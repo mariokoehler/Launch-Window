@@ -729,6 +729,11 @@ be revisited once §2's mechanics are pinned down enough to know what state
 the server actually needs to hold and how often clients need to poll/be
 pushed to.
 
+See §3.7 for the persistence/data-model decision (flat-file JSON, no
+database) — orthogonal to the "is there a long-running process" question
+above, but settles the *format* half of this section's remaining open
+question.
+
 ### 3.2 Relationship to BASPM's own simulation code
 
 BASPM's per-player simulation (`Player.cs`, `GameWorld.cs`, the various
@@ -902,6 +907,93 @@ per-game-aware rather than one-size-fits-all, which was always implied by
 supporting multiple concurrent games (friends' game and colleagues' game
 running side by side, on different schedules) rather than a single global
 game instance.
+
+### 3.7 Persistence & turn-resolution data model — decided (user, 2026-09-27): flat-file JSON, no database
+
+**Decision: keep the server lightweight, matching the sibling projects' own
+convention — no database.** The game world's state serializes to JSON and
+persists as a flat file on disk, one snapshot per resolved turn, not a
+live mutable DB row. This is a strong match for BASPM's own precedent, not
+just sibling-project convention: `baspm.md` §2.1's real save-game analysis
+already found BASPM's own save format is plain XML mapping almost 1:1 onto
+its in-memory object graph, and its PBEM multiplayer mode (`baspm.md` §5) is
+literally "pause, serialize the whole state, hand off, resume" over HTTP —
+the exact same shape, just JSON instead of XML and file-storage instead of
+file-transfer.
+
+**Player actions as an append-only, one-file-per-action journal.** Each
+submitted action (assign personnel, queue a mission, declare a scrub policy,
+etc.) is written as its own JSON file rather than mutating one shared
+"today's declared turn" blob. Two things this buys: **crash robustness**
+(only the most recent write can ever be lost, never a whole day's declared
+turn), and **natural separation** (one player's actions never collide with
+another's on disk, and are trivially all-in-one-place — their own
+subdirectory — for both login-time reconstruction and turn-resolution).
+
+**(unconfirmed default, recommended) Actions are idempotent "declare current
+intent" statements, not deltas.** E.g. an action isn't "add Employee X to
+R&D" as a delta on whatever's currently declared — it's "R&D assignment for
+slot N is now Employee X," a complete restatement. This is what makes both
+replay use cases below work with zero extra machinery: replaying a player's
+whole day's action journal in chronological order always converges on their
+latest actual intent, because a later action for the same "slot" simply
+supersedes an earlier one during replay — no separate cancel/retract event
+type needed for "I changed my mind." Worth stating as an explicit rule for
+every action type Launch Window ever defines, not discovering the need for
+it later.
+
+**(unconfirmed default, recommended) Each player's state resolves
+independently — one snapshot file per player per turn, not one combined
+whole-game-state blob.** Per BASPM's own architecture (`baspm.md` §2.1's
+`Player.cs`/`GameWorld.cs`, and §5's PBEM precedent — two agencies'
+simulations that only ever get *compared*, never directly touch each other's
+state) and matching §2.9's current passive-competition-only default: a turn
+resolution for player A only ever needs player A's last snapshot plus player
+A's action journal for that day. A lightweight separate **game-meta file**
+(schedule config/§3.6, blackout list, and whatever minimal per-player summary
+the goals-comparison screen needs, `baspm.md` §11.4) sits alongside the
+per-player files for the cross-player bits. This sidesteps the one real
+question a combined-file design would otherwise force — what deterministic
+order to apply N players' actions in, if they can affect shared state —
+entirely, for as long as §2.9 keeps interaction passive-only. **Revisit the
+moment §2.9 adds anything that lets one player's action touch another
+player's state** (sabotage, trading, a shared resource) — that's exactly the
+point a real cross-player ordering rule becomes necessary, deferred until
+then rather than solved prematurely now.
+
+**Turn-resolution loop, concretely:** for each player independently — load
+their last snapshot, replay/apply their day's action journal onto it (same
+replay logic the login flow below already uses), run it through the actual
+simulation/resolution logic (§2's various formulas), write the result as the
+next snapshot, archive or delete that day's action-journal files. Per game,
+this loop runs once per player, independently, whenever that game's schedule
+(§3.6) says a turn resolves.
+
+**Login flow, concretely:** load the player's last snapshot, replay whatever
+exists in today's action journal on top of it (possibly empty, if nothing's
+been submitted yet today), present that as "current state" to the client. No
+special-casing for "first login of the day" vs. "checking back after already
+submitting something" — it's the same replay operation either way.
+
+**Security note** (flagged per this project's standing practice of
+surfacing trust-boundary concerns during design, unprompted): action files
+represent a player's *declared intent* only — the server must always
+recompute the actual resolved outcome itself from that intent plus its own
+simulation logic, never accept or trust a client-submitted "here's what
+happened" result. This matters more, not less, in a self-hosted-among-
+friends context, since a technically-inclined player is exactly the kind of
+person who could otherwise hand-craft a favorable result file.
+
+**Implementation detail worth flagging now rather than discovering it during
+implementation:** writes need to be atomic (write to a temp file, then
+rename into place) to avoid a half-written JSON file on disk if the server
+crashes mid-write — otherwise the "only the last action can be lost"
+crash-robustness goal doesn't actually hold.
+
+**Multi-game layout:** one top-level directory per game instance (§3.6
+already established multiple concurrent games — e.g. the friends' game and
+the colleagues' game — run on independent schedules), each containing its
+own per-player snapshot/journal subdirectories plus its own game-meta file.
 
 ## 4. Open questions (tracked here until resolved)
 
