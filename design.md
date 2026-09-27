@@ -911,6 +911,14 @@ today"), not a client feature, so it lives here rather than in §2.
   admin/role model yet — revisit once §2's multiplayer interaction model
   and any notion of a "game host" role are designed.
 
+**The game's announced start date reuses this exact mechanism (user,
+2026-09-27, §3.8's join-anytime decision):** a server can go live days before
+a game's announced start, accepting account creation/slot-claiming during
+that window, but its *first turn* shouldn't resolve early. No new mechanism
+needed — this is just an automatic blackout spanning "server goes live"
+through "the day before the announced start date," applied the moment the
+game is created, same data shape as any host-added blackout above.
+
 **What happens on a non-resolving day:** nothing special — it's not a
 "skipped turn" needing its own state, it's simply a day the resolution job
 doesn't fire. Players can keep reviewing/editing their already-queued
@@ -1077,18 +1085,65 @@ so directly reusing its actual shape (not just its idea) carries none of
   exist yet auto-creates the account from the supplied password + display
   name; an existing login requires the password to match, or the attempt is
   rejected.
-- **Open sub-question, concrete default proposed rather than left blank: how
-  an account claims a "player slot" in the one game this server hosts
-  (§3.9).** Since target player counts are small and known in advance (§1:
-  ~4 friends or ~10 colleagues), **(unconfirmed default)** the game is
-  created with a configured max-player-count (optionally plus an explicit
-  allowed-login allowlist, cheap insurance against a stray/uninvited login
-  claiming a slot if the server is reachable but not meant to be public) —
-  the first accounts to log in claim slots up to that count. Ties into the
-  still-open "who's allowed to edit the blackout list" host-role gap
-  (§3.6/§4) — both eventually want a lightweight "game host" concept, but
-  neither blocks a first playable version among trusted friends/colleagues
-  without one.
+- **Slot claiming — superseded (user, 2026-09-27): dynamic slot count, and
+  joining stays open for the entire life of the game, not just before it
+  starts.** The earlier default here (a configured max-player-count, first
+  logins claim a pre-existing slot) assumed a fixed player pool decided at
+  game creation — **real past experience says that assumption doesn't
+  hold**: people hear about an ongoing game later (word of mouth, "the
+  coffee kitchen") and want to join mid-game, accepting they're starting
+  from a serious, possibly un-recoverable disadvantage rather than being
+  turned away. So: **no upper bound on player count, and no cutoff after
+  which joining closes.**
+  - **Concrete flow:** the host announces a new game for a given **start
+    date**; the server itself goes live a few days earlier, but — per §3.6's
+    scheduling mechanism — its *first turn doesn't resolve until that start
+    date* (mechanically identical to an automatic blackout period covering
+    "server-live" through "the day before start," no new mechanism needed).
+    That gap is the signup window: an account that doesn't exist yet gets
+    created on first login (§3.8 above), then immediately walks through
+    **claiming a slot** — picking an agency archetype (NASA-style/Soviet-
+    style/GSA-style, per `baspm.md` §2.4's `SpaceAgencyT`), and naming both
+    the agency and the player's own in-game persona/callsign. An existing
+    account with an existing slot just logs into it as before; a login that
+    doesn't have a slot yet in *this* game always gets the claim flow,
+    whether that's on day one of the signup window or in the middle of an
+    already-months-long game.
+  - **(unconfirmed default) Agency name and persona/callsign must be unique
+    within a given game** (first claimed, first served — hence the "already
+    taken" joke), but nothing about identity needs to be unique *across*
+    different games, and archetype choice itself being exclusive or shared
+    is a separate, still-open question (see below).
+  - **A late joiner's own season/turn count starts fresh from their personal
+    turn 1, decoupled from the game's shared wall-clock schedule (§3.6).**
+    The schedule (which real days produce *a* turn) is one shared clock for
+    the whole game; how many turns any given player has personally played is
+    a separate per-player quantity. A player joining on the game's calendar
+    turn 40 starts their own personnel/budget/program state at their turn 1,
+    which then resolves alongside everyone else's current turn on every
+    subsequent shared schedule tick — they're simply far behind on content,
+    not on a different clock.
+  - **Open joining is the intended default posture, not a gap to close**:
+    the earlier allowlist idea assumed a small, fixed, pre-vetted circle,
+    which this design explicitly no longer assumes. An invite-only/allowlist
+    mode is worth keeping as an optional host toggle for whichever group
+    wants it, not the default.
+  - **Genuinely new open question this raises, not yet resolved: how many
+    agency archetypes exist, and can more than one player pick the same
+    one?** BASPM itself only has three real factions (NASA/Soviet/GSA,
+    `baspm.md` §2.4) — nowhere near enough for §1's ~10-player colleagues
+    group if archetypes must be exclusive per game. **(unconfirmed default,
+    proposed rather than left blank)** archetypes are non-exclusive — several
+    players can pick the same historical/flavor archetype, distinguished
+    entirely by their own unique agency name and persona, same as how a
+    board game lets multiple people play "the same faction" flavor-wise in
+    a free-for-all. This is now a concrete new dependency on `design.md`
+    §4's still-open "how much of BASPM's Cold War framing do we keep vs.
+    reskin" question — noted there too.
+  - **Ties into the still-open "who's allowed to edit the blackout list"
+    host-role gap (§3.6/§4)**: announcing a game and setting its start date
+    is itself a "host" action — both eventually want the same lightweight
+    "game host" concept, but neither blocks a first playable version.
 - **Client-local settings (volume, display resolution, keybindings, etc.)
   are explicitly out of scope for accounts entirely (user, 2026-09-27)** —
   a plain local JSON file on the client machine, no server or account
@@ -1170,13 +1225,29 @@ another container") rather than an application-level concern.
   sub-question: who is allowed to edit a game's blackout-period list once
   play has started — needs a "game host/admin" role concept that doesn't
   exist yet (§3.6).
-- Matchmaking model / how a friends-group game and a colleagues-group game
-  (different schedules, different rosters) both exist as separate concurrent
-  game instances on the same server? (§1, §3.6)
+- **Resolved (§3.9, 2026-09-27):** a friends-group game and a colleagues-
+  group game are two separate server instances (e.g. two Docker containers),
+  not one server hosting both — no matchmaking/game-selection layer needed.
+  **Resolved (§3.8, 2026-09-27):** player-slot count within a game is dynamic
+  and never closes — joining stays open for the game's entire life, not just
+  before it starts.
 - Multiplayer interaction model: how much of §2.9's brainstorm ships in v1?
-- Client platform: native (libGDX, like the sibling projects) vs. web? (§3.3)
-- Does the server need a persistent process at all, or is it a stateless API
-  + scheduled batch job? (§3.1)
+- **Resolved (§3.3, 2026-09-27):** native client, libGDX, matching the
+  sibling projects — the web-client alternative once considered here was
+  dropped.
+- **Resolved (§3.1, 2026-09-27):** yes, a persistent server process — just a
+  lightly-loaded one (short-lived client connections plus one scheduled
+  turn-resolution job), not a continuously-simulating one like either
+  sibling project's.
 - How much of BASPM's historical Cold War framing (real programs, real
   agencies) do we keep vs. reskin, given this ships under a different name
-  and is meant to stand on its own as a fan project? (§1)
+  and is meant to stand on its own as a fan project? (§1) **New concrete
+  dependency (§3.8, 2026-09-27): how many distinct agency archetypes Launch
+  Window ships, and whether they're exclusive per game, is now blocking on
+  this** — BASPM's own 3 factions aren't enough seats for a ~10-player game
+  if archetypes must be unique per game; the **(unconfirmed default)**
+  proposed in §3.8 is non-exclusive archetypes (several players can share
+  one, distinguished by their own agency name/persona), which would make
+  this question purely a flavor/content-scope decision rather than a
+  hard-capacity constraint — worth confirming that framing before this gets
+  resolved for real.
