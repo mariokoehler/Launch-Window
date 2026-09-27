@@ -752,16 +752,36 @@ guessing at balance numbers from scratch.
 
 ### 3.3 Tech stack
 
-Not yet decided. Options to weigh once §2/§3.1 are further along:
-- Reuse the sibling projects' Java/libGDX/Maven/KryoNet stack for continuity
-  (client tooling, asset pipeline conventions, JUnit testing conventions) —
-  even though KryoNet's TCP/UDP dual-channel netcode is arguably wasted on a
-  request/response daily-batch game.
-- A plainer web stack (HTTP/REST or GraphQL API + a browser client) might fit
-  the "check in once a day" session shape better than a native game client
-  players have to keep installed/updated — worth an explicit discussion
-  before committing, since it's a much bigger platform decision than
-  anything either sibling project had to make.
+**Decided (user, 2026-09-27): stay close to the sibling projects' stack —
+libGDX (client), KryoNet (network layer), Jackson (JSON), JUnit 5 (tests),
+Java 25.** Rationale is continuity and proven experience (tooling, asset
+pipeline conventions, testing conventions all carry over directly) rather
+than re-litigating tooling choices for a fan project — the earlier "maybe a
+plainer web stack fits the daily-check-in shape better" alternative
+considered here is dropped, not left open.
+
+- **KryoNet's usage pattern here genuinely differs from both sibling
+  projects, worth being explicit about so implementation doesn't
+  accidentally inherit assumptions that don't apply**: StarWars uses it for
+  continuous real-time UDP snapshots with client-side prediction/
+  reconciliation; Robot-Rampage holds a live session open for a
+  simultaneous-programming turn. Launch Window needs neither — per
+  `CLAUDE.md`'s own framing of this project, "nobody is ever waiting live
+  for other players," so a client's KryoNet usage looks more like a
+  lightweight RPC transport (connect, send today's queued actions/query
+  current state, receive the reply, disconnect) than a session-holding
+  connection. No prediction/reconciliation layer, no reconnect-during-a-live-
+  turn machinery — genuinely simpler netcode than either sibling project's,
+  despite reusing the same library.
+- **Jackson does double duty, which is a nice consolidation, not a
+  coincidence worth losing track of**: it's not just the wire-format
+  library for client/server messages, it's also the serializer for §3.7's
+  flat-file JSON snapshots and action-journal entries — one library, one set
+  of conventions, for both jobs.
+- **Unblocks §3.4 (Data model)**: with the tech stack settled and most of
+  §2's core systems now traced (`baspm.md` §8-§12), that section is ready to
+  actually start once picked up — not attempted in this same pass, flagged
+  here as no longer gated on an open tech-stack question.
 
 ### 3.4 Data model
 
