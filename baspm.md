@@ -223,9 +223,9 @@ the full screen graph for real.
 | `MissionsSimulationsManager.cs` | 450 | Loads & drives one mission's live simulation (see §2.1) |
 | `MissionAssignmentsManager.cs` | 449 | Assigning personnel to mission slots |
 | `SpaceComplexDataManager.cs` | 424 | The player's space complex/facility layout |
-| `GoalsManager.cs` | 392 | Prestige-granting goals (`Goals.xml`) |
+| `GoalsManager.cs` | 392 | Prestige-granting goals (`Goals.xml`) — traced, see §11 |
 | `CampaignManager.cs` | 113 | Single-player `CampaignGSA` scripted objectives (`GSACampaignObjectives.xml`) — see §5 for why this is relevant to multiplayer design |
-| `ConstantsManager.cs` | 143 | Loads `Constants.xml`/`Constants-<Agency>.xml` — tuning knobs (initial funds, budget-review thresholds, Tiger Teams boost/cost, mission-sim "saving throw" multipliers) |
+| `ConstantsManager.cs` | 143 | Loads `Constants.xml`/`Constants-<Agency>.xml` — tuning knobs (initial funds, budget-review thresholds, Tiger Teams boost/cost, mission-sim "saving throw" multipliers) — budget-review thresholds traced, see §11 |
 | `RandomEventsManager.cs` | 96 | Picks/fires `REB*` random events |
 | `TasksManager.cs` | 60 | Small — player task list/reminders |
 | `ScriptsManager.cs` (57) / `DataScriptsManager.cs` (7) / `TextScriptsManager` | — | The data-loading plumbing itself (§3) |
@@ -332,8 +332,10 @@ et al. are thin XML readers, not the source of truth.
     variants for each program: duration, prestige granted/deducted, goals
     achieved, launch info, `GoalBoost` (extra goal progress for
     over-delivering, e.g. launching more Sputniks). **Traced, see §10.**
-  - `Goals.xml` — every prestige-granting goal, first/second/later-time
-    prestige values, `GoalsCancelled` (a goal can obsolete an earlier one).
+  - `Goals.xml` (207 goals: 34 generic, 173 non-generic) — every
+    prestige-granting goal, first/second/later-time prestige values,
+    `GoalsCancelled` (a goal can obsolete an earlier one). **Traced, see
+    §11.**
   - `MissionComponents.xml` (85 entries) — the rocket/capsule/component
     catalog. **Traced, see §10.**
   - `ProgramCategories.xml` (13 shipped categories, though the code
@@ -552,7 +554,8 @@ Not a commitment, just a sensible dependency order given what's mapped above:
    `MissionsConfigurationsManager.cs`, `Programs.xml`/`MsnCnfg*.xml`) — the
    content tree players progress through. **Done — see §10.**
 5. **Budget & prestige** (`ConstantsManager.cs`'s `BudgetReviewConstants`,
-   `PAOMainOverlay.cs`, `Goals.xml`) — the resource loop and scoring.
+   `PAOMainOverlay.cs`, `Goals.xml`) — the resource loop and scoring. **Done —
+   see §11.**
 6. **Campaign objectives / goals / random events** (§2.3) — the
    meta-progression and variance layer on top of the above.
 7. **PBEM** (§5) — read in full once #2-5 make its data model legible,
@@ -613,12 +616,18 @@ earlier drafts of this file (§2's prefix table, §2.4's `GSA`/PBEM claims).
   e.g. "Soyuz orbital flight"). Goals can imply lower-tier goals
   automatically (Duration III ⇒ II ⇒ I). **Skipping a prerequisite goal
   imposes a reliability penalty** on the mission that skips it — a real
-  risk/reward lever, not just a checklist.
+  risk/reward lever, not just a checklist. **All three claims now
+  code-confirmed, see §11.3/§11.4** (this bullet was manual-only when
+  written).
 - **Prestige → Funds**: prestige earned/lost from mission success/failure
-  directly determines next budget review's funding.
+  directly determines next budget review's funding. **Code-confirmed, exact
+  formula in §11.1** — it's a tiered lookup with a catch-up adjustment, not a
+  simple proportional conversion.
 - **Seasons**: **confirmed exactly** one season = one quarter of a year (4/
   year). **Budget review every 4 years** (16 seasons), determining funding
-  for the next 4-year cycle based on prestige earned.
+  for the next 4-year cycle based on prestige earned. **Code-confirmed,
+  §11.1** — and the funding is a recurring per-season grant locked in until
+  the next review, not a lump sum.
 - **Fixed costs per season**: all personnel salaries (SET, Astronauts/
   Cosmonauts, Flight Controllers), building maintenance, active
   payload/rocket program upkeep.
@@ -758,9 +767,19 @@ ComputeProbabilityOfSuccessForMissionStep`/`SimulateMissionStepFirstDiceRoll`/
 
 1. **Compute a base success probability for the step.** For every mission
    component involved in the step (`MsnCmpInvolved`, e.g. a rocket + payload
-   each contributing a percentage), weight that component's *current*
-   reliability (plus any modifier from prior R&D/reliability-transfer) by its
-   involvement % and sum. Separately sum flight-controller contributions
+   each contributing a percentage), weight that component's *effective*
+   reliability by its involvement % and sum. **Precise composition of
+   "effective reliability," code-confirmed (§11.3, 2026-09-27) — corrects
+   the "plus any modifier" hand-wave in an earlier draft of this section:**
+   `max(0, CurrReliability + GetPlayerMissionComponentTotalReliabilityModifier(...))`,
+   where `CurrReliability` already bakes in Reliability Transfer (§10.3) and
+   every prior use's R&D/mission-outcome adjustment (§10.4), and the modifier
+   term is a **separate, per-mission-attempt (not persisted) bonus/penalty**
+   from this specific mission configuration's declared goal dependencies/
+   boosts (§11.3) — flying without a prerequisite goal already achieved
+   penalizes just the components that goal is declared against; having
+   already achieved a bonus-goal boosts them instead. Separately sum
+   flight-controller contributions
    (involvement % × the assigned controller's relevant skill) and flight-crew
    contributions (involvement % × the assigned astronaut's relevant skill,
    summed per-skill-per-crew-member). **Astronaut skill only ever matters as
@@ -1315,3 +1334,189 @@ server resolves mechanically" with no special-casing needed. See
    `OpeningCostDeductions`, `RequiredGoal` gating, and the "extended
    mission" variant choice are actually surfaced to the player, useful for
    calibrating Launch Window's own program-selection UI.
+
+## 11. Budget, prestige, and goals (traced 2026-09-27)
+
+Full trace of `ConstantsManager.cs`'s `BudgetReviewConstants` loading,
+`GameWorld.cs`'s budget-review methods, `Player.cs`'s funds/prestige fields,
+`GoalsManager.cs` + `Goal.cs`/`GoalDependencyOrBoost.cs`, `Goals.xml` (the
+live install's copy — same "not in `extracted\`" gotcha §10 hit), and
+`PAOMainOverlay.cs`. This upgrades §7.1's manual-only claims (prestige→funds,
+budget-review cadence, generic/non-generic goals, the goal-skip reliability
+penalty) to **code-confirmed** throughout, and answers all four as real,
+specific mechanisms rather than paraphrasing the manual's plain-English
+version.
+
+### 11.1 Prestige → funds: a tiered lookup with a catch-up adjustment, not a simple conversion
+
+**Code-confirmed** (`GameWorld.ComputeNextBudgetForPlayer`/
+`RetrievePrestigePointsAndBudgetsGrantedForBudgetReviewNumber`,
+`ConstantsManager`'s `BudgetReviewConstants` list). Three things worth
+knowing, none of them guessable from the manual's one-line summary:
+
+- **A budget review isn't one formula — it's a sequence of brackets, one per
+  review.** `Constants-<Agency>.xml`'s `BudgetReview/BudgetReviewConstants`
+  is a list of `(MinPrestigePoints, MinBudget, MaxPrestigePoints, MaxBudget)`
+  tuples, one entry per successive review (review 1, 2, 3, ...), each
+  scaled by its own difficulty multiplier (Normal/`Value1` only, per
+  `design.md` §2.10). Later reviews demand more cumulative prestige for the
+  same or better funding — the bar rises every cycle, it doesn't stay fixed.
+- **The formula itself is linear interpolation within the current review's
+  bracket, floored/capped at its ends:** at or below `MinPrestigePoints`,
+  the player gets exactly `MinBudget`; at or above `MaxPrestigePoints`,
+  exactly `MaxBudget`; in between, linear interpolation. **Crucially,
+  `PrestigePoints` here is the player's all-time cumulative total, never
+  reset** (`Player._prestigePoints` only changes via `AddPrestigePoints`/
+  `SubstractPrestigePoints` on mission outcomes and goal achievements,
+  confirmed by a codebase-wide search — nothing else touches it, and it's
+  zeroed only once, at game start). So each successive review compares your
+  *entire game's* prestige history against an ever-higher bar, not "prestige
+  earned since the last review."
+- **A genuine catch-up mechanic, not documented anywhere in the manual:**
+  if the player's prestige *at the time of the previous review*
+  (`Player.PrestigePointsInLastBudgetReview`, a snapshot taken each review)
+  fell short of *that previous review's own* minimum threshold, the
+  **current** review's min/max thresholds both get shifted down by exactly
+  that shortfall. Underperforming one review doesn't compound against you
+  forever — the next review's bar recalibrates relative to where you
+  actually ended up, not where the un-adjusted schedule originally expected
+  you to be.
+- **Funding is a recurring per-season grant, not a lump sum.** A review
+  doesn't hand the player a pile of cash — it sets `_currentBudgetPerSeason`
+  (`GameWorld.cs`), and every season thereafter `ComputeMoneyGrantedToPlayer`
+  simply returns that same value again, added to funds once per season
+  (`GameWorld.AdvanceSeason...` → `player.AddToFunds(...)`), until the next
+  review recalculates it. Before the first review, this starts at
+  `Constants-<Agency>.xml`'s flat `InitialBudgetPerSeason`.
+- **This is genuinely the *only* recurring income source, confirmed by a
+  codebase-wide search for every funds-modifying call site**: the sole
+  addition is the per-season budget grant above; every other call
+  (`Player.SubstractFromFunds`) is an expense — fixed costs each season,
+  Tiger Teams hiring (§9.5), random-event unexpected costs, mission/
+  construction spending. **Missions and goals never grant cash directly,
+  only prestige** — prestige is the only lever, and it only becomes money at
+  a review boundary, via the formula above.
+- **None of this is hidden from the player.** `PAOMainOverlay.cs` (§11.4)
+  displays the current review bracket's exact min/max prestige-to-budget
+  mapping and a live-computed *projected* next-review budget based on
+  current prestige, every time the screen is opened — the formula above is
+  fully transparent in-game, not a black box the player has to infer.
+
+### 11.2 Budget review cadence: every 16th season from game start, confirmed exact
+
+**Code-confirmed** (`GameWorld.IsSeasonForBudgetComputation`/
+`ComputeNumberOfSeasonsUntilNextBudgetReview`): a review triggers exactly
+when `NumberOfSeasonsElapsed % 16 == 0` — season 16, 32, 48, etc., counted
+from game start (not from the last review, though since the interval is
+fixed at 16 the two are equivalent here). Confirms the manual's "every 4
+years" claim exactly (`baspm.md` §7.1).
+
+### 11.3 Goals: generic vs. non-generic is real and mechanically consequential; the goal-skip reliability penalty, exact mechanism
+
+**Code-confirmed**, `Goal.cs`/`GoalsManager.cs`. `Goals.xml` (the live
+install's copy, not present in `extracted\`) defines **207 goals: 34
+generic, 173 non-generic** — generic goals are the minority, universal
+race-defining milestones; the bulk of content is agency-specific flavor
+goals. `IsGeneric` has **two real, separate mechanical consequences**, not
+just a display label:
+- **Program-opening gates only ever check generic goals**
+  (`ProgramsManager.CanOpenProgram` is passed
+  `player.GetAllGenericGoalsAchievedOrCancelledIDs()` exclusively) — a
+  program's `RequiredGoal` prerequisite (§10.1) can only ever reference a
+  generic goal, never a non-generic one.
+- **The opposing-faction comparison screen (`baspm.md` §5's PBEM/CampaignRTTM
+  precedent) only ever compares generic goals** (`GameWorld.
+  GetAllGenericGoalsAchievedInfoByOpposingFaction`) — non-generic,
+  agency-specific goals are structurally excluded from cross-agency
+  comparison, which makes sense (the other agency literally can't achieve a
+  goal declared specific to yours).
+- **`GoalsCancelled` confirmed as real recursive obsoletion**
+  (`MissionsConfigurationsManager.ComputeAndAddAchievedGoalsToPlayerInner`):
+  achieving a goal walks its `GoalsCancelledIDs` list and recursively marks
+  each not-yet-achieved one as cancelled too (guarded against reprocessing
+  the same goal twice), confirming "Duration III ⇒ II ⇒ I" is a real cascade,
+  not just documentation shorthand.
+- **The goal-skip reliability penalty, exact mechanism found** — this was
+  the one specific manual-only claim going into this pass with no idea where
+  it lived in code. **It's neither a mission-sim-formula special case nor a
+  program-opening gate — it's a third, distinct, per-mission-attempt
+  reliability modifier**, separate from Reliability Transfer (§10.3, a
+  one-time bonus at program-opening) and post-mission reliability updates
+  (§10.4, permanent, accrues from use). A `MissionConfiguration` declares its
+  own `GoalDependencies` (goal ID + specific mission-component IDs + a
+  penalty amount each) and `GoalBoosts` (goal ID + mission-component IDs + a
+  bonus amount each). At mission-attempt time,
+  `MissionsConfigurationsManager.GetPlayerMissionComponentTotalReliabilityModifierForMsnCnfg`
+  computes, per component: **subtract** the penalty for every declared
+  dependency goal the player hasn't achieved/cancelled yet, **add** the bonus
+  for every declared boost goal the player already has achieved/cancelled.
+  This modifier is computed fresh for every mission attempt (not persisted
+  onto the component) and feeds directly into §8.2's mission-sim base
+  probability as `max(0, CurrReliability + modifier)` — confirmed by tracing
+  the call chain straight into `MissionSimBaseScreen.cs:918`. So "skipping a
+  prerequisite goal" very concretely means: flying a mission configuration
+  without having first achieved the specific goal it declares a dependency
+  on penalizes exactly the components that goal is tied to, for that
+  attempt only — a real, mechanical risk/reward lever exactly as the manual
+  claimed, now with the precise formula behind it. **§8.2 updated with a
+  cross-reference to this finding.**
+
+### 11.4 The Public Affairs Office screen: full financial/prestige transparency, and where the multiplayer comparison button actually lives
+
+**Code-confirmed**, `PAOMainOverlay.cs` (manual p.40). Three panels:
+- **Top:** current per-season budget, seasons until next review, the
+  *current review bracket's* min-prestige/min-budget and max-prestige/
+  max-budget pair (both ends shown plainly, per §11.1's transparency note),
+  and a live-computed *projected* next-review budget from current prestige.
+  A **"Goals Comparison" button lives on this same screen**, gated to
+  `IsMultiplayerGameMode || IsCampaignRTTMGameMode` — confirms and locates
+  exactly where `baspm.md` §5's opposing-faction comparison precedent
+  actually surfaces to the player: bundled into the budget/prestige overview,
+  not a separate dedicated screen.
+- **Center:** current funds, an itemized expenditure breakdown (the three
+  personnel groups' combined salaries separately, facilities upkeep,
+  program fixed costs, mission-component fixed costs, a total), the current
+  per-season budget again, and a computed quarterly balance (income minus
+  total expenditure), color-coded green/red.
+- **Bottom:** current (cumulative, all-time) prestige points, displayed
+  plainly.
+- **Relevant for Launch Window's own UI (`design.md` §2.1(b)):** nothing
+  about BASPM's resource loop is opaque to the player — every number that
+  drives the next review's funding is shown in advance, every season's
+  spending is itemized by category. A good concrete precedent for an
+  async-multiplayer "why did my budget change" screen, where transparency
+  matters even more since the player wasn't present when their turn
+  actually resolved.
+
+### 11.5 Async-multiplayer relevance: entirely between-turn, no mid-resolution surprises
+
+**No new mid-turn/mid-resolution decision point found** — the budget review
+computation, per-season income/expense application, and goal
+achievement/cancellation are all deterministic outcomes of state that
+already exists once a turn's missions/personnel/programs are resolved; none
+of it requires a live player choice the way Tiger Teams did (§9.5). This
+system slots cleanly into "server resolves mechanically, no pause," same as
+§10.6's finding for programs/mission-configs/reliability.
+
+### 11.6 Verification still needed (in-game / screenshots)
+
+1. **A screenshot of the PAO screen itself** (§11.4), ideally including the
+   Goals Comparison button in a multiplayer/CampaignRTTM game — confirms the
+   exact layout/wording for calibrating Launch Window's own budget/status
+   screen and any-comparison-with-rival feature.
+2. **Confirm in-game that the catch-up adjustment (§11.1) is real and
+   visible** — deliberately underperform one budget-review cycle (end it
+   below that cycle's minimum prestige threshold), then check whether the
+   *next* cycle's displayed min/max prestige thresholds on the PAO screen
+   are visibly lower than the un-adjusted schedule would predict. Low
+   priority (doesn't change Launch Window's own design either way, we're
+   re-deriving formulas per `design.md` §1.2) but would confirm the read of
+   the code is right.
+3. **Low priority: a save-game or in-game check of a goal-skip penalty in
+   effect** (§11.3) — fly a mission configuration that declares a
+   `GoalDependencies` entry for a goal the player hasn't achieved, and
+   compare that component's displayed/effective reliability for the attempt
+   against its plain `CurrReliability` shown elsewhere in the UI. Would
+   directly confirm the penalty is player-visible (as opposed to a silent
+   under-the-hood odds adjustment), which matters for whether Launch Window
+   should surface its own equivalent modifier explicitly in its UI.

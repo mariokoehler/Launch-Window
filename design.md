@@ -179,6 +179,16 @@ same session it comes up**, the same standing-note-to-self habit as
   (`baspm.md` §10.1, e.g. Explorer I costing 40% less once Sputnik I is
   already open) — a real, true dynamic of the actual Space Race (whoever
   answers second gets to skip R&D the first mover already paid for).
+- **Surfaced during the §2.1 budget/prestige trace (2026-09-27): "prestige
+  literally becomes your budget" is not a game abstraction — it's a fair
+  read of how NASA's real funding actually worked.** Congress's willingness
+  to fund Apollo at the scale it did was substantially driven by Cold War
+  prestige competition, most visibly the political shock of Sputnik (1957)
+  and Gagarin (1961) — NASA's budget rose sharply in the years right after
+  each, well before Apollo had flown a single crewed mission of its own to
+  "earn" that funding on engineering merit alone. A strong, true beat for
+  the moment a player first sees their own budget review: the real space
+  race really was funded by prestige, not purely by demonstrated capability.
 
 ### 1.2 Content & asset policy: no copying BASPM's copyrighted content
 
@@ -228,7 +238,47 @@ subsection list, derived from BASPM's own manager/system boundaries
 (`baspm.md` §"Source code map"), to be expanded/reordered as analysis
 proceeds:
 
-- 2.1 Space agencies, budget & funding cycle
+- 2.1 **Space agencies, budget & funding cycle — analyzed 2026-09-27, see
+  `baspm.md` §11 for the full trace.**
+  - **(a) How BASPM does it:** prestige (earned only from missions/goals,
+    never cash directly) is the sole input to a budget review every 16
+    seasons (4 years), which sets a **recurring per-season funding rate**
+    (not a lump sum) via a tiered lookup — each review has its own
+    prestige-to-budget bracket, later reviews demanding more cumulative,
+    all-time prestige for the same funding, with a built-in catch-up
+    adjustment if the player fell short of the previous review's bar.
+    Funding is the *only* recurring income; every other funds-touching call
+    in the codebase is an expense (fixed salaries/maintenance every season,
+    Tiger Teams, random-event costs, program/mission/construction spending).
+    None of this is hidden — the PAO screen (`baspm.md` §11.4) shows the
+    current bracket's exact thresholds and a live-projected next-review
+    budget at all times.
+  - **(b) What changes for async multiplayer:** nothing structural — this
+    is entirely a between-turn, deterministic computation with no
+    mid-resolution decision point (`baspm.md` §11.5), same shape as §2.3/
+    §2.4's finding. **One real question worth deciding (unconfirmed):** the
+    16-season/4-year review cadence is counted in *seasons elapsed*, not
+    real days — so under `design.md` §3.6's schedule profiles, a `WEEKDAYS`
+    game and a `DAILY` game reach review #1 after a different number of
+    *real* days (a `WEEKDAYS` game needs more real-world time per season on
+    average, once weekends are excluded), even though both experience
+    exactly the same in-fiction pacing. This is very likely fine — "one
+    turn = one season" (§1) already treats real-time elapsed as irrelevant
+    to game-time elapsed everywhere else — but worth stating explicitly so
+    a future session doesn't rediscover it as a bug.
+  - **(c) Decision:** **port the "prestige is the only currency that
+    converts to funding, on a periodic tiered review with a catch-up
+    mechanic" shape**, re-deriving actual thresholds/multipliers rather than
+    reusing BASPM's constants verbatim (`design.md` §1.2). **(unconfirmed
+    default)** keep funding as a recurring per-turn rate set at review time,
+    not a lump sum — it's the cleaner fit for a persistent async economy
+    (a lump sum risks a huge one-time balance swing landing on a turn a
+    player might not even be online for). **(unconfirmed default)** keep
+    full transparency of the review formula in Launch Window's own UI
+    (current bracket, live-projected next payout) rather than hiding it —
+    BASPM already treats this as a feature, not a spoiler, and transparency
+    matters more, not less, when a player wasn't present for the turn that
+    changed their funding.
 - 2.2 **Personnel (astronauts, flight controllers, SET/scientists) — hiring,
   training, skills, morale/fatigue — analyzed 2026-09-27, see `baspm.md` §9
   for the full trace.**
@@ -442,7 +492,47 @@ proceeds:
     as-is: a mission genuinely taking several turns to play out (with
     escalating stakes each turn, per the Sputnik example in `baspm.md` §8.1)
     is good game feel to keep, not an artifact to engineer away.
-- 2.6 Prestige, goals & scoring
+- 2.6 **Prestige, goals & scoring — analyzed 2026-09-27, see `baspm.md` §11
+  for the full trace.**
+  - **(a) How BASPM does it:** goals are `Generic` (universal race
+    milestones, the minority — 34 of 207 in the base game) vs. `Non-generic`
+    (agency-specific flavor content, the bulk). The generic/non-generic
+    split is mechanically real, not cosmetic: only generic goals can gate a
+    program's opening, and only generic goals ever appear in the
+    opposing-faction comparison screen (non-generic goals are structurally
+    excluded, since a rival agency can't achieve one declared specific to
+    yours). Achieving a goal can recursively cancel/obsolete lower-tier
+    goals (`GoalsCancelled`). **The manual's "skipping a prerequisite goal
+    imposes a reliability penalty" claim resolved to a specific, third
+    reliability-modifying mechanism** (distinct from Reliability Transfer,
+    §2.4, and post-mission reliability growth): a mission configuration can
+    declare goal-gated per-component reliability penalties (goal not yet
+    achieved) or bonuses (goal already achieved), computed fresh per mission
+    attempt and fed straight into §2.5's mission-sim formula — not
+    persisted onto the component, and not a program-opening gate either.
+  - **(b) What changes for async multiplayer:** nothing structural — goal
+    achievement/cancellation and the per-attempt reliability modifier are
+    both deterministic outcomes of state that exists when a turn is queued,
+    no mid-resolution surprises (`baspm.md` §11.5). The one place this
+    system is *already* concrete multiplayer precedent, not just adaptable
+    single-player content: BASPM's own opposing-faction goal comparison
+    (§2.9's brainstorm already cites this) lives bundled into the same
+    budget/prestige overview screen the player already checks every turn
+    (`baspm.md` §11.4), not a separate dedicated screen — worth carrying
+    that placement decision into Launch Window's own UI rather than
+    burying a "how's my rival doing" view somewhere less visited.
+  - **(c) Decision:** **port the generic/non-generic goal split and its two
+    concrete mechanical consequences** (program-gating eligibility,
+    comparison-screen visibility) as Launch Window's starting shape,
+    re-deriving Launch Window's own actual goal list/prestige values rather
+    than reusing BASPM's (`design.md` §1.2). **(unconfirmed default)** port
+    the goal-gated reliability-penalty/bonus mechanic too, as a genuine
+    risk/reward lever distinct from reliability transfer — worth deciding
+    whether Launch Window surfaces this modifier explicitly in its own UI
+    (baspm.md §11.6 flags whether BASPM even does this as still unverified)
+    rather than leaving it as an invisible odds adjustment, since
+    async-multiplayer players benefit more from a legible "why did this
+    mission's odds look different" explanation than an offline player would.
 - 2.7 Random events
 - 2.8 Campaign objectives / win conditions
 - 2.9 **Multiplayer interaction model** — the one system with no BASPM
@@ -454,7 +544,10 @@ proceeds:
     `MultiplayerColdWar`/`CampaignRTTM` shape, not just an analogy: it really
     does expose which generic goals the opponent has achieved via a
     side-by-side comparison screen, `baspm.md` §5/§2.4, even though the two
-    sides otherwise play in isolation).
+    sides otherwise play in isolation — and per `baspm.md` §11.4/`design.md`
+    §2.6(b), it's not a standalone screen, it's bundled directly into the
+    budget/prestige overview the player already checks every turn, a
+    placement worth carrying over).
   - Direct communication: in-game chat/mail between players.
   - Active interference ("sabotage"): espionage, poaching the other side's
     personnel, disrupting a rival's launch window — needs careful balance so
