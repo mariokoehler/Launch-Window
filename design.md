@@ -284,13 +284,17 @@ proceeds:
       resolution, a step needing a saving-throw rescue automatically draws on
       any currently-available Expert-flagged personnel; no live decision, no
       per-turn "what if" declaration required from the player at all.
-      **Open sub-question, not yet resolved:** Expert personnel are
-      necessarily a shared, limited pool if more than one mission needs
-      rescuing in the same turn (or the same mission needs it more than
-      once) — needs a contention rule (first-come, a player-set priority
-      order across their active missions, or simply sizing the Expert
-      headcount so contention is rare by design). Revisit once §2.5/§2.9 pin
-      down realistic concurrent-mission counts.
+      **Contention resolved (user, 2026-09-27): no hard cap on how many
+      times an Expert gets drawn on in a single turn — instead, diminishing
+      returns/exhaustion.** Each additional rescue the same Expert performs
+      within one turn makes them progressively less effective (exact
+      falloff curve TBD, likely echoing the diminishing-returns shape
+      already established for training/skill growth, `baspm.md` §9.3, for
+      consistency rather than inventing a new curve shape). This sidesteps
+      needing any priority/queueing rule at all: an Expert is never
+      *unavailable*, just increasingly less reliable the more a single turn
+      leans on them — which also nicely discourages a player from treating
+      Expert staff as a free unlimited safety net.
       **(unconfirmed default) Secondary fallback, kept for the case no Expert
       personnel are available:** a pre-set cash-budget-cap policy — BASPM's
       original mechanic (`baspm.md` §9.5) — that only engages when the
