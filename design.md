@@ -209,10 +209,12 @@ same session it comes up**, the same standing-note-to-self habit as
   cooperation in orbit did eventually happen for real, just decades later
   and in a very different form: the **International Space Station**, a
   genuine multi-agency partnership (NASA, Roscosmos, ESA, JAXA, CSA) that
-  only became possible once Cold War competition itself wound down. A fair,
-  true beat for a moment introducing a GSA-equivalent faction (if Launch
-  Window keeps one): the real world eventually got a version of this idea,
-  just not the way GSA imagines it happening in the 1950s-70s.
+  only became possible once Cold War competition itself wound down. **Launch
+  Window decided against a GSA-equivalent faction entirely (§2.1(a1)/(b1),
+  2026-09-27), so this no longer has a faction to attach to** — still a true,
+  worth-keeping beat, just relocated to wherever it naturally fits instead
+  (a museum/history screen "did you know" aside is the obvious candidate,
+  not a dedicated faction-introduction moment).
 - **Surfaced during the §2.5/§2.6 "vital vs. optional step" discussion
   (2026-09-27): grading a mission by how many non-critical objectives it
   hit, rather than a flat success/fail, isn't a video-game invention** —
@@ -345,26 +347,23 @@ proceeds:
     which explicitly does have one using the identical win condition. The
     manual's own word for GSA is "**utopic**" (`baspm.md` §2.4) — a deliberate
     wish-fulfillment/alternate-history mode (what if Cold War competition had
-    been cooperation instead, `design.md` §1.1's ISS-precedent note already
-    made this connection), not a faction meant to be raced against a rival on
-    equal footing.
-  - **Decided (user, 2026-09-27): a universal-access archetype, if Launch
-    Window ships one at all, is excluded from whatever the default/standard
-    multiplayer ruleset is** — matching BASPM's actual solution, not the
-    previous session's "give it a compensating downside" idea, which is
-    retracted. **(unconfirmed default)** the cleanest way to model this given
-    what's already decided: a game-creation-time ruleset flag (same
-    game-instance-level config pattern already established for §3.6's
-    schedule profiles) — a "historical" ruleset offers only real
-    content-gated archetypes, an opt-in "open" ruleset also offers the
-    universal-access one. Whether Launch Window bothers building this
-    distinction for a first playable version, or simply doesn't ship a
-    universal-access archetype at all until it does, is left open — either
-    is consistent with this decision, neither needs deciding right now.
-    Feeds directly into `design.md` §4's still-open "how much of BASPM's
-    Cold War framing to keep vs. reskin" question — now a concrete content-
-    scope decision (how many archetypes, what their real-world basis is, and
-    whether a ruleset concept exists at all) rather than an abstract one.
+    been cooperation instead — the same real-world counterfactual `design.md`
+    §1.1 already connects to the ISS, decades later and in a different form),
+    not a faction meant to be raced against a rival on equal footing.
+  - **Decided (user, 2026-09-27): no GSA-equivalent archetype at all —
+    Launch Window ships exactly two non-exclusive archetypes, NASA-style and
+    Soviet-style.** Simpler than the previous session's "gate a
+    universal-access archetype behind an opt-in ruleset" idea — that whole
+    ruleset-flag mechanism is now unnecessary, retracted along with it, since
+    there's no universal-access content to gate in the first place. This
+    also isn't just "the safe choice" — it's the literal same shape as
+    BASPM's own actual competitive mode: `MultiplayerColdWar` (`baspm.md`
+    §2.4/§5) is *itself* strictly NASA vs. Soviet only, no GSA option,
+    exactly what Launch Window is now doing for its one and only ruleset.
+    Fully resolves `design.md` §4's "how much of BASPM's Cold War framing to
+    keep vs. reskin" question as far as archetype count/scope goes: two
+    archetypes, both real historical agencies, non-exclusive, no fictional
+    third faction.
   - **(b) What changes for async multiplayer:** nothing structural — this
     is entirely a between-turn, deterministic computation with no
     mid-resolution decision point (`baspm.md` §11.5), same shape as §2.3/
@@ -1318,26 +1317,16 @@ another container") rather than an application-level concern.
   lightly-loaded one (short-lived client connections plus one scheduled
   turn-resolution job), not a continuously-simulating one like either
   sibling project's.
-- How much of BASPM's historical Cold War framing (real programs, real
-  agencies) do we keep vs. reskin, given this ships under a different name
-  and is meant to stand on its own as a fan project? (§1) **Confirmed
-  non-exclusive (§3.8, then user, 2026-09-27), and now informed by §13's
-  full agency-differences trace (`design.md` §2.1(a1)/(b1)):** archetypes
-  are non-exclusive flavors, which sidesteps the capacity concern entirely
-  (BASPM's own 3 factions would have been too few seats for a ~10-player
-  game if exclusive). **Decided:** carry over real content-gating by
-  archetype (BASPM's own one real mechanical lever), economics stay
-  identical across archetypes (matching what BASPM's own shipped game
-  already does despite its data model supporting divergence). **A
-  GSA-style "unlocks everything" archetype is real strict superiority in a
-  competitive setting, not something a compensating bonus fixes (user
-  pushback, 2026-09-27, §2.1(b1) corrected) — decided: excluded from
-  whatever the default/standard multiplayer ruleset is**, matching what
-  BASPM's own designers actually did (fenced GSA out of `MultiplayerColdWar`
-  entirely, only allowed in the casual `MultiplayerFreeform` mode or GSA's
-  own rival-free solo campaign). **Still genuinely open:** the actual
-  content-scope question this was always really about — how many
-  archetypes, what real-world agencies/traditions they're based on, and
-  whether Launch Window ever builds a "historical vs. open ruleset" concept
-  to let a universal-access archetype exist at all (§2.1(b1)) — this is now
-  a concrete content-design task, not an abstract philosophical one.
+- **Resolved, as far as archetype count/scope goes (§2.1(a1)/(b1), 2026-09-27):
+  how much of BASPM's historical Cold War framing (real programs, real
+  agencies) do we keep vs. reskin?** Two non-exclusive archetypes, NASA-style
+  and Soviet-style, real content-gating carried over between them, economics
+  identical across both (matching what BASPM's own shipped game already
+  does). **No GSA-equivalent third faction** — a universal-access archetype
+  turned out to be real strict superiority in a competitive setting (user
+  pushback, 2026-09-27), not something a compensating bonus could fix, and
+  BASPM's own actual competitive mode (`MultiplayerColdWar`) already excludes
+  GSA the exact same way. What's still open is the *content* layer this
+  scope decision sits under — real program/mission-config names and history
+  vs. an original reskin, still governed by `design.md` §1.2's no-copying
+  rule either way.
