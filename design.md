@@ -43,21 +43,37 @@ fitting a game about staying ahead of a rival agency over a long game.
   resolves every player's queued actions simultaneously and advances the
   world by one turn. Nobody needs to be online at resolution time, and
   nobody blocks anybody else — the opposite of Robot-Rampage's "everyone
-  must confirm before the turn resolves" model. **(unconfirmed)** turn cadence
-  is one real day = one game turn; BASPM's own turns are "seasons," and the
-  manual confirms exactly one season = one quarter of a year (four seasons/
-  year, budget review every four years/16 seasons — `baspm.md` §3.1/§7) —
-  whether a Launch Window turn maps to a BASPM season or to something
-  finer-grained (e.g. a season takes several daily turns to play out, mission
-  steps trickling in day by day) is an open question, see §7.
+  must confirm before the turn resolves" model. **Decided (user,
+  2026-09-27): one real-world turn = one BASPM "season"**, straightforward
+  1:1 mapping, no finer-grained daily sub-turns within a season. This
+  resolves the turn-cadence open question that used to live in §4 — a season
+  is still exactly one quarter of a year in fiction (four seasons/year,
+  budget review every four years/16 seasons, `baspm.md` §3.1/§7), it's just
+  that "one turn" no longer means "one calendar day" universally — see the
+  **turn scheduling** note below and §3.6: not every real day produces a
+  turn.
 - **Match length:** a full game is expected to run **weeks to months** of
-  real time, not a single sitting — a deliberate consequence of the daily
+  real time, not a single sitting — a deliberate consequence of the daily-ish
   cadence, not a limitation to design around.
+- **Turn scheduling is per-game-instance configurable, not a fixed global
+  cadence (user, 2026-09-27).** Two anticipated player pools with different
+  needs: a friends group wants a turn every real day, 7 days a week; a
+  work-colleagues group wants turns only Monday–Friday, explicitly to avoid
+  any pressure to log in on a weekend (they'd play during a work coffee
+  break). Both are the same underlying mechanic — a per-game weekday
+  schedule — plus host-configurable **blackout periods** (holidays,
+  vacations) that suppress resolution even on an otherwise-active weekday,
+  addable *mid-playthrough*, not just at game creation. Full design in §3.6.
 - **Players:** more than BASPM's hard 1v1 cap (its own PBEM multiplayer modes
-  were strictly two-player — see `baspm.md`). Target player count
-  **(unconfirmed)**, likely small-group (perhaps 2-8, echoing the sibling
-  projects) rather than a persistent-world MMO — revisit once the
-  competitive-interaction model (§2.x, TBD) is chosen.
+  were strictly two-player — see `baspm.md`). **Two concrete target sizes
+  (user, 2026-09-27):** a friends group at **~4 players** and a
+  work-colleagues group at **~10 players** — these are the two real games
+  this project is being built to actually run, not hypothetical scale
+  targets. Architecture should comfortably handle small-group sizes in that
+  ~4–10 range rather than being designed around a persistent-world MMO;
+  revisit the upper bound once the competitive-interaction model (§2.x, TBD)
+  is chosen, since interference/sabotage mechanics may scale differently
+  than passive competition does.
 - **Fan project note:** BASPM is a game by Slitherine/Matrix Games. This
   project is non-commercial, references BASPM purely for analysis and
   inspiration (`baspm.md`), and intends to ship its own name, art, and
@@ -322,6 +338,72 @@ exists to generate a real manifest from.
   to an end** — worth treating "the asset pipeline" as a small project of
   its own with its own iteration, not a one-off script.
 
+### 3.6 Turn scheduling & calendar configuration
+
+Per §1, turn cadence isn't a single global constant — each game instance has
+its own **schedule profile** plus an editable list of **blackout periods**.
+This is a server-side concern (a scheduled job deciding "does a turn resolve
+today"), not a client feature, so it lives here rather than in §2.
+
+**Schedule profile (per game, set at creation, editable by the host later):**
+- **(unconfirmed default)** Two named presets to start:
+  - `DAILY` — resolves every day of the week (fits the friends-group use
+    case).
+  - `WEEKDAYS` — resolves Monday–Friday only, no Saturday/Sunday turns
+    (fits the work-colleagues use case: playable on a work laptop during a
+    break, no weekend pressure).
+  - Modeled as a weekday bitmask/set rather than a hardcoded enum of two
+    values, so a future custom profile (e.g. "Tuesday/Thursday only") is a
+    data change, not a code change — cheap to generalize now, not
+    over-engineering, since it's the same data shape either way.
+- Each profile also carries a **resolution time-of-day and timezone**
+  **(unconfirmed default: host's local timezone at game creation, stored
+  explicitly — never left as ambient server-local time**, since players may
+  span timezones and "midnight UTC" silently drifting relative to a host's
+  workday would be confusing).
+
+**Blackout periods (per game, a list, editable *during* a playthrough):**
+- A blackout is a **date range** (inclusive start/end date, in the game's
+  configured timezone) during which no turn resolves, *regardless* of what
+  the weekday schedule would otherwise say — covers national holidays or a
+  player's vacation.
+- **Must be addable mid-game, not just at game creation** (explicit user
+  requirement, 2026-09-27) — e.g. a host adding a Christmas/New Year
+  blackout mid-season, or blocking out a week once someone announces
+  vacation. Implies blackout periods are their own persisted, mutable
+  records (`ScheduleException` or similar), not baked into an
+  immutable game-config blob written once at creation.
+- **(unconfirmed default)** Only future dates can be blacked out — a
+  blackout can't retroactively undo a turn that already resolved. Adding one
+  that overlaps *today* before today's resolution job has fired should still
+  suppress today's turn; the scheduler's "does a turn resolve today" check
+  needs to run its blackout lookup at trigger time, not from a snapshot
+  taken earlier.
+- **Who can edit the blackout list (open question, not yet decided):**
+  probably whoever "owns"/hosts that game instance, but this project has no
+  admin/role model yet — revisit once §2's multiplayer interaction model
+  and any notion of a "game host" role are designed.
+
+**What happens on a non-resolving day:** nothing special — it's not a
+"skipped turn" needing its own state, it's simply a day the resolution job
+doesn't fire. Players can keep reviewing/editing their already-queued
+actions for the *upcoming* turn; nothing changes about their queued intents
+across a blackout or weekend. The in-game turn counter only increments on
+days the job actually runs, so "one turn = one season" (§1) stays exactly
+true regardless of how many real days a given turn's window spanned.
+
+**Architecture implication for §3.1:** this rules out a single naive global
+cron expression as the whole scheduling mechanism. The actual shape needed
+is closer to: a lightweight scheduler (cron-triggered, e.g. hourly) that,
+for *each active game*, checks that game's own weekday profile + blackout
+list to decide whether *that game* resolves today, then fires its
+turn-resolution job independently. Confirms §3.1's "stateless API + scheduled
+batch job" candidate shape is still workable — it just means the job is
+per-game-aware rather than one-size-fits-all, which was always implied by
+supporting multiple concurrent games (friends' game and colleagues' game
+running side by side, on different schedules) rather than a single global
+game instance.
+
 ## 4. Open questions (tracked here until resolved)
 
 - **Mid-turn/mid-mission player decisions.** BASPM stops and waits for a
@@ -349,9 +431,14 @@ exists to generate a real manifest from.
   0 prestige) — worth testing separately whether a mid-flight abort is
   actually penalized (`MsnSim*.xml`'s `OnCancellation` fields suggest it
   should be) before assuming "scrub" is uniformly free or uniformly costly.
-- Turn cadence: one real day = one BASPM "season", or finer-grained daily
-  turns within a season? (§1)
-- Player count per game / matchmaking model? (§1)
+- Turn cadence resolved (§1/§3.6): one turn = one BASPM "season", schedule
+  (which real days produce a turn) is per-game-configurable. Remaining
+  sub-question: who is allowed to edit a game's blackout-period list once
+  play has started — needs a "game host/admin" role concept that doesn't
+  exist yet (§3.6).
+- Matchmaking model / how a friends-group game and a colleagues-group game
+  (different schedules, different rosters) both exist as separate concurrent
+  game instances on the same server? (§1, §3.6)
 - Multiplayer interaction model: how much of §2.9's brainstorm ships in v1?
 - Client platform: native (libGDX, like the sibling projects) vs. web? (§3.3)
 - Does the server need a persistent process at all, or is it a stateless API
