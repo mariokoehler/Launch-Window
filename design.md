@@ -716,23 +716,26 @@ proceeds:
 
 ### 3.1 High-level shape
 
-Not yet decided. Candidate shape **(unconfirmed)**: no persistent game
-server process is strictly required by the async/daily-batch model the way
-StarWars' real-time server or Robot-Rampage's live session-holding server
-are — a player's "connection" is really just authenticated HTTP requests
-against a backend that stores per-turn intents and a scheduled job that
-resolves all pending turns once a day. This is architecturally closer to a
-web app with a cron job than to either sibling project's netcode. Whether it
-still benefits from a long-running server process (for push notifications,
-an admin/ops view, or reusing sibling-project infrastructure) is open — to
-be revisited once §2's mechanics are pinned down enough to know what state
-the server actually needs to hold and how often clients need to poll/be
-pushed to.
+**The "long-running process or not" question resolves itself once §3.3's
+tech stack and §3.8's account model are decided (2026-09-27) — yes, there is
+one, it just does much less continuous work than either sibling project's.**
+KryoNet needs a resident listener process regardless (same as both sibling
+projects), and §3.8's `AccountStore` pattern (an in-memory map, background-
+flushed to disk on a fixed cadence) also assumes a live, resident process —
+there's no version of this stack that's genuinely serverless. What's
+different from StarWars/Robot-Rampage isn't "process or no process," it's
+*how little* that process actually does most of the time: no continuous
+real-time simulation loop, no live session state per connection — just
+occasional short-lived client connections (§3.3's "connect, send today's
+actions, get current state, disconnect" RPC-style usage) plus one scheduled
+turn-resolution job per day (§3.6). Architecturally closer to a lightly-used
+long-running service than to either sibling's continuously-simulating game
+server, but a genuine resident process (and genuine Docker deployment,
+matching StarWars' own `Dockerfile` precedent, §3.9) either way.
 
 See §3.7 for the persistence/data-model decision (flat-file JSON, no
-database) — orthogonal to the "is there a long-running process" question
-above, but settles the *format* half of this section's remaining open
-question.
+database) and §3.9 for the one-game-per-server-instance decision that
+simplifies both §3.6's scheduler and §3.7's file layout.
 
 ### 3.2 Relationship to BASPM's own simulation code
 
@@ -916,17 +919,17 @@ across a blackout or weekend. The in-game turn counter only increments on
 days the job actually runs, so "one turn = one season" (§1) stays exactly
 true regardless of how many real days a given turn's window spanned.
 
-**Architecture implication for §3.1:** this rules out a single naive global
-cron expression as the whole scheduling mechanism. The actual shape needed
-is closer to: a lightweight scheduler (cron-triggered, e.g. hourly) that,
-for *each active game*, checks that game's own weekday profile + blackout
-list to decide whether *that game* resolves today, then fires its
-turn-resolution job independently. Confirms §3.1's "stateless API + scheduled
-batch job" candidate shape is still workable — it just means the job is
-per-game-aware rather than one-size-fits-all, which was always implied by
-supporting multiple concurrent games (friends' game and colleagues' game
-running side by side, on different schedules) rather than a single global
-game instance.
+**Architecture implication for §3.1, simplified by §3.9's one-game-per-server
+decision (2026-09-27):** a single server instance only ever needs to track
+*one* schedule profile and *one* blackout list — its own — not a per-game
+loop juggling several. The scheduler is just: on a fixed cadence (e.g.
+hourly), check *this* game's weekday profile + blackout list to decide
+whether today's turn resolves, then fire the turn-resolution job. Running
+the friends' game and the colleagues' game (each on their own schedule)
+means running two separate server instances (§3.9), not one scheduler
+managing two games — simpler than the "per-game-aware" framing this section
+originally had, back when a single server was assumed to host multiple
+concurrent games side by side.
 
 ### 3.7 Persistence & turn-resolution data model — decided (user, 2026-09-27): flat-file JSON, no database
 
@@ -1022,10 +1025,94 @@ rename into place) to avoid a half-written JSON file on disk if the server
 crashes mid-write — otherwise the "only the last action can be lost"
 crash-robustness goal doesn't actually hold.
 
-**Multi-game layout:** one top-level directory per game instance (§3.6
-already established multiple concurrent games — e.g. the friends' game and
-the colleagues' game — run on independent schedules), each containing its
-own per-player snapshot/journal subdirectories plus its own game-meta file.
+**File layout, simplified by §3.9's one-game-per-server decision
+(2026-09-27):** no multi-game top-level directory scheme needed — a server
+instance only ever persists *one* game, so its whole data root just contains
+that game's per-player snapshot/journal subdirectories plus its one
+game-meta file directly. Running the friends' game and the colleagues' game
+means two separate server instances with two separate data roots (§3.9), not
+one shared root disambiguating between games by ID.
+
+### 3.8 Player accounts & authentication
+
+**Decided (user, 2026-09-27): persistent player accounts, minimal — Display
+Name, Login, Password — deliberately mirroring the account system already
+built and working in the StarWars sibling project** (`StarWars/server/src/
+main/java/.../accounts/`: `PlayerAccount`, `AccountStore`, `PasswordHasher`,
+`AuthResult`). This is the same author's own prior code, not BASPM-derived,
+so directly reusing its actual shape (not just its idea) carries none of
+`design.md` §1.2's copying concerns.
+
+- **Account fields, deliberately minimal:** `login` (unique), `passwordHash`
+  + `passwordSalt` (the raw password is never stored, never logged), and a
+  re-writable `displayName` — StarWars' own convention is that a successful
+  login simply re-writes whatever display name was supplied that time, so
+  "change how I present in-game" needs no separate edit-profile flow, just
+  typing a different name next login. **Explicitly excludes anything
+  game-specific** (StarWars' account also carries lifetime XP/kills/deaths/
+  ship-unlocks, because those are cross-game persistent progression in that
+  project) — **decided (user, 2026-09-27): Launch Window's per-game choices
+  (agency/faction, and anything else about a specific playthrough) live
+  entirely in that game's own state, under the player's slot, not on the
+  account.** An account's only job is identity plus which slot it maps to.
+- **Password hashing: salted SHA-256**, reusing `PasswordHasher` directly —
+  StarWars' own documented reasoning ("good enough for this project's threat
+  model — a hobby dedicated server, not a target worth pulling in bcrypt/
+  Argon2 for") applies at least as strongly here, arguably more so (an
+  invite-only, non-real-time, small-group game is a lower-value target than
+  even that).
+- **Storage: reuse `AccountStore`'s pattern directly** — a single JSON file
+  mapping login → account, held as an in-memory synchronized map (no disk
+  I/O on the calling thread), flushed to disk on a fixed background cadence
+  with a dirty flag so an unchanged store never rewrites, periodic
+  retention-bounded rolling backups, and a JVM shutdown hook for one final
+  synchronous flush on a clean stop (`docker stop` included) so only a hard
+  crash can lose anything since the last scheduled flush. No libGDX
+  dependency — plain `Path`/Jackson I/O, directly unit-testable exactly as
+  StarWars' own `AccountStoreTest` already does. This is `design.md` §3.7's
+  flat-file-JSON-via-Jackson philosophy applied to a third concern, alongside
+  per-player game snapshots and the action journal, not a new persistence
+  idea.
+- **Login flow: reuse the exact same semantics** — a login name that doesn't
+  exist yet auto-creates the account from the supplied password + display
+  name; an existing login requires the password to match, or the attempt is
+  rejected.
+- **Open sub-question, concrete default proposed rather than left blank: how
+  an account claims a "player slot" in the one game this server hosts
+  (§3.9).** Since target player counts are small and known in advance (§1:
+  ~4 friends or ~10 colleagues), **(unconfirmed default)** the game is
+  created with a configured max-player-count (optionally plus an explicit
+  allowed-login allowlist, cheap insurance against a stray/uninvited login
+  claiming a slot if the server is reachable but not meant to be public) —
+  the first accounts to log in claim slots up to that count. Ties into the
+  still-open "who's allowed to edit the blackout list" host-role gap
+  (§3.6/§4) — both eventually want a lightweight "game host" concept, but
+  neither blocks a first playable version among trusted friends/colleagues
+  without one.
+- **Client-local settings (volume, display resolution, keybindings, etc.)
+  are explicitly out of scope for accounts entirely (user, 2026-09-27)** —
+  a plain local JSON file on the client machine, no server or account
+  involvement at all.
+
+### 3.9 Deployment: one game per server instance
+
+**Decided (user, 2026-09-27): a running server instance hosts exactly one
+game — no multi-tenancy inside a single process.** Supporting §1's two
+target groups running concurrently (the friends' game and the colleagues'
+game) means running two separate server instances — e.g. two Docker
+containers — not one server juggling several games internally. Real,
+already-used precedent for exactly this deployment shape: StarWars already
+ships its own dedicated-server `Dockerfile`.
+
+This is the decision that simplified §3.1 (a resident process, but a single
+one per game, not a multi-tenant one), §3.6 (the scheduler tracks one
+schedule profile/blackout list, not a per-game loop), and §3.7 (no
+multi-game directory layout needed) — each cross-references back here as the
+originating decision, recorded once in full instead of three times.
+Rationale, as the user put it: keeps the server itself simpler (no
+multi-tenant game-selection/routing layer to design or build at all), and
+scaling across groups becomes infrastructure-level parallelism ("start
+another container") rather than an application-level concern.
 
 ## 4. Open questions (tracked here until resolved)
 
