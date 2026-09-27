@@ -275,8 +275,30 @@ subsection list, derived from BASPM's own manager/system boundaries
 proceeds:
 
 - 2.1 **Space agencies, budget & funding cycle — analyzed 2026-09-27, see
-  `baspm.md` §11 for the full trace.**
-  - **(a) How BASPM does it:** prestige (earned only from missions/goals,
+  `baspm.md` §11 for the budget/funding trace and §13 for the agency-
+  differences trace (added after a direct user question, 2026-09-27).**
+  - **(a1) How BASPM's agencies actually differ, mechanically (§13):**
+    ranked by real significance — **(1) program/component access is the one
+    real, structurally-enforced gate**: NASA and Soviet each only ever see
+    their own tagged content (55 programs split 32/23, zero shared ones; 85
+    mission components split 50/35), enforced by one shared rule
+    (`CoreManager.ElementPassesSpaceAgencyTest`) that also gives **GSA
+    universal access to everything, regardless of tag** — confirms the "NASA
+    can't launch Sputnik" guess exactly, and confirms GSA is a genuine
+    super-agency, not a third separate content track. **(2) GSA also gets a
+    real synergy bonus beyond raw access**: its Reliability Transfer table
+    isn't just NASA's + Soviet's tables filed together — 44% of its targets
+    declare cross-lineage sources neither single-agency table has (a real
+    NASA rocket drawing a reliability bonus from a real Soviet one), modeling
+    genuine East-West tech-sharing that was historically impossible for
+    either agency alone. **(3) Everything else is cosmetic or a structurally
+    present but unused lever**: personnel candidate pools differ only in
+    name flavor (zero stat differences); `Constants-<Agency>.xml` for all
+    three agencies are byte-for-byte identical (same funds, same budget-
+    review brackets) despite the per-agency file split existing to support
+    divergence; `SpaceAgencyT.Common` is entirely dead code, never
+    referenced or tagged anywhere.
+  - **(a) How BASPM does it (budget/funding):** prestige (earned only from missions/goals,
     never cash directly) is the sole input to a budget review every 16
     seasons (4 years), which sets a **recurring per-season funding rate**
     (not a lump sum) via a tiered lookup — each review has its own
@@ -289,6 +311,30 @@ proceeds:
     None of this is hidden — the PAO screen (`baspm.md` §11.4) shows the
     current bracket's exact thresholds and a live-projected next-review
     budget at all times.
+  - **(b1)/(c1) Non-exclusive archetypes (`design.md` §3.8, already decided)
+    meets (a1)'s findings — decided (user, 2026-09-27): carry over real
+    mechanical content-gating by archetype, but keep the economic side
+    identical across archetypes.** BASPM's own precedent turns out to be
+    exactly this shape already — a real, structurally-enforced content
+    difference (program/component access) paired with an economic side that
+    the shipped game deliberately leaves identical despite the data model
+    supporting divergence (a1's finding #3). Since Launch Window's archetypes
+    are non-exclusive (§3.8 — several players can share one), gating content
+    by archetype creates no scarcity problem: each player's programs/
+    components are resolved from their own independent snapshot (§3.7), so
+    multiple players racing to open "their" archetype's Sputnik-equivalent
+    never actually contend with each other. **(unconfirmed default)** also
+    adopt a GSA-style "unlocks everything" archetype as one option among the
+    non-exclusive choices, specifically *because* (a1)'s finding #2 (the
+    cross-lineage Reliability Transfer bonus) is such a strong, thematically-resonant
+    mechanic (real synergy from combining traditions, not just more content)
+    — worth deliberately re-deriving an equivalent bonus for Launch Window's
+    own version rather than letting a hypothetical "access everything"
+    archetype be strictly, boringly better with no offsetting trade-off.
+    Feeds directly into `design.md` §4's still-open "how much of BASPM's
+    Cold War framing to keep vs. reskin" question — now a concrete content-
+    scope decision (how many archetypes, what their real-world basis is)
+    rather than an abstract one.
   - **(b) What changes for async multiplayer:** nothing structural — this
     is entirely a between-turn, deterministic computation with no
     mid-resolution decision point (`baspm.md` §11.5), same shape as §2.3/
@@ -1244,13 +1290,19 @@ another container") rather than an application-level concern.
   sibling project's.
 - How much of BASPM's historical Cold War framing (real programs, real
   agencies) do we keep vs. reskin, given this ships under a different name
-  and is meant to stand on its own as a fan project? (§1) **New concrete
-  dependency (§3.8, 2026-09-27): how many distinct agency archetypes Launch
-  Window ships, and whether they're exclusive per game, is now blocking on
-  this** — BASPM's own 3 factions aren't enough seats for a ~10-player game
-  if archetypes must be unique per game; the **(unconfirmed default)**
-  proposed in §3.8 is non-exclusive archetypes (several players can share
-  one, distinguished by their own agency name/persona), which would make
-  this question purely a flavor/content-scope decision rather than a
-  hard-capacity constraint — worth confirming that framing before this gets
-  resolved for real.
+  and is meant to stand on its own as a fan project? (§1) **Confirmed
+  non-exclusive (§3.8, then user, 2026-09-27), and now informed by §13's
+  full agency-differences trace (`design.md` §2.1(a1)/(b1)):** archetypes
+  are non-exclusive flavors, which sidesteps the capacity concern entirely
+  (BASPM's own 3 factions would have been too few seats for a ~10-player
+  game if exclusive). **Decided:** carry over real content-gating by
+  archetype (BASPM's own one real mechanical lever), economics stay
+  identical across archetypes (matching what BASPM's own shipped game
+  already does despite its data model supporting divergence). **Still
+  genuinely open:** the actual content-scope question this was always
+  really about — how many archetypes, what real-world agencies/traditions
+  they're based on, and whether a GSA-style "unlocks everything" option
+  ships too (§2.1(b1) proposes yes, paired with re-deriving its own version
+  of GSA's cross-lineage Reliability Transfer bonus rather than making it
+  strictly better with no trade-off) — this is now a concrete content design
+  task, not an abstract philosophical one.

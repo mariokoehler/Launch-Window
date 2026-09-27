@@ -283,7 +283,10 @@ enum DifficultyLevelT { Normal = 1, Hard = 2, BuzzHard = 3 }
   GetLongTermGSACampaignObjectives`'s `deadlineYear=1974, deadlinePeriod=4`,
   §12.3) plus periodic short-term objectives from `GSACampaignObjectives.xml`
   (`CampaignManager.cs` only initializes these `if playerSpaceAgency == GSA`).
-  **Traced in full, see §12.3.**
+  **Traced in full, see §12.3.** Its mechanical identity as a playable
+  faction outside that campaign (access to every program/component
+  regardless of tag, plus a unique cross-lineage Reliability Transfer bonus)
+  is traced separately in **§13**.
 - **`CampaignRTTM`** — the manual never spells out the acronym or uses it as
   a name, but repeatedly calls this mode "the race to the Moon campaign(s)"
   (p.5-6, p.28, p.41), so "Race To The Moon" is a confident reading, not
@@ -1385,6 +1388,10 @@ knowing, none of them guessable from the manual's one-line summary:
   scaled by its own difficulty multiplier (Normal/`Value1` only, per
   `design.md` §2.10). Later reviews demand more cumulative prestige for the
   same or better funding — the bar rises every cycle, it doesn't stay fixed.
+  **The `<Agency>` in that filename turns out not to matter in practice —
+  §13.4 confirms `Constants-NASA.xml`/`Constants-Soviet.xml`/
+  `Constants-GSA.xml` are textually identical, so every number in this
+  subsection is the same regardless of which agency is playing.**
 - **The formula itself is linear interpolation within the current review's
   bracket, floored/capped at its ends:** at or below `MinPrestigePoints`,
   the player gets exactly `MinBudget`; at or above `MaxPrestigePoints`,
@@ -1731,3 +1738,128 @@ GSA's specific scripted story content, consistent with `design.md` §1.2.
 2. **Low priority:** a screenshot of the GSA campaign's Victory/Game Over
    overlay (§12.3) — confirms presentation only, the win/loss mechanism
    itself is already code-confirmed.
+
+## 13. Per-agency differences: what actually differs between NASA/Soviet/GSA (traced 2026-09-27)
+
+Direct answer to a question raised during design discussion: BASPM's data is
+split into per-agency files everywhere (`Constants-<Agency>.xml`,
+`AstronautCandidates-<Agency>.xml`, `MissionControlCandidates-<Agency>.xml`,
+`SETCandidates-<Agency>.xml`, `ReliabilityTransfers-<Agency>.xml`, plus
+`Programs.xml`/`MissionComponents.xml`'s per-entry `SpaceAgency` attribute),
+but nothing in this file had actually compared their *contents* before now.
+**Code-confirmed** throughout, diffing the live install's actual Data
+Scripts files (`SPM-Windows_Data\Scripts\Data Scripts\General Container\` —
+same "not in `extracted\`" gotcha as `Programs.xml`/`Goals.xml`, §10/§11)
+directly against each other and against the source.
+
+### 13.1 Program/component access — the one real, structurally-enforced difference, confirms the "can't launch Sputnik" guess exactly
+
+`Programs.xml`'s 55 programs split `SpaceAgency='NASA'` (32) /
+`SpaceAgency='Soviet'` (23) — no shared/neutral program exists at all.
+`MissionComponents.xml`'s 85 components split similarly (50 NASA / 35
+Soviet). **The entire gating mechanism is one shared method,
+`CoreManager.ElementPassesSpaceAgencyTest`** (used identically by both
+`ProgramsManager` and `MissionComponentsManager`, the only two callers in
+the whole codebase):
+
+```
+return playerSpaceAgency == SpaceAgencyT.GSA || playerSpaceAgency == elementSpaceAgency;
+```
+
+I.e.: a NASA player only ever sees NASA-tagged content, a Soviet player only
+ever sees Soviet-tagged content — **and a GSA player sees literally
+everything**, since the test always passes for GSA regardless of the
+element's own tag. GSA isn't a third separate content track; it's "no
+filter applied," a genuine super-agency exactly matching the manual's own
+framing (`baspm.md` §2.4, "a utopic international space agency that unites
+all the world's space programs").
+
+### 13.2 Reliability Transfer: GSA gets a real synergy bonus, not just wider access
+
+`ReliabilityTransfers-Soviet.xml` (416 lines) encodes the real Soviet R-7
+family (Sputnik/Vostok/Voskhod/Molniya/Soyuz launch vehicles, all R-7
+derivatives) plus Proton and N1, and even the real-but-never-flown Chelomei
+UR-700 proposal — same historically-grounded-lineage approach `baspm.md`
+§10.3 already found for NASA's table (Redstone/Atlas/Titan/Saturn), same
+generosity range (25–60%, same caps, e.g. both agencies' R-7/Redstone-class
+targets cap at `MaxReliabilityTransfer="60"`).
+
+**`ReliabilityTransfers-GSA.xml` is not simply the union of the other two
+tables re-filed under one agency — 37 of its 85 targets (44%) declare
+*cross-lineage* sources that never appear in either single-agency file.**
+Concrete example, `JUPITER-C` (a real NASA vehicle) as a GSA target: its
+source list includes `REDSTONE`/`JUNO_II`/`ATLAS` (as expected, matching
+NASA's own table) but *also* `R-7_SPUTNIK` (25%), `R-7_VOSTOK` (27.5%),
+`R-7_SOYUZ` (32.5%), `PROTON` (25%), `N1` (50%) — Soviet-lineage sources a
+NASA-only or Soviet-only player's own table never lists for that target.
+**This is a genuine, deliberate GSA-exclusive mechanical edge, not just
+"access to more programs"**: a GSA player can draw reliability-transfer
+benefit from cross-pollinating American and Soviet hardware experience,
+representing real East-West technology sharing that was politically
+impossible for either historical agency alone — thematically rich, and
+worth calling out as real design intent by BASPM's own developers, not an
+incidental side effect of GSA's "sees everything" filter.
+
+### 13.3 Personnel candidate pools: cosmetic (name-flavor) only, zero stat differences
+
+`AstronautCandidates-<Agency>.xml`/`MissionControlCandidates-<Agency>.xml`/
+`SETCandidates-<Agency>.xml` differ **only in candidate names** — each
+`<Candidate>` entry carries just `GlobalID`/`Name`/`Sex`/`HasOwnPortrait`,
+no skill or stat attributes at all. NASA's astronaut pool includes named
+historical figures (Buzz Aldrin appears once, alongside generic American
+names); Soviet's includes Yuri Gagarin alongside Cyrillic-flavored
+transliterated names; GSA has its own separate (presumably more
+internationally-mixed, not characterized in detail here) name pool. **Every
+actual stat/skill value is generated from the same agency-agnostic
+quality-distribution tables** already documented (`PersonnelManagerConstants.xml`,
+`baspm.md` §9.4) — personnel generation itself has no mechanical agency
+dependency whatsoever, only which name gets drawn.
+
+### 13.4 Economic constants: a per-agency lever that exists in the data model but the shipped game never uses
+
+**`Constants-NASA.xml`, `Constants-Soviet.xml`, and `Constants-GSA.xml` are
+byte-for-byte textually identical** (confirmed via direct `diff`, zero
+output either way) — same `PlayerInitialFunds` (25000), same
+`PlayerInitialPrestigePoints` (250), same `InitialBudgetPerSeason` (3000),
+and all ten of `baspm.md` §11.1's budget-review brackets, digit for digit.
+The per-agency file split clearly exists to *support* independent economic
+tuning per agency, but the base game's actual authored content simply never
+diverges — NASA/Soviet/GSA are 100% economically identical in the shipped
+game, an unused lever exactly like `SpaceAgencyT.Common` below.
+
+### 13.5 `SpaceAgencyT.Common`: confirmed entirely dead
+
+A codebase-wide search found **zero references to the enum value anywhere
+outside its own declaration** (`SpaceAgencyT.cs`), and zero XML data
+anywhere tags anything `Common`. Not a playable choice, not an internal
+marker actually used for anything in the shipped game — a genuinely unused
+enum slot, nothing more.
+
+### 13.6 Goals: agency association is indirect, not a direct tag (inferred, not chased further)
+
+`Goals.xml` itself carries no `SpaceAgency` attribute on any goal entry.
+The 173 non-generic, agency-flavored goals (`baspm.md` §11.3) most likely
+get their agency association *indirectly*, through which agency's
+mission-configurations grant them (a Soviet-only program's mission configs
+can only ever be flown, and thus only ever grant their goals, by a Soviet
+player) — **inferred from how every other agency-specific system in this
+codebase works, not independently code-confirmed**; low priority to chase
+further since it doesn't change the ranked picture below.
+
+### 13.7 Ranked summary and the design question it answers
+
+In order of actual mechanical significance:
+1. **Program/component access (§13.1)** — the one real, structurally
+   enforced gate. Confirms the "NASA can't launch Sputnik" guess exactly.
+2. **Reliability Transfer cross-pollination for GSA (§13.2)** — a genuine
+   GSA-exclusive bonus mechanic, not reducible to "more content."
+3. **Everything else is cosmetic or an unused lever**: personnel pools
+   differ only in name flavor (§13.3); economic constants are a real
+   per-agency capability the shipped game never actually exercises (§13.4);
+   `Common` is dead (§13.5); goals are agency-flavored only indirectly,
+   through program access (§13.6).
+
+**Directly answers the design question this pass was launched to inform**
+(`design.md` §2.1/§3.8, §3.8's non-exclusive-archetype decision): see
+`design.md` §2.1 for the resulting decision on whether Launch Window's own
+archetypes should carry a mechanical difference or stay flavor-only.
