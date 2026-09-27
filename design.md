@@ -323,18 +323,48 @@ proceeds:
     by archetype creates no scarcity problem: each player's programs/
     components are resolved from their own independent snapshot (§3.7), so
     multiple players racing to open "their" archetype's Sputnik-equivalent
-    never actually contend with each other. **(unconfirmed default)** also
-    adopt a GSA-style "unlocks everything" archetype as one option among the
-    non-exclusive choices, specifically *because* (a1)'s finding #2 (the
-    cross-lineage Reliability Transfer bonus) is such a strong, thematically-resonant
-    mechanic (real synergy from combining traditions, not just more content)
-    — worth deliberately re-deriving an equivalent bonus for Launch Window's
-    own version rather than letting a hypothetical "access everything"
-    archetype be strictly, boringly better with no offsetting trade-off.
+    never actually contend with each other.
+  - **A GSA-equivalent "unlocks everything" archetype is real strict
+    superiority in a competitive setting — correction of the previous
+    session's proposal (user pushback, 2026-09-27), resolved by re-reading
+    BASPM's own actual precedent rather than inventing a compensating bonus.**
+    More content options plus a real synergy bonus, on the *same* economy as
+    every other archetype (a1's finding #3), is a strict advantage, not a
+    trade-off — the earlier idea to "re-derive an equivalent bonus so it
+    isn't just better" doesn't actually fix that, since the imbalance is
+    structural (more optionality is never worse), not a missing downside to
+    balance out. **BASPM's own designers evidently reached the same
+    conclusion and solved it structurally, not by nerfing GSA**:
+    `MultiplayerColdWar` — the mode explicitly modeling the real historical
+    race, `baspm.md` §2.4/§5 — is **hard-restricted to NASA vs. Soviet only,
+    GSA isn't even a selectable option there.** GSA is only choosable in
+    `MultiplayerFreeform`, the explicitly casual/"anything goes" mode (the
+    manual's own example is a player racing *themselves* in hotseat mode).
+    And GSA's actual home turf is solo: `CampaignGSA` (`baspm.md` §12.3) is a
+    fixed-deadline race with **no AI rival at all** — contrast `CampaignRTTM`,
+    which explicitly does have one using the identical win condition. The
+    manual's own word for GSA is "**utopic**" (`baspm.md` §2.4) — a deliberate
+    wish-fulfillment/alternate-history mode (what if Cold War competition had
+    been cooperation instead, `design.md` §1.1's ISS-precedent note already
+    made this connection), not a faction meant to be raced against a rival on
+    equal footing.
+  - **Decided (user, 2026-09-27): a universal-access archetype, if Launch
+    Window ships one at all, is excluded from whatever the default/standard
+    multiplayer ruleset is** — matching BASPM's actual solution, not the
+    previous session's "give it a compensating downside" idea, which is
+    retracted. **(unconfirmed default)** the cleanest way to model this given
+    what's already decided: a game-creation-time ruleset flag (same
+    game-instance-level config pattern already established for §3.6's
+    schedule profiles) — a "historical" ruleset offers only real
+    content-gated archetypes, an opt-in "open" ruleset also offers the
+    universal-access one. Whether Launch Window bothers building this
+    distinction for a first playable version, or simply doesn't ship a
+    universal-access archetype at all until it does, is left open — either
+    is consistent with this decision, neither needs deciding right now.
     Feeds directly into `design.md` §4's still-open "how much of BASPM's
     Cold War framing to keep vs. reskin" question — now a concrete content-
-    scope decision (how many archetypes, what their real-world basis is)
-    rather than an abstract one.
+    scope decision (how many archetypes, what their real-world basis is, and
+    whether a ruleset concept exists at all) rather than an abstract one.
   - **(b) What changes for async multiplayer:** nothing structural — this
     is entirely a between-turn, deterministic computation with no
     mid-resolution decision point (`baspm.md` §11.5), same shape as §2.3/
@@ -1298,11 +1328,16 @@ another container") rather than an application-level concern.
   game if exclusive). **Decided:** carry over real content-gating by
   archetype (BASPM's own one real mechanical lever), economics stay
   identical across archetypes (matching what BASPM's own shipped game
-  already does despite its data model supporting divergence). **Still
-  genuinely open:** the actual content-scope question this was always
-  really about — how many archetypes, what real-world agencies/traditions
-  they're based on, and whether a GSA-style "unlocks everything" option
-  ships too (§2.1(b1) proposes yes, paired with re-deriving its own version
-  of GSA's cross-lineage Reliability Transfer bonus rather than making it
-  strictly better with no trade-off) — this is now a concrete content design
-  task, not an abstract philosophical one.
+  already does despite its data model supporting divergence). **A
+  GSA-style "unlocks everything" archetype is real strict superiority in a
+  competitive setting, not something a compensating bonus fixes (user
+  pushback, 2026-09-27, §2.1(b1) corrected) — decided: excluded from
+  whatever the default/standard multiplayer ruleset is**, matching what
+  BASPM's own designers actually did (fenced GSA out of `MultiplayerColdWar`
+  entirely, only allowed in the casual `MultiplayerFreeform` mode or GSA's
+  own rival-free solo campaign). **Still genuinely open:** the actual
+  content-scope question this was always really about — how many
+  archetypes, what real-world agencies/traditions they're based on, and
+  whether Launch Window ever builds a "historical vs. open ruleset" concept
+  to let a universal-access archetype exist at all (§2.1(b1)) — this is now
+  a concrete content-design task, not an abstract philosophical one.
