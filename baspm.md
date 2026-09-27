@@ -909,7 +909,14 @@ decompiled code:
    for whether a plain, unsolved `MINOR_GLITCH` ever actually lets the
    mission continue, or whether in practice every unsolved glitch falls into
    the same failure band that ends it — §8.2's "half-credit, continues" claim
-   should be treated as unconfirmed until that's settled.
+   should be treated as unconfirmed until that's settled. **Downgraded from
+   blocking to merely curious (user design input, 2026-09-27, `design.md`
+   §2.5(c)):** Launch Window is now leaning toward designing its own
+   "vital vs. optional step" outcome model from first principles rather than
+   porting BASPM's exact step-outcome tiering, so this question no longer
+   gates any Launch Window design decision — still worth settling for
+   completeness if it comes up naturally, not worth spending a dedicated
+   pass on.
 2. **A screenshot of `ETLaunchSchedMsnsOverlay`** (the season-advance
    Launch/Scrub/Resume screen, manual p.36-ish) mid-multi-season-mission —
    confirms in the UI itself (not just the code label found in §8.1) exactly

@@ -213,6 +213,18 @@ same session it comes up**, the same standing-note-to-self habit as
   true beat for a moment introducing a GSA-equivalent faction (if Launch
   Window keeps one): the real world eventually got a version of this idea,
   just not the way GSA imagines it happening in the 1950s-70s.
+- **Surfaced during the §2.5/§2.6 "vital vs. optional step" discussion
+  (2026-09-27): grading a mission by how many non-critical objectives it
+  hit, rather than a flat success/fail, isn't a video-game invention** —
+  real space agencies genuinely plan and report missions this way. NASA/JPL
+  project formulation routinely distinguishes **must-achieve requirements**
+  from lower-tier **bonus/extended objectives**, and real missions get
+  graded on exactly that spectrum after the fact (e.g. "prime mission
+  success" vs. an extended/bonus phase for a planetary probe that outlives
+  its baseline requirements). A true, concrete real-world precedent worth
+  a short beat wherever Launch Window's own gold/silver/bronze goal rating
+  (§2.6(c)) is first explained to a player — this is how real missions
+  actually get scored, not just a game abstraction layered on top.
 
 ### 1.2 Content & asset policy: no copying BASPM's copyrighted content
 
@@ -516,6 +528,19 @@ proceeds:
     as-is: a mission genuinely taking several turns to play out (with
     escalating stakes each turn, per the Sputnik example in `baspm.md` §8.1)
     is good game feel to keep, not an artifact to engineer away.
+    **Potential direction, not yet decided (user, 2026-09-27): design our own
+    step-outcome model from first principles — "vital" vs. "optional" steps —
+    rather than trying to replicate BASPM's exact tiering.** The idea: some
+    steps are make-or-break (e.g. ascent) where failure should end the
+    mission and can be crew-fatality-eligible; others are lower-stakes (e.g.
+    an in-flight science-collection step) where failure should only reduce
+    rewards, not end the mission outright. **This downgrades the still-open
+    `baspm.md` §8.4 item 1 question** (whether BASPM's own unresolved
+    `MINOR_GLITCH` ever lets a mission continue) **from blocking to merely
+    curious** — since Launch Window would define its own vital/optional split
+    rather than inherit BASPM's exact step semantics either way, it no longer
+    gates any design choice here. This idea also directly motivates a tiered
+    goal-achievement rating, cross-referenced into §2.6(c) below.
 - 2.6 **Prestige, goals & scoring — analyzed 2026-09-27, see `baspm.md` §11
   for the full trace.**
   - **(a) How BASPM does it:** goals are `Generic` (universal race
@@ -557,6 +582,15 @@ proceeds:
     rather than leaving it as an invisible odds adjustment, since
     async-multiplayer players benefit more from a legible "why did this
     mission's odds look different" explanation than an offline player would.
+    **Potential direction, not yet decided (user, 2026-09-27, follows from
+    §2.5(c)'s "vital vs. optional step" idea): a tiered goal-achievement
+    rating** — e.g. gold/3-star for completing a mission without failing any
+    optional step, silver/2-star for at most one optional-step failure,
+    bronze/1-star for more — giving goal achievement a quality dimension
+    beyond BASPM's plain achieved-or-not, without needing a vital step to
+    ever fail (that still just ends the mission, per §2.5). No BASPM
+    precedent for this; it's a Launch Window-original scoring layer, floated
+    as a direction worth keeping in mind rather than committed to yet.
 - 2.7 **Random events — analyzed 2026-09-27, see `baspm.md` §12.1/§12.2 for
   the full trace.**
   - **(a) How BASPM does it:** two independent per-season dice rolls (5%
