@@ -132,6 +132,20 @@ same session it comes up**, the same standing-note-to-self habit as
   on that) — the educational angle works whether Launch Window keeps BASPM's
   real Sputnik-through-Apollo framing or reskins it, as long as *some*
   real-world engineering challenge is still being modeled underneath.
+- **Surfaced during the §2.5 mission-simulation trace (2026-09-27): the
+  "saving throw" mechanic (a failing step getting caught/fixed by skilled
+  flight controllers, `baspm.md` §8.2) is modeling something real and
+  genuinely dramatic, not just a game-balance abstraction** — real Mission
+  Control teams have saved missions through exactly this kind of real-time
+  anomaly response: Apollo 11's 1202/1201 program alarms during the lunar
+  descent, where a controller's split-second correct call *not* to abort
+  (recognizing the computer was just overloaded, not failing) let the
+  landing proceed; Apollo 13's oxygen-tank explosion, where the "failure"
+  didn't end the mission because ground teams improvised a survival plan in
+  real time. A short "here's the real event this kind of save is modeling"
+  note attached to a step that gets rescued by a good saving throw is a
+  strong, concrete candidate for this pillar — dramatic, true, and it lands
+  at the exact moment the mechanic just made it matter to the player.
 
 ### 1.2 Content & asset policy: no copying BASPM's copyrighted content
 
@@ -187,8 +201,48 @@ proceeds:
 - 2.3 Programs & mission configurations (the Sputnik→Apollo tech/content
   tree)
 - 2.4 Mission components (rockets, capsules, boosters) & reliability
-- 2.5 Mission simulation (the step-by-step launch/flight resolution, success/
-  failure rolls)
+- 2.5 **Mission simulation (the step-by-step launch/flight resolution,
+  success/failure rolls) — analyzed 2026-09-27, see `baspm.md` §8 for the
+  full formula trace.**
+  - **(a) How BASPM does it:** a mission is a multi-season entity (commonly
+    spans several real seasons already, e.g. a satellite's launch season
+    plus several follow-on "keep operating it" seasons), and each season
+    contributes its own ordered batch of steps. Each step resolves via up to
+    two rolls — a base roll weighted by component-reliability/personnel-skill
+    involvement percentages, then (only if that fails) a "saving throw"
+    scaled by flight-controller skill that can fully rescue the step
+    (`MINOR_GLITCH_SOLVED`) or downgrade the failure's severity. A
+    `CATASTROPHIC`/`FAILURE` step **ends the mission immediately** — no
+    further steps run that season or in any later season. Crucially, this
+    entire step-by-step chain is a **fully automatic dice-and-consequence
+    sequence once triggered — it needs no player input mid-sequence**; every
+    genuine player decision point (scrub/launch/assign, per `baspm.md` §7.2)
+    happens *before* a season's step batch runs, never interleaved with it.
+  - **(b) What changes for async multiplayer:** almost nothing structurally
+    — this is the rare case where BASPM's own model already fits the
+    daily-batch shape directly rather than needing adaptation. "Resolve this
+    mission's current season" is a clean, self-contained, non-interactive
+    operation the server-side turn job can run once per in-progress mission
+    per turn, with zero risk of needing to pause mid-resolution for a player
+    click (§3.6/§4's mid-turn-decision problem turns out to be entirely a
+    *pre*-resolution problem — which missions get scrubbed/launched/assigned
+    before the job runs — not a mid-resolution one).
+  - **(c) Decision:** **port the two-roll formula shape** (base
+    involvement-weighted probability, then a flight-controller-scaled saving
+    throw with catastrophic/failure/minor-glitch bands) as Launch Window's own
+    starting mission-resolution mechanic, re-deriving the actual tuning
+    numbers rather than reusing BASPM's `Constants.xml` values verbatim
+    (`design.md` §1.2 — and we're free to retune balance for our own player
+    counts/pacing regardless). **(unconfirmed default)** carry over the
+    outcome taxonomy's *shape* (a clean success, a "rescued" success, a
+    half-credited partial failure, a full failure, and a crew-fatality-
+    eligible worst tier) without committing to BASPM's exact five-plus-one
+    labels — revisit once §2.6 (prestige/scoring) is designed, since the
+    outcome tiers only matter insofar as they map to a scoring/consequence
+    model we still need to design fresh. Multi-season missions are adopted
+    as-is: a mission genuinely taking several turns to play out (with
+    escalating stakes each turn, per the Sputnik example in `baspm.md` §8.1)
+    is good game feel to keep, not an artifact to engineer away.
 - 2.6 Prestige, goals & scoring
 - 2.7 Random events
 - 2.8 Campaign objectives / win conditions
@@ -429,18 +483,28 @@ game instance.
 
 ## 4. Open questions (tracked here until resolved)
 
-- **Mid-turn/mid-mission player decisions.** BASPM stops and waits for a
-  player click at several points *within* a turn, not just between turns:
-  scrubbing a scheduled/in-progress mission, pulling an employee out of
-  training early, some `REB*`/decision-event choices (`baspm.md` §7.2). A
-  daily-batch resolver where nobody's expected to be online has no obvious
-  equivalent. Candidates: submit conditional policies alongside the rest of
-  the turn ("scrub this mission if X happens"), defer the decision to the
-  next day's turn at some in-fiction cost, or auto-resolve with a
+- **Mid-turn/mid-mission player decisions — narrowed by the §2.5 mission-sim
+  trace (2026-09-27).** BASPM stops and waits for a player click at several
+  points *within* a turn, not just between turns: scrubbing a scheduled/
+  in-progress mission, pulling an employee out of training early, some
+  `REB*`/decision-event choices (`baspm.md` §7.2). Originally worried this
+  meant a daily-batch resolver where nobody's expected online has no obvious
+  equivalent — **the mission-simulation trace resolves the "mid-*resolution*"
+  half of that worry: a season's step-by-step roll sequence is fully
+  automatic once triggered, needing no player input while it runs** (`baspm.md`
+  §8.1/§8.2) — every one of BASPM's own stop-and-click points (scrub/launch/
+  assign, training pull-out, `REB*` choices) happens *before* that sequence
+  starts, never interleaved with it. **What's still genuinely open is only
+  the *pre*-resolution question:** what does a player who doesn't log in
+  before a turn's server tick implicitly decide for each of those points?
+  Candidates unchanged: submit conditional policies alongside the rest of the
+  turn ("scrub this mission if X happens"), defer the decision to the next
+  day's turn at some in-fiction cost, or auto-resolve with a
   player-overridable default up until that day's server tick.
-  **(unconfirmed)** — needs deciding before §2.5 (mission simulation) and
-  §2.7 (random events) can be finalized. **One sub-case already resolved
-  favorably by real savegame evidence (`baspm.md` §8.1, 2026-09-27):
+  **(unconfirmed)** — needs deciding before §2.7 (random events) can be
+  finalized. **One sub-case already resolved favorably by real savegame
+  evidence (`baspm.md` §2.1, 2026-09-27 — this citation previously pointed
+  at a §8.1 that didn't yet exist; backfilled properly this session):
   ongoing R&D assignment is NOT one of the awkward mid-turn cases** — despite
   its state name (`ASSIGNED_TO_RD_ONE_TURN`), an assignment persists
   automatically across seasons with no re-declaration needed, confirmed by

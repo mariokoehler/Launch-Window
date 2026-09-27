@@ -146,11 +146,11 @@ the full screen graph for real.
   `new System.Random(...)` call, also not yet traced.
 - **`Mission.cs` (59 lines)** + **`MissionStep.cs` (388 lines)** +
   **`MissionStepOutcome.cs`** — an in-progress mission and one of its steps;
-  likely where the actual success/failure resolution formula lives (each
-  step has component/personnel "involvement" percentages, per the data
-  shape in §3.1's `MsnSim*.xml` — `MsnCmpInvolved`/`FlightControllerInvolved`
-  amounts). **Not yet fully traced — do this first when starting the
-  mission-simulation deep dive**, since it's the heart of the whole game.
+  these three are just data holders, though (each holds component/personnel
+  "involvement" percentages, per the data shape in §3.1's `MsnSim*.xml` —
+  `MsnCmpInvolved`/`FlightControllerInvolved` amounts). **The actual
+  resolution formula lives in `MissionSimBaseScreen.cs` instead (the screen
+  class, not a manager) — fully traced now, see §8.**
   `MissionStepOutcome.MissionStepOutcomeT` confirms the full outcome
   taxonomy per step: `NOT_PERFORMED`, `CATASTROPHIC`, `FAILURE`,
   `MINOR_GLITCH`, `MINOR_GLITCH_SOLVED`, `SUCCESSFUL` — i.e. there are two
@@ -187,6 +187,21 @@ the full screen graph for real.
   snapshots (after hiring, after a mission attempt, ideally one success and
   one failure) are coming — see `CLAUDE.md`/chat for the current state of
   that.
+- **R&D employee assignment persists across seasons untouched — confirmed by
+  a real save (2026-09-27), backfilled here after `design.md` §4 was found
+  citing this finding under a section number (`§8.1`) that never actually
+  existed in this file — fixing that dangling cross-reference by writing the
+  finding down properly, since it was apparently never committed to
+  `baspm.md` in the first place.** Despite its state name
+  `ASSIGNED_TO_RD_ONE_TURN` (which reads like a one-turn, must-renew
+  assignment), a save showed one employee staying assigned to the same
+  mission component's R&D across four consecutive seasons with no
+  re-declaration in between. So this is a standing order the player sets
+  once and leaves alone, not something that has to be resubmitted every
+  season — directly relevant to what a Launch Window turn's input needs to
+  carry for "who's on R&D" (design.md §4 already draws this conclusion;
+  `design.md`'s citation has been corrected to point here, §2.1, rather than
+  the non-existent old §8.1).
 
 ### 2.2 Manager classes (one per major subsystem, all extend `CoreManager`)
 
@@ -511,7 +526,7 @@ Not a commitment, just a sensible dependency order given what's mapped above:
 2. **Mission simulation** (§2.1, §3.1's `MsnSim*.xml`) — the actual
    launch-success formula. Everything else (personnel skill, component
    reliability, prestige) feeds into this, so understanding it first makes
-   every other system's *purpose* clear.
+   every other system's *purpose* clear. **Done — see §8.**
 3. **Personnel** (`PersonnelManager.cs`, `Employee.cs` hierarchy,
    `AstronautCandidates-*.xml` etc.) — skills/training feed directly into
    #2's involvement percentages. Manual p.29-32 ("PERSONNEL GROUPS") already
@@ -643,9 +658,200 @@ and several further manual-confirmed and code-confirmed points stop
 
 **None of these have an obvious equivalent in a daily-batch, nobody's-online
 resolver.** `design.md` §4 needs an explicit policy before mission
-simulation (§2.1) can be finalized for Launch Window: candidates are
-pre-declared conditional policies submitted with the rest of the turn
-("scrub this mission if X happens"), deferring the decision to the *next*
-day's turn (the mission/event waits, at some in-fiction cost), or an
+simulation (§2.1, now traced — see §8) can be finalized for Launch Window:
+candidates are pre-declared conditional policies submitted with the rest of
+the turn ("scrub this mission if X happens"), deferring the decision to the
+*next* day's turn (the mission/event waits, at some in-fiction cost), or an
 auto-resolve default the player can override at latest sign-in before that
-day's server tick. Flagged in `design.md` §4 as an open question.
+day's server tick. Flagged in `design.md` §4 as an open question. **Update,
+§8 tracing (2026-09-27): the step-by-step roll sequence itself needs no
+player input at all** — it's a fully automatic dice-and-consequence chain
+once triggered, whether or not the mission spans one season or several (§8
+confirms it commonly spans several). The genuine mid-turn interaction points
+listed above (`ETLaunchSchedMsnsOverlay`'s scrub/resume/assign, training
+pull-out, `REB*` choices) all happen strictly *before* a season's resolution
+runs, not interleaved with it — good news for the daily-batch model, since it
+means "resolve this mission's current season" can be one uninterrupted
+server-side step once the turn's pre-resolution decisions are in.
+
+## 8. Mission simulation: the resolution formula (traced 2026-09-27)
+
+Full trace of `SPMRandom.cs`, `Mission.cs`/`MissionStep.cs`/
+`MissionStepOutcome.cs`, `MissionsSimulationsManager.cs`,
+`MissionSimBaseScreen.cs` (the screen class turns out to own the actual
+resolution logic, not a manager — `ComputeProbabilityOfSuccessForMissionStep`/
+`SimulateMissionStepFirstDiceRoll`/`SimulateMissionStepSavingThrow`, all
+**code-confirmed**), `ConstantsManager.cs`, and several `MsnSim*.xml` samples
+under `Mission Simulations Container\Program Category 00 Container\` (the
+Sputnik-era category). Only the Normal-difficulty numbers were characterized
+throughout, per `design.md` §2.10's decision to ignore Hard/BuzzHard.
+
+### 8.1 A mission is a multi-season entity; each season is its own file
+
+**Code-confirmed.** A mission configuration's simulation data isn't one
+file — it's one file *per season the mission runs*:
+`MsnSim<PgmCtgID>-<PgmID>-<MsnCnfgID>-<Season>.xml`
+(`MissionsSimulationsManager.GetMissionSimulationDataScriptFileName`). A
+one-season mission has only a `-01` file; a longer one has `-01`, `-02`,
+`-03`, etc. Real example, `Program Category 00` (Sputnik-era), mission
+config `01`: `MsnSim00-00-01-01.xml` (season 1: `NumLaunches="1"`, the actual
+launch — `LAUNCH_PREPARATIONS`/`COUNTDOWN`/`LAUNCH`/`ASCENT`-type steps),
+`-02.xml` and `-03.xml` (`NumLaunches="0"`, a single
+`ADVANCED_EXPERIMENTS_EARTH_ORBIT` step each, prestige rising 25→50 — the
+satellite is already up, the "mission" is now just continuing to operate it
+across additional seasons). `ScheduledMissionToLaunch`/
+`ScheduledMissionInProgress.TotalSeasons` (`ScheduledMissionBase.cs`) is the
+authoritative count; `Player.cs`'s season-advance logic only ends/removes a
+mission once `CurrSeason == TotalSeasons`.
+
+**Direct implication for Launch Window's "one turn = one season" decision
+(design.md §1/§3.6): this was never in tension with BASPM's own model.**
+BASPM already resolves one mission-season's worth of steps per season-advance
+and leaves the mission "in progress" otherwise (`ETLaunchSchedMsnsOverlay`'s
+"MISSION_IN_PROGRESS, CURRENT SEASON: n/N" label, code-confirmed) — a
+turn-resolution job that processes "each in-progress mission's *current*
+season's step batch, once, per turn" is a direct, faithful port of the
+original mechanic, not an adaptation of it.
+
+### 8.2 Step resolution: two rolls, not one
+
+Each step's outcome (`MissionStepOutcomeT`: `NOT_PERFORMED`, `CATASTROPHIC`,
+`FAILURE`, `MINOR_GLITCH`, `MINOR_GLITCH_SOLVED`, `SUCCESSFUL`) comes from up
+to two sequential rolls against a probability derived from involvement-
+weighted reliability/skill sums (all **code-confirmed**, `MissionSimBaseScreen.
+ComputeProbabilityOfSuccessForMissionStep`/`SimulateMissionStepFirstDiceRoll`/
+`SimulateMissionStepSavingThrow`):
+
+1. **Compute a base success probability for the step.** For every mission
+   component involved in the step (`MsnCmpInvolved`, e.g. a rocket + payload
+   each contributing a percentage), weight that component's *current*
+   reliability (plus any modifier from prior R&D/reliability-transfer) by its
+   involvement % and sum. Separately sum flight-controller contributions
+   (involvement % × the assigned controller's relevant skill) and flight-crew
+   contributions (involvement % × the assigned astronaut's relevant skill,
+   summed per-skill-per-crew-member). **Astronaut skill only ever matters as
+   a bonus on top of already-solid hardware**: it's blended in (25% weight)
+   only when crew are involved *and* the hardware-only sum already exceeds
+   70; below that threshold, or with no crew, the step's success probability
+   is hardware-and-controller-skill alone — a good astronaut can't rescue a
+   fundamentally unreliable rocket. Flight-controller skill isn't part of
+   this base probability at all; it instead scales a *second*,
+   separate "saving-throw probability" (base probability × flight-controller
+   sum ÷ 100) used only if the first roll fails.
+2. **First roll:** one `RandomNext(0,100)`; success (step passes cleanly, no
+   further roll) if the roll exceeds `100 − base probability`. Note: a
+   `DifficultyFactor * randomNumber` value is computed alongside this roll
+   but **only feeds a debug UI label, never the actual pass/fail comparison**
+   — despite being loaded per-step from XML and looking load-bearing,
+   `DifficultyFactor` does not mathematically affect step-outcome odds in
+   this code path (its real use is elsewhere — `MissionsSimulationsManager.
+   GetMissionStepsSumOfDifficultyFactors` — not traced in this pass, low
+   priority since it doesn't change the odds formula).
+3. **If the first roll fails, a saving throw follows** — the mechanical
+   version of "flight controllers catch/fix the problem in real time"
+   (confirms the guess in `baspm.md` §2.1/§7.2). A fresh roll against
+   `100 − saving-throw probability`: rolling *above* that threshold flips the
+   outcome all the way to `MINOR_GLITCH_SOLVED` (full credit, as if nothing
+   went wrong) — i.e. skilled flight controllers can fully rescue a step the
+   hardware/base roll already lost. Rolling at or below it still fails, but
+   which flavor of failure depends on where in the failing range the roll
+   lands, using two **Normal-difficulty** tuning multipliers from
+   `Constants.xml`'s `MissionSim/MissionSimSavingThrow` (`Value1` —
+   `MaxValueForCatastrophicFailureMultiplier`/`MaxValueForRegularFailureMultiplier`,
+   both scaled by the saving-throw chance-to-fail): the lowest slice of the
+   failing range is `CATASTROPHIC` (only possible on steps flagged
+   `CrewCanPerish`, else it downgrades to plain `FAILURE`), the next slice up
+   is `FAILURE`, and the remaining slice just under the threshold is
+   `MINOR_GLITCH` (a lesser, only-half-credited failure, not a full one).
+- **Dead code worth knowing about so it doesn't mislead a future reading of
+  the decompile:** `MissionSimBaseScreen.ComputeRandomNumber(DifficultyLevelT)`
+  — which would roll twice and take the max on Normal difficulty vs. a single
+  roll on Hard/BuzzHard, a plausible-looking "easier difficulty = friendlier
+  rolls" mechanic — **is never called from anywhere in the codebase.** The
+  live roll everywhere in §8.2 is a single flat `RandomNext(0,100)`
+  regardless of difficulty; difficulty only ever enters through the
+  Constants-driven multipliers above. Irrelevant to Launch Window either way
+  (single shared Normal-only difficulty, `design.md` §2.10), but worth not
+  mistaking for a difficulty-scaling mechanic if this file gets read again.
+- Outcome → consequence, **code-confirmed**
+  (`MissionSimBaseScreen.MoveToNextMissionStep`/`ProcessStep*`): `SUCCESSFUL`
+  or `MINOR_GLITCH_SOLVED` → full prestige for that step's goals, mission
+  continues to its next step (possibly next season). `MINOR_GLITCH` → half
+  prestige, mission still continues. `CATASTROPHIC`/`FAILURE` → the step's
+  `PrestigeDeductedOnFailure`, and **the mission ends immediately** — no
+  further steps execute, confirming a mission-in-progress is a strict
+  sequential chain that stops at its first hard failure, not an
+  all-steps-attempted batch.
+- **A loose end, not confirmed either way:** `MissionOutcomeT` has a
+  `MISSION_OUTCOME_NEARLY_SUCCESSFUL` value, and `ProcessStepFailed`'s switch
+  does map a `MINOR_GLITCH` step to it — but `ProcessStepFailed` is only ever
+  *called* when the outcome is `CATASTROPHIC`/`FAILURE` (`MoveToNextMissionStep`'s
+  guard), so that branch looks unreachable within `MissionSimBaseScreen.cs`.
+  A `MINOR_GLITCH` step (half prestige, mission continues) may just leave the
+  mission's final reported outcome as `SUCCESSFUL` rather than
+  `NEARLY_SUCCESSFUL` — not chased further outside this one file (the results
+  overlay or museum/record screens might recompute it by re-scanning step
+  outcomes after the fact). Low-stakes either way for Launch Window's own
+  design, since we're writing our own outcome taxonomy from real facts, not
+  porting this one verbatim — flagged here only so a future reader doesn't
+  trust the enum name at face value.
+- **Tiger Teams cross-reference, not chased in this pass:** a
+  `_savingThrowProbOfSuccessIncludingExpertTeams` variable appears alongside
+  the plain saving-throw probability, and `ConstantsManager` separately loads
+  `TigerTeamsPercentageBoost`/`TigerTeamsCostMultiplier` (§2.2). Strongly
+  suggests Tiger Teams (a hireable boost mentioned in passing elsewhere) work
+  by boosting the saving-throw probability specifically, i.e. they make
+  flight controllers better at catching an already-failing step rather than
+  improving the step's base odds. Worth confirming when the personnel/R&D
+  deep dive reaches Tiger Teams, not here.
+
+### 8.3 Determinism and replay
+
+**Code-confirmed, minor but worth knowing:** `SPMRandom` seeds a plain
+`System.Random` and replays it deterministically by re-drawing
+`RandomUsageCounter` throwaway values on load — i.e. the entire RNG stream
+for a save is reproducible from `(seed, usage count)` alone. Not directly a
+Launch Window design decision (our own server-authoritative resolver doesn't
+need to replay a client's RNG the way a save-game reload does), but relevant
+prior art if a "replay this turn's resolution log for a player" debug/spectate
+feature is ever wanted.
+
+### 8.4 Verification still needed (in-game / screenshots)
+
+Everything above came from static code + data analysis; a few things are
+easier to settle by actually watching the game than by reading further
+decompiled code:
+
+1. **The `MISSION_OUTCOME_NEARLY_SUCCESSFUL` loose end (§8.2).** Fly a
+   mission configuration that has at least one non-final step with
+   `MsnCmpInvolved`/reliability low enough to plausibly roll `MINOR_GLITCH`
+   (an early Sputnik-category mission with a well-worn rocket is a good
+   candidate), let it hit a `MINOR_GLITCH`, and check what the end-of-mission
+   summary screen (`ETMissionSimResultsOverlay`) actually reports as the
+   mission's outcome label. Resolves whether `NEARLY_SUCCESSFUL` is truly
+   dead or just set from a code path this pass didn't find.
+2. **A screenshot of `ETLaunchSchedMsnsOverlay`** (the season-advance
+   Launch/Scrub/Resume screen, manual p.36-ish) mid-multi-season-mission —
+   confirms in the UI itself (not just the code label found in §8.1) exactly
+   what a player sees/can do for a mission that's continuing into season 2+
+   versus one launching for the first time, which will directly inform how
+   Launch Window's own turn-summary screen should present "missions in
+   progress."
+3. **A screenshot or short recording of a `CATASTROPHIC` step outcome that
+   has `CrewCanPerish=true`** — confirms in the client UI what "an astronaut
+   died" actually looks/reads like (the manual and code establish it happens
+   mechanically via `Player.AddFallenAstronaut`, but not what's communicated
+   to the player, which matters for Launch Window's own tone/UX on the same
+   moment).
+4. **Confirm whether `DifficultyFactor` (per-step, loaded but seemingly
+   unused in the odds formula, §8.2) visibly does anything in a real
+   playthrough** — e.g. try two mission configs with very different
+   `DifficultyFactor` values on an otherwise-similar step and see whether
+   failure rates in practice look different. If it turns out truly inert for
+   step odds, that's one fewer XML field Launch Window needs to carry
+   forward when re-deriving its own mission-content schema.
+5. **A save-game pair (one post-success, one post-`MINOR_GLITCH`) for the
+   same mission configuration**, if convenient to produce — would let a
+   future session diff `SaveSlot*.xml`'s mission/prestige records the same
+   way §2.1's "real save example" already did for reliability, and settle
+   #1 above from save data directly instead of a screenshot.
