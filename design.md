@@ -239,7 +239,14 @@ proceeds:
     eligible worst tier) without committing to BASPM's exact five-plus-one
     labels — revisit once §2.6 (prestige/scoring) is designed, since the
     outcome tiers only matter insofar as they map to a scoring/consequence
-    model we still need to design fresh. Multi-season missions are adopted
+    model we still need to design fresh. **Caveat (user in-game check,
+    2026-09-27, `baspm.md` §8.4 item 1): the "half-credited partial failure
+    that lets the mission continue" tier may not actually be reachable in
+    BASPM** — the user only ever saw a glitch either get fully rescued or
+    escalate straight into a mission-ending failure, never a
+    continuing-but-degraded outcome. Not yet re-confirmed against the
+    decompile, so treat the fifth tier above as tentative; it may collapse to
+    four tiers instead. Multi-season missions are adopted
     as-is: a mission genuinely taking several turns to play out (with
     escalating stakes each turn, per the Sputnik example in `baspm.md` §8.1)
     is good game feel to keep, not an artifact to engineer away.

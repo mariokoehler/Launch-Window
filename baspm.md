@@ -822,14 +822,25 @@ Everything above came from static code + data analysis; a few things are
 easier to settle by actually watching the game than by reading further
 decompiled code:
 
-1. **The `MISSION_OUTCOME_NEARLY_SUCCESSFUL` loose end (§8.2).** Fly a
-   mission configuration that has at least one non-final step with
-   `MsnCmpInvolved`/reliability low enough to plausibly roll `MINOR_GLITCH`
-   (an early Sputnik-category mission with a well-worn rocket is a good
-   candidate), let it hit a `MINOR_GLITCH`, and check what the end-of-mission
-   summary screen (`ETMissionSimResultsOverlay`) actually reports as the
-   mission's outcome label. Resolves whether `NEARLY_SUCCESSFUL` is truly
-   dead or just set from a code path this pass didn't find.
+1. **RESOLVED (user, 2026-09-27).** Confirmed in-game: a mission that hit a
+   glitch mid-flight but got it rescued still reports **Successful** overall
+   — `MISSION_OUTCOME_NEARLY_SUCCESSFUL` is effectively dead in practice,
+   matching the "unreachable branch" read from the decompile in §8.2.
+   Per-step (clicking through the mission's visualization), a rescued step
+   is labeled **"Minor Glitch Resolved"**; a step that fails outright is
+   labeled **"Failure"**, with every step after it **"Not Performed"**.
+   **New open sub-question this raises, not yet re-checked against the
+   decompile:** the user describes only these two step-level outcomes as
+   actually occurring — a rescued glitch, or an outright failure that ends
+   the mission — not a third, distinct "glitch happened, wasn't rescued, but
+   the mission continues anyway at half credit" state, which is what §8.2's
+   formula trace inferred `MINOR_GLITCH` (as opposed to `MINOR_GLITCH_SOLVED`)
+   should look like from the saving-throw banding logic. Needs a fresh look
+   at `MissionSimBaseScreen.ProcessStep*`/`MoveToNextMissionStep` specifically
+   for whether a plain, unsolved `MINOR_GLITCH` ever actually lets the
+   mission continue, or whether in practice every unsolved glitch falls into
+   the same failure band that ends it — §8.2's "half-credit, continues" claim
+   should be treated as unconfirmed until that's settled.
 2. **A screenshot of `ETLaunchSchedMsnsOverlay`** (the season-advance
    Launch/Scrub/Resume screen, manual p.36-ish) mid-multi-season-mission —
    confirms in the UI itself (not just the code label found in §8.1) exactly
