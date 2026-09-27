@@ -930,7 +930,7 @@ turn), and **natural separation** (one player's actions never collide with
 another's on disk, and are trivially all-in-one-place — their own
 subdirectory — for both login-time reconstruction and turn-resolution).
 
-**(unconfirmed default, recommended) Actions are idempotent "declare current
+**Decided (user, 2026-09-27): actions are idempotent "declare current
 intent" statements, not deltas.** E.g. an action isn't "add Employee X to
 R&D" as a delta on whatever's currently declared — it's "R&D assignment for
 slot N is now Employee X," a complete restatement. This is what makes both
@@ -938,28 +938,40 @@ replay use cases below work with zero extra machinery: replaying a player's
 whole day's action journal in chronological order always converges on their
 latest actual intent, because a later action for the same "slot" simply
 supersedes an earlier one during replay — no separate cancel/retract event
-type needed for "I changed my mind." Worth stating as an explicit rule for
-every action type Launch Window ever defines, not discovering the need for
-it later.
+type needed for "I changed my mind." Stated as an explicit rule for every
+action type Launch Window ever defines, not discovered as a need later.
 
-**(unconfirmed default, recommended) Each player's state resolves
-independently — one snapshot file per player per turn, not one combined
-whole-game-state blob.** Per BASPM's own architecture (`baspm.md` §2.1's
-`Player.cs`/`GameWorld.cs`, and §5's PBEM precedent — two agencies'
-simulations that only ever get *compared*, never directly touch each other's
-state) and matching §2.9's current passive-competition-only default: a turn
-resolution for player A only ever needs player A's last snapshot plus player
-A's action journal for that day. A lightweight separate **game-meta file**
-(schedule config/§3.6, blackout list, and whatever minimal per-player summary
-the goals-comparison screen needs, `baspm.md` §11.4) sits alongside the
-per-player files for the cross-player bits. This sidesteps the one real
-question a combined-file design would otherwise force — what deterministic
-order to apply N players' actions in, if they can affect shared state —
-entirely, for as long as §2.9 keeps interaction passive-only. **Revisit the
-moment §2.9 adds anything that lets one player's action touch another
-player's state** (sabotage, trading, a shared resource) — that's exactly the
-point a real cross-player ordering rule becomes necessary, deferred until
-then rather than solved prematurely now.
+**Decided (user, 2026-09-27): each player's state resolves independently —
+one snapshot file per player per turn, not one combined whole-game-state
+blob.** Per BASPM's own architecture (`baspm.md` §2.1's `Player.cs`/
+`GameWorld.cs`, and §5's PBEM precedent — two agencies' simulations that only
+ever get *compared*, never directly touch each other's state) and matching
+§2.9's current passive-competition-only default: a turn resolution for
+player A only ever needs player A's last snapshot plus player A's action
+journal for that day. A lightweight separate **game-meta file** (schedule
+config/§3.6, blackout list, and whatever minimal per-player summary the
+goals-comparison screen needs, `baspm.md` §11.4) sits alongside the
+per-player files for the cross-player bits.
+- **Sharper than originally written here (user design input, 2026-09-27):
+  cross-player ordering turns out to never be a real problem, not just a
+  problem deferred until §2.9 adds interaction.** The reasoning: even a
+  future sabotage/interaction action is only ever *declared as intent*
+  during the day (a plain action-journal entry, same as everything else) —
+  its actual effect is computed once, by the server, at turn-resolution
+  time, not applied as a live incremental mutation during the day. As long
+  as that resolution step always reads the *target* player's **last
+  confirmed (start-of-turn) snapshot** as its input — never a same-turn,
+  already-in-progress result from resolving the target's own turn — there's
+  no ordering dependency to resolve: each player's turn can be computed
+  independently, in any order, even in parallel, exactly like the current
+  passive-competition case. **The one real boundary case this doesn't
+  cover, worth remembering if it ever comes up:** a mechanic where multiple
+  players contend over one genuinely *shared, limited* resource within the
+  same turn (not just "reads another player's snapshot," but "only one of
+  us can actually get this") would still need an explicit tie-break rule —
+  nothing currently proposed in §2.9's brainstorm is shaped like that, but
+  if a future idea is, that's the actual trigger for revisiting this
+  section, not "any interaction at all."
 
 **Turn-resolution loop, concretely:** for each player independently — load
 their last snapshot, replay/apply their day's action journal onto it (same
