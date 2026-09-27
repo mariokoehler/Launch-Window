@@ -157,6 +157,14 @@ same session it comes up**, the same standing-note-to-self habit as
   one discipline — worth a short in-game beat the first time a player
   designates someone as Flight Director, explaining that a great FD is
   broad, not deep.
+- **Surfaced while redesigning Tiger Teams for async play (user, 2026-09-27):
+  "Tiger Team" is itself real aerospace/NASA jargon** — a temporary task
+  force of specialists assembled to solve an urgent problem, real-world
+  terminology that predates BASPM's use of it (not BASPM's own invented
+  content, so §1.2's no-copying rule doesn't apply to keeping the term
+  itself). Worth a short in-fiction note on why the term exists/where it
+  comes from whenever a player first assembles one, in the same spirit as
+  this pillar's other real-history beats.
 
 ### 1.2 Content & asset policy: no copying BASPM's copyrighted content
 
@@ -240,11 +248,15 @@ proceeds:
     seasons are simple countdowns; both fit "one turn = one season" (§1)
     cleanly with zero special handling, including under a `WEEKDAYS`/
     blackout schedule (§3.6), since morale/age only change on days a turn
-    actually resolves, never on a skipped real day. The one new problem this
-    pass surfaces: **Tiger Teams needs a pre-resolution policy, same as
-    scrub/training-pull-out/`REB*` choices (§4)** — but unlike those, one of
-    its options ("decline, no cost, no boost") is always free and never a
-    strictly bad choice, so it has a uniquely safe auto-resolve default. The
+    actually resolves, never on a skipped real day. **Tiger Teams is the one
+    place this pass's finding actually forces a design choice, not just a
+    default (user design input, 2026-09-27, see decision (c) below):** BASPM's
+    own mechanic is a live per-step spending decision, which has no clean
+    async equivalent short of asking the player to pre-declare a
+    "what if a glitch happens" budget every turn a mission is active — doable
+    (see (c)'s fallback), but exactly the kind of repetitive per-turn
+    busywork this project has otherwise avoided (R&D/permanent-training are
+    both "set once, no redeclaration" by design, immediately above). The
     "retirement/resignation only checked while idle" behavior is a design
     choice worth deciding on deliberately rather than inheriting by default —
     it could read as a fairness quirk (an offline player's idle-but-neglected
@@ -257,14 +269,47 @@ proceeds:
     per-turn re-declaration" for R&D-equivalent and permanent-training
     assignments, and keep retirement/resignation gated on being idle for a
     first playable version — revisit only if playtesting makes it feel like
-    an exploit. **(unconfirmed default)** add Tiger-Teams-equivalent to §4's
-    mid-turn-decision list with a firm answer already available: **auto-
-    resolve to "decline" unless the player has pre-set a spending policy/
-    budget cap** — the one mid-turn case in this system with a genuinely
-    free, always-safe non-interactive default. **(unconfirmed default)**
-    keep the morale-gates-hiring-pool-quality feedback loop as a systemic
-    mechanic, independent of whichever exact skillset/morale buckets Launch
-    Window ends up using.
+    an exploit. **(unconfirmed default)** keep the morale-gates-hiring-
+    pool-quality feedback loop as a systemic mechanic, independent of
+    whichever exact skillset/morale buckets Launch Window ends up using.
+    - **Tiger Teams — decided to diverge from BASPM here (user design input,
+      2026-09-27): promote it from a live per-step spending decision into a
+      developed personnel capability**, rather than a pre-declared per-turn
+      budget policy. A SET or Mission Control employee (no new department)
+      can earn an **"Expert"** trait (working name) once a skill crosses a
+      threshold and/or via a dedicated advanced-training track, alongside
+      their normal duties — reusing the exact standing-order shape
+      `baspm.md` §2.1's R&D assignment and §9.3's permanent training already
+      established, rather than inventing a new per-turn UI element. During turn
+      resolution, a step needing a saving-throw rescue automatically draws on
+      any currently-available Expert-flagged personnel; no live decision, no
+      per-turn "what if" declaration required from the player at all.
+      **Open sub-question, not yet resolved:** Expert personnel are
+      necessarily a shared, limited pool if more than one mission needs
+      rescuing in the same turn (or the same mission needs it more than
+      once) — needs a contention rule (first-come, a player-set priority
+      order across their active missions, or simply sizing the Expert
+      headcount so contention is rare by design). Revisit once §2.5/§2.9 pin
+      down realistic concurrent-mission counts.
+      **(unconfirmed default) Secondary fallback, kept for the case no Expert
+      personnel are available:** a pre-set cash-budget-cap policy — BASPM's
+      original mechanic (`baspm.md` §9.5) — that only engages when the
+      Expert-personnel pool can't cover the moment, defaulting to "do
+      nothing" if the player never sets one, same safe-default shape as
+      BASPM's own free "decline" option.
+      **Adopt regardless of the above, and generalized beyond Tiger Teams:**
+      a post-turn **"replay"** of what an in-progress mission's automatic
+      resolution actually did — `baspm.md` §8.3 already flagged BASPM's
+      deterministic-RNG-replay mechanism as relevant prior art for exactly
+      this. Since the player isn't present for anything a daily-batch turn
+      resolves unattended, this is the general answer to that gap, not a
+      Tiger-Teams-specific feature — the replay should show which rescue
+      mechanic, if any, triggered and why.
+      **Naming aside, low priority:** "Tiger Team" is real historical NASA/
+      aerospace jargon that predates BASPM's use of it — per §1.2's carve-out
+      for real-world facts (as opposed to BASPM's own specific expression of
+      them), Launch Window is free to keep the term verbatim if it fits the
+      tone; this isn't a case needing a reskin.
 - 2.3 Programs & mission configurations (the Sputnik→Apollo tech/content
   tree)
 - 2.4 Mission components (rockets, capsules, boosters) & reliability
@@ -592,12 +637,15 @@ game instance.
   0 prestige) — worth testing separately whether a mid-flight abort is
   actually penalized (`MsnSim*.xml`'s `OnCancellation` fields suggest it
   should be) before assuming "scrub" is uniformly free or uniformly costly.
-  **New case found by the §2.2 personnel trace (2026-09-27, `baspm.md`
-  §9.5): Tiger Teams (pay to boost a step's saving-throw odds) is a genuine
-  mid-mission-*step* pause, not just a between-turns one — but it already
-  has a firm answer, unlike the others: auto-resolve to "decline" (free, no
-  effect) unless the player has pre-set a spending policy, since decline is
-  never a strictly bad choice for someone who wasn't online to answer.**
+  **Tiger Teams resolved differently (2026-09-27, `baspm.md` §9.5, §2.2(c)):**
+  BASPM's version is a genuine mid-mission-*step* pause (pay to boost a
+  step's saving-throw odds), not just a between-turns one — but rather than
+  give it a live-decision-with-auto-default treatment like the remaining
+  open cases below, Launch Window promotes it into a standing personnel
+  capability instead (an "Expert"-trait employee pool that auto-triggers
+  during resolution, §2.2(c)), sidestepping the need for any per-turn
+  decision at all. A cash-budget fallback policy is kept only as a secondary
+  case for when no Expert personnel are available.
 - Turn cadence resolved (§1/§3.6): one turn = one BASPM "season", schedule
   (which real days produce a turn) is per-game-configurable. Remaining
   sub-question: who is allowed to edit a game's blackout-period list once
