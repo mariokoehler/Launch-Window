@@ -212,6 +212,29 @@ proceeds:
   - **(unconfirmed)** start with passive competition + chat for a first
     playable version; layer sabotage/interference in once the core daily-turn
     loop is proven fun and fair.
+- 2.10 **Difficulty level — decided (user, 2026-09-27): none, by design.**
+  BASPM has three difficulty levels (`DifficultyLevelT.{Normal, Hard,
+  BuzzHard}`, `baspm.md` §2.4) as a single-player choice — the player picks
+  how much punishment to opt into. **Launch Window has exactly one
+  difficulty, shared by every player in a game, with no difficulty selection
+  offered at all.** Reasoning: difficulty-as-a-player-choice doesn't fit the
+  multiplayer angle — it can force players into a difficulty they'd rather
+  not engage with (e.g. a game host picking Hard, or a mismatch where one
+  player wants a harder game than the rest of their group). A shared,
+  non-optional difficulty removes that friction entirely rather than trying
+  to solve it (per-player difficulty scaling, host-only override, etc.).
+  **Concrete decision: base all of Launch Window's balance on BASPM's
+  Normal difficulty specifically** — i.e., wherever a Data Scripts value is
+  keyed by difficulty (`Constants.xml`/`Constants-{GSA,NASA,Soviet}.xml`'s
+  `Value1`/`Value2`/`Value3` = Normal/Hard/BuzzHard, `baspm.md` §3.1), Launch
+  Window reads only `Value1`/Normal when re-deriving formulas; Hard/BuzzHard
+  numbers are out of scope entirely, not something to port, categorize, or
+  even keep around for reference. **Architecture implication:** no
+  difficulty field anywhere — not in game creation, not per-player, not a
+  `DifficultyLevelT`-equivalent enum at all. One less axis of configuration
+  for §3.6's game-instance config to carry. If Normal later proves miscalibrated
+  for the async multiplayer context, that's retuned as Launch Window's own
+  single evolving balance sheet, not by resurrecting a three-tier system.
 
 ## 3. Architecture
 

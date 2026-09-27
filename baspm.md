@@ -244,6 +244,11 @@ enum MPGameModeT { ColdWar, Freeform }
 enum DifficultyLevelT { Normal = 1, Hard = 2, BuzzHard = 3 }
 ```
 
+- **`DifficultyLevelT`** has no Launch Window equivalent — `design.md` §2.10
+  decided a single shared difficulty for all players, based on **Normal**
+  only (`Value1` throughout the difficulty-keyed Data Scripts below); `Hard`/
+  `BuzzHard`'s `Value2`/`Value3` numbers are out of scope.
+
 - **`GSA` = "Global Space Agency"** (manual-confirmed, p.5: "a utopic
   international space agency that unites all the world's space programs").
   Not generic/tutorial content — it's a full third playable faction with its
