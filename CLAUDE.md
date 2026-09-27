@@ -71,8 +71,12 @@ from scratch.
 **Analysis phase — no code written yet.** This session's deliverable is the
 initial `CLAUDE.md`/`design.md`/`baspm.md` scaffolding plus a first pass at
 indexing BASPM's decompiled source and extracted assets so future sessions
-can navigate it quickly. Not a git repository yet — ask before running `git
-init` or making it public.
+can navigate it quickly. Git repo initialized 2026-09-27 and pushed to
+GitHub as a **private** repo (`mariokoehler/Launch-Window` — GitHub doesn't
+allow spaces in repo names, so "Launch Window" became "Launch-Window"; local
+folder stays `LaunchWindow`). Will flip to public once something playable
+exists or private-repo GitHub Actions limits become a problem — ask before
+making that change.
 
 ## Source material locations (read-only, reference-only — never edit, never copy into the repo)
 
