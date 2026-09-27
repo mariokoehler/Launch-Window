@@ -189,6 +189,30 @@ same session it comes up**, the same standing-note-to-self habit as
   "earn" that funding on engineering merit alone. A strong, true beat for
   the moment a player first sees their own budget review: the real space
   race really was funded by prestige, not purely by demonstrated capability.
+- **Surfaced during the §2.7 random-events trace (2026-09-27): BASPM's bad
+  events mostly aren't pure noise, they're gated to real recent risk
+  factors** (`baspm.md` §12.1) — a reliability setback only strikes a
+  component actually in R&D, morale only drops after a recent mission
+  failure, extra funding only arrives after a recent run of successes. This
+  is a true structural fact about real program risk, not just a design
+  nicety: **trouble in a real space program rarely comes from nowhere** —
+  it concentrates around whatever's already under strain (an
+  already-stretched budget, an already-fatigued team, hardware already
+  being pushed hard), rather than striking uniformly at random. Worth
+  keeping this framing explicit if Launch Window's own event flavor text
+  ever explains *why* a given event fired, rather than presenting it as
+  arbitrary bad luck.
+- **Surfaced during the §2.8 campaign-objectives trace (2026-09-27): GSA's
+  fictional "one unified world space agency" premise (`baspm.md` §2.4) isn't
+  pure fantasy — it's a real counterfactual with a real answer.** No such
+  agency existed during the actual Cold War space race, but international
+  cooperation in orbit did eventually happen for real, just decades later
+  and in a very different form: the **International Space Station**, a
+  genuine multi-agency partnership (NASA, Roscosmos, ESA, JAXA, CSA) that
+  only became possible once Cold War competition itself wound down. A fair,
+  true beat for a moment introducing a GSA-equivalent faction (if Launch
+  Window keeps one): the real world eventually got a version of this idea,
+  just not the way GSA imagines it happening in the 1950s-70s.
 
 ### 1.2 Content & asset policy: no copying BASPM's copyrighted content
 
@@ -533,8 +557,73 @@ proceeds:
     rather than leaving it as an invisible odds adjustment, since
     async-multiplayer players benefit more from a legible "why did this
     mission's odds look different" explanation than an offline player would.
-- 2.7 Random events
-- 2.8 Campaign objectives / win conditions
+- 2.7 **Random events — analyzed 2026-09-27, see `baspm.md` §12.1/§12.2 for
+  the full trace.**
+  - **(a) How BASPM does it:** two independent per-season dice rolls (5%
+    chance of a "bad" event, 20% chance of a "good" one), each picking from a
+    pool of 14/5 candidates gated by real precondition checks (e.g. a
+    reliability setback can't strike unless something's actually in R&D) —
+    situational, not pure noise. Applied automatically, narrated as a news
+    item afterward. **A real choice-presenting mechanism exists in the code
+    (`DecisionEventBase`) but is entirely dead in the shipped game** — the
+    one class using it is permanently disabled and every method on it is an
+    empty stub, and the manager method that would even roll for it is never
+    called. **This resolves this project's oldest open question, present
+    since the first session: no `REB*` event, and no BASPM random event at
+    all, ever presents the player a real mid-turn choice.** Also notable:
+    unlike every other system traced so far, this one is entirely hardcoded
+    in C# with zero Data Scripts XML backing.
+  - **(b) What changes for async multiplayer:** nothing — this needed no
+    adaptation even in principle, since it was already fully non-interactive
+    in the original. §4's mid-turn-decision list can now drop `REB*`/random
+    events entirely; there was never a real case there to resolve.
+  - **(c) Decision:** **port the two-tier good/bad shape with situational
+    gating** (events react to real recent player state, per §1.1's note
+    above) as Launch Window's starting point, re-deriving Launch Window's
+    own event list/odds (`design.md` §1.2). **(unconfirmed default)** make
+    Launch Window's own events data-driven from the start (unlike BASPM's
+    hardcoded approach) — no reason to inherit that specific limitation.
+    **(unconfirmed default)** don't port the dead "decision event" concept —
+    BASPM itself never finished it, and the Tiger Teams redesign (§2.2(c))
+    already established this project's preferred alternative to a live
+    per-turn choice popup (a standing capability the player develops in
+    advance) whenever a similar need comes up, rather than trying to build
+    the live-choice UI BASPM itself abandoned.
+- 2.8 **Campaign objectives / win conditions — analyzed 2026-09-27, see
+  `baspm.md` §12.3 for the full trace (GSA's own single-player scripted
+  content is out of scope per `design.md` §1.2 — only the reusable system
+  shape matters here).**
+  - **(a) How BASPM does it:** a strategy-pattern objective system — one
+    long-term objective (achieve a specific goal by a hard deadline; success
+    triggers a real Victory screen, failure a real Game Over screen — a
+    genuine win/loss condition, not open-ended scoring) plus short-term
+    objectives drawn periodically (2 at a time, at each budget-review
+    boundary) from a larger authored pool, each independently timed and
+    granting/deducting prestige at its own deadline. Seven objective-field
+    types, all simple, generic state-threshold predicates (funds, personnel
+    headcount, skill competency, component reliability, a specific goal set,
+    a component's successful-use count) — a clean, reusable shape completely
+    independent of GSA's specific scripted content. **Bonus finding:**
+    `CampaignRTTM` (the single-player AI-rival mode) uses this exact same
+    "race to one specific milestone goal" pattern as its own win condition —
+    real precedent for a head-to-head race-to-a-goal win state, not just an
+    open-ended score comparison.
+  - **(b) What changes for async multiplayer:** nothing structural for
+    objective *checking* — deterministic state comparisons at a fixed
+    deadline, no mid-resolution surprises, same clean shape §2.3/§2.4/§2.6
+    already found. **But this system's existence surfaces a real, still-open
+    design question for §2.9, not a minor detail:** does Launch Window want
+    an actual win condition at all (a race to some finish line, mirroring
+    `CampaignRTTM`'s shared-goal race) or is it an ongoing/open-ended score
+    comparison (mirroring the passive `MultiplayerColdWar` mode)? This
+    system's shape supports either answer equally well — it doesn't resolve
+    the question, it just means whichever direction §2.9 lands on has a
+    working mechanism to build from.
+  - **(c) Decision:** **port the objective-field strategy-pattern shape**
+    (the seven generic predicate types above) as reusable prior art for
+    Launch Window's own scoring/achievement system, independent of GSA's
+    specific content (`design.md` §1.2). Leave the actual win-condition
+    question itself for §2.9 to resolve.
 - 2.9 **Multiplayer interaction model** — the one system with no BASPM
   precedent beyond its arms-length PBEM mode (`baspm.md`). Open brainstorm,
   nothing decided yet:
@@ -558,6 +647,13 @@ proceeds:
   - **(unconfirmed)** start with passive competition + chat for a first
     playable version; layer sabotage/interference in once the core daily-turn
     loop is proven fun and fair.
+  - **New question surfaced by §2.8's campaign-objectives trace (2026-09-27,
+    `baspm.md` §12.3): does Launch Window even have a hard win condition,**
+    like `CampaignRTTM`'s real "first to a specific milestone goal wins"
+    race, or is it open-ended score comparison like the passive
+    `MultiplayerColdWar` mode? Both are real BASPM precedent, not
+    hypothetical options — this needs its own decision, not just an
+    interaction-style choice.
 - 2.10 **Difficulty level — decided (user, 2026-09-27): none, by design.**
   BASPM has three difficulty levels (`DifficultyLevelT.{Normal, Hard,
   BuzzHard}`, `baspm.md` §2.4) as a single-player choice — the player picks
@@ -778,23 +874,28 @@ game instance.
 - **Mid-turn/mid-mission player decisions — narrowed by the §2.5 mission-sim
   trace (2026-09-27).** BASPM stops and waits for a player click at several
   points *within* a turn, not just between turns: scrubbing a scheduled/
-  in-progress mission, pulling an employee out of training early, some
-  `REB*`/decision-event choices (`baspm.md` §7.2). Originally worried this
-  meant a daily-batch resolver where nobody's expected online has no obvious
-  equivalent — **the mission-simulation trace resolves the "mid-*resolution*"
-  half of that worry: a season's step-by-step roll sequence is fully
-  automatic once triggered, needing no player input while it runs** (`baspm.md`
-  §8.1/§8.2) — every one of BASPM's own stop-and-click points (scrub/launch/
-  assign, training pull-out, `REB*` choices) happens *before* that sequence
-  starts, never interleaved with it. **What's still genuinely open is only
-  the *pre*-resolution question:** what does a player who doesn't log in
-  before a turn's server tick implicitly decide for each of those points?
-  Candidates unchanged: submit conditional policies alongside the rest of the
-  turn ("scrub this mission if X happens"), defer the decision to the next
-  day's turn at some in-fiction cost, or auto-resolve with a
-  player-overridable default up until that day's server tick.
-  **(unconfirmed)** — needs deciding before §2.7 (random events) can be
-  finalized. **One sub-case already resolved favorably by real savegame
+  in-progress mission, pulling an employee out of training early, and
+  (originally suspected, per naming alone) some `REB*`/decision-event
+  choices (`baspm.md` §7.2). Originally worried this meant a daily-batch
+  resolver where nobody's expected online has no obvious equivalent — **the
+  mission-simulation trace resolves the "mid-*resolution*" half of that
+  worry: a season's step-by-step roll sequence is fully automatic once
+  triggered, needing no player input while it runs** (`baspm.md` §8.1/§8.2)
+  — every one of BASPM's own stop-and-click points (scrub/launch/assign,
+  training pull-out) happens *before* that sequence starts, never
+  interleaved with it. **The `REB*` suspicion itself resolved to zero real
+  cases (`baspm.md` §12.2, 2026-09-27): no BASPM random event ever presents
+  a real choice** — the one class that could (`DEAvoidPrestigeDropAtACost`)
+  is a permanently-disabled, entirely-unimplemented stub. §2.7 needed no
+  policy decision at all as a result. **What's still genuinely open is only
+  the *pre*-resolution question for the two remaining real cases (scrub,
+  training pull-out):** what does a player who doesn't log in before a
+  turn's server tick implicitly decide for each of those points? Candidates
+  unchanged: submit conditional policies alongside the rest of the turn
+  ("scrub this mission if X happens"), defer the decision to the next day's
+  turn at some in-fiction cost, or auto-resolve with a player-overridable
+  default up until that day's server tick. **(unconfirmed)** — still needs
+  deciding. **One sub-case already resolved favorably by real savegame
   evidence (`baspm.md` §2.1, 2026-09-27 — this citation previously pointed
   at a §8.1 that didn't yet exist; backfilled properly this session):
   ongoing R&D assignment is NOT one of the awkward mid-turn cases** — despite
@@ -804,8 +905,8 @@ game instance.
   consecutive seasons untouched. So a Launch Window turn's "who's on R&D" input
   can be a standing order the player sets and leaves alone, not something
   that has to be resubmitted every single day. The remaining open cases
-  (scrub, training pull-out, random-event choices) still need a policy —
-  and the scrub case has a real nuance now too: a save showed a mission
+  (scrub, training pull-out) still need a policy — and the scrub case has a
+  real nuance now too: a save showed a mission
   scrubbed *before* it ever started executing costing nothing (`MISSION_OUTCOME_CANCELLED`,
   0 prestige) — worth testing separately whether a mid-flight abort is
   actually penalized (`MsnSim*.xml`'s `OnCancellation` fields suggest it

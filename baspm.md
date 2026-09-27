@@ -100,11 +100,12 @@ marked **(inferred)** where the manual doesn't use the same term:
 | `MP` | 37 | Multiplayer (PBEM) lobby/challenge screens — see §5 | manual-confirmed (matches "MULTIPLAYER" p.42) |
 | `VAB` | 20 | Vehicle Assembly Building — scheduled/in-progress missions, rocket/payload assembly (manual p.35-36) | manual-confirmed |
 | `WM` | 16 | Space Complex screen (the main hub with the 7 building icons, day/night cycle) — **internal codename doesn't match the manual's own name for it** ("Space Complex Screen", p.34); `WorldMapBaseScreenGameLogic.cs`/`WMEmployeeCenterButtonER.cs` etc. are this screen's code | inferred (mapping to the manual's "Space Complex Screen" is a strong guess, not proven) |
-| `REB` | 14 | `RandomAndDecisionEventBase` subclasses, one class per random/decision event (manual p.28, "RANDOM EVENTS") | confirmed (base class name + manual section both line up) |
+| `REB` | 14 | `RandomAndDecisionEventBase` subclasses, "bad" random events (manual p.28, "RANDOM EVENTS") — traced, see §12, **none of them present a player choice** despite the base class's "...AndDecision..." naming | confirmed (base class name + manual section both line up); choice-presenting behavior corrected, see §12.2 |
+| `REG` | 5 | Sibling family to `REB`, missed by this table until the §12 pass — "good" random events (`REGExtraFunding` etc.), same non-interactive shape | confirmed, see §12.1 |
 | `Museum` | 14 | Historical stats / achieved-goals / memorial browser (manual p.40, "MUSEUM") | manual-confirmed |
 | `ET` | 11+ (undercounted, see above) | **Not just the News Screen** — covers the *whole end-of-turn sequence* triggered by the Space Complex screen's "End season" button (manual p.35, item 7): `ETInterseason*` (the news screen, matching manual p.34 "NEWS SCREEN" — `ETInterseasonOverlay.cs`'s `NewsItemType` enum incl. `CampaignRTTM*OpposingFaction`), then `ETRDResults*`/`ETRDR*` (an R&D-results step, matching the `RDResults*` asset bundles, §4), then `ETLaunchSchedMsns*` (**a per-mission Launch/Scrub/Resume/AssignMC decision step** — `ETLaunchSchedMsnsOverlay.cs`, `ETLaunchSchedMsnScrubButtonER.cs` etc.). **This means BASPM's turn resolution is itself interactive, not a single non-interruptible batch step** — see §7.2, this is directly relevant to designing Launch Window's own daily resolver. | confirmed (content, not just naming) |
 | `PAO` | 4 | Public Affairs Office — budget & prestige overview (manual p.40, "PUBLIC AFFAIRS OFFICE") | manual-confirmed |
-| `DE` | 1 | Only one file, `DEAvoidPrestigeDropAtACost.cs` — a single scripted decision-event, not a real prefix family | n/a (one-off) |
+| `DE` | 1 | Only one file, `DEAvoidPrestigeDropAtACost.cs` — **confirmed dead code, see §12.2**: its applicability check is hardcoded to always return false, every method body is empty, and the manager method that would even roll for it is never called from anywhere in the turn-resolution flow. Not "a scripted decision event" as an earlier draft of this file guessed — a never-finished scaffold. | confirmed dead, see §12.2 |
 | `*ER` suffix | 411 | "Event Receiver" — one class per clickable UI widget's click handler (`XButtonER.cs` → calls into the real manager). Almost entirely thin NGUI click-glue. Low value to read individually; grep the *manager* method it calls instead. | confirmed (pattern, not a screen) |
 | `*Overlay` suffix | 91 | A modal/full-screen UI panel | confirmed (pattern, not a screen) |
 
@@ -224,9 +225,9 @@ the full screen graph for real.
 | `MissionAssignmentsManager.cs` | 449 | Assigning personnel to mission slots |
 | `SpaceComplexDataManager.cs` | 424 | The player's space complex/facility layout |
 | `GoalsManager.cs` | 392 | Prestige-granting goals (`Goals.xml`) — traced, see §11 |
-| `CampaignManager.cs` | 113 | Single-player `CampaignGSA` scripted objectives (`GSACampaignObjectives.xml`) — see §5 for why this is relevant to multiplayer design |
+| `CampaignManager.cs` | 113 | Single-player `CampaignGSA` scripted objectives (`GSACampaignObjectives.xml`) — see §5 for why this is relevant to multiplayer design, and §12.3 for the traced objective-system shape |
 | `ConstantsManager.cs` | 143 | Loads `Constants.xml`/`Constants-<Agency>.xml` — tuning knobs (initial funds, budget-review thresholds, Tiger Teams boost/cost, mission-sim "saving throw" multipliers) — budget-review thresholds traced, see §11 |
-| `RandomEventsManager.cs` | 96 | Picks/fires `REB*` random events |
+| `RandomEventsManager.cs` | 96 | Picks/fires `REB*`/`REG*` random events — traced, see §12.1 (**entirely hardcoded in C#, no Data Scripts XML involved at all** — the one system in the whole codebase that isn't data-driven) |
 | `TasksManager.cs` | 60 | Small — player task list/reminders |
 | `ScriptsManager.cs` (57) / `DataScriptsManager.cs` (7) / `TextScriptsManager` | — | The data-loading plumbing itself (§3) |
 | `PBEMManager.cs` | 955 | The async multiplayer backend client — see §5, dedicated section, this is the most relevant file in the whole codebase for Launch Window |
@@ -277,9 +278,12 @@ enum DifficultyLevelT { Normal = 1, Hard = 2, BuzzHard = 3 }
   international space agency that unites all the world's space programs").
   Not generic/tutorial content — it's a full third playable faction with its
   own scripted single-player campaign (`CampaignGSA`): a long-term goal
-  (manned lunar landing by end of 1973) plus periodic short-term objectives
-  from `GSACampaignObjectives.xml` (`CampaignManager.cs` only initializes
-  these `if playerSpaceAgency == GSA`).
+  (manned lunar landing by end of **1974**, not 1973 as an earlier draft of
+  this file guessed — code-confirmed exact, `CampaignManager.
+  GetLongTermGSACampaignObjectives`'s `deadlineYear=1974, deadlinePeriod=4`,
+  §12.3) plus periodic short-term objectives from `GSACampaignObjectives.xml`
+  (`CampaignManager.cs` only initializes these `if playerSpaceAgency == GSA`).
+  **Traced in full, see §12.3.**
 - **`CampaignRTTM`** — the manual never spells out the acronym or uses it as
   a name, but repeatedly calls this mode "the race to the Moon campaign(s)"
   (p.5-6, p.28, p.41), so "Race To The Moon" is a confident reading, not
@@ -557,7 +561,8 @@ Not a commitment, just a sensible dependency order given what's mapped above:
    `PAOMainOverlay.cs`, `Goals.xml`) — the resource loop and scoring. **Done —
    see §11.**
 6. **Campaign objectives / goals / random events** (§2.3) — the
-   meta-progression and variance layer on top of the above.
+   meta-progression and variance layer on top of the above. **Done — see
+   §12.**
 7. **PBEM** (§5) — read in full once #2-5 make its data model legible,
    specifically to answer "what would a daily-batch N-player version of this
    turn-exchange protocol look like".
@@ -672,13 +677,22 @@ and several further manual-confirmed and code-confirmed points stop
 - **Pulling an employee out of advanced training early** (manual p.30) —
   an explicit mid-season interrupt with an intentionally worse outcome than
   waiting.
-- **`REB*` random/decision events** (§2.3) — `RandomAndDecisionEventBase`'s
-  naming ("...AndDecision...") suggests at least some of these present a
-  choice rather than just narrating an outcome; not yet confirmed which
-  ones, worth checking `RandomEventsManager.cs` and a sample `REB*.cs` with
-  actual branching logic (`DEAvoidPrestigeDropAtACost.cs` is a likely
-  candidate — a single-purpose decision event, "DE" probably = "Decision
-  Event").
+- ~~**`REB*` random/decision events** — `RandomAndDecisionEventBase`'s naming
+  ("...AndDecision...") suggests at least some of these present a choice
+  rather than just narrating an outcome~~ — **RESOLVED, not actually a
+  mid-turn case at all (§12.2, 2026-09-27): zero interactivity.** Every
+  `REB*`/`REG*` event just rolls and applies automatically, reported
+  after the fact as a news item. A real choice-presenting mechanism does
+  exist in the code (`DecisionEventBase`'s `Option1Selected`/
+  `Option2Selected`), but it's entirely dead: the only class that extends
+  it, `DEAvoidPrestigeDropAtACost`, has its applicability check hardcoded to
+  always return `false` and every method body empty, and the manager method
+  that would even roll for a decision event is never called from anywhere in
+  the actual turn-resolution flow. BASPM's shipped game contains no
+  interactive random events whatsoever, despite the scaffolding suggesting
+  otherwise — this was this project's oldest unresolved open question
+  (present since the very first analysis session) and it resolves to "not a
+  case at all," the cleanest possible outcome for the daily-batch model.
 - Multiplayer-specific: `PBEMManager`'s resign/claim-on-timeout actions (§5)
   are themselves mid-game player decisions outside the normal turn loop.
 - **Tiger Teams (§9.5, code-confirmed 2026-09-27)** — the one genuinely
@@ -699,8 +713,10 @@ day's server tick. Flagged in `design.md` §4 as an open question. **Update,
 automatically once triggered, whether or not the mission spans one season or
 several (§8 confirms it commonly spans several). The genuine mid-turn
 interaction points listed above (`ETLaunchSchedMsnsOverlay`'s scrub/resume/
-assign, training pull-out, `REB*` choices) all happen strictly *before* a
-season's resolution runs, not interleaved with it. **Correction, §9 tracing
+assign, training pull-out) all happen strictly *before* a season's
+resolution runs, not interleaved with it — **`REB*` choices dropped from this
+list entirely, per §12.2: there turned out to be no such choices to
+interleave.** **Correction, §9 tracing
 (2026-09-27): this "no interleaved input" claim has exactly one confirmed
 exception — Tiger Teams (§9.5).** `MissionSimBaseScreen.AnimateMissionStepOutcomeSuspense`
 literally calls `MissionSimPlayer.PauseUnpauseMission(value: true)` and pops
@@ -1106,8 +1122,9 @@ GetTigerTeamsPercentageBoost`/`GetTigerTeamsCostMultiplier`):
   decision. See §7.2's updated correction note and `design.md` §2.2(c)/§4.
   The saving grace for the daily-batch model: "decline" is free and always
   available, so a trivial, harmless auto-resolve default exists (unlike
-  scrub/training-pull-out/`REB*` choices, which all have real trade-offs
-  either way) — Launch Window's resolver can simply auto-decline unless a
+  scrub/training-pull-out, which have real trade-offs either way — `REB*`
+  turned out not to belong on this list at all, §12.2) — Launch Window's
+  resolver can simply auto-decline unless a
   player has pre-set a spending policy, without that default ever being a
   strictly bad choice for the player who didn't log in.
 
@@ -1520,3 +1537,190 @@ system slots cleanly into "server resolves mechanically, no pause," same as
    directly confirm the penalty is player-visible (as opposed to a silent
    under-the-hood odds adjustment), which matters for whether Launch Window
    should surface its own equivalent modifier explicitly in its UI.
+
+## 12. Random events and campaign objectives (traced 2026-09-27)
+
+Full trace of `RandomEventsManager.cs`, `RandomAndDecisionEventBase.cs` +
+`DecisionEventBase.cs`, a representative sample of `REB*`/`REG*`/`DE*`
+subclasses, `Player.cs`'s event-chance fields, `CampaignManager.cs` +
+`CampaignObjective.cs`/`CampaignObjectiveField.cs` + all seven `CampaignOF*`
+subclasses, `GameWorld.cs`'s objective-processing methods, and
+`GSACampaignObjectives.xml` (the live install's copy — same "not in
+`extracted\`" gotcha §10/§11 both hit). This is the last item in §6's
+suggested order and **resolves this project's oldest standing open
+question** (present since the very first session): whether any `REB*`
+decision event ever presents the player a real mid-turn choice.
+
+### 12.1 Random events: two independent per-season dice rolls, entirely hardcoded (no Data Scripts XML at all)
+
+**Code-confirmed, a genuine architectural outlier worth flagging plainly:**
+unlike literally every other system traced so far (mission-sim, personnel,
+programs, budget/goals — all Data-Scripts-XML-driven), **random events have
+no XML backing whatsoever.** `RandomEventsManager.Initialize` hardcodes two
+lists of event objects directly in C# — 14 "bad" events (`REB*`) and 5 "good"
+events (`REG*`, a sibling family this file's earlier prefix table missed
+entirely until now) — and each event class hardcodes its own effect
+magnitude as C# fields/literals (e.g. `REBReliabilitySetback`'s
+`MinReliabilitySetback = 7f`/`MaxReliabilitySetback = 15f`), not anything
+loaded from a Data Script.
+
+- **Trigger chances, code-confirmed** (`Player.cs`'s reset/new-game method):
+  a flat **5% chance of a bad event, 20% chance of a good event, every
+  single season**, independent rolls (both can fire the same season, or
+  neither). These are hardcoded literals too — despite `Player.cs` having
+  full XML save/load plumbing for these three chance fields (suggesting a
+  design intent to make them tunable/persistent), nothing anywhere in the
+  codebase ever sets them to anything other than these three hardcoded
+  values at new-game start.
+- **Picking an event, code-confirmed**
+  (`RandomEventsManager.ComputeChancesAndApplyRandomOrDecisionEvent`): on a
+  successful roll, shuffle the relevant pool and apply the first event whose
+  `AppliesToCurrentSituation(gameWorld, spmRandom)` gate passes — **most
+  events are situationally gated to a real precondition, not pure noise**.
+  Concrete examples from the sample read: `REBReliabilitySetback` only
+  applies if the player has components actively in R&D; `REBPerishedAstronaut`
+  only if there's an available astronaut to kill; `REBMoraleDrop` only
+  after a mission failure in the last season; `REGExtraFunding` only after a
+  recent run of mission successes *and* only with enough seasons left before
+  the next budget review to matter. **This is a real, deliberate design
+  choice worth carrying forward**: bad news concentrates around actual
+  recent risk factors (a program that's already struggling gets hit harder),
+  rather than random events feeling like disconnected noise layered on top
+  of an otherwise-stable game. Flagged into `design.md` §1.1 below.
+- **Effect ranges, from the sample read**: costs/setbacks are proportional,
+  not flat (`REBUnexpectedCost` deducts 7–15% of *current* funds; reliability
+  setbacks are 7–15 percentage points off 1–N components in R&D; morale
+  drops are 10–20 points off one randomly chosen personnel group; a
+  perished astronaut is a specific named employee, permanently). Good events
+  are comparably proportional-and-temporary (`REGExtraFunding` bumps the
+  per-season budget rate 7–16%; `REGRDResultsBoost` multiplies R&D output
+  1.15–1.25× for a random 1–7 seasons).
+- **Resolution, code-confirmed** (`ETInterseasonOverlay.
+  GetRandomEventBadNewsItemText`/`GetRandomEventGoodNewsItemText`): both
+  rolls happen **as part of generating the end-of-season news screen's
+  text**, applying their effect immediately and returning a plain narrated
+  message — exactly the same "roll happens, effect applies, player reads
+  about it afterward" shape as everything else on that screen. Nothing
+  pauses for this.
+
+### 12.2 The "decision event" question, definitively resolved: none exist in the shipped game
+
+**This is the answer to the open question flagged since this project's very
+first session.** `RandomAndDecisionEventBase`'s own contract
+(`AppliesToCurrentSituation`/`Apply(..., out string outputMessage)`) has no
+choice-presenting capability at all — it's identical in shape to a plain
+random event. A *separate*, more capable base class does exist,
+`DecisionEventBase : RandomAndDecisionEventBase`, adding `Option1Text`/
+`Option2Text` fields and abstract `Option1Selected`/`Option2Selected`
+methods — real, functional choice-presentation machinery, the same general
+shape as Tiger Teams' pause-and-choose (§9.5).
+
+**But it was never finished, and it's entirely unreachable in play, for
+three independent reasons, any one of which alone would be sufficient:**
+1. **Only one class in the entire codebase extends `DecisionEventBase`**:
+   `DEAvoidPrestigeDropAtACost` (so "DE" = "Decision Event," confirming the
+   earlier guess). Its `AppliesToCurrentSituation` override
+   **unconditionally returns `false`** — it can never be selected by the
+   picking loop in §12.1, regardless of situation or luck.
+2. **Every method on that one class is an empty stub** — `Apply`,
+   `Option1Selected`, and `Option2Selected` all have blank bodies. Even if
+   reason 1 didn't block it, selecting either option would do nothing.
+3. **The manager method that would even roll for a decision event,
+   `RandomEventsManager.ComputeChancesAndApplyDecisionEvent`, is never
+   called from anywhere in the codebase outside its own definition** —
+   confirmed by a codebase-wide search. Not even wired into the
+   end-of-season news flow the way the bad/good rolls are (§12.1). Its own
+   body is also incomplete: it declares `out string optionA, out string
+   optionB` parameters clearly meant to carry the two choices' text back to
+   a UI layer, but both are simply set to `string.Empty` right before
+   returning, and an `if (num >= 0) { }` block sits empty where option-text
+   population would presumably go.
+4. (Not load-bearing given 1–3, but consistent with the whole thing being
+   abandoned mid-implementation): `_chancesForTriggeringDecisionEvents`
+   defaults to `1f` — a 100% roll chance — which would be a strange design
+   choice for a real feature and reads much more like a placeholder value
+   nobody ever came back to tune.
+
+**Conclusion: BASPM's shipped game contains zero interactive random/decision
+events.** Every `REB*`/`REG*` event, and the sole (non-functional) `DE*`
+scaffold, confirms the same thing §8/§9/§10/§11 already found for every
+*other* system in this codebase — turn resolution is a fully automatic
+dice-and-consequence process the player reads about afterward, never one
+that pauses for a choice mid-flow, **with Tiger Teams (§9.5) remaining the
+sole genuine exception across this entire analysis pass.** `baspm.md` §7.2
+and `design.md` §4 updated to close this out.
+
+### 12.3 Campaign objectives: a reusable strategy-pattern scoring shape (GSA's own content out of scope)
+
+**Code-confirmed**, `CampaignManager.cs`/`CampaignObjective.cs`/
+`CampaignObjectiveField.cs` + the seven `CampaignOF*` subclasses. This is
+`CampaignGSA`-mode-only content (single-player, `baspm.md` §2.4's existing
+GSA note) — traced here for its reusable *system shape*, not to catalog
+GSA's specific scripted story content, consistent with `design.md` §1.2.
+
+- **One long-term objective, a real win/loss condition, code-confirmed**:
+  `CampaignManager.GetLongTermGSACampaignObjectives` hardcodes exactly one —
+  achieve the generic goal `MANNED_LUNAR_LANDING` by **Q4 1974** (corrected
+  from an earlier draft's "1973" guess, §2.4 above). `GameWorld.
+  ProcessExpiringLongTermCampaignObjectives` checks it once, at its
+  deadline, and sets one of two player-state flags depending on the
+  outcome — `WorldMapBaseScreenGameLogic.cs` reads those flags to show a
+  genuine **Victory** or **Game Over** overlay. This is a real, hard
+  win/loss condition, not an open-ended score — the GSA campaign definitely
+  ends, one way or the other.
+  - **Bonus finding, not this pass's main target but directly adjacent**:
+    `CampaignRTTM` (the single-player AI-rival mode, `baspm.md` §2.4) uses
+    this *exact same* generic goal as its own win condition — first side
+    (player or the simulated AI rival) to achieve `MANNED_LUNAR_LANDING`
+    triggers the same Victory/Defeat overlay pair. **Real, concrete
+    precedent for a race-to-a-specific-milestone head-to-head win
+    condition** — directly relevant to `design.md` §2.9's still-open
+    "does Launch Window even have a win condition, or is it open-ended
+    score comparison" question, flagged there.
+- **Short-term objectives, code-confirmed**: drawn 2 at a time (3 on
+  BuzzHard — irrelevant, Normal-only per `design.md` §2.10) from a larger
+  authored pool, specifically at each budget-review boundary
+  (`GameWorld.AdvanceSeason...` → `AddShortTermCampaignObjectives`, gated
+  `IsSeasonForBudgetComputation`), each sharing that review period's
+  deadline. `GSACampaignObjectives.xml` (41 candidate objectives across 6
+  budget-review periods, only 2 ever drawn per period) confirms escalating
+  stakes across periods (period 1: 300 prestige granted / 400 deducted;
+  period 2: 500/750; rising further in later periods, not fully
+  characterized here). Each is independently checked at its own deadline
+  (`ProcessExpiringShortTermCampaignObjectives`) and grants
+  `PrestigePointsGrantedOnCompletion` on success or deducts
+  `PrestigePointsDeductedOnFailure` on failure — always one or the other,
+  never a silent expiry.
+- **Seven objective-field types, all simple independent state-threshold
+  predicates** — confirms and completes `baspm.md` §2.3's existing
+  by-filename-only list:
+  - `AchieveSetOfGoals` — one or more specific goal IDs achieved.
+  - `AgencyFunds` — current funds ≥ a target.
+  - `EmployeesSkillset` — at least N employees of a given group with a given
+    skill ≥ a target competency.
+  - `MsnCmpRel` / `MsnCmpRelSETSkill` — at least N mission components (of a
+    given SET skill group) at ≥ a target reliability.
+  - `PersonnelCount` — a personnel group's headcount ≥ a target.
+  - `SuccessfulUsesCount` — one specific mission component successfully used
+    ≥ N times.
+  - Every one of these is a clean, generic, re-derivable predicate type
+    (funds/headcount/skill/reliability/goal-set/usage-count thresholds) —
+    **exactly the reusable "objective system shape" this file's earlier note
+    already flagged as worth reusing**, now fully confirmed rather than
+    guessed at from class names alone.
+- **Async-multiplayer relevance: same clean shape as everything else traced
+  so far** — objective checking is a deterministic state comparison run at a
+  fixed deadline/budget-review boundary, no mid-resolution surprises, no
+  player input needed once an objective's terms are set. See `design.md`
+  §2.8(b).
+
+### 12.4 Verification still needed (in-game / screenshots)
+
+1. **Low priority, cosmetic only:** a screenshot of a `REB*`/`REG*` news
+   item as it actually renders on the interseason news screen — confirms
+   tone/format for calibrating Launch Window's own equivalent, though the
+   mechanic itself needed no in-game verification (fully resolved by static
+   analysis, §12.1/§12.2).
+2. **Low priority:** a screenshot of the GSA campaign's Victory/Game Over
+   overlay (§12.3) — confirms presentation only, the win/loss mechanism
+   itself is already code-confirmed.
