@@ -216,9 +216,9 @@ the full screen graph for real.
 
 | Manager | Lines | Likely scope |
 |---|---|---|
-| `ProgramsManager.cs` | 764 | The Sputnik→Apollo program/tech tree (`Programs.xml`) |
-| `MissionsConfigurationsManager.cs` | 740 | Mission configuration variants per program (`MsnCnfg*.xml`) |
-| `MissionComponentsManager.cs` | 631 | Rockets/capsules/components catalog + reliability |
+| `ProgramsManager.cs` | 764 | The Sputnik→Apollo program/tech tree (`Programs.xml`) — traced, see §10 |
+| `MissionsConfigurationsManager.cs` | 740 | Mission configuration variants per program (`MsnCnfg*.xml`) — traced, see §10 |
+| `MissionComponentsManager.cs` | 631 | Rockets/capsules/components catalog + reliability — traced, see §10 |
 | `PersonnelManager.cs` | 595 | Astronauts/flight controllers/SET hiring, skills, training — traced, see §9 |
 | `MissionsSimulationsManager.cs` | 450 | Loads & drives one mission's live simulation (see §2.1) |
 | `MissionAssignmentsManager.cs` | 449 | Assigning personnel to mission slots |
@@ -327,20 +327,24 @@ et al. are thin XML readers, not the source of truth.
     PgmCtgID='00' ... OpeningCost='126' MaintenanceCost='13'
     SpaceAgency='Soviet'>` for Sputnik I), including `OpeningCostDeductions`
     (cost discounts for having already opened a prerequisite program) and
-    `RequiredMsnComponents`.
+    `RequiredMsnComponents`. **Traced, see §10.**
   - `MsnCnfg<PgmCtgID>-<PgmID>.xml` (57 files) — mission configuration
     variants for each program: duration, prestige granted/deducted, goals
     achieved, launch info, `GoalBoost` (extra goal progress for
-    over-delivering, e.g. launching more Sputniks).
+    over-delivering, e.g. launching more Sputniks). **Traced, see §10.**
   - `Goals.xml` — every prestige-granting goal, first/second/later-time
     prestige values, `GoalsCancelled` (a goal can obsolete an earlier one).
-  - `MissionComponents.xml` — the rocket/capsule/component catalog.
-  - `ProgramCategories.xml` — the grouping programs fall under (satellite,
-    manned orbital, lunar, etc. — `PgmCtgID` from `Programs.xml`).
+  - `MissionComponents.xml` (85 entries) — the rocket/capsule/component
+    catalog. **Traced, see §10.**
+  - `ProgramCategories.xml` (13 shipped categories, though the code
+    references up to 40 IDs — see §10.2) — the grouping programs fall under
+    (satellite, manned orbital, lunar, etc. — `PgmCtgID` from `Programs.xml`).
+    **Traced, see §10.**
   - `AstronautCandidates-<Agency>.xml`, `MissionControlCandidates-<Agency>.xml`,
     `SETCandidates-<Agency>.xml` — hiring pools, per agency.
   - `ReliabilityTransfers-<Agency>.xml` — how reliability carries over
-    between mission component versions/upgrades.
+    between mission component versions/upgrades. **Traced, see §10.3** —
+    exact formula now confirmed, was manual-only before this pass.
   - `GSACampaignObjectives.xml` — the scripted single-player campaign's
     objective definitions, read by `CampaignManager.cs`.
   - `Tasks.xml`, `PersonnelManagerConstants.xml`, `MsnCmpsManagerConstants.xml`,
@@ -354,7 +358,10 @@ et al. are thin XML readers, not the source of truth.
   launch success/failure formula. **The single most important data
   directory for a "how does a launch actually resolve" deep dive.**
   `MissionComponent MinUpgrade/MaxUpgrade/MinDowngrade/MaxDowngrade`
-  attributes here also drive post-mission reliability changes.
+  attributes appear here, but **correction (§10.4, 2026-09-27): no code
+  anywhere reads them — post-mission reliability changes are actually driven
+  by three global outcome-based ranges in `MsnCmpsManagerConstants.xml`
+  instead**, not these per-step XML attributes.
 All **444 `.csv` files** under `Scripts\` live entirely under
 `Text Scripts\*\CSV\` (confirmed: `find Scripts -name '*.csv' -exec dirname
 {} \; | sort | uniq -c` — 62 files × 7 languages under `General Container`
@@ -543,7 +550,7 @@ Not a commitment, just a sensible dependency order given what's mapped above:
    see §9.**
 4. **Programs & mission configurations** (`ProgramsManager.cs`,
    `MissionsConfigurationsManager.cs`, `Programs.xml`/`MsnCnfg*.xml`) — the
-   content tree players progress through.
+   content tree players progress through. **Done — see §10.**
 5. **Budget & prestige** (`ConstantsManager.cs`'s `BudgetReviewConstants`,
    `PAOMainOverlay.cs`, `Goals.xml`) — the resource loop and scoring.
 6. **Campaign objectives / goals / random events** (§2.3) — the
@@ -881,13 +888,11 @@ decompiled code:
    mechanically via `Player.AddFallenAstronaut`, but not what's communicated
    to the player, which matters for Launch Window's own tone/UX on the same
    moment).
-4. **Confirm whether `DifficultyFactor` (per-step, loaded but seemingly
-   unused in the odds formula, §8.2) visibly does anything in a real
-   playthrough** — e.g. try two mission configs with very different
-   `DifficultyFactor` values on an otherwise-similar step and see whether
-   failure rates in practice look different. If it turns out truly inert for
-   step odds, that's one fewer XML field Launch Window needs to carry
-   forward when re-deriving its own mission-content schema.
+4. ~~Confirm whether `DifficultyFactor` visibly does anything in a real
+   playthrough~~ — **RESOLVED by static analysis, no verification needed
+   (§10.5, 2026-09-27):** inert for step odds as suspected, but it does
+   scale a mission configuration's total cost via
+   `GetMissionConfigurationAverageDifficultyFactorAccrossAllSeasons`.
 5. **A save-game pair (one post-success, one post-`MINOR_GLITCH`) for the
    same mission configuration**, if convenient to produce — would let a
    future session diff `SaveSlot*.xml`'s mission/prestige records the same
@@ -1118,3 +1123,195 @@ correction for whoever reads §8.2 closely against the actual XML next.
    since every code path found treats R&D assignment as indefinite in
    practice regardless of which enum value is active; only worth chasing if
    a future save or screenshot ever shows that state's name somewhere.
+
+## 10. Programs, mission configurations, and reliability (traced 2026-09-27)
+
+Full trace of `ProgramsManager.cs`, `MissionsConfigurationsManager.cs`,
+`MissionComponentsManager.cs`, and the `Programs.xml`/`ProgramCategories.xml`/
+`MsnCnfg00-00.xml`/`MissionComponents.xml`/`ReliabilityTransfers-NASA.xml`
+data files (the live game install's copy under `SPM-Windows_Data\Scripts\
+Data Scripts\General Container\` — the `extracted\` dump does **not**
+contain these; they only exist unpacked in the actual install directory,
+worth remembering next time a Data Scripts file needs a fresh read). This
+upgrades manual-only claims in §7.1 to **code-confirmed** and answers the
+one previously flagged open question (Reliability Transfer's exact formula).
+
+### 10.1 The containment hierarchy, code-confirmed exactly as §7.1 described
+
+**Program Category → Program → Mission Configuration → Mission Component(s)**,
+plus a cross-cutting **Reliability Transfer** layer. Concretely:
+- A **Program Category** (`ProgramCategories.xml`) belongs to a
+  **Robotic**/**Crewed** group (`ProgramCategoryGroupIDT`) and can require
+  one or more prerequisite **Strict Goals** to even become available for
+  opening (e.g. Mercury probes require *both* the Venus-probe and
+  Mars-probe goals already achieved — multiple `RequiredGoal` entries are
+  effectively ANDed).
+- A **Program** (`Programs.xml`) sits inside a category, has its own
+  `OpeningCost`/`MaintenanceCost`, can carry its own additional
+  `RequiredGoal`, and declares `RequiredMsnComponents` — the actual mission
+  components it needs built. **`OpeningCostDeductions` confirmed exactly**:
+  a list of `(other program, deduction %)` pairs; owning that other program
+  knocks the stated percentage off this one's opening cost (summed and
+  capped at 100%). Real example: Explorer I (`00-01`) gets a flat **40%**
+  discount once Sputnik I (`00-00`) is already open — a genuine, deliberate
+  "fast follower" mechanic, not just flavor text (see §1.1 note below).
+- A **Mission Configuration** (`MsnCnfg<PgmCtgID>-<PgmID>.xml`) is one way
+  of flying a program: `DurationInSeasons`, `NumLaunches`,
+  `PrestigeGrantedOnSuccess` (first/second/later-time values, confirming
+  §7.1's "diminishing prestige for repeat missions"), `PrestigeDeductedOnFailure`,
+  and the goals it grants. **The "extended duration variant" from §7.1 is
+  real and directly confirmed**: `MsnCnfg00-00.xml`'s config `1` ("Sputnik -
+  Extended mission") is `DurationInSeasons='3'` against config `0`'s `'1'`,
+  and its prestige is roughly double (500/250/150 vs. 250/125/75) — a
+  genuine higher-risk-longer-commitment, higher-reward alternative to the
+  baseline mission, not just a cosmetic label. This is also the concrete,
+  named source of §8.1's 3-season Sputnik example — same mission
+  configuration, now traced from both ends (data authoring and runtime
+  behavior).
+- A **Mission Component** (`MissionComponents.xml`, 85 entries in the base
+  game) belongs to one `AssociatedSETSkill` group (§9's five SET skills)
+  and one `ProgramCategoryGroupID` (Robotic/Crewed), and carries its cost
+  triad (`CreationCost`/`MaintenanceCost`/`UnitCost`), its reliability triad
+  (see §10.3), and (for rockets) a `MassAndCapacity` payload-to-orbit table.
+  **Every mission component in the base game starts at the same tiny
+  baseline: `Initial='3.00000'`** — a brand-new, untransferred rocket or
+  capsule is a near-coin-flip-of-doom by design; Reliability Transfer
+  (§10.3) and R&D (§9.3) are how it becomes flyable at all.
+
+### 10.2 Program categories reveal cut/never-shipped scope beyond the base game
+
+**Code-confirmed, a genuine "the code is bigger than the data" finding.**
+`ProgramsManager.GetPgmCtgIDsBasedOnProgramCategoryKind` and the
+`ProgramCategoryKindT` enum define **12 solar-system-target category
+groupings** — Moon, Sun, Inner Planets, Outer/Dwarf Planets, **Asteroids and
+Comets**, **Outer Heliosphere**, Space Planes, Ballistic Capsules, Lunar
+Expeditions, **Space Stations**, **SSTO Vehicles**, and **Mars Expeditions**
+— referencing category IDs all the way up to `"39"`. But the base game's
+actual `ProgramCategories.xml` only ever defines **13 categories**, IDs `00,
+02, 04, 06, 08, 10, 14, 16, 26, 27, 28, 29, 30` — covering only the probes
+(Earth/Moon/Sun/Mercury/Venus/Mars/Jupiter/Saturn) and the ballistic-capsule/
+short-lunar-expedition categories. **Every category ID the code references
+for asteroids/comets, the outer heliosphere, space stations, SSTO vehicles,
+and Mars expeditions is dead — scaffolded in the enum and lookup tables but
+never given actual `Program`/`MsnCnfg` content in this build.** Whether this
+is cut content, a DLC/expansion that never shipped, or forward-looking
+architecture that was never filled in isn't determinable from the code
+alone — but it's a real signal of where BASPM's own designers were already
+looking past Apollo, which is squarely useful, non-copyable inspiration for
+Launch Window's own long-term content roadmap (the category *names*/domains
+are real astronomical/spaceflight targets, not BASPM's invented content —
+§1.2's carve-out for real-world facts applies here too).
+
+### 10.3 Reliability Transfer: the exact formula (previously manual-only, now code-confirmed)
+
+**Resolves the one open question going into this pass.** `ReliabilityTransfers-<Agency>.xml`
+declares, per **target** mission component, an explicit list of **source**
+components and a **per-source transfer percentage**, plus a **cap**
+(`MaxReliabilityTransfer`) — "related" is an explicit, hand-authored
+per-component list, not a generic "same skill group" heuristic. Real
+example, NASA's `JUPITER-C` target: 13 separate rocket sources listed,
+transfer percentages ranging 35–60% depending on how closely related each
+source rocket actually is (Redstone 50%, Saturn V 60%, Thor-Able 35%), every
+one of them capped at the target's own 60% ceiling regardless of how many
+sources the player owns.
+
+- **Exact formula, `MissionComponentsManager.ComputeReliabilityTransferForMissionComponent`:**
+  `transfer = min(MaxReliabilityTransfer, Σ over owned sources of (source's
+  CURRENT reliability × that source's ReliabilityTransferPercentage ÷ 100))`
+  — it's driven by the source's *current* (not initial) reliability, so a
+  well-developed, heavily-flown source rocket passes on much more than a
+  freshly-opened one, and owning several related sources stacks (up to the
+  cap).
+- **Applied once, at the moment a program is opened** (`Player.AddMsnComponentBought`
+  → `GetMissionComponentInitialReliabilityInclRelTransfer`, which takes
+  `max(existing tracked reliability, baseline Initial + transfer)`): a new
+  component's starting `CurrReliability` is its 3% baseline plus this
+  transfer bonus (capped), not a small step up from zero.
+- **A naming trap worth flagging precisely, code-confirmed, not yet verified
+  in-game:** the field named `InitialReliabilityWithRelTransfer` — which
+  post-mission reliability updates (§10.4) treat as a floor a component can
+  never drop below — is **never actually set to the transfer-inclusive
+  value anywhere in the traced code**; it's initialized once, in
+  `MissionComponentsManager.InitializeMissionComponents`, to the exact same
+  raw 3% baseline as plain `InitialReliability`, and nothing else writes it
+  except save-file deserialization (which just reads back whatever was last
+  serialized — itself always that same raw baseline, going by this trace).
+  So despite its name, the actual "floor" enforced after repeated mission
+  failures (§10.4) appears to be the bare **3% baseline**, not the
+  transfer-boosted starting value — meaning a heavily transfer-boosted
+  component genuinely can be ground back down near its raw minimum through
+  bad luck, harder than the field's name suggests. Not confirmed whether
+  this is intentional (transfer is a one-time head start, not a new floor)
+  or an oversight; **not a Launch Window design concern either way** since
+  we're re-deriving our own formula, but worth getting the *intended*
+  behavior right by deliberate choice rather than by inheriting whichever
+  one this trace found.
+
+### 10.4 Component reliability changing over time: resolves the MinUpgrade/MaxUpgrade XML mystery
+
+**Corrects a previous-session note.** §3.1 flagged `MissionComponent
+MinUpgrade/MaxUpgrade/MinDowngrade/MaxDowngrade` attributes seen in the
+Mission Simulations Container XML as apparently driving post-mission
+reliability changes. **A codebase-wide search found no code anywhere that
+reads attributes by those names** — they don't drive anything; either dead/
+informational XML data or read through a path this and the mission-sim pass
+both missed. **The actual mechanism, code-confirmed**
+(`MissionComponentsManager.UpdatePlayersMissionComponentAfterMission`, called
+once per mission per component used): each used component's reliability
+change is `(MaxReliability − CurrReliability) × factor`, where `factor` is a
+random draw from one of three **global, difficulty-keyed constant ranges**
+in `MsnCmpsManagerConstants.xml` (Normal/`Value1` only, per `design.md`
+§2.10) selected by that component's own per-use performance category — a
+**four-way outcome taxonomy distinct from `MissionStepOutcomeT`** (§8.2):
+`SUCCESS` (positive factor), `MINOR_GLITCH` (a smaller positive factor —
+**note this is a genuinely distinct, code-confirmed category from a clean
+success**, relevant context for the still-open §8.4 item 1 question about
+whether an unsolved minor glitch is reachable, though this pass didn't trace
+how `MissionStepOutcomeT` maps into this specific enum), `FAILURE` (a
+negative factor, scaled down by how much that component was actually
+involved in the failure — a component barely involved in a failed step
+barely gets penalized), and `NEUTRAL` (no change, for components not
+involved in whatever happened that step). Diminishing-returns-shaped by
+construction (factor multiplies the *remaining headroom* to max, same
+"bigger gains further from the cap" shape as §9.3's training formula) —
+another case of this project's preferred diminishing-returns curve shape
+showing up independently in a third system.
+
+### 10.5 The `DifficultyFactor` XML field: resolves baspm.md §8.4 item 4
+
+**Resolved by this pass, no in-game verification needed after all** — retract
+that item from §8.4's list. Per-step `DifficultyFactor` (loaded but, per §8.2,
+never read by the actual step-odds roll) **does have a real, confirmed use**:
+`MissionsConfigurationsManager.GetMissionConfigurationAverageDifficultyFactorAccrossAllSeasons`
+averages every step's `DifficultyFactor` across a mission configuration's
+full multi-season run, and that average directly scales the mission
+configuration's `TotalCostForPayloads` at load time (harder missions cost
+more to fly, mechanically, not just narratively). It's inert for step-outcome
+*odds* specifically, exactly as §8.2 found, but very much alive for mission
+*cost*.
+
+### 10.6 Async-multiplayer relevance: this system is all clean pre-turn input
+
+**No new mid-turn/mid-resolution decision points found** — opening a
+program, choosing a mission configuration, and reliability transfer are all
+resolved from state that already exists at the moment a player queues the
+action (owned programs, current component reliabilities); none of it
+depends on anything rolled during turn resolution, unlike Tiger Teams
+(§9.5). This system slots cleanly into "declare intent before the turn,
+server resolves mechanically" with no special-casing needed. See
+`design.md` §2.3(b)/§2.4(b).
+
+### 10.7 Verification still needed (in-game / screenshots)
+
+1. **Confirm the `InitialReliabilityWithRelTransfer`-as-floor finding
+   (§10.3)** — build up a component's reliability via a large reliability
+   transfer, drive it down through repeated mission failures, and see
+   whether it ever drops below its transfer-boosted starting value or only
+   ever floors out at the bare baseline. Low priority (doesn't affect Launch
+   Window's own design either way) but would confirm whether this is a real
+   BASPM behavior or a trace error.
+2. **A screenshot of the Program/Mission Configuration selection screens**
+   (HQ's "manage programs" overlay, manual p.33-ish) — confirms how
+   `OpeningCostDeductions`, `RequiredGoal` gating, and the "extended
+   mission" variant choice are actually surfaced to the player, useful for
+   calibrating Launch Window's own program-selection UI.

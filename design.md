@@ -165,6 +165,20 @@ same session it comes up**, the same standing-note-to-self habit as
   itself). Worth a short in-fiction note on why the term exists/where it
   comes from whenever a player first assembles one, in the same spirit as
   this pillar's other real-history beats.
+- **Surfaced during the §2.3/§2.4 programs/reliability trace (2026-09-27):
+  Reliability Transfer's data is a real rocket-family lineage, not a
+  gameplay abstraction** — NASA's `ReliabilityTransfers-NASA.xml`
+  (`baspm.md` §10.3) literally encodes the real Redstone → Jupiter-C → Juno
+  II and Atlas/Titan/Saturn family relationships, at percentages that echo
+  how much actual hardware/guidance experience really carried over between
+  those programs. A strong, concrete beat for showing *why* a new rocket
+  isn't just reused art with a new name — real rocket families really did
+  inherit engines, guidance systems, and institutional experience from their
+  predecessors, which is exactly what let real programs move fast. Also
+  worth a beat on **`OpeningCostDeductions`'s "fast follower" discount**
+  (`baspm.md` §10.1, e.g. Explorer I costing 40% less once Sputnik I is
+  already open) — a real, true dynamic of the actual Space Race (whoever
+  answers second gets to skip R&D the first mover already paid for).
 
 ### 1.2 Content & asset policy: no copying BASPM's copyrighted content
 
@@ -314,9 +328,71 @@ proceeds:
       for real-world facts (as opposed to BASPM's own specific expression of
       them), Launch Window is free to keep the term verbatim if it fits the
       tone; this isn't a case needing a reskin.
-- 2.3 Programs & mission configurations (the Sputnik→Apollo tech/content
-  tree)
-- 2.4 Mission components (rockets, capsules, boosters) & reliability
+- 2.3 **Programs & mission configurations (the Sputnik→Apollo tech/content
+  tree) — analyzed 2026-09-27, see `baspm.md` §10 for the full trace.**
+  - **(a) How BASPM does it:** a Program Category (Robotic or Crewed group,
+    gated behind prerequisite goals) contains Programs (their own
+    opening/maintenance cost, required mission components, optional extra
+    goal gate), each offering one or more Mission Configurations (duration
+    in seasons, prestige granted/deducted, goals achieved — including a
+    genuine "extended duration" variant that's longer, costlier-feeling, and
+    pays out roughly double prestige, not just a cosmetic label). Opening a
+    related program discounts a new one's opening cost by a flat,
+    hand-authored percentage (e.g. Explorer I is 40% cheaper once Sputnik I
+    is open) — a real "fast follower" mechanic. A genuinely notable finding:
+    the code scaffolds **12 solar-system-target category groupings**
+    (`baspm.md` §10.2) but the shipped game only ever fills in 13 of the
+    ~40 category IDs those groupings reference — everything for asteroids/
+    comets, the outer heliosphere, space stations, SSTO vehicles, and Mars
+    expeditions is dead code, never-shipped scope.
+  - **(b) What changes for async multiplayer:** nothing structural — this
+    is entirely pre-turn player input (which program to open, which mission
+    configuration to fly) resolved from state that already exists when the
+    turn is queued; no mid-resolution surprises the way Tiger Teams turned
+    out to have (§2.2(c), §4). Fits "declare intent before the turn, server
+    resolves mechanically" cleanly.
+  - **(c) Decision:** **port the four-level containment hierarchy and the
+    opening-cost-discount-for-related-programs mechanic**, re-deriving
+    actual cost/prestige numbers rather than reusing BASPM's constants
+    verbatim (`design.md` §1.2). **(unconfirmed default)** treat BASPM's
+    never-shipped category scaffolding (asteroid belt, space stations, SSTO,
+    Mars expeditions, outer heliosphere) as legitimate **long-term content
+    roadmap inspiration** for Launch Window once the core Sputnik-through-
+    Apollo content exists and is proven fun — these are real spaceflight
+    domains, not BASPM's invented content, so using them as a roadmap isn't
+    a copying concern, just good evidence of "what comes after the Moon"
+    that the original's own architecture already anticipated.
+- 2.4 **Mission components (rockets, capsules, boosters) & reliability —
+  analyzed 2026-09-27, see `baspm.md` §10 for the full trace.**
+  - **(a) How BASPM does it:** every mission component starts at a tiny
+    ~3% baseline reliability regardless of type — genuinely unflyable until
+    boosted. Two mechanisms boost it: **Reliability Transfer** (opening a
+    related component grants a one-time starting bonus computed from
+    already-owned related components' *current* reliability × an explicit,
+    hand-authored per-pair transfer percentage, capped per target — "related"
+    is a curated list, e.g. a real Redstone/Atlas/Titan/Saturn rocket-family
+    web, not a generic same-skill-group rule) and ongoing use (R&D, §2.2, or
+    actually flying missions, both diminishing-returns-shaped, consistently
+    with §2.2(a) and §9.3/§10.4's training/skill-growth formulas). Post-mission
+    reliability change is driven by a component's own per-use outcome
+    (success/minor-glitch/failure/neutral, scaled by involvement for
+    failures) against three global tuning ranges, not by any per-step XML
+    field — a previous session's guess about specific per-step upgrade/
+    downgrade XML attributes driving this turned out to be wrong (`baspm.md`
+    §10.4 corrects it).
+  - **(b) What changes for async multiplayer:** nothing structural, same as
+    §2.3(b) — reliability transfer and R&D/mission-based growth are all
+    either one-time (at program opening) or already-standing-order shaped
+    (§2.2), fitting the daily-turn model with no special handling.
+  - **(c) Decision:** **port the "everything starts nearly unflyable, transfer
+    and use are how it becomes viable" shape** and the diminishing-returns
+    reliability-growth curve, re-deriving actual percentages
+    (`design.md` §1.2). **(unconfirmed default)** keep reliability transfer
+    as an explicit, curated per-pair relationship table (not a generic
+    same-category rule) since that's what makes a real rocket-family lineage
+    feel earned rather than automatic — worth designing Launch Window's own
+    component lineage deliberately once the component catalog exists, rather
+    than generating transfer relationships algorithmically.
 - 2.5 **Mission simulation (the step-by-step launch/flight resolution,
   success/failure rolls) — analyzed 2026-09-27, see `baspm.md` §8 for the
   full formula trace.**
