@@ -1269,6 +1269,88 @@ multi-tenant game-selection/routing layer to design or build at all), and
 scaling across groups becomes infrastructure-level parallelism ("start
 another container") rather than an application-level concern.
 
+### 3.10 Testing strategy: automated bot-driven playthroughs
+
+**Decided (user, 2026-09-27): the core gameplay loop must be automatable
+from the start** — not just unit-testable in isolation, but drivable
+end-to-end by simple bots across many simulated turns/seasons, so balance
+questions (does a multi-season mission actually resolve correctly across
+turn boundaries? does an agency's budget trajectory make sense over 50
+simulated seasons? does one archetype snowball relative to another?) get
+answered by running hundreds of automated games, not by a human manually
+playing for hours to reach the endgame.
+
+**Real, working precedent to follow, not a fresh design: Robot-Rampage's
+`Playouts`/`BoardMetrics` harness** (`dev-tools/.../analysis/Playouts.java`,
+`BoardMetrics.java`). The mechanism, precisely:
+- A pure, libGDX-free simulation loop (`Playouts.run`): builds a game state,
+  then repeatedly deals cards, asks a `BotBrain` for a decision per seat
+  (always at `BotDifficulty.HARD`, regardless of what a lobby bot happens to
+  be set to — so the metrics' calibration never silently drifts with an
+  unrelated difficulty setting), submits it, and calls the *real*
+  `TurnResolver.resolve(state)` — the exact same resolution code the real
+  server uses, not a simplified stand-in.
+- Everything is seeded, so the same input always reproduces the same
+  numbers — deterministic, reproducible comparisons across runs.
+- The result is a small, purpose-built `Report` record (games played, how
+  many finished within a turn cap, average turns to finish, deaths by cause,
+  wins by seat, a fairness measure like the gap between the best/worst
+  seat's average) — not a generic dump, a handful of numbers actually chosen
+  to answer "is this balanced/does this work," decided in advance.
+- **The structural precondition this depends on, worth adopting
+  deliberately**: the rules engine (`rules` package) has zero libGDX
+  dependency and is unit-tested directly — this is what makes hundreds of
+  simulated games run in about a second each, with no window, no rendering,
+  no real time passing at all. Robot-Rampage's own testing-strategy section
+  states the mirror image explicitly: "Not tested: screens, rendering,
+  animation, Scene2D wiring." **The same split should apply to Launch
+  Window's own core simulation logic once it exists (§3.4, not started
+  yet): the turn/season-resolution engine (mission simulation, personnel,
+  budget, goals — `baspm.md` §8-§13's traced formulas) needs to be plain,
+  headless-simulatable Java from day one**, never entangled with any client
+  rendering code — this is the one architectural principle from this
+  session worth actively designing for before the rules engine's first line
+  is written, not retrofitting later.
+
+**Launch Window's own equivalent, not yet built — correctly deferred, since
+there's no rules engine yet (§3.4's status):** once the turn-resolution
+engine exists, build an equivalent `Playouts`-style harness — simple bots
+making plausible per-season decisions (assign personnel, queue a mission,
+open a program), run many simulated multi-season games from a seed, and
+report the metrics that actually matter here: whether a multi-season
+mission completes correctly across turn boundaries (a real, non-trivial
+case per `baspm.md` §8.1's finding that missions commonly span several
+seasons), funds/prestige trajectory over N simulated seasons (does an agency
+go bankrupt, does the budget-review math actually converge sensibly), and
+whether the NASA-style and Soviet-style archetypes (§2.1(a1)/(b1)'s real
+content differences) actually play out roughly evenly rather than one
+snowballing. **(unconfirmed default)** this belongs in `dev-tools`, matching
+Robot-Rampage's placement exactly, once `dev-tools` has its first real tool
+(currently empty, §3.3).
+
+### 3.11 Offscreen screenshot tooling for UI checking
+
+**Decided (user, 2026-09-27): reuse Robot-Rampage's `ScreenSnapshot`
+mechanism once real UI screens exist — not re-derive a new one.** The
+mechanism, precisely: an `Lwjgl3ApplicationConfiguration` with
+`setInitialVisible(false)` (a real GPU-backed window, just never shown on
+screen — not truly headless, genuine rendering still happens), building a
+screen from canned/synthetic state (no real server needed, a dead-end
+connection stub that goes nowhere), rendering it into a libGDX `FrameBuffer`,
+and writing the result out via `Pixmap.createFromFrameBuffer`/
+`PixmapIO.writePNG`. This is how Robot-Rampage's own development checked
+layouts, hard-to-reach states (damaged/locked UI, dialogs that only open
+from a click), and caught real regressions (a moved/renamed sprite silently
+invisible on screen, not a crash) that no unit test would catch and no
+screenshot-free playtest reliably would either.
+
+**Not built yet, correctly deferred** — `LaunchWindowGame` (`core`'s
+`client` package) is currently a blank placeholder with no real screens to
+photograph. Build this the same session real screens start existing,
+following `ScreenSnapshot`'s exact shape (an `lwjgl3/src/test` dev tool,
+never shipped) rather than reinventing the hidden-window/`FrameBuffer`
+mechanism from scratch.
+
 ## 4. Open questions (tracked here until resolved)
 
 - **Mid-turn/mid-mission player decisions — narrowed by the §2.5 mission-sim
