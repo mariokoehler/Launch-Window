@@ -1128,18 +1128,21 @@ so directly reusing its actual shape (not just its idea) carries none of
     which this design explicitly no longer assumes. An invite-only/allowlist
     mode is worth keeping as an optional host toggle for whichever group
     wants it, not the default.
-  - **Genuinely new open question this raises, not yet resolved: how many
-    agency archetypes exist, and can more than one player pick the same
-    one?** BASPM itself only has three real factions (NASA/Soviet/GSA,
-    `baspm.md` §2.4) — nowhere near enough for §1's ~10-player colleagues
-    group if archetypes must be exclusive per game. **(unconfirmed default,
-    proposed rather than left blank)** archetypes are non-exclusive — several
+  - **Decided (user, 2026-09-27): agency archetypes are non-exclusive.**
+    BASPM itself only has three real factions (NASA/Soviet/GSA, `baspm.md`
+    §2.4) — nowhere near enough seats for §1's ~10-player colleagues group if
+    archetypes had to be exclusive per game. Confirmed instead: several
     players can pick the same historical/flavor archetype, distinguished
     entirely by their own unique agency name and persona, same as how a
-    board game lets multiple people play "the same faction" flavor-wise in
-    a free-for-all. This is now a concrete new dependency on `design.md`
+    board game lets multiple people play "the same faction" flavor-wise in a
+    free-for-all. **Whether an archetype carries any real mechanical
+    difference at all (vs. being pure flavor) is still open** — the user
+    doesn't recall BASPM's own agency differences precisely beyond "probably
+    program-gating," which is now a concrete new dependency on `design.md`
     §4's still-open "how much of BASPM's Cold War framing do we keep vs.
-    reskin" question — noted there too.
+    reskin" question — a research pass is underway to characterize BASPM's
+    actual per-agency differences before deciding whether Launch Window's
+    archetypes should mirror any of them mechanically or stay cosmetic-only.
   - **Ties into the still-open "who's allowed to edit the blackout list"
     host-role gap (§3.6/§4)**: announcing a game and setting its start date
     is itself a "host" action — both eventually want the same lightweight
