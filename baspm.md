@@ -201,7 +201,16 @@ the full screen graph for real.
   season — directly relevant to what a Launch Window turn's input needs to
   carry for "who's on R&D" (design.md §4 already draws this conclusion;
   `design.md`'s citation has been corrected to point here, §2.1, rather than
-  the non-existent old §8.1).
+  the non-existent old §8.1). **Root cause found (§9 personnel trace,
+  2026-09-27):** `SETEmployeeStateT` actually defines *two* R&D states,
+  `ASSIGNED_TO_RD_ONE_TURN` and `ASSIGNED_TO_RD_INDEFINITE` — but a
+  codebase-wide search found only one call site that ever sets either of
+  them (`UIScreenOrOverlay.SetSETEmployeeAssigned`), and it always passes
+  `ASSIGNED_TO_RD_ONE_TURN`. `ASSIGNED_TO_RD_INDEFINITE` is dead code, never
+  reachable through play. Nothing in the season-advance logic
+  (`Player.UpdatePersonnelSETSpecific`, §9.2) ever reverts an assignment out
+  of `ASSIGNED_TO_RD_ONE_TURN` — it's a misleading name for what the only
+  live code path actually treats as an indefinite standing order.
 
 ### 2.2 Manager classes (one per major subsystem, all extend `CoreManager`)
 
@@ -210,7 +219,7 @@ the full screen graph for real.
 | `ProgramsManager.cs` | 764 | The Sputnik→Apollo program/tech tree (`Programs.xml`) |
 | `MissionsConfigurationsManager.cs` | 740 | Mission configuration variants per program (`MsnCnfg*.xml`) |
 | `MissionComponentsManager.cs` | 631 | Rockets/capsules/components catalog + reliability |
-| `PersonnelManager.cs` | 595 | Astronauts/flight controllers/SET hiring, skills, training |
+| `PersonnelManager.cs` | 595 | Astronauts/flight controllers/SET hiring, skills, training — traced, see §9 |
 | `MissionsSimulationsManager.cs` | 450 | Loads & drives one mission's live simulation (see §2.1) |
 | `MissionAssignmentsManager.cs` | 449 | Assigning personnel to mission slots |
 | `SpaceComplexDataManager.cs` | 424 | The player's space complex/facility layout |
@@ -530,7 +539,8 @@ Not a commitment, just a sensible dependency order given what's mapped above:
 3. **Personnel** (`PersonnelManager.cs`, `Employee.cs` hierarchy,
    `AstronautCandidates-*.xml` etc.) — skills/training feed directly into
    #2's involvement percentages. Manual p.29-32 ("PERSONNEL GROUPS") already
-   gives the plain-English skill/morale/training model — §7 below.
+   gives the plain-English skill/morale/training model — §7 below. **Done —
+   see §9.**
 4. **Programs & mission configurations** (`ProgramsManager.cs`,
    `MissionsConfigurationsManager.cs`, `Programs.xml`/`MsnCnfg*.xml`) — the
    content tree players progress through.
@@ -655,6 +665,10 @@ and several further manual-confirmed and code-confirmed points stop
   Event").
 - Multiplayer-specific: `PBEMManager`'s resign/claim-on-timeout actions (§5)
   are themselves mid-game player decisions outside the normal turn loop.
+- **Tiger Teams (§9.5, code-confirmed 2026-09-27)** — the one genuinely
+  *mid-mission-step* pause found so far, not just a between-steps one: the
+  live simulation pauses and asks whether to pay to boost a specific step's
+  saving-throw odds, the instant that step is found to need one.
 
 **None of these have an obvious equivalent in a daily-batch, nobody's-online
 resolver.** `design.md` §4 needs an explicit policy before mission
@@ -664,15 +678,28 @@ the turn ("scrub this mission if X happens"), deferring the decision to the
 *next* day's turn (the mission/event waits, at some in-fiction cost), or an
 auto-resolve default the player can override at latest sign-in before that
 day's server tick. Flagged in `design.md` §4 as an open question. **Update,
-§8 tracing (2026-09-27): the step-by-step roll sequence itself needs no
-player input at all** — it's a fully automatic dice-and-consequence chain
-once triggered, whether or not the mission spans one season or several (§8
-confirms it commonly spans several). The genuine mid-turn interaction points
-listed above (`ETLaunchSchedMsnsOverlay`'s scrub/resume/assign, training
-pull-out, `REB*` choices) all happen strictly *before* a season's resolution
-runs, not interleaved with it — good news for the daily-batch model, since it
-means "resolve this mission's current season" can be one uninterrupted
-server-side step once the turn's pre-resolution decisions are in.
+§8 tracing (2026-09-27): the step-by-step roll sequence itself needs
+*almost* no player input** — it's a dice-and-consequence chain that runs
+automatically once triggered, whether or not the mission spans one season or
+several (§8 confirms it commonly spans several). The genuine mid-turn
+interaction points listed above (`ETLaunchSchedMsnsOverlay`'s scrub/resume/
+assign, training pull-out, `REB*` choices) all happen strictly *before* a
+season's resolution runs, not interleaved with it. **Correction, §9 tracing
+(2026-09-27): this "no interleaved input" claim has exactly one confirmed
+exception — Tiger Teams (§9.5).** `MissionSimBaseScreen.AnimateMissionStepOutcomeSuspense`
+literally calls `MissionSimPlayer.PauseUnpauseMission(value: true)` and pops
+a hiring overlay the instant a step's first roll comes back needing a saving
+throw, waiting for the player to pick "no thanks" or pay for a
+saving-throw boost before the roll continues — a real, code-confirmed,
+mid-*mission-step* pause, not just a between-steps or between-seasons one.
+Good news for the daily-batch model regardless: one of the four options is
+literally "decline, no cost, no boost," giving a trivial, risk-free
+auto-resolve default for a turn where nobody's online to see the prompt (see
+`design.md` §2.2(c)/§4). So "resolve this mission's current season" still
+doesn't need a *player* mid-resolution, but the server-side resolver now
+needs to know it must supply *some* Tiger-Teams answer (a pre-set budget
+policy, or simply always-decline by default) at that exact junction, not
+just at the season's start.
 
 ## 8. Mission simulation: the resolution formula (traced 2026-09-27)
 
@@ -866,3 +893,228 @@ decompiled code:
    future session diff `SaveSlot*.xml`'s mission/prestige records the same
    way §2.1's "real save example" already did for reliability, and settle
    #1 above from save data directly instead of a screenshot.
+
+## 9. Personnel: hiring, skills, training, and the employee lifecycle (traced 2026-09-27)
+
+Full trace of `Employee.cs`/`PersonnelCandidateOrEmployee.cs` (shared base),
+`AstronautEmployee.cs`/`SETEmployee.cs`/`MissionControlEmployee.cs` (the three
+groups), `Player.cs`'s `UpdatePersonnel*` season-advance methods,
+`PersonnelManager.cs`, and `PersonnelManagerConstants.xml`. This upgrades
+§7.1's manual-only personnel summary to **code-confirmed** throughout except
+where noted otherwise, and corrects/sharpens it in a few places.
+
+### 9.1 Three groups, five skills each, one derived sixth for Mission Control
+
+**Code-confirmed**, matches §7.1's manual-derived model exactly:
+- **Astronauts** (`AstronautEmployee.AstronautSkillT`): Leadership, Piloting,
+  EVA, Science, Fitness.
+- **SET** (`SETEmployee.SETEmployeeSkillT`): one skill per mission-component
+  group — Rockets, Space Probes, Human-Rated Rockets, Crewed Spacecraft, EVA
+  Suits.
+- **Mission Control** (`MissionControlEmployee.MissionControlSkillT`):
+  Propulsion, Trajectory & GNC, Spacecraft Systems, Crew Systems & Payloads,
+  Mission Operations, plus **Flight Director** as a sixth named enum value —
+  but it has no independent stored value: `PersonnelCandidateOrEmployee.
+  GetSkillCompetency(index)` returns the plain average of the other five
+  whenever `index >= 5`. A Flight Director isn't a specialist trained
+  separately; "how good a Flight Director someone is" is arithmetically just
+  how well-rounded they are.
+- All three groups share one base class (`Employee` : `PersonnelCandidateOrEmployee`)
+  and the same five underlying stat slots (`_skillsCompetencies[5]`); which
+  five things those slots *mean* is the only thing that differs by group.
+  **Educational note:** Mission Control's five categories map cleanly onto
+  real NASA flight-control disciplines — Propulsion (EECOM-adjacent),
+  Trajectory & GNC (FDO/GUIDO), Spacecraft Systems, Crew Systems & Payloads,
+  Mission Operations — and Flight Director being "the average of your team,"
+  not a separately-trained specialist, is a decent abstraction of the real
+  role (a Flight Director is a generalist coordinating specialists, not
+  another specialist). Flagged into `design.md` §1.1.
+
+### 9.2 Morale, aging, retirement, and resignation — one season-advance pass
+
+**Code-confirmed** (`Player.UpdatePersonnelCommon`, called every season for
+every active employee in all three groups):
+- **Age** increases by exactly 0.25 every season (matching the
+  one-season-per-quarter-year fact already established, `baspm.md` §7.1).
+- **Morale**: an *available* (idle) employee loses 1 morale/season. An
+  employee who is *busy* (assigned to a mission/R&D, or in training) gains 2
+  morale/season, capped at 100. An employee in the separate "unavailable"
+  penalty state (see below) gets no morale change at all, just a countdown.
+- **Retirement age is per-group and fairly different**: Astronauts 55,
+  Mission Control 65, SET 75 (`PersonnelManagerConstants.xml`'s
+  `RetirementAge`) — astronauts age out of the corps two decades earlier
+  than the engineers who build their hardware, a real-world-plausible
+  detail worth keeping if Launch Window keeps a similar three-group split.
+  `IsEmployeeApproachingRetirementAge` flags a 3-year advance-warning window
+  (`RetirementAgeThresholdInYears`).
+- **Resignation is a hard morale floor, not a warning band you can miss**:
+  `PersonnelManagerConstants.xml`'s `DisgruntedEmployeesMoraleRange` is
+  `MinValue="40" MaxValue="47"` — at or below 40, an available employee
+  resigns *that same season* (`Player.ResignEmployee`, called directly from
+  the season-advance loop, no separate "at risk" state in between).
+  41–47 is a separate, softer **"disgruntled" reporting band**
+  (`Player.GetDisgruntledEmployeesFromPersonnelGroup`) that only ever
+  produces an end-of-season news item — despite there being a
+  `DisgruntledEmployee` class, it's a plain data record for that news
+  report, not a distinct lifecycle state; nothing about actually being
+  "disgruntled" changes an employee's behavior beyond the warning.
+- **Crucially, retirement and resignation are only ever checked while an
+  employee is available (idle)** — the season-advance loop's age/morale
+  checks live inside the `IsAvailable()` branch. A busy employee (assigned
+  to a mission/R&D, or in training) who crosses the retirement age or would
+  have resigned simply doesn't that season, however marginal their morale or
+  however far past retirement age — the check only fires once they're free
+  again. Worth deciding deliberately whether Launch Window keeps this
+  "busy employees are protected" property or closes it as a loophole.
+- `ResigningEmployee`/`RetiringEmployee`/`DismissedEmployee`/
+  `FailedBasicTrainingEmployee` are all thin `InactiveEmployee` subclasses —
+  archival snapshot records for save/history/museum purposes (name, when,
+  last assignment), not additional state-machine states. The real lifecycle
+  is fully captured by `Employee.ActiveOrInactiveStatusT` (`Active`,
+  `Dismissed`, `Resigned`, `Retired`, `Fallen`).
+- **Dismissal is the one lifecycle exit that's a genuine player action**
+  (`Player.DismissEmployee`, called from UI) rather than an automatic
+  season-advance consequence — resignation/retirement/failing-basic-training
+  are all automatic.
+
+### 9.3 Training: two modes, a real learning-capacity formula, and a precise pull-out penalty
+
+**Code-confirmed.** Basic training duration is group-specific and notably
+uneven: **Astronauts 4 seasons**, **SET 2 seasons**, **Mission Control 2
+seasons** (`NumSeasonsForBasicTraining` overrides) — astronaut candidates
+take twice as long to clear basic training as the other two groups, a
+plausible echo of how demanding real astronaut selection/training is.
+Advanced training is a flat **3 seasons** for all three groups.
+
+- **The learning-capacity formula, confirmed exactly as the manual implies**
+  (`PersonnelManagerConstants.xml`'s doc comment plus `Player.
+  UpdateEmployeeSkillsAfterAdvancedTrainingInner`):
+  `improvement = (MaxSkillCompetencyValue − currentSkill) × random(0.3, 0.6) × (LearningPotential ÷ MaxSkillCompetencyValue)`,
+  where `MaxSkillCompetencyValue = 98` (not 100 — nobody ever caps out
+  completely). This is a genuine diminishing-returns curve (the closer to
+  the cap, the smaller each training round's gain) scaled by a per-employee
+  learning-potential fraction — concretely confirms §7.1's "low skill + high
+  learning capacity can beat adequate skill + low learning capacity" claim,
+  and gives Launch Window a ready-made, easy-to-port formula shape (re-derive
+  the actual constants, per `design.md` §1.2).
+- **Two training modes, both code-confirmed:** a fixed-length advanced
+  training round (`SendToAdvancedTraining`), or "**permanent** advanced
+  training" (`SendToPermanentAdvancedTraining`, a target skill level) which
+  auto-re-enrolls the employee into another 3-season round every time one
+  completes, for as long as their skill is still below the target — a
+  genuine standing order requiring no re-declaration, structurally the same
+  shape as §2.1's R&D-assignment finding.
+- **The mid-training pull-out penalty, now precisely formulated** (sharpens
+  §7.2's "reduced results, no refund" claim): pulling an employee out early
+  computes the *same* improvement formula, but scales the random factor by
+  `seasonsAlreadyCompleted ÷ totalSeasonsForThatTrainingType` — i.e. genuine
+  **linear partial credit for elapsed training time**, not an arbitrary
+  penalty and not zero. Pull someone out after 1 of 3 advanced-training
+  seasons and they keep roughly a third of a full round's worth of expected
+  gain; the season(s) already spent aren't wasted, just not fully banked.
+- **SET R&D skill growth is a different, simpler shape than training or
+  mission-based growth** — flagged explicitly in `PersonnelManagerConstants.xml`'s
+  own comments as an intentional contrast: while assigned to R&D, a SET
+  employee's skill-in-use increases by a **flat** `random(0.2, 0.4)` per
+  season (no distance-to-cap scaling at all), vs. the diminishing-returns
+  curve used everywhere else (training, and mission-based astronaut/
+  flight-controller growth, §9.4). Worth deciding deliberately whether
+  Launch Window keeps two different growth shapes for two different
+  activities, or unifies them.
+- **Astronaut/flight-controller skill growth from actually flying a
+  mission is a separate mechanic from training, code-confirmed and
+  previously unexplored** (`PersonnelManager.
+  UpdateFlightCrewsAndFlightControllersSkillAfterMission`, called from
+  `MissionSimBaseScreen.cs` on **both** the success and the failure path —
+  flying the mission is what matters, not the outcome): assigned flight crew
+  get **all 5 of their skills** bumped via the same diminishing-returns
+  formula; an assigned flight controller gets **only the one skill they were
+  actually using** bumped the same way — *unless* they were serving as
+  Flight Director (skill index 5), in which case the gain is computed once
+  from their average-skill-to-cap distance, divided by 5, and spread evenly
+  across all 5 base skills. Directly ties personnel back into §8's mission
+  formula: flying missions is how astronauts and controllers actually grow,
+  not (for astronauts) an explicit "send to training" action at all —
+  astronauts have no on-the-job-vs-training-only skill tension the way SET's
+  R&D-flat-growth vs. training-diminishing-growth choice does.
+
+### 9.4 Hiring: candidate quality is fed by the group's own current morale
+
+**Code-confirmed, a systemic feedback loop not mentioned in §7.1.**
+`PersonnelManagerConstants.xml`'s `CandidatesProfilesSets` defines several
+named quality-distribution tables, each keyed by a `MoraleUpperLimit`; when a
+new batch of 10 recruits (`HiringBatchSize`) is generated, the table actually
+used is chosen by **the hiring group's own current average morale** — a
+demoralized astronaut corps quite literally attracts worse recruits (mostly
+"Poor"/"Average" skillsets, "Generalist" specialization) than a thriving one
+(predominantly "VeryGood"/"Excellent", including "VerySkilledInTwoAreas" and
+outright "Specialist" candidates). This makes morale management a
+double-lever system: it's not just about not losing existing staff to
+resignation (§9.2), it's also actively shaping who you're even offered to
+hire next. A strong, self-contained mechanic worth carrying into Launch
+Window's own personnel design, independent of whether the exact skillset/
+morale/learning-potential bucket numbers are kept.
+
+### 9.5 Tiger Teams: confirmed — a pay-to-boost-the-saving-throw mechanic, and a real mid-step pause
+
+**Code-confirmed, resolves the loose end flagged in §8.2.** The hypothesis
+was right: Tiger Teams boost the *saving throw* specifically, never the
+step's base success probability. Full mechanism
+(`TigerTeamsHiringOverlay.cs`, `MissionSimBaseScreen.
+AnimateMissionStepOutcomeSuspense`, `ConstantsManager.
+GetTigerTeamsPercentageBoost`/`GetTigerTeamsCostMultiplier`):
+
+- The instant a mission step's first roll comes back needing a saving throw,
+  the live simulation **pauses** (`MissionSimPlayer.PauseUnpauseMission(true)`)
+  and presents four options: decline (free, no change), or hire 1/2/3 Tiger
+  Teams at increasing cost, each buying a bigger slice of the *remaining gap
+  to 100%* saving-throw probability (`boost = percentageBoost(option) ×
+  (100 − currentSavingThrowProb)`) — the same diminishing-returns shape as
+  §9.3's training formula, applied to odds instead of skill. Cost scales
+  with the mission's total cost (`missionCost × costMultiplier(option)`,
+  `Constants.xml`: multipliers `0 / 1 / 1.75 / 2.5`, boosts `0% / 25% / 40% /
+  50%` of the remaining gap — identical across all three difficulty tiers,
+  so this mechanic is untouched by `design.md` §2.10's Normal-only
+  decision).
+- **This corrects §7.2/§8's "the roll sequence needs no player input at
+  all" conclusion** — it needs no input *between* steps or seasons, but this
+  one juncture genuinely pauses *inside* a step's resolution for a live
+  decision. See §7.2's updated correction note and `design.md` §2.2(c)/§4.
+  The saving grace for the daily-batch model: "decline" is free and always
+  available, so a trivial, harmless auto-resolve default exists (unlike
+  scrub/training-pull-out/`REB*` choices, which all have real trade-offs
+  either way) — Launch Window's resolver can simply auto-decline unless a
+  player has pre-set a spending policy, without that default ever being a
+  strictly bad choice for the player who didn't log in.
+
+### 9.6 A related, unrelated-looking loose end noticed but not chased
+
+**Minor, low-priority — noted so it isn't lost.** `Constants.xml`'s
+`MissionSim/MissionSimSavingThrow` block (the catastrophic/regular-failure
+multipliers §8.2 already covers) is actually laid out as **three whole
+`<Values>` rows, one per difficulty tier**, each carrying both named
+multipliers as attributes — not, as §8.2's prose shorthand implies, a single
+row with `Value1`/`Value2`/`Value3` standing for the three difficulties.
+Doesn't change any number already recorded (this block happens to be
+identical across all three difficulty rows anyway), just a phrasing
+correction for whoever reads §8.2 closely against the actual XML next.
+
+### 9.7 Verification still needed (in-game / screenshots)
+
+1. **A screenshot of the Tiger Teams hiring popup itself** (§9.5) — confirms
+   the exact wording/framing shown to the player at that pause point, useful
+   for calibrating Launch Window's own equivalent prompt/default messaging.
+2. **Confirm the "disgruntled" news item's actual wording and where it
+   surfaces** (§9.2, the 41–47 morale warning band) — the interseason news
+   screen presumably, but not confirmed which screen/format, and whether it
+   names the employee or just counts them.
+3. **A save-game or in-game check of a Mission Control employee acting as
+   Flight Director** (§9.1) — confirms in practice (not just from the
+   `GetSkillCompetency` averaging code) that the UI itself presents "Flight
+   Director skill" as a computed average rather than something a player ever
+   sees as an independently trainable number.
+4. **Confirm whether the game ever actually offers `ASSIGNED_TO_RD_INDEFINITE`
+   through any UI path this pass didn't check** (§2.1/§9.2) — low priority,
+   since every code path found treats R&D assignment as indefinite in
+   practice regardless of which enum value is active; only worth chasing if
+   a future save or screenshot ever shows that state's name somewhere.

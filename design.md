@@ -146,6 +146,17 @@ same session it comes up**, the same standing-note-to-self habit as
   note attached to a step that gets rescued by a good saving throw is a
   strong, concrete candidate for this pillar — dramatic, true, and it lands
   at the exact moment the mechanic just made it matter to the player.
+- **Surfaced during the §2.2 personnel trace (2026-09-27): Mission Control's
+  five skill categories (`baspm.md` §9.1) map cleanly onto real NASA flight-
+  control disciplines** — Propulsion, Trajectory & GNC, Spacecraft Systems,
+  Crew Systems & Payloads, Mission Operations echo real console positions
+  like FDO/GUIDO and EECOM. **"Flight Director" being computed as the plain
+  average of a controller's other five skills, not an independently trained
+  specialty, is itself a decent small lesson**: a real Flight Director is a
+  generalist who coordinates specialists rather than being the best at any
+  one discipline — worth a short in-game beat the first time a player
+  designates someone as Flight Director, explaining that a great FD is
+  broad, not deep.
 
 ### 1.2 Content & asset policy: no copying BASPM's copyrighted content
 
@@ -196,8 +207,64 @@ subsection list, derived from BASPM's own manager/system boundaries
 proceeds:
 
 - 2.1 Space agencies, budget & funding cycle
-- 2.2 Personnel (astronauts, flight controllers, SET/scientists) — hiring,
-  training, skills, morale/fatigue
+- 2.2 **Personnel (astronauts, flight controllers, SET/scientists) — hiring,
+  training, skills, morale/fatigue — analyzed 2026-09-27, see `baspm.md` §9
+  for the full trace.**
+  - **(a) How BASPM does it:** three groups (Astronauts, Mission Control,
+    SET), each with 5 skills; Mission Control's "Flight Director" is a
+    derived average of the other five, not an independently trained skill.
+    Age/morale/retirement/resignation are all evaluated in one season-advance
+    pass: idle staff lose 1 morale/season, busy staff (assigned or training)
+    gain 2; resignation is a hard floor (morale ≤ 40) checked only while
+    idle, so a busy employee never resigns or ages into retirement mid-
+    assignment no matter how marginal their stats get. Training has two
+    modes — fixed-length, or "permanent" (auto-repeats every season until a
+    target skill is hit, a standing order needing no re-declaration, same
+    shape as R&D assignment per `baspm.md` §2.1) — with a real diminishing-
+    returns formula scaled by learning potential, and a precisely
+    proportional partial-credit penalty for pulling someone out early (linear
+    in seasons-already-completed). SET's R&D skill growth is flat per season
+    (no diminishing returns), unlike training and unlike astronaut/
+    controller skill growth from actually flying missions (which does use
+    the diminishing-returns curve, and grows from flying regardless of
+    mission outcome). Hiring pool quality is fed by the hiring group's own
+    current morale — a demoralized agency gets worse recruit offers. **Tiger
+    Teams** (pay to boost a specific step's saving-throw odds mid-mission,
+    `baspm.md` §9.5) turned out to be a genuine mid-*mission-step* pause,
+    correcting §2.5's "the roll sequence needs no player input at all" —
+    it needs no input *between* steps, but this one junction does pause for
+    a live choice.
+  - **(b) What changes for async multiplayer:** mostly nothing structural —
+    R&D assignment and permanent training are already standing orders (no
+    per-turn re-declaration), and fixed-length training/mandatory rest
+    seasons are simple countdowns; both fit "one turn = one season" (§1)
+    cleanly with zero special handling, including under a `WEEKDAYS`/
+    blackout schedule (§3.6), since morale/age only change on days a turn
+    actually resolves, never on a skipped real day. The one new problem this
+    pass surfaces: **Tiger Teams needs a pre-resolution policy, same as
+    scrub/training-pull-out/`REB*` choices (§4)** — but unlike those, one of
+    its options ("decline, no cost, no boost") is always free and never a
+    strictly bad choice, so it has a uniquely safe auto-resolve default. The
+    "retirement/resignation only checked while idle" behavior is a design
+    choice worth deciding on deliberately rather than inheriting by default —
+    it could read as a fairness quirk (an offline player's idle-but-neglected
+    staff drift towards leaving, while a busy roster is silently protected)
+    once players start comparing notes across an async multiplayer game.
+  - **(c) Decision:** **port the three-group/skill shape and the general
+    morale/training/lifecycle mechanics** as Launch Window's starting point,
+    re-deriving actual numbers rather than reusing BASPM's constants verbatim
+    (`design.md` §1.2). **(unconfirmed default)** keep "standing orders, no
+    per-turn re-declaration" for R&D-equivalent and permanent-training
+    assignments, and keep retirement/resignation gated on being idle for a
+    first playable version — revisit only if playtesting makes it feel like
+    an exploit. **(unconfirmed default)** add Tiger-Teams-equivalent to §4's
+    mid-turn-decision list with a firm answer already available: **auto-
+    resolve to "decline" unless the player has pre-set a spending policy/
+    budget cap** — the one mid-turn case in this system with a genuinely
+    free, always-safe non-interactive default. **(unconfirmed default)**
+    keep the morale-gates-hiring-pool-quality feedback loop as a systemic
+    mechanic, independent of whichever exact skillset/morale buckets Launch
+    Window ends up using.
 - 2.3 Programs & mission configurations (the Sputnik→Apollo tech/content
   tree)
 - 2.4 Mission components (rockets, capsules, boosters) & reliability
@@ -525,6 +592,12 @@ game instance.
   0 prestige) — worth testing separately whether a mid-flight abort is
   actually penalized (`MsnSim*.xml`'s `OnCancellation` fields suggest it
   should be) before assuming "scrub" is uniformly free or uniformly costly.
+  **New case found by the §2.2 personnel trace (2026-09-27, `baspm.md`
+  §9.5): Tiger Teams (pay to boost a step's saving-throw odds) is a genuine
+  mid-mission-*step* pause, not just a between-turns one — but it already
+  has a firm answer, unlike the others: auto-resolve to "decline" (free, no
+  effect) unless the player has pre-set a spending policy, since decline is
+  never a strictly bad choice for someone who wasn't online to answer.**
 - Turn cadence resolved (§1/§3.6): one turn = one BASPM "season", schedule
   (which real days produce a turn) is per-game-configurable. Remaining
   sub-question: who is allowed to edit a game's blackout-period list once
