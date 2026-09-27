@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>de.mkoehler.launchwindow</groupId>
+    <artifactId>launchwindow-parent</artifactId>
+    <version>0</version>
+  </parent>
+
+  <!-- Developer tools that are never shipped: not shaded, not packaged by any release
+       workflow. Empty for now - no concrete tool exists yet. No exec-maven-plugin config
+       here yet either, since that needs a real mainClass to point at; add both once the
+       first tool (an asset importer, a save-file inspector, etc.) actually exists, following
+       the sibling projects' dev-tools/pom.xml as the template. -->
+  <artifactId>launchwindow-dev-tools</artifactId>
+  <packaging>jar</packaging>
+  <name>LaunchWindow-dev-tools</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>de.mkoehler.launchwindow</groupId>
+      <artifactId>launchwindow-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+</project>

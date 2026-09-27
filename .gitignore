@@ -1,0 +1,64 @@
+## Maven:
+target/
+/core/target/
+/lwjgl3/target/
+/server/target/
+/dev-tools/target/
+dependency-reduced-pom.xml
+
+## Java:
+*.class
+*.war
+*.ear
+hs_err_pid*
+.attach_pid*
+
+## IntelliJ, Android Studio:
+.idea/
+*.ipr
+*.iws
+*.iml
+
+## Eclipse:
+.classpath
+.project
+.metadata/
+.settings/
+.loadpath
+.externalToolBuilders/
+*.launch
+*.tmp
+*.bak
+*.swp
+*~.nib
+
+## NetBeans:
+/nbproject/private/
+/nbbuild/
+/nbdist/
+nbactions.xml
+nb-configuration.xml
+
+## OS-Specific:
+.DS_Store
+Thumbs.db
+
+## Miscellaneous:
+*~
+*.*#
+*#*#
+
+## LWJGL's native-library extraction cache, created at runtime when running the client
+## (wherever the working directory happened to be when it was run):
+.lwjgl/
+
+## Runtime-generated local data (design.md 3.7/3.8) - a game's per-player snapshots/action
+## journals, its game-meta file, and a real account store (login/salted password hash) could
+## land in any directory a server happens to be launched from, not just server/target. None
+## of this has a fixed name/path yet since the actual persistence code doesn't exist yet -
+## broaden this once it does (matching the sibling projects' data/accounts.json pattern).
+data/
+
+## Client-local settings (design.md 3.8 - volume, resolution, keybindings, etc., never
+## server/account state): no fixed filename decided yet - broaden once it exists.
+client-settings.json

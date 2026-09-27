@@ -68,15 +68,19 @@ from scratch.
 
 ## Current status
 
-**Analysis phase — no code written yet.** This session's deliverable is the
-initial `CLAUDE.md`/`design.md`/`baspm.md` scaffolding plus a first pass at
-indexing BASPM's decompiled source and extracted assets so future sessions
-can navigate it quickly. Git repo initialized 2026-09-27 and pushed to
-GitHub as a **private** repo (`mariokoehler/Launch-Window` — GitHub doesn't
-allow spaces in repo names, so "Launch Window" became "Launch-Window"; local
-folder stays `LaunchWindow`). Will flip to public once something playable
-exists or private-repo GitHub Actions limits become a problem — ask before
-making that change.
+**Analysis phase is done; basic project scaffolding exists (2026-09-27).**
+The initial `CLAUDE.md`/`design.md`/`baspm.md` docs plus a deep-dive analysis
+pass over BASPM's decompiled source (`baspm.md` §8-§13) came first; the
+Maven multi-module skeleton (`pom.xml` + `core`/`lwjgl3`/`server`/
+`dev-tools`) came after, mirroring the sibling projects — see "Build system"
+below. No real game logic exists yet (no screens, no persistence, no wire
+protocol) — just a skeleton proven to compile, test, and launch. Git repo
+initialized 2026-09-27 and pushed to GitHub as a **private** repo
+(`mariokoehler/Launch-Window` — GitHub doesn't allow spaces in repo names,
+so "Launch Window" became "Launch-Window"; local folder stays
+`LaunchWindow`). Will flip to public once something playable exists or
+private-repo GitHub Actions limits become a problem — ask before making that
+change.
 
 ## Source material locations (read-only, reference-only — never edit, never copy into the repo)
 
@@ -132,7 +136,77 @@ making that change.
 
 ## Build system
 
-Not yet chosen. `design.md` §3 will record the decision once made — likely to
-lean on the same core stack as the sibling projects (Java/libGDX/Maven +
-KryoNet or a plain HTTP/REST API, given the async daily-batch shape may not
-need a persistent-socket game server at all — open question, see `design.md`).
+**Decided (user, 2026-09-27), see `design.md` §3.3/§3.9:** Maven,
+multi-module, mirroring the sibling projects' template almost directly
+(Robot-Rampage's `pom.xml` was the base, not StarWars' — its `lwjgl-bom`
+import replaces StarWars' ~200-line per-LWJGL-classifier block). Modules:
+`core` (shared client/server code — currently just `NetworkConstants` and a
+placeholder `LaunchWindowGame`/persistence smoke test, no real game logic
+yet), `lwjgl3` (desktop client launcher), `server` (`gdx-backend-headless`
+dedicated server), `dev-tools` (empty for now — no concrete tool exists yet,
+see its own `pom.xml` comment for why it has no `exec-maven-plugin` config).
+Java 25 (`maven.compiler.release`), Maven 3.8.4 confirmed working locally.
+
+- `mvn clean package` from the repo root builds everything and runs the
+  tests.
+- `start_client.cmd` / `start_server.cmd` reinstall `core` and run the
+  module — but **don't run them from an automated/non-interactive shell,
+  they end in `pause`**; use the underlying commands directly instead (see
+  below), backgrounded if needed.
+- By hand: install `core` first, **then** run the target module *alone* —
+  no `-am` on the exec step (a bare exec goal with `-am` walks the whole
+  reactor, including the `pom`-packaging parent, and fails there):
+  ```
+  mvn install -pl core -am -DskipTests
+  mvn -pl server compile exec:java
+  mvn -pl lwjgl3 compile exec:exec
+  ```
+  **Reinstall `core` after *every* change to it, and after every new commit
+  or tag, not just when its own code changed** — `lwjgl3`/`server` resolve
+  `core` from `~/.m2`, and a commit shifts the jgitver-computed
+  `${project.version}` the next build expects, so a stale install silently
+  stops matching (or runs old code). The start scripts always reinstall
+  unconditionally for exactly this reason.
+- **KryoNet TCP port: 45825** (`NetworkConstants.TCP_PORT`) — deliberately
+  different from StarWars' 45625/tcp+45626/udp and Robot-Rampage's 45725/tcp,
+  so all three servers can run on the same machine/NAS at once. TCP-only, no
+  UDP channel: Launch Window is async/daily-batch (design.md 3.1/3.3), not
+  real-time, so there's no continuous-simulation channel to justify one.
+- **Verified locally (2026-09-27):** `mvn clean package` passes (all 4
+  modules, including `core`'s one real test — a Jackson round-trip proving
+  the flat-file JSON persistence mechanism design.md §3.7/§3.8 depends on).
+  Both the server (binds 45825, logs a KryoNet "Server opened") and the
+  client (opens an LWJGL3 window, no `SharedLibraryLoadRuntimeException`)
+  were actually launched and confirmed running via `tasklist`/
+  `Get-CimInstance Win32_Process`, not just "no error in the log" — then
+  killed. **`TaskStop` on the background task reported success but left the
+  underlying `java.exe` processes running** (Windows-specific, exec:exec
+  forks a detached child process) — verify with `tasklist`/
+  `Get-CimInstance Win32_Process -Filter "Name='java.exe'"` and `taskkill
+  /F /PID <pid>` by hand if a launched client/server needs killing, don't
+  trust a bare "stopped" report.
+
+### Maven + libGDX gotchas (carried over from the sibling projects, still valid)
+
+- Maven's default `maven-compiler-plugin` ignores `maven.compiler.release`;
+  the parent pins 3.13.0. Surefire is pinned to 3.2.5 for JUnit 5.
+- **Each native-backed libGDX piece needs its *own* `*-platform`
+  `natives-desktop` dependency**, independently, in every runnable module
+  (`lwjgl3`, `server`). Missing one only fails at *runtime*
+  (`SharedLibraryLoadRuntimeException`), never at build/test time.
+- `${project.parent.basedir}` is not a valid property — use
+  `${project.basedir}/../assets` for the shared `assets/` resource dir.
+- The KryoNet fork is JitPack-only; the parent pom declares the JitPack
+  repository.
+- A plugin's top-level `<configuration>` applies to every goal of that
+  plugin invoked from the CLI — `lwjgl3`'s exec config is written for
+  `exec:exec`; `server`'s is written for `exec:java`. Don't share one goal's
+  config with the other.
+- XML comments in poms can't contain a literal `--` anywhere in their text.
+- **Release packaging (client zip via jpackage, server Docker image) is
+  deliberately deferred** — no game content exists yet to package. Both
+  sibling projects have a working, documented template for this
+  (`release-client` Maven profile, `Dockerfile`, `docker-compose.yml`,
+  tag-triggered GitHub Actions) once it's actually needed — see their own
+  `CLAUDE.md`/`design.md` "Releasing" sections, migrate from there rather
+  than re-deriving it from scratch.

@@ -1,0 +1,3 @@
+Placeholder so Git tracks this otherwise-empty directory - lwjgl3/server's exec:exec/exec:java
+configs use this directory as their working directory, and both modules' poms bundle it onto
+the classpath as a resource directory, so it must exist even before any real asset lands here.

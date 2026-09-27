@@ -1,0 +1,3 @@
+Placeholder so Git tracks this otherwise-empty directory - pre-processed source art (design.md
+3.5's asset generation pipeline) lands here, gets processed, and its output goes to assets/
+proper; see the sibling projects' assets-raw/ for the convention this follows.

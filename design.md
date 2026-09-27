@@ -838,6 +838,21 @@ than re-litigating tooling choices for a fan project — the earlier "maybe a
 plainer web stack fits the daily-check-in shape better" alternative
 considered here is dropped, not left open.
 
+**Implemented (2026-09-27):** the Maven multi-module skeleton exists —
+`pom.xml` + `core`/`lwjgl3`/`server`/`dev-tools`, modeled on Robot-Rampage's
+own parent pom specifically (its `lwjgl-bom` import is cleaner than
+StarWars' older per-classifier block). `mvn clean package` passes from the
+repo root; the server binds its TCP port and the client opens a real LWJGL3
+window, both actually launched and confirmed running (not just "no error in
+the log") before being killed. No real game logic yet — this is a proven
+skeleton, not a feature. See `CLAUDE.md` "Build system" for the exact
+commands/gotchas. **Release packaging (client zip, server Docker image) is
+deliberately deferred** until there's actual game content to package — both
+sibling projects have a complete, working template for this
+(`release-client` Maven profile + `jpackage` + `Dockerfile` + tag-triggered
+GitHub Actions) to migrate from once it's needed, not worth re-deriving or
+even scaffolding empty right now.
+
 - **KryoNet's usage pattern here genuinely differs from both sibling
   projects, worth being explicit about so implementation doesn't
   accidentally inherit assumptions that don't apply**: StarWars uses it for
@@ -851,11 +866,18 @@ considered here is dropped, not left open.
   connection. No prediction/reconciliation layer, no reconnect-during-a-live-
   turn machinery — genuinely simpler netcode than either sibling project's,
   despite reusing the same library.
-- **Jackson does double duty, which is a nice consolidation, not a
-  coincidence worth losing track of**: it's not just the wire-format
-  library for client/server messages, it's also the serializer for §3.7's
-  flat-file JSON snapshots and action-journal entries — one library, one set
-  of conventions, for both jobs.
+- **Correction (found while scaffolding, 2026-09-27): Jackson does *not*
+  double as the wire-format library — an earlier draft of this bullet said
+  it did, which is wrong.** KryoNet serializes wire messages with Kryo (a
+  binary format, not JSON), the same way both sibling projects use it —
+  compatibility depends on registration order, not class names, so any real
+  message classes will need a Robot-Rampage-style `MessageRegistry`
+  (append-only, never reordered) plus a test guarding every registered type,
+  once real messages exist. **Jackson's actual, sole job here is §3.7/§3.8's
+  on-disk persistence** — flat-file JSON snapshots, the action journal, and
+  the account store — which is exactly why the scaffold's one real test
+  (`core`'s `JacksonRoundTripTest`) lives under a `persistence` package, not
+  a `net` one.
 - **Unblocks §3.4 (Data model)**: with the tech stack settled and most of
   §2's core systems now traced (`baspm.md` §8-§12), that section is ready to
   actually start once picked up — not attempted in this same pass, flagged

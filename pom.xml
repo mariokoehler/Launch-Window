@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>de.mkoehler.launchwindow</groupId>
+  <artifactId>launchwindow-parent</artifactId>
+  <!-- Placeholder only - jgitver-maven-plugin (.mvn/extensions.xml) overrides the real
+       version from git tags/history at build time, same scheme as the sibling projects. -->
+  <version>0</version>
+  <packaging>pom</packaging>
+
+  <name>LaunchWindow</name>
+  <description>Asynchronous multiplayer space-agency management game, reimagining Buzz Aldrin's
+    Space Program Manager - see CLAUDE.md/design.md.</description>
+
+  <modules>
+    <module>core</module>
+    <module>lwjgl3</module>
+    <module>server</module>
+    <module>dev-tools</module>
+  </modules>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.release>25</maven.compiler.release>
+    <appName>LaunchWindow</appName>
+    <gdxVersion>1.14.2</gdxVersion>
+    <!-- Forces LWJGL3 to this version, to avoid warnings on Java 25 and up. Applied via the
+         lwjgl-bom import below, which pins every LWJGL artifact and native classifier at once. -->
+    <lwjgl3Version>3.4.3</lwjgl3Version>
+    <!-- Maintained KryoNet fork, see design.md 3.3 -->
+    <kryonetVersion>2.22.9</kryonetVersion>
+    <!-- JUnit 5, see design.md 3.3 -->
+    <junitVersion>5.14.4</junitVersion>
+    <!-- JSON handling for the flat-file persistence model (design.md 3.7/3.8) -->
+    <jacksonVersion>2.22.2</jacksonVersion>
+  </properties>
+
+  <!-- The KryoNet fork is only published on JitPack, not Maven Central. -->
+  <repositories>
+    <repository>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
+    </repository>
+  </repositories>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.lwjgl</groupId>
+        <artifactId>lwjgl-bom</artifactId>
+        <version>${lwjgl3Version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.github.crykn</groupId>
+        <artifactId>kryonet</artifactId>
+        <version>${kryonetVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter</artifactId>
+        <version>${junitVersion}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>${jacksonVersion}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <!-- Maven's default maven-compiler-plugin ignores maven.compiler.release; pin one that doesn't. -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.13.0</version>
+        </plugin>
+        <!-- Maven's default lifecycle binding resolves an old surefire that predates JUnit 5 support. -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>3.2.5</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+</project>
