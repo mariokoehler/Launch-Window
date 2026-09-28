@@ -82,6 +82,14 @@ so "Launch Window" became "Launch-Window"; local folder stays
 private-repo GitHub Actions limits become a problem — ask before making that
 change.
 
+**Visual design system decided (2026-09-28).** A "restrained engineering
+blueprint" UI look — see `design.md` §3.12 for the full color/type/layout
+system (colors are semantic, not decorative; thin borders + solid fills;
+readability-critical surfaces always sit on a flat white background, never
+directly on the textured page frame). Wordmark/logo intentionally deferred
+as a separate task (`design.md` §4) — the UI typeface (Archivo + Work Sans)
+is not meant to double as the brand mark.
+
 ## Source material locations (read-only, reference-only — never edit, never copy into the repo)
 
 - **Game install** (Steam):
