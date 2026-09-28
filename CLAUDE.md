@@ -75,18 +75,22 @@ deep-dive analysis pass over BASPM's decompiled source (`baspm.md` §8-§13)
 came first; the Maven multi-module skeleton (`pom.xml` + `core`/`lwjgl3`/
 `server`/`dev-tools`) came after, mirroring the sibling projects — see
 "Build system" below. **`design.md` §5 has the implementation roadmap**
-(milestones M0-M7+, format borrowed from the StarWars/Robot-Rampage sibling
-projects) — read that before picking up any implementation work, to see
+(milestones M0-M7+, format borrowed from Robot-Rampage's own sibling
+project) — read that before picking up any implementation work, to see
 what milestone it belongs to and what's already decided about ordering.
-**M0 (this scaffold) is done; M1 (the walking-skeleton milestone: one
-trivial action through persistence/accounts/network/scheduler end to end)
-hasn't started yet.** `core`'s new `de.mkoehler.launchwindow.model`
-package has M2's domain-model groundwork done ahead of schedule —
-`PlayerSnapshot` (the per-player aggregate root), `Archetype`, and the
-three personnel classes (`Astronaut`/`SetSpecialist`/`MissionControlOfficer`)
-with their skill enums — see `design.md` §3.4 for the full list and what's
-still deliberately deferred; no resolution logic, screens, wire protocol,
-or content-definition types yet. Git repo initialized 2026-09-27 and pushed
+**M0 (this scaffold) is done. M1 (the walking-skeleton milestone) is
+underway: its first slice — snapshot/journal/replay persistence
+(`de.mkoehler.launchwindow.persistence`: `PlayerSnapshotStore`,
+`PlayerActionJournal`, `SnapshotReplay`, `PlayerStateService`) — is done
+(2026-09-28); accounts, the KryoNet protocol, the scheduler, and a CLI dev
+client are still to come, see `design.md` §5's M1 slice list.** `core`'s
+`de.mkoehler.launchwindow.model` package has M2's domain-model groundwork
+done ahead of schedule — `PlayerSnapshot` (the per-player aggregate root),
+`Archetype`, and the three personnel classes (`Astronaut`/`SetSpecialist`/
+`MissionControlOfficer`) with their skill enums — see `design.md` §3.4 for
+the full list and what's still deliberately deferred; no resolution logic,
+screens, wire protocol, or content-definition types yet. Git repo
+initialized 2026-09-27 and pushed
 to GitHub as a **private**
 repo (`mariokoehler/Launch-Window` — GitHub doesn't allow spaces in repo
 names, so "Launch Window" became "Launch-Window"; local folder stays

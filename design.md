@@ -1207,6 +1207,48 @@ game-meta file directly. Running the friends' game and the colleagues' game
 means two separate server instances with two separate data roots (§3.9), not
 one shared root disambiguating between games by ID.
 
+**Concrete per-player layout (unconfirmed default, from M1's
+implementation, 2026-09-28 — this is a call the implementation made, not a
+locked decision; reversible if a different shape turns out to fit better
+once real network/scheduler code is layered on top):**
+```
+players/<playerId>/
+  snapshots/<turn>.json      one ResolvedSnapshot envelope per resolved
+                              game turn — the PlayerSnapshot itself, plus
+                              the journal file name of the last action
+                              applied to produce it (or null if none were
+                              pending). Never overwritten once written and
+                              never pruned; "current state" is always the
+                              highest-numbered file. Turn 0 is the
+                              bootstrap snapshot a new player starts from,
+                              written by the slot-claim flow (M4) rather
+                              than by any turn resolution.
+  journal/<seq>-<uuid>.json   pending, not-yet-resolved actions; <seq> is
+                              a zero-padded monotonic counter (not a
+                              timestamp — two actions submitted in the
+                              same millisecond still need a stable order),
+                              restarting from 1 after every archive — it
+                              only orders actions within one still-open
+                              turn, it is never globally unique across a
+                              player's whole game.
+  journal-archive/<turn>/     that turn's journal files, moved here once
+                              resolved
+```
+**Invariant future work must preserve:** journal file names must stay
+fixed-width, zero-padded, sequence-number-first — crash recovery (below)
+compares them as plain strings, not by parsing a sequence number back out,
+so a format change here would silently break that comparison.
+
+Resolving a turn is idempotent and crash-safe by construction: a turn's
+snapshot file is written once and never replaced, so a crashed-and-retried
+resolution detects "this turn's snapshot already exists" and skips
+re-replaying/re-saving. It still finishes the job rather than leaving it
+half-done: the envelope's saved cutoff tells the retry exactly which
+journal files that turn actually applied, so it archives only those —
+never an action submitted after the original attempt (which stays pending
+for the next turn instead of being silently swallowed), and never fails
+by re-archiving a file an earlier attempt already moved.
+
 ### 3.8 Player accounts & authentication
 
 **Decided (user, 2026-09-27): persistent player accounts, minimal — Display
@@ -1578,8 +1620,19 @@ here.
   email-address field needed on §3.8's account schema (login, password
   hash/salt, display name stays as-is). In-game mail itself is still M7+
   scope (§2.9's own sequencing), not part of this milestone.
-  - **Slice: snapshot + journal + atomic writes + login-time replay**
-    (§3.7) — the flat-file persistence mechanism itself, no network yet.
+  - **Slice: snapshot + journal + atomic writes + login-time replay — done
+    (2026-09-28).** `de.mkoehler.launchwindow.persistence`:
+    `PlayerSnapshotStore` (one immutable file per resolved turn, per the
+    concrete layout above), `PlayerActionJournal` (monotonic sequence-numbered
+    action files, not clock-based — two actions submitted in the same
+    millisecond still need a stable replay order), `SnapshotReplay`, and
+    `PlayerStateService` tying them into the login flow and an idempotent,
+    crash-safe `resolveTurn(gameTurn)` (a cutoff saved alongside each turn's
+    snapshot lets a crashed-and-retried resolution finish archiving exactly
+    the actions it actually applied, never a later one submitted during the
+    crash window). `SetFundsAction` is the placeholder action exercising all
+    of this end to end. No network yet — proven by direct unit/integration
+    tests against the file system, not yet over real sockets.
   - **Slice: `AccountStore`**, reused directly from StarWars (§3.8) —
     fetch its actual source via `gh api repos/mariokoehler/StarWars/
     contents/server/src/main/java/.../accounts/AccountStore.java` (and
@@ -1596,7 +1649,12 @@ here.
     the already-decided blackout-list stopgap (§3.6/§3.8/§4) — so this
     slice is also where that JSON config file's shape gets defined: schedule
     profile, timezone, blackout list, and (once M4 adds it) the declared
-    goal list all live in one host-edited file.
+    goal list all live in one host-edited file. **Contract this slice must
+    uphold, from the persistence slice above:** the scheduler must call
+    `PlayerStateService.resolveTurn(gameTurn)` for consecutive `gameTurn`
+    values, never skipping one — the crash-recovery cutoff lookup is keyed
+    to the exact turn number requested, so a skipped turn would look up a
+    cutoff that was never saved and silently archive nothing for it.
   - **Slice: CLI/console dev client** — no libGDX UI needed yet, just enough
     to submit an action and read back state.
   - **Exit criterion:** a player can log in (auto-creating an account),
