@@ -68,22 +68,40 @@ from scratch.
 
 ## Current status
 
-**Analysis phase is done; basic project scaffolding exists (2026-09-27).**
-The initial `CLAUDE.md`/`design.md`/`baspm.md` docs plus a deep-dive analysis
-pass over BASPM's decompiled source (`baspm.md` §8-§13) came first; the
-Maven multi-module skeleton (`pom.xml` + `core`/`lwjgl3`/`server`/
-`dev-tools`) came after, mirroring the sibling projects — see "Build system"
-below. No real game logic exists yet (no screens, no persistence, no wire
-protocol) — just a skeleton proven to compile, test, and launch. Git repo
-initialized 2026-09-27 and pushed to GitHub as a **private** repo
-(`mariokoehler/Launch-Window` — GitHub doesn't allow spaces in repo names,
-so "Launch Window" became "Launch-Window"; local folder stays
+**Analysis phase is done; basic project scaffolding exists (2026-09-27);
+milestone/slice roadmap drafted, first domain-model groundwork implemented
+(2026-09-28).** The initial `CLAUDE.md`/`design.md`/`baspm.md` docs plus a
+deep-dive analysis pass over BASPM's decompiled source (`baspm.md` §8-§13)
+came first; the Maven multi-module skeleton (`pom.xml` + `core`/`lwjgl3`/
+`server`/`dev-tools`) came after, mirroring the sibling projects — see
+"Build system" below. **`design.md` §5 has the implementation roadmap**
+(milestones M0-M7+, format borrowed from the StarWars/Robot-Rampage sibling
+projects) — read that before picking up any implementation work, to see
+what milestone it belongs to and what's already decided about ordering.
+**M0 (this scaffold) is done; M1 (the walking-skeleton milestone: one
+trivial action through persistence/accounts/network/scheduler end to end)
+hasn't started yet.** `core`'s new `de.mkoehler.launchwindow.model`
+package has M2's domain-model groundwork done ahead of schedule —
+`PlayerSnapshot` (the per-player aggregate root), `Archetype`, and the
+three personnel classes (`Astronaut`/`SetSpecialist`/`MissionControlOfficer`)
+with their skill enums — see `design.md` §3.4 for the full list and what's
+still deliberately deferred; no resolution logic, screens, wire protocol,
+or content-definition types yet. Git repo initialized 2026-09-27 and pushed
+to GitHub as a **private**
+repo (`mariokoehler/Launch-Window` — GitHub doesn't allow spaces in repo
+names, so "Launch Window" became "Launch-Window"; local folder stays
 `LaunchWindow`). Will flip to public once something playable exists or
 private-repo GitHub Actions limits become a problem — ask before making that
 change.
 
 ## Source material locations (read-only, reference-only — never edit, never copy into the repo)
 
+- **Machine caveat:** if the environment variable `COMPUTERNAME` is
+  `S0147359`, this is the user's laptop, which has neither the original
+  game install nor the extracted/decompiled asset dump below — there's no
+  `E:` drive at all on that machine. If a task needs anything under `E:\...`
+  while on that machine, stop and ask the user rather than assuming the
+  paths exist; work it out with them before proceeding.
 - **Game install** (Steam):
   `E:\Steam\steamapps\common\Buzz Aldrin's Space Program Manager`
 - **Extracted/decompiled analysis dump**: `E:\Temp\BASPM` — decompiled C#
@@ -140,11 +158,12 @@ change.
 multi-module, mirroring the sibling projects' template almost directly
 (Robot-Rampage's `pom.xml` was the base, not StarWars' — its `lwjgl-bom`
 import replaces StarWars' ~200-line per-LWJGL-classifier block). Modules:
-`core` (shared client/server code — currently just `NetworkConstants` and a
-placeholder `LaunchWindowGame`/persistence smoke test, no real game logic
-yet), `lwjgl3` (desktop client launcher), `server` (`gdx-backend-headless`
-dedicated server), `dev-tools` (empty for now — no concrete tool exists yet,
-see its own `pom.xml` comment for why it has no `exec-maven-plugin` config).
+`core` (shared client/server code — `NetworkConstants`, a placeholder
+`LaunchWindowGame`, and the `de.mkoehler.launchwindow.model` package holding
+the first real domain types, see `design.md` §3.4), `lwjgl3` (desktop client
+launcher), `server` (`gdx-backend-headless` dedicated server), `dev-tools`
+(empty for now — no concrete tool exists yet, see its own `pom.xml` comment
+for why it has no `exec-maven-plugin` config).
 Java 25 (`maven.compiler.release`), Maven 3.8.4 confirmed working locally.
 
 - `mvn clean package` from the repo root builds everything and runs the
