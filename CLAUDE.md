@@ -115,6 +115,13 @@ aren't in the repo yet). Needed two new Maven dependencies, `gdx-freetype`
 (`lwjgl3/pom.xml`) — same gotcha as every other native-backed libGDX piece,
 each runnable module needs its own natives dependency independently.
 
+**Logo decided (2026-09-28):** `assets/branding/logo.svg` — a mission-patch
+illustration (Saturn V ascending past Earth's limb, starfield, a gold
+"window" arc, ribbon wordmark), superseding the four earlier abstract
+symbol concepts once the user supplied a reference image. See `design.md`
+§3.12 for the full description and the follow-up production tasks
+(outlining the wordmark text, a small-size icon-only crop) still open.
+
 ## Source material locations (read-only, reference-only — never edit, never copy into the repo)
 
 - **Machine caveat:** if the environment variable `COMPUTERNAME` is

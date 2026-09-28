@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <title>Launch Window — logo</title>
+  <defs>
+    <path id="sparkle" d="M0,-6 L1.5,-1.5 L6,0 L1.5,1.5 L0,6 L-1.5,1.5 L-6,0 L-1.5,-1.5 Z"/>
+    <clipPath id="field"><circle cx="100" cy="100" r="84"/></clipPath>
+  </defs>
+
+  <circle cx="100" cy="100" r="98" fill="#e0a72e"/>
+  <circle cx="100" cy="100" r="88" fill="#16305c"/>
+  <circle cx="100" cy="100" r="84" fill="none" stroke="#f5efe1" stroke-width="1.2"/>
+
+  <g clip-path="url(#field)">
+    <use href="#sparkle" transform="translate(56,55) scale(0.45)" fill="#f5efe1"/>
+    <use href="#sparkle" transform="translate(137,44) scale(0.45)" fill="#f5efe1"/>
+    <use href="#sparkle" transform="translate(72,94) scale(0.4)" fill="#f5efe1"/>
+    <use href="#sparkle" transform="translate(127,78) scale(0.4)" fill="#f5efe1"/>
+    <use href="#sparkle" transform="translate(142,108) scale(0.4)" fill="#f5efe1"/>
+    <use href="#sparkle" transform="translate(35,75) scale(0.5)" fill="#f5efe1"/>
+    <use href="#sparkle" transform="translate(165,62) scale(0.4)" fill="#f5efe1"/>
+    <use href="#sparkle" transform="translate(48,112) scale(0.35)" fill="#f5efe1"/>
+    <use href="#sparkle" transform="translate(160,105) scale(0.4)" fill="#f5efe1"/>
+
+    <!-- The orbital arc: F's exact curve, shifted down 16 units so it intersects the rocket's nose -->
+    <path d="M38,118 C68,44 132,38 156,84" fill="none" stroke="#e0a72e" stroke-width="3"/>
+    <use href="#sparkle" transform="translate(156,84) scale(1.3)" fill="#e0a72e"/>
+
+    <!-- Earth limb + cloud texture -->
+    <circle cx="100" cy="270" r="150" fill="#3d6a9a"/>
+    <path d="M45,128 Q100,118 155,128" fill="none" stroke="#f5efe1" stroke-width="1" opacity="0.5"/>
+    <path d="M62,136 Q100,128 138,136" fill="none" stroke="#f5efe1" stroke-width="1" opacity="0.4"/>
+
+    <!-- Saturn V-style rocket: tapered multi-stage body, black roll-pattern band, slender capsule/LES nose -->
+    <path d="M100,40 L101.5,52 L98.5,52 Z" fill="#f5efe1"/>
+    <path d="M98.5,52 L101.5,52 L104,64 L96,64 Z" fill="#f5efe1"/>
+    <path d="M96,64 L104,64 L105,78 L95,78 Z" fill="#f5efe1"/>
+    <path d="M95,78 L105,78 L106,94 L94,94 Z" fill="#f5efe1"/>
+    <path d="M94,94 L106,94 L106,100 L94,100 Z" fill="#f5efe1"/>
+    <rect x="94" y="100" width="12" height="8" fill="#1c1c1a"/>
+    <rect x="97" y="100" width="2" height="8" fill="#f5efe1"/>
+    <rect x="101" y="100" width="2" height="8" fill="#f5efe1"/>
+    <rect x="94" y="108" width="12" height="14" fill="#f5efe1"/>
+    <path d="M94,112 L85,122 L94,120 Z" fill="#16305c"/>
+    <path d="M106,112 L115,122 L106,120 Z" fill="#16305c"/>
+    <path d="M94,122 L106,122 L100,140 Z" fill="#e0a72e"/>
+    <path d="M97,122 L103,122 L100,133 Z" fill="#c6402b"/>
+
+    <!-- Ribbon rule lines -->
+    <line x1="60" y1="145" x2="140" y2="145" stroke="#e0a72e" stroke-width="1.4"/>
+    <line x1="77" y1="163" x2="123" y2="163" stroke="#e0a72e" stroke-width="1.4"/>
+  </g>
+
+  <text x="100" y="158" text-anchor="middle" font-family="Archivo, sans-serif" font-weight="700" font-size="12" letter-spacing="0.5" fill="#f5efe1">LAUNCH WINDOW</text>
+  <text x="100" y="172" text-anchor="middle" font-family="Work Sans, sans-serif" font-weight="600" font-style="italic" font-size="6.2" fill="#f5efe1">Stay one small step ahead.</text>
+</svg>
