@@ -142,6 +142,12 @@ symbol concepts once the user supplied a reference image. See `design.md`
   preference — this repo is public on GitHub, so anything committed to it is
   effectively redistributed). Read for understanding, then write Space
   Race's own original version from the underlying real-world facts.
+  **One explicit exception approved by the user (2026-09-28):**
+  `assets-raw/baspm/ui/*.png` — BASPM UI screenshots committed to the repo
+  as reference material for later Launch Window UI work. The user judged
+  screenshots low-risk and asked for this single carve-out while keeping
+  the rule active otherwise; don't extend it to other asset types (art,
+  audio, video, source) without asking again.
 
 ## Conventions / preferences (carried over from the sibling projects)
 
