@@ -659,6 +659,17 @@ proceeds:
     tie-break rule (decided 2026-09-28) uses goal-achievement rating as its
     second-order tie-break, so deciding this one way or the other now also
     affects whether that tie-break rule has anything to compare.
+    **A second reason to actually ship this (user, 2026-09-28, tying into
+    §3.12's logo work): a goal achievement is the natural place to render
+    the "mission patch" visual language the logo itself is being built
+    from** — the same circular border/rim-text frame as the brand mark,
+    with the center art swapped per goal and the ring closed solid gold
+    once earned (open/partial gold = the window is still active; closed
+    gold = hit it). This doesn't force the gold/silver/bronze quality tiers
+    above to be decided — a binary achieved/not-achieved badge already
+    works with the same frame — but if the tiered rating does ship, the
+    tiers are an obvious second visual axis (e.g. the rim color/thickness,
+    or a small corner mark) rather than a whole new badge shape.
 - 2.7 **Random events — analyzed 2026-09-27, see `baspm.md` §12.1/§12.2 for
   the full trace.**
   - **(a) How BASPM does it:** two independent per-season dice rolls (5%
@@ -1527,6 +1538,18 @@ it against, see §4. **Not yet done:** the actual Archivo/Work Sans TrueType
 files aren't in the repo yet (`Theme.FontFile` names the expected filenames
 under `assets/fonts/`); both are open-source Google Fonts, so no BASPM-
 content concern, just an outstanding asset-adding task.
+
+**Logo direction in progress (2026-09-28):** exploring a "launch window is
+a narrow, precise moment in time" symbol rather than a generic rocket —
+four concepts drafted (an orbit ring with a gold "window" arc; the
+existing crosshair register-mark motif as a camera-aperture; a two-post
+gate with an ascent line; and a mission-patch framing of the orbit-ring
+concept). **The mission-patch direction is the one being carried
+forward**, specifically because it reuses the same circular frame for
+in-game goal-achievement badges (§2.6(c)) — one visual system doing double
+duty as the brand mark and a recurring in-game reward, rather than two
+unrelated pieces of art. Still open: which of the four center-art
+concepts wins, and the actual wordmark lettering (unchanged from above).
 
 ## 4. Open questions (tracked here until resolved)
 
