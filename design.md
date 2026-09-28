@@ -1539,17 +1539,37 @@ files aren't in the repo yet (`Theme.FontFile` names the expected filenames
 under `assets/fonts/`); both are open-source Google Fonts, so no BASPM-
 content concern, just an outstanding asset-adding task.
 
-**Logo direction in progress (2026-09-28):** exploring a "launch window is
-a narrow, precise moment in time" symbol rather than a generic rocket —
-four concepts drafted (an orbit ring with a gold "window" arc; the
-existing crosshair register-mark motif as a camera-aperture; a two-post
+**Logo decided (2026-09-28): a mission-patch illustration.** After the
+initial four abstract-symbol concepts (an orbit ring with a gold "window"
+arc; the crosshair register-mark motif as a camera-aperture; a two-post
 gate with an ascent line; and a mission-patch framing of the orbit-ring
-concept). **The mission-patch direction is the one being carried
-forward**, specifically because it reuses the same circular frame for
-in-game goal-achievement badges (§2.6(c)) — one visual system doing double
-duty as the brand mark and a recurring in-game reward, rather than two
-unrelated pieces of art. Still open: which of the four center-art
-concepts wins, and the actual wordmark lettering (unchanged from above).
+concept), the user supplied a generated reference image of a full
+illustrated NASA-style patch and asked for that spirit specifically —
+superseding the four abstract options rather than picking among them.
+The final mark (`assets/branding/logo.svg`): a Saturn V-style rocket
+(tapered multi-stage body, its own black roll-pattern stripe — not a
+generic silhouette) ascending past a simplified Earth limb into a
+starfield, with a gold arc — the "window" — sweeping from lower-left,
+intersecting the rocket's nose, and terminating at an accent star; a
+mission-patch double-ring border (gold outer, thin cream inner); and a
+horizontal ribbon with the wordmark and tagline. Reached over several
+iteration rounds against specific visual feedback (arc curvature/height,
+star placement, ribbon-line spacing) rather than in one pass — see the
+session history if the reasoning behind a specific coordinate ever needs
+re-deriving. **The mission-patch-as-goal-badge tie-in from the earlier
+draft still stands**: the same circular frame is intended for in-game
+goal-achievement badges (§2.6(c)), swapping the center art and closing
+the gold arc solid when a goal is achieved, rather than being a
+one-off piece of art with no reuse elsewhere.
+**Note on this section's own iteration:** several rounds of building this
+logo hit real self-inflicted bugs worth remembering for any future
+SVG/vector work in this project — a circular `clip-path` silently
+discards anything outside its radius (several star positions were
+authored outside the visible circle and never rendered, more than once,
+until each coordinate was checked by hand against the actual radius
+rather than eyeballed), and a multi-control-point bezier's true peak/
+curvature needs solving for (or pinning via an on-curve point), not
+estimated from the control points' own coordinates.
 
 ## 4. Open questions (tracked here until resolved)
 
@@ -1623,11 +1643,12 @@ concepts wins, and the actual wordmark lettering (unchanged from above).
   no real screen has been laid out yet to check it against. Revisit once
   the first real screen (the Space Complex hub is the obvious first
   candidate) is actually being built.
-- **Wordmark/logo — open (§3.12, 2026-09-28).** The "LAUNCH WINDOW" text in
-  UI mockups is a placeholder for a real logotype, deliberately deferred as
-  its own design pass rather than solved by picking a fancier UI font
-  (§3.12 explains why those are different problems). Not blocking: the rest
-  of §3.12's visual system doesn't depend on it.
+- **Resolved (§3.12, 2026-09-28): the wordmark/logo.** A mission-patch
+  illustration — see §3.12's own entry for the full description and
+  `assets/branding/logo.svg` for the file. Two follow-ups remain, tracked
+  there rather than here since they're production tasks, not open design
+  questions: the wordmark text isn't outlined yet (needs the real font
+  files first), and no separate small-size icon-only crop exists yet.
 - **Resolved (§5, 2026-09-28): how much of §2.9's multiplayer-interaction
   brainstorm ships in v1?** Passive competition only (already decided,
   §2.9) plus the win-condition/tie-break check, both scheduled into M2/M4.
