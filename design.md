@@ -1435,6 +1435,25 @@ This section is the reference for any future screen mockup — a new screen
 should look like it belongs next to this one without needing to re-derive
 the palette or the border/fill rules from scratch.
 
+**Implemented in code (2026-09-28):**
+`core/src/main/java/de/mkoehler/launchwindow/client/ui/Theme.java` — the
+libGDX translation of this section, mirroring the sibling projects'
+`Theme.java` shape (StarWars/Robot-Rampage; Robot-Rampage's is the closer
+template). Every color/spacing/radius/border constant above has a matching
+Java constant with the same usage note; `Theme.Shapes` builds the actual
+Scene2D drawables (buttons, badges, cards, nav tabs, progress dots).
+Simpler than the sibling's version in one respect: this system has no
+rounded corners or shadows, so the shape rendering is plain bordered
+rectangles plus small anti-aliased circles, not a full signed-distance-field
+rounded-box-with-shadow renderer. **(unconfirmed default)** `Theme`
+declares a virtual layout resolution of 1920×1080 (matching Robot-Rampage's
+own default) purely so `Theme.Fonts`/a future `FitViewport` have a
+reference size — no real screen has been laid out yet to confirm or refute
+it against, see §4. **Not yet done:** the actual Archivo/Work Sans TrueType
+files aren't in the repo yet (`Theme.FontFile` names the expected filenames
+under `assets/fonts/`); both are open-source Google Fonts, so no BASPM-
+content concern, just an outstanding asset-adding task.
+
 ## 4. Open questions (tracked here until resolved)
 
 - **Mid-turn/mid-mission player decisions — narrowed by the §2.5 mission-sim
@@ -1498,6 +1517,12 @@ the palette or the border/fill rules from scratch.
   and never closes — joining stays open for the game's entire life, not just
   before it starts.
 - Multiplayer interaction model: how much of §2.9's brainstorm ships in v1?
+- **Screen layout resolution — open (§3.12, 2026-09-28).** `Theme.VIEW_WIDTH`/
+  `VIEW_HEIGHT` (1920×1080) is an unconfirmed default carried over from
+  Robot-Rampage's own `Theme.java`, not a decision made for this project —
+  no real screen has been laid out yet to check it against. Revisit once
+  the first real screen (the Space Complex hub is the obvious first
+  candidate) is actually being built.
 - **Wordmark/logo — open (§3.12, 2026-09-28).** The "LAUNCH WINDOW" text in
   UI mockups is a placeholder for a real logotype, deliberately deferred as
   its own design pass rather than solved by picking a fancier UI font

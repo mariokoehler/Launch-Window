@@ -38,6 +38,12 @@
       <classifier>natives-desktop</classifier>
     </dependency>
     <dependency>
+      <groupId>com.badlogicgames.gdx</groupId>
+      <artifactId>gdx-freetype-platform</artifactId>
+      <version>${gdxVersion}</version>
+      <classifier>natives-desktop</classifier>
+    </dependency>
+    <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
       <scope>test</scope>
