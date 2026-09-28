@@ -71,9 +71,10 @@ fitting a game about staying ahead of a rival agency over a long game.
   this project is being built to actually run, not hypothetical scale
   targets. Architecture should comfortably handle small-group sizes in that
   ~4–10 range rather than being designed around a persistent-world MMO;
-  revisit the upper bound once the competitive-interaction model (§2.x, TBD)
-  is chosen, since interference/sabotage mechanics may scale differently
-  than passive competition does.
+  revisit the upper bound once §2.9's interaction-model scope
+  (passive-competition-first, sabotage/interference layered in later) is
+  actually built, since interference/sabotage mechanics may scale
+  differently than passive competition does.
 - **Fan project note:** BASPM is a game by Slitherine/Matrix Games. This
   project is non-commercial, references BASPM purely for analysis and
   inspiration (`baspm.md`), and intends to ship its own name, art, and
@@ -367,24 +368,21 @@ proceeds:
   - **(b) What changes for async multiplayer:** nothing structural — this
     is entirely a between-turn, deterministic computation with no
     mid-resolution decision point (`baspm.md` §11.5), same shape as §2.3/
-    §2.4's finding. **One real question worth deciding (unconfirmed):** the
+    §2.4's finding. **Decision:** the
     16-season/4-year review cadence is counted in *seasons elapsed*, not
     real days — so under `design.md` §3.6's schedule profiles, a `WEEKDAYS`
     game and a `DAILY` game reach review #1 after a different number of
     *real* days (a `WEEKDAYS` game needs more real-world time per season on
     average, once weekends are excluded), even though both experience
-    exactly the same in-fiction pacing. This is very likely fine — "one
+    exactly the same in-fiction pacing. This is fine — "one
     turn = one season" (§1) already treats real-time elapsed as irrelevant
-    to game-time elapsed everywhere else — but worth stating explicitly so
-    a future session doesn't rediscover it as a bug.
+    to game-time elapsed everywhere else.
   - **(c) Decision:** **port the "prestige is the only currency that
     converts to funding, on a periodic tiered review with a catch-up
     mechanic" shape**, re-deriving actual thresholds/multipliers rather than
-    reusing BASPM's constants verbatim (`design.md` §1.2). **(unconfirmed
-    default)** keep funding as a recurring per-turn rate set at review time,
-    not a lump sum — it's the cleaner fit for a persistent async economy
-    (a lump sum risks a huge one-time balance swing landing on a turn a
-    player might not even be online for). **(unconfirmed default)** keep
+    reusing BASPM's constants verbatim (`design.md` §1.2). **Decision:** keep funding as a recurring per-turn rate set at review time,
+    not a lump sum — it's the cleaner fit for a persistent async economy.
+    **Decision:** keep
     full transparency of the review formula in Launch Window's own UI
     (current bracket, live-projected next payout) rather than hiding it —
     BASPM already treats this as a feature, not a spoiler, and transparency
@@ -440,11 +438,9 @@ proceeds:
   - **(c) Decision:** **port the three-group/skill shape and the general
     morale/training/lifecycle mechanics** as Launch Window's starting point,
     re-deriving actual numbers rather than reusing BASPM's constants verbatim
-    (`design.md` §1.2). **(unconfirmed default)** keep "standing orders, no
+    (`design.md` §1.2). **Decision: ** keep "standing orders, no
     per-turn re-declaration" for R&D-equivalent and permanent-training
-    assignments, and keep retirement/resignation gated on being idle for a
-    first playable version — revisit only if playtesting makes it feel like
-    an exploit. **(unconfirmed default)** keep the morale-gates-hiring-
+    assignments, and keep retirement/resignation gated on being idle. **Decision:** keep the morale-gates-hiring-
     pool-quality feedback loop as a systemic mechanic, independent of
     whichever exact skillset/morale buckets Launch Window ends up using.
     - **Tiger Teams — decided to diverge from BASPM here (user design input,
@@ -470,12 +466,8 @@ proceeds:
       *unavailable*, just increasingly less reliable the more a single turn
       leans on them — which also nicely discourages a player from treating
       Expert staff as a free unlimited safety net.
-      **(unconfirmed default) Secondary fallback, kept for the case no Expert
-      personnel are available:** a pre-set cash-budget-cap policy — BASPM's
-      original mechanic (`baspm.md` §9.5) — that only engages when the
-      Expert-personnel pool can't cover the moment, defaulting to "do
-      nothing" if the player never sets one, same safe-default shape as
-      BASPM's own free "decline" option.
+      **Decision:** No secondary fallback in the case no Expert
+      personnel are available. players need to cultivate their own Experts to have a safety net, rather than relying on a pre-declared budget to buy one on demand.
       **Adopt regardless of the above, and generalized beyond Tiger Teams:**
       a post-turn **"replay"** of what an in-progress mission's automatic
       resolution actually did — `baspm.md` §8.3 already flagged BASPM's
@@ -515,7 +507,7 @@ proceeds:
   - **(c) Decision:** **port the four-level containment hierarchy and the
     opening-cost-discount-for-related-programs mechanic**, re-deriving
     actual cost/prestige numbers rather than reusing BASPM's constants
-    verbatim (`design.md` §1.2). **(unconfirmed default)** treat BASPM's
+    verbatim (`design.md` §1.2). **Decision:** treat BASPM's
     never-shipped category scaffolding (asteroid belt, space stations, SSTO,
     Mars expeditions, outer heliosphere) as legitimate **long-term content
     roadmap inspiration** for Launch Window once the core Sputnik-through-
@@ -548,12 +540,10 @@ proceeds:
   - **(c) Decision:** **port the "everything starts nearly unflyable, transfer
     and use are how it becomes viable" shape** and the diminishing-returns
     reliability-growth curve, re-deriving actual percentages
-    (`design.md` §1.2). **(unconfirmed default)** keep reliability transfer
+    (`design.md` §1.2). **Decision:** keep reliability transfer
     as an explicit, curated per-pair relationship table (not a generic
     same-category rule) since that's what makes a real rocket-family lineage
-    feel earned rather than automatic — worth designing Launch Window's own
-    component lineage deliberately once the component catalog exists, rather
-    than generating transfer relationships algorithmically.
+    feel earned rather than automatic.
 - 2.5 **Mission simulation (the step-by-step launch/flight resolution,
   success/failure rolls) — analyzed 2026-09-27, see `baspm.md` §8 for the
   full formula trace.**
@@ -649,10 +639,9 @@ proceeds:
     concrete mechanical consequences** (program-gating eligibility,
     comparison-screen visibility) as Launch Window's starting shape,
     re-deriving Launch Window's own actual goal list/prestige values rather
-    than reusing BASPM's (`design.md` §1.2). **(unconfirmed default)** port
+    than reusing BASPM's (`design.md` §1.2). **Decision:** port
     the goal-gated reliability-penalty/bonus mechanic too, as a genuine
-    risk/reward lever distinct from reliability transfer — worth deciding
-    whether Launch Window surfaces this modifier explicitly in its own UI
+    risk/reward lever distinct from reliability transfer — Launch Window surfaces this modifier explicitly in its own UI
     (baspm.md §11.6 flags whether BASPM even does this as still unverified)
     rather than leaving it as an invisible odds adjustment, since
     async-multiplayer players benefit more from a legible "why did this
@@ -666,6 +655,10 @@ proceeds:
     ever fail (that still just ends the mission, per §2.5). No BASPM
     precedent for this; it's a Launch Window-original scoring layer, floated
     as a direction worth keeping in mind rather than committed to yet.
+    **No longer purely cosmetic if it ships:** §2.9's win-condition
+    tie-break rule (decided 2026-09-28) uses goal-achievement rating as its
+    second-order tie-break, so deciding this one way or the other now also
+    affects whether that tie-break rule has anything to compare.
 - 2.7 **Random events — analyzed 2026-09-27, see `baspm.md` §12.1/§12.2 for
   the full trace.**
   - **(a) How BASPM does it:** two independent per-season dice rolls (5%
@@ -689,10 +682,10 @@ proceeds:
   - **(c) Decision:** **port the two-tier good/bad shape with situational
     gating** (events react to real recent player state, per §1.1's note
     above) as Launch Window's starting point, re-deriving Launch Window's
-    own event list/odds (`design.md` §1.2). **(unconfirmed default)** make
+    own event list/odds (`design.md` §1.2). **Decision:** make
     Launch Window's own events data-driven from the start (unlike BASPM's
     hardcoded approach) — no reason to inherit that specific limitation.
-    **(unconfirmed default)** don't port the dead "decision event" concept —
+    **Decision:** don't port the dead "decision event" concept —
     BASPM itself never finished it, and the Tiger Teams redesign (§2.2(c))
     already established this project's preferred alternative to a live
     per-turn choice popup (a standing capability the player develops in
@@ -732,10 +725,12 @@ proceeds:
     (the seven generic predicate types above) as reusable prior art for
     Launch Window's own scoring/achievement system, independent of GSA's
     specific content (`design.md` §1.2). Leave the actual win-condition
-    question itself for §2.9 to resolve.
+    question itself for §2.9 to resolve. **Resolved 2026-09-28, see §2.9:**
+    a declared-goal-list race, built on this same objective-field shape.
 - 2.9 **Multiplayer interaction model** — the one system with no BASPM
-  precedent beyond its arms-length PBEM mode (`baspm.md`). Open brainstorm,
-  nothing decided yet:
+  precedent beyond its arms-length PBEM mode (`baspm.md`). Brainstorm below;
+  the interaction-mode starting point and the win condition are both now
+  decided (see the `Decision`/`decided` bullets further down):
   - Passive competition only (both agencies race for the same historical
     firsts/prestige, visible to each other only through news-style reports
     and a goal-progress comparison screen — this is BASPM's actual existing
@@ -753,16 +748,49 @@ proceeds:
     cadence.
   - Cooperative options (joint missions, shared programs) as a distinct mode
     alongside head-to-head.
-  - **(unconfirmed)** start with passive competition + chat for a first
-    playable version; layer sabotage/interference in once the core daily-turn
-    loop is proven fun and fair.
-  - **New question surfaced by §2.8's campaign-objectives trace (2026-09-27,
-    `baspm.md` §12.3): does Launch Window even have a hard win condition,**
-    like `CampaignRTTM`'s real "first to a specific milestone goal wins"
-    race, or is it open-ended score comparison like the passive
-    `MultiplayerColdWar` mode? Both are real BASPM precedent, not
-    hypothetical options — this needs its own decision, not just an
-    interaction-style choice.
+  - **Decision:** start with passive competition + in-game player-to-player
+    mail for a first playable version; layer espionage/sabotage/interference
+    in once the core daily-turn loop is proven fun and fair. **Clarified
+    (user, 2026-09-28): "mail" means in-game messages over the same
+    connection as everything else, not server-sent notification emails to a
+    real address** — no email-address field needed on the §3.8 account
+    schema.
+  - **Win condition — decided (user, 2026-09-28), resolving the question
+    §2.8's campaign-objectives trace surfaced (2026-09-27, `baspm.md`
+    §12.3):** Launch Window has a real hard win condition, mirroring
+    `CampaignRTTM`'s "race to a goal" shape rather than
+    `MultiplayerColdWar`'s open-ended score comparison — but generalized from
+    `CampaignRTTM`'s single milestone goal to a **declared list of goals**.
+    **When a game is created, the host declares the list of goals that
+    define that game's win condition** (reusing §2.8(c)'s ported
+    objective-field strategy-pattern shape for the goals themselves — this is
+    what makes an arbitrary declared list practical rather than a single
+    hardcoded milestone). **First player to achieve every goal on the list
+    wins.** This list is a piece of per-game config, alongside §3.6's
+    turn-cadence/calendar config, and **must be visible to players in the UI**
+    throughout the game (the goal-progress comparison screen §2.6(b)/§2.9's
+    first bullet already established belongs on the budget/prestige overview
+    is the natural home for it — it already shows each side's goal
+    achievement, this just adds "these are the ones that end the game").
+    **Tie-break rule (fully specified, user, 2026-09-28):** normally "first
+    to complete the list" already resolves the race outright — daily-batch
+    resolution means one player reaches their final goal on an earlier
+    calendar turn than the other. A tie only exists in the narrow case where
+    **more than one player completes their final goal in the same turn's
+    resolution.** For just those tied players, build a **placement table
+    across every goal in the declared list**: for each individual goal,
+    rank the tied players by who achieved *that* goal earliest (1st, 2nd,
+    3rd, ...). Then compare the tied players' placement counts
+    Olympic-medal-table style — most 1st-place goal finishes wins; if still
+    tied, most 2nd-place finishes; and so on down the list. **Second-order
+    tie-break** (only reached if the medal-table comparison is itself still
+    tied): best goal-achievement *rating* — this makes §2.6(c)'s
+    not-yet-decided gold/silver/bronze tiered goal-achievement rating idea
+    load-bearing rather than cosmetic *if* it's ever implemented; until/
+    unless that's decided, this tie-break has nothing to compare and simply
+    doesn't apply (an unresolved tie at that point is vanishingly unlikely
+    given how many independent rankings precede it, and isn't worth
+    designing for further right now).
 - 2.10 **Difficulty level — decided (user, 2026-09-27): none, by design.**
   BASPM has three difficulty levels (`DifficultyLevelT.{Normal, Hard,
   BuzzHard}`, `baspm.md` §2.4) as a single-player choice — the player picks
@@ -875,9 +903,9 @@ even scaffolding empty right now.
   (append-only, never reordered) plus a test guarding every registered type,
   once real messages exist. **Jackson's actual, sole job here is §3.7/§3.8's
   on-disk persistence** — flat-file JSON snapshots, the action journal, and
-  the account store — which is exactly why the scaffold's one real test
-  (`core`'s `JacksonRoundTripTest`) lives under a `persistence` package, not
-  a `net` one.
+  the account store — which is exactly why `core`'s persistence-format
+  proof lives as `PlayerSnapshotTest`'s round-trip test (§3.4), under the
+  `model` package, not a `net` one.
 - **Unblocks §3.4 (Data model)**: with the tech stack settled and most of
   §2's core systems now traced (`baspm.md` §8-§12), that section is ready to
   actually start once picked up — not attempted in this same pass, flagged
@@ -885,8 +913,51 @@ even scaffolding empty right now.
 
 ### 3.4 Data model
 
-Not yet started — will be derived from BASPM's Data Scripts XML schemas
-(`baspm.md` §"Data-driven architecture") once §2 mechanics are further along.
+**First slice implemented (2026-09-28):** `core`'s new
+`de.mkoehler.launchwindow.model` package (zero libGDX imports, per §3.10),
+covering the shapes already decided in §2/§3.7/§3.8:
+
+- **`PlayerSnapshot`** — the aggregate root (§3.7's per-player-per-turn
+  persisted file): agency name, `Archetype`, funds, prestige, the recurring
+  per-season funding rate (§2.1(a)/(c)), the player's own personal season
+  counter (§3.8's late-joiner decoupling), and the three personnel rosters.
+  Holds only per-player state, references future content-definition types
+  (programs, goals, etc.) by ID rather than embedding them, once those types
+  exist.
+- **`Archetype`** — exactly two values, `NASA`/`SOVIET` (§2.1's no-GSA
+  decision).
+- **Personnel** — `Personnel` (shared mutable base: id, name, age, morale,
+  learning potential, `AssignmentState`) with three concrete subclasses,
+  `Astronaut`/`SetSpecialist`/`MissionControlOfficer`, each holding an
+  `EnumMap` of its own five-value skill enum (§2.2(a)/`baspm.md` §9.1).
+  `MissionControlOfficer.flightDirectorSkill()` computes the sixth "Flight
+  Director" aptitude as the plain average of the other five, exactly as
+  `baspm.md` §9.1 traced — not a stored value, so not a member of
+  `MissionControlSkill`.
+- **`AssignmentState`** — `IDLE`/`ASSIGNED`/`IN_TRAINING`; deliberately does
+  not yet distinguish R&D from a mission assignment, since neither exists as
+  a model type yet.
+
+**Decided (user, 2026-09-28): state is mutable, not immutable records with
+withers.** Turn resolution touches many fields per employee across a
+potentially large roster every turn; the on-disk JSON snapshot (§3.7) is
+already the immutable artifact, so in-memory state doesn't also need to be.
+Content *definitions* (programs, mission components, goals, events), once
+they exist, are expected to stay data-driven/immutable by contrast — only
+per-player *state* is mutable.
+
+**Deliberately deferred, not modeled yet** (formulas/balance numbers, and
+shapes §2 still marks unconfirmed): mission outcome tiers (§2.5(c)), the
+Expert exhaustion/falloff curve (§2.2(c)), the gold/silver/bronze goal
+rating (§2.6(c)), programs/mission configurations/mission components/goals/
+events as their own types, and all numeric balance values. Every class in
+`de.mkoehler.launchwindow.model` has full Javadoc and a JUnit test under
+`core/src/test/.../model`, per `CLAUDE.md`.
+
+**Content definitions themselves remain not yet started** — still to be
+derived from BASPM's Data Scripts XML *shapes* (`baspm.md` §"Data-driven
+architecture"), re-deriving Launch Window's own actual values per §1.2, once
+picked up.
 
 ### 3.5 Asset generation pipeline (early idea, not yet designed in detail)
 
@@ -970,7 +1041,7 @@ This is a server-side concern (a scheduled job deciding "does a turn resolve
 today"), not a client feature, so it lives here rather than in §2.
 
 **Schedule profile (per game, set at creation, editable by the host later):**
-- **(unconfirmed default)** Two named presets to start:
+- **Decision:** Two named presets to start:
   - `DAILY` — resolves every day of the week (fits the friends-group use
     case).
   - `WEEKDAYS` — resolves Monday–Friday only, no Saturday/Sunday turns
@@ -981,7 +1052,7 @@ today"), not a client feature, so it lives here rather than in §2.
     data change, not a code change — cheap to generalize now, not
     over-engineering, since it's the same data shape either way.
 - Each profile also carries a **resolution time-of-day and timezone**
-  **(unconfirmed default: host's local timezone at game creation, stored
+  **(Decision: host's local timezone at game creation, stored
   explicitly — never left as ambient server-local time**, since players may
   span timezones and "midnight UTC" silently drifting relative to a host's
   workday would be confusing).
@@ -997,16 +1068,14 @@ today"), not a client feature, so it lives here rather than in §2.
   vacation. Implies blackout periods are their own persisted, mutable
   records (`ScheduleException` or similar), not baked into an
   immutable game-config blob written once at creation.
-- **(unconfirmed default)** Only future dates can be blacked out — a
+- **(Decision:)** Only future dates can be blacked out — a
   blackout can't retroactively undo a turn that already resolved. Adding one
   that overlaps *today* before today's resolution job has fired should still
   suppress today's turn; the scheduler's "does a turn resolve today" check
   needs to run its blackout lookup at trigger time, not from a snapshot
   taken earlier.
-- **Who can edit the blackout list (open question, not yet decided):**
-  probably whoever "owns"/hosts that game instance, but this project has no
-  admin/role model yet — revisit once §2's multiplayer interaction model
-  and any notion of a "game host" role are designed.
+- **Who can edit the blackout list:**
+  The server will have a json file that holds the blackouts (and potentially other server configurations). In the first version it's good enough for the host of the server to just manually edit this json file.
 
 **The game's announced start date reuses this exact mechanism (user,
 2026-09-27, §3.8's join-anytime decision):** a server can go live days before
@@ -1199,18 +1268,18 @@ so directly reusing its actual shape (not just its idea) carries none of
     "server-live" through "the day before start," no new mechanism needed).
     That gap is the signup window: an account that doesn't exist yet gets
     created on first login (§3.8 above), then immediately walks through
-    **claiming a slot** — picking an agency archetype (NASA-style/Soviet-
-    style/GSA-style, per `baspm.md` §2.4's `SpaceAgencyT`), and naming both
-    the agency and the player's own in-game persona/callsign. An existing
+    **claiming a slot** — picking an agency archetype (NASA-style or
+    Soviet-style only, per §2.1(a1)/(c1)'s decision to drop the GSA-
+    equivalent third archetype entirely), and naming both the agency and the
+    player's own in-game persona/callsign. An existing
     account with an existing slot just logs into it as before; a login that
     doesn't have a slot yet in *this* game always gets the claim flow,
     whether that's on day one of the signup window or in the middle of an
     already-months-long game.
-  - **(unconfirmed default) Agency name and persona/callsign must be unique
+  - **(Decision:) Agency name and persona/callsign must be unique
     within a given game** (first claimed, first served — hence the "already
     taken" joke), but nothing about identity needs to be unique *across*
-    different games, and archetype choice itself being exclusive or shared
-    is a separate, still-open question (see below).
+    different games.
   - **A late joiner's own season/turn count starts fresh from their personal
     turn 1, decoupled from the game's shared wall-clock schedule (§3.6).**
     The schedule (which real days produce *a* turn) is one shared clock for
@@ -1232,18 +1301,23 @@ so directly reusing its actual shape (not just its idea) carries none of
     players can pick the same historical/flavor archetype, distinguished
     entirely by their own unique agency name and persona, same as how a
     board game lets multiple people play "the same faction" flavor-wise in a
-    free-for-all. **Whether an archetype carries any real mechanical
-    difference at all (vs. being pure flavor) is still open** — the user
-    doesn't recall BASPM's own agency differences precisely beyond "probably
-    program-gating," which is now a concrete new dependency on `design.md`
-    §4's still-open "how much of BASPM's Cold War framing do we keep vs.
-    reskin" question — a research pass is underway to characterize BASPM's
-    actual per-agency differences before deciding whether Launch Window's
-    archetypes should mirror any of them mechanically or stay cosmetic-only.
-  - **Ties into the still-open "who's allowed to edit the blackout list"
-    host-role gap (§3.6/§4)**: announcing a game and setting its start date
-    is itself a "host" action — both eventually want the same lightweight
-    "game host" concept, but neither blocks a first playable version.
+    free-for-all. **Whether an archetype carries a real mechanical
+    difference — resolved by the later §2.1(a1)/(c1) agency-differences
+    research pass (2026-09-27), not still open as this bullet originally
+    said:** yes, a real one, not pure flavor — program/mission-component
+    access is gated by archetype (NASA/Soviet each only see their own tagged
+    content), while the economic side (funding formulas, costs) stays
+    identical across both, matching what BASPM's own shipped game already
+    does. See §2.1(a1)/(c1) for the full trace; that pass also fully
+    resolved `design.md` §4's "how much of BASPM's Cold War framing to keep
+    vs. reskin" question as far as archetype scope goes.
+  - **Ties into the "game host" role concept (§3.6/§4):** announcing a game
+    and setting its start date is itself a "host" action, and so is editing
+    the blackout list — **for v1 both are just direct server-file/manual
+    access (blackout editing decided §3.6, 2026-09-28: the host edits the
+    server's own JSON config directly), not an in-game permission system.**
+    A real lightweight "game host" role/UI is still open for later, but
+    blocks nothing about a first playable version.
 - **Client-local settings (volume, display resolution, keybindings, etc.)
   are explicitly out of scope for accounts entirely (user, 2026-09-27)** —
   a plain local JSON file on the client machine, no server or account
@@ -1324,7 +1398,7 @@ seasons), funds/prestige trajectory over N simulated seasons (does an agency
 go bankrupt, does the budget-review math actually converge sensibly), and
 whether the NASA-style and Soviet-style archetypes (§2.1(a1)/(b1)'s real
 content differences) actually play out roughly evenly rather than one
-snowballing. **(unconfirmed default)** this belongs in `dev-tools`, matching
+snowballing. This belongs in `dev-tools`, matching
 Robot-Rampage's placement exactly, once `dev-tools` has its first real tool
 (currently empty, §3.3).
 
@@ -1479,8 +1553,8 @@ content concern, just an outstanding asset-adding task.
   unchanged: submit conditional policies alongside the rest of the turn
   ("scrub this mission if X happens"), defer the decision to the next day's
   turn at some in-fiction cost, or auto-resolve with a player-overridable
-  default up until that day's server tick. **(unconfirmed)** — still needs
-  deciding. **One sub-case already resolved favorably by real savegame
+  default up until that day's server tick. **Decision:** — The player is already explicitly asked if he wants to launch a mission when he assembles it. in the original game he is asked a second time right before the turn evaluation starts, but this is just a nice to have thing, not a necessity. So we can simply skip this second confirmation in Launch Window. If the player intends to scrub the mission he will be able to do so through normal game play dialogs up until the current days turn gets evaluated. The same is true if he wants to pull an employee out of training. The player will be able to do so through normal game play dialogs up until the current days turn gets evaluated. If he does not do so, the default is that the mission will launch and the employee will stay in training. This is a reasonable default and it is consistent with the original game.
+- **One sub-case already resolved favorably by real savegame
   evidence (`baspm.md` §2.1, 2026-09-27 — this citation previously pointed
   at a §8.1 that didn't yet exist; backfilled properly this session):
   ongoing R&D assignment is NOT one of the awkward mid-turn cases** — despite
@@ -1489,9 +1563,8 @@ content concern, just an outstanding asset-adding task.
   tracking one employee staying assigned to the same component across four
   consecutive seasons untouched. So a Launch Window turn's "who's on R&D" input
   can be a standing order the player sets and leaves alone, not something
-  that has to be resubmitted every single day. The remaining open cases
-  (scrub, training pull-out) still need a policy — and the scrub case has a
-  real nuance now too: a save showed a mission
+  that has to be resubmitted every single day. 
+- a save showed a mission
   scrubbed *before* it ever started executing costing nothing (`MISSION_OUTCOME_CANCELLED`,
   0 prestige) — worth testing separately whether a mid-flight abort is
   actually penalized (`MsnSim*.xml`'s `OnCancellation` fields suggest it
@@ -1503,13 +1576,17 @@ content concern, just an outstanding asset-adding task.
   open cases below, Launch Window promotes it into a standing personnel
   capability instead (an "Expert"-trait employee pool that auto-triggers
   during resolution, §2.2(c)), sidestepping the need for any per-turn
-  decision at all. A cash-budget fallback policy is kept only as a secondary
-  case for when no Expert personnel are available.
+  decision at all. **No cash-budget fallback** for when no Expert personnel
+  are available (§2.2(c)'s decision, tightened after this bullet was first
+  written) — players need to cultivate their own Experts to have a safety
+  net, not buy one on demand.
 - Turn cadence resolved (§1/§3.6): one turn = one BASPM "season", schedule
-  (which real days produce a turn) is per-game-configurable. Remaining
-  sub-question: who is allowed to edit a game's blackout-period list once
-  play has started — needs a "game host/admin" role concept that doesn't
-  exist yet (§3.6).
+  (which real days produce a turn) is per-game-configurable. **Blackout-list
+  editing decided for v1 (§3.6, 2026-09-28): the host edits the server's own
+  JSON config file directly** — no in-game permissions/role system needed
+  yet. A real "game host/admin" role concept (needed eventually for
+  announcing games, and anything beyond direct file access, §3.8) is still
+  open, just no longer blocking v1.
 - **Resolved (§3.9, 2026-09-27):** a friends-group game and a colleagues-
   group game are two separate server instances (e.g. two Docker containers),
   not one server hosting both — no matchmaking/game-selection layer needed.
@@ -1528,6 +1605,12 @@ content concern, just an outstanding asset-adding task.
   its own design pass rather than solved by picking a fancier UI font
   (§3.12 explains why those are different problems). Not blocking: the rest
   of §3.12's visual system doesn't depend on it.
+- **Resolved (§5, 2026-09-28): how much of §2.9's multiplayer-interaction
+  brainstorm ships in v1?** Passive competition only (already decided,
+  §2.9) plus the win-condition/tie-break check, both scheduled into M2/M4.
+  Espionage/sabotage/interference is explicitly M7+. Still open: whether
+  §2.9's "email" means player-to-player mail or turn-notification emails —
+  M1's decision gate.
 - **Resolved (§3.3, 2026-09-27):** native client, libGDX, matching the
   sibling projects — the web-client alternative once considered here was
   dropped.
@@ -1548,3 +1631,170 @@ content concern, just an outstanding asset-adding task.
   scope decision sits under — real program/mission-config names and history
   vs. an original reskin, still governed by `design.md` §1.2's no-copying
   rule either way.
+
+## 5. Implementation roadmap: milestones & slices
+
+**Draft (user + assistant, 2026-09-28), format borrowed directly from
+Robot-Rampage's own `design.md` "Components/TODOs" section** (fetched from
+its public GitHub repo, `mariokoehler/Robot-Rampage`, since that project
+isn't cloned on this laptop at all — an unrelated absence from the laptop's
+missing `E:` drive, `CLAUDE.md`'s caveat about that is specifically about
+BASPM's own extracted files; StarWars' own equivalent section wasn't
+checked). Robot-Rampage's
+own list is headed "Proposed implementation order" and accumulated **done**
+markers as milestones actually finished — this list is written the same
+way, prospectively, so treat granularity/order as **(unconfirmed)** until a
+milestone is actually underway. Each milestone: what it's for, what's in/out
+of scope, its exit criterion, and (where relevant) which still-open
+`design.md` item has to be decided before that milestone's affected slice
+can start (a **decision gate**). `baspm.md`, already in the repo, is where
+every milestone's BASPM-shape references point — but **check per slice, not
+as a blanket assumption**: grep `baspm.md` for the section a slice's
+formulas/content need before starting it, and if the fact isn't there (only
+on `E:`), stop and ask, per `CLAUDE.md`'s `COMPUTERNAME` rule, rather than
+guessing. The sibling projects' own template code (StarWars'
+`AccountStore`/`PasswordHasher`, Robot-Rampage's `MessageRegistry`/
+`Playouts`/`ScreenSnapshot`) isn't on this laptop either, but both repos are
+public on GitHub and fetchable read-only via `gh api repos/mariokoehler/
+<repo>/contents/<path>` the same way this roadmap section was drafted — so
+M1 is buildable on the laptop despite neither sibling repo being cloned
+here.
+
+**Three shape-defining choices made before drafting this list (user,
+2026-09-28):**
+- **Walking skeleton before real game systems**, not Robot-Rampage's own
+  layered order (rules engine → persistence → network → client). An early
+  milestone proves login → a queued action → the scheduler resolves it →
+  the player sees the result, end to end, before any real game system
+  exists — de-risking the riskiest integration (the scheduled turn job,
+  KryoNet connect/send/disconnect, and action-journal replay at login,
+  §3.7) early rather than at the end.
+- **Deployment (jpackage client zip, Docker server image, §3.9) is
+  deferred, matching Robot-Rampage's own M7 placement** — not required for
+  the MVP. The first real playtest happens in dev-mode (the commands in
+  `CLAUDE.md` "Build system"), validating the core loop is worth packaging
+  before investing in packaging it.
+- **The "Expert" personnel trait (§2.2(c)'s Tiger Teams replacement) ships
+  after the base mission-simulation formula, not with it.** Mission
+  simulation's first version is the base involvement-weighted roll plus a
+  flight-controller-skill-scaled saving throw only, with no automatic
+  rescue beyond that. The Expert-trait auto-rescue and its still-undecided
+  exhaustion/falloff curve is exactly the kind of tunable detail worth
+  deferring until there's a playable loop to tune it against — added as a
+  later second-wave slice, mirroring how Robot-Rampage's M5 added pushers/
+  crushers onto an engine that already structurally supported them.
+
+- **M0 — Project skeleton. Done (2026-09-27).** Maven multi-module
+  scaffold, `NetworkConstants`, `LaunchWindowGame` placeholder — see
+  `CLAUDE.md` "Build system"/"Current status".
+- **M1 — Walking skeleton: one trivial action, end to end.** No real game
+  systems yet. **Decision gate resolved (user, 2026-09-28):** §2.9's "email"
+  means in-game player-to-player mail, not turn-notification email — no
+  email-address field needed on §3.8's account schema (login, password
+  hash/salt, display name stays as-is). In-game mail itself is still M7+
+  scope (§2.9's own sequencing), not part of this milestone.
+  - **Slice: snapshot + journal + atomic writes + login-time replay**
+    (§3.7) — the flat-file persistence mechanism itself, no network yet.
+  - **Slice: `AccountStore`**, reused directly from StarWars (§3.8) —
+    fetch its actual source via `gh api repos/mariokoehler/StarWars/
+    contents/server/src/main/java/.../accounts/AccountStore.java` (and
+    `PasswordHasher`/`PlayerAccount`/`AuthResult` alongside it) rather than
+    reimplementing from the prose description here. Schema depends on the
+    email decision gate above.
+  - **Slice: minimal KryoNet protocol** — `MessageRegistry` (Robot-Rampage's
+    pattern, same `gh api` fetch approach) plus two message types: submit
+    one action, fetch current state.
+  - **Slice: scheduler + server config file.** The scheduled turn-resolution
+    job honors a real schedule profile + blackout list (§3.6) rather than
+    running on every tick. **Confirmed (user, 2026-09-28): game creation
+    itself is also a v1 file edit, not a client screen**, consistent with
+    the already-decided blackout-list stopgap (§3.6/§3.8/§4) — so this
+    slice is also where that JSON config file's shape gets defined: schedule
+    profile, timezone, blackout list, and (once M4 adds it) the declared
+    goal list all live in one host-edited file.
+  - **Slice: CLI/console dev client** — no libGDX UI needed yet, just enough
+    to submit an action and read back state.
+  - **Exit criterion:** a player can log in (auto-creating an account),
+    submit one trivial action (e.g. a placeholder funds adjustment),
+    disconnect, and after the next scheduled resolution, log back in and
+    see it reflected — over real sockets, via a real scheduled job,
+    surviving a client restart.
+- **M2 — Rules engine, headless.** The turn-resolution logic for each
+  system traced in §2, built and unit-tested independent of M1's
+  network/persistence pipe (§3.10's "headless rules first" principle),
+  against an in-memory/test-fixture content set (real content is M3).
+  **Domain-model groundwork already done ahead of this milestone
+  (2026-09-28, before this roadmap existed):** `PlayerSnapshot`,
+  `Archetype`, `Personnel`/`Astronaut`/`SetSpecialist`/`MissionControlOfficer`
+  and their skill enums (`de.mkoehler.launchwindow.model`) — state shapes
+  only, no resolution logic yet.
+  - Slice: personnel lifecycle (morale/age/resignation, R&D/training
+    standing orders, skill growth) — §2.2.
+  - Slice: programs, mission configurations, mission components &
+    reliability transfer — §2.3/§2.4.
+  - Slice: mission simulation, base two-roll formula only (no Expert yet,
+    per the shape-defining choice above) — §2.5. **Decision gate:** §2.5(c)'s
+    outcome-tier shape (four vs. five tiers, "vital vs. optional step") is
+    still marked unconfirmed and must be settled before this slice starts.
+  - Slice: budget/funding review, prestige, goals, and the win-condition +
+    tie-break check — §2.1/§2.6/§2.9.
+  - Slice: random events — §2.7.
+  - **The Playouts-style bot-driven harness (§3.10) starts right after the
+    first resolution rule exists**, in `dev-tools`, not as a final
+    milestone — grown alongside this milestone's slices, not bolted on
+    after.
+  - **Exit criterion:** a full season/turn resolves correctly for a
+    multi-season mission spanning several turns, proven by the bot harness
+    across many simulated games, headlessly, with no client or server
+    process involved.
+- **M3 — Content format + first MVP content pack.** Data-driven
+  `Program`/`MissionConfiguration`/`MissionComponent`/`Goal`/`Event`
+  types (Jackson-loaded, re-deriving BASPM's Data Scripts *shape* per
+  `baspm.md` "Data-driven architecture", never its values, per §1.2), plus
+  a real authored **early-era-only content pack** — enough to make a small
+  declared goal list achievable (e.g. a first-satellite-equivalent and a
+  first-crewed-orbit-equivalent goal), not the full Sputnik-through-Apollo
+  tree. **Exit criterion:** M2's bot harness runs against this real content
+  pack instead of test fixtures, and actually reaches the declared goals in
+  some simulated games.
+- **M4 — Integration: wire M2/M3's real engine into M1's proven skeleton.**
+  Replace M1's placeholder trivial action with real player actions (assign
+  personnel, open a program, queue a mission) and real turn resolution.
+  Slot-claiming/late-join (§3.8) and the game-meta file (schedule config,
+  blackout list, per-player summary for the goal-comparison screen, §3.7)
+  land here too. **Exit criterion:** the same proof as M1's, but resolving
+  a real turn through the real engine and real content, still via a
+  CLI-style dev client.
+- **M5 — Playable client (libGDX UI).** First real playtest happens at the
+  end of this milestone. Expected slices, sizing not yet estimated:
+  connect/login/slot-claim screens; roster/personnel management;
+  program/mission selection bundled with the budget/prestige overview and
+  goal-comparison screen (§2.6(b) established this bundled placement,
+  including the declared goal list itself, §2.9); the mission replay view
+  (§2.2(c)'s "adopt regardless" decision — this is v1, not deferred); a
+  win/game-over screen. Game *creation* itself (declaring the goal list,
+  picking a schedule profile) is **not** a client screen in v1 — see M1's
+  server-config-file note and M7+ below. **Build the offscreen screenshot
+  tooling (§3.11) alongside whichever slice introduces the first real
+  screen**, not as its own separate slice — `design.md` §3.11 already
+  commits to this exact sequencing. **Exit criterion:** the milestone's own
+  remaining bar is the owner actually running a first real playtest, not a
+  further slice to build (Robot-Rampage's own M4 phrasing) — this is where
+  the deferred-deployment choice above matters: that playtest runs in
+  dev-mode, not from a packaged release.
+- **M6 — Deployment.** jpackage client zip, Docker server image,
+  tag-driven GitHub Actions release, reusing the sibling projects' own
+  working templates (§3.3/§3.9). Comes after M5's playtest validates the
+  loop is worth packaging, not before.
+- **M7+ — Second wave, order not yet decided:** the Expert personnel trait
+  and its exhaustion/falloff curve (§2.2(c)); active
+  interference/sabotage/espionage (§2.9's brainstorm, deliberately deferred
+  past passive-competition-only v1); the gold/silver/bronze goal-achievement
+  rating (§2.6(c), still not decided at all — and if it never is, §2.9's
+  win-condition tie-break simply never reaches that tier, which is fine);
+  the rest of the Sputnik-through-Apollo content tree beyond M3's
+  early-era slice; the educational layer's actual UI/content (§1.1); real
+  art via the asset generation pipeline (§3.5, its own small project); a
+  real "game host" role/UI (§3.6/§3.8, currently just direct server-file
+  access); validating the `WEEKDAYS` schedule profile with the actual
+  colleagues group.
