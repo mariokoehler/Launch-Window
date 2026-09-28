@@ -94,6 +94,23 @@ names, so "Launch Window" became "Launch-Window"; local folder stays
 private-repo GitHub Actions limits become a problem — ask before making that
 change.
 
+**Visual design system decided (2026-09-28).** A "restrained engineering
+blueprint" UI look — see `design.md` §3.12 for the full color/type/layout
+system (colors are semantic, not decorative; thin borders + solid fills;
+readability-critical surfaces always sit on a flat white background, never
+directly on the textured page frame). Wordmark/logo intentionally deferred
+as a separate task (`design.md` §4) — the UI typeface (Archivo + Work Sans)
+is not meant to double as the brand mark. **Translated into code
+(2026-09-28):** `core/.../client/ui/Theme.java`, mirroring the sibling
+projects' `Theme.java` pattern (colors/spacing/radii/borders as constants,
+`Theme.Fonts` for gdx-freetype-generated bitmap fonts, `Theme.Shapes` for
+the actual Scene2D drawables) — see `design.md` §3.12 for what's
+implemented vs. still open (the Archivo/Work Sans `.ttf` files themselves
+aren't in the repo yet). Needed two new Maven dependencies, `gdx-freetype`
+(`core/pom.xml`) and `gdx-freetype-platform`/`natives-desktop`
+(`lwjgl3/pom.xml`) — same gotcha as every other native-backed libGDX piece,
+each runnable module needs its own natives dependency independently.
+
 ## Source material locations (read-only, reference-only — never edit, never copy into the repo)
 
 - **Machine caveat:** if the environment variable `COMPUTERNAME` is

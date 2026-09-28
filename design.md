@@ -1425,6 +1425,109 @@ following `ScreenSnapshot`'s exact shape (an `lwjgl3/src/test` dev tool,
 never shipped) rather than reinventing the hidden-window/`FrameBuffer`
 mechanism from scratch.
 
+### 3.12 Visual design system / UI style — approved direction (user, 2026-09-28)
+
+**Decided: a "restrained engineering blueprint" look**, arrived at through a
+round of side-by-side HTML/CSS mockups (four independent directions, then
+two rounds of merging/refining the winner) rather than a single guess —
+worth recording the process briefly since the ruled-out directions are real
+information for future UI work, not just the final answer:
+
+- **Ruled out:** a dark green-phosphor "retro Mission Control" terminal look
+  and a dark modern minimal dashboard — both read as visually striking but
+  too hard on the eyes for the amount of actual reading Launch Window
+  requires (personnel/mission tables, the educational "why was this hard"
+  passages `design.md` §1.1 commits to). **Lesson for any future screen
+  design: this project is text-heavy enough that a dark UI is a real
+  readability risk, not just a style preference — default to light,
+  high-contrast surfaces for anything with a paragraph of body copy on it.**
+- **Kept and merged:** a bold flat-color "Cold War atomic-age poster" look
+  (strong navy/red/mustard, confident color blocking) and a "technical
+  document" look (paper texture, thin rules, corner register marks, quiet
+  restraint) — merged because the heaviness people disliked in the poster
+  direction turned out to be about **border weight**, not color: thin
+  borders (1–1.5px) plus solid, saturated fills gives both the color
+  confidence of the poster look and the lighter touch of the document look
+  at the same time. That's the core visual rule going forward, not just a
+  one-off mockup choice.
+- **Final variant:** the paper/parchment page background was swapped for a
+  cyanotype "engineering blueprint" blue with a two-tier drafting grid (fine
+  hairlines every 20px, a bolder line every 100px) — fits Launch Window's
+  own "space agency instrument panel" framing better than paper did. The
+  page background and the content cards are **deliberately different
+  values**: readability-critical surfaces (the mission-detail card, any
+  paragraph of body text, data tables) sit on a **flat, opaque white card**,
+  never directly on the textured/patterned page background — texture and
+  pattern are for the page frame (header/nav/footer margins) only, kept out
+  of anything meant to be read at length.
+
+**Color — has real semantic meaning, not picked per-component:**
+
+| Role | Color | Usage |
+|---|---|---|
+| Primary / neutral UI | Navy `#16305c` | Chrome: headers, primary buttons, table header rows, borders |
+| Active / in-progress / caution | Gold `#e0a72e` (fill), `#8a5d12` (text-safe darker variant) | "In progress" status, the current step in a sequence, a neutral/steady state |
+| Good / high / success | Green `#1f6b47` | A positive rating (e.g. high morale) — **new color, not present in any of the ruled-out directions**; added deliberately once mission/personnel outcomes are going to need a real "this is good" signal distinct from "this is just active" |
+| Destructive / failure | Red `#c6402b` | **Reserved** for genuinely destructive actions (e.g. scrubbing a mission) or failure states — not used for "in progress," which earlier mockup rounds had wrongly conflated with danger |
+| Page frame (blueprint) | Blue `#3d6a9a` background, white grid lines at low opacity | Header/nav/footer margins only |
+| Content surface | White `#ffffff` | Cards, tables, body-text blocks |
+| Ink / body text | `#1c1c1a` (on white), `#eaf1fb`/`#ffffff` (on the blue frame) | — |
+
+Each color was picked/tuned against real contrast math (WCAG relative
+luminance), not by eye — e.g. the blueprint page background was deliberately
+lightened from an initial too-dark value once it became clear it was
+sitting at roughly the same luminance as the navy UI accent (~1.2:1 contrast
+between them, i.e. barely distinguishable); the shipped value roughly
+doubles that separation.
+
+**Typography — a two-font functional system, wordmark deliberately
+excluded from it:** **Archivo** (600/700 weight, not the single-weight
+"Archivo Black") for headers, labels, and buttons; **Work Sans** for body
+copy, chosen specifically because Launch Window has real paragraphs to
+display (the educational asides in §1.1, mission narrative), not just UI
+chrome. **Explicitly decided not to lean on the UI typeface for the
+"LAUNCH WINDOW" wordmark** — a plain grotesque font was never going to give
+the logotype presence, and conflating "the font used everywhere for
+buttons" with "the brand mark" was the actual problem, not a font choice to
+keep tuning. Precedent noted during the decision: NASA's own 1975 "worm"
+logotype is a bespoke piece of lettering used only as the wordmark, while
+every actual document/sign used plain Helvetica — same separation of
+concerns. **Open, tracked in §4:** the actual wordmark/logo is a separate,
+parallel design task, not blocking anything else in this section.
+
+**Layout principles that generalize beyond this one mockup screen:**
+- Thin borders (1–1.5px) throughout; heavy/thick borders read as dated once
+  a screen has more than one bordered element on it.
+- Solid color fills are reserved for elements that are communicating state
+  (a status badge, a rating) or are the primary action in a group — not
+  applied decoratively.
+- A card/table/paragraph that will be read (as opposed to glanced at) always
+  gets a flat, opaque background, regardless of what texture or pattern the
+  page around it uses.
+
+This section is the reference for any future screen mockup — a new screen
+should look like it belongs next to this one without needing to re-derive
+the palette or the border/fill rules from scratch.
+
+**Implemented in code (2026-09-28):**
+`core/src/main/java/de/mkoehler/launchwindow/client/ui/Theme.java` — the
+libGDX translation of this section, mirroring the sibling projects'
+`Theme.java` shape (StarWars/Robot-Rampage; Robot-Rampage's is the closer
+template). Every color/spacing/radius/border constant above has a matching
+Java constant with the same usage note; `Theme.Shapes` builds the actual
+Scene2D drawables (buttons, badges, cards, nav tabs, progress dots).
+Simpler than the sibling's version in one respect: this system has no
+rounded corners or shadows, so the shape rendering is plain bordered
+rectangles plus small anti-aliased circles, not a full signed-distance-field
+rounded-box-with-shadow renderer. **(unconfirmed default)** `Theme`
+declares a virtual layout resolution of 1920×1080 (matching Robot-Rampage's
+own default) purely so `Theme.Fonts`/a future `FitViewport` have a
+reference size — no real screen has been laid out yet to confirm or refute
+it against, see §4. **Not yet done:** the actual Archivo/Work Sans TrueType
+files aren't in the repo yet (`Theme.FontFile` names the expected filenames
+under `assets/fonts/`); both are open-source Google Fonts, so no BASPM-
+content concern, just an outstanding asset-adding task.
+
 ## 4. Open questions (tracked here until resolved)
 
 - **Mid-turn/mid-mission player decisions — narrowed by the §2.5 mission-sim
@@ -1490,6 +1593,18 @@ mechanism from scratch.
   **Resolved (§3.8, 2026-09-27):** player-slot count within a game is dynamic
   and never closes — joining stays open for the game's entire life, not just
   before it starts.
+- Multiplayer interaction model: how much of §2.9's brainstorm ships in v1?
+- **Screen layout resolution — open (§3.12, 2026-09-28).** `Theme.VIEW_WIDTH`/
+  `VIEW_HEIGHT` (1920×1080) is an unconfirmed default carried over from
+  Robot-Rampage's own `Theme.java`, not a decision made for this project —
+  no real screen has been laid out yet to check it against. Revisit once
+  the first real screen (the Space Complex hub is the obvious first
+  candidate) is actually being built.
+- **Wordmark/logo — open (§3.12, 2026-09-28).** The "LAUNCH WINDOW" text in
+  UI mockups is a placeholder for a real logotype, deliberately deferred as
+  its own design pass rather than solved by picking a fancier UI font
+  (§3.12 explains why those are different problems). Not blocking: the rest
+  of §3.12's visual system doesn't depend on it.
 - **Resolved (§5, 2026-09-28): how much of §2.9's multiplayer-interaction
   brainstorm ships in v1?** Passive competition only (already decided,
   §2.9) plus the win-condition/tie-break check, both scheduled into M2/M4.
