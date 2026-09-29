@@ -1634,6 +1634,30 @@ rather than eyeballed), and a multi-control-point bezier's true peak/
 curvature needs solving for (or pinning via an on-curve point), not
 estimated from the control points' own coordinates.
 
+**Iconography: first real icon set exists (2026-09-29), still raw.** Five
+solid-silhouette icons for the `SetSkill` categories (Rockets, Space
+probes, Human-rated rockets, Crewed spacecraft, EVA suits) — the user
+generated original bitmap art with an AI image tool and had it contour-
+traced to SVG, at `assets-raw/svg/icon_*.svg`. First used as the sort-by-
+skill buttons on a Personnel Recruitment screen mockup (a Claude Artifact,
+not yet a repo screen); confirmed a second, independent use the same day
+when the user pointed out BASPM's own training/skill-selection dialog
+uses these same five categories as its icon set — real evidence the
+`SetSkill` enum is the right single join point for this artwork wherever
+a skill needs a glyph (recruitment, training assignment, R&D assignment
+screens all plausibly reuse it), not a one-screen throwaway. **Still
+open:** these are raw traced files, not yet promoted into `assets/` or
+wired into `Theme`'s icon pipeline (`Theme` has no icon concept yet at
+all — see its own "no icon system yet" status) — that promotion, plus
+deciding a consistent on-disk/atlas format, is a real task for whenever
+the first screen using them gets actually built, not done implicitly by
+having them exist in `assets-raw/`. **Provenance, since this exact
+mistake happened once already this session:** these are traced from the
+user's own new bitmap art, not from BASPM — the five icon SVGs that
+*were* traced from BASPM's SET Centre UI got caught and removed the same
+day (see `CLAUDE.md`'s source-material note for the full story); don't
+conflate the two when this section is read back later.
+
 ## 4. Open questions (tracked here until resolved)
 
 - **Mid-turn/mid-mission player decisions — narrowed by the §2.5 mission-sim
