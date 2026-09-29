@@ -1834,48 +1834,105 @@ here.
   - **Slice: minimal KryoNet protocol — done (2026-09-29).**
     `de.mkoehler.launchwindow.net`: `MessageRegistry` (Robot-Rampage's
     pattern, fetched via `gh api` rather than reimplemented from prose) plus
-    two request/response pairs in `net.messages` —
-    `SubmitActionRequest`/`SubmitActionResponse` and
-    `FetchStateRequest`/`FetchStateResponse`. Each request carries login
-    credentials directly rather than relying on a prior handshake
-    establishing a session, matching §3.3's lightweight-RPC model (no held
-    session state). **A real Kryo compatibility issue surfaced and got
-    fixed here, not hypothetical:** `EnumMap` has no no-arg constructor, so
-    Kryo's default reflective instantiation can't create one on read; fixed
-    by switching the personnel skill maps from `EnumMap` to `LinkedHashMap`
-    (§3.4) rather than fighting Kryo's per-key-type `EnumMapSerializer`,
-    which doesn't generalize across our three different skill enums anyway.
-    **Accepted risk, not yet mitigated:** credentials travel in plain text
-    over KryoNet's TCP channel, with no TLS layer. §3.8's threat model
-    ("a hobby dedicated server, not a target worth pulling in bcrypt/Argon2
-    for") already covers password *storage*; this extends the same
-    acceptance to *transport*, for the same reasons (invite-only,
-    non-real-time, small-group, self-hosted-among-friends).
-  - **New slice, confirmed (user, 2026-09-29): request dispatcher + KryoNet
-    server/client wiring, between the protocol slice above and the
-    scheduler slice below.** Neither the protocol slice (just message shapes) nor the
-    scheduler slice (turn timing) nor the CLI-client slice (a thin UI over
-    an already-working client) actually owns the piece that receives a
-    `SubmitActionRequest`/`FetchStateRequest` on the server, authenticates
-    it via `AccountStore`, maps the account's `id` to `players/<id>/`, and
-    calls `PlayerStateService` — without it, M1's exit criterion (a player
-    submitting an action and reading it back over real sockets) has no
-    server-side home. Shape: a plain dispatcher class (no libGDX, testable
-    without real sockets) plus the actual KryoNet `Server`/`Client` binding
-    and one test over real sockets, mirroring Robot-Rampage's own
-    `NetworkServerClientTest`. **Decided (user, 2026-09-29): a brand-new
-    account gets a placeholder turn-0 snapshot the first time it connects**
-    (since `PlayerStateService.currentState()` throws when no snapshot
-    exists yet and real slot-claiming doesn't arrive until M4), replaced by
-    the real slot-claim flow then. **Also includes the version handshake**
-    (confirmed, 2026-09-29): Robot-Rampage's `AppVersion`/`HandshakeRequest`/
-    `HandshakeResponse` pattern, adapted the same `gh api`-fetch way as
-    everything else borrowed from the sibling projects — without it, a
-    client and server built from different commits misread each other
-    silently or fail with an opaque Kryo error rather than a clear "please
-    update" message. Bundled into this slice rather than deferred to M5,
-    since it belongs in the same connection-establishment code path as the
-    rest of this slice's KryoNet wiring.
+    `net.messages`. **Credentials travel once per connection, in the
+    handshake (see the dispatcher slice below), not on
+    `SubmitActionRequest`/`FetchStateRequest`** — those two carry no fields
+    beyond the action/nothing at all. **A real Kryo compatibility issue:**
+    `EnumMap` has no no-arg constructor, so Kryo's default reflective
+    instantiation can't create one on read; fixed by switching the
+    personnel skill maps from `EnumMap` to `LinkedHashMap` (§3.4) rather
+    than fighting Kryo's per-key-type `EnumMapSerializer`, which doesn't
+    generalize across our three different skill enums anyway.
+  - **Slice: request dispatcher + KryoNet server/client wiring — done
+    (2026-09-29).** This is the piece that actually receives a message on
+    the server, authenticates it, and calls `AccountStore`/
+    `PlayerStateService` — without it, M1's exit criterion (submit an
+    action, read it back over real sockets) has no server-side home.
+    - **`HandshakeRequest(clientVersion, login, password, displayName)` /
+      `HandshakeResponse(accepted, message, serverVersion)`** (adapted from
+      Robot-Rampage's own pattern) do double duty: the version check *and*
+      the login, in one step, before anything else on that connection is
+      honored. `AccountStore.login` needs a `displayName` to auto-create an
+      account, so credentials and the display name travel here, once per
+      connection, not on every subsequent request. This is
+      connection-scoped, not a cross-connection session the way
+      Robot-Rampage's own reconnect tokens are — §3.3's "no held session"
+      still holds, since nothing survives past that one short connection.
+      **Registered first in `MessageRegistry`, and never moved:** the
+      version check exists specifically to catch two builds whose
+      registries differ, so the two handshake classes must keep the same
+      ids regardless of what else in the registry has changed - this
+      protects against registration-order drift in every *other* class,
+      not against a future change to the handshake classes' own fields,
+      which is why their own field layout must never change at all (adding
+      a field included - Kryo's record serializer reads the receiver's own
+      field count, so a mismatched pair could not decode an extra one
+      either). **Accepted risk, not yet mitigated:** the password travels
+      once per connection, in this handshake, in plain text over KryoNet's
+      TCP channel, with no TLS layer. §3.8's threat model ("a hobby
+      dedicated server, not a target worth pulling in bcrypt/Argon2 for")
+      already covers password *storage*; this extends the same acceptance
+      to *transport*, for the same reasons (invite-only, non-real-time,
+      small-group, self-hosted-among-friends).
+    - **`RequestDispatcher`** (`server` module, plain class, no KryoNet/
+      libGDX dependency, so it's testable without sockets): its single
+      entry point, `handle(connectionId, message)`, dispatches by message
+      type and reports whether the connection should be closed after the
+      response is sent (a rejected handshake) - `GameServer` and the
+      real-socket test both call this one method, so the routing logic
+      exists in exactly one place. For a `HandshakeRequest`: checks the
+      client version first — an incompatible client never reaches
+      `AccountStore` at all — then `AccountStore.login`, then bootstraps a
+      placeholder turn-0 snapshot for a brand-new account (agency name =
+      display name, archetype `NASA`, replaced by the real slot-claim flow
+      in M4), then tracks `connectionId → accountId` for the rest of that
+      connection's life so `SubmitActionRequest`/`FetchStateRequest` need
+      no credentials of their own.
+    - **`NetworkServer`** (`core`, adapted from Robot-Rampage's own,
+      poll-based) closes a rejected connection only on the *next* call to
+      `poll()`, not immediately after sending the rejection - an immediate
+      close can drop a write still in flight, which would mean the client
+      never actually receives the rejection reason. **`NetworkClient`**
+      (`core`) is a deliberately different, simpler design from
+      Robot-Rampage's own poll-based one — a blocking
+      `sendAndReceive(request, responseType)`, since this project's usage
+      really is "connect, one request, one reply, disconnect" with no
+      concurrent in-flight requests to correlate; it clears any stale
+      queued message before each send and treats a disconnect as an
+      immediate failure rather than waiting out the full response timeout.
+      `GameServer` wires `NetworkServer` + `RequestDispatcher` +
+      `AccountStore` together. `ServerLauncher` takes the data root as an
+      optional second CLI argument (unconfirmed default: a plain relative
+      `data/` directory, revisit once the config-file slice below defines a
+      real one).
+    - **Threading constraint the scheduler slice below must respect:**
+      `RequestDispatcher` and everything it calls (including
+      `PlayerActionJournal.append`, whose `synchronized` is only per
+      *instance*, and its read-increment-write sequence counter, which
+      isn't safe across two separately-constructed instances touching the
+      same player) must only ever run on the single thread that drains
+      `NetworkServer.poll()` - `GameServer`'s own render loop. The
+      scheduler must never append to, or otherwise touch, a player's
+      journal concurrently with that thread. **Proposed (unconfirmed): the
+      scheduler runs as a check inside `GameServer.render()` itself, on
+      that same thread** - this removes the concurrency question
+      entirely rather than needing a separate synchronization mechanism.
+    - **jgitver finding, verified directly** (the plugin's own bytecode for
+      what Maven properties it exposes; the plausible candidate expressions
+      tested via `mvn help:evaluate`; two local-only tags, never pushed, on
+      the same history to observe the actual computed version at different
+      points): with this repo's current bare `jgitver-maven-plugin`
+      registration (no `useCommitDistance`/`useGitCommitId`, no tags),
+      `AppVersion.getVersion()` returns the constant `0.0.0-SNAPSHOT` for
+      every commit. **A first tag does not fix this on its own** - it only
+      bumps the version once, at the tag; every commit between that tag and
+      the next one still shares one identical version string, so the
+      handshake's version check only distinguishes builds across a tag
+      boundary, not commit-to-commit in general. `jgitver`'s own
+      `useGitCommitId`/`gitCommitIdLength` configuration options would
+      embed a git commit SHA fragment directly into the computed version
+      itself, which would actually solve this — not enabled yet, a
+      decision for the user.
   - **Slice: scheduler + server config file.** The scheduled turn-resolution
     job honors a real schedule profile + blackout list (§3.6) rather than
     running on every tick. **Confirmed (user, 2026-09-28): game creation
@@ -1889,6 +1946,13 @@ here.
     values, never skipping one — the crash-recovery cutoff lookup is keyed
     to the exact turn number requested, so a skipped turn would look up a
     cutoff that was never saved and silently archive nothing for it.
+    **Second contract, from the dispatcher slice above: never call
+    `resolveTurn` concurrently with `RequestDispatcher` handling a request
+    for the same player** (see that slice's threading-constraint note).
+    Proposed (unconfirmed) way to satisfy this for free: run the scheduler
+    check as part of `GameServer.render()` itself, on the same thread that
+    already drains `NetworkServer.poll()`, rather than a separate thread
+    needing its own synchronization.
   - **Slice: CLI/console dev client** — no libGDX UI needed yet, just enough
     to submit an action and read back state.
   - **Exit criterion:** a player can log in (auto-creating an account),

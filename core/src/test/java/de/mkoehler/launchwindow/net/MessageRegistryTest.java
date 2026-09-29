@@ -3,6 +3,7 @@ package de.mkoehler.launchwindow.net;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
 import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.Astronaut;
@@ -14,11 +15,12 @@ import de.mkoehler.launchwindow.model.SetSkill;
 import de.mkoehler.launchwindow.model.SetSpecialist;
 import de.mkoehler.launchwindow.net.messages.FetchStateRequest;
 import de.mkoehler.launchwindow.net.messages.FetchStateResponse;
+import de.mkoehler.launchwindow.net.messages.HandshakeRequest;
+import de.mkoehler.launchwindow.net.messages.HandshakeResponse;
 import de.mkoehler.launchwindow.net.messages.SubmitActionRequest;
 import de.mkoehler.launchwindow.net.messages.SubmitActionResponse;
 import de.mkoehler.launchwindow.persistence.PlayerAction;
 import de.mkoehler.launchwindow.persistence.SetFundsAction;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
@@ -65,7 +67,7 @@ class MessageRegistryTest {
             MissionControlSkill.class, Astronaut.class, SetSpecialist.class, MissionControlOfficer.class,
             PlayerSnapshot.class, ArrayList.class, LinkedHashMap.class, SetFundsAction.class,
             SubmitActionRequest.class, SubmitActionResponse.class, FetchStateRequest.class,
-            FetchStateResponse.class};
+            FetchStateResponse.class, HandshakeRequest.class, HandshakeResponse.class};
         for (Class<?> registeredClass : registeredClasses) {
             assertEquals(first.getRegistration(registeredClass).getId(), second.getRegistration(registeredClass).getId(),
                 "id mismatch for " + registeredClass.getSimpleName());
@@ -93,30 +95,97 @@ class MessageRegistryTest {
     }
 
     /**
-     * A {@link SubmitActionRequest} must keep its credentials and its
-     * action across the wire.
+     * {@link HandshakeRequest} and {@link HandshakeResponse} must be
+     * registered before every other class, so their ids stay stable
+     * regardless of what else in the registry has drifted between two
+     * builds - see {@link MessageRegistry}'s class Javadoc.
      */
     @Test
-    void submitActionRequestSurvivesRoundTrip() {
-        SubmitActionRequest original = new SubmitActionRequest("mario", "hunter2", new SetFundsAction(5_000));
+    void handshakeClassesAreRegisteredBeforeEverythingElse() {
+        Kryo kryo = new Kryo();
+        MessageRegistry.register(kryo);
 
-        SubmitActionRequest copy = roundTrip(original, SubmitActionRequest.class);
-
-        assertEquals("mario", copy.login());
-        assertEquals("hunter2", copy.password());
-        assertEquals(5_000, ((SetFundsAction) copy.action()).getFunds());
+        int requestId = kryo.getRegistration(HandshakeRequest.class).getId();
+        int responseId = kryo.getRegistration(HandshakeResponse.class).getId();
+        Class<?>[] everyOtherClass = {
+            Archetype.class, AssignmentState.class, AstronautSkill.class, SetSkill.class,
+            MissionControlSkill.class, Astronaut.class, SetSpecialist.class, MissionControlOfficer.class,
+            PlayerSnapshot.class, ArrayList.class, LinkedHashMap.class, SetFundsAction.class,
+            SubmitActionRequest.class, SubmitActionResponse.class, FetchStateRequest.class,
+            FetchStateResponse.class};
+        for (Class<?> other : everyOtherClass) {
+            int otherId = kryo.getRegistration(other).getId();
+            assertTrue(requestId < otherId, "HandshakeRequest's id must be lower than " + other.getSimpleName());
+            assertTrue(responseId < otherId, "HandshakeResponse's id must be lower than " + other.getSimpleName());
+        }
     }
 
     /**
-     * A {@link SubmitActionRequest}'s string representation must never
-     * contain the plain-text password, so it is safe to appear in a log
-     * line.
+     * Verifies that {@code isProtocolMessage} accepts this project's own
+     * message classes and rejects everything else, including {@code null}.
      */
     @Test
-    void submitActionRequestToStringRedactsThePassword() {
-        SubmitActionRequest request = new SubmitActionRequest("mario", "hunter2", new SetFundsAction(5_000));
+    void isProtocolMessageDistinguishesOwnMessagesFromAnythingElse() {
+        assertTrue(MessageRegistry.isProtocolMessage(new FetchStateRequest()));
+        assertFalse(MessageRegistry.isProtocolMessage("a plain string"));
+        assertFalse(MessageRegistry.isProtocolMessage(null));
+    }
+
+    /**
+     * A {@link HandshakeRequest} must keep its version and credentials
+     * across the wire.
+     */
+    @Test
+    void handshakeRequestSurvivesRoundTrip() {
+        HandshakeRequest original = new HandshakeRequest("1.0", "mario", "hunter2", "Hanseatic Space Agency");
+
+        HandshakeRequest copy = roundTrip(original, HandshakeRequest.class);
+
+        assertEquals("1.0", copy.clientVersion());
+        assertEquals("mario", copy.login());
+        assertEquals("hunter2", copy.password());
+        assertEquals("Hanseatic Space Agency", copy.displayName());
+    }
+
+    /**
+     * A {@link HandshakeRequest}'s string representation must never contain
+     * the plain-text password, so it is safe to appear in a log line.
+     */
+    @Test
+    void handshakeRequestToStringRedactsThePassword() {
+        HandshakeRequest request = new HandshakeRequest("1.0", "mario", "hunter2", "Hanseatic Space Agency");
 
         assertFalse(request.toString().contains("hunter2"));
+    }
+
+    /**
+     * A {@link HandshakeResponse} must keep its outcome across the wire,
+     * for both an accepted and a rejected handshake.
+     */
+    @Test
+    void handshakeResponseSurvivesRoundTrip() {
+        HandshakeResponse accepted = roundTrip(HandshakeResponse.accept("Welcome.", "1.0"), HandshakeResponse.class);
+        assertTrue(accepted.accepted());
+        assertEquals("Welcome.", accepted.message());
+        assertEquals("1.0", accepted.serverVersion());
+
+        HandshakeResponse rejected =
+            roundTrip(HandshakeResponse.reject("Version mismatch.", "2.0"), HandshakeResponse.class);
+        assertFalse(rejected.accepted());
+        assertEquals("Version mismatch.", rejected.message());
+        assertEquals("2.0", rejected.serverVersion());
+    }
+
+    /**
+     * A {@link SubmitActionRequest} must keep its action across the wire.
+     */
+    @Test
+    void submitActionRequestSurvivesRoundTrip() {
+        SubmitActionRequest original = new SubmitActionRequest(new SetFundsAction(5_000));
+
+        SubmitActionRequest copy = roundTrip(original, SubmitActionRequest.class);
+
+        assertEquals(5_000, ((SetFundsAction) copy.action()).getFunds());
     }
 
     /**
@@ -130,35 +199,18 @@ class MessageRegistryTest {
         assertEquals("Accepted.", accepted.message());
 
         SubmitActionResponse rejected =
-            roundTrip(SubmitActionResponse.failure("Incorrect password."), SubmitActionResponse.class);
+            roundTrip(SubmitActionResponse.failure("Not authenticated."), SubmitActionResponse.class);
         assertFalse(rejected.success());
-        assertEquals("Incorrect password.", rejected.message());
+        assertEquals("Not authenticated.", rejected.message());
     }
 
     /**
-     * A {@link FetchStateRequest} must keep its credentials across the
-     * wire.
+     * A {@link FetchStateRequest} must survive the wire - it carries no
+     * fields, so this just proves the empty record itself round-trips.
      */
     @Test
     void fetchStateRequestSurvivesRoundTrip() {
-        FetchStateRequest original = new FetchStateRequest("mario", "hunter2");
-
-        FetchStateRequest copy = roundTrip(original, FetchStateRequest.class);
-
-        assertEquals("mario", copy.login());
-        assertEquals("hunter2", copy.password());
-    }
-
-    /**
-     * A {@link FetchStateRequest}'s string representation must never
-     * contain the plain-text password, so it is safe to appear in a log
-     * line.
-     */
-    @Test
-    void fetchStateRequestToStringRedactsThePassword() {
-        FetchStateRequest request = new FetchStateRequest("mario", "hunter2");
-
-        assertFalse(request.toString().contains("hunter2"));
+        assertNotNull(roundTrip(new FetchStateRequest(), FetchStateRequest.class));
     }
 
     /**
@@ -189,7 +241,7 @@ class MessageRegistryTest {
         assertEquals(63, copy.state().getSetSpecialists().get(0).getSkill(SetSkill.ROCKETS));
         assertEquals(50, copy.state().getMissionControlOfficers().get(0).getSkill(MissionControlSkill.PROPULSION));
 
-        FetchStateResponse rejected = roundTrip(FetchStateResponse.failure("Incorrect password."), FetchStateResponse.class);
+        FetchStateResponse rejected = roundTrip(FetchStateResponse.failure("Not authenticated."), FetchStateResponse.class);
         assertFalse(rejected.success());
         assertNull(rejected.state());
     }

@@ -28,6 +28,30 @@ public final class NetworkConstants {
     public static final int CONNECTION_TIMEOUT_MILLIS = 10_000;
 
     /**
+     * Maximum time, in milliseconds, a client waits for a response to one
+     * request before giving up. The server side (see {@code GameServer})
+     * only drains queued requests once per {@code updatesPerSecond} tick, so
+     * a handshake followed by one request can take a couple of seconds even
+     * under normal conditions - this leaves generous headroom above that.
+     */
+    public static final int RESPONSE_TIMEOUT_MILLIS = 8_000;
+
+    /**
+     * Size, in bytes, of the buffer used to write queued objects to the
+     * network. Several messages can be queued at once, so it is a multiple
+     * of {@link #OBJECT_BUFFER_SIZE}.
+     */
+    public static final int WRITE_BUFFER_SIZE = 262_144;
+
+    /**
+     * Size, in bytes, of the buffer used to serialize or deserialize a
+     * single object. Must be larger than the biggest single message - a
+     * {@code FetchStateResponse} carrying a full personnel roster is the
+     * largest today.
+     */
+    public static final int OBJECT_BUFFER_SIZE = 65_536;
+
+    /**
      * Not instantiable; this class only holds constants.
      */
     private NetworkConstants() {

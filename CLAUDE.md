@@ -79,18 +79,23 @@ came first; the Maven multi-module skeleton (`pom.xml` + `core`/`lwjgl3`/
 project) — read that before picking up any implementation work, to see
 what milestone it belongs to and what's already decided about ordering.
 **M0 (this scaffold) is done. M1 (the walking-skeleton milestone) is
-underway: its first three slices are done** — snapshot/journal/replay
-persistence (`de.mkoehler.launchwindow.persistence`: `PlayerSnapshotStore`,
+underway: its first four slices are done, and it's genuinely playable over
+real sockets today** (no client UI yet, but `GameServer` + a KryoNet client
+can log in, submit an action, and read it back — see
+`ServerClientIntegrationTest`) — snapshot/journal/replay persistence
+(`de.mkoehler.launchwindow.persistence`: `PlayerSnapshotStore`,
 `PlayerActionJournal`, `SnapshotReplay`, `AtomicFiles`, `PlayerStateService`,
 2026-09-28, hardened 2026-09-29), `AccountStore`
 (`de.mkoehler.launchwindow.server.accounts`, adapted from StarWars,
-2026-09-29), and the minimal KryoNet protocol
-(`de.mkoehler.launchwindow.net`: `MessageRegistry` + the
-submit-action/fetch-state message pairs, adapted from Robot-Rampage,
-2026-09-29) — **a request dispatcher + actual KryoNet server/client wiring
-is proposed as a new slice (unconfirmed, not yet agreed to), then the
-scheduler, then a CLI dev client; see `design.md` §5's M1 slice list for
-exactly what's open.** `core`'s
+2026-09-29), the minimal KryoNet protocol (`de.mkoehler.launchwindow.net`:
+`MessageRegistry`, `HandshakeRequest`/`Response`,
+`SubmitActionRequest`/`Response`, `FetchStateRequest`/`Response`,
+2026-09-29), and the request dispatcher + real KryoNet server/client wiring
+(`RequestDispatcher` in `server`, `NetworkServer`/`NetworkClient`/
+`AppVersion` in `core`, `GameServer` actually wired up and launched,
+2026-09-29) — **only the scheduler + server config file, then a CLI dev
+client, are still open; see `design.md` §5's M1 slice list for exactly
+what's left.** `core`'s
 `de.mkoehler.launchwindow.model` package has M2's domain-model groundwork
 done ahead of schedule — `PlayerSnapshot` (the per-player aggregate root),
 `Archetype`, and the three personnel classes (`Astronaut`/`SetSpecialist`/
@@ -244,12 +249,17 @@ Java 25 (`maven.compiler.release`), Maven 3.8.4 confirmed working locally.
   mvn -pl server compile exec:java
   mvn -pl lwjgl3 compile exec:exec
   ```
-  **Reinstall `core` after *every* change to it, and after every new commit
-  or tag, not just when its own code changed** — `lwjgl3`/`server` resolve
-  `core` from `~/.m2`, and a commit shifts the jgitver-computed
+  **Reinstall `core` after *every* change to it, and after every new tag,
+  not just when its own code changed** — `lwjgl3`/`server` resolve `core`
+  from `~/.m2`, and a new git tag shifts the jgitver-computed
   `${project.version}` the next build expects, so a stale install silently
-  stops matching (or runs old code). The start scripts always reinstall
-  unconditionally for exactly this reason.
+  stops matching (or runs old code). **Verified (2026-09-29, local-only
+  tag experiments, nothing pushed): a plain commit alone does not shift
+  the version** with this repo's current jgitver setup (no tags yet, no
+  `useCommitDistance`/`useGitCommitId`) — every commit between two tags
+  computes the exact same version string, only creating a *new tag* bumps
+  it. The start scripts still always reinstall unconditionally regardless,
+  since it costs nothing and remains exactly correct once tagging starts.
 - **KryoNet TCP port: 45825** (`NetworkConstants.TCP_PORT`) — deliberately
   different from StarWars' 45625/tcp+45626/udp and Robot-Rampage's 45725/tcp,
   so all three servers can run on the same machine/NAS at once. TCP-only, no

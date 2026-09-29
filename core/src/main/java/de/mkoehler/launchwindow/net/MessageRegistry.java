@@ -12,6 +12,8 @@ import de.mkoehler.launchwindow.model.SetSkill;
 import de.mkoehler.launchwindow.model.SetSpecialist;
 import de.mkoehler.launchwindow.net.messages.FetchStateRequest;
 import de.mkoehler.launchwindow.net.messages.FetchStateResponse;
+import de.mkoehler.launchwindow.net.messages.HandshakeRequest;
+import de.mkoehler.launchwindow.net.messages.HandshakeResponse;
 import de.mkoehler.launchwindow.net.messages.SubmitActionRequest;
 import de.mkoehler.launchwindow.net.messages.SubmitActionResponse;
 import de.mkoehler.launchwindow.persistence.SetFundsAction;
@@ -30,21 +32,44 @@ import java.util.LinkedHashMap;
  * on the receiving end. This class is the single shared place that order
  * is defined, to be used by both the server and every client.</p>
  *
- * <p>The order is append-only: a new class, whichever package it comes
- * from, is added as a new line at the end of {@link #register(Kryo)}.
- * Existing lines are never reordered, removed, or grouped by package -
- * inserting a new line in the middle of an existing block would shift
- * every registration id after it and silently break the wire format for
- * anyone running a different build on the other end.</p>
+ * <p>{@link HandshakeRequest} and {@link HandshakeResponse} are registered
+ * first and never move: the version check they carry exists specifically to
+ * catch two builds whose registries have drifted apart, so their own two
+ * classes must keep the same ids regardless of what else in the registry
+ * has changed. This protects against registration-order drift in every
+ * *other* class, not against a change to the handshake classes' own
+ * fields - see their own Javadoc for why those never change either.
+ * Everything else follows,
+ * append-only: a new class, whichever package it comes from, is added as a
+ * new line at the end of {@link #register(Kryo)}. Existing lines are never
+ * reordered, removed, or grouped by package - inserting a new line in the
+ * middle of an existing block would shift every registration id after it
+ * and silently break the wire format for anyone running a different build
+ * on the other end.</p>
  *
  * @author Mario Koehler
  */
 public final class MessageRegistry {
 
+    private static final String PROTOCOL_PACKAGE_PREFIX = "de.mkoehler.launchwindow.";
+
     /**
-     * Not instantiable; this class only exposes a static method.
+     * Not instantiable; this class only exposes static methods.
      */
     private MessageRegistry() {
+    }
+
+    /**
+     * Tells this project's own messages apart from KryoNet's housekeeping
+     * objects (keep-alive frames and the like), which a listener must never
+     * hand on to application code.
+     *
+     * @param object what KryoNet delivered
+     * @return {@code true} if it is an instance of one of this project's
+     *     own classes
+     */
+    public static boolean isProtocolMessage(Object object) {
+        return object != null && object.getClass().getName().startsWith(PROTOCOL_PACKAGE_PREFIX);
     }
 
     /**
@@ -56,6 +81,9 @@ public final class MessageRegistry {
      *             method
      */
     public static void register(Kryo kryo) {
+        // The handshake, first and pinned - see the class Javadoc for why.
+        kryo.register(HandshakeRequest.class);
+        kryo.register(HandshakeResponse.class);
         // de.mkoehler.launchwindow.model - referenced by PlayerSnapshot, carried in
         // FetchStateResponse.
         kryo.register(Archetype.class);
@@ -73,7 +101,7 @@ public final class MessageRegistry {
         // listed in PlayerAction's own @JsonSubTypes must also be registered here -
         // MessageRegistryTest.everyPlayerActionSubtypeIsRegistered() checks this.
         kryo.register(SetFundsAction.class);
-        // Wire messages themselves.
+        // Remaining wire messages.
         kryo.register(SubmitActionRequest.class);
         kryo.register(SubmitActionResponse.class);
         kryo.register(FetchStateRequest.class);
