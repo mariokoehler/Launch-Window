@@ -3,17 +3,29 @@ package de.mkoehler.launchwindow.server;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import de.mkoehler.launchwindow.net.NetworkServer;
 import de.mkoehler.launchwindow.server.accounts.AccountStore;
+import de.mkoehler.launchwindow.server.schedule.TurnScheduler;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.time.Clock;
+import java.util.Objects;
 
 /**
  * <p>Headless libGDX application hosting the dedicated server: binds
  * {@link NetworkServer}, and on every {@link #render()} tick drains its
  * queued events and routes them through {@link RequestDispatcher} to
- * {@link AccountStore} and the per-player persistence layer.</p>
+ * {@link AccountStore} and the per-player persistence layer, then gives
+ * {@link TurnScheduler} a chance to resolve today's turn.</p>
+ *
+ * <p>{@link TurnScheduler#checkAndResolveIfDue()} is called from this same
+ * {@link #render()} tick, on the same thread that drains
+ * {@code NetworkServer.poll()}, rather than from a separate thread - so a
+ * turn resolution can never run concurrently with
+ * {@link RequestDispatcher} handling a request for the same player.</p>
  *
  * @author Mario Koehler
  */
@@ -26,6 +38,8 @@ public class GameServer extends ApplicationAdapter {
     private NetworkServer networkServer;
     private AccountStore accountStore;
     private RequestDispatcher dispatcher;
+    private TurnScheduler scheduler;
+    private String lastSchedulerFailure;
 
     /**
      * Creates the application.
@@ -39,10 +53,31 @@ public class GameServer extends ApplicationAdapter {
         this.dataRoot = dataRoot;
     }
 
+    /**
+     * Builds the single {@link ObjectMapper} configuration every store in
+     * this application shares: {@link JavaTimeModule} for the
+     * {@code java.time} fields {@link de.mkoehler.launchwindow.server.schedule.GameMeta}
+     * and {@link de.mkoehler.launchwindow.server.schedule.SchedulerState}
+     * use, with timestamp-array output disabled so the host-edited
+     * {@code game-meta.json} reads as {@code "09:00"} rather than
+     * {@code [9,0]}. A single shared factory, rather than each caller (and
+     * each test) configuring its own mapper, so this configuration can only
+     * drift out of sync with itself in one place.
+     *
+     * @return a newly configured mapper
+     */
+    public static ObjectMapper createMapper() {
+        return new ObjectMapper()
+            .registerModule(new JavaTimeModule())
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+    }
+
     @Override
     public void create() {
+        ObjectMapper mapper = createMapper();
         accountStore = new AccountStore(dataRoot.resolve("accounts.json"));
-        dispatcher = new RequestDispatcher(accountStore, dataRoot, new ObjectMapper());
+        dispatcher = new RequestDispatcher(accountStore, dataRoot, mapper);
+        scheduler = new TurnScheduler(dataRoot, mapper, Clock.systemDefaultZone());
         networkServer = new NetworkServer();
         try {
             networkServer.start(tcpPort);
@@ -65,6 +100,21 @@ public class GameServer extends ApplicationAdapter {
                 dispatcher.handleDisconnect(connectionId);
             }
         });
+        try {
+            scheduler.checkAndResolveIfDue();
+            lastSchedulerFailure = null;
+        } catch (IOException | RuntimeException e) {
+            // Anything thrown here would end the render thread, and with it all NetworkServer
+            // polling - caught broadly, not just IOException, since a host's typo in
+            // game-meta.json (re-read every tick) surfaces as IllegalStateException/
+            // NullPointerException, not an I/O failure. Keyed on toString(), never null, so a
+            // persistent error logs once rather than every tick forever.
+            String failure = e.toString();
+            if (!Objects.equals(failure, lastSchedulerFailure)) {
+                lastSchedulerFailure = failure;
+                Gdx.app.error(TAG, "Turn resolution failed, will retry next tick: " + failure, e);
+            }
+        }
     }
 
     /**

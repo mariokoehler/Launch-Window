@@ -16,8 +16,7 @@ public final class ServerLauncher {
     /**
      * The data root used when none is given on the command line - a plain
      * relative "data" directory next to wherever the process is started
-     * from. (Unconfirmed default: revisit once design.md &sect;5's
-     * scheduler-and-server-config-file slice defines a real one.)
+     * from. (Unconfirmed default.)
      */
     private static final Path DEFAULT_DATA_ROOT = Path.of("data");
 
@@ -40,8 +39,8 @@ public final class ServerLauncher {
         Path dataRoot = args.length > 1 ? Path.of(args[1]) : DEFAULT_DATA_ROOT;
         HeadlessApplicationConfiguration config = new HeadlessApplicationConfiguration();
         // Async/daily-batch (design.md 3.1): there is no continuous simulation to tick, just
-        // short-lived client connections plus one scheduled turn-resolution job (not implemented
-        // yet). A modest rate is plenty for now.
+        // short-lived client connections plus one scheduled turn-resolution check on every render()
+        // tick (see TurnScheduler). A modest rate is plenty for now.
         config.updatesPerSecond = 1;
         new HeadlessApplication(new GameServer(port, dataRoot), config);
     }

@@ -1108,6 +1108,13 @@ across a blackout or weekend. The in-game turn counter only increments on
 days the job actually runs, so "one turn = one season" (§1) stays exactly
 true regardless of how many real days a given turn's window spanned.
 
+**Decided (user, 2026-09-29): missed-day catch-up.** If the server itself is
+down across more than one scheduled resolution day, only the single next day
+resolves on the next check — the missed days in between are skipped, not
+caught up in a burst. The rejected alternative, resolving one turn per
+missed day on restart, would jump the group several seasons forward in one
+go with no chance to submit actions in between.
+
 **Architecture implication for §3.1, simplified by §3.9's one-game-per-server
 decision (2026-09-27):** a single server instance only ever needs to track
 *one* schedule profile and *one* blackout list — its own — not a per-game
@@ -1903,9 +1910,8 @@ here.
       `GameServer` wires `NetworkServer` + `RequestDispatcher` +
       `AccountStore` together. `ServerLauncher` takes the data root as an
       optional second CLI argument (unconfirmed default: a plain relative
-      `data/` directory, revisit once the config-file slice below defines a
-      real one).
-    - **Threading constraint the scheduler slice below must respect:**
+      `data/` directory).
+    - **Threading constraint the scheduler slice below upholds:**
       `RequestDispatcher` and everything it calls (including
       `PlayerActionJournal.append`, whose `synchronized` is only per
       *instance*, and its read-increment-write sequence counter, which
@@ -1913,10 +1919,11 @@ here.
       same player) must only ever run on the single thread that drains
       `NetworkServer.poll()` - `GameServer`'s own render loop. The
       scheduler must never append to, or otherwise touch, a player's
-      journal concurrently with that thread. **Proposed (unconfirmed): the
-      scheduler runs as a check inside `GameServer.render()` itself, on
-      that same thread** - this removes the concurrency question
-      entirely rather than needing a separate synchronization mechanism.
+      journal concurrently with that thread. `TurnScheduler.checkAndResolveIfDue()`
+      runs as a check inside `GameServer.render()` itself, on that same
+      thread, right after the `NetworkServer.poll()` call - this removes
+      the concurrency question entirely rather than needing a separate
+      synchronization mechanism.
     - **jgitver finding, verified directly** (the plugin's own bytecode for
       what Maven properties it exposes; the plausible candidate expressions
       tested via `mvn help:evaluate`; two local-only tags, never pushed, on
@@ -1933,26 +1940,65 @@ here.
       embed a git commit SHA fragment directly into the computed version
       itself, which would actually solve this — not enabled yet, a
       decision for the user.
-  - **Slice: scheduler + server config file.** The scheduled turn-resolution
-    job honors a real schedule profile + blackout list (§3.6) rather than
-    running on every tick. **Confirmed (user, 2026-09-28): game creation
-    itself is also a v1 file edit, not a client screen**, consistent with
-    the already-decided blackout-list stopgap (§3.6/§3.8/§4) — so this
-    slice is also where that JSON config file's shape gets defined: schedule
-    profile, timezone, blackout list, and (once M4 adds it) the declared
-    goal list all live in one host-edited file. **Contract this slice must
-    uphold, from the persistence slice above:** the scheduler must call
-    `PlayerStateService.resolveTurn(gameTurn)` for consecutive `gameTurn`
-    values, never skipping one — the crash-recovery cutoff lookup is keyed
-    to the exact turn number requested, so a skipped turn would look up a
-    cutoff that was never saved and silently archive nothing for it.
-    **Second contract, from the dispatcher slice above: never call
-    `resolveTurn` concurrently with `RequestDispatcher` handling a request
-    for the same player** (see that slice's threading-constraint note).
-    Proposed (unconfirmed) way to satisfy this for free: run the scheduler
-    check as part of `GameServer.render()` itself, on the same thread that
-    already drains `NetworkServer.poll()`, rather than a separate thread
-    needing its own synchronization.
+  - **Slice: scheduler + server config file — done.** The scheduled
+    turn-resolution job honors a real schedule profile + blackout list
+    (§3.6) rather than running on every tick. Game creation itself is also
+    a v1 file edit, not a client screen, consistent with the blackout-list
+    stopgap (§3.6/§3.8/§4) — so this slice is also where that file's shape
+    is defined, under the `server.schedule` package (`server` module,
+    plain classes, no KryoNet/libGDX dependency):
+    - **`game-meta.json`** (`GameMeta`, loaded/created by `GameMetaStore`),
+      sitting alongside `accounts.json` and `players/` under the data
+      root: a `schedule` (`ScheduleProfile` — the active weekdays as a
+      `Set<DayOfWeek>`, a resolution time of day, and a timezone; `daily()`
+      and `weekdays()` factory presets) and a `blackouts` list
+      (`Blackout` — an inclusive `[start, end]` date range). A server's
+      announced-start-date gap reuses this same blackout mechanism rather
+      than a dedicated field. `TurnScheduler` calls `GameMetaStore` to
+      re-read this file on every check rather than caching it, so a
+      blackout a host adds mid-day, before the resolution time is reached,
+      still suppresses that day. `GameMeta`/`ScheduleProfile`
+      validate on load (non-empty active days, no null fields, no
+      inverted blackout range) and fail loudly rather than silently
+      accepting a malformed hand edit. If the file does not exist yet,
+      `GameMetaStore` creates a default DAILY profile — **decided (user,
+      2026-09-29): its timezone is hardcoded to `Europe/Berlin`**, since the
+      user is expected to remain the only host for the foreseeable future,
+      not derived from the server process's own clock. Logged loudly to
+      stderr on creation, meant to be hand-edited afterward rather than used
+      as-is by a host running elsewhere.
+    - **`scheduler-state.json`** (`SchedulerState`, via
+      `SchedulerStateStore`, atomic writes like every other flat-file
+      store here): the scheduler's own progress, never host-edited — the
+      next `gameTurn` number to use, and the last calendar date (in the
+      schedule's timezone) a turn was resolved for. On this data root's
+      very first check ever, that date bootstraps to *yesterday* if today's
+      resolution time hasn't passed yet (today itself stays eligible for a
+      resolution later that same day), or to *today* if it already has (a
+      late-in-the-day first boot never resolves immediately) - staying
+      unset would resolve turn 1 immediately on any first boot past the
+      resolution time.
+    - **`TurnScheduler.checkAndResolveIfDue()`** ties the two together:
+      resolves today's turn, for every player under `players/` that
+      already has a saved snapshot, exactly once — a no-op if
+      today was already resolved, isn't an active weekday, falls in a
+      blackout, or the resolution time hasn't passed yet. Upholds the
+      persistence slice's contract of calling
+      `PlayerStateService.resolveTurn(gameTurn)` for consecutive `gameTurn`
+      values, never skipping one, by only advancing its own state after
+      *every* player resolves without error: if any one player throws, the
+      exception propagates, the scheduler state is left unadvanced, and
+      the next check retries the same game turn for every player — already-
+      resolved players are unaffected, since `resolveTurn` is itself
+      idempotent. **Accepted limit, not yet mitigated (user, 2026-09-29):** a
+      player whose resolution keeps failing therefore blocks every other
+      player's turn from ever advancing past it, for as long as it keeps
+      failing — accepted, since this needs looking at and fixing directly if
+      it ever actually happens rather than designed around in advance.
+    - **Decided (missed-day catch-up, see §3.6):** if the server is down
+      across more than one scheduled resolution day, only the single next
+      day is resolved on the next check — the missed days in between are
+      skipped, not caught up.
   - **Slice: CLI/console dev client** — no libGDX UI needed yet, just enough
     to submit an action and read back state.
   - **Exit criterion:** a player can log in (auto-creating an account),

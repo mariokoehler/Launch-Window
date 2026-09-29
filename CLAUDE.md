@@ -79,7 +79,7 @@ came first; the Maven multi-module skeleton (`pom.xml` + `core`/`lwjgl3`/
 project) — read that before picking up any implementation work, to see
 what milestone it belongs to and what's already decided about ordering.
 **M0 (this scaffold) is done. M1 (the walking-skeleton milestone) is
-underway: its first four slices are done, and it's genuinely playable over
+underway: its first five slices are done, and it's genuinely playable over
 real sockets today** (no client UI yet, but `GameServer` + a KryoNet client
 can log in, submit an action, and read it back — see
 `ServerClientIntegrationTest`) — snapshot/journal/replay persistence
@@ -90,12 +90,25 @@ can log in, submit an action, and read it back — see
 2026-09-29), the minimal KryoNet protocol (`de.mkoehler.launchwindow.net`:
 `MessageRegistry`, `HandshakeRequest`/`Response`,
 `SubmitActionRequest`/`Response`, `FetchStateRequest`/`Response`,
-2026-09-29), and the request dispatcher + real KryoNet server/client wiring
+2026-09-29), the request dispatcher + real KryoNet server/client wiring
 (`RequestDispatcher` in `server`, `NetworkServer`/`NetworkClient`/
 `AppVersion` in `core`, `GameServer` actually wired up and launched,
-2026-09-29) — **only the scheduler + server config file, then a CLI dev
-client, are still open; see `design.md` §5's M1 slice list for exactly
-what's left.** `core`'s
+2026-09-29), and the scheduler + server config file
+(`de.mkoehler.launchwindow.server.schedule`: `GameMeta`/`ScheduleProfile`/
+`Blackout`/`GameMetaStore` for the host-edited `game-meta.json`,
+`SchedulerState`/`SchedulerStateStore` for the scheduler's own progress,
+`TurnScheduler` tying them together, called from `GameServer.render()` on
+the same thread as `NetworkServer.poll()`, 2026-09-29 — needed adding
+`jackson-datatype-jsr310` as a new dependency for the `java.time` fields in
+`game-meta.json`/`scheduler-state.json`, with timestamp-array output
+disabled on the shared mapper so the host-edited file reads as `"09:00"`
+rather than `[9,0]`; missed-day catch-up decided (skip the gap, resolve one
+turn on the next check, not one per missed day) and the default
+`game-meta.json` timezone hardcoded to `Europe/Berlin` rather than derived
+from the server process, since the user is expected to remain the only host
+for the foreseeable future) — **only a CLI dev
+client is still open; see `design.md` §5's M1 slice list for exactly what's
+left.** `core`'s
 `de.mkoehler.launchwindow.model` package has M2's domain-model groundwork
 done ahead of schedule — `PlayerSnapshot` (the per-player aggregate root),
 `Archetype`, and the three personnel classes (`Astronaut`/`SetSpecialist`/
