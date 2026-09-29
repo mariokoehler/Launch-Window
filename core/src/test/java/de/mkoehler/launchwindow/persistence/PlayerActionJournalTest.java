@@ -131,4 +131,25 @@ class PlayerActionJournalTest {
             assertEquals(1, listing.count());
         }
     }
+
+    /**
+     * Verifies that a file name's sequence number is never reused after an
+     * archive - a new action's sequence prefix must always sort after
+     * every previously archived one, since {@code PlayerStateService}'s
+     * crash-recovery cutoff relies on comparing file names as plain
+     * strings.
+     */
+    @Test
+    void sequenceNumberIsNeverReusedAcrossAnArchive(@TempDir Path playerRoot) throws IOException {
+        PlayerActionJournal journal = new PlayerActionJournal(playerRoot, mapper);
+        journal.append(new SetFundsAction(1_000));
+        String firstFileName = journal.readPending().get(0).file().getFileName().toString();
+        journal.archive(journal.readPending(), 1);
+
+        journal.append(new SetFundsAction(2_000));
+        String secondFileName = journal.readPending().get(0).file().getFileName().toString();
+
+        assertTrue(secondFileName.compareTo(firstFileName) > 0,
+            "a file name submitted after an archive must sort after every previously archived one");
+    }
 }

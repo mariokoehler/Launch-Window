@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.OptionalLong;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -19,9 +18,17 @@ import java.util.stream.Stream;
  * <p>The append-only, one-file-per-action journal of a player's not-yet-
  * resolved actions (see {@code design.md} &sect;3.7). Each submitted
  * {@link PlayerAction} is written as its own JSON file, named with a
- * monotonically increasing, zero-padded sequence number so that listing the
- * directory always yields the actions in submission order, even when two
- * actions are submitted within the same millisecond.</p>
+ * zero-padded sequence number so that listing the directory always yields
+ * the actions in submission order, even when two actions are submitted
+ * within the same millisecond.</p>
+ *
+ * <p>The sequence number is durably persisted and never reused, for the
+ * life of the player's whole game - not reset after an archive. A crash-
+ * recovery retry (see {@link PlayerStateService#resolveTurn(long)}) compares
+ * journal file names as plain strings to decide what's already been
+ * applied; if two different actions, submitted on either side of an
+ * archive, could ever share the same sequence number, that comparison
+ * would be ambiguous.</p>
  *
  * @author Mario Koehler
  */
@@ -32,6 +39,7 @@ public class PlayerActionJournal {
 
     private final Path journalDir;
     private final Path archiveRoot;
+    private final Path sequenceFile;
     private final ObjectMapper mapper;
 
     /**
@@ -44,6 +52,7 @@ public class PlayerActionJournal {
         Objects.requireNonNull(playerRoot, "playerRoot must not be null");
         this.journalDir = playerRoot.resolve("journal");
         this.archiveRoot = playerRoot.resolve("journal-archive");
+        this.sequenceFile = playerRoot.resolve("journal-sequence.txt");
         this.mapper = Objects.requireNonNull(mapper, "mapper must not be null");
     }
 
@@ -53,12 +62,18 @@ public class PlayerActionJournal {
      * process never compute the same next sequence number.
      *
      * @param action the action to append
-     * @throws IOException if the action cannot be written
+     * @throws IOException if the action or the sequence counter cannot be
+     *                      written
      */
     public synchronized void append(PlayerAction action) throws IOException {
         Objects.requireNonNull(action, "action must not be null");
         Files.createDirectories(journalDir);
-        long sequence = highestExistingSequence().orElse(0) + 1;
+        // The sequence counter is reserved and durably persisted BEFORE the action file is
+        // written, not after: if a crash happens between the two, the reserved number is simply
+        // never used (a harmless gap), rather than the next append recomputing and reusing the
+        // same number a still-pending file already has.
+        long sequence = readSequenceCounter() + 1;
+        writeSequenceCounter(sequence);
         String fileName = String.format("%0" + SEQUENCE_WIDTH + "d", sequence) + "-" + UUID.randomUUID() + SUFFIX;
         Path target = journalDir.resolve(fileName);
         Path tempFile = Files.createTempFile(journalDir, "action-", ".json.tmp");
@@ -129,20 +144,35 @@ public class PlayerActionJournal {
     }
 
     /**
-     * Returns the highest sequence number among the journal's current
-     * files, parsed from each filename's fixed-width numeric prefix.
+     * Reads the last sequence number handed out, or {@code 0} if no action
+     * has ever been appended for this player.
      *
-     * @return the highest existing sequence number, or an empty result if
-     *     the journal is empty
-     * @throws IOException if the journal directory cannot be read
+     * @return the last sequence number handed out
+     * @throws IOException if the sequence file exists but cannot be read
      */
-    private OptionalLong highestExistingSequence() throws IOException {
-        try (Stream<Path> listing = Files.list(journalDir)) {
-            return listing
-                .map(path -> path.getFileName().toString())
-                .filter(name -> name.endsWith(SUFFIX))
-                .mapToLong(name -> Long.parseLong(name.substring(0, SEQUENCE_WIDTH)))
-                .max();
+    private long readSequenceCounter() throws IOException {
+        if (!Files.exists(sequenceFile)) {
+            return 0;
+        }
+        String content = Files.readString(sequenceFile).strip();
+        return content.isEmpty() ? 0 : Long.parseLong(content);
+    }
+
+    /**
+     * Atomically persists the last sequence number handed out.
+     *
+     * @param value the sequence number to persist
+     * @throws IOException if the sequence file cannot be written
+     */
+    private void writeSequenceCounter(long value) throws IOException {
+        Files.createDirectories(sequenceFile.getParent());
+        Path tempFile = Files.createTempFile(sequenceFile.getParent(), "journal-sequence-", ".tmp");
+        try {
+            Files.writeString(tempFile, Long.toString(value));
+            AtomicFiles.moveReplacingWithRetry(tempFile, sequenceFile);
+        } catch (IOException e) {
+            Files.deleteIfExists(tempFile);
+            throw e;
         }
     }
 
