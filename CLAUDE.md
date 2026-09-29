@@ -145,6 +145,21 @@ aren't in the repo yet). Needed two new Maven dependencies, `gdx-freetype`
 (`lwjgl3/pom.xml`) — same gotcha as every other native-backed libGDX piece,
 each runnable module needs its own natives dependency independently.
 
+**UI Asset Sheet canvas started (2026-09-29)**, a living Claude Artifact
+(not a repo file) collecting the graphical assets `Theme.java` will need to
+replicate the mockup screens in libGDX: the tileable blueprint-grid
+background texture (spec'd as an exact 100×100 px repeat unit, with the
+libGDX Pixmap/Texture/TiledDrawable build steps written out) and every icon
+glyph used so far, grouped by where they appear. Unlike the earlier
+one-off exploration canvases (Style Direction, Logo Concepts), this one is
+meant to be kept in sync — add to it whenever a new screen mockup
+introduces a new icon or texture, rather than letting glyphs go untracked
+across mockups. Its own asset provenance note repeats the BASPM-traced-icon
+story from the source-material note below, so a reader of the sheet alone
+still gets the warning. Link is with the user (private Claude Artifact,
+not committed to this repo); ask them if a future session needs it and
+doesn't have it in context.
+
 **Logo decided (2026-09-28):** `assets/branding/logo.svg` — a mission-patch
 illustration (Saturn V ascending past Earth's limb, starfield, a gold
 "window" arc, ribbon wordmark), superseding the four earlier abstract

@@ -1552,8 +1552,9 @@ information for future UI work, not just the final answer:
 |---|---|---|
 | Primary / neutral UI | Navy `#16305c` | Chrome: headers, primary buttons, table header rows, borders |
 | Active / in-progress / caution | Gold `#e0a72e` (fill), `#8a5d12` (text-safe darker variant) | "In progress" status, the current step in a sequence, a neutral/steady state |
-| Good / high / success | Green `#1f6b47` | A positive rating (e.g. high morale) — **new color, not present in any of the ruled-out directions**; added deliberately once mission/personnel outcomes are going to need a real "this is good" signal distinct from "this is just active" |
+| Good / high / success | Green `#1f6b47` (on white), `#c4f5e0` pale-mint `success-on-page` (directly on the blue frame) | A positive rating (e.g. high morale) — **new color, not present in any of the ruled-out directions**; added deliberately once mission/personnel outcomes are going to need a real "this is good" signal distinct from "this is just active." **The on-page variant was a real fix, not a preemptive one** (2026-09-29): a footer stat's positive delta was first set in plain `#1f6b47` directly on the blue frame and measured ~1.15:1 contrast there — essentially invisible, caught by the user, not by any contrast check before shipping. Mirrors the gold/`gold-on-page` split that already existed for the identical reason; `success` just hadn't been used directly on the page background until this footer stat did. |
 | Destructive / failure | Red `#c6402b` | **Reserved** for genuinely destructive actions (e.g. scrubbing a mission) or failure states — not used for "in progress," which earlier mockup rounds had wrongly conflated with danger |
+| Season-commit action | Violet `#4b3a72` | **Reserved for exactly one action per screen**: advancing the game clock (the common footer's "End Season" button) — added 2026-09-29 |
 | Page frame (blueprint) | Blue `#3d6a9a` background, white grid lines at low opacity | Header/nav/footer margins only |
 | Content surface | White `#ffffff` | Cards, tables, body-text blocks |
 | Ink / body text | `#1c1c1a` (on white), `#eaf1fb`/`#ffffff` (on the blue frame) | — |
@@ -1564,6 +1565,24 @@ lightened from an initial too-dark value once it became clear it was
 sitting at roughly the same luminance as the navy UI accent (~1.2:1 contrast
 between them, i.e. barely distinguishable); the shipped value roughly
 doubles that separation.
+
+**A fifth semantic color, violet/`commit` (2026-09-29):** added specifically
+for the common footer's "End Season" button — the player's way of advancing
+time after finishing a season's management steps, present on every screen.
+Deliberately its own hue, not a reuse of gold ("active") or navy
+("primary/neutral"): this button needed to read as clearly distinct from
+every other button on screen, since it's the one action that ends the
+current turn rather than opening a sub-screen or committing a small local
+change. Violet was picked over an orange/coral option specifically because
+it sits outside the hue range gold and danger already occupy (avoiding "is
+this a caution color or a danger color?" ambiguity), and it has a loose
+thematic fit — dusk/day's-end — for a "close out the season" action. Pushed
+into the actual Design System artifact as a `commit` color token and a
+matching `Button` `commit` variant (not just hacked into one mockup), with
+the explicit rule that it's reserved for this one action per screen, never
+a general fourth button style. **Not yet in `Theme.java`** — same
+not-yet-translated state as everything else in this section; add
+`Theme.COMMIT`/a `ButtonKind.COMMIT` case when a real screen needs it.
 
 **Typography — a two-font functional system, wordmark deliberately
 excluded from it:** **Archivo** (600/700 weight, not the single-weight
@@ -1644,6 +1663,30 @@ until each coordinate was checked by hand against the actual radius
 rather than eyeballed), and a multi-control-point bezier's true peak/
 curvature needs solving for (or pinning via an on-curve point), not
 estimated from the control points' own coordinates.
+
+**Iconography: first real icon set exists (2026-09-29), still raw.** Five
+solid-silhouette icons for the `SetSkill` categories (Rockets, Space
+probes, Human-rated rockets, Crewed spacecraft, EVA suits) — the user
+generated original bitmap art with an AI image tool and had it contour-
+traced to SVG, at `assets-raw/svg/icon_*.svg`. First used as the sort-by-
+skill buttons on a Personnel Recruitment screen mockup (a Claude Artifact,
+not yet a repo screen); confirmed a second, independent use the same day
+when the user pointed out BASPM's own training/skill-selection dialog
+uses these same five categories as its icon set — real evidence the
+`SetSkill` enum is the right single join point for this artwork wherever
+a skill needs a glyph (recruitment, training assignment, R&D assignment
+screens all plausibly reuse it), not a one-screen throwaway. **Still
+open:** these are raw traced files, not yet promoted into `assets/` or
+wired into `Theme`'s icon pipeline (`Theme` has no icon concept yet at
+all — see its own "no icon system yet" status) — that promotion, plus
+deciding a consistent on-disk/atlas format, is a real task for whenever
+the first screen using them gets actually built, not done implicitly by
+having them exist in `assets-raw/`. **Provenance, since this exact
+mistake happened once already this session:** these are traced from the
+user's own new bitmap art, not from BASPM — the five icon SVGs that
+*were* traced from BASPM's SET Centre UI got caught and removed the same
+day (see `CLAUDE.md`'s source-material note for the full story); don't
+conflate the two when this section is read back later.
 
 ## 4. Open questions (tracked here until resolved)
 
