@@ -1543,6 +1543,7 @@ information for future UI work, not just the final answer:
 | Active / in-progress / caution | Gold `#e0a72e` (fill), `#8a5d12` (text-safe darker variant) | "In progress" status, the current step in a sequence, a neutral/steady state |
 | Good / high / success | Green `#1f6b47` | A positive rating (e.g. high morale) — **new color, not present in any of the ruled-out directions**; added deliberately once mission/personnel outcomes are going to need a real "this is good" signal distinct from "this is just active" |
 | Destructive / failure | Red `#c6402b` | **Reserved** for genuinely destructive actions (e.g. scrubbing a mission) or failure states — not used for "in progress," which earlier mockup rounds had wrongly conflated with danger |
+| Season-commit action | Violet `#4b3a72` | **Reserved for exactly one action per screen**: advancing the game clock (the common footer's "End Season" button) — added 2026-09-29 |
 | Page frame (blueprint) | Blue `#3d6a9a` background, white grid lines at low opacity | Header/nav/footer margins only |
 | Content surface | White `#ffffff` | Cards, tables, body-text blocks |
 | Ink / body text | `#1c1c1a` (on white), `#eaf1fb`/`#ffffff` (on the blue frame) | — |
@@ -1553,6 +1554,24 @@ lightened from an initial too-dark value once it became clear it was
 sitting at roughly the same luminance as the navy UI accent (~1.2:1 contrast
 between them, i.e. barely distinguishable); the shipped value roughly
 doubles that separation.
+
+**A fifth semantic color, violet/`commit` (2026-09-29):** added specifically
+for the common footer's "End Season" button — the player's way of advancing
+time after finishing a season's management steps, present on every screen.
+Deliberately its own hue, not a reuse of gold ("active") or navy
+("primary/neutral"): this button needed to read as clearly distinct from
+every other button on screen, since it's the one action that ends the
+current turn rather than opening a sub-screen or committing a small local
+change. Violet was picked over an orange/coral option specifically because
+it sits outside the hue range gold and danger already occupy (avoiding "is
+this a caution color or a danger color?" ambiguity), and it has a loose
+thematic fit — dusk/day's-end — for a "close out the season" action. Pushed
+into the actual Design System artifact as a `commit` color token and a
+matching `Button` `commit` variant (not just hacked into one mockup), with
+the explicit rule that it's reserved for this one action per screen, never
+a general fourth button style. **Not yet in `Theme.java`** — same
+not-yet-translated state as everything else in this section; add
+`Theme.COMMIT`/a `ButtonKind.COMMIT` case when a real screen needs it.
 
 **Typography — a two-font functional system, wordmark deliberately
 excluded from it:** **Archivo** (600/700 weight, not the single-weight
