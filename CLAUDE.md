@@ -78,11 +78,14 @@ came first; the Maven multi-module skeleton (`pom.xml` + `core`/`lwjgl3`/
 (milestones M0-M7+, format borrowed from Robot-Rampage's own sibling
 project) — read that before picking up any implementation work, to see
 what milestone it belongs to and what's already decided about ordering.
-**M0 (this scaffold) is done. M1 (the walking-skeleton milestone) is
-underway: its first five slices are done, and it's genuinely playable over
-real sockets today** (no client UI yet, but `GameServer` + a KryoNet client
-can log in, submit an action, and read it back — see
-`ServerClientIntegrationTest`) — snapshot/journal/replay persistence
+**M0 and M1 (the walking-skeleton milestone) are both done (2026-09-29).**
+M1's exit criterion is verified end to end, over real sockets, via a real
+scheduled job: `DevClient` logs in (auto-creating an account), submits a
+funds action, disconnects; the real `GameServer` process resolves the turn
+on its own via `TurnScheduler`; a second, separate `DevClient` process logs
+back in and sees the submitted funds value with the season counter
+advanced — see `design.md` §5's M1 exit-criterion note for the full
+verification record. M1's six slices — snapshot/journal/replay persistence
 (`de.mkoehler.launchwindow.persistence`: `PlayerSnapshotStore`,
 `PlayerActionJournal`, `SnapshotReplay`, `AtomicFiles`, `PlayerStateService`,
 2026-09-28, hardened 2026-09-29), `AccountStore`
@@ -93,7 +96,7 @@ can log in, submit an action, and read it back — see
 2026-09-29), the request dispatcher + real KryoNet server/client wiring
 (`RequestDispatcher` in `server`, `NetworkServer`/`NetworkClient`/
 `AppVersion` in `core`, `GameServer` actually wired up and launched,
-2026-09-29), and the scheduler + server config file
+2026-09-29), the scheduler + server config file
 (`de.mkoehler.launchwindow.server.schedule`: `GameMeta`/`ScheduleProfile`/
 `Blackout`/`GameMetaStore` for the host-edited `game-meta.json`,
 `SchedulerState`/`SchedulerStateStore` for the scheduler's own progress,
@@ -106,9 +109,11 @@ rather than `[9,0]`; missed-day catch-up decided (skip the gap, resolve one
 turn on the next check, not one per missed day) and the default
 `game-meta.json` timezone hardcoded to `Europe/Berlin` rather than derived
 from the server process, since the user is expected to remain the only host
-for the foreseeable future) — **only a CLI dev
-client is still open; see `design.md` §5's M1 slice list for exactly what's
-left.** `core`'s
+for the foreseeable future), and the CLI/console dev client
+(`de.mkoehler.launchwindow.devtools.DevClient` in the `dev-tools` module,
+a plain `NetworkClient`-based REPL with `state`/`funds <amount>`/`help`/
+`quit`, 2026-09-29) — are all done. Next up is **M2 (rules engine,
+headless)**; see `design.md` §5 for its scope. `core`'s
 `de.mkoehler.launchwindow.model` package has M2's domain-model groundwork
 done ahead of schedule — `PlayerSnapshot` (the per-player aggregate root),
 `Archetype`, and the three personnel classes (`Astronaut`/`SetSpecialist`/
@@ -244,8 +249,8 @@ import replaces StarWars' ~200-line per-LWJGL-classifier block). Modules:
 `LaunchWindowGame`, and the `de.mkoehler.launchwindow.model` package holding
 the first real domain types, see `design.md` §3.4), `lwjgl3` (desktop client
 launcher), `server` (`gdx-backend-headless` dedicated server), `dev-tools`
-(empty for now — no concrete tool exists yet, see its own `pom.xml` comment
-for why it has no `exec-maven-plugin` config).
+(developer tools never shipped/packaged by any release workflow — currently
+just `DevClient`, the CLI/console dev client, see "Current status" above).
 Java 25 (`maven.compiler.release`), Maven 3.8.4 confirmed working locally.
 
 - `mvn clean package` from the repo root builds everything and runs the
@@ -261,6 +266,7 @@ Java 25 (`maven.compiler.release`), Maven 3.8.4 confirmed working locally.
   mvn install -pl core -am -DskipTests
   mvn -pl server compile exec:java
   mvn -pl lwjgl3 compile exec:exec
+  mvn -pl dev-tools compile exec:java -Dexec.args="localhost 45825"
   ```
   **Reinstall `core` after *every* change to it, and after every new tag,
   not just when its own code changed** — `lwjgl3`/`server` resolve `core`

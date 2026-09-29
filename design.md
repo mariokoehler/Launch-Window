@@ -1805,8 +1805,9 @@ here.
 - **M0 — Project skeleton. Done (2026-09-27).** Maven multi-module
   scaffold, `NetworkConstants`, `LaunchWindowGame` placeholder — see
   `CLAUDE.md` "Build system"/"Current status".
-- **M1 — Walking skeleton: one trivial action, end to end.** No real game
-  systems yet. **Decision gate resolved (user, 2026-09-28):** §2.9's "email"
+- **M1 — Walking skeleton: one trivial action, end to end — done
+  (2026-09-29).** No real game systems yet. **Decision gate resolved (user,
+  2026-09-28):** §2.9's "email"
   means in-game player-to-player mail, not turn-notification email — no
   email-address field needed on §3.8's account schema (login, password
   hash/salt, display name stays as-is). In-game mail itself is still M7+
@@ -1999,13 +2000,30 @@ here.
       across more than one scheduled resolution day, only the single next
       day is resolved on the next check — the missed days in between are
       skipped, not caught up.
-  - **Slice: CLI/console dev client** — no libGDX UI needed yet, just enough
-    to submit an action and read back state.
-  - **Exit criterion:** a player can log in (auto-creating an account),
-    submit one trivial action (e.g. a placeholder funds adjustment),
-    disconnect, and after the next scheduled resolution, log back in and
-    see it reflected — over real sockets, via a real scheduled job,
-    surviving a client restart.
+  - **Slice: CLI/console dev client — done.** `dev-tools`'s
+    `de.mkoehler.launchwindow.devtools.DevClient`: no libGDX UI, a plain
+    console REPL over `core`'s `NetworkClient` - prompts for login/
+    password/display name, sends the handshake, then accepts `state`
+    (`FetchStateRequest`, prints a one-line summary), `funds <amount>`
+    (`SubmitActionRequest` with `SetFundsAction`), `help`, and `quit`/
+    `exit`. `main()` itself (the interactive console/socket loop) is
+    exercised manually against a running server, matching
+    `ServerLauncher`'s own untested bootstrap entry point in this
+    codebase; its two pure helpers (`parseFundsAmount`, `formatSnapshot`)
+    have unit tests.
+  - **Exit criterion — verified (2026-09-29), real sockets, real scheduled
+    job:** a player logs in (auto-creating an account) via `DevClient`,
+    submits a `funds` action, disconnects; the real `GameServer` process,
+    running standalone with `game-meta.json`'s resolution time set a couple
+    of minutes out, resolves the turn on its own via
+    `TurnScheduler.checkAndResolveIfDue()` inside `render()` -
+    `scheduler-state.json` shows `nextGameTurn` advancing from 1 to 2 and
+    `lastResolvedDate` set to that day, the player's `snapshots/1.json`
+    holds `funds: 5000`, its `journal/` directory is empty, and
+    `journal-archive/1/` holds the one archived action file - not just a
+    replay of a still-pending action. A second, separate `DevClient`
+    process then logs back in and `state` shows the submitted funds value
+    with the season counter advanced from 1 to 2. **M1 is done.**
 - **M2 — Rules engine, headless.** The turn-resolution logic for each
   system traced in §2, built and unit-tested independent of M1's
   network/persistence pipe (§3.10's "headless rules first" principle),

@@ -29,10 +29,7 @@ import java.util.stream.Stream;
  * <p>Only ever resolves the single next calendar day it is behind by, never
  * a backlog of several missed days at once: if the server was down across
  * more than one scheduled resolution day, the days in between are skipped
- * rather than caught up on the next boot. (Unconfirmed: design.md does not
- * decide this either way; this is the more conservative choice for an async
- * friends game, where catching up several missed seasons at once on restart
- * could be more surprising than simply losing the gap.)</p>
+ * rather than caught up on the next boot.</p>
  *
  * <p>Intended to be called from the same thread that drains
  * {@code NetworkServer.poll()} - e.g. inside {@code GameServer.render()} -

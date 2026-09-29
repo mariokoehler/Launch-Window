@@ -11,13 +11,14 @@
   </parent>
 
   <!-- Developer tools that are never shipped: not shaded, not packaged by any release
-       workflow. Empty for now - no concrete tool exists yet. No exec-maven-plugin config
-       here yet either, since that needs a real mainClass to point at; add both once the
-       first tool (an asset importer, a save-file inspector, etc.) actually exists, following
-       the sibling projects' dev-tools/pom.xml as the template. -->
+       workflow. -->
   <artifactId>launchwindow-dev-tools</artifactId>
   <packaging>jar</packaging>
   <name>LaunchWindow-dev-tools</name>
+
+  <properties>
+    <mainClass>de.mkoehler.launchwindow.devtools.DevClient</mainClass>
+  </properties>
 
   <dependencies>
     <dependency>
@@ -31,4 +32,19 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <!-- Run the dev client directly with: mvn -pl dev-tools compile exec:java
+             (core must already be installed locally). -->
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.5.0</version>
+        <configuration>
+          <mainClass>${mainClass}</mainClass>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>

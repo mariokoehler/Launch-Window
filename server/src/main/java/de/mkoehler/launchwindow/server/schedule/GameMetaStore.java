@@ -29,13 +29,11 @@ public final class GameMetaStore {
     private static final LocalTime DEFAULT_RESOLUTION_TIME = LocalTime.of(9, 0);
 
     /**
-     * The timezone used for a newly created default {@code game-meta.json}
-     * (user, 2026-09-29: hardcoded to the host's own locale rather than
-     * derived from the server process, since the same person is expected to
-     * be the only host for the foreseeable future). A host running
-     * elsewhere edits this field directly - see {@code design.md}
-     * &sect;3.6's requirement that this be an explicit, host-chosen zone
-     * rather than an ambient one such as a container's UTC default.
+     * The timezone used for a newly created default {@code game-meta.json}.
+     * A host running elsewhere edits this field directly - see
+     * {@code design.md} &sect;3.6's requirement that this be an explicit,
+     * host-chosen zone rather than an ambient one such as a container's UTC
+     * default.
      */
     private static final ZoneId DEFAULT_TIMEZONE = ZoneId.of("Europe/Berlin");
 
