@@ -167,6 +167,14 @@ symbol concepts once the user supplied a reference image. See `design.md`
   five SET skills are wanted again, they need to be drawn original from
   the underlying real-world concepts, not traced from BASPM's asset dump —
   same posture as everything else under `baspm.md`'s source-material note.
+  **Replaced with legitimate originals (2026-09-29):** the user generated
+  five new bitmap icons with an AI image tool (`assets-raw/icons/*.png`,
+  described by the user as original, not BASPM-derived) and asked for them
+  to be vectorized. Done via luminance thresholding to isolate the white
+  icon from its background/shadow/watermark, then contour tracing (holes
+  via `evenodd`) — a mechanical bitmap→vector conversion of the user's own
+  new source art, not a repeat of the BASPM-tracing violation above.
+  `assets-raw/svg/icon_*.svg` now hold these new traces.
 
 ## Conventions / preferences (carried over from the sibling projects)
 
