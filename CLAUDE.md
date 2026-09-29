@@ -167,6 +167,39 @@ symbol concepts once the user supplied a reference image. See `design.md`
 §3.12 for the full description and the follow-up production tasks
 (outlining the wordmark text, a small-size icon-only crop) still open.
 
+**Main-menu-as-clickable-map idea explored, not yet a design decision
+(2026-09-29):** the user is considering an aerial-view agency complex
+(AI-generated concept art, four seasonal variants planned) as the main menu,
+with buildings as clickable hotspots that highlight on hover. Prototyped in
+`dev-tools` (`MenuHotspotPrototype.java`, see "Build system" below for how
+to run it) to test one specific question: since the seasonal art variants
+won't have pixel-identical building placement, hand-authored hotspot
+polygons need a margin of error, so a softened highlight edge (rather than
+a crisp outline) would both look nicer and hide that margin. Tried baking
+the polygon fill into a small offscreen `FrameBuffer` (much smaller than
+the polygon's own bounding box) and stretching it back up with bilinear
+filtering for a cheap blur - **this broke on the user's machine (whole
+window went solid grey)**, not debugged further since it didn't matter for
+the actual question. **What's locked in instead (2026-09-29): a plain
+hard-edged highlight** - `ShapeType.Filled` polygon fill plus a
+`ShapeType.Line` outline, both drawn in a single neutral near-white color
+(`HIGHLIGHT_COLOR`) at the *same* low alpha (0.18 - matching the outline's
+alpha to the fill's was a deliberate fix, an earlier version had the
+outline more opaque than the fill and it read as a mismatched double-edge).
+This alone proved the core concept (hover detection via
+`Intersector.isPointInPolygon`, polygon-with-margin tolerating seasonal art
+drift) well enough - the soft-edge blur is not a blocker and can be
+revisited later if wanted. Still open/unconfirmed: actual per-building
+hotspot polygon authoring (a real building outline, not the arbitrary demo
+hexagon; possibly needs a small polygon-authoring dev tool of its own), how
+hover ties into a tooltip/label, and whether this becomes the real
+main-menu screen at all — none of that is decided yet, this was purely a
+rendering-technique spike. The reference aerial-view art
+(`dev-tools/src/main/resources/menu-prototype/aerial.png`) is the user's
+own AI-generated concept image, not BASPM-derived, so it's exempt from the
+source-material restrictions below — but it's prototype-only placeholder
+art, not committed final main-menu art.
+
 ## Source material locations (read-only, reference-only — never edit, never copy into the repo)
 
 - **Machine caveat:** if the environment variable `COMPUTERNAME` is
@@ -264,8 +297,17 @@ import replaces StarWars' ~200-line per-LWJGL-classifier block). Modules:
 `LaunchWindowGame`, and the `de.mkoehler.launchwindow.model` package holding
 the first real domain types, see `design.md` §3.4), `lwjgl3` (desktop client
 launcher), `server` (`gdx-backend-headless` dedicated server), `dev-tools`
-(developer tools never shipped/packaged by any release workflow — currently
-just `DevClient`, the CLI/console dev client, see "Current status" above).
+(developer tools never shipped/packaged by any release workflow — the
+CLI/console `DevClient`, plus `MenuHotspotPrototype`, a windowed libGDX
+rendering spike, see "Current status" above). `dev-tools` therefore now
+also carries `gdx-backend-lwjgl3` + `gdx-platform:natives-desktop` (only
+`MenuHotspotPrototype` needs them; `DevClient` doesn't, but the module has
+one shared classpath). The exec-maven-plugin config still defaults to
+`DevClient` — run a different `dev-tools` main class by overriding the POM
+property directly with **`-DmainClass=...`**, not `-Dexec.mainClass=...`
+(the plugin's `<mainClass>` is bound to `${mainClass}`, the POM property,
+so only a same-named `-D` override reaches it):
+`mvn -pl dev-tools compile exec:java -DmainClass=de.mkoehler.launchwindow.devtools.MenuHotspotPrototype`.
 Java 25 (`maven.compiler.release`), Maven 3.8.4 confirmed working locally.
 
 - `mvn clean package` from the repo root builds everything and runs the

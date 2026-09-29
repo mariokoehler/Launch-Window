@@ -27,6 +27,21 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
+      <!-- Only needed for the MenuHotspotPrototype (a windowed libGDX app), not DevClient
+           itself - pulled in here anyway since dev-tools has a single shared classpath. -->
+      <groupId>com.badlogicgames.gdx</groupId>
+      <artifactId>gdx-backend-lwjgl3</artifactId>
+      <version>${gdxVersion}</version>
+    </dependency>
+    <dependency>
+      <!-- Every native-backed libGDX piece needs its own *-platform natives-desktop dependency,
+           independently, in every runnable module - missing one only fails at runtime. -->
+      <groupId>com.badlogicgames.gdx</groupId>
+      <artifactId>gdx-platform</artifactId>
+      <version>${gdxVersion}</version>
+      <classifier>natives-desktop</classifier>
+    </dependency>
+    <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
       <scope>test</scope>
@@ -37,7 +52,9 @@
     <plugins>
       <plugin>
         <!-- Run the dev client directly with: mvn -pl dev-tools compile exec:java
-             (core must already be installed locally). -->
+             (core must already be installed locally). Run the windowed
+             MenuHotspotPrototype instead with:
+             mvn -pl dev-tools compile exec:java -Dexec.mainClass=de.mkoehler.launchwindow.devtools.MenuHotspotPrototype -->
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
         <version>3.5.0</version>
