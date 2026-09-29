@@ -1,6 +1,6 @@
 package de.mkoehler.launchwindow.model;
 
-import java.util.EnumMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -8,11 +8,16 @@ import java.util.Objects;
  * <p>A Scientist/Engineer/Technician (SET) employee - drives R&amp;D on
  * mission components, holds one competency value per {@link SetSkill}.</p>
  *
+ * <p>The skill map is a plain {@link LinkedHashMap}, not an
+ * {@link java.util.EnumMap} - Kryo's wire serialization (see
+ * {@code de.mkoehler.launchwindow.net.MessageRegistry}) needs a
+ * no-arg-constructible map, which {@code EnumMap} isn't.</p>
+ *
  * @author Mario Koehler
  */
 public class SetSpecialist extends Personnel {
 
-    private Map<SetSkill, Integer> skills = new EnumMap<>(SetSkill.class);
+    private Map<SetSkill, Integer> skills = new LinkedHashMap<>();
 
     /**
      * No-argument constructor required for Jackson deserialization.
@@ -51,8 +56,7 @@ public class SetSpecialist extends Personnel {
      */
     public void setSkills(Map<SetSkill, Integer> skills) {
         Objects.requireNonNull(skills, "skills must not be null");
-        this.skills = new EnumMap<>(SetSkill.class);
-        this.skills.putAll(skills);
+        this.skills = new LinkedHashMap<>(skills);
     }
 
     /**

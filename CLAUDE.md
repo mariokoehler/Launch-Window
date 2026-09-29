@@ -79,21 +79,24 @@ came first; the Maven multi-module skeleton (`pom.xml` + `core`/`lwjgl3`/
 project) — read that before picking up any implementation work, to see
 what milestone it belongs to and what's already decided about ordering.
 **M0 (this scaffold) is done. M1 (the walking-skeleton milestone) is
-underway: its first two slices are done** — snapshot/journal/replay
+underway: its first three slices are done** — snapshot/journal/replay
 persistence (`de.mkoehler.launchwindow.persistence`: `PlayerSnapshotStore`,
 `PlayerActionJournal`, `SnapshotReplay`, `AtomicFiles`, `PlayerStateService`,
-2026-09-28, hardened 2026-09-29) and `AccountStore`
+2026-09-28, hardened 2026-09-29), `AccountStore`
 (`de.mkoehler.launchwindow.server.accounts`, adapted from StarWars,
-2026-09-29) — **the KryoNet protocol, the scheduler, and a CLI dev client
-are still to come, see `design.md` §5's M1 slice list for exactly what's
-open, including one flagged decision gate (the login → player-data-
-directory mapping).** `core`'s
+2026-09-29), and the minimal KryoNet protocol
+(`de.mkoehler.launchwindow.net`: `MessageRegistry` + the
+submit-action/fetch-state message pairs, adapted from Robot-Rampage,
+2026-09-29) — **a request dispatcher + actual KryoNet server/client wiring
+is proposed as a new slice (unconfirmed, not yet agreed to), then the
+scheduler, then a CLI dev client; see `design.md` §5's M1 slice list for
+exactly what's open.** `core`'s
 `de.mkoehler.launchwindow.model` package has M2's domain-model groundwork
 done ahead of schedule — `PlayerSnapshot` (the per-player aggregate root),
 `Archetype`, and the three personnel classes (`Astronaut`/`SetSpecialist`/
 `MissionControlOfficer`) with their skill enums — see `design.md` §3.4 for
 the full list and what's still deliberately deferred; no resolution logic,
-screens, wire protocol, or content-definition types yet. Git repo
+screens, or content-definition types yet. Git repo
 initialized 2026-09-27 and pushed
 to GitHub as a **private**
 repo (`mariokoehler/Launch-Window` — GitHub doesn't allow spaces in repo

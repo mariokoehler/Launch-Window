@@ -909,10 +909,11 @@ even scaffolding empty right now.
   double as the wire-format library — an earlier draft of this bullet said
   it did, which is wrong.** KryoNet serializes wire messages with Kryo (a
   binary format, not JSON), the same way both sibling projects use it —
-  compatibility depends on registration order, not class names, so any real
-  message classes will need a Robot-Rampage-style `MessageRegistry`
-  (append-only, never reordered) plus a test guarding every registered type,
-  once real messages exist. **Jackson's actual, sole job here is §3.7/§3.8's
+  compatibility depends on registration order, not class names, so real
+  message classes need a Robot-Rampage-style `MessageRegistry` (append-only,
+  never reordered) plus a test guarding every registered type — built in
+  §5's M1 protocol slice, `de.mkoehler.launchwindow.net`. **Jackson's actual,
+  sole job here is §3.7/§3.8's
   on-disk persistence** — flat-file JSON snapshots, the action journal, and
   the account store — which is exactly why `core`'s persistence-format
   proof lives as `PlayerSnapshotTest`'s round-trip test (§3.4), under the
@@ -939,8 +940,11 @@ covering the shapes already decided in §2/§3.7/§3.8:
   decision).
 - **Personnel** — `Personnel` (shared mutable base: id, name, age, morale,
   learning potential, `AssignmentState`) with three concrete subclasses,
-  `Astronaut`/`SetSpecialist`/`MissionControlOfficer`, each holding an
-  `EnumMap` of its own five-value skill enum (§2.2(a)/`baspm.md` §9.1).
+  `Astronaut`/`SetSpecialist`/`MissionControlOfficer`, each holding a
+  `LinkedHashMap` of its own five-value skill enum (§2.2(a)/`baspm.md`
+  §9.1) — `LinkedHashMap`, not `EnumMap`, since Kryo's wire serialization
+  (§5's M1 protocol slice) needs a no-arg-constructible map type, which
+  `EnumMap` isn't.
   `MissionControlOfficer.flightDirectorSkill()` computes the sixth "Flight
   Director" aptitude as the plain average of the other five, exactly as
   `baspm.md` §9.1 traced — not a stored value, so not a member of
@@ -1827,9 +1831,51 @@ here.
     schema/validation rules and what was dropped from StarWars' version.
     Its own file write is now atomic via `AtomicFiles` (§3.7's slice),
     which StarWars' version doesn't have.
-  - **Slice: minimal KryoNet protocol** — `MessageRegistry` (Robot-Rampage's
-    pattern, same `gh api` fetch approach) plus two message types: submit
-    one action, fetch current state.
+  - **Slice: minimal KryoNet protocol — done (2026-09-29).**
+    `de.mkoehler.launchwindow.net`: `MessageRegistry` (Robot-Rampage's
+    pattern, fetched via `gh api` rather than reimplemented from prose) plus
+    two request/response pairs in `net.messages` —
+    `SubmitActionRequest`/`SubmitActionResponse` and
+    `FetchStateRequest`/`FetchStateResponse`. Each request carries login
+    credentials directly rather than relying on a prior handshake
+    establishing a session, matching §3.3's lightweight-RPC model (no held
+    session state). **A real Kryo compatibility issue surfaced and got
+    fixed here, not hypothetical:** `EnumMap` has no no-arg constructor, so
+    Kryo's default reflective instantiation can't create one on read; fixed
+    by switching the personnel skill maps from `EnumMap` to `LinkedHashMap`
+    (§3.4) rather than fighting Kryo's per-key-type `EnumMapSerializer`,
+    which doesn't generalize across our three different skill enums anyway.
+    **Accepted risk, not yet mitigated:** credentials travel in plain text
+    over KryoNet's TCP channel, with no TLS layer. §3.8's threat model
+    ("a hobby dedicated server, not a target worth pulling in bcrypt/Argon2
+    for") already covers password *storage*; this extends the same
+    acceptance to *transport*, for the same reasons (invite-only,
+    non-real-time, small-group, self-hosted-among-friends).
+  - **New slice, confirmed (user, 2026-09-29): request dispatcher + KryoNet
+    server/client wiring, between the protocol slice above and the
+    scheduler slice below.** Neither the protocol slice (just message shapes) nor the
+    scheduler slice (turn timing) nor the CLI-client slice (a thin UI over
+    an already-working client) actually owns the piece that receives a
+    `SubmitActionRequest`/`FetchStateRequest` on the server, authenticates
+    it via `AccountStore`, maps the account's `id` to `players/<id>/`, and
+    calls `PlayerStateService` — without it, M1's exit criterion (a player
+    submitting an action and reading it back over real sockets) has no
+    server-side home. Shape: a plain dispatcher class (no libGDX, testable
+    without real sockets) plus the actual KryoNet `Server`/`Client` binding
+    and one test over real sockets, mirroring Robot-Rampage's own
+    `NetworkServerClientTest`. **Decided (user, 2026-09-29): a brand-new
+    account gets a placeholder turn-0 snapshot the first time it connects**
+    (since `PlayerStateService.currentState()` throws when no snapshot
+    exists yet and real slot-claiming doesn't arrive until M4), replaced by
+    the real slot-claim flow then. **Also includes the version handshake**
+    (confirmed, 2026-09-29): Robot-Rampage's `AppVersion`/`HandshakeRequest`/
+    `HandshakeResponse` pattern, adapted the same `gh api`-fetch way as
+    everything else borrowed from the sibling projects — without it, a
+    client and server built from different commits misread each other
+    silently or fail with an opaque Kryo error rather than a clear "please
+    update" message. Bundled into this slice rather than deferred to M5,
+    since it belongs in the same connection-establishment code path as the
+    rest of this slice's KryoNet wiring.
   - **Slice: scheduler + server config file.** The scheduled turn-resolution
     job honors a real schedule profile + blackout list (§3.6) rather than
     running on every tick. **Confirmed (user, 2026-09-28): game creation
