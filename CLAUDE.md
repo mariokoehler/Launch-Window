@@ -152,6 +152,21 @@ symbol concepts once the user supplied a reference image. See `design.md`
   screenshots low-risk and asked for this single carve-out while keeping
   the rule active otherwise; don't extend it to other asset types (art,
   audio, video, source) without asking again.
+  **The rule caught a real violation the same day (2026-09-28):** five icon
+  SVGs (`assets-raw/svg/icon_rockets.svg` and four others for the SET
+  skills) had been traced/converted from BASPM's own SET Centre UI and
+  committed to `origin/master`. Caught while building the Personnel
+  Recruitment mockup (a Claude Artifact, not part of this repo) when asked
+  to use them for the mockup's sort-by-skill buttons — the path data's
+  density (hundreds of plotted anchor points) was the tell that they were
+  traced rather than drawn. The screenshot exception above does not cover
+  them (icons are a derived-art asset type, not a screenshot), so on
+  confirmation from the user they were removed outright rather than kept
+  and just avoided. The mockup itself uses simple original stroke icons
+  (rocket/signal-waves/shield/capsule/helmet) instead. If icons for these
+  five SET skills are wanted again, they need to be drawn original from
+  the underlying real-world concepts, not traced from BASPM's asset dump —
+  same posture as everything else under `baspm.md`'s source-material note.
 
 ## Conventions / preferences (carried over from the sibling projects)
 
