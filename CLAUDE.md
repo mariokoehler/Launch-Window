@@ -79,11 +79,15 @@ came first; the Maven multi-module skeleton (`pom.xml` + `core`/`lwjgl3`/
 project) — read that before picking up any implementation work, to see
 what milestone it belongs to and what's already decided about ordering.
 **M0 (this scaffold) is done. M1 (the walking-skeleton milestone) is
-underway: its first slice — snapshot/journal/replay persistence
-(`de.mkoehler.launchwindow.persistence`: `PlayerSnapshotStore`,
-`PlayerActionJournal`, `SnapshotReplay`, `PlayerStateService`) — is done
-(2026-09-28); accounts, the KryoNet protocol, the scheduler, and a CLI dev
-client are still to come, see `design.md` §5's M1 slice list.** `core`'s
+underway: its first two slices are done** — snapshot/journal/replay
+persistence (`de.mkoehler.launchwindow.persistence`: `PlayerSnapshotStore`,
+`PlayerActionJournal`, `SnapshotReplay`, `AtomicFiles`, `PlayerStateService`,
+2026-09-28, hardened 2026-09-29) and `AccountStore`
+(`de.mkoehler.launchwindow.server.accounts`, adapted from StarWars,
+2026-09-29) — **the KryoNet protocol, the scheduler, and a CLI dev client
+are still to come, see `design.md` §5's M1 slice list for exactly what's
+open, including one flagged decision gate (the login → player-data-
+directory mapping).** `core`'s
 `de.mkoehler.launchwindow.model` package has M2's domain-model groundwork
 done ahead of schedule — `PlayerSnapshot` (the per-player aggregate root),
 `Archetype`, and the three personnel classes (`Astronaut`/`SetSpecialist`/

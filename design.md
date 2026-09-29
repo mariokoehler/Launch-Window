@@ -1237,18 +1237,23 @@ players/<playerId>/
   journal/<seq>-<uuid>.json   pending, not-yet-resolved actions; <seq> is
                               a zero-padded monotonic counter (not a
                               timestamp — two actions submitted in the
-                              same millisecond still need a stable order),
-                              restarting from 1 after every archive — it
-                              only orders actions within one still-open
-                              turn, it is never globally unique across a
-                              player's whole game.
+                              same millisecond still need a stable order).
+  journal-sequence.txt        the last sequence number handed out for this
+                              player, persisted and never reused or reset,
+                              not even across an archive — see the
+                              invariant below.
   journal-archive/<turn>/     that turn's journal files, moved here once
                               resolved
 ```
-**Invariant future work must preserve:** journal file names must stay
+**Invariants future work must preserve:** journal file names must stay
 fixed-width, zero-padded, sequence-number-first — crash recovery (below)
 compares them as plain strings, not by parsing a sequence number back out,
-so a format change here would silently break that comparison.
+so a format change here would silently break that comparison. **The
+sequence number itself must never be reused or reset for a given player,
+ever** — any future change to how the counter is persisted or seeded must
+preserve strict, permanent monotonicity, or two different actions on
+either side of an archive could share a sequence prefix and make the
+crash-recovery cutoff comparison below ambiguous.
 
 Resolving a turn is idempotent and crash-safe by construction: a turn's
 snapshot file is written once and never replaced, so a crashed-and-retried
@@ -1270,18 +1275,20 @@ main/java/.../accounts/`: `PlayerAccount`, `AccountStore`, `PasswordHasher`,
 so directly reusing its actual shape (not just its idea) carries none of
 `design.md` §1.2's copying concerns.
 
-- **Account fields, deliberately minimal:** `login` (unique), `passwordHash`
-  + `passwordSalt` (the raw password is never stored, never logged), and a
-  re-writable `displayName` — StarWars' own convention is that a successful
-  login simply re-writes whatever display name was supplied that time, so
-  "change how I present in-game" needs no separate edit-profile flow, just
-  typing a different name next login. **Explicitly excludes anything
-  game-specific** (StarWars' account also carries lifetime XP/kills/deaths/
-  ship-unlocks, because those are cross-game persistent progression in that
-  project) — **decided (user, 2026-09-27): Launch Window's per-game choices
-  (agency/faction, and anything else about a specific playthrough) live
-  entirely in that game's own state, under the player's slot, not on the
-  account.** An account's only job is identity plus which slot it maps to.
+- **Account fields, deliberately minimal:** a server-assigned `id`
+  (generated once at account creation, never reused/reassigned), `login`
+  (unique), `passwordHash` + `passwordSalt` (the raw password is never
+  stored, never logged), and a re-writable `displayName` — StarWars' own
+  convention is that a successful login simply re-writes whatever display
+  name was supplied that time, so "change how I present in-game" needs no
+  separate edit-profile flow, just typing a different name next login.
+  **Explicitly excludes anything game-specific** (StarWars' account also
+  carries lifetime XP/kills/deaths/ship-unlocks, because those are
+  cross-game persistent progression in that project) — **decided (user,
+  2026-09-27): Launch Window's per-game choices (agency/faction, and
+  anything else about a specific playthrough) live entirely in that game's
+  own state, under the player's slot, not on the account.** An account's
+  only job is identity.
 - **Password hashing: salted SHA-256**, reusing `PasswordHasher` directly —
   StarWars' own documented reasoning ("good enough for this project's threat
   model — a hobby dedicated server, not a target worth pulling in bcrypt/
@@ -1303,7 +1310,21 @@ so directly reusing its actual shape (not just its idea) carries none of
 - **Login flow: reuse the exact same semantics** — a login name that doesn't
   exist yet auto-creates the account from the supplied password + display
   name; an existing login requires the password to match, or the attempt is
-  rejected.
+  rejected. **Decided (2026-09-29): a login is restricted to
+  `[A-Za-z0-9_-]{1,32}`**, and a blank/null display name is rejected. The
+  login charset restriction is defense in depth, not the actual mapping
+  mechanism (see below) — it still matters because a rejected-but-not-yet-
+  mapped login is a cheaper failure than a malformed one reaching a path
+  operation later.
+- **Decided (user, 2026-09-29): a per-player data directory
+  (`players/<id>/`, §3.7) is keyed by the account's server-assigned `id`,
+  never by the login directly.** A login-derived directory name would have
+  meant either normalizing case everywhere (simpler, but makes two logins
+  differing only in case the same identity - `Mario`/`mario` collide on
+  NTFS, this laptop's filesystem, but not on the Linux server, §3.9's
+  Docker deployment) or accepting that ambiguity. A stable, server-assigned
+  id sidesteps the whole question, and also means a login can be renamed
+  later without moving or migrating that player's data directory.
 - **Slot claiming — superseded (user, 2026-09-27): dynamic slot count, and
   joining stays open for the entire life of the game, not just before it
   starts.** The earlier default here (a configured max-player-count, first
@@ -1780,24 +1801,32 @@ here.
   hash/salt, display name stays as-is). In-game mail itself is still M7+
   scope (§2.9's own sequencing), not part of this milestone.
   - **Slice: snapshot + journal + atomic writes + login-time replay — done
-    (2026-09-28).** `de.mkoehler.launchwindow.persistence`:
+    (2026-09-28, hardened 2026-09-29).** `de.mkoehler.launchwindow.persistence`:
     `PlayerSnapshotStore` (one immutable file per resolved turn, per the
-    concrete layout above), `PlayerActionJournal` (monotonic sequence-numbered
-    action files, not clock-based — two actions submitted in the same
-    millisecond still need a stable replay order), `SnapshotReplay`, and
-    `PlayerStateService` tying them into the login flow and an idempotent,
-    crash-safe `resolveTurn(gameTurn)` (a cutoff saved alongside each turn's
-    snapshot lets a crashed-and-retried resolution finish archiving exactly
-    the actions it actually applied, never a later one submitted during the
-    crash window). `SetFundsAction` is the placeholder action exercising all
-    of this end to end. No network yet — proven by direct unit/integration
-    tests against the file system, not yet over real sockets.
-  - **Slice: `AccountStore`**, reused directly from StarWars (§3.8) —
-    fetch its actual source via `gh api repos/mariokoehler/StarWars/
-    contents/server/src/main/java/.../accounts/AccountStore.java` (and
-    `PasswordHasher`/`PlayerAccount`/`AuthResult` alongside it) rather than
-    reimplementing from the prose description here. Schema depends on the
-    email decision gate above.
+    concrete layout above), `PlayerActionJournal` (sequence-numbered
+    action files, the sequence durably persisted and never reused/reset —
+    see §3.7's invariant note), `SnapshotReplay`, `AtomicFiles` (the
+    shared temp-file-plus-retrying-atomic-replace helper every flat-file
+    store in this project now uses, including §3.8's `AccountStore`
+    below), and `PlayerStateService` tying the rest into the login flow
+    and an idempotent, crash-safe `resolveTurn(gameTurn)` (a cutoff saved
+    alongside each turn's snapshot lets a crashed-and-retried resolution
+    finish archiving exactly the actions it actually applied, never a
+    later one submitted during the crash window). `SetFundsAction` is the
+    placeholder action exercising all of this end to end. No network yet —
+    proven by direct unit/integration tests against the file system, not
+    yet over real sockets.
+  - **Slice: `AccountStore` — done (2026-09-29).** Adapted from StarWars'
+    own source (`gh api repos/mariokoehler/Star-Wars/contents/server/src/
+    main/java/de/mkoehler/starwars/server/accounts/AccountStore.java` —
+    the repo is `Star-Wars`, hyphenated, not `StarWars`) rather than
+    reimplemented from prose. `de.mkoehler.launchwindow.server.accounts`
+    gets `PlayerAccount` (including the server-assigned `id`, §3.8's
+    login → player-data-directory decision), `PasswordHasher`,
+    `AuthResult`, and `AccountStore` — see §3.8 for the full account
+    schema/validation rules and what was dropped from StarWars' version.
+    Its own file write is now atomic via `AtomicFiles` (§3.7's slice),
+    which StarWars' version doesn't have.
   - **Slice: minimal KryoNet protocol** — `MessageRegistry` (Robot-Rampage's
     pattern, same `gh api` fetch approach) plus two message types: submit
     one action, fetch current state.
