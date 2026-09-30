@@ -118,11 +118,11 @@ public final class PersonnelLifecyclePlayouts {
             for (int season = 0; season < seasons && rosterSize(snapshot) > 0; season++) {
                 shuffleAssignments(snapshot, random);
                 int before = rosterSize(snapshot);
-                Set<String> busyBefore = busyEmployeeKeys(snapshot);
+                Set<String> protectedBefore = protectedEmployeeKeys(snapshot);
 
                 List<ResolutionEvent> lifecycleEvents = PersonnelLifecycle.advanceSeason(snapshot);
                 List<ResolutionEvent> trainingEvents = TrainingProgress.advanceSeason(snapshot, random);
-                checkInvariants(snapshot, lifecycleEvents, before, busyBefore);
+                checkInvariants(snapshot, lifecycleEvents, before, protectedBefore);
                 checkTrainingInvariants(snapshot, trainingEvents);
 
                 for (ResolutionEvent event : lifecycleEvents) {
@@ -154,25 +154,33 @@ public final class PersonnelLifecyclePlayouts {
 
     /**
      * Cross-checks {@link PersonnelLifecycle}'s own output for internal
-     * consistency - age monotonicity and "busy never departs" are already
-     * covered exhaustively by {@code PersonnelLifecycleTest}'s own unit
-     * tests, so this focuses on what many random combinations can catch
-     * that a handful of hand-picked unit tests might not: morale staying
-     * in bounds, every reported departure actually matching the threshold
-     * it claims to, and that nobody who was busy going into this season's
-     * advance is ever among its departures - the property that would break
-     * first if {@link PersonnelLifecycle} and {@link TrainingProgress} were
-     * ever accidentally run in the wrong order.
+     * consistency - age monotonicity is already covered exhaustively by
+     * {@code PersonnelLifecycleTest}'s own unit tests, so this focuses on
+     * what many random combinations can catch that a handful of hand-picked
+     * unit tests might not: morale staying in bounds, every reported
+     * departure actually matching the threshold it claims to, and that
+     * nobody <i>protected</i> going into this season's advance is ever
+     * among its departures - computed independently here
+     * ({@link #protectedEmployeeKeys}), not by calling
+     * {@code PersonnelLifecycle}'s own (package-private, and in a different
+     * package) protection predicate, so this is a genuine cross-check of
+     * the resolver's behavior rather than the same logic agreeing with
+     * itself. See {@code design.md} &sect;2.2(c) for the actual per-group
+     * protection rule this mirrors (SET never protected; Astronaut/Mission
+     * Control protected only while {@link AssignmentState#ASSIGNED}) -
+     * reversed from BASPM's own uniform "any busy employee" shape the same
+     * session this harness was first built against.
      *
      * @param snapshot        the snapshot after this season's advance
      * @param events          the {@link PersonnelLifecycle} events this season's advance returned
      * @param rosterSizeBefore the combined roster size before this season's advance
-     * @param busyBefore      the {@code group:id} keys of every employee who was
-     *                        busy immediately before this season's advance ran
+     * @param protectedBefore the {@code group:id} keys of every employee who was
+     *                        protected from departure immediately before this
+     *                        season's advance ran
      * @throws IllegalStateException if any invariant is violated
      */
     private static void checkInvariants(PlayerSnapshot snapshot, List<ResolutionEvent> events, int rosterSizeBefore,
-            Set<String> busyBefore) {
+            Set<String> protectedBefore) {
         snapshot.getAstronauts().forEach(PersonnelLifecyclePlayouts::checkMoraleRange);
         snapshot.getSetSpecialists().forEach(PersonnelLifecyclePlayouts::checkMoraleRange);
         snapshot.getMissionControlOfficers().forEach(PersonnelLifecyclePlayouts::checkMoraleRange);
@@ -190,10 +198,9 @@ public final class PersonnelLifecyclePlayouts {
                     + " was younger than their group's retirement age: " + departure.ageAtExit());
             }
             String key = employeeKey(departure.group(), departure.personnelId());
-            if (busyBefore.contains(key)) {
+            if (protectedBefore.contains(key)) {
                 throw new IllegalStateException("Employee " + departure.personnelId()
-                    + " departed despite being busy going into this season - resignation/retirement must only"
-                    + " ever be checked while idle");
+                    + " departed despite being protected going into this season");
             }
         }
 
@@ -262,24 +269,28 @@ public final class PersonnelLifecyclePlayouts {
     }
 
     /**
-     * Collects the {@code group:id} key of every currently-busy employee
-     * across all three rosters, for {@link #checkInvariants}'s "busy never
-     * departs" check.
+     * Collects the {@code group:id} key of every employee currently
+     * protected from departure, across all three rosters, for
+     * {@link #checkInvariants}'s cross-check - computed independently from
+     * {@code PersonnelLifecycle}'s own protection rule (SET is never
+     * protected; Astronaut/Mission Control are protected only while
+     * {@link AssignmentState#ASSIGNED}, not merely non-idle), deliberately
+     * not by calling it.
      *
      * @param snapshot the snapshot to inspect
-     * @return the busy employees' keys
+     * @return the protected employees' keys
      */
-    private static Set<String> busyEmployeeKeys(PlayerSnapshot snapshot) {
+    private static Set<String> protectedEmployeeKeys(PlayerSnapshot snapshot) {
         Set<String> keys = new HashSet<>();
-        addBusyKeys(snapshot.getAstronauts(), PersonnelGroup.ASTRONAUT, keys);
-        addBusyKeys(snapshot.getSetSpecialists(), PersonnelGroup.SET, keys);
-        addBusyKeys(snapshot.getMissionControlOfficers(), PersonnelGroup.MISSION_CONTROL, keys);
+        addProtectedKeys(snapshot.getAstronauts(), PersonnelGroup.ASTRONAUT, keys);
+        addProtectedKeys(snapshot.getMissionControlOfficers(), PersonnelGroup.MISSION_CONTROL, keys);
+        // SET is deliberately excluded - never protected, regardless of assignment state.
         return keys;
     }
 
-    private static void addBusyKeys(List<? extends Personnel> roster, PersonnelGroup group, Set<String> keys) {
+    private static void addProtectedKeys(List<? extends Personnel> roster, PersonnelGroup group, Set<String> keys) {
         for (Personnel person : roster) {
-            if (person.getAssignmentState() != AssignmentState.IDLE) {
+            if (person.getAssignmentState() == AssignmentState.ASSIGNED) {
                 keys.add(employeeKey(group, person.getId()));
             }
         }

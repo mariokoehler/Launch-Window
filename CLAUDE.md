@@ -126,7 +126,8 @@ age/morale/retirement/resignation sub-slice of personnel lifecycle
 (§2.2(a)/(c)), with `PersonnelDeparture`/`DepartureReason`/`PersonnelGroup`
 as its reported events and a `ResolutionEvent` marker interface meant to
 be reused as the shared event vocabulary by every later rules-engine
-resolver. 17 new unit tests; also added one field to `Personnel`
+resolver. 21 unit tests (as of the departure-protection reversal below);
+also added one field to `Personnel`
 (`agingProgressSeasons`, an internal 0-3 bookkeeping counter, see
 `design.md` §3.4) and extended `MessageRegistryTest`'s existing
 `FetchStateResponse` round-trip to cover it over Kryo — no `MessageRegistry`
@@ -158,16 +159,34 @@ the documented composition order, with a bot that starts real training
 assignments (not just idle/busy toggling) — see `design.md` §3.10 for the
 full description, its self-checking invariants (including the new skill-
 range and IN_TRAINING-consistency ones), and its current tuning numbers
-(seed 42, 200 games, starting skills/learning-potential now randomized
-rather than flat-zero/flat-50 - see `design.md` §3.10 for that same-session
-fix: ~9% of a 3,000-employee population resigned, ~29% retired, ~61% still
-employed at an 80-season/20-year cap, ~18,300 training completions
-averaging ~7.8 skill points each). Run it directly with
+(seed 42, 200 games, starting skills/learning-potential randomized 20-90/
+20-80 - see `design.md` §3.10: ~8% resigned, ~33% retired, ~59% still
+employed of a 3,000-employee population at an 80-season/20-year cap,
+~18,200 training completions averaging ~7.8 skill points each - retirement
+jumped after the departure-protection reversal below dropped SET's own
+retirement age to 65 and stopped training from protecting anyone). Run it
+directly with
 `mvn -pl dev-tools compile exec:java -DmainClass=de.mkoehler.launchwindow.devtools.analysis.PersonnelLifecyclePlayouts`.
 Deliberately named after the resolvers it drives, not yet the general
 full-game harness `design.md` §3.10 originally described — that needs
 a real bot and the mission/program/budget resolvers, none of which exist
-yet. Git repo
+yet.
+
+**Departure-protection rule reversed from BASPM's own shape (user
+decision, 2026-09-30, after reviewing this same session's work) — see
+`design.md` §2.2(c) for the full reasoning:** BASPM protects any busy
+employee uniformly; Launch Window now protects **per group** instead -
+**SET is never protected** (they only ever work on mission components, no
+reason to block a departure mid-project), **Astronaut/Mission Control are
+protected only while `ASSIGNED`**, no longer while `IN_TRAINING`
+(protection is meant to model "don't vanish mid-mission," which training
+isn't). SET's retirement age also dropped 70→65. `PersonnelDeparture` gained
+`assignmentStateAtExit` as a "was working on something, assign a
+replacement" hint. A nice side effect: this also resolves the `PERMANENT`-
+training "immortality loophole" flagged in `design.md` §3.4 the same
+session, without needing a guard inside `PERMANENT` itself — training
+never protected Astronaut/Mission Control from departure again once the
+rule changed. Git repo
 initialized 2026-09-27 and pushed
 to GitHub as a **private**
 repo (`mariokoehler/Launch-Window` — GitHub doesn't allow spaces in repo

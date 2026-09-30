@@ -159,41 +159,45 @@ class TrainingProgressTest {
      * rock bottom) already cross both thresholds.
      */
     @Test
-    void correctCompositionOrderProtectsACompletingTraineeFromDepartingTheSameSeason() {
+    void correctCompositionOrderJudgesMoraleAgainstBeingBusyAllSeasonAndStays() {
         Astronaut astronaut = trainingAstronaut(AstronautSkill.EVA, TrainingKind.ADVANCED,
             TrainingProgress.ADVANCED_TRAINING_SEASONS - 1, TrainingProgress.ADVANCED_TRAINING_SEASONS);
-        astronaut.setAge(PersonnelLifecycle.ASTRONAUT_RETIREMENT_AGE);
-        astronaut.setAgingProgressSeasons(PersonnelLifecycle.SEASONS_PER_YEAR - 1);
-        astronaut.setMorale(1);
+        astronaut.setAge(30);
+        astronaut.setMorale(37);
         PlayerSnapshot snapshot = snapshotWithAstronaut(astronaut);
 
         List<ResolutionEvent> lifecycleEvents = PersonnelLifecycle.advanceSeason(snapshot);
         TrainingProgress.advanceSeason(snapshot, new Random(1L));
 
-        assertTrue(lifecycleEvents.isEmpty(), "the trainee was busy going into this season, so must not depart");
+        assertTrue(lifecycleEvents.isEmpty(),
+            "correct order: busy morale gain (37+3=40) keeps them above the resignation floor");
         assertEquals(1, snapshot.getAstronauts().size());
+        assertEquals(40, snapshot.getAstronauts().get(0).getMorale());
         assertEquals(AssignmentState.IDLE, snapshot.getAstronauts().get(0).getAssignmentState());
     }
 
     /**
      * Verifies the wrong composition order (running {@code TrainingProgress}
-     * first) lets the same employee wrongly depart the same season their
-     * training completes - demonstrating why the order in the test above
-     * actually matters, not just documenting a preference.
+     * first) judges that season's morale against the wrong assignment
+     * state and wrongly resigns the same employee - demonstrating why the
+     * order in the test above still matters, even though (after the
+     * 2026-09-30 departure-protection reversal, see {@link PersonnelLifecycle}'s
+     * own Javadoc) it no longer changes *eligibility* for the check, only
+     * the morale the check is judged against.
      */
     @Test
-    void wrongCompositionOrderLetsACompletingTraineeWronglyDepart() {
+    void wrongCompositionOrderJudgesMoraleAgainstAlreadyBeingIdleAndResigns() {
         Astronaut astronaut = trainingAstronaut(AstronautSkill.EVA, TrainingKind.ADVANCED,
             TrainingProgress.ADVANCED_TRAINING_SEASONS - 1, TrainingProgress.ADVANCED_TRAINING_SEASONS);
-        astronaut.setAge(PersonnelLifecycle.ASTRONAUT_RETIREMENT_AGE);
-        astronaut.setAgingProgressSeasons(PersonnelLifecycle.SEASONS_PER_YEAR - 1);
-        astronaut.setMorale(1);
+        astronaut.setAge(30);
+        astronaut.setMorale(37);
         PlayerSnapshot snapshot = snapshotWithAstronaut(astronaut);
 
         TrainingProgress.advanceSeason(snapshot, new Random(1L));
         List<ResolutionEvent> lifecycleEvents = PersonnelLifecycle.advanceSeason(snapshot);
 
-        assertEquals(1, lifecycleEvents.size(), "wrong order: the now-idle trainee wrongly departs this season");
+        assertEquals(1, lifecycleEvents.size(),
+            "wrong order: now-idle morale loss (37-2=35) hits the resignation floor exactly");
         assertTrue(snapshot.getAstronauts().isEmpty());
     }
 

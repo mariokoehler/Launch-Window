@@ -124,17 +124,99 @@ class PersonnelLifecycleTest {
     }
 
     /**
-     * Verifies that a busy employee never resigns, no matter how low their
-     * morale already is - resignation is only ever checked while idle.
+     * Verifies that an astronaut actively assigned (the "on a mission" proxy
+     * for this group, see {@link PersonnelLifecycle}'s own Javadoc) never
+     * resigns, no matter how low their morale already is.
      */
     @Test
-    void busyEmployeeNeverResignsRegardlessOfMorale() {
+    void assignedAstronautNeverResignsRegardlessOfMorale() {
         PlayerSnapshot snapshot = snapshotWithAstronaut(astronaut("a1", 40, 1, AssignmentState.ASSIGNED));
 
         List<ResolutionEvent> events = PersonnelLifecycle.advanceSeason(snapshot);
 
         assertEquals(1, snapshot.getAstronauts().size());
         assertTrue(events.isEmpty());
+    }
+
+    /**
+     * Verifies that an astronaut <em>in training</em> is not protected the
+     * way an assigned one is - the reversal from BASPM's own uniform
+     * busy-protects-everyone shape, decided 2026-09-30 (see
+     * {@link PersonnelLifecycle}'s own Javadoc): only {@code ASSIGNED}
+     * protects Astronaut/Mission Control now, not {@code IN_TRAINING}.
+     */
+    @Test
+    void inTrainingAstronautIsNotProtectedFromDeparture() {
+        Astronaut astronaut = astronaut("a1", PersonnelLifecycle.ASTRONAUT_RETIREMENT_AGE + 20, 1,
+            AssignmentState.IN_TRAINING);
+        PlayerSnapshot snapshot = snapshotWithAstronaut(astronaut);
+
+        List<ResolutionEvent> events = PersonnelLifecycle.advanceSeason(snapshot);
+
+        assertTrue(snapshot.getAstronauts().isEmpty());
+        assertEquals(1, events.size());
+    }
+
+    /**
+     * Verifies that an assigned Mission Control officer is protected the
+     * same way an assigned astronaut is - both groups share
+     * {@link PersonnelLifecycle}'s "protected only while {@code ASSIGNED}"
+     * rule, and only the astronaut path was exercised above; a copy/paste
+     * error in the shared logic could otherwise go unnoticed for this
+     * group.
+     */
+    @Test
+    void assignedMissionControlOfficerIsProtectedFromDeparture() {
+        MissionControlOfficer officer = new MissionControlOfficer("m1", "MC One",
+            PersonnelLifecycle.MISSION_CONTROL_RETIREMENT_AGE + 20, 1, 50);
+        officer.setAssignmentState(AssignmentState.ASSIGNED);
+        PlayerSnapshot snapshot = new PlayerSnapshot("Agency", Archetype.NASA, 0, 0, 0, 1);
+        snapshot.setMissionControlOfficers(List.of(officer));
+
+        List<ResolutionEvent> events = PersonnelLifecycle.advanceSeason(snapshot);
+
+        assertEquals(1, snapshot.getMissionControlOfficers().size());
+        assertTrue(events.isEmpty());
+    }
+
+    /**
+     * Verifies that SET is never protected from departure, regardless of
+     * assignment state - the other half of the 2026-09-30 reversal (see
+     * {@link PersonnelLifecycle}'s own Javadoc): SET only ever works on
+     * mission components, so there's no in-fiction reason to block a
+     * departure mid-assignment the way there is for a crew on an active
+     * mission.
+     */
+    @Test
+    void assignedSetSpecialistIsNeverProtectedFromDeparture() {
+        SetSpecialist specialist = new SetSpecialist("s1", "Set One", 30, 1, 50);
+        specialist.setAssignmentState(AssignmentState.ASSIGNED);
+        PlayerSnapshot snapshot = new PlayerSnapshot("Agency", Archetype.NASA, 0, 0, 0, 1);
+        snapshot.setSetSpecialists(List.of(specialist));
+
+        List<ResolutionEvent> events = PersonnelLifecycle.advanceSeason(snapshot);
+
+        assertTrue(snapshot.getSetSpecialists().isEmpty());
+        assertEquals(1, events.size());
+        assertEquals(DepartureReason.RESIGNED, ((PersonnelDeparture) events.get(0)).reason());
+    }
+
+    /**
+     * Verifies a departed employee's {@code assignmentStateAtExit} matches
+     * what they were actually doing that season - the "hint" a future UI
+     * can use to flag a replacement is needed, per {@code design.md}
+     * &sect;2.2(c).
+     */
+    @Test
+    void departureRecordsTheAssignmentStateAtExit() {
+        SetSpecialist assignedWhenTheyLeft = new SetSpecialist("s1", "Set One", 30, 1, 50);
+        assignedWhenTheyLeft.setAssignmentState(AssignmentState.ASSIGNED);
+        PlayerSnapshot snapshot = new PlayerSnapshot("Agency", Archetype.NASA, 0, 0, 0, 1);
+        snapshot.setSetSpecialists(List.of(assignedWhenTheyLeft));
+
+        List<ResolutionEvent> events = PersonnelLifecycle.advanceSeason(snapshot);
+
+        assertEquals(AssignmentState.ASSIGNED, ((PersonnelDeparture) events.get(0)).assignmentStateAtExit());
     }
 
     /**
@@ -173,11 +255,12 @@ class PersonnelLifecycleTest {
     }
 
     /**
-     * Verifies that a busy employee never retires either, even far past
-     * both the retirement age and the resignation morale floor at once.
+     * Verifies that an assigned astronaut never retires either, even far
+     * past both the retirement age and the resignation morale floor at
+     * once.
      */
     @Test
-    void busyEmployeeNeverRetiresOrResignsEvenPastBothThresholds() {
+    void assignedAstronautNeverRetiresOrResignsEvenPastBothThresholds() {
         Astronaut astronaut = astronaut("a1", PersonnelLifecycle.ASTRONAUT_RETIREMENT_AGE + 20, 1, AssignmentState.ASSIGNED);
         PlayerSnapshot snapshot = snapshotWithAstronaut(astronaut);
 
@@ -188,13 +271,13 @@ class PersonnelLifecycleTest {
     }
 
     /**
-     * Verifies that a departure merely deferred by being busy actually
-     * happens once the employee goes idle again - the protection is only
-     * ever "not checked this season while busy", never a permanent
+     * Verifies that a departure merely deferred by being assigned actually
+     * happens once the astronaut is no longer assigned - the protection is
+     * only ever "not checked this season while assigned", never a permanent
      * exemption once the underlying stats already cross a threshold.
      */
     @Test
-    void departureDeferredWhileBusyHappensOnceIdleAgain() {
+    void departureDeferredWhileAssignedHappensOnceUnassignedAgain() {
         Astronaut astronaut = astronaut("a1", PersonnelLifecycle.ASTRONAUT_RETIREMENT_AGE + 20, 1, AssignmentState.ASSIGNED);
         PlayerSnapshot snapshot = snapshotWithAstronaut(astronaut);
         PersonnelLifecycle.advanceSeason(snapshot);

@@ -29,15 +29,26 @@ import java.util.random.RandomGenerator;
  *
  * <p><b>Composition order with {@link PersonnelLifecycle}, for whoever wires
  * both into one season pass (M4):</b> run {@link PersonnelLifecycle#advanceSeason}
- * <i>before</i> this class's {@link #advanceSeason}, not after. A training
- * round that completes this season flips the employee to
- * {@link AssignmentState#IDLE} - if {@code PersonnelLifecycle} ran second, it
- * would see that employee as idle in the very season they were actually busy
- * for, and its resignation/retirement checks (idle-only by design) would
- * wrongly apply to them a season early. Running {@code PersonnelLifecycle}
- * first, against the assignment state as it stood going into the season,
- * keeps the "busy is never checked for departure" invariant true for the
- * season a training round completes in, same as any other season.</p>
+ * <i>before</i> this class's {@link #advanceSeason}, not after. <b>Reason,
+ * updated 2026-09-30 after {@code PersonnelLifecycle}'s own departure-
+ * protection rule was reversed</b> (see that class's Javadoc - training no
+ * longer protects Astronaut/Mission Control from departure at all, so the
+ * order no longer changes *whether* a completing trainee is eligible for
+ * the resignation/retirement check): it still changes the <i>morale</i> that
+ * check is judged against, because a training round that completes this
+ * season flips the employee to {@link AssignmentState#IDLE}. If
+ * {@code PersonnelLifecycle} ran second, it would apply the *idle* morale
+ * penalty for a season the employee actually spent busy/training, not the
+ * busy morale gain - potentially the exact difference between staying and
+ * resigning right at the floor. Running {@code PersonnelLifecycle} first
+ * judges that season's morale and departure eligibility against the
+ * assignment state the employee actually held for most of it. <b>Not
+ * guarded by the bot harness's own invariants</b> - its "busy never
+ * departs" check only covers {@link AssignmentState#ASSIGNED} now (see
+ * {@code PersonnelLifecyclePlayouts}), which this class never sets, so a
+ * wrong composition order would not trip it; {@code TrainingProgressTest}'s
+ * own composition-order tests are the only thing verifying this order
+ * still matters.</p>
  *
  * <p>Headless, per {@code design.md} &sect;3.10 - no persistence/network/
  * libGDX dependency. Driven every season by the bot harness

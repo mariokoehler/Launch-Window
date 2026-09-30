@@ -446,7 +446,12 @@ proceeds:
     re-deriving actual numbers rather than reusing BASPM's constants verbatim
     (`design.md` §1.2). **Decision: ** keep "standing orders, no
     per-turn re-declaration" for R&D-equivalent and permanent-training
-    assignments, and keep retirement/resignation gated on being idle. **Decision:** keep the morale-gates-hiring-
+    assignments, and keep retirement/resignation gated on being idle.
+    **Superseded 2026-09-30 — see this same subsection's own later entry
+    below ("Reversed (user, 2026-09-30)"): the "gated on being idle" *shape*
+    of this decision was reversed once the personnel-lifecycle rules-engine
+    slice actually existed to react to.** Left here rather than deleted so
+    the history of how the decision evolved stays legible. **Decision:** keep the morale-gates-hiring-
     pool-quality feedback loop as a systemic mechanic, independent of
     whichever exact skillset/morale buckets Launch Window ends up using.
     - **Tiger Teams — decided to diverge from BASPM here (user design input,
@@ -495,22 +500,55 @@ proceeds:
       mechanic shape:**
       - Idle: -2 morale/season. Busy (assigned or in training): +3 morale/
         season. Morale clamped to [0, 100].
-      - Resign at or below 35 morale, checked only while idle. A
-        36-44 morale band is reserved for a future "disgruntled" season-news
-        warning (`baspm.md` §9.2's precedent) — not yet consumed anywhere,
-        no news/report system exists yet to read it.
-      - Retirement age, checked only while idle: Astronauts 50, Mission
-        Control 60, SET 70 — same "astronauts age out earliest, by a wide
-        margin" shape as BASPM's own 55/65/75, different absolute values.
-      - Age itself still advances every season regardless of idle/busy —
-        only the retirement/resignation *check* is idle-gated, matching
-        BASPM's own shape and this section's own "keep retirement/
-        resignation gated on being idle" decision above. See §3.4 for how
-        age's own whole-year-vs-fractional representation was resolved.
-      - Order of operations per employee, matching BASPM's own: morale
-        updates first, then age, then (idle only) resignation is checked
-        against the just-updated morale, then (only if not resigned)
-        retirement against the just-updated age.
+      - Resign at or below 35 morale, while not protected from departure
+        (see the reversed protection rule below). A 36-44 morale band is
+        reserved for a future "disgruntled" season-news warning
+        (`baspm.md` §9.2's precedent) — not yet consumed anywhere, no news/
+        report system exists yet to read it.
+      - Retirement age, while not protected from departure: Astronauts 50,
+        Mission Control 60, **SET 65** (lowered from an initial 70 the same
+        session, user decision, 2026-09-30 — "70 seemed a bit extreme") —
+        same "astronauts age out earliest, by a wide margin" shape as
+        BASPM's own 55/65/75, different absolute values.
+      - Age itself still advances every season regardless of protection
+        status — only the retirement/resignation *check* is gated. See §3.4
+        for how age's own whole-year-vs-fractional representation was
+        resolved.
+      - Order of operations per employee: morale updates first, then age,
+        then (only if not protected) resignation is checked against the
+        just-updated morale, then (only if not resigned) retirement against
+        the just-updated age.
+      - **Departure-protection rule reversed from BASPM's own shape (user
+        decision, 2026-09-30) — this is a shape change, not just a
+        re-derived number, and deliberately not what the "keep retirement/
+        resignation gated on being idle" decision above originally said:**
+        BASPM protects any busy (non-idle) employee uniformly across all
+        three groups (`baspm.md` §9.2). Launch Window now protects
+        **per group** instead: **SET is never protected**, regardless of
+        assignment state - the user's own reasoning: "SET personnel only
+        ever work on mission components, so there is no reason not to
+        retire them even when they are assigned to a project" (a departed
+        SET employee's `assignmentStateAtExit`, new on `PersonnelDeparture`,
+        gives the player a "was working on something, assign a replacement"
+        hint - exactly *what* they were working on remains blocked on
+        §3.4's still-open R&D-target-linkage note). **Astronaut and Mission
+        Control are protected only while `ASSIGNED`** - critically, **no
+        longer while `IN_TRAINING`**, which used to protect alongside
+        `ASSIGNED` before this reversal - the user's own reasoning: this
+        protection "should only ever apply to flight controllers and
+        astronauts while they are participating in an active mission,"
+        which training isn't. **Two interpretations recorded as judgment
+        calls, not re-confirmed word for word (see
+        `PersonnelLifecycle`'s own Javadoc for the full reasoning):**
+        (1) the rule is applied to resignation as well as retirement, even
+        though the user's own wording named retirement specifically;
+        (2) `AssignmentState.ASSIGNED` is used as the stand-in for "on an
+        active mission" for Astronaut/Mission Control, which is exactly
+        right today (it has no other meaning for those two groups yet) but
+        **will need revisiting once mission simulation exists (slice 3,
+        §2.5)** - a crew `ASSIGNED` to a mission that hasn't launched yet
+        would already read as protected under this proxy, which isn't
+        quite "mid-mission."
       - Implemented in `core`'s new `de.mkoehler.launchwindow.rules`
         package (headless, §3.10) — `PersonnelLifecycle.advanceSeason`,
         with `PersonnelDeparture`/`DepartureReason`/`PersonnelGroup` as its
@@ -518,7 +556,7 @@ proceeds:
         be the shared event vocabulary for every future rules-engine
         resolver (feeding the post-turn replay/season-news/Museum
         consumers this section and §3.13 already flag as wanting one).
-        17 unit tests, fully headless — not yet wired into
+        21 unit tests, fully headless — not yet wired into
         `PlayerStateService`/`TurnScheduler` (M4 scope, per §5).
       - **Skill growth, training-state transitions, hiring, and Expert are
         still fully deferred** — this sub-slice only ever touches age,
@@ -592,11 +630,12 @@ proceeds:
         `baspm.md` §9.2), not a repeatable skill-boosting round the way
         this implementation treats it (the same diminishing-returns gain,
         on one chosen target skill, re-runnable on veteran staff same as
-        `ADVANCED`). **Open question for the user:** keep `BASIC` as a
-        repeatable same-shape-as-`ADVANCED` round (current code), or give
-        it BASPM's own distinct one-time/pass-fail post-hire shape instead
-        (which would need a real hiring-pool/new-hire concept to even
-        trigger from, not yet built)?
+        `ADVANCED`). **Decided (user, 2026-09-30): keep the current
+        repeatable, same-shape-as-`ADVANCED` behavior for now, revisit once
+        the hiring pool exists** — BASPM's own distinct one-time/pass-fail
+        post-hire shape would need a real hiring-pool/new-hire concept to
+        even trigger from, which isn't built yet; no code change from this
+        decision, it confirms what was already implemented.
       - **Assumes an already-started training assignment** — nothing in
         this project yet *starts* one (that's a player-action concern,
         doesn't exist). Only ever advances a countdown/resolves completion.
@@ -609,29 +648,40 @@ proceeds:
         counting down and eventually "complete" a round the employee was
         actually pulled out of; conversely `IN_TRAINING` with no real
         `trainingKind` set (exactly what `PersonnelLifecycleTest`'s own
-        busy-employee fixtures and the bot harness's assignment shuffle
-        both do today) must never be advanced either. **Caught before it
-        shipped**, not found later — checking `trainingKind` alone was the
-        first version.
+        busy-employee fixtures do, by design - a deliberately minimal
+        fixture, not a real training assignment) must never be advanced
+        either. **Caught before it shipped**, not found later — checking
+        `trainingKind` alone was the first version.
       - **Composition-order contract for whoever wires this together with
         `PersonnelLifecycle` in one season pass (M4), decided, documented
-        in both classes' Javadoc, and now test-enforced:** run
-        `PersonnelLifecycle` *before* `TrainingProgress`, not after —
-        otherwise an employee whose training completes this season would
-        already read as idle when `PersonnelLifecycle` checks it, letting
-        its idle-only resignation/retirement check wrongly fire a season
-        early for someone who was actually busy all season. Two tests
-        prove this directly: the correct order leaves a completing
-        trainee (already past both the retirement age and the resignation
-        morale floor) in the roster; the reversed order lets the same
-        trainee wrongly depart. The two resolvers still aren't composed
-        together anywhere in real code at first — only the contract itself
-        was verified by a test. **Composed for real later the same
-        session**, in the bot harness only (still not `PlayerStateService`/
-        `TurnScheduler`, that's M4) — see §3.10's own entry: the harness's
-        bot grew a real "start a training assignment" decision specifically
-        so this composition could be exercised, not left proven only in
-        isolated unit tests.
+        in both classes' Javadoc, and test-enforced:** run
+        `PersonnelLifecycle` *before* `TrainingProgress`, not after.
+        **Reason updated 2026-09-30 after §2.2(c)'s own departure-
+        protection reversal below:** the order no longer changes *whether*
+        a completing trainee is eligible for the resignation/retirement
+        check (training stopped protecting Astronaut/Mission Control
+        entirely) - it still changes the *morale* that check is judged
+        against, since a training round completing this season flips the
+        employee to `IDLE`. Running `PersonnelLifecycle` first judges that
+        season against the assignment state the employee actually held for
+        most of it (busy/training), not the one they only just switched to.
+        Two tests prove this with a concrete number: an astronaut at
+        morale 37, age 30 (well clear of retirement), in the final season
+        of `ADVANCED` training - correct order applies the +3 busy gain
+        (37→40) and stays; reversed order applies the −2 idle loss instead
+        (37→35), landing exactly on the resignation floor and resigning.
+        **Not guarded by the bot harness's own invariants** - its
+        "protected never departs" check (see §3.10) only covers
+        `AssignmentState.ASSIGNED` now, which `TrainingProgress` never
+        sets, so a wrong composition order wouldn't trip it; these two unit
+        tests are the only thing verifying the order still matters. The two
+        resolvers still aren't composed together anywhere in real code at
+        first — only the contract itself was verified by a test.
+        **Composed for real later the same session**, in the bot harness
+        only (still not `PlayerStateService`/`TurnScheduler`, that's M4) —
+        see §3.10's own entry: the harness's bot grew a real "start a
+        training assignment" decision specifically so this composition
+        could be exercised, not left proven only in isolated unit tests.
       - 12 unit tests, fully headless.
 - 2.3 **Programs & mission configurations (the Sputnik→Apollo tech/content
   tree) — analyzed 2026-09-27, see `baspm.md` §10 for the full trace.**
@@ -1149,18 +1199,24 @@ unconfirmed:**
   the target skill reaches it. **Proposed but not implemented this
   session** - only `BASIC`/`ADVANCED` (fixed-length) are actually resolved
   by code yet; `PERMANENT`'s re-enrollment logic is deferred to whenever
-  it's picked up. **A real design risk flagged ahead of time, for the user
-  to weigh in on, not a code bug to fix:** combined with §2.2(a)/(c)'s kept
-  "resignation/retirement only checked while idle" property, an employee
-  on a `PERMANENT` standing order stays busy indefinitely - if their target
-  level is set high (or unreachable, near/at the skill cap), they could
-  stay busy for the rest of the game and never become eligible to resign
-  or retire at all. Worth deciding, before `PERMANENT` is implemented,
-  whether that's an acceptable emergent strategy (a real trade-off: an
-  employee parked in permanent training never grows other skills or does
-  other work either) or a loophole worth closing (e.g. a termination
-  guard that also forces a training round back to idle/re-evaluation
-  after some cap, not just when the target level is reached).
+  it's picked up. **The "immortality loophole" flagged here originally is
+  now resolved as a side effect of §2.2(c)'s 2026-09-30 departure-
+  protection reversal, not by a guard inside `PERMANENT` itself:** this
+  note originally warned that combining `PERMANENT` with the
+  then-current "resignation/retirement only checked while idle" property
+  would let an employee on a high/unreachable-target standing order stay
+  protected indefinitely. Since training (any kind, including the future
+  `PERMANENT`) no longer protects Astronaut/Mission Control from departure
+  at all - only `AssignmentState.ASSIGNED` does now, and SET is never
+  protected regardless - an employee stuck in `PERMANENT` training is
+  exactly as eligible to resign/retire as an idle one, every season. **A
+  termination guard is still needed for a different reason, not this
+  one:** without a cap on re-enrollment, a standing order with learning
+  potential 0 (the gain is always 0) or a target at/above `SkillGrowth.SKILL_CAP`
+  (the curve only approaches it asymptotically) would loop forever,
+  re-enrolling every round with no progress - an infinite-loop bug, not a
+  balance question. Stop re-enrolling once the target is reached *or* a
+  round's own gain falls below a small epsilon.
 - **R&D's own target skill is a separate, still-fully-open question, not
   solved by any of the above:** `AssignmentState.ASSIGNED` still doesn't
   distinguish "doing R&D" from "assigned to a mission" (its own doc
@@ -1171,7 +1227,11 @@ unconfirmed:**
   since "what is this SET employee's R&D actually contributing to" is a
   program/component-linkage question, not a pure personnel one. Not
   proposed in detail here - deliberately left to whichever slice actually
-  introduces mission-component-linked R&D.
+  introduces mission-component-linked R&D. **Reverse pointer (2026-09-30):**
+  when that linkage lands, also extend `PersonnelDeparture` (§2.2(c)) with
+  what the employee was actually working on - it currently only carries
+  `assignmentStateAtExit`, a coarse "were they ASSIGNED/IN_TRAINING/IDLE"
+  hint, exactly because this finer-grained link doesn't exist yet.
 - **Wire-format note for whoever implements this:** `TrainingKind` is a new
   enum reachable from `PlayerSnapshot`, so it needs a `MessageRegistry`
   entry appended at the end of `register(Kryo)` (never inserted earlier -
@@ -1712,9 +1772,13 @@ matching Robot-Rampage's placement exactly, holds
 (§2.2(c)'s new resolver) across many random rosters/seasons, seeded for
 reproducibility, with a trivial "bot" (each employee independently has a
 per-season chance of toggling idle/busy — just enough churn to exercise
-both the morale-gain-while-busy path and the idle-only resignation/
-retirement checks, not a stand-in for a real per-turn decision, which
-doesn't exist yet). Reports a small `PersonnelPlayoutReport` — games
+both the morale-gain-while-busy path and the (at the time) idle-only
+resignation/retirement checks, not a stand-in for a real per-turn
+decision, which doesn't exist yet). **Historical, pre-reversal**: this
+paragraph describes the harness as first built, before both
+`TrainingProgress` was wired in and the departure-protection rule was
+reversed later the same day - see both entries below for the current
+shape. Reports a small `PersonnelPlayoutReport` — games
 played, resigned/retired counts and their average tenure in seasons,
 still-employed count — plus self-checking invariants (morale bounds, every
 reported departure actually matching the threshold it claims) that throw
@@ -1788,11 +1852,34 @@ that constant ever gets retuned, since it will move this number a lot.
 length was briefly 2 seasons, landing on BASPM's own exact value for that
 group by coincidence — re-derived to 3 instead before any of the numbers
 above were finalized, per §1.2's no-verbatim-match rule; see §2.2(c)'s own
-entry for the full note, including that `BASIC` training's completion
-behavior (the same diminishing-returns gain `ADVANCED` uses) is this
-session's own invented shape, not something `baspm.md` traces for basic
-training specifically — flagged as an open question for the user there,
-not decided unilaterally.
+entry for the full note. `BASIC` training's completion behavior (the same
+diminishing-returns gain `ADVANCED` uses) was flagged as this session's own
+invented shape, not something `baspm.md` traces for basic training
+specifically — **decided (user, 2026-09-30): keep it, revisit once the
+hiring pool exists** (§2.2(c)).
+
+**Departure-protection rule reversed the same session (user decision,
+2026-09-30, §2.2(c)) — the harness's own invariant check updated to match,
+independently re-deriving the new rule rather than calling the resolver's
+own predicate** (renamed `busyEmployeeKeys`/`checkInvariants`'s "busy never
+departs" wording to `protectedEmployeeKeys`/"protected never departs" -
+`group != SET && state == ASSIGNED`, computed separately in
+`PersonnelLifecyclePlayouts` itself). SET's retirement age also dropped
+from 70 to 65 the same session. **Numbers after both changes, same seed/
+game shape as above:** 234 resigned (avg. tenure 33.2 seasons), **992
+retired** (avg. tenure 56.4 seasons, up from 884 - training and SET's
+own assignment state no longer protecting anyone pushed many more
+employees past their retirement age before the season cap), 1,774 still
+employed, 18,237 training completions, average gain 7.79 (essentially
+unchanged, as expected - the growth formula itself didn't change). **The
+earlier "SET can't retire at all under this run's settings" caveat above
+is now only barely avoided, not comfortably true**: with SET's own age now
+65 (not 70) and starting ages 24-45, only an employee who started at
+exactly the oldest age (45) reaches retirement exactly at the 80-season
+cap's edge (45 + 20 years = 65) - still not a comfortable margin, so the
+same underlying finding holds (§2.2(c)'s own open question: is a realistic
+game long enough for SET to actually retire meaningfully?), just less
+extreme than the original 70-age/100-season gap.
 
 **Still not built:** the general full-game harness described in this
 section's original text below — simple bots making plausible per-season
@@ -2588,6 +2675,13 @@ here.
     per the shape-defining choice above) — §2.5. **Decision gate:** §2.5(c)'s
     outcome-tier shape (four vs. five tiers, "vital vs. optional step") is
     still marked unconfirmed and must be settled before this slice starts.
+    **Also pick up while here (§2.2(c), 2026-09-30):** switch Astronaut/
+    Mission Control's departure-protection signal from
+    `AssignmentState.ASSIGNED` to something closer to "in flight" -
+    `ASSIGNED` was used as a stand-in because it had no other meaning for
+    those two groups yet, but once a mission actually exists, a crew
+    `ASSIGNED` to one that hasn't launched would already read as protected
+    under the current proxy, which isn't quite right.
   - Slice: budget/funding review, prestige, goals, and the win-condition +
     tie-break check — §2.1/§2.6/§2.9.
   - Slice: random events — §2.7.

@@ -22,22 +22,59 @@ import java.util.Objects;
  * {@link PlayerSnapshot}, nothing else.</p>
  *
  * <p><b>Deliberately out of scope for this slice</b> (later M2 slices, see
- * {@code design.md} &sect;2.2): skill growth (training, R&amp;D, flying a
- * mission), training-state transitions, the hiring pool, and the Expert
- * trait. This pass only ever touches {@link Personnel#getAge()},
- * {@link Personnel#getMorale()}, and roster membership - it never reads or
- * writes a skill map. It also never touches {@link PlayerSnapshot#getSeason()}
- * itself; season advancement is {@code PlayerStateService}'s job
- * ({@code design.md} &sect;3.7), not the rules engine's.</p>
+ * {@code design.md} &sect;2.2): skill growth (R&amp;D, flying a mission -
+ * training itself is {@link TrainingProgress}, a separate resolver), the
+ * hiring pool, and the Expert trait. This pass only ever touches
+ * {@link Personnel#getAge()}, {@link Personnel#getMorale()}, and roster
+ * membership - it never reads or writes a skill map. It also never touches
+ * {@link PlayerSnapshot#getSeason()} itself; season advancement is
+ * {@code PlayerStateService}'s job ({@code design.md} &sect;3.7), not the
+ * rules engine's.</p>
  *
- * <p><b>Order of operations per employee, matching BASPM's own shape</b>
- * ({@code baspm.md} &sect;9.2): morale updates first (idle loses, busy
- * gains), then age, then - only while idle - resignation is checked against
- * the just-updated morale, and only if not resigned, retirement is checked
- * against the just-updated age. A busy employee's morale and age still
- * update every season; only the resignation/retirement *check* is
- * idle-gated, matching BASPM's own "busy employees are protected" property,
- * which {@code design.md} &sect;2.2(c) explicitly decided to keep.</p>
+ * <p><b>Order of operations per employee:</b> morale updates first (idle
+ * loses, busy gains), then age, then resignation is checked against the
+ * just-updated morale (only if {@link #isProtectedFromDeparture} says no),
+ * and only if not resigned, retirement is checked against the just-updated
+ * age (same protection check). A protected employee's morale and age still
+ * update every season; only the resignation/retirement *check* is skipped
+ * for them.</p>
+ *
+ * <p><b>The departure-protection rule itself - reversed from BASPM's own
+ * shape, not just re-derived numbers (user decision, 2026-09-30, see
+ * {@code design.md} &sect;2.2(c)):</b> BASPM protects any busy (non-idle)
+ * employee uniformly across all three groups ({@code baspm.md} &sect;9.2).
+ * Launch Window instead protects <b>per group</b>, via
+ * {@link #isProtectedFromDeparture}: SET is <b>never</b> protected,
+ * regardless of {@link AssignmentState} - SET only ever works on mission
+ * components, so there's no in-fiction reason to block them from leaving
+ * mid-assignment the way pulling a crew off a launching rocket would be a
+ * problem. Astronaut and Mission Control are protected <b>only</b> while
+ * {@link AssignmentState#ASSIGNED} - critically, <b>not</b> while
+ * {@link AssignmentState#IN_TRAINING}, which used to protect uniformly
+ * alongside {@code ASSIGNED} before this reversal. This is a deliberate,
+ * user-directed departure from the "keep BASPM's busy-protects-everyone
+ * shape" decision recorded earlier the same session in {@code design.md}
+ * &sect;2.2(c) - that earlier entry is superseded for the *shape* of the
+ * rule, not overwritten, so the history stays legible.</p>
+ *
+ * <p><b>Two interpretations of the user's instruction, recorded as this
+ * class's own judgment calls, not re-confirmed word for word:</b> (1) the
+ * user's wording named retirement specifically ("no reason not to retire
+ * them"); this class applies the identical protection rule to resignation
+ * too, reading that as the natural extension rather than a narrower one
+ * covering only retirement. (2) {@link AssignmentState#ASSIGNED} is used
+ * here as the proxy for "on an active mission" for Astronaut/Mission
+ * Control - which is exactly right today, since {@code ASSIGNED} has no
+ * other meaning yet for those two groups. <b>This proxy will need
+ * revisiting once mission simulation exists (slice 3, {@code design.md}
+ * &sect;2.5)</b>: a crew {@code ASSIGNED} to a mission that hasn't actually
+ * launched yet would already read as "protected" under this rule, which
+ * isn't quite "mid-mission" - the eventual mission-sim slice should key
+ * protection off something closer to "in flight," not merely "assigned to
+ * a mission," or a version of the immortality problem {@code design.md}
+ * &sect;3.4 warns about for {@code PERMANENT} training (an indefinitely
+ * long "assignment" that never lets its holder become eligible to depart)
+ * could resurface here too.</p>
  *
  * <p><b>All the numeric constants below are Launch Window's own values, not
  * BASPM's</b> - {@code design.md} &sect;1.2 forbids reusing BASPM's own
@@ -73,7 +110,8 @@ public final class PersonnelLifecycle {
     public static final int MORALE_MAX = 100;
 
     /**
-     * At or below this morale, an idle employee resigns that same season.
+     * At or below this morale, an employee not protected from departure
+     * (see {@link #isProtectedFromDeparture}) resigns that same season.
      */
     public static final int RESIGNATION_MORALE_FLOOR = 35;
 
@@ -97,8 +135,12 @@ public final class PersonnelLifecycle {
     /** Retirement age, in whole years, for the Mission Control roster. */
     public static final int MISSION_CONTROL_RETIREMENT_AGE = 60;
 
-    /** Retirement age, in whole years, for the SET roster. */
-    public static final int SET_RETIREMENT_AGE = 70;
+    /**
+     * Retirement age, in whole years, for the SET roster. Lowered from an
+     * initial 70 to 65 the same session (user decision, 2026-09-30) - 70
+     * "seemed a bit extreme."
+     */
+    public static final int SET_RETIREMENT_AGE = 65;
 
     /**
      * Not instantiable; this class only exposes static methods.
@@ -128,6 +170,24 @@ public final class PersonnelLifecycle {
     }
 
     /**
+     * Whether an employee is protected from the resignation/retirement
+     * check this season - the per-group rule this class's own Javadoc
+     * explains in full. SET is never protected; Astronaut and Mission
+     * Control are protected only while {@link AssignmentState#ASSIGNED}.
+     *
+     * @param group the employee's personnel group
+     * @param state the employee's current assignment state
+     * @return {@code true} if the resignation/retirement check must be
+     *     skipped for them this season
+     */
+    static boolean isProtectedFromDeparture(PersonnelGroup group, AssignmentState state) {
+        if (group == PersonnelGroup.SET) {
+            return false;
+        }
+        return state == AssignmentState.ASSIGNED;
+    }
+
+    /**
      * Advances one roster, removing anyone who departs.
      *
      * @param roster        the roster to advance and prune, of any {@link Personnel}
@@ -142,10 +202,13 @@ public final class PersonnelLifecycle {
         Iterator<T> iterator = roster.iterator();
         while (iterator.hasNext()) {
             T person = iterator.next();
-            DepartureReason reason = advanceOne(person, retirementAge);
+            // advanceOne never itself mutates assignmentState, so reading it here (after
+            // morale/age have already advanced) still reflects what this employee was doing
+            // this season.
+            DepartureReason reason = advanceOne(person, group, retirementAge);
             if (reason != null) {
                 events.add(new PersonnelDeparture(group, person.getId(), person.getName(), reason,
-                    person.getAge(), person.getMorale()));
+                    person.getAge(), person.getMorale(), person.getAssignmentState()));
                 iterator.remove();
             }
         }
@@ -156,16 +219,17 @@ public final class PersonnelLifecycle {
      * depart this season.
      *
      * @param person        the employee to advance
+     * @param group         their personnel group
      * @param retirementAge their roster's retirement age, in whole years
      * @return why they depart, or {@code null} if they stay
      */
-    private static DepartureReason advanceOne(Personnel person, int retirementAge) {
+    private static DepartureReason advanceOne(Personnel person, PersonnelGroup group, int retirementAge) {
         boolean idle = person.getAssignmentState() == AssignmentState.IDLE;
         int moraleDelta = idle ? -IDLE_MORALE_LOSS_PER_SEASON : BUSY_MORALE_GAIN_PER_SEASON;
         person.setMorale(clamp(person.getMorale() + moraleDelta, MORALE_MIN, MORALE_MAX));
         advanceAge(person);
 
-        if (!idle) {
+        if (isProtectedFromDeparture(group, person.getAssignmentState())) {
             return null;
         }
         if (person.getMorale() <= RESIGNATION_MORALE_FLOOR) {
