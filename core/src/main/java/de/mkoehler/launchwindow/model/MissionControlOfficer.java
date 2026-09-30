@@ -18,11 +18,15 @@ import java.util.Objects;
  * {@code de.mkoehler.launchwindow.net.MessageRegistry}) needs a
  * no-arg-constructible map, which {@code EnumMap} isn't.</p>
  *
+ * <p>Competency values are {@code double}, not {@code int} - flat per-season
+ * growth elsewhere in this project ({@code design.md} &sect;2.2(c)) can be
+ * smaller than 1 and would round away to nothing on an integer scale.</p>
+ *
  * @author Mario Koehler
  */
 public class MissionControlOfficer extends Personnel {
 
-    private Map<MissionControlSkill, Integer> skills = new LinkedHashMap<>();
+    private Map<MissionControlSkill, Double> skills = new LinkedHashMap<>();
 
     /**
      * No-argument constructor required for Jackson deserialization.
@@ -50,7 +54,7 @@ public class MissionControlOfficer extends Personnel {
      *
      * @return the skill map
      */
-    public Map<MissionControlSkill, Integer> getSkills() {
+    public Map<MissionControlSkill, Double> getSkills() {
         return skills;
     }
 
@@ -59,7 +63,7 @@ public class MissionControlOfficer extends Personnel {
      *
      * @param skills the skill map
      */
-    public void setSkills(Map<MissionControlSkill, Integer> skills) {
+    public void setSkills(Map<MissionControlSkill, Double> skills) {
         Objects.requireNonNull(skills, "skills must not be null");
         this.skills = new LinkedHashMap<>(skills);
     }
@@ -70,8 +74,8 @@ public class MissionControlOfficer extends Personnel {
      * @param skill the skill to look up
      * @return the competency value, or {@code 0} if not set
      */
-    public int getSkill(MissionControlSkill skill) {
-        return skills.getOrDefault(skill, 0);
+    public double getSkill(MissionControlSkill skill) {
+        return skills.getOrDefault(skill, 0.0);
     }
 
     /**
@@ -80,7 +84,7 @@ public class MissionControlOfficer extends Personnel {
      * @param skill the skill to set
      * @param value the competency value
      */
-    public void setSkill(MissionControlSkill skill, int value) {
+    public void setSkill(MissionControlSkill skill, double value) {
         skills.put(skill, value);
     }
 
@@ -92,10 +96,10 @@ public class MissionControlOfficer extends Personnel {
      * @return the average of the five stored competency values
      */
     public double flightDirectorSkill() {
-        int sum = 0;
+        double sum = 0;
         for (MissionControlSkill skill : MissionControlSkill.values()) {
             sum += getSkill(skill);
         }
-        return sum / (double) MissionControlSkill.values().length;
+        return sum / MissionControlSkill.values().length;
     }
 }

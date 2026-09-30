@@ -13,11 +13,15 @@ import java.util.Objects;
  * {@code de.mkoehler.launchwindow.net.MessageRegistry}) needs a
  * no-arg-constructible map, which {@code EnumMap} isn't.</p>
  *
+ * <p>Competency values are {@code double}, not {@code int} - SET's flat
+ * per-season R&amp;D growth ({@code design.md} &sect;2.2(c)) can be smaller
+ * than 1 and would round away to nothing on an integer scale.</p>
+ *
  * @author Mario Koehler
  */
 public class SetSpecialist extends Personnel {
 
-    private Map<SetSkill, Integer> skills = new LinkedHashMap<>();
+    private Map<SetSkill, Double> skills = new LinkedHashMap<>();
 
     /**
      * No-argument constructor required for Jackson deserialization.
@@ -45,7 +49,7 @@ public class SetSpecialist extends Personnel {
      *
      * @return the skill map
      */
-    public Map<SetSkill, Integer> getSkills() {
+    public Map<SetSkill, Double> getSkills() {
         return skills;
     }
 
@@ -54,7 +58,7 @@ public class SetSpecialist extends Personnel {
      *
      * @param skills the skill map
      */
-    public void setSkills(Map<SetSkill, Integer> skills) {
+    public void setSkills(Map<SetSkill, Double> skills) {
         Objects.requireNonNull(skills, "skills must not be null");
         this.skills = new LinkedHashMap<>(skills);
     }
@@ -65,8 +69,8 @@ public class SetSpecialist extends Personnel {
      * @param skill the skill to look up
      * @return the competency value, or {@code 0} if not set
      */
-    public int getSkill(SetSkill skill) {
-        return skills.getOrDefault(skill, 0);
+    public double getSkill(SetSkill skill) {
+        return skills.getOrDefault(skill, 0.0);
     }
 
     /**
@@ -75,7 +79,7 @@ public class SetSpecialist extends Personnel {
      * @param skill the skill to set
      * @param value the competency value
      */
-    public void setSkill(SetSkill skill, int value) {
+    public void setSkill(SetSkill skill, double value) {
         skills.put(skill, value);
     }
 }

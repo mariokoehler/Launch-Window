@@ -990,7 +990,15 @@ covering the shapes already decided in §2/§3.7/§3.8:
   `MissionControlOfficer.flightDirectorSkill()` computes the sixth "Flight
   Director" aptitude as the plain average of the other five, exactly as
   `baspm.md` §9.1 traced — not a stored value, so not a member of
-  `MissionControlSkill`.
+  `MissionControlSkill`. **Skill values switched from `Integer` to `Double`
+  (2026-09-30, M2's skill-growth groundwork):** SET's flat per-season R&D
+  growth (§2.2(c)/`baspm.md` §9.3's re-derived shape) is well under 1 per
+  season, which an `Integer` map would round away to nothing every single
+  season. All three `getSkill`/`setSkill` accessors and the underlying maps
+  changed together; every existing skill-map test updated to match, and the
+  Kryo/Jackson round-trip tests (`MessageRegistryTest`/`PlayerSnapshotTest`)
+  now assert on a fractional value specifically, not just an integer that
+  happens to also be a valid double.
 - **`AssignmentState`** — `IDLE`/`ASSIGNED`/`IN_TRAINING`; deliberately does
   not yet distinguish R&D from a mission assignment, since neither exists as
   a model type yet.

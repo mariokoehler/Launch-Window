@@ -21,20 +21,22 @@ class AstronautTest {
     void unsetSkillDefaultsToZero() {
         Astronaut astronaut = new Astronaut("astro-1", "Jane Reyes", 34, 80, 60);
 
-        assertEquals(0, astronaut.getSkill(AstronautSkill.EVA));
+        assertEquals(0.0, astronaut.getSkill(AstronautSkill.EVA));
     }
 
     /**
      * Verifies that a value written via {@code setSkill} is read back
-     * unchanged via {@code getSkill}.
+     * unchanged via {@code getSkill}, including a fractional value - the
+     * shape flat per-season skill growth needs, {@code design.md}
+     * &sect;2.2(c).
      */
     @Test
     void setSkillIsReflectedByGetSkill() {
         Astronaut astronaut = new Astronaut("astro-1", "Jane Reyes", 34, 80, 60);
 
-        astronaut.setSkill(AstronautSkill.LEADERSHIP, 42);
+        astronaut.setSkill(AstronautSkill.LEADERSHIP, 42.7);
 
-        assertEquals(42, astronaut.getSkill(AstronautSkill.LEADERSHIP));
+        assertEquals(42.7, astronaut.getSkill(AstronautSkill.LEADERSHIP));
     }
 
     /**
@@ -46,9 +48,9 @@ class AstronautTest {
     void setSkillsCopiesAnImmutableMapIntoAMutableOne() {
         Astronaut astronaut = new Astronaut("astro-1", "Jane Reyes", 34, 80, 60);
 
-        astronaut.setSkills(Map.of(AstronautSkill.PILOTING, 55));
+        astronaut.setSkills(Map.of(AstronautSkill.PILOTING, 55.0));
 
-        assertEquals(55, astronaut.getSkill(AstronautSkill.PILOTING));
+        assertEquals(55.0, astronaut.getSkill(AstronautSkill.PILOTING));
         assertDoesNotThrow(() -> astronaut.setSkill(AstronautSkill.SCIENCE, 30));
     }
 }

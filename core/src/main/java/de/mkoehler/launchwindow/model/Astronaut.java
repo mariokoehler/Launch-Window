@@ -13,11 +13,15 @@ import java.util.Objects;
  * {@code de.mkoehler.launchwindow.net.MessageRegistry}) needs a
  * no-arg-constructible map, which {@code EnumMap} isn't.</p>
  *
+ * <p>Competency values are {@code double}, not {@code int} - flat per-season
+ * growth (e.g. SET's R&amp;D gain, {@code design.md} &sect;2.2(c)) can be
+ * smaller than 1 and would round away to nothing on an integer scale.</p>
+ *
  * @author Mario Koehler
  */
 public class Astronaut extends Personnel {
 
-    private Map<AstronautSkill, Integer> skills = new LinkedHashMap<>();
+    private Map<AstronautSkill, Double> skills = new LinkedHashMap<>();
 
     /**
      * No-argument constructor required for Jackson deserialization.
@@ -45,7 +49,7 @@ public class Astronaut extends Personnel {
      *
      * @return the skill map
      */
-    public Map<AstronautSkill, Integer> getSkills() {
+    public Map<AstronautSkill, Double> getSkills() {
         return skills;
     }
 
@@ -54,7 +58,7 @@ public class Astronaut extends Personnel {
      *
      * @param skills the skill map
      */
-    public void setSkills(Map<AstronautSkill, Integer> skills) {
+    public void setSkills(Map<AstronautSkill, Double> skills) {
         Objects.requireNonNull(skills, "skills must not be null");
         this.skills = new LinkedHashMap<>(skills);
     }
@@ -65,8 +69,8 @@ public class Astronaut extends Personnel {
      * @param skill the skill to look up
      * @return the competency value, or {@code 0} if not set
      */
-    public int getSkill(AstronautSkill skill) {
-        return skills.getOrDefault(skill, 0);
+    public double getSkill(AstronautSkill skill) {
+        return skills.getOrDefault(skill, 0.0);
     }
 
     /**
@@ -75,7 +79,7 @@ public class Astronaut extends Personnel {
      * @param skill the skill to set
      * @param value the competency value
      */
-    public void setSkill(AstronautSkill skill, int value) {
+    public void setSkill(AstronautSkill skill, double value) {
         skills.put(skill, value);
     }
 }

@@ -44,7 +44,7 @@ class PlayerSnapshotTest {
             new PlayerSnapshot("Hanseatic Space Agency", Archetype.SOVIET, 25_000, 100, 5_000, 3);
 
         Astronaut astronaut = new Astronaut("astro-1", "Jane Reyes", 34, 80, 60);
-        astronaut.setSkill(AstronautSkill.PILOTING, 70);
+        astronaut.setSkill(AstronautSkill.PILOTING, 70.5);
         astronaut.setAssignmentState(AssignmentState.ASSIGNED);
         astronaut.setAgingProgressSeasons(2);
         original.setAstronauts(List.of(astronaut));
@@ -76,7 +76,7 @@ class PlayerSnapshotTest {
         assertEquals(80, restoredAstronaut.getMorale());
         assertEquals(60, restoredAstronaut.getLearningPotential());
         assertEquals(AssignmentState.ASSIGNED, restoredAstronaut.getAssignmentState());
-        assertEquals(70, restoredAstronaut.getSkill(AstronautSkill.PILOTING));
+        assertEquals(70.5, restoredAstronaut.getSkill(AstronautSkill.PILOTING));
         assertEquals(2, restoredAstronaut.getAgingProgressSeasons());
 
         assertEquals(1, restored.getSetSpecialists().size());

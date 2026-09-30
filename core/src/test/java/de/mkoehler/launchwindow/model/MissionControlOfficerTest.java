@@ -22,7 +22,21 @@ class MissionControlOfficerTest {
     void unsetSkillDefaultsToZero() {
         MissionControlOfficer officer = new MissionControlOfficer("mco-1", "Alex Novak", 45, 70, 40);
 
-        assertEquals(0, officer.getSkill(MissionControlSkill.PROPULSION));
+        assertEquals(0.0, officer.getSkill(MissionControlSkill.PROPULSION));
+    }
+
+    /**
+     * Verifies that a fractional skill value - the shape SET's flat R&D
+     * growth needs, {@code design.md} &sect;2.2(c) - is read back exactly,
+     * not rounded to a whole number.
+     */
+    @Test
+    void fractionalSkillValueIsReadBackExactly() {
+        MissionControlOfficer officer = new MissionControlOfficer("mco-1", "Alex Novak", 45, 70, 40);
+
+        officer.setSkill(MissionControlSkill.PROPULSION, 50.3);
+
+        assertEquals(50.3, officer.getSkill(MissionControlSkill.PROPULSION));
     }
 
     /**
@@ -63,9 +77,9 @@ class MissionControlOfficerTest {
     void setSkillsCopiesAnImmutableMapIntoAMutableOne() {
         MissionControlOfficer officer = new MissionControlOfficer("mco-1", "Alex Novak", 45, 70, 40);
 
-        officer.setSkills(Map.of(MissionControlSkill.MISSION_OPERATIONS, 66));
+        officer.setSkills(Map.of(MissionControlSkill.MISSION_OPERATIONS, 66.0));
 
-        assertEquals(66, officer.getSkill(MissionControlSkill.MISSION_OPERATIONS));
+        assertEquals(66.0, officer.getSkill(MissionControlSkill.MISSION_OPERATIONS));
         assertDoesNotThrow(() -> officer.setSkill(MissionControlSkill.PROPULSION, 10));
     }
 }
