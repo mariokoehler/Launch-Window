@@ -46,6 +46,7 @@ class PlayerSnapshotTest {
         Astronaut astronaut = new Astronaut("astro-1", "Jane Reyes", 34, 80, 60);
         astronaut.setSkill(AstronautSkill.PILOTING, 70);
         astronaut.setAssignmentState(AssignmentState.ASSIGNED);
+        astronaut.setAgingProgressSeasons(2);
         original.setAstronauts(List.of(astronaut));
 
         SetSpecialist specialist = new SetSpecialist("set-1", "Omar Idris", 41, 75, 55);
@@ -76,6 +77,7 @@ class PlayerSnapshotTest {
         assertEquals(60, restoredAstronaut.getLearningPotential());
         assertEquals(AssignmentState.ASSIGNED, restoredAstronaut.getAssignmentState());
         assertEquals(70, restoredAstronaut.getSkill(AstronautSkill.PILOTING));
+        assertEquals(2, restoredAstronaut.getAgingProgressSeasons());
 
         assertEquals(1, restored.getSetSpecialists().size());
         SetSpecialist restoredSpecialist = restored.getSetSpecialists().get(0);

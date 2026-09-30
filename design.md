@@ -487,6 +487,42 @@ proceeds:
       for real-world facts (as opposed to BASPM's own specific expression of
       them), Launch Window is free to keep the term verbatim if it fits the
       tone; this isn't a case needing a reskin.
+    - **Age/morale/retirement/resignation sub-slice implemented (2026-09-30,
+      M2's first rules-engine slice, §5) — concrete numbers decided, all
+      (unconfirmed defaults) pending real bot-harness tuning (§3.10), and all
+      deliberately different from BASPM's own constants (`baspm.md` §9.2)
+      per §1.2's no-verbatim-reuse rule, while keeping the identical
+      mechanic shape:**
+      - Idle: -2 morale/season. Busy (assigned or in training): +3 morale/
+        season. Morale clamped to [0, 100].
+      - Resign at or below 35 morale, checked only while idle. A
+        36-44 morale band is reserved for a future "disgruntled" season-news
+        warning (`baspm.md` §9.2's precedent) — not yet consumed anywhere,
+        no news/report system exists yet to read it.
+      - Retirement age, checked only while idle: Astronauts 50, Mission
+        Control 60, SET 70 — same "astronauts age out earliest, by a wide
+        margin" shape as BASPM's own 55/65/75, different absolute values.
+      - Age itself still advances every season regardless of idle/busy —
+        only the retirement/resignation *check* is idle-gated, matching
+        BASPM's own shape and this section's own "keep retirement/
+        resignation gated on being idle" decision above. See §3.4 for how
+        age's own whole-year-vs-fractional representation was resolved.
+      - Order of operations per employee, matching BASPM's own: morale
+        updates first, then age, then (idle only) resignation is checked
+        against the just-updated morale, then (only if not resigned)
+        retirement against the just-updated age.
+      - Implemented in `core`'s new `de.mkoehler.launchwindow.rules`
+        package (headless, §3.10) — `PersonnelLifecycle.advanceSeason`,
+        with `PersonnelDeparture`/`DepartureReason`/`PersonnelGroup` as its
+        reported events, and a `ResolutionEvent` marker interface meant to
+        be the shared event vocabulary for every future rules-engine
+        resolver (feeding the post-turn replay/season-news/Museum
+        consumers this section and §3.13 already flag as wanting one).
+        16 unit tests, fully headless — not yet wired into
+        `PlayerStateService`/`TurnScheduler` (M4 scope, per §5).
+      - **Skill growth, training-state transitions, hiring, and Expert are
+        still fully deferred** — this sub-slice only ever touches age,
+        morale, and roster membership, never a skill map.
 - 2.3 **Programs & mission configurations (the Sputnik→Apollo tech/content
   tree) — analyzed 2026-09-27, see `baspm.md` §10 for the full trace.**
   - **(a) How BASPM does it:** a Program Category (Robotic or Crewed group,
@@ -959,6 +995,19 @@ covering the shapes already decided in §2/§3.7/§3.8:
   not yet distinguish R&D from a mission assignment, since neither exists as
   a model type yet.
 
+**Age representation — decided (2026-09-30, M2's personnel-lifecycle
+slice, §2.2(c)/§5):** `Personnel.age` stays a whole-years `int` (its
+existing M1 shape/API is unchanged), rather than switching to a fractional
+or seasons-only representation. A new, separate `agingProgressSeasons`
+field (`int`, 0-3, public accessors only because Jackson/Kryo need a bean)
+tracks how many seasons have accumulated since `age` last incremented -
+BASPM's own age advances by exactly 0.25/season (`baspm.md` §9.2), and one
+Launch Window turn is one such season (§1/§3.6), so this counter rolls
+`age` up by one whole year every 4 seasons rather than the model carrying
+a fractional year anywhere client code would have to know to round for
+display. Not meant to be read/written outside the rules engine's own
+season-advance pass.
+
 **Decided (user, 2026-09-28): state is mutable, not immutable records with
 withers.** Turn resolution touches many fields per employee across a
 potentially large roster every turn; the on-disk JSON snapshot (§3.7) is
@@ -973,7 +1022,12 @@ Expert exhaustion/falloff curve (§2.2(c)), the gold/silver/bronze goal
 rating (§2.6(c)), programs/mission configurations/mission components/goals/
 events as their own types, and all numeric balance values. Every class in
 `de.mkoehler.launchwindow.model` has full Javadoc and a JUnit test under
-`core/src/test/.../model`, per `CLAUDE.md`.
+`core/src/test/.../model`, per `CLAUDE.md`. **Partially superseded
+(2026-09-30):** the age/morale/retirement/resignation slice of §2.2(a)/(c)
+is now modeled and resolved — see §5's M2 status and the new
+`de.mkoehler.launchwindow.rules` package. Skill growth, training-state
+fields, hiring, and Expert remain deferred exactly as this paragraph
+originally said.
 
 **Content definitions themselves remain not yet started** — still to be
 derived from BASPM's Data Scripts XML *shapes* (`baspm.md` §"Data-driven
@@ -2251,7 +2305,24 @@ here.
   and their skill enums (`de.mkoehler.launchwindow.model`) — state shapes
   only, no resolution logic yet.
   - Slice: personnel lifecycle (morale/age/resignation, R&D/training
-    standing orders, skill growth) — §2.2.
+    standing orders, skill growth) — §2.2. **Age/morale/retirement/
+    resignation sub-slice done (2026-09-30)** — see §2.2(c)'s own entry for
+    the concrete numbers and `de.mkoehler.launchwindow.rules.PersonnelLifecycle`.
+    **Still open in this same slice:** skill growth (training/R&D/mission-
+    flying), training-state transitions (basic/advanced/permanent), the
+    hiring pool, and the Expert trait — none started yet. **Known blocker
+    for whoever picks up skill growth next:** the three skill maps
+    (`Astronaut`/`SetSpecialist`/`MissionControlOfficer`, all
+    `Map<TheirSkillEnum, Integer>`) can't hold SET's flat R&D gain as
+    specified (`baspm.md` §9.3's re-derived shape is a flat ~0.2-0.4/season
+    - an `Integer` map rounds that to 0 every single season). Switch those
+    three skill maps to `Double` before starting that sub-slice, and update
+    every existing skill-map test (`AstronautTest`/`SetSpecialistTest`/
+    `MissionControlOfficerTest`) to match - not done yet, since this
+    sub-slice never touched a skill map at all. Training also needs new
+    `Personnel` fields (training kind - basic/advanced/permanent; seasons
+    completed and total; the permanent-training target) and an
+    active/inactive status field, none of which exist yet either.
   - Slice: programs, mission configurations, mission components &
     reliability transfer — §2.3/§2.4.
   - Slice: mission simulation, base two-roll formula only (no Expert yet,

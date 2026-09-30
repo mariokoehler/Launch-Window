@@ -112,14 +112,29 @@ from the server process, since the user is expected to remain the only host
 for the foreseeable future), and the CLI/console dev client
 (`de.mkoehler.launchwindow.devtools.DevClient` in the `dev-tools` module,
 a plain `NetworkClient`-based REPL with `state`/`funds <amount>`/`help`/
-`quit`, 2026-09-29) — are all done. Next up is **M2 (rules engine,
-headless)**; see `design.md` §5 for its scope. `core`'s
+`quit`, 2026-09-29) — are all done. **M2 (rules engine, headless) is
+underway (started 2026-09-30);** see `design.md` §5 for its scope. `core`'s
 `de.mkoehler.launchwindow.model` package has M2's domain-model groundwork
 done ahead of schedule — `PlayerSnapshot` (the per-player aggregate root),
 `Archetype`, and the three personnel classes (`Astronaut`/`SetSpecialist`/
 `MissionControlOfficer`) with their skill enums — see `design.md` §3.4 for
-the full list and what's still deliberately deferred; no resolution logic,
-screens, or content-definition types yet. Git repo
+the full list and what's still deliberately deferred.
+**First rules-engine slice done (2026-09-30):** `core`'s new
+`de.mkoehler.launchwindow.rules` package, headless (no libGDX/network/
+persistence dependency) — `PersonnelLifecycle.advanceSeason` resolves the
+age/morale/retirement/resignation sub-slice of personnel lifecycle
+(§2.2(a)/(c)), with `PersonnelDeparture`/`DepartureReason`/`PersonnelGroup`
+as its reported events and a `ResolutionEvent` marker interface meant to
+be reused as the shared event vocabulary by every later rules-engine
+resolver. 16 new unit tests; also added one field to `Personnel`
+(`agingProgressSeasons`, an internal 0-3 bookkeeping counter, see
+`design.md` §3.4) and extended `MessageRegistryTest`'s existing
+`FetchStateResponse` round-trip to cover it over Kryo — no `MessageRegistry`
+changes needed, since it's a field on an already-registered class, not a
+new type. Full `mvn clean package` (all 4 modules) passes. **Still not
+started in this same M2 slice:** skill growth, training-state transitions,
+hiring, Expert. Not yet wired into `PlayerStateService`/`TurnScheduler` —
+that integration is M4 scope, not M2's. Git repo
 initialized 2026-09-27 and pushed
 to GitHub as a **private**
 repo (`mariokoehler/Launch-Window` — GitHub doesn't allow spaces in repo

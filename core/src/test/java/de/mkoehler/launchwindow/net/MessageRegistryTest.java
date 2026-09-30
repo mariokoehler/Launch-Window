@@ -224,6 +224,7 @@ class MessageRegistryTest {
         PlayerSnapshot snapshot = new PlayerSnapshot("Hanseatic Space Agency", Archetype.SOVIET, 1_000, 0, 0, 1);
         Astronaut astronaut = new Astronaut("astro-1", "Jane Reyes", 34, 80, 60);
         astronaut.setSkill(AstronautSkill.PILOTING, 70);
+        astronaut.setAgingProgressSeasons(2);
         snapshot.setAstronauts(List.of(astronaut));
         SetSpecialist specialist = new SetSpecialist("set-1", "Omar Idris", 41, 75, 55);
         specialist.setSkill(SetSkill.ROCKETS, 63);
@@ -238,6 +239,7 @@ class MessageRegistryTest {
         assertEquals("Hanseatic Space Agency", copy.state().getAgencyName());
         assertEquals(Archetype.SOVIET, copy.state().getArchetype());
         assertEquals(70, copy.state().getAstronauts().get(0).getSkill(AstronautSkill.PILOTING));
+        assertEquals(2, copy.state().getAstronauts().get(0).getAgingProgressSeasons());
         assertEquals(63, copy.state().getSetSpecialists().get(0).getSkill(SetSkill.ROCKETS));
         assertEquals(50, copy.state().getMissionControlOfficers().get(0).getSkill(MissionControlSkill.PROPULSION));
 

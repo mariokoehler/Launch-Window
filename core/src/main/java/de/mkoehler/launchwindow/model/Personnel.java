@@ -15,6 +15,7 @@ public abstract class Personnel {
     private String id;
     private String name;
     private int age;
+    private int agingProgressSeasons;
     private int morale;
     private int learningPotential;
     private AssignmentState assignmentState = AssignmentState.IDLE;
@@ -95,6 +96,31 @@ public abstract class Personnel {
      */
     public void setAge(int age) {
         this.age = age;
+    }
+
+    /**
+     * Returns how many seasons of aging have accumulated toward this
+     * employee's next whole-year {@link #getAge()} increment - internal
+     * bookkeeping for the rules engine's season-advance pass (one turn is
+     * one BASPM-style season, a quarter year, see {@code design.md}
+     * &sect;1/&sect;3.6; {@code age} itself stays whole years rather than
+     * carrying a fraction, so this counter rolls it over every 4th season).
+     * Not meant to be read or set outside that pass; public only because
+     * Jackson needs a bean accessor.
+     *
+     * @return the accumulated aging progress, 0-3
+     */
+    public int getAgingProgressSeasons() {
+        return agingProgressSeasons;
+    }
+
+    /**
+     * Sets the accumulated aging progress. See {@link #getAgingProgressSeasons()}.
+     *
+     * @param agingProgressSeasons the accumulated aging progress, 0-3
+     */
+    public void setAgingProgressSeasons(int agingProgressSeasons) {
+        this.agingProgressSeasons = agingProgressSeasons;
     }
 
     /**
