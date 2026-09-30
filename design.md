@@ -1303,6 +1303,46 @@ unconfirmed:**
   what the employee was actually working on - it currently only carries
   `assignmentStateAtExit`, a coarse "were they ASSIGNED/IN_TRAINING/IDLE"
   hint, exactly because this finer-grained link doesn't exist yet.
+
+**Hiring pool — proposed ahead of M2's hiring-pool sub-slice (2026-09-30),
+written down before any code, same convention as the training fields
+above:**
+- **Candidates reuse the existing `Astronaut`/`SetSpecialist`/
+  `MissionControlOfficer` classes directly, rather than a parallel
+  candidate-specific type** - a candidate and a hired employee need the
+  same shape (age, skills, learning potential), and the only real
+  difference is *which list they're in*. `PlayerSnapshot` gets three new
+  fields, one candidate pool per group:
+  `astronautCandidates`/`setSpecialistCandidates`/`missionControlCandidates`
+  (`List<Astronaut>`/etc., same defensive-copy-on-set shape as the existing
+  roster lists). A candidate's `morale`/`assignmentState`/training fields
+  are meaningless until hired - seeded to a real (not default-zero) value
+  at generation time regardless, so the record reads sensibly even before
+  hire. **No `MessageRegistry` change needed** - these are `List<Astronaut>`
+  etc., and both `Astronaut` and `ArrayList` are already registered.
+- **Quality is fed by the hiring group's own current average morale**
+  (`baspm.md` §9.4's mechanic, kept per §2.2(c)'s existing decision to
+  carry this feedback loop over) - re-derived as four morale bands, own
+  boundaries and skill ranges, not BASPM's named tiers/values: roughly
+  "Poor" (low morale → narrow, low skill range), "Average", "Good", up to
+  "Excellent" (high morale → wide, high skill range). Exact numbers to be
+  decided in code as **(unconfirmed defaults)**, same as every other M2
+  numeric constant. An empty roster (nothing to average) falls back to a
+  fixed neutral morale for band purposes, not zero/undefined.
+- **A fixed batch size, regenerated in full each time** (own number, not
+  BASPM's 10) - refreshing discards whoever wasn't hired from the previous
+  batch, framed as "the job market moved on," not an accumulating pool
+  with a cap.
+- **Hiring itself (moving a candidate into the real roster) is a plain
+  headless operation, not tied to the action-submission system** - same
+  posture as `TrainingProgress` "assumes an already-started assignment":
+  there is no player-action dispatch path yet for either starting training
+  or hiring, so both stay pure state-mutation methods a future action
+  handler will call, not built as part of this slice.
+- **Refresh cadence: every season**, alongside the other two personnel
+  resolvers - fits "one turn = one season" the same way training/lifecycle
+  already do, no special handling needed.
+
 - **Wire-format note for whoever implements this:** `TrainingKind` is a new
   enum reachable from `PlayerSnapshot`, so it needs a `MessageRegistry`
   entry appended at the end of `register(Kryo)` (never inserted earlier -
