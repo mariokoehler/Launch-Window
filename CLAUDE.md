@@ -131,10 +131,23 @@ resolver. 16 new unit tests; also added one field to `Personnel`
 `design.md` §3.4) and extended `MessageRegistryTest`'s existing
 `FetchStateResponse` round-trip to cover it over Kryo — no `MessageRegistry`
 changes needed, since it's a field on an already-registered class, not a
-new type. Full `mvn clean package` (all 4 modules) passes. **Still not
-started in this same M2 slice:** skill growth, training-state transitions,
-hiring, Expert. Not yet wired into `PlayerStateService`/`TurnScheduler` —
-that integration is M4 scope, not M2's.
+new type. Full `mvn clean package` (all 4 modules) passes.
+**Two more rules-engine sub-slices done the same day:** skill values
+switched `Integer`→`Double` on all three personnel classes (a flat gain
+under 1/season would otherwise round to 0); `SkillGrowth` (pure
+diminishing-returns/flat-R&D/partial-credit formulas, own numbers not
+BASPM's, 13 tests); `TrainingProgress.advanceSeason` (fixed-length
+`BASIC`/`ADVANCED` training countdown+completion, new `TrainingKind` enum
++ training fields on `Personnel`/each subclass, `TrainingKind` appended to
+`MessageRegistry`, 8 tests) — full write-up in `design.md` §2.2(c)/§3.4,
+including the composition-order contract for running `PersonnelLifecycle`
+before `TrainingProgress` once both get wired into one pass. **Still not
+started in this same M2 slice:** `PERMANENT` training, R&D's own target-
+skill field (needs §2.3/§2.4's program linkage first), mission-based
+growth's caller, hiring, Expert, and actually starting a training
+assignment (no player-action path exists yet). Not yet wired into
+`PlayerStateService`/`TurnScheduler`/the bot harness — that integration is
+M4 scope, not M2's.
 
 **Bot-driven playout harness started the same day, right after that first
 resolver landed (2026-09-30):** `dev-tools`'s new

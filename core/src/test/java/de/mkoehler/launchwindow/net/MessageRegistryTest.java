@@ -13,6 +13,7 @@ import de.mkoehler.launchwindow.model.MissionControlSkill;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.model.SetSkill;
 import de.mkoehler.launchwindow.model.SetSpecialist;
+import de.mkoehler.launchwindow.model.TrainingKind;
 import de.mkoehler.launchwindow.net.messages.FetchStateRequest;
 import de.mkoehler.launchwindow.net.messages.FetchStateResponse;
 import de.mkoehler.launchwindow.net.messages.HandshakeRequest;
@@ -67,7 +68,7 @@ class MessageRegistryTest {
             MissionControlSkill.class, Astronaut.class, SetSpecialist.class, MissionControlOfficer.class,
             PlayerSnapshot.class, ArrayList.class, LinkedHashMap.class, SetFundsAction.class,
             SubmitActionRequest.class, SubmitActionResponse.class, FetchStateRequest.class,
-            FetchStateResponse.class, HandshakeRequest.class, HandshakeResponse.class};
+            FetchStateResponse.class, HandshakeRequest.class, HandshakeResponse.class, TrainingKind.class};
         for (Class<?> registeredClass : registeredClasses) {
             assertEquals(first.getRegistration(registeredClass).getId(), second.getRegistration(registeredClass).getId(),
                 "id mismatch for " + registeredClass.getSimpleName());
@@ -112,7 +113,7 @@ class MessageRegistryTest {
             MissionControlSkill.class, Astronaut.class, SetSpecialist.class, MissionControlOfficer.class,
             PlayerSnapshot.class, ArrayList.class, LinkedHashMap.class, SetFundsAction.class,
             SubmitActionRequest.class, SubmitActionResponse.class, FetchStateRequest.class,
-            FetchStateResponse.class};
+            FetchStateResponse.class, TrainingKind.class};
         for (Class<?> other : everyOtherClass) {
             int otherId = kryo.getRegistration(other).getId();
             assertTrue(requestId < otherId, "HandshakeRequest's id must be lower than " + other.getSimpleName());
@@ -225,6 +226,10 @@ class MessageRegistryTest {
         Astronaut astronaut = new Astronaut("astro-1", "Jane Reyes", 34, 80, 60);
         astronaut.setSkill(AstronautSkill.PILOTING, 70.5);
         astronaut.setAgingProgressSeasons(2);
+        astronaut.setTrainingKind(TrainingKind.ADVANCED);
+        astronaut.setTrainingSeasonsCompleted(1);
+        astronaut.setTrainingSeasonsTotal(2);
+        astronaut.setTrainingTargetSkill(AstronautSkill.EVA);
         snapshot.setAstronauts(List.of(astronaut));
         SetSpecialist specialist = new SetSpecialist("set-1", "Omar Idris", 41, 75, 55);
         specialist.setSkill(SetSkill.ROCKETS, 63);
@@ -240,6 +245,10 @@ class MessageRegistryTest {
         assertEquals(Archetype.SOVIET, copy.state().getArchetype());
         assertEquals(70.5, copy.state().getAstronauts().get(0).getSkill(AstronautSkill.PILOTING));
         assertEquals(2, copy.state().getAstronauts().get(0).getAgingProgressSeasons());
+        assertEquals(TrainingKind.ADVANCED, copy.state().getAstronauts().get(0).getTrainingKind());
+        assertEquals(1, copy.state().getAstronauts().get(0).getTrainingSeasonsCompleted());
+        assertEquals(2, copy.state().getAstronauts().get(0).getTrainingSeasonsTotal());
+        assertEquals(AstronautSkill.EVA, copy.state().getAstronauts().get(0).getTrainingTargetSkill());
         assertEquals(63, copy.state().getSetSpecialists().get(0).getSkill(SetSkill.ROCKETS));
         assertEquals(50, copy.state().getMissionControlOfficers().get(0).getSkill(MissionControlSkill.PROPULSION));
 

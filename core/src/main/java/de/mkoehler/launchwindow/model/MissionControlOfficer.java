@@ -27,6 +27,7 @@ import java.util.Objects;
 public class MissionControlOfficer extends Personnel {
 
     private Map<MissionControlSkill, Double> skills = new LinkedHashMap<>();
+    private MissionControlSkill trainingTargetSkill;
 
     /**
      * No-argument constructor required for Jackson deserialization.
@@ -101,5 +102,27 @@ public class MissionControlOfficer extends Personnel {
             sum += getSkill(skill);
         }
         return sum / MissionControlSkill.values().length;
+    }
+
+    /**
+     * Returns the skill this officer's current training round is working
+     * toward. Meaningless when {@link #getTrainingKind()} is
+     * {@link TrainingKind#NONE} - see {@code design.md} &sect;3.4's field
+     * proposal.
+     *
+     * @return the training target skill, or {@code null} if not training
+     */
+    public MissionControlSkill getTrainingTargetSkill() {
+        return trainingTargetSkill;
+    }
+
+    /**
+     * Sets the skill this officer's current training round is working
+     * toward.
+     *
+     * @param trainingTargetSkill the training target skill
+     */
+    public void setTrainingTargetSkill(MissionControlSkill trainingTargetSkill) {
+        this.trainingTargetSkill = trainingTargetSkill;
     }
 }

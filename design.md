@@ -524,9 +524,9 @@ proceeds:
         still fully deferred** — this sub-slice only ever touches age,
         morale, and roster membership, never a skill map.
     - **Skill-growth formulas sub-slice implemented (2026-09-30) — pure
-      functions only, nothing calls them yet (that caller is the next
-      sub-slice, which needs training-state/R&D-target fields on
-      `Personnel` that don't exist yet either):**
+      functions, first called by the training-progress sub-slice
+      immediately below (mission-based growth's own caller is still
+      later, slice 3's mission-simulation work):**
       - Skill values themselves switched from `Integer` to `Double`
         (`Astronaut`/`SetSpecialist`/`MissionControlOfficer`) — a flat gain
         under 1/season would otherwise round to nothing on an `int` scale.
@@ -549,12 +549,69 @@ proceeds:
         that treats skill as a 0-100 percentage. Linear pull-out partial
         credit (`baspm.md` §9.3) is its own tiny function,
         `fullGain × completed ÷ total`, decoupled from the growth formula
-        itself. 11 unit tests, fully headless, no dependency on any
+        itself. 13 unit tests, fully headless, no dependency on any
         `Personnel` type — deciding *which* skill(s) a call touches
         (a single skill for R&D/most training, all five for a flying
         astronaut, a Flight Director's five-way-spread average per
-        `baspm.md` §9.4) is deliberately left to the next sub-slice's
-        caller, not built here.
+        `baspm.md` §9.4) is deliberately left to each caller, not built
+        here.
+    - **Training-progress sub-slice implemented (2026-09-30) — fixed-length
+      training only (`BASIC`/`ADVANCED`); `PERMANENT`'s re-enrollment and
+      R&D's own target-skill/growth caller are still deferred, per §3.4's
+      field proposal:**
+      - New fields, exactly as §3.4 proposed: `TrainingKind` (`NONE`/
+        `BASIC`/`ADVANCED`/`PERMANENT`) plus seasons-completed/total
+        counters on `Personnel`; a per-subclass `trainingTargetSkill` field
+        on `Astronaut`/`SetSpecialist`/`MissionControlOfficer`.
+        `TrainingKind` registered with `MessageRegistry`, appended at the
+        end per its own ordering rule; both `MessageRegistryTest` class
+        lists and the Kryo/Jackson round-trip tests updated to cover it.
+      - `de.mkoehler.launchwindow.rules.TrainingProgress.advanceSeason`:
+        counts down `BASIC`/`ADVANCED` training, and on the season it
+        completes, draws a training factor
+        (`SkillGrowth.drawTrainingFactor`), applies
+        `SkillGrowth.diminishingReturnsGain` to the target skill, resets
+        every training field to its not-training default, and returns the
+        employee to `IDLE` — reporting a `TrainingCompleted` event.
+        Per-group fixed lengths, own numbers (BASPM: Astronaut 4/SET 2/
+        MC 2 basic, 3 advanced for all): **Astronaut basic 3, SET basic 1,
+        Mission Control basic 2, advanced 2 for all three** — all
+        **unconfirmed defaults**, pending bot-harness tuning.
+      - **Assumes an already-started training assignment** — nothing in
+        this project yet *starts* one (that's a player-action concern,
+        doesn't exist). Only ever advances a countdown/resolves completion.
+      - **A fixed-length round is only genuinely active when
+        `AssignmentState.IN_TRAINING` *and* a fixed-length `trainingKind`
+        both agree** (`TrainingProgress.isActivelyTraining`) — the two
+        fields are independent and could otherwise drift apart: a stale
+        `trainingKind` left behind by some future pull-out path that only
+        updates the assignment state would otherwise keep silently
+        counting down and eventually "complete" a round the employee was
+        actually pulled out of; conversely `IN_TRAINING` with no real
+        `trainingKind` set (exactly what `PersonnelLifecycleTest`'s own
+        busy-employee fixtures and the bot harness's assignment shuffle
+        both do today) must never be advanced either. **Caught before it
+        shipped**, not found later — checking `trainingKind` alone was the
+        first version.
+      - **Composition-order contract for whoever wires this together with
+        `PersonnelLifecycle` in one season pass (M4), decided, documented
+        in both classes' Javadoc, and now test-enforced:** run
+        `PersonnelLifecycle` *before* `TrainingProgress`, not after —
+        otherwise an employee whose training completes this season would
+        already read as idle when `PersonnelLifecycle` checks it, letting
+        its idle-only resignation/retirement check wrongly fire a season
+        early for someone who was actually busy all season. Two tests
+        prove this directly: the correct order leaves a completing
+        trainee (already past both the retirement age and the resignation
+        morale floor) in the roster; the reversed order lets the same
+        trainee wrongly depart. The two resolvers still aren't composed
+        together anywhere in real code this session (each is still called
+        independently) — only the contract itself is now verified.
+      - 12 unit tests, fully headless; **not** wired into the bot harness
+        this session (`PersonnelLifecyclePlayouts` still only drives
+        `PersonnelLifecycle`) — doing so would need the harness to also
+        start training assignments, which is real per-turn decision logic
+        the harness's own trivial "bot" deliberately doesn't have yet.
 - 2.3 **Programs & mission configurations (the Sputnik→Apollo tech/content
   tree) — analyzed 2026-09-27, see `baspm.md` §10 for the full trace.**
   - **(a) How BASPM does it:** a Program Category (Robotic or Crewed group,
@@ -1048,9 +1105,12 @@ a fractional year anywhere client code would have to know to round for
 display. Not meant to be read/written outside the rules engine's own
 season-advance pass.
 
-**Training/R&D fields — proposed, unconfirmed (2026-09-30, ahead of M2's
-training-progress sub-slice), written down before any code so the sub-slice
-starts from a settled shape rather than inventing fields mid-implementation:**
+**Training/R&D fields — proposed ahead of M2's training-progress sub-slice,
+written down before any code so the sub-slice starts from a settled shape
+rather than inventing fields mid-implementation; the `Personnel`/per-
+subclass fields below are now implemented exactly as proposed
+(2026-09-30, same day), the `PERMANENT`/R&D items remain proposed-only,
+unconfirmed:**
 - **On `Personnel` (shared, since all three groups train the same way,
   `baspm.md` §9.3):** a new `TrainingKind` enum (`NONE`/`BASIC`/`ADVANCED`/
   `PERMANENT`), plus `trainingSeasonsCompleted`/`trainingSeasonsTotal`
@@ -2427,21 +2487,19 @@ here.
     standing orders, skill growth) — §2.2. **Age/morale/retirement/
     resignation sub-slice done (2026-09-30)** — see §2.2(c)'s own entry for
     the concrete numbers and `de.mkoehler.launchwindow.rules.PersonnelLifecycle`.
-    **Still open in this same slice:** skill growth (training/R&D/mission-
-    flying), training-state transitions (basic/advanced/permanent), the
-    hiring pool, and the Expert trait — none started yet. **Known blocker
-    for whoever picks up skill growth next:** the three skill maps
-    (`Astronaut`/`SetSpecialist`/`MissionControlOfficer`, all
-    `Map<TheirSkillEnum, Integer>`) can't hold SET's flat R&D gain as
-    specified (`baspm.md` §9.3's re-derived shape is a flat ~0.2-0.4/season
-    - an `Integer` map rounds that to 0 every single season). Switch those
-    three skill maps to `Double` before starting that sub-slice, and update
-    every existing skill-map test (`AstronautTest`/`SetSpecialistTest`/
-    `MissionControlOfficerTest`) to match - not done yet, since this
-    sub-slice never touched a skill map at all. Training also needs new
-    `Personnel` fields (training kind - basic/advanced/permanent; seasons
-    completed and total; the permanent-training target) and an
-    active/inactive status field, none of which exist yet either.
+    **Skill-growth formulas done (2026-09-30, `SkillGrowth`) and skill
+    maps switched to `Double`** — see §2.2(c). **Fixed-length training
+    (`BASIC`/`ADVANCED`) done (2026-09-30, `TrainingProgress`)** — see
+    §2.2(c)'s own entry for the new fields and the composition-order
+    contract with `PersonnelLifecycle`. **Still open in this same slice:**
+    `PERMANENT` training's re-enrollment, R&D's own target-skill field/
+    caller (needs §2.3/§2.4's program/component-linkage first, see §3.4),
+    mission-based skill growth's own caller (slice 3), the hiring pool, and
+    the Expert trait — none started yet. Also still open: actually starting
+    a training assignment (a player-action concern, no action-submission
+    path for this exists yet) and composing `PersonnelLifecycle`/
+    `TrainingProgress`/a future R&D resolver into one real season pass
+    (M4, not M2).
   - Slice: programs, mission configurations, mission components &
     reliability transfer — §2.3/§2.4.
   - Slice: mission simulation, base two-roll formula only (no Expert yet,

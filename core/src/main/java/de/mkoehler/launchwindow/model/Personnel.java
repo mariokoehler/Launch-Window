@@ -19,6 +19,9 @@ public abstract class Personnel {
     private int morale;
     private int learningPotential;
     private AssignmentState assignmentState = AssignmentState.IDLE;
+    private TrainingKind trainingKind = TrainingKind.NONE;
+    private int trainingSeasonsCompleted;
+    private int trainingSeasonsTotal;
 
     /**
      * No-argument constructor required for Jackson deserialization.
@@ -175,5 +178,67 @@ public abstract class Personnel {
      */
     public void setAssignmentState(AssignmentState assignmentState) {
         this.assignmentState = Objects.requireNonNull(assignmentState, "assignmentState must not be null");
+    }
+
+    /**
+     * Returns what kind of training this employee is currently undergoing,
+     * meaningful only while {@link #getAssignmentState()} is
+     * {@link AssignmentState#IN_TRAINING} - see {@code design.md} &sect;3.4's
+     * field proposal.
+     *
+     * @return the training kind, {@link TrainingKind#NONE} if not training
+     */
+    public TrainingKind getTrainingKind() {
+        return trainingKind;
+    }
+
+    /**
+     * Sets what kind of training this employee is currently undergoing.
+     *
+     * @param trainingKind the training kind
+     */
+    public void setTrainingKind(TrainingKind trainingKind) {
+        this.trainingKind = Objects.requireNonNull(trainingKind, "trainingKind must not be null");
+    }
+
+    /**
+     * Returns how many seasons of the current training round have been
+     * completed so far. Meaningless when {@link #getTrainingKind()} is
+     * {@link TrainingKind#NONE}.
+     *
+     * @return the seasons completed
+     */
+    public int getTrainingSeasonsCompleted() {
+        return trainingSeasonsCompleted;
+    }
+
+    /**
+     * Sets how many seasons of the current training round have been
+     * completed so far.
+     *
+     * @param trainingSeasonsCompleted the seasons completed
+     */
+    public void setTrainingSeasonsCompleted(int trainingSeasonsCompleted) {
+        this.trainingSeasonsCompleted = trainingSeasonsCompleted;
+    }
+
+    /**
+     * Returns the current training round's total length in seasons.
+     * Meaningless for {@link TrainingKind#NONE} and {@link TrainingKind#PERMANENT}
+     * (which has no fixed length - see {@code design.md} &sect;3.4).
+     *
+     * @return the total seasons
+     */
+    public int getTrainingSeasonsTotal() {
+        return trainingSeasonsTotal;
+    }
+
+    /**
+     * Sets the current training round's total length in seasons.
+     *
+     * @param trainingSeasonsTotal the total seasons
+     */
+    public void setTrainingSeasonsTotal(int trainingSeasonsTotal) {
+        this.trainingSeasonsTotal = trainingSeasonsTotal;
     }
 }

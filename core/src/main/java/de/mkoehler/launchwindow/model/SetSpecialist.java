@@ -22,6 +22,7 @@ import java.util.Objects;
 public class SetSpecialist extends Personnel {
 
     private Map<SetSkill, Double> skills = new LinkedHashMap<>();
+    private SetSkill trainingTargetSkill;
 
     /**
      * No-argument constructor required for Jackson deserialization.
@@ -81,5 +82,27 @@ public class SetSpecialist extends Personnel {
      */
     public void setSkill(SetSkill skill, double value) {
         skills.put(skill, value);
+    }
+
+    /**
+     * Returns the skill this specialist's current training round is working
+     * toward. Meaningless when {@link #getTrainingKind()} is
+     * {@link TrainingKind#NONE} - see {@code design.md} &sect;3.4's field
+     * proposal.
+     *
+     * @return the training target skill, or {@code null} if not training
+     */
+    public SetSkill getTrainingTargetSkill() {
+        return trainingTargetSkill;
+    }
+
+    /**
+     * Sets the skill this specialist's current training round is working
+     * toward.
+     *
+     * @param trainingTargetSkill the training target skill
+     */
+    public void setTrainingTargetSkill(SetSkill trainingTargetSkill) {
+        this.trainingTargetSkill = trainingTargetSkill;
     }
 }

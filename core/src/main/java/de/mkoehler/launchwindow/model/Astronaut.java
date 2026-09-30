@@ -22,6 +22,7 @@ import java.util.Objects;
 public class Astronaut extends Personnel {
 
     private Map<AstronautSkill, Double> skills = new LinkedHashMap<>();
+    private AstronautSkill trainingTargetSkill;
 
     /**
      * No-argument constructor required for Jackson deserialization.
@@ -81,5 +82,27 @@ public class Astronaut extends Personnel {
      */
     public void setSkill(AstronautSkill skill, double value) {
         skills.put(skill, value);
+    }
+
+    /**
+     * Returns the skill this astronaut's current training round is working
+     * toward. Meaningless when {@link #getTrainingKind()} is
+     * {@link TrainingKind#NONE} - see {@code design.md} &sect;3.4's field
+     * proposal.
+     *
+     * @return the training target skill, or {@code null} if not training
+     */
+    public AstronautSkill getTrainingTargetSkill() {
+        return trainingTargetSkill;
+    }
+
+    /**
+     * Sets the skill this astronaut's current training round is working
+     * toward.
+     *
+     * @param trainingTargetSkill the training target skill
+     */
+    public void setTrainingTargetSkill(AstronautSkill trainingTargetSkill) {
+        this.trainingTargetSkill = trainingTargetSkill;
     }
 }

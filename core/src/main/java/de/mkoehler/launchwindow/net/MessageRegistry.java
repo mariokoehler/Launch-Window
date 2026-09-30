@@ -10,6 +10,7 @@ import de.mkoehler.launchwindow.model.MissionControlSkill;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.model.SetSkill;
 import de.mkoehler.launchwindow.model.SetSpecialist;
+import de.mkoehler.launchwindow.model.TrainingKind;
 import de.mkoehler.launchwindow.net.messages.FetchStateRequest;
 import de.mkoehler.launchwindow.net.messages.FetchStateResponse;
 import de.mkoehler.launchwindow.net.messages.HandshakeRequest;
@@ -106,5 +107,8 @@ public final class MessageRegistry {
         kryo.register(SubmitActionResponse.class);
         kryo.register(FetchStateRequest.class);
         kryo.register(FetchStateResponse.class);
+        // Appended 2026-09-30 (M2's training-progress groundwork) - referenced by Personnel,
+        // carried in PlayerSnapshot. Never move this line; see the class Javadoc.
+        kryo.register(TrainingKind.class);
     }
 }

@@ -52,6 +52,10 @@ class PlayerSnapshotTest {
         SetSpecialist specialist = new SetSpecialist("set-1", "Omar Idris", 41, 75, 55);
         specialist.setSkill(SetSkill.ROCKETS, 63);
         specialist.setAssignmentState(AssignmentState.IN_TRAINING);
+        specialist.setTrainingKind(TrainingKind.BASIC);
+        specialist.setTrainingSeasonsCompleted(1);
+        specialist.setTrainingSeasonsTotal(2);
+        specialist.setTrainingTargetSkill(SetSkill.ROCKETS);
         original.setSetSpecialists(List.of(specialist));
 
         MissionControlOfficer officer = new MissionControlOfficer("mco-1", "Alex Novak", 45, 70, 40);
@@ -84,6 +88,10 @@ class PlayerSnapshotTest {
         assertEquals("set-1", restoredSpecialist.getId());
         assertEquals(AssignmentState.IN_TRAINING, restoredSpecialist.getAssignmentState());
         assertEquals(63, restoredSpecialist.getSkill(SetSkill.ROCKETS));
+        assertEquals(TrainingKind.BASIC, restoredSpecialist.getTrainingKind());
+        assertEquals(1, restoredSpecialist.getTrainingSeasonsCompleted());
+        assertEquals(2, restoredSpecialist.getTrainingSeasonsTotal());
+        assertEquals(SetSkill.ROCKETS, restoredSpecialist.getTrainingTargetSkill());
 
         assertEquals(1, restored.getMissionControlOfficers().size());
         MissionControlOfficer restoredOfficer = restored.getMissionControlOfficers().get(0);
