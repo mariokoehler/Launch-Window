@@ -1531,21 +1531,47 @@ playing for hours to reach the endgame.
   session worth actively designing for before the rules engine's first line
   is written, not retrofitting later.
 
-**Launch Window's own equivalent, not yet built — correctly deferred, since
-there's no rules engine yet (§3.4's status):** once the turn-resolution
-engine exists, build an equivalent `Playouts`-style harness — simple bots
-making plausible per-season decisions (assign personnel, queue a mission,
-open a program), run many simulated multi-season games from a seed, and
-report the metrics that actually matter here: whether a multi-season
-mission completes correctly across turn boundaries (a real, non-trivial
-case per `baspm.md` §8.1's finding that missions commonly span several
-seasons), funds/prestige trajectory over N simulated seasons (does an agency
-go bankrupt, does the budget-review math actually converge sensibly), and
-whether the NASA-style and Soviet-style archetypes (§2.1(a1)/(b1)'s real
-content differences) actually play out roughly evenly rather than one
-snowballing. This belongs in `dev-tools`, matching
-Robot-Rampage's placement exactly, once `dev-tools` has its first real tool
-(currently empty, §3.3).
+**First slice started (2026-09-30), right after the first rules-engine
+resolver existed, per this section's own sequencing rule.**
+`dev-tools`'s new `de.mkoehler.launchwindow.devtools.analysis` package,
+matching Robot-Rampage's placement exactly, holds
+`PersonnelLifecyclePlayouts`: drives `PersonnelLifecycle.advanceSeason`
+(§2.2(c)'s new resolver) across many random rosters/seasons, seeded for
+reproducibility, with a trivial "bot" (each employee independently has a
+per-season chance of toggling idle/busy — just enough churn to exercise
+both the morale-gain-while-busy path and the idle-only resignation/
+retirement checks, not a stand-in for a real per-turn decision, which
+doesn't exist yet). Reports a small `PersonnelPlayoutReport` — games
+played, resigned/retired counts and their average tenure in seasons,
+still-employed count — plus self-checking invariants (morale bounds, every
+reported departure actually matching the threshold it claims) that throw
+if violated, catching what a handful of hand-picked unit tests might miss
+across many random combinations. **Deliberately named after the one
+resolver it drives, not yet the general full-game harness this section
+originally described** — that needs a real bot making per-season decisions
+like "queue a mission" or "open a program," none of which exist yet;
+expected to grow/generalize alongside M2's remaining slices rather than
+staying permanently resolver-specific. **First real tuning numbers seen
+(2026-09-30, seed 42, 200 games, 80 seasons, 5 employees/group/game, 3,000
+employees total):** 202 resigned (avg. tenure 31.0 seasons), 875 retired
+(avg. tenure 54.5 seasons), 1,923 still employed at the 80-season cap —
+a plausible-looking first-pass distribution, not yet judged against any
+real target (there isn't one yet), but exactly the kind of number this
+harness exists to produce.
+
+**Still not built:** the general full-game harness described in this
+section's original text below — simple bots making plausible per-season
+decisions (assign personnel, queue a mission, open a program), run many
+simulated multi-season games from a seed, and reporting the metrics that
+actually matter here: whether a multi-season mission completes correctly
+across turn boundaries (a real, non-trivial case per `baspm.md` §8.1's
+finding that missions commonly span several seasons), funds/prestige
+trajectory over N simulated seasons (does an agency go bankrupt, does the
+budget-review math actually converge sensibly), and whether the NASA-style
+and Soviet-style archetypes (§2.1(a1)/(b1)'s real content differences)
+actually play out roughly evenly rather than one snowballing. Blocked on
+the mission-simulation and programs/budget resolvers not existing yet
+(§5's M2 slice list).
 
 ### 3.11 Offscreen screenshot tooling for UI checking
 
@@ -2335,7 +2361,8 @@ here.
   - **The Playouts-style bot-driven harness (§3.10) starts right after the
     first resolution rule exists**, in `dev-tools`, not as a final
     milestone — grown alongside this milestone's slices, not bolted on
-    after.
+    after. **Started (2026-09-30):** `PersonnelLifecyclePlayouts` — see
+    §3.10's own entry for what it does and its first tuning numbers.
   - **Exit criterion:** a full season/turn resolves correctly for a
     multi-season mission spanning several turns, proven by the bot harness
     across many simulated games, headlessly, with no client or server

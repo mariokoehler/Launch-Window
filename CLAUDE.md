@@ -134,7 +134,20 @@ changes needed, since it's a field on an already-registered class, not a
 new type. Full `mvn clean package` (all 4 modules) passes. **Still not
 started in this same M2 slice:** skill growth, training-state transitions,
 hiring, Expert. Not yet wired into `PlayerStateService`/`TurnScheduler` —
-that integration is M4 scope, not M2's. Git repo
+that integration is M4 scope, not M2's.
+
+**Bot-driven playout harness started the same day, right after that first
+resolver landed (2026-09-30):** `dev-tools`'s new
+`de.mkoehler.launchwindow.devtools.analysis.PersonnelLifecyclePlayouts` —
+see `design.md` §3.10 for the full description, its self-checking
+invariants, and its first real tuning numbers (seed 42, 200 games: ~7% of
+a 3,000-employee population resigned, ~29% retired, ~64% still employed at
+an 80-season/20-year cap). Run it directly with
+`mvn -pl dev-tools compile exec:java -DmainClass=de.mkoehler.launchwindow.devtools.analysis.PersonnelLifecyclePlayouts`.
+Deliberately named after the one resolver it drives, not yet the general
+full-game harness `design.md` §3.10 originally described — that needs
+a real bot and the mission/program/budget resolvers, none of which exist
+yet. Git repo
 initialized 2026-09-27 and pushed
 to GitHub as a **private**
 repo (`mariokoehler/Launch-Window` — GitHub doesn't allow spaces in repo
@@ -346,7 +359,10 @@ File > Import Polygons From... to seed a new image's polygons from another
 image's sidecar (e.g. a seasonal variant sharing the same building
 layout), which is exactly how the real `assets-raw/main_menu/` hotspots
 below were produced. See "Current status" above for what it actually
-produced. `dev-tools` therefore now
+produced. `dev-tools` also now has its `analysis` package (2026-09-30,
+mirroring Robot-Rampage's own `dev-tools/.../analysis` placement,
+`design.md` §3.10) — `PersonnelLifecyclePlayouts`, the first slice of the
+bot-driven playout harness; see "Current status" above. `dev-tools` therefore now
 also carries `gdx-backend-lwjgl3` + `gdx-platform:natives-desktop` (only
 `MenuHotspotPrototype` needs them; `DevClient`/`HotspotEditor` don't, but
 the module has one shared classpath). The exec-maven-plugin config still
