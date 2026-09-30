@@ -1384,9 +1384,12 @@ bot-harness tuning:**
   ids were ever reused across a refresh, a stale hire action could
   silently hire the wrong person. **Not yet retrofitted onto the bot
   harness's own initial-roster generation** (still `"a"+i`-style, seeded
-  independently of any `PlayerSnapshot` counter) - low risk today since
-  the harness never mixes hand-seeded ids with `HiringPool`-generated ones
-  within the same roster, but worth unifying if that ever changes.
+  independently of any `PlayerSnapshot` counter) - the two id styles don't
+  collide (different prefixes: `"a"/"s"/"m"` vs. `HiringPool`'s `"p"`), and
+  since the harness was wired to hire from `HiringPool` the same session
+  (§3.10), a roster now genuinely does mix both styles at once in
+  practice, not just hypothetically - still low risk, but worth unifying
+  if that stops being true (e.g. a future id format that could collide).
 - `HireOutcome` (`HIRED`/`UNKNOWN_CANDIDATE`/`ROSTER_FULL`) - `hire`
   returns a result rather than throwing, since an unknown candidate id is
   an expected, ordinary async-multiplayer case (a stale pool view), not an
@@ -1396,9 +1399,9 @@ bot-harness tuning:**
   then `TrainingProgress`, then `refreshCandidates` last - a player can
   then always hire from the exact pool they were shown, and a season's
   refresh never discards a candidate that same season's own actions just
-  hired. Not yet composed in real code (same status as
-  `PersonnelLifecycle`/`TrainingProgress`'s own still-just-documented
-  order).
+  hired. Not yet composed into a real per-turn season pass (that's M4
+  scope) - the bot harness (§3.10) exercises this same order every season,
+  but that's a test harness, not the production turn-resolution pipeline.
 - 11 unit tests, fully headless: batch size, id non-reuse across refreshes,
   value ranges, the empty-roster fallback, all four band boundaries (a
   dedicated test per ceiling, checking both that the right band's range is
@@ -2078,6 +2081,73 @@ resignation depends on accumulated idle seasons, and `PERMANENT` all but
 removes idle seasons for whoever the bot assigns to it. Worth keeping in
 mind once real balance tuning starts: `PERMANENT` isn't just a training
 convenience, it's a genuine low-effort way to keep staff from leaving.
+
+**`HiringPool` wired in the same session it was implemented (2026-09-30):**
+each season the bot may first hire one random candidate out of each
+group's current pool (25% chance per group, a stand-in for a journaled
+player action — a no-op on an empty pool, i.e. season 0 before any refresh
+has happened, or a full roster), then `PersonnelLifecycle` and
+`TrainingProgress` run as before, then `HiringPool.refreshCandidates` runs
+last — the exact composition order `HiringPool`'s own Javadoc documents.
+Three new invariants, all computed independently of `HiringPool`'s own
+logic rather than trusting it: every id is globally unique across all
+three rosters *and* all three candidate pools (the shared
+`PlayerSnapshot.allocatePersonnelId()` counter must never repeat); each
+pool holds exactly `HIRING_BATCH_SIZE` candidates after a refresh; and
+every candidate's skills fall inside the range the harness's own
+independently-reimplemented morale-to-band mapping would select for that
+group's current roster (this required promoting `HiringPool`'s per-band
+skill-range constants from `private` to `public`, since they're plain
+tuning numbers the harness needs to cross-check against, not the kind of
+internal decision logic — like the departure-protection predicate — that
+must stay off-limits to keep the check genuine). **Tenure accounting
+needed a fix here, caught by the advisor before committing:** the
+departure-tenure calculation (`season + 1`) implicitly assumed every
+employee joined at season 0, which was true before hiring existed but
+silently over-counts tenure for anyone hired mid-game; fixed with a
+per-game `group:id -> join season` map, seeded at 0 for the starting
+roster and updated on every successful hire, so tenure is now
+`(departure season + 1) - join season`. This changes only the two average-
+tenure figures below, not any count (a map lookup doesn't consume from
+`Random`). **Numbers after wiring it in, same seed/game shape as above:**
+259 resigned (avg. tenure 29.3 seasons, corrected from an initial,
+uncorrected 35.7), 1,271 retired (avg. tenure 55.7 seasons, corrected from
+57.6 — both counts up from 144/980, since hired replacements now
+themselves age toward retirement/resignation within the same 80-season
+cap), 5,358 still employed (up sharply — hires now add to the roster over
+time, not just replace departures 1:1, since `HIRE_CHANCE_PER_SEASON` and
+roster capacity are independent of the current departure rate; note this
+is ~96% of the 5,600-employee capacity ceiling this run's settings imply
+— 200 games × 28 total roster slots (8+12+8) — so "still employed" here is
+now largely a *capacity-saturation* number, not a pure attrition one),
+70,424 training completions (avg. gain 5.25 — lower, since every new hire
+auto-starts a fresh `BASIC` round at a random skill, diluting the average
+with more early-career, larger-headroom gains), **3,888 successful
+hires**. **Band-hit distribution is the real finding here:** across all 3
+groups × 200 games × 80 seasons, refreshes landed in "Poor" 0 times,
+"Average" 575 times, "Good" 20,836 times, and "Excellent" 26,589 times —
+the bot's rosters essentially never drop into the bottom two quality
+bands. Part of this is the bot's own churn (`BUSY_MORALE_GAIN_PER_SEASON`
+outweighing `IDLE_MORALE_LOSS_PER_SEASON` at this bot's rate, the same
+equilibrium noted above, keeps average roster morale high most of the
+time), but the "Poor" band is also *structurally* narrow regardless of bot
+behavior: anyone whose morale drops to the §2.2(c) resignation floor (35)
+or below resigns and leaves the average entirely, so landing a group
+average at or below `POOR_MORALE_CEILING` (44) requires nearly the *whole*
+roster to be sitting in the narrow 36-44 band simultaneously, not just a
+few struggling employees dragging the average down — a genuinely rare
+event by construction, not only by this bot's behavior. Worth keeping in
+mind once real balance tuning starts: the reachable "Poor" window is only
+ever the 9-point gap between the resignation floor (35, below which
+nobody survives to be averaged in) and `POOR_MORALE_CEILING` (44) —
+raising the ceiling widens that window and makes "Poor" reachable more
+often; moving it *closer* to the floor would only narrow the window
+further. If the game is meant to make hiring noticeably worse for a
+roster that's merely somewhat unhappy (not uniformly near-resignation),
+this pairing of constants needs revisiting - the same "keep the ceiling
+comfortably above the floor" reasoning in §2.2(c)'s own `HiringPool` entry
+turns out to need *more* headroom than the 9 points currently given, not
+less.
 
 **Still not built:** the general full-game harness described in this
 section's original text below — simple bots making plausible per-season

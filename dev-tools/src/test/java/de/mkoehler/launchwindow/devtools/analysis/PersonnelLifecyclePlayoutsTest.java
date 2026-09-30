@@ -28,11 +28,12 @@ class PersonnelLifecyclePlayoutsTest {
 
     /**
      * Verifies a run's own bookkeeping is internally consistent: every
-     * employee that started is accounted for as resigned, retired, or
-     * still employed, with no double-counting or loss - a run that throws
-     * {@code IllegalStateException} from {@code checkInvariants} would
-     * already fail this test outright, but this also catches the report's
-     * own arithmetic being wrong even if the invariant checks pass.
+     * employee that started or was hired is accounted for as resigned,
+     * retired, or still employed, with no double-counting or loss - a run
+     * that throws {@code IllegalStateException} from {@code checkInvariants}
+     * would already fail this test outright, but this also catches the
+     * report's own arithmetic being wrong even if the invariant checks
+     * pass.
      */
     @Test
     void everyStartingEmployeeIsAccountedFor() {
@@ -40,9 +41,10 @@ class PersonnelLifecyclePlayoutsTest {
 
         assertEquals(30, report.gamesPlayed());
         assertEquals(60, report.seasonsPerGame());
-        assertEquals(report.employeesStarted(),
+        assertEquals(report.employeesStarted() + report.hiredCount(),
             report.resignedCount() + report.retiredCount() + report.stillEmployedAtEnd());
         assertTrue(report.employeesStarted() > 0);
+        assertTrue(report.hiredCount() > 0, "expected at least one bot hire over 60 seasons");
     }
 
     /**

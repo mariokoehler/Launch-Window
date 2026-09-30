@@ -15,7 +15,8 @@ package de.mkoehler.launchwindow.devtools.analysis;
  *                                          every game
  * @param retiredCount                      how many employees retired across
  *                                          every game
- * @param stillEmployedAtEnd                {@code employeesStarted} minus
+ * @param stillEmployedAtEnd                {@code employeesStarted} plus
+ *                                          {@code hiredCount} minus
  *                                          {@code resignedCount} minus
  *                                          {@code retiredCount}
  * @param averageTenureSeasonsWhenResigned  average seasons survived by an
@@ -29,6 +30,18 @@ package de.mkoehler.launchwindow.devtools.analysis;
  * @param averageTrainingGain               average skill gain per completed
  *                                          training round, {@code 0} if none
  *                                          completed
+ * @param hiredCount                        how many bot hires succeeded
+ *                                          across every game (see
+ *                                          {@code PersonnelLifecyclePlayouts#HIRE_CHANCE_PER_SEASON});
+ *                                          already reflected in
+ *                                          {@code stillEmployedAtEnd}
+ * @param poorBandBatches                   how many of the three groups'
+ *                                          per-season candidate-pool
+ *                                          refreshes landed in the "Poor"
+ *                                          quality band, across every game
+ * @param averageBandBatches                same, for the "Average" band
+ * @param goodBandBatches                   same, for the "Good" band
+ * @param excellentBandBatches              same, for the "Excellent" band
  * @author Mario Koehler
  */
 public record PersonnelPlayoutReport(
@@ -41,6 +54,11 @@ public record PersonnelPlayoutReport(
     double averageTenureSeasonsWhenResigned,
     double averageTenureSeasonsWhenRetired,
     int trainingCompletedCount,
-    double averageTrainingGain
+    double averageTrainingGain,
+    int hiredCount,
+    int poorBandBatches,
+    int averageBandBatches,
+    int goodBandBatches,
+    int excellentBandBatches
 ) {
 }

@@ -151,20 +151,25 @@ assignment (no player-action path exists yet). Not yet wired into
 M2's.
 
 **Bot-driven playout harness started the same day, right after the first
-resolver landed, then extended the same day once `TrainingProgress` also
-existed (2026-09-30):** `dev-tools`'s new
-`de.mkoehler.launchwindow.devtools.analysis.PersonnelLifecyclePlayouts` now
-drives both `PersonnelLifecycle` and `TrainingProgress` every season, in
-the documented composition order, with a bot that starts real training
-assignments (not just idle/busy toggling) — see `design.md` §3.10 for the
-full description, its self-checking invariants (including the new skill-
-range and IN_TRAINING-consistency ones), and its current tuning numbers
-(seed 42, 200 games, starting skills/learning-potential randomized 20-90/
-20-80 - see `design.md` §3.10: ~8% resigned, ~33% retired, ~59% still
-employed of a 3,000-employee population at an 80-season/20-year cap,
-~18,200 training completions averaging ~7.8 skill points each - retirement
-jumped after the departure-protection reversal below dropped SET's own
-retirement age to 65 and stopped training from protecting anyone). Run it
+resolver landed, then extended repeatedly the same day as
+`TrainingProgress` and `HiringPool` landed too (2026-09-30):** `dev-tools`'s
+new `de.mkoehler.launchwindow.devtools.analysis.PersonnelLifecyclePlayouts`
+now drives `PersonnelLifecycle`, `TrainingProgress`, and `HiringPool`
+(both `refreshCandidates` and, via an occasional bot hire, `hire`) every
+season, in the documented composition order, with a bot that starts real
+training assignments (not just idle/busy toggling) and occasionally hires
+from the current candidate pool — see `design.md` §3.10 for the full
+description, its self-checking invariants (skill-range/IN_TRAINING-
+consistency, `PERMANENT`-target validity, and the hiring-pool ones: unique
+ids across all rosters/pools, exact pool size after a refresh, candidate
+skills within their band), and the full run-by-run history of its tuning
+numbers as each resolver was wired in — **current numbers (seed 42, 200
+games, 80-season/20-year cap, 3,000 starting employees): 259 resigned,
+1,271 retired, 5,358 still employed, 70,424 training completions (avg.
+gain 5.25), 3,888 successful hires; hiring-pool quality bands landed
+"Poor" 0 times, "Average" 575, "Good" 20,836, "Excellent" 26,589 — this
+bot's rosters practically never see a below-average candidate batch, since
+its churn keeps average morale high.** Run it
 directly with
 `mvn -pl dev-tools compile exec:java -DmainClass=de.mkoehler.launchwindow.devtools.analysis.PersonnelLifecyclePlayouts`.
 Deliberately named after the resolvers it drives, not yet the general
@@ -210,7 +215,55 @@ resignations dropped sharply, 234→144, since an employee cycling through
 (gaining morale) than periodically idling between shorter rounds would -
 `PERMANENT` turns out to be a genuine low-effort way to keep staff from
 resigning, not just a training convenience, worth remembering once real
-balance tuning starts. See `design.md` §3.10 for the full numbers. Git repo
+balance tuning starts. See `design.md` §3.10 for the full numbers.
+
+**Hiring pool implemented the same day (2026-09-30):**
+`core/.../rules/HiringPool` — the fourth M2 rules-engine slice.
+`refreshCandidates` replaces each group's candidate pool with a fresh
+6-candidate batch every call, quality banded by that group's own current
+average roster morale (4 bands, re-derived numbers from `baspm.md` §9.4's
+mechanic); `hire` moves one candidate from pool to roster, returning a
+`HireOutcome` (`HIRED`/`UNKNOWN_CANDIDATE`/`ROSTER_FULL`) rather than
+throwing, since a stale candidate id or a full roster are both ordinary
+outcomes in an async multiplayer game, not error conditions. Three user
+decisions the same day: new hires auto-start `BASIC` training on a random
+skill from their own group; roster capacity is now enforced (8 astronauts,
+12 SET, 8 Mission Control); hiring itself is free for now. New
+`PlayerSnapshot` fields for this: `astronautCandidates`/
+`setSpecialistCandidates`/`missionControlCandidates` and
+`nextPersonnelId` (a shared counter behind the new
+`allocatePersonnelId()` — deliberately shared across all three groups and
+both real hires and candidates, so no id is ever reused, which matters for
+an async game where a stale action could otherwise resolve against the
+wrong entity later). 11 new `HiringPoolTest` tests. **Composition-order
+contract for whoever wires this into a real season pass (M4):** journaled
+player actions (including `hire`) first, then `PersonnelLifecycle`, then
+`TrainingProgress`, then `refreshCandidates` last.
+
+**Wired into the bot harness the same session** (numbers folded into the
+"Bot-driven playout harness" paragraph above): each season the bot may
+first hire one random candidate out of each group's current pool (25%
+chance per group, a stand-in for a journaled player action), matching the
+composition order above — `PersonnelLifecycle`/`TrainingProgress` run as
+before, then `HiringPool.refreshCandidates` runs last. Three new
+invariants, all computed independently of `HiringPool`'s own logic: every
+id is globally unique across all three rosters *and* all three candidate
+pools; each pool holds exactly 6 candidates after a refresh; every
+candidate's skills fall inside the range the harness's own independently
+re-derived morale-to-band mapping would select — this needed promoting
+`HiringPool`'s per-band skill-range constants from `private` to `public`
+(plain tuning numbers, not the kind of internal decision logic that has to
+stay off-limits to keep the cross-check genuine — see `design.md` §3.10's
+note). Tenure accounting also needed a fix here: a mid-game hire's tenure
+is measured from its own join season, not season 0, via a per-game
+`joinedAtSeason` map — caught by the advisor before this was committed.
+Full numbers and reasoning in `design.md` §3.10. This completes "finish
+personnel first" for M2's current scope — see `design.md` §5 for what's
+still open in the personnel slice (R&D's own resolver, mission-based
+growth's caller, the Expert trait) and what's next (programs/mission-
+configuration slice).
+
+Git repo
 initialized 2026-09-27 and pushed
 to GitHub as a **private**
 repo (`mariokoehler/Launch-Window` — GitHub doesn't allow spaces in repo

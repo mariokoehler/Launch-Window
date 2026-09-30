@@ -12,6 +12,8 @@ import de.mkoehler.launchwindow.model.SetSkill;
 import de.mkoehler.launchwindow.model.SetSpecialist;
 import de.mkoehler.launchwindow.model.TrainingKind;
 import de.mkoehler.launchwindow.rules.DepartureReason;
+import de.mkoehler.launchwindow.rules.HireOutcome;
+import de.mkoehler.launchwindow.rules.HiringPool;
 import de.mkoehler.launchwindow.rules.PersonnelDeparture;
 import de.mkoehler.launchwindow.rules.PersonnelGroup;
 import de.mkoehler.launchwindow.rules.PersonnelLifecycle;
@@ -21,20 +23,22 @@ import de.mkoehler.launchwindow.rules.TrainingCompleted;
 import de.mkoehler.launchwindow.rules.TrainingProgress;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
 /**
  * <p>Launch Window's own {@code Playouts}-style bot-driven harness (see
  * {@code design.md} &sect;3.10, following Robot-Rampage's own precedent) -
- * drives {@link PersonnelLifecycle#advanceSeason} and
- * {@link TrainingProgress#advanceSeason}, the two rules-engine resolvers
- * that exist so far, across many random simulated rosters and seasons,
- * purely headless (no client/server/persistence involved), and reports the
- * tenure/departure/training statistics that make it a tuning tool rather
- * than just another unit test.</p>
+ * drives {@link PersonnelLifecycle#advanceSeason}, {@link TrainingProgress#advanceSeason},
+ * and {@link HiringPool#refreshCandidates}/{@link HiringPool#hire}, the
+ * rules-engine resolvers that exist so far, across many random simulated
+ * rosters and seasons, purely headless (no client/server/persistence
+ * involved), and reports the tenure/departure/training/hiring statistics
+ * that make it a tuning tool rather than just another unit test.</p>
  *
  * <p><b>Deliberately narrow, named after the resolvers it drives</b> - this
  * is not yet the general full-game {@code Playouts} harness
@@ -58,12 +62,14 @@ import java.util.Set;
  * re-enrolling on its own). Not a stand-in for a real per-turn player
  * decision, which doesn't exist yet at this milestone.</p>
  *
- * <p><b>Resolver composition order matches the contract {@link TrainingProgress}'s
- * own Javadoc documents</b>: {@link PersonnelLifecycle} runs before
- * {@link TrainingProgress} every season, using the same seeded
- * {@link Random} for both this season's assignment shuffle and any
- * training-completion gain it draws - reusing one source keeps a whole
- * game's outcome reproducible from a single seed.</p>
+ * <p><b>Resolver composition order matches the contract {@link HiringPool}'s
+ * own Javadoc documents</b>: each season, the bot may first hire out of
+ * <i>last</i> season's candidate pool ({@link #HIRE_CHANCE_PER_SEASON} per
+ * group, a stand-in for a journaled player action), then
+ * {@link PersonnelLifecycle} runs, then {@link TrainingProgress}, then
+ * {@link HiringPool#refreshCandidates} last - all sharing the same seeded
+ * {@link Random}, so a whole game's outcome stays reproducible from a
+ * single seed.</p>
  *
  * @author Mario Koehler
  */
@@ -78,6 +84,7 @@ public final class PersonnelLifecyclePlayouts {
     private static final double MIN_START_SKILL = 20.0;
     private static final double MAX_START_SKILL = 90.0;
     private static final double REASSIGNMENT_CHANCE_PER_SEASON = 0.3;
+    private static final double HIRE_CHANCE_PER_SEASON = 0.25;
 
     /**
      * Not instantiable; this class only exposes static methods.
@@ -114,13 +121,19 @@ public final class PersonnelLifecyclePlayouts {
         int employeesStarted = 0;
         int trainingCompletedCount = 0;
         double trainingGainTotal = 0;
+        int hiredCount = 0;
+        int[] bandHits = new int[4];
 
         for (int game = 0; game < games; game++) {
             PlayerSnapshot snapshot = newRandomSnapshot(employeesPerGroupPerGame, random);
             employeesStarted += rosterSize(snapshot);
+            Map<String, Integer> joinedAtSeason = new HashMap<>();
+            seedJoinedAtSeason(snapshot, joinedAtSeason);
 
             for (int season = 0; season < seasons && rosterSize(snapshot) > 0; season++) {
                 shuffleAssignments(snapshot, random);
+                hiredCount += hireFromPools(snapshot, random, season, joinedAtSeason);
+
                 int before = rosterSize(snapshot);
                 Set<String> protectedBefore = protectedEmployeeKeys(snapshot);
 
@@ -131,7 +144,12 @@ public final class PersonnelLifecyclePlayouts {
 
                 for (ResolutionEvent event : lifecycleEvents) {
                     PersonnelDeparture departure = (PersonnelDeparture) event;
-                    int tenureSeasons = season + 1;
+                    String key = employeeKey(departure.group(), departure.personnelId());
+                    Integer joinedAt = joinedAtSeason.remove(key);
+                    if (joinedAt == null) {
+                        throw new IllegalStateException("Departure for an employee with no recorded join season: " + key);
+                    }
+                    int tenureSeasons = season + 1 - joinedAt;
                     if (departure.reason() == DepartureReason.RESIGNED) {
                         resignedCount++;
                         resignedTenureTotal += tenureSeasons;
@@ -144,16 +162,88 @@ public final class PersonnelLifecyclePlayouts {
                     trainingCompletedCount++;
                     trainingGainTotal += ((TrainingCompleted) event).skillGain();
                 }
+
+                HiringPool.refreshCandidates(snapshot, random);
+                checkHiringInvariants(snapshot, bandHits);
             }
         }
 
-        int stillEmployed = employeesStarted - resignedCount - retiredCount;
+        int stillEmployed = employeesStarted + hiredCount - resignedCount - retiredCount;
         double avgResignedTenure = resignedCount == 0 ? 0 : (double) resignedTenureTotal / resignedCount;
         double avgRetiredTenure = retiredCount == 0 ? 0 : (double) retiredTenureTotal / retiredCount;
         double avgTrainingGain = trainingCompletedCount == 0 ? 0 : trainingGainTotal / trainingCompletedCount;
 
         return new PersonnelPlayoutReport(games, seasons, employeesStarted, resignedCount, retiredCount,
-            stillEmployed, avgResignedTenure, avgRetiredTenure, trainingCompletedCount, avgTrainingGain);
+            stillEmployed, avgResignedTenure, avgRetiredTenure, trainingCompletedCount, avgTrainingGain,
+            hiredCount, bandHits[0], bandHits[1], bandHits[2], bandHits[3]);
+    }
+
+    /**
+     * The bot's stand-in for a journaled "hire" player action: for each
+     * group, with probability {@link #HIRE_CHANCE_PER_SEASON}, hires one
+     * random candidate out of that group's <i>current</i> pool (i.e. the one
+     * last season's {@link HiringPool#refreshCandidates} produced) - a
+     * no-op if that pool is currently empty (season 0, before any refresh
+     * has happened yet) or the roster is already at capacity, both of which
+     * {@link HiringPool#hire} itself reports via {@link HireOutcome} rather
+     * than throwing. On a successful hire, records the join season in
+     * {@code joinedAtSeason} so tenure can be computed correctly later -
+     * a hire mid-game must not be credited with tenure back to season 0.
+     *
+     * @param snapshot        the snapshot to hire into; mutated in place
+     * @param random          the random source to draw from
+     * @param season          the current season index, recorded as the new
+     *                        hire's join season
+     * @param joinedAtSeason  this game's {@code group:id -> join season} map;
+     *                        mutated in place on a successful hire
+     * @return how many of the three groups actually hired this season
+     */
+    private static int hireFromPools(PlayerSnapshot snapshot, Random random, int season,
+            Map<String, Integer> joinedAtSeason) {
+        int hired = 0;
+        hired += maybeHire(snapshot, PersonnelGroup.ASTRONAUT, snapshot.getAstronautCandidates(), random, season,
+            joinedAtSeason);
+        hired += maybeHire(snapshot, PersonnelGroup.SET, snapshot.getSetSpecialistCandidates(), random, season,
+            joinedAtSeason);
+        hired += maybeHire(snapshot, PersonnelGroup.MISSION_CONTROL, snapshot.getMissionControlCandidates(), random,
+            season, joinedAtSeason);
+        return hired;
+    }
+
+    private static int maybeHire(PlayerSnapshot snapshot, PersonnelGroup group, List<? extends Personnel> pool,
+            Random random, int season, Map<String, Integer> joinedAtSeason) {
+        if (pool.isEmpty() || random.nextDouble() >= HIRE_CHANCE_PER_SEASON) {
+            return 0;
+        }
+        String candidateId = pool.get(random.nextInt(pool.size())).getId();
+        HireOutcome outcome = HiringPool.hire(snapshot, group, candidateId, random);
+        if (outcome != HireOutcome.HIRED) {
+            return 0;
+        }
+        joinedAtSeason.put(employeeKey(group, candidateId), season);
+        return 1;
+    }
+
+    /**
+     * Seeds {@code joinedAtSeason} with join season {@code 0} for every
+     * employee already on the roster at game start, so {@link #maybeHire}'s
+     * later entries and this initial batch are treated uniformly when
+     * computing tenure on departure.
+     *
+     * @param snapshot        the freshly-created snapshot
+     * @param joinedAtSeason  the map to seed; mutated in place
+     */
+    private static void seedJoinedAtSeason(PlayerSnapshot snapshot, Map<String, Integer> joinedAtSeason) {
+        seedJoinedAtSeason(snapshot.getAstronauts(), PersonnelGroup.ASTRONAUT, joinedAtSeason);
+        seedJoinedAtSeason(snapshot.getSetSpecialists(), PersonnelGroup.SET, joinedAtSeason);
+        seedJoinedAtSeason(snapshot.getMissionControlOfficers(), PersonnelGroup.MISSION_CONTROL, joinedAtSeason);
+    }
+
+    private static void seedJoinedAtSeason(List<? extends Personnel> roster, PersonnelGroup group,
+            Map<String, Integer> joinedAtSeason) {
+        for (Personnel person : roster) {
+            joinedAtSeason.put(employeeKey(group, person.getId()), 0);
+        }
     }
 
     /**
@@ -257,6 +347,122 @@ public final class PersonnelLifecyclePlayouts {
                 checkPermanentTrainingTarget(officer, officer.getSkill(officer.getTrainingTargetSkill()));
             }
         }
+    }
+
+    /**
+     * The four {@link HiringPool} quality bands' skill ranges, in the same
+     * POOR/AVERAGE/GOOD/EXCELLENT order {@link #bandIndex} returns - built
+     * from {@link HiringPool}'s own public range constants, but the
+     * band-selection logic below ({@link #bandIndex}) is this class's own
+     * independent re-derivation, not a call into {@link HiringPool}'s
+     * private {@code bandFor}/{@code randomSkill}.
+     */
+    private static final double[][] HIRING_SKILL_RANGES = {
+        {HiringPool.POOR_SKILL_MIN, HiringPool.POOR_SKILL_MAX},
+        {HiringPool.AVERAGE_SKILL_MIN, HiringPool.AVERAGE_SKILL_MAX},
+        {HiringPool.GOOD_SKILL_MIN, HiringPool.GOOD_SKILL_MAX},
+        {HiringPool.EXCELLENT_SKILL_MIN, HiringPool.EXCELLENT_SKILL_MAX},
+    };
+
+    /**
+     * Cross-checks {@link HiringPool#refreshCandidates}'s own output,
+     * computed independently of its internals: every id across all three
+     * rosters <i>and</i> all three candidate pools is globally unique (the
+     * shared {@link PlayerSnapshot#allocatePersonnelId()} counter must never
+     * repeat), each pool holds exactly {@link HiringPool#HIRING_BATCH_SIZE}
+     * candidates after a refresh, and every candidate's skills fall inside
+     * the range this class's own {@link #bandIndex} would select for that
+     * group's current average roster morale - also tallies which band each
+     * group's refresh landed in, for {@link PersonnelPlayoutReport}.
+     *
+     * @param snapshot the snapshot immediately after this season's
+     *                 {@link HiringPool#refreshCandidates} call
+     * @param bandHits four running totals, indexed by {@link #bandIndex};
+     *                 incremented in place, once per group per season
+     * @throws IllegalStateException if any invariant is violated
+     */
+    private static void checkHiringInvariants(PlayerSnapshot snapshot, int[] bandHits) {
+        checkUniqueIds(snapshot);
+        checkPoolSize(snapshot.getAstronautCandidates());
+        checkPoolSize(snapshot.getSetSpecialistCandidates());
+        checkPoolSize(snapshot.getMissionControlCandidates());
+
+        int astronautBand = bandIndex(independentAverageMorale(snapshot.getAstronauts()));
+        bandHits[astronautBand]++;
+        for (Astronaut candidate : snapshot.getAstronautCandidates()) {
+            checkSkillsInBand(candidate.getId(), candidate.getSkills().values(), astronautBand);
+        }
+
+        int setBand = bandIndex(independentAverageMorale(snapshot.getSetSpecialists()));
+        bandHits[setBand]++;
+        for (SetSpecialist candidate : snapshot.getSetSpecialistCandidates()) {
+            checkSkillsInBand(candidate.getId(), candidate.getSkills().values(), setBand);
+        }
+
+        int missionControlBand = bandIndex(independentAverageMorale(snapshot.getMissionControlOfficers()));
+        bandHits[missionControlBand]++;
+        for (MissionControlOfficer candidate : snapshot.getMissionControlCandidates()) {
+            checkSkillsInBand(candidate.getId(), candidate.getSkills().values(), missionControlBand);
+        }
+    }
+
+    private static void checkUniqueIds(PlayerSnapshot snapshot) {
+        Set<String> ids = new HashSet<>();
+        addIds(snapshot.getAstronauts(), ids);
+        addIds(snapshot.getSetSpecialists(), ids);
+        addIds(snapshot.getMissionControlOfficers(), ids);
+        addIds(snapshot.getAstronautCandidates(), ids);
+        addIds(snapshot.getSetSpecialistCandidates(), ids);
+        addIds(snapshot.getMissionControlCandidates(), ids);
+    }
+
+    private static void addIds(List<? extends Personnel> people, Set<String> ids) {
+        for (Personnel person : people) {
+            if (!ids.add(person.getId())) {
+                throw new IllegalStateException("Duplicate personnel id across rosters/pools: " + person.getId());
+            }
+        }
+    }
+
+    private static void checkPoolSize(List<? extends Personnel> pool) {
+        if (pool.size() != HiringPool.HIRING_BATCH_SIZE) {
+            throw new IllegalStateException("Candidate pool size mismatch: " + pool.size());
+        }
+    }
+
+    private static void checkSkillsInBand(String candidateId, Iterable<Double> skills, int band) {
+        double min = HIRING_SKILL_RANGES[band][0];
+        double max = HIRING_SKILL_RANGES[band][1];
+        for (double skill : skills) {
+            if (skill < min || skill > max) {
+                throw new IllegalStateException("Candidate " + candidateId + " skill " + skill
+                    + " outside band range [" + min + ", " + max + "]");
+            }
+        }
+    }
+
+    private static double independentAverageMorale(List<? extends Personnel> roster) {
+        if (roster.isEmpty()) {
+            return HiringPool.EMPTY_ROSTER_FALLBACK_MORALE;
+        }
+        double sum = 0;
+        for (Personnel person : roster) {
+            sum += person.getMorale();
+        }
+        return sum / roster.size();
+    }
+
+    private static int bandIndex(double averageMorale) {
+        if (averageMorale <= HiringPool.POOR_MORALE_CEILING) {
+            return 0;
+        }
+        if (averageMorale <= HiringPool.AVERAGE_MORALE_CEILING) {
+            return 1;
+        }
+        if (averageMorale <= HiringPool.GOOD_MORALE_CEILING) {
+            return 2;
+        }
+        return 3;
     }
 
     /**
@@ -563,5 +769,9 @@ public final class PersonnelLifecyclePlayouts {
         System.out.printf("Still employed at end: %d%n", report.stillEmployedAtEnd());
         System.out.printf("Training completions: %d (avg gain %.2f)%n",
             report.trainingCompletedCount(), report.averageTrainingGain());
+        System.out.printf("Hired: %d%n", report.hiredCount());
+        System.out.printf("Hiring-pool band hits - poor: %d, average: %d, good: %d, excellent: %d%n",
+            report.poorBandBatches(), report.averageBandBatches(), report.goodBandBatches(),
+            report.excellentBandBatches());
     }
 }

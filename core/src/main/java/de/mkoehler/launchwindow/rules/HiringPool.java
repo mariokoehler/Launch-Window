@@ -80,14 +80,18 @@ public final class HiringPool {
      */
     public static final int EMPTY_ROSTER_FALLBACK_MORALE = 50;
 
-    private static final double POOR_SKILL_MIN = 10.0;
-    private static final double POOR_SKILL_MAX = 40.0;
-    private static final double AVERAGE_SKILL_MIN = 25.0;
-    private static final double AVERAGE_SKILL_MAX = 60.0;
-    private static final double GOOD_SKILL_MIN = 40.0;
-    private static final double GOOD_SKILL_MAX = 75.0;
-    private static final double EXCELLENT_SKILL_MIN = 55.0;
-    private static final double EXCELLENT_SKILL_MAX = 90.0;
+    /** Candidate skill range, "Poor" band. */
+    public static final double POOR_SKILL_MIN = 10.0;
+    public static final double POOR_SKILL_MAX = 40.0;
+    /** Candidate skill range, "Average" band. */
+    public static final double AVERAGE_SKILL_MIN = 25.0;
+    public static final double AVERAGE_SKILL_MAX = 60.0;
+    /** Candidate skill range, "Good" band. */
+    public static final double GOOD_SKILL_MIN = 40.0;
+    public static final double GOOD_SKILL_MAX = 75.0;
+    /** Candidate skill range, "Excellent" band. */
+    public static final double EXCELLENT_SKILL_MIN = 55.0;
+    public static final double EXCELLENT_SKILL_MAX = 90.0;
 
     /** The youngest age a freshly generated candidate can have. */
     public static final int CANDIDATE_MIN_AGE = 22;
