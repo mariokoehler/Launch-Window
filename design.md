@@ -518,7 +518,7 @@ proceeds:
         be the shared event vocabulary for every future rules-engine
         resolver (feeding the post-turn replay/season-news/Museum
         consumers this section and §3.13 already flag as wanting one).
-        16 unit tests, fully headless — not yet wired into
+        17 unit tests, fully headless — not yet wired into
         `PlayerStateService`/`TurnScheduler` (M4 scope, per §5).
       - **Skill growth, training-state transitions, hiring, and Expert are
         still fully deferred** — this sub-slice only ever touches age,
@@ -1743,6 +1743,12 @@ per-season toggle chance), morale drifts *upward* on average (−2 idle,
 after an unusually long idle streak, which is a real, useful finding about
 the current numbers (§2.2(c)'s morale deltas function more as a "sustained
 neglect" penalty than a routine one at this bot's churn rate), not a bug.
+**This equilibrium shifted further toward busy once `TrainingProgress` was
+wired in** (below): an employee who starts training can no longer be
+interrupted, so actual busy-time is somewhat above 50% once training spells
+(1-3 seasons each) are accounted for, pushing the average morale drift
+still further upward - the same "sustained neglect" reading holds, just
+more so.
 
 **`TrainingProgress` wired in the same day, once it existed (2026-09-30):**
 the bot got real per-employee decisions to go with it — idle becomes either

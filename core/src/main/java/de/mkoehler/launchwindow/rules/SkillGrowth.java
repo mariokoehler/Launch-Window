@@ -10,8 +10,10 @@ import java.util.random.RandomGenerator;
  * or any of its subclasses - deciding *which* skill(s) a training round, an
  * R&amp;D assignment, or flying a mission actually touches (a single skill,
  * all five, or a Flight Director's five-way-spread average per
- * {@code baspm.md} &sect;9.4) is a caller's job, not this class's; nothing in
- * this project calls these methods yet, that caller is a later M2 slice.</p>
+ * {@code baspm.md} &sect;9.4) is a caller's job, not this class's.
+ * {@link TrainingProgress} is the first such caller (a single target skill,
+ * fixed-length training); mission-based growth's own caller is still a
+ * later M2 slice.</p>
  *
  * <p><b>Random factor drawn separately from the formula it feeds</b> - every
  * growth formula here takes its random factor as a plain parameter rather

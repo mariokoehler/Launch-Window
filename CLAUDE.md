@@ -126,7 +126,7 @@ age/morale/retirement/resignation sub-slice of personnel lifecycle
 (§2.2(a)/(c)), with `PersonnelDeparture`/`DepartureReason`/`PersonnelGroup`
 as its reported events and a `ResolutionEvent` marker interface meant to
 be reused as the shared event vocabulary by every later rules-engine
-resolver. 16 new unit tests; also added one field to `Personnel`
+resolver. 17 new unit tests; also added one field to `Personnel`
 (`agingProgressSeasons`, an internal 0-3 bookkeeping counter, see
 `design.md` §3.4) and extended `MessageRegistryTest`'s existing
 `FetchStateResponse` round-trip to cover it over Kryo — no `MessageRegistry`
@@ -139,7 +139,7 @@ diminishing-returns/flat-R&D/partial-credit formulas, own numbers not
 BASPM's, 13 tests); `TrainingProgress.advanceSeason` (fixed-length
 `BASIC`/`ADVANCED` training countdown+completion, new `TrainingKind` enum
 + training fields on `Personnel`/each subclass, `TrainingKind` appended to
-`MessageRegistry`, 8 tests) — full write-up in `design.md` §2.2(c)/§3.4,
+`MessageRegistry`, 12 tests) — full write-up in `design.md` §2.2(c)/§3.4,
 including the composition-order contract for running `PersonnelLifecycle`
 before `TrainingProgress` once both get wired into one pass. **Still not
 started in this same M2 slice:** `PERMANENT` training, R&D's own target-

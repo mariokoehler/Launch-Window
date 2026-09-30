@@ -40,8 +40,9 @@ import java.util.random.RandomGenerator;
  * season a training round completes in, same as any other season.</p>
  *
  * <p>Headless, per {@code design.md} &sect;3.10 - no persistence/network/
- * libGDX dependency. Nothing calls this yet; not wired into
- * {@code PlayerStateService}/{@code TurnScheduler} (M4) or the bot harness.</p>
+ * libGDX dependency. Driven every season by the bot harness
+ * ({@code PersonnelLifecyclePlayouts}, {@code dev-tools}); not yet wired
+ * into {@code PlayerStateService}/{@code TurnScheduler} (M4).</p>
  *
  * @author Mario Koehler
  */
