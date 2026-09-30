@@ -14,11 +14,15 @@ import java.util.Objects;
 import java.util.random.RandomGenerator;
 
 /**
- * <p>The fixed-length training countdown: the third M2 rules-engine slice
- * (see {@code design.md} &sect;5 M2, &sect;2.2(a)/(c), and &sect;3.4's field
- * proposal). Resolves {@link TrainingKind#BASIC} and {@link TrainingKind#ADVANCED}
- * only - {@link TrainingKind#PERMANENT}'s re-enrollment logic is deliberately
- * out of scope, see {@code design.md} &sect;3.4.</p>
+ * <p>The training countdown: the third M2 rules-engine slice (see
+ * {@code design.md} &sect;5 M2, &sect;2.2(a)/(c), and &sect;3.4's field
+ * proposal). Resolves all three real {@link TrainingKind}s -
+ * {@link TrainingKind#BASIC}/{@link TrainingKind#ADVANCED} as one fixed-
+ * length round each, {@link TrainingKind#PERMANENT} as the same
+ * {@link #ADVANCED_TRAINING_SEASONS}-long round, automatically re-enrolled
+ * every time one completes until {@code trainingTargetLevel} is reached (or
+ * the {@link #PERMANENT_TRAINING_GAIN_EPSILON} termination guard fires -
+ * see {@link #shouldReenroll}).</p>
  *
  * <p><b>Assumes an already-started training assignment</b> - this class only
  * ever advances a countdown and resolves completion; nothing in this project
@@ -77,6 +81,19 @@ public final class TrainingProgress {
     public static final int ADVANCED_TRAINING_SEASONS = 2;
 
     /**
+     * The minimum skill gain a {@link TrainingKind#PERMANENT} round must
+     * produce to re-enroll into another one. Without this floor, an
+     * employee with 0 learning potential (whose gain is always exactly 0 -
+     * see {@link SkillGrowth#diminishingReturnsGain}) or a target level
+     * at/above {@link SkillGrowth#SKILL_CAP} (which the gain formula only
+     * ever asymptotically approaches, never reaches) would re-enroll
+     * forever with no real progress - an infinite loop, not a balance
+     * question. Own value, not from BASPM (which has no {@code PERMANENT}-
+     * equivalent re-enrollment cap to begin with).
+     */
+    public static final double PERMANENT_TRAINING_GAIN_EPSILON = 0.05;
+
+    /**
      * Not instantiable; this class only exposes static methods.
      */
     private TrainingProgress() {
@@ -84,9 +101,9 @@ public final class TrainingProgress {
 
     /**
      * Advances one season of training progress for every employee across
-     * all three of the given snapshot's rosters who is currently
-     * undergoing {@link TrainingKind#BASIC} or {@link TrainingKind#ADVANCED}
-     * training, mutating the snapshot in place.
+     * all three of the given snapshot's rosters who is currently training
+     * (any of {@link TrainingKind#BASIC}, {@link TrainingKind#ADVANCED}, or
+     * {@link TrainingKind#PERMANENT}), mutating the snapshot in place.
      *
      * @param snapshot the player snapshot to advance; mutated in place
      * @param random   the random source training-completion gains are drawn
@@ -115,8 +132,8 @@ public final class TrainingProgress {
     }
 
     /**
-     * Whether a fixed-length training round is genuinely in progress -
-     * both {@link AssignmentState#IN_TRAINING} and a fixed-length
+     * Whether a training round is genuinely in progress - both
+     * {@link AssignmentState#IN_TRAINING} and a real (non-{@link TrainingKind#NONE})
      * {@link TrainingKind} must agree, since the two are independent
      * fields that could otherwise drift apart (e.g. a future pull-out path
      * that sets {@link AssignmentState#IDLE} without also clearing
@@ -128,11 +145,35 @@ public final class TrainingProgress {
      * such as {@code PersonnelLifecycleTest}'s own busy-employee fixtures).
      *
      * @param person the employee to check
-     * @return {@code true} if a fixed-length round is genuinely active
+     * @return {@code true} if a training round is genuinely active
      */
     private static boolean isActivelyTraining(Personnel person) {
         return person.getAssignmentState() == AssignmentState.IN_TRAINING
-            && (person.getTrainingKind() == TrainingKind.BASIC || person.getTrainingKind() == TrainingKind.ADVANCED);
+            && person.getTrainingKind() != TrainingKind.NONE;
+    }
+
+    /**
+     * Whether a completed round should re-enroll into another one, rather
+     * than finish - only ever {@code true} for {@link TrainingKind#PERMANENT},
+     * and only while genuine progress is still being made toward the
+     * target level.
+     *
+     * @param kind        the training kind that just completed a round
+     * @param newSkill    the target skill's value after this round's gain
+     *                    was applied
+     * @param targetLevel the level {@code PERMANENT} training is working
+     *                     toward (meaningless for other kinds)
+     * @param gain        this round's own gain
+     * @return {@code true} if another round should start immediately
+     */
+    private static boolean shouldReenroll(TrainingKind kind, double newSkill, double targetLevel, double gain) {
+        if (kind != TrainingKind.PERMANENT) {
+            return false;
+        }
+        if (newSkill >= targetLevel) {
+            return false;
+        }
+        return gain >= PERMANENT_TRAINING_GAIN_EPSILON;
     }
 
     private static void advanceAstronaut(Astronaut astronaut, RandomGenerator random, List<ResolutionEvent> events) {
@@ -147,11 +188,16 @@ public final class TrainingProgress {
         TrainingKind kind = astronaut.getTrainingKind();
         var targetSkill = astronaut.getTrainingTargetSkill();
         double factor = SkillGrowth.drawTrainingFactor(random);
-        double gain = SkillGrowth.diminishingReturnsGain(
-            astronaut.getSkill(targetSkill), astronaut.getLearningPotential(), factor);
-        astronaut.setSkill(targetSkill, astronaut.getSkill(targetSkill) + gain);
-        resetTraining(astronaut);
-        astronaut.setTrainingTargetSkill(null);
+        double currentSkill = astronaut.getSkill(targetSkill);
+        double gain = SkillGrowth.diminishingReturnsGain(currentSkill, astronaut.getLearningPotential(), factor);
+        double newSkill = currentSkill + gain;
+        astronaut.setSkill(targetSkill, newSkill);
+        if (shouldReenroll(kind, newSkill, astronaut.getTrainingTargetLevel(), gain)) {
+            astronaut.setTrainingSeasonsCompleted(0);
+        } else {
+            resetTraining(astronaut);
+            astronaut.setTrainingTargetSkill(null);
+        }
         events.add(new TrainingCompleted(PersonnelGroup.ASTRONAUT, astronaut.getId(), astronaut.getName(),
             kind, targetSkill.name(), gain));
     }
@@ -168,11 +214,16 @@ public final class TrainingProgress {
         TrainingKind kind = specialist.getTrainingKind();
         var targetSkill = specialist.getTrainingTargetSkill();
         double factor = SkillGrowth.drawTrainingFactor(random);
-        double gain = SkillGrowth.diminishingReturnsGain(
-            specialist.getSkill(targetSkill), specialist.getLearningPotential(), factor);
-        specialist.setSkill(targetSkill, specialist.getSkill(targetSkill) + gain);
-        resetTraining(specialist);
-        specialist.setTrainingTargetSkill(null);
+        double currentSkill = specialist.getSkill(targetSkill);
+        double gain = SkillGrowth.diminishingReturnsGain(currentSkill, specialist.getLearningPotential(), factor);
+        double newSkill = currentSkill + gain;
+        specialist.setSkill(targetSkill, newSkill);
+        if (shouldReenroll(kind, newSkill, specialist.getTrainingTargetLevel(), gain)) {
+            specialist.setTrainingSeasonsCompleted(0);
+        } else {
+            resetTraining(specialist);
+            specialist.setTrainingTargetSkill(null);
+        }
         events.add(new TrainingCompleted(PersonnelGroup.SET, specialist.getId(), specialist.getName(),
             kind, targetSkill.name(), gain));
     }
@@ -190,11 +241,16 @@ public final class TrainingProgress {
         TrainingKind kind = officer.getTrainingKind();
         var targetSkill = officer.getTrainingTargetSkill();
         double factor = SkillGrowth.drawTrainingFactor(random);
-        double gain = SkillGrowth.diminishingReturnsGain(
-            officer.getSkill(targetSkill), officer.getLearningPotential(), factor);
-        officer.setSkill(targetSkill, officer.getSkill(targetSkill) + gain);
-        resetTraining(officer);
-        officer.setTrainingTargetSkill(null);
+        double currentSkill = officer.getSkill(targetSkill);
+        double gain = SkillGrowth.diminishingReturnsGain(currentSkill, officer.getLearningPotential(), factor);
+        double newSkill = currentSkill + gain;
+        officer.setSkill(targetSkill, newSkill);
+        if (shouldReenroll(kind, newSkill, officer.getTrainingTargetLevel(), gain)) {
+            officer.setTrainingSeasonsCompleted(0);
+        } else {
+            resetTraining(officer);
+            officer.setTrainingTargetSkill(null);
+        }
         events.add(new TrainingCompleted(PersonnelGroup.MISSION_CONTROL, officer.getId(), officer.getName(),
             kind, targetSkill.name(), gain));
     }
@@ -203,6 +259,7 @@ public final class TrainingProgress {
         person.setTrainingKind(TrainingKind.NONE);
         person.setTrainingSeasonsCompleted(0);
         person.setTrainingSeasonsTotal(0);
+        person.setTrainingTargetLevel(0);
         person.setAssignmentState(AssignmentState.IDLE);
     }
 }

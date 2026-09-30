@@ -30,11 +30,13 @@ public enum TrainingKind {
 
     /**
      * Standing-order advanced training that automatically re-enrolls every
-     * completed round until a target skill level is reached
-     * ({@code baspm.md} &sect;9.3). <b>Not yet resolved by any code</b> -
-     * see {@code design.md} &sect;3.4's field proposal for what's still
-     * missing (a target level) before this can be driven by
-     * {@code TrainingProgress}.
+     * completed round (each the same length as {@link #ADVANCED}) until
+     * {@link Personnel#getTrainingTargetLevel()} is reached, resolved by
+     * {@code de.mkoehler.launchwindow.rules.TrainingProgress} - see that
+     * class's own {@code shouldReenroll} for the termination guard that
+     * also stops re-enrollment once a round's own gain becomes negligible
+     * (unreachable target, or zero learning potential), not just once the
+     * target is actually hit.
      */
     PERMANENT
 }

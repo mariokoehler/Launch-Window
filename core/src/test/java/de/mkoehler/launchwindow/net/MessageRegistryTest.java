@@ -230,6 +230,7 @@ class MessageRegistryTest {
         astronaut.setTrainingSeasonsCompleted(1);
         astronaut.setTrainingSeasonsTotal(2);
         astronaut.setTrainingTargetSkill(AstronautSkill.EVA);
+        astronaut.setTrainingTargetLevel(85.5);
         snapshot.setAstronauts(List.of(astronaut));
         SetSpecialist specialist = new SetSpecialist("set-1", "Omar Idris", 41, 75, 55);
         specialist.setSkill(SetSkill.ROCKETS, 63);
@@ -249,6 +250,7 @@ class MessageRegistryTest {
         assertEquals(1, copy.state().getAstronauts().get(0).getTrainingSeasonsCompleted());
         assertEquals(2, copy.state().getAstronauts().get(0).getTrainingSeasonsTotal());
         assertEquals(AstronautSkill.EVA, copy.state().getAstronauts().get(0).getTrainingTargetSkill());
+        assertEquals(85.5, copy.state().getAstronauts().get(0).getTrainingTargetLevel());
         assertEquals(63, copy.state().getSetSpecialists().get(0).getSkill(SetSkill.ROCKETS));
         assertEquals(50, copy.state().getMissionControlOfficers().get(0).getSkill(MissionControlSkill.PROPULSION));
 

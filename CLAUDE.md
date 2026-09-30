@@ -186,7 +186,25 @@ replacement" hint. A nice side effect: this also resolves the `PERMANENT`-
 training "immortality loophole" flagged in `design.md` §3.4 the same
 session, without needing a guard inside `PERMANENT` itself — training
 never protected Astronaut/Mission Control from departure again once the
-rule changed. Git repo
+rule changed. **Both interpretations behind this rule confirmed by the
+user afterward (2026-09-30):** applies to resignation as well as
+retirement; `ASSIGNED` as the "on a mission" proxy is fine as-is, and the
+user gave a reason the seemingly-open gap likely isn't real — a mission is
+only ever `SCHEDULED` until the next turn evaluation, the same evaluation
+that would run the first departure check, so there's no real window where
+a crew sits merely assigned without already being active (still worth
+re-confirming once real mission scheduling exists, `design.md` §5 slice 3).
+
+**`PERMANENT` training implemented the same session:** `Personnel.trainingTargetLevel`
+(shared field, not per-subclass) plus `TrainingProgress.shouldReenroll` —
+each round is `ADVANCED`-length, re-enrolling automatically until the
+target level is reached or a termination guard fires
+(`PERMANENT_TRAINING_GAIN_EPSILON = 0.05`, needed for zero-learning-
+potential or near-skill-cap targets that would otherwise loop forever).
+16 `TrainingProgress` tests now (up from 12). **Not yet wired into the bot
+harness** — its bot still only starts `BASIC`/`ADVANCED`; teaching it to
+also start `PERMANENT` and re-running for new numbers is open follow-up
+work. Git repo
 initialized 2026-09-27 and pushed
 to GitHub as a **private**
 repo (`mariokoehler/Launch-Window` — GitHub doesn't allow spaces in repo

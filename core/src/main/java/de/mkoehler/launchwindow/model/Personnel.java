@@ -22,6 +22,7 @@ public abstract class Personnel {
     private TrainingKind trainingKind = TrainingKind.NONE;
     private int trainingSeasonsCompleted;
     private int trainingSeasonsTotal;
+    private double trainingTargetLevel;
 
     /**
      * No-argument constructor required for Jackson deserialization.
@@ -224,8 +225,12 @@ public abstract class Personnel {
 
     /**
      * Returns the current training round's total length in seasons.
-     * Meaningless for {@link TrainingKind#NONE} and {@link TrainingKind#PERMANENT}
-     * (which has no fixed length - see {@code design.md} &sect;3.4).
+     * Meaningless for {@link TrainingKind#NONE}. For
+     * {@link TrainingKind#PERMANENT}, each individual round is the same
+     * length as {@link TrainingKind#ADVANCED} - {@code PERMANENT} simply
+     * re-enrolls into another round automatically on completion, rather
+     * than having its own distinct round length (see {@code design.md}
+     * &sect;3.4).
      *
      * @return the total seasons
      */
@@ -240,5 +245,30 @@ public abstract class Personnel {
      */
     public void setTrainingSeasonsTotal(int trainingSeasonsTotal) {
         this.trainingSeasonsTotal = trainingSeasonsTotal;
+    }
+
+    /**
+     * Returns the skill level {@link TrainingKind#PERMANENT} training
+     * re-enrolls toward - meaningless for every other {@link #getTrainingKind()}.
+     * Not tied to any particular skill enum type, unlike
+     * {@code trainingTargetSkill} (declared per-subclass, since the three
+     * groups' skill enums differ) - a plain target *level* has no such
+     * type dependency, so it lives here on the shared base instead. See
+     * {@code design.md} &sect;3.4.
+     *
+     * @return the target skill level
+     */
+    public double getTrainingTargetLevel() {
+        return trainingTargetLevel;
+    }
+
+    /**
+     * Sets the skill level {@link TrainingKind#PERMANENT} training
+     * re-enrolls toward.
+     *
+     * @param trainingTargetLevel the target skill level
+     */
+    public void setTrainingTargetLevel(double trainingTargetLevel) {
+        this.trainingTargetLevel = trainingTargetLevel;
     }
 }

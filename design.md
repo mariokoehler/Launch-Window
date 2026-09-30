@@ -537,18 +537,24 @@ proceeds:
         `ASSIGNED` before this reversal - the user's own reasoning: this
         protection "should only ever apply to flight controllers and
         astronauts while they are participating in an active mission,"
-        which training isn't. **Two interpretations recorded as judgment
-        calls, not re-confirmed word for word (see
-        `PersonnelLifecycle`'s own Javadoc for the full reasoning):**
-        (1) the rule is applied to resignation as well as retirement, even
-        though the user's own wording named retirement specifically;
-        (2) `AssignmentState.ASSIGNED` is used as the stand-in for "on an
-        active mission" for Astronaut/Mission Control, which is exactly
-        right today (it has no other meaning for those two groups yet) but
-        **will need revisiting once mission simulation exists (slice 3,
-        §2.5)** - a crew `ASSIGNED` to a mission that hasn't launched yet
-        would already read as protected under this proxy, which isn't
-        quite "mid-mission."
+        which training isn't. **Two interpretations, both confirmed by the
+        user after review (2026-09-30), not left as unilateral judgment
+        calls (see `PersonnelLifecycle`'s own Javadoc for the full
+        reasoning):** (1) confirmed the rule extends to resignation as well
+        as retirement, even though the user's original wording named
+        retirement specifically. (2) Confirmed `AssignmentState.ASSIGNED`
+        as the stand-in for "on an active mission" for Astronaut/Mission
+        Control - and the user gave a reason the seemingly-open gap (a crew
+        `ASSIGNED` to a mission that hasn't launched yet) likely isn't a
+        real one: a mission is only ever `SCHEDULED` until the *next* turn
+        evaluation, at which point it becomes `ACTIVE` - the same
+        evaluation that would also run the first (and only per-turn)
+        departure check. So there's no real multi-turn window where a crew
+        sits merely assigned-but-not-flying while a check could fire on
+        them. **Still worth a quick re-confirmation once mission
+        simulation actually exists (slice 3, §2.5)** - this reasoning is
+        about the *intended* scheduling shape, not yet verified against
+        real running code.
       - Implemented in `core`'s new `de.mkoehler.launchwindow.rules`
         package (headless, §3.10) — `PersonnelLifecycle.advanceSeason`,
         with `PersonnelDeparture`/`DepartureReason`/`PersonnelGroup` as its
@@ -682,7 +688,10 @@ proceeds:
         see §3.10's own entry: the harness's bot grew a real "start a
         training assignment" decision specifically so this composition
         could be exercised, not left proven only in isolated unit tests.
-      - 12 unit tests, fully headless.
+      - 16 unit tests, fully headless (12 fixed-length ones, plus 4 for
+        `PERMANENT`'s re-enrollment/termination-guard behavior once that
+        landed later the same session — see this same §3.4 entry's own
+        "Implemented" note for the full description).
 - 2.3 **Programs & mission configurations (the Sputnik→Apollo tech/content
   tree) — analyzed 2026-09-27, see `baspm.md` §10 for the full trace.**
   - **(a) How BASPM does it:** a Program Category (Robotic or Crewed group,
@@ -1196,10 +1205,24 @@ unconfirmed:**
   counters above can.
 - **`PERMANENT` training additionally needs a target level** (`double`,
   alongside `trainingTargetSkill`) - re-enrolls every completed round until
-  the target skill reaches it. **Proposed but not implemented this
-  session** - only `BASIC`/`ADVANCED` (fixed-length) are actually resolved
-  by code yet; `PERMANENT`'s re-enrollment logic is deferred to whenever
-  it's picked up. **The "immortality loophole" flagged here originally is
+  the target skill reaches it. **Implemented (2026-09-30):**
+  `Personnel.trainingTargetLevel` (shared base field, not per-subclass like
+  `trainingTargetSkill` - a plain level has no skill-enum-type dependency)
+  and `TrainingProgress.shouldReenroll` — each `PERMANENT` round is the
+  same length as `ADVANCED` (`TrainingProgress.ADVANCED_TRAINING_SEASONS`),
+  and on completion either re-enrolls (resets `trainingSeasonsCompleted`
+  to 0, keeps everything else) or finishes exactly like a completed
+  `BASIC`/`ADVANCED` round would. `TrainingCompleted` is now raised for
+  every completed *round*, not just a finished assignment — check the
+  employee's own `trainingKind` afterward (`PERMANENT` if re-enrolled,
+  `NONE` if that was the final round) to tell the two apart. 16 unit tests
+  total for `TrainingProgress` (up from 12), covering re-enrollment,
+  stopping at the target, and both termination-guard cases below. **Not
+  yet wired into the bot harness** — the harness's own bot still only
+  starts `BASIC`/`ADVANCED`; teaching it to start `PERMANENT` (with a
+  target somewhere in `(currentSkill, SkillGrowth.SKILL_CAP]`) and adding
+  the matching invariant is separate follow-up work. **The "immortality
+  loophole" flagged here originally is
   now resolved as a side effect of §2.2(c)'s 2026-09-30 departure-
   protection reversal, not by a guard inside `PERMANENT` itself:** this
   note originally warned that combining `PERMANENT` with the
@@ -2675,13 +2698,16 @@ here.
     per the shape-defining choice above) — §2.5. **Decision gate:** §2.5(c)'s
     outcome-tier shape (four vs. five tiers, "vital vs. optional step") is
     still marked unconfirmed and must be settled before this slice starts.
-    **Also pick up while here (§2.2(c), 2026-09-30):** switch Astronaut/
-    Mission Control's departure-protection signal from
-    `AssignmentState.ASSIGNED` to something closer to "in flight" -
-    `ASSIGNED` was used as a stand-in because it had no other meaning for
-    those two groups yet, but once a mission actually exists, a crew
-    `ASSIGNED` to one that hasn't launched would already read as protected
-    under the current proxy, which isn't quite right.
+    **Re-confirm while here (§2.2(c), 2026-09-30):** Astronaut/Mission
+    Control's departure protection uses `AssignmentState.ASSIGNED` as a
+    stand-in for "on an active mission," accepted by the user with a
+    reason the seemingly-open "assigned but not yet launched" gap likely
+    isn't real: a mission is only ever `SCHEDULED` until the next turn
+    evaluation, which is also the same evaluation a departure check would
+    run, so there's no real window where a crew sits merely assigned
+    without also already being active. Confirm this holds once real
+    mission scheduling exists — if it doesn't, switch the signal to
+    something closer to "in flight" instead of plain `ASSIGNED`.
   - Slice: budget/funding review, prestige, goals, and the win-condition +
     tie-break check — §2.1/§2.6/§2.9.
   - Slice: random events — §2.7.

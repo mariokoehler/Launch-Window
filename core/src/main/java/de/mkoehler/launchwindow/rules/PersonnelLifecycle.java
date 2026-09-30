@@ -57,24 +57,24 @@ import java.util.Objects;
  * &sect;2.2(c) - that earlier entry is superseded for the *shape* of the
  * rule, not overwritten, so the history stays legible.</p>
  *
- * <p><b>Two interpretations of the user's instruction, recorded as this
- * class's own judgment calls, not re-confirmed word for word:</b> (1) the
- * user's wording named retirement specifically ("no reason not to retire
- * them"); this class applies the identical protection rule to resignation
- * too, reading that as the natural extension rather than a narrower one
- * covering only retirement. (2) {@link AssignmentState#ASSIGNED} is used
- * here as the proxy for "on an active mission" for Astronaut/Mission
- * Control - which is exactly right today, since {@code ASSIGNED} has no
- * other meaning yet for those two groups. <b>This proxy will need
- * revisiting once mission simulation exists (slice 3, {@code design.md}
- * &sect;2.5)</b>: a crew {@code ASSIGNED} to a mission that hasn't actually
- * launched yet would already read as "protected" under this rule, which
- * isn't quite "mid-mission" - the eventual mission-sim slice should key
- * protection off something closer to "in flight," not merely "assigned to
- * a mission," or a version of the immortality problem {@code design.md}
- * &sect;3.4 warns about for {@code PERMANENT} training (an indefinitely
- * long "assignment" that never lets its holder become eligible to depart)
- * could resurface here too.</p>
+ * <p><b>Two interpretations of the user's original instruction - both
+ * confirmed by the user after review (2026-09-30), not left as unilateral
+ * judgment calls:</b> (1) the user's wording named retirement specifically
+ * ("no reason not to retire them"); confirmed the rule extends to
+ * resignation too, not just retirement. (2) {@link AssignmentState#ASSIGNED}
+ * is used here as the proxy for "on an active mission" for Astronaut/
+ * Mission Control - the user accepted this proxy, and beyond just accepting
+ * it, gave a reason it likely isn't even a real gap: a mission is only ever
+ * {@code SCHEDULED} until the *next* turn evaluation, at which point it
+ * becomes {@code ACTIVE} - and that same turn evaluation is also the first
+ * (and only per-turn) opportunity for a resignation/retirement check to
+ * run at all. So there is no real multi-turn window where a crew sits
+ * merely {@code ASSIGNED}-but-not-yet-flying while a departure check could
+ * fire on them - by the time any check runs, a scheduled mission has
+ * already become active. <b>Still worth a quick confirmation once mission
+ * simulation actually exists (slice 3, {@code design.md} &sect;2.5)</b>,
+ * since this reasoning is about the *intended* scheduling shape, not
+ * something verified against real running code yet.</p>
  *
  * <p><b>All the numeric constants below are Launch Window's own values, not
  * BASPM's</b> - {@code design.md} &sect;1.2 forbids reusing BASPM's own
