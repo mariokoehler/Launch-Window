@@ -24,6 +24,11 @@ package de.mkoehler.launchwindow.devtools.analysis;
  * @param averageTenureSeasonsWhenRetired   average seasons survived by an
  *                                          employee who retired, {@code 0} if
  *                                          nobody did
+ * @param trainingCompletedCount            how many fixed-length training
+ *                                          rounds completed across every game
+ * @param averageTrainingGain               average skill gain per completed
+ *                                          training round, {@code 0} if none
+ *                                          completed
  * @author Mario Koehler
  */
 public record PersonnelPlayoutReport(
@@ -34,6 +39,8 @@ public record PersonnelPlayoutReport(
     int retiredCount,
     int stillEmployedAtEnd,
     double averageTenureSeasonsWhenResigned,
-    double averageTenureSeasonsWhenRetired
+    double averageTenureSeasonsWhenRetired,
+    int trainingCompletedCount,
+    double averageTrainingGain
 ) {
 }

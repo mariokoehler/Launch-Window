@@ -60,6 +60,23 @@ class PersonnelLifecyclePlayoutsTest {
     }
 
     /**
+     * Verifies a long enough run actually completes training rounds too -
+     * a sign the bot's training-starting path and
+     * {@code TrainingProgress}'s own countdown are both genuinely
+     * exercised, not just theoretically wired together. Every run already
+     * self-checks the IN_TRAINING/trainingKind consistency invariant
+     * internally (see {@code checkTrainingInvariants}); this only adds
+     * that at least one completion actually happens.
+     */
+    @Test
+    void aLongRunProducesTrainingCompletions() {
+        PersonnelPlayoutReport report = PersonnelLifecyclePlayouts.run(100, 5, 100, 7L);
+
+        assertTrue(report.trainingCompletedCount() > 0, "expected at least one training completion over 100 seasons");
+        assertTrue(report.averageTrainingGain() > 0);
+    }
+
+    /**
      * Verifies each non-positive argument is rejected.
      */
     @Test

@@ -3,15 +3,22 @@ package de.mkoehler.launchwindow.devtools.analysis;
 import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.Astronaut;
+import de.mkoehler.launchwindow.model.AstronautSkill;
 import de.mkoehler.launchwindow.model.MissionControlOfficer;
+import de.mkoehler.launchwindow.model.MissionControlSkill;
 import de.mkoehler.launchwindow.model.Personnel;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
+import de.mkoehler.launchwindow.model.SetSkill;
 import de.mkoehler.launchwindow.model.SetSpecialist;
+import de.mkoehler.launchwindow.model.TrainingKind;
 import de.mkoehler.launchwindow.rules.DepartureReason;
 import de.mkoehler.launchwindow.rules.PersonnelDeparture;
 import de.mkoehler.launchwindow.rules.PersonnelGroup;
 import de.mkoehler.launchwindow.rules.PersonnelLifecycle;
 import de.mkoehler.launchwindow.rules.ResolutionEvent;
+import de.mkoehler.launchwindow.rules.SkillGrowth;
+import de.mkoehler.launchwindow.rules.TrainingCompleted;
+import de.mkoehler.launchwindow.rules.TrainingProgress;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -20,29 +27,39 @@ import java.util.Random;
 import java.util.Set;
 
 /**
- * <p>The first slice of Launch Window's own {@code Playouts}-style bot-driven
- * harness (see {@code design.md} &sect;3.10, following Robot-Rampage's own
- * precedent) - drives {@link PersonnelLifecycle#advanceSeason}, the only
- * rules-engine resolver that exists so far, across many random simulated
- * rosters and seasons, purely headless (no client/server/persistence
- * involved), and reports the tenure/departure statistics that make it a
- * tuning tool rather than just another unit test.</p>
+ * <p>Launch Window's own {@code Playouts}-style bot-driven harness (see
+ * {@code design.md} &sect;3.10, following Robot-Rampage's own precedent) -
+ * drives {@link PersonnelLifecycle#advanceSeason} and
+ * {@link TrainingProgress#advanceSeason}, the two rules-engine resolvers
+ * that exist so far, across many random simulated rosters and seasons,
+ * purely headless (no client/server/persistence involved), and reports the
+ * tenure/departure/training statistics that make it a tuning tool rather
+ * than just another unit test.</p>
  *
- * <p><b>Deliberately narrow, named after the one resolver it drives</b> -
- * this is not yet the general full-game {@code Playouts} harness
+ * <p><b>Deliberately narrow, named after the resolvers it drives</b> - this
+ * is not yet the general full-game {@code Playouts} harness
  * {@code design.md} &sect;3.10 describes (that needs a real bot making
  * per-season decisions like "queue a mission" or "open a program," none of
  * which exist yet). Expected to grow alongside M2's remaining slices
  * ({@code design.md} &sect;5), most likely folding into a more general
- * harness once there is more than one resolver to drive per season, rather
- * than staying its own permanent, resolver-specific class.</p>
+ * harness once there are resolvers for those too, rather than staying its
+ * own permanent, resolver-specific class.</p>
  *
- * <p>The "bot" here is intentionally trivial: each employee independently
- * has a fixed per-season chance of toggling between idle and busy
- * ({@link #REASSIGNMENT_CHANCE_PER_SEASON}), just enough churn to actually
- * exercise both the morale-gain-while-busy path and the idle-only
- * resignation/retirement checks over many seasons - not a stand-in for a
- * real per-turn player decision, which doesn't exist yet at this milestone.</p>
+ * <p>The "bot" here is intentionally simple, per employee per season
+ * (chance {@link #REASSIGNMENT_CHANCE_PER_SEASON}): idle becomes either
+ * assigned, or starts a real fixed-length training round (a random kind, a
+ * random target skill from that employee's own group); assigned becomes
+ * idle; an employee already in training is <b>never</b> interrupted - there
+ * is no pull-out path yet, so training always runs to its own completion.
+ * Not a stand-in for a real per-turn player decision, which doesn't exist
+ * yet at this milestone.</p>
+ *
+ * <p><b>Resolver composition order matches the contract {@link TrainingProgress}'s
+ * own Javadoc documents</b>: {@link PersonnelLifecycle} runs before
+ * {@link TrainingProgress} every season, using the same seeded
+ * {@link Random} for both this season's assignment shuffle and any
+ * training-completion gain it draws - reusing one source keeps a whole
+ * game's outcome reproducible from a single seed.</p>
  *
  * @author Mario Koehler
  */
@@ -88,6 +105,8 @@ public final class PersonnelLifecyclePlayouts {
         long resignedTenureTotal = 0;
         long retiredTenureTotal = 0;
         int employeesStarted = 0;
+        int trainingCompletedCount = 0;
+        double trainingGainTotal = 0;
 
         for (int game = 0; game < games; game++) {
             PlayerSnapshot snapshot = newRandomSnapshot(employeesPerGroupPerGame, random);
@@ -98,10 +117,12 @@ public final class PersonnelLifecyclePlayouts {
                 int before = rosterSize(snapshot);
                 Set<String> busyBefore = busyEmployeeKeys(snapshot);
 
-                List<ResolutionEvent> events = PersonnelLifecycle.advanceSeason(snapshot);
-                checkInvariants(snapshot, events, before, busyBefore);
+                List<ResolutionEvent> lifecycleEvents = PersonnelLifecycle.advanceSeason(snapshot);
+                List<ResolutionEvent> trainingEvents = TrainingProgress.advanceSeason(snapshot, random);
+                checkInvariants(snapshot, lifecycleEvents, before, busyBefore);
+                checkTrainingInvariants(snapshot, trainingEvents);
 
-                for (ResolutionEvent event : events) {
+                for (ResolutionEvent event : lifecycleEvents) {
                     PersonnelDeparture departure = (PersonnelDeparture) event;
                     int tenureSeasons = season + 1;
                     if (departure.reason() == DepartureReason.RESIGNED) {
@@ -112,31 +133,36 @@ public final class PersonnelLifecyclePlayouts {
                         retiredTenureTotal += tenureSeasons;
                     }
                 }
+                for (ResolutionEvent event : trainingEvents) {
+                    trainingCompletedCount++;
+                    trainingGainTotal += ((TrainingCompleted) event).skillGain();
+                }
             }
         }
 
         int stillEmployed = employeesStarted - resignedCount - retiredCount;
         double avgResignedTenure = resignedCount == 0 ? 0 : (double) resignedTenureTotal / resignedCount;
         double avgRetiredTenure = retiredCount == 0 ? 0 : (double) retiredTenureTotal / retiredCount;
+        double avgTrainingGain = trainingCompletedCount == 0 ? 0 : trainingGainTotal / trainingCompletedCount;
 
         return new PersonnelPlayoutReport(games, seasons, employeesStarted, resignedCount, retiredCount,
-            stillEmployed, avgResignedTenure, avgRetiredTenure);
+            stillEmployed, avgResignedTenure, avgRetiredTenure, trainingCompletedCount, avgTrainingGain);
     }
 
     /**
-     * Cross-checks the resolver's own output for internal consistency -
-     * age monotonicity and "busy never departs" are already covered
-     * exhaustively by {@code PersonnelLifecycleTest}'s own unit tests, so
-     * this focuses on what many random combinations can catch that a
-     * handful of hand-picked unit tests might not: morale staying in
-     * bounds, every reported departure actually matching the threshold it
-     * claims to, and - since the next M2 slices are expected to start
-     * changing {@code AssignmentState} mid-season-pass, exactly when a
-     * regression here becomes likely - that nobody who was busy going into
-     * this season's advance is ever among its departures.
+     * Cross-checks {@link PersonnelLifecycle}'s own output for internal
+     * consistency - age monotonicity and "busy never departs" are already
+     * covered exhaustively by {@code PersonnelLifecycleTest}'s own unit
+     * tests, so this focuses on what many random combinations can catch
+     * that a handful of hand-picked unit tests might not: morale staying
+     * in bounds, every reported departure actually matching the threshold
+     * it claims to, and that nobody who was busy going into this season's
+     * advance is ever among its departures - the property that would break
+     * first if {@link PersonnelLifecycle} and {@link TrainingProgress} were
+     * ever accidentally run in the wrong order.
      *
      * @param snapshot        the snapshot after this season's advance
-     * @param events          the events this season's advance returned
+     * @param events          the {@link PersonnelLifecycle} events this season's advance returned
      * @param rosterSizeBefore the combined roster size before this season's advance
      * @param busyBefore      the {@code group:id} keys of every employee who was
      *                        busy immediately before this season's advance ran
@@ -172,6 +198,63 @@ public final class PersonnelLifecyclePlayouts {
         if (rosterSizeBefore - events.size() != rosterSizeAfter) {
             throw new IllegalStateException(
                 "Roster size change does not match the number of reported departures");
+        }
+    }
+
+    /**
+     * Cross-checks {@link TrainingProgress}'s own output and the resulting
+     * snapshot state: every reported gain is non-negative, every skill
+     * stays within {@code [0, SkillGrowth.SKILL_CAP]}, and
+     * {@link AssignmentState#IN_TRAINING} agrees with a non-{@link TrainingKind#NONE}
+     * training kind and a non-null target skill in both directions - the
+     * same consistency {@link TrainingProgress#isActivelyTraining} itself
+     * relies on, re-checked here across many random combinations rather
+     * than trusted blindly.
+     *
+     * @param snapshot       the snapshot after this season's training advance
+     * @param trainingEvents the {@link TrainingProgress} events this season's advance returned
+     * @throws IllegalStateException if any invariant is violated
+     */
+    private static void checkTrainingInvariants(PlayerSnapshot snapshot, List<ResolutionEvent> trainingEvents) {
+        for (ResolutionEvent event : trainingEvents) {
+            double gain = ((TrainingCompleted) event).skillGain();
+            if (gain < 0) {
+                throw new IllegalStateException("Negative training gain: " + gain);
+            }
+        }
+        for (Astronaut astronaut : snapshot.getAstronauts()) {
+            checkTrainingConsistency(astronaut, astronaut.getTrainingTargetSkill());
+            checkSkillsInRange(astronaut.getId(), astronaut.getSkills().values());
+        }
+        for (SetSpecialist specialist : snapshot.getSetSpecialists()) {
+            checkTrainingConsistency(specialist, specialist.getTrainingTargetSkill());
+            checkSkillsInRange(specialist.getId(), specialist.getSkills().values());
+        }
+        for (MissionControlOfficer officer : snapshot.getMissionControlOfficers()) {
+            checkTrainingConsistency(officer, officer.getTrainingTargetSkill());
+            checkSkillsInRange(officer.getId(), officer.getSkills().values());
+        }
+    }
+
+    private static void checkTrainingConsistency(Personnel person, Object targetSkill) {
+        boolean inTraining = person.getAssignmentState() == AssignmentState.IN_TRAINING;
+        boolean hasTrainingKind = person.getTrainingKind() != TrainingKind.NONE;
+        if (inTraining != hasTrainingKind) {
+            throw new IllegalStateException("IN_TRAINING/trainingKind disagree for " + person.getId());
+        }
+        if (inTraining && targetSkill == null) {
+            throw new IllegalStateException("IN_TRAINING employee with no target skill: " + person.getId());
+        }
+        if (!inTraining && targetSkill != null) {
+            throw new IllegalStateException("Not training but a target skill is still set: " + person.getId());
+        }
+    }
+
+    private static void checkSkillsInRange(String personnelId, Iterable<Double> skillValues) {
+        for (double skill : skillValues) {
+            if (skill < 0 || skill > SkillGrowth.SKILL_CAP) {
+                throw new IllegalStateException("Skill out of range for " + personnelId + ": " + skill);
+            }
         }
     }
 
@@ -218,20 +301,93 @@ public final class PersonnelLifecyclePlayouts {
     }
 
     private static void shuffleAssignments(PlayerSnapshot snapshot, Random random) {
-        snapshot.getAstronauts().forEach(a -> maybeToggleAssignment(a, random));
-        snapshot.getSetSpecialists().forEach(s -> maybeToggleAssignment(s, random));
-        snapshot.getMissionControlOfficers().forEach(m -> maybeToggleAssignment(m, random));
+        snapshot.getAstronauts().forEach(a -> shuffleAstronaut(a, random));
+        snapshot.getSetSpecialists().forEach(s -> shuffleSetSpecialist(s, random));
+        snapshot.getMissionControlOfficers().forEach(m -> shuffleMissionControlOfficer(m, random));
     }
 
-    private static void maybeToggleAssignment(Personnel person, Random random) {
+    private static void shuffleAstronaut(Astronaut astronaut, Random random) {
         if (random.nextDouble() >= REASSIGNMENT_CHANCE_PER_SEASON) {
             return;
         }
-        if (person.getAssignmentState() == AssignmentState.IDLE) {
-            person.setAssignmentState(random.nextBoolean() ? AssignmentState.ASSIGNED : AssignmentState.IN_TRAINING);
-        } else {
-            person.setAssignmentState(AssignmentState.IDLE);
+        if (astronaut.getAssignmentState() == AssignmentState.ASSIGNED) {
+            astronaut.setAssignmentState(AssignmentState.IDLE);
+            return;
         }
+        if (astronaut.getAssignmentState() != AssignmentState.IDLE) {
+            return;
+        }
+        if (random.nextBoolean()) {
+            astronaut.setAssignmentState(AssignmentState.ASSIGNED);
+            return;
+        }
+        AstronautSkill[] skills = AstronautSkill.values();
+        AstronautSkill target = skills[random.nextInt(skills.length)];
+        TrainingKind kind = random.nextBoolean() ? TrainingKind.BASIC : TrainingKind.ADVANCED;
+        int total = kind == TrainingKind.BASIC
+            ? TrainingProgress.ASTRONAUT_BASIC_TRAINING_SEASONS
+            : TrainingProgress.ADVANCED_TRAINING_SEASONS;
+        astronaut.setTrainingKind(kind);
+        astronaut.setTrainingSeasonsTotal(total);
+        astronaut.setTrainingSeasonsCompleted(0);
+        astronaut.setTrainingTargetSkill(target);
+        astronaut.setAssignmentState(AssignmentState.IN_TRAINING);
+    }
+
+    private static void shuffleSetSpecialist(SetSpecialist specialist, Random random) {
+        if (random.nextDouble() >= REASSIGNMENT_CHANCE_PER_SEASON) {
+            return;
+        }
+        if (specialist.getAssignmentState() == AssignmentState.ASSIGNED) {
+            specialist.setAssignmentState(AssignmentState.IDLE);
+            return;
+        }
+        if (specialist.getAssignmentState() != AssignmentState.IDLE) {
+            return;
+        }
+        if (random.nextBoolean()) {
+            specialist.setAssignmentState(AssignmentState.ASSIGNED);
+            return;
+        }
+        SetSkill[] skills = SetSkill.values();
+        SetSkill target = skills[random.nextInt(skills.length)];
+        TrainingKind kind = random.nextBoolean() ? TrainingKind.BASIC : TrainingKind.ADVANCED;
+        int total = kind == TrainingKind.BASIC
+            ? TrainingProgress.SET_BASIC_TRAINING_SEASONS
+            : TrainingProgress.ADVANCED_TRAINING_SEASONS;
+        specialist.setTrainingKind(kind);
+        specialist.setTrainingSeasonsTotal(total);
+        specialist.setTrainingSeasonsCompleted(0);
+        specialist.setTrainingTargetSkill(target);
+        specialist.setAssignmentState(AssignmentState.IN_TRAINING);
+    }
+
+    private static void shuffleMissionControlOfficer(MissionControlOfficer officer, Random random) {
+        if (random.nextDouble() >= REASSIGNMENT_CHANCE_PER_SEASON) {
+            return;
+        }
+        if (officer.getAssignmentState() == AssignmentState.ASSIGNED) {
+            officer.setAssignmentState(AssignmentState.IDLE);
+            return;
+        }
+        if (officer.getAssignmentState() != AssignmentState.IDLE) {
+            return;
+        }
+        if (random.nextBoolean()) {
+            officer.setAssignmentState(AssignmentState.ASSIGNED);
+            return;
+        }
+        MissionControlSkill[] skills = MissionControlSkill.values();
+        MissionControlSkill target = skills[random.nextInt(skills.length)];
+        TrainingKind kind = random.nextBoolean() ? TrainingKind.BASIC : TrainingKind.ADVANCED;
+        int total = kind == TrainingKind.BASIC
+            ? TrainingProgress.MISSION_CONTROL_BASIC_TRAINING_SEASONS
+            : TrainingProgress.ADVANCED_TRAINING_SEASONS;
+        officer.setTrainingKind(kind);
+        officer.setTrainingSeasonsTotal(total);
+        officer.setTrainingSeasonsCompleted(0);
+        officer.setTrainingTargetSkill(target);
+        officer.setAssignmentState(AssignmentState.IN_TRAINING);
     }
 
     private static PlayerSnapshot newRandomSnapshot(int employeesPerGroup, Random random) {
@@ -283,5 +439,7 @@ public final class PersonnelLifecyclePlayouts {
         System.out.printf("Retired: %d (avg tenure %.1f seasons)%n",
             report.retiredCount(), report.averageTenureSeasonsWhenRetired());
         System.out.printf("Still employed at end: %d%n", report.stillEmployedAtEnd());
+        System.out.printf("Training completions: %d (avg gain %.2f)%n",
+            report.trainingCompletedCount(), report.averageTrainingGain());
     }
 }

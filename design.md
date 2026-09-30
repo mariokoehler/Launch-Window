@@ -605,13 +605,14 @@ proceeds:
         trainee (already past both the retirement age and the resignation
         morale floor) in the roster; the reversed order lets the same
         trainee wrongly depart. The two resolvers still aren't composed
-        together anywhere in real code this session (each is still called
-        independently) — only the contract itself is now verified.
-      - 12 unit tests, fully headless; **not** wired into the bot harness
-        this session (`PersonnelLifecyclePlayouts` still only drives
-        `PersonnelLifecycle`) — doing so would need the harness to also
-        start training assignments, which is real per-turn decision logic
-        the harness's own trivial "bot" deliberately doesn't have yet.
+        together anywhere in real code at first — only the contract itself
+        was verified by a test. **Composed for real later the same
+        session**, in the bot harness only (still not `PlayerStateService`/
+        `TurnScheduler`, that's M4) — see §3.10's own entry: the harness's
+        bot grew a real "start a training assignment" decision specifically
+        so this composition could be exercised, not left proven only in
+        isolated unit tests.
+      - 12 unit tests, fully headless.
 - 2.3 **Programs & mission configurations (the Sputnik→Apollo tech/content
   tree) — analyzed 2026-09-27, see `baspm.md` §10 for the full trace.**
   - **(a) How BASPM does it:** a Program Category (Robotic or Crewed group,
@@ -1711,6 +1712,30 @@ per-season toggle chance), morale drifts *upward* on average (−2 idle,
 after an unusually long idle streak, which is a real, useful finding about
 the current numbers (§2.2(c)'s morale deltas function more as a "sustained
 neglect" penalty than a routine one at this bot's churn rate), not a bug.
+
+**`TrainingProgress` wired in the same day, once it existed (2026-09-30):**
+the bot got real per-employee decisions to go with it — idle becomes either
+assigned or a genuine fixed-length training assignment (a random kind,
+random target skill from that employee's own group, the correct per-group/
+per-kind length); assigned becomes idle; an employee already training is
+never interrupted (no pull-out path exists yet, so training always runs to
+completion). Both resolvers run every season in the documented composition
+order (`PersonnelLifecycle` then `TrainingProgress`, §2.2(c)), sharing one
+seeded `Random` so a whole game stays reproducible from its seed. Two new
+self-checking invariants: every skill stays in `[0, SkillGrowth.SKILL_CAP]`,
+and `AssignmentState.IN_TRAINING` agrees with a non-`NONE` training kind and
+a non-null target skill in both directions — running clean across many
+random combinations is itself evidence the `isActivelyTraining` consistency
+guard (§2.2(c)) and the bot's own start/stop logic agree with each other.
+**Updated tuning numbers, same seed/game shape as above** (the RNG stream
+shifted once `TrainingProgress` started consuming from it, so these
+supersede the earlier run, not just add to it): 262 resigned (avg. tenure
+37.6 seasons), 875 retired (avg. tenure 55.6 seasons), 1,863 still employed,
+and — the new number — **18,963 training completions, average gain 17.50
+skill points per completion.** That completion count is large mostly
+because SET's basic-training length is only 1 season (§2.2(c)) - worth
+keeping in mind if that constant ever gets retuned, since it will move this
+number a lot.
 
 **Still not built:** the general full-game harness described in this
 section's original text below — simple bots making plausible per-season
