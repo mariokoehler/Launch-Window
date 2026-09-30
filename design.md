@@ -523,6 +523,38 @@ proceeds:
       - **Skill growth, training-state transitions, hiring, and Expert are
         still fully deferred** — this sub-slice only ever touches age,
         morale, and roster membership, never a skill map.
+    - **Skill-growth formulas sub-slice implemented (2026-09-30) — pure
+      functions only, nothing calls them yet (that caller is the next
+      sub-slice, which needs training-state/R&D-target fields on
+      `Personnel` that don't exist yet either):**
+      - Skill values themselves switched from `Integer` to `Double`
+        (`Astronaut`/`SetSpecialist`/`MissionControlOfficer`) — a flat gain
+        under 1/season would otherwise round to nothing on an `int` scale.
+        See §3.4.
+      - `de.mkoehler.launchwindow.rules.SkillGrowth`: one shared
+        diminishing-returns formula (`baspm.md` §9.3's shape, reused for
+        both training and mission-based growth exactly as BASPM itself
+        does) — `distanceToCap × factor × (learningPotential ÷ 100)`,
+        skill cap **100** (BASPM: 98), training factor range **0.25-0.55**
+        (BASPM: 0.3-0.6, all **unconfirmed defaults**, pending bot-harness
+        tuning like §2.2(c)'s other numbers). SET's flat R&D gain — **its
+        factor range 0.15-0.35** (BASPM: 0.2-0.4) — reuses the same
+        "formula takes a pre-drawn factor, a thin wrapper draws it from an
+        injected `RandomGenerator`" shape for API consistency, but unlike
+        the diminishing-returns formula has no distance-to-cap term of its
+        own (it's flat by definition), so it clamps against the skill cap
+        explicitly — **a real bug caught before it shipped**: an unclamped
+        flat gain under a standing R&D order would otherwise walk a skill
+        straight past 100 after enough seasons, breaking any later formula
+        that treats skill as a 0-100 percentage. Linear pull-out partial
+        credit (`baspm.md` §9.3) is its own tiny function,
+        `fullGain × completed ÷ total`, decoupled from the growth formula
+        itself. 11 unit tests, fully headless, no dependency on any
+        `Personnel` type — deciding *which* skill(s) a call touches
+        (a single skill for R&D/most training, all five for a flying
+        astronaut, a Flight Director's five-way-spread average per
+        `baspm.md` §9.4) is deliberately left to the next sub-slice's
+        caller, not built here.
 - 2.3 **Programs & mission configurations (the Sputnik→Apollo tech/content
   tree) — analyzed 2026-09-27, see `baspm.md` §10 for the full trace.**
   - **(a) How BASPM does it:** a Program Category (Robotic or Crewed group,
