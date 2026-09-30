@@ -234,6 +234,19 @@ same session it comes up**, the same standing-note-to-self habit as
   a short beat wherever Launch Window's own gold/silver/bronze goal rating
   (§2.6(c)) is first explained to a player — this is how real missions
   actually get scored, not just a game abstraction layered on top.
+- **Surfaced during the §2.2 astronaut-PR-duty idea (2026-09-30): real
+  astronauts genuinely served a public-relations/fundraising function for
+  their programs, not a gameplay invention layered onto them.** The
+  Mercury Seven signed an exclusive personal-story deal with *Life*
+  magazine, toured extensively, and were deliberately used by NASA to
+  build and sustain public/congressional support — the same real dynamic
+  §2.1's budget/prestige trace already found (prestige from Sputnik/Gagarin
+  drove real funding increases before Apollo had flown a single crewed
+  mission of its own). A strong, true beat for wherever an "assign an
+  astronaut to PR duty" screen/option ends up landing, whenever that idea
+  (§2.2) actually gets designed and built — astronaut-as-celebrity was a
+  real, deliberate strategy, not just a game giving idle astronauts
+  something to do.
 
 ### 1.2 Content & asset policy: no copying BASPM's copyrighted content
 
@@ -692,6 +705,41 @@ proceeds:
         `PERMANENT`'s re-enrollment/termination-guard behavior once that
         landed later the same session — see this same §3.4 entry's own
         "Implemented" note for the full description).
+    - **Idea for later, not decided (user, 2026-09-30): astronaut PR duty
+      as a third season activity, earning prestige directly.** The
+      motivating gap: in BASPM itself, an astronaut between missions has
+      essentially one thing to do — train — and with `PERMANENT` training
+      now a real standing order needing zero further input, that gap
+      becomes a real "nothing left to decide" stretch for the player, not
+      just a BASPM quirk being carried over. The user's proposed fix has
+      real historical grounding, not just a gameplay patch: real astronauts
+      genuinely served a public-relations/fundraising role for their
+      programs (Mercury Seven press tours, magazine deals, parades) — the
+      same "prestige funds the program" dynamic §2.1's budget/funding trace
+      already established as historically real, not a game abstraction, now
+      extended to a third lever beyond missions/goals for *earning* it.
+      **Proposed shape (unconfirmed, needs its own design pass before
+      implementation):** a third `AssignmentState`-adjacent activity
+      alongside idle/training/mission-assigned — "PR duty" — that an
+      otherwise-idle astronaut can be assigned to, yielding a small amount
+      of prestige each season it continues, scaled by that astronaut's own
+      `AstronautSkill.LEADERSHIP` (a real, already-modeled skill this
+      would be the first personnel-facing use of beyond flying missions).
+      Also floated: PR duty as a hook for bulletin/news-style events
+      (`design.md` §2.7's random-events system, or the "replay"/season-news
+      surface §2.2(c) already wants for other personnel events) - a
+      standout PR season could generate its own flavor news item, not just
+      a silent prestige tick. **Open questions this idea doesn't answer
+      yet, deliberately not guessed at here:** exact prestige-per-season
+      formula and how it scales with leadership; whether SET/Mission
+      Control get an equivalent off-mission activity or this stays
+      astronaut-specific (their own "boring gap" problem is different,
+      since SET already has R&D as a standing background activity and
+      Mission Control has no BASPM precedent for an idle-time duty at
+      all); how this interacts with `PERMANENT` training as a competing
+      choice for the same astronaut's time. Not scheduled into any M2
+      slice yet - flagged here so it isn't lost, to be designed properly
+      whenever personnel work resumes after the current M2 slices finish.
 - 2.3 **Programs & mission configurations (the Sputnik→Apollo tech/content
   tree) — analyzed 2026-09-27, see `baspm.md` §10 for the full trace.**
   - **(a) How BASPM does it:** a Program Category (Robotic or Crewed group,
