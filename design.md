@@ -1048,6 +1048,47 @@ a fractional year anywhere client code would have to know to round for
 display. Not meant to be read/written outside the rules engine's own
 season-advance pass.
 
+**Training/R&D fields — proposed, unconfirmed (2026-09-30, ahead of M2's
+training-progress sub-slice), written down before any code so the sub-slice
+starts from a settled shape rather than inventing fields mid-implementation:**
+- **On `Personnel` (shared, since all three groups train the same way,
+  `baspm.md` §9.3):** a new `TrainingKind` enum (`NONE`/`BASIC`/`ADVANCED`/
+  `PERMANENT`), plus `trainingSeasonsCompleted`/`trainingSeasonsTotal`
+  (`int`) for the fixed-length kinds. `trainingSeasonsTotal` is meaningless
+  for `PERMANENT` (no fixed length - it re-enrolls until a target level is
+  hit, `baspm.md` §9.3) and for `NONE`.
+- **On each subclass, not `Personnel`** (`Astronaut`/`SetSpecialist`/
+  `MissionControlOfficer`): a `trainingTargetSkill` field of that
+  subclass's own skill enum (`AstronautSkill`/`SetSkill`/
+  `MissionControlSkill`) - the three groups' skill enums are different
+  types, so this can't be one shared field on the base class the way the
+  counters above can.
+- **`PERMANENT` training additionally needs a target level** (`double`,
+  alongside `trainingTargetSkill`) - re-enrolls every completed round until
+  the target skill reaches it. **Proposed but not implemented this
+  session** - only `BASIC`/`ADVANCED` (fixed-length) are actually resolved
+  by code yet; `PERMANENT`'s re-enrollment logic is deferred to whenever
+  it's picked up.
+- **R&D's own target skill is a separate, still-fully-open question, not
+  solved by any of the above:** `AssignmentState.ASSIGNED` still doesn't
+  distinguish "doing R&D" from "assigned to a mission" (its own doc
+  comment already flagged this gap, unchanged since M1) - SET's R&D target
+  skill needs its own field (`SetSpecialist`-only, since only SET does
+  R&D) once that distinction actually gets modeled, most likely alongside
+  §2.3/§2.4's programs/mission-components slice rather than this one,
+  since "what is this SET employee's R&D actually contributing to" is a
+  program/component-linkage question, not a pure personnel one. Not
+  proposed in detail here - deliberately left to whichever slice actually
+  introduces mission-component-linked R&D.
+- **Wire-format note for whoever implements this:** `TrainingKind` is a new
+  enum reachable from `PlayerSnapshot`, so it needs a `MessageRegistry`
+  entry appended at the end of `register(Kryo)` (never inserted earlier -
+  see that class's own Javadoc on registration order) and added to both
+  class-list arrays in `MessageRegistryTest`. Kryo serializes enums by
+  ordinal, so `TrainingKind`'s four values, once shipped, must only ever
+  gain new constants at the end too, matching `AssignmentState`'s own
+  existing constraint.
+
 **Decided (user, 2026-09-28): state is mutable, not immutable records with
 withers.** Turn resolution touches many fields per employee across a
 potentially large roster every turn; the on-disk JSON snapshot (§3.7) is
