@@ -1565,7 +1565,19 @@ employees total):** 202 resigned (avg. tenure 31.0 seasons), 875 retired
 (avg. tenure 54.5 seasons), 1,923 still employed at the 80-season cap —
 a plausible-looking first-pass distribution, not yet judged against any
 real target (there isn't one yet), but exactly the kind of number this
-harness exists to produce.
+harness exists to produce. **Caveat, worked out the same day these numbers
+were first seen:** these mostly reflect the harness's own bot/roster
+choices, not the underlying game-balance constants yet. **SET can't retire
+at all under this particular run's settings** - starting ages are 24-45
+and SET retires at 70, a 25-year/100-season gap the 80-season cap never
+reaches, so every SET retirement in a longer run only starts becoming
+possible past season 100 (equivalently, past 25 real years at one turn per
+season). And at the bot's roughly 50/50 idle/busy equilibrium (a 30%
+per-season toggle chance), morale drifts *upward* on average (−2 idle,
++3 busy nets to +0.5/season at 50/50) - resignation in practice only fires
+after an unusually long idle streak, which is a real, useful finding about
+the current numbers (§2.2(c)'s morale deltas function more as a "sustained
+neglect" penalty than a routine one at this bot's churn rate), not a bug.
 
 **Still not built:** the general full-game harness described in this
 section's original text below — simple bots making plausible per-season

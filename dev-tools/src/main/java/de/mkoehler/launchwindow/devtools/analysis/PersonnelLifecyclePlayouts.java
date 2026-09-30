@@ -14,8 +14,10 @@ import de.mkoehler.launchwindow.rules.PersonnelLifecycle;
 import de.mkoehler.launchwindow.rules.ResolutionEvent;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * <p>The first slice of Launch Window's own {@code Playouts}-style bot-driven
@@ -94,9 +96,10 @@ public final class PersonnelLifecyclePlayouts {
             for (int season = 0; season < seasons && rosterSize(snapshot) > 0; season++) {
                 shuffleAssignments(snapshot, random);
                 int before = rosterSize(snapshot);
+                Set<String> busyBefore = busyEmployeeKeys(snapshot);
 
                 List<ResolutionEvent> events = PersonnelLifecycle.advanceSeason(snapshot);
-                checkInvariants(snapshot, events, before);
+                checkInvariants(snapshot, events, before, busyBefore);
 
                 for (ResolutionEvent event : events) {
                     PersonnelDeparture departure = (PersonnelDeparture) event;
@@ -126,15 +129,21 @@ public final class PersonnelLifecyclePlayouts {
      * exhaustively by {@code PersonnelLifecycleTest}'s own unit tests, so
      * this focuses on what many random combinations can catch that a
      * handful of hand-picked unit tests might not: morale staying in
-     * bounds, and every reported departure actually matching the threshold
-     * it claims to.
+     * bounds, every reported departure actually matching the threshold it
+     * claims to, and - since the next M2 slices are expected to start
+     * changing {@code AssignmentState} mid-season-pass, exactly when a
+     * regression here becomes likely - that nobody who was busy going into
+     * this season's advance is ever among its departures.
      *
      * @param snapshot        the snapshot after this season's advance
      * @param events          the events this season's advance returned
      * @param rosterSizeBefore the combined roster size before this season's advance
+     * @param busyBefore      the {@code group:id} keys of every employee who was
+     *                        busy immediately before this season's advance ran
      * @throws IllegalStateException if any invariant is violated
      */
-    private static void checkInvariants(PlayerSnapshot snapshot, List<ResolutionEvent> events, int rosterSizeBefore) {
+    private static void checkInvariants(PlayerSnapshot snapshot, List<ResolutionEvent> events, int rosterSizeBefore,
+            Set<String> busyBefore) {
         snapshot.getAstronauts().forEach(PersonnelLifecyclePlayouts::checkMoraleRange);
         snapshot.getSetSpecialists().forEach(PersonnelLifecyclePlayouts::checkMoraleRange);
         snapshot.getMissionControlOfficers().forEach(PersonnelLifecyclePlayouts::checkMoraleRange);
@@ -151,6 +160,12 @@ public final class PersonnelLifecyclePlayouts {
                 throw new IllegalStateException("Retired employee " + departure.personnelId()
                     + " was younger than their group's retirement age: " + departure.ageAtExit());
             }
+            String key = employeeKey(departure.group(), departure.personnelId());
+            if (busyBefore.contains(key)) {
+                throw new IllegalStateException("Employee " + departure.personnelId()
+                    + " departed despite being busy going into this season - resignation/retirement must only"
+                    + " ever be checked while idle");
+            }
         }
 
         int rosterSizeAfter = rosterSize(snapshot);
@@ -158,6 +173,34 @@ public final class PersonnelLifecyclePlayouts {
             throw new IllegalStateException(
                 "Roster size change does not match the number of reported departures");
         }
+    }
+
+    /**
+     * Collects the {@code group:id} key of every currently-busy employee
+     * across all three rosters, for {@link #checkInvariants}'s "busy never
+     * departs" check.
+     *
+     * @param snapshot the snapshot to inspect
+     * @return the busy employees' keys
+     */
+    private static Set<String> busyEmployeeKeys(PlayerSnapshot snapshot) {
+        Set<String> keys = new HashSet<>();
+        addBusyKeys(snapshot.getAstronauts(), PersonnelGroup.ASTRONAUT, keys);
+        addBusyKeys(snapshot.getSetSpecialists(), PersonnelGroup.SET, keys);
+        addBusyKeys(snapshot.getMissionControlOfficers(), PersonnelGroup.MISSION_CONTROL, keys);
+        return keys;
+    }
+
+    private static void addBusyKeys(List<? extends Personnel> roster, PersonnelGroup group, Set<String> keys) {
+        for (Personnel person : roster) {
+            if (person.getAssignmentState() != AssignmentState.IDLE) {
+                keys.add(employeeKey(group, person.getId()));
+            }
+        }
+    }
+
+    private static String employeeKey(PersonnelGroup group, String personnelId) {
+        return group + ":" + personnelId;
     }
 
     private static void checkMoraleRange(Personnel person) {
