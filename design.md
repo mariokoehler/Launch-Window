@@ -575,8 +575,28 @@ proceeds:
         employee to `IDLE` — reporting a `TrainingCompleted` event.
         Per-group fixed lengths, own numbers (BASPM: Astronaut 4/SET 2/
         MC 2 basic, 3 advanced for all): **Astronaut basic 3, SET basic 1,
-        Mission Control basic 2, advanced 2 for all three** — all
+        Mission Control basic 3, advanced 2 for all three** — all
         **unconfirmed defaults**, pending bot-harness tuning.
+        **Corrected same session:** Mission Control basic training was
+        first set to 2, landing on BASPM's own exact value for that group
+        by coincidence — caught by the advisor, re-derived to 3 instead,
+        since §1.2 forbids matching a BASPM tuning constant verbatim even
+        unintentionally.
+      - **What `BASIC` training's completion actually *does* is this
+        session's own invented behavior, not something `baspm.md` §9.3
+        specifies — flagged for the user, not decided unilaterally.**
+        `baspm.md` §9.3's diminishing-returns gain formula is documented
+        there for *advanced* training and mission-based growth; BASPM's own
+        basic training is described as a one-time post-hire phase with its
+        own separate failure exit (`FailedBasicTrainingEmployee`,
+        `baspm.md` §9.2), not a repeatable skill-boosting round the way
+        this implementation treats it (the same diminishing-returns gain,
+        on one chosen target skill, re-runnable on veteran staff same as
+        `ADVANCED`). **Open question for the user:** keep `BASIC` as a
+        repeatable same-shape-as-`ADVANCED` round (current code), or give
+        it BASPM's own distinct one-time/pass-fail post-hire shape instead
+        (which would need a real hiring-pool/new-hire concept to even
+        trigger from, not yet built)?
       - **Assumes an already-started training assignment** — nothing in
         this project yet *starts* one (that's a player-action concern,
         doesn't exist). Only ever advances a countdown/resolves completion.
@@ -1129,7 +1149,18 @@ unconfirmed:**
   the target skill reaches it. **Proposed but not implemented this
   session** - only `BASIC`/`ADVANCED` (fixed-length) are actually resolved
   by code yet; `PERMANENT`'s re-enrollment logic is deferred to whenever
-  it's picked up.
+  it's picked up. **A real design risk flagged ahead of time, for the user
+  to weigh in on, not a code bug to fix:** combined with §2.2(a)/(c)'s kept
+  "resignation/retirement only checked while idle" property, an employee
+  on a `PERMANENT` standing order stays busy indefinitely - if their target
+  level is set high (or unreachable, near/at the skill cap), they could
+  stay busy for the rest of the game and never become eligible to resign
+  or retire at all. Worth deciding, before `PERMANENT` is implemented,
+  whether that's an acceptable emergent strategy (a real trade-off: an
+  employee parked in permanent training never grows other skills or does
+  other work either) or a loophole worth closing (e.g. a termination
+  guard that also forces a training round back to idle/re-evaluation
+  after some cap, not just when the target level is reached).
 - **R&D's own target skill is a separate, still-fully-open question, not
   solved by any of the above:** `AssignmentState.ASSIGNED` still doesn't
   distinguish "doing R&D" from "assigned to a mission" (its own doc
@@ -1731,11 +1762,31 @@ guard (§2.2(c)) and the bot's own start/stop logic agree with each other.
 shifted once `TrainingProgress` started consuming from it, so these
 supersede the earlier run, not just add to it): 262 resigned (avg. tenure
 37.6 seasons), 875 retired (avg. tenure 55.6 seasons), 1,863 still employed,
-and — the new number — **18,963 training completions, average gain 17.50
-skill points per completion.** That completion count is large mostly
-because SET's basic-training length is only 1 season (§2.2(c)) - worth
-keeping in mind if that constant ever gets retuned, since it will move this
-number a lot.
+and — the new number — 18,963 training completions, average gain 17.50
+skill points per completion. **That first average gain turned out to be
+misleading, caught the same session:** `newRandomSnapshot` never seeded any
+starting skill values (everyone began at 0) and gave everyone a flat
+learning-potential of 50, so 17.50 was mostly first-training-round gains
+starting from zero, and the new skill-cap invariant almost never actually
+exercised itself (nobody got near 100). **Fixed the same session**: starting
+skills now randomize across 20-90, learning potential across 20-80 (both
+per employee, not flat). **Numbers after that fix, same seed/game shape**:
+273 resigned (avg. tenure 31.8 seasons), 884 retired (avg. tenure 55.4
+seasons), 1,843 still employed, 18,329 training completions, **average gain
+7.78** — the more realistic number, now that most training rounds start
+from a non-zero skill and genuinely feel the diminishing-returns curve.
+The completion count itself is still large mostly because SET's
+basic-training length is only 1 season (§2.2(c)) - worth keeping in mind if
+that constant ever gets retuned, since it will move this number a lot.
+**Also corrected the same session:** Mission Control's basic-training
+length was briefly 2 seasons, landing on BASPM's own exact value for that
+group by coincidence — re-derived to 3 instead before any of the numbers
+above were finalized, per §1.2's no-verbatim-match rule; see §2.2(c)'s own
+entry for the full note, including that `BASIC` training's completion
+behavior (the same diminishing-returns gain `ADVANCED` uses) is this
+session's own invented shape, not something `baspm.md` traces for basic
+training specifically — flagged as an open question for the user there,
+not decided unilaterally.
 
 **Still not built:** the general full-game harness described in this
 section's original text below — simple bots making plausible per-season

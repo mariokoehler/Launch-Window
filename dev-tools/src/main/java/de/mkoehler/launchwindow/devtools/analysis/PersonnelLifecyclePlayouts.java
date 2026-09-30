@@ -69,7 +69,10 @@ public final class PersonnelLifecyclePlayouts {
     private static final int MAX_START_AGE = 45;
     private static final int MIN_START_MORALE = 50;
     private static final int MAX_START_MORALE = 90;
-    private static final int STARTING_LEARNING_POTENTIAL = 50;
+    private static final int MIN_START_LEARNING_POTENTIAL = 20;
+    private static final int MAX_START_LEARNING_POTENTIAL = 80;
+    private static final double MIN_START_SKILL = 20.0;
+    private static final double MAX_START_SKILL = 90.0;
     private static final double REASSIGNMENT_CHANCE_PER_SEASON = 0.3;
 
     /**
@@ -396,12 +399,26 @@ public final class PersonnelLifecyclePlayouts {
         List<SetSpecialist> specialists = new ArrayList<>();
         List<MissionControlOfficer> officers = new ArrayList<>();
         for (int i = 0; i < employeesPerGroup; i++) {
-            astronauts.add(new Astronaut("a" + i, "Astronaut " + i,
-                randomAge(random), randomMorale(random), STARTING_LEARNING_POTENTIAL));
-            specialists.add(new SetSpecialist("s" + i, "Specialist " + i,
-                randomAge(random), randomMorale(random), STARTING_LEARNING_POTENTIAL));
-            officers.add(new MissionControlOfficer("m" + i, "Officer " + i,
-                randomAge(random), randomMorale(random), STARTING_LEARNING_POTENTIAL));
+            Astronaut astronaut = new Astronaut("a" + i, "Astronaut " + i,
+                randomAge(random), randomMorale(random), randomLearningPotential(random));
+            for (AstronautSkill skill : AstronautSkill.values()) {
+                astronaut.setSkill(skill, randomStartingSkill(random));
+            }
+            astronauts.add(astronaut);
+
+            SetSpecialist specialist = new SetSpecialist("s" + i, "Specialist " + i,
+                randomAge(random), randomMorale(random), randomLearningPotential(random));
+            for (SetSkill skill : SetSkill.values()) {
+                specialist.setSkill(skill, randomStartingSkill(random));
+            }
+            specialists.add(specialist);
+
+            MissionControlOfficer officer = new MissionControlOfficer("m" + i, "Officer " + i,
+                randomAge(random), randomMorale(random), randomLearningPotential(random));
+            for (MissionControlSkill skill : MissionControlSkill.values()) {
+                officer.setSkill(skill, randomStartingSkill(random));
+            }
+            officers.add(officer);
         }
         snapshot.setAstronauts(astronauts);
         snapshot.setSetSpecialists(specialists);
@@ -415,6 +432,14 @@ public final class PersonnelLifecyclePlayouts {
 
     private static int randomMorale(Random random) {
         return MIN_START_MORALE + random.nextInt(MAX_START_MORALE - MIN_START_MORALE + 1);
+    }
+
+    private static int randomLearningPotential(Random random) {
+        return MIN_START_LEARNING_POTENTIAL + random.nextInt(MAX_START_LEARNING_POTENTIAL - MIN_START_LEARNING_POTENTIAL + 1);
+    }
+
+    private static double randomStartingSkill(Random random) {
+        return MIN_START_SKILL + random.nextDouble() * (MAX_START_SKILL - MIN_START_SKILL);
     }
 
     private static int rosterSize(PlayerSnapshot snapshot) {

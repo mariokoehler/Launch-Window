@@ -158,9 +158,11 @@ the documented composition order, with a bot that starts real training
 assignments (not just idle/busy toggling) — see `design.md` §3.10 for the
 full description, its self-checking invariants (including the new skill-
 range and IN_TRAINING-consistency ones), and its current tuning numbers
-(seed 42, 200 games: ~9% of a 3,000-employee population resigned, ~29%
-retired, ~62% still employed at an 80-season/20-year cap, ~19,000 training
-completions averaging ~17.5 skill points each). Run it directly with
+(seed 42, 200 games, starting skills/learning-potential now randomized
+rather than flat-zero/flat-50 - see `design.md` §3.10 for that same-session
+fix: ~9% of a 3,000-employee population resigned, ~29% retired, ~61% still
+employed at an 80-season/20-year cap, ~18,300 training completions
+averaging ~7.8 skill points each). Run it directly with
 `mvn -pl dev-tools compile exec:java -DmainClass=de.mkoehler.launchwindow.devtools.analysis.PersonnelLifecyclePlayouts`.
 Deliberately named after the resolvers it drives, not yet the general
 full-game harness `design.md` §3.10 originally described — that needs

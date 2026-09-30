@@ -53,8 +53,13 @@ public final class TrainingProgress {
     /** Fixed length, in seasons, of SET basic training. */
     public static final int SET_BASIC_TRAINING_SEASONS = 1;
 
-    /** Fixed length, in seasons, of Mission Control basic training. */
-    public static final int MISSION_CONTROL_BASIC_TRAINING_SEASONS = 2;
+    /**
+     * Fixed length, in seasons, of Mission Control basic training.
+     * Deliberately <b>not</b> 2, BASPM's own value for this group
+     * ({@code baspm.md} &sect;9.3) - {@code design.md} &sect;1.2 forbids
+     * landing on a BASPM tuning constant verbatim, even by coincidence.
+     */
+    public static final int MISSION_CONTROL_BASIC_TRAINING_SEASONS = 3;
 
     /** Fixed length, in seasons, of one advanced-training round, the same for every group. */
     public static final int ADVANCED_TRAINING_SEASONS = 2;
