@@ -201,10 +201,16 @@ each round is `ADVANCED`-length, re-enrolling automatically until the
 target level is reached or a termination guard fires
 (`PERMANENT_TRAINING_GAIN_EPSILON = 0.05`, needed for zero-learning-
 potential or near-skill-cap targets that would otherwise loop forever).
-16 `TrainingProgress` tests now (up from 12). **Not yet wired into the bot
-harness** — its bot still only starts `BASIC`/`ADVANCED`; teaching it to
-also start `PERMANENT` and re-running for new numbers is open follow-up
-work. Git repo
+16 `TrainingProgress` tests now (up from 12). **Wired into the bot harness
+the same session** — starting training now picks evenly among `BASIC`/
+`ADVANCED`/`PERMANENT`, with a matching independent invariant
+(`checkPermanentTrainingTarget`). New numbers (seed 42, 200 games):
+resignations dropped sharply, 234→144, since an employee cycling through
+`PERMANENT` re-enrollment spends far more of their career busy/training
+(gaining morale) than periodically idling between shorter rounds would -
+`PERMANENT` turns out to be a genuine low-effort way to keep staff from
+resigning, not just a training convenience, worth remembering once real
+balance tuning starts. See `design.md` §3.10 for the full numbers. Git repo
 initialized 2026-09-27 and pushed
 to GitHub as a **private**
 repo (`mariokoehler/Launch-Window` — GitHub doesn't allow spaces in repo

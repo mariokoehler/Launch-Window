@@ -47,12 +47,16 @@ import java.util.Set;
  *
  * <p>The "bot" here is intentionally simple, per employee per season
  * (chance {@link #REASSIGNMENT_CHANCE_PER_SEASON}): idle becomes either
- * assigned, or starts a real fixed-length training round (a random kind, a
- * random target skill from that employee's own group); assigned becomes
- * idle; an employee already in training is <b>never</b> interrupted - there
- * is no pull-out path yet, so training always runs to its own completion.
- * Not a stand-in for a real per-turn player decision, which doesn't exist
- * yet at this milestone.</p>
+ * assigned, or starts a real training assignment - a random target skill
+ * from that employee's own group, and evenly among {@link TrainingKind#BASIC}/
+ * {@link TrainingKind#ADVANCED}/{@link TrainingKind#PERMANENT} (the last
+ * with a random target level strictly above the current skill and up to
+ * {@link SkillGrowth#SKILL_CAP}, per {@code design.md} &sect;3.4's proposed
+ * invariant); assigned becomes idle; an employee already in training is
+ * <b>never</b> interrupted - there is no pull-out path yet, so training
+ * always runs to its own completion (for {@code PERMANENT}, until it stops
+ * re-enrolling on its own). Not a stand-in for a real per-turn player
+ * decision, which doesn't exist yet at this milestone.</p>
  *
  * <p><b>Resolver composition order matches the contract {@link TrainingProgress}'s
  * own Javadoc documents</b>: {@link PersonnelLifecycle} runs before
@@ -235,14 +239,48 @@ public final class PersonnelLifecyclePlayouts {
         for (Astronaut astronaut : snapshot.getAstronauts()) {
             checkTrainingConsistency(astronaut, astronaut.getTrainingTargetSkill());
             checkSkillsInRange(astronaut.getId(), astronaut.getSkills().values());
+            if (astronaut.getTrainingKind() == TrainingKind.PERMANENT) {
+                checkPermanentTrainingTarget(astronaut, astronaut.getSkill(astronaut.getTrainingTargetSkill()));
+            }
         }
         for (SetSpecialist specialist : snapshot.getSetSpecialists()) {
             checkTrainingConsistency(specialist, specialist.getTrainingTargetSkill());
             checkSkillsInRange(specialist.getId(), specialist.getSkills().values());
+            if (specialist.getTrainingKind() == TrainingKind.PERMANENT) {
+                checkPermanentTrainingTarget(specialist, specialist.getSkill(specialist.getTrainingTargetSkill()));
+            }
         }
         for (MissionControlOfficer officer : snapshot.getMissionControlOfficers()) {
             checkTrainingConsistency(officer, officer.getTrainingTargetSkill());
             checkSkillsInRange(officer.getId(), officer.getSkills().values());
+            if (officer.getTrainingKind() == TrainingKind.PERMANENT) {
+                checkPermanentTrainingTarget(officer, officer.getSkill(officer.getTrainingTargetSkill()));
+            }
+        }
+    }
+
+    /**
+     * Cross-checks the invariant {@code design.md} &sect;3.4 proposes for
+     * {@link TrainingKind#PERMANENT}: while still actively re-enrolled, the
+     * target level must be set (not stale/zero) and no higher than
+     * {@link SkillGrowth#SKILL_CAP}, and the target skill's current value
+     * must still be strictly below it - otherwise {@code TrainingProgress}
+     * should already have finished this training, per its own
+     * {@code shouldReenroll}.
+     *
+     * @param person             the employee to check, currently {@code PERMANENT}-training
+     * @param currentSkillOfTarget the target skill's current value
+     * @throws IllegalStateException if the invariant is violated
+     */
+    private static void checkPermanentTrainingTarget(Personnel person, double currentSkillOfTarget) {
+        double targetLevel = person.getTrainingTargetLevel();
+        if (targetLevel <= 0 || targetLevel > SkillGrowth.SKILL_CAP) {
+            throw new IllegalStateException(
+                "PERMANENT target level out of range for " + person.getId() + ": " + targetLevel);
+        }
+        if (currentSkillOfTarget >= targetLevel) {
+            throw new IllegalStateException(
+                "PERMANENT training still active despite the target already being reached for " + person.getId());
         }
     }
 
@@ -337,7 +375,7 @@ public final class PersonnelLifecyclePlayouts {
         }
         AstronautSkill[] skills = AstronautSkill.values();
         AstronautSkill target = skills[random.nextInt(skills.length)];
-        TrainingKind kind = random.nextBoolean() ? TrainingKind.BASIC : TrainingKind.ADVANCED;
+        TrainingKind kind = drawTrainingKind(random, astronaut.getSkill(target));
         int total = kind == TrainingKind.BASIC
             ? TrainingProgress.ASTRONAUT_BASIC_TRAINING_SEASONS
             : TrainingProgress.ADVANCED_TRAINING_SEASONS;
@@ -345,6 +383,9 @@ public final class PersonnelLifecyclePlayouts {
         astronaut.setTrainingSeasonsTotal(total);
         astronaut.setTrainingSeasonsCompleted(0);
         astronaut.setTrainingTargetSkill(target);
+        if (kind == TrainingKind.PERMANENT) {
+            astronaut.setTrainingTargetLevel(drawPermanentTargetLevel(random, astronaut.getSkill(target)));
+        }
         astronaut.setAssignmentState(AssignmentState.IN_TRAINING);
     }
 
@@ -365,7 +406,7 @@ public final class PersonnelLifecyclePlayouts {
         }
         SetSkill[] skills = SetSkill.values();
         SetSkill target = skills[random.nextInt(skills.length)];
-        TrainingKind kind = random.nextBoolean() ? TrainingKind.BASIC : TrainingKind.ADVANCED;
+        TrainingKind kind = drawTrainingKind(random, specialist.getSkill(target));
         int total = kind == TrainingKind.BASIC
             ? TrainingProgress.SET_BASIC_TRAINING_SEASONS
             : TrainingProgress.ADVANCED_TRAINING_SEASONS;
@@ -373,6 +414,9 @@ public final class PersonnelLifecyclePlayouts {
         specialist.setTrainingSeasonsTotal(total);
         specialist.setTrainingSeasonsCompleted(0);
         specialist.setTrainingTargetSkill(target);
+        if (kind == TrainingKind.PERMANENT) {
+            specialist.setTrainingTargetLevel(drawPermanentTargetLevel(random, specialist.getSkill(target)));
+        }
         specialist.setAssignmentState(AssignmentState.IN_TRAINING);
     }
 
@@ -393,7 +437,7 @@ public final class PersonnelLifecyclePlayouts {
         }
         MissionControlSkill[] skills = MissionControlSkill.values();
         MissionControlSkill target = skills[random.nextInt(skills.length)];
-        TrainingKind kind = random.nextBoolean() ? TrainingKind.BASIC : TrainingKind.ADVANCED;
+        TrainingKind kind = drawTrainingKind(random, officer.getSkill(target));
         int total = kind == TrainingKind.BASIC
             ? TrainingProgress.MISSION_CONTROL_BASIC_TRAINING_SEASONS
             : TrainingProgress.ADVANCED_TRAINING_SEASONS;
@@ -401,7 +445,49 @@ public final class PersonnelLifecyclePlayouts {
         officer.setTrainingSeasonsTotal(total);
         officer.setTrainingSeasonsCompleted(0);
         officer.setTrainingTargetSkill(target);
+        if (kind == TrainingKind.PERMANENT) {
+            officer.setTrainingTargetLevel(drawPermanentTargetLevel(random, officer.getSkill(target)));
+        }
         officer.setAssignmentState(AssignmentState.IN_TRAINING);
+    }
+
+    /**
+     * Picks which kind of training a newly-started assignment uses -
+     * evenly among {@link TrainingKind#BASIC}, {@link TrainingKind#ADVANCED},
+     * and {@link TrainingKind#PERMANENT}, except {@code PERMANENT} is
+     * skipped (falls back to {@code ADVANCED}) when the target skill is
+     * already too close to {@link SkillGrowth#SKILL_CAP} to leave any
+     * meaningful room for a target level above it.
+     *
+     * @param random       the random source to draw from
+     * @param currentSkill the target skill's current value
+     * @return the drawn training kind
+     */
+    private static TrainingKind drawTrainingKind(Random random, double currentSkill) {
+        int choice = random.nextInt(3);
+        if (choice == 2 && SkillGrowth.SKILL_CAP - currentSkill < 1.0) {
+            return TrainingKind.ADVANCED;
+        }
+        return switch (choice) {
+            case 0 -> TrainingKind.BASIC;
+            case 1 -> TrainingKind.ADVANCED;
+            default -> TrainingKind.PERMANENT;
+        };
+    }
+
+    /**
+     * Picks a target level for a newly-started {@link TrainingKind#PERMANENT}
+     * assignment - somewhere strictly between the current skill and
+     * {@link SkillGrowth#SKILL_CAP}, per {@code design.md} &sect;3.4's
+     * proposed harness invariant.
+     *
+     * @param random       the random source to draw from
+     * @param currentSkill the target skill's current value
+     * @return the drawn target level
+     */
+    private static double drawPermanentTargetLevel(Random random, double currentSkill) {
+        double headroom = SkillGrowth.SKILL_CAP - currentSkill;
+        return currentSkill + random.nextDouble() * headroom;
     }
 
     private static PlayerSnapshot newRandomSnapshot(int employeesPerGroup, Random random) {

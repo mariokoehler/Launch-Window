@@ -1952,6 +1952,30 @@ same underlying finding holds (§2.2(c)'s own open question: is a realistic
 game long enough for SET to actually retire meaningfully?), just less
 extreme than the original 70-age/100-season gap.
 
+**`PERMANENT` training wired into the bot's own decisions the same session
+it was implemented (2026-09-30):** starting a training assignment now picks
+evenly among `BASIC`/`ADVANCED`/`PERMANENT` (falling back to `ADVANCED`
+when the target skill is already too close to `SkillGrowth.SKILL_CAP` to
+leave room for a meaningful target level); `PERMANENT`'s own target level
+is drawn strictly between the current skill and the cap. A new invariant
+(`checkPermanentTrainingTarget`) checks, independently of the resolver's
+own logic, that any still-`PERMANENT`-training employee has a target level
+in range and hasn't already reached it - `TrainingProgress` should have
+finished their training already if so. **Numbers after wiring it in, same
+seed/game shape as above:** **144 resigned** (down sharply from 234, avg.
+tenure 24.2 seasons), 980 retired (avg. tenure 57.1 seasons, essentially
+unchanged - retirement is age-driven and runs regardless of assignment
+state for the reasons already established), 1,876 still employed, and
+**34,747 training completions** (nearly double, avg. gain 5.35, down from
+7.79). **The real finding, not just noise:** `PERMANENT` training
+substantially suppresses resignation, because an employee re-enrolled in
+it spends far more of their career busy/training (gaining morale each
+season) than periodically cycling idle↔`BASIC`/`ADVANCED`↔idle would -
+resignation depends on accumulated idle seasons, and `PERMANENT` all but
+removes idle seasons for whoever the bot assigns to it. Worth keeping in
+mind once real balance tuning starts: `PERMANENT` isn't just a training
+convenience, it's a genuine low-effort way to keep staff from leaving.
+
 **Still not built:** the general full-game harness described in this
 section's original text below — simple bots making plausible per-season
 decisions (assign personnel, queue a mission, open a program), run many
