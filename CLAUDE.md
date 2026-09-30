@@ -200,6 +200,23 @@ own AI-generated concept image, not BASPM-derived, so it's exempt from the
 source-material restrictions below — but it's prototype-only placeholder
 art, not committed final main-menu art.
 
+**Main-menu hub: real assets + full chrome spec now exist, still M5-scoped
+groundwork, not implemented (2026-09-30).** Superseding the prototype
+above with real production art: `assets-raw/main_menu/` now holds complete
+NASA + SOVIET asset sets (4 seasons &times; 4 times of day each, plus one
+`hotspots.json` sidecar per faction, authored with the new `HotspotEditor`
+tool above) and the user shared a Personnel Recruitment screen mockup
+(a private Claude Artifact) establishing the header/footer chrome shared
+by every screen. Full details — the season/time-of-day art-cycling rule,
+the asset crop needed (1920&times;1088 &rarr; 1920&times;1080), the
+confirmed BASPM precedent (this *is* BASPM's own "Space Complex Screen",
+`baspm.md`'s `WM` entry), the header/footer layout itself, and the
+decision to drop BASPM's "End Season" button entirely (Launch Window's
+async model has no equivalent action) — are in `design.md` §3.13 (new)
+and §1.1/§3.12 (updated), not repeated here. Still nothing implemented in
+`lwjgl3`; M2 (design.md §5) is still the actual next milestone, this is
+groundwork prepared ahead of it.
+
 ## Source material locations (read-only, reference-only — never edit, never copy into the repo)
 
 - **Machine caveat:** if the environment variable `COMPUTERNAME` is
@@ -298,16 +315,33 @@ import replaces StarWars' ~200-line per-LWJGL-classifier block). Modules:
 the first real domain types, see `design.md` §3.4), `lwjgl3` (desktop client
 launcher), `server` (`gdx-backend-headless` dedicated server), `dev-tools`
 (developer tools never shipped/packaged by any release workflow — the
-CLI/console `DevClient`, plus `MenuHotspotPrototype`, a windowed libGDX
-rendering spike, see "Current status" above). `dev-tools` therefore now
+CLI/console `DevClient`, `MenuHotspotPrototype`, a windowed libGDX
+rendering spike, and `HotspotEditor` (2026-09-29), a plain Swing app (no
+libGDX dependency at all, unlike the other two) for hand-authoring the
+main-menu building hotspot polygons: load an image, left-click places a
+point, right-click undoes the last one, Enter finishes+names the polygon
+(prompting for a name; starts the next one automatically), Escape discards
+the in-progress one, mouse wheel zooms centered on the cursor, arrow keys
+nudge the selected finished polygon (Shift for a bigger step) — only
+named/finished polygons save, as a `<image>.hotspots.json` sidecar (top-
+left-origin, Y-down image-pixel-space coordinates — matching the raw PNG's
+own indexing, not libGDX's Y-up convention; any flip needed happens on the
+loading side, see `MenuHotspotPrototype.create()`'s own example). Also has
+File > Import Polygons From... to seed a new image's polygons from another
+image's sidecar (e.g. a seasonal variant sharing the same building
+layout), which is exactly how the real `assets-raw/main_menu/` hotspots
+below were produced. See "Current status" above for what it actually
+produced. `dev-tools` therefore now
 also carries `gdx-backend-lwjgl3` + `gdx-platform:natives-desktop` (only
-`MenuHotspotPrototype` needs them; `DevClient` doesn't, but the module has
-one shared classpath). The exec-maven-plugin config still defaults to
-`DevClient` — run a different `dev-tools` main class by overriding the POM
-property directly with **`-DmainClass=...`**, not `-Dexec.mainClass=...`
+`MenuHotspotPrototype` needs them; `DevClient`/`HotspotEditor` don't, but
+the module has one shared classpath). The exec-maven-plugin config still
+defaults to `DevClient` — run a different `dev-tools` main class by
+overriding the POM property directly with **`-DmainClass=...`**, not
+`-Dexec.mainClass=...`
 (the plugin's `<mainClass>` is bound to `${mainClass}`, the POM property,
 so only a same-named `-D` override reaches it):
-`mvn -pl dev-tools compile exec:java -DmainClass=de.mkoehler.launchwindow.devtools.MenuHotspotPrototype`.
+`mvn -pl dev-tools compile exec:java -DmainClass=de.mkoehler.launchwindow.devtools.HotspotEditor`
+(or `...MenuHotspotPrototype`).
 Java 25 (`maven.compiler.release`), Maven 3.8.4 confirmed working locally.
 
 - `mvn clean package` from the repo root builds everything and runs the

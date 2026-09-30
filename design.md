@@ -119,7 +119,13 @@ same session it comes up**, the same standing-note-to-self habit as
   curious players without slowing down anyone who just wants to play the
   strategy game. BASPM's own Museum building (`baspm.md` §2, manual p.40)
   is a plausible home for a deeper "encyclopedia" version of the same
-  content, if a dedicated screen turns out to be worth it.
+  content, if a dedicated screen turns out to be worth it. **No longer
+  hypothetical (2026-09-30):** the main-menu art the user authored already
+  has a `MUSEUM` hotspot, alongside BASPM's own other six Space Complex
+  buildings — see §3.13. The educational-encyclopedia screen this bullet
+  proposed now has a confirmed place to live; still not designed in any
+  detail (content model, how it surfaces the §1.1 beats scattered through
+  this section), just no longer an "if."
 - **Real images:** wanted, per the user. **Flagging a licensing
   consideration proactively** (unprompted, per this project's existing
   security/legal-flagging convention): NASA-produced photos/footage are
@@ -1554,7 +1560,7 @@ information for future UI work, not just the final answer:
 | Active / in-progress / caution | Gold `#e0a72e` (fill), `#8a5d12` (text-safe darker variant) | "In progress" status, the current step in a sequence, a neutral/steady state |
 | Good / high / success | Green `#1f6b47` (on white), `#c4f5e0` pale-mint `success-on-page` (directly on the blue frame) | A positive rating (e.g. high morale) — **new color, not present in any of the ruled-out directions**; added deliberately once mission/personnel outcomes are going to need a real "this is good" signal distinct from "this is just active." **The on-page variant was a real fix, not a preemptive one** (2026-09-29): a footer stat's positive delta was first set in plain `#1f6b47` directly on the blue frame and measured ~1.15:1 contrast there — essentially invisible, caught by the user, not by any contrast check before shipping. Mirrors the gold/`gold-on-page` split that already existed for the identical reason; `success` just hadn't been used directly on the page background until this footer stat did. |
 | Destructive / failure | Red `#c6402b` | **Reserved** for genuinely destructive actions (e.g. scrubbing a mission) or failure states — not used for "in progress," which earlier mockup rounds had wrongly conflated with danger |
-| Season-commit action | Violet `#4b3a72` | **Reserved for exactly one action per screen**: advancing the game clock (the common footer's "End Season" button) — added 2026-09-29 |
+| Season-commit action | Violet `#4b3a72` | **Reserved for exactly one action per screen**: advancing the game clock — added 2026-09-29, **its one use dropped 2026-09-30, see below** |
 | Page frame (blueprint) | Blue `#3d6a9a` background, white grid lines at low opacity | Header/nav/footer margins only |
 | Content surface | White `#ffffff` | Cards, tables, body-text blocks |
 | Ink / body text | `#1c1c1a` (on white), `#eaf1fb`/`#ffffff` (on the blue frame) | — |
@@ -1581,8 +1587,26 @@ into the actual Design System artifact as a `commit` color token and a
 matching `Button` `commit` variant (not just hacked into one mockup), with
 the explicit rule that it's reserved for this one action per screen, never
 a general fourth button style. **Not yet in `Theme.java`** — same
-not-yet-translated state as everything else in this section; add
-`Theme.COMMIT`/a `ButtonKind.COMMIT` case when a real screen needs it.
+not-yet-translated state as everything else in this section.
+
+**Its one intended use — an "End Season" button — was itself dropped the
+same way it arrived, by re-examining the design rather than by building it
+first (2026-09-30):** working through the common footer's exact layout
+against the Personnel Recruitment mockup (§3.13), the user realized Launch
+Window has no equivalent action at all — the player never explicitly
+advances the season themselves; every action is submitted individually and
+takes effect at the server's next scheduled resolution (§3.6), so there is
+no "I'm ready, resolve now" moment for a button to mean. BASPM has one
+because it's the single-player/PBEM turn-based game actually waiting on
+that click; Launch Window's async daily-batch model structurally doesn't.
+**The `commit` color token and `Button` `commit` variant stay defined in
+the design system** (removing them is more churn than leaving an unused
+token, and a genuinely different single "big, deliberate, one-per-screen"
+action could still turn up later — Tiger Team assembly was floated as one
+informal candidate, not decided) **but nothing currently needs
+`Theme.COMMIT`/`ButtonKind.COMMIT`** — don't add either speculatively; add
+them only once a real screen actually needs this exact "one outside-the-
+normal-palette action" treatment.
 
 **Typography — a two-font functional system, wordmark deliberately
 excluded from it:** **Archivo** (600/700 weight, not the single-weight
@@ -1688,6 +1712,152 @@ user's own new bitmap art, not from BASPM — the five icon SVGs that
 day (see `CLAUDE.md`'s source-material note for the full story); don't
 conflate the two when this section is read back later.
 
+### 3.13 Common screen chrome & the main-menu hub (2026-09-30, groundwork ahead of M5)
+
+**Not implemented yet — M5 scope (§5). Recorded now because the user
+prepared the actual art/mockup this session, not because the client work
+has started.** Two artifacts inform this section, both private Claude
+Artifacts kept off GitHub rather than pasted into this repo (same posture
+as the earlier UI Asset Sheet entry above) — ask the user for the links if
+a future session needs them and doesn't have them in context:
+- A **Personnel Recruitment screen mockup**, built with the launchwindow
+  design system installed as its Design System artifact (confirms
+  `Theme.java`'s constants are pixel/value-identical to the published
+  `tokens.json` — cross-checked directly this session, no drift found).
+  Its recruitment-specific content is secondary; what matters here is the
+  header/footer chrome, present and marked "identical on every screen."
+- The existing **UI Asset Sheet** (§3.12's iconography entry) — re-checked
+  this session for completeness, no new icons beyond what §3.12 already
+  documents.
+
+**The main menu is BASPM's "Space Complex Screen" (`WM` prefix,
+`baspm.md`'s screen table), not a new invention.** BASPM's own version is
+already documented there as "the main hub with the 7 building icons, day/
+night cycle." The art the user prepared this session
+(`assets-raw/main_menu/`) independently lands on exactly that shape:
+
+- **Two complete asset sets, one per `Archetype`** (`LW_main_menu_NASA_*`,
+  `LW_main_menu_SOVIET_*`): 4 seasons &times; 4 times of day = 16 background
+  images per faction, 32 total, plus one `<faction>.hotspots.json` sidecar
+  per faction (authored with the `HotspotEditor` dev tool, see its own
+  session history) — **a single polygon set per faction turned out to
+  cover every season/time-of-day variant**, confirmed by the user after
+  trying it, since the buildings themselves don't move between variants,
+  only the lighting/season dressing around them. Both sidecars' polygon
+  names match exactly.
+- **Each hotspot set has exactly 7 named polygons** — `VAB`,
+  `MISSION_CONTROL`, `ASTRONAUT_COMPLEX`, `SET_CENTRE`,
+  `PUBLIC_AFFAIRS_OFFICE`, `HEADQUARTERS`, `MUSEUM` — the same count as
+  BASPM's own 7-building hub, and every name maps onto one of BASPM's own
+  screens (`baspm.md`'s table): Mission Control, Astronaut Complex, SET
+  Centre, Public Affairs Office and Headquarters all already have a
+  `baspm.md` entry; `VAB` and `MUSEUM` are the two that don't yet appear
+  anywhere in this file's own roadmap (§5) — see the note below.
+- **Raw images are 1920&times;1088, 8 px taller than the 1920&times;1080
+  target** — confirmed by direct inspection this session. **When these
+  assets get promoted from `assets-raw/` into `assets/`, crop exactly the
+  bottom 8 rows off every image**, nothing else. The user deliberately
+  placed every hotspot polygon clear of that bottom strip before authoring
+  them, and hotspot coordinates are image-pixel space with a top-left
+  origin (the `HotspotEditor` tool's own documented convention) — a
+  bottom-only crop never shifts any polygon's coordinates, so the existing
+  `.hotspots.json` sidecars need no rework once this crop happens.
+- **Season/time-of-day art selection (decided, 2026-09-30):** which of the
+  4 season images shows is driven by the real in-game current season
+  (server state, §3.6/§3.7) — not a real-world calendar date. Which of the
+  4 time-of-day images shows is purely a **client-side, wall-clock-driven
+  ambience effect with no server involvement at all**: it advances one
+  step every 4 real-world minutes the player has spent in the game
+  session, checked/applied only when the player *re-enters* the main menu
+  screen (never while they're actually sitting on it — no background timer
+  ticking the art out from under them mid-view). Concretely: on entering
+  the main menu, compare the wall-clock time since the *last* time it was
+  entered; if &ge; 4 minutes have passed, advance to the next time-of-day
+  image (dawn &rarr; noon &rarr; dusk &rarr; night &rarr; dawn), otherwise
+  leave it as is. Purely cosmetic, gives "time is passing" ambience while
+  flipping between screens, matching BASPM's own "day/night cycle" note on
+  this same hub screen but adapted to Launch Window's async/no-live-session
+  model (BASPM's cycle is presumably tied to actual turn/session time; this
+  one is wall-clock since nothing else in Launch Window ties the client to
+  a shared session clock).
+- **`VAB` and `MUSEUM` aren't arbitrary extra buildings — both are
+  BASPM-confirmed distinct screens not yet reflected in §5's roadmap:**
+  - **`VAB`** (manual p.35-36): scheduled/in-progress missions,
+    rocket/payload *assembly* — distinct from `HEADQUARTERS` (manual
+    p.39), which is open/manage *programs*, R&D, goals. BASPM keeps these
+    as two separate screens (open a program at Headquarters; assemble/
+    schedule/launch a specific mission at the VAB). **M5's current slice
+    list (§5) bundles "program/mission selection" into one screen** —
+    worth revisiting whether that should actually split into two, matching
+    both BASPM's own division and the main-menu art's own two separate
+    hotspots, when M5 is actually sized. Not decided either way yet.
+  - **`MUSEUM`** (manual p.40): historical stats/achieved-goals/memorial
+    browser — this is the same screen §1.1 already flagged as "a plausible
+    home for a deeper encyclopedia version" of the educational-layer
+    content; see that section's own updated note. Also the natural home
+    for whatever the win-condition tie-break's goal-comparison screen
+    (§2.6(b), M4/M5) ends up looking like, though that's a guess, not a
+    decision — the two aren't necessarily the same screen.
+
+**Common header/footer chrome, transcribed from the mockup (identical on
+every screen, per the mockup's own comments):**
+
+- **Fixed virtual canvas, 1920&times;1080** (`Theme.VIEW_WIDTH`/
+  `VIEW_HEIGHT` already match — real confirmation, not a new decision;
+  see this narrowing §4's still-open "screen layout resolution" question),
+  30px outer page padding (`Theme.SPACE_6`), 20px gap between the header/
+  content/footer major sections (`Theme.SPACE_5`) — both spacing tokens
+  already existed in `Theme.java` and match exactly.
+- **Header, above a horizontal separator rule — shared chrome:**
+  back / home (main menu) / settings icon buttons, a divider, then a
+  breadcrumb trail (each prior crumb clickable, navigating back to that
+  screen; the current screen's crumb non-clickable, rendered upper-case).
+  Right-aligned: a prestige chip (white card, navy icon/text) and a
+  game-time chip (solid navy fill, on-fill text, "`1955 &middot; S1`"-style
+  year/season format).
+- **Screen-specific title block sits directly *below* that separator** —
+  an eyebrow context label (e.g. "SET Centre") plus a large heading (e.g.
+  "Personnel Recruitment"). **This is part of each screen's own content
+  area, not shared chrome**, despite visually reading like part of the
+  header — the separator line is the actual boundary the user described
+  ("everything above that line is common header area, anything below is
+  specific").
+- **Footer, below its own horizontal separator rule — shared chrome:**
+  five evenly-spaced clickable stat chips, each with a small trailing
+  chevron hinting it navigates: **Funds/Budget** (&rarr; Public Affairs
+  Office; shows current balance plus a colored delta, e.g.
+  "`$ 25,000.0` `+2,420.0`"), **SET employees** (&rarr; SET Centre; "hired /
+  busy / capacity", e.g. "`5 / 5 / 7`"), **Astronauts** (&rarr; Astronaut
+  Complex; same three-number format), **Flight controllers** (&rarr;
+  Mission Control; same format), **Open programs** (&rarr; Headquarters;
+  "open / total", e.g. "`0 / 3`"). **No sixth "End Season" action** — see
+  §3.12's `commit`-color entry for why that button was dropped the same
+  session it was being laid out.
+- **Background:** every non-main-menu screen reuses the tiled blueprint-
+  grid page texture (§3.12's iconography entry / the UI Asset Sheet) as
+  its frame. **The main menu is the one exception**, filling the entire
+  screen with the season/time-of-day art above instead of the blueprint
+  texture — already noted as the plan in §3.12's own background-texture
+  history, now confirmed by the actual prepared art.
+- **Window resize must preserve a 16:9 content area** (user requirement,
+  2026-09-30): whatever the real window size, the rendered game area keeps
+  a 16:9 aspect ratio (letterboxed/pillarboxed as needed), consistent with
+  a libGDX `FitViewport` of `Theme.VIEW_WIDTH`&times;`VIEW_HEIGHT` — the
+  approach `Theme.java`'s own doc comment already assumes (`Fonts.load`'s
+  `scale` parameter), not a new technical decision, just an explicit
+  requirement now on record.
+
+**A real gap found by cross-checking the mockup against `Theme.java`
+directly this session:** the published `tokens.json` (§3.12) defines
+`success-on-page` (`#c4f5e0`, used by the footer's funds-delta text) and
+`commit` (`#4b3a72`, now unused per the note above) — `Theme.java` has
+neither as a constant yet, unlike every other token in that file, which
+all have exact matches. `success-on-page` is a real, currently-missing
+gap (the footer's positive funds delta needs it and nothing else in
+`Theme.java` covers that role); `commit` is optional per the note above.
+Add `Theme.SUCCESS_ON_PAGE` when the footer/header chrome actually gets
+built, not speculatively now.
+
 ## 4. Open questions (tracked here until resolved)
 
 - **Mid-turn/mid-mission player decisions — narrowed by the §2.5 mission-sim
@@ -1754,12 +1924,16 @@ conflate the two when this section is read back later.
   and never closes — joining stays open for the game's entire life, not just
   before it starts.
 - Multiplayer interaction model: how much of §2.9's brainstorm ships in v1?
-- **Screen layout resolution — open (§3.12, 2026-09-28).** `Theme.VIEW_WIDTH`/
-  `VIEW_HEIGHT` (1920×1080) is an unconfirmed default carried over from
-  Robot-Rampage's own `Theme.java`, not a decision made for this project —
-  no real screen has been laid out yet to check it against. Revisit once
-  the first real screen (the Space Complex hub is the obvious first
-  candidate) is actually being built.
+- **Screen layout resolution — narrowed, not yet fully resolved (§3.12,
+  2026-09-28; reinforced §3.13, 2026-09-30).** `Theme.VIEW_WIDTH`/
+  `VIEW_HEIGHT` (1920×1080) was an unconfirmed default carried over from
+  Robot-Rampage's own `Theme.java`. Real evidence now points the same way,
+  not just the carried-over default: the Personnel Recruitment mockup's
+  own root element is a fixed 1920×1080 canvas, and the main-menu art
+  (§3.13) targets 1920×1080 after its 8px crop — but this is still mockup/
+  art evidence, not a real libGDX screen laid out and checked against it.
+  Revisit once the first real screen (the Space Complex hub, §3.13, is the
+  obvious first candidate) is actually being built in `lwjgl3`.
 - **Resolved (§3.12, 2026-09-28): the wordmark/logo.** A mission-patch
   illustration — see §3.12's own entry for the full description and
   `assets/branding/logo.svg` for the file. Two follow-ups remain, tracked
