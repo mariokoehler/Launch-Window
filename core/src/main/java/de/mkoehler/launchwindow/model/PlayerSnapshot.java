@@ -29,6 +29,10 @@ public class PlayerSnapshot {
     private List<Astronaut> astronauts = new ArrayList<>();
     private List<SetSpecialist> setSpecialists = new ArrayList<>();
     private List<MissionControlOfficer> missionControlOfficers = new ArrayList<>();
+    private List<Astronaut> astronautCandidates = new ArrayList<>();
+    private List<SetSpecialist> setSpecialistCandidates = new ArrayList<>();
+    private List<MissionControlOfficer> missionControlCandidates = new ArrayList<>();
+    private long nextPersonnelId;
 
     /**
      * No-argument constructor required for Jackson deserialization.
@@ -226,5 +230,104 @@ public class PlayerSnapshot {
     public void setMissionControlOfficers(List<MissionControlOfficer> missionControlOfficers) {
         Objects.requireNonNull(missionControlOfficers, "missionControlOfficers must not be null");
         this.missionControlOfficers = new ArrayList<>(missionControlOfficers);
+    }
+
+    /**
+     * Returns the player's current astronaut hiring-candidate pool - not
+     * part of the real roster until hired (see
+     * {@code de.mkoehler.launchwindow.rules.HiringPool}).
+     *
+     * @return the astronaut candidate pool
+     */
+    public List<Astronaut> getAstronautCandidates() {
+        return astronautCandidates;
+    }
+
+    /**
+     * Replaces the player's astronaut hiring-candidate pool.
+     *
+     * @param astronautCandidates the astronaut candidate pool
+     */
+    public void setAstronautCandidates(List<Astronaut> astronautCandidates) {
+        Objects.requireNonNull(astronautCandidates, "astronautCandidates must not be null");
+        this.astronautCandidates = new ArrayList<>(astronautCandidates);
+    }
+
+    /**
+     * Returns the player's current SET hiring-candidate pool.
+     *
+     * @return the SET candidate pool
+     */
+    public List<SetSpecialist> getSetSpecialistCandidates() {
+        return setSpecialistCandidates;
+    }
+
+    /**
+     * Replaces the player's SET hiring-candidate pool.
+     *
+     * @param setSpecialistCandidates the SET candidate pool
+     */
+    public void setSetSpecialistCandidates(List<SetSpecialist> setSpecialistCandidates) {
+        Objects.requireNonNull(setSpecialistCandidates, "setSpecialistCandidates must not be null");
+        this.setSpecialistCandidates = new ArrayList<>(setSpecialistCandidates);
+    }
+
+    /**
+     * Returns the player's current Mission Control hiring-candidate pool.
+     *
+     * @return the Mission Control candidate pool
+     */
+    public List<MissionControlOfficer> getMissionControlCandidates() {
+        return missionControlCandidates;
+    }
+
+    /**
+     * Replaces the player's Mission Control hiring-candidate pool.
+     *
+     * @param missionControlCandidates the Mission Control candidate pool
+     */
+    public void setMissionControlCandidates(List<MissionControlOfficer> missionControlCandidates) {
+        Objects.requireNonNull(missionControlCandidates, "missionControlCandidates must not be null");
+        this.missionControlCandidates = new ArrayList<>(missionControlCandidates);
+    }
+
+    /**
+     * Returns the next id {@link #allocatePersonnelId()} will hand out.
+     * Public only because Jackson/Kryo need a bean accessor - callers
+     * should use {@link #allocatePersonnelId()}, never read or set this
+     * directly.
+     *
+     * @return the next personnel id counter value
+     */
+    public long getNextPersonnelId() {
+        return nextPersonnelId;
+    }
+
+    /**
+     * Sets the next id {@link #allocatePersonnelId()} will hand out.
+     *
+     * @param nextPersonnelId the next personnel id counter value
+     */
+    public void setNextPersonnelId(long nextPersonnelId) {
+        this.nextPersonnelId = nextPersonnelId;
+    }
+
+    /**
+     * Allocates a fresh, globally-unique-within-this-snapshot personnel id
+     * and advances the counter - the single source of new ids for every
+     * astronaut/SET specialist/Mission Control officer this player ever
+     * generates (hiring candidates included), across every group and every
+     * season, so an id is never reused even once its original owner has
+     * departed. A flat counter shared across all three groups, not
+     * group-prefixed - {@code PersonnelGroup} (rules-engine side) already
+     * disambiguates which roster/pool an id belongs to wherever that
+     * matters.
+     *
+     * @return the newly allocated id, e.g. {@code "p42"}
+     */
+    public String allocatePersonnelId() {
+        String id = "p" + nextPersonnelId;
+        nextPersonnelId++;
+        return id;
     }
 }

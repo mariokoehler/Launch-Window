@@ -63,6 +63,11 @@ class PlayerSnapshotTest {
         officer.setSkill(MissionControlSkill.PROPULSION, 50);
         original.setMissionControlOfficers(List.of(officer));
 
+        MissionControlOfficer candidate = new MissionControlOfficer("mco-cand-1", "Diego Ferreira", 26, 60, 35);
+        candidate.setSkill(MissionControlSkill.MISSION_OPERATIONS, 28.0);
+        original.setMissionControlCandidates(List.of(candidate));
+        original.setNextPersonnelId(3);
+
         String json = mapper.writeValueAsString(original);
         PlayerSnapshot restored = mapper.readValue(json, PlayerSnapshot.class);
 
@@ -99,6 +104,12 @@ class PlayerSnapshotTest {
         MissionControlOfficer restoredOfficer = restored.getMissionControlOfficers().get(0);
         assertEquals("mco-1", restoredOfficer.getId());
         assertEquals(50, restoredOfficer.getSkill(MissionControlSkill.PROPULSION));
+
+        assertEquals(1, restored.getMissionControlCandidates().size());
+        MissionControlOfficer restoredCandidate = restored.getMissionControlCandidates().get(0);
+        assertEquals("mco-cand-1", restoredCandidate.getId());
+        assertEquals(28.0, restoredCandidate.getSkill(MissionControlSkill.MISSION_OPERATIONS));
+        assertEquals(3, restored.getNextPersonnelId());
     }
 
     /**

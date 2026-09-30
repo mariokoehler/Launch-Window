@@ -238,6 +238,10 @@ class MessageRegistryTest {
         MissionControlOfficer officer = new MissionControlOfficer("mco-1", "Alex Novak", 45, 70, 40);
         officer.setSkill(MissionControlSkill.PROPULSION, 50);
         snapshot.setMissionControlOfficers(List.of(officer));
+        Astronaut candidate = new Astronaut("astro-cand-1", "Priya Nair", 27, 65, 45);
+        candidate.setSkill(AstronautSkill.LEADERSHIP, 33.0);
+        snapshot.setAstronautCandidates(List.of(candidate));
+        snapshot.setNextPersonnelId(7);
 
         FetchStateResponse copy = roundTrip(FetchStateResponse.success(snapshot), FetchStateResponse.class);
 
@@ -253,6 +257,10 @@ class MessageRegistryTest {
         assertEquals(85.5, copy.state().getAstronauts().get(0).getTrainingTargetLevel());
         assertEquals(63, copy.state().getSetSpecialists().get(0).getSkill(SetSkill.ROCKETS));
         assertEquals(50, copy.state().getMissionControlOfficers().get(0).getSkill(MissionControlSkill.PROPULSION));
+        assertEquals(1, copy.state().getAstronautCandidates().size());
+        assertEquals("astro-cand-1", copy.state().getAstronautCandidates().get(0).getId());
+        assertEquals(33.0, copy.state().getAstronautCandidates().get(0).getSkill(AstronautSkill.LEADERSHIP));
+        assertEquals(7, copy.state().getNextPersonnelId());
 
         FetchStateResponse rejected = roundTrip(FetchStateResponse.failure("Not authenticated."), FetchStateResponse.class);
         assertFalse(rejected.success());

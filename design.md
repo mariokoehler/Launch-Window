@@ -1306,7 +1306,8 @@ unconfirmed:**
 
 **Hiring pool — proposed ahead of M2's hiring-pool sub-slice (2026-09-30),
 written down before any code, same convention as the training fields
-above:**
+above; implemented the same day, right after the proposal, with the field
+shape exactly as proposed:**
 - **Candidates reuse the existing `Astronaut`/`SetSpecialist`/
   `MissionControlOfficer` classes directly, rather than a parallel
   candidate-specific type** - a candidate and a hired employee need the
@@ -1342,6 +1343,68 @@ above:**
 - **Refresh cadence: every season**, alongside the other two personnel
   resolvers - fits "one turn = one season" the same way training/lifecycle
   already do, no special handling needed.
+
+**Implemented (2026-09-30), `de.mkoehler.launchwindow.rules.HiringPool`
+(headless, §3.10) — concrete numbers, all unconfirmed defaults pending
+bot-harness tuning:**
+- `HIRING_BATCH_SIZE = 6` (BASPM: 10). Four quality bands by average
+  roster morale - `POOR_MORALE_CEILING = 44`, `AVERAGE_MORALE_CEILING = 64`,
+  `GOOD_MORALE_CEILING = 84`, above which is Excellent - each with its own
+  skill-value range for every generated candidate skill: Poor [10, 40],
+  Average [25, 60], Good [40, 75], Excellent [55, 90]. **Deliberately kept
+  all four ceilings comfortably above the §2.2(c) resignation floor (35)**
+  - a caught-before-shipping consideration, not an afterthought: if every
+  ceiling sat at or below the floor, a struggling-but-not-yet-resigning
+  roster could never actually land in the Poor band, since almost nobody
+  survives long below 35 morale to be averaged in. `EMPTY_ROSTER_FALLBACK_MORALE = 50`
+  (lands in Average) for a brand-new agency with nobody hired yet.
+  Candidate age 22-40, learning potential 20-80 (independent of quality
+  band), starting morale 55-75 (the new hire's own attitude on joining,
+  independent of the hiring group's morale, which only gates skill
+  quality).
+- **Roster capacity, decided at the user's own request (2026-09-30,
+  answering a question this section deferred to exactly this point):**
+  Astronaut 8, SET 12, Mission Control 8 (own numbers, no other system to
+  derive them from yet - a building/budget-driven capacity mechanic is a
+  real future possibility, not decided here). `hire` returns
+  `HireOutcome.ROSTER_FULL` without mutating anything if the group is
+  already at capacity.
+- **New hires auto-start `BASIC` training (user decision, 2026-09-30) on
+  a random skill from their own group** - which specific skill isn't
+  specified by that decision, so the random choice is this slice's own
+  unconfirmed default.
+- **Hiring is free (user decision, 2026-09-30)** - no funds/salary model
+  exists yet (§2.1), so no cost is charged; revisit once budget/funding is
+  implemented.
+- **A new `PlayerSnapshot.nextPersonnelId` counter, allocated through one
+  `allocatePersonnelId()` helper, backs every id `HiringPool` generates** -
+  a flat, monotonic, never-reused counter shared across all three groups
+  (`"p42"`-style ids, not group-prefixed), needed because the async model
+  lets a hire action resolve against a pool the player saw seasons ago; if
+  ids were ever reused across a refresh, a stale hire action could
+  silently hire the wrong person. **Not yet retrofitted onto the bot
+  harness's own initial-roster generation** (still `"a"+i`-style, seeded
+  independently of any `PlayerSnapshot` counter) - low risk today since
+  the harness never mixes hand-seeded ids with `HiringPool`-generated ones
+  within the same roster, but worth unifying if that ever changes.
+- `HireOutcome` (`HIRED`/`UNKNOWN_CANDIDATE`/`ROSTER_FULL`) - `hire`
+  returns a result rather than throwing, since an unknown candidate id is
+  an expected, ordinary async-multiplayer case (a stale pool view), not an
+  error.
+- **Composition order for whoever wires this into one season pass (M4):**
+  journaled actions (including `hire`) first, then `PersonnelLifecycle`,
+  then `TrainingProgress`, then `refreshCandidates` last - a player can
+  then always hire from the exact pool they were shown, and a season's
+  refresh never discards a candidate that same season's own actions just
+  hired. Not yet composed in real code (same status as
+  `PersonnelLifecycle`/`TrainingProgress`'s own still-just-documented
+  order).
+- 11 unit tests, fully headless: batch size, id non-reuse across refreshes,
+  value ranges, the empty-roster fallback, all four band boundaries (a
+  dedicated test per ceiling, checking both that the right band's range is
+  hit and that a wrong higher band's range isn't), a successful hire
+  (including the auto-`BASIC`-training side effect), an unknown id, an id
+  from the wrong group's pool, a full roster, and seed reproducibility.
 
 - **Wire-format note for whoever implements this:** `TrainingKind` is a new
   enum reachable from `PlayerSnapshot`, so it needs a `MessageRegistry`
@@ -2792,18 +2855,22 @@ here.
     resignation sub-slice done (2026-09-30)** — see §2.2(c)'s own entry for
     the concrete numbers and `de.mkoehler.launchwindow.rules.PersonnelLifecycle`.
     **Skill-growth formulas done (2026-09-30, `SkillGrowth`) and skill
-    maps switched to `Double`** — see §2.2(c). **Fixed-length training
-    (`BASIC`/`ADVANCED`) done (2026-09-30, `TrainingProgress`)** — see
+    maps switched to `Double`** — see §2.2(c). **Fixed-length and
+    `PERMANENT` training done (2026-09-30, `TrainingProgress`)** — see
     §2.2(c)'s own entry for the new fields and the composition-order
-    contract with `PersonnelLifecycle`. **Still open in this same slice:**
-    `PERMANENT` training's re-enrollment, R&D's own target-skill field/
+    contract with `PersonnelLifecycle`. **Hiring pool done (2026-09-30,
+    `HiringPool`)** — see §3.4/§2.2(c) for the candidate-pool fields,
+    quality bands, roster capacities, and the three user decisions
+    (auto-`BASIC`-training on hire, capacity now decided, hiring free for
+    now). **Still open in this same slice:** R&D's own target-skill field/
     caller (needs §2.3/§2.4's program/component-linkage first, see §3.4),
-    mission-based skill growth's own caller (slice 3), the hiring pool, and
-    the Expert trait — none started yet. Also still open: actually starting
-    a training assignment (a player-action concern, no action-submission
-    path for this exists yet) and composing `PersonnelLifecycle`/
-    `TrainingProgress`/a future R&D resolver into one real season pass
-    (M4, not M2).
+    mission-based skill growth's own caller (slice 3), and the Expert
+    trait — none started yet. Also still open: actually starting a
+    training assignment via a real player action, and *submitting* a hire
+    as a real player action (both currently plain headless methods a
+    future action handler will call, no dispatch path exists yet), plus
+    composing `PersonnelLifecycle`/`TrainingProgress`/`HiringPool`/a
+    future R&D resolver into one real season pass (M4, not M2).
   - Slice: programs, mission configurations, mission components &
     reliability transfer — §2.3/§2.4.
   - Slice: mission simulation, base two-roll formula only (no Expert yet,
