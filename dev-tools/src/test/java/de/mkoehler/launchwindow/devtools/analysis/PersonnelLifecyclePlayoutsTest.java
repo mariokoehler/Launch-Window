@@ -79,6 +79,21 @@ class PersonnelLifecyclePlayoutsTest {
     }
 
     /**
+     * Verifies a long enough run actually opens programs too - a sign the
+     * bot's open-program path and {@code ProgramOpening} are both
+     * genuinely exercised, not just theoretically wired together. Every
+     * run already self-checks the funds/opened-id/reliability/required-by
+     * invariants internally (see {@code checkProgramInvariants}); this
+     * only adds that at least one open actually succeeds.
+     */
+    @Test
+    void aLongRunOpensPrograms() {
+        PersonnelPlayoutReport report = PersonnelLifecyclePlayouts.run(100, 5, 100, 7L);
+
+        assertTrue(report.programsOpenedCount() > 0, "expected at least one program opened over 100 seasons");
+    }
+
+    /**
      * Verifies each non-positive argument is rejected.
      */
     @Test

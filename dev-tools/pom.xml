@@ -52,9 +52,12 @@
     <plugins>
       <plugin>
         <!-- Run the dev client directly with: mvn -pl dev-tools compile exec:java
-             (core must already be installed locally). Run the windowed
-             MenuHotspotPrototype instead with:
-             mvn -pl dev-tools compile exec:java -Dexec.mainClass=de.mkoehler.launchwindow.devtools.MenuHotspotPrototype -->
+             (core must already be installed locally). Run a different tool's main
+             class instead by overriding the mainClass *property* this plugin's
+             own config reads below, e.g.:
+             mvn -pl dev-tools compile exec:java -DmainClass=de.mkoehler.launchwindow.devtools.MenuHotspotPrototype
+             (-Dexec.mainClass does not work here - it's overridden right back by
+             this plugin's own <configuration> below, which always reads ${mainClass}). -->
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
         <version>3.5.0</version>

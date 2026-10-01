@@ -273,11 +273,10 @@ validating every cross-reference at construction — and new
 opening-discount and reliability-transfer formulas with Launch Window's
 own numbers. New `PlayerSnapshot` fields `openedProgramIds`/
 `missionComponents` (the latter backed by a new per-player state class,
-`OwnedMissionComponent`, appended to `MessageRegistry`). Implemented as an
-unconfirmed default the same day: a component's reliability floor is the
-transfer-inclusive starting value, not the bare baseline — still the
-user's call, not yet confirmed; see `design.md` §2.4(c)/§5 for the full
-writeup, including why BASPM's own code left this exact choice
+`OwnedMissionComponent`, appended to `MessageRegistry`). **Decided (user,
+2026-10-01):** a component's reliability floor is the transfer-inclusive
+starting value, not the bare baseline — see `design.md` §2.4(c)/§5 for the
+full writeup, including why BASPM's own code left this exact choice
 ambiguous. 16 new `ProgramOpeningTest` tests (including a fix for a real
 bug the advisor caught: initial reliability wasn't clamped at the
 component's own max), plus the two real correctness traps (an
@@ -285,9 +284,28 @@ already-owned component is never reset/re-transferred; two components
 newly granted in the same `open` call never see each other's fresh
 reliability when computing transfers). Unblocks
 but doesn't itself implement SET's R&D-target-component linkage (see
-`design.md` §3.4) — the clear next M2 sub-slice. **Not yet wired into
-`PersonnelLifecyclePlayouts`**, unlike every earlier M2 resolver — still
-open.
+`design.md` §3.4) — the clear next M2 sub-slice.
+
+**`ProgramOpening` wired into `PersonnelLifecyclePlayouts` the same day
+(2026-10-01):** a small fixture `ContentCatalog` (three programs, four
+mission components, two reliability-transfer relationships — only one of
+which can ever actually fire, by design, since the other's two components
+are granted by the same program in the same `open` call, see
+`design.md` §3.10) lets the bot open one random not-yet-open program per
+season (10% chance), in the same journaled-player-action bucket as
+`HiringPool.hire`. Four new invariants (funds never negative, opened ids
+known to the catalog, owned-component reliability/floor ordering, every
+owned component required by some opened program). **Numbers (same
+200-game/80-season run, now shifted by this slice's own random draws —
+no personnel resolver's behavior changed): 236 resigned (avg. tenure
+29.7), 1,242 retired (avg. tenure 55.9), 5,371 still employed, 69,961
+training completions (avg. gain 5.24), 3,849 hires, hiring-pool bands
+0/597/21,001/26,402, 599 programs opened.** The fixture's total program
+cost (2,300 at most) stays well under the 5,000 starting funds, so
+`INSUFFICIENT_FUNDS` is exercised by `ProgramOpeningTest`'s own unit
+test, not meaningfully by this harness — see `design.md` §3.10 for the
+full writeup. This completes wiring every
+M2 resolver built so far into the harness.
 
 Git repo
 initialized 2026-09-27 and pushed

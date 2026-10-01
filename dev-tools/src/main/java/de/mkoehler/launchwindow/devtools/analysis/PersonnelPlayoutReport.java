@@ -42,6 +42,9 @@ package de.mkoehler.launchwindow.devtools.analysis;
  * @param averageBandBatches                same, for the "Average" band
  * @param goodBandBatches                   same, for the "Good" band
  * @param excellentBandBatches              same, for the "Excellent" band
+ * @param programsOpenedCount               how many bot program-opens
+ *                                          succeeded across every game (see
+ *                                          {@code PersonnelLifecyclePlayouts#OPEN_PROGRAM_CHANCE_PER_SEASON})
  * @author Mario Koehler
  */
 public record PersonnelPlayoutReport(
@@ -59,6 +62,7 @@ public record PersonnelPlayoutReport(
     int poorBandBatches,
     int averageBandBatches,
     int goodBandBatches,
-    int excellentBandBatches
+    int excellentBandBatches,
+    int programsOpenedCount
 ) {
 }

@@ -1,11 +1,16 @@
 package de.mkoehler.launchwindow.devtools.analysis;
 
+import de.mkoehler.launchwindow.content.ContentCatalog;
+import de.mkoehler.launchwindow.content.MissionComponent;
+import de.mkoehler.launchwindow.content.Program;
+import de.mkoehler.launchwindow.content.ProgramCategory;
 import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.AstronautSkill;
 import de.mkoehler.launchwindow.model.MissionControlOfficer;
 import de.mkoehler.launchwindow.model.MissionControlSkill;
+import de.mkoehler.launchwindow.model.OwnedMissionComponent;
 import de.mkoehler.launchwindow.model.Personnel;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.model.SetSkill;
@@ -14,9 +19,11 @@ import de.mkoehler.launchwindow.model.TrainingKind;
 import de.mkoehler.launchwindow.rules.DepartureReason;
 import de.mkoehler.launchwindow.rules.HireOutcome;
 import de.mkoehler.launchwindow.rules.HiringPool;
+import de.mkoehler.launchwindow.rules.OpenProgramOutcome;
 import de.mkoehler.launchwindow.rules.PersonnelDeparture;
 import de.mkoehler.launchwindow.rules.PersonnelGroup;
 import de.mkoehler.launchwindow.rules.PersonnelLifecycle;
+import de.mkoehler.launchwindow.rules.ProgramOpening;
 import de.mkoehler.launchwindow.rules.ResolutionEvent;
 import de.mkoehler.launchwindow.rules.SkillGrowth;
 import de.mkoehler.launchwindow.rules.TrainingCompleted;
@@ -34,20 +41,33 @@ import java.util.Set;
  * <p>Launch Window's own {@code Playouts}-style bot-driven harness (see
  * {@code design.md} &sect;3.10, following Robot-Rampage's own precedent) -
  * drives {@link PersonnelLifecycle#advanceSeason}, {@link TrainingProgress#advanceSeason},
- * and {@link HiringPool#refreshCandidates}/{@link HiringPool#hire}, the
- * rules-engine resolvers that exist so far, across many random simulated
- * rosters and seasons, purely headless (no client/server/persistence
- * involved), and reports the tenure/departure/training/hiring statistics
- * that make it a tuning tool rather than just another unit test.</p>
+ * {@link HiringPool#refreshCandidates}/{@link HiringPool#hire}, and
+ * {@link ProgramOpening#open}, the rules-engine resolvers that exist so
+ * far, across many random simulated rosters and seasons, purely headless
+ * (no client/server/persistence involved), and reports the tenure/
+ * departure/training/hiring/program statistics that make it a tuning tool
+ * rather than just another unit test.</p>
  *
  * <p><b>Deliberately narrow, named after the resolvers it drives</b> - this
  * is not yet the general full-game {@code Playouts} harness
  * {@code design.md} &sect;3.10 describes (that needs a real bot making
- * per-season decisions like "queue a mission" or "open a program," none of
- * which exist yet). Expected to grow alongside M2's remaining slices
- * ({@code design.md} &sect;5), most likely folding into a more general
- * harness once there are resolvers for those too, rather than staying its
- * own permanent, resolver-specific class.</p>
+ * per-season decisions like "queue a mission," which doesn't exist yet).
+ * Expected to grow alongside M2's remaining slices ({@code design.md}
+ * &sect;5), most likely folding into a more general harness once there are
+ * resolvers for those too, rather than staying its own permanent,
+ * resolver-specific class.</p>
+ *
+ * <p><b>{@link #CATALOG} is a small hand-built fixture, not real content</b>
+ * (see {@code design.md} &sect;5's M2 status - "against an in-memory/
+ * test-fixture content set"; real, authored content is M3's job): three
+ * programs and four mission components, with two reliability-transfer
+ * relationships and one opening-cost discount, enough to exercise
+ * {@link ProgramOpening}'s main paths without building a fake tech tree
+ * bigger than this harness actually needs. Only one of the two transfer
+ * relationships can ever actually produce a nonzero bonus - see
+ * {@link #buildCatalog()}'s own Javadoc for why the other one is a
+ * deliberate illustration of {@link ProgramOpening}'s same-call isolation
+ * rule, not a bug.</p>
  *
  * <p>The "bot" here is intentionally simple, per employee per season
  * (chance {@link #REASSIGNMENT_CHANCE_PER_SEASON}): idle becomes either
@@ -63,13 +83,14 @@ import java.util.Set;
  * decision, which doesn't exist yet at this milestone.</p>
  *
  * <p><b>Resolver composition order matches the contract {@link HiringPool}'s
- * own Javadoc documents</b>: each season, the bot may first hire out of
- * <i>last</i> season's candidate pool ({@link #HIRE_CHANCE_PER_SEASON} per
- * group, a stand-in for a journaled player action), then
- * {@link PersonnelLifecycle} runs, then {@link TrainingProgress}, then
- * {@link HiringPool#refreshCandidates} last - all sharing the same seeded
- * {@link Random}, so a whole game's outcome stays reproducible from a
- * single seed.</p>
+ * and {@link ProgramOpening}'s own Javadoc documents</b>: each season, the
+ * bot may first hire out of <i>last</i> season's candidate pool
+ * ({@link #HIRE_CHANCE_PER_SEASON} per group) and open one program
+ * ({@link #OPEN_PROGRAM_CHANCE_PER_SEASON}) - both stand-ins for a
+ * journaled player action - then {@link PersonnelLifecycle} runs, then
+ * {@link TrainingProgress}, then {@link HiringPool#refreshCandidates}
+ * last - all sharing the same seeded {@link Random}, so a whole game's
+ * outcome stays reproducible from a single seed.</p>
  *
  * @author Mario Koehler
  */
@@ -85,11 +106,83 @@ public final class PersonnelLifecyclePlayouts {
     private static final double MAX_START_SKILL = 90.0;
     private static final double REASSIGNMENT_CHANCE_PER_SEASON = 0.3;
     private static final double HIRE_CHANCE_PER_SEASON = 0.25;
+    private static final double OPEN_PROGRAM_CHANCE_PER_SEASON = 0.1;
+    private static final long STARTING_FUNDS = 5_000;
+
+    /**
+     * Every program id {@link #CATALOG} defines, matching
+     * {@link #buildCatalog()} exactly - {@link #maybeOpenProgram} picks
+     * among these rather than enumerating {@link ContentCatalog} itself,
+     * which exposes lookup by id but not "every id of a given type."
+     */
+    private static final List<String> PROGRAM_IDS =
+        List.of("sputnik-program", "explorer-program", "mercury-program");
+
+    /**
+     * The fixture content catalog every simulated game opens programs
+     * against - see this class's own Javadoc for why it's small and not
+     * real content.
+     */
+    private static final ContentCatalog CATALOG = buildCatalog();
+
+    static {
+        // Guards PROGRAM_IDS against silently drifting out of sync with buildCatalog(): if a
+        // program were added to the catalog without adding its id here, the bot would simply
+        // never pick it, with nothing failing loudly to say so.
+        for (String programId : PROGRAM_IDS) {
+            if (CATALOG.program(programId).isEmpty()) {
+                throw new ExceptionInInitializerError("PROGRAM_IDS has an id not in CATALOG: " + programId);
+            }
+        }
+    }
 
     /**
      * Not instantiable; this class only exposes static methods.
      */
     private PersonnelLifecyclePlayouts() {
+    }
+
+    /**
+     * Builds {@link #CATALOG}: one program category, four mission
+     * components, and three programs (one carrying an opening-cost
+     * discount from another).
+     *
+     * <p>Two components declare a reliability-transfer source, but only
+     * one of those can ever actually fire: {@code satellite-explorer}'s
+     * transfer from {@code satellite-sputnik} fires whenever
+     * {@code sputnik-program} was opened in an <em>earlier</em> call than
+     * {@code explorer-program}, since by then {@code satellite-sputnik} is
+     * already owned. {@code capsule-mercury}'s transfer from
+     * {@code rocket-redstone} can <b>never</b> fire, since
+     * {@code mercury-program} grants both components in the very same
+     * {@link ProgramOpening#open} call, and {@link ProgramOpening}
+     * computes every transfer within one call against ownership as it
+     * stood before that call - a deliberate illustration of that rule
+     * inside this fixture, not a bug to fix by reshaping the catalog.</p>
+     *
+     * @return the fixture catalog
+     */
+    private static ContentCatalog buildCatalog() {
+        ProgramCategory category = new ProgramCategory("early-space", "Early Space");
+
+        MissionComponent satelliteSputnik =
+            new MissionComponent("satellite-sputnik", SetSkill.SPACE_PROBES, 3, 90, 0, List.of());
+        MissionComponent satelliteExplorer = new MissionComponent("satellite-explorer", SetSkill.SPACE_PROBES, 3, 90,
+            40, List.of(new MissionComponent.ReliabilityTransferSource("satellite-sputnik", 40)));
+        MissionComponent rocketRedstone =
+            new MissionComponent("rocket-redstone", SetSkill.ROCKETS, 3, 95, 0, List.of());
+        MissionComponent capsuleMercury = new MissionComponent("capsule-mercury", SetSkill.CREWED_SPACECRAFT, 3, 90,
+            50, List.of(new MissionComponent.ReliabilityTransferSource("rocket-redstone", 50)));
+
+        Program sputnikProgram =
+            new Program("sputnik-program", "early-space", 500, 0, List.of("satellite-sputnik"), List.of());
+        Program explorerProgram = new Program("explorer-program", "early-space", 600, 0,
+            List.of("satellite-explorer"), List.of(new Program.OpeningCostDiscount("sputnik-program", 40)));
+        Program mercuryProgram = new Program("mercury-program", "early-space", 1_200, 0,
+            List.of("rocket-redstone", "capsule-mercury"), List.of());
+
+        return new ContentCatalog(List.of(category), List.of(sputnikProgram, explorerProgram, mercuryProgram),
+            List.of(), List.of(satelliteSputnik, satelliteExplorer, rocketRedstone, capsuleMercury));
     }
 
     /**
@@ -122,6 +215,7 @@ public final class PersonnelLifecyclePlayouts {
         int trainingCompletedCount = 0;
         double trainingGainTotal = 0;
         int hiredCount = 0;
+        int programsOpenedCount = 0;
         int[] bandHits = new int[4];
 
         for (int game = 0; game < games; game++) {
@@ -133,6 +227,8 @@ public final class PersonnelLifecyclePlayouts {
             for (int season = 0; season < seasons && rosterSize(snapshot) > 0; season++) {
                 shuffleAssignments(snapshot, random);
                 hiredCount += hireFromPools(snapshot, random, season, joinedAtSeason);
+                programsOpenedCount += maybeOpenProgram(snapshot, random);
+                checkProgramInvariants(snapshot);
 
                 int before = rosterSize(snapshot);
                 Set<String> protectedBefore = protectedEmployeeKeys(snapshot);
@@ -175,7 +271,7 @@ public final class PersonnelLifecyclePlayouts {
 
         return new PersonnelPlayoutReport(games, seasons, employeesStarted, resignedCount, retiredCount,
             stillEmployed, avgResignedTenure, avgRetiredTenure, trainingCompletedCount, avgTrainingGain,
-            hiredCount, bandHits[0], bandHits[1], bandHits[2], bandHits[3]);
+            hiredCount, bandHits[0], bandHits[1], bandHits[2], bandHits[3], programsOpenedCount);
     }
 
     /**
@@ -222,6 +318,38 @@ public final class PersonnelLifecyclePlayouts {
         }
         joinedAtSeason.put(employeeKey(group, candidateId), season);
         return 1;
+    }
+
+    /**
+     * The bot's stand-in for a journaled "open program" player action: with
+     * probability {@link #OPEN_PROGRAM_CHANCE_PER_SEASON}, picks one random
+     * not-yet-opened program from {@link #CATALOG} and opens it. A no-op if
+     * every program is already open, or if {@link ProgramOpening#open}
+     * reports {@link OpenProgramOutcome#INSUFFICIENT_FUNDS} - both ordinary
+     * outcomes this harness lets happen rather than working around, the
+     * same posture as {@link #maybeHire}.
+     *
+     * @param snapshot the snapshot to open a program for; mutated in place
+     *                 on success
+     * @param random   the random source to draw from
+     * @return {@code 1} if a program was opened this call, {@code 0} otherwise
+     */
+    private static int maybeOpenProgram(PlayerSnapshot snapshot, Random random) {
+        if (random.nextDouble() >= OPEN_PROGRAM_CHANCE_PER_SEASON) {
+            return 0;
+        }
+        List<String> candidateProgramIds = new ArrayList<>();
+        for (String programId : PROGRAM_IDS) {
+            if (!snapshot.getOpenedProgramIds().contains(programId)) {
+                candidateProgramIds.add(programId);
+            }
+        }
+        if (candidateProgramIds.isEmpty()) {
+            return 0;
+        }
+        String programId = candidateProgramIds.get(random.nextInt(candidateProgramIds.size()));
+        OpenProgramOutcome outcome = ProgramOpening.open(snapshot, programId, CATALOG);
+        return outcome == OpenProgramOutcome.OPENED ? 1 : 0;
     }
 
     /**
@@ -345,6 +473,63 @@ public final class PersonnelLifecyclePlayouts {
             checkSkillsInRange(officer.getId(), officer.getSkills().values());
             if (officer.getTrainingKind() == TrainingKind.PERMANENT) {
                 checkPermanentTrainingTarget(officer, officer.getSkill(officer.getTrainingTargetSkill()));
+            }
+        }
+    }
+
+    /**
+     * Cross-checks {@link ProgramOpening#open}'s own output, computed
+     * independently of its internals: funds never go negative, every
+     * opened program id is one {@link #CATALOG} actually defines, every
+     * owned component's reliability and floor stay ordered
+     * {@code baselineReliability <= floorReliability <= currentReliability
+     * <= maxReliability}, and every owned component is required by at
+     * least one currently opened program (no component is ever owned
+     * without a program having granted it).
+     *
+     * <p>The reliability-range check is near-vacuous today: nothing in
+     * this harness mutates a component's reliability after it's granted
+     * (no R&amp;D or mission-simulation resolver exists yet), so it only
+     * re-verifies the same grant-time computation rather than catching
+     * drift over a component's lifetime. It starts earning its keep once
+     * this harness grows a resolver that actually changes reliability
+     * over time.</p>
+     *
+     * @param snapshot the snapshot to check, at any point after this
+     *                 season's {@link #maybeOpenProgram} call
+     * @throws IllegalStateException if any invariant is violated
+     */
+    private static void checkProgramInvariants(PlayerSnapshot snapshot) {
+        if (snapshot.getFunds() < 0) {
+            throw new IllegalStateException("Funds went negative: " + snapshot.getFunds());
+        }
+
+        Set<String> requiredByAnOpenedProgram = new HashSet<>();
+        for (String programId : snapshot.getOpenedProgramIds()) {
+            Program program = CATALOG.program(programId)
+                .orElseThrow(() -> new IllegalStateException("Opened an unknown program: " + programId));
+            requiredByAnOpenedProgram.addAll(program.requiredMissionComponentIds());
+        }
+
+        for (Map.Entry<String, OwnedMissionComponent> entry : snapshot.getMissionComponents().entrySet()) {
+            String componentId = entry.getKey();
+            OwnedMissionComponent owned = entry.getValue();
+            MissionComponent component = CATALOG.missionComponent(componentId)
+                .orElseThrow(() -> new IllegalStateException("Owns an unknown mission component: " + componentId));
+            if (owned.getCurrentReliability() < component.baselineReliability()
+                    || owned.getCurrentReliability() > component.maxReliability()) {
+                throw new IllegalStateException("Reliability out of range for " + componentId + ": "
+                    + owned.getCurrentReliability());
+            }
+            if (owned.getFloorReliability() < component.baselineReliability()
+                    || owned.getFloorReliability() > owned.getCurrentReliability()) {
+                throw new IllegalStateException("Floor reliability out of order for " + componentId
+                    + ": baseline " + component.baselineReliability() + " / floor " + owned.getFloorReliability()
+                    + " / current " + owned.getCurrentReliability());
+            }
+            if (!requiredByAnOpenedProgram.contains(componentId)) {
+                throw new IllegalStateException(
+                    "Owns " + componentId + " but no currently opened program requires it");
             }
         }
     }
@@ -697,7 +882,7 @@ public final class PersonnelLifecyclePlayouts {
     }
 
     private static PlayerSnapshot newRandomSnapshot(int employeesPerGroup, Random random) {
-        PlayerSnapshot snapshot = new PlayerSnapshot("Bot Agency", Archetype.NASA, 0, 0, 0, 1);
+        PlayerSnapshot snapshot = new PlayerSnapshot("Bot Agency", Archetype.NASA, STARTING_FUNDS, 0, 0, 1);
         List<Astronaut> astronauts = new ArrayList<>();
         List<SetSpecialist> specialists = new ArrayList<>();
         List<MissionControlOfficer> officers = new ArrayList<>();
@@ -773,5 +958,6 @@ public final class PersonnelLifecyclePlayouts {
         System.out.printf("Hiring-pool band hits - poor: %d, average: %d, good: %d, excellent: %d%n",
             report.poorBandBatches(), report.averageBandBatches(), report.goodBandBatches(),
             report.excellentBandBatches());
+        System.out.printf("Programs opened: %d%n", report.programsOpenedCount());
     }
 }

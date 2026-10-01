@@ -8,10 +8,10 @@ package de.mkoehler.launchwindow.model;
  * <p>The floor is the transfer-inclusive starting value (baseline
  * reliability plus whatever one-time reliability-transfer bonus applied
  * when this component was first granted), not the component's own bare
- * baseline - see {@code design.md} &sect;2.4(c) for the open question this
- * settles (unconfirmed default) and why. A future mission-simulation
- * slice's post-mission reliability change must clamp against
- * {@link #getFloorReliability()}, not the component's own baseline.</p>
+ * baseline - see {@code design.md} &sect;2.4(c) for why. A future
+ * mission-simulation slice's post-mission reliability change must clamp
+ * against {@link #getFloorReliability()}, not the component's own
+ * baseline.</p>
  *
  * <p>Per-player state, mutable - matching every other class in
  * {@code de.mkoehler.launchwindow.model} (see {@code design.md} &sect;3.4's

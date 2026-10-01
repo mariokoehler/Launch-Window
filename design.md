@@ -804,15 +804,13 @@ proceeds:
     same-category rule) since that's what makes a real rocket-family lineage
     feel earned rather than automatic. **Implemented (2026-10-01, §5's M2
     status):** `MissionComponent`/`ProgramOpening` in
-    `de.mkoehler.launchwindow.content`/`.rules`. **Unconfirmed default (the
-    same session): the per-component reliability floor is implemented as
-    the transfer-inclusive starting value, not the bare baseline** —
+    `de.mkoehler.launchwindow.content`/`.rules`. **Decided (user,
+    2026-10-01): the per-component reliability floor is the
+    transfer-inclusive starting value, not the bare baseline** —
     `baspm.md` §10.3's own trace found this exact choice left ambiguous in
     BASPM's code (the field name implies the former, the code does the
-    latter), and a future mission-simulation slice's post-mission
-    reliability change will need to clamp against whichever one is
-    chosen, so a default had to be picked now rather than left open. See
-    §5's own entry for the full writeup.
+    latter); a future mission-simulation slice's post-mission reliability
+    change clamps against it. See §5's own entry for the full writeup.
 - 2.5 **Mission simulation (the step-by-step launch/flight resolution,
   success/failure rolls) — analyzed 2026-09-27, see `baspm.md` §8 for the
   full formula trace.**
@@ -2166,19 +2164,61 @@ comfortably above the floor" reasoning in §2.2(c)'s own `HiringPool` entry
 turns out to need *more* headroom than the 9 points currently given, not
 less.
 
+**`ProgramOpening` wired in the same session it was implemented
+(2026-10-01):** a small fixture `ContentCatalog` (three programs, four
+mission components - not real content, see §5's M2 status for the exact
+shape) lets the bot open one random not-yet-open program per season at a
+10% chance, in the same journaled-player-action bucket as
+`HiringPool.hire`, before `PersonnelLifecycle`/`TrainingProgress`/
+`HiringPool.refreshCandidates` run. Four new invariants, computed
+independently of `ProgramOpening`'s own logic: funds never negative;
+every opened program id is one the catalog defines; every owned
+component's reliability and floor stay ordered
+`baselineReliability <= floorReliability <= currentReliability <=
+maxReliability`; every owned component is required by at least one
+currently opened program.
+
+**Only one of the fixture's two reliability-transfer relationships can
+ever actually fire.** `satellite-explorer`'s transfer from
+`satellite-sputnik` fires whenever `sputnik-program` opened in an earlier
+season than `explorer-program`, since by then `satellite-sputnik` is
+already owned. `capsule-mercury`'s transfer from `rocket-redstone` can
+**never** fire: `mercury-program` grants both components in the very same
+`open` call, and `ProgramOpening` computes every transfer within one call
+against ownership as it stood *before* that call - a deliberate
+illustration of that rule living inside the fixture itself, not a flaw to
+fix by reshaping it.
+
+**Numbers (same 200-game/80-season run as the figures above, now shifted
+by this slice's own `random.nextDouble()` calls consuming the shared
+random stream earlier each season - no personnel resolver's own behavior
+changed, since funds don't feed any of them): 236 resigned (avg. tenure
+29.7 seasons), 1,242 retired (avg. tenure 55.9 seasons), 5,371 still
+employed, 69,961 training completions (avg. gain 5.24), 3,849 hires,
+hiring-pool band hits 0/597/21,001/26,402 (poor/average/good/excellent),
+and 599 programs opened.** The fixture's three programs cost at most
+2,300 combined even with no discount applied, well under the 5,000
+starting funds, so almost every game opens all three (599 of a possible
+600) well before running out of money; the `INSUFFICIENT_FUNDS` path is
+exercised by `ProgramOpeningTest`'s own unit test, not meaningfully by
+this harness run. A future real content pack's actual program costs,
+once authored (M3), will likely make funds a genuine constraint the way
+they aren't here.
+
 **Still not built:** the general full-game harness described in this
 section's original text below — simple bots making plausible per-season
-decisions (assign personnel, queue a mission, open a program), run many
-simulated multi-season games from a seed, and reporting the metrics that
-actually matter here: whether a multi-season mission completes correctly
-across turn boundaries (a real, non-trivial case per `baspm.md` §8.1's
-finding that missions commonly span several seasons), funds/prestige
-trajectory over N simulated seasons (does an agency go bankrupt, does the
+decisions (assign personnel, queue a mission), run many simulated
+multi-season games from a seed, and reporting the metrics that actually
+matter here: whether a multi-season mission completes correctly across
+turn boundaries (a real, non-trivial case per `baspm.md` §8.1's finding
+that missions commonly span several seasons), funds/prestige trajectory
+over N simulated seasons (does an agency go bankrupt, does the
 budget-review math actually converge sensibly), and whether the NASA-style
 and Soviet-style archetypes (§2.1(a1)/(b1)'s real content differences)
-actually play out roughly evenly rather than one snowballing. Blocked on
-the mission-simulation and programs/budget resolvers not existing yet
-(§5's M2 slice list).
+actually play out roughly evenly rather than one snowballing. "Open a
+program" is already in this harness, as of the entry above; blocked on
+the mission-simulation and budget resolvers not existing yet (§5's M2
+slice list).
 
 ### 3.11 Offscreen screenshot tooling for UI checking
 
@@ -3004,31 +3044,36 @@ here.
     `PlayerSnapshot` fields: `openedProgramIds` (`List<String>`) and
     `missionComponents` (`Map<String, OwnedMissionComponent>`, a new
     per-player, mutable state class - `MessageRegistry` gained an entry
-    for it, appended after `TrainingKind`). **Unconfirmed default
-    (2026-10-01, &sect;2.4(c)): the per-component reliability floor a
-    future mission-simulation slice's post-mission reliability change
-    must clamp against is implemented as the transfer-inclusive starting
-    value** (baseline plus whatever one-time transfer bonus applied when
-    first granted), stored explicitly as
-    `OwnedMissionComponent.floorReliability` rather than re-derived from
-    the catalog's bare baseline - `baspm.md` &sect;10.3 flagged this exact
-    choice as deliberately unresolved in BASPM's own code (the field name
-    implies a transfer-inclusive floor was intended, but the code never
-    actually sets it that way); Launch Window needed to pick one now since
-    the state shape depends on it, but it's the user's call, not yet
-    confirmed.
+    for it, appended after `TrainingKind`). **Decided (user, 2026-10-01,
+    &sect;2.4(c)): the per-component reliability floor a future
+    mission-simulation slice's post-mission reliability change must clamp
+    against is the transfer-inclusive starting value** (baseline plus
+    whatever one-time transfer bonus applied when first granted), stored
+    explicitly as `OwnedMissionComponent.floorReliability` rather than
+    re-derived from the catalog's bare baseline - `baspm.md` &sect;10.3
+    flagged this exact choice as deliberately unresolved in BASPM's own
+    code (the field name implies a transfer-inclusive floor was intended,
+    but the code never actually sets it that way).
     **Unblocks, but does not itself implement, the R&D-target-component
     linkage &sect;3.4 flagged as this slice's follow-up:** `SetSpecialist`
     still has no field linking a standing R&D order to a specific
     `MissionComponent#id()` - natural next sub-slice now that
-    `MissionComponent` actually has a stable id to reference. **Also not
-    yet done:** wiring `ProgramOpening` into
-    `PersonnelLifecyclePlayouts` with its own invariants (funds never
-    negative, opened ids subset of the catalog, owned-component
-    reliabilities within `[baseline, max]`, every owned component
-    required by some opened program) - every earlier M2 resolver got
-    wired into the harness the same session it was built; this one
-    hasn't been yet.
+    `MissionComponent` actually has a stable id to reference.
+    **`ProgramOpening` wired into `PersonnelLifecyclePlayouts` (2026-10-01):**
+    a small fixture `ContentCatalog` (three programs, four mission
+    components, two reliability-transfer relationships - only one of which
+    can ever actually fire, by design - one opening-cost discount; not
+    real content) lets the bot open one random not-yet-open program per
+    season with probability `0.1`, in the same "journaled player action,
+    runs before the season-advance resolvers" bucket as `HiringPool.hire`.
+    Four new independent invariants, checked every season: funds never
+    negative, every opened program id is one the catalog actually
+    defines, every owned component's reliability and floor stay ordered
+    `baselineReliability &le; floorReliability &le; currentReliability
+    &le; maxReliability`, and every owned component is required by at
+    least one currently opened program. Full numbers and the
+    never-fires-by-design transfer relationship's explanation in
+    &sect;3.10's own entry.
   - Slice: mission simulation, base two-roll formula only (no Expert yet,
     per the shape-defining choice above) — §2.5. **Decision gate:** §2.5(c)'s
     outcome-tier shape (four vs. five tiers, "vital vs. optional step") is
