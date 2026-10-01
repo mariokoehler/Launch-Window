@@ -316,7 +316,8 @@ employee's `ASSIGNED` state now always means R&D on a specific owned
 component's own ceiling, **unconfirmed default shape and factor range**
 — `baspm.md` has no decompiled trace for this half of the mechanic, only
 a manual-level claim that it scales with skill at all; see `design.md`
-§3.4 for the full proposal and the open question). `PersonnelDeparture`
+§3.4 for the full proposal and the open question — **superseded later
+the same day once the trace existed, see below**). `PersonnelDeparture`
 gained `rdTargetComponentIdAtExit`, the reverse pointer §3.4 flagged as
 this linkage's own follow-up. Wired into `PersonnelLifecyclePlayouts` the
 same day: the bot now picks a random owned component when assigning a
@@ -331,6 +332,104 @@ that group): 287 resigned (avg. tenure 29.2), 1,269 retired (avg. tenure
 opened, 37,300 R&D seasons completed (avg. reliability gain 1.65).** See
 `design.md` §3.10 for the full writeup. This completes wiring every M2
 resolver built so far into the harness.
+
+**R&D-to-reliability formula traced against real BASPM source and
+upgraded to match, same day (2026-10-01), once the user was back on the
+machine with `E:\Temp\BASPM`/game-install access — this is the "check a
+formula once back on the main PC" follow-up flagged during the prior
+laptop session.** `baspm.md` §10.8 (new) traces
+`MissionComponentsManager.PerformRDProcessOnPlayerMsnCmp` plus the loose,
+previously-missed `SPM-Windows_Data\Scripts\Data Scripts\General
+Container\MissionComponents.xml`/`MsnCmpsManagerConstants.xml` (unpacked
+on disk, not in the `extracted/`/`monobehaviours/` dump — same fix applied
+to §9.4's `MoraleUpperLimit` dead end the same session, see below): BASPM's
+real mechanic has **two reliability ceilings per component** (a separate,
+lower `MaxRDReliability` R&D alone can reach, below the absolute
+`MaxReliability` only flying missions can approach) and **up to four SET
+employees R&D the same component at once, in explicit slots with sharply
+diminishing per-slot reward bands** (first slot richest, fourth poorest),
+not the single-assignee formula `design.md` §3.4 had proposed as an
+unconfirmed placeholder. **Presented as two explicit decisions, both
+decided (user, 2026-10-01): adopt the two-ceiling shape, and adopt the
+full multi-slot mechanic rather than simplifying it away.** Implemented
+the same session: `MissionComponent` gained `maxRdReliability`/
+`rdSlotBandMaxAmounts` (23 constructor call sites updated across 5
+files), `SetSpecialist` gained `rdSlot`, `SkillGrowth.reliabilityGain`
+was removed and replaced with `rdReliabilityGain`/`drawRdSlotRawAmount`/
+`rdSlotBandLower`/`rdSlotBandUpper` (the now-dead
+`RD_RELIABILITY_FACTOR_MIN`/`MAX`/`drawRdReliabilityFactor` removed too),
+and `ResearchProgress` was rewritten around a per-component (not
+per-specialist) pass — a component's headroom factor is now computed
+once per season and shared by every occupied slot, matching BASPM's own
+code exactly, which **supersedes the sequential "stacks in roster order"
+design this same linkage shipped with earlier the same day**. Per-employee
+event attribution (there's no such concept in BASPM once slots are
+summed) is Launch Window's own addition: each `ResearchCompleted`
+reports a proportional share of the season's actually-applied,
+post-clamp total, so summing every event's `reliabilityGain` always
+equals the component's real delta. `baspm.md` §9.4 also got the same
+loose-XML-file fix applied retroactively: `PersonnelManagerConstants.xml`
+*is* recoverable after all (same lesson, different file) — BASPM's own
+"Poor" hiring tier only appears in its two lowest morale bands (≤50 at
+20%, ≤60 at 10%), directionally consistent with the harness's own numbers
+but not a confirmed match, since Launch Window's `HiringPool` picks one
+deterministic skill band per roster while BASPM mixes probabilistic
+profiles within six wider tiers — plausibly the same underlying shape,
+not proven the same mechanism (corrected from an earlier, over-strong
+version of this same claim the same session). Wired into `PersonnelLifecyclePlayouts`
+the same session: the bot now claims a free R&D slot (0-3) when assigning
+a `SET` specialist to a component, falling back to training if all four
+are already taken, with two new invariants (slot in range and paired with
+`ASSIGNED` exactly, no two specialists ever share a (component, slot)
+pair). **Two more real issues were caught and fixed in the
+post-implementation advisor pass, both reflected in the final numbers
+below:**
+1. `advanceComponent` returned early without emitting a
+   `ResearchCompleted` event (dropping the already-applied flat skill
+   gain from the report, not just the reliability gain) whenever a
+   component's nominal reliability gain was zero for the season — common
+   once a component sits at its new `maxRdReliability` cap. Fixed to
+   always emit one event per occupied slot, 0-share when there's nothing
+   to distribute.
+2. **BASPM itself auto-releases every SET employee from a component once
+   it reaches its R&D ceiling** (`baspm.md` §10.8's own
+   `ProcessAndRetrieveAllMissionComponentsThatReachedMaxRDReliabilityAtSomePointDuringTheLastSeason`/
+   `UnassignAllSETPersonnelFromMissionComponent`, confirmed by reading
+   `Player.cs` directly) — missed in the first implementation pass, which
+   would have left specialists parked on a maxed component farming flat
+   skill gain forever, a mechanic the user's "adopt BASPM's full
+   mechanic" decision didn't actually choose. Ported as a new
+   `ResearchComponentMaxed` event + release-to-`IDLE` logic in
+   `ResearchProgress`, with the unconfirmed nuance that BASPM triggers it
+   from interseason news-item generation rather than inside the R&D pass
+   itself. This needed one harness fix too:
+   `PersonnelLifecyclePlayouts`'s own reliability-gain aggregation
+   blindly cast every research event to `ResearchCompleted`, which threw
+   on the first `ResearchComponentMaxed` — fixed via `instanceof`.
+
+Also fixed the same pass: §9.4's correction below had overstated what the
+newly-found `PersonnelManagerConstants.xml` actually shows (BASPM's
+"Poor" hiring tier is reachable up to `MoraleUpperLimit="60"`, not only
+`"50"`, and the two systems' mechanisms aren't directly comparable —
+softened to "plausibly similar," see `baspm.md` §9.4 for the corrected
+text), a magic `0.1` threshold copied verbatim from BASPM was replaced
+with a named, Launch-Window-own `ResearchProgress.HEADROOM_STAGNATION_THRESHOLD`
+constant per `design.md` §1.2, a unit test was using a real BASPM
+component's exact `L1`-`L4` values (also a §1.2 violation, swapped for
+arbitrary numbers), and the class Javadoc's claimed "roster order" was
+corrected to the grouped order the code actually uses.
+
+**Final numbers for this slice (same 200-game/80-season run, shifted
+several times across the issues above — the release mechanic in
+particular is a real behavioral change, not just a random-stream shift,
+since freed specialists get reshuffled by the bot sooner instead of
+sitting parked doing nothing): 223 resigned (avg. tenure 31.3), 1,244
+retired (avg. tenure 55.2), 5,365 still employed, 73,553 training
+completions (avg. gain 5.11), 3,832 hires, hiring-pool bands
+0/573/20,384/27,043, 599 programs opened, 36,285 R&D seasons completed
+(avg. reliability gain 1.53).** Full `mvn clean package` passes (328
+tests). See `design.md` §3.4/§3.10 for the full decided formula writeup
+and harness numbers.
 
 **Mission-simulation decision gate resolved (user, 2026-10-01):** §2.5(c)'s
 outcome-tier shape — the one open question that was blocking M2's

@@ -24,12 +24,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class ProgramOpeningTest {
 
+    private static final List<Double> RD_BANDS = List.of(3.0, 6.0, 9.0, 12.0);
+
     private final ProgramCategory earlyRockets = new ProgramCategory("early-rockets", "Early Rockets");
 
     private final MissionComponent redstone =
-        new MissionComponent("rocket-redstone", SetSkill.ROCKETS, 3, 95, 50, List.of());
-    private final MissionComponent jupiterC = new MissionComponent("rocket-jupiter-c", SetSkill.ROCKETS, 3, 95, 60,
-        List.of(new MissionComponent.ReliabilityTransferSource("rocket-redstone", 50)));
+        new MissionComponent("rocket-redstone", SetSkill.ROCKETS, 3, 95, 85, RD_BANDS, 50, List.of());
+    private final MissionComponent jupiterC = new MissionComponent("rocket-jupiter-c", SetSkill.ROCKETS, 3, 95, 85,
+        RD_BANDS, 60, List.of(new MissionComponent.ReliabilityTransferSource("rocket-redstone", 50)));
 
     private final Program redstoneProgram =
         new Program("redstone-program", "early-rockets", 1_000, 0, List.of("rocket-redstone"), List.of());
@@ -38,10 +40,10 @@ class ProgramOpeningTest {
     private final Program comboProgram = new Program("combo-program", "early-rockets", 2_000, 0,
         List.of("rocket-redstone", "rocket-jupiter-c"), List.of());
 
-    private final MissionComponent overcapped = new MissionComponent("rocket-overcapped", SetSkill.ROCKETS, 90, 95, 100,
-        List.of(new MissionComponent.ReliabilityTransferSource("rocket-source-full", 100)));
+    private final MissionComponent overcapped = new MissionComponent("rocket-overcapped", SetSkill.ROCKETS, 90, 95,
+        95, RD_BANDS, 100, List.of(new MissionComponent.ReliabilityTransferSource("rocket-source-full", 100)));
     private final MissionComponent sourceFull =
-        new MissionComponent("rocket-source-full", SetSkill.ROCKETS, 3, 100, 0, List.of());
+        new MissionComponent("rocket-source-full", SetSkill.ROCKETS, 3, 100, 90, RD_BANDS, 0, List.of());
     private final Program overcappedProgram =
         new Program("overcapped-program", "early-rockets", 1_000, 0, List.of("rocket-overcapped"), List.of());
 
@@ -129,8 +131,8 @@ class ProgramOpeningTest {
      */
     @Test
     void reliabilityTransferCappedAtMaximum() {
-        MissionComponent heavilyTransferred = new MissionComponent("rocket-target", SetSkill.ROCKETS, 3, 95, 60,
-            List.of(new MissionComponent.ReliabilityTransferSource("source-a", 60),
+        MissionComponent heavilyTransferred = new MissionComponent("rocket-target", SetSkill.ROCKETS, 3, 95, 85,
+            RD_BANDS, 60, List.of(new MissionComponent.ReliabilityTransferSource("source-a", 60),
                 new MissionComponent.ReliabilityTransferSource("source-b", 60)));
         Map<String, OwnedMissionComponent> owned = Map.of(
             "source-a", new OwnedMissionComponent(90, 3),

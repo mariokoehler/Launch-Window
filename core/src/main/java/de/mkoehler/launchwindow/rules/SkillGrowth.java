@@ -1,5 +1,8 @@
 package de.mkoehler.launchwindow.rules;
 
+import de.mkoehler.launchwindow.content.MissionComponent;
+
+import java.util.List;
 import java.util.random.RandomGenerator;
 
 /**
@@ -66,12 +69,6 @@ public final class SkillGrowth {
 
     /** The highest random factor a season of flat SET R&D growth can draw. */
     public static final double RD_GAIN_FACTOR_MAX = 0.35;
-
-    /** The lowest random factor a season of R&D-driven component-reliability growth can draw. */
-    public static final double RD_RELIABILITY_FACTOR_MIN = 0.05;
-
-    /** The highest random factor a season of R&D-driven component-reliability growth can draw. */
-    public static final double RD_RELIABILITY_FACTOR_MAX = 0.15;
 
     /**
      * Not instantiable; this class only exposes static methods.
@@ -153,42 +150,115 @@ public final class SkillGrowth {
     }
 
     /**
-     * The diminishing-returns growth formula for a mission component's
-     * reliability growing from sustained R&amp;D work, scaled by the
-     * assignee's own skill in that component's group - a <em>separate</em>
-     * function from {@link #diminishingReturnsGain}, not that function
-     * reused with an external clamp, because its distance-to-cap term is
-     * computed against the given {@code maxReliability} directly rather
-     * than the fixed {@link #SKILL_CAP}: a component instance's own
-     * reliability ceiling is not always 100, so reusing the
-     * fixed-100-cap formula would compute too large a gain near that
-     * component's own ceiling and then clip sharply there, not taper off.
-     * The same shape as the post-mission reliability-change formula a
-     * future mission-simulation resolver will need.
+     * One R&amp;D slot's per-season reliability-gain contribution -
+     * <b>code-confirmed, re-deriving {@code baspm.md} &sect;10.8's exact
+     * formula</b> (user decision, 2026-10-01, see {@code design.md}
+     * &sect;3.4) with Launch Window's own numbers, not BASPM's: a
+     * <em>separate</em> function from {@link #diminishingReturnsGain}, not
+     * that function reused with an external clamp, because its
+     * distance-to-cap term is computed against the given
+     * {@code maxRdReliability} directly rather than the fixed
+     * {@link #SKILL_CAP}: a component instance's own R&amp;D ceiling is not
+     * always 100, so reusing the fixed-100-cap formula would compute too
+     * large a gain near that ceiling and then clip sharply there, not taper
+     * off. {@link ResearchProgress} sums one call of this per occupied slot
+     * to get a component's total gain for the season - this method itself
+     * doesn't sum across slots, apply the stagnation guard, or clamp to
+     * {@code maxRdReliability}, since those are whole-component concerns,
+     * not a single slot's.
      *
-     * <p>(Unconfirmed default - both this shape and {@link #RD_RELIABILITY_FACTOR_MIN}/
-     * {@link #RD_RELIABILITY_FACTOR_MAX}, see {@code design.md} &sect;3.4):
-     * Launch Window's own formula, not yet verified against the decompiled
-     * source - {@code baspm.md} only has a manual-level claim that this
-     * gain scales with skill at all.</p>
-     *
-     * @param currentReliability the component's current reliability before
-     *                           this gain
-     * @param maxReliability     the component's own reliability ceiling
-     * @param assigneeSkill      the assignee's current skill in the
-     *                           component's associated group
-     * @param factor             the random factor for this season, normally
-     *                           drawn via {@link #drawRdReliabilityFactor}
-     * @return the gain to add to {@code currentReliability}; never
-     *     negative, and {@code currentReliability + gain} never exceeds
-     *     {@code maxReliability} for any {@code factor} and
-     *     {@code assigneeSkill} in {@code [0, SKILL_CAP]}
+     * @param rawAmount           this slot's raw improvement amount for the
+     *                            season, normally drawn via
+     *                            {@link #drawRdSlotRawAmount}
+     * @param currentReliability  the component's current reliability before
+     *                            this season's R&amp;D, shared by every slot
+     *                            (BASPM computes the headroom factor once
+     *                            per component, before any slot's
+     *                            contribution, not sequentially per slot)
+     * @param maxRdReliability    the component's own R&amp;D reliability
+     *                            ceiling (always &le; its absolute
+     *                            {@code maxReliability} - see
+     *                            {@link MissionComponent#maxRdReliability()})
+     * @param assigneeSkill       this slot's assignee's current skill in the
+     *                            component's associated group
+     * @return this slot's contribution to add to {@code currentReliability};
+     *     never negative
      */
-    public static double reliabilityGain(double currentReliability, double maxReliability, double assigneeSkill,
-            double factor) {
-        double distanceToCap = Math.max(0.0, maxReliability - currentReliability);
+    public static double rdReliabilityGain(double rawAmount, double currentReliability, double maxRdReliability,
+            double assigneeSkill) {
+        double headroomFactor = Math.max(0.0, maxRdReliability - currentReliability) / 100.0;
         double skillFraction = clamp(assigneeSkill / SKILL_CAP, 0.0, 1.0);
-        return distanceToCap * factor * skillFraction;
+        return rawAmount * headroomFactor * skillFraction;
+    }
+
+    /**
+     * Draws the raw improvement amount one R&amp;D slot contributes this
+     * season, uniformly from that slot's own band within
+     * {@code rdSlotBandMaxAmounts} - re-deriving {@code baspm.md}
+     * &sect;10.8's per-component {@code RDLevelMaxAmount L1}-{@code L4}
+     * mechanic: slot 0 (the best) draws from the band between the third and
+     * fourth entries, each successive slot one band lower, down to slot
+     * {@value MissionComponent#RD_SLOT_COUNT}{@code  - 1} (the worst), which
+     * draws from {@code [0, rdSlotBandMaxAmounts.get(0)]}.
+     *
+     * @param rdSlotBandMaxAmounts the component's four ascending band
+     *                             ceilings, see
+     *                             {@link MissionComponent#rdSlotBandMaxAmounts()}
+     * @param slot                 the slot index, {@code 0} to
+     *                              {@value MissionComponent#RD_SLOT_COUNT}{@code  - 1}
+     * @param random                the random source to draw from
+     * @return the drawn raw amount
+     * @throws IllegalArgumentException if {@code slot} is outside
+     *                                   {@code [0, }{@value MissionComponent#RD_SLOT_COUNT}{@code )}
+     *                                   or {@code rdSlotBandMaxAmounts}
+     *                                   doesn't have exactly
+     *                                   {@value MissionComponent#RD_SLOT_COUNT}
+     *                                   entries
+     */
+    public static double drawRdSlotRawAmount(List<Double> rdSlotBandMaxAmounts, int slot, RandomGenerator random) {
+        double lower = rdSlotBandLower(rdSlotBandMaxAmounts, slot);
+        double upper = rdSlotBandUpper(rdSlotBandMaxAmounts, slot);
+        return lower >= upper ? lower : random.nextDouble(lower, upper);
+    }
+
+    /**
+     * Returns the inclusive lower bound of one R&amp;D slot's raw-amount
+     * band - see {@link #drawRdSlotRawAmount}.
+     *
+     * @param rdSlotBandMaxAmounts the component's four ascending band
+     *                             ceilings
+     * @param slot                 the slot index
+     * @return the band's lower bound; {@code 0} for the worst slot
+     */
+    public static double rdSlotBandLower(List<Double> rdSlotBandMaxAmounts, int slot) {
+        validateSlot(rdSlotBandMaxAmounts, slot);
+        return slot == MissionComponent.RD_SLOT_COUNT - 1 ? 0.0 : rdSlotBandMaxAmounts.get(2 - slot);
+    }
+
+    /**
+     * Returns the inclusive upper bound of one R&amp;D slot's raw-amount
+     * band - see {@link #drawRdSlotRawAmount}.
+     *
+     * @param rdSlotBandMaxAmounts the component's four ascending band
+     *                             ceilings
+     * @param slot                 the slot index
+     * @return the band's upper bound
+     */
+    public static double rdSlotBandUpper(List<Double> rdSlotBandMaxAmounts, int slot) {
+        validateSlot(rdSlotBandMaxAmounts, slot);
+        return rdSlotBandMaxAmounts.get(MissionComponent.RD_SLOT_COUNT - 1 - slot);
+    }
+
+    private static void validateSlot(List<Double> rdSlotBandMaxAmounts, int slot) {
+        if (rdSlotBandMaxAmounts.size() != MissionComponent.RD_SLOT_COUNT) {
+            throw new IllegalArgumentException(
+                "rdSlotBandMaxAmounts must have exactly " + MissionComponent.RD_SLOT_COUNT + " entries: "
+                    + rdSlotBandMaxAmounts);
+        }
+        if (slot < 0 || slot >= MissionComponent.RD_SLOT_COUNT) {
+            throw new IllegalArgumentException(
+                "slot must be within [0, " + MissionComponent.RD_SLOT_COUNT + "): " + slot);
+        }
     }
 
     /**
@@ -212,19 +282,6 @@ public final class SkillGrowth {
      */
     public static double drawRdGainFactor(RandomGenerator random) {
         return random.nextDouble(RD_GAIN_FACTOR_MIN, RD_GAIN_FACTOR_MAX);
-    }
-
-    /**
-     * Draws a random factor for one season of R&amp;D-driven
-     * component-reliability growth, uniformly from
-     * {@code [}{@link #RD_RELIABILITY_FACTOR_MIN}{@code ,}
-     * {@link #RD_RELIABILITY_FACTOR_MAX}{@code )}.
-     *
-     * @param random the random source to draw from
-     * @return the drawn factor
-     */
-    public static double drawRdReliabilityFactor(RandomGenerator random) {
-        return random.nextDouble(RD_RELIABILITY_FACTOR_MIN, RD_RELIABILITY_FACTOR_MAX);
     }
 
     /**

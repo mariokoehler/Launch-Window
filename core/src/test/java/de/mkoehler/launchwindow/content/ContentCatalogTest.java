@@ -16,9 +16,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class ContentCatalogTest {
 
+    private static final List<Double> RD_BANDS = List.of(3.0, 6.0, 9.0, 12.0);
+
     private final ProgramCategory earthOrbit = new ProgramCategory("earth-orbit", "Earth Orbit");
     private final MissionComponent rocket =
-        new MissionComponent("rocket-1", SetSkill.ROCKETS, 3, 95, 50, List.of());
+        new MissionComponent("rocket-1", SetSkill.ROCKETS, 3, 95, 85, RD_BANDS, 50, List.of());
     private final Program sputnik =
         new Program("sputnik-1", "earth-orbit", 1_000, 50, List.of("rocket-1"), List.of());
     private final MissionStep sputnikStep = new MissionStep("ascent",
@@ -145,7 +147,8 @@ class ContentCatalogTest {
      */
     @Test
     void rejectsMissionConfigurationStepWithComponentNotRequiredByItsProgram() {
-        MissionComponent payload = new MissionComponent("payload-1", SetSkill.SPACE_PROBES, 3, 95, 0, List.of());
+        MissionComponent payload =
+            new MissionComponent("payload-1", SetSkill.SPACE_PROBES, 3, 95, 85, RD_BANDS, 0, List.of());
         MissionStep stepWithUnrequiredComponent = new MissionStep("ascent",
             List.of(new MissionStep.ComponentInvolvement("payload-1", 100)), List.of(), List.of(), false);
         MissionConfiguration configuration = new MissionConfiguration("sputnik-1-std", "sputnik-1",
@@ -163,7 +166,7 @@ class ContentCatalogTest {
      */
     @Test
     void rejectsComponentWithUnknownTransferSource() {
-        MissionComponent withBadSource = new MissionComponent("rocket-2", SetSkill.ROCKETS, 3, 95, 50,
+        MissionComponent withBadSource = new MissionComponent("rocket-2", SetSkill.ROCKETS, 3, 95, 85, RD_BANDS, 50,
             List.of(new MissionComponent.ReliabilityTransferSource("unknown-component", 50)));
 
         assertThrows(IllegalArgumentException.class, () -> new ContentCatalog(
@@ -176,8 +179,8 @@ class ContentCatalogTest {
      */
     @Test
     void rejectsComponentTransferSourceReferencingItself() {
-        MissionComponent selfTransferring = new MissionComponent("rocket-1", SetSkill.ROCKETS, 3, 95, 50,
-            List.of(new MissionComponent.ReliabilityTransferSource("rocket-1", 50)));
+        MissionComponent selfTransferring = new MissionComponent("rocket-1", SetSkill.ROCKETS, 3, 95, 85, RD_BANDS,
+            50, List.of(new MissionComponent.ReliabilityTransferSource("rocket-1", 50)));
 
         assertThrows(IllegalArgumentException.class, () -> new ContentCatalog(
             List.of(), List.of(), List.of(), List.of(selfTransferring)));
@@ -192,7 +195,8 @@ class ContentCatalogTest {
      */
     @Test
     void reportsMultipleStepReferenceProblemsTogether() {
-        MissionComponent payload = new MissionComponent("payload-1", SetSkill.SPACE_PROBES, 3, 95, 0, List.of());
+        MissionComponent payload =
+            new MissionComponent("payload-1", SetSkill.SPACE_PROBES, 3, 95, 85, RD_BANDS, 0, List.of());
         MissionStep stepWithUnknownComponent = new MissionStep("ascent",
             List.of(new MissionStep.ComponentInvolvement("unknown-component", 100)), List.of(), List.of(), false);
         MissionStep stepWithUnrequiredComponent = new MissionStep("orbit-insertion",

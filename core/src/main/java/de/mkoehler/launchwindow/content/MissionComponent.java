@@ -31,7 +31,25 @@ import java.util.Objects;
  * @param baselineReliability        the reliability (0-100) a freshly
  *                                   granted, untransferred component starts at
  * @param maxReliability             the reliability (0-100) ceiling this
- *                                   component can never exceed
+ *                                   component can never exceed, by any means
+ * @param maxRdReliability           the reliability (0-100) ceiling R&amp;D
+ *                                   alone can reach - at or below
+ *                                   {@link #maxReliability}, never above;
+ *                                   closing the remaining gap (if any) needs
+ *                                   a future mission-simulation slice's
+ *                                   post-mission reliability change instead,
+ *                                   re-deriving {@code baspm.md} &sect;10.8's
+ *                                   own two-ceiling shape (user decision,
+ *                                   2026-10-01, see {@code design.md}
+ *                                   &sect;3.4)
+ * @param rdSlotBandMaxAmounts       four ascending raw-improvement-amount
+ *                                   ceilings, one per R&amp;D slot band -
+ *                                   see {@code de.mkoehler.launchwindow.rules.SkillGrowth}
+ *                                   for how a slot's band is derived from
+ *                                   this list, re-deriving {@code baspm.md}
+ *                                   &sect;10.8's own per-component
+ *                                   {@code RDLevelMaxAmount L1}-{@code L4}
+ *                                   data, with Launch Window's own numbers
  * @param maxReliabilityTransfer     the reliability-transfer cap (0-100):
  *                                   however many qualifying
  *                                   {@link #reliabilityTransferSources()} a
@@ -46,35 +64,64 @@ import java.util.Objects;
  * @author Mario Koehler
  */
 public record MissionComponent(String id, SetSkill associatedSkill, double baselineReliability,
-                                double maxReliability, double maxReliabilityTransfer,
+                                double maxReliability, double maxRdReliability,
+                                List<Double> rdSlotBandMaxAmounts, double maxReliabilityTransfer,
                                 List<ReliabilityTransferSource> reliabilityTransferSources) {
+
+    /** The number of simultaneous R&amp;D slots every mission component has - {@code baspm.md} &sect;10.8. */
+    public static final int RD_SLOT_COUNT = 4;
 
     /**
      * Validates every field and defensively copies
-     * {@code reliabilityTransferSources} into an unmodifiable view.
+     * {@code rdSlotBandMaxAmounts}/{@code reliabilityTransferSources} into
+     * unmodifiable views.
      *
      * @throws NullPointerException     if {@code id}/{@code associatedSkill}/
+     *                                   {@code rdSlotBandMaxAmounts}/
      *                                   {@code reliabilityTransferSources} is
      *                                   {@code null}
      * @throws IllegalArgumentException if {@code id} is blank, any
      *                                   reliability value is outside 0-100,
-     *                                   or {@code baselineReliability}
-     *                                   exceeds {@code maxReliability}
+     *                                   {@code baselineReliability} exceeds
+     *                                   {@code maxRdReliability},
+     *                                   {@code maxRdReliability} exceeds
+     *                                   {@code maxReliability}, or
+     *                                   {@code rdSlotBandMaxAmounts} doesn't
+     *                                   have exactly {@value #RD_SLOT_COUNT}
+     *                                   non-negative, ascending entries
      */
     public MissionComponent {
         Objects.requireNonNull(id, "id must not be null");
         Objects.requireNonNull(associatedSkill, "associatedSkill must not be null");
+        Objects.requireNonNull(rdSlotBandMaxAmounts, "rdSlotBandMaxAmounts must not be null");
         Objects.requireNonNull(reliabilityTransferSources, "reliabilityTransferSources must not be null");
         if (id.isBlank()) {
             throw new IllegalArgumentException("id must not be blank");
         }
         requirePercentage(baselineReliability, "baselineReliability");
         requirePercentage(maxReliability, "maxReliability");
+        requirePercentage(maxRdReliability, "maxRdReliability");
         requirePercentage(maxReliabilityTransfer, "maxReliabilityTransfer");
-        if (baselineReliability > maxReliability) {
+        if (baselineReliability > maxRdReliability) {
             throw new IllegalArgumentException(
-                "baselineReliability " + baselineReliability + " exceeds maxReliability " + maxReliability);
+                "baselineReliability " + baselineReliability + " exceeds maxRdReliability " + maxRdReliability);
         }
+        if (maxRdReliability > maxReliability) {
+            throw new IllegalArgumentException(
+                "maxRdReliability " + maxRdReliability + " exceeds maxReliability " + maxReliability);
+        }
+        if (rdSlotBandMaxAmounts.size() != RD_SLOT_COUNT) {
+            throw new IllegalArgumentException(
+                "rdSlotBandMaxAmounts must have exactly " + RD_SLOT_COUNT + " entries: " + rdSlotBandMaxAmounts);
+        }
+        double previous = 0.0;
+        for (double amount : rdSlotBandMaxAmounts) {
+            if (amount < previous) {
+                throw new IllegalArgumentException("rdSlotBandMaxAmounts must be ascending: " + rdSlotBandMaxAmounts);
+            }
+            previous = amount;
+        }
+        rdSlotBandMaxAmounts = List.copyOf(rdSlotBandMaxAmounts);
         reliabilityTransferSources = List.copyOf(reliabilityTransferSources);
     }
 

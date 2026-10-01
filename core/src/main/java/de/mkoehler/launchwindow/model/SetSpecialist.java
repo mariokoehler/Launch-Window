@@ -24,6 +24,7 @@ public class SetSpecialist extends Personnel {
     private Map<SetSkill, Double> skills = new LinkedHashMap<>();
     private SetSkill trainingTargetSkill;
     private String rdTargetComponentId;
+    private Integer rdSlot;
 
     /**
      * No-argument constructor required for Jackson deserialization.
@@ -128,5 +129,29 @@ public class SetSpecialist extends Personnel {
      */
     public void setRdTargetComponentId(String rdTargetComponentId) {
         this.rdTargetComponentId = rdTargetComponentId;
+    }
+
+    /**
+     * Returns which of the targeted component's four R&amp;D slots this
+     * specialist occupies (0 = best reward band, 3 = worst) - a deliberate
+     * player choice, re-deriving {@code baspm.md} &sect;10.8's own
+     * explicit-slot mechanic (user decision, 2026-10-01, see
+     * {@code design.md} &sect;3.4). Meaningless when
+     * {@link #getRdTargetComponentId()} is {@code null}.
+     *
+     * @return the slot index (0-3), or {@code null} if not doing R&amp;D
+     */
+    public Integer getRdSlot() {
+        return rdSlot;
+    }
+
+    /**
+     * Sets which of the targeted component's four R&amp;D slots this
+     * specialist occupies.
+     *
+     * @param rdSlot the slot index (0-3), or {@code null}
+     */
+    public void setRdSlot(Integer rdSlot) {
+        this.rdSlot = rdSlot;
     }
 }

@@ -1105,6 +1105,43 @@ hire next. A strong, self-contained mechanic worth carrying into Launch
 Window's own personnel design, independent of whether the exact skillset/
 morale/learning-potential bucket numbers are kept.
 
+**Correction (2026-10-01): the numbers *are* recoverable after all — the
+2026-09-30 search just looked in the wrong half of the dump.**
+`PersonnelManagerConstants.xml` isn't inside `extracted/`/`monobehaviours/`
+(the packed-asset dump that search covered); it's a **loose file on disk**
+in the game install itself, `SPM-Windows_Data\Scripts\Data
+Scripts\General Container\PersonnelManagerConstants.xml` — same lesson
+§10.8 draws for the R&D-reliability formula's own constants file, found the
+same session by checking the install directly instead of the extraction
+dump.
+
+**Actual bands, six tiers by `MoraleUpperLimit` (50/60/70/80/90/100), each
+listing 5 `CandidateProfile` rows with a `Ratio` (sums to 1.0 per tier):**
+only the two lowest tiers ever offer a "Poor" skillset at all —
+`MoraleUpperLimit="50"` at `Ratio="0.2"`, `MoraleUpperLimit="60"` at
+`Ratio="0.1"` — every tier above 60 never offers "Poor" again. **This is
+directionally consistent with the bot harness's own numbers** (`design.md`
+§3.10: "Poor" landed 0 times across 200 games/26,589+ "Excellent" draws),
+though not a confirmed match of the exact mechanism: Launch Window's own
+`HiringPool` picks one deterministic skill band from the roster's average
+morale (`POOR_MORALE_CEILING = 44`, its own re-derived number per
+`design.md` §1.2), where BASPM instead mixes several candidate profiles
+probabilistically within one of six wider tiers — the two aren't directly
+comparable band-for-band. What *is* fair to say: in both systems, a
+roster's average morale has to be sitting fairly low (at or below 60 in
+BASPM, not far above the `DisgruntedEmployeesMoraleRange MinValue="40"`
+resignation floor the same file confirms) before "Poor"/worst-tier
+candidates become reachable at all, and ordinary churn is normally enough
+to keep morale above that line in both — **plausibly the same underlying
+shape, not confirmed as the same mechanism** — a looser claim than the
+one this correction originally made.
+
+(The same file also confirms, in passing, real BASPM's own retirement
+ages — `ASTRONAUTS="55"`, `MISSIONCONTROL="65"`, `SET="75"` — and its
+skill cap, `MaxSkillCompetencyValue="98"`, both already known not to be
+reused verbatim per `design.md` §1.2, so no action needed, just noted for
+completeness now that the source is in hand.)
+
 ### 9.5 Tiger Teams: confirmed — a pay-to-boost-the-saving-throw mechanic, and a real mid-step pause
 
 **Code-confirmed, resolves the loose end flagged in §8.2.** The hypothesis
@@ -1323,6 +1360,22 @@ construction (factor multiplies the *remaining headroom* to max, same
 another case of this project's preferred diminishing-returns curve shape
 showing up independently in a third system.
 
+**Also unassigns SET, same as §10.8's own R&D-side release — found the
+same session §10.8 was traced.** Right after computing the new
+`CurrReliability` above, `UpdatePlayersMissionComponentAfterMission`
+(lines ~595-602) clamps it at `MaxReliability` and checks the resulting
+value: **if the post-flight `CurrReliability` is at or above
+`MaxRDReliability` — a state check, not a one-directional "pushed past
+it," so even a *failed* flight that knocks a component's reliability down
+while it's still sitting at/above that ceiling triggers this the same
+way** — it calls the same `UnassignAllSETPersonnelFromMissionComponent`
+method §10.8 item 5 describes, immediately, not via the interseason
+recheck R&D's own release path uses. So any mission flight that leaves a
+component's reliability at or above its R&D ceiling releases its
+researchers on the spot — a second, more direct trigger for the identical
+release mechanic, this one requiring no later recheck since it already
+has the post-flight value in hand.
+
 ### 10.5 The `DifficultyFactor` XML field: resolves baspm.md §8.4 item 4
 
 **Resolved by this pass, no in-game verification needed after all** — retract
@@ -1361,17 +1414,104 @@ server resolves mechanically" with no special-casing needed. See
    `OpeningCostDeductions`, `RequiredGoal` gating, and the "extended
    mission" variant choice are actually surfaced to the player, useful for
    calibrating Launch Window's own program-selection UI.
-3. **Trace the actual R&D-to-reliability formula** — this pass found no
-   decompiled source for how "R&D reliability gains scale with the
-   assignee's skill" (the manual-level summary in the overview's Core
-   Elements list) actually computes a mission component's reliability
-   gain from a season of SET R&D work, only the separate, code-confirmed
-   formula for the SET employee's *own* skill growth (§9.3). Needed:
-   `PersonnelManager`/`MissionComponentsManager`'s own R&D-handling
-   methods and whichever constants file holds this gain's factor range,
-   the same way §10.3/§10.4 traced reliability transfer and post-mission
-   change. `design.md` §3.4/§5 currently carries an unconfirmed,
-   Launch-Window-original formula for this pending that trace.
+3. ~~**Trace the actual R&D-to-reliability formula**~~ — **resolved
+   2026-10-01, see §10.8.**
+
+### 10.8 R&D reliability gains: the exact formula (resolves §10.7 item 3)
+
+**Code-confirmed (2026-10-01), traced on the main PC with `E:\Temp\BASPM`/
+game-install access**, via `MissionComponentsManager.PerformRDProcessOnPlayerMsnCmp`
+(static, called every season for every mission component in
+`player.GetMissionComponentsToRDIDs()`) plus the loose
+`SPM-Windows_Data\Scripts\Data Scripts\General Container\MissionComponents.xml`/
+`MsnCmpsManagerConstants.xml` for the actual numbers. **That XML pair lives
+unpacked on disk** (`ScriptLocationType.ApplicationDataPathFolder`), not inside
+an asset bundle — earlier passes that only searched `extracted/`/
+`monobehaviours/` (e.g. the `MoraleUpperLimit` dead end, §9.4) missed it
+because they were looking in the wrong half of the dump; worth remembering for
+any future "data file not found in the dump" case — check the loose
+`SPM-Windows_Data\Scripts\Data Scripts\` tree in the game install itself
+before concluding a constants file is unrecoverable.
+
+**The mechanic is substantially richer than the manual-level summary
+suggested — five distinct parts, not one:**
+
+1. **A separate, lower ceiling just for R&D, `MaxRDReliability`** — distinct
+   from the component's absolute `MaxReliability` (the post-mission-use
+   ceiling, §10.4). Per the sample data, `MaxRD` sits roughly 7-10 points
+   under `Max` per component (e.g. `JUPITER-C`: `Max=95.05`, `MaxRD=85.16`;
+   `ATLAS`: `Max=97.50`, `MaxRD=90.30`) — R&D alone can get a component most
+   of the way there, but actually flying it is the only way past that last
+   stretch. Both ceilings are separately difficulty-scaled at load time
+   (`RelMaxMultiplier`/`RelMaxRDMultiplier`, 1.05/1.0/0.95 across
+   Easy/Normal/Hard).
+2. **Up to four SET employees can be assigned to the same component's R&D
+   simultaneously**, each occupying one of four explicit slots
+   (`MissionComponent.AssignSETEmployeeID(slot, id)` — the slot is a
+   deliberate player choice, not auto-assigned by skill). Each slot draws
+   its raw per-season improvement from its own fixed band, authored per
+   component as ascending `RDLevelMaxAmount L1`-`L4` XML attributes:
+   **slot 0 draws from `[L3, L4]`, slot 1 from `[L2, L3]`, slot 2 from
+   `[L1, L2]`, slot 3 from `[0, L1]`** — e.g. `JUPITER-C`'s `L1..L4 =
+   9/14/19/28`, so a lone researcher in slot 0 draws 19-28 raw points, a
+   fourth researcher added in slot 3 only ever draws 0-9. This is a second,
+   independent diminishing-returns lever on top of the headroom one below —
+   stacking researchers on one component has real but sharply shrinking
+   marginal value, and *which* slot an employee is placed in matters as
+   much as how many are assigned.
+3. **Per-slot gain formula:** `rawAmount(slot's band) ×
+   ((MaxRDReliability − CurrReliability) / 100) × (assigneeSkillCompetency
+   / 100)` — summed across all occupied slots for that season's total
+   improvement, then added to `CurrReliability` and clamped to
+   `MaxRDReliability`. The `(MaxRDReliability − CurrReliability) / 100`
+   term is the "remaining headroom" diminishing-returns factor — same
+   shape family as training (§9.3) and post-mission reliability change
+   (§10.4), its fourth independent appearance in the codebase. The skill
+   term is a flat 0-1 scaling of skill competency (0-100 scale), not
+   itself diminishing-returns-shaped.
+4. **A stagnation guard:** if remaining headroom drops under `0.1` points
+   and any gain was computed, the game snaps straight to `MaxRDReliability`
+   instead of letting the per-season gain asymptotically crawl forever.
+5. **Reaching `MaxRDReliability` auto-releases every assigned SET
+   employee from that component, code-confirmed in `Player.cs` — a
+   different, misleadingly-named method than the one above
+   (`UpdateMissionComponentAndMakeSETEmployeesAvailableBackAgain`,
+   called from inside the R&D pass itself) actually does nothing more
+   than record a `MaxRDReliabilityReached` flag on that season's
+   `MissionComponentsUpdated` entry, despite its name.** The real
+   release is a separate method,
+   `Player.ProcessAndRetrieveAllMissionComponentsThatReachedMaxRDReliabilityAtSomePointDuringTheLastSeason`
+   (`Player.cs` lines 2184-2200), called from `ETInterseasonOverlay.cs:792`
+   (interseason news-item generation, a UI-adjacent call site — not
+   re-verified to run at exactly the same resolution step as the R&D pass
+   itself, only confirmed to be the same season). It scans every flagged
+   component and **rechecks** `CurrReliability >= MaxRDReliability`: if
+   still true, it calls `UnassignAllSETPersonnelFromMissionComponent`
+   (clearing all four slots and making every employee "available again");
+   if the component somehow dropped back below the ceiling by then, it
+   just clears the flag instead. The net effect: once R&D alone can't
+   improve a component any further, its researchers are automatically
+   freed to do something else, rather than sitting parked there
+   indefinitely for no further gain.
+
+**`RDDifficultyFactor` (the per-component XML attribute already known about)
+plays no role in this formula at all** — confirmed by a codebase-wide
+search, it's used exactly once, purely for a UI display stat
+(`GetMissionComponentRelativeRDDifficultyFactor`, "this component's R&D
+difficulty relative to the hardest component in its skill group," shown to
+the player as flavor/comparison info, not consumed by any gain
+calculation).
+
+**Decided the same session (user, 2026-10-01), after this trace was
+presented as two explicit choices:** adopt BASPM's full shape, both
+halves — the two-ceiling mechanic and the four-slot one — rather than
+keeping Launch Window's earlier, deliberately-simpler single-assignee
+placeholder. Implemented the same session as
+`SkillGrowth.rdReliabilityGain`/`drawRdSlotRawAmount`/`rdSlotBandLower`/
+`rdSlotBandUpper` and a rewritten `ResearchProgress` (the old
+single-assignee `SkillGrowth.reliabilityGain` is gone). See `design.md`
+§3.4 for the full decided formula, with Launch Window's own numbers, not
+BASPM's.
 
 ## 11. Budget, prestige, and goals (traced 2026-09-27)
 

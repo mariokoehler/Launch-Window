@@ -2,6 +2,7 @@ package de.mkoehler.launchwindow.rules;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -168,63 +169,108 @@ class SkillGrowthTest {
     }
 
     /**
-     * Verifies the exact reliability-gain formula: distance to the
-     * component's own ceiling, times the factor, times the assignee's
-     * skill as a fraction of {@link SkillGrowth#SKILL_CAP}.
+     * Verifies the exact per-slot reliability-gain formula - re-deriving
+     * {@code baspm.md} &sect;10.8's code-confirmed formula: the slot's raw
+     * amount, times the component's own headroom to its R&amp;D ceiling as
+     * a fraction of 100, times the assignee's skill as a fraction of
+     * {@link SkillGrowth#SKILL_CAP}.
      */
     @Test
-    void reliabilityGainMatchesTheExactFormula() {
-        // (90 - 50) * 0.1 * (80 / 100) = 3.2.
-        assertEquals(3.2, SkillGrowth.reliabilityGain(50.0, 90.0, 80.0, 0.1), 1e-9);
+    void rdReliabilityGainMatchesTheExactFormula() {
+        // 10 * ((90 - 50) / 100) * (80 / 100) = 10 * 0.4 * 0.8 = 3.2.
+        assertEquals(3.2, SkillGrowth.rdReliabilityGain(10.0, 50.0, 90.0, 80.0), 1e-9);
     }
 
     /**
      * Verifies a zero-skill assignee contributes no reliability gain at
-     * all, regardless of how far the component is from its own ceiling.
+     * all, regardless of raw amount or headroom.
      */
     @Test
-    void reliabilityGainWithZeroSkillIsZero() {
-        assertEquals(0.0, SkillGrowth.reliabilityGain(10.0, 90.0, 0.0, SkillGrowth.RD_RELIABILITY_FACTOR_MAX));
+    void rdReliabilityGainWithZeroSkillIsZero() {
+        assertEquals(0.0, SkillGrowth.rdReliabilityGain(12.0, 10.0, 90.0, 0.0));
     }
 
     /**
-     * Verifies the gain never pushes a component's reliability past its
-     * own {@code maxReliability}, even when that ceiling is well below
-     * {@link SkillGrowth#SKILL_CAP} - the exact bug this formula exists to
-     * avoid, that a formula scaled against the fixed skill cap instead
-     * would not catch near a lower, component-specific ceiling.
+     * Verifies a component already at its own R&amp;D ceiling contributes
+     * no further gain, regardless of raw amount or skill - the exact bug
+     * this formula's headroom term exists to avoid, that a formula scaled
+     * against the fixed skill cap instead would not catch near a lower,
+     * component-specific ceiling.
      */
     @Test
-    void reliabilityGainNeverPushesPastItsOwnMaxBelowTheSkillCap() {
-        double currentReliability = 89.0;
-        double maxReliability = 90.0;
-        double gain = SkillGrowth.reliabilityGain(currentReliability, maxReliability, SkillGrowth.SKILL_CAP,
-            SkillGrowth.RD_RELIABILITY_FACTOR_MAX);
-
-        assertTrue(currentReliability + gain <= maxReliability);
+    void rdReliabilityGainAtItsOwnCeilingIsZero() {
+        assertEquals(0.0, SkillGrowth.rdReliabilityGain(12.0, 90.0, 90.0, SkillGrowth.SKILL_CAP));
     }
 
     /**
-     * Verifies a component already at its own ceiling gains nothing
-     * further.
+     * Verifies the four R&amp;D slot bands - best (slot 0) to worst (slot
+     * 3) - match the ascending ceiling list exactly, re-deriving
+     * {@code baspm.md} &sect;10.8's own slot-to-band mapping with Launch
+     * Window's own numbers, not a BASPM component's real values.
      */
     @Test
-    void reliabilityGainAtItsOwnMaxIsZero() {
-        assertEquals(0.0,
-            SkillGrowth.reliabilityGain(90.0, 90.0, SkillGrowth.SKILL_CAP, SkillGrowth.RD_RELIABILITY_FACTOR_MAX));
+    void rdSlotBandsMatchTheDocumentedMapping() {
+        List<Double> bands = List.of(3.0, 6.0, 9.0, 12.0);
+
+        assertEquals(9.0, SkillGrowth.rdSlotBandLower(bands, 0));
+        assertEquals(12.0, SkillGrowth.rdSlotBandUpper(bands, 0));
+        assertEquals(6.0, SkillGrowth.rdSlotBandLower(bands, 1));
+        assertEquals(9.0, SkillGrowth.rdSlotBandUpper(bands, 1));
+        assertEquals(3.0, SkillGrowth.rdSlotBandLower(bands, 2));
+        assertEquals(6.0, SkillGrowth.rdSlotBandUpper(bands, 2));
+        assertEquals(0.0, SkillGrowth.rdSlotBandLower(bands, 3));
+        assertEquals(3.0, SkillGrowth.rdSlotBandUpper(bands, 3));
     }
 
     /**
-     * Verifies {@code drawRdReliabilityFactor} always stays within its
-     * documented range across many draws.
+     * Verifies an out-of-range slot index is rejected.
      */
     @Test
-    void drawRdReliabilityFactorStaysWithinItsRange() {
+    void rdSlotBandsRejectOutOfRangeSlot() {
+        List<Double> bands = List.of(3.0, 6.0, 9.0, 12.0);
+
+        assertThrows(IllegalArgumentException.class, () -> SkillGrowth.rdSlotBandLower(bands, -1));
+        assertThrows(IllegalArgumentException.class, () -> SkillGrowth.rdSlotBandUpper(bands, 4));
+    }
+
+    /**
+     * Verifies a {@code rdSlotBandMaxAmounts} list with other than exactly
+     * four entries is rejected.
+     */
+    @Test
+    void rdSlotBandsRejectWrongListSize() {
+        assertThrows(IllegalArgumentException.class, () -> SkillGrowth.rdSlotBandLower(List.of(1.0, 2.0), 0));
+    }
+
+    /**
+     * Verifies {@code drawRdSlotRawAmount} always stays within the drawn
+     * slot's own band across many draws, for every slot.
+     */
+    @Test
+    void drawRdSlotRawAmountStaysWithinItsSlotsBand() {
+        List<Double> bands = List.of(3.0, 6.0, 9.0, 12.0);
         Random random = new Random(42L);
-        for (int i = 0; i < 1_000; i++) {
-            double factor = SkillGrowth.drawRdReliabilityFactor(random);
-            assertTrue(factor >= SkillGrowth.RD_RELIABILITY_FACTOR_MIN
-                && factor < SkillGrowth.RD_RELIABILITY_FACTOR_MAX);
+        for (int slot = 0; slot < 4; slot++) {
+            double lower = SkillGrowth.rdSlotBandLower(bands, slot);
+            double upper = SkillGrowth.rdSlotBandUpper(bands, slot);
+            for (int i = 0; i < 1_000; i++) {
+                double amount = SkillGrowth.drawRdSlotRawAmount(bands, slot, random);
+                assertTrue(amount >= lower && amount < upper,
+                    "slot " + slot + " drew " + amount + " outside [" + lower + ", " + upper + ")");
+            }
         }
+    }
+
+    /**
+     * Verifies a degenerate band (lower equal to upper, e.g. an all-zero
+     * band list) draws the fixed bound rather than throwing -
+     * {@code RandomGenerator.nextDouble(min, max)} itself requires a
+     * strictly smaller bound, so this formula must guard that case.
+     */
+    @Test
+    void drawRdSlotRawAmountHandlesADegenerateBand() {
+        List<Double> allZero = List.of(0.0, 0.0, 0.0, 0.0);
+
+        assertEquals(0.0, SkillGrowth.drawRdSlotRawAmount(allZero, 3, new Random(42L)));
     }
 }

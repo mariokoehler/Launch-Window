@@ -889,11 +889,26 @@ proceeds:
     (no caller exists yet, so this is not wired into the bot harness yet
     either): the per-player in-progress-mission state, the resolver that
     actually walks a season's steps against that state, post-mission
-    reliability change (expected to reuse `SkillGrowth.reliabilityGain`'s
-    shape with its own factor range), mission-based astronaut/controller
-    skill growth, and re-confirming `AssignmentState.ASSIGNED` is still a
+    reliability change (expected to reuse the same headroom-based
+    diminishing-returns shape as `SkillGrowth.rdReliabilityGain`'s own
+    headroom term, against the component's absolute `maxReliability` this
+    time rather than `maxRdReliability` - but as a single random-factor
+    draw against the whole component, not a multi-slot one: BASPM's own
+    post-mission formula, `baspm.md` §10.4, has no slot concept at all,
+    only R&D does, per §10.8), mission-based astronaut/controller
+    skill growth, re-confirming `AssignmentState.ASSIGNED` is still a
     safe "on an active mission" proxy once real mission scheduling exists
-    (§2.2(c)'s own open follow-up).
+    (§2.2(c)'s own open follow-up), and **a post-flight SET-release
+    mechanic parallel to R&D's own** (see R&D's entry above,
+    `ResearchComponentMaxed`): `baspm.md` §10.4's
+    `UpdatePlayersMissionComponentAfterMission` unassigns every SET
+    researcher from a component whenever a mission flight leaves its
+    reliability at or above `MaxRDReliability` - a state check, not a
+    one-directional "pushed past it," so even a failed flight that drops
+    reliability while it's still at/above that ceiling triggers it the
+    same way - the exact same
+    `UnassignAllSETPersonnelFromMissionComponent` call R&D's own release
+    uses, just triggered by a flight outcome instead of an R&D season.
   - **(e) The step/season content shape (2026-10-01):** `MissionStep`
     (`core/.../content`) holds what a step needs to feed
     `MissionStepResolution`, nothing about *who* is assigned — three
@@ -1376,60 +1391,135 @@ unconfirmed:**
   before any code, same convention as the training fields above - see
   §5's M2 status for the concrete classes:**
   `AssignmentState.ASSIGNED` now distinguishes "doing R&D" from
-  "assigned to a mission" via the field below, resolved without a new
+  "assigned to a mission" via the fields below, resolved without a new
   enum constant - SET's
   own `ASSIGNED` already means "working on mission components"
   (§2.2(c)'s departure-protection rule already treats it that way, and a
   new `AssignmentState` value would carry Kryo-ordinal and departure-
   protection consequences for no real gain) - instead `SetSpecialist`
-  gains a new field, `rdTargetComponentId` (`String`, nullable, the owned
-  `MissionComponent#id()` a `SET` employee's current `ASSIGNED` state is
-  working on; `null` when not doing R&D).
+  gains two new fields, `rdTargetComponentId` (`String`, nullable, the
+  owned `MissionComponent#id()` a `SET` employee's current `ASSIGNED`
+  state is working on; `null` when not doing R&D) and `rdSlot` (`Integer`,
+  nullable, which of that component's four R&D slots the employee
+  occupies; see below - "doing R&D" means both fields are set, not just
+  the target id).
   - **`baspm.md` §9.3 confirms two separate effects from one season of
     R&D, not one:** the SET employee's own skill-in-use grows by a flat
     `random(0.2, 0.4)` (BASPM's own numbers; re-derived as
     `SkillGrowth.RD_GAIN_FACTOR_MIN`/`MAX`, already implemented as
     `SkillGrowth.flatRdGain` - this part of the mechanic was already built
-    ahead of its caller existing). Separately, the manual-level summary
-    (not code-confirmed - `baspm.md` has no decompiled trace for this half,
-    not yet verified against the decompiled source) states "R&D
-    reliability gains scale with the assignee's skill in that component's
-    group" - the targeted `MissionComponent`'s own reliability grows too,
-    diminishing-returns-shaped against *its own* `maxReliability`, not the
-    personnel skill cap.
-  - **Unconfirmed default - both the formula shape and its factor range:
-    `SkillGrowth.reliabilityGain(currentReliability, maxReliability,
-    assigneeSkill, factor)`** - `(maxReliability − currentReliability) ×
-    factor × clamp(assigneeSkill ÷ SKILL_CAP, 0, 1)`. Launch Window's own
-    shape, not re-derived from a BASPM code trace: `baspm.md` has no
-    decompiled source for this half of the mechanic, only the manual-level
-    claim that it "scales with the assignee's skill" at all - the specific
-    diminishing-returns-against-its-own-ceiling shape and the
-    skill-as-a-fraction-of-`SKILL_CAP` scaling are both this proposal's own
-    choice, for the user to confirm or revise. Deliberately a new function,
-    not `diminishingReturnsGain` reused with an external clamp: that
-    function's own distance-to-cap term is hardwired to
-    `SkillGrowth.SKILL_CAP` (100), not a per-call cap, so reusing it for a
-    component whose `maxReliability` is below 100 would compute too large a
-    gain near that component's own ceiling and then clip sharply, not
-    taper off the way genuine diminishing returns should. The shape
-    matches `baspm.md` §10.4's own post-mission reliability-change formula,
-    `(MaxReliability − CurrReliability) × factor` - the same curve shape
-    showing up a fourth time, so a future mission-simulation slice's
-    post-mission change can reuse it too, just with a different factor
-    range. **`RD_RELIABILITY_FACTOR_MIN`/`MAX` are placeholder-but-concrete
-    Launch Window numbers**, same status as every other numeric constant
-    in this file, since BASPM has no code-confirmed range to re-derive
-    from either.
+    ahead of its caller existing). Separately, `baspm.md` §10.8 - traced
+    the same session once the user was back on the main PC with decompiled-
+    source access, resolving what had been a manual-level-only claim -
+    confirms "R&D reliability gains scale with the assignee's skill in that
+    component's group" means a considerably richer mechanic than a single
+    assignee scaling a single formula: see below.
+  - **Decided (user, 2026-10-01), re-deriving `baspm.md` §10.8's exact
+    code-confirmed mechanic with Launch Window's own numbers, after
+    presenting both halves of it as explicit choices:** adopt BASPM's full
+    multi-slot shape, not a simplified single-assignee version, and adopt
+    its two-ceiling shape too.
+    - **Two ceilings, not one:** `MissionComponent` gains `maxRdReliability`
+      (R&D alone can never push a component's `currentReliability` past
+      this; always ≤ `maxReliability`) alongside the existing
+      `maxReliability` (the absolute ceiling only a future mission-
+      simulation slice's post-mission reliability change can approach, per
+      §2.5(c)). Closing the gap between the two needs actually flying the
+      component, not more R&D - the point of having two ceilings at all.
+    - **Four explicit R&D slots per component**, not one open-ended pool of
+      assignees: `MissionComponent` gains `rdSlotBandMaxAmounts` (four
+      ascending raw-improvement-amount ceilings, re-deriving BASPM's own
+      per-component `RDLevelMaxAmount L1`-`L4` XML data), and
+      `SetSpecialist.rdSlot` records which slot (0 = best band, 3 = worst)
+      an assigned employee occupies - a deliberate choice, not auto-
+      assigned by skill, matching BASPM's own UI-level slot-assignment
+      mechanic (no player-action path for *choosing* a slot exists yet
+      either, same "no real assignment UI yet" status as R&D targeting
+      itself - see below).
+    - **Exact per-slot formula, `SkillGrowth.rdReliabilityGain(rawAmount,
+      currentReliability, maxRdReliability, assigneeSkill)`:** `rawAmount ×
+      ((maxRdReliability − currentReliability) ÷ 100) × clamp(assigneeSkill
+      ÷ SKILL_CAP, 0, 1)` - code-confirmed, not this project's own
+      invention the way the single-assignee placeholder was.
+      `SkillGrowth.drawRdSlotRawAmount`/`rdSlotBandLower`/`rdSlotBandUpper`
+      derive a slot's own band from the four ascending ceilings (slot 0
+      draws from the band between the 3rd and 4th entries, each
+      successive slot one band lower, slot 3 from `[0,` 1st entry`]`).
+      **Supersedes the single-assignee `SkillGrowth.reliabilityGain`**,
+      removed the same session, along with its now-dead
+      `RD_RELIABILITY_FACTOR_MIN`/`MAX` constants and
+      `drawRdReliabilityFactor`.
+    - **A component's headroom factor is computed once per season, shared
+      by every occupied slot** - not recomputed per assignee - matching
+      BASPM's own code exactly (`PerformRDProcessOnPlayerMsnCmp` computes
+      it once, before iterating slots). **This supersedes an earlier
+      version of this same proposal** ("two SET employees assigned to the
+      same component stack, applied in roster order, each computed against
+      whatever the component's reliability already is") - that sequential
+      model doesn't match BASPM's actual shared-headroom mechanic, only
+      traced after the fact.
+    - **A stagnation guard**: once remaining headroom drops under
+      `ResearchProgress.HEADROOM_STAGNATION_THRESHOLD` (Launch Window's own
+      value, `0.2`, not BASPM's `0.1` copied verbatim, per §1.2), any
+      positive nominal gain snaps the component straight to
+      `maxRdReliability` in one step, rather than crawling toward it
+      asymptotically forever - re-deriving BASPM's own guard's shape, not
+      its exact number.
+    - **A component reaching its R&D ceiling automatically releases every
+      SET employee occupying one of its slots back to `IDLE`** - caught
+      only on a post-implementation advisor pass, not in the first version
+      of this same session's implementation - re-deriving `baspm.md`
+      §10.8's own `ProcessAndRetrieveAllMissionComponentsThatReachedMaxRDReliabilityAtSomePointDuringTheLastSeason`/
+      `UnassignAllSETPersonnelFromMissionComponent` mechanic: checked
+      against reliability as it stands at the end of the season (so a
+      component already at its cap when first assigned to releases its
+      researcher the very next season too, not only the season it actually
+      reaches the cap). New event, `ResearchComponentMaxed(componentId,
+      releasedPersonnelIds)` - one per maxed component, not per employee;
+      BASPM's own per-employee `SETEmployeeAvailableBackAgain` has no
+      direct equivalent here yet, this grouping is Launch Window's own
+      choice. **Unconfirmed timing nuance:** BASPM triggers the release
+      from its own interseason-overlay news-item generation, a UI-adjacent
+      call site, not from inside the R&D resolver itself - functionally
+      the same season, but not re-verified to be the exact same resolution
+      step; folded directly into `ResearchProgress.advanceSeason` here,
+      which should be behaviorally equivalent for one player-snapshot's
+      turn resolution but is a simplification worth flagging.
+    - **Per-employee event attribution is Launch Window's own choice, not
+      a BASPM concept:** BASPM has no notion of per-employee credit once
+      slots are summed into one component-wide total. `ResearchProgress`
+      reports each contributing specialist's `ResearchCompleted`
+      `reliabilityGain` as their proportional share of the season's
+      actually-applied total (their own nominal, pre-clamp contribution
+      divided by the sum of every occupied slot's nominal contribution,
+      times the applied total) - chosen specifically so summing every
+      event's `reliabilityGain` for a season always equals that
+      component's real reliability delta, which the bot harness's own
+      reporting (§3.10) relies on.
+    - **Slot-collision/no-real-assignment-UI handling, a defensive
+      simplification flagged unconfirmed rather than asked about:** with no
+      player-action path for *choosing* a slot yet (same status as R&D
+      targeting itself - both are bot-harness-only for now, M4 scope to
+      wire into real player actions), `ResearchProgress` treats a
+      specialist with no slot set, an out-of-range slot, or a slot
+      colliding with another specialist already on the same (component,
+      slot) pair as simply not researching at all this season (skipped for
+      *both* their own skill gain and the component's reliability gain,
+      first-encountered-in-roster-order wins a collision) - real
+      enforcement belongs at a future assignment layer, not here.
   - **Both of a season's R&D effects use the assignee's skill as it stood
     at the start of that employee's own turn this season** (before this
     same season's own flat skill gain is applied) - keeps the two draws
-    independent of each other's own output, not entangled.
-  - **Two SET employees assigned to the same component stack, applied in
-    roster order**, each one's reliability gain computed against whatever
-    the component's reliability already is when their own turn comes up -
-    genuine diminishing returns across simultaneous researchers, not just
-    across seasons.
+    independent of each other's own output, not entangled. **The random-
+    draw order changed from an earlier version of this proposal**: every
+    researching specialist's flat skill gain is now drawn and applied
+    first, grouped by target component (in the order each component's
+    first active researcher appears in roster order) and slot 0 before 1
+    before 2 before 3 within a component - not literal roster order, since
+    both passes iterate in this same grouped order - *then* every
+    component's reliability draws happen, in the same grouped order,
+    necessary once reliability became a per-component, not per-specialist,
+    computation.
   - **Never touches `OwnedMissionComponent.floorReliability`** - only
     `currentReliability` grows from R&D; the floor stays exactly what
     `ProgramOpening` set it to.
@@ -1442,7 +1532,14 @@ unconfirmed:**
   - **Reverse pointer (2026-09-30), resolved by this same proposal:**
     `PersonnelDeparture` (§2.2(c)) gains `rdTargetComponentIdAtExit`
     (`String`, nullable) - `null` for every non-`SET` departure and for a
-    `SET` departure with no R&D target set, populated otherwise.
+    `SET` departure with no R&D target set, populated otherwise. (Doesn't
+    carry a matching `rdSlotAtExit`: a departed employee simply stops
+    being found by `ResearchProgress`'s own roster scan next season, which
+    frees their slot automatically - no separate bookkeeping needed. A
+    freed slot leaves a gap rather than compacting the remaining
+    employees down, matching BASPM's own `RemoveSETEmployeeFromSlot`,
+    unconfirmed whether that's the behavior worth keeping once a real
+    slot-assignment UI exists.)
 
 **Hiring pool — proposed ahead of M2's hiring-pool sub-slice (2026-09-30),
 written down before any code, same convention as the training fields
@@ -2382,6 +2479,57 @@ program" is already in this harness, as of the entry above; blocked on
 the mission-simulation and budget resolvers not existing yet (§5's M2
 slice list).
 
+**`ResearchProgress`'s multi-slot upgrade wired in the same session it
+shipped (2026-10-01):** `shuffleSetSpecialist` now claims the first free
+R&D slot (0-3) on the randomly-picked owned component when moving a `SET`
+specialist from idle to assigned, via a new `firstFreeRdSlot` helper that
+scans the roster fresh each call - falling back to starting training
+instead, same as before, both when nothing is owned yet *and* now also
+when the chosen component's four slots are already full. Clears
+`rdSlot` alongside `rdTargetComponentId` on the move back to idle. Two
+invariants replace the old single pairing check: `rdSlot` is set, in
+range, if and only if the specialist is `ASSIGNED` with an owned target
+(computed independently of `firstFreeRdSlot`'s own allocation logic, so
+it doesn't just confirm the bot agrees with itself), and no two
+specialists ever claim the same (component, slot) pair.
+
+**The release-at-the-cap mechanic (`ResearchComponentMaxed`, see §3.4)
+needed no harness-side wiring of its own** - it's entirely internal to
+`ResearchProgress.advanceSeason`, so a freed specialist simply shows up
+`IDLE` with a cleared target/slot the next time `shuffleSetSpecialist`
+looks at them, same as any other idle specialist. The one real harness
+fix it forced: the season loop's own reliability-gain aggregation was
+blindly casting every event in `ResearchProgress`'s return list to
+`ResearchCompleted`, which threw a `ClassCastException` the first time a
+`ResearchComponentMaxed` event appeared in a real run (caught by this
+slice's own unit tests failing, not by the harness itself) - fixed to
+skip non-`ResearchCompleted` events via `instanceof` instead.
+
+**Numbers (same 200-game/80-season run, shifted twice more after this
+paragraph was first written):**
+1. First shift, same day: multiple `SET` specialists can now stack on one
+   component's R&D and the new two-ceiling cap changes how long it keeps
+   paying off - 259 resigned, 1,277 retired, 73,867 training completions,
+   36,310 R&D seasons completed.
+2. Second shift, a real bug fix caught in the post-implementation advisor
+   pass: `ResearchProgress` was silently dropping the `ResearchCompleted`
+   event - and with it, the already-applied flat skill gain - for any
+   specialist whose component had zero nominal reliability gain this
+   season (e.g. one already sitting at `maxRdReliability`). Fixed to
+   always emit one event per occupied slot, with a `0` reliability share
+   when there's nothing to distribute - 36,347 R&D seasons completed.
+3. Third shift, the release-at-the-cap mechanic (see below) landing the
+   same advisor pass: freed specialists go back to `IDLE` and get
+   reshuffled by the bot sooner (often straight into training, which
+   raises morale) instead of sitting parked on a maxed component doing
+   nothing - a real behavioral change, not just a random-stream shift.
+
+**Final numbers for this slice: 223 resigned (avg. tenure 31.3 seasons),
+1,244 retired (avg. tenure 55.2 seasons), 5,365 still employed, 73,553
+training completions (avg. gain 5.11), 3,832 hires, hiring-pool band hits
+0/573/20,384/27,043 (poor/average/good/excellent), 599 programs opened,
+and 36,285 R&D seasons completed (avg. reliability gain 1.53).**
+
 ### 3.11 Offscreen screenshot tooling for UI checking
 
 **Decided (user, 2026-09-27): reuse Robot-Rampage's `ScreenSnapshot`
@@ -3160,12 +3308,15 @@ here.
     quality bands, roster capacities, and the three user decisions
     (auto-`BASIC`-training on hire, capacity now decided, hiring free for
     now). **R&D-target-component linkage done (2026-10-01, `ResearchProgress`/
-    `ResearchCompleted`)** — see §3.4's own entry for the full proposal
-    this implements exactly: `SetSpecialist.rdTargetComponentId`, the new
-    `SkillGrowth.reliabilityGain` formula, the composition order (same
-    position as `TrainingProgress`, after `PersonnelLifecycle`), and
-    `PersonnelDeparture.rdTargetComponentIdAtExit`. **Still open in this
-    same slice:** mission-based skill growth's own caller (slice 3), and
+    `ResearchCompleted`), then upgraded to BASPM's full multi-slot/
+    two-ceiling mechanic the same day once `baspm.md` §10.8 traced it** —
+    see §3.4's own entry for the full, current proposal this implements
+    exactly: `SetSpecialist.rdTargetComponentId`/`rdSlot`,
+    `SkillGrowth.rdReliabilityGain` and its slot-band helpers, the
+    composition order (same position as `TrainingProgress`, after
+    `PersonnelLifecycle`), and `PersonnelDeparture.rdTargetComponentIdAtExit`.
+    **Still open in this same slice:** mission-based skill growth's own
+    caller (slice 3), and
     the Expert trait — neither started yet. Also still open: actually starting a
     training assignment via a real player action, and *submitting* a hire
     as a real player action (both currently plain headless methods a

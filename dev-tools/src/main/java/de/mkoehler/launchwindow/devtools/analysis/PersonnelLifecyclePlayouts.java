@@ -125,6 +125,15 @@ public final class PersonnelLifecyclePlayouts {
         List.of("sputnik-program", "explorer-program", "mercury-program");
 
     /**
+     * The fixture catalog's shared R&amp;D slot-band ceilings, re-deriving
+     * {@code baspm.md} &sect;10.8's per-component {@code RDLevelMaxAmount
+     * L1}-{@code L4} shape with Launch Window's own numbers - every fixture
+     * component uses the same bands, since this harness isn't tuning R&amp;D
+     * balance, only exercising the multi-slot mechanic.
+     */
+    private static final List<Double> RD_SLOT_BANDS = List.of(3.0, 6.0, 9.0, 12.0);
+
+    /**
      * The fixture content catalog every simulated game opens programs
      * against - see this class's own Javadoc for why it's small and not
      * real content.
@@ -171,14 +180,14 @@ public final class PersonnelLifecyclePlayouts {
     private static ContentCatalog buildCatalog() {
         ProgramCategory category = new ProgramCategory("early-space", "Early Space");
 
-        MissionComponent satelliteSputnik =
-            new MissionComponent("satellite-sputnik", SetSkill.SPACE_PROBES, 3, 90, 0, List.of());
+        MissionComponent satelliteSputnik = new MissionComponent("satellite-sputnik", SetSkill.SPACE_PROBES, 3, 90,
+            82, RD_SLOT_BANDS, 0, List.of());
         MissionComponent satelliteExplorer = new MissionComponent("satellite-explorer", SetSkill.SPACE_PROBES, 3, 90,
-            40, List.of(new MissionComponent.ReliabilityTransferSource("satellite-sputnik", 40)));
-        MissionComponent rocketRedstone =
-            new MissionComponent("rocket-redstone", SetSkill.ROCKETS, 3, 95, 0, List.of());
+            82, RD_SLOT_BANDS, 40, List.of(new MissionComponent.ReliabilityTransferSource("satellite-sputnik", 40)));
+        MissionComponent rocketRedstone = new MissionComponent("rocket-redstone", SetSkill.ROCKETS, 3, 95, 87,
+            RD_SLOT_BANDS, 0, List.of());
         MissionComponent capsuleMercury = new MissionComponent("capsule-mercury", SetSkill.CREWED_SPACECRAFT, 3, 90,
-            50, List.of(new MissionComponent.ReliabilityTransferSource("rocket-redstone", 50)));
+            82, RD_SLOT_BANDS, 50, List.of(new MissionComponent.ReliabilityTransferSource("rocket-redstone", 50)));
 
         Program sputnikProgram =
             new Program("sputnik-program", "early-space", 500, 0, List.of("satellite-sputnik"), List.of());
@@ -269,8 +278,12 @@ public final class PersonnelLifecyclePlayouts {
                     trainingGainTotal += ((TrainingCompleted) event).skillGain();
                 }
                 for (ResolutionEvent event : researchEvents) {
-                    researchCompletedCount++;
-                    researchReliabilityGainTotal += ((ResearchCompleted) event).reliabilityGain();
+                    // ResearchComponentMaxed (a component reaching its R&D ceiling, releasing its
+                    // researchers - baspm.md §10.8) isn't counted here; only actual research seasons are.
+                    if (event instanceof ResearchCompleted completed) {
+                        researchCompletedCount++;
+                        researchReliabilityGainTotal += completed.reliabilityGain();
+                    }
                 }
 
                 HiringPool.refreshCandidates(snapshot, random);
@@ -495,27 +508,41 @@ public final class PersonnelLifecyclePlayouts {
     }
 
     /**
-     * Cross-checks the invariant {@link #shuffleSetSpecialist} must
-     * uphold for {@link ResearchProgress} to ever find anyone to advance:
-     * a {@code SET} specialist is {@link AssignmentState#ASSIGNED} if and
+     * Cross-checks the invariants {@link #shuffleSetSpecialist} must uphold
+     * for {@link ResearchProgress} to ever find anyone to advance: a
+     * {@code SET} specialist is {@link AssignmentState#ASSIGNED} if and
      * only if their {@code rdTargetComponentId} is set to an id the
-     * snapshot actually owns - the pairing {@link AssignmentState}'s own
-     * Javadoc documents.
+     * snapshot actually owns <em>and</em> their {@code rdSlot} is within
+     * {@code [0, }{@value MissionComponent#RD_SLOT_COUNT}{@code )} - the
+     * pairing {@link AssignmentState}'s own Javadoc documents, extended by
+     * {@code baspm.md} &sect;10.8's own slot mechanic - and, independently,
+     * that no two specialists ever claim the same (component, slot) pair,
+     * computed from scratch here rather than reusing
+     * {@link #firstFreeRdSlot}, so this check doesn't just confirm the bot's
+     * own allocation logic agrees with itself.
      *
      * @param snapshot the snapshot to check, after this season's
      *                 {@link #shuffleAssignments} and
      *                 {@link PersonnelLifecycle#advanceSeason} calls
-     * @throws IllegalStateException if the pairing is violated for any
-     *                                 {@code SET} specialist
+     * @throws IllegalStateException if any invariant is violated
      */
     private static void checkResearchInvariants(PlayerSnapshot snapshot) {
+        Set<String> claimedSlots = new HashSet<>();
         for (SetSpecialist specialist : snapshot.getSetSpecialists()) {
             boolean assigned = specialist.getAssignmentState() == AssignmentState.ASSIGNED;
             String targetId = specialist.getRdTargetComponentId();
+            Integer slot = specialist.getRdSlot();
+            boolean hasValidSlot = slot != null && slot >= 0 && slot < MissionComponent.RD_SLOT_COUNT;
             boolean hasOwnedTarget = targetId != null && snapshot.getMissionComponents().containsKey(targetId);
-            if (assigned != hasOwnedTarget) {
-                throw new IllegalStateException("ASSIGNED/rdTargetComponentId pairing broken for "
-                    + specialist.getId() + ": assigned=" + assigned + ", targetId=" + targetId);
+            if (assigned != (hasOwnedTarget && hasValidSlot)) {
+                throw new IllegalStateException("ASSIGNED/rdTargetComponentId/rdSlot pairing broken for "
+                    + specialist.getId() + ": assigned=" + assigned + ", targetId=" + targetId + ", slot=" + slot);
+            }
+            if (assigned) {
+                String claim = targetId + "#" + slot;
+                if (!claimedSlots.add(claim)) {
+                    throw new IllegalStateException("Two SET specialists claim the same R&D slot: " + claim);
+                }
             }
         }
     }
@@ -834,6 +861,13 @@ public final class PersonnelLifecyclePlayouts {
      * {@link AssignmentState#ASSIGNED} &hArr; a non-null, owned target
      * never drifts apart.
      *
+     * <p>Picking a target also means picking one of its four R&amp;D slots
+     * ({@code baspm.md} &sect;10.8) - this bot takes the first free slot on
+     * a randomly-chosen owned component, and falls back to starting
+     * training instead if that component's four slots are all already
+     * occupied, the same way "no owned component at all" already falls
+     * back.</p>
+     *
      * @param specialist the specialist to maybe reassign
      * @param snapshot   the snapshot their owned mission components are
      *                   read from
@@ -846,6 +880,7 @@ public final class PersonnelLifecyclePlayouts {
         if (specialist.getAssignmentState() == AssignmentState.ASSIGNED) {
             specialist.setAssignmentState(AssignmentState.IDLE);
             specialist.setRdTargetComponentId(null);
+            specialist.setRdSlot(null);
             return;
         }
         if (specialist.getAssignmentState() != AssignmentState.IDLE) {
@@ -854,9 +889,13 @@ public final class PersonnelLifecyclePlayouts {
         List<String> ownedComponentIds = new ArrayList<>(snapshot.getMissionComponents().keySet());
         if (!ownedComponentIds.isEmpty() && random.nextBoolean()) {
             String target = ownedComponentIds.get(random.nextInt(ownedComponentIds.size()));
-            specialist.setRdTargetComponentId(target);
-            specialist.setAssignmentState(AssignmentState.ASSIGNED);
-            return;
+            Integer freeSlot = firstFreeRdSlot(snapshot, target);
+            if (freeSlot != null) {
+                specialist.setRdTargetComponentId(target);
+                specialist.setRdSlot(freeSlot);
+                specialist.setAssignmentState(AssignmentState.ASSIGNED);
+                return;
+            }
         }
         SetSkill[] skills = SetSkill.values();
         SetSkill target = skills[random.nextInt(skills.length)];
@@ -872,6 +911,34 @@ public final class PersonnelLifecyclePlayouts {
             specialist.setTrainingTargetLevel(drawPermanentTargetLevel(random, specialist.getSkill(target)));
         }
         specialist.setAssignmentState(AssignmentState.IN_TRAINING);
+    }
+
+    /**
+     * Returns the lowest-numbered R&amp;D slot not already occupied by
+     * another {@code ASSIGNED} specialist targeting the same component, or
+     * {@code null} if all {@value MissionComponent#RD_SLOT_COUNT} are
+     * taken.
+     *
+     * @param snapshot    the snapshot whose roster to scan
+     * @param componentId the target component's id
+     * @return the first free slot index, or {@code null}
+     */
+    private static Integer firstFreeRdSlot(PlayerSnapshot snapshot, String componentId) {
+        boolean[] occupied = new boolean[MissionComponent.RD_SLOT_COUNT];
+        for (SetSpecialist other : snapshot.getSetSpecialists()) {
+            if (other.getAssignmentState() == AssignmentState.ASSIGNED
+                    && componentId.equals(other.getRdTargetComponentId())
+                    && other.getRdSlot() != null && other.getRdSlot() >= 0
+                    && other.getRdSlot() < MissionComponent.RD_SLOT_COUNT) {
+                occupied[other.getRdSlot()] = true;
+            }
+        }
+        for (int slot = 0; slot < occupied.length; slot++) {
+            if (!occupied[slot]) {
+                return slot;
+            }
+        }
+        return null;
     }
 
     private static void shuffleMissionControlOfficer(MissionControlOfficer officer, Random random) {
