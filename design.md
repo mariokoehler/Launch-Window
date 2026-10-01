@@ -863,6 +863,35 @@ proceeds:
     genuinely taking several turns to play out (with escalating stakes
     each turn, per the Sputnik example in `baspm.md` §8.1) is good game
     feel to keep, not an artifact to engineer away.
+  - **(d) Implementation (2026-10-01):** the pure formula half ships first,
+    as `MissionStepResolution` (`core/.../rules`) plus a new
+    `MissionStepOutcome` enum — the same "formula class before its caller"
+    order `SkillGrowth` followed. It takes already-involvement-weighted
+    contribution sums as plain `double`s (no `MissionComponent`/`Personnel`
+    dependency), mirroring every other rules class here: a base probability
+    from the component-reliability sum alone, optionally blended with the
+    crew-skill sum (20% weight) once that base sum exceeds a 65 threshold
+    and crew are actually involved — flight-controller skill plays no part
+    in this base roll at all, it only scales a second saving-throw
+    probability (base × controller-skill-sum ÷ 100) used only if the first
+    roll fails. A failing saving-throw splits its own range into
+    CATASTROPHIC (bottom slice, only reachable when the step is flagged
+    crew-risk, else downgraded to FAILURE)/FAILURE/MINOR_GLITCH (top slice)
+    bands. All four numbers (the 65% blend threshold, the 20% blend weight,
+    and the two band-size fractions) are unconfirmed defaults, re-derived to
+    values different from BASPM's own code-confirmed `Constants.xml` numbers
+    (a 70% threshold and 25% weight) per `design.md`
+    §1.2 — concrete placeholders for the bot harness to tune later, not
+    BASPM's numbers and not final balance. **Deferred to a later sub-slice**
+    (no caller exists yet, so this is not wired into the bot harness yet
+    either): the `MissionStep`/per-season-step-batch content-definition
+    shape, the per-player in-progress-mission state, the resolver that
+    actually walks a season's steps against that state, post-mission
+    reliability change (expected to reuse `SkillGrowth.reliabilityGain`'s
+    shape with its own factor range), mission-based astronaut/controller
+    skill growth, and re-confirming `AssignmentState.ASSIGNED` is still a
+    safe "on an active mission" proxy once real mission scheduling exists
+    (§2.2(c)'s own open follow-up).
 - 2.6 **Prestige, goals & scoring — analyzed 2026-09-27, see `baspm.md` §11
   for the full trace.**
   - **(a) How BASPM does it:** goals are `Generic` (universal race
@@ -3162,6 +3191,15 @@ here.
     without also already being active. Confirm this holds once real
     mission scheduling exists — if it doesn't, switch the signal to
     something closer to "in flight" instead of plain `ASSIGNED`.
+    **Pure formula half done (2026-10-01):** `MissionStepResolution` +
+    `MissionStepOutcome` (`core/.../rules`) implement the two-roll formula
+    itself - see §2.5(d) for the exact shape and its four re-derived
+    constants. Not yet wired into the bot harness or any caller: the
+    `MissionStep` content shape, the per-player in-progress-mission state,
+    the resolver that walks a season's step batch, post-mission
+    reliability change, and mission-based skill growth are all still open
+    - the ASSIGNED re-confirmation two paragraphs up is also still open and
+    unaffected by this sub-slice.
   - Slice: budget/funding review, prestige, goals, and the win-condition +
     tie-break check — §2.1/§2.6/§2.9.
   - Slice: random events — §2.7.

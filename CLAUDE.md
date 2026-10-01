@@ -349,9 +349,27 @@ now scrapped for v1 outright rather than redesigned around a new
 trigger — goal achievement is plain achieved/not-achieved. This also
 makes §2.9's win-condition tie-break's second-order criterion (best
 goal-achievement rating) permanently moot for v1; the medal-table
-comparison is all it has. Mission simulation itself is not implemented
-yet — this was only the design-gate decision; see `design.md` §5 for the
-slice itself.
+comparison is all it has. That decision was only the design gate — see
+below for the mission-simulation slice's own first implementation step.
+
+**Mission simulation's pure formula half implemented (2026-10-01):**
+`MissionStepResolution` + `MissionStepOutcome` (`core/.../rules`) — the
+two-roll formula itself (base involvement-weighted probability, optional
+crew-skill blend, flight-controller-scaled saving throw, five-tier
+outcome bands), taking already-summed contribution totals as plain
+`double`s with no dependency on `MissionComponent`/`Personnel`, the same
+"formula class before its caller" order `SkillGrowth` followed. All four
+tuning constants (a 65% crew-blend hardware threshold, a 20% crew-blend
+weight, and two saving-throw band-size fractions) are unconfirmed
+defaults, re-derived to values different from BASPM's own code-confirmed
+numbers (a 70% threshold, a 25% weight) per `design.md` §1.2 — see
+`design.md` §2.5(d) for the full writeup. **Deliberately not wired into
+the bot harness yet** — no caller exists: the `MissionStep` content
+shape, per-player in-progress-mission state, the resolver that walks a
+season's step batch against it, post-mission reliability change, and
+mission-based skill growth are all still open, as is re-confirming
+`AssignmentState.ASSIGNED` as the "on an active mission" proxy (§2.2(c)'s
+own open follow-up) — see `design.md` §5's M2 entry for the exact list.
 
 Git repo
 initialized 2026-09-27 and pushed
