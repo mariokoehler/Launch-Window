@@ -1,7 +1,9 @@
 package de.mkoehler.launchwindow.model;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -33,6 +35,8 @@ public class PlayerSnapshot {
     private List<SetSpecialist> setSpecialistCandidates = new ArrayList<>();
     private List<MissionControlOfficer> missionControlCandidates = new ArrayList<>();
     private long nextPersonnelId;
+    private List<String> openedProgramIds = new ArrayList<>();
+    private Map<String, OwnedMissionComponent> missionComponents = new LinkedHashMap<>();
 
     /**
      * No-argument constructor required for Jackson deserialization.
@@ -310,6 +314,46 @@ public class PlayerSnapshot {
      */
     public void setNextPersonnelId(long nextPersonnelId) {
         this.nextPersonnelId = nextPersonnelId;
+    }
+
+    /**
+     * Returns the ids of every program this player has opened (see
+     * {@code de.mkoehler.launchwindow.rules.ProgramOpening}).
+     *
+     * @return the opened program ids
+     */
+    public List<String> getOpenedProgramIds() {
+        return openedProgramIds;
+    }
+
+    /**
+     * Replaces the set of opened program ids.
+     *
+     * @param openedProgramIds the opened program ids
+     */
+    public void setOpenedProgramIds(List<String> openedProgramIds) {
+        Objects.requireNonNull(openedProgramIds, "openedProgramIds must not be null");
+        this.openedProgramIds = new ArrayList<>(openedProgramIds);
+    }
+
+    /**
+     * Returns this player's owned mission components, keyed by
+     * {@code MissionComponent} id.
+     *
+     * @return the owned mission components
+     */
+    public Map<String, OwnedMissionComponent> getMissionComponents() {
+        return missionComponents;
+    }
+
+    /**
+     * Replaces this player's owned mission components.
+     *
+     * @param missionComponents the owned mission components
+     */
+    public void setMissionComponents(Map<String, OwnedMissionComponent> missionComponents) {
+        Objects.requireNonNull(missionComponents, "missionComponents must not be null");
+        this.missionComponents = new LinkedHashMap<>(missionComponents);
     }
 
     /**

@@ -802,7 +802,17 @@ proceeds:
     (`design.md` §1.2). **Decision:** keep reliability transfer
     as an explicit, curated per-pair relationship table (not a generic
     same-category rule) since that's what makes a real rocket-family lineage
-    feel earned rather than automatic.
+    feel earned rather than automatic. **Implemented (2026-10-01, §5's M2
+    status):** `MissionComponent`/`ProgramOpening` in
+    `de.mkoehler.launchwindow.content`/`.rules`. **Unconfirmed default (the
+    same session): the per-component reliability floor is implemented as
+    the transfer-inclusive starting value, not the bare baseline** —
+    `baspm.md` §10.3's own trace found this exact choice left ambiguous in
+    BASPM's code (the field name implies the former, the code does the
+    latter), and a future mission-simulation slice's post-mission
+    reliability change will need to clamp against whichever one is
+    chosen, so a default had to be picked now rather than left open. See
+    §5's own entry for the full writeup.
 - 2.5 **Mission simulation (the step-by-step launch/flight resolution,
   success/failure rolls) — analyzed 2026-09-27, see `baspm.md` §8 for the
   full formula trace.**
@@ -1293,10 +1303,10 @@ unconfirmed:**
   distinguish "doing R&D" from "assigned to a mission" (its own doc
   comment already flagged this gap, unchanged since M1) - SET's R&D target
   skill needs its own field (`SetSpecialist`-only, since only SET does
-  R&D) once that distinction actually gets modeled, most likely alongside
-  §2.3/§2.4's programs/mission-components slice rather than this one,
-  since "what is this SET employee's R&D actually contributing to" is a
-  program/component-linkage question, not a pure personnel one. Not
+  R&D) once that distinction actually gets modeled. **Unblocked, not yet
+  implemented (2026-10-01):** §2.3/§2.4's programs/mission-components
+  slice is done and `MissionComponent` now has a stable id to link
+  against - this is the clear next M2 sub-slice, still not started. Not
   proposed in detail here - deliberately left to whichever slice actually
   introduces mission-component-linked R&D. **Reverse pointer (2026-09-30):**
   when that linkage lands, also extend `PersonnelDeparture` (§2.2(c)) with
@@ -1437,12 +1447,19 @@ events as their own types, and all numeric balance values. Every class in
 is now modeled and resolved — see §5's M2 status and the new
 `de.mkoehler.launchwindow.rules` package. Skill growth, training-state
 fields, hiring, and Expert remain deferred exactly as this paragraph
-originally said.
+originally said. **Further superseded (2026-10-01):** programs/mission
+configurations/mission components now exist as their own immutable types
+(`de.mkoehler.launchwindow.content`) — see §5's M2 status. Goals/events
+remain deferred exactly as this paragraph originally said.
 
-**Content definitions themselves remain not yet started** — still to be
-derived from BASPM's Data Scripts XML *shapes* (`baspm.md` §"Data-driven
-architecture"), re-deriving Launch Window's own actual values per §1.2, once
-picked up.
+**Content-definition *types* now exist (2026-10-01) - real, authored
+content still doesn't.** `de.mkoehler.launchwindow.content`'s
+`ProgramCategory`/`Program`/`MissionConfiguration`/`MissionComponent` are
+built and validated from in-memory fixtures only (see §5's M2 status); a
+real content pack, and the loader reading these same shapes from files,
+remain M3's job, re-deriving Launch Window's own actual values from
+BASPM's Data Scripts XML *shapes* (`baspm.md` §"Data-driven architecture")
+per §1.2.
 
 ### 3.5 Asset generation pipeline (early idea, not yet designed in detail)
 
@@ -2949,8 +2966,69 @@ here.
     future action handler will call, no dispatch path exists yet), plus
     composing `PersonnelLifecycle`/`TrainingProgress`/`HiringPool`/a
     future R&D resolver into one real season pass (M4, not M2).
-  - Slice: programs, mission configurations, mission components &
-    reliability transfer — §2.3/§2.4.
+  - **Slice: programs, mission configurations, mission components &
+    reliability transfer — done (2026-10-01)** — §2.3/§2.4. New
+    `de.mkoehler.launchwindow.content` package: `ProgramCategory`/`Program`/
+    `MissionConfiguration`/`MissionComponent` (plus `Program`'s nested
+    `OpeningCostDiscount` and `MissionComponent`'s nested
+    `ReliabilityTransferSource`) are immutable records, matching
+    &sect;3.4's "content definitions stay data-driven/immutable" decision -
+    built from in-memory fixtures for this slice, a real content-pack
+    loader reading these same shapes from files is M3's job.
+    `MissionConfiguration` is deliberately minimal (id, programId,
+    durationInSeasons only) - prestige/goals-granted belong to the
+    mission-simulation and prestige/goals slices below. `ContentCatalog`
+    indexes all four by id and validates every cross-reference at
+    construction (no duplicate ids, no dangling category/component/
+    discount-target/transfer-source reference, no self-referencing
+    discount or transfer entry), so a resolver can trust a looked-up id's
+    references are real without re-checking. New
+    `de.mkoehler.launchwindow.rules.ProgramOpening` (headless, same
+    "plain method a future action handler will call" posture as
+    `HiringPool.hire` - no action-dispatch path exists yet):
+    `effectiveOpeningCost` (sums every qualifying
+    `OpeningCostDiscount`, capped at 100%, re-deriving &sect;10.1's "fast
+    follower" mechanic) and `reliabilityTransferFor` (sums each owned
+    transfer source's own *current* reliability times its transfer
+    percentage, capped at the target's own `maxReliabilityTransfer`,
+    re-deriving &sect;10.3's exact formula) back `open`, which deducts the
+    cost, marks the program open, and grants every required component not
+    already owned at baseline-plus-transfer. **Two correctness properties
+    specifically tested:** an already-owned component is never reset or
+    re-granted a transfer by a second program that also requires it; and
+    within one single `open` call, every newly granted component's
+    transfer is computed against ownership as it stood *before* that call,
+    never against a sibling component the same call is also granting (so
+    two components required together, one a transfer source for the
+    other, resolve the same way regardless of processing order). New
+    `PlayerSnapshot` fields: `openedProgramIds` (`List<String>`) and
+    `missionComponents` (`Map<String, OwnedMissionComponent>`, a new
+    per-player, mutable state class - `MessageRegistry` gained an entry
+    for it, appended after `TrainingKind`). **Unconfirmed default
+    (2026-10-01, &sect;2.4(c)): the per-component reliability floor a
+    future mission-simulation slice's post-mission reliability change
+    must clamp against is implemented as the transfer-inclusive starting
+    value** (baseline plus whatever one-time transfer bonus applied when
+    first granted), stored explicitly as
+    `OwnedMissionComponent.floorReliability` rather than re-derived from
+    the catalog's bare baseline - `baspm.md` &sect;10.3 flagged this exact
+    choice as deliberately unresolved in BASPM's own code (the field name
+    implies a transfer-inclusive floor was intended, but the code never
+    actually sets it that way); Launch Window needed to pick one now since
+    the state shape depends on it, but it's the user's call, not yet
+    confirmed.
+    **Unblocks, but does not itself implement, the R&D-target-component
+    linkage &sect;3.4 flagged as this slice's follow-up:** `SetSpecialist`
+    still has no field linking a standing R&D order to a specific
+    `MissionComponent#id()` - natural next sub-slice now that
+    `MissionComponent` actually has a stable id to reference. **Also not
+    yet done:** wiring `ProgramOpening` into
+    `PersonnelLifecyclePlayouts` with its own invariants (funds never
+    negative, opened ids subset of the catalog, owned-component
+    reliabilities within `[baseline, max]`, every owned component
+    required by some opened program) - every earlier M2 resolver got
+    wired into the harness the same session it was built; this one
+    hasn't been yet.
   - Slice: mission simulation, base two-roll formula only (no Expert yet,
     per the shape-defining choice above) — §2.5. **Decision gate:** §2.5(c)'s
     outcome-tier shape (four vs. five tiers, "vital vs. optional step") is

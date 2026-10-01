@@ -10,6 +10,7 @@ import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.AstronautSkill;
 import de.mkoehler.launchwindow.model.MissionControlOfficer;
 import de.mkoehler.launchwindow.model.MissionControlSkill;
+import de.mkoehler.launchwindow.model.OwnedMissionComponent;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.model.SetSkill;
 import de.mkoehler.launchwindow.model.SetSpecialist;
@@ -28,6 +29,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -68,7 +70,8 @@ class MessageRegistryTest {
             MissionControlSkill.class, Astronaut.class, SetSpecialist.class, MissionControlOfficer.class,
             PlayerSnapshot.class, ArrayList.class, LinkedHashMap.class, SetFundsAction.class,
             SubmitActionRequest.class, SubmitActionResponse.class, FetchStateRequest.class,
-            FetchStateResponse.class, HandshakeRequest.class, HandshakeResponse.class, TrainingKind.class};
+            FetchStateResponse.class, HandshakeRequest.class, HandshakeResponse.class, TrainingKind.class,
+            OwnedMissionComponent.class};
         for (Class<?> registeredClass : registeredClasses) {
             assertEquals(first.getRegistration(registeredClass).getId(), second.getRegistration(registeredClass).getId(),
                 "id mismatch for " + registeredClass.getSimpleName());
@@ -113,7 +116,7 @@ class MessageRegistryTest {
             MissionControlSkill.class, Astronaut.class, SetSpecialist.class, MissionControlOfficer.class,
             PlayerSnapshot.class, ArrayList.class, LinkedHashMap.class, SetFundsAction.class,
             SubmitActionRequest.class, SubmitActionResponse.class, FetchStateRequest.class,
-            FetchStateResponse.class, TrainingKind.class};
+            FetchStateResponse.class, TrainingKind.class, OwnedMissionComponent.class};
         for (Class<?> other : everyOtherClass) {
             int otherId = kryo.getRegistration(other).getId();
             assertTrue(requestId < otherId, "HandshakeRequest's id must be lower than " + other.getSimpleName());
@@ -242,6 +245,8 @@ class MessageRegistryTest {
         candidate.setSkill(AstronautSkill.LEADERSHIP, 33.0);
         snapshot.setAstronautCandidates(List.of(candidate));
         snapshot.setNextPersonnelId(7);
+        snapshot.setOpenedProgramIds(List.of("sputnik-1"));
+        snapshot.setMissionComponents(Map.of("rocket-1", new OwnedMissionComponent(42.5, 17.0)));
 
         FetchStateResponse copy = roundTrip(FetchStateResponse.success(snapshot), FetchStateResponse.class);
 
@@ -261,6 +266,9 @@ class MessageRegistryTest {
         assertEquals("astro-cand-1", copy.state().getAstronautCandidates().get(0).getId());
         assertEquals(33.0, copy.state().getAstronautCandidates().get(0).getSkill(AstronautSkill.LEADERSHIP));
         assertEquals(7, copy.state().getNextPersonnelId());
+        assertEquals(List.of("sputnik-1"), copy.state().getOpenedProgramIds());
+        assertEquals(42.5, copy.state().getMissionComponents().get("rocket-1").getCurrentReliability());
+        assertEquals(17.0, copy.state().getMissionComponents().get("rocket-1").getFloorReliability());
 
         FetchStateResponse rejected = roundTrip(FetchStateResponse.failure("Not authenticated."), FetchStateResponse.class);
         assertFalse(rejected.success());

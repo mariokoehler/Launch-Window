@@ -263,6 +263,32 @@ still open in the personnel slice (R&D's own resolver, mission-based
 growth's caller, the Expert trait) and what's next (programs/mission-
 configuration slice).
 
+**Programs/mission-configuration slice done (2026-10-01):** new
+`de.mkoehler.launchwindow.content` package — `ProgramCategory`/`Program`/
+`MissionConfiguration`/`MissionComponent` (immutable records, content
+definitions per `design.md` §3.4, not per-player state), `ContentCatalog`
+validating every cross-reference at construction — and new
+`de.mkoehler.launchwindow.rules.ProgramOpening` (`effectiveOpeningCost`,
+`reliabilityTransferFor`, `open`), re-deriving `baspm.md` §10.1/§10.3's
+opening-discount and reliability-transfer formulas with Launch Window's
+own numbers. New `PlayerSnapshot` fields `openedProgramIds`/
+`missionComponents` (the latter backed by a new per-player state class,
+`OwnedMissionComponent`, appended to `MessageRegistry`). Implemented as an
+unconfirmed default the same day: a component's reliability floor is the
+transfer-inclusive starting value, not the bare baseline — still the
+user's call, not yet confirmed; see `design.md` §2.4(c)/§5 for the full
+writeup, including why BASPM's own code left this exact choice
+ambiguous. 16 new `ProgramOpeningTest` tests (including a fix for a real
+bug the advisor caught: initial reliability wasn't clamped at the
+component's own max), plus the two real correctness traps (an
+already-owned component is never reset/re-transferred; two components
+newly granted in the same `open` call never see each other's fresh
+reliability when computing transfers). Unblocks
+but doesn't itself implement SET's R&D-target-component linkage (see
+`design.md` §3.4) — the clear next M2 sub-slice. **Not yet wired into
+`PersonnelLifecyclePlayouts`**, unlike every earlier M2 resolver — still
+open.
+
 Git repo
 initialized 2026-09-27 and pushed
 to GitHub as a **private**

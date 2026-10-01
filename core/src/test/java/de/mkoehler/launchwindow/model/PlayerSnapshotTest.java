@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -67,6 +68,8 @@ class PlayerSnapshotTest {
         candidate.setSkill(MissionControlSkill.MISSION_OPERATIONS, 28.0);
         original.setMissionControlCandidates(List.of(candidate));
         original.setNextPersonnelId(3);
+        original.setOpenedProgramIds(List.of("sputnik-1"));
+        original.setMissionComponents(Map.of("rocket-1", new OwnedMissionComponent(42.5, 17.0)));
 
         String json = mapper.writeValueAsString(original);
         PlayerSnapshot restored = mapper.readValue(json, PlayerSnapshot.class);
@@ -110,6 +113,12 @@ class PlayerSnapshotTest {
         assertEquals("mco-cand-1", restoredCandidate.getId());
         assertEquals(28.0, restoredCandidate.getSkill(MissionControlSkill.MISSION_OPERATIONS));
         assertEquals(3, restored.getNextPersonnelId());
+
+        assertEquals(List.of("sputnik-1"), restored.getOpenedProgramIds());
+        assertEquals(1, restored.getMissionComponents().size());
+        OwnedMissionComponent restoredComponent = restored.getMissionComponents().get("rocket-1");
+        assertEquals(42.5, restoredComponent.getCurrentReliability());
+        assertEquals(17.0, restoredComponent.getFloorReliability());
     }
 
     /**
@@ -126,5 +135,20 @@ class PlayerSnapshotTest {
         snapshot.setAstronauts(List.of(astronaut));
 
         assertDoesNotThrow(() -> snapshot.getAstronauts().add(new Astronaut("astro-2", "Kim Lee", 29, 90, 65)));
+    }
+
+    /**
+     * Verifies that {@code setMissionComponents} defensively copies its
+     * argument, so passing an immutable map does not leave the snapshot's
+     * own map immutable.
+     */
+    @Test
+    void missionComponentsSetterCopiesAnImmutableMapIntoAMutableOne() {
+        PlayerSnapshot snapshot =
+            new PlayerSnapshot("Hanseatic Space Agency", Archetype.NASA, 25_000, 0, 5_000, 1);
+
+        snapshot.setMissionComponents(Map.of("rocket-1", new OwnedMissionComponent(10, 10)));
+
+        assertDoesNotThrow(() -> snapshot.getMissionComponents().put("rocket-2", new OwnedMissionComponent(5, 5)));
     }
 }

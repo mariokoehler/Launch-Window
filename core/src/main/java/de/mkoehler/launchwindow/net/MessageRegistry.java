@@ -7,6 +7,7 @@ import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.AstronautSkill;
 import de.mkoehler.launchwindow.model.MissionControlOfficer;
 import de.mkoehler.launchwindow.model.MissionControlSkill;
+import de.mkoehler.launchwindow.model.OwnedMissionComponent;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.model.SetSkill;
 import de.mkoehler.launchwindow.model.SetSpecialist;
@@ -110,5 +111,9 @@ public final class MessageRegistry {
         // Appended 2026-09-30 (M2's training-progress groundwork) - referenced by Personnel,
         // carried in PlayerSnapshot. Never move this line; see the class Javadoc.
         kryo.register(TrainingKind.class);
+        // Appended 2026-10-01 (M2's programs/mission-components groundwork) - referenced by
+        // PlayerSnapshot.missionComponents, carried in FetchStateResponse. Never move this line;
+        // see the class Javadoc.
+        kryo.register(OwnedMissionComponent.class);
     }
 }
