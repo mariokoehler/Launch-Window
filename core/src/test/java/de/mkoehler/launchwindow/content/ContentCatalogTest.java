@@ -21,8 +21,10 @@ class ContentCatalogTest {
         new MissionComponent("rocket-1", SetSkill.ROCKETS, 3, 95, 50, List.of());
     private final Program sputnik =
         new Program("sputnik-1", "earth-orbit", 1_000, 50, List.of("rocket-1"), List.of());
+    private final MissionStep sputnikStep = new MissionStep("ascent",
+        List.of(new MissionStep.ComponentInvolvement("rocket-1", 100)), List.of(), List.of(), false);
     private final MissionConfiguration sputnikStandard =
-        new MissionConfiguration("sputnik-1-std", "sputnik-1", 1);
+        new MissionConfiguration("sputnik-1-std", "sputnik-1", List.of(new MissionSeason(List.of(sputnikStep))));
 
     /**
      * Verifies that a well-formed catalog looks up every definition it was
@@ -112,10 +114,47 @@ class ContentCatalogTest {
      */
     @Test
     void rejectsMissionConfigurationWithUnknownProgram() {
-        MissionConfiguration orphan = new MissionConfiguration("orphan-std", "unknown-program", 1);
+        MissionConfiguration orphan =
+            new MissionConfiguration("orphan-std", "unknown-program", List.of(new MissionSeason(List.of(sputnikStep))));
 
         assertThrows(IllegalArgumentException.class, () -> new ContentCatalog(
             List.of(earthOrbit), List.of(sputnik), List.of(orphan), List.of(rocket)));
+    }
+
+    /**
+     * Verifies that a mission configuration step referencing an unknown
+     * mission component is rejected.
+     */
+    @Test
+    void rejectsMissionConfigurationStepWithUnknownComponent() {
+        MissionStep stepWithUnknownComponent = new MissionStep("ascent",
+            List.of(new MissionStep.ComponentInvolvement("unknown-component", 100)), List.of(), List.of(), false);
+        MissionConfiguration configuration = new MissionConfiguration("sputnik-1-std", "sputnik-1",
+            List.of(new MissionSeason(List.of(stepWithUnknownComponent))));
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new ContentCatalog(
+            List.of(earthOrbit), List.of(sputnik), List.of(configuration), List.of(rocket)));
+
+        assertTrue(exception.getMessage().contains("unknown MissionComponent"));
+    }
+
+    /**
+     * Verifies that a mission configuration step referencing a component
+     * that exists in the catalog but is not required by the
+     * configuration's own program is rejected.
+     */
+    @Test
+    void rejectsMissionConfigurationStepWithComponentNotRequiredByItsProgram() {
+        MissionComponent payload = new MissionComponent("payload-1", SetSkill.SPACE_PROBES, 3, 95, 0, List.of());
+        MissionStep stepWithUnrequiredComponent = new MissionStep("ascent",
+            List.of(new MissionStep.ComponentInvolvement("payload-1", 100)), List.of(), List.of(), false);
+        MissionConfiguration configuration = new MissionConfiguration("sputnik-1-std", "sputnik-1",
+            List.of(new MissionSeason(List.of(stepWithUnrequiredComponent))));
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new ContentCatalog(
+            List.of(earthOrbit), List.of(sputnik), List.of(configuration), List.of(rocket, payload)));
+
+        assertTrue(exception.getMessage().contains("not required by its own Program"));
     }
 
     /**
@@ -142,5 +181,29 @@ class ContentCatalogTest {
 
         assertThrows(IllegalArgumentException.class, () -> new ContentCatalog(
             List.of(), List.of(), List.of(), List.of(selfTransferring)));
+    }
+
+    /**
+     * Verifies that two independent step-reference problems across two
+     * different steps are both reported in one combined exception message,
+     * rather than only the first one found - proving
+     * {@link ContentCatalog#ContentCatalog} collects every problem before
+     * throwing, for these two new checks specifically.
+     */
+    @Test
+    void reportsMultipleStepReferenceProblemsTogether() {
+        MissionComponent payload = new MissionComponent("payload-1", SetSkill.SPACE_PROBES, 3, 95, 0, List.of());
+        MissionStep stepWithUnknownComponent = new MissionStep("ascent",
+            List.of(new MissionStep.ComponentInvolvement("unknown-component", 100)), List.of(), List.of(), false);
+        MissionStep stepWithUnrequiredComponent = new MissionStep("orbit-insertion",
+            List.of(new MissionStep.ComponentInvolvement("payload-1", 100)), List.of(), List.of(), false);
+        MissionConfiguration configuration = new MissionConfiguration("sputnik-1-std", "sputnik-1",
+            List.of(new MissionSeason(List.of(stepWithUnknownComponent, stepWithUnrequiredComponent))));
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new ContentCatalog(
+            List.of(earthOrbit), List.of(sputnik), List.of(configuration), List.of(rocket, payload)));
+
+        assertTrue(exception.getMessage().contains("ascent"));
+        assertTrue(exception.getMessage().contains("orbit-insertion"));
     }
 }

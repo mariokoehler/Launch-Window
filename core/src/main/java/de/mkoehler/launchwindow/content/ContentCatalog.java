@@ -11,10 +11,12 @@ import java.util.function.Function;
 
 /**
  * <p>An immutable, validated set of content definitions - every
- * {@link ProgramCategory}, {@link Program}, {@link MissionConfiguration},
- * and {@link MissionComponent} a game instance plays with. Validated once
- * at construction, not on every lookup, so a resolver can trust that every
- * id a content definition references actually exists without re-checking.</p>
+ * {@link ProgramCategory}, {@link Program}, {@link MissionConfiguration}
+ * (together with its own nested {@link MissionSeason}/{@link MissionStep}
+ * content), and {@link MissionComponent} a game instance plays with.
+ * Validated once at construction, not on every lookup, so a resolver can
+ * trust that every id a content definition references actually exists
+ * without re-checking.</p>
  *
  * <p>Built directly from in-memory fixtures for now (see {@code design.md}
  * &sect;5's M2 status - "headless rules... against an in-memory/test-
@@ -41,9 +43,11 @@ public final class ContentCatalog {
      * @throws NullPointerException     if any argument is {@code null}
      * @throws IllegalArgumentException if any list contains a duplicate id,
      *                                   a dangling reference to an id not
-     *                                   present elsewhere in the catalog, or
-     *                                   a self-referencing discount/transfer
-     *                                   entry
+     *                                   present elsewhere in the catalog, a
+     *                                   self-referencing discount/transfer
+     *                                   entry, or a mission step referencing
+     *                                   a {@link MissionComponent} its own
+     *                                   {@link Program} does not require
      */
     public ContentCatalog(List<ProgramCategory> categories, List<Program> programs,
             List<MissionConfiguration> missionConfigurations, List<MissionComponent> missionComponents) {
@@ -164,10 +168,13 @@ public final class ContentCatalog {
         }
 
         for (MissionConfiguration configuration : missionConfigurationsById.values()) {
-            if (!programsById.containsKey(configuration.programId())) {
+            Program program = programsById.get(configuration.programId());
+            if (program == null) {
                 problems.add("MissionConfiguration " + configuration.id() + " references unknown Program "
                     + configuration.programId());
+                continue;
             }
+            validateStepComponentReferences(configuration, program, problems);
         }
 
         for (MissionComponent component : missionComponentsById.values()) {
@@ -184,6 +191,36 @@ public final class ContentCatalog {
 
         if (!problems.isEmpty()) {
             throw new IllegalArgumentException("invalid content catalog: " + String.join("; ", problems));
+        }
+    }
+
+    /**
+     * Checks that every step of {@code configuration} only involves mission
+     * components that both exist in this catalog and are actually required
+     * by {@code program} - a mission configuration cannot use a component
+     * the player was never granted, see {@code design.md} &sect;2.5(e).
+     *
+     * @param configuration the mission configuration to check
+     * @param program       the program {@code configuration} belongs to
+     * @param problems      the list to append any problem found to
+     */
+    private void validateStepComponentReferences(MissionConfiguration configuration, Program program,
+            List<String> problems) {
+        List<MissionSeason> seasons = configuration.seasons();
+        for (int seasonIndex = 0; seasonIndex < seasons.size(); seasonIndex++) {
+            for (MissionStep step : seasons.get(seasonIndex).steps()) {
+                String stepLabel = "MissionConfiguration " + configuration.id() + " season " + seasonIndex
+                    + " step " + step.id();
+                for (MissionStep.ComponentInvolvement involvement : step.componentInvolvements()) {
+                    String componentId = involvement.componentId();
+                    if (!missionComponentsById.containsKey(componentId)) {
+                        problems.add(stepLabel + " references unknown MissionComponent " + componentId);
+                    } else if (!program.requiredMissionComponentIds().contains(componentId)) {
+                        problems.add(stepLabel + " references MissionComponent " + componentId
+                            + " not required by its own Program " + program.id());
+                    }
+                }
+            }
         }
     }
 }

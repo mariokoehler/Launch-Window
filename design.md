@@ -877,21 +877,85 @@ proceeds:
     roll fails. A failing saving-throw splits its own range into
     CATASTROPHIC (bottom slice, only reachable when the step is flagged
     crew-risk, else downgraded to FAILURE)/FAILURE/MINOR_GLITCH (top slice)
-    bands. All four numbers (the 65% blend threshold, the 20% blend weight,
+    bands. All four numbers (the 65 blend threshold, the 20% blend weight,
     and the two band-size fractions) are unconfirmed defaults, re-derived to
-    values different from BASPM's own code-confirmed `Constants.xml` numbers
-    (a 70% threshold and 25% weight) per `design.md`
+    values different from BASPM's own code-confirmed numbers (a 70
+    threshold and 25% weight, from `ComputeProbabilityOfSuccessForMissionStep`
+    itself, not `Constants.xml` — only the band-size fractions trace to
+    `Constants.xml`, and `baspm.md` §8.2 never gives their exact values) per
+    `design.md`
     §1.2 — concrete placeholders for the bot harness to tune later, not
     BASPM's numbers and not final balance. **Deferred to a later sub-slice**
     (no caller exists yet, so this is not wired into the bot harness yet
-    either): the `MissionStep`/per-season-step-batch content-definition
-    shape, the per-player in-progress-mission state, the resolver that
+    either): the per-player in-progress-mission state, the resolver that
     actually walks a season's steps against that state, post-mission
     reliability change (expected to reuse `SkillGrowth.reliabilityGain`'s
     shape with its own factor range), mission-based astronaut/controller
     skill growth, and re-confirming `AssignmentState.ASSIGNED` is still a
     safe "on an active mission" proxy once real mission scheduling exists
     (§2.2(c)'s own open follow-up).
+  - **(e) The step/season content shape (2026-10-01):** `MissionStep`
+    (`core/.../content`) holds what a step needs to feed
+    `MissionStepResolution`, nothing about *who* is assigned — three
+    involvement lists (`componentInvolvements` as
+    `(componentId, percent)`, `controllerInvolvements`/`crewInvolvements`
+    as `(skill, percent)` against `MissionControlSkill`/`AstronautSkill`)
+    plus the `crewRisk` flag. Skills, not specific personnel: which actual
+    astronaut/controller fills a skill slot, and how several crew sharing
+    one skill combine into that skill's single contribution, are both
+    left to the future per-player resolver — `baspm.md` §8.2's own trace
+    ("summed per-skill-per-crew-member") confirms crew contributions are
+    tallied per skill but never pins down the multi-crew aggregation rule
+    itself. `MissionSeason` is just `List<MissionStep> steps` (at least
+    one); `MissionConfiguration` now holds `List<MissionSeason> seasons`
+    (at least one) instead of a stored `durationInSeasons` — that accessor
+    is now derived (`seasons.size()`), so the two can never disagree.
+    **Unconfirmed defaults, written down since `baspm.md` doesn't settle
+    any of them:** a step's `componentInvolvements` percentages must sum
+    to exactly 100 (every step is always fully, jointly covered by its
+    hardware — a weighted-average effective reliability, not a partial
+    one). `crewInvolvements` is either empty (no crew on this step) or
+    also sums to exactly 100 when non-empty — **not** "100 or less" as
+    first written: `MissionStepResolution.computeBaseProbability`'s blend
+    is a weighted average of the component sum and the crew sum, so a
+    partial crew sum (e.g. one skill at 40%) would read as a skill
+    shortfall rather than reduced crew presence, quietly pulling the
+    blended probability *down* even when every involved crew member is
+    maximally skilled — caught by the advisor before this landed, not
+    found by testing. `controllerInvolvements` is the one list that
+    legitimately stays "100 or less" (partial or absent controller
+    participation is a meaningful content lever) — an empty list means
+    the saving throw can never succeed at all, since
+    `computeSavingThrowProbability` scales it by this same sum. Every
+    individual involvement entry must also be 1-100, not 0-100 — a
+    zero-percent entry is indistinguishable from "not involved at all,"
+    so it is rejected outright rather than silently accepted as noise. A
+    `crewRisk` step must have at least one crew involvement,
+    since a worst-tier failure with nobody aboard to lose makes no sense.
+    Step ids are unique within their own `MissionSeason` only (the same id
+    may recur in a later season, e.g. a repeating "continue operating it"
+    step across several extended seasons). `ContentCatalog` additionally
+    requires every step's component ids both exist and belong to the
+    step's own mission's program's `requiredMissionComponentIds` — no
+    trace of BASPM missions reaching into another program's components,
+    so this is enforced as a real rule, not left open. **Per-step prestige
+    deferred to §2.6**, not added here — `MissionStepOutcome.MINOR_GLITCH`'s
+    half-credit needs it, but prestige/goals is its own slice's concern; a
+    caller resolver will need this field once it exists.
+    **Open balance question for the user, not yet answered:** under this
+    weighted-average blend, involving crew *lowers* the step's success
+    probability whenever the crew-skill sum is below the component
+    sum — the ordinary case, since the blend only ever applies once the
+    component sum already clears the 65 threshold. `baspm.md` §8.2
+    describes crew skill as "a bonus on top of already-solid hardware,"
+    which reads as crew-involvement never hurting, only sometimes not
+    helping much — a genuine bonus formula (e.g. an additive top-up
+    capped by the weight) would fit that description more literally than
+    a weighted average does. The weighted-average shape ships for now
+    since it is a defensible reading of the same trace and keeps the
+    formula simple, but this is exactly the kind of balance-defining
+    choice that should be confirmed, not assumed - see `CLAUDE.md`'s own
+    "Current status" entry for this slice.
 - 2.6 **Prestige, goals & scoring — analyzed 2026-09-27, see `baspm.md` §11
   for the full trace.**
   - **(a) How BASPM does it:** goals are `Generic` (universal race
@@ -1526,8 +1590,9 @@ bronze goal rating (§2.6(c)) is scrapped for v1, not merely deferred.
 
 **Content-definition *types* now exist (2026-10-01) - real, authored
 content still doesn't.** `de.mkoehler.launchwindow.content`'s
-`ProgramCategory`/`Program`/`MissionConfiguration`/`MissionComponent` are
-built and validated from in-memory fixtures only (see §5's M2 status); a
+`ProgramCategory`/`Program`/`MissionConfiguration`/`MissionSeason`/
+`MissionStep`/`MissionComponent` are built and validated from in-memory
+fixtures only (see §5's M2 status); a
 real content pack, and the loader reading these same shapes from files,
 remain M3's job, re-deriving Launch Window's own actual values from
 BASPM's Data Scripts XML *shapes* (`baspm.md` §"Data-driven architecture")
@@ -3194,12 +3259,16 @@ here.
     **Pure formula half done (2026-10-01):** `MissionStepResolution` +
     `MissionStepOutcome` (`core/.../rules`) implement the two-roll formula
     itself - see §2.5(d) for the exact shape and its four re-derived
-    constants. Not yet wired into the bot harness or any caller: the
-    `MissionStep` content shape, the per-player in-progress-mission state,
-    the resolver that walks a season's step batch, post-mission
-    reliability change, and mission-based skill growth are all still open
-    - the ASSIGNED re-confirmation two paragraphs up is also still open and
-    unaffected by this sub-slice.
+    constants. **Step/season content shape also done the same day:**
+    `MissionStep`/`MissionSeason` plus a reshaped `MissionConfiguration`
+    (`core/.../content`) - see §2.5(e) for the exact fields, their
+    percentage-sum rules, and the open crew-blend-direction question still
+    unanswered. Not yet wired into the bot harness or any caller: the
+    per-player in-progress-mission state, the resolver that walks a
+    season's step batch, post-mission reliability change, and
+    mission-based skill growth are all still open - the ASSIGNED
+    re-confirmation two paragraphs up is also still open and unaffected by
+    this sub-slice.
   - Slice: budget/funding review, prestige, goals, and the win-condition +
     tie-break check — §2.1/§2.6/§2.9.
   - Slice: random events — §2.7.

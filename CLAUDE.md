@@ -359,17 +359,47 @@ crew-skill blend, flight-controller-scaled saving throw, five-tier
 outcome bands), taking already-summed contribution totals as plain
 `double`s with no dependency on `MissionComponent`/`Personnel`, the same
 "formula class before its caller" order `SkillGrowth` followed. All four
-tuning constants (a 65% crew-blend hardware threshold, a 20% crew-blend
+tuning constants (a 65 crew-blend hardware threshold, a 20% crew-blend
 weight, and two saving-throw band-size fractions) are unconfirmed
 defaults, re-derived to values different from BASPM's own code-confirmed
-numbers (a 70% threshold, a 25% weight) per `design.md` §1.2 — see
-`design.md` §2.5(d) for the full writeup. **Deliberately not wired into
-the bot harness yet** — no caller exists: the `MissionStep` content
-shape, per-player in-progress-mission state, the resolver that walks a
-season's step batch against it, post-mission reliability change, and
-mission-based skill growth are all still open, as is re-confirming
-`AssignmentState.ASSIGNED` as the "on an active mission" proxy (§2.2(c)'s
-own open follow-up) — see `design.md` §5's M2 entry for the exact list.
+numbers (a 70 threshold, a 25% weight, from
+`ComputeProbabilityOfSuccessForMissionStep` itself, not `Constants.xml`)
+per `design.md` §1.2 — see
+`design.md` §2.5(d) for the full writeup.
+
+**Step/season content shape done the same day (2026-10-01):**
+`MissionStep`/`MissionSeason` plus a reshaped `MissionConfiguration`
+(`core/.../content`, `durationInSeasons()` now derived from
+`seasons.size()` rather than stored) — involvement expressed against
+skills/components, never specific personnel, so it stays decoupled from
+who is actually assigned. **One real formula bug the advisor caught
+before this landed:** the first draft let `crewInvolvements` sum to 100
+or less, like `controllerInvolvements` — but
+`MissionStepResolution.computeBaseProbability`'s blend is a weighted
+average, so a partial crew sum reads as a skill shortfall and quietly
+*lowers* the blended probability, even with maximally skilled crew.
+Fixed: `crewInvolvements` is now either empty or sums to exactly 100;
+`controllerInvolvements` stays "100 or less" since partial controller
+participation is a real content lever, and an empty list now explicitly
+means the saving throw can never succeed. Every involvement percentage
+is 1-100, not 0-100 (a zero-percent entry is indistinguishable from "not
+involved"). `ContentCatalog` additionally requires every step's
+component ids to both exist and be required by the step's own mission's
+program. **Open question for the user, not yet answered — see
+`design.md` §2.5(e)'s own "Open balance question" paragraph:** the
+weighted-average blend means involving crew *lowers* success odds
+whenever crew skill is below the component sum (the ordinary case),
+which sits oddly against `baspm.md` §8.2's "a bonus on top of
+already-solid hardware" description — an additive bonus formula might
+fit that description more literally. Shipped as the weighted-average
+shape for now since it's a defensible reading and keeps the formula
+simple, not because the question is resolved. **Still not wired into the
+bot harness or any caller:** the per-player in-progress-mission state,
+the resolver that walks a season's step batch against it, post-mission
+reliability change, and mission-based skill growth are all still open,
+as is re-confirming `AssignmentState.ASSIGNED` as the "on an active
+mission" proxy (§2.2(c)'s own open follow-up) — see `design.md` §5's M2
+entry for the exact list.
 
 Git repo
 initialized 2026-09-27 and pushed

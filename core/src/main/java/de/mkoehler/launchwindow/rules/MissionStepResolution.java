@@ -32,9 +32,12 @@ import java.util.random.RandomGenerator;
  *
  * <p><b>All the numeric constants below are Launch Window's own values, not
  * BASPM's</b> - {@code design.md} &sect;1.2 forbids reusing BASPM's own
- * tuning constants (its own {@code Constants.xml} values) verbatim, so every
- * one here was re-derived to a concrete placeholder number while keeping the
- * same formula shape traced in {@code baspm.md} &sect;8.2.
+ * tuning constants verbatim, whether code-confirmed (BASPM's own 70
+ * threshold/25% weight, traced to {@code ComputeProbabilityOfSuccessForMissionStep}
+ * itself) or sourced from its {@code Constants.xml} (the saving-throw band
+ * fractions), so every one here was re-derived to a concrete placeholder
+ * number while keeping the same formula shape traced in {@code baspm.md}
+ * &sect;8.2.
  * <b>(Unconfirmed default, {@code design.md} &sect;2.5(d), 2026-10-01):</b>
  * placeholder-but-concrete starting values, expected to be tuned later via
  * the bot-driven playout harness once a caller exists, not final game
@@ -114,8 +117,10 @@ public final class MissionStepResolution {
      *                                 their relevant skill; ignored when
      *                                 {@code crewInvolved} is {@code false}
      * @return the base success probability, as a percentage; not clamped to
-     *     100, since an overwhelming contribution sum legitimately means a
-     *     guaranteed-success step
+     *     100 - when every component's involvement percentages sum to 100
+     *     (see {@code design.md} &sect;2.5(e)), this only exceeds 100 if a
+     *     positive {@link #effectiveReliability} modifier pushes some
+     *     component's own effective reliability above 100
      */
     public static double computeBaseProbability(double componentContributionSum, boolean crewInvolved,
             double crewContributionSum) {
