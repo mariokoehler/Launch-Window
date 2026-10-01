@@ -332,6 +332,27 @@ opened, 37,300 R&D seasons completed (avg. reliability gain 1.65).** See
 `design.md` §3.10 for the full writeup. This completes wiring every M2
 resolver built so far into the harness.
 
+**Mission-simulation decision gate resolved (user, 2026-10-01):** §2.5(c)'s
+outcome-tier shape — the one open question that was blocking M2's
+mission-simulation slice from starting — is settled: port BASPM's full
+five-tier step-outcome ladder (clean success / rescued success /
+half-credited continuing failure / full mission-ending failure /
+crew-fatality-eligible worst tier), uniformly across every step, not a
+per-step vital/optional split. Re-deriving Launch Window's own tuning
+numbers, per `design.md` §1.2. This also settles `baspm.md` §8.4 item 1 —
+the trace already showed the half-credited tier is reachable in BASPM's
+own code, the user's in-game play just never happened to land that
+narrow a roll band. **The loose end this decision created is now also
+resolved, same day:** the "tiered goal-achievement rating" idea (§2.6(c))
+had no trigger left once the vital/optional split was dropped, and is
+now scrapped for v1 outright rather than redesigned around a new
+trigger — goal achievement is plain achieved/not-achieved. This also
+makes §2.9's win-condition tie-break's second-order criterion (best
+goal-achievement rating) permanently moot for v1; the medal-table
+comparison is all it has. Mission simulation itself is not implemented
+yet — this was only the design-gate decision; see `design.md` §5 for the
+slice itself.
+
 Git repo
 initialized 2026-09-27 and pushed
 to GitHub as a **private**

@@ -231,9 +231,12 @@ same session it comes up**, the same standing-note-to-self habit as
   graded on exactly that spectrum after the fact (e.g. "prime mission
   success" vs. an extended/bonus phase for a planetary probe that outlives
   its baseline requirements). A true, concrete real-world precedent worth
-  a short beat wherever Launch Window's own gold/silver/bronze goal rating
-  (§2.6(c)) is first explained to a player — this is how real missions
+  a short beat for wherever Launch Window ever explains a mission's
+  prime-vs-extended framing to a player — this is how real missions
   actually get scored, not just a game abstraction layered on top.
+  (§2.6(c)'s own gold/silver/bronze goal rating, the originally-intended
+  home for this beat, is scrapped for v1 — this stays a true, worth-
+  keeping fact regardless of which future screen it ends up attached to.)
 - **Surfaced during the §2.2 astronaut-PR-duty idea (2026-09-30): real
   astronauts genuinely served a public-relations/fundraising function for
   their programs, not a gameplay invention layered onto them.** The
@@ -843,36 +846,23 @@ proceeds:
     starting mission-resolution mechanic, re-deriving the actual tuning
     numbers rather than reusing BASPM's `Constants.xml` values verbatim
     (`design.md` §1.2 — and we're free to retune balance for our own player
-    counts/pacing regardless). **(unconfirmed default)** carry over the
-    outcome taxonomy's *shape* (a clean success, a "rescued" success, a
-    half-credited partial failure, a full failure, and a crew-fatality-
-    eligible worst tier) without committing to BASPM's exact five-plus-one
-    labels — revisit once §2.6 (prestige/scoring) is designed, since the
-    outcome tiers only matter insofar as they map to a scoring/consequence
-    model we still need to design fresh. **Caveat (user in-game check,
-    2026-09-27, `baspm.md` §8.4 item 1): the "half-credited partial failure
-    that lets the mission continue" tier may not actually be reachable in
-    BASPM** — the user only ever saw a glitch either get fully rescued or
-    escalate straight into a mission-ending failure, never a
-    continuing-but-degraded outcome. Not yet re-confirmed against the
-    decompile, so treat the fifth tier above as tentative; it may collapse to
-    four tiers instead. Multi-season missions are adopted
-    as-is: a mission genuinely taking several turns to play out (with
-    escalating stakes each turn, per the Sputnik example in `baspm.md` §8.1)
-    is good game feel to keep, not an artifact to engineer away.
-    **Potential direction, not yet decided (user, 2026-09-27): design our own
-    step-outcome model from first principles — "vital" vs. "optional" steps —
-    rather than trying to replicate BASPM's exact tiering.** The idea: some
-    steps are make-or-break (e.g. ascent) where failure should end the
-    mission and can be crew-fatality-eligible; others are lower-stakes (e.g.
-    an in-flight science-collection step) where failure should only reduce
-    rewards, not end the mission outright. **This downgrades the still-open
-    `baspm.md` §8.4 item 1 question** (whether BASPM's own unresolved
-    `MINOR_GLITCH` ever lets a mission continue) **from blocking to merely
-    curious** — since Launch Window would define its own vital/optional split
-    rather than inherit BASPM's exact step semantics either way, it no longer
-    gates any design choice here. This idea also directly motivates a tiered
-    goal-achievement rating, cross-referenced into §2.6(c) below.
+    counts/pacing regardless). **Decided (user, 2026-10-01): port the full
+    five-tier outcome taxonomy, uniformly across every step** (not a
+    per-step vital/optional split) - a clean success, a "rescued" success
+    (saving throw fully catches it), a half-credited failure that lets the
+    mission continue, a full mission-ending failure, and a crew-fatality-
+    eligible worst tier (only reachable on steps flagged crew-risk) -
+    re-deriving BASPM's own labels/bands per `baspm.md` §8.2's trace, with
+    Launch Window's own tuning numbers. **This also settles `baspm.md`
+    §8.4 item 1's question** (whether the half-credited "continues but
+    degraded" tier is actually reachable): `baspm.md` §8.2's own
+    code-confirmed trace already shows it is - a plain glitch grants half
+    prestige and the mission continues - the user's own in-game play
+    simply never happened to land that particular roll band, evidently a
+    narrow one. Multi-season missions are adopted as-is: a mission
+    genuinely taking several turns to play out (with escalating stakes
+    each turn, per the Sputnik example in `baspm.md` §8.1) is good game
+    feel to keep, not an artifact to engineer away.
 - 2.6 **Prestige, goals & scoring — analyzed 2026-09-27, see `baspm.md` §11
   for the full trace.**
   - **(a) How BASPM does it:** goals are `Generic` (universal race
@@ -913,30 +903,27 @@ proceeds:
     rather than leaving it as an invisible odds adjustment, since
     async-multiplayer players benefit more from a legible "why did this
     mission's odds look different" explanation than an offline player would.
-    **Potential direction, not yet decided (user, 2026-09-27, follows from
-    §2.5(c)'s "vital vs. optional step" idea): a tiered goal-achievement
-    rating** — e.g. gold/3-star for completing a mission without failing any
-    optional step, silver/2-star for at most one optional-step failure,
-    bronze/1-star for more — giving goal achievement a quality dimension
-    beyond BASPM's plain achieved-or-not, without needing a vital step to
-    ever fail (that still just ends the mission, per §2.5). No BASPM
-    precedent for this; it's a Launch Window-original scoring layer, floated
-    as a direction worth keeping in mind rather than committed to yet.
-    **No longer purely cosmetic if it ships:** §2.9's win-condition
-    tie-break rule (decided 2026-09-28) uses goal-achievement rating as its
-    second-order tie-break, so deciding this one way or the other now also
-    affects whether that tie-break rule has anything to compare.
-    **A second reason to actually ship this (user, 2026-09-28, tying into
-    §3.12's logo work): a goal achievement is the natural place to render
-    the "mission patch" visual language the logo itself is being built
-    from** — the same circular border/rim-text frame as the brand mark,
-    with the center art swapped per goal and the ring closed solid gold
-    once earned (open/partial gold = the window is still active; closed
-    gold = hit it). This doesn't force the gold/silver/bronze quality tiers
-    above to be decided — a binary achieved/not-achieved badge already
-    works with the same frame — but if the tiered rating does ship, the
-    tiers are an obvious second visual axis (e.g. the rim color/thickness,
-    or a small corner mark) rather than a whole new badge shape.
+    **Scrapped for v1 (user, 2026-10-01):** a tiered gold/silver/bronze
+    goal-achievement rating was floated (2026-09-27, originally following
+    from §2.5(c)'s "vital vs. optional step" idea - e.g. gold for
+    completing a mission without failing any optional step, silver for
+    one such failure, bronze for more) as a Launch Window-original quality
+    dimension beyond BASPM's plain achieved-or-not. Its own trigger
+    stopped existing once §2.5(c) settled on BASPM's uniform five-tier
+    outcome ladder instead of a per-step vital/optional split, and the
+    idea is scrapped for v1 rather than redesigned around a new trigger -
+    goal achievement is plain achieved/not-achieved for now.
+    **Consequence:** §2.9's win-condition tie-break rule had reserved a
+    second-order tie-break for this rating; see that section's own note -
+    it simply doesn't apply now, nothing else needed.
+    **The "mission patch" visual language this idea was also meant to
+    support (user, 2026-09-28, tying into §3.12's logo work) still
+    works without it:** a goal achievement is the natural place to render
+    the same circular border/rim-text frame as the brand mark, with the
+    center art swapped per goal and the ring closed solid gold once
+    earned (open/partial gold = the window is still active; closed gold =
+    hit it) - a binary achieved/not-achieved badge already works with
+    this same frame, no quality-tier visual axis needed for v1.
 - 2.7 **Random events — analyzed 2026-09-27, see `baspm.md` §12.1/§12.2 for
   the full trace.**
   - **(a) How BASPM does it:** two independent per-season dice rolls (5%
@@ -1061,14 +1048,13 @@ proceeds:
     3rd, ...). Then compare the tied players' placement counts
     Olympic-medal-table style — most 1st-place goal finishes wins; if still
     tied, most 2nd-place finishes; and so on down the list. **Second-order
-    tie-break** (only reached if the medal-table comparison is itself still
-    tied): best goal-achievement *rating* — this makes §2.6(c)'s
-    not-yet-decided gold/silver/bronze tiered goal-achievement rating idea
-    load-bearing rather than cosmetic *if* it's ever implemented; until/
-    unless that's decided, this tie-break has nothing to compare and simply
-    doesn't apply (an unresolved tie at that point is vanishingly unlikely
+    tie-break, now moot (user, 2026-10-01):** was meant to be best
+    goal-achievement *rating*, but §2.6(c)'s gold/silver/bronze tiered
+    goal-achievement rating idea is scrapped for v1 - there is nothing for
+    this second-order tie-break to compare, so it simply doesn't apply. An
+    unresolved tie after the medal-table comparison is vanishingly unlikely
     given how many independent rankings precede it, and isn't worth
-    designing for further right now).
+    designing a replacement criterion for right now.
 - 2.10 **Difficulty level — decided (user, 2026-09-27): none, by design.**
   BASPM has three difficulty levels (`DifficultyLevelT.{Normal, Hard,
   BuzzHard}`, `baspm.md` §2.4) as a single-player choice — the player picks
@@ -1504,7 +1490,10 @@ fields, hiring, and Expert remain deferred exactly as this paragraph
 originally said. **Further superseded (2026-10-01):** programs/mission
 configurations/mission components now exist as their own immutable types
 (`de.mkoehler.launchwindow.content`) — see §5's M2 status. Goals/events
-remain deferred exactly as this paragraph originally said.
+remain deferred exactly as this paragraph originally said. **Also
+superseded (2026-10-01):** mission outcome tiers (§2.5(c)) are decided,
+not unconfirmed — port BASPM's full five-tier ladder; the gold/silver/
+bronze goal rating (§2.6(c)) is scrapped for v1, not merely deferred.
 
 **Content-definition *types* now exist (2026-10-01) - real, authored
 content still doesn't.** `de.mkoehler.launchwindow.content`'s
@@ -3159,9 +3148,10 @@ here.
     never-fires-by-design transfer relationship's explanation in
     &sect;3.10's own entry.
   - Slice: mission simulation, base two-roll formula only (no Expert yet,
-    per the shape-defining choice above) — §2.5. **Decision gate:** §2.5(c)'s
-    outcome-tier shape (four vs. five tiers, "vital vs. optional step") is
-    still marked unconfirmed and must be settled before this slice starts.
+    per the shape-defining choice above) — §2.5. **Decision gate resolved
+    (user, 2026-10-01):** §2.5(c)'s outcome-tier shape is settled - port
+    BASPM's full five-tier ladder, uniformly across every step, re-deriving
+    Launch Window's own numbers. This slice can start.
     **Re-confirm while here (§2.2(c), 2026-09-30):** Astronaut/Mission
     Control's departure protection uses `AssignmentState.ASSIGNED` as a
     stand-in for "on an active mission," accepted by the user with a
@@ -3226,10 +3216,8 @@ here.
 - **M7+ — Second wave, order not yet decided:** the Expert personnel trait
   and its exhaustion/falloff curve (§2.2(c)); active
   interference/sabotage/espionage (§2.9's brainstorm, deliberately deferred
-  past passive-competition-only v1); the gold/silver/bronze goal-achievement
-  rating (§2.6(c), still not decided at all — and if it never is, §2.9's
-  win-condition tie-break simply never reaches that tier, which is fine);
-  the rest of the Sputnik-through-Apollo content tree beyond M3's
+  past passive-competition-only v1); the rest of the Sputnik-through-Apollo
+  content tree beyond M3's
   early-era slice; the educational layer's actual UI/content (§1.1); real
   art via the asset generation pipeline (§3.5, its own small project); a
   real "game host" role/UI (§3.6/§3.8, currently just direct server-file
