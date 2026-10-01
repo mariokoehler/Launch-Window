@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -217,6 +218,40 @@ class PersonnelLifecycleTest {
         List<ResolutionEvent> events = PersonnelLifecycle.advanceSeason(snapshot);
 
         assertEquals(AssignmentState.ASSIGNED, ((PersonnelDeparture) events.get(0)).assignmentStateAtExit());
+    }
+
+    /**
+     * Verifies a departing {@code SET} employee's
+     * {@code rdTargetComponentIdAtExit} matches whatever R&amp;D target
+     * they had set - the finer-grained reverse pointer {@code design.md}
+     * &sect;3.4's R&amp;D-target-linkage proposal added.
+     */
+    @Test
+    void departureRecordsTheSetEmployeesRdTargetComponentId() {
+        SetSpecialist researching = new SetSpecialist("s1", "Set One", 30, 1, 50);
+        researching.setAssignmentState(AssignmentState.ASSIGNED);
+        researching.setRdTargetComponentId("rocket-redstone");
+        PlayerSnapshot snapshot = new PlayerSnapshot("Agency", Archetype.NASA, 0, 0, 0, 1);
+        snapshot.setSetSpecialists(List.of(researching));
+
+        List<ResolutionEvent> events = PersonnelLifecycle.advanceSeason(snapshot);
+
+        assertEquals("rocket-redstone", ((PersonnelDeparture) events.get(0)).rdTargetComponentIdAtExit());
+    }
+
+    /**
+     * Verifies a departing non-{@code SET} employee's
+     * {@code rdTargetComponentIdAtExit} is always {@code null}, since only
+     * {@code SET} employees do R&amp;D at all.
+     */
+    @Test
+    void departureRecordsNoRdTargetComponentIdForNonSetGroups() {
+        Astronaut astronaut = astronaut("a1", PersonnelLifecycle.ASTRONAUT_RETIREMENT_AGE, 80, AssignmentState.IDLE);
+        PlayerSnapshot snapshot = snapshotWithAstronaut(astronaut);
+
+        List<ResolutionEvent> events = PersonnelLifecycle.advanceSeason(snapshot);
+
+        assertNull(((PersonnelDeparture) events.get(0)).rdTargetComponentIdAtExit());
     }
 
     /**

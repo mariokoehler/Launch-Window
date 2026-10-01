@@ -58,6 +58,7 @@ class PlayerSnapshotTest {
         specialist.setTrainingSeasonsTotal(2);
         specialist.setTrainingTargetSkill(SetSkill.ROCKETS);
         specialist.setTrainingTargetLevel(72.25);
+        specialist.setRdTargetComponentId("rocket-redstone");
         original.setSetSpecialists(List.of(specialist));
 
         MissionControlOfficer officer = new MissionControlOfficer("mco-1", "Alex Novak", 45, 70, 40);
@@ -102,6 +103,7 @@ class PlayerSnapshotTest {
         assertEquals(2, restoredSpecialist.getTrainingSeasonsTotal());
         assertEquals(SetSkill.ROCKETS, restoredSpecialist.getTrainingTargetSkill());
         assertEquals(72.25, restoredSpecialist.getTrainingTargetLevel());
+        assertEquals("rocket-redstone", restoredSpecialist.getRdTargetComponentId());
 
         assertEquals(1, restored.getMissionControlOfficers().size());
         MissionControlOfficer restoredOfficer = restored.getMissionControlOfficers().get(0);

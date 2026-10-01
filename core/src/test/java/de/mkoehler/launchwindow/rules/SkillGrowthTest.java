@@ -166,4 +166,65 @@ class SkillGrowthTest {
             assertTrue(factor >= SkillGrowth.RD_GAIN_FACTOR_MIN && factor < SkillGrowth.RD_GAIN_FACTOR_MAX);
         }
     }
+
+    /**
+     * Verifies the exact reliability-gain formula: distance to the
+     * component's own ceiling, times the factor, times the assignee's
+     * skill as a fraction of {@link SkillGrowth#SKILL_CAP}.
+     */
+    @Test
+    void reliabilityGainMatchesTheExactFormula() {
+        // (90 - 50) * 0.1 * (80 / 100) = 3.2.
+        assertEquals(3.2, SkillGrowth.reliabilityGain(50.0, 90.0, 80.0, 0.1), 1e-9);
+    }
+
+    /**
+     * Verifies a zero-skill assignee contributes no reliability gain at
+     * all, regardless of how far the component is from its own ceiling.
+     */
+    @Test
+    void reliabilityGainWithZeroSkillIsZero() {
+        assertEquals(0.0, SkillGrowth.reliabilityGain(10.0, 90.0, 0.0, SkillGrowth.RD_RELIABILITY_FACTOR_MAX));
+    }
+
+    /**
+     * Verifies the gain never pushes a component's reliability past its
+     * own {@code maxReliability}, even when that ceiling is well below
+     * {@link SkillGrowth#SKILL_CAP} - the exact bug this formula exists to
+     * avoid, that a formula scaled against the fixed skill cap instead
+     * would not catch near a lower, component-specific ceiling.
+     */
+    @Test
+    void reliabilityGainNeverPushesPastItsOwnMaxBelowTheSkillCap() {
+        double currentReliability = 89.0;
+        double maxReliability = 90.0;
+        double gain = SkillGrowth.reliabilityGain(currentReliability, maxReliability, SkillGrowth.SKILL_CAP,
+            SkillGrowth.RD_RELIABILITY_FACTOR_MAX);
+
+        assertTrue(currentReliability + gain <= maxReliability);
+    }
+
+    /**
+     * Verifies a component already at its own ceiling gains nothing
+     * further.
+     */
+    @Test
+    void reliabilityGainAtItsOwnMaxIsZero() {
+        assertEquals(0.0,
+            SkillGrowth.reliabilityGain(90.0, 90.0, SkillGrowth.SKILL_CAP, SkillGrowth.RD_RELIABILITY_FACTOR_MAX));
+    }
+
+    /**
+     * Verifies {@code drawRdReliabilityFactor} always stays within its
+     * documented range across many draws.
+     */
+    @Test
+    void drawRdReliabilityFactorStaysWithinItsRange() {
+        Random random = new Random(42L);
+        for (int i = 0; i < 1_000; i++) {
+            double factor = SkillGrowth.drawRdReliabilityFactor(random);
+            assertTrue(factor >= SkillGrowth.RD_RELIABILITY_FACTOR_MIN
+                && factor < SkillGrowth.RD_RELIABILITY_FACTOR_MAX);
+        }
+    }
 }

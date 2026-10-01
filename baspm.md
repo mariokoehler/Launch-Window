@@ -1361,6 +1361,17 @@ server resolves mechanically" with no special-casing needed. See
    `OpeningCostDeductions`, `RequiredGoal` gating, and the "extended
    mission" variant choice are actually surfaced to the player, useful for
    calibrating Launch Window's own program-selection UI.
+3. **Trace the actual R&D-to-reliability formula** — this pass found no
+   decompiled source for how "R&D reliability gains scale with the
+   assignee's skill" (the manual-level summary in the overview's Core
+   Elements list) actually computes a mission component's reliability
+   gain from a season of SET R&D work, only the separate, code-confirmed
+   formula for the SET employee's *own* skill growth (§9.3). Needed:
+   `PersonnelManager`/`MissionComponentsManager`'s own R&D-handling
+   methods and whichever constants file holds this gain's factor range,
+   the same way §10.3/§10.4 traced reliability transfer and post-mission
+   change. `design.md` §3.4/§5 currently carries an unconfirmed,
+   Launch-Window-original formula for this pending that trace.
 
 ## 11. Budget, prestige, and goals (traced 2026-09-27)
 

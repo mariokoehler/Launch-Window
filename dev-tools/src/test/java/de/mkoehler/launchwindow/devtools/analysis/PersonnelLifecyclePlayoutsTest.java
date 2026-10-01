@@ -94,6 +94,23 @@ class PersonnelLifecyclePlayoutsTest {
     }
 
     /**
+     * Verifies a long enough run actually completes R&D seasons too - a
+     * sign the bot's own-component-targeting reassignment path and
+     * {@code ResearchProgress} are both genuinely exercised, not just
+     * theoretically wired together. Every run already self-checks the
+     * ASSIGNED/rdTargetComponentId pairing invariant internally (see
+     * {@code checkResearchInvariants}); without this, a fixture or bot
+     * change could quietly make that pairing check vacuous by never
+     * actually assigning anyone to research.
+     */
+    @Test
+    void aLongRunProducesResearch() {
+        PersonnelPlayoutReport report = PersonnelLifecyclePlayouts.run(100, 5, 100, 7L);
+
+        assertTrue(report.researchCompletedCount() > 0, "expected at least one R&D season over 100 seasons");
+    }
+
+    /**
      * Verifies each non-positive argument is rejected.
      */
     @Test

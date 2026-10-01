@@ -23,7 +23,11 @@ public enum AssignmentState {
     IDLE,
 
     /**
-     * Actively assigned to a duty (R&amp;D, a mission, or similar).
+     * Actively assigned to a duty - for a {@link SetSpecialist}, always
+     * R&amp;D on the owned mission component named by their own
+     * {@link SetSpecialist#getRdTargetComponentId()} (SET has no other kind
+     * of assignment); for an {@link Astronaut}/{@link MissionControlOfficer},
+     * a mission.
      */
     ASSIGNED,
 

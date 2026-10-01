@@ -143,10 +143,10 @@ BASPM's, 13 tests); `TrainingProgress.advanceSeason` (fixed-length
 `MessageRegistry`, 12 tests) — full write-up in `design.md` §2.2(c)/§3.4,
 including the composition-order contract for running `PersonnelLifecycle`
 before `TrainingProgress` once both get wired into one pass. **Still not
-started in this same M2 slice:** `PERMANENT` training, R&D's own target-
-skill field (needs §2.3/§2.4's program linkage first), mission-based
-growth's caller, hiring, Expert, and actually starting a training
-assignment (no player-action path exists yet). Not yet wired into
+started in this same M2 slice (as of 2026-09-30; R&D's own target-skill
+field is since done — see further down):** `PERMANENT` training,
+mission-based growth's caller, hiring, Expert, and actually starting a
+training assignment (no player-action path exists yet). Not yet wired into
 `PlayerStateService`/`TurnScheduler` — that integration is M4 scope, not
 M2's.
 
@@ -282,9 +282,9 @@ bug the advisor caught: initial reliability wasn't clamped at the
 component's own max), plus the two real correctness traps (an
 already-owned component is never reset/re-transferred; two components
 newly granted in the same `open` call never see each other's fresh
-reliability when computing transfers). Unblocks
-but doesn't itself implement SET's R&D-target-component linkage (see
-`design.md` §3.4) — the clear next M2 sub-slice.
+reliability when computing transfers). Unblocked SET's
+R&D-target-component linkage (see `design.md` §3.4) — done the same day,
+see below.
 
 **`ProgramOpening` wired into `PersonnelLifecyclePlayouts` the same day
 (2026-10-01):** a small fixture `ContentCatalog` (three programs, four
@@ -304,8 +304,33 @@ training completions (avg. gain 5.24), 3,849 hires, hiring-pool bands
 cost (2,300 at most) stays well under the 5,000 starting funds, so
 `INSUFFICIENT_FUNDS` is exercised by `ProgramOpeningTest`'s own unit
 test, not meaningfully by this harness — see `design.md` §3.10 for the
-full writeup. This completes wiring every
-M2 resolver built so far into the harness.
+full writeup.
+
+**R&D-target-component linkage done the same day (2026-10-01):**
+`SetSpecialist.rdTargetComponentId` plus `ResearchProgress`/
+`ResearchCompleted` in `de.mkoehler.launchwindow.rules` — a `SET`
+employee's `ASSIGNED` state now always means R&D on a specific owned
+`MissionComponent`, growing both the employee's own skill (flat,
+`SkillGrowth.flatRdGain`, already built) and the component's reliability
+(new `SkillGrowth.reliabilityGain`, diminishing-returns against the
+component's own ceiling, **unconfirmed default shape and factor range**
+— `baspm.md` has no decompiled trace for this half of the mechanic, only
+a manual-level claim that it scales with skill at all; see `design.md`
+§3.4 for the full proposal and the open question). `PersonnelDeparture`
+gained `rdTargetComponentIdAtExit`, the reverse pointer §3.4 flagged as
+this linkage's own follow-up. Wired into `PersonnelLifecyclePlayouts` the
+same day: the bot now picks a random owned component when assigning a
+`SET` specialist (falling back to training if none owned yet), with a new
+invariant enforcing the `ASSIGNED` ⇔ owned-target pairing every season.
+**Numbers (same run, shifted again — partly behavioral this time, not
+just the random stream: `SET` can't go `ASSIGNED` until a program is
+open and a component owned, which changes morale/resignation timing for
+that group): 287 resigned (avg. tenure 29.2), 1,269 retired (avg. tenure
+55.9), 5,345 still employed, 72,258 training completions (avg. gain
+5.16), 3,901 hires, hiring-pool bands 0/608/21,560/25,832, 597 programs
+opened, 37,300 R&D seasons completed (avg. reliability gain 1.65).** See
+`design.md` §3.10 for the full writeup. This completes wiring every M2
+resolver built so far into the harness.
 
 Git repo
 initialized 2026-09-27 and pushed

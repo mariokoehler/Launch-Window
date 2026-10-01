@@ -25,10 +25,9 @@ import java.util.Objects;
  *
  * @param id                         a stable identifier, unique within a
  *                                   {@link ContentCatalog}
- * @param associatedSkill            the SET skill whose R&amp;D work can grow
- *                                   this component's reliability (not yet
- *                                   wired to any resolver - see
- *                                   {@code design.md} &sect;3.4)
+ * @param associatedSkill            the SET skill whose R&amp;D work grows
+ *                                   this component's reliability - see
+ *                                   {@code de.mkoehler.launchwindow.rules.ResearchProgress}
  * @param baselineReliability        the reliability (0-100) a freshly
  *                                   granted, untransferred component starts at
  * @param maxReliability             the reliability (0-100) ceiling this

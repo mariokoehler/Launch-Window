@@ -1296,21 +1296,77 @@ unconfirmed:**
   re-enrolling every round with no progress - an infinite-loop bug, not a
   balance question. Stop re-enrolling once the target is reached *or* a
   round's own gain falls below a small epsilon.
-- **R&D's own target skill is a separate, still-fully-open question, not
-  solved by any of the above:** `AssignmentState.ASSIGNED` still doesn't
-  distinguish "doing R&D" from "assigned to a mission" (its own doc
-  comment already flagged this gap, unchanged since M1) - SET's R&D target
-  skill needs its own field (`SetSpecialist`-only, since only SET does
-  R&D) once that distinction actually gets modeled. **Unblocked, not yet
-  implemented (2026-10-01):** §2.3/§2.4's programs/mission-components
-  slice is done and `MissionComponent` now has a stable id to link
-  against - this is the clear next M2 sub-slice, still not started. Not
-  proposed in detail here - deliberately left to whichever slice actually
-  introduces mission-component-linked R&D. **Reverse pointer (2026-09-30):**
-  when that linkage lands, also extend `PersonnelDeparture` (§2.2(c)) with
-  what the employee was actually working on - it currently only carries
-  `assignmentStateAtExit`, a coarse "were they ASSIGNED/IN_TRAINING/IDLE"
-  hint, exactly because this finer-grained link doesn't exist yet.
+- **R&D-target-component linkage - implemented (2026-10-01), written down
+  before any code, same convention as the training fields above - see
+  §5's M2 status for the concrete classes:**
+  `AssignmentState.ASSIGNED` now distinguishes "doing R&D" from
+  "assigned to a mission" via the field below, resolved without a new
+  enum constant - SET's
+  own `ASSIGNED` already means "working on mission components"
+  (§2.2(c)'s departure-protection rule already treats it that way, and a
+  new `AssignmentState` value would carry Kryo-ordinal and departure-
+  protection consequences for no real gain) - instead `SetSpecialist`
+  gains a new field, `rdTargetComponentId` (`String`, nullable, the owned
+  `MissionComponent#id()` a `SET` employee's current `ASSIGNED` state is
+  working on; `null` when not doing R&D).
+  - **`baspm.md` §9.3 confirms two separate effects from one season of
+    R&D, not one:** the SET employee's own skill-in-use grows by a flat
+    `random(0.2, 0.4)` (BASPM's own numbers; re-derived as
+    `SkillGrowth.RD_GAIN_FACTOR_MIN`/`MAX`, already implemented as
+    `SkillGrowth.flatRdGain` - this part of the mechanic was already built
+    ahead of its caller existing). Separately, the manual-level summary
+    (not code-confirmed - `baspm.md` has no decompiled trace for this half,
+    not yet verified against the decompiled source) states "R&D
+    reliability gains scale with the assignee's skill in that component's
+    group" - the targeted `MissionComponent`'s own reliability grows too,
+    diminishing-returns-shaped against *its own* `maxReliability`, not the
+    personnel skill cap.
+  - **Unconfirmed default - both the formula shape and its factor range:
+    `SkillGrowth.reliabilityGain(currentReliability, maxReliability,
+    assigneeSkill, factor)`** - `(maxReliability − currentReliability) ×
+    factor × clamp(assigneeSkill ÷ SKILL_CAP, 0, 1)`. Launch Window's own
+    shape, not re-derived from a BASPM code trace: `baspm.md` has no
+    decompiled source for this half of the mechanic, only the manual-level
+    claim that it "scales with the assignee's skill" at all - the specific
+    diminishing-returns-against-its-own-ceiling shape and the
+    skill-as-a-fraction-of-`SKILL_CAP` scaling are both this proposal's own
+    choice, for the user to confirm or revise. Deliberately a new function,
+    not `diminishingReturnsGain` reused with an external clamp: that
+    function's own distance-to-cap term is hardwired to
+    `SkillGrowth.SKILL_CAP` (100), not a per-call cap, so reusing it for a
+    component whose `maxReliability` is below 100 would compute too large a
+    gain near that component's own ceiling and then clip sharply, not
+    taper off the way genuine diminishing returns should. The shape
+    matches `baspm.md` §10.4's own post-mission reliability-change formula,
+    `(MaxReliability − CurrReliability) × factor` - the same curve shape
+    showing up a fourth time, so a future mission-simulation slice's
+    post-mission change can reuse it too, just with a different factor
+    range. **`RD_RELIABILITY_FACTOR_MIN`/`MAX` are placeholder-but-concrete
+    Launch Window numbers**, same status as every other numeric constant
+    in this file, since BASPM has no code-confirmed range to re-derive
+    from either.
+  - **Both of a season's R&D effects use the assignee's skill as it stood
+    at the start of that employee's own turn this season** (before this
+    same season's own flat skill gain is applied) - keeps the two draws
+    independent of each other's own output, not entangled.
+  - **Two SET employees assigned to the same component stack, applied in
+    roster order**, each one's reliability gain computed against whatever
+    the component's reliability already is when their own turn comes up -
+    genuine diminishing returns across simultaneous researchers, not just
+    across seasons.
+  - **Never touches `OwnedMissionComponent.floorReliability`** - only
+    `currentReliability` grows from R&D; the floor stays exactly what
+    `ProgramOpening` set it to.
+  - **Composition order: `PersonnelLifecycle`, then `TrainingProgress`,
+    then this resolver, then `HiringPool.refreshCandidates` last** (a
+    departed SET employee does no further R&D the same season they left;
+    running after `TrainingProgress`, not before, is also what keeps the
+    two resolvers' random draws reproducible from a seed, since both draw
+    from the same shared source).
+  - **Reverse pointer (2026-09-30), resolved by this same proposal:**
+    `PersonnelDeparture` (§2.2(c)) gains `rdTargetComponentIdAtExit`
+    (`String`, nullable) - `null` for every non-`SET` departure and for a
+    `SET` departure with no R&D target set, populated otherwise.
 
 **Hiring pool — proposed ahead of M2's hiring-pool sub-slice (2026-09-30),
 written down before any code, same convention as the training fields
@@ -2205,7 +2261,33 @@ this harness run. A future real content pack's actual program costs,
 once authored (M3), will likely make funds a genuine constraint the way
 they aren't here.
 
-**Still not built:** the general full-game harness described in this
+**`ResearchProgress` wired in the same session it was implemented
+(2026-10-01):** `shuffleSetSpecialist`'s own reassignment move now picks a
+random *owned* mission component when moving a `SET` specialist from idle
+to assigned - falling back to starting training instead when nothing is
+owned yet (no program opened in that game so far) - and clears
+`rdTargetComponentId` on the move back to idle, so the
+`AssignmentState.ASSIGNED` &hArr; non-null-and-owned-target pairing never
+drifts apart; a new invariant checks that pairing every season,
+independently of `ResearchProgress`'s own logic. The existing reliability-
+range/floor-ordering invariant (already added for `ProgramOpening`) now
+genuinely exercises R&D's own output too, not just grant-time values, since
+it runs every season after R&D may have grown a component's reliability.
+
+**Numbers (same 200-game/80-season run as the figures above, shifted
+again, this time partly for a behavioral reason, not only a random-stream
+one): 287 resigned (avg. tenure 29.2 seasons), 1,269 retired (avg. tenure
+55.9 seasons), 5,345 still employed, 72,258 training completions (avg.
+gain 5.16), 3,901 hires, hiring-pool band hits 0/608/21,560/25,832
+(poor/average/good/excellent), 597 programs opened, and 37,300 R&D
+seasons completed (avg. reliability gain 1.65).** The behavioral part: a
+`SET` specialist can only go `ASSIGNED` once at least one program is
+open and a component is actually owned, which it wasn't at all before
+this wiring - early-season `SET` specialists that would previously have
+gone `ASSIGNED` (idle-morale-loss-avoiding busywork with no real target)
+now more often train instead, changing morale/resignation timing for that
+group specifically, on top of the usual random-stream shift from the new
+draws themselves. the general full-game harness described in this
 section's original text below — simple bots making plausible per-season
 decisions (assign personnel, queue a mission), run many simulated
 multi-season games from a seed, and reporting the metrics that actually
@@ -2997,10 +3079,14 @@ here.
     `HiringPool`)** — see §3.4/§2.2(c) for the candidate-pool fields,
     quality bands, roster capacities, and the three user decisions
     (auto-`BASIC`-training on hire, capacity now decided, hiring free for
-    now). **Still open in this same slice:** R&D's own target-skill field/
-    caller (needs §2.3/§2.4's program/component-linkage first, see §3.4),
-    mission-based skill growth's own caller (slice 3), and the Expert
-    trait — none started yet. Also still open: actually starting a
+    now). **R&D-target-component linkage done (2026-10-01, `ResearchProgress`/
+    `ResearchCompleted`)** — see §3.4's own entry for the full proposal
+    this implements exactly: `SetSpecialist.rdTargetComponentId`, the new
+    `SkillGrowth.reliabilityGain` formula, the composition order (same
+    position as `TrainingProgress`, after `PersonnelLifecycle`), and
+    `PersonnelDeparture.rdTargetComponentIdAtExit`. **Still open in this
+    same slice:** mission-based skill growth's own caller (slice 3), and
+    the Expert trait — neither started yet. Also still open: actually starting a
     training assignment via a real player action, and *submitting* a hire
     as a real player action (both currently plain headless methods a
     future action handler will call, no dispatch path exists yet), plus
@@ -3054,11 +3140,9 @@ here.
     flagged this exact choice as deliberately unresolved in BASPM's own
     code (the field name implies a transfer-inclusive floor was intended,
     but the code never actually sets it that way).
-    **Unblocks, but does not itself implement, the R&D-target-component
-    linkage &sect;3.4 flagged as this slice's follow-up:** `SetSpecialist`
-    still has no field linking a standing R&D order to a specific
-    `MissionComponent#id()` - natural next sub-slice now that
-    `MissionComponent` actually has a stable id to reference.
+    **Unblocked the R&D-target-component linkage &sect;3.4 flagged as this
+    slice's follow-up - done the same day, see &sect;3.4's own entry and
+    this list's `ResearchProgress` entry below.**
     **`ProgramOpening` wired into `PersonnelLifecyclePlayouts` (2026-10-01):**
     a small fixture `ContentCatalog` (three programs, four mission
     components, two reliability-transfer relationships - only one of which

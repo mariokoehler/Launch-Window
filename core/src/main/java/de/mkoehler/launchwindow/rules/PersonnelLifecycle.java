@@ -208,10 +208,30 @@ public final class PersonnelLifecycle {
             DepartureReason reason = advanceOne(person, group, retirementAge);
             if (reason != null) {
                 events.add(new PersonnelDeparture(group, person.getId(), person.getName(), reason,
-                    person.getAge(), person.getMorale(), person.getAssignmentState()));
+                    person.getAge(), person.getMorale(), person.getAssignmentState(),
+                    rdTargetComponentIdAtExit(person, group)));
                 iterator.remove();
             }
         }
+    }
+
+    /**
+     * Returns the departing employee's R&amp;D target component id, for
+     * {@link PersonnelDeparture#rdTargetComponentIdAtExit()} - only
+     * {@code SET} employees do R&amp;D, so every other group's departure
+     * reports {@code null} unconditionally rather than inspecting the
+     * employee at all.
+     *
+     * @param person the departing employee
+     * @param group  their personnel group
+     * @return their R&amp;D target component id, or {@code null} if they
+     *     aren't {@code SET} or have no target set
+     */
+    private static String rdTargetComponentIdAtExit(Personnel person, PersonnelGroup group) {
+        if (group != PersonnelGroup.SET) {
+            return null;
+        }
+        return ((SetSpecialist) person).getRdTargetComponentId();
     }
 
     /**

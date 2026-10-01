@@ -23,11 +23,15 @@ import de.mkoehler.launchwindow.model.AssignmentState;
  *                              {@link AssignmentState#ASSIGNED} or
  *                              {@link AssignmentState#IN_TRAINING} signals
  *                              the player has a replacement to assign, not
- *                              just a roster slot to refill; exactly *what*
- *                              they were working on is a finer-grained hint
- *                              this field doesn't carry yet - see
- *                              {@code design.md} &sect;3.4's still-open
- *                              R&amp;D-target-linkage note)
+ *                              just a roster slot to refill)
+ * @param rdTargetComponentIdAtExit the mission component id a departing
+ *                              {@code SET} employee's R&amp;D was targeting
+ *                              at the moment they left, or {@code null} for
+ *                              every non-{@code SET} departure and for a
+ *                              {@code SET} departure with no R&amp;D target
+ *                              set - the finer-grained hint
+ *                              {@link #assignmentStateAtExit} alone can't
+ *                              carry
  * @author Mario Koehler
  */
 public record PersonnelDeparture(
@@ -37,6 +41,7 @@ public record PersonnelDeparture(
     DepartureReason reason,
     int ageAtExit,
     int moraleAtExit,
-    AssignmentState assignmentStateAtExit
+    AssignmentState assignmentStateAtExit,
+    String rdTargetComponentIdAtExit
 ) implements ResolutionEvent {
 }

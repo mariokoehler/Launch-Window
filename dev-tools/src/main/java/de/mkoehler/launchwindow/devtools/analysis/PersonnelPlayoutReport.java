@@ -45,6 +45,13 @@ package de.mkoehler.launchwindow.devtools.analysis;
  * @param programsOpenedCount               how many bot program-opens
  *                                          succeeded across every game (see
  *                                          {@code PersonnelLifecyclePlayouts#OPEN_PROGRAM_CHANCE_PER_SEASON})
+ * @param researchCompletedCount            how many seasons of R&amp;D
+ *                                          produced a {@code ResearchCompleted}
+ *                                          event across every game
+ * @param averageResearchReliabilityGain    average component-reliability
+ *                                          gain per completed R&amp;D
+ *                                          season, {@code 0} if none
+ *                                          completed
  * @author Mario Koehler
  */
 public record PersonnelPlayoutReport(
@@ -63,6 +70,8 @@ public record PersonnelPlayoutReport(
     int averageBandBatches,
     int goodBandBatches,
     int excellentBandBatches,
-    int programsOpenedCount
+    int programsOpenedCount,
+    int researchCompletedCount,
+    double averageResearchReliabilityGain
 ) {
 }

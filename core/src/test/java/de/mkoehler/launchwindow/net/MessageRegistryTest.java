@@ -237,6 +237,7 @@ class MessageRegistryTest {
         snapshot.setAstronauts(List.of(astronaut));
         SetSpecialist specialist = new SetSpecialist("set-1", "Omar Idris", 41, 75, 55);
         specialist.setSkill(SetSkill.ROCKETS, 63);
+        specialist.setRdTargetComponentId("rocket-redstone");
         snapshot.setSetSpecialists(List.of(specialist));
         MissionControlOfficer officer = new MissionControlOfficer("mco-1", "Alex Novak", 45, 70, 40);
         officer.setSkill(MissionControlSkill.PROPULSION, 50);
@@ -261,6 +262,7 @@ class MessageRegistryTest {
         assertEquals(AstronautSkill.EVA, copy.state().getAstronauts().get(0).getTrainingTargetSkill());
         assertEquals(85.5, copy.state().getAstronauts().get(0).getTrainingTargetLevel());
         assertEquals(63, copy.state().getSetSpecialists().get(0).getSkill(SetSkill.ROCKETS));
+        assertEquals("rocket-redstone", copy.state().getSetSpecialists().get(0).getRdTargetComponentId());
         assertEquals(50, copy.state().getMissionControlOfficers().get(0).getSkill(MissionControlSkill.PROPULSION));
         assertEquals(1, copy.state().getAstronautCandidates().size());
         assertEquals("astro-cand-1", copy.state().getAstronautCandidates().get(0).getId());

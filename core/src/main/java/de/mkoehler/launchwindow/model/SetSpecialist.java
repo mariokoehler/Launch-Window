@@ -23,6 +23,7 @@ public class SetSpecialist extends Personnel {
 
     private Map<SetSkill, Double> skills = new LinkedHashMap<>();
     private SetSkill trainingTargetSkill;
+    private String rdTargetComponentId;
 
     /**
      * No-argument constructor required for Jackson deserialization.
@@ -104,5 +105,28 @@ public class SetSpecialist extends Personnel {
      */
     public void setTrainingTargetSkill(SetSkill trainingTargetSkill) {
         this.trainingTargetSkill = trainingTargetSkill;
+    }
+
+    /**
+     * Returns the id of the owned mission component this specialist's
+     * current {@link AssignmentState#ASSIGNED} state is doing R&amp;D on.
+     * Meaningless when not {@code ASSIGNED} - see {@code design.md}
+     * &sect;3.4's field proposal.
+     *
+     * @return the R&amp;D target component id, or {@code null} if not
+     *     doing R&amp;D
+     */
+    public String getRdTargetComponentId() {
+        return rdTargetComponentId;
+    }
+
+    /**
+     * Sets the id of the owned mission component this specialist's
+     * current {@link AssignmentState#ASSIGNED} state is doing R&amp;D on.
+     *
+     * @param rdTargetComponentId the R&amp;D target component id
+     */
+    public void setRdTargetComponentId(String rdTargetComponentId) {
+        this.rdTargetComponentId = rdTargetComponentId;
     }
 }

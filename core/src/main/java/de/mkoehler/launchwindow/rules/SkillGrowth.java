@@ -11,9 +11,10 @@ import java.util.random.RandomGenerator;
  * R&amp;D assignment, or flying a mission actually touches (a single skill,
  * all five, or a Flight Director's five-way-spread average per
  * {@code baspm.md} &sect;9.4) is a caller's job, not this class's.
- * {@link TrainingProgress} is the first such caller (a single target skill,
- * fixed-length training); mission-based growth's own caller is still a
- * later M2 slice.</p>
+ * {@link TrainingProgress} (a single target skill, fixed-length training)
+ * and {@link ResearchProgress} (R&amp;D's own employee-skill and
+ * component-reliability growth) are such callers; mission-based growth's
+ * own caller is still a later M2 slice.</p>
  *
  * <p><b>Random factor drawn separately from the formula it feeds</b> - every
  * growth formula here takes its random factor as a plain parameter rather
@@ -65,6 +66,12 @@ public final class SkillGrowth {
 
     /** The highest random factor a season of flat SET R&D growth can draw. */
     public static final double RD_GAIN_FACTOR_MAX = 0.35;
+
+    /** The lowest random factor a season of R&D-driven component-reliability growth can draw. */
+    public static final double RD_RELIABILITY_FACTOR_MIN = 0.05;
+
+    /** The highest random factor a season of R&D-driven component-reliability growth can draw. */
+    public static final double RD_RELIABILITY_FACTOR_MAX = 0.15;
 
     /**
      * Not instantiable; this class only exposes static methods.
@@ -146,6 +153,45 @@ public final class SkillGrowth {
     }
 
     /**
+     * The diminishing-returns growth formula for a mission component's
+     * reliability growing from sustained R&amp;D work, scaled by the
+     * assignee's own skill in that component's group - a <em>separate</em>
+     * function from {@link #diminishingReturnsGain}, not that function
+     * reused with an external clamp, because its distance-to-cap term is
+     * computed against the given {@code maxReliability} directly rather
+     * than the fixed {@link #SKILL_CAP}: a component instance's own
+     * reliability ceiling is not always 100, so reusing the
+     * fixed-100-cap formula would compute too large a gain near that
+     * component's own ceiling and then clip sharply there, not taper off.
+     * The same shape as the post-mission reliability-change formula a
+     * future mission-simulation resolver will need.
+     *
+     * <p>(Unconfirmed default - both this shape and {@link #RD_RELIABILITY_FACTOR_MIN}/
+     * {@link #RD_RELIABILITY_FACTOR_MAX}, see {@code design.md} &sect;3.4):
+     * Launch Window's own formula, not yet verified against the decompiled
+     * source - {@code baspm.md} only has a manual-level claim that this
+     * gain scales with skill at all.</p>
+     *
+     * @param currentReliability the component's current reliability before
+     *                           this gain
+     * @param maxReliability     the component's own reliability ceiling
+     * @param assigneeSkill      the assignee's current skill in the
+     *                           component's associated group
+     * @param factor             the random factor for this season, normally
+     *                           drawn via {@link #drawRdReliabilityFactor}
+     * @return the gain to add to {@code currentReliability}; never
+     *     negative, and {@code currentReliability + gain} never exceeds
+     *     {@code maxReliability} for any {@code factor} and
+     *     {@code assigneeSkill} in {@code [0, SKILL_CAP]}
+     */
+    public static double reliabilityGain(double currentReliability, double maxReliability, double assigneeSkill,
+            double factor) {
+        double distanceToCap = Math.max(0.0, maxReliability - currentReliability);
+        double skillFraction = clamp(assigneeSkill / SKILL_CAP, 0.0, 1.0);
+        return distanceToCap * factor * skillFraction;
+    }
+
+    /**
      * Draws a random factor for one training round, uniformly from
      * {@code [}{@link #TRAINING_FACTOR_MIN}{@code ,} {@link #TRAINING_FACTOR_MAX}{@code )}.
      *
@@ -166,6 +212,19 @@ public final class SkillGrowth {
      */
     public static double drawRdGainFactor(RandomGenerator random) {
         return random.nextDouble(RD_GAIN_FACTOR_MIN, RD_GAIN_FACTOR_MAX);
+    }
+
+    /**
+     * Draws a random factor for one season of R&amp;D-driven
+     * component-reliability growth, uniformly from
+     * {@code [}{@link #RD_RELIABILITY_FACTOR_MIN}{@code ,}
+     * {@link #RD_RELIABILITY_FACTOR_MAX}{@code )}.
+     *
+     * @param random the random source to draw from
+     * @return the drawn factor
+     */
+    public static double drawRdReliabilityFactor(RandomGenerator random) {
+        return random.nextDouble(RD_RELIABILITY_FACTOR_MIN, RD_RELIABILITY_FACTOR_MAX);
     }
 
     /**

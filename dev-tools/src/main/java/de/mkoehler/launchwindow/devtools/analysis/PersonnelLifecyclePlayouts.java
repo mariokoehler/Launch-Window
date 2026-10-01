@@ -24,6 +24,8 @@ import de.mkoehler.launchwindow.rules.PersonnelDeparture;
 import de.mkoehler.launchwindow.rules.PersonnelGroup;
 import de.mkoehler.launchwindow.rules.PersonnelLifecycle;
 import de.mkoehler.launchwindow.rules.ProgramOpening;
+import de.mkoehler.launchwindow.rules.ResearchCompleted;
+import de.mkoehler.launchwindow.rules.ResearchProgress;
 import de.mkoehler.launchwindow.rules.ResolutionEvent;
 import de.mkoehler.launchwindow.rules.SkillGrowth;
 import de.mkoehler.launchwindow.rules.TrainingCompleted;
@@ -88,9 +90,13 @@ import java.util.Set;
  * ({@link #HIRE_CHANCE_PER_SEASON} per group) and open one program
  * ({@link #OPEN_PROGRAM_CHANCE_PER_SEASON}) - both stand-ins for a
  * journaled player action - then {@link PersonnelLifecycle} runs, then
- * {@link TrainingProgress}, then {@link HiringPool#refreshCandidates}
- * last - all sharing the same seeded {@link Random}, so a whole game's
- * outcome stays reproducible from a single seed.</p>
+ * {@link TrainingProgress} and {@link ResearchProgress} (same position,
+ * since both only ever touch someone already {@link AssignmentState#IN_TRAINING}/
+ * {@link AssignmentState#ASSIGNED} going into this season, never someone
+ * {@link PersonnelLifecycle} just removed), then
+ * {@link HiringPool#refreshCandidates} last - all sharing the same seeded
+ * {@link Random}, so a whole game's outcome stays reproducible from a
+ * single seed.</p>
  *
  * @author Mario Koehler
  */
@@ -216,6 +222,8 @@ public final class PersonnelLifecyclePlayouts {
         double trainingGainTotal = 0;
         int hiredCount = 0;
         int programsOpenedCount = 0;
+        int researchCompletedCount = 0;
+        double researchReliabilityGainTotal = 0;
         int[] bandHits = new int[4];
 
         for (int game = 0; game < games; game++) {
@@ -235,8 +243,10 @@ public final class PersonnelLifecyclePlayouts {
 
                 List<ResolutionEvent> lifecycleEvents = PersonnelLifecycle.advanceSeason(snapshot);
                 List<ResolutionEvent> trainingEvents = TrainingProgress.advanceSeason(snapshot, random);
+                List<ResolutionEvent> researchEvents = ResearchProgress.advanceSeason(snapshot, CATALOG, random);
                 checkInvariants(snapshot, lifecycleEvents, before, protectedBefore);
                 checkTrainingInvariants(snapshot, trainingEvents);
+                checkResearchInvariants(snapshot);
 
                 for (ResolutionEvent event : lifecycleEvents) {
                     PersonnelDeparture departure = (PersonnelDeparture) event;
@@ -258,6 +268,10 @@ public final class PersonnelLifecyclePlayouts {
                     trainingCompletedCount++;
                     trainingGainTotal += ((TrainingCompleted) event).skillGain();
                 }
+                for (ResolutionEvent event : researchEvents) {
+                    researchCompletedCount++;
+                    researchReliabilityGainTotal += ((ResearchCompleted) event).reliabilityGain();
+                }
 
                 HiringPool.refreshCandidates(snapshot, random);
                 checkHiringInvariants(snapshot, bandHits);
@@ -268,10 +282,13 @@ public final class PersonnelLifecyclePlayouts {
         double avgResignedTenure = resignedCount == 0 ? 0 : (double) resignedTenureTotal / resignedCount;
         double avgRetiredTenure = retiredCount == 0 ? 0 : (double) retiredTenureTotal / retiredCount;
         double avgTrainingGain = trainingCompletedCount == 0 ? 0 : trainingGainTotal / trainingCompletedCount;
+        double avgResearchReliabilityGain =
+            researchCompletedCount == 0 ? 0 : researchReliabilityGainTotal / researchCompletedCount;
 
         return new PersonnelPlayoutReport(games, seasons, employeesStarted, resignedCount, retiredCount,
             stillEmployed, avgResignedTenure, avgRetiredTenure, trainingCompletedCount, avgTrainingGain,
-            hiredCount, bandHits[0], bandHits[1], bandHits[2], bandHits[3], programsOpenedCount);
+            hiredCount, bandHits[0], bandHits[1], bandHits[2], bandHits[3], programsOpenedCount,
+            researchCompletedCount, avgResearchReliabilityGain);
     }
 
     /**
@@ -478,6 +495,32 @@ public final class PersonnelLifecyclePlayouts {
     }
 
     /**
+     * Cross-checks the invariant {@link #shuffleSetSpecialist} must
+     * uphold for {@link ResearchProgress} to ever find anyone to advance:
+     * a {@code SET} specialist is {@link AssignmentState#ASSIGNED} if and
+     * only if their {@code rdTargetComponentId} is set to an id the
+     * snapshot actually owns - the pairing {@link AssignmentState}'s own
+     * Javadoc documents.
+     *
+     * @param snapshot the snapshot to check, after this season's
+     *                 {@link #shuffleAssignments} and
+     *                 {@link PersonnelLifecycle#advanceSeason} calls
+     * @throws IllegalStateException if the pairing is violated for any
+     *                                 {@code SET} specialist
+     */
+    private static void checkResearchInvariants(PlayerSnapshot snapshot) {
+        for (SetSpecialist specialist : snapshot.getSetSpecialists()) {
+            boolean assigned = specialist.getAssignmentState() == AssignmentState.ASSIGNED;
+            String targetId = specialist.getRdTargetComponentId();
+            boolean hasOwnedTarget = targetId != null && snapshot.getMissionComponents().containsKey(targetId);
+            if (assigned != hasOwnedTarget) {
+                throw new IllegalStateException("ASSIGNED/rdTargetComponentId pairing broken for "
+                    + specialist.getId() + ": assigned=" + assigned + ", targetId=" + targetId);
+            }
+        }
+    }
+
+    /**
      * Cross-checks {@link ProgramOpening#open}'s own output, computed
      * independently of its internals: funds never go negative, every
      * opened program id is one {@link #CATALOG} actually defines, every
@@ -487,13 +530,11 @@ public final class PersonnelLifecyclePlayouts {
      * least one currently opened program (no component is ever owned
      * without a program having granted it).
      *
-     * <p>The reliability-range check is near-vacuous today: nothing in
-     * this harness mutates a component's reliability after it's granted
-     * (no R&amp;D or mission-simulation resolver exists yet), so it only
-     * re-verifies the same grant-time computation rather than catching
-     * drift over a component's lifetime. It starts earning its keep once
-     * this harness grows a resolver that actually changes reliability
-     * over time.</p>
+     * <p>The reliability-range check genuinely exercises
+     * {@link ResearchProgress}'s own output too, not only
+     * {@link ProgramOpening}'s grant-time computation - it runs every
+     * season, after R&amp;D may have grown a component's
+     * {@code currentReliability} well past what it started at.</p>
      *
      * @param snapshot the snapshot to check, at any point after this
      *                 season's {@link #maybeOpenProgram} call
@@ -745,7 +786,7 @@ public final class PersonnelLifecyclePlayouts {
 
     private static void shuffleAssignments(PlayerSnapshot snapshot, Random random) {
         snapshot.getAstronauts().forEach(a -> shuffleAstronaut(a, random));
-        snapshot.getSetSpecialists().forEach(s -> shuffleSetSpecialist(s, random));
+        snapshot.getSetSpecialists().forEach(s -> shuffleSetSpecialist(s, snapshot, random));
         snapshot.getMissionControlOfficers().forEach(m -> shuffleMissionControlOfficer(m, random));
     }
 
@@ -780,18 +821,40 @@ public final class PersonnelLifecyclePlayouts {
         astronaut.setAssignmentState(AssignmentState.IN_TRAINING);
     }
 
-    private static void shuffleSetSpecialist(SetSpecialist specialist, Random random) {
+    /**
+     * The bot's reassignment move for one SET specialist - same shape as
+     * {@link #shuffleAstronaut}/{@link #shuffleMissionControlOfficer}, with
+     * one difference: "assigned" only ever means R&amp;D for SET (see
+     * {@link AssignmentState#ASSIGNED}'s own Javadoc), so moving idle to
+     * assigned requires an owned mission component to target. With none
+     * owned yet (no program opened this game so far), falls back to
+     * starting training instead - the same path an idle specialist with no
+     * assignable work takes. Moving assigned back to idle clears
+     * {@link SetSpecialist#getRdTargetComponentId()} too, so the pairing
+     * {@link AssignmentState#ASSIGNED} &hArr; a non-null, owned target
+     * never drifts apart.
+     *
+     * @param specialist the specialist to maybe reassign
+     * @param snapshot   the snapshot their owned mission components are
+     *                   read from
+     * @param random     the random source to draw from
+     */
+    private static void shuffleSetSpecialist(SetSpecialist specialist, PlayerSnapshot snapshot, Random random) {
         if (random.nextDouble() >= REASSIGNMENT_CHANCE_PER_SEASON) {
             return;
         }
         if (specialist.getAssignmentState() == AssignmentState.ASSIGNED) {
             specialist.setAssignmentState(AssignmentState.IDLE);
+            specialist.setRdTargetComponentId(null);
             return;
         }
         if (specialist.getAssignmentState() != AssignmentState.IDLE) {
             return;
         }
-        if (random.nextBoolean()) {
+        List<String> ownedComponentIds = new ArrayList<>(snapshot.getMissionComponents().keySet());
+        if (!ownedComponentIds.isEmpty() && random.nextBoolean()) {
+            String target = ownedComponentIds.get(random.nextInt(ownedComponentIds.size()));
+            specialist.setRdTargetComponentId(target);
             specialist.setAssignmentState(AssignmentState.ASSIGNED);
             return;
         }
@@ -959,5 +1022,7 @@ public final class PersonnelLifecyclePlayouts {
             report.poorBandBatches(), report.averageBandBatches(), report.goodBandBatches(),
             report.excellentBandBatches());
         System.out.printf("Programs opened: %d%n", report.programsOpenedCount());
+        System.out.printf("R&D seasons completed: %d (avg reliability gain %.2f)%n",
+            report.researchCompletedCount(), report.averageResearchReliabilityGain());
     }
 }

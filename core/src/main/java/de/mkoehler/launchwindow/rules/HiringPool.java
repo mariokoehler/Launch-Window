@@ -34,9 +34,12 @@ import java.util.random.RandomGenerator;
  * <p><b>Composition order for whoever wires this into one season pass
  * (M4):</b> journaled player actions (including {@link #hire}) first, then
  * {@link PersonnelLifecycle}, then {@link TrainingProgress}, then
- * {@link #refreshCandidates} last - a player can then always hire from
- * the exact pool they were shown, and a season's refresh never discards a
- * candidate the same season's own actions just hired.</p>
+ * {@link ResearchProgress}, then {@link #refreshCandidates} last - a
+ * player can then always hire from the exact pool they were shown, and a
+ * season's refresh never discards a candidate the same season's own
+ * actions just hired. {@code TrainingProgress} before {@code ResearchProgress}
+ * specifically (not the reverse) is also what makes their random draws
+ * reproducible from a seed, since both draw from the same shared source.</p>
  *
  * <p><b>{@link #hire} is a plain headless operation, not tied to any
  * action-submission system</b> - same posture as {@link TrainingProgress}
