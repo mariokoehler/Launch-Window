@@ -410,6 +410,29 @@ groundwork prepared ahead of it.
   via `evenodd`) — a mechanical bitmap→vector conversion of the user's own
   new source art, not a repeat of the BASPM-tracing violation above.
   `assets-raw/svg/icon_*.svg` now hold these new traces.
+  **Remaining astronaut/mission-control skill icons converted the same way
+  (2026-10-01):** the user had since added 9 more bitmaps for the
+  `AstronautSkill`/`MissionControlSkill` icons (same batch, same AI tool,
+  `assets-raw/icons/*.png`) — `leadership`, `piloting`, `science`,
+  `fitness` (astronaut; `EVA` reuses `icon_eva_suits.svg` from the SET
+  batch above rather than getting its own file, since the user specified
+  the astronaut "EVA" skill and the SET "EVA Suits" skill share one icon)
+  and `propulsion`, `trajectory_and_guidance`, `spacecraft_systems`,
+  `crew_and_payload`, `mission_operations` (mission control). All 5
+  `AstronautSkill`/5 `MissionControlSkill`/5 `SetSkill` values now have an
+  icon. The simple per-image median-blur background estimate used for the
+  first batch silently punched a false hole into any icon area thicker
+  than its blur radius (its own local neighborhood became mostly icon, not
+  background, so the diff against itself read as "no icon here") — caught
+  on the `science` icon's microscope arm. Fixed by fitting a smooth
+  low-order 2D polynomial per color channel to only the image's outer
+  border ring (always guaranteed real background, never samples the icon)
+  and using that as the per-pixel background estimate instead - robust
+  across the flat single-tone icons, an icon with a small non-white accent
+  color (the `science` icon's DNA strand), and a two-tone icon layering a
+  darker secondary gray over the background (`mission_operations`'s
+  screens/map), all flattened to one silhouette the same way the first
+  batch was.
 
 ## Conventions / preferences (carried over from the sibling projects)
 
