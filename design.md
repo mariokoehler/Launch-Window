@@ -3011,6 +3011,35 @@ built, not speculatively now.
   scope decision sits under — real program/mission-config names and history
   vs. an original reskin, still governed by `design.md` §1.2's no-copying
   rule either way.
+- **Resolved (user, 2026-10-01), refining the above once `baspm.md`
+  §13.4a actually measured BASPM's own NASA/Soviet prestige balance: don't
+  try to fully close the gap for v1, but stay close to BASPM's own
+  compensation ratios when Launch Window's own mission-prestige formula
+  gets designed (a later M2/M3 slice — no mission-simulation/prestige
+  resolver exists yet, see §5).** `baspm.md` §13.4a found BASPM gives
+  Soviet programs a real but partial per-program compensation (worth
+  ~4% more prestige on average, ~11% more cost-efficient) that narrows but
+  doesn't close NASA's ~34% total prestige-throughput edge from having 9
+  more programs. **User's reasoning: not confident this is actually a
+  problem worth engineering around** — Soviet's own total available
+  prestige (46,050 in BASPM's numbers) is almost certainly far more than
+  enough to reach a normal endgame before any prestige cap/ceiling could
+  matter, so a real gap in *how much* prestige is technically available
+  doesn't necessarily translate into a real gap in *whether either
+  archetype can win* - treat as a balance question to revisit with actual
+  playtest/harness data (§3.10) once Launch Window has a real
+  mission-simulation resolver, not a v1 blocker to pre-solve from table
+  numbers alone. In the meantime: **re-derive Launch Window's own
+  mission-configuration prestige formula close to BASPM's own shape** —
+  its `SecondTime`/`LaterTime` repeat-mission decay (50%/30% of
+  `FirstTime`, essentially universal across 186/189 of BASPM's own
+  mission configurations, re-confirmed in-game via screenshot) is a
+  reasonable curve to keep (not verbatim BASPM numbers, per §1.2, but the
+  same *shape* - a fixed, uniform decay ratio applied to every mission
+  rather than per-mission-tuned), and whatever per-program NASA/Soviet
+  reward-scaling Launch Window ends up with should land in the same
+  "partial, not full" compensation range BASPM itself used, rather than
+  either leaving the gap fully open or over-correcting to full parity.
 
 ## 5. Implementation roadmap: milestones & slices
 

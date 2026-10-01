@@ -1978,6 +1978,70 @@ tuning per agency, but the base game's actual authored content simply never
 diverges — NASA/Soviet/GSA are 100% economically identical in the shipped
 game, an unused lever exactly like `SpaceAgencyT.Common` below.
 
+### 13.4a Per-mission prestige rewards: a real, partial compensation — corrected after an initial wrong read
+
+**Follow-up question, answered from the data (2026-10-01, corrected same
+day after an in-game screenshot caught the error):** does BASPM compensate
+Soviet's smaller program roster (§13.1: 23 vs NASA's 32) with richer
+prestige rewards per mission?
+
+**First pass was wrong — the decay mechanic is real, not unused.** It
+initially looked that way because of checking the wrong file: `Mission
+Simulations Container\MsnSim*.xml` (249 files) stores each mission
+*step*'s prestige as a **percentage share** of a total
+(`MissionStep.SetPrestigeGrantedOnSuccessAsPercentage`,
+`percentage × totalMissionPrestige ÷ 100`) — naturally identical across
+`FirstTime`/`SecondTime`/`LaterTime` on that file, since it's the same
+share either way. The actual per-repeat totals live one level up, in
+`General Container\MsnCnfg<PgmCtgID>-<PgmID>.xml` (one file per program,
+one `<MsnCnfg>` per mission configuration,
+`MissionsConfigurationsManager` lines 76-78) — and there, the decay is
+real: **`SecondTime` is exactly 50% of `FirstTime`, and `LaterTime` is
+exactly 30% of `FirstTime`, in 186 of 189 mission configurations in the
+game** (the remaining 3 differ by a rounding fraction) — e.g. Luna 3
+(lunar flyby): 585/292/175, screenshotted in-game and matching to three
+decimal places. A hardcoded design rule applied uniformly, not
+per-mission tuning.
+
+**Redone with the correct source, per-program prestige (best config's
+`FirstTime`, cross-referenced against `Programs.xml`'s `SpaceAgency`/
+`OpeningCost`):**
+
+- **Soviet programs are genuinely worth more prestige individually** —
+  average `FirstTime` prestige 2,002 vs NASA's 1,930 per program, and
+  Soviet is more cost-efficient too (1.84 prestige per funds spent on
+  opening vs NASA's 1.66). A real, deliberate per-program compensation,
+  not the "uncompensated" conclusion the first pass reached.
+- **It doesn't fully close the gap, though.** Summed across each agency's
+  whole roster: NASA's 32 programs total 61,750 `FirstTime` prestige vs
+  Soviet's 23 programs at 46,050 — NASA ahead by ~34%, almost exactly
+  tracking the 32:23 program-count ratio itself. The steady-state repeat
+  rate (`LaterTime`, the relevant one once a game is deep enough that
+  completed programs are being re-flown in parallel rather than newly
+  opened) tells the same story: NASA 18,525 total vs Soviet 13,815 — NASA
+  still ~34% ahead.
+- **Not chased further: goals stack an additional, separate prestige
+  bonus on top of a `MsnCnfg`'s own `FirstTime`/`SecondTime`/`LaterTime`**
+  (`MissionsConfigurationsManager.GetPrestigeGrantedIncludingGoals` sums
+  `GoalsManager.GetPrestigeGrantedNextTimeGoalGetsAchieved` across every
+  goal a configuration's `GoalsAchieved` list declares) - not included in
+  the totals above, so the real NASA/Soviet gap could be somewhat
+  different once goal-prestige is folded in; low priority to chase since
+  it doesn't change which direction the imbalance runs.
+
+**So the historically-accurate program-access asymmetry (§13.1) gets a
+real but partial per-program compensation** (Soviet programs pay a bit
+more, a bit more efficiently) **that doesn't fully offset having 9 fewer
+programs** — NASA retains a genuine prestige-throughput advantage of
+roughly the same size as its program-count advantage, most visible once
+several of its extra programs are running in parallel in the mid/late
+game. Directly relevant to `design.md` §2.1's own archetype-balance
+question (§13.7 below) — if Launch Window wants NASA/Soviet-equivalent
+archetypes to feel balanced, matching BASPM's own *shape* (partial
+per-program compensation, not full) is one option, but closing the gap
+further would be a deliberate Launch Window choice, not something to
+inherit as-is.
+
 ### 13.5 `SpaceAgencyT.Common`: confirmed entirely dead
 
 A codebase-wide search found **zero references to the enum value anywhere
@@ -2002,13 +2066,20 @@ further since it doesn't change the ranked picture below.
 In order of actual mechanical significance:
 1. **Program/component access (§13.1)** — the one real, structurally
    enforced gate. Confirms the "NASA can't launch Sputnik" guess exactly.
+   **Code-confirmed only partially compensated (§13.4a, 2026-10-01)**:
+   Soviet programs pay more prestige individually and more efficiently per
+   funds spent, but not enough to offset NASA's 9-program advantage — NASA
+   retains a standing ~34% prestige-throughput edge, tracking its
+   program-count edge almost exactly.
 2. **Reliability Transfer cross-pollination for GSA (§13.2)** — a genuine
    GSA-exclusive bonus mechanic, not reducible to "more content."
 3. **Everything else is cosmetic or an unused lever**: personnel pools
-   differ only in name flavor (§13.3); economic constants are a real
-   per-agency capability the shipped game never actually exercises (§13.4);
-   `Common` is dead (§13.5); goals are agency-flavored only indirectly,
-   through program access (§13.6).
+   differ only in name flavor (§13.3); economic constants (§13.4) are a
+   real per-agency tuning capability the shipped game never actually
+   exercises (unlike per-mission prestige rewards, §13.4a, which the
+   shipped game *does* meaningfully vary, just not by agency); `Common`
+   is dead (§13.5); goals are agency-flavored only indirectly, through
+   program access (§13.6).
 
 **Directly answers the design question this pass was launched to inform**
 (`design.md` §2.1/§3.8, §3.8's non-exclusive-archetype decision): see
