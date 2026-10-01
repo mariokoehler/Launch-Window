@@ -385,16 +385,15 @@ means the saving throw can never succeed. Every involvement percentage
 is 1-100, not 0-100 (a zero-percent entry is indistinguishable from "not
 involved"). `ContentCatalog` additionally requires every step's
 component ids to both exist and be required by the step's own mission's
-program. **Open question for the user, not yet answered — see
-`design.md` §2.5(e)'s own "Open balance question" paragraph:** the
-weighted-average blend means involving crew *lowers* success odds
-whenever crew skill is below the component sum (the ordinary case),
-which sits oddly against `baspm.md` §8.2's "a bonus on top of
-already-solid hardware" description — an additive bonus formula might
-fit that description more literally. Shipped as the weighted-average
-shape for now since it's a defensible reading and keeps the formula
-simple, not because the question is resolved. **Still not wired into the
-bot harness or any caller:** the per-player in-progress-mission state,
+program. **Crew-blend shape confirmed (user, 2026-10-01) — see
+`design.md` §2.5(e)'s own "Blend shape confirmed" paragraph:** the
+trade-off was surfaced first - the weighted-average blend means involving
+crew *lowers* success odds whenever crew skill is below the component sum
+(the ordinary case), which sits oddly against `baspm.md` §8.2's "a bonus
+on top of already-solid hardware" description, an additive bonus formula
+would fit more literally - but the user chose to keep the simpler,
+already-implemented weighted-average shape as-is rather than rework it.
+**Still not wired into the bot harness or any caller:** the per-player in-progress-mission state,
 the resolver that walks a season's step batch against it, post-mission
 reliability change, and mission-based skill growth are all still open,
 as is re-confirming `AssignmentState.ASSIGNED` as the "on an active

@@ -942,20 +942,17 @@ proceeds:
     deferred to §2.6**, not added here — `MissionStepOutcome.MINOR_GLITCH`'s
     half-credit needs it, but prestige/goals is its own slice's concern; a
     caller resolver will need this field once it exists.
-    **Open balance question for the user, not yet answered:** under this
-    weighted-average blend, involving crew *lowers* the step's success
-    probability whenever the crew-skill sum is below the component
-    sum — the ordinary case, since the blend only ever applies once the
-    component sum already clears the 65 threshold. `baspm.md` §8.2
-    describes crew skill as "a bonus on top of already-solid hardware,"
-    which reads as crew-involvement never hurting, only sometimes not
-    helping much — a genuine bonus formula (e.g. an additive top-up
-    capped by the weight) would fit that description more literally than
-    a weighted average does. The weighted-average shape ships for now
-    since it is a defensible reading of the same trace and keeps the
-    formula simple, but this is exactly the kind of balance-defining
-    choice that should be confirmed, not assumed - see `CLAUDE.md`'s own
-    "Current status" entry for this slice.
+    **Blend shape confirmed (user, 2026-10-01):** keep the weighted
+    average as implemented, rather than switching to an additive bonus
+    that could only ever help. The trade-off was surfaced first - under
+    this blend, involving crew *lowers* the step's success probability
+    whenever the crew-skill sum is below the component sum (the ordinary
+    case, since the blend only ever applies once the component sum
+    already clears the 65 threshold), which sits a little oddly against
+    `baspm.md` §8.2's "a bonus on top of already-solid hardware" wording -
+    but the user chose to keep the simpler, already-implemented shape
+    rather than rework it for a reading of that one phrase. Not expected
+    to be revisited without a concrete balance reason to.
 - 2.6 **Prestige, goals & scoring — analyzed 2026-09-27, see `baspm.md` §11
   for the full trace.**
   - **(a) How BASPM does it:** goals are `Generic` (universal race
