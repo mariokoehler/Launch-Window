@@ -118,6 +118,33 @@ public final class SkillGrowth {
     public static final double MISSION_RELIABILITY_FAILURE_FACTOR_MAX = 0.25;
 
     /**
+     * The minimum skill value (on {@link #SKILL_CAP}'s own scale) an
+     * Astronaut/Mission Control officer must already hold in a skill
+     * before {@code de.mkoehler.launchwindow.rules.TrainingProgress}'s
+     * {@code startAstronautExpertTraining}/{@code startMissionControlExpertTraining}
+     * actions will let them start training toward the Expert trait in
+     * it - see {@code design.md} &sect;2.2(c) (user decision, 2026-10-02).
+     */
+    public static final double EXPERT_TRAINING_SKILL_THRESHOLD = 80.0;
+
+    /**
+     * The flat per-season chance (0-100, not 0-1) of completing one
+     * season of {@link de.mkoehler.launchwindow.model.TrainingKind#EXPERT}
+     * training, before {@link #EXPERT_TRAINING_SKILL_BONUS_MAX}'s own
+     * skill-scaled bonus - see {@link #expertTrainingSuccessChance}.
+     */
+    public static final double EXPERT_TRAINING_BASE_SUCCESS_CHANCE = 25.0;
+
+    /**
+     * The most {@link #expertTrainingSuccessChance} can add on top of
+     * {@link #EXPERT_TRAINING_BASE_SUCCESS_CHANCE} - reached only by a
+     * skill already at {@link #SKILL_CAP}; a skill at exactly
+     * {@link #EXPERT_TRAINING_SKILL_THRESHOLD} adds none of it (user
+     * decision, 2026-10-02).
+     */
+    public static final double EXPERT_TRAINING_SKILL_BONUS_MAX = 10.0;
+
+    /**
      * Not instantiable; this class only exposes static methods.
      */
     private SkillGrowth() {
@@ -444,6 +471,56 @@ public final class SkillGrowth {
      */
     public static double drawRdGainFactor(RandomGenerator random) {
         return random.nextDouble(RD_GAIN_FACTOR_MIN, RD_GAIN_FACTOR_MAX);
+    }
+
+    /**
+     * Computes one season's chance of completing
+     * {@link de.mkoehler.launchwindow.model.TrainingKind#EXPERT} training
+     * for a given skill: {@link #EXPERT_TRAINING_BASE_SUCCESS_CHANCE} plus
+     * a bonus scaled linearly from {@code 0} (at
+     * {@link #EXPERT_TRAINING_SKILL_THRESHOLD}) up to
+     * {@link #EXPERT_TRAINING_SKILL_BONUS_MAX} (at {@link #SKILL_CAP}) -
+     * user decision, 2026-10-02, see {@code design.md} &sect;2.2(c). The
+     * chance stays constant across every season of one attempt, since
+     * Expert training never grows the targeted skill itself.
+     *
+     * @param currentSkill the targeted skill's current value; expected to
+     *                     already be at or above {@link #EXPERT_TRAINING_SKILL_THRESHOLD} -
+     *                     the action that starts this training enforces
+     *                     that, not this formula
+     * @return the success chance, as a percentage (0-100, not 0-1)
+     */
+    public static double expertTrainingSuccessChance(double currentSkill) {
+        double bonus = EXPERT_TRAINING_SKILL_BONUS_MAX
+            * (currentSkill - EXPERT_TRAINING_SKILL_THRESHOLD) / (SKILL_CAP - EXPERT_TRAINING_SKILL_THRESHOLD);
+        return EXPERT_TRAINING_BASE_SUCCESS_CHANCE + clamp(bonus, 0.0, EXPERT_TRAINING_SKILL_BONUS_MAX);
+    }
+
+    /**
+     * Draws one season's Expert-training roll, uniformly in
+     * {@code [0, 100)} - see {@link #expertTrainingSucceeds}.
+     *
+     * @param random the random source to draw from
+     * @return the drawn roll
+     */
+    public static double drawExpertTrainingRoll(RandomGenerator random) {
+        return random.nextDouble(0, 100);
+    }
+
+    /**
+     * Resolves one season's Expert-training roll against a success
+     * chance, the same {@code roll > 100 - chance} shape
+     * {@link MissionStepResolution} uses for its own rolls, for
+     * consistency.
+     *
+     * @param roll           the drawn roll, as returned by
+     *                       {@link #drawExpertTrainingRoll}
+     * @param successChance  the success chance, as returned by
+     *                       {@link #expertTrainingSuccessChance}
+     * @return {@code true} if this season's training succeeds
+     */
+    public static boolean expertTrainingSucceeds(double roll, double successChance) {
+        return roll > 100.0 - successChance;
     }
 
     /**

@@ -45,6 +45,16 @@ import java.util.random.RandomGenerator;
  * the bot-driven playout harness once a caller exists, not final game
  * balance.</p>
  *
+ * <p><b>Expert rescue, added 2026-10-02</b> (see {@code design.md}
+ * &sect;2.5(i)) - {@link #applyExpertBoost}/{@link #expertRescueBoostPercentForUse}/
+ * {@link #EXPERT_RESCUE_PROBABILITY_CAP} are the pure formulas
+ * {@link MissionProgress#resolveStep} uses to let an Expert-flagged
+ * employee (see {@code design.md} &sect;2.2(c)) boost a saving-throw
+ * probability already in progress; deciding <em>who</em> is eligible for
+ * a given step, and tracking per-employee exhaustion across a turn, are
+ * both {@link MissionProgress}'s own responsibility, the same split this
+ * class already keeps for everything else.</p>
+ *
  * @author Mario Koehler
  */
 public final class MissionStepResolution {
@@ -183,7 +193,7 @@ public final class MissionStepResolution {
      */
     public static MissionStepOutcome resolve(double baseProbability, double savingThrowProbability,
             boolean crewRisk, double firstRoll, double savingRoll) {
-        if (firstRoll > 100.0 - baseProbability) {
+        if (firstRollSucceeded(baseProbability, firstRoll)) {
             return MissionStepOutcome.SUCCESSFUL;
         }
 
@@ -222,7 +232,7 @@ public final class MissionStepResolution {
     public static MissionStepOutcome resolve(double baseProbability, double savingThrowProbability,
             boolean crewRisk, RandomGenerator random) {
         double firstRoll = drawRoll(random);
-        if (firstRoll > 100.0 - baseProbability) {
+        if (firstRollSucceeded(baseProbability, firstRoll)) {
             return MissionStepOutcome.SUCCESSFUL;
         }
         double savingRoll = drawRoll(random);
@@ -230,12 +240,155 @@ public final class MissionStepResolution {
     }
 
     /**
-     * Draws one roll, uniformly in {@code [0, 100)}.
+     * Whether a step's first roll alone already succeeds, with no saving
+     * throw ever needed - shared by every {@link #resolve} overload above,
+     * and by {@link MissionProgress#resolveStep} directly: that caller
+     * must know this <em>before</em> computing an Expert-boosted saving-
+     * throw probability (see {@code design.md} &sect;2.5(i)), since an
+     * Expert is only ever "used" (and exhausted) when a saving throw is
+     * actually needed - never merely for being eligible.
+     *
+     * @param baseProbability the step's base success probability, as
+     *                         returned by {@link #computeBaseProbability}
+     * @param firstRoll        the step's first roll, uniformly in
+     *                         {@code [0, 100)}
+     * @return {@code true} if the first roll alone succeeds
+     */
+    static boolean firstRollSucceeded(double baseProbability, double firstRoll) {
+        return firstRoll > 100.0 - baseProbability;
+    }
+
+    /**
+     * Draws one roll, uniformly in {@code [0, 100)} - package-private so
+     * {@link MissionProgress#resolveStep} can draw its own first roll
+     * explicitly (see {@link #firstRollSucceeded}'s own Javadoc for why),
+     * rather than only ever through the auto-drawing {@link #resolve}
+     * overload above.
      *
      * @param random the random source to draw from
      * @return the drawn roll
      */
-    private static double drawRoll(RandomGenerator random) {
+    static double drawRoll(RandomGenerator random) {
         return random.nextDouble(0, 100);
+    }
+
+    /**
+     * The highest an Expert-boosted saving-throw probability may ever
+     * reach, applied once by {@link #capExpertRescue} after every eligible
+     * Expert's own {@link #applyExpertBoost} call for a step - see
+     * {@code design.md} &sect;2.5(i). Launch Window's own unconfirmed
+     * default, not traced from BASPM - {@code baspm.md} &sect;9.5's own
+     * Tiger Teams tiers max out at 50% of the remaining gap in a single
+     * use, structurally far short of ever needing a cap like this one.
+     */
+    public static final double EXPERT_RESCUE_PROBABILITY_CAP = 95.0;
+
+    /**
+     * The share of the remaining gap to 100% an Expert's rescue attempt
+     * closes on its first use within one turn - see
+     * {@link #expertRescueBoostPercentForUse}. User-confirmed, 2026-10-02,
+     * see {@code design.md} &sect;2.5(i); re-derives {@code baspm.md}
+     * &sect;9.5's own single-use gap-closing shape with Launch Window's
+     * own number, not BASPM's own tiered 25/40/50% (there, those three
+     * numbers were tied to a hireable "how many Tiger Teams" choice that
+     * doesn't exist here).
+     */
+    public static final double EXPERT_RESCUE_FIRST_USE_BOOST_PERCENT = 50.0;
+
+    /** The same employee's second use within one turn - see {@link #EXPERT_RESCUE_FIRST_USE_BOOST_PERCENT}. */
+    public static final double EXPERT_RESCUE_SECOND_USE_BOOST_PERCENT = 40.0;
+
+    /** The same employee's third use within one turn - see {@link #EXPERT_RESCUE_FIRST_USE_BOOST_PERCENT}. */
+    public static final double EXPERT_RESCUE_THIRD_USE_BOOST_PERCENT = 10.0;
+
+    /**
+     * How much a Mission Control officer's own rescue contribution scales
+     * by when they are {@code ASSIGNED} to a <em>different</em> active
+     * mission than the one glitching - still on Earth, just not fully
+     * dedicated (user decision, 2026-10-02, see {@code design.md}
+     * &sect;2.5(i)). An Astronaut in the same situation is excluded
+     * entirely instead (see {@link MissionProgress#applyExpertRescue});
+     * this scaling only ever applies to a Mission Control officer.
+     */
+    public static final double EXPERT_RESCUE_OFF_MISSION_CONTROLLER_EFFICIENCY = 0.75;
+
+    /**
+     * Looks up how much of the remaining gap to 100% an Expert's rescue
+     * attempt closes, by how many times that same employee has already
+     * been drawn on this turn (see {@code design.md} &sect;2.5(i)'s own
+     * "scope: per employee, per turn" rule) - {@code useNumber} 1 is their
+     * first use this turn, 2 their second, and so on. The fourth use and
+     * every one after it contributes {@code 0} - not hard-capped at three
+     * uses, just negligible from then on (user decision, 2026-10-02).
+     *
+     * @param useNumber which use this is for the employee this turn,
+     *                  1-indexed; must be positive
+     * @return the boost percent, 0-100
+     * @throws IllegalArgumentException if {@code useNumber} is not positive
+     */
+    public static double expertRescueBoostPercentForUse(int useNumber) {
+        if (useNumber <= 0) {
+            throw new IllegalArgumentException("useNumber must be positive: " + useNumber);
+        }
+        return switch (useNumber) {
+            case 1 -> EXPERT_RESCUE_FIRST_USE_BOOST_PERCENT;
+            case 2 -> EXPERT_RESCUE_SECOND_USE_BOOST_PERCENT;
+            case 3 -> EXPERT_RESCUE_THIRD_USE_BOOST_PERCENT;
+            default -> 0.0;
+        };
+    }
+
+    /**
+     * Applies one Expert's rescue attempt to a saving-throw probability
+     * already in progress: closes {@code boostPercent} of the remaining
+     * gap to 100%, re-deriving {@code baspm.md} &sect;9.5's own
+     * {@code boost = percentageBoost × (100 − currentProb)} shape. Meant
+     * to be called once per eligible Expert, in sequence, each call
+     * working off the previous call's own result - stacking several
+     * Experts this way inherently keeps the result strictly below 100%
+     * (every {@code boostPercent} used is itself strictly below 100%, so
+     * the remaining gap shrinks geometrically but never reaches exactly
+     * zero), satisfying "never guaranteed" by construction, with no extra
+     * guard needed here. {@link #capExpertRescue} is a separate, explicit
+     * ceiling a caller applies once, after every Expert's own boost has
+     * been applied - not part of this formula itself, since the cap must
+     * never lower an unboosted probability that was already above it on
+     * its own (see {@code design.md} &sect;2.5(i)).
+     *
+     * @param currentProbability the saving-throw probability before this
+     *                           Expert's own contribution (the unboosted
+     *                           value, or another Expert's already-
+     *                           applied boost)
+     * @param boostPercent       this Expert's own boost percent for this
+     *                           use, as returned by
+     *                           {@link #expertRescueBoostPercentForUse}
+     *                           (already scaled down for an off-mission
+     *                           Mission Control officer, if applicable -
+     *                           this formula takes the final percent, it
+     *                           does not apply that scaling itself)
+     * @return the boosted probability; never below {@code currentProbability}
+     */
+    public static double applyExpertBoost(double currentProbability, double boostPercent) {
+        return currentProbability + (100.0 - currentProbability) * boostPercent / 100.0;
+    }
+
+    /**
+     * Applies {@link #EXPERT_RESCUE_PROBABILITY_CAP} to a saving-throw
+     * probability after every eligible Expert's own {@link #applyExpertBoost}
+     * has already been applied in sequence: {@code min(boosted, max(unboosted,
+     * cap))} - never lets Expert stacking push the result above the cap,
+     * but also never lowers {@code unboosted} itself when it was already
+     * above the cap on its own merits, with zero Experts involved at all
+     * (see {@code design.md} &sect;2.5(i)).
+     *
+     * @param boosted   the saving-throw probability after every eligible
+     *                  Expert's own contribution (equal to
+     *                  {@code unboosted} if none applied)
+     * @param unboosted the saving-throw probability before any Expert's
+     *                  own contribution
+     * @return the final, capped saving-throw probability
+     */
+    public static double capExpertRescue(double boosted, double unboosted) {
+        return Math.min(boosted, Math.max(unboosted, EXPERT_RESCUE_PROBABILITY_CAP));
     }
 }

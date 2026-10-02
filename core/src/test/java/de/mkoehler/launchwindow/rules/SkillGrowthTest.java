@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -403,5 +404,85 @@ class SkillGrowthTest {
             assertTrue(factor >= SkillGrowth.MISSION_RELIABILITY_FAILURE_FACTOR_MIN
                 && factor < SkillGrowth.MISSION_RELIABILITY_FAILURE_FACTOR_MAX);
         }
+    }
+
+    /**
+     * Verifies a skill exactly at the threshold gets no bonus at all -
+     * just the flat base chance.
+     */
+    @Test
+    void expertTrainingSuccessChanceAtTheThresholdIsJustTheBase() {
+        assertEquals(SkillGrowth.EXPERT_TRAINING_BASE_SUCCESS_CHANCE,
+            SkillGrowth.expertTrainingSuccessChance(SkillGrowth.EXPERT_TRAINING_SKILL_THRESHOLD), 1e-9);
+    }
+
+    /**
+     * Verifies a skill at the cap gets the full bonus on top of the base
+     * chance.
+     */
+    @Test
+    void expertTrainingSuccessChanceAtTheCapIsBasePlusFullBonus() {
+        assertEquals(
+            SkillGrowth.EXPERT_TRAINING_BASE_SUCCESS_CHANCE + SkillGrowth.EXPERT_TRAINING_SKILL_BONUS_MAX,
+            SkillGrowth.expertTrainingSuccessChance(SkillGrowth.SKILL_CAP), 1e-9);
+    }
+
+    /**
+     * Verifies the exact formula at a value partway between the threshold
+     * and the cap - distinguishing the correct linear interpolation from a
+     * plausible but wrong alternative (e.g. scaling against the full 0-100
+     * range instead of the threshold-to-cap range).
+     */
+    @Test
+    void expertTrainingSuccessChanceInterpolatesLinearly() {
+        // threshold 80, cap 100: skill 90 is halfway, so half the +10 bonus = +5, total 30.
+        assertEquals(30.0, SkillGrowth.expertTrainingSuccessChance(90.0), 1e-9);
+    }
+
+    /**
+     * Verifies the success chance never exceeds base-plus-full-bonus, even
+     * for a skill value somehow above the cap.
+     */
+    @Test
+    void expertTrainingSuccessChanceNeverExceedsBasePlusFullBonus() {
+        double chance = SkillGrowth.expertTrainingSuccessChance(150.0);
+
+        assertEquals(SkillGrowth.EXPERT_TRAINING_BASE_SUCCESS_CHANCE + SkillGrowth.EXPERT_TRAINING_SKILL_BONUS_MAX,
+            chance, 1e-9);
+    }
+
+    /**
+     * Verifies the success chance never drops below the flat base, even
+     * for a skill value somehow below the threshold.
+     */
+    @Test
+    void expertTrainingSuccessChanceNeverDropsBelowTheBase() {
+        double chance = SkillGrowth.expertTrainingSuccessChance(50.0);
+
+        assertEquals(SkillGrowth.EXPERT_TRAINING_BASE_SUCCESS_CHANCE, chance, 1e-9);
+    }
+
+    /**
+     * Verifies {@code drawExpertTrainingRoll} always stays within its
+     * documented range across many draws.
+     */
+    @Test
+    void drawExpertTrainingRollStaysWithinItsRange() {
+        Random random = new Random(42L);
+        for (int i = 0; i < 1_000; i++) {
+            double roll = SkillGrowth.drawExpertTrainingRoll(random);
+            assertTrue(roll >= 0.0 && roll < 100.0);
+        }
+    }
+
+    /**
+     * Verifies the exact pass/fail boundary: a roll exactly at the
+     * threshold fails, one roll above it succeeds.
+     */
+    @Test
+    void expertTrainingSucceedsAtTheExactBoundary() {
+        // successChance 30 -> threshold roll 70.
+        assertTrue(SkillGrowth.expertTrainingSucceeds(70.1, 30.0));
+        assertFalse(SkillGrowth.expertTrainingSucceeds(70.0, 30.0));
     }
 }

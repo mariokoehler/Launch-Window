@@ -201,6 +201,53 @@ class PersonnelLifecyclePlayoutsTest {
     }
 
     /**
+     * Verifies a long enough run actually starts and completes
+     * {@code TrainingKind.EXPERT} training - a sign the bot's own
+     * eligibility check and the validated start action are both genuinely
+     * exercised, not just theoretically wired in. Every run already
+     * self-checks the threshold/pairing invariants internally (see
+     * {@code checkExpertTrainingEligibility}/{@code checkExpertSkillThreshold});
+     * this only adds that both the start and the eventual completion
+     * actually happen.
+     */
+    @Test
+    void aLongRunStartsAndCompletesExpertTraining() {
+        PersonnelPlayoutReport report = PersonnelLifecyclePlayouts.run(100, 5, 100, 7L);
+
+        assertTrue(report.expertTrainingStartedCount() > 0, "expected at least one Expert training start");
+        assertTrue(report.expertTrainingCompletedCount() > 0, "expected at least one Expert training completion");
+    }
+
+    /**
+     * Verifies a long enough run actually exercises the general pull-out
+     * path - a sign {@code TrainingProgress#pullOutOfTraining} is
+     * genuinely reachable under the bot's own low pull-out chance, not
+     * just theoretically implemented.
+     */
+    @Test
+    void aLongRunPullsSomeoneOutOfTraining() {
+        PersonnelPlayoutReport report = PersonnelLifecyclePlayouts.run(100, 5, 100, 7L);
+
+        assertTrue(report.pulledOutOfTrainingCount() > 0, "expected at least one pull-out over 100 seasons");
+    }
+
+    /**
+     * Verifies a long enough run actually applies a nonzero Expert rescue
+     * boost to a mission step's saving throw - a sign the roster-wide
+     * eligibility pool and the stacking/exhaustion mechanic are genuinely
+     * reachable, not just theoretically implemented. Every run already
+     * self-checks the exact boost-percent/probability invariants
+     * internally (see {@code checkExpertRescueInvariants}); this only adds
+     * that a nonzero rescue actually happens.
+     */
+    @Test
+    void aLongRunAppliesANonzeroExpertRescue() {
+        PersonnelPlayoutReport report = PersonnelLifecyclePlayouts.run(200, 5, 100, 7L);
+
+        assertTrue(report.expertRescueAppliedCount() > 0, "expected at least one nonzero Expert rescue over 200 games");
+    }
+
+    /**
      * Verifies each non-positive argument is rejected.
      */
     @Test

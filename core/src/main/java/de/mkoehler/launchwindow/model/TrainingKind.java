@@ -38,5 +38,19 @@ public enum TrainingKind {
      * (unreachable target, or zero learning potential), not just once the
      * target is actually hit.
      */
-    PERMANENT
+    PERMANENT,
+
+    /**
+     * Open-ended training toward the Expert trait (an {@code expertSkills}
+     * field declared per-subclass, e.g. {@link Astronaut#getExpertSkills()}/
+     * {@link MissionControlOfficer#getExpertSkills()}) for one specific
+     * skill - unlike {@link #BASIC}/{@link #ADVANCED}/{@link #PERMANENT},
+     * has no total season count at all: each season rolls a fresh
+     * pass/fail chance
+     * ({@code de.mkoehler.launchwindow.rules.SkillGrowth#expertTrainingSuccessChance}),
+     * resolved by {@code de.mkoehler.launchwindow.rules.TrainingProgress} -
+     * see {@code design.md} &sect;2.2(c). Astronaut/Mission Control only,
+     * never {@link SetSpecialist}.
+     */
+    EXPERT
 }

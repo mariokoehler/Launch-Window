@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -381,6 +382,315 @@ class TrainingProgressTest {
         PlayerSnapshot snapshot = new PlayerSnapshot("Agency", Archetype.NASA, 0, 0, 0, 1);
         assertThrows(NullPointerException.class, () -> TrainingProgress.advanceSeason(null, new Random(1L)));
         assertThrows(NullPointerException.class, () -> TrainingProgress.advanceSeason(snapshot, null));
+    }
+
+    /**
+     * Verifies a failed {@link TrainingKind#EXPERT} season only advances
+     * the (purely informational) counter - no event, no skill change, and
+     * the employee stays {@code IN_TRAINING} for another season.
+     */
+    @Test
+    void expertTrainingSeasonThatFailsOnlyAdvancesTheCounter() {
+        Astronaut astronaut = expertTrainingAstronaut(AstronautSkill.PILOTING, 90.0);
+        PlayerSnapshot snapshot = snapshotWithAstronaut(astronaut);
+
+        // successChance at skill 90 (threshold 80, cap 100) is 25 + 10*(10/20) = 30 -> pass
+        // threshold is roll > 70. A roll of 50 fails.
+        List<ResolutionEvent> events = TrainingProgress.advanceSeason(snapshot, new Random(2L) {
+            @Override
+            public double nextDouble(double origin, double bound) {
+                return 50.0;
+            }
+        });
+
+        assertTrue(events.isEmpty());
+        assertEquals(1, astronaut.getTrainingSeasonsCompleted());
+        assertEquals(AssignmentState.IN_TRAINING, astronaut.getAssignmentState());
+        assertEquals(TrainingKind.EXPERT, astronaut.getTrainingKind());
+        assertEquals(90.0, astronaut.getSkill(AstronautSkill.PILOTING), "EXPERT training never grows the skill");
+        assertTrue(astronaut.getExpertSkills().isEmpty());
+    }
+
+    /**
+     * Verifies a successful {@link TrainingKind#EXPERT} season grants the
+     * trait, resets every training field, and reports the exact event -
+     * at the precise pass/fail boundary, so a wrong comparison direction
+     * would fail this test.
+     */
+    @Test
+    void expertTrainingSeasonThatSucceedsGrantsTheTraitAndResetsFields() {
+        Astronaut astronaut = expertTrainingAstronaut(AstronautSkill.PILOTING, 90.0);
+        PlayerSnapshot snapshot = snapshotWithAstronaut(astronaut);
+
+        // successChance 30 -> threshold roll 70. A roll of 70.1 passes.
+        List<ResolutionEvent> events = TrainingProgress.advanceSeason(snapshot, new Random(2L) {
+            @Override
+            public double nextDouble(double origin, double bound) {
+                return 70.1;
+            }
+        });
+
+        assertEquals(1, events.size());
+        ExpertTrainingCompleted completed = (ExpertTrainingCompleted) events.get(0);
+        assertEquals(PersonnelGroup.ASTRONAUT, completed.group());
+        assertEquals("a1", completed.personnelId());
+        assertEquals("PILOTING", completed.skillName());
+        assertEquals(Set.of(AstronautSkill.PILOTING), astronaut.getExpertSkills());
+        assertEquals(TrainingKind.NONE, astronaut.getTrainingKind());
+        assertEquals(0, astronaut.getTrainingSeasonsCompleted());
+        assertNull(astronaut.getTrainingTargetSkill());
+        assertEquals(AssignmentState.IDLE, astronaut.getAssignmentState());
+        assertEquals(90.0, astronaut.getSkill(AstronautSkill.PILOTING), "EXPERT training never grows the skill");
+    }
+
+    /**
+     * Verifies the Mission Control equivalent of
+     * {@link #expertTrainingSeasonThatSucceedsGrantsTheTraitAndResetsFields}.
+     */
+    @Test
+    void missionControlExpertTrainingSeasonThatSucceedsGrantsTheTrait() {
+        MissionControlOfficer officer = new MissionControlOfficer("m1", "Expert Candidate", 30, 80, 50);
+        officer.setSkill(MissionControlSkill.PROPULSION, 90.0);
+        officer.setAssignmentState(AssignmentState.IN_TRAINING);
+        officer.setTrainingKind(TrainingKind.EXPERT);
+        officer.setTrainingTargetSkill(MissionControlSkill.PROPULSION);
+        PlayerSnapshot snapshot = new PlayerSnapshot("Agency", Archetype.NASA, 0, 0, 0, 1);
+        snapshot.setMissionControlOfficers(List.of(officer));
+
+        List<ResolutionEvent> events = TrainingProgress.advanceSeason(snapshot, new Random(2L) {
+            @Override
+            public double nextDouble(double origin, double bound) {
+                return 70.1;
+            }
+        });
+
+        assertEquals(1, events.size());
+        ExpertTrainingCompleted completed = (ExpertTrainingCompleted) events.get(0);
+        assertEquals(PersonnelGroup.MISSION_CONTROL, completed.group());
+        assertEquals(Set.of(MissionControlSkill.PROPULSION), officer.getExpertSkills());
+        assertEquals(AssignmentState.IDLE, officer.getAssignmentState());
+    }
+
+    /**
+     * Verifies {@link TrainingProgress#startAstronautExpertTraining} starts
+     * training for an eligible, idle astronaut at exactly the threshold.
+     */
+    @Test
+    void startAstronautExpertTrainingStartsAtExactlyTheThreshold() {
+        Astronaut astronaut = new Astronaut("a1", "Candidate", 30, 80, 50);
+        astronaut.setSkill(AstronautSkill.PILOTING, SkillGrowth.EXPERT_TRAINING_SKILL_THRESHOLD);
+        PlayerSnapshot snapshot = snapshotWithAstronaut(astronaut);
+
+        StartExpertTrainingOutcome outcome =
+            TrainingProgress.startAstronautExpertTraining(snapshot, "a1", AstronautSkill.PILOTING);
+
+        assertEquals(StartExpertTrainingOutcome.STARTED, outcome);
+        assertEquals(TrainingKind.EXPERT, astronaut.getTrainingKind());
+        assertEquals(AstronautSkill.PILOTING, astronaut.getTrainingTargetSkill());
+        assertEquals(AssignmentState.IN_TRAINING, astronaut.getAssignmentState());
+        assertEquals(0, astronaut.getTrainingSeasonsCompleted());
+        assertEquals(0, astronaut.getTrainingSeasonsTotal());
+    }
+
+    /**
+     * Verifies a skill just below the threshold is rejected, mutating
+     * nothing.
+     */
+    @Test
+    void startAstronautExpertTrainingRejectsSkillJustBelowTheThreshold() {
+        Astronaut astronaut = new Astronaut("a1", "Candidate", 30, 80, 50);
+        astronaut.setSkill(AstronautSkill.PILOTING, SkillGrowth.EXPERT_TRAINING_SKILL_THRESHOLD - 0.1);
+        PlayerSnapshot snapshot = snapshotWithAstronaut(astronaut);
+
+        StartExpertTrainingOutcome outcome =
+            TrainingProgress.startAstronautExpertTraining(snapshot, "a1", AstronautSkill.PILOTING);
+
+        assertEquals(StartExpertTrainingOutcome.SKILL_BELOW_THRESHOLD, outcome);
+        assertEquals(TrainingKind.NONE, astronaut.getTrainingKind());
+        assertEquals(AssignmentState.IDLE, astronaut.getAssignmentState());
+    }
+
+    /**
+     * Verifies an astronaut not currently idle is rejected.
+     */
+    @Test
+    void startAstronautExpertTrainingRejectsWhenNotIdle() {
+        Astronaut astronaut = new Astronaut("a1", "Candidate", 30, 80, 50);
+        astronaut.setSkill(AstronautSkill.PILOTING, 90.0);
+        astronaut.setAssignmentState(AssignmentState.ASSIGNED);
+        PlayerSnapshot snapshot = snapshotWithAstronaut(astronaut);
+
+        assertEquals(StartExpertTrainingOutcome.NOT_IDLE,
+            TrainingProgress.startAstronautExpertTraining(snapshot, "a1", AstronautSkill.PILOTING));
+    }
+
+    /**
+     * Verifies an astronaut already Expert in the targeted skill is
+     * rejected.
+     */
+    @Test
+    void startAstronautExpertTrainingRejectsWhenAlreadyExpertInTheSkill() {
+        Astronaut astronaut = new Astronaut("a1", "Candidate", 30, 80, 50);
+        astronaut.setSkill(AstronautSkill.PILOTING, 90.0);
+        astronaut.getExpertSkills().add(AstronautSkill.PILOTING);
+        PlayerSnapshot snapshot = snapshotWithAstronaut(astronaut);
+
+        assertEquals(StartExpertTrainingOutcome.ALREADY_EXPERT_IN_SKILL,
+            TrainingProgress.startAstronautExpertTraining(snapshot, "a1", AstronautSkill.PILOTING));
+    }
+
+    /**
+     * Verifies an unknown astronaut id is rejected.
+     */
+    @Test
+    void startAstronautExpertTrainingRejectsUnknownId() {
+        PlayerSnapshot snapshot = new PlayerSnapshot("Agency", Archetype.NASA, 0, 0, 0, 1);
+
+        assertEquals(StartExpertTrainingOutcome.UNKNOWN_PERSONNEL,
+            TrainingProgress.startAstronautExpertTraining(snapshot, "unknown", AstronautSkill.PILOTING));
+    }
+
+    /**
+     * Verifies {@link TrainingProgress#startMissionControlExpertTraining}
+     * mirrors the astronaut path, as a spot check rather than repeating
+     * every rejection case.
+     */
+    @Test
+    void startMissionControlExpertTrainingStarts() {
+        MissionControlOfficer officer = new MissionControlOfficer("m1", "Candidate", 30, 80, 50);
+        officer.setSkill(MissionControlSkill.PROPULSION, 90.0);
+        PlayerSnapshot snapshot = new PlayerSnapshot("Agency", Archetype.NASA, 0, 0, 0, 1);
+        snapshot.setMissionControlOfficers(List.of(officer));
+
+        StartExpertTrainingOutcome outcome =
+            TrainingProgress.startMissionControlExpertTraining(snapshot, "m1", MissionControlSkill.PROPULSION);
+
+        assertEquals(StartExpertTrainingOutcome.STARTED, outcome);
+        assertEquals(TrainingKind.EXPERT, officer.getTrainingKind());
+        assertEquals(AssignmentState.IN_TRAINING, officer.getAssignmentState());
+    }
+
+    /**
+     * Verifies pulling an astronaut out of a {@code BASIC}/{@code ADVANCED}/
+     * {@code PERMANENT} round applies exactly {@code SkillGrowth.partialCredit}
+     * against that round's own completed/total seasons - a real,
+     * scaled-down gain, neither the full gain nor zero.
+     */
+    @Test
+    void pullOutOfTrainingCreditsAPartialGainForAFixedLengthRound() {
+        Astronaut astronaut = trainingAstronaut(AstronautSkill.EVA, TrainingKind.ADVANCED,
+            1, TrainingProgress.ADVANCED_TRAINING_SEASONS);
+        astronaut.setSkill(AstronautSkill.EVA, 40.0);
+        PlayerSnapshot snapshot = snapshotWithAstronaut(astronaut);
+
+        double expectedFactor = SkillGrowth.drawTrainingFactor(new Random(11L));
+        double expectedFullGain =
+            SkillGrowth.diminishingReturnsGain(40.0, astronaut.getLearningPotential(), expectedFactor);
+        double expectedCreditedGain = SkillGrowth.partialCredit(expectedFullGain, 1,
+            TrainingProgress.ADVANCED_TRAINING_SEASONS);
+
+        PullOutOfTrainingOutcome outcome =
+            TrainingProgress.pullOutOfTraining(snapshot, PersonnelGroup.ASTRONAUT, "a1", new Random(11L));
+
+        assertEquals(PullOutOfTrainingOutcome.PULLED_OUT, outcome);
+        assertTrue(expectedCreditedGain > 0 && expectedCreditedGain < expectedFullGain,
+            "sanity check on the fixture: partial credit must be strictly between zero and the full gain");
+        assertEquals(40.0 + expectedCreditedGain, astronaut.getSkill(AstronautSkill.EVA));
+        assertEquals(TrainingKind.NONE, astronaut.getTrainingKind());
+        assertEquals(AssignmentState.IDLE, astronaut.getAssignmentState());
+        assertNull(astronaut.getTrainingTargetSkill());
+    }
+
+    /**
+     * Verifies pulling an astronaut out of {@link TrainingKind#EXPERT}
+     * training credits nothing at all - there is no continuous skill
+     * value that training ever grows, unlike the fixed-length kinds.
+     */
+    @Test
+    void pullOutOfTrainingCreditsNothingForExpertTraining() {
+        Astronaut astronaut = expertTrainingAstronaut(AstronautSkill.PILOTING, 90.0);
+        PlayerSnapshot snapshot = snapshotWithAstronaut(astronaut);
+
+        PullOutOfTrainingOutcome outcome =
+            TrainingProgress.pullOutOfTraining(snapshot, PersonnelGroup.ASTRONAUT, "a1", new Random(1L));
+
+        assertEquals(PullOutOfTrainingOutcome.PULLED_OUT, outcome);
+        assertEquals(90.0, astronaut.getSkill(AstronautSkill.PILOTING));
+        assertTrue(astronaut.getExpertSkills().isEmpty(), "pulling out early never grants the trait");
+        assertEquals(TrainingKind.NONE, astronaut.getTrainingKind());
+        assertEquals(AssignmentState.IDLE, astronaut.getAssignmentState());
+    }
+
+    /**
+     * Verifies a SET specialist's own fixed-length round is pulled out of
+     * the same way as an astronaut's/officer's.
+     */
+    @Test
+    void pullOutOfTrainingCreditsAPartialGainForASetSpecialist() {
+        SetSpecialist specialist = new SetSpecialist("s1", "Set One", 30, 80, 50);
+        specialist.setAssignmentState(AssignmentState.IN_TRAINING);
+        specialist.setTrainingKind(TrainingKind.BASIC);
+        specialist.setTrainingSeasonsTotal(TrainingProgress.SET_BASIC_TRAINING_SEASONS + 1);
+        specialist.setTrainingSeasonsCompleted(1);
+        specialist.setTrainingTargetSkill(SetSkill.ROCKETS);
+        specialist.setSkill(SetSkill.ROCKETS, 20.0);
+        PlayerSnapshot snapshot = new PlayerSnapshot("Agency", Archetype.NASA, 0, 0, 0, 1);
+        snapshot.setSetSpecialists(List.of(specialist));
+
+        double expectedFactor = SkillGrowth.drawTrainingFactor(new Random(1L));
+        double expectedFullGain =
+            SkillGrowth.diminishingReturnsGain(20.0, specialist.getLearningPotential(), expectedFactor);
+        double expectedCreditedGain = SkillGrowth.partialCredit(expectedFullGain, 1,
+            TrainingProgress.SET_BASIC_TRAINING_SEASONS + 1);
+
+        PullOutOfTrainingOutcome outcome =
+            TrainingProgress.pullOutOfTraining(snapshot, PersonnelGroup.SET, "s1", new Random(1L));
+
+        assertEquals(PullOutOfTrainingOutcome.PULLED_OUT, outcome);
+        assertTrue(expectedCreditedGain > 0, "sanity check on the fixture: partial credit must be positive here");
+        assertEquals(20.0 + expectedCreditedGain, specialist.getSkill(SetSkill.ROCKETS));
+        assertEquals(TrainingKind.NONE, specialist.getTrainingKind());
+        assertEquals(AssignmentState.IDLE, specialist.getAssignmentState());
+    }
+
+    /**
+     * Verifies an employee not currently training is rejected.
+     */
+    @Test
+    void pullOutOfTrainingRejectsWhenNotInTraining() {
+        Astronaut astronaut = new Astronaut("a1", "Idle", 30, 80, 50);
+        PlayerSnapshot snapshot = snapshotWithAstronaut(astronaut);
+
+        assertEquals(PullOutOfTrainingOutcome.NOT_IN_TRAINING,
+            TrainingProgress.pullOutOfTraining(snapshot, PersonnelGroup.ASTRONAUT, "a1", new Random(1L)));
+    }
+
+    /**
+     * Verifies an unknown id is rejected.
+     */
+    @Test
+    void pullOutOfTrainingRejectsUnknownId() {
+        PlayerSnapshot snapshot = new PlayerSnapshot("Agency", Archetype.NASA, 0, 0, 0, 1);
+
+        assertEquals(PullOutOfTrainingOutcome.UNKNOWN_PERSONNEL,
+            TrainingProgress.pullOutOfTraining(snapshot, PersonnelGroup.ASTRONAUT, "unknown", new Random(1L)));
+    }
+
+    /**
+     * Builds an astronaut already {@link TrainingKind#EXPERT} training for
+     * the given skill, with that skill already at the given value.
+     *
+     * @param target the skill being trained toward the Expert trait in
+     * @param skillValue the astronaut's current value in {@code target}
+     * @return the built astronaut
+     */
+    private static Astronaut expertTrainingAstronaut(AstronautSkill target, double skillValue) {
+        Astronaut astronaut = new Astronaut("a1", "Expert Candidate", 30, 80, 50);
+        astronaut.setSkill(target, skillValue);
+        astronaut.setAssignmentState(AssignmentState.IN_TRAINING);
+        astronaut.setTrainingKind(TrainingKind.EXPERT);
+        astronaut.setTrainingTargetSkill(target);
+        return astronaut;
     }
 
     private static Astronaut trainingAstronaut(AstronautSkill target, TrainingKind kind,

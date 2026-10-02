@@ -646,7 +646,11 @@ specifically (one event can release up to four at once, one component's
 full slot count) - confirms that path is reachable at this scale. Full
 writeup in `design.md` §2.5(g).
 
-**Mission cost at launch done (2026-10-02):** `MissionConfiguration`
+**Mission cost at launch done (2026-10-02):** **user-confirmed from
+in-game play** (`baspm.md` §9.5's own added note) - a mission's cost is
+deducted in full the instant the player decides to launch, before the
+next turn evaluates, and is never refunded on a later scrub, so this is
+no longer treated as an unconfirmed default. `MissionConfiguration`
 gained a `cost` field, deducted up front by `MissionLaunch.launch` right
 after the program-open check (same ordering `ProgramOpening.open`
 already uses for its own funds check), rejecting with a new
@@ -677,8 +681,79 @@ game's funds low enough to matter within 80 seasons (same situation
 Full writeup in `design.md` §2.5(h). **Still open for mission
 simulation:** prestige/goals and the goal-dependency reliability
 modifier (both blocked on the budget/prestige/goals slice, not started
-yet), and the Expert trait (still blocked on tracing Tiger Teams - not
-enough is known yet to implement it responsibly).
+yet).
+
+**The Expert trait done (2026-10-02):** `baspm.md` §9.5 fully traced
+Tiger Teams the same day the mission-cost note above was first written,
+resolving the cross-reference that had kept this blocked - the user
+then made every remaining design decision the same day, so this shipped
+in full rather than waiting for a second wave (`design.md` §2.2(c)/§2.5(i)
+have the complete writeup; this is the short version). New
+`TrainingKind.EXPERT`: an Astronaut or Mission Control officer (never
+SET) with a skill at or above **80** can start open-ended training
+toward the Expert trait in it via a new validated action
+(`TrainingProgress.startAstronautExpertTraining`/
+`startMissionControlExpertTraining` - rejects below-threshold, already-
+Expert, not-idle, or unknown ids); each season rolls a flat 25% success
+chance plus up to another 10% scaled by how far above the threshold the
+skill sits (interpolated linearly to 100%), with no skill growth either
+way - success grants the trait, failure just continues into another
+season. An employee can hold the trait in several skills over a career
+(one per successful stint), and it's permanent once granted. A new
+general **pull-out-of-training action** (`TrainingProgress.pullOutOfTraining`)
+shipped alongside this - applies to any `TrainingKind`, not just
+`EXPERT`, since nothing in the project had this before; credits
+`SkillGrowth.partialCredit` for the three fixed-length kinds' current
+round, nothing for `EXPERT`. **The mission-side rescue mechanic**
+(`MissionProgress.applyExpertRescue`): when a step's first roll already
+failed, any Expert whose skill matches that step's crew/controller
+involvement can boost the saving-throw probability - re-deriving
+`baspm.md` §9.5's own gap-closing formula
+(`MissionStepResolution.applyExpertBoost`), generalized so crew-skill
+Experts get a real mechanical role Tiger Teams itself never gave them
+(user's own call, grounded in the real Ken Mattingly/Apollo 13 ground-
+rescue precedent). **Eligibility is roster-wide, not mission-scoped** -
+idle, in training, or assigned to *this* mission all count at full
+strength; an Astronaut assigned to a *different* active mission is
+excluded entirely (physically elsewhere), but a Mission Control officer
+in the same situation scales to 75% instead of being excluded (still on
+Earth). Multiple Experts stack sequentially, each closing a share of the
+remaining gap left by the one before (50% on a given employee's first
+use this turn, 40% second, 10% third, 0% beyond that - exhaustion is
+per employee, not per step), which already guarantees some failure
+chance always remains; an explicit 95% cap on top handles the case where
+a big roster would otherwise make that chance negligible in practice,
+without ever lowering an already-higher natural probability. Needed a
+`MissionProgress.resolveStep` restructuring (drawing its own rolls
+explicitly, since an Expert can only be "used" once a saving throw is
+actually needed) - confirmed bit-for-bit identical harness numbers with
+zero Experts before wiring the bot in, so this was a pure extension, not
+a regression. New model fields: `Astronaut`/`MissionControlOfficer` each
+gained an `expertSkills` set (a `LinkedHashSet`, the first `Set` type
+`MessageRegistry` has ever needed to register over the wire). **Wired
+into the bot harness the same day:** the bot starts Expert training
+(20% chance, when eligible) and pulls people out of training (3% chance
+per season) exclusively through the validated actions, never by setting
+fields directly, so the harness's own threshold/pairing invariants are
+a genuine cross-check, not the bot agreeing with itself; a third new
+invariant independently re-derives each `ExpertRescueApplied` event's
+expected boost percent from its own position in that season's event
+list. **Numbers (same 200-game/80-season/seed-42 run): 1,092 resigned/
+1,013 retired/5,344 still employed/71,178 training completions/4,515
+hires/598 programs opened/37,426 R&D seasons; 2,164 missions launched,
+mission steps 1,958 successful/793 minor-glitch-solved/285 minor
+glitch/385 failure/33 catastrophic, 66 lost in accidents, 30 retired on
+mission release; 3,518 Expert-training starts (3,108 completed), 3,663
+pull-outs, 1,766 nonzero Expert rescues.** **The step-mix shift is the
+rescue mechanic itself, not noise:** minor-glitch-solved rose 403→793,
+failure fell 604→385, catastrophic fell 41→33, accidents fell 82→66,
+and the average post-mission reliability delta rose 1.24→2.17 - the
+direct, expected effect of 1,766 nonzero rescues pulling outcomes
+toward success. Training completions fell 84,592→71,178, consistent
+with Expert stints (which never emit `TrainingCompleted`, success or
+fail) plus 3,663 pull-outs displacing rounds that would otherwise have
+completed. Single seed, not checked against run-to-run variance, same
+caveat as every other numbers pass this session.
 
 Git repo
 initialized 2026-09-27 and pushed

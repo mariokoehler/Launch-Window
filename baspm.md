@@ -1186,6 +1186,13 @@ GetTigerTeamsPercentageBoost`/`GetTigerTeamsCostMultiplier`):
   resolver can simply auto-decline unless a
   player has pre-set a spending policy, without that default ever being a
   strictly bad choice for the player who didn't log in.
+- **User-confirmed from in-game play (2026-10-02), not independently traced
+  in the decompiled source:** a mission's own cost is deducted in full at
+  the moment the player decides to launch it - before the server ever
+  evaluates the next turn - and is never refunded if the mission is later
+  scrubbed. Launch Window's own `MissionLaunch`/`MissionConfiguration.cost`
+  (`design.md` &sect;2.5(h)) now matches this directly rather than treating
+  it as an unconfirmed default.
 
 ### 9.6 A related, unrelated-looking loose end noticed but not chased
 

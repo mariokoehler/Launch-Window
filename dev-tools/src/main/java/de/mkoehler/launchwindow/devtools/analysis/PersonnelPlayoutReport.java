@@ -112,6 +112,36 @@ package de.mkoehler.launchwindow.devtools.analysis;
  *                                          {@code ResearchProgress}'s own
  *                                          R&amp;D-pass release, not counted
  *                                          here)
+ * @param expertTrainingStartedCount         how many bot-started
+ *                                          {@code TrainingKind.EXPERT}
+ *                                          training attempts succeeded
+ *                                          across every game (see
+ *                                          {@code PersonnelLifecyclePlayouts#EXPERT_TRAINING_START_CHANCE_PER_SEASON}) -
+ *                                          via the validated
+ *                                          {@code TrainingProgress#startAstronautExpertTraining}/
+ *                                          {@code #startMissionControlExpertTraining}
+ *                                          actions, never by setting the
+ *                                          training fields directly
+ * @param expertTrainingCompletedCount       how many {@code TrainingKind.EXPERT}
+ *                                          attempts actually succeeded
+ *                                          (granted the Expert trait)
+ *                                          across every game - always at
+ *                                          most {@code expertTrainingStartedCount},
+ *                                          since a season can fail and
+ *                                          continue instead
+ * @param pulledOutOfTrainingCount           how many bot pull-outs
+ *                                          succeeded across every game,
+ *                                          any {@code TrainingKind}, any
+ *                                          group (see
+ *                                          {@code PersonnelLifecyclePlayouts#PULL_OUT_OF_TRAINING_CHANCE_PER_SEASON})
+ * @param expertRescueAppliedCount           how many {@code ExpertRescueApplied}
+ *                                          events across every game
+ *                                          actually contributed a nonzero
+ *                                          boost - an eligible but fully
+ *                                          exhausted (4th+ use this turn)
+ *                                          Expert is still consulted and
+ *                                          still emits an event, just not
+ *                                          counted here
  * @author Mario Koehler
  */
 public record PersonnelPlayoutReport(
@@ -145,6 +175,10 @@ public record PersonnelPlayoutReport(
     double averageMissionReliabilityDelta,
     int missionSkillGrowthCount,
     double averageMissionSkillGrowth,
-    int missionTriggeredSetReleaseCount
+    int missionTriggeredSetReleaseCount,
+    int expertTrainingStartedCount,
+    int expertTrainingCompletedCount,
+    int pulledOutOfTrainingCount,
+    int expertRescueAppliedCount
 ) {
 }

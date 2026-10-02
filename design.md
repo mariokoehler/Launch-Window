@@ -172,6 +172,21 @@ same session it comes up**, the same standing-note-to-self habit as
   itself). Worth a short in-fiction note on why the term exists/where it
   comes from whenever a player first assembles one, in the same spirit as
   this pillar's other real-history beats.
+- **Surfaced while designing the Expert trait's rescue mechanic (2026-10-02):
+  Apollo 13's own command-module power-up is real, concrete precedent for
+  letting both an Astronaut and a Mission Control Expert rescue the same
+  mission together** — the emergency procedure for powering the nearly-
+  dead Command Module back up for reentry, after days running on the Lunar
+  Module's own limited resources, is most often credited to EECOM flight
+  controller John Aaron and the ground team he worked with, who devised
+  the sequence under severe power constraints; Ken Mattingly — bumped from
+  Apollo 13's prime crew by measles exposure, and so grounded for the
+  entire mission — spent that time in the simulator testing and refining
+  it before it was ever read up to the crew. A real flight controller
+  devising the fix and a real, non-flying astronaut verifying it from the
+  ground, together, is exactly the two-group rescue this project's own
+  Expert mechanic models (§2.5(i)) — worth a short in-fiction beat the
+  first time a player's own Expert of either kind actually rescues a step.
 - **Surfaced during the §2.3/§2.4 programs/reliability trace (2026-09-27):
   Reliability Transfer's data is a real rocket-family lineage, not a
   gameplay abstraction** — NASA's `ReliabilityTransfers-NASA.xml`
@@ -482,15 +497,19 @@ proceeds:
     - **Tiger Teams — decided to diverge from BASPM here (user design input,
       2026-09-27): promote it from a live per-step spending decision into a
       developed personnel capability**, rather than a pre-declared per-turn
-      budget policy. A SET or Mission Control employee (no new department)
-      can earn an **"Expert"** trait (working name) once a skill crosses a
-      threshold and/or via a dedicated advanced-training track, alongside
-      their normal duties — reusing the exact standing-order shape
-      `baspm.md` §2.1's R&D assignment and §9.3's permanent training already
-      established, rather than inventing a new per-turn UI element. During turn
-      resolution, a step needing a saving-throw rescue automatically draws on
-      any currently-available Expert-flagged personnel; no live decision, no
-      per-turn "what if" declaration required from the player at all.
+      budget policy. An Astronaut or Mission Control employee (never SET -
+      corrected 2026-10-02, see below; the original 2026-09-27 sketch said
+      "SET or Mission Control," which doesn't match either BASPM's own
+      control-room-flavored Tiger Teams or the user's later-confirmed
+      eligibility) can earn an **"Expert"** trait (working name) once a
+      skill crosses a threshold and/or via a dedicated advanced-training
+      track, alongside their normal duties — reusing the exact standing-
+      order shape `baspm.md` §2.1's R&D assignment and §9.3's permanent
+      training already established, rather than inventing a new per-turn
+      UI element. During turn resolution, a step needing a saving-throw
+      rescue automatically draws on any currently-available Expert-flagged
+      personnel; no live decision, no per-turn "what if" declaration
+      required from the player at all.
       **Contention resolved (user, 2026-09-27): no hard cap on how many
       times an Expert gets drawn on in a single turn — instead, diminishing
       returns/exhaustion.** Each additional rescue the same Expert performs
@@ -504,6 +523,84 @@ proceeds:
       Expert staff as a free unlimited safety net.
       **Decision:** No secondary fallback in the case no Expert
       personnel are available. players need to cultivate their own Experts to have a safety net, rather than relying on a pre-declared budget to buy one on demand.
+      - **Fully decided and implemented (user, 2026-10-02), closing the
+        "exact falloff curve TBD"/eligibility-group open ends above:**
+        - **Eligibility:** Astronaut or Mission Control officer only,
+          never SET (corrects the 2026-09-27 sketch's "SET or Mission
+          Control" error). To even *start* training toward becoming an
+          Expert in a skill, that skill must already be at or above
+          **80** (out of `SkillGrowth.SKILL_CAP`) - a new headless
+          `TrainingProgress.startAstronautExpertTraining`/
+          `startMissionControlExpertTraining` action (same "plain method
+          a future action handler will call" posture as `HiringPool.hire`/
+          `MissionLaunch.launch`) rejects an id below the threshold,
+          already Expert in that skill, not currently `IDLE`, or unknown.
+        - **Training shape - a new `TrainingKind.EXPERT`, genuinely
+          open-ended, unlike `BASIC`/`ADVANCED`/`PERMANENT`'s own fixed-
+          or re-enrolling-fixed-length rounds:** no total season count at
+          all - each season while `IN_TRAINING` with kind `EXPERT` rolls
+          a fresh pass/fail chance; success ends training and grants the
+          Expert trait for that skill immediately; failure keeps the
+          employee training (unavailable for other tasks) into another
+          season, with **no skill growth either way** - Expert status is
+          a binary unlock, not a continuous value, so there is nothing
+          for `SkillGrowth.diminishingReturnsGain` to apply here.
+        - **Per-season success chance (user-specified formula, 2026-10-02):
+          a flat 25% base, plus up to another 10% scaled by how far the
+          employee's current skill sits above the 80 threshold** - `25 +
+          10 × (skill − 80) ÷ (SkillGrowth.SKILL_CAP − 80)`, so a skill of
+          exactly 80 gets no bonus at all and a skill at the cap gets the
+          full +10%; re-derived as `SkillGrowth.expertTrainingSuccessChance`,
+          a new pure formula, plus `drawExpertTrainingRoll`/
+          `expertTrainingSucceeds` for the actual pass/fail check -
+          mirroring `MissionStepResolution`'s own "pure formula, separate
+          draw, separate resolve" split for direct testability. Since the
+          targeted skill never grows during this training, the chance
+          stays constant across every season of one attempt.
+        - **Multi-skill accumulation, confirmed:** "only an Expert in a
+          single skill" means per training *attempt*, not ever - an
+          employee can hold the Expert trait in several skills over their
+          career, one gained per successful training stint, each
+          requiring its own separate 80-threshold stint for that skill.
+          Stored as a new per-subclass `Set<AstronautSkill>`/
+          `Set<MissionControlSkill> expertSkills` field (never on
+          `SetSpecialist`), backed by a `LinkedHashSet` for the same
+          Kryo-wire reason the existing skill maps use `LinkedHashMap`
+          (see `Astronaut`/`MissionControlOfficer`'s own class Javadoc) -
+          a new `LinkedHashSet` registration was needed in
+          `MessageRegistry`, since nothing before this used a `Set` type
+          over the wire at all.
+        - **Permanence, confirmed:** once granted, the Expert trait is
+          never lost by any mechanic built so far (no decay, no removal
+          on reassignment/retraining).
+        - **A new general "pull employee out of training" action**
+          (`TrainingProgress.pullOutOfTraining`, dispatched by
+          `PersonnelGroup` since it must internally read/write each
+          subclass's own typed training fields) - applies to *any*
+          `TrainingKind`, not an Expert-specific mechanic, since nothing
+          in the project had this before at all (flagged as a known gap,
+          `design.md` §3.10's own "no pull-out path exists yet" note).
+          For `BASIC`/`ADVANCED`/`PERMANENT`'s current round, draws a
+          fresh gain factor the same way a normal completion would and
+          applies `SkillGrowth.partialCredit` against that round's own
+          completed/total seasons, crediting the skill with a scaled-down
+          gain rather than nothing; for `EXPERT`, credits nothing at all
+          (there is no continuous skill value this training ever grows,
+          so there is nothing to partially credit). Either way, resets to
+          `IDLE` and clears every training field. **No event reported** -
+          same posture as every other player action this project has
+          built (`HiringPool.hire`/`ProgramOpening.open`/`MissionLaunch.launch`
+          none report one either; only season-advance resolvers do).
+          **Still open, not part of this decision:** what a player who
+          hasn't logged in implicitly decides for a pull-out opportunity
+          before a turn resolves - `design.md` §4/`baspm.md` §8.4's own
+          still-open pre-resolution question, unaffected by this slice
+          landing.
+      - See §2.5(i) for how the Expert trait is actually *consumed*
+        during mission-step resolution (the rescue mechanic itself) - a
+        separate decision, made the same day, once the eligibility pool's
+        scope (roster-wide, not mission-scoped) and the stacking/cap rules
+        were settled.
       **Adopt regardless of the above, and generalized beyond Tiger Teams:**
       a post-turn **"replay"** of what an in-progress mission's automatic
       resolution actually did — `baspm.md` §8.3 already flagged BASPM's
@@ -1107,13 +1204,15 @@ proceeds:
       `ResearchProgress` → `HiringPool.refreshCandidates`.
     - **Deferred, same posture as §2.5(d)/(e)'s own lists:** prestige/goals
       (§2.6) and the §11.3 goal-dependency reliability modifier (both
-      blocked on the budget/prestige/goals slice, §5), and the Expert
-      trait (still blocked on tracing Tiger Teams/the saving-throw boost,
-      `baspm.md`'s own `_savingThrowProbOfSuccessIncludingExpertTeams`
-      cross-reference - not enough is known yet to implement it
-      responsibly). Post-mission reliability change and mission-based
-      skill growth are done - see (g) below; mission cost at launch is
-      done - see (h) below.
+      blocked on the budget/prestige/goals slice, §5). Post-mission
+      reliability change and mission-based skill growth are done - see
+      (g) below; mission cost at launch is done - see (h) below.
+      **The Expert trait is done, not just no longer blocked** -
+      `baspm.md` §9.5 fully traced Tiger Teams the same day this list was
+      first written (formula and constants both code-confirmed), and the
+      user then made every design decision needed to implement the
+      mission-side rescue mechanic the same day (2026-10-02) - see (i)
+      below for the concrete shape and the harness numbers.
       **Two balance holes harness-wiring this surfaced (§3.10) are both
       resolved, same day, not left open:** the crew-size question became
       the exact-headcount decision above (`requiredAstronautCount`/
@@ -1277,22 +1376,24 @@ proceeds:
     `missionCost` value (used as the base its Tiger-Teams cost-scaling
     formula multiplies against) - real evidence a per-mission cost is
     genuine BASPM content, not invented, but that one reference is all
-    &sect;9.5 traces; **when or how BASPM itself deducts it (at launch,
-    per season, on completion, or elsewhere) is not traced**, so "charge
-    the full cost once, at launch" is this project's own unconfirmed
-    default, not a ported BASPM mechanic - flagged to the user as such,
-    not silently assumed. `MissionConfiguration` gained a new `cost`
-    field - a one-time funds cost `MissionLaunch.launch` deducts up
-    front, checked right after the program-open check and before any
-    crew/controller validation (same ordering `ProgramOpening.open`
+    &sect;9.5 traces; when/how BASPM's own code deducts it was not traced
+    there. **User-confirmed from in-game play (2026-10-02, `baspm.md`
+    &sect;9.5's own added note): deducted in full at the moment the
+    player decides to launch, before the server evaluates the next turn,
+    and never refunded on a later scrub** - "charge the full cost once,
+    at launch, no refund" is therefore a confirmed match to BASPM's own
+    behavior, not an unconfirmed default anymore. `MissionConfiguration`
+    gained a new `cost` field - a one-time funds cost `MissionLaunch.launch`
+    deducts up front, checked right after the program-open check and
+    before any crew/controller validation (same ordering `ProgramOpening.open`
     already uses for its own funds check). Rejects with a new
     `MissionLaunchOutcome.INSUFFICIENT_FUNDS` when the player's current
     funds are below the configuration's own cost, mutating nothing, same
     "fail before any mutation" contract every other `MissionLaunch`
-    rejection already upholds. **No refund on `FAILURE`/`CATASTROPHIC`**
-    - the cost buys the attempt, not a guaranteed outcome, matching how
-    `Program.openingCost()` is never refunded either; also unconfirmed,
-    not traced. Deliberately simple: a flat one-time cost, not the
+    rejection already upholds. **No refund on `FAILURE`/`CATASTROPHIC`
+    either** - confirmed by the same user statement above, not just
+    matching `Program.openingCost()`'s own (still unconfirmed) non-refund
+    behavior by analogy. Deliberately simple: a flat one-time cost, not the
     recurring per-season upkeep §2.1's budget slice still owns, and
     distinct from `Program.openingCost()`/`maintenanceCost()`, which
     price owning the program itself rather than flying one of its
@@ -1316,13 +1417,150 @@ proceeds:
     §3.10's own note) - the harness's full numbers run is bit-for-bit
     identical to the pre-cost run (a funds deduction never consumes a
     random draw, which explains why a successful launch changes
-    nothing downstream), <b>and `missionsLaunchedCount` itself didn't
+    nothing downstream), **and `missionsLaunchedCount` itself didn't
     drop either, confirming `INSUFFICIENT_FUNDS` never actually fired in
-    this 200-game run</b> - this harness has no income mechanic at all, so
+    this 200-game run** - this harness has no income mechanic at all, so
     funds only ever fall, but the fixture's modest costs against 5,000
     starting funds never drove any game's funds low enough to matter
     within 80 seasons. The dedicated `MissionLaunchTest` cases above are
     what actually exercise `INSUFFICIENT_FUNDS`, not the harness.
+  - **(i) Expert rescue during mission-step resolution (2026-10-02),
+    consuming §2.2(c)'s Expert trait:** this is the mission-side half of
+    Tiger Teams' redesign - §2.2(c) covers how an employee *becomes* an
+    Expert; this covers how an existing Expert actually *rescues* a
+    mission step.
+    - **Where the boost applies - both skill types feed the same
+      saving-throw roll (user decision, 2026-10-02):** `baspm.md` §9.5's
+      own Tiger Teams only ever boosted the saving throw, and only ever
+      via flight-controller-adjacent personnel (the control-room setting
+      the mechanic is themed around) - `MissionStepResolution`'s own
+      formula mirrors that split today, crew skill feeding only the base
+      probability (`computeBaseProbability`), controller skill feeding
+      only the saving throw (`computeSavingThrowProbability`), with no
+      crew term in the saving throw at all. Since the user wants
+      Astronauts Expert-eligible too, "the skill needed to fix the
+      glitch" is read as whichever skill (crew or controller) the
+      glitching step actually involves - an Astronaut-Expert and a
+      Mission-Control-Expert both boost the *same* saving-throw
+      probability, if their own Expert skill matches that step's
+      `crewInvolvements`/`controllerInvolvements`. This gives crew skill
+      a real mechanical role in glitch recovery it never had before -
+      a deliberate departure from BASPM's own controller-only shape, not
+      an oversight. **Real-world grounding (`design.md` &sect;1.1):**
+      Apollo 13's own command-module power-up procedure - devised chiefly
+      by EECOM flight controller John Aaron and the ground team he worked
+      with, then tested and refined in the simulator by Ken Mattingly
+      (bumped from the prime crew by measles exposure, grounded for the
+      whole mission) before it was ever read up to the crew - is real
+      precedent for a flight controller and a non-flying astronaut
+      rescuing an active mission together, informing the pool-scope
+      decision directly below.
+    - **Eligibility pool - roster-wide, not mission-scoped (user
+      decision, 2026-10-02):** §2.2(c)'s own 2026-09-27 wording ("any
+      currently-available Expert-flagged personnel... an Expert is never
+      *unavailable*") already implied this, re-confirmed explicitly once
+      asked. An eligible Expert need not be assigned to the glitching
+      mission at all - idle, training (including training toward a
+      *different* Expert skill), or assigned to another mission can all
+      be drawn on. **One asymmetric exclusion, reasoned from physical
+      presence:** an Astronaut currently `ASSIGNED` to a *different*
+      active mission is excluded entirely (0%) - they are physically
+      aboard that other spacecraft, not available at all. A Mission
+      Control officer assigned to a *different* active mission is never
+      excluded, but their own contribution scales to **75%** (user's own
+      number) - still on Earth, just not fully dedicated. Every other
+      state (idle, training, assigned to *this* mission) contributes at
+      full strength for either group. Matches by simple overlap - any
+      shared skill between the Expert's own `expertSkills` and the
+      step's involved skills qualifies them, regardless of involvement
+      weight (unconfirmed default, a sub-detail not worth its own
+      question). Each eligible person is consulted **at most once per
+      step**, even if they hold the Expert trait in several skills that
+      all happen to match - one person, one rescue attempt, not one per
+      matching skill (also an unconfirmed default).
+    - **Stacking with exhaustion, confirmed (user, 2026-10-02): multiple
+      Experts' effects stack, with diminishing returns, but success must
+      never become guaranteed - some failure chance must always
+      remain.** Re-deriving `baspm.md` §9.5's own single-use formula
+      (`boost = percentageBoost × (100 − currentProbability)`) and
+      applying it *sequentially*, once per eligible Expert, each against
+      the *already-boosted* probability the previous Expert left behind -
+      a new `MissionStepResolution.applyExpertBoost(currentProbability,
+      boostPercent)` pure function. This structure inherently satisfies
+      "never guaranteed" on its own: since every `boostPercent` used is
+      strictly below 100%, the remaining gap to 100% shrinks
+      geometrically but mathematically never reaches exactly zero, no
+      matter how many Experts stack - confirmed algebraically, not just
+      assumed. **Per-person exhaustion (user-confirmed numbers): the
+      first time a given employee is drawn on in one turn closes 50% of
+      the remaining gap; the second time, 40%; the third, 10%; the
+      fourth and beyond, 0%** (negligible, matching "not to a degree
+      where success is guaranteed" from the other side too - an
+      over-exhausted Expert simply stops helping rather than ever
+      hurting) - a new `MissionStepResolution.expertRescueBoostPercentForUse`
+      lookup. Exhaustion counts uses, not successes - an Expert consulted
+      for a step that still ultimately fails despite their boost is just
+      as "used" as one whose rescue worked, matching the plain reading
+      of "drawn on" (unconfirmed default). **Scope: per employee, per
+      `MissionProgress.advanceSeason` call** ("the same turn
+      evaluation," reset fresh every call, not persisted on the
+      snapshot) - a fresh `Map<personnelId, useCount>` threaded through
+      every mission/step this call processes, missions walked in
+      `inProgressMissions`' own map order, personnel consulted in
+      roster order (astronauts before controllers) for determinism.
+    - **An explicit 95% cap, confirmed (user, 2026-10-02) - the
+      asymptote alone was judged insufficient**, since with a large
+      enough roster the remaining failure chance can shrink close enough
+      to zero to feel guaranteed in practice, not just mathematically
+      nonzero. `final = min(boosted, max(unboosted, 95))` - never lets
+      Expert stacking push the saving-throw probability above 95%, but
+      also never *lowers* an already-higher unboosted probability down
+      to 95% when no Experts were involved at all (a step whose natural
+      odds already exceed 95% stays at its own natural value, uncapped -
+      the cap only ever constrains what *Experts* can add, never the
+      formula's own baseline result). 95 is this project's own
+      unconfirmed default, not traced from BASPM (§9.5 has no equivalent
+      cap at all - BASPM's own tiered Tiger Teams boost maxes out at 50%
+      of the remaining gap in a single use, structurally far short of
+      ever needing one).
+    - **No new randomness consumed:** every Expert-rescue computation
+      above (eligibility, stacking, exhaustion, the cap) is fully
+      deterministic given roster state and this turn's use counts so
+      far - only the pre-existing first-roll/saving-roll draws
+      `MissionStepResolution` already made are still drawn.
+      `resolveStep`'s own flow needed restructuring to make this
+      possible: it used to call `MissionStepResolution.resolve`'s auto-
+      drawing overload directly, which draws (and may skip) the saving
+      roll internally; it now draws the first roll itself via a newly
+      package-private `MissionStepResolution.drawRoll`, checks it via a
+      new package-private `firstRollSucceeded`, and - only if a saving
+      throw is actually needed - computes and Expert-boosts the saving-
+      throw probability *before* drawing the saving roll, then calls the
+      already-existing fully-deterministic `resolve` overload with both
+      explicit rolls. This also fixes the exhaustion-counting
+      requirement: an Expert is only ever marked "used" when a step
+      genuinely needed rescuing (the first roll already failed), never
+      merely for being eligible.
+    - **New event, `ExpertRescueApplied`:** one per eligible Expert
+      actually consulted for a step needing a saving throw (mirroring
+      `MissionReliabilityChanged`/`MissionSkillGrowthApplied`'s own
+      per-application shape) - reports the mission/step, the person, the
+      matched skill, their own boost percent this use (already scaled
+      for off-mission controllers), and the probability before/after
+      their own contribution. **Caveat: `probabilityAfter` never reflects
+      the 95% cap** - `capExpertRescue` runs once, after every Expert's
+      own event for a step has already been emitted, so a sequence of
+      these events can together show a probability above 95% even though
+      the roll that actually decided the step used the capped value;
+      worth remembering if a later "what actually happened" replay (the
+      post-turn replay idea &sect;2.2(c) floats) is ever built straight
+      from this event stream. **Caveat: eligibility depends on mission
+      processing order within one turn** - missions are walked in
+      `inProgressMissions`' own map order, so a crew member released
+      earlier in the same turn becomes an eligible roster-wide Expert for
+      a mission processed later in that same turn, while one lost earlier
+      does not; deterministic, but order-dependent, not something a
+      player could predict without knowing that internal order.
 - 2.6 **Prestige, goals & scoring — analyzed 2026-09-27, see `baspm.md` §11
   for the full trace.**
   - **(a) How BASPM does it:** goals are `Generic` (universal race
@@ -3001,6 +3239,43 @@ never meaningfully exercises `INSUFFICIENT_FUNDS`. That outcome is
 exercised directly instead, by `MissionLaunchTest`'s own dedicated
 cases - see §2.5(h).
 
+**The Expert trait wired in the same day (2026-10-02) - see §2.2(c)/§2.5(i).**
+Two new bot decisions, both exclusively through the validated actions
+(never by setting fields directly, so the harness's own invariants
+genuinely cross-check them): starting `TrainingKind.EXPERT` training
+(20% chance, once idle and eligible - see `eligibleExpertAstronautSkills`/
+`eligibleExpertMissionControlSkills`), and pulling anyone currently
+training out early (3% chance per season, any kind, any group - the
+first exercise of the new general `pullOutOfTraining` path, closing the
+"no pull-out path exists yet" gap this section's own 2026-09-30 entry
+flagged). Three new invariants: every currently-held Expert skill's own
+value is still at or above the threshold (skills never decrease, so
+this also proves the threshold held at grant time); an in-progress
+`EXPERT` round's own target skill is at or above the threshold and not
+already held; and every `ExpertRescueApplied` event's own `boostPercent`
+matches `MissionStepResolution.expertRescueBoostPercentForUse` for that
+employee's own re-derived use-count position in the same season's event
+list (or that value scaled by the off-mission-controller efficiency),
+with `probabilityAfter` never below `probabilityBefore` and never
+reaching 100. **Numbers (same 200-game/80-season/seed-42 run): 1,092
+resigned/1,013 retired/5,344 still employed/71,178 training
+completions/4,515 hires/598 programs opened/37,426 R&D seasons; 2,164
+missions launched, mission steps 1,958 successful/793 minor-glitch-
+solved/285 minor glitch/385 failure/33 catastrophic, 66 lost in
+accidents, 30 retired on mission release; 3,518 Expert-training starts
+(3,108 completed), 3,663 pull-outs, 1,766 nonzero Expert rescues.**
+**The step-mix shift is the rescue mechanic itself working, not noise:**
+minor-glitch-solved rose 403&rarr;793, failure fell 604&rarr;385,
+catastrophic fell 41&rarr;33, accidents fell 82&rarr;66, and the average
+post-mission reliability delta rose 1.24&rarr;2.17 - all the direct,
+expected effect of 1,766 nonzero rescues pulling outcomes toward
+success. Fixed-length training completions fell 84,592&rarr;71,178,
+consistent with Expert stints (which never emit `TrainingCompleted` at
+all, success or fail) plus 3,663 pull-outs displacing rounds that would
+otherwise have completed normally. Single seed, not checked against
+run-to-run variance, same caveat as every other numbers pass in this
+section.
+
 ### 3.11 Offscreen screenshot tooling for UI checking
 
 **Decided (user, 2026-09-27): reuse Robot-Rampage's `ScreenSnapshot`
@@ -3554,15 +3829,18 @@ here.
   the MVP. The first real playtest happens in dev-mode (the commands in
   `CLAUDE.md` "Build system"), validating the core loop is worth packaging
   before investing in packaging it.
-- **The "Expert" personnel trait (§2.2(c)'s Tiger Teams replacement) ships
-  after the base mission-simulation formula, not with it.** Mission
-  simulation's first version is the base involvement-weighted roll plus a
-  flight-controller-skill-scaled saving throw only, with no automatic
-  rescue beyond that. The Expert-trait auto-rescue and its still-undecided
-  exhaustion/falloff curve is exactly the kind of tunable detail worth
-  deferring until there's a playable loop to tune it against — added as a
-  later second-wave slice, mirroring how Robot-Rampage's M5 added pushers/
-  crushers onto an engine that already structurally supported them.
+- **The "Expert" personnel trait (§2.2(c)'s Tiger Teams replacement)
+  originally shipped after the base mission-simulation formula, not with
+  it** — mission simulation's first version was the base involvement-
+  weighted roll plus a flight-controller-skill-scaled saving throw only,
+  with no automatic rescue beyond that, deferring the then-still-
+  undecided exhaustion/falloff curve until there was a playable loop to
+  tune it against. **Superseded (2026-10-02): once the base formula
+  existed and `baspm.md` §9.5 fully traced Tiger Teams, the user made
+  every remaining design decision the same day, so the Expert trait's
+  mission-side rescue mechanic moved up into this same mission-
+  simulation work instead of waiting for a second wave** — see §2.2(c)/
+  §2.5(i) for the implemented shape.
 
 - **M0 — Project skeleton. Done (2026-09-27).** Maven multi-module
   scaffold, `NetworkConstants`, `LaunchWindowGame` placeholder — see
@@ -3815,11 +4093,16 @@ here.
     `SkillGrowth.rdReliabilityGain` and its slot-band helpers, the
     composition order (same position as `TrainingProgress`, after
     `PersonnelLifecycle`), and `PersonnelDeparture.rdTargetComponentIdAtExit`.
-    **Still open in this same slice:** the Expert trait, not started yet
-    (mission-based skill growth's own caller shipped later, as part of
-    the mission-simulation slice below — see §2.5(g)). Also still open: actually starting a
-    training assignment via a real player action, and *submitting* a hire
-    as a real player action (both currently plain headless methods a
+    **The Expert trait done (2026-10-02)** - see §2.2(c)'s full decided
+    shape (mission-based skill growth's own caller shipped earlier, as
+    part of the mission-simulation slice below — see §2.5(g)). **Starting
+    training via a real player action is now partly done**: `TrainingKind.EXPERT`
+    has one (`TrainingProgress.startAstronautExpertTraining`/
+    `startMissionControlExpertTraining`), and a new general
+    `pullOutOfTraining` action ends any kind early - but `BASIC`/
+    `ADVANCED`/`PERMANENT` still have no *start* action of their own, only
+    the bot setting their fields directly. Also still open: *submitting*
+    a hire as a real player action (currently a plain headless method a
     future action handler will call, no dispatch path exists yet), plus
     composing `PersonnelLifecycle`/`TrainingProgress`/`HiringPool`/a
     future R&D resolver into one real season pass (M4, not M2).
@@ -3925,13 +4208,16 @@ here.
     **Mission cost at launch done (2026-10-02)** - see §2.5(h) for the
     new `MissionConfiguration.cost`/`MissionLaunchOutcome.INSUFFICIENT_FUNDS`
     shape and why it isn't meaningfully exercised by the bot harness.
-    **Still open, same posture as §2.5(f)'s own deferred list:**
-    prestige/goals (§2.6) and the §11.3 goal-dependency reliability
-    modifier (both still blocked on the budget/prestige/goals slice
-    below), and the Expert trait (the crew-size question, the
+    **The Expert trait's mission-side rescue mechanic is done
+    (2026-10-02)** - see §2.5(i) for the full shape (roster-wide pool,
+    stacking with exhaustion, the 95% cap) and §3.10's own entry for the
+    harness numbers. **Still open, same posture as
+    §2.5(f)'s own deferred list:** prestige/goals (§2.6) and the §11.3
+    goal-dependency reliability modifier (both still blocked on the
+    budget/prestige/goals slice below) - the crew-size question, the
     free-relaunch retirement loophole, the reliability-change/skill-
     growth items, and mission cost are all resolved - see
-    §2.5(f)/(g)/(h)).
+    §2.5(f)/(g)/(h).
   - Slice: budget/funding review, prestige, goals, and the win-condition +
     tie-break check — §2.1/§2.6/§2.9.
   - Slice: random events — §2.7.
@@ -3983,8 +4269,7 @@ here.
   tag-driven GitHub Actions release, reusing the sibling projects' own
   working templates (§3.3/§3.9). Comes after M5's playtest validates the
   loop is worth packaging, not before.
-- **M7+ — Second wave, order not yet decided:** the Expert personnel trait
-  and its exhaustion/falloff curve (§2.2(c)); active
+- **M7+ — Second wave, order not yet decided:** active
   interference/sabotage/espionage (§2.9's brainstorm, deliberately deferred
   past passive-competition-only v1); the rest of the Sputnik-through-Apollo
   content tree beyond M3's

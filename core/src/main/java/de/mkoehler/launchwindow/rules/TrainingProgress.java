@@ -2,7 +2,9 @@ package de.mkoehler.launchwindow.rules;
 
 import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.Astronaut;
+import de.mkoehler.launchwindow.model.AstronautSkill;
 import de.mkoehler.launchwindow.model.MissionControlOfficer;
+import de.mkoehler.launchwindow.model.MissionControlSkill;
 import de.mkoehler.launchwindow.model.Personnel;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.model.SetSpecialist;
@@ -16,20 +18,32 @@ import java.util.random.RandomGenerator;
 /**
  * <p>The training countdown: the third M2 rules-engine slice (see
  * {@code design.md} &sect;5 M2, &sect;2.2(a)/(c), and &sect;3.4's field
- * proposal). Resolves all three real {@link TrainingKind}s -
- * {@link TrainingKind#BASIC}/{@link TrainingKind#ADVANCED} as one fixed-
- * length round each, {@link TrainingKind#PERMANENT} as the same
- * {@link #ADVANCED_TRAINING_SEASONS}-long round, automatically re-enrolled
- * every time one completes until {@code trainingTargetLevel} is reached (or
- * the {@link #PERMANENT_TRAINING_GAIN_EPSILON} termination guard fires -
- * see {@link #shouldReenroll}).</p>
+ * proposal). {@link #advanceSeason} resolves all four real
+ * {@link TrainingKind}s - {@link TrainingKind#BASIC}/{@link TrainingKind#ADVANCED}
+ * as one fixed-length round each, {@link TrainingKind#PERMANENT} as the
+ * same {@link #ADVANCED_TRAINING_SEASONS}-long round, automatically
+ * re-enrolled every time one completes until {@code trainingTargetLevel}
+ * is reached (or the {@link #PERMANENT_TRAINING_GAIN_EPSILON} termination
+ * guard fires - see {@link #shouldReenroll}), and
+ * {@link TrainingKind#EXPERT} as an open-ended per-season pass/fail roll
+ * with no total length at all (see {@link #advanceAstronautExpertTraining}/
+ * {@link #advanceMissionControlExpertTraining}, and {@code design.md}
+ * &sect;2.2(c)).</p>
  *
- * <p><b>Assumes an already-started training assignment</b> - this class only
- * ever advances a countdown and resolves completion; nothing in this project
- * yet *starts* one (setting {@code trainingKind}/{@code trainingSeasonsTotal}/
- * a target skill and {@link AssignmentState#IN_TRAINING} is a player-action
- * concern that doesn't exist yet). An employee whose {@code trainingKind} is
- * {@link TrainingKind#NONE} is left untouched.</p>
+ * <p><b>Starting training and pulling out of it early are both real
+ * actions now</b> (2026-10-02, see {@code design.md} &sect;2.2(c)) -
+ * {@link #startAstronautExpertTraining}/{@link #startMissionControlExpertTraining}
+ * start {@link TrainingKind#EXPERT} training (the only kind with an actual
+ * start action so far; nothing in this project yet starts
+ * {@link TrainingKind#BASIC}/{@link TrainingKind#ADVANCED}/
+ * {@link TrainingKind#PERMANENT} via a real action - the bot harness still
+ * sets those fields directly), and {@link #pullOutOfTraining} ends any
+ * kind early, crediting {@link SkillGrowth#partialCredit} for the three
+ * fixed-length kinds' current round and nothing for {@link TrainingKind#EXPERT}.
+ * {@link #advanceSeason} itself still only ever advances an
+ * already-{@code IN_TRAINING} employee's existing round/attempt; an
+ * employee whose {@code trainingKind} is {@link TrainingKind#NONE} is left
+ * untouched.</p>
  *
  * <p><b>Composition order with {@link PersonnelLifecycle}, for whoever wires
  * both into one season pass (M4):</b> run {@link PersonnelLifecycle#advanceSeason}
@@ -102,15 +116,17 @@ public final class TrainingProgress {
     /**
      * Advances one season of training progress for every employee across
      * all three of the given snapshot's rosters who is currently training
-     * (any of {@link TrainingKind#BASIC}, {@link TrainingKind#ADVANCED}, or
-     * {@link TrainingKind#PERMANENT}), mutating the snapshot in place.
+     * (any of {@link TrainingKind#BASIC}, {@link TrainingKind#ADVANCED},
+     * {@link TrainingKind#PERMANENT}, or {@link TrainingKind#EXPERT}),
+     * mutating the snapshot in place.
      *
      * @param snapshot the player snapshot to advance; mutated in place
-     * @param random   the random source training-completion gains are drawn
-     *                 from (via {@link SkillGrowth#drawTrainingFactor})
-     * @return the {@link TrainingCompleted} events this pass caused, in no
-     *     particular cross-roster order; empty if nobody completed training
-     *     this season
+     * @param random   the random source training-completion gains (and
+     *                 {@link TrainingKind#EXPERT}'s own pass/fail rolls)
+     *                 are drawn from
+     * @return the {@link TrainingCompleted}/{@link ExpertTrainingCompleted}
+     *     events this pass caused, in no particular cross-roster order;
+     *     empty if nobody completed training this season
      * @throws NullPointerException if {@code snapshot} or {@code random} is
      *                               {@code null}
      */
@@ -135,14 +151,16 @@ public final class TrainingProgress {
      * Whether a training round is genuinely in progress - both
      * {@link AssignmentState#IN_TRAINING} and a real (non-{@link TrainingKind#NONE})
      * {@link TrainingKind} must agree, since the two are independent
-     * fields that could otherwise drift apart (e.g. a future pull-out path
-     * that sets {@link AssignmentState#IDLE} without also clearing
-     * {@code trainingKind} back to {@link TrainingKind#NONE} - checking
-     * {@code trainingKind} alone would keep counting that employee down
-     * and eventually "complete" training they were actually pulled out of;
-     * checking {@link AssignmentState#IN_TRAINING} alone would never
-     * advance someone left in that state with no real training kind set,
-     * such as {@code PersonnelLifecycleTest}'s own busy-employee fixtures).
+     * fields that could otherwise drift apart: {@link #pullOutOfTraining}
+     * always clears both together via {@link #resetTraining}, so it
+     * cannot cause this drift in practice, but checking
+     * {@code trainingKind} alone would still keep counting an employee
+     * down and eventually "complete" training they were actually pulled
+     * out of, if some other path ever set {@link AssignmentState#IDLE}
+     * without also resetting it; checking {@link AssignmentState#IN_TRAINING}
+     * alone would never advance someone left in that state with no real
+     * training kind set, such as {@code PersonnelLifecycleTest}'s own
+     * busy-employee fixtures.
      *
      * @param person the employee to check
      * @return {@code true} if a training round is genuinely active
@@ -178,6 +196,10 @@ public final class TrainingProgress {
 
     private static void advanceAstronaut(Astronaut astronaut, RandomGenerator random, List<ResolutionEvent> events) {
         if (!isActivelyTraining(astronaut)) {
+            return;
+        }
+        if (astronaut.getTrainingKind() == TrainingKind.EXPERT) {
+            advanceAstronautExpertTraining(astronaut, random, events);
             return;
         }
         int completed = astronaut.getTrainingSeasonsCompleted() + 1;
@@ -233,6 +255,10 @@ public final class TrainingProgress {
         if (!isActivelyTraining(officer)) {
             return;
         }
+        if (officer.getTrainingKind() == TrainingKind.EXPERT) {
+            advanceMissionControlExpertTraining(officer, random, events);
+            return;
+        }
         int completed = officer.getTrainingSeasonsCompleted() + 1;
         officer.setTrainingSeasonsCompleted(completed);
         if (completed < officer.getTrainingSeasonsTotal()) {
@@ -261,5 +287,269 @@ public final class TrainingProgress {
         person.setTrainingSeasonsTotal(0);
         person.setTrainingTargetLevel(0);
         person.setAssignmentState(AssignmentState.IDLE);
+    }
+
+    /**
+     * One season of {@link TrainingKind#EXPERT} training for an astronaut:
+     * draws a fresh pass/fail roll against
+     * {@link SkillGrowth#expertTrainingSuccessChance} for the targeted
+     * skill's current value; on success, grants the Expert trait and ends
+     * training (emitting {@link ExpertTrainingCompleted}); on failure,
+     * leaves the astronaut {@code IN_TRAINING} into another season,
+     * silently - see {@code design.md} &sect;2.2(c).
+     *
+     * @param astronaut the astronaut to advance; already confirmed
+     *                  actively training {@link TrainingKind#EXPERT}
+     * @param random    the random source the pass/fail roll is drawn from
+     * @param events    the list to append an {@link ExpertTrainingCompleted}
+     *                  event to on success
+     */
+    private static void advanceAstronautExpertTraining(Astronaut astronaut, RandomGenerator random,
+            List<ResolutionEvent> events) {
+        astronaut.setTrainingSeasonsCompleted(astronaut.getTrainingSeasonsCompleted() + 1);
+        AstronautSkill targetSkill = astronaut.getTrainingTargetSkill();
+        double successChance = SkillGrowth.expertTrainingSuccessChance(astronaut.getSkill(targetSkill));
+        double roll = SkillGrowth.drawExpertTrainingRoll(random);
+        if (!SkillGrowth.expertTrainingSucceeds(roll, successChance)) {
+            return;
+        }
+        astronaut.getExpertSkills().add(targetSkill);
+        resetTraining(astronaut);
+        astronaut.setTrainingTargetSkill(null);
+        events.add(new ExpertTrainingCompleted(PersonnelGroup.ASTRONAUT, astronaut.getId(), astronaut.getName(),
+            targetSkill.name()));
+    }
+
+    /**
+     * The Mission Control equivalent of {@link #advanceAstronautExpertTraining}.
+     *
+     * @param officer the officer to advance; already confirmed actively
+     *                training {@link TrainingKind#EXPERT}
+     * @param random  the random source the pass/fail roll is drawn from
+     * @param events  the list to append an {@link ExpertTrainingCompleted}
+     *                event to on success
+     */
+    private static void advanceMissionControlExpertTraining(MissionControlOfficer officer, RandomGenerator random,
+            List<ResolutionEvent> events) {
+        officer.setTrainingSeasonsCompleted(officer.getTrainingSeasonsCompleted() + 1);
+        MissionControlSkill targetSkill = officer.getTrainingTargetSkill();
+        double successChance = SkillGrowth.expertTrainingSuccessChance(officer.getSkill(targetSkill));
+        double roll = SkillGrowth.drawExpertTrainingRoll(random);
+        if (!SkillGrowth.expertTrainingSucceeds(roll, successChance)) {
+            return;
+        }
+        officer.getExpertSkills().add(targetSkill);
+        resetTraining(officer);
+        officer.setTrainingTargetSkill(null);
+        events.add(new ExpertTrainingCompleted(PersonnelGroup.MISSION_CONTROL, officer.getId(), officer.getName(),
+            targetSkill.name()));
+    }
+
+    /**
+     * Starts {@link TrainingKind#EXPERT} training for an astronaut: a
+     * plain headless operation, not tied to any action-submission system
+     * (same posture as {@code HiringPool.hire}/{@code ProgramOpening.open}/
+     * {@code MissionLaunch.launch} - no player-action dispatch path exists
+     * yet). Fails without mutating anything if the astronaut id is
+     * unknown, not currently {@link AssignmentState#IDLE}, below
+     * {@link SkillGrowth#EXPERT_TRAINING_SKILL_THRESHOLD} in {@code skill},
+     * or already Expert in it.
+     *
+     * @param snapshot    the player snapshot to start training for; mutated
+     *                    in place on success
+     * @param astronautId the astronaut to start training
+     * @param skill       the skill to train toward the Expert trait in
+     * @return the outcome
+     * @throws NullPointerException if any argument is {@code null}
+     */
+    public static StartExpertTrainingOutcome startAstronautExpertTraining(PlayerSnapshot snapshot,
+            String astronautId, AstronautSkill skill) {
+        Objects.requireNonNull(snapshot, "snapshot must not be null");
+        Objects.requireNonNull(astronautId, "astronautId must not be null");
+        Objects.requireNonNull(skill, "skill must not be null");
+
+        Astronaut astronaut = findById(snapshot.getAstronauts(), astronautId);
+        if (astronaut == null) {
+            return StartExpertTrainingOutcome.UNKNOWN_PERSONNEL;
+        }
+        if (astronaut.getAssignmentState() != AssignmentState.IDLE) {
+            return StartExpertTrainingOutcome.NOT_IDLE;
+        }
+        if (astronaut.getSkill(skill) < SkillGrowth.EXPERT_TRAINING_SKILL_THRESHOLD) {
+            return StartExpertTrainingOutcome.SKILL_BELOW_THRESHOLD;
+        }
+        if (astronaut.getExpertSkills().contains(skill)) {
+            return StartExpertTrainingOutcome.ALREADY_EXPERT_IN_SKILL;
+        }
+
+        astronaut.setTrainingKind(TrainingKind.EXPERT);
+        astronaut.setTrainingTargetSkill(skill);
+        astronaut.setTrainingSeasonsCompleted(0);
+        astronaut.setTrainingSeasonsTotal(0);
+        astronaut.setAssignmentState(AssignmentState.IN_TRAINING);
+        return StartExpertTrainingOutcome.STARTED;
+    }
+
+    /**
+     * The Mission Control equivalent of {@link #startAstronautExpertTraining}.
+     *
+     * @param snapshot   the player snapshot to start training for; mutated
+     *                   in place on success
+     * @param officerId  the officer to start training
+     * @param skill      the skill to train toward the Expert trait in
+     * @return the outcome
+     * @throws NullPointerException if any argument is {@code null}
+     */
+    public static StartExpertTrainingOutcome startMissionControlExpertTraining(PlayerSnapshot snapshot,
+            String officerId, MissionControlSkill skill) {
+        Objects.requireNonNull(snapshot, "snapshot must not be null");
+        Objects.requireNonNull(officerId, "officerId must not be null");
+        Objects.requireNonNull(skill, "skill must not be null");
+
+        MissionControlOfficer officer = findById(snapshot.getMissionControlOfficers(), officerId);
+        if (officer == null) {
+            return StartExpertTrainingOutcome.UNKNOWN_PERSONNEL;
+        }
+        if (officer.getAssignmentState() != AssignmentState.IDLE) {
+            return StartExpertTrainingOutcome.NOT_IDLE;
+        }
+        if (officer.getSkill(skill) < SkillGrowth.EXPERT_TRAINING_SKILL_THRESHOLD) {
+            return StartExpertTrainingOutcome.SKILL_BELOW_THRESHOLD;
+        }
+        if (officer.getExpertSkills().contains(skill)) {
+            return StartExpertTrainingOutcome.ALREADY_EXPERT_IN_SKILL;
+        }
+
+        officer.setTrainingKind(TrainingKind.EXPERT);
+        officer.setTrainingTargetSkill(skill);
+        officer.setTrainingSeasonsCompleted(0);
+        officer.setTrainingSeasonsTotal(0);
+        officer.setAssignmentState(AssignmentState.IN_TRAINING);
+        return StartExpertTrainingOutcome.STARTED;
+    }
+
+    /**
+     * Pulls an employee out of training early: a plain headless operation,
+     * same posture as {@link #startAstronautExpertTraining} - general
+     * across every {@link TrainingKind}, not Expert-specific, since
+     * nothing in this project had a pull-out path before this (see this
+     * class's own Javadoc). For {@link TrainingKind#BASIC}/
+     * {@link TrainingKind#ADVANCED}/{@link TrainingKind#PERMANENT}'s
+     * current round, draws a fresh gain factor the same way a normal
+     * completion would and applies {@link SkillGrowth#partialCredit}
+     * against that round's own completed/total seasons - crediting a
+     * scaled-down gain, never nothing and never the full gain. For
+     * {@link TrainingKind#EXPERT}, credits nothing at all - there is no
+     * continuous skill value that training ever grows. Either way, resets
+     * to {@link AssignmentState#IDLE} and clears every training field. No
+     * event is reported, same as every other player action this project
+     * has built.
+     *
+     * @param snapshot    the player snapshot to pull the employee out of
+     *                    training in; mutated in place on success
+     * @param group       which roster {@code personnelId} belongs to
+     * @param personnelId the employee to pull out of training
+     * @param random      the random source a fixed-length round's partial-
+     *                    credit gain factor is drawn from; unused for
+     *                    {@link TrainingKind#EXPERT}
+     * @return the outcome
+     * @throws NullPointerException if any argument is {@code null}
+     */
+    public static PullOutOfTrainingOutcome pullOutOfTraining(PlayerSnapshot snapshot, PersonnelGroup group,
+            String personnelId, RandomGenerator random) {
+        Objects.requireNonNull(snapshot, "snapshot must not be null");
+        Objects.requireNonNull(group, "group must not be null");
+        Objects.requireNonNull(personnelId, "personnelId must not be null");
+        Objects.requireNonNull(random, "random must not be null");
+
+        return switch (group) {
+            case ASTRONAUT -> pullOutAstronaut(findById(snapshot.getAstronauts(), personnelId), random);
+            case SET -> pullOutSetSpecialist(findById(snapshot.getSetSpecialists(), personnelId), random);
+            case MISSION_CONTROL ->
+                pullOutMissionControlOfficer(findById(snapshot.getMissionControlOfficers(), personnelId), random);
+        };
+    }
+
+    private static PullOutOfTrainingOutcome pullOutAstronaut(Astronaut astronaut, RandomGenerator random) {
+        if (astronaut == null) {
+            return PullOutOfTrainingOutcome.UNKNOWN_PERSONNEL;
+        }
+        if (!isActivelyTraining(astronaut)) {
+            return PullOutOfTrainingOutcome.NOT_IN_TRAINING;
+        }
+        if (astronaut.getTrainingKind() != TrainingKind.EXPERT) {
+            AstronautSkill targetSkill = astronaut.getTrainingTargetSkill();
+            double factor = SkillGrowth.drawTrainingFactor(random);
+            double fullGain =
+                SkillGrowth.diminishingReturnsGain(astronaut.getSkill(targetSkill), astronaut.getLearningPotential(),
+                    factor);
+            double creditedGain =
+                SkillGrowth.partialCredit(fullGain, astronaut.getTrainingSeasonsCompleted(),
+                    astronaut.getTrainingSeasonsTotal());
+            astronaut.setSkill(targetSkill, astronaut.getSkill(targetSkill) + creditedGain);
+        }
+        resetTraining(astronaut);
+        astronaut.setTrainingTargetSkill(null);
+        return PullOutOfTrainingOutcome.PULLED_OUT;
+    }
+
+    private static PullOutOfTrainingOutcome pullOutSetSpecialist(SetSpecialist specialist, RandomGenerator random) {
+        if (specialist == null) {
+            return PullOutOfTrainingOutcome.UNKNOWN_PERSONNEL;
+        }
+        if (!isActivelyTraining(specialist)) {
+            return PullOutOfTrainingOutcome.NOT_IN_TRAINING;
+        }
+        var targetSkill = specialist.getTrainingTargetSkill();
+        double factor = SkillGrowth.drawTrainingFactor(random);
+        double fullGain = SkillGrowth.diminishingReturnsGain(specialist.getSkill(targetSkill),
+            specialist.getLearningPotential(), factor);
+        double creditedGain = SkillGrowth.partialCredit(fullGain, specialist.getTrainingSeasonsCompleted(),
+            specialist.getTrainingSeasonsTotal());
+        specialist.setSkill(targetSkill, specialist.getSkill(targetSkill) + creditedGain);
+        resetTraining(specialist);
+        specialist.setTrainingTargetSkill(null);
+        return PullOutOfTrainingOutcome.PULLED_OUT;
+    }
+
+    private static PullOutOfTrainingOutcome pullOutMissionControlOfficer(MissionControlOfficer officer,
+            RandomGenerator random) {
+        if (officer == null) {
+            return PullOutOfTrainingOutcome.UNKNOWN_PERSONNEL;
+        }
+        if (!isActivelyTraining(officer)) {
+            return PullOutOfTrainingOutcome.NOT_IN_TRAINING;
+        }
+        if (officer.getTrainingKind() != TrainingKind.EXPERT) {
+            MissionControlSkill targetSkill = officer.getTrainingTargetSkill();
+            double factor = SkillGrowth.drawTrainingFactor(random);
+            double fullGain =
+                SkillGrowth.diminishingReturnsGain(officer.getSkill(targetSkill), officer.getLearningPotential(),
+                    factor);
+            double creditedGain =
+                SkillGrowth.partialCredit(fullGain, officer.getTrainingSeasonsCompleted(),
+                    officer.getTrainingSeasonsTotal());
+            officer.setSkill(targetSkill, officer.getSkill(targetSkill) + creditedGain);
+        }
+        resetTraining(officer);
+        officer.setTrainingTargetSkill(null);
+        return PullOutOfTrainingOutcome.PULLED_OUT;
+    }
+
+    /**
+     * Finds a {@link Personnel} record by id within a roster.
+     *
+     * @param roster the roster to search
+     * @param id     the id to find
+     * @param <T>    the roster's own {@link Personnel} subtype
+     * @return the matching record, or {@code null} if none matches
+     */
+    private static <T extends Personnel> T findById(List<T> roster, String id) {
+        for (T person : roster) {
+            if (person.getId().equals(id)) {
+                return person;
+            }
+        }
+        return null;
     }
 }

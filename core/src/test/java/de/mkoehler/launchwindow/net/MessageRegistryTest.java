@@ -29,8 +29,10 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -72,7 +74,7 @@ class MessageRegistryTest {
             PlayerSnapshot.class, ArrayList.class, LinkedHashMap.class, SetFundsAction.class,
             SubmitActionRequest.class, SubmitActionResponse.class, FetchStateRequest.class,
             FetchStateResponse.class, HandshakeRequest.class, HandshakeResponse.class, TrainingKind.class,
-            OwnedMissionComponent.class, InProgressMission.class};
+            OwnedMissionComponent.class, InProgressMission.class, LinkedHashSet.class};
         for (Class<?> registeredClass : registeredClasses) {
             assertEquals(first.getRegistration(registeredClass).getId(), second.getRegistration(registeredClass).getId(),
                 "id mismatch for " + registeredClass.getSimpleName());
@@ -117,7 +119,8 @@ class MessageRegistryTest {
             MissionControlSkill.class, Astronaut.class, SetSpecialist.class, MissionControlOfficer.class,
             PlayerSnapshot.class, ArrayList.class, LinkedHashMap.class, SetFundsAction.class,
             SubmitActionRequest.class, SubmitActionResponse.class, FetchStateRequest.class,
-            FetchStateResponse.class, TrainingKind.class, OwnedMissionComponent.class, InProgressMission.class};
+            FetchStateResponse.class, TrainingKind.class, OwnedMissionComponent.class, InProgressMission.class,
+            LinkedHashSet.class};
         for (Class<?> other : everyOtherClass) {
             int otherId = kryo.getRegistration(other).getId();
             assertTrue(requestId < otherId, "HandshakeRequest's id must be lower than " + other.getSimpleName());
@@ -236,6 +239,7 @@ class MessageRegistryTest {
         astronaut.setTrainingTargetSkill(AstronautSkill.EVA);
         astronaut.setTrainingTargetLevel(85.5);
         astronaut.setAssignedMissionId("m0");
+        astronaut.getExpertSkills().add(AstronautSkill.PILOTING);
         snapshot.setAstronauts(List.of(astronaut));
         SetSpecialist specialist = new SetSpecialist("set-1", "Omar Idris", 41, 75, 55);
         specialist.setSkill(SetSkill.ROCKETS, 63);
@@ -244,6 +248,7 @@ class MessageRegistryTest {
         snapshot.setSetSpecialists(List.of(specialist));
         MissionControlOfficer officer = new MissionControlOfficer("mco-1", "Alex Novak", 45, 70, 40);
         officer.setSkill(MissionControlSkill.PROPULSION, 50);
+        officer.getExpertSkills().add(MissionControlSkill.PROPULSION);
         snapshot.setMissionControlOfficers(List.of(officer));
         Astronaut candidate = new Astronaut("astro-cand-1", "Priya Nair", 27, 65, 45);
         candidate.setSkill(AstronautSkill.LEADERSHIP, 33.0);
@@ -271,6 +276,9 @@ class MessageRegistryTest {
         assertEquals("rocket-redstone", copy.state().getSetSpecialists().get(0).getRdTargetComponentId());
         assertEquals(0, copy.state().getSetSpecialists().get(0).getRdSlot());
         assertEquals(50, copy.state().getMissionControlOfficers().get(0).getSkill(MissionControlSkill.PROPULSION));
+        assertEquals(Set.of(AstronautSkill.PILOTING), copy.state().getAstronauts().get(0).getExpertSkills());
+        assertEquals(Set.of(MissionControlSkill.PROPULSION),
+            copy.state().getMissionControlOfficers().get(0).getExpertSkills());
         assertEquals(1, copy.state().getAstronautCandidates().size());
         assertEquals("astro-cand-1", copy.state().getAstronautCandidates().get(0).getId());
         assertEquals(33.0, copy.state().getAstronautCandidates().get(0).getSkill(AstronautSkill.LEADERSHIP));

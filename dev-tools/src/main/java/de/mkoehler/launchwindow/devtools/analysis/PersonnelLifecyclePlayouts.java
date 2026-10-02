@@ -21,6 +21,8 @@ import de.mkoehler.launchwindow.model.SetSkill;
 import de.mkoehler.launchwindow.model.SetSpecialist;
 import de.mkoehler.launchwindow.model.TrainingKind;
 import de.mkoehler.launchwindow.rules.DepartureReason;
+import de.mkoehler.launchwindow.rules.ExpertRescueApplied;
+import de.mkoehler.launchwindow.rules.ExpertTrainingCompleted;
 import de.mkoehler.launchwindow.rules.HireOutcome;
 import de.mkoehler.launchwindow.rules.HiringPool;
 import de.mkoehler.launchwindow.rules.MissionLaunch;
@@ -29,17 +31,20 @@ import de.mkoehler.launchwindow.rules.MissionProgress;
 import de.mkoehler.launchwindow.rules.MissionReliabilityChanged;
 import de.mkoehler.launchwindow.rules.MissionSkillGrowthApplied;
 import de.mkoehler.launchwindow.rules.MissionStepOutcome;
+import de.mkoehler.launchwindow.rules.MissionStepResolution;
 import de.mkoehler.launchwindow.rules.MissionStepResolved;
 import de.mkoehler.launchwindow.rules.OpenProgramOutcome;
 import de.mkoehler.launchwindow.rules.PersonnelDeparture;
 import de.mkoehler.launchwindow.rules.PersonnelGroup;
 import de.mkoehler.launchwindow.rules.PersonnelLifecycle;
 import de.mkoehler.launchwindow.rules.ProgramOpening;
+import de.mkoehler.launchwindow.rules.PullOutOfTrainingOutcome;
 import de.mkoehler.launchwindow.rules.ResearchCompleted;
 import de.mkoehler.launchwindow.rules.ResearchComponentMaxed;
 import de.mkoehler.launchwindow.rules.ResearchProgress;
 import de.mkoehler.launchwindow.rules.ResolutionEvent;
 import de.mkoehler.launchwindow.rules.SkillGrowth;
+import de.mkoehler.launchwindow.rules.StartExpertTrainingOutcome;
 import de.mkoehler.launchwindow.rules.TrainingCompleted;
 import de.mkoehler.launchwindow.rules.TrainingProgress;
 
@@ -91,10 +96,18 @@ import java.util.Set;
  * {@link TrainingKind#ADVANCED}/{@link TrainingKind#PERMANENT} (the last
  * with a random target level strictly above the current skill and up to
  * {@link SkillGrowth#SKILL_CAP}, per {@code design.md} &sect;3.4's proposed
- * invariant); an employee already in training is <b>never</b> interrupted -
- * there is no pull-out path yet, so training always runs to its own
- * completion (for {@code PERMANENT}, until it stops re-enrolling on its
- * own). <b>An Astronaut/Mission Control officer's idle-to-{@code ASSIGNED}
+ * invariant). <b>An employee already in training is no longer always run
+ * to completion</b> (2026-10-02) - a small per-season chance
+ * ({@link #PULL_OUT_OF_TRAINING_CHANCE_PER_SEASON}) pulls them out early
+ * via the general {@link TrainingProgress#pullOutOfTraining} action
+ * instead, the first exercise of that path in this harness; otherwise
+ * training still runs to its own completion (for {@code PERMANENT}, until
+ * it stops re-enrolling on its own). Idle Astronauts/Mission Control
+ * officers also have a smaller chance
+ * ({@link #EXPERT_TRAINING_START_CHANCE_PER_SEASON}) of starting
+ * {@link TrainingKind#EXPERT} training instead, when eligible - see
+ * {@link #shuffleAstronaut}/{@link #shuffleMissionControlOfficer}'s own
+ * Javadoc. <b>An Astronaut/Mission Control officer's idle-to-{@code ASSIGNED}
  * transition no longer happens here</b> (2026-10-02) - it is exclusively
  * {@link #maybeLaunchMission}'s job now, since {@code ASSIGNED} means
  * "on a specific {@link de.mkoehler.launchwindow.model.InProgressMission}"
@@ -138,6 +151,28 @@ public final class PersonnelLifecyclePlayouts {
     private static final double OPEN_PROGRAM_CHANCE_PER_SEASON = 0.1;
     private static final double LAUNCH_MISSION_CHANCE_PER_SEASON = 0.15;
     private static final long STARTING_FUNDS = 5_000;
+
+    /**
+     * For an idle Astronaut/Mission Control officer whose shuffle roll
+     * already cleared {@link #REASSIGNMENT_CHANCE_PER_SEASON}, the chance
+     * - checked <em>before</em> the shuffle's own 50/50 idle-vs-training
+     * split, not after it - that the bot starts {@link TrainingKind#EXPERT}
+     * training instead of ever reaching that split at all. Only ever
+     * rolled when at least one of their skills already clears
+     * {@link SkillGrowth#EXPERT_TRAINING_SKILL_THRESHOLD} and isn't
+     * already an Expert skill (see {@link #eligibleExpertAstronautSkills}/
+     * {@link #eligibleExpertMissionControlSkills}).
+     */
+    private static final double EXPERT_TRAINING_START_CHANCE_PER_SEASON = 0.2;
+
+    /**
+     * The chance, per currently-{@code IN_TRAINING} employee per season
+     * (any {@link TrainingKind}, any of the three groups), that the bot
+     * pulls them out early via {@link TrainingProgress#pullOutOfTraining} -
+     * deliberately low, since this is meant to exercise the general
+     * pull-out path at all, not to make training routinely abandoned.
+     */
+    private static final double PULL_OUT_OF_TRAINING_CHANCE_PER_SEASON = 0.03;
 
     /**
      * Every program id {@link #CATALOG} defines, matching
@@ -341,6 +376,10 @@ public final class PersonnelLifecyclePlayouts {
         int missionSkillGrowthCount = 0;
         double missionSkillGrowthTotal = 0;
         int missionTriggeredSetReleaseCount = 0;
+        int expertTrainingStartedCount = 0;
+        int expertTrainingCompletedCount = 0;
+        int pulledOutOfTrainingCount = 0;
+        int expertRescueAppliedCount = 0;
         int[] bandHits = new int[4];
 
         for (int game = 0; game < games; game++) {
@@ -350,7 +389,11 @@ public final class PersonnelLifecyclePlayouts {
             seedJoinedAtSeason(snapshot, joinedAtSeason);
 
             for (int season = 0; season < seasons && rosterSize(snapshot) > 0; season++) {
-                shuffleAssignments(snapshot, random);
+                // index 0: Expert training starts this season; index 1: pull-outs this season.
+                int[] expertTally = new int[2];
+                shuffleAssignments(snapshot, random, expertTally);
+                expertTrainingStartedCount += expertTally[0];
+                pulledOutOfTrainingCount += expertTally[1];
                 hiredCount += hireFromPools(snapshot, random, season, joinedAtSeason);
                 programsOpenedCount += maybeOpenProgram(snapshot, random);
                 missionsLaunchedCount += maybeLaunchMission(snapshot, random);
@@ -426,11 +469,21 @@ public final class PersonnelLifecyclePlayouts {
                         // R&D-pass release, which is deliberately not counted below. Counts every
                         // released specialist, not just the triggering event.
                         missionTriggeredSetReleaseCount += maxed.releasedPersonnelIds().size();
+                    } else if (event instanceof ExpertRescueApplied rescued && rescued.boostPercent() > 0) {
+                        // Only counts a rescue that actually contributed something - an eligible
+                        // Expert already exhausted past the third use this turn still gets
+                        // consulted (and emits an event), but at a 0% boost.
+                        expertRescueAppliedCount++;
                     }
                 }
+                checkExpertRescueInvariants(missionEvents);
                 for (ResolutionEvent event : trainingEvents) {
-                    trainingCompletedCount++;
-                    trainingGainTotal += ((TrainingCompleted) event).skillGain();
+                    if (event instanceof TrainingCompleted completed) {
+                        trainingCompletedCount++;
+                        trainingGainTotal += completed.skillGain();
+                    } else if (event instanceof ExpertTrainingCompleted) {
+                        expertTrainingCompletedCount++;
+                    }
                 }
                 for (ResolutionEvent event : researchEvents) {
                     // ResearchComponentMaxed (a component reaching its R&D ceiling, releasing its
@@ -464,7 +517,8 @@ public final class PersonnelLifecyclePlayouts {
             missionStepMinorGlitchSolvedCount, missionStepMinorGlitchCount, missionStepFailureCount,
             missionStepCatastrophicCount, lostInAccidentCount, retiredOnMissionReleaseCount,
             missionReliabilityChangeCount, avgMissionReliabilityDelta, missionSkillGrowthCount,
-            avgMissionSkillGrowth, missionTriggeredSetReleaseCount);
+            avgMissionSkillGrowth, missionTriggeredSetReleaseCount, expertTrainingStartedCount,
+            expertTrainingCompletedCount, pulledOutOfTrainingCount, expertRescueAppliedCount);
     }
 
     /**
@@ -715,7 +769,12 @@ public final class PersonnelLifecyclePlayouts {
      * training kind and a non-null target skill in both directions - the
      * same consistency {@link TrainingProgress#isActivelyTraining} itself
      * relies on, re-checked here across many random combinations rather
-     * than trusted blindly.
+     * than trusted blindly. Also cross-checks the two Expert-specific
+     * invariants (2026-10-02, see {@link #checkExpertTrainingEligibility}/
+     * {@link #checkExpertSkillThreshold}): an in-progress
+     * {@link TrainingKind#EXPERT} round's own target skill is eligible,
+     * and every already-held Expert skill's own current value still
+     * clears the threshold.
      *
      * @param snapshot       the snapshot after this season's training advance
      * @param trainingEvents the {@link TrainingProgress} events this season's advance returned
@@ -723,9 +782,8 @@ public final class PersonnelLifecyclePlayouts {
      */
     private static void checkTrainingInvariants(PlayerSnapshot snapshot, List<ResolutionEvent> trainingEvents) {
         for (ResolutionEvent event : trainingEvents) {
-            double gain = ((TrainingCompleted) event).skillGain();
-            if (gain < 0) {
-                throw new IllegalStateException("Negative training gain: " + gain);
+            if (event instanceof TrainingCompleted completed && completed.skillGain() < 0) {
+                throw new IllegalStateException("Negative training gain: " + completed.skillGain());
             }
         }
         for (Astronaut astronaut : snapshot.getAstronauts()) {
@@ -733,6 +791,13 @@ public final class PersonnelLifecyclePlayouts {
             checkSkillsInRange(astronaut.getId(), astronaut.getSkills().values());
             if (astronaut.getTrainingKind() == TrainingKind.PERMANENT) {
                 checkPermanentTrainingTarget(astronaut, astronaut.getSkill(astronaut.getTrainingTargetSkill()));
+            }
+            if (astronaut.getTrainingKind() == TrainingKind.EXPERT) {
+                checkExpertTrainingEligibility(astronaut.getId(), astronaut.getSkill(astronaut.getTrainingTargetSkill()),
+                    astronaut.getExpertSkills().contains(astronaut.getTrainingTargetSkill()));
+            }
+            for (AstronautSkill skill : astronaut.getExpertSkills()) {
+                checkExpertSkillThreshold(astronaut.getId(), skill.name(), astronaut.getSkill(skill));
             }
         }
         for (SetSpecialist specialist : snapshot.getSetSpecialists()) {
@@ -747,6 +812,103 @@ public final class PersonnelLifecyclePlayouts {
             checkSkillsInRange(officer.getId(), officer.getSkills().values());
             if (officer.getTrainingKind() == TrainingKind.PERMANENT) {
                 checkPermanentTrainingTarget(officer, officer.getSkill(officer.getTrainingTargetSkill()));
+            }
+            if (officer.getTrainingKind() == TrainingKind.EXPERT) {
+                checkExpertTrainingEligibility(officer.getId(), officer.getSkill(officer.getTrainingTargetSkill()),
+                    officer.getExpertSkills().contains(officer.getTrainingTargetSkill()));
+            }
+            for (MissionControlSkill skill : officer.getExpertSkills()) {
+                checkExpertSkillThreshold(officer.getId(), skill.name(), officer.getSkill(skill));
+            }
+        }
+    }
+
+    /**
+     * Cross-checks the invariant {@link TrainingProgress#startAstronautExpertTraining}/
+     * {@code startMissionControlExpertTraining} must enforce, re-checked
+     * independently here across many random combinations: an employee
+     * currently training {@link TrainingKind#EXPERT} must have a current
+     * value in the targeted skill at or above
+     * {@link SkillGrowth#EXPERT_TRAINING_SKILL_THRESHOLD}, and must not
+     * already be an Expert in it - both conditions the start action itself
+     * rejects, so finding either false here would mean the bot bypassed
+     * that action (it never should - {@link #shuffleAstronaut}/
+     * {@link #shuffleMissionControlOfficer} only ever call it directly).
+     *
+     * @param personnelId            the employee to check
+     * @param currentSkillOfTarget   the targeted skill's current value
+     * @param alreadyExpertInTarget  whether the employee already holds the
+     *                               Expert trait in the targeted skill
+     * @throws IllegalStateException if either condition is violated
+     */
+    private static void checkExpertTrainingEligibility(String personnelId, double currentSkillOfTarget,
+            boolean alreadyExpertInTarget) {
+        if (currentSkillOfTarget < SkillGrowth.EXPERT_TRAINING_SKILL_THRESHOLD) {
+            throw new IllegalStateException("EXPERT training in progress for " + personnelId
+                + " below the threshold: " + currentSkillOfTarget);
+        }
+        if (alreadyExpertInTarget) {
+            throw new IllegalStateException(
+                "EXPERT training in progress for " + personnelId + " targeting a skill already held");
+        }
+    }
+
+    /**
+     * Cross-checks that every currently-held Expert skill's own current
+     * value is still at or above {@link SkillGrowth#EXPERT_TRAINING_SKILL_THRESHOLD} -
+     * skills never decrease anywhere in this project, so this also proves
+     * the threshold genuinely held at the moment the trait was granted,
+     * not just right now.
+     *
+     * @param personnelId  the employee to check
+     * @param skillName    the Expert skill's own {@code name()}
+     * @param currentValue the skill's current value
+     * @throws IllegalStateException if the value is below the threshold
+     */
+    private static void checkExpertSkillThreshold(String personnelId, String skillName, double currentValue) {
+        if (currentValue < SkillGrowth.EXPERT_TRAINING_SKILL_THRESHOLD) {
+            throw new IllegalStateException(
+                "Expert skill " + skillName + " for " + personnelId + " is below the threshold: " + currentValue);
+        }
+    }
+
+    /**
+     * Cross-checks every {@link ExpertRescueApplied} event this season's
+     * mission advance reported, computed independently of
+     * {@link MissionProgress#applyExpertRescue}'s own internals: counting
+     * each person's own earlier occurrences in this same event list
+     * re-derives which use number this one must be, and the reported
+     * {@code boostPercent} must match {@link MissionStepResolution#expertRescueBoostPercentForUse}
+     * for that use number exactly, or that value scaled by
+     * {@link MissionStepResolution#EXPERT_RESCUE_OFF_MISSION_CONTROLLER_EFFICIENCY}
+     * (an off-mission Mission Control officer) - no other value is ever
+     * valid. Also checks {@code probabilityAfter} never drops below
+     * {@code probabilityBefore} and never reaches 100, the per-event
+     * guarantee the geometric gap-closing formula provides (the separate
+     * 95% cap is only ever applied once, to the final aggregated value, so
+     * it is deliberately not re-checked per event here).
+     *
+     * @param missionEvents this season's {@link MissionProgress#advanceSeason} events
+     * @throws IllegalStateException if any invariant is violated
+     */
+    private static void checkExpertRescueInvariants(List<ResolutionEvent> missionEvents) {
+        Map<String, Integer> useCountSoFar = new HashMap<>();
+        for (ResolutionEvent event : missionEvents) {
+            if (!(event instanceof ExpertRescueApplied rescue)) {
+                continue;
+            }
+            int useNumber = useCountSoFar.merge(rescue.personnelId(), 1, Integer::sum);
+            double expectedBase = MissionStepResolution.expertRescueBoostPercentForUse(useNumber);
+            double expectedScaled =
+                expectedBase * MissionStepResolution.EXPERT_RESCUE_OFF_MISSION_CONTROLLER_EFFICIENCY;
+            if (rescue.boostPercent() != expectedBase && rescue.boostPercent() != expectedScaled) {
+                throw new IllegalStateException("Expert rescue boost percent for " + rescue.personnelId()
+                    + " on use " + useNumber + " was " + rescue.boostPercent() + ", expected " + expectedBase
+                    + " or " + expectedScaled);
+            }
+            if (rescue.probabilityAfter() < rescue.probabilityBefore() || rescue.probabilityAfter() >= 100.0) {
+                throw new IllegalStateException("Expert rescue probability out of range for " + rescue.personnelId()
+                    + ": before=" + rescue.probabilityBefore() + ", after=" + rescue.probabilityAfter());
             }
         }
     }
@@ -1239,13 +1401,53 @@ public final class PersonnelLifecyclePlayouts {
         };
     }
 
-    private static void shuffleAssignments(PlayerSnapshot snapshot, Random random) {
-        snapshot.getAstronauts().forEach(a -> shuffleAstronaut(a, random));
-        snapshot.getSetSpecialists().forEach(s -> shuffleSetSpecialist(s, snapshot, random));
-        snapshot.getMissionControlOfficers().forEach(m -> shuffleMissionControlOfficer(m, random));
+    /**
+     * Drives every employee's per-season idle/training/pull-out decision
+     * across all three rosters - see {@link #shuffleAstronaut}/
+     * {@link #shuffleSetSpecialist}/{@link #shuffleMissionControlOfficer}
+     * for the per-group shape.
+     *
+     * @param snapshot    the snapshot to shuffle; mutated in place
+     * @param random      the random source to draw from
+     * @param expertTally {@code [0]} incremented once per successful
+     *                    Expert-training start, {@code [1]} once per
+     *                    successful pull-out, across every group; mutated
+     *                    in place
+     */
+    private static void shuffleAssignments(PlayerSnapshot snapshot, Random random, int[] expertTally) {
+        snapshot.getAstronauts().forEach(a -> shuffleAstronaut(snapshot, a, random, expertTally));
+        snapshot.getSetSpecialists().forEach(s -> shuffleSetSpecialist(s, snapshot, random, expertTally));
+        snapshot.getMissionControlOfficers().forEach(m -> shuffleMissionControlOfficer(snapshot, m, random, expertTally));
     }
 
-    private static void shuffleAstronaut(Astronaut astronaut, Random random) {
+    /**
+     * The bot's per-season decision for one astronaut: if currently
+     * {@code IN_TRAINING} (any kind), a small chance to pull out early via
+     * the validated {@link TrainingProgress#pullOutOfTraining} action
+     * (never by setting fields directly - see
+     * {@link #checkExpertTrainingEligibility}'s own cross-check, which
+     * depends on this). Otherwise, if idle and the shuffle's own
+     * reassignment roll clears, either starts {@link TrainingKind#EXPERT}
+     * training (via {@link TrainingProgress#startAstronautExpertTraining},
+     * same validated-action posture) when at least one skill is eligible
+     * and a separate, smaller chance clears, or falls back to the
+     * existing fixed-length pick.
+     *
+     * @param snapshot    the snapshot {@code astronaut} belongs to
+     * @param astronaut   the astronaut to maybe reassign
+     * @param random      the random source to draw from
+     * @param expertTally mutated in place - see {@link #shuffleAssignments}
+     */
+    private static void shuffleAstronaut(PlayerSnapshot snapshot, Astronaut astronaut, Random random,
+            int[] expertTally) {
+        if (astronaut.getAssignmentState() == AssignmentState.IN_TRAINING) {
+            if (random.nextDouble() < PULL_OUT_OF_TRAINING_CHANCE_PER_SEASON
+                    && TrainingProgress.pullOutOfTraining(snapshot, PersonnelGroup.ASTRONAUT, astronaut.getId(),
+                        random) == PullOutOfTrainingOutcome.PULLED_OUT) {
+                expertTally[1]++;
+            }
+            return;
+        }
         if (random.nextDouble() >= REASSIGNMENT_CHANCE_PER_SEASON) {
             return;
         }
@@ -1253,6 +1455,15 @@ public final class PersonnelLifecyclePlayouts {
         // (see maybeLaunchMission), MissionProgress.advanceSeason the only path back to IDLE on
         // a mission's end. This shuffle only ever decides idle <-> training.
         if (astronaut.getAssignmentState() != AssignmentState.IDLE) {
+            return;
+        }
+        List<AstronautSkill> eligibleExpertSkills = eligibleExpertAstronautSkills(astronaut);
+        if (!eligibleExpertSkills.isEmpty() && random.nextDouble() < EXPERT_TRAINING_START_CHANCE_PER_SEASON) {
+            AstronautSkill target = eligibleExpertSkills.get(random.nextInt(eligibleExpertSkills.size()));
+            if (TrainingProgress.startAstronautExpertTraining(snapshot, astronaut.getId(), target)
+                    == StartExpertTrainingOutcome.STARTED) {
+                expertTally[0]++;
+            }
             return;
         }
         if (random.nextBoolean()) {
@@ -1275,6 +1486,43 @@ public final class PersonnelLifecyclePlayouts {
     }
 
     /**
+     * Returns every {@link AstronautSkill} this astronaut could validly
+     * start {@link TrainingKind#EXPERT} training in right now: at or above
+     * {@link SkillGrowth#EXPERT_TRAINING_SKILL_THRESHOLD}, and not already
+     * held as an Expert skill.
+     *
+     * @param astronaut the astronaut to check
+     * @return the eligible skills, possibly empty
+     */
+    private static List<AstronautSkill> eligibleExpertAstronautSkills(Astronaut astronaut) {
+        List<AstronautSkill> eligible = new ArrayList<>();
+        for (AstronautSkill skill : AstronautSkill.values()) {
+            if (astronaut.getSkill(skill) >= SkillGrowth.EXPERT_TRAINING_SKILL_THRESHOLD
+                    && !astronaut.getExpertSkills().contains(skill)) {
+                eligible.add(skill);
+            }
+        }
+        return eligible;
+    }
+
+    /**
+     * The Mission Control equivalent of {@link #eligibleExpertAstronautSkills}.
+     *
+     * @param officer the officer to check
+     * @return the eligible skills, possibly empty
+     */
+    private static List<MissionControlSkill> eligibleExpertMissionControlSkills(MissionControlOfficer officer) {
+        List<MissionControlSkill> eligible = new ArrayList<>();
+        for (MissionControlSkill skill : MissionControlSkill.values()) {
+            if (officer.getSkill(skill) >= SkillGrowth.EXPERT_TRAINING_SKILL_THRESHOLD
+                    && !officer.getExpertSkills().contains(skill)) {
+                eligible.add(skill);
+            }
+        }
+        return eligible;
+    }
+
+    /**
      * The bot's reassignment move for one SET specialist - same shape as
      * {@link #shuffleAstronaut}/{@link #shuffleMissionControlOfficer}, with
      * one difference: "assigned" only ever means R&amp;D for SET (see
@@ -1294,12 +1542,27 @@ public final class PersonnelLifecyclePlayouts {
      * occupied, the same way "no owned component at all" already falls
      * back.</p>
      *
-     * @param specialist the specialist to maybe reassign
-     * @param snapshot   the snapshot their owned mission components are
-     *                   read from
-     * @param random     the random source to draw from
+     * <p>SET is never Expert-eligible, but still uses the same general
+     * pull-out path as the other two groups if currently {@code IN_TRAINING} -
+     * see {@link #shuffleAstronaut}'s own Javadoc for why pull-out is
+     * general, not Expert-specific.</p>
+     *
+     * @param specialist  the specialist to maybe reassign
+     * @param snapshot    the snapshot their owned mission components are
+     *                    read from
+     * @param random      the random source to draw from
+     * @param expertTally mutated in place - see {@link #shuffleAssignments}
      */
-    private static void shuffleSetSpecialist(SetSpecialist specialist, PlayerSnapshot snapshot, Random random) {
+    private static void shuffleSetSpecialist(SetSpecialist specialist, PlayerSnapshot snapshot, Random random,
+            int[] expertTally) {
+        if (specialist.getAssignmentState() == AssignmentState.IN_TRAINING) {
+            if (random.nextDouble() < PULL_OUT_OF_TRAINING_CHANCE_PER_SEASON
+                    && TrainingProgress.pullOutOfTraining(snapshot, PersonnelGroup.SET, specialist.getId(), random)
+                        == PullOutOfTrainingOutcome.PULLED_OUT) {
+                expertTally[1]++;
+            }
+            return;
+        }
         if (random.nextDouble() >= REASSIGNMENT_CHANCE_PER_SEASON) {
             return;
         }
@@ -1367,12 +1630,40 @@ public final class PersonnelLifecyclePlayouts {
         return null;
     }
 
-    private static void shuffleMissionControlOfficer(MissionControlOfficer officer, Random random) {
+    /**
+     * The Mission Control equivalent of {@link #shuffleAstronaut} - same
+     * pull-out-first, then Expert-training-start, then fixed-length-pick
+     * shape.
+     *
+     * @param snapshot    the snapshot {@code officer} belongs to
+     * @param officer     the officer to maybe reassign
+     * @param random      the random source to draw from
+     * @param expertTally mutated in place - see {@link #shuffleAssignments}
+     */
+    private static void shuffleMissionControlOfficer(PlayerSnapshot snapshot, MissionControlOfficer officer,
+            Random random, int[] expertTally) {
+        if (officer.getAssignmentState() == AssignmentState.IN_TRAINING) {
+            if (random.nextDouble() < PULL_OUT_OF_TRAINING_CHANCE_PER_SEASON
+                    && TrainingProgress.pullOutOfTraining(snapshot, PersonnelGroup.MISSION_CONTROL, officer.getId(),
+                        random) == PullOutOfTrainingOutcome.PULLED_OUT) {
+                expertTally[1]++;
+            }
+            return;
+        }
         if (random.nextDouble() >= REASSIGNMENT_CHANCE_PER_SEASON) {
             return;
         }
         // Same reasoning as shuffleAstronaut: ASSIGNED is now exclusively mission-driven.
         if (officer.getAssignmentState() != AssignmentState.IDLE) {
+            return;
+        }
+        List<MissionControlSkill> eligibleExpertSkills = eligibleExpertMissionControlSkills(officer);
+        if (!eligibleExpertSkills.isEmpty() && random.nextDouble() < EXPERT_TRAINING_START_CHANCE_PER_SEASON) {
+            MissionControlSkill target = eligibleExpertSkills.get(random.nextInt(eligibleExpertSkills.size()));
+            if (TrainingProgress.startMissionControlExpertTraining(snapshot, officer.getId(), target)
+                    == StartExpertTrainingOutcome.STARTED) {
+                expertTally[0]++;
+            }
             return;
         }
         if (random.nextBoolean()) {
@@ -1528,5 +1819,9 @@ public final class PersonnelLifecyclePlayouts {
             report.missionSkillGrowthCount(), report.averageMissionSkillGrowth());
         System.out.printf("SET specialists released via mission-triggered R&D ceiling: %d%n",
             report.missionTriggeredSetReleaseCount());
+        System.out.printf("Expert training started: %d (completed: %d)%n",
+            report.expertTrainingStartedCount(), report.expertTrainingCompletedCount());
+        System.out.printf("Pulled out of training: %d%n", report.pulledOutOfTrainingCount());
+        System.out.printf("Expert rescues applied (nonzero boost): %d%n", report.expertRescueAppliedCount());
     }
 }

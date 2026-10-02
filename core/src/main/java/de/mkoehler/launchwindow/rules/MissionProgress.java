@@ -80,6 +80,14 @@ import java.util.random.RandomGenerator;
  * {@link #applyPostSeasonReliabilityChange}/{@link #applyPostSeasonSkillGrowth}'s
  * own Javadoc for the full rules.</p>
  *
+ * <p><b>Expert rescue</b> (see {@code design.md} &sect;2.5(i)) lets an
+ * Expert-flagged Astronaut/Mission Control officer (see &sect;2.2(c))
+ * boost a step's saving-throw probability once the step's first roll has
+ * already failed - a roster-wide eligibility pool, not limited to the
+ * glitching mission's own assigned crew/controllers. See
+ * {@link #resolveStep}/{@link #applyExpertRescue}'s own Javadoc for the
+ * full mechanic (eligibility, stacking with exhaustion, the cap).</p>
+ *
  * <p><b>Deliberately out of scope for this slice</b> (see
  * {@code design.md} &sect;2.5(g)'s own deferred list): prestige/goals,
  * and the {@code baspm.md} &sect;11.3 goal-dependency reliability
@@ -107,9 +115,11 @@ public final class MissionProgress {
      *                 mission components are looked up in
      * @param random   the random source {@link MissionStepResolution}
      *                 draws its rolls from
-     * @return this pass's {@link MissionStepResolved} and
-     *     {@link PersonnelDeparture} events, in no particular cross-mission
-     *     order; empty if there were no in-progress missions
+     * @return this pass's {@link MissionStepResolved}, {@link PersonnelDeparture},
+     *     {@link MissionReliabilityChanged}, {@link MissionSkillGrowthApplied},
+     *     {@link ResearchComponentMaxed}, and {@link ExpertRescueApplied}
+     *     events, in no particular cross-mission order; empty if there
+     *     were no in-progress missions
      * @throws NullPointerException if any argument is {@code null}
      */
     public static List<ResolutionEvent> advanceSeason(PlayerSnapshot snapshot, ContentCatalog catalog,
@@ -123,9 +133,13 @@ public final class MissionProgress {
         // InProgressMission's own fields in place is safe mid-iteration, but removing a map entry
         // while iterating its values() is not.
         List<String> endedMissionIds = new ArrayList<>();
+        // Expert-rescue exhaustion (design.md §2.5(i)) - scoped to this one advanceSeason call
+        // ("the same turn evaluation"), never persisted on the snapshot; shared across every
+        // mission/step this call processes, since the Expert pool is roster-wide, not mission-scoped.
+        Map<String, Integer> expertUseCounts = new LinkedHashMap<>();
 
         for (InProgressMission mission : snapshot.getInProgressMissions().values()) {
-            advanceOne(snapshot, catalog, random, mission, events, endedMissionIds);
+            advanceOne(snapshot, catalog, random, mission, events, endedMissionIds, expertUseCounts);
         }
 
         for (String missionId : endedMissionIds) {
@@ -143,9 +157,12 @@ public final class MissionProgress {
      * @param mission         the mission to advance; mutated in place
      * @param events          the list to append this mission's events to
      * @param endedMissionIds the list to append this mission's id to if it ends
+     * @param expertUseCounts this {@code advanceSeason} call's shared
+     *                        Expert-rescue exhaustion map; mutated in place
      */
     private static void advanceOne(PlayerSnapshot snapshot, ContentCatalog catalog, RandomGenerator random,
-            InProgressMission mission, List<ResolutionEvent> events, List<String> endedMissionIds) {
+            InProgressMission mission, List<ResolutionEvent> events, List<String> endedMissionIds,
+            Map<String, Integer> expertUseCounts) {
         MissionConfiguration configuration = catalog.missionConfiguration(mission.getMissionConfigurationId())
             .orElse(null);
         if (configuration == null) {
@@ -160,7 +177,8 @@ public final class MissionProgress {
         List<MissionStepOutcome> executedOutcomes = new ArrayList<>();
         boolean missionEndedThisSeason = false;
         for (MissionStep step : season.steps()) {
-            MissionStepOutcome outcome = resolveStep(snapshot, catalog, random, mission, step);
+            MissionStepOutcome outcome = resolveStep(snapshot, catalog, random, mission, step, expertUseCounts,
+                events);
             events.add(new MissionStepResolved(mission.getId(), configuration.id(), mission.getCurrentSeasonIndex(),
                 step.id(), outcome));
             executedSteps.add(step);
@@ -201,17 +219,30 @@ public final class MissionProgress {
 
     /**
      * Resolves one step's outcome against the mission's assigned personnel
-     * and the player's owned mission components.
+     * and the player's owned mission components. <b>Draws its own rolls
+     * explicitly, rather than delegating to {@link MissionStepResolution}'s
+     * own auto-drawing overload</b> (design.md &sect;2.5(i)): an Expert's
+     * rescue may only boost the saving-throw probability, and may only be
+     * "used" (consulted and exhausted), once the first roll has actually
+     * failed and a saving throw is genuinely needed - never merely for
+     * being eligible. The saving-throw probability itself is therefore
+     * only computed (and Expert-boosted) after that first roll is known to
+     * have failed, immediately before the saving roll is drawn.
      *
-     * @param snapshot the player snapshot owning the components/personnel
-     * @param catalog  the content catalog
-     * @param random   the random source
-     * @param mission  the mission this step belongs to
-     * @param step     the step to resolve
+     * @param snapshot        the player snapshot owning the components/personnel
+     * @param catalog         the content catalog
+     * @param random          the random source
+     * @param mission         the mission this step belongs to
+     * @param step            the step to resolve
+     * @param expertUseCounts this {@code advanceSeason} call's shared
+     *                        Expert-rescue exhaustion map; mutated in place
+     * @param events          the list to append any {@link ExpertRescueApplied}
+     *                        events to
      * @return the resolved outcome
      */
     private static MissionStepOutcome resolveStep(PlayerSnapshot snapshot, ContentCatalog catalog,
-            RandomGenerator random, InProgressMission mission, MissionStep step) {
+            RandomGenerator random, InProgressMission mission, MissionStep step, Map<String, Integer> expertUseCounts,
+            List<ResolutionEvent> events) {
         double componentSum = componentContributionSum(snapshot, step);
         boolean crewInvolved = !step.crewInvolvements().isEmpty();
         double crewSum = crewInvolved
@@ -220,13 +251,149 @@ public final class MissionProgress {
                 Astronaut::getSkill)
             : 0;
         double baseProbability = MissionStepResolution.computeBaseProbability(componentSum, crewInvolved, crewSum);
+
+        double firstRoll = MissionStepResolution.drawRoll(random);
+        if (MissionStepResolution.firstRollSucceeded(baseProbability, firstRoll)) {
+            return MissionStepOutcome.SUCCESSFUL;
+        }
+
         double controllerSum = averageContributionSum(step.controllerInvolvements(),
             mission.getAssignedMissionControlOfficerIds(), snapshot.getMissionControlOfficers(),
             MissionStep.ControllerInvolvement::skill, MissionStep.ControllerInvolvement::percent,
             MissionControlOfficer::getSkill);
         double savingThrowProbability = MissionStepResolution.computeSavingThrowProbability(baseProbability,
             controllerSum);
-        return MissionStepResolution.resolve(baseProbability, savingThrowProbability, step.crewRisk(), random);
+        savingThrowProbability = applyExpertRescue(snapshot, mission, step, savingThrowProbability, expertUseCounts,
+            events);
+
+        double savingRoll = MissionStepResolution.drawRoll(random);
+        return MissionStepResolution.resolve(baseProbability, savingThrowProbability, step.crewRisk(), firstRoll,
+            savingRoll);
+    }
+
+    /**
+     * Lets every roster-wide eligible Expert (see {@code design.md}
+     * &sect;2.5(i) for the full rule) boost {@code savingThrowProbability}
+     * in sequence, each against the previous Expert's own result, then
+     * applies {@link MissionStepResolution#EXPERT_RESCUE_PROBABILITY_CAP}
+     * once at the end.
+     *
+     * <p>Eligibility: any Astronaut/Mission Control officer whose own
+     * Expert-skill set shares at least one skill with {@code step}'s
+     * {@code crewInvolvements}/{@code controllerInvolvements} - idle,
+     * training, or assigned to <em>this</em> mission, all at full
+     * strength. An Astronaut assigned to a <em>different</em> active
+     * mission is excluded entirely (physically elsewhere); a Mission
+     * Control officer assigned to a different active mission is never
+     * excluded, but scales to 75% efficiency instead (still on Earth,
+     * just not fully dedicated). SET is never eligible (no Expert trait
+     * possible).</p>
+     *
+     * @param snapshot             the player snapshot the roster is read from
+     * @param mission              the mission whose step is being rescued
+     * @param step                 the step needing a saving throw
+     * @param savingThrowProbability the saving-throw probability before
+     *                             any Expert's own contribution
+     * @param expertUseCounts      this {@code advanceSeason} call's shared
+     *                             exhaustion map; mutated in place
+     * @param events               the list to append any
+     *                             {@link ExpertRescueApplied} events to
+     * @return the final saving-throw probability, capped
+     */
+    private static double applyExpertRescue(PlayerSnapshot snapshot, InProgressMission mission, MissionStep step,
+            double savingThrowProbability, Map<String, Integer> expertUseCounts, List<ResolutionEvent> events) {
+        double unboosted = savingThrowProbability;
+        double boosted = unboosted;
+
+        Set<AstronautSkill> stepCrewSkills = new LinkedHashSet<>();
+        for (MissionStep.CrewInvolvement involvement : step.crewInvolvements()) {
+            stepCrewSkills.add(involvement.skill());
+        }
+        for (Astronaut astronaut : snapshot.getAstronauts()) {
+            AstronautSkill matchedSkill = firstOverlap(astronaut.getExpertSkills(), stepCrewSkills);
+            if (matchedSkill == null) {
+                continue;
+            }
+            if (astronaut.getAssignmentState() == AssignmentState.ASSIGNED
+                    && !mission.getId().equals(astronaut.getAssignedMissionId())) {
+                // Physically aboard a different spacecraft - not available at all, user decision
+                // 2026-10-02 - never consulted, never exhausted.
+                continue;
+            }
+            boosted = applyOneExpert(mission, step, PersonnelGroup.ASTRONAUT, astronaut.getId(), astronaut.getName(),
+                matchedSkill.name(), 1.0, boosted, expertUseCounts, events);
+        }
+
+        Set<MissionControlSkill> stepControllerSkills = new LinkedHashSet<>();
+        for (MissionStep.ControllerInvolvement involvement : step.controllerInvolvements()) {
+            stepControllerSkills.add(involvement.skill());
+        }
+        for (MissionControlOfficer officer : snapshot.getMissionControlOfficers()) {
+            MissionControlSkill matchedSkill = firstOverlap(officer.getExpertSkills(), stepControllerSkills);
+            if (matchedSkill == null) {
+                continue;
+            }
+            boolean onAnotherMission = officer.getAssignmentState() == AssignmentState.ASSIGNED
+                && !mission.getId().equals(officer.getAssignedMissionId());
+            double efficiency =
+                onAnotherMission ? MissionStepResolution.EXPERT_RESCUE_OFF_MISSION_CONTROLLER_EFFICIENCY : 1.0;
+            boosted = applyOneExpert(mission, step, PersonnelGroup.MISSION_CONTROL, officer.getId(),
+                officer.getName(), matchedSkill.name(), efficiency, boosted, expertUseCounts, events);
+        }
+
+        return MissionStepResolution.capExpertRescue(boosted, unboosted);
+    }
+
+    /**
+     * Applies one Expert's own rescue attempt: looks up and increments
+     * their exhaustion count for this turn, looks up the resulting boost
+     * percent (scaled by {@code efficiency}), applies it via
+     * {@link MissionStepResolution#applyExpertBoost}, and reports an
+     * {@link ExpertRescueApplied} event.
+     *
+     * @param mission         the mission whose step is being rescued
+     * @param step            the step needing a saving throw
+     * @param group           which roster this Expert belongs to
+     * @param personnelId     this Expert's stable id
+     * @param name            this Expert's display name
+     * @param skillName       the matched Expert skill's own {@code name()}
+     * @param efficiency      {@code 1.0} at full strength, {@code 0.75}
+     *                        for an off-mission Mission Control officer
+     * @param currentProbability the saving-throw probability before this
+     *                        Expert's own contribution
+     * @param expertUseCounts this {@code advanceSeason} call's shared
+     *                        exhaustion map; mutated in place
+     * @param events          the list to append the new event to
+     * @return the saving-throw probability after this Expert's own
+     *     contribution
+     */
+    private static double applyOneExpert(InProgressMission mission, MissionStep step, PersonnelGroup group,
+            String personnelId, String name, String skillName, double efficiency, double currentProbability,
+            Map<String, Integer> expertUseCounts, List<ResolutionEvent> events) {
+        int useNumber = expertUseCounts.merge(personnelId, 1, Integer::sum);
+        double boostPercent = MissionStepResolution.expertRescueBoostPercentForUse(useNumber) * efficiency;
+        double newProbability = MissionStepResolution.applyExpertBoost(currentProbability, boostPercent);
+        events.add(new ExpertRescueApplied(mission.getId(), step.id(), group, personnelId, name, skillName,
+            boostPercent, currentProbability, newProbability));
+        return newProbability;
+    }
+
+    /**
+     * Returns the first element {@code a} and {@code b} have in common, or
+     * {@code null} if they share none.
+     *
+     * @param a   the first set
+     * @param b   the second set
+     * @param <S> the shared element type
+     * @return the first shared element, or {@code null}
+     */
+    private static <S> S firstOverlap(Set<S> a, Set<S> b) {
+        for (S item : a) {
+            if (b.contains(item)) {
+                return item;
+            }
+        }
+        return null;
     }
 
     /**

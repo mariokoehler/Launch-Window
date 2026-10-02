@@ -18,6 +18,7 @@ import de.mkoehler.launchwindow.model.OwnedMissionComponent;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.model.SetSkill;
 import de.mkoehler.launchwindow.model.SetSpecialist;
+import de.mkoehler.launchwindow.model.TrainingKind;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -26,6 +27,7 @@ import java.util.random.RandomGenerator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -903,6 +905,282 @@ class MissionProgressTest {
             MissionProgress.advanceSeason(snapshot, catalog, new ScriptedRandomGenerator());
 
         assertTrue(events.isEmpty());
+    }
+
+    /**
+     * Verifies an idle, roster-wide Expert (not assigned to the glitching
+     * mission at all) boosts the saving throw: with no controller
+     * actually assigned to the mission, the unboosted saving-throw
+     * probability is 0 (a roll of 60 would otherwise always land in a
+     * failing band), but the Expert's own 50% first-use boost raises it
+     * to exactly 50, rescuing the step. Also checks the exact
+     * {@link ExpertRescueApplied} event fields.
+     */
+    @Test
+    void idleRosterWideControllerExpertRescuesTheSavingThrow() {
+        MissionStep step = new MissionStep("ops", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
+            List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 100)), List.of(), false);
+        MissionConfiguration configuration =
+            new MissionConfiguration("expert-std", "mercury-program", List.of(new MissionSeason(List.of(step))), 0, 1,
+                0);
+        ContentCatalog catalog = catalogWith(configuration);
+
+        PlayerSnapshot snapshot = snapshotWithOwnedCapsule(50.0);
+        snapshot.getInProgressMissions().put("m0", new InProgressMission("m0", "expert-std", List.of(), List.of()));
+        MissionControlOfficer expert = new MissionControlOfficer("mco-expert", "Idle Expert", 45, 70, 40);
+        expert.getExpertSkills().add(MissionControlSkill.PROPULSION);
+        snapshot.setMissionControlOfficers(List.of(expert));
+
+        // base probability = 50 (uncrewed) -> first-roll threshold 50; firstRoll=10 fails.
+        // Unboosted saving-throw probability is 0 (nobody assigned as controller to this
+        // mission). The Expert's own first-use boost (50%) raises it to 50 -> pass threshold 50;
+        // savingRoll=60 clears it. 1 filler for this season's reliability-change factor.
+        ScriptedRandomGenerator random = new ScriptedRandomGenerator(10.0, 60.0, 0.1);
+        List<ResolutionEvent> events = MissionProgress.advanceSeason(snapshot, catalog, random);
+
+        assertEquals(MissionStepOutcome.MINOR_GLITCH_SOLVED, findEvent(events, MissionStepResolved.class).outcome());
+        ExpertRescueApplied rescue = findEvent(events, ExpertRescueApplied.class);
+        assertEquals("mco-expert", rescue.personnelId());
+        assertEquals(PersonnelGroup.MISSION_CONTROL, rescue.group());
+        assertEquals("PROPULSION", rescue.skillName());
+        assertEquals(50.0, rescue.boostPercent());
+        assertEquals(0.0, rescue.probabilityBefore());
+        assertEquals(50.0, rescue.probabilityAfter());
+    }
+
+    /**
+     * Verifies an Astronaut-Expert assigned to a <em>different</em> active
+     * mission is excluded entirely - physically aboard that other
+     * spacecraft, per the real-world grounding {@code design.md}
+     * &sect;2.5(i) cites. With no controller involvement at all this
+     * step, the unboosted saving-throw probability is always 0 regardless
+     * - a roll that would land in {@code FAILURE} only if the excluded
+     * Expert contributed nothing confirms the exclusion.
+     */
+    @Test
+    void astronautExpertAssignedToAnotherMissionIsExcludedEntirely() {
+        MissionStep step = new MissionStep("ops", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
+            List.of(), List.of(new MissionStep.CrewInvolvement(AstronautSkill.PILOTING, 100)), false);
+        MissionConfiguration configuration =
+            new MissionConfiguration("expert-std", "mercury-program", List.of(new MissionSeason(List.of(step))), 1, 0,
+                0);
+        ContentCatalog catalog = catalogWith(configuration);
+
+        PlayerSnapshot snapshot = snapshotWithOwnedCapsule(50.0);
+        snapshot.getInProgressMissions().put("m0", new InProgressMission("m0", "expert-std", List.of(), List.of()));
+        Astronaut expertElsewhere = new Astronaut("astro-expert", "Elsewhere Expert", 34, 80, 60);
+        expertElsewhere.getExpertSkills().add(AstronautSkill.PILOTING);
+        expertElsewhere.setAssignmentState(AssignmentState.ASSIGNED);
+        expertElsewhere.setAssignedMissionId("some-other-mission");
+        snapshot.setAstronauts(List.of(expertElsewhere));
+
+        // firstRoll=10 fails against baseProbability 50. Unboosted saving-throw probability is 0
+        // (no controller involvement this step at all) - the excluded Expert must contribute
+        // nothing, so savingRoll=50 lands in the FAILURE band (passThreshold would stay 100).
+        ScriptedRandomGenerator random = new ScriptedRandomGenerator(10.0, 50.0, 0.1);
+        List<ResolutionEvent> events = MissionProgress.advanceSeason(snapshot, catalog, random);
+
+        assertEquals(MissionStepOutcome.FAILURE, findEvent(events, MissionStepResolved.class).outcome());
+        assertNull(findEventOrNull(events, ExpertRescueApplied.class), "excluded Expert must never be consulted");
+    }
+
+    /**
+     * Verifies a Mission Control officer Expert assigned to a different
+     * active mission is never excluded, but scales to 75% efficiency
+     * instead - still on Earth, just not fully dedicated.
+     */
+    @Test
+    void controllerExpertAssignedToAnotherMissionGetsSeventyFivePercentEfficiency() {
+        MissionStep step = new MissionStep("ops", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
+            List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 100)), List.of(), false);
+        MissionConfiguration configuration =
+            new MissionConfiguration("expert-std", "mercury-program", List.of(new MissionSeason(List.of(step))), 0, 1,
+                0);
+        ContentCatalog catalog = catalogWith(configuration);
+
+        PlayerSnapshot snapshot = snapshotWithOwnedCapsule(50.0);
+        snapshot.getInProgressMissions().put("m0", new InProgressMission("m0", "expert-std", List.of(), List.of()));
+        MissionControlOfficer expert = new MissionControlOfficer("mco-expert", "Busy Elsewhere", 45, 70, 40);
+        expert.getExpertSkills().add(MissionControlSkill.PROPULSION);
+        expert.setAssignmentState(AssignmentState.ASSIGNED);
+        expert.setAssignedMissionId("some-other-mission");
+        snapshot.setMissionControlOfficers(List.of(expert));
+
+        // 1st-use boost scaled to 75%: 0 + (100-0)*37.5/100 = 37.5 -> pass threshold 62.5;
+        // savingRoll=70 clears it (would not clear the unboosted 100 threshold).
+        ScriptedRandomGenerator random = new ScriptedRandomGenerator(10.0, 70.0, 0.1);
+        List<ResolutionEvent> events = MissionProgress.advanceSeason(snapshot, catalog, random);
+
+        assertEquals(MissionStepOutcome.MINOR_GLITCH_SOLVED, findEvent(events, MissionStepResolved.class).outcome());
+        ExpertRescueApplied rescue = findEvent(events, ExpertRescueApplied.class);
+        assertEquals(37.5, rescue.boostPercent());
+        assertEquals(37.5, rescue.probabilityAfter());
+    }
+
+    /**
+     * Verifies an Expert currently {@code IN_TRAINING} is still fully
+     * eligible - "never unavailable" per {@code design.md} &sect;2.2(c)'s
+     * own 2026-09-27 wording, re-confirmed explicitly for this mechanic.
+     */
+    @Test
+    void controllerExpertCurrentlyInTrainingIsStillFullyEligible() {
+        MissionStep step = new MissionStep("ops", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
+            List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 100)), List.of(), false);
+        MissionConfiguration configuration =
+            new MissionConfiguration("expert-std", "mercury-program", List.of(new MissionSeason(List.of(step))), 0, 1,
+                0);
+        ContentCatalog catalog = catalogWith(configuration);
+
+        PlayerSnapshot snapshot = snapshotWithOwnedCapsule(50.0);
+        snapshot.getInProgressMissions().put("m0", new InProgressMission("m0", "expert-std", List.of(), List.of()));
+        MissionControlOfficer expert = new MissionControlOfficer("mco-expert", "In Training", 45, 70, 40);
+        expert.getExpertSkills().add(MissionControlSkill.PROPULSION);
+        expert.setAssignmentState(AssignmentState.IN_TRAINING);
+        expert.setTrainingKind(TrainingKind.BASIC);
+        snapshot.setMissionControlOfficers(List.of(expert));
+
+        // Same math as the idle case - full-strength 50% first-use boost.
+        ScriptedRandomGenerator random = new ScriptedRandomGenerator(10.0, 60.0, 0.1);
+        List<ResolutionEvent> events = MissionProgress.advanceSeason(snapshot, catalog, random);
+
+        assertEquals(MissionStepOutcome.MINOR_GLITCH_SOLVED, findEvent(events, MissionStepResolved.class).outcome());
+        assertEquals(50.0, findEvent(events, ExpertRescueApplied.class).boostPercent());
+    }
+
+    /**
+     * Verifies two different Experts stack sequentially, each against the
+     * previous one's own result, not independently against the original
+     * unboosted value - each is a genuinely different employee, so each
+     * gets their own first-use 50% boost (exhaustion is per employee, not
+     * per step): 50% of the remaining 0-to-100 gap, then 50% of the
+     * remaining 50-to-100 gap, gives 75 - distinct from both a single
+     * Expert's own 50 and a naive "both against the original value" reading's
+     * own 100.
+     */
+    @Test
+    void twoDifferentExpertsStackSequentially() {
+        MissionStep step = new MissionStep("ops", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
+            List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 100)), List.of(), false);
+        MissionConfiguration configuration =
+            new MissionConfiguration("expert-std", "mercury-program", List.of(new MissionSeason(List.of(step))), 0, 1,
+                0);
+        ContentCatalog catalog = catalogWith(configuration);
+
+        PlayerSnapshot snapshot = snapshotWithOwnedCapsule(50.0);
+        snapshot.getInProgressMissions().put("m0", new InProgressMission("m0", "expert-std", List.of(), List.of()));
+        MissionControlOfficer expertA = new MissionControlOfficer("mco-a", "Expert A", 45, 70, 40);
+        expertA.getExpertSkills().add(MissionControlSkill.PROPULSION);
+        MissionControlOfficer expertB = new MissionControlOfficer("mco-b", "Expert B", 45, 70, 40);
+        expertB.getExpertSkills().add(MissionControlSkill.PROPULSION);
+        snapshot.setMissionControlOfficers(List.of(expertA, expertB));
+
+        // 0 -> (A, own 1st use, 50%) -> 50 -> (B, own 1st use, 50% of the remaining 50) -> 75.
+        // Pass threshold 25; savingRoll=50 clears it.
+        ScriptedRandomGenerator random = new ScriptedRandomGenerator(10.0, 50.0, 0.1);
+        List<ResolutionEvent> events = MissionProgress.advanceSeason(snapshot, catalog, random);
+
+        assertEquals(MissionStepOutcome.MINOR_GLITCH_SOLVED, findEvent(events, MissionStepResolved.class).outcome());
+        List<ExpertRescueApplied> rescues = findEvents(events, ExpertRescueApplied.class);
+        assertEquals(2, rescues.size());
+        assertEquals("mco-a", rescues.get(0).personnelId());
+        assertEquals(0.0, rescues.get(0).probabilityBefore());
+        assertEquals(50.0, rescues.get(0).probabilityAfter());
+        assertEquals("mco-b", rescues.get(1).personnelId());
+        assertEquals(50.0, rescues.get(1).probabilityBefore());
+        assertEquals(75.0, rescues.get(1).probabilityAfter());
+    }
+
+    /**
+     * Verifies the same Expert's exhaustion carries across two different
+     * missions resolved in the same {@code advanceSeason} call - their
+     * second use this turn (across either mission) gets the second-use
+     * 40% boost, not another first-use 50%. A roll chosen to pass under
+     * the correct 40% boost's own pass threshold but fail under a
+     * (buggy) repeated-50% reading's threshold distinguishes the two.
+     */
+    @Test
+    void sameExpertsExhaustionCarriesAcrossDifferentMissionsInOneTurn() {
+        MissionStep step = new MissionStep("ops", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
+            List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 100)), List.of(), false);
+        MissionConfiguration configuration =
+            new MissionConfiguration("expert-std", "mercury-program", List.of(new MissionSeason(List.of(step))), 0, 1,
+                0);
+        ContentCatalog catalog = catalogWith(configuration);
+
+        PlayerSnapshot snapshot = snapshotWithOwnedCapsule(50.0);
+        snapshot.getInProgressMissions().put("m0", new InProgressMission("m0", "expert-std", List.of(), List.of()));
+        snapshot.getInProgressMissions().put("m1", new InProgressMission("m1", "expert-std", List.of(), List.of()));
+        MissionControlOfficer expert = new MissionControlOfficer("mco-expert", "Busy Expert", 45, 70, 40);
+        expert.getExpertSkills().add(MissionControlSkill.PROPULSION);
+        snapshot.setMissionControlOfficers(List.of(expert));
+
+        // m0 (processed first, map insertion order): 1st use, 50% boost -> 0 to 50, pass
+        // threshold 50; savingRoll=60 clears it (MINOR_GLITCH_SOLVED).
+        // m1: 2nd use, 40% boost -> 0 to 40, pass threshold 60; savingRoll=55 does NOT clear 60
+        // (MINOR_GLITCH, unsolved) - but would have cleared a repeated-50%-boost's own threshold
+        // of 50, so this exact roll is what actually proves exhaustion carried over.
+        ScriptedRandomGenerator random = new ScriptedRandomGenerator(10.0, 60.0, 0.1, 10.0, 55.0, 0.1);
+        List<ResolutionEvent> events = MissionProgress.advanceSeason(snapshot, catalog, random);
+
+        List<MissionStepResolved> resolved = findEvents(events, MissionStepResolved.class);
+        assertEquals(MissionStepOutcome.MINOR_GLITCH_SOLVED, resolved.get(0).outcome());
+        assertEquals(MissionStepOutcome.MINOR_GLITCH, resolved.get(1).outcome());
+        List<ExpertRescueApplied> rescues = findEvents(events, ExpertRescueApplied.class);
+        assertEquals(2, rescues.size());
+        assertEquals(50.0, rescues.get(0).boostPercent());
+        assertEquals(40.0, rescues.get(1).boostPercent());
+    }
+
+    /**
+     * Finds the first event of the given type, failing the test if none
+     * exists.
+     *
+     * @param events the events to search
+     * @param type   the event type to find
+     * @param <T>    the event type
+     * @return the first matching event
+     */
+    private static <T extends ResolutionEvent> T findEvent(List<ResolutionEvent> events, Class<T> type) {
+        T found = findEventOrNull(events, type);
+        assertNotNull(found, "expected an event of type " + type.getSimpleName());
+        return found;
+    }
+
+    /**
+     * Finds the first event of the given type, or {@code null} if none
+     * exists.
+     *
+     * @param events the events to search
+     * @param type   the event type to find
+     * @param <T>    the event type
+     * @return the first matching event, or {@code null}
+     */
+    private static <T extends ResolutionEvent> T findEventOrNull(List<ResolutionEvent> events, Class<T> type) {
+        for (ResolutionEvent event : events) {
+            if (type.isInstance(event)) {
+                return type.cast(event);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Finds every event of the given type, in their original relative
+     * order.
+     *
+     * @param events the events to search
+     * @param type   the event type to find
+     * @param <T>    the event type
+     * @return every matching event, in order
+     */
+    private static <T extends ResolutionEvent> List<T> findEvents(List<ResolutionEvent> events, Class<T> type) {
+        List<T> found = new java.util.ArrayList<>();
+        for (ResolutionEvent event : events) {
+            if (type.isInstance(event)) {
+                found.add(type.cast(event));
+            }
+        }
+        return found;
     }
 
     /**

@@ -5,6 +5,9 @@ import org.junit.jupiter.api.Test;
 import java.util.random.RandomGenerator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * <p>Tests for {@link MissionStepResolution}'s pure two-roll formula.</p>
@@ -204,6 +207,99 @@ class MissionStepResolutionTest {
 
         assertEquals(MissionStepOutcome.MINOR_GLITCH_SOLVED, outcome);
         assertEquals(2, scripted.drawCount());
+    }
+
+    /**
+     * Verifies {@code firstRollSucceeded}'s exact boundary, re-checked
+     * independently here since every {@code resolve} overload above
+     * depends on it agreeing with itself.
+     */
+    @Test
+    void firstRollSucceededMatchesTheExactBoundary() {
+        assertTrue(MissionStepResolution.firstRollSucceeded(60.0, 40.1));
+        assertFalse(MissionStepResolution.firstRollSucceeded(60.0, 40.0));
+    }
+
+    /**
+     * Verifies the exact Expert-boost formula: closes the given percent
+     * of the remaining gap to 100%.
+     */
+    @Test
+    void applyExpertBoostMatchesTheExactFormula() {
+        // (100 - 60) * 50 / 100 = 20, so 60 + 20 = 80.
+        assertEquals(80.0, MissionStepResolution.applyExpertBoost(60.0, 50.0), 1e-9);
+    }
+
+    /**
+     * Verifies a zero boost percent leaves the probability unchanged.
+     */
+    @Test
+    void applyExpertBoostAtZeroPercentIsUnchanged() {
+        assertEquals(60.0, MissionStepResolution.applyExpertBoost(60.0, 0.0), 1e-9);
+    }
+
+    /**
+     * Verifies stacking two boosts in sequence never reaches exactly
+     * 100%, even starting already close to it - the geometric-gap-closing
+     * property {@code design.md} &sect;2.5(i) relies on to guarantee a
+     * real failure chance always remains, with no separate cap needed for
+     * this specific property.
+     */
+    @Test
+    void applyExpertBoostStackedTwiceNeverReachesExactly100() {
+        double afterFirst = MissionStepResolution.applyExpertBoost(90.0, 50.0);
+        double afterSecond = MissionStepResolution.applyExpertBoost(afterFirst, 40.0);
+
+        assertTrue(afterSecond < 100.0);
+    }
+
+    /**
+     * Verifies the exhaustion lookup's exact per-use values.
+     */
+    @Test
+    void expertRescueBoostPercentForUseMatchesTheDocumentedCurve() {
+        assertEquals(50.0, MissionStepResolution.expertRescueBoostPercentForUse(1));
+        assertEquals(40.0, MissionStepResolution.expertRescueBoostPercentForUse(2));
+        assertEquals(10.0, MissionStepResolution.expertRescueBoostPercentForUse(3));
+        assertEquals(0.0, MissionStepResolution.expertRescueBoostPercentForUse(4));
+        assertEquals(0.0, MissionStepResolution.expertRescueBoostPercentForUse(100));
+    }
+
+    /**
+     * Verifies a non-positive use number is rejected.
+     */
+    @Test
+    void expertRescueBoostPercentForUseRejectsNonPositiveUseNumber() {
+        assertThrows(IllegalArgumentException.class, () -> MissionStepResolution.expertRescueBoostPercentForUse(0));
+        assertThrows(IllegalArgumentException.class, () -> MissionStepResolution.expertRescueBoostPercentForUse(-1));
+    }
+
+    /**
+     * Verifies the cap clamps a heavily-boosted probability down to it.
+     */
+    @Test
+    void capExpertRescueClampsABoostedProbabilityDownToTheCap() {
+        assertEquals(MissionStepResolution.EXPERT_RESCUE_PROBABILITY_CAP,
+            MissionStepResolution.capExpertRescue(99.9, 20.0));
+    }
+
+    /**
+     * Verifies the cap never lowers an unboosted probability that was
+     * already above it on its own, with zero Experts involved - the
+     * exact property {@code design.md} &sect;2.5(i) requires.
+     */
+    @Test
+    void capExpertRescueNeverLowersAnAlreadyHigherUnboostedProbability() {
+        assertEquals(97.0, MissionStepResolution.capExpertRescue(97.0, 97.0));
+    }
+
+    /**
+     * Verifies a boosted probability below the cap passes through
+     * unchanged.
+     */
+    @Test
+    void capExpertRescueLeavesABoostedProbabilityBelowTheCapUnchanged() {
+        assertEquals(80.0, MissionStepResolution.capExpertRescue(80.0, 60.0));
     }
 
     /**

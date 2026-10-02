@@ -23,6 +23,7 @@ import de.mkoehler.launchwindow.persistence.SetFundsAction;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 
 /**
  * <p>Registers every class sent over the wire with a {@link Kryo} instance,
@@ -120,5 +121,10 @@ public final class MessageRegistry {
         // PlayerSnapshot.inProgressMissions, carried in FetchStateResponse. Never move this line;
         // see the class Javadoc.
         kryo.register(InProgressMission.class);
+        // Appended 2026-10-02 (the Expert trait, design.md §2.2(c)) - backs
+        // Astronaut.expertSkills/MissionControlOfficer.expertSkills, carried in
+        // FetchStateResponse. The first Set type this registry has ever needed - every earlier
+        // collection field used List/Map. Never move this line; see the class Javadoc.
+        kryo.register(LinkedHashSet.class);
     }
 }

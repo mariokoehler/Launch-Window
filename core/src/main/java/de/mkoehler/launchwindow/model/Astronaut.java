@@ -1,8 +1,10 @@
 package de.mkoehler.launchwindow.model;
 
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * <p>An astronaut/cosmonaut employee - flies missions, holds one competency
@@ -11,7 +13,8 @@ import java.util.Objects;
  * <p>The skill map is a plain {@link LinkedHashMap}, not an
  * {@link java.util.EnumMap} - Kryo's wire serialization (see
  * {@code de.mkoehler.launchwindow.net.MessageRegistry}) needs a
- * no-arg-constructible map, which {@code EnumMap} isn't.</p>
+ * no-arg-constructible map, which {@code EnumMap} isn't. {@link #expertSkills}
+ * is a {@link LinkedHashSet} for the identical reason.</p>
  *
  * <p>Competency values are {@code double}, not {@code int} - flat per-season
  * growth (e.g. SET's R&amp;D gain, {@code design.md} &sect;2.2(c)) can be
@@ -23,6 +26,7 @@ public class Astronaut extends Personnel {
 
     private Map<AstronautSkill, Double> skills = new LinkedHashMap<>();
     private AstronautSkill trainingTargetSkill;
+    private Set<AstronautSkill> expertSkills = new LinkedHashSet<>();
 
     /**
      * No-argument constructor required for Jackson deserialization.
@@ -104,5 +108,26 @@ public class Astronaut extends Personnel {
      */
     public void setTrainingTargetSkill(AstronautSkill trainingTargetSkill) {
         this.trainingTargetSkill = trainingTargetSkill;
+    }
+
+    /**
+     * Returns every skill this astronaut has earned the Expert trait in -
+     * see {@code design.md} &sect;2.2(c). Empty for an astronaut who has
+     * never completed {@link TrainingKind#EXPERT} training.
+     *
+     * @return the Expert skills
+     */
+    public Set<AstronautSkill> getExpertSkills() {
+        return expertSkills;
+    }
+
+    /**
+     * Replaces this astronaut's entire Expert-skill set.
+     *
+     * @param expertSkills the Expert skills
+     */
+    public void setExpertSkills(Set<AstronautSkill> expertSkills) {
+        Objects.requireNonNull(expertSkills, "expertSkills must not be null");
+        this.expertSkills = new LinkedHashSet<>(expertSkills);
     }
 }
