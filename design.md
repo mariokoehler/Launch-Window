@@ -3438,9 +3438,10 @@ here.
     itself - see §2.5(d) for the exact shape and its four re-derived
     constants. **Step/season content shape also done the same day:**
     `MissionStep`/`MissionSeason` plus a reshaped `MissionConfiguration`
-    (`core/.../content`) - see §2.5(e) for the exact fields, their
-    percentage-sum rules, and the open crew-blend-direction question still
-    unanswered. Not yet wired into the bot harness or any caller: the
+    (`core/.../content`) - see §2.5(e) for the exact fields and their
+    percentage-sum rules (the crew-blend-direction question raised there
+    is since confirmed - see §2.5(e)'s own "Blend shape confirmed"
+    paragraph). Not yet wired into the bot harness or any caller: the
     per-player in-progress-mission state, the resolver that walks a
     season's step batch, post-mission reliability change, and
     mission-based skill growth are all still open - the ASSIGNED
