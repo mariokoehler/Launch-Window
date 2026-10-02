@@ -14,10 +14,11 @@ import java.util.random.RandomGenerator;
  * R&amp;D assignment, or flying a mission actually touches (a single skill,
  * all five, or a Flight Director's five-way-spread average per
  * {@code baspm.md} &sect;9.4) is a caller's job, not this class's.
- * {@link TrainingProgress} (a single target skill, fixed-length training)
- * and {@link ResearchProgress} (R&amp;D's own employee-skill and
- * component-reliability growth) are such callers; mission-based growth's
- * own caller is still a later M2 slice.</p>
+ * {@link TrainingProgress} (a single target skill, fixed-length training),
+ * {@link ResearchProgress} (R&amp;D's own employee-skill and
+ * component-reliability growth), and {@link MissionProgress} (mission-based
+ * astronaut/controller skill growth, and post-mission-season component
+ * reliability change) are such callers.</p>
  *
  * <p><b>Random factor drawn separately from the formula it feeds</b> - every
  * growth formula here takes its random factor as a plain parameter rather
@@ -69,6 +70,52 @@ public final class SkillGrowth {
 
     /** The highest random factor a season of flat SET R&D growth can draw. */
     public static final double RD_GAIN_FACTOR_MAX = 0.35;
+
+    /**
+     * The lowest random factor one season of mission-based astronaut/
+     * controller skill growth can draw - see {@link MissionProgress}.
+     */
+    public static final double MISSION_SKILL_GROWTH_FACTOR_MIN = 0.05;
+
+    /**
+     * The highest random factor one season of mission-based astronaut/
+     * controller skill growth can draw.
+     */
+    public static final double MISSION_SKILL_GROWTH_FACTOR_MAX = 0.15;
+
+    /**
+     * The lowest random factor a component's post-mission-season
+     * reliability gain can draw when every step it was involved in that
+     * season resolved {@code SUCCESSFUL}/{@code MINOR_GLITCH_SOLVED} - see
+     * {@link #missionReliabilityGain} and {@link MissionProgress}.
+     */
+    public static final double MISSION_RELIABILITY_SUCCESS_FACTOR_MIN = 0.05;
+
+    /** The highest random factor for the success case - see {@link #MISSION_RELIABILITY_SUCCESS_FACTOR_MIN}. */
+    public static final double MISSION_RELIABILITY_SUCCESS_FACTOR_MAX = 0.15;
+
+    /**
+     * The lowest random factor a component's post-mission-season
+     * reliability gain can draw when it was involved in an unsolved
+     * {@code MINOR_GLITCH} this season (and in no worse outcome) -
+     * strictly smaller than the success range, since a glitch is a
+     * weaker vote of confidence in the hardware than a clean run.
+     */
+    public static final double MISSION_RELIABILITY_MINOR_GLITCH_FACTOR_MIN = 0.02;
+
+    /** The highest random factor for the minor-glitch case - see {@link #MISSION_RELIABILITY_MINOR_GLITCH_FACTOR_MIN}. */
+    public static final double MISSION_RELIABILITY_MINOR_GLITCH_FACTOR_MAX = 0.06;
+
+    /**
+     * The lowest random factor a component's post-mission-season
+     * reliability loss can draw when it was involved in the step that
+     * resolved {@code FAILURE}/{@code CATASTROPHIC} this season - see
+     * {@link #missionReliabilityLoss}.
+     */
+    public static final double MISSION_RELIABILITY_FAILURE_FACTOR_MIN = 0.10;
+
+    /** The highest random factor for the failure case - see {@link #MISSION_RELIABILITY_FAILURE_FACTOR_MIN}. */
+    public static final double MISSION_RELIABILITY_FAILURE_FACTOR_MAX = 0.25;
 
     /**
      * Not instantiable; this class only exposes static methods.
@@ -259,6 +306,121 @@ public final class SkillGrowth {
             throw new IllegalArgumentException(
                 "slot must be within [0, " + MissionComponent.RD_SLOT_COUNT + "): " + slot);
         }
+    }
+
+    /**
+     * A component's post-mission-season reliability gain on a season where
+     * it flew without a worse-than-glitch outcome - re-deriving
+     * {@code baspm.md} &sect;10.4's own
+     * {@code UpdatePlayersMissionComponentAfterMission} shape
+     * (change = headroom to max &times; factor) with Launch Window's own
+     * numbers and its own season-level, not step-level, aggregation (user
+     * decision, 2026-10-02, see {@code design.md} &sect;2.5(g)) - a
+     * <em>separate</em> function from {@link #rdReliabilityGain}, since
+     * this one grows toward the component's absolute
+     * {@link MissionComponent#maxReliability()}, not its lower R&amp;D-only
+     * {@link MissionComponent#maxRdReliability()} ceiling, and takes no
+     * assignee-skill term at all - flying a component well reflects on the
+     * hardware itself, not on whoever happened to be aboard.
+     *
+     * @param currentReliability the component's current reliability before
+     *                           this season's gain
+     * @param maxReliability     the component's own absolute reliability
+     *                           ceiling
+     * @param factor              the random factor for this season, drawn
+     *                            via {@link #drawMissionReliabilitySuccessFactor}
+     *                            or {@link #drawMissionReliabilityMinorGlitchFactor}
+     *                            depending on which outcome category applies
+     * @return the gain to add to {@code currentReliability}; never
+     *     negative, and {@code currentReliability + gain} never exceeds
+     *     {@code maxReliability}
+     */
+    public static double missionReliabilityGain(double currentReliability, double maxReliability, double factor) {
+        return Math.max(0.0, maxReliability - currentReliability) * factor;
+    }
+
+    /**
+     * A component's post-mission-season reliability loss on a season where
+     * one of its steps resolved {@code FAILURE}/{@code CATASTROPHIC} -
+     * re-deriving {@code baspm.md} &sect;10.4's own failure case (a
+     * negative factor, "scaled down by how much that component was
+     * actually involved in the failure") with Launch Window's own numbers:
+     * the loss shrinks toward
+     * {@link de.mkoehler.launchwindow.model.OwnedMissionComponent#getFloorReliability()}
+     * the same diminishing-returns way {@link #missionReliabilityGain}
+     * shrinks toward the max, so a component already near its floor can
+     * never be pushed below it by construction, mirroring the floor's own
+     * "transfer-inclusive starting value, never erased" decision
+     * ({@code design.md} &sect;2.4(c)).
+     *
+     * @param currentReliability the component's current reliability before
+     *                           this season's loss
+     * @param floorReliability   the component's own
+     *                           {@code OwnedMissionComponent.getFloorReliability()}
+     * @param factor              the random factor for this season, drawn
+     *                            via {@link #drawMissionReliabilityFailureFactor}
+     * @param involvementPercent  the component's involvement percentage in
+     *                            the specific step that failed, 0-100
+     * @return the amount to subtract from {@code currentReliability};
+     *     never negative, and {@code currentReliability - loss} never
+     *     drops below {@code floorReliability}
+     */
+    public static double missionReliabilityLoss(double currentReliability, double floorReliability, double factor,
+            double involvementPercent) {
+        double headroomToFloor = Math.max(0.0, currentReliability - floorReliability);
+        return headroomToFloor * factor * clamp(involvementPercent / 100.0, 0.0, 1.0);
+    }
+
+    /**
+     * Draws a random factor for one season of mission-based astronaut/
+     * controller skill growth, uniformly from
+     * {@code [}{@link #MISSION_SKILL_GROWTH_FACTOR_MIN}{@code ,}
+     * {@link #MISSION_SKILL_GROWTH_FACTOR_MAX}{@code )}.
+     *
+     * @param random the random source to draw from
+     * @return the drawn factor
+     */
+    public static double drawMissionSkillGrowthFactor(RandomGenerator random) {
+        return random.nextDouble(MISSION_SKILL_GROWTH_FACTOR_MIN, MISSION_SKILL_GROWTH_FACTOR_MAX);
+    }
+
+    /**
+     * Draws a random factor for {@link #missionReliabilityGain}'s success
+     * case, uniformly from
+     * {@code [}{@link #MISSION_RELIABILITY_SUCCESS_FACTOR_MIN}{@code ,}
+     * {@link #MISSION_RELIABILITY_SUCCESS_FACTOR_MAX}{@code )}.
+     *
+     * @param random the random source to draw from
+     * @return the drawn factor
+     */
+    public static double drawMissionReliabilitySuccessFactor(RandomGenerator random) {
+        return random.nextDouble(MISSION_RELIABILITY_SUCCESS_FACTOR_MIN, MISSION_RELIABILITY_SUCCESS_FACTOR_MAX);
+    }
+
+    /**
+     * Draws a random factor for {@link #missionReliabilityGain}'s minor-
+     * glitch case, uniformly from
+     * {@code [}{@link #MISSION_RELIABILITY_MINOR_GLITCH_FACTOR_MIN}{@code ,}
+     * {@link #MISSION_RELIABILITY_MINOR_GLITCH_FACTOR_MAX}{@code )}.
+     *
+     * @param random the random source to draw from
+     * @return the drawn factor
+     */
+    public static double drawMissionReliabilityMinorGlitchFactor(RandomGenerator random) {
+        return random.nextDouble(MISSION_RELIABILITY_MINOR_GLITCH_FACTOR_MIN,
+            MISSION_RELIABILITY_MINOR_GLITCH_FACTOR_MAX);
+    }
+
+    /**
+     * Draws a random factor for {@link #missionReliabilityLoss}, uniformly
+     * from {@code [}{@link #MISSION_RELIABILITY_FAILURE_FACTOR_MIN}{@code ,}
+     * {@link #MISSION_RELIABILITY_FAILURE_FACTOR_MAX}{@code )}.
+     *
+     * @param random the random source to draw from
+     * @return the drawn factor
+     */
+    public static double drawMissionReliabilityFailureFactor(RandomGenerator random) {
+        return random.nextDouble(MISSION_RELIABILITY_FAILURE_FACTOR_MIN, MISSION_RELIABILITY_FAILURE_FACTOR_MAX);
     }
 
     /**

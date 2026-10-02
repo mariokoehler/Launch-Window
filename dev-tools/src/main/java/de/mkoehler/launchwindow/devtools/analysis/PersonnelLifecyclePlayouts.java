@@ -26,6 +26,8 @@ import de.mkoehler.launchwindow.rules.HiringPool;
 import de.mkoehler.launchwindow.rules.MissionLaunch;
 import de.mkoehler.launchwindow.rules.MissionLaunchOutcome;
 import de.mkoehler.launchwindow.rules.MissionProgress;
+import de.mkoehler.launchwindow.rules.MissionReliabilityChanged;
+import de.mkoehler.launchwindow.rules.MissionSkillGrowthApplied;
 import de.mkoehler.launchwindow.rules.MissionStepOutcome;
 import de.mkoehler.launchwindow.rules.MissionStepResolved;
 import de.mkoehler.launchwindow.rules.OpenProgramOutcome;
@@ -34,6 +36,7 @@ import de.mkoehler.launchwindow.rules.PersonnelGroup;
 import de.mkoehler.launchwindow.rules.PersonnelLifecycle;
 import de.mkoehler.launchwindow.rules.ProgramOpening;
 import de.mkoehler.launchwindow.rules.ResearchCompleted;
+import de.mkoehler.launchwindow.rules.ResearchComponentMaxed;
 import de.mkoehler.launchwindow.rules.ResearchProgress;
 import de.mkoehler.launchwindow.rules.ResolutionEvent;
 import de.mkoehler.launchwindow.rules.SkillGrowth;
@@ -328,6 +331,11 @@ public final class PersonnelLifecyclePlayouts {
         int missionStepCatastrophicCount = 0;
         int lostInAccidentCount = 0;
         int retiredOnMissionReleaseCount = 0;
+        int missionReliabilityChangeCount = 0;
+        double missionReliabilityDeltaTotal = 0;
+        int missionSkillGrowthCount = 0;
+        double missionSkillGrowthTotal = 0;
+        int missionTriggeredSetReleaseCount = 0;
         int[] bandHits = new int[4];
 
         for (int game = 0; game < games; game++) {
@@ -352,6 +360,7 @@ public final class PersonnelLifecyclePlayouts {
                 int beforeMissionProgress = rosterSize(snapshot);
                 List<ResolutionEvent> missionEvents = MissionProgress.advanceSeason(snapshot, CATALOG, random);
                 checkMissionInvariants(snapshot, missionEvents, beforeMissionProgress);
+                checkProgramInvariants(snapshot);
 
                 List<ResolutionEvent> trainingEvents = TrainingProgress.advanceSeason(snapshot, random);
                 List<ResolutionEvent> researchEvents = ResearchProgress.advanceSeason(snapshot, CATALOG, random);
@@ -400,6 +409,18 @@ public final class PersonnelLifecyclePlayouts {
                             retiredTenureTotal += season + 1 - joinedAt;
                             retiredOnMissionReleaseCount++;
                         }
+                    } else if (event instanceof MissionReliabilityChanged changed) {
+                        missionReliabilityChangeCount++;
+                        missionReliabilityDeltaTotal += changed.delta();
+                    } else if (event instanceof MissionSkillGrowthApplied growth) {
+                        missionSkillGrowthCount++;
+                        missionSkillGrowthTotal += growth.totalSkillGain();
+                    } else if (event instanceof ResearchComponentMaxed maxed) {
+                        // Mission-triggered release (the post-season reliability gain pushed a
+                        // component to its R&D ceiling) - distinct from ResearchProgress's own
+                        // R&D-pass release, which is deliberately not counted below. Counts every
+                        // released specialist, not just the triggering event.
+                        missionTriggeredSetReleaseCount += maxed.releasedPersonnelIds().size();
                     }
                 }
                 for (ResolutionEvent event : trainingEvents) {
@@ -426,13 +447,19 @@ public final class PersonnelLifecyclePlayouts {
         double avgTrainingGain = trainingCompletedCount == 0 ? 0 : trainingGainTotal / trainingCompletedCount;
         double avgResearchReliabilityGain =
             researchCompletedCount == 0 ? 0 : researchReliabilityGainTotal / researchCompletedCount;
+        double avgMissionReliabilityDelta =
+            missionReliabilityChangeCount == 0 ? 0 : missionReliabilityDeltaTotal / missionReliabilityChangeCount;
+        double avgMissionSkillGrowth =
+            missionSkillGrowthCount == 0 ? 0 : missionSkillGrowthTotal / missionSkillGrowthCount;
 
         return new PersonnelPlayoutReport(games, seasons, employeesStarted, resignedCount, retiredCount,
             stillEmployed, avgResignedTenure, avgRetiredTenure, trainingCompletedCount, avgTrainingGain,
             hiredCount, bandHits[0], bandHits[1], bandHits[2], bandHits[3], programsOpenedCount,
             researchCompletedCount, avgResearchReliabilityGain, missionsLaunchedCount, missionStepSuccessfulCount,
             missionStepMinorGlitchSolvedCount, missionStepMinorGlitchCount, missionStepFailureCount,
-            missionStepCatastrophicCount, lostInAccidentCount, retiredOnMissionReleaseCount);
+            missionStepCatastrophicCount, lostInAccidentCount, retiredOnMissionReleaseCount,
+            missionReliabilityChangeCount, avgMissionReliabilityDelta, missionSkillGrowthCount,
+            avgMissionSkillGrowth, missionTriggeredSetReleaseCount);
     }
 
     /**
@@ -764,8 +791,15 @@ public final class PersonnelLifecyclePlayouts {
      * {@code RETIRED} departure (either group - the retire-on-release
      * check) is actually at or above that group's own retirement age, no
      * {@code RESIGNED} departure is ever reported (not a mechanic
-     * {@link MissionProgress} has), and {@link #checkMissionAssignmentConsistency}
-     * holds.
+     * {@link MissionProgress} has), every {@link MissionSkillGrowthApplied}
+     * event's own gain is non-negative, and
+     * {@link #checkMissionAssignmentConsistency} holds.
+     * {@code MissionReliabilityChanged}/{@code ResearchComponentMaxed}'s own
+     * bounds aren't re-checked here - the caller runs
+     * {@link #checkProgramInvariants}/{@link #checkResearchInvariants}
+     * later the same season regardless (including the game's last
+     * season, so a mission's final-season reliability change is never
+     * left unchecked), so those cover it instead.
      *
      * @param snapshot                    the snapshot after this season's
      *                                     mission advance
@@ -800,6 +834,9 @@ public final class PersonnelLifecyclePlayouts {
                         "MissionProgress reported an unexpected RESIGNED departure for " + departure.personnelId());
                 }
                 departureCount++;
+            } else if (event instanceof MissionSkillGrowthApplied growth && growth.totalSkillGain() < 0) {
+                throw new IllegalStateException(
+                    "Negative mission skill growth for " + growth.personnelId() + ": " + growth.totalSkillGain());
             }
         }
         int rosterSizeAfter = rosterSize(snapshot);
@@ -1477,5 +1514,11 @@ public final class PersonnelLifecyclePlayouts {
         System.out.printf("Astronauts lost in accidents: %d%n", report.lostInAccidentCount());
         System.out.printf("Retired on mission release (of total retired): %d%n",
             report.retiredOnMissionReleaseCount());
+        System.out.printf("Mission reliability changes: %d (avg delta %.2f)%n",
+            report.missionReliabilityChangeCount(), report.averageMissionReliabilityDelta());
+        System.out.printf("Mission skill growth events: %d (avg gain %.2f)%n",
+            report.missionSkillGrowthCount(), report.averageMissionSkillGrowth());
+        System.out.printf("SET specialists released via mission-triggered R&D ceiling: %d%n",
+            report.missionTriggeredSetReleaseCount());
     }
 }

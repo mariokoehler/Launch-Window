@@ -85,6 +85,33 @@ package de.mkoehler.launchwindow.devtools.analysis;
  *                                          already included in
  *                                          {@code retiredCount}, not
  *                                          additional to it
+ * @param missionReliabilityChangeCount      how many post-mission-season
+ *                                          component reliability changes
+ *                                          were applied across every game
+ *                                          (see {@code MissionProgress#applyPostSeasonReliabilityChange})
+ * @param averageMissionReliabilityDelta    average signed reliability change
+ *                                          per component per season it
+ *                                          changed, {@code 0} if none did -
+ *                                          positive means gains outweighed
+ *                                          losses overall
+ * @param missionSkillGrowthCount            how many post-mission-season
+ *                                          skill-growth events were applied
+ *                                          across every game, one per
+ *                                          surviving assigned crew/
+ *                                          controller per season flown (see
+ *                                          {@code MissionProgress#applyPostSeasonSkillGrowth})
+ * @param averageMissionSkillGrowth          average total skill gain per
+ *                                          skill-growth event, {@code 0} if
+ *                                          none occurred
+ * @param missionTriggeredSetReleaseCount    how many SET specialists were
+ *                                          released from R&amp;D specifically
+ *                                          because a mission's post-season
+ *                                          reliability gain pushed their
+ *                                          target component to its R&amp;D
+ *                                          ceiling (as opposed to
+ *                                          {@code ResearchProgress}'s own
+ *                                          R&amp;D-pass release, not counted
+ *                                          here)
  * @author Mario Koehler
  */
 public record PersonnelPlayoutReport(
@@ -113,6 +140,11 @@ public record PersonnelPlayoutReport(
     int missionStepFailureCount,
     int missionStepCatastrophicCount,
     int lostInAccidentCount,
-    int retiredOnMissionReleaseCount
+    int retiredOnMissionReleaseCount,
+    int missionReliabilityChangeCount,
+    double averageMissionReliabilityDelta,
+    int missionSkillGrowthCount,
+    double averageMissionSkillGrowth,
+    int missionTriggeredSetReleaseCount
 ) {
 }

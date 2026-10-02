@@ -273,4 +273,135 @@ class SkillGrowthTest {
 
         assertEquals(0.0, SkillGrowth.drawRdSlotRawAmount(allZero, 3, new Random(42L)));
     }
+
+    /**
+     * Verifies the exact post-mission-season reliability-gain formula:
+     * headroom to {@code maxReliability}, times the factor.
+     */
+    @Test
+    void missionReliabilityGainMatchesTheExactFormula() {
+        // (90 - 50) * 0.1 = 4.0.
+        assertEquals(4.0, SkillGrowth.missionReliabilityGain(50.0, 90.0, 0.1), 1e-9);
+    }
+
+    /**
+     * Verifies a component already at or above its own max gains nothing
+     * further, rather than the headroom term going negative.
+     */
+    @Test
+    void missionReliabilityGainAtOrAboveMaxIsZero() {
+        assertEquals(0.0, SkillGrowth.missionReliabilityGain(90.0, 90.0, SkillGrowth.MISSION_RELIABILITY_SUCCESS_FACTOR_MAX));
+        assertEquals(0.0, SkillGrowth.missionReliabilityGain(95.0, 90.0, SkillGrowth.MISSION_RELIABILITY_SUCCESS_FACTOR_MAX));
+    }
+
+    /**
+     * Verifies the exact post-mission-season reliability-loss formula:
+     * headroom to {@code floorReliability}, times the factor, times the
+     * involvement percentage expressed as a 0-1 fraction.
+     */
+    @Test
+    void missionReliabilityLossMatchesTheExactFormula() {
+        // (50 - 20) * 0.2 * (60 / 100) = 30 * 0.2 * 0.6 = 3.6.
+        assertEquals(3.6, SkillGrowth.missionReliabilityLoss(50.0, 20.0, 0.2, 60.0), 1e-9);
+    }
+
+    /**
+     * Verifies a component already at or below its own floor loses nothing
+     * further, rather than the headroom term going negative.
+     */
+    @Test
+    void missionReliabilityLossAtOrBelowFloorIsZero() {
+        assertEquals(0.0, SkillGrowth.missionReliabilityLoss(20.0, 20.0, SkillGrowth.MISSION_RELIABILITY_FAILURE_FACTOR_MAX, 100.0));
+        assertEquals(0.0, SkillGrowth.missionReliabilityLoss(15.0, 20.0, SkillGrowth.MISSION_RELIABILITY_FAILURE_FACTOR_MAX, 100.0));
+    }
+
+    /**
+     * Verifies full (100%) involvement applies the loss unscaled - the
+     * involvement clamp's identity case.
+     */
+    @Test
+    void missionReliabilityLossAtFullInvolvementIsUnscaled() {
+        assertEquals(6.0, SkillGrowth.missionReliabilityLoss(50.0, 20.0, 0.2, 100.0), 1e-9);
+    }
+
+    /**
+     * Verifies zero involvement applies no loss at all, regardless of
+     * headroom or factor.
+     */
+    @Test
+    void missionReliabilityLossAtZeroInvolvementIsZero() {
+        assertEquals(0.0, SkillGrowth.missionReliabilityLoss(50.0, 20.0, SkillGrowth.MISSION_RELIABILITY_FAILURE_FACTOR_MAX, 0.0));
+    }
+
+    /**
+     * Verifies an involvement percentage outside {@code [0, 100]} is
+     * clamped rather than producing a loss outside the headroom-scaled
+     * range - {@code MissionStep}'s own validation should already keep this
+     * from happening in practice, but the formula itself must not rely on
+     * that.
+     */
+    @Test
+    void missionReliabilityLossClampsOutOfRangeInvolvement() {
+        double atZero = SkillGrowth.missionReliabilityLoss(50.0, 20.0, 0.2, -10.0);
+        double atFull = SkillGrowth.missionReliabilityLoss(50.0, 20.0, 0.2, 150.0);
+
+        assertEquals(0.0, atZero);
+        assertEquals(6.0, atFull, 1e-9);
+    }
+
+    /**
+     * Verifies {@code drawMissionSkillGrowthFactor} always stays within its
+     * documented range across many draws.
+     */
+    @Test
+    void drawMissionSkillGrowthFactorStaysWithinItsRange() {
+        Random random = new Random(42L);
+        for (int i = 0; i < 1_000; i++) {
+            double factor = SkillGrowth.drawMissionSkillGrowthFactor(random);
+            assertTrue(factor >= SkillGrowth.MISSION_SKILL_GROWTH_FACTOR_MIN
+                && factor < SkillGrowth.MISSION_SKILL_GROWTH_FACTOR_MAX);
+        }
+    }
+
+    /**
+     * Verifies {@code drawMissionReliabilitySuccessFactor} always stays
+     * within its documented range across many draws.
+     */
+    @Test
+    void drawMissionReliabilitySuccessFactorStaysWithinItsRange() {
+        Random random = new Random(42L);
+        for (int i = 0; i < 1_000; i++) {
+            double factor = SkillGrowth.drawMissionReliabilitySuccessFactor(random);
+            assertTrue(factor >= SkillGrowth.MISSION_RELIABILITY_SUCCESS_FACTOR_MIN
+                && factor < SkillGrowth.MISSION_RELIABILITY_SUCCESS_FACTOR_MAX);
+        }
+    }
+
+    /**
+     * Verifies {@code drawMissionReliabilityMinorGlitchFactor} always stays
+     * within its documented range across many draws.
+     */
+    @Test
+    void drawMissionReliabilityMinorGlitchFactorStaysWithinItsRange() {
+        Random random = new Random(42L);
+        for (int i = 0; i < 1_000; i++) {
+            double factor = SkillGrowth.drawMissionReliabilityMinorGlitchFactor(random);
+            assertTrue(factor >= SkillGrowth.MISSION_RELIABILITY_MINOR_GLITCH_FACTOR_MIN
+                && factor < SkillGrowth.MISSION_RELIABILITY_MINOR_GLITCH_FACTOR_MAX);
+        }
+    }
+
+    /**
+     * Verifies {@code drawMissionReliabilityFailureFactor} always stays
+     * within its documented range across many draws.
+     */
+    @Test
+    void drawMissionReliabilityFailureFactorStaysWithinItsRange() {
+        Random random = new Random(42L);
+        for (int i = 0; i < 1_000; i++) {
+            double factor = SkillGrowth.drawMissionReliabilityFailureFactor(random);
+            assertTrue(factor >= SkillGrowth.MISSION_RELIABILITY_FAILURE_FACTOR_MIN
+                && factor < SkillGrowth.MISSION_RELIABILITY_FAILURE_FACTOR_MAX);
+        }
+    }
 }

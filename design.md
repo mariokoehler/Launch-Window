@@ -1105,19 +1105,173 @@ proceeds:
       those and `HiringPool.refreshCandidates` — the full order is now
       `PersonnelLifecycle` → `MissionProgress` → `TrainingProgress` →
       `ResearchProgress` → `HiringPool.refreshCandidates`.
-    - **Deferred, same posture as §2.5(d)/(e)'s own lists:** post-mission
-      reliability change (component wear/growth from actually flying —
-      expected to reuse `SkillGrowth.rdReliabilityGain`'s shape against
-      `maxReliability` rather than `maxRdReliability`, per §3.4's two-
-      ceiling design), mission-based astronaut/controller skill growth,
-      prestige/goals (§2.6), the mission's own cost at launch (§2.1 budget
-      interaction - `MissionLaunch` does not currently charge anything),
-      the §11.3 goal-dependency reliability modifier, and the Expert trait.
+    - **Deferred, same posture as §2.5(d)/(e)'s own lists:** prestige/goals
+      (§2.6), the mission's own cost at launch (§2.1 budget interaction -
+      `MissionLaunch` does not currently charge anything), the §11.3 goal-
+      dependency reliability modifier, and the Expert trait (still blocked
+      on tracing Tiger Teams/the saving-throw boost, `baspm.md`'s own
+      `_savingThrowProbOfSuccessIncludingExpertTeams` cross-reference - not
+      enough is known yet to implement it responsibly). Post-mission
+      reliability change and mission-based skill growth are done - see (g)
+      below.
       **Two balance holes harness-wiring this surfaced (§3.10) are both
       resolved, same day, not left open:** the crew-size question became
       the exact-headcount decision above (`requiredAstronautCount`/
       `requiredMissionControlOfficerCount`); the free-relaunch retirement
       loophole became the retire-on-release decision above.
+  - **(g) Post-mission reliability change and mission-based skill growth
+    (2026-10-02):** both happen once per in-progress mission *per
+    season*, right after that season's step batch resolves, regardless
+    of outcome - `baspm.md` §10.4/§9.3 both describe their BASPM
+    counterparts as firing "on both the success and the failure path,"
+    once per mission; Launch Window's own turn-based model naturally maps
+    that onto "once per season a mission actually flies," not once for an
+    entire multi-season mission, since a season boundary is already where
+    this resolver's own state genuinely advances.
+    - **Decided (user, 2026-10-02): reliability change aggregates per
+      component across the whole season, not per individual step.** The
+      alternative (a separate reliability nudge after every single step)
+      was considered and rejected: a season with an early successful step
+      and a later step that fails and ends the mission would otherwise
+      apply a positive nudge and then a negative one to the same
+      component in the same season, which has no equivalent in BASPM's
+      own once-per-mission granularity. For each component involved in
+      any step the season actually executed (the steps up to and
+      including a mission-ending `FAILURE`/`CATASTROPHIC`, if any), the
+      worst outcome category it was involved in that season wins:
+      `FAILURE` (the step resolved `FAILURE`/`CATASTROPHIC` - necessarily
+      at most one such step per season, since the first one ends the
+      season) beats `MINOR_GLITCH` (unsolved) beats `SUCCESS`
+      (`SUCCESSFUL`/`MINOR_GLITCH_SOLVED` only). **Two mapping decisions,
+      both unconfirmed defaults, not traced:** `MINOR_GLITCH_SOLVED` maps
+      to the `SUCCESS` category (matching its own full-credit prestige
+      semantics); `CATASTROPHIC` maps to the same `FAILURE` category as
+      plain `FAILURE` rather than getting a fourth, harsher category of
+      its own - `baspm.md` §10.4 only traces a four-way taxonomy
+      (`SUCCESS`/`MINOR_GLITCH`/`FAILURE`/`NEUTRAL`) with no fifth tier
+      for a worse-than-`FAILURE` case, and inventing one isn't backed by
+      anything - just another number to tune later if it turns out to
+      matter.
+    - **Formula, re-deriving `baspm.md` §10.4's own shape**
+      (`SkillGrowth.missionReliabilityGain`/`missionReliabilityLoss`):
+      `SUCCESS`/`MINOR_GLITCH` both grow toward
+      `MissionComponent.maxReliability()` the same diminishing-returns way
+      `rdReliabilityGain` grows toward `maxRdReliability` - `(max −
+      current) × factor`, `MINOR_GLITCH`'s own factor range lower than
+      `SUCCESS`'s (0.02-0.06 vs. 0.05-0.15 - a glitch is meant as a
+      weaker vote of confidence than a clean run), though the two ranges
+      overlap slightly rather than being strictly separated, so a glitch
+      can occasionally out-gain a clean success at the extremes - worth
+      revisiting once real balance tuning starts, same posture as every
+      other unconfirmed-default range here. `FAILURE` shrinks the *other*
+      direction,
+      toward `OwnedMissionComponent.getFloorReliability()` rather than 0 -
+      `(current − floor) × factor`, additionally scaled by the failing
+      step's own involvement percentage for that component (per
+      `baspm.md`'s own "scaled down by how much that component was
+      actually involved in the failure"; `SUCCESS`/`MINOR_GLITCH` are
+      **not** involvement-scaled, matching the trace, which only
+      describes the failure case that way). All three factor ranges are
+      unconfirmed defaults, re-derived to Launch Window's own numbers per
+      §1.2. **Reaching `maxRdReliability` this way releases any SET
+      researchers still assigned to that component**, exactly like
+      §10.8's own R&D-side release - re-derived as a new shared
+      `ResearchProgress.releaseResearchersIfMaxed` helper both this
+      resolver and `ResearchProgress`'s own pass call, rather than
+      duplicating the release logic, since `baspm.md` traces both
+      triggers calling the identical `UnassignAllSETPersonnelFromMissionComponent`.
+    - **Mission-based skill growth, re-deriving `baspm.md` §9.3/§9.4's own
+      shape** (`SkillGrowth.diminishingReturnsGain`, the same formula
+      training uses): every astronaut still on the mission at the end of
+      the season grows **all five** `AstronautSkill` values; every
+      Mission Control officer still on it grows every skill that
+      appeared in *any* step the season actually executed -
+      **deliberately broader than BASPM's own "the one skill they were
+      actually using,"** since Launch Window's own per-skill averaging
+      model (§2.5(f)) has no concept of one controller personally owning
+      one skill the way BASPM's per-person assignment does; growing every
+      skill genuinely exercised that season is the natural equivalent.
+      **BASPM's Flight-Director-specific spread-the-average variant is
+      deferred, not adopted:** Launch Window has no "who is Flight
+      Director for this mission" concept at all yet -
+      `MissionControlOfficer.flightDirectorSkill()` is a computed stat,
+      never an assigned role - so there is nothing to key this variant
+      off of without first deciding whether Launch Window wants a
+      designate-a-Flight-Director mechanic at all, a real design question
+      of its own, not decided here.
+    - **Ordering: growth and reliability change run before
+      `releaseSurvivors`'s own retire-on-release check, so a crew
+      member's final season still counts for both** - they flew the
+      season, then (if applicable) retired afterward; a `CATASTROPHIC`
+      outcome's lost crew never grows at all, since `loseCrew` already
+      removed them from the roster first. Draw order (for the shared
+      random source, per-mission, in `inProgressMissions`' own map
+      order): a season's steps first (unchanged from §2.5(f)), then
+      reliability changes (components in first-involved-this-season
+      order), then skill growth (astronauts in `assignedAstronautIds`
+      order, then controllers in `assignedMissionControlOfficerIds`
+      order).
+    - **Harness-wired the same day:** since
+      `PersonnelLifecyclePlayouts` already calls
+      `MissionProgress.advanceSeason` (§3.10's "mission simulation wired
+      in" entry), both mechanics ran automatically the moment they
+      existed — no new bot decision was needed. What *was* added: five
+      new report fields (`missionReliabilityChangeCount`/
+      `averageMissionReliabilityDelta`, `missionSkillGrowthCount`/
+      `averageMissionSkillGrowth`, `missionTriggeredSetReleaseCount` —
+      the last one specifically a mission-triggered
+      `ResearchProgress.releaseResearchersIfMaxed` call, kept separate
+      from `ResearchProgress`'s own R&D-pass release, which still isn't
+      counted at all); a new `checkMissionInvariants` check that every
+      `MissionSkillGrowthApplied` event's own gain is non-negative
+      (`MissionReliabilityChanged`/`ResearchComponentMaxed`'s own bounds
+      were already covered every season by `checkProgramInvariants`/
+      `checkResearchInvariants`, so nothing new was needed there); and
+      two new `PersonnelLifecyclePlayoutsTest` tests proving both
+      mechanics, and specifically the mission-triggered SET-release path,
+      are actually reachable under the fixture's own numbers, not just
+      theoretically wired in.
+      **Numbers (same 200-game/80-season/seed-42 run as §3.10's "second
+      pass," now with both mechanics live): 1,053 resigned/1,037
+      retired/5,344 still employed/84,592 training completions/4,516
+      hires/hiring bands 0/1,994/33,131/12,875 poor-average-good-
+      excellent/598 programs opened/36,131 R&D seasons; 2,103 missions
+      launched, mission steps resolved 1,725 successful/403 minor-
+      glitch-solved/422 minor glitch/604 failure/41 catastrophic, 82
+      astronauts lost in accidents, 24 retired on mission release.**
+      Personnel/hiring/program totals are within a few percent of the
+      second-pass baseline, consistent with the random stream shifting
+      (the new post-season draws consume additional values every mission
+      season). **The mission-step mix also moved toward success (50.4%,
+      1,610/3,192 second pass, &rarr; 54.0%, 1,725/3,195), with every
+      unsuccessful category falling (minor glitch 475&rarr;422, failure
+      650&rarr;604) despite the total step count staying effectively
+      flat - the direction the new feedback loop predicts** (post-mission
+      reliability gain raising each component's own base probability,
+      mission-based skill growth raising the crew-blend/saving-throw
+      inputs, both now feeding back into later step rolls, something the
+      harness had no mechanism to do before this slice). **Single seed,
+      not checked against run-to-run variance** - steps aren't
+      independent draws (reliability/skill state persists within a game,
+      so outcomes cluster per game, making the effective sample size much
+      closer to 200 games than to 3,195 steps), so this is a plausible,
+      not confirmed, causal read; a few more seeds would be needed to
+      treat the shift itself as established rather than directional.
+      R&D seasons completed fell slightly too (36,313&rarr;36,131, about
+      0.5% - noise-level, not asserted as caused by anything here).
+      **The two new mechanics themselves: 3,903 reliability
+      changes (avg. delta +1.24, i.e. gains outweigh losses overall —
+      expected, since `SUCCESSFUL`/`MINOR_GLITCH_SOLVED` together far
+      outnumber `FAILURE`/`CATASTROPHIC` steps above), 5,567 skill-growth
+      events (avg. total gain 5.29 across whichever skills grew that
+      season), and 152 SET specialists released specifically via the new
+      mission-triggered R&D-ceiling path** (one `ResearchComponentMaxed`
+      event can release up to four specialists at once, since a
+      component has four R&D slots; distinct from and not counted in
+      `ResearchProgress`'s own R&D-pass release count) — confirms the
+      mission-triggered release path, the one genuinely new mechanic with
+      no prior analog in the harness, is reachable at this scale, not
+      just theoretically implemented.
 - 2.6 **Prestige, goals & scoring — analyzed 2026-09-27, see `baspm.md` §11
   for the full trace.**
   - **(a) How BASPM does it:** goals are `Generic` (universal race
@@ -2781,6 +2935,11 @@ and the whole-crew-loss rule removes both every time; the first pass's
 Confirms whole-crew loss and exact headcounts are working together
 correctly end to end, not just independently.
 
+**Third pass (post-mission reliability change/mission-based skill
+growth wired in, 2026-10-02) - see §2.5(g) for the full numbers,
+including the step-mix shift this slice's own feedback loop produces
+and the mission-triggered SET-release count**, not repeated here.
+
 ### 3.11 Offscreen screenshot tooling for UI checking
 
 **Decided (user, 2026-09-27): reuse Robot-Rampage's `ScreenSnapshot`
@@ -3697,12 +3856,17 @@ here.
     crew-contribution decision, and the whole-crew `CATASTROPHIC` loss
     decision. Wired into the bot harness the same day - see §3.10's own
     entry for the fixture mission configurations and the real numbers.
+    **Post-mission reliability change and mission-based astronaut/
+    controller skill growth done (2026-10-02)** - see §2.5(g) for the
+    full shape (the per-season aggregation decision, the worst-category-
+    wins rule, the shared SET-release helper, the broader-than-BASPM
+    controller-growth rule) and its own harness numbers.
     **Still open, same posture as §2.5(f)'s own deferred list:**
-    post-mission reliability change, mission-based astronaut/controller
-    skill growth, prestige/goals (§2.6), the mission's own cost at launch,
-    the §11.3 goal-dependency reliability modifier, and the Expert trait
-    (the crew-size question and the free-relaunch retirement loophole are
-    both resolved - see §2.5(f)).
+    prestige/goals (§2.6), the mission's own cost at launch, the §11.3
+    goal-dependency reliability modifier, and the Expert trait (the
+    crew-size question, the free-relaunch retirement loophole, and the
+    reliability-change/skill-growth items are all resolved - see
+    §2.5(f)/(g)).
   - Slice: budget/funding review, prestige, goals, and the win-condition +
     tie-break check — §2.1/§2.6/§2.9.
   - Slice: random events — §2.7.

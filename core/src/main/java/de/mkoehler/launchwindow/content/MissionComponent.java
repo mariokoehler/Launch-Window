@@ -19,9 +19,9 @@ import java.util.Objects;
  * <p>A content-definition type: shared, read-only game data loaded from a
  * content pack (not yet implemented - see {@code design.md} &sect;5's M3),
  * never per-player state, and never sent over the network. Post-mission
- * reliability change (component wear/growth from actually flying) is not
- * implemented by any resolver yet - see {@code design.md} &sect;5's M2
- * status for what still needs it.</p>
+ * reliability change (component wear/growth from actually flying) is
+ * resolved by {@code de.mkoehler.launchwindow.rules.MissionProgress} - see
+ * {@code design.md} &sect;2.5(g).</p>
  *
  * @param id                         a stable identifier, unique within a
  *                                   {@link ContentCatalog}
@@ -35,13 +35,13 @@ import java.util.Objects;
  * @param maxRdReliability           the reliability (0-100) ceiling R&amp;D
  *                                   alone can reach - at or below
  *                                   {@link #maxReliability}, never above;
- *                                   closing the remaining gap (if any) needs
- *                                   a future mission-simulation slice's
- *                                   post-mission reliability change instead,
- *                                   re-deriving {@code baspm.md} &sect;10.8's
- *                                   own two-ceiling shape (user decision,
+ *                                   closing the remaining gap (if any) is
+ *                                   {@code MissionProgress}'s own post-mission
+ *                                   reliability-gain job instead, re-deriving
+ *                                   {@code baspm.md} &sect;10.8's own
+ *                                   two-ceiling shape (user decision,
  *                                   2026-10-01, see {@code design.md}
- *                                   &sect;3.4)
+ *                                   &sect;3.4/&sect;2.5(g))
  * @param rdSlotBandMaxAmounts       four ascending raw-improvement-amount
  *                                   ceilings, one per R&amp;D slot band -
  *                                   see {@code de.mkoehler.launchwindow.rules.SkillGrowth}

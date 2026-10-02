@@ -1,21 +1,28 @@
 package de.mkoehler.launchwindow.rules;
 
 import de.mkoehler.launchwindow.content.ContentCatalog;
+import de.mkoehler.launchwindow.content.MissionComponent;
 import de.mkoehler.launchwindow.content.MissionConfiguration;
 import de.mkoehler.launchwindow.content.MissionSeason;
 import de.mkoehler.launchwindow.content.MissionStep;
 import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.Astronaut;
+import de.mkoehler.launchwindow.model.AstronautSkill;
 import de.mkoehler.launchwindow.model.InProgressMission;
 import de.mkoehler.launchwindow.model.MissionControlOfficer;
+import de.mkoehler.launchwindow.model.MissionControlSkill;
 import de.mkoehler.launchwindow.model.OwnedMissionComponent;
 import de.mkoehler.launchwindow.model.Personnel;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.ToIntFunction;
@@ -64,12 +71,19 @@ import java.util.random.RandomGenerator;
  * already reflected before the later resolvers run against the same
  * snapshot.</p>
  *
+ * <p><b>Post-mission-season reliability change and mission-based
+ * skill growth</b> (see {@code design.md} &sect;2.5(g)) both run once
+ * per in-progress mission per season, right after that season's step
+ * batch resolves, regardless of outcome - re-deriving
+ * {@code baspm.md} &sect;10.4/&sect;9.3, aggregated per season rather
+ * than per individual step (user decision, 2026-10-02). See
+ * {@link #applyPostSeasonReliabilityChange}/{@link #applyPostSeasonSkillGrowth}'s
+ * own Javadoc for the full rules.</p>
+ *
  * <p><b>Deliberately out of scope for this slice</b> (see
- * {@code design.md} &sect;2.5(f)'s own deferred list): post-mission
- * reliability change, mission-based astronaut/controller skill growth,
- * prestige/goals, the mission's own cost at launch, and the
- * {@code baspm.md} &sect;11.3 goal-dependency reliability modifier (always
- * 0 here).</p>
+ * {@code design.md} &sect;2.5(g)'s own deferred list): prestige/goals,
+ * the mission's own cost at launch, and the {@code baspm.md}
+ * &sect;11.3 goal-dependency reliability modifier (always 0 here).</p>
  *
  * @author Mario Koehler
  */
@@ -141,19 +155,38 @@ public final class MissionProgress {
         }
 
         MissionSeason season = configuration.seasons().get(mission.getCurrentSeasonIndex());
+        List<MissionStep> executedSteps = new ArrayList<>();
+        List<MissionStepOutcome> executedOutcomes = new ArrayList<>();
+        boolean missionEndedThisSeason = false;
         for (MissionStep step : season.steps()) {
             MissionStepOutcome outcome = resolveStep(snapshot, catalog, random, mission, step);
             events.add(new MissionStepResolved(mission.getId(), configuration.id(), mission.getCurrentSeasonIndex(),
                 step.id(), outcome));
+            executedSteps.add(step);
+            executedOutcomes.add(outcome);
 
             if (outcome == MissionStepOutcome.FAILURE || outcome == MissionStepOutcome.CATASTROPHIC) {
+                missionEndedThisSeason = true;
                 if (outcome == MissionStepOutcome.CATASTROPHIC) {
                     loseCrew(snapshot, mission, events);
                 }
-                releaseSurvivors(snapshot, mission, events);
-                endedMissionIds.add(mission.getId());
-                return;
+                break;
             }
+        }
+
+        // Both apply once per season a mission actually flies, regardless of outcome - see this
+        // class's own Javadoc - and must run before releaseSurvivors below, so a crew member's
+        // final season (completion, or a retirement triggered by this same release) still counts;
+        // a CATASTROPHIC season's lost crew already can't grow, since loseCrew above already
+        // removed them from the roster.
+        applyPostSeasonReliabilityChange(snapshot, catalog, mission, executedSteps, executedOutcomes, random,
+            events);
+        applyPostSeasonSkillGrowth(snapshot, mission, executedSteps, random, events);
+
+        if (missionEndedThisSeason) {
+            releaseSurvivors(snapshot, mission, events);
+            endedMissionIds.add(mission.getId());
+            return;
         }
 
         int nextSeasonIndex = mission.getCurrentSeasonIndex() + 1;
@@ -271,6 +304,208 @@ public final class MissionProgress {
             }
         }
         return count == 0 ? 0 : total / count;
+    }
+
+    /**
+     * The least severe of the three season-aggregated reliability-change
+     * categories - every involved step this season resolved
+     * {@code SUCCESSFUL}/{@code MINOR_GLITCH_SOLVED}. See
+     * {@link #categoryFor} and {@code design.md} &sect;2.5(g).
+     */
+    private static final int CATEGORY_SUCCESS = 0;
+
+    /**
+     * The middle reliability-change category - no involved step this
+     * season resolved worse than an unsolved {@code MINOR_GLITCH}.
+     */
+    private static final int CATEGORY_MINOR_GLITCH = 1;
+
+    /**
+     * The most severe reliability-change category - an involved step this
+     * season resolved {@code FAILURE}/{@code CATASTROPHIC} (necessarily
+     * the season's last executed step, since either ends the mission).
+     */
+    private static final int CATEGORY_FAILURE = 2;
+
+    /**
+     * Applies this season's post-flight reliability change to every
+     * component involved in any step the season actually executed: for
+     * each one, the worst {@link MissionStepOutcome} category it was
+     * involved in this season decides a single gain or loss, applied once
+     * - see this class's own Javadoc and {@code design.md} &sect;2.5(g)
+     * for the full aggregation rule and formula.
+     *
+     * @param snapshot       the player snapshot the components are owned in
+     * @param catalog        the content catalog components are looked up in
+     * @param mission        the mission this season belongs to
+     * @param executedSteps   the steps this season actually executed, in order
+     * @param executedOutcomes each executed step's own resolved outcome, same order
+     * @param random          the random source this season's factors are drawn from
+     * @param events          the list to append any
+     *                        {@link MissionReliabilityChanged}/{@link ResearchComponentMaxed}
+     *                        event to
+     */
+    private static void applyPostSeasonReliabilityChange(PlayerSnapshot snapshot, ContentCatalog catalog,
+            InProgressMission mission, List<MissionStep> executedSteps, List<MissionStepOutcome> executedOutcomes,
+            RandomGenerator random, List<ResolutionEvent> events) {
+        Map<String, Integer> categoryByComponentId = new LinkedHashMap<>();
+        Map<String, Integer> failureInvolvementPercentByComponentId = new LinkedHashMap<>();
+
+        for (int i = 0; i < executedSteps.size(); i++) {
+            int category = categoryFor(executedOutcomes.get(i));
+            for (MissionStep.ComponentInvolvement involvement : executedSteps.get(i).componentInvolvements()) {
+                String componentId = involvement.componentId();
+                Integer existing = categoryByComponentId.get(componentId);
+                if (existing == null || category > existing) {
+                    categoryByComponentId.put(componentId, category);
+                    if (category == CATEGORY_FAILURE) {
+                        failureInvolvementPercentByComponentId.put(componentId, involvement.percent());
+                    }
+                }
+            }
+        }
+
+        for (Map.Entry<String, Integer> entry : categoryByComponentId.entrySet()) {
+            applyComponentReliabilityChange(snapshot, catalog, mission.getId(), entry.getKey(), entry.getValue(),
+                failureInvolvementPercentByComponentId.get(entry.getKey()), random, events);
+        }
+    }
+
+    /**
+     * Maps a resolved step outcome onto the reliability-change category it
+     * contributes - see this class's own Javadoc for the two unconfirmed-
+     * default mappings ({@code MINOR_GLITCH_SOLVED} to {@code SUCCESS},
+     * {@code CATASTROPHIC} to {@code FAILURE}).
+     *
+     * @param outcome the resolved step outcome
+     * @return {@link #CATEGORY_SUCCESS}, {@link #CATEGORY_MINOR_GLITCH}, or
+     *     {@link #CATEGORY_FAILURE}
+     */
+    private static int categoryFor(MissionStepOutcome outcome) {
+        return switch (outcome) {
+            case SUCCESSFUL, MINOR_GLITCH_SOLVED -> CATEGORY_SUCCESS;
+            case MINOR_GLITCH -> CATEGORY_MINOR_GLITCH;
+            case FAILURE, CATASTROPHIC -> CATEGORY_FAILURE;
+        };
+    }
+
+    /**
+     * Applies one component's own reliability change for this season,
+     * reports it, and releases any SET researchers still assigned to it if
+     * the change reached its R&amp;D ceiling.
+     *
+     * @param snapshot                   the player snapshot the component
+     *                                    is owned in
+     * @param catalog                    the content catalog the component's
+     *                                    own definition is looked up in
+     * @param missionInstanceId          the mission instance this season
+     *                                    belongs to, for the reported event
+     * @param componentId                the component to change
+     * @param category                   this component's worst category
+     *                                    this season
+     * @param failureInvolvementPercent  the component's involvement
+     *                                    percentage in the step that
+     *                                    failed; only meaningful (and only
+     *                                    non-{@code null}) when
+     *                                    {@code category} is
+     *                                    {@link #CATEGORY_FAILURE}
+     * @param random                     the random source this season's
+     *                                    factor is drawn from
+     * @param events                     the list to append this
+     *                                    component's events to
+     */
+    private static void applyComponentReliabilityChange(PlayerSnapshot snapshot, ContentCatalog catalog,
+            String missionInstanceId, String componentId, int category, Integer failureInvolvementPercent,
+            RandomGenerator random, List<ResolutionEvent> events) {
+        OwnedMissionComponent owned = snapshot.getMissionComponents().get(componentId);
+        MissionComponent component = catalog.missionComponent(componentId).orElse(null);
+        if (owned == null || component == null) {
+            // Defensive skip, not expected: MissionLaunch only ever launches a configuration whose
+            // every step component is validated (ContentCatalog) to be owned once its program is
+            // open.
+            return;
+        }
+
+        double before = owned.getCurrentReliability();
+        double after;
+        if (category == CATEGORY_FAILURE) {
+            double factor = SkillGrowth.drawMissionReliabilityFailureFactor(random);
+            double loss = SkillGrowth.missionReliabilityLoss(before, owned.getFloorReliability(), factor,
+                failureInvolvementPercent);
+            after = Math.max(owned.getFloorReliability(), before - loss);
+        } else {
+            double factor = category == CATEGORY_MINOR_GLITCH
+                ? SkillGrowth.drawMissionReliabilityMinorGlitchFactor(random)
+                : SkillGrowth.drawMissionReliabilitySuccessFactor(random);
+            double gain = SkillGrowth.missionReliabilityGain(before, component.maxReliability(), factor);
+            after = Math.min(component.maxReliability(), before + gain);
+        }
+        owned.setCurrentReliability(after);
+        events.add(new MissionReliabilityChanged(missionInstanceId, componentId, after - before));
+
+        ResearchComponentMaxed maxedEvent =
+            ResearchProgress.releaseResearchersIfMaxed(snapshot, componentId, after, component.maxRdReliability());
+        if (maxedEvent != null) {
+            events.add(maxedEvent);
+        }
+    }
+
+    /**
+     * Applies this season's mission-based skill growth to every astronaut/
+     * Mission Control officer still assigned to {@code mission} - see this
+     * class's own Javadoc and {@code design.md} &sect;2.5(g) for the full
+     * rule (astronauts grow all five skills; controllers grow every skill
+     * exercised by the season's own executed steps).
+     *
+     * @param snapshot       the player snapshot the assigned personnel belong to
+     * @param mission        the mission this season belongs to
+     * @param executedSteps  the steps this season actually executed
+     * @param random         the random source this season's factors are drawn from
+     * @param events         the list to append each
+     *                       {@link MissionSkillGrowthApplied} event to
+     */
+    private static void applyPostSeasonSkillGrowth(PlayerSnapshot snapshot, InProgressMission mission,
+            List<MissionStep> executedSteps, RandomGenerator random, List<ResolutionEvent> events) {
+        for (String astronautId : mission.getAssignedAstronautIds()) {
+            Astronaut astronaut = findById(snapshot.getAstronauts(), astronautId);
+            if (astronaut == null) {
+                // Lost this season's CATASTROPHIC step; loseCrew already removed them.
+                continue;
+            }
+            double totalGain = 0;
+            for (AstronautSkill skill : AstronautSkill.values()) {
+                double factor = SkillGrowth.drawMissionSkillGrowthFactor(random);
+                double gain = SkillGrowth.diminishingReturnsGain(astronaut.getSkill(skill),
+                    astronaut.getLearningPotential(), factor);
+                astronaut.setSkill(skill, astronaut.getSkill(skill) + gain);
+                totalGain += gain;
+            }
+            events.add(new MissionSkillGrowthApplied(mission.getId(), astronaut.getId(), astronaut.getName(),
+                PersonnelGroup.ASTRONAUT, totalGain));
+        }
+
+        Set<MissionControlSkill> skillsExercisedThisSeason = new LinkedHashSet<>();
+        for (MissionStep step : executedSteps) {
+            for (MissionStep.ControllerInvolvement involvement : step.controllerInvolvements()) {
+                skillsExercisedThisSeason.add(involvement.skill());
+            }
+        }
+        for (String controllerId : mission.getAssignedMissionControlOfficerIds()) {
+            MissionControlOfficer officer = findById(snapshot.getMissionControlOfficers(), controllerId);
+            if (officer == null) {
+                continue;
+            }
+            double totalGain = 0;
+            for (MissionControlSkill skill : skillsExercisedThisSeason) {
+                double factor = SkillGrowth.drawMissionSkillGrowthFactor(random);
+                double gain = SkillGrowth.diminishingReturnsGain(officer.getSkill(skill),
+                    officer.getLearningPotential(), factor);
+                officer.setSkill(skill, officer.getSkill(skill) + gain);
+                totalGain += gain;
+            }
+            events.add(new MissionSkillGrowthApplied(mission.getId(), officer.getId(), officer.getName(),
+                PersonnelGroup.MISSION_CONTROL, totalGain));
+        }
     }
 
     /**

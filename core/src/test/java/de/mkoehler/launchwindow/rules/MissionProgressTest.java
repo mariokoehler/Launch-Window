@@ -17,6 +17,7 @@ import de.mkoehler.launchwindow.model.MissionControlSkill;
 import de.mkoehler.launchwindow.model.OwnedMissionComponent;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.model.SetSkill;
+import de.mkoehler.launchwindow.model.SetSpecialist;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -173,8 +174,13 @@ class MissionProgressTest {
 
         // base probability (average) = 77 -> first-roll threshold 23; saving-throw probability
         // = 77 * 50 / 100 = 38.5 -> saving-throw pass threshold 61.5. A first-member-only bug
-        // would instead compute a pass threshold of 64 - see this test's own Javadoc.
-        ScriptedRandomGenerator random = new ScriptedRandomGenerator(20.0, 63.0);
+        // would instead compute a pass threshold of 64 - see this test's own Javadoc. The 12
+        // filler values after the two step rolls cover this season's post-flight draws: 1
+        // reliability-change factor (capsule-mercury, MINOR_GLITCH_SOLVED -> SUCCESS category),
+        // then 5 skill-growth factors per assigned astronaut (astro-1, astro-2) and 1 per
+        // controller skill exercised this season (mco-1, PROPULSION only).
+        ScriptedRandomGenerator random = new ScriptedRandomGenerator(20.0, 63.0,
+            0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1);
         List<ResolutionEvent> events = MissionProgress.advanceSeason(snapshot, catalog, random);
 
         MissionStepResolved resolved = (MissionStepResolved) events.get(0);
@@ -200,7 +206,9 @@ class MissionProgressTest {
         snapshot.getInProgressMissions().put("m0",
             new InProgressMission("m0", "complete-std", List.of("astro-1"), List.of()));
 
-        ScriptedRandomGenerator random = new ScriptedRandomGenerator(99.0);
+        // step roll (1) + this season's post-flight draws: 1 reliability-change factor
+        // (capsule-mercury, SUCCESSFUL) + 5 skill-growth factors (astro-1's five skills).
+        ScriptedRandomGenerator random = new ScriptedRandomGenerator(99.0, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1);
         MissionProgress.advanceSeason(snapshot, catalog, random);
 
         assertTrue(snapshot.getInProgressMissions().isEmpty());
@@ -229,7 +237,10 @@ class MissionProgressTest {
         snapshot.getInProgressMissions().put("m0",
             new InProgressMission("m0", "complete-std", List.of("astro-1"), List.of()));
 
-        ScriptedRandomGenerator random = new ScriptedRandomGenerator(99.0);
+        // Growth runs before the retire-on-release check, so this still needs its post-flight
+        // draws too - see completingTheFinalSeasonReleasesEveryoneAndEndsTheMission's own comment
+        // above for the exact breakdown.
+        ScriptedRandomGenerator random = new ScriptedRandomGenerator(99.0, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1);
         List<ResolutionEvent> events = MissionProgress.advanceSeason(snapshot, catalog, random);
 
         assertTrue(snapshot.getAstronauts().isEmpty());
@@ -261,7 +272,8 @@ class MissionProgressTest {
         snapshot.getInProgressMissions().put("m0",
             new InProgressMission("m0", "complete-std", List.of("astro-1"), List.of()));
 
-        ScriptedRandomGenerator random = new ScriptedRandomGenerator(99.0);
+        // Same post-flight draw breakdown as completingTheFinalSeasonReleasesEveryoneAndEndsTheMission.
+        ScriptedRandomGenerator random = new ScriptedRandomGenerator(99.0, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1);
         MissionProgress.advanceSeason(snapshot, catalog, random);
 
         assertTrue(snapshot.getAstronauts().isEmpty());
@@ -293,8 +305,11 @@ class MissionProgressTest {
         // base probability 10 (component reliability alone, below the 65 blend threshold);
         // saving-throw probability 10*50/100=5 -> pass threshold 95, failing range 95,
         // catastrophic boundary 9.5, failure boundary 57; firstRoll 0 fails, savingRoll 30 lands
-        // in the plain-failure band regardless of the controller's own skill.
-        ScriptedRandomGenerator random = new ScriptedRandomGenerator(0.0, 30.0);
+        // in the plain-failure band regardless of the controller's own skill. Post-flight draws:
+        // 1 reliability-change factor (FAILURE), 5 skill-growth factors for the surviving
+        // astronaut, 1 for the controller's own exercised skill (PROPULSION).
+        ScriptedRandomGenerator random =
+            new ScriptedRandomGenerator(0.0, 30.0, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1);
         List<ResolutionEvent> events = MissionProgress.advanceSeason(snapshot, catalog, random);
 
         assertTrue(snapshot.getMissionControlOfficers().isEmpty());
@@ -327,7 +342,9 @@ class MissionProgressTest {
         snapshot.getInProgressMissions().put("m0",
             new InProgressMission("m0", "catastrophic-std", List.of("astro-1"), List.of()));
 
-        ScriptedRandomGenerator random = new ScriptedRandomGenerator(0.0, 5.0);
+        // Post-flight draws: 1 reliability-change factor (FAILURE, from the CATASTROPHIC
+        // mapping); no skill-growth draws, since loseCrew already removed the only astronaut.
+        ScriptedRandomGenerator random = new ScriptedRandomGenerator(0.0, 5.0, 0.1);
         List<ResolutionEvent> events = MissionProgress.advanceSeason(snapshot, catalog, random);
 
         long departureCount = events.stream().filter(e -> e instanceof PersonnelDeparture).count();
@@ -359,7 +376,10 @@ class MissionProgressTest {
         snapshot.getInProgressMissions().put("m0",
             new InProgressMission("m0", "multi-std", List.of("astro-1"), List.of()));
 
-        ScriptedRandomGenerator random = new ScriptedRandomGenerator(99.0);
+        // Post-flight draws, same breakdown as completingTheFinalSeasonReleasesEveryoneAndEndsTheMission:
+        // 1 reliability-change factor, 5 skill-growth factors - still applied even on a
+        // continuing (non-final) season, since growth happens every season flown.
+        ScriptedRandomGenerator random = new ScriptedRandomGenerator(99.0, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1);
         MissionProgress.advanceSeason(snapshot, catalog, random);
 
         assertEquals(1, snapshot.getAstronauts().size());
@@ -384,7 +404,9 @@ class MissionProgressTest {
         snapshot.getInProgressMissions().put("m0",
             new InProgressMission("m0", "multi-std", List.of(), List.of("mco-1")));
 
-        ScriptedRandomGenerator random = new ScriptedRandomGenerator(99.0);
+        // Post-flight draws: 1 reliability-change factor, 1 skill-growth factor for the
+        // controller's own exercised skill (PROPULSION).
+        ScriptedRandomGenerator random = new ScriptedRandomGenerator(99.0, 0.1, 0.1);
         MissionProgress.advanceSeason(snapshot, catalog, random);
 
         assertEquals(1, snapshot.getInProgressMissions().size());
@@ -395,9 +417,12 @@ class MissionProgressTest {
     /**
      * Verifies a {@code FAILURE} on the first of two steps in the same
      * season genuinely ends the season there - the second step never
-     * resolves at all. Proven by scripting exactly the two rolls the first
-     * step consumes: if the second step were resolved too, it would need
-     * to draw a third roll the scripted generator does not have, throwing.
+     * resolves at all. Proven by scripting exactly the draws the first
+     * step and its own post-flight reliability change consume, no more:
+     * if the second step were resolved too, it would need to draw its own
+     * first roll, a 4th draw the scripted generator does not have,
+     * throwing - checked explicitly via {@code drawCount()} too, not just
+     * relying on the absence of a throw.
      */
     @Test
     void failureOnTheFirstStepPreventsTheSecondStepFromRunning() {
@@ -413,14 +438,21 @@ class MissionProgressTest {
         snapshot.getInProgressMissions().put("m0", new InProgressMission("m0", "two-step-std", List.of(), List.of()));
 
         // no controllers -> saving-throw probability 0, failing range 100, failure boundary 60;
-        // firstRoll 0 always fails, savingRoll 30 lands in the plain-failure band.
-        ScriptedRandomGenerator random = new ScriptedRandomGenerator(0.0, 30.0);
+        // firstRoll 0 always fails, savingRoll 30 lands in the plain-failure band. Exactly 3
+        // values total: the 2 step rolls plus 1 reliability-change factor for the one component
+        // involved in the (one) step that actually executed - deliberately no extra value, so
+        // that if the second step erroneously ran too, its own first roll would exhaust this
+        // generator and throw, same proof mechanism this test's own Javadoc describes.
+        ScriptedRandomGenerator random = new ScriptedRandomGenerator(0.0, 30.0, 0.1);
         List<ResolutionEvent> events = MissionProgress.advanceSeason(snapshot, catalog, random);
 
-        assertEquals(1, events.size());
+        // 1 MissionStepResolved (the one executed step) + 1 MissionReliabilityChanged (the one
+        // involved component) - no skill growth, since no personnel are assigned.
+        assertEquals(2, events.size());
         assertEquals("launch", ((MissionStepResolved) events.get(0)).stepId());
         assertEquals(MissionStepOutcome.FAILURE, ((MissionStepResolved) events.get(0)).outcome());
         assertTrue(snapshot.getInProgressMissions().isEmpty());
+        assertEquals(3, random.drawCount());
     }
 
     /**
@@ -445,13 +477,19 @@ class MissionProgressTest {
         // step 1: firstRoll 0 fails (base probability 10, threshold 90); savingRoll 80 lands in
         // the top (minor-glitch) band (failure boundary 60, saving-throw pass threshold 100).
         // step 2: firstRoll 99 succeeds outright (base probability still 10, threshold 90).
-        ScriptedRandomGenerator random = new ScriptedRandomGenerator(0.0, 80.0, 99.0);
+        // Post-flight draws: capsule-mercury is involved in both steps, so it is one component
+        // with one aggregated category this season - MINOR_GLITCH (the worse of MINOR_GLITCH and
+        // SUCCESS) - needing exactly 1 reliability-change factor, not two.
+        ScriptedRandomGenerator random = new ScriptedRandomGenerator(0.0, 80.0, 99.0, 0.1);
         List<ResolutionEvent> events = MissionProgress.advanceSeason(snapshot, catalog, random);
 
-        assertEquals(2, events.size());
+        // 2 MissionStepResolved + 1 MissionReliabilityChanged (one component, one aggregated
+        // category) - no skill growth, since no personnel are assigned.
+        assertEquals(3, events.size());
         assertEquals(MissionStepOutcome.MINOR_GLITCH, ((MissionStepResolved) events.get(0)).outcome());
         assertEquals(MissionStepOutcome.SUCCESSFUL, ((MissionStepResolved) events.get(1)).outcome());
         assertTrue(snapshot.getInProgressMissions().isEmpty());
+        assertEquals(4, random.drawCount());
     }
 
     /**
@@ -474,13 +512,16 @@ class MissionProgressTest {
 
         // base/saving-throw probability both low (no controllers -> saving-throw probability 0,
         // failing range 100, catastrophic boundary 10, failure boundary 60); firstRoll 0 always
-        // fails, savingRoll 30 lands in the plain-failure band.
-        ScriptedRandomGenerator random = new ScriptedRandomGenerator(0.0, 30.0);
+        // fails, savingRoll 30 lands in the plain-failure band. Post-flight draws: 1
+        // reliability-change factor, 5 skill-growth factors for the surviving astronaut.
+        ScriptedRandomGenerator random =
+            new ScriptedRandomGenerator(0.0, 30.0, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1);
         List<ResolutionEvent> events = MissionProgress.advanceSeason(snapshot, catalog, random);
 
         MissionStepResolved resolved = (MissionStepResolved) events.get(0);
         assertEquals(MissionStepOutcome.FAILURE, resolved.outcome());
-        assertEquals(1, events.size());
+        // 1 MissionStepResolved + 1 MissionReliabilityChanged + 1 MissionSkillGrowthApplied.
+        assertEquals(3, events.size());
         assertTrue(snapshot.getInProgressMissions().isEmpty());
         assertEquals(1, snapshot.getAstronauts().size());
         assertEquals(AssignmentState.IDLE, snapshot.getAstronauts().get(0).getAssignmentState());
@@ -507,8 +548,10 @@ class MissionProgressTest {
         snapshot.getInProgressMissions().put("m0",
             new InProgressMission("m0", "catastrophic-std", List.of("astro-1", "astro-2"), List.of()));
 
-        // catastrophic boundary at 10 (no controllers -> failing range 100); savingRoll 5 lands in it.
-        ScriptedRandomGenerator random = new ScriptedRandomGenerator(0.0, 5.0);
+        // catastrophic boundary at 10 (no controllers -> failing range 100); savingRoll 5 lands in
+        // it. Post-flight draws: 1 reliability-change factor; no skill growth, since loseCrew
+        // already removed both astronauts.
+        ScriptedRandomGenerator random = new ScriptedRandomGenerator(0.0, 5.0, 0.1);
         List<ResolutionEvent> events = MissionProgress.advanceSeason(snapshot, catalog, random);
 
         assertEquals(MissionStepOutcome.CATASTROPHIC, ((MissionStepResolved) events.get(0)).outcome());
@@ -543,7 +586,10 @@ class MissionProgressTest {
         snapshot.getInProgressMissions().put("m0",
             new InProgressMission("m0", "catastrophic-ctrl-std", List.of("astro-1"), List.of("mco-1")));
 
-        ScriptedRandomGenerator random = new ScriptedRandomGenerator(0.0, 1.0);
+        // Post-flight draws: 1 reliability-change factor; no astronaut growth (loseCrew already
+        // removed astro-1); 1 skill-growth factor for the surviving controller's own exercised
+        // skill (PROPULSION).
+        ScriptedRandomGenerator random = new ScriptedRandomGenerator(0.0, 1.0, 0.1, 0.1);
         MissionProgress.advanceSeason(snapshot, catalog, random);
 
         assertTrue(snapshot.getAstronauts().isEmpty());
@@ -573,14 +619,256 @@ class MissionProgressTest {
         snapshot.getInProgressMissions().put("m0", new InProgressMission("m0", "mission-a", List.of(), List.of()));
         snapshot.getInProgressMissions().put("m1", new InProgressMission("m1", "mission-b", List.of(), List.of()));
 
-        ScriptedRandomGenerator random = new ScriptedRandomGenerator(99.0, 99.0);
+        // Each mission's own advanceOne call runs to completion (step, then its own post-flight
+        // reliability change) before the next mission's begins - draw order is m0's step, m0's
+        // reliability factor, m1's step, m1's reliability factor, not both missions' steps first.
+        ScriptedRandomGenerator random = new ScriptedRandomGenerator(99.0, 0.1, 99.0, 0.1);
         List<ResolutionEvent> events = MissionProgress.advanceSeason(snapshot, catalog, random);
 
-        assertEquals(2, events.size());
+        // 1 MissionStepResolved + 1 MissionReliabilityChanged per mission - no skill growth,
+        // since neither mission has any personnel assigned.
+        assertEquals(4, events.size());
         // mission-a (one season) completed and was removed; mission-b (two seasons) advanced to
         // season 1 and is still in progress.
         assertEquals(1, snapshot.getInProgressMissions().size());
         assertEquals(1, snapshot.getInProgressMissions().get("m1").getCurrentSeasonIndex());
+    }
+
+    /**
+     * Verifies a {@code SUCCESSFUL} season grows the one involved
+     * component's reliability toward {@link MissionComponent#maxReliability()},
+     * by the exact formula: {@code (max - current) * factor}.
+     */
+    @Test
+    void successfulSeasonGrowsComponentReliabilityTowardMax() {
+        MissionStep step = new MissionStep("ops", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
+            List.of(), List.of(), false);
+        MissionConfiguration configuration =
+            new MissionConfiguration("growth-std", "mercury-program", List.of(new MissionSeason(List.of(step))), 0,
+                0);
+        ContentCatalog catalog = catalogWith(configuration);
+
+        PlayerSnapshot snapshot = snapshotWithOwnedCapsule(50.0);
+        snapshot.getInProgressMissions().put("m0", new InProgressMission("m0", "growth-std", List.of(), List.of()));
+
+        // base probability 50 (reliability alone) -> first-roll threshold 50; firstRoll 99
+        // succeeds outright. Reliability factor 0.1 -> gain (90-50)*0.1=4.0.
+        ScriptedRandomGenerator random = new ScriptedRandomGenerator(99.0, 0.1);
+        List<ResolutionEvent> events = MissionProgress.advanceSeason(snapshot, catalog, random);
+
+        assertEquals(54.0, snapshot.getMissionComponents().get("capsule-mercury").getCurrentReliability(), 1e-9);
+        MissionReliabilityChanged changed = (MissionReliabilityChanged) events.get(1);
+        assertEquals("capsule-mercury", changed.componentId());
+        assertEquals(4.0, changed.delta(), 1e-9);
+    }
+
+    /**
+     * Verifies a {@code FAILURE} season shrinks each involved component's
+     * reliability toward {@link OwnedMissionComponent#getFloorReliability()},
+     * scaled by that specific component's own involvement percentage in
+     * the failing step - two components at different involvement
+     * percentages in the same failing step lose different amounts even
+     * with the same drawn factor.
+     */
+    @Test
+    void failureSeasonShrinksComponentReliabilityScaledByItsOwnInvolvement() {
+        MissionComponent second =
+            new MissionComponent("second-component", SetSkill.ROCKETS, 3, 90, 82, RD_SLOT_BANDS, 0, List.of());
+        Program twoComponentProgram = new Program("mercury-program", "early-space", 1_000, 0,
+            List.of("capsule-mercury", "second-component"), List.of());
+        ContentCatalog catalog = new ContentCatalog(List.of(CATEGORY), List.of(twoComponentProgram),
+            List.of(new MissionConfiguration("failure-split-std", "mercury-program",
+                List.of(new MissionSeason(List.of(new MissionStep("launch",
+                    List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 60),
+                        new MissionStep.ComponentInvolvement("second-component", 40)),
+                    List.of(), List.of(), false)))), 0, 0)),
+            List.of(CAPSULE, second));
+
+        PlayerSnapshot snapshot = new PlayerSnapshot("Agency", Archetype.NASA, 10_000, 0, 0, 1);
+        snapshot.setOpenedProgramIds(List.of("mercury-program"));
+        snapshot.setMissionComponents(Map.of(
+            "capsule-mercury", new OwnedMissionComponent(50.0, 20.0),
+            "second-component", new OwnedMissionComponent(50.0, 20.0)));
+        snapshot.getInProgressMissions().put("m0",
+            new InProgressMission("m0", "failure-split-std", List.of(), List.of()));
+
+        // componentSum = 0.6*50 + 0.4*50 = 50 -> base probability 50, first-roll threshold 50;
+        // firstRoll 0 fails. No controllers -> saving-throw probability 0, failing range 100,
+        // failure boundary 60; savingRoll 30 lands in the plain-failure band. capsule-mercury's
+        // own failure factor is drawn first (it is listed first in componentInvolvements): loss
+        // = (50-20)*0.2*0.6 = 3.6 -> new reliability 46.4.
+        ScriptedRandomGenerator random = new ScriptedRandomGenerator(0.0, 30.0, 0.2, 0.3);
+        MissionProgress.advanceSeason(snapshot, catalog, random);
+
+        assertEquals(46.4, snapshot.getMissionComponents().get("capsule-mercury").getCurrentReliability(), 1e-9);
+    }
+
+    /**
+     * Verifies a component's reliability never drops below its own floor
+     * even at the theoretical maximum factor (1.0) and full involvement -
+     * the formula's own distance-to-floor term makes this true by
+     * construction, the same way {@link SkillGrowth#reliabilityGain}'s
+     * distance-to-cap term does for a gain.
+     */
+    @Test
+    void reliabilityLossNeverDropsBelowTheFloorEvenAtTheMaxFactor() {
+        MissionStep step = new MissionStep("launch", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
+            List.of(), List.of(), false);
+        MissionConfiguration configuration = new MissionConfiguration("failure-floor-std", "mercury-program",
+            List.of(new MissionSeason(List.of(step))), 0, 0);
+        ContentCatalog catalog = catalogWith(configuration);
+
+        PlayerSnapshot snapshot = new PlayerSnapshot("Agency", Archetype.NASA, 10_000, 0, 0, 1);
+        snapshot.setOpenedProgramIds(List.of("mercury-program"));
+        snapshot.setMissionComponents(Map.of("capsule-mercury", new OwnedMissionComponent(25.0, 20.0)));
+        snapshot.getInProgressMissions().put("m0",
+            new InProgressMission("m0", "failure-floor-std", List.of(), List.of()));
+
+        // base probability 25 -> first-roll threshold 75; firstRoll 0 fails. No controllers ->
+        // failing range 100, failure boundary 60; savingRoll 30 lands in the plain-failure band.
+        // factor 1.0, full involvement -> loss = (25-20)*1.0*1.0 = 5.0 -> lands exactly at the
+        // floor, 20.0.
+        ScriptedRandomGenerator random = new ScriptedRandomGenerator(0.0, 30.0, 1.0);
+        MissionProgress.advanceSeason(snapshot, catalog, random);
+
+        assertEquals(20.0, snapshot.getMissionComponents().get("capsule-mercury").getCurrentReliability(), 1e-9);
+    }
+
+    /**
+     * Verifies a component's reliability never exceeds
+     * {@link MissionComponent#maxReliability()} even at the theoretical
+     * maximum factor (1.0).
+     */
+    @Test
+    void reliabilityGainNeverExceedsMaxEvenAtTheMaxFactor() {
+        MissionStep step = new MissionStep("ops", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
+            List.of(), List.of(), false);
+        MissionConfiguration configuration = new MissionConfiguration("growth-max-std", "mercury-program",
+            List.of(new MissionSeason(List.of(step))), 0, 0);
+        ContentCatalog catalog = catalogWith(configuration);
+
+        PlayerSnapshot snapshot = snapshotWithOwnedCapsule(85.0);
+        snapshot.getInProgressMissions().put("m0",
+            new InProgressMission("m0", "growth-max-std", List.of(), List.of()));
+
+        // base probability 85 -> first-roll threshold 15; firstRoll 99 succeeds. factor 1.0 ->
+        // gain (90-85)*1.0=5.0 -> lands exactly at maxReliability, 90.0.
+        ScriptedRandomGenerator random = new ScriptedRandomGenerator(99.0, 1.0);
+        MissionProgress.advanceSeason(snapshot, catalog, random);
+
+        assertEquals(90.0, snapshot.getMissionComponents().get("capsule-mercury").getCurrentReliability(), 1e-9);
+    }
+
+    /**
+     * Verifies reaching {@link MissionComponent#maxRdReliability()} via a
+     * season's post-flight gain releases any SET specialist still
+     * assigned to that component's R&amp;D, the same release mechanic
+     * {@link ResearchProgress}'s own R&amp;D pass uses - re-deriving
+     * {@code baspm.md} &sect;10.4's own second release trigger.
+     */
+    @Test
+    void successfulSeasonReleasesSetResearchersAtTheRdCeiling() {
+        MissionStep step = new MissionStep("ops", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
+            List.of(), List.of(), false);
+        MissionConfiguration configuration = new MissionConfiguration("growth-release-std", "mercury-program",
+            List.of(new MissionSeason(List.of(step))), 0, 0);
+        ContentCatalog catalog = catalogWith(configuration);
+
+        PlayerSnapshot snapshot = snapshotWithOwnedCapsule(80.0);
+        SetSpecialist specialist = new SetSpecialist("set-1", "Set One", 40, 70, 50);
+        specialist.setAssignmentState(AssignmentState.ASSIGNED);
+        specialist.setRdTargetComponentId("capsule-mercury");
+        specialist.setRdSlot(0);
+        snapshot.setSetSpecialists(List.of(specialist));
+        snapshot.getInProgressMissions().put("m0",
+            new InProgressMission("m0", "growth-release-std", List.of(), List.of()));
+
+        // base probability 80 -> first-roll threshold 20; firstRoll 99 succeeds. factor 0.5 ->
+        // gain (90-80)*0.5=5.0 -> new reliability 85.0, at/above maxRdReliability (82).
+        ScriptedRandomGenerator random = new ScriptedRandomGenerator(99.0, 0.5);
+        List<ResolutionEvent> events = MissionProgress.advanceSeason(snapshot, catalog, random);
+
+        assertEquals(85.0, snapshot.getMissionComponents().get("capsule-mercury").getCurrentReliability(), 1e-9);
+        assertEquals(AssignmentState.IDLE, snapshot.getSetSpecialists().get(0).getAssignmentState());
+        assertNull(snapshot.getSetSpecialists().get(0).getRdTargetComponentId());
+        assertTrue(events.stream().anyMatch(e -> e instanceof ResearchComponentMaxed));
+    }
+
+    /**
+     * Verifies mission-based skill growth bumps all five
+     * {@link AstronautSkill} values for an assigned astronaut, not just
+     * whichever skill a step happened to involve - re-deriving
+     * {@code baspm.md} &sect;9.3/&sect;9.4's "flying is what matters"
+     * shape.
+     */
+    @Test
+    void skillGrowthBumpsAllFiveAstronautSkills() {
+        MissionStep step = new MissionStep("ops", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
+            List.of(), List.of(), false);
+        MissionConfiguration configuration = new MissionConfiguration("skill-growth-std", "mercury-program",
+            List.of(new MissionSeason(List.of(step))), 0, 0);
+        ContentCatalog catalog = catalogWith(configuration);
+
+        PlayerSnapshot snapshot = snapshotWithOwnedCapsule(90.0);
+        Astronaut astronaut = new Astronaut("astro-1", "Jane Reyes", 34, 80, 60);
+        astronaut.setSkill(AstronautSkill.PILOTING, 50.0);
+        astronaut.setAssignmentState(AssignmentState.ASSIGNED);
+        astronaut.setAssignedMissionId("m0");
+        snapshot.setAstronauts(List.of(astronaut));
+        snapshot.getInProgressMissions().put("m0",
+            new InProgressMission("m0", "skill-growth-std", List.of("astro-1"), List.of()));
+
+        // step roll (99, succeeds) + 1 reliability factor (0.1) + 5 skill-growth factors, all
+        // 0.1: gain = (100 - currentSkill) * 0.1 * (60/100) for each of the five skills -
+        // PILOTING (50) -> (100-50)*0.1*0.6 = 3.0 -> 53.0; every other skill (0) ->
+        // (100-0)*0.1*0.6 = 6.0 -> 6.0.
+        ScriptedRandomGenerator random = new ScriptedRandomGenerator(99.0, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1);
+        MissionProgress.advanceSeason(snapshot, catalog, random);
+
+        Astronaut grown = snapshot.getAstronauts().get(0);
+        assertEquals(53.0, grown.getSkill(AstronautSkill.PILOTING), 1e-9);
+        assertEquals(6.0, grown.getSkill(AstronautSkill.LEADERSHIP), 1e-9);
+        assertEquals(6.0, grown.getSkill(AstronautSkill.EVA), 1e-9);
+        assertEquals(6.0, grown.getSkill(AstronautSkill.SCIENCE), 1e-9);
+        assertEquals(6.0, grown.getSkill(AstronautSkill.FITNESS), 1e-9);
+    }
+
+    /**
+     * Verifies a Mission Control officer only grows the skill(s) actually
+     * exercised by the season's own executed steps, not every skill they
+     * happen to have a value for - the deliberate broadening of BASPM's
+     * own "one skill they were actually using" rule onto Launch Window's
+     * averaged-contribution model (see {@code design.md} &sect;2.5(g)),
+     * not an unconditional "grow everything" rule.
+     */
+    @Test
+    void controllerSkillGrowthOnlyAppliesToSkillsExercisedThisSeason() {
+        MissionStep step = new MissionStep("ops", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
+            List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 100)), List.of(), false);
+        MissionConfiguration configuration = new MissionConfiguration("controller-growth-std", "mercury-program",
+            List.of(new MissionSeason(List.of(step))), 0, 1);
+        ContentCatalog catalog = catalogWith(configuration);
+
+        PlayerSnapshot snapshot = snapshotWithOwnedCapsule(90.0);
+        MissionControlOfficer officer = new MissionControlOfficer("mco-1", "Alex Novak", 45, 70, 50);
+        officer.setSkill(MissionControlSkill.PROPULSION, 50.0);
+        officer.setSkill(MissionControlSkill.TRAJECTORY_AND_GNC, 30.0);
+        officer.setAssignmentState(AssignmentState.ASSIGNED);
+        officer.setAssignedMissionId("m0");
+        snapshot.setMissionControlOfficers(List.of(officer));
+        snapshot.getInProgressMissions().put("m0",
+            new InProgressMission("m0", "controller-growth-std", List.of(), List.of("mco-1")));
+
+        // step roll (99, succeeds) + 1 reliability factor (0.1) + exactly 1 skill-growth factor
+        // (0.1), for PROPULSION only - TRAJECTORY_AND_GNC was never exercised this season and
+        // must stay untouched.
+        ScriptedRandomGenerator random = new ScriptedRandomGenerator(99.0, 0.1, 0.1);
+        MissionProgress.advanceSeason(snapshot, catalog, random);
+
+        MissionControlOfficer grown = snapshot.getMissionControlOfficers().get(0);
+        // gain = (100-50)*0.1*(50/100) = 2.5 -> 52.5.
+        assertEquals(52.5, grown.getSkill(MissionControlSkill.PROPULSION), 1e-9);
+        assertEquals(30.0, grown.getSkill(MissionControlSkill.TRAJECTORY_AND_GNC), 1e-9);
     }
 
     /**
@@ -662,6 +950,14 @@ class MissionProgressTest {
                 throw new IllegalStateException("no more scripted rolls available");
             }
             return scriptedRolls[drawCount++];
+        }
+
+        /**
+         * @return how many times {@link #nextDouble(double, double)} was
+         *     actually called
+         */
+        private int drawCount() {
+            return drawCount;
         }
     }
 }

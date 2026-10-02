@@ -296,21 +296,53 @@ public final class ResearchProgress {
         // the end of this season, whether or not it actually changed this season - a component
         // already sitting at its cap when a specialist is first assigned to it releases them the
         // very next season, same as one that just reached the cap this season.
-        if (owned.getCurrentReliability() >= component.maxRdReliability()) {
-            List<String> releasedPersonnelIds = new ArrayList<>();
-            for (int slot = 0; slot < MissionComponent.RD_SLOT_COUNT; slot++) {
-                SetSpecialist specialist = slots[slot];
-                if (specialist == null) {
-                    continue;
-                }
+        ResearchComponentMaxed maxedEvent =
+            releaseResearchersIfMaxed(snapshot, componentId, owned.getCurrentReliability(),
+                component.maxRdReliability());
+        if (maxedEvent != null) {
+            events.add(maxedEvent);
+        }
+    }
+
+    /**
+     * Releases every {@code SET} specialist currently
+     * {@link AssignmentState#ASSIGNED} to {@code componentId}'s R&amp;D back
+     * to {@link AssignmentState#IDLE} if {@code currentReliability} has
+     * reached {@code maxRdReliability} - the shared release-at-the-cap
+     * mechanic both this class's own R&amp;D pass and
+     * {@link MissionProgress}'s post-mission-season reliability change use
+     * ({@code baspm.md} &sect;10.4/&sect;10.8 both call the identical
+     * {@code UnassignAllSETPersonnelFromMissionComponent}, one from a
+     * flight outcome, the other from an R&amp;D season - see this class's
+     * own Javadoc). Scans the whole roster by target id rather than a
+     * slots array, so it works regardless of which resolver is calling it.
+     *
+     * @param snapshot            the player snapshot whose SET roster to scan
+     * @param componentId         the component to check and release researchers from
+     * @param currentReliability  the component's reliability as it stands
+     *                            right now (after whichever resolver's own
+     *                            change this season, if any)
+     * @param maxRdReliability    the component's own R&amp;D reliability ceiling
+     * @return a {@link ResearchComponentMaxed} event if anyone was
+     *     released, or {@code null} if {@code currentReliability} is still
+     *     below {@code maxRdReliability}, or nobody was assigned to this
+     *     component anyway
+     */
+    static ResearchComponentMaxed releaseResearchersIfMaxed(PlayerSnapshot snapshot, String componentId,
+            double currentReliability, double maxRdReliability) {
+        if (currentReliability < maxRdReliability) {
+            return null;
+        }
+        List<String> releasedPersonnelIds = new ArrayList<>();
+        for (SetSpecialist specialist : snapshot.getSetSpecialists()) {
+            if (specialist.getAssignmentState() == AssignmentState.ASSIGNED
+                    && componentId.equals(specialist.getRdTargetComponentId())) {
                 specialist.setAssignmentState(AssignmentState.IDLE);
                 specialist.setRdTargetComponentId(null);
                 specialist.setRdSlot(null);
                 releasedPersonnelIds.add(specialist.getId());
             }
-            if (!releasedPersonnelIds.isEmpty()) {
-                events.add(new ResearchComponentMaxed(componentId, releasedPersonnelIds));
-            }
         }
+        return releasedPersonnelIds.isEmpty() ? null : new ResearchComponentMaxed(componentId, releasedPersonnelIds);
     }
 }

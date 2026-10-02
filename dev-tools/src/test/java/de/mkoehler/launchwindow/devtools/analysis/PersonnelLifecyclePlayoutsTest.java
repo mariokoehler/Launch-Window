@@ -162,6 +162,45 @@ class PersonnelLifecyclePlayoutsTest {
     }
 
     /**
+     * Verifies a long enough run actually applies post-mission-season
+     * reliability change and mission-based skill growth - a sign the two
+     * mechanics ({@code MissionProgress#applyPostSeasonReliabilityChange}/
+     * {@code #applyPostSeasonSkillGrowth}) are genuinely exercised, not
+     * just theoretically wired in. Every run already self-checks the
+     * reliability-bounds and skill-range invariants internally (see
+     * {@code checkProgramInvariants}/{@code checkTrainingInvariants}'s
+     * shared {@code checkSkillsInRange}); this only adds that both
+     * mechanics actually fire at least once.
+     */
+    @Test
+    void aLongRunAppliesPostMissionReliabilityChangeAndSkillGrowth() {
+        PersonnelPlayoutReport report = PersonnelLifecyclePlayouts.run(100, 5, 100, 7L);
+
+        assertTrue(report.missionReliabilityChangeCount() > 0,
+            "expected at least one post-mission reliability change over 100 seasons");
+        assertTrue(report.missionSkillGrowthCount() > 0,
+            "expected at least one mission-based skill growth event over 100 seasons");
+        assertTrue(report.averageMissionSkillGrowth() > 0);
+    }
+
+    /**
+     * Verifies a long enough run actually exercises the mission-triggered
+     * SET-release path too - a component's post-season reliability gain
+     * pushing it to its own R&amp;D ceiling, freeing any SET specialist
+     * still targeting it (see {@code ResearchProgress#releaseResearchersIfMaxed},
+     * shared with {@code ResearchProgress}'s own R&amp;D-pass release). A
+     * sign this path is genuinely reachable under the fixture's own
+     * numbers across enough games, not just theoretically implemented.
+     */
+    @Test
+    void aLongRunReleasesSetSpecialistsViaMissionTriggeredResearchCeiling() {
+        PersonnelPlayoutReport report = PersonnelLifecyclePlayouts.run(200, 5, 100, 7L);
+
+        assertTrue(report.missionTriggeredSetReleaseCount() > 0,
+            "expected at least one mission-triggered SET release over 200 games");
+    }
+
+    /**
      * Verifies each non-positive argument is rejected.
      */
     @Test

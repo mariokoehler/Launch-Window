@@ -568,9 +568,86 @@ now picks exactly a configuration's own declared counts via
 full before/after numbers tables, including the second pass after both
 fixes landed. **This completes M2's own mission-simulation exit
 criterion** (a multi-season mission spanning several turns, bot-driven)
-— still open for this slice: post-mission reliability change,
-mission-based skill growth, prestige/goals, the mission's own cost at
-launch, the goal-dependency reliability modifier, and the Expert trait.
+— still open for this slice (as of before the next paragraph): post-mission
+reliability change, mission-based skill growth, prestige/goals, the
+mission's own cost at launch, the goal-dependency reliability modifier,
+and the Expert trait.
+
+**Post-mission reliability change and mission-based skill growth done
+(2026-10-02):** both resolved once per in-progress mission *per season*,
+right after that season's steps resolve, regardless of outcome -
+`MissionProgress.applyPostSeasonReliabilityChange`/
+`applyPostSeasonSkillGrowth`, re-deriving `baspm.md` §10.4/§9.3/§9.4's
+own "fires on both the success and failure path, once per mission"
+shape onto Launch Window's season-incremental model. **Decided (user,
+2026-10-02): reliability change aggregates per component across the
+whole season, not per individual step** - for each component involved
+in any step the season actually executed, the worst outcome category
+wins (`FAILURE` > `MINOR_GLITCH` > `SUCCESS`; `MINOR_GLITCH_SOLVED`→
+`SUCCESS` and `CATASTROPHIC`→`FAILURE` are both unconfirmed-default
+mappings, `baspm.md` only traces a four-way taxonomy with no fifth,
+worse-than-`FAILURE` tier). New `SkillGrowth.missionReliabilityGain`/
+`missionReliabilityLoss` re-derive §10.4's own shape: gain grows toward
+`maxReliability` the same diminishing-returns way R&D does; loss shrinks
+toward `OwnedMissionComponent.getFloorReliability()`, scaled by the
+failing step's own involvement percentage (only the failure case is
+involvement-scaled, matching the trace). Reaching `maxRdReliability`
+this way releases any SET researchers still assigned there, via a new
+shared `ResearchProgress.releaseResearchersIfMaxed` helper now called by
+both this path and `ResearchProgress`'s own R&D pass, rather than
+duplicating the release logic (`baspm.md` traces both triggers calling
+the same underlying method). Mission-based skill growth re-derives
+§9.3/§9.4's own shape with `SkillGrowth.diminishingReturnsGain`: every
+surviving astronaut grows **all five** `AstronautSkill` values every
+season flown; every surviving controller grows every
+`MissionControlSkill` that appeared in *any* step that season -
+deliberately broader than BASPM's own "one skill they were actually
+using," since Launch Window's averaged-contribution crew model has no
+per-person skill ownership to key a narrower rule off of. BASPM's
+Flight-Director-specific growth variant is deliberately not adopted -
+Launch Window has no "who is Flight Director for this mission" concept
+yet, a separate open design question. Both mechanics run before
+`releaseSurvivors`'s own retire-on-release check, so a crew member's
+final season still counts for both. Two new event records,
+`MissionReliabilityChanged`/`MissionSkillGrowthApplied`. **Wired into the
+bot harness the same day** - no new bot decision was needed, since the
+harness already calls `MissionProgress.advanceSeason`; added five new
+`PersonnelPlayoutReport` fields (`missionReliabilityChangeCount`/
+`averageMissionReliabilityDelta`, `missionSkillGrowthCount`/
+`averageMissionSkillGrowth`, `missionTriggeredSetReleaseCount` - the
+last kept separate from `ResearchProgress`'s own R&D-pass release
+count), a non-negative-gain invariant for `MissionSkillGrowthApplied`,
+and two new harness tests proving both mechanics - and specifically the
+mission-triggered SET-release path - are actually reachable. **Numbers
+(same 200-game/80-season/seed-42 run as the mission-sim pass above):
+1,053 resigned/1,037 retired/5,344 still employed/84,592 training
+completions/4,516 hires/598 programs opened/36,131 R&D seasons; 2,103
+missions launched, mission steps 1,725 successful/403 minor-glitch-
+solved/422 minor glitch/604 failure/41 catastrophic, 82 lost in
+accidents, 24 retired on mission release - personnel/hiring/program
+totals within a few percent of the prior pass, consistent with the
+random stream shifting (extra post-season draws every mission season).
+**The step mix also moved toward success, in the direction the new
+feedback loop predicts:** success share rose 50.4%→54.0%
+(1,610/3,192→1,725/3,195) with every unsuccessful category falling,
+despite a flat total step count - consistent with reliability gain
+raising base probability and skill growth raising the crew/saving-throw
+inputs, both now feeding back into later rolls, which the harness had
+no mechanism to do before this slice. **Single seed, not checked
+against run-to-run variance** - steps aren't independent draws within a
+game, so this is a plausible, not confirmed, causal read. R&D seasons
+fell slightly too (36,313→36,131, ~0.5% - noise-level, not attributed
+to anything here).** The two new mechanics themselves: 3,903
+reliability changes (avg. delta +1.24, gains outweighing losses, as
+expected since successful/glitch-solved steps far outnumber failures),
+5,567 skill-growth events (avg. total gain 5.29), and 152 SET
+specialists released via the new mission-triggered R&D-ceiling path
+specifically (one event can release up to four at once, one component's
+full slot count) - confirms that path is reachable at this scale. Full
+writeup in `design.md` §2.5(g). **Still open for mission simulation:**
+prestige/goals, the mission's own cost at launch, the goal-dependency
+reliability modifier, and the Expert trait (still blocked on tracing
+Tiger Teams - not enough is known yet to implement it responsibly).
 
 Git repo
 initialized 2026-09-27 and pushed
