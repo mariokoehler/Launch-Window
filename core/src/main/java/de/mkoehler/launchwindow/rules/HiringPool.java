@@ -33,8 +33,9 @@ import java.util.random.RandomGenerator;
  *
  * <p><b>Composition order for whoever wires this into one season pass
  * (M4):</b> journaled player actions (including {@link #hire}) first, then
- * {@link PersonnelLifecycle}, then {@link TrainingProgress}, then
- * {@link ResearchProgress}, then {@link #refreshCandidates} last - a
+ * {@link PersonnelLifecycle}, then {@link MissionProgress}, then
+ * {@link TrainingProgress}, then {@link ResearchProgress}, then
+ * {@link #refreshCandidates} last - a
  * player can then always hire from the exact pool they were shown, and a
  * season's refresh never discards a candidate the same season's own
  * actions just hired. {@code TrainingProgress} before {@code ResearchProgress}

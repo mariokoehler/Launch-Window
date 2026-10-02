@@ -943,6 +943,18 @@ decompiled code:
    future session diff `SaveSlot*.xml`'s mission/prestige records the same
    way §2.1's "real save example" already did for reliability, and settle
    #1 above from save data directly instead of a screenshot.
+6. **Trace `Player.AddFallenAstronaut`'s own caller(s) directly** (not yet
+   traced against the decompiled source) — settles exactly how many
+   astronauts a `CATASTROPHIC` step
+   outcome removes (the whole assigned crew, one random member, or
+   something else) and whether it is even a flat rule rather than
+   depending on the step/mission itself. Launch Window's own
+   `MissionProgress` (`design.md` §2.5(f)) ported "whole assigned crew" as
+   a user decision made without this trace, reasoned from real-world
+   catastrophic-accident precedent (Apollo 1, Challenger, Columbia) rather
+   than BASPM's own code - worth confirming whether it happens to match
+   anyway, not a blocker either way since it's already a confirmed
+   decision, not a placeholder.
 
 ## 9. Personnel: hiring, skills, training, and the employee lifecycle (traced 2026-09-27)
 

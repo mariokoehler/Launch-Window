@@ -3,9 +3,14 @@ package de.mkoehler.launchwindow.rules;
 import de.mkoehler.launchwindow.model.AssignmentState;
 
 /**
- * <p>Reports that one employee left a roster during a
- * {@link PersonnelLifecycle#advanceSeason} pass, automatically (resignation
- * or retirement, never dismissal - see {@link DepartureReason}).</p>
+ * <p>Reports that one employee left a roster, automatically - never
+ * dismissal, see {@link DepartureReason}. Reported by
+ * {@link PersonnelLifecycle#advanceSeason} ({@link DepartureReason#RESIGNED}/
+ * {@link DepartureReason#RETIRED}) and by {@link MissionProgress}
+ * ({@link DepartureReason#LOST_IN_ACCIDENT}, and also
+ * {@link DepartureReason#RETIRED} via its own retire-on-release check) -
+ * one shared record for both resolvers, since every field below applies
+ * unchanged regardless of which one reports it.</p>
  *
  * @param group                 which roster the employee left
  * @param personnelId           the departed employee's stable id
@@ -23,7 +28,11 @@ import de.mkoehler.launchwindow.model.AssignmentState;
  *                              {@link AssignmentState#ASSIGNED} or
  *                              {@link AssignmentState#IN_TRAINING} signals
  *                              the player has a replacement to assign, not
- *                              just a roster slot to refill)
+ *                              just a roster slot to refill - for a
+ *                              {@link MissionProgress}-reported departure,
+ *                              this is always {@link AssignmentState#ASSIGNED}
+ *                              to the mission that just ended, not a slot
+ *                              still waiting to be filled)
  * @param rdTargetComponentIdAtExit the mission component id a departing
  *                              {@code SET} employee's R&amp;D was targeting
  *                              at the moment they left, or {@code null} for

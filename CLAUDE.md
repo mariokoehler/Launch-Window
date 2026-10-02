@@ -492,12 +492,85 @@ crew *lowers* success odds whenever crew skill is below the component sum
 on top of already-solid hardware" description, an additive bonus formula
 would fit more literally - but the user chose to keep the simpler,
 already-implemented weighted-average shape as-is rather than rework it.
-**Still not wired into the bot harness or any caller:** the per-player in-progress-mission state,
-the resolver that walks a season's step batch against it, post-mission
-reliability change, and mission-based skill growth are all still open,
-as is re-confirming `AssignmentState.ASSIGNED` as the "on an active
-mission" proxy (§2.2(c)'s own open follow-up) — see `design.md` §5's M2
-entry for the exact list.
+**Superseded the same day, see directly below:** this paragraph originally
+left the per-player in-progress-mission state, the resolver, and the
+`AssignmentState.ASSIGNED` re-confirmation all open - all three are done
+now.
+
+**Per-player mission state, launch, and season resolution done
+(2026-10-02):** `InProgressMission` (`core/.../model`, Kryo-registered)
+plus `MissionLaunch`/`MissionProgress` (`core/.../rules`) close out the
+list directly above — the per-player state, the resolver, and the
+`AssignmentState.ASSIGNED` re-confirmation are all done now, not just the
+pure formula/content shape. `Personnel` gained `assignedMissionId`
+(nullable; for Astronaut/Mission Control, `ASSIGNED` now means "on this
+mission instance," the same way `SetSpecialist.rdTargetComponentId`
+already disambiguates SET's own `ASSIGNED`). Two user decisions:
+crew/controller skill contribution for a given skill is the **average**
+across every assigned person, not a sum (a sum would push the weighted-
+average blend's inputs past the 0-100 scale §2.5(e)'s own fix depends
+on); a `CATASTROPHIC` outcome permanently loses the **entire** assigned
+crew, not one random member (matching real catastrophic accidents -
+Apollo 1, Challenger, Columbia - with no partial survival; `baspm.md`'s
+own `Player.AddFallenAstronaut` confirms BASPM permanently removes a
+named astronaut here, though the exact who/how-many rule needs
+`E:\Temp\BASPM` access to trace, flagged as `baspm.md` §8.4 item 6 for
+later). Lost astronauts are reported as `PersonnelDeparture` with a new
+`DepartureReason.LOST_IN_ACCIDENT`, reusing the existing event record
+rather than inventing a parallel one. Composition order:
+`PersonnelLifecycle` → `MissionProgress` → `TrainingProgress` →
+`ResearchProgress` → `HiringPool.refreshCandidates`. **Wired into the bot
+harness the same day:** three original fixture mission configurations
+(`sputnik-launch-std`, `explorer-mission-std`, `mercury-mission-std` -
+one uncrewed single-season, one uncrewed multi-season, one crewed
+multi-season with every step flagged crew-risk) and a new
+`maybeLaunchMission` journaled-action stand-in. **A real bot-shape
+change this forced:** an Astronaut/Mission Control officer's idle-to-
+`ASSIGNED` transition used to be a direct per-employee coin flip inside
+`shuffleAstronaut`/`shuffleMissionControlOfficer` - since `ASSIGNED` now
+always points at a real mission, that path moved entirely into
+`maybeLaunchMission`, and the per-employee shuffle only decides idle vs.
+training now. New invariants: the bidirectional `ASSIGNED`/
+`assignedMissionId` pairing (both directions - the person's own state and
+every `InProgressMission`'s own assigned-id lists), nobody on two
+missions at once, season index in range, and (added once exact counts
+landed) every mission's own assigned-list sizes match its configuration's
+declared counts. **Numbers (same 200-game/80-season/seed-42 run, after
+both balance-hole fixes below): 2,138 missions launched, mission steps
+1,610 successful / 420 minor-glitch-solved / 475 minor glitch / 650
+failure / 37 catastrophic (all from `mercury-mission-std`, the only
+crew-risk configuration), 74 astronauts lost in accidents, 17 retirements
+specifically via the new retire-on-release check (already included in
+the 1,032 total retired, not additional).** **The personnel numbers
+shifted a lot more than expected versus the pre-mission-sim baseline, and
+in the opposite direction from a first guess** - resignations roughly
+*quadrupled* (1,098 vs. 223 before) and the Excellent hiring band fell by
+more than half (12,604 vs. 27,043), meaning *more* idle time, not less.
+Cause, not a bug: Astronaut/
+Mission Control officers lost their old unconditional coin-flip into
+`ASSIGNED` (busy-morale bonus to roughly half of them every reassignment
+roll) and now only reach `ASSIGNED` via `maybeLaunchMission` actually
+firing (15% chance/season, exactly however many a picked configuration's
+own counts require) - otherwise they sit `IDLE` losing morale every
+season instead. **Two balance holes this surfaced were both
+resolved the same day (user, 2026-10-02), not left open:**
+`MissionConfiguration` now declares its own exact
+`requiredAstronautCount`/`requiredMissionControlOfficerCount` (replacing
+the earlier content-derived boolean shape - `MissionLaunch` rejects any
+other count, via new `WRONG_ASTRONAUT_COUNT`/
+`WRONG_MISSION_CONTROL_OFFICER_COUNT` outcomes); and `MissionProgress`
+now retires an over-age crew/controller on release instead of returning
+them to `IDLE` (closing the free-relaunch loophole - a `retirementAgeFor`
+helper moved to `PersonnelLifecycle`, package-private, shared by both
+resolvers). Harness and numbers updated to match (`maybeLaunchMission`
+now picks exactly a configuration's own declared counts via
+`pickExactlyIdleIds`, not a random 1-2) - see `design.md` §3.10 for the
+full before/after numbers tables, including the second pass after both
+fixes landed. **This completes M2's own mission-simulation exit
+criterion** (a multi-season mission spanning several turns, bot-driven)
+— still open for this slice: post-mission reliability change,
+mission-based skill growth, prestige/goals, the mission's own cost at
+launch, the goal-dependency reliability modifier, and the Expert trait.
 
 Git repo
 initialized 2026-09-27 and pushed

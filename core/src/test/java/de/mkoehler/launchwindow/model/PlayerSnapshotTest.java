@@ -48,6 +48,7 @@ class PlayerSnapshotTest {
         astronaut.setSkill(AstronautSkill.PILOTING, 70.5);
         astronaut.setAssignmentState(AssignmentState.ASSIGNED);
         astronaut.setAgingProgressSeasons(2);
+        astronaut.setAssignedMissionId("m0");
         original.setAstronauts(List.of(astronaut));
 
         SetSpecialist specialist = new SetSpecialist("set-1", "Omar Idris", 41, 75, 55);
@@ -71,6 +72,9 @@ class PlayerSnapshotTest {
         original.setNextPersonnelId(3);
         original.setOpenedProgramIds(List.of("sputnik-1"));
         original.setMissionComponents(Map.of("rocket-1", new OwnedMissionComponent(42.5, 17.0)));
+        original.setInProgressMissions(
+            Map.of("m0", new InProgressMission("m0", "sputnik-1-std", List.of("astro-1"), List.of("mco-1"))));
+        original.setNextMissionInstanceId(1);
 
         String json = mapper.writeValueAsString(original);
         PlayerSnapshot restored = mapper.readValue(json, PlayerSnapshot.class);
@@ -92,6 +96,7 @@ class PlayerSnapshotTest {
         assertEquals(AssignmentState.ASSIGNED, restoredAstronaut.getAssignmentState());
         assertEquals(70.5, restoredAstronaut.getSkill(AstronautSkill.PILOTING));
         assertEquals(2, restoredAstronaut.getAgingProgressSeasons());
+        assertEquals("m0", restoredAstronaut.getAssignedMissionId());
 
         assertEquals(1, restored.getSetSpecialists().size());
         SetSpecialist restoredSpecialist = restored.getSetSpecialists().get(0);
@@ -121,6 +126,15 @@ class PlayerSnapshotTest {
         OwnedMissionComponent restoredComponent = restored.getMissionComponents().get("rocket-1");
         assertEquals(42.5, restoredComponent.getCurrentReliability());
         assertEquals(17.0, restoredComponent.getFloorReliability());
+
+        assertEquals(1, restored.getInProgressMissions().size());
+        InProgressMission restoredMission = restored.getInProgressMissions().get("m0");
+        assertEquals("m0", restoredMission.getId());
+        assertEquals("sputnik-1-std", restoredMission.getMissionConfigurationId());
+        assertEquals(0, restoredMission.getCurrentSeasonIndex());
+        assertEquals(List.of("astro-1"), restoredMission.getAssignedAstronautIds());
+        assertEquals(List.of("mco-1"), restoredMission.getAssignedMissionControlOfficerIds());
+        assertEquals(1, restored.getNextMissionInstanceId());
     }
 
     /**
@@ -152,5 +166,37 @@ class PlayerSnapshotTest {
         snapshot.setMissionComponents(Map.of("rocket-1", new OwnedMissionComponent(10, 10)));
 
         assertDoesNotThrow(() -> snapshot.getMissionComponents().put("rocket-2", new OwnedMissionComponent(5, 5)));
+    }
+
+    /**
+     * Verifies that {@code setInProgressMissions} defensively copies its
+     * argument, so passing an immutable map does not leave the snapshot's
+     * own map immutable.
+     */
+    @Test
+    void inProgressMissionsSetterCopiesAnImmutableMapIntoAMutableOne() {
+        PlayerSnapshot snapshot =
+            new PlayerSnapshot("Hanseatic Space Agency", Archetype.NASA, 25_000, 0, 5_000, 1);
+
+        snapshot.setInProgressMissions(
+            Map.of("m0", new InProgressMission("m0", "sputnik-1-std", List.of(), List.of())));
+
+        assertDoesNotThrow(() -> snapshot.getInProgressMissions()
+            .put("m1", new InProgressMission("m1", "sputnik-1-std", List.of(), List.of())));
+    }
+
+    /**
+     * Verifies that {@code allocateMissionInstanceId} hands out successive
+     * ids and advances its own counter, mirroring
+     * {@code allocatePersonnelId}'s own shape.
+     */
+    @Test
+    void allocateMissionInstanceIdHandsOutSuccessiveIds() {
+        PlayerSnapshot snapshot =
+            new PlayerSnapshot("Hanseatic Space Agency", Archetype.NASA, 25_000, 0, 5_000, 1);
+
+        assertEquals("m0", snapshot.allocateMissionInstanceId());
+        assertEquals("m1", snapshot.allocateMissionInstanceId());
+        assertEquals(2, snapshot.getNextMissionInstanceId());
     }
 }

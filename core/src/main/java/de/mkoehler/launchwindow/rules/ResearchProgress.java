@@ -97,8 +97,8 @@ import java.util.random.RandomGenerator;
  * their assignment is cleared.</p>
  *
  * <p><b>Composition order: {@link PersonnelLifecycle}, then
- * {@link TrainingProgress}, then this class, then
- * {@code HiringPool.refreshCandidates} last</b> - the exact order
+ * {@link MissionProgress}, then {@link TrainingProgress}, then this
+ * class, then {@code HiringPool.refreshCandidates} last</b> - the exact order
  * {@link HiringPool}'s own Javadoc documents. A {@code SET} employee who
  * departed this same season does no further R&amp;D, and running after
  * {@code TrainingProgress} (not before) is also what makes the two

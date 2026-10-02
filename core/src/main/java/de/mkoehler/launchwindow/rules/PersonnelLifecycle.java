@@ -57,6 +57,14 @@ import java.util.Objects;
  * &sect;2.2(c) - that earlier entry is superseded for the *shape* of the
  * rule, not overwritten, so the history stays legible.</p>
  *
+ * <p><b>Protecting someone while genuinely on a mission is correct, but
+ * naively releasing and immediately relaunching them every season would
+ * reopen the same "never actually unprotected long enough to depart" gap
+ * in a different shape</b> - {@link MissionProgress}'s own retire-on-
+ * release check closes this (see its own Javadoc and {@code design.md}
+ * &sect;2.5(f)), rather than this method's protection rule needing to
+ * change again.</p>
+ *
  * <p><b>Two interpretations of the user's original instruction - both
  * confirmed by the user after review (2026-09-30), not left as unilateral
  * judgment calls:</b> (1) the user's wording named retirement specifically
@@ -71,10 +79,12 @@ import java.util.Objects;
  * run at all. So there is no real multi-turn window where a crew sits
  * merely {@code ASSIGNED}-but-not-yet-flying while a departure check could
  * fire on them - by the time any check runs, a scheduled mission has
- * already become active. <b>Still worth a quick confirmation once mission
- * simulation actually exists (slice 3, {@code design.md} &sect;2.5)</b>,
- * since this reasoning is about the *intended* scheduling shape, not
- * something verified against real running code yet.</p>
+ * already become active. <b>Confirmed mechanically, not just argued,
+ * once mission simulation actually shipped (2026-10-02, {@code design.md}
+ * &sect;2.5(f)):</b> {@code MissionLaunch}/{@code MissionProgress} launch
+ * a mission and resolve its first season's step batch in the same pass,
+ * so this reasoning about the intended scheduling shape turned out to
+ * match the real implementation.</p>
  *
  * <p><b>All the numeric constants below are Launch Window's own values, not
  * BASPM's</b> - {@code design.md} &sect;1.2 forbids reusing BASPM's own
@@ -146,6 +156,23 @@ public final class PersonnelLifecycle {
      * Not instantiable; this class only exposes static methods.
      */
     private PersonnelLifecycle() {
+    }
+
+    /**
+     * Returns the given group's retirement age, in whole years.
+     * Package-private: a shared lookup for any resolver in this package
+     * that needs to check age against retirement (e.g. {@link MissionProgress}'s
+     * retire-on-release check), not a public part of this class's own API.
+     *
+     * @param group the personnel group
+     * @return that group's retirement age
+     */
+    static int retirementAgeFor(PersonnelGroup group) {
+        return switch (group) {
+            case ASTRONAUT -> ASTRONAUT_RETIREMENT_AGE;
+            case SET -> SET_RETIREMENT_AGE;
+            case MISSION_CONTROL -> MISSION_CONTROL_RETIREMENT_AGE;
+        };
     }
 
     /**

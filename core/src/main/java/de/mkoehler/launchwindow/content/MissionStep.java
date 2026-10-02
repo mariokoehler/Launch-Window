@@ -11,13 +11,14 @@ import java.util.Objects;
  * {@link de.mkoehler.launchwindow.rules.MissionStepResolution} needs to
  * resolve it, not who is assigned to it. Involvement is expressed against
  * skills/components, never specific personnel: which astronaut or
- * controller actually fills a skill's involvement, and how several crew
- * sharing one skill combine into that skill's single contribution, are both
- * left to a future per-player mission resolver (see
- * {@code design.md} &sect;2.5(d) for that resolver's own status) -
+ * controller actually fills a skill's involvement is left to
+ * {@link de.mkoehler.launchwindow.rules.MissionLaunch}'s own assignment:
+ * how several crew sharing one skill combine into that skill's single
+ * contribution is the <em>mean</em> skill value across every assigned
+ * person (user decision, {@code design.md} &sect;2.5(f)) -
  * {@code baspm.md} &sect;8.2's own trace
  * ("summed per-skill-per-crew-member") confirms crew contributions are
- * tallied per skill but never pins down that aggregation rule itself.</p>
+ * tallied per skill but does not itself pin down this aggregation rule.</p>
  *
  * <p>A content-definition type: shared, read-only game data loaded from a
  * content pack (not yet implemented - see {@code design.md} &sect;5's M3),

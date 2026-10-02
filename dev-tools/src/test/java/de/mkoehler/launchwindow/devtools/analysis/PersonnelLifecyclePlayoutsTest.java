@@ -29,11 +29,11 @@ class PersonnelLifecyclePlayoutsTest {
     /**
      * Verifies a run's own bookkeeping is internally consistent: every
      * employee that started or was hired is accounted for as resigned,
-     * retired, or still employed, with no double-counting or loss - a run
-     * that throws {@code IllegalStateException} from {@code checkInvariants}
-     * would already fail this test outright, but this also catches the
-     * report's own arithmetic being wrong even if the invariant checks
-     * pass.
+     * retired, lost in a mission accident, or still employed, with no
+     * double-counting or loss - a run that throws
+     * {@code IllegalStateException} from {@code checkInvariants} would
+     * already fail this test outright, but this also catches the report's
+     * own arithmetic being wrong even if the invariant checks pass.
      */
     @Test
     void everyStartingEmployeeIsAccountedFor() {
@@ -42,7 +42,8 @@ class PersonnelLifecyclePlayoutsTest {
         assertEquals(30, report.gamesPlayed());
         assertEquals(60, report.seasonsPerGame());
         assertEquals(report.employeesStarted() + report.hiredCount(),
-            report.resignedCount() + report.retiredCount() + report.stillEmployedAtEnd());
+            report.resignedCount() + report.retiredCount() + report.lostInAccidentCount()
+                + report.stillEmployedAtEnd());
         assertTrue(report.employeesStarted() > 0);
         assertTrue(report.hiredCount() > 0, "expected at least one bot hire over 60 seasons");
     }
@@ -108,6 +109,56 @@ class PersonnelLifecyclePlayoutsTest {
         PersonnelPlayoutReport report = PersonnelLifecyclePlayouts.run(100, 5, 100, 7L);
 
         assertTrue(report.researchCompletedCount() > 0, "expected at least one R&D season over 100 seasons");
+    }
+
+    /**
+     * Verifies a long enough run actually launches missions and resolves
+     * mission steps too - a sign the bot's {@code maybeLaunchMission} path
+     * and {@code MissionProgress} are both genuinely exercised, not just
+     * theoretically wired together. Every run already self-checks the
+     * ASSIGNED/assignedMissionId pairing invariant internally (see
+     * {@code checkMissionAssignmentConsistency}); without this, a fixture
+     * or bot change could quietly make that pairing check vacuous by never
+     * actually launching a mission.
+     */
+    @Test
+    void aLongRunLaunchesMissionsAndResolvesSteps() {
+        PersonnelPlayoutReport report = PersonnelLifecyclePlayouts.run(100, 5, 100, 7L);
+
+        assertTrue(report.missionsLaunchedCount() > 0, "expected at least one mission launched over 100 seasons");
+        int stepsResolved = report.missionStepSuccessfulCount() + report.missionStepMinorGlitchSolvedCount()
+            + report.missionStepMinorGlitchCount() + report.missionStepFailureCount()
+            + report.missionStepCatastrophicCount();
+        assertTrue(stepsResolved > 0, "expected at least one mission step resolved over 100 seasons");
+    }
+
+    /**
+     * Verifies a long enough run actually produces a crew loss too, since
+     * {@code mercury-mission-std}'s every step is flagged crew-risk - a
+     * sign the {@code CATASTROPHIC} crew-loss path is genuinely reachable
+     * under the fixture's own numbers, not just theoretically implemented.
+     */
+    @Test
+    void aLongRunProducesAtLeastOneCrewLoss() {
+        PersonnelPlayoutReport report = PersonnelLifecyclePlayouts.run(200, 5, 100, 7L);
+
+        assertTrue(report.lostInAccidentCount() > 0, "expected at least one astronaut lost over 200 games");
+    }
+
+    /**
+     * Verifies a long enough run actually exercises
+     * {@code MissionProgress}'s own retire-on-release check (an employee
+     * who had already reached retirement age at the moment a mission
+     * released them) - a sign the loophole-closing path is genuinely
+     * reachable under the fixture's own starting ages/mission lengths, not
+     * just theoretically implemented.
+     */
+    @Test
+    void aLongRunRetiresSomeoneOnMissionRelease() {
+        PersonnelPlayoutReport report = PersonnelLifecyclePlayouts.run(100, 5, 100, 7L);
+
+        assertTrue(report.retiredOnMissionReleaseCount() > 0,
+            "expected at least one retire-on-release over 100 seasons");
     }
 
     /**

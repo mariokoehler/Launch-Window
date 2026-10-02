@@ -250,6 +250,15 @@ same session it comes up**, the same standing-note-to-self habit as
   (§2.2) actually gets designed and built — astronaut-as-celebrity was a
   real, deliberate strategy, not just a game giving idle astronauts
   something to do.
+- **Surfaced while deciding `CATASTROPHIC` crew loss for §2.5(f)
+  (2026-10-02): real catastrophic spaceflight accidents lost the entire
+  crew, not a partial/random subset** — Apollo 1's launchpad fire, Soyuz 1
+  and Soyuz 11's re-entry failures, and the Challenger and Columbia shuttle
+  losses all claimed every crew member aboard, never just one. This is the
+  real-world fact behind the "whole assigned crew" decision in §2.5(f), not
+  an arbitrary balance choice — worth a short, sober in-fiction note the
+  first time a player actually experiences this outcome, naming the real
+  precedent rather than letting it read as a pure game-mechanic penalty.
 
 ### 1.2 Content & asset policy: no copying BASPM's copyrighted content
 
@@ -885,22 +894,22 @@ proceeds:
     `Constants.xml`, and `baspm.md` §8.2 never gives their exact values) per
     `design.md`
     §1.2 — concrete placeholders for the bot harness to tune later, not
-    BASPM's numbers and not final balance. **Deferred to a later sub-slice**
-    (no caller exists yet, so this is not wired into the bot harness yet
-    either): the per-player in-progress-mission state, the resolver that
-    actually walks a season's steps against that state, post-mission
-    reliability change (expected to reuse the same headroom-based
-    diminishing-returns shape as `SkillGrowth.rdReliabilityGain`'s own
-    headroom term, against the component's absolute `maxReliability` this
-    time rather than `maxRdReliability` - but as a single random-factor
-    draw against the whole component, not a multi-slot one: BASPM's own
-    post-mission formula, `baspm.md` §10.4, has no slot concept at all,
-    only R&D does, per §10.8), mission-based astronaut/controller
-    skill growth, re-confirming `AssignmentState.ASSIGNED` is still a
-    safe "on an active mission" proxy once real mission scheduling exists
-    (§2.2(c)'s own open follow-up), and **a post-flight SET-release
-    mechanic parallel to R&D's own** (see R&D's entry above,
-    `ResearchComponentMaxed`): `baspm.md` §10.4's
+    BASPM's numbers and not final balance. **The per-player in-progress-
+    mission state and the resolver that walks a season's steps against it
+    are done - see (f) below**, including the re-confirmation of
+    `AssignmentState.ASSIGNED` this entry originally deferred alongside
+    them (resolved mechanically, not just re-argued, once launch and
+    season-0 resolution turned out to genuinely share one pass). **Still
+    deferred to a later sub-slice:** post-mission reliability change
+    (expected to reuse the same headroom-based diminishing-returns shape as
+    `SkillGrowth.rdReliabilityGain`'s own headroom term, against the
+    component's absolute `maxReliability` this time rather than
+    `maxRdReliability` - but as a single random-factor draw against the
+    whole component, not a multi-slot one: BASPM's own post-mission
+    formula, `baspm.md` §10.4, has no slot concept at all, only R&D does,
+    per §10.8), mission-based astronaut/controller skill growth, and **a
+    post-flight SET-release mechanic parallel to R&D's own** (see R&D's
+    entry above, `ResearchComponentMaxed`): `baspm.md` §10.4's
     `UpdatePlayersMissionComponentAfterMission` unassigns every SET
     researcher from a component whenever a mission flight leaves its
     reliability at or above `MaxRDReliability` - a state check, not a
@@ -916,12 +925,13 @@ proceeds:
     `(componentId, percent)`, `controllerInvolvements`/`crewInvolvements`
     as `(skill, percent)` against `MissionControlSkill`/`AstronautSkill`)
     plus the `crewRisk` flag. Skills, not specific personnel: which actual
-    astronaut/controller fills a skill slot, and how several crew sharing
-    one skill combine into that skill's single contribution, are both
-    left to the future per-player resolver — `baspm.md` §8.2's own trace
-    ("summed per-skill-per-crew-member") confirms crew contributions are
-    tallied per skill but never pins down the multi-crew aggregation rule
-    itself. `MissionSeason` is just `List<MissionStep> steps` (at least
+    astronaut/controller fills a skill slot is `MissionLaunch`'s own job
+    (§2.5(f)); how several crew sharing one skill combine into that
+    skill's single contribution is the mean skill value across every
+    assigned person, decided in §2.5(f) once that resolver existed —
+    `baspm.md` §8.2's own trace ("summed per-skill-per-crew-member")
+    confirms crew contributions are tallied per skill but did not itself
+    settle this aggregation rule. `MissionSeason` is just `List<MissionStep> steps` (at least
     one); `MissionConfiguration` now holds `List<MissionSeason> seasons`
     (at least one) instead of a stored `durationInSeasons` — that accessor
     is now derived (`seasons.size()`), so the two can never disagree.
@@ -968,6 +978,146 @@ proceeds:
     but the user chose to keep the simpler, already-implemented shape
     rather than rework it for a reading of that one phrase. Not expected
     to be revisited without a concrete balance reason to.
+  - **(f) Per-player mission state, launch, and season resolution
+    (2026-10-02):** `InProgressMission` (`core/.../model`, mutable, Kryo-
+    registered) is the per-player runtime instance a `MissionConfiguration`
+    produces once launched — `id` (a fresh instance id, since the same
+    configuration can run more than once), `missionConfigurationId`,
+    `currentSeasonIndex` (0-based, into `seasons()`), and the two assigned-
+    personnel id lists (`assignedAstronautIds`/`assignedMissionControlOfficerIds`).
+    `PlayerSnapshot` gains `inProgressMissions` (keyed by instance id, a
+    `LinkedHashMap` for reproducible iteration order against the shared
+    random source — same reasoning as `ContentCatalog.indexById`) and
+    `nextMissionInstanceId`/`allocateMissionInstanceId()` (prefix `m`,
+    same shape as `allocatePersonnelId()`'s `p` prefix).
+    `Personnel` gains `assignedMissionId` (nullable) — for Astronaut/
+    Mission Control, `AssignmentState.ASSIGNED` now means "assigned to
+    this mission instance," the same way `SetSpecialist.rdTargetComponentId`
+    already disambiguates SET's own `ASSIGNED`. **This also resolves
+    §2.2(c)'s own standing re-confirmation note**, now that mission
+    scheduling is real: launching a mission and resolving its first
+    season's step batch happen in the same pass (see below), so there is
+    never a turn boundary where a crew sits `ASSIGNED` without also
+    already being active — exactly the reasoning the user accepted on
+    trust back in §2.2(c), now mechanically true rather than just argued.
+    - **`MissionLaunch.launch(snapshot, missionConfigurationId,
+      astronautIds, controllerIds, catalog)`** (`core/.../rules`), a plain
+      headless method a future action-dispatch system will call (M4, not
+      this slice) — returns a `MissionLaunchOutcome` rather than throwing,
+      the same `HireOutcome`/`OpenProgramOutcome` pattern. Validates the
+      configuration and its program exist/are open, and that the supplied
+      crew/controllers are each a known, currently-`IDLE` id with no
+      duplicates. **Decided (user, 2026-10-02), superseding this slice's
+      own first-draft shape: a mission's crew/controller headcount is
+      declared on `MissionConfiguration` itself
+      (`requiredAstronautCount`/`requiredMissionControlOfficerCount`), not
+      inferred from its content.** The original design scanned every step
+      of every season for a non-empty `crewInvolvements`/`controllerInvolvements`
+      to decide whether a mission needs crew/controllers *at all*; the
+      user's own framing was stronger - a real mission states exactly how
+      many astronauts/controllers it needs, and a launch must supply
+      exactly that many, not "at least one" or "any number." Which skills
+      they need is still expressed by each `MissionStep`'s own involvement
+      lists, unchanged - the headcount is a requirement layered on top,
+      not a replacement; it does not assign a specific seat to a specific
+      skill (a possible stricter reading the user's own wording also
+      suggested - "how many astronauts and flight controllers *with which
+      skills*" - raised but not adopted, since the involvement-list
+      skills already answer "which skills," just not seat-by-seat; worth
+      revisiting if per-seat skill assignment ever becomes its own
+      design need). A launch supplying any count other than the exact
+      required one is rejected (`MissionLaunchOutcome.WRONG_ASTRONAUT_COUNT`/
+      `WRONG_MISSION_CONTROL_OFFICER_COUNT`), which still closes the same
+      departure-protection exploit the content-derived shape existed to
+      close in the first place: a configuration requiring 0 astronauts can
+      never have one assigned to it, so parking an idle astronaut on an
+      uncrewed mission just to shield them from resignation/retirement
+      checks is still impossible. On success, creates the
+      `InProgressMission`, sets every assigned id's
+      `AssignmentState`/`assignedMissionId`, and stores it.
+    - **`MissionProgress.advanceSeason(snapshot, catalog, random)`**
+      (`core/.../rules`), the resolver that actually walks one season's
+      step batch for every in-progress mission. For each step: the
+      component contribution sum weights each `effectiveReliability`
+      (modifier fixed at 0 for now — the §11.3 goal-dependency bonus/
+      penalty this parameter exists for has no caller until §2.6/§2.9
+      exist) by involvement percentage, exactly as `MissionStepResolution`
+      expects. **Decided (user, 2026-10-02): the crew/controller
+      contribution for a given skill is the *average* skill value across
+      every assigned crew/controller**, not a sum — a sum would push the
+      weighted-average blend's inputs past the 0-100 scale §2.5(e)'s own
+      fix depends on, rewarding crew size rather than crew quality; average
+      keeps both contributions on the same 0-100 scale regardless of how
+      many people are assigned. Each step's outcome is reported as a new
+      `MissionStepResolved` event. **On `FAILURE`/`CATASTROPHIC`, the
+      mission ends immediately** (no further steps that season or later),
+      consistent with §2.5(a)'s original trace. **Decided (user,
+      2026-10-02): a `CATASTROPHIC` outcome permanently loses the
+      *entire* assigned crew**, not one random member — matching real
+      catastrophic accidents with no partial survival (Apollo 1, Challenger,
+      Columbia; `baspm.md`'s own `Player.AddFallenAstronaut` mechanism
+      confirms BASPM permanently removes a named astronaut on this outcome,
+      though the exact "who/how many" rule is not yet traced against the
+      decompiled source - see `baspm.md` §8.4 item 6 for that follow-up).
+      Each lost astronaut is
+      reported as a `PersonnelDeparture` with a new `DepartureReason.LOST_IN_ACCIDENT`
+      — reusing the existing event/record rather than inventing a parallel
+      one, since every field it already carries (age/morale/assignment
+      state at exit) applies unchanged. Mission control officers are never
+      crew and are not at risk; on any mission end (success, `FAILURE`, or
+      `CATASTROPHIC`), every surviving assigned person (controllers always,
+      astronauts unless just lost) is released: back to `IDLE` with
+      `assignedMissionId` cleared, or retired on the spot instead - see
+      the retire-on-release decision below. **A successfully completed
+      mission** (every season's step batch resolved without a mission-
+      ending outcome, `currentSeasonIndex` reaching `durationInSeasons`)
+      releases its crew the same way; prestige for a completed mission is
+      §2.6's job, not this resolver's — not yet implemented.
+    - **Decided (user, 2026-10-02): releasing a crew/controller who has
+      already reached their group's retirement age retires them on the
+      spot, with a `PersonnelDeparture`/`DepartureReason.RETIRED` event,
+      instead of returning them to `IDLE`.** This closes a loophole
+      harness-wiring this slice surfaced (§3.10): launching is free and
+      runs before `PersonnelLifecycle` each season, so without this check
+      an over-age employee released one season could be relaunched the
+      very next, every season, and never sit `IDLE` long enough for
+      `PersonnelLifecycle`'s own retirement check to ever catch them -
+      structurally different from the training-based "immortality
+      loophole" §2.2(c) already closed, since that one was about a
+      protection *rule*, not a scheduling *gap*. Applies to both
+      Astronaut and Mission Control (both are shielded from departure
+      while `ASSIGNED`, so both have the same loophole), using a new
+      package-private `PersonnelLifecycle.retirementAgeFor(PersonnelGroup)`
+      helper shared by both resolvers. The user's own stated reasoning
+      doubled as a concrete UX idea for later, not implemented now - a
+      news-bulletin beat ("after a successful/failed mission, fellow
+      astronaut John Doe decided enough is enough and retired...") -
+      deferred since no news/bulletin system exists yet; the event stream
+      this already produces (`MissionStepResolved` plus the `RETIRED`
+      departure, in order) carries everything such a bulletin would need
+      once one does.
+    - **Composition order**: `MissionLaunch.launch` is a journaled player
+      action, so it runs in the same "before any resolver" bucket as
+      `ProgramOpening.open`/`HiringPool.hire`. `MissionProgress.advanceSeason`
+      runs right after `PersonnelLifecycle.advanceSeason` (so a crew
+      lost/released this season is reflected before `TrainingProgress`/
+      `ResearchProgress` run against the same snapshot) and before both of
+      those and `HiringPool.refreshCandidates` — the full order is now
+      `PersonnelLifecycle` → `MissionProgress` → `TrainingProgress` →
+      `ResearchProgress` → `HiringPool.refreshCandidates`.
+    - **Deferred, same posture as §2.5(d)/(e)'s own lists:** post-mission
+      reliability change (component wear/growth from actually flying —
+      expected to reuse `SkillGrowth.rdReliabilityGain`'s shape against
+      `maxReliability` rather than `maxRdReliability`, per §3.4's two-
+      ceiling design), mission-based astronaut/controller skill growth,
+      prestige/goals (§2.6), the mission's own cost at launch (§2.1 budget
+      interaction - `MissionLaunch` does not currently charge anything),
+      the §11.3 goal-dependency reliability modifier, and the Expert trait.
+      **Two balance holes harness-wiring this surfaced (§3.10) are both
+      resolved, same day, not left open:** the crew-size question became
+      the exact-headcount decision above (`requiredAstronautCount`/
+      `requiredMissionControlOfficerCount`); the free-relaunch retirement
+      loophole became the retire-on-release decision above.
 - 2.6 **Prestige, goals & scoring — analyzed 2026-09-27, see `baspm.md` §11
   for the full trace.**
   - **(a) How BASPM does it:** goals are `Generic` (universal race
@@ -1379,7 +1529,15 @@ unconfirmed:**
   `PERMANENT`) no longer protects Astronaut/Mission Control from departure
   at all - only `AssignmentState.ASSIGNED` does now, and SET is never
   protected regardless - an employee stuck in `PERMANENT` training is
-  exactly as eligible to resign/retire as an idle one, every season. **A
+  exactly as eligible to resign/retire as an idle one, every season.
+  **A second, mission-shaped variant of this same loophole surfaced
+  later (2026-10-02) and is also closed, by a different mechanism - see
+  §2.5(f)'s retire-on-release decision:** `ASSIGNED` protecting someone
+  on an active mission is correct, but releasing and immediately
+  relaunching them every season would otherwise let an over-age employee
+  never sit unprotected long enough for a retirement check to run;
+  `MissionProgress` retires them on release instead, rather than
+  reworking the protection rule itself again. **A
   termination guard is still needed for a different reason, not this
   one:** without a cap on re-enrollment, a standing order with learning
   potential 0 (the gain is always 0) or a target at/above `SkillGrowth.SKILL_CAP`
@@ -2530,6 +2688,99 @@ training completions (avg. gain 5.11), 3,832 hires, hiring-pool band hits
 0/573/20,384/27,043 (poor/average/good/excellent), 599 programs opened,
 and 36,285 R&D seasons completed (avg. reliability gain 1.53).**
 
+**Mission simulation wired in (2026-10-02):** `MissionLaunch`/`MissionProgress`
+added to the harness, completing §2.5(f)'s own M2 exit criterion - a
+multi-season mission spanning several turns, now actually driven by the
+bot. Three new fixture mission configurations (`sputnik-launch-std`,
+one season, uncrewed, controller-involved; `explorer-mission-std`, two
+seasons, uncrewed; `mercury-mission-std`, two seasons, crewed, every step
+flagged crew-risk - see `buildCatalog()`'s own Javadoc for the exact
+step/skill composition, original structure per `design.md` &sect;1.2, not
+copying any real BASPM mission's own layout). `maybeLaunchMission` is the
+new journaled-action stand-in (same bucket as `maybeHire`/
+`maybeOpenProgram`): picks a random configuration whose program is open
+and exactly as many random idle astronauts/controllers as its own
+declared `requiredAstronautCount`/`requiredMissionControlOfficerCount`
+(via `pickExactlyIdleIds`), same "ordinary outcome, not an error" posture
+when not enough idle personnel exist to meet either count.
+`MissionProgress.advanceSeason`
+runs right after `PersonnelLifecycle`, per `design.md` &sect;2.5(f)'s
+decided composition order. **A real bot-shape change this slice forced**:
+an Astronaut/Mission Control officer's idle-to-`ASSIGNED` transition used
+to happen directly inside `shuffleAstronaut`/`shuffleMissionControlOfficer`
+(a per-employee coin flip); since `ASSIGNED` now always points at a real
+`InProgressMission`, that transition moved entirely into
+`maybeLaunchMission` - the per-employee shuffle now only ever decides
+idle vs. training, never idle vs. assigned.
+
+**New invariants:** `checkMissionInvariants` (roster-size delta matches
+reported `LOST_IN_ACCIDENT` departures exactly, each one astronaut-only
+with that reason) and `checkMissionAssignmentConsistency` (the
+bidirectional `ASSIGNED`/`assignedMissionId` pairing, from both the
+person's own side and every `InProgressMission`'s own assigned-id lists;
+nobody assigned to two missions at once; every mission's season index
+within its own configuration's range) - the same "re-derive independently,
+don't call the resolver's own logic" posture every earlier invariant in
+this harness uses.
+
+**Numbers, first pass (200-game/80-season/seed-42 run, crew/controller
+counts still content-derived, no retire-on-release yet): 2,089 missions
+launched, mission steps resolved 1,567 successful / 400 minor-glitch-
+solved / 451 minor glitch / 673 failure / 40 catastrophic (all 40 from
+`mercury-mission-std`, the only crew-risk configuration - sputnik/
+explorer can only ever downgrade to `FAILURE`), 57 astronauts lost in
+accidents.**
+
+**The personnel numbers from that first pass were not comparable to the
+pre-mission-sim numbers quoted earlier in this section, and the direction
+of the shift was the opposite of what a first reading suggests:** 1,047
+resigned (vs. 223 before)/1,038 retired (vs. 1,244)/5,342 still employed
+(vs. 5,365)/84,142 training completions (vs. 73,553)/4,484 hires (vs.
+3,832)/hiring bands 0/2,127/33,084/12,789 poor-average-good-excellent
+(vs. 0/573/20,384/27,043)/594 programs opened (vs. 599)/35,765 R&amp;D
+seasons (vs. 36,285). Resignations roughly *quadrupled*, not dropped, and
+the Excellent hiring band fell by more than half - **more idle time, not
+less.** The cause is the bot-shape change itself, not a bug: Astronaut/
+Mission Control officers lost their old unconditional coin-flip into
+`ASSIGNED` (which granted the busy-morale bonus to roughly half of them
+every reassignment roll), and now reach `ASSIGNED` only when
+`maybeLaunchMission` actually fires and picks them - every other season
+they sit `IDLE`, losing morale. A genuine side effect of making
+`ASSIGNED` mean something real, not a defect in this slice's own
+correctness, and still true after the two fixes below.
+
+**Two balance holes this first pass surfaced were both resolved the same
+day, not left open - see §2.5(f)'s own entries:** the crew-size question
+became the exact-headcount decision (`requiredAstronautCount`/
+`requiredMissionControlOfficerCount`, replacing the content-derived
+boolean shape); the free-relaunch retirement loophole became the
+retire-on-release decision (`MissionProgress` retires an over-age
+crew/controller on release instead of returning them to `IDLE`). Both
+needed a harness update: `maybeLaunchMission` now reads a configuration's
+own exact counts via `pickExactlyIdleIds` rather than picking a random
+1-2; the fixture's three mission configurations each declare their own
+counts (`sputnik-launch-std`/`explorer-mission-std`: 0 astronauts, 1
+controller; `mercury-mission-std`: 2 astronauts, 1 controller).
+
+**Numbers, second pass (same 200-game/80-season/seed-42 run, both fixes
+in place): 1,098 resigned/1,032 retired/5,333 still employed/83,951
+training completions/4,537 hires/hiring bands 0/2,073/33,323/12,604
+poor-average-good-excellent/598 programs opened/36,313 R&amp;D seasons;
+2,138 missions launched, mission steps resolved 1,610 successful / 420
+minor-glitch-solved / 475 minor glitch / 650 failure / 37 catastrophic,
+74 astronauts lost in accidents, 17 of the 1,032 total retirements
+specifically from the new retire-on-release check (not additional to it
+- already included).** The personnel totals are close to the first
+pass's (within a few percent each), consistent with the random stream
+simply shifting rather than the underlying dynamics changing. **The
+exact-count fix shows up directly and exactly in the accident math**:
+74 lost ÷ 37 catastrophic steps = 2.0 exactly, since
+`mercury-mission-std` now always flies exactly its declared 2 astronauts
+and the whole-crew-loss rule removes both every time; the first pass's
+57 ÷ 40 ≈ 1.4 is consistent with the old random 1-2 crew size instead.
+Confirms whole-crew loss and exact headcounts are working together
+correctly end to end, not just independently.
+
 ### 3.11 Offscreen screenshot tooling for UI checking
 
 **Decided (user, 2026-09-27): reuse Robot-Rampage's `ScreenSnapshot`
@@ -3423,16 +3674,15 @@ here.
     (user, 2026-10-01):** §2.5(c)'s outcome-tier shape is settled - port
     BASPM's full five-tier ladder, uniformly across every step, re-deriving
     Launch Window's own numbers. This slice can start.
-    **Re-confirm while here (§2.2(c), 2026-09-30):** Astronaut/Mission
-    Control's departure protection uses `AssignmentState.ASSIGNED` as a
-    stand-in for "on an active mission," accepted by the user with a
-    reason the seemingly-open "assigned but not yet launched" gap likely
-    isn't real: a mission is only ever `SCHEDULED` until the next turn
-    evaluation, which is also the same evaluation a departure check would
-    run, so there's no real window where a crew sits merely assigned
-    without also already being active. Confirm this holds once real
-    mission scheduling exists — if it doesn't, switch the signal to
-    something closer to "in flight" instead of plain `ASSIGNED`.
+    **Re-confirmation resolved, mechanically rather than just argued
+    (2026-10-02):** Astronaut/Mission Control's departure protection uses
+    `AssignmentState.ASSIGNED` as a stand-in for "on an active mission" -
+    now that `MissionLaunch`/`MissionProgress` exist (§2.5(f)), launching a
+    mission and resolving its first season's step batch happen in the same
+    journaled-action-then-resolver pass, so there genuinely is no turn
+    boundary where a crew sits `ASSIGNED` without already being active,
+    exactly the reasoning the user accepted on trust back when this was
+    first raised (2026-09-30).
     **Pure formula half done (2026-10-01):** `MissionStepResolution` +
     `MissionStepOutcome` (`core/.../rules`) implement the two-roll formula
     itself - see §2.5(d) for the exact shape and its four re-derived
@@ -3441,12 +3691,18 @@ here.
     (`core/.../content`) - see §2.5(e) for the exact fields and their
     percentage-sum rules (the crew-blend-direction question raised there
     is since confirmed - see §2.5(e)'s own "Blend shape confirmed"
-    paragraph). Not yet wired into the bot harness or any caller: the
-    per-player in-progress-mission state, the resolver that walks a
-    season's step batch, post-mission reliability change, and
-    mission-based skill growth are all still open - the ASSIGNED
-    re-confirmation two paragraphs up is also still open and unaffected by
-    this sub-slice.
+    paragraph). **Per-player state, launch, and season resolution done
+    (2026-10-02):** `InProgressMission`, `MissionLaunch`, and
+    `MissionProgress` - see §2.5(f) for the full shape, the average-not-sum
+    crew-contribution decision, and the whole-crew `CATASTROPHIC` loss
+    decision. Wired into the bot harness the same day - see §3.10's own
+    entry for the fixture mission configurations and the real numbers.
+    **Still open, same posture as §2.5(f)'s own deferred list:**
+    post-mission reliability change, mission-based astronaut/controller
+    skill growth, prestige/goals (§2.6), the mission's own cost at launch,
+    the §11.3 goal-dependency reliability modifier, and the Expert trait
+    (the crew-size question and the free-relaunch retirement loophole are
+    both resolved - see §2.5(f)).
   - Slice: budget/funding review, prestige, goals, and the win-condition +
     tie-break check — §2.1/§2.6/§2.9.
   - Slice: random events — §2.7.

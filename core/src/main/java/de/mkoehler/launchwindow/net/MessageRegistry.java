@@ -5,6 +5,7 @@ import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.AstronautSkill;
+import de.mkoehler.launchwindow.model.InProgressMission;
 import de.mkoehler.launchwindow.model.MissionControlOfficer;
 import de.mkoehler.launchwindow.model.MissionControlSkill;
 import de.mkoehler.launchwindow.model.OwnedMissionComponent;
@@ -115,5 +116,9 @@ public final class MessageRegistry {
         // PlayerSnapshot.missionComponents, carried in FetchStateResponse. Never move this line;
         // see the class Javadoc.
         kryo.register(OwnedMissionComponent.class);
+        // Appended 2026-10-02 (M2's mission-simulation per-player state) - referenced by
+        // PlayerSnapshot.inProgressMissions, carried in FetchStateResponse. Never move this line;
+        // see the class Javadoc.
+        kryo.register(InProgressMission.class);
     }
 }

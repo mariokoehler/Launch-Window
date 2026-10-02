@@ -11,8 +11,10 @@ import java.util.random.RandomGenerator;
  * or {@link de.mkoehler.launchwindow.model.Personnel} - summing a step's
  * involved components/controllers/crew into the contribution totals this
  * class takes as input, and walking a season's step batch against
- * per-player mission state, are both a future caller's responsibility; see
- * {@code design.md} &sect;2.5(d) for that caller's own status.</p>
+ * per-player mission state, are both {@link MissionProgress}'s own
+ * responsibility; see {@code design.md} &sect;2.5(f) for that resolver's
+ * exact shape, including the average-not-sum rule it uses to fold several
+ * assigned crew/controllers into one skill's contribution.</p>
  *
  * <p><b>Contribution sums are already on the 0-100 scale</b> - each term a
  * caller adds into {@code componentContributionSum}/{@code crewContributionSum}/
@@ -111,11 +113,15 @@ public final class MissionStepResolution {
      *                                 that component's {@link #effectiveReliability}
      * @param crewInvolved             whether any flight crew are involved
      *                                 in this step at all
-     * @param crewContributionSum      the sum, across every crew member
+     * @param crewContributionSum      the sum, across every crew skill
      *                                 involved in the step, of
      *                                 {@code (involvement percentage / 100) *}
-     *                                 their relevant skill; ignored when
-     *                                 {@code crewInvolved} is {@code false}
+     *                                 that skill's contribution - the mean
+     *                                 skill value across every assigned
+     *                                 crew member, not a sum of them (see
+     *                                 {@link MissionProgress}); ignored
+     *                                 when {@code crewInvolved} is
+     *                                 {@code false}
      * @return the base success probability, as a percentage; not clamped to
      *     100 - when every component's involvement percentages sum to 100
      *     (see {@code design.md} &sect;2.5(e)), this only exceeds 100 if a
@@ -138,10 +144,14 @@ public final class MissionStepResolution {
      * @param baseProbability           the step's base success probability,
      *                                   as returned by
      *                                   {@link #computeBaseProbability}
-     * @param controllerContributionSum the sum, across every flight
-     *                                   controller involved in the step, of
+     * @param controllerContributionSum the sum, across every flight-
+     *                                   controller skill involved in the
+     *                                   step, of
      *                                   {@code (involvement percentage / 100) *}
-     *                                   their relevant skill
+     *                                   that skill's contribution - the
+     *                                   mean skill value across every
+     *                                   assigned controller, not a sum of
+     *                                   them (see {@link MissionProgress})
      * @return the saving-throw probability, as a percentage; not clamped to
      *     100, for the same reason {@link #computeBaseProbability} is not
      */

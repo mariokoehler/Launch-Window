@@ -27,7 +27,8 @@ public enum AssignmentState {
      * R&amp;D on the owned mission component named by their own
      * {@link SetSpecialist#getRdTargetComponentId()} (SET has no other kind
      * of assignment); for an {@link Astronaut}/{@link MissionControlOfficer},
-     * a mission.
+     * the {@link InProgressMission} named by their own
+     * {@link Personnel#getAssignedMissionId()}.
      */
     ASSIGNED,
 

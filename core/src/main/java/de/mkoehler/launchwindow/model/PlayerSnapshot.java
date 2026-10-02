@@ -37,6 +37,8 @@ public class PlayerSnapshot {
     private long nextPersonnelId;
     private List<String> openedProgramIds = new ArrayList<>();
     private Map<String, OwnedMissionComponent> missionComponents = new LinkedHashMap<>();
+    private Map<String, InProgressMission> inProgressMissions = new LinkedHashMap<>();
+    private long nextMissionInstanceId;
 
     /**
      * No-argument constructor required for Jackson deserialization.
@@ -354,6 +356,63 @@ public class PlayerSnapshot {
     public void setMissionComponents(Map<String, OwnedMissionComponent> missionComponents) {
         Objects.requireNonNull(missionComponents, "missionComponents must not be null");
         this.missionComponents = new LinkedHashMap<>(missionComponents);
+    }
+
+    /**
+     * Returns this player's in-progress missions, keyed by
+     * {@link InProgressMission#getId()}.
+     *
+     * @return the in-progress missions
+     */
+    public Map<String, InProgressMission> getInProgressMissions() {
+        return inProgressMissions;
+    }
+
+    /**
+     * Replaces this player's in-progress missions.
+     *
+     * @param inProgressMissions the in-progress missions
+     */
+    public void setInProgressMissions(Map<String, InProgressMission> inProgressMissions) {
+        Objects.requireNonNull(inProgressMissions, "inProgressMissions must not be null");
+        this.inProgressMissions = new LinkedHashMap<>(inProgressMissions);
+    }
+
+    /**
+     * Returns the next id {@link #allocateMissionInstanceId()} will hand
+     * out. Public only because Jackson/Kryo need a bean accessor - callers
+     * should use {@link #allocateMissionInstanceId()}, never read or set
+     * this directly.
+     *
+     * @return the next mission instance id counter value
+     */
+    public long getNextMissionInstanceId() {
+        return nextMissionInstanceId;
+    }
+
+    /**
+     * Sets the next id {@link #allocateMissionInstanceId()} will hand out.
+     *
+     * @param nextMissionInstanceId the next mission instance id counter value
+     */
+    public void setNextMissionInstanceId(long nextMissionInstanceId) {
+        this.nextMissionInstanceId = nextMissionInstanceId;
+    }
+
+    /**
+     * Allocates a fresh, globally-unique-within-this-snapshot mission
+     * instance id and advances the counter - the single source of new ids
+     * for every {@link InProgressMission} this player ever launches, so an
+     * id is never reused even once that instance has ended. A separate
+     * counter from {@link #allocatePersonnelId()}'s, since the two id
+     * spaces are never compared against each other.
+     *
+     * @return the newly allocated id, e.g. {@code "m3"}
+     */
+    public String allocateMissionInstanceId() {
+        String id = "m" + nextMissionInstanceId;
+        nextMissionInstanceId++;
+        return id;
     }
 
     /**

@@ -25,9 +25,10 @@ import java.util.Objects;
  * <p><b>Composition order for whoever wires this into one season pass
  * (M4):</b> opening a program is a journaled player action, like
  * {@code HiringPool.hire}, so it runs before any season-advance resolver -
- * {@link PersonnelLifecycle}, then {@link TrainingProgress}, then
- * {@link ResearchProgress}, then {@code HiringPool.refreshCandidates} last,
- * the exact order {@link HiringPool}'s own Javadoc documents. Several
+ * {@link PersonnelLifecycle}, then {@link MissionProgress}, then
+ * {@link TrainingProgress}, then {@link ResearchProgress}, then
+ * {@code HiringPool.refreshCandidates} last, the exact order
+ * {@link HiringPool}'s own Javadoc documents. Several
  * opens queued in the same turn apply in journal order, each one computing
  * its own discount/transfer against the result the previous one left
  * behind - there is no single "this turn's" ownership snapshot they all

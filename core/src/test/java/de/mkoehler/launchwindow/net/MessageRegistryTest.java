@@ -8,6 +8,7 @@ import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.AstronautSkill;
+import de.mkoehler.launchwindow.model.InProgressMission;
 import de.mkoehler.launchwindow.model.MissionControlOfficer;
 import de.mkoehler.launchwindow.model.MissionControlSkill;
 import de.mkoehler.launchwindow.model.OwnedMissionComponent;
@@ -71,7 +72,7 @@ class MessageRegistryTest {
             PlayerSnapshot.class, ArrayList.class, LinkedHashMap.class, SetFundsAction.class,
             SubmitActionRequest.class, SubmitActionResponse.class, FetchStateRequest.class,
             FetchStateResponse.class, HandshakeRequest.class, HandshakeResponse.class, TrainingKind.class,
-            OwnedMissionComponent.class};
+            OwnedMissionComponent.class, InProgressMission.class};
         for (Class<?> registeredClass : registeredClasses) {
             assertEquals(first.getRegistration(registeredClass).getId(), second.getRegistration(registeredClass).getId(),
                 "id mismatch for " + registeredClass.getSimpleName());
@@ -116,7 +117,7 @@ class MessageRegistryTest {
             MissionControlSkill.class, Astronaut.class, SetSpecialist.class, MissionControlOfficer.class,
             PlayerSnapshot.class, ArrayList.class, LinkedHashMap.class, SetFundsAction.class,
             SubmitActionRequest.class, SubmitActionResponse.class, FetchStateRequest.class,
-            FetchStateResponse.class, TrainingKind.class, OwnedMissionComponent.class};
+            FetchStateResponse.class, TrainingKind.class, OwnedMissionComponent.class, InProgressMission.class};
         for (Class<?> other : everyOtherClass) {
             int otherId = kryo.getRegistration(other).getId();
             assertTrue(requestId < otherId, "HandshakeRequest's id must be lower than " + other.getSimpleName());
@@ -234,6 +235,7 @@ class MessageRegistryTest {
         astronaut.setTrainingSeasonsTotal(2);
         astronaut.setTrainingTargetSkill(AstronautSkill.EVA);
         astronaut.setTrainingTargetLevel(85.5);
+        astronaut.setAssignedMissionId("m0");
         snapshot.setAstronauts(List.of(astronaut));
         SetSpecialist specialist = new SetSpecialist("set-1", "Omar Idris", 41, 75, 55);
         specialist.setSkill(SetSkill.ROCKETS, 63);
@@ -249,6 +251,9 @@ class MessageRegistryTest {
         snapshot.setNextPersonnelId(7);
         snapshot.setOpenedProgramIds(List.of("sputnik-1"));
         snapshot.setMissionComponents(Map.of("rocket-1", new OwnedMissionComponent(42.5, 17.0)));
+        snapshot.setInProgressMissions(
+            Map.of("m0", new InProgressMission("m0", "sputnik-1-std", List.of("astro-1"), List.of("mco-1"))));
+        snapshot.setNextMissionInstanceId(1);
 
         FetchStateResponse copy = roundTrip(FetchStateResponse.success(snapshot), FetchStateResponse.class);
 
@@ -273,6 +278,13 @@ class MessageRegistryTest {
         assertEquals(List.of("sputnik-1"), copy.state().getOpenedProgramIds());
         assertEquals(42.5, copy.state().getMissionComponents().get("rocket-1").getCurrentReliability());
         assertEquals(17.0, copy.state().getMissionComponents().get("rocket-1").getFloorReliability());
+        assertEquals("m0", copy.state().getAstronauts().get(0).getAssignedMissionId());
+        assertEquals(1, copy.state().getInProgressMissions().size());
+        InProgressMission copiedMission = copy.state().getInProgressMissions().get("m0");
+        assertEquals("sputnik-1-std", copiedMission.getMissionConfigurationId());
+        assertEquals(List.of("astro-1"), copiedMission.getAssignedAstronautIds());
+        assertEquals(List.of("mco-1"), copiedMission.getAssignedMissionControlOfficerIds());
+        assertEquals(1, copy.state().getNextMissionInstanceId());
 
         FetchStateResponse rejected = roundTrip(FetchStateResponse.failure("Not authenticated."), FetchStateResponse.class);
         assertFalse(rejected.success());

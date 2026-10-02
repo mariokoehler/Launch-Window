@@ -18,7 +18,8 @@ package de.mkoehler.launchwindow.devtools.analysis;
  * @param stillEmployedAtEnd                {@code employeesStarted} plus
  *                                          {@code hiredCount} minus
  *                                          {@code resignedCount} minus
- *                                          {@code retiredCount}
+ *                                          {@code retiredCount} minus
+ *                                          {@code lostInAccidentCount}
  * @param averageTenureSeasonsWhenResigned  average seasons survived by an
  *                                          employee who resigned, {@code 0} if
  *                                          nobody did
@@ -52,6 +53,38 @@ package de.mkoehler.launchwindow.devtools.analysis;
  *                                          gain per completed R&amp;D
  *                                          season, {@code 0} if none
  *                                          completed
+ * @param missionsLaunchedCount             how many bot mission launches
+ *                                          succeeded across every game (see
+ *                                          {@code PersonnelLifecyclePlayouts#LAUNCH_MISSION_CHANCE_PER_SEASON})
+ * @param missionStepSuccessfulCount        how many mission steps resolved
+ *                                          {@code SUCCESSFUL} across every game
+ * @param missionStepMinorGlitchSolvedCount how many mission steps resolved
+ *                                          {@code MINOR_GLITCH_SOLVED}
+ *                                          across every game
+ * @param missionStepMinorGlitchCount       how many mission steps resolved
+ *                                          {@code MINOR_GLITCH} across every game
+ * @param missionStepFailureCount           how many mission steps resolved
+ *                                          {@code FAILURE} across every game
+ * @param missionStepCatastrophicCount      how many mission steps resolved
+ *                                          {@code CATASTROPHIC} across every
+ *                                          game
+ * @param lostInAccidentCount               how many astronauts were
+ *                                          permanently lost to a
+ *                                          {@code CATASTROPHIC} step across
+ *                                          every game - already reflected
+ *                                          in {@code stillEmployedAtEnd}
+ * @param retiredOnMissionReleaseCount       how many of {@code retiredCount}'s
+ *                                          own total came specifically from
+ *                                          {@code MissionProgress}'s own
+ *                                          retire-on-release check (an
+ *                                          employee who had already reached
+ *                                          retirement age at the moment a
+ *                                          mission released them), rather
+ *                                          than {@code PersonnelLifecycle}'s
+ *                                          own season-advance check -
+ *                                          already included in
+ *                                          {@code retiredCount}, not
+ *                                          additional to it
  * @author Mario Koehler
  */
 public record PersonnelPlayoutReport(
@@ -72,6 +105,14 @@ public record PersonnelPlayoutReport(
     int excellentBandBatches,
     int programsOpenedCount,
     int researchCompletedCount,
-    double averageResearchReliabilityGain
+    double averageResearchReliabilityGain,
+    int missionsLaunchedCount,
+    int missionStepSuccessfulCount,
+    int missionStepMinorGlitchSolvedCount,
+    int missionStepMinorGlitchCount,
+    int missionStepFailureCount,
+    int missionStepCatastrophicCount,
+    int lostInAccidentCount,
+    int retiredOnMissionReleaseCount
 ) {
 }

@@ -23,6 +23,7 @@ public abstract class Personnel {
     private int trainingSeasonsCompleted;
     private int trainingSeasonsTotal;
     private double trainingTargetLevel;
+    private String assignedMissionId;
 
     /**
      * No-argument constructor required for Jackson deserialization.
@@ -270,5 +271,33 @@ public abstract class Personnel {
      */
     public void setTrainingTargetLevel(double trainingTargetLevel) {
         this.trainingTargetLevel = trainingTargetLevel;
+    }
+
+    /**
+     * Returns the {@link InProgressMission#getId()} this employee is
+     * currently assigned to - meaningful only for an {@link Astronaut}/
+     * {@link MissionControlOfficer} while {@link #getAssignmentState()} is
+     * {@link AssignmentState#ASSIGNED} (see that enum's own Javadoc); a
+     * {@link SetSpecialist}'s {@code ASSIGNED} state never sets this,
+     * using {@link SetSpecialist#getRdTargetComponentId()} instead. Not
+     * declared on {@link SetSpecialist} at all, unlike
+     * {@code trainingTargetSkill} - a plain mission-instance id has no
+     * per-subclass skill-enum dependency, so it lives here on the shared
+     * base.
+     *
+     * @return the assigned mission instance id, or {@code null} if not
+     *     assigned to a mission
+     */
+    public String getAssignedMissionId() {
+        return assignedMissionId;
+    }
+
+    /**
+     * Sets the mission instance id this employee is currently assigned to.
+     *
+     * @param assignedMissionId the assigned mission instance id
+     */
+    public void setAssignedMissionId(String assignedMissionId) {
+        this.assignedMissionId = assignedMissionId;
     }
 }

@@ -2,12 +2,16 @@ package de.mkoehler.launchwindow.devtools.analysis;
 
 import de.mkoehler.launchwindow.content.ContentCatalog;
 import de.mkoehler.launchwindow.content.MissionComponent;
+import de.mkoehler.launchwindow.content.MissionConfiguration;
+import de.mkoehler.launchwindow.content.MissionSeason;
+import de.mkoehler.launchwindow.content.MissionStep;
 import de.mkoehler.launchwindow.content.Program;
 import de.mkoehler.launchwindow.content.ProgramCategory;
 import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.AstronautSkill;
+import de.mkoehler.launchwindow.model.InProgressMission;
 import de.mkoehler.launchwindow.model.MissionControlOfficer;
 import de.mkoehler.launchwindow.model.MissionControlSkill;
 import de.mkoehler.launchwindow.model.OwnedMissionComponent;
@@ -19,6 +23,11 @@ import de.mkoehler.launchwindow.model.TrainingKind;
 import de.mkoehler.launchwindow.rules.DepartureReason;
 import de.mkoehler.launchwindow.rules.HireOutcome;
 import de.mkoehler.launchwindow.rules.HiringPool;
+import de.mkoehler.launchwindow.rules.MissionLaunch;
+import de.mkoehler.launchwindow.rules.MissionLaunchOutcome;
+import de.mkoehler.launchwindow.rules.MissionProgress;
+import de.mkoehler.launchwindow.rules.MissionStepOutcome;
+import de.mkoehler.launchwindow.rules.MissionStepResolved;
 import de.mkoehler.launchwindow.rules.OpenProgramOutcome;
 import de.mkoehler.launchwindow.rules.PersonnelDeparture;
 import de.mkoehler.launchwindow.rules.PersonnelGroup;
@@ -32,6 +41,7 @@ import de.mkoehler.launchwindow.rules.TrainingCompleted;
 import de.mkoehler.launchwindow.rules.TrainingProgress;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -72,28 +82,38 @@ import java.util.Set;
  * rule, not a bug.</p>
  *
  * <p>The "bot" here is intentionally simple, per employee per season
- * (chance {@link #REASSIGNMENT_CHANCE_PER_SEASON}): idle becomes either
- * assigned, or starts a real training assignment - a random target skill
- * from that employee's own group, and evenly among {@link TrainingKind#BASIC}/
+ * (chance {@link #REASSIGNMENT_CHANCE_PER_SEASON}): idle either stays idle
+ * or starts a real training assignment - a random target skill from that
+ * employee's own group, and evenly among {@link TrainingKind#BASIC}/
  * {@link TrainingKind#ADVANCED}/{@link TrainingKind#PERMANENT} (the last
  * with a random target level strictly above the current skill and up to
  * {@link SkillGrowth#SKILL_CAP}, per {@code design.md} &sect;3.4's proposed
- * invariant); assigned becomes idle; an employee already in training is
- * <b>never</b> interrupted - there is no pull-out path yet, so training
- * always runs to its own completion (for {@code PERMANENT}, until it stops
- * re-enrolling on its own). Not a stand-in for a real per-turn player
+ * invariant); an employee already in training is <b>never</b> interrupted -
+ * there is no pull-out path yet, so training always runs to its own
+ * completion (for {@code PERMANENT}, until it stops re-enrolling on its
+ * own). <b>An Astronaut/Mission Control officer's idle-to-{@code ASSIGNED}
+ * transition no longer happens here</b> (2026-10-02) - it is exclusively
+ * {@link #maybeLaunchMission}'s job now, since {@code ASSIGNED} means
+ * "on a specific {@link de.mkoehler.launchwindow.model.InProgressMission}"
+ * and an individual employee shuffle has no mission to point at; the
+ * reverse transition is exclusively {@link MissionProgress#advanceSeason}'s
+ * job, when that mission ends. Not a stand-in for a real per-turn player
  * decision, which doesn't exist yet at this milestone.</p>
  *
- * <p><b>Resolver composition order matches the contract {@link HiringPool}'s
- * and {@link ProgramOpening}'s own Javadoc documents</b>: each season, the
- * bot may first hire out of <i>last</i> season's candidate pool
- * ({@link #HIRE_CHANCE_PER_SEASON} per group) and open one program
- * ({@link #OPEN_PROGRAM_CHANCE_PER_SEASON}) - both stand-ins for a
- * journaled player action - then {@link PersonnelLifecycle} runs, then
- * {@link TrainingProgress} and {@link ResearchProgress} (same position,
- * since both only ever touch someone already {@link AssignmentState#IN_TRAINING}/
- * {@link AssignmentState#ASSIGNED} going into this season, never someone
- * {@link PersonnelLifecycle} just removed), then
+ * <p><b>Resolver composition order matches the contract {@link HiringPool}'s,
+ * {@link ProgramOpening}'s, and {@link MissionLaunch}'s own Javadoc
+ * documents</b>: each season, the bot may first hire out of <i>last</i>
+ * season's candidate pool ({@link #HIRE_CHANCE_PER_SEASON} per group),
+ * open one program ({@link #OPEN_PROGRAM_CHANCE_PER_SEASON}), and launch
+ * one mission ({@link #LAUNCH_MISSION_CHANCE_PER_SEASON}) - all three
+ * stand-ins for a journaled player action - then {@link PersonnelLifecycle}
+ * runs, then {@link MissionProgress} (right after, so a crew lost or
+ * released this season is already reflected before the resolvers below
+ * run), then {@link TrainingProgress} and {@link ResearchProgress} (same
+ * position, since both only ever touch someone already
+ * {@link AssignmentState#IN_TRAINING}/{@link AssignmentState#ASSIGNED}
+ * going into this season, never someone {@link PersonnelLifecycle}/
+ * {@link MissionProgress} just removed or released), then
  * {@link HiringPool#refreshCandidates} last - all sharing the same seeded
  * {@link Random}, so a whole game's outcome stays reproducible from a
  * single seed.</p>
@@ -113,6 +133,7 @@ public final class PersonnelLifecyclePlayouts {
     private static final double REASSIGNMENT_CHANCE_PER_SEASON = 0.3;
     private static final double HIRE_CHANCE_PER_SEASON = 0.25;
     private static final double OPEN_PROGRAM_CHANCE_PER_SEASON = 0.1;
+    private static final double LAUNCH_MISSION_CHANCE_PER_SEASON = 0.15;
     private static final long STARTING_FUNDS = 5_000;
 
     /**
@@ -123,6 +144,14 @@ public final class PersonnelLifecyclePlayouts {
      */
     private static final List<String> PROGRAM_IDS =
         List.of("sputnik-program", "explorer-program", "mercury-program");
+
+    /**
+     * Every mission configuration id {@link #CATALOG} defines, matching
+     * {@link #buildCatalog()} exactly - {@link #maybeLaunchMission} picks
+     * among these, the same reason {@link #PROGRAM_IDS} exists.
+     */
+    private static final List<String> MISSION_CONFIGURATION_IDS =
+        List.of("sputnik-launch-std", "explorer-mission-std", "mercury-mission-std");
 
     /**
      * The fixture catalog's shared R&amp;D slot-band ceilings, re-deriving
@@ -149,6 +178,13 @@ public final class PersonnelLifecyclePlayouts {
                 throw new ExceptionInInitializerError("PROGRAM_IDS has an id not in CATALOG: " + programId);
             }
         }
+        // Same guard, for MISSION_CONFIGURATION_IDS against buildCatalog().
+        for (String missionConfigurationId : MISSION_CONFIGURATION_IDS) {
+            if (CATALOG.missionConfiguration(missionConfigurationId).isEmpty()) {
+                throw new ExceptionInInitializerError(
+                    "MISSION_CONFIGURATION_IDS has an id not in CATALOG: " + missionConfigurationId);
+            }
+        }
     }
 
     /**
@@ -159,8 +195,10 @@ public final class PersonnelLifecyclePlayouts {
 
     /**
      * Builds {@link #CATALOG}: one program category, four mission
-     * components, and three programs (one carrying an opening-cost
-     * discount from another).
+     * components, three programs (one carrying an opening-cost discount
+     * from another), and three mission configurations, one per program -
+     * original structure, not reproducing any real BASPM mission's own
+     * season/step layout, per {@code design.md} &sect;1.2.
      *
      * <p>Two components declare a reliability-transfer source, but only
      * one of those can ever actually fire: {@code satellite-explorer}'s
@@ -174,6 +212,16 @@ public final class PersonnelLifecyclePlayouts {
      * computes every transfer within one call against ownership as it
      * stood before that call - a deliberate illustration of that rule
      * inside this fixture, not a bug to fix by reshaping the catalog.</p>
+     *
+     * <p>The three mission configurations exercise every major
+     * {@link MissionProgress} code path: {@code sputnik-launch-std}
+     * (one season, uncrewed, controller-involved) and
+     * {@code explorer-mission-std} (two seasons, uncrewed, controller-
+     * involved - the multi-season continuation path) cover an uncrewed
+     * mission with and without a saving throw worth anything;
+     * {@code mercury-mission-std} (two seasons, crewed, every step flagged
+     * crew-risk) is the only one that can ever produce a
+     * {@code CATASTROPHIC} crew loss.</p>
      *
      * @return the fixture catalog
      */
@@ -196,8 +244,47 @@ public final class PersonnelLifecyclePlayouts {
         Program mercuryProgram = new Program("mercury-program", "early-space", 1_200, 0,
             List.of("rocket-redstone", "capsule-mercury"), List.of());
 
+        MissionStep sputnikLaunchStep = new MissionStep("launch",
+            List.of(new MissionStep.ComponentInvolvement("satellite-sputnik", 100)),
+            List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 60),
+                new MissionStep.ControllerInvolvement(MissionControlSkill.TRAJECTORY_AND_GNC, 40)),
+            List.of(), false);
+        MissionConfiguration sputnikLaunchConfiguration = new MissionConfiguration("sputnik-launch-std",
+            "sputnik-program", List.of(new MissionSeason(List.of(sputnikLaunchStep))), 0, 1);
+
+        MissionStep explorerLaunchStep = new MissionStep("launch",
+            List.of(new MissionStep.ComponentInvolvement("satellite-explorer", 100)),
+            List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 50),
+                new MissionStep.ControllerInvolvement(MissionControlSkill.MISSION_OPERATIONS, 50)),
+            List.of(), false);
+        MissionStep explorerOrbitOpsStep = new MissionStep("orbit-ops",
+            List.of(new MissionStep.ComponentInvolvement("satellite-explorer", 100)),
+            List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.MISSION_OPERATIONS, 100)),
+            List.of(), false);
+        MissionConfiguration explorerMissionConfiguration = new MissionConfiguration("explorer-mission-std",
+            "explorer-program",
+            List.of(new MissionSeason(List.of(explorerLaunchStep)), new MissionSeason(List.of(explorerOrbitOpsStep))),
+            0, 1);
+
+        MissionStep mercuryLaunchStep = new MissionStep("launch",
+            List.of(new MissionStep.ComponentInvolvement("rocket-redstone", 60),
+                new MissionStep.ComponentInvolvement("capsule-mercury", 40)),
+            List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 50),
+                new MissionStep.ControllerInvolvement(MissionControlSkill.TRAJECTORY_AND_GNC, 50)),
+            List.of(new MissionStep.CrewInvolvement(AstronautSkill.PILOTING, 70),
+                new MissionStep.CrewInvolvement(AstronautSkill.FITNESS, 30)), true);
+        MissionStep mercuryOrbitOpsStep = new MissionStep("orbit-ops",
+            List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
+            List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.SPACECRAFT_SYSTEMS, 100)),
+            List.of(new MissionStep.CrewInvolvement(AstronautSkill.SCIENCE, 100)), true);
+        MissionConfiguration mercuryMissionConfiguration = new MissionConfiguration("mercury-mission-std",
+            "mercury-program",
+            List.of(new MissionSeason(List.of(mercuryLaunchStep)), new MissionSeason(List.of(mercuryOrbitOpsStep))),
+            2, 1);
+
         return new ContentCatalog(List.of(category), List.of(sputnikProgram, explorerProgram, mercuryProgram),
-            List.of(), List.of(satelliteSputnik, satelliteExplorer, rocketRedstone, capsuleMercury));
+            List.of(sputnikLaunchConfiguration, explorerMissionConfiguration, mercuryMissionConfiguration),
+            List.of(satelliteSputnik, satelliteExplorer, rocketRedstone, capsuleMercury));
     }
 
     /**
@@ -233,6 +320,14 @@ public final class PersonnelLifecyclePlayouts {
         int programsOpenedCount = 0;
         int researchCompletedCount = 0;
         double researchReliabilityGainTotal = 0;
+        int missionsLaunchedCount = 0;
+        int missionStepSuccessfulCount = 0;
+        int missionStepMinorGlitchSolvedCount = 0;
+        int missionStepMinorGlitchCount = 0;
+        int missionStepFailureCount = 0;
+        int missionStepCatastrophicCount = 0;
+        int lostInAccidentCount = 0;
+        int retiredOnMissionReleaseCount = 0;
         int[] bandHits = new int[4];
 
         for (int game = 0; game < games; game++) {
@@ -245,15 +340,21 @@ public final class PersonnelLifecyclePlayouts {
                 shuffleAssignments(snapshot, random);
                 hiredCount += hireFromPools(snapshot, random, season, joinedAtSeason);
                 programsOpenedCount += maybeOpenProgram(snapshot, random);
+                missionsLaunchedCount += maybeLaunchMission(snapshot, random);
                 checkProgramInvariants(snapshot);
 
                 int before = rosterSize(snapshot);
                 Set<String> protectedBefore = protectedEmployeeKeys(snapshot);
 
                 List<ResolutionEvent> lifecycleEvents = PersonnelLifecycle.advanceSeason(snapshot);
+                checkInvariants(snapshot, lifecycleEvents, before, protectedBefore);
+
+                int beforeMissionProgress = rosterSize(snapshot);
+                List<ResolutionEvent> missionEvents = MissionProgress.advanceSeason(snapshot, CATALOG, random);
+                checkMissionInvariants(snapshot, missionEvents, beforeMissionProgress);
+
                 List<ResolutionEvent> trainingEvents = TrainingProgress.advanceSeason(snapshot, random);
                 List<ResolutionEvent> researchEvents = ResearchProgress.advanceSeason(snapshot, CATALOG, random);
-                checkInvariants(snapshot, lifecycleEvents, before, protectedBefore);
                 checkTrainingInvariants(snapshot, trainingEvents);
                 checkResearchInvariants(snapshot);
 
@@ -271,6 +372,34 @@ public final class PersonnelLifecyclePlayouts {
                     } else {
                         retiredCount++;
                         retiredTenureTotal += tenureSeasons;
+                    }
+                }
+                for (ResolutionEvent event : missionEvents) {
+                    if (event instanceof MissionStepResolved resolved) {
+                        switch (resolved.outcome()) {
+                            case SUCCESSFUL -> missionStepSuccessfulCount++;
+                            case MINOR_GLITCH_SOLVED -> missionStepMinorGlitchSolvedCount++;
+                            case MINOR_GLITCH -> missionStepMinorGlitchCount++;
+                            case FAILURE -> missionStepFailureCount++;
+                            case CATASTROPHIC -> missionStepCatastrophicCount++;
+                        }
+                    } else if (event instanceof PersonnelDeparture departure) {
+                        String key = employeeKey(departure.group(), departure.personnelId());
+                        Integer joinedAt = joinedAtSeason.remove(key);
+                        if (joinedAt == null) {
+                            throw new IllegalStateException(
+                                "Departure for an employee with no recorded join season: " + key);
+                        }
+                        if (departure.reason() == DepartureReason.LOST_IN_ACCIDENT) {
+                            lostInAccidentCount++;
+                        } else {
+                            // RETIRED, from MissionProgress's own retire-on-release check - folded into the
+                            // same retiredCount/retiredTenureTotal PersonnelLifecycle's own RETIRED
+                            // departures feed, plus its own dedicated counter for the harness's test.
+                            retiredCount++;
+                            retiredTenureTotal += season + 1 - joinedAt;
+                            retiredOnMissionReleaseCount++;
+                        }
                     }
                 }
                 for (ResolutionEvent event : trainingEvents) {
@@ -291,7 +420,7 @@ public final class PersonnelLifecyclePlayouts {
             }
         }
 
-        int stillEmployed = employeesStarted + hiredCount - resignedCount - retiredCount;
+        int stillEmployed = employeesStarted + hiredCount - resignedCount - retiredCount - lostInAccidentCount;
         double avgResignedTenure = resignedCount == 0 ? 0 : (double) resignedTenureTotal / resignedCount;
         double avgRetiredTenure = retiredCount == 0 ? 0 : (double) retiredTenureTotal / retiredCount;
         double avgTrainingGain = trainingCompletedCount == 0 ? 0 : trainingGainTotal / trainingCompletedCount;
@@ -301,7 +430,9 @@ public final class PersonnelLifecyclePlayouts {
         return new PersonnelPlayoutReport(games, seasons, employeesStarted, resignedCount, retiredCount,
             stillEmployed, avgResignedTenure, avgRetiredTenure, trainingCompletedCount, avgTrainingGain,
             hiredCount, bandHits[0], bandHits[1], bandHits[2], bandHits[3], programsOpenedCount,
-            researchCompletedCount, avgResearchReliabilityGain);
+            researchCompletedCount, avgResearchReliabilityGain, missionsLaunchedCount, missionStepSuccessfulCount,
+            missionStepMinorGlitchSolvedCount, missionStepMinorGlitchCount, missionStepFailureCount,
+            missionStepCatastrophicCount, lostInAccidentCount, retiredOnMissionReleaseCount);
     }
 
     /**
@@ -380,6 +511,84 @@ public final class PersonnelLifecyclePlayouts {
         String programId = candidateProgramIds.get(random.nextInt(candidateProgramIds.size()));
         OpenProgramOutcome outcome = ProgramOpening.open(snapshot, programId, CATALOG);
         return outcome == OpenProgramOutcome.OPENED ? 1 : 0;
+    }
+
+    /**
+     * The bot's stand-in for a journaled "launch mission" player action:
+     * with probability {@link #LAUNCH_MISSION_CHANCE_PER_SEASON}, picks one
+     * random mission configuration whose own program is currently open,
+     * and attempts to launch it with exactly
+     * {@link MissionConfiguration#requiredAstronautCount()}/
+     * {@link MissionConfiguration#requiredMissionControlOfficerCount()}
+     * randomly-picked currently idle astronauts/Mission Control officers.
+     * A no-op (not an error) if no program is open yet, not enough idle
+     * personnel exist to meet either exact count, or
+     * {@link MissionLaunch#launch} itself reports anything else - the same
+     * posture as {@link #maybeHire}/{@link #maybeOpenProgram}.
+     *
+     * @param snapshot the snapshot to launch a mission for; mutated in
+     *                 place on success
+     * @param random   the random source to draw from
+     * @return {@code 1} if a mission was launched this call, {@code 0} otherwise
+     */
+    private static int maybeLaunchMission(PlayerSnapshot snapshot, Random random) {
+        if (random.nextDouble() >= LAUNCH_MISSION_CHANCE_PER_SEASON) {
+            return 0;
+        }
+        List<String> candidateConfigurationIds = new ArrayList<>();
+        for (String configurationId : MISSION_CONFIGURATION_IDS) {
+            MissionConfiguration configuration = CATALOG.missionConfiguration(configurationId).orElseThrow();
+            if (snapshot.getOpenedProgramIds().contains(configuration.programId())) {
+                candidateConfigurationIds.add(configurationId);
+            }
+        }
+        if (candidateConfigurationIds.isEmpty()) {
+            return 0;
+        }
+        String configurationId = candidateConfigurationIds.get(random.nextInt(candidateConfigurationIds.size()));
+        MissionConfiguration configuration = CATALOG.missionConfiguration(configurationId).orElseThrow();
+
+        List<String> astronautIds =
+            pickExactlyIdleIds(snapshot.getAstronauts(), configuration.requiredAstronautCount(), random);
+        if (astronautIds == null) {
+            return 0;
+        }
+        List<String> controllerIds = pickExactlyIdleIds(snapshot.getMissionControlOfficers(),
+            configuration.requiredMissionControlOfficerCount(), random);
+        if (controllerIds == null) {
+            return 0;
+        }
+
+        MissionLaunchOutcome outcome =
+            MissionLaunch.launch(snapshot, configurationId, astronautIds, controllerIds, CATALOG);
+        return outcome == MissionLaunchOutcome.LAUNCHED ? 1 : 0;
+    }
+
+    /**
+     * Picks exactly {@code count} random currently idle ids from a roster.
+     *
+     * @param roster the roster to pick from
+     * @param count  exactly how many ids to pick
+     * @param random the random source to draw from
+     * @param <P>    the roster's own {@link Personnel} subtype
+     * @return the picked ids, or {@code null} if fewer than {@code count}
+     *     are currently idle
+     */
+    private static <P extends Personnel> List<String> pickExactlyIdleIds(List<P> roster, int count, Random random) {
+        if (count == 0) {
+            return List.of();
+        }
+        List<String> idleIds = new ArrayList<>();
+        for (P person : roster) {
+            if (person.getAssignmentState() == AssignmentState.IDLE) {
+                idleIds.add(person.getId());
+            }
+        }
+        if (idleIds.size() < count) {
+            return null;
+        }
+        Collections.shuffle(idleIds, random);
+        return new ArrayList<>(idleIds.subList(0, count));
     }
 
     /**
@@ -545,6 +754,180 @@ public final class PersonnelLifecyclePlayouts {
                 }
             }
         }
+    }
+
+    /**
+     * Cross-checks {@link MissionProgress#advanceSeason}'s own output,
+     * computed independently of its internals: the roster-size change
+     * matches the reported departures exactly, every
+     * {@code LOST_IN_ACCIDENT} departure is astronaut-only, every
+     * {@code RETIRED} departure (either group - the retire-on-release
+     * check) is actually at or above that group's own retirement age, no
+     * {@code RESIGNED} departure is ever reported (not a mechanic
+     * {@link MissionProgress} has), and {@link #checkMissionAssignmentConsistency}
+     * holds.
+     *
+     * @param snapshot                    the snapshot after this season's
+     *                                     mission advance
+     * @param missionEvents                the events
+     *                                     {@link MissionProgress#advanceSeason}
+     *                                     returned this season
+     * @param rosterSizeBeforeMissionProgress the combined roster size
+     *                                     immediately before this season's
+     *                                     mission advance ran
+     * @throws IllegalStateException if any invariant is violated
+     */
+    private static void checkMissionInvariants(PlayerSnapshot snapshot, List<ResolutionEvent> missionEvents,
+            int rosterSizeBeforeMissionProgress) {
+        int departureCount = 0;
+        for (ResolutionEvent event : missionEvents) {
+            if (event instanceof PersonnelDeparture departure) {
+                switch (departure.reason()) {
+                    case LOST_IN_ACCIDENT -> {
+                        if (departure.group() != PersonnelGroup.ASTRONAUT) {
+                            throw new IllegalStateException(
+                                "MissionProgress reported a non-astronaut LOST_IN_ACCIDENT departure: "
+                                    + departure.group());
+                        }
+                    }
+                    case RETIRED -> {
+                        if (departure.ageAtExit() < retirementAgeFor(departure.group())) {
+                            throw new IllegalStateException("MissionProgress retired " + departure.personnelId()
+                                + " younger than their group's retirement age: " + departure.ageAtExit());
+                        }
+                    }
+                    case RESIGNED -> throw new IllegalStateException(
+                        "MissionProgress reported an unexpected RESIGNED departure for " + departure.personnelId());
+                }
+                departureCount++;
+            }
+        }
+        int rosterSizeAfter = rosterSize(snapshot);
+        if (rosterSizeBeforeMissionProgress - departureCount != rosterSizeAfter) {
+            throw new IllegalStateException("Roster size change does not match the number of reported mission departures");
+        }
+
+        checkMissionAssignmentConsistency(snapshot);
+    }
+
+    /**
+     * Cross-checks the bidirectional pairing between every
+     * Astronaut/Mission Control officer's own {@code ASSIGNED}/
+     * {@code assignedMissionId} and every {@link InProgressMission}'s own
+     * assigned-id lists: each side must agree with the other, nobody is
+     * assigned to more than one mission at once, and every mission's own
+     * season index is within its configuration's own range.
+     *
+     * @param snapshot the snapshot to check
+     * @throws IllegalStateException if any invariant is violated
+     */
+    private static void checkMissionAssignmentConsistency(PlayerSnapshot snapshot) {
+        for (Astronaut astronaut : snapshot.getAstronauts()) {
+            checkAssignmentPointer(astronaut);
+        }
+        for (MissionControlOfficer officer : snapshot.getMissionControlOfficers()) {
+            checkAssignmentPointer(officer);
+        }
+
+        Set<String> claimedPersonnelIds = new HashSet<>();
+        for (InProgressMission mission : snapshot.getInProgressMissions().values()) {
+            checkMissionSideGroup(mission.getId(), mission.getAssignedAstronautIds(), snapshot.getAstronauts(),
+                claimedPersonnelIds);
+            checkMissionSideGroup(mission.getId(), mission.getAssignedMissionControlOfficerIds(),
+                snapshot.getMissionControlOfficers(), claimedPersonnelIds);
+
+            MissionConfiguration configuration =
+                CATALOG.missionConfiguration(mission.getMissionConfigurationId()).orElse(null);
+            if (configuration == null) {
+                continue;
+            }
+            if (mission.getCurrentSeasonIndex() < 0
+                    || mission.getCurrentSeasonIndex() >= configuration.durationInSeasons()) {
+                throw new IllegalStateException(
+                    "Mission " + mission.getId() + " season index out of range: " + mission.getCurrentSeasonIndex());
+            }
+            if (mission.getAssignedAstronautIds().size() != configuration.requiredAstronautCount()) {
+                throw new IllegalStateException("Mission " + mission.getId() + " assigned astronaut count "
+                    + mission.getAssignedAstronautIds().size() + " does not match its own configuration's required "
+                    + configuration.requiredAstronautCount());
+            }
+            if (mission.getAssignedMissionControlOfficerIds().size() != configuration
+                    .requiredMissionControlOfficerCount()) {
+                throw new IllegalStateException("Mission " + mission.getId()
+                    + " assigned Mission Control officer count "
+                    + mission.getAssignedMissionControlOfficerIds().size()
+                    + " does not match its own configuration's required "
+                    + configuration.requiredMissionControlOfficerCount());
+            }
+        }
+    }
+
+    /**
+     * Checks one Astronaut/Mission Control officer's own
+     * {@code ASSIGNED}/{@code assignedMissionId} pairing.
+     *
+     * @param person the employee to check
+     * @throws IllegalStateException if the pairing is broken
+     */
+    private static void checkAssignmentPointer(Personnel person) {
+        boolean assigned = person.getAssignmentState() == AssignmentState.ASSIGNED;
+        String missionId = person.getAssignedMissionId();
+        if (assigned && missionId == null) {
+            throw new IllegalStateException("ASSIGNED employee with no assignedMissionId: " + person.getId());
+        }
+        if (!assigned && missionId != null) {
+            throw new IllegalStateException("Not ASSIGNED but assignedMissionId still set: " + person.getId());
+        }
+    }
+
+    /**
+     * Checks one mission's own assigned-id list, from the mission's side:
+     * every id must exist on {@code roster}, be claimed by no other
+     * mission, and agree with that person's own {@code ASSIGNED}/
+     * {@code assignedMissionId}.
+     *
+     * @param missionId           the mission these ids are assigned to
+     * @param ids                 the assigned ids to check
+     * @param roster              the roster the ids are looked up against
+     * @param claimedPersonnelIds every id claimed by any mission so far,
+     *                            across both groups; mutated in place
+     * @param <P>                 the roster's own {@link Personnel} subtype
+     * @throws IllegalStateException if any id is unknown, claimed twice, or
+     *                                disagrees with that person's own state
+     */
+    private static <P extends Personnel> void checkMissionSideGroup(String missionId, List<String> ids,
+            List<P> roster, Set<String> claimedPersonnelIds) {
+        for (String id : ids) {
+            if (!claimedPersonnelIds.add(id)) {
+                throw new IllegalStateException("Personnel " + id + " is assigned to more than one in-progress mission");
+            }
+            P person = findPersonById(roster, id);
+            if (person == null) {
+                throw new IllegalStateException("Mission " + missionId + " references unknown personnel id " + id);
+            }
+            if (person.getAssignmentState() != AssignmentState.ASSIGNED
+                    || !missionId.equals(person.getAssignedMissionId())) {
+                throw new IllegalStateException("Mission " + missionId + "'s own assigned id " + id
+                    + " disagrees with that person's own ASSIGNED/assignedMissionId state");
+            }
+        }
+    }
+
+    /**
+     * Finds a {@link Personnel} record by id within a roster.
+     *
+     * @param roster the roster to search
+     * @param id     the id to find
+     * @param <P>    the roster's own {@link Personnel} subtype
+     * @return the matching record, or {@code null} if none matches
+     */
+    private static <P extends Personnel> P findPersonById(List<P> roster, String id) {
+        for (P person : roster) {
+            if (person.getId().equals(id)) {
+                return person;
+            }
+        }
+        return null;
     }
 
     /**
@@ -821,15 +1204,13 @@ public final class PersonnelLifecyclePlayouts {
         if (random.nextDouble() >= REASSIGNMENT_CHANCE_PER_SEASON) {
             return;
         }
-        if (astronaut.getAssignmentState() == AssignmentState.ASSIGNED) {
-            astronaut.setAssignmentState(AssignmentState.IDLE);
-            return;
-        }
+        // ASSIGNED is now exclusively mission-driven - MissionLaunch is the only path in
+        // (see maybeLaunchMission), MissionProgress.advanceSeason the only path back to IDLE on
+        // a mission's end. This shuffle only ever decides idle <-> training.
         if (astronaut.getAssignmentState() != AssignmentState.IDLE) {
             return;
         }
         if (random.nextBoolean()) {
-            astronaut.setAssignmentState(AssignmentState.ASSIGNED);
             return;
         }
         AstronautSkill[] skills = AstronautSkill.values();
@@ -945,15 +1326,11 @@ public final class PersonnelLifecyclePlayouts {
         if (random.nextDouble() >= REASSIGNMENT_CHANCE_PER_SEASON) {
             return;
         }
-        if (officer.getAssignmentState() == AssignmentState.ASSIGNED) {
-            officer.setAssignmentState(AssignmentState.IDLE);
-            return;
-        }
+        // Same reasoning as shuffleAstronaut: ASSIGNED is now exclusively mission-driven.
         if (officer.getAssignmentState() != AssignmentState.IDLE) {
             return;
         }
         if (random.nextBoolean()) {
-            officer.setAssignmentState(AssignmentState.ASSIGNED);
             return;
         }
         MissionControlSkill[] skills = MissionControlSkill.values();
@@ -1091,5 +1468,14 @@ public final class PersonnelLifecyclePlayouts {
         System.out.printf("Programs opened: %d%n", report.programsOpenedCount());
         System.out.printf("R&D seasons completed: %d (avg reliability gain %.2f)%n",
             report.researchCompletedCount(), report.averageResearchReliabilityGain());
+        System.out.printf("Missions launched: %d%n", report.missionsLaunchedCount());
+        System.out.printf(
+            "Mission steps - successful: %d, minor glitch solved: %d, minor glitch: %d, failure: %d, catastrophic: %d%n",
+            report.missionStepSuccessfulCount(), report.missionStepMinorGlitchSolvedCount(),
+            report.missionStepMinorGlitchCount(), report.missionStepFailureCount(),
+            report.missionStepCatastrophicCount());
+        System.out.printf("Astronauts lost in accidents: %d%n", report.lostInAccidentCount());
+        System.out.printf("Retired on mission release (of total retired): %d%n",
+            report.retiredOnMissionReleaseCount());
     }
 }
