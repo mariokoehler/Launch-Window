@@ -42,12 +42,12 @@ class MissionLaunchTest {
         List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 100)),
         List.of(new MissionStep.CrewInvolvement(AstronautSkill.PILOTING, 100)), true);
     private final MissionConfiguration crewedConfiguration = new MissionConfiguration("crewed-std",
-        "mercury-program", List.of(new MissionSeason(List.of(crewedStep))), 1, 1);
+        "mercury-program", List.of(new MissionSeason(List.of(crewedStep))), 1, 1, 500);
 
     private final MissionStep uncrewedStep = new MissionStep("ops",
         List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)), List.of(), List.of(), false);
     private final MissionConfiguration uncrewedConfiguration = new MissionConfiguration("uncrewed-std",
-        "mercury-program", List.of(new MissionSeason(List.of(uncrewedStep))), 0, 0);
+        "mercury-program", List.of(new MissionSeason(List.of(uncrewedStep))), 0, 0, 0);
 
     private final ContentCatalog catalog = new ContentCatalog(List.of(category), List.of(program),
         List.of(crewedConfiguration, uncrewedConfiguration), List.of(capsule));
@@ -99,6 +99,55 @@ class MissionLaunchTest {
 
         assertEquals(MissionLaunchOutcome.LAUNCHED, outcome);
         assertEquals(AssignmentState.IDLE, snapshot.getAstronauts().get(0).getAssignmentState());
+    }
+
+    /**
+     * Verifies a successful launch deducts the configuration's own cost
+     * from the player's funds.
+     */
+    @Test
+    void launchDeductsTheConfigurationsCost() {
+        PlayerSnapshot snapshot = snapshotWithProgramOpenAndIdleCrew();
+
+        MissionLaunch.launch(snapshot, "crewed-std", List.of("astro-1"), List.of("mco-1"), catalog);
+
+        assertEquals(10_000 - 500, snapshot.getFunds());
+    }
+
+    /**
+     * Verifies a launch whose cost exceeds the player's current funds is
+     * rejected, and nothing is mutated - the same "fail before any
+     * mutation" contract every other rejection here already upholds.
+     */
+    @Test
+    void rejectsLaunchWhenFundsAreInsufficient() {
+        PlayerSnapshot snapshot = snapshotWithProgramOpenAndIdleCrew();
+        snapshot.setFunds(499);
+
+        MissionLaunchOutcome outcome =
+            MissionLaunch.launch(snapshot, "crewed-std", List.of("astro-1"), List.of("mco-1"), catalog);
+
+        assertEquals(MissionLaunchOutcome.INSUFFICIENT_FUNDS, outcome);
+        assertEquals(499, snapshot.getFunds());
+        assertTrue(snapshot.getInProgressMissions().isEmpty());
+        assertEquals(AssignmentState.IDLE, snapshot.getAstronauts().get(0).getAssignmentState());
+    }
+
+    /**
+     * Verifies a launch whose cost exactly equals the player's current
+     * funds is accepted, not rejected - the funds check must not be an
+     * off-by-one strict inequality.
+     */
+    @Test
+    void acceptsLaunchWhenFundsExactlyMatchCost() {
+        PlayerSnapshot snapshot = snapshotWithProgramOpenAndIdleCrew();
+        snapshot.setFunds(500);
+
+        MissionLaunchOutcome outcome =
+            MissionLaunch.launch(snapshot, "crewed-std", List.of("astro-1"), List.of("mco-1"), catalog);
+
+        assertEquals(MissionLaunchOutcome.LAUNCHED, outcome);
+        assertEquals(0, snapshot.getFunds());
     }
 
     /**
@@ -224,8 +273,9 @@ class MissionLaunchTest {
 
     /**
      * Verifies nothing is mutated when a launch call ultimately fails -
-     * the astronaut stays {@code IDLE} and no in-progress mission is
-     * created, even though the controller was valid.
+     * the astronaut stays {@code IDLE}, no in-progress mission is created,
+     * and no cost is deducted, even though the controller was valid and
+     * funds were sufficient.
      */
     @Test
     void failedLaunchMutatesNothing() {
@@ -237,5 +287,6 @@ class MissionLaunchTest {
         assertEquals(MissionLaunchOutcome.UNKNOWN_ASTRONAUT, outcome);
         assertTrue(snapshot.getInProgressMissions().isEmpty());
         assertEquals(AssignmentState.IDLE, snapshot.getMissionControlOfficers().get(0).getAssignmentState());
+        assertEquals(10_000, snapshot.getFunds());
     }
 }

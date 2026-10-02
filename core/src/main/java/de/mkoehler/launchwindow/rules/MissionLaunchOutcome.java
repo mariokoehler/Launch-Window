@@ -17,6 +17,9 @@ public enum MissionLaunchOutcome {
     /** The mission configuration's own program has not been opened by this player. */
     PROGRAM_NOT_OPEN,
 
+    /** The player's current funds are below the mission configuration's own {@code cost}. */
+    INSUFFICIENT_FUNDS,
+
     /** A given astronaut id is not on this player's astronaut roster. */
     UNKNOWN_ASTRONAUT,
 

@@ -41,13 +41,35 @@ class MissionConfigurationTest {
     @Test
     void storesEveryField() {
         List<MissionSeason> seasons = seasons(1);
-        MissionConfiguration configuration = new MissionConfiguration("sputnik-1-std", "sputnik-1", seasons, 0, 0);
+        MissionConfiguration configuration =
+            new MissionConfiguration("sputnik-1-std", "sputnik-1", seasons, 0, 0, 750);
 
         assertEquals("sputnik-1-std", configuration.id());
         assertEquals("sputnik-1", configuration.programId());
         assertEquals(seasons, configuration.seasons());
         assertEquals(0, configuration.requiredAstronautCount());
         assertEquals(0, configuration.requiredMissionControlOfficerCount());
+        assertEquals(750, configuration.cost());
+    }
+
+    /**
+     * Verifies a negative cost is rejected.
+     */
+    @Test
+    void rejectsNegativeCost() {
+        assertThrows(IllegalArgumentException.class,
+            () -> new MissionConfiguration("sputnik-1-std", "sputnik-1", seasons(1), 0, 0, -1));
+    }
+
+    /**
+     * Verifies a zero cost (a free mission) is accepted.
+     */
+    @Test
+    void acceptsZeroCost() {
+        MissionConfiguration configuration =
+            new MissionConfiguration("sputnik-1-std", "sputnik-1", seasons(1), 0, 0, 0);
+
+        assertEquals(0, configuration.cost());
     }
 
     /**
@@ -57,7 +79,7 @@ class MissionConfigurationTest {
     @Test
     void durationInSeasonsMatchesTheSeasonListSize() {
         MissionConfiguration configuration =
-            new MissionConfiguration("sputnik-1-ext", "sputnik-1", seasons(3), 0, 0);
+            new MissionConfiguration("sputnik-1-ext", "sputnik-1", seasons(3), 0, 0, 0);
 
         assertEquals(3, configuration.durationInSeasons());
     }
@@ -68,7 +90,7 @@ class MissionConfigurationTest {
     @Test
     void rejectsEmptySeasons() {
         assertThrows(IllegalArgumentException.class,
-            () -> new MissionConfiguration("sputnik-1-std", "sputnik-1", List.of(), 0, 0));
+            () -> new MissionConfiguration("sputnik-1-std", "sputnik-1", List.of(), 0, 0, 0));
     }
 
     /**
@@ -77,9 +99,9 @@ class MissionConfigurationTest {
     @Test
     void rejectsBlankIds() {
         List<MissionSeason> seasons = seasons(1);
-        assertThrows(IllegalArgumentException.class, () -> new MissionConfiguration(" ", "sputnik-1", seasons, 0, 0));
+        assertThrows(IllegalArgumentException.class, () -> new MissionConfiguration(" ", "sputnik-1", seasons, 0, 0, 0));
         assertThrows(IllegalArgumentException.class,
-            () -> new MissionConfiguration("sputnik-1-std", " ", seasons, 0, 0));
+            () -> new MissionConfiguration("sputnik-1-std", " ", seasons, 0, 0, 0));
     }
 
     /**
@@ -90,7 +112,7 @@ class MissionConfigurationTest {
     @Test
     void defensivelyCopiesSeasons() {
         List<MissionSeason> mutable = new ArrayList<>(seasons(1));
-        MissionConfiguration configuration = new MissionConfiguration("sputnik-1-std", "sputnik-1", mutable, 0, 0);
+        MissionConfiguration configuration = new MissionConfiguration("sputnik-1-std", "sputnik-1", mutable, 0, 0, 0);
 
         mutable.add(new MissionSeason(seasons(1).get(0).steps()));
 
@@ -103,7 +125,7 @@ class MissionConfigurationTest {
     @Test
     void rejectsNegativeRequiredAstronautCount() {
         assertThrows(IllegalArgumentException.class,
-            () -> new MissionConfiguration("sputnik-1-std", "sputnik-1", seasons(1), -1, 0));
+            () -> new MissionConfiguration("sputnik-1-std", "sputnik-1", seasons(1), -1, 0, 0));
     }
 
     /**
@@ -113,7 +135,7 @@ class MissionConfigurationTest {
     @Test
     void rejectsNegativeRequiredMissionControlOfficerCount() {
         assertThrows(IllegalArgumentException.class,
-            () -> new MissionConfiguration("sputnik-1-std", "sputnik-1", seasons(1), 0, -1));
+            () -> new MissionConfiguration("sputnik-1-std", "sputnik-1", seasons(1), 0, -1, 0));
     }
 
     /**
@@ -123,7 +145,7 @@ class MissionConfigurationTest {
     @Test
     void rejectsPositiveRequiredAstronautCountWithNoCrewInvolvement() {
         assertThrows(IllegalArgumentException.class,
-            () -> new MissionConfiguration("sputnik-1-std", "sputnik-1", seasons(1), 1, 0));
+            () -> new MissionConfiguration("sputnik-1-std", "sputnik-1", seasons(1), 1, 0, 0));
     }
 
     /**
@@ -138,7 +160,7 @@ class MissionConfigurationTest {
         List<MissionSeason> seasons = List.of(new MissionSeason(List.of(crewedStep)));
 
         assertThrows(IllegalArgumentException.class,
-            () -> new MissionConfiguration("sputnik-1-std", "sputnik-1", seasons, 0, 0));
+            () -> new MissionConfiguration("sputnik-1-std", "sputnik-1", seasons, 0, 0, 0));
     }
 
     /**
@@ -148,7 +170,7 @@ class MissionConfigurationTest {
     @Test
     void rejectsPositiveRequiredMissionControlOfficerCountWithNoControllerInvolvement() {
         assertThrows(IllegalArgumentException.class,
-            () -> new MissionConfiguration("sputnik-1-std", "sputnik-1", seasons(1), 0, 1));
+            () -> new MissionConfiguration("sputnik-1-std", "sputnik-1", seasons(1), 0, 1, 0));
     }
 
     /**
@@ -163,7 +185,7 @@ class MissionConfigurationTest {
         List<MissionSeason> seasons = List.of(new MissionSeason(List.of(controlledStep)));
 
         assertThrows(IllegalArgumentException.class,
-            () -> new MissionConfiguration("sputnik-1-std", "sputnik-1", seasons, 0, 0));
+            () -> new MissionConfiguration("sputnik-1-std", "sputnik-1", seasons, 0, 0, 0));
     }
 
     /**
@@ -177,7 +199,7 @@ class MissionConfigurationTest {
             List.of(new MissionStep.CrewInvolvement(AstronautSkill.PILOTING, 100)), false);
         List<MissionSeason> seasons = List.of(new MissionSeason(List.of(crewedStep)));
 
-        MissionConfiguration configuration = new MissionConfiguration("sputnik-1-std", "sputnik-1", seasons, 2, 0);
+        MissionConfiguration configuration = new MissionConfiguration("sputnik-1-std", "sputnik-1", seasons, 2, 0, 0);
 
         assertEquals(2, configuration.requiredAstronautCount());
     }

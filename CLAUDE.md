@@ -644,10 +644,41 @@ expected since successful/glitch-solved steps far outnumber failures),
 specialists released via the new mission-triggered R&D-ceiling path
 specifically (one event can release up to four at once, one component's
 full slot count) - confirms that path is reachable at this scale. Full
-writeup in `design.md` §2.5(g). **Still open for mission simulation:**
-prestige/goals, the mission's own cost at launch, the goal-dependency
-reliability modifier, and the Expert trait (still blocked on tracing
-Tiger Teams - not enough is known yet to implement it responsibly).
+writeup in `design.md` §2.5(g).
+
+**Mission cost at launch done (2026-10-02):** `MissionConfiguration`
+gained a `cost` field, deducted up front by `MissionLaunch.launch` right
+after the program-open check (same ordering `ProgramOpening.open`
+already uses for its own funds check), rejecting with a new
+`MissionLaunchOutcome.INSUFFICIENT_FUNDS` - mutating nothing - when
+funds are below cost. A flat one-time cost, distinct from the recurring
+per-season upkeep the still-unbuilt budget slice owns, and from
+`Program.openingCost()`/`maintenanceCost()`, which price the program
+itself rather than flying one of its missions. 45 existing
+`MissionConfiguration` constructor call sites across 5 files needed the
+new argument (mechanical, same kind of change as the R&D two-ceiling
+upgrade earlier this project needed) - all defaulted to `0` except where
+a test exercises cost specifically. 5 new tests: `MissionConfigurationTest`
+(rejects negative, accepts zero) and `MissionLaunchTest` (deducts the
+exact cost, rejects below-cost funds with nothing mutated, accepts an
+exact-match boundary case). **Harness-wired the same day:** the three
+fixture configurations got small launch costs (50/75/150, ascending
+with crew/duration, well under the programs' own 500/600/1,200 opening
+costs) - `maybeLaunchMission` already treated any non-`LAUNCHED`
+outcome as an ordinary no-op, so no new harness code was needed, only a
+Javadoc update. **The harness's full numbers run came back bit-for-bit
+identical to the pre-cost run, and `missionsLaunchedCount` itself didn't
+drop either, confirming `INSUFFICIENT_FUNDS` never actually fired in
+this 200-game run** - this harness has no income mechanic at all, so
+funds only ever fall, but the fixture's modest costs never drove any
+game's funds low enough to matter within 80 seasons (same situation
+`ProgramOpening`'s own `INSUFFICIENT_FUNDS` is in) - the dedicated
+`MissionLaunchTest` cases are what actually prove it works.
+Full writeup in `design.md` §2.5(h). **Still open for mission
+simulation:** prestige/goals and the goal-dependency reliability
+modifier (both blocked on the budget/prestige/goals slice, not started
+yet), and the Expert trait (still blocked on tracing Tiger Teams - not
+enough is known yet to implement it responsibly).
 
 Git repo
 initialized 2026-09-27 and pushed

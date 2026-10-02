@@ -1106,14 +1106,14 @@ proceeds:
       `PersonnelLifecycle` → `MissionProgress` → `TrainingProgress` →
       `ResearchProgress` → `HiringPool.refreshCandidates`.
     - **Deferred, same posture as §2.5(d)/(e)'s own lists:** prestige/goals
-      (§2.6), the mission's own cost at launch (§2.1 budget interaction -
-      `MissionLaunch` does not currently charge anything), the §11.3 goal-
-      dependency reliability modifier, and the Expert trait (still blocked
-      on tracing Tiger Teams/the saving-throw boost, `baspm.md`'s own
-      `_savingThrowProbOfSuccessIncludingExpertTeams` cross-reference - not
-      enough is known yet to implement it responsibly). Post-mission
-      reliability change and mission-based skill growth are done - see (g)
-      below.
+      (§2.6) and the §11.3 goal-dependency reliability modifier (both
+      blocked on the budget/prestige/goals slice, §5), and the Expert
+      trait (still blocked on tracing Tiger Teams/the saving-throw boost,
+      `baspm.md`'s own `_savingThrowProbOfSuccessIncludingExpertTeams`
+      cross-reference - not enough is known yet to implement it
+      responsibly). Post-mission reliability change and mission-based
+      skill growth are done - see (g) below; mission cost at launch is
+      done - see (h) below.
       **Two balance holes harness-wiring this surfaced (§3.10) are both
       resolved, same day, not left open:** the crew-size question became
       the exact-headcount decision above (`requiredAstronautCount`/
@@ -1272,6 +1272,57 @@ proceeds:
       mission-triggered release path, the one genuinely new mechanic with
       no prior analog in the harness, is reachable at this scale, not
       just theoretically implemented.
+  - **(h) Mission cost at launch (2026-10-02):** `baspm.md` &sect;9.5's
+    Tiger-Teams trace confirms BASPM's own code references a
+    `missionCost` value (used as the base its Tiger-Teams cost-scaling
+    formula multiplies against) - real evidence a per-mission cost is
+    genuine BASPM content, not invented, but that one reference is all
+    &sect;9.5 traces; **when or how BASPM itself deducts it (at launch,
+    per season, on completion, or elsewhere) is not traced**, so "charge
+    the full cost once, at launch" is this project's own unconfirmed
+    default, not a ported BASPM mechanic - flagged to the user as such,
+    not silently assumed. `MissionConfiguration` gained a new `cost`
+    field - a one-time funds cost `MissionLaunch.launch` deducts up
+    front, checked right after the program-open check and before any
+    crew/controller validation (same ordering `ProgramOpening.open`
+    already uses for its own funds check). Rejects with a new
+    `MissionLaunchOutcome.INSUFFICIENT_FUNDS` when the player's current
+    funds are below the configuration's own cost, mutating nothing, same
+    "fail before any mutation" contract every other `MissionLaunch`
+    rejection already upholds. **No refund on `FAILURE`/`CATASTROPHIC`**
+    - the cost buys the attempt, not a guaranteed outcome, matching how
+    `Program.openingCost()` is never refunded either; also unconfirmed,
+    not traced. Deliberately simple: a flat one-time cost, not the
+    recurring per-season upkeep §2.1's budget slice still owns, and
+    distinct from `Program.openingCost()`/`maintenanceCost()`, which
+    price owning the program itself rather than flying one of its
+    missions. 45 existing `MissionConfiguration`
+    constructor call sites across 5 files needed the new argument added
+    (mechanical, same kind of change &sect;3.4's R&D two-ceiling upgrade
+    needed) - all defaulted to `0` (free) except where a test specifically
+    exercises cost. 5 new tests: two in `MissionConfigurationTest`
+    (rejects negative cost, accepts zero), three in `MissionLaunchTest`
+    (deducts the exact cost on success, rejects when funds are below
+    cost with nothing mutated, accepts when funds exactly match cost -
+    the boundary case a strict-inequality bug could get wrong).
+    **Harness-wired the same day:** the three fixture configurations
+    each declare a small launch cost (50/75/150, ascending with crew/
+    duration, deliberately small next to the programs' own 500/600/1,200
+    opening costs - not balance-tuned numbers); `maybeLaunchMission`
+    already treats any non-`LAUNCHED` outcome as an ordinary no-op, so
+    `INSUFFICIENT_FUNDS` needed no new harness code, only a Javadoc
+    update. **Confirmed not meaningfully exercised by this harness**
+    (same situation `ProgramOpening`'s own `INSUFFICIENT_FUNDS` is in,
+    §3.10's own note) - the harness's full numbers run is bit-for-bit
+    identical to the pre-cost run (a funds deduction never consumes a
+    random draw, which explains why a successful launch changes
+    nothing downstream), <b>and `missionsLaunchedCount` itself didn't
+    drop either, confirming `INSUFFICIENT_FUNDS` never actually fired in
+    this 200-game run</b> - this harness has no income mechanic at all, so
+    funds only ever fall, but the fixture's modest costs against 5,000
+    starting funds never drove any game's funds low enough to matter
+    within 80 seasons. The dedicated `MissionLaunchTest` cases above are
+    what actually exercise `INSUFFICIENT_FUNDS`, not the harness.
 - 2.6 **Prestige, goals & scoring — analyzed 2026-09-27, see `baspm.md` §11
   for the full trace.**
   - **(a) How BASPM does it:** goals are `Generic` (universal race
@@ -2940,6 +2991,16 @@ growth wired in, 2026-10-02) - see §2.5(g) for the full numbers,
 including the step-mix shift this slice's own feedback loop produces
 and the mission-triggered SET-release count**, not repeated here.
 
+**Mission cost at launch wired in the same day (2026-10-02) - see
+§2.5(h).** The three fixture configurations each got a small launch
+cost; the full numbers run came back bit-for-bit identical to the third
+pass above, confirming a funds deduction alone never shifts the random
+draw stream - not a sign the wiring did nothing, just that this harness
+(no income mechanic, modest fixture costs against 5,000 starting funds)
+never meaningfully exercises `INSUFFICIENT_FUNDS`. That outcome is
+exercised directly instead, by `MissionLaunchTest`'s own dedicated
+cases - see §2.5(h).
+
 ### 3.11 Offscreen screenshot tooling for UI checking
 
 **Decided (user, 2026-09-27): reuse Robot-Rampage's `ScreenSnapshot`
@@ -3754,9 +3815,9 @@ here.
     `SkillGrowth.rdReliabilityGain` and its slot-band helpers, the
     composition order (same position as `TrainingProgress`, after
     `PersonnelLifecycle`), and `PersonnelDeparture.rdTargetComponentIdAtExit`.
-    **Still open in this same slice:** mission-based skill growth's own
-    caller (slice 3), and
-    the Expert trait — neither started yet. Also still open: actually starting a
+    **Still open in this same slice:** the Expert trait, not started yet
+    (mission-based skill growth's own caller shipped later, as part of
+    the mission-simulation slice below — see §2.5(g)). Also still open: actually starting a
     training assignment via a real player action, and *submitting* a hire
     as a real player action (both currently plain headless methods a
     future action handler will call, no dispatch path exists yet), plus
@@ -3861,12 +3922,16 @@ here.
     full shape (the per-season aggregation decision, the worst-category-
     wins rule, the shared SET-release helper, the broader-than-BASPM
     controller-growth rule) and its own harness numbers.
+    **Mission cost at launch done (2026-10-02)** - see §2.5(h) for the
+    new `MissionConfiguration.cost`/`MissionLaunchOutcome.INSUFFICIENT_FUNDS`
+    shape and why it isn't meaningfully exercised by the bot harness.
     **Still open, same posture as §2.5(f)'s own deferred list:**
-    prestige/goals (§2.6), the mission's own cost at launch, the §11.3
-    goal-dependency reliability modifier, and the Expert trait (the
-    crew-size question, the free-relaunch retirement loophole, and the
-    reliability-change/skill-growth items are all resolved - see
-    §2.5(f)/(g)).
+    prestige/goals (§2.6) and the §11.3 goal-dependency reliability
+    modifier (both still blocked on the budget/prestige/goals slice
+    below), and the Expert trait (the crew-size question, the
+    free-relaunch retirement loophole, the reliability-change/skill-
+    growth items, and mission cost are all resolved - see
+    §2.5(f)/(g)/(h)).
   - Slice: budget/funding review, prestige, goals, and the win-condition +
     tie-break check — §2.1/§2.6/§2.9.
   - Slice: random events — §2.7.

@@ -26,7 +26,7 @@ class ContentCatalogTest {
     private final MissionStep sputnikStep = new MissionStep("ascent",
         List.of(new MissionStep.ComponentInvolvement("rocket-1", 100)), List.of(), List.of(), false);
     private final MissionConfiguration sputnikStandard = new MissionConfiguration("sputnik-1-std", "sputnik-1",
-        List.of(new MissionSeason(List.of(sputnikStep))), 0, 0);
+        List.of(new MissionSeason(List.of(sputnikStep))), 0, 0, 0);
 
     /**
      * Verifies that a well-formed catalog looks up every definition it was
@@ -117,7 +117,7 @@ class ContentCatalogTest {
     @Test
     void rejectsMissionConfigurationWithUnknownProgram() {
         MissionConfiguration orphan = new MissionConfiguration("orphan-std", "unknown-program",
-            List.of(new MissionSeason(List.of(sputnikStep))), 0, 0);
+            List.of(new MissionSeason(List.of(sputnikStep))), 0, 0, 0);
 
         assertThrows(IllegalArgumentException.class, () -> new ContentCatalog(
             List.of(earthOrbit), List.of(sputnik), List.of(orphan), List.of(rocket)));
@@ -132,7 +132,7 @@ class ContentCatalogTest {
         MissionStep stepWithUnknownComponent = new MissionStep("ascent",
             List.of(new MissionStep.ComponentInvolvement("unknown-component", 100)), List.of(), List.of(), false);
         MissionConfiguration configuration = new MissionConfiguration("sputnik-1-std", "sputnik-1",
-            List.of(new MissionSeason(List.of(stepWithUnknownComponent))), 0, 0);
+            List.of(new MissionSeason(List.of(stepWithUnknownComponent))), 0, 0, 0);
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new ContentCatalog(
             List.of(earthOrbit), List.of(sputnik), List.of(configuration), List.of(rocket)));
@@ -152,7 +152,7 @@ class ContentCatalogTest {
         MissionStep stepWithUnrequiredComponent = new MissionStep("ascent",
             List.of(new MissionStep.ComponentInvolvement("payload-1", 100)), List.of(), List.of(), false);
         MissionConfiguration configuration = new MissionConfiguration("sputnik-1-std", "sputnik-1",
-            List.of(new MissionSeason(List.of(stepWithUnrequiredComponent))), 0, 0);
+            List.of(new MissionSeason(List.of(stepWithUnrequiredComponent))), 0, 0, 0);
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new ContentCatalog(
             List.of(earthOrbit), List.of(sputnik), List.of(configuration), List.of(rocket, payload)));
@@ -202,7 +202,7 @@ class ContentCatalogTest {
         MissionStep stepWithUnrequiredComponent = new MissionStep("orbit-insertion",
             List.of(new MissionStep.ComponentInvolvement("payload-1", 100)), List.of(), List.of(), false);
         MissionConfiguration configuration = new MissionConfiguration("sputnik-1-std", "sputnik-1",
-            List.of(new MissionSeason(List.of(stepWithUnknownComponent, stepWithUnrequiredComponent))), 0, 0);
+            List.of(new MissionSeason(List.of(stepWithUnknownComponent, stepWithUnrequiredComponent))), 0, 0, 0);
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new ContentCatalog(
             List.of(earthOrbit), List.of(sputnik), List.of(configuration), List.of(rocket, payload)));

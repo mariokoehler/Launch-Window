@@ -60,8 +60,9 @@ public final class MissionLaunch {
 
     /**
      * Launches a mission for this player: validates the configuration, its
-     * program, and the supplied crew/controllers, then creates a new
-     * {@link InProgressMission} at season 0 and marks every supplied
+     * program, the player's funds against {@link MissionConfiguration#cost()},
+     * and the supplied crew/controllers, then deducts that cost, creates a
+     * new {@link InProgressMission} at season 0, and marks every supplied
      * person {@link AssignmentState#ASSIGNED} with
      * {@link Personnel#setAssignedMissionId} pointing at it. Fails without
      * mutating anything if any check fails.
@@ -110,6 +111,9 @@ public final class MissionLaunch {
         if (!snapshot.getOpenedProgramIds().contains(configuration.programId())) {
             return MissionLaunchOutcome.PROGRAM_NOT_OPEN;
         }
+        if (snapshot.getFunds() < configuration.cost()) {
+            return MissionLaunchOutcome.INSUFFICIENT_FUNDS;
+        }
 
         MissionLaunchOutcome crewProblem =
             validateAstronauts(snapshot, astronautIds, configuration.requiredAstronautCount());
@@ -127,6 +131,7 @@ public final class MissionLaunch {
             new InProgressMission(instanceId, configuration.id(), astronautIds, missionControlOfficerIds);
         snapshot.getInProgressMissions().put(instanceId, mission);
 
+        snapshot.setFunds(snapshot.getFunds() - configuration.cost());
         assign(snapshot.getAstronauts(), astronautIds, instanceId);
         assign(snapshot.getMissionControlOfficers(), missionControlOfficerIds, instanceId);
 

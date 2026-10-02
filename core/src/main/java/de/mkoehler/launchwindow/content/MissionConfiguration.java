@@ -26,6 +26,14 @@ import java.util.function.Predicate;
  * replacement for it, and does not assign a specific seat to a specific
  * skill.</p>
  *
+ * <p><b>{@link #cost()} is a one-time launch cost, charged once per
+ * {@link de.mkoehler.launchwindow.rules.MissionLaunch#launch} call</b>
+ * (user decision, {@code design.md} &sect;2.5(h), 2026-10-02) - distinct
+ * from both the recurring per-season costs this type does not yet model
+ * (see {@code design.md} &sect;2.1) and from {@link Program#openingCost()},
+ * which prices owning the program itself, not flying one of its missions.
+ * {@code 0} is a valid cost (a free mission).</p>
+ *
  * <p>A content-definition type: shared, read-only game data loaded from a
  * content pack (not yet implemented - see {@code design.md} &sect;5's M3),
  * never per-player state, and never sent over the network.</p>
@@ -45,10 +53,16 @@ import java.util.function.Predicate;
  *                  Control officers a launch of this configuration must
  *                  supply; must be positive if, and only if, some step of
  *                  some season has a non-empty {@code controllerInvolvements}
+ * @param cost      the funds cost {@link de.mkoehler.launchwindow.rules.MissionLaunch#launch}
+ *                  deducts up front when launching this configuration - a
+ *                  one-time launch cost, distinct from
+ *                  {@link Program#openingCost()}/{@link Program#maintenanceCost()},
+ *                  which price owning the program itself, not flying one of
+ *                  its missions
  * @author Mario Koehler
  */
 public record MissionConfiguration(String id, String programId, List<MissionSeason> seasons,
-                                    int requiredAstronautCount, int requiredMissionControlOfficerCount) {
+                                    int requiredAstronautCount, int requiredMissionControlOfficerCount, long cost) {
 
     /**
      * Validates every field (including that both required-count fields
@@ -60,8 +74,9 @@ public record MissionConfiguration(String id, String programId, List<MissionSeas
      *                                   {@code seasons} is {@code null}
      * @throws IllegalArgumentException if {@code id}/{@code programId} is
      *                                   blank, {@code seasons} is empty,
-     *                                   either required-count field is
-     *                                   negative, or either disagrees with
+     *                                   either required-count field or
+     *                                   {@code cost} is negative, or either
+     *                                   required-count field disagrees with
      *                                   whether {@code seasons} actually
      *                                   involves any crew/controllers
      */
@@ -84,6 +99,9 @@ public record MissionConfiguration(String id, String programId, List<MissionSeas
         if (requiredMissionControlOfficerCount < 0) {
             throw new IllegalArgumentException(
                 "requiredMissionControlOfficerCount must not be negative: " + requiredMissionControlOfficerCount);
+        }
+        if (cost < 0) {
+            throw new IllegalArgumentException("cost must not be negative: " + cost);
         }
         seasons = List.copyOf(seasons);
 

@@ -162,7 +162,7 @@ class MissionProgressTest {
             List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 100)),
             List.of(new MissionStep.CrewInvolvement(AstronautSkill.PILOTING, 100)), false);
         MissionConfiguration configuration =
-            new MissionConfiguration("avg-std", "mercury-program", List.of(new MissionSeason(List.of(step))), 2, 1);
+            new MissionConfiguration("avg-std", "mercury-program", List.of(new MissionSeason(List.of(step))), 2, 1, 0);
         ContentCatalog catalog = catalogWith(configuration);
 
         PlayerSnapshot snapshot = snapshotWithOwnedCapsule(80.0);
@@ -198,7 +198,7 @@ class MissionProgressTest {
         MissionStep step = new MissionStep("ops", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
             List.of(), List.of(new MissionStep.CrewInvolvement(AstronautSkill.PILOTING, 100)), false);
         MissionConfiguration configuration = new MissionConfiguration("complete-std", "mercury-program",
-            List.of(new MissionSeason(List.of(step))), 1, 0);
+            List.of(new MissionSeason(List.of(step))), 1, 0, 0);
         ContentCatalog catalog = catalogWith(configuration);
 
         PlayerSnapshot snapshot = snapshotWithOwnedCapsule(90.0);
@@ -228,7 +228,7 @@ class MissionProgressTest {
         MissionStep step = new MissionStep("ops", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
             List.of(), List.of(new MissionStep.CrewInvolvement(AstronautSkill.PILOTING, 100)), false);
         MissionConfiguration configuration = new MissionConfiguration("complete-std", "mercury-program",
-            List.of(new MissionSeason(List.of(step))), 1, 0);
+            List.of(new MissionSeason(List.of(step))), 1, 0, 0);
         ContentCatalog catalog = catalogWith(configuration);
 
         PlayerSnapshot snapshot = snapshotWithOwnedCapsule(90.0);
@@ -264,7 +264,7 @@ class MissionProgressTest {
         MissionStep step = new MissionStep("ops", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
             List.of(), List.of(new MissionStep.CrewInvolvement(AstronautSkill.PILOTING, 100)), false);
         MissionConfiguration configuration = new MissionConfiguration("complete-std", "mercury-program",
-            List.of(new MissionSeason(List.of(step))), 1, 0);
+            List.of(new MissionSeason(List.of(step))), 1, 0, 0);
         ContentCatalog catalog = catalogWith(configuration);
 
         PlayerSnapshot snapshot = snapshotWithOwnedCapsule(90.0);
@@ -292,7 +292,7 @@ class MissionProgressTest {
             List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 100)),
             List.of(new MissionStep.CrewInvolvement(AstronautSkill.PILOTING, 100)), false);
         MissionConfiguration configuration = new MissionConfiguration("failure-std", "mercury-program",
-            List.of(new MissionSeason(List.of(step))), 1, 1);
+            List.of(new MissionSeason(List.of(step))), 1, 1, 0);
         ContentCatalog catalog = catalogWith(configuration);
 
         PlayerSnapshot snapshot = snapshotWithOwnedCapsule(10.0);
@@ -334,7 +334,7 @@ class MissionProgressTest {
         MissionStep step = new MissionStep("launch", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
             List.of(), List.of(new MissionStep.CrewInvolvement(AstronautSkill.PILOTING, 100)), true);
         MissionConfiguration configuration = new MissionConfiguration("catastrophic-std", "mercury-program",
-            List.of(new MissionSeason(List.of(step))), 1, 0);
+            List.of(new MissionSeason(List.of(step))), 1, 0, 0);
         ContentCatalog catalog = catalogWith(configuration);
 
         PlayerSnapshot snapshot = snapshotWithOwnedCapsule(10.0);
@@ -368,7 +368,7 @@ class MissionProgressTest {
         MissionStep step = new MissionStep("ops", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
             List.of(), List.of(new MissionStep.CrewInvolvement(AstronautSkill.PILOTING, 100)), false);
         MissionConfiguration configuration = new MissionConfiguration("multi-std", "mercury-program",
-            List.of(new MissionSeason(List.of(step)), new MissionSeason(List.of(step))), 1, 0);
+            List.of(new MissionSeason(List.of(step)), new MissionSeason(List.of(step))), 1, 0, 0);
         ContentCatalog catalog = catalogWith(configuration);
 
         PlayerSnapshot snapshot = snapshotWithOwnedCapsule(90.0);
@@ -396,7 +396,7 @@ class MissionProgressTest {
         MissionStep step = new MissionStep("ops", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
             List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 100)), List.of(), false);
         MissionConfiguration configuration = new MissionConfiguration("multi-std", "mercury-program",
-            List.of(new MissionSeason(List.of(step)), new MissionSeason(List.of(step))), 0, 1);
+            List.of(new MissionSeason(List.of(step)), new MissionSeason(List.of(step))), 0, 1, 0);
         ContentCatalog catalog = catalogWith(configuration);
 
         PlayerSnapshot snapshot = snapshotWithOwnedCapsule(90.0);
@@ -431,7 +431,7 @@ class MissionProgressTest {
         MissionStep secondStep = new MissionStep("orbit-ops",
             List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)), List.of(), List.of(), false);
         MissionConfiguration configuration = new MissionConfiguration("two-step-std", "mercury-program",
-            List.of(new MissionSeason(List.of(firstStep, secondStep))), 0, 0);
+            List.of(new MissionSeason(List.of(firstStep, secondStep))), 0, 0, 0);
         ContentCatalog catalog = catalogWith(configuration);
 
         PlayerSnapshot snapshot = snapshotWithOwnedCapsule(10.0);
@@ -468,7 +468,7 @@ class MissionProgressTest {
         MissionStep secondStep = new MissionStep("orbit-ops",
             List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)), List.of(), List.of(), false);
         MissionConfiguration configuration = new MissionConfiguration("glitch-std", "mercury-program",
-            List.of(new MissionSeason(List.of(firstStep, secondStep))), 0, 0);
+            List.of(new MissionSeason(List.of(firstStep, secondStep))), 0, 0, 0);
         ContentCatalog catalog = catalogWith(configuration);
 
         PlayerSnapshot snapshot = snapshotWithOwnedCapsule(10.0);
@@ -502,7 +502,7 @@ class MissionProgressTest {
         MissionStep step = new MissionStep("launch", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
             List.of(), List.of(new MissionStep.CrewInvolvement(AstronautSkill.PILOTING, 100)), false);
         MissionConfiguration configuration = new MissionConfiguration("failure-std", "mercury-program",
-            List.of(new MissionSeason(List.of(step))), 1, 0);
+            List.of(new MissionSeason(List.of(step))), 1, 0, 0);
         ContentCatalog catalog = catalogWith(configuration);
 
         PlayerSnapshot snapshot = snapshotWithOwnedCapsule(10.0);
@@ -539,7 +539,7 @@ class MissionProgressTest {
         MissionStep step = new MissionStep("launch", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
             List.of(), List.of(new MissionStep.CrewInvolvement(AstronautSkill.PILOTING, 100)), true);
         MissionConfiguration configuration = new MissionConfiguration("catastrophic-std", "mercury-program",
-            List.of(new MissionSeason(List.of(step))), 2, 0);
+            List.of(new MissionSeason(List.of(step))), 2, 0, 0);
         ContentCatalog catalog = catalogWith(configuration);
 
         PlayerSnapshot snapshot = snapshotWithOwnedCapsule(10.0);
@@ -577,7 +577,7 @@ class MissionProgressTest {
             List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 100)),
             List.of(new MissionStep.CrewInvolvement(AstronautSkill.PILOTING, 100)), true);
         MissionConfiguration configuration = new MissionConfiguration("catastrophic-ctrl-std", "mercury-program",
-            List.of(new MissionSeason(List.of(step))), 1, 1);
+            List.of(new MissionSeason(List.of(step))), 1, 1, 0);
         ContentCatalog catalog = catalogWith(configuration);
 
         PlayerSnapshot snapshot = snapshotWithOwnedCapsule(10.0);
@@ -608,11 +608,11 @@ class MissionProgressTest {
         MissionStep stepA = new MissionStep("ops-a", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
             List.of(), List.of(), false);
         MissionConfiguration configurationA = new MissionConfiguration("mission-a", "mercury-program",
-            List.of(new MissionSeason(List.of(stepA))), 0, 0);
+            List.of(new MissionSeason(List.of(stepA))), 0, 0, 0);
         MissionStep stepB = new MissionStep("ops-b", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
             List.of(), List.of(), false);
         MissionConfiguration configurationB = new MissionConfiguration("mission-b", "mercury-program",
-            List.of(new MissionSeason(List.of(stepB)), new MissionSeason(List.of(stepB))), 0, 0);
+            List.of(new MissionSeason(List.of(stepB)), new MissionSeason(List.of(stepB))), 0, 0, 0);
         ContentCatalog catalog = catalogWith(configurationA, configurationB);
 
         PlayerSnapshot snapshot = snapshotWithOwnedCapsule(90.0);
@@ -645,7 +645,7 @@ class MissionProgressTest {
             List.of(), List.of(), false);
         MissionConfiguration configuration =
             new MissionConfiguration("growth-std", "mercury-program", List.of(new MissionSeason(List.of(step))), 0,
-                0);
+                0, 0);
         ContentCatalog catalog = catalogWith(configuration);
 
         PlayerSnapshot snapshot = snapshotWithOwnedCapsule(50.0);
@@ -681,7 +681,7 @@ class MissionProgressTest {
                 List.of(new MissionSeason(List.of(new MissionStep("launch",
                     List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 60),
                         new MissionStep.ComponentInvolvement("second-component", 40)),
-                    List.of(), List.of(), false)))), 0, 0)),
+                    List.of(), List.of(), false)))), 0, 0, 0)),
             List.of(CAPSULE, second));
 
         PlayerSnapshot snapshot = new PlayerSnapshot("Agency", Archetype.NASA, 10_000, 0, 0, 1);
@@ -715,7 +715,7 @@ class MissionProgressTest {
         MissionStep step = new MissionStep("launch", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
             List.of(), List.of(), false);
         MissionConfiguration configuration = new MissionConfiguration("failure-floor-std", "mercury-program",
-            List.of(new MissionSeason(List.of(step))), 0, 0);
+            List.of(new MissionSeason(List.of(step))), 0, 0, 0);
         ContentCatalog catalog = catalogWith(configuration);
 
         PlayerSnapshot snapshot = new PlayerSnapshot("Agency", Archetype.NASA, 10_000, 0, 0, 1);
@@ -744,7 +744,7 @@ class MissionProgressTest {
         MissionStep step = new MissionStep("ops", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
             List.of(), List.of(), false);
         MissionConfiguration configuration = new MissionConfiguration("growth-max-std", "mercury-program",
-            List.of(new MissionSeason(List.of(step))), 0, 0);
+            List.of(new MissionSeason(List.of(step))), 0, 0, 0);
         ContentCatalog catalog = catalogWith(configuration);
 
         PlayerSnapshot snapshot = snapshotWithOwnedCapsule(85.0);
@@ -771,7 +771,7 @@ class MissionProgressTest {
         MissionStep step = new MissionStep("ops", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
             List.of(), List.of(), false);
         MissionConfiguration configuration = new MissionConfiguration("growth-release-std", "mercury-program",
-            List.of(new MissionSeason(List.of(step))), 0, 0);
+            List.of(new MissionSeason(List.of(step))), 0, 0, 0);
         ContentCatalog catalog = catalogWith(configuration);
 
         PlayerSnapshot snapshot = snapshotWithOwnedCapsule(80.0);
@@ -806,7 +806,7 @@ class MissionProgressTest {
         MissionStep step = new MissionStep("ops", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
             List.of(), List.of(), false);
         MissionConfiguration configuration = new MissionConfiguration("skill-growth-std", "mercury-program",
-            List.of(new MissionSeason(List.of(step))), 0, 0);
+            List.of(new MissionSeason(List.of(step))), 0, 0, 0);
         ContentCatalog catalog = catalogWith(configuration);
 
         PlayerSnapshot snapshot = snapshotWithOwnedCapsule(90.0);
@@ -846,7 +846,7 @@ class MissionProgressTest {
         MissionStep step = new MissionStep("ops", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
             List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 100)), List.of(), false);
         MissionConfiguration configuration = new MissionConfiguration("controller-growth-std", "mercury-program",
-            List.of(new MissionSeason(List.of(step))), 0, 1);
+            List.of(new MissionSeason(List.of(step))), 0, 1, 0);
         ContentCatalog catalog = catalogWith(configuration);
 
         PlayerSnapshot snapshot = snapshotWithOwnedCapsule(90.0);

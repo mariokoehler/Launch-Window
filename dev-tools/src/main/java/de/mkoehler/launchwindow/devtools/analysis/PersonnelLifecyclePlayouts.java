@@ -224,7 +224,12 @@ public final class PersonnelLifecyclePlayouts {
      * mission with and without a saving throw worth anything;
      * {@code mercury-mission-std} (two seasons, crewed, every step flagged
      * crew-risk) is the only one that can ever produce a
-     * {@code CATASTROPHIC} crew loss.</p>
+     * {@code CATASTROPHIC} crew loss. Each also declares its own
+     * {@link MissionConfiguration#cost()} (50/75/150 respectively,
+     * ascending with crew/duration) - deliberately small next to the
+     * programs' own opening costs (500/600/1,200), since flying a mission
+     * should cost much less than building the hardware it flies, not
+     * balance-tuned numbers.</p>
      *
      * @return the fixture catalog
      */
@@ -253,7 +258,7 @@ public final class PersonnelLifecyclePlayouts {
                 new MissionStep.ControllerInvolvement(MissionControlSkill.TRAJECTORY_AND_GNC, 40)),
             List.of(), false);
         MissionConfiguration sputnikLaunchConfiguration = new MissionConfiguration("sputnik-launch-std",
-            "sputnik-program", List.of(new MissionSeason(List.of(sputnikLaunchStep))), 0, 1);
+            "sputnik-program", List.of(new MissionSeason(List.of(sputnikLaunchStep))), 0, 1, 50);
 
         MissionStep explorerLaunchStep = new MissionStep("launch",
             List.of(new MissionStep.ComponentInvolvement("satellite-explorer", 100)),
@@ -267,7 +272,7 @@ public final class PersonnelLifecyclePlayouts {
         MissionConfiguration explorerMissionConfiguration = new MissionConfiguration("explorer-mission-std",
             "explorer-program",
             List.of(new MissionSeason(List.of(explorerLaunchStep)), new MissionSeason(List.of(explorerOrbitOpsStep))),
-            0, 1);
+            0, 1, 75);
 
         MissionStep mercuryLaunchStep = new MissionStep("launch",
             List.of(new MissionStep.ComponentInvolvement("rocket-redstone", 60),
@@ -283,7 +288,7 @@ public final class PersonnelLifecyclePlayouts {
         MissionConfiguration mercuryMissionConfiguration = new MissionConfiguration("mercury-mission-std",
             "mercury-program",
             List.of(new MissionSeason(List.of(mercuryLaunchStep)), new MissionSeason(List.of(mercuryOrbitOpsStep))),
-            2, 1);
+            2, 1, 150);
 
         return new ContentCatalog(List.of(category), List.of(sputnikProgram, explorerProgram, mercuryProgram),
             List.of(sputnikLaunchConfiguration, explorerMissionConfiguration, mercuryMissionConfiguration),
@@ -549,7 +554,10 @@ public final class PersonnelLifecyclePlayouts {
      * {@link MissionConfiguration#requiredMissionControlOfficerCount()}
      * randomly-picked currently idle astronauts/Mission Control officers.
      * A no-op (not an error) if no program is open yet, not enough idle
-     * personnel exist to meet either exact count, or
+     * personnel exist to meet either exact count, the player's funds are
+     * below the picked configuration's own {@link MissionConfiguration#cost()}
+     * ({@link MissionLaunchOutcome#INSUFFICIENT_FUNDS} - this harness has no
+     * income mechanic yet, so funds only ever fall over a game), or
      * {@link MissionLaunch#launch} itself reports anything else - the same
      * posture as {@link #maybeHire}/{@link #maybeOpenProgram}.
      *

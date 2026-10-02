@@ -82,8 +82,9 @@ import java.util.random.RandomGenerator;
  *
  * <p><b>Deliberately out of scope for this slice</b> (see
  * {@code design.md} &sect;2.5(g)'s own deferred list): prestige/goals,
- * the mission's own cost at launch, and the {@code baspm.md}
- * &sect;11.3 goal-dependency reliability modifier (always 0 here).</p>
+ * and the {@code baspm.md} &sect;11.3 goal-dependency reliability
+ * modifier (always 0 here). The mission's own cost at launch is done -
+ * see {@link MissionLaunch}/{@code design.md} &sect;2.5(h).</p>
  *
  * @author Mario Koehler
  */
