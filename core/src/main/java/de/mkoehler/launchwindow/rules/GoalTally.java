@@ -1,9 +1,14 @@
 package de.mkoehler.launchwindow.rules;
 
+import de.mkoehler.launchwindow.model.PlayerSnapshot;
+
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * <p>The game-wide count of how many times each goal has settled, across
@@ -27,6 +32,29 @@ public final class GoalTally {
      * Creates an empty tally - no goal has settled yet.
      */
     public GoalTally() {
+    }
+
+    /**
+     * Builds the tally from every player's state at the start of a turn. Each player settles a goal at
+     * most once, achieved or cancelled, so a goal's count is the number of players who have it - the
+     * same count committing every turn's events would have reached. Rebuilding from start-of-turn
+     * snapshots keeps a crashed, half-resolved turn from pricing same-turn goals as second-time on
+     * retry ({@code design.md} &sect;5, M4).
+     *
+     * @param players every player's start-of-turn snapshot
+     * @return the tally
+     */
+    public static GoalTally fromPlayers(Collection<PlayerSnapshot> players) {
+        Objects.requireNonNull(players, "players must not be null");
+        GoalTally tally = new GoalTally();
+        for (PlayerSnapshot player : players) {
+            Set<String> held = new HashSet<>(player.getAchievedGoals().keySet());
+            held.addAll(player.getCancelledGoalIds());
+            for (String goalId : held) {
+                tally.counts.merge(goalId, 1, Integer::sum);
+            }
+        }
+        return tally;
     }
 
     /**

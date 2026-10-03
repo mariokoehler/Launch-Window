@@ -1,6 +1,21 @@
 package de.mkoehler.launchwindow.net;
 
 import com.esotericsoftware.kryo.Kryo;
+import de.mkoehler.launchwindow.actions.AssignResearchAction;
+import de.mkoehler.launchwindow.actions.CancelMissionAction;
+import de.mkoehler.launchwindow.actions.CloseProgramAction;
+import de.mkoehler.launchwindow.actions.CloseRocketProgramAction;
+import de.mkoehler.launchwindow.actions.ConvertPrestigeAction;
+import de.mkoehler.launchwindow.actions.DismissAction;
+import de.mkoehler.launchwindow.actions.HireAction;
+import de.mkoehler.launchwindow.actions.LaunchMissionAction;
+import de.mkoehler.launchwindow.actions.OpenProgramAction;
+import de.mkoehler.launchwindow.actions.OpenRocketProgramAction;
+import de.mkoehler.launchwindow.actions.PullOutOfTrainingAction;
+import de.mkoehler.launchwindow.actions.ReleaseResearchAction;
+import de.mkoehler.launchwindow.actions.StartExpertTrainingAction;
+import de.mkoehler.launchwindow.actions.StartTrainingAction;
+import de.mkoehler.launchwindow.actions.UpgradeBuildingAction;
 import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.Astronaut;
@@ -16,6 +31,8 @@ import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.model.SetSkill;
 import de.mkoehler.launchwindow.model.SetSpecialist;
 import de.mkoehler.launchwindow.model.TrainingKind;
+import de.mkoehler.launchwindow.net.messages.ClaimSlotRequest;
+import de.mkoehler.launchwindow.net.messages.ClaimSlotResponse;
 import de.mkoehler.launchwindow.net.messages.FetchStateRequest;
 import de.mkoehler.launchwindow.net.messages.FetchStateResponse;
 import de.mkoehler.launchwindow.net.messages.HandshakeRequest;
@@ -23,6 +40,7 @@ import de.mkoehler.launchwindow.net.messages.HandshakeResponse;
 import de.mkoehler.launchwindow.net.messages.SubmitActionRequest;
 import de.mkoehler.launchwindow.net.messages.SubmitActionResponse;
 import de.mkoehler.launchwindow.persistence.SetFundsAction;
+import de.mkoehler.launchwindow.rules.PersonnelGroup;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -137,5 +155,27 @@ public final class MessageRegistry {
         // buildingUpgradeSeasonsRemaining, carried in FetchStateResponse. Never move this line;
         // see the class Javadoc.
         kryo.register(Building.class);
+        // Appended 2026-10-03 (M4 player actions, design.md section 5): every journaled action travels in
+        // SubmitActionRequest, plus the group enum several of them carry. Never move these lines; see the
+        // class Javadoc.
+        kryo.register(PersonnelGroup.class);
+        kryo.register(OpenProgramAction.class);
+        kryo.register(CloseProgramAction.class);
+        kryo.register(OpenRocketProgramAction.class);
+        kryo.register(CloseRocketProgramAction.class);
+        kryo.register(LaunchMissionAction.class);
+        kryo.register(CancelMissionAction.class);
+        kryo.register(HireAction.class);
+        kryo.register(DismissAction.class);
+        kryo.register(UpgradeBuildingAction.class);
+        kryo.register(ConvertPrestigeAction.class);
+        kryo.register(AssignResearchAction.class);
+        kryo.register(ReleaseResearchAction.class);
+        kryo.register(StartTrainingAction.class);
+        kryo.register(StartExpertTrainingAction.class);
+        kryo.register(PullOutOfTrainingAction.class);
+        // Appended 2026-10-03 (M4 slot claim, design.md section 3.8). Never move these lines.
+        kryo.register(ClaimSlotRequest.class);
+        kryo.register(ClaimSlotResponse.class);
     }
 }

@@ -1,7 +1,11 @@
 package de.mkoehler.launchwindow.server;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.mkoehler.launchwindow.actions.OpenProgramAction;
+import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.net.AppVersion;
+import de.mkoehler.launchwindow.net.messages.ClaimSlotRequest;
+import de.mkoehler.launchwindow.net.messages.ClaimSlotResponse;
 import de.mkoehler.launchwindow.net.NetworkClient;
 import de.mkoehler.launchwindow.net.NetworkServer;
 import de.mkoehler.launchwindow.net.messages.FetchStateRequest;
@@ -10,7 +14,6 @@ import de.mkoehler.launchwindow.net.messages.HandshakeRequest;
 import de.mkoehler.launchwindow.net.messages.HandshakeResponse;
 import de.mkoehler.launchwindow.net.messages.SubmitActionRequest;
 import de.mkoehler.launchwindow.net.messages.SubmitActionResponse;
-import de.mkoehler.launchwindow.persistence.SetFundsAction;
 import de.mkoehler.launchwindow.server.accounts.AccountStore;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -100,7 +103,8 @@ class ServerClientIntegrationTest {
     private int startServer(Path dataRoot) throws IOException {
         int port = freePort();
         accountStore = new AccountStore(dataRoot.resolve("accounts.json"));
-        RequestDispatcher dispatcher = new RequestDispatcher(accountStore, dataRoot, mapper);
+        RequestDispatcher dispatcher = new RequestDispatcher(accountStore, dataRoot, mapper, ServerTestGames.CONTEXT,
+            ServerTestGames.meta(false));
         server = new NetworkServer();
         server.start(port);
         NetworkServer capturedServer = server;
@@ -158,13 +162,17 @@ class ServerClientIntegrationTest {
             HandshakeResponse.class);
         assertTrue(handshake.accepted());
 
-        SubmitActionResponse submitResponse =
-            client.sendAndReceive(new SubmitActionRequest(new SetFundsAction(5_000)), SubmitActionResponse.class);
+        ClaimSlotResponse claim = client.sendAndReceive(
+            new ClaimSlotRequest(Archetype.SOVIET, "Hanseatic Space Agency", "Mario"), ClaimSlotResponse.class);
+        assertTrue(claim.success());
+
+        SubmitActionResponse submitResponse = client.sendAndReceive(
+            new SubmitActionRequest(new OpenProgramAction("sputnik-1")), SubmitActionResponse.class);
         assertTrue(submitResponse.success());
 
         FetchStateResponse fetchResponse = client.sendAndReceive(new FetchStateRequest(), FetchStateResponse.class);
         assertTrue(fetchResponse.success());
-        assertEquals(5_000, fetchResponse.state().getFunds());
+        assertEquals(25_000 - 876, fetchResponse.state().getFunds());
     }
 
     /**

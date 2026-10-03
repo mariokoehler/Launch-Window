@@ -83,6 +83,32 @@ public class PlayerSnapshotStore {
      *     actions pending
      * @throws IOException if the snapshot file exists but cannot be read
      */
+    /**
+     * Loads the most recent snapshot resolved before a turn - the player's state
+     * at the start of that turn, even if a crashed attempt already wrote the turn
+     * itself ({@code design.md} &sect;5, M4: the game-wide goal tally must be built
+     * from start-of-turn state).
+     *
+     * @param turn the turn being resolved
+     * @return the latest snapshot with a lower turn number, if any
+     * @throws IOException if the snapshot folder can't be read
+     */
+    public Optional<PlayerSnapshot> loadLatestBefore(long turn) throws IOException {
+        if (!Files.exists(snapshotsDir)) {
+            return Optional.empty();
+        }
+        OptionalLong before;
+        try (Stream<Path> listing = Files.list(snapshotsDir)) {
+            before = listing
+                .map(path -> path.getFileName().toString())
+                .filter(name -> name.endsWith(SUFFIX))
+                .mapToLong(name -> Long.parseLong(name.substring(0, name.length() - SUFFIX.length())))
+                .filter(number -> number < turn)
+                .max();
+        }
+        return before.isEmpty() ? Optional.empty() : load(before.getAsLong());
+    }
+
     public Optional<String> lastAppliedActionFile(long turn) throws IOException {
         return loadRecord(turn).map(ResolvedSnapshot::getLastAppliedActionFile);
     }

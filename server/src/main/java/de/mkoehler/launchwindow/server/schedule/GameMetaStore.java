@@ -62,6 +62,7 @@ public final class GameMetaStore {
             return new Result(meta, false);
         }
         GameMeta meta = new GameMeta(ScheduleProfile.daily(DEFAULT_RESOLUTION_TIME, DEFAULT_TIMEZONE), List.of());
+        meta.setGameSeed(new java.security.SecureRandom().nextLong());
         save(file, meta, mapper);
         System.err.println("No " + file.toAbsolutePath() + " found - created a default DAILY schedule at "
             + DEFAULT_RESOLUTION_TIME + " " + DEFAULT_TIMEZONE + ". Edit this file to configure the real game.");

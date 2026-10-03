@@ -19,6 +19,8 @@ import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.model.SetSkill;
 import de.mkoehler.launchwindow.model.SetSpecialist;
 import de.mkoehler.launchwindow.model.TrainingKind;
+import de.mkoehler.launchwindow.net.messages.ClaimSlotRequest;
+import de.mkoehler.launchwindow.net.messages.ClaimSlotResponse;
 import de.mkoehler.launchwindow.net.messages.FetchStateRequest;
 import de.mkoehler.launchwindow.net.messages.FetchStateResponse;
 import de.mkoehler.launchwindow.net.messages.HandshakeRequest;
@@ -218,6 +220,17 @@ class MessageRegistryTest {
     /**
      * A {@link FetchStateRequest} must survive the wire - it carries no
      * fields, so this just proves the empty record itself round-trips.
+     */
+    @Test
+    void claimSlotMessagesSurviveRoundTrip() {
+        assertEquals(new ClaimSlotRequest(Archetype.SOVIET, "OKB-1", "Chief"),
+            roundTrip(new ClaimSlotRequest(Archetype.SOVIET, "OKB-1", "Chief"), ClaimSlotRequest.class));
+        assertEquals(ClaimSlotResponse.success("Welcome"),
+            roundTrip(ClaimSlotResponse.success("Welcome"), ClaimSlotResponse.class));
+    }
+
+    /**
+     * Verifies the empty fetch request round-trips.
      */
     @Test
     void fetchStateRequestSurvivesRoundTrip() {

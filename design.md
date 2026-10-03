@@ -4963,6 +4963,55 @@ here.
          mission can't be abandoned; it always runs to its end or to failure.
        - **Building upgrades are final**, as in BASPM. There's no cancel, so the
          client must confirm before queuing one.
+  - **Slice 4b, `SeasonResolver` — done (2026-10-03).** One player's whole season pass
+    in composition order, used by the server and by `ContentPackPlayouts`.
+    `Context.gameTurn` (goal stamps, news, flight and failure turns) is kept apart
+    from `seasonsElapsed`, the player's own count that drives reviews. An
+    `Observer` hooks before and after each phase. A pure refactor: the harness
+    reproduces its seed-42 numbers exactly.
+  - **Slice 4a, the action vocabulary — done (2026-10-03).**
+    - **New validated rules:** `PersonnelActions` (dismiss; start basic, advanced,
+      or permanent training; assign or release R&D) and `MissionCancellation`
+      (scrub with a full refund of the recorded `InProgressMission.launchCost`,
+      or cancel an uncrewed mission in flight with
+      `MissionConfiguration.cancellationPrestigeDeduction`/`cancellationRefundPercent`,
+      regenerated into the pack).
+    - **Fifteen journaled actions** in `de.mkoehler.launchwindow.actions`, plain
+      beans for Jackson and Kryo, one per rules method. Each returns an
+      `ActionResult` (applied, plus the outcome name).
+    - **Seeds:** `PlayerAction.seed` is set by the server on acceptance,
+      overwriting the client's, and the hire and pull-out actions draw from it.
+    - **Replay:** `SnapshotReplay` applies each action to a copy and keeps the copy
+      only if the action applied, so a rejected or malformed action never leaves a
+      partial change.
+    - **Submission:** `PlayerStateService.submitAction` validates against the
+      preview and journals only what takes effect.
+  - **Slice 4c, server wiring — done (2026-10-03).**
+    - **Game meta and pack:** `game-meta.json` gained `contentPack` (pinned at
+      startup; changing it mid-game would break replays), `declaredGoalIds`
+      (default: earth-orbit satellite, human in space, human in orbit),
+      `gameSeed` (random for a new game), and `devMode`.
+    - **Slot claim:** the handshake no longer bootstraps a placeholder player;
+      `ClaimSlotRequest` creates the slot. It takes the archetype, a unique
+      agency name, and a unique callsign (case-insensitive;
+      `PlayerSnapshot.callsign` is new) and creates the starting state
+      (decision 2), with candidate pools seeded from the game seed. Until then,
+      fetch and submit answer `SLOT_CLAIM_REQUIRED`. `HandshakeResponse` keeps its
+      fields, since its shape must never change.
+    - **Submission:** submit refuses `SetFundsAction` outside dev mode and names
+      the rules outcome in its response.
+    - **Turn resolution:** `TurnScheduler` builds the goal tally from every
+      player's start-of-turn snapshot (`GoalTally.fromPlayers`,
+      `PlayerSnapshotStore.loadLatestBefore`), so a crash-and-retry prices goals
+      the same way. Each player resolves through `SeasonResolver`, seeded by
+      `GameSeeds.forSeason(gameSeed, turn, account)`, with the shared game turn
+      and the player's own seasons. After everyone resolves, the win check writes
+      `game-result.json` once (`GameResult`), and play continues.
+    - **Tests:** a resolved turn comes out byte-identical when resolved again;
+      every action survives the JSON journal and Kryo; and the claim, uniqueness,
+      dev-mode, and seed rules have dispatcher tests.
+    - **Dev data:** reset the dev data root, because M1-era player folders
+      predate the slot claim.
   - **Note from M3 for the dispatch work:** call the five-argument
     `HiringPool.hire(..., BuildingSchedule)` with `catalog.buildings()`. The
     four-argument overload silently uses `BuildingSchedule.baspmClose()`, which

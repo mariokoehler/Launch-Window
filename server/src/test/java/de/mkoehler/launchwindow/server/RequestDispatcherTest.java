@@ -1,25 +1,35 @@
 package de.mkoehler.launchwindow.server;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.mkoehler.launchwindow.actions.HireAction;
+import de.mkoehler.launchwindow.actions.OpenProgramAction;
+import de.mkoehler.launchwindow.model.Archetype;
+import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.net.AppVersion;
+import de.mkoehler.launchwindow.net.messages.ClaimSlotRequest;
 import de.mkoehler.launchwindow.net.messages.FetchStateRequest;
 import de.mkoehler.launchwindow.net.messages.FetchStateResponse;
 import de.mkoehler.launchwindow.net.messages.HandshakeRequest;
 import de.mkoehler.launchwindow.net.messages.HandshakeResponse;
 import de.mkoehler.launchwindow.net.messages.SubmitActionRequest;
 import de.mkoehler.launchwindow.net.messages.SubmitActionResponse;
+import de.mkoehler.launchwindow.persistence.PlayerAction;
 import de.mkoehler.launchwindow.persistence.SetFundsAction;
+import de.mkoehler.launchwindow.rules.HiringPool;
+import de.mkoehler.launchwindow.rules.PersonnelGroup;
 import de.mkoehler.launchwindow.server.accounts.AccountStore;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -57,13 +67,26 @@ class RequestDispatcherTest {
     }
 
     /**
+     * Creates a dispatcher on the early-era pack.
+     *
+     * @param accountStore the account store
+     * @param dataRoot     the data root
+     * @param devMode      whether development cheats are accepted
+     * @return the dispatcher
+     */
+    private RequestDispatcher dispatcher(AccountStore accountStore, Path dataRoot, boolean devMode) {
+        return new RequestDispatcher(accountStore, dataRoot, mapper, ServerTestGames.CONTEXT,
+            ServerTestGames.meta(devMode));
+    }
+
+    /**
      * Verifies that a version mismatch is rejected before the account
      * store is ever touched - no account gets created.
      */
     @Test
     void versionMismatchIsRejectedAndCreatesNoAccount(@TempDir Path dataRoot) {
         AccountStore accountStore = createAccountStore(dataRoot);
-        RequestDispatcher dispatcher = new RequestDispatcher(accountStore, dataRoot, mapper);
+        RequestDispatcher dispatcher = dispatcher(accountStore, dataRoot, true);
 
         HandshakeResponse response =
             dispatcher.handleHandshake(1, new HandshakeRequest("not-a-real-version", "mario", "hunter2", "Agency"));
@@ -80,7 +103,7 @@ class RequestDispatcherTest {
     @Test
     void wrongPasswordIsRejected(@TempDir Path dataRoot) {
         AccountStore accountStore = createAccountStore(dataRoot);
-        RequestDispatcher dispatcher = new RequestDispatcher(accountStore, dataRoot, mapper);
+        RequestDispatcher dispatcher = dispatcher(accountStore, dataRoot, true);
         dispatcher.handleHandshake(1, new HandshakeRequest(AppVersion.getVersion(), "mario", "hunter2", "Agency"));
 
         HandshakeResponse response =
@@ -96,7 +119,7 @@ class RequestDispatcherTest {
      */
     @Test
     void submitBeforeHandshakeIsRejected(@TempDir Path dataRoot) {
-        RequestDispatcher dispatcher = new RequestDispatcher(createAccountStore(dataRoot), dataRoot, mapper);
+        RequestDispatcher dispatcher = dispatcher(createAccountStore(dataRoot), dataRoot, true);
 
         SubmitActionResponse response = dispatcher.handleSubmitAction(1, new SubmitActionRequest(new SetFundsAction(1_000)));
 
@@ -109,7 +132,7 @@ class RequestDispatcherTest {
      */
     @Test
     void fetchBeforeHandshakeIsRejected(@TempDir Path dataRoot) {
-        RequestDispatcher dispatcher = new RequestDispatcher(createAccountStore(dataRoot), dataRoot, mapper);
+        RequestDispatcher dispatcher = dispatcher(createAccountStore(dataRoot), dataRoot, true);
 
         FetchStateResponse response = dispatcher.handleFetchState(1, new FetchStateRequest());
 
@@ -117,44 +140,98 @@ class RequestDispatcherTest {
     }
 
     /**
-     * Verifies that a successful handshake creates the placeholder turn-0
-     * snapshot, and that a second handshake for the same account does not
-     * recreate or reset it.
+     * Verifies that an account with no slot gets the claim-required answer from fetch
+     * and submit, and that claiming creates the starting state exactly once.
      */
     @Test
-    void bootstrapSnapshotIsCreatedExactlyOnce(@TempDir Path dataRoot) {
-        AccountStore accountStore = createAccountStore(dataRoot);
-        RequestDispatcher dispatcher = new RequestDispatcher(accountStore, dataRoot, mapper);
-        dispatcher.handleHandshake(1, new HandshakeRequest(AppVersion.getVersion(), "mario", "hunter2", "Agency"));
-        dispatcher.handleSubmitAction(1, new SubmitActionRequest(new SetFundsAction(5_000)));
+    void claimSlotCreatesTheStartingStateExactlyOnce(@TempDir Path dataRoot) {
+        RequestDispatcher dispatcher = dispatcher(createAccountStore(dataRoot), dataRoot, false);
+        dispatcher.handleHandshake(1, new HandshakeRequest(AppVersion.getVersion(), "mario", "hunter2", "Mario"));
 
-        dispatcher.handleHandshake(2, new HandshakeRequest(AppVersion.getVersion(), "mario", "hunter2", "Agency"));
-        FetchStateResponse response = dispatcher.handleFetchState(2, new FetchStateRequest());
+        assertEquals(ClaimSlotRequest.SLOT_CLAIM_REQUIRED,
+            dispatcher.handleFetchState(1, new FetchStateRequest()).message());
+        assertEquals(ClaimSlotRequest.SLOT_CLAIM_REQUIRED,
+            dispatcher.handleSubmitAction(1, new SubmitActionRequest(new OpenProgramAction("sputnik-1"))).message());
 
-        assertTrue(response.success());
-        assertEquals(5_000, response.state().getFunds(), "the second handshake must not have reset the bootstrap snapshot");
+        assertTrue(dispatcher.handleClaimSlot(1, new ClaimSlotRequest(Archetype.SOVIET, "OKB-1", "Chief")).success());
+        assertFalse(dispatcher.handleClaimSlot(1, new ClaimSlotRequest(Archetype.NASA, "Other", "Other")).success(),
+            "a second claim is refused");
+
+        PlayerSnapshot start = dispatcher.handleFetchState(1, new FetchStateRequest()).state();
+        assertEquals(Archetype.SOVIET, start.getArchetype());
+        assertEquals("OKB-1", start.getAgencyName());
+        assertEquals("Chief", start.getCallsign());
+        assertEquals(25_000, start.getFunds());
+        assertEquals(250, start.getPrestige());
+        assertEquals(3_000, start.getFundingRatePerSeason());
+        assertTrue(start.getAstronauts().isEmpty() && start.getSetSpecialists().isEmpty()
+            && start.getMissionControlOfficers().isEmpty(), "rosters start empty");
+        assertEquals(HiringPool.HIRING_BATCH_SIZE, start.getSetSpecialistCandidates().size());
     }
 
     /**
-     * Verifies the whole authenticated flow: handshake, then submit, then
-     * fetch reflects the submitted action.
+     * Verifies that agency names and callsigns are unique within the game, ignoring case.
+     */
+    @Test
+    void agencyNamesAndCallsignsAreUnique(@TempDir Path dataRoot) {
+        RequestDispatcher dispatcher = dispatcher(createAccountStore(dataRoot), dataRoot, false);
+        dispatcher.handleHandshake(1, new HandshakeRequest(AppVersion.getVersion(), "mario", "hunter2", "Mario"));
+        dispatcher.handleHandshake(2, new HandshakeRequest(AppVersion.getVersion(), "anna", "secret", "Anna"));
+        dispatcher.handleClaimSlot(1, new ClaimSlotRequest(Archetype.NASA, "Hanseatic Space Agency", "Mario"));
+
+        assertFalse(dispatcher.handleClaimSlot(2,
+            new ClaimSlotRequest(Archetype.NASA, "hanseatic space agency", "Anna")).success());
+        assertFalse(dispatcher.handleClaimSlot(2, new ClaimSlotRequest(Archetype.NASA, "Bavaria", "MARIO")).success());
+        assertTrue(dispatcher.handleClaimSlot(2, new ClaimSlotRequest(Archetype.NASA, "Bavaria", "Anna")).success(),
+            "the same archetype is fine");
+    }
+
+    /**
+     * Verifies the whole authenticated flow with a real action: the response names the
+     * rules outcome, the preview reflects it, and a rejected action changes nothing.
      */
     @Test
     void submitThenFetchReturnsTheSubmittedAction(@TempDir Path dataRoot) {
-        AccountStore accountStore = createAccountStore(dataRoot);
-        RequestDispatcher dispatcher = new RequestDispatcher(accountStore, dataRoot, mapper);
-        HandshakeResponse handshake =
-            dispatcher.handleHandshake(1, new HandshakeRequest(AppVersion.getVersion(), "mario", "hunter2", "Agency"));
-        assertTrue(handshake.accepted());
+        RequestDispatcher dispatcher = dispatcher(createAccountStore(dataRoot), dataRoot, false);
+        dispatcher.handleHandshake(1, new HandshakeRequest(AppVersion.getVersion(), "mario", "hunter2", "Mario"));
+        dispatcher.handleClaimSlot(1, new ClaimSlotRequest(Archetype.SOVIET, "OKB-1", "Chief"));
 
-        SubmitActionResponse submitResponse = dispatcher.handleSubmitAction(1, new SubmitActionRequest(new SetFundsAction(2_500)));
+        SubmitActionResponse wrongAgency =
+            dispatcher.handleSubmitAction(1, new SubmitActionRequest(new OpenProgramAction("mercury")));
+        SubmitActionResponse opened =
+            dispatcher.handleSubmitAction(1, new SubmitActionRequest(new OpenProgramAction("sputnik-1")));
         FetchStateResponse fetchResponse = dispatcher.handleFetchState(1, new FetchStateRequest());
 
-        assertTrue(submitResponse.success());
-        assertTrue(fetchResponse.success());
-        assertEquals(2_500, fetchResponse.state().getFunds());
+        assertEquals(SubmitActionResponse.failure("WRONG_AGENCY"), wrongAgency);
+        assertEquals(SubmitActionResponse.success("OPENED"), opened);
+        assertEquals(25_000 - 876, fetchResponse.state().getFunds());
+        assertEquals(List.of("sputnik-1"), fetchResponse.state().getOpenedProgramIds());
     }
 
+    /**
+     * Verifies that the funds cheat is refused outside dev mode, and that the server
+     * overwrites whatever seed a client sent.
+     */
+    @Test
+    void cheatsNeedDevModeAndSeedsComeFromTheServer(@TempDir Path dataRoot) throws Exception {
+        RequestDispatcher dispatcher = dispatcher(createAccountStore(dataRoot), dataRoot, false);
+        dispatcher.handleHandshake(1, new HandshakeRequest(AppVersion.getVersion(), "mario", "hunter2", "Mario"));
+        dispatcher.handleClaimSlot(1, new ClaimSlotRequest(Archetype.SOVIET, "OKB-1", "Chief"));
+
+        assertFalse(dispatcher.handleSubmitAction(1, new SubmitActionRequest(new SetFundsAction(1_000_000))).success());
+
+        PlayerSnapshot preview = dispatcher.handleFetchState(1, new FetchStateRequest()).state();
+        HireAction hire = new HireAction(PersonnelGroup.SET, preview.getSetSpecialistCandidates().get(0).getId());
+        hire.setSeed(12345);
+        assertTrue(dispatcher.handleSubmitAction(1, new SubmitActionRequest(hire)).success());
+        try (var accountDirs = Files.list(dataRoot.resolve("players"))) {
+            Path journal = accountDirs.findFirst().orElseThrow().resolve("journal");
+            try (var files = Files.list(journal)) {
+                PlayerAction journaled = mapper.readValue(files.findFirst().orElseThrow().toFile(), PlayerAction.class);
+                assertNotEquals(12345, journaled.getSeed(), "the client's seed is replaced");
+            }
+        }
+    }
     /**
      * Verifies that a disconnect clears a connection's authentication, so
      * a later request reusing that connection id is rejected again.
@@ -162,7 +239,7 @@ class RequestDispatcherTest {
     @Test
     void disconnectClearsTheConnectionsAuthentication(@TempDir Path dataRoot) {
         AccountStore accountStore = createAccountStore(dataRoot);
-        RequestDispatcher dispatcher = new RequestDispatcher(accountStore, dataRoot, mapper);
+        RequestDispatcher dispatcher = dispatcher(accountStore, dataRoot, true);
         dispatcher.handleHandshake(1, new HandshakeRequest(AppVersion.getVersion(), "mario", "hunter2", "Agency"));
         assertTrue(dispatcher.isAuthenticated(1));
 
@@ -179,7 +256,7 @@ class RequestDispatcherTest {
     @Test
     void handleReportsCloseConnectionOnlyForARejectedHandshake(@TempDir Path dataRoot) {
         AccountStore accountStore = createAccountStore(dataRoot);
-        RequestDispatcher dispatcher = new RequestDispatcher(accountStore, dataRoot, mapper);
+        RequestDispatcher dispatcher = dispatcher(accountStore, dataRoot, true);
 
         RequestDispatcher.DispatchResult rejected =
             dispatcher.handle(1, new HandshakeRequest("not-a-real-version", "mario", "hunter2", "Agency"));
@@ -200,8 +277,9 @@ class RequestDispatcherTest {
     @Test
     void handleRoutesKnownMessageTypesAndRejectsUnknownOnes(@TempDir Path dataRoot) {
         AccountStore accountStore = createAccountStore(dataRoot);
-        RequestDispatcher dispatcher = new RequestDispatcher(accountStore, dataRoot, mapper);
+        RequestDispatcher dispatcher = dispatcher(accountStore, dataRoot, true);
         dispatcher.handle(1, new HandshakeRequest(AppVersion.getVersion(), "mario", "hunter2", "Agency"));
+        dispatcher.handle(1, new ClaimSlotRequest(Archetype.NASA, "Agency", "Mario"));
 
         RequestDispatcher.DispatchResult submitResult = dispatcher.handle(1, new SubmitActionRequest(new SetFundsAction(1_500)));
         assertFalse(submitResult.closeConnection());

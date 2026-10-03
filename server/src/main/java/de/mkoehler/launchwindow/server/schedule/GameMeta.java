@@ -25,6 +25,17 @@ public class GameMeta {
 
     private ScheduleProfile schedule;
     private List<Blackout> blackouts = new ArrayList<>();
+    private String contentPack = DEFAULT_CONTENT_PACK;
+    private List<String> declaredGoalIds = new ArrayList<>(DEFAULT_DECLARED_GOALS);
+    private long gameSeed;
+    private boolean devMode;
+
+    /** The content pack a new game plays, under {@code assets/content/}. */
+    public static final String DEFAULT_CONTENT_PACK = "early-era";
+
+    /** The early era's race: a satellite in orbit, a human in space, a human in orbit. */
+    public static final List<String> DEFAULT_DECLARED_GOALS =
+        List.of("earth-orbit-satellite", "human-in-space", "human-in-orbit");
 
     /**
      * Creates an uninitialized instance, for Jackson.
@@ -102,6 +113,80 @@ public class GameMeta {
      * @throws IllegalStateException if the schedule is missing or invalid,
      *                                or a blackout entry is null
      */
+    /**
+     * Returns the content pack this game plays. Pinned for the game's life: changing it mid-game would
+     * make pending actions and past snapshots replay against different content.
+     *
+     * @return the pack's folder name under {@code assets/content/}
+     */
+    public String getContentPack() {
+        return contentPack;
+    }
+
+    /**
+     * Sets the content pack.
+     *
+     * @param contentPack the pack's folder name
+     */
+    public void setContentPack(String contentPack) {
+        this.contentPack = contentPack;
+    }
+
+    /**
+     * Returns the goals a player must reach to win, in any order (`design.md` &sect;2.9).
+     *
+     * @return the declared goal ids
+     */
+    public List<String> getDeclaredGoalIds() {
+        return declaredGoalIds;
+    }
+
+    /**
+     * Sets the declared goals.
+     *
+     * @param declaredGoalIds the goal ids
+     */
+    public void setDeclaredGoalIds(List<String> declaredGoalIds) {
+        this.declaredGoalIds = declaredGoalIds == null ? new ArrayList<>() : new ArrayList<>(declaredGoalIds);
+    }
+
+    /**
+     * Returns the game's seed. Every season pass and every new player's candidate pool is seeded from
+     * it, mixed with the turn and the player, so a turn always resolves the same way.
+     *
+     * @return the seed
+     */
+    public long getGameSeed() {
+        return gameSeed;
+    }
+
+    /**
+     * Sets the game's seed.
+     *
+     * @param gameSeed the seed
+     */
+    public void setGameSeed(long gameSeed) {
+        this.gameSeed = gameSeed;
+    }
+
+    /**
+     * Returns whether the server accepts development cheats such as setting funds outright.
+     *
+     * @return `true` in dev mode
+     */
+    public boolean isDevMode() {
+        return devMode;
+    }
+
+    /**
+     * Sets dev mode.
+     *
+     * @param devMode `true` to accept development cheats
+     */
+    public void setDevMode(boolean devMode) {
+        this.devMode = devMode;
+    }
+
     void validate() {
         Objects.requireNonNull(schedule, "schedule must not be null").validate();
         for (Blackout blackout : blackouts) {

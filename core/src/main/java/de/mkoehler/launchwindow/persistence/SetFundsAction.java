@@ -52,8 +52,17 @@ public class SetFundsAction extends PlayerAction {
      *
      * @param snapshot the snapshot to mutate
      */
+    /**
+     * Sets the funds outright. A development cheat: the server refuses it unless it
+     * runs in dev mode ({@code design.md} &sect;5, M4).
+     *
+     * @param snapshot the player
+     * @param context  unused
+     * @return always applied
+     */
     @Override
-    public void applyTo(PlayerSnapshot snapshot) {
+    public ActionResult apply(PlayerSnapshot snapshot, ActionContext context) {
         snapshot.setFunds(funds);
+        return new ActionResult(true, "FUNDS_SET");
     }
 }

@@ -22,7 +22,7 @@ class SetFundsActionTest {
         PlayerSnapshot snapshot = new PlayerSnapshot("Hanseatic Space Agency", Archetype.NASA, 100, 0, 0, 1);
         SetFundsAction action = new SetFundsAction(5_000);
 
-        action.applyTo(snapshot);
+        action.apply(snapshot, null);
 
         assertEquals(5_000, snapshot.getFunds());
     }

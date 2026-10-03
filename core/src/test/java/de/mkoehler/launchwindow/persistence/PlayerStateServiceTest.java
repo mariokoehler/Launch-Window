@@ -30,7 +30,7 @@ class PlayerStateServiceTest {
      */
     @Test
     void currentStateThrowsWhenNoSnapshotExistsYet(@TempDir Path playerRoot) {
-        PlayerStateService service = new PlayerStateService(playerRoot, mapper);
+        PlayerStateService service = new PlayerStateService(playerRoot, mapper, TestContexts.EARLY_ERA);
 
         assertThrows(IllegalStateException.class, service::currentState);
     }
@@ -43,7 +43,7 @@ class PlayerStateServiceTest {
     @Test
     void currentStateReplaysTodaysUnresolvedActionsWithoutPersistingThem(@TempDir Path playerRoot)
         throws IOException {
-        PlayerStateService service = new PlayerStateService(playerRoot, mapper);
+        PlayerStateService service = new PlayerStateService(playerRoot, mapper, TestContexts.EARLY_ERA);
         seedInitialSnapshot(playerRoot, 1_000);
 
         service.submitAction(new SetFundsAction(5_000));
@@ -60,14 +60,15 @@ class PlayerStateServiceTest {
      */
     @Test
     void resolveTurnPersistsReplayedStateAndAdvancesSeason(@TempDir Path playerRoot) throws IOException {
-        PlayerStateService service = new PlayerStateService(playerRoot, mapper);
+        PlayerStateService service = new PlayerStateService(playerRoot, mapper, TestContexts.EARLY_ERA);
         seedInitialSnapshot(playerRoot, 1_000);
         service.submitAction(new SetFundsAction(5_000));
 
-        service.resolveTurn(1);
+        TestContexts.resolveQuietly(service, 1);
 
         PlayerSnapshot resolved = new PlayerSnapshotStore(playerRoot, mapper).load().orElseThrow();
-        assertEquals(5_000, resolved.getFunds());
+        // The season pass ran: the 5,000 set today, minus level-1 building upkeep, plus no funding (rate 0).
+        assertEquals(5_000 - 925, resolved.getFunds());
         assertEquals(2, resolved.getSeason());
         assertTrue(new PlayerActionJournal(playerRoot, mapper).readPending().isEmpty());
     }
@@ -82,16 +83,16 @@ class PlayerStateServiceTest {
     @Test
     void resolvingAnAlreadyResolvedTurnAgainDoesNotChangeTheSnapshotOrArchiveNewerActions(@TempDir Path playerRoot)
         throws IOException {
-        PlayerStateService service = new PlayerStateService(playerRoot, mapper);
+        PlayerStateService service = new PlayerStateService(playerRoot, mapper, TestContexts.EARLY_ERA);
         seedInitialSnapshot(playerRoot, 1_000);
         service.submitAction(new SetFundsAction(5_000));
-        service.resolveTurn(1);
+        TestContexts.resolveQuietly(service, 1);
 
         service.submitAction(new SetFundsAction(9_999));
-        service.resolveTurn(1);
+        TestContexts.resolveQuietly(service, 1);
 
         PlayerSnapshot resolved = new PlayerSnapshotStore(playerRoot, mapper).load().orElseThrow();
-        assertEquals(5_000, resolved.getFunds());
+        assertEquals(5_000 - 925, resolved.getFunds());
         assertEquals(2, resolved.getSeason());
 
         List<PlayerActionJournal.PendingAction> stillPending =
@@ -109,7 +110,7 @@ class PlayerStateServiceTest {
     @Test
     void resolvingAnAlreadyResolvedTurnAgainStillArchivesTheActionsItApplied(@TempDir Path playerRoot)
         throws IOException {
-        PlayerStateService service = new PlayerStateService(playerRoot, mapper);
+        PlayerStateService service = new PlayerStateService(playerRoot, mapper, TestContexts.EARLY_ERA);
         seedInitialSnapshot(playerRoot, 1_000);
         service.submitAction(new SetFundsAction(5_000));
         PlayerActionJournal journal = new PlayerActionJournal(playerRoot, mapper);
@@ -117,7 +118,7 @@ class PlayerStateServiceTest {
         new PlayerSnapshotStore(playerRoot, mapper)
             .save(1, new PlayerSnapshot("Hanseatic Space Agency", Archetype.NASA, 5_000, 0, 0, 2), appliedFile);
 
-        service.resolveTurn(1);
+        TestContexts.resolveQuietly(service, 1);
 
         assertTrue(journal.readPending().isEmpty());
     }

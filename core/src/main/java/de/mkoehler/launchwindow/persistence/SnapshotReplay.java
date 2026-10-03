@@ -5,15 +5,16 @@ import de.mkoehler.launchwindow.model.PlayerSnapshot;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 /**
- * <p>Applies a sequence of {@link PlayerAction}s onto a copy of a base
- * {@link PlayerSnapshot}, without mutating the original - the mechanism
- * both the login flow (replay today's journal so far) and the turn-
- * resolution loop (replay a full day's journal) rely on (see
- * {@code design.md} &sect;3.7).</p>
+ * <p>Replays a player's pending actions onto a copy of their last resolved snapshot
+ * ({@code design.md} &sect;3.7). Each action runs through its validated rules
+ * method, in journal order; one that no longer takes effect changes nothing and is
+ * reported, rather than stopping the replay. Replay is deterministic: the same
+ * snapshot, actions, and context always give the same state.</p>
  *
  * @author Mario Koehler
  */
@@ -22,46 +23,76 @@ public class SnapshotReplay {
     private final ObjectMapper mapper;
 
     /**
-     * Creates a new replay helper using the given mapper to copy snapshots.
+     * Creates a replayer that deep-copies snapshots through the given mapper.
      *
-     * @param mapper the Jackson mapper used to deep-copy a snapshot before
-     *               replaying actions onto it
+     * @param mapper the mapper snapshots are persisted with
      */
     public SnapshotReplay(ObjectMapper mapper) {
         this.mapper = Objects.requireNonNull(mapper, "mapper must not be null");
     }
 
     /**
-     * Returns a new snapshot equal to {@code base} with every action in
-     * {@code actions} applied to it in order. {@code base} itself is left
-     * unmodified.
+     * The state after a replay, and what each action did.
      *
-     * @param base    the snapshot to start from
-     * @param actions the actions to apply, in the order they should be
-     *                applied
-     * @return the resulting snapshot
+     * @param state   the resulting state
+     * @param results one result per action, in order
      */
-    public PlayerSnapshot replay(PlayerSnapshot base, List<PlayerAction> actions) {
-        Objects.requireNonNull(base, "base must not be null");
-        Objects.requireNonNull(actions, "actions must not be null");
-
-        PlayerSnapshot result = copy(base);
-        for (PlayerAction action : actions) {
-            action.applyTo(result);
-        }
-        return result;
+    public record Replayed(PlayerSnapshot state, List<ActionResult> results) {
     }
 
     /**
-     * Deep-copies a snapshot via a Jackson serialize/deserialize round
-     * trip, so that {@link PlayerSnapshot}'s own persistence format is
-     * always the single source of truth for what "a copy" means - a field
-     * added to the snapshot later needs no matching change here.
+     * Replays actions onto a copy of {@code base}, leaving {@code base} untouched.
      *
-     * @param snapshot the snapshot to copy
-     * @return an independent copy of {@code snapshot}
+     * @param base    the last resolved snapshot
+     * @param actions the pending actions, in journal order
+     * @param context the game's content and budget schedule
+     * @return the resulting state and each action's result
      */
-    private PlayerSnapshot copy(PlayerSnapshot snapshot) {
+    public Replayed replay(PlayerSnapshot base, List<PlayerAction> actions, ActionContext context) {
+        Objects.requireNonNull(base, "base must not be null");
+        Objects.requireNonNull(actions, "actions must not be null");
+        Objects.requireNonNull(context, "context must not be null");
+        PlayerSnapshot result = copy(base);
+        List<ActionResult> results = new ArrayList<>();
+        for (PlayerAction action : actions) {
+            // Each action runs on its own copy, kept only if it takes effect, so even an action that
+            // throws halfway can never leave a partial change behind.
+            PlayerSnapshot candidate = copy(result);
+            ActionResult actionResult = applySafely(action, candidate, context);
+            if (actionResult.applied()) {
+                result = candidate;
+            }
+            results.add(actionResult);
+        }
+        return new Replayed(result, results);
+    }
+
+    /**
+     * Applies one action, treating a malformed one (a missing id, an unknown
+     * enum) as an action that simply doesn't take effect. The rules methods
+     * change nothing before they reject, so a rejected action leaves the state as
+     * it was.
+     *
+     * @param action   the action
+     * @param snapshot the state; mutated only if the action takes effect
+     * @param context  the game's content and budget schedule
+     * @return the action's result
+     */
+    public static ActionResult applySafely(PlayerAction action, PlayerSnapshot snapshot, ActionContext context) {
+        try {
+            return action.apply(snapshot, context);
+        } catch (NullPointerException | IllegalArgumentException e) {
+            return new ActionResult(false, "INVALID_ACTION");
+        }
+    }
+
+    /**
+     * Deep-copies a snapshot through JSON.
+     *
+     * @param snapshot the snapshot
+     * @return an independent copy
+     */
+    public PlayerSnapshot copy(PlayerSnapshot snapshot) {
         try {
             return mapper.readValue(mapper.writeValueAsString(snapshot), PlayerSnapshot.class);
         } catch (IOException e) {

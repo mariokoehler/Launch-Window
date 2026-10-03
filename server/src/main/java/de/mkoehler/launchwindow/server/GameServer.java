@@ -6,7 +6,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import de.mkoehler.launchwindow.net.NetworkServer;
+import de.mkoehler.launchwindow.content.BudgetSchedule;
+import de.mkoehler.launchwindow.content.ContentCatalog;
+import de.mkoehler.launchwindow.content.ContentPackLoader;
+import de.mkoehler.launchwindow.content.RandomEventRoster;
+import de.mkoehler.launchwindow.persistence.ActionContext;
 import de.mkoehler.launchwindow.server.accounts.AccountStore;
+import de.mkoehler.launchwindow.server.schedule.GameMeta;
+import de.mkoehler.launchwindow.server.schedule.GameMetaStore;
 import de.mkoehler.launchwindow.server.schedule.TurnScheduler;
 
 import java.io.IOException;
@@ -76,8 +83,19 @@ public class GameServer extends ApplicationAdapter {
     public void create() {
         ObjectMapper mapper = createMapper();
         accountStore = new AccountStore(dataRoot.resolve("accounts.json"));
-        dispatcher = new RequestDispatcher(accountStore, dataRoot, mapper);
-        scheduler = new TurnScheduler(dataRoot, mapper, Clock.systemDefaultZone());
+        GameMeta meta;
+        try {
+            meta = GameMetaStore.loadOrCreateDefault(dataRoot.resolve("game-meta.json"), mapper).meta();
+        } catch (IOException e) {
+            throw new IllegalStateException("Could not read game-meta.json", e);
+        }
+        // The content pack is read once and pinned for the server's life (design.md section 5, M4).
+        ContentCatalog catalog = ContentPackLoader.loadFromClasspath("content/" + meta.getContentPack(),
+            GameServer.class.getClassLoader());
+        ActionContext context = new ActionContext(catalog, BudgetSchedule.baspmClose());
+        dispatcher = new RequestDispatcher(accountStore, dataRoot, mapper, context, meta);
+        scheduler = new TurnScheduler(dataRoot, mapper, Clock.systemDefaultZone(), context,
+            RandomEventRoster.baspmClose());
         networkServer = new NetworkServer();
         try {
             networkServer.start(tcpPort);

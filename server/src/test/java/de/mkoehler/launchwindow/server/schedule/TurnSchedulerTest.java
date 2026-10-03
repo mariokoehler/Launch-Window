@@ -1,11 +1,13 @@
 package de.mkoehler.launchwindow.server.schedule;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.mkoehler.launchwindow.content.RandomEventRoster;
 import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.persistence.PlayerSnapshotStore;
 import de.mkoehler.launchwindow.persistence.ResolvedSnapshot;
 import de.mkoehler.launchwindow.server.GameServer;
+import de.mkoehler.launchwindow.server.ServerTestGames;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -18,9 +20,11 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -89,6 +93,51 @@ class TurnSchedulerTest {
     }
 
     /**
+     * Creates a scheduler on the early-era pack with random events switched off.
+     *
+     * @param dataRoot the server data root
+     * @param clock    the clock
+     * @return the scheduler
+     */
+    private TurnScheduler scheduler(Path dataRoot, Clock clock) {
+        return new TurnScheduler(dataRoot, mapper, clock, ServerTestGames.CONTEXT,
+            new RandomEventRoster(0, 0, RandomEventRoster.baspmClose().events()));
+    }
+
+    /**
+     * Verifies the season pass really runs at resolution - building upkeep is charged
+     * and the candidate pools refresh - and that the first player to hold every
+     * declared goal is recorded as the winner once, never overwritten.
+     */
+    @Test
+    void resolutionRunsTheSeasonPassAndRecordsTheFirstWinnerOnce(@TempDir Path dataRoot) throws IOException {
+        createPlayer(dataRoot, "acct-1");
+        Path winnerRoot = dataRoot.resolve("players").resolve("acct-2");
+        PlayerSnapshot winner = new PlayerSnapshot("Winner", Archetype.SOVIET, 10_000, 0, 0, 1);
+        winner.setAchievedGoals(Map.of("earth-orbit-satellite", 0, "human-in-space", 0, "human-in-orbit", 0));
+        new PlayerSnapshotStore(winnerRoot, mapper).save(0, winner, null);
+        Clock bootstrap = Clock.fixed(Instant.parse("2026-09-28T08:00:00Z"), ZONE);
+        scheduler(dataRoot, bootstrap).checkAndResolveIfDue();
+
+        scheduler(dataRoot, Clock.fixed(Instant.parse("2026-09-29T08:00:00Z"), ZONE)).checkAndResolveIfDue();
+
+        PlayerSnapshot resolved = new PlayerSnapshotStore(winnerRoot, mapper).load(1).orElseThrow();
+        assertEquals(10_000 - 925, resolved.getFunds(), "level-1 building upkeep was charged");
+        assertEquals(2, resolved.getSeason());
+        assertFalse(resolved.getAstronautCandidates().isEmpty(), "the candidate pools were refreshed");
+        GameResult result = mapper.readValue(dataRoot.resolve(GameResult.FILE_NAME).toFile(), GameResult.class);
+        assertEquals("WON", result.status());
+        assertEquals(List.of("acct-2"), result.winnerIds());
+        assertEquals(List.of("Winner"), result.winnerAgencies());
+        assertEquals(1, result.decidedOnTurn());
+
+        scheduler(dataRoot, Clock.fixed(Instant.parse("2026-09-30T08:00:00Z"), ZONE)).checkAndResolveIfDue();
+        assertEquals(1, mapper.readValue(dataRoot.resolve(GameResult.FILE_NAME).toFile(), GameResult.class)
+            .decidedOnTurn(), "the recorded result is never overwritten");
+        assertTrue(new PlayerSnapshotStore(winnerRoot, mapper).load(2).isPresent(), "play continues");
+    }
+
+    /**
      * Writes a custom {@code game-meta.json}, for scenarios that need a
      * specific schedule rather than the DAILY default.
      *
@@ -110,7 +159,7 @@ class TurnSchedulerTest {
         createPlayer(dataRoot, "acct-1");
         // 2026-09-29 is a Tuesday, 10:00 Europe/Berlin - past the DAILY default's 09:00.
         Clock clock = Clock.fixed(Instant.parse("2026-09-29T08:00:00Z"), ZONE);
-        TurnScheduler scheduler = new TurnScheduler(dataRoot, mapper, clock);
+        TurnScheduler scheduler = scheduler(dataRoot, clock);
 
         scheduler.checkAndResolveIfDue();
 
@@ -128,7 +177,7 @@ class TurnSchedulerTest {
         createPlayer(dataRoot, "acct-1");
         // 07:00 Europe/Berlin - before the DAILY default's 09:00.
         MutableClock clock = new MutableClock(Instant.parse("2026-09-29T05:00:00Z"), ZONE);
-        TurnScheduler scheduler = new TurnScheduler(dataRoot, mapper, clock);
+        TurnScheduler scheduler = scheduler(dataRoot, clock);
 
         scheduler.checkAndResolveIfDue();
         assertTrue(new PlayerSnapshotStore(dataRoot.resolve("players/acct-1"), mapper).load(1).isEmpty());
@@ -148,9 +197,9 @@ class TurnSchedulerTest {
     void resolvesOnceOnAResolvingDayAndNotTwice(@TempDir Path dataRoot) throws IOException {
         createPlayer(dataRoot, "acct-1");
         Clock beforeToday = Clock.fixed(Instant.parse("2026-09-28T08:00:00Z"), ZONE);
-        new TurnScheduler(dataRoot, mapper, beforeToday).checkAndResolveIfDue();
+        scheduler(dataRoot, beforeToday).checkAndResolveIfDue();
         Clock afterResolutionTime = Clock.fixed(Instant.parse("2026-09-29T08:00:00Z"), ZONE);
-        TurnScheduler scheduler = new TurnScheduler(dataRoot, mapper, afterResolutionTime);
+        TurnScheduler scheduler = scheduler(dataRoot, afterResolutionTime);
 
         scheduler.checkAndResolveIfDue();
         scheduler.checkAndResolveIfDue();
@@ -168,11 +217,11 @@ class TurnSchedulerTest {
     void doesNotResolveBeforeTheConfiguredTime(@TempDir Path dataRoot) throws IOException {
         createPlayer(dataRoot, "acct-1");
         Clock bootstrap = Clock.fixed(Instant.parse("2026-09-28T08:00:00Z"), ZONE);
-        new TurnScheduler(dataRoot, mapper, bootstrap).checkAndResolveIfDue();
+        scheduler(dataRoot, bootstrap).checkAndResolveIfDue();
         // 07:00 Europe/Berlin - before the DAILY default's 09:00.
         Clock beforeResolutionTime = Clock.fixed(Instant.parse("2026-09-29T05:00:00Z"), ZONE);
 
-        new TurnScheduler(dataRoot, mapper, beforeResolutionTime).checkAndResolveIfDue();
+        scheduler(dataRoot, beforeResolutionTime).checkAndResolveIfDue();
 
         assertTrue(new PlayerSnapshotStore(dataRoot.resolve("players/acct-1"), mapper).load(1).isEmpty());
     }
@@ -187,10 +236,10 @@ class TurnSchedulerTest {
         writeGameMeta(dataRoot, new GameMeta(ScheduleProfile.weekdays(LocalTime.of(9, 0), ZONE), List.of()));
         // 2026-10-03 is a Saturday.
         Clock bootstrap = Clock.fixed(Instant.parse("2026-10-02T08:00:00Z"), ZONE);
-        new TurnScheduler(dataRoot, mapper, bootstrap).checkAndResolveIfDue();
+        scheduler(dataRoot, bootstrap).checkAndResolveIfDue();
         Clock saturday = Clock.fixed(Instant.parse("2026-10-03T08:00:00Z"), ZONE);
 
-        new TurnScheduler(dataRoot, mapper, saturday).checkAndResolveIfDue();
+        scheduler(dataRoot, saturday).checkAndResolveIfDue();
 
         assertTrue(new PlayerSnapshotStore(dataRoot.resolve("players/acct-1"), mapper).load(1).isEmpty());
     }
@@ -207,7 +256,7 @@ class TurnSchedulerTest {
     void aBlackoutAddedMidDaySuppressesTodaysResolution(@TempDir Path dataRoot) throws IOException {
         createPlayer(dataRoot, "acct-1");
         MutableClock clock = new MutableClock(Instant.parse("2026-09-28T08:00:00Z"), ZONE);
-        TurnScheduler scheduler = new TurnScheduler(dataRoot, mapper, clock);
+        TurnScheduler scheduler = scheduler(dataRoot, clock);
         scheduler.checkAndResolveIfDue();
 
         // 07:00 Europe/Berlin the next day - before the resolution time.
@@ -237,19 +286,19 @@ class TurnSchedulerTest {
     void schedulerStateSurvivesARestartAcrossDaysWithConsecutiveGameTurns(@TempDir Path dataRoot) throws IOException {
         createPlayer(dataRoot, "acct-1");
         Clock bootstrap = Clock.fixed(Instant.parse("2026-09-28T08:00:00Z"), ZONE);
-        new TurnScheduler(dataRoot, mapper, bootstrap).checkAndResolveIfDue();
+        scheduler(dataRoot, bootstrap).checkAndResolveIfDue();
         Clock day1 = Clock.fixed(Instant.parse("2026-09-29T08:00:00Z"), ZONE);
-        new TurnScheduler(dataRoot, mapper, day1).checkAndResolveIfDue();
+        scheduler(dataRoot, day1).checkAndResolveIfDue();
 
         // A brand-new instance, as if the process restarted, checking again the same day.
-        new TurnScheduler(dataRoot, mapper, day1).checkAndResolveIfDue();
+        scheduler(dataRoot, day1).checkAndResolveIfDue();
         PlayerSnapshotStore store = new PlayerSnapshotStore(dataRoot.resolve("players/acct-1"), mapper);
         assertTrue(store.load(1).isPresent());
         assertTrue(store.load(2).isEmpty());
 
         // Another restart, now on the next resolving day.
         Clock day2 = Clock.fixed(Instant.parse("2026-09-30T08:00:00Z"), ZONE);
-        new TurnScheduler(dataRoot, mapper, day2).checkAndResolveIfDue();
+        scheduler(dataRoot, day2).checkAndResolveIfDue();
 
         assertTrue(store.load(2).isPresent(), "turn 2 must resolve as the next consecutive game turn");
         Optional<SchedulerState> state = new SchedulerStateStore(dataRoot.resolve("scheduler-state.json"), mapper).load();
@@ -266,13 +315,13 @@ class TurnSchedulerTest {
     void missedDaysAreSkippedNotCaughtUpOneTurnEach(@TempDir Path dataRoot) throws IOException {
         createPlayer(dataRoot, "acct-1");
         Clock bootstrap = Clock.fixed(Instant.parse("2026-09-28T08:00:00Z"), ZONE);
-        new TurnScheduler(dataRoot, mapper, bootstrap).checkAndResolveIfDue();
+        scheduler(dataRoot, bootstrap).checkAndResolveIfDue();
         Clock day1 = Clock.fixed(Instant.parse("2026-09-29T08:00:00Z"), ZONE);
-        new TurnScheduler(dataRoot, mapper, day1).checkAndResolveIfDue();
+        scheduler(dataRoot, day1).checkAndResolveIfDue();
 
         // The server is down for a few days, then boots again three days later.
         Clock threeDaysLater = Clock.fixed(Instant.parse("2026-10-02T08:00:00Z"), ZONE);
-        new TurnScheduler(dataRoot, mapper, threeDaysLater).checkAndResolveIfDue();
+        scheduler(dataRoot, threeDaysLater).checkAndResolveIfDue();
 
         PlayerSnapshotStore store = new PlayerSnapshotStore(dataRoot.resolve("players/acct-1"), mapper);
         assertTrue(store.load(2).isPresent(), "exactly one more turn resolves, not one per missed day");
@@ -295,9 +344,9 @@ class TurnSchedulerTest {
         Files.createDirectories(badSnapshotFile.getParent());
         Files.writeString(badSnapshotFile, "not valid json");
         Clock bootstrap = Clock.fixed(Instant.parse("2026-09-28T08:00:00Z"), ZONE);
-        new TurnScheduler(dataRoot, mapper, bootstrap).checkAndResolveIfDue();
+        scheduler(dataRoot, bootstrap).checkAndResolveIfDue();
         Clock day1 = Clock.fixed(Instant.parse("2026-09-29T08:00:00Z"), ZONE);
-        TurnScheduler scheduler = new TurnScheduler(dataRoot, mapper, day1);
+        TurnScheduler scheduler = scheduler(dataRoot, day1);
 
         assertThrows(IOException.class, scheduler::checkAndResolveIfDue);
         // Fix the broken player, as an operator would, then retry the same day.
@@ -326,10 +375,10 @@ class TurnSchedulerTest {
         Files.createDirectories(dataRoot.resolve("players").resolve("no-snapshots-dir-at-all"));
         Files.createDirectories(dataRoot.resolve("players").resolve("empty-snapshots-dir").resolve("snapshots"));
         Clock bootstrap = Clock.fixed(Instant.parse("2026-09-28T08:00:00Z"), ZONE);
-        new TurnScheduler(dataRoot, mapper, bootstrap).checkAndResolveIfDue();
+        scheduler(dataRoot, bootstrap).checkAndResolveIfDue();
         Clock day1 = Clock.fixed(Instant.parse("2026-09-29T08:00:00Z"), ZONE);
 
-        new TurnScheduler(dataRoot, mapper, day1).checkAndResolveIfDue();
+        scheduler(dataRoot, day1).checkAndResolveIfDue();
 
         assertTrue(new PlayerSnapshotStore(dataRoot.resolve("players/acct-1"), mapper).load(1).isPresent());
     }
