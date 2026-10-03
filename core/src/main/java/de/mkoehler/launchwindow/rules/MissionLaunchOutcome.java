@@ -30,12 +30,16 @@ public enum MissionLaunchOutcome {
     DUPLICATE_ASTRONAUT,
 
     /**
-     * The number of astronaut ids given does not exactly match the
-     * mission configuration's own {@code requiredAstronautCount}.
+     * The crew slots are filled wrongly: a crew slot some step uses is empty, a crew
+     * slot no step uses holds someone, or more ids were given than the layout has
+     * seats ({@code baspm.md} &sect;10.11).
      */
     WRONG_ASTRONAUT_COUNT,
 
-    /** A given Mission Control officer id is not on this player's roster. */
+    /**
+     * A flight-controller slot holds an id that isn't on this player's Mission Control
+     * roster - an astronaut in a controller slot lands here too.
+     */
     UNKNOWN_MISSION_CONTROL_OFFICER,
 
     /** A given Mission Control officer id is on the roster, but not currently {@code IDLE}. */
@@ -45,9 +49,8 @@ public enum MissionLaunchOutcome {
     DUPLICATE_MISSION_CONTROL_OFFICER,
 
     /**
-     * The number of Mission Control officer ids given does not exactly
-     * match the mission configuration's own
-     * {@code requiredMissionControlOfficerCount}.
+     * The flight-controller slots are filled wrongly: a used one is empty, an unused
+     * one holds someone, or more ids were given than the layout has control slots.
      */
     WRONG_MISSION_CONTROL_OFFICER_COUNT,
 
@@ -74,9 +77,15 @@ public enum MissionLaunchOutcome {
      */
     ROCKET_CANNOT_LIFT_PAYLOAD,
 
-    /** The number of CAPCOM astronaut ids given doesn't match the configuration's CAPCOM count. */
+    /**
+     * The astronaut-type control slots (CAPCOM) are filled wrongly: a used one is empty,
+     * or an unused one holds someone.
+     */
     WRONG_CAPCOM_COUNT,
 
-    /** A CAPCOM astronaut id is unknown, not idle, repeated, or also in the crew. */
+    /**
+     * A CAPCOM slot holds someone who isn't an astronaut on the roster, or who is not
+     * idle, is unavailable, is repeated, or is also in the crew.
+     */
     CAPCOM_NOT_AVAILABLE
 }

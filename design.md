@@ -5130,7 +5130,14 @@ here.
       idle and available; the previous holder goes idle. CAPCOM stays reassignable,
       the unconfirmed default above.
     - **Expert rescue:** a step's rescuing skills come from its slots. **Unconfirmed
-      default:** a Flight Director slot names no single skill, so it adds none.
+      default:** a Flight Director slot names no single skill, so it adds none. A
+      used CAPCOM slot adds its astronaut skill (Leadership), so a Leadership Expert
+      can now rescue that step, which slice 3c's note didn't allow.
+    - **Retire on release:** a re-staffed slot's previous holder, and everyone on a
+      cancelled mission, is released through `MissionProgress.releaseOrRetire`, the
+      same retire-at-age rule as a mission's end, so a swap can't keep an over-age
+      person assigned. These retirements aren't reported as events yet (no event
+      channel for actions; see `ui-spec.md` G2).
     - **DevClient:** `launch <config> rockets=... crew=a,b control=x,-,y` takes one
       entry per slot (`-` for empty), and `reassign <mission> <slot> <person>` is new.
       `missions` prints the slot lists.

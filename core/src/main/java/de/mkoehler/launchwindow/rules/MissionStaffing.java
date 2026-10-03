@@ -5,11 +5,9 @@ import de.mkoehler.launchwindow.content.MissionConfiguration;
 import de.mkoehler.launchwindow.content.MissionSeason;
 import de.mkoehler.launchwindow.content.MissionStep;
 import de.mkoehler.launchwindow.content.StaffingSlot;
-import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.AstronautSkill;
 import de.mkoehler.launchwindow.model.InProgressMission;
-import de.mkoehler.launchwindow.model.MissionControlOfficer;
 import de.mkoehler.launchwindow.model.Personnel;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 
@@ -145,7 +143,8 @@ public final class MissionStaffing {
      * at no cost (user decision 2026-10-03; BASPM re-staffs mission control between
      * seasons, {@code baspm.md} &sect;10.11). The crew can't be changed this way: a crew
      * slot isn't a control slot. The new person must be of the slot's type, idle, and
-     * available; the previous holder goes back to idle. Mutates nothing on a refusal.
+     * available; the previous holder goes back to idle, or retires if already at their
+     * group's retirement age, as at a mission's end. Mutates nothing on a refusal.
      *
      * @param snapshot          the player; mutated in place on success
      * @param missionInstanceId the mission
@@ -187,14 +186,12 @@ public final class MissionStaffing {
             mission.getControlSlotIds().add(null);
         }
         String previousId = mission.getControlSlotIds().get(slot);
-        if (previousId != null) {
-            Personnel previous = MissionLaunch.findPerson(snapshot, previousId);
-            if (previous != null) {
-                previous.setAssignmentState(AssignmentState.IDLE);
-                previous.setAssignedMissionId(null);
-            }
-        }
         mission.getControlSlotIds().set(slot, personId);
+        if (previousId != null) {
+            // Retires instead of going idle when already over age, as a mission's end does, so a swap can't
+            // keep an over-age person assigned and protected from retirement.
+            MissionProgress.releaseOrRetire(snapshot, previousId);
+        }
         MissionLaunch.assign(person, missionInstanceId);
         return ReassignOutcome.REASSIGNED;
     }

@@ -1032,6 +1032,24 @@ public final class MissionProgress {
     }
 
     /**
+     * Releases one astronaut or flight controller from a mission outside the season
+     * pass - a re-staffed slot's previous holder, or a cancelled mission's people -
+     * with the same retire-on-release rule as {@link #releaseGroup}: someone already
+     * at their group's retirement age retires instead of going idle, so a release can
+     * never hand an over-age person back for another assignment.
+     *
+     * @param snapshot the player
+     * @param id       the person's id; unknown ids are ignored
+     * @return the retirement departure, or {@code null} if the person went idle
+     */
+    static PersonnelDeparture releaseOrRetire(PlayerSnapshot snapshot, String id) {
+        List<ResolutionEvent> events = new ArrayList<>();
+        releaseGroup(snapshot.getAstronauts(), List.of(id), PersonnelGroup.ASTRONAUT, events);
+        releaseGroup(snapshot.getMissionControlOfficers(), List.of(id), PersonnelGroup.MISSION_CONTROL, events);
+        return events.isEmpty() ? null : (PersonnelDeparture) events.get(0);
+    }
+
+    /**
      * Finds a {@link Personnel} record by id within a roster.
      *
      * @param roster the roster to search

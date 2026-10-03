@@ -2,9 +2,7 @@ package de.mkoehler.launchwindow.rules;
 
 import de.mkoehler.launchwindow.content.ContentCatalog;
 import de.mkoehler.launchwindow.content.MissionConfiguration;
-import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.InProgressMission;
-import de.mkoehler.launchwindow.model.Personnel;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 
 import java.util.ArrayList;
@@ -80,18 +78,11 @@ public final class MissionCancellation {
         }
         List<String> everyone = new ArrayList<>(mission.crewIds());
         everyone.addAll(mission.groundIds());
-        release(snapshot.getAstronauts(), everyone);
-        release(snapshot.getMissionControlOfficers(), everyone);
+        // Released as at a mission's end: anyone already at retirement age retires.
+        for (String id : everyone) {
+            MissionProgress.releaseOrRetire(snapshot, id);
+        }
         snapshot.getInProgressMissions().remove(missionInstanceId);
         return unflown ? Outcome.SCRUBBED : Outcome.CANCELLED;
-    }
-
-    private static void release(List<? extends Personnel> roster, List<String> ids) {
-        for (Personnel person : roster) {
-            if (ids.contains(person.getId())) {
-                person.setAssignmentState(AssignmentState.IDLE);
-                person.setAssignedMissionId(null);
-            }
-        }
     }
 }

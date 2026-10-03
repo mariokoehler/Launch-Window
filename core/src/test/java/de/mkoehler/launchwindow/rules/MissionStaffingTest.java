@@ -202,6 +202,20 @@ class MissionStaffingTest {
     }
 
     @Test
+    void aDisplacedHolderAtRetirementAgeRetiresInsteadOfGoingIdle() {
+        // Otherwise a swap could keep an over-age controller ASSIGNED, and so protected from retirement,
+        // by moving them straight into another mission's slot.
+        PlayerSnapshot snapshot = launchedTwoSlots();
+        String missionId = snapshot.getInProgressMissions().keySet().iterator().next();
+        find(snapshot, "flight").setAge(PersonnelLifecycle.retirementAgeFor(PersonnelGroup.MISSION_CONTROL));
+
+        assertEquals(MissionStaffing.ReassignOutcome.REASSIGNED,
+            MissionStaffing.reassign(snapshot, missionId, 1, "spare", CATALOG));
+
+        assertTrue(snapshot.getMissionControlOfficers().stream().noneMatch(o -> o.getId().equals("flight")));
+    }
+
+    @Test
     void reassignRefusesWithoutChangingAnything() {
         PlayerSnapshot snapshot = launchedTwoSlots();
         String missionId = snapshot.getInProgressMissions().keySet().iterator().next();
