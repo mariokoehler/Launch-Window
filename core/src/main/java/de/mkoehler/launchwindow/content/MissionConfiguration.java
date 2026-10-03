@@ -76,13 +76,44 @@ import java.util.function.Predicate;
  * @param requiredCapcomCount the exact number of astronauts a launch must supply as
  *                  CAPCOM on the ground; positive if, and only if, some step has a
  *                  CAPCOM involvement ({@code baspm.md} &sect;10.9)
+ * @param cancellationPrestigeDeduction the prestige an uncrewed mission loses when
+ *                  cancelled in flight - BASPM's configuration-level
+ *                  {@code PrestigeDeductedOnFailure} ({@code baspm.md} &sect;10.10)
+ * @param cancellationRefundPercent the share of the launch cost an in-flight
+ *                  cancellation restores, 0-100 - BASPM's {@code OnCancellation FundsRestored}
  * @author Mario Koehler
  */
 public record MissionConfiguration(String id, String programId, List<MissionSeason> seasons,
                                     int requiredAstronautCount, int requiredMissionControlOfficerCount, long cost,
                                     long firstTimePrestige, List<GoalModifier> goalDependencies,
                                     List<GoalModifier> goalBoosts, List<Launch> launches,
-                                    int requiredCapcomCount) {
+                                    int requiredCapcomCount, long cancellationPrestigeDeduction,
+                                    int cancellationRefundPercent) {
+
+    /**
+     * A configuration with no cancellation terms - the shape before M4.
+     *
+     * @param id                                 see {@link MissionConfiguration}
+     * @param programId                          see {@link MissionConfiguration}
+     * @param seasons                            see {@link MissionConfiguration}
+     * @param requiredAstronautCount             see {@link MissionConfiguration}
+     * @param requiredMissionControlOfficerCount see {@link MissionConfiguration}
+     * @param cost                               see {@link MissionConfiguration}
+     * @param firstTimePrestige                  see {@link MissionConfiguration}
+     * @param goalDependencies                   see {@link MissionConfiguration}
+     * @param goalBoosts                         see {@link MissionConfiguration}
+     * @param launches                           see {@link MissionConfiguration}
+     * @param requiredCapcomCount                see {@link MissionConfiguration}
+     * @throws NullPointerException     see the canonical constructor
+     * @throws IllegalArgumentException see the canonical constructor
+     */
+    public MissionConfiguration(String id, String programId, List<MissionSeason> seasons,
+                                int requiredAstronautCount, int requiredMissionControlOfficerCount, long cost,
+                                long firstTimePrestige, List<GoalModifier> goalDependencies,
+                                List<GoalModifier> goalBoosts, List<Launch> launches, int requiredCapcomCount) {
+        this(id, programId, seasons, requiredAstronautCount, requiredMissionControlOfficerCount, cost,
+            firstTimePrestige, goalDependencies, goalBoosts, launches, requiredCapcomCount, 0, 0);
+    }
 
     /**
      * A configuration with no CAPCOM - the shape before CAPCOM was modeled.
@@ -311,6 +342,9 @@ public record MissionConfiguration(String id, String programId, List<MissionSeas
         if ((requiredAstronautCount > 0) != anyCrewInvolvement) {
             throw new IllegalArgumentException(
                 "requiredAstronautCount " + requiredAstronautCount + " disagrees with whether any step has crew involvement");
+        }
+        if (cancellationPrestigeDeduction < 0 || cancellationRefundPercent < 0 || cancellationRefundPercent > 100) {
+            throw new IllegalArgumentException("cancellation terms out of range for " + id);
         }
         if (requiredCapcomCount < 0) {
             throw new IllegalArgumentException("requiredCapcomCount must not be negative: " + requiredCapcomCount);

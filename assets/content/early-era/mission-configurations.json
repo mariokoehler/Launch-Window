@@ -192,7 +192,9 @@
         ]
       }
     ],
-    "requiredCapcomCount": 0
+    "requiredCapcomCount": 0,
+    "cancellationPrestigeDeduction": 200,
+    "cancellationRefundPercent": 10
   },
   {
     "id": "sputnik-1-extended",
@@ -443,7 +445,9 @@
         ]
       }
     ],
-    "requiredCapcomCount": 0
+    "requiredCapcomCount": 0,
+    "cancellationPrestigeDeduction": 375,
+    "cancellationRefundPercent": 10
   },
   {
     "id": "sputnik-2-orbit",
@@ -686,7 +690,9 @@
         ]
       }
     ],
-    "requiredCapcomCount": 0
+    "requiredCapcomCount": 0,
+    "cancellationPrestigeDeduction": 375,
+    "cancellationRefundPercent": 10
   },
   {
     "id": "korabl-sputnik-2-orbit",
@@ -1069,7 +1075,9 @@
         ]
       }
     ],
-    "requiredCapcomCount": 0
+    "requiredCapcomCount": 0,
+    "cancellationPrestigeDeduction": 375,
+    "cancellationRefundPercent": 10
   },
   {
     "id": "vostok-uncrewed-suborbital",
@@ -1447,7 +1455,9 @@
         ]
       }
     ],
-    "requiredCapcomCount": 0
+    "requiredCapcomCount": 0,
+    "cancellationPrestigeDeduction": 50,
+    "cancellationRefundPercent": 10
   },
   {
     "id": "vostok-suborbital",
@@ -1979,7 +1989,9 @@
         ]
       }
     ],
-    "requiredCapcomCount": 1
+    "requiredCapcomCount": 1,
+    "cancellationPrestigeDeduction": 2000,
+    "cancellationRefundPercent": 10
   },
   {
     "id": "vostok-uncrewed-orbital",
@@ -2363,7 +2375,9 @@
         ]
       }
     ],
-    "requiredCapcomCount": 0
+    "requiredCapcomCount": 0,
+    "cancellationPrestigeDeduction": 75,
+    "cancellationRefundPercent": 10
   },
   {
     "id": "vostok-orbital",
@@ -2900,7 +2914,9 @@
         ]
       }
     ],
-    "requiredCapcomCount": 1
+    "requiredCapcomCount": 1,
+    "cancellationPrestigeDeduction": 2125,
+    "cancellationRefundPercent": 10
   },
   {
     "id": "vostok-orbital-duration-1",
@@ -3485,7 +3501,9 @@
         ]
       }
     ],
-    "requiredCapcomCount": 1
+    "requiredCapcomCount": 1,
+    "cancellationPrestigeDeduction": 2250,
+    "cancellationRefundPercent": 10
   },
   {
     "id": "vostok-orbital-duration-2",
@@ -4126,7 +4144,9 @@
         ]
       }
     ],
-    "requiredCapcomCount": 1
+    "requiredCapcomCount": 1,
+    "cancellationPrestigeDeduction": 2300,
+    "cancellationRefundPercent": 10
   },
   {
     "id": "vostok-joint-orbital",
@@ -5209,7 +5229,9 @@
         ]
       }
     ],
-    "requiredCapcomCount": 1
+    "requiredCapcomCount": 1,
+    "cancellationPrestigeDeduction": 2375,
+    "cancellationRefundPercent": 10
   },
   {
     "id": "explorer-1-orbit",
@@ -5405,7 +5427,9 @@
         ]
       }
     ],
-    "requiredCapcomCount": 0
+    "requiredCapcomCount": 0,
+    "cancellationPrestigeDeduction": 200,
+    "cancellationRefundPercent": 10
   },
   {
     "id": "explorer-1-extended",
@@ -5658,7 +5682,9 @@
         ]
       }
     ],
-    "requiredCapcomCount": 0
+    "requiredCapcomCount": 0,
+    "cancellationPrestigeDeduction": 375,
+    "cancellationRefundPercent": 10
   },
   {
     "id": "mercury-uncrewed-suborbital",
@@ -6036,7 +6062,9 @@
         ]
       }
     ],
-    "requiredCapcomCount": 0
+    "requiredCapcomCount": 0,
+    "cancellationPrestigeDeduction": 50,
+    "cancellationRefundPercent": 10
   },
   {
     "id": "mercury-suborbital",
@@ -6627,7 +6655,9 @@
         ]
       }
     ],
-    "requiredCapcomCount": 1
+    "requiredCapcomCount": 1,
+    "cancellationPrestigeDeduction": 2000,
+    "cancellationRefundPercent": 10
   },
   {
     "id": "mercury-uncrewed-orbital",
@@ -7011,7 +7041,9 @@
         ]
       }
     ],
-    "requiredCapcomCount": 0
+    "requiredCapcomCount": 0,
+    "cancellationPrestigeDeduction": 75,
+    "cancellationRefundPercent": 10
   },
   {
     "id": "mercury-orbital",
@@ -7611,7 +7643,9 @@
         ]
       }
     ],
-    "requiredCapcomCount": 1
+    "requiredCapcomCount": 1,
+    "cancellationPrestigeDeduction": 2125,
+    "cancellationRefundPercent": 10
   },
   {
     "id": "mercury-orbital-duration-1",
@@ -8272,7 +8306,9 @@
         ]
       }
     ],
-    "requiredCapcomCount": 1
+    "requiredCapcomCount": 1,
+    "cancellationPrestigeDeduction": 2250,
+    "cancellationRefundPercent": 10
   },
   {
     "id": "mercury-joint-orbital",
@@ -9270,6 +9306,8 @@
         ]
       }
     ],
-    "requiredCapcomCount": 1
+    "requiredCapcomCount": 1,
+    "cancellationPrestigeDeduction": 2375,
+    "cancellationRefundPercent": 10
   }
 ]

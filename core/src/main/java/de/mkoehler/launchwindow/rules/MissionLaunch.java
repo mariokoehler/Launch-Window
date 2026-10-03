@@ -231,6 +231,7 @@ public final class MissionLaunch {
             new InProgressMission(instanceId, configuration.id(), astronautIds, missionControlOfficerIds);
         mission.setRocketIds(request.rocketIds());
         mission.setCapcomAstronautIds(request.capcomAstronautIds());
+        mission.setLaunchCost(cost);
         snapshot.getInProgressMissions().put(instanceId, mission);
 
         snapshot.setFunds(snapshot.getFunds() - cost);

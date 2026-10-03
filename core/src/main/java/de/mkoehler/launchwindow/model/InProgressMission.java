@@ -23,6 +23,7 @@ public class InProgressMission {
     private List<String> assignedMissionControlOfficerIds = new ArrayList<>();
     private List<String> rocketIds = new ArrayList<>();
     private List<String> capcomAstronautIds = new ArrayList<>();
+    private long launchCost;
 
     /**
      * No-argument constructor required for Jackson/Kryo deserialization.
@@ -197,5 +198,25 @@ public class InProgressMission {
     public void setCapcomAstronautIds(List<String> capcomAstronautIds) {
         Objects.requireNonNull(capcomAstronautIds, "capcomAstronautIds must not be null");
         this.capcomAstronautIds = new ArrayList<>(capcomAstronautIds);
+    }
+
+    /**
+     * Returns what launching this mission cost - the configuration's cost plus its
+     * rockets' unit costs - so a scrub or cancellation refunds against the price
+     * actually paid ({@code design.md} &sect;5, M4).
+     *
+     * @return the launch cost
+     */
+    public long getLaunchCost() {
+        return launchCost;
+    }
+
+    /**
+     * Sets what launching this mission cost.
+     *
+     * @param launchCost the launch cost, zero or more
+     */
+    public void setLaunchCost(long launchCost) {
+        this.launchCost = launchCost;
     }
 }
