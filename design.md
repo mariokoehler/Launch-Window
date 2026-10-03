@@ -4807,6 +4807,24 @@ here.
     `launch` overload still works for configurations without launches. The harness
     fixtures have no launches, so the bot exercises rockets only once it runs on
     the real pack (slice 5); `RocketsTest` covers the rules meanwhile.
+  - **Slice 3c, CAPCOM — done (2026-10-03).** `MissionStep.capcomInvolvements` (astronaut
+    skills, on the controller side, sharing the 100% budget with
+    `controllerInvolvements`) and `MissionConfiguration.requiredCapcomCount`
+    (positive exactly when some step involves CAPCOM). The `LaunchRequest`'s CAPCOM
+    astronauts must be known, idle, available, unique, and not also crew
+    (`CAPCOM_NOT_AVAILABLE`, `WRONG_CAPCOM_COUNT`). They are stored on
+    `InProgressMission.capcomAstronautIds` and `ASSIGNED` to the mission. In flight,
+    their averaged skill feeds the saving throw's controller sum. They are released
+    (or retire on release) like everyone else, are never lost in a crew accident,
+    and are not Expert-rescue participants beyond the existing roster-wide rule.
+    **Unconfirmed default:** CAPCOM grows the skills it exercised that season, the
+    way a controller does. The harness's assignment-pairing invariant now covers
+    the CAPCOM list, and it also checks the CAPCOM and rocket counts against the
+    configuration. **Staffing correction:** the crewed `MC-MERCURY` layout has 11
+    slots, 10 controllers plus one CAPCOM astronaut; the uncrewed layout has 9
+    controllers (decision 6 above said nine for crewed). Both exceed the level-1
+    Mission Control cap of 5, so a NASA player has to upgrade Mission Control
+    (level 2 holds 13) before flying any Mercury mission.
 - **M4 — Integration: wire M2/M3's real engine into M1's proven skeleton.**
   Replace M1's placeholder trivial action with real player actions (assign
   personnel, open a program, queue a mission) and real turn resolution.

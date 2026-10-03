@@ -437,6 +437,10 @@ public final class MissionProgress {
             mission.getAssignedMissionControlOfficerIds(), snapshot.getMissionControlOfficers(),
             MissionStep.ControllerInvolvement::skill, MissionStep.ControllerInvolvement::percent,
             MissionControlOfficer::getSkill);
+        // CAPCOM astronauts sit on the controller side of the saving throw (baspm.md §10.9).
+        controllerSum += averageContributionSum(step.capcomInvolvements(), mission.getCapcomAstronautIds(),
+            snapshot.getAstronauts(), MissionStep.CrewInvolvement::skill, MissionStep.CrewInvolvement::percent,
+            Astronaut::getSkill);
         double savingThrowProbability = MissionStepResolution.computeSavingThrowProbability(baseProbability,
             controllerSum);
         savingThrowProbability = applyExpertRescue(snapshot, mission, step, savingThrowProbability, expertUseCounts,
@@ -889,6 +893,30 @@ public final class MissionProgress {
             events.add(new MissionSkillGrowthApplied(mission.getId(), officer.getId(), officer.getName(),
                 PersonnelGroup.MISSION_CONTROL, totalGain));
         }
+
+        // CAPCOM grows the skills it exercised this season, as a controller does (unconfirmed default).
+        Set<AstronautSkill> capcomSkillsExercised = new LinkedHashSet<>();
+        for (MissionStep step : executedSteps) {
+            for (MissionStep.CrewInvolvement involvement : step.capcomInvolvements()) {
+                capcomSkillsExercised.add(involvement.skill());
+            }
+        }
+        for (String capcomId : mission.getCapcomAstronautIds()) {
+            Astronaut astronaut = findById(snapshot.getAstronauts(), capcomId);
+            if (astronaut == null) {
+                continue;
+            }
+            double totalGain = 0;
+            for (AstronautSkill skill : capcomSkillsExercised) {
+                double factor = SkillGrowth.drawMissionSkillGrowthFactor(random);
+                double gain = SkillGrowth.diminishingReturnsGain(astronaut.getSkill(skill),
+                    astronaut.getLearningPotential(), factor);
+                astronaut.setSkill(skill, astronaut.getSkill(skill) + gain);
+                totalGain += gain;
+            }
+            events.add(new MissionSkillGrowthApplied(mission.getId(), astronaut.getId(), astronaut.getName(),
+                PersonnelGroup.ASTRONAUT, totalGain));
+        }
     }
 
     /**
@@ -931,6 +959,8 @@ public final class MissionProgress {
     private static void releaseSurvivors(PlayerSnapshot snapshot, InProgressMission mission,
             List<ResolutionEvent> events) {
         releaseGroup(snapshot.getAstronauts(), mission.getAssignedAstronautIds(), PersonnelGroup.ASTRONAUT, events);
+        // CAPCOM never flew, so it survives any crew loss and is released like everyone else.
+        releaseGroup(snapshot.getAstronauts(), mission.getCapcomAstronautIds(), PersonnelGroup.ASTRONAUT, events);
         releaseGroup(snapshot.getMissionControlOfficers(), mission.getAssignedMissionControlOfficerIds(),
             PersonnelGroup.MISSION_CONTROL, events);
     }

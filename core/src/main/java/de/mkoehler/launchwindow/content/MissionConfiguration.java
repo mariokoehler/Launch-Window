@@ -73,12 +73,40 @@ import java.util.function.Predicate;
  *                  &sect;10.9). A step names launch {@code n}'s rocket by the slot id
  *                  {@link #rocketSlotId(int) @rocket-n}. Empty for a configuration
  *                  with no rocket choice (its components all come from its program)
+ * @param requiredCapcomCount the exact number of astronauts a launch must supply as
+ *                  CAPCOM on the ground; positive if, and only if, some step has a
+ *                  CAPCOM involvement ({@code baspm.md} &sect;10.9)
  * @author Mario Koehler
  */
 public record MissionConfiguration(String id, String programId, List<MissionSeason> seasons,
                                     int requiredAstronautCount, int requiredMissionControlOfficerCount, long cost,
                                     long firstTimePrestige, List<GoalModifier> goalDependencies,
-                                    List<GoalModifier> goalBoosts, List<Launch> launches) {
+                                    List<GoalModifier> goalBoosts, List<Launch> launches,
+                                    int requiredCapcomCount) {
+
+    /**
+     * A configuration with no CAPCOM - the shape before CAPCOM was modeled.
+     *
+     * @param id                                 see {@link MissionConfiguration}
+     * @param programId                          see {@link MissionConfiguration}
+     * @param seasons                            see {@link MissionConfiguration}
+     * @param requiredAstronautCount             see {@link MissionConfiguration}
+     * @param requiredMissionControlOfficerCount see {@link MissionConfiguration}
+     * @param cost                               see {@link MissionConfiguration}
+     * @param firstTimePrestige                  see {@link MissionConfiguration}
+     * @param goalDependencies                   see {@link MissionConfiguration}
+     * @param goalBoosts                         see {@link MissionConfiguration}
+     * @param launches                           see {@link MissionConfiguration}
+     * @throws NullPointerException     see the canonical constructor
+     * @throws IllegalArgumentException see the canonical constructor
+     */
+    public MissionConfiguration(String id, String programId, List<MissionSeason> seasons,
+                                int requiredAstronautCount, int requiredMissionControlOfficerCount, long cost,
+                                long firstTimePrestige, List<GoalModifier> goalDependencies,
+                                List<GoalModifier> goalBoosts, List<Launch> launches) {
+        this(id, programId, seasons, requiredAstronautCount, requiredMissionControlOfficerCount, cost,
+            firstTimePrestige, goalDependencies, goalBoosts, launches, 0);
+    }
 
     /** The prefix of a step's rocket slot id; launch {@code n} (1-based) is {@code @rocket-n}. The {@code @} keeps it apart from real component ids. */
     public static final String ROCKET_SLOT_PREFIX = "@rocket-";
@@ -283,6 +311,14 @@ public record MissionConfiguration(String id, String programId, List<MissionSeas
         if ((requiredAstronautCount > 0) != anyCrewInvolvement) {
             throw new IllegalArgumentException(
                 "requiredAstronautCount " + requiredAstronautCount + " disagrees with whether any step has crew involvement");
+        }
+        if (requiredCapcomCount < 0) {
+            throw new IllegalArgumentException("requiredCapcomCount must not be negative: " + requiredCapcomCount);
+        }
+        boolean anyCapcomInvolvement = anyStepMatches(seasons, step -> !step.capcomInvolvements().isEmpty());
+        if ((requiredCapcomCount > 0) != anyCapcomInvolvement) {
+            throw new IllegalArgumentException("requiredCapcomCount " + requiredCapcomCount
+                + " disagrees with whether any step has CAPCOM involvement");
         }
         boolean anyControllerInvolvement = anyStepMatches(seasons, step -> !step.controllerInvolvements().isEmpty());
         if ((requiredMissionControlOfficerCount > 0) != anyControllerInvolvement) {

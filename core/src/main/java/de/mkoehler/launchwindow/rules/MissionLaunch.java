@@ -209,9 +209,6 @@ public final class MissionLaunch {
                 }
             }
         }
-        if (!request.capcomAstronautIds().isEmpty()) {
-            return MissionLaunchOutcome.WRONG_CAPCOM_COUNT;
-        }
 
         MissionLaunchOutcome crewProblem =
             validateAstronauts(snapshot, astronautIds, configuration.requiredAstronautCount());
@@ -223,16 +220,23 @@ public final class MissionLaunch {
         if (controllerProblem != null) {
             return controllerProblem;
         }
+        MissionLaunchOutcome capcomProblem = validateCapcom(snapshot, request.capcomAstronautIds(), astronautIds,
+            configuration.requiredCapcomCount());
+        if (capcomProblem != null) {
+            return capcomProblem;
+        }
 
         String instanceId = snapshot.allocateMissionInstanceId();
         InProgressMission mission =
             new InProgressMission(instanceId, configuration.id(), astronautIds, missionControlOfficerIds);
         mission.setRocketIds(request.rocketIds());
+        mission.setCapcomAstronautIds(request.capcomAstronautIds());
         snapshot.getInProgressMissions().put(instanceId, mission);
 
         snapshot.setFunds(snapshot.getFunds() - cost);
         snapshot.setLaunchesThisWindow(snapshot.getLaunchesThisWindow() + 1);
         assign(snapshot.getAstronauts(), astronautIds, instanceId);
+        assign(snapshot.getAstronauts(), request.capcomAstronautIds(), instanceId);
         assign(snapshot.getMissionControlOfficers(), missionControlOfficerIds, instanceId);
 
         return MissionLaunchOutcome.LAUNCHED;
@@ -278,6 +282,34 @@ public final class MissionLaunch {
         }
         if (astronautIds.size() != requiredCount) {
             return MissionLaunchOutcome.WRONG_ASTRONAUT_COUNT;
+        }
+        return null;
+    }
+
+    /**
+     * Validates the CAPCOM astronauts: each known, idle and available, none repeated
+     * and none also in the crew, and exactly the configuration's CAPCOM count.
+     *
+     * @param snapshot      the player
+     * @param capcomIds     the CAPCOM astronaut ids
+     * @param crewIds       the crew astronaut ids
+     * @param requiredCount how many CAPCOM astronauts the configuration needs
+     * @return the first problem, or {@code null}
+     */
+    private static MissionLaunchOutcome validateCapcom(PlayerSnapshot snapshot, List<String> capcomIds,
+            List<String> crewIds, int requiredCount) {
+        if (hasDuplicate(capcomIds)) {
+            return MissionLaunchOutcome.CAPCOM_NOT_AVAILABLE;
+        }
+        for (String id : capcomIds) {
+            Astronaut astronaut = findById(snapshot.getAstronauts(), id);
+            if (astronaut == null || crewIds.contains(id) || astronaut.getAssignmentState() != AssignmentState.IDLE
+                    || astronaut.getUnavailableSeasons() > 0) {
+                return MissionLaunchOutcome.CAPCOM_NOT_AVAILABLE;
+            }
+        }
+        if (capcomIds.size() != requiredCount) {
+            return MissionLaunchOutcome.WRONG_CAPCOM_COUNT;
         }
         return null;
     }

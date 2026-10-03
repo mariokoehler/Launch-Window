@@ -1746,6 +1746,9 @@ public final class PersonnelLifecyclePlayouts {
         for (InProgressMission mission : snapshot.getInProgressMissions().values()) {
             checkMissionSideGroup(mission.getId(), mission.getAssignedAstronautIds(), snapshot.getAstronauts(),
                 claimedPersonnelIds);
+            // CAPCOM astronauts are ASSIGNED to the mission too, and may not double as crew.
+            checkMissionSideGroup(mission.getId(), mission.getCapcomAstronautIds(), snapshot.getAstronauts(),
+                claimedPersonnelIds);
             checkMissionSideGroup(mission.getId(), mission.getAssignedMissionControlOfficerIds(),
                 snapshot.getMissionControlOfficers(), claimedPersonnelIds);
 
@@ -1763,6 +1766,15 @@ public final class PersonnelLifecyclePlayouts {
                 throw new IllegalStateException("Mission " + mission.getId() + " assigned astronaut count "
                     + mission.getAssignedAstronautIds().size() + " does not match its own configuration's required "
                     + configuration.requiredAstronautCount());
+            }
+            if (mission.getCapcomAstronautIds().size() != configuration.requiredCapcomCount()) {
+                throw new IllegalStateException("Mission " + mission.getId() + " has "
+                    + mission.getCapcomAstronautIds().size() + " CAPCOM, its configuration requires "
+                    + configuration.requiredCapcomCount());
+            }
+            if (mission.getRocketIds().size() != configuration.launches().size()) {
+                throw new IllegalStateException("Mission " + mission.getId() + " flies " + mission.getRocketIds().size()
+                    + " rocket(s) for " + configuration.launches().size() + " launch(es)");
             }
             if (mission.getAssignedMissionControlOfficerIds().size() != configuration
                     .requiredMissionControlOfficerCount()) {

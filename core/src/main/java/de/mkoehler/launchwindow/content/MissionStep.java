@@ -64,13 +64,42 @@ import java.util.Objects;
  *                                magnitude - it replaces the season's
  *                                accumulated prestige rather than adding to
  *                                it, {@code design.md} &sect;2.6(d)
+ * @param goalIdsAchieved         the goals this step achieves when it succeeds
+ * @param capcomInvolvements      the CAPCOM astronauts' skills on the ground, on the
+ *                                controller side: they feed the saving throw like a
+ *                                controller involvement, read from the mission's CAPCOM
+ *                                astronauts. Controllers and CAPCOM together sum to
+ *                                100 or less - BASPM's CAPCOM slot ({@code baspm.md}
+ *                                &sect;10.9). May be empty
  * @author Mario Koehler
  */
 public record MissionStep(String id, List<ComponentInvolvement> componentInvolvements,
                            List<ControllerInvolvement> controllerInvolvements,
                            List<CrewInvolvement> crewInvolvements, boolean crewRisk,
                            int prestigeSharePercent, long failurePrestigeDeduction,
-                           List<String> goalIdsAchieved) {
+                           List<String> goalIdsAchieved, List<CrewInvolvement> capcomInvolvements) {
+
+    /**
+     * A step with no CAPCOM involvement - the shape before CAPCOM was modeled.
+     *
+     * @param id                       see {@link MissionStep}
+     * @param componentInvolvements    see {@link MissionStep}
+     * @param controllerInvolvements   see {@link MissionStep}
+     * @param crewInvolvements         see {@link MissionStep}
+     * @param crewRisk                 see {@link MissionStep}
+     * @param prestigeSharePercent     see {@link MissionStep}
+     * @param failurePrestigeDeduction see {@link MissionStep}
+     * @param goalIdsAchieved          see {@link MissionStep}
+     * @throws NullPointerException     see the canonical constructor
+     * @throws IllegalArgumentException see the canonical constructor
+     */
+    public MissionStep(String id, List<ComponentInvolvement> componentInvolvements,
+                       List<ControllerInvolvement> controllerInvolvements,
+                       List<CrewInvolvement> crewInvolvements, boolean crewRisk,
+                       int prestigeSharePercent, long failurePrestigeDeduction, List<String> goalIdsAchieved) {
+        this(id, componentInvolvements, controllerInvolvements, crewInvolvements, crewRisk, prestigeSharePercent,
+            failurePrestigeDeduction, goalIdsAchieved, List.of());
+    }
 
     /**
      * A step with no prestige share, no failure deduction, and no goals - the
@@ -158,8 +187,13 @@ public record MissionStep(String id, List<ComponentInvolvement> componentInvolve
 
         requireExactly100(componentInvolvements.stream().mapToInt(ComponentInvolvement::percent).sum(),
             "componentInvolvements");
-        requireAtMost100(controllerInvolvements.stream().mapToInt(ControllerInvolvement::percent).sum(),
-            "controllerInvolvements");
+        Objects.requireNonNull(capcomInvolvements, "capcomInvolvements must not be null");
+        capcomInvolvements = List.copyOf(capcomInvolvements);
+        requireNoDuplicates(capcomInvolvements.stream().map(CrewInvolvement::skill).toList(), "capcomInvolvements");
+        // CAPCOM sits on the controller side, so the two share one 100% budget (baspm.md §10.9).
+        requireAtMost100(controllerInvolvements.stream().mapToInt(ControllerInvolvement::percent).sum()
+            + capcomInvolvements.stream().mapToInt(CrewInvolvement::percent).sum(),
+            "controllerInvolvements plus capcomInvolvements");
         if (!crewInvolvements.isEmpty()) {
             requireExactly100(crewInvolvements.stream().mapToInt(CrewInvolvement::percent).sum(), "crewInvolvements");
         }
