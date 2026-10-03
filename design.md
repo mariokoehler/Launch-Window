@@ -5053,7 +5053,25 @@ here.
     overload can't choose rockets or CAPCOM.
 - **M5 — Playable client (libGDX UI).** **Screen spec: `ui-spec.md`** (2026-10-03). The user
   mocks up each screen in Claude Design against the launchwindow design system, and Claude implements
-  them. The spec also lists the server gaps G1–G7 that M5 has to close. First real playtest happens at the
+  them. The spec also lists the gaps G1–G9 that M5 has to close.
+  - **Decisions (user, 2026-10-03), the screen flow (`ui-spec.md` §3):**
+    - **Buildings regrouped from BASPM's layout.** The VAB owns rockets (open, manage, and Rocket
+      R&D), matching its rocket-program cap and rocket-class gate. Headquarters owns payload programs
+      and all mission planning. The SET Centre owns payload R&D, which is also reached from mission
+      configuration. Mission Control watches scheduled and active missions.
+    - **Personnel buildings open on a personnel overview** (training, dismiss, and so on), with Hire
+      and Manage department as sub-screens, as in BASPM.
+    - **Department salary adjustment is BASPM's one-off** (`baspm.md` §9.8): −50 % to +50 % on every
+      salary in the group once, with morale +p for a raise or −3p for a cut. A new rules action.
+    - **Assembly and launch are one screen** (BASPM's schedule and assemble merged). It has one slot
+      per crew member, CAPCOM, and controller, filled by hand or by auto-assign (best skill match).
+      Confirming deducts the cost and moves the mission to Mission Control's scheduled list, where a
+      scrub before resolution refunds in full.
+    - **Programs are browsed by celestial body** on `backgrounds/solar_system.png`, with available
+      and open counts per body. Categories need a body field (content).
+    - **Configurations are viewable before their program is open**, but read-only.
+    - **Mission assessment is computed in the client** from `core`.
+    - **R&D splits into Rocket R&D (VAB) and Payload R&D (SET Centre).** First real playtest happens at the
   end of this milestone. Expected slices, sizing not yet estimated:
   connect/login/slot-claim screens; roster/personnel management;
   program/mission selection bundled with the budget/prestige overview and

@@ -1230,6 +1230,22 @@ correction for whoever reads §8.2 closely against the actual XML next.
    practice regardless of which enum value is active; only worth chasing if
    a future save or screenshot ever shows that state's name somewhere.
 
+### 9.8 Department salary adjustment (traced 2026-10-03, for M5)
+
+`ManagePersonnelGroupOverlay`, the "Manage Department" dialog on each personnel
+screen, has a slider that `Mathf.Lerp`s from **−50 % to +50 %** in whole percents.
+On OK, `Player.ApplySalariesAdjustmentToPersonnelGroup` applies it **once** to the
+whole group:
+- `UpdateSalariesAcrossAllGroup(p)` changes every salary by p %;
+- `UpdateMoraleAcrossAllGroup(m)` adds the morale change `m = p` for a raise and
+  `m = 3 × p` for a cut (so −10 % costs 30 morale), clamped to 0–100.
+
+The dialog previews the projected department expenditure
+(`current × (1 + p/100)`) and the projected average morale. It is a one-off
+action, not a standing salary level. Launch Window adopts it as is (user decision,
+2026-10-03, `design.md` §5 M5, `ui-spec.md` G8). Screenshot:
+`assets-raw/baspm/ui/manage_department.png`.
+
 ## 10. Programs, mission configurations, and reliability (traced 2026-09-27)
 
 Full trace of `ProgramsManager.cs`, `MissionsConfigurationsManager.cs`,
