@@ -70,23 +70,25 @@ from scratch.
 
 **Next up (as of 2026-10-03):** M2's budget/funding, prestige, goals, and
 win-condition/tie-break slice (`design.md` §2.1/§2.6/§2.9, §5), in four
-sub-slices. **Sub-slice 1 (mission prestige) is done** (uncommitted); the
-next one is **sub-slice 2, goals** (`design.md` §2.6(d)): `Goal` content,
-goal-granted prestige folded into each season's total, the cancellation
-cascade (cancelled goals pay and count too), a program gate that's an AND
-list of required goals (not generic-only, a mis-trace since corrected), the
-goal-dependency reliability modifier read live on every step, and the
-game-wide cross-player goal count. Sub-slice 2
-needs a multi-player harness game, since the cross-player race can't be
-exercised by a single-player run. The decided design (four user decisions
-taken 2026-10-03, see `design.md` §2.1(d)/§2.6(d)/§2.9) is:
-salaries yes; debt allowed, with a prestige-to-funds conversion while in debt
-(cap: funds may come up to two seasons of running costs); same-turn goal
-achievers all get first-time prestige; the win list is goal ids. The
-cross-player goal race is a Launch Window design, not a BASPM port - BASPM's
-human multiplayer counts each player's own goals, so this needed the user's
-explicit re-decision after the correction (`baspm.md` §11.7). BASPM's own
-answer to going into the red is a defeat, not debt (`baspm.md` §11.8).
+sub-slices. **Sub-slices 1 (mission prestige) and 2 (goals) are done.** The
+next one is **sub-slice 3, budget** (`design.md` §2.1(d)): the funding review
+every 16 seasons with catch-up, salaries and program maintenance as the
+recurring expenses, debt allowed, and the prestige-to-funds conversion while
+in debt (cap: funds may come up to two seasons of running costs). Then
+sub-slice 4, the win-condition check (`design.md` §2.9).
+
+The goal design (`design.md` §2.6(d)) is in place, including the corrections
+from checking BASPM source: a program gate is an AND list of required goals,
+not generic-only; the goal modifier is read live on every step; cancelled goals
+pay and count too. The cross-player goal race is a Launch Window design, not a
+BASPM port, since BASPM's human multiplayer counts each player's own goals
+(`baspm.md` §11.7); the user kept it after being told. Same-turn achievers all
+pay first-time, and the tally commits after every player has resolved. Sub-slice 2
+has no separate multi-player playout yet; the race is covered by
+`MissionProgressGoalsTest`, which drives the real `MissionLaunch`/`MissionProgress`
+against a real `GoalTally`. BASPM's answer to going into the red is a defeat,
+not debt (`baspm.md` §11.8), and the decided debt/conversion design departs from
+it on purpose.
 Everything below is history; if this paragraph and a later one disagree, the
 later one wins.
 

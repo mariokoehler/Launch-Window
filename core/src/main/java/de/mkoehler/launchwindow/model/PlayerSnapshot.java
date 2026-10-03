@@ -2,9 +2,11 @@ package de.mkoehler.launchwindow.model;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * <p>One player's complete resolved game state as of the end of a turn -
@@ -40,6 +42,8 @@ public class PlayerSnapshot {
     private Map<String, InProgressMission> inProgressMissions = new LinkedHashMap<>();
     private long nextMissionInstanceId;
     private Map<String, Integer> successfulFlightCounts = new LinkedHashMap<>();
+    private Map<String, Integer> achievedGoals = new LinkedHashMap<>();
+    private Set<String> cancelledGoalIds = new LinkedHashSet<>();
 
     /**
      * No-argument constructor required for Jackson deserialization.
@@ -402,6 +406,61 @@ public class PlayerSnapshot {
     public void setSuccessfulFlightCounts(Map<String, Integer> successfulFlightCounts) {
         Objects.requireNonNull(successfulFlightCounts, "successfulFlightCounts must not be null");
         this.successfulFlightCounts = new LinkedHashMap<>(successfulFlightCounts);
+    }
+
+    /**
+     * Returns the goals this player has achieved, mapped to the game turn each
+     * one settled on. Goals cancelled by an achieved goal are not in here - see
+     * {@link #getCancelledGoalIds()}. The live map is returned.
+     *
+     * @return the achieved goals and their settlement turns, never {@code null}
+     */
+    public Map<String, Integer> getAchievedGoals() {
+        return achievedGoals;
+    }
+
+    /**
+     * Replaces the achieved goals. Public for Jackson/Kryo, and copied defensively.
+     *
+     * @param achievedGoals the achieved goals to set
+     * @throws NullPointerException if {@code achievedGoals} is {@code null}
+     */
+    public void setAchievedGoals(Map<String, Integer> achievedGoals) {
+        Objects.requireNonNull(achievedGoals, "achievedGoals must not be null");
+        this.achievedGoals = new LinkedHashMap<>(achievedGoals);
+    }
+
+    /**
+     * Returns the goals cancelled by an achieved goal, which count as fulfilled
+     * for gates and modifiers but never pay as achieved. The live set is returned.
+     *
+     * @return the cancelled goal ids, never {@code null}
+     */
+    public Set<String> getCancelledGoalIds() {
+        return cancelledGoalIds;
+    }
+
+    /**
+     * Replaces the cancelled goal ids. Public for Jackson/Kryo, and copied defensively.
+     *
+     * @param cancelledGoalIds the cancelled goal ids to set
+     * @throws NullPointerException if {@code cancelledGoalIds} is {@code null}
+     */
+    public void setCancelledGoalIds(Set<String> cancelledGoalIds) {
+        Objects.requireNonNull(cancelledGoalIds, "cancelledGoalIds must not be null");
+        this.cancelledGoalIds = new LinkedHashSet<>(cancelledGoalIds);
+    }
+
+    /**
+     * Returns whether a goal counts as fulfilled for gates and modifiers:
+     * achieved, or cancelled by an achieved goal. BASPM's own "achieved or
+     * cancelled" check - {@code baspm.md} &sect;11.3.
+     *
+     * @param goalId the goal id to check
+     * @return {@code true} if the goal is achieved or cancelled
+     */
+    public boolean hasAchievedOrCancelledGoal(String goalId) {
+        return achievedGoals.containsKey(goalId) || cancelledGoalIds.contains(goalId);
     }
 
     /**

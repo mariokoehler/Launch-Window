@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -76,11 +77,15 @@ class PlayerSnapshotTest {
         original.setInProgressMissions(Map.of("m0", flying));
         original.setNextMissionInstanceId(1);
         original.setSuccessfulFlightCounts(Map.of("sputnik-1-std", 3));
+        original.setAchievedGoals(Map.of("orbit", 4));
+        original.setCancelledGoalIds(Set.of("pre-flight"));
 
         String json = mapper.writeValueAsString(original);
         PlayerSnapshot restored = mapper.readValue(json, PlayerSnapshot.class);
 
         assertEquals(3, restored.getSuccessfulFlightCounts().get("sputnik-1-std"));
+        assertEquals(4, restored.getAchievedGoals().get("orbit"));
+        assertEquals(Set.of("pre-flight"), restored.getCancelledGoalIds());
         assertEquals(original.getAgencyName(), restored.getAgencyName());
         assertEquals(original.getArchetype(), restored.getArchetype());
         assertEquals(original.getFunds(), restored.getFunds());

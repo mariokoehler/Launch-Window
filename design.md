@@ -4477,6 +4477,31 @@ here.
       71,178 training completions) - prestige adds no random draws, so nothing
       else shifts. Still open for this slice: goals (sub-slice 2), budget
       (sub-slice 3), win check (sub-slice 4).
+    - **Sub-slice 2, goals — done (2026-10-03).** `Goal` (first/second-time
+      prestige, cancellation list, validated in `ContentCatalog`),
+      `MissionStep.goalIdsAchieved`, `Program.requiredGoalIds` (an AND gate, which
+      `ProgramOpening` checks and reports as `GOALS_NOT_MET`), and
+      `MissionConfiguration.goalDependencies`/`goalBoosts` (`GoalModifier`). The
+      game-wide count is `GoalTally`: `MissionProgress` reads it but never changes
+      it, and the caller commits each resolution's `GoalSettled` events afterward,
+      which gives the same-turn rule. Goal prestige folds into the season total
+      (so a `MINOR_GLITCH` halves it, and a failing season forfeits it while the goal
+      stays achieved and counted). Cancelled goals pay and count too. The modifier
+      is read live per step (`goalModifierFor`, inside the component sum). **Not
+      built:** a separate multi-player playout. The race is covered by
+      `MissionProgressGoalsTest`, which drives the real `MissionLaunch` and
+      `MissionProgress` against a real `GoalTally`. The main harness now has three
+      goals, an explorer program gated on one, and a mercury modifier, with the
+      goal prestige and gate checked each season (`checkPrestigeInvariants`
+      folds it in; `checkGoalPrice` checks each settlement against the pre-commit
+      tally; `checkGoalState` checks the achieved and cancelled sets). **Numbers
+      (200 games, 80 seasons, seed 42): 813,110 prestige paid, 27,400 deducted,
+      1,536 completed flights; 1,168 resigned, 1,057 retired, 5,333 still
+      employed, 73,575 training completions, 4,632 hires, 1,870 missions
+      launched.** Personnel numbers moved, because the explorer program's gate
+      now changes which programs open. Goal settlement counts are not in the
+      report, only the prestige they feed into. Still open: budget (sub-slice 3),
+      the win check (sub-slice 4).
   - Slice: random events — §2.7.
   - **The Playouts-style bot-driven harness (§3.10) starts right after the
     first resolution rule exists**, in `dev-tools`, not as a final

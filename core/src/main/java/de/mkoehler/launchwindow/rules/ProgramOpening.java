@@ -157,6 +157,13 @@ public final class ProgramOpening {
         if (openedProgramIds.contains(program.id())) {
             return OpenProgramOutcome.ALREADY_OPEN;
         }
+        // Every required goal must be achieved or cancelled - an AND gate, BASPM's StrictGoalsIDs
+        // (baspm.md §11.3, corrected 2026-10-03: not generic-only).
+        for (String goalId : program.requiredGoalIds()) {
+            if (!snapshot.hasAchievedOrCancelledGoal(goalId)) {
+                return OpenProgramOutcome.GOALS_NOT_MET;
+            }
+        }
 
         long cost = effectiveOpeningCost(program, openedProgramIds);
         if (snapshot.getFunds() < cost) {

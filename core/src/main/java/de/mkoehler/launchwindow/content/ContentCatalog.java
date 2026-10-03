@@ -32,6 +32,7 @@ public final class ContentCatalog {
     private final Map<String, Program> programsById;
     private final Map<String, MissionConfiguration> missionConfigurationsById;
     private final Map<String, MissionComponent> missionComponentsById;
+    private final Map<String, Goal> goalsById;
 
     /**
      * Builds and validates a catalog from the given content definitions.
@@ -51,18 +52,49 @@ public final class ContentCatalog {
      */
     public ContentCatalog(List<ProgramCategory> categories, List<Program> programs,
             List<MissionConfiguration> missionConfigurations, List<MissionComponent> missionComponents) {
+        this(categories, programs, missionConfigurations, missionComponents, List.of());
+    }
+
+    /**
+     * Builds and validates a catalog that also holds goals.
+     *
+     * @param categories           every program category
+     * @param programs             every program
+     * @param missionConfigurations every mission configuration
+     * @param missionComponents    every mission component
+     * @param goals                every goal a step or modifier can reference
+     * @throws NullPointerException     if any argument is {@code null}
+     * @throws IllegalArgumentException if any list contains a duplicate id, or
+     *                                   any goal, program, step, or modifier
+     *                                   references an id the catalog doesn't define
+     */
+    public ContentCatalog(List<ProgramCategory> categories, List<Program> programs,
+            List<MissionConfiguration> missionConfigurations, List<MissionComponent> missionComponents,
+            List<Goal> goals) {
         Objects.requireNonNull(categories, "categories must not be null");
         Objects.requireNonNull(programs, "programs must not be null");
         Objects.requireNonNull(missionConfigurations, "missionConfigurations must not be null");
         Objects.requireNonNull(missionComponents, "missionComponents must not be null");
+        Objects.requireNonNull(goals, "goals must not be null");
 
         this.categoriesById = indexById(categories, ProgramCategory::id, "ProgramCategory");
         this.programsById = indexById(programs, Program::id, "Program");
         this.missionConfigurationsById =
             indexById(missionConfigurations, MissionConfiguration::id, "MissionConfiguration");
         this.missionComponentsById = indexById(missionComponents, MissionComponent::id, "MissionComponent");
+        this.goalsById = indexById(goals, Goal::id, "Goal");
 
         validateReferences();
+    }
+
+    /**
+     * Looks up a goal by id.
+     *
+     * @param id the id to look up
+     * @return the matching goal, or {@link Optional#empty()} if none exists
+     */
+    public Optional<Goal> goal(String id) {
+        return Optional.ofNullable(goalsById.get(id));
     }
 
     /**
@@ -176,6 +208,23 @@ public final class ContentCatalog {
             }
             validateStepComponentReferences(configuration, program, problems);
             validatePrestigeShares(configuration, problems);
+            validateGoalReferences(configuration, problems);
+        }
+
+        for (Goal goal : goalsById.values()) {
+            for (String cancelledId : goal.cancelsGoalIds()) {
+                if (!goalsById.containsKey(cancelledId)) {
+                    problems.add("Goal " + goal.id() + " cancels unknown Goal " + cancelledId);
+                }
+            }
+        }
+
+        for (Program program : programsById.values()) {
+            for (String goalId : program.requiredGoalIds()) {
+                if (!goalsById.containsKey(goalId)) {
+                    problems.add("Program " + program.id() + " requires unknown Goal " + goalId);
+                }
+            }
         }
 
         for (MissionComponent component : missionComponentsById.values()) {
@@ -192,6 +241,43 @@ public final class ContentCatalog {
 
         if (!problems.isEmpty()) {
             throw new IllegalArgumentException("invalid content catalog: " + String.join("; ", problems));
+        }
+    }
+
+    /**
+     * Checks that every goal a configuration's steps achieve, and every goal
+     * modifier it declares, references a goal and mission component the catalog
+     * defines.
+     *
+     * @param configuration the mission configuration to check
+     * @param problems      the list to append any problem found to
+     */
+    private void validateGoalReferences(MissionConfiguration configuration, List<String> problems) {
+        String label = "MissionConfiguration " + configuration.id();
+        for (MissionSeason season : configuration.seasons()) {
+            for (MissionStep step : season.steps()) {
+                for (String goalId : step.goalIdsAchieved()) {
+                    if (!goalsById.containsKey(goalId)) {
+                        problems.add(label + " step " + step.id() + " achieves unknown Goal " + goalId);
+                    }
+                }
+            }
+        }
+        for (MissionConfiguration.GoalModifier modifier : configuration.goalDependencies()) {
+            checkModifier(label, "dependency", modifier, problems);
+        }
+        for (MissionConfiguration.GoalModifier modifier : configuration.goalBoosts()) {
+            checkModifier(label, "boost", modifier, problems);
+        }
+    }
+
+    private void checkModifier(String label, String kind, MissionConfiguration.GoalModifier modifier,
+            List<String> problems) {
+        if (!goalsById.containsKey(modifier.goalId())) {
+            problems.add(label + " goal " + kind + " references unknown Goal " + modifier.goalId());
+        }
+        if (!missionComponentsById.containsKey(modifier.componentId())) {
+            problems.add(label + " goal " + kind + " references unknown MissionComponent " + modifier.componentId());
         }
     }
 

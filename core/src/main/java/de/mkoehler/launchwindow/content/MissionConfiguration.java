@@ -70,7 +70,59 @@ import java.util.function.Predicate;
  */
 public record MissionConfiguration(String id, String programId, List<MissionSeason> seasons,
                                     int requiredAstronautCount, int requiredMissionControlOfficerCount, long cost,
-                                    long firstTimePrestige) {
+                                    long firstTimePrestige, List<GoalModifier> goalDependencies,
+                                    List<GoalModifier> goalBoosts) {
+
+    /**
+     * A goal-linked reliability modifier on one mission component: a
+     * dependency subtracts {@code amount} while the goal is still unfulfilled,
+     * a boost adds {@code amount} once it is achieved or cancelled - see
+     * {@code design.md} &sect;2.6(d) and {@code baspm.md} &sect;11.3.
+     *
+     * @param goalId      the {@link Goal#id()} the modifier depends on
+     * @param componentId the {@link MissionComponent#id()} it changes
+     * @param amount      the reliability magnitude, positive
+     */
+    public record GoalModifier(String goalId, String componentId, int amount) {
+
+        /**
+         * Validates every field.
+         *
+         * @throws NullPointerException     if {@code goalId} or {@code componentId} is {@code null}
+         * @throws IllegalArgumentException if either id is blank or {@code amount} is not positive
+         */
+        public GoalModifier {
+            Objects.requireNonNull(goalId, "goalId must not be null");
+            Objects.requireNonNull(componentId, "componentId must not be null");
+            if (goalId.isBlank() || componentId.isBlank()) {
+                throw new IllegalArgumentException("goalModifier ids must not be blank");
+            }
+            if (amount <= 0) {
+                throw new IllegalArgumentException("goalModifier amount must be positive: " + amount);
+            }
+        }
+    }
+
+    /**
+     * A configuration with no goal modifiers - the shape before goal
+     * modifiers were modeled.
+     *
+     * @param id                                 see {@link MissionConfiguration}
+     * @param programId                          see {@link MissionConfiguration}
+     * @param seasons                            see {@link MissionConfiguration}
+     * @param requiredAstronautCount             see {@link MissionConfiguration}
+     * @param requiredMissionControlOfficerCount see {@link MissionConfiguration}
+     * @param cost                               see {@link MissionConfiguration}
+     * @param firstTimePrestige                  see {@link MissionConfiguration}
+     * @throws NullPointerException     see the canonical constructor
+     * @throws IllegalArgumentException see the canonical constructor
+     */
+    public MissionConfiguration(String id, String programId, List<MissionSeason> seasons,
+                                int requiredAstronautCount, int requiredMissionControlOfficerCount, long cost,
+                                long firstTimePrestige) {
+        this(id, programId, seasons, requiredAstronautCount, requiredMissionControlOfficerCount, cost,
+            firstTimePrestige, List.of(), List.of());
+    }
 
     /**
      * A configuration that pays no prestige at all - the shape every
@@ -134,6 +186,10 @@ public record MissionConfiguration(String id, String programId, List<MissionSeas
             throw new IllegalArgumentException("firstTimePrestige must not be negative: " + firstTimePrestige);
         }
         seasons = List.copyOf(seasons);
+        Objects.requireNonNull(goalDependencies, "goalDependencies must not be null");
+        Objects.requireNonNull(goalBoosts, "goalBoosts must not be null");
+        goalDependencies = List.copyOf(goalDependencies);
+        goalBoosts = List.copyOf(goalBoosts);
 
         boolean anyCrewInvolvement = anyStepMatches(seasons, step -> !step.crewInvolvements().isEmpty());
         if ((requiredAstronautCount > 0) != anyCrewInvolvement) {

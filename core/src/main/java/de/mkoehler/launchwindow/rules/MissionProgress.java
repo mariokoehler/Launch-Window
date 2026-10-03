@@ -1,6 +1,7 @@
 package de.mkoehler.launchwindow.rules;
 
 import de.mkoehler.launchwindow.content.ContentCatalog;
+import de.mkoehler.launchwindow.content.Goal;
 import de.mkoehler.launchwindow.content.MissionComponent;
 import de.mkoehler.launchwindow.content.MissionConfiguration;
 import de.mkoehler.launchwindow.content.MissionSeason;
@@ -125,9 +126,29 @@ public final class MissionProgress {
      */
     public static List<ResolutionEvent> advanceSeason(PlayerSnapshot snapshot, ContentCatalog catalog,
             RandomGenerator random) {
+        return advanceSeason(snapshot, catalog, random, new GoalTally(), 0);
+    }
+
+    /**
+     * Advances every in-progress mission by one season, with goals settling
+     * against a game-wide {@link GoalTally}. The tally is read here and only
+     * changed by the caller's {@link GoalTally#commit} after every player has
+     * resolved, so same-turn achievers all price first-time (design.md &sect;2.6(d)).
+     *
+     * @param snapshot   the player snapshot to advance; mutated in place
+     * @param catalog    the content catalog every mission was launched from
+     * @param random     the random source for step rolls and post-flight draws
+     * @param goalTally  the game-wide goal counts, read but not changed by this call
+     * @param gameTurn   the game turn this resolution settles, stamped on achieved goals
+     * @return the events produced, in resolution order
+     * @throws NullPointerException if any argument is {@code null}
+     */
+    public static List<ResolutionEvent> advanceSeason(PlayerSnapshot snapshot, ContentCatalog catalog,
+            RandomGenerator random, GoalTally goalTally, int gameTurn) {
         Objects.requireNonNull(snapshot, "snapshot must not be null");
         Objects.requireNonNull(catalog, "catalog must not be null");
         Objects.requireNonNull(random, "random must not be null");
+        Objects.requireNonNull(goalTally, "goalTally must not be null");
 
         List<ResolutionEvent> events = new ArrayList<>();
         // Missions this pass ends are removed after the loop below, never during it - mutating an
@@ -140,7 +161,8 @@ public final class MissionProgress {
         Map<String, Integer> expertUseCounts = new LinkedHashMap<>();
 
         for (InProgressMission mission : snapshot.getInProgressMissions().values()) {
-            advanceOne(snapshot, catalog, random, mission, events, endedMissionIds, expertUseCounts);
+            advanceOne(snapshot, catalog, random, mission, events, endedMissionIds, expertUseCounts, goalTally,
+                gameTurn);
         }
 
         for (String missionId : endedMissionIds) {
@@ -163,7 +185,7 @@ public final class MissionProgress {
      */
     private static void advanceOne(PlayerSnapshot snapshot, ContentCatalog catalog, RandomGenerator random,
             InProgressMission mission, List<ResolutionEvent> events, List<String> endedMissionIds,
-            Map<String, Integer> expertUseCounts) {
+            Map<String, Integer> expertUseCounts, GoalTally goalTally, int gameTurn) {
         MissionConfiguration configuration = catalog.missionConfiguration(mission.getMissionConfigurationId())
             .orElse(null);
         if (configuration == null) {
@@ -190,7 +212,12 @@ public final class MissionProgress {
                 step.id(), outcome));
             executedSteps.add(step);
             executedOutcomes.add(outcome);
-            seasonPrestige = stepPrestige(seasonPrestige, outcome, step, tierTotal);
+            // A step that ends or fails the mission awards no goals - BASPM's ProcessStepFailed has none
+            // (baspm.md §11.7). The other outcomes award theirs right after the step itself.
+            long goalPrestige = awardsGoals(outcome)
+                ? settleStepGoals(snapshot, catalog, mission, step, goalTally, gameTurn, events)
+                : 0;
+            seasonPrestige = stepPrestige(seasonPrestige, outcome, step, tierTotal, goalPrestige);
 
             if (outcome == MissionStepOutcome.FAILURE || outcome == MissionStepOutcome.CATASTROPHIC) {
                 missionEndedThisSeason = true;
@@ -242,15 +269,95 @@ public final class MissionProgress {
      * @param outcome     this step's resolved outcome
      * @param step        the step, for its share and failure deduction
      * @param tierTotal   the configuration's total at the flight's tier
+     * @param goalPrestige the prestige the goals this step settled paid; folded
+     *                    into the same total as the step's own share, so a
+     *                    {@code MINOR_GLITCH} halves it too (baspm.md §11.7)
      * @return the running total after this step
      */
-    private static long stepPrestige(long seasonSoFar, MissionStepOutcome outcome, MissionStep step, long tierTotal) {
-        long payout = MissionPrestige.stepPayout(tierTotal, step.prestigeSharePercent());
+    private static long stepPrestige(long seasonSoFar, MissionStepOutcome outcome, MissionStep step, long tierTotal,
+            long goalPrestige) {
+        long payout = MissionPrestige.stepPayout(tierTotal, step.prestigeSharePercent()) + goalPrestige;
         return switch (outcome) {
             case SUCCESSFUL, MINOR_GLITCH_SOLVED -> seasonSoFar + payout;
             case MINOR_GLITCH -> seasonSoFar + payout / 2;
             case FAILURE, CATASTROPHIC -> -step.failurePrestigeDeduction();
         };
+    }
+
+    /**
+     * Whether a step with this outcome awards its goals. Only the outcomes
+     * that don't end the mission do - a failing step awards none.
+     *
+     * @param outcome the step's outcome
+     * @return {@code true} unless the outcome is {@code FAILURE} or {@code CATASTROPHIC}
+     */
+    private static boolean awardsGoals(MissionStepOutcome outcome) {
+        return outcome != MissionStepOutcome.FAILURE && outcome != MissionStepOutcome.CATASTROPHIC;
+    }
+
+    /**
+     * Settles every goal a step achieves that this player hasn't already
+     * fulfilled, returning the prestige they paid in total, including every
+     * cancelled goal's own payout. Each settlement is reported as a
+     * {@link GoalSettled} event; the game-wide tally is not changed here
+     * (see {@link GoalTally#commit}).
+     *
+     * @param snapshot   the player whose goals settle
+     * @param catalog    the content catalog, for each goal's definition
+     * @param mission    the mission whose step this is
+     * @param step       the step whose goals settle
+     * @param goalTally  the game-wide counts as of the start of this resolution
+     * @param gameTurn   the turn stamped on every goal this player achieves
+     * @param events     the list to append each {@link GoalSettled} event to
+     * @return the total prestige those settlements paid
+     */
+    private static long settleStepGoals(PlayerSnapshot snapshot, ContentCatalog catalog, InProgressMission mission,
+            MissionStep step, GoalTally goalTally, int gameTurn, List<ResolutionEvent> events) {
+        long total = 0;
+        for (String goalId : step.goalIdsAchieved()) {
+            if (!snapshot.hasAchievedOrCancelledGoal(goalId)) {
+                total += settleGoal(snapshot, catalog, goalId, false, mission, goalTally, gameTurn, events);
+            }
+        }
+        return total;
+    }
+
+    /**
+     * Settles one goal, then recursively cancels every goal it cancels that
+     * this player hasn't already fulfilled. A cancelled goal pays its own
+     * first-time or second-time prestige and counts toward the tally, exactly
+     * like an achieved one (baspm.md §11.7).
+     *
+     * @param snapshot  the player whose goal settles
+     * @param catalog   the content catalog
+     * @param goalId    the goal to settle
+     * @param cancelled whether this settlement is a cancellation rather than an achievement
+     * @param mission   the mission whose step caused this settlement
+     * @param goalTally the game-wide counts as of the start of this resolution
+     * @param gameTurn  the turn stamped on an achieved goal
+     * @param events    the list to append the {@link GoalSettled} events to
+     * @return the prestige this settlement and its whole cancellation cascade paid
+     */
+    private static long settleGoal(PlayerSnapshot snapshot, ContentCatalog catalog, String goalId, boolean cancelled,
+            InProgressMission mission, GoalTally goalTally, int gameTurn, List<ResolutionEvent> events) {
+        Goal goal = catalog.goal(goalId).orElseThrow(
+            () -> new IllegalStateException("MissionStep references unknown Goal " + goalId));
+        // Same-turn rule: the count read here is the committed count, never one this pass has advanced.
+        long prestige = goalTally.countOf(goalId) == 0 ? goal.firstTimePrestige() : goal.secondTimePrestige();
+        if (cancelled) {
+            snapshot.getCancelledGoalIds().add(goalId);
+        } else {
+            snapshot.getAchievedGoals().put(goalId, gameTurn);
+        }
+        events.add(new GoalSettled(mission.getId(), goalId, cancelled, prestige));
+
+        long total = prestige;
+        for (String cancelledId : goal.cancelsGoalIds()) {
+            if (!snapshot.hasAchievedOrCancelledGoal(cancelledId)) {
+                total += settleGoal(snapshot, catalog, cancelledId, true, mission, goalTally, gameTurn, events);
+            }
+        }
+        return total;
     }
 
     /**
@@ -304,7 +411,7 @@ public final class MissionProgress {
     private static MissionStepOutcome resolveStep(PlayerSnapshot snapshot, ContentCatalog catalog,
             RandomGenerator random, InProgressMission mission, MissionStep step, Map<String, Integer> expertUseCounts,
             List<ResolutionEvent> events) {
-        double componentSum = componentContributionSum(snapshot, step);
+        double componentSum = componentContributionSum(snapshot, catalog, mission, step);
         boolean crewInvolved = !step.crewInvolvements().isEmpty();
         double crewSum = crewInvolved
             ? averageContributionSum(step.crewInvolvements(), mission.getAssignedAstronautIds(),
@@ -458,24 +565,59 @@ public final class MissionProgress {
     }
 
     /**
-     * Computes a step's component contribution sum: each involved
-     * component's {@link MissionStepResolution#effectiveReliability}
-     * (modifier fixed at 0 - see this class's own class Javadoc), weighted
-     * by its involvement percentage.
+     * Computes a step's component contribution sum: each involved component's
+     * {@link MissionStepResolution#effectiveReliability} - its current
+     * reliability plus its live goal modifier - weighted by its involvement
+     * percentage.
      *
      * @param snapshot the player snapshot the components are owned in
+     * @param catalog  the content catalog, for the mission's configuration
+     * @param mission  the mission the step belongs to
      * @param step     the step to compute the sum for
      * @return the component contribution sum
      */
-    private static double componentContributionSum(PlayerSnapshot snapshot, MissionStep step) {
+    private static double componentContributionSum(PlayerSnapshot snapshot, ContentCatalog catalog,
+            InProgressMission mission, MissionStep step) {
+        MissionConfiguration configuration = catalog.missionConfiguration(mission.getMissionConfigurationId())
+            .orElseThrow();
         double sum = 0;
         for (MissionStep.ComponentInvolvement involvement : step.componentInvolvements()) {
             OwnedMissionComponent owned = snapshot.getMissionComponents().get(involvement.componentId());
             double current = owned != null ? owned.getCurrentReliability() : 0;
-            double effective = MissionStepResolution.effectiveReliability(current, 0);
+            double modifier = goalModifierFor(snapshot, configuration, involvement.componentId());
+            double effective = MissionStepResolution.effectiveReliability(current, modifier);
             sum += involvement.percent() / 100.0 * effective;
         }
         return sum;
+    }
+
+    /**
+     * Computes one component's goal-linked reliability modifier for a
+     * configuration, live against this player's current achieved-or-cancelled
+     * goals: each dependency whose goal is still unfulfilled subtracts its
+     * amount, and each boost whose goal is fulfilled adds its amount. Read on
+     * every step, so a goal achieved earlier in the same flight changes the
+     * next step's odds immediately (baspm.md §11.7, MissionSimBaseScreen.cs:918).
+     *
+     * @param snapshot    the player whose goal state is read
+     * @param configuration the configuration the flight belongs to
+     * @param componentId the mission component the modifier applies to
+     * @return the summed modifier, negative for unmet dependencies
+     */
+    static double goalModifierFor(PlayerSnapshot snapshot, MissionConfiguration configuration, String componentId) {
+        double modifier = 0;
+        for (MissionConfiguration.GoalModifier dependency : configuration.goalDependencies()) {
+            if (dependency.componentId().equals(componentId)
+                    && !snapshot.hasAchievedOrCancelledGoal(dependency.goalId())) {
+                modifier -= dependency.amount();
+            }
+        }
+        for (MissionConfiguration.GoalModifier boost : configuration.goalBoosts()) {
+            if (boost.componentId().equals(componentId) && snapshot.hasAchievedOrCancelledGoal(boost.goalId())) {
+                modifier += boost.amount();
+            }
+        }
+        return modifier;
     }
 
     /**

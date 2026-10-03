@@ -38,7 +38,26 @@ import java.util.Objects;
  * @author Mario Koehler
  */
 public record Program(String id, String categoryId, long openingCost, long maintenanceCost,
-                       List<String> requiredMissionComponentIds, List<OpeningCostDiscount> openingCostDiscounts) {
+                       List<String> requiredMissionComponentIds, List<OpeningCostDiscount> openingCostDiscounts,
+                       List<String> requiredGoalIds) {
+
+    /**
+     * A program with no goal gate - the shape before goal gates were modeled.
+     *
+     * @param id                          see {@link Program}
+     * @param categoryId                  see {@link Program}
+     * @param openingCost                 see {@link Program}
+     * @param maintenanceCost             see {@link Program}
+     * @param requiredMissionComponentIds see {@link Program}
+     * @param openingCostDiscounts        see {@link Program}
+     * @throws NullPointerException     see the canonical constructor
+     * @throws IllegalArgumentException see the canonical constructor
+     */
+    public Program(String id, String categoryId, long openingCost, long maintenanceCost,
+                   List<String> requiredMissionComponentIds, List<OpeningCostDiscount> openingCostDiscounts) {
+        this(id, categoryId, openingCost, maintenanceCost, requiredMissionComponentIds, openingCostDiscounts,
+            List.of());
+    }
 
     /**
      * Validates every field and defensively copies both lists into
@@ -66,6 +85,8 @@ public record Program(String id, String categoryId, long openingCost, long maint
             throw new IllegalArgumentException("maintenanceCost must not be negative: " + maintenanceCost);
         }
         requiredMissionComponentIds = List.copyOf(requiredMissionComponentIds);
+        Objects.requireNonNull(requiredGoalIds, "requiredGoalIds must not be null");
+        requiredGoalIds = List.copyOf(requiredGoalIds);
         openingCostDiscounts = List.copyOf(openingCostDiscounts);
     }
 

@@ -1,6 +1,7 @@
 package de.mkoehler.launchwindow.devtools.analysis;
 
 import de.mkoehler.launchwindow.content.ContentCatalog;
+import de.mkoehler.launchwindow.content.Goal;
 import de.mkoehler.launchwindow.content.MissionComponent;
 import de.mkoehler.launchwindow.content.MissionConfiguration;
 import de.mkoehler.launchwindow.content.MissionSeason;
@@ -33,6 +34,8 @@ import de.mkoehler.launchwindow.rules.MissionReliabilityChanged;
 import de.mkoehler.launchwindow.rules.MissionSkillGrowthApplied;
 import de.mkoehler.launchwindow.rules.MissionStepOutcome;
 import de.mkoehler.launchwindow.rules.MissionStepResolution;
+import de.mkoehler.launchwindow.rules.GoalSettled;
+import de.mkoehler.launchwindow.rules.GoalTally;
 import de.mkoehler.launchwindow.rules.MissionPrestige;
 import de.mkoehler.launchwindow.rules.MissionPrestigeChanged;
 import de.mkoehler.launchwindow.rules.MissionStepResolved;
@@ -287,7 +290,8 @@ public final class PersonnelLifecyclePlayouts {
         Program sputnikProgram =
             new Program("sputnik-program", "early-space", 500, 0, List.of("satellite-sputnik"), List.of());
         Program explorerProgram = new Program("explorer-program", "early-space", 600, 0,
-            List.of("satellite-explorer"), List.of(new Program.OpeningCostDiscount("sputnik-program", 40)));
+            List.of("satellite-explorer"), List.of(new Program.OpeningCostDiscount("sputnik-program", 40)),
+            List.of("satellite-in-orbit"));
         Program mercuryProgram = new Program("mercury-program", "early-space", 1_200, 0,
             List.of("rocket-redstone", "capsule-mercury"), List.of());
 
@@ -295,7 +299,7 @@ public final class PersonnelLifecyclePlayouts {
             List.of(new MissionStep.ComponentInvolvement("satellite-sputnik", 100)),
             List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 60),
                 new MissionStep.ControllerInvolvement(MissionControlSkill.TRAJECTORY_AND_GNC, 40)),
-            List.of(), false, 100, 100);
+            List.of(), false, 100, 100, List.of("satellite-in-orbit"));
         MissionConfiguration sputnikLaunchConfiguration = new MissionConfiguration("sputnik-launch-std",
             "sputnik-program", List.of(new MissionSeason(List.of(sputnikLaunchStep))), 0, 1, 50, 300);
 
@@ -303,11 +307,11 @@ public final class PersonnelLifecyclePlayouts {
             List.of(new MissionStep.ComponentInvolvement("satellite-explorer", 100)),
             List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 50),
                 new MissionStep.ControllerInvolvement(MissionControlSkill.MISSION_OPERATIONS, 50)),
-            List.of(), false, 40, 80);
+            List.of(), false, 40, 80, List.of());
         MissionStep explorerOrbitOpsStep = new MissionStep("orbit-ops",
             List.of(new MissionStep.ComponentInvolvement("satellite-explorer", 100)),
             List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.MISSION_OPERATIONS, 100)),
-            List.of(), false, 60, 60);
+            List.of(), false, 60, 60, List.of());
         MissionConfiguration explorerMissionConfiguration = new MissionConfiguration("explorer-mission-std",
             "explorer-program",
             List.of(new MissionSeason(List.of(explorerLaunchStep)), new MissionSeason(List.of(explorerOrbitOpsStep))),
@@ -319,19 +323,23 @@ public final class PersonnelLifecyclePlayouts {
             List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 50),
                 new MissionStep.ControllerInvolvement(MissionControlSkill.TRAJECTORY_AND_GNC, 50)),
             List.of(new MissionStep.CrewInvolvement(AstronautSkill.PILOTING, 70),
-                new MissionStep.CrewInvolvement(AstronautSkill.FITNESS, 30)), true, 50, 200);
+                new MissionStep.CrewInvolvement(AstronautSkill.FITNESS, 30)), true, 50, 200, List.of("crewed-training"));
         MissionStep mercuryOrbitOpsStep = new MissionStep("orbit-ops",
             List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
             List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.SPACECRAFT_SYSTEMS, 100)),
-            List.of(new MissionStep.CrewInvolvement(AstronautSkill.SCIENCE, 100)), true, 50, 150);
+            List.of(new MissionStep.CrewInvolvement(AstronautSkill.SCIENCE, 100)), true, 50, 150, List.of("crewed-flight"));
         MissionConfiguration mercuryMissionConfiguration = new MissionConfiguration("mercury-mission-std",
             "mercury-program",
             List.of(new MissionSeason(List.of(mercuryLaunchStep)), new MissionSeason(List.of(mercuryOrbitOpsStep))),
-            2, 1, 150, 1_000);
+            2, 1, 150, 1_000, List.of(new MissionConfiguration.GoalModifier("satellite-in-orbit", "capsule-mercury", 5)),
+            List.of());
 
         return new ContentCatalog(List.of(category), List.of(sputnikProgram, explorerProgram, mercuryProgram),
             List.of(sputnikLaunchConfiguration, explorerMissionConfiguration, mercuryMissionConfiguration),
-            List.of(satelliteSputnik, satelliteExplorer, rocketRedstone, capsuleMercury));
+            List.of(satelliteSputnik, satelliteExplorer, rocketRedstone, capsuleMercury), List.of(
+                new Goal("satellite-in-orbit", 300, 150, List.of()),
+                new Goal("crewed-flight", 800, 400, List.of("crewed-training")),
+                new Goal("crewed-training", 200, 100, List.of())));
     }
 
     /**
@@ -391,6 +399,7 @@ public final class PersonnelLifecyclePlayouts {
 
         for (int game = 0; game < games; game++) {
             PlayerSnapshot snapshot = newRandomSnapshot(employeesPerGroupPerGame, random);
+            GoalTally goalTally = new GoalTally();
             employeesStarted += rosterSize(snapshot);
             Map<String, Integer> joinedAtSeason = new HashMap<>();
             seedJoinedAtSeason(snapshot, joinedAtSeason);
@@ -420,13 +429,16 @@ public final class PersonnelLifecyclePlayouts {
                     configByMission.put(flying.getId(), flying.getMissionConfigurationId());
                 }
                 Map<String, Integer> countsBefore = new HashMap<>(snapshot.getSuccessfulFlightCounts());
-                List<ResolutionEvent> missionEvents = MissionProgress.advanceSeason(snapshot, CATALOG, random);
+                List<ResolutionEvent> missionEvents = MissionProgress.advanceSeason(snapshot, CATALOG, random, goalTally, season);
                 checkMissionInvariants(snapshot, missionEvents, beforeMissionProgress);
-                long[] prestigeFlows = checkPrestigeInvariants(snapshot, missionEvents, prestigeBefore,
+                long[] prestigeFlows = checkPrestigeInvariants(snapshot, missionEvents, prestigeBefore, goalTally,
                     configByMission, countsBefore);
+                checkGoalState(snapshot);
                 prestigePaidTotal += prestigeFlows[0];
                 prestigeDeductedTotal += prestigeFlows[1];
                 completedFlightCount += (int) prestigeFlows[2];
+                // The tally moves only after the whole resolution has been checked (design.md §2.6(d)).
+                goalTally.commit(missionEvents);
                 checkProgramInvariants(snapshot);
 
                 List<ResolutionEvent> trainingEvents = TrainingProgress.advanceSeason(snapshot, random);
@@ -1064,15 +1076,23 @@ public final class PersonnelLifecyclePlayouts {
      * @throws IllegalStateException if any invariant is violated
      */
     private static long[] checkPrestigeInvariants(PlayerSnapshot snapshot, List<ResolutionEvent> events,
-            long prestigeBefore, Map<String, String> configByMission, Map<String, Integer> countsBefore) {
+            long prestigeBefore, GoalTally goalTally, Map<String, String> configByMission,
+            Map<String, Integer> countsBefore) {
         if (snapshot.getPrestige() < 0) {
             throw new IllegalStateException("Prestige went negative: " + snapshot.getPrestige());
         }
 
-        Map<String, List<MissionStepResolved>> stepsByMission = new LinkedHashMap<>();
+        // A goal settles right after the step that achieved it (MissionProgress emits it there), so each
+        // GoalSettled belongs to the most recent step of its mission - its prestige folds into that step.
+        Map<String, List<StepRecord>> stepsByMission = new LinkedHashMap<>();
         for (ResolutionEvent event : events) {
             if (event instanceof MissionStepResolved resolved) {
-                stepsByMission.computeIfAbsent(resolved.missionInstanceId(), id -> new ArrayList<>()).add(resolved);
+                stepsByMission.computeIfAbsent(resolved.missionInstanceId(), id -> new ArrayList<>())
+                    .add(new StepRecord(resolved));
+            } else if (event instanceof GoalSettled settled) {
+                checkGoalPrice(settled, goalTally);
+                List<StepRecord> steps = stepsByMission.get(settled.missionInstanceId());
+                steps.get(steps.size() - 1).goalPrestige += settled.prestige();
             }
         }
 
@@ -1085,14 +1105,15 @@ public final class PersonnelLifecyclePlayouts {
         for (Map.Entry<String, String> mission : configByMission.entrySet()) {
             String missionId = mission.getKey();
             String configId = mission.getValue();
-            List<MissionStepResolved> steps = stepsByMission.getOrDefault(missionId, List.of());
+            List<StepRecord> steps = stepsByMission.getOrDefault(missionId, List.of());
             FlightTier tier = MissionPrestige.tierFor(runningCounts.getOrDefault(configId, 0));
             long tierTotal = MissionPrestige.tierTotal(CATALOG.missionConfiguration(configId).orElseThrow(), tier);
             long requested = 0;
             boolean failed = false;
-            for (MissionStepResolved resolved : steps) {
+            for (StepRecord record : steps) {
+                MissionStepResolved resolved = record.resolved;
                 MissionStep step = stepOf(resolved);
-                long payout = tierTotal * step.prestigeSharePercent() / 100;
+                long payout = tierTotal * step.prestigeSharePercent() / 100 + record.goalPrestige;
                 switch (resolved.outcome()) {
                     case SUCCESSFUL, MINOR_GLITCH_SOLVED -> requested += payout;
                     case MINOR_GLITCH -> requested += payout / 2;
@@ -1178,6 +1199,61 @@ public final class PersonnelLifecyclePlayouts {
             }
         }
         return new long[] {paid, deducted, completed};
+    }
+
+    /**
+     * Cross-checks one goal settlement's price against the game-wide tally as it
+     * stood before this resolution's commit: the first-time value when nobody has
+     * settled the goal yet, the second-time value otherwise (design.md &sect;2.6(d)).
+     *
+     * @param settled   the settlement event
+     * @param goalTally the tally, not yet committed for this resolution
+     * @throws IllegalStateException if the paid prestige doesn't match
+     */
+    private static void checkGoalPrice(GoalSettled settled, GoalTally goalTally) {
+        Goal goal = CATALOG.goal(settled.goalId()).orElseThrow();
+        long expected = goalTally.countOf(settled.goalId()) == 0
+            ? goal.firstTimePrestige() : goal.secondTimePrestige();
+        if (settled.prestige() != expected) {
+            throw new IllegalStateException("Goal " + settled.goalId() + " settled for " + settled.prestige()
+                + ", expected " + expected + " from the pre-commit tally");
+        }
+    }
+
+    /**
+     * Cross-checks a player's goal state: every achieved or cancelled id is a
+     * goal the catalog defines, and no goal is both achieved and cancelled.
+     *
+     * @param snapshot the player to check
+     * @throws IllegalStateException if any invariant is violated
+     */
+    private static void checkGoalState(PlayerSnapshot snapshot) {
+        for (String goalId : snapshot.getAchievedGoals().keySet()) {
+            if (CATALOG.goal(goalId).isEmpty()) {
+                throw new IllegalStateException("Achieved goal unknown to the catalog: " + goalId);
+            }
+            if (snapshot.getCancelledGoalIds().contains(goalId)) {
+                throw new IllegalStateException("Goal both achieved and cancelled: " + goalId);
+            }
+        }
+        for (String goalId : snapshot.getCancelledGoalIds()) {
+            if (CATALOG.goal(goalId).isEmpty()) {
+                throw new IllegalStateException("Cancelled goal unknown to the catalog: " + goalId);
+            }
+        }
+    }
+
+    /**
+     * One mission step in one season, with the goal prestige its settlements paid.
+     */
+    private static final class StepRecord {
+
+        private final MissionStepResolved resolved;
+        private long goalPrestige;
+
+        private StepRecord(MissionStepResolved resolved) {
+            this.resolved = resolved;
+        }
     }
 
     /**

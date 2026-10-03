@@ -260,6 +260,8 @@ class MessageRegistryTest {
         snapshot.setInProgressMissions(Map.of("m0", flying));
         snapshot.setNextMissionInstanceId(1);
         snapshot.setSuccessfulFlightCounts(Map.of("sputnik-1-std", 2));
+        snapshot.setAchievedGoals(Map.of("orbit", 4));
+        snapshot.setCancelledGoalIds(Set.of("pre-flight"));
 
         FetchStateResponse copy = roundTrip(FetchStateResponse.success(snapshot), FetchStateResponse.class);
 
@@ -294,6 +296,8 @@ class MessageRegistryTest {
         assertEquals(List.of("astro-1"), copiedMission.getAssignedAstronautIds());
         assertEquals(List.of("mco-1"), copiedMission.getAssignedMissionControlOfficerIds());
         assertEquals(2, copy.state().getSuccessfulFlightCounts().get("sputnik-1-std"));
+        assertEquals(4, copy.state().getAchievedGoals().get("orbit"));
+        assertEquals(Set.of("pre-flight"), copy.state().getCancelledGoalIds());
         assertEquals(1, copy.state().getNextMissionInstanceId());
 
         FetchStateResponse rejected = roundTrip(FetchStateResponse.failure("Not authenticated."), FetchStateResponse.class);

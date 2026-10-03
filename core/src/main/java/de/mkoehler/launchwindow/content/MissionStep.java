@@ -69,7 +69,30 @@ import java.util.Objects;
 public record MissionStep(String id, List<ComponentInvolvement> componentInvolvements,
                            List<ControllerInvolvement> controllerInvolvements,
                            List<CrewInvolvement> crewInvolvements, boolean crewRisk,
-                           int prestigeSharePercent, long failurePrestigeDeduction) {
+                           int prestigeSharePercent, long failurePrestigeDeduction,
+                           List<String> goalIdsAchieved) {
+
+    /**
+     * A step with no prestige share, no failure deduction, and no goals - the
+     * shape every step had before prestige and goals were modeled.
+     *
+     * @param id                     see {@link MissionStep}
+     * @param componentInvolvements  see {@link MissionStep}
+     * @param controllerInvolvements see {@link MissionStep}
+     * @param crewInvolvements       see {@link MissionStep}
+     * @param crewRisk               see {@link MissionStep}
+     * @param prestigeSharePercent   see {@link MissionStep}
+     * @param failurePrestigeDeduction see {@link MissionStep}
+     * @throws NullPointerException     see the canonical constructor
+     * @throws IllegalArgumentException see the canonical constructor
+     */
+    public MissionStep(String id, List<ComponentInvolvement> componentInvolvements,
+                       List<ControllerInvolvement> controllerInvolvements,
+                       List<CrewInvolvement> crewInvolvements, boolean crewRisk,
+                       int prestigeSharePercent, long failurePrestigeDeduction) {
+        this(id, componentInvolvements, controllerInvolvements, crewInvolvements, crewRisk,
+            prestigeSharePercent, failurePrestigeDeduction, List.of());
+    }
 
     /**
      * A step with no prestige share and no failure deduction - the shape
@@ -150,6 +173,11 @@ public record MissionStep(String id, List<ComponentInvolvement> componentInvolve
         if (failurePrestigeDeduction < 0) {
             throw new IllegalArgumentException(
                 "failurePrestigeDeduction must not be negative: " + failurePrestigeDeduction);
+        }
+        Objects.requireNonNull(goalIdsAchieved, "goalIdsAchieved must not be null");
+        goalIdsAchieved = List.copyOf(goalIdsAchieved);
+        if (goalIdsAchieved.size() != goalIdsAchieved.stream().distinct().count()) {
+            throw new IllegalArgumentException("goalIdsAchieved must not contain a duplicate entry");
         }
     }
 

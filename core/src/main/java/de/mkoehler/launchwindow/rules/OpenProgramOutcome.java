@@ -30,5 +30,11 @@ public enum OpenProgramOutcome {
      * The player doesn't have enough funds to cover the program's
      * effective opening cost.
      */
-    INSUFFICIENT_FUNDS
+    INSUFFICIENT_FUNDS,
+
+    /**
+     * One or more of the program's required goals hasn't been achieved or
+     * cancelled yet - see {@code design.md} &sect;2.6(d).
+     */
+    GOALS_NOT_MET
 }
