@@ -1532,6 +1532,67 @@ single-assignee `SkillGrowth.reliabilityGain` is gone). See `design.md`
 §3.4 for the full decided formula, with Launch Window's own numbers, not
 BASPM's.
 
+### 10.9 Rockets, creation cost, staffing layouts, and buildings (traced 2026-10-03, for M3)
+
+Traced from the live install's Data Scripts and from `Player.cs`,
+`ProgramsManager.cs`, `MissionComponentsManager.cs`, `LaunchInformation.cs`,
+`MissionComponent.cs`, `MissionAssignmentsManager.cs`, and `MissionSimBaseScreen.cs`.
+
+- **Rockets are bought separately.** A payload program's `RequiredMsnComponents`
+  lists only payloads (Sputnik I requires `SPUTNIK`, Mercury requires `MERCURY`).
+  Rockets are opened as *rocket programs*:
+  `Player.OpenRocketProgramAndAddMissionComponents` charges the rocket's
+  `CreationCost` and adds the component.
+- **Opening a payload program costs its discounted `OpeningCost` plus the
+  `CreationCost` of every required component the player doesn't own yet**
+  (`ProgramsManager.GetProgramExtraOpeningCostForMsnCmpsCreation`). Sputnik I
+  therefore costs 126 + 750.
+- **Mission steps name a rocket *slot* (`ROCKET_1`), never a rocket.** Each
+  `LaunchInformation` in `MsnCnfg*.xml` has a `LaunchType` (`SUBORBITAL`, `LEO`,
+  `TLI`, `TPI`, each with an `_HR` human-rated variant), its payload components,
+  and a `HistoricalRocketUsedID` that only feeds the historical clip. The player
+  picks the rocket per launch. A rocket is eligible when
+  `GetMaxPayloadSupported(launchType)` is at least the payload's summed `Mass`.
+  For an `_HR` launch type, a plain `ROCKETS`-skill rocket supports 0, so only
+  `HUMAN_RATED_ROCKETS` qualify. Capacities come from each rocket's
+  `MassAndCapacity` (`PayloadToSubOrbital`/`LEO`/`TLI`/`TPI`).
+  `ComputeExtraBoostProvidedByPayload` subtracts a payload's own capacity (an
+  upper stage); none of the early-era payloads have any.
+- **Staffing layouts are hardcoded in C#** (`MissionAssignmentsManager.Initialize`),
+  keyed by `MissionControlLayoutID`/`FlightCrewLayoutID`. Each slot is
+  `(SpecialityIndex, EmployeeType, name)`. A step's `FlightControllerInvolved
+  SlotID` indexes that layout, and the formula reads the assigned employee's
+  skill at the slot's `SpecialityIndex` (`ComputeProbabilityOfSuccessForMissionStep`).
+  For controllers, indices 0-4 are the five skills and 5 is Flight Director (their
+  average). Slot names don't match the index: `MC-SATELLITE`'s "Flight Director"
+  slot has index 1. `MC-SATELLITE` has 3 slots, `MC-MERCURY_UNCREWED` has 9, and
+  `MC-MERCURY` has 11, one of them a **CAPCOM slot held by an astronaut**
+  (`EmployeeType ASTRONAUTS`, speciality 0). A crew step's `AstronautInvolved`
+  lists per-slot skill indices with weights summing to the slot's `Amount`.
+- **The UnitCost triad:** `UnitCost` is the per-flight price shown in the rocket
+  list (`HQMsnCnfgsRocketListEntry`); the mission's price is rocket plus payloads.
+- **Buildings** (`SpaceComplexData.xml`): per-level caps, upgrade costs, build
+  times, and maintenance.
+
+  | Building | Caps L1/L2/L3/L4 | Build/upgrade cost (V1 = construct) | Seasons | Maintenance L1..L4 |
+  |---|---|---|---|---|
+  | Astronaut Center | 7/14/24/35 | 500/1100/1600/2000 | 2/2/2/2 | 175/525/1000/1400 |
+  | Mission Control | 5/13/22/35 | 300/900/1400/1800 | 1/1/2/2 | 150/500/900/1300 |
+  | SET Center | 7/14/20/30 | 0/1000/1500/1900 | -1/2/2/3 | 200/600/1200/1750 |
+  | Headquarters | 3/7/10/16 | 0/500/1000/2500 | -1/2/2/3 | 150/400/750/1200 |
+  | VAB | 4/8/14 (3 levels) | 800/2000/3500/6000 | 2/3/4/4 | 250/650/1300/2200 |
+
+  BASPM players start with only Headquarters and the SET Center built (V1 = 0).
+  State index 0 is "not built" (cap 0), and states 1-4 are levels 1-4. The cost and
+  build-time lists are indexed by the *current* state, so going from level 1 to 2
+  costs V2. The maintenance list is indexed by state too, so V2 is level 1's
+  upkeep. **Code-confirmed (`Player.cs`):** the Headquarters cap limits *opened
+  payload programs* (`CanOpenNewProgramWithoutExceedingMaxCapacity`). The VAB cap
+  limits *opened rocket programs* (`CanOpenNewRocketProgramWithoutExceedingMaxCapacity`),
+  and the VAB level also limits the rocket class (`GetMaxRocketTypeSupportedByVAB`:
+  level 1 Light, level 2 Medium, level 3 Heavy). A rocket's class is its
+  `MassAndCapacity RocketType`. The VAB cap is not a limit on concurrent missions.
+
 ## 11. Budget, prestige, and goals (traced 2026-09-27)
 
 Full trace of `ConstantsManager.cs`'s `BudgetReviewConstants` loading,

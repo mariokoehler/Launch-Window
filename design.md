@@ -4699,6 +4699,50 @@ here.
   tree. **Exit criterion:** M2's bot harness runs against this real content
   pack instead of test fixtures, and actually reaches the declared goals in
   some simulated games.
+  - **Decisions (user, 2026-10-03), made before M3 started:**
+    1. **Values are BASPM-close, not re-derived.** This extends the budget
+       exception (§2.1(d)) to the whole content pack: costs, maintenance,
+       reliability, prestige, step involvements, and goal values follow BASPM's
+       Data Scripts. Ids, names, and all text stay our own. This overrides the
+       "never its values" wording above for M3, and §1.2's rule for these numbers.
+    2. **Early-era scope:** Earth-orbit satellites and the one-crew ballistic
+       capsules (the Sputnik/Explorer/Vostok/Mercury equivalents), plus the rockets
+       they fly on.
+    3. **Format:** JSON, one file per content type, under
+       `assets/content/<pack>/`, loaded with Jackson.
+    4. **Rockets work as in BASPM, including choosing one at launch.** A rocket is
+       its own mission component, bought through a *rocket program* at its
+       creation cost. A mission step references the configuration's rocket slot,
+       not a specific rocket. At launch, the player picks any owned rocket whose
+       payload capacity for that launch's type (suborbital, LEO, TLI, TPI) covers
+       the payload mass. Human-rated launch types accept only human-rated rockets
+       (`baspm.md` §10.9).
+    5. **Content is filtered by `Archetype`.** As in BASPM, each player can only
+       open their own agency's programs and rockets. Generic goals are the shared
+       race; agency-specific goals are separate.
+    6. **Staffing uses BASPM's slot counts.** A configuration requires as many
+       controllers as its BASPM mission-control layout has slots, so crewed
+       Mercury needs nine. A CAPCOM slot is an extra required astronaut whose
+       skill counts on the controller side.
+    7. **Buildings and upgrades, all five of BASPM's.** Astronaut Center, Mission
+       Control, SET Center, Headquarters, and the VAB all start at level 1 for
+       free; there is no construction step. Upgrades use BASPM's costs, build
+       times, per-level maintenance, and caps. The three personnel buildings cap
+       their rosters (level 1: 7 astronauts, 5 controllers, 7 SET), Headquarters
+       caps open payload programs, and the VAB caps open rocket programs and the
+       rocket class (Light, Medium, Heavy by VAB level), as BASPM's code does
+       (`baspm.md` §10.9; the option text said "concurrent missions", which was
+       my misreading before the trace). These caps replace the earlier 8/12/8
+       roster capacity (§2.2(c)).
+  - **Defaults chosen without asking (unconfirmed, flagged):** opening a program
+    also charges the creation cost of every component it grants that the player
+    doesn't own yet, as BASPM does. A mission costs the unit cost of its rocket
+    plus its payloads. The repeat-flight prestige tiers move from 60%/40% to
+    BASPM's 50%/30%. A Flight Director slot's involvement is spread evenly
+    across the five controller skills. Controller slots map to skills by
+    BASPM's speciality index, not by the slot's name. A category's required goals
+    are copied onto every program in it. Goal dependencies and boosts that
+    reference goals outside the pack are dropped.
 - **M4 — Integration: wire M2/M3's real engine into M1's proven skeleton.**
   Replace M1's placeholder trivial action with real player actions (assign
   personnel, open a program, queue a mission) and real turn resolution.
