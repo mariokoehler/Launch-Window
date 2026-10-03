@@ -68,15 +68,12 @@ from scratch.
 
 ## Current status
 
-**Next up (as of 2026-10-03):** random events, **sub-slice (a) done** (`design.md`
-§2.7): the mechanism, the 20-event content roster, the news log, and twelve events
-that touch only existing state. **Sub-slice (b) is next:** the R&D and cost
-multipliers (BASPM never reads its own multiplier factors, so Launch Window
-implements the described effect and flags the departure), the launch cap,
-component and employee unavailability, and the two events that combine cost with
-no launches. Each needs new coupling in `MissionLaunch`, `ResearchProgress`, and
-`BudgetProgress`, which is why it's a separate sub-slice. After that, the only
-M2 is then complete, and what remains is M4's player-action dispatch.
+**Next up (as of 2026-10-03):** M2 is complete. Its last items, random events
+(`design.md` §2.7, sub-slices a and b), are both done: all twenty BASPM events,
+the news log, the timed state, and the launch and unavailability coupling. What
+remains is M4's player-action dispatch (conversions, budget actions, hires, and
+launches as journaled actions), and the first multi-player game-meta wiring.
+Known departures from BASPM are recorded in `baspm.md` §12.1 and `design.md` §2.7.
 
 Budget defaults are close to BASPM's own values, per the user's 2026-10-03
 instruction: starting funds 25,000 / prestige 250 / 3,000 per season, BASPM's

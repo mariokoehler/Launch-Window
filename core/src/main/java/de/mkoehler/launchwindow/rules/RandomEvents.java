@@ -27,13 +27,17 @@ import java.util.random.RandomGenerator;
  * as a component in R&amp;D or a recent failure. An M2 rules-engine resolver,
  * headless.</p>
  *
- * <p><b>This slice implements the events that touch only existing state</b>: basic
- * training extension, dismissal, failed basic training, resignation, perished
- * astronaut, morale drop and boost, prestige drop and boost, unexpected cost,
- * reliability setback, and extra funding. The events that need new state - the
- * R&amp;D and cost multipliers, launch caps, component and employee unavailability,
- * and the cost-plus-no-launches combination - are listed in {@code design.md}
- * &sect;2.7 and return "not applicable" here until that slice lands.</p>
+ * <p>All twenty events are implemented. Timed effects (multipliers, the launch cap,
+ * component and employee unavailability) are aged once per season by
+ * {@link #tickTimedState}, before the roll, so an event that lasts N seasons covers N
+ * seasons of budget, research, and launches.</p>
+ *
+ * <p><b>Deliberate departures from BASPM:</b> BASPM never reads its own R&amp;D and
+ * cost multiplier factors, so its R&amp;D and reduced-expenditure events change
+ * nothing in the shipped game. Launch Window applies what each event's news text
+ * describes: R&amp;D gains (skill and reliability alike) and running costs are
+ * scaled. Launch caps and unavailability are enforced by {@code MissionLaunch};
+ * unavailable employees are skipped by launches, but still train and research.</p>
  *
  * <p><b>Deliberate deviation from BASPM, for personnel events:</b> dismissal and
  * resignation take any employee who isn't on a mission. BASPM takes any active
@@ -76,6 +80,7 @@ public final class RandomEvents {
         Objects.requireNonNull(snapshot, "snapshot must not be null");
         Objects.requireNonNull(roster, "roster must not be null");
         Objects.requireNonNull(random, "random must not be null");
+        tickTimedState(snapshot);
         List<ResolutionEvent> events = new ArrayList<>();
         if (random.nextDouble() * 100 < roster.badChancePercent()) {
             rollPool(false, snapshot, roster, random, turn, seasonsElapsed, events);
@@ -137,9 +142,147 @@ public final class RandomEvents {
             case UNEXPECTED_COST -> unexpectedCost(snapshot, roster, random, turn, events);
             case RELIABILITY_SETBACK -> reliabilitySetback(snapshot, roster, random, turn, events);
             case EXTRA_FUNDING -> extraFunding(snapshot, roster, random, turn, seasonsElapsed, events);
-            // Sub-slice (b): needs multipliers, launch caps, or unavailability state.
-            default -> false;
+            case UNEXPECTED_COST_AND_NO_LAUNCHES -> unexpectedCostAndNoLaunches(snapshot, roster, random, turn,
+                events);
+            case MAX_LAUNCHES_ALLOWED -> capLaunches(snapshot, 1, kind, turn, events);
+            case NO_LAUNCHES_ALLOWED -> capLaunches(snapshot, 0, kind, turn, events);
+            case MISSION_COMPONENTS_UNAVAILABLE -> componentsUnavailable(snapshot, roster, random, turn, events);
+            case EMPLOYEE_UNAVAILABLE -> employeeUnavailable(snapshot, roster, random, turn, events);
+            case RD_RESULTS_SETBACK, RD_RESULTS_BOOST -> rdMultiplier(kind, snapshot, roster, random, turn, events);
+            case REDUCED_EXPENDITURES -> costMultiplier(snapshot, roster, random, turn, seasonsElapsed, events);
         };
+    }
+
+    /**
+     * Ages the timed state by one season, before this season's roll: multipliers
+     * count down and reset at zero, the launch cap and the window's launch count
+     * reset, component and employee unavailability counts down. An event that sets
+     * N seasons therefore covers the next N seasons' budget, research, and launches.
+     *
+     * @param snapshot the player
+     */
+    private static void tickTimedState(PlayerSnapshot snapshot) {
+        if (snapshot.getRdResultsSeasonsRemaining() > 0) {
+            int remaining = snapshot.getRdResultsSeasonsRemaining() - 1;
+            snapshot.setRdResults(remaining == 0 ? 1.0 : snapshot.getRdResultsMultiplier(), remaining);
+        }
+        if (snapshot.getCostMultiplierSeasonsRemaining() > 0) {
+            int remaining = snapshot.getCostMultiplierSeasonsRemaining() - 1;
+            snapshot.setCostMultiplier(remaining == 0 ? 1.0 : snapshot.getCostMultiplier(), remaining);
+        }
+        snapshot.setLaunchCap(-1);
+        snapshot.setLaunchesThisWindow(0);
+        snapshot.getUnavailableComponents().replaceAll((componentId, windows) -> windows - 1);
+        snapshot.getUnavailableComponents().values().removeIf(windows -> windows <= 0);
+        for (PersonnelGroup group : PersonnelGroup.values()) {
+            for (Personnel person : groupRoster(snapshot, group)) {
+                person.setUnavailableSeasons(Math.max(0, person.getUnavailableSeasons() - 1));
+            }
+        }
+    }
+
+    /**
+     * Cost-plus-no-launches: the unexpected cost, and no launches in the next window.
+     * BASPM's own gate needs a vehicle-assembly building Launch Window doesn't have,
+     * so this takes the same positive-funds gate as {@link #unexpectedCost}.
+     */
+    private static boolean unexpectedCostAndNoLaunches(PlayerSnapshot snapshot, RandomEventRoster roster,
+            RandomGenerator random, int turn, List<ResolutionEvent> events) {
+        if (snapshot.getFunds() <= 0) {
+            return false;
+        }
+        RandomEventRoster.EventSpec spec = roster.spec(RandomEventKind.UNEXPECTED_COST_AND_NO_LAUNCHES);
+        double percent = drawFraction(random, spec.min(), spec.max());
+        long cost = (long) Math.floor(snapshot.getFunds() * percent / 100.0);
+        snapshot.setFunds(snapshot.getFunds() - cost);
+        snapshot.setLaunchCap(0);
+        occurred(snapshot, events, RandomEventKind.UNEXPECTED_COST_AND_NO_LAUNCHES, null, percent, turn);
+        return true;
+    }
+
+    /**
+     * Sets the launch cap for the next launch window: one for {@code MAX_LAUNCHES_ALLOWED},
+     * zero for {@code NO_LAUNCHES_ALLOWED}. Neither has a gate in Launch Window.
+     */
+    private static boolean capLaunches(PlayerSnapshot snapshot, int cap, RandomEventKind kind, int turn,
+            List<ResolutionEvent> events) {
+        snapshot.setLaunchCap(cap);
+        occurred(snapshot, events, kind, null, cap, turn);
+        return true;
+    }
+
+    /**
+     * Makes half of the components currently in R&amp;D (at least one) unavailable for
+     * a rolled number of launch windows. BASPM's own selection and duration.
+     */
+    private static boolean componentsUnavailable(PlayerSnapshot snapshot, RandomEventRoster roster,
+            RandomGenerator random, int turn, List<ResolutionEvent> events) {
+        List<String> inResearch = componentsInResearch(snapshot);
+        if (inResearch.isEmpty()) {
+            return false;
+        }
+        shuffle(inResearch, random);
+        int count = Math.max(1, inResearch.size() / 2);
+        RandomEventRoster.EventSpec spec = roster.spec(RandomEventKind.MISSION_COMPONENTS_UNAVAILABLE);
+        int windows = drawInt(random, spec.durationMin(), spec.durationMax());
+        for (String componentId : inResearch.subList(0, count)) {
+            snapshot.getUnavailableComponents().put(componentId, windows);
+        }
+        occurred(snapshot, events, RandomEventKind.MISSION_COMPONENTS_UNAVAILABLE, null, windows, turn);
+        return true;
+    }
+
+    /**
+     * Makes one eligible employee unavailable for launches for a rolled number of
+     * windows - the same eligibility as dismissal.
+     */
+    private static boolean employeeUnavailable(PlayerSnapshot snapshot, RandomEventRoster roster,
+            RandomGenerator random, int turn, List<ResolutionEvent> events) {
+        List<PersonnelGroup> groups = new ArrayList<>(List.of(PersonnelGroup.values()));
+        shuffle(groups, random);
+        for (PersonnelGroup group : groups) {
+            List<Personnel> eligible = eligibleEmployees(snapshot, group);
+            if (!eligible.isEmpty()) {
+                Personnel chosen = eligible.get(random.nextInt(eligible.size()));
+                RandomEventRoster.EventSpec spec = roster.spec(RandomEventKind.EMPLOYEE_UNAVAILABLE);
+                int windows = drawInt(random, spec.durationMin(), spec.durationMax());
+                chosen.setUnavailableSeasons(windows);
+                occurred(snapshot, events, RandomEventKind.EMPLOYEE_UNAVAILABLE, chosen.getId(), windows, turn);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Sets the R&amp;D results multiplier for a rolled number of seasons. A setback and a
+     * boost share one slot, so the newer event replaces the older one, as BASPM's setter does.
+     */
+    private static boolean rdMultiplier(RandomEventKind kind, PlayerSnapshot snapshot, RandomEventRoster roster,
+            RandomGenerator random, int turn, List<ResolutionEvent> events) {
+        RandomEventRoster.EventSpec spec = roster.spec(kind);
+        double factor = drawFraction(random, spec.min(), spec.max());
+        int seasons = drawInt(random, spec.durationMin(), spec.durationMax());
+        snapshot.setRdResults(factor, seasons);
+        occurred(snapshot, events, kind, null, factor, turn);
+        return true;
+    }
+
+    /**
+     * Scales running costs for a rolled number of seasons. Needs at least
+     * {@link #MIN_SEASONS_UNTIL_REVIEW} seasons until the next review, as BASPM's gate does.
+     */
+    private static boolean costMultiplier(PlayerSnapshot snapshot, RandomEventRoster roster, RandomGenerator random,
+            int turn, int seasonsElapsed, List<ResolutionEvent> events) {
+        if (seasonsUntilReview(seasonsElapsed) < MIN_SEASONS_UNTIL_REVIEW) {
+            return false;
+        }
+        RandomEventRoster.EventSpec spec = roster.spec(RandomEventKind.REDUCED_EXPENDITURES);
+        double factor = drawFraction(random, spec.min(), spec.max());
+        int seasons = drawInt(random, spec.durationMin(), spec.durationMax());
+        snapshot.setCostMultiplier(factor, seasons);
+        occurred(snapshot, events, RandomEventKind.REDUCED_EXPENDITURES, null, factor, turn);
+        return true;
     }
 
     /**

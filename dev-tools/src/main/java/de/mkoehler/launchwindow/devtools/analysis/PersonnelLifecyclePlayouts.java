@@ -788,7 +788,7 @@ public final class PersonnelLifecyclePlayouts {
         }
         List<String> idleIds = new ArrayList<>();
         for (P person : roster) {
-            if (person.getAssignmentState() == AssignmentState.IDLE) {
+            if (person.getAssignmentState() == AssignmentState.IDLE && person.getUnavailableSeasons() == 0) {
                 idleIds.add(person.getId());
             }
         }
@@ -1401,7 +1401,7 @@ public final class PersonnelLifecyclePlayouts {
         for (String componentId : snapshot.getMissionComponents().keySet()) {
             total += CATALOG.missionComponent(componentId).orElseThrow().maintenanceCost();
         }
-        return total;
+        return Math.round(total * snapshot.getCostMultiplier());
     }
 
     /**

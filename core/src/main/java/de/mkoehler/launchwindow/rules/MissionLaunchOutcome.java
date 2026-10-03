@@ -49,5 +49,16 @@ public enum MissionLaunchOutcome {
      * match the mission configuration's own
      * {@code requiredMissionControlOfficerCount}.
      */
-    WRONG_MISSION_CONTROL_OFFICER_COUNT
+    WRONG_MISSION_CONTROL_OFFICER_COUNT,
+
+    /**
+     * The launch window already holds as many launches as the random-event cap allows
+     * ({@code design.md} &sect;2.7).
+     */
+    LAUNCH_CAP_REACHED,
+
+    /**
+     * One of the configuration's mission components is unavailable for this window ({@code design.md} &sect;2.7).
+     */
+    MISSION_COMPONENT_UNAVAILABLE
 }

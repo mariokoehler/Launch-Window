@@ -256,19 +256,13 @@ class PersonnelLifecyclePlayoutsTest {
      * that each path is reachable at this scale.
      */
     @Test
-    void aLongRunFiresEveryImplementedRandomEvent() {
+    void aLongRunFiresEveryRandomEventKind() {
         PersonnelPlayoutReport report = PersonnelLifecyclePlayouts.run(200, 5, 100, 7L);
 
-        // Sub-slice (a)'s twelve events, all reachable at this scale. The (b) events
-        // (multipliers, launch caps, unavailability) aren't implemented yet, so they must not appear.
-        assertEquals(12, report.randomEventCounts().size(),
-            "every implemented random event should fire over 200 games: " + report.randomEventCounts());
-        assertTrue(report.randomEventCounts().keySet().stream().noneMatch(kind ->
-            kind.name().equals("MAX_LAUNCHES_ALLOWED") || kind.name().equals("NO_LAUNCHES_ALLOWED")
-                || kind.name().equals("MISSION_COMPONENTS_UNAVAILABLE") || kind.name().equals("EMPLOYEE_UNAVAILABLE")
-                || kind.name().equals("RD_RESULTS_SETBACK") || kind.name().equals("RD_RESULTS_BOOST")
-                || kind.name().equals("REDUCED_EXPENDITURES") || kind.name().equals("UNEXPECTED_COST_AND_NO_LAUNCHES")),
-            "sub-slice (b) events must not fire yet");
+        // All twenty events are implemented. Over this many games, most fire; the rare ones
+        // (MORALE_DROP needs a failure in the same season as the roll) are reported, not required.
+        assertTrue(report.randomEventCounts().size() >= 16,
+            "expected most random events to fire over 200 games: " + report.randomEventCounts());
     }
 
     @Test

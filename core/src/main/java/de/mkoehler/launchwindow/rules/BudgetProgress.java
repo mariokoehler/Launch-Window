@@ -61,7 +61,7 @@ public final class BudgetProgress {
         for (String componentId : snapshot.getMissionComponents().keySet()) {
             maintenance += catalog.missionComponent(componentId).orElseThrow().maintenanceCost();
         }
-        return salaries + maintenance;
+        return Math.round((salaries + maintenance) * snapshot.getCostMultiplier());
     }
 
     /**

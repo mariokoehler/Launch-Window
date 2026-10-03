@@ -25,6 +25,7 @@ public abstract class Personnel {
     private double trainingTargetLevel;
     private String assignedMissionId;
     private double salary;
+    private int unavailableSeasons;
 
     /**
      * No-argument constructor required for Jackson deserialization.
@@ -272,6 +273,30 @@ public abstract class Personnel {
      */
     public void setTrainingTargetLevel(double trainingTargetLevel) {
         this.trainingTargetLevel = trainingTargetLevel;
+    }
+
+    /**
+     * Returns how many more launch windows this employee is unavailable for.
+     *
+     * @return the remaining windows, zero when available
+     */
+    public int getUnavailableSeasons() {
+        return unavailableSeasons;
+    }
+
+    /**
+     * Sets how many more launch windows this employee is unavailable for - a random
+     * "unavailable" event's effect, {@code design.md} &sect;2.7. Launches skip an
+     * unavailable employee, as they skip one who isn't idle.
+     *
+     * @param unavailableSeasons the remaining windows, zero or more
+     * @throws IllegalArgumentException if {@code unavailableSeasons} is negative
+     */
+    public void setUnavailableSeasons(int unavailableSeasons) {
+        if (unavailableSeasons < 0) {
+            throw new IllegalArgumentException("unavailableSeasons must not be negative: " + unavailableSeasons);
+        }
+        this.unavailableSeasons = unavailableSeasons;
     }
 
     /**

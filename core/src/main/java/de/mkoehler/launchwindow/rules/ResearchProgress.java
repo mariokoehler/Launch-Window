@@ -168,8 +168,8 @@ public final class ResearchProgress {
                 double skillBefore = specialist.getSkill(group);
                 skillBeforeGain.put(specialist, skillBefore);
                 double skillFactor = SkillGrowth.drawRdGainFactor(random);
-                double skillGain = SkillGrowth.flatRdGain(skillBefore, skillFactor);
-                specialist.setSkill(group, skillBefore + skillGain);
+                double skillGain = SkillGrowth.flatRdGain(skillBefore, skillFactor) * snapshot.getRdResultsMultiplier();
+                specialist.setSkill(group, Math.min(SkillGrowth.SKILL_CAP, skillBefore + skillGain));
             }
         }
 
@@ -263,7 +263,7 @@ public final class ResearchProgress {
             double rawAmount = SkillGrowth.drawRdSlotRawAmount(component.rdSlotBandMaxAmounts(), slot, random);
             double skillBefore = skillBeforeGain.get(specialist);
             double nominalGain = SkillGrowth.rdReliabilityGain(rawAmount, startReliability,
-                component.maxRdReliability(), skillBefore);
+                component.maxRdReliability(), skillBefore) * snapshot.getRdResultsMultiplier();
             nominalGains[slot] = nominalGain;
             nominalTotal += nominalGain;
         }

@@ -33,13 +33,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class RandomEventsTest {
 
-    /** Sub-slice (a) - the events this resolver implements. */
-    private static final Set<RandomEventKind> IMPLEMENTED = EnumSet.of(
-        RandomEventKind.BASIC_TRAINING_EXTENSION, RandomEventKind.EMPLOYEE_DISMISSED,
-        RandomEventKind.EMPLOYEE_FAILED_BASIC_TRAINING, RandomEventKind.EMPLOYEE_RESIGNING,
-        RandomEventKind.PERISHED_ASTRONAUT, RandomEventKind.MORALE_DROP, RandomEventKind.MORALE_BOOST,
-        RandomEventKind.PRESTIGE_DROP, RandomEventKind.PRESTIGE_POINTS_BOOST, RandomEventKind.UNEXPECTED_COST,
-        RandomEventKind.RELIABILITY_SETBACK, RandomEventKind.EXTRA_FUNDING);
+    /** Every event kind - all twenty are implemented as of sub-slice (b). */
+    private static final Set<RandomEventKind> IMPLEMENTED = EnumSet.allOf(RandomEventKind.class);
 
     /** The roster with BASPM's own ranges and every chance set to a given value. */
     private static RandomEventRoster roster(int badPercent, int goodPercent) {
@@ -52,59 +47,75 @@ class RandomEventsTest {
     }
 
     /**
-     * With no personnel, no prestige, no components in R&amp;D, and no failures, a
-     * positive-funds player can only ever suffer an unexpected cost.
+     * Applied kinds, in order, for one season of a roster with the given chances.
      */
-    @Test
-    void unexpectedCostIsTheOnlyEventInAQuietState() {
-        PlayerSnapshot player = quietPlayer(10_000, 0);
-
-        List<ResolutionEvent> events = RandomEvents.advanceSeason(player, roster(100, 0), new Random(1), 5, 5);
-
-        assertEquals(1, events.size());
-        RandomEventOccurred occurred = (RandomEventOccurred) events.get(0);
-        assertEquals(RandomEventKind.UNEXPECTED_COST, occurred.kind());
-        assertTrue(occurred.magnitude() >= 7 && occurred.magnitude() < 15, "7-15% range, got " + occurred.magnitude());
-        long expectedCost = (long) Math.floor(10_000 * occurred.magnitude() / 100.0);
-        assertEquals(10_000 - expectedCost, player.getFunds());
-        assertEquals(1, player.getNewsLog().size());
-        assertEquals(new NewsEntry(5, RandomEventKind.UNEXPECTED_COST, null, occurred.magnitude()),
-            player.getNewsLog().get(0));
+    private static List<RandomEventKind> kindsApplied(List<ResolutionEvent> events) {
+        return events.stream().filter(event -> event instanceof RandomEventOccurred)
+            .map(event -> ((RandomEventOccurred) event).kind()).toList();
     }
 
     /**
-     * In debt there is no cash to take, so the same quiet state yields nothing.
+     * Over many seeds in a state with positive funds and nothing else to act on,
+     * unexpected cost is one of the events that can apply, and when it does, it takes
+     * its rolled share of funds.
      */
     @Test
-    void debtBlocksEverythingInAQuietState() {
-        PlayerSnapshot player = quietPlayer(-500, 0);
-
-        assertTrue(RandomEvents.advanceSeason(player, roster(100, 0), new Random(2), 5, 5).isEmpty());
-        assertEquals(-500, player.getFunds());
+    void unexpectedCostTakesItsRolledShareOfFunds() {
+        boolean sawIt = false;
+        for (long seed = 0; seed < 200; seed++) {
+            PlayerSnapshot player = quietPlayer(10_000, 0);
+            List<ResolutionEvent> events = RandomEvents.advanceSeason(player, roster(100, 0), new Random(seed), 5, 5);
+            for (ResolutionEvent event : events) {
+                if (event instanceof RandomEventOccurred occurred && occurred.kind() == RandomEventKind.UNEXPECTED_COST) {
+                    sawIt = true;
+                    assertTrue(occurred.magnitude() >= 7 && occurred.magnitude() < 15,
+                        "7-15% range, got " + occurred.magnitude());
+                    long expectedCost = (long) Math.floor(10_000 * occurred.magnitude() / 100.0);
+                    assertEquals(10_000 - expectedCost, player.getFunds());
+                }
+            }
+        }
+        assertTrue(sawIt, "unexpected cost should be reachable from a funded, quiet state");
     }
 
     /**
-     * A morale drop needs a mission failure this very season, and nothing else
-     * applies in a quiet state, so the drop either happens or nothing does.
+     * In debt there is no cash to take, so no funds-based event ever applies, whatever else fires.
+     */
+    @Test
+    void debtBlocksTheCashEventsEverywhere() {
+        for (long seed = 0; seed < 200; seed++) {
+            PlayerSnapshot player = quietPlayer(-500, 0);
+            for (RandomEventKind kind : kindsApplied(RandomEvents.advanceSeason(player, roster(100, 0),
+                    new Random(seed), 5, 5))) {
+                assertTrue(kind != RandomEventKind.UNEXPECTED_COST
+                    && kind != RandomEventKind.UNEXPECTED_COST_AND_NO_LAUNCHES, "cash event in debt: " + kind);
+            }
+            assertEquals(-500, player.getFunds());
+        }
+    }
+
+    /**
+     * A morale drop needs a mission failure this very season: without one it never
+     * applies, and with one it can.
      */
     @Test
     void moraleDropNeedsAFailureThisSeason() {
-        PlayerSnapshot withFailure = quietPlayer(0, 0);
-        withFailure.setLastFailureTurn(5);
-        Astronaut astronaut = new Astronaut("a1", "a1", 30, 80, 60);
-        withFailure.setAstronauts(List.of(astronaut));
-        // Make the astronaut un-eligible for the personnel events by putting them on a mission.
-        astronaut.setAssignmentState(AssignmentState.ASSIGNED);
-        astronaut.setAssignedMissionId("m0");
+        for (long seed = 0; seed < 200; seed++) {
+            PlayerSnapshot noFailure = quietPlayer(0, 0);
+            noFailure.setAstronauts(List.of(new Astronaut("a1", "a1", 30, 80, 60)));
+            assertTrue(!kindsApplied(RandomEvents.advanceSeason(noFailure, roster(100, 0), new Random(seed), 5, 5))
+                .contains(RandomEventKind.MORALE_DROP), "morale drop applied without a failure");
+        }
 
-        List<ResolutionEvent> events = RandomEvents.advanceSeason(withFailure, roster(100, 0), new Random(3), 5, 5);
-        assertEquals(RandomEventKind.MORALE_DROP, ((RandomEventOccurred) events.get(0)).kind());
-        assertTrue(((RandomEventOccurred) events.get(0)).magnitude() >= 10, "a 10-19 point drop, inclusive of 10");
-
-        PlayerSnapshot noFailure = quietPlayer(0, 0);
-        noFailure.setAstronauts(List.of(new Astronaut("a1", "a1", 30, 80, 60)));
-        noFailure.getAstronauts().get(0).setAssignmentState(AssignmentState.ASSIGNED);
-        assertTrue(RandomEvents.advanceSeason(noFailure, roster(100, 0), new Random(3), 5, 5).isEmpty());
+        boolean sawDrop = false;
+        for (long seed = 0; seed < 200 && !sawDrop; seed++) {
+            PlayerSnapshot withFailure = quietPlayer(0, 0);
+            withFailure.setLastFailureTurn(5);
+            withFailure.setAstronauts(List.of(new Astronaut("a1", "a1", 30, 80, 60)));
+            sawDrop = kindsApplied(RandomEvents.advanceSeason(withFailure, roster(100, 0), new Random(seed), 5, 5))
+                .contains(RandomEventKind.MORALE_DROP);
+        }
+        assertTrue(sawDrop, "morale drop should be reachable after a failure this season");
     }
 
     /**

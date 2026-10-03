@@ -2,6 +2,8 @@ package de.mkoehler.launchwindow.rules;
 
 import de.mkoehler.launchwindow.content.ContentCatalog;
 import de.mkoehler.launchwindow.content.MissionConfiguration;
+import de.mkoehler.launchwindow.content.MissionSeason;
+import de.mkoehler.launchwindow.content.MissionStep;
 import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.InProgressMission;
@@ -114,6 +116,18 @@ public final class MissionLaunch {
         if (snapshot.getFunds() < configuration.cost()) {
             return MissionLaunchOutcome.INSUFFICIENT_FUNDS;
         }
+        if (snapshot.getLaunchCap() >= 0 && snapshot.getLaunchesThisWindow() >= snapshot.getLaunchCap()) {
+            return MissionLaunchOutcome.LAUNCH_CAP_REACHED;
+        }
+        for (MissionSeason season : configuration.seasons()) {
+            for (MissionStep step : season.steps()) {
+                for (MissionStep.ComponentInvolvement involvement : step.componentInvolvements()) {
+                    if (snapshot.getUnavailableComponents().containsKey(involvement.componentId())) {
+                        return MissionLaunchOutcome.MISSION_COMPONENT_UNAVAILABLE;
+                    }
+                }
+            }
+        }
 
         MissionLaunchOutcome crewProblem =
             validateAstronauts(snapshot, astronautIds, configuration.requiredAstronautCount());
@@ -132,6 +146,7 @@ public final class MissionLaunch {
         snapshot.getInProgressMissions().put(instanceId, mission);
 
         snapshot.setFunds(snapshot.getFunds() - configuration.cost());
+        snapshot.setLaunchesThisWindow(snapshot.getLaunchesThisWindow() + 1);
         assign(snapshot.getAstronauts(), astronautIds, instanceId);
         assign(snapshot.getMissionControlOfficers(), missionControlOfficerIds, instanceId);
 
@@ -158,7 +173,7 @@ public final class MissionLaunch {
             if (astronaut == null) {
                 return MissionLaunchOutcome.UNKNOWN_ASTRONAUT;
             }
-            if (astronaut.getAssignmentState() != AssignmentState.IDLE) {
+            if (astronaut.getAssignmentState() != AssignmentState.IDLE || astronaut.getUnavailableSeasons() > 0) {
                 return MissionLaunchOutcome.ASTRONAUT_NOT_IDLE;
             }
         }
@@ -190,7 +205,7 @@ public final class MissionLaunch {
             if (officer == null) {
                 return MissionLaunchOutcome.UNKNOWN_MISSION_CONTROL_OFFICER;
             }
-            if (officer.getAssignmentState() != AssignmentState.IDLE) {
+            if (officer.getAssignmentState() != AssignmentState.IDLE || officer.getUnavailableSeasons() > 0) {
                 return MissionLaunchOutcome.MISSION_CONTROL_OFFICER_NOT_IDLE;
             }
         }

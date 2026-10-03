@@ -1966,11 +1966,23 @@ proceeds:
     astronauts), because a crew member can't be removed mid-flight without breaking
     Launch Window's assignment invariants; the unexpected-cost event needs positive
     funds, since debt has nothing to take; and the reliability floor is BASPM's own.
-    **Sub-slice (b), not started:** the R&D and cost multipliers (implemented as
-    the described effect, not as BASPM's no-op, flagged), the launch cap, component
-    and employee unavailability, and the two events that combine cost with no
-    launches. `RandomEvents` returns "not applicable" for those kinds until (b)
-    lands. **Harness:** the playout now runs the events every season after the budget
+    **Sub-slice (b), done (2026-10-03):** all twenty events are implemented. Timed
+    state (`PlayerSnapshot`: R&D and cost multipliers with their seasons remaining,
+    the launch cap and launches this window, unavailable components by window;
+    `Personnel.unavailableSeasons`) is aged once per season at the start of the
+    events pass, so an event lasting N seasons covers N seasons of research, budget,
+    and launches. The R&D multiplier scales each specialist's flat skill gain and
+    reliability gain, with the skill clamped at `SkillGrowth.SKILL_CAP`. The cost
+    multiplier scales salaries and maintenance, so the debt cap moves with it. Launches
+    refuse at the cap (`LAUNCH_CAP_REACHED`) and for an unavailable component
+    (`MISSION_COMPONENT_UNAVAILABLE`); an unavailable employee is treated as not idle.
+    The unavailable employee still trains and researches (a narrower effect than
+    BASPM's, which isn't traced further). **Harness, after (b):** the playout's
+    events fire all twenty kinds, with `MORALE_DROP` rarest (3 in 200 games). Over
+    the same run: 814,335 prestige paid, 41,744 deducted, 1,563 completed flights,
+    1,081 resigned, 1,036 retired, 5,337 still employed, 115 removed by dismissal or
+    failed training, 4,694 hires.
+    **Harness, earlier note:** the playout now runs the events every season after the budget
     pass, with departures counted through the existing accounting (dismissals and
     failed training as a separate count). The long run fires eleven of the twelve
     implemented events; `MORALE_DROP` does not fire there, because its gate needs a

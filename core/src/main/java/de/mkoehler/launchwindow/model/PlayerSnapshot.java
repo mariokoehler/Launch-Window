@@ -51,6 +51,13 @@ public class PlayerSnapshot {
     private List<NewsEntry> newsLog = new ArrayList<>();
     private int lastFlightSeasonTurn = -1;
     private int lastFailureTurn = -1;
+    private double rdResultsMultiplier = 1.0;
+    private int rdResultsSeasonsRemaining;
+    private double costMultiplier = 1.0;
+    private int costMultiplierSeasonsRemaining;
+    private int launchCap = -1;
+    private int launchesThisWindow;
+    private Map<String, Integer> unavailableComponents = new LinkedHashMap<>();
 
     /**
      * No-argument constructor required for Jackson deserialization.
@@ -413,6 +420,173 @@ public class PlayerSnapshot {
     public void setSuccessfulFlightCounts(Map<String, Integer> successfulFlightCounts) {
         Objects.requireNonNull(successfulFlightCounts, "successfulFlightCounts must not be null");
         this.successfulFlightCounts = new LinkedHashMap<>(successfulFlightCounts);
+    }
+
+    /**
+     * Returns the R&amp;D results multiplier in force this season: 1.0 unless a random
+     * event set it, and it applies to skill and reliability gains alike - {@code design.md} &sect;2.7.
+     *
+     * @return the multiplier, positive
+     */
+    public double getRdResultsMultiplier() {
+        return rdResultsMultiplier;
+    }
+
+    /**
+     * Returns how many more seasons the R&amp;D multiplier lasts, counting this one.
+     *
+     * @return the seasons remaining, zero when the multiplier is at its default
+     */
+    public int getRdResultsSeasonsRemaining() {
+        return rdResultsSeasonsRemaining;
+    }
+
+    /**
+     * Sets the R&amp;D results multiplier and its duration, replacing any earlier one.
+     *
+     * @param multiplier the factor applied to each R&amp;D gain, positive
+     * @param seasons    how many seasons it lasts, zero or more
+     * @throws IllegalArgumentException if {@code multiplier} isn't positive or {@code seasons} is negative
+     */
+    public void setRdResults(double multiplier, int seasons) {
+        if (multiplier <= 0 || seasons < 0) {
+            throw new IllegalArgumentException("invalid R&D multiplier or duration");
+        }
+        this.rdResultsMultiplier = multiplier;
+        this.rdResultsSeasonsRemaining = seasons;
+    }
+
+    /**
+     * Sets the R&amp;D multiplier alone. Public for Jackson, which persists the two
+     * R&amp;D fields separately; gameplay code uses {@link #setRdResults}.
+     *
+     * @param rdResultsMultiplier the factor to store
+     */
+    public void setRdResultsMultiplier(double rdResultsMultiplier) {
+        this.rdResultsMultiplier = rdResultsMultiplier;
+    }
+
+    /**
+     * Sets the R&amp;D remaining-seasons count alone. Public for Jackson; gameplay code uses {@link #setRdResults}.
+     *
+     * @param rdResultsSeasonsRemaining the count to store
+     */
+    public void setRdResultsSeasonsRemaining(int rdResultsSeasonsRemaining) {
+        this.rdResultsSeasonsRemaining = rdResultsSeasonsRemaining;
+    }
+
+    /**
+     * Sets the running-cost multiplier alone. Public for Jackson, which persists the two cost fields separately; gameplay code uses the two-argument overload.
+     *
+     * @param costMultiplier the factor to store
+     */
+    public void setCostMultiplier(double costMultiplier) {
+        this.costMultiplier = costMultiplier;
+    }
+
+    /**
+     * Sets the running-cost remaining-seasons count alone. Public for Jackson; gameplay code uses the two-argument overload.
+     *
+     * @param costMultiplierSeasonsRemaining the count to store
+     */
+    public void setCostMultiplierSeasonsRemaining(int costMultiplierSeasonsRemaining) {
+        this.costMultiplierSeasonsRemaining = costMultiplierSeasonsRemaining;
+    }
+
+    /**
+     * Returns the running-cost multiplier in force this season: 1.0 unless a random
+     * event set it. It scales salaries and maintenance alike, so debt conversions
+     * cap against the costs actually paid ({@code design.md} &sect;2.7).
+     *
+     * @return the multiplier, positive
+     */
+    public double getCostMultiplier() {
+        return costMultiplier;
+    }
+
+    /**
+     * Returns how many more seasons the running-cost multiplier lasts.
+     *
+     * @return the seasons remaining, zero when the multiplier is at its default
+     */
+    public int getCostMultiplierSeasonsRemaining() {
+        return costMultiplierSeasonsRemaining;
+    }
+
+    /**
+     * Sets the running-cost multiplier and its duration, replacing any earlier one.
+     *
+     * @param multiplier the factor applied to running costs, positive
+     * @param seasons    how many seasons it lasts, zero or more
+     * @throws IllegalArgumentException if {@code multiplier} isn't positive or {@code seasons} is negative
+     */
+    public void setCostMultiplier(double multiplier, int seasons) {
+        if (multiplier <= 0 || seasons < 0) {
+            throw new IllegalArgumentException("invalid cost multiplier or duration");
+        }
+        this.costMultiplier = multiplier;
+        this.costMultiplierSeasonsRemaining = seasons;
+    }
+
+    /**
+     * Returns the cap on launches in the next launch window, or {@code -1} for no cap.
+     *
+     * @return the cap, or {@code -1}
+     */
+    public int getLaunchCap() {
+        return launchCap;
+    }
+
+    /**
+     * Sets the cap on launches in the next launch window.
+     *
+     * @param launchCap the cap, zero or more, or {@code -1} for none
+     * @throws IllegalArgumentException if {@code launchCap} is below {@code -1}
+     */
+    public void setLaunchCap(int launchCap) {
+        if (launchCap < -1) {
+            throw new IllegalArgumentException("launchCap must be -1 or more: " + launchCap);
+        }
+        this.launchCap = launchCap;
+    }
+
+    /**
+     * Returns how many missions have launched in the current launch window.
+     *
+     * @return the count, zero or more
+     */
+    public int getLaunchesThisWindow() {
+        return launchesThisWindow;
+    }
+
+    /**
+     * Sets the number of missions launched in the current window.
+     *
+     * @param launchesThisWindow the count, zero or more
+     */
+    public void setLaunchesThisWindow(int launchesThisWindow) {
+        this.launchesThisWindow = launchesThisWindow;
+    }
+
+    /**
+     * Returns the mission components currently unavailable, mapped to the launch
+     * windows each stays unavailable for. The live map is returned.
+     *
+     * @return the unavailable components, never {@code null}
+     */
+    public Map<String, Integer> getUnavailableComponents() {
+        return unavailableComponents;
+    }
+
+    /**
+     * Replaces the unavailable components. Public for Jackson/Kryo, and copied defensively.
+     *
+     * @param unavailableComponents the component id to remaining-windows map
+     * @throws NullPointerException if {@code unavailableComponents} is {@code null}
+     */
+    public void setUnavailableComponents(Map<String, Integer> unavailableComponents) {
+        Objects.requireNonNull(unavailableComponents, "unavailableComponents must not be null");
+        this.unavailableComponents = new LinkedHashMap<>(unavailableComponents);
     }
 
     /**
