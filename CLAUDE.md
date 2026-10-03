@@ -69,9 +69,9 @@ from scratch.
 ## Current status
 
 **Next up (as of 2026-10-03):** M2 is down to two open slices: **random events**
-(`design.md` §2.7, not started, and it needs a small design decision on how
-events reach a player, since there's no news/bulletin system yet), and the
-player-action dispatch that M4 owns (conversions, budget actions, hires). The
+(`design.md` §2.7). The three decisions are taken (2026-10-03): a stored news log per
+player, BASPM's full event set re-derived, and BASPM's own odds (5% negative, 20%
+positive, per season). Implementation has not started. The player-action dispatch that M4 owns (conversions, budget actions, hires) is the other open item. The
 four budget/prestige/goals/win sub-slices are all done (`design.md` §2.1(d),
 §2.6(d), §2.9, §5). The win check is headless: `WinCondition.evaluate` takes the
 declared goal list, which M4 will read from `game-meta.json`. The harness runs

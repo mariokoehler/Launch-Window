@@ -1873,6 +1873,20 @@ proceeds:
     per-turn choice popup (a standing capability the player develops in
     advance) whenever a similar need comes up, rather than trying to build
     the live-choice UI BASPM itself abandoned.
+  - **Decided (user, 2026-10-03), for the implementation slice:**
+    - **Delivery: a stored news log per player.** Each resolved season appends
+      its random events to a per-player news list kept in `PlayerSnapshot`, and
+      the player reads it at their next login. This is the planned season-news
+      surface (§2.2(c)) and fits the async model. Not a shared game feed, since
+      that would reveal one player's setbacks to everyone.
+    - **Event content: BASPM's full set, re-derived.** All 14 negative and 5
+      positive events, with their situational gates, using Launch Window's own
+      magnitudes (`baspm.md` §12.1). Per the user's standing instruction, the
+      magnitudes stay close to BASPM's own values for defaults.
+    - **Odds: BASPM's own.** Each season rolls once for a negative event at 5%
+      and once for a positive event at 20%, independently.
+    - **Still to decide when the slice is built, under the same closeness rule:**
+      the exact magnitudes, which are defaults and not new questions.
 - 2.8 **Campaign objectives / win conditions — analyzed 2026-09-27, see
   `baspm.md` §12.3 for the full trace (GSA's own single-player scripted
   content is out of scope per `design.md` §1.2 — only the reusable system
