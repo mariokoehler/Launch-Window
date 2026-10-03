@@ -1,15 +1,19 @@
 package de.mkoehler.launchwindow.devtools;
 
+import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.net.AppVersion;
 import de.mkoehler.launchwindow.net.NetworkClient;
 import de.mkoehler.launchwindow.net.NetworkConstants;
+import de.mkoehler.launchwindow.net.messages.ClaimSlotRequest;
+import de.mkoehler.launchwindow.net.messages.ClaimSlotResponse;
 import de.mkoehler.launchwindow.net.messages.FetchStateRequest;
 import de.mkoehler.launchwindow.net.messages.FetchStateResponse;
 import de.mkoehler.launchwindow.net.messages.HandshakeRequest;
 import de.mkoehler.launchwindow.net.messages.HandshakeResponse;
 import de.mkoehler.launchwindow.net.messages.SubmitActionRequest;
 import de.mkoehler.launchwindow.net.messages.SubmitActionResponse;
+import de.mkoehler.launchwindow.persistence.PlayerAction;
 import de.mkoehler.launchwindow.persistence.SetFundsAction;
 
 import java.io.BufferedReader;
@@ -114,10 +118,14 @@ public final class DevClient {
                 printHelp();
             } else if (line.equals("state")) {
                 handleState(client);
-            } else if (line.startsWith("funds ")) {
-                handleFunds(client, line.substring("funds ".length()));
+            } else if (line.startsWith("claim ")) {
+                handleClaim(client, line);
+            } else if (DevViews.isView(line)) {
+                FetchStateResponse response = client.sendAndReceive(new FetchStateRequest(), FetchStateResponse.class);
+                System.out.println(response.success() ? DevViews.render(line, response.state())
+                    : "Failed: " + response.message());
             } else {
-                System.out.println("Unknown command. Type 'help' for the list.");
+                handleAction(client, line);
             }
         }
     }
@@ -132,6 +140,8 @@ public final class DevClient {
         FetchStateResponse response = client.sendAndReceive(new FetchStateRequest(), FetchStateResponse.class);
         if (response.success()) {
             System.out.println(formatSnapshot(response.state()));
+        } else if (ClaimSlotRequest.SLOT_CLAIM_REQUIRED.equals(response.message())) {
+            System.out.println("No slot in this game yet - claim one: claim <NASA|SOVIET> <agencyName> <callsign>");
         } else {
             System.out.println("Failed: " + response.message());
         }
@@ -145,24 +155,45 @@ public final class DevClient {
      * @param fundsArgument the text after the {@code funds } command word
      * @throws IOException if the request fails
      */
-    private static void handleFunds(NetworkClient client, String fundsArgument) throws IOException {
-        long funds;
+    private static void handleClaim(NetworkClient client, String line) throws IOException {
+        String[] words = line.strip().split("\\s+");
+        if (words.length != 4) {
+            System.out.println("Usage: claim <NASA|SOVIET> <agencyName> <callsign>");
+            return;
+        }
+        Archetype archetype;
         try {
-            funds = parseFundsAmount(fundsArgument);
-        } catch (NumberFormatException e) {
-            System.out.println("Not a whole number: " + fundsArgument);
+            archetype = Archetype.valueOf(words[1].toUpperCase(java.util.Locale.ROOT));
+        } catch (IllegalArgumentException e) {
+            System.out.println("Archetype must be NASA or SOVIET.");
+            return;
+        }
+        ClaimSlotResponse response = client.sendAndReceive(new ClaimSlotRequest(archetype, words[2], words[3]),
+            ClaimSlotResponse.class);
+        System.out.println(response.success() ? response.message() : "Failed: " + response.message());
+    }
+
+    private static void handleAction(NetworkClient client, String line) throws IOException {
+        PlayerAction action;
+        try {
+            action = DevCommands.parse(line);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage() + " - type 'help' for the list.");
             return;
         }
         SubmitActionResponse response =
-            client.sendAndReceive(new SubmitActionRequest(new SetFundsAction(funds)), SubmitActionResponse.class);
-        System.out.println(response.success() ? "OK: " + response.message() : "Failed: " + response.message());
+            client.sendAndReceive(new SubmitActionRequest(action), SubmitActionResponse.class);
+        System.out.println(response.success() ? "OK: " + response.message() : "Refused: " + response.message());
     }
 
     /**
      * Prints the list of available console commands.
      */
+
     private static void printHelp() {
-        System.out.println("Commands: state | funds <amount> | help | quit");
+        System.out.println("Commands: claim <NASA|SOVIET> <agencyName> <callsign> | state | help | quit");
+        System.out.println(DevViews.HELP);
+        System.out.println(DevCommands.HELP);
     }
 
     /**

@@ -5012,6 +5012,35 @@ here.
       dev-mode, and seed rules have dispatcher tests.
     - **Dev data:** reset the dev data root, because M1-era player folders
       predate the slot claim.
+  - **Slice 4e, DevClient and the exit proof — done (2026-10-03). M4's exit criterion is
+    met.** `DevClient` gained `claim`, read-only views in `DevViews` (roster,
+    candidates, components, missions, buildings, goals, news), and one command per
+    action, parsed by `DevCommands` (unit-tested). **The proof:**
+    - **Setup:** a real `GameServer` process on a fresh data root, with a
+      hand-written `game-meta.json` (resolution time a few minutes ahead, seed
+      20261003).
+    - **Client 1:** a DevClient process created the account, claimed a Soviet slot
+      (`OKB-1`/`Chief`), and saw the starting state: 25,000 funds, 250 prestige,
+      3,000 per season, empty rosters, six candidates per group.
+    - **Client 2:** a second process hired SET candidate `p11` (salary 40), opened
+      Sputnik 1 (876), and opened the R-7 Sputnik rocket program (2,500). Opening
+      Mercury was refused (`WRONG_AGENCY`) and not journaled. The preview showed
+      21,624.
+    - **Resolution:** the scheduler resolved turn 1 on its own at the configured
+      time.
+    - **Client 3:** a third process saw exactly the predicted state: funds
+      23,321 (21,624 − 1,303 running costs + 3,000 funding, where 1,303 = salary
+      40 + program upkeep 13 + components 75 and 250 + buildings 925), season 2,
+      `p11` idle after one-season basic training with Human-rated rockets 27 → 32,
+      and fresh candidate pools (ids from `p18`). A random event also fired
+      (prestige boost, 250 → 266) and shows in the news log.
+  - **Still open after M4:**
+    - The harness bot still sets R&D and training fields directly rather than
+      going through the actions (the advisor suggested routing it through
+      `PlayerAction` and a JSON round-trip).
+    - There's no multi-player harness, which would cover same-turn goal pricing
+      across players beyond the unit tests.
+    - Mission-instance ids can only be discovered through the `missions` view.
   - **Note from M3 for the dispatch work:** call the five-argument
     `HiringPool.hire(..., BuildingSchedule)` with `catalog.buildings()`. The
     four-argument overload silently uses `BuildingSchedule.baspmClose()`, which

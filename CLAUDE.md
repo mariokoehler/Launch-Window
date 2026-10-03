@@ -68,7 +68,18 @@ from scratch.
 
 ## Current status
 
-**Next up (as of 2026-10-03):** M2 and M3 are both complete. M3 (`design.md`
+**Next up (as of 2026-10-03, later the same day):** M4 is complete too
+(`design.md` §5, M4 slices 4a–4e). Players act through journaled
+`PlayerAction`s, and undo is by inverse actions only, so the journal stays
+append-only. The server pins the content pack from `game-meta.json`, players
+claim a slot (archetype, unique agency name and callsign), turns resolve
+through `SeasonResolver` with seeded randomness, and the first winner goes to
+`game-result.json`. The exit proof ran over real sockets with a scheduled
+resolution. Next is M5, the libGDX client. **Gotcha for proof runs:** pipe
+DevClient input from the Bash tool, not PowerShell. PowerShell's pipe to a
+native process prepends a byte-order mark, which breaks the login line.
+
+**As of earlier on 2026-10-03:** M2 and M3 are both complete. M3 (`design.md`
 §5) added a JSON content-pack loader, five buildings with upgrades, agencies,
 creation cost, program and rocket-program closing, rocket choice at launch, and
 CAPCOM. It also authored the early-era pack (`assets/content/early-era`), and
