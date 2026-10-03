@@ -76,6 +76,27 @@ public record BudgetSchedule(long initialFunds, long initialPrestige, long initi
     }
 
     /**
+     * The BASPM-close schedule (Normal difficulty): 25,000 funds, 250 prestige,
+     * 3,000 per season to start, BASPM's review table, and 4 prestige per fund
+     * (the conversion rate is Launch Window's own) - {@code design.md} &sect;2.1(d).
+     *
+     * @return the default schedule
+     */
+    public static BudgetSchedule baspmClose() {
+        return new BudgetSchedule(25_000, 250, 3_000, 4, List.of(
+            new Review(250, 3_800, 2_500, 8_000),
+            new Review(2_000, 4_600, 12_500, 21_000),
+            new Review(5_000, 5_500, 35_000, 35_000),
+            new Review(7_500, 8_000, 70_000, 49_000),
+            new Review(10_000, 10_000, 120_000, 52_500),
+            new Review(16_000, 12_500, 130_000, 55_000),
+            new Review(24_000, 17_500, 140_000, 57_500),
+            new Review(32_000, 25_000, 150_000, 60_000),
+            new Review(48_000, 35_000, 160_000, 62_500),
+            new Review(48_000, 40_000, 170_000, 65_000)));
+    }
+
+    /**
      * Returns the bracket a review number reads, repeating the last bracket past
      * the table's end.
      *

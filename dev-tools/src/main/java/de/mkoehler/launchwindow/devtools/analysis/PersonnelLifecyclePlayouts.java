@@ -190,18 +190,8 @@ public final class PersonnelLifecyclePlayouts {
     private static final long STARTING_FUNDING_RATE = 3_000;
     private static final long PRESTIGE_PER_FUND = 4;
     private static final RandomEventRoster ROSTER = RandomEventRoster.baspmClose();
-    private static final BudgetSchedule SCHEDULE = new BudgetSchedule(STARTING_FUNDS, STARTING_PRESTIGE,
-        STARTING_FUNDING_RATE, PRESTIGE_PER_FUND, List.of(
-            new BudgetSchedule.Review(250, 3_800, 2_500, 8_000),
-            new BudgetSchedule.Review(2_000, 4_600, 12_500, 21_000),
-            new BudgetSchedule.Review(5_000, 5_500, 35_000, 35_000),
-            new BudgetSchedule.Review(7_500, 8_000, 70_000, 49_000),
-            new BudgetSchedule.Review(10_000, 10_000, 120_000, 52_500),
-            new BudgetSchedule.Review(16_000, 12_500, 130_000, 55_000),
-            new BudgetSchedule.Review(24_000, 17_500, 140_000, 57_500),
-            new BudgetSchedule.Review(32_000, 25_000, 150_000, 60_000),
-            new BudgetSchedule.Review(48_000, 35_000, 160_000, 62_500),
-            new BudgetSchedule.Review(48_000, 40_000, 170_000, 65_000)));
+    private static final BudgetSchedule SCHEDULE = BudgetSchedule.baspmClose();
+
 
     /**
      * For an idle Astronaut/Mission Control officer whose shuffle roll

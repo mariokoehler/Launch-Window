@@ -4868,6 +4868,44 @@ here.
     through goal cancellation (the suborbital-flight goals cancel "human in
     space"), as in BASPM. Not in the pack: a declared goal list, which is game-meta
     (M4), and buildings, which stay on `BuildingSchedule.baspmClose()`.
+  - **Slice 5, the harness on the real pack — done (2026-10-03). M3's exit criterion is
+    met.** New `dev-tools` class `ContentPackPlayouts`: whole games on the early-era
+    pack. Every season resolver runs in composition order (player actions, then
+    `PersonnelLifecycle`, `MissionProgress` with the goal tally,
+    `BuildingUpgrades`, `BudgetProgress`, `RandomEvents`, `TrainingProgress`,
+    `ResearchProgress`, `HiringPool.refreshCandidates`). The bot is goal-directed:
+    - It follows its agency's plan toward the declared goals (earth-orbit
+      satellite, human in space, human in orbit). Each plan is the satellite,
+      then the uncrewed and crewed suborbital flights, then the uncrewed and
+      crewed orbital flights.
+    - Each season it opens the target's program and the cheapest rocket able to
+      lift it, upgrades Mission Control or the Astronaut Center when staffing needs
+      it, hires the best candidates, points idle SET at the target's components,
+      and launches the best-skilled crew, CAPCOM, and controllers once every flown
+      component is at least 70 reliable or at its R&D ceiling.
+    - Idle staff train only while the hardware is still in R&D. The first version
+      trained them regardless, which left too few controllers idle at once to
+      staff a ten-controller flight, so crewed launches almost never happened.
+
+    Independent invariants check each action's charge (opening price, rocket
+    creation cost, launch cost, upgrade cost), the season's running costs and the
+    funds reconciliation, the hires against the cap read from the table, the
+    Headquarters and VAB caps, the agency filter, and every flying mission's
+    counts, rocket lift and human rating, and seat pairing. `BudgetSchedule.baspmClose()`
+    moved into core for it. **Numbers (200 games, 80 seasons, seed 42, alternating
+    NASA and Soviet):** 189 games reached every declared goal (NASA 90 of 100,
+    Soviet 99 of 100), at an average of season 59.1. Earth-orbit satellite was
+    reached in all 200, human in space in 199, and human in orbit in 189. About
+    1,600 launches; steps came out 10,563 successful, 1,257 glitch solved, 422
+    minor glitch, 601 failure, and 34 catastrophic. 89 astronauts were lost, there
+    were 200 Mission Control upgrades, and no debt (lowest funds 19,719). **Balance
+    note:** the bot takes about 15 game years to orbit a human, against roughly 5
+    historically. It works on one target at a time and only researches that
+    target's components. Real players will run R&D in parallel, so this is a bot
+    limit, not yet a balance finding. `ContentPackPlayoutsTest` keeps the exit
+    criterion checked (20 games: every game orbits a satellite, both agencies
+    complete some games, every NASA plan step flies). `PersonnelLifecyclePlayouts`
+    stays on its fixtures as the resolvers' random stress test. **M3 is done.**
 - **M4 — Integration: wire M2/M3's real engine into M1's proven skeleton.**
   Replace M1's placeholder trivial action with real player actions (assign
   personnel, open a program, queue a mission) and real turn resolution.
