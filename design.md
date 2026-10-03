@@ -540,7 +540,8 @@ proceeds:
       starts together. Default proposal: reviews fire on fixed *game* turns
       (16, 32, ...), so every player is reviewed together and a late joiner
       starts at `initialFundingRate` until their first review. This needs a
-      `joinedAtGameTurn` on the snapshot, which M4 owns.
+      `joinedAtGameTurn` on the snapshot, which M4 owns. **Superseded (user, 2026-10-03, §5 M4 decision 3):**
+      reviews count the player's own seasons, as BASPM does; no `joinedAtGameTurn` is needed.
     - **Currency rule carried over:** prestige, not cash, is the only input to
       a review. Missions and goals grant prestige only; they never grant
       funds directly (`baspm.md` §11.1). Prestige is clamped at zero, since a
@@ -1496,7 +1497,8 @@ proceeds:
     there. **User-confirmed from in-game play (2026-10-02, `baspm.md`
     &sect;9.5's own added note): deducted in full at the moment the
     player decides to launch, before the server evaluates the next turn,
-    and never refunded on a later scrub** - "charge the full cost once,
+    and never refunded on a later scrub** (**superseded 2026-10-03, §5 M4 decision 5:** a scrub before the
+    mission flies refunds the full launch cost, as BASPM's code does) - "charge the full cost once,
     at launch, no refund" is therefore a confirmed match to BASPM's own
     behavior, not an unconfirmed default anymore. `MissionConfiguration`
     gained a new `cost` field - a one-time funds cost `MissionLaunch.launch`
@@ -2834,6 +2836,8 @@ turn), and **natural separation** (one player's actions never collide with
 another's on disk, and are trivially all-in-one-place — their own
 subdirectory — for both login-time reconstruction and turn-resolution).
 
+**Narrowed 2026-10-03 (§5 M4 decision 1):** this holds for assignment-style actions only; one-off
+actions (open, buy, hire, launch) are undone by queuing their inverse at its normal cost.
 **Decided (user, 2026-09-27): actions are idempotent "declare current
 intent" statements, not deltas.** E.g. an action isn't "add Employee X to
 R&D" as a delta on whatever's currently declared — it's "R&D assignment for

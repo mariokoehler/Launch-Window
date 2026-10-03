@@ -11,6 +11,7 @@ import de.mkoehler.launchwindow.content.ContentCatalog;
 import de.mkoehler.launchwindow.content.ContentPackLoader;
 import de.mkoehler.launchwindow.content.RandomEventRoster;
 import de.mkoehler.launchwindow.persistence.ActionContext;
+import de.mkoehler.launchwindow.rules.WinCondition;
 import de.mkoehler.launchwindow.server.accounts.AccountStore;
 import de.mkoehler.launchwindow.server.schedule.GameMeta;
 import de.mkoehler.launchwindow.server.schedule.GameMetaStore;
@@ -92,6 +93,8 @@ public class GameServer extends ApplicationAdapter {
         // The content pack is read once and pinned for the server's life (design.md section 5, M4).
         ContentCatalog catalog = ContentPackLoader.loadFromClasspath("content/" + meta.getContentPack(),
             GameServer.class.getClassLoader());
+        // A bad declared goal id must fail here, at startup, not stall every turn's win check mid-game.
+        WinCondition.evaluate(java.util.Map.of(), meta.getDeclaredGoalIds(), catalog);
         ActionContext context = new ActionContext(catalog, BudgetSchedule.baspmClose());
         dispatcher = new RequestDispatcher(accountStore, dataRoot, mapper, context, meta);
         scheduler = new TurnScheduler(dataRoot, mapper, Clock.systemDefaultZone(), context,
