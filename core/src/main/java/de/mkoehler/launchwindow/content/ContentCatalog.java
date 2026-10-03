@@ -175,6 +175,7 @@ public final class ContentCatalog {
                 continue;
             }
             validateStepComponentReferences(configuration, program, problems);
+            validatePrestigeShares(configuration, problems);
         }
 
         for (MissionComponent component : missionComponentsById.values()) {
@@ -191,6 +192,31 @@ public final class ContentCatalog {
 
         if (!problems.isEmpty()) {
             throw new IllegalArgumentException("invalid content catalog: " + String.join("; ", problems));
+        }
+    }
+
+    /**
+     * Checks that a configuration's step prestige shares are either fully
+     * allocated (sum to 100) or not allocated at all (sum to 0), and that a
+     * configuration which pays any prestige is fully allocated. See
+     * {@code design.md} &sect;2.6(d).
+     *
+     * @param configuration the mission configuration to check
+     * @param problems      the list to append any problem found to
+     */
+    private void validatePrestigeShares(MissionConfiguration configuration, List<String> problems) {
+        int shareSum = configuration.seasons().stream()
+            .flatMap(season -> season.steps().stream())
+            .mapToInt(MissionStep::prestigeSharePercent)
+            .sum();
+        String label = "MissionConfiguration " + configuration.id();
+        // Either fully allocated or not at all - a partial allocation would silently leave part of the
+        // configuration's prestige unpaid, see design.md §2.6(d).
+        if (shareSum != 0 && shareSum != 100) {
+            problems.add(label + " step prestige shares must sum to 0 or 100, got " + shareSum);
+        }
+        if (configuration.firstTimePrestige() > 0 && shareSum != 100) {
+            problems.add(label + " pays prestige but its step shares sum to " + shareSum + ", not 100");
         }
     }
 

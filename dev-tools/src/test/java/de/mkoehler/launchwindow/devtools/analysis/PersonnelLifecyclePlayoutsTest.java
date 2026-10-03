@@ -248,6 +248,23 @@ class PersonnelLifecyclePlayoutsTest {
     }
 
     /**
+     * Verifies the prestige arithmetic actually runs end to end over a long
+     * run: prestige is paid for successful steps, deducted by failing ones,
+     * and completed flights advance the repeat tier. Every season already
+     * self-checks the exact per-step payouts, the failure replacement, and
+     * the zero floor (see {@code checkPrestigeInvariants}); this only adds
+     * that each path is reachable at this scale.
+     */
+    @Test
+    void aLongRunPaysAndDeductsPrestigeAndCompletesFlights() {
+        PersonnelPlayoutReport report = PersonnelLifecyclePlayouts.run(200, 5, 100, 7L);
+
+        assertTrue(report.prestigePaidTotal() > 0, "expected prestige to be paid over 200 games");
+        assertTrue(report.prestigeDeductedTotal() > 0, "expected at least one failing season to deduct prestige");
+        assertTrue(report.completedFlightCount() > 0, "expected completed flights over 200 games");
+    }
+
+    /**
      * Verifies each non-positive argument is rejected.
      */
     @Test

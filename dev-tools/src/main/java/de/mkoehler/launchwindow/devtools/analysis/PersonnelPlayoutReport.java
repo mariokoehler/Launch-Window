@@ -134,6 +134,14 @@ package de.mkoehler.launchwindow.devtools.analysis;
  *                                          any {@code TrainingKind}, any
  *                                          group (see
  *                                          {@code PersonnelLifecyclePlayouts#PULL_OUT_OF_TRAINING_CHANCE_PER_SEASON})
+ * @param prestigePaidTotal                  total prestige paid out by mission
+ *                                           seasons (positive {@link de.mkoehler.launchwindow.rules.MissionPrestigeChanged#applied()}
+ *                                           only), summed over every game and season
+ * @param prestigeDeductedTotal              total prestige taken by failing
+ *                                           seasons, as a positive magnitude
+ * @param completedFlightCount               mission flights that completed all
+ *                                           their seasons without a failure, and so
+ *                                           advanced their configuration's repeat tier
  * @param expertRescueAppliedCount           how many {@code ExpertRescueApplied}
  *                                          events across every game
  *                                          actually contributed a nonzero
@@ -179,6 +187,9 @@ public record PersonnelPlayoutReport(
     int expertTrainingStartedCount,
     int expertTrainingCompletedCount,
     int pulledOutOfTrainingCount,
-    int expertRescueAppliedCount
+    int expertRescueAppliedCount,
+    long prestigePaidTotal,
+    long prestigeDeductedTotal,
+    int completedFlightCount
 ) {
 }

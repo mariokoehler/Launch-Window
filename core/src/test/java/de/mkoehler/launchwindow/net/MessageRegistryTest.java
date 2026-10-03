@@ -256,9 +256,10 @@ class MessageRegistryTest {
         snapshot.setNextPersonnelId(7);
         snapshot.setOpenedProgramIds(List.of("sputnik-1"));
         snapshot.setMissionComponents(Map.of("rocket-1", new OwnedMissionComponent(42.5, 17.0)));
-        snapshot.setInProgressMissions(
-            Map.of("m0", new InProgressMission("m0", "sputnik-1-std", List.of("astro-1"), List.of("mco-1"))));
+        InProgressMission flying = new InProgressMission("m0", "sputnik-1-std", List.of("astro-1"), List.of("mco-1"));
+        snapshot.setInProgressMissions(Map.of("m0", flying));
         snapshot.setNextMissionInstanceId(1);
+        snapshot.setSuccessfulFlightCounts(Map.of("sputnik-1-std", 2));
 
         FetchStateResponse copy = roundTrip(FetchStateResponse.success(snapshot), FetchStateResponse.class);
 
@@ -292,6 +293,7 @@ class MessageRegistryTest {
         assertEquals("sputnik-1-std", copiedMission.getMissionConfigurationId());
         assertEquals(List.of("astro-1"), copiedMission.getAssignedAstronautIds());
         assertEquals(List.of("mco-1"), copiedMission.getAssignedMissionControlOfficerIds());
+        assertEquals(2, copy.state().getSuccessfulFlightCounts().get("sputnik-1-std"));
         assertEquals(1, copy.state().getNextMissionInstanceId());
 
         FetchStateResponse rejected = roundTrip(FetchStateResponse.failure("Not authenticated."), FetchStateResponse.class);

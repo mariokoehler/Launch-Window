@@ -72,13 +72,15 @@ class PlayerSnapshotTest {
         original.setNextPersonnelId(3);
         original.setOpenedProgramIds(List.of("sputnik-1"));
         original.setMissionComponents(Map.of("rocket-1", new OwnedMissionComponent(42.5, 17.0)));
-        original.setInProgressMissions(
-            Map.of("m0", new InProgressMission("m0", "sputnik-1-std", List.of("astro-1"), List.of("mco-1"))));
+        InProgressMission flying = new InProgressMission("m0", "sputnik-1-std", List.of("astro-1"), List.of("mco-1"));
+        original.setInProgressMissions(Map.of("m0", flying));
         original.setNextMissionInstanceId(1);
+        original.setSuccessfulFlightCounts(Map.of("sputnik-1-std", 3));
 
         String json = mapper.writeValueAsString(original);
         PlayerSnapshot restored = mapper.readValue(json, PlayerSnapshot.class);
 
+        assertEquals(3, restored.getSuccessfulFlightCounts().get("sputnik-1-std"));
         assertEquals(original.getAgencyName(), restored.getAgencyName());
         assertEquals(original.getArchetype(), restored.getArchetype());
         assertEquals(original.getFunds(), restored.getFunds());

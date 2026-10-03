@@ -124,6 +124,45 @@ class ContentCatalogTest {
     }
 
     /**
+     * Builds a one-step {@code sputnik-1-std}-shaped configuration with the
+     * given step prestige share and configuration prestige total.
+     *
+     * @param sharePercent     the single step's prestige share
+     * @param firstTimePrestige the configuration's first-time prestige total
+     * @return the configuration
+     */
+    private MissionConfiguration prestigeConfiguration(int sharePercent, long firstTimePrestige) {
+        MissionStep step = new MissionStep("ascent",
+            List.of(new MissionStep.ComponentInvolvement("rocket-1", 100)), List.of(), List.of(), false,
+            sharePercent, 0);
+        return new MissionConfiguration("sputnik-1-std", "sputnik-1",
+            List.of(new MissionSeason(List.of(step))), 0, 0, 0, firstTimePrestige);
+    }
+
+    /**
+     * Verifies that a configuration whose step shares sum to something other
+     * than 0 or 100 is rejected, since a partial allocation would leave part of
+     * the prestige total silently unpaid.
+     */
+    @Test
+    void rejectsPartiallyAllocatedPrestigeShares() {
+        assertThrows(IllegalArgumentException.class, () -> new ContentCatalog(
+            List.of(earthOrbit), List.of(sputnik), List.of(prestigeConfiguration(50, 1_000)), List.of(rocket)));
+    }
+
+    /**
+     * Verifies that a configuration paying prestige must have its shares fully
+     * allocated, and that a fully allocated one is accepted.
+     */
+    @Test
+    void requiresFullAllocationWhenAConfigurationPaysPrestige() {
+        assertThrows(IllegalArgumentException.class, () -> new ContentCatalog(
+            List.of(earthOrbit), List.of(sputnik), List.of(prestigeConfiguration(0, 1_000)), List.of(rocket)));
+        assertTrue(new ContentCatalog(List.of(earthOrbit), List.of(sputnik),
+            List.of(prestigeConfiguration(100, 1_000)), List.of(rocket)).missionConfiguration("sputnik-1-std").isPresent());
+    }
+
+    /**
      * Verifies that a mission configuration step referencing an unknown
      * mission component is rejected.
      */

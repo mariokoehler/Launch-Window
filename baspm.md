@@ -1620,11 +1620,17 @@ generic, 173 non-generic** — generic goals are the minority, universal
 race-defining milestones; the bulk of content is agency-specific flavor
 goals. `IsGeneric` has **two real, separate mechanical consequences**, not
 just a display label:
-- **Program-opening gates only ever check generic goals**
-  (`ProgramsManager.CanOpenProgram` is passed
-  `player.GetAllGenericGoalsAchievedOrCancelledIDs()` exclusively) — a
-  program's `RequiredGoal` prerequisite (§10.1) can only ever reference a
-  generic goal, never a non-generic one.
+- **CORRECTED 2026-10-03 (`baspm.md` §11.7): the program gate is NOT
+  generic-only in code.** `ProgramsManager.CanOpenProgram` checks a program's
+  `StrictGoalsIDs` (an AND list), a category gate
+  (`CanOpenProgramCategory`), and `ConjunctiveGoal` lists, against the caller's
+  fulfilled-goal list. Most callers pass
+  `GetGoalsAchievedOrCancelledIDs()` (all goals - `HQPgmCtgsPgmEntry.cs:101`,
+  `Player.cs:1507`); only one overlay passes the generic subset
+  (`HQPgmsOverlay.cs:235`). Whether the shipped data only ever references
+  generic goals from a program's gate is a data convention I have not checked,
+  not something the code enforces. The earlier claim above was a mis-trace of
+  that one overlay call.
 - **The opposing-faction comparison screen (`baspm.md` §5's PBEM/CampaignRTTM
   precedent) only ever compares generic goals** (`GameWorld.
   GetAllGenericGoalsAchievedInfoByOpposingFaction`) — non-generic,
@@ -1651,10 +1657,12 @@ just a display label:
   computes, per component: **subtract** the penalty for every declared
   dependency goal the player hasn't achieved/cancelled yet, **add** the bonus
   for every declared boost goal the player already has achieved/cancelled.
-  This modifier is computed fresh for every mission attempt (not persisted
-  onto the component) and feeds directly into §8.2's mission-sim base
-  probability as `max(0, CurrReliability + modifier)` — confirmed by tracing
-  the call chain straight into `MissionSimBaseScreen.cs:918`. So "skipping a
+  **CORRECTED 2026-10-03 (see §11.7):** this is read live on every step, not
+  once per attempt. `MissionSimBaseScreen.ComputeProbabilityOfSuccessForMissionStep`
+  calls the modifier per involved component, every step, against the player's
+  current achieved-or-cancelled state. Not persisted onto the component.
+  It feeds directly into §8.2's mission-sim base probability as
+  `max(0, CurrReliability + modifier)`. So "skipping a
   prerequisite goal" very concretely means: flying a mission configuration
   without having first achieved the specific goal it declares a dependency
   on penalizes exactly the components that goal is tied to, for that
@@ -1721,6 +1729,149 @@ system slots cleanly into "server resolves mechanically, no pause," same as
    directly confirm the penalty is player-visible (as opposed to a silent
    under-the-hood odds adjustment), which matters for whether Launch Window
    should surface its own equivalent modifier explicitly in its UI.
+
+### 11.7 Follow-up trace (2026-10-03): goal source, goal-prestige count, failure, repeat tiers, catch-up base
+
+Traced for the budget/prestige/goals slice's design (`design.md` §2.1/§2.6/§2.9).
+**Code-confirmed** against `E:\Temp\BASPM\source\Assembly-CSharp` unless marked
+inferred. Corrected the same session after an advisor review that caught three
+wrong claims in this section's first draft (noted inline).
+
+- **Goals are granted per mission *step*, and the outcome decides how.**
+  `MissionSimBaseScreen.ProcessStepSuccessful` (`SUCCESSFUL`/`MINOR_GLITCH_SOLVED`,
+  line ~1248) and `ProcessStepNearlySuccessful` (`MINOR_GLITCH`, line ~1267) both
+  call `ComputeAndAddAchievedGoalsToPlayer` with `_currMissionStep.GoalsAchievedIDs`.
+  `ProcessStepFailed` (`FAILURE`/`CATASTROPHIC`) does **not** award goals. So a
+  minor glitch, unsolved, still achieves its step's goals, at half prestige (see
+  the next bullet). A configuration's `GoalsAchieved` is just the union across
+  its steps. An achieved goal recursively cancels its `GoalsCancelled` list
+  (`ComputeAndAddAchievedGoalsToPlayerInner`, already in §11.3). Nothing in the
+  goal system is a state predicate; the seven objective-field types (§12.3)
+  belong to the campaign-objective system only.
+- **Per-step prestige, by outcome.** Within a season, `_accumulatedPlayerPoints`
+  collects each step's `GetPrestigeGrantedOnSuccess(runCount) + goalPrestige`:
+  full for `SUCCESSFUL`/`MINOR_GLITCH_SOLVED`, **half** for `MINOR_GLITCH`
+  (`ProcessStepNearlySuccessful`, `/ 2f`), nothing on a failing step.
+- **A failing step replaces the season's accumulated prestige; it doesn't add to
+  it.** `ProcessStepFailed` sets `_accumulatedPlayerPoints =
+  _currMissionStep.PrestigeDeductedOnFailure` (assignment, line ~1299). The
+  season's own total is then added to the player once, in
+  `AddToPrestigePoints((int)_accumulatedPlayerPoints)` at the end of the season
+  screen (line ~1197). **So on failure, every prestige point that the same
+  season's earlier steps had earned is forfeited** - including goal prestige
+  from those steps. The goals themselves stay achieved (awarded immediately, not
+  deferred), only their prestige is lost. Earlier, completed seasons of the same
+  mission keep their prestige, since each season is paid out at its own end.
+- **The failure deduction is per *step*, not per configuration.**
+  `MissionStep.PrestigeDeductedOnFailure` is stored as a percentage of the
+  configuration's total (`SetPrestigeDeductedOnFailureAsPercentage`, `MissionStep.cs`
+  ~251), and it's the value the failure path uses. The configuration-level
+  `MissionConfiguration.PrestigeDeductedOnFailure` (`MsnCnfg*.xml`) is used only by
+  **mid-flight cancellation** (`MissionSimBaseScreen.cs:1210`,
+  `-GetPrestigeDeducted(...)`). First draft got this wrong. (Sign: the stored
+  step value is added directly, so it must be negative in the data - inferred from
+  that, not read from the XML.)
+- **The mission's own repeat tier counts only completed, non-failed missions,
+  not launches or season-records.** `Player.GetMissionRunCount` maps
+  `GetNumberOfTimesMissionSuccessful` (`GetNumberOfTimesMissionX`) to
+  `FIRST_TIME` (0), `SECOND_TIME` (1), `LATER_TIME` (2+). That counts
+  `MissionRecord`s with outcome `SUCCESSFUL` **and `!IsInProgress`**. A
+  record is `IsInProgress` for every season of a multi-season mission except
+  its last (`MissionSimBaseScreen.AddMissionRecordToPlayer`), so only the final
+  season of a completed mission counts. A minor glitch doesn't stop a mission
+  counting as `SUCCESSFUL`, since `_missionOutcome` only changes on a failing
+  step. `MISSION_OUTCOME_NEARLY_SUCCESSFUL` is effectively unreachable: it's set
+  only in `ProcessStepFailed`'s `MINOR_GLITCH` case, and `MoveToNextMissionStep`
+  never routes a minor glitch there. (Closes the §8.2 loose end: a
+  minor-glitch-completed mission counts toward the tier, and the nearly-
+  successful outcome is dead code.) First draft said "launches"; wrong.
+  **Read point, traced:** `ProcessStepSuccessful` and `ProcessStepNearlySuccessful`
+  each call `_player.GetMissionRunCount(...)` for every step they resolve, so the
+  tier is read live, during resolution, not snapshotted at launch. Missions resolve
+  one at a time in launch order, so a copy of a configuration that completes earlier
+  in the same pass already counts toward a later copy's tier.
+- **Goal prestige is decayed by the number of achievements of that goal in the
+  *local game instance*, which is not a human opponent's.**
+  `GoalsManager.GetPrestigeGrantedNextTimeGoalGetsAchieved` uses
+  `GetNumberOfTimesGoalHasBeenAchieved(goalID) + 1`, which counts entries in a
+  per-goal list (`_goalsAchievementInfoLists`) filled by
+  `AddGoalAccomplishedByPlayer`. Its only callers are the local player's own
+  achievements (`Player.cs` ~2222, ~2244) and, in CampaignRTTM only, the
+  simulated AI rival's goals (`ETInterseasonOverlay.cs:113`). **A human PBEM/
+  multiplayer opponent's goals are read from their XML for the comparison screen
+  only and are never added to this list** - so in human-vs-human play, the
+  first-time/second-time value is effectively each player's own count, not a
+  cross-player race. First draft said "game-wide, across every player"; that was
+  wrong for human multiplayer and only true against the CampaignRTTM rival.
+- **Budget-review catch-up uses the previous review's *raw* minimum, not its
+  adjusted minimum, so shortfalls don't compound.**
+  `GameWorld.ComputeNextBudgetForPlayer` calls
+  `RetrieveMinPrestigePointsForBudgetReviewNumber(num - 1)`, which reads the
+  table's own unadjusted min for review `num - 1`, and shifts the current
+  review's min/max by `(thatRawMin - PrestigePointsInLastBudgetReview)` only when
+  the player fell short. Review 1 has no catch-up. This resolves the "adjusted or
+  raw?" question from §11.1 in favour of raw.
+- **Budget-season order** (`GameWorld.AdvanceSeasonPostInterseason`, confirmed
+  line by line): (1) `SubstractFromFunds(ComputeFixedCosts)`, (2)
+  `NumberOfSeasonsElapsed++`, (3) `ComputeNextBudgetForPlayer` if
+  `IsSeasonForBudgetComputation` (review, sets the new `_currentBudgetPerSeason`),
+  (4) `AddToFunds(ComputeMoneyGrantedToPlayer())` - the grant at the *new* rate.
+  Expenses are charged before the grant in the same season, and a review season
+  pays the new rate immediately.
+- **The review cadence counts each player's own elapsed seasons**, not a
+  game-global calendar: `IsSeasonForBudgetComputation(player)` is
+  `player.NumberOfSeasonsElapsed > 0 && NumberOfSeasonsElapsed % 16 == 0`. In
+  single-player and BASPM's PBEM modes this is the same as game time, since every
+  player starts together. It is not automatically game-global, which matters for
+  Launch Window's late-joiner model (`design.md` §3.8).
+- **Goal-dependency reliability modifier: read live on every step, not once per
+  attempt** (CORRECTED 2026-10-03; the first draft and §11.3 said "per attempt").
+  `MissionSimBaseScreen.ComputeProbabilityOfSuccessForMissionStep` (line ~918)
+  calls `MissionsConfigurationsManager.GetPlayerMissionComponentTotalReliabilityModifier`
+  for each component a step involves, every step, against the player's current
+  achieved-or-cancelled state. A goal achieved earlier in the same flight changes
+  the next step's odds straight away. Not persisted onto the component.
+- **Cancelled goals pay prestige and count toward the game-wide tally, and the
+  cascade is recursive** (CORRECTED 2026-10-03; the first draft said nothing about
+  this). `Player.AddGoalCancelledAndUpdateGoalsAchievedDuringMissionSim` (line
+  ~2235-2256) adds each cancelled goal to `_goalsCancelledIDs` (not the achieved
+  list), calls `GoalsManager.AddGoalAccomplishedByPlayer` for it (which appends to
+  the same per-goal achievement list, so it moves the first/second-time count for
+  every later achiever), adds that goal's own first/second-time prestige to the
+  achieving goal's reward, and recurses into its own `GoalsCancelled` list. So
+  "achieving Duration III" pays and counts for II and I too. Only goals not already
+  achieved-or-cancelled are processed.
+
+### 11.8 Going into the red: a defeat condition, not debt (traced 2026-10-03)
+
+**Code-confirmed** (`WorldMapBaseScreenGameLogic.CheckForDefeatCondition`,
+`GameWorld.AdvanceSeasonPostInterseason`, `Player.SubstractFromFunds`):
+
+- Fixed costs are subtracted **once per season, after the season's
+  interseason processing**: `player.SubstractFromFunds(player.ComputeFixedCosts(...))`
+  in `AdvanceSeasonPostInterseason`. `ComputeFixedCosts` = all personnel
+  salaries + `ComputeProgramsFixedCosts` (each opened program's
+  maintenance cost) + `ComputeMissionComponentsFixedCosts` (each *active*
+  component) + space-complex building upkeep. The per-season budget grant is
+  added in the same function, *after* the costs.
+- Spending (programs, missions, Tiger Teams, construction) is blocked up
+  front by an affordability check, so funds only go negative through these
+  recurring costs.
+- **If `player.Funds < 0` at the world map, the game ends.** Single-player
+  shows a `GAME_OVER` / `RED_NUMBERS` popup. Multiplayer shows
+  `RED_NUMBERS_MULTIPLAYER`, and dismissing it sets
+  `_mustSurrenderAfterSendingPBEMChatMessage = true` - the player is forced
+  to surrender.
+- The original gives a warning in advance: the PAO screen (§11.4) shows the
+  quarterly balance (income minus total expenditure), colour-coded red/green,
+  and the projected next-review budget.
+- **BASPM has no prestige-to-cash conversion.** Prestige reaches cash only
+  through a review.
+
+**Launch Window's decision (user, 2026-10-03), a departure from this:** going
+into debt is not a defeat. Instead it unlocks a player-initiated conversion of
+prestige into funds (`design.md` §2.1(d)). The conversion is a Launch Window
+addition, not a port.
 
 ## 12. Random events and campaign objectives (traced 2026-09-27)
 

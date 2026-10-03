@@ -434,6 +434,99 @@ proceeds:
     BASPM already treats this as a feature, not a spoiler, and transparency
     matters more, not less, when a player wasn't present for the turn that
     changed their funding.
+  - **(d) Proposal for the budget slice (2026-10-03; every default below is
+    unconfirmed, and the four starred items need user decisions before any
+    code, per `CLAUDE.md`'s pause rule for balance-defining choices):**
+    - **Income.** `PlayerSnapshot.fundingRatePerSeason` (already present) is
+      credited to funds every season. Its initial value is a Launch Window-
+      own `initialFundingRate` in content, not BASPM's `InitialBudgetPerSeason`
+      (§1.2).
+    - **Reviews.** Every 16 seasons, a review sets the new
+      `fundingRatePerSeason` from a `BudgetSchedule` content record: an ordered
+      list of per-review brackets `(minPrestige, minFunding, maxPrestige,
+      maxFunding)`, with BASPM's own shape - linear interpolation between the
+      ends, ceiling-rounded, flat at each end. The table's own numbers are
+      Launch Window's, authored in M3; the M2 harness uses a fixture.
+    - **Catch-up.** Traced this session (`baspm.md` §11.7): if prestige at the
+      previous review fell short of that review's *raw* minimum, the current
+      review's bracket shifts down by that shortfall. Shortfalls therefore
+      don't compound. Snapshot fields: `budgetReviewCount`,
+      `prestigeAtLastReview`.
+    - **Expenses, charged each season after `PersonnelLifecycle`:** program
+      `maintenanceCost` for every opened program (exists already), plus
+      **\*personnel salaries** (see the starred decision below). Not modeled
+      in v1: mission-component upkeep and any facilities/building cost - Launch
+      Window has no facilities concept, and BASPM's per-component fixed costs
+      have no Launch Window field yet.
+    - **Salaries - decided (user, 2026-10-03).** Yes, in v1. This supersedes
+      the 2026-09-30 "hiring is free until budget exists" decision (§2.2). A
+      flat per-employee salary per group, charged every season the employee
+      is on the roster, with own numbers (BASPM confirms salaries are a fixed
+      per-season cost, `baspm.md` §11.8; the values are Launch Window's and
+      are set in the harness fixture and in M3's content, unconfirmed).
+    - **Negative funds - decided (user, 2026-10-03), a departure from
+      BASPM.** BASPM treats funds below zero as an immediate game-over
+      (multiplayer: forced surrender, `baspm.md` §11.8). Launch Window allows
+      debt instead: funds can go negative, and debt blocks new spending through
+      the existing `INSUFFICIENT_FUNDS` checks, with no other penalty. The
+      harness's "funds never negative" invariant is dropped accordingly.
+    - **Prestige-to-funds conversion while in debt - decided (user,
+      2026-10-03), a Launch Window addition with no BASPM precedent.** A player
+      whose funds are below zero may convert prestige into funds:
+      - **Offered whenever the player is in debt, and only then.** The offer
+        repeats every time the player is in debt, for as long as they have
+        prestige. A player in debt with no prestige left has to hope the next
+        funding review saves them.
+      - **Fixed conversion rate:** `prestigeToFundsRate` (funds per prestige
+        point). The number is unconfirmed; it's set in the harness fixture and
+        in M3's content. It should sit well below what a review pays per
+        prestige point, so conversion is an emergency tool, not a strategy -
+        the same prestige would otherwise have gone toward the review.
+      - **The player chooses the amount**, from 1 up to the cap below. The
+        conversion itself is a journaled player action, applied in the same
+        "before any resolver" bucket as the other actions.
+      - **Cap - decided (user, 2026-10-03): the conversion brings funds up to
+        two seasons of running costs.** With funds at `-D` and running costs
+        `R` per season, the most a single conversion can add is `D + 2R`, so
+        funds end at no more than `2R`. Running costs are salaries plus
+        maintenance, the same figure as the season's expenses. The conversion
+        is also capped by the prestige the player holds times the rate. A
+        deeply indebted player can therefore clear the debt and keep a
+        two-season buffer in one conversion.
+      - **Prestige is spent,** so a conversion lowers the prestige that the next
+        review will see. That's the intended trade-off.
+      - **Validation:** a conversion submitted while the player is not in debt
+        at application time is rejected (no state change). Validation happens
+        at application, not submission.
+    - **Season order (corrected 2026-10-03 after advisor review).** Journaled
+      actions (mission launches, debt conversions, hires), then
+      `PersonnelLifecycle`, then `MissionProgress`. Goals are awarded inside
+      `MissionProgress`, per step, as BASPM does (§2.6(d)), so this season's
+      step prestige and goal prestige both exist before any review. Then
+      `BudgetProgress`, in the internal order BASPM traces
+      (`baspm.md` §11.7): (1) fixed costs (salaries and maintenance), (2)
+      increment the player's seasons-elapsed counter, (3) run the review if
+      one is due, which sets the new funding rate, (4) grant this season's
+      funding at the *new* rate. A review season therefore pays the new rate
+      immediately. Then `TrainingProgress`, `ResearchProgress`, and
+      `HiringPool.refreshCandidates`. The cross-player win check (§2.9) runs
+      once per resolution, after every player has resolved.
+    - **Review cadence and late joiners (unconfirmed default, to be decided
+      with M4's slot-claim work).** BASPM counts each player's own seasons
+      (`baspm.md` §11.7), which is the same as game time only when everyone
+      starts together. Default proposal: reviews fire on fixed *game* turns
+      (16, 32, ...), so every player is reviewed together and a late joiner
+      starts at `initialFundingRate` until their first review. This needs a
+      `joinedAtGameTurn` on the snapshot, which M4 owns.
+    - **Currency rule carried over:** prestige, not cash, is the only input to
+      a review. Missions and goals grant prestige only; they never grant
+      funds directly (`baspm.md` §11.1). Prestige is clamped at zero, since a
+      cumulative total that can go negative would make the review bracket
+      meaningless. Unconfirmed default, flagged.
+  - **(e) Consequence for the composition order (`CLAUDE.md`, M2 status):**
+    the budget and goal passes change the season order documented in §2.5(f)
+    once they land. The pure-function resolvers each stay headless and
+    independently testable; only the caller's order changes.
 - 2.2 **Personnel (astronauts, flight controllers, SET/scientists) — hiring,
   training, skills, morale/fatigue — analyzed 2026-09-27, see `baspm.md` §9
   for the full trace.**
@@ -1622,6 +1715,117 @@ proceeds:
     earned (open/partial gold = the window is still active; closed gold =
     hit it) - a binary achieved/not-achieved badge already works with
     this same frame, no quality-tier visual axis needed for v1.
+  - **(d) Proposal for the prestige/goals slice (2026-10-03; unconfirmed
+    defaults, one starred user decision in the last bullet).** Two sources of
+    prestige and one sink, all deterministic, and no funds coupling - a mission
+    or goal never adds cash directly (§2.1(d)).
+    - **Mission prestige.** Each `MissionConfiguration` declares a
+      `firstTimePrestige` total. The repeat tier is read from the player's
+      count of **successful** completions of that configuration (not launches,
+      `baspm.md` §11.7 `GetMissionRunCount`), and the total is
+      `firstTime` / `secondTime` / `laterTime` by tier. Launch Window's own
+      ratios: second-time 60%, later-time 40% - the same *shape* as BASPM's
+      50%/30% per §1.2 and §4's balance note, not its numbers.
+      **The tier is read live, at each season's own resolution, not stamped
+      at launch** (decided 2026-10-03 after advisor review, implemented the
+      same day). BASPM's own step handlers call `GetMissionRunCount` during
+      resolution (`baspm.md` §11.7), and missions resolve one at a time in
+      launch order, so a second copy of a configuration that completes
+      earlier in the same pass already counts. The first draft stamped the tier
+      at launch; with five copies launched together, that paid all five at the
+      first-time total (5,000 instead of 1,000 + 600 + 400×3 = 2,800). No
+      `flightTier` field is stored on `InProgressMission` and nothing about it
+      travels over the wire.
+    - **Two more prestige rules, from the same trace (`baspm.md` §11.7),
+      both implemented and harness-checked in sub-slice 1:** a `MINOR_GLITCH`
+      step pays half, and goal prestige (sub-slice 2) is folded into that same
+      season total. A failing season forfeits the earlier prestige its own
+      steps earned - the failing step replaces the season total instead of
+      adding to it.
+    - **Per-step share.** Each `MissionStep` declares `prestigeSharePercent`.
+      The shares across every step of a configuration must sum to exactly 100
+      (validated in `ContentCatalog`, like the crew-involvement rule in §2.5(e)),
+      so the configuration's total is always paid out whole. Paid per step on
+      `SUCCESS`/`MINOR_GLITCH_SOLVED` at full share, `MINOR_GLITCH` at half.
+      Unexecuted steps' shares are simply not paid.
+    - **Prestige accumulates per season, not per mission** (`baspm.md` §11.7:
+      each season is its own screen, paid at that season's end). Within one
+      season, a `FAILURE`/`CATASTROPHIC` step **replaces** the season's
+      accumulated total with its own failure deduction, rather than adding to
+      it. So a failed season forfeits the prestige its earlier steps earned,
+      including goal prestige from those steps. The goals themselves stay
+      achieved, since they're awarded immediately, not deferred. Earlier,
+      completed seasons of the same mission keep their prestige. This is the
+      one mechanic here that's easy to get wrong, so it's pinned to a harness
+      invariant in sub-slice 1.
+    - **Failure deduction is per step, not per configuration.** Each
+      `MissionStep` declares `failurePrestigeDeduction`, applied as the
+      replacement total above. A configuration-level deduction exists in BASPM
+      (`baspm.md` §11.7) but is used there only for mid-flight cancellation,
+      which Launch Window doesn't have yet (no scrub). Clamped so cumulative
+      prestige never goes below zero (§2.1(d)).
+    - **Goals are granted by mission steps,** exactly as BASPM does (`baspm.md`
+      §11.7): each `MissionStep` lists `goalIdsAchieved`. There is no separate
+      state-predicate goal system in v1 (see the win-condition note in §2.9).
+      Achieving a goal cancels every goal in its `cancelsGoalIds` list
+      (recursively, as §11.3 traces). **Corrected 2026-10-03 (`baspm.md`
+      §11.7):** a cancelled goal is not free. It pays its own first/second-time
+      prestige into the achieving goal's reward, and it counts toward the game-wide
+      tally, so every later achiever's value moves. The cascade is recursive.
+    - **Goal prestige: the count is per game instance, and in human play that
+      means per player - corrected 2026-10-03.** Each `Goal` carries
+      `firstTimePrestige` and `secondTimePrestige`, and the value is chosen by
+      how many times that goal has already been achieved in the local game
+      instance (`baspm.md` §11.7). In human multiplayer, the opponent's goals
+      are read only for the comparison screen and never enter that count, so
+      BASPM's behavior is each player's own count. Only CampaignRTTM's
+      simulated rival adds to it. **An earlier draft of this section said
+      BASPM runs a cross-player first-come race; that was wrong.** The
+      cross-player race is a Launch Window addition, if kept at all (see the
+      same-turn bullet below and the open question in the slice's status).
+      The per-player count needs no game-level record. A cross-player race would
+      need one, persisted alongside `game-meta.json` (an M4 requirement).
+    - **Cross-player goal race - decided (user, 2026-10-03), as a Launch
+      Window design, not a BASPM port.** The user was told BASPM doesn't run
+      this race (see the bullet above) and chose to keep it anyway. So the goal
+      count is game-wide, across all players of a game. Consequences: a
+      game-level record of goal achievements is needed, persisted alongside
+      `game-meta.json` (an M4 requirement), and the harness has to run
+      multi-player games to exercise second-time prestige at all.
+    - **Same-turn achievers - decided (user, 2026-10-03), with the cross-player
+      race above.** Every goal achieved in one resolution pays the first-time
+      value to all its achievers, and the game-wide count is incremented only
+      after that resolution finishes. This avoids any order-dependence between
+      players. A deterministic order by player id was the alternative; it was
+      rejected.
+    - **Generic flag and program gate - corrected 2026-10-03 (`baspm.md`
+      §11.3).** The earlier "generic goals only gate a program" rule was a
+      mis-trace: BASPM's gate is an AND list of required goals (`StrictGoalsIDs`)
+      plus a category gate and conjunctive lists, checked against all achieved or
+      cancelled goals. So: **no `Goal.generic` flag and no generic-only validation
+      in v1.** `Program` gets `requiredGoalIds` (an AND list, default empty),
+      unconfirmed shape. The opposing-faction comparison screen's generic-only
+      filter belongs to M5, where that screen gets built, and the flag can be
+      added then if the filter needs one.
+    - **Goal-dependency reliability modifier - corrected 2026-10-03 (`baspm.md`
+      §11.7): read live on every step, not stamped at launch.** A
+      `MissionConfiguration` declares `goalDependencies` (goal id, component id,
+      penalty) and `goalBoosts` (goal id, component id, bonus). For each step, and
+      for each component that step involves, the modifier is recomputed from the
+      snapshot's current achieved-or-cancelled state, inside
+      `componentContributionSum` (replacing its `effectiveReliability(current, 0)`
+      placeholder), then clamped as `max(0, current + modifier)`. **So no
+      `InProgressMission` field and no wire traffic.** A goal achieved earlier in
+      the same flight changes the next step's odds immediately, which matches
+      BASPM. The UI should surface the modifier (§2.6(c)).
+    - **Bookkeeping:** `PlayerSnapshot` gains `successfulFlightCounts`
+      (configuration id → count), `achievedGoals` (goal id → game turn of
+      achievement, not per-player season), and `cancelledGoalIds`.
+      `OwnedMissionComponent` gains no field in this slice. Every new field
+      travels in `FetchStateResponse` and needs `MessageRegistryTest` and the
+      Jackson snapshot round-trip extended; any new class is appended to
+      `MessageRegistry`, never reordered, and avoids `EnumMap`
+      (`design.md` §3.4's own Kryo gotcha).
 - 2.7 **Random events — analyzed 2026-09-27, see `baspm.md` §12.1/§12.2 for
   the full trace.**
   - **(a) How BASPM does it:** two independent per-season dice rolls (5%
@@ -1753,6 +1957,29 @@ proceeds:
     unresolved tie after the medal-table comparison is vanishingly unlikely
     given how many independent rankings precede it, and isn't worth
     designing a replacement criterion for right now.
+  - **Win-condition check (2026-10-03; the list-shape decision is user-decided,
+    the rest are unconfirmed defaults).**
+    - **The win list is a list of goal ids - decided (user, 2026-10-03).**
+      Not a list of state predicates. BASPM's goals are granted by mission
+      steps (`baspm.md` §11.7), so the seven-predicate objective shape (§2.8(c))
+      belongs to campaign objectives only and is not used here. The §2.8(c)
+      reuse is withdrawn for v1.
+    - **"Done" for a listed goal means achieved, or cancelled by an achieved
+      goal.** Without the second clause, a list containing both a goal and a
+      goal it cancels could never be completed. This mirrors BASPM's own
+      gate semantics, which counts achieved-or-cancelled (`baspm.md` §11.3).
+    - **Achievement time is the game turn of the resolution** that achieved
+      the goal, not the player's own season count. That keeps the placement
+      table comparable across late joiners (§3.8).
+    - **Placement table ties** use standard competition ranking: players who
+      achieved the same goal in the same resolution share a placement, and the
+      next placement skips accordingly (1, 1, 3). This is an unconfirmed
+      default; the placement rule itself is the one already decided above.
+    - **Headless function, not a per-player resolver:** takes the declared list
+      and every player's `achievedGoals`/`cancelledGoalIds`, and returns either
+      no winner yet, a single winner, or the tied set plus its placement table.
+      The real call site is M4's `TurnScheduler`, which owns the game-meta file
+      that declares the list (§3.6).
 - 2.10 **Difficulty level — decided (user, 2026-09-27): none, by design.**
   BASPM has three difficulty levels (`DifficultyLevelT.{Normal, Hard,
   BuzzHard}`, `baspm.md` §2.4) as a single-player choice — the player picks
@@ -4219,7 +4446,37 @@ here.
     growth items, and mission cost are all resolved - see
     §2.5(f)/(g)/(h).
   - Slice: budget/funding review, prestige, goals, and the win-condition +
-    tie-break check — §2.1/§2.6/§2.9.
+    tie-break check — §2.1/§2.6/§2.9. **Design drafted and four user
+    decisions taken (2026-10-03):** salaries yes, debt allowed with a
+    prestige-to-funds conversion (new, no BASPM precedent), same-turn goal
+    achievers all get first-time, win list is goal ids (§2.1(d), §2.6(d),
+    §2.9). Remaining defaults are unconfirmed and flagged in those sections.
+    Build order, each sub-slice with its own advisor review and harness
+    invariants: (1) mission prestige, (2) goals and the goal-dependency
+    modifier, (3) budget (with salaries, maintenance, and the conversion
+    action), (4) the win-condition check.
+    - **Sub-slice 1, mission prestige — done (2026-10-03).** `MissionPrestige`
+      (tier ratios 60%/40%, own numbers, unconfirmed), `FlightTier`,
+      `MissionPrestigeChanged`; `MissionStep.prestigeSharePercent`/
+      `failurePrestigeDeduction` and `MissionConfiguration.firstTimePrestige`
+      (both with defaulted constructors, so existing fixtures are unchanged);
+      `PlayerSnapshot.successfulFlightCounts`; `ContentCatalog`'s share-sum
+      rule (0 or 100, and 100 whenever a configuration pays). `MissionProgress`
+      accumulates per season, applies a failing step as a replacement, floors
+      at zero, and counts a flight only on completion. **Tier is read live, not
+      stamped at launch** - a launch-time stamp would let simultaneous copies
+      of one configuration all pay first-time; see §2.6(d). Unit tests:
+      `MissionPrestigeTest`, `MissionProgressPrestigeTest` (including two copies
+      completing in one pass). Harness: the fixture configurations now pay
+      prestige, and `checkPrestigeInvariants` recomputes each season's requested
+      change from the step events and catalog, checks the zero floor, and checks
+      that completions bump the count per configuration. **Numbers (200 games,
+      80 seasons, seed 42, same run as before): 677,880 prestige paid, 38,250
+      deducted, 1,728 completed flights.** The personnel numbers are identical to
+      the pre-prestige pass (1,092 resigned, 1,013 retired, 5,344 still employed,
+      71,178 training completions) - prestige adds no random draws, so nothing
+      else shifts. Still open for this slice: goals (sub-slice 2), budget
+      (sub-slice 3), win check (sub-slice 4).
   - Slice: random events — §2.7.
   - **The Playouts-style bot-driven harness (§3.10) starts right after the
     first resolution rule exists**, in `dev-tools`, not as a final

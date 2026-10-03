@@ -52,11 +52,43 @@ import java.util.Objects;
  *                                ({@link de.mkoehler.launchwindow.rules.MissionStepOutcome#CATASTROPHIC});
  *                                requires at least one entry in
  *                                {@code crewInvolvements}
+ * @param prestigeSharePercent    this step's share of its configuration's
+ *                                prestige total, 0-100; the shares across
+ *                                every step of one configuration must sum to
+ *                                either exactly 100 or 0 - see
+ *                                {@link ContentCatalog} and
+ *                                {@code design.md} &sect;2.6(d)
+ * @param failurePrestigeDeduction the prestige this step deducts when it
+ *                                resolves {@code FAILURE} or
+ *                                {@code CATASTROPHIC}, as a non-negative
+ *                                magnitude - it replaces the season's
+ *                                accumulated prestige rather than adding to
+ *                                it, {@code design.md} &sect;2.6(d)
  * @author Mario Koehler
  */
 public record MissionStep(String id, List<ComponentInvolvement> componentInvolvements,
                            List<ControllerInvolvement> controllerInvolvements,
-                           List<CrewInvolvement> crewInvolvements, boolean crewRisk) {
+                           List<CrewInvolvement> crewInvolvements, boolean crewRisk,
+                           int prestigeSharePercent, long failurePrestigeDeduction) {
+
+    /**
+     * A step with no prestige share and no failure deduction - the shape
+     * every step had before prestige was modeled, kept so existing content
+     * and tests don't all need touching.
+     *
+     * @param id                     see {@link MissionStep}
+     * @param componentInvolvements  see {@link MissionStep}
+     * @param controllerInvolvements see {@link MissionStep}
+     * @param crewInvolvements       see {@link MissionStep}
+     * @param crewRisk               see {@link MissionStep}
+     * @throws NullPointerException     see the canonical constructor
+     * @throws IllegalArgumentException see the canonical constructor
+     */
+    public MissionStep(String id, List<ComponentInvolvement> componentInvolvements,
+                       List<ControllerInvolvement> controllerInvolvements,
+                       List<CrewInvolvement> crewInvolvements, boolean crewRisk) {
+        this(id, componentInvolvements, controllerInvolvements, crewInvolvements, crewRisk, 0, 0);
+    }
 
     /**
      * Validates every field, defensively copies all three involvement
@@ -111,6 +143,13 @@ public record MissionStep(String id, List<ComponentInvolvement> componentInvolve
 
         if (crewRisk && crewInvolvements.isEmpty()) {
             throw new IllegalArgumentException("crewRisk requires at least one crewInvolvements entry");
+        }
+        if (prestigeSharePercent < 0 || prestigeSharePercent > 100) {
+            throw new IllegalArgumentException("prestigeSharePercent must be 0-100: " + prestigeSharePercent);
+        }
+        if (failurePrestigeDeduction < 0) {
+            throw new IllegalArgumentException(
+                "failurePrestigeDeduction must not be negative: " + failurePrestigeDeduction);
         }
     }
 

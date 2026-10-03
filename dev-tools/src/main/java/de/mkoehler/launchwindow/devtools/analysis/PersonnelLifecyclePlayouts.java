@@ -11,6 +11,7 @@ import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.AstronautSkill;
+import de.mkoehler.launchwindow.model.FlightTier;
 import de.mkoehler.launchwindow.model.InProgressMission;
 import de.mkoehler.launchwindow.model.MissionControlOfficer;
 import de.mkoehler.launchwindow.model.MissionControlSkill;
@@ -32,6 +33,8 @@ import de.mkoehler.launchwindow.rules.MissionReliabilityChanged;
 import de.mkoehler.launchwindow.rules.MissionSkillGrowthApplied;
 import de.mkoehler.launchwindow.rules.MissionStepOutcome;
 import de.mkoehler.launchwindow.rules.MissionStepResolution;
+import de.mkoehler.launchwindow.rules.MissionPrestige;
+import de.mkoehler.launchwindow.rules.MissionPrestigeChanged;
 import de.mkoehler.launchwindow.rules.MissionStepResolved;
 import de.mkoehler.launchwindow.rules.OpenProgramOutcome;
 import de.mkoehler.launchwindow.rules.PersonnelDeparture;
@@ -52,6 +55,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -291,23 +295,23 @@ public final class PersonnelLifecyclePlayouts {
             List.of(new MissionStep.ComponentInvolvement("satellite-sputnik", 100)),
             List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 60),
                 new MissionStep.ControllerInvolvement(MissionControlSkill.TRAJECTORY_AND_GNC, 40)),
-            List.of(), false);
+            List.of(), false, 100, 100);
         MissionConfiguration sputnikLaunchConfiguration = new MissionConfiguration("sputnik-launch-std",
-            "sputnik-program", List.of(new MissionSeason(List.of(sputnikLaunchStep))), 0, 1, 50);
+            "sputnik-program", List.of(new MissionSeason(List.of(sputnikLaunchStep))), 0, 1, 50, 300);
 
         MissionStep explorerLaunchStep = new MissionStep("launch",
             List.of(new MissionStep.ComponentInvolvement("satellite-explorer", 100)),
             List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 50),
                 new MissionStep.ControllerInvolvement(MissionControlSkill.MISSION_OPERATIONS, 50)),
-            List.of(), false);
+            List.of(), false, 40, 80);
         MissionStep explorerOrbitOpsStep = new MissionStep("orbit-ops",
             List.of(new MissionStep.ComponentInvolvement("satellite-explorer", 100)),
             List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.MISSION_OPERATIONS, 100)),
-            List.of(), false);
+            List.of(), false, 60, 60);
         MissionConfiguration explorerMissionConfiguration = new MissionConfiguration("explorer-mission-std",
             "explorer-program",
             List.of(new MissionSeason(List.of(explorerLaunchStep)), new MissionSeason(List.of(explorerOrbitOpsStep))),
-            0, 1, 75);
+            0, 1, 75, 500);
 
         MissionStep mercuryLaunchStep = new MissionStep("launch",
             List.of(new MissionStep.ComponentInvolvement("rocket-redstone", 60),
@@ -315,15 +319,15 @@ public final class PersonnelLifecyclePlayouts {
             List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 50),
                 new MissionStep.ControllerInvolvement(MissionControlSkill.TRAJECTORY_AND_GNC, 50)),
             List.of(new MissionStep.CrewInvolvement(AstronautSkill.PILOTING, 70),
-                new MissionStep.CrewInvolvement(AstronautSkill.FITNESS, 30)), true);
+                new MissionStep.CrewInvolvement(AstronautSkill.FITNESS, 30)), true, 50, 200);
         MissionStep mercuryOrbitOpsStep = new MissionStep("orbit-ops",
             List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
             List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.SPACECRAFT_SYSTEMS, 100)),
-            List.of(new MissionStep.CrewInvolvement(AstronautSkill.SCIENCE, 100)), true);
+            List.of(new MissionStep.CrewInvolvement(AstronautSkill.SCIENCE, 100)), true, 50, 150);
         MissionConfiguration mercuryMissionConfiguration = new MissionConfiguration("mercury-mission-std",
             "mercury-program",
             List.of(new MissionSeason(List.of(mercuryLaunchStep)), new MissionSeason(List.of(mercuryOrbitOpsStep))),
-            2, 1, 150);
+            2, 1, 150, 1_000);
 
         return new ContentCatalog(List.of(category), List.of(sputnikProgram, explorerProgram, mercuryProgram),
             List.of(sputnikLaunchConfiguration, explorerMissionConfiguration, mercuryMissionConfiguration),
@@ -367,6 +371,9 @@ public final class PersonnelLifecyclePlayouts {
         int missionStepSuccessfulCount = 0;
         int missionStepMinorGlitchSolvedCount = 0;
         int missionStepMinorGlitchCount = 0;
+        long prestigePaidTotal = 0;
+        long prestigeDeductedTotal = 0;
+        int completedFlightCount = 0;
         int missionStepFailureCount = 0;
         int missionStepCatastrophicCount = 0;
         int lostInAccidentCount = 0;
@@ -406,8 +413,20 @@ public final class PersonnelLifecyclePlayouts {
                 checkInvariants(snapshot, lifecycleEvents, before, protectedBefore);
 
                 int beforeMissionProgress = rosterSize(snapshot);
+                long prestigeBefore = snapshot.getPrestige();
+                // Launch order, the same order MissionProgress resolves them in.
+                Map<String, String> configByMission = new LinkedHashMap<>();
+                for (InProgressMission flying : snapshot.getInProgressMissions().values()) {
+                    configByMission.put(flying.getId(), flying.getMissionConfigurationId());
+                }
+                Map<String, Integer> countsBefore = new HashMap<>(snapshot.getSuccessfulFlightCounts());
                 List<ResolutionEvent> missionEvents = MissionProgress.advanceSeason(snapshot, CATALOG, random);
                 checkMissionInvariants(snapshot, missionEvents, beforeMissionProgress);
+                long[] prestigeFlows = checkPrestigeInvariants(snapshot, missionEvents, prestigeBefore,
+                    configByMission, countsBefore);
+                prestigePaidTotal += prestigeFlows[0];
+                prestigeDeductedTotal += prestigeFlows[1];
+                completedFlightCount += (int) prestigeFlows[2];
                 checkProgramInvariants(snapshot);
 
                 List<ResolutionEvent> trainingEvents = TrainingProgress.advanceSeason(snapshot, random);
@@ -518,7 +537,8 @@ public final class PersonnelLifecyclePlayouts {
             missionStepCatastrophicCount, lostInAccidentCount, retiredOnMissionReleaseCount,
             missionReliabilityChangeCount, avgMissionReliabilityDelta, missionSkillGrowthCount,
             avgMissionSkillGrowth, missionTriggeredSetReleaseCount, expertTrainingStartedCount,
-            expertTrainingCompletedCount, pulledOutOfTrainingCount, expertRescueAppliedCount);
+            expertTrainingCompletedCount, pulledOutOfTrainingCount, expertRescueAppliedCount,
+            prestigePaidTotal, prestigeDeductedTotal, completedFlightCount);
     }
 
     /**
@@ -1015,6 +1035,166 @@ public final class PersonnelLifecyclePlayouts {
         }
 
         checkMissionAssignmentConsistency(snapshot);
+    }
+
+    /**
+     * Cross-checks one season's prestige and repeat-flight bookkeeping
+     * against an independent recomputation from this season's
+     * {@link MissionStepResolved} outcomes and the catalog's own step
+     * definitions, rather than trusting {@link MissionProgress}'s own
+     * arithmetic (see {@code design.md} &sect;2.6(d)):
+     * <ul>
+     *   <li>prestige is never negative;</li>
+     *   <li>each mission's requested change is rebuilt step by step - full
+     *       share for {@code SUCCESSFUL}/{@code MINOR_GLITCH_SOLVED}, half
+     *       for {@code MINOR_GLITCH}, and a failing step replacing the running
+     *       total with its own deduction;</li>
+     *   <li>each reported change applies the zero floor to the running prestige
+     *       total, and the applied amounts sum to the season's real delta;</li>
+     *   <li>a mission that leaves the roster without a failure bumped its
+     *       configuration's count by exactly one, and nothing else moved it.</li>
+     * </ul>
+     *
+     * @param snapshot       the snapshot after this season's {@link MissionProgress} pass
+     * @param events         this season's {@link MissionProgress} events
+     * @param prestigeBefore the player's prestige before the pass
+     * @param configByMission each in-progress mission's configuration id, in launch order, captured before the pass
+     * @param countsBefore   the successful-flight counts, captured before the pass
+     * @return {@code {paid, deducted, completedFlights}} for this season
+     * @throws IllegalStateException if any invariant is violated
+     */
+    private static long[] checkPrestigeInvariants(PlayerSnapshot snapshot, List<ResolutionEvent> events,
+            long prestigeBefore, Map<String, String> configByMission, Map<String, Integer> countsBefore) {
+        if (snapshot.getPrestige() < 0) {
+            throw new IllegalStateException("Prestige went negative: " + snapshot.getPrestige());
+        }
+
+        Map<String, List<MissionStepResolved>> stepsByMission = new LinkedHashMap<>();
+        for (ResolutionEvent event : events) {
+            if (event instanceof MissionStepResolved resolved) {
+                stepsByMission.computeIfAbsent(resolved.missionInstanceId(), id -> new ArrayList<>()).add(resolved);
+            }
+        }
+
+        // Recomputed in launch order, the same order MissionProgress resolves in, with the repeat tier read
+        // live from a running copy of the counts - a mission that completes here bumps the count before
+        // any later mission reads it (design.md §2.6(d); baspm.md §11.7).
+        Map<String, Integer> runningCounts = new HashMap<>(countsBefore);
+        Map<String, Long> expectedRequested = new HashMap<>();
+        Map<String, Boolean> failedThisSeason = new HashMap<>();
+        for (Map.Entry<String, String> mission : configByMission.entrySet()) {
+            String missionId = mission.getKey();
+            String configId = mission.getValue();
+            List<MissionStepResolved> steps = stepsByMission.getOrDefault(missionId, List.of());
+            FlightTier tier = MissionPrestige.tierFor(runningCounts.getOrDefault(configId, 0));
+            long tierTotal = MissionPrestige.tierTotal(CATALOG.missionConfiguration(configId).orElseThrow(), tier);
+            long requested = 0;
+            boolean failed = false;
+            for (MissionStepResolved resolved : steps) {
+                MissionStep step = stepOf(resolved);
+                long payout = tierTotal * step.prestigeSharePercent() / 100;
+                switch (resolved.outcome()) {
+                    case SUCCESSFUL, MINOR_GLITCH_SOLVED -> requested += payout;
+                    case MINOR_GLITCH -> requested += payout / 2;
+                    case FAILURE, CATASTROPHIC -> {
+                        requested = -step.failurePrestigeDeduction();
+                        failed = true;
+                    }
+                }
+            }
+            expectedRequested.put(missionId, requested);
+            failedThisSeason.put(missionId, failed);
+            if (!failed && !snapshot.getInProgressMissions().containsKey(missionId)) {
+                runningCounts.merge(configId, 1, Integer::sum);
+            }
+        }
+
+        long running = prestigeBefore;
+        long paid = 0;
+        long deducted = 0;
+        int expectedChanges = 0;
+        for (long requested : expectedRequested.values()) {
+            if (requested != 0) {
+                expectedChanges++;
+            }
+        }
+        int changes = 0;
+        for (ResolutionEvent event : events) {
+            if (!(event instanceof MissionPrestigeChanged change)) {
+                continue;
+            }
+            changes++;
+            Long expected = expectedRequested.get(change.missionInstanceId());
+            if (expected == null || change.requested() != expected) {
+                String configId = configByMission.get(change.missionInstanceId());
+                throw new IllegalStateException("Prestige change for " + change.missionInstanceId()
+                    + " requested " + change.requested() + ", independent recomputation says " + expected
+                    + " (config " + configId + ": count before pass " + countsBefore.getOrDefault(configId, 0)
+                    + ", count now " + snapshot.getSuccessfulFlightCounts().getOrDefault(configId, 0)
+                    + ", events this season " + events + ")");
+            }
+            long expectedApplied = Math.max(-running, change.requested());
+            if (change.applied() != expectedApplied) {
+                throw new IllegalStateException("Prestige change for " + change.missionInstanceId()
+                    + " applied " + change.applied() + ", expected " + expectedApplied + " after the zero floor");
+            }
+            running += change.applied();
+            if (change.applied() > 0) {
+                paid += change.applied();
+            } else {
+                deducted -= change.applied();
+            }
+        }
+        if (changes != expectedChanges) {
+            throw new IllegalStateException("Expected " + expectedChanges + " prestige changes this season, saw " + changes);
+        }
+        if (running != snapshot.getPrestige()) {
+            throw new IllegalStateException("Prestige events sum to " + running + " but the snapshot holds "
+                + snapshot.getPrestige());
+        }
+
+        // The count is per configuration, not per mission: two flights of one configuration can end in the
+        // same season (one completing, one failing), so the expected delta is summed per configuration.
+        Map<String, Integer> expectedDeltaByConfig = new HashMap<>();
+        int completed = 0;
+        for (String missionId : configByMission.keySet()) {
+            if (snapshot.getInProgressMissions().containsKey(missionId)) {
+                continue;
+            }
+            if (!failedThisSeason.getOrDefault(missionId, false)) {
+                expectedDeltaByConfig.merge(configByMission.get(missionId), 1, Integer::sum);
+                completed++;
+            }
+        }
+        Set<String> configIds = new HashSet<>(countsBefore.keySet());
+        configIds.addAll(snapshot.getSuccessfulFlightCounts().keySet());
+        for (String configId : configIds) {
+            int delta = snapshot.getSuccessfulFlightCounts().getOrDefault(configId, 0)
+                - countsBefore.getOrDefault(configId, 0);
+            int expected = expectedDeltaByConfig.getOrDefault(configId, 0);
+            if (delta != expected) {
+                throw new IllegalStateException("Successful-flight count for " + configId + " moved by " + delta
+                    + " this season, expected " + expected + " (completions only, failures never count)");
+            }
+        }
+        return new long[] {paid, deducted, completed};
+    }
+
+    /**
+     * Looks up the {@link MissionStep} a resolved step event refers to, from
+     * the catalog - the same definition {@link MissionProgress} resolved against.
+     *
+     * @param resolved the step event
+     * @return the step definition
+     * @throws IllegalStateException if the catalog has no such step
+     */
+    private static MissionStep stepOf(MissionStepResolved resolved) {
+        return CATALOG.missionConfiguration(resolved.missionConfigurationId())
+            .map(configuration -> configuration.seasons().get(resolved.seasonIndex()).steps().stream()
+                .filter(step -> step.id().equals(resolved.stepId()))
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("No step " + resolved.stepId())))
+            .orElseThrow(() -> new IllegalStateException("No configuration " + resolved.missionConfigurationId()));
     }
 
     /**
@@ -1823,5 +2003,8 @@ public final class PersonnelLifecyclePlayouts {
             report.expertTrainingStartedCount(), report.expertTrainingCompletedCount());
         System.out.printf("Pulled out of training: %d%n", report.pulledOutOfTrainingCount());
         System.out.printf("Expert rescues applied (nonzero boost): %d%n", report.expertRescueAppliedCount());
+        System.out.printf("Prestige paid / deducted: %d / %d%n", report.prestigePaidTotal(),
+            report.prestigeDeductedTotal());
+        System.out.printf("Completed flights (advance repeat tier): %d%n", report.completedFlightCount());
     }
 }

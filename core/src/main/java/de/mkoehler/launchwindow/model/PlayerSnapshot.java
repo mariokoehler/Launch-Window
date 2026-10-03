@@ -39,6 +39,7 @@ public class PlayerSnapshot {
     private Map<String, OwnedMissionComponent> missionComponents = new LinkedHashMap<>();
     private Map<String, InProgressMission> inProgressMissions = new LinkedHashMap<>();
     private long nextMissionInstanceId;
+    private Map<String, Integer> successfulFlightCounts = new LinkedHashMap<>();
 
     /**
      * No-argument constructor required for Jackson deserialization.
@@ -376,6 +377,31 @@ public class PlayerSnapshot {
     public void setInProgressMissions(Map<String, InProgressMission> inProgressMissions) {
         Objects.requireNonNull(inProgressMissions, "inProgressMissions must not be null");
         this.inProgressMissions = new LinkedHashMap<>(inProgressMissions);
+    }
+
+    /**
+     * Returns how many times this player has completed each mission
+     * configuration successfully, keyed by configuration id. Only a final,
+     * non-failed season counts - see {@code design.md} &sect;2.6(d). Drives
+     * the repeat tier a new launch pays at. The live map is returned, so
+     * callers can mutate it in place.
+     *
+     * @return the successful-flight counts, never {@code null}
+     */
+    public Map<String, Integer> getSuccessfulFlightCounts() {
+        return successfulFlightCounts;
+    }
+
+    /**
+     * Replaces the successful-flight counts. Public for Jackson/Kryo, and
+     * copied defensively.
+     *
+     * @param successfulFlightCounts the counts to set
+     * @throws NullPointerException if {@code successfulFlightCounts} is {@code null}
+     */
+    public void setSuccessfulFlightCounts(Map<String, Integer> successfulFlightCounts) {
+        Objects.requireNonNull(successfulFlightCounts, "successfulFlightCounts must not be null");
+        this.successfulFlightCounts = new LinkedHashMap<>(successfulFlightCounts);
     }
 
     /**

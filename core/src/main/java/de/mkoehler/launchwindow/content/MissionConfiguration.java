@@ -59,10 +59,37 @@ import java.util.function.Predicate;
  *                  {@link Program#openingCost()}/{@link Program#maintenanceCost()},
  *                  which price owning the program itself, not flying one of
  *                  its missions
+ * @param firstTimePrestige the prestige total this configuration pays when
+ *                  flown for the first time; later flights pay a fixed
+ *                  fraction of it, by {@link de.mkoehler.launchwindow.rules.MissionPrestige}'s
+ *                  own repeat-tier ratios. Each step pays its
+ *                  {@link MissionStep#prestigeSharePercent()} share of the
+ *                  tier's total. {@code 0} means the configuration pays no
+ *                  prestige at all
  * @author Mario Koehler
  */
 public record MissionConfiguration(String id, String programId, List<MissionSeason> seasons,
-                                    int requiredAstronautCount, int requiredMissionControlOfficerCount, long cost) {
+                                    int requiredAstronautCount, int requiredMissionControlOfficerCount, long cost,
+                                    long firstTimePrestige) {
+
+    /**
+     * A configuration that pays no prestige at all - the shape every
+     * configuration had before prestige was modeled, kept so existing
+     * content and tests don't all need touching.
+     *
+     * @param id                                 see {@link MissionConfiguration}
+     * @param programId                          see {@link MissionConfiguration}
+     * @param seasons                            see {@link MissionConfiguration}
+     * @param requiredAstronautCount             see {@link MissionConfiguration}
+     * @param requiredMissionControlOfficerCount see {@link MissionConfiguration}
+     * @param cost                               see {@link MissionConfiguration}
+     * @throws NullPointerException     see the canonical constructor
+     * @throws IllegalArgumentException see the canonical constructor
+     */
+    public MissionConfiguration(String id, String programId, List<MissionSeason> seasons,
+                                int requiredAstronautCount, int requiredMissionControlOfficerCount, long cost) {
+        this(id, programId, seasons, requiredAstronautCount, requiredMissionControlOfficerCount, cost, 0);
+    }
 
     /**
      * Validates every field (including that both required-count fields
@@ -102,6 +129,9 @@ public record MissionConfiguration(String id, String programId, List<MissionSeas
         }
         if (cost < 0) {
             throw new IllegalArgumentException("cost must not be negative: " + cost);
+        }
+        if (firstTimePrestige < 0) {
+            throw new IllegalArgumentException("firstTimePrestige must not be negative: " + firstTimePrestige);
         }
         seasons = List.copyOf(seasons);
 

@@ -68,6 +68,42 @@ from scratch.
 
 ## Current status
 
+**Next up (as of 2026-10-03):** M2's budget/funding, prestige, goals, and
+win-condition/tie-break slice (`design.md` §2.1/§2.6/§2.9, §5), in four
+sub-slices. **Sub-slice 1 (mission prestige) is done** (uncommitted); the
+next one is **sub-slice 2, goals** (`design.md` §2.6(d)): `Goal` content,
+goal-granted prestige folded into each season's total, the cancellation
+cascade (cancelled goals pay and count too), a program gate that's an AND
+list of required goals (not generic-only, a mis-trace since corrected), the
+goal-dependency reliability modifier read live on every step, and the
+game-wide cross-player goal count. Sub-slice 2
+needs a multi-player harness game, since the cross-player race can't be
+exercised by a single-player run. The decided design (four user decisions
+taken 2026-10-03, see `design.md` §2.1(d)/§2.6(d)/§2.9) is:
+salaries yes; debt allowed, with a prestige-to-funds conversion while in debt
+(cap: funds may come up to two seasons of running costs); same-turn goal
+achievers all get first-time prestige; the win list is goal ids. The
+cross-player goal race is a Launch Window design, not a BASPM port - BASPM's
+human multiplayer counts each player's own goals, so this needed the user's
+explicit re-decision after the correction (`baspm.md` §11.7). BASPM's own
+answer to going into the red is a defeat, not debt (`baspm.md` §11.8).
+Everything below is history; if this paragraph and a later one disagree, the
+later one wins.
+
+**Mission prestige, sub-slice 1, done (2026-10-03):** `MissionPrestige`,
+`FlightTier`, `MissionPrestigeChanged`, plus defaulted constructors on
+`MissionStep`/`MissionConfiguration` so existing content is unchanged.
+`MissionProgress` accumulates per season, a failing step replaces the season
+total (forfeiting that season's earlier prestige, `baspm.md` §11.7), prestige
+floors at zero, and a flight counts only when it completes. **Pitfall worth
+remembering:** the tier is read live per mission, not stamped at launch -
+an advisor review caught that a launch-time stamp let simultaneous copies of
+one configuration all pay first-time. Also a pitfall, from this same session:
+`mvn clean package` does not install `core` into `~/.m2`, so a standalone
+`exec:java` in `dev-tools` ran a stale `core` jar and reported a false
+mismatch. Reinstall `core` first (`mvn -pl core install -DskipTests`), as
+below says. Harness numbers are in `design.md` §5/§3.10.
+
 **Analysis phase is done; basic project scaffolding exists (2026-09-27);
 milestone/slice roadmap drafted, first domain-model groundwork implemented
 (2026-09-28).** The initial `CLAUDE.md`/`design.md`/`baspm.md` docs plus a
@@ -142,13 +178,14 @@ BASPM's, 13 tests); `TrainingProgress.advanceSeason` (fixed-length
 + training fields on `Personnel`/each subclass, `TrainingKind` appended to
 `MessageRegistry`, 12 tests) — full write-up in `design.md` §2.2(c)/§3.4,
 including the composition-order contract for running `PersonnelLifecycle`
-before `TrainingProgress` once both get wired into one pass. **Still not
-started in this same M2 slice (as of 2026-09-30; R&D's own target-skill
-field is since done — see further down):** `PERMANENT` training,
-mission-based growth's caller, hiring, Expert, and actually starting a
-training assignment (no player-action path exists yet). Not yet wired into
-`PlayerStateService`/`TurnScheduler` — that integration is M4 scope, not
-M2's.
+before `TrainingProgress` once both get wired into one pass. **Since
+superseded:** `PERMANENT` training, hiring, the Expert trait, and
+mission-based growth's caller are all done (see the later paragraphs).
+**Still open in the personnel slice:** `BASIC`/`ADVANCED`/`PERMANENT`
+training have no player start action (only the Expert and pull-out
+actions exist), and submitting a hire as a player action has no dispatch
+path yet. Not wired into `PlayerStateService`/`TurnScheduler` - that is
+M4 scope, not M2's.
 
 **Bot-driven playout harness started the same day, right after the first
 resolver landed, then extended repeatedly the same day as
@@ -259,9 +296,9 @@ is measured from its own join season, not season 0, via a per-game
 `joinedAtSeason` map — caught by the advisor before this was committed.
 Full numbers and reasoning in `design.md` §3.10. This completes "finish
 personnel first" for M2's current scope — see `design.md` §5 for what's
-still open in the personnel slice (R&D's own resolver, mission-based
-growth's caller, the Expert trait) and what's next (programs/mission-
-configuration slice).
+still open in the personnel slice (the player start actions, see the
+personnel slice's own status paragraph further down) and what's next
+(programs/mission-configuration slice, since done).
 
 **Programs/mission-configuration slice done (2026-10-01):** new
 `de.mkoehler.launchwindow.content` package — `ProgramCategory`/`Program`/
@@ -571,7 +608,9 @@ criterion** (a multi-season mission spanning several turns, bot-driven)
 — still open for this slice (as of before the next paragraph): post-mission
 reliability change, mission-based skill growth, prestige/goals, the
 mission's own cost at launch, the goal-dependency reliability modifier,
-and the Expert trait.
+and the Expert trait. **Superseded by the later paragraphs:** every item
+on that list is now done except prestige/goals and the goal-dependency
+modifier.
 
 **Post-mission reliability change and mission-based skill growth done
 (2026-10-02):** both resolved once per in-progress mission *per season*,

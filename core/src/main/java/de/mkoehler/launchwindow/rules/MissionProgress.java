@@ -7,6 +7,7 @@ import de.mkoehler.launchwindow.content.MissionSeason;
 import de.mkoehler.launchwindow.content.MissionStep;
 import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.Astronaut;
+import de.mkoehler.launchwindow.model.FlightTier;
 import de.mkoehler.launchwindow.model.AstronautSkill;
 import de.mkoehler.launchwindow.model.InProgressMission;
 import de.mkoehler.launchwindow.model.MissionControlOfficer;
@@ -176,6 +177,12 @@ public final class MissionProgress {
         List<MissionStep> executedSteps = new ArrayList<>();
         List<MissionStepOutcome> executedOutcomes = new ArrayList<>();
         boolean missionEndedThisSeason = false;
+        // Read live, at this mission's own resolution, not stamped at launch: BASPM's own step handlers call
+        // GetMissionRunCount during resolution (baspm.md §11.7), so a copy of this configuration that
+        // completed earlier in the same pass already counts. Missions run in launch order.
+        FlightTier tier = MissionPrestige.tierFor(snapshot.getSuccessfulFlightCounts().getOrDefault(configuration.id(), 0));
+        long tierTotal = MissionPrestige.tierTotal(configuration, tier);
+        long seasonPrestige = 0;
         for (MissionStep step : season.steps()) {
             MissionStepOutcome outcome = resolveStep(snapshot, catalog, random, mission, step, expertUseCounts,
                 events);
@@ -183,6 +190,7 @@ public final class MissionProgress {
                 step.id(), outcome));
             executedSteps.add(step);
             executedOutcomes.add(outcome);
+            seasonPrestige = stepPrestige(seasonPrestige, outcome, step, tierTotal);
 
             if (outcome == MissionStepOutcome.FAILURE || outcome == MissionStepOutcome.CATASTROPHIC) {
                 missionEndedThisSeason = true;
@@ -192,6 +200,7 @@ public final class MissionProgress {
                 break;
             }
         }
+        applySeasonPrestige(snapshot, mission, configuration, seasonPrestige, events);
 
         // Both apply once per season a mission actually flies, regardless of outcome - see this
         // class's own Javadoc - and must run before releaseSurvivors below, so a crew member's
@@ -211,10 +220,62 @@ public final class MissionProgress {
         int nextSeasonIndex = mission.getCurrentSeasonIndex() + 1;
         if (nextSeasonIndex >= configuration.durationInSeasons()) {
             releaseSurvivors(snapshot, mission, events);
+            // Only a completed, non-failed flight counts toward the repeat tier - design.md §2.6(d).
+            // A failing season returned above, so reaching this branch means no step failed.
+            snapshot.getSuccessfulFlightCounts().merge(configuration.id(), 1, Integer::sum);
             endedMissionIds.add(mission.getId());
         } else {
             mission.setCurrentSeasonIndex(nextSeasonIndex);
         }
+    }
+
+    /**
+     * Folds one step's outcome into the season's running prestige total.
+     * Successful steps add their full payout, a {@code MINOR_GLITCH} adds
+     * half of its payout (rounded down), and a failing step <b>replaces</b>
+     * the running total with its own negative deduction rather than adding
+     * to it - so a failed season forfeits whatever its earlier steps earned
+     * (see {@code design.md} &sect;2.6(d) and {@code baspm.md} &sect;11.7,
+     * which trace the same replacement in BASPM's own season-end code).
+     *
+     * @param seasonSoFar the season's running total before this step
+     * @param outcome     this step's resolved outcome
+     * @param step        the step, for its share and failure deduction
+     * @param tierTotal   the configuration's total at the flight's tier
+     * @return the running total after this step
+     */
+    private static long stepPrestige(long seasonSoFar, MissionStepOutcome outcome, MissionStep step, long tierTotal) {
+        long payout = MissionPrestige.stepPayout(tierTotal, step.prestigeSharePercent());
+        return switch (outcome) {
+            case SUCCESSFUL, MINOR_GLITCH_SOLVED -> seasonSoFar + payout;
+            case MINOR_GLITCH -> seasonSoFar + payout / 2;
+            case FAILURE, CATASTROPHIC -> -step.failurePrestigeDeduction();
+        };
+    }
+
+    /**
+     * Applies one season's net prestige change to the player, clamped so
+     * cumulative prestige never goes below zero, and reports it. The
+     * clamp is the only place a season's requested change can be cut short.
+     *
+     * @param snapshot      the player snapshot whose prestige changes
+     * @param mission       the mission this season belongs to
+     * @param configuration the configuration being flown
+     * @param requested     the season's net before the zero floor
+     * @param events        the list to append the {@link MissionPrestigeChanged} event to
+     */
+    private static void applySeasonPrestige(PlayerSnapshot snapshot, InProgressMission mission,
+            MissionConfiguration configuration, long requested, List<ResolutionEvent> events) {
+        // A season that pays nothing is a no-op and reports nothing, so prestige-free configurations
+        // don't add noise to the event stream.
+        if (requested == 0) {
+            return;
+        }
+        long before = snapshot.getPrestige();
+        long after = Math.max(0, before + requested);
+        snapshot.setPrestige(after);
+        events.add(new MissionPrestigeChanged(mission.getId(), configuration.id(), mission.getCurrentSeasonIndex(),
+            requested, after - before));
     }
 
     /**
