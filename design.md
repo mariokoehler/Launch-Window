@@ -5008,7 +5008,8 @@ here.
       preview and journals only what takes effect.
   - **Slice 4c, server wiring — done (2026-10-03).**
     - **Game meta and pack:** `game-meta.json` gained `contentPack` (pinned at
-      startup; changing it mid-game would break replays), `declaredGoalIds`
+      startup; changing it mid-game would break replays - more precisely, the open
+      turn and in-flight state, see M5 "Content packs"), `declaredGoalIds`
       (default: earth-orbit satellite, human in space, human in orbit),
       `gameSeed` (random for a new game), and `devMode`.
     - **Slot claim:** the handshake no longer bootstraps a placeholder player;
@@ -5102,6 +5103,38 @@ here.
     - **Control slots are released per season, as in BASPM** (user, 2026-10-03): after each season,
       whoever holds a control slot no remaining season uses goes idle (or retires at age). The crew
       stays aboard to the end.
+  - **Content packs: freezing, growth, and fixes (decided 2026-10-03, not built yet).**
+    - **Frozen per game.** At game creation the server copies the pack named by
+      `contentPack` into the game's data folder and only loads it from there. A
+      content hash of that copy identifies the version; G1 (`ui-spec.md` §6) sends
+      id and hash, and a client whose copy differs downloads the game's pack. Do
+      this before long-running games exist; retrofitting it is awkward.
+    - **Why freeze:** not history - each turn's resolved snapshot is saved, and only
+      the open turn's actions are replayed onto it. Freezing keeps the open turn
+      consistent (actions are validated at submit and applied at resolution, and a
+      crash-and-retry must resolve identically), keeps in-flight state valid (it
+      references configuration ids and season indices), and gives every player the
+      same numbers.
+    - **Growth:** one main pack grows slice by slice in `assets/content/` and is
+      renamed to something neutral (`standard`) once it covers more than the early
+      era. Separate packs remain an option for shorter scenarios (an early-era-only
+      race), since a scenario is just a pack plus the declared goal list in
+      `game-meta.json`.
+    - **Fixes in a running game:**
+      - *Code fixes* (rules, server) need nothing special: they ship with a server
+        update and apply from the next resolution, because past turns are stored,
+        not recomputed. Deploy between resolutions, never mid-resolution. A
+        protocol change still needs clients updated, as today.
+      - *Content fixes* are a deliberate host operation between resolutions: replace
+        the game's frozen pack with the fixed one. It's refused unless it's
+        compatible with the running state: every id any snapshot references still
+        exists, every in-flight mission's configuration keeps its season count and
+        its slots, and every journaled action of the open turn still validates.
+        Clients pick the new pack up through the hash. Numbers (costs, reliability,
+        prestige) can change freely this way; removing or restructuring content
+        can't while it's in use.
+      - Freezing doesn't block fixes; it makes a content change an explicit,
+        checked step instead of a side effect of a server update.
   - **Slot staffing — done (2026-10-03).** The two decisions above, implemented.
     - **Content:** `StaffingSlot` (title, kind `MISSION_CONTROL` or `ASTRONAUT`, and a
       skill name, `FLIGHT_DIRECTOR` for a Flight Director slot). `MissionConfiguration`

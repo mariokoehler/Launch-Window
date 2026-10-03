@@ -538,10 +538,17 @@ for the mockups.
 Found while writing this spec. The client can't build these screens from the
 current state alone. Each is an M5 task.
 
-- **G1. Game info.** The content pack id (so the client loads the same pack), the
-  declared goals, the current game turn and the game date (start year and
-  season), the next resolution time, and the game result if any. Needs a new
-  `GameInfoRequest`/`GameInfoResponse`; the handshake can't change.
+- **G1. Game info.** The content pack id and its content hash (so the client loads
+  exactly the game's pack), the declared goals, the current game turn and the game
+  date (start year and season), the next resolution time, and the game result if
+  any. Needs a new `GameInfoRequest`/`GameInfoResponse`; the handshake can't change.
+  - **Content is frozen per game** (`design.md` §5 M5, "Content packs"): the server
+    copies the pack into the game's data folder at creation and only loads it from
+    there. The hash covers that frozen copy.
+  - **On a hash mismatch** the client downloads the game's pack from the server
+    (a new `FetchContentPackRequest`/`Response`, a few hundred KB of JSON) and
+    uses it for this game, instead of refusing to play. A client may hold several
+    packs at once, one per game version.
 - **G2. Turn report and replay data.** Resolution events (`MissionStepResolved`,
   `GoalSettled`, `ResearchCompleted`, `TrainingCompleted`, `PersonnelDeparture`,
   `SeasonFundsSettled`, `BudgetReviewed`, and so on) are computed and then thrown
