@@ -75,7 +75,10 @@ append-only. The server pins the content pack from `game-meta.json`, players
 claim a slot (archetype, unique agency name and callsign), turns resolve
 through `SeasonResolver` with seeded randomness, and the first winner goes to
 `game-result.json`. The exit proof ran over real sockets with a scheduled
-resolution. Next is M5, the libGDX client. **Gotcha for proof runs:** pipe
+resolution. Next is M5, the libGDX client. **Workflow (user, 2026-10-03):**
+Claude writes the screen spec (`ui-spec.md`, read by Claude Design from GitHub), the user makes
+the mockups in Claude Design, and Claude implements them. Keep `ui-spec.md` current as screens
+change, and close its server gaps G1–G7. **Gotcha for proof runs:** pipe
 DevClient input from the Bash tool, not PowerShell. PowerShell's pipe to a
 native process prepends a byte-order mark, which breaks the login line.
 

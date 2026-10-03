@@ -5051,7 +5051,9 @@ here.
     only matches while the pack carries no building table of its own. Launches go
     through `MissionLaunch.launch(snapshot, LaunchRequest, catalog)`; the old
     overload can't choose rockets or CAPCOM.
-- **M5 — Playable client (libGDX UI).** First real playtest happens at the
+- **M5 — Playable client (libGDX UI).** **Screen spec: `ui-spec.md`** (2026-10-03). The user
+  mocks up each screen in Claude Design against the launchwindow design system, and Claude implements
+  them. The spec also lists the server gaps G1–G7 that M5 has to close. First real playtest happens at the
   end of this milestone. Expected slices, sizing not yet estimated:
   connect/login/slot-claim screens; roster/personnel management;
   program/mission selection bundled with the budget/prestige overview and
