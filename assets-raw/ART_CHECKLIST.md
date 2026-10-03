@@ -175,13 +175,13 @@ Notes:
 
 ### `27` One-crew ballistic capsules
 
-- [ ] **Project Mercury** (NASA, `27-00`) **(M3 pack)**
-  - [ ] Uncrewed suborbital flight test
-  - [ ] Suborbital flight
-  - [ ] Uncrewed orbital flight test
-  - [ ] Orbital flight
-  - [ ] Orbital flight (Duration Level I)
-  - [ ] Joint launch and orbital flight (Duration Level I)
+- [X] **Project Mercury** (NASA, `27-00`) **(M3 pack)**
+  - [X] Uncrewed suborbital flight test
+  - [X] Suborbital flight
+  - [X] Uncrewed orbital flight test
+  - [X] Orbital flight
+  - [X] Orbital flight (Duration Level I)
+  - [X] Joint launch and orbital flight (Duration Level I)
 
 - [X] **Vostok** (SOVIET, `27-01`) **(M3 pack)**
   - [x] Uncrewed suborbital flight test — `vostok_uncrewed_suborbital`
