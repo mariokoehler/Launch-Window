@@ -4546,8 +4546,23 @@ here.
       game). The bot never went into debt at these values, so 0 debt conversions
       happened in the harness - the conversion is covered by `BudgetProgressTest`
       only. Each season's expenses and funds are checked independently.** Still open:
-      the win check (sub-slice 4), and the conversion and budget actions' dispatch
-      (M4).
+      the conversion and budget actions' dispatch (M4).
+    - **Sub-slice 4, win-condition check — done (2026-10-03).** `WinCondition.evaluate`
+      (headless, cross-player) takes the declared goal list, every player's state,
+      and the catalog. A goal is done when achieved, or cancelled by an achieved goal;
+      a cancelled goal's time is the turn of the earliest achieved goal whose cascade
+      cancels it. A player's completion turn is the latest of their listed goal times.
+      The earliest completion turn wins outright; a same-turn group is settled by the
+      medal table (per listed goal, competition-ranked placings, then most first, then
+      second places, and so on), with an exact tie reported as `TIED`. Six unit tests
+      in `WinConditionTest`, covering no winner yet, an outright earlier finish, a
+      medal-table win, an exact tie, and the cancellation timing. **Not built here:**
+      the declared list itself (it lives in `game-meta.json`, M4), and any multi-player
+      playout. The harness runs one player per game, so the win check is covered by
+      its unit tests, not by a long simulation. **M2 status after this:** the four
+      budget/prestige/goals/win sub-slices are done. Still open in M2: random events
+      (§2.7), and the player-action dispatch for conversions, budget actions, and
+      hires (M4).
   - Slice: random events — §2.7.
   - **The Playouts-style bot-driven harness (§3.10) starts right after the
     first resolution rule exists**, in `dev-tools`, not as a final

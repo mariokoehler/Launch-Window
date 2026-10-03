@@ -68,14 +68,15 @@ from scratch.
 
 ## Current status
 
-**Next up (as of 2026-10-03):** M2's budget/funding, prestige, goals, and
-win-condition/tie-break slice (`design.md` §2.1/§2.6/§2.9, §5), in four
-sub-slices. **Sub-slices 1 (mission prestige), 2 (goals), and 3 (budget) are
-done.** The next one is **sub-slice 4, the win-condition check** (`design.md`
-§2.9): a headless cross-player function taking the declared goal list, each
-player's achieved goals (with the game turn they settled on) and cancelled goals,
-and the Olympic-style medal-table tie-break for same-turn finishers. The real
-call site is M4's `TurnScheduler`, which owns the goal list in `game-meta.json`.
+**Next up (as of 2026-10-03):** M2 is down to two open slices: **random events**
+(`design.md` §2.7, not started, and it needs a small design decision on how
+events reach a player, since there's no news/bulletin system yet), and the
+player-action dispatch that M4 owns (conversions, budget actions, hires). The
+four budget/prestige/goals/win sub-slices are all done (`design.md` §2.1(d),
+§2.6(d), §2.9, §5). The win check is headless: `WinCondition.evaluate` takes the
+declared goal list, which M4 will read from `game-meta.json`. The harness runs
+one player per game, so the cross-player goal race and the win check are covered
+by unit tests, not by a long multi-player playout.
 
 Budget defaults are close to BASPM's own values, per the user's 2026-10-03
 instruction: starting funds 25,000 / prestige 250 / 3,000 per season, BASPM's
