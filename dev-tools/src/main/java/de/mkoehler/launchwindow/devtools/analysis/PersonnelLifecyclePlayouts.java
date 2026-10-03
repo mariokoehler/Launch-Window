@@ -1,6 +1,7 @@
 package de.mkoehler.launchwindow.devtools.analysis;
 
 import de.mkoehler.launchwindow.content.BudgetSchedule;
+import de.mkoehler.launchwindow.content.BuildingSchedule;
 import de.mkoehler.launchwindow.content.ContentCatalog;
 import de.mkoehler.launchwindow.content.Goal;
 import de.mkoehler.launchwindow.content.MissionComponent;
@@ -14,6 +15,7 @@ import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.AstronautSkill;
+import de.mkoehler.launchwindow.model.Building;
 import de.mkoehler.launchwindow.model.FlightTier;
 import de.mkoehler.launchwindow.model.RandomEventKind;
 import de.mkoehler.launchwindow.model.InProgressMission;
@@ -39,6 +41,9 @@ import de.mkoehler.launchwindow.rules.MissionStepOutcome;
 import de.mkoehler.launchwindow.rules.MissionStepResolution;
 import de.mkoehler.launchwindow.rules.BudgetProgress;
 import de.mkoehler.launchwindow.rules.BudgetReviewed;
+import de.mkoehler.launchwindow.rules.BuildingUpgradeOutcome;
+import de.mkoehler.launchwindow.rules.BuildingUpgraded;
+import de.mkoehler.launchwindow.rules.BuildingUpgrades;
 import de.mkoehler.launchwindow.rules.GoalSettled;
 import de.mkoehler.launchwindow.rules.PrestigeConversion;
 import de.mkoehler.launchwindow.rules.RandomEventOccurred;
@@ -165,6 +170,9 @@ public final class PersonnelLifecyclePlayouts {
     private static final double MAX_START_SKILL = 90.0;
     private static final double REASSIGNMENT_CHANCE_PER_SEASON = 0.3;
     private static final double HIRE_CHANCE_PER_SEASON = 0.25;
+
+    /** The bot's per-season chance of starting one building upgrade (journaled-action bucket). */
+    private static final double BUILDING_UPGRADE_CHANCE = 0.05;
     private static final double OPEN_PROGRAM_CHANCE_PER_SEASON = 0.1;
     private static final double LAUNCH_MISSION_CHANCE_PER_SEASON = 0.15;
     /**
@@ -436,6 +444,8 @@ public final class PersonnelLifecyclePlayouts {
         int pulledOutOfTrainingCount = 0;
         int expertRescueAppliedCount = 0;
         int[] bandHits = new int[4];
+        int buildingUpgradesStartedCount = 0;
+        int buildingUpgradesCompletedCount = 0;
 
         for (int game = 0; game < games; game++) {
             PlayerSnapshot snapshot = newRandomSnapshot(employeesPerGroupPerGame, random);
@@ -453,6 +463,7 @@ public final class PersonnelLifecyclePlayouts {
                 hiredCount += hireFromPools(snapshot, random, season, joinedAtSeason);
                 programsOpenedCount += maybeOpenProgram(snapshot, random);
                 missionsLaunchedCount += maybeLaunchMission(snapshot, random);
+                buildingUpgradesStartedCount += maybeUpgradeBuilding(snapshot, random);
                 checkProgramInvariants(snapshot);
                 // A player in debt may convert prestige into funds, before any resolver runs (journaled bucket).
                 debtConversionCount += maybeConvertPrestige(snapshot, random);
@@ -481,6 +492,14 @@ public final class PersonnelLifecyclePlayouts {
                 completedFlightCount += (int) prestigeFlows[2];
                 // The tally moves only after the whole resolution has been checked (design.md §2.6(d)).
                 goalTally.commit(missionEvents);
+                // Building upgrades finish before the budget pass, so a new level's upkeep is charged the season it lands.
+                Map<Building, Integer> levelsBefore = new EnumMap<>(Building.class);
+                for (Building building : Building.values()) {
+                    levelsBefore.put(building, snapshot.buildingLevel(building));
+                }
+                List<ResolutionEvent> upgradeEvents = BuildingUpgrades.advanceSeason(snapshot, CATALOG.buildings());
+                checkBuildingInvariants(snapshot, upgradeEvents, levelsBefore);
+                buildingUpgradesCompletedCount += upgradeEvents.size();
                 // The budget season pass, after mission progress so this season's prestige can feed a review.
                 long expectedExpenses = independentRunningCosts(snapshot);
                 long fundsBefore = snapshot.getFunds();
@@ -637,7 +656,7 @@ public final class PersonnelLifecyclePlayouts {
             avgMissionSkillGrowth, missionTriggeredSetReleaseCount, expertTrainingStartedCount,
             expertTrainingCompletedCount, pulledOutOfTrainingCount, expertRescueAppliedCount,
             prestigePaidTotal, prestigeDeductedTotal, completedFlightCount, reviewCount, debtConversionCount,
-            dismissedByEventCount, randomEventCounts);
+            dismissedByEventCount, randomEventCounts, buildingUpgradesStartedCount, buildingUpgradesCompletedCount);
     }
 
     /**
@@ -678,7 +697,19 @@ public final class PersonnelLifecyclePlayouts {
             return 0;
         }
         String candidateId = pool.get(random.nextInt(pool.size())).getId();
-        HireOutcome outcome = HiringPool.hire(snapshot, group, candidateId, random);
+        int rosterBefore = rosterSize(snapshot, group);
+        HireOutcome outcome = HiringPool.hire(snapshot, group, candidateId, random, CATALOG.buildings());
+        // The roster cap, read straight off the level table: a hire may only land below it, and a full
+        // roster must be refused.
+        int cap = independentCap(switch (group) {
+            case ASTRONAUT -> Building.ASTRONAUT_CENTER;
+            case SET -> Building.SET_CENTER;
+            case MISSION_CONTROL -> Building.MISSION_CONTROL;
+        }, snapshot);
+        if ((outcome == HireOutcome.HIRED) != (rosterBefore < cap)) {
+            throw new IllegalStateException(group + " hire " + outcome + " with roster " + rosterBefore + " and cap "
+                + cap);
+        }
         if (outcome != HireOutcome.HIRED) {
             return 0;
         }
@@ -1401,7 +1432,89 @@ public final class PersonnelLifecyclePlayouts {
         for (String componentId : snapshot.getMissionComponents().keySet()) {
             total += CATALOG.missionComponent(componentId).orElseThrow().maintenanceCost();
         }
+        // Building upkeep, read straight off the level table rather than through BuildingUpgrades.
+        for (Building building : Building.values()) {
+            BuildingSchedule.Levels table = CATALOG.buildings().of(building);
+            int level = snapshot.getBuildingLevels().getOrDefault(building, 1);
+            total += table.maintenance().get(level - 1);
+        }
         return Math.round(total * snapshot.getCostMultiplier());
+    }
+
+    /**
+     * The bot's building upgrade (journaled-action bucket): with a small chance per
+     * season, starts upgrading one random building, through the validated action.
+     *
+     * @param snapshot the player
+     * @param random   the shared random source
+     * @return 1 if an upgrade started, else 0
+     */
+    private static int maybeUpgradeBuilding(PlayerSnapshot snapshot, Random random) {
+        if (random.nextDouble() >= BUILDING_UPGRADE_CHANCE) {
+            return 0;
+        }
+        Building[] buildings = Building.values();
+        Building building = buildings[random.nextInt(buildings.length)];
+        long fundsBefore = snapshot.getFunds();
+        int levelBefore = snapshot.buildingLevel(building);
+        BuildingUpgradeOutcome outcome = BuildingUpgrades.startUpgrade(snapshot, building, CATALOG.buildings());
+        if (outcome != BuildingUpgradeOutcome.STARTED) {
+            if (snapshot.getFunds() != fundsBefore) {
+                throw new IllegalStateException("A refused upgrade changed funds: " + outcome);
+            }
+            return 0;
+        }
+        long expectedCost = CATALOG.buildings().of(building).upgradeCosts().get(levelBefore - 1);
+        if (fundsBefore - snapshot.getFunds() != expectedCost) {
+            throw new IllegalStateException("Upgrade of " + building + " charged " + (fundsBefore - snapshot.getFunds())
+                + ", expected " + expectedCost);
+        }
+        return 1;
+    }
+
+    /**
+     * Checks the building state after the upgrade pass: every level is within its
+     * table, every roster within its building's cap, and opened programs within the
+     * Headquarters cap.
+     *
+     * @param snapshot the player
+     * @param upgradeEvents the upgrade pass's events
+     * @param levelsBefore the levels before the pass
+     */
+    private static void checkBuildingInvariants(PlayerSnapshot snapshot, List<ResolutionEvent> upgradeEvents,
+            Map<Building, Integer> levelsBefore) {
+        for (Building building : Building.values()) {
+            int level = snapshot.buildingLevel(building);
+            int max = CATALOG.buildings().of(building).maxLevel();
+            if (level < 1 || level > max) {
+                throw new IllegalStateException(building + " at level " + level + ", outside 1.." + max);
+            }
+            long finished = upgradeEvents.stream()
+                .filter(event -> event instanceof BuildingUpgraded upgraded && upgraded.building() == building)
+                .count();
+            if (level != levelsBefore.get(building) + finished) {
+                throw new IllegalStateException(building + " moved from " + levelsBefore.get(building) + " to "
+                    + level + " with " + finished + " upgrade(s) finished");
+            }
+        }
+        // Rosters can start above their cap (the harness seeds them freely), so roster caps are checked where
+        // hires happen. Opened programs only ever grow through ProgramOpening, so Headquarters holds outright.
+        int headquartersCap = independentCap(Building.HEADQUARTERS, snapshot);
+        if (snapshot.getOpenedProgramIds().size() > headquartersCap) {
+            throw new IllegalStateException(snapshot.getOpenedProgramIds().size()
+                + " programs open, Headquarters allows " + headquartersCap);
+        }
+    }
+
+    /**
+     * Reads a building's current cap straight off the level table.
+     *
+     * @param building the building
+     * @param snapshot the player
+     * @return the cap at the building's recorded level
+     */
+    private static int independentCap(Building building, PlayerSnapshot snapshot) {
+        return CATALOG.buildings().of(building).caps().get(snapshot.getBuildingLevels().getOrDefault(building, 1) - 1);
     }
 
     /**
@@ -2326,6 +2439,14 @@ public final class PersonnelLifecyclePlayouts {
         return MIN_START_SKILL + random.nextDouble() * (MAX_START_SKILL - MIN_START_SKILL);
     }
 
+    private static int rosterSize(PlayerSnapshot snapshot, PersonnelGroup group) {
+        return switch (group) {
+            case ASTRONAUT -> snapshot.getAstronauts().size();
+            case SET -> snapshot.getSetSpecialists().size();
+            case MISSION_CONTROL -> snapshot.getMissionControlOfficers().size();
+        };
+    }
+
     private static int rosterSize(PlayerSnapshot snapshot) {
         return snapshot.getAstronauts().size() + snapshot.getSetSpecialists().size()
             + snapshot.getMissionControlOfficers().size();
@@ -2382,5 +2503,7 @@ public final class PersonnelLifecyclePlayouts {
         System.out.printf("Funding reviews: %d; debt conversions: %d%n", report.reviewCount(), report.debtConversionCount());
         System.out.printf("Employees removed by events (dismissed or failed training): %d%n", report.dismissedByEventCount());
         report.randomEventCounts().forEach((kind, count) -> System.out.printf("  %s: %d%n", kind, count));
+        System.out.printf("Building upgrades started / completed: %d / %d%n", report.buildingUpgradesStartedCount(),
+            report.buildingUpgradesCompletedCount());
     }
 }

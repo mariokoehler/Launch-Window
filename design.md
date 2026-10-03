@@ -4743,6 +4743,30 @@ here.
     BASPM's speciality index, not by the slot's name. A category's required goals
     are copied onto every program in it. Goal dependencies and boosts that
     reference goals outside the pack are dropped.
+  - **Slice 1, content-pack loader — done (2026-10-03).** `ContentPackLoader` reads
+    `categories.json`, `programs.json`, `mission-components.json`,
+    `mission-configurations.json`, and `goals.json` from a folder or the classpath.
+    The JSON maps one-to-one onto the content records, so record validation and
+    `ContentCatalog`'s cross-reference checks both run. The mapper is strict:
+    unknown fields and missing numbers or flags fail, and only a missing list
+    defaults to empty. `server` and `lwjgl3` already bundle `assets/` on the
+    classpath; `core` and `dev-tools` don't.
+  - **Slice 2, buildings — done (2026-10-03).** `Building` (five values, Kryo-registered),
+    `BuildingSchedule.baspmClose()` (caps, upkeep, upgrade cost and seasons per
+    level, from `baspm.md` §10.9), `PlayerSnapshot.buildingLevels`/
+    `buildingUpgradeSeasonsRemaining` (a missing level reads as 1), and
+    `BuildingUpgrades` (`startUpgrade` pays up front, refusing a second upgrade of
+    the same building, the top level, or short funds; `advanceSeason` finishes
+    upgrades). `ContentCatalog` carries the table, defaulting to BASPM's.
+    `HiringPool.hire` caps each roster by its building, replacing the 8/12/8
+    constants. `ProgramOpening` refuses past the Headquarters cap
+    (`HEADQUARTERS_FULL`). Running costs include building upkeep (925 per season
+    at level 1). The VAB cap is wired in the rocket slice. Harness (200 games, 80
+    seasons, seed 42): the bot starts an upgrade at 5% per season, and upgrades
+    finish before the budget pass. Independent invariants check the charged cost,
+    the level after the pass, hires against the cap read from the table, and open
+    programs against Headquarters. Result: 754 upgrades started, 749 completed,
+    4,871 hires, 569 programs opened, 1,920 missions, still no debt conversions.
 - **M4 — Integration: wire M2/M3's real engine into M1's proven skeleton.**
   Replace M1's placeholder trivial action with real player actions (assign
   personnel, open a program, queue a mission) and real turn resolution.

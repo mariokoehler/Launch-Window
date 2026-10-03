@@ -36,5 +36,11 @@ public enum OpenProgramOutcome {
      * One or more of the program's required goals hasn't been achieved or
      * cancelled yet - see {@code design.md} &sect;2.6(d).
      */
-    GOALS_NOT_MET
+    GOALS_NOT_MET,
+
+    /**
+     * The player already has as many programs open as their Headquarters'
+     * current level allows - see {@code baspm.md} &sect;10.9.
+     */
+    HEADQUARTERS_FULL
 }

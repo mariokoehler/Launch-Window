@@ -1,6 +1,8 @@
 package de.mkoehler.launchwindow.rules;
 
+import de.mkoehler.launchwindow.content.BuildingSchedule;
 import de.mkoehler.launchwindow.model.Archetype;
+import de.mkoehler.launchwindow.model.Building;
 import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
@@ -220,7 +222,8 @@ class HiringPoolTest {
     @Test
     void hireIntoAFullRosterFails() {
         PlayerSnapshot snapshot = newSnapshot();
-        for (int i = 0; i < HiringPool.ASTRONAUT_ROSTER_CAPACITY; i++) {
+        int capacity = HiringPool.rosterCapacity(snapshot, PersonnelGroup.ASTRONAUT, BuildingSchedule.baspmClose());
+        for (int i = 0; i < capacity; i++) {
             snapshot.getAstronauts().add(new Astronaut(snapshot.allocatePersonnelId(), "Existing", 30, 80, 50));
         }
         HiringPool.refreshCandidates(snapshot, new Random(1L));
@@ -231,6 +234,29 @@ class HiringPoolTest {
 
         assertEquals(HireOutcome.ROSTER_FULL, outcome);
         assertEquals(poolSizeBefore, snapshot.getAstronautCandidates().size(), "the pool should be untouched on failure");
+    }
+
+    /**
+     * Verifies an Astronaut Center upgrade raises the roster cap.
+     */
+    @Test
+    void upgradedBuildingRaisesTheRosterCap() {
+        PlayerSnapshot snapshot = newSnapshot();
+        BuildingSchedule buildings = BuildingSchedule.baspmClose();
+        assertEquals(7, HiringPool.rosterCapacity(snapshot, PersonnelGroup.ASTRONAUT, buildings));
+        assertEquals(5, HiringPool.rosterCapacity(snapshot, PersonnelGroup.MISSION_CONTROL, buildings));
+        assertEquals(7, HiringPool.rosterCapacity(snapshot, PersonnelGroup.SET, buildings));
+        for (int i = 0; i < 7; i++) {
+            snapshot.getAstronauts().add(new Astronaut(snapshot.allocatePersonnelId(), "Existing", 30, 80, 50));
+        }
+        HiringPool.refreshCandidates(snapshot, new Random(1L));
+        String candidateId = snapshot.getAstronautCandidates().get(0).getId();
+
+        snapshot.getBuildingLevels().put(Building.ASTRONAUT_CENTER, 2);
+
+        assertEquals(HireOutcome.HIRED,
+            HiringPool.hire(snapshot, PersonnelGroup.ASTRONAUT, candidateId, new Random(1L), buildings));
+        assertEquals(8, snapshot.getAstronauts().size());
     }
 
     /**

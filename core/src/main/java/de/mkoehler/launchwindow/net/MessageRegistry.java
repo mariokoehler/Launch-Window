@@ -5,6 +5,7 @@ import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.AstronautSkill;
+import de.mkoehler.launchwindow.model.Building;
 import de.mkoehler.launchwindow.model.InProgressMission;
 import de.mkoehler.launchwindow.model.NewsEntry;
 import de.mkoehler.launchwindow.model.RandomEventKind;
@@ -132,5 +133,9 @@ public final class MessageRegistry {
         // enum, carried in FetchStateResponse. Never move these lines; see the class Javadoc.
         kryo.register(RandomEventKind.class);
         kryo.register(NewsEntry.class);
+        // Appended 2026-10-03 (M3 buildings): the keys of PlayerSnapshot.buildingLevels and
+        // buildingUpgradeSeasonsRemaining, carried in FetchStateResponse. Never move this line;
+        // see the class Javadoc.
+        kryo.register(Building.class);
     }
 }

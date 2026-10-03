@@ -1,7 +1,9 @@
 package de.mkoehler.launchwindow.rules;
 
 import de.mkoehler.launchwindow.model.AssignmentState;
+import de.mkoehler.launchwindow.content.BuildingSchedule;
 import de.mkoehler.launchwindow.model.Astronaut;
+import de.mkoehler.launchwindow.model.Building;
 import de.mkoehler.launchwindow.model.AstronautSkill;
 import de.mkoehler.launchwindow.model.MissionControlOfficer;
 import de.mkoehler.launchwindow.model.MissionControlSkill;
@@ -126,14 +128,6 @@ public final class HiringPool {
     /** The highest starting morale a freshly generated candidate can have. */
     public static final int NEW_HIRE_MAX_STARTING_MORALE = 75;
 
-    /** How many astronauts a roster can hold at once. */
-    public static final int ASTRONAUT_ROSTER_CAPACITY = 8;
-
-    /** How many SET specialists a roster can hold at once. */
-    public static final int SET_ROSTER_CAPACITY = 12;
-
-    /** How many Mission Control officers a roster can hold at once. */
-    public static final int MISSION_CONTROL_ROSTER_CAPACITY = 8;
 
     /**
      * Not instantiable; this class only exposes static methods.
@@ -214,20 +208,59 @@ public final class HiringPool {
      */
     public static HireOutcome hire(PlayerSnapshot snapshot, PersonnelGroup group, String candidateId,
             RandomGenerator random) {
+        return hire(snapshot, group, candidateId, random, BuildingSchedule.baspmClose());
+    }
+
+    /**
+     * Hires one candidate, as {@link #hire(PlayerSnapshot, PersonnelGroup, String, RandomGenerator)}
+     * does, against an explicit building table: the group's roster is capped by its
+     * building's current level (Astronaut Center, SET Center, Mission Control).
+     *
+     * @param snapshot    the player snapshot to hire into; mutated in place on success
+     * @param group       which group to hire from
+     * @param candidateId the candidate's id, from that group's current pool
+     * @param random      the random source the auto-started training's target skill is drawn from
+     * @param buildings   the building table the roster caps come from
+     * @return the outcome
+     * @throws NullPointerException if any argument is {@code null}
+     */
+    public static HireOutcome hire(PlayerSnapshot snapshot, PersonnelGroup group, String candidateId,
+            RandomGenerator random, BuildingSchedule buildings) {
         Objects.requireNonNull(snapshot, "snapshot must not be null");
         Objects.requireNonNull(group, "group must not be null");
         Objects.requireNonNull(candidateId, "candidateId must not be null");
         Objects.requireNonNull(random, "random must not be null");
+        Objects.requireNonNull(buildings, "buildings must not be null");
 
         return switch (group) {
-            case ASTRONAUT -> hireAstronaut(snapshot, candidateId, random);
-            case SET -> hireSetSpecialist(snapshot, candidateId, random);
-            case MISSION_CONTROL -> hireMissionControlOfficer(snapshot, candidateId, random);
+            case ASTRONAUT -> hireAstronaut(snapshot, candidateId, random,
+                BuildingUpgrades.capacity(snapshot, Building.ASTRONAUT_CENTER, buildings));
+            case SET -> hireSetSpecialist(snapshot, candidateId, random,
+                BuildingUpgrades.capacity(snapshot, Building.SET_CENTER, buildings));
+            case MISSION_CONTROL -> hireMissionControlOfficer(snapshot, candidateId, random,
+                BuildingUpgrades.capacity(snapshot, Building.MISSION_CONTROL, buildings));
         };
     }
 
-    private static HireOutcome hireAstronaut(PlayerSnapshot snapshot, String candidateId, RandomGenerator random) {
-        if (snapshot.getAstronauts().size() >= ASTRONAUT_ROSTER_CAPACITY) {
+    /**
+     * Returns the roster cap a group currently has, from its building's level.
+     *
+     * @param snapshot  the player
+     * @param group     the group
+     * @param buildings the building table
+     * @return the cap
+     */
+    public static int rosterCapacity(PlayerSnapshot snapshot, PersonnelGroup group, BuildingSchedule buildings) {
+        return BuildingUpgrades.capacity(snapshot, switch (group) {
+            case ASTRONAUT -> Building.ASTRONAUT_CENTER;
+            case SET -> Building.SET_CENTER;
+            case MISSION_CONTROL -> Building.MISSION_CONTROL;
+        }, buildings);
+    }
+
+    private static HireOutcome hireAstronaut(PlayerSnapshot snapshot, String candidateId, RandomGenerator random,
+            int capacity) {
+        if (snapshot.getAstronauts().size() >= capacity) {
             return HireOutcome.ROSTER_FULL;
         }
         List<Astronaut> pool = snapshot.getAstronautCandidates();
@@ -246,8 +279,9 @@ public final class HiringPool {
         return HireOutcome.HIRED;
     }
 
-    private static HireOutcome hireSetSpecialist(PlayerSnapshot snapshot, String candidateId, RandomGenerator random) {
-        if (snapshot.getSetSpecialists().size() >= SET_ROSTER_CAPACITY) {
+    private static HireOutcome hireSetSpecialist(PlayerSnapshot snapshot, String candidateId, RandomGenerator random,
+            int capacity) {
+        if (snapshot.getSetSpecialists().size() >= capacity) {
             return HireOutcome.ROSTER_FULL;
         }
         List<SetSpecialist> pool = snapshot.getSetSpecialistCandidates();
@@ -267,8 +301,8 @@ public final class HiringPool {
     }
 
     private static HireOutcome hireMissionControlOfficer(PlayerSnapshot snapshot, String candidateId,
-            RandomGenerator random) {
-        if (snapshot.getMissionControlOfficers().size() >= MISSION_CONTROL_ROSTER_CAPACITY) {
+            RandomGenerator random, int capacity) {
+        if (snapshot.getMissionControlOfficers().size() >= capacity) {
             return HireOutcome.ROSTER_FULL;
         }
         List<MissionControlOfficer> pool = snapshot.getMissionControlCandidates();

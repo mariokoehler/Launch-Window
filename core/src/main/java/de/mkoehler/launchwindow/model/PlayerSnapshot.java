@@ -58,6 +58,8 @@ public class PlayerSnapshot {
     private int launchCap = -1;
     private int launchesThisWindow;
     private Map<String, Integer> unavailableComponents = new LinkedHashMap<>();
+    private Map<Building, Integer> buildingLevels = new LinkedHashMap<>();
+    private Map<Building, Integer> buildingUpgradeSeasonsRemaining = new LinkedHashMap<>();
 
     /**
      * No-argument constructor required for Jackson deserialization.
@@ -587,6 +589,59 @@ public class PlayerSnapshot {
     public void setUnavailableComponents(Map<String, Integer> unavailableComponents) {
         Objects.requireNonNull(unavailableComponents, "unavailableComponents must not be null");
         this.unavailableComponents = new LinkedHashMap<>(unavailableComponents);
+    }
+
+    /**
+     * Returns a building's current level. Every building starts at level 1, so a
+     * building with no recorded level is at level 1 - {@code design.md} &sect;5 (M3).
+     *
+     * @param building the building
+     * @return its level, 1 or more
+     */
+    public int buildingLevel(Building building) {
+        return buildingLevels.getOrDefault(Objects.requireNonNull(building, "building must not be null"), 1);
+    }
+
+    /**
+     * Returns the recorded building levels. Buildings missing from the map are at
+     * level 1; prefer {@link #buildingLevel(Building)}. The live map is returned.
+     *
+     * @return the levels, never {@code null}
+     */
+    public Map<Building, Integer> getBuildingLevels() {
+        return buildingLevels;
+    }
+
+    /**
+     * Replaces the building levels. Public for Jackson/Kryo, and copied defensively.
+     *
+     * @param buildingLevels the building to level map
+     * @throws NullPointerException if {@code buildingLevels} is {@code null}
+     */
+    public void setBuildingLevels(Map<Building, Integer> buildingLevels) {
+        Objects.requireNonNull(buildingLevels, "buildingLevels must not be null");
+        this.buildingLevels = new LinkedHashMap<>(buildingLevels);
+    }
+
+    /**
+     * Returns the buildings currently being upgraded, mapped to the seasons left
+     * until each reaches its next level. The live map is returned.
+     *
+     * @return the upgrades in progress, never {@code null}
+     */
+    public Map<Building, Integer> getBuildingUpgradeSeasonsRemaining() {
+        return buildingUpgradeSeasonsRemaining;
+    }
+
+    /**
+     * Replaces the upgrades in progress. Public for Jackson/Kryo, and copied defensively.
+     *
+     * @param buildingUpgradeSeasonsRemaining the building to seasons-left map
+     * @throws NullPointerException if {@code buildingUpgradeSeasonsRemaining} is {@code null}
+     */
+    public void setBuildingUpgradeSeasonsRemaining(Map<Building, Integer> buildingUpgradeSeasonsRemaining) {
+        Objects.requireNonNull(buildingUpgradeSeasonsRemaining, "buildingUpgradeSeasonsRemaining must not be null");
+        this.buildingUpgradeSeasonsRemaining = new LinkedHashMap<>(buildingUpgradeSeasonsRemaining);
     }
 
     /**

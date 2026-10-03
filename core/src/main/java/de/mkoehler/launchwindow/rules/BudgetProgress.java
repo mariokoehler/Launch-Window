@@ -21,7 +21,8 @@ import java.util.Objects;
  * pays its new rate straight away.</p>
  *
  * <p>Running costs are every employee's salary, every opened program's
- * maintenance, and every owned mission component's maintenance. Funds may go
+ * maintenance, every owned mission component's maintenance, and every
+ * building's maintenance at its current level (M3). Funds may go
  * negative; debt blocks new spending through the existing {@code INSUFFICIENT_FUNDS}
  * checks, and nothing else ({@code design.md} &sect;2.1(d)).</p>
  *
@@ -61,6 +62,7 @@ public final class BudgetProgress {
         for (String componentId : snapshot.getMissionComponents().keySet()) {
             maintenance += catalog.missionComponent(componentId).orElseThrow().maintenanceCost();
         }
+        maintenance += BuildingUpgrades.maintenance(snapshot, catalog.buildings());
         return Math.round((salaries + maintenance) * snapshot.getCostMultiplier());
     }
 

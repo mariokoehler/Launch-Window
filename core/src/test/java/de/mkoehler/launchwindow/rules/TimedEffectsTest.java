@@ -1,6 +1,7 @@
 package de.mkoehler.launchwindow.rules;
 
 import de.mkoehler.launchwindow.content.ContentCatalog;
+import de.mkoehler.launchwindow.content.TestBuildings;
 import de.mkoehler.launchwindow.content.MissionComponent;
 import de.mkoehler.launchwindow.content.MissionConfiguration;
 import de.mkoehler.launchwindow.content.MissionSeason;
@@ -40,7 +41,7 @@ class TimedEffectsTest {
         List.of(new MissionSeason(List.of(new MissionStep("s1",
             List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)), List.of(), List.of(), false)))),
         0, 0, 0, 0);
-    private static final ContentCatalog CATALOG = new ContentCatalog(List.of(CATEGORY), List.of(PROGRAM),
+    private static final ContentCatalog CATALOG = TestBuildings.catalogWithoutUpkeep(List.of(CATEGORY), List.of(PROGRAM),
         List.of(CONFIG), List.of(CAPSULE));
     private static final RandomEventRoster QUIET = new RandomEventRoster(0, 0,
         RandomEventRoster.baspmClose().events());

@@ -33,6 +33,7 @@ public final class ContentCatalog {
     private final Map<String, MissionConfiguration> missionConfigurationsById;
     private final Map<String, MissionComponent> missionComponentsById;
     private final Map<String, Goal> goalsById;
+    private final BuildingSchedule buildings;
 
     /**
      * Builds and validates a catalog from the given content definitions.
@@ -71,6 +72,26 @@ public final class ContentCatalog {
     public ContentCatalog(List<ProgramCategory> categories, List<Program> programs,
             List<MissionConfiguration> missionConfigurations, List<MissionComponent> missionComponents,
             List<Goal> goals) {
+        this(categories, programs, missionConfigurations, missionComponents, goals, BuildingSchedule.baspmClose());
+    }
+
+    /**
+     * Builds and validates a catalog with goals and an explicit building table.
+     *
+     * @param categories            every program category
+     * @param programs              every program
+     * @param missionConfigurations every mission configuration
+     * @param missionComponents     every mission component
+     * @param goals                 every goal a step or modifier can reference
+     * @param buildings             the building table
+     * @throws NullPointerException     if any argument is {@code null}
+     * @throws IllegalArgumentException if any list contains a duplicate id, or
+     *                                   any reference doesn't resolve
+     */
+    public ContentCatalog(List<ProgramCategory> categories, List<Program> programs,
+            List<MissionConfiguration> missionConfigurations, List<MissionComponent> missionComponents,
+            List<Goal> goals, BuildingSchedule buildings) {
+        this.buildings = Objects.requireNonNull(buildings, "buildings must not be null");
         Objects.requireNonNull(categories, "categories must not be null");
         Objects.requireNonNull(programs, "programs must not be null");
         Objects.requireNonNull(missionConfigurations, "missionConfigurations must not be null");
@@ -85,6 +106,15 @@ public final class ContentCatalog {
         this.goalsById = indexById(goals, Goal::id, "Goal");
 
         validateReferences();
+    }
+
+    /**
+     * Returns the building table.
+     *
+     * @return the building levels, caps, costs, and maintenance
+     */
+    public BuildingSchedule buildings() {
+        return buildings;
     }
 
     /**

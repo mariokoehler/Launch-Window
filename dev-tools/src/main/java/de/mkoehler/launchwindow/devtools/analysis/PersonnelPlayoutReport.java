@@ -158,6 +158,8 @@ import java.util.Map;
  *                                          Expert is still consulted and
  *                                          still emits an event, just not
  *                                          counted here
+ * @param buildingUpgradesStartedCount     building upgrades the bot started and paid for
+ * @param buildingUpgradesCompletedCount   building upgrades that finished and raised a level
  * @author Mario Koehler
  */
 public record PersonnelPlayoutReport(
@@ -202,6 +204,8 @@ public record PersonnelPlayoutReport(
     int reviewCount,
     int debtConversionCount,
     int dismissedByEventCount,
-    Map<RandomEventKind, Integer> randomEventCounts
+    Map<RandomEventKind, Integer> randomEventCounts,
+    int buildingUpgradesStartedCount,
+    int buildingUpgradesCompletedCount
 ) {
 }

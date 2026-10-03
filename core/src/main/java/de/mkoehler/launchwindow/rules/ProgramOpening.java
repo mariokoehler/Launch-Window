@@ -3,6 +3,7 @@ package de.mkoehler.launchwindow.rules;
 import de.mkoehler.launchwindow.content.ContentCatalog;
 import de.mkoehler.launchwindow.content.MissionComponent;
 import de.mkoehler.launchwindow.content.Program;
+import de.mkoehler.launchwindow.model.Building;
 import de.mkoehler.launchwindow.model.OwnedMissionComponent;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 
@@ -163,6 +164,12 @@ public final class ProgramOpening {
             if (!snapshot.hasAchievedOrCancelledGoal(goalId)) {
                 return OpenProgramOutcome.GOALS_NOT_MET;
             }
+        }
+
+        // Headquarters caps how many programs can be open at once (baspm.md §10.9).
+        if (openedProgramIds.size() >= BuildingUpgrades.capacity(snapshot, Building.HEADQUARTERS,
+                catalog.buildings())) {
+            return OpenProgramOutcome.HEADQUARTERS_FULL;
         }
 
         long cost = effectiveOpeningCost(program, openedProgramIds);

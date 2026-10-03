@@ -2,6 +2,7 @@ package de.mkoehler.launchwindow.rules;
 
 import de.mkoehler.launchwindow.content.BudgetSchedule;
 import de.mkoehler.launchwindow.content.ContentCatalog;
+import de.mkoehler.launchwindow.content.TestBuildings;
 import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
@@ -23,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class BudgetProgressTest {
 
-    private static final ContentCatalog EMPTY = new ContentCatalog(List.of(), List.of(), List.of(), List.of());
+    private static final ContentCatalog EMPTY = TestBuildings.catalogWithoutUpkeep(List.of(), List.of(), List.of(), List.of());
 
     /** Bracket 1 pays 100 at 0 prestige, 200 at 1,000; bracket 2 pays 300 at 2,000, 600 at 4,000. */
     private static final BudgetSchedule SCHEDULE = new BudgetSchedule(1_000, 0, 50, 4, List.of(
