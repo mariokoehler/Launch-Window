@@ -1634,6 +1634,29 @@ Traced from the live install's Data Scripts and from `Player.cs`,
 - **Building upgrades:** `SetSpaceCenterBuildingState` starts one; nothing in
   `Player.cs` or the UI cancels one.
 
+### 10.11 Staffing slots, auto-assign, and re-staffing between seasons (traced 2026-10-03, for M5)
+
+- **Slots are per layout, not per person.** A configuration names a mission-control layout and a
+  flight-crew layout (§10.9). Each slot has a title, a speciality index, and an employee type. A
+  slot accepts **any** employee of its type (every controller has all five controller skills;
+  CAPCOM is an astronaut-type slot). The speciality decides which of that person's values the roll
+  reads, and which icon the slot shows (`AssetsProvider.GetIconSpeciality`). Slots no step of the
+  current season uses are shown "Not required" and stay empty (`VABAssignmentsLayoutOverlay`,
+  `RetrieveSlotsIDsInUse`).
+- **Per-slot, not averaged.** `ComputeProbabilityOfSuccessForMissionStep` sums each involved slot's
+  `Amount × that one person's competency at the slot's speciality`; speciality 5 is the person's
+  Flight Director value (the average of their five skills). Crew slots carry several skills with
+  weights (`AstronautInvolved SkillUsedIndexN/SkillInvolvementN`).
+- **Auto-assign** (`VABAssignmentsOverlay.AssignFlightControllersBestFit`) fills Flight Director
+  slots first, then every other in-use empty slot, each with `GetBestAvailableEmployeeForSkill`
+  for that slot's type and speciality.
+- **Between seasons** (`Player.UnassignFlightControllersAndFlightCrewAfterMissionCancelledUnscheduledOrEnded`):
+  after a season of a multi-season mission, controllers in slots the next season doesn't use are
+  released; the others stay, and the end-of-season "Assign MC" step
+  (`ETLaunchSchedMsnAssignMCButtonER`, `MissionControlForSubsequentSeason`) lets the player change
+  them. The crew is unassigned after every season; astronauts coming out of a mission get a
+  **rest season** (`AstronautEmployee.SetToRestSeason`), which Launch Window doesn't model yet.
+
 ## 11. Budget, prestige, and goals (traced 2026-09-27)
 
 Full trace of `ConstantsManager.cs`'s `BudgetReviewConstants` loading,

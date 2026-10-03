@@ -5071,7 +5071,18 @@ here.
       and open counts per body. Categories need a body field (content).
     - **Configurations are viewable before their program is open**, but read-only.
     - **Mission assessment is computed in the client** from `core`.
-    - **R&D splits into Rocket R&D (VAB) and Payload R&D (SET Centre).** First real playtest happens at the
+    - **R&D splits into Rocket R&D (VAB) and Payload R&D (SET Centre).**
+    - **Staffing moves to BASPM's slots (user, 2026-10-03; `baspm.md` §10.11).** This replaces the
+      2026-10-02 averaged model: configurations get BASPM's mission-control and flight-crew layouts
+      one to one (titled slots, each with a skill and an employee type). Steps involve slots, a launch
+      fills each slot with one person, and the roll reads that person's value in the slot's skill (a
+      Flight Director slot reads the average of the person's five skills). A slot accepts any employee
+      of its type. Skill growth follows the slot's skill.
+    - **Ground slots can be re-staffed during a mission, for free** (user, 2026-10-03): from Inspect
+      active missions, the assembly screen reopens with crew slots locked and the mission-control slots
+      reassignable to available people. BASPM offers the same between seasons. **Unconfirmed default:**
+      CAPCOM counts as a ground slot and is reassignable too, though it holds an astronaut (the user
+      said astronaut slots are locked, meaning the crew aboard). First real playtest happens at the
   end of this milestone. Expected slices, sizing not yet estimated:
   connect/login/slot-claim screens; roster/personnel management;
   program/mission selection bundled with the budget/prestige overview and
