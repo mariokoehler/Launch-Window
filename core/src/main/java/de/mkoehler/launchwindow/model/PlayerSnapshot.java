@@ -41,10 +41,16 @@ public class PlayerSnapshot {
     private Map<String, OwnedMissionComponent> missionComponents = new LinkedHashMap<>();
     private Map<String, InProgressMission> inProgressMissions = new LinkedHashMap<>();
     private long nextMissionInstanceId;
+    /** How many news entries a player's log keeps before the oldest drop off - {@code design.md} &sect;2.7. */
+    public static final int NEWS_LOG_CAPACITY = 50;
+
     private Map<String, Integer> successfulFlightCounts = new LinkedHashMap<>();
     private Map<String, Integer> achievedGoals = new LinkedHashMap<>();
     private Set<String> cancelledGoalIds = new LinkedHashSet<>();
     private long prestigeAtLastReview;
+    private List<NewsEntry> newsLog = new ArrayList<>();
+    private int lastFlightSeasonTurn = -1;
+    private int lastFailureTurn = -1;
 
     /**
      * No-argument constructor required for Jackson deserialization.
@@ -407,6 +413,64 @@ public class PlayerSnapshot {
     public void setSuccessfulFlightCounts(Map<String, Integer> successfulFlightCounts) {
         Objects.requireNonNull(successfulFlightCounts, "successfulFlightCounts must not be null");
         this.successfulFlightCounts = new LinkedHashMap<>(successfulFlightCounts);
+    }
+
+    /**
+     * Returns the player's news log, oldest first, capped at the most recent
+     * {@link #NEWS_LOG_CAPACITY} entries - {@code design.md} &sect;2.7. The live list is returned.
+     *
+     * @return the news entries, never {@code null}
+     */
+    public List<NewsEntry> getNewsLog() {
+        return newsLog;
+    }
+
+    /**
+     * Replaces the news log. Public for Jackson/Kryo, and copied defensively.
+     *
+     * @param newsLog the entries to set, oldest first
+     * @throws NullPointerException if {@code newsLog} is {@code null}
+     */
+    public void setNewsLog(List<NewsEntry> newsLog) {
+        Objects.requireNonNull(newsLog, "newsLog must not be null");
+        this.newsLog = new ArrayList<>(newsLog);
+    }
+
+    /**
+     * Returns the game turn of the most recent season a mission of this player flew
+     * without a failure, or {@code -1} if none has.
+     *
+     * @return the turn, or {@code -1}
+     */
+    public int getLastFlightSeasonTurn() {
+        return lastFlightSeasonTurn;
+    }
+
+    /**
+     * Sets the turn of the most recent failure-free flight season.
+     *
+     * @param lastFlightSeasonTurn the turn, or {@code -1}
+     */
+    public void setLastFlightSeasonTurn(int lastFlightSeasonTurn) {
+        this.lastFlightSeasonTurn = lastFlightSeasonTurn;
+    }
+
+    /**
+     * Returns the game turn of the most recent mission failure, or {@code -1} if none has.
+     *
+     * @return the turn, or {@code -1}
+     */
+    public int getLastFailureTurn() {
+        return lastFailureTurn;
+    }
+
+    /**
+     * Sets the turn of the most recent mission failure.
+     *
+     * @param lastFailureTurn the turn, or {@code -1}
+     */
+    public void setLastFailureTurn(int lastFailureTurn) {
+        this.lastFailureTurn = lastFailureTurn;
     }
 
     /**

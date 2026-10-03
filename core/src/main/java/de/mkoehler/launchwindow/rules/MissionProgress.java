@@ -238,6 +238,14 @@ public final class MissionProgress {
             events);
         applyPostSeasonSkillGrowth(snapshot, mission, executedSteps, random, events);
 
+        // Recent-history turns feed the random-event gates (design.md §2.7). A failure is FAILURE or
+        // CATASTROPHIC; a season that didn't end in one counts as a failure-free flight season.
+        if (missionEndedThisSeason) {
+            snapshot.setLastFailureTurn(gameTurn);
+        } else {
+            snapshot.setLastFlightSeasonTurn(gameTurn);
+        }
+
         if (missionEndedThisSeason) {
             releaseSurvivors(snapshot, mission, events);
             endedMissionIds.add(mission.getId());

@@ -1,5 +1,9 @@
 package de.mkoehler.launchwindow.devtools.analysis;
 
+import de.mkoehler.launchwindow.model.RandomEventKind;
+
+import java.util.Map;
+
 /**
  * <p>Summary statistics from a {@link PersonnelLifecyclePlayouts} run - the
  * handful of numbers that actually answer "is this balanced," not a raw
@@ -140,6 +144,8 @@ package de.mkoehler.launchwindow.devtools.analysis;
  * @param prestigeDeductedTotal              total prestige taken by failing
  *                                           seasons, as a positive magnitude
  * @param reviewCount                        funding reviews that fell due and ran
+ * @param dismissedByEventCount              employees removed by dismissal or failed basic training events
+ * @param randomEventCounts                  how many times each random event applied over the run
  * @param debtConversionCount                prestige-to-funds conversions the bot made while in debt
  * @param completedFlightCount               mission flights that completed all
  *                                           their seasons without a failure, and so
@@ -194,6 +200,8 @@ public record PersonnelPlayoutReport(
     long prestigeDeductedTotal,
     int completedFlightCount,
     int reviewCount,
-    int debtConversionCount
+    int debtConversionCount,
+    int dismissedByEventCount,
+    Map<RandomEventKind, Integer> randomEventCounts
 ) {
 }

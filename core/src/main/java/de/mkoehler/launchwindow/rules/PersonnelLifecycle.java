@@ -254,7 +254,7 @@ public final class PersonnelLifecycle {
      * @return their R&amp;D target component id, or {@code null} if they
      *     aren't {@code SET} or have no target set
      */
-    private static String rdTargetComponentIdAtExit(Personnel person, PersonnelGroup group) {
+    static String rdTargetComponentIdAtExit(Personnel person, PersonnelGroup group) {
         if (group != PersonnelGroup.SET) {
             return null;
         }

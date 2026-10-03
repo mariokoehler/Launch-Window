@@ -9,11 +9,13 @@ import de.mkoehler.launchwindow.content.MissionSeason;
 import de.mkoehler.launchwindow.content.MissionStep;
 import de.mkoehler.launchwindow.content.Program;
 import de.mkoehler.launchwindow.content.ProgramCategory;
+import de.mkoehler.launchwindow.content.RandomEventRoster;
 import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.AstronautSkill;
 import de.mkoehler.launchwindow.model.FlightTier;
+import de.mkoehler.launchwindow.model.RandomEventKind;
 import de.mkoehler.launchwindow.model.InProgressMission;
 import de.mkoehler.launchwindow.model.MissionControlOfficer;
 import de.mkoehler.launchwindow.model.MissionControlSkill;
@@ -39,6 +41,8 @@ import de.mkoehler.launchwindow.rules.BudgetProgress;
 import de.mkoehler.launchwindow.rules.BudgetReviewed;
 import de.mkoehler.launchwindow.rules.GoalSettled;
 import de.mkoehler.launchwindow.rules.PrestigeConversion;
+import de.mkoehler.launchwindow.rules.RandomEventOccurred;
+import de.mkoehler.launchwindow.rules.RandomEvents;
 import de.mkoehler.launchwindow.rules.SeasonFundsSettled;
 import de.mkoehler.launchwindow.rules.GoalTally;
 import de.mkoehler.launchwindow.rules.MissionPrestige;
@@ -63,6 +67,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.EnumMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -172,6 +177,7 @@ public final class PersonnelLifecyclePlayouts {
     private static final long STARTING_PRESTIGE = 250;
     private static final long STARTING_FUNDING_RATE = 3_000;
     private static final long PRESTIGE_PER_FUND = 4;
+    private static final RandomEventRoster ROSTER = RandomEventRoster.baspmClose();
     private static final BudgetSchedule SCHEDULE = new BudgetSchedule(STARTING_FUNDS, STARTING_PRESTIGE,
         STARTING_FUNDING_RATE, PRESTIGE_PER_FUND, List.of(
             new BudgetSchedule.Review(250, 3_800, 2_500, 8_000),
@@ -411,6 +417,8 @@ public final class PersonnelLifecyclePlayouts {
         int missionStepMinorGlitchCount = 0;
         int reviewCount = 0;
         int debtConversionCount = 0;
+        int dismissedByEventCount = 0;
+        Map<RandomEventKind, Integer> randomEventCounts = new EnumMap<>(RandomEventKind.class);
         long prestigePaidTotal = 0;
         long prestigeDeductedTotal = 0;
         int completedFlightCount = 0;
@@ -485,6 +493,38 @@ public final class PersonnelLifecyclePlayouts {
                     reviewCount++;
                 }
                 checkProgramInvariants(snapshot);
+
+                // Random events, after the budget pass. Their departures go through the same accounting as
+                // lifecycle departures: resignations count as resignations, perished astronauts as losses.
+                int rosterBeforeEvents = rosterSize(snapshot);
+                int newsBeforeEvents = snapshot.getNewsLog().size();
+                List<ResolutionEvent> randomEventEvents = RandomEvents.advanceSeason(snapshot, ROSTER, random,
+                    season, season + 1);
+                checkRandomEventInvariants(snapshot, randomEventEvents, rosterBeforeEvents, newsBeforeEvents);
+                for (ResolutionEvent event : randomEventEvents) {
+                    if (event instanceof RandomEventOccurred occurred) {
+                        randomEventCounts.merge(occurred.kind(), 1, Integer::sum);
+                    } else if (event instanceof PersonnelDeparture departure) {
+                        String key = employeeKey(departure.group(), departure.personnelId());
+                        Integer joinedAt = joinedAtSeason.remove(key);
+                        if (joinedAt == null) {
+                            throw new IllegalStateException("Event departure with no recorded join season: " + key);
+                        }
+                        int tenureSeasons = season + 1 - joinedAt;
+                        switch (departure.reason()) {
+                            case RESIGNED -> {
+                                resignedCount++;
+                                resignedTenureTotal += tenureSeasons;
+                            }
+                            case PERISHED, LOST_IN_ACCIDENT -> lostInAccidentCount++;
+                            case DISMISSED, FAILED_BASIC_TRAINING -> dismissedByEventCount++;
+                            case RETIRED -> {
+                                retiredCount++;
+                                retiredTenureTotal += tenureSeasons;
+                            }
+                        }
+                    }
+                }
 
                 List<ResolutionEvent> trainingEvents = TrainingProgress.advanceSeason(snapshot, random);
                 List<ResolutionEvent> researchEvents = ResearchProgress.advanceSeason(snapshot, CATALOG, random);
@@ -575,7 +615,8 @@ public final class PersonnelLifecyclePlayouts {
             }
         }
 
-        int stillEmployed = employeesStarted + hiredCount - resignedCount - retiredCount - lostInAccidentCount;
+        int stillEmployed = employeesStarted + hiredCount - resignedCount - retiredCount - lostInAccidentCount
+            - dismissedByEventCount;
         double avgResignedTenure = resignedCount == 0 ? 0 : (double) resignedTenureTotal / resignedCount;
         double avgRetiredTenure = retiredCount == 0 ? 0 : (double) retiredTenureTotal / retiredCount;
         double avgTrainingGain = trainingCompletedCount == 0 ? 0 : trainingGainTotal / trainingCompletedCount;
@@ -595,7 +636,8 @@ public final class PersonnelLifecyclePlayouts {
             missionReliabilityChangeCount, avgMissionReliabilityDelta, missionSkillGrowthCount,
             avgMissionSkillGrowth, missionTriggeredSetReleaseCount, expertTrainingStartedCount,
             expertTrainingCompletedCount, pulledOutOfTrainingCount, expertRescueAppliedCount,
-            prestigePaidTotal, prestigeDeductedTotal, completedFlightCount, reviewCount, debtConversionCount);
+            prestigePaidTotal, prestigeDeductedTotal, completedFlightCount, reviewCount, debtConversionCount,
+            dismissedByEventCount, randomEventCounts);
     }
 
     /**
@@ -1284,6 +1326,53 @@ public final class PersonnelLifecyclePlayouts {
         for (String goalId : snapshot.getCancelledGoalIds()) {
             if (CATALOG.goal(goalId).isEmpty()) {
                 throw new IllegalStateException("Cancelled goal unknown to the catalog: " + goalId);
+            }
+        }
+    }
+
+    /**
+     * Cross-checks one season's random events: each applied event's magnitude is inside
+     * its content range, the news log grows by exactly the number of events (up to its
+     * capacity), the roster shrinks by exactly the number of departures, and no
+     * component falls below its transfer floor.
+     *
+     * @param snapshot       the player after the events
+     * @param events         the events the pass reported
+     * @param rosterBefore   the roster size before the pass
+     * @param newsBefore     the news log size before the pass
+     * @throws IllegalStateException if any invariant is violated
+     */
+    private static void checkRandomEventInvariants(PlayerSnapshot snapshot, List<ResolutionEvent> events,
+            int rosterBefore, int newsBefore) {
+        int occurred = 0;
+        int departures = 0;
+        for (ResolutionEvent event : events) {
+            if (event instanceof RandomEventOccurred applied) {
+                occurred++;
+                RandomEventRoster.EventSpec spec = ROSTER.spec(applied.kind());
+                // A reliability setback reports what was actually taken after the transfer floor clips it,
+                // so its lower bound is zero, not the drawn minimum.
+                double low = applied.kind() == RandomEventKind.RELIABILITY_SETBACK ? 0 : spec.min();
+                if (applied.magnitude() < low || applied.magnitude() > spec.max()) {
+                    throw new IllegalStateException(applied.kind() + " magnitude " + applied.magnitude()
+                        + " outside its content range [" + low + ", " + spec.max() + "]");
+                }
+            } else if (event instanceof PersonnelDeparture) {
+                departures++;
+            }
+        }
+        int expectedNews = Math.min(PlayerSnapshot.NEWS_LOG_CAPACITY, newsBefore + occurred);
+        if (snapshot.getNewsLog().size() != expectedNews) {
+            throw new IllegalStateException("News log holds " + snapshot.getNewsLog().size() + ", expected "
+                + expectedNews);
+        }
+        if (rosterSize(snapshot) != rosterBefore - departures) {
+            throw new IllegalStateException("Roster went " + rosterBefore + " -> " + rosterSize(snapshot)
+                + " with " + departures + " random-event departures");
+        }
+        for (OwnedMissionComponent owned : snapshot.getMissionComponents().values()) {
+            if (owned.getCurrentReliability() < owned.getFloorReliability()) {
+                throw new IllegalStateException("Component reliability fell below its transfer floor");
             }
         }
     }
@@ -2291,5 +2380,7 @@ public final class PersonnelLifecyclePlayouts {
             report.prestigeDeductedTotal());
         System.out.printf("Completed flights (advance repeat tier): %d%n", report.completedFlightCount());
         System.out.printf("Funding reviews: %d; debt conversions: %d%n", report.reviewCount(), report.debtConversionCount());
+        System.out.printf("Employees removed by events (dismissed or failed training): %d%n", report.dismissedByEventCount());
+        report.randomEventCounts().forEach((kind, count) -> System.out.printf("  %s: %d%n", kind, count));
     }
 }

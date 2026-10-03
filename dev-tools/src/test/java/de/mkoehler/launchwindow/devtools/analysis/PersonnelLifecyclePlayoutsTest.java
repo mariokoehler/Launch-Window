@@ -42,7 +42,7 @@ class PersonnelLifecyclePlayoutsTest {
         assertEquals(30, report.gamesPlayed());
         assertEquals(60, report.seasonsPerGame());
         assertEquals(report.employeesStarted() + report.hiredCount(),
-            report.resignedCount() + report.retiredCount() + report.lostInAccidentCount()
+            report.resignedCount() + report.retiredCount() + report.lostInAccidentCount() + report.dismissedByEventCount()
                 + report.stillEmployedAtEnd());
         assertTrue(report.employeesStarted() > 0);
         assertTrue(report.hiredCount() > 0, "expected at least one bot hire over 60 seasons");
@@ -255,6 +255,22 @@ class PersonnelLifecyclePlayoutsTest {
      * the zero floor (see {@code checkPrestigeInvariants}); this only adds
      * that each path is reachable at this scale.
      */
+    @Test
+    void aLongRunFiresEveryImplementedRandomEvent() {
+        PersonnelPlayoutReport report = PersonnelLifecyclePlayouts.run(200, 5, 100, 7L);
+
+        // Sub-slice (a)'s twelve events, all reachable at this scale. The (b) events
+        // (multipliers, launch caps, unavailability) aren't implemented yet, so they must not appear.
+        assertEquals(12, report.randomEventCounts().size(),
+            "every implemented random event should fire over 200 games: " + report.randomEventCounts());
+        assertTrue(report.randomEventCounts().keySet().stream().noneMatch(kind ->
+            kind.name().equals("MAX_LAUNCHES_ALLOWED") || kind.name().equals("NO_LAUNCHES_ALLOWED")
+                || kind.name().equals("MISSION_COMPONENTS_UNAVAILABLE") || kind.name().equals("EMPLOYEE_UNAVAILABLE")
+                || kind.name().equals("RD_RESULTS_SETBACK") || kind.name().equals("RD_RESULTS_BOOST")
+                || kind.name().equals("REDUCED_EXPENDITURES") || kind.name().equals("UNEXPECTED_COST_AND_NO_LAUNCHES")),
+            "sub-slice (b) events must not fire yet");
+    }
+
     @Test
     void aLongRunPaysAndDeductsPrestigeAndCompletesFlights() {
         PersonnelPlayoutReport report = PersonnelLifecyclePlayouts.run(200, 5, 100, 7L);

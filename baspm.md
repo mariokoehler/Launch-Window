@@ -1937,6 +1937,40 @@ loaded from a Data Script.
   message — exactly the same "roll happens, effect applies, player reads
   about it afterward" shape as everything else on that screen. Nothing
   pauses for this.
+- **Correction (2026-10-03, source-read):** `RandomEventsManager.Initialize`
+  registers **15** bad events, not 14 - the list above was short by one - and
+  5 good events.
+- **Gates and effects, confirmed by reading each class in full (2026-10-03):**
+  - `REBEmployeeBasicTrainingExtension`: gate is anyone in basic training. Effect
+    is `ExtendBasicTraining(1)` - one more season, confirmed.
+  - `REBEmployeeDismissed`, `REBEmployeeResigning`, `REBEmployeeUnavailable`: the
+    same gate. Walking the shuffled groups, a group with at least one employee
+    passes if it is MISSIONCONTROL or SET, and an astronaut group passes only if it
+    has an *available* (idle) astronaut. (The earlier grep dropped the `continue`
+    and `switch`.) Target selection: for the astronaut group, idle astronauts only;
+    for the other groups, any active employee of that group.
+  - `HasThereBeenAMissionWithXOutcomeInTheLastNPeriods` looks at the last N period
+    records, counting the current one, and matches the outcome exactly.
+    `FAILURE` does not match `CATASTROPHIC`. In-progress season records are
+    included, so "a success in the last four periods" means any season flown
+    without a failure, not only a completed mission. (Morale drop uses N=1: a
+    failure in the current period.)
+  - `TemporaryMultiplierFactor` (the R&D and fixed-cost multipliers) **is never
+    read anywhere in the shipped source.** `SetRDResultsMultiplier` and
+    `SetFixedCostsMultiplier` are called only by four events
+    (`REBRDResultsSetback`, `REGRDResultsBoost`, `REGReducedExpenditures`), and
+    the factor is only saved, loaded, reset, and decremented
+    (`UpdateAllTemporaryMultiplierFactorSeasonsRemaining`, which runs at season
+    advance). So in the shipped game these three events **change no number** - their
+    news text promises an effect the code never applies. Launch Window will
+    implement the described effect and flag the departure; this is a bug in BASPM,
+    not a design.
+  - `MissionComponent.ModifyCurrReliability` clamps at
+    `_initialReliabilityWithRelTransfer`, the transfer-inclusive floor (the same
+    floor as `OwnedMissionComponent.floorReliability`, §2.4(c)). Confirmed.
+  - `SPMRandom.RandomNext(int, int)` ranges are upper-exclusive, so `RandomNext(1, 5)`
+    gives 1-4. Float ranges (`RandomNext(4f, 10f)`) are continuous.
+  - Chances are the hard-coded 5% (bad) and 20% (good). Confirmed.
 
 ### 12.2 The "decision event" question, definitively resolved: none exist in the shipped game
 

@@ -9,6 +9,8 @@ import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.AstronautSkill;
 import de.mkoehler.launchwindow.model.InProgressMission;
+import de.mkoehler.launchwindow.model.NewsEntry;
+import de.mkoehler.launchwindow.model.RandomEventKind;
 import de.mkoehler.launchwindow.model.MissionControlOfficer;
 import de.mkoehler.launchwindow.model.MissionControlSkill;
 import de.mkoehler.launchwindow.model.OwnedMissionComponent;
@@ -74,7 +76,7 @@ class MessageRegistryTest {
             PlayerSnapshot.class, ArrayList.class, LinkedHashMap.class, SetFundsAction.class,
             SubmitActionRequest.class, SubmitActionResponse.class, FetchStateRequest.class,
             FetchStateResponse.class, HandshakeRequest.class, HandshakeResponse.class, TrainingKind.class,
-            OwnedMissionComponent.class, InProgressMission.class, LinkedHashSet.class};
+            OwnedMissionComponent.class, InProgressMission.class, LinkedHashSet.class, RandomEventKind.class, NewsEntry.class};
         for (Class<?> registeredClass : registeredClasses) {
             assertEquals(first.getRegistration(registeredClass).getId(), second.getRegistration(registeredClass).getId(),
                 "id mismatch for " + registeredClass.getSimpleName());
@@ -120,7 +122,7 @@ class MessageRegistryTest {
             PlayerSnapshot.class, ArrayList.class, LinkedHashMap.class, SetFundsAction.class,
             SubmitActionRequest.class, SubmitActionResponse.class, FetchStateRequest.class,
             FetchStateResponse.class, TrainingKind.class, OwnedMissionComponent.class, InProgressMission.class,
-            LinkedHashSet.class};
+            LinkedHashSet.class, RandomEventKind.class, NewsEntry.class};
         for (Class<?> other : everyOtherClass) {
             int otherId = kryo.getRegistration(other).getId();
             assertTrue(requestId < otherId, "HandshakeRequest's id must be lower than " + other.getSimpleName());
@@ -262,6 +264,8 @@ class MessageRegistryTest {
         snapshot.setNextMissionInstanceId(1);
         snapshot.setSuccessfulFlightCounts(Map.of("sputnik-1-std", 2));
         snapshot.setPrestigeAtLastReview(700);
+        snapshot.setNewsLog(List.of(new NewsEntry(3, RandomEventKind.EXTRA_FUNDING, null, 9.5)));
+        snapshot.setLastFailureTurn(4);
         snapshot.setAchievedGoals(Map.of("orbit", 4));
         snapshot.setCancelledGoalIds(Set.of("pre-flight"));
 
@@ -299,6 +303,8 @@ class MessageRegistryTest {
         assertEquals(List.of("mco-1"), copiedMission.getAssignedMissionControlOfficerIds());
         assertEquals(2, copy.state().getSuccessfulFlightCounts().get("sputnik-1-std"));
         assertEquals(700, copy.state().getPrestigeAtLastReview());
+        assertEquals(new NewsEntry(3, RandomEventKind.EXTRA_FUNDING, null, 9.5), copy.state().getNewsLog().get(0));
+        assertEquals(4, copy.state().getLastFailureTurn());
         assertEquals(42, copy.state().getAstronauts().get(0).getSalary());
         assertEquals(4, copy.state().getAchievedGoals().get("orbit"));
         assertEquals(Set.of("pre-flight"), copy.state().getCancelledGoalIds());

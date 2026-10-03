@@ -27,6 +27,9 @@ public enum DepartureReason {
      * while not protected from departure.
      */
     RESIGNED,
+    DISMISSED,
+    FAILED_BASIC_TRAINING,
+    PERISHED,
 
     /**
      * Age reached the employee's group's retirement age. Reported either

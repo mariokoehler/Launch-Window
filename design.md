@@ -1887,6 +1887,96 @@ proceeds:
       and once for a positive event at 20%, independently.
     - **Still to decide when the slice is built, under the same closeness rule:**
       the exact magnitudes, which are defaults and not new questions.
+  - **Implementation mapping (2026-10-03, unconfirmed where marked):**
+    - **Correction to `baspm.md` §12.1:** BASPM registers **15** bad events, not
+      14 (`RandomEventsManager.Initialize`, lines 14-28), plus 5 good ones.
+    - **Roll:** once per season, after the budget pass. A bad roll at 5%, a good
+      roll at 20%, independently. The first event in a shuffled pool whose gate
+      passes is applied, as BASPM does. Timed effects tick down before the roll,
+      so an event that sets N seasons is active for the next N seasons.
+    - **Gates** (BASPM's gate where one exists; marked where re-derived):
+      - Bad, applicable when the gate holds: `EmployeeBasicTrainingExtension`
+        (someone in basic training; extends their training by one season,
+        *unconfirmed effect*); `EmployeeDismissed` (an idle employee exists
+        *re-derived*); `EmployeeFailedBasicTraining` (someone in basic training);
+        `EmployeeResigning` (an idle employee exists *re-derived*);
+        `EmployeeUnavailable` (an idle employee exists *re-derived*);
+        `MaxNumLaunchesAllowed`, `NoLaunchesAllowed`, `UnexpectedCostAndNoLaunches`
+        (gate dropped, since Launch Window has no vehicle-assembly building
+        *re-derived*); `MissionComponentsUnavailable`, `ReliabilitySetback`
+        (an owned component is in R&D *re-derived*); `MoraleDrop` (a mission
+        failed in the current season, BASPM's own gate); `PerishedAstronaut` (an
+        idle astronaut exists); `PrestigeDrop` (prestige above zero);
+        `RDResultsSetback` (no gate); `UnexpectedCost` (no gate, but only
+        applied while funds are positive, since debt has no cost to take
+        *re-derived*).
+      - Good: `ExtraFunding` (a completed flight in the last four seasons, and at
+        least six seasons until the next review - BASPM's own gate);
+        `MoraleBoost` (a completed flight in the last four seasons); `PrestigePointsBoost`
+        (prestige above zero); `RDResultsBoost` (no gate); `ReducedExpenditures`
+        (at least six seasons until the next review).
+    - **Effects, BASPM magnitudes, Launch Window's own state:**
+      - Morale effects: a random group loses 10-20 (`MoraleDrop`) or gains 9-21
+        (`MoraleBoost`) morale.
+      - Prestige: `PrestigeDrop` takes 4-10% of current prestige, floored;
+        `PrestigePointsBoost` adds 4-7.5%.
+      - Funding: `ExtraFunding` raises the current funding rate by 7-16% until the
+        next review resets it.
+      - Costs: `UnexpectedCost` takes 7-15% of current funds, and
+        `UnexpectedCostAndNoLaunches` does the same plus the launch cap below.
+        `ReducedExpenditures` multiplies running costs by 0.75-0.95 for 3-11
+        seasons.
+      - R&D: `RDResultsSetback` multiplies R&D gains by 0.80-0.95 for 1-4 seasons;
+        `RDResultsBoost` by 1.15-1.25 for 1-7 seasons. Each sets one slot, so a
+        later event replaces an earlier one (as BASPM's setter does).
+      - Reliability: `ReliabilitySetback` picks 1 to N of the components in R&D
+        and cuts each by 7-15 points, floored at its own transfer floor
+        *re-derived*.
+      - Personnel: `EmployeeDismissed` and `EmployeeResigning` remove one idle
+        employee (new departure reasons); `PerishedAstronaut` removes one idle
+        astronaut as lost in an accident; `EmployeeFailedBasicTraining` removes one
+        trainee; `EmployeeUnavailable` makes one idle employee unavailable for one
+        season, during which launches skip them *re-derived*.
+      - Missions: `MaxNumLaunchesAllowed` caps launches at one, and
+        `NoLaunchesAllowed` at zero, for the next season's launch window.
+        `MissionComponentsUnavailable` takes half (at least one) of the owned
+        components out for 1-3 seasons, during which launches using them are refused.
+    - **New state:** a per-player news log (`NewsEntry`, appended to the snapshot,
+      capped at the most recent 50); timed multipliers for R&D and fixed costs;
+      a launch cap; per-component and per-employee unavailability counters; and
+      the turns of the last completed and last failed flights.
+  - **Source verification, 2026-10-03 (`baspm.md` §12.1, read in full, not grepped).**
+    The gates marked "re-derived" above are now resolved against source where BASPM
+    has them. Confirmed: the basic-training extension is exactly one season;
+    dismissal, resignation, and unavailability gate on any group with an eligible
+    member, with astronauts needing an idle one; a morale drop needs a `FAILURE` in
+    the current period (never `CATASTROPHIC`); a success needs any failure-free
+    season in the last four periods; `ModifyCurrReliability` clamps at the
+    transfer-inclusive floor. **Two real findings:** BASPM registers 15 bad events,
+    not 14; and the R&D and fixed-cost multipliers are never read, so those three
+    events change nothing in the shipped game.
+  - **Sub-slice (a), done (2026-10-03):** the mechanism (`RandomEvents`), content
+    (`RandomEventRoster.baspmClose()`, all 20 events with BASPM's ranges and
+    durations), the structured news log (`NewsEntry`, capped at 50, appended to
+    `MessageRegistry`), and the twelve events that only touch existing state. Those
+    are: basic-training extension, dismissal, failed basic training, resignation,
+    perished astronaut, morale drop and boost, prestige drop and boost, unexpected
+    cost, reliability setback, and extra funding. Deliberate deviations: personnel
+    events take only employees not on a mission (idle or training, and idle only for
+    astronauts), because a crew member can't be removed mid-flight without breaking
+    Launch Window's assignment invariants; the unexpected-cost event needs positive
+    funds, since debt has nothing to take; and the reliability floor is BASPM's own.
+    **Sub-slice (b), not started:** the R&D and cost multipliers (implemented as
+    the described effect, not as BASPM's no-op, flagged), the launch cap, component
+    and employee unavailability, and the two events that combine cost with no
+    launches. `RandomEvents` returns "not applicable" for those kinds until (b)
+    lands. **Harness:** the playout now runs the events every season after the budget
+    pass, with departures counted through the existing accounting (dismissals and
+    failed training as a separate count). The long run fires eleven of the twelve
+    implemented events; `MORALE_DROP` does not fire there, because its gate needs a
+    mission failure in the very season the roll happens, and this harness's failure
+    rate is low. A 100-season, 200-game run does fire it (`RandomEventsTest` and
+    `PersonnelLifecyclePlayoutsTest`, both green).
 - 2.8 **Campaign objectives / win conditions — analyzed 2026-09-27, see
   `baspm.md` §12.3 for the full trace (GSA's own single-player scripted
   content is out of scope per `design.md` §1.2 — only the reusable system

@@ -68,15 +68,15 @@ from scratch.
 
 ## Current status
 
-**Next up (as of 2026-10-03):** M2 is down to two open slices: **random events**
-(`design.md` §2.7). The three decisions are taken (2026-10-03): a stored news log per
-player, BASPM's full event set re-derived, and BASPM's own odds (5% negative, 20%
-positive, per season). Implementation has not started. The player-action dispatch that M4 owns (conversions, budget actions, hires) is the other open item. The
-four budget/prestige/goals/win sub-slices are all done (`design.md` §2.1(d),
-§2.6(d), §2.9, §5). The win check is headless: `WinCondition.evaluate` takes the
-declared goal list, which M4 will read from `game-meta.json`. The harness runs
-one player per game, so the cross-player goal race and the win check are covered
-by unit tests, not by a long multi-player playout.
+**Next up (as of 2026-10-03):** random events, **sub-slice (a) done** (`design.md`
+§2.7): the mechanism, the 20-event content roster, the news log, and twelve events
+that touch only existing state. **Sub-slice (b) is next:** the R&D and cost
+multipliers (BASPM never reads its own multiplier factors, so Launch Window
+implements the described effect and flags the departure), the launch cap,
+component and employee unavailability, and the two events that combine cost with
+no launches. Each needs new coupling in `MissionLaunch`, `ResearchProgress`, and
+`BudgetProgress`, which is why it's a separate sub-slice. After that, the only
+M2 is then complete, and what remains is M4's player-action dispatch.
 
 Budget defaults are close to BASPM's own values, per the user's 2026-10-03
 instruction: starting funds 25,000 / prestige 250 / 3,000 per season, BASPM's

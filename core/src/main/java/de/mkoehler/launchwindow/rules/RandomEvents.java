@@ -1,0 +1,442 @@
+package de.mkoehler.launchwindow.rules;
+
+import de.mkoehler.launchwindow.content.RandomEventRoster;
+import de.mkoehler.launchwindow.model.Astronaut;
+import de.mkoehler.launchwindow.model.AssignmentState;
+import de.mkoehler.launchwindow.model.MissionControlOfficer;
+import de.mkoehler.launchwindow.model.NewsEntry;
+import de.mkoehler.launchwindow.model.OwnedMissionComponent;
+import de.mkoehler.launchwindow.model.Personnel;
+import de.mkoehler.launchwindow.model.PlayerSnapshot;
+import de.mkoehler.launchwindow.model.RandomEventKind;
+import de.mkoehler.launchwindow.model.SetSpecialist;
+import de.mkoehler.launchwindow.model.TrainingKind;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.random.RandomGenerator;
+
+/**
+ * <p>The random-events season pass: two independent rolls per season, one for a
+ * bad event and one for a good event. Each roll that succeeds applies the first
+ * event, in a shuffled pool, whose gate passes. Gates are situational, as BASPM's
+ * are ({@code baspm.md} &sect;12.1): a bad event needs a real precondition, such
+ * as a component in R&amp;D or a recent failure. An M2 rules-engine resolver,
+ * headless.</p>
+ *
+ * <p><b>This slice implements the events that touch only existing state</b>: basic
+ * training extension, dismissal, failed basic training, resignation, perished
+ * astronaut, morale drop and boost, prestige drop and boost, unexpected cost,
+ * reliability setback, and extra funding. The events that need new state - the
+ * R&amp;D and cost multipliers, launch caps, component and employee unavailability,
+ * and the cost-plus-no-launches combination - are listed in {@code design.md}
+ * &sect;2.7 and return "not applicable" here until that slice lands.</p>
+ *
+ * <p><b>Deliberate deviation from BASPM, for personnel events:</b> dismissal and
+ * resignation take any employee who isn't on a mission. BASPM takes any active
+ * employee, which would strand a crew member mid-flight; Launch Window's
+ * assignment invariants forbid that. Idle astronauts only, for the astronaut group,
+ * as BASPM does.</p>
+ *
+ * @author Mario Koehler
+ */
+public final class RandomEvents {
+
+    /** Seasons of recent history a "recent success" or "recent failure" gate looks back over. */
+    private static final int RECENT_SEASONS = 4;
+
+    /** Seasons of budget review lead time an event needs to be worth applying - BASPM's own gate. */
+    private static final int MIN_SEASONS_UNTIL_REVIEW = 6;
+
+    /** Seasons between budget reviews, as {@link BudgetProgress} uses. */
+    private static final int SEASONS_PER_REVIEW = BudgetProgress.SEASONS_PER_REVIEW;
+
+    /**
+     * Not instantiable; this class only exposes static methods.
+     */
+    private RandomEvents() {
+    }
+
+    /**
+     * Rolls one season's random events for one player.
+     *
+     * @param snapshot       the player; mutated in place
+     * @param roster         the event content: odds, pools, and ranges
+     * @param random         the random source
+     * @param turn           the game turn this season resolves on
+     * @param seasonsElapsed the player's seasons elapsed counting this one, for the review-lead gate
+     * @return the events that applied, in order; each also appended to the news log
+     * @throws NullPointerException if an argument is {@code null}
+     */
+    public static List<ResolutionEvent> advanceSeason(PlayerSnapshot snapshot, RandomEventRoster roster,
+            RandomGenerator random, int turn, int seasonsElapsed) {
+        Objects.requireNonNull(snapshot, "snapshot must not be null");
+        Objects.requireNonNull(roster, "roster must not be null");
+        Objects.requireNonNull(random, "random must not be null");
+        List<ResolutionEvent> events = new ArrayList<>();
+        if (random.nextDouble() * 100 < roster.badChancePercent()) {
+            rollPool(false, snapshot, roster, random, turn, seasonsElapsed, events);
+        }
+        if (random.nextDouble() * 100 < roster.goodChancePercent()) {
+            rollPool(true, snapshot, roster, random, turn, seasonsElapsed, events);
+        }
+        List<NewsEntry> log = snapshot.getNewsLog();
+        while (log.size() > PlayerSnapshot.NEWS_LOG_CAPACITY) {
+            log.remove(0);
+        }
+        return events;
+    }
+
+    /**
+     * Applies the first event in a shuffled pool whose gate passes, if any does.
+     *
+     * @param positive       which pool to roll: good events if {@code true}
+     * @param snapshot       the player
+     * @param roster         the content
+     * @param random         the random source
+     * @param turn           the game turn
+     * @param seasonsElapsed the seasons-elapsed count
+     * @param events         the list to append applied events to
+     */
+    private static void rollPool(boolean positive, PlayerSnapshot snapshot, RandomEventRoster roster,
+            RandomGenerator random, int turn, int seasonsElapsed, List<ResolutionEvent> events) {
+        List<RandomEventKind> pool = new ArrayList<>();
+        for (RandomEventKind kind : RandomEventKind.values()) {
+            if (kind.isPositive() == positive) {
+                pool.add(kind);
+            }
+        }
+        shuffle(pool, random);
+        for (RandomEventKind kind : pool) {
+            if (apply(kind, snapshot, roster, random, turn, seasonsElapsed, events)) {
+                return;
+            }
+        }
+    }
+
+    /**
+     * Checks one event's gate and, if it passes, applies its effect.
+     *
+     * @return {@code true} if the event applied
+     */
+    private static boolean apply(RandomEventKind kind, PlayerSnapshot snapshot, RandomEventRoster roster,
+            RandomGenerator random, int turn, int seasonsElapsed, List<ResolutionEvent> events) {
+        return switch (kind) {
+            case BASIC_TRAINING_EXTENSION -> extendBasicTraining(snapshot, random, turn, events);
+            case EMPLOYEE_DISMISSED -> departAnyEligible(snapshot, random, DepartureReason.DISMISSED, kind, turn, events);
+            case EMPLOYEE_RESIGNING -> departAnyEligible(snapshot, random, DepartureReason.RESIGNED, kind, turn, events);
+            case EMPLOYEE_FAILED_BASIC_TRAINING -> failBasicTraining(snapshot, random, turn, events);
+            case PERISHED_ASTRONAUT -> perishAstronaut(snapshot, random, turn, events);
+            case MORALE_DROP -> shiftMorale(kind, -1, snapshot, roster, random, turn, events);
+            case MORALE_BOOST -> shiftMorale(kind, +1, snapshot, roster, random, turn, events);
+            case PRESTIGE_DROP -> shiftPrestige(kind, -1, snapshot, roster, random, turn, events);
+            case PRESTIGE_POINTS_BOOST -> shiftPrestige(kind, +1, snapshot, roster, random, turn, events);
+            case UNEXPECTED_COST -> unexpectedCost(snapshot, roster, random, turn, events);
+            case RELIABILITY_SETBACK -> reliabilitySetback(snapshot, roster, random, turn, events);
+            case EXTRA_FUNDING -> extraFunding(snapshot, roster, random, turn, seasonsElapsed, events);
+            // Sub-slice (b): needs multipliers, launch caps, or unavailability state.
+            default -> false;
+        };
+    }
+
+    /**
+     * Extends one random trainee's basic training by one season.
+     */
+    private static boolean extendBasicTraining(PlayerSnapshot snapshot, RandomGenerator random, int turn,
+            List<ResolutionEvent> events) {
+        List<Personnel> trainees = basicTrainees(snapshot);
+        if (trainees.isEmpty()) {
+            return false;
+        }
+        Personnel trainee = trainees.get(random.nextInt(trainees.size()));
+        trainee.setTrainingSeasonsTotal(trainee.getTrainingSeasonsTotal() + 1);
+        occurred(snapshot, events, RandomEventKind.BASIC_TRAINING_EXTENSION, trainee.getId(), 1, turn);
+        return true;
+    }
+
+    /**
+     * Removes one random eligible employee from the first group, in a shuffled
+     * order, that has one. Used for dismissal and resignation.
+     */
+    private static boolean departAnyEligible(PlayerSnapshot snapshot, RandomGenerator random,
+            DepartureReason reason, RandomEventKind kind, int turn, List<ResolutionEvent> events) {
+        List<PersonnelGroup> groups = new ArrayList<>(List.of(PersonnelGroup.values()));
+        shuffle(groups, random);
+        for (PersonnelGroup group : groups) {
+            List<Personnel> eligible = eligibleEmployees(snapshot, group);
+            if (!eligible.isEmpty()) {
+                Personnel chosen = eligible.get(random.nextInt(eligible.size()));
+                depart(snapshot, group, chosen, reason, kind, turn, events);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Removes one random trainee who failed basic training.
+     */
+    private static boolean failBasicTraining(PlayerSnapshot snapshot, RandomGenerator random, int turn,
+            List<ResolutionEvent> events) {
+        List<Personnel> trainees = basicTrainees(snapshot);
+        if (trainees.isEmpty()) {
+            return false;
+        }
+        Personnel trainee = trainees.get(random.nextInt(trainees.size()));
+        depart(snapshot, groupOf(snapshot, trainee), trainee, DepartureReason.FAILED_BASIC_TRAINING,
+            RandomEventKind.EMPLOYEE_FAILED_BASIC_TRAINING, turn, events);
+        return true;
+    }
+
+    /**
+     * One idle astronaut dies. BASPM takes an available astronaut at random.
+     */
+    private static boolean perishAstronaut(PlayerSnapshot snapshot, RandomGenerator random, int turn,
+            List<ResolutionEvent> events) {
+        List<Personnel> idle = eligibleEmployees(snapshot, PersonnelGroup.ASTRONAUT);
+        if (idle.isEmpty()) {
+            return false;
+        }
+        Personnel astronaut = idle.get(random.nextInt(idle.size()));
+        depart(snapshot, PersonnelGroup.ASTRONAUT, astronaut, DepartureReason.PERISHED,
+            RandomEventKind.PERISHED_ASTRONAUT, turn, events);
+        return true;
+    }
+
+    /**
+     * Shifts one random group's morale by a rolled amount, clamped to 0-100. A drop
+     * needs a failure this season; a boost needs a failure-free flight within
+     * {@link #RECENT_SEASONS} seasons. Both use BASPM's own gates.
+     *
+     * @param sign {@code -1} for a drop, {@code +1} for a boost
+     */
+    private static boolean shiftMorale(RandomEventKind kind, int sign, PlayerSnapshot snapshot,
+            RandomEventRoster roster, RandomGenerator random, int turn, List<ResolutionEvent> events) {
+        boolean gate = sign < 0
+            ? snapshot.getLastFailureTurn() == turn
+            : recentFlight(snapshot, turn);
+        if (!gate) {
+            return false;
+        }
+        RandomEventRoster.EventSpec spec = roster.spec(kind);
+        PersonnelGroup group = PersonnelGroup.values()[random.nextInt(PersonnelGroup.values().length)];
+        int amount = drawInt(random, spec.min(), spec.max());
+        for (Personnel person : groupRoster(snapshot, group)) {
+            person.setMorale(clamp(person.getMorale() + sign * amount, 0, 100));
+        }
+        occurred(snapshot, events, kind, group.name(), amount, turn);
+        return true;
+    }
+
+    /**
+     * Shifts prestige by a rolled share of the current total, floored. Needs prestige above zero.
+     *
+     * @param sign {@code -1} for a drop, {@code +1} for a boost
+     */
+    private static boolean shiftPrestige(RandomEventKind kind, int sign, PlayerSnapshot snapshot,
+            RandomEventRoster roster, RandomGenerator random, int turn, List<ResolutionEvent> events) {
+        if (snapshot.getPrestige() <= 0) {
+            return false;
+        }
+        RandomEventRoster.EventSpec spec = roster.spec(kind);
+        double percent = drawFraction(random, spec.min(), spec.max());
+        long amount = (long) Math.floor(snapshot.getPrestige() * percent / 100.0);
+        snapshot.setPrestige(Math.max(0, snapshot.getPrestige() + sign * amount));
+        occurred(snapshot, events, kind, null, percent, turn);
+        return true;
+    }
+
+    /**
+     * Takes a rolled share of current funds, floored. Needs positive funds: in debt,
+     * there is no cash to take ({@code design.md} &sect;2.7, a Launch Window choice).
+     */
+    private static boolean unexpectedCost(PlayerSnapshot snapshot, RandomEventRoster roster, RandomGenerator random,
+            int turn, List<ResolutionEvent> events) {
+        if (snapshot.getFunds() <= 0) {
+            return false;
+        }
+        RandomEventRoster.EventSpec spec = roster.spec(RandomEventKind.UNEXPECTED_COST);
+        double percent = drawFraction(random, spec.min(), spec.max());
+        long cost = (long) Math.floor(snapshot.getFunds() * percent / 100.0);
+        snapshot.setFunds(snapshot.getFunds() - cost);
+        occurred(snapshot, events, RandomEventKind.UNEXPECTED_COST, null, percent, turn);
+        return true;
+    }
+
+    /**
+     * Cuts reliability on one to all of the components currently in R&amp;D, each by a
+     * rolled number of points, floored at the component's own transfer floor
+     * (BASPM's {@code ModifyCurrReliability} clamp, {@code baspm.md} &sect;12.1).
+     * Needs at least one component in R&amp;D.
+     */
+    private static boolean reliabilitySetback(PlayerSnapshot snapshot, RandomEventRoster roster,
+            RandomGenerator random, int turn, List<ResolutionEvent> events) {
+        List<String> inResearch = componentsInResearch(snapshot);
+        if (inResearch.isEmpty()) {
+            return false;
+        }
+        shuffle(inResearch, random);
+        int affected = 1 + random.nextInt(inResearch.size());
+        RandomEventRoster.EventSpec spec = roster.spec(RandomEventKind.RELIABILITY_SETBACK);
+        for (String componentId : inResearch.subList(0, affected)) {
+            OwnedMissionComponent owned = snapshot.getMissionComponents().get(componentId);
+            double cut = drawFraction(random, spec.min(), spec.max());
+            double before = owned.getCurrentReliability();
+            owned.setCurrentReliability(Math.max(owned.getFloorReliability(), before - cut));
+            occurred(snapshot, events, RandomEventKind.RELIABILITY_SETBACK, componentId,
+                before - owned.getCurrentReliability(), turn);
+        }
+        return true;
+    }
+
+    /**
+     * Raises the current funding rate by a rolled share, until the next review
+     * resets it. Needs a failure-free flight within {@link #RECENT_SEASONS} seasons
+     * and at least {@link #MIN_SEASONS_UNTIL_REVIEW} seasons until the next review
+     * ({@code baspm.md} &sect;12.1).
+     */
+    private static boolean extraFunding(PlayerSnapshot snapshot, RandomEventRoster roster, RandomGenerator random,
+            int turn, int seasonsElapsed, List<ResolutionEvent> events) {
+        if (!recentFlight(snapshot, turn) || seasonsUntilReview(seasonsElapsed) < MIN_SEASONS_UNTIL_REVIEW) {
+            return false;
+        }
+        RandomEventRoster.EventSpec spec = roster.spec(RandomEventKind.EXTRA_FUNDING);
+        double percent = drawFraction(random, spec.min(), spec.max());
+        long raised = (long) Math.floor(snapshot.getFundingRatePerSeason() * percent / 100.0);
+        snapshot.setFundingRatePerSeason(snapshot.getFundingRatePerSeason() + raised);
+        occurred(snapshot, events, RandomEventKind.EXTRA_FUNDING, null, percent, turn);
+        return true;
+    }
+
+    /**
+     * Whether a failure-free flight season happened within the last {@link #RECENT_SEASONS}
+     * periods, counting this one - BASPM's own window ({@code baspm.md} &sect;12.1).
+     */
+    private static boolean recentFlight(PlayerSnapshot snapshot, int turn) {
+        int last = snapshot.getLastFlightSeasonTurn();
+        return last >= 0 && turn - last < RECENT_SEASONS;
+    }
+
+    /**
+     * Seasons from this season to the next budget review, as BASPM counts them.
+     *
+     * @param seasonsElapsed the seasons-elapsed count including this season
+     * @return a value from 1 to {@link BudgetProgress#SEASONS_PER_REVIEW}
+     */
+    static int seasonsUntilReview(int seasonsElapsed) {
+        return SEASONS_PER_REVIEW - (seasonsElapsed % SEASONS_PER_REVIEW);
+    }
+
+    /**
+     * Removes one employee from the roster and reports the departure, with the same
+     * bookkeeping {@link PersonnelLifecycle} uses, and records the event.
+     */
+    private static void depart(PlayerSnapshot snapshot, PersonnelGroup group, Personnel person,
+            DepartureReason reason, RandomEventKind kind, int turn, List<ResolutionEvent> events) {
+        switch (group) {
+            case ASTRONAUT -> removeAndReport(snapshot.getAstronauts(), (Astronaut) person, group, reason, events);
+            case SET -> removeAndReport(snapshot.getSetSpecialists(), (SetSpecialist) person, group, reason, events);
+            case MISSION_CONTROL -> removeAndReport(snapshot.getMissionControlOfficers(),
+                (MissionControlOfficer) person, group, reason, events);
+        }
+        occurred(snapshot, events, kind, person.getId(), 1, turn);
+    }
+
+    private static <T extends Personnel> void removeAndReport(List<T> roster, T person, PersonnelGroup group,
+            DepartureReason reason, List<ResolutionEvent> events) {
+        events.add(new PersonnelDeparture(group, person.getId(), person.getName(), reason, person.getAge(),
+            person.getMorale(), person.getAssignmentState(),
+            PersonnelLifecycle.rdTargetComponentIdAtExit(person, group)));
+        roster.remove(person);
+    }
+
+    /**
+     * Records one applied event in the season's event list and the player's news log.
+     */
+    private static void occurred(PlayerSnapshot snapshot, List<ResolutionEvent> events, RandomEventKind kind,
+            String subjectId, double magnitude, int turn) {
+        events.add(new RandomEventOccurred(kind, subjectId, magnitude, turn));
+        snapshot.getNewsLog().add(new NewsEntry(turn, kind, subjectId, magnitude));
+    }
+
+    /** Employees of one group who may be removed by a random event: idle, or in training for the non-astronaut groups. */
+    private static List<Personnel> eligibleEmployees(PlayerSnapshot snapshot, PersonnelGroup group) {
+        List<Personnel> eligible = new ArrayList<>();
+        for (Personnel person : groupRoster(snapshot, group)) {
+            AssignmentState state = person.getAssignmentState();
+            boolean idle = state == AssignmentState.IDLE;
+            boolean training = state == AssignmentState.IN_TRAINING;
+            if (group == PersonnelGroup.ASTRONAUT ? idle : idle || training) {
+                eligible.add(person);
+            }
+        }
+        return eligible;
+    }
+
+    private static List<Personnel> basicTrainees(PlayerSnapshot snapshot) {
+        List<Personnel> trainees = new ArrayList<>();
+        for (PersonnelGroup group : PersonnelGroup.values()) {
+            for (Personnel person : groupRoster(snapshot, group)) {
+                if (person.getAssignmentState() == AssignmentState.IN_TRAINING
+                        && person.getTrainingKind() == TrainingKind.BASIC) {
+                    trainees.add(person);
+                }
+            }
+        }
+        return trainees;
+    }
+
+    private static PersonnelGroup groupOf(PlayerSnapshot snapshot, Personnel person) {
+        for (PersonnelGroup group : PersonnelGroup.values()) {
+            if (groupRoster(snapshot, group).contains(person)) {
+                return group;
+            }
+        }
+        throw new IllegalStateException("personnel not on any roster: " + person.getId());
+    }
+
+    private static List<Personnel> groupRoster(PlayerSnapshot snapshot, PersonnelGroup group) {
+        return switch (group) {
+            case ASTRONAUT -> new ArrayList<>(snapshot.getAstronauts());
+            case SET -> new ArrayList<>(snapshot.getSetSpecialists());
+            case MISSION_CONTROL -> new ArrayList<>(snapshot.getMissionControlOfficers());
+        };
+    }
+
+    /** Component ids currently being researched by a SET specialist, in roster order, without repeats. */
+    private static List<String> componentsInResearch(PlayerSnapshot snapshot) {
+        LinkedHashSet<String> ids = new LinkedHashSet<>();
+        for (SetSpecialist specialist : snapshot.getSetSpecialists()) {
+            if (specialist.getAssignmentState() == AssignmentState.ASSIGNED
+                    && specialist.getRdTargetComponentId() != null) {
+                ids.add(specialist.getRdTargetComponentId());
+            }
+        }
+        return new ArrayList<>(ids);
+    }
+
+    /** Draws a fraction uniformly from {@code [min, max)}. */
+    private static double drawFraction(RandomGenerator random, double min, double max) {
+        return min + random.nextDouble() * (max - min);
+    }
+
+    /** Draws an integer from {@code [min, max)}, BASPM's own integer-range convention. */
+    private static int drawInt(RandomGenerator random, double min, double max) {
+        int low = (int) min;
+        int high = (int) max;
+        return low + random.nextInt(high - low);
+    }
+
+    private static int clamp(int value, int low, int high) {
+        return Math.max(low, Math.min(high, value));
+    }
+
+    private static <T> void shuffle(List<T> items, RandomGenerator random) {
+        for (int i = items.size() - 1; i > 0; i--) {
+            Collections.swap(items, i, random.nextInt(i + 1));
+        }
+    }
+}

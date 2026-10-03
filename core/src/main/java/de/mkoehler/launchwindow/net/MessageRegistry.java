@@ -6,6 +6,8 @@ import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.AstronautSkill;
 import de.mkoehler.launchwindow.model.InProgressMission;
+import de.mkoehler.launchwindow.model.NewsEntry;
+import de.mkoehler.launchwindow.model.RandomEventKind;
 import de.mkoehler.launchwindow.model.MissionControlOfficer;
 import de.mkoehler.launchwindow.model.MissionControlSkill;
 import de.mkoehler.launchwindow.model.OwnedMissionComponent;
@@ -126,5 +128,9 @@ public final class MessageRegistry {
         // FetchStateResponse. The first Set type this registry has ever needed - every earlier
         // collection field used List/Map. Never move this line; see the class Javadoc.
         kryo.register(LinkedHashSet.class);
+        // Appended 2026-10-03 (random events, design.md §2.7): the news log carries NewsEntry and its kind
+        // enum, carried in FetchStateResponse. Never move these lines; see the class Javadoc.
+        kryo.register(RandomEventKind.class);
+        kryo.register(NewsEntry.class);
     }
 }
