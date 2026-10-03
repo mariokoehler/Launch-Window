@@ -333,6 +333,21 @@ public final class ResearchProgress {
         if (currentReliability < maxRdReliability) {
             return null;
         }
+        List<String> releasedPersonnelIds = releaseResearchers(snapshot, componentId);
+        return releasedPersonnelIds.isEmpty() ? null : new ResearchComponentMaxed(componentId, releasedPersonnelIds);
+    }
+
+    /**
+     * Releases every SET specialist researching a component back to idle - used when
+     * the component reaches its R&amp;D ceiling, and when it goes inactive because the
+     * last program using it closed (BASPM's {@code UnassignAllSETPersonnelFromMissionComponent},
+     * {@code baspm.md} &sect;10.8/&sect;10.9).
+     *
+     * @param snapshot    the player; mutated in place
+     * @param componentId the component
+     * @return the released specialists' ids, possibly empty
+     */
+    static List<String> releaseResearchers(PlayerSnapshot snapshot, String componentId) {
         List<String> releasedPersonnelIds = new ArrayList<>();
         for (SetSpecialist specialist : snapshot.getSetSpecialists()) {
             if (specialist.getAssignmentState() == AssignmentState.ASSIGNED
@@ -343,6 +358,6 @@ public final class ResearchProgress {
                 releasedPersonnelIds.add(specialist.getId());
             }
         }
-        return releasedPersonnelIds.isEmpty() ? null : new ResearchComponentMaxed(componentId, releasedPersonnelIds);
+        return releasedPersonnelIds;
     }
 }

@@ -158,6 +158,10 @@ public final class ProgramOpening {
         if (openedProgramIds.contains(program.id())) {
             return OpenProgramOutcome.ALREADY_OPEN;
         }
+        // Each agency only ever sees its own programs (design.md §5, M3 decision 5).
+        if (!program.availableTo(snapshot.getArchetype())) {
+            return OpenProgramOutcome.WRONG_AGENCY;
+        }
         // Every required goal must be achieved or cancelled - an AND gate, BASPM's StrictGoalsIDs
         // (baspm.md §11.3, corrected 2026-10-03: not generic-only).
         for (String goalId : program.requiredGoalIds()) {
@@ -172,7 +176,7 @@ public final class ProgramOpening {
             return OpenProgramOutcome.HEADQUARTERS_FULL;
         }
 
-        long cost = effectiveOpeningCost(program, openedProgramIds);
+        long cost = openingPrice(snapshot, program, catalog);
         if (snapshot.getFunds() < cost) {
             return OpenProgramOutcome.INSUFFICIENT_FUNDS;
         }
@@ -186,6 +190,7 @@ public final class ProgramOpening {
         Map<String, OwnedMissionComponent> newlyOwned = new LinkedHashMap<>();
         for (String componentId : program.requiredMissionComponentIds()) {
             if (ownedBeforeThisOpening.containsKey(componentId)) {
+                // Still owned from an earlier program: reactivated below, reliability untouched.
                 continue;
             }
             MissionComponent component = catalog.missionComponent(componentId)
@@ -202,8 +207,78 @@ public final class ProgramOpening {
         snapshot.setOpenedProgramIds(openedProgramIds);
         Map<String, OwnedMissionComponent> allOwned = new LinkedHashMap<>(ownedBeforeThisOpening);
         allOwned.putAll(newlyOwned);
+        for (String componentId : program.requiredMissionComponentIds()) {
+            allOwned.get(componentId).setActive(true);
+        }
         snapshot.setMissionComponents(allOwned);
 
         return OpenProgramOutcome.OPENED;
+    }
+
+    /**
+     * Returns what opening a program costs this player right now: the discounted
+     * {@link #effectiveOpeningCost}, plus the {@link MissionComponent#creationCost()}
+     * of every required component the player doesn't own yet - BASPM's
+     * {@code GetProgramExtraOpeningCostForMsnCmpsCreation} ({@code baspm.md} &sect;10.9).
+     * A component still owned from a closed program is not paid for again. The
+     * discount never applies to the creation cost.
+     *
+     * @param snapshot the player
+     * @param program  the program to price
+     * @param catalog  the content catalog the components are looked up in
+     * @return the total price
+     * @throws NullPointerException if an argument is {@code null}
+     */
+    public static long openingPrice(PlayerSnapshot snapshot, Program program, ContentCatalog catalog) {
+        Objects.requireNonNull(snapshot, "snapshot must not be null");
+        long price = effectiveOpeningCost(program, snapshot.getOpenedProgramIds());
+        for (String componentId : program.requiredMissionComponentIds()) {
+            if (!snapshot.getMissionComponents().containsKey(componentId)) {
+                price += catalog.missionComponent(componentId).orElseThrow().creationCost();
+            }
+        }
+        return price;
+    }
+
+    /**
+     * Closes an open program, as BASPM's {@code Player.CloseProgram}
+     * ({@code baspm.md} &sect;10.9): the program stops counting against
+     * Headquarters and stops paying upkeep, and every component it required that
+     * no other open program still requires goes inactive - kept, with its
+     * reliability, but paying no upkeep and released from R&amp;D. Refused while any
+     * of the program's missions is still in flight.
+     *
+     * @param snapshot  the player; mutated only when the program closes
+     * @param programId the program to close
+     * @param catalog   the content catalog
+     * @return the outcome
+     * @throws NullPointerException if an argument is {@code null}
+     */
+    public static CloseProgramOutcome close(PlayerSnapshot snapshot, String programId, ContentCatalog catalog) {
+        Objects.requireNonNull(snapshot, "snapshot must not be null");
+        Objects.requireNonNull(programId, "programId must not be null");
+        Objects.requireNonNull(catalog, "catalog must not be null");
+        if (!snapshot.getOpenedProgramIds().contains(programId)) {
+            return CloseProgramOutcome.NOT_OPEN;
+        }
+        boolean missionsInFlight = snapshot.getInProgressMissions().values().stream()
+            .map(mission -> catalog.missionConfiguration(mission.getMissionConfigurationId()).orElseThrow())
+            .anyMatch(configuration -> configuration.programId().equals(programId));
+        if (missionsInFlight) {
+            return CloseProgramOutcome.MISSIONS_IN_FLIGHT;
+        }
+        List<String> openedProgramIds = snapshot.getOpenedProgramIds();
+        openedProgramIds.remove(programId);
+        snapshot.setOpenedProgramIds(openedProgramIds);
+        for (String componentId : catalog.program(programId).orElseThrow().requiredMissionComponentIds()) {
+            boolean stillUsed = openedProgramIds.stream()
+                .map(id -> catalog.program(id).orElseThrow())
+                .anyMatch(other -> other.requiredMissionComponentIds().contains(componentId));
+            if (!stillUsed) {
+                snapshot.getMissionComponents().get(componentId).setActive(false);
+                ResearchProgress.releaseResearchers(snapshot, componentId);
+            }
+        }
+        return CloseProgramOutcome.CLOSED;
     }
 }

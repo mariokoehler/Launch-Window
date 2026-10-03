@@ -4767,6 +4767,25 @@ here.
     the level after the pass, hires against the cap read from the table, and open
     programs against Headquarters. Result: 754 upgrades started, 749 completed,
     4,871 hires, 569 programs opened, 1,920 missions, still no debt conversions.
+  - **Slice 3a, agency, creation cost, closing, and tiers — done (2026-10-03).**
+    `Program.agency` and `MissionComponent.agency` (null means any) gate opening
+    (`WRONG_AGENCY`), and the catalog rejects a program that grants another
+    agency's component. `MissionComponent` gained `creationCost`, `unitCost`,
+    `mass`, and an optional `RocketSpec` (class plus payload to suborbital, LEO,
+    TLI, and TPI) for slice 3b. `ProgramOpening.openingPrice` is the discounted
+    opening cost plus the creation cost of every required component not yet owned;
+    the discount never touches creation cost. **Closing programs, as BASPM does
+    (`Player.CloseProgram`, `baspm.md` §10.9), added without asking because it
+    follows the faithful-to-BASPM direction:** `ProgramOpening.close` is refused
+    while a mission of the program flies. A required component that no other
+    open program needs goes inactive (`OwnedMissionComponent.active`): it keeps
+    its reliability, pays no upkeep, and its researchers are released. Reopening
+    reactivates it without charging the creation cost again. The repeat-flight
+    tiers are now BASPM's 50%/30%. Harness: the bot closes a program at 2% per
+    season. Independent checks cover the opening price and the
+    close-while-flying refusal; an owned component is active exactly when an open
+    program requires it, and no specialist researches an inactive component. 725
+    programs opened, 230 closed, 1,739 missions, 696,302 prestige paid.
 - **M4 — Integration: wire M2/M3's real engine into M1's proven skeleton.**
   Replace M1's placeholder trivial action with real player actions (assign
   personnel, open a program, queue a mission) and real turn resolution.

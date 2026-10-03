@@ -12,21 +12,20 @@ import java.util.Objects;
  * {@link MissionProgress} resolver owns the per-season accumulation and
  * applies these numbers (see {@code design.md} &sect;2.6(d)).</p>
  *
- * <p><b>The repeat-tier ratios are Launch Window's own, not BASPM's.</b>
- * BASPM's own shape is a fixed uniform decay ({@code baspm.md} &sect;13.4a:
- * 50% / 30%); {@code design.md} &sect;1.2 and &sect;4 say to keep the shape
- * but re-derive the numbers. These are unconfirmed defaults chosen to be
- * flatter than BASPM's, so repeat flights stay worth flying.</p>
+ * <p><b>The repeat-tier ratios are BASPM's own</b> fixed uniform decay
+ * ({@code baspm.md} &sect;13.4a: 50% / 30%), per the user's 2026-10-03
+ * instruction to keep defaults close to BASPM's values ({@code design.md} &sect;5,
+ * M3). They were 60% / 40% before M3.</p>
  *
  * @author Mario Koehler
  */
 public final class MissionPrestige {
 
-    /** Percentage of {@code firstTimePrestige} a second-time flight pays. Unconfirmed default. */
-    public static final int SECOND_TIME_PERCENT = 60;
+    /** Percentage of {@code firstTimePrestige} a second-time flight pays - BASPM's value. */
+    public static final int SECOND_TIME_PERCENT = 50;
 
-    /** Percentage of {@code firstTimePrestige} a later-time flight pays. Unconfirmed default. */
-    public static final int LATER_TIME_PERCENT = 40;
+    /** Percentage of {@code firstTimePrestige} a later-time flight pays - BASPM's value. */
+    public static final int LATER_TIME_PERCENT = 30;
 
     /**
      * Not instantiable; this class only exposes static methods.

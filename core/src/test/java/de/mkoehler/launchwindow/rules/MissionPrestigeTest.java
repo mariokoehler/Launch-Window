@@ -67,8 +67,9 @@ class MissionPrestigeTest {
     void tierTotalsUseTheFixedRatiosAndFloor() {
         MissionConfiguration configuration = configurationPaying(1_001);
         assertEquals(1_001, MissionPrestige.tierTotal(configuration, FlightTier.FIRST_TIME));
-        assertEquals(600, MissionPrestige.tierTotal(configuration, FlightTier.SECOND_TIME));
-        assertEquals(400, MissionPrestige.tierTotal(configuration, FlightTier.LATER_TIME));
+        // BASPM's 50% / 30%, floored: 500.5 -> 500, 300.3 -> 300.
+        assertEquals(500, MissionPrestige.tierTotal(configuration, FlightTier.SECOND_TIME));
+        assertEquals(300, MissionPrestige.tierTotal(configuration, FlightTier.LATER_TIME));
     }
 
     /**

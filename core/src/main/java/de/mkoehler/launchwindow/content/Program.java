@@ -1,5 +1,7 @@
 package de.mkoehler.launchwindow.content;
 
+import de.mkoehler.launchwindow.model.Archetype;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -35,11 +37,45 @@ import java.util.Objects;
  * @param openingCostDiscounts        discounts this program's opening cost
  *                                    receives from already-owning certain
  *                                    other programs
+ * @param requiredGoalIds             goals that must be achieved or cancelled before
+ *                                    the program can be opened
+ * @param agency                      the only archetype that may open it, or
+ *                                    {@code null} for any - {@code design.md} &sect;5 (M3)
  * @author Mario Koehler
  */
 public record Program(String id, String categoryId, long openingCost, long maintenanceCost,
                        List<String> requiredMissionComponentIds, List<OpeningCostDiscount> openingCostDiscounts,
-                       List<String> requiredGoalIds) {
+                       List<String> requiredGoalIds, Archetype agency) {
+
+    /**
+     * A program open to every agency.
+     *
+     * @param id                          see {@link Program}
+     * @param categoryId                  see {@link Program}
+     * @param openingCost                 see {@link Program}
+     * @param maintenanceCost             see {@link Program}
+     * @param requiredMissionComponentIds see {@link Program}
+     * @param openingCostDiscounts        see {@link Program}
+     * @param requiredGoalIds             see {@link Program}
+     * @throws NullPointerException     see the canonical constructor
+     * @throws IllegalArgumentException see the canonical constructor
+     */
+    public Program(String id, String categoryId, long openingCost, long maintenanceCost,
+                   List<String> requiredMissionComponentIds, List<OpeningCostDiscount> openingCostDiscounts,
+                   List<String> requiredGoalIds) {
+        this(id, categoryId, openingCost, maintenanceCost, requiredMissionComponentIds, openingCostDiscounts,
+            requiredGoalIds, null);
+    }
+
+    /**
+     * Returns whether a player of an archetype may open this program.
+     *
+     * @param archetype the player's archetype
+     * @return {@code true} when the program has no agency or matches it
+     */
+    public boolean availableTo(Archetype archetype) {
+        return agency == null || agency == archetype;
+    }
 
     /**
      * A program with no goal gate - the shape before goal gates were modeled.

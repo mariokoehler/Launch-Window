@@ -59,8 +59,11 @@ public final class BudgetProgress {
         for (String programId : snapshot.getOpenedProgramIds()) {
             maintenance += catalog.program(programId).orElseThrow().maintenanceCost();
         }
-        for (String componentId : snapshot.getMissionComponents().keySet()) {
-            maintenance += catalog.missionComponent(componentId).orElseThrow().maintenanceCost();
+        for (var owned : snapshot.getMissionComponents().entrySet()) {
+            // An inactive component (its last program closed) is kept but pays no upkeep (baspm.md §10.9).
+            if (owned.getValue().isActive()) {
+                maintenance += catalog.missionComponent(owned.getKey()).orElseThrow().maintenanceCost();
+            }
         }
         maintenance += BuildingUpgrades.maintenance(snapshot, catalog.buildings());
         return Math.round((salaries + maintenance) * snapshot.getCostMultiplier());

@@ -19,12 +19,17 @@ package de.mkoehler.launchwindow.model;
  * types in {@code de.mkoehler.launchwindow.content} this one is paired
  * with.</p>
  *
+ * <p>A component stays owned when the last program using it closes: it goes
+ * inactive, keeping its reliability, and pays no upkeep until a program using it
+ * opens again - BASPM's {@code IsActive} ({@code baspm.md} &sect;10.9).</p>
+ *
  * @author Mario Koehler
  */
 public class OwnedMissionComponent {
 
     private double currentReliability;
     private double floorReliability;
+    private boolean active = true;
 
     /**
      * No-argument constructor required for Jackson/Kryo deserialization.
@@ -79,5 +84,24 @@ public class OwnedMissionComponent {
      */
     public void setFloorReliability(double floorReliability) {
         this.floorReliability = floorReliability;
+    }
+
+    /**
+     * Returns whether the component is active: some open program (or, for a
+     * rocket, its open rocket program) uses it.
+     *
+     * @return {@code true} while active
+     */
+    public boolean isActive() {
+        return active;
+    }
+
+    /**
+     * Sets whether the component is active.
+     *
+     * @param active {@code true} while some open program uses it
+     */
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

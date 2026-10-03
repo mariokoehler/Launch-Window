@@ -215,8 +215,13 @@ public final class ContentCatalog {
                 problems.add("Program " + program.id() + " references unknown categoryId " + program.categoryId());
             }
             for (String componentId : program.requiredMissionComponentIds()) {
-                if (!missionComponentsById.containsKey(componentId)) {
+                MissionComponent component = missionComponentsById.get(componentId);
+                if (component == null) {
                     problems.add("Program " + program.id() + " requires unknown MissionComponent " + componentId);
+                } else if (component.agency() != null && component.agency() != program.agency()) {
+                    // A program may only grant components its own agency can own.
+                    problems.add("Program " + program.id() + " (agency " + program.agency()
+                        + ") requires MissionComponent " + componentId + " of agency " + component.agency());
                 }
             }
             for (Program.OpeningCostDiscount discount : program.openingCostDiscounts()) {

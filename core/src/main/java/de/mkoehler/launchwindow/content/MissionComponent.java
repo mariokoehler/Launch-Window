@@ -1,5 +1,6 @@
 package de.mkoehler.launchwindow.content;
 
+import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.model.SetSkill;
 
 import java.util.List;
@@ -61,13 +62,93 @@ import java.util.Objects;
  *                                   {@code design.md} &sect;2.4(c)'s decision
  *                                   to keep this an explicit per-pair table,
  *                                   not a generic same-skill-group rule
+ * @param maintenanceCost            the upkeep per season while the component is active
+ * @param creationCost               the one-time price of first acquiring it, charged
+ *                                   when a program or rocket program grants it
+ *                                   ({@code baspm.md} &sect;10.9)
+ * @param unitCost                   the price of one flight's worth, part of a
+ *                                   mission's launch cost
+ * @param mass                       the payload mass it adds to a launch; a rocket
+ *                                   must lift the summed mass of its launch's payloads
+ * @param agency                     the only archetype that may own it, or
+ *                                   {@code null} for any - {@code design.md} &sect;5 (M3)
+ * @param rocket                     the rocket's class and payload capacities, or
+ *                                   {@code null} for a component that isn't a rocket;
+ *                                   only allowed on a rocket skill
  * @author Mario Koehler
  */
 public record MissionComponent(String id, SetSkill associatedSkill, double baselineReliability,
                                 double maxReliability, double maxRdReliability,
                                 List<Double> rdSlotBandMaxAmounts, double maxReliabilityTransfer,
                                 List<ReliabilityTransferSource> reliabilityTransferSources,
-                                long maintenanceCost) {
+                                long maintenanceCost, long creationCost, long unitCost, double mass,
+                                Archetype agency, RocketSpec rocket) {
+
+    /**
+     * A rocket's class and how much payload it lifts to each destination - BASPM's
+     * {@code MassAndCapacity} ({@code baspm.md} &sect;10.9).
+     *
+     * @param rocketClass         the size class, gated by the VAB level
+     * @param payloadToSuborbital the payload it lifts on a suborbital launch
+     * @param payloadToLeo        the payload it lifts to low Earth orbit
+     * @param payloadToTli        the payload it lifts to trans-lunar injection
+     * @param payloadToTpi        the payload it lifts to trans-planetary injection
+     */
+    public record RocketSpec(RocketClass rocketClass, double payloadToSuborbital, double payloadToLeo,
+                             double payloadToTli, double payloadToTpi) {
+
+        /**
+         * Validates the spec.
+         *
+         * @throws NullPointerException     if {@code rocketClass} is {@code null}
+         * @throws IllegalArgumentException if a capacity is negative
+         */
+        public RocketSpec {
+            Objects.requireNonNull(rocketClass, "rocketClass must not be null");
+            if (payloadToSuborbital < 0 || payloadToLeo < 0 || payloadToTli < 0 || payloadToTpi < 0) {
+                throw new IllegalArgumentException("payload capacities must not be negative");
+            }
+        }
+
+        /**
+         * Returns the payload this rocket lifts to a launch type's destination.
+         *
+         * @param launchType the launch type
+         * @return the capacity
+         */
+        public double capacityFor(LaunchType launchType) {
+            return switch (launchType) {
+                case SUBORBITAL, SUBORBITAL_HR -> payloadToSuborbital;
+                case LEO, LEO_HR -> payloadToLeo;
+                case TLI, TLI_HR -> payloadToTli;
+                case TPI, TPI_HR -> payloadToTpi;
+            };
+        }
+    }
+
+    /**
+     * A component without the M3 economy and launch fields: no creation or unit
+     * cost, no mass, any agency, not a rocket.
+     *
+     * @param id                          see {@link MissionComponent}
+     * @param associatedSkill             see {@link MissionComponent}
+     * @param baselineReliability         see {@link MissionComponent}
+     * @param maxReliability              see {@link MissionComponent}
+     * @param maxRdReliability            see {@link MissionComponent}
+     * @param rdSlotBandMaxAmounts        see {@link MissionComponent}
+     * @param maxReliabilityTransfer      see {@link MissionComponent}
+     * @param reliabilityTransferSources  see {@link MissionComponent}
+     * @param maintenanceCost             see {@link MissionComponent}
+     * @throws NullPointerException     see the canonical constructor
+     * @throws IllegalArgumentException see the canonical constructor
+     */
+    public MissionComponent(String id, SetSkill associatedSkill, double baselineReliability,
+                            double maxReliability, double maxRdReliability,
+                            List<Double> rdSlotBandMaxAmounts, double maxReliabilityTransfer,
+                            List<ReliabilityTransferSource> reliabilityTransferSources, long maintenanceCost) {
+        this(id, associatedSkill, baselineReliability, maxReliability, maxRdReliability, rdSlotBandMaxAmounts,
+            maxReliabilityTransfer, reliabilityTransferSources, maintenanceCost, 0, 0, 0, null, null);
+    }
 
     /**
      * A component with no upkeep - the shape before maintenance was modeled.
@@ -88,7 +169,7 @@ public record MissionComponent(String id, SetSkill associatedSkill, double basel
                             List<Double> rdSlotBandMaxAmounts, double maxReliabilityTransfer,
                             List<ReliabilityTransferSource> reliabilityTransferSources) {
         this(id, associatedSkill, baselineReliability, maxReliability, maxRdReliability, rdSlotBandMaxAmounts,
-            maxReliabilityTransfer, reliabilityTransferSources, 0);
+            maxReliabilityTransfer, reliabilityTransferSources, 0L);
     }
 
     /** The number of simultaneous R&amp;D slots every mission component has - {@code baspm.md} &sect;10.8. */
@@ -146,9 +227,58 @@ public record MissionComponent(String id, SetSkill associatedSkill, double basel
         }
         rdSlotBandMaxAmounts = List.copyOf(rdSlotBandMaxAmounts);
         reliabilityTransferSources = List.copyOf(reliabilityTransferSources);
-        if (maintenanceCost < 0) {
-            throw new IllegalArgumentException("maintenanceCost must not be negative: " + maintenanceCost);
+        if (maintenanceCost < 0 || creationCost < 0 || unitCost < 0 || mass < 0) {
+            throw new IllegalArgumentException("costs and mass must not be negative: " + id);
         }
+        if (rocket != null && !isRocketSkill(associatedSkill)) {
+            throw new IllegalArgumentException("only a rocket may carry a rocket spec: " + id);
+        }
+    }
+
+    /**
+     * Returns whether a SET skill is one of the two rocket skills.
+     *
+     * @param skill the skill
+     * @return {@code true} for {@code ROCKETS} and {@code HUMAN_RATED_ROCKETS}
+     */
+    public static boolean isRocketSkill(SetSkill skill) {
+        return skill == SetSkill.ROCKETS || skill == SetSkill.HUMAN_RATED_ROCKETS;
+    }
+
+    /**
+     * Returns whether this component is a rocket, meaning it carries a rocket spec.
+     * Deliberately not named {@code isRocket}, which Jackson would read as a
+     * second {@code rocket} property.
+     *
+     * @return {@code true} for a rocket
+     */
+    public boolean hasRocketSpec() {
+        return rocket != null;
+    }
+
+    /**
+     * Returns the payload this component lifts for a launch type, as BASPM's
+     * {@code GetMaxPayloadSupported}: zero for anything that isn't a rocket, and
+     * zero for a plain {@code ROCKETS} rocket on a human-rated launch.
+     *
+     * @param launchType the launch type
+     * @return the capacity, zero if it can't fly that launch
+     */
+    public double payloadCapacity(LaunchType launchType) {
+        if (rocket == null || (launchType.humanRated() && associatedSkill != SetSkill.HUMAN_RATED_ROCKETS)) {
+            return 0;
+        }
+        return rocket.capacityFor(launchType);
+    }
+
+    /**
+     * Returns whether a player of an archetype may own this component.
+     *
+     * @param archetype the player's archetype
+     * @return {@code true} when the component has no agency or matches it
+     */
+    public boolean availableTo(Archetype archetype) {
+        return agency == null || agency == archetype;
     }
 
     /**

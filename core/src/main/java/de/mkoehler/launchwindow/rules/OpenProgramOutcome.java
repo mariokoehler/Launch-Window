@@ -42,5 +42,10 @@ public enum OpenProgramOutcome {
      * The player already has as many programs open as their Headquarters'
      * current level allows - see {@code baspm.md} &sect;10.9.
      */
-    HEADQUARTERS_FULL
+    HEADQUARTERS_FULL,
+
+    /**
+     * The program belongs to another agency - see {@code design.md} &sect;5 (M3).
+     */
+    WRONG_AGENCY
 }

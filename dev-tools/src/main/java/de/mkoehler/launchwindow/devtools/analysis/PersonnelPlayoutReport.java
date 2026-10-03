@@ -160,6 +160,7 @@ import java.util.Map;
  *                                          counted here
  * @param buildingUpgradesStartedCount     building upgrades the bot started and paid for
  * @param buildingUpgradesCompletedCount   building upgrades that finished and raised a level
+ * @param programsClosedCount              programs the bot closed
  * @author Mario Koehler
  */
 public record PersonnelPlayoutReport(
@@ -206,6 +207,7 @@ public record PersonnelPlayoutReport(
     int dismissedByEventCount,
     Map<RandomEventKind, Integer> randomEventCounts,
     int buildingUpgradesStartedCount,
-    int buildingUpgradesCompletedCount
+    int buildingUpgradesCompletedCount,
+    int programsClosedCount
 ) {
 }

@@ -44,6 +44,7 @@ import de.mkoehler.launchwindow.rules.BudgetReviewed;
 import de.mkoehler.launchwindow.rules.BuildingUpgradeOutcome;
 import de.mkoehler.launchwindow.rules.BuildingUpgraded;
 import de.mkoehler.launchwindow.rules.BuildingUpgrades;
+import de.mkoehler.launchwindow.rules.CloseProgramOutcome;
 import de.mkoehler.launchwindow.rules.GoalSettled;
 import de.mkoehler.launchwindow.rules.PrestigeConversion;
 import de.mkoehler.launchwindow.rules.RandomEventOccurred;
@@ -173,6 +174,9 @@ public final class PersonnelLifecyclePlayouts {
 
     /** The bot's per-season chance of starting one building upgrade (journaled-action bucket). */
     private static final double BUILDING_UPGRADE_CHANCE = 0.05;
+
+    /** The bot's per-season chance of closing one open program (journaled-action bucket). */
+    private static final double CLOSE_PROGRAM_CHANCE_PER_SEASON = 0.02;
     private static final double OPEN_PROGRAM_CHANCE_PER_SEASON = 0.1;
     private static final double LAUNCH_MISSION_CHANCE_PER_SEASON = 0.15;
     /**
@@ -445,6 +449,7 @@ public final class PersonnelLifecyclePlayouts {
         int expertRescueAppliedCount = 0;
         int[] bandHits = new int[4];
         int buildingUpgradesStartedCount = 0;
+        int programsClosedCount = 0;
         int buildingUpgradesCompletedCount = 0;
 
         for (int game = 0; game < games; game++) {
@@ -462,6 +467,7 @@ public final class PersonnelLifecyclePlayouts {
                 pulledOutOfTrainingCount += expertTally[1];
                 hiredCount += hireFromPools(snapshot, random, season, joinedAtSeason);
                 programsOpenedCount += maybeOpenProgram(snapshot, random);
+                programsClosedCount += maybeCloseProgram(snapshot, random);
                 missionsLaunchedCount += maybeLaunchMission(snapshot, random);
                 buildingUpgradesStartedCount += maybeUpgradeBuilding(snapshot, random);
                 checkProgramInvariants(snapshot);
@@ -656,7 +662,8 @@ public final class PersonnelLifecyclePlayouts {
             avgMissionSkillGrowth, missionTriggeredSetReleaseCount, expertTrainingStartedCount,
             expertTrainingCompletedCount, pulledOutOfTrainingCount, expertRescueAppliedCount,
             prestigePaidTotal, prestigeDeductedTotal, completedFlightCount, reviewCount, debtConversionCount,
-            dismissedByEventCount, randomEventCounts, buildingUpgradesStartedCount, buildingUpgradesCompletedCount);
+            dismissedByEventCount, randomEventCounts, buildingUpgradesStartedCount, buildingUpgradesCompletedCount,
+            programsClosedCount);
     }
 
     /**
@@ -745,8 +752,52 @@ public final class PersonnelLifecyclePlayouts {
             return 0;
         }
         String programId = candidateProgramIds.get(random.nextInt(candidateProgramIds.size()));
+        // The price, recomputed independently: the discounted opening cost plus the creation cost of every
+        // required component not owned yet (baspm.md §10.9).
+        Program program = CATALOG.program(programId).orElseThrow();
+        int discountPercent = 0;
+        for (Program.OpeningCostDiscount discount : program.openingCostDiscounts()) {
+            if (snapshot.getOpenedProgramIds().contains(discount.otherProgramId())) {
+                discountPercent += discount.percent();
+            }
+        }
+        long expectedPrice = program.openingCost() * (100 - Math.min(100, discountPercent)) / 100;
+        for (String componentId : program.requiredMissionComponentIds()) {
+            if (!snapshot.getMissionComponents().containsKey(componentId)) {
+                expectedPrice += CATALOG.missionComponent(componentId).orElseThrow().creationCost();
+            }
+        }
+        long fundsBefore = snapshot.getFunds();
         OpenProgramOutcome outcome = ProgramOpening.open(snapshot, programId, CATALOG);
+        long charged = fundsBefore - snapshot.getFunds();
+        if (charged != (outcome == OpenProgramOutcome.OPENED ? expectedPrice : 0)) {
+            throw new IllegalStateException("Opening " + programId + " (" + outcome + ") charged " + charged
+                + ", expected " + expectedPrice);
+        }
         return outcome == OpenProgramOutcome.OPENED ? 1 : 0;
+    }
+
+    /**
+     * The bot's stand-in for a journaled "close program" action: with a small chance per
+     * season, closes one random open program. Refused while one of its missions flies.
+     *
+     * @param snapshot the player
+     * @param random   the shared random source
+     * @return 1 if a program closed, else 0
+     */
+    private static int maybeCloseProgram(PlayerSnapshot snapshot, Random random) {
+        if (snapshot.getOpenedProgramIds().isEmpty() || random.nextDouble() >= CLOSE_PROGRAM_CHANCE_PER_SEASON) {
+            return 0;
+        }
+        String programId = snapshot.getOpenedProgramIds().get(random.nextInt(snapshot.getOpenedProgramIds().size()));
+        boolean flying = snapshot.getInProgressMissions().values().stream()
+            .anyMatch(mission -> CATALOG.missionConfiguration(mission.getMissionConfigurationId()).orElseThrow()
+                .programId().equals(programId));
+        CloseProgramOutcome outcome = ProgramOpening.close(snapshot, programId, CATALOG);
+        if ((outcome == CloseProgramOutcome.MISSIONS_IN_FLIGHT) != flying) {
+            throw new IllegalStateException("Closing " + programId + " gave " + outcome + " with flying=" + flying);
+        }
+        return outcome == CloseProgramOutcome.CLOSED ? 1 : 0;
     }
 
     /**
@@ -1429,8 +1480,10 @@ public final class PersonnelLifecyclePlayouts {
         for (String programId : snapshot.getOpenedProgramIds()) {
             total += CATALOG.program(programId).orElseThrow().maintenanceCost();
         }
-        for (String componentId : snapshot.getMissionComponents().keySet()) {
-            total += CATALOG.missionComponent(componentId).orElseThrow().maintenanceCost();
+        for (Map.Entry<String, OwnedMissionComponent> owned : snapshot.getMissionComponents().entrySet()) {
+            if (owned.getValue().isActive()) {
+                total += CATALOG.missionComponent(owned.getKey()).orElseThrow().maintenanceCost();
+            }
         }
         // Building upkeep, read straight off the level table rather than through BuildingUpgrades.
         for (Building building : Building.values()) {
@@ -1836,9 +1889,16 @@ public final class PersonnelLifecyclePlayouts {
                     + ": baseline " + component.baselineReliability() + " / floor " + owned.getFloorReliability()
                     + " / current " + owned.getCurrentReliability());
             }
-            if (!requiredByAnOpenedProgram.contains(componentId)) {
-                throw new IllegalStateException(
-                    "Owns " + componentId + " but no currently opened program requires it");
+            // Active exactly when some open program requires it (baspm.md §10.9's IsActive).
+            if (owned.isActive() != requiredByAnOpenedProgram.contains(componentId)) {
+                throw new IllegalStateException(componentId + " active=" + owned.isActive()
+                    + " but required by an open program=" + requiredByAnOpenedProgram.contains(componentId));
+            }
+        }
+        for (SetSpecialist specialist : snapshot.getSetSpecialists()) {
+            String target = specialist.getRdTargetComponentId();
+            if (target != null && !snapshot.getMissionComponents().get(target).isActive()) {
+                throw new IllegalStateException(specialist.getId() + " researches inactive component " + target);
             }
         }
     }
@@ -2226,7 +2286,13 @@ public final class PersonnelLifecyclePlayouts {
         if (specialist.getAssignmentState() != AssignmentState.IDLE) {
             return;
         }
-        List<String> ownedComponentIds = new ArrayList<>(snapshot.getMissionComponents().keySet());
+        // Only an active component can be researched; a closed program's components are idle stock.
+        List<String> ownedComponentIds = new ArrayList<>();
+        snapshot.getMissionComponents().forEach((id, owned) -> {
+            if (owned.isActive()) {
+                ownedComponentIds.add(id);
+            }
+        });
         if (!ownedComponentIds.isEmpty() && random.nextBoolean()) {
             String target = ownedComponentIds.get(random.nextInt(ownedComponentIds.size()));
             Integer freeSlot = firstFreeRdSlot(snapshot, target);
@@ -2505,5 +2571,6 @@ public final class PersonnelLifecyclePlayouts {
         report.randomEventCounts().forEach((kind, count) -> System.out.printf("  %s: %d%n", kind, count));
         System.out.printf("Building upgrades started / completed: %d / %d%n", report.buildingUpgradesStartedCount(),
             report.buildingUpgradesCompletedCount());
+        System.out.printf("Programs closed: %d%n", report.programsClosedCount());
     }
 }
