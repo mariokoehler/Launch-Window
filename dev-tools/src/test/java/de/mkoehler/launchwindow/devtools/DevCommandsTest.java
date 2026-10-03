@@ -3,6 +3,7 @@ package de.mkoehler.launchwindow.devtools;
 import de.mkoehler.launchwindow.actions.HireAction;
 import de.mkoehler.launchwindow.actions.LaunchMissionAction;
 import de.mkoehler.launchwindow.actions.OpenRocketProgramAction;
+import de.mkoehler.launchwindow.actions.ReassignControlSlotAction;
 import de.mkoehler.launchwindow.actions.StartTrainingAction;
 import de.mkoehler.launchwindow.actions.UpgradeBuildingAction;
 import de.mkoehler.launchwindow.model.Building;
@@ -10,6 +11,7 @@ import de.mkoehler.launchwindow.model.TrainingKind;
 import de.mkoehler.launchwindow.rules.PersonnelGroup;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -25,13 +27,21 @@ class DevCommandsTest {
     @Test
     void parsesTheLaunchCommandWithItsLists() {
         LaunchMissionAction launch = (LaunchMissionAction) DevCommands.parse(
-            "launch vostok-orbital rockets=r7-vostok crew=p1 capcom=p2 mc=p3,p4");
+            "launch vostok-orbital rockets=r7-vostok crew=p1 control=p3,-,p2");
 
         assertEquals("vostok-orbital", launch.getMissionConfigurationId());
         assertEquals(List.of("r7-vostok"), launch.getRocketIds());
-        assertEquals(List.of("p1"), launch.getAstronautIds());
-        assertEquals(List.of("p2"), launch.getCapcomAstronautIds());
-        assertEquals(List.of("p3", "p4"), launch.getMissionControlOfficerIds());
+        assertEquals(List.of("p1"), launch.getCrewSlotIds());
+        assertEquals(Arrays.asList("p3", null, "p2"), launch.getControlSlotIds());
+    }
+
+    @Test
+    void parsesTheReassignCommand() {
+        ReassignControlSlotAction reassign = (ReassignControlSlotAction) DevCommands.parse("reassign m0 4 p9");
+
+        assertEquals("m0", reassign.getMissionInstanceId());
+        assertEquals(4, reassign.getSlot());
+        assertEquals("p9", reassign.getPersonId());
     }
 
     @Test

@@ -1,5 +1,7 @@
 package de.mkoehler.launchwindow.devtools.analysis;
 
+import de.mkoehler.launchwindow.rules.MissionStaffing;
+import de.mkoehler.launchwindow.content.StaffingSlot;
 import de.mkoehler.launchwindow.content.BudgetSchedule;
 import de.mkoehler.launchwindow.content.BuildingSchedule;
 import de.mkoehler.launchwindow.content.ContentCatalog;
@@ -471,29 +473,22 @@ public final class ContentPackPlayouts {
     }
 
     private void launch(PlayerSnapshot snapshot, MissionConfiguration target, MissionComponent rocket, Tally tally) {
-        Set<String> crewSkills = new HashSet<>();
-        target.seasons().forEach(season -> season.steps().forEach(step ->
-            step.crewInvolvements().forEach(involvement -> crewSkills.add(involvement.skill().name()))));
-        List<Astronaut> idleAstronauts = snapshot.getAstronauts().stream().filter(ContentPackPlayouts::available)
-            .sorted(Comparator.comparingDouble((Astronaut a) -> -meanOf(a, crewSkills))).toList();
-        if (idleAstronauts.size() < target.requiredAstronautCount() + target.requiredCapcomCount()) {
-            tally.stalls.merge("too few idle astronauts", 1, Integer::sum);
-            return;
+        // Staffed the way a player's "auto-assign" would: the best idle person per slot (baspm.md §10.11).
+        MissionStaffing.Staffing staffing = MissionStaffing.autoAssign(snapshot, target);
+        for (int slot : target.usedCrewSlots()) {
+            if (staffing.crewSlotIds().get(slot) == null) {
+                tally.stalls.merge("too few idle astronauts", 1, Integer::sum);
+                return;
+            }
         }
-        List<String> crew = idleAstronauts.subList(0, target.requiredAstronautCount()).stream()
-            .map(Personnel::getId).toList();
-        List<String> capcom = idleAstronauts.subList(target.requiredAstronautCount(),
-                target.requiredAstronautCount() + target.requiredCapcomCount()).stream()
-            .map(Personnel::getId).toList();
-        List<MissionControlOfficer> idleControllers = snapshot.getMissionControlOfficers().stream()
-            .filter(ContentPackPlayouts::available)
-            .sorted(Comparator.comparingDouble(officer -> -averageSkill(officer))).toList();
-        if (idleControllers.size() < target.requiredMissionControlOfficerCount()) {
-            tally.stalls.merge("too few idle controllers", 1, Integer::sum);
-            return;
+        for (int slot : target.usedControlSlots()) {
+            if (staffing.controlSlotIds().get(slot) == null) {
+                boolean astronautSlot = target.controlSlots().get(slot).kind() == StaffingSlot.Kind.ASTRONAUT;
+                tally.stalls.merge(astronautSlot ? "too few idle astronauts" : "too few idle controllers", 1,
+                    Integer::sum);
+                return;
+            }
         }
-        List<String> controllers = idleControllers.subList(0, target.requiredMissionControlOfficerCount()).stream()
-            .map(Personnel::getId).toList();
         List<String> rockets = target.launches().stream().map(launch -> rocket.id()).toList();
         long expectedCost = target.cost() + rockets.size() * rocket.unitCost();
         if (snapshot.getFunds() < expectedCost) {
@@ -502,7 +497,7 @@ public final class ContentPackPlayouts {
         }
         long before = snapshot.getFunds();
         MissionLaunchOutcome outcome = MissionLaunch.launch(snapshot,
-            new LaunchRequest(target.id(), crew, controllers, capcom, rockets), catalog);
+            new LaunchRequest(target.id(), staffing.crewSlotIds(), staffing.controlSlotIds(), rockets), catalog);
         long charged = before - snapshot.getFunds();
         if (charged != (outcome == MissionLaunchOutcome.LAUNCHED ? expectedCost : 0)) {
             throw new IllegalStateException("Launching " + target.id() + " (" + outcome + ") charged " + charged
@@ -594,13 +589,10 @@ public final class ContentPackPlayouts {
         for (InProgressMission mission : snapshot.getInProgressMissions().values()) {
             MissionConfiguration configuration =
                 catalog.missionConfiguration(mission.getMissionConfigurationId()).orElseThrow();
-            if (mission.getRocketIds().size() != configuration.launches().size()
-                    || mission.getAssignedAstronautIds().size() != configuration.requiredAstronautCount()
-                    || mission.getCapcomAstronautIds().size() != configuration.requiredCapcomCount()
-                    || mission.getAssignedMissionControlOfficerIds().size()
-                        != configuration.requiredMissionControlOfficerCount()) {
-                throw new IllegalStateException("Mission " + mission.getId() + " counts disagree with its configuration");
+            if (mission.getRocketIds().size() != configuration.launches().size()) {
+                throw new IllegalStateException("Mission " + mission.getId() + " rockets disagree with its launches");
             }
+            checkSlots(snapshot, mission, configuration);
             for (int i = 0; i < mission.getRocketIds().size(); i++) {
                 MissionComponent rocket = catalog.missionComponent(mission.getRocketIds().get(i)).orElseThrow();
                 MissionConfiguration.Launch launch = configuration.launches().get(i);
@@ -620,9 +612,8 @@ public final class ContentPackPlayouts {
                         + ", which can't lift " + mass + " to " + launch.launchType());
                 }
             }
-            List<String> everyone = new ArrayList<>(mission.getAssignedAstronautIds());
-            everyone.addAll(mission.getCapcomAstronautIds());
-            everyone.addAll(mission.getAssignedMissionControlOfficerIds());
+            List<String> everyone = new ArrayList<>(mission.crewIds());
+            everyone.addAll(mission.groundIds());
             for (String id : everyone) {
                 if (!claimed.add(id)) {
                     throw new IllegalStateException(id + " holds two seats");
@@ -706,16 +697,45 @@ public final class ContentPackPlayouts {
         return null;
     }
 
-    private static boolean available(Personnel person) {
-        return person.getAssignmentState() == AssignmentState.IDLE && person.getUnavailableSeasons() == 0;
+    /**
+     * Checks a mission's staffing slot by slot, re-derived from the steps: a used slot
+     * holds one person of the slot's type, an unused slot holds nobody.
+     */
+    private static void checkSlots(PlayerSnapshot snapshot, InProgressMission mission,
+            MissionConfiguration configuration) {
+        Set<Integer> usedCrew = new HashSet<>();
+        Set<Integer> usedControl = new HashSet<>();
+        configuration.seasons().forEach(season -> season.steps().forEach(step -> {
+            step.crewInvolvements().forEach(involvement -> usedCrew.add(involvement.slot()));
+            step.controllerInvolvements().forEach(involvement -> usedControl.add(involvement.slot()));
+        }));
+        Set<String> astronautIds = new HashSet<>();
+        snapshot.getAstronauts().forEach(astronaut -> astronautIds.add(astronaut.getId()));
+        Set<String> controllerIds = new HashSet<>();
+        snapshot.getMissionControlOfficers().forEach(officer -> controllerIds.add(officer.getId()));
+        if (mission.getCrewSlotIds().size() != configuration.crewSlots().size()
+                || mission.getControlSlotIds().size() != configuration.controlSlots().size()) {
+            throw new IllegalStateException("Mission " + mission.getId() + " slot lists don't match its layouts");
+        }
+        for (int slot = 0; slot < configuration.crewSlots().size(); slot++) {
+            String holder = mission.getCrewSlotIds().get(slot);
+            if ((holder != null) != usedCrew.contains(slot) || (holder != null && !astronautIds.contains(holder))) {
+                throw new IllegalStateException("Mission " + mission.getId() + " crew slot " + slot + ": " + holder);
+            }
+        }
+        for (int slot = 0; slot < configuration.controlSlots().size(); slot++) {
+            String holder = mission.getControlSlotIds().get(slot);
+            Set<String> roster = configuration.controlSlots().get(slot).kind() == StaffingSlot.Kind.ASTRONAUT
+                ? astronautIds : controllerIds;
+            if ((holder != null) != usedControl.contains(slot) || (holder != null && !roster.contains(holder))) {
+                throw new IllegalStateException("Mission " + mission.getId() + " control slot " + slot + " ("
+                    + configuration.controlSlots().get(slot).title() + "): " + holder);
+            }
+        }
     }
 
-    private static double meanOf(Astronaut astronaut, Set<String> skills) {
-        if (skills.isEmpty()) {
-            return averageSkill(astronaut);
-        }
-        return skills.stream().mapToDouble(skill -> astronaut.getSkill(AstronautSkill.valueOf(skill))).average()
-            .orElse(0);
+    private static boolean available(Personnel person) {
+        return person.getAssignmentState() == AssignmentState.IDLE && person.getUnavailableSeasons() == 0;
     }
 
     private static double averageSkill(Personnel person) {

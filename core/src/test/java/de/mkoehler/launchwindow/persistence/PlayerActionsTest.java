@@ -15,6 +15,7 @@ import de.mkoehler.launchwindow.actions.LaunchMissionAction;
 import de.mkoehler.launchwindow.actions.OpenProgramAction;
 import de.mkoehler.launchwindow.actions.OpenRocketProgramAction;
 import de.mkoehler.launchwindow.actions.PullOutOfTrainingAction;
+import de.mkoehler.launchwindow.actions.ReassignControlSlotAction;
 import de.mkoehler.launchwindow.actions.ReleaseResearchAction;
 import de.mkoehler.launchwindow.actions.StartExpertTrainingAction;
 import de.mkoehler.launchwindow.actions.StartTrainingAction;
@@ -34,6 +35,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -63,7 +65,11 @@ class PlayerActionsTest {
             new ReleaseResearchAction("p5"),
             new StartTrainingAction(PersonnelGroup.MISSION_CONTROL, "p6", TrainingKind.PERMANENT, "PROPULSION", 70.5),
             new StartExpertTrainingAction(PersonnelGroup.ASTRONAUT, "p7", "PILOTING"),
-            new PullOutOfTrainingAction(PersonnelGroup.SET, "p8"));
+            new PullOutOfTrainingAction(PersonnelGroup.SET, "p8"),
+            // A null control slot is a slot no step uses; the journal and the wire must keep it.
+            new LaunchMissionAction("mercury-orbital", List.of("p1"), Arrays.asList("p2", null, "p3"),
+                List.of("redstone")),
+            new ReassignControlSlotAction("m0", 4, "p9"));
         long seed = 1;
         for (PlayerAction action : actions) {
             action.setSeed(seed++);

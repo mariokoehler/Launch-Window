@@ -1198,7 +1198,9 @@ proceeds:
     produces once launched — `id` (a fresh instance id, since the same
     configuration can run more than once), `missionConfigurationId`,
     `currentSeasonIndex` (0-based, into `seasons()`), and the two assigned-
-    personnel id lists (`assignedAstronautIds`/`assignedMissionControlOfficerIds`).
+    personnel id lists (`assignedAstronautIds`/`assignedMissionControlOfficerIds`;
+    **Superseded 2026-10-03 by BASPM staffing slots (§5 M5, "Slot staffing").** They are now
+    the slot-aligned `crewSlotIds`/`controlSlotIds`).
     `PlayerSnapshot` gains `inProgressMissions` (keyed by instance id, a
     `LinkedHashMap` for reproducible iteration order against the shared
     random source — same reasoning as `ContentCatalog.indexById`) and
@@ -1258,7 +1260,8 @@ proceeds:
       exist) by involvement percentage, exactly as `MissionStepResolution`
       expects. **Decided (user, 2026-10-02): the crew/controller
       contribution for a given skill is the *average* skill value across
-      every assigned crew/controller**, not a sum — a sum would push the
+      every assigned crew/controller** (**Superseded 2026-10-03 by BASPM staffing slots (§5 M5, "Slot staffing").** Each involvement now reads the one person in
+      its slot), not a sum — a sum would push the
       weighted-average blend's inputs past the 0-100 scale §2.5(e)'s own
       fix depends on, rewarding crew size rather than crew quality; average
       keeps both contributions on the same 0-100 scale regardless of how
@@ -1426,7 +1429,8 @@ proceeds:
       reliability changes (components in first-involved-this-season
       order), then skill growth (astronauts in `assignedAstronautIds`
       order, then controllers in `assignedMissionControlOfficerIds`
-      order).
+      order). **Superseded 2026-10-03 by BASPM staffing slots (§5 M5, "Slot staffing").** Growth now runs over the crew in slot
+      order, then each control slot an executed step used, in slot order.
     - **Harness-wired the same day:** since
       `PersonnelLifecyclePlayouts` already calls
       `MissionProgress.advanceSeason` (§3.10's "mission simulation wired
@@ -4737,7 +4741,11 @@ here.
        crewed Mercury and Vostok need 10 controllers plus 1 CAPCOM, and the
        uncrewed tests need 9. (This first said nine for crewed; corrected after the
        layouts were traced.) A CAPCOM slot is an extra required astronaut whose
-       skill counts on the controller side.
+       skill counts on the controller side. **Corrected 2026-10-03:** only the slots
+       some step uses are required, as BASPM shows unused slots as "Not required".
+       Crewed Mercury and Vostok need 9 controllers plus 1 CAPCOM (the layout's
+       FLIGHT slot is never used), the uncrewed tests 8, Sputnik 2 needs 4, and the
+       satellites 2. No early-era step uses a Flight Director slot.
     7. **Buildings and upgrades, all five of BASPM's.** Astronaut Center, Mission
        Control, SET Center, Headquarters, and the VAB all start at level 1 for
        free; there is no construction step. Upgrades use BASPM's costs, build
@@ -4753,7 +4761,8 @@ here.
     doesn't own yet, as BASPM does. A mission costs the unit cost of its rocket
     plus its payloads. The repeat-flight prestige tiers move from 60%/40% to
     BASPM's 50%/30%. A Flight Director slot's involvement is spread evenly
-    across the five controller skills. Controller slots map to skills by
+    across the five controller skills (superseded by slot staffing: the slot reads
+    the person's Flight Director value). Controller slots map to skills by
     BASPM's speciality index, not by the slot's name. A category's required goals
     are copied onto every program in it. Goal dependencies and boosts that
     reference goals outside the pack are dropped.
@@ -4821,7 +4830,8 @@ here.
     `launch` overload still works for configurations without launches. The harness
     fixtures have no launches, so the bot exercises rockets only once it runs on
     the real pack (slice 5); `RocketsTest` covers the rules meanwhile.
-  - **Slice 3c, CAPCOM — done (2026-10-03).** `MissionStep.capcomInvolvements` (astronaut
+  - **Slice 3c, CAPCOM — done (2026-10-03).** **Superseded 2026-10-03 by BASPM staffing slots (§5 M5, "Slot staffing").** CAPCOM is now an astronaut-type
+    control slot; `capcomInvolvements` and the CAPCOM id list are gone. `MissionStep.capcomInvolvements` (astronaut
     skills, on the controller side, sharing the 100% budget with
     `controllerInvolvements`) and `MissionConfiguration.requiredCapcomCount`
     (positive exactly when some step involves CAPCOM). The `LaunchRequest`'s CAPCOM
@@ -4855,6 +4865,11 @@ here.
       Every configuration's shares already summed to 100. The step's failure value
       is a percentage of the first-time total, so `failurePrestigeDeduction` =
       round(pct × firstTime / 100).
+    - **Superseded 2026-10-03 by BASPM staffing slots (§5 M5, "Slot staffing").** The converter now emits each layout one to
+      one (`crewSlots` titles, `controlSlots` with title, kind, and skill), slot-indexed
+      controller involvements, and per-slot crew weights. The four rules below
+      (controller slots, crew slots, staffing counts, joint flights) describe the
+      earlier pack.
     - **Controller slots** map through the configuration's mission-control layout
       by speciality index. A Flight Director slot's amount is spread evenly over
       the five controller skills, and an astronaut slot becomes a `LEADERSHIP`
@@ -4906,7 +4921,8 @@ here.
     funds reconciliation, the hires against the cap read from the table, the
     Headquarters and VAB caps, the agency filter, and every flying mission's
     counts, rocket lift and human rating, and seat pairing. `BudgetSchedule.baspmClose()`
-    moved into core for it. **Numbers (200 games, 80 seasons, seed 42, alternating
+    moved into core for it. (Re-recorded under slot staffing in §5 M5, "Slot staffing".)
+    **Numbers (200 games, 80 seasons, seed 42, alternating
     NASA and Soviet):** 189 games reached every declared goal (NASA 90 of 100,
     Soviet 99 of 100), at an average of season 59.1. Earth-orbit satellite was
     reached in all 200, human in space in 199, and human in orbit in 189. About
@@ -5082,7 +5098,57 @@ here.
       active missions, the assembly screen reopens with crew slots locked and the mission-control slots
       reassignable to available people. BASPM offers the same between seasons. **Unconfirmed default:**
       CAPCOM counts as a ground slot and is reassignable too, though it holds an astronaut (the user
-      said astronaut slots are locked, meaning the crew aboard). First real playtest happens at the
+      said astronaut slots are locked, meaning the crew aboard).
+  - **Slot staffing — done (2026-10-03).** The two decisions above, implemented.
+    - **Content:** `StaffingSlot` (title, kind `MISSION_CONTROL` or `ASTRONAUT`, and a
+      skill name, `FLIGHT_DIRECTOR` for a Flight Director slot). `MissionConfiguration`
+      carries `crewSlots` (titles) and `controlSlots`, and derives the required counts
+      from the slots any step of any season uses. That is a simplification of BASPM,
+      which releases a slot after its last season. `MissionStep` involvements are
+      slot-indexed: `ControllerInvolvement(slot, percent)` for control slots, CAPCOM
+      included, and `CrewInvolvement(slot, skill, weight)`, with crew weights as
+      doubles summing to 100. The old count constructors remain for fixtures and
+      build generic slots (`CREW n`; `CONTROLLER n` cycling through the five skills;
+      `CAPCOM n` reading Leadership). The pack was regenerated, and nothing but
+      staffing changed.
+    - **Rules:** `MissionLaunch` validates one person per used slot, of the slot's
+      type, idle and available, and nobody in an unused slot. The roll reads each
+      slot holder (`MissionProgress.slotValue`). Growth follows the slot: the crew
+      grows all five skills; each used control slot's holder grows that slot's
+      skill; a Flight Director grows from their Flight Director value, spread evenly
+      over the five skills, as BASPM does (`baspm.md` §9.3). Release and crew loss
+      read the derived `crewIds()`/`groundIds()`.
+    - **Auto-assign:** `MissionStaffing.autoAssign` proposes the best idle person per
+      used slot, with Flight Director slots first, then the rest, as BASPM's
+      `AssignFlightControllersBestFit` does. **Unconfirmed defaults:** crew slots are
+      filled before the control slots (so CAPCOM never takes the best pilot), each
+      crew seat by the step weights on that seat, and ties go to roster order.
+    - **Re-staffing:** `MissionStaffing.reassign`, journaled as
+      `ReassignControlSlotAction` (`reassignControlSlot`, appended to the Kryo
+      registry). It is free, works on scheduled and flying missions, takes control
+      slots only (the crew is locked), and needs a person of the slot's type who is
+      idle and available; the previous holder goes idle. CAPCOM stays reassignable,
+      the unconfirmed default above.
+    - **Expert rescue:** a step's rescuing skills come from its slots. **Unconfirmed
+      default:** a Flight Director slot names no single skill, so it adds none.
+    - **DevClient:** `launch <config> rockets=... crew=a,b control=x,-,y` takes one
+      entry per slot (`-` for empty), and `reassign <mission> <slot> <person>` is new.
+      `missions` prints the slot lists.
+    - **Dev data:** the journaled launch action's fields changed, so reset the dev
+      data root again.
+    - **Harness numbers (200 games, 80 seasons, seed 42).** `ContentPackPlayouts` now
+      staffs through `autoAssign` and checks every slot's holder and type
+      independently: 186 games completed every declared goal (NASA 88, Soviet 98;
+      189 before), average season 58.9; steps 10,468 successful, 1,367 glitch
+      solved, 453 minor glitch, 623 failure, 30 catastrophic; 77 astronauts lost;
+      lowest funds 19,421. `ContentPackPlayoutsTest` (the M3 exit criterion) still
+      passes. `PersonnelLifecyclePlayouts`' fixtures had to grow slots for the
+      controllers their steps name (Sputnik 2, Explorer 2 of 5, Mercury 3) and split
+      the Mercury crew weights over both seats, so its numbers move a lot: 1,452
+      missions; steps 1,098 / 650 / 182 / 236 / 16; 102 astronauts lost; 871
+      resigned, 1,039 retired, 4,687 hires.
+
+  First real playtest happens at the
   end of this milestone. Expected slices, sizing not yet estimated:
   connect/login/slot-claim screens; roster/personnel management;
   program/mission selection bundled with the budget/prestige overview and

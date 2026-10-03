@@ -27,10 +27,10 @@ class MissionStepTest {
             List.of(new MissionStep.ComponentInvolvement("rocket-1", 70),
                 new MissionStep.ComponentInvolvement("payload-1", 30));
         List<MissionStep.ControllerInvolvement> controllers =
-            List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 50));
+            List.of(new MissionStep.ControllerInvolvement(0, 50));
         List<MissionStep.CrewInvolvement> crew =
-            List.of(new MissionStep.CrewInvolvement(AstronautSkill.PILOTING, 70),
-                new MissionStep.CrewInvolvement(AstronautSkill.LEADERSHIP, 30));
+            List.of(new MissionStep.CrewInvolvement(0, AstronautSkill.PILOTING, 70),
+                new MissionStep.CrewInvolvement(0, AstronautSkill.LEADERSHIP, 30));
 
         MissionStep step = new MissionStep("ascent", components, controllers, crew, true);
 
@@ -99,8 +99,8 @@ class MissionStepTest {
         List<MissionStep.ComponentInvolvement> components =
             List.of(new MissionStep.ComponentInvolvement("rocket-1", 100));
         List<MissionStep.ControllerInvolvement> controllers =
-            List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 60),
-                new MissionStep.ControllerInvolvement(MissionControlSkill.MISSION_OPERATIONS, 50));
+            List.of(new MissionStep.ControllerInvolvement(0, 60),
+                new MissionStep.ControllerInvolvement(4, 50));
 
         assertThrows(IllegalArgumentException.class,
             () -> new MissionStep("ascent", components, controllers, List.of(), false));
@@ -114,8 +114,8 @@ class MissionStepTest {
         List<MissionStep.ComponentInvolvement> components =
             List.of(new MissionStep.ComponentInvolvement("rocket-1", 100));
         List<MissionStep.CrewInvolvement> crew =
-            List.of(new MissionStep.CrewInvolvement(AstronautSkill.PILOTING, 60),
-                new MissionStep.CrewInvolvement(AstronautSkill.LEADERSHIP, 50));
+            List.of(new MissionStep.CrewInvolvement(0, AstronautSkill.PILOTING, 60),
+                new MissionStep.CrewInvolvement(0, AstronautSkill.LEADERSHIP, 50));
 
         assertThrows(IllegalArgumentException.class,
             () -> new MissionStep("ascent", components, List.of(), crew, false));
@@ -133,7 +133,7 @@ class MissionStepTest {
     void rejectsNonEmptyCrewPercentagesSummingBelow100() {
         List<MissionStep.ComponentInvolvement> components =
             List.of(new MissionStep.ComponentInvolvement("rocket-1", 100));
-        List<MissionStep.CrewInvolvement> crew = List.of(new MissionStep.CrewInvolvement(AstronautSkill.PILOTING, 40));
+        List<MissionStep.CrewInvolvement> crew = List.of(new MissionStep.CrewInvolvement(0, AstronautSkill.PILOTING, 40));
 
         assertThrows(IllegalArgumentException.class,
             () -> new MissionStep("ascent", components, List.of(), crew, false));
@@ -161,8 +161,8 @@ class MissionStepTest {
         List<MissionStep.ComponentInvolvement> components =
             List.of(new MissionStep.ComponentInvolvement("rocket-1", 100));
         List<MissionStep.CrewInvolvement> crew =
-            List.of(new MissionStep.CrewInvolvement(AstronautSkill.PILOTING, 20),
-                new MissionStep.CrewInvolvement(AstronautSkill.PILOTING, 20));
+            List.of(new MissionStep.CrewInvolvement(0, AstronautSkill.PILOTING, 20),
+                new MissionStep.CrewInvolvement(0, AstronautSkill.PILOTING, 20));
 
         assertThrows(IllegalArgumentException.class,
             () -> new MissionStep("ascent", components, List.of(), crew, false));
@@ -213,8 +213,8 @@ class MissionStepTest {
         MissionStep step = new MissionStep("ascent", components, controllers, crew, false);
 
         components.add(new MissionStep.ComponentInvolvement("payload-1", 1));
-        controllers.add(new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 10));
-        crew.add(new MissionStep.CrewInvolvement(AstronautSkill.PILOTING, 10));
+        controllers.add(new MissionStep.ControllerInvolvement(0, 10));
+        crew.add(new MissionStep.CrewInvolvement(0, AstronautSkill.PILOTING, 10));
 
         assertEquals(1, step.componentInvolvements().size());
         assertEquals(0, step.controllerInvolvements().size());
@@ -231,12 +231,12 @@ class MissionStepTest {
         assertThrows(IllegalArgumentException.class, () -> new MissionStep.ComponentInvolvement("rocket-1", 0));
         assertThrows(IllegalArgumentException.class, () -> new MissionStep.ComponentInvolvement("rocket-1", -1));
         assertThrows(IllegalArgumentException.class,
-            () -> new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 101));
+            () -> new MissionStep.ControllerInvolvement(0, 101));
         assertThrows(IllegalArgumentException.class,
-            () -> new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 0));
+            () -> new MissionStep.ControllerInvolvement(0, 0));
         assertThrows(IllegalArgumentException.class,
-            () -> new MissionStep.CrewInvolvement(AstronautSkill.PILOTING, 0));
+            () -> new MissionStep.CrewInvolvement(0, AstronautSkill.PILOTING, 0));
         assertThrows(IllegalArgumentException.class,
-            () -> new MissionStep.CrewInvolvement(AstronautSkill.PILOTING, -1));
+            () -> new MissionStep.CrewInvolvement(0, AstronautSkill.PILOTING, -1));
     }
 }

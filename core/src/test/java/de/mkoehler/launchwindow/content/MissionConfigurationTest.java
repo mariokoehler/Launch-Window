@@ -139,24 +139,47 @@ class MissionConfigurationTest {
     }
 
     /**
-     * Verifies a positive required-astronaut-count is rejected when no
-     * step actually involves any crew.
+     * Verifies layout slots no step uses aren't required, as BASPM's "Not required"
+     * slots ({@code baspm.md} &sect;10.11).
      */
     @Test
-    void rejectsPositiveRequiredAstronautCountWithNoCrewInvolvement() {
-        assertThrows(IllegalArgumentException.class,
-            () -> new MissionConfiguration("sputnik-1-std", "sputnik-1", seasons(1), 1, 0, 0));
+    void slotsNoStepUsesAreNotRequired() {
+        MissionConfiguration configuration =
+            new MissionConfiguration("sputnik-1-std", "sputnik-1", seasons(1), 1, 1, 0);
+
+        assertEquals(0, configuration.requiredAstronautCount());
+        assertEquals(0, configuration.requiredMissionControlOfficerCount());
     }
 
     /**
-     * Verifies a zero required-astronaut-count is rejected when a step
-     * does involve crew.
+     * Verifies the required counts split the used control slots by employee type: a
+     * Flight Director slot needs a controller, a CAPCOM slot an astronaut.
      */
     @Test
-    void rejectsZeroRequiredAstronautCountWithCrewInvolvement() {
+    void requiredCountsSplitUsedControlSlotsByType() {
+        MissionStep step = new MissionStep("step-1", List.of(new MissionStep.ComponentInvolvement("rocket-1", 100)),
+            List.of(new MissionStep.ControllerInvolvement(0, 60), new MissionStep.ControllerInvolvement(2, 40)),
+            List.of(), false);
+        MissionConfiguration configuration = new MissionConfiguration("sputnik-1-std", "sputnik-1",
+            List.of(new MissionSeason(List.of(step))), List.of(),
+            List.of(StaffingSlot.flightDirector("FLIGHT"), StaffingSlot.controller("BOOSTER",
+                de.mkoehler.launchwindow.model.MissionControlSkill.PROPULSION),
+                StaffingSlot.astronaut("CAPCOM", AstronautSkill.LEADERSHIP)),
+            0, 0, List.of(), List.of(), List.of(), 0, 0);
+
+        assertEquals(1, configuration.requiredMissionControlOfficerCount());
+        assertEquals(1, configuration.requiredCapcomCount());
+        assertEquals(java.util.Set.of(0, 2), configuration.usedControlSlots());
+    }
+
+    /**
+     * Verifies a step naming a crew slot the layout doesn't have is rejected.
+     */
+    @Test
+    void rejectsACrewSlotOutsideTheLayout() {
         MissionStep crewedStep = new MissionStep("step-1",
             List.of(new MissionStep.ComponentInvolvement("rocket-1", 100)), List.of(),
-            List.of(new MissionStep.CrewInvolvement(AstronautSkill.PILOTING, 100)), false);
+            List.of(new MissionStep.CrewInvolvement(0, AstronautSkill.PILOTING, 100)), false);
         List<MissionSeason> seasons = List.of(new MissionSeason(List.of(crewedStep)));
 
         assertThrows(IllegalArgumentException.class,
@@ -164,24 +187,13 @@ class MissionConfigurationTest {
     }
 
     /**
-     * Verifies a positive required-Mission-Control-officer-count is
-     * rejected when no step actually involves any controller.
+     * Verifies a step naming a control slot the layout doesn't have is rejected.
      */
     @Test
-    void rejectsPositiveRequiredMissionControlOfficerCountWithNoControllerInvolvement() {
-        assertThrows(IllegalArgumentException.class,
-            () -> new MissionConfiguration("sputnik-1-std", "sputnik-1", seasons(1), 0, 1, 0));
-    }
-
-    /**
-     * Verifies a zero required-Mission-Control-officer-count is rejected
-     * when a step does involve a controller.
-     */
-    @Test
-    void rejectsZeroRequiredMissionControlOfficerCountWithControllerInvolvement() {
+    void rejectsAControlSlotOutsideTheLayout() {
         MissionStep controlledStep = new MissionStep("step-1",
             List.of(new MissionStep.ComponentInvolvement("rocket-1", 100)),
-            List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 100)), List.of(), false);
+            List.of(new MissionStep.ControllerInvolvement(0, 100)), List.of(), false);
         List<MissionSeason> seasons = List.of(new MissionSeason(List.of(controlledStep)));
 
         assertThrows(IllegalArgumentException.class,
@@ -189,18 +201,18 @@ class MissionConfigurationTest {
     }
 
     /**
-     * Verifies a correctly matched positive required-astronaut-count with
-     * crew involvement is accepted.
+     * Verifies only the crew slots a step uses count: a two-seat layout with one
+     * seat used needs one astronaut.
      */
     @Test
-    void acceptsMatchedRequiredAstronautCount() {
+    void countsOnlyTheUsedCrewSlots() {
         MissionStep crewedStep = new MissionStep("step-1",
             List.of(new MissionStep.ComponentInvolvement("rocket-1", 100)), List.of(),
-            List.of(new MissionStep.CrewInvolvement(AstronautSkill.PILOTING, 100)), false);
+            List.of(new MissionStep.CrewInvolvement(0, AstronautSkill.PILOTING, 100)), false);
         List<MissionSeason> seasons = List.of(new MissionSeason(List.of(crewedStep)));
 
         MissionConfiguration configuration = new MissionConfiguration("sputnik-1-std", "sputnik-1", seasons, 2, 0, 0);
 
-        assertEquals(2, configuration.requiredAstronautCount());
+        assertEquals(1, configuration.requiredAstronautCount());
     }
 }

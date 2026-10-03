@@ -3,6 +3,7 @@ package de.mkoehler.launchwindow.model;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -27,8 +28,8 @@ class InProgressMissionTest {
         assertEquals("m0", mission.getId());
         assertEquals("sputnik-1-std", mission.getMissionConfigurationId());
         assertEquals(0, mission.getCurrentSeasonIndex());
-        assertEquals(List.of("astro-1"), mission.getAssignedAstronautIds());
-        assertEquals(List.of("mco-1"), mission.getAssignedMissionControlOfficerIds());
+        assertEquals(List.of("astro-1"), mission.getCrewSlotIds());
+        assertEquals(List.of("mco-1"), mission.getControlSlotIds());
     }
 
     /**
@@ -45,8 +46,8 @@ class InProgressMissionTest {
         astronautIds.add("astro-2");
         controllerIds.add("mco-2");
 
-        assertEquals(1, mission.getAssignedAstronautIds().size());
-        assertEquals(1, mission.getAssignedMissionControlOfficerIds().size());
+        assertEquals(1, mission.getCrewSlotIds().size());
+        assertEquals(1, mission.getControlSlotIds().size());
     }
 
     /**
@@ -58,11 +59,23 @@ class InProgressMissionTest {
     void settersCopyAnImmutableListIntoAMutableOne() {
         InProgressMission mission = new InProgressMission("m0", "sputnik-1-std", List.of(), List.of());
 
-        mission.setAssignedAstronautIds(List.of("astro-1"));
-        mission.setAssignedMissionControlOfficerIds(List.of("mco-1"));
+        mission.setCrewSlotIds(List.of("astro-1"));
+        mission.setControlSlotIds(List.of("mco-1"));
 
-        assertDoesNotThrow(() -> mission.getAssignedAstronautIds().add("astro-2"));
-        assertDoesNotThrow(() -> mission.getAssignedMissionControlOfficerIds().add("mco-2"));
+        assertDoesNotThrow(() -> mission.getCrewSlotIds().add("astro-2"));
+        assertDoesNotThrow(() -> mission.getControlSlotIds().add("mco-2"));
+    }
+
+    /**
+     * Verifies the derived crew and ground lists skip the {@code null}s of unused slots.
+     */
+    @Test
+    void derivedListsSkipUnusedSlots() {
+        InProgressMission mission = new InProgressMission("m0", "mercury-orbital", Arrays.asList(null, "astro-1"),
+            Arrays.asList("mco-1", null, "astro-2"));
+
+        assertEquals(List.of("astro-1"), mission.crewIds());
+        assertEquals(List.of("mco-1", "astro-2"), mission.groundIds());
     }
 
     /**

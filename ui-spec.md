@@ -359,24 +359,27 @@ four parts:
 - **Assemble mission** (below).
 
 **4.6.8 Assemble mission** *(decided: one screen merging BASPM's schedule and
-assemble)*. It shows the mission's **slots**: one per crew member
-(`requiredAstronautCount`), per CAPCOM (`requiredCapcomCount`, an astronaut on
-the ground), and per flight controller (`requiredMissionControlOfficerCount`),
-plus the chosen rocket per launch.
-- Click a slot to pick an available employee: idle, not unavailable, and not in
-  another slot. Each candidate shows the skills this mission uses.
-- **Auto-assign** fills every slot with the best available person, ranked by how
-  well their skills match what the mission's steps use:
-  - crew are ranked by the steps' crew skills;
-  - CAPCOM by Leadership (or the CAPCOM skill the steps name);
-  - controllers by the steps' controller skills, with Flight Director shares
-    spread evenly over the five skills.
-
-  *Note for the design:* our rules average each skill across everyone assigned,
-  so slots are seats, not named jobs like BASPM's BOOSTER or FIDO. Labelling seats
-  by the skill they most help is a good aid, but it isn't a rule.
+assemble)*. It shows the configuration's **staffing layouts** one to one, as BASPM
+does (`baspm.md` §10.11), plus the chosen rocket per launch:
+- **Flight crew** (`crewSlots`): one titled seat per astronaut aboard, for example
+  ASTRONAUT, or COSMONAUT A and B on a joint flight.
+- **Mission control** (`controlSlots`): titled jobs such as BOOSTER, RETRO, FIDO,
+  GUIDO, SURGEON, FLIGHT, and CAPCOM. Each slot shows its icon for the skill it reads
+  (the Flight Director icon for a FLIGHT slot) and its employee type; CAPCOM takes an
+  astronaut, every other slot a flight controller.
+- Slots no step uses show **"Not required"** and stay empty, as in BASPM. Crewed
+  Mercury, for example, has 11 control slots and uses 10 (9 controllers + CAPCOM).
+- Click a slot to pick an available employee of its type: idle, not unavailable, and
+  not in another slot. Any controller fits any controller slot; each candidate shows
+  their value in the slot's skill (a Flight Director slot reads the average of the
+  five skills), which is exactly what the roll will read.
+- **Auto-assign** (`MissionStaffing.autoAssign` in `core`) fills the crew seats first,
+  each with the astronaut best at the skills the steps weight on that seat, then the
+  Flight Director slots, then every other used slot, each with the best available
+  person at the slot's skill. Nobody is placed twice; a slot nobody is left for stays
+  empty.
 - A slot that can't be filled says why ("only 5 flight controllers; this mission
-  needs 10. Upgrade Mission Control and hire").
+  needs 9. Upgrade Mission Control and hire").
 - **Confirm & pay**: a price breakdown (configuration cost + the rockets' unit
   costs) and one confirmation ("Launch for 2,243? It flies at the next turn.
   Scrubbing before then refunds in full"). On confirm, the cost is deducted and the
@@ -399,6 +402,12 @@ cost. **Scrub** (red, confirmation) refunds in full and frees everyone.
 
 **4.7.3 Inspect active missions, and the mission replay.** Missions in flight,
 each with season n of m, its people, and the components' reliability.
+- **Re-staff mission control** *(decided 2026-10-03)*: reopens the assembly screen
+  (§4.6.8) for this mission with the crew seats locked and every used control slot
+  reassignable to an available person of its type, at no cost
+  (`ReassignControlSlotAction`, one action per changed slot; the previous holder
+  goes idle). CAPCOM is reassignable too (unconfirmed default). The same applies to
+  scheduled missions (§4.7.2).
 - **Cancel** (red, confirmation) is offered only for **uncrewed** missions: it
   shows the prestige loss and the percentage refunded.
 - Crewed missions show "Can't be abandoned", with no button.

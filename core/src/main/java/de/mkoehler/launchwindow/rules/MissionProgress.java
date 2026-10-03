@@ -6,6 +6,7 @@ import de.mkoehler.launchwindow.content.MissionComponent;
 import de.mkoehler.launchwindow.content.MissionConfiguration;
 import de.mkoehler.launchwindow.content.MissionSeason;
 import de.mkoehler.launchwindow.content.MissionStep;
+import de.mkoehler.launchwindow.content.StaffingSlot;
 import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.FlightTier;
@@ -25,9 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.function.ToIntFunction;
+import java.util.TreeSet;
 import java.util.random.RandomGenerator;
 
 /**
@@ -37,16 +36,15 @@ import java.util.random.RandomGenerator;
  * {@code design.md} &sect;3.10 - no persistence/network/libGDX
  * dependency.</p>
  *
- * <p><b>Crew/controller skill contribution is an average across every
- * assigned person, not a sum</b> (user decision, 2026-10-02, see
- * {@code design.md} &sect;2.5(f)): for a given skill, this resolver takes
- * the mean skill value across every astronaut/Mission Control officer
- * assigned to the mission, then weights that average by the step's own
- * involvement percentage, exactly like {@link MissionStepResolution}
- * expects. A sum would grow with crew size and push the inputs to
- * {@link MissionStepResolution#computeBaseProbability}'s weighted-average
- * blend past the 0-100 scale {@code design.md} &sect;2.5(e)'s own fix
- * depends on.</p>
+ * <p><b>Each involvement reads the one person in its staffing slot</b>, as in
+ * BASPM ({@code baspm.md} &sect;10.11, user decision 2026-10-03, superseding the
+ * 2026-10-02 averaging rule): a controller involvement reads the person in that
+ * control slot at the slot's skill (a Flight Director slot reads
+ * {@link MissionControlOfficer#flightDirectorSkill()}, a CAPCOM slot the
+ * astronaut's skill), and a crew involvement reads the astronaut in that crew slot
+ * at the involvement's skill. Crew weights sum to 100 and controller percentages to
+ * 100 or less, so both sums stay on the 0-100 scale
+ * {@link MissionStepResolution} expects.</p>
  *
  * <p><b>On {@code FAILURE}/{@code CATASTROPHIC}, the mission ends
  * immediately</b> - no further steps run that season or any later season,
@@ -54,8 +52,8 @@ import java.util.random.RandomGenerator;
  * outcome permanently loses the entire assigned crew</b> (user decision,
  * 2026-10-02, see {@code design.md} &sect;2.5(f) for the real-world
  * precedent this is based on), reported as a {@link PersonnelDeparture}
- * per lost astronaut with {@link DepartureReason#LOST_IN_ACCIDENT}. Mission
- * Control officers are never crew and are never at risk. On any mission
+ * per lost astronaut with {@link DepartureReason#LOST_IN_ACCIDENT}. Everyone in
+ * a control slot is on the ground and never at risk, CAPCOM included. On any mission
  * end - successful completion, {@code FAILURE}, or {@code CATASTROPHIC} -
  * every surviving assigned person is released: back to
  * {@link AssignmentState#IDLE} with {@link Personnel#setAssignedMissionId}
@@ -236,7 +234,7 @@ public final class MissionProgress {
         // removed them from the roster.
         applyPostSeasonReliabilityChange(snapshot, catalog, mission, executedSteps, executedOutcomes, random,
             events);
-        applyPostSeasonSkillGrowth(snapshot, mission, executedSteps, random, events);
+        applyPostSeasonSkillGrowth(snapshot, configuration, mission, executedSteps, random, events);
 
         // Recent-history turns feed the random-event gates (design.md §2.7). A failure is FAILURE or
         // CATASTROPHIC; a season that didn't end in one counts as a failure-free flight season.
@@ -421,11 +419,7 @@ public final class MissionProgress {
             List<ResolutionEvent> events) {
         double componentSum = componentContributionSum(snapshot, catalog, mission, step);
         boolean crewInvolved = !step.crewInvolvements().isEmpty();
-        double crewSum = crewInvolved
-            ? averageContributionSum(step.crewInvolvements(), mission.getAssignedAstronautIds(),
-                snapshot.getAstronauts(), MissionStep.CrewInvolvement::skill, MissionStep.CrewInvolvement::percent,
-                Astronaut::getSkill)
-            : 0;
+        double crewSum = crewInvolved ? crewContributionSum(snapshot, mission, step) : 0;
         double baseProbability = MissionStepResolution.computeBaseProbability(componentSum, crewInvolved, crewSum);
 
         double firstRoll = MissionStepResolution.drawRoll(random);
@@ -433,18 +427,12 @@ public final class MissionProgress {
             return MissionStepOutcome.SUCCESSFUL;
         }
 
-        double controllerSum = averageContributionSum(step.controllerInvolvements(),
-            mission.getAssignedMissionControlOfficerIds(), snapshot.getMissionControlOfficers(),
-            MissionStep.ControllerInvolvement::skill, MissionStep.ControllerInvolvement::percent,
-            MissionControlOfficer::getSkill);
-        // CAPCOM astronauts sit on the controller side of the saving throw (baspm.md §10.9).
-        controllerSum += averageContributionSum(step.capcomInvolvements(), mission.getCapcomAstronautIds(),
-            snapshot.getAstronauts(), MissionStep.CrewInvolvement::skill, MissionStep.CrewInvolvement::percent,
-            Astronaut::getSkill);
+        // CAPCOM is a control slot, so it sits on the controller side of the saving throw (baspm.md §10.9).
+        double controllerSum = controlContributionSum(snapshot, catalog, mission, step);
         double savingThrowProbability = MissionStepResolution.computeSavingThrowProbability(baseProbability,
             controllerSum);
-        savingThrowProbability = applyExpertRescue(snapshot, mission, step, savingThrowProbability, expertUseCounts,
-            events);
+        savingThrowProbability = applyExpertRescue(snapshot, catalog, mission, step, savingThrowProbability,
+            expertUseCounts, events);
 
         double savingRoll = MissionStepResolution.drawRoll(random);
         return MissionStepResolution.resolve(baseProbability, savingThrowProbability, step.crewRisk(), firstRoll,
@@ -459,8 +447,9 @@ public final class MissionProgress {
      * once at the end.
      *
      * <p>Eligibility: any Astronaut/Mission Control officer whose own
-     * Expert-skill set shares at least one skill with {@code step}'s
-     * {@code crewInvolvements}/{@code controllerInvolvements} - idle,
+     * Expert-skill set shares at least one skill the step reads - its crew
+     * involvements' skills, and its involved control slots' skills (a Flight
+     * Director slot names no single skill, so it adds none) - idle,
      * training, or assigned to <em>this</em> mission, all at full
      * strength. An Astronaut assigned to a <em>different</em> active
      * mission is excluded entirely (physically elsewhere); a Mission
@@ -470,6 +459,7 @@ public final class MissionProgress {
      * possible).</p>
      *
      * @param snapshot             the player snapshot the roster is read from
+     * @param catalog              the content catalog, for the step's slots
      * @param mission              the mission whose step is being rescued
      * @param step                 the step needing a saving throw
      * @param savingThrowProbability the saving-throw probability before
@@ -480,14 +470,25 @@ public final class MissionProgress {
      *                             {@link ExpertRescueApplied} events to
      * @return the final saving-throw probability, capped
      */
-    private static double applyExpertRescue(PlayerSnapshot snapshot, InProgressMission mission, MissionStep step,
-            double savingThrowProbability, Map<String, Integer> expertUseCounts, List<ResolutionEvent> events) {
+    private static double applyExpertRescue(PlayerSnapshot snapshot, ContentCatalog catalog,
+            InProgressMission mission, MissionStep step, double savingThrowProbability,
+            Map<String, Integer> expertUseCounts, List<ResolutionEvent> events) {
         double unboosted = savingThrowProbability;
         double boosted = unboosted;
+        List<StaffingSlot> controlSlots = configurationOf(catalog, mission).controlSlots();
 
         Set<AstronautSkill> stepCrewSkills = new LinkedHashSet<>();
+        Set<MissionControlSkill> stepControllerSkills = new LinkedHashSet<>();
         for (MissionStep.CrewInvolvement involvement : step.crewInvolvements()) {
             stepCrewSkills.add(involvement.skill());
+        }
+        for (MissionStep.ControllerInvolvement involvement : step.controllerInvolvements()) {
+            StaffingSlot slot = controlSlots.get(involvement.slot());
+            if (slot.kind() == StaffingSlot.Kind.ASTRONAUT) {
+                stepCrewSkills.add(AstronautSkill.valueOf(slot.skill()));
+            } else if (!slot.flightDirectorSlot()) {
+                stepControllerSkills.add(MissionControlSkill.valueOf(slot.skill()));
+            }
         }
         for (Astronaut astronaut : snapshot.getAstronauts()) {
             AstronautSkill matchedSkill = firstOverlap(astronaut.getExpertSkills(), stepCrewSkills);
@@ -504,10 +505,6 @@ public final class MissionProgress {
                 matchedSkill.name(), 1.0, boosted, expertUseCounts, events);
         }
 
-        Set<MissionControlSkill> stepControllerSkills = new LinkedHashSet<>();
-        for (MissionStep.ControllerInvolvement involvement : step.controllerInvolvements()) {
-            stepControllerSkills.add(involvement.skill());
-        }
         for (MissionControlOfficer officer : snapshot.getMissionControlOfficers()) {
             MissionControlSkill matchedSkill = firstOverlap(officer.getExpertSkills(), stepControllerSkills);
             if (matchedSkill == null) {
@@ -635,60 +632,81 @@ public final class MissionProgress {
     }
 
     /**
-     * Computes a contribution sum across a list of skill involvements: for
-     * each one, the mean skill value across every assigned person (see
-     * {@link #averageSkill}), weighted by that involvement's percentage.
+     * Computes a step's crew contribution sum: each crew involvement's weight times
+     * the skill of the astronaut in that crew slot. An empty or vacated slot reads 0.
      *
-     * @param involvements the skill involvements to sum over
-     * @param assignedIds  the ids assigned to this mission in {@code roster}'s
-     *                     own group
-     * @param roster       the full roster {@code assignedIds} are looked up
-     *                     against
-     * @param skillOf      reads one involvement's skill
-     * @param percentOf    reads one involvement's percentage
-     * @param skillValueOf reads one person's value for a given skill
-     * @param <I>          the involvement record type
-     * @param <S>          the skill enum type
-     * @param <P>          the roster's own {@link Personnel} subtype
-     * @return the contribution sum
+     * @param snapshot the player
+     * @param mission  the mission
+     * @param step     the step
+     * @return the crew sum, 0-100
      */
-    private static <I, S, P extends Personnel> double averageContributionSum(List<I> involvements,
-            List<String> assignedIds, List<P> roster, Function<I, S> skillOf, ToIntFunction<I> percentOf,
-            BiFunction<P, S, Double> skillValueOf) {
+    private static double crewContributionSum(PlayerSnapshot snapshot, InProgressMission mission, MissionStep step) {
         double sum = 0;
-        for (I involvement : involvements) {
-            double average = averageSkill(assignedIds, roster, skillOf.apply(involvement), skillValueOf);
-            sum += percentOf.applyAsInt(involvement) / 100.0 * average;
+        for (MissionStep.CrewInvolvement involvement : step.crewInvolvements()) {
+            Astronaut astronaut = findById(snapshot.getAstronauts(), slotHolder(mission.getCrewSlotIds(),
+                involvement.slot()));
+            if (astronaut != null) {
+                sum += involvement.percent() / 100.0 * astronaut.getSkill(involvement.skill());
+            }
         }
         return sum;
     }
 
     /**
-     * Computes the mean value of one skill across every assigned person
-     * actually found on the roster (an assigned id not found on the roster
-     * - never expected in practice - contributes nothing and is not
-     * counted toward the average).
+     * Computes a step's controller contribution sum: each control-slot involvement's
+     * percentage times the slot holder's value at the slot's skill
+     * ({@link #slotValue}). An empty or vacated slot reads 0.
      *
-     * @param assignedIds  the ids to average over
-     * @param roster       the roster the ids are looked up against
-     * @param skill        the skill to read
-     * @param skillValueOf reads one person's value for a given skill
-     * @param <S>          the skill enum type
-     * @param <P>          the roster's own {@link Personnel} subtype
-     * @return the mean skill value, or 0 if nobody is assigned
+     * @param snapshot the player
+     * @param catalog  the content catalog, for the configuration's slots
+     * @param mission  the mission
+     * @param step     the step
+     * @return the controller sum, 0-100
      */
-    private static <S, P extends Personnel> double averageSkill(List<String> assignedIds, List<P> roster, S skill,
-            BiFunction<P, S, Double> skillValueOf) {
-        double total = 0;
-        int count = 0;
-        for (String id : assignedIds) {
-            P person = findById(roster, id);
-            if (person != null) {
-                total += skillValueOf.apply(person, skill);
-                count++;
-            }
+    private static double controlContributionSum(PlayerSnapshot snapshot, ContentCatalog catalog,
+            InProgressMission mission, MissionStep step) {
+        List<StaffingSlot> slots = configurationOf(catalog, mission).controlSlots();
+        double sum = 0;
+        for (MissionStep.ControllerInvolvement involvement : step.controllerInvolvements()) {
+            String holderId = slotHolder(mission.getControlSlotIds(), involvement.slot());
+            sum += involvement.percent() / 100.0 * slotValue(snapshot, slots.get(involvement.slot()), holderId);
         }
-        return count == 0 ? 0 : total / count;
+        return sum;
+    }
+
+    /**
+     * Returns what the person holding a control slot contributes: a controller's
+     * skill at the slot's skill, or their Flight Director value for a Flight Director
+     * slot; an astronaut's skill for an astronaut slot. 0 when nobody suitable holds it.
+     *
+     * @param snapshot the player
+     * @param slot     the slot
+     * @param holderId the slot holder's id, or {@code null}
+     * @return the value, 0-100
+     */
+    public static double slotValue(PlayerSnapshot snapshot, StaffingSlot slot, String holderId) {
+        if (holderId == null) {
+            return 0;
+        }
+        if (slot.kind() == StaffingSlot.Kind.ASTRONAUT) {
+            Astronaut astronaut = findById(snapshot.getAstronauts(), holderId);
+            return astronaut == null ? 0 : astronaut.getSkill(AstronautSkill.valueOf(slot.skill()));
+        }
+        MissionControlOfficer officer = findById(snapshot.getMissionControlOfficers(), holderId);
+        if (officer == null) {
+            return 0;
+        }
+        return slot.flightDirectorSlot()
+            ? officer.flightDirectorSkill()
+            : officer.getSkill(MissionControlSkill.valueOf(slot.skill()));
+    }
+
+    private static String slotHolder(List<String> slotIds, int slot) {
+        return slot < slotIds.size() ? slotIds.get(slot) : null;
+    }
+
+    private static MissionConfiguration configurationOf(ContentCatalog catalog, InProgressMission mission) {
+        return catalog.missionConfiguration(mission.getMissionConfigurationId()).orElseThrow();
     }
 
     /**
@@ -838,22 +856,25 @@ public final class MissionProgress {
     }
 
     /**
-     * Applies this season's mission-based skill growth to every astronaut/
-     * Mission Control officer still assigned to {@code mission} - see this
-     * class's own Javadoc and {@code design.md} &sect;2.5(g) for the full
-     * rule (astronauts grow all five skills; controllers grow every skill
-     * exercised by the season's own executed steps).
+     * Applies this season's mission-based skill growth ({@code design.md}
+     * &sect;2.5(g), {@code baspm.md} &sect;9.3): every astronaut aboard grows all five
+     * skills; everyone in a control slot some executed step involved grows that
+     * slot's one skill - a CAPCOM astronaut its astronaut skill, and a Flight
+     * Director one gain computed from their Flight Director value, spread evenly over
+     * their five skills, as BASPM does. Someone in a slot no executed step involved
+     * doesn't grow this season.
      *
-     * @param snapshot       the player snapshot the assigned personnel belong to
-     * @param mission        the mission this season belongs to
-     * @param executedSteps  the steps this season actually executed
-     * @param random         the random source this season's factors are drawn from
-     * @param events         the list to append each
-     *                       {@link MissionSkillGrowthApplied} event to
+     * @param snapshot      the player snapshot the assigned personnel belong to
+     * @param configuration the configuration being flown
+     * @param mission       the mission this season belongs to
+     * @param executedSteps the steps this season actually executed
+     * @param random        the random source this season's factors are drawn from
+     * @param events        the list to append each {@link MissionSkillGrowthApplied} event to
      */
-    private static void applyPostSeasonSkillGrowth(PlayerSnapshot snapshot, InProgressMission mission,
-            List<MissionStep> executedSteps, RandomGenerator random, List<ResolutionEvent> events) {
-        for (String astronautId : mission.getAssignedAstronautIds()) {
+    private static void applyPostSeasonSkillGrowth(PlayerSnapshot snapshot, MissionConfiguration configuration,
+            InProgressMission mission, List<MissionStep> executedSteps, RandomGenerator random,
+            List<ResolutionEvent> events) {
+        for (String astronautId : mission.crewIds()) {
             Astronaut astronaut = findById(snapshot.getAstronauts(), astronautId);
             if (astronaut == null) {
                 // Lost this season's CATASTROPHIC step; loseCrew already removed them.
@@ -871,51 +892,51 @@ public final class MissionProgress {
                 PersonnelGroup.ASTRONAUT, totalGain));
         }
 
-        Set<MissionControlSkill> skillsExercisedThisSeason = new LinkedHashSet<>();
+        Set<Integer> slotsExercised = new TreeSet<>();
         for (MissionStep step : executedSteps) {
             for (MissionStep.ControllerInvolvement involvement : step.controllerInvolvements()) {
-                skillsExercisedThisSeason.add(involvement.skill());
+                slotsExercised.add(involvement.slot());
             }
         }
-        for (String controllerId : mission.getAssignedMissionControlOfficerIds()) {
-            MissionControlOfficer officer = findById(snapshot.getMissionControlOfficers(), controllerId);
+        for (int slotIndex : slotsExercised) {
+            StaffingSlot slot = configuration.controlSlots().get(slotIndex);
+            String holderId = slotHolder(mission.getControlSlotIds(), slotIndex);
+            if (holderId == null) {
+                continue;
+            }
+            double factor = SkillGrowth.drawMissionSkillGrowthFactor(random);
+            if (slot.kind() == StaffingSlot.Kind.ASTRONAUT) {
+                Astronaut astronaut = findById(snapshot.getAstronauts(), holderId);
+                if (astronaut != null) {
+                    AstronautSkill skill = AstronautSkill.valueOf(slot.skill());
+                    double gain = SkillGrowth.diminishingReturnsGain(astronaut.getSkill(skill),
+                        astronaut.getLearningPotential(), factor);
+                    astronaut.setSkill(skill, astronaut.getSkill(skill) + gain);
+                    events.add(new MissionSkillGrowthApplied(mission.getId(), astronaut.getId(),
+                        astronaut.getName(), PersonnelGroup.ASTRONAUT, gain));
+                }
+                continue;
+            }
+            MissionControlOfficer officer = findById(snapshot.getMissionControlOfficers(), holderId);
             if (officer == null) {
                 continue;
             }
-            double totalGain = 0;
-            for (MissionControlSkill skill : skillsExercisedThisSeason) {
-                double factor = SkillGrowth.drawMissionSkillGrowthFactor(random);
-                double gain = SkillGrowth.diminishingReturnsGain(officer.getSkill(skill),
+            double gain;
+            if (slot.flightDirectorSlot()) {
+                gain = SkillGrowth.diminishingReturnsGain(officer.flightDirectorSkill(),
                     officer.getLearningPotential(), factor);
+                for (MissionControlSkill skill : MissionControlSkill.values()) {
+                    officer.setSkill(skill, Math.min(SkillGrowth.SKILL_CAP,
+                        officer.getSkill(skill) + gain / MissionControlSkill.values().length));
+                }
+            } else {
+                MissionControlSkill skill = MissionControlSkill.valueOf(slot.skill());
+                gain = SkillGrowth.diminishingReturnsGain(officer.getSkill(skill), officer.getLearningPotential(),
+                    factor);
                 officer.setSkill(skill, officer.getSkill(skill) + gain);
-                totalGain += gain;
             }
             events.add(new MissionSkillGrowthApplied(mission.getId(), officer.getId(), officer.getName(),
-                PersonnelGroup.MISSION_CONTROL, totalGain));
-        }
-
-        // CAPCOM grows the skills it exercised this season, as a controller does (unconfirmed default).
-        Set<AstronautSkill> capcomSkillsExercised = new LinkedHashSet<>();
-        for (MissionStep step : executedSteps) {
-            for (MissionStep.CrewInvolvement involvement : step.capcomInvolvements()) {
-                capcomSkillsExercised.add(involvement.skill());
-            }
-        }
-        for (String capcomId : mission.getCapcomAstronautIds()) {
-            Astronaut astronaut = findById(snapshot.getAstronauts(), capcomId);
-            if (astronaut == null) {
-                continue;
-            }
-            double totalGain = 0;
-            for (AstronautSkill skill : capcomSkillsExercised) {
-                double factor = SkillGrowth.drawMissionSkillGrowthFactor(random);
-                double gain = SkillGrowth.diminishingReturnsGain(astronaut.getSkill(skill),
-                    astronaut.getLearningPotential(), factor);
-                astronaut.setSkill(skill, astronaut.getSkill(skill) + gain);
-                totalGain += gain;
-            }
-            events.add(new MissionSkillGrowthApplied(mission.getId(), astronaut.getId(), astronaut.getName(),
-                PersonnelGroup.ASTRONAUT, totalGain));
+                PersonnelGroup.MISSION_CONTROL, gain));
         }
     }
 
@@ -929,7 +950,7 @@ public final class MissionProgress {
      * @param events   the list to append each departure to
      */
     private static void loseCrew(PlayerSnapshot snapshot, InProgressMission mission, List<ResolutionEvent> events) {
-        for (String astronautId : mission.getAssignedAstronautIds()) {
+        for (String astronautId : mission.crewIds()) {
             Iterator<Astronaut> iterator = snapshot.getAstronauts().iterator();
             while (iterator.hasNext()) {
                 Astronaut astronaut = iterator.next();
@@ -958,11 +979,12 @@ public final class MissionProgress {
      */
     private static void releaseSurvivors(PlayerSnapshot snapshot, InProgressMission mission,
             List<ResolutionEvent> events) {
-        releaseGroup(snapshot.getAstronauts(), mission.getAssignedAstronautIds(), PersonnelGroup.ASTRONAUT, events);
-        // CAPCOM never flew, so it survives any crew loss and is released like everyone else.
-        releaseGroup(snapshot.getAstronauts(), mission.getCapcomAstronautIds(), PersonnelGroup.ASTRONAUT, events);
-        releaseGroup(snapshot.getMissionControlOfficers(), mission.getAssignedMissionControlOfficerIds(),
-            PersonnelGroup.MISSION_CONTROL, events);
+        releaseGroup(snapshot.getAstronauts(), mission.crewIds(), PersonnelGroup.ASTRONAUT, events);
+        // The ground staff never flew, so they survive any crew loss. Ids are unique across rosters, so
+        // releasing every ground id from each roster releases each person exactly once.
+        releaseGroup(snapshot.getAstronauts(), mission.groundIds(), PersonnelGroup.ASTRONAUT, events);
+        releaseGroup(snapshot.getMissionControlOfficers(), mission.groundIds(), PersonnelGroup.MISSION_CONTROL,
+            events);
     }
 
     /**

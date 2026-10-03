@@ -7,6 +7,7 @@ import de.mkoehler.launchwindow.model.InProgressMission;
 import de.mkoehler.launchwindow.model.Personnel;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -68,7 +69,7 @@ public final class MissionCancellation {
             snapshot.setFunds(snapshot.getFunds() + mission.getLaunchCost());
             snapshot.setLaunchesThisWindow(Math.max(0, snapshot.getLaunchesThisWindow() - 1));
         } else {
-            if (!mission.getAssignedAstronautIds().isEmpty()) {
+            if (!mission.crewIds().isEmpty()) {
                 return Outcome.CREWED_MISSION_IN_FLIGHT;
             }
             MissionConfiguration configuration =
@@ -77,9 +78,10 @@ public final class MissionCancellation {
             snapshot.setFunds(snapshot.getFunds()
                 + mission.getLaunchCost() * configuration.cancellationRefundPercent() / 100);
         }
-        release(snapshot.getAstronauts(), mission.getAssignedAstronautIds());
-        release(snapshot.getAstronauts(), mission.getCapcomAstronautIds());
-        release(snapshot.getMissionControlOfficers(), mission.getAssignedMissionControlOfficerIds());
+        List<String> everyone = new ArrayList<>(mission.crewIds());
+        everyone.addAll(mission.groundIds());
+        release(snapshot.getAstronauts(), everyone);
+        release(snapshot.getMissionControlOfficers(), everyone);
         snapshot.getInProgressMissions().remove(missionInstanceId);
         return unflown ? Outcome.SCRUBBED : Outcome.CANCELLED;
     }
