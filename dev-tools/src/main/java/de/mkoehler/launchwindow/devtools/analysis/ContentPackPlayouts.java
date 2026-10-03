@@ -47,6 +47,7 @@ import de.mkoehler.launchwindow.rules.RocketProgramOutcome;
 import de.mkoehler.launchwindow.rules.RocketPrograms;
 import de.mkoehler.launchwindow.rules.SeasonFundsSettled;
 import de.mkoehler.launchwindow.rules.TrainingProgress;
+import de.mkoehler.launchwindow.rules.WinCondition;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -218,7 +219,13 @@ public final class ContentPackPlayouts {
                     tally.goalReached.merge(goal, 1, Integer::sum);
                 }
             }
-            if (reached.size() == DECLARED_GOALS.size()) {
+            // The harness's own completion check must agree with the win logic M4 will call.
+            WinCondition.Outcome win = WinCondition.evaluate(Map.of("bot", snapshot), DECLARED_GOALS, catalog);
+            boolean complete = reached.size() == DECLARED_GOALS.size();
+            if (complete != (win.status() == WinCondition.Status.WON && win.winners().equals(List.of("bot")))) {
+                throw new IllegalStateException("Completion " + complete + " disagrees with WinCondition " + win);
+            }
+            if (complete) {
                 tally.completedByArchetype.merge(archetype, 1, Integer::sum);
                 tally.completionSeasons.add(season + 1);
                 return;

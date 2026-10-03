@@ -72,9 +72,15 @@ class PlayerSnapshotTest {
         original.setMissionControlCandidates(List.of(candidate));
         original.setNextPersonnelId(3);
         original.setOpenedProgramIds(List.of("sputnik-1"));
-        original.setMissionComponents(Map.of("rocket-1", new OwnedMissionComponent(42.5, 17.0)));
+        OwnedMissionComponent closed = new OwnedMissionComponent(42.5, 17.0);
+        closed.setActive(false);
+        original.setMissionComponents(Map.of("rocket-1", closed));
         InProgressMission flying = new InProgressMission("m0", "sputnik-1-std", List.of("astro-1"), List.of("mco-1"));
+        flying.setRocketIds(List.of("r7-sputnik"));
+        flying.setCapcomAstronautIds(List.of("astro-2"));
         original.setInProgressMissions(Map.of("m0", flying));
+        original.getBuildingLevels().put(Building.MISSION_CONTROL, 2);
+        original.getBuildingUpgradeSeasonsRemaining().put(Building.VEHICLE_ASSEMBLY, 3);
         original.setNextMissionInstanceId(1);
         original.setSuccessfulFlightCounts(Map.of("sputnik-1-std", 3));
         original.setAchievedGoals(Map.of("orbit", 4));
@@ -142,6 +148,12 @@ class PlayerSnapshotTest {
         assertEquals(List.of("astro-1"), restoredMission.getAssignedAstronautIds());
         assertEquals(List.of("mco-1"), restoredMission.getAssignedMissionControlOfficerIds());
         assertEquals(1, restored.getNextMissionInstanceId());
+        assertEquals(List.of("r7-sputnik"), restoredMission.getRocketIds());
+        assertEquals(List.of("astro-2"), restoredMission.getCapcomAstronautIds());
+        assertEquals(false, restoredComponent.isActive());
+        assertEquals(2, restored.buildingLevel(Building.MISSION_CONTROL));
+        assertEquals(1, restored.buildingLevel(Building.HEADQUARTERS));
+        assertEquals(Map.of(Building.VEHICLE_ASSEMBLY, 3), restored.getBuildingUpgradeSeasonsRemaining());
     }
 
     /**

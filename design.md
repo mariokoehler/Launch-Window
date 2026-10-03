@@ -4721,8 +4721,10 @@ here.
        open their own agency's programs and rockets. Generic goals are the shared
        race; agency-specific goals are separate.
     6. **Staffing uses BASPM's slot counts.** A configuration requires as many
-       controllers as its BASPM mission-control layout has slots, so crewed
-       Mercury needs nine. A CAPCOM slot is an extra required astronaut whose
+       controllers as its BASPM mission-control layout has Mission Control slots:
+       crewed Mercury and Vostok need 10 controllers plus 1 CAPCOM, and the
+       uncrewed tests need 9. (This first said nine for crewed; corrected after the
+       layouts were traced.) A CAPCOM slot is an extra required astronaut whose
        skill counts on the controller side.
     7. **Buildings and upgrades, all five of BASPM's.** Astronaut Center, Mission
        Control, SET Center, Headquarters, and the VAB all start at level 1 for
@@ -4914,6 +4916,12 @@ here.
   land here too. **Exit criterion:** the same proof as M1's, but resolving
   a real turn through the real engine and real content, still via a
   CLI-style dev client.
+  - **Note from M3 for the dispatch work:** call the five-argument
+    `HiringPool.hire(..., BuildingSchedule)` with `catalog.buildings()`. The
+    four-argument overload silently uses `BuildingSchedule.baspmClose()`, which
+    only matches while the pack carries no building table of its own. Launches go
+    through `MissionLaunch.launch(snapshot, LaunchRequest, catalog)`; the old
+    overload can't choose rockets or CAPCOM.
 - **M5 — Playable client (libGDX UI).** First real playtest happens at the
   end of this milestone. Expected slices, sizing not yet estimated:
   connect/login/slot-claim screens; roster/personnel management;
