@@ -3951,7 +3951,10 @@ night cycle." The art the user prepared this session
     list (§5) bundles "program/mission selection" into one screen** —
     worth revisiting whether that should actually split into two, matching
     both BASPM's own division and the main-menu art's own two separate
-    hotspots, when M5 is actually sized. Not decided either way yet.
+    hotspots, when M5 is actually sized. **Resolved by `ui-spec.md` (2026-10-03):**
+    the split happened — the VAB owns "Open rocket program"/"Manage rocket
+    programs"/Rocket R&D (§4.5), Headquarters owns programs and all mission
+    planning (§4.6), matching both BASPM's own division and the two hotspots.
   - **`MUSEUM`** (manual p.40): historical stats/achieved-goals/memorial
     browser — this is the same screen §1.1 already flagged as "a plausible
     home for a deeper encyclopedia version" of the educational-layer
