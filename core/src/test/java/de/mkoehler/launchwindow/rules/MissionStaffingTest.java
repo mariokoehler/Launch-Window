@@ -202,6 +202,44 @@ class MissionStaffingTest {
     }
 
     @Test
+    void aControlSlotIsReleasedAfterTheLastSeasonThatUsesIt() {
+        // BOOSTER works only the first season, FLIGHT both; a perfect capsule keeps the mission flying.
+        MissionComponent perfect = new MissionComponent("perfect", SetSkill.CREWED_SPACECRAFT, 3, 100, 100,
+            List.of(1.0, 2.0, 3.0, 4.0), 0, List.of());
+        Program program = new Program("perfect-program", "early-space", 0, 0, List.of("perfect"), List.of());
+        MissionStep launch = new MissionStep("launch", List.of(new MissionStep.ComponentInvolvement("perfect", 100)),
+            List.of(new MissionStep.ControllerInvolvement(0, 50), new MissionStep.ControllerInvolvement(1, 50)),
+            List.of(), false);
+        MissionStep cruise = new MissionStep("cruise", List.of(new MissionStep.ComponentInvolvement("perfect", 100)),
+            List.of(new MissionStep.ControllerInvolvement(1, 100)), List.of(), false);
+        MissionConfiguration twoSeasons = new MissionConfiguration("two-seasons", "perfect-program",
+            List.of(new MissionSeason(List.of(launch)), new MissionSeason(List.of(cruise))), List.of(),
+            List.of(StaffingSlot.controller("BOOSTER", MissionControlSkill.PROPULSION),
+                StaffingSlot.flightDirector("FLIGHT")),
+            0, 0, List.of(), List.of(), List.of(), 0, 0);
+        ContentCatalog catalog = new ContentCatalog(List.of(CATEGORY), List.of(program), List.of(twoSeasons),
+            List.of(perfect));
+        PlayerSnapshot snapshot = player(controller("booster", 50, 50), controller("flight", 50, 50),
+            controller("spare", 50, 50));
+        snapshot.setOpenedProgramIds(List.of("perfect-program"));
+        snapshot.setMissionComponents(new java.util.HashMap<>(Map.of("perfect", new OwnedMissionComponent(100, 100))));
+        assertEquals(MissionLaunchOutcome.LAUNCHED, MissionLaunch.launch(snapshot,
+            new LaunchRequest("two-seasons", List.of(), List.of("booster", "flight"), List.of()), catalog));
+        InProgressMission mission = snapshot.getInProgressMissions().values().iterator().next();
+
+        MissionProgress.advanceSeason(snapshot, catalog, new Random(1));
+
+        assertEquals(1, mission.getCurrentSeasonIndex(), "still flying");
+        assertNull(mission.getControlSlotIds().get(0));
+        assertEquals("flight", mission.getControlSlotIds().get(1));
+        assertEquals(AssignmentState.IDLE, find(snapshot, "booster").getAssignmentState());
+        assertNull(find(snapshot, "booster").getAssignedMissionId());
+        assertEquals(AssignmentState.ASSIGNED, find(snapshot, "flight").getAssignmentState());
+        assertEquals(MissionStaffing.ReassignOutcome.SLOT_NOT_USED,
+            MissionStaffing.reassign(snapshot, mission.getId(), 0, "spare", catalog), "a released slot stays empty");
+    }
+
+    @Test
     void aDisplacedHolderAtRetirementAgeRetiresInsteadOfGoingIdle() {
         // Otherwise a swap could keep an over-age controller ASSIGNED, and so protected from retirement,
         // by moving them straight into another mission's slot.

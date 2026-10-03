@@ -21,8 +21,9 @@ import java.util.TreeSet;
  * slot the steps use with one person. Layout slots no step uses stay empty, as
  * BASPM's "Not required" slots do. The required head-counts
  * ({@link #requiredAstronautCount()} and friends) are derived from the slots the
- * steps use across every season - a simplification of BASPM, which releases a
- * slot after the last season that uses it.</p>
+ * steps use across every season. As in BASPM, a control slot is released after the
+ * last season that uses it ({@link #usedControlSlotsFrom(int)}, user decision
+ * 2026-10-03); the crew stays aboard to the end.</p>
  *
  * <p>{@link #cost()} is a one-time launch cost for the payloads; each chosen
  * rocket's unit cost is added at launch ({@code design.md} &sect;2.5(h), &sect;5 M3).</p>
@@ -353,9 +354,21 @@ public record MissionConfiguration(String id, String programId, List<MissionSeas
      * @return the slot indices, ascending
      */
     public SortedSet<Integer> usedControlSlots() {
+        return usedControlSlotsFrom(0);
+    }
+
+    /**
+     * Returns the control slots some step of season {@code seasonIndex} or later
+     * involves - the seats a mission still needs from that season on. A slot outside
+     * this set is released once its last season has flown ({@code baspm.md} &sect;10.11).
+     *
+     * @param seasonIndex the 0-based season index
+     * @return the slot indices, ascending; empty past the last season
+     */
+    public SortedSet<Integer> usedControlSlotsFrom(int seasonIndex) {
         SortedSet<Integer> used = new TreeSet<>();
-        for (MissionSeason season : seasons) {
-            for (MissionStep step : season.steps()) {
+        for (int i = Math.max(0, seasonIndex); i < seasons.size(); i++) {
+            for (MissionStep step : seasons.get(i).steps()) {
                 step.controllerInvolvements().forEach(involvement -> used.add(involvement.slot()));
             }
         }

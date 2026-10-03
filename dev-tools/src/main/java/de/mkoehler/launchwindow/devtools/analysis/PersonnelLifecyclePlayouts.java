@@ -1795,10 +1795,14 @@ public final class PersonnelLifecyclePlayouts {
             MissionConfiguration configuration) {
         Set<Integer> usedCrew = new HashSet<>();
         Set<Integer> usedControl = new HashSet<>();
-        for (MissionSeason season : configuration.seasons()) {
-            for (MissionStep step : season.steps()) {
+        // The crew stays aboard for the whole mission; a control slot is held only while the current or a
+        // later season still uses it.
+        for (int season = 0; season < configuration.seasons().size(); season++) {
+            for (MissionStep step : configuration.seasons().get(season).steps()) {
                 step.crewInvolvements().forEach(involvement -> usedCrew.add(involvement.slot()));
-                step.controllerInvolvements().forEach(involvement -> usedControl.add(involvement.slot()));
+                if (season >= mission.getCurrentSeasonIndex()) {
+                    step.controllerInvolvements().forEach(involvement -> usedControl.add(involvement.slot()));
+                }
             }
         }
         for (int slot = 0; slot < Math.max(configuration.crewSlots().size(), mission.getCrewSlotIds().size());

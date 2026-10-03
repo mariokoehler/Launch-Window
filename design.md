@@ -5096,15 +5096,20 @@ here.
       of its type. Skill growth follows the slot's skill.
     - **Ground slots can be re-staffed during a mission, for free** (user, 2026-10-03): from Inspect
       active missions, the assembly screen reopens with crew slots locked and the mission-control slots
-      reassignable to available people. BASPM offers the same between seasons. **Unconfirmed default:**
-      CAPCOM counts as a ground slot and is reassignable too, though it holds an astronaut (the user
-      said astronaut slots are locked, meaning the crew aboard).
+      reassignable to available people. BASPM offers the same between seasons. **Confirmed (user,
+      2026-10-03):** CAPCOM counts as a ground slot and is reassignable too, though it holds an
+      astronaut; "astronaut slots are locked" means the crew aboard.
+    - **Control slots are released per season, as in BASPM** (user, 2026-10-03): after each season,
+      whoever holds a control slot no remaining season uses goes idle (or retires at age). The crew
+      stays aboard to the end.
   - **Slot staffing — done (2026-10-03).** The two decisions above, implemented.
     - **Content:** `StaffingSlot` (title, kind `MISSION_CONTROL` or `ASTRONAUT`, and a
       skill name, `FLIGHT_DIRECTOR` for a Flight Director slot). `MissionConfiguration`
       carries `crewSlots` (titles) and `controlSlots`, and derives the required counts
-      from the slots any step of any season uses. That is a simplification of BASPM,
-      which releases a slot after its last season. `MissionStep` involvements are
+      from the slots any step of any season uses. `usedControlSlotsFrom(season)` gives
+      the slots still needed from a season on; `MissionProgress` releases the rest
+      after each season (`releaseFinishedControlSlots`), and `reassign` refuses a
+      released slot. `MissionStep` involvements are
       slot-indexed: `ControllerInvolvement(slot, percent)` for control slots, CAPCOM
       included, and `CrewInvolvement(slot, skill, weight)`, with crew weights as
       doubles summing to 100. The old count constructors remain for fixtures and
@@ -5128,7 +5133,7 @@ here.
       registry). It is free, works on scheduled and flying missions, takes control
       slots only (the crew is locked), and needs a person of the slot's type who is
       idle and available; the previous holder goes idle. CAPCOM stays reassignable,
-      the unconfirmed default above.
+      as confirmed above.
     - **Expert rescue:** a step's rescuing skills come from its slots. **Unconfirmed
       default:** a Flight Director slot names no single skill, so it adds none. A
       used CAPCOM slot adds its astronaut skill (Leadership), so a Leadership Expert
@@ -5153,7 +5158,11 @@ here.
       controllers their steps name (Sputnik 2, Explorer 2 of 5, Mercury 3) and split
       the Mercury crew weights over both seats, so its numbers move a lot: 1,452
       missions; steps 1,098 / 650 / 182 / 236 / 16; 102 astronauts lost; 871
-      resigned, 1,039 retired, 4,687 hires.
+      resigned, 1,039 retired, 4,687 hires. **With the per-season release** (the
+      content-pack numbers are unchanged, since the bot's plan flies only
+      single-season configurations): 1,450 missions; steps 1,071 / 606 / 181 / 256 /
+      12; 92 astronauts lost; 995 resigned (released controllers sit idle and lose
+      morale), 1,031 retired, 4,778 hires.
 
   First real playtest happens at the
   end of this milestone. Expected slices, sizing not yet estimated:

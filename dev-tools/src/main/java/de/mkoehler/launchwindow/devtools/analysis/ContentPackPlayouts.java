@@ -705,10 +705,15 @@ public final class ContentPackPlayouts {
             MissionConfiguration configuration) {
         Set<Integer> usedCrew = new HashSet<>();
         Set<Integer> usedControl = new HashSet<>();
-        configuration.seasons().forEach(season -> season.steps().forEach(step -> {
-            step.crewInvolvements().forEach(involvement -> usedCrew.add(involvement.slot()));
-            step.controllerInvolvements().forEach(involvement -> usedControl.add(involvement.slot()));
-        }));
+        // Crew for the whole mission; a control slot only while the current or a later season uses it.
+        for (int season = 0; season < configuration.seasons().size(); season++) {
+            for (MissionStep step : configuration.seasons().get(season).steps()) {
+                step.crewInvolvements().forEach(involvement -> usedCrew.add(involvement.slot()));
+                if (season >= mission.getCurrentSeasonIndex()) {
+                    step.controllerInvolvements().forEach(involvement -> usedControl.add(involvement.slot()));
+                }
+            }
+        }
         Set<String> astronautIds = new HashSet<>();
         snapshot.getAstronauts().forEach(astronaut -> astronautIds.add(astronaut.getId()));
         Set<String> controllerIds = new HashSet<>();

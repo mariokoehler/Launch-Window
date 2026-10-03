@@ -259,6 +259,34 @@ public final class MissionProgress {
             endedMissionIds.add(mission.getId());
         } else {
             mission.setCurrentSeasonIndex(nextSeasonIndex);
+            releaseFinishedControlSlots(snapshot, configuration, mission, events);
+        }
+    }
+
+    /**
+     * Releases everyone in a control slot no remaining season uses, as BASPM does
+     * between seasons ({@code baspm.md} &sect;10.11, user decision 2026-10-03): they go
+     * idle, or retire if already at retirement age, and the slot is emptied. The crew
+     * stays aboard until the mission ends.
+     *
+     * @param snapshot      the player
+     * @param configuration the configuration being flown
+     * @param mission       the mission, already moved to its next season
+     * @param events        the list to append any retirement departure to
+     */
+    private static void releaseFinishedControlSlots(PlayerSnapshot snapshot, MissionConfiguration configuration,
+            InProgressMission mission, List<ResolutionEvent> events) {
+        Set<Integer> stillUsed = configuration.usedControlSlotsFrom(mission.getCurrentSeasonIndex());
+        List<String> slots = mission.getControlSlotIds();
+        for (int slot = 0; slot < slots.size(); slot++) {
+            String holder = slots.get(slot);
+            if (holder != null && !stillUsed.contains(slot)) {
+                slots.set(slot, null);
+                PersonnelDeparture retired = releaseOrRetire(snapshot, holder);
+                if (retired != null) {
+                    events.add(retired);
+                }
+            }
         }
     }
 

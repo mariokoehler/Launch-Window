@@ -39,7 +39,7 @@ public final class MissionStaffing {
         UNKNOWN_MISSION,
         /** The configuration has no control slot with that index. */
         UNKNOWN_SLOT,
-        /** No step of the configuration uses the slot, so it stays empty. */
+        /** No step of the current or a later season uses the slot, so it stays empty. */
         SLOT_NOT_USED,
         /** The person is unknown, or not of the slot's employee type. */
         WRONG_EMPLOYEE_TYPE,
@@ -168,7 +168,8 @@ public final class MissionStaffing {
         if (slot < 0 || slot >= configuration.controlSlots().size()) {
             return ReassignOutcome.UNKNOWN_SLOT;
         }
-        if (!configuration.usedControlSlots().contains(slot)) {
+        // A slot whose last season has flown was released, and stays empty.
+        if (!configuration.usedControlSlotsFrom(mission.getCurrentSeasonIndex()).contains(slot)) {
             return ReassignOutcome.SLOT_NOT_USED;
         }
         StaffingSlot staffingSlot = configuration.controlSlots().get(slot);

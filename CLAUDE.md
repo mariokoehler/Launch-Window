@@ -125,7 +125,9 @@ BASPM's mission-control and flight-crew layouts one to one (`StaffingSlot`,
 slot-indexed step involvements, `MissionStaffing.autoAssign`/`reassign`, the new
 `ReassignControlSlotAction`). Each roll reads the one person in each slot, which
 **supersedes the 2026-10-02 averaging rule described below**. Only used slots are
-required: crewed Mercury/Vostok need 9 controllers + 1 CAPCOM, not "10 + 1". The
+required: crewed Mercury/Vostok need 9 controllers + 1 CAPCOM, not "10 + 1".
+Control slots are released after their last season, as in BASPM, and CAPCOM is
+re-staffable mid-mission (both confirmed by the user the same day). The
 converter (`E:\Temp\BASPM\tools\baspm_pack.py`, pre-slot copy kept as
 `.bak-preslots`) now emits the layouts. Details and harness numbers are in
 `design.md` §5 M5, "Slot staffing". **Next:** the M5 server gaps G1-G9

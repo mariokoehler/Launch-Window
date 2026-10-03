@@ -406,8 +406,11 @@ each with season n of m, its people, and the components' reliability.
   (§4.6.8) for this mission with the crew seats locked and every used control slot
   reassignable to an available person of its type, at no cost
   (`ReassignControlSlotAction`, one action per changed slot; the previous holder
-  goes idle). CAPCOM is reassignable too (unconfirmed default). The same applies to
-  scheduled missions (§4.7.2).
+  goes idle). CAPCOM is reassignable too. The same applies to scheduled missions
+  (§4.7.2).
+- A control slot whose last season has flown is **released**: its holder went idle at
+  the season's end, as in BASPM, and the slot shows "Released" and can't be refilled.
+  The crew stays aboard until the mission ends.
 - **Cancel** (red, confirmation) is offered only for **uncrewed** missions: it
   shows the prestige loss and the percentage refunded.
 - Crewed missions show "Can't be abandoned", with no button.
