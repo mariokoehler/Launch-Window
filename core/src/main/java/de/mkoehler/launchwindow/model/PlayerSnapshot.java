@@ -44,6 +44,7 @@ public class PlayerSnapshot {
     private Map<String, Integer> successfulFlightCounts = new LinkedHashMap<>();
     private Map<String, Integer> achievedGoals = new LinkedHashMap<>();
     private Set<String> cancelledGoalIds = new LinkedHashSet<>();
+    private long prestigeAtLastReview;
 
     /**
      * No-argument constructor required for Jackson deserialization.
@@ -406,6 +407,25 @@ public class PlayerSnapshot {
     public void setSuccessfulFlightCounts(Map<String, Integer> successfulFlightCounts) {
         Objects.requireNonNull(successfulFlightCounts, "successfulFlightCounts must not be null");
         this.successfulFlightCounts = new LinkedHashMap<>(successfulFlightCounts);
+    }
+
+    /**
+     * Returns the player's prestige as it stood at the last funding review, the
+     * base of the next review's catch-up shortfall ({@code baspm.md} &sect;11.7).
+     *
+     * @return the prestige recorded at the last review, zero before the first
+     */
+    public long getPrestigeAtLastReview() {
+        return prestigeAtLastReview;
+    }
+
+    /**
+     * Sets the prestige recorded at the last funding review.
+     *
+     * @param prestigeAtLastReview the prestige to record
+     */
+    public void setPrestigeAtLastReview(long prestigeAtLastReview) {
+        this.prestigeAtLastReview = prestigeAtLastReview;
     }
 
     /**

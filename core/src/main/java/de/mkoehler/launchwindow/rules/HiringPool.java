@@ -98,6 +98,12 @@ public final class HiringPool {
     public static final double EXCELLENT_SKILL_MAX = 90.0;
 
     /** The youngest age a freshly generated candidate can have. */
+    /** The lowest salary a candidate can ask for, per season - BASPM's own range floor. */
+    public static final int SALARY_MIN = 25;
+
+    /** The highest salary a candidate can ask for, per season - BASPM's own range ceiling. */
+    public static final int SALARY_MAX = 60;
+
     public static final int CANDIDATE_MIN_AGE = 22;
 
     /** The oldest age a freshly generated candidate can have. */
@@ -156,6 +162,7 @@ public final class HiringPool {
         for (int i = 0; i < HIRING_BATCH_SIZE; i++) {
             Astronaut candidate = new Astronaut(snapshot.allocatePersonnelId(), "Candidate",
                 randomAge(random), randomStartingMorale(random), randomLearningPotential(random));
+            candidate.setSalary(randomSalary(random));
             for (AstronautSkill skill : AstronautSkill.values()) {
                 candidate.setSkill(skill, randomSkill(random, astronautBand));
             }
@@ -168,6 +175,7 @@ public final class HiringPool {
         for (int i = 0; i < HIRING_BATCH_SIZE; i++) {
             SetSpecialist candidate = new SetSpecialist(snapshot.allocatePersonnelId(), "Candidate",
                 randomAge(random), randomStartingMorale(random), randomLearningPotential(random));
+            candidate.setSalary(randomSalary(random));
             for (SetSkill skill : SetSkill.values()) {
                 candidate.setSkill(skill, randomSkill(random, setBand));
             }
@@ -180,6 +188,7 @@ public final class HiringPool {
         for (int i = 0; i < HIRING_BATCH_SIZE; i++) {
             MissionControlOfficer candidate = new MissionControlOfficer(snapshot.allocatePersonnelId(), "Candidate",
                 randomAge(random), randomStartingMorale(random), randomLearningPotential(random));
+            candidate.setSalary(randomSalary(random));
             for (MissionControlSkill skill : MissionControlSkill.values()) {
                 candidate.setSkill(skill, randomSkill(random, missionControlBand));
             }
@@ -335,6 +344,19 @@ public final class HiringPool {
             case GOOD -> GOOD_SKILL_MIN + random.nextDouble() * (GOOD_SKILL_MAX - GOOD_SKILL_MIN);
             case EXCELLENT -> EXCELLENT_SKILL_MIN + random.nextDouble() * (EXCELLENT_SKILL_MAX - EXCELLENT_SKILL_MIN);
         };
+    }
+
+    /**
+     * Draws one candidate's per-season salary from BASPM's own 25-60 range
+     * ({@code PersonnelManagerConstants.xml}'s salary range; {@code design.md}
+     * &sect;2.1(d) - the user's 2026-10-03 instruction to stay close to BASPM's
+     * values). Whole units, inclusive at both ends.
+     *
+     * @param random the random source
+     * @return the salary, between {@link #SALARY_MIN} and {@link #SALARY_MAX} inclusive
+     */
+    static double randomSalary(RandomGenerator random) {
+        return SALARY_MIN + random.nextInt(SALARY_MAX - SALARY_MIN + 1);
     }
 
     private static int randomAge(RandomGenerator random) {

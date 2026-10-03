@@ -70,27 +70,26 @@ from scratch.
 
 **Next up (as of 2026-10-03):** M2's budget/funding, prestige, goals, and
 win-condition/tie-break slice (`design.md` §2.1/§2.6/§2.9, §5), in four
-sub-slices. **Sub-slices 1 (mission prestige) and 2 (goals) are done.** The
-next one is **sub-slice 3, budget** (`design.md` §2.1(d)): the funding review
-every 16 seasons with catch-up, salaries and program maintenance as the
-recurring expenses, debt allowed, and the prestige-to-funds conversion while
-in debt (cap: funds may come up to two seasons of running costs). Then
-sub-slice 4, the win-condition check (`design.md` §2.9).
+sub-slices. **Sub-slices 1 (mission prestige), 2 (goals), and 3 (budget) are
+done.** The next one is **sub-slice 4, the win-condition check** (`design.md`
+§2.9): a headless cross-player function taking the declared goal list, each
+player's achieved goals (with the game turn they settled on) and cancelled goals,
+and the Olympic-style medal-table tie-break for same-turn finishers. The real
+call site is M4's `TurnScheduler`, which owns the goal list in `game-meta.json`.
 
-The goal design (`design.md` §2.6(d)) is in place, including the corrections
-from checking BASPM source: a program gate is an AND list of required goals,
-not generic-only; the goal modifier is read live on every step; cancelled goals
-pay and count too. The cross-player goal race is a Launch Window design, not a
-BASPM port, since BASPM's human multiplayer counts each player's own goals
-(`baspm.md` §11.7); the user kept it after being told. Same-turn achievers all
-pay first-time, and the tally commits after every player has resolved. Sub-slice 2
-has no separate multi-player playout yet; the race is covered by
-`MissionProgressGoalsTest`, which drives the real `MissionLaunch`/`MissionProgress`
-against a real `GoalTally`. BASPM's answer to going into the red is a defeat,
-not debt (`baspm.md` §11.8), and the decided debt/conversion design departs from
-it on purpose.
+Budget defaults are close to BASPM's own values, per the user's 2026-10-03
+instruction: starting funds 25,000 / prestige 250 / 3,000 per season, BASPM's
+Normal-difficulty review table, salaries drawn from BASPM's 25-60 range, and
+component maintenance from BASPM's `MaintenanceCost` values. `design.md` §2.1(d)
+flags that §1.2 normally asks for re-derived numbers; this is the user's
+directed exception, to revisit if they prefer stricter re-derivation. The
+conversion rate (4 prestige per fund) is my own, unconfirmed. In the harness, the
+bot never goes into debt at these values, so the conversion is covered by unit
+tests only.
+
 Everything below is history; if this paragraph and a later one disagree, the
 later one wins.
+
 
 **Mission prestige, sub-slice 1, done (2026-10-03):** `MissionPrestige`,
 `FlightTier`, `MissionPrestigeChanged`, plus defaulted constructors on

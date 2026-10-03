@@ -24,6 +24,7 @@ public abstract class Personnel {
     private int trainingSeasonsTotal;
     private double trainingTargetLevel;
     private String assignedMissionId;
+    private double salary;
 
     /**
      * No-argument constructor required for Jackson deserialization.
@@ -271,6 +272,31 @@ public abstract class Personnel {
      */
     public void setTrainingTargetLevel(double trainingTargetLevel) {
         this.trainingTargetLevel = trainingTargetLevel;
+    }
+
+    /**
+     * Returns this employee's salary, charged every season they are on the
+     * roster - {@code design.md} &sect;2.1(d). Drawn once at creation from
+     * BASPM's own 25-60 range, so a candidate's salary is fixed from the moment
+     * the candidate appears in a pool.
+     *
+     * @return the per-season salary, never negative
+     */
+    public double getSalary() {
+        return salary;
+    }
+
+    /**
+     * Sets this employee's per-season salary.
+     *
+     * @param salary the salary to set, never negative
+     * @throws IllegalArgumentException if {@code salary} is negative
+     */
+    public void setSalary(double salary) {
+        if (salary < 0) {
+            throw new IllegalArgumentException("salary must not be negative: " + salary);
+        }
+        this.salary = salary;
     }
 
     /**

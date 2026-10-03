@@ -66,7 +66,30 @@ import java.util.Objects;
 public record MissionComponent(String id, SetSkill associatedSkill, double baselineReliability,
                                 double maxReliability, double maxRdReliability,
                                 List<Double> rdSlotBandMaxAmounts, double maxReliabilityTransfer,
-                                List<ReliabilityTransferSource> reliabilityTransferSources) {
+                                List<ReliabilityTransferSource> reliabilityTransferSources,
+                                long maintenanceCost) {
+
+    /**
+     * A component with no upkeep - the shape before maintenance was modeled.
+     *
+     * @param id                          see {@link MissionComponent}
+     * @param associatedSkill             see {@link MissionComponent}
+     * @param baselineReliability         see {@link MissionComponent}
+     * @param maxReliability              see {@link MissionComponent}
+     * @param maxRdReliability            see {@link MissionComponent}
+     * @param rdSlotBandMaxAmounts        see {@link MissionComponent}
+     * @param maxReliabilityTransfer      see {@link MissionComponent}
+     * @param reliabilityTransferSources  see {@link MissionComponent}
+     * @throws NullPointerException     see the canonical constructor
+     * @throws IllegalArgumentException see the canonical constructor
+     */
+    public MissionComponent(String id, SetSkill associatedSkill, double baselineReliability,
+                            double maxReliability, double maxRdReliability,
+                            List<Double> rdSlotBandMaxAmounts, double maxReliabilityTransfer,
+                            List<ReliabilityTransferSource> reliabilityTransferSources) {
+        this(id, associatedSkill, baselineReliability, maxReliability, maxRdReliability, rdSlotBandMaxAmounts,
+            maxReliabilityTransfer, reliabilityTransferSources, 0);
+    }
 
     /** The number of simultaneous R&amp;D slots every mission component has - {@code baspm.md} &sect;10.8. */
     public static final int RD_SLOT_COUNT = 4;
@@ -123,6 +146,9 @@ public record MissionComponent(String id, SetSkill associatedSkill, double basel
         }
         rdSlotBandMaxAmounts = List.copyOf(rdSlotBandMaxAmounts);
         reliabilityTransferSources = List.copyOf(reliabilityTransferSources);
+        if (maintenanceCost < 0) {
+            throw new IllegalArgumentException("maintenanceCost must not be negative: " + maintenanceCost);
+        }
     }
 
     /**

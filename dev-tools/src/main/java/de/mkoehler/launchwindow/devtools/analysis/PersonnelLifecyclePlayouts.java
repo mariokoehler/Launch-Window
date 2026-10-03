@@ -1,5 +1,6 @@
 package de.mkoehler.launchwindow.devtools.analysis;
 
+import de.mkoehler.launchwindow.content.BudgetSchedule;
 import de.mkoehler.launchwindow.content.ContentCatalog;
 import de.mkoehler.launchwindow.content.Goal;
 import de.mkoehler.launchwindow.content.MissionComponent;
@@ -34,7 +35,11 @@ import de.mkoehler.launchwindow.rules.MissionReliabilityChanged;
 import de.mkoehler.launchwindow.rules.MissionSkillGrowthApplied;
 import de.mkoehler.launchwindow.rules.MissionStepOutcome;
 import de.mkoehler.launchwindow.rules.MissionStepResolution;
+import de.mkoehler.launchwindow.rules.BudgetProgress;
+import de.mkoehler.launchwindow.rules.BudgetReviewed;
 import de.mkoehler.launchwindow.rules.GoalSettled;
+import de.mkoehler.launchwindow.rules.PrestigeConversion;
+import de.mkoehler.launchwindow.rules.SeasonFundsSettled;
 import de.mkoehler.launchwindow.rules.GoalTally;
 import de.mkoehler.launchwindow.rules.MissionPrestige;
 import de.mkoehler.launchwindow.rules.MissionPrestigeChanged;
@@ -157,7 +162,28 @@ public final class PersonnelLifecyclePlayouts {
     private static final double HIRE_CHANCE_PER_SEASON = 0.25;
     private static final double OPEN_PROGRAM_CHANCE_PER_SEASON = 0.1;
     private static final double LAUNCH_MISSION_CHANCE_PER_SEASON = 0.15;
-    private static final long STARTING_FUNDS = 5_000;
+    /**
+     * The starting economy, close to BASPM's own Normal-difficulty values (the user's
+     * instruction of 2026-10-03: stay close to BASPM's values for defaults). Launch
+     * Window's own review table is BASPM's shape at BASPM's magnitudes, rounded
+     * where BASPM's are not already round - {@code design.md} &sect;2.1(d).
+     */
+    private static final long STARTING_FUNDS = 25_000;
+    private static final long STARTING_PRESTIGE = 250;
+    private static final long STARTING_FUNDING_RATE = 3_000;
+    private static final long PRESTIGE_PER_FUND = 4;
+    private static final BudgetSchedule SCHEDULE = new BudgetSchedule(STARTING_FUNDS, STARTING_PRESTIGE,
+        STARTING_FUNDING_RATE, PRESTIGE_PER_FUND, List.of(
+            new BudgetSchedule.Review(250, 3_800, 2_500, 8_000),
+            new BudgetSchedule.Review(2_000, 4_600, 12_500, 21_000),
+            new BudgetSchedule.Review(5_000, 5_500, 35_000, 35_000),
+            new BudgetSchedule.Review(7_500, 8_000, 70_000, 49_000),
+            new BudgetSchedule.Review(10_000, 10_000, 120_000, 52_500),
+            new BudgetSchedule.Review(16_000, 12_500, 130_000, 55_000),
+            new BudgetSchedule.Review(24_000, 17_500, 140_000, 57_500),
+            new BudgetSchedule.Review(32_000, 25_000, 150_000, 60_000),
+            new BudgetSchedule.Review(48_000, 35_000, 160_000, 62_500),
+            new BudgetSchedule.Review(48_000, 40_000, 170_000, 65_000)));
 
     /**
      * For an idle Astronaut/Mission Control officer whose shuffle roll
@@ -278,21 +304,25 @@ public final class PersonnelLifecyclePlayouts {
     private static ContentCatalog buildCatalog() {
         ProgramCategory category = new ProgramCategory("early-space", "Early Space");
 
+        // Program openings, maintenance, and mission costs are BASPM's own values for the programs and
+        // components these fixtures stand for (Sputnik 00-00, Explorer 00-02, crewed 00-05 approximately;
+        // a mission costs the unit cost of the components it flies). Component upkeep close to BASPM's own MaintenanceCost values (Sputnik 75, Explorer I 90,
+        // Redstone 188, Mercury 158) - user's 2026-10-03 instruction to stay close for defaults.
         MissionComponent satelliteSputnik = new MissionComponent("satellite-sputnik", SetSkill.SPACE_PROBES, 3, 90,
-            82, RD_SLOT_BANDS, 0, List.of());
+            82, RD_SLOT_BANDS, 0, List.of(), 75);
         MissionComponent satelliteExplorer = new MissionComponent("satellite-explorer", SetSkill.SPACE_PROBES, 3, 90,
-            82, RD_SLOT_BANDS, 40, List.of(new MissionComponent.ReliabilityTransferSource("satellite-sputnik", 40)));
+            82, RD_SLOT_BANDS, 40, List.of(new MissionComponent.ReliabilityTransferSource("satellite-sputnik", 40)), 90);
         MissionComponent rocketRedstone = new MissionComponent("rocket-redstone", SetSkill.ROCKETS, 3, 95, 87,
-            RD_SLOT_BANDS, 0, List.of());
+            RD_SLOT_BANDS, 0, List.of(), 188);
         MissionComponent capsuleMercury = new MissionComponent("capsule-mercury", SetSkill.CREWED_SPACECRAFT, 3, 90,
-            82, RD_SLOT_BANDS, 50, List.of(new MissionComponent.ReliabilityTransferSource("rocket-redstone", 50)));
+            82, RD_SLOT_BANDS, 50, List.of(new MissionComponent.ReliabilityTransferSource("rocket-redstone", 50)), 158);
 
         Program sputnikProgram =
-            new Program("sputnik-program", "early-space", 500, 0, List.of("satellite-sputnik"), List.of());
-        Program explorerProgram = new Program("explorer-program", "early-space", 600, 0,
+            new Program("sputnik-program", "early-space", 126, 13, List.of("satellite-sputnik"), List.of());
+        Program explorerProgram = new Program("explorer-program", "early-space", 354, 36,
             List.of("satellite-explorer"), List.of(new Program.OpeningCostDiscount("sputnik-program", 40)),
             List.of("satellite-in-orbit"));
-        Program mercuryProgram = new Program("mercury-program", "early-space", 1_200, 0,
+        Program mercuryProgram = new Program("mercury-program", "early-space", 449, 45,
             List.of("rocket-redstone", "capsule-mercury"), List.of());
 
         MissionStep sputnikLaunchStep = new MissionStep("launch",
@@ -301,7 +331,7 @@ public final class PersonnelLifecyclePlayouts {
                 new MissionStep.ControllerInvolvement(MissionControlSkill.TRAJECTORY_AND_GNC, 40)),
             List.of(), false, 100, 100, List.of("satellite-in-orbit"));
         MissionConfiguration sputnikLaunchConfiguration = new MissionConfiguration("sputnik-launch-std",
-            "sputnik-program", List.of(new MissionSeason(List.of(sputnikLaunchStep))), 0, 1, 50, 300);
+            "sputnik-program", List.of(new MissionSeason(List.of(sputnikLaunchStep))), 0, 1, 488, 250);
 
         MissionStep explorerLaunchStep = new MissionStep("launch",
             List.of(new MissionStep.ComponentInvolvement("satellite-explorer", 100)),
@@ -315,7 +345,7 @@ public final class PersonnelLifecyclePlayouts {
         MissionConfiguration explorerMissionConfiguration = new MissionConfiguration("explorer-mission-std",
             "explorer-program",
             List.of(new MissionSeason(List.of(explorerLaunchStep)), new MissionSeason(List.of(explorerOrbitOpsStep))),
-            0, 1, 75, 500);
+            0, 1, 585, 500);
 
         MissionStep mercuryLaunchStep = new MissionStep("launch",
             List.of(new MissionStep.ComponentInvolvement("rocket-redstone", 60),
@@ -331,7 +361,7 @@ public final class PersonnelLifecyclePlayouts {
         MissionConfiguration mercuryMissionConfiguration = new MissionConfiguration("mercury-mission-std",
             "mercury-program",
             List.of(new MissionSeason(List.of(mercuryLaunchStep)), new MissionSeason(List.of(mercuryOrbitOpsStep))),
-            2, 1, 150, 1_000, List.of(new MissionConfiguration.GoalModifier("satellite-in-orbit", "capsule-mercury", 5)),
+            2, 1, 2_243, 1_000, List.of(new MissionConfiguration.GoalModifier("satellite-in-orbit", "capsule-mercury", 5)),
             List.of());
 
         return new ContentCatalog(List.of(category), List.of(sputnikProgram, explorerProgram, mercuryProgram),
@@ -379,6 +409,8 @@ public final class PersonnelLifecyclePlayouts {
         int missionStepSuccessfulCount = 0;
         int missionStepMinorGlitchSolvedCount = 0;
         int missionStepMinorGlitchCount = 0;
+        int reviewCount = 0;
+        int debtConversionCount = 0;
         long prestigePaidTotal = 0;
         long prestigeDeductedTotal = 0;
         int completedFlightCount = 0;
@@ -414,6 +446,8 @@ public final class PersonnelLifecyclePlayouts {
                 programsOpenedCount += maybeOpenProgram(snapshot, random);
                 missionsLaunchedCount += maybeLaunchMission(snapshot, random);
                 checkProgramInvariants(snapshot);
+                // A player in debt may convert prestige into funds, before any resolver runs (journaled bucket).
+                debtConversionCount += maybeConvertPrestige(snapshot, random);
 
                 int before = rosterSize(snapshot);
                 Set<String> protectedBefore = protectedEmployeeKeys(snapshot);
@@ -439,6 +473,17 @@ public final class PersonnelLifecyclePlayouts {
                 completedFlightCount += (int) prestigeFlows[2];
                 // The tally moves only after the whole resolution has been checked (design.md §2.6(d)).
                 goalTally.commit(missionEvents);
+                // The budget season pass, after mission progress so this season's prestige can feed a review.
+                long expectedExpenses = independentRunningCosts(snapshot);
+                long fundsBefore = snapshot.getFunds();
+                long prestigeAtLastReviewBefore = snapshot.getPrestigeAtLastReview();
+                List<ResolutionEvent> budgetEvents = BudgetProgress.advanceSeason(snapshot, CATALOG, SCHEDULE,
+                    season + 1);
+                checkBudgetInvariants(snapshot, budgetEvents, fundsBefore, expectedExpenses, prestigeAtLastReviewBefore,
+                    season + 1);
+                if (budgetEvents.stream().anyMatch(event -> event instanceof BudgetReviewed)) {
+                    reviewCount++;
+                }
                 checkProgramInvariants(snapshot);
 
                 List<ResolutionEvent> trainingEvents = TrainingProgress.advanceSeason(snapshot, random);
@@ -550,7 +595,7 @@ public final class PersonnelLifecyclePlayouts {
             missionReliabilityChangeCount, avgMissionReliabilityDelta, missionSkillGrowthCount,
             avgMissionSkillGrowth, missionTriggeredSetReleaseCount, expertTrainingStartedCount,
             expertTrainingCompletedCount, pulledOutOfTrainingCount, expertRescueAppliedCount,
-            prestigePaidTotal, prestigeDeductedTotal, completedFlightCount);
+            prestigePaidTotal, prestigeDeductedTotal, completedFlightCount, reviewCount, debtConversionCount);
     }
 
     /**
@@ -1244,6 +1289,156 @@ public final class PersonnelLifecyclePlayouts {
     }
 
     /**
+     * Recomputes the season's running costs from the roster, the opened programs, and
+     * the owned components, the same figure {@link BudgetProgress#runningCosts} charges.
+     *
+     * @param snapshot the player
+     * @return the running costs
+     */
+    private static long independentRunningCosts(PlayerSnapshot snapshot) {
+        long total = 0;
+        for (Astronaut astronaut : snapshot.getAstronauts()) {
+            total += Math.round(astronaut.getSalary());
+        }
+        for (SetSpecialist specialist : snapshot.getSetSpecialists()) {
+            total += Math.round(specialist.getSalary());
+        }
+        for (MissionControlOfficer officer : snapshot.getMissionControlOfficers()) {
+            total += Math.round(officer.getSalary());
+        }
+        for (String programId : snapshot.getOpenedProgramIds()) {
+            total += CATALOG.program(programId).orElseThrow().maintenanceCost();
+        }
+        for (String componentId : snapshot.getMissionComponents().keySet()) {
+            total += CATALOG.missionComponent(componentId).orElseThrow().maintenanceCost();
+        }
+        return total;
+    }
+
+    /**
+     * Cross-checks one budget season against an independent recomputation: the
+     * expenses match the roster and holdings, the review (if one falls due) matches
+     * the bracket table and catch-up rule, and funds reconcile to fundsBefore - expenses + income.
+     *
+     * @param snapshot              the player after the budget pass
+     * @param events                the budget pass's events
+     * @param fundsBefore           funds before the pass
+     * @param expectedExpenses      the independently recomputed running costs
+     * @param prestigeAtLastReview  the review baseline before the pass
+     * @param seasonsElapsed        the seasons-elapsed count the pass was given
+     * @throws IllegalStateException if any invariant is violated
+     */
+    private static void checkBudgetInvariants(PlayerSnapshot snapshot, List<ResolutionEvent> events, long fundsBefore,
+            long expectedExpenses, long prestigeAtLastReview, int seasonsElapsed) {
+        SeasonFundsSettled settled = null;
+        BudgetReviewed review = null;
+        for (ResolutionEvent event : events) {
+            if (event instanceof SeasonFundsSettled found) {
+                settled = found;
+            } else if (event instanceof BudgetReviewed found) {
+                review = found;
+            }
+        }
+        if (settled == null) {
+            throw new IllegalStateException("Budget pass produced no SeasonFundsSettled event");
+        }
+        if (settled.expenses() != expectedExpenses) {
+            throw new IllegalStateException("Expenses " + settled.expenses() + ", independent recomputation says "
+                + expectedExpenses);
+        }
+        boolean reviewDue = seasonsElapsed % BudgetProgress.SEASONS_PER_REVIEW == 0;
+        if (reviewDue != (review != null)) {
+            throw new IllegalStateException("Review due=" + reviewDue + " but an event was "
+                + (review != null ? "reported" : "absent") + " at seasons elapsed " + seasonsElapsed);
+        }
+        if (review != null) {
+            int reviewNumber = seasonsElapsed / BudgetProgress.SEASONS_PER_REVIEW;
+            long shift = 0;
+            if (reviewNumber > 1) {
+                long previousMin = SCHEDULE.reviewFor(reviewNumber - 1).minPrestige();
+                if (prestigeAtLastReview < previousMin) {
+                    shift = previousMin - prestigeAtLastReview;
+                }
+            }
+            if (review.reviewNumber() != reviewNumber || review.catchUpShift() != shift) {
+                throw new IllegalStateException("Review " + review + " disagrees with review " + reviewNumber
+                    + " and catch-up " + shift);
+            }
+            long expectedRate = independentRate(SCHEDULE.reviewFor(reviewNumber), shift, review.prestige());
+            if (review.fundingRate() != expectedRate) {
+                throw new IllegalStateException("Review set rate " + review.fundingRate()
+                    + ", independent recomputation says " + expectedRate);
+            }
+            if (snapshot.getPrestigeAtLastReview() != review.prestige()) {
+                throw new IllegalStateException("Review baseline not recorded");
+            }
+        }
+        long rate = snapshot.getFundingRatePerSeason();
+        if (settled.income() != rate || settled.fundsAfter() != snapshot.getFunds()) {
+            throw new IllegalStateException("Season funds event disagrees with the snapshot");
+        }
+        if (snapshot.getFunds() != fundsBefore - expectedExpenses + rate) {
+            throw new IllegalStateException("Funds don't reconcile: " + snapshot.getFunds() + " != " + fundsBefore
+                + " - " + expectedExpenses + " + " + rate);
+        }
+    }
+
+    /**
+     * Recomputes a review's funding from the bracket, the catch-up shift, and the
+     * prestige, with the same straight-line shape BASPM uses - independently of
+     * {@link BudgetProgress}'s own code.
+     *
+     * @param bracket the bracket the review reads
+     * @param shift   the catch-up shift applied to the bracket's prestige ends
+     * @param prestige the player's prestige
+     * @return the funding per season
+     */
+    private static long independentRate(BudgetSchedule.Review bracket, long shift, long prestige) {
+        long minP = bracket.minPrestige() - shift;
+        long maxP = bracket.maxPrestige() - shift;
+        if (prestige <= minP) {
+            return bracket.minFunding();
+        }
+        if (prestige >= maxP) {
+            return bracket.maxFunding();
+        }
+        // Same floating-point form as BudgetProgress's own line, so a legitimate rounding edge can't split the two.
+        double slope = (double) (bracket.maxFunding() - bracket.minFunding()) / (maxP - minP);
+        double intercept = bracket.maxFunding() - slope * maxP;
+        return (long) Math.ceil(slope * prestige + intercept);
+    }
+
+    /**
+     * The bot's debt conversion: with a 50% chance when in debt, converts a random
+     * amount up to what the cap and the player's prestige allow. Every such attempt
+     * must succeed, and funds must never end past two seasons of running costs.
+     *
+     * @param snapshot the player
+     * @param random   the bot's random source
+     * @return {@code 1} if a conversion happened, {@code 0} otherwise
+     */
+    private static int maybeConvertPrestige(PlayerSnapshot snapshot, Random random) {
+        if (snapshot.getFunds() >= 0 || random.nextDouble() >= 0.5) {
+            return 0;
+        }
+        long affordable = snapshot.getPrestige() / PRESTIGE_PER_FUND;
+        long max = Math.min(PrestigeConversion.maxConversion(snapshot, CATALOG), affordable);
+        if (max <= 0) {
+            return 0;
+        }
+        long amount = 1 + (long) (random.nextDouble() * max);
+        PrestigeConversion.Outcome outcome = PrestigeConversion.convert(snapshot, CATALOG, SCHEDULE, amount);
+        if (outcome != PrestigeConversion.Outcome.CONVERTED) {
+            throw new IllegalStateException("Conversion of " + amount + " within the cap gave " + outcome);
+        }
+        long cap = PrestigeConversion.COVERED_SEASONS * BudgetProgress.runningCosts(snapshot, CATALOG);
+        if (snapshot.getFunds() > cap) {
+            throw new IllegalStateException("Funds " + snapshot.getFunds() + " exceed the two-season cover " + cap);
+        }
+        return 1;
+    }
+
+    /**
      * One mission step in one season, with the goal prestige its settlements paid.
      */
     private static final class StepRecord {
@@ -1414,9 +1609,7 @@ public final class PersonnelLifecyclePlayouts {
      * @throws IllegalStateException if any invariant is violated
      */
     private static void checkProgramInvariants(PlayerSnapshot snapshot) {
-        if (snapshot.getFunds() < 0) {
-            throw new IllegalStateException("Funds went negative: " + snapshot.getFunds());
-        }
+        // Funds may be negative: debt is allowed (design.md §2.1(d)), so there is no non-negativity invariant.
 
         Set<String> requiredByAnOpenedProgram = new HashSet<>();
         for (String programId : snapshot.getOpenedProgramIds()) {
@@ -1981,13 +2174,15 @@ public final class PersonnelLifecyclePlayouts {
     }
 
     private static PlayerSnapshot newRandomSnapshot(int employeesPerGroup, Random random) {
-        PlayerSnapshot snapshot = new PlayerSnapshot("Bot Agency", Archetype.NASA, STARTING_FUNDS, 0, 0, 1);
+        PlayerSnapshot snapshot = new PlayerSnapshot("Bot Agency", Archetype.NASA, STARTING_FUNDS,
+            STARTING_PRESTIGE, STARTING_FUNDING_RATE, 1);
         List<Astronaut> astronauts = new ArrayList<>();
         List<SetSpecialist> specialists = new ArrayList<>();
         List<MissionControlOfficer> officers = new ArrayList<>();
         for (int i = 0; i < employeesPerGroup; i++) {
             Astronaut astronaut = new Astronaut("a" + i, "Astronaut " + i,
                 randomAge(random), randomMorale(random), randomLearningPotential(random));
+            astronaut.setSalary(randomSalary(random));
             for (AstronautSkill skill : AstronautSkill.values()) {
                 astronaut.setSkill(skill, randomStartingSkill(random));
             }
@@ -1995,6 +2190,7 @@ public final class PersonnelLifecyclePlayouts {
 
             SetSpecialist specialist = new SetSpecialist("s" + i, "Specialist " + i,
                 randomAge(random), randomMorale(random), randomLearningPotential(random));
+            specialist.setSalary(randomSalary(random));
             for (SetSkill skill : SetSkill.values()) {
                 specialist.setSkill(skill, randomStartingSkill(random));
             }
@@ -2002,6 +2198,7 @@ public final class PersonnelLifecyclePlayouts {
 
             MissionControlOfficer officer = new MissionControlOfficer("m" + i, "Officer " + i,
                 randomAge(random), randomMorale(random), randomLearningPotential(random));
+            officer.setSalary(randomSalary(random));
             for (MissionControlSkill skill : MissionControlSkill.values()) {
                 officer.setSkill(skill, randomStartingSkill(random));
             }
@@ -2011,6 +2208,17 @@ public final class PersonnelLifecyclePlayouts {
         snapshot.setSetSpecialists(specialists);
         snapshot.setMissionControlOfficers(officers);
         return snapshot;
+    }
+
+    /**
+     * Draws one employee's per-season salary from BASPM's own 25-60 range, the same
+     * range {@link HiringPool} draws candidates from ({@code design.md} &sect;2.1(d)).
+     *
+     * @param random the bot's random source
+     * @return the salary, whole units
+     */
+    private static double randomSalary(Random random) {
+        return HiringPool.SALARY_MIN + random.nextInt(HiringPool.SALARY_MAX - HiringPool.SALARY_MIN + 1);
     }
 
     private static int randomAge(Random random) {
@@ -2082,5 +2290,6 @@ public final class PersonnelLifecyclePlayouts {
         System.out.printf("Prestige paid / deducted: %d / %d%n", report.prestigePaidTotal(),
             report.prestigeDeductedTotal());
         System.out.printf("Completed flights (advance repeat tier): %d%n", report.completedFlightCount());
+        System.out.printf("Funding reviews: %d; debt conversions: %d%n", report.reviewCount(), report.debtConversionCount());
     }
 }

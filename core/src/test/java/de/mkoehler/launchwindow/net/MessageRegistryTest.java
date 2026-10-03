@@ -231,6 +231,7 @@ class MessageRegistryTest {
     void fetchStateResponseSurvivesRoundTrip() {
         PlayerSnapshot snapshot = new PlayerSnapshot("Hanseatic Space Agency", Archetype.SOVIET, 1_000, 0, 0, 1);
         Astronaut astronaut = new Astronaut("astro-1", "Jane Reyes", 34, 80, 60);
+        astronaut.setSalary(42);
         astronaut.setSkill(AstronautSkill.PILOTING, 70.5);
         astronaut.setAgingProgressSeasons(2);
         astronaut.setTrainingKind(TrainingKind.ADVANCED);
@@ -260,6 +261,7 @@ class MessageRegistryTest {
         snapshot.setInProgressMissions(Map.of("m0", flying));
         snapshot.setNextMissionInstanceId(1);
         snapshot.setSuccessfulFlightCounts(Map.of("sputnik-1-std", 2));
+        snapshot.setPrestigeAtLastReview(700);
         snapshot.setAchievedGoals(Map.of("orbit", 4));
         snapshot.setCancelledGoalIds(Set.of("pre-flight"));
 
@@ -296,6 +298,8 @@ class MessageRegistryTest {
         assertEquals(List.of("astro-1"), copiedMission.getAssignedAstronautIds());
         assertEquals(List.of("mco-1"), copiedMission.getAssignedMissionControlOfficerIds());
         assertEquals(2, copy.state().getSuccessfulFlightCounts().get("sputnik-1-std"));
+        assertEquals(700, copy.state().getPrestigeAtLastReview());
+        assertEquals(42, copy.state().getAstronauts().get(0).getSalary());
         assertEquals(4, copy.state().getAchievedGoals().get("orbit"));
         assertEquals(Set.of("pre-flight"), copy.state().getCancelledGoalIds());
         assertEquals(1, copy.state().getNextMissionInstanceId());

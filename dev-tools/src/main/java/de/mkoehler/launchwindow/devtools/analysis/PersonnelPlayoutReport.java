@@ -139,6 +139,8 @@ package de.mkoehler.launchwindow.devtools.analysis;
  *                                           only), summed over every game and season
  * @param prestigeDeductedTotal              total prestige taken by failing
  *                                           seasons, as a positive magnitude
+ * @param reviewCount                        funding reviews that fell due and ran
+ * @param debtConversionCount                prestige-to-funds conversions the bot made while in debt
  * @param completedFlightCount               mission flights that completed all
  *                                           their seasons without a failure, and so
  *                                           advanced their configuration's repeat tier
@@ -190,6 +192,8 @@ public record PersonnelPlayoutReport(
     int expertRescueAppliedCount,
     long prestigePaidTotal,
     long prestigeDeductedTotal,
-    int completedFlightCount
+    int completedFlightCount,
+    int reviewCount,
+    int debtConversionCount
 ) {
 }

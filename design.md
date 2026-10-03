@@ -445,8 +445,9 @@ proceeds:
       `fundingRatePerSeason` from a `BudgetSchedule` content record: an ordered
       list of per-review brackets `(minPrestige, minFunding, maxPrestige,
       maxFunding)`, with BASPM's own shape - linear interpolation between the
-      ends, ceiling-rounded, flat at each end. The table's own numbers are
-      Launch Window's, authored in M3; the M2 harness uses a fixture.
+      ends, ceiling-rounded, flat at each end. **Numbers: close to BASPM's own
+      Normal-difficulty table (user, 2026-10-03; see the salary bullet below for
+      the §1.2 flag).** The M3 content pack will own the final table.
     - **Catch-up.** Traced this session (`baspm.md` §11.7): if prestige at the
       previous review fell short of that review's *raw* minimum, the current
       review's bracket shifts down by that shortfall. Shortfalls therefore
@@ -459,11 +460,25 @@ proceeds:
       Window has no facilities concept, and BASPM's per-component fixed costs
       have no Launch Window field yet.
     - **Salaries - decided (user, 2026-10-03).** Yes, in v1. This supersedes
-      the 2026-09-30 "hiring is free until budget exists" decision (§2.2). A
-      flat per-employee salary per group, charged every season the employee
-      is on the roster, with own numbers (BASPM confirms salaries are a fixed
-      per-season cost, `baspm.md` §11.8; the values are Launch Window's and
-      are set in the harness fixture and in M3's content, unconfirmed).
+      the 2026-09-30 "hiring is free until budget exists" decision (§2.2).
+      **Values: close to BASPM's own, per the user's instruction of 2026-10-03
+      ("stay close to the original BASPM values" for defaults).** Each employee
+      carries an individual salary drawn from BASPM's own range of 25-60 per
+      season (`PersonnelManagerConstants.xml`'s salary range), drawn when the
+      employee is created (candidate or starting roster), not a flat
+      per-group figure. Charged every season the employee is on the roster.
+      **Flag:** §1.2 says content is re-derived rather than copied, so these
+      numbers are a deliberate, user-directed exception, to be reviewed if the
+      user prefers stricter re-derivation.
+    - **Budget defaults, close to BASPM (user, 2026-10-03):** initial funds
+      25,000; initial prestige 250; initial funding rate 3,000 per season; the
+      ten BASPM review brackets (Normal difficulty) as the `BudgetSchedule`;
+      program maintenance and mission-component maintenance in BASPM's own range
+      (component maintenance is a real BASPM expense - `MissionComponents.xml`'s
+      `MaintenanceCost`, and it's now modeled as `MissionComponent.maintenanceCost`
+      rather than left out). Beyond the tenth review, which BASPM's own table
+      doesn't cover, the last bracket repeats (Launch Window's own choice, flagged).
+      Conversion rate: 4 prestige points per 1 fund (unconfirmed, see below).
     - **Negative funds - decided (user, 2026-10-03), a departure from
       BASPM.** BASPM treats funds below zero as an immediate game-over
       (multiplayer: forced surrender, `baspm.md` §11.8). Launch Window allows
@@ -4502,6 +4517,37 @@ here.
       now changes which programs open. Goal settlement counts are not in the
       report, only the prestige they feed into. Still open: budget (sub-slice 3),
       the win check (sub-slice 4).
+    - **Sub-slice 3, budget — done (2026-10-03).** `BudgetSchedule` content
+      (starting funds 25,000, prestige 250, funding 3,000 per season, the ten
+      review brackets close to BASPM's Normal-difficulty table, conversion rate 4
+      prestige per fund - unconfirmed). `BudgetProgress.advanceSeason` runs in
+      BASPM's traced order: running costs (every employee's salary, every opened
+      program's maintenance, every owned component's maintenance), the review if
+      `seasonsElapsed` is a multiple of 16, then funding at the rate in force.
+      Catch-up is measured against the previous review's raw minimum. Funds may
+      go negative. `PrestigeConversion.convert` is the headless debt conversion: only
+      while in debt, capped so funds end at most two seasons of running costs, and
+      it spends prestige at 4 points per fund. `Personnel.salary` (25-60, BASPM's
+      range, drawn at candidate creation) and `MissionComponent.maintenanceCost`
+      (BASPM's values for the fixture components) are new. Caveat: the M2 harness
+      no longer checks "funds never negative", since debt is allowed. **Fixture
+      costs aligned to BASPM (2026-10-03, same day):** program openings 126 /
+      354 / 449 (BASPM 00-00, 00-02, 00-05 - the crewed mapping is approximate),
+      program maintenance 13 / 36 / 45, component maintenance 75 / 90 / 188 / 158
+      (BASPM's MaintenanceCost for Sputnik, Explorer I, Redstone, Mercury), and
+      mission costs equal to the unit costs of the components flown (488 Sputnik,
+      585 Explorer, 2,243 Redstone + Mercury). The Sputnik prestige fixture is now
+      250 (BASPM's first-time value for that configuration). Prestige and goal
+      fixture values for the other missions are still our own, flagged for M3's
+      content alignment. **Numbers
+      (200 games, 80 seasons, seed 42, aligned costs): 817,500 prestige paid, 43,650 deducted,
+      1,583 completed flights; 1,076 resigned, 1,026 retired, 5,368 still employed,
+      72,544 training completions, 4,528 hires; 1,000 funding reviews (five per
+      game). The bot never went into debt at these values, so 0 debt conversions
+      happened in the harness - the conversion is covered by `BudgetProgressTest`
+      only. Each season's expenses and funds are checked independently.** Still open:
+      the win check (sub-slice 4), and the conversion and budget actions' dispatch
+      (M4).
   - Slice: random events — §2.7.
   - **The Playouts-style bot-driven harness (§3.10) starts right after the
     first resolution rule exists**, in `dev-tools`, not as a final
