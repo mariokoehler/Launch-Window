@@ -23,7 +23,6 @@ import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.model.SetSkill;
 import de.mkoehler.launchwindow.model.SetSpecialist;
 import de.mkoehler.launchwindow.model.TrainingKind;
-import de.mkoehler.launchwindow.rules.BudgetProgress;
 import de.mkoehler.launchwindow.rules.BuildingUpgradeOutcome;
 import de.mkoehler.launchwindow.rules.BuildingUpgrades;
 import de.mkoehler.launchwindow.rules.GoalTally;
@@ -32,20 +31,17 @@ import de.mkoehler.launchwindow.rules.HiringPool;
 import de.mkoehler.launchwindow.rules.LaunchRequest;
 import de.mkoehler.launchwindow.rules.MissionLaunch;
 import de.mkoehler.launchwindow.rules.MissionLaunchOutcome;
-import de.mkoehler.launchwindow.rules.MissionProgress;
 import de.mkoehler.launchwindow.rules.MissionStepResolved;
 import de.mkoehler.launchwindow.rules.OpenProgramOutcome;
 import de.mkoehler.launchwindow.rules.PersonnelDeparture;
 import de.mkoehler.launchwindow.rules.PersonnelGroup;
-import de.mkoehler.launchwindow.rules.PersonnelLifecycle;
 import de.mkoehler.launchwindow.rules.PrestigeConversion;
 import de.mkoehler.launchwindow.rules.ProgramOpening;
-import de.mkoehler.launchwindow.rules.RandomEvents;
-import de.mkoehler.launchwindow.rules.ResearchProgress;
 import de.mkoehler.launchwindow.rules.ResolutionEvent;
 import de.mkoehler.launchwindow.rules.RocketProgramOutcome;
 import de.mkoehler.launchwindow.rules.RocketPrograms;
 import de.mkoehler.launchwindow.rules.SeasonFundsSettled;
+import de.mkoehler.launchwindow.rules.SeasonResolver;
 import de.mkoehler.launchwindow.rules.TrainingProgress;
 import de.mkoehler.launchwindow.rules.WinCondition;
 
@@ -184,27 +180,20 @@ public final class ContentPackPlayouts {
             act(snapshot, random, tally);
             checkState(snapshot);
 
-            List<ResolutionEvent> lifecycle = PersonnelLifecycle.advanceSeason(snapshot);
-            List<ResolutionEvent> missions = MissionProgress.advanceSeason(snapshot, catalog, random, goalTally,
-                season);
-            goalTally.commit(missions);
-            BuildingUpgrades.advanceSeason(snapshot, buildings);
-            long expectedExpenses = independentRunningCosts(snapshot);
-            long fundsBefore = snapshot.getFunds();
-            List<ResolutionEvent> budget = BudgetProgress.advanceSeason(snapshot, catalog, schedule, season + 1);
-            checkBudget(budget, fundsBefore, expectedExpenses, snapshot);
-            List<ResolutionEvent> events = RandomEvents.advanceSeason(snapshot, roster, random, season, season + 1);
-            TrainingProgress.advanceSeason(snapshot, random);
-            ResearchProgress.advanceSeason(snapshot, catalog, random);
-            HiringPool.refreshCandidates(snapshot, random);
+            // One player per game, so the game turn and the player's own seasons coincide here.
+            SeasonResolver.Context context =
+                new SeasonResolver.Context(catalog, schedule, roster, goalTally, season, season + 1);
+            BudgetWatch watch = new BudgetWatch();
+            List<ResolutionEvent> seasonEvents = SeasonResolver.advanceSeason(snapshot, context, random, watch);
+            goalTally.commit(seasonEvents);
             checkState(snapshot);
 
-            for (ResolutionEvent event : missions) {
+            for (ResolutionEvent event : seasonEvents) {
                 if (event instanceof MissionStepResolved resolved) {
                     tally.stepOutcomes.merge(resolved.outcome().name(), 1, Integer::sum);
                 }
             }
-            for (List<ResolutionEvent> list : List.of(lifecycle, missions, events)) {
+            for (List<ResolutionEvent> list : List.of(seasonEvents)) {
                 for (ResolutionEvent event : list) {
                     if (event instanceof PersonnelDeparture departure && departure.group() == PersonnelGroup.ASTRONAUT
                             && (departure.reason().name().equals("LOST_IN_ACCIDENT")
@@ -229,6 +218,27 @@ public final class ContentPackPlayouts {
                 tally.completedByArchetype.merge(archetype, 1, Integer::sum);
                 tally.completionSeasons.add(season + 1);
                 return;
+            }
+        }
+    }
+
+    /** Checks the budget phase against an independent recomputation taken just before it runs. */
+    private final class BudgetWatch implements SeasonResolver.Observer {
+        private long expectedExpenses;
+        private long fundsBefore;
+
+        @Override
+        public void before(SeasonResolver.Phase phase, PlayerSnapshot snapshot) {
+            if (phase == SeasonResolver.Phase.BUDGET) {
+                expectedExpenses = independentRunningCosts(snapshot);
+                fundsBefore = snapshot.getFunds();
+            }
+        }
+
+        @Override
+        public void after(SeasonResolver.Phase phase, PlayerSnapshot snapshot, List<ResolutionEvent> events) {
+            if (phase == SeasonResolver.Phase.BUDGET) {
+                checkBudget(events, fundsBefore, expectedExpenses, snapshot);
             }
         }
     }
