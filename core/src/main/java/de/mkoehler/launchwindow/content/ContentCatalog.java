@@ -218,6 +218,10 @@ public final class ContentCatalog {
                 MissionComponent component = missionComponentsById.get(componentId);
                 if (component == null) {
                     problems.add("Program " + program.id() + " requires unknown MissionComponent " + componentId);
+                } else if (component.hasRocketSpec()) {
+                    // Rockets come only from rocket programs, behind the VAB's cap and class limit.
+                    problems.add("Program " + program.id() + " requires rocket " + componentId
+                        + "; rockets are opened as rocket programs");
                 } else if (component.agency() != null && component.agency() != program.agency()) {
                     // A program may only grant components its own agency can own.
                     problems.add("Program " + program.id() + " (agency " + program.agency()
@@ -242,6 +246,14 @@ public final class ContentCatalog {
                 continue;
             }
             validateStepComponentReferences(configuration, program, problems);
+            for (MissionConfiguration.Launch launch : configuration.launches()) {
+                for (String payloadId : launch.payloadComponentIds()) {
+                    if (!program.requiredMissionComponentIds().contains(payloadId)) {
+                        problems.add("MissionConfiguration " + configuration.id() + " launches payload " + payloadId
+                            + " its program " + program.id() + " doesn't require");
+                    }
+                }
+            }
             validatePrestigeShares(configuration, problems);
             validateGoalReferences(configuration, problems);
         }
@@ -263,6 +275,9 @@ public final class ContentCatalog {
         }
 
         for (MissionComponent component : missionComponentsById.values()) {
+            if (component.id().startsWith(MissionConfiguration.ROCKET_SLOT_PREFIX)) {
+                problems.add("MissionComponent " + component.id() + " uses the reserved rocket slot prefix");
+            }
             for (MissionComponent.ReliabilityTransferSource source : component.reliabilityTransferSources()) {
                 if (source.sourceComponentId().equals(component.id())) {
                     problems.add("MissionComponent " + component.id() + " has a transfer source referencing itself");
@@ -360,7 +375,14 @@ public final class ContentCatalog {
                     + " step " + step.id();
                 for (MissionStep.ComponentInvolvement involvement : step.componentInvolvements()) {
                     String componentId = involvement.componentId();
-                    if (!missionComponentsById.containsKey(componentId)) {
+                    if (componentId.startsWith(MissionConfiguration.ROCKET_SLOT_PREFIX)) {
+                        // A rocket slot: the player's rocket choice for that launch, not a program component.
+                        int launchIndex = MissionConfiguration.rocketSlotIndex(componentId);
+                        if (launchIndex < 0 || launchIndex >= configuration.launches().size()) {
+                            problems.add(stepLabel + " names rocket slot " + componentId + " but the configuration has "
+                                + configuration.launches().size() + " launch(es)");
+                        }
+                    } else if (!missionComponentsById.containsKey(componentId)) {
                         problems.add(stepLabel + " references unknown MissionComponent " + componentId);
                     } else if (!program.requiredMissionComponentIds().contains(componentId)) {
                         problems.add(stepLabel + " references MissionComponent " + componentId

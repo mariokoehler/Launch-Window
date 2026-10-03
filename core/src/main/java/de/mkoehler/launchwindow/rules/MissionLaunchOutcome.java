@@ -60,5 +60,23 @@ public enum MissionLaunchOutcome {
     /**
      * One of the configuration's mission components is unavailable for this window ({@code design.md} &sect;2.7).
      */
-    MISSION_COMPONENT_UNAVAILABLE
+    MISSION_COMPONENT_UNAVAILABLE,
+
+    /** The number of rockets given doesn't match the configuration's launches. */
+    WRONG_ROCKET_COUNT,
+
+    /** A given rocket isn't a rocket the player owns with its rocket program open. */
+    ROCKET_NOT_AVAILABLE,
+
+    /**
+     * A given rocket can't lift its launch's payload to its destination, or isn't
+     * human-rated for a crewed launch ({@code baspm.md} &sect;10.9).
+     */
+    ROCKET_CANNOT_LIFT_PAYLOAD,
+
+    /** The number of CAPCOM astronaut ids given doesn't match the configuration's CAPCOM count. */
+    WRONG_CAPCOM_COUNT,
+
+    /** A CAPCOM astronaut id is unknown, not idle, repeated, or also in the crew. */
+    CAPCOM_NOT_AVAILABLE
 }

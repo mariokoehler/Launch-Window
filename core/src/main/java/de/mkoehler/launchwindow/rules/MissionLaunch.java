@@ -1,6 +1,7 @@
 package de.mkoehler.launchwindow.rules;
 
 import de.mkoehler.launchwindow.content.ContentCatalog;
+import de.mkoehler.launchwindow.content.MissionComponent;
 import de.mkoehler.launchwindow.content.MissionConfiguration;
 import de.mkoehler.launchwindow.content.MissionSeason;
 import de.mkoehler.launchwindow.content.MissionStep;
@@ -8,6 +9,7 @@ import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.InProgressMission;
 import de.mkoehler.launchwindow.model.MissionControlOfficer;
+import de.mkoehler.launchwindow.model.OwnedMissionComponent;
 import de.mkoehler.launchwindow.model.Personnel;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 
@@ -85,16 +87,86 @@ public final class MissionLaunch {
      */
     public static MissionLaunchOutcome launch(PlayerSnapshot snapshot, String missionConfigurationId,
             List<String> astronautIds, List<String> missionControlOfficerIds, ContentCatalog catalog) {
-        Objects.requireNonNull(snapshot, "snapshot must not be null");
         Objects.requireNonNull(missionConfigurationId, "missionConfigurationId must not be null");
         Objects.requireNonNull(astronautIds, "astronautIds must not be null");
         Objects.requireNonNull(missionControlOfficerIds, "missionControlOfficerIds must not be null");
+        return launch(snapshot, new LaunchRequest(missionConfigurationId, astronautIds, missionControlOfficerIds,
+            List.of(), List.of()), catalog);
+    }
+
+    /**
+     * Launches a mission from a full {@link LaunchRequest}: as the shorter overload,
+     * plus one rocket per launch and the CAPCOM astronauts ({@code design.md} &sect;5,
+     * M3). Each rocket must be a rocket the player owns and has active (its rocket
+     * program open), able to lift its launch's summed payload mass to the launch's
+     * destination, and human-rated for a crewed launch. The launch costs the
+     * configuration's {@link MissionConfiguration#cost()} plus every chosen rocket's
+     * {@link MissionComponent#unitCost()}. Fails without mutating anything if any check
+     * fails.
+     *
+     * @param snapshot the player; mutated in place on success
+     * @param request  the launch choices
+     * @param catalog  the content catalog
+     * @return the outcome
+     * @throws NullPointerException if any argument is {@code null}
+     */
+    public static MissionLaunchOutcome launch(PlayerSnapshot snapshot, LaunchRequest request,
+            ContentCatalog catalog) {
+        Objects.requireNonNull(snapshot, "snapshot must not be null");
+        Objects.requireNonNull(request, "request must not be null");
         Objects.requireNonNull(catalog, "catalog must not be null");
 
-        return catalog.missionConfiguration(missionConfigurationId)
-            .map(configuration -> launchKnownConfiguration(snapshot, configuration, astronautIds,
-                missionControlOfficerIds))
+        return catalog.missionConfiguration(request.missionConfigurationId())
+            .map(configuration -> launchKnownConfiguration(snapshot, configuration, request, catalog))
             .orElse(MissionLaunchOutcome.UNKNOWN_MISSION_CONFIGURATION);
+    }
+
+    /**
+     * Returns what launching a configuration with these rockets costs: the
+     * configuration's own cost plus each rocket's unit cost.
+     *
+     * @param configuration the configuration
+     * @param rocketIds     the chosen rockets, all known to the catalog
+     * @param catalog       the content catalog
+     * @return the launch cost
+     */
+    public static long launchCost(MissionConfiguration configuration, List<String> rocketIds,
+            ContentCatalog catalog) {
+        long cost = configuration.cost();
+        for (String rocketId : rocketIds) {
+            cost += catalog.missionComponent(rocketId).orElseThrow().unitCost();
+        }
+        return cost;
+    }
+
+    /**
+     * Checks the chosen rockets against the configuration's launches.
+     *
+     * @return the first problem, or {@code null} when every rocket fits its launch
+     */
+    private static MissionLaunchOutcome validateRockets(PlayerSnapshot snapshot, MissionConfiguration configuration,
+            List<String> rocketIds, ContentCatalog catalog) {
+        if (rocketIds.size() != configuration.launches().size()) {
+            return MissionLaunchOutcome.WRONG_ROCKET_COUNT;
+        }
+        for (int i = 0; i < rocketIds.size(); i++) {
+            MissionComponent rocket = catalog.missionComponent(rocketIds.get(i)).orElse(null);
+            OwnedMissionComponent owned = snapshot.getMissionComponents().get(rocketIds.get(i));
+            if (rocket == null || !rocket.hasRocketSpec() || owned == null || !owned.isActive()) {
+                return MissionLaunchOutcome.ROCKET_NOT_AVAILABLE;
+            }
+            MissionConfiguration.Launch launch = configuration.launches().get(i);
+            double payloadMass = 0;
+            for (String payloadId : launch.payloadComponentIds()) {
+                payloadMass += catalog.missionComponent(payloadId).orElseThrow().mass();
+            }
+            double capacity = rocket.payloadCapacity(launch.launchType());
+            // A rocket with no capacity for this launch type can't fly it at all, even an empty payload.
+            if (capacity <= 0 || capacity < payloadMass) {
+                return MissionLaunchOutcome.ROCKET_CANNOT_LIFT_PAYLOAD;
+            }
+        }
+        return null;
     }
 
     /**
@@ -109,11 +181,19 @@ public final class MissionLaunch {
      * @return the outcome
      */
     private static MissionLaunchOutcome launchKnownConfiguration(PlayerSnapshot snapshot,
-            MissionConfiguration configuration, List<String> astronautIds, List<String> missionControlOfficerIds) {
+            MissionConfiguration configuration, LaunchRequest request, ContentCatalog catalog) {
+        List<String> astronautIds = request.astronautIds();
+        List<String> missionControlOfficerIds = request.missionControlOfficerIds();
         if (!snapshot.getOpenedProgramIds().contains(configuration.programId())) {
             return MissionLaunchOutcome.PROGRAM_NOT_OPEN;
         }
-        if (snapshot.getFunds() < configuration.cost()) {
+        // Rockets before funds: the price depends on which rockets fly.
+        MissionLaunchOutcome rocketProblem = validateRockets(snapshot, configuration, request.rocketIds(), catalog);
+        if (rocketProblem != null) {
+            return rocketProblem;
+        }
+        long cost = launchCost(configuration, request.rocketIds(), catalog);
+        if (snapshot.getFunds() < cost) {
             return MissionLaunchOutcome.INSUFFICIENT_FUNDS;
         }
         if (snapshot.getLaunchCap() >= 0 && snapshot.getLaunchesThisWindow() >= snapshot.getLaunchCap()) {
@@ -122,11 +202,15 @@ public final class MissionLaunch {
         for (MissionSeason season : configuration.seasons()) {
             for (MissionStep step : season.steps()) {
                 for (MissionStep.ComponentInvolvement involvement : step.componentInvolvements()) {
-                    if (snapshot.getUnavailableComponents().containsKey(involvement.componentId())) {
+                    String componentId = resolveComponentId(involvement.componentId(), request.rocketIds());
+                    if (snapshot.getUnavailableComponents().containsKey(componentId)) {
                         return MissionLaunchOutcome.MISSION_COMPONENT_UNAVAILABLE;
                     }
                 }
             }
+        }
+        if (!request.capcomAstronautIds().isEmpty()) {
+            return MissionLaunchOutcome.WRONG_CAPCOM_COUNT;
         }
 
         MissionLaunchOutcome crewProblem =
@@ -143,14 +227,29 @@ public final class MissionLaunch {
         String instanceId = snapshot.allocateMissionInstanceId();
         InProgressMission mission =
             new InProgressMission(instanceId, configuration.id(), astronautIds, missionControlOfficerIds);
+        mission.setRocketIds(request.rocketIds());
         snapshot.getInProgressMissions().put(instanceId, mission);
 
-        snapshot.setFunds(snapshot.getFunds() - configuration.cost());
+        snapshot.setFunds(snapshot.getFunds() - cost);
         snapshot.setLaunchesThisWindow(snapshot.getLaunchesThisWindow() + 1);
         assign(snapshot.getAstronauts(), astronautIds, instanceId);
         assign(snapshot.getMissionControlOfficers(), missionControlOfficerIds, instanceId);
 
         return MissionLaunchOutcome.LAUNCHED;
+    }
+
+    /**
+     * Resolves a step's component involvement id to the component that actually
+     * flies: a rocket slot {@code @rocket-n} becomes the rocket chosen for launch
+     * {@code n}; any other id is already a component id.
+     *
+     * @param involvementId the step's involvement id
+     * @param rocketIds     the mission's chosen rockets, in launch order
+     * @return the component id
+     */
+    public static String resolveComponentId(String involvementId, List<String> rocketIds) {
+        int launchIndex = MissionConfiguration.rocketSlotIndex(involvementId);
+        return launchIndex < 0 ? involvementId : rocketIds.get(launchIndex);
     }
 
     /**

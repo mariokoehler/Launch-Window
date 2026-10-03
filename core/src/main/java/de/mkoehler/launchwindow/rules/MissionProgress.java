@@ -590,9 +590,11 @@ public final class MissionProgress {
             .orElseThrow();
         double sum = 0;
         for (MissionStep.ComponentInvolvement involvement : step.componentInvolvements()) {
-            OwnedMissionComponent owned = snapshot.getMissionComponents().get(involvement.componentId());
+            // A rocket slot reads the reliability of the rocket the player chose for that launch.
+            String componentId = MissionLaunch.resolveComponentId(involvement.componentId(), mission.getRocketIds());
+            OwnedMissionComponent owned = snapshot.getMissionComponents().get(componentId);
             double current = owned != null ? owned.getCurrentReliability() : 0;
-            double modifier = goalModifierFor(snapshot, configuration, involvement.componentId());
+            double modifier = goalModifierFor(snapshot, configuration, componentId);
             double effective = MissionStepResolution.effectiveReliability(current, modifier);
             sum += involvement.percent() / 100.0 * effective;
         }
@@ -733,7 +735,9 @@ public final class MissionProgress {
         for (int i = 0; i < executedSteps.size(); i++) {
             int category = categoryFor(executedOutcomes.get(i));
             for (MissionStep.ComponentInvolvement involvement : executedSteps.get(i).componentInvolvements()) {
-                String componentId = involvement.componentId();
+                // Aggregated per resolved component, so a rocket slot changes the chosen rocket's reliability.
+                String componentId = MissionLaunch.resolveComponentId(involvement.componentId(),
+                    mission.getRocketIds());
                 Integer existing = categoryByComponentId.get(componentId);
                 if (existing == null || category > existing) {
                     categoryByComponentId.put(componentId, category);

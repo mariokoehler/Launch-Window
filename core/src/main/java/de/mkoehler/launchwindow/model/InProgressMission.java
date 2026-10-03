@@ -21,6 +21,8 @@ public class InProgressMission {
     private int currentSeasonIndex;
     private List<String> assignedAstronautIds = new ArrayList<>();
     private List<String> assignedMissionControlOfficerIds = new ArrayList<>();
+    private List<String> rocketIds = new ArrayList<>();
+    private List<String> capcomAstronautIds = new ArrayList<>();
 
     /**
      * No-argument constructor required for Jackson/Kryo deserialization.
@@ -151,5 +153,49 @@ public class InProgressMission {
         Objects.requireNonNull(assignedMissionControlOfficerIds,
             "assignedMissionControlOfficerIds must not be null");
         this.assignedMissionControlOfficerIds = new ArrayList<>(assignedMissionControlOfficerIds);
+    }
+
+    /**
+     * Returns the rocket chosen for each launch, in launch order - empty for a
+     * configuration with no launches. A step's rocket slot {@code @rocket-n} resolves
+     * to entry {@code n - 1} ({@code design.md} &sect;5, M3).
+     *
+     * @return the rocket component ids, never {@code null}
+     */
+    public List<String> getRocketIds() {
+        return rocketIds;
+    }
+
+    /**
+     * Replaces the chosen rockets. Public for Jackson/Kryo, and copied defensively.
+     *
+     * @param rocketIds the rocket component ids, in launch order
+     * @throws NullPointerException if {@code rocketIds} is {@code null}
+     */
+    public void setRocketIds(List<String> rocketIds) {
+        Objects.requireNonNull(rocketIds, "rocketIds must not be null");
+        this.rocketIds = new ArrayList<>(rocketIds);
+    }
+
+    /**
+     * Returns the astronauts serving as CAPCOM on the ground for this mission - BASPM's
+     * CAPCOM slot ({@code baspm.md} &sect;10.9). They are {@code ASSIGNED} to this mission
+     * like the crew, but never fly, so a crew loss never touches them.
+     *
+     * @return the CAPCOM astronaut ids, never {@code null}
+     */
+    public List<String> getCapcomAstronautIds() {
+        return capcomAstronautIds;
+    }
+
+    /**
+     * Replaces the CAPCOM astronauts. Public for Jackson/Kryo, and copied defensively.
+     *
+     * @param capcomAstronautIds the CAPCOM astronaut ids
+     * @throws NullPointerException if {@code capcomAstronautIds} is {@code null}
+     */
+    public void setCapcomAstronautIds(List<String> capcomAstronautIds) {
+        Objects.requireNonNull(capcomAstronautIds, "capcomAstronautIds must not be null");
+        this.capcomAstronautIds = new ArrayList<>(capcomAstronautIds);
     }
 }

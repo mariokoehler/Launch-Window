@@ -4786,6 +4786,27 @@ here.
     close-while-flying refusal; an owned component is active exactly when an open
     program requires it, and no specialist researches an inactive component. 725
     programs opened, 230 closed, 1,739 missions, 696,302 prestige paid.
+  - **Slice 3b, rocket programs and choosing a rocket at launch — done (2026-10-03).**
+    `MissionConfiguration.launches` (a `LaunchType` plus payload ids per launch)
+    and the reserved step slot id `@rocket-N`, which resolves to the rocket chosen
+    for launch N. I picked the `@` prefix because the fixture ids already used
+    `rocket-`. `RocketPrograms.open` charges the creation cost, and it charges
+    again on every reopening, as BASPM does, though a reopened rocket keeps its
+    reliability. Opening is gated by agency, the VAB cap (open rocket programs are
+    owned, active rockets), and the VAB level's rocket class. `RocketPrograms.close`
+    is refused while a flying mission uses the rocket. `MissionLaunch.launch(snapshot,
+    LaunchRequest, catalog)` needs exactly one owned, active rocket per launch,
+    with capacity for its launch type at least the summed payload mass. A plain
+    `ROCKETS` rocket has no capacity on an `_HR` launch type. The rocket checks run
+    before the funds check, because the cost is the configuration's cost plus each
+    rocket's unit cost. The chosen rockets are stored on `InProgressMission.rocketIds`.
+    `MissionProgress` resolves the slot both for the success probability and for
+    the post-season reliability change, so the chosen rocket's reliability moves.
+    The catalog rejects programs that grant a rocket, out-of-range slots, payloads
+    the program doesn't require, and real ids using the reserved prefix. The old
+    `launch` overload still works for configurations without launches. The harness
+    fixtures have no launches, so the bot exercises rockets only once it runs on
+    the real pack (slice 5); `RocketsTest` covers the rules meanwhile.
 - **M4 — Integration: wire M2/M3's real engine into M1's proven skeleton.**
   Replace M1's placeholder trivial action with real player actions (assign
   personnel, open a program, queue a mission) and real turn resolution.

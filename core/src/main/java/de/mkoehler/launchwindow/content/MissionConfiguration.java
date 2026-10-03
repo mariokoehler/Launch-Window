@@ -66,12 +66,98 @@ import java.util.function.Predicate;
  *                  {@link MissionStep#prestigeSharePercent()} share of the
  *                  tier's total. {@code 0} means the configuration pays no
  *                  prestige at all
+ * @param goalDependencies reliability penalties while a goal is unmet
+ * @param goalBoosts       reliability bonuses once a goal is met
+ * @param launches  the launches this configuration flies, one rocket each, chosen at
+ *                  launch time - BASPM's {@code LaunchInformation} ({@code baspm.md}
+ *                  &sect;10.9). A step names launch {@code n}'s rocket by the slot id
+ *                  {@link #rocketSlotId(int) @rocket-n}. Empty for a configuration
+ *                  with no rocket choice (its components all come from its program)
  * @author Mario Koehler
  */
 public record MissionConfiguration(String id, String programId, List<MissionSeason> seasons,
                                     int requiredAstronautCount, int requiredMissionControlOfficerCount, long cost,
                                     long firstTimePrestige, List<GoalModifier> goalDependencies,
-                                    List<GoalModifier> goalBoosts) {
+                                    List<GoalModifier> goalBoosts, List<Launch> launches) {
+
+    /** The prefix of a step's rocket slot id; launch {@code n} (1-based) is {@code @rocket-n}. The {@code @} keeps it apart from real component ids. */
+    public static final String ROCKET_SLOT_PREFIX = "@rocket-";
+
+    /**
+     * One launch: where it goes, and which payloads ride on it. The rocket is the
+     * player's choice at launch time, from their owned, active rockets that can lift
+     * the summed payload mass to this launch type ({@code baspm.md} &sect;10.9).
+     *
+     * @param launchType          the destination, and whether the launch is crewed
+     * @param payloadComponentIds the payload components this launch carries; never empty
+     */
+    public record Launch(LaunchType launchType, List<String> payloadComponentIds) {
+
+        /**
+         * Validates and copies the launch.
+         *
+         * @throws NullPointerException     if a field is {@code null}
+         * @throws IllegalArgumentException if there are no payloads
+         */
+        public Launch {
+            Objects.requireNonNull(launchType, "launchType must not be null");
+            payloadComponentIds = List.copyOf(payloadComponentIds);
+            if (payloadComponentIds.isEmpty()) {
+                throw new IllegalArgumentException("a launch carries at least one payload");
+            }
+        }
+    }
+
+    /**
+     * Returns the slot id a step uses for a launch's rocket.
+     *
+     * @param launchNumber the 1-based launch number
+     * @return {@code @rocket-<launchNumber>}
+     */
+    public static String rocketSlotId(int launchNumber) {
+        return ROCKET_SLOT_PREFIX + launchNumber;
+    }
+
+    /**
+     * Returns the 0-based launch index a step involvement id names, or {@code -1}
+     * when the id is a plain component id rather than a rocket slot.
+     *
+     * @param involvementId a step's component involvement id
+     * @return the launch index, or {@code -1}
+     */
+    public static int rocketSlotIndex(String involvementId) {
+        if (!involvementId.startsWith(ROCKET_SLOT_PREFIX)) {
+            return -1;
+        }
+        try {
+            return Integer.parseInt(involvementId.substring(ROCKET_SLOT_PREFIX.length())) - 1;
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
+
+    /**
+     * A configuration with no rocket choice - the shape before rockets were modeled.
+     *
+     * @param id                                 see {@link MissionConfiguration}
+     * @param programId                          see {@link MissionConfiguration}
+     * @param seasons                            see {@link MissionConfiguration}
+     * @param requiredAstronautCount             see {@link MissionConfiguration}
+     * @param requiredMissionControlOfficerCount see {@link MissionConfiguration}
+     * @param cost                               see {@link MissionConfiguration}
+     * @param firstTimePrestige                  see {@link MissionConfiguration}
+     * @param goalDependencies                   see {@link MissionConfiguration}
+     * @param goalBoosts                         see {@link MissionConfiguration}
+     * @throws NullPointerException     see the canonical constructor
+     * @throws IllegalArgumentException see the canonical constructor
+     */
+    public MissionConfiguration(String id, String programId, List<MissionSeason> seasons,
+                                int requiredAstronautCount, int requiredMissionControlOfficerCount, long cost,
+                                long firstTimePrestige, List<GoalModifier> goalDependencies,
+                                List<GoalModifier> goalBoosts) {
+        this(id, programId, seasons, requiredAstronautCount, requiredMissionControlOfficerCount, cost,
+            firstTimePrestige, goalDependencies, goalBoosts, List.of());
+    }
 
     /**
      * A goal-linked reliability modifier on one mission component: a
@@ -190,6 +276,8 @@ public record MissionConfiguration(String id, String programId, List<MissionSeas
         Objects.requireNonNull(goalBoosts, "goalBoosts must not be null");
         goalDependencies = List.copyOf(goalDependencies);
         goalBoosts = List.copyOf(goalBoosts);
+        Objects.requireNonNull(launches, "launches must not be null");
+        launches = List.copyOf(launches);
 
         boolean anyCrewInvolvement = anyStepMatches(seasons, step -> !step.crewInvolvements().isEmpty());
         if ((requiredAstronautCount > 0) != anyCrewInvolvement) {
