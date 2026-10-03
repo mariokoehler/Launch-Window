@@ -4825,6 +4825,49 @@ here.
     controllers (decision 6 above said nine for crewed). Both exceed the level-1
     Mission Control cap of 5, so a NASA player has to upgrade Mission Control
     (level 2 holds 13) before flying any Mercury mission.
+  - **Slice 4, the early-era content pack — done (2026-10-03).** `assets/content/early-era/`:
+    two categories and six programs. Soviet: Sputnik 1, Sputnik 2, Korabl-Sputnik 2,
+    and Vostok. NASA: Explorer 1 and Mercury. The pack has 10 components: five
+    payloads, and five rockets (R-7 Sputnik and R-7 Vostok for the Soviets; Jupiter-C,
+    Redstone, and Atlas for NASA). It has 19 mission configurations, and the 21
+    goals they reference. It was generated from BASPM's Data Scripts by a converter
+    kept in the session scratchpad, not in this repo, since it reads `E:`. Its
+    mapping rules, which a regenerated pack must follow:
+    - **Ids are our own:** hand-mapped kebab-case ids for every program,
+      component, configuration, and goal; category names are ours too. Values are
+      BASPM's, per decision 1.
+    - **Step prestige:** a step's BASPM `PrestigeGrantedOnSuccess` is a
+      percentage share (`baspm.md` §13.4a), so it becomes `prestigeSharePercent`.
+      Every configuration's shares already summed to 100. The step's failure value
+      is a percentage of the first-time total, so `failurePrestigeDeduction` =
+      round(pct × firstTime / 100).
+    - **Controller slots** map through the configuration's mission-control layout
+      by speciality index. A Flight Director slot's amount is spread evenly over
+      the five controller skills, and an astronaut slot becomes a `LEADERSHIP`
+      CAPCOM involvement. Each skill is summed, then rounded by largest remainder
+      to integers with an unchanged total.
+    - **Crew slots** are summed per skill (every crew step sums to exactly 100).
+      `ROCKET_N` becomes `@rocket-N`.
+    - **Staffing counts:** the controller count is the layout's Mission Control
+      slots, the CAPCOM count its astronaut slots, and the crew count the
+      flight-crew layout's slots (Mercury and Vostok need 10 controllers plus 1
+      CAPCOM).
+    - **Costs:** a configuration's `cost` is its payloads' unit cost; the rocket's
+      is added at launch.
+    - **Goals and transfers:** goal modifiers and achieved goals that reference
+      goals outside the pack are dropped. That is Space Plane, the two Biosatellite
+      goals, and Pegasus's micrometeoroid study, all only ever boosts on Mercury.
+      Reliability transfers keep only sources inside the pack.
+    - **Joint flights:** the two dual-launch joint configurations collapse their
+      two crew slots into our averaged crew model, an approximation flagged here.
+    `EarlyEraPackTest` checks that the pack loads from both a folder and a
+    classpath, that every configuration has a rocket of its own agency at VAB
+    level 1 able to lift it, that staffing fits a reachable building level, and
+    that the race goals (earth-orbit satellite, human in space, human in orbit)
+    are reachable by both agencies. Human in space and human in orbit are reached
+    through goal cancellation (the suborbital-flight goals cancel "human in
+    space"), as in BASPM. Not in the pack: a declared goal list, which is game-meta
+    (M4), and buildings, which stay on `BuildingSchedule.baspmClose()`.
 - **M4 — Integration: wire M2/M3's real engine into M1's proven skeleton.**
   Replace M1's placeholder trivial action with real player actions (assign
   personnel, open a program, queue a mission) and real turn resolution.

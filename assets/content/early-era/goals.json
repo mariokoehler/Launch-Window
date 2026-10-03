@@ -1,0 +1,158 @@
+[
+  {
+    "id": "earth-orbit-satellite",
+    "firstTimePrestige": 600,
+    "secondTimePrestige": 300,
+    "cancelsGoalIds": [
+      "radio-signals-from-orbit"
+    ]
+  },
+  {
+    "id": "radio-signals-from-orbit",
+    "firstTimePrestige": 250,
+    "secondTimePrestige": 125,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "sputnik-1-flown",
+    "firstTimePrestige": 300,
+    "secondTimePrestige": 150,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "explorer-1-flown",
+    "firstTimePrestige": 300,
+    "secondTimePrestige": 150,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "magnetic-field-study",
+    "firstTimePrestige": 250,
+    "secondTimePrestige": 125,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "organisms-in-microgravity",
+    "firstTimePrestige": 800,
+    "secondTimePrestige": 400,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "sputnik-2-flown",
+    "firstTimePrestige": 600,
+    "secondTimePrestige": 300,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "korabl-sputnik-2-flown",
+    "firstTimePrestige": 1000,
+    "secondTimePrestige": 500,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "vostok-uncrewed-suborbital-flown",
+    "firstTimePrestige": 120,
+    "secondTimePrestige": 60,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "vostok-suborbital-flown",
+    "firstTimePrestige": 600,
+    "secondTimePrestige": 300,
+    "cancelsGoalIds": [
+      "vostok-uncrewed-suborbital-flown",
+      "human-in-space"
+    ]
+  },
+  {
+    "id": "vostok-uncrewed-orbital-flown",
+    "firstTimePrestige": 150,
+    "secondTimePrestige": 75,
+    "cancelsGoalIds": [
+      "vostok-uncrewed-suborbital-flown"
+    ]
+  },
+  {
+    "id": "vostok-orbital-flown",
+    "firstTimePrestige": 1200,
+    "secondTimePrestige": 600,
+    "cancelsGoalIds": [
+      "vostok-uncrewed-orbital-flown",
+      "vostok-suborbital-flown",
+      "human-in-orbit"
+    ]
+  },
+  {
+    "id": "mercury-uncrewed-suborbital-flown",
+    "firstTimePrestige": 120,
+    "secondTimePrestige": 60,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "mercury-suborbital-flown",
+    "firstTimePrestige": 600,
+    "secondTimePrestige": 300,
+    "cancelsGoalIds": [
+      "mercury-uncrewed-suborbital-flown",
+      "human-in-space"
+    ]
+  },
+  {
+    "id": "mercury-uncrewed-orbital-flown",
+    "firstTimePrestige": 150,
+    "secondTimePrestige": 75,
+    "cancelsGoalIds": [
+      "mercury-uncrewed-suborbital-flown"
+    ]
+  },
+  {
+    "id": "mercury-orbital-flown",
+    "firstTimePrestige": 1200,
+    "secondTimePrestige": 600,
+    "cancelsGoalIds": [
+      "mercury-uncrewed-orbital-flown",
+      "mercury-suborbital-flown",
+      "human-in-orbit"
+    ]
+  },
+  {
+    "id": "duration-level-1",
+    "firstTimePrestige": 1000,
+    "secondTimePrestige": 500,
+    "cancelsGoalIds": [
+      "human-in-space",
+      "human-in-orbit"
+    ]
+  },
+  {
+    "id": "duration-level-2",
+    "firstTimePrestige": 1250,
+    "secondTimePrestige": 625,
+    "cancelsGoalIds": [
+      "duration-level-1"
+    ]
+  },
+  {
+    "id": "joint-crewed-launch",
+    "firstTimePrestige": 1250,
+    "secondTimePrestige": 625,
+    "cancelsGoalIds": [
+      "human-in-orbit"
+    ]
+  },
+  {
+    "id": "human-in-space",
+    "firstTimePrestige": 1750,
+    "secondTimePrestige": 875,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "human-in-orbit",
+    "firstTimePrestige": 3000,
+    "secondTimePrestige": 1500,
+    "cancelsGoalIds": [
+      "human-in-space",
+      "earth-orbit-satellite"
+    ]
+  }
+]
