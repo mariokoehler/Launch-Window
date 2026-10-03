@@ -4924,6 +4924,45 @@ here.
   land here too. **Exit criterion:** the same proof as M1's, but resolving
   a real turn through the real engine and real content, still via a
   CLI-style dev client.
+  - **Decisions (user, 2026-10-03), made before M4 started:**
+    1. **Undo is inverse actions only.** The journal stays append-only, and a
+       queued action is never withdrawn. A player takes back a one-off action by
+       queuing its opposite (close the program they opened, close the rocket
+       program, fire the hire, scrub the launch). That opposite costs whatever it
+       normally costs: closing refunds nothing, as in BASPM. I raised the
+       alternative of free same-day withdrawal; the user chose inverse actions.
+       This narrows §3.7's "declare current intent" rule to the assignment-style
+       actions where restating makes sense, and every one-off action type needs
+       a real inverse.
+    2. **A new player starts with empty rosters and fresh candidate pools,** plus
+       the budget schedule's starting values (25,000 funds, 250 prestige, 3,000
+       per season) and every building at level 1. That is BASPM-like: the first
+       day is spent hiring.
+    3. **Funding reviews count the player's own seasons**, as BASPM does. A late
+       joiner gets the same budget arc as everyone else: first review after their
+       own 16th season, the same brackets, the same catch-up rule. This replaces
+       the "fixed game turns" proposal in §2.1(d).
+    4. **A win is recorded and the game keeps going.** The first completion (or a
+       same-turn tie) is written once, and turns keep resolving so everyone else
+       can still finish and be ranked by completion turn. The host stops the
+       server when done.
+    5. **The inverse actions, traced in BASPM (`baspm.md` §10.10) and decided by the
+       user:**
+       - **Fire.** BASPM's `DismissEmployee` costs nothing. It is refused for
+         crew and controllers assigned to a mission, while SET can be dismissed
+         mid-R&D. Hiring is free here, so hire-then-fire costs nothing, but the
+         candidate is gone.
+       - **Scrub before flight gives a full refund.** A launch queued today
+         hasn't flown, so a same-day scrub returns its whole launch cost and frees
+         its people, as `CancelScheduledMissionAndGiveARefund` does for an
+         assembled, unflown mission. This supersedes the 2026-10-02 "never
+         refunded" note, which was probably observed on a mission in another state.
+       - **Cancel in flight, uncrewed missions only.** A multi-season mission
+         without crew can be cancelled mid-flight with BASPM's `OnCancellation`
+         rule: a prestige deduction, and a percentage of funds restored. A crewed
+         mission can't be abandoned; it always runs to its end or to failure.
+       - **Building upgrades are final**, as in BASPM. There's no cancel, so the
+         client must confirm before queuing one.
   - **Note from M3 for the dispatch work:** call the five-argument
     `HiringPool.hire(..., BuildingSchedule)` with `catalog.buildings()`. The
     four-argument overload silently uses `BuildingSchedule.baspmClose()`, which

@@ -1192,7 +1192,11 @@ GetTigerTeamsPercentageBoost`/`GetTigerTeamsCostMultiplier`):
   evaluates the next turn - and is never refunded if the mission is later
   scrubbed. Launch Window's own `MissionLaunch`/`MissionConfiguration.cost`
   (`design.md` &sect;2.5(h)) now matches this directly rather than treating
-  it as an unconfirmed default.
+  it as an unconfirmed default. **Corrected by a code trace (2026-10-03, §10.10):**
+  `Player.CancelScheduledMissionAndGiveARefund` does refund the full mission
+  cost when an *assembled, not yet flown* mission is scrubbed. The no-refund
+  observation above most likely came from a mission in another state, such as
+  one already in flight.
 
 ### 9.6 A related, unrelated-looking loose end noticed but not chased
 
@@ -1592,6 +1596,27 @@ Traced from the live install's Data Scripts and from `Player.cs`,
   and the VAB level also limits the rocket class (`GetMaxRocketTypeSupportedByVAB`:
   level 1 Light, level 2 Medium, level 3 Heavy). A rocket's class is its
   `MassAndCapacity RocketType`. The VAB cap is not a limit on concurrent missions.
+
+### 10.10 Undoing things: dismissal, scrub, cancellation, upgrades (traced 2026-10-03, for M4)
+
+- **Dismissal** (`Player.DismissEmployee`, from `ManagePersMainDismissButtonER`):
+  costs nothing and removes the employee (a SET specialist's R&D slot is cleared
+  first). The button refuses astronauts and flight controllers unless they are
+  available or in training, so anyone assigned to a mission can't be dismissed;
+  SET is always dismissable.
+- **Scrub of a scheduled mission** (`CancelScheduledMissionAndGiveARefund`, from
+  the HQ and launch-schedule scrub buttons): when the mission is
+  `SCHED_MSN_STATE_ASSEMBLED`, it adds back
+  `GetMissionConfigurationTotalCostWithReductionsForTasksAchieved` (the full cost)
+  and returns the purchased components. Crew and controllers are released. An
+  unscheduled (not yet assembled) mission is simply deleted, since nothing was
+  paid.
+- **Cancellation in flight:** each `MsnSim*.xml` carries `<OnCancellation
+  PrestigeDeductedOnFailure='2' FundsRestored='10'/>` (percentages), read into
+  `Mission.FundsRestoredOnCancellation`. The configuration-level
+  `PrestigeDeductedOnFailure` is the cancellation deduction (§11.7).
+- **Building upgrades:** `SetSpaceCenterBuildingState` starts one; nothing in
+  `Player.cs` or the UI cancels one.
 
 ## 11. Budget, prestige, and goals (traced 2026-09-27)
 
