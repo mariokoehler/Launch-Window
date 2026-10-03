@@ -88,7 +88,9 @@ then `python baspm_pack.py write <repo>\assets\content\early-era`. The script
 lives on the main PC only, never in the repo, because it reads `E:` and holds
 BASPM's internal ids. To extend the pack, add the scope and our own ids to its
 `PROGRAMS`/`COMPONENTS`/`CONFIG_NAMES` maps and to `goals.map.json`. Its mapping
-rules are written down in `design.md` §5, M3 slice 4. **Pitfall:** PowerShell 5.1's `Set-Content -Encoding
+rules are written down in `design.md` §5, M3 slice 4. `checklist.py` (same folder) regenerates
+`assets-raw/ART_CHECKLIST.md` from `baspm_programs.txt` and the art on disk; update its file maps when
+art lands. **Pitfall:** PowerShell 5.1's `Set-Content -Encoding
 utf8` writes a BOM, which breaks javac. Write files with
 `[IO.File]::WriteAllText(path, text, (New-Object Text.UTF8Encoding $false))`.
 Many repo files are CRLF on disk, so normalize before string-replacing

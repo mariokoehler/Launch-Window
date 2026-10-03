@@ -309,6 +309,14 @@ to it is effectively redistributed. BASPM's actual copyrighted expression
   public historical fact, not BASPM's property. The constraint is on BASPM's
   own specific expression of that subject matter (its particular prose, its
   particular art), never on the underlying facts.
+- **Fictional programs get Launch Window's own names (user decision, 2026-10-03).**
+  Real programs keep their historical names, which are public fact. BASPM's
+  invented ones are renamed. The first is the Soviet counterpart to the X-15:
+  BASPM's "PKA space plane" (program `26-01`) becomes the **OKB-MiG E-154**.
+  OKB stands for Opytnoe Konstruktorskoe Byuro, "experimental design bureau", so
+  the name reads as "the MiG (Mikoyan) design bureau's E-154". It's still
+  fictional, but it sounds like a real Soviet designation. Content ids, art file
+  names, and UI text use the new name. `assets-raw/ART_CHECKLIST.md` tracks the art.
 - This sharpens (doesn't replace) the existing "fan project note" in §1 and
   `CLAUDE.md`: those said "we intend to ship our own name/art/content" as
   general intent; this is the explicit, binding version of that intent.
