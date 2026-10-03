@@ -48,20 +48,20 @@ Notes:
   - [x] Sputnik - Extended mission — `sputnik_extended`
 
 - [x] **Explorer I** (NASA, `00-01`) **(M3 pack)** — `explorer_I`
-  - [ ] Explorer
-  - [ ] Explorer - Extended mission
+  - [X] Explorer
+  - [X] Explorer - Extended mission
 
 - [x] **Pegasus satellite** (NASA, `00-02`) — `pegasus_satellite`
-  - [ ] Pegasus satellite
-  - [ ] Pegasus satellite - Extended mission
+  - [X] Pegasus satellite
+  - [X] Pegasus satellite - Extended mission
 
 - [x] **Biosatellite** (NASA, `00-03`) — `bio_satellite`
-  - [ ] Biosatellite
-  - [ ] Biosatellite - Extended mission
+  - [X] Biosatellite
+  - [X] Biosatellite - Extended mission
 
 - [x] **Orbiting Frog Otolith (OFO)** (NASA, `00-04`) — `ofo_orbiting_frog_otolith`
-  - [ ] OFO
-  - [ ] OFO - Extended mission
+  - [X] OFO
+  - [X] OFO - Extended mission
 
 - [x] **Korabl-Sputnik 2** (SOVIET, `00-05`) **(M3 pack)** — `korabl_sputnik_2`
   - [x] Korabl-Sputnik 2 (Sputnik 5) — `korabl_sputnik_2`
@@ -72,25 +72,25 @@ Notes:
 ### `02` Lunar probes
 
 - [x] **Pioneer 4 lunar flyby** (NASA, `02-00`) — `pioneer_4`
-  - [ ] Pioneer 4 lunar flyby
+  - [X Pioneer 4 lunar flyby
 
 - [x] **Zond 5 lunar bioscience flyby** (SOVIET, `02-01`) — `zond_5`
   - [x] Zond 5 lunar bioscience flyby — `zond_5`
 
 - [x] **Ranger 3 lunar impactor** (NASA, `02-02`) — `ranger_3`
-  - [ ] Ranger 3 lunar impactor
+  - [X] Ranger 3 lunar impactor
 
 - [x] **Luna 2 lunar impactor** (SOVIET, `02-03`) — `luna_2`
   - [x] Luna 2 lunar impactor — `luna_2`
 
 - [x] **Pioneer 2 lunar orbiter** (NASA, `02-04`) — `pioneer_2`
-  - [ ] Pioneer 2 lunar orbiter
+  - [X] Pioneer 2 lunar orbiter
 
 - [x] **Lunar orbiter program** (NASA, `02-05`) — `lunar_orbiter`
-  - [ ] Lunar orbiter program
+  - [X] Lunar orbiter program
 
 - [x] **Surveyor lunar lander** (NASA, `02-06`) — `surveyor`
-  - [ ] Surveyor lunar lander
+  - [X] Surveyor lunar lander
 
 - [x] **Luna 15 lunar sample return** (SOVIET, `02-07`) — `luna_15`
   - [x] Luna 15 lunar sample return — `luna_15`
@@ -114,40 +114,40 @@ Notes:
 ### `08` Venus probes
 
 - [x] **Mariner 5 Venus flyby** (NASA, `08-00`) — `mariner_5`
-  - [ ] Mariner 5 Venus flyby
+  - [X] Mariner 5 Venus flyby
 
 - [x] **Pioneer Venus orbiter** (NASA, `08-01`) — `pioneer_venus_orbiter`
-  - [ ] Pioneer Venus orbiter
+  - [X] Pioneer Venus orbiter
 
-- [ ] **Venera 15 Venus orbiter** (SOVIET, `08-02`)
-  - [ ] Venera 15 Venus orbiter
+- [X] **Venera 15 Venus orbiter** (SOVIET, `08-02`)
+  - [X] Venera 15 Venus orbiter
 
 - [x] **Pioneer Venus Multiprobe** (NASA, `08-03`) — `pioneer_venus_multiprobe`
   - [x] Pioneer Venus Multiprobe — `pioneer_13_venus_multiprobe`
 
-- [ ] **Venera 7 Venus lander** (SOVIET, `08-04`)
-  - [ ] Venera 7 Venus lander
+- [X] **Venera 7 Venus lander** (SOVIET, `08-04`)
+  - [X] Venera 7 Venus lander
 
-- [ ] **Venera Venus flyby/orbiter probe with a lander** (SOVIET, `08-05`)
-  - [ ] Venera Venus flyby and lander
-  - [ ] Venera Venus orbiter and lander
+- [X] **Venera Venus flyby/orbiter probe with a lander** (SOVIET, `08-05`)
+  - [X] Venera Venus flyby and lander
+  - [X] Venera Venus orbiter and lander
 
 ### `10` Mars probes
 
 - [x] **Mariner 6 Mars flyby** (NASA, `10-00`) — `mariner_6`
   - [x] Mariner 6 Mars flyby — `mariner_6`
 
-- [ ] **Mariner 9 Mars orbiter** (NASA, `10-01`)
-  - [ ] Mariner 9 Mars orbiter
+- [X] **Mariner 9 Mars orbiter** (NASA, `10-01`)
+  - [X] Mariner 9 Mars orbiter
 
-- [ ] **Mars Viking orbiter and lander** (NASA, `10-02`)
-  - [ ] Mars Viking orbiter and lander
+- [X] **Mars Viking orbiter and lander** (NASA, `10-02`)
+  - [X] Mars Viking orbiter and lander
 
-- [ ] **Mars 2 orbiter lander and rover** (SOVIET, `10-03`)
-  - [ ] Mars 2 orbiter lander and rover
+- [X] **Mars 2 orbiter lander and rover** (SOVIET, `10-03`)
+  - [X] Mars 2 orbiter lander and rover
 
-- [ ] **Mars M69** (SOVIET, `10-04`)
-  - [ ] Mars M69 orbiter
+- [X] **Mars M69** (SOVIET, `10-04`)
+  - [X] Mars M69 orbiter
 
 ### `14` Jupiter probes
 
@@ -161,17 +161,17 @@ Notes:
 
 ### `26` Space planes
 
-- [ ] **X-15 space plane** (NASA, `26-00`)
-  - [ ] Flight test
-  - [ ] Experimental flight I
-  - [ ] Experimental flight II
+- [X] **X-15 space plane** (NASA, `26-00`)
+  - [X] Flight test
+  - [X] Experimental flight I
+  - [X] Experimental flight II
 
-- [ ] **OKB-MiG E-154 space plane (renamed from BASPM's "PKA space plane")** (SOVIET, `26-01`)
+- [X] **OKB-MiG E-154 space plane (renamed from BASPM's "PKA space plane")** (SOVIET, `26-01`)
   - [x] Atmospheric drop test flight — `okb_mig_e_154_drop_test`
   - [x] Suborbital test flight — `okb_mig_e_154_suborbital`
-  - [ ] Orbital flight
-  - [ ] Orbital flight (Duration Level I)
-  - [ ] Joint launch and orbital flight
+  - [X] Orbital flight
+  - [X] Orbital flight (Duration Level I)
+  - [X] Joint launch and orbital flight
 
 ### `27` One-crew ballistic capsules
 
@@ -183,7 +183,7 @@ Notes:
   - [ ] Orbital flight (Duration Level I)
   - [ ] Joint launch and orbital flight (Duration Level I)
 
-- [ ] **Vostok** (SOVIET, `27-01`) **(M3 pack)**
+- [X] **Vostok** (SOVIET, `27-01`) **(M3 pack)**
   - [x] Uncrewed suborbital flight test — `vostok_uncrewed_suborbital`
   - [x] Suborbital flight — `vostok_suborbital`
   - [x] Uncrewed orbital flight test — `vostok_uncrewed_orbital`
@@ -223,7 +223,7 @@ Notes:
   - [ ] Uncrewed Direct Ascent Configuration test flight in Earth Orbit (reentry at near-lunar velocity)
   - [ ] Crewed Direct Ascent Configuration test flight in Earth Orbit (reentry at near-lunar velocity)
 
-- [x] **Voskhod** (SOVIET, `28-04`) — `voshkod`
+- [x] **Voskhod** (SOVIET, `28-04`) — `voskhod`
   - [ ] Uncrewed suborbital flight test
   - [ ] Suborbital flight
   - [ ] Uncrewed orbital flight test
