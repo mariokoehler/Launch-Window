@@ -1,11 +1,13 @@
 package de.mkoehler.launchwindow.rules;
 
 import de.mkoehler.launchwindow.content.ContentCatalog;
+import de.mkoehler.launchwindow.content.ContentPackLoader;
 import de.mkoehler.launchwindow.content.Goal;
 import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import org.junit.jupiter.api.Test;
 
+import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -126,5 +128,40 @@ class WinConditionTest {
             () -> WinCondition.evaluate(players, List.of("A", "A"), CATALOG));
         assertThrows(IllegalArgumentException.class,
             () -> WinCondition.evaluate(players, List.of("A", "ghost"), CATALOG));
+    }
+
+    /**
+     * On the real early-era pack, a Vostok Orbital landing settles all three default declared
+     * goals: Human in orbit through the cascade, and Human in space two links further down it.
+     */
+    @Test
+    void aVostokOrbitalLandingFinishesTheDefaultGoals() {
+        ContentCatalog pack = ContentPackLoader.load(Path.of("..", "assets", "content", "early-era"));
+        List<String> declared = List.of("earth-orbit-satellite", "human-in-space", "human-in-orbit");
+        PlayerSnapshot zarya = player(Map.of("earth-orbit-satellite", 12, "vostok-orbital-flown", 24),
+            List.of("radio-signals-from-orbit", "vostok-uncrewed-orbital-flown", "vostok-suborbital-flown",
+                "human-in-orbit", "vostok-uncrewed-suborbital-flown", "human-in-space"));
+
+        Map<String, Integer> times = WinCondition.goalTimes(zarya, declared, pack);
+
+        assertEquals(Map.of("earth-orbit-satellite", 12, "human-in-space", 24, "human-in-orbit", 24), times);
+        assertEquals(java.util.Optional.of(24), WinCondition.completionTurn(times, declared));
+    }
+
+    /**
+     * The medal table places each tied player per goal, sharing a shared place.
+     */
+    @Test
+    void theMedalTablePlacesTiedPlayers() {
+        Map<String, Map<String, Integer>> times = new LinkedHashMap<>();
+        times.put("alpha", Map.of("A", 2, "B", 5));
+        times.put("beta", Map.of("A", 3, "B", 5));
+        times.put("gamma", Map.of("A", 1));
+
+        assertEquals(List.of("alpha", "beta"), WinCondition.sameTurnFinishers(times, List.of("A", "B")));
+        WinCondition.MedalTable table = WinCondition.medalTable(List.of("alpha", "beta"), times, List.of("A", "B"));
+        assertEquals(List.of(1, 1), table.places().get("alpha"));
+        assertEquals(List.of(2, 1), table.places().get("beta"));
+        assertEquals(List.of("alpha"), WinCondition.evaluateTimes(times, List.of("A", "B")).winners());
     }
 }

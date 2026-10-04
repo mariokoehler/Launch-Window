@@ -9,9 +9,11 @@ import de.mkoehler.launchwindow.content.ContentPackHash;
 import de.mkoehler.launchwindow.content.ContentPackLoader;
 import de.mkoehler.launchwindow.content.MissionConfiguration;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
+import de.mkoehler.launchwindow.net.messages.RivalSummary;
 import de.mkoehler.launchwindow.rules.TurnReport;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -47,6 +49,7 @@ public final class ClientSession {
     private final Map<String, MissionDraft> drafts = new HashMap<>();
     private final Map<Long, TurnReport> reports = new HashMap<>();
     private long lastTurnWithoutReport;
+    private List<RivalSummary> rivals;
 
     private ClientSession(Credentials credentials, ContentCatalog catalog, PackStatus packStatus, PlayerSnapshot state,
                           GameInfo gameInfo) {
@@ -188,6 +191,24 @@ public final class ClientSession {
      */
     public void keepReport(TurnReport report) {
         reports.put(report.gameTurn(), report);
+    }
+
+    /**
+     * Returns the rival summaries fetched last in this session (gap G3).
+     *
+     * @return the summaries, or {@code null} if none were fetched yet
+     */
+    public List<RivalSummary> rivals() {
+        return rivals;
+    }
+
+    /**
+     * Keeps freshly fetched rival summaries.
+     *
+     * @param rivals every player's summary
+     */
+    public void keepRivals(List<RivalSummary> rivals) {
+        this.rivals = List.copyOf(rivals);
     }
 
     /**

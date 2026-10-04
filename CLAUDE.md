@@ -260,8 +260,14 @@ JSON inside `TurnReportResponse`, and read by `TurnReportScreen` and `ReplayScre
   busy turn's JSON outgrows the buffer, and an oversized message drops the connection.
   The server refuses a report that would still be too big.
 
-**Next in `ui-spec.md` §7:** phase 4 (Astronaut Complex, Public Affairs Office, Museum,
-settings, game result).
+**Museum, Settings and the game result built (2026-10-04),** with G3 (rival summaries,
+`RivalsRequest`) and G10 (`PlayerSnapshot.memorial`) plus `PlayerSnapshot.goalRecords`, both
+approved by the user as additive save fields. The client reads the race through
+`WinCondition`'s goal-time helpers, never its own port. The hub strip has a gear for
+Settings.
+
+**Next in `ui-spec.md` §7:** the rest of phase 4, the Astronaut Complex and the Public
+Affairs Office (their mockups are on another canvas; ask the user for the link).
 
 **Headquarters built in libGDX (2026-10-04),** as far as opening a program, from the
 Headquarters mockup: landing with the building panel and upgrade, Manage open

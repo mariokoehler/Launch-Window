@@ -10,6 +10,8 @@ import de.mkoehler.launchwindow.content.StaffingSlot;
 import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.FlightTier;
+import de.mkoehler.launchwindow.model.GoalRecord;
+import de.mkoehler.launchwindow.model.MemorialEntry;
 import de.mkoehler.launchwindow.model.AstronautSkill;
 import de.mkoehler.launchwindow.model.InProgressMission;
 import de.mkoehler.launchwindow.model.MissionControlOfficer;
@@ -223,7 +225,7 @@ public final class MissionProgress {
             if (outcome == MissionStepOutcome.FAILURE || outcome == MissionStepOutcome.CATASTROPHIC) {
                 missionEndedThisSeason = true;
                 if (outcome == MissionStepOutcome.CATASTROPHIC) {
-                    loseCrew(snapshot, mission, events);
+                    loseCrew(snapshot, mission, step, gameTurn, events);
                 }
                 break;
             }
@@ -355,7 +357,8 @@ public final class MissionProgress {
             // The goal, then every goal it cancels, recursively, that this player doesn't hold yet.
             List<String> cascade = GoalCascade.unheld(goalId, snapshot, catalog);
             for (int i = 0; i < cascade.size(); i++) {
-                total += settleGoal(snapshot, catalog, cascade.get(i), i > 0, mission, goalTally, gameTurn, events);
+                total += settleGoal(snapshot, catalog, cascade.get(i), i > 0 ? cascade.get(0) : null, mission,
+                    goalTally, gameTurn, events);
             }
         }
         return total;
@@ -369,15 +372,17 @@ public final class MissionProgress {
      * @param snapshot  the player whose goal settles
      * @param catalog   the content catalog
      * @param goalId    the goal to settle
-     * @param cancelled whether this settlement is a cancellation rather than an achievement
+     * @param root      the goal actually reached, when this settlement is a cancellation through
+     *                  its cascade; {@code null} for the reached goal itself
      * @param mission   the mission whose step caused this settlement
      * @param goalTally the game-wide counts as of the start of this resolution
      * @param gameTurn  the turn stamped on an achieved goal
      * @param events    the list to append the {@link GoalSettled} event to
      * @return the prestige this settlement paid
      */
-    private static long settleGoal(PlayerSnapshot snapshot, ContentCatalog catalog, String goalId, boolean cancelled,
+    private static long settleGoal(PlayerSnapshot snapshot, ContentCatalog catalog, String goalId, String root,
             InProgressMission mission, GoalTally goalTally, int gameTurn, List<ResolutionEvent> events) {
+        boolean cancelled = root != null;
         Goal goal = catalog.goal(goalId).orElseThrow(
             () -> new IllegalStateException("MissionStep references unknown Goal " + goalId));
         // Same-turn rule: the count read here is the committed count, never one this pass has advanced.
@@ -389,6 +394,8 @@ public final class MissionProgress {
             snapshot.getAchievedGoals().put(goalId, gameTurn);
         }
         events.add(new GoalSettled(mission.getId(), goalId, cancelled, prestige, first));
+        snapshot.getGoalRecords().add(new GoalRecord(goalId, gameTurn, mission.getMissionConfigurationId(), root,
+            first, prestige));
         return prestige;
     }
 
@@ -1010,9 +1017,12 @@ public final class MissionProgress {
      *
      * @param snapshot the player snapshot to remove them from
      * @param mission  the mission whose entire assigned crew is lost
+     * @param step     the catastrophic step, for the memorial
+     * @param gameTurn the turn being resolved, for the memorial
      * @param events   the list to append each departure to
      */
-    private static void loseCrew(PlayerSnapshot snapshot, InProgressMission mission, List<ResolutionEvent> events) {
+    private static void loseCrew(PlayerSnapshot snapshot, InProgressMission mission, MissionStep step, int gameTurn,
+            List<ResolutionEvent> events) {
         for (String astronautId : mission.crewIds()) {
             Iterator<Astronaut> iterator = snapshot.getAstronauts().iterator();
             while (iterator.hasNext()) {
@@ -1021,6 +1031,8 @@ public final class MissionProgress {
                     events.add(new PersonnelDeparture(PersonnelGroup.ASTRONAUT, astronaut.getId(),
                         astronaut.getName(), DepartureReason.LOST_IN_ACCIDENT, astronaut.getAge(),
                         astronaut.getMorale(), astronaut.getAssignmentState(), null));
+                    snapshot.getMemorial().add(new MemorialEntry(astronaut.getName(), astronaut.getAge(), gameTurn,
+                        MemorialEntry.Cause.MISSION, mission.getMissionConfigurationId(), step.id()));
                     iterator.remove();
                     break;
                 }

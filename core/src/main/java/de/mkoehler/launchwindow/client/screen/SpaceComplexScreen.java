@@ -93,7 +93,17 @@ public final class SpaceComplexScreen extends SessionScreen {
         rebuild();
         if (unreadReport && game.reportUnread()) {
             openUnreadReport();
+        } else if (game.resultUnseen()) {
+            // The first hub visit after the result announces it, until the player closes it.
+            showResult();
         }
+    }
+
+    /**
+     * Opens the game result dialog over the hub.
+     */
+    public void showResult() {
+        new GameResultDialog(this).open();
     }
 
     private List<Hub.Hotspot> loadHotspots() {
@@ -157,7 +167,16 @@ public final class SpaceComplexScreen extends SessionScreen {
             ui.label(money(state.getFunds()), Theme.TextStyle.LABEL, Theme.NAVY))).height(CHIP_HEIGHT).padRight(gap);
         chips.add(chip(ui.solid(Theme.SURFACE_CARD), "prestige", Theme.NAVY,
             ui.label(String.format(Locale.ROOT, "%,d", state.getPrestige()), Theme.TextStyle.LABEL, Theme.NAVY)))
-            .height(CHIP_HEIGHT);
+            .height(CHIP_HEIGHT).padRight(gap);
+        // Settings, the hub having no header (decided 2026-10-04): a white icon-only button, like IconButton.
+        Table gear = new Table();
+        gear.setBackground(ui.rect(Theme.SURFACE_CARD, Theme.ON_PAGE, Theme.BORDER_THIN));
+        Image glyph = new Image(ui.icon("settings"), Scaling.fit);
+        glyph.setColor(Theme.NAVY);
+        gear.add(glyph).size(16f);
+        gear.setTouchable(Touchable.enabled);
+        gear.addListener(clicked(this::openSettings));
+        chips.add(gear).size(CHIP_HEIGHT);
         strip.add(chips).right().top();
     }
 
@@ -194,6 +213,7 @@ public final class SpaceComplexScreen extends SessionScreen {
             case SET_CENTRE -> goSetCentre();
             case VAB -> goVab();
             case MISSION_CONTROL -> goMissionControl();
+            case MUSEUM -> goMuseum();
             default -> notBuiltYet(place.inSentence());
         }
     }

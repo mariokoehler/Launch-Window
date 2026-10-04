@@ -4,6 +4,7 @@ import de.mkoehler.launchwindow.content.RandomEventRoster;
 import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.MissionControlOfficer;
+import de.mkoehler.launchwindow.model.MemorialEntry;
 import de.mkoehler.launchwindow.model.NewsEntry;
 import de.mkoehler.launchwindow.model.OwnedMissionComponent;
 import de.mkoehler.launchwindow.model.Personnel;
@@ -344,6 +345,8 @@ public final class RandomEvents {
             return false;
         }
         Personnel astronaut = idle.get(random.nextInt(idle.size()));
+        snapshot.getMemorial().add(new MemorialEntry(astronaut.getName(), astronaut.getAge(), turn,
+            MemorialEntry.Cause.ACCIDENT, null, null));
         depart(snapshot, PersonnelGroup.ASTRONAUT, astronaut, DepartureReason.PERISHED,
             RandomEventKind.PERISHED_ASTRONAUT, turn, events);
         return true;

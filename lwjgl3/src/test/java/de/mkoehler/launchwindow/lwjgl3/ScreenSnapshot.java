@@ -36,6 +36,10 @@ import de.mkoehler.launchwindow.client.screen.RndBoardScreen;
 import de.mkoehler.launchwindow.client.screen.OpenRocketScreen;
 import de.mkoehler.launchwindow.client.screen.RocketProgramsScreen;
 import de.mkoehler.launchwindow.client.screen.VabScreen;
+import de.mkoehler.launchwindow.client.screen.MuseumScreen;
+import de.mkoehler.launchwindow.model.GoalRecord;
+import de.mkoehler.launchwindow.model.MemorialEntry;
+import de.mkoehler.launchwindow.net.messages.RivalSummary;
 import de.mkoehler.launchwindow.client.screen.ReplayScreen;
 import de.mkoehler.launchwindow.client.screen.TurnReportScreen;
 import de.mkoehler.launchwindow.client.view.TurnReportView;
@@ -89,6 +93,7 @@ import de.mkoehler.launchwindow.net.messages.GameInfoResponse;
 import java.io.File;
 import java.nio.ByteBuffer;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 /**
@@ -142,6 +147,11 @@ public final class ScreenSnapshot {
         @Override
         public void fetchTurnReport(Credentials credentials, long turn,
                                     Consumer<de.mkoehler.launchwindow.client.connect.TurnReportResult> done) {
+        }
+
+        @Override
+        public void fetchRivals(Credentials credentials,
+                                Consumer<de.mkoehler.launchwindow.client.connect.RivalsResult> done) {
         }
 
         @Override
@@ -309,6 +319,7 @@ public final class ScreenSnapshot {
         planningShots(folder, game, info);
         missionControlShots(folder, game, info);
         reportShots(folder, game, info);
+        museumShots(folder, game, info);
     }
 
     /**
@@ -526,6 +537,93 @@ public final class ScreenSnapshot {
         startSession(game, after, later);
         game.session().keepReport(report);
         write(folder, "report-earlier.png", new TurnReportScreen(game, report), null);
+    }
+
+    /** The game's default declared goals, as the Museum mockup shows them. */
+    private static final List<String> DECLARED = List.of("earth-orbit-satellite", "human-in-space", "human-in-orbit");
+
+    /**
+     * The Museum, Settings and the game result, after the mockup's turn: Vostok Orbital has just
+     * landed at turn 24, which finished the declared goals; three rivals, one astronaut lost.
+     */
+    private static void museumShots(File folder, LaunchWindowGame game, GameInfoResponse info) {
+        PlayerSnapshot state = museumState();
+        String hash = ContentPackHash.ofClasspath("content/early-era", ScreenSnapshot.class.getClassLoader());
+        GameInfoResponse won = GameInfoResponse.success("early-era", hash, DECLARED, 25, true,
+            23 * 3_600_000L + 40 * 60_000L, 0L, "WON", List.of(state.getAgencyName()), List.of(state.getDirectorName()),
+            24);
+        startSession(game, state, won);
+        RivalSummary me = RivalSummary.of(state.getAgencyName(), state.getDirectorName(), Archetype.SOVIET, true,
+            Map.of("earth-orbit-satellite", 12, "human-in-space", 24, "human-in-orbit", 24));
+        List<RivalSummary> rivals = List.of(me,
+            RivalSummary.of("Orion Spaceworks", "Ana Reyes", Archetype.NASA, false, Map.of("earth-orbit-satellite", 11)),
+            RivalSummary.of("Kestrel Aerospace", "Moses Okafor", Archetype.NASA, false,
+                Map.of("earth-orbit-satellite", 13)),
+            RivalSummary.of("Polar Star Bureau", "Vera Sedova", Archetype.SOVIET, false,
+                Map.of("earth-orbit-satellite", 14)));
+        game.session().keepRivals(rivals);
+        write(folder, "museum-race.png", new MuseumScreen(game, MuseumScreen.Tab.RACE), null);
+        write(folder, "museum-achievements.png", new MuseumScreen(game, MuseumScreen.Tab.ACHIEVEMENTS), null);
+        write(folder, "museum-flights.png", new MuseumScreen(game, MuseumScreen.Tab.FLIGHTS), null);
+        write(folder, "museum-memorial.png", new MuseumScreen(game, MuseumScreen.Tab.MEMORIAL), null);
+        write(folder, "settings.png", new SpaceComplexScreen(game), SpaceComplexScreen::openSettings);
+        write(folder, "settings-chrome.png", new MuseumScreen(game, MuseumScreen.Tab.FLIGHTS),
+            MuseumScreen::openSettings);
+        write(folder, "result-won.png", new SpaceComplexScreen(game), SpaceComplexScreen::showResult);
+
+        // A rival won on the medal table: two agencies finished at turn 24.
+        GameInfoResponse medal = GameInfoResponse.success("early-era", hash, DECLARED, 25, true,
+            23 * 3_600_000L, 0L, "WON", List.of("Orion Spaceworks"), List.of("Ana Reyes"), 24);
+        startSession(game, state, medal);
+        game.session().keepRivals(List.of(me,
+            RivalSummary.of("Orion Spaceworks", "Ana Reyes", Archetype.NASA, false,
+                Map.of("earth-orbit-satellite", 11, "human-in-space", 20, "human-in-orbit", 24)),
+            rivals.get(2), rivals.get(3)));
+        write(folder, "result-medal.png", new SpaceComplexScreen(game), SpaceComplexScreen::showResult);
+
+        // An exact tie: level on every place of the medal table.
+        GameInfoResponse tie = GameInfoResponse.success("early-era", hash, DECLARED, 25, true,
+            23 * 3_600_000L, 0L, "TIED", List.of(state.getAgencyName(), "Orion Spaceworks"),
+            List.of(state.getDirectorName(), "Ana Reyes"), 24);
+        startSession(game, state, tie);
+        game.session().keepRivals(List.of(me,
+            RivalSummary.of("Orion Spaceworks", "Ana Reyes", Archetype.NASA, false,
+                Map.of("earth-orbit-satellite", 12, "human-in-space", 24, "human-in-orbit", 24)),
+            rivals.get(2), rivals.get(3)));
+        write(folder, "result-tie.png", new SpaceComplexScreen(game), SpaceComplexScreen::showResult);
+
+        // No losses yet: the memorial's empty state.
+        PlayerSnapshot spared = museumState();
+        spared.setMemorial(List.of());
+        startSession(game, spared, won);
+        write(folder, "museum-memorial-empty.png", new MuseumScreen(game, MuseumScreen.Tab.MEMORIAL), null);
+    }
+
+    /** The mockup's agency at 1960 · S4, with the goal records and memorial the Museum reads. */
+    private static PlayerSnapshot museumState() {
+        PlayerSnapshot state = new PlayerSnapshot("Zarya Design Bureau", Archetype.SOVIET, 15_275, 10_190, 3_000, 25);
+        state.setDirectorName("Nina Tarasova");
+        state.getOpenedProgramIds().addAll(List.of("sputnik-1", "vostok"));
+        state.setAchievedGoals(Map.of("sputnik-1-flown", 12, "earth-orbit-satellite", 12,
+            "vostok-uncrewed-suborbital-flown", 18, "vostok-uncrewed-orbital-flown", 21, "vostok-orbital-flown", 24));
+        state.setCancelledGoalIds(new java.util.LinkedHashSet<>(List.of("radio-signals-from-orbit",
+            "vostok-suborbital-flown", "human-in-orbit", "human-in-space")));
+        state.setGoalRecords(List.of(
+            new GoalRecord("sputnik-1-flown", 12, "sputnik-1-orbit", null, true, 300),
+            new GoalRecord("earth-orbit-satellite", 12, "sputnik-1-orbit", null, false, 300),
+            new GoalRecord("radio-signals-from-orbit", 12, "sputnik-1-orbit", "earth-orbit-satellite", false, 125),
+            new GoalRecord("vostok-uncrewed-suborbital-flown", 18, "vostok-uncrewed-suborbital", null, true, 120),
+            new GoalRecord("vostok-uncrewed-orbital-flown", 21, "vostok-uncrewed-orbital", null, true, 150),
+            new GoalRecord("vostok-orbital-flown", 24, "vostok-orbital", null, true, 1_200),
+            new GoalRecord("vostok-suborbital-flown", 24, "vostok-orbital", "vostok-orbital-flown", true, 600),
+            new GoalRecord("human-in-space", 24, "vostok-orbital", "vostok-orbital-flown", true, 1_750),
+            new GoalRecord("human-in-orbit", 24, "vostok-orbital", "vostok-orbital-flown", true, 3_000)));
+        state.setSuccessfulFlightCounts(Map.of("sputnik-1-orbit", 2, "sputnik-1-extended", 1,
+            "vostok-uncrewed-suborbital", 1, "vostok-uncrewed-orbital", 2, "vostok-orbital", 1));
+        state.setMemorial(List.of(new MemorialEntry("Arseny Kolesov", 27, 19, MemorialEntry.Cause.ACCIDENT, null,
+            null), new MemorialEntry("Pavel Orlov", 31, 22, MemorialEntry.Cause.MISSION, "vostok-orbital",
+            "reentry")));
+        return state;
     }
 
     /** The seed for the report fixture's season pass. */

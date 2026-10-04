@@ -357,7 +357,7 @@ abstract class ChromeScreen extends SessionScreen {
         Table bar = new Table();
         bar.add(navButton("back", this::goBack)).size(NAV_BUTTON).padRight(Theme.SPACE_2);
         bar.add(navButton("home", this::goHome)).size(NAV_BUTTON).padRight(Theme.SPACE_2);
-        bar.add(navButton("settings", () -> notBuiltYet("Settings"))).size(NAV_BUTTON).padRight(Theme.SPACE_2);
+        bar.add(navButton("settings", this::openSettings)).size(NAV_BUTTON).padRight(Theme.SPACE_2);
         bar.add(new Image(ui.solid(Theme.ON_PAGE))).width(Theme.BORDER_THIN).height(NAV_BUTTON).padRight(Theme.SPACE_2);
         for (int i = 0; i < crumbs.size(); i++) {
             Crumb crumb = crumbs.get(i);

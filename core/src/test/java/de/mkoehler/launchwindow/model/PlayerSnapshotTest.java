@@ -41,6 +41,20 @@ class PlayerSnapshotTest {
      * full serialize/deserialize round trip unchanged.
      */
     @Test
+    void aSaveFromBeforeTheMuseumRecordsStillLoads() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        PlayerSnapshot original = new PlayerSnapshot("Hanseatic Space Agency", Archetype.SOVIET, 25_000, 100, 5_000, 3);
+        com.fasterxml.jackson.databind.node.ObjectNode json = mapper.valueToTree(original);
+        json.remove("memorial");
+        json.remove("goalRecords");
+
+        PlayerSnapshot restored = mapper.treeToValue(json, PlayerSnapshot.class);
+
+        assertTrue(restored.getMemorial().isEmpty());
+        assertTrue(restored.getGoalRecords().isEmpty());
+    }
+
+    @Test
     void roundTripsThroughJsonIncludingAllPersonnelRosters() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         PlayerSnapshot original =

@@ -105,6 +105,13 @@ abstract class SessionScreen extends StageScreen {
     }
 
     /**
+     * Goes to the Museum, on the race.
+     */
+    protected void goMuseum() {
+        game.setScreen(new MuseumScreen(game, MuseumScreen.Tab.RACE));
+    }
+
+    /**
      * Fetches the state and game info again and rebuilds the screen with them. Quiet: a failed
      * refresh changes nothing and says nothing; the next action reports any real problem.
      */
@@ -221,17 +228,34 @@ abstract class SessionScreen extends StageScreen {
      * @param card the dialog's content, already built
      */
     public void showDialog(Table card) {
+        showDialog(card, DIALOG_WIDTH);
+    }
+
+    /**
+     * Shows a modal dialog of a given width, for the wider dialogs (Settings, the game result).
+     *
+     * @param card  the dialog's content, already built
+     * @param width the card's width
+     */
+    public void showDialog(Table card, float width) {
         closeDialog();
         dialog = new Table();
         dialog.setFillParent(true);
         dialog.setBackground(ui.solid(new Color(Theme.NAVY.r, Theme.NAVY.g, Theme.NAVY.b, 0.55f)));
         dialog.setTouchable(Touchable.enabled);
         dialog.addListener(new ClickListener());
-        dialog.add(card).width(DIALOG_WIDTH);
+        dialog.add(card).width(width);
         stage.addActor(dialog);
         if (toast != null) {
             toast.toFront();
         }
+    }
+
+    /**
+     * Opens Settings ({@code ui-spec.md} &sect;4.12) over this screen.
+     */
+    public void openSettings() {
+        new SettingsDialog(this).open();
     }
 
     /**

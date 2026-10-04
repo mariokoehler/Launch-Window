@@ -329,8 +329,7 @@ Choices made while building it, **confirmed by the user (2026-10-04)**:
   CSS, which has no design-system token.
 - **Turn Report** opens the latest turn's report (§4.4), and a gold dot marks it unread.
   Both came with G2.
-- **No Log out:** the mockup has none, so the hub drops the stand-in's button. Switching
-  servers means restarting the client until Settings exists.
+- **Log out** is in Settings (§4.12), from the gear button at the end of the strip.
 - **The content-differs warning** from the stand-in stays, as a warning notice under the
   agency name.
 - **The strip follows the revised mockup** (solid chips, navy nameplate, outlined
@@ -824,7 +823,22 @@ canvas, one artboard per tab (`Museum`, `MuseumAchievements`, `MuseumFlights`,
   their first and later prestige;
 - Flights shows one card per configuration with its art and the count;
 - the Memorial is one plaque per astronaut lost, with an empty state.
-**Needs server work:** G3 (rivals) and G10 (the memorial).
+**Server work:** G3 (rivals) and G10 (the memorial), both done.
+
+**Implemented in libGDX (2026-10-04)** as `client.screen.MuseumScreen`, with its wording
+in `client.view.Museum` and the race table in `RaceTable` (shared with the game result).
+Reached from the hub's Museum building. Choices made while building it, **confirmed by the user
+(2026-10-04)**:
+- **Dates** are the season the goal was done in ("Fall 1960"), from `GameDate`, rather than
+  the mockup's "1960 · S4". The result reads "decided in Fall 1960", not "at the turn into".
+- **"This game is won by"** has no hand-written "how" line per goal, since content has no
+  descriptions yet (G4). It names the goals that also credit it ("Also credited by …").
+- **Achievements:** "Credited through" names the goal actually reached (the root of the
+  cascade), not the link just above it. Goals settled before goal records existed say only
+  "Reached" or "Credited through the cascade", without prestige or a First tag.
+- **Memorial plaques** leave out the astronaut's flight count, which the game doesn't keep.
+- **The race** is fetched each time the Museum opens; while it loads, the table says so.
+- **The memorial's history note** (Bondarenko) is the mockup's draft, still to verify.
 
 ### 4.12 Settings (header gear)
 Log out; server address; sound on or off (later); about and version.
@@ -838,6 +852,14 @@ Choices still **unconfirmed**:
 - Switch server logs out and opens Connect with the new address filled in;
 - About shows the version, the game's content pack and hash, the fan-project note (not
   affiliated with the original game's makers) and the font licenses.
+
+**Implemented in libGDX (2026-10-04)** as `client.screen.SettingsDialog`, opened by the
+header gear on every screen and by a white gear button at the end of the hub strip. Log out
+and Switch server close the connection and open Connect, Switch server with the new address
+filled in (a bad address shows the Connect screen's own error under the field). Sound is
+two disabled segments. **Confirmed by the user (2026-10-04):** the hash is shortened to 8 characters; the
+"connected" label is fixed text; and the account note says an unlaunched mission plan is
+dropped (plans live on the client session), instead of the mockup's "logging out loses nothing".
 
 ### 4.13 Game result
 **Purpose:** announce the winner. **Shows:** an overlay on the hub when a result
@@ -853,6 +875,17 @@ rival won on the medal table, an exact tie). Every state is computed by a port o
   when several agencies finished at the same turn;
 - "Keep playing" closes it, with a toast saying where to find it again;
 - the race tab of the Museum carries the reopen button.
+
+**Implemented in libGDX (2026-10-04)** as `client.screen.GameResultDialog`. Who won comes
+from the game info (the server's result), never from the client. The race and medal tables
+come from the rival summaries (G3) through `core`'s `WinCondition`. Choices, **confirmed by the
+user (2026-10-04)**:
+- **When it shows:** on any hub visit while the result is unseen, unless an unread turn
+  report opened at the same time (then the next hub visit shows it). "Seen" is remembered
+  per device, like the report's read mark, and set by Keep playing or Open the Museum.
+- **The medal table** lists the winner first.
+- **Without the summaries** (a failed fetch), it still names the winner and leaves the
+  tables out.
 
 ---
 
@@ -947,7 +980,10 @@ current state alone. Each is an M5 task.
   **What the Public Affairs Office mockup adds (2026-10-04):** the money amount of an
   unexpected-cost event (a `NewsEntry` stores only its share of funds), and last
   season's actual funds change for the footer.
-- **G3. Rival summaries.** Each player's agency name, director name, archetype, and the
+- **G3. Rival summaries.** *(Done 2026-10-04: `RivalsRequest`/`RivalsResponse`, one
+  `RivalSummary` per player read from each one's latest resolved snapshot, with only the
+  declared goals' turns; a credited goal counts from its canceller's turn, through
+  `WinCondition.goalTimes`.)* Each player's agency name, director name, archetype, and the
   declared goals they hold, with turns, for the race tab. This is the
   "per-player summary" `design.md` §3.7 planned for game-meta.
 - **G4. Display text.** Content has ids only. The UI needs names and short
@@ -979,7 +1015,11 @@ current state alone. Each is an M5 task.
   exist.)* Program categories need a body field
   (Earth, Moon, Sun, Mercury, Venus, Mars, Jupiter, Saturn) for the body picker.
   The available and open counts per body are then derived in the client.
-- **G10. Memorial records (found by the Museum mockup, 2026-10-04).** Astronauts lost
+- **G10. Memorial records (found by the Museum mockup, 2026-10-04).** *(Done
+  2026-10-04: `PlayerSnapshot.memorial`, a list of `MemorialEntry`, written by
+  `MissionProgress` for a catastrophic step and by `RandomEvents` for the perished-astronaut
+  event. The Achievements tab also got `PlayerSnapshot.goalRecords`, one `GoalRecord` per
+  settled goal.)* Astronauts lost
   leave the roster as a `PersonnelDeparture` event (`LOST_IN_ACCIDENT`, or the
   perished-astronaut random event), and nothing keeps them. The memorial needs a
   persisted list per player: name, age, the turn, the cause, and for a flight loss the

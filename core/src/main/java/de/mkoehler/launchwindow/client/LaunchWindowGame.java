@@ -122,9 +122,36 @@ public class LaunchWindowGame extends Game {
         return session != null && session.latestResolvedTurn() >= 1 && session.latestResolvedTurn() > lastReadReport();
     }
 
+    /**
+     * Returns whether the game has a result this player hasn't seen announced on this device yet,
+     * for the game result dialog ({@code ui-spec.md} &sect;4.13). Kept like the report's read mark.
+     *
+     * @return whether to announce the result
+     */
+    public boolean resultUnseen() {
+        return session != null && session.gameInfo().response().decided()
+            && !preferences().getBoolean(key("resultSeen"), false);
+    }
+
+    /**
+     * Marks the game result as seen, once the player closed its announcement.
+     */
+    public void markResultSeen() {
+        if (session == null) {
+            return;
+        }
+        com.badlogic.gdx.Preferences preferences = preferences();
+        preferences.putBoolean(key("resultSeen"), true);
+        preferences.flush();
+    }
+
     private String readKey() {
+        return key("reportRead");
+    }
+
+    private String key(String name) {
         Credentials credentials = session.credentials();
-        return "reportRead." + credentials.address().host() + ":" + credentials.address().port() + "."
+        return name + "." + credentials.address().host() + ":" + credentials.address().port() + "."
             + credentials.login();
     }
 

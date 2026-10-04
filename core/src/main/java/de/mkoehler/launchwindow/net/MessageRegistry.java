@@ -24,6 +24,8 @@ import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.AstronautSkill;
 import de.mkoehler.launchwindow.model.Building;
 import de.mkoehler.launchwindow.model.InProgressMission;
+import de.mkoehler.launchwindow.model.GoalRecord;
+import de.mkoehler.launchwindow.model.MemorialEntry;
 import de.mkoehler.launchwindow.model.NewsEntry;
 import de.mkoehler.launchwindow.model.RandomEventKind;
 import de.mkoehler.launchwindow.model.MissionControlOfficer;
@@ -38,6 +40,9 @@ import de.mkoehler.launchwindow.net.messages.ClaimSlotRequest;
 import de.mkoehler.launchwindow.net.messages.ClaimSlotResponse;
 import de.mkoehler.launchwindow.net.messages.GameInfoRequest;
 import de.mkoehler.launchwindow.net.messages.GameInfoResponse;
+import de.mkoehler.launchwindow.net.messages.RivalSummary;
+import de.mkoehler.launchwindow.net.messages.RivalsRequest;
+import de.mkoehler.launchwindow.net.messages.RivalsResponse;
 import de.mkoehler.launchwindow.net.messages.TurnReportRequest;
 import de.mkoehler.launchwindow.net.messages.TurnReportResponse;
 import de.mkoehler.launchwindow.net.messages.FetchStateRequest;
@@ -198,5 +203,13 @@ public final class MessageRegistry {
         kryo.register(TurnReportRequest.class);
         kryo.register(TurnReportResponse.class);
         kryo.register(byte[].class);
+        // Appended 2026-10-04 (M5 rival summaries, ui-spec.md gap G3). Never move these lines.
+        kryo.register(RivalsRequest.class);
+        kryo.register(RivalsResponse.class);
+        kryo.register(RivalSummary.class);
+        // Appended 2026-10-04 (M5 Museum: the memorial, gap G10, and goal records). Never move these lines.
+        kryo.register(MemorialEntry.class);
+        kryo.register(MemorialEntry.Cause.class);
+        kryo.register(GoalRecord.class);
     }
 }

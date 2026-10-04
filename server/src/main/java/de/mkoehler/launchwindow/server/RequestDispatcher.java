@@ -15,6 +15,9 @@ import de.mkoehler.launchwindow.net.messages.TurnReportResponse;
 import de.mkoehler.launchwindow.net.messages.GameInfoResponse;
 import de.mkoehler.launchwindow.net.messages.HandshakeRequest;
 import de.mkoehler.launchwindow.net.messages.HandshakeResponse;
+import de.mkoehler.launchwindow.net.messages.RivalSummary;
+import de.mkoehler.launchwindow.net.messages.RivalsRequest;
+import de.mkoehler.launchwindow.net.messages.RivalsResponse;
 import de.mkoehler.launchwindow.net.messages.SubmitActionRequest;
 import de.mkoehler.launchwindow.net.messages.SubmitActionResponse;
 import de.mkoehler.launchwindow.persistence.ActionContext;
@@ -25,6 +28,7 @@ import de.mkoehler.launchwindow.persistence.PlayerStateService;
 import de.mkoehler.launchwindow.persistence.SetFundsAction;
 import de.mkoehler.launchwindow.rules.HiringPool;
 import de.mkoehler.launchwindow.rules.TurnReport;
+import de.mkoehler.launchwindow.rules.WinCondition;
 import de.mkoehler.launchwindow.server.accounts.AccountStore;
 import de.mkoehler.launchwindow.server.accounts.AuthResult;
 import de.mkoehler.launchwindow.server.schedule.GameMeta;
@@ -137,6 +141,9 @@ public class RequestDispatcher {
         }
         if (message instanceof TurnReportRequest request) {
             return new DispatchResult(handleTurnReport(connectionId, request), false);
+        }
+        if (message instanceof RivalsRequest request) {
+            return new DispatchResult(handleRivals(connectionId, request), false);
         }
         if (message instanceof GameInfoRequest request) {
             return new DispatchResult(handleGameInfo(connectionId, request), false);
@@ -306,6 +313,44 @@ public class RequestDispatcher {
             return response;
         } catch (IOException e) {
             return TurnReportResponse.failure("Failed to read the turn report: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Handles a {@link RivalsRequest}: every claimed player's summary for the race, read from
+     * each one's latest resolved snapshot. Only the agency, director, archetype and the declared
+     * goals' turns leave the server.
+     *
+     * @param connectionId the connection the request arrived on
+     * @param request      the request
+     * @return the response
+     */
+    public RivalsResponse handleRivals(int connectionId, RivalsRequest request) {
+        String accountId = connectionAccountIds.get(connectionId);
+        if (accountId == null) {
+            return RivalsResponse.failure("Not authenticated - send a HandshakeRequest first.");
+        }
+        try {
+            if (!hasSlot(accountId)) {
+                return RivalsResponse.failure(ClaimSlotRequest.SLOT_CLAIM_REQUIRED);
+            }
+            List<String> declared = meta.getDeclaredGoalIds();
+            List<RivalSummary> rivals = new ArrayList<>();
+            try (Stream<Path> listing = Files.list(dataRoot.resolve("players"))) {
+                for (Path playerDir : listing.filter(Files::isDirectory).sorted().toList()) {
+                    Optional<PlayerSnapshot> snapshot = new PlayerSnapshotStore(playerDir, mapper).load();
+                    if (snapshot.isEmpty()) {
+                        continue;
+                    }
+                    PlayerSnapshot player = snapshot.get();
+                    rivals.add(RivalSummary.of(player.getAgencyName(), player.getDirectorName(),
+                        player.getArchetype(), playerDir.getFileName().toString().equals(accountId),
+                        WinCondition.goalTimes(player, declared, context.catalog())));
+                }
+            }
+            return RivalsResponse.of(rivals);
+        } catch (IOException | RuntimeException e) {
+            return RivalsResponse.failure("Failed to read the race: " + e.getMessage());
         }
     }
 

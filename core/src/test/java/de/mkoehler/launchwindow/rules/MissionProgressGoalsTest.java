@@ -11,6 +11,7 @@ import de.mkoehler.launchwindow.content.ProgramCategory;
 import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.model.InProgressMission;
 import de.mkoehler.launchwindow.model.OwnedMissionComponent;
+import de.mkoehler.launchwindow.model.GoalRecord;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.model.SetSkill;
 import org.junit.jupiter.api.Test;
@@ -123,6 +124,13 @@ class MissionProgressGoalsTest {
         assertEquals(Map.of("orbit", 1), snapshot.getAchievedGoals());
         assertEquals(List.of("basic-training", "pre-flight"), List.copyOf(snapshot.getCancelledGoalIds()));
         assertEquals(3, settlements(events).size());
+        List<GoalRecord> records = snapshot.getGoalRecords();
+        assertEquals(List.of("orbit", "basic-training", "pre-flight"), records.stream().map(GoalRecord::goalId).toList());
+        assertEquals(java.util.Arrays.asList(null, "orbit", "orbit"),
+            records.stream().map(GoalRecord::creditedThroughGoalId).toList());
+        assertEquals(List.of(200L, 50L, 30L), records.stream().map(GoalRecord::prestige).toList());
+        assertTrue(records.stream().allMatch(record -> record.firstInGame() && record.turn() == 1
+            && record.missionConfigurationId() != null));
         tally.commit(events);
         assertEquals(1, tally.countOf("basic-training"));
         assertEquals(1, tally.countOf("pre-flight"));

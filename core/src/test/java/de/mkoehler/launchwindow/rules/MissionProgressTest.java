@@ -12,6 +12,7 @@ import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.AstronautSkill;
 import de.mkoehler.launchwindow.model.InProgressMission;
+import de.mkoehler.launchwindow.model.MemorialEntry;
 import de.mkoehler.launchwindow.model.MissionControlOfficer;
 import de.mkoehler.launchwindow.model.MissionControlSkill;
 import de.mkoehler.launchwindow.model.OwnedMissionComponent;
@@ -556,6 +557,12 @@ class MissionProgressTest {
         }
         assertTrue(snapshot.getAstronauts().isEmpty());
         assertTrue(snapshot.getInProgressMissions().isEmpty());
+        assertEquals(2, snapshot.getMemorial().size(), "both are remembered");
+        for (MemorialEntry remembered : snapshot.getMemorial()) {
+            assertEquals(MemorialEntry.Cause.MISSION, remembered.cause());
+            assertEquals("catastrophic-std", remembered.missionConfigurationId());
+            assertEquals("launch", remembered.stepId());
+        }
     }
 
     /**

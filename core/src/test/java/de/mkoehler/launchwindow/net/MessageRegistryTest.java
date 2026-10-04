@@ -10,6 +10,8 @@ import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.AstronautSkill;
 import de.mkoehler.launchwindow.model.Building;
 import de.mkoehler.launchwindow.model.InProgressMission;
+import de.mkoehler.launchwindow.model.GoalRecord;
+import de.mkoehler.launchwindow.model.MemorialEntry;
 import de.mkoehler.launchwindow.model.NewsEntry;
 import de.mkoehler.launchwindow.model.RandomEventKind;
 import de.mkoehler.launchwindow.model.MissionControlOfficer;
@@ -25,6 +27,9 @@ import de.mkoehler.launchwindow.net.messages.FetchStateRequest;
 import de.mkoehler.launchwindow.net.messages.FetchStateResponse;
 import de.mkoehler.launchwindow.net.messages.GameInfoRequest;
 import de.mkoehler.launchwindow.net.messages.GameInfoResponse;
+import de.mkoehler.launchwindow.net.messages.RivalSummary;
+import de.mkoehler.launchwindow.net.messages.RivalsRequest;
+import de.mkoehler.launchwindow.net.messages.RivalsResponse;
 import de.mkoehler.launchwindow.net.messages.TurnReportRequest;
 import de.mkoehler.launchwindow.net.messages.TurnReportResponse;
 import de.mkoehler.launchwindow.net.messages.HandshakeRequest;
@@ -225,6 +230,18 @@ class MessageRegistryTest {
      * The game-info request and its reply must survive the wire.
      */
     @Test
+    void rivalMessagesSurviveRoundTrip() {
+        assertEquals(new RivalsRequest(), roundTrip(new RivalsRequest(), RivalsRequest.class));
+        // Built from immutable inputs, as the server does: the factories copy into registered collections.
+        RivalsResponse rivals = RivalsResponse.of(List.of(
+            RivalSummary.of("Zarya Design Bureau", "Nina Tarasova", Archetype.SOVIET, true,
+                Map.of("earth-orbit-satellite", 12)),
+            RivalSummary.of("Orion Spaceworks", "Ana Reyes", Archetype.NASA, false, Map.of())));
+        assertEquals(rivals, roundTrip(rivals, RivalsResponse.class));
+        assertEquals(RivalsResponse.failure("nope"), roundTrip(RivalsResponse.failure("nope"), RivalsResponse.class));
+    }
+
+    @Test
     void turnReportMessagesSurviveRoundTrip() throws Exception {
         assertEquals(new TurnReportRequest(4), roundTrip(new TurnReportRequest(4), TurnReportRequest.class));
         TurnReportResponse found = TurnReportResponse.of(4, "{\"gameTurn\":4}");
@@ -319,8 +336,14 @@ class MessageRegistryTest {
         snapshot.setLastFailureTurn(4);
         snapshot.setAchievedGoals(Map.of("orbit", 4));
         snapshot.setCancelledGoalIds(Set.of("pre-flight"));
+        // M5 Museum state: the memorial (G10) and the goal records.
+        snapshot.setMemorial(List.of(new MemorialEntry("Ivan Petrov", 31, 19, MemorialEntry.Cause.MISSION,
+            "vostok-orbital", "reentry")));
+        snapshot.setGoalRecords(List.of(new GoalRecord("pre-flight", 4, "sputnik-1-std", "orbit", true, 30)));
 
         FetchStateResponse copy = roundTrip(FetchStateResponse.success(snapshot), FetchStateResponse.class);
+        assertEquals(snapshot.getMemorial(), copy.state().getMemorial());
+        assertEquals(snapshot.getGoalRecords(), copy.state().getGoalRecords());
 
         assertTrue(copy.success());
         assertEquals("Hanseatic Space Agency", copy.state().getAgencyName());

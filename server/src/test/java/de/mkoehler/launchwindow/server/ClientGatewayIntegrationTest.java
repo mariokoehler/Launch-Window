@@ -10,6 +10,10 @@ import de.mkoehler.launchwindow.client.connect.NetworkGateway;
 import de.mkoehler.launchwindow.client.connect.ServerAddress;
 import de.mkoehler.launchwindow.client.connect.ServerResult;
 import de.mkoehler.launchwindow.client.connect.TurnReportResult;
+import de.mkoehler.launchwindow.client.connect.RivalsResult;
+import de.mkoehler.launchwindow.net.messages.RivalSummary;
+import de.mkoehler.launchwindow.persistence.PlayerSnapshotStore;
+import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.persistence.PlayerStateService;
 import de.mkoehler.launchwindow.persistence.TurnReportStore;
 import de.mkoehler.launchwindow.net.NetworkConstants;
@@ -262,6 +266,43 @@ class ClientGatewayIntegrationTest {
         TurnReportResult fetched = await(done -> gateway.fetchTurnReport(mario, 1, done));
         assertEquals(TurnReportResult.Kind.FOUND, fetched.kind(), fetched.message());
         assertEquals(big, fetched.report());
+    }
+
+    /**
+     * Rival summaries over real sockets: every player, the asker marked, and only the declared
+     * goals' turns.
+     */
+    @Test
+    void theGatewayFetchesRivalSummaries(@TempDir Path dataRoot) throws Exception {
+        int port = startServer(dataRoot);
+        application = new HeadlessApplication(new ApplicationAdapter() {
+        });
+        gateway = new NetworkGateway();
+        ServerAddress address = new ServerAddress("localhost", port);
+        Credentials anna = new Credentials(address, "anna", "secret");
+        logIn(anna);
+        assertEquals(ClaimResult.Kind.JOINED, claim(anna, "Orion Spaceworks", "Ana Reyes").kind());
+        Credentials mario = new Credentials(address, "mario", "hunter2");
+        logIn(mario);
+        assertEquals(ClaimResult.Kind.JOINED, claim(mario, "Baltic Star Agency", "A. Okafor").kind());
+
+        String declared = ServerTestGames.meta(false).getDeclaredGoalIds().get(0);
+        Path annaDir = dataRoot.resolve("players").resolve(accountStore.findByLogin("anna").orElseThrow().getId());
+        PlayerSnapshotStore annaStore = new PlayerSnapshotStore(annaDir, GameServer.createMapper());
+        PlayerSnapshot annaState = annaStore.load().orElseThrow();
+        annaState.getAchievedGoals().put(declared, 3);
+        annaState.getAchievedGoals().put("some-undeclared-goal", 2);
+        annaStore.save(1, annaState, null);
+
+        RivalsResult rivals = await(done -> gateway.fetchRivals(mario, done));
+        assertTrue(rivals.ok(), rivals.message());
+        assertEquals(2, rivals.rivals().size());
+        RivalSummary orion = rivals.rivals().stream().filter(row -> row.agencyName().equals("Orion Spaceworks"))
+            .findFirst().orElseThrow();
+        assertFalse(orion.you());
+        assertEquals(java.util.Map.of(declared, 3), orion.goalTurns());
+        assertTrue(rivals.rivals().stream().filter(RivalSummary::you).findFirst().orElseThrow().agencyName()
+            .equals("Baltic Star Agency"));
     }
 
     private LoginResult logIn(Credentials credentials) throws Exception {

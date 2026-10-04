@@ -68,6 +68,15 @@ public interface ServerGateway {
     void fetchTurnReport(Credentials credentials, long turn, Consumer<TurnReportResult> done);
 
     /**
+     * Fetches every player's summary in the race (gap G3). A read: retried once if the
+     * connection broke.
+     *
+     * @param credentials who and where
+     * @param done        called on the render thread with the result
+     */
+    void fetchRivals(Credentials credentials, Consumer<RivalsResult> done);
+
+    /**
      * Ends the session: closes its connection. The next {@link #logIn} opens a new one.
      */
     void logOut();

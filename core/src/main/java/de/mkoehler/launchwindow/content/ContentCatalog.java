@@ -199,6 +199,15 @@ public final class ContentCatalog {
     }
 
     /**
+     * Returns every goal, in the pack's order.
+     *
+     * @return the goals, unmodifiable
+     */
+    public java.util.Collection<Goal> goals() {
+        return java.util.Collections.unmodifiableCollection(goalsById.values());
+    }
+
+    /**
      * Returns every mission component, in the pack's order.
      *
      * @return the components, unmodifiable

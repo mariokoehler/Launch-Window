@@ -175,6 +175,15 @@ public final class UiKit implements Disposable {
     }
 
     /**
+     * Returns the game result's trophy disc: a solid gold circle.
+     *
+     * @return the drawable, drawn at 112 px and scaled down
+     */
+    public Drawable trophy() {
+        return rects.computeIfAbsent("trophy", key -> shapes.circle(Theme.GOLD, Theme.GOLD, 1f, 112));
+    }
+
+    /**
      * Returns a progress-track dot ({@link Theme.Shapes#progressDot}), built once per state.
      *
      * @param state the step's state

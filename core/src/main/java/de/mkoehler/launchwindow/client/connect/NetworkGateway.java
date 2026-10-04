@@ -15,6 +15,8 @@ import de.mkoehler.launchwindow.net.messages.HandshakeRequest;
 import de.mkoehler.launchwindow.net.messages.HandshakeResponse;
 import de.mkoehler.launchwindow.net.messages.SubmitActionRequest;
 import de.mkoehler.launchwindow.net.messages.SubmitActionResponse;
+import de.mkoehler.launchwindow.net.messages.RivalsRequest;
+import de.mkoehler.launchwindow.net.messages.RivalsResponse;
 import de.mkoehler.launchwindow.net.messages.TurnReportRequest;
 import de.mkoehler.launchwindow.net.messages.TurnReportResponse;
 import de.mkoehler.launchwindow.persistence.PlayerAction;
@@ -172,6 +174,29 @@ public final class NetworkGateway implements ServerGateway {
             return first.kind() == TurnReportResult.Kind.FAILED && first.report() == null && client == null
                 ? fetchReportOnce(credentials, turn) : first;
         }, message -> new TurnReportResult(TurnReportResult.Kind.FAILED, message, null), done);
+    }
+
+    @Override
+    public void fetchRivals(Credentials credentials, Consumer<RivalsResult> done) {
+        run(() -> {
+            RivalsResult first = fetchRivalsOnce(credentials);
+            return !first.ok() && client == null ? fetchRivalsOnce(credentials) : first;
+        }, message -> new RivalsResult(false, message, null), done);
+    }
+
+    private RivalsResult fetchRivalsOnce(Credentials credentials) {
+        Optional<LoginResult> refusal = ensureSession(credentials);
+        if (refusal.isPresent()) {
+            return new RivalsResult(false, refusal.get().message(), null);
+        }
+        try {
+            RivalsResponse response = client.sendAndReceive(new RivalsRequest(), RivalsResponse.class);
+            return response.success() ? new RivalsResult(true, "", response.rivals())
+                : new RivalsResult(false, response.message(), null);
+        } catch (IOException | RuntimeException e) {
+            dropConnection();
+            return new RivalsResult(false, e.getMessage(), null);
+        }
     }
 
     private TurnReportResult fetchReportOnce(Credentials credentials, long turn) {

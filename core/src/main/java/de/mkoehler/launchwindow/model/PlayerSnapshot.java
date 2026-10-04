@@ -50,6 +50,8 @@ public class PlayerSnapshot {
     private Set<String> cancelledGoalIds = new LinkedHashSet<>();
     private long prestigeAtLastReview;
     private List<NewsEntry> newsLog = new ArrayList<>();
+    private List<MemorialEntry> memorial = new ArrayList<>();
+    private List<GoalRecord> goalRecords = new ArrayList<>();
     private int lastFlightSeasonTurn = -1;
     private int lastFailureTurn = -1;
     private double rdResultsMultiplier = 1.0;
@@ -683,6 +685,48 @@ public class PlayerSnapshot {
     public void setNewsLog(List<NewsEntry> newsLog) {
         Objects.requireNonNull(newsLog, "newsLog must not be null");
         this.newsLog = new ArrayList<>(newsLog);
+    }
+
+    /**
+     * Returns the astronauts this agency lost, oldest first, for the Museum's memorial
+     * ({@code ui-spec.md} gap G10). Never trimmed. The live list is returned.
+     *
+     * @return the entries, never {@code null}
+     */
+    public List<MemorialEntry> getMemorial() {
+        return memorial;
+    }
+
+    /**
+     * Replaces the memorial. Public for Jackson/Kryo, and copied defensively.
+     *
+     * @param memorial the entries to set, oldest first
+     * @throws NullPointerException if {@code memorial} is {@code null}
+     */
+    public void setMemorial(List<MemorialEntry> memorial) {
+        Objects.requireNonNull(memorial, "memorial must not be null");
+        this.memorial = new ArrayList<>(memorial);
+    }
+
+    /**
+     * Returns how each goal settled, in settlement order, for the Museum's achievements. Goals
+     * settled before these records existed have none. The live list is returned.
+     *
+     * @return the records, never {@code null}
+     */
+    public List<GoalRecord> getGoalRecords() {
+        return goalRecords;
+    }
+
+    /**
+     * Replaces the goal records. Public for Jackson/Kryo, and copied defensively.
+     *
+     * @param goalRecords the records to set, in settlement order
+     * @throws NullPointerException if {@code goalRecords} is {@code null}
+     */
+    public void setGoalRecords(List<GoalRecord> goalRecords) {
+        Objects.requireNonNull(goalRecords, "goalRecords must not be null");
+        this.goalRecords = new ArrayList<>(goalRecords);
     }
 
     /**

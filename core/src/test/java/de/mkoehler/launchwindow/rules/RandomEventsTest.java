@@ -1,6 +1,7 @@
 package de.mkoehler.launchwindow.rules;
 
 import de.mkoehler.launchwindow.content.RandomEventRoster;
+import de.mkoehler.launchwindow.model.MemorialEntry;
 import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.AssignmentState;
@@ -151,6 +152,7 @@ class RandomEventsTest {
         for (long seed = 0; seed < 40; seed++) {
             Random random = new Random(seed);
             PlayerSnapshot player = populated(random);
+            int perished = 0;
             for (int season = 1; season <= 60; season++) {
                 if (random.nextDouble() < 0.5) {
                     player.setLastFlightSeasonTurn(season);
@@ -166,7 +168,14 @@ class RandomEventsTest {
                     }
                     seen.add(occurred.kind());
                     assertTrue(IMPLEMENTED.contains(occurred.kind()), "unexpected kind " + occurred.kind());
+                    if (occurred.kind() == RandomEventKind.PERISHED_ASTRONAUT) {
+                        perished++;
+                        MemorialEntry remembered = player.getMemorial().get(player.getMemorial().size() - 1);
+                        assertEquals(MemorialEntry.Cause.ACCIDENT, remembered.cause());
+                        assertEquals(season, remembered.turn());
+                    }
                 }
+                assertEquals(perished, player.getMemorial().size(), "every perished astronaut is remembered");
                 assertTrue(player.getNewsLog().size() <= PlayerSnapshot.NEWS_LOG_CAPACITY);
                 assertTrue(player.getPrestige() >= 0);
                 for (var astronaut : player.getAstronauts()) {

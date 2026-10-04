@@ -187,8 +187,8 @@ same session it comes up**, the same standing-note-to-self habit as
     pressure chamber at the end of an isolation test, and his death was
     kept secret until 1986. A pure-oxygen cabin fire also killed the
     Apollo 1 crew in 1967, which is why later cabins used a nitrogen-oxygen
-    mix on the pad. Verify the details before shipping. The Museum
-    mockup's Memorial tab carries it as a draft.
+    mix on the pad. Verify the details before shipping. The Museum's
+    Memorial tab (built 2026-10-04) carries it as a draft.
 - **Real images:** wanted, per the user. **Flagging a licensing
   consideration proactively** (unprompted, per this project's existing
   security/legal-flagging convention): NASA-produced photos/footage are
@@ -2914,6 +2914,17 @@ originally had, back when a single server was assumed to host multiple
 concurrent games side by side.
 
 ### 3.7 Persistence & turn-resolution data model — decided (user, 2026-09-27): flat-file JSON, no database
+
+**Museum records (2026-10-04, approved by the user before they were written).** Two lists
+were added to `PlayerSnapshot`, both only ever appended to:
+- `memorial` (`MemorialEntry`: name, age, turn, cause, and for a mission loss the
+  configuration and step), written by `MissionProgress.loseCrew` and
+  `RandomEvents.perishAstronaut`;
+- `goalRecords` (`GoalRecord`: goal, turn, the configuration that settled it, the goal
+  actually reached when it was credited through the cascade, first in the game, prestige),
+  written by `MissionProgress.settleGoal`.
+Saves from before load with both empty (`PlayerSnapshotTest` proves it), so no data reset is
+needed. Neither write draws a random number, and `ContentPackPlayouts` stayed identical.
 
 **Turn reports (G2, 2026-10-04; the format choices are unconfirmed).**
 - **What's saved:** each player's resolution gets one JSON file beside the snapshots,
@@ -6134,6 +6145,16 @@ here.
       filter chips, the segmented control, the reliability bar, the skill bar, the
       R&D slot box, and the white on-page secondary button. They should be promoted
       to the design system and the UI Asset Sheet.
+  - **Slice: the Museum, Settings and the game result — done (2026-10-04).** From the
+    `Launch Window — Museum, Settings & Game Result mockup` canvas. Details and unconfirmed
+    choices are in `ui-spec.md` §4.11–§4.13.
+    - **Rules:** `WinCondition` now works on plain goal-time maps too (`goalTimes`,
+      `evaluateTimes`, `completionTurn`, `sameTurnFinishers`, `medalTable`), so the client
+      shows the race and medal table through `core`.
+    - **Server:** G3 rival summaries (a new message pair) and G10 plus goal records (see
+      §3.7). `ContentPackPlayouts` stayed byte-identical.
+    - **Client:** `MuseumScreen` (four tabs), `SettingsDialog`, `GameResultDialog`, and a
+      gear button on the hub strip.
   - **Slice: G2 turn reports, the turn report and the replay — done (2026-10-04).** See
     §3.7 for the format.
     - **Richer events:** step events (components as flown, chances, rolls, running

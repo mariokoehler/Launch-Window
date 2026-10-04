@@ -94,51 +94,119 @@ public final class WinCondition {
         Objects.requireNonNull(declaredGoals, "declaredGoals must not be null");
         Objects.requireNonNull(catalog, "catalog must not be null");
         requireValidList(declaredGoals, catalog);
-
-        Map<String, Map<String, Integer>> timesByPlayer = new LinkedHashMap<>();
-        Map<String, Integer> completionByPlayer = new LinkedHashMap<>();
-        for (Map.Entry<String, PlayerSnapshot> entry : players.entrySet()) {
-            Map<String, Integer> times = goalTimes(entry.getValue(), declaredGoals, catalog);
-            if (times.size() == declaredGoals.size()) {
-                timesByPlayer.put(entry.getKey(), times);
-                completionByPlayer.put(entry.getKey(), times.values().stream().max(Integer::compare).orElseThrow());
-            }
-        }
-        if (completionByPlayer.isEmpty()) {
-            return new Outcome(Status.NO_WINNER_YET, List.of());
-        }
-
-        int earliest = completionByPlayer.values().stream().min(Integer::compare).orElseThrow();
-        List<String> candidates = new ArrayList<>();
-        completionByPlayer.forEach((playerId, completion) -> {
-            if (completion == earliest) {
-                candidates.add(playerId);
-            }
-        });
-        if (candidates.size() == 1) {
-            return new Outcome(Status.WON, candidates);
-        }
-        return medalTable(candidates, timesByPlayer, declaredGoals);
+        Map<String, Map<String, Integer>> times = new LinkedHashMap<>();
+        players.forEach((playerId, snapshot) -> times.put(playerId, goalTimes(snapshot, declaredGoals, catalog)));
+        return evaluateTimes(times, declaredGoals);
     }
 
     /**
-     * Breaks a same-turn tie: each listed goal places the candidates by its time, then
-     * the candidates are compared place by place, most first places first.
+     * Evaluates the win condition from each player's goal times, as {@link #goalTimes} gives
+     * them. The client reads the same check over the rival summaries it's sent.
+     *
+     * @param timesByPlayer each player's turn per done goal (missing = not done), keyed by a stable
+     *                      player id; iteration order is the order ties are reported in
+     * @param declaredGoals the game's declared goal list
+     * @return the outcome
+     * @throws NullPointerException if any argument is {@code null}
+     */
+    public static Outcome evaluateTimes(Map<String, Map<String, Integer>> timesByPlayer, List<String> declaredGoals) {
+        Objects.requireNonNull(timesByPlayer, "timesByPlayer must not be null");
+        Objects.requireNonNull(declaredGoals, "declaredGoals must not be null");
+        List<String> candidates = sameTurnFinishers(timesByPlayer, declaredGoals);
+        if (candidates.isEmpty()) {
+            return new Outcome(Status.NO_WINNER_YET, List.of());
+        }
+        if (candidates.size() == 1) {
+            return new Outcome(Status.WON, candidates);
+        }
+        return decide(medalTable(candidates, timesByPlayer, declaredGoals));
+    }
+
+    /**
+     * Returns the turn a player finished the declared list: the latest of its goal times.
+     *
+     * @param times         the player's turn per done goal
+     * @param declaredGoals the declared goals
+     * @return the turn, or empty while a declared goal isn't done
+     */
+    public static Optional<Integer> completionTurn(Map<String, Integer> times, List<String> declaredGoals) {
+        int latest = 0;
+        for (String goalId : declaredGoals) {
+            Integer time = times.get(goalId);
+            if (time == null) {
+                return Optional.empty();
+            }
+            latest = Math.max(latest, time);
+        }
+        return Optional.of(latest);
+    }
+
+    /**
+     * Returns the players who finished the declared list at the earliest turn anyone did.
+     *
+     * @param timesByPlayer each player's turn per done goal
+     * @param declaredGoals the declared goals
+     * @return their ids, in the map's order; empty if no one has finished
+     */
+    public static List<String> sameTurnFinishers(Map<String, Map<String, Integer>> timesByPlayer,
+            List<String> declaredGoals) {
+        Map<String, Integer> completion = new LinkedHashMap<>();
+        timesByPlayer.forEach((playerId, times) -> completionTurn(times, declaredGoals)
+            .ifPresent(turn -> completion.put(playerId, turn)));
+        if (completion.isEmpty()) {
+            return List.of();
+        }
+        int earliest = completion.values().stream().min(Integer::compare).orElseThrow();
+        return completion.entrySet().stream().filter(entry -> entry.getValue() == earliest)
+            .map(Map.Entry::getKey).toList();
+    }
+
+    /**
+     * A same-turn tie's medal table: each candidate's place on each declared goal.
+     *
+     * @param players the tied candidates, in order
+     * @param places  each candidate's place per declared goal, in declared order (1 = first;
+     *                shared places are shared, standard competition ranking)
+     */
+    public record MedalTable(List<String> players, Map<String, List<Integer>> places) {
+
+        /**
+         * Copies both defensively.
+         */
+        public MedalTable {
+            players = List.copyOf(players);
+            places = Map.copyOf(places);
+        }
+
+        /**
+         * Returns how many of each place a candidate holds.
+         *
+         * @param playerId the candidate
+         * @return the counts, index 0 = first places, one entry per candidate
+         */
+        public int[] counts(String playerId) {
+            int[] counts = new int[players.size()];
+            for (int place : places.get(playerId)) {
+                counts[place - 1]++;
+            }
+            return counts;
+        }
+    }
+
+    /**
+     * Places the tied candidates on each declared goal by its time.
      *
      * @param candidates    the players tied on completion turn
      * @param timesByPlayer each player's time for each listed goal
      * @param declaredGoals the listed goals, in the order they were declared
-     * @return the medal-table outcome
+     * @return the medal table
      */
-    private static Outcome medalTable(List<String> candidates, Map<String, Map<String, Integer>> timesByPlayer,
+    public static MedalTable medalTable(List<String> candidates, Map<String, Map<String, Integer>> timesByPlayer,
             List<String> declaredGoals) {
-        int places = candidates.size();
-        Map<String, int[]> medals = new LinkedHashMap<>();
+        Map<String, List<Integer>> places = new LinkedHashMap<>();
         for (String playerId : candidates) {
-            medals.put(playerId, new int[places + 1]);
-        }
-        for (String goalId : declaredGoals) {
-            for (String playerId : candidates) {
+            List<Integer> own = new ArrayList<>();
+            for (String goalId : declaredGoals) {
                 int time = timesByPlayer.get(playerId).get(goalId);
                 int place = 1;
                 for (String other : candidates) {
@@ -146,19 +214,31 @@ public final class WinCondition {
                         place++;
                     }
                 }
-                medals.get(playerId)[place]++;
+                own.add(place);
             }
+            places.put(playerId, own);
         }
+        return new MedalTable(candidates, places);
+    }
 
+    /**
+     * Breaks a same-turn tie on the medal table: the most first places, then the most second
+     * places, and so on.
+     *
+     * @param table the medal table
+     * @return the outcome
+     */
+    private static Outcome decide(MedalTable table) {
+        List<String> candidates = table.players();
         Set<String> remaining = new HashSet<>(candidates);
-        for (int place = 1; place <= places && remaining.size() > 1; place++) {
+        for (int place = 0; place < candidates.size() && remaining.size() > 1; place++) {
             final int currentPlace = place;
             int best = -1;
             for (String playerId : remaining) {
-                best = Math.max(best, medals.get(playerId)[currentPlace]);
+                best = Math.max(best, table.counts(playerId)[currentPlace]);
             }
             final int bestCount = best;
-            remaining.removeIf(playerId -> medals.get(playerId)[currentPlace] != bestCount);
+            remaining.removeIf(playerId -> table.counts(playerId)[currentPlace] != bestCount);
         }
         List<String> left = candidates.stream().filter(remaining::contains).toList();
         return left.size() == 1
@@ -168,17 +248,18 @@ public final class WinCondition {
 
     /**
      * Each listed goal's settlement turn for one player, for the goals that player is
-     * done with. A goal missing from the result is not done yet.
+     * done with. A goal missing from the result is not done yet. A cancelled goal's turn is
+     * the turn of the earliest achieved goal that cancelled it.
      *
-     * @param snapshot      the player
-     * @param declaredGoals the listed goals
-     * @param catalog       the content catalog
-     * @return the turn per done goal
+     * @param snapshot the player
+     * @param goals    the goals to look up
+     * @param catalog  the content catalog
+     * @return the turn per done goal, in the goals' order
      */
-    private static Map<String, Integer> goalTimes(PlayerSnapshot snapshot, List<String> declaredGoals,
+    public static Map<String, Integer> goalTimes(PlayerSnapshot snapshot, List<String> goals,
             ContentCatalog catalog) {
         Map<String, Integer> times = new LinkedHashMap<>();
-        for (String goalId : declaredGoals) {
+        for (String goalId : goals) {
             if (snapshot.getAchievedGoals().containsKey(goalId)) {
                 times.put(goalId, snapshot.getAchievedGoals().get(goalId));
             } else if (snapshot.getCancelledGoalIds().contains(goalId)) {
