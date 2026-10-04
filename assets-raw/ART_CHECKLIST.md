@@ -194,22 +194,22 @@ Notes:
 
 ### `28` Two-crew ballistic capsules
 
-- [ ] **Project Gemini** (NASA, `28-00`)
-  - [ ] Uncrewed suborbital flight test
-  - [ ] Suborbital flight
-  - [ ] Uncrewed orbital flight test
-  - [ ] Orbital flight
-  - [ ] Spacewalk (Duration Level I)
-  - [ ] Orbital rendezvous with a crewed vehicle
-  - [ ] Docking
-  - [ ] EVA and orbital rendezvous with a crewed vehicle (Duration Level I)
-  - [ ] EVA and docking (Duration Level I)
-  - [ ] EVA (Duration Level II)
-  - [ ] Orbital rendezvous with a crewed vehicle (Duration Level II)
-  - [ ] Docking - Duration Level II
-  - [ ] EVA and orbital rendezvous with a crewed vehicle (Duration Level II)
-  - [ ] EVA and docking (Duration Level II)
-  - [ ] Orbital flight (Duration Level III)
+- [X] **Project Gemini** (NASA, `28-00`)
+  - [X] Uncrewed suborbital flight test
+  - [X] Suborbital flight
+  - [X] Uncrewed orbital flight test
+  - [X] Orbital flight
+  - [X] Spacewalk (Duration Level I)
+  - [X] Orbital rendezvous with a crewed vehicle
+  - [X] Docking
+  - [X] EVA and orbital rendezvous with a crewed vehicle (Duration Level I)
+  - [X] EVA and docking (Duration Level I)
+  - [X] EVA (Duration Level II)
+  - [X] Orbital rendezvous with a crewed vehicle (Duration Level II)
+  - [X] Docking - Duration Level II
+  - [X] EVA and orbital rendezvous with a crewed vehicle (Duration Level II)
+  - [X] EVA and docking (Duration Level II)
+  - [X] Orbital flight (Duration Level III)
 
 - [x] **Circumlunar Gemini test flights in Earth orbit** (NASA, `28-01`) — `circumlunar_gemini?`
   - [ ] Uncrewed Gemini heat shield test (reentry at near-lunar velocity)
