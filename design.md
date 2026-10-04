@@ -4194,6 +4194,30 @@ traced from anything. `ui-spec.md` §4.3 updated to drop the "Proposal (not
 decided)" framing. The main-menu hub stays the one screen without the
 standard header/footer chrome; every other screen keeps it.
 
+**Hub strip revised: solid chips, no fade (2026-10-04, after the libGDX
+build).** The libGDX session found the two see-through chips, Next turn and
+Turn Report, hard to read on bright art (snow, dawn sky), and their thin
+icons looked fainter than their text. The mockup had only been checked on
+NASA spring noon, a mid-brightness variant. Measured across all 32
+variants, the top band's mean brightness runs from about 15 (winter night)
+to 209 (Soviet winter noon) out of 255. No single translucent style or fade
+reads on both ends, so the strip now follows §3.12's rule that text on art
+sits on a solid surface:
+- the dark gradient fade behind the strip is gone;
+- the agency and director names sit on a navy nameplate;
+- Next turn is a white chip like funds and prestige, and the date stays the
+  navy chip;
+- Turn Report is white with a 2 px navy outline (`border-emphasis`), so it
+  still reads as the strip's one button, and its gold unread dot is
+  unchanged.
+
+All chips are 32 px tall, and their icons are navy at the usual 2 px stroke,
+so they match the text. The canvas's dev panel now switches the art
+(spring noon, winter noon, summer dawn, winter night) to check the strip
+against the brightest and darkest cases. For `Theme.java`, this needs no new
+token: it's `SURFACE_CARD` and `NAVY` chips plus a `BORDER_EMPHASIS` navy
+outline on the button.
+
 **The `Theme.java` gap flagged here is closed (2026-10-04).** `Theme.SUCCESS_ON_PAGE`
 and `Theme.COMMIT` (plus `ButtonKind.COMMIT`) are now both defined, matching
 `tokens.json` exactly. Done ahead of the footer/header chrome actually being

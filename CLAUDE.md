@@ -392,6 +392,14 @@ components. Details and the unconfirmed proposals are in `design.md` §3.13.
   extra height. Copy the `/_blob/` assets into a local `_blob/` folder and
   serve SVGs as `image/svg+xml`.
 
+**Hub strip made solid (2026-10-04, libGDX feedback):** the see-through Next
+turn and Turn Report chips were unreadable on bright art. Every strip element
+is now a solid chip (navy nameplate, white chips, white Turn Report with a
+navy outline), and the fade is gone. **Lesson:** check anything drawn over the
+hub art against the brightest variant (Soviet winter noon) and the darkest
+(winter night), not just one sample. The hub canvas's dev panel switches the
+art for this. See `design.md` §3.13.
+
 **Open, content:** "Human in space" and "Human in orbit" aren't reached by any
 step; other goals only cancel them, so their prestige can never be earned.
 Check `baspm_pack.py`, along with the Explorer 1 discount above.
