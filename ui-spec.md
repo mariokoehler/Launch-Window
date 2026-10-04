@@ -309,6 +309,9 @@ Turn Report button with a navy outline. There is no translucent chip and no fade
 because the art's top band runs from near-black (night) to near-white (winter noon).
 See `design.md` §3.13.
 
+**Settings gear (decided, user, 2026-10-04):** a white icon-only gear button at the end
+of the strip opens Settings (§4.12). This replaces "no Log out" below.
+
 **States:** a building that is upgrading shows a subtle "under construction"
 marker; a game result exists (§4.13).
 
@@ -804,8 +807,9 @@ Log out; server address; sound on or off (later); about and version.
 
 **Mocked up (2026-10-04)** as `Settings` on the Museum canvas, as a `Dialog` over the hub.
 Choices still **unconfirmed**:
-- **a gear `IconButton` at the end of the hub strip**, so Settings (and Log out) is
-  reachable from the hub, which has no header;
+- **Decided (user, 2026-10-04): a gear button at the end of the hub strip** (white,
+  icon-only, 32 px, like `IconButton`), so Settings (and Log out) is reachable from the
+  hub, which has no header. The hub mockup has it too;
 - Log out needs no confirmation, since today's actions are already on the server;
 - Switch server logs out and opens Connect with the new address filled in;
 - About shows the version, the game's content pack and hash, the fan-project note (not
