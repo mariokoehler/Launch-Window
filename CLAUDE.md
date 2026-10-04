@@ -299,6 +299,12 @@ R&D-board pattern (component 10) verbatim, retargeted at rocket components
 — real assign/release interactivity, same two rockets as Manage Rocket
 Programs for narrative consistency. Breadcrumb root is "Space Complex"
 throughout. No new design-system components, tokens, or icons were needed.
+**Footer fix (user, 2026-10-04):** the footer must stay at the bottom of the
+frame. It had ridden up under short lists in the VAB and SET Centre mockups.
+Both are fixed, and the rule is in `design.md` §3.13. **Mockup pitfall:** a
+style on an `x-import` only sizes its slot, so `flex: 1` on a
+`LaunchWindow.Card` doesn't fill. Put the fill and scroll on a plain wrapper
+`div`, and give the footer `margin-top: auto`.
 
 Everything below is history; if this paragraph and a later one disagree, the
 later one wins.

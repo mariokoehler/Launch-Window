@@ -4089,6 +4089,16 @@ every screen, per the mockup's own comments):**
   "open / total", e.g. "`0 / 3`"). **No sixth "End Season" action** — see
   §3.12's `commit`-color entry for why that button was dropped the same
   session it was being laid out.
+- **The footer is always anchored to the bottom of the 1920&times;1080
+  frame** (user, 2026-10-04), however little content the screen has. It
+  never rides up under a short list. In the mockups the footer has
+  `margin-top: auto`, and the list area that fills the space between
+  header and footer is a plain wrapper `div`. A style set on a mounted
+  design-system component (`x-import`) only reaches its slot, so a
+  `LaunchWindow.Card` given `flex: 1` shrinks to its rows and pulls the
+  footer up. That was the bug in the first VAB and SET Centre mockups, now
+  fixed in both. In libGDX, give the content cell `expandY()` (or put an
+  expanding spacer above the footer) so the footer row stays at the bottom.
 - **Background:** every non-main-menu screen reuses the tiled blueprint-
   grid page texture (§3.12's iconography entry / the UI Asset Sheet) as
   its frame. **The main menu is the one exception**, filling the entire
