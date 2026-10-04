@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.connect.ClaimResult;
 import de.mkoehler.launchwindow.client.connect.Credentials;
+import de.mkoehler.launchwindow.client.connect.GameInfo;
 import de.mkoehler.launchwindow.client.connect.LoginResult;
 import de.mkoehler.launchwindow.client.connect.ServerAddress;
 import de.mkoehler.launchwindow.client.connect.ServerGateway;
@@ -21,9 +22,11 @@ import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.net.messages.ClaimSlotResponse;
+import de.mkoehler.launchwindow.net.messages.GameInfoResponse;
 
 import java.io.File;
 import java.nio.ByteBuffer;
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -112,7 +115,7 @@ public final class ScreenSnapshot {
             screen.submit();
         });
         write(folder, "connect-version-mismatch.png", filledConnect(game), screen -> screen.applyLoginResult(
-            CREDENTIALS, new LoginResult(LoginResult.Kind.VERSION_MISMATCH, "", "0.4.0", "0.5.0", null)));
+            CREDENTIALS, new LoginResult(LoginResult.Kind.VERSION_MISMATCH, "", "0.4.0", "0.5.0", null, null)));
         write(folder, "connect-unreachable.png", filledConnect(game), screen -> screen.applyLoginResult(
             CREDENTIALS, LoginResult.failure(LoginResult.Kind.UNREACHABLE, "Connection refused")));
 
@@ -133,7 +136,10 @@ public final class ScreenSnapshot {
 
         PlayerSnapshot state = new PlayerSnapshot("Baltic Star Agency", Archetype.SOVIET, 25_000, 250, 3_000, 1);
         state.setDirectorName("A. Reyes");
-        write(folder, "agency.png", new AgencyScreen(game, CREDENTIALS, state), null);
+        GameInfoResponse info = GameInfoResponse.success("early-era", "hash", List.of(), 1, false,
+            6 * 3_600_000L + 12 * 60_000L + 30_000L, 0L, null, List.of(), List.of(), 0);
+        write(folder, "agency.png",
+            new AgencyScreen(game, CREDENTIALS, state, new GameInfo(info, System.currentTimeMillis())), null);
     }
 
     private static ConnectScreen filledConnect(LaunchWindowGame game) {

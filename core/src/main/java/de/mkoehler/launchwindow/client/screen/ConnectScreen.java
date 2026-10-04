@@ -158,7 +158,7 @@ public final class ConnectScreen extends StageScreen {
     public void applyLoginResult(Credentials credentials, LoginResult result) {
         setBusy(false);
         switch (result.kind()) {
-            case IN_GAME -> game.setScreen(new AgencyScreen(game, credentials, result.state()));
+            case IN_GAME -> game.setScreen(new AgencyScreen(game, credentials, result.state(), result.gameInfo()));
             case NEEDS_SLOT -> game.setScreen(new JoinScreen(game, credentials));
             case VERSION_MISMATCH -> showBanner(Theme.NoticeKind.WARNING, "Versions don't match.",
                 "Client v" + result.clientVersion() + ", server v" + result.serverVersion()

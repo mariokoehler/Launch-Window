@@ -595,7 +595,9 @@ for the mockups.
 Found while writing this spec. The client can't build these screens from the
 current state alone. Each is an M5 task.
 
-- **G1. Game info.** The content pack id and its content hash (so the client loads
+- **G1. Game info.** *(Done 2026-10-04, except the pack download: `GameInfoRequest`/
+  `GameInfoResponse`, `design.md` §5 M5 "Game info". Game date: turn 1 is Winter 1955,
+  one season per turn, unconfirmed.)* The content pack id and its content hash (so the client loads
   exactly the game's pack), the declared goals, the current game turn and the game
   date (start year and season), the next resolution time, and the game result if
   any. Needs a new `GameInfoRequest`/`GameInfoResponse`; the handshake can't change.

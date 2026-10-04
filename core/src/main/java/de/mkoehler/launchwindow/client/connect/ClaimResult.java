@@ -6,13 +6,15 @@ import de.mkoehler.launchwindow.net.messages.ClaimSlotResponse;
 /**
  * What came of pressing Join on the Join Game screen ({@code ui-spec.md} &sect;4.2).
  *
- * @param kind    what happened
- * @param reason  the server's refusal reason, for {@link Kind#REFUSED}
- * @param message the server's or the network's words; empty for {@link Kind#JOINED}
- * @param state   the new player's starting state, for {@link Kind#JOINED}
+ * @param kind     what happened
+ * @param reason   the server's refusal reason, for {@link Kind#REFUSED}
+ * @param message  the server's or the network's words; empty for {@link Kind#JOINED}
+ * @param state    the new player's starting state, for {@link Kind#JOINED}
+ * @param gameInfo the game's shared facts, for {@link Kind#JOINED}
  * @author Mario Koehler
  */
-public record ClaimResult(Kind kind, ClaimSlotResponse.Reason reason, String message, PlayerSnapshot state) {
+public record ClaimResult(Kind kind, ClaimSlotResponse.Reason reason, String message, PlayerSnapshot state,
+                          GameInfo gameInfo) {
 
     /**
      * The outcomes of a slot claim.
@@ -33,11 +35,12 @@ public record ClaimResult(Kind kind, ClaimSlotResponse.Reason reason, String mes
     /**
      * Creates a joined result.
      *
-     * @param state the starting state
+     * @param state    the starting state
+     * @param gameInfo the game info
      * @return the result
      */
-    public static ClaimResult joined(PlayerSnapshot state) {
-        return new ClaimResult(Kind.JOINED, null, "", state);
+    public static ClaimResult joined(PlayerSnapshot state, GameInfo gameInfo) {
+        return new ClaimResult(Kind.JOINED, null, "", state, gameInfo);
     }
 
     /**
@@ -47,7 +50,7 @@ public record ClaimResult(Kind kind, ClaimSlotResponse.Reason reason, String mes
      * @return the result
      */
     public static ClaimResult refused(ClaimSlotResponse response) {
-        return new ClaimResult(Kind.REFUSED, response.reason(), response.message(), null);
+        return new ClaimResult(Kind.REFUSED, response.reason(), response.message(), null, null);
     }
 
     /**
@@ -58,6 +61,6 @@ public record ClaimResult(Kind kind, ClaimSlotResponse.Reason reason, String mes
      * @return the result
      */
     public static ClaimResult failure(Kind kind, String message) {
-        return new ClaimResult(kind, null, message == null ? "" : message, null);
+        return new ClaimResult(kind, null, message == null ? "" : message, null, null);
     }
 }

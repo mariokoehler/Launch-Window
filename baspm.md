@@ -313,6 +313,18 @@ enum DifficultyLevelT { Normal = 1, Hard = 2, BuzzHard = 3 }
   with no in-game player-to-player interaction described anywhere in the
   manual beyond that notification. See §5.
 
+### 2.5 The game calendar (traced 2026-10-04, for M5 gap G1)
+
+`GameWorld.cs` keeps the date as `_currYear` and `_currPeriod`. A campaign
+starts in **1955, period 1** (`FirstTurnPeriod = 1`), with
+`NumberOfPeriodsPerYear = 4`. One season-advance moves the period on by one,
+rolling period 4 into period 1 of the next year. `CurrPeriodAsLabel` names the
+periods **1 Winter, 2 Spring, 3 Summer, 4 Fall**, so a year starts in winter.
+The save file writes the date as `GameDate="<period>.<year>"` ("1.1955", see
+§1.2). A turn index since the start is `(CurrYear - 1955) * 4 + CurrPeriod`.
+Launch Window's `GameDate` uses the same start and order (`design.md` §5 M5,
+"Game info").
+
 ## 3. Data-driven architecture
 
 Three separate, non-overlapping data layers. Knowing which one a given

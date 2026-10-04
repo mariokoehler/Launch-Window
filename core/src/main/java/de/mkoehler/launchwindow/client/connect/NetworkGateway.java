@@ -8,6 +8,8 @@ import de.mkoehler.launchwindow.net.messages.ClaimSlotRequest;
 import de.mkoehler.launchwindow.net.messages.ClaimSlotResponse;
 import de.mkoehler.launchwindow.net.messages.FetchStateRequest;
 import de.mkoehler.launchwindow.net.messages.FetchStateResponse;
+import de.mkoehler.launchwindow.net.messages.GameInfoRequest;
+import de.mkoehler.launchwindow.net.messages.GameInfoResponse;
 import de.mkoehler.launchwindow.net.messages.HandshakeRequest;
 import de.mkoehler.launchwindow.net.messages.HandshakeResponse;
 
@@ -35,6 +37,17 @@ public final class NetworkGateway implements ServerGateway {
     });
 
     /**
+     * Closes finished connections off the worker thread. KryoNet's {@code Client.stop()} sometimes
+     * takes several seconds on Windows after the exchange is complete (seen up to ~11 s, 2026-10-04);
+     * closing inline held back both the result and the next call by that long.
+     */
+    private static final ExecutorService CLOSER = Executors.newCachedThreadPool(runnable -> {
+        Thread thread = new Thread(runnable, "server-gateway-close");
+        thread.setDaemon(true);
+        return thread;
+    });
+
+    /**
      * Creates the gateway and its background thread.
      */
     public NetworkGateway() {
@@ -47,9 +60,16 @@ public final class NetworkGateway implements ServerGateway {
             if (refusal.isPresent()) {
                 return refusal.get();
             }
-            return LoginResult.fromFetch(client.sendAndReceive(new FetchStateRequest(), FetchStateResponse.class));
+            GameInfoResponse info = client.sendAndReceive(new GameInfoRequest(), GameInfoResponse.class);
+            if (!info.success()) {
+                return LoginResult.failure(LoginResult.Kind.FAILED, info.message());
+            }
+            GameInfo gameInfo = new GameInfo(info, System.currentTimeMillis());
+            return LoginResult.fromFetch(client.sendAndReceive(new FetchStateRequest(), FetchStateResponse.class))
+                .withGameInfo(gameInfo);
         }, message -> LoginResult.failure(LoginResult.Kind.UNREACHABLE, message),
-            message -> LoginResult.failure(LoginResult.Kind.FAILED, message)), done);
+            message -> LoginResult.failure(LoginResult.Kind.FAILED, message)),
+            message -> LoginResult.failure(LoginResult.Kind.FAILED, message), done);
     }
 
     @Override
@@ -65,11 +85,15 @@ public final class NetworkGateway implements ServerGateway {
             if (!claim.success()) {
                 return ClaimResult.refused(claim);
             }
+            GameInfoResponse info = client.sendAndReceive(new GameInfoRequest(), GameInfoResponse.class);
             FetchStateResponse fetch = client.sendAndReceive(new FetchStateRequest(), FetchStateResponse.class);
-            return fetch.success() ? ClaimResult.joined(fetch.state())
-                : ClaimResult.failure(ClaimResult.Kind.FAILED, fetch.message());
+            if (!info.success() || !fetch.success()) {
+                return ClaimResult.failure(ClaimResult.Kind.FAILED, info.success() ? fetch.message() : info.message());
+            }
+            return ClaimResult.joined(fetch.state(), new GameInfo(info, System.currentTimeMillis()));
         }, message -> ClaimResult.failure(ClaimResult.Kind.UNREACHABLE, message),
-            message -> ClaimResult.failure(ClaimResult.Kind.FAILED, message)), done);
+            message -> ClaimResult.failure(ClaimResult.Kind.FAILED, message)),
+            message -> ClaimResult.failure(ClaimResult.Kind.FAILED, message), done);
     }
 
     @Override
@@ -92,7 +116,8 @@ public final class NetworkGateway implements ServerGateway {
     }
 
     /**
-     * Opens a connection, runs the exchange on it, and always closes it.
+     * Opens a connection, runs the exchange on it, and always closes it, in the background so a
+     * slow close never delays the result.
      *
      * @param credentials   where to connect
      * @param exchange      the work, on the open connection
@@ -103,7 +128,8 @@ public final class NetworkGateway implements ServerGateway {
      */
     private static <T> T withConnection(Credentials credentials, Exchange<T> exchange,
                                         Function<String, T> ifUnreachable, Function<String, T> ifBroken) {
-        try (NetworkClient client = new NetworkClient()) {
+        NetworkClient client = new NetworkClient();
+        try {
             try {
                 client.connect(credentials.address().host(), credentials.address().port());
             } catch (IOException | RuntimeException e) {
@@ -112,13 +138,26 @@ public final class NetworkGateway implements ServerGateway {
             return exchange.run(client);
         } catch (IOException | RuntimeException e) {
             return ifBroken.apply(e.getMessage());
+        } finally {
+            CLOSER.execute(client::close);
         }
     }
 
-    private <T> void run(Supplier<T> work, Consumer<T> done) {
+    /**
+     * Runs work on the background thread and always delivers a result, even if the work throws
+     * something unexpected: a screen waiting on a call must never be left disabled for good.
+     */
+    private <T> void run(Supplier<T> work, Function<String, T> ifCrashed, Consumer<T> done) {
         worker.execute(() -> {
-            T result = work.get();
-            Gdx.app.postRunnable(() -> done.accept(result));
+            T result;
+            try {
+                result = work.get();
+            } catch (Throwable e) {
+                Gdx.app.error("NetworkGateway", "Server call failed unexpectedly", e);
+                result = ifCrashed.apply(e.toString());
+            }
+            T delivered = result;
+            Gdx.app.postRunnable(() -> done.accept(delivered));
         });
     }
 

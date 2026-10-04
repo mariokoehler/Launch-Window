@@ -15,6 +15,7 @@ import de.mkoehler.launchwindow.net.messages.HandshakeResponse;
 import de.mkoehler.launchwindow.net.messages.SubmitActionRequest;
 import de.mkoehler.launchwindow.net.messages.SubmitActionResponse;
 import de.mkoehler.launchwindow.server.accounts.AccountStore;
+import de.mkoehler.launchwindow.server.schedule.GameMeta;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -103,8 +104,9 @@ class ServerClientIntegrationTest {
     private int startServer(Path dataRoot) throws IOException {
         int port = freePort();
         accountStore = new AccountStore(dataRoot.resolve("accounts.json"));
+        GameMeta meta = ServerTestGames.meta(false);
         RequestDispatcher dispatcher = new RequestDispatcher(accountStore, dataRoot, mapper, ServerTestGames.CONTEXT,
-            ServerTestGames.meta(false));
+            meta, ServerTestGames.gameInfo(dataRoot, mapper, meta));
         server = new NetworkServer();
         server.start(port);
         NetworkServer capturedServer = server;

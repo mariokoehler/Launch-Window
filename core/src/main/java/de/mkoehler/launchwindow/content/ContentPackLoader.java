@@ -46,6 +46,13 @@ public final class ContentPackLoader {
     public static final String MISSION_CONFIGURATIONS_FILE = "mission-configurations.json";
     /** The goals file. */
     public static final String GOALS_FILE = "goals.json";
+    /**
+     * Every file a pack consists of, in a fixed order. The one list the loader, the server's
+     * freezing step and {@link ContentPackHash} all go by, so a file added to packs later (the
+     * display strings, gap G4) joins all three at once.
+     */
+    public static final List<String> FILES = List.of(CATEGORIES_FILE, PROGRAMS_FILE, MISSION_COMPONENTS_FILE,
+        MISSION_CONFIGURATIONS_FILE, GOALS_FILE);
 
     private static final ObjectMapper MAPPER = createMapper();
 

@@ -90,13 +90,21 @@ public class GameServer extends ApplicationAdapter {
         } catch (IOException e) {
             throw new IllegalStateException("Could not read game-meta.json", e);
         }
-        // The content pack is read once and pinned for the server's life (design.md section 5, M4).
-        ContentCatalog catalog = ContentPackLoader.loadFromClasspath("content/" + meta.getContentPack(),
-            GameServer.class.getClassLoader());
+        // The game loads only its own frozen copy of the pack, made on the first start, and pins it for the
+        // server's life (design.md section 5, M5 "Content packs").
+        FrozenContentPack pack;
+        try {
+            pack = FrozenContentPack.freeze(dataRoot, meta.getContentPack(), GameServer.class.getClassLoader());
+        } catch (IOException e) {
+            throw new IllegalStateException("Could not freeze content pack " + meta.getContentPack(), e);
+        }
+        ContentCatalog catalog = ContentPackLoader.load(pack.directory());
         // A bad declared goal id must fail here, at startup, not stall every turn's win check mid-game.
         WinCondition.evaluate(java.util.Map.of(), meta.getDeclaredGoalIds(), catalog);
         ActionContext context = new ActionContext(catalog, BudgetSchedule.baspmClose());
-        dispatcher = new RequestDispatcher(accountStore, dataRoot, mapper, context, meta);
+        GameInfoService gameInfo = new GameInfoService(dataRoot, mapper, pack.packId(), pack.hash(), meta,
+            Clock.systemDefaultZone());
+        dispatcher = new RequestDispatcher(accountStore, dataRoot, mapper, context, meta, gameInfo);
         scheduler = new TurnScheduler(dataRoot, mapper, Clock.systemDefaultZone(), context,
             RandomEventRoster.baspmClose());
         networkServer = new NetworkServer();

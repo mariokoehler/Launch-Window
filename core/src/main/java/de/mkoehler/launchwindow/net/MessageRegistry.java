@@ -29,11 +29,14 @@ import de.mkoehler.launchwindow.model.MissionControlOfficer;
 import de.mkoehler.launchwindow.model.MissionControlSkill;
 import de.mkoehler.launchwindow.model.OwnedMissionComponent;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
+import de.mkoehler.launchwindow.model.Season;
 import de.mkoehler.launchwindow.model.SetSkill;
 import de.mkoehler.launchwindow.model.SetSpecialist;
 import de.mkoehler.launchwindow.model.TrainingKind;
 import de.mkoehler.launchwindow.net.messages.ClaimSlotRequest;
 import de.mkoehler.launchwindow.net.messages.ClaimSlotResponse;
+import de.mkoehler.launchwindow.net.messages.GameInfoRequest;
+import de.mkoehler.launchwindow.net.messages.GameInfoResponse;
 import de.mkoehler.launchwindow.net.messages.FetchStateRequest;
 import de.mkoehler.launchwindow.net.messages.FetchStateResponse;
 import de.mkoehler.launchwindow.net.messages.HandshakeRequest;
@@ -182,5 +185,9 @@ public final class MessageRegistry {
         kryo.register(ReassignControlSlotAction.class);
         // Appended 2026-10-04 (M5 connect/join screens): ClaimSlotResponse's refusal reason. Never move this line.
         kryo.register(ClaimSlotResponse.Reason.class);
+        // Appended 2026-10-04 (M5 game info, ui-spec.md gap G1). Never move these lines.
+        kryo.register(Season.class);
+        kryo.register(GameInfoRequest.class);
+        kryo.register(GameInfoResponse.class);
     }
 }

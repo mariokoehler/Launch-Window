@@ -22,10 +22,12 @@ import java.util.Optional;
  * @param clientVersion this client's version, for {@link Kind#VERSION_MISMATCH}
  * @param serverVersion the server's version, for {@link Kind#VERSION_MISMATCH}
  * @param state         the player's state with today's actions applied, for {@link Kind#IN_GAME}
+ * @param gameInfo      the game's shared facts, for {@link Kind#IN_GAME} and {@link Kind#NEEDS_SLOT};
+ *                      {@code null} otherwise
  * @author Mario Koehler
  */
 public record LoginResult(Kind kind, String message, String clientVersion, String serverVersion,
-                          PlayerSnapshot state) {
+                          PlayerSnapshot state, GameInfo gameInfo) {
 
     /**
      * The outcomes of a login.
@@ -58,7 +60,7 @@ public record LoginResult(Kind kind, String message, String clientVersion, Strin
         }
         if (!clientVersion.equals(response.serverVersion())) {
             return Optional.of(new LoginResult(Kind.VERSION_MISMATCH, "", clientVersion, response.serverVersion(),
-                null));
+                null, null));
         }
         return Optional.of(failure(Kind.REJECTED, response.message()));
     }
@@ -71,10 +73,10 @@ public record LoginResult(Kind kind, String message, String clientVersion, Strin
      */
     public static LoginResult fromFetch(FetchStateResponse response) {
         if (response.success()) {
-            return new LoginResult(Kind.IN_GAME, "", "", "", response.state());
+            return new LoginResult(Kind.IN_GAME, "", "", "", response.state(), null);
         }
         if (ClaimSlotRequest.SLOT_CLAIM_REQUIRED.equals(response.message())) {
-            return new LoginResult(Kind.NEEDS_SLOT, "", "", "", null);
+            return new LoginResult(Kind.NEEDS_SLOT, "", "", "", null, null);
         }
         return failure(Kind.FAILED, response.message());
     }
@@ -87,6 +89,16 @@ public record LoginResult(Kind kind, String message, String clientVersion, Strin
      * @return the result
      */
     public static LoginResult failure(Kind kind, String message) {
-        return new LoginResult(kind, message == null ? "" : message, "", "", null);
+        return new LoginResult(kind, message == null ? "" : message, "", "", null, null);
+    }
+
+    /**
+     * Returns this result with the game info attached.
+     *
+     * @param info the game info
+     * @return the result
+     */
+    public LoginResult withGameInfo(GameInfo info) {
+        return new LoginResult(kind, message, clientVersion, serverVersion, state, info);
     }
 }

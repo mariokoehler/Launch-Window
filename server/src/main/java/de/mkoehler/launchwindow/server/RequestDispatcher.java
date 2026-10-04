@@ -8,6 +8,8 @@ import de.mkoehler.launchwindow.net.messages.ClaimSlotRequest;
 import de.mkoehler.launchwindow.net.messages.ClaimSlotResponse;
 import de.mkoehler.launchwindow.net.messages.FetchStateRequest;
 import de.mkoehler.launchwindow.net.messages.FetchStateResponse;
+import de.mkoehler.launchwindow.net.messages.GameInfoRequest;
+import de.mkoehler.launchwindow.net.messages.GameInfoResponse;
 import de.mkoehler.launchwindow.net.messages.HandshakeRequest;
 import de.mkoehler.launchwindow.net.messages.HandshakeResponse;
 import de.mkoehler.launchwindow.net.messages.SubmitActionRequest;
@@ -69,6 +71,7 @@ public class RequestDispatcher {
     private final ObjectMapper mapper;
     private final ActionContext context;
     private final GameMeta meta;
+    private final GameInfoService gameInfo;
     private final SecureRandom actionSeeds = new SecureRandom();
     private final Map<Integer, String> connectionAccountIds = new HashMap<>();
 
@@ -82,14 +85,16 @@ public class RequestDispatcher {
      *                     persistence store
      * @param context      the game's content pack and budget schedule
      * @param meta         the game's configuration (seed, dev mode)
+     * @param gameInfo     builds the game info (gap G1)
      */
     public RequestDispatcher(AccountStore accountStore, Path dataRoot, ObjectMapper mapper, ActionContext context,
-            GameMeta meta) {
+            GameMeta meta, GameInfoService gameInfo) {
         this.accountStore = Objects.requireNonNull(accountStore, "accountStore must not be null");
         this.dataRoot = Objects.requireNonNull(dataRoot, "dataRoot must not be null");
         this.mapper = Objects.requireNonNull(mapper, "mapper must not be null");
         this.context = Objects.requireNonNull(context, "context must not be null");
         this.meta = Objects.requireNonNull(meta, "meta must not be null");
+        this.gameInfo = Objects.requireNonNull(gameInfo, "gameInfo must not be null");
     }
 
     /**
@@ -118,6 +123,9 @@ public class RequestDispatcher {
         }
         if (message instanceof FetchStateRequest request) {
             return new DispatchResult(handleFetchState(connectionId, request), false);
+        }
+        if (message instanceof GameInfoRequest request) {
+            return new DispatchResult(handleGameInfo(connectionId, request), false);
         }
         throw new IllegalArgumentException("Unexpected message type: " + message.getClass().getName());
     }
@@ -287,6 +295,25 @@ public class RequestDispatcher {
      * @return the snapshots
      * @throws IOException if a player's files can't be read
      */
+    /**
+     * Handles a {@link GameInfoRequest}: the game's shared facts. Needs an accepted handshake but
+     * no slot, so the Join Game screen can show them before the player has joined.
+     *
+     * @param connectionId the connection the request arrived on
+     * @param request      the request
+     * @return the response
+     */
+    public GameInfoResponse handleGameInfo(int connectionId, GameInfoRequest request) {
+        if (connectionAccountIds.get(connectionId) == null) {
+            return GameInfoResponse.failure("Not authenticated - send a HandshakeRequest first.");
+        }
+        try {
+            return gameInfo.info();
+        } catch (IOException | RuntimeException e) {
+            return GameInfoResponse.failure("Failed to read the game info: " + e.getMessage());
+        }
+    }
+
     private List<PlayerSnapshot> everyPlayer() throws IOException {
         Path players = dataRoot.resolve("players");
         List<PlayerSnapshot> result = new ArrayList<>();

@@ -177,7 +177,7 @@ public final class JoinScreen extends StageScreen {
     public void applyClaimResult(ClaimResult result) {
         setBusy(false);
         switch (result.kind()) {
-            case JOINED -> game.setScreen(new AgencyScreen(game, credentials, result.state()));
+            case JOINED -> game.setScreen(new AgencyScreen(game, credentials, result.state(), result.gameInfo()));
             case REFUSED -> showRefusal(result);
             case LOGIN_FAILED -> showBanner("Couldn't log in again.", result.message());
             case UNREACHABLE -> showBanner("Can't reach the server.", "Check your connection and try again.");
@@ -220,7 +220,7 @@ public final class JoinScreen extends StageScreen {
             }
             setBusy(false);
             if (login.kind() == LoginResult.Kind.IN_GAME) {
-                game.setScreen(new AgencyScreen(game, credentials, login.state()));
+                game.setScreen(new AgencyScreen(game, credentials, login.state(), login.gameInfo()));
             } else {
                 showBanner("This account already has an agency here.", "Connect again to open it.");
             }

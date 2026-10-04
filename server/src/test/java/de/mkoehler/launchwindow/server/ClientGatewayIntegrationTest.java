@@ -9,9 +9,13 @@ import de.mkoehler.launchwindow.client.connect.LoginResult;
 import de.mkoehler.launchwindow.client.connect.NetworkGateway;
 import de.mkoehler.launchwindow.client.connect.ServerAddress;
 import de.mkoehler.launchwindow.model.Archetype;
+import de.mkoehler.launchwindow.model.GameDate;
+import de.mkoehler.launchwindow.model.Season;
 import de.mkoehler.launchwindow.net.NetworkServer;
 import de.mkoehler.launchwindow.net.messages.ClaimSlotResponse;
+import de.mkoehler.launchwindow.net.messages.GameInfoResponse;
 import de.mkoehler.launchwindow.server.accounts.AccountStore;
+import de.mkoehler.launchwindow.server.schedule.GameMeta;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -26,6 +30,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Drives the client's real {@link NetworkGateway}, the one the Connect and Join Game screens
@@ -76,10 +82,17 @@ class ClientGatewayIntegrationTest {
         ServerAddress address = new ServerAddress("localhost", port);
         Credentials mario = new Credentials(address, "mario", "hunter2");
 
-        assertEquals(LoginResult.Kind.NEEDS_SLOT, logIn(mario).kind());
+        LoginResult first = logIn(mario);
+        assertEquals(LoginResult.Kind.NEEDS_SLOT, first.kind());
+        GameInfoResponse info = first.gameInfo().response();
+        assertEquals(1, info.gameTurn());
+        assertEquals(new GameDate(1955, Season.WINTER), info.date());
+        assertFalse(info.started());
+        assertTrue(first.gameInfo().millisUntilNextResolution(System.currentTimeMillis()).isPresent());
         ClaimResult joined = claim(mario, "Baltic Star Agency", "A. Reyes");
         assertEquals(ClaimResult.Kind.JOINED, joined.kind());
         assertEquals("A. Reyes", joined.state().getDirectorName());
+        assertEquals(ServerTestGames.PACK_HASH, joined.gameInfo().response().contentPackHash());
 
         LoginResult again = logIn(mario);
         assertEquals(LoginResult.Kind.IN_GAME, again.kind());
@@ -121,8 +134,10 @@ class ClientGatewayIntegrationTest {
             port = socket.getLocalPort();
         }
         accountStore = new AccountStore(dataRoot.resolve("accounts.json"));
-        RequestDispatcher dispatcher = new RequestDispatcher(accountStore, dataRoot, new ObjectMapper(),
-            ServerTestGames.CONTEXT, ServerTestGames.meta(false));
+        ObjectMapper mapper = GameServer.createMapper();
+        GameMeta meta = ServerTestGames.meta(false);
+        RequestDispatcher dispatcher = new RequestDispatcher(accountStore, dataRoot, mapper, ServerTestGames.CONTEXT,
+            meta, ServerTestGames.gameInfo(dataRoot, mapper, meta));
         server = new NetworkServer();
         server.start(port);
         NetworkServer capturedServer = server;

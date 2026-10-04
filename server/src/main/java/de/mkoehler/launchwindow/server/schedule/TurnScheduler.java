@@ -119,13 +119,7 @@ public class TurnScheduler {
         LocalDate today = now.toLocalDate();
 
         SchedulerState state = loadOrBootstrapState(now, meta);
-        if (today.equals(state.getLastResolvedDate())) {
-            return;
-        }
-        if (!meta.resolvesOn(today)) {
-            return;
-        }
-        if (now.toLocalTime().isBefore(meta.getSchedule().getResolutionTime())) {
+        if (!ResolutionSchedule.isDue(meta, state.getLastResolvedDate(), now)) {
             return;
         }
 
@@ -155,11 +149,9 @@ public class TurnScheduler {
         if (existing.isPresent()) {
             return existing.get();
         }
-        LocalDate today = now.toLocalDate();
-        boolean beforeResolutionTime = now.toLocalTime().isBefore(meta.getSchedule().getResolutionTime());
         SchedulerState fresh = new SchedulerState();
         fresh.setNextGameTurn(1);
-        fresh.setLastResolvedDate(beforeResolutionTime ? today.minusDays(1) : today);
+        fresh.setLastResolvedDate(ResolutionSchedule.bootstrapLastResolvedDate(meta, now));
         stateStore.save(fresh);
         return fresh;
     }

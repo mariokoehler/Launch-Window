@@ -4,12 +4,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.mkoehler.launchwindow.actions.HireAction;
 import de.mkoehler.launchwindow.actions.OpenProgramAction;
 import de.mkoehler.launchwindow.model.Archetype;
+import de.mkoehler.launchwindow.model.GameDate;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
+import de.mkoehler.launchwindow.model.Season;
 import de.mkoehler.launchwindow.net.AppVersion;
 import de.mkoehler.launchwindow.net.messages.ClaimSlotRequest;
 import de.mkoehler.launchwindow.net.messages.ClaimSlotResponse;
 import de.mkoehler.launchwindow.net.messages.FetchStateRequest;
 import de.mkoehler.launchwindow.net.messages.FetchStateResponse;
+import de.mkoehler.launchwindow.net.messages.GameInfoRequest;
+import de.mkoehler.launchwindow.net.messages.GameInfoResponse;
 import de.mkoehler.launchwindow.net.messages.HandshakeRequest;
 import de.mkoehler.launchwindow.net.messages.HandshakeResponse;
 import de.mkoehler.launchwindow.net.messages.SubmitActionRequest;
@@ -19,12 +23,17 @@ import de.mkoehler.launchwindow.persistence.SetFundsAction;
 import de.mkoehler.launchwindow.rules.HiringPool;
 import de.mkoehler.launchwindow.rules.PersonnelGroup;
 import de.mkoehler.launchwindow.server.accounts.AccountStore;
+import de.mkoehler.launchwindow.server.schedule.GameMeta;
+import de.mkoehler.launchwindow.server.schedule.GameResult;
+import de.mkoehler.launchwindow.server.schedule.SchedulerState;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +51,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class RequestDispatcherTest {
 
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper = GameServer.createMapper();
     private final List<AccountStore> stores = new ArrayList<>();
 
     /**
@@ -76,8 +85,9 @@ class RequestDispatcherTest {
      * @return the dispatcher
      */
     private RequestDispatcher dispatcher(AccountStore accountStore, Path dataRoot, boolean devMode) {
-        return new RequestDispatcher(accountStore, dataRoot, mapper, ServerTestGames.CONTEXT,
-            ServerTestGames.meta(devMode));
+        GameMeta meta = ServerTestGames.meta(devMode);
+        return new RequestDispatcher(accountStore, dataRoot, mapper, ServerTestGames.CONTEXT, meta,
+            ServerTestGames.gameInfo(dataRoot, mapper, meta));
     }
 
     /**
@@ -295,5 +305,46 @@ class RequestDispatcherTest {
         assertEquals(1_500, ((FetchStateResponse) fetchResult.response()).state().getFunds());
 
         assertThrows(IllegalArgumentException.class, () -> dispatcher.handle(1, "not a real message"));
+    }
+
+    /**
+     * The game info needs a login but no slot, reports a fresh game as turn 1 (winter 1955, not
+     * started) with a next resolution ahead, and picks up the scheduler's progress and the result
+     * from their files, naming the winner's director.
+     */
+    @Test
+    void gameInfoNeedsALoginButNoSlot(@TempDir Path dataRoot) throws Exception {
+        AccountStore store = createAccountStore(dataRoot);
+        RequestDispatcher dispatcher = dispatcher(store, dataRoot, false);
+        assertFalse(dispatcher.handleGameInfo(1, new GameInfoRequest()).success());
+        dispatcher.handleHandshake(1, new HandshakeRequest(AppVersion.getVersion(), "mario", "hunter2"));
+
+        GameInfoResponse fresh = dispatcher.handleGameInfo(1, new GameInfoRequest());
+        assertTrue(fresh.success(), fresh.message());
+        assertEquals("early-era", fresh.contentPackId());
+        assertEquals(ServerTestGames.PACK_HASH, fresh.contentPackHash());
+        assertEquals(GameMeta.DEFAULT_DECLARED_GOALS, fresh.declaredGoalIds());
+        assertEquals(1, fresh.gameTurn());
+        assertEquals(new GameDate(1955, Season.WINTER), fresh.date());
+        assertFalse(fresh.started());
+        assertTrue(fresh.nextResolutionMillis() > fresh.serverNowMillis(), "a fresh game's first turn is still ahead");
+        assertFalse(fresh.decided());
+
+        dispatcher.handleClaimSlot(1, new ClaimSlotRequest(Archetype.NASA, "Orion Spaceworks", "A. Reyes"));
+        String accountId = store.findByLogin("mario").orElseThrow().getId();
+        SchedulerState state = new SchedulerState();
+        state.setNextGameTurn(6);
+        state.setLastResolvedDate(LocalDate.now(ZoneId.of("Europe/Berlin")));
+        mapper.writeValue(dataRoot.resolve("scheduler-state.json").toFile(), state);
+        mapper.writeValue(dataRoot.resolve(GameResult.FILE_NAME).toFile(),
+            new GameResult("WINNER", List.of(accountId), List.of("Orion Spaceworks"), 5));
+
+        GameInfoResponse later = dispatcher.handleGameInfo(1, new GameInfoRequest());
+        assertEquals(new GameDate(1956, Season.SPRING), later.date());
+        assertTrue(later.started());
+        assertEquals("WINNER", later.resultStatus());
+        assertEquals(List.of("Orion Spaceworks"), later.winnerAgencies());
+        assertEquals(List.of("A. Reyes"), later.winnerDirectors());
+        assertEquals(5, later.resultTurn());
     }
 }

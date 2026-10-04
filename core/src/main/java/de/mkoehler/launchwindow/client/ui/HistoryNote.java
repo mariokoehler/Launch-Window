@@ -18,9 +18,8 @@ import com.badlogic.gdx.utils.Scaling;
  * pins the card open until its &times; or the icon is clicked again. The card goes on the
  * stage itself, above everything else, so no parent table can clip it.
  *
- * <p>The card is flat. The design system's CSS gives it a drop shadow, the only shadow in the
- * whole system; that is still an open question for the user ({@code design.md} &sect;3.13), so
- * this follows {@link Theme}'s no-shadow rule until it's decided.</p>
+ * <p>The card is flat, like every surface in this system (the user dropped the design system's
+ * one drop shadow for this popover, 2026-10-04).</p>
  *
  * @author Mario Koehler
  */

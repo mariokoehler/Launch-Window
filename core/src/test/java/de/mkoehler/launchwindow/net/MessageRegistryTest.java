@@ -23,6 +23,8 @@ import de.mkoehler.launchwindow.net.messages.ClaimSlotRequest;
 import de.mkoehler.launchwindow.net.messages.ClaimSlotResponse;
 import de.mkoehler.launchwindow.net.messages.FetchStateRequest;
 import de.mkoehler.launchwindow.net.messages.FetchStateResponse;
+import de.mkoehler.launchwindow.net.messages.GameInfoRequest;
+import de.mkoehler.launchwindow.net.messages.GameInfoResponse;
 import de.mkoehler.launchwindow.net.messages.HandshakeRequest;
 import de.mkoehler.launchwindow.net.messages.HandshakeResponse;
 import de.mkoehler.launchwindow.net.messages.SubmitActionRequest;
@@ -218,8 +220,21 @@ class MessageRegistryTest {
     }
 
     /**
-     * A {@link FetchStateRequest} must survive the wire - it carries no
-     * fields, so this just proves the empty record itself round-trips.
+     * The game-info request and its reply must survive the wire.
+     */
+    @Test
+    void gameInfoMessagesSurviveRoundTrip() {
+        assertEquals(new GameInfoRequest(), roundTrip(new GameInfoRequest(), GameInfoRequest.class));
+        // Built through the factory from immutable lists, as the server does: the factory must copy them into
+        // the registered ArrayList, or Kryo refuses to write them.
+        GameInfoResponse info = GameInfoResponse.success("early-era", "ab12", List.of("goal-a", "goal-b"), 6, true,
+            1_000L, 900L, "WINNER", List.of("Orion"), List.of("A. Reyes"), 5);
+        assertEquals(info, roundTrip(info, GameInfoResponse.class));
+        assertEquals(GameInfoResponse.failure("nope"), roundTrip(GameInfoResponse.failure("nope"), GameInfoResponse.class));
+    }
+
+    /**
+     * A slot claim and its reply must survive the wire, a refusal's reason included.
      */
     @Test
     void claimSlotMessagesSurviveRoundTrip() {

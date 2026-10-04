@@ -206,6 +206,18 @@ It turns a flat fill into a gradient (fixed in `Theme.Shapes.rect`).
 note need their OK. (The notice/hint-boxes-as-components and the history-note
 shadow questions below are both closed now.)
 
+**G1 game info done (2026-10-04),** see `design.md` §5 M5 "Game info": the game date
+(turn 1 = Winter 1955, unconfirmed), content packs frozen per game under
+`<dataRoot>/content/<packId>/` with a shared `ContentPackHash`, one schedule rule
+(`ResolutionSchedule`) for the scheduler and the countdown, and the client showing
+date and countdown. **Pitfall:** KryoNet's `Client.stop()` can block up to about 11 s
+on Windows after a finished exchange. That was the "weird timeouts" with quick
+connect/close cycles. Never close a client on a thread a result waits on.
+**Next:** main-menu groundwork (art by season and time of day, hotspots, hover), then
+G5 names, then G8 salary adjustment. The user asked (2026-10-04) about one long-lived
+connection per client session instead of short ones; see their answer in the next
+session note before changing `NetworkGateway`.
+
 **Mockup feedback from the libGDX build, closed out the same day (2026-10-04).**
 Seven items came back from implementing Connect/Join Game; all are done now:
 - `Notice` (warning/danger/info) is now a real design-system component, plus a

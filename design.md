@@ -5259,7 +5259,8 @@ here.
     - **Control slots are released per season, as in BASPM** (user, 2026-10-03): after each season,
       whoever holds a control slot no remaining season uses goes idle (or retires at age). The crew
       stays aboard to the end.
-  - **Content packs: freezing, growth, and fixes (decided 2026-10-03, not built yet).**
+  - **Content packs: freezing, growth, and fixes (decided 2026-10-03; freezing and the hash built 2026-10-04,
+    see "Game info" below; the client download and the host's replace step are not built yet).**
     - **Frozen per game.** At game creation the server copies the pack named by
       `contentPack` into the game's data folder and only loads it from there. A
       content hash of that copy identifies the version; G1 (`ui-spec.md` §6) sends
@@ -5384,6 +5385,35 @@ here.
     `ClientGatewayIntegrationTest` in `server`, which drives the real gateway
     against a real server: first login, claim, re-login, wrong password,
     name taken, unreachable.
+  - **Slice: game info (gap G1) — done (2026-10-04), except the pack download.**
+    - **Game date (unconfirmed default):** each game turn is one season, and turn
+      1 is Winter 1955, BASPM's own start (`baspm.md` §2.5). `model.GameDate` and
+      `model.Season` (Winter, Spring, Summer, Fall). The date shown is the open
+      turn's, so a fresh game reads "Winter 1955" until the first resolution.
+    - **Content packs are frozen:** on its first start a game copies its pack
+      into `<dataRoot>/content/<packId>/` (`FrozenContentPack`, staged and
+      renamed so a crash never leaves a half copy) and only loads from there.
+      `ContentPackHash` is a SHA-256 over `ContentPackLoader.FILES` (name plus
+      text, CRLF and BOM ignored), shared by client and server.
+    - **One schedule rule:** `ResolutionSchedule` holds "is a turn due",
+      "bootstrap", and "when is the next one". `TurnScheduler` and the game info
+      both use it, so the countdown can't drift from what resolves.
+    - **Protocol:** `GameInfoRequest`/`GameInfoResponse` (registered last in
+      `MessageRegistry`, with `Season`). The response carries the pack id and
+      hash, declared goals, open turn and date, `started` (any turn resolved
+      yet), the next resolution and the server's own clock in epoch millis, and
+      the result with winner agencies and directors (never account ids).
+      `GameInfoService` re-reads `game-meta.json`, `scheduler-state.json` and
+      `game-result.json` per request, and never writes. The request needs a
+      login but no slot.
+    - **Client:** login and claim fetch it on the same connection
+      (`client.connect.GameInfo` counts down against the server's clock). The
+      stand-in agency screen shows the date, the turn and a live "Next turn in …".
+    - **Found on the way:** KryoNet's `Client.stop()` sometimes takes up to about
+      11 s on Windows after an exchange has finished. Closing inline held each
+      result back by that long. `NetworkGateway` now delivers first and closes
+      on a separate thread, and its worker always delivers a result even if the
+      work throws.
 - **M6 — Deployment.** jpackage client zip, Docker server image,
   tag-driven GitHub Actions release, reusing the sibling projects' own
   working templates (§3.3/§3.9). Comes after M5's playtest validates the
