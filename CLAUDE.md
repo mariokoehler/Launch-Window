@@ -227,7 +227,7 @@ Seven items came back from implementing Connect/Join Game; all are done now:
   `historyNoteCard()` exactly — no shadow anywhere in this system, this
   popover included.
 
-**Space Complex hub chrome: decided — no chrome (user, 2026-10-05).**
+**Space Complex hub chrome: decided — no chrome (user, 2026-10-04).**
 `ui-spec.md` §4.3 left chrome-or-not an open proposal; both got mocked up
 side by side in a new canvas ("Launch Window — Space Complex Hub", private,
 ask the user for the link) to compare directly instead of guessing. The
@@ -239,6 +239,42 @@ not kept around as a rejected alternative. `ui-spec.md` §4.3 and `design.md`
 §3.13 both updated to record this as decided, not proposed. Two new icons
 (clock, document) went into the UI Asset Sheet the same day. **Next:** this
 can now become the real `lwjgl3` screen whenever that's picked up.
+
+**SET Centre mockup built — Personnel overview + Payload R&D (2026-10-04,
+later the same day, per `ui-spec.md` §7's suggested order).** One two-artboard
+canvas (`Launch Window — SET Centre mockup`, private, ask the user for the
+link). This needed a real design system change first: component 6 (Action
+Result Toast) has no green "success" case among `Notice`'s three existing
+variants (warning/danger/info), so a fourth, `success`, was added (bundle.css/
+index.d.ts/`Notice/README.md`/`design-system.json`) and ported into
+`Theme.java`'s `NoticeKind` enum (`SUCCESS`, plus its `textColor()`/
+`Shapes.notice()` cases) the same session, keeping the two in lockstep per
+the standing commitment from the Connect/Join Game session above. The
+mockup itself builds out two previously-unbuilt reusable components for
+real: the **Training dialog** (component 12 — Basic/Advanced/Permanent, a
+skill picker reusing the five `SetSkill` icons, a target-level slider for
+Permanent) and the **Manage department dialog** (component 13 — the ±50%
+one-off salary slider with a live projected-salary/projected-morale
+preview, per BASPM's own one-off-adjustment shape). Personnel rows
+(component 1) use `Badge variant="active"` for anyone not idle (in
+training or researching) and a plain muted pill for Idle/Unavailable,
+since Badge has no neutral variant and gold's "active/in-progress"
+semantic already fits exactly; SET never gets Expert stars (that trait is
+Astronaut/Mission-Control only), so the mockup doesn't render any. The
+Payload R&D board demonstrates all of component 10's pieces on four
+fixture components, including one sitting exactly at its R&D ceiling with
+a green "Cap reached" badge and its four slots already auto-released — the
+literal mechanic `ResearchProgress.releaseResearchersIfMaxed` (M2,
+mission-simulation slice) implements server-side. **Also fixed in this
+mockup, not just avoided going forward:** the existing Personnel
+Recruitment mockup's breadcrumb conflates "Headquarters" with the actual
+hub/home screen (its home icon's `aria-label` even says "Home —
+Headquarters") — a leftover from before `ui-spec.md` §3's flow was
+finalized, where **Space Complex** is the true hub and Headquarters is an
+ordinary sibling building. The SET Centre mockup's breadcrumb root is
+"Space Complex" throughout; the Personnel Recruitment mockup itself was
+left as-is (out of scope unless asked). No new icons were needed — the
+board reuses the five SET skill icons already in the UI Asset Sheet.
 
 Everything below is history; if this paragraph and a later one disagree, the
 later one wins.
