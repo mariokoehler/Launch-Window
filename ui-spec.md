@@ -527,7 +527,7 @@ mockup's bottom row (`client.screen.MissionConfigsScreen`, `MissionStepsScreen`,
   first rocket that fits and Auto-assign's staffing. Every rebuild drops people who
   aren't free any more and rockets that can't fly. The draft is cleared after a launch.
 
-Choices made while building them, **unconfirmed**:
+Choices made while building them, **confirmed by the user (2026-10-04)**:
 - **The assessment uses the plan as it stands,** starting with Auto-assign's staff, rather
   than always Auto-assign's. It leaves out Expert rescues, changes between seasons and
   random events, and says so on screen.
