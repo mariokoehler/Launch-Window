@@ -482,11 +482,12 @@ news, and the debt and multiplier states. Details and the unconfirmed choices ar
 - **Phase 4 is done too (2026-10-04, later the same day):** the Museum (four tabs),
   Settings, and the game result, on a new canvas, `Launch Window — Museum, Settings &
   Game Result mockup` (private, ask the user for the link). Details are in `design.md`
-  §3.13. Proposed and unconfirmed: a gear button on the hub strip for Settings. New
-  server gap: G10, the memorial list.
-- **Balance finding, open for the user:** the default declared goals end the race at
-  the first crewed orbital flight, because the cascade credits all three. In the
-  fixture, that's 1960 · S4.
+  §3.13. New server gap: G10, the memorial list.
+- **Hub Settings gear decided (user, 2026-10-04):** a white icon-only gear at the end
+  of the hub strip opens Settings (and so Log out). It's in the hub mockup too.
+- **Default declared goals are preliminary (user, 2026-10-04):** they end the race at
+  the first crewed orbital flight (the cascade credits all three). The full game will
+  declare extended goals.
 - **Mockup tip:** `<sc-for>` inside a CSS grid lays its items out as grid cells, so a
   table can be a grid with one `sc-for` per row.
 

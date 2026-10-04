@@ -4799,9 +4799,10 @@ fixtures: Orion Spaceworks, Kestrel Aerospace and Polar Star Bureau.
     history note (Bondarenko, §1.1).
 - **Settings (4.12):** a `Dialog` with account and Log out, server address
   and Switch server, sound (disabled, later), and About (version, the game's
-  content pack and hash, the fan-project note, font licenses). **Proposed:**
-  a gear `IconButton` at the end of the hub strip, since the hub has no
-  header and the libGDX hub dropped Log out for lack of a place.
+  content pack and hash, the fan-project note, font licenses). **Decided (user, 2026-10-04):**
+  a gear button at the end of the hub strip (white, icon-only), since the
+  hub has no header and the libGDX hub dropped Log out for lack of a place.
+  The hub mockup now has it.
 - **Game result (4.13):** a `Dialog` over the hub (Soviet autumn noon): who
   won and when, the race table, and for a same-turn finish the medal table
   (each tied agency's place per goal, and its place counts). Three states:
@@ -4814,7 +4815,9 @@ check when done, a dashed navy ring and star when open, a gold First
 ribbon). Nothing new in the design system was needed. **Server need found:**
 G10 in `ui-spec.md`, the memorial list.
 
-**Balance finding, for the user:** with the default declared goals
+**Balance finding, answered (user, 2026-10-04): the default goal list is
+preliminary.** The full game will declare extended goals, so the short race
+below is expected for now. The finding: with the default declared goals
 (`GameMeta.DEFAULT_DECLARED_GOALS`: Earth-orbit satellite, Human in space,
 Human in orbit), the first crewed orbital flight finishes the race, because
 Vostok or Mercury orbital credits Human in orbit, which credits the other
