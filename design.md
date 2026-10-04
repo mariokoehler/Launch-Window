@@ -182,6 +182,13 @@ same session it comes up**, the same standing-note-to-self habit as
     than about 30. Selection included centrifuge runs and days alone in a
     silent isolation chamber. Verify the figures before shipping. The
     Astronaut Complex mockup puts it on the Headcount stat as a draft.
+  - **Candidate: Valentin Bondarenko.** The youngest of the first Soviet
+    cosmonaut group died in March 1961 after a fire in a pure-oxygen
+    pressure chamber at the end of an isolation test, and his death was
+    kept secret until 1986. A pure-oxygen cabin fire also killed the
+    Apollo 1 crew in 1967, which is why later cabins used a nitrogen-oxygen
+    mix on the pad. Verify the details before shipping. The Museum
+    mockup's Memorial tab carries it as a draft.
 - **Real images:** wanted, per the user. **Flagging a licensing
   consideration proactively** (unprompted, per this project's existing
   security/legal-flagging convention): NASA-produced photos/footage are
@@ -4748,23 +4755,73 @@ at 1960 · S3, with Vostok Orbital scheduled.
 
 Every budget number is `core`'s on the fixture (`BudgetProgress.runningCosts`,
 the review interpolation, `BudgetSchedule.baspmClose`, `PrestigeConversion`,
-`BuildingSchedule`). Proposals, all **unconfirmed**:
-- Expert training as a fourth kind in the Training dialog, not its own row
-  action;
+`BuildingSchedule`). **Decided (user, 2026-10-04):** Expert training is a fourth
+kind in the Training dialog, not its own row action. Proposals, still
+**unconfirmed**:
 - the building panel as a compact cell of the department strip;
 - the forecast and the "keeps today's funding" figure (client-derived);
 - the footer's funds delta is last season's actual change, while the
   Public Affairs Office also shows the net per season from now on;
 - the news log lists random events only; reviews appear in the review card.
 
-**New token proposed: `danger-on-page`** (`#ffc4b8`), red text on the blue
-page, for negative funds and a negative delta in the footer. The design
-system has `success-on-page` but no red counterpart, and `danger` itself
-is unreadable on the page. It's local to the mockups for now (also added to
-the Mission Control canvas's footer); it goes into the design system and
-`Theme.java` together once the user confirms it. **For G2:** a news entry
+**Negative values on the page: a solid `danger` tag, not a new token
+(2026-10-04).** The mockup first proposed a `danger-on-page` text color
+(`#ffc4b8`), and the user agreed to a red there. Measuring it before adding it
+showed it fails: 3.7:1 on the page blue, where every other on-page text token
+clears 4.5:1. The pale step that does clear it (`#ffe2d6`, 4.6:1) reads as
+white. So a negative value on the page (funds in debt, a negative funds delta
+in the footer) is a small solid `danger` tag with `on-page-strong` text
+(5.0:1), which is unmistakable. No new color was needed. The design system's
+`danger` token and `Theme.DANGER` both document the rule, and both mockup
+canvases use it. Side finding, not changed: `on-fill` on `danger` is 4.39:1,
+just under 4.5:1. **For G2:** a news entry
 stores the unexpected cost's share (8 %), not the amount taken, so the
 amount needs to be kept too.
+
+**Museum, Settings and the game result mocked up (2026-10-04, `ui-spec.md`
+§4.11 to §4.13, the end of §7's phase 4).** A new canvas, `Launch Window —
+Museum, Settings & Game Result mockup` (private, ask the user for the link).
+It's the same Soviet agency, now named Zarya Design Bureau (Dir. Nina
+Tarasova), at 1960 · S4, right after Vostok Orbital landed. Three rivals are
+fixtures: Orion Spaceworks, Kestrel Aerospace and Polar Star Bureau.
+- **Museum (4.11):** `NavTabs` in the header, one artboard per tab.
+  - *The race:* a table of every agency with one column per declared goal
+    (turn done, a gold First tag), the done count and the finished turn,
+    beside a "This game is won by" card (each declared goal's badge and how
+    to get it). The rule is spelled out under the table. Once decided, a
+    success `Notice` names the winner, with "Show the result".
+  - *Achievements:* all 21 goals in two columns, done ones by turn, each with
+    how it was reached or credited through the cascade, "First in the game",
+    and the prestige paid (first-time or later); open ones show both values.
+  - *Flights:* one card per configuration with its art and
+    `successfulFlightCounts`.
+  - *Memorial:* one plaque per astronaut lost, an empty state, and a
+    history note (Bondarenko, §1.1).
+- **Settings (4.12):** a `Dialog` with account and Log out, server address
+  and Switch server, sound (disabled, later), and About (version, the game's
+  content pack and hash, the fan-project note, font licenses). **Proposed:**
+  a gear `IconButton` at the end of the hub strip, since the hub has no
+  header and the libGDX hub dropped Log out for lack of a place.
+- **Game result (4.13):** a `Dialog` over the hub (Soviet autumn noon): who
+  won and when, the race table, and for a same-turn finish the medal table
+  (each tied agency's place per goal, and its place counts). Three states:
+  you won outright, a rival won on the medal table, an exact tie (a shared
+  win). All three are computed by a JavaScript port of `WinCondition` on the
+  fixtures, not written by hand.
+
+The goal badge is the Headquarters mockup's proposal (a green ring and
+check when done, a dashed navy ring and star when open, a gold First
+ribbon). Nothing new in the design system was needed. **Server need found:**
+G10 in `ui-spec.md`, the memorial list.
+
+**Balance finding, for the user:** with the default declared goals
+(`GameMeta.DEFAULT_DECLARED_GOALS`: Earth-orbit satellite, Human in space,
+Human in orbit), the first crewed orbital flight finishes the race, because
+Vostok or Mercury orbital credits Human in orbit, which credits the other
+two through the cascade. In this fixture that's turn 24, 1960 · S4, about six
+real weeks at one turn a day. That may be right for a first play test, but a
+longer game needs a later goal on the list (for example a duration or joint
+crewed launch goal).
 
 ## 4. Open questions (tracked here until resolved)
 

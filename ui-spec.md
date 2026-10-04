@@ -722,7 +722,7 @@ department.
 **Mocked up (2026-10-04)** as `AstronautComplex` on the `Launch Window — Astronaut
 Complex & Public Affairs Office mockup` canvas; `design.md` §3.13 has the writeup.
 Choices still **unconfirmed**:
-- **Expert training is a fourth kind in the Training dialog** (Basic · 3 seasons,
+- **Decided (user, 2026-10-04): Expert training is a fourth kind in the Training dialog** (Basic · 3 seasons,
   Advanced · 2 seasons, Permanent, Expert), not a separate row action. Only skills at
   80+ that aren't Expert yet can be picked. The dialog shows the per-season chance
   (25 % at 80 up to 35 % at 100), no skill growth, and nothing on pull-out.
@@ -766,8 +766,9 @@ has the writeup. Choices still **unconfirmed**:
   next season would still be short;
 - the footer delta is last season's actual change; the net per season is shown here;
 - the news log lists random events only.
-- **New token proposed, not yet in the design system:** `danger-on-page` (`#ffc4b8`)
-  for negative funds and deltas in the footer.
+- **Decided (2026-10-04):** a negative value on the page (funds in debt, a negative
+  footer delta) is a small solid `danger` tag with white text, the `danger` token's
+  documented rule. No separate red text color: one readable as red fails contrast.
 
 ### 4.11 Museum: goals, history, rivals
 **Purpose:** the scoreboard and the archive. **Ref:** `museum*.png`.
@@ -783,14 +784,47 @@ has the writeup. Choices still **unconfirmed**:
 
 **Later (M7+):** the educational encyclopedia (`design.md` §1.1).
 
+**Mocked up (2026-10-04)** on the `Launch Window — Museum, Settings & Game Result mockup`
+canvas, one artboard per tab (`Museum`, `MuseumAchievements`, `MuseumFlights`,
+`MuseumMemorial`); `design.md` §3.13 has the writeup. Choices still **unconfirmed**:
+- the tabs are `NavTabs` in the header;
+- the race is a table (place, agency with director and archetype, one column per declared
+  goal with the turn done and a First tag, done count, finished turn), next to a "This
+  game is won by" card with each declared goal's badge and how to get it, and the rule;
+- once decided, a success `Notice` on the race tab says who won, with "Show the result";
+- Achievements lists all the pack's goals in two columns (done first, by turn), with how
+  each was reached or credited, First in the game, and the prestige paid; open goals show
+  their first and later prestige;
+- Flights shows one card per configuration with its art and the count;
+- the Memorial is one plaque per astronaut lost, with an empty state.
+**Needs server work:** G3 (rivals) and G10 (the memorial).
+
 ### 4.12 Settings (header gear)
 Log out; server address; sound on or off (later); about and version.
+
+**Mocked up (2026-10-04)** as `Settings` on the Museum canvas, as a `Dialog` over the hub.
+Choices still **unconfirmed**:
+- **a gear `IconButton` at the end of the hub strip**, so Settings (and Log out) is
+  reachable from the hub, which has no header;
+- Log out needs no confirmation, since today's actions are already on the server;
+- Switch server logs out and opens Connect with the new address filled in;
+- About shows the version, the game's content pack and hash, the fan-project note (not
+  affiliated with the original game's makers) and the font licenses.
 
 ### 4.13 Game result
 **Purpose:** announce the winner. **Shows:** an overlay on the hub when a result
 exists: winner or tied winners (agency and director name), the turn decided, and the
 race table. Play continues, so the overlay can be dismissed and is reopenable from
 the Museum.
+
+**Mocked up (2026-10-04)** as `GameResult` on the Museum canvas: a `Dialog` over the hub,
+shown at the first hub visit after the result, with three states (you won outright, a
+rival won on the medal table, an exact tie). Every state is computed by a port of `core`'s
+`WinCondition`. Choices still **unconfirmed**:
+- the medal table (each tied agency's place per goal and its place counts) shows only
+  when several agencies finished at the same turn;
+- "Keep playing" closes it, with a toast saying where to find it again;
+- the race tab of the Museum carries the reopen button.
 
 ---
 
@@ -911,6 +945,11 @@ current state alone. Each is an M5 task.
   exist.)* Program categories need a body field
   (Earth, Moon, Sun, Mercury, Venus, Mars, Jupiter, Saturn) for the body picker.
   The available and open counts per body are then derived in the client.
+- **G10. Memorial records (found by the Museum mockup, 2026-10-04).** Astronauts lost
+  leave the roster as a `PersonnelDeparture` event (`LOST_IN_ACCIDENT`, or the
+  perished-astronaut random event), and nothing keeps them. The memorial needs a
+  persisted list per player: name, age, the turn, the cause, and for a flight loss the
+  mission and the step.
 
 ---
 
