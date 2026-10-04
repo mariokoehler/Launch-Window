@@ -387,6 +387,37 @@ and values. The mockup canvases still use their local copies.
 agency's program, so it can never apply. Check `baspm_pack.py`; details in
 `design.md` §3.13.
 
+**Headquarters mission planning mocked up (2026-10-04, `ui-spec.md`
+§4.6.5–§4.6.8, the start of §7's phase 3).** Four new artboards on the
+Headquarters canvas (bottom row), following Vostok Orbital: configuration
+selection, steps and goals, the planning hub (assessment, rockets, payload
+R&D), and Assemble mission. They're the first mockups to mount the promoted
+components. Details and the unconfirmed proposals are in `design.md` §3.13.
+- **Assessment numbers:** the mockup derives the odds from `core`'s formulas.
+  `ui-spec.md` G7 now asks for a `core` helper that returns them, so the
+  client doesn't re-derive them.
+- **New icon:** a stand-in Flight Director icon,
+  `assets-raw/svg/icon_flight_director.svg`, added to the UI Asset Sheet with
+  the ten astronaut and mission-control skill icons.
+- **Preview tool for mockups:** a canvas artboard can be screenshotted
+  locally. Read the canvas's `artifact-type/dc-runtime.js`, save it next to
+  the `.dc.html` files as `support.js`, and serve the folder over HTTP.
+  Headless Chromium takes the screenshot; the window needs about 87 px of
+  extra height. Copy the `/_blob/` assets into a local `_blob/` folder and
+  serve SVGs as `image/svg+xml`.
+
+**Hub strip made solid (2026-10-04, libGDX feedback):** the see-through Next
+turn and Turn Report chips were unreadable on bright art. Every strip element
+is now a solid chip (navy nameplate, white chips, white Turn Report with a
+navy outline), and the fade is gone. **Lesson:** check anything drawn over the
+hub art against the brightest variant (Soviet winter noon) and the darkest
+(winter night), not just one sample. The hub canvas's dev panel switches the
+art for this. See `design.md` §3.13.
+
+**Open, content:** "Human in space" and "Human in orbit" aren't reached by any
+step; other goals only cancel them, so their prestige can never be earned.
+Check `baspm_pack.py`, along with the Explorer 1 discount above.
+
 Everything below is history; if this paragraph and a later one disagree, the
 later one wins.
 

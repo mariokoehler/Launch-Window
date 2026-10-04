@@ -157,6 +157,15 @@ same session it comes up**, the same standing-note-to-self habit as
     Khrushchev gave one of them, Pushinka, to Caroline Kennedy in 1961. It
     fits next to the Korabl-Sputnik 2 program or its "Organisms in
     microgravity" goal.
+  - **Candidate: Vostok's natural-decay backup.** Vostok had one retrorocket
+    and no backup. The answer was the orbit itself: it was planned low
+    enough for drag to bring the capsule down within about ten days, and the
+    capsule carried food, water and air for roughly that long. Vostok 1's
+    upper stage burned a little long and put it higher than planned, so
+    that fallback would have taken longer than its supplies lasted. Verify
+    the figures before using it. It fits Vostok Orbital's "Retrofire" step
+    on the configuration details screen, and it says why that step matters
+    so much in the odds.
 - **Real images:** wanted, per the user. **Flagging a licensing
   consideration proactively** (unprompted, per this project's existing
   security/legal-flagging convention): NASA-produced photos/footage are
@@ -4188,6 +4197,30 @@ traced from anything. `ui-spec.md` §4.3 updated to drop the "Proposal (not
 decided)" framing. The main-menu hub stays the one screen without the
 standard header/footer chrome; every other screen keeps it.
 
+**Hub strip revised: solid chips, no fade (2026-10-04, after the libGDX
+build).** The libGDX session found the two see-through chips, Next turn and
+Turn Report, hard to read on bright art (snow, dawn sky), and their thin
+icons looked fainter than their text. The mockup had only been checked on
+NASA spring noon, a mid-brightness variant. Measured across all 32
+variants, the top band's mean brightness runs from about 15 (winter night)
+to 209 (Soviet winter noon) out of 255. No single translucent style or fade
+reads on both ends, so the strip now follows §3.12's rule that text on art
+sits on a solid surface:
+- the dark gradient fade behind the strip is gone;
+- the agency and director names sit on a navy nameplate;
+- Next turn is a white chip like funds and prestige, and the date stays the
+  navy chip;
+- Turn Report is white with a 2 px navy outline (`border-emphasis`), so it
+  still reads as the strip's one button, and its gold unread dot is
+  unchanged.
+
+All chips are 32 px tall, and their icons are navy at the usual 2 px stroke,
+so they match the text. The canvas's dev panel now switches the art
+(spring noon, winter noon, summer dawn, winter night) to check the strip
+against the brightest and darkest cases. For `Theme.java`, this needs no new
+token: it's `SURFACE_CARD` and `NAVY` chips plus a `BORDER_EMPHASIS` navy
+outline on the button.
+
 **The `Theme.java` gap flagged here is closed (2026-10-04).** `Theme.SUCCESS_ON_PAGE`
 and `Theme.COMMIT` (plus `ButtonKind.COMMIT`) are now both defined, matching
 `tokens.json` exactly. Done ahead of the footer/header chrome actually being
@@ -4436,6 +4469,101 @@ Still open:
 - **The mockup canvases still carry their local copies.** The SET Centre,
   VAB, Headquarters and Personnel Recruitment mockups haven't been switched
   over to mount these components yet.
+
+**Headquarters mission planning mocked up (2026-10-04, `ui-spec.md`
+§4.6.5–§4.6.8, the first part of §7's phase 3).** Four more artboards on the
+Headquarters canvas, in a third row. They're the first mockups to mount the
+promoted components (`Dialog`, `ReliabilityBar`, `RdSlot`, `SkillBar`) and
+the design system's `NavTabs`, instead of local copies. The scene moves to
+1960 · S3: Vostok is open, both uncrewed Vostok flights have flown, and
+nobody has been to space yet. Everything about the configurations comes from
+the early-era pack: cost, prestige, launch types, staffing layouts, and
+Orbital's 11 steps with their shares, crew-risk flags and goals. People,
+reliability figures and goal progress are fixtures. The art is the user's own
+`assets-raw/Mission Configuration/vostok_*.png`, uploaded as JPEG copies.
+
+- **Configuration selection (4.6.5):** a card per configuration with art,
+  duration and step count, prestige at the next flight's tier (first, 50 %,
+  30 %, with a "Flown n ×" count), launch types (a "Human-rated" tag on
+  `_HR` launches, "2 ×" for joint flights), cost, and crew, controller and
+  CAPCOM counts. The controller and CAPCOM counts are the slots the steps
+  actually use, not the layout size. "Program not open" greys the art and
+  adds an info Notice with an "Open Vostok" call to action, as decided in
+  §4.6.5.
+- **Configuration details (4.6.6):** a steps grid, season by season, with
+  columns for the step, its component shares (with the component's skill
+  icon), its consoles (slot title, skill icon and share; CAPCOM in navy
+  because it takes an astronaut), its crew skills (icon and share), a gold
+  "Crew at risk" marker, its prestige share, and the goals it reaches (a
+  green chip). The goal dependencies sit beside it. A dependency that's still
+  open shows its penalty in gold. One that's reached is struck through as
+  "no penalty".
+- **Plan the mission (4.6.7):** `NavTabs` switch between the three parts,
+  with "Assemble mission" as a primary button beside them.
+  - *Mission assessment.* The client computes it from `core`'s formulas
+    (`MissionStepResolution`, `goalModifierFor`): components "as they'll
+    fly" after goal penalties, then a per-step table with hardware, success
+    (the first roll, crew blend included), saved (the controllers' saving
+    roll), ends the mission (failure plus catastrophic), crew lost, and an
+    outcome bar in five colours. At the top it shows the chance of
+    completing, the crew-loss risk and the prestige. Proposals, all
+    **unconfirmed**:
+    - the odds assume the staff `MissionStaffing.autoAssign` would pick,
+      with the R-7 the player chose;
+    - a step is "Weak" if it ends the mission at least one time in ten;
+    - a warning Notice names any open goal penalty and the configuration
+      that lifts it.
+
+    A mockup switcher compares the Vostok capsule with and without the
+    20-point "Human in space" penalty: about 29 % and 55 % to complete.
+  - *Rocket assignment.* A radio list per launch. Eligible rockets show
+    their reliability bar, lift to the destination, spare capacity and unit
+    cost. Ineligible ones are greyed with every reason ("Not human-rated.
+    Too small for the 4,700 kg capsule."), and clicking one gives the
+    `ROCKET_CANNOT_LIFT_PAYLOAD` toast.
+  - *Payload R&D.* The R&D board, filtered to the capsule, with an assign
+    dialog that ranks idle SET staff by their Crewed Spacecraft skill.
+- **Assemble mission (4.6.8):** BASPM's layouts one to one: one COSMONAUT
+  seat, and 11 console tiles (FLIGHT dashed as "Not required"). Each tile
+  shows the slot title, an employee-type pill (Astronaut or Flight
+  controller), the skill it reads with its icon, and the holder with the
+  exact value the roll will read. A crew seat shows a "seat fit": the
+  holder's skills weighted by what the steps lean on in that seat, the same
+  score `autoAssign` ranks by.
+  - Clicking a used slot opens a `Dialog` picker. It lists only free people
+    of the slot's type who aren't already on this mission, best first, each
+    with a `SkillBar`, plus "Empty this slot". Auto-assign mirrors
+    `MissionStaffing.autoAssign` exactly.
+  - The completion and crew-loss odds update live as slots change. An empty
+    slot reads 0, as in the rules.
+  - **Confirm & pay** gives the price breakdown (configuration plus the
+    rocket's unit cost), funds after launch, and the violet commit button
+    "Launch — $ 4,369". Its confirmation dialog carries the spec's wording.
+    On confirm, a "Scheduled" Notice points to Mission Control, and the
+    footer's busy counts rise by the people assigned.
+  - The switcher covers every state: not staffed, short of staff (the tiles
+    nobody can fill turn gold-dashed, "Nobody free for this slot", with a
+    warning Notice built from the spec's wording), short of funds, launch
+    cap reached, and capsule grounded. Each of the last four disables the
+    launch button with a one-line reason.
+
+**New icon: Flight Director** (`assets-raw/svg/icon_flight_director.svg`,
+a headset with a star, drawn here as a simple filled silhouette). It's
+original but cruder than the user's traced skill set, so treat it as a
+stand-in to replace with the same batch's art if wanted. The UI Asset Sheet
+gained an "Astronaut & Mission Control Skills" section (all ten traced icons
+plus this one), since the planning screens are the first to show them, and a
+"Mission Planning" section (caution triangle, forward arrow, check).
+`Theme.java` needs nothing new: the screens use only existing tokens.
+
+**Open question for the content pack, found while building:** the goals
+"Human in space" (1,750 prestige) and "Human in orbit" (3,000) aren't in any
+step's `goalIdsAchieved`. Other goals only ever cancel them (Vostok
+suborbital flown cancels Human in space, Vostok orbital flown cancels Human
+in orbit). Their dependencies still lift correctly, because the rules count
+a goal as "achieved or cancelled", but their own prestige can never be
+earned. Check whether `baspm_pack.py` dropped BASPM's generic-goal awards,
+same as the Explorer 1 discount above.
 
 ## 4. Open questions (tracked here until resolved)
 
