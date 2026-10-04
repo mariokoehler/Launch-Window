@@ -4233,6 +4233,66 @@ is a one-line change whenever that mockup is next touched. No new icons
 were needed for this mockup — it reuses the five SET skill icons already
 cataloged in the UI Asset Sheet.
 
+**VAB mockup built — Overview, Open Rocket Program, Manage Rocket
+Programs, Rocket R&D (2026-10-04, later the same day, next in
+`ui-spec.md` §7's suggested order).** Four linked artboards
+(`Launch Window — VAB mockup`, private, ask the user for the link). This
+is the first real build of **component 7, the Building Panel**: level of
+max, the current cap, the rocket-class gate the VAB level sets (Light at
+level 1, Medium at 2, Heavy at 3 — matching `RocketClass`'s own
+declaration order), upkeep per season, and a real Upgrade flow — a price
+breakdown, a confirmation dialog (upgrading is final, matching `ui-spec.md`
+§2's own wording), and then an "Upgrading — 1 season left" state the
+button switches to on confirm. It's built as plain markup, not a new
+design-system component yet, since nothing else has needed one of these
+five buildings' panels until now; the shape should carry over to
+Astronaut Complex/Mission Control/SET Centre/Headquarters as-is when
+their own screens get built. This mockup is also the first to need
+**component 4, the Price Breakdown** — line items plus a total — used
+for both the VAB upgrade cost and a rocket's creation cost. Kept as local
+markup too, same posture as the modal-dialog overlay pattern the SET
+Centre mockup introduced for its Training/Manage-department/Confirmation
+dialogs: a pattern worth promoting into the design system once a second
+screen actually needs it, not before.
+
+Open Rocket Program (4.5.1) lists the agency's not-yet-open rocket
+designs as rows with real `ROCKETS`/`HUMAN_RATED_ROCKETS` skill icons
+(reused from the Personnel Recruitment mockup's own five SET-skill set)
+and real payload figures per destination (suborbital/LEO/TLI/TPI),
+straight off `MissionComponent.RocketSpec`'s own field shape — not
+invented columns. One fixture rocket (a Medium-class "Molniya") is
+greyed out with the `ROCKET_CLASS_TOO_LARGE` refusal wording against a
+Level-1, Light-only VAB, demonstrating that refusal state for the first
+time anywhere in these mockups. Opening a rocket shows the price-
+breakdown confirmation, then removes it from the not-yet-open list and
+shows the green success toast — real interactive state, not a static
+mock.
+
+Manage Rocket Programs (4.5.2) shows the two already-open rockets with
+reliability bars (component 3, same track/fill/R&D-cap-marker/floor-
+marker shape the SET Centre's Payload R&D board established) and their
+upkeep, with one ("Soyuz-A") flagged `on a mission` and its Close button
+disabled — clicking it anyway surfaces the navy refusal toast
+("Can't close while a mission uses it."), demonstrating
+`MISSIONS_IN_FLIGHT` for the first time. A header-level "Rocket R&D"
+button leads to the fourth artboard.
+
+Rocket R&D (4.5.3) *(decided: split from payload R&D, ui-spec.md §4.5.3)*
+reuses the SET Centre's R&D-board pattern (component 10) essentially
+verbatim — same reliability-bar/four-slot-assign-release shape — just
+retargeted at rocket components (`ROCKETS`/`HUMAN_RATED_ROCKETS`
+associated skills) instead of payload ones (`SPACE_PROBES`/
+`CREWED_SPACECRAFT`/`EVA_SUITS`), confirming the component really is
+generic across both R&D boards the way `ui-spec.md`'s own component list
+describes it. Uses the same two rockets and the same reliability numbers
+as Manage Rocket Programs, for narrative consistency across the two
+screens (unlike the SET Centre canvas's Overview/Payload-R&D pair, which
+used independent fixtures) — easy to do here since both artboards only
+ever needed two rockets. Breadcrumb root is "Space Complex" throughout,
+matching the SET Centre mockup's fix; no new design-system components,
+tokens, or icons were needed beyond the two already-traced rocket skill
+icons.
+
 ## 4. Open questions (tracked here until resolved)
 
 - **Mid-turn/mid-mission player decisions — narrowed by the §2.5 mission-sim
