@@ -4400,6 +4400,40 @@ a proposal, to replace with the patch frame if the user prefers.
   meant to point at the player's own counterpart program. Check it in
   `baspm_pack.py` on the main PC.
 
+**Seven mockup styles promoted to design-system components (2026-10-04,
+at the libGDX session's request).** They had existed only as local CSS in the
+mockups and in the client's own code:
+
+| Component | Replaces | Used by |
+|---|---|---|
+| `Dialog` | the modal-overlay pattern | components 5, 12, 13 |
+| `FilterChips` | the roster state filter | — |
+| `SegmentedControl` | the Training dialog's kind picker | — |
+| `ReliabilityBar` | the reliability track | component 3 |
+| `SkillBar` | the Hire screen's skill rows | — |
+| `RdSlot` | the R&D board's slot box | component 10 |
+| `IconButton` | the white sort buttons that sit on `surface-page` (the "white on-page button") | — |
+
+Each one gets a README and a preview in the design system, and its
+`index.d.ts` types. The UI Asset Sheet gained a second artboard,
+"Components", with a live specimen of each and the exact measurements and
+libGDX build notes for `Theme.java`. Two decisions came with the promotion:
+- **RdSlot's Release/Assign are navy, not red.** Releasing a researcher
+  isn't destructive, and red is reserved for destructive actions and
+  failures (§3.12). The mockups had used red.
+- **The R&D slot's dashed frame is the only piece that needs a new image
+  asset** (a small dashed nine-patch), since `Shapes.rect` draws solid lines
+  only.
+
+Still open:
+- **`Theme.java` isn't changed here.** The libGDX session has its own
+  versions of these in code that isn't pushed yet, so it should align its
+  names and values to the design system when it lands, including the navy
+  Release.
+- **The mockup canvases still carry their local copies.** The SET Centre,
+  VAB, Headquarters and Personnel Recruitment mockups haven't been switched
+  over to mount these components yet.
+
 ## 4. Open questions (tracked here until resolved)
 
 - **Mid-turn/mid-mission player decisions — narrowed by the §2.5 mission-sim
