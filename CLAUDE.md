@@ -213,6 +213,20 @@ shadow questions below are both closed now.)
 date and countdown. **Pitfall:** KryoNet's `Client.stop()` can block up to about 11 s
 on Windows after a finished exchange. That was the "weird timeouts" with quick
 connect/close cycles. Never close a client on a thread a result waits on.
+**Space Complex hub built in libGDX (2026-10-04),** from the hub mockup
+(`SpaceComplexScreen`). It replaces the stand-in agency screen and is where every
+breadcrumb root and home button now go.
+- **Logic:** `client.view.Hub`. **Art:** `assets-raw/make_hub_art.py` (32 JPEGs, cropped
+  to 1080 rows).
+- **Shared base:** `SessionScreen`, under `ChromeScreen`, gives the hub the toast,
+  dialogs, refresh and navigation without the chrome.
+- **Unconfirmed choices** are in `ui-spec.md` §4.3's "Implemented" note (time of day
+  measured from the last step, no Log out, no Turn Report yet).
+- **Pitfall:** hotspot files say `imageHeight` 1088. Flip y against 1080, the cropped
+  art.
+
+**Next:** the VAB (its mockup exists; ask the user for the link if needed).
+
 **Headquarters built in libGDX (2026-10-04),** as far as opening a program, from the
 Headquarters mockup: landing with the building panel and upgrade, Manage open
 programs, Select celestial body, a body's programs, and Program details with Open

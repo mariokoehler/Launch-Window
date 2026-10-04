@@ -39,7 +39,7 @@ public final class BodyProgramsScreen extends ChromeScreen {
      * @param body the body whose programs to show
      */
     public BodyProgramsScreen(LaunchWindowGame game, CelestialBody body) {
-        super(game, List.of(new Crumb("Space Complex", null), new Crumb("Headquarters", null),
+        super(game, List.of(Crumb.SPACE_COMPLEX, Crumb.HEADQUARTERS,
             new Crumb(BodyMap.name(body), null)), "Headquarters · " + BodyMap.name(body),
             "Program categories and programs");
         this.body = body;

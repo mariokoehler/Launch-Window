@@ -40,7 +40,7 @@ public final class PayloadRndScreen extends ChromeScreen {
      * @param game the game, in a session
      */
     public PayloadRndScreen(LaunchWindowGame game) {
-        super(game, List.of(new Crumb("Space Complex", null), new Crumb("SET Centre", null),
+        super(game, List.of(Crumb.SPACE_COMPLEX, Crumb.SET_CENTRE,
             new Crumb("Payload R&D", null)), "SET Centre", "Payload R&D");
         rebuild();
     }

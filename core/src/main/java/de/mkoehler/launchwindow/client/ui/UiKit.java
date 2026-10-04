@@ -2,6 +2,7 @@ package de.mkoehler.launchwindow.client.ui;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -54,6 +55,9 @@ public final class UiKit implements Disposable {
     private final Map<Theme.BadgeKind, Drawable> badgeFills = new EnumMap<>(Theme.BadgeKind.class);
     private Slider.SliderStyle sliderStyle;
     private TextButton.TextButtonStyle pageButtonStyle;
+    private String backdropPath;
+    private Texture backdrop;
+    private Texture topFade;
 
     /**
      * Loads the fonts and images and builds the shared styles.
@@ -115,6 +119,48 @@ public final class UiKit implements Disposable {
         }
         Texture texture = pictures.get(path);
         return texture == null ? null : new TextureRegionDrawable(texture);
+    }
+
+    /**
+     * Returns a full-screen backdrop from {@code assets/}, such as the hub's art. Only one is kept:
+     * asking for another releases the previous one, so the 32 hub images never pile up, while
+     * returning to the hub with the same art loads nothing.
+     *
+     * @param path the path under {@code assets/}
+     * @return the drawable, or {@code null} if there's no such file
+     */
+    public TextureRegionDrawable backdrop(String path) {
+        if (!path.equals(backdropPath)) {
+            if (backdrop != null) {
+                backdrop.dispose();
+            }
+            FileHandle file = assets.child(path);
+            backdrop = file.exists() ? smoothTexture(file) : null;
+            backdropPath = path;
+        }
+        return backdrop == null ? null : new TextureRegionDrawable(backdrop);
+    }
+
+    /**
+     * Returns the hub's overlay strip background: dark navy at 60% at the top, fading to nothing
+     * at the bottom, so the strip's white text reads on any art.
+     *
+     * @return the drawable
+     */
+    public TextureRegionDrawable topFade() {
+        if (topFade == null) {
+            int height = 64;
+            Pixmap pixmap = new Pixmap(1, height, Pixmap.Format.RGBA8888);
+            for (int y = 0; y < height; y++) {
+                float alpha = 0.6f * (1f - y / (float) (height - 1));
+                pixmap.setColor(10 / 255f, 20 / 255f, 40 / 255f, alpha);
+                pixmap.drawPixel(0, y);
+            }
+            topFade = new Texture(pixmap);
+            topFade.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+            pixmap.dispose();
+        }
+        return new TextureRegionDrawable(topFade);
     }
 
     /**
@@ -456,6 +502,12 @@ public final class UiKit implements Disposable {
         archetypeArt.values().forEach(Texture::dispose);
         icons.values().forEach(Texture::dispose);
         pictures.values().stream().filter(java.util.Objects::nonNull).forEach(Texture::dispose);
+        if (backdrop != null) {
+            backdrop.dispose();
+        }
+        if (topFade != null) {
+            topFade.dispose();
+        }
     }
 
     private static Texture smoothTexture(FileHandle file) {

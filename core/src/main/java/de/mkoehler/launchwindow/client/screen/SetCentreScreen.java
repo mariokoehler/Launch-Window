@@ -55,7 +55,7 @@ public final class SetCentreScreen extends ChromeScreen {
      * @param game the game, in a session
      */
     public SetCentreScreen(LaunchWindowGame game) {
-        super(game, List.of(new Crumb("Space Complex", null), new Crumb("SET Centre", null)), "SET Centre",
+        super(game, List.of(Crumb.SPACE_COMPLEX, Crumb.SET_CENTRE), "SET Centre",
             "Personnel overview");
         titleActions.add(onPage(ui.pageButton("Hire"), () -> game.setScreen(new HireScreen(game)))).padRight(10f);
         titleActions.add(onPage(ui.pageButton("Manage Department"), this::openManageDepartment)).padRight(10f);

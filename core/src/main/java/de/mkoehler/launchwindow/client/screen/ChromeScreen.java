@@ -5,20 +5,14 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Scaling;
-import de.mkoehler.launchwindow.client.ClientSession;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
-import de.mkoehler.launchwindow.client.connect.ServerResult;
-import de.mkoehler.launchwindow.client.ui.Countdown;
-import de.mkoehler.launchwindow.client.ui.Refusals;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.view.Programs;
 import de.mkoehler.launchwindow.client.view.SetDepartment;
@@ -28,40 +22,43 @@ import de.mkoehler.launchwindow.content.ContentCatalog;
 import de.mkoehler.launchwindow.model.Building;
 import de.mkoehler.launchwindow.model.Personnel;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
-import de.mkoehler.launchwindow.persistence.PlayerAction;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.function.Consumer;
 
 /**
  * The base of every in-game screen except the hub ({@code ui-spec.md} &sect;2, {@code design.md}
  * &sect;3.13): the header (back, home, settings, the breadcrumb, and the prestige, game-date and
  * next-turn chips), the screen's eyebrow and title with room for its buttons, the content area,
- * and the footer's five stat chips. Also the action result toast, modal dialogs, and the
- * submit-then-rebuild loop every action goes through.
+ * and the footer's five stat chips. The toast, dialogs and the submit-then-rebuild loop come from
+ * {@link SessionScreen}.
  *
  * <p>Subclasses fill {@link #content} in {@link #rebuild()}, which runs on creation and after every
  * state change, and may add buttons to {@link #titleActions}.</p>
  *
  * @author Mario Koehler
  */
-abstract class ChromeScreen extends StageScreen {
+abstract class ChromeScreen extends SessionScreen {
 
     private static final float NAV_BUTTON = 32f;
-    private static final float TOAST_SECONDS = 3.4f;
-    private static final float DIALOG_WIDTH = 520f;
 
     /**
      * One breadcrumb step: its label, and where clicking it goes ({@code null} for the current one).
+     * The action takes the screen, so a subclass can name it in its {@code super(...)} call.
      *
      * @param label  the label
-     * @param action where it goes
+     * @param action where it goes, such as {@code ChromeScreen::goHome}
      */
-    protected record Crumb(String label, Runnable action) {
+    protected record Crumb(String label, java.util.function.Consumer<ChromeScreen> action) {
+
+        /** The breadcrumb's root, the Space Complex hub. */
+        static final Crumb SPACE_COMPLEX = new Crumb("Space Complex", ChromeScreen::goHome);
+        /** Headquarters' landing screen. */
+        static final Crumb HEADQUARTERS = new Crumb("Headquarters", ChromeScreen::goHeadquarters);
+        /** The SET Centre's personnel overview. */
+        static final Crumb SET_CENTRE = new Crumb("SET Centre", ChromeScreen::goSetCentre);
     }
 
-    protected final ClientSession session;
     /** The screen's own area, between the title row and the footer. */
     protected final Table content = new Table();
     /** Room for the screen's buttons, right of its title. */
@@ -71,16 +68,6 @@ abstract class ChromeScreen extends StageScreen {
     private final Label gameDate;
     private final Label countdown;
     private final Table footer = new Table();
-    private Table dialog;
-    private Table toast;
-    private boolean busy;
-    private boolean refreshing;
-    private long lastRefreshMillis = System.currentTimeMillis();
-
-    /** How long after the countdown reaches zero to wait before fetching the resolved turn. */
-    private static final long RESOLUTION_GRACE_MILLIS = 5_000;
-    /** The least time between automatic refreshes. */
-    private static final long REFRESH_SPACING_MILLIS = 15_000;
 
     /**
      * Builds the chrome.
@@ -92,7 +79,6 @@ abstract class ChromeScreen extends StageScreen {
      */
     protected ChromeScreen(LaunchWindowGame game, List<Crumb> crumbs, String eyebrow, String title) {
         super(game);
-        this.session = game.session();
         prestige = ui.label("", Theme.TextStyle.LABEL, Theme.NAVY);
         gameDate = ui.label("", Theme.TextStyle.LABEL, Theme.ON_FILL);
         countdown = ui.label("", Theme.TextStyle.LABEL, Theme.NAVY);
@@ -113,40 +99,6 @@ abstract class ChromeScreen extends StageScreen {
         root.add(line()).height(Theme.BORDER_THIN).padTop(Theme.SPACE_4).row();
         root.add(footer).padTop(Theme.SPACE_2);
         refreshChrome();
-    }
-
-    /**
-     * Fills {@link #content} from the session's current state. Runs once the subclass is built
-     * (call it at the end of the subclass constructor) and after every state change.
-     */
-    protected abstract void rebuild();
-
-    /**
-     * Where the back button goes. The hub by default.
-     */
-    protected void goBack() {
-        goHome();
-    }
-
-    /**
-     * Goes to the hub (for now the stand-in agency screen, until the hub is built).
-     */
-    protected void goHome() {
-        game.setScreen(new AgencyScreen(game));
-    }
-
-    /**
-     * Goes to the SET Centre's personnel overview.
-     */
-    protected void goSetCentre() {
-        game.setScreen(new SetCentreScreen(game));
-    }
-
-    /**
-     * Goes to Headquarters' landing screen.
-     */
-    protected void goHeadquarters() {
-        game.setScreen(new HeadquartersScreen(game));
     }
 
     /**
@@ -320,179 +272,14 @@ abstract class ChromeScreen extends StageScreen {
 
     @Override
     public void render(float delta) {
-        long now = System.currentTimeMillis();
-        java.util.OptionalLong left = session.gameInfo().millisUntilNextResolution(now);
-        countdown.setText(Countdown.nextTurn(left).toUpperCase(Locale.ROOT));
-        // Once the turn is due, fetch the resolved state shortly after: new date, new candidates, new countdown.
-        if (left.isPresent() && left.getAsLong() == 0 && now - lastRefreshMillis > REFRESH_SPACING_MILLIS
-            && now - session.gameInfo().receivedAtMillis() > RESOLUTION_GRACE_MILLIS) {
-            refresh();
-        }
+        countdown.setText(nextTurnText());
         super.render(delta);
     }
 
-    /**
-     * Fetches the state and game info again and rebuilds the screen with them. Quiet: a failed
-     * refresh changes nothing and says nothing; the next action reports any real problem.
-     */
-    protected void refresh() {
-        if (refreshing) {
-            return;
-        }
-        refreshing = true;
-        lastRefreshMillis = System.currentTimeMillis();
-        game.gateway().refresh(session.credentials(), result -> {
-            refreshing = false;
-            if (isShowing() && result.kind() == ServerResult.Kind.OK && result.state() != null) {
-                session.update(result);
-                refreshChrome();
-                rebuild();
-            }
-        });
-    }
-
-    /**
-     * Submits an action: while it's under way further submits are ignored; on success the new
-     * state is taken in and the screen rebuilt, and on a refusal or failure the toast says why.
-     *
-     * @param action    the action
-     * @param onSuccess runs after a successful submit's rebuild, with the result (may be {@code null})
-     */
-    protected void submit(PlayerAction action, Consumer<ServerResult> onSuccess) {
-        if (busy) {
-            return;
-        }
-        busy = true;
-        game.gateway().submit(session.credentials(), action, result -> {
-            busy = false;
-            if (!isShowing()) {
-                return;
-            }
-            handle(result, onSuccess);
-        });
-    }
-
-    /**
-     * Takes in a server result: updates the session and rebuilds on success, or toasts the problem.
-     *
-     * @param result    the result
-     * @param onSuccess runs after a successful rebuild, may be {@code null}
-     */
-    protected void handle(ServerResult result, Consumer<ServerResult> onSuccess) {
-        switch (result.kind()) {
-            case OK -> {
-                session.update(result);
-                refreshChrome();
-                rebuild();
-                if (onSuccess != null) {
-                    onSuccess.accept(result);
-                }
-                if (result.state() == null) {
-                    // Applied, but the state didn't come back with it.
-                    refresh();
-                }
-            }
-            case REFUSED -> {
-                toast(Refusals.text(result.message()), Theme.NoticeKind.INFO);
-                // A refusal often means the screen is out of date (a resolved turn refreshed the pool, say).
-                refresh();
-            }
-            case UNREACHABLE -> toast("Can't reach the server. Try again.", Theme.NoticeKind.DANGER);
-            case LOGIN_FAILED -> toast("Couldn't log in again: " + result.message(), Theme.NoticeKind.DANGER);
-            case FAILED -> toast("The connection broke off. Try again.", Theme.NoticeKind.DANGER);
-        }
-    }
-
-    /**
-     * Returns whether a submit is under way.
-     *
-     * @return whether busy
-     */
-    protected boolean isBusy() {
-        return busy;
-    }
-
-    /**
-     * Shows the action result toast in the bottom-right corner for a few seconds
-     * ({@code ui-spec.md} component 6): green for success, navy for a refusal.
-     *
-     * @param text the message
-     * @param kind the notice kind
-     */
-    public void toast(String text, Theme.NoticeKind kind) {
-        if (toast != null) {
-            toast.remove();
-        }
-        toast = new Table();
-        toast.add(ui.notice(kind, text)).width(420f);
-        toast.pack();
-        toast.setPosition(stage.getWidth() - toast.getWidth() - 28f, 28f);
-        toast.setTouchable(Touchable.disabled);
-        Table shown = toast;
-        toast.addAction(Actions.sequence(Actions.delay(TOAST_SECONDS), Actions.fadeOut(0.2f), Actions.run(() -> {
-            shown.remove();
-            if (toast == shown) {
-                toast = null;
-            }
-        })));
-        stage.addActor(toast);
-    }
-
-    /**
-     * Shows a modal dialog: a navy scrim over the screen with the card centered on it
-     * ({@code ui-spec.md} components 5, 12 and 13). Only one at a time.
-     *
-     * @param card the dialog's content, already built
-     */
-    public void showDialog(Table card) {
-        closeDialog();
-        dialog = new Table();
-        dialog.setFillParent(true);
-        dialog.setBackground(ui.solid(new Color(Theme.NAVY.r, Theme.NAVY.g, Theme.NAVY.b, 0.55f)));
-        dialog.setTouchable(Touchable.enabled);
-        dialog.addListener(new ClickListener());
-        dialog.add(card).width(DIALOG_WIDTH);
-        stage.addActor(dialog);
-        if (toast != null) {
-            toast.toFront();
-        }
-    }
-
-    /**
-     * Closes the dialog, if one is open.
-     */
-    public void closeDialog() {
-        if (dialog != null) {
-            dialog.remove();
-            dialog = null;
-        }
-    }
-
-    /**
-     * Builds a dialog card: white, a navy outline, an eyebrow and a title, ready for more rows.
-     *
-     * @param eyebrow the eyebrow
-     * @param title   the title
-     * @return the card
-     */
-    protected Table dialogCard(String eyebrow, String title) {
-        Table card = new Table();
-        card.setBackground(ui.rect(Theme.SURFACE_CARD, Theme.NAVY, Theme.BORDER_EMPHASIS));
-        card.pad(Theme.SPACE_5 + Theme.BORDER_EMPHASIS);
-        card.defaults().growX().left();
-        card.add(ui.label(eyebrow, Theme.TextStyle.EYEBROW, Theme.NAVY)).padBottom(2f).row();
-        card.add(ui.paragraph(title, Theme.TextStyle.HEADING_SM, Theme.INK)).padBottom(Theme.SPACE_4).row();
-        return card;
-    }
-
-    /**
-     * Says that a place in the game isn't built yet: footer chips and buttons for screens that
-     * don't exist in the client so far show this instead of doing nothing.
-     *
-     * @param place the place, such as "Mission Control"
-     */
-    protected void notBuiltYet(String place) {
-        toast(place + " isn't built yet.", Theme.NoticeKind.INFO);
+    @Override
+    protected void stateChanged() {
+        refreshChrome();
+        rebuild();
     }
 
     /**
@@ -517,7 +304,7 @@ abstract class ChromeScreen extends StageScreen {
             Label label = ui.label(current ? crumb.label().toUpperCase(Locale.ROOT) : crumb.label(),
                 Theme.TextStyle.LABEL, current ? Theme.ON_PAGE_STRONG : Theme.ON_PAGE_MUTED);
             if (!current && crumb.action() != null) {
-                label.addListener(clicked(crumb.action()));
+                label.addListener(clicked(() -> crumb.action().accept(this)));
             }
             bar.add(label).padRight(6f);
             if (!current) {
@@ -621,18 +408,4 @@ abstract class ChromeScreen extends StageScreen {
         return scroll;
     }
 
-    /**
-     * Returns a listener that runs an action on click.
-     *
-     * @param action the action
-     * @return the listener
-     */
-    protected static ClickListener clicked(Runnable action) {
-        return new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                action.run();
-            }
-        };
-    }
 }

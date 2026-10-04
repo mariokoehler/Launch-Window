@@ -18,7 +18,6 @@ import de.mkoehler.launchwindow.client.connect.ServerAddress;
 import de.mkoehler.launchwindow.client.connect.ServerGateway;
 import de.mkoehler.launchwindow.client.connect.ServerResult;
 import de.mkoehler.launchwindow.persistence.PlayerAction;
-import de.mkoehler.launchwindow.client.screen.AgencyScreen;
 import de.mkoehler.launchwindow.client.screen.ConnectScreen;
 import de.mkoehler.launchwindow.client.screen.JoinScreen;
 import de.mkoehler.launchwindow.client.ui.Theme;
@@ -30,6 +29,9 @@ import de.mkoehler.launchwindow.client.screen.SelectBodyScreen;
 import de.mkoehler.launchwindow.client.view.Programs;
 import de.mkoehler.launchwindow.content.CelestialBody;
 import de.mkoehler.launchwindow.client.screen.HireScreen;
+import de.mkoehler.launchwindow.client.screen.SpaceComplexScreen;
+import de.mkoehler.launchwindow.client.view.Hub;
+import de.mkoehler.launchwindow.content.ContentPackHash;
 import de.mkoehler.launchwindow.client.screen.PayloadRndScreen;
 import de.mkoehler.launchwindow.client.screen.SetCentreScreen;
 import de.mkoehler.launchwindow.client.view.PayloadRnd;
@@ -174,7 +176,24 @@ public final class ScreenSnapshot {
             6 * 3_600_000L + 12 * 60_000L + 30_000L, 0L, null, List.of(), List.of(), 0);
         game.setSession(ClientSession.start(CREDENTIALS, state, new GameInfo(info, System.currentTimeMillis()),
             ScreenSnapshot.class.getClassLoader()));
-        write(folder, "agency.png", new AgencyScreen(game), null);
+        write(folder, "hub-pack-differs.png", new SpaceComplexScreen(game), null);
+        String hash = ContentPackHash.ofClasspath("content/early-era", ScreenSnapshot.class.getClassLoader());
+        GameInfoResponse spring = GameInfoResponse.success("early-era", hash, List.of(), 2, true,
+            6 * 3_600_000L + 12 * 60_000L + 30_000L, 0L, null, List.of(), List.of(), 0);
+        game.setSession(ClientSession.start(CREDENTIALS, state, new GameInfo(spring, System.currentTimeMillis()),
+            ScreenSnapshot.class.getClassLoader()));
+        write(folder, "hub-soviet-spring.png", new SpaceComplexScreen(game), null);
+        write(folder, "hub-soviet-hover-hq.png", new SpaceComplexScreen(game),
+            screen -> screen.hover(Hub.Place.HEADQUARTERS));
+        PlayerSnapshot nasa = new PlayerSnapshot("Orion Spaceworks", Archetype.NASA, 27_420, 250, 3_000, 3);
+        nasa.setDirectorName("A. Reyes");
+        nasa.getBuildingUpgradeSeasonsRemaining().put(Building.VEHICLE_ASSEMBLY, 1);
+        GameInfoResponse summer = GameInfoResponse.success("early-era", hash, List.of(), 3, true,
+            6 * 3_600_000L + 12 * 60_000L + 30_000L, 0L, null, List.of(), List.of(), 0);
+        game.setSession(ClientSession.start(CREDENTIALS, nasa, new GameInfo(summer, System.currentTimeMillis()),
+            ScreenSnapshot.class.getClassLoader()));
+        write(folder, "hub-nasa-summer-upgrading.png", new SpaceComplexScreen(game),
+            screen -> screen.hover(Hub.Place.SET_CENTRE));
 
         game.setSession(ClientSession.start(CREDENTIALS, setCentreState(), new GameInfo(info, System.currentTimeMillis()),
             ScreenSnapshot.class.getClassLoader()));

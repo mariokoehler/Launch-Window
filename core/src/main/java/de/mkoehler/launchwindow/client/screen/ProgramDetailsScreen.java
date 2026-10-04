@@ -64,9 +64,12 @@ public final class ProgramDetailsScreen extends ChromeScreen {
 
     private static List<Crumb> crumbs(CelestialBody fromBody, String programId) {
         List<Crumb> crumbs = new ArrayList<>();
-        crumbs.add(new Crumb("Space Complex", null));
-        crumbs.add(new Crumb("Headquarters", null));
-        crumbs.add(new Crumb(fromBody == null ? "Open programs" : BodyMap.name(fromBody), null));
+        crumbs.add(Crumb.SPACE_COMPLEX);
+        crumbs.add(Crumb.HEADQUARTERS);
+        crumbs.add(fromBody == null
+            ? new Crumb("Open programs", screen -> screen.game.setScreen(new OpenProgramsScreen(screen.game)))
+            : new Crumb(BodyMap.name(fromBody), screen -> screen.game.setScreen(new BodyProgramsScreen(screen.game,
+                fromBody))));
         crumbs.add(new Crumb(ContentNames.of(programId), null));
         return crumbs;
     }

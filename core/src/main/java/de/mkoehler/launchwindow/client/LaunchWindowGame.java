@@ -7,10 +7,11 @@ import de.mkoehler.launchwindow.client.connect.Credentials;
 import de.mkoehler.launchwindow.client.connect.GameInfo;
 import de.mkoehler.launchwindow.client.connect.NetworkGateway;
 import de.mkoehler.launchwindow.client.connect.ServerGateway;
-import de.mkoehler.launchwindow.client.screen.AgencyScreen;
 import de.mkoehler.launchwindow.client.screen.ConnectScreen;
+import de.mkoehler.launchwindow.client.screen.SpaceComplexScreen;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.UiKit;
+import de.mkoehler.launchwindow.client.view.Hub;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 
 /**
@@ -29,6 +30,7 @@ public class LaunchWindowGame extends Game {
     private String lastServer = "localhost:45825";
     private String lastLogin = "";
     private ClientSession session;
+    private final Hub.Clock hubClock = new Hub.Clock();
 
     @Override
     public void create() {
@@ -66,7 +68,7 @@ public class LaunchWindowGame extends Game {
 
     /**
      * Enters the game after a successful login or claim: starts the session (loading the game's
-     * content pack) and opens the agency.
+     * content pack) and opens the Space Complex hub.
      *
      * @param credentials who and where
      * @param state       the player's state
@@ -80,8 +82,17 @@ public class LaunchWindowGame extends Game {
         } catch (IllegalStateException e) {
             return e.getMessage();
         }
-        setScreen(new AgencyScreen(this));
+        setScreen(new SpaceComplexScreen(this));
         return null;
+    }
+
+    /**
+     * Returns the hub's time-of-day clock, which lives as long as the client does.
+     *
+     * @return the clock
+     */
+    public Hub.Clock hubClock() {
+        return hubClock;
     }
 
     /**

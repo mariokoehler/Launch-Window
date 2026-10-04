@@ -59,7 +59,7 @@ public final class HireScreen extends ChromeScreen {
      * @param game the game, in a session
      */
     public HireScreen(LaunchWindowGame game) {
-        super(game, List.of(new Crumb("Space Complex", null), new Crumb("SET Centre", null),
+        super(game, List.of(Crumb.SPACE_COMPLEX, Crumb.SET_CENTRE,
             new Crumb("Personnel Recruitment", null)), "SET Centre", "Personnel Recruitment");
         rebuild();
     }

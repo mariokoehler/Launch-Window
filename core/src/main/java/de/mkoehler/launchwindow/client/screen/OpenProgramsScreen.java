@@ -37,7 +37,7 @@ public final class OpenProgramsScreen extends ChromeScreen {
      * @param game the game, in a session
      */
     public OpenProgramsScreen(LaunchWindowGame game) {
-        super(game, List.of(new Crumb("Space Complex", null), new Crumb("Headquarters", null),
+        super(game, List.of(Crumb.SPACE_COMPLEX, Crumb.HEADQUARTERS,
             new Crumb("Open programs", null)), "Headquarters", "Open programs");
         rebuild();
     }

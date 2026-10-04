@@ -306,6 +306,31 @@ removed outright, not kept as an alternative.
 **States:** a building that is upgrading shows a subtle "under construction"
 marker; a game result exists (§4.13).
 
+**Implemented in libGDX (2026-10-04)** as `client.screen.SpaceComplexScreen`, from the Space
+Complex Hub mockup, replacing the stand-in agency screen. The logic is in `client.view.Hub`.
+The art comes from `assets-raw/make_hub_art.py`: 32 JPEGs, about 15 MB, cropped to 1080 rows.
+Choices made while building it, **unconfirmed**:
+- **Time of day:** it steps on when the player enters the hub and at least 4 minutes have
+  passed since the *last step*, not since the last entry. Otherwise someone hopping between
+  screens every 3 minutes would never see it change. It moves one step however long it's
+  been, and the first entry shows noon, as the mockup does.
+- **Chips use the implemented chrome's formats** ("SPRING 1955", "NEXT TURN IN 6 H 12 M",
+  "$ 25,000") rather than the mockup's "1958 · S2" and "$ 27,420.0".
+- **Hover labels use `HEADING_SM` (18 px), upper case,** rather than the mockup's local 20 px
+  CSS, which has no design-system token.
+- **Turn Report** shows an "isn't built yet" toast, and its unread badge never shows. Both
+  need G2.
+- **No Log out:** the mockup has none, so the hub drops the stand-in's button. Switching
+  servers means restarting the client until Settings exists.
+- **The content-differs warning** from the stand-in stays, as a warning notice under the
+  agency name.
+- **The "game result exists" state isn't handled.** `GameInfo` already carries the result
+  and the winners; only the §4.13 screen is missing.
+- **Only Headquarters and the SET Centre open.** The other five buildings toast "isn't
+  built yet".
+- **Breadcrumbs are now live:** "Space Complex", "Headquarters", "SET Centre", and the
+  program details' "Open programs" or body crumb go to their screens.
+
 ### 4.4 Turn report (automatic after a resolution, reopenable from the hub)
 **Purpose:** "what happened overnight", the async equivalent of BASPM's
 end-of-season news screen. **Ref:** `bulletin_news_*.png`,

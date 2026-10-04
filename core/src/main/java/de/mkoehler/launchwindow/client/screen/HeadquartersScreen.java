@@ -22,7 +22,7 @@ public final class HeadquartersScreen extends ChromeScreen {
      * @param game the game, in a session
      */
     public HeadquartersScreen(LaunchWindowGame game) {
-        super(game, List.of(new Crumb("Space Complex", null), new Crumb("Headquarters", null)), "Headquarters",
+        super(game, List.of(Crumb.SPACE_COMPLEX, Crumb.HEADQUARTERS), "Headquarters",
             "Programs and mission planning");
         rebuild();
     }

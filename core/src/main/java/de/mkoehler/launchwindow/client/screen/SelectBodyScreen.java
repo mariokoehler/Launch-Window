@@ -37,7 +37,7 @@ public final class SelectBodyScreen extends ChromeScreen {
      * @param game the game, in a session
      */
     public SelectBodyScreen(LaunchWindowGame game) {
-        super(game, List.of(new Crumb("Space Complex", null), new Crumb("Headquarters", null),
+        super(game, List.of(Crumb.SPACE_COMPLEX, Crumb.HEADQUARTERS,
             new Crumb("Select body", null)), "Headquarters", "Select celestial body");
         titleActions.add(ui.label("Under each body: programs your agency can open, and programs already open.",
             Theme.TextStyle.CAPTION, Theme.ON_PAGE_MUTED));

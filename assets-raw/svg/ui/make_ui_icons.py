@@ -39,6 +39,7 @@ CHROME = {
     "learning_potential": '<path d="M22 12l-9-9-11 6 11 6 9-9z"/><path d="M11 9v9l-7-3.9V9"/>',
     "check": '<polyline points="5 12.5 10 17 19 7"/>',
     "lock": '<rect x="4" y="11" width="16" height="10"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+    "document": '<path d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="15" y2="16"/>',
 }
 
 # The astronaut glyph's antenna tip is a filled dot.

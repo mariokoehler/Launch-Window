@@ -4007,9 +4007,9 @@ mockups copy the corrected version, not the one that needed fixing:
 
 ### 3.13 Common screen chrome & the main-menu hub (2026-09-30, groundwork ahead of M5)
 
-**Not implemented yet — M5 scope (§5). Recorded now because the user
-prepared the actual art/mockup this session, not because the client work
-has started.** Two artifacts inform this section, both private Claude
+**Implemented since (2026-10-04):** the chrome in `ChromeScreen`, the hub in
+`SpaceComplexScreen` (§5, M5, "Slice: Space Complex hub"). The text below
+is the groundwork it was built from. Two artifacts inform this section, both private Claude
 Artifacts kept off GitHub rather than pasted into this repo (same posture
 as the earlier UI Asset Sheet entry above) — ask the user for the links if
 a future session needs them and doesn't have them in context:
@@ -4054,12 +4054,15 @@ night cycle." The art the user prepared this session
   them, and hotspot coordinates are image-pixel space with a top-left
   origin (the `HotspotEditor` tool's own documented convention) — a
   bottom-only crop never shifts any polygon's coordinates, so the existing
-  `.hotspots.json` sidecars need no rework once this crop happens.
+  `.hotspots.json` sidecars need no rework once this crop happens. **Done
+  (2026-10-04)** by `assets-raw/make_hub_art.py` into `assets/ui/hub/`.
 - **Season/time-of-day art selection (decided, 2026-09-30):** which of the
   4 season images shows is driven by the real in-game current season
   (server state, §3.6/§3.7) — not a real-world calendar date. Which of the
   4 time-of-day images shows is purely a **client-side, wall-clock-driven
-  ambience effect with no server involvement at all**: it advances one
+  ambience effect with no server involvement at all** (**as built, 2026-10-04:** measured
+  from the last *step*, not the last entry, so screen-hopping still sees it move; first
+  entry shows noon; see `ui-spec.md` §4.3): it advances one
   step every 4 real-world minutes the player has spent in the game
   session, checked/applied only when the player *re-enters* the main menu
   screen (never while they're actually sitting on it — no background timer
@@ -5711,6 +5714,21 @@ here.
       filter chips, the segmented control, the reliability bar, the skill bar, the
       R&D slot box, and the white on-page secondary button. They should be promoted
       to the design system and the UI Asset Sheet.
+  - **Slice: Space Complex hub — done (2026-10-04).** `client.screen.SpaceComplexScreen`
+    replaces the stand-in agency screen; `ui-spec.md` §4.3's "Implemented" note lists its
+    unconfirmed choices.
+    - **Shared base:** `SessionScreen` sits between `StageScreen` and `ChromeScreen`. It
+      holds the toast, dialogs, submit and refresh, and the `go*` navigation, so the hub
+      gets them without the chrome. A state change goes through `stateChanged()`;
+      `ChromeScreen` overrides it to update its chips first.
+    - **View logic:** `client.view.Hub` covers the places and their buildings, reads the
+      hotspot files, and picks the art path and the time-of-day `Clock`, which lives on
+      `LaunchWindowGame`. Y flips against the cropped 1080, not the files' 1088.
+      Polygons are triangulated once for the highlight, and labels sit at the centroid.
+    - **Textures:** `UiKit.backdrop` keeps only one full-screen texture, so returning to
+      the hub decodes nothing and the 32 images never pile up.
+    - **Assets:** `assets-raw/make_hub_art.py` writes `assets/ui/hub/` and copies the
+      hotspot files. There's a new `document` icon for the turn report.
   - **Slice: Headquarters, as far as opening a program — done (2026-10-04).** The
     landing screen with the building panel and its upgrade flow, Manage open programs,
     Select celestial body, a body's categories and programs, and Program details with
