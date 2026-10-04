@@ -446,7 +446,9 @@ active missions with Cancel, re-staffing, and the step-by-step replay viewer
 with its season summary. It continues the Headquarters canvas (1960 · S3, right
 after Vostok Orbital's launch). Details and unconfirmed choices are in
 `design.md` §3.13. `ui-spec.md` G2 now lists every field the replay reads.
-**Next in §7:** the turn report (§4.4), which reuses the replay. **Pitfall:**
+**The turn report (§4.4) is on the same canvas, now titled "Mission Control &
+Turn Report mockup", which completes §7's phase 3.** Next in §7 is phase 4:
+Astronaut Complex, Public Affairs Office, Museum, settings, game result. **Pitfall:**
 the design system serves no `tokens.css`; send the local copy as a file when
 installing it on a new canvas.
 

@@ -4650,6 +4650,41 @@ skill icons already in the UI Asset Sheet). **Server need found while
 building:** G2 in `ui-spec.md` now lists every field the replay and the
 summary read.
 
+**Turn report mocked up (2026-10-04, `ui-spec.md` §4.4, the end of §7's phase
+3).** One more artboard, `TurnReport`, on the same canvas, now titled
+`Launch Window — Mission Control & Turn Report mockup`, so that its "Watch
+replay" buttons go straight to the replay viewer. It's a normal chrome
+screen titled "What happened overnight", with "Continue to Space Complex"
+as its one primary action. Below an at-a-glance strip (prestige, funds,
+missions, goals, people, events or the funding review, each with a
+one-line note), three columns:
+- *missions flown*, with art, a result line, one coloured square per step in
+  the replay's outcome colours, the prestige, and "Watch replay"; then
+  *goals*, each a green chip, with a gold "First in the game!" tag and how it
+  came (reached on a step, or credited through the cascade); then
+  *buildings*;
+- *R&D*: each component's gain on a `ReliabilityBar` (before → after) with
+  who earned it, plus a success `Notice` when a component hit its R&D cap
+  and its researchers went idle; then *news* (random events, an up or down
+  arrow for good or bad);
+- *people*: Expert earned, training finished, hires, retirements and other
+  departures, plus a morale warning; then *budget*: funding minus running
+  costs by kind, the net, funds now, and an info `Notice` when a funding
+  review happened.
+
+A mockup chip switches between "Last turn" (1960 · S2 → S3, the turn the
+other screens come from) and "A milestone turn" (the next one, when Vostok
+Orbital lands: four goals, three of them first in the game, 8,050 prestige,
+and funding review #2). Proposals, all **unconfirmed**:
+- the report is one scrolling screen rather than tabs;
+- running costs are broken down by kind;
+- the morale warning ("may resign if he stays idle") is derived in the
+  client, not an event.
+
+Nothing new in the design system was needed. **For G2:** the budget lines
+need the expenses split by kind (`SeasonFundsSettled` has only totals), and
+the goal lines need to know whether a goal was the first in the game.
+
 ## 4. Open questions (tracked here until resolved)
 
 - **Mid-turn/mid-mission player decisions — narrowed by the §2.5 mission-sim
