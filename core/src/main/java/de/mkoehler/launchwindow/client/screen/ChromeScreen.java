@@ -59,6 +59,8 @@ abstract class ChromeScreen extends SessionScreen {
         static final Crumb SET_CENTRE = new Crumb("SET Centre", ChromeScreen::goSetCentre);
         /** Mission Control's flight-controller overview. */
         static final Crumb MISSION_CONTROL = new Crumb("Mission Control", ChromeScreen::goMissionControl);
+        /** The Astronaut Complex's astronauts. */
+        static final Crumb ASTRONAUT_COMPLEX = new Crumb("Astronaut Complex", ChromeScreen::goAstronautComplex);
         /** The VAB's landing screen. */
         static final Crumb VAB = new Crumb("VAB", ChromeScreen::goVab);
         /** The VAB's Manage Rocket Programs. */
@@ -441,12 +443,12 @@ abstract class ChromeScreen extends SessionScreen {
     private void rebuildFooter(PlayerSnapshot state, ContentCatalog catalog) {
         footer.clearChildren();
         // No funds delta: last season's net change isn't in the state yet (gap G2), so none is invented.
-        footer.add(footerStat("funds", String.format(Locale.ROOT, "$ %,d", state.getFunds()),
-            () -> notBuiltYet("The Public Affairs Office"))).expandX().left();
+        footer.add(footerStat("funds", String.format(Locale.ROOT, state.getFunds() < 0 ? "− $ %,d" : "$ %,d",
+            Math.abs(state.getFunds())), state.getFunds() < 0, this::goPublicAffairs)).expandX().left();
         footer.add(footerStat("set_employees", counts(state.getSetSpecialists(), catalog, state, Building.SET_CENTER),
             this::goSetCentre)).expandX();
         footer.add(footerStat("astronauts", counts(state.getAstronauts(), catalog, state, Building.ASTRONAUT_CENTER),
-            () -> notBuiltYet("The Astronaut Complex"))).expandX();
+            this::goAstronautComplex)).expandX();
         footer.add(footerStat("flight_controllers",
             counts(state.getMissionControlOfficers(), catalog, state, Building.MISSION_CONTROL),
             this::goMissionControl)).expandX();
@@ -463,13 +465,26 @@ abstract class ChromeScreen extends SessionScreen {
     }
 
     private Table footerStat(String icon, String text, Runnable action) {
+        return footerStat(icon, text, false, action);
+    }
+
+    private Table footerStat(String icon, String text, boolean negative, Runnable action) {
         Table stat = new Table();
         stat.setBackground(ui.solid(new Color(1f, 1f, 1f, 0.08f)));
         stat.pad(Theme.SPACE_1, Theme.SPACE_2, Theme.SPACE_1, Theme.SPACE_2);
         Image glyph = new Image(ui.icon(icon), Scaling.fit);
         glyph.setColor(Theme.ON_PAGE_STRONG);
         stat.add(glyph).size(16f).padRight(Theme.SPACE_2);
-        stat.add(ui.label(text, Theme.TextStyle.CAPTION, Theme.ON_PAGE_STRONG)).padRight(Theme.SPACE_2);
+        if (negative) {
+            // A negative value on the page is a small solid danger tag with white text (ui-spec.md §4.10).
+            Table tag = new Table();
+            tag.setBackground(ui.solid(Theme.DANGER));
+            tag.pad(1f, 5f, 1f, 5f);
+            tag.add(ui.label(text, Theme.TextStyle.CAPTION, Theme.ON_PAGE_STRONG));
+            stat.add(tag).padRight(Theme.SPACE_2);
+        } else {
+            stat.add(ui.label(text, Theme.TextStyle.CAPTION, Theme.ON_PAGE_STRONG)).padRight(Theme.SPACE_2);
+        }
         Image chevron = new Image(ui.icon("chevron"), Scaling.fit);
         chevron.setColor(new Color(1f, 1f, 1f, 0.6f));
         stat.add(chevron).size(12f);

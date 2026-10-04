@@ -348,20 +348,31 @@ public final class TurnReportView {
      */
     public static List<Line> news(TurnReport report, ContentCatalog catalog) {
         return events(report, RandomEventOccurred.class).stream()
-            .map(event -> news(event, catalog))
+            .map(event -> newsLine(event.kind(), event.subjectId(), event.magnitude(), catalog, true))
             .toList();
     }
 
-    private static Line news(RandomEventOccurred event, ContentCatalog catalog) {
-        int tone = event.kind().isPositive() ? 1 : -1;
-        String subject = catalog.missionComponent(Optional.ofNullable(event.subjectId()).orElse(""))
+    /**
+     * Words one random event, for the turn report's news and the Public Affairs Office's news log.
+     *
+     * @param kind      the event
+     * @param subjectId what it struck (a component id), or {@code null}
+     * @param magnitude its size (points, funds or reliability)
+     * @param catalog   the content pack, for component names
+     * @param inReport  whether it's on the turn report, which can point to its People column
+     * @return the title, text and tone
+     */
+    public static Line newsLine(RandomEventKind kind, String subjectId, double magnitude, ContentCatalog catalog,
+                                boolean inReport) {
+        int tone = kind.isPositive() ? 1 : -1;
+        String subject = catalog.missionComponent(Optional.ofNullable(subjectId).orElse(""))
             .map(component -> ContentNames.of(component.id())).orElse("");
-        double magnitude = event.magnitude();
-        String text = switch (event.kind()) {
+        String people = inReport ? "; see People." : ".";
+        String text = switch (kind) {
             case BASIC_TRAINING_EXTENSION -> "A trainee's basic training takes a season longer.";
-            case EMPLOYEE_DISMISSED -> "Someone was let go; see People.";
+            case EMPLOYEE_DISMISSED -> "Someone was let go" + people;
             case EMPLOYEE_FAILED_BASIC_TRAINING -> "A trainee failed basic training and left.";
-            case EMPLOYEE_RESIGNING -> "Someone resigned; see People.";
+            case EMPLOYEE_RESIGNING -> "Someone resigned" + people;
             case EMPLOYEE_UNAVAILABLE -> "Someone is unavailable for a while.";
             case MAX_LAUNCHES_ALLOWED -> "Only one launch is allowed this turn.";
             case NO_LAUNCHES_ALLOWED -> "No launches are allowed this turn.";
@@ -369,7 +380,7 @@ public final class TurnReportView {
                 + " is grounded for a while.";
             case MORALE_DROP -> String.format(Locale.ROOT, "Morale fell by %.0f.", magnitude);
             case MORALE_BOOST -> String.format(Locale.ROOT, "Morale rose by %.0f.", magnitude);
-            case PERISHED_ASTRONAUT -> "An astronaut died in an accident; see People.";
+            case PERISHED_ASTRONAUT -> "An astronaut died in an accident" + people;
             case PRESTIGE_DROP -> String.format(Locale.ROOT, "Prestige fell by %,.0f.", magnitude);
             case PRESTIGE_POINTS_BOOST -> String.format(Locale.ROOT, "Prestige rose by %,.0f.", magnitude);
             case RD_RESULTS_SETBACK -> "R&D results are down for a while.";
@@ -382,7 +393,7 @@ public final class TurnReportView {
             case EXTRA_FUNDING -> "Extra funding of " + money(Math.round(magnitude)) + ".";
             case REDUCED_EXPENDITURES -> "Running costs are down for a while.";
         };
-        return new Line(title(event.kind()), text, "", tone);
+        return new Line(title(kind), text, "", tone);
     }
 
     private static String title(RandomEventKind kind) {

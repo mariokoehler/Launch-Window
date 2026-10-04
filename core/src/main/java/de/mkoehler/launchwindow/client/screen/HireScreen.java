@@ -68,8 +68,11 @@ public final class HireScreen extends ChromeScreen {
      * @param department the department hiring
      */
     public HireScreen(LaunchWindowGame game, Department department) {
-        super(game, List.of(Crumb.SPACE_COMPLEX, department == Department.SET ? Crumb.SET_CENTRE
-            : Crumb.MISSION_CONTROL, new Crumb("Personnel Recruitment", null)), department.place(),
+        super(game, List.of(Crumb.SPACE_COMPLEX, switch (department) {
+            case SET -> Crumb.SET_CENTRE;
+            case ASTRONAUT -> Crumb.ASTRONAUT_COMPLEX;
+            case MISSION_CONTROL -> Crumb.MISSION_CONTROL;
+        }, new Crumb("Personnel Recruitment", null)), department.place(),
             "Personnel Recruitment");
         this.department = department;
         this.sortBy = department.skills().get(0);
@@ -78,10 +81,10 @@ public final class HireScreen extends ChromeScreen {
 
     @Override
     protected void goBack() {
-        if (department == Department.SET) {
-            goSetCentre();
-        } else {
-            goMissionControl();
+        switch (department) {
+            case SET -> goSetCentre();
+            case ASTRONAUT -> goAstronautComplex();
+            case MISSION_CONTROL -> goMissionControl();
         }
     }
 

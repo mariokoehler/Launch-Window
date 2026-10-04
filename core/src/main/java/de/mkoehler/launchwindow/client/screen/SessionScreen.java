@@ -105,6 +105,20 @@ abstract class SessionScreen extends StageScreen {
     }
 
     /**
+     * Goes to the Astronaut Complex.
+     */
+    protected void goAstronautComplex() {
+        game.setScreen(new AstronautComplexScreen(game));
+    }
+
+    /**
+     * Goes to the Public Affairs Office.
+     */
+    protected void goPublicAffairs() {
+        game.setScreen(new PublicAffairsScreen(game));
+    }
+
+    /**
      * Goes to the Museum, on the race.
      */
     protected void goMuseum() {

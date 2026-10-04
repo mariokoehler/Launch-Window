@@ -764,6 +764,19 @@ Choices still **unconfirmed**:
   strip: level, cap, upkeep, and Upgrade with a confirmation.
 - "Near retirement" is within 5 years of 50, as the libGDX SET Centre does for 65.
 
+**Implemented in libGDX (2026-10-04)** as `client.screen.AstronautComplexScreen`, with its
+wording in `client.view.AstronautCorps`. Hire, training, pull out, dismiss and Manage
+department are the shared department pieces (`Department.ASTRONAUT`). Choices made while
+building it, **unconfirmed**:
+- **Expert training reaches controllers too:** the fourth kind sits in the shared training
+  dialog, so Mission Control's controllers get it as well (SET never does). The threshold
+  and the per-season chance come from `SkillGrowth`. Skills that can't train toward Expert
+  are greyed out, and each pick shows its value with a gold star on an Expert skill.
+- **The building cell** shows the level, the upkeep and Upgrade; the headcount stat
+  already shows the cap.
+- **The roster** has no "Mission ›" difference between crew and CAPCOM: both open the
+  mission's list.
+
 ### 4.10 Public Affairs Office: budget and prestige
 **Purpose:** money. **Ref:** `public_affairs_office.png`, `budget_info.png`.
 
@@ -802,6 +815,19 @@ has the writeup. Choices still **unconfirmed**:
 - **Decided (2026-10-04):** a negative value on the page (funds in debt, a negative
   footer delta) is a small solid `danger` tag with white text, the `danger` token's
   documented rule. No separate red text color: one readable as red fails contrast.
+
+**Implemented in libGDX (2026-10-04)** as `client.screen.PublicAffairsScreen`, reached from the
+hub and the footer's funds chip. The numbers come from `core`: `BudgetProgress.costDetail`
+(the lines, the base and the multiplier's saving), `BudgetProgress.forecast` (the next
+review: when, what it pays, what keeps today's funding) and `PrestigeConversion`. Choices,
+**unconfirmed**:
+- **Known limit:** the client prices reviews and conversions with
+  `BudgetSchedule.baspmClose()`, the schedule the server uses today, because the schedule
+  isn't sent to the client. A game with another schedule would show wrong numbers here.
+- **"Last season"** under the funds is the latest turn report's funds change, fetched
+  quietly; it's left out when there's no report. The footer delta stays deferred.
+- **The review scale** has no tag above the gold mark; the legend names both marks.
+- **The footer's funds** show the danger tag when negative.
 
 ### 4.11 Museum: goals, history, rivals
 **Purpose:** the scoreboard and the archive. **Ref:** `museum*.png`.

@@ -6167,6 +6167,15 @@ here.
       filter chips, the segmented control, the reliability bar, the skill bar, the
       R&D slot box, and the white on-page secondary button. They should be promoted
       to the design system and the UI Asset Sheet.
+  - **Slice: the Astronaut Complex and the Public Affairs Office — done (2026-10-04).** From
+    the `Launch Window — Astronaut Complex & Public Affairs Office mockup` canvas. Details and
+    unconfirmed choices are in `ui-spec.md` §4.9 and §4.10.
+    - **Rules:** `BudgetProgress.costDetail` and `BudgetProgress.forecast` (the review's pay
+      now comes from one shared method; `ContentPackPlayouts` stayed byte-identical).
+      `BudgetProgressTest` checks the forecast against the real season pass.
+    - **Client:** `Department.ASTRONAUT` (every two-way branch became an exhaustive switch),
+      Expert training in the shared dialog for astronauts and controllers, `RosterCells`
+      shared by both crew rosters, and the footer's danger tag for negative funds.
   - **Fix: the SET Centre and Mission Control can be upgraded (2026-10-04).** Their mockups had no
     building panel, so neither building could be upgraded, though their level caps the
     department's headcount. A compact building cell (`ChromeScreen.buildingCell`: level, upkeep,

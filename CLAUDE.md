@@ -277,8 +277,11 @@ wobble. `Theme.Fonts` turns them off. Mipmaps were tried and made text greyer, s
 stays linear. The user will judge the fonts again once the packaged client can use Windows'
 high-DPI setting (libGDX otherwise ignores high DPI, as in the sibling projects).
 
-**Next in `ui-spec.md` §7:** the rest of phase 4, the Astronaut Complex and the Public
-Affairs Office (their mockups are on another canvas; ask the user for the link).
+**Astronaut Complex and Public Affairs Office built (2026-10-04),** which completes
+`ui-spec.md` §7's phase 4; every hub building now opens a screen. **Known limit:** the client
+uses `BudgetSchedule.baspmClose()` for the review table, the forecast and conversions, because
+the schedule isn't sent to the client. **Next:** ask the user (the remaining spec work is the
+later phases and the open gaps in `ui-spec.md` §6).
 
 **Headquarters built in libGDX (2026-10-04),** as far as opening a program, from the
 Headquarters mockup: landing with the building panel and upgrade, Manage open

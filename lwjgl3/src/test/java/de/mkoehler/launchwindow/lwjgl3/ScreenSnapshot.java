@@ -37,6 +37,10 @@ import de.mkoehler.launchwindow.client.screen.OpenRocketScreen;
 import de.mkoehler.launchwindow.client.screen.RocketProgramsScreen;
 import de.mkoehler.launchwindow.client.screen.VabScreen;
 import de.mkoehler.launchwindow.client.screen.MuseumScreen;
+import de.mkoehler.launchwindow.client.screen.AstronautComplexScreen;
+import de.mkoehler.launchwindow.client.screen.PublicAffairsScreen;
+import de.mkoehler.launchwindow.model.NewsEntry;
+import de.mkoehler.launchwindow.model.RandomEventKind;
 import de.mkoehler.launchwindow.model.GoalRecord;
 import de.mkoehler.launchwindow.model.MemorialEntry;
 import de.mkoehler.launchwindow.net.messages.RivalSummary;
@@ -606,6 +610,70 @@ public final class ScreenSnapshot {
         startSession(game, spared, GameInfoResponse.success("early-era", hash, DECLARED, 25, true,
             23 * 3_600_000L + 40 * 60_000L, 0L, null, List.of(), List.of(), 0, true));
         write(folder, "hub-dev-mode.png", new SpaceComplexScreen(game), null);
+
+        departmentShots(folder, game, hash);
+    }
+
+    /**
+     * The Astronaut Complex and the Public Affairs Office, on the Mission Control agency (Vostok
+     * Orbital scheduled, so one cosmonaut flies and one sits at CAPCOM).
+     */
+    private static void departmentShots(File folder, LaunchWindowGame game, String hash) {
+        PlayerSnapshot state = missionControlState();
+        List<Astronaut> idle = state.getAstronauts().stream()
+            .filter(astronaut -> astronaut.getAssignmentState() == AssignmentState.IDLE).toList();
+        Astronaut eligible = idle.get(0);
+        eligible.setSkill(AstronautSkill.FITNESS, 81.0);
+        Astronaut expert = idle.get(1);
+        expert.setSkill(AstronautSkill.LEADERSHIP, 86.0);
+        expert.getExpertSkills().add(AstronautSkill.LEADERSHIP);
+        for (int i = 0; i < state.getAstronauts().size(); i++) {
+            state.getAstronauts().get(i).setSalary(42 + i * 4);
+        }
+        state.getBuildingLevels().put(Building.ASTRONAUT_CENTER, 2);
+        for (Astronaut astronaut : state.getAstronauts()) {
+            if (astronaut.getAssignmentState() == AssignmentState.IN_TRAINING) {
+                astronaut.setTrainingKind(TrainingKind.BASIC);
+                astronaut.setTrainingTargetSkill(AstronautSkill.EVA);
+                astronaut.setTrainingSeasonsTotal(3);
+                astronaut.setTrainingSeasonsCompleted(1);
+            }
+        }
+        GameInfoResponse info = GameInfoResponse.success("early-era", hash, DECLARED, 23, true,
+            6 * 3_600_000L + 12 * 60_000L + 30_000L, 0L, null, List.of(), List.of(), 0);
+        startSession(game, state, info);
+        write(folder, "ac-overview.png", new AstronautComplexScreen(game), null);
+        write(folder, "ac-train-expert.png", new AstronautComplexScreen(game),
+            screen -> screen.openTraining(eligible, TrainingKind.EXPERT, "FITNESS"));
+        write(folder, "ac-train-expert-none.png", new AstronautComplexScreen(game),
+            screen -> screen.openTraining(expert, TrainingKind.EXPERT, null));
+        write(folder, "ac-upgrade.png", new AstronautComplexScreen(game),
+            screen -> screen.confirmUpgrade(Building.ASTRONAUT_CENTER, "the Astronaut Complex", "headcount cap"));
+        Astronaut onMission = state.getAstronauts().stream()
+            .filter(astronaut -> astronaut.getAssignmentState() == AssignmentState.ASSIGNED).findFirst().orElseThrow();
+        write(folder, "ac-dismiss-refused.png", new AstronautComplexScreen(game),
+            screen -> screen.confirmDismiss(onMission));
+
+        // The Public Affairs Office: a news log, then a debt with the convert dialog, then both timed effects.
+        state.setNewsLog(List.of(new NewsEntry(17, RandomEventKind.MORALE_BOOST, null, 12),
+            new NewsEntry(20, RandomEventKind.EMPLOYEE_UNAVAILABLE, null, 1),
+            new NewsEntry(22, RandomEventKind.UNEXPECTED_COST, null, 1_249)));
+        write(folder, "pao.png", new PublicAffairsScreen(game), null);
+        PlayerSnapshot debt = missionControlState();
+        debt.setFunds(-1_200);
+        debt.setPrestige(2_140);
+        debt.getBuildingLevels().put(Building.ASTRONAUT_CENTER, 3);
+        debt.getBuildingLevels().put(Building.MISSION_CONTROL, 3);
+        startSession(game, debt, info);
+        write(folder, "pao-debt.png", new PublicAffairsScreen(game), null);
+        write(folder, "pao-convert.png", new PublicAffairsScreen(game), PublicAffairsScreen::openConvert);
+        PlayerSnapshot effects = missionControlState();
+        effects.setCostMultiplier(0.85, 5);
+        effects.setRdResults(0.9, 2);
+        effects.setNewsLog(List.of(new NewsEntry(22, RandomEventKind.REDUCED_EXPENDITURES, null, 0.85),
+            new NewsEntry(22, RandomEventKind.RD_RESULTS_SETBACK, null, 0.9)));
+        startSession(game, effects, info);
+        write(folder, "pao-effects.png", new PublicAffairsScreen(game), null);
     }
 
     /** The mockup's agency at 1960 · S4, with the goal records and memorial the Museum reads. */

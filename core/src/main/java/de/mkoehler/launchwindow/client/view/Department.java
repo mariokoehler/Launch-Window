@@ -1,6 +1,8 @@
 package de.mkoehler.launchwindow.client.view;
 
 import de.mkoehler.launchwindow.content.ContentCatalog;
+import de.mkoehler.launchwindow.model.Astronaut;
+import de.mkoehler.launchwindow.model.AstronautSkill;
 import de.mkoehler.launchwindow.model.Building;
 import de.mkoehler.launchwindow.model.MissionControlOfficer;
 import de.mkoehler.launchwindow.model.MissionControlSkill;
@@ -9,6 +11,8 @@ import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.model.SetSkill;
 import de.mkoehler.launchwindow.model.SetSpecialist;
 import de.mkoehler.launchwindow.rules.PersonnelGroup;
+import de.mkoehler.launchwindow.rules.PersonnelLifecycle;
+import de.mkoehler.launchwindow.rules.SkillGrowth;
 import de.mkoehler.launchwindow.rules.TrainingProgress;
 
 import java.util.Arrays;
@@ -18,7 +22,8 @@ import java.util.Map;
 /**
  * A personnel department as the shared screens see it (Hire, the training, pull-out, dismiss and
  * Manage department dialogs): its group, building, skills with their icons and names, roster and
- * candidate pool. The SET Centre's engineers and Mission Control's flight controllers.
+ * candidate pool. The SET Centre's engineers, the Astronaut Complex's astronauts and Mission Control's
+ * flight controllers.
  *
  * @author Mario Koehler
  */
@@ -27,6 +32,10 @@ public enum Department {
     SET(PersonnelGroup.SET, Building.SET_CENTER, "SET Centre", "specialists", "set_employees",
         TrainingProgress.SET_BASIC_TRAINING_SEASONS,
         Arrays.stream(SetSkill.values()).map(Enum::name).toList()),
+    /** The Astronaut Complex's astronauts. */
+    ASTRONAUT(PersonnelGroup.ASTRONAUT, Building.ASTRONAUT_CENTER, "Astronaut Complex", "astronauts", "astronauts",
+        TrainingProgress.ASTRONAUT_BASIC_TRAINING_SEASONS,
+        Arrays.stream(AstronautSkill.values()).map(Enum::name).toList()),
     /** Mission Control's flight controllers. */
     MISSION_CONTROL(PersonnelGroup.MISSION_CONTROL, Building.MISSION_CONTROL, "Mission Control", "flight controllers",
         "flight_controllers", TrainingProgress.MISSION_CONTROL_BASIC_TRAINING_SEASONS,
@@ -128,7 +137,10 @@ public enum Department {
      * @return the icon name
      */
     public String icon(String skill) {
-        return this == SET ? SetSkills.icon(SetSkill.valueOf(skill)) : CrewSkills.icon(skill);
+        return switch (this) {
+            case SET -> SetSkills.icon(SetSkill.valueOf(skill));
+            case ASTRONAUT, MISSION_CONTROL -> CrewSkills.icon(skill);
+        };
     }
 
     /**
@@ -138,7 +150,10 @@ public enum Department {
      * @return the display name
      */
     public String label(String skill) {
-        return this == SET ? SetSkills.label(SetSkill.valueOf(skill)) : CrewSkills.label(skill);
+        return switch (this) {
+            case SET -> SetSkills.label(SetSkill.valueOf(skill));
+            case ASTRONAUT, MISSION_CONTROL -> CrewSkills.label(skill);
+        };
     }
 
     /**
@@ -148,7 +163,11 @@ public enum Department {
      * @return the short name
      */
     public String shortLabel(String skill) {
-        return this == SET ? SetSkills.shortLabel(SetSkill.valueOf(skill)) : MC_SHORT.getOrDefault(skill, skill);
+        return switch (this) {
+            case SET -> SetSkills.shortLabel(SetSkill.valueOf(skill));
+            case ASTRONAUT -> CrewSkills.label(skill);
+            case MISSION_CONTROL -> MC_SHORT.getOrDefault(skill, skill);
+        };
     }
 
     /**
@@ -159,10 +178,71 @@ public enum Department {
      * @return the value, 0-100
      */
     public double skill(Personnel person, String skill) {
-        if (this == SET) {
-            return SetDepartment.skill((SetSpecialist) person, SetSkill.valueOf(skill));
+        return switch (this) {
+            case SET -> SetDepartment.skill((SetSpecialist) person, SetSkill.valueOf(skill));
+            case ASTRONAUT -> ((Astronaut) person).getSkill(AstronautSkill.valueOf(skill));
+            case MISSION_CONTROL -> ((MissionControlOfficer) person).getSkill(MissionControlSkill.valueOf(skill));
+        };
+    }
+
+    /**
+     * Returns whether this department's people can hold the Expert trait (astronauts and
+     * controllers; SET never does), so the training dialog offers Expert training.
+     *
+     * @return whether Experts exist here
+     */
+    public boolean hasExperts() {
+        return this != SET;
+    }
+
+    /**
+     * Returns whether a person holds the Expert trait in a skill.
+     *
+     * @param person the person, of this department
+     * @param skill  the skill's name
+     * @return whether they're an Expert in it
+     */
+    public boolean isExpert(Personnel person, String skill) {
+        return switch (this) {
+            case SET -> false;
+            case ASTRONAUT -> ((Astronaut) person).getExpertSkills().contains(AstronautSkill.valueOf(skill));
+            case MISSION_CONTROL -> ((MissionControlOfficer) person).getExpertSkills()
+                .contains(MissionControlSkill.valueOf(skill));
+        };
+    }
+
+    /**
+     * Returns whether a person holds the Expert trait in any skill.
+     *
+     * @param person the person, of this department
+     * @return whether they're an Expert at all
+     */
+    public boolean isExpert(Personnel person) {
+        return skills.stream().anyMatch(skill -> isExpert(person, skill));
+    }
+
+    /**
+     * Returns the skills a person could start Expert training in: at or above the threshold
+     * ({@link SkillGrowth#EXPERT_TRAINING_SKILL_THRESHOLD}) and not Expert yet.
+     *
+     * @param person the person, of this department
+     * @return the skill names, in the enum's order; empty for SET
+     */
+    public List<String> expertEligible(Personnel person) {
+        if (!hasExperts()) {
+            return List.of();
         }
-        return ((MissionControlOfficer) person).getSkill(MissionControlSkill.valueOf(skill));
+        return skills.stream().filter(skill -> skill(person, skill) >= SkillGrowth.EXPERT_TRAINING_SKILL_THRESHOLD
+            && !isExpert(person, skill)).toList();
+    }
+
+    /**
+     * Returns the age this department's people retire at.
+     *
+     * @return the age
+     */
+    public int retirementAge() {
+        return PersonnelLifecycle.retirementAgeFor(group);
     }
 
     /**
@@ -172,7 +252,11 @@ public enum Department {
      * @return the roster
      */
     public List<? extends Personnel> roster(PlayerSnapshot state) {
-        return this == SET ? state.getSetSpecialists() : state.getMissionControlOfficers();
+        return switch (this) {
+            case SET -> state.getSetSpecialists();
+            case ASTRONAUT -> state.getAstronauts();
+            case MISSION_CONTROL -> state.getMissionControlOfficers();
+        };
     }
 
     /**
@@ -182,7 +266,11 @@ public enum Department {
      * @return the candidates
      */
     public List<? extends Personnel> candidates(PlayerSnapshot state) {
-        return this == SET ? state.getSetSpecialistCandidates() : state.getMissionControlCandidates();
+        return switch (this) {
+            case SET -> state.getSetSpecialistCandidates();
+            case ASTRONAUT -> state.getAstronautCandidates();
+            case MISSION_CONTROL -> state.getMissionControlCandidates();
+        };
     }
 
     /**

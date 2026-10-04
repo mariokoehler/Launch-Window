@@ -46,6 +46,72 @@ class BudgetProgressTest {
     }
 
     /**
+     * The review forecast matches the real season pass: it counts the same number of resolutions
+     * to the next review, names its number, and predicts the rate it then pays.
+     */
+    @Test
+    void theForecastMatchesTheSeasonPass() {
+        for (int start : new int[] {1, 5, 15, 16, 17, 31, 32}) {
+            PlayerSnapshot snapshot = player(10_000, 2_500, 150);
+            snapshot.setSeason(start);
+            snapshot.setPrestigeAtLastReview(400);
+            BudgetProgress.ReviewForecast forecast = BudgetProgress.forecast(snapshot, SCHEDULE);
+
+            int resolutions = 0;
+            BudgetReviewed review = null;
+            while (review == null) {
+                resolutions++;
+                for (ResolutionEvent event : BudgetProgress.advanceSeason(snapshot, EMPTY, SCHEDULE,
+                        snapshot.getSeason())) {
+                    if (event instanceof BudgetReviewed reviewed) {
+                        review = reviewed;
+                    }
+                }
+                snapshot.setSeason(snapshot.getSeason() + 1);
+            }
+            assertEquals(resolutions, forecast.seasonsUntil(), "from season " + start);
+            assertEquals(review.reviewNumber(), forecast.reviewNumber(), "from season " + start);
+            assertEquals(review.fundingRate(), forecast.payToday(), "from season " + start);
+        }
+    }
+
+    /**
+     * The prestige that keeps today's funding is the least that pays it at the next review.
+     */
+    @Test
+    void theForecastFindsThePrestigeThatKeepsTodaysFunding() {
+        PlayerSnapshot snapshot = player(10_000, 2_500, 450);
+        snapshot.setSeason(20);
+        snapshot.setPrestigeAtLastReview(1_000);
+        BudgetProgress.ReviewForecast forecast = BudgetProgress.forecast(snapshot, SCHEDULE);
+
+        assertEquals(2, forecast.reviewNumber());
+        long keep = forecast.keepPrestige();
+        assertTrue(forecast.payAt(keep) >= 450);
+        assertTrue(forecast.payAt(keep - 1) < 450);
+        snapshot.setFundingRatePerSeason(700);
+        assertEquals(-1, BudgetProgress.forecast(snapshot, SCHEDULE).keepPrestige(), "more than the bracket pays");
+    }
+
+    /**
+     * The cost detail adds up: its lines make the base, and the base less the multiplier's saving
+     * is exactly what the season pass charges, with and without a cost multiplier.
+     */
+    @Test
+    void theCostDetailAddsUpToTheRunningCosts() {
+        PlayerSnapshot snapshot = player(10_000, 0, 100, 30.4, 25.6, 41.5);
+        for (double multiplier : new double[] {1.0, 0.85, 1.2}) {
+            snapshot.setCostMultiplier(multiplier, multiplier == 1.0 ? 0 : 3);
+            BudgetProgress.CostDetail detail = BudgetProgress.costDetail(snapshot, EMPTY);
+            long lines = detail.groups().stream().flatMap(group -> group.lines().stream())
+                .mapToLong(BudgetProgress.CostLine::amount).sum();
+            assertEquals(detail.base(), lines);
+            assertEquals(BudgetProgress.runningCosts(snapshot, EMPTY), detail.base() - detail.saving());
+            assertEquals(30 + 26 + 42, detail.groups().get(0).lines().get(0).amount(), "per-person rounding");
+        }
+    }
+
+    /**
      * Running costs are the roster's salaries; nothing else is open or owned here.
      */
     @Test

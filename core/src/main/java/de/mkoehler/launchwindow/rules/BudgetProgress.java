@@ -2,6 +2,7 @@ package de.mkoehler.launchwindow.rules;
 
 import de.mkoehler.launchwindow.content.BudgetSchedule;
 import de.mkoehler.launchwindow.content.ContentCatalog;
+import de.mkoehler.launchwindow.model.Building;
 import de.mkoehler.launchwindow.model.Personnel;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 
@@ -156,22 +157,237 @@ public final class BudgetProgress {
      * @return the review's event
      */
     private static BudgetReviewed review(PlayerSnapshot snapshot, BudgetSchedule schedule, int reviewNumber) {
-        BudgetSchedule.Review bracket = schedule.reviewFor(reviewNumber);
-        long catchUpShift = 0;
-        if (reviewNumber > 1) {
-            // The previous review's *raw* minimum, not its shifted one, so shortfalls never compound
-            // (baspm.md §11.7).
-            long previousMin = schedule.reviewFor(reviewNumber - 1).minPrestige();
-            if (snapshot.getPrestigeAtLastReview() < previousMin) {
-                catchUpShift = previousMin - snapshot.getPrestigeAtLastReview();
-            }
-        }
+        long catchUpShift = catchUpShift(snapshot, schedule, reviewNumber);
         long prestige = snapshot.getPrestige();
-        long rate = interpolate(bracket.minPrestige() - catchUpShift, bracket.minFunding(),
-            bracket.maxPrestige() - catchUpShift, bracket.maxFunding(), prestige);
+        long rate = reviewRate(schedule.reviewFor(reviewNumber), catchUpShift, prestige);
         snapshot.setFundingRatePerSeason(rate);
         snapshot.setPrestigeAtLastReview(prestige);
         return new BudgetReviewed(reviewNumber, prestige, catchUpShift, rate);
+    }
+
+    /**
+     * The catch-up shift a review applies: how far the previous review's baseline fell short of
+     * that review's bottom.
+     */
+    private static long catchUpShift(PlayerSnapshot snapshot, BudgetSchedule schedule, int reviewNumber) {
+        if (reviewNumber <= 1) {
+            return 0;
+        }
+        // The previous review's *raw* minimum, not its shifted one, so shortfalls never compound
+        // (baspm.md §11.7).
+        long previousMin = schedule.reviewFor(reviewNumber - 1).minPrestige();
+        return snapshot.getPrestigeAtLastReview() < previousMin ? previousMin - snapshot.getPrestigeAtLastReview() : 0;
+    }
+
+    /** The funding a review's bracket pays for a prestige, after the catch-up shift. */
+    private static long reviewRate(BudgetSchedule.Review bracket, long catchUpShift, long prestige) {
+        return interpolate(bracket.minPrestige() - catchUpShift, bracket.minFunding(),
+            bracket.maxPrestige() - catchUpShift, bracket.maxFunding(), prestige);
+    }
+
+    /**
+     * What the next funding review looks like from today ({@code ui-spec.md} &sect;4.10, gap G7).
+     *
+     * @param reviewNumber   the next review's number, from 1
+     * @param seasonsUntil   how many resolutions until it, counting the next one (1 = the next turn)
+     * @param catchUpShift   the shift it will apply, from the last review's baseline
+     * @param minPrestige    its bracket's bottom prestige, shifted
+     * @param minFunding     the funding at the bottom
+     * @param maxPrestige    its bracket's top prestige, shifted
+     * @param maxFunding     the funding at the top
+     * @param payToday       what it would pay at today's prestige
+     * @param currentRate    today's funding per season
+     * @param keepPrestige   the least prestige that keeps today's funding, or -1 if none can
+     */
+    public record ReviewForecast(int reviewNumber, int seasonsUntil, long catchUpShift, long minPrestige,
+                                 long minFunding, long maxPrestige, long maxFunding, long payToday, long currentRate,
+                                 long keepPrestige) {
+
+        /**
+         * Returns what the review would pay at a given prestige.
+         *
+         * @param prestige the prestige at the review
+         * @return the funding per season
+         */
+        public long payAt(long prestige) {
+            return interpolate(minPrestige, minFunding, maxPrestige, maxFunding, prestige);
+        }
+    }
+
+    /**
+     * Forecasts the next funding review: when it comes and what today's prestige would earn
+     * there. The season pass runs a review when the player's own season count, counting the
+     * season being resolved ({@link PlayerSnapshot#getSeason()}), is a multiple of
+     * {@link #SEASONS_PER_REVIEW}.
+     *
+     * @param snapshot the player
+     * @param schedule the bracket table
+     * @return the forecast
+     */
+    public static ReviewForecast forecast(PlayerSnapshot snapshot, BudgetSchedule schedule) {
+        return forecast(snapshot, schedule, snapshot.getPrestige());
+    }
+
+    /**
+     * Forecasts the next funding review as if the player held a given prestige, such as after a
+     * conversion.
+     *
+     * @param snapshot the player
+     * @param schedule the bracket table
+     * @param prestige the prestige to price
+     * @return the forecast
+     */
+    public static ReviewForecast forecast(PlayerSnapshot snapshot, BudgetSchedule schedule, long prestige) {
+        Objects.requireNonNull(snapshot, "snapshot must not be null");
+        Objects.requireNonNull(schedule, "schedule must not be null");
+        int season = Math.max(1, snapshot.getSeason());
+        int seasonsUntil = (SEASONS_PER_REVIEW - season % SEASONS_PER_REVIEW) % SEASONS_PER_REVIEW + 1;
+        int reviewNumber = (season + seasonsUntil - 1) / SEASONS_PER_REVIEW;
+        long shift = catchUpShift(snapshot, schedule, reviewNumber);
+        BudgetSchedule.Review bracket = schedule.reviewFor(reviewNumber);
+        long min = bracket.minPrestige() - shift;
+        long max = bracket.maxPrestige() - shift;
+        long current = snapshot.getFundingRatePerSeason();
+        long keep = -1;
+        if (reviewRate(bracket, shift, max) >= current) {
+            if (reviewRate(bracket, shift, min) >= current) {
+                keep = Math.max(0, min);
+            } else {
+                // The rate rises with prestige: find the least prestige that pays today's rate.
+                long low = min;
+                long high = max;
+                while (high - low > 1) {
+                    long mid = low + (high - low) / 2;
+                    if (reviewRate(bracket, shift, mid) >= current) {
+                        high = mid;
+                    } else {
+                        low = mid;
+                    }
+                }
+                keep = high;
+            }
+        }
+        return new ReviewForecast(reviewNumber, seasonsUntil, shift, min, bracket.minFunding(), max,
+            bracket.maxFunding(), reviewRate(bracket, shift, prestige), current, keep);
+    }
+
+    /**
+     * One line of the detailed running costs.
+     *
+     * @param label  what it is, such as "Astronauts (6)"
+     * @param amount its cost per season, before the cost multiplier
+     */
+    public record CostLine(String label, long amount) {
+    }
+
+    /**
+     * A group of cost lines, such as "Salaries".
+     *
+     * @param title the group's title
+     * @param lines its lines
+     */
+    public record CostGroup(String title, List<CostLine> lines) {
+
+        /**
+         * Copies the lines.
+         */
+        public CostGroup {
+            lines = List.copyOf(lines);
+        }
+    }
+
+    /**
+     * The running costs line by line ({@code ui-spec.md} &sect;4.10): salaries per department,
+     * program and active-component upkeep, and upkeep per building, then any cost multiplier.
+     *
+     * @param groups            the lines, before the multiplier; they add up to {@code base}
+     * @param base              every line together
+     * @param total             what the season pass charges, {@link #runningCosts}
+     * @param multiplier        the cost multiplier in force, 1 when none
+     * @param multiplierSeasons how many more seasons it runs, 0 when none
+     */
+    public record CostDetail(List<CostGroup> groups, long base, long total, double multiplier,
+                             int multiplierSeasons) {
+
+        /**
+         * Copies the groups.
+         */
+        public CostDetail {
+            groups = List.copyOf(groups);
+        }
+
+        /**
+         * Returns what the multiplier saves (or adds, when negative) this season.
+         *
+         * @return base less total
+         */
+        public long saving() {
+            return base - total;
+        }
+    }
+
+    /**
+     * Returns the running costs line by line. Salaries round per person, as the season pass does,
+     * so the base matches {@link #runningCostBreakdown} before its multiplier.
+     *
+     * @param snapshot the player's state
+     * @param catalog  the content catalog
+     * @return the detail
+     */
+    public static CostDetail costDetail(PlayerSnapshot snapshot, ContentCatalog catalog) {
+        Objects.requireNonNull(snapshot, "snapshot must not be null");
+        Objects.requireNonNull(catalog, "catalog must not be null");
+        List<CostLine> salaries = List.of(
+            salaryLine("Astronauts", snapshot.getAstronauts()),
+            salaryLine("SET", snapshot.getSetSpecialists()),
+            salaryLine("Flight controllers", snapshot.getMissionControlOfficers()));
+        long programs = 0;
+        for (String programId : snapshot.getOpenedProgramIds()) {
+            programs += catalog.program(programId).orElseThrow().maintenanceCost();
+        }
+        long components = 0;
+        int componentCount = 0;
+        for (var owned : snapshot.getMissionComponents().entrySet()) {
+            if (owned.getValue().isActive()) {
+                components += catalog.missionComponent(owned.getKey()).orElseThrow().maintenanceCost();
+                componentCount++;
+            }
+        }
+        List<CostLine> upkeep = List.of(
+            new CostLine("Program upkeep (" + snapshot.getOpenedProgramIds().size() + " open)", programs),
+            new CostLine("Component upkeep (" + componentCount + " active)", components));
+        List<CostLine> buildings = new ArrayList<>();
+        for (Building building : Building.values()) {
+            int level = snapshot.buildingLevel(building);
+            long cost = catalog.buildings().maintenance(building, level);
+            if (cost != 0) {
+                buildings.add(new CostLine(buildingName(building) + ", level " + level, cost));
+            }
+        }
+        List<CostGroup> groups = List.of(new CostGroup("Salaries", salaries),
+            new CostGroup("Programs and components", upkeep), new CostGroup("Buildings", buildings));
+        long base = groups.stream().flatMap(group -> group.lines().stream()).mapToLong(CostLine::amount).sum();
+        boolean active = snapshot.getCostMultiplierSeasonsRemaining() > 0;
+        return new CostDetail(groups, base, runningCosts(snapshot, catalog), snapshot.getCostMultiplier(),
+            active ? snapshot.getCostMultiplierSeasonsRemaining() : 0);
+    }
+
+    private static CostLine salaryLine(String label, List<? extends Personnel> roster) {
+        long total = 0;
+        for (Personnel person : roster) {
+            total += Math.round(person.getSalary());
+        }
+        return new CostLine(label + " (" + roster.size() + ")", total);
+    }
+
+    private static String buildingName(Building building) {
+        return switch (building) {
+            case HEADQUARTERS -> "Headquarters";
+            case VEHICLE_ASSEMBLY -> "VAB";
+            case ASTRONAUT_CENTER -> "Astronaut Complex";
+            case SET_CENTER -> "SET Centre";
+            case MISSION_CONTROL -> "Mission Control";
+        };
     }
 
     /**

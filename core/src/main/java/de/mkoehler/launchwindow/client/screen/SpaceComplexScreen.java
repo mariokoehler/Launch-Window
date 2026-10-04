@@ -252,6 +252,8 @@ public final class SpaceComplexScreen extends SessionScreen {
             case VAB -> goVab();
             case MISSION_CONTROL -> goMissionControl();
             case MUSEUM -> goMuseum();
+            case ASTRONAUT_COMPLEX -> goAstronautComplex();
+            case PUBLIC_AFFAIRS_OFFICE -> goPublicAffairs();
             default -> notBuiltYet(place.inSentence());
         }
     }
