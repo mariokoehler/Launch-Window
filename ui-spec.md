@@ -392,6 +392,8 @@ while building it, **unconfirmed**:
   morale warning goes to idle people at morale 50 or below (the resignation floor
   plus 15).
 - **News wording** is the client's own, one line per kind of random event.
+- **Later idea (user, 2026-10-04):** one real-world space-race story from the same three
+  months in every report's news. See `design.md` §1.1.
 
 ### 4.5 VAB: rockets
 **Purpose:** everything about rockets. The VAB's own cap limits the open rocket

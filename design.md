@@ -189,6 +189,28 @@ same session it comes up**, the same standing-note-to-self habit as
     Apollo 1 crew in 1967, which is why later cabins used a nitrogen-oxygen
     mix on the pad. Verify the details before shipping. The Museum's
     Memorial tab (built 2026-10-04) carries it as a draft.
+- **Idea, for later (user, 2026-10-04): a real-world news item every turn.**
+  The turn report's news (today: the season's random events, `ui-spec.md`
+  §4.4) always gets one more item: something memorable that happened in the
+  real space race during the same three months as the turn's game date.
+  The user expects at least one story for every quarter; when there are
+  several, one is picked at random. Not built yet. Open points to settle
+  when it is:
+  - **Where the stories live:** a content file keyed by year and season
+    (one or more stories each), so a pack or game era can carry its own.
+  - **Which date:** the season the turn played out in (the report's "from"
+    date), matching how the Museum dates goals.
+  - **The random pick:** seeded from the game seed and the turn, so a crash
+    redo writes the same report, and the pick is stored in the saved report
+    (an added field, per §3.7's additive rule) rather than re-rolled.
+  - **Our own words, checked facts:** written fresh from the history, never
+    from BASPM's historical-facts text (§1.2). Verify each story, the same as
+    history notes.
+  - **Real timeline vs the game's:** a story can contradict what happened in
+    this game (a real first that a player hasn't matched yet, or already
+    beat). Labelling the item as "on the real timeline" keeps that clear.
+  - **Past the end of the stories:** decide what shows once the game date
+    runs beyond the written quarters.
 - **Real images:** wanted, per the user. **Flagging a licensing
   consideration proactively** (unprompted, per this project's existing
   security/legal-flagging convention): NASA-produced photos/footage are
