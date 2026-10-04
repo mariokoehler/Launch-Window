@@ -4,8 +4,8 @@ import java.util.Objects;
 
 /**
  * Who the player is and where they play: kept in memory for the client session only, never
- * written to disk. Every server call opens its own short connection and authenticates again
- * with these ({@code design.md} &sect;3.3: no connection is held between actions).
+ * written to disk. The gateway logs in with them once per connection, and again by itself if the
+ * session's connection drops and has to be reopened ({@code design.md} &sect;3.3).
  *
  * @param address  the server
  * @param login    the account's login

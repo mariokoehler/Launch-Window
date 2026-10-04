@@ -70,6 +70,10 @@ public final class ScreenSnapshot {
         }
 
         @Override
+        public void logOut() {
+        }
+
+        @Override
         public void dispose() {
         }
     }

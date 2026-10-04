@@ -2183,7 +2183,8 @@ different from StarWars/Robot-Rampage isn't "process or no process," it's
 *how little* that process actually does most of the time: no continuous
 real-time simulation loop, no live session state per connection — just
 occasional short-lived client connections (§3.3's "connect, send today's
-actions, get current state, disconnect" RPC-style usage) plus one scheduled
+actions, get current state, disconnect" RPC-style usage; **superseded
+2026-10-04:** one long-lived, mostly idle connection per client session, §3.3) plus one scheduled
 turn-resolution job per day (§3.6). Architecturally closer to a lightly-used
 long-running service than to either sibling's continuously-simulating game
 server, but a genuine resident process (and genuine Docker deployment,
@@ -2247,6 +2248,33 @@ even scaffolding empty right now.
   connection. No prediction/reconciliation layer, no reconnect-during-a-live-
   turn machinery — genuinely simpler netcode than either sibling project's,
   despite reusing the same library.
+  **Changed (user, 2026-10-04): one long-lived connection per client session.**
+  Connect opens the connection and logs in once. Every later request goes over
+  it, and Log out or the client's exit closes it.
+  - **Why:** connecting and closing for every call kept producing odd
+    timeouts. The likely cause, found while building G1, is KryoNet's
+    `Client.stop()`, which can block for up to about 11 s on Windows after an
+    exchange has finished.
+  - **Reconnecting:** `client.connect.NetworkGateway` checks the connection
+    before each call. If it has dropped (Wi-Fi, sleep, a server restart), the
+    gateway reconnects and logs in again by itself. A connection that died
+    silently, with no TCP close (laptop sleep, say), still looks connected
+    until KryoNet's 12 s timeout fires. A call made in that window waits out
+    the 8 s response timeout, and the player sees one error; retrying then
+    reconnects. Verified: an idle connection survives 15 s with no reconnect,
+    since keepalives flow, and KryoNet's client thread is a daemon, so exit is
+    never held up.
+  - **No repeats:** a call that breaks *during* its exchange is never repeated,
+    since the server may already have acted on it. The connection is dropped and
+    the next call reconnects. **Rule for later calls:** read-only calls (state
+    refresh, game info) may reconnect and retry once on such a failure.
+    Action submits must never be retried automatically.
+  - **Closing:** connections are closed on a separate thread.
+  - **Unchanged:** the server needed nothing new. Authentication was already
+    per connection, and KryoNet's keepalive keeps idle connections open. Still
+    no prediction and no live-turn machinery.
+  - **Later:** server push, such as a "turn resolved" message to clients that
+    are online, is now possible but not built.
 - **Correction (found while scaffolding, 2026-09-27): Jackson does *not*
   double as the wire-format library — an earlier draft of this bullet said
   it did, which is wrong.** KryoNet serializes wire messages with Kryo (a
@@ -4330,7 +4358,8 @@ cataloged in the UI Asset Sheet.
   sibling projects — the web-client alternative once considered here was
   dropped.
 - **Resolved (§3.1, 2026-09-27):** yes, a persistent server process — just a
-  lightly-loaded one (short-lived client connections plus one scheduled
+  lightly-loaded one (short-lived client connections, since 2026-10-04 one idle
+  connection per client session, §3.3, plus one scheduled
   turn-resolution job), not a continuously-simulating one like either
   sibling project's.
 - **Resolved, as far as archetype count/scope goes (§2.1(a1)/(b1), 2026-09-27):
@@ -4499,6 +4528,9 @@ here.
       connection-scoped, not a cross-connection session the way
       Robot-Rampage's own reconnect tokens are — §3.3's "no held session"
       still holds, since nothing survives past that one short connection.
+      (Superseded 2026-10-04: the client now holds one connection per session,
+      §3.3. Authentication is still per connection, with no reconnect tokens.
+      A new connection simply logs in again.)
       **Registered first in `MessageRegistry`, and never moved:** the
       version check exists specifically to catch two builds whose
       registries differ, so the two handshake classes must keep the same
@@ -5439,7 +5471,7 @@ here.
   - **Slice: Connect and Join Game screens — done (2026-10-04).** The first real
     libGDX screens, built from the user's Claude Design mockups (`ui-spec.md`
     §4.1/§4.2 and their "Implemented" note), plus a stand-in agency screen
-    until the hub has a mockup. Short-lived connections run through
+    until the hub has a mockup. Connections (one per session since 2026-10-04, §3.3) run through
     `client.connect.NetworkGateway` on a background thread. `ScreenSnapshot`
     (§3.11) was built alongside, as planned. **Wire change:** `ClaimSlotResponse`
     went from `(success, message)` to `(success, reason, message)`, with
@@ -5476,9 +5508,9 @@ here.
       stand-in agency screen shows the date, the turn and a live "Next turn in …".
     - **Found on the way:** KryoNet's `Client.stop()` sometimes takes up to about
       11 s on Windows after an exchange has finished. Closing inline held each
-      result back by that long. `NetworkGateway` now delivers first and closes
-      on a separate thread, and its worker always delivers a result even if the
-      work throws.
+      result back by that long. That led to the switch to one long-lived
+      connection per session (§3.3). The gateway's worker always delivers a
+      result, even if the work throws.
 - **M6 — Deployment.** jpackage client zip, Docker server image,
   tag-driven GitHub Actions release, reusing the sibling projects' own
   working templates (§3.3/§3.9). Comes after M5's playtest validates the

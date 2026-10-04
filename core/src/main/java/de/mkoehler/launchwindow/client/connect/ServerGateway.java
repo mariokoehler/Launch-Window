@@ -15,7 +15,8 @@ import java.util.function.Consumer;
 public interface ServerGateway {
 
     /**
-     * Connects, logs in, and fetches the player's state.
+     * Logs in on a fresh connection, which then stays open for the session, and fetches the game
+     * info and the player's state.
      *
      * @param credentials who and where
      * @param done        receives the result on the render thread
@@ -23,7 +24,8 @@ public interface ServerGateway {
     void logIn(Credentials credentials, Consumer<LoginResult> done);
 
     /**
-     * Connects, logs in again, claims this account's slot in the game, and fetches the new state.
+     * Claims this account's slot in the game over the session's connection (reconnecting and
+     * logging in again first if it has dropped), and fetches the game info and the new state.
      *
      * @param credentials  who and where
      * @param archetype    the agency style
@@ -35,7 +37,12 @@ public interface ServerGateway {
                    Consumer<ClaimResult> done);
 
     /**
-     * Stops any background work. Results still in flight are dropped.
+     * Ends the session: closes its connection. The next {@link #logIn} opens a new one.
+     */
+    void logOut();
+
+    /**
+     * Ends the session and stops the background work, when the client exits.
      */
     void dispose();
 }

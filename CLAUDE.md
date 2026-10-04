@@ -181,8 +181,8 @@ UI Asset Sheet. What exists now:
   `AgencyScreen` until the hub has a mockup).
 - **Widgets:** `client.ui` (`UiKit`, `FormField`, `OptionCard`, `HistoryNote`, `HistoryNotes`).
 - **Networking:** `client.connect`. `NetworkGateway` runs each call on a background
-  thread over its own short connection and posts the result back to the
-  render thread. `LoginResult` tells the handshake's refusals apart without
+  thread over the session's one connection (see below) and posts the result back
+  to the render thread. `LoginResult` tells the handshake's refusals apart without
   a reason code, since the handshake's shape is pinned.
 - **Server changes:** `ClaimSlotResponse` gained a `Reason` enum (registered
   last in `MessageRegistry`), and the login rule moved to `core`'s `LoginNames`.
@@ -213,10 +213,13 @@ shadow questions below are both closed now.)
 date and countdown. **Pitfall:** KryoNet's `Client.stop()` can block up to about 11 s
 on Windows after a finished exchange. That was the "weird timeouts" with quick
 connect/close cycles. Never close a client on a thread a result waits on.
-**Next:** main-menu groundwork (art by season and time of day, hotspots, hover), then
-G5 names, then G8 salary adjustment. The user asked (2026-10-04) about one long-lived
-connection per client session instead of short ones; see their answer in the next
-session note before changing `NetworkGateway`.
+**One long-lived connection per client session (user, 2026-10-04),** replacing
+the connection-per-call design (`design.md` §3.3). `NetworkGateway` logs in once
+at Connect, reuses the connection, reconnects and logs in again by itself if it
+has dropped, never repeats a call that broke mid-exchange, and closes off-thread.
+`ClientGatewayIntegrationTest` proves the reuse and a reconnect after a server
+restart. **Next:** main-menu groundwork (art by season and time of day, hotspots,
+hover; the hub stays chrome-free), then G5 names, then G8 salary adjustment.
 
 **Mockup feedback from the libGDX build, closed out the same day (2026-10-04).**
 Seven items came back from implementing Connect/Join Game; all are done now:

@@ -22,9 +22,23 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
- * The real {@link ServerGateway}: each call runs on one background thread, opens its own
- * short-lived KryoNet connection ({@code design.md} &sect;3.3), authenticates, does its work,
- * closes, and posts the result back to the render thread. Calls run one at a time, in order.
+ * The real {@link ServerGateway}: one KryoNet connection for the whole client session
+ * ({@code design.md} &sect;3.3, changed 2026-10-04). Connect opens it and logs in once; every later
+ * call goes over the same connection; Log out or the client's exit closes it. All calls run one at
+ * a time on one background thread, which alone touches the connection, and post their results back
+ * to the render thread.
+ *
+ * <p><b>Reconnecting.</b> A connection held for hours will sometimes drop (Wi-Fi, a sleeping
+ * laptop, a server restarted between resolutions). Before each call the gateway checks the
+ * connection is still up and, if not, opens a new one and logs in again with the session's
+ * credentials. (A connection that died silently, with no TCP close, still looks up until KryoNet's
+ * timeout notices; a call in that window fails once, and the retry reconnects.) A call whose connection breaks
+ * <em>during</em> the exchange is not repeated: the server may already have acted on it. The
+ * connection is dropped and the next call reconnects. (A slot claim repeated by the player is
+ * safe: the server answers {@code ALREADY_CLAIMED}, and Join Game then opens the agency.) Any
+ * exchange that breaks off also drops the connection, so a late reply to it can never be mistaken
+ * for the answer to a later request. Read-only calls added later may reconnect and retry once on
+ * such a failure; action submits must never be retried automatically.</p>
  *
  * @author Mario Koehler
  */
@@ -37,9 +51,10 @@ public final class NetworkGateway implements ServerGateway {
     });
 
     /**
-     * Closes finished connections off the worker thread. KryoNet's {@code Client.stop()} sometimes
-     * takes several seconds on Windows after the exchange is complete (seen up to ~11 s, 2026-10-04);
-     * closing inline held back both the result and the next call by that long.
+     * Closes dropped connections off the worker thread. KryoNet's {@code Client.stop()} sometimes
+     * takes several seconds on Windows (seen up to ~11 s, 2026-10-04); closing inline would hold
+     * back whatever the worker does next by that long. It was the likely cause of the "weird
+     * timeouts" the earlier connection-per-call design ran into.
      */
     private static final ExecutorService CLOSER = Executors.newCachedThreadPool(runnable -> {
         Thread thread = new Thread(runnable, "server-gateway-close");
@@ -47,100 +62,147 @@ public final class NetworkGateway implements ServerGateway {
         return thread;
     });
 
+    /** The session's connection; only the worker thread touches it. {@code null} when logged out. */
+    private NetworkClient client;
+    /** Who the connection is logged in as; only the worker thread touches it. */
+    private Credentials session;
+
     /**
-     * Creates the gateway and its background thread.
+     * Creates the gateway and its background thread. No connection is opened until {@link #logIn}.
      */
     public NetworkGateway() {
     }
 
     @Override
     public void logIn(Credentials credentials, Consumer<LoginResult> done) {
-        run(() -> withConnection(credentials, client -> {
-            Optional<LoginResult> refusal = handshake(client, credentials);
+        run(() -> {
+            // Pressing Connect is always a fresh login, even with the same credentials.
+            dropConnection();
+            Optional<LoginResult> refusal = openSession(credentials);
             if (refusal.isPresent()) {
                 return refusal.get();
             }
-            GameInfoResponse info = client.sendAndReceive(new GameInfoRequest(), GameInfoResponse.class);
-            if (!info.success()) {
-                return LoginResult.failure(LoginResult.Kind.FAILED, info.message());
+            try {
+                GameInfoResponse info = client.sendAndReceive(new GameInfoRequest(), GameInfoResponse.class);
+                if (!info.success()) {
+                    return LoginResult.failure(LoginResult.Kind.FAILED, info.message());
+                }
+                GameInfo gameInfo = new GameInfo(info, System.currentTimeMillis());
+                return LoginResult.fromFetch(client.sendAndReceive(new FetchStateRequest(), FetchStateResponse.class))
+                    .withGameInfo(gameInfo);
+            } catch (IOException | RuntimeException e) {
+                dropConnection();
+                return LoginResult.failure(LoginResult.Kind.FAILED, e.getMessage());
             }
-            GameInfo gameInfo = new GameInfo(info, System.currentTimeMillis());
-            return LoginResult.fromFetch(client.sendAndReceive(new FetchStateRequest(), FetchStateResponse.class))
-                .withGameInfo(gameInfo);
-        }, message -> LoginResult.failure(LoginResult.Kind.UNREACHABLE, message),
-            message -> LoginResult.failure(LoginResult.Kind.FAILED, message)),
-            message -> LoginResult.failure(LoginResult.Kind.FAILED, message), done);
+        }, message -> LoginResult.failure(LoginResult.Kind.FAILED, message), done);
     }
 
     @Override
     public void claimSlot(Credentials credentials, Archetype archetype, String agencyName, String directorName,
                           Consumer<ClaimResult> done) {
-        run(() -> withConnection(credentials, client -> {
-            Optional<LoginResult> refusal = handshake(client, credentials);
+        run(() -> {
+            Optional<LoginResult> refusal = ensureSession(credentials);
             if (refusal.isPresent()) {
-                return ClaimResult.failure(ClaimResult.Kind.LOGIN_FAILED, loginFailureText(refusal.get()));
+                return claimFailure(refusal.get());
             }
-            ClaimSlotResponse claim = client.sendAndReceive(
-                new ClaimSlotRequest(archetype, agencyName, directorName), ClaimSlotResponse.class);
-            if (!claim.success()) {
-                return ClaimResult.refused(claim);
+            try {
+                ClaimSlotResponse claim = client.sendAndReceive(
+                    new ClaimSlotRequest(archetype, agencyName, directorName), ClaimSlotResponse.class);
+                if (!claim.success()) {
+                    return ClaimResult.refused(claim);
+                }
+                GameInfoResponse info = client.sendAndReceive(new GameInfoRequest(), GameInfoResponse.class);
+                FetchStateResponse fetch = client.sendAndReceive(new FetchStateRequest(), FetchStateResponse.class);
+                if (!info.success() || !fetch.success()) {
+                    return ClaimResult.failure(ClaimResult.Kind.FAILED,
+                        info.success() ? fetch.message() : info.message());
+                }
+                return ClaimResult.joined(fetch.state(), new GameInfo(info, System.currentTimeMillis()));
+            } catch (IOException | RuntimeException e) {
+                dropConnection();
+                return ClaimResult.failure(ClaimResult.Kind.FAILED, e.getMessage());
             }
-            GameInfoResponse info = client.sendAndReceive(new GameInfoRequest(), GameInfoResponse.class);
-            FetchStateResponse fetch = client.sendAndReceive(new FetchStateRequest(), FetchStateResponse.class);
-            if (!info.success() || !fetch.success()) {
-                return ClaimResult.failure(ClaimResult.Kind.FAILED, info.success() ? fetch.message() : info.message());
-            }
-            return ClaimResult.joined(fetch.state(), new GameInfo(info, System.currentTimeMillis()));
-        }, message -> ClaimResult.failure(ClaimResult.Kind.UNREACHABLE, message),
-            message -> ClaimResult.failure(ClaimResult.Kind.FAILED, message)),
-            message -> ClaimResult.failure(ClaimResult.Kind.FAILED, message), done);
+        }, message -> ClaimResult.failure(ClaimResult.Kind.FAILED, message), done);
+    }
+
+    @Override
+    public void logOut() {
+        worker.execute(this::dropConnection);
     }
 
     @Override
     public void dispose() {
-        worker.shutdownNow();
-    }
-
-    private static Optional<LoginResult> handshake(NetworkClient client, Credentials credentials) throws IOException {
-        HandshakeResponse response = client.sendAndReceive(
-            new HandshakeRequest(AppVersion.getVersion(), credentials.login(), credentials.password()),
-            HandshakeResponse.class);
-        return LoginResult.fromHandshake(response, AppVersion.getVersion());
-    }
-
-    private static String loginFailureText(LoginResult result) {
-        if (result.kind() == LoginResult.Kind.VERSION_MISMATCH) {
-            return "The server is now on version " + result.serverVersion() + ". Update the client and connect again.";
-        }
-        return result.message();
+        worker.execute(this::dropConnection);
+        worker.shutdown();
     }
 
     /**
-     * Opens a connection, runs the exchange on it, and always closes it, in the background so a
-     * slow close never delays the result.
+     * Makes sure the connection is up and logged in as these credentials, reconnecting if it has
+     * dropped or belongs to someone else.
      *
-     * @param credentials   where to connect
-     * @param exchange      the work, on the open connection
-     * @param ifUnreachable the result when no connection can be made
-     * @param ifBroken      the result when the exchange breaks off
-     * @param <T>           the result type
-     * @return the result
+     * @param credentials who and where
+     * @return the login's refusal, or empty if the session is ready
      */
-    private static <T> T withConnection(Credentials credentials, Exchange<T> exchange,
-                                        Function<String, T> ifUnreachable, Function<String, T> ifBroken) {
-        NetworkClient client = new NetworkClient();
-        try {
-            try {
-                client.connect(credentials.address().host(), credentials.address().port());
-            } catch (IOException | RuntimeException e) {
-                return ifUnreachable.apply(e.getMessage());
-            }
-            return exchange.run(client);
-        } catch (IOException | RuntimeException e) {
-            return ifBroken.apply(e.getMessage());
-        } finally {
-            CLOSER.execute(client::close);
+    private Optional<LoginResult> ensureSession(Credentials credentials) {
+        if (client != null && client.isConnected() && credentials.equals(session)) {
+            return Optional.empty();
         }
+        dropConnection();
+        return openSession(credentials);
+    }
+
+    /**
+     * Opens a connection and logs in. On success it becomes the session's connection.
+     *
+     * @param credentials who and where
+     * @return the refusal, or empty on success
+     */
+    private Optional<LoginResult> openSession(Credentials credentials) {
+        NetworkClient fresh = new NetworkClient();
+        try {
+            fresh.connect(credentials.address().host(), credentials.address().port());
+        } catch (IOException | RuntimeException e) {
+            closeLater(fresh);
+            return Optional.of(LoginResult.failure(LoginResult.Kind.UNREACHABLE, e.getMessage()));
+        }
+        try {
+            HandshakeResponse response = fresh.sendAndReceive(
+                new HandshakeRequest(AppVersion.getVersion(), credentials.login(), credentials.password()),
+                HandshakeResponse.class);
+            Optional<LoginResult> refusal = LoginResult.fromHandshake(response, AppVersion.getVersion());
+            if (refusal.isPresent()) {
+                closeLater(fresh);
+                return refusal;
+            }
+        } catch (IOException | RuntimeException e) {
+            closeLater(fresh);
+            return Optional.of(LoginResult.failure(LoginResult.Kind.FAILED, e.getMessage()));
+        }
+        client = fresh;
+        session = credentials;
+        return Optional.empty();
+    }
+
+    private static ClaimResult claimFailure(LoginResult refusal) {
+        return switch (refusal.kind()) {
+            case UNREACHABLE -> ClaimResult.failure(ClaimResult.Kind.UNREACHABLE, refusal.message());
+            case FAILED -> ClaimResult.failure(ClaimResult.Kind.FAILED, refusal.message());
+            case VERSION_MISMATCH -> ClaimResult.failure(ClaimResult.Kind.LOGIN_FAILED, "The server is now on version "
+                + refusal.serverVersion() + ". Update the client and connect again.");
+            default -> ClaimResult.failure(ClaimResult.Kind.LOGIN_FAILED, refusal.message());
+        };
+    }
+
+    private void dropConnection() {
+        if (client != null) {
+            closeLater(client);
+            client = null;
+            session = null;
+        }
+    }
+
+    private static void closeLater(NetworkClient connection) {
+        CLOSER.execute(connection::close);
     }
 
     /**
@@ -154,27 +216,11 @@ public final class NetworkGateway implements ServerGateway {
                 result = work.get();
             } catch (Throwable e) {
                 Gdx.app.error("NetworkGateway", "Server call failed unexpectedly", e);
+                dropConnection();
                 result = ifCrashed.apply(e.toString());
             }
             T delivered = result;
             Gdx.app.postRunnable(() -> done.accept(delivered));
         });
-    }
-
-    /**
-     * Work done on an open, not yet authenticated connection.
-     *
-     * @param <T> the result type
-     */
-    @FunctionalInterface
-    private interface Exchange<T> {
-        /**
-         * Runs the work.
-         *
-         * @param client the connection
-         * @return the result
-         * @throws IOException if the exchange breaks off
-         */
-        T run(NetworkClient client) throws IOException;
     }
 }

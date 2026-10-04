@@ -14,6 +14,7 @@ import de.mkoehler.launchwindow.model.Season;
 import de.mkoehler.launchwindow.net.NetworkServer;
 import de.mkoehler.launchwindow.net.messages.ClaimSlotResponse;
 import de.mkoehler.launchwindow.net.messages.GameInfoResponse;
+import de.mkoehler.launchwindow.net.messages.HandshakeRequest;
 import de.mkoehler.launchwindow.server.accounts.AccountStore;
 import de.mkoehler.launchwindow.server.schedule.GameMeta;
 import org.junit.jupiter.api.AfterEach;
@@ -23,10 +24,12 @@ import org.junit.jupiter.api.io.TempDir;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -50,6 +53,7 @@ class ClientGatewayIntegrationTest {
     private HeadlessApplication application;
     private NetworkGateway gateway;
     private AccountStore accountStore;
+    private final AtomicInteger handshakes = new AtomicInteger();
 
     @AfterEach
     void tearDown() {
@@ -71,7 +75,8 @@ class ClientGatewayIntegrationTest {
     }
 
     /**
-     * The whole first-visit flow, then the refusals.
+     * The whole first-visit flow over one long-lived connection, a transparent reconnect after the
+     * server restarts, then the refusals.
      */
     @Test
     void theGatewayCarriesTheConnectAndJoinFlow(@TempDir Path dataRoot) throws Exception {
@@ -93,6 +98,14 @@ class ClientGatewayIntegrationTest {
         assertEquals(ClaimResult.Kind.JOINED, joined.kind());
         assertEquals("A. Reyes", joined.state().getDirectorName());
         assertEquals(ServerTestGames.PACK_HASH, joined.gameInfo().response().contentPackHash());
+        assertEquals(1, handshakes.get(), "the claim reuses the login's connection");
+
+        // A server restart drops the connection; the next call reconnects and logs in again by itself.
+        restartServer(dataRoot, port);
+        ClaimResult afterRestart = claim(mario, "Second Agency", "Someone Else");
+        assertEquals(ClaimResult.Kind.REFUSED, afterRestart.kind(), afterRestart.message());
+        assertEquals(ClaimSlotResponse.Reason.ALREADY_CLAIMED, afterRestart.reason());
+        assertEquals(2, handshakes.get(), "one new login after the restart");
 
         LoginResult again = logIn(mario);
         assertEquals(LoginResult.Kind.IN_GAME, again.kind());
@@ -112,6 +125,30 @@ class ClientGatewayIntegrationTest {
         }
         assertEquals(LoginResult.Kind.UNREACHABLE,
             logIn(new Credentials(new ServerAddress("localhost", closedPort), "mario", "hunter2")).kind());
+    }
+
+    /**
+     * The session's connection outlives an idle stretch longer than KryoNet's 12 s timeout
+     * (keepalives flow), and KryoNet's client thread is a daemon, so a close still running when the
+     * client exits can't keep the process alive.
+     */
+    @Test
+    void theConnectionSurvivesIdleStretches(@TempDir Path dataRoot) throws Exception {
+        int port = startServer(dataRoot);
+        application = new HeadlessApplication(new ApplicationAdapter() {
+        });
+        gateway = new NetworkGateway();
+        Credentials mario = new Credentials(new ServerAddress("localhost", port), "mario", "hunter2");
+
+        assertEquals(LoginResult.Kind.NEEDS_SLOT, logIn(mario).kind());
+        Thread.sleep(15_000);
+        assertEquals(ClaimResult.Kind.JOINED, claim(mario, "Baltic Star Agency", "A. Reyes").kind());
+        assertEquals(1, handshakes.get(), "no reconnect after 15 s idle");
+
+        List<Thread> clientThreads = Thread.getAllStackTraces().keySet().stream()
+            .filter(thread -> thread.getName().equals("Client")).toList();
+        assertFalse(clientThreads.isEmpty(), "KryoNet's client update thread is running");
+        assertTrue(clientThreads.stream().allMatch(Thread::isDaemon), "KryoNet's client thread is a daemon");
     }
 
     private LoginResult logIn(Credentials credentials) throws Exception {
@@ -134,6 +171,22 @@ class ClientGatewayIntegrationTest {
             port = socket.getLocalPort();
         }
         accountStore = new AccountStore(dataRoot.resolve("accounts.json"));
+        startServer(dataRoot, port);
+        return port;
+    }
+
+    /**
+     * Stops the server and starts a new one on the same port and data, as a host's restart would,
+     * then waits long enough for the client to notice its connection is gone.
+     */
+    private void restartServer(Path dataRoot, int port) throws Exception {
+        pollingThread.shutdownNow();
+        server.stop();
+        startServer(dataRoot, port);
+        Thread.sleep(1_000);
+    }
+
+    private void startServer(Path dataRoot, int port) throws IOException {
         ObjectMapper mapper = GameServer.createMapper();
         GameMeta meta = ServerTestGames.meta(false);
         RequestDispatcher dispatcher = new RequestDispatcher(accountStore, dataRoot, mapper, ServerTestGames.CONTEXT,
@@ -145,6 +198,9 @@ class ClientGatewayIntegrationTest {
         pollingThread.scheduleWithFixedDelay(() -> capturedServer.poll(new NetworkServer.Handler() {
             @Override
             public void onMessage(int connectionId, Object message) {
+                if (message instanceof HandshakeRequest) {
+                    handshakes.incrementAndGet();
+                }
                 RequestDispatcher.DispatchResult result = dispatcher.handle(connectionId, message);
                 if (result.closeConnection()) {
                     capturedServer.sendThenClose(connectionId, result.response());
@@ -158,6 +214,5 @@ class ClientGatewayIntegrationTest {
                 dispatcher.handleDisconnect(connectionId);
             }
         }), 0, 10, TimeUnit.MILLISECONDS);
-        return port;
     }
 }

@@ -49,6 +49,7 @@ public final class AgencyScreen extends StageScreen {
         logOut.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                game.gateway().logOut();
                 game.setScreen(new ConnectScreen(game));
             }
         });
