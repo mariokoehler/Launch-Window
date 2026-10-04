@@ -5650,6 +5650,33 @@ here.
       result back by that long. That led to the switch to one long-lived
       connection per session (§3.3). The gateway's worker always delivers a
       result, even if the work throws.
+  - **Slice: SET Centre screens, G5 and G8 — done (2026-10-04).** The first in-game
+    screens: the SET Centre's personnel overview (with the Training, Confirm and
+    Manage department dialogs and the action result toast), Payload R&D, and Hire
+    SET personnel. Details and unconfirmed choices are in `ui-spec.md` §4.8's
+    "Implemented" note.
+    - **Client foundation:** `ClientSession` holds the credentials, the latest state,
+      the game info and the game's content pack, loaded on the client from its
+      bundled copy and compared by hash. `ServerGateway` gained `submit` (never
+      retried) and `refresh` (a read, retried once on a broken connection).
+      `ChromeScreen` is the shared base: header, footer, toast, modal dialogs, and
+      submit-then-rebuild. `client.view` holds the screens' plain logic
+      (`SetDepartment`, `PayloadRnd`, `SetSkills`, `ContentNames`), with tests.
+    - **G5 names:** `rules.PersonnelNames`. Names are seeded from the candidate id and
+      the agency, never from the hiring pool's stream. Verified: `ContentPackPlayouts`
+      prints byte-identical output with and without names. Its current figure is 186
+      of 200 games completing every declared goal; the older "189 of 200" in these docs
+      predates later rules changes (slot staffing and others), not this one.
+    - **G8 salary adjustment:** `rules.DepartmentSalaries` holds one formula that
+      both `AdjustSalariesAction` (registered last in `MessageRegistry` and in
+      `PlayerAction`'s subtypes) and the dialog's live preview call.
+    - **Assets:** the chrome icons from the UI Asset Sheet and the SET skill icons,
+      rasterized white by `assets-raw/svg/ui/make_ui_icons.py` into `assets/ui/icons/`
+      (SVG sources beside the script).
+    - **Local mockup styles, not design-system components yet:** the modal dialog,
+      filter chips, the segmented control, the reliability bar, the skill bar, the
+      R&D slot box, and the white on-page secondary button. They should be promoted
+      to the design system and the UI Asset Sheet.
 - **M6 — Deployment.** jpackage client zip, Docker server image,
   tag-driven GitHub Actions release, reusing the sibling projects' own
   working templates (§3.3/§3.9). Comes after M5's playtest validates the

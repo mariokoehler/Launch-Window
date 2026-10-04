@@ -213,6 +213,17 @@ shadow questions below are both closed now.)
 date and countdown. **Pitfall:** KryoNet's `Client.stop()` can block up to about 11 s
 on Windows after a finished exchange. That was the "weird timeouts" with quick
 connect/close cycles. Never close a client on a thread a result waits on.
+**SET Centre built in libGDX (2026-10-04),** from the SET Centre mockup and the old
+Personnel Recruitment mockup: overview with Training, Confirm and Manage department
+dialogs, Payload R&D, and Hire, on a shared `ChromeScreen`. Also done: G5 candidate
+names (`rules.PersonnelNames`) and G8 department salary adjustment
+(`rules.DepartmentSalaries`, `AdjustSalariesAction`). See `design.md` §5 M5 and
+`ui-spec.md` §4.8's "Implemented" note for the choices made while building them, all
+confirmed by the user the same day (including G8's missing per-season limit). **Pitfall:** never
+create drawables in a rebuild loop; use `UiKit.rect`/`icon`/`cardAccent`, which cache.
+**Next:** the hub (its mockup exists), then the rest of `ui-spec.md` §7's first loop
+(Headquarters opening a program, VAB rocket programs).
+
 **One long-lived connection per client session (user, 2026-10-04),** replacing
 the connection-per-call design (`design.md` §3.3). `NetworkGateway` logs in once
 at Connect, reuses the connection, reconnects and logs in again by itself if it

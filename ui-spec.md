@@ -497,6 +497,41 @@ component · slot".
 (component 10) for payload components: satellites, probes, capsules. Also reached
 from mission configuration (§4.6.7), filtered to that mission.
 
+**Implemented in libGDX (2026-10-04)** from the SET Centre mockup (overview and
+Payload R&D) and the older Personnel Recruitment mockup (`client.screen.SetCentreScreen`,
+`PayloadRndScreen`, `HireScreen`, on a shared `ChromeScreen` with the header, footer,
+toast and dialogs). Decisions made while building them, **all confirmed by the user
+(2026-10-04)**:
+- **Pull out copy corrected.** The mockup says Permanent earns no partial credit, but
+  the rules credit the current round of Basic, Advanced *and* Permanent; only Expert
+  gets nothing. The dialog now says "They keep partial credit for the round in
+  progress." The mockup should be fixed to match.
+- **Training lengths and limits come from `core`**, not the mockup: Basic is
+  `SET_BASIC_TRAINING_SEASONS`, Advanced `ADVANCED_TRAINING_SEASONS`, and Permanent's
+  target slider starts one above the employee's current value in the chosen skill
+  (the server refuses anything else) and ends at the skill cap.
+- **Assigning R&D.** The server always seats a new researcher in the component's
+  lowest free slot, so only that slot shows "+ Assign". It opens a short list of
+  idle engineers, best in the component's skill first. (The mockup silently took
+  "the next idle specialist".)
+- **"Near retirement"** means within 5 years of the group's retirement age (65 for
+  SET), not the mockup's fixed 60.
+- **Caps come from the content pack** (the SET Centre's 7/14/20/30 by level), never
+  from mockup numbers.
+- **No funds delta in the footer.** Last season's net change isn't in the state yet
+  (gap G2), so none is shown rather than invented.
+- **Secondary buttons on the blue page** (Hire, Manage Department, Cancel) get a
+  white fill. The design system's transparent secondary button disappears on the
+  page.
+- **Component names are made from ids** ("vostok-capsule" reads "Vostok Capsule")
+  until the pack's display text exists (G4).
+- **Hiring several recruits** sends one hire per recruit, in order, and sums the
+  outcomes up in one toast. Selection stops at the SET Centre's free places.
+- **Recruitment screen chrome** follows the SET Centre mockup: no End Season button,
+  breadcrumb root Space Complex, and the next-turn chip.
+- **Home** goes to the stand-in agency screen until the hub is built. Footer chips
+  and buttons for screens that don't exist yet show a "isn't built yet" toast.
+
 ### 4.9 Astronaut Complex
 **Purpose:** the astronaut department. Astronaut cap 7/14/24/35. **Ref:**
 `astronaut_centre_*.png`, `hire_recruits.png`.
@@ -586,6 +621,7 @@ for the mockups.
 | MAX_LEVEL / ALREADY_UPGRADING | Already at the top level. / Already upgrading. |
 | NOT_IN_DEBT / EXCEEDS_CAP / INSUFFICIENT_PRESTIGE | Only possible while in debt. / More than the conversion allows. / Not enough prestige. |
 | SLOT_CLAIM_REQUIRED | (Client goes to §4.2.) |
+| Manage department (`AdjustSalariesAction`, added 2026-10-04): INVALID_PERCENT / EMPTY_DEPARTMENT | Pick a change between −50 % and +50 %. / There's nobody in the department yet. |
 | Join game (`ClaimSlotResponse.Reason`, added 2026-10-04): AGENCY_NAME_TAKEN / DIRECTOR_NAME_TAKEN / MISSING_FIELDS / ALREADY_CLAIMED / NOT_AUTHENTICATED / SERVER_ERROR | Already taken by another agency. (under the field) / the same / Required. / (client logs in again and opens the agency) / (danger notice with the server's words) |
 
 ---
@@ -621,7 +657,9 @@ current state alone. Each is an M5 task.
   goals, written in our own words (never BASPM's, `design.md` §1.2). Add a
   strings file per pack. Each entry can also carry an optional history note
   (component 15), so the content screens can show the icon where a story exists.
-- **G5. Personnel names.** Candidates are all called "Candidate". Generate
+- **G5. Personnel names.** *(Done 2026-10-04: `rules.PersonnelNames`, our own lists per
+  archetype, well-known space-program people left out, seeded per candidate so no
+  skill roll changes.)* Candidates are all called "Candidate". Generate
   plausible names per archetype (our own name lists).
 - **G6. Today's queue.** Today's pending actions and their results, for the queue
   panel.
@@ -630,7 +668,9 @@ current state alone. Each is an M5 task.
   assessment, auto-assign ranking, and running-cost breakdown are rules logic. The
   client ships `core` and calls the same methods locally against the preview
   state, so the UI never duplicates the rules.
-- **G8. Department salary adjustment (new rule)** *(decided: BASPM's one-off)*.
+- **G8. Department salary adjustment (new rule)** *(decided: BASPM's one-off; done
+  2026-10-04: `rules.DepartmentSalaries` and `AdjustSalariesAction`, no once-per-season
+  limit, as in BASPM, unconfirmed)*.
   An action that changes every salary in one group by p % (−50 to +50) and every
   morale in it by +p for a raise or −3p for a cut, clamped to 0–100
   (`baspm.md` §9.8). Morale feeds hiring quality and resignations, so this is a

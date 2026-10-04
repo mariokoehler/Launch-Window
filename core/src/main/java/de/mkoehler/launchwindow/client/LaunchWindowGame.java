@@ -3,11 +3,15 @@ package de.mkoehler.launchwindow.client;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import de.mkoehler.launchwindow.client.connect.Credentials;
+import de.mkoehler.launchwindow.client.connect.GameInfo;
 import de.mkoehler.launchwindow.client.connect.NetworkGateway;
 import de.mkoehler.launchwindow.client.connect.ServerGateway;
+import de.mkoehler.launchwindow.client.screen.AgencyScreen;
 import de.mkoehler.launchwindow.client.screen.ConnectScreen;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.UiKit;
+import de.mkoehler.launchwindow.model.PlayerSnapshot;
 
 /**
  * The client application's shared entry point ({@code design.md} &sect;3.3: lwjgl3 stays a
@@ -24,6 +28,7 @@ public class LaunchWindowGame extends Game {
     private ServerGateway gateway;
     private String lastServer = "localhost:45825";
     private String lastLogin = "";
+    private ClientSession session;
 
     @Override
     public void create() {
@@ -57,6 +62,45 @@ public class LaunchWindowGame extends Game {
      */
     public ServerGateway gateway() {
         return gateway;
+    }
+
+    /**
+     * Enters the game after a successful login or claim: starts the session (loading the game's
+     * content pack) and opens the agency.
+     *
+     * @param credentials who and where
+     * @param state       the player's state
+     * @param gameInfo    the game info
+     * @return {@code null} on success, or why the game couldn't be entered (the client lacks the
+     *     game's content pack)
+     */
+    public String enterGame(Credentials credentials, PlayerSnapshot state, GameInfo gameInfo) {
+        try {
+            session = ClientSession.start(credentials, state, gameInfo, LaunchWindowGame.class.getClassLoader());
+        } catch (IllegalStateException e) {
+            return e.getMessage();
+        }
+        setScreen(new AgencyScreen(this));
+        return null;
+    }
+
+    /**
+     * Returns the session, once the player is in the game.
+     *
+     * @return the session, or {@code null} before entering
+     */
+    public ClientSession session() {
+        return session;
+    }
+
+    /**
+     * Sets the session directly. For the offscreen screenshot tool, which builds screens without a
+     * server.
+     *
+     * @param session the session
+     */
+    public void setSession(ClientSession session) {
+        this.session = session;
     }
 
     /**

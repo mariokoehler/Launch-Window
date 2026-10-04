@@ -12,6 +12,9 @@ import de.mkoehler.launchwindow.net.messages.GameInfoRequest;
 import de.mkoehler.launchwindow.net.messages.GameInfoResponse;
 import de.mkoehler.launchwindow.net.messages.HandshakeRequest;
 import de.mkoehler.launchwindow.net.messages.HandshakeResponse;
+import de.mkoehler.launchwindow.net.messages.SubmitActionRequest;
+import de.mkoehler.launchwindow.net.messages.SubmitActionResponse;
+import de.mkoehler.launchwindow.persistence.PlayerAction;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -126,6 +129,36 @@ public final class NetworkGateway implements ServerGateway {
     }
 
     @Override
+    public void submit(Credentials credentials, PlayerAction action, Consumer<ServerResult> done) {
+        run(() -> {
+            Optional<LoginResult> refusal = ensureSession(credentials);
+            if (refusal.isPresent()) {
+                return sessionFailure(refusal.get());
+            }
+            SubmitActionResponse response;
+            try {
+                response = client.sendAndReceive(new SubmitActionRequest(action), SubmitActionResponse.class);
+            } catch (IOException | RuntimeException e) {
+                dropConnection();
+                return ServerResult.of(ServerResult.Kind.FAILED, e.getMessage());
+            }
+            if (!response.success()) {
+                return ServerResult.of(ServerResult.Kind.REFUSED, response.message());
+            }
+            ServerResult fetched = readWithRetry(credentials);
+            // The action is applied either way; without a fresh state the screen refreshes later.
+            return fetched.kind() == ServerResult.Kind.OK
+                ? new ServerResult(ServerResult.Kind.OK, response.message(), fetched.state(), fetched.gameInfo())
+                : ServerResult.of(ServerResult.Kind.OK, response.message());
+        }, message -> ServerResult.of(ServerResult.Kind.FAILED, message), done);
+    }
+
+    @Override
+    public void refresh(Credentials credentials, Consumer<ServerResult> done) {
+        run(() -> readWithRetry(credentials), message -> ServerResult.of(ServerResult.Kind.FAILED, message), done);
+    }
+
+    @Override
     public void logOut() {
         worker.execute(this::dropConnection);
     }
@@ -181,6 +214,49 @@ public final class NetworkGateway implements ServerGateway {
         client = fresh;
         session = credentials;
         return Optional.empty();
+    }
+
+    /**
+     * Fetches the game info and the state; on a broken connection, reconnects and tries once more.
+     *
+     * @param credentials who and where
+     * @return the result
+     */
+    private ServerResult readWithRetry(Credentials credentials) {
+        ServerResult first = readOnce(credentials);
+        if (first.kind() != ServerResult.Kind.FAILED) {
+            return first;
+        }
+        return readOnce(credentials);
+    }
+
+    private ServerResult readOnce(Credentials credentials) {
+        Optional<LoginResult> refusal = ensureSession(credentials);
+        if (refusal.isPresent()) {
+            return sessionFailure(refusal.get());
+        }
+        try {
+            GameInfoResponse info = client.sendAndReceive(new GameInfoRequest(), GameInfoResponse.class);
+            FetchStateResponse fetch = client.sendAndReceive(new FetchStateRequest(), FetchStateResponse.class);
+            if (!info.success() || !fetch.success()) {
+                return ServerResult.of(ServerResult.Kind.REFUSED, info.success() ? fetch.message() : info.message());
+            }
+            return new ServerResult(ServerResult.Kind.OK, "", fetch.state(),
+                new GameInfo(info, System.currentTimeMillis()));
+        } catch (IOException | RuntimeException e) {
+            dropConnection();
+            return ServerResult.of(ServerResult.Kind.FAILED, e.getMessage());
+        }
+    }
+
+    private static ServerResult sessionFailure(LoginResult refusal) {
+        return switch (refusal.kind()) {
+            case UNREACHABLE -> ServerResult.of(ServerResult.Kind.UNREACHABLE, refusal.message());
+            case FAILED -> ServerResult.of(ServerResult.Kind.FAILED, refusal.message());
+            case VERSION_MISMATCH -> ServerResult.of(ServerResult.Kind.LOGIN_FAILED, "The server is now on version "
+                + refusal.serverVersion() + ". Update the client and connect again.");
+            default -> ServerResult.of(ServerResult.Kind.LOGIN_FAILED, refusal.message());
+        };
     }
 
     private static ClaimResult claimFailure(LoginResult refusal) {

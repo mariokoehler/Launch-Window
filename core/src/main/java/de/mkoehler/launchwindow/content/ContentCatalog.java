@@ -172,6 +172,15 @@ public final class ContentCatalog {
     }
 
     /**
+     * Returns every mission component, in the pack's order.
+     *
+     * @return the components, unmodifiable
+     */
+    public java.util.Collection<MissionComponent> missionComponents() {
+        return java.util.Collections.unmodifiableCollection(missionComponentsById.values());
+    }
+
+    /**
      * Indexes a list of content definitions by their own id, rejecting a
      * duplicate.
      *

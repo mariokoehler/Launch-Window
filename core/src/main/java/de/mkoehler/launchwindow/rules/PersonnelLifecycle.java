@@ -159,15 +159,14 @@ public final class PersonnelLifecycle {
     }
 
     /**
-     * Returns the given group's retirement age, in whole years.
-     * Package-private: a shared lookup for any resolver in this package
-     * that needs to check age against retirement (e.g. {@link MissionProgress}'s
-     * retire-on-release check), not a public part of this class's own API.
+     * Returns the given group's retirement age, in whole years. Shared by the resolvers that check
+     * age against retirement (e.g. {@link MissionProgress}'s retire-on-release check) and, since
+     * 2026-10-04, the client's "near retirement" count.
      *
      * @param group the personnel group
      * @return that group's retirement age
      */
-    static int retirementAgeFor(PersonnelGroup group) {
+    public static int retirementAgeFor(PersonnelGroup group) {
         return switch (group) {
             case ASTRONAUT -> ASTRONAUT_RETIREMENT_AGE;
             case SET -> SET_RETIREMENT_AGE;

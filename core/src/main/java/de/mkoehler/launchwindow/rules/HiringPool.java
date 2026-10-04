@@ -2,6 +2,7 @@ package de.mkoehler.launchwindow.rules;
 
 import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.content.BuildingSchedule;
+import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.Building;
 import de.mkoehler.launchwindow.model.AstronautSkill;
@@ -136,6 +137,18 @@ public final class HiringPool {
     }
 
     /**
+     * Names a new candidate from their own seed (gap G5), never from the pool's random stream.
+     *
+     * @param snapshot    the hiring player's state
+     * @param candidateId the candidate's id
+     * @return the name
+     */
+    private static String candidateName(PlayerSnapshot snapshot, String candidateId) {
+        Archetype archetype = snapshot.getArchetype() == null ? Archetype.NASA : snapshot.getArchetype();
+        return PersonnelNames.forCandidate(candidateId, archetype, snapshot.getAgencyName());
+    }
+
+    /**
      * Replaces every group's candidate pool with a fresh
      * {@link #HIRING_BATCH_SIZE}-sized batch, discarding whoever was in it
      * before (the job market moves on, not an accumulating pool). Quality
@@ -157,6 +170,7 @@ public final class HiringPool {
             Astronaut candidate = new Astronaut(snapshot.allocatePersonnelId(), "Candidate",
                 randomAge(random), randomStartingMorale(random), randomLearningPotential(random));
             candidate.setSalary(randomSalary(random));
+            candidate.setName(candidateName(snapshot, candidate.getId()));
             for (AstronautSkill skill : AstronautSkill.values()) {
                 candidate.setSkill(skill, randomSkill(random, astronautBand));
             }
@@ -170,6 +184,7 @@ public final class HiringPool {
             SetSpecialist candidate = new SetSpecialist(snapshot.allocatePersonnelId(), "Candidate",
                 randomAge(random), randomStartingMorale(random), randomLearningPotential(random));
             candidate.setSalary(randomSalary(random));
+            candidate.setName(candidateName(snapshot, candidate.getId()));
             for (SetSkill skill : SetSkill.values()) {
                 candidate.setSkill(skill, randomSkill(random, setBand));
             }
@@ -183,6 +198,7 @@ public final class HiringPool {
             MissionControlOfficer candidate = new MissionControlOfficer(snapshot.allocatePersonnelId(), "Candidate",
                 randomAge(random), randomStartingMorale(random), randomLearningPotential(random));
             candidate.setSalary(randomSalary(random));
+            candidate.setName(candidateName(snapshot, candidate.getId()));
             for (MissionControlSkill skill : MissionControlSkill.values()) {
                 candidate.setSkill(skill, randomSkill(random, missionControlBand));
             }

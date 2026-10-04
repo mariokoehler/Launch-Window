@@ -1,6 +1,7 @@
 package de.mkoehler.launchwindow.client.connect;
 
 import de.mkoehler.launchwindow.model.Archetype;
+import de.mkoehler.launchwindow.persistence.PlayerAction;
 
 import java.util.function.Consumer;
 
@@ -35,6 +36,26 @@ public interface ServerGateway {
      */
     void claimSlot(Credentials credentials, Archetype archetype, String agencyName, String directorName,
                    Consumer<ClaimResult> done);
+
+    /**
+     * Submits one of today's actions over the session's connection, then fetches the state with it
+     * applied and the game info. The submit itself is never retried: if the connection breaks
+     * during it, the server may already have applied it.
+     *
+     * @param credentials who and where
+     * @param action      the action
+     * @param done        receives the result on the render thread
+     */
+    void submit(Credentials credentials, PlayerAction action, Consumer<ServerResult> done);
+
+    /**
+     * Fetches the player's state and the game info again. A read, so it may reconnect and retry
+     * once if the connection breaks.
+     *
+     * @param credentials who and where
+     * @param done        receives the result on the render thread
+     */
+    void refresh(Credentials credentials, Consumer<ServerResult> done);
 
     /**
      * Ends the session: closes its connection. The next {@link #logIn} opens a new one.

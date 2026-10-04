@@ -1,6 +1,7 @@
 package de.mkoehler.launchwindow.net;
 
 import com.esotericsoftware.kryo.Kryo;
+import de.mkoehler.launchwindow.actions.AdjustSalariesAction;
 import de.mkoehler.launchwindow.actions.AssignResearchAction;
 import de.mkoehler.launchwindow.actions.CancelMissionAction;
 import de.mkoehler.launchwindow.actions.CloseProgramAction;
@@ -189,5 +190,7 @@ public final class MessageRegistry {
         kryo.register(Season.class);
         kryo.register(GameInfoRequest.class);
         kryo.register(GameInfoResponse.class);
+        // Appended 2026-10-04 (M5 department salary adjustment, ui-spec.md gap G8). Never move this line.
+        kryo.register(AdjustSalariesAction.class);
     }
 }

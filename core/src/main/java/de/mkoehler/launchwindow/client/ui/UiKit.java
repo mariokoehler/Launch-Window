@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -16,6 +17,7 @@ import com.badlogic.gdx.utils.Disposable;
 import de.mkoehler.launchwindow.model.Archetype;
 
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -45,6 +47,12 @@ public final class UiKit implements Disposable {
     private final Drawable historyNoteCard;
     private final Label.LabelStyle activeBadge;
     private final Drawable badgeFill;
+    private final FileHandle assets;
+    private final Map<String, Texture> icons = new HashMap<>();
+    private final Map<String, Drawable> rects = new HashMap<>();
+    private final Map<Theme.BadgeKind, Drawable> badgeFills = new EnumMap<>(Theme.BadgeKind.class);
+    private Slider.SliderStyle sliderStyle;
+    private TextButton.TextButtonStyle pageButtonStyle;
 
     /**
      * Loads the fonts and images and builds the shared styles.
@@ -53,6 +61,7 @@ public final class UiKit implements Disposable {
      * @param fontScale the ratio of the real window height to {@value Theme#VIEW_HEIGHT}, so text stays sharp
      */
     public UiKit(FileHandle assets, float fontScale) {
+        this.assets = assets;
         this.fonts = Theme.Fonts.load(assets.child("fonts"), fontScale);
         this.logo = smoothTexture(assets.child("branding/logo.png"));
         this.historyNoteIcon = smoothTexture(assets.child("ui/icon_history_note.png"));
@@ -75,6 +84,129 @@ public final class UiKit implements Disposable {
         Drawable badgeFill = activeBadge.background;
         activeBadge.background = null;
         this.badgeFill = badgeFill;
+        for (Theme.BadgeKind kind : Theme.BadgeKind.values()) {
+            badgeFills.put(kind, shapes.badge(kind, fonts.get(Theme.TextStyle.LABEL)).background);
+        }
+    }
+
+    /**
+     * Returns a UI icon from {@code assets/ui/icons/}, white so it can be tinted with
+     * {@code Image.setColor}. Loaded once and kept.
+     *
+     * @param name the icon's file name without {@code .png}, such as {@code prestige}
+     * @return the drawable
+     */
+    public TextureRegionDrawable icon(String name) {
+        Texture texture = icons.computeIfAbsent(name, key -> smoothTexture(assets.child("ui/icons/" + key + ".png")));
+        return new TextureRegionDrawable(texture);
+    }
+
+    /**
+     * Returns the native size of an icon's image, for keeping an icon's aspect ratio (the SET
+     * skill icons all differ: size them by height only).
+     *
+     * @param name the icon's name
+     * @return its width divided by its height
+     */
+    public float iconAspect(String name) {
+        Texture texture = icons.computeIfAbsent(name, key -> smoothTexture(assets.child("ui/icons/" + key + ".png")));
+        return (float) texture.getWidth() / texture.getHeight();
+    }
+
+    /**
+     * Returns a sharp-cornered bordered rectangle ({@link Theme.Shapes#rect}), built once per
+     * combination and kept, so screens that rebuild their widgets never make new textures.
+     *
+     * @param fill        the fill
+     * @param border      the border color
+     * @param borderWidth the border width, 0 for none
+     * @return the drawable
+     */
+    public Drawable rect(Color fill, Color border, float borderWidth) {
+        String key = fill + "/" + border + "/" + borderWidth;
+        return rects.computeIfAbsent(key, k -> shapes.rect(fill, border, borderWidth));
+    }
+
+    /**
+     * Returns the slider style (the training dialog's target level, the department salary
+     * slider): a thin {@link Theme#SKILL_TRACK} track with a {@link Theme#NAVY} fill up to a
+     * small navy knob. Built once.
+     *
+     * @return the style
+     */
+    public Slider.SliderStyle slider() {
+        if (sliderStyle == null) {
+            NinePatchDrawable track = (NinePatchDrawable) shapes.rect(Theme.SKILL_TRACK, Theme.SKILL_TRACK, 0f);
+            track.setMinHeight(4f);
+            NinePatchDrawable fill = (NinePatchDrawable) shapes.rect(Theme.NAVY, Theme.NAVY, 0f);
+            fill.setMinHeight(4f);
+            NinePatchDrawable knob = (NinePatchDrawable) shapes.rect(Theme.NAVY, Theme.NAVY, 0f);
+            knob.setMinWidth(10f);
+            knob.setMinHeight(18f);
+            sliderStyle = new Slider.SliderStyle(track, knob);
+            sliderStyle.knobBefore = fill;
+        }
+        return sliderStyle;
+    }
+
+    /**
+     * Returns the accent-left card background ({@link Theme.Shapes#cardAccent}), built once per color.
+     *
+     * @param accent the stripe color
+     * @return the drawable
+     */
+    public Drawable cardAccent(Color accent) {
+        return rects.computeIfAbsent("accent/" + accent, key -> shapes.cardAccent(accent));
+    }
+
+    /**
+     * Returns a flat fill, no border.
+     *
+     * @param color the fill color
+     * @return the drawable
+     */
+    public Drawable solid(Color color) {
+        return shapes.solid(color);
+    }
+
+    /**
+     * Returns a notice box background ({@link Theme.Shapes#notice}).
+     *
+     * @param kind the kind
+     * @return the drawable
+     */
+    public Drawable noticeBackground(Theme.NoticeKind kind) {
+        return notices.get(kind);
+    }
+
+    /**
+     * Builds a badge of any kind, padded {@link Theme#SPACE_1} by {@link Theme#SPACE_2}.
+     *
+     * @param kind the kind
+     * @param text the text
+     * @return the badge
+     */
+    public Container<Label> badge(Theme.BadgeKind kind, String text) {
+        Color textColor = kind == Theme.BadgeKind.ACTIVE ? Theme.ON_GOLD : Theme.ON_FILL;
+        Container<Label> badge = new Container<>(label(text, Theme.TextStyle.LABEL, textColor));
+        badge.setBackground(badgeFills.get(kind));
+        badge.pad(Theme.SPACE_1, Theme.SPACE_2, Theme.SPACE_1, Theme.SPACE_2);
+        return badge;
+    }
+
+    /**
+     * Builds a one-line notice (the action result toast's look): the message alone, no bold lead.
+     *
+     * @param kind the kind
+     * @param text the message
+     * @return the notice's table
+     */
+    public Table notice(Theme.NoticeKind kind, String text) {
+        Table notice = new Table();
+        notice.setBackground(notices.get(kind));
+        notice.pad(Theme.SPACE_3);
+        notice.add(paragraph(text, Theme.TextStyle.BODY, kind.textColor())).growX();
+        return notice;
     }
 
     /**
@@ -124,6 +256,28 @@ public final class UiKit implements Disposable {
      */
     public TextButton button(String text, Theme.ButtonKind kind) {
         TextButton button = new TextButton(text, buttonStyles.get(kind));
+        button.pad(Theme.SPACE_2, Theme.SPACE_3, Theme.SPACE_2, Theme.SPACE_3);
+        return button;
+    }
+
+    /**
+     * Builds a secondary button for use directly on the blue page: the design system's secondary
+     * button is transparent with navy text, which disappears on {@link Theme#SURFACE_PAGE}, so this
+     * one gets a white fill (the mockups' own on-page icon buttons use the same white fill and
+     * {@link Theme#ON_PAGE} border). Not yet a design-system variant.
+     *
+     * @param text the label
+     * @return the button
+     */
+    public TextButton pageButton(String text) {
+        if (pageButtonStyle == null) {
+            pageButtonStyle = new TextButton.TextButtonStyle(buttonStyles.get(Theme.ButtonKind.SECONDARY));
+            pageButtonStyle.up = rect(Theme.SURFACE_CARD, Theme.ON_PAGE, Theme.BORDER_THIN);
+            pageButtonStyle.down = rect(new Color(Theme.SURFACE_CARD).lerp(Theme.NAVY, 0.08f), Theme.ON_PAGE,
+                Theme.BORDER_THIN);
+            pageButtonStyle.disabled = rect(new Color(1f, 1f, 1f, 0.5f), Theme.ON_PAGE, Theme.BORDER_THIN);
+        }
+        TextButton button = new TextButton(text, pageButtonStyle);
         button.pad(Theme.SPACE_2, Theme.SPACE_3, Theme.SPACE_2, Theme.SPACE_3);
         return button;
     }
@@ -263,6 +417,7 @@ public final class UiKit implements Disposable {
         logo.dispose();
         historyNoteIcon.dispose();
         archetypeArt.values().forEach(Texture::dispose);
+        icons.values().forEach(Texture::dispose);
     }
 
     private static Texture smoothTexture(FileHandle file) {

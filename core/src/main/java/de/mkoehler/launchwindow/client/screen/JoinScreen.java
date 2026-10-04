@@ -11,12 +11,14 @@ import com.badlogic.gdx.utils.Align;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.connect.ClaimResult;
 import de.mkoehler.launchwindow.client.connect.Credentials;
+import de.mkoehler.launchwindow.client.connect.GameInfo;
 import de.mkoehler.launchwindow.client.connect.LoginResult;
 import de.mkoehler.launchwindow.client.ui.FormField;
 import de.mkoehler.launchwindow.client.ui.HistoryNotes;
 import de.mkoehler.launchwindow.client.ui.OptionCard;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.model.Archetype;
+import de.mkoehler.launchwindow.model.PlayerSnapshot;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -177,7 +179,7 @@ public final class JoinScreen extends StageScreen {
     public void applyClaimResult(ClaimResult result) {
         setBusy(false);
         switch (result.kind()) {
-            case JOINED -> game.setScreen(new AgencyScreen(game, credentials, result.state(), result.gameInfo()));
+            case JOINED -> enter(result.state(), result.gameInfo());
             case REFUSED -> showRefusal(result);
             case LOGIN_FAILED -> showBanner("Couldn't log in again.", result.message());
             case UNREACHABLE -> showBanner("Can't reach the server.", "Check your connection and try again.");
@@ -220,11 +222,18 @@ public final class JoinScreen extends StageScreen {
             }
             setBusy(false);
             if (login.kind() == LoginResult.Kind.IN_GAME) {
-                game.setScreen(new AgencyScreen(game, credentials, login.state(), login.gameInfo()));
+                enter(login.state(), login.gameInfo());
             } else {
                 showBanner("This account already has an agency here.", "Connect again to open it.");
             }
         });
+    }
+
+    private void enter(PlayerSnapshot state, GameInfo gameInfo) {
+        String problem = game.enterGame(credentials, state, gameInfo);
+        if (problem != null) {
+            showBanner("Can't open this game.", problem);
+        }
     }
 
     private static Label centered(Label label) {

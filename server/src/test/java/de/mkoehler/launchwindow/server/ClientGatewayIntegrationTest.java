@@ -8,6 +8,11 @@ import de.mkoehler.launchwindow.client.connect.Credentials;
 import de.mkoehler.launchwindow.client.connect.LoginResult;
 import de.mkoehler.launchwindow.client.connect.NetworkGateway;
 import de.mkoehler.launchwindow.client.connect.ServerAddress;
+import de.mkoehler.launchwindow.client.connect.ServerResult;
+import de.mkoehler.launchwindow.actions.AdjustSalariesAction;
+import de.mkoehler.launchwindow.actions.HireAction;
+import de.mkoehler.launchwindow.persistence.PlayerAction;
+import de.mkoehler.launchwindow.rules.PersonnelGroup;
 import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.model.GameDate;
 import de.mkoehler.launchwindow.model.Season;
@@ -100,6 +105,23 @@ class ClientGatewayIntegrationTest {
         assertEquals(ServerTestGames.PACK_HASH, joined.gameInfo().response().contentPackHash());
         assertEquals(1, handshakes.get(), "the claim reuses the login's connection");
 
+        // Actions go over the same connection: a hire is applied and the refreshed state comes back with it;
+        // a refusal comes back as the server's code.
+        String candidate = joined.state().getSetSpecialistCandidates().get(0).getId();
+        ServerResult hired = submit(mario, new HireAction(PersonnelGroup.SET, candidate));
+        assertEquals(ServerResult.Kind.OK, hired.kind(), hired.message());
+        assertEquals(1, hired.state().getSetSpecialists().size());
+        ServerResult stale = submit(mario, new HireAction(PersonnelGroup.SET, candidate));
+        assertEquals(ServerResult.Kind.REFUSED, stale.kind());
+        assertEquals("UNKNOWN_CANDIDATE", stale.message());
+        double salary = hired.state().getSetSpecialists().get(0).getSalary();
+        ServerResult raised = submit(mario, new AdjustSalariesAction(PersonnelGroup.SET, 10));
+        assertEquals(ServerResult.Kind.OK, raised.kind(), raised.message());
+        assertEquals(salary * 1.1, raised.state().getSetSpecialists().get(0).getSalary(), 1e-9);
+        ServerResult refreshed = await(done -> gateway.refresh(mario, done));
+        assertEquals(1, refreshed.state().getSetSpecialists().size());
+        assertEquals(1, handshakes.get(), "submits and refreshes reuse the connection too");
+
         // A server restart drops the connection; the next call reconnects and logs in again by itself.
         restartServer(dataRoot, port);
         ClaimResult afterRestart = claim(mario, "Second Agency", "Someone Else");
@@ -149,6 +171,10 @@ class ClientGatewayIntegrationTest {
             .filter(thread -> thread.getName().equals("Client")).toList();
         assertFalse(clientThreads.isEmpty(), "KryoNet's client update thread is running");
         assertTrue(clientThreads.stream().allMatch(Thread::isDaemon), "KryoNet's client thread is a daemon");
+    }
+
+    private ServerResult submit(Credentials credentials, PlayerAction action) throws Exception {
+        return await(done -> gateway.submit(credentials, action, done));
     }
 
     private LoginResult logIn(Credentials credentials) throws Exception {

@@ -2,6 +2,7 @@ package de.mkoehler.launchwindow.persistence;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import de.mkoehler.launchwindow.actions.AdjustSalariesAction;
 import de.mkoehler.launchwindow.actions.AssignResearchAction;
 import de.mkoehler.launchwindow.actions.CancelMissionAction;
 import de.mkoehler.launchwindow.actions.CloseProgramAction;
@@ -55,7 +56,8 @@ import de.mkoehler.launchwindow.model.PlayerSnapshot;
     @JsonSubTypes.Type(value = StartTrainingAction.class, name = "startTraining"),
     @JsonSubTypes.Type(value = StartExpertTrainingAction.class, name = "startExpertTraining"),
     @JsonSubTypes.Type(value = PullOutOfTrainingAction.class, name = "pullOutOfTraining"),
-    @JsonSubTypes.Type(value = ReassignControlSlotAction.class, name = "reassignControlSlot")
+    @JsonSubTypes.Type(value = ReassignControlSlotAction.class, name = "reassignControlSlot"),
+    @JsonSubTypes.Type(value = AdjustSalariesAction.class, name = "adjustSalaries")
 })
 public abstract class PlayerAction {
 

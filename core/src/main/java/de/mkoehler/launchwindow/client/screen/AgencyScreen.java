@@ -5,8 +5,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import de.mkoehler.launchwindow.client.ClientSession;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
-import de.mkoehler.launchwindow.client.connect.Credentials;
 import de.mkoehler.launchwindow.client.connect.GameInfo;
 import de.mkoehler.launchwindow.client.ui.Countdown;
 import de.mkoehler.launchwindow.client.ui.Theme;
@@ -32,16 +32,14 @@ public final class AgencyScreen extends StageScreen {
     private final Label countdown;
 
     /**
-     * Builds the screen.
+     * Builds the screen from the game's session.
      *
-     * @param game        the game
-     * @param credentials the login in use (kept for the hub that will replace this screen)
-     * @param state       the player's state with today's actions applied
-     * @param gameInfo    the game's shared facts
+     * @param game the game, in a session
      */
-    public AgencyScreen(LaunchWindowGame game, Credentials credentials, PlayerSnapshot state, GameInfo gameInfo) {
+    public AgencyScreen(LaunchWindowGame game) {
         super(game);
-        this.gameInfo = gameInfo;
+        PlayerSnapshot state = game.session().state();
+        this.gameInfo = game.session().gameInfo();
         GameInfoResponse info = gameInfo.response();
         countdown = ui.paragraph("", Theme.TextStyle.BODY, Theme.INK);
         updateCountdown();
@@ -65,9 +63,24 @@ public final class AgencyScreen extends StageScreen {
         card.add(ui.paragraph(info.date().label() + " · Game turn " + info.gameTurn()
             + (info.started() ? "" : " · Signup"), Theme.TextStyle.BODY, Theme.INK)).row();
         card.add(countdown).row();
-        card.add(ui.paragraph("The Space Complex isn't built yet. This page stands in for it.",
+        if (game.session().packStatus() == ClientSession.PackStatus.DIFFERENT) {
+            card.add(ui.paragraph("Your copy of this game's content differs from the server's. Some numbers shown "
+                + "may be off until the client can download the game's own copy.", Theme.TextStyle.CAPTION,
+                Theme.DANGER)).row();
+        }
+        card.add(ui.paragraph("The Space Complex isn't built yet. This page stands in for it; the SET Centre is built.",
             Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padBottom(Theme.SPACE_4).row();
-        card.add(logOut).left().expand(false, false).fill(false, false).padBottom(0f);
+        TextButton setCentre = ui.button("SET Centre", Theme.ButtonKind.PRIMARY);
+        setCentre.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new SetCentreScreen(game));
+            }
+        });
+        Table buttons = new Table();
+        buttons.add(setCentre).padRight(Theme.SPACE_2);
+        buttons.add(logOut);
+        card.add(buttons).left().expand(false, false).fill(false, false).padBottom(0f);
         root.add(card).width(COLUMN_WIDTH);
     }
 

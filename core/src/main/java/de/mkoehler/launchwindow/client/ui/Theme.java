@@ -464,7 +464,7 @@ public final class Theme {
         + "ĐđĒēĔĕĖėĘęĚěĜĝĞğ"
         + "İıŁłŒœŚśŠšŤťŪūŮů"
         + "ŰűŲųŸŹźŻżŽž"
-        + "€×–—…‘’“”·−•";
+        + "€×–—…‘’“”·−•→↑↓›";
 
     /**
      * One {@link BitmapFont} per {@link TextStyle}, owned by this object.
