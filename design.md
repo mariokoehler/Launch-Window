@@ -4103,6 +4103,44 @@ every screen, per the mockup's own comments):**
   `scale` parameter), not a new technical decision, just an explicit
   requirement now on record.
 
+**Hub chrome-or-not: two mockups built, decision still open (2026-10-05).**
+`ui-spec.md` §4.3 left this an explicit proposal, not a decision ("no header
+or footer chrome on this screen, so the art stays whole"). Rather than pick
+one, both were mocked up side by side in a new Claude Design canvas
+("Launch Window — Space Complex Hub", private, not in this repo — ask the
+user for the link) using the real `LW_main_menu_NASA.hotspots.json` polygon
+data and one of the 32 prepared background variants (NASA, spring/noon —
+not the final pick, just a representative sample):
+- **No-chrome artboard:** full-bleed 1920&times;1080 art, the 7 hotspots
+  overlaid as hover-highlighted SVG polygons (design.md's own decided
+  hard-edged highlight: white fill+stroke at 0.18 alpha, confirmed to read
+  well against real art, not just the earlier prototype's placeholder
+  hexagon), and a slim translucent overlay strip along the top carrying
+  everything the shared header/footer doesn't: agency/director name, the
+  turn-report button (with its unread badge), and the usual game-date/
+  next-resolution/funds/prestige chips.
+- **With-chrome artboard:** the same art+hotspots inside the standard
+  header/footer chrome (copied from the Personnel Recruitment mockup, not
+  re-derived) — which necessarily letterboxes the art (pillarboxed, since
+  the content box is wider-than-16:9 relative to the art itself) rather
+  than filling the screen. The hub's own info moved into the screen's
+  title-block row instead of a bespoke strip; a next-resolution chip was
+  added to the header (ui-spec.md §2's recent addition, predating the
+  Personnel Recruitment mockup).
+- Both demonstrate the "under construction" marker (§4.3's own requirement)
+  as a small gold badge reusing the existing settings-gear icon — no new
+  glyph needed there — and an unread-badge dot on the turn-report button,
+  both via the same dev-only state switcher pattern every mockup since
+  Connect/Join Game has used.
+- **Two new icons this needed, added to the UI Asset Sheet the same day:**
+  a clock (next-resolution chip) and a document glyph (turn-report button).
+  Both are original stroke icons in the system's existing nav/chrome style,
+  not traced from anything.
+- **Not yet decided:** which variant ships. Letterboxing the hero art is
+  the real, visible cost of chrome-everywhere consistency; full-bleed is
+  the real, visible cost of a bespoke one-off chrome strip. The user is
+  reviewing both before choosing.
+
 **The `Theme.java` gap flagged here is closed (2026-10-04).** `Theme.SUCCESS_ON_PAGE`
 and `Theme.COMMIT` (plus `ButtonKind.COMMIT`) are now both defined, matching
 `tokens.json` exactly. Done ahead of the footer/header chrome actually being
