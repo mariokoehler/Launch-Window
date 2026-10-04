@@ -16,17 +16,18 @@ package de.mkoehler.launchwindow.net.messages;
  * specifically so their ids survive drift in every other registered class,
  * but Kryo's record serializer still reads the receiver's own field count
  * to decode one, so two builds with a different field list here could not
- * decode each other's handshake regardless of registration order.</p>
+ * decode each other's handshake regardless of registration order. (Broken
+ * exactly once, before any release: a {@code displayName} field was removed on
+ * 2026-10-04, when the per-game director name replaced it.)</p>
  *
  * @param clientVersion the client's build version, normally
  *                      {@code AppVersion.getVersion()}
  * @param login         the account's login name
  * @param password      the account's plain-text password, checked against
  *                      the stored hash server-side
- * @param displayName   the name to show this player as in-game
  * @author Mario Koehler
  */
-public record HandshakeRequest(String clientVersion, String login, String password, String displayName) {
+public record HandshakeRequest(String clientVersion, String login, String password) {
 
     /**
      * Returns a representation with the password redacted, so this record
@@ -37,6 +38,6 @@ public record HandshakeRequest(String clientVersion, String login, String passwo
     @Override
     public String toString() {
         return "HandshakeRequest[clientVersion=" + clientVersion + ", login=" + login
-            + ", password=<redacted>, displayName=" + displayName + "]";
+            + ", password=<redacted>]";
     }
 }

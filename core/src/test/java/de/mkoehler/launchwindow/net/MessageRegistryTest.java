@@ -151,14 +151,13 @@ class MessageRegistryTest {
      */
     @Test
     void handshakeRequestSurvivesRoundTrip() {
-        HandshakeRequest original = new HandshakeRequest("1.0", "mario", "hunter2", "Hanseatic Space Agency");
+        HandshakeRequest original = new HandshakeRequest("1.0", "mario", "hunter2");
 
         HandshakeRequest copy = roundTrip(original, HandshakeRequest.class);
 
         assertEquals("1.0", copy.clientVersion());
         assertEquals("mario", copy.login());
         assertEquals("hunter2", copy.password());
-        assertEquals("Hanseatic Space Agency", copy.displayName());
     }
 
     /**
@@ -167,7 +166,7 @@ class MessageRegistryTest {
      */
     @Test
     void handshakeRequestToStringRedactsThePassword() {
-        HandshakeRequest request = new HandshakeRequest("1.0", "mario", "hunter2", "Hanseatic Space Agency");
+        HandshakeRequest request = new HandshakeRequest("1.0", "mario", "hunter2");
 
         assertFalse(request.toString().contains("hunter2"));
     }

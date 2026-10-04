@@ -25,7 +25,7 @@ import java.util.Set;
 public class PlayerSnapshot {
 
     private String agencyName;
-    private String callsign;
+    private String directorName;
     private Archetype archetype;
     private long funds;
     private long prestige;
@@ -94,22 +94,22 @@ public class PlayerSnapshot {
     }
 
     /**
-     * Returns the player's own in-game persona or callsign, unique within the game like the agency
-     * name (`design.md` &sect;3.8's slot claim), or `null` before it is chosen.
+     * Returns the name of the agency's director, the player's own in-game persona, unique within
+     * the game like the agency name (`design.md` &sect;3.8's slot claim), or `null` before it is chosen.
      *
-     * @return the callsign
+     * @return the director's name
      */
-    public String getCallsign() {
-        return callsign;
+    public String getDirectorName() {
+        return directorName;
     }
 
     /**
-     * Sets the player's callsign.
+     * Sets the name of the agency's director.
      *
-     * @param callsign the callsign
+     * @param directorName the director's name
      */
-    public void setCallsign(String callsign) {
-        this.callsign = callsign;
+    public void setDirectorName(String directorName) {
+        this.directorName = directorName;
     }
 
     /**

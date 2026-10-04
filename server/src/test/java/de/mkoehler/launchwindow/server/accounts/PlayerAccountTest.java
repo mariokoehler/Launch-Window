@@ -18,7 +18,7 @@ class PlayerAccountTest {
      */
     @Test
     void copyReturnsAnIndependentInstanceWithTheSameFields() {
-        PlayerAccount original = new PlayerAccount("acct-1", "mario", "hash", "salt", "Hanseatic Space Agency");
+        PlayerAccount original = new PlayerAccount("acct-1", "mario", "hash", "salt");
 
         PlayerAccount copy = original.copy();
 
@@ -27,7 +27,6 @@ class PlayerAccountTest {
         assertEquals(original.getLogin(), copy.getLogin());
         assertEquals(original.getPasswordHash(), copy.getPasswordHash());
         assertEquals(original.getPasswordSalt(), copy.getPasswordSalt());
-        assertEquals(original.getDisplayName(), copy.getDisplayName());
     }
 
     /**
@@ -36,11 +35,11 @@ class PlayerAccountTest {
      */
     @Test
     void mutatingTheOriginalAfterCopyingDoesNotAffectTheCopy() {
-        PlayerAccount original = new PlayerAccount("acct-1", "mario", "hash", "salt", "Hanseatic Space Agency");
+        PlayerAccount original = new PlayerAccount("acct-1", "mario", "hash", "salt");
         PlayerAccount copy = original.copy();
 
-        original.setDisplayName("Baltic Star Agency");
+        original.setPasswordHash("other-hash");
 
-        assertEquals("Hanseatic Space Agency", copy.getDisplayName());
+        assertEquals("hash", copy.getPasswordHash());
     }
 }

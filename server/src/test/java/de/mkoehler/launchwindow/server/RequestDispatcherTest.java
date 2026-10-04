@@ -89,7 +89,7 @@ class RequestDispatcherTest {
         RequestDispatcher dispatcher = dispatcher(accountStore, dataRoot, true);
 
         HandshakeResponse response =
-            dispatcher.handleHandshake(1, new HandshakeRequest("not-a-real-version", "mario", "hunter2", "Agency"));
+            dispatcher.handleHandshake(1, new HandshakeRequest("not-a-real-version", "mario", "hunter2"));
 
         assertFalse(response.accepted());
         assertTrue(accountStore.findByLogin("mario").isEmpty());
@@ -104,10 +104,10 @@ class RequestDispatcherTest {
     void wrongPasswordIsRejected(@TempDir Path dataRoot) {
         AccountStore accountStore = createAccountStore(dataRoot);
         RequestDispatcher dispatcher = dispatcher(accountStore, dataRoot, true);
-        dispatcher.handleHandshake(1, new HandshakeRequest(AppVersion.getVersion(), "mario", "hunter2", "Agency"));
+        dispatcher.handleHandshake(1, new HandshakeRequest(AppVersion.getVersion(), "mario", "hunter2"));
 
         HandshakeResponse response =
-            dispatcher.handleHandshake(2, new HandshakeRequest(AppVersion.getVersion(), "mario", "wrong", "Agency"));
+            dispatcher.handleHandshake(2, new HandshakeRequest(AppVersion.getVersion(), "mario", "wrong"));
 
         assertFalse(response.accepted());
         assertFalse(dispatcher.isAuthenticated(2));
@@ -146,7 +146,7 @@ class RequestDispatcherTest {
     @Test
     void claimSlotCreatesTheStartingStateExactlyOnce(@TempDir Path dataRoot) {
         RequestDispatcher dispatcher = dispatcher(createAccountStore(dataRoot), dataRoot, false);
-        dispatcher.handleHandshake(1, new HandshakeRequest(AppVersion.getVersion(), "mario", "hunter2", "Mario"));
+        dispatcher.handleHandshake(1, new HandshakeRequest(AppVersion.getVersion(), "mario", "hunter2"));
 
         assertEquals(ClaimSlotRequest.SLOT_CLAIM_REQUIRED,
             dispatcher.handleFetchState(1, new FetchStateRequest()).message());
@@ -160,7 +160,7 @@ class RequestDispatcherTest {
         PlayerSnapshot start = dispatcher.handleFetchState(1, new FetchStateRequest()).state();
         assertEquals(Archetype.SOVIET, start.getArchetype());
         assertEquals("OKB-1", start.getAgencyName());
-        assertEquals("Chief", start.getCallsign());
+        assertEquals("Chief", start.getDirectorName());
         assertEquals(25_000, start.getFunds());
         assertEquals(250, start.getPrestige());
         assertEquals(3_000, start.getFundingRatePerSeason());
@@ -170,13 +170,13 @@ class RequestDispatcherTest {
     }
 
     /**
-     * Verifies that agency names and callsigns are unique within the game, ignoring case.
+     * Verifies that agency names and director names are unique within the game, ignoring case.
      */
     @Test
-    void agencyNamesAndCallsignsAreUnique(@TempDir Path dataRoot) {
+    void agencyNamesAndDirectorNamesAreUnique(@TempDir Path dataRoot) {
         RequestDispatcher dispatcher = dispatcher(createAccountStore(dataRoot), dataRoot, false);
-        dispatcher.handleHandshake(1, new HandshakeRequest(AppVersion.getVersion(), "mario", "hunter2", "Mario"));
-        dispatcher.handleHandshake(2, new HandshakeRequest(AppVersion.getVersion(), "anna", "secret", "Anna"));
+        dispatcher.handleHandshake(1, new HandshakeRequest(AppVersion.getVersion(), "mario", "hunter2"));
+        dispatcher.handleHandshake(2, new HandshakeRequest(AppVersion.getVersion(), "anna", "secret"));
         dispatcher.handleClaimSlot(1, new ClaimSlotRequest(Archetype.NASA, "Hanseatic Space Agency", "Mario"));
 
         assertFalse(dispatcher.handleClaimSlot(2,
@@ -193,7 +193,7 @@ class RequestDispatcherTest {
     @Test
     void submitThenFetchReturnsTheSubmittedAction(@TempDir Path dataRoot) {
         RequestDispatcher dispatcher = dispatcher(createAccountStore(dataRoot), dataRoot, false);
-        dispatcher.handleHandshake(1, new HandshakeRequest(AppVersion.getVersion(), "mario", "hunter2", "Mario"));
+        dispatcher.handleHandshake(1, new HandshakeRequest(AppVersion.getVersion(), "mario", "hunter2"));
         dispatcher.handleClaimSlot(1, new ClaimSlotRequest(Archetype.SOVIET, "OKB-1", "Chief"));
 
         SubmitActionResponse wrongAgency =
@@ -215,7 +215,7 @@ class RequestDispatcherTest {
     @Test
     void cheatsNeedDevModeAndSeedsComeFromTheServer(@TempDir Path dataRoot) throws Exception {
         RequestDispatcher dispatcher = dispatcher(createAccountStore(dataRoot), dataRoot, false);
-        dispatcher.handleHandshake(1, new HandshakeRequest(AppVersion.getVersion(), "mario", "hunter2", "Mario"));
+        dispatcher.handleHandshake(1, new HandshakeRequest(AppVersion.getVersion(), "mario", "hunter2"));
         dispatcher.handleClaimSlot(1, new ClaimSlotRequest(Archetype.SOVIET, "OKB-1", "Chief"));
 
         assertFalse(dispatcher.handleSubmitAction(1, new SubmitActionRequest(new SetFundsAction(1_000_000))).success());
@@ -240,7 +240,7 @@ class RequestDispatcherTest {
     void disconnectClearsTheConnectionsAuthentication(@TempDir Path dataRoot) {
         AccountStore accountStore = createAccountStore(dataRoot);
         RequestDispatcher dispatcher = dispatcher(accountStore, dataRoot, true);
-        dispatcher.handleHandshake(1, new HandshakeRequest(AppVersion.getVersion(), "mario", "hunter2", "Agency"));
+        dispatcher.handleHandshake(1, new HandshakeRequest(AppVersion.getVersion(), "mario", "hunter2"));
         assertTrue(dispatcher.isAuthenticated(1));
 
         dispatcher.handleDisconnect(1);
@@ -259,12 +259,12 @@ class RequestDispatcherTest {
         RequestDispatcher dispatcher = dispatcher(accountStore, dataRoot, true);
 
         RequestDispatcher.DispatchResult rejected =
-            dispatcher.handle(1, new HandshakeRequest("not-a-real-version", "mario", "hunter2", "Agency"));
+            dispatcher.handle(1, new HandshakeRequest("not-a-real-version", "mario", "hunter2"));
         assertTrue(rejected.closeConnection());
         assertFalse(((HandshakeResponse) rejected.response()).accepted());
 
         RequestDispatcher.DispatchResult accepted =
-            dispatcher.handle(2, new HandshakeRequest(AppVersion.getVersion(), "mario", "hunter2", "Agency"));
+            dispatcher.handle(2, new HandshakeRequest(AppVersion.getVersion(), "mario", "hunter2"));
         assertFalse(accepted.closeConnection());
         assertTrue(((HandshakeResponse) accepted.response()).accepted());
     }
@@ -278,7 +278,7 @@ class RequestDispatcherTest {
     void handleRoutesKnownMessageTypesAndRejectsUnknownOnes(@TempDir Path dataRoot) {
         AccountStore accountStore = createAccountStore(dataRoot);
         RequestDispatcher dispatcher = dispatcher(accountStore, dataRoot, true);
-        dispatcher.handle(1, new HandshakeRequest(AppVersion.getVersion(), "mario", "hunter2", "Agency"));
+        dispatcher.handle(1, new HandshakeRequest(AppVersion.getVersion(), "mario", "hunter2"));
         dispatcher.handle(1, new ClaimSlotRequest(Archetype.NASA, "Agency", "Mario"));
 
         RequestDispatcher.DispatchResult submitResult = dispatcher.handle(1, new SubmitActionRequest(new SetFundsAction(1_500)));

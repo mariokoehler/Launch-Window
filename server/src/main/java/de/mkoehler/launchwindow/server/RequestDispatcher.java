@@ -141,7 +141,7 @@ public class RequestDispatcher {
                 serverVersion);
         }
 
-        AuthResult authResult = accountStore.login(request.login(), request.password(), request.displayName());
+        AuthResult authResult = accountStore.login(request.login(), request.password());
         if (!authResult.success()) {
             return HandshakeResponse.reject(authResult.message(), serverVersion);
         }
@@ -151,7 +151,7 @@ public class RequestDispatcher {
 
     /**
      * Handles a {@link ClaimSlotRequest}: creates the account's slot in this game -
-     * the archetype, a unique agency name and callsign, and the starting state (the
+     * the archetype, a unique agency name and director name, and the starting state (the
      * budget schedule's starting values, every building at level 1, empty rosters,
      * and fresh candidate pools; user decision, 2026-10-03). A late joiner starts at
      * their own season 1 ({@code design.md} &sect;3.8).
@@ -165,8 +165,8 @@ public class RequestDispatcher {
         if (accountId == null) {
             return ClaimSlotResponse.failure("Not authenticated - send a HandshakeRequest first.");
         }
-        if (request.archetype() == null || isBlank(request.agencyName()) || isBlank(request.callsign())) {
-            return ClaimSlotResponse.failure("An archetype, an agency name and a callsign are all required.");
+        if (request.archetype() == null || isBlank(request.agencyName()) || isBlank(request.directorName())) {
+            return ClaimSlotResponse.failure("An archetype, an agency name and a director name are all required.");
         }
         try {
             PlayerSnapshotStore store = new PlayerSnapshotStore(playerRoot(accountId), mapper);
@@ -174,23 +174,23 @@ public class RequestDispatcher {
                 return ClaimSlotResponse.failure("This account already has a slot in this game.");
             }
             String agencyName = request.agencyName().strip();
-            String callsign = request.callsign().strip();
+            String directorName = request.directorName().strip();
             for (PlayerSnapshot other : everyPlayer()) {
                 if (agencyName.equalsIgnoreCase(other.getAgencyName())) {
                     return ClaimSlotResponse.failure("The agency name \"" + agencyName + "\" is already taken.");
                 }
-                if (callsign.equalsIgnoreCase(other.getCallsign())) {
-                    return ClaimSlotResponse.failure("The callsign \"" + callsign + "\" is already taken.");
+                if (directorName.equalsIgnoreCase(other.getDirectorName())) {
+                    return ClaimSlotResponse.failure("The director name \"" + directorName + "\" is already taken.");
                 }
             }
             BudgetSchedule schedule = context.schedule();
             PlayerSnapshot start = new PlayerSnapshot(agencyName, request.archetype(), schedule.initialFunds(),
                 schedule.initialPrestige(), schedule.initialFundingRate(), 1);
-            start.setCallsign(callsign);
+            start.setDirectorName(directorName);
             HiringPool.refreshCandidates(start, new SplittableRandom(GameSeeds.forNewPlayer(meta.getGameSeed(),
                 accountId)));
             store.save(0, start, null);
-            return ClaimSlotResponse.success("Welcome, " + callsign + " of " + agencyName + ".");
+            return ClaimSlotResponse.success("Welcome, Director " + directorName + " of " + agencyName + ".");
         } catch (IOException e) {
             return ClaimSlotResponse.failure("Failed to create the slot: " + e.getMessage());
         }

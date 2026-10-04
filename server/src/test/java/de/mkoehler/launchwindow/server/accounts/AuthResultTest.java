@@ -21,7 +21,7 @@ class AuthResultTest {
      */
     @Test
     void successBuildsASuccessfulResultCarryingTheAccount() {
-        PlayerAccount account = new PlayerAccount("acct-1", "mario", "hash", "salt", "Hanseatic Space Agency");
+        PlayerAccount account = new PlayerAccount("acct-1", "mario", "hash", "salt");
 
         AuthResult result = AuthResult.success(account, "Welcome back.");
 

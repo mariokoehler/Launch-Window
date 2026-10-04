@@ -126,6 +126,25 @@ same session it comes up**, the same standing-note-to-self habit as
   proposed now has a confirmed place to live; still not designed in any
   detail (content model, how it surfaces the §1.1 beats scattered through
   this section), just no longer an "if."
+- **History notes: the in-the-moment form, decided (user, 2026-10-04).**
+  A small icon of its own sits next to a label, field, or value. On
+  mouse-over it shows two to four sentences of real history or engineering;
+  a click pins the card. It's always optional, and it never carries rules
+  help, so the icon means one thing only: "there's a real story here". The
+  join screen has the first one on purpose, so players learn the icon there
+  (`ui-spec.md` component 15). The glyph and card style are proposals for
+  Claude Design (§3.12). The user expects many more of these to turn up as
+  the work goes on: add each one where it comes up.
+  - **First note: Director vs. Administrator vs. Chief Designer.** Launch
+    Window gives both agencies a "Director" (§3.8). The real jobs differed
+    sharply. NASA's Administrator was a public appointee, confirmed by the
+    Senate and questioned by Congress. Sergei Korolev, who drove the Soviet
+    program, was kept secret: the world knew him only as "the Chief Designer"
+    until his obituary in 1966. The secrecy was partly about shielding him
+    from foreign intelligence, and it also meant the Soviet successes were
+    credited to the state, not to a person. That contrast is a good way into
+    how the two programs were run (an open, budget-debated civilian agency
+    vs. rival design bureaus under military and Party control).
 - **Real images:** wanted, per the user. **Flagging a licensing
   consideration proactively** (unprompted, per this project's existing
   security/legal-flagging convention): NASA-produced photos/footage are
@@ -2982,10 +3001,12 @@ so directly reusing its actual shape (not just its idea) carries none of
 - **Account fields, deliberately minimal:** a server-assigned `id`
   (generated once at account creation, never reused/reassigned), `login`
   (unique), `passwordHash` + `passwordSalt` (the raw password is never
-  stored, never logged), and a re-writable `displayName` — StarWars' own
-  convention is that a successful login simply re-writes whatever display
-  name was supplied that time, so "change how I present in-game" needs no
-  separate edit-profile flow, just typing a different name next login.
+  stored, never logged). **Changed (user, 2026-10-04): no display name.**
+  The account first carried StarWars' re-writable `displayName`, but it
+  duplicated the per-game director name, which is how players actually see
+  each other. It's gone from the account, the handshake, and the connect
+  screen. A player's in-game name is now chosen once per game, at slot claim,
+  and stays fixed.
   **Explicitly excludes anything game-specific** (StarWars' account also
   carries lifetime XP/kills/deaths/ship-unlocks, because those are
   cross-game persistent progression in that project) — **decided (user,
@@ -3012,10 +3033,10 @@ so directly reusing its actual shape (not just its idea) carries none of
   per-player game snapshots and the action journal, not a new persistence
   idea.
 - **Login flow: reuse the exact same semantics** — a login name that doesn't
-  exist yet auto-creates the account from the supplied password + display
-  name; an existing login requires the password to match, or the attempt is
+  exist yet auto-creates the account from the supplied password; an
+  existing login requires the password to match, or the attempt is
   rejected. **Decided (2026-09-29): a login is restricted to
-  `[A-Za-z0-9_-]{1,32}`**, and a blank/null display name is rejected. The
+  `[A-Za-z0-9_-]{1,32}`**. The
   login charset restriction is defense in depth, not the actual mapping
   mechanism (see below) — it still matters because a rejected-but-not-yet-
   mapped login is a cheaper failure than a malformed one reaching a path
@@ -3048,13 +3069,16 @@ so directly reusing its actual shape (not just its idea) carries none of
     created on first login (§3.8 above), then immediately walks through
     **claiming a slot** — picking an agency archetype (NASA-style or
     Soviet-style only, per §2.1(a1)/(c1)'s decision to drop the GSA-
-    equivalent third archetype entirely), and naming both the agency and the
-    player's own in-game persona/callsign. An existing
+    equivalent third archetype entirely), and naming both the agency and its
+    **director**, the player's own persona (decided 2026-10-04: one title for
+    both archetypes, replacing the earlier "callsign", which read like a
+    fighter pilot's nickname; the director is the agency's head, someone like
+    NASA's Administrator). An existing
     account with an existing slot just logs into it as before; a login that
     doesn't have a slot yet in *this* game always gets the claim flow,
     whether that's on day one of the signup window or in the middle of an
     already-months-long game.
-  - **(Decision:) Agency name and persona/callsign must be unique
+  - **(Decision:) Agency name and director name must be unique
     within a given game** (first claimed, first served — hence the "already
     taken" joke), but nothing about identity needs to be unique *across*
     different games.
@@ -3877,6 +3901,17 @@ SET Centre UI got caught and removed the same day (see `CLAUDE.md`'s
 source-material note for the full story); don't conflate the two when
 this section is read back later.
 
+**History-note icon (user, 2026-10-04; the look is a proposal, unconfirmed).**
+A new glyph with exactly one meaning: "a real-world story is here" (§1.1,
+`ui-spec.md` component 15). It must not look like a generic "i" or "?"
+help icon, because rules help is a different kind of content and must never
+share it. *Proposal:* a small open book in navy line art at body-text size,
+with the hover card styled like an archive index card: a white surface (body
+text always sits on white, per this section), a thin navy rule, and a small
+"History" kicker. Gold is ruled out (it means "active") and so is the unused
+violet `commit` token, which stays reserved. Add the glyph to the UI Asset
+Sheet once Claude Design settles it.
+
 ### 3.13 Common screen chrome & the main-menu hub (2026-09-30, groundwork ahead of M5)
 
 **Not implemented yet — M5 scope (§5). Recorded now because the user
@@ -4224,7 +4259,8 @@ here.
   2026-09-28):** §2.9's "email"
   means in-game player-to-player mail, not turn-notification email — no
   email-address field needed on §3.8's account schema (login, password
-  hash/salt, display name stays as-is). In-game mail itself is still M7+
+  hash/salt, display name stays as-is; the display name itself was later
+  dropped, 2026-10-04, §3.8). In-game mail itself is still M7+
   scope (§2.9's own sequencing), not part of this milestone.
   - **Slice: snapshot + journal + atomic writes + login-time replay — done
     (2026-09-28, hardened 2026-09-29).** `de.mkoehler.launchwindow.persistence`:
@@ -4276,7 +4312,10 @@ here.
       the login, in one step, before anything else on that connection is
       honored. `AccountStore.login` needs a `displayName` to auto-create an
       account, so credentials and the display name travel here, once per
-      connection, not on every subsequent request. This is
+      connection, not on every subsequent request. **Superseded (user,
+      2026-10-04):** the account has no display name any more; players are
+      known per game by agency name and director name (§3.8). The handshake is now `HandshakeRequest(clientVersion, login, password)`,
+      its one field change before any release. This is
       connection-scoped, not a cross-connection session the way
       Robot-Rampage's own reconnect tokens are — §3.3's "no held session"
       still holds, since nothing survives past that one short connection.
@@ -4309,7 +4348,8 @@ here.
       display name, archetype `NASA`, replaced by the real slot-claim flow
       in M4), then tracks `connectionId → accountId` for the rest of that
       connection's life so `SubmitActionRequest`/`FetchStateRequest` need
-      no credentials of their own.
+      no credentials of their own. (The placeholder snapshot went away in M4,
+      and the display name with it on 2026-10-04.)
     - **`NetworkServer`** (`core`, adapted from Robot-Rampage's own,
       poll-based) closes a rejected connection only on the *next* call to
       `poll()`, not immediately after sending the rejection - an immediate
@@ -4417,7 +4457,7 @@ here.
   - **Slice: CLI/console dev client — done.** `dev-tools`'s
     `de.mkoehler.launchwindow.devtools.DevClient`: no libGDX UI, a plain
     console REPL over `core`'s `NetworkClient` - prompts for login/
-    password/display name, sends the handshake, then accepts `state`
+    password (display name until 2026-10-04), sends the handshake, then accepts `state`
     (`FetchStateRequest`, prints a one-line summary), `funds <amount>`
     (`SubmitActionRequest` with `SetFundsAction`), `help`, and `quit`/
     `exit`. `main()` itself (the interactive console/socket loop) is
@@ -5014,8 +5054,9 @@ here.
       `gameSeed` (random for a new game), and `devMode`.
     - **Slot claim:** the handshake no longer bootstraps a placeholder player;
       `ClaimSlotRequest` creates the slot. It takes the archetype, a unique
-      agency name, and a unique callsign (case-insensitive;
-      `PlayerSnapshot.callsign` is new) and creates the starting state
+      agency name, and a unique director name (case-insensitive;
+      `PlayerSnapshot.directorName` is new; called "callsign" until
+      2026-10-04) and creates the starting state
       (decision 2), with candidate pools seeded from the game seed. Until then,
       fetch and submit answer `SLOT_CLAIM_REQUIRED`. `HandshakeResponse` keeps its
       fields, since its shape must never change.

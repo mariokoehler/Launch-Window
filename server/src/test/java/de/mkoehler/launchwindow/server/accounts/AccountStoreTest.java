@@ -60,7 +60,7 @@ class AccountStoreTest {
     void newLoginIsAssignedAnId(@TempDir Path tempDir) {
         AccountStore store = createStore(tempDir.resolve("accounts.json"));
 
-        AuthResult result = store.login("mario", "hunter2", "Hanseatic Space Agency");
+        AuthResult result = store.login("mario", "hunter2");
 
         assertFalse(result.account().getId() == null || result.account().getId().isBlank());
     }
@@ -71,9 +71,9 @@ class AccountStoreTest {
     @Test
     void idIsStableAcrossRepeatedLogins(@TempDir Path tempDir) {
         AccountStore store = createStore(tempDir.resolve("accounts.json"));
-        String firstId = store.login("mario", "hunter2", "Hanseatic Space Agency").account().getId();
+        String firstId = store.login("mario", "hunter2").account().getId();
 
-        String secondId = store.login("mario", "hunter2", "Hanseatic Space Agency").account().getId();
+        String secondId = store.login("mario", "hunter2").account().getId();
 
         assertEquals(firstId, secondId);
     }
@@ -86,10 +86,10 @@ class AccountStoreTest {
     void newLoginAutoCreatesAccount(@TempDir Path tempDir) {
         AccountStore store = createStore(tempDir.resolve("accounts.json"));
 
-        AuthResult result = store.login("mario", "hunter2", "Hanseatic Space Agency");
+        AuthResult result = store.login("mario", "hunter2");
 
         assertTrue(result.success());
-        assertEquals("Hanseatic Space Agency", result.account().getDisplayName());
+        assertEquals("mario", result.account().getLogin());
         assertTrue(store.findByLogin("mario").isPresent());
     }
 
@@ -99,9 +99,9 @@ class AccountStoreTest {
     @Test
     void existingLoginWithCorrectPasswordSucceeds(@TempDir Path tempDir) {
         AccountStore store = createStore(tempDir.resolve("accounts.json"));
-        store.login("mario", "hunter2", "Hanseatic Space Agency");
+        store.login("mario", "hunter2");
 
-        AuthResult result = store.login("mario", "hunter2", "Hanseatic Space Agency");
+        AuthResult result = store.login("mario", "hunter2");
 
         assertTrue(result.success());
     }
@@ -113,28 +113,12 @@ class AccountStoreTest {
     @Test
     void existingLoginWithWrongPasswordIsRejected(@TempDir Path tempDir) {
         AccountStore store = createStore(tempDir.resolve("accounts.json"));
-        store.login("mario", "hunter2", "Hanseatic Space Agency");
+        store.login("mario", "hunter2");
 
-        AuthResult result = store.login("mario", "wrong password", "Hanseatic Space Agency");
+        AuthResult result = store.login("mario", "wrong password");
 
         assertFalse(result.success());
         assertTrue(store.findByLogin("mario").isPresent());
-    }
-
-    /**
-     * Verifies that a successful login (re)writes the supplied display name
-     * onto the account.
-     */
-    @Test
-    void loginUpdatesDisplayNameOnChange(@TempDir Path tempDir) {
-        AccountStore store = createStore(tempDir.resolve("accounts.json"));
-        store.login("mario", "hunter2", "Hanseatic Space Agency");
-
-        AuthResult result = store.login("mario", "hunter2", "Baltic Star Agency");
-
-        assertTrue(result.success());
-        assertEquals("Baltic Star Agency", result.account().getDisplayName());
-        assertEquals("Baltic Star Agency", store.findByLogin("mario").orElseThrow().getDisplayName());
     }
 
     /**
@@ -144,8 +128,8 @@ class AccountStoreTest {
     void blankLoginIsRejected(@TempDir Path tempDir) {
         AccountStore store = createStore(tempDir.resolve("accounts.json"));
 
-        assertFalse(store.login("", "password", "Nobody").success());
-        assertFalse(store.login(null, "password", "Nobody").success());
+        assertFalse(store.login("", "password").success());
+        assertFalse(store.login(null, "password").success());
     }
 
     /**
@@ -155,7 +139,7 @@ class AccountStoreTest {
     void emptyPasswordIsRejected(@TempDir Path tempDir) {
         AccountStore store = createStore(tempDir.resolve("accounts.json"));
 
-        assertFalse(store.login("mario", "", "Hanseatic Space Agency").success());
+        assertFalse(store.login("mario", "").success());
     }
 
     /**
@@ -166,41 +150,40 @@ class AccountStoreTest {
     void loginWithUnsafeCharactersIsRejected(@TempDir Path tempDir) {
         AccountStore store = createStore(tempDir.resolve("accounts.json"));
 
-        assertFalse(store.login("../escape", "password", "Nobody").success());
-        assertFalse(store.login("a/b", "password", "Nobody").success());
-        assertFalse(store.login("a b", "password", "Nobody").success());
+        assertFalse(store.login("../escape", "password").success());
+        assertFalse(store.login("a/b", "password").success());
+        assertFalse(store.login("a b", "password").success());
     }
 
     /**
-     * Verifies that a blank or {@code null} display name is rejected for a
-     * brand-new login, rather than throwing.
+     * Verifies that a {@code null} password is rejected for a brand-new
+     * login, rather than throwing.
      */
     @Test
-    void blankOrNullDisplayNameIsRejectedForANewLogin(@TempDir Path tempDir) {
+    void nullPasswordIsRejectedForANewLogin(@TempDir Path tempDir) {
         AccountStore store = createStore(tempDir.resolve("accounts.json"));
 
-        assertFalse(store.login("mario", "hunter2", "").success());
-        assertFalse(store.login("mario", "hunter2", null).success());
+        assertFalse(store.login("mario", null).success());
         assertTrue(store.findByLogin("mario").isEmpty());
     }
 
     /**
-     * Verifies that a blank or {@code null} display name is rejected for an
-     * existing login, so an invalid name never reaches the stored account,
-     * and that a later flush still succeeds.
+     * Verifies that a rejected login for an existing account leaves the
+     * stored account untouched, and that a later flush still succeeds.
      */
     @Test
-    void blankOrNullDisplayNameIsRejectedForAnExistingLoginAndFlushStillSucceeds(@TempDir Path tempDir) {
+    void rejectedLoginForAnExistingAccountLeavesItIntactAndFlushStillSucceeds(@TempDir Path tempDir) {
         Path file = tempDir.resolve("accounts.json");
         AccountStore store = createStore(file);
-        store.login("mario", "hunter2", "Hanseatic Space Agency");
+        String id = store.login("mario", "hunter2").account().getId();
 
-        assertFalse(store.login("mario", "hunter2", null).success());
-        assertEquals("Hanseatic Space Agency", store.findByLogin("mario").orElseThrow().getDisplayName());
+        assertFalse(store.login("mario", "wrong password").success());
+        assertEquals(id, store.findByLogin("mario").orElseThrow().getId());
         store.flush();
 
         AccountStore reloaded = createStore(file);
-        assertEquals("Hanseatic Space Agency", reloaded.findByLogin("mario").orElseThrow().getDisplayName());
+        assertEquals(id, reloaded.findByLogin("mario").orElseThrow().getId());
+        assertTrue(reloaded.login("mario", "hunter2").success());
     }
 
     /**
@@ -211,11 +194,11 @@ class AccountStoreTest {
     void accountSurvivesReloadFromDisk(@TempDir Path tempDir) {
         Path file = tempDir.resolve("accounts.json");
         AccountStore first = createStore(file);
-        first.login("mario", "hunter2", "Hanseatic Space Agency");
+        first.login("mario", "hunter2");
         first.flush();
 
         AccountStore reloaded = createStore(file);
-        AuthResult result = reloaded.login("mario", "hunter2", "Hanseatic Space Agency");
+        AuthResult result = reloaded.login("mario", "hunter2");
 
         assertTrue(result.success());
         assertTrue(reloaded.findByLogin("mario").isPresent());
@@ -229,12 +212,12 @@ class AccountStoreTest {
     void reloadRejectsWrongPasswordForPersistedAccount(@TempDir Path tempDir) {
         Path file = tempDir.resolve("accounts.json");
         AccountStore first = createStore(file);
-        first.login("mario", "hunter2", "Hanseatic Space Agency");
+        first.login("mario", "hunter2");
         first.flush();
 
         AccountStore reloaded = createStore(file);
 
-        assertFalse(reloaded.login("mario", "wrong password", "Hanseatic Space Agency").success());
+        assertFalse(reloaded.login("mario", "wrong password").success());
     }
 
     /**
@@ -257,7 +240,7 @@ class AccountStoreTest {
         Path file = tempDir.resolve("accounts.json");
         AccountStore store = createStore(file);
 
-        store.login("mario", "hunter2", "Hanseatic Space Agency");
+        store.login("mario", "hunter2");
         assertFalse(Files.exists(file), "login() must not write through to disk on its own");
 
         store.flush();
@@ -272,7 +255,7 @@ class AccountStoreTest {
     void flushWithNothingChangedDoesNotRewriteTheFile(@TempDir Path tempDir) throws IOException {
         Path file = tempDir.resolve("accounts.json");
         AccountStore store = createStore(file);
-        store.login("mario", "hunter2", "Hanseatic Space Agency");
+        store.login("mario", "hunter2");
         store.flush();
         long firstWriteTime = Files.getLastModifiedTime(file).toMillis();
 
@@ -289,7 +272,7 @@ class AccountStoreTest {
     void closeFlushesOnceMoreAndIsSafeToCallTwice(@TempDir Path tempDir) {
         Path file = tempDir.resolve("accounts.json");
         AccountStore store = createStore(file);
-        store.login("mario", "hunter2", "Hanseatic Space Agency");
+        store.login("mario", "hunter2");
 
         store.close();
         store.close(); // must not throw, e.g. from double-removing the shutdown hook
