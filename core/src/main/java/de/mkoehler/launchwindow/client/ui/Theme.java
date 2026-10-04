@@ -578,8 +578,10 @@ public final class Theme {
     /**
      * The kinds of notice box: a full-width message on {@link #SURFACE_CARD}'s family of
      * tints, bordered in its own color. Taken from the Connect and Join Game mockups'
-     * local {@code .banner}/{@code .hint} CSS (2026-10-04), not yet a component in the design
-     * system itself.
+     * local {@code .banner}/{@code .hint} CSS (2026-10-04), promoted into the design system's
+     * own {@code Notice} component the same day; {@link #SUCCESS} added 2026-10-04 once the
+     * SET Centre mockup's Action Result Toast (ui-spec.md &sect;2 component 6) needed a
+     * fourth, non-navy-neutral case for "it worked".
      */
     public enum NoticeKind {
         /** A problem the player can fix (versions don't match): {@link #GOLD} border, {@link #GOLD_TEXT} text. */
@@ -587,7 +589,9 @@ public final class Theme {
         /** A failure (the server can't be reached): {@link #DANGER} border and text. */
         DANGER,
         /** Neutral guidance (the Join Game hint): {@link #NAVY} border, {@link #INK} text. */
-        INFO;
+        INFO,
+        /** An action actually went through: {@link #SUCCESS} border and text. */
+        SUCCESS;
 
         /**
          * Returns the text color to set inside a notice of this kind.
@@ -599,6 +603,7 @@ public final class Theme {
                 case WARNING -> GOLD_TEXT;
                 case DANGER -> Theme.DANGER;
                 case INFO -> INK;
+                case SUCCESS -> Theme.SUCCESS;
             };
         }
     }
@@ -948,9 +953,9 @@ public final class Theme {
 
         /**
          * Builds a notice box background: a thin border in the kind's color around a pale,
-         * opaque tint of it (10% gold, 8% danger or 6% navy blended into white, matching the
-         * mockups' {@code color-mix} values). No built-in padding; pad the content by
-         * {@link #SPACE_3}.
+         * opaque tint of it (10% gold, 8% danger, 6% navy or 8% success blended into white,
+         * matching the design system's {@code color-mix} values). No built-in padding; pad
+         * the content by {@link #SPACE_3}.
          *
          * @param kind the kind of notice
          * @return the drawable; its texture is owned by this object
@@ -960,6 +965,7 @@ public final class Theme {
                 case WARNING -> rect(new Color(SURFACE_CARD).lerp(GOLD, 0.10f), GOLD, BORDER_THIN);
                 case DANGER -> rect(new Color(SURFACE_CARD).lerp(DANGER, 0.08f), DANGER, BORDER_THIN);
                 case INFO -> rect(new Color(SURFACE_CARD).lerp(NAVY, 0.06f), NAVY, BORDER_THIN);
+                case SUCCESS -> rect(new Color(SURFACE_CARD).lerp(SUCCESS, 0.08f), SUCCESS, BORDER_THIN);
             };
         }
 

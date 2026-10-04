@@ -4103,7 +4103,7 @@ every screen, per the mockup's own comments):**
   `scale` parameter), not a new technical decision, just an explicit
   requirement now on record.
 
-**Hub chrome-or-not: decided (user, 2026-10-05) — no chrome, full-bleed art.**
+**Hub chrome-or-not: decided (user, 2026-10-04) — no chrome, full-bleed art.**
 `ui-spec.md` §4.3 had left this an explicit proposal, not a decision ("no
 header or footer chrome on this screen, so the art stays whole"). Both
 options were mocked up side by side first, in a new Claude Design canvas
@@ -4167,6 +4167,71 @@ items this surfaced, neither resolved yet:**
    system and read as out of place; the design system's CSS now matches
    `historyNoteCard()`'s own flat rendering exactly, no decision left
    open on either side.
+
+**`Notice` gained a fourth variant, `success` (green), and the SET Centre
+mockup (Personnel overview + Payload R&D) was built, same day (2026-10-04),
+following `ui-spec.md` §7's suggested mockup order.** Component 6 (Action
+Result Toast) needs a green "it worked" case alongside `Notice`'s existing
+warning/danger/info, so `success` was added to the design system
+(`bundle.css`'s `.lw-notice--success`, `index.d.ts`'s `NoticeVariant`,
+`components/Notice/README.md`, whose "these three cover every case" line
+is now four) — paralleling `Badge`'s own existing `success` variant, not a
+one-off invention. `Theme.java`'s `NoticeKind` gained the matching
+`SUCCESS` value (border/background/text all keyed off `Theme.SUCCESS`,
+same 8%-tint recipe as `DANGER`) the same session, keeping it in lockstep
+with the design system per this section's own standing commitment.
+Verified by compiling `Theme.java` standalone against the cached libGDX
+jars, same method as every earlier `Theme.java` change in this sandboxed
+session.
+
+The mockup itself (`Launch Window — SET Centre mockup`, private, ask the
+user for the link) is a two-artboard canvas: **Personnel overview**
+(component 11) and **Payload R&D** (component 10), linked by real
+cross-artboard `<a href>`s. It builds out two of §2's reusable components
+for the first time: the **Training dialog** (component 12 — Basic/
+Advanced/Permanent as a segmented control, a skill picker reusing the
+five `SetSkill` icons already traced for the Personnel Recruitment
+mockup, and a target-level range input shown only for Permanent) and the
+**Manage department dialog** (component 13 — a &plusmn;50% salary slider
+with a live preview of the projected total salary and average morale,
+computed with the exact `+p`/`-3p` morale rule `ui-spec.md` §2 component
+13 specifies). Both dialogs, plus the generic Confirmation dialog
+(component 5) used for Pull Out/Dismiss, are plain fixed-position modal
+overlays — a pattern this design system had no precedent for yet (neither
+Connect/Join Game nor the hub needed one); kept deliberately simple
+(a centered `surface-card` panel, `border-emphasis` navy border, a
+`rgba(navy, 0.55)` scrim) rather than invented as a new design-system
+component, since nothing else has needed one yet either.
+
+Two modeling decisions worth recording: **personnel-row state badges**
+use `Badge variant="active"` (gold) for anyone not idle (in training or
+researching) and a plain muted pill — not a badge at all — for Idle and
+Unavailable, since `Badge` has no neutral variant and gold's existing
+"active/in-progress" semantic (§3.12) already fits the "something is
+happening" cases exactly; inventing a neutral badge variant for "nothing
+is happening" would have been the one-off this system's own `Notice`
+README warns against. **SET personnel never show Expert stars** — the
+Expert trait (§2.2(c)) is Astronaut/Mission-Control only — so the mockup
+renders none, correctly, rather than stubbing the UI for a trait this
+department can never have. The Payload R&D board's four fixture
+components include one sitting exactly at its R&D ceiling (current
+reliability == `maxRdReliability`) with a green "Cap reached" `Badge` and
+all four slots already shown released — the literal UI face of
+`ResearchProgress.releaseResearchersIfMaxed` (§2.4(c)/§3.4), not a made-up
+state.
+
+**Also caught and fixed, not just avoided going forward:** the existing
+Personnel Recruitment mockup's breadcrumb/home-icon conflates
+"Headquarters" with the true hub/home screen (its home button's
+`aria-label` literally reads "Home — Headquarters") — a holdover from
+before `ui-spec.md` §3's screen-flow diagram was finalized, which now has
+**Space Complex** as the actual root and Headquarters as an ordinary
+sibling building, same level as SET Centre. The new SET Centre mockup's
+breadcrumb root is "Space Complex" throughout; the older Personnel
+Recruitment mockup was left as-is, since fixing it wasn't asked for and
+is a one-line change whenever that mockup is next touched. No new icons
+were needed for this mockup — it reuses the five SET skill icons already
+cataloged in the UI Asset Sheet.
 
 ## 4. Open questions (tracked here until resolved)
 
