@@ -45,6 +45,8 @@ CHROME = {
     "step_forward": '<polygon points="7 5 16 12 7 19 7 5"/><line x1="17" y1="5" x2="17" y2="19"/>',
     "restart": '<polyline points="4 4 4 10 10 10"/><path d="M5.5 15a7 7 0 1 0 1.6-7.3L4 10"/>',
     "document": '<path d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="15" y2="16"/>',
+    # The game result's trophy (Museum, Settings & Game Result mockup).
+    "trophy": '<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/>',
 }
 
 # The astronaut glyph's antenna tip is a filled dot.
