@@ -340,6 +340,15 @@ inside an `<a href>`, because the button swallows the click. Style the `<a>`
 itself with `class="lw-btn lw-btn--primary label"`. This was fixed in the VAB
 and SET Centre canvases.
 
+**Seven components promoted to the design system (2026-10-04, at the libGDX
+session's request):** `Dialog`, `FilterChips`, `SegmentedControl`,
+`ReliabilityBar`, `SkillBar`, `RdSlot` and `IconButton` (the white on-page
+button). Each has a README and a preview. The UI Asset Sheet gained a
+"Components" artboard with specimens and `Theme.java` build notes.
+`design.md` §3.13 has the details. `RdSlot`'s Release is now navy, not red.
+**Open:** the libGDX session should align its unpushed code with these names
+and values. The mockup canvases still use their local copies.
+
 **Open, content:** Explorer 1's 40% discount points at Sputnik 1, another
 agency's program, so it can never apply. Check `baspm_pack.py`; details in
 `design.md` §3.13.
