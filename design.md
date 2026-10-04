@@ -3935,8 +3935,10 @@ the client tints navy.
 - The open-book icon is now a real asset: `assets-raw/svg/icon_history_note.svg`,
   rasterized to `assets/ui/icon_history_note.png` (white, tinted navy at runtime).
   Noted on the UI Asset Sheet the same day.
-- The history-note card stays flat (no shadow). The box-shadow question
-  below is still the user's to decide.
+- The history-note card stays flat (no shadow) — **resolved (user,
+  2026-10-04): drop the shadow**, since it was the only one in an
+  otherwise flat system and read as out of place. The design system's
+  CSS was updated to match (§3.13's own item 2 below has the full note).
 
 **Mockups synced back from the libGDX feedback, same day.** The Connect
 and Join Game mockups (the Claude Design canvas, not just `Theme.java`)
@@ -4127,14 +4129,12 @@ items this surfaced, neither resolved yet:**
    asset the same way every other skill icon under `assets-raw/svg/` does.
    **Done 2026-10-04:** `assets-raw/svg/icon_history_note.svg`, rasterized
    to `assets/ui/icon_history_note.png`.
-2. The design system's `.lw-historynote__card` CSS has a `box-shadow`
-   — the first shadow anywhere in this design system. `Theme.java`'s
-   own class doc states this system has no shadows at all, and
-   `historyNoteCard()` deliberately omits it rather than silently
-   contradicting that rule or silently dropping a property the design
-   system actually specifies. Needs a decision: add a shadow primitive
-   (a new thing for this system) or amend the design system's popover to
-   drop it, matching the flat-everywhere rule everywhere else.
+2. The design system's `.lw-historynote__card` CSS had a `box-shadow`
+   — the first shadow anywhere in this design system. **Resolved (user,
+   2026-10-04): drop it.** It was the only shadow in an otherwise flat
+   system and read as out of place; the design system's CSS now matches
+   `historyNoteCard()`'s own flat rendering exactly, no decision left
+   open on either side.
 
 ## 4. Open questions (tracked here until resolved)
 

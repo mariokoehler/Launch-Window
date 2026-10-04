@@ -885,19 +885,16 @@ public final class Theme {
 
         /**
          * Builds a {@code HistoryNote} popover's background: a thin navy
-         * border on {@link #SURFACE_CARD}, the same "archive index card"
-         * look as the design system's {@code .lw-historynote__card}
-         * &mdash; <b>except its drop shadow</b>, which this method
-         * deliberately omits. This system has no shadow primitive anywhere
-         * else (see the class doc), and the design system's own CSS adding
-         * one here, only for this one popover, hasn't been reconciled with
-         * that rule yet &mdash; worth raising with the user before deciding
-         * either way, rather than silently matching or silently dropping it
-         * here. The open-book icon itself is not a {@code Shapes} method at
-         * all: unlike a flat rect or circle, it's an actual drawn glyph, so
-         * it's a real asset ({@code assets-raw/svg/icon_history_note.svg},
-         * rasterized to {@code assets/ui/icon_history_note.png}); see
-         * {@code HistoryNote}.
+         * border on {@link #SURFACE_CARD}, the "archive index card" look,
+         * flat like every other surface in this system (see the class doc).
+         * <b>Resolved (user, 2026-10-04):</b> the design system's own CSS
+         * briefly gave this popover a drop shadow &mdash; the only one this
+         * system would have had &mdash; and it read as out of place; the
+         * design system dropped it the same day to match. The open-book
+         * icon itself is not a {@code Shapes} method at all: unlike a flat
+         * rect or circle, it's an actual drawn glyph, so it's a real asset
+         * ({@code assets-raw/svg/icon_history_note.svg}, rasterized to
+         * {@code assets/ui/icon_history_note.png}); see {@code HistoryNote}.
          *
          * @return the drawable; its texture is owned by this object
          */

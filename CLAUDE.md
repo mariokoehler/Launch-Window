@@ -202,13 +202,12 @@ cd assets && java --enable-native-access=ALL-UNNAMED -cp "../lwjgl3/target/class
 ```
 **Pitfall:** never use linear filtering on a stretched few-pixel nine-patch.
 It turns a flat fill into a gradient (fixed in `Theme.Shapes.rect`).
-**Open, for the user:** the notice/hint boxes should become design-system
-components; the history-note card's shadow is still undecided (kept flat);
-and the copy changes in `ui-spec.md` §4.2's "Implemented" note need their OK.
+**Open, for the user:** the copy changes in `ui-spec.md` §4.2's "Implemented"
+note need their OK. (The notice/hint-boxes-as-components and the history-note
+shadow questions below are both closed now.)
 
 **Mockup feedback from the libGDX build, closed out the same day (2026-10-04).**
-Seven items came back from implementing Connect/Join Game; all but the shadow
-question are done:
+Seven items came back from implementing Connect/Join Game; all are done now:
 - `Notice` (warning/danger/info) is now a real design-system component, plus a
   new `body-strong` type token for its bold lead-in — no longer `Theme.java`-only.
   The Connect/Join Game mockups dropped their local `.banner`/`.hint` CSS for it.
@@ -222,9 +221,11 @@ question are done:
   state the original spec didn't cover.
 - The UI Asset Sheet now notes the history-note icon is a real SVG+PNG asset
   pair, not just design-system markup.
-- **Still open:** the history-note popover's `box-shadow` — the one shadow
-  this design system has — is still undecided; `Theme.java` and the mockup
-  both still render it flat.
+- **The history-note popover's `box-shadow` is resolved (user, 2026-10-04):
+  drop it.** It was the only shadow this design system had and read as out
+  of place; the design system's CSS now matches `Theme.java`'s own flat
+  `historyNoteCard()` exactly — no shadow anywhere in this system, this
+  popover included.
 
 Everything below is history; if this paragraph and a later one disagree, the
 later one wins.
