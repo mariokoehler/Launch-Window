@@ -479,7 +479,16 @@ news, and the debt and multiplier states. Details and the unconfirmed choices ar
   #2 in 1960. Reviews come every 16 of the player's seasons (1959 · S1, 1963 · S1, …).
 - **Pitfall:** a page's own `renderVals` key named like a `chromeVals` key (for example
   `fundsCls`) is silently overwritten by the chrome, because `chromeVals` is merged last.
-- **Next in phase 4:** the Museum (§4.11), settings (§4.12), and the game result (§4.13).
+- **Phase 4 is done too (2026-10-04, later the same day):** the Museum (four tabs),
+  Settings, and the game result, on a new canvas, `Launch Window — Museum, Settings &
+  Game Result mockup` (private, ask the user for the link). Details are in `design.md`
+  §3.13. Proposed and unconfirmed: a gear button on the hub strip for Settings. New
+  server gap: G10, the memorial list.
+- **Balance finding, open for the user:** the default declared goals end the race at
+  the first crewed orbital flight, because the cascade credits all three. In the
+  fixture, that's 1960 · S4.
+- **Mockup tip:** `<sc-for>` inside a CSS grid lays its items out as grid cells, so a
+  table can be a grid with one `sc-for` per row.
 
 Everything below is history; if this paragraph and a later one disagree, the
 later one wins.
