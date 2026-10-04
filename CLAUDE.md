@@ -383,9 +383,9 @@ button). Each has a README and a preview. The UI Asset Sheet gained a
 **Open:** the libGDX session should align its unpushed code with these names
 and values. The mockup canvases still use their local copies.
 
-**Open, content:** Explorer 1's 40% discount points at Sputnik 1, another
-agency's program, so it can never apply. Check `baspm_pack.py`; details in
-`design.md` §3.13.
+**Resolved, content (2026-10-04, libGDX session):** Explorer 1's 40% discount
+pointed at Sputnik 1, another agency's program. It was BASPM data that only
+its GSA faction could ever use, so it's been removed from the pack.
 
 **Headquarters mission planning mocked up (2026-10-04, `ui-spec.md`
 §4.6.5–§4.6.8, the start of §7's phase 3).** Four new artboards on the
@@ -414,9 +414,11 @@ hub art against the brightest variant (Soviet winter noon) and the darkest
 (winter night), not just one sample. The hub canvas's dev panel switches the
 art for this. See `design.md` §3.13.
 
-**Open, content:** "Human in space" and "Human in orbit" aren't reached by any
-step; other goals only cancel them, so their prestige can never be earned.
-Check `baspm_pack.py`, along with the Explorer 1 discount above.
+**Resolved, not a bug (2026-10-04, libGDX session):** "Human in space" and
+"Human in orbit" are earned through the goal cascade. In the pack, "cancels"
+means "also credits, with full prestige", as in BASPM. The client labels such
+goals "Achieved", and next-goal rewards include them. The Headquarters steps
+screen now shows "Also credits …" under a step's goals.
 
 Everything below is history; if this paragraph and a later one disagree, the
 later one wins.

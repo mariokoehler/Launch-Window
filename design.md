@@ -4429,12 +4429,10 @@ a proposal, to replace with the patch frame if the user prefers.
   mockups wrapped the design-system Button in a link, so their "Payload R&D",
   "Rocket R&D" and VAB nav-card links didn't navigate in Play. All fixed:
   the `<a>` itself now carries the `lw-btn` classes.
-- **Open question for the content pack:** `programs.json` gives Explorer 1
-  (NASA) a 40% opening discount when Sputnik 1 (Soviet) is open. One player
-  can never own both, so the discount can never apply. Either the converter
-  mapped BASPM's discount across agencies by mistake, or the discount was
-  meant to point at the player's own counterpart program. Check it in
-  `baspm_pack.py` on the main PC.
+- **Content question, resolved (2026-10-04, libGDX session):**
+  `programs.json` gave Explorer 1 (NASA) a 40% opening discount when Sputnik 1
+  (Soviet) was open, which one player could never use. It was BASPM data that
+  only BASPM's GSA faction could ever use, so it's been removed from the pack.
 
 **Seven mockup styles promoted to design-system components (2026-10-04,
 at the libGDX session's request).** They had existed only as local CSS in the
@@ -4556,14 +4554,15 @@ plus this one), since the planning screens are the first to show them, and a
 "Mission Planning" section (caution triangle, forward arrow, check).
 `Theme.java` needs nothing new: the screens use only existing tokens.
 
-**Open question for the content pack, found while building:** the goals
-"Human in space" (1,750 prestige) and "Human in orbit" (3,000) aren't in any
-step's `goalIdsAchieved`. Other goals only ever cancel them (Vostok
-suborbital flown cancels Human in space, Vostok orbital flown cancels Human
-in orbit). Their dependencies still lift correctly, because the rules count
-a goal as "achieved or cancelled", but their own prestige can never be
-earned. Check whether `baspm_pack.py` dropped BASPM's generic-goal awards,
-same as the Explorer 1 discount above.
+**Content question, resolved as not a bug (2026-10-04, libGDX session):**
+"Human in space" and "Human in orbit" aren't in any step's `goalIdsAchieved`.
+They're earned through the goal cascade: in the pack, a goal's
+`cancelsGoalIds` means "also credits, with full prestige", as in BASPM, down
+the whole chain. The client labels such goals "Achieved", and next-goal
+rewards include them. The steps screen (4.6.6) now shows this under a
+step's goal chip. For example, Vostok Orbital's landing reads "Vostok
+orbital flown", then "Also credits Vostok suborbital flown, Human in space,
+Human in orbit": the cascade minus goals already reached.
 
 ## 4. Open questions (tracked here until resolved)
 
