@@ -3924,16 +3924,44 @@ the client tints navy.
 - `TextStyle.BODY_STRONG` (Work Sans SemiBold 13/20) is the mockups'
   `<strong>` inside body text. A Scene2D `Label` can't switch fonts
   mid-text, so a notice's bold lead-in sits on its own line above the rest.
-  This is a small visual departure from the mockups, where it runs inline.
+  This is a small visual departure from the mockups, where it ran inline —
+  **fixed in the mockups the same day, see directly below.**
 - `NoticeKind` and `Shapes.notice` (warning, danger, info) come from the
-  mockups' local `.banner`/`.hint` CSS. **They aren't components in the
-  design system yet.** They should be promoted there, so later mockups
-  reuse them instead of re-inventing them.
+  mockups' local `.banner`/`.hint` CSS. **Promoted into the design system
+  the same day** (`Notice`, plus a new `body-strong` type token for its
+  lead-in) — no longer code-only; later mockups reuse the component
+  instead of re-inventing the look locally.
 - `Shapes.blueprintGrid()` is built exactly as the UI Asset Sheet specifies it.
 - The open-book icon is now a real asset: `assets-raw/svg/icon_history_note.svg`,
   rasterized to `assets/ui/icon_history_note.png` (white, tinted navy at runtime).
+  Noted on the UI Asset Sheet the same day.
 - The history-note card stays flat (no shadow). The box-shadow question
   below is still the user's to decide.
+
+**Mockups synced back from the libGDX feedback, same day.** The Connect
+and Join Game mockups (the Claude Design canvas, not just `Theme.java`)
+picked up every decision the implementation session made, so later
+mockups copy the corrected version, not the one that needed fixing:
+- Dropped the `.banner`/`.hint` local CSS in both mockups; both now use
+  the real `Notice` component, with its bold lead-in as a separate
+  `title` prop on its own line — never an inline `<strong>` — matching
+  what libGDX can actually render.
+- Join Game's heading no longer names BASPM's own product or a game date
+  the client can't know yet ("Join game" / "Found your agency", not
+  "Space Program Manager — Season 1958 · S1").
+- Join Game's hint text no longer claims the game is "already in
+  progress" (false during the signup window) or implies the starting
+  funds are fixed (they're the game's own pack's numbers): now "Everyone
+  starts from the same line...".
+- Join Game's eyebrow, heading and footnote switched from `navy`/`ink`
+  (meant for a white card) to `on-page-muted`/`on-page-strong`/
+  `on-page-muted` — they sit directly on the blue page, where the card
+  colors are close to illegible, the same mistake the Field-on-page bug
+  earlier this session already corrected once.
+- Added a "Pick an agency style." error row under the archetype cards
+  (a state `ui-spec.md` didn't cover) and a generic server-error `Notice`
+  state, both as new dev-switcher chips, matching `JoinScreen`'s real
+  refusal handling.
 
 ### 3.13 Common screen chrome & the main-menu hub (2026-09-30, groundwork ahead of M5)
 

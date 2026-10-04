@@ -206,6 +206,26 @@ It turns a flat fill into a gradient (fixed in `Theme.Shapes.rect`).
 components; the history-note card's shadow is still undecided (kept flat);
 and the copy changes in `ui-spec.md` §4.2's "Implemented" note need their OK.
 
+**Mockup feedback from the libGDX build, closed out the same day (2026-10-04).**
+Seven items came back from implementing Connect/Join Game; all but the shadow
+question are done:
+- `Notice` (warning/danger/info) is now a real design-system component, plus a
+  new `body-strong` type token for its bold lead-in — no longer `Theme.java`-only.
+  The Connect/Join Game mockups dropped their local `.banner`/`.hint` CSS for it.
+- The mockups themselves picked up every wording/color/layout fix the
+  implementation made: Join Game's heading ("Found your agency", not BASPM's
+  product name plus an unknowable date), its hint text (no longer claims the
+  game is "already in progress" or implies fixed starting funds), its eyebrow/
+  heading/footnote (switched from navy/ink to the on-page colors, since they
+  sit directly on the blue page), a bold lead-in on its own line instead of
+  inline (libGDX can't mix fonts in one label), and a "Pick an agency style."
+  state the original spec didn't cover.
+- The UI Asset Sheet now notes the history-note icon is a real SVG+PNG asset
+  pair, not just design-system markup.
+- **Still open:** the history-note popover's `box-shadow` — the one shadow
+  this design system has — is still undecided; `Theme.java` and the mockup
+  both still render it flat.
+
 Everything below is history; if this paragraph and a later one disagree, the
 later one wins.
 
