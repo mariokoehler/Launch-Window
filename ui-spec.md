@@ -315,7 +315,7 @@ marker; a game result exists (§4.13).
 **Implemented in libGDX (2026-10-04)** as `client.screen.SpaceComplexScreen`, from the Space
 Complex Hub mockup, replacing the stand-in agency screen. The logic is in `client.view.Hub`.
 The art comes from `assets-raw/make_hub_art.py`: 32 JPEGs, about 15 MB, cropped to 1080 rows.
-Choices made while building it, **unconfirmed**:
+Choices made while building it, **confirmed by the user (2026-10-04)**:
 - **Time of day:** it steps on when the player enters the hub and at least 4 minutes have
   passed since the *last step*, not since the last entry. Otherwise someone hopping between
   screens every 3 minutes would never see it change. It moves one step however long it's
@@ -330,9 +330,11 @@ Choices made while building it, **unconfirmed**:
   servers means restarting the client until Settings exists.
 - **The content-differs warning** from the stand-in stays, as a warning notice under the
   agency name.
+- **The strip follows the revised mockup** (solid chips, navy nameplate, outlined
+  Turn Report, no fade). It has been checked on Soviet winter noon, the brightest art.
 - **The "game result exists" state isn't handled.** `GameInfo` already carries the result
   and the winners; only the §4.13 screen is missing.
-- **Only Headquarters and the SET Centre open.** The other five buildings toast "isn't
+- **Only Headquarters, the SET Centre and the VAB open.** The other five buildings toast "isn't
   built yet".
 - **Breadcrumbs are now live:** "Space Complex", "Headquarters", "SET Centre", and the
   program details' "Open programs" or body crumb go to their screens.
@@ -381,6 +383,25 @@ cost again; refused while a mission uses it".
 **4.5.3 Rocket R&D** *(decided: split from payload R&D)*. The R&D board
 (component 10) for rocket components. **Ref:**
 `rocket_program_rnd_assignment.png`.
+
+**Implemented in libGDX (2026-10-04)** from the VAB mockup (`client.screen.VabScreen`,
+`OpenRocketScreen`, `RocketProgramsScreen`, and `RndBoardScreen` in its `ROCKET` mode,
+which is the SET Centre's Payload R&D board with rockets in it). View logic lives in
+`client.view.Rockets`. Greying out and refusals use `RocketPrograms.checkOpen`,
+`classAllowed` and `inFlight`, the server's own checks. Choices made while building
+them, **confirmed by the user (2026-10-04)**:
+- **Numbers come from the rules,** not the mockup: the cap (4/8/14), upgrade cost,
+  upkeep and seasons all come from the catalog's building schedule. The upgrade dialog
+  names the class the next level unlocks ("and unlocks the Medium class").
+- **Reopening a kept rocket** says so in its confirmation: "Still owned from before,
+  with its reliability. Reopening charges the creation cost again."
+- **A rocket on several missions** shows the first mission's badge and "+N".
+- **Close on a rocket in flight** is greyed out, and clicking it toasts the refusal,
+  as in the mockup.
+- **The class gate can't show with the real pack,** because every early-era rocket is
+  Light. `RocketsTest` proves it on a fixture catalog.
+- **Rocket R&D's breadcrumb** runs through Manage Rocket Programs, and its back button
+  goes there, as in the mockup.
 
 ### 4.6 Headquarters: programs and mission planning
 **Purpose:** decide what the agency works on, and plan and launch missions.
@@ -687,6 +708,7 @@ for the mockups.
 | MAX_LEVEL / ALREADY_UPGRADING | Already at the top level. / Already upgrading. |
 | NOT_IN_DEBT / EXCEEDS_CAP / INSUFFICIENT_PRESTIGE | Only possible while in debt. / More than the conversion allows. / Not enough prestige. |
 | SLOT_CLAIM_REQUIRED | (Client goes to §4.2.) |
+| Rocket programs: VAB_FULL / ROCKET_CLASS_TOO_LARGE / UNKNOWN_ROCKET (added 2026-10-04) | The VAB can't hold more rocket programs. Upgrade it or close one. / Upgrade the VAB to build this rocket class. / That rocket doesn't exist in this game. |
 | Building upgrade: MAX_LEVEL / ALREADY_UPGRADING; program opening also UNKNOWN_PROGRAM | Already at the top level. / Already upgrading. / That program doesn't exist in this game. |
 | Manage department (`AdjustSalariesAction`, added 2026-10-04): INVALID_PERCENT / EMPTY_DEPARTMENT | Pick a change between −50 % and +50 %. / There's nobody in the department yet. |
 | Join game (`ClaimSlotResponse.Reason`, added 2026-10-04): AGENCY_NAME_TAKEN / DIRECTOR_NAME_TAKEN / MISSING_FIELDS / ALREADY_CLAIMED / NOT_AUTHENTICATED / SERVER_ERROR | Already taken by another agency. (under the field) / the same / Required. / (client logs in again and opens the agency) / (danger notice with the server's words) |

@@ -32,7 +32,11 @@ import de.mkoehler.launchwindow.client.screen.HireScreen;
 import de.mkoehler.launchwindow.client.screen.SpaceComplexScreen;
 import de.mkoehler.launchwindow.client.view.Hub;
 import de.mkoehler.launchwindow.content.ContentPackHash;
-import de.mkoehler.launchwindow.client.screen.PayloadRndScreen;
+import de.mkoehler.launchwindow.client.screen.RndBoardScreen;
+import de.mkoehler.launchwindow.client.screen.OpenRocketScreen;
+import de.mkoehler.launchwindow.client.screen.RocketProgramsScreen;
+import de.mkoehler.launchwindow.client.screen.VabScreen;
+import de.mkoehler.launchwindow.model.InProgressMission;
 import de.mkoehler.launchwindow.client.screen.SetCentreScreen;
 import de.mkoehler.launchwindow.client.view.PayloadRnd;
 import de.mkoehler.launchwindow.content.ContentPackLoader;
@@ -208,8 +212,8 @@ public final class ScreenSnapshot {
             screen -> screen.openManageDepartment(-10));
         write(folder, "set-toast.png", new SetCentreScreen(game), screen -> screen.toast(
             "Started training \u2014 Elena Markova (Permanent, Space probes).", Theme.NoticeKind.SUCCESS));
-        write(folder, "payload-rnd.png", new PayloadRndScreen(game), null);
-        write(folder, "payload-rnd-assign.png", new PayloadRndScreen(game), screen -> screen.openAssign(
+        write(folder, "payload-rnd.png", new RndBoardScreen(game, RndBoardScreen.Board.PAYLOAD), null);
+        write(folder, "payload-rnd-assign.png", new RndBoardScreen(game, RndBoardScreen.Board.PAYLOAD), screen -> screen.openAssign(
             PayloadRnd.cards(game.session().state(), game.session().catalog()).get(2)));
         write(folder, "hire.png", new HireScreen(game), screen -> {
             List<SetSpecialist> pool = game.session().state().getSetSpecialistCandidates();
@@ -244,7 +248,24 @@ public final class ScreenSnapshot {
             ScreenSnapshot.class.getClassLoader()));
         write(folder, "hq-open-programs-empty.png", new OpenProgramsScreen(game), null);
         write(folder, "set-empty.png", new SetCentreScreen(game), null);
-        write(folder, "payload-rnd-empty.png", new PayloadRndScreen(game), null);
+        write(folder, "payload-rnd-empty.png", new RndBoardScreen(game, RndBoardScreen.Board.PAYLOAD), null);
+
+        game.setSession(ClientSession.start(CREDENTIALS, vabState(false), new GameInfo(info,
+            System.currentTimeMillis()), ScreenSnapshot.class.getClassLoader()));
+        write(folder, "vab-overview.png", new VabScreen(game), null);
+        write(folder, "vab-upgrade.png", new VabScreen(game), screen -> screen.confirmUpgrade(
+            Building.VEHICLE_ASSEMBLY, "the VAB", "rocket-program cap", "the Medium class"));
+        write(folder, "vab-open.png", new OpenRocketScreen(game), null);
+        write(folder, "vab-open-confirm.png", new OpenRocketScreen(game), screen -> screen.tryOpen(
+            game.session().catalog().missionComponent("r7-vostok").orElseThrow()));
+        write(folder, "vab-rocket-rnd.png", new RndBoardScreen(game, RndBoardScreen.Board.ROCKET), null);
+        game.setSession(ClientSession.start(CREDENTIALS, vabState(true), new GameInfo(info,
+            System.currentTimeMillis()), ScreenSnapshot.class.getClassLoader()));
+        write(folder, "vab-manage.png", new RocketProgramsScreen(game), null);
+        write(folder, "vab-manage-close.png", new RocketProgramsScreen(game), screen -> screen.confirmClose(
+            game.session().catalog().missionComponent("r7-vostok").orElseThrow()));
+        write(folder, "vab-open-empty.png", new OpenRocketScreen(game), null);
+        write(folder, "vab-overview-upgrading.png", new VabScreen(game), null);
     }
 
     /**
@@ -312,6 +333,35 @@ public final class ScreenSnapshot {
         kept.setActive(false);
         state.getMissionComponents().put("sputnik-2-satellite", kept);
         state.getAchievedGoals().put("earth-orbit-satellite", 4);
+        return state;
+    }
+
+    /**
+     * A Soviet agency with Sputnik 1 open and its R-7 rocket open, flying, and researched by one
+     * engineer. With {@code bothOpen}, the R-7 Vostok is open too and the VAB is upgrading;
+     * without, the R-7 Vostok is kept from a closed program.
+     */
+    private static PlayerSnapshot vabState(boolean bothOpen) {
+        PlayerSnapshot state = new PlayerSnapshot("Baltic Star Agency", Archetype.SOVIET, 24_355, 850, 3_000, 13);
+        state.setDirectorName("A. Reyes");
+        state.getOpenedProgramIds().add("sputnik-1");
+        state.getMissionComponents().put("sputnik-1-satellite", new OwnedMissionComponent(58.4, 3.0));
+        state.getMissionComponents().put("r7-sputnik", new OwnedMissionComponent(61.5, 40.0));
+        OwnedMissionComponent vostok = new OwnedMissionComponent(47.0, 35.0);
+        vostok.setActive(bothOpen);
+        state.getMissionComponents().put("r7-vostok", vostok);
+        InProgressMission mission = new InProgressMission("m1", "sputnik-1-orbit", List.of(), List.of());
+        mission.setRocketIds(List.of("r7-sputnik"));
+        state.getInProgressMissions().put("m1", mission);
+        SetSpecialist researcher = specialist("s1", "Otto Bergmann", 44, 66, 50, 72, 30, 41, 22, 18);
+        researcher.setAssignmentState(AssignmentState.ASSIGNED);
+        researcher.setRdTargetComponentId("r7-sputnik");
+        researcher.setRdSlot(0);
+        state.getSetSpecialists().add(researcher);
+        state.getSetSpecialists().add(specialist("s2", "Elena Markova", 38, 70, 55, 64, 28, 52, 30, 35));
+        if (bothOpen) {
+            state.getBuildingUpgradeSeasonsRemaining().put(Building.VEHICLE_ASSEMBLY, 1);
+        }
         return state;
     }
 

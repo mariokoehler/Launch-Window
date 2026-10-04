@@ -42,10 +42,10 @@ public final class SpaceComplexScreen extends SessionScreen {
 
     /** The hover highlight: white at 18% for fill and outline alike, hard-edged (decided). */
     private static final Color HIGHLIGHT = new Color(1f, 1f, 1f, 0.18f);
-    private static final Color GHOST_FILL = new Color(1f, 1f, 1f, 0.14f);
-    private static final Color GHOST_BORDER = new Color(1f, 1f, 1f, 0.4f);
     private static final Color LABEL_SHADOW = new Color(0f, 0f, 0f, 0.65f);
-    private static final Color DIRECTOR = new Color(1f, 1f, 1f, 0.78f);
+    private static final Color DIRECTOR = new Color(1f, 1f, 1f, 0.8f);
+    /** Every strip chip's height. */
+    private static final float CHIP_HEIGHT = 32f;
     /** The under-construction marker: a gold disc this far above the building's label. */
     private static final float MARKER_RISE = 55f;
     private static final float MARKER_RADIUS = 22f;
@@ -67,7 +67,7 @@ public final class SpaceComplexScreen extends SessionScreen {
         super(game);
         this.timeOfDay = game.hubClock().enter(System.currentTimeMillis());
         this.hotspots = loadHotspots();
-        countdown = ui.label("", Theme.TextStyle.LABEL, Theme.ON_FILL);
+        countdown = ui.label("", Theme.TextStyle.LABEL, Theme.NAVY);
         root.setBackground(ui.solid(Theme.NAVY));
         art.setScaling(Scaling.fill);
 
@@ -101,48 +101,53 @@ public final class SpaceComplexScreen extends SessionScreen {
     }
 
     private void rebuildStrip(PlayerSnapshot state) {
+        // No fade and nothing see-through: the art runs from near-black (winter night) to near-white
+        // (Soviet winter noon), so everything on it sits on a solid surface.
         strip.clearChildren();
-        strip.setBackground(ui.topFade());
         strip.pad(20f, Theme.SPACE_6, 20f, Theme.SPACE_6);
 
         Table agency = new Table();
+        agency.setBackground(ui.solid(Theme.NAVY));
+        agency.pad(8f, 14f, 8f, 14f);
         agency.defaults().left();
         agency.add(ui.label(state.getAgencyName(), Theme.TextStyle.HEADING_SM, Theme.ON_FILL)).padBottom(2f).row();
         agency.add(ui.label("Dir. " + state.getDirectorName(), Theme.TextStyle.CAPTION, DIRECTOR));
-        strip.add(agency).expandX().left();
+        Table left = new Table();
+        left.top().left();
+        left.add(agency).left().row();
+        if (session.packStatus() == ClientSession.PackStatus.DIFFERENT) {
+            left.add(ui.notice(Theme.NoticeKind.WARNING, "Content differs.", "Your copy of this game's content "
+                + "differs from the server's. Some numbers shown may be off until the client can download the "
+                + "game's own copy.")).width(480f).left().padTop(Theme.SPACE_3);
+        }
+        strip.add(left).expandX().left().top();
 
+        Table chips = new Table();
         float gap = 10f;
-        strip.add(chip(ui.solid(Theme.NAVY), "game_time", Theme.ON_FILL,
+        chips.add(chip(ui.solid(Theme.NAVY), "game_time", Theme.ON_FILL,
             ui.label(session.gameInfo().response().date().label().toUpperCase(Locale.ROOT), Theme.TextStyle.LABEL,
-                Theme.ON_FILL))).padRight(gap);
-        strip.add(chip(ghost(), "clock", Theme.ON_FILL, countdown)).padRight(gap);
-        Table report = chip(ghost(), "document", Theme.ON_FILL,
-            ui.label("TURN REPORT", Theme.TextStyle.LABEL, Theme.ON_FILL));
+                Theme.ON_FILL))).height(CHIP_HEIGHT).padRight(gap);
+        chips.add(chip(ui.solid(Theme.SURFACE_CARD), "clock", Theme.NAVY, countdown)).height(CHIP_HEIGHT)
+            .padRight(gap);
+        // The strip's one button: white like its neighbours, with a navy outline.
+        Table report = chip(ui.rect(Theme.SURFACE_CARD, Theme.NAVY, Theme.BORDER_EMPHASIS), "document", Theme.NAVY,
+            ui.label("TURN REPORT", Theme.TextStyle.LABEL, Theme.NAVY));
         report.setTouchable(Touchable.enabled);
         report.addListener(clicked(() -> notBuiltYet("The turn report")));
         // No unread badge: nothing in the state says a report is unread yet (gap G2).
-        strip.add(report).padRight(gap);
-        strip.add(chip(ui.solid(Theme.SURFACE_CARD), "funds", Theme.NAVY,
-            ui.label(money(state.getFunds()), Theme.TextStyle.LABEL, Theme.NAVY))).padRight(gap);
-        strip.add(chip(ui.solid(Theme.SURFACE_CARD), "prestige", Theme.NAVY,
-            ui.label(String.format(Locale.ROOT, "%,d", state.getPrestige()), Theme.TextStyle.LABEL, Theme.NAVY)));
-
-        if (session.packStatus() == ClientSession.PackStatus.DIFFERENT) {
-            strip.row();
-            strip.add(ui.notice(Theme.NoticeKind.WARNING, "Content differs.", "Your copy of this game's content "
-                + "differs from the server's. Some numbers shown may be off until the client can download the "
-                + "game's own copy.")).colspan(6).width(480f).left().padTop(Theme.SPACE_3);
-        }
-    }
-
-    private Drawable ghost() {
-        return ui.rect(GHOST_FILL, GHOST_BORDER, Theme.BORDER_THIN);
+        chips.add(report).height(CHIP_HEIGHT).padRight(gap);
+        chips.add(chip(ui.solid(Theme.SURFACE_CARD), "funds", Theme.NAVY,
+            ui.label(money(state.getFunds()), Theme.TextStyle.LABEL, Theme.NAVY))).height(CHIP_HEIGHT).padRight(gap);
+        chips.add(chip(ui.solid(Theme.SURFACE_CARD), "prestige", Theme.NAVY,
+            ui.label(String.format(Locale.ROOT, "%,d", state.getPrestige()), Theme.TextStyle.LABEL, Theme.NAVY)))
+            .height(CHIP_HEIGHT);
+        strip.add(chips).right().top();
     }
 
     private Table chip(Drawable background, String icon, Color color, Label text) {
         Table chip = new Table();
         chip.setBackground(background);
-        chip.pad(6f, 12f, 6f, 12f);
+        chip.pad(0f, 12f, 0f, 12f);
         Image glyph = new Image(ui.icon(icon), Scaling.fit);
         glyph.setColor(color);
         chip.add(glyph).size(14f).padRight(6f);
@@ -170,6 +175,7 @@ public final class SpaceComplexScreen extends SessionScreen {
         switch (place) {
             case HEADQUARTERS -> goHeadquarters();
             case SET_CENTRE -> goSetCentre();
+            case VAB -> goVab();
             default -> notBuiltYet(place.inSentence());
         }
     }

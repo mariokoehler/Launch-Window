@@ -2,6 +2,7 @@ package de.mkoehler.launchwindow.rules;
 
 import de.mkoehler.launchwindow.content.ContentCatalog;
 import de.mkoehler.launchwindow.content.MissionComponent;
+import de.mkoehler.launchwindow.content.RocketClass;
 import de.mkoehler.launchwindow.model.Building;
 import de.mkoehler.launchwindow.model.OwnedMissionComponent;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
@@ -50,15 +51,40 @@ public final class RocketPrograms {
     }
 
     /**
-     * Opens a rocket program, paying the rocket's creation cost.
+     * Returns whether a VAB level can build a rocket class: level 1 builds Light rockets, 2
+     * Medium, 3 Heavy ({@code baspm.md} &sect;10.9).
      *
-     * @param snapshot the player; mutated only when the program opens
+     * @param rocketClass the class
+     * @param vabLevel    the VAB's level
+     * @return whether it can
+     */
+    public static boolean classAllowed(RocketClass rocketClass, int vabLevel) {
+        return rocketClass.ordinal() < vabLevel;
+    }
+
+    /**
+     * Returns whether a mission in flight uses a rocket, which keeps its program from closing.
+     *
+     * @param snapshot the player
+     * @param rocketId the rocket component
+     * @return whether one does
+     */
+    public static boolean inFlight(PlayerSnapshot snapshot, String rocketId) {
+        return snapshot.getInProgressMissions().values().stream()
+            .anyMatch(mission -> mission.getRocketIds().contains(rocketId));
+    }
+
+    /**
+     * Checks whether a rocket program could open now, without changing anything: the same checks
+     * {@link #open} makes, in the same order.
+     *
+     * @param snapshot the player
      * @param rocketId the rocket component
      * @param catalog  the content catalog
-     * @return the outcome
+     * @return {@link RocketProgramOutcome#OPENED} if it could, else why not
      * @throws NullPointerException if an argument is {@code null}
      */
-    public static RocketProgramOutcome open(PlayerSnapshot snapshot, String rocketId, ContentCatalog catalog) {
+    public static RocketProgramOutcome checkOpen(PlayerSnapshot snapshot, String rocketId, ContentCatalog catalog) {
         Objects.requireNonNull(snapshot, "snapshot must not be null");
         Objects.requireNonNull(rocketId, "rocketId must not be null");
         Objects.requireNonNull(catalog, "catalog must not be null");
@@ -77,13 +103,31 @@ public final class RocketPrograms {
                 catalog.buildings())) {
             return RocketProgramOutcome.VAB_FULL;
         }
-        // VAB level 1 builds Light rockets, 2 Medium, 3 Heavy (baspm.md §10.9).
-        if (rocket.rocket().rocketClass().ordinal() >= snapshot.buildingLevel(Building.VEHICLE_ASSEMBLY)) {
+        if (!classAllowed(rocket.rocket().rocketClass(), snapshot.buildingLevel(Building.VEHICLE_ASSEMBLY))) {
             return RocketProgramOutcome.ROCKET_CLASS_TOO_LARGE;
         }
         if (snapshot.getFunds() < rocket.creationCost()) {
             return RocketProgramOutcome.INSUFFICIENT_FUNDS;
         }
+        return RocketProgramOutcome.OPENED;
+    }
+
+    /**
+     * Opens a rocket program, paying the rocket's creation cost.
+     *
+     * @param snapshot the player; mutated only when the program opens
+     * @param rocketId the rocket component
+     * @param catalog  the content catalog
+     * @return the outcome
+     * @throws NullPointerException if an argument is {@code null}
+     */
+    public static RocketProgramOutcome open(PlayerSnapshot snapshot, String rocketId, ContentCatalog catalog) {
+        RocketProgramOutcome check = checkOpen(snapshot, rocketId, catalog);
+        if (check != RocketProgramOutcome.OPENED) {
+            return check;
+        }
+        MissionComponent rocket = catalog.missionComponent(rocketId).orElseThrow();
+        OwnedMissionComponent owned = snapshot.getMissionComponents().get(rocketId);
         snapshot.setFunds(snapshot.getFunds() - rocket.creationCost());
         if (owned != null) {
             owned.setActive(true);
@@ -118,9 +162,7 @@ public final class RocketPrograms {
         if (owned == null || !owned.isActive()) {
             return RocketProgramOutcome.NOT_OPEN;
         }
-        boolean inFlight = snapshot.getInProgressMissions().values().stream()
-            .anyMatch(mission -> mission.getRocketIds().contains(rocketId));
-        if (inFlight) {
+        if (inFlight(snapshot, rocketId)) {
             return RocketProgramOutcome.MISSIONS_IN_FLIGHT;
         }
         owned.setActive(false);

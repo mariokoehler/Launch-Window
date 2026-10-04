@@ -225,7 +225,17 @@ breadcrumb root and home button now go.
 - **Pitfall:** hotspot files say `imageHeight` 1088. Flip y against 1080, the cropped
   art.
 
-**Next:** the VAB (its mockup exists; ask the user for the link if needed).
+**VAB built in libGDX (2026-10-04),** from the VAB mockup (canvas "Launch Window
+— VAB mockup", private, ask the user for the link): the landing screen, Open Rocket
+Program, Manage Rocket Programs, and Rocket R&D (`RndBoardScreen`, shared with Payload
+R&D). The hub strip also follows the revised, all-solid mockup.
+- **Regression check for shared UI changes:** copy `shots/` first, re-shoot, then diff
+  every PNG with PIL's `ImageChops.difference(...).getbbox()`.
+- **Pitfall:** a snapshot block that calls `game.setSession` changes the session for
+  every shot after it. Add new blocks at the end.
+
+**Next:** Headquarters mission planning (`ui-spec.md` §4.6.5–§4.6.8; the
+Headquarters mockup canvas has the new artboards, ask the user for the link).
 
 **Headquarters built in libGDX (2026-10-04),** as far as opening a program, from the
 Headquarters mockup: landing with the building panel and upgrade, Manage open

@@ -77,10 +77,23 @@ public final class PayloadRnd {
      * @return the cards
      */
     public static List<Card> cards(PlayerSnapshot state, ContentCatalog catalog) {
+        return cards(state, catalog, false);
+    }
+
+    /**
+     * Builds a board's cards, in the content pack's order: the payload board (SET Centre) or the
+     * rocket board (VAB), which work the same way.
+     *
+     * @param state   the player's state
+     * @param catalog the content pack
+     * @param rockets whether to build the rocket board
+     * @return the cards
+     */
+    public static List<Card> cards(PlayerSnapshot state, ContentCatalog catalog, boolean rockets) {
         List<Card> cards = new ArrayList<>();
         for (MissionComponent component : catalog.missionComponents()) {
             OwnedMissionComponent owned = state.getMissionComponents().get(component.id());
-            if (component.rocket() != null || owned == null || !owned.isActive()) {
+            if (component.hasRocketSpec() != rockets || owned == null || !owned.isActive()) {
                 continue;
             }
             List<SetSpecialist> slots = new ArrayList<>();

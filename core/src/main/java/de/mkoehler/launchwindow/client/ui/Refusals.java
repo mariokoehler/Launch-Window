@@ -39,6 +39,9 @@ public final class Refusals {
         Map.entry("NOT_OPEN", "Not open."),
         Map.entry("UNKNOWN_PROGRAM", "That program doesn't exist in this game."),
         Map.entry("MISSIONS_IN_FLIGHT", "Can't close while a mission uses it."),
+        Map.entry("VAB_FULL", "The VAB can't hold more rocket programs. Upgrade it or close one."),
+        Map.entry("ROCKET_CLASS_TOO_LARGE", "Upgrade the VAB to build this rocket class."),
+        Map.entry("UNKNOWN_ROCKET", "That rocket doesn't exist in this game."),
         Map.entry("MAX_LEVEL", "Already at the top level."),
         Map.entry("ALREADY_UPGRADING", "Already upgrading."));
 

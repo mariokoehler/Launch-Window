@@ -5859,6 +5859,15 @@ here.
       filter chips, the segmented control, the reliability bar, the skill bar, the
       R&D slot box, and the white on-page secondary button. They should be promoted
       to the design system and the UI Asset Sheet.
+  - **Slice: VAB — done (2026-10-04).** Landing with the building panel (which can now
+    take extra stats and name what an upgrade unlocks), Open Rocket Program, Manage Rocket
+    Programs, and Rocket R&D. Details are in `ui-spec.md` §4.5's "Implemented" note.
+    - **Rules:** `RocketPrograms` gained a non-mutating `checkOpen`, which `open` now
+      calls, plus `classAllowed` and `inFlight`, shared with the client. The playouts
+      were byte-identical afterwards.
+    - **Client:** the R&D board is one screen with two modes (`RndBoardScreen.Board`).
+      `PayloadRnd.cards` takes a rocket switch. Every earlier screenshot was
+      pixel-identical afterwards.
   - **Slice: Space Complex hub — done (2026-10-04).** `client.screen.SpaceComplexScreen`
     replaces the stand-in agency screen; `ui-spec.md` §4.3's "Implemented" note lists its
     unconfirmed choices.

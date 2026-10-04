@@ -25,40 +25,75 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * The SET Centre's Payload R&amp;D board ({@code ui-spec.md} &sect;4.8.3, component 10): one card per
- * owned payload component with its reliability bar and four R&amp;D slots. Assign an idle engineer
- * (they take the lowest free slot) or release one; a component at its R&amp;D ceiling shows "Cap
- * reached" and its slots released.
+ * An R&amp;D board (component 10): the SET Centre's Payload R&amp;D ({@code ui-spec.md} &sect;4.8.3)
+ * or the VAB's Rocket R&amp;D (&sect;4.5.3), which work the same way. One card per owned, active
+ * component with its reliability bar and four R&amp;D slots. Assign an idle engineer (they take
+ * the lowest free slot) or release one; a component at its R&amp;D ceiling shows "Cap reached" and
+ * its slots released.
  *
  * @author Mario Koehler
  */
-public final class PayloadRndScreen extends ChromeScreen {
+public final class RndBoardScreen extends ChromeScreen {
+
+    /**
+     * Which board: what it holds, where it sits, and what it says when empty.
+     */
+    public enum Board {
+        /** Payload components, in the SET Centre. */
+        PAYLOAD("SET Centre", "Payload R&D", "No payload components yet. Open a program in Headquarters to get its "
+            + "satellites, probes and capsules; they show up here for R&D."),
+        /** Rockets, in the VAB. */
+        ROCKET("VAB", "Rocket R&D", "No rockets yet. Open a rocket program in the VAB; its rocket shows up here "
+            + "for R&D.");
+
+        private final String building;
+        private final String title;
+        private final String empty;
+
+        Board(String building, String title, String empty) {
+            this.building = building;
+            this.title = title;
+            this.empty = empty;
+        }
+
+        private List<Crumb> crumbs() {
+            return this == PAYLOAD
+                ? List.of(Crumb.SPACE_COMPLEX, Crumb.SET_CENTRE, new Crumb(title, null))
+                : List.of(Crumb.SPACE_COMPLEX, Crumb.VAB, Crumb.ROCKET_PROGRAMS, new Crumb(title, null));
+        }
+    }
+
+    private final Board board;
 
     /**
      * Builds the screen from the session.
      *
-     * @param game the game, in a session
+     * @param game  the game, in a session
+     * @param board which board
      */
-    public PayloadRndScreen(LaunchWindowGame game) {
-        super(game, List.of(Crumb.SPACE_COMPLEX, Crumb.SET_CENTRE,
-            new Crumb("Payload R&D", null)), "SET Centre", "Payload R&D");
+    public RndBoardScreen(LaunchWindowGame game, Board board) {
+        super(game, board.crumbs(), board.building, board.title);
+        this.board = board;
         rebuild();
     }
 
     @Override
     protected void goBack() {
-        goSetCentre();
+        if (board == Board.PAYLOAD) {
+            goSetCentre();
+        } else {
+            game.setScreen(new RocketProgramsScreen(game));
+        }
     }
 
     @Override
     protected void rebuild() {
         content.clearChildren();
         content.top();
-        List<PayloadRnd.Card> cards = PayloadRnd.cards(session.state(), session.catalog());
+        List<PayloadRnd.Card> cards = cards();
         if (cards.isEmpty()) {
             Table empty = ui.card();
-            empty.add(ui.paragraph("No payload components yet. Open a program in Headquarters to get its satellites, "
-                + "probes and capsules; they show up here for R&D.", Theme.TextStyle.BODY, Theme.INK_MUTED)).growX();
+            empty.add(ui.paragraph(board.empty, Theme.TextStyle.BODY, Theme.INK_MUTED)).growX();
             content.add(empty).growX();
             return;
         }
@@ -76,6 +111,15 @@ public final class PayloadRndScreen extends ChromeScreen {
         }
         ScrollPane scroll = scrollPane(grid);
         content.add(scroll).expand().fill();
+    }
+
+    /**
+     * Returns the board's cards.
+     *
+     * @return the cards
+     */
+    public List<PayloadRnd.Card> cards() {
+        return PayloadRnd.cards(session.state(), session.catalog(), board == Board.ROCKET);
     }
 
     private Table card(PayloadRnd.Card card) {
@@ -166,7 +210,7 @@ public final class PayloadRndScreen extends ChromeScreen {
             toast("No idle engineers. Hire more, or free someone up.", Theme.NoticeKind.INFO);
             return;
         }
-        Table dialogCard = dialogCard("Payload R&D", "Assign to " + ContentNames.of(component.id()));
+        Table dialogCard = dialogCard(board.title, "Assign to " + ContentNames.of(component.id()));
         dialogCard.add(ui.paragraph("They take slot " + (card.nextFreeSlot() + 1) + ". Sorted by "
             + SetSkills.label(component.associatedSkill()) + ", the skill this component needs.",
             Theme.TextStyle.BODY, Theme.INK_MUTED)).padBottom(Theme.SPACE_3).row();

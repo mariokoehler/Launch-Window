@@ -57,6 +57,11 @@ abstract class ChromeScreen extends SessionScreen {
         static final Crumb HEADQUARTERS = new Crumb("Headquarters", ChromeScreen::goHeadquarters);
         /** The SET Centre's personnel overview. */
         static final Crumb SET_CENTRE = new Crumb("SET Centre", ChromeScreen::goSetCentre);
+        /** The VAB's landing screen. */
+        static final Crumb VAB = new Crumb("VAB", ChromeScreen::goVab);
+        /** The VAB's Manage Rocket Programs. */
+        static final Crumb ROCKET_PROGRAMS = new Crumb("Manage Rocket Programs",
+            screen -> screen.game.setScreen(new RocketProgramsScreen(screen.game)));
     }
 
     /** The screen's own area, between the title row and the footer. */
@@ -198,6 +203,27 @@ abstract class ChromeScreen extends SessionScreen {
     }
 
     /**
+     * Builds a landing screen's navigation card: an eyebrow, a title, a line of copy, and a
+     * primary button.
+     *
+     * @param eyebrow the eyebrow
+     * @param title   the title
+     * @param body    the copy
+     * @param action  the button's label
+     * @param onClick what the button does
+     * @return the card
+     */
+    protected Table navCard(String eyebrow, String title, String body, String action, Runnable onClick) {
+        Table card = ui.card();
+        card.defaults().left().growX();
+        card.add(ui.label(eyebrow, Theme.TextStyle.EYEBROW, Theme.NAVY)).padBottom(Theme.SPACE_2).row();
+        card.add(ui.label(title, Theme.TextStyle.HEADING_SM, Theme.INK)).padBottom(Theme.SPACE_2).row();
+        card.add(ui.paragraph(body, Theme.TextStyle.BODY, Theme.INK_MUTED)).padBottom(Theme.SPACE_3).row();
+        card.add(actionButton(action, Theme.ButtonKind.PRIMARY, onClick)).left().fill(false, false);
+        return card;
+    }
+
+    /**
      * Builds a building panel ({@code ui-spec.md} component 7): the level, the building's cap,
      * its upkeep, and an Upgrade button (or "Upgrading" while it builds) whose confirmation shows
      * the price and what the next level raises the cap to.
@@ -210,13 +236,34 @@ abstract class ChromeScreen extends SessionScreen {
      * @return the panel
      */
     protected Table buildingPanel(Building building, String name, String capLabel, String capValue, String capNoun) {
+        return buildingPanel(building, name, capLabel, capValue, capNoun, List.of(), level -> null);
+    }
+
+    /**
+     * Builds a building panel with stats of the building's own after the cap (the VAB's rocket
+     * classes), and an upgrade confirmation that can name what else the next level unlocks.
+     *
+     * @param building   the building
+     * @param name       its name in the confirmation, such as "Headquarters"
+     * @param capLabel   the cap's label, such as "Open programs"
+     * @param capValue   the cap's value, such as "2 / 3"
+     * @param capNoun    the cap in the confirmation's sentence, such as "open-program cap"
+     * @param extraStats more label and value pairs, after the cap
+     * @param unlocks    what a level newly unlocks, for the confirmation ("the Medium class"), or {@code null}
+     * @return the panel
+     */
+    protected Table buildingPanel(Building building, String name, String capLabel, String capValue, String capNoun,
+                                  List<String[]> extraStats, java.util.function.IntFunction<String> unlocks) {
         PlayerSnapshot state = session.state();
         BuildingSchedule.Levels levels = session.catalog().buildings().of(building);
         int level = state.buildingLevel(building);
         Table panel = ui.card();
         Table stats = new Table();
-        String[][] values = {{"Level", level + " of " + levels.maxLevel()}, {capLabel, capValue},
-            {"Upkeep / season", money(session.catalog().buildings().maintenance(building, level))}};
+        List<String[]> values = new java.util.ArrayList<>();
+        values.add(new String[] {"Level", level + " of " + levels.maxLevel()});
+        values.add(new String[] {capLabel, capValue});
+        values.addAll(extraStats);
+        values.add(new String[] {"Upkeep / season", money(session.catalog().buildings().maintenance(building, level))});
         for (String[] value : values) {
             Table stat = new Table();
             stat.left();
@@ -235,7 +282,7 @@ abstract class ChromeScreen extends SessionScreen {
             panel.add(ui.label("Top level", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).right();
         } else {
             panel.add(actionButton("Upgrade \u2014 Level " + (level + 1), Theme.ButtonKind.SECONDARY,
-                () -> confirmUpgrade(building, name, capNoun))).right();
+                () -> confirmUpgrade(building, name, capNoun, unlocks.apply(level + 1)))).right();
         }
         return panel;
     }
@@ -248,6 +295,18 @@ abstract class ChromeScreen extends SessionScreen {
      * @param capNoun  what its cap is called in a sentence
      */
     public void confirmUpgrade(Building building, String name, String capNoun) {
+        confirmUpgrade(building, name, capNoun, null);
+    }
+
+    /**
+     * Asks to upgrade a building, naming what else the next level unlocks.
+     *
+     * @param building the building
+     * @param name     its name, such as "the VAB"
+     * @param capNoun  the cap in the sentence
+     * @param unlocks  what the next level unlocks besides the cap ("the Medium class"), or {@code null}
+     */
+    public void confirmUpgrade(Building building, String name, String capNoun, String unlocks) {
         BuildingSchedule.Levels levels = session.catalog().buildings().of(building);
         int level = session.state().buildingLevel(building);
         long cost = levels.upgradeCosts().get(level - 1);
@@ -255,7 +314,7 @@ abstract class ChromeScreen extends SessionScreen {
         String duration = seasons + (seasons == 1 ? " season" : " seasons");
         Table card = dialogCard("Confirm", "Upgrade " + name + " to Level " + (level + 1) + "?");
         card.add(ui.paragraph("Raises the " + capNoun + " from " + levels.caps().get(level - 1) + " to "
-            + levels.caps().get(level) + ". Takes " + duration + ", and upgrading is final.", Theme.TextStyle.BODY,
+            + levels.caps().get(level) + (unlocks == null ? "" : " and unlocks " + unlocks) + ". Takes " + duration + ", and upgrading is final.", Theme.TextStyle.BODY,
             Theme.INK_MUTED)).padBottom(Theme.SPACE_4).row();
         card.add(priceBreakdown(List.of(new Programs.PriceLine("Upgrade cost", cost, null)), cost))
             .padBottom(Theme.SPACE_4).row();

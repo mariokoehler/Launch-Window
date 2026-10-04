@@ -90,6 +90,13 @@ abstract class SessionScreen extends StageScreen {
     }
 
     /**
+     * Goes to the VAB's landing screen.
+     */
+    protected void goVab() {
+        game.setScreen(new VabScreen(game));
+    }
+
+    /**
      * Fetches the state and game info again and rebuilds the screen with them. Quiet: a failed
      * refresh changes nothing and says nothing; the next action reports any real problem.
      */

@@ -53,14 +53,4 @@ public final class HeadquartersScreen extends ChromeScreen {
             .expandX().fillX().uniformX().top();
         content.add(cards);
     }
-
-    private Table navCard(String eyebrow, String title, String body, String action, Runnable onClick) {
-        Table card = ui.card();
-        card.defaults().left().growX();
-        card.add(ui.label(eyebrow, Theme.TextStyle.EYEBROW, Theme.NAVY)).padBottom(Theme.SPACE_2).row();
-        card.add(ui.label(title, Theme.TextStyle.HEADING_SM, Theme.INK)).padBottom(Theme.SPACE_2).row();
-        card.add(ui.paragraph(body, Theme.TextStyle.BODY, Theme.INK_MUTED)).padBottom(Theme.SPACE_3).row();
-        card.add(actionButton(action, Theme.ButtonKind.PRIMARY, onClick)).left().fill(false, false);
-        return card;
-    }
 }
