@@ -227,16 +227,18 @@ Seven items came back from implementing Connect/Join Game; all are done now:
   `historyNoteCard()` exactly — no shadow anywhere in this system, this
   popover included.
 
-**Space Complex hub: two mockups built, decision pending (2026-10-05).**
-`ui-spec.md` §4.3 left chrome-or-not an open proposal — rather than pick,
-both got mocked up in a new canvas ("Launch Window — Space Complex Hub",
-private, ask the user for the link): a no-chrome artboard (full-bleed art,
-the real `LW_main_menu_NASA.hotspots.json` 7-building hover highlights,
-a slim overlay strip for the hub's own info) and a with-chrome artboard
-(same art+hotspots, but letterboxed inside the standard header/footer).
-Full writeup in `design.md` §3.13. Two new icons (clock, document) went
-into the UI Asset Sheet the same day. **Waiting on the user's pick before
-either becomes the real `lwjgl3` screen.**
+**Space Complex hub chrome: decided — no chrome (user, 2026-10-05).**
+`ui-spec.md` §4.3 left chrome-or-not an open proposal; both got mocked up
+side by side in a new canvas ("Launch Window — Space Complex Hub", private,
+ask the user for the link) to compare directly instead of guessing. The
+no-chrome version (full-bleed art, the real `LW_main_menu_NASA.hotspots.json`
+7-building hover highlights, a slim overlay strip for the hub's own info)
+won outright — the user judged it clearly better than the with-chrome
+version (which letterboxes the hero art) and had that artboard deleted,
+not kept around as a rejected alternative. `ui-spec.md` §4.3 and `design.md`
+§3.13 both updated to record this as decided, not proposed. Two new icons
+(clock, document) went into the UI Asset Sheet the same day. **Next:** this
+can now become the real `lwjgl3` screen whenever that's picked up.
 
 Everything below is history; if this paragraph and a later one disagree, the
 later one wins.

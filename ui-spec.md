@@ -297,8 +297,11 @@ highlight on hover with a label. A slim overlay strip shows:
 - a turn-report button, badged when unread;
 - the funds and prestige chips.
 
-**Proposal (not decided):** no header or footer chrome on this screen, so the art
-stays whole.
+**Decided (user, 2026-10-05):** no header or footer chrome on this screen, so
+the art stays whole — the slim overlay strip above is the only chrome it gets.
+Confirmed by comparing two real mockups side by side (`design.md` §3.13); the
+with-chrome variant looked clearly worse (it letterboxes the hero art) and was
+removed outright, not kept as an alternative.
 
 **States:** a building that is upgrading shows a subtle "under construction"
 marker; a game result exists (§4.13).
