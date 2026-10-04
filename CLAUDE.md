@@ -243,8 +243,16 @@ mission, up to a real launch.
 - **Pitfall:** `LaunchRequest` copies `rocketIds` with `List.copyOf`, which rejects
   nulls, so `MissionDraft.request()` sends "" for a missing rocket.
 
-**Next:** Mission Control (§4.7), where launched missions show up and can be scrubbed;
-or the hub's other buildings.
+**Mission Control built in libGDX (2026-10-04),** all but the replay viewer
+(`ui-spec.md` §4.7): the flight controllers, scheduled and active missions with Scrub
+and Cancel, and Re-staff. The SET Centre's hire and personnel dialogs are now shared
+by department.
+- **Pitfall:** `shoot.sh` clears `shots/` first and allows 400 s. A run killed
+  part-way leaves stale PNGs that make a pixel diff look clean.
+
+**Next:** G2 (persist each player's resolution events per turn), which the replay
+viewer and the turn report (§4.4) both need. It's a persistence-format decision, so
+ask the user first.
 
 **Headquarters built in libGDX (2026-10-04),** as far as opening a program, from the
 Headquarters mockup: landing with the building panel and upgrade, Manage open

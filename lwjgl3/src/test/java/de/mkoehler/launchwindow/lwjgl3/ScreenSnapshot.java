@@ -36,6 +36,16 @@ import de.mkoehler.launchwindow.client.screen.RndBoardScreen;
 import de.mkoehler.launchwindow.client.screen.OpenRocketScreen;
 import de.mkoehler.launchwindow.client.screen.RocketProgramsScreen;
 import de.mkoehler.launchwindow.client.screen.VabScreen;
+import de.mkoehler.launchwindow.client.screen.MissionControlScreen;
+import de.mkoehler.launchwindow.client.screen.MissionsScreen;
+import de.mkoehler.launchwindow.client.screen.RestaffScreen;
+import de.mkoehler.launchwindow.client.view.Department;
+import de.mkoehler.launchwindow.content.ContentCatalog;
+import de.mkoehler.launchwindow.content.MissionConfiguration;
+import de.mkoehler.launchwindow.rules.LaunchRequest;
+import de.mkoehler.launchwindow.rules.MissionLaunch;
+import de.mkoehler.launchwindow.rules.MissionStaffing;
+import java.util.Arrays;
 import de.mkoehler.launchwindow.client.screen.AssembleMissionScreen;
 import de.mkoehler.launchwindow.client.screen.MissionConfigsScreen;
 import de.mkoehler.launchwindow.client.screen.MissionPlanScreen;
@@ -276,6 +286,7 @@ public final class ScreenSnapshot {
         write(folder, "vab-overview-upgrading.png", new VabScreen(game), null);
 
         planningShots(folder, game, info);
+        missionControlShots(folder, game, info);
     }
 
     /**
@@ -391,6 +402,69 @@ public final class ScreenSnapshot {
             MissionPlanScreen.Tab.ASSESSMENT), null);
     }
 
+    private static void missionControlShots(File folder, LaunchWindowGame game, GameInfoResponse info) {
+        startSession(game, missionControlState(), info);
+        InProgressMission scheduled = game.session().state().getInProgressMissions().values().stream()
+            .filter(mission -> mission.getCurrentSeasonIndex() == 0).findFirst().orElseThrow();
+        write(folder, "mc-overview.png", new MissionControlScreen(game), null);
+        write(folder, "mc-manage.png", new MissionControlScreen(game), MissionControlScreen::openManageDepartment);
+        write(folder, "mc-train.png", new MissionControlScreen(game), screen -> screen.openTraining(
+            game.session().state().getMissionControlOfficers().stream()
+                .filter(officer -> officer.getAssignmentState() == AssignmentState.IDLE).reduce((a, b) -> b)
+                .orElseThrow()));
+        write(folder, "mc-hire.png", new HireScreen(game, Department.MISSION_CONTROL), null);
+        write(folder, "mc-scheduled.png", new MissionsScreen(game, true), null);
+        write(folder, "mc-scrub.png", new MissionsScreen(game, true), screen -> screen.confirmCallOff(scheduled));
+        write(folder, "mc-active.png", new MissionsScreen(game, false), null);
+        write(folder, "mc-cancel.png", new MissionsScreen(game, false), screen -> screen.confirmCallOff(
+            game.session().state().getInProgressMissions().get("m-sputnik")));
+        write(folder, "mc-restaff.png", new RestaffScreen(game, scheduled.getId()), null);
+        write(folder, "mc-restaff-picker.png", new RestaffScreen(game, scheduled.getId()),
+            screen -> screen.openPicker(0));
+        write(folder, "mc-restaff-active.png", new RestaffScreen(game, "m-sputnik"), null);
+        startSession(game, planningState(11, 25_000), info);
+        write(folder, "mc-scheduled-empty.png", new MissionsScreen(game, true), null);
+        write(folder, "mc-active-empty.png", new MissionsScreen(game, false), null);
+    }
+
+    /**
+     * The planning agency right after launching Vostok Orbital, with Sputnik 1 Extended in its
+     * last season: BOOSTER was released after season 1, SPACECRAFT SYSTEMS is still staffed. One
+     * controller holds an Expert skill, and two candidates wait in the pool.
+     */
+    private static PlayerSnapshot missionControlState() {
+        PlayerSnapshot state = planningState(13, 25_000);
+        state.getBuildingLevels().put(Building.MISSION_CONTROL, 3);
+        ContentCatalog catalog = ContentPackLoader.loadFromClasspath("content/early-era",
+            ScreenSnapshot.class.getClassLoader());
+        MissionConfiguration orbital = catalog.missionConfiguration("vostok-orbital").orElseThrow();
+        MissionStaffing.Staffing staffing = MissionStaffing.autoAssign(state, orbital);
+        MissionLaunch.launch(state, new LaunchRequest(orbital.id(), staffing.crewSlotIds(), staffing.controlSlotIds(),
+            List.of("r7-vostok")), catalog);
+        MissionControlOfficer systems = state.getMissionControlOfficers().stream()
+            .filter(officer -> officer.getAssignmentState() == AssignmentState.IDLE).findFirst().orElseThrow();
+        // BOOSTER was released after season 1: the season pass emptied the console then.
+        InProgressMission sputnik = new InProgressMission("m-sputnik", "sputnik-1-extended", List.of(),
+            Arrays.asList(null, systems.getId(), null));
+        sputnik.setRocketIds(List.of("r7-sputnik"));
+        sputnik.setLaunchCost(2_113);
+        sputnik.setCurrentSeasonIndex(2);
+        state.getInProgressMissions().put("m-sputnik", sputnik);
+        systems.setAssignmentState(AssignmentState.ASSIGNED);
+        systems.setAssignedMissionId("m-sputnik");
+        state.getMissionControlOfficers().get(0).getExpertSkills().add(MissionControlSkill.PROPULSION);
+        for (int i = 0; i < 2; i++) {
+            MissionControlOfficer candidate = new MissionControlOfficer("cand" + i, i == 0 ? "Pyotr Lavrov"
+                : "Irina Volkova", 27 + i, 60, 70);
+            for (MissionControlSkill skill : MissionControlSkill.values()) {
+                candidate.setSkill(skill, 40 + i * 9 + skill.ordinal() * 4);
+            }
+            candidate.setSalary(31 + i * 4);
+            state.getMissionControlCandidates().add(candidate);
+        }
+        return state;
+    }
+
     private static void startSession(LaunchWindowGame game, PlayerSnapshot state, GameInfoResponse info) {
         game.setSession(ClientSession.start(CREDENTIALS, state, new GameInfo(info, System.currentTimeMillis()),
             ScreenSnapshot.class.getClassLoader()));
@@ -430,9 +504,10 @@ public final class ScreenSnapshot {
         }
         String[] names = {"Sergei Markov", "Oleg Fedorov", "Ivan Kozlov", "Boris Antonov", "Lev Romanov",
             "Arkady Smirnov", "Konstantin Pavlov", "Valentina Kirova", "Tamara Sorokina", "Fyodor Gusev",
-            "Raisa Melnikova", "Yuri Panin"};
+            "Raisa Melnikova", "Yuri Panin", "Pavel Lazarev"};
         for (int i = 0; i < controllers; i++) {
             MissionControlOfficer officer = new MissionControlOfficer("c" + i, names[i], 35 + i, 70, 60);
+            officer.setSalary(38 + i * 3);
             int k = 0;
             for (MissionControlSkill skill : MissionControlSkill.values()) {
                 officer.setSkill(skill, 45 + (i * 7 + k++ * 11) % 35);

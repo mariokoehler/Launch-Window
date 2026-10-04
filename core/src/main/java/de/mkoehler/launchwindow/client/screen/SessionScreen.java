@@ -90,6 +90,13 @@ abstract class SessionScreen extends StageScreen {
     }
 
     /**
+     * Goes to Mission Control's flight-controller overview.
+     */
+    protected void goMissionControl() {
+        game.setScreen(new MissionControlScreen(game));
+    }
+
+    /**
      * Goes to the VAB's landing screen.
      */
     protected void goVab() {

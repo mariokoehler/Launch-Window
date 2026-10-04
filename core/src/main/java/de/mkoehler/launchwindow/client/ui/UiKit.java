@@ -166,6 +166,26 @@ public final class UiKit implements Disposable {
     }
 
     /**
+     * Returns a progress-track dot ({@link Theme.Shapes#progressDot}), built once per state.
+     *
+     * @param state the step's state
+     * @return the drawable, 14 px across
+     */
+    public Drawable progressDot(Theme.ProgressState state) {
+        return rects.computeIfAbsent("progressDot:" + state, key -> shapes.progressDot(state, 14));
+    }
+
+    /**
+     * Returns the dash between two progress-track dots ({@link Theme.Shapes#progressDash}).
+     *
+     * @param leadsIntoCurrent whether it leads into the current step
+     * @return the drawable
+     */
+    public Drawable progressDash(boolean leadsIntoCurrent) {
+        return rects.computeIfAbsent("progressDash:" + leadsIntoCurrent, key -> shapes.progressDash(leadsIntoCurrent));
+    }
+
+    /**
      * Returns a nav tab's background ({@link Theme.Shapes#navTab}): white when active, an outline
      * on the page otherwise. Built once per look.
      *

@@ -17,11 +17,8 @@ import de.mkoehler.launchwindow.client.connect.ServerResult;
 import de.mkoehler.launchwindow.client.ui.Refusals;
 import de.mkoehler.launchwindow.client.ui.SkillBar;
 import de.mkoehler.launchwindow.client.ui.Theme;
-import de.mkoehler.launchwindow.client.view.SetDepartment;
-import de.mkoehler.launchwindow.client.view.SetSkills;
-import de.mkoehler.launchwindow.model.SetSkill;
-import de.mkoehler.launchwindow.model.SetSpecialist;
-import de.mkoehler.launchwindow.rules.PersonnelGroup;
+import de.mkoehler.launchwindow.client.view.Department;
+import de.mkoehler.launchwindow.model.Personnel;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -33,12 +30,13 @@ import java.util.Locale;
 import java.util.Set;
 
 /**
- * Hire SET personnel ({@code ui-spec.md} &sect;4.8.2, component 14): the group's candidate pool
- * (it refreshes every season), sortable by skill; select candidates into the Recruits panel, then
+ * Hire personnel ({@code ui-spec.md} &sect;4.8.2 and &sect;4.7.1, component 14) for a department, the
+ * SET Centre's engineers or Mission Control's flight controllers: the group's candidate pool (it
+ * refreshes every season), sortable by skill; select candidates into the Recruits panel, then
  * Hire Recruits. Built from the older Personnel Recruitment mockup, with the SET Centre mockup's
  * newer header and footer (no End Season button; the breadcrumb starts at Space Complex).
  *
- * <p>Selection can't go past the SET Centre's free roster places. Hiring sends one hire per recruit,
+ * <p>Selection can't go past the building's free roster places. Hiring sends one hire per recruit,
  * in order, and sums the outcomes up in one toast: a candidate who has left the pool, or a roster
  * that filled up meanwhile, is reported, not lost silently.</p>
  *
@@ -49,7 +47,8 @@ public final class HireScreen extends ChromeScreen {
     private static final float LIST_WIDTH = 1180f;
 
     private final Set<String> selected = new LinkedHashSet<>();
-    private SetSkill sortBy = SetSkill.ROCKETS;
+    private final Department department;
+    private String sortBy;
     private boolean descending = true;
     private boolean hiring;
 
@@ -59,14 +58,31 @@ public final class HireScreen extends ChromeScreen {
      * @param game the game, in a session
      */
     public HireScreen(LaunchWindowGame game) {
-        super(game, List.of(Crumb.SPACE_COMPLEX, Crumb.SET_CENTRE,
-            new Crumb("Personnel Recruitment", null)), "SET Centre", "Personnel Recruitment");
+        this(game, Department.SET);
+    }
+
+    /**
+     * Builds the screen for a department.
+     *
+     * @param game       the game, in a session
+     * @param department the department hiring
+     */
+    public HireScreen(LaunchWindowGame game, Department department) {
+        super(game, List.of(Crumb.SPACE_COMPLEX, department == Department.SET ? Crumb.SET_CENTRE
+            : Crumb.MISSION_CONTROL, new Crumb("Personnel Recruitment", null)), department.place(),
+            "Personnel Recruitment");
+        this.department = department;
+        this.sortBy = department.skills().get(0);
         rebuild();
     }
 
     @Override
     protected void goBack() {
-        goSetCentre();
+        if (department == Department.SET) {
+            goSetCentre();
+        } else {
+            goMissionControl();
+        }
     }
 
     /**
@@ -88,13 +104,13 @@ public final class HireScreen extends ChromeScreen {
     }
 
     private int freePlaces() {
-        return Math.max(0, SetDepartment.cap(session.state(), session.catalog())
-            - session.state().getSetSpecialists().size());
+        return Math.max(0, department.cap(session.state(), session.catalog())
+            - department.roster(session.state()).size());
     }
 
     @Override
     protected void rebuild() {
-        List<SetSpecialist> pool = session.state().getSetSpecialistCandidates();
+        List<? extends Personnel> pool = department.candidates(session.state());
         selected.removeIf(id -> pool.stream().noneMatch(candidate -> candidate.getId().equals(id)));
         content.clearChildren();
         content.top();
@@ -106,19 +122,19 @@ public final class HireScreen extends ChromeScreen {
         content.add(actionsRow(pool)).growX().padTop(Theme.SPACE_5);
     }
 
-    private Table candidatesPanel(List<SetSpecialist> pool) {
+    private Table candidatesPanel(List<? extends Personnel> pool) {
         Table panel = new Table();
         panel.top();
         Table head = new Table();
-        head.add(ui.label("Available candidates · Sorted by " + SetSkills.label(sortBy) + " "
+        head.add(ui.label("Available candidates · Sorted by " + department.label(sortBy) + " "
             + (descending ? "↓" : "↑"), Theme.TextStyle.EYEBROW, Theme.ON_PAGE_STRONG)).expandX().left();
         head.add(sortButton(descending ? "sort_desc" : "sort_asc", true, () -> {
             descending = !descending;
             rebuild();
         })).size(32f).padRight(Theme.SPACE_1);
         head.add(new Image(ui.solid(Theme.ON_PAGE))).width(Theme.BORDER_THIN).height(32f).padRight(Theme.SPACE_1);
-        for (SetSkill skill : SetSkill.values()) {
-            head.add(sortButton(SetSkills.icon(skill), skill == sortBy, () -> {
+        for (String skill : department.skills()) {
+            head.add(sortButton(department.icon(skill), skill == sortBy, () -> {
                 sortBy = skill;
                 rebuild();
             })).size(32f).padLeft(Theme.SPACE_1);
@@ -131,13 +147,13 @@ public final class HireScreen extends ChromeScreen {
         Table list = new Table();
         list.top();
         list.defaults().growX();
-        Comparator<SetSpecialist> bySkill = Comparator.comparingDouble(c -> SetDepartment.skill(c, sortBy));
-        List<SetSpecialist> sorted = pool.stream().sorted(descending ? bySkill.reversed() : bySkill).toList();
+        Comparator<Personnel> bySkill = Comparator.comparingDouble(c -> department.skill(c, sortBy));
+        List<? extends Personnel> sorted = pool.stream().sorted(descending ? bySkill.reversed() : bySkill).toList();
         if (sorted.isEmpty()) {
             list.add(ui.paragraph("No candidates this season. The pool refreshes when the turn resolves.",
                 Theme.TextStyle.BODY, Theme.INK_MUTED)).pad(Theme.SPACE_6);
         }
-        for (SetSpecialist candidate : sorted) {
+        for (Personnel candidate : sorted) {
             list.add(candidateRow(candidate)).row();
             list.add(new Image(ui.solid(Theme.NAVY_BORDER))).height(Theme.BORDER_THIN).row();
         }
@@ -147,7 +163,7 @@ public final class HireScreen extends ChromeScreen {
         return panel;
     }
 
-    private Table candidateRow(SetSpecialist candidate) {
+    private Table candidateRow(Personnel candidate) {
         boolean isSelected = selected.contains(candidate.getId());
         Table row = new Table();
         if (isSelected) {
@@ -167,9 +183,9 @@ public final class HireScreen extends ChromeScreen {
         inner.add(who).width(170f).left().padRight(Theme.SPACE_4);
 
         Table skills = new Table();
-        for (SetSkill skill : SetSkill.values()) {
-            double value = SetDepartment.skill(candidate, skill);
-            skills.add(ui.label(SetSkills.label(skill), Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).width(148f).left()
+        for (String skill : department.skills()) {
+            double value = department.skill(candidate, skill);
+            skills.add(ui.label(department.label(skill), Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).width(148f).left()
                 .padRight(Theme.SPACE_2);
             skills.add(new SkillBar(ui, value)).expandX().fillX().height(6f).padRight(Theme.SPACE_2);
             Label number = ui.label(String.format(Locale.ROOT, "%.1f%%", value), Theme.TextStyle.BODY_SM, Theme.INK);
@@ -192,7 +208,7 @@ public final class HireScreen extends ChromeScreen {
         return row;
     }
 
-    private Table recruitsPanel(List<SetSpecialist> pool) {
+    private Table recruitsPanel(List<? extends Personnel> pool) {
         Table panel = new Table();
         panel.top();
         Table head = new Table();
@@ -204,19 +220,19 @@ public final class HireScreen extends ChromeScreen {
         Table card = ui.card();
         card.top();
         card.defaults().growX();
-        List<SetSpecialist> chosen = chosen(pool);
+        List<? extends Personnel> chosen = chosen(pool);
         if (chosen.isEmpty()) {
             Table empty = new Table();
-            Image glyph = new Image(ui.icon("set_employees"), Scaling.fit);
+            Image glyph = new Image(ui.icon(department.icon()), Scaling.fit);
             glyph.setColor(Theme.INK_MUTED);
             empty.add(glyph).size(36f).padBottom(Theme.SPACE_2).row();
-            Label text = ui.paragraph("No recruits selected yet. Choose specialists from the candidate list to add "
-                + "them here.", Theme.TextStyle.BODY, Theme.INK_MUTED);
+            Label text = ui.paragraph("No recruits selected yet. Choose " + department.people() + " from the "
+                + "candidate list to add them here.", Theme.TextStyle.BODY, Theme.INK_MUTED);
             text.setAlignment(Align.center);
             empty.add(text).width(320f);
             card.add(empty).expand().center();
         }
-        for (SetSpecialist recruit : chosen) {
+        for (Personnel recruit : chosen) {
             Table entry = new Table();
             entry.setBackground(ui.rect(Theme.SURFACE_CARD, Theme.SURFACE_CARD, 0f));
             Image accent = new Image(ui.solid(Theme.GOLD_TEXT));
@@ -238,7 +254,7 @@ public final class HireScreen extends ChromeScreen {
         return panel;
     }
 
-    private Table actionsRow(List<SetSpecialist> pool) {
+    private Table actionsRow(List<? extends Personnel> pool) {
         Table row = new Table();
         TextButton hire = button(hiring ? "Hiring…" : "Hire Recruits", Theme.ButtonKind.PRIMARY, this::hire);
         hire.setDisabled(selected.isEmpty() || hiring);
@@ -253,14 +269,14 @@ public final class HireScreen extends ChromeScreen {
         });
         row.add(cancel);
         row.add().expandX();
-        double total = chosen(pool).stream().mapToDouble(SetSpecialist::getSalary).sum();
+        double total = chosen(pool).stream().mapToDouble(Personnel::getSalary).sum();
         row.add(ui.label("Added fixed costs", Theme.TextStyle.EYEBROW, Theme.GOLD_ON_PAGE)).padRight(Theme.SPACE_2);
         row.add(ui.label(String.format(Locale.ROOT, "$ %,.1f / season", total), Theme.TextStyle.HEADING_SM,
             Theme.ON_PAGE_STRONG));
         return row;
     }
 
-    private List<SetSpecialist> chosen(List<SetSpecialist> pool) {
+    private List<? extends Personnel> chosen(List<? extends Personnel> pool) {
         return pool.stream().filter(candidate -> selected.contains(candidate.getId())).toList();
     }
 
@@ -291,7 +307,7 @@ public final class HireScreen extends ChromeScreen {
             return;
         }
         String candidateId = queue.poll();
-        game.gateway().submit(session.credentials(), new HireAction(PersonnelGroup.SET, candidateId), result -> {
+        game.gateway().submit(session.credentials(), new HireAction(department.group(), candidateId), result -> {
             if (!isShowing()) {
                 return;
             }

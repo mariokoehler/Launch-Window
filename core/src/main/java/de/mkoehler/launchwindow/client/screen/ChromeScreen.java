@@ -57,6 +57,8 @@ abstract class ChromeScreen extends SessionScreen {
         static final Crumb HEADQUARTERS = new Crumb("Headquarters", ChromeScreen::goHeadquarters);
         /** The SET Centre's personnel overview. */
         static final Crumb SET_CENTRE = new Crumb("SET Centre", ChromeScreen::goSetCentre);
+        /** Mission Control's flight-controller overview. */
+        static final Crumb MISSION_CONTROL = new Crumb("Mission Control", ChromeScreen::goMissionControl);
         /** The VAB's landing screen. */
         static final Crumb VAB = new Crumb("VAB", ChromeScreen::goVab);
         /** The VAB's Manage Rocket Programs. */
@@ -411,7 +413,7 @@ abstract class ChromeScreen extends SessionScreen {
             () -> notBuiltYet("The Astronaut Complex"))).expandX();
         footer.add(footerStat("flight_controllers",
             counts(state.getMissionControlOfficers(), catalog, state, Building.MISSION_CONTROL),
-            () -> notBuiltYet("Mission Control"))).expandX();
+            this::goMissionControl)).expandX();
         footer.add(footerStat("open_programs", state.getOpenedProgramIds().size() + " / "
             + catalog.buildings().capacity(Building.HEADQUARTERS, state.buildingLevel(Building.HEADQUARTERS)),
             this::goHeadquarters)).expandX().right();

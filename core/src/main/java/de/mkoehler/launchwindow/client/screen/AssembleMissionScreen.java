@@ -284,7 +284,7 @@ public final class AssembleMissionScreen extends ChromeScreen {
                 + "next turn. Until then you can scrub it in Mission Control for a full refund.")).padBottom(
                 Theme.SPACE_3).row();
             card.add(actionButton("See it in Mission Control", Theme.ButtonKind.SECONDARY,
-                () -> notBuiltYet("Mission Control"))).left().fill(false, false);
+                () -> game.setScreen(new MissionsScreen(game, true)))).left().fill(false, false);
             return card;
         }
         LaunchRequest request = draft.request();
@@ -369,50 +369,9 @@ public final class AssembleMissionScreen extends ChromeScreen {
                        String value, boolean used, Runnable open) {
         boolean nobody = used && person == null && candidates(astronaut ? StaffingSlot.Kind.ASTRONAUT
             : StaffingSlot.Kind.MISSION_CONTROL, null).isEmpty();
-        Table tile = new Table();
-        tile.top().left();
-        tile.pad(10f, 12f, 10f, 12f);
-        if (!used) {
-            tile.setBackground(ui.rect(new Color(Theme.SURFACE_CARD).lerp(Theme.SKILL_TRACK, 0.5f), Theme.NAVY_BORDER,
-                Theme.BORDER_THIN));
-        } else if (person != null) {
-            tile.setBackground(ui.rect(Theme.SURFACE_CARD, Theme.NAVY, Theme.BORDER_EMPHASIS));
-        } else if (nobody) {
-            tile.setBackground(ui.rect(Theme.SURFACE_CARD, Theme.GOLD_TEXT, Theme.BORDER_EMPHASIS));
-        } else {
-            tile.setBackground(ui.rect(Theme.SURFACE_CARD, Theme.NAVY, Theme.BORDER_THIN));
-        }
-        tile.defaults().growX().left();
-        Table head = new Table();
-        head.add(ui.label(title.toUpperCase(Locale.ROOT), Theme.TextStyle.EYEBROW, used ? Theme.INK : Theme.INK_MUTED))
-            .expandX().left();
-        Table pill = new Table();
-        pill.setBackground(ui.rect(Theme.SURFACE_CARD, astronaut ? Theme.NAVY : Theme.NAVY_BORDER, Theme.BORDER_THIN));
-        pill.pad(1f, 5f, 1f, 5f);
-        pill.add(ui.label(type, Theme.TextStyle.LABEL, astronaut ? Theme.NAVY : Theme.INK_MUTED));
-        head.add(pill);
-        tile.add(head).padBottom(6f).row();
-        Table skillRow = new Table();
-        skillRow.left();
-        if (icon != null) {
-            Image glyph = new Image(ui.icon(icon), Scaling.fit);
-            glyph.setColor(Theme.INK_MUTED);
-            skillRow.add(glyph).size(13f).padRight(6f);
-        }
-        skillRow.add(ui.label(skill, Theme.TextStyle.CAPTION, Theme.INK_MUTED));
-        tile.add(skillRow).padBottom(Theme.SPACE_3).row();
-        if (!used) {
-            tile.add(ui.label("Not required", Theme.TextStyle.CAPTION, Theme.INK_MUTED));
-        } else if (person != null) {
-            Table holder = new Table();
-            holder.add(ui.label(person, Theme.TextStyle.BODY_STRONG, Theme.INK)).expandX().left();
-            holder.add(ui.label(value, Theme.TextStyle.HEADING_SM, Theme.NAVY));
-            tile.add(holder);
-        } else if (nobody) {
-            tile.add(ui.label("Nobody free for this slot", Theme.TextStyle.CAPTION, Theme.GOLD_TEXT));
-        } else {
-            tile.add(ui.label("+ Assign", Theme.TextStyle.LABEL, Theme.NAVY));
-        }
+        SlotTile.State state = !used ? SlotTile.State.UNUSED : person != null ? SlotTile.State.FILLED
+            : nobody ? SlotTile.State.NOBODY : SlotTile.State.EMPTY;
+        Table tile = SlotTile.build(ui, title, type, astronaut, icon, skill, person, value, state);
         if (used && editable()) {
             tile.setTouchable(Touchable.enabled);
             tile.addListener(clicked(open));

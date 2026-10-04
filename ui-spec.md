@@ -334,7 +334,7 @@ Choices made while building it, **confirmed by the user (2026-10-04)**:
   Turn Report, no fade). It has been checked on Soviet winter noon, the brightest art.
 - **The "game result exists" state isn't handled.** `GameInfo` already carries the result
   and the winners; only the §4.13 screen is missing.
-- **Only Headquarters, the SET Centre and the VAB open.** The other five buildings toast "isn't
+- **Only Headquarters, the SET Centre, the VAB and Mission Control open.** The other five buildings toast "isn't
   built yet".
 - **Breadcrumbs are now live:** "Space Complex", "Headquarters", "SET Centre", and the
   program details' "Open programs" or body crumb go to their screens.
@@ -617,6 +617,42 @@ crew losses. Playback should be skippable and steppable. **Needs server work:** 
 - "Can't be abandoned" is shown on a fixture card, because the early pack has no
   multi-season crewed configuration.
 
+**Implemented in libGDX (2026-10-04), all but the replay viewer,** from the Mission
+Control mockup:
+- **Screens:** `client.screen.MissionControlScreen` (flight controllers),
+  `MissionsScreen` (scheduled or active missions, one class with two modes) and
+  `RestaffScreen`.
+- **View logic:** `client.view.MissionControl`. Hire, training, pull out, dismiss and
+  Manage department are now shared with the SET Centre, through `client.view.Department`,
+  `PersonnelDialogs` and a `HireScreen` that takes the department.
+- **Rules (G7):**
+  - `MissionCancellation.preview` gives the refund and prestige loss the server will
+    apply, so the dialogs show $ 211, the integer refund the rule pays, not the
+    mockup's $ 211.3.
+  - `MissionAssessment` can start from a season, for the odds of what's left.
+
+**The replay viewer waits for G2:** the server keeps no per-turn events. "Replay season
+N" shows the "isn't built yet" toast.
+
+Choices made while building them, **unconfirmed**:
+- **Kept from the mockup's proposals:** no building panel; re-staffing has no
+  confirmation; Scrub and Cancel use the generic dialog with price lines.
+- **No "prestige so far"** on an active mission: the state doesn't keep it (added to
+  G2).
+- **A released console says only "Released",** not the mockup's "Released · Fyodor
+  Gusev is idle": the season pass empties a released console, so the name is gone.
+- **"Changed today"** on Re-staff lists only this visit's changes. Nothing on the server
+  records them (G6).
+- **The re-staff picker has no "Empty this slot",** because the rule can't leave a
+  console empty, and lists only idle people.
+- **The Expert mark** is the prestige star in gold beside the skill. The mockup's ★
+  glyph isn't in the font.
+- **No Expert training here:** component 12 has no Expert option, and no screen offers
+  `StartExpertTrainingAction` yet.
+- **The roster filter** says "On a mission" where the SET Centre says "Researching".
+- **Not reachable with the real pack:** "Can't be abandoned" for a crewed mission in
+  flight. It's covered by `MissionCancellationPreviewTest`, not a screenshot.
+
 ### 4.8 SET Centre: engineers and payload R&D
 **Purpose:** the engineering department and payload R&D. SET cap 7/14/20/30.
 **Ref:** `SET_centre*.png`, `rnd_assignments.png`, `upgrade_SET_centre.png`.
@@ -756,6 +792,7 @@ for the mockups.
 | NOT_IN_DEBT / EXCEEDS_CAP / INSUFFICIENT_PRESTIGE | Only possible while in debt. / More than the conversion allows. / Not enough prestige. |
 | SLOT_CLAIM_REQUIRED | (Client goes to §4.2.) |
 | Launch (added 2026-10-04): PROGRAM_NOT_OPEN / LAUNCH_CAP_REACHED / MISSION_COMPONENT_UNAVAILABLE / WRONG_ROCKET_COUNT, ROCKET_NOT_AVAILABLE / ROCKET_CANNOT_LIFT_PAYLOAD / WRONG_*_COUNT / *_NOT_IDLE / DUPLICATE_* / UNKNOWN_ASTRONAUT, UNKNOWN_MISSION_CONTROL_OFFICER / CAPCOM_NOT_AVAILABLE / UNKNOWN_MISSION_CONFIGURATION | Open the program first. / No more launches this turn: the launch window is full. / A component is grounded this turn. / Pick a rocket for every launch. / That rocket can't fly this launch. / Fill every slot the mission uses. / Someone in a slot isn't free any more. / Someone is in two slots. / Someone in a slot isn't on the roster any more. / CAPCOM needs a free astronaut who isn't in the crew. / That mission doesn't exist in this game. Short of funds reads "Not enough funds: $ N short." |
+| Mission Control (added 2026-10-04): UNKNOWN_MISSION / CREWED_MISSION_IN_FLIGHT / UNKNOWN_SLOT / SLOT_NOT_USED / WRONG_EMPLOYEE_TYPE / PERSON_NOT_AVAILABLE | That mission isn't scheduled or in flight any more. / A crewed mission in flight can't be abandoned. / That console doesn't exist on this mission. / That console isn't needed any more. / That console takes someone of another type. / They're not free any more. |
 | Rocket programs: VAB_FULL / ROCKET_CLASS_TOO_LARGE / UNKNOWN_ROCKET (added 2026-10-04) | The VAB can't hold more rocket programs. Upgrade it or close one. / Upgrade the VAB to build this rocket class. / That rocket doesn't exist in this game. |
 | Building upgrade: MAX_LEVEL / ALREADY_UPGRADING; program opening also UNKNOWN_PROGRAM | Already at the top level. / Already upgrading. / That program doesn't exist in this game. |
 | Manage department (`AdjustSalariesAction`, added 2026-10-04): INVALID_PERCENT / EMPTY_DEPARTMENT | Pick a change between −50 % and +50 %. / There's nobody in the department yet. |
@@ -795,6 +832,8 @@ current state alone. Each is an M5 task.
   - *per season:* the prestige total, goals reached with the cascade's credits,
     each component's reliability before and after, skill growth per person, the
     consoles released, and crew losses.
+  - *per mission (2026-10-04, from the libGDX build):* the prestige earned so far, for
+    an active mission's card.
 - **G3. Rival summaries.** Each player's agency name, director name, archetype, and the
   declared goals they hold, with turns, for the race tab. This is the
   "per-player summary" `design.md` §3.7 planned for game-meta.

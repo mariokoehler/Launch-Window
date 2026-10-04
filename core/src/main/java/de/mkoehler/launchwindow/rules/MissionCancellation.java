@@ -46,6 +46,49 @@ public final class MissionCancellation {
     }
 
     /**
+     * What calling a mission off would do, as {@link #cancel} would do it.
+     *
+     * @param outcome      the outcome
+     * @param refund       the funds returned
+     * @param prestigeLost the prestige taken, at most what the player has
+     */
+    public record Preview(Outcome outcome, long refund, long prestigeLost) {
+    }
+
+    /**
+     * Says what calling a mission off would do, without changing anything: a full refund for an
+     * unflown mission, or the configuration's refund share and prestige loss for an uncrewed one
+     * in flight; a crewed one in flight can't be called off.
+     *
+     * @param snapshot          the player
+     * @param missionInstanceId the mission
+     * @param catalog           the content catalog
+     * @return the preview
+     * @throws NullPointerException if an argument is {@code null}
+     */
+    public static Preview preview(PlayerSnapshot snapshot, String missionInstanceId, ContentCatalog catalog) {
+        Objects.requireNonNull(snapshot, "snapshot must not be null");
+        Objects.requireNonNull(missionInstanceId, "missionInstanceId must not be null");
+        Objects.requireNonNull(catalog, "catalog must not be null");
+        InProgressMission mission = snapshot.getInProgressMissions().get(missionInstanceId);
+        if (mission == null) {
+            return new Preview(Outcome.UNKNOWN_MISSION, 0, 0);
+        }
+        // A mission that has flown any season has moved past index 0, or has already ended.
+        if (mission.getCurrentSeasonIndex() == 0) {
+            return new Preview(Outcome.SCRUBBED, mission.getLaunchCost(), 0);
+        }
+        if (!mission.crewIds().isEmpty()) {
+            return new Preview(Outcome.CREWED_MISSION_IN_FLIGHT, 0, 0);
+        }
+        MissionConfiguration configuration =
+            catalog.missionConfiguration(mission.getMissionConfigurationId()).orElseThrow();
+        return new Preview(Outcome.CANCELLED,
+            mission.getLaunchCost() * configuration.cancellationRefundPercent() / 100,
+            Math.min(snapshot.getPrestige(), configuration.cancellationPrestigeDeduction()));
+    }
+
+    /**
      * Scrubs or cancels a mission.
      *
      * @param snapshot          the player; mutated only on success
@@ -57,24 +100,16 @@ public final class MissionCancellation {
         Objects.requireNonNull(snapshot, "snapshot must not be null");
         Objects.requireNonNull(missionInstanceId, "missionInstanceId must not be null");
         Objects.requireNonNull(catalog, "catalog must not be null");
-        InProgressMission mission = snapshot.getInProgressMissions().get(missionInstanceId);
-        if (mission == null) {
-            return Outcome.UNKNOWN_MISSION;
+        Preview preview = preview(snapshot, missionInstanceId, catalog);
+        if (preview.outcome() != Outcome.SCRUBBED && preview.outcome() != Outcome.CANCELLED) {
+            return preview.outcome();
         }
-        // A mission that has flown any season has moved past index 0, or has already ended.
-        boolean unflown = mission.getCurrentSeasonIndex() == 0;
+        InProgressMission mission = snapshot.getInProgressMissions().get(missionInstanceId);
+        boolean unflown = preview.outcome() == Outcome.SCRUBBED;
+        snapshot.setFunds(snapshot.getFunds() + preview.refund());
+        snapshot.setPrestige(snapshot.getPrestige() - preview.prestigeLost());
         if (unflown) {
-            snapshot.setFunds(snapshot.getFunds() + mission.getLaunchCost());
             snapshot.setLaunchesThisWindow(Math.max(0, snapshot.getLaunchesThisWindow() - 1));
-        } else {
-            if (!mission.crewIds().isEmpty()) {
-                return Outcome.CREWED_MISSION_IN_FLIGHT;
-            }
-            MissionConfiguration configuration =
-                catalog.missionConfiguration(mission.getMissionConfigurationId()).orElseThrow();
-            snapshot.setPrestige(Math.max(0, snapshot.getPrestige() - configuration.cancellationPrestigeDeduction()));
-            snapshot.setFunds(snapshot.getFunds()
-                + mission.getLaunchCost() * configuration.cancellationRefundPercent() / 100);
         }
         List<String> everyone = new ArrayList<>(mission.crewIds());
         everyone.addAll(mission.groundIds());

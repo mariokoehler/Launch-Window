@@ -5927,6 +5927,16 @@ here.
       filter chips, the segmented control, the reliability bar, the skill bar, the
       R&D slot box, and the white on-page secondary button. They should be promoted
       to the design system and the UI Asset Sheet.
+  - **Slice: Mission Control, all but the replay — done (2026-10-04).** The flight
+    controllers, scheduled missions with Scrub, active missions with Cancel, and
+    Re-staff. Details and unconfirmed choices are in `ui-spec.md` §4.7's
+    "Implemented" note.
+    - **Rules:** `MissionCancellation.preview`, which `cancel` now uses, and
+      `MissionAssessment` from a season. `ContentPackPlayouts` stayed byte-identical.
+    - **Client:** the personnel pieces are shared by department (`Department`,
+      `PersonnelDialogs`, `HireScreen(game, department)`), and the seat and console
+      tile is shared too (`SlotTile`). Every earlier screenshot is pixel-identical.
+    - **Waiting:** the replay viewer needs G2's persisted per-turn events.
   - **Slice: Headquarters mission planning — done (2026-10-04).** Configuration
     selection, configuration details, the planning hub (assessment, rockets, payload
     R&D) and Assemble mission, up to a real launch (`LaunchMissionAction`). Details and

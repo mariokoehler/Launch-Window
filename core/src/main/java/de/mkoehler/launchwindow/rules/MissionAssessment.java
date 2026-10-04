@@ -86,6 +86,26 @@ public final class MissionAssessment {
     public static Assessment assess(PlayerSnapshot snapshot, ContentCatalog catalog,
             MissionConfiguration configuration, List<String> crewSlotIds, List<String> controlSlotIds,
             List<String> rocketIds) {
+        return assess(snapshot, catalog, configuration, crewSlotIds, controlSlotIds, rocketIds, 0);
+    }
+
+    /**
+     * Assesses what's left of a flight from a season on, for a mission already in flight: its
+     * earlier seasons have flown, and their goals are already in the player's state.
+     *
+     * @param snapshot       the player
+     * @param catalog        the content catalog
+     * @param configuration  the configuration
+     * @param crewSlotIds    one astronaut id per crew seat, {@code null} for an empty one
+     * @param controlSlotIds one id per control slot, {@code null} for an empty one
+     * @param rocketIds      one rocket per launch
+     * @param fromSeason     the first season still to fly, from 0
+     * @return the odds of the seasons from {@code fromSeason} on
+     * @throws NullPointerException if an argument is {@code null}
+     */
+    public static Assessment assess(PlayerSnapshot snapshot, ContentCatalog catalog,
+            MissionConfiguration configuration, List<String> crewSlotIds, List<String> controlSlotIds,
+            List<String> rocketIds, int fromSeason) {
         Objects.requireNonNull(snapshot, "snapshot must not be null");
         Objects.requireNonNull(catalog, "catalog must not be null");
         Objects.requireNonNull(configuration, "configuration must not be null");
@@ -98,7 +118,7 @@ public final class MissionAssessment {
         List<StepOdds> steps = new ArrayList<>();
         double reach = 1;
         double crewLoss = 0;
-        for (int seasonIndex = 0; seasonIndex < configuration.seasons().size(); seasonIndex++) {
+        for (int seasonIndex = Math.max(0, fromSeason); seasonIndex < configuration.seasons().size(); seasonIndex++) {
             MissionSeason season = configuration.seasons().get(seasonIndex);
             for (MissionStep step : season.steps()) {
                 StepOdds odds = stepOdds(snapshot, catalog, plan, seasonIndex, step, held::contains);

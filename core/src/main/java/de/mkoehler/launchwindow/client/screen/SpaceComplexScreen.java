@@ -176,6 +176,7 @@ public final class SpaceComplexScreen extends SessionScreen {
             case HEADQUARTERS -> goHeadquarters();
             case SET_CENTRE -> goSetCentre();
             case VAB -> goVab();
+            case MISSION_CONTROL -> goMissionControl();
             default -> notBuiltYet(place.inSentence());
         }
     }
