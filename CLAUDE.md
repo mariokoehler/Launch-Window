@@ -473,6 +473,33 @@ installing it on a new canvas.
 shows "Also credits …" under a step's goals, following `rules.GoalCascade`
 (see "Content findings closed" above).
 
+**Astronaut Complex and Public Affairs Office mocked up (2026-10-04, `ui-spec.md`
+§4.9/§4.10, first in §7's phase 4, so play testing can start):** a new canvas,
+`Launch Window — Astronaut Complex & Public Affairs Office mockup` (private, ask the
+user for the link). Expert training is a fourth kind in the Training dialog, and the
+Public Affairs Office shows the budget, the next-review forecast, the review table,
+news, and the debt and multiplier states. Details and the unconfirmed choices are in
+`design.md` §3.13.
+- **Negative funds on the blue page** are a solid `danger` tag with white text, now a
+  documented rule of the design system's `danger` token and `Theme.DANGER`. A red text
+  color was approved by the user but failed contrast (3.7:1), so no new token.
+- **Expert training as a fourth Training-dialog kind** is confirmed by the user.
+- **Turn report fixture corrected:** its budget had invented numbers, and it put review
+  #2 in 1960. Reviews come every 16 of the player's seasons (1959 · S1, 1963 · S1, …).
+- **Pitfall:** a page's own `renderVals` key named like a `chromeVals` key (for example
+  `fundsCls`) is silently overwritten by the chrome, because `chromeVals` is merged last.
+- **Phase 4 is done too (2026-10-04, later the same day):** the Museum (four tabs),
+  Settings, and the game result, on a new canvas, `Launch Window — Museum, Settings &
+  Game Result mockup` (private, ask the user for the link). Details are in `design.md`
+  §3.13. New server gap: G10, the memorial list.
+- **Hub Settings gear decided (user, 2026-10-04):** a white icon-only gear at the end
+  of the hub strip opens Settings (and so Log out). It's in the hub mockup too.
+- **Default declared goals are preliminary (user, 2026-10-04):** they end the race at
+  the first crewed orbital flight (the cascade credits all three). The full game will
+  declare extended goals.
+- **Mockup tip:** `<sc-for>` inside a CSS grid lays its items out as grid cells, so a
+  table can be a grid with one `sc-for` per row.
+
 Everything below is history; if this paragraph and a later one disagree, the
 later one wins.
 

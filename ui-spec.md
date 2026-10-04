@@ -309,6 +309,9 @@ Turn Report button with a navy outline. There is no translucent chip and no fade
 because the art's top band runs from near-black (night) to near-white (winter noon).
 See `design.md` §3.13.
 
+**Settings gear (decided, user, 2026-10-04):** a white icon-only gear button at the end
+of the strip opens Settings (§4.12). This replaces "no Log out" below.
+
 **States:** a building that is upgrading shows a subtle "under construction"
 marker; a game result exists (§4.13).
 
@@ -361,8 +364,10 @@ end-of-season news screen. **Ref:** `bulletin_news_*.png`,
 **Server work:** G2, done.
 
 **Mocked up (2026-10-04)** as `TurnReport` on the `Launch Window — Mission Control & Turn
-Report mockup` canvas, in two variants: an ordinary turn and a milestone turn with goals
-and a funding review. `design.md` §3.13 has the writeup. Choices still **unconfirmed**:
+Report mockup` canvas, in three variants: an ordinary turn, a milestone turn with goals,
+and a turn with a funding review (1963 · S1; reviews come every 16 seasons). Its budget
+lines are `core`'s running costs, as on the Public Affairs Office mockup. `design.md` §3.13
+has the writeup. Choices still **unconfirmed**:
 - one scrolling screen, not tabs;
 - running costs broken down by kind;
 - the morale warning is derived by the client.
@@ -737,6 +742,18 @@ toast and dialogs). Decisions made while building them, **all confirmed by the u
 mission (crew or CAPCOM) and Expert stars, with sub-screens Hire and Manage
 department.
 
+**Mocked up (2026-10-04)** as `AstronautComplex` on the `Launch Window — Astronaut
+Complex & Public Affairs Office mockup` canvas; `design.md` §3.13 has the writeup.
+Choices still **unconfirmed**:
+- **Decided (user, 2026-10-04): Expert training is a fourth kind in the Training dialog** (Basic · 3 seasons,
+  Advanced · 2 seasons, Permanent, Expert), not a separate row action. Only skills at
+  80+ that aren't Expert yet can be picked. The dialog shows the per-season chance
+  (25 % at 80 up to 35 % at 100), no skill growth, and nothing on pull-out.
+- An idle astronaut with such a skill gets a gold "Can train toward Expert in …" hint.
+- The building panel (component 7) is a compact cell at the end of the department
+  strip: level, cap, upkeep, and Upgrade with a confirmation.
+- "Near retirement" is within 5 years of 50, as the libGDX SET Centre does for 65.
+
 ### 4.10 Public Affairs Office: budget and prestige
 **Purpose:** money. **Ref:** `public_affairs_office.png`, `budget_info.png`.
 
@@ -758,6 +775,24 @@ cap and the price.
 **States:** in debt, where new spending is refused; a temporary cost or R&D
 multiplier is active (random event, n seasons left).
 
+**Mocked up (2026-10-04)** as `PublicAffairs` on the `Launch Window — Astronaut Complex
+& Public Affairs Office mockup` canvas, with the three states on mockup chips (the debt
+one is a labelled what-if). Every number is `core`'s on the fixture; `design.md` §3.13
+has the writeup. Choices still **unconfirmed**:
+- three columns: funds and running costs; prestige, the next review and the review
+  table; active effects and news;
+- the next review is shown as a scale of its prestige range with two markers (you, and
+  what keeps today's funding), plus a forecast `Notice` (warning when funding would
+  fall);
+- Convert prestige is a dialog with a slider from 1 to the most allowed, showing funds,
+  prestige and the next review's pay before and after, both limits, and a warning when
+  next season would still be short;
+- the footer delta is last season's actual change; the net per season is shown here;
+- the news log lists random events only.
+- **Decided (2026-10-04):** a negative value on the page (funds in debt, a negative
+  footer delta) is a small solid `danger` tag with white text, the `danger` token's
+  documented rule. No separate red text color: one readable as red fails contrast.
+
 ### 4.11 Museum: goals, history, rivals
 **Purpose:** the scoreboard and the archive. **Ref:** `museum*.png`.
 
@@ -772,14 +807,48 @@ multiplier is active (random event, n seasons left).
 
 **Later (M7+):** the educational encyclopedia (`design.md` §1.1).
 
+**Mocked up (2026-10-04)** on the `Launch Window — Museum, Settings & Game Result mockup`
+canvas, one artboard per tab (`Museum`, `MuseumAchievements`, `MuseumFlights`,
+`MuseumMemorial`); `design.md` §3.13 has the writeup. Choices still **unconfirmed**:
+- the tabs are `NavTabs` in the header;
+- the race is a table (place, agency with director and archetype, one column per declared
+  goal with the turn done and a First tag, done count, finished turn), next to a "This
+  game is won by" card with each declared goal's badge and how to get it, and the rule;
+- once decided, a success `Notice` on the race tab says who won, with "Show the result";
+- Achievements lists all the pack's goals in two columns (done first, by turn), with how
+  each was reached or credited, First in the game, and the prestige paid; open goals show
+  their first and later prestige;
+- Flights shows one card per configuration with its art and the count;
+- the Memorial is one plaque per astronaut lost, with an empty state.
+**Needs server work:** G3 (rivals) and G10 (the memorial).
+
 ### 4.12 Settings (header gear)
 Log out; server address; sound on or off (later); about and version.
+
+**Mocked up (2026-10-04)** as `Settings` on the Museum canvas, as a `Dialog` over the hub.
+Choices still **unconfirmed**:
+- **Decided (user, 2026-10-04): a gear button at the end of the hub strip** (white,
+  icon-only, 32 px, like `IconButton`), so Settings (and Log out) is reachable from the
+  hub, which has no header. The hub mockup has it too;
+- Log out needs no confirmation, since today's actions are already on the server;
+- Switch server logs out and opens Connect with the new address filled in;
+- About shows the version, the game's content pack and hash, the fan-project note (not
+  affiliated with the original game's makers) and the font licenses.
 
 ### 4.13 Game result
 **Purpose:** announce the winner. **Shows:** an overlay on the hub when a result
 exists: winner or tied winners (agency and director name), the turn decided, and the
 race table. Play continues, so the overlay can be dismissed and is reopenable from
 the Museum.
+
+**Mocked up (2026-10-04)** as `GameResult` on the Museum canvas: a `Dialog` over the hub,
+shown at the first hub visit after the result, with three states (you won outright, a
+rival won on the medal table, an exact tie). Every state is computed by a port of `core`'s
+`WinCondition`. Choices still **unconfirmed**:
+- the medal table (each tied agency's place per goal and its place counts) shows only
+  when several agencies finished at the same turn;
+- "Keep playing" closes it, with a toast saying where to find it again;
+- the race tab of the Museum carries the reopen button.
 
 ---
 
@@ -871,6 +940,9 @@ current state alone. Each is an M5 task.
   (salaries, component maintenance, program upkeep, building upkeep; `SeasonFundsSettled`
   has only totals), whether each goal was the first in the game, and each R&D gain with
   its researchers and slots.
+  **What the Public Affairs Office mockup adds (2026-10-04):** the money amount of an
+  unexpected-cost event (a `NewsEntry` stores only its share of funds), and last
+  season's actual funds change for the footer.
 - **G3. Rival summaries.** Each player's agency name, director name, archetype, and the
   declared goals they hold, with turns, for the race tab. This is the
   "per-player summary" `design.md` §3.7 planned for game-meta.
@@ -903,6 +975,11 @@ current state alone. Each is an M5 task.
   exist.)* Program categories need a body field
   (Earth, Moon, Sun, Mercury, Venus, Mars, Jupiter, Saturn) for the body picker.
   The available and open counts per body are then derived in the client.
+- **G10. Memorial records (found by the Museum mockup, 2026-10-04).** Astronauts lost
+  leave the roster as a `PersonnelDeparture` event (`LOST_IN_ACCIDENT`, or the
+  perished-astronaut random event), and nothing keeps them. The memorial needs a
+  persisted list per player: name, age, the turn, the cause, and for a flight loss the
+  mission and the step.
 
 ---
 
