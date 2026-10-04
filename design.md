@@ -4748,21 +4748,26 @@ at 1960 · S3, with Vostok Orbital scheduled.
 
 Every budget number is `core`'s on the fixture (`BudgetProgress.runningCosts`,
 the review interpolation, `BudgetSchedule.baspmClose`, `PrestigeConversion`,
-`BuildingSchedule`). Proposals, all **unconfirmed**:
-- Expert training as a fourth kind in the Training dialog, not its own row
-  action;
+`BuildingSchedule`). **Decided (user, 2026-10-04):** Expert training is a fourth
+kind in the Training dialog, not its own row action. Proposals, still
+**unconfirmed**:
 - the building panel as a compact cell of the department strip;
 - the forecast and the "keeps today's funding" figure (client-derived);
 - the footer's funds delta is last season's actual change, while the
   Public Affairs Office also shows the net per season from now on;
 - the news log lists random events only; reviews appear in the review card.
 
-**New token proposed: `danger-on-page`** (`#ffc4b8`), red text on the blue
-page, for negative funds and a negative delta in the footer. The design
-system has `success-on-page` but no red counterpart, and `danger` itself
-is unreadable on the page. It's local to the mockups for now (also added to
-the Mission Control canvas's footer); it goes into the design system and
-`Theme.java` together once the user confirms it. **For G2:** a news entry
+**Negative values on the page: a solid `danger` tag, not a new token
+(2026-10-04).** The mockup first proposed a `danger-on-page` text color
+(`#ffc4b8`), and the user agreed to a red there. Measuring it before adding it
+showed it fails: 3.7:1 on the page blue, where every other on-page text token
+clears 4.5:1. The pale step that does clear it (`#ffe2d6`, 4.6:1) reads as
+white. So a negative value on the page (funds in debt, a negative funds delta
+in the footer) is a small solid `danger` tag with `on-page-strong` text
+(5.0:1), which is unmistakable. No new color was needed. The design system's
+`danger` token and `Theme.DANGER` both document the rule, and both mockup
+canvases use it. Side finding, not changed: `on-fill` on `danger` is 4.39:1,
+just under 4.5:1. **For G2:** a news entry
 stores the unexpected cost's share (8 %), not the amount taken, so the
 amount needs to be kept too.
 

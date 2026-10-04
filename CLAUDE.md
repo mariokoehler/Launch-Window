@@ -471,9 +471,10 @@ user for the link). Expert training is a fourth kind in the Training dialog, and
 Public Affairs Office shows the budget, the next-review forecast, the review table,
 news, and the debt and multiplier states. Details and the unconfirmed choices are in
 `design.md` §3.13.
-- **Open, for the user:** a new token `danger-on-page` (`#ffc4b8`) for negative funds
-  on the blue page. It's local to the mockups until confirmed; then it goes into the
-  design system and `Theme.java` together.
+- **Negative funds on the blue page** are a solid `danger` tag with white text, now a
+  documented rule of the design system's `danger` token and `Theme.DANGER`. A red text
+  color was approved by the user but failed contrast (3.7:1), so no new token.
+- **Expert training as a fourth Training-dialog kind** is confirmed by the user.
 - **Turn report fixture corrected:** its budget had invented numbers, and it put review
   #2 in 1960. Reviews come every 16 of the player's seasons (1959 · S1, 1963 · S1, …).
 - **Pitfall:** a page's own `renderVals` key named like a `chromeVals` key (for example

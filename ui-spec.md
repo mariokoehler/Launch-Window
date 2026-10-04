@@ -722,7 +722,7 @@ department.
 **Mocked up (2026-10-04)** as `AstronautComplex` on the `Launch Window — Astronaut
 Complex & Public Affairs Office mockup` canvas; `design.md` §3.13 has the writeup.
 Choices still **unconfirmed**:
-- **Expert training is a fourth kind in the Training dialog** (Basic · 3 seasons,
+- **Decided (user, 2026-10-04): Expert training is a fourth kind in the Training dialog** (Basic · 3 seasons,
   Advanced · 2 seasons, Permanent, Expert), not a separate row action. Only skills at
   80+ that aren't Expert yet can be picked. The dialog shows the per-season chance
   (25 % at 80 up to 35 % at 100), no skill growth, and nothing on pull-out.
@@ -766,8 +766,9 @@ has the writeup. Choices still **unconfirmed**:
   next season would still be short;
 - the footer delta is last season's actual change; the net per season is shown here;
 - the news log lists random events only.
-- **New token proposed, not yet in the design system:** `danger-on-page` (`#ffc4b8`)
-  for negative funds and deltas in the footer.
+- **Decided (2026-10-04):** a negative value on the page (funds in debt, a negative
+  footer delta) is a small solid `danger` tag with white text, the `danger` token's
+  documented rule. No separate red text color: one readable as red fails contrast.
 
 ### 4.11 Museum: goals, history, rivals
 **Purpose:** the scoreboard and the archive. **Ref:** `museum*.png`.

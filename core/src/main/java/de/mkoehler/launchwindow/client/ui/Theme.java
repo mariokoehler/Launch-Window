@@ -214,6 +214,13 @@ public final class Theme {
      * Reserved for destructive actions (Scrub) and real failure states.
      * Never used to mean "something is currently happening" &mdash; that is
      * what {@link #GOLD} is for.
+     *
+     * <p>On {@link #SURFACE_PAGE}, a negative value (funds in debt, a negative
+     * funds delta in the footer) is a small solid tag, {@code Shapes.solid(DANGER)}
+     * with {@link #ON_PAGE_STRONG} text (~5.0:1), never this color as text: it
+     * measures ~1.1:1 on the page, and a pale red text step that clears 4.5:1
+     * reads as white. Decided 2026-10-04 instead of a separate
+     * danger-on-page text color (`design.md` &sect;3.13).</p>
      */
     public static final Color DANGER = Color.valueOf("#c6402b");
 
