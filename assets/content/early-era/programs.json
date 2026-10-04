@@ -55,12 +55,7 @@
     "requiredMissionComponentIds": [
       "explorer-1-satellite"
     ],
-    "openingCostDiscounts": [
-      {
-        "otherProgramId": "sputnik-1",
-        "percent": 40
-      }
-    ],
+    "openingCostDiscounts": [],
     "requiredGoalIds": [],
     "agency": "NASA"
   },

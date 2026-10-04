@@ -13,11 +13,11 @@ import de.mkoehler.launchwindow.client.ui.ReliabilityBar;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.Programs;
-import de.mkoehler.launchwindow.content.Goal;
 import de.mkoehler.launchwindow.content.MissionComponent;
 import de.mkoehler.launchwindow.content.Program;
 import de.mkoehler.launchwindow.model.Building;
 import de.mkoehler.launchwindow.model.OwnedMissionComponent;
+import de.mkoehler.launchwindow.rules.GoalCascade;
 
 import java.util.List;
 import java.util.Locale;
@@ -135,8 +135,9 @@ public final class OpenProgramsScreen extends ChromeScreen {
         goalText.defaults().left();
         goalText.add(ui.label(next.map(ContentNames::of).orElse("All reached"), Theme.TextStyle.BODY_SM, Theme.INK)).row();
         if (next.isPresent()) {
-            long prestige = session.catalog().goal(next.get()).map(Goal::firstTimePrestige).orElse(0L);
-            // "First time" needs the race's standings (gap G3), so the reward reads "up to".
+            // The goal and every goal it also credits (GoalCascade), at first-time prestige. Whether it
+            // is first time needs the race's standings (gap G3), so the reward reads "up to".
+            long prestige = GoalCascade.maxPrestige(next.get(), session.state(), session.catalog());
             goalText.add(ui.label("Up to " + prestige + " prestige", Theme.TextStyle.CAPTION, Theme.INK_MUTED));
         }
         goalRow.add(goalText);

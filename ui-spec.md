@@ -404,7 +404,8 @@ missing goals). Other agencies' programs are hidden entirely.
 - the price breakdown: opening cost, discount from other open programs, and
   creation cost for components not owned yet (a component still owned from a
   closed program is free);
-- the required goals as goal badges;
+- the required goals as goal badges (a goal credited through another goal's
+  cascade reads "Achieved", without a date);
 - the components it grants, each with its reliability bar if owned;
 - a link to mission configuration selection.
 

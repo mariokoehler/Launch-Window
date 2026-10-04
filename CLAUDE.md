@@ -383,9 +383,15 @@ button). Each has a README and a preview. The UI Asset Sheet gained a
 **Open:** the libGDX session should align its unpushed code with these names
 and values. The mockup canvases still use their local copies.
 
-**Open, content:** Explorer 1's 40% discount points at Sputnik 1, another
-agency's program, so it can never apply. Check `baspm_pack.py`; details in
-`design.md` §3.13.
+**Content findings closed (2026-10-04),** see `design.md` §3.13.
+- **Explorer 1's discount:** it's BASPM data that only its GSA faction could
+  use. `baspm_pack.py` now drops cross-agency discounts (backup:
+  `.bak-crossagency`).
+- **"Human in space" and "Human in orbit"** are earned through the goal cascade.
+  In pack terms, "cancels" means "also credits, with prestige"
+  (`rules.GoalCascade`).
+
+**Pitfall:** don't read `cancelsGoalIds` as "makes unearnable".
 
 Everything below is history; if this paragraph and a later one disagree, the
 later one wins.

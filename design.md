@@ -228,10 +228,14 @@ same session it comes up**, the same standing-note-to-self habit as
   isn't just reused art with a new name — real rocket families really did
   inherit engines, guidance systems, and institutional experience from their
   predecessors, which is exactly what let real programs move fast. Also
-  worth a beat on **`OpeningCostDeductions`'s "fast follower" discount**
-  (`baspm.md` §10.1, e.g. Explorer I costing 40% less once Sputnik I is
-  already open) — a real, true dynamic of the actual Space Race (whoever
-  answers second gets to skip R&D the first mover already paid for).
+  worth a beat on **`OpeningCostDeductions`'s follow-on discount**
+  (`baspm.md` §10.1: a program costs less once its own agency's predecessor
+  is open). *Corrected 2026-10-04:* this is not a "fast follower" discount
+  driven by the rival, as first written here; the one cross-agency example
+  (Explorer I after Sputnik I) only works for BASPM's GSA faction. A real
+  rival-driven discount (whoever answers second skips some of the R&D the
+  first mover paid for) would be a genuine cross-player mechanic, with no
+  BASPM precedent. It's an idea, not a decision.
 - **Surfaced during the §2.1 budget/prestige trace (2026-09-27): "prestige
   literally becomes your budget" is not a game abstraction — it's a fair
   read of how NASA's real funding actually worked.** Congress's willingness
@@ -1007,8 +1011,8 @@ proceeds:
     genuine "extended duration" variant that's longer, costlier-feeling, and
     pays out roughly double prestige, not just a cosmetic label). Opening a
     related program discounts a new one's opening cost by a flat,
-    hand-authored percentage (e.g. Explorer I is 40% cheaper once Sputnik I
-    is open) — a real "fast follower" mechanic. A genuinely notable finding:
+    hand-authored percentage of the player's own programs (corrected
+    2026-10-04: not a rival-driven "fast follower" mechanic, see §1.1). A genuinely notable finding:
     the code scaffolds **12 solar-system-target category groupings**
     (`baspm.md` §10.2) but the shipped game only ever fills in 13 of the
     ~40 category IDs those groupings reference — everything for asteroids/
@@ -4396,12 +4400,25 @@ a proposal, to replace with the patch frame if the user prefers.
   mockups wrapped the design-system Button in a link, so their "Payload R&D",
   "Rocket R&D" and VAB nav-card links didn't navigate in Play. All fixed:
   the `<a>` itself now carries the `lw-btn` classes.
-- **Open question for the content pack:** `programs.json` gives Explorer 1
-  (NASA) a 40% opening discount when Sputnik 1 (Soviet) is open. One player
-  can never own both, so the discount can never apply. Either the converter
-  mapped BASPM's discount across agencies by mistake, or the discount was
-  meant to point at the player's own counterpart program. Check it in
-  `baspm_pack.py` on the main PC.
+- **Closed (2026-10-04): the content pack's Explorer 1 discount.** `programs.json`
+  gave Explorer 1 (NASA) 40% off when Sputnik 1 (Soviet) is open. The converter
+  copied BASPM correctly: BASPM's data has that deduction, but it can only apply
+  to BASPM's GSA faction, which may open both agencies' programs (`baspm.md`
+  §10.1). It's the only cross-agency deduction of BASPM's 54. `baspm_pack.py` now
+  drops any discount whose source program belongs to the other agency, with a
+  note, and the pack was regenerated. The diff was that one entry only, and
+  `ContentPackPlayouts` was byte-identical.
+- **Closed (2026-10-04): "Human in space" and "Human in orbit" can't be earned?**
+  They can. No step names them, in BASPM either. They're earned through the
+  goal cascade: a crewed suborbital flight's goal cancels "Human in space", and
+  a cancelled goal pays its prestige and counts as fulfilled (`baspm.md` §11.7).
+  `ContentPackPlayouts` reaches them in 199 and 186 of 200 games. What misled
+  the reading was the field name `cancelsGoalIds` and Program details labelling
+  such a goal "Cancelled".
+  - **The rule is now shared:** `rules.GoalCascade` holds the traversal, used by
+    the season pass (output byte-identical) and the client.
+  - **The client:** Manage open programs' next-goal reward now sums the cascade,
+    and a credited goal reads "Achieved".
 
 **Seven mockup styles promoted to design-system components (2026-10-04,
 at the libGDX session's request).** They had existed only as local CSS in the

@@ -349,18 +349,19 @@ public final class MissionProgress {
             MissionStep step, GoalTally goalTally, int gameTurn, List<ResolutionEvent> events) {
         long total = 0;
         for (String goalId : step.goalIdsAchieved()) {
-            if (!snapshot.hasAchievedOrCancelledGoal(goalId)) {
-                total += settleGoal(snapshot, catalog, goalId, false, mission, goalTally, gameTurn, events);
+            // The goal, then every goal it cancels, recursively, that this player doesn't hold yet.
+            List<String> cascade = GoalCascade.unheld(goalId, snapshot, catalog);
+            for (int i = 0; i < cascade.size(); i++) {
+                total += settleGoal(snapshot, catalog, cascade.get(i), i > 0, mission, goalTally, gameTurn, events);
             }
         }
         return total;
     }
 
     /**
-     * Settles one goal, then recursively cancels every goal it cancels that
-     * this player hasn't already fulfilled. A cancelled goal pays its own
-     * first-time or second-time prestige and counts toward the tally, exactly
-     * like an achieved one (baspm.md §11.7).
+     * Settles one goal of a cascade. A cancelled goal pays its own first-time
+     * or second-time prestige and counts toward the tally, exactly like an
+     * achieved one (baspm.md §11.7); only an achieved goal carries the turn.
      *
      * @param snapshot  the player whose goal settles
      * @param catalog   the content catalog
@@ -369,8 +370,8 @@ public final class MissionProgress {
      * @param mission   the mission whose step caused this settlement
      * @param goalTally the game-wide counts as of the start of this resolution
      * @param gameTurn  the turn stamped on an achieved goal
-     * @param events    the list to append the {@link GoalSettled} events to
-     * @return the prestige this settlement and its whole cancellation cascade paid
+     * @param events    the list to append the {@link GoalSettled} event to
+     * @return the prestige this settlement paid
      */
     private static long settleGoal(PlayerSnapshot snapshot, ContentCatalog catalog, String goalId, boolean cancelled,
             InProgressMission mission, GoalTally goalTally, int gameTurn, List<ResolutionEvent> events) {
@@ -384,14 +385,7 @@ public final class MissionProgress {
             snapshot.getAchievedGoals().put(goalId, gameTurn);
         }
         events.add(new GoalSettled(mission.getId(), goalId, cancelled, prestige));
-
-        long total = prestige;
-        for (String cancelledId : goal.cancelsGoalIds()) {
-            if (!snapshot.hasAchievedOrCancelledGoal(cancelledId)) {
-                total += settleGoal(snapshot, catalog, cancelledId, true, mission, goalTally, gameTurn, events);
-            }
-        }
-        return total;
+        return prestige;
     }
 
     /**

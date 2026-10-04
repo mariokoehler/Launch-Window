@@ -1286,9 +1286,16 @@ plus a cross-cutting **Reliability Transfer** layer. Concretely:
   components it needs built. **`OpeningCostDeductions` confirmed exactly**:
   a list of `(other program, deduction %)` pairs; owning that other program
   knocks the stated percentage off this one's opening cost (summed and
-  capped at 100%). Real example: Explorer I (`00-01`) gets a flat **40%**
-  discount once Sputnik I (`00-00`) is already open — a genuine, deliberate
-  "fast follower" mechanic, not just flavor text (see §1.1 note below).
+  capped at 100%). **CORRECTED 2026-10-04:** "owning" means the player's *own*
+  open programs (`ProgramsManager.GetProgramOpeningCostWithDeductions` checks
+  `player.IsProgramOpened`), not the rival's. Explorer I (`00-01`, NASA) gets
+  40% off once Sputnik I (`00-00`, Soviet) is open, but a NASA player can never
+  open a Soviet program: `CoreManager.ElementPassesSpaceAgencyTest` passes only
+  the player's own agency, or both for the **GSA** faction. So that deduction
+  only ever applies to a GSA player. It's the only one of BASPM's 54 deductions
+  that crosses agencies. It is **not** the "fast follower" (rival-driven)
+  mechanic an earlier version of this note claimed; the other 53 are same-agency
+  follow-on discounts.
 - A **Mission Configuration** (`MsnCnfg<PgmCtgID>-<PgmID>.xml`) is one way
   of flying a program: `DurationInSeasons`, `NumLaunches`,
   `PrestigeGrantedOnSuccess` (first/second/later-time values, confirming
@@ -1882,7 +1889,15 @@ wrong claims in this section's first draft (noted inline).
   minor glitch, unsolved, still achieves its step's goals, at half prestige (see
   the next bullet). A configuration's `GoalsAchieved` is just the union across
   its steps. An achieved goal recursively cancels its `GoalsCancelled` list
-  (`ComputeAndAddAchievedGoalsToPlayerInner`, already in §11.3). Nothing in the
+  (`ComputeAndAddAchievedGoalsToPlayerInner`, already in §11.3). **"Cancel"
+  means "also credit":** `Player.AddGoalCancelledAndUpdateGoalsAchievedDuringMissionSim`
+  calls `GoalsManager.AddGoalAccomplishedByPlayer`, which returns the goal's
+  prestige, so a cancelled goal pays like an achieved one. The generic race
+  goals `MAN_IN_SPACE` and `MAN_IN_ORBIT` appear in no `MsnSim` file's
+  `GoalAchieved` at all; they're earned only this way, through the crewed
+  flight goals that cancel them. BASPM's Headquarters goal lists show the
+  cascade as well (`GoalsRetrieveModeT.GetGoalsAndAllCancelledGoals` in
+  `HQMsnCnfgsOverlay`, `HQPgmCtgsPgmEntry`, `MsnCnfgInfoOverlay`). Nothing in the
   goal system is a state predicate; the seven objective-field types (§12.3)
   belong to the campaign-objective system only.
 - **Per-step prestige, by outcome.** Within a season, `_accumulatedPlayerPoints`

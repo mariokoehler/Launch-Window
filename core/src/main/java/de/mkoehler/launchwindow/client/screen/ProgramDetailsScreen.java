@@ -231,8 +231,9 @@ public final class ProgramDetailsScreen extends ChromeScreen {
         Label name = ui.paragraph(ContentNames.of(goalId), Theme.TextStyle.BODY_SM, Theme.INK);
         name.setAlignment(Align.center);
         badge.add(name).width(110f).row();
+        // A cancelled goal was credited by a bigger one (GoalCascade), with its prestige; no turn is kept for it.
         String status = achieved ? "Achieved " + GameDate.ofTurn(Math.max(1, state.getAchievedGoals().get(goalId)))
-            .label() : cancelled ? "Cancelled" : "Not yet";
+            .label() : cancelled ? "Achieved" : "Not yet";
         Label statusLabel = ui.label(status, Theme.TextStyle.CAPTION, Theme.INK_MUTED);
         statusLabel.setAlignment(Align.center);
         badge.add(statusLabel).width(110f);
