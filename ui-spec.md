@@ -360,6 +360,13 @@ end-of-season news screen. **Ref:** `bulletin_news_*.png`,
 **Actions:** open a mission's replay (§4.7.3); continue to the hub.
 **Needs server work:** G2.
 
+**Mocked up (2026-10-04)** as `TurnReport` on the `Launch Window — Mission Control & Turn
+Report mockup` canvas, in two variants: an ordinary turn and a milestone turn with goals
+and a funding review. `design.md` §3.13 has the writeup. Choices still **unconfirmed**:
+- one scrolling screen, not tabs;
+- running costs broken down by kind;
+- the morale warning is derived by the client.
+
 ### 4.5 VAB: rockets
 **Purpose:** everything about rockets. The VAB's own cap limits the open rocket
 programs (4/8/14), and its level sets the largest rocket class (Light, then
@@ -834,6 +841,10 @@ current state alone. Each is an M5 task.
     consoles released, and crew losses.
   - *per mission (2026-10-04, from the libGDX build):* the prestige earned so far, for
     an active mission's card.
+  **What the turn report mockup adds (2026-10-04):** running costs split by kind
+  (salaries, component maintenance, program upkeep, building upkeep; `SeasonFundsSettled`
+  has only totals), whether each goal was the first in the game, and each R&D gain with
+  its researchers and slots.
 - **G3. Rival summaries.** Each player's agency name, director name, archetype, and the
   declared goals they hold, with turns, for the race tab. This is the
   "per-player summary" `design.md` §3.7 planned for game-meta.
