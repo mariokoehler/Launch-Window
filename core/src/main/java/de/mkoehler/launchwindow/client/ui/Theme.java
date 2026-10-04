@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -151,6 +152,20 @@ public final class Theme {
     public static final Color GOLD_ON_PAGE = Color.valueOf("#ffe9b3");
 
     /**
+     * The green/success family used as small text directly on {@link
+     * #SURFACE_PAGE} (the footer's funds-delta readout, e.g. "+2,420.0")
+     * &mdash; a paler mint step than {@link #SUCCESS} so it clears 4.5:1
+     * against the page background (measured ~4.7:1, matching {@link
+     * #GOLD_ON_PAGE}'s own margin). <b>Never set {@link #SUCCESS} itself as
+     * text on {@link #SURFACE_PAGE}</b> &mdash; it measures ~1.15:1 there,
+     * essentially invisible; this was a real bug caught in the design system
+     * before this constant existed (`design.md` &sect;3.12). Added
+     * 2026-10-04 once the header/footer chrome mockups made this a real,
+     * not speculative, need.
+     */
+    public static final Color SUCCESS_ON_PAGE = Color.valueOf("#c4f5e0");
+
+    /**
      * Primary/neutral UI: headers, primary-button fill, table header-row
      * fill, borders on {@link #SURFACE_CARD}. The neutral color of the
      * interface itself, not a signal.
@@ -203,9 +218,23 @@ public final class Theme {
     public static final Color DANGER = Color.valueOf("#c6402b");
 
     /**
+     * Reserved for exactly one action per screen: advancing the game clock
+     * (BASPM's "End Season"). A muted violet, deliberately outside the rest
+     * of the palette's hue range so it reads as its own thing rather than a
+     * variant of an existing status color. <b>Currently unused by any real
+     * screen</b> &mdash; {@code ui-spec.md} dropped the one button that
+     * would have used it, since Launch Window's async model resolves turns
+     * on the server's own schedule and has no player-facing "end my turn"
+     * action. Kept defined (matching {@link BadgeKind#DANGER}'s own
+     * not-yet-used precedent) because the design system still reserves the
+     * token and {@link ButtonKind#COMMIT} for whatever eventually needs it.
+     */
+    public static final Color COMMIT = Color.valueOf("#4b3a72");
+
+    /**
      * Text and icons on a dark solid fill &mdash; {@link #NAVY}, {@link
-     * #SUCCESS} or {@link #DANGER}. One shared light color rather than three
-     * near-identical creams.
+     * #SUCCESS}, {@link #DANGER} or {@link #COMMIT}. One shared light color
+     * rather than near-identical creams per fill.
      */
     public static final Color ON_FILL = Color.valueOf("#f5efe1");
 
@@ -522,7 +551,9 @@ public final class Theme {
         /** {@link #NAVY}-outlined, transparent. A neutral action beside a primary one. */
         SECONDARY,
         /** {@link #DANGER}-outlined, transparent. Actions that actually end or cancel something. */
-        DESTRUCTIVE
+        DESTRUCTIVE,
+        /** {@link #COMMIT} fill, {@link #ON_FILL} label. See {@link #COMMIT}'s own doc &mdash; not used by any real screen yet. */
+        COMMIT
     }
 
     /**
@@ -719,11 +750,17 @@ public final class Theme {
                     style.disabled = rect(new Color(0f, 0f, 0f, 0f), INK_MUTED, BORDER_THIN);
                     style.fontColor = NAVY;
                 }
-                default -> {
+                case DESTRUCTIVE -> {
                     style.up = rect(new Color(0f, 0f, 0f, 0f), DANGER, BORDER_THIN);
                     style.down = rect(pressedOverlay, DANGER, BORDER_THIN);
                     style.disabled = rect(new Color(0f, 0f, 0f, 0f), INK_MUTED, BORDER_THIN);
                     style.fontColor = DANGER;
+                }
+                default -> {
+                    style.up = solid(COMMIT);
+                    style.down = solid(new Color(COMMIT).lerp(Color.BLACK, 0.12f));
+                    style.disabled = solid(new Color(COMMIT.r, COMMIT.g, COMMIT.b, 0.4f));
+                    style.fontColor = ON_FILL;
                 }
             }
             return style;
@@ -757,6 +794,77 @@ public final class Theme {
                 }
             }
             return style;
+        }
+
+        /**
+         * Builds a {@code Field} component's input-box style: a thin navy
+         * border on {@link #SURFACE_CARD}, switching to {@link #DANGER} and
+         * a {@link #BORDER_EMPHASIS} focus ring when {@code error} is set
+         * &mdash; matching the design system's {@code .lw-field__control}
+         * exactly. The label above the box is not part of this style: it's
+         * a plain {@link TextStyle#LABEL} {@code Label} in {@link
+         * #INK_MUTED}, upper-cased by the caller, same as every other
+         * section-eyebrow label in this system. Scene2D has no single style
+         * object that can toggle border color at runtime, so build two
+         * instances (one per {@code error} state) rather than mutating one.
+         *
+         * @param font  the font for the typed text, normally {@code fonts.get(TextStyle.BODY)}
+         * @param error whether to render the validation-failure look
+         * @return the style, ready for a {@code TextField}
+         */
+        public TextFieldStyle textField(BitmapFont font, boolean error) {
+            TextFieldStyle style = new TextFieldStyle();
+            style.font = font;
+            style.fontColor = INK;
+            style.messageFont = font;
+            style.messageFontColor = INK_MUTED;
+            Color borderColor = error ? DANGER : NAVY;
+            style.background = rect(SURFACE_CARD, borderColor, BORDER_THIN);
+            style.focusedBackground = rect(SURFACE_CARD, borderColor, BORDER_EMPHASIS);
+            style.disabledBackground = rect(SURFACE_CARD, INK_MUTED, BORDER_THIN);
+            style.cursor = solid(NAVY);
+            style.selection = solid(new Color(NAVY.r, NAVY.g, NAVY.b, 0.25f));
+            return style;
+        }
+
+        /**
+         * Builds an {@code OptionCard} background: a plain {@link
+         * #NAVY_BORDER}-thin outline on {@link #SURFACE_CARD} normally, or a
+         * {@link #BORDER_EMPHASIS} {@link #GOLD} outline over a gold-tinted
+         * fill when {@code selected} &mdash; matching
+         * {@code .lw-optioncard--selected} exactly (a 10% blend of gold into
+         * white, not a translucent gold overlay, so it stays opaque on top
+         * of the card's own image). Its "Selected" badge is not part of this
+         * drawable: it's a plain {@link #badge}({@link BadgeKind#ACTIVE}, ...).
+         *
+         * @param selected whether to render the selected look
+         * @return the drawable; its texture is owned by this object
+         */
+        public NinePatchDrawable optionCard(boolean selected) {
+            return selected
+                ? rect(new Color(SURFACE_CARD).lerp(GOLD, 0.1f), GOLD, BORDER_EMPHASIS)
+                : rect(SURFACE_CARD, NAVY_BORDER, BORDER_THIN);
+        }
+
+        /**
+         * Builds a {@code HistoryNote} popover's background: a thin navy
+         * border on {@link #SURFACE_CARD}, the same "archive index card"
+         * look as the design system's {@code .lw-historynote__card}
+         * &mdash; <b>except its drop shadow</b>, which this method
+         * deliberately omits. This system has no shadow primitive anywhere
+         * else (see the class doc), and the design system's own CSS adding
+         * one here, only for this one popover, hasn't been reconciled with
+         * that rule yet &mdash; worth raising with the user before deciding
+         * either way, rather than silently matching or silently dropping it
+         * here. The open-book icon itself is not a {@code Shapes} method at
+         * all: unlike a flat rect or circle, it's an actual drawn glyph, so
+         * it needs a real SVG/texture asset (the same path every other skill
+         * icon under {@code assets-raw/svg/} took), not yet added.
+         *
+         * @return the drawable; its texture is owned by this object
+         */
+        public NinePatchDrawable historyNoteCard() {
+            return rect(SURFACE_CARD, NAVY, BORDER_THIN);
         }
 
         /**

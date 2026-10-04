@@ -3901,16 +3901,20 @@ SET Centre UI got caught and removed the same day (see `CLAUDE.md`'s
 source-material note for the full story); don't conflate the two when
 this section is read back later.
 
-**History-note icon (user, 2026-10-04; the look is a proposal, unconfirmed).**
-A new glyph with exactly one meaning: "a real-world story is here" (§1.1,
-`ui-spec.md` component 15). It must not look like a generic "i" or "?"
-help icon, because rules help is a different kind of content and must never
-share it. *Proposal:* a small open book in navy line art at body-text size,
-with the hover card styled like an archive index card: a white surface (body
-text always sits on white, per this section), a thin navy rule, and a small
-"History" kicker. Gold is ruled out (it means "active") and so is the unused
-violet `commit` token, which stays reserved. Add the glyph to the UI Asset
-Sheet once Claude Design settles it.
+**History-note icon, the proposal shipped (2026-10-04).** A new glyph with
+exactly one meaning: "a real-world story is here" (§1.1, `ui-spec.md`
+component 15). It must not look like a generic "i" or "?" help icon,
+because rules help is a different kind of content and must never share it.
+The original proposal is now the real, built `HistoryNote` design-system
+component (see §3.13's `Theme.java` update below): a small open book in navy line
+art, hover-previewed and click-pinned, with the card styled like an archive
+index card — a white surface (body text always sits on white, per this
+section), a thin navy rule, and a small "History" kicker. Gold was ruled out
+(it means "active") and so was the unused violet `commit` token, which stays
+reserved. **Still open:** the glyph only exists as inline SVG inside the
+design-system component's own markup, not yet added to the UI Asset Sheet
+or exported as a real texture asset for the libGDX client — `Theme.java`'s
+own update flags this as the actionable next step.
 
 ### 3.13 Common screen chrome & the main-menu hub (2026-09-30, groundwork ahead of M5)
 
@@ -4050,16 +4054,43 @@ every screen, per the mockup's own comments):**
   `scale` parameter), not a new technical decision, just an explicit
   requirement now on record.
 
-**A real gap found by cross-checking the mockup against `Theme.java`
-directly this session:** the published `tokens.json` (§3.12) defines
-`success-on-page` (`#c4f5e0`, used by the footer's funds-delta text) and
-`commit` (`#4b3a72`, now unused per the note above) — `Theme.java` has
-neither as a constant yet, unlike every other token in that file, which
-all have exact matches. `success-on-page` is a real, currently-missing
-gap (the footer's positive funds delta needs it and nothing else in
-`Theme.java` covers that role); `commit` is optional per the note above.
-Add `Theme.SUCCESS_ON_PAGE` when the footer/header chrome actually gets
-built, not speculatively now.
+**The `Theme.java` gap flagged here is closed (2026-10-04).** `Theme.SUCCESS_ON_PAGE`
+and `Theme.COMMIT` (plus `ButtonKind.COMMIT`) are now both defined, matching
+`tokens.json` exactly. Done ahead of the footer/header chrome actually being
+built, reversing this section's earlier "not speculatively now" call —
+the libGDX implementation session is starting soon enough that keeping
+`Theme.java` current with the design system, rather than catching up later,
+is now worth more than the deferral.
+
+**`Theme.java` brought current with the design system's three newest
+components, same day.** `Field`, `OptionCard`, and `HistoryNote` (all three
+added to the design system 2026-10-03/04 for the Connect and Join Game
+mockups, see this section's own entries above and `CLAUDE.md`'s 2026-10-04
+paragraph) had no `Theme.java` equivalent at all until now:
+`Shapes.textField(BitmapFont, boolean error)` (a `TextFieldStyle` matching
+`.lw-field__control`, including its danger-border error look — the
+label above it is just a plain `TextStyle.LABEL` `Label` in `INK_MUTED`,
+nothing new needed there), `Shapes.optionCard(boolean selected)` (matching
+`.lw-optioncard`/`--selected`; its "Selected" badge reuses the existing
+`badge(BadgeKind.ACTIVE, ...)`, no new method needed), and
+`Shapes.historyNoteCard()` (the popover's background only). **Two open
+items this surfaced, neither resolved yet:**
+1. The open-book icon itself can't be a `Shapes` method — unlike a
+   flat rect or circle, it's a drawn glyph, so it needs a real texture/SVG
+   asset the same way every other skill icon under `assets-raw/svg/` does.
+   Not created yet. §3.12's own history-note-icon entry already asked for
+   this ("add the glyph to the UI Asset Sheet once Claude Design settles
+   it") — Claude Design has now settled it (the icon and its hover/
+   pin card shipped in the design system this session), so this is now
+   actionable, not blocked.
+2. The design system's `.lw-historynote__card` CSS has a `box-shadow`
+   — the first shadow anywhere in this design system. `Theme.java`'s
+   own class doc states this system has no shadows at all, and
+   `historyNoteCard()` deliberately omits it rather than silently
+   contradicting that rule or silently dropping a property the design
+   system actually specifies. Needs a decision: add a shadow primitive
+   (a new thing for this system) or amend the design system's popover to
+   drop it, matching the flat-everywhere rule everywhere else.
 
 ## 4. Open questions (tracked here until resolved)
 

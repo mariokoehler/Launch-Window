@@ -146,6 +146,34 @@ screen's Director field (Korolev as the secret "Chief Designer"). When a
 tidbit turns up during any work, add it to `design.md` §1.1 as a history
 note candidate.
 
+**`Theme.java` brought current with the design system (2026-10-04),** ahead
+of the libGDX implementation session that will soon start wiring up the
+Connect/Join Game mockups. Added the two color tokens the design system
+already had but `Theme.java` didn't (`SUCCESS_ON_PAGE`, `COMMIT` +
+`ButtonKind.COMMIT`, both previously deferred in `design.md` §3.13 as "not
+speculative now" — that deferral is reversed, since catching up later is
+now worse than keeping it current), plus style factories for the three
+components the Connect/Join Game mockups introduced and `Theme.java` had
+never seen: `Shapes.textField`/`optionCard`/`historyNoteCard`. Verified by
+compiling `Theme.java` standalone against the cached libGDX jars in
+`~/.m2` (a full `mvn clean package` can't run in this sandboxed session —
+`jitpack.io`, which `core`'s KryoNet fork dependency needs, is blocked by
+this environment's egress policy; not a code problem, just re-verify with
+a full build on a machine that can reach it). **Two things this surfaced,
+both still open** (full detail in `design.md` §3.13's own paragraph):
+the `HistoryNote` open-book icon is still only inline SVG inside the design
+system's own component markup, not yet a real texture/SVG asset under
+`assets-raw/svg/` the way every other skill icon is; and the design
+system's `HistoryNote` popover CSS has a `box-shadow`, the first shadow
+anywhere in this design system, which contradicts `Theme.java`'s own
+documented "no shadows" rule — `Theme.java` deliberately left its shadow
+out rather than silently deciding either way, needs a real decision.
+**Going forward: keep `Theme.java` in lockstep with the design system
+every time a mockup session adds or changes a component/token** — this
+gap existed because three components shipped across two sessions without
+a matching `Theme.java` update; don't let that gap reopen now that the
+libGDX side is about to start consuming it.
+
 Everything below is history; if this paragraph and a later one disagree, the
 later one wins.
 
