@@ -227,6 +227,8 @@ class MessageRegistryTest {
             roundTrip(new ClaimSlotRequest(Archetype.SOVIET, "OKB-1", "Chief"), ClaimSlotRequest.class));
         assertEquals(ClaimSlotResponse.success("Welcome"),
             roundTrip(ClaimSlotResponse.success("Welcome"), ClaimSlotResponse.class));
+        ClaimSlotResponse refusal = ClaimSlotResponse.failure(ClaimSlotResponse.Reason.DIRECTOR_NAME_TAKEN, "Taken");
+        assertEquals(refusal, roundTrip(refusal, ClaimSlotResponse.class));
     }
 
     /**

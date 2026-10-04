@@ -163,24 +163,24 @@ public class RequestDispatcher {
     public ClaimSlotResponse handleClaimSlot(int connectionId, ClaimSlotRequest request) {
         String accountId = connectionAccountIds.get(connectionId);
         if (accountId == null) {
-            return ClaimSlotResponse.failure("Not authenticated - send a HandshakeRequest first.");
+            return ClaimSlotResponse.failure(ClaimSlotResponse.Reason.NOT_AUTHENTICATED, "Not authenticated - send a HandshakeRequest first.");
         }
         if (request.archetype() == null || isBlank(request.agencyName()) || isBlank(request.directorName())) {
-            return ClaimSlotResponse.failure("An archetype, an agency name and a director name are all required.");
+            return ClaimSlotResponse.failure(ClaimSlotResponse.Reason.MISSING_FIELDS, "An archetype, an agency name and a director name are all required.");
         }
         try {
             PlayerSnapshotStore store = new PlayerSnapshotStore(playerRoot(accountId), mapper);
             if (store.load().isPresent()) {
-                return ClaimSlotResponse.failure("This account already has a slot in this game.");
+                return ClaimSlotResponse.failure(ClaimSlotResponse.Reason.ALREADY_CLAIMED, "This account already has a slot in this game.");
             }
             String agencyName = request.agencyName().strip();
             String directorName = request.directorName().strip();
             for (PlayerSnapshot other : everyPlayer()) {
                 if (agencyName.equalsIgnoreCase(other.getAgencyName())) {
-                    return ClaimSlotResponse.failure("The agency name \"" + agencyName + "\" is already taken.");
+                    return ClaimSlotResponse.failure(ClaimSlotResponse.Reason.AGENCY_NAME_TAKEN, "The agency name \"" + agencyName + "\" is already taken.");
                 }
                 if (directorName.equalsIgnoreCase(other.getDirectorName())) {
-                    return ClaimSlotResponse.failure("The director name \"" + directorName + "\" is already taken.");
+                    return ClaimSlotResponse.failure(ClaimSlotResponse.Reason.DIRECTOR_NAME_TAKEN, "The director name \"" + directorName + "\" is already taken.");
                 }
             }
             BudgetSchedule schedule = context.schedule();
@@ -192,7 +192,7 @@ public class RequestDispatcher {
             store.save(0, start, null);
             return ClaimSlotResponse.success("Welcome, Director " + directorName + " of " + agencyName + ".");
         } catch (IOException e) {
-            return ClaimSlotResponse.failure("Failed to create the slot: " + e.getMessage());
+            return ClaimSlotResponse.failure(ClaimSlotResponse.Reason.SERVER_ERROR, "Failed to create the slot: " + e.getMessage());
         }
     }
 

@@ -40,7 +40,22 @@ public final class Lwjgl3Launcher {
         Graphics.DisplayMode display = Lwjgl3ApplicationConfiguration.getDisplayMode();
         // Limits FPS to the refresh rate of the active monitor, plus 1 to match fractional refresh rates.
         configuration.setForegroundFPS(display.refreshRate + 1);
-        configuration.setWindowedMode(1280, 720);
+        int height = windowHeight(display.height);
+        configuration.setWindowedMode(height * 16 / 9, height);
         return configuration;
+    }
+
+    /**
+     * Picks a 16:9 window height that fits the monitor: the design's own 1080 rows when there's
+     * room for them, otherwise 85% of the monitor's height. The screens are laid out at
+     * 1920 by 1080 and scaled to fit, so a too-small window makes the 10 to 13 px design text
+     * hard to read.
+     *
+     * @param monitorHeight the monitor's height in pixels
+     * @return the window height
+     */
+    private static int windowHeight(int monitorHeight) {
+        int design = 1080;
+        return monitorHeight > design * 1.1 ? design : Math.round(monitorHeight * 0.85f);
     }
 }

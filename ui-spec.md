@@ -262,6 +262,31 @@ state is 25,000 funds, 250 prestige, 3,000 per season, every building at level 1
 empty rosters, and six candidates per group. So the first thing to show is a hint
 to hire staff (SET Centre first).
 
+**Implemented in libGDX (2026-10-04)** from the Connect and Join Game mockups
+(`client.screen.ConnectScreen`/`JoinScreen`). Decisions made while building them,
+**all unconfirmed**:
+- **No BASPM name in the heading.** The mockup's heading names BASPM's own product
+  and a game date the client can't know yet (that needs G1). It's now "Join game" /
+  "Found your agency" until G1 brings the date.
+- **The hint no longer claims things the client can't know.** "Already in
+  progress" can be false during the signup window, and the starting funds come
+  from the game's own pack. New text: *"Everyone starts from the same line.
+  Whenever you join, your agency starts fresh: every building at level 1, empty
+  rosters, and six candidates waiting in each hiring pool. Hire SET specialists
+  first. They research the parts every mission flies on."*
+- **Text on the blue page is light.** The mockup set the heading, eyebrow and
+  footnote in ink and navy directly on the page, which is illegible there. They
+  use the on-page colors instead.
+- **No archetype picked** shows "Pick an agency style." under the cards when Join
+  is pressed (the spec didn't cover this state).
+- **Connect's refusals:** version mismatch is a warning notice above the card;
+  unreachable and a broken-off exchange are danger notices; any other handshake
+  refusal (normally a wrong password) is shown under the password field in the
+  server's own words. A bad login or an empty field is caught on the client
+  before sending.
+- **After joining** there's a stand-in agency screen (name, director, funds,
+  Log out) until the hub (§4.3) has a mockup.
+
 ### 4.3 Space Complex hub (main menu)
 **Purpose:** navigation, and the game's front page. **Shows:** full-screen art for
 the player's archetype, picked by the game season, with the time of day advancing
@@ -558,6 +583,7 @@ for the mockups.
 | MAX_LEVEL / ALREADY_UPGRADING | Already at the top level. / Already upgrading. |
 | NOT_IN_DEBT / EXCEEDS_CAP / INSUFFICIENT_PRESTIGE | Only possible while in debt. / More than the conversion allows. / Not enough prestige. |
 | SLOT_CLAIM_REQUIRED | (Client goes to §4.2.) |
+| Join game (`ClaimSlotResponse.Reason`, added 2026-10-04): AGENCY_NAME_TAKEN / DIRECTOR_NAME_TAKEN / MISSING_FIELDS / ALREADY_CLAIMED / NOT_AUTHENTICATED / SERVER_ERROR | Already taken by another agency. (under the field) / the same / Required. / (client logs in again and opens the agency) / (danger notice with the server's words) |
 
 ---
 

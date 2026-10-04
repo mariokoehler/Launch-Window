@@ -7,6 +7,7 @@ import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.net.AppVersion;
 import de.mkoehler.launchwindow.net.messages.ClaimSlotRequest;
+import de.mkoehler.launchwindow.net.messages.ClaimSlotResponse;
 import de.mkoehler.launchwindow.net.messages.FetchStateRequest;
 import de.mkoehler.launchwindow.net.messages.FetchStateResponse;
 import de.mkoehler.launchwindow.net.messages.HandshakeRequest;
@@ -154,7 +155,8 @@ class RequestDispatcherTest {
             dispatcher.handleSubmitAction(1, new SubmitActionRequest(new OpenProgramAction("sputnik-1"))).message());
 
         assertTrue(dispatcher.handleClaimSlot(1, new ClaimSlotRequest(Archetype.SOVIET, "OKB-1", "Chief")).success());
-        assertFalse(dispatcher.handleClaimSlot(1, new ClaimSlotRequest(Archetype.NASA, "Other", "Other")).success(),
+        assertEquals(ClaimSlotResponse.Reason.ALREADY_CLAIMED,
+            dispatcher.handleClaimSlot(1, new ClaimSlotRequest(Archetype.NASA, "Other", "Other")).reason(),
             "a second claim is refused");
 
         PlayerSnapshot start = dispatcher.handleFetchState(1, new FetchStateRequest()).state();
@@ -179,9 +181,12 @@ class RequestDispatcherTest {
         dispatcher.handleHandshake(2, new HandshakeRequest(AppVersion.getVersion(), "anna", "secret"));
         dispatcher.handleClaimSlot(1, new ClaimSlotRequest(Archetype.NASA, "Hanseatic Space Agency", "Mario"));
 
-        assertFalse(dispatcher.handleClaimSlot(2,
-            new ClaimSlotRequest(Archetype.NASA, "hanseatic space agency", "Anna")).success());
-        assertFalse(dispatcher.handleClaimSlot(2, new ClaimSlotRequest(Archetype.NASA, "Bavaria", "MARIO")).success());
+        assertEquals(ClaimSlotResponse.Reason.AGENCY_NAME_TAKEN, dispatcher.handleClaimSlot(2,
+            new ClaimSlotRequest(Archetype.NASA, "hanseatic space agency", "Anna")).reason());
+        assertEquals(ClaimSlotResponse.Reason.DIRECTOR_NAME_TAKEN,
+            dispatcher.handleClaimSlot(2, new ClaimSlotRequest(Archetype.NASA, "Bavaria", "MARIO")).reason());
+        assertEquals(ClaimSlotResponse.Reason.MISSING_FIELDS,
+            dispatcher.handleClaimSlot(2, new ClaimSlotRequest(Archetype.NASA, "Bavaria", " ")).reason());
         assertTrue(dispatcher.handleClaimSlot(2, new ClaimSlotRequest(Archetype.NASA, "Bavaria", "Anna")).success(),
             "the same archetype is fine");
     }

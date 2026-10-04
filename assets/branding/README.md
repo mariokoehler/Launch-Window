@@ -22,9 +22,11 @@ placement, and ribbon spacing against specific feedback each round.
   missing from the repo) or the text converted to outlines in a vector
   editor so rendering doesn't depend on the viewer having those fonts
   installed.
-- No rasterized PNG/texture yet for actual use in the libGDX client
-  (a title-screen mark, a window icon, etc.) — this SVG is the source
-  to export from once a concrete use screen exists.
+- **`logo.png` (300×300) now exists (2026-10-04)** for the Connect screen's
+  150 px logo, at 2×. It was rasterized with `resvg-py` from this SVG, loading
+  the real font files from `assets/fonts/` (`skip_system_fonts`), so the
+  wordmark renders in Archivo and Work Sans. Re-export it the same way
+  whenever the SVG changes.
 - This is the primary lockup (icon + wordmark + tagline). An icon-only
   cropped version (for a small app/window icon, where the full patch
   reads as just a colored dot per `design.md` §3.12's own honesty note

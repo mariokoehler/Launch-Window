@@ -174,6 +174,38 @@ gap existed because three components shipped across two sessions without
 a matching `Theme.java` update; don't let that gap reopen now that the
 libGDX side is about to start consuming it.
 
+**Connect and Join Game are built in libGDX (2026-10-04),** from the user's
+Claude Design mockups (canvas "Launch Window — Connect & Join Game") and the
+UI Asset Sheet. What exists now:
+- **Screens:** `client.screen` (`ConnectScreen`, `JoinScreen`, and a stand-in
+  `AgencyScreen` until the hub has a mockup).
+- **Widgets:** `client.ui` (`UiKit`, `FormField`, `OptionCard`, `HistoryNote`, `HistoryNotes`).
+- **Networking:** `client.connect`. `NetworkGateway` runs each call on a background
+  thread over its own short connection and posts the result back to the
+  render thread. `LoginResult` tells the handshake's refusals apart without
+  a reason code, since the handshake's shape is pinned.
+- **Server changes:** `ClaimSlotResponse` gained a `Reason` enum (registered
+  last in `MessageRegistry`), and the login rule moved to `core`'s `LoginNames`.
+- **Full build re-verified on the main PC** (the earlier `Theme.java` session
+  couldn't reach jitpack): `mvn clean package` is green.
+- **Assets:** the six font TTFs plus their OFL licenses (`assets/fonts`),
+  `assets/branding/logo.png`, and `assets/ui/` (the history-note icon and the
+  archetype thumbnails cropped from the spring-noon hub art).
+
+**To check a screen against its mockup, run `ScreenSnapshot`.** It renders on a
+hidden window and writes one PNG per state; Read the PNGs afterwards:
+```
+mvn -q install -pl core -am -DskipTests
+mvn -q -pl lwjgl3 test-compile
+mvn -q -pl lwjgl3 dependency:build-classpath -Dmdep.outputFile=target/test-cp.txt -Dmdep.includeScope=test
+cd assets && java --enable-native-access=ALL-UNNAMED -cp "../lwjgl3/target/classes;../lwjgl3/target/test-classes;$(cat ../lwjgl3/target/test-cp.txt)" de.mkoehler.launchwindow.lwjgl3.ScreenSnapshot <out-dir>
+```
+**Pitfall:** never use linear filtering on a stretched few-pixel nine-patch.
+It turns a flat fill into a gradient (fixed in `Theme.Shapes.rect`).
+**Open, for the user:** the notice/hint boxes should become design-system
+components; the history-note card's shadow is still undecided (kept flat);
+and the copy changes in `ui-spec.md` §4.2's "Implemented" note need their OK.
+
 Everything below is history; if this paragraph and a later one disagree, the
 later one wins.
 

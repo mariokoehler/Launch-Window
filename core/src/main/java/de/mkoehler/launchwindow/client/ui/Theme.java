@@ -314,11 +314,10 @@ public final class Theme {
 
     /**
      * The font files, relative to the directory passed to {@link
-     * Fonts#load}. <b>Placeholder file names</b>: the actual TrueType files
-     * (Archivo and Work Sans, both open-source Google Fonts &mdash; no
-     * BASPM-content concern) still need to be added under
-     * {@code assets/fonts/}; this enum just fixes the names {@link
-     * Fonts#load} will look for once they are.
+     * Fonts#load}. The static TrueType files (Archivo and Work Sans, both
+     * open-source Google Fonts under the SIL Open Font License &mdash; no
+     * BASPM-content concern) live in {@code assets/fonts/}, with their
+     * license texts beside them (added 2026-10-04).
      */
     public enum FontFile {
         /** Archivo SemiBold, weight 600. */
@@ -379,6 +378,13 @@ public final class Theme {
          * serve; never substitute a UI style for a real paragraph.
          */
         BODY(FontFile.WORK_SANS_REGULAR, 13, 20, 0f),
+        /**
+         * A bold lead-in inside body copy (the mockups' {@code <strong>}, e.g. "Versions don't
+         * match." at the start of a notice): Work Sans SemiBold 13, line-height 20. Added
+         * 2026-10-04 for the Connect/Join Game screens; a Scene2D {@code Label} can't switch
+         * fonts mid-text, so it's set as its own label above the rest of the paragraph.
+         */
+        BODY_STRONG(FontFile.WORK_SANS_SEMIBOLD, 13, 20, 0f),
         /** Table cell text: Work Sans Medium 12, line-height 17. */
         BODY_SM(FontFile.WORK_SANS_MEDIUM, 12, 17, 0f),
         /** Small meta text &mdash; footer stats, a progress-step label: Work Sans Medium 11, line-height 14. */
@@ -458,7 +464,7 @@ public final class Theme {
         + "ĐđĒēĔĕĖėĘęĚěĜĝĞğ"
         + "İıŁłŒœŚśŠšŤťŪūŮů"
         + "ŰűŲųŸŹźŻżŽž"
-        + "€×–—…‘’“”·−";
+        + "€×–—…‘’“”·−•";
 
     /**
      * One {@link BitmapFont} per {@link TextStyle}, owned by this object.
@@ -570,6 +576,34 @@ public final class Theme {
     }
 
     /**
+     * The kinds of notice box: a full-width message on {@link #SURFACE_CARD}'s family of
+     * tints, bordered in its own color. Taken from the Connect and Join Game mockups'
+     * local {@code .banner}/{@code .hint} CSS (2026-10-04), not yet a component in the design
+     * system itself.
+     */
+    public enum NoticeKind {
+        /** A problem the player can fix (versions don't match): {@link #GOLD} border, {@link #GOLD_TEXT} text. */
+        WARNING,
+        /** A failure (the server can't be reached): {@link #DANGER} border and text. */
+        DANGER,
+        /** Neutral guidance (the Join Game hint): {@link #NAVY} border, {@link #INK} text. */
+        INFO;
+
+        /**
+         * Returns the text color to set inside a notice of this kind.
+         *
+         * @return the text color
+         */
+        public Color textColor() {
+            return switch (this) {
+                case WARNING -> GOLD_TEXT;
+                case DANGER -> Theme.DANGER;
+                case INFO -> INK;
+            };
+        }
+    }
+
+    /**
      * The state of one step in a {@code ProgressTrack}-style sequence.
      */
     public enum ProgressState {
@@ -643,7 +677,10 @@ public final class Theme {
             pixmap.setColor(fill);
             pixmap.fillRectangle(bw, bw, size - 2 * bw, size - 2 * bw);
             Texture texture = new Texture(pixmap);
-            texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+            // Nearest, not Linear: the patch is only a few pixels, and linear filtering blends
+            // the border into the stretched centre, turning a flat fill into a gradient (seen on
+            // the first Connect screen snapshot, 2026-10-04).
+            texture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
             pixmap.dispose();
             textures.add(texture);
             NinePatchDrawable drawable = new NinePatchDrawable(
@@ -858,8 +895,9 @@ public final class Theme {
          * either way, rather than silently matching or silently dropping it
          * here. The open-book icon itself is not a {@code Shapes} method at
          * all: unlike a flat rect or circle, it's an actual drawn glyph, so
-         * it needs a real SVG/texture asset (the same path every other skill
-         * icon under {@code assets-raw/svg/} took), not yet added.
+         * it's a real asset ({@code assets-raw/svg/icon_history_note.svg},
+         * rasterized to {@code assets/ui/icon_history_note.png}); see
+         * {@code HistoryNote}.
          *
          * @return the drawable; its texture is owned by this object
          */
@@ -909,6 +947,55 @@ public final class Theme {
             drawable.setTopHeight(0f);
             drawable.setBottomHeight(0f);
             return drawable;
+        }
+
+        /**
+         * Builds a notice box background: a thin border in the kind's color around a pale,
+         * opaque tint of it (10% gold, 8% danger or 6% navy blended into white, matching the
+         * mockups' {@code color-mix} values). No built-in padding; pad the content by
+         * {@link #SPACE_3}.
+         *
+         * @param kind the kind of notice
+         * @return the drawable; its texture is owned by this object
+         */
+        public NinePatchDrawable notice(NoticeKind kind) {
+            return switch (kind) {
+                case WARNING -> rect(new Color(SURFACE_CARD).lerp(GOLD, 0.10f), GOLD, BORDER_THIN);
+                case DANGER -> rect(new Color(SURFACE_CARD).lerp(DANGER, 0.08f), DANGER, BORDER_THIN);
+                case INFO -> rect(new Color(SURFACE_CARD).lerp(NAVY, 0.06f), NAVY, BORDER_THIN);
+            };
+        }
+
+        /**
+         * Builds the page frame's blueprint grid, exactly as the UI Asset Sheet specifies it: a
+         * 100 by 100 tile of {@link #SURFACE_PAGE}, fine {@link #GRID_LINE} hairlines at 20, 40,
+         * 60 and 80 on both axes, and one {@link #GRID_LINE_STRONG} line at 0 on each axis only
+         * (the tile's far edge is the next tile's 0, so drawing it there too would double the
+         * line once tiled). Paint it behind a whole screen; it repeats with no seam.
+         *
+         * @return the drawable; its texture is owned by this object
+         */
+        public TiledDrawable blueprintGrid() {
+            int tile = 100;
+            int pitch = 20;
+            Pixmap pixmap = new Pixmap(tile, tile, Pixmap.Format.RGBA8888);
+            pixmap.setBlending(Pixmap.Blending.None);
+            pixmap.setColor(SURFACE_PAGE);
+            pixmap.fill();
+            pixmap.setBlending(Pixmap.Blending.SourceOver);
+            pixmap.setColor(GRID_LINE);
+            for (int at = pitch; at < tile; at += pitch) {
+                pixmap.drawLine(at, 0, at, tile - 1);
+                pixmap.drawLine(0, at, tile - 1, at);
+            }
+            pixmap.setColor(GRID_LINE_STRONG);
+            pixmap.drawLine(0, 0, 0, tile - 1);
+            pixmap.drawLine(0, 0, tile - 1, 0);
+            Texture texture = new Texture(pixmap);
+            texture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+            pixmap.dispose();
+            textures.add(texture);
+            return new TiledDrawable(new TextureRegion(texture));
         }
 
         /**

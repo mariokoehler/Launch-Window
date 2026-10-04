@@ -180,5 +180,7 @@ public final class MessageRegistry {
         kryo.register(ClaimSlotResponse.class);
         // Appended 2026-10-03 (M5 staffing slots, baspm.md section 10.11). Never move this line.
         kryo.register(ReassignControlSlotAction.class);
+        // Appended 2026-10-04 (M5 connect/join screens): ClaimSlotResponse's refusal reason. Never move this line.
+        kryo.register(ClaimSlotResponse.Reason.class);
     }
 }

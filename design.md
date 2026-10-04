@@ -3690,12 +3690,13 @@ from a click), and caught real regressions (a moved/renamed sprite silently
 invisible on screen, not a crash) that no unit test would catch and no
 screenshot-free playtest reliably would either.
 
-**Not built yet, correctly deferred** — `LaunchWindowGame` (`core`'s
-`client` package) is currently a blank placeholder with no real screens to
-photograph. Build this the same session real screens start existing,
-following `ScreenSnapshot`'s exact shape (an `lwjgl3/src/test` dev tool,
-never shipped) rather than reinventing the hidden-window/`FrameBuffer`
-mechanism from scratch.
+**Built (2026-10-04), with the first real screens.** `lwjgl3/src/test/.../ScreenSnapshot`
+renders every Connect and Join Game state (and the stand-in agency screen)
+against a gateway that never answers, then writes one PNG per state. It
+caught a real bug on its first run: `Theme.Shapes.rect` used linear
+filtering on its few-pixel nine-patch, so every card and field showed a
+grey gradient instead of a flat white fill. The fix was nearest filtering.
+How to run it is in `CLAUDE.md`.
 
 ### 3.12 Visual design system / UI style — approved direction (user, 2026-09-28)
 
@@ -3915,11 +3916,24 @@ reserved. **Added to the UI Asset Sheet the same day**, once the user
 caught that the sheet had gone stale (its own "Icons — History Note"
 section now carries the glyph, its size/stroke/color, and the box-shadow
 question below, so a reader of the sheet alone gets the same warning
-`Theme.java`'s doc carries). **Still open:** it's still only inline SVG
-inside the design-system component's own markup and the asset sheet's
-reference copy, not yet exported as a real texture/SVG asset file for the
-libGDX client the way every other icon under `assets-raw/svg/` is —
-`Theme.java`'s own update flags this as the actionable next step.
+`Theme.java`'s doc carries). **Exported 2026-10-04:** `assets-raw/svg/icon_history_note.svg`
+is the source, and `assets/ui/icon_history_note.png` is the white raster
+the client tints navy.
+
+**Connect and Join Game in libGDX (2026-10-04): what `Theme.java` gained.**
+- `TextStyle.BODY_STRONG` (Work Sans SemiBold 13/20) is the mockups'
+  `<strong>` inside body text. A Scene2D `Label` can't switch fonts
+  mid-text, so a notice's bold lead-in sits on its own line above the rest.
+  This is a small visual departure from the mockups, where it runs inline.
+- `NoticeKind` and `Shapes.notice` (warning, danger, info) come from the
+  mockups' local `.banner`/`.hint` CSS. **They aren't components in the
+  design system yet.** They should be promoted there, so later mockups
+  reuse them instead of re-inventing them.
+- `Shapes.blueprintGrid()` is built exactly as the UI Asset Sheet specifies it.
+- The open-book icon is now a real asset: `assets-raw/svg/icon_history_note.svg`,
+  rasterized to `assets/ui/icon_history_note.png` (white, tinted navy at runtime).
+- The history-note card stays flat (no shadow). The box-shadow question
+  below is still the user's to decide.
 
 ### 3.13 Common screen chrome & the main-menu hub (2026-09-30, groundwork ahead of M5)
 
@@ -4083,11 +4097,8 @@ items this surfaced, neither resolved yet:**
 1. The open-book icon itself can't be a `Shapes` method — unlike a
    flat rect or circle, it's a drawn glyph, so it needs a real texture/SVG
    asset the same way every other skill icon under `assets-raw/svg/` does.
-   Not created yet. §3.12's own history-note-icon entry already asked for
-   this ("add the glyph to the UI Asset Sheet once Claude Design settles
-   it") — Claude Design has now settled it (the icon and its hover/
-   pin card shipped in the design system this session), so this is now
-   actionable, not blocked.
+   **Done 2026-10-04:** `assets-raw/svg/icon_history_note.svg`, rasterized
+   to `assets/ui/icon_history_note.png`.
 2. The design system's `.lw-historynote__card` CSS has a `box-shadow`
    — the first shadow anywhere in this design system. `Theme.java`'s
    own class doc states this system has no shadows at all, and
@@ -4171,8 +4182,13 @@ items this surfaced, neither resolved yet:**
   own root element is a fixed 1920×1080 canvas, and the main-menu art
   (§3.13) targets 1920×1080 after its 8px crop — but this is still mockup/
   art evidence, not a real libGDX screen laid out and checked against it.
-  Revisit once the first real screen (the Space Complex hub, §3.13, is the
-  obvious first candidate) is actually being built in `lwjgl3`.
+  **Now checked (2026-10-04):** the Connect and Join Game mockups are both
+  1920×1080 canvases, and their libGDX versions lay out at the mockups'
+  own pixel sizes in a `FitViewport` of that size, matching them closely in
+  `ScreenSnapshot`'s output. Treat 1920×1080 as settled unless the user says
+  otherwise. The launcher now sizes its window from the monitor (1080 rows
+  when there's room, else 85% of the monitor's height), since a 1280×720
+  window made the 10 to 13 px design text hard to read.
 - **Resolved (§3.12, 2026-09-28): the wordmark/logo.** A mission-patch
   illustration — see §3.12's own entry for the full description and
   `assets/branding/logo.svg` for the file. Two follow-ups remain, tracked
@@ -5294,6 +5310,20 @@ here.
   further slice to build (Robot-Rampage's own M4 phrasing) — this is where
   the deferred-deployment choice above matters: that playtest runs in
   dev-mode, not from a packaged release.
+  - **Slice: Connect and Join Game screens — done (2026-10-04).** The first real
+    libGDX screens, built from the user's Claude Design mockups (`ui-spec.md`
+    §4.1/§4.2 and their "Implemented" note), plus a stand-in agency screen
+    until the hub has a mockup. Short-lived connections run through
+    `client.connect.NetworkGateway` on a background thread. `ScreenSnapshot`
+    (§3.11) was built alongside, as planned. **Wire change:** `ClaimSlotResponse`
+    went from `(success, message)` to `(success, reason, message)`, with
+    `ClaimSlotResponse.Reason` registered last in `MessageRegistry`. Old and
+    new builds can't decode each other's claim reply, so rebuild the client,
+    server and DevClient together (fine before any release). Tests:
+    `ServerAddressTest` and `LoginResultTest` in `core`, plus
+    `ClientGatewayIntegrationTest` in `server`, which drives the real gateway
+    against a real server: first login, claim, re-login, wrong password,
+    name taken, unreachable.
 - **M6 — Deployment.** jpackage client zip, Docker server image,
   tag-driven GitHub Actions release, reusing the sibling projects' own
   working templates (§3.3/§3.9). Comes after M5's playtest validates the

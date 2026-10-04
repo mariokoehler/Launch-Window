@@ -3,6 +3,7 @@ package de.mkoehler.launchwindow.server.accounts;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import de.mkoehler.launchwindow.net.LoginNames;
 import de.mkoehler.launchwindow.persistence.AtomicFiles;
 
 import java.io.IOException;
@@ -21,7 +22,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 /**
@@ -62,15 +62,6 @@ public class AccountStore {
     };
     private static final DateTimeFormatter BACKUP_TIMESTAMP = DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss");
 
-    /** Maximum allowed login length - see {@link #VALID_LOGIN}. */
-    private static final int MAX_LOGIN_LENGTH = 32;
-    /**
-     * Restricts a login to characters safe to later use as a filesystem
-     * path segment (see {@code design.md} &sect;3.8's per-player data
-     * directory) - rejects path-traversal sequences and characters illegal
-     * in a Windows file name.
-     */
-    private static final Pattern VALID_LOGIN = Pattern.compile("[A-Za-z0-9_-]{1," + MAX_LOGIN_LENGTH + "}");
 
     /** How often the background task flushes accumulated changes to disk. */
     private static final long FLUSH_INTERVAL_SECONDS = 60;
@@ -157,9 +148,9 @@ public class AccountStore {
         if (login == null || login.isBlank()) {
             return AuthResult.failure("Login is required.");
         }
-        if (!VALID_LOGIN.matcher(login).matches()) {
+        if (!LoginNames.isValid(login)) {
             return AuthResult.failure(
-                "Login may only contain letters, digits, '_' and '-', up to " + MAX_LOGIN_LENGTH + " characters.");
+                "Login may only contain letters, digits, '_' and '-', up to " + LoginNames.MAX_LENGTH + " characters.");
         }
         if (password == null || password.isEmpty()) {
             return AuthResult.failure("Password is required.");
