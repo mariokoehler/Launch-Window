@@ -266,6 +266,12 @@ approved by the user as additive save fields. The client reads the race through
 `WinCondition`'s goal-time helpers, never its own port. The hub strip has a gear for
 Settings.
 
+**Font pitfall (2026-10-04):** fonts are generated at the monitor's scale and drawn scaled
+down, so `BitmapFont`'s default integer positions rounded each glyph apart and made baselines
+wobble. `Theme.Fonts` turns them off. Mipmaps were tried and made text greyer, so the filter
+stays linear. The user will judge the fonts again once the packaged client can use Windows'
+high-DPI setting (libGDX otherwise ignores high DPI, as in the sibling projects).
+
 **Next in `ui-spec.md` §7:** the rest of phase 4, the Astronaut Complex and the Public
 Affairs Office (their mockups are on another canvas; ask the user for the link).
 

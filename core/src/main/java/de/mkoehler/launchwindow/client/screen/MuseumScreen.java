@@ -158,8 +158,9 @@ public final class MuseumScreen extends ChromeScreen {
         raceCard.defaults().growX();
         List<RivalSummary> rivals = session.rivals();
         Table head = new Table();
-        head.add(ui.label(("The race" + (rivals == null ? "" : " · " + rivals.size() + " agencies"))
-            .toUpperCase(Locale.ROOT), Theme.TextStyle.EYEBROW, Theme.NAVY)).expandX().left();
+        String count = rivals == null ? "" : " · " + rivals.size() + (rivals.size() == 1 ? " agency" : " agencies");
+        head.add(ui.label(("The race" + count).toUpperCase(Locale.ROOT), Theme.TextStyle.EYEBROW, Theme.NAVY))
+            .expandX().left();
         head.add(ui.label("Dates are the turn each goal was done", Theme.TextStyle.CAPTION, Theme.INK_MUTED));
         raceCard.add(head).padBottom(Theme.SPACE_3).row();
         if (rivals == null) {

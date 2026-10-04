@@ -510,6 +510,10 @@ public final class Theme {
                         file -> new FreeTypeFontGenerator(directory.child(file.fileName())));
                     BitmapFont font = generator.generateFont(parameterFor(style, scale));
                     font.getData().setScale(1f / scale);
+                    // Glyphs are made at the monitor's scale and drawn scaled back down, so their
+                    // offsets are fractional. Snapping each glyph to a whole unit rounds them apart,
+                    // which makes baselines wobble (worst on y and g).
+                    font.setUseIntegerPositions(false);
                     result.fonts.put(style, font);
                 }
             } finally {
@@ -524,6 +528,8 @@ public final class Theme {
             parameter.spaceX = Math.round(parameter.size * style.letterSpacingEm());
             parameter.color = Color.WHITE;
             parameter.characters = CHARACTERS;
+            // Linear, not mipmapped: mipmaps were tried (2026-10-04) and made the text greyer and
+            // softer at the usual 0.6-1x draw scale.
             parameter.minFilter = Texture.TextureFilter.Linear;
             parameter.magFilter = Texture.TextureFilter.Linear;
             return parameter;
