@@ -439,6 +439,17 @@ hub art against the brightest variant (Soviet winter noon) and the darkest
 (winter night), not just one sample. The hub canvas's dev panel switches the
 art for this. See `design.md` §3.13.
 
+**Mission Control mocked up (2026-10-04, `ui-spec.md` §4.7):** a new canvas,
+`Launch Window — Mission Control mockup` (private, ask the user for the link),
+with five artboards: the controller overview, scheduled missions with Scrub,
+active missions with Cancel, re-staffing, and the step-by-step replay viewer
+with its season summary. It continues the Headquarters canvas (1960 · S3, right
+after Vostok Orbital's launch). Details and unconfirmed choices are in
+`design.md` §3.13. `ui-spec.md` G2 now lists every field the replay reads.
+**Next in §7:** the turn report (§4.4), which reuses the replay. **Pitfall:**
+the design system serves no `tokens.css`; send the local copy as a file when
+installing it on a new canvas.
+
 **Goal cascade in the mockups (2026-10-04):** the Headquarters steps screen
 shows "Also credits …" under a step's goals, following `rules.GoalCascade`
 (see "Content findings closed" above).

@@ -166,6 +166,16 @@ same session it comes up**, the same standing-note-to-self habit as
     the figures before using it. It fits Vostok Orbital's "Retrofire" step
     on the configuration details screen, and it says why that step matters
     so much in the odds.
+  - **Candidate: Sputnik 1's beeps led to satellite navigation.** Sputnik 1
+    radioed only a simple beep, for about three weeks until its batteries
+    ran out. Two young physicists at Johns Hopkins' Applied Physics
+    Laboratory listened to it and found they could work out its whole orbit
+    from the Doppler shift of that tone. Their lab then turned the idea
+    around: if you know a satellite's orbit, the same shift tells you where
+    you are on the ground. That became the US Navy's Transit system, the
+    ancestor of GPS. Verify the details before using it. It fits Sputnik 1
+    and its Extended configuration, whose later seasons are "advanced
+    experiments in orbit".
 - **Real images:** wanted, per the user. **Flagging a licensing
   consideration proactively** (unprompted, per this project's existing
   security/legal-flagging convention): NASA-produced photos/footage are
@@ -4579,6 +4589,66 @@ question above is closed: those goals are earned through the cascade
 goal chip. For example, Vostok Orbital's landing reads "Vostok orbital flown",
 then "Also credits Vostok suborbital flown, Human in space, Human in orbit":
 the cascade minus goals already reached.
+
+**Mission Control mocked up (2026-10-04, `ui-spec.md` §4.7, phase 3 of §7).**
+A new canvas, `Launch Window — Mission Control mockup` (private, ask the user
+for the link), with five linked artboards. It's the same Soviet agency as the
+Headquarters mockup, at 1960 · S3, right after Vostok Orbital was launched
+from Assemble mission, so it picks up where that canvas ends. Configuration
+content is the early-era pack's. People, reliability and the replayed rolls
+are fixtures, but every chance shown comes from `core`'s formulas.
+- **Flight controllers (4.7.1):** the SET Centre's personnel overview
+  (component 11) for controllers. It has no building panel either, to match
+  that mockup, so the headcount stat says "12 / 13 · Level 2 · Level 3 holds
+  22". Each row shows the controller's mission and console ("On Vostok ·
+  Orbital · BOOSTER", gold badge), all five skills with a gold star on an
+  Expert skill, and the Flight Director average that a FLIGHT console reads.
+  `FilterChips` filter the list. A "Missions at a glance" row links to
+  Scheduled and Active missions. Dismiss on someone on a mission gives the
+  `ASSIGNED_TO_MISSION` toast.
+- **Scheduled missions (4.7.2):** Vostok Orbital with its art, launch, crew
+  and console tiles ("FLIGHT: Not required"), the odds with this staff, and
+  what was paid. Scrub is red, with a confirmation that names the full
+  refund and everyone who goes idle; after it comes the empty state.
+- **Active missions (4.7.3):** Sputnik 1 Extended, the early pack's only
+  multi-season configuration, in season 3 of 3. It shows a `ProgressTrack`
+  of its seasons, the satellite's reliability, and its consoles, with
+  BOOSTER "Released · Fyodor Gusev is idle" because season 1 was its last.
+  It also shows the odds for the season still to fly. Cancel's
+  confirmation lists the prestige lost (−375) and the 10 % refund ($211.3)
+  as price lines. The early pack has no multi-season crewed configuration, so
+  "Can't be abandoned" sits on a fixture card ("Soyuz 7K-OK ·
+  Long-duration") behind a mockup chip.
+- **Re-staff (4.7.3):** the Assemble mission tiles again. Crew seats are
+  locked; every used console opens a picker of free people of its type; a
+  change counts at once and costs nothing (a toast names the person
+  replaced, now idle). A changed tile turns gold and lands in a "Changed
+  today" list. Released and not-required tiles are dashed and inert. A
+  mockup chip switches between the scheduled and the in-flight mission.
+- **Replay viewer (4.7.3):** a chooser of the replays from the last turn
+  (`FilterChips`), a step list that fills in as playback goes, and transport
+  controls made of `IconButton`s (back to start, previous, play/pause, next)
+  plus "Skip to summary". Each step shows its components' reliability as
+  flown, the success chance, the controllers' saving-roll chance, each roll
+  as passed or failed, any Expert rescue with the Expert's name and the
+  raised chance, and the outcome as a `Notice`: green for success and saves,
+  gold for a minor glitch, red for failure. Prestige so far and an outcome
+  tally sit beside it. The season summary covers prestige, goals, crew,
+  what happened to mission control, reliability changes (before → after on a
+  `ReliabilityBar`) and skill growth per person.
+
+Proposals, all **unconfirmed**:
+- the replay shows chances and pass/fail, not the raw dice numbers;
+- playback steps every 1.5 s;
+- re-staffing has no confirmation, since it's free and can be changed
+  back;
+- Cancel and Scrub use the generic dialog with price lines for prestige and
+  refund.
+
+No new components, tokens or icons were needed (the console glyphs are the
+skill icons already in the UI Asset Sheet). **Server need found while
+building:** G2 in `ui-spec.md` now lists every field the replay and the
+summary read.
 
 ## 4. Open questions (tracked here until resolved)
 

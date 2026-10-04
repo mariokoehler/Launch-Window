@@ -607,6 +607,16 @@ season's steps one by one:
 Then the season summary: goals achieved, reliability changes, skill growth, and
 crew losses. Playback should be skippable and steppable. **Needs server work:** G2.
 
+**Mocked up (2026-10-04)** in the `Launch Window — Mission Control mockup` canvas
+(`MCOverview`, `ScheduledMissions`, `ActiveMissions`, `Restaff`, `Replay`); `design.md`
+§3.13 has the writeup. Choices still **unconfirmed**:
+- no building panel on the overview, as in the SET Centre;
+- re-staffing has no confirmation (it's free and reversible);
+- the replay shows chances and pass/fail rather than dice numbers, and steps every
+  1.5 s;
+- "Can't be abandoned" is shown on a fixture card, because the early pack has no
+  multi-season crewed configuration.
+
 ### 4.8 SET Centre: engineers and payload R&D
 **Purpose:** the engineering department and payload R&D. SET cap 7/14/20/30.
 **Ref:** `SET_centre*.png`, `rnd_assignments.png`, `upgrade_SET_centre.png`.
@@ -776,6 +786,15 @@ current state alone. Each is an M5 task.
   `SeasonFundsSettled`, `BudgetReviewed`, and so on) are computed and then thrown
   away. Persist each player's events per turn and serve them. The replay viewer
   also needs the step's success chance, which isn't in `MissionStepResolved` yet.
+  **What the Mission Control mockup's replay reads (2026-10-04):**
+  - *per step:* the step, its season, each component with its involvement and its
+    reliability as flown (after goal modifiers), the success chance, whether the
+    first roll passed, the saving-roll chance and whether it passed, each Expert
+    rescue (who, which skill, the raised chance), the outcome, and the prestige
+    change;
+  - *per season:* the prestige total, goals reached with the cascade's credits,
+    each component's reliability before and after, skill growth per person, the
+    consoles released, and crew losses.
 - **G3. Rival summaries.** Each player's agency name, director name, archetype, and the
   declared goals they hold, with turns, for the race tab. This is the
   "per-player summary" `design.md` §3.7 planned for game-meta.
