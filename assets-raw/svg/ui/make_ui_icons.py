@@ -45,7 +45,11 @@ CHROME = {
 # The astronaut glyph's antenna tip is a filled dot.
 EXTRA_FILL = {"astronauts": '<circle cx="12" cy="1.5" r="0.8" fill="currentColor" stroke="none"/>'}
 
-SKILLS = ["rockets", "space_probes", "human_rated_rockets", "crewed_spacecraft", "eva_suits"]
+SKILLS = ["rockets", "space_probes", "human_rated_rockets", "crewed_spacecraft", "eva_suits",
+          # Astronaut skills (EVA reuses eva_suits) and Mission Control skills, plus the Flight Director.
+          "leadership", "piloting", "science", "fitness",
+          "propulsion", "trajectory_and_guidance", "spacecraft_systems", "crew_and_payload", "mission_operations",
+          "flight_director"]
 
 CHROME_PX = 48
 SKILL_HEIGHT_PX = 64

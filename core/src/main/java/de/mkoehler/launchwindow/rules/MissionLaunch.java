@@ -139,6 +139,58 @@ public final class MissionLaunch {
      *
      * @return the first problem, or {@code null} when every rocket fits its launch
      */
+    /**
+     * Checks whether a launch could go ahead now, without changing anything: the same checks
+     * {@link #launch(PlayerSnapshot, LaunchRequest, ContentCatalog)} makes, in the same order.
+     *
+     * @param snapshot the player
+     * @param request  the launch
+     * @param catalog  the content catalog
+     * @return {@link MissionLaunchOutcome#LAUNCHED} if it could, else why not
+     * @throws NullPointerException if an argument is {@code null}
+     */
+    public static MissionLaunchOutcome check(PlayerSnapshot snapshot, LaunchRequest request, ContentCatalog catalog) {
+        Objects.requireNonNull(snapshot, "snapshot must not be null");
+        Objects.requireNonNull(request, "request must not be null");
+        Objects.requireNonNull(catalog, "catalog must not be null");
+        return catalog.missionConfiguration(request.missionConfigurationId())
+            .map(configuration -> {
+                MissionLaunchOutcome problem = validate(snapshot, configuration, request, catalog);
+                return problem == null ? MissionLaunchOutcome.LAUNCHED : problem;
+            })
+            .orElse(MissionLaunchOutcome.UNKNOWN_MISSION_CONFIGURATION);
+    }
+
+    /**
+     * Returns the payload mass one launch of a configuration carries.
+     *
+     * @param launch  the launch
+     * @param catalog the content catalog
+     * @return the mass, in kg
+     */
+    public static double payloadMass(MissionConfiguration.Launch launch, ContentCatalog catalog) {
+        double payloadMass = 0;
+        for (String payloadId : launch.payloadComponentIds()) {
+            payloadMass += catalog.missionComponent(payloadId).orElseThrow().mass();
+        }
+        return payloadMass;
+    }
+
+    /**
+     * Returns whether a rocket can fly a launch: it reaches the launch type (a crewed type needs a
+     * human-rated rocket) and lifts the payload. A rocket with no capacity for the type can't fly
+     * it at all, even an empty payload.
+     *
+     * @param rocket  the rocket
+     * @param launch  the launch
+     * @param catalog the content catalog
+     * @return whether it can
+     */
+    public static boolean canLift(MissionComponent rocket, MissionConfiguration.Launch launch, ContentCatalog catalog) {
+        double capacity = rocket.payloadCapacity(launch.launchType());
+        return capacity > 0 && capacity >= payloadMass(launch, catalog);
+    }
+
     private static MissionLaunchOutcome validateRockets(PlayerSnapshot snapshot, MissionConfiguration configuration,
             List<String> rocketIds, ContentCatalog catalog) {
         if (rocketIds.size() != configuration.launches().size()) {
@@ -150,14 +202,7 @@ public final class MissionLaunch {
             if (rocket == null || !rocket.hasRocketSpec() || owned == null || !owned.isActive()) {
                 return MissionLaunchOutcome.ROCKET_NOT_AVAILABLE;
             }
-            MissionConfiguration.Launch launch = configuration.launches().get(i);
-            double payloadMass = 0;
-            for (String payloadId : launch.payloadComponentIds()) {
-                payloadMass += catalog.missionComponent(payloadId).orElseThrow().mass();
-            }
-            double capacity = rocket.payloadCapacity(launch.launchType());
-            // A rocket with no capacity for this launch type can't fly it at all, even an empty payload.
-            if (capacity <= 0 || capacity < payloadMass) {
+            if (!canLift(rocket, configuration.launches().get(i), catalog)) {
                 return MissionLaunchOutcome.ROCKET_CANNOT_LIFT_PAYLOAD;
             }
         }
@@ -176,6 +221,38 @@ public final class MissionLaunch {
      */
     private static MissionLaunchOutcome launchKnownConfiguration(PlayerSnapshot snapshot,
             MissionConfiguration configuration, LaunchRequest request, ContentCatalog catalog) {
+        MissionLaunchOutcome problem = validate(snapshot, configuration, request, catalog);
+        if (problem != null) {
+            return problem;
+        }
+        long cost = launchCost(configuration, request.rocketIds(), catalog);
+        List<String> crewSlotIds = padded(request.crewSlotIds(), configuration.crewSlots().size());
+        List<String> controlSlotIds = padded(request.controlSlotIds(), configuration.controlSlots().size());
+
+        String instanceId = snapshot.allocateMissionInstanceId();
+        InProgressMission mission = new InProgressMission(instanceId, configuration.id(), crewSlotIds, controlSlotIds);
+        mission.setRocketIds(request.rocketIds());
+        mission.setLaunchCost(cost);
+        snapshot.getInProgressMissions().put(instanceId, mission);
+
+        snapshot.setFunds(snapshot.getFunds() - cost);
+        snapshot.setLaunchesThisWindow(snapshot.getLaunchesThisWindow() + 1);
+        for (String id : mission.crewIds()) {
+            assign(findPerson(snapshot, id), instanceId);
+        }
+        for (String id : mission.groundIds()) {
+            assign(findPerson(snapshot, id), instanceId);
+        }
+        return MissionLaunchOutcome.LAUNCHED;
+    }
+
+    /**
+     * Runs every launch check, changing nothing.
+     *
+     * @return the first problem, or {@code null} if the launch can go ahead
+     */
+    private static MissionLaunchOutcome validate(PlayerSnapshot snapshot, MissionConfiguration configuration,
+            LaunchRequest request, ContentCatalog catalog) {
         if (!snapshot.getOpenedProgramIds().contains(configuration.programId())) {
             return MissionLaunchOutcome.PROGRAM_NOT_OPEN;
         }
@@ -215,27 +292,7 @@ public final class MissionLaunch {
         if (controllerProblem != null) {
             return controllerProblem;
         }
-        MissionLaunchOutcome capcomProblem =
-            validateGroundAstronautSlots(snapshot, configuration, controlSlotIds, crewSlotIds);
-        if (capcomProblem != null) {
-            return capcomProblem;
-        }
-
-        String instanceId = snapshot.allocateMissionInstanceId();
-        InProgressMission mission = new InProgressMission(instanceId, configuration.id(), crewSlotIds, controlSlotIds);
-        mission.setRocketIds(request.rocketIds());
-        mission.setLaunchCost(cost);
-        snapshot.getInProgressMissions().put(instanceId, mission);
-
-        snapshot.setFunds(snapshot.getFunds() - cost);
-        snapshot.setLaunchesThisWindow(snapshot.getLaunchesThisWindow() + 1);
-        for (String id : mission.crewIds()) {
-            assign(findPerson(snapshot, id), instanceId);
-        }
-        for (String id : mission.groundIds()) {
-            assign(findPerson(snapshot, id), instanceId);
-        }
-        return MissionLaunchOutcome.LAUNCHED;
+        return validateGroundAstronautSlots(snapshot, configuration, controlSlotIds, crewSlotIds);
     }
 
     /**
@@ -378,7 +435,7 @@ public final class MissionLaunch {
      * @param person the person
      * @return {@code true} when free
      */
-    static boolean isAvailable(Personnel person) {
+    public static boolean isAvailable(Personnel person) {
         return person.getAssignmentState() == AssignmentState.IDLE && person.getUnavailableSeasons() <= 0;
     }
 

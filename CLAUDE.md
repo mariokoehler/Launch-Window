@@ -234,8 +234,17 @@ R&D). The hub strip also follows the revised, all-solid mockup.
 - **Pitfall:** a snapshot block that calls `game.setSession` changes the session for
   every shot after it. Add new blocks at the end.
 
-**Next:** Headquarters mission planning (`ui-spec.md` §4.6.5–§4.6.8; the
-Headquarters mockup canvas has the new artboards, ask the user for the link).
+**Headquarters mission planning built in libGDX (2026-10-04)** (`ui-spec.md`
+§4.6.5–§4.6.8): configuration selection, steps, the planning hub, and Assemble
+mission, up to a real launch.
+- **Rules:** the odds come from `core`'s `MissionAssessment`, which is exact, not
+  simulated. The launch button follows `MissionLaunch.check`.
+- **Drafts:** the plan draft lives on the session (`ClientSession.draft`).
+- **Pitfall:** `LaunchRequest` copies `rocketIds` with `List.copyOf`, which rejects
+  nulls, so `MissionDraft.request()` sends "" for a missing rocket.
+
+**Next:** Mission Control (§4.7), where launched missions show up and can be scrubbed;
+or the hub's other buildings.
 
 **Headquarters built in libGDX (2026-10-04),** as far as opening a program, from the
 Headquarters mockup: landing with the building panel and upgrade, Manage open
@@ -1241,6 +1250,10 @@ and §1.1/§3.12 (updated), not repeated here. Still nothing implemented in
 groundwork prepared ahead of it.
 
 ## Source material locations (read-only, reference-only — never edit, never copy into the repo)
+
+- **`assets-raw/` is the user's own original art (user, 2026-10-04),** except the BASPM
+  reference screenshots in `assets-raw/baspm/`. Converting anything else there into
+  `assets/` needs no provenance check.
 
 - **Machine caveat:** if the environment variable `COMPUTERNAME` is
   `S0147359`, this is the user's laptop, which has neither the original

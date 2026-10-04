@@ -5859,6 +5859,20 @@ here.
       filter chips, the segmented control, the reliability bar, the skill bar, the
       R&D slot box, and the white on-page secondary button. They should be promoted
       to the design system and the UI Asset Sheet.
+  - **Slice: Headquarters mission planning — done (2026-10-04).** Configuration
+    selection, configuration details, the planning hub (assessment, rockets, payload
+    R&D) and Assemble mission, up to a real launch (`LaunchMissionAction`). Details and
+    unconfirmed choices are in `ui-spec.md` §4.6's "Implemented" note.
+    - **Rules:** `rules.MissionAssessment` gives exact per-step odds. A seeded
+      simulation of `MissionStepResolution.resolve` agrees to within 0.5 %, and a
+      real-pack test shows the 20-point "Human in space" penalty on Vostok Orbital.
+    - **Shared with the engine:** `MissionLaunch.check`/`canLift`/`payloadMass`,
+      `MissionStaffing.seatFit`, `MissionProgress.goalModifierFor`, and
+      `GoalCascade.unheld`, each taking a predicate for held goals.
+    - **Unchanged output:** `ContentPackPlayouts` is byte-identical, and every
+      earlier screenshot is pixel-identical.
+    - **Client:** the R&D cards moved into `RndCards`, shared by the R&D boards and the
+      plan's Payload R&D tab. The plan draft lives on the session.
   - **Slice: VAB — done (2026-10-04).** Landing with the building panel (which can now
     take extra stats and name what an upgrade unlocks), Open Rocket Program, Manage Rocket
     Programs, and Rocket R&D. Details are in `ui-spec.md` §4.5's "Implemented" note.

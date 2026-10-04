@@ -36,6 +36,14 @@ import de.mkoehler.launchwindow.client.screen.RndBoardScreen;
 import de.mkoehler.launchwindow.client.screen.OpenRocketScreen;
 import de.mkoehler.launchwindow.client.screen.RocketProgramsScreen;
 import de.mkoehler.launchwindow.client.screen.VabScreen;
+import de.mkoehler.launchwindow.client.screen.AssembleMissionScreen;
+import de.mkoehler.launchwindow.client.screen.MissionConfigsScreen;
+import de.mkoehler.launchwindow.client.screen.MissionPlanScreen;
+import de.mkoehler.launchwindow.client.screen.MissionStepsScreen;
+import de.mkoehler.launchwindow.model.Astronaut;
+import de.mkoehler.launchwindow.model.AstronautSkill;
+import de.mkoehler.launchwindow.model.MissionControlOfficer;
+import de.mkoehler.launchwindow.model.MissionControlSkill;
 import de.mkoehler.launchwindow.model.InProgressMission;
 import de.mkoehler.launchwindow.client.screen.SetCentreScreen;
 import de.mkoehler.launchwindow.client.view.PayloadRnd;
@@ -266,6 +274,8 @@ public final class ScreenSnapshot {
             game.session().catalog().missionComponent("r7-vostok").orElseThrow()));
         write(folder, "vab-open-empty.png", new OpenRocketScreen(game), null);
         write(folder, "vab-overview-upgrading.png", new VabScreen(game), null);
+
+        planningShots(folder, game, info);
     }
 
     /**
@@ -333,6 +343,110 @@ public final class ScreenSnapshot {
         kept.setActive(false);
         state.getMissionComponents().put("sputnik-2-satellite", kept);
         state.getAchievedGoals().put("earth-orbit-satellite", 4);
+        return state;
+    }
+
+    private static void planningShots(File folder, LaunchWindowGame game, GameInfoResponse info) {
+        startSession(game, planningState(11, 25_000), info);
+        write(folder, "plan-configs.png", new MissionConfigsScreen(game, "vostok"), null);
+        write(folder, "plan-steps.png", new MissionStepsScreen(game, "vostok-orbital"), null);
+        write(folder, "plan-assessment.png", new MissionPlanScreen(game, "vostok-orbital",
+            MissionPlanScreen.Tab.ASSESSMENT), null);
+        write(folder, "plan-rockets.png", new MissionPlanScreen(game, "vostok-orbital", MissionPlanScreen.Tab.ROCKETS),
+            null);
+        write(folder, "plan-rnd.png", new MissionPlanScreen(game, "vostok-orbital", MissionPlanScreen.Tab.RND), null);
+        write(folder, "plan-assemble.png", new AssembleMissionScreen(game, "vostok-orbital"), null);
+        write(folder, "plan-assemble-picker.png", new AssembleMissionScreen(game, "vostok-orbital"),
+            screen -> screen.openPicker(false, 3));
+        write(folder, "plan-assemble-confirm.png", new AssembleMissionScreen(game, "vostok-orbital"),
+            screen -> screen.confirmLaunch(game.session().draft(game.session().catalog()
+                .missionConfiguration("vostok-orbital").orElseThrow()), 4_369));
+        startSession(game, planningState(11, 25_000), info);
+        write(folder, "plan-assemble-launched.png", new AssembleMissionScreen(game, "vostok-orbital"),
+            AssembleMissionScreen::previewLaunched);
+
+        PlayerSnapshot penalty = planningState(11, 25_000);
+        penalty.getCancelledGoalIds().add("human-in-space");
+        startSession(game, penalty, info);
+        write(folder, "plan-assessment-no-penalty.png", new MissionPlanScreen(game, "vostok-orbital",
+            MissionPlanScreen.Tab.ASSESSMENT), null);
+
+        startSession(game, planningState(5, 25_000), info);
+        write(folder, "plan-assemble-short.png", new AssembleMissionScreen(game, "vostok-orbital"), null);
+        startSession(game, planningState(11, 2_000), info);
+        write(folder, "plan-assemble-funds.png", new AssembleMissionScreen(game, "vostok-orbital"), null);
+        PlayerSnapshot capped = planningState(11, 25_000);
+        capped.setLaunchCap(1);
+        capped.setLaunchesThisWindow(1);
+        startSession(game, capped, info);
+        write(folder, "plan-assemble-cap.png", new AssembleMissionScreen(game, "vostok-orbital"), null);
+        PlayerSnapshot grounded = planningState(11, 25_000);
+        grounded.getUnavailableComponents().put("vostok-capsule", 1);
+        startSession(game, grounded, info);
+        write(folder, "plan-assemble-grounded.png", new AssembleMissionScreen(game, "vostok-orbital"), null);
+
+        startSession(game, headquartersState(), info);
+        write(folder, "plan-configs-readonly.png", new MissionConfigsScreen(game, "vostok"), null);
+        write(folder, "plan-assessment-readonly.png", new MissionPlanScreen(game, "vostok-orbital",
+            MissionPlanScreen.Tab.ASSESSMENT), null);
+    }
+
+    private static void startSession(LaunchWindowGame game, PlayerSnapshot state, GameInfoResponse info) {
+        game.setSession(ClientSession.start(CREDENTIALS, state, new GameInfo(info, System.currentTimeMillis()),
+            ScreenSnapshot.class.getClassLoader()));
+    }
+
+    /**
+     * The mockup's agency in 1960: Vostok open, both uncrewed Vostok flights flown, nobody in
+     * space yet, six cosmonauts (one in training) and some controllers (one in training).
+     */
+    private static PlayerSnapshot planningState(int controllers, long funds) {
+        PlayerSnapshot state = new PlayerSnapshot("Baltic Star Agency", Archetype.SOVIET, funds, 2_140, 3_000, 23);
+        state.setDirectorName("A. Reyes");
+        state.getOpenedProgramIds().addAll(List.of("sputnik-1", "korabl-sputnik-2", "vostok"));
+        state.getMissionComponents().put("sputnik-1-satellite", new OwnedMissionComponent(72.0, 3.0));
+        state.getMissionComponents().put("vostok-capsule", new OwnedMissionComponent(80.6, 8.7));
+        state.getMissionComponents().put("r7-vostok", new OwnedMissionComponent(84.3, 3.0));
+        state.getMissionComponents().put("r7-sputnik", new OwnedMissionComponent(78.2, 3.0));
+        for (String goal : List.of("earth-orbit-satellite", "sputnik-1-flown", "korabl-sputnik-2-flown",
+            "vostok-uncrewed-suborbital-flown", "vostok-uncrewed-orbital-flown")) {
+            state.getAchievedGoals().put(goal, 10);
+        }
+        state.getCancelledGoalIds().add("radio-signals-from-orbit");
+        state.getSuccessfulFlightCounts().put("vostok-uncrewed-suborbital", 1);
+        state.getSuccessfulFlightCounts().put("vostok-uncrewed-orbital", 1);
+        String[][] astronauts = {{"Pavel Orlov", "58", "71", "34", "77", "22"}, {"Andrei Volkov", "66", "52", "41",
+            "69", "30"}, {"Nikolai Belov", "49", "63", "55", "61", "18"}, {"Grigori Zaitsev", "72", "44", "38", "58",
+            "26"}, {"Mikhail Ermakov", "41", "59", "29", "72", "35"}, {"Viktor Dorofeev", "61", "66", "47", "74", "40"}};
+        for (int i = 0; i < astronauts.length; i++) {
+            Astronaut astronaut = new Astronaut("a" + i, astronauts[i][0], 30 + i, 70, 60);
+            astronaut.setSkill(AstronautSkill.LEADERSHIP, Double.parseDouble(astronauts[i][1]));
+            astronaut.setSkill(AstronautSkill.PILOTING, Double.parseDouble(astronauts[i][2]));
+            astronaut.setSkill(AstronautSkill.SCIENCE, Double.parseDouble(astronauts[i][3]));
+            astronaut.setSkill(AstronautSkill.FITNESS, Double.parseDouble(astronauts[i][4]));
+            astronaut.setSkill(AstronautSkill.EVA, Double.parseDouble(astronauts[i][5]));
+            astronaut.setAssignmentState(i == 4 ? AssignmentState.IN_TRAINING : AssignmentState.IDLE);
+            state.getAstronauts().add(astronaut);
+        }
+        String[] names = {"Sergei Markov", "Oleg Fedorov", "Ivan Kozlov", "Boris Antonov", "Lev Romanov",
+            "Arkady Smirnov", "Konstantin Pavlov", "Valentina Kirova", "Tamara Sorokina", "Fyodor Gusev",
+            "Raisa Melnikova", "Yuri Panin"};
+        for (int i = 0; i < controllers; i++) {
+            MissionControlOfficer officer = new MissionControlOfficer("c" + i, names[i], 35 + i, 70, 60);
+            int k = 0;
+            for (MissionControlSkill skill : MissionControlSkill.values()) {
+                officer.setSkill(skill, 45 + (i * 7 + k++ * 11) % 35);
+            }
+            officer.setAssignmentState(i == controllers - 1 && controllers > 5 ? AssignmentState.IN_TRAINING
+                : AssignmentState.IDLE);
+            state.getMissionControlOfficers().add(officer);
+        }
+        SetSpecialist researcher = specialist("s1", "Otto Bergmann", 44, 66, 50, 72, 30, 41, 64, 18);
+        researcher.setAssignmentState(AssignmentState.ASSIGNED);
+        researcher.setRdTargetComponentId("vostok-capsule");
+        researcher.setRdSlot(0);
+        state.getSetSpecialists().add(researcher);
+        state.getSetSpecialists().add(specialist("s2", "Elena Markova", 38, 70, 55, 64, 28, 52, 58, 35));
         return state;
     }
 

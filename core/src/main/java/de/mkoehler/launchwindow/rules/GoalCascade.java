@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * The goals that achieving one goal settles for a player: the goal itself, then every goal it
@@ -35,20 +36,34 @@ public final class GoalCascade {
      * @throws IllegalStateException if a goal in the cascade isn't in the pack
      */
     public static List<String> unheld(String goalId, PlayerSnapshot state, ContentCatalog catalog) {
+        return unheld(goalId, state::hasAchievedOrCancelledGoal, catalog);
+    }
+
+    /**
+     * As {@link #unheld(String, PlayerSnapshot, ContentCatalog)}, against any notion of which goals
+     * are held: the mission assessment walks a flight step by step, holding each step's goals once
+     * it's past.
+     *
+     * @param goalId  the goal achieved
+     * @param held    whether a goal is already held
+     * @param catalog the content pack
+     * @return the goal ids to settle
+     */
+    public static List<String> unheld(String goalId, Predicate<String> held, ContentCatalog catalog) {
         Set<String> order = new LinkedHashSet<>();
-        if (!state.hasAchievedOrCancelledGoal(goalId)) {
-            visit(goalId, state, catalog, order);
+        if (!held.test(goalId)) {
+            visit(goalId, held, catalog, order);
         }
         return new ArrayList<>(order);
     }
 
-    private static void visit(String goalId, PlayerSnapshot state, ContentCatalog catalog, Set<String> order) {
+    private static void visit(String goalId, Predicate<String> held, ContentCatalog catalog, Set<String> order) {
         order.add(goalId);
         Goal goal = catalog.goal(goalId).orElseThrow(
             () -> new IllegalStateException("Unknown Goal " + goalId));
         for (String cancelledId : goal.cancelsGoalIds()) {
-            if (!state.hasAchievedOrCancelledGoal(cancelledId) && !order.contains(cancelledId)) {
-                visit(cancelledId, state, catalog, order);
+            if (!held.test(cancelledId) && !order.contains(cancelledId)) {
+                visit(cancelledId, held, catalog, order);
             }
         }
     }

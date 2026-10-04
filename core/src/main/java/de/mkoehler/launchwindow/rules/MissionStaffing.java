@@ -197,6 +197,27 @@ public final class MissionStaffing {
         return ReassignOutcome.REASSIGNED;
     }
 
+    /**
+     * Returns how well an astronaut fits a crew seat: their skills weighted by how much the
+     * configuration's steps lean on each skill in that seat, 0-100. {@link #autoAssign} ranks
+     * candidates for a seat by the same weighting.
+     *
+     * @param astronaut     the astronaut
+     * @param configuration the configuration
+     * @param slot          the crew seat
+     * @return the fit, or 0 for a seat no step uses
+     */
+    public static double seatFit(Astronaut astronaut, MissionConfiguration configuration, int slot) {
+        Map<AstronautSkill, Double> weights = crewWeights(configuration, slot);
+        double total = 0;
+        double score = 0;
+        for (Map.Entry<AstronautSkill, Double> weight : weights.entrySet()) {
+            total += weight.getValue();
+            score += weight.getValue() * astronaut.getSkill(weight.getKey());
+        }
+        return total == 0 ? 0 : score / total;
+    }
+
     private static Map<AstronautSkill, Double> crewWeights(MissionConfiguration configuration, int slot) {
         Map<AstronautSkill, Double> weights = new EnumMap<>(AstronautSkill.class);
         for (MissionSeason season : configuration.seasons()) {

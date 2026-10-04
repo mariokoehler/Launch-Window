@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.Predicate;
 import java.util.random.RandomGenerator;
 
 /**
@@ -609,6 +610,16 @@ public final class MissionProgress {
      */
     private static double componentContributionSum(PlayerSnapshot snapshot, ContentCatalog catalog,
             InProgressMission mission, MissionStep step) {
+        return componentContributionSum(snapshot, catalog, mission, step, snapshot::hasAchievedOrCancelledGoal);
+    }
+
+    /**
+     * As {@link #componentContributionSum(PlayerSnapshot, ContentCatalog, InProgressMission, MissionStep)},
+     * with the goal modifiers read against any notion of which goals are held. For the mission
+     * assessment, which holds a step's goals once its walk is past the step.
+     */
+    static double componentContributionSum(PlayerSnapshot snapshot, ContentCatalog catalog,
+            InProgressMission mission, MissionStep step, Predicate<String> goalHeld) {
         MissionConfiguration configuration = catalog.missionConfiguration(mission.getMissionConfigurationId())
             .orElseThrow();
         double sum = 0;
@@ -617,7 +628,7 @@ public final class MissionProgress {
             String componentId = MissionLaunch.resolveComponentId(involvement.componentId(), mission.getRocketIds());
             OwnedMissionComponent owned = snapshot.getMissionComponents().get(componentId);
             double current = owned != null ? owned.getCurrentReliability() : 0;
-            double modifier = goalModifierFor(snapshot, configuration, componentId);
+            double modifier = goalModifierFor(goalHeld, configuration, componentId);
             double effective = MissionStepResolution.effectiveReliability(current, modifier);
             sum += involvement.percent() / 100.0 * effective;
         }
@@ -638,15 +649,29 @@ public final class MissionProgress {
      * @return the summed modifier, negative for unmet dependencies
      */
     static double goalModifierFor(PlayerSnapshot snapshot, MissionConfiguration configuration, String componentId) {
+        return goalModifierFor(snapshot::hasAchievedOrCancelledGoal, configuration, componentId);
+    }
+
+    /**
+     * As {@link #goalModifierFor(PlayerSnapshot, MissionConfiguration, String)}, against any notion
+     * of which goals are held. Public so the client shows a component "as it'll fly" by the same
+     * rule ({@code ui-spec.md} &sect;4.6.7).
+     *
+     * @param goalHeld      whether a goal is achieved or cancelled
+     * @param configuration the configuration the flight belongs to
+     * @param componentId   the mission component the modifier applies to
+     * @return the summed modifier, negative for unmet dependencies
+     */
+    public static double goalModifierFor(Predicate<String> goalHeld, MissionConfiguration configuration,
+            String componentId) {
         double modifier = 0;
         for (MissionConfiguration.GoalModifier dependency : configuration.goalDependencies()) {
-            if (dependency.componentId().equals(componentId)
-                    && !snapshot.hasAchievedOrCancelledGoal(dependency.goalId())) {
+            if (dependency.componentId().equals(componentId) && !goalHeld.test(dependency.goalId())) {
                 modifier -= dependency.amount();
             }
         }
         for (MissionConfiguration.GoalModifier boost : configuration.goalBoosts()) {
-            if (boost.componentId().equals(componentId) && snapshot.hasAchievedOrCancelledGoal(boost.goalId())) {
+            if (boost.componentId().equals(componentId) && goalHeld.test(boost.goalId())) {
                 modifier += boost.amount();
             }
         }
@@ -662,7 +687,7 @@ public final class MissionProgress {
      * @param step     the step
      * @return the crew sum, 0-100
      */
-    private static double crewContributionSum(PlayerSnapshot snapshot, InProgressMission mission, MissionStep step) {
+    static double crewContributionSum(PlayerSnapshot snapshot, InProgressMission mission, MissionStep step) {
         double sum = 0;
         for (MissionStep.CrewInvolvement involvement : step.crewInvolvements()) {
             Astronaut astronaut = findById(snapshot.getAstronauts(), slotHolder(mission.getCrewSlotIds(),
@@ -685,7 +710,7 @@ public final class MissionProgress {
      * @param step     the step
      * @return the controller sum, 0-100
      */
-    private static double controlContributionSum(PlayerSnapshot snapshot, ContentCatalog catalog,
+    static double controlContributionSum(PlayerSnapshot snapshot, ContentCatalog catalog,
             InProgressMission mission, MissionStep step) {
         List<StaffingSlot> slots = configurationOf(catalog, mission).controlSlots();
         double sum = 0;

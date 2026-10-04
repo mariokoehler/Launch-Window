@@ -120,6 +120,32 @@ public final class UiKit implements Disposable {
     }
 
     /**
+     * Returns a picture from {@code assets/ui/} cropped about its centre to an aspect ratio, so it
+     * fills a box of that shape without spilling out of it.
+     *
+     * @param path   the path under {@code assets/ui/}
+     * @param aspect the box's width over its height
+     * @return the drawable, or {@code null} if there's no such picture
+     */
+    public TextureRegionDrawable croppedPicture(String path, float aspect) {
+        TextureRegionDrawable picture = picture(path);
+        if (picture == null) {
+            return null;
+        }
+        Texture texture = picture.getRegion().getTexture();
+        int width = texture.getWidth();
+        int height = texture.getHeight();
+        if (width / (float) height > aspect) {
+            int cropped = Math.round(height * aspect);
+            return new TextureRegionDrawable(new com.badlogic.gdx.graphics.g2d.TextureRegion(texture,
+                (width - cropped) / 2, 0, cropped, height));
+        }
+        int cropped = Math.round(width / aspect);
+        return new TextureRegionDrawable(new com.badlogic.gdx.graphics.g2d.TextureRegion(texture, 0,
+            (height - cropped) / 2, width, cropped));
+    }
+
+    /**
      * Returns a full-screen backdrop from {@code assets/}, such as the hub's art. Only one is kept:
      * asking for another releases the previous one, so the 32 hub images never pile up, while
      * returning to the hub with the same art loads nothing.
@@ -137,6 +163,17 @@ public final class UiKit implements Disposable {
             backdropPath = path;
         }
         return backdrop == null ? null : new TextureRegionDrawable(backdrop);
+    }
+
+    /**
+     * Returns a nav tab's background ({@link Theme.Shapes#navTab}): white when active, an outline
+     * on the page otherwise. Built once per look.
+     *
+     * @param active whether the tab is the current one
+     * @return the drawable
+     */
+    public Drawable navTab(boolean active) {
+        return rects.computeIfAbsent(active ? "navTab:active" : "navTab", key -> shapes.navTab(active));
     }
 
     /**

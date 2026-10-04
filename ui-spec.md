@@ -509,6 +509,43 @@ probabilities and band fractions, `MissionProgress.goalModifierFor`, `slotValue`
 one method returns the distribution, so the mockup derives it. A small `core` helper
 would keep the client from re-deriving the bands.
 
+**Implemented in libGDX (2026-10-04), §4.6.5 to §4.6.8,** from the Headquarters
+mockup's bottom row (`client.screen.MissionConfigsScreen`, `MissionStepsScreen`,
+`MissionPlanScreen`, `AssembleMissionScreen`). View logic is in `client.view.Missions`,
+`MissionDraft` and `CrewSkills`.
+- **Rules (G7):**
+  - **Odds:** `core`'s new `rules.MissionAssessment` computes each step's exact outcome
+    odds and the flight's completion and crew-loss odds from the season pass's own sums.
+    It holds each step's goals once the walk is past it.
+  - **Checks:** `MissionLaunch.check` is the launch's own checks without the changes,
+    and `MissionLaunch.canLift` and `payloadMass` judge the rockets.
+  - **Seat fit:** `MissionStaffing.seatFit` scores a crew seat.
+  - **Engine refactor:** the engine now shares these pieces, and `ContentPackPlayouts`
+    stayed byte-identical.
+- **Plan drafts:** the rocket choice and staffing live per configuration on the session
+  (`ClientSession.draft`), so they survive moving between screens. They start from the
+  first rocket that fits and Auto-assign's staffing. Every rebuild drops people who
+  aren't free any more and rockets that can't fly. The draft is cleared after a launch.
+
+Choices made while building them, **unconfirmed**:
+- **The assessment uses the plan as it stands,** starting with Auto-assign's staff, rather
+  than always Auto-assign's. It leaves out Expert rescues, changes between seasons and
+  random events, and says so on screen.
+- **Weak steps:** a step is "Weak" when it ends the mission at least 10 % of the time,
+  as the mockup proposed. Weak steps share one notice instead of one each.
+- **Kept from the mockup's proposals:** the slot picker lists only free people, and a
+  crew seat shows a "seat fit".
+- **Big odds figures** use `HEADING_LG` (24 px) rather than the mockup's local 40 px and
+  32 px styles. Empty and "nobody free" tiles use solid borders, because `Theme` has no
+  dashed rectangle.
+- **"See it in Mission Control"** shows the "isn't built yet" toast until §4.7 exists.
+- **Configuration names come from their ids** ("Orbital duration 1"), until G4.
+- **Configuration art:** `assets-raw/make_content_art.py` converts the configuration art
+  in `assets-raw/Mission Configuration/` (provenance as the design session noted it: the
+  user's own).
+- **New icons:** `make_ui_icons.py` now renders the ten crew and controller skill icons
+  and the Flight Director stand-in.
+
 **Implemented in libGDX (2026-10-04), §4.6 to §4.6.4,** from the Headquarters mockup
 (`client.screen.HeadquartersScreen`, `OpenProgramsScreen`, `SelectBodyScreen`,
 `BodyProgramsScreen`, `ProgramDetailsScreen`). Choices made while building them,
@@ -529,7 +566,7 @@ would keep the client from re-deriving the bands.
 - **The building panel** (component 7) is built as a reusable piece and used here.
   The SET Centre landing could show it too (§2 says all five capped buildings), but
   its mockup doesn't, so it isn't added there yet.
-- **Mission configurations** shows an "isn't built yet" toast until §4.6.5 exists.
+- **Mission configurations** opens §4.6.5 (built since, see the note above).
 
 ### 4.7 Mission Control: controllers and missions
 **Purpose:** the flight-controller department, and watching missions. Controller
@@ -708,6 +745,7 @@ for the mockups.
 | MAX_LEVEL / ALREADY_UPGRADING | Already at the top level. / Already upgrading. |
 | NOT_IN_DEBT / EXCEEDS_CAP / INSUFFICIENT_PRESTIGE | Only possible while in debt. / More than the conversion allows. / Not enough prestige. |
 | SLOT_CLAIM_REQUIRED | (Client goes to §4.2.) |
+| Launch (added 2026-10-04): PROGRAM_NOT_OPEN / LAUNCH_CAP_REACHED / MISSION_COMPONENT_UNAVAILABLE / WRONG_ROCKET_COUNT, ROCKET_NOT_AVAILABLE / ROCKET_CANNOT_LIFT_PAYLOAD / WRONG_*_COUNT / *_NOT_IDLE / DUPLICATE_* / UNKNOWN_ASTRONAUT, UNKNOWN_MISSION_CONTROL_OFFICER / CAPCOM_NOT_AVAILABLE / UNKNOWN_MISSION_CONFIGURATION | Open the program first. / No more launches this turn: the launch window is full. / A component is grounded this turn. / Pick a rocket for every launch. / That rocket can't fly this launch. / Fill every slot the mission uses. / Someone in a slot isn't free any more. / Someone is in two slots. / Someone in a slot isn't on the roster any more. / CAPCOM needs a free astronaut who isn't in the crew. / That mission doesn't exist in this game. Short of funds reads "Not enough funds: $ N short." |
 | Rocket programs: VAB_FULL / ROCKET_CLASS_TOO_LARGE / UNKNOWN_ROCKET (added 2026-10-04) | The VAB can't hold more rocket programs. Upgrade it or close one. / Upgrade the VAB to build this rocket class. / That rocket doesn't exist in this game. |
 | Building upgrade: MAX_LEVEL / ALREADY_UPGRADING; program opening also UNKNOWN_PROGRAM | Already at the top level. / Already upgrading. / That program doesn't exist in this game. |
 | Manage department (`AdjustSalariesAction`, added 2026-10-04): INVALID_PERCENT / EMPTY_DEPARTMENT | Pick a change between −50 % and +50 %. / There's nobody in the department yet. |

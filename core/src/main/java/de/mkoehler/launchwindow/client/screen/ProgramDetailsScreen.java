@@ -177,7 +177,7 @@ public final class ProgramDetailsScreen extends ChromeScreen {
                 () -> tryClose(program))).padRight(10f);
         }
         buttons.add(actionButton("Mission configurations", Theme.ButtonKind.SECONDARY,
-            () -> notBuiltYet("Mission configuration selection")));
+            () -> game.setScreen(new MissionConfigsScreen(game, programId))));
         row.add(buttons).expandX().left();
         row.add(ui.label("Headquarters: " + session.state().getOpenedProgramIds().size() + " / "
             + Programs.cap(session.state(), session.catalog()) + " programs open", Theme.TextStyle.CAPTION,
