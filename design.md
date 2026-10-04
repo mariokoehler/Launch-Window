@@ -3911,10 +3911,15 @@ art, hover-previewed and click-pinned, with the card styled like an archive
 index card — a white surface (body text always sits on white, per this
 section), a thin navy rule, and a small "History" kicker. Gold was ruled out
 (it means "active") and so was the unused violet `commit` token, which stays
-reserved. **Still open:** the glyph only exists as inline SVG inside the
-design-system component's own markup, not yet added to the UI Asset Sheet
-or exported as a real texture asset for the libGDX client — `Theme.java`'s
-own update flags this as the actionable next step.
+reserved. **Added to the UI Asset Sheet the same day**, once the user
+caught that the sheet had gone stale (its own "Icons — History Note"
+section now carries the glyph, its size/stroke/color, and the box-shadow
+question below, so a reader of the sheet alone gets the same warning
+`Theme.java`'s doc carries). **Still open:** it's still only inline SVG
+inside the design-system component's own markup and the asset sheet's
+reference copy, not yet exported as a real texture/SVG asset file for the
+libGDX client the way every other icon under `assets-raw/svg/` is —
+`Theme.java`'s own update flags this as the actionable next step.
 
 ### 3.13 Common screen chrome & the main-menu hub (2026-09-30, groundwork ahead of M5)
 
