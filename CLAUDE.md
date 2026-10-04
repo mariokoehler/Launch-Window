@@ -321,6 +321,29 @@ style on an `x-import` only sizes its slot, so `flex: 1` on a
 `LaunchWindow.Card` doesn't fill. Put the fill and scroll on a plain wrapper
 `div`, and give the footer `margin-top: auto`.
 
+**Headquarters mockup built, as far as opening a program (2026-10-04,
+`ui-spec.md` §4.6.1–§4.6.4).** Five linked artboards (`Launch Window —
+Headquarters mockup`, private, ask the user for the link):
+- **Data:** a Soviet agency, the early-era pack's real costs, and the real
+  solar-system, category and program art, uploaded to the canvas as JPEG
+  copies.
+- **First builds:** the goal badge (component 8, a circle proposal, not yet
+  the `logo.svg` patch frame), plus the price breakdown with discounts and
+  owned components.
+- **Refusals:** `HEADQUARTERS_FULL` and `GOALS_NOT_MET`.
+- **History note:** Gagarin's parachute landing, on Vostok. Belka and
+  Strelka are recorded as a candidate in `design.md` §1.1.
+- **Phase 2 of `ui-spec.md` §7 is now fully mocked up.**
+
+**Mockup pitfall:** never put a `<button>` (or a mounted `LaunchWindow.Button`)
+inside an `<a href>`, because the button swallows the click. Style the `<a>`
+itself with `class="lw-btn lw-btn--primary label"`. This was fixed in the VAB
+and SET Centre canvases.
+
+**Open, content:** Explorer 1's 40% discount points at Sputnik 1, another
+agency's program, so it can never apply. Check `baspm_pack.py`; details in
+`design.md` §3.13.
+
 Everything below is history; if this paragraph and a later one disagree, the
 later one wins.
 

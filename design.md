@@ -145,6 +145,18 @@ same session it comes up**, the same standing-note-to-self habit as
     credited to the state, not to a person. That contrast is a good way into
     how the two programs were run (an open, budget-debated civilian agency
     vs. rival design bureaus under military and Party control).
+  - **Used in the Headquarters mockup (2026-10-04): Gagarin's landing.**
+    On Program details for Vostok. Vostok 1 (12 April 1961) took Gagarin
+    once around the Earth in 108 minutes, but he didn't land in the capsule:
+    he ejected at about 7 km and came down under his own parachute. Soviet
+    officials kept this quiet for years, because the rules for an official
+    flight record required the pilot to land with his craft.
+  - **Candidate: Belka and Strelka (Korabl-Sputnik 2).** In August 1960 the
+    two dogs became the first animals to orbit Earth and come back alive,
+    along with mice, rats and plants. Strelka later had puppies, and
+    Khrushchev gave one of them, Pushinka, to Caroline Kennedy in 1961. It
+    fits next to the Korabl-Sputnik 2 program or its "Organisms in
+    microgravity" goal.
 - **Real images:** wanted, per the user. **Flagging a licensing
   consideration proactively** (unprompted, per this project's existing
   security/legal-flagging convention): NASA-produced photos/footage are
@@ -4330,6 +4342,63 @@ ever needed two rockets. Breadcrumb root is "Space Complex" throughout,
 matching the SET Centre mockup's fix; no new design-system components,
 tokens, or icons were needed beyond the two already-traced rocket skill
 icons.
+
+**Headquarters mockup built, as far as opening a program (2026-10-04,
+`ui-spec.md` §4.6.1–§4.6.4, the last item of §7's phase 2).** Five linked
+artboards (`Launch Window — Headquarters mockup`, private, ask the user for
+the link), for a Soviet agency. It's the first mockup to use the real
+prepared art and the real content pack:
+- **Art:** `assets-raw/backgrounds/solar_system.png`, the Soviet category art,
+  and the program art, uploaded as web-sized JPEG copies.
+- **Content:** Sputnik 1, Sputnik 2, Korabl-Sputnik 2 and Vostok use the
+  early-era pack's own opening costs and upkeep. Everything else is a
+  fixture: Voskhod, Soyuz 7K-OK, the OKB-MiG E-154, a 25% Vostok discount,
+  and every reliability figure.
+
+The screens:
+- **Landing:** the Building Panel (component 7) again, unchanged from the
+  VAB, which confirms it carries across buildings.
+- **Manage open programs (4.6.1):** art thumbnail, upkeep, a reliability bar
+  per component, missions in flight, and the next reachable goal.
+- **Select celestial body (4.6.2):** percentage-positioned targets over the
+  solar-system art, using the hub's decided hover highlight. Each body has a
+  white label chip, since text never sits directly on art (§3.12). Bodies
+  with no programs for the player's agency (here the Sun, Mercury, Jupiter
+  and Saturn) are inert and say so, instead of hiding. This is "other
+  agencies' programs are hidden" from the body's side.
+- **Earth's categories and programs (4.6.3):** the category list with counts,
+  and program cards in all four states. Open is the gold active badge,
+  available a navy outline, closed and locked are muted pills. Locked art is
+  greyed, with the missing goals listed.
+- **Program details (4.6.4):** a mockup-only switcher over four programs that
+  share one state, which demonstrates:
+  - the price breakdown with all three line kinds: the opening cost, a
+    discount, and a component already owned through another program
+    (Vostok's capsule, free);
+  - reopening a closed program for the opening cost only, since its
+    components were kept;
+  - the `HEADQUARTERS_FULL` refusal once 3 of 3 are open;
+  - `GOALS_NOT_MET` on a locked program;
+  - Close with its confirmation.
+
+**First build of the goal badge (component 8):** a circular patch. Achieved
+is a solid green ring with a check; not yet is a dashed navy ring with a
+star. "First" is a gold Badge ribbon over the patch's bottom edge. The
+`logo.svg` frame `ui-spec.md` mentions isn't used yet. This plain circle is
+a proposal, to replace with the patch frame if the user prefers.
+
+**Found while building:**
+- **A link wrapped around a button doesn't navigate.** The canvas format
+  says a `<button>` inside an `<a>` swallows the click. The VAB and SET Centre
+  mockups wrapped the design-system Button in a link, so their "Payload R&D",
+  "Rocket R&D" and VAB nav-card links didn't navigate in Play. All fixed:
+  the `<a>` itself now carries the `lw-btn` classes.
+- **Open question for the content pack:** `programs.json` gives Explorer 1
+  (NASA) a 40% opening discount when Sputnik 1 (Soviet) is open. One player
+  can never own both, so the discount can never apply. Either the converter
+  mapped BASPM's discount across agencies by mistake, or the discount was
+  meant to point at the player's own counterpart program. Check it in
+  `baspm_pack.py` on the main PC.
 
 ## 4. Open questions (tracked here until resolved)
 
