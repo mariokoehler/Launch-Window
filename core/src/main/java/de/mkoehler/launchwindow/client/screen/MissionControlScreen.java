@@ -17,6 +17,7 @@ import de.mkoehler.launchwindow.client.view.MissionControl;
 import de.mkoehler.launchwindow.content.MissionConfiguration;
 import de.mkoehler.launchwindow.content.StaffingSlot;
 import de.mkoehler.launchwindow.model.AssignmentState;
+import de.mkoehler.launchwindow.model.Building;
 import de.mkoehler.launchwindow.model.InProgressMission;
 import de.mkoehler.launchwindow.model.MissionControlOfficer;
 import de.mkoehler.launchwindow.model.MissionControlSkill;
@@ -87,8 +88,8 @@ public final class MissionControlScreen extends ChromeScreen {
         MissionControl.Summary summary = MissionControl.summary(session.state(), session.catalog());
         Table strip = ui.card();
         strip.pad(Theme.BORDER_EMPHASIS);
-        String next = summary.nextCap() < 0 ? "Level " + summary.level() + " · top level"
-            : "Level " + summary.level() + " · Level " + (summary.level() + 1) + " holds " + summary.nextCap();
+        // The building cell at the strip's end shows the level; this says what the next one holds.
+        String next = summary.nextCap() < 0 ? null : "Level " + (summary.level() + 1) + " holds " + summary.nextCap();
         String[][] stats = {
             {"Headcount", summary.headcount() + " / " + summary.cap(), next},
             {"On missions", String.valueOf(summary.onMission()), null},
@@ -108,10 +109,9 @@ public final class MissionControlScreen extends ChromeScreen {
                 stat.add(ui.label(stats[i][2], Theme.TextStyle.CAPTION, Theme.INK_MUTED));
             }
             strip.add(stat).expandX().fillX().uniformX().top();
-            if (i < stats.length - 1) {
-                strip.add(new Image(ui.solid(Theme.NAVY_BORDER))).width(Theme.BORDER_THIN).fillY();
-            }
+            strip.add(new Image(ui.solid(Theme.NAVY_BORDER))).width(Theme.BORDER_THIN).fillY();
         }
+        strip.add(buildingCell(Building.MISSION_CONTROL, "Mission Control", "headcount cap")).top();
         return strip;
     }
 

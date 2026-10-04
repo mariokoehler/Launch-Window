@@ -6167,6 +6167,11 @@ here.
       filter chips, the segmented control, the reliability bar, the skill bar, the
       R&D slot box, and the white on-page secondary button. They should be promoted
       to the design system and the UI Asset Sheet.
+  - **Fix: the SET Centre and Mission Control can be upgraded (2026-10-04).** Their mockups had no
+    building panel, so neither building could be upgraded, though their level caps the
+    department's headcount. A compact building cell (`ChromeScreen.buildingCell`: level, upkeep,
+    Upgrade with the shared confirmation) now ends both summary strips, where the Astronaut
+    Complex mockup puts it.
   - **Slice: resolve the turn now, in dev mode — done (2026-10-04, user request for play
     testing).** `ResolveTurnNowRequest` makes the server run `TurnScheduler.resolveNow`: the
     scheduled pass for the open turn, at once. It leaves the schedule alone, so the day's

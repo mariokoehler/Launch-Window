@@ -674,7 +674,10 @@ Control mockup:
   for the latest turn.
 
 Choices made while building them, **unconfirmed**:
-- **Kept from the mockup's proposals:** no building panel; re-staffing has no
+- **Building panel (changed 2026-10-04, user):** the mockup had none, which left Mission Control
+  with no way to upgrade. A compact building cell (level, upkeep, Upgrade) now ends the summary
+  strip, as the Astronaut Complex mockup places it, and the SET Centre has the same.
+- **Kept from the mockup's proposals:** re-staffing has no
   confirmation; Scrub and Cancel use the generic dialog with price lines.
 - **No "prestige so far"** on an active mission: the state doesn't keep it (added to
   G2).

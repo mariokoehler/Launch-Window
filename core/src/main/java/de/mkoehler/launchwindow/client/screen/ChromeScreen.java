@@ -290,6 +290,42 @@ abstract class ChromeScreen extends SessionScreen {
     }
 
     /**
+     * Builds the compact building cell ({@code ui-spec.md} component 7, as the Astronaut Complex
+     * mockup places it): the level and upkeep, and Upgrade (or "Upgrading" while it builds) at the
+     * end of a department's summary strip. The strip's headcount already shows the cap.
+     *
+     * @param building the building
+     * @param name     its name in the confirmation, such as "the SET Centre"
+     * @param capNoun  the cap in the confirmation's sentence, such as "headcount cap"
+     * @return the cell
+     */
+    protected Table buildingCell(Building building, String name, String capNoun) {
+        PlayerSnapshot state = session.state();
+        BuildingSchedule.Levels levels = session.catalog().buildings().of(building);
+        int level = state.buildingLevel(building);
+        Table cell = new Table();
+        cell.left();
+        cell.pad(Theme.SPACE_3, Theme.SPACE_4, Theme.SPACE_3, Theme.SPACE_4);
+        cell.defaults().left();
+        cell.add(ui.label("BUILDING", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padBottom(2f).row();
+        cell.add(ui.label("Level " + level + " of " + levels.maxLevel(), Theme.TextStyle.HEADING_SM, Theme.INK))
+            .row();
+        cell.add(ui.label(money(session.catalog().buildings().maintenance(building, level)) + " upkeep / season",
+            Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padBottom(Theme.SPACE_2).row();
+        Integer upgrading = state.getBuildingUpgradeSeasonsRemaining().get(building);
+        if (upgrading != null) {
+            cell.add(ui.badge(Theme.BadgeKind.ACTIVE, "Upgrading \u00b7 " + upgrading
+                + (upgrading == 1 ? " season left" : " seasons left")));
+        } else if (level >= levels.maxLevel()) {
+            cell.add(ui.label("Top level", Theme.TextStyle.CAPTION, Theme.INK_MUTED));
+        } else {
+            cell.add(actionButton("Upgrade \u2014 Level " + (level + 1), Theme.ButtonKind.SECONDARY,
+                () -> confirmUpgrade(building, name, capNoun))).fill(false, false);
+        }
+        return cell;
+    }
+
+    /**
      * Asks to upgrade a building, showing the price and what the next level raises the cap to.
      *
      * @param building the building

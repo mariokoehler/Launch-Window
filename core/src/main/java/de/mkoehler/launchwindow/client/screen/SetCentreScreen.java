@@ -18,6 +18,7 @@ import de.mkoehler.launchwindow.client.view.Department;
 import de.mkoehler.launchwindow.client.view.SetDepartment;
 import de.mkoehler.launchwindow.client.view.SetSkills;
 import de.mkoehler.launchwindow.model.AssignmentState;
+import de.mkoehler.launchwindow.model.Building;
 import de.mkoehler.launchwindow.model.SetSkill;
 import de.mkoehler.launchwindow.model.SetSpecialist;
 import de.mkoehler.launchwindow.model.TrainingKind;
@@ -89,11 +90,10 @@ public final class SetCentreScreen extends ChromeScreen {
             stat.add(ui.label(stats[i][0].toUpperCase(Locale.ROOT), Theme.TextStyle.CAPTION, Theme.INK_MUTED))
                 .padBottom(2f).row();
             stat.add(ui.label(stats[i][1], Theme.TextStyle.HEADING_SM, Theme.INK));
-            strip.add(stat).expandX().fillX().uniformX();
-            if (i < stats.length - 1) {
-                strip.add(new Image(ui.solid(Theme.NAVY_BORDER))).width(Theme.BORDER_THIN).fillY();
-            }
+            strip.add(stat).expandX().fillX().uniformX().top();
+            strip.add(new Image(ui.solid(Theme.NAVY_BORDER))).width(Theme.BORDER_THIN).fillY();
         }
+        strip.add(buildingCell(Building.SET_CENTER, "the SET Centre", "headcount cap")).top();
         return strip;
     }
 
