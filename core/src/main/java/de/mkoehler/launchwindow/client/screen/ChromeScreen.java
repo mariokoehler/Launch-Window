@@ -10,6 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.client.ClientSession;
@@ -18,7 +20,10 @@ import de.mkoehler.launchwindow.client.connect.ServerResult;
 import de.mkoehler.launchwindow.client.ui.Countdown;
 import de.mkoehler.launchwindow.client.ui.Refusals;
 import de.mkoehler.launchwindow.client.ui.Theme;
+import de.mkoehler.launchwindow.client.view.Programs;
 import de.mkoehler.launchwindow.client.view.SetDepartment;
+import de.mkoehler.launchwindow.actions.UpgradeBuildingAction;
+import de.mkoehler.launchwindow.content.BuildingSchedule;
 import de.mkoehler.launchwindow.content.ContentCatalog;
 import de.mkoehler.launchwindow.model.Building;
 import de.mkoehler.launchwindow.model.Personnel;
@@ -135,6 +140,182 @@ abstract class ChromeScreen extends StageScreen {
      */
     protected void goSetCentre() {
         game.setScreen(new SetCentreScreen(game));
+    }
+
+    /**
+     * Goes to Headquarters' landing screen.
+     */
+    protected void goHeadquarters() {
+        game.setScreen(new HeadquartersScreen(game));
+    }
+
+    /**
+     * Builds a button that runs an action when clicked (and isn't disabled).
+     *
+     * @param text   the label
+     * @param kind   the kind of button
+     * @param action the action
+     * @return the button
+     */
+    protected TextButton actionButton(String text, Theme.ButtonKind kind, Runnable action) {
+        return onClick(ui.button(text, kind), action);
+    }
+
+    /**
+     * Makes a button run an action when clicked (and isn't disabled).
+     *
+     * @param button the button
+     * @param action the action
+     * @return the same button
+     */
+    protected static TextButton onClick(TextButton button, Runnable action) {
+        button.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (!button.isDisabled()) {
+                    action.run();
+                }
+            }
+        });
+        return button;
+    }
+
+    /**
+     * Builds a price breakdown ({@code ui-spec.md} component 4): line items, then a total under a
+     * navy rule.
+     *
+     * @param lines the lines
+     * @param total the total
+     * @return the table
+     */
+    protected Table priceBreakdown(List<Programs.PriceLine> lines, long total) {
+        Table table = new Table();
+        table.defaults().growX();
+        for (Programs.PriceLine line : lines) {
+            Table row = new Table();
+            row.add(ui.label(line.label(), Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).expandX().left();
+            row.add(ui.label(line.text() != null ? line.text() : money(line.amount()), Theme.TextStyle.BODY_SM,
+                Theme.INK_MUTED)).right();
+            table.add(row).padBottom(Theme.SPACE_1).row();
+        }
+        table.add(new Image(ui.solid(Theme.NAVY))).height(Theme.BORDER_EMPHASIS).padTop(2f).padBottom(Theme.SPACE_2)
+            .row();
+        Table totalRow = new Table();
+        totalRow.add(ui.label("Total", Theme.TextStyle.BODY_STRONG, Theme.INK)).expandX().left();
+        totalRow.add(ui.label(money(total), Theme.TextStyle.HEADING_SM, Theme.INK)).right();
+        table.add(totalRow);
+        return table;
+    }
+
+    /**
+     * Builds a program's state mark: the gold "Open" badge, a navy "Available" pill, or a muted
+     * "Locked" pill with a lock.
+     *
+     * @param state the state
+     * @return the mark
+     */
+    protected Table programStateMark(Programs.State state) {
+        Table mark = new Table();
+        if (state == Programs.State.OPEN) {
+            mark.add(ui.badge(Theme.BadgeKind.ACTIVE, "Open"));
+            return mark;
+        }
+        boolean locked = state == Programs.State.LOCKED;
+        Color color = locked ? Theme.INK_MUTED : Theme.NAVY;
+        mark.setBackground(ui.rect(new Color(0f, 0f, 0f, 0f), locked ? Theme.NAVY_BORDER : Theme.NAVY,
+            Theme.BORDER_THIN));
+        mark.pad(Theme.SPACE_1, Theme.SPACE_2, Theme.SPACE_1, Theme.SPACE_2);
+        if (locked) {
+            Image lock = new Image(ui.icon("lock"), com.badlogic.gdx.utils.Scaling.fit);
+            lock.setColor(color);
+            mark.add(lock).size(11f).padRight(4f);
+        }
+        mark.add(ui.label(locked ? "Locked" : "Available", Theme.TextStyle.LABEL, color));
+        return mark;
+    }
+
+    /**
+     * Words an amount of money as the mockups do.
+     *
+     * @param amount the amount; negative for a deduction
+     * @return for example "$ 1,345.0" or "\u2212 $ 336.0"
+     */
+    protected static String money(long amount) {
+        return amount < 0 ? String.format(Locale.ROOT, "\u2212 $ %,.1f", (double) -amount)
+            : String.format(Locale.ROOT, "$ %,.1f", (double) amount);
+    }
+
+    /**
+     * Builds a building panel ({@code ui-spec.md} component 7): the level, the building's cap,
+     * its upkeep, and an Upgrade button (or "Upgrading" while it builds) whose confirmation shows
+     * the price and what the next level raises the cap to.
+     *
+     * @param building the building
+     * @param name     the building's name, as on screen
+     * @param capLabel the cap's label, such as "Open programs"
+     * @param capValue the cap's value, such as "2 / 3"
+     * @param capNoun  what the cap is called in a sentence, such as "open-program cap"
+     * @return the panel
+     */
+    protected Table buildingPanel(Building building, String name, String capLabel, String capValue, String capNoun) {
+        PlayerSnapshot state = session.state();
+        BuildingSchedule.Levels levels = session.catalog().buildings().of(building);
+        int level = state.buildingLevel(building);
+        Table panel = ui.card();
+        Table stats = new Table();
+        String[][] values = {{"Level", level + " of " + levels.maxLevel()}, {capLabel, capValue},
+            {"Upkeep / season", money(session.catalog().buildings().maintenance(building, level))}};
+        for (String[] value : values) {
+            Table stat = new Table();
+            stat.left();
+            stat.defaults().left();
+            stat.add(ui.label(value[0].toUpperCase(Locale.ROOT), Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padBottom(2f)
+                .row();
+            stat.add(ui.label(value[1], Theme.TextStyle.HEADING_SM, Theme.INK));
+            stats.add(stat).left().padRight(Theme.SPACE_6);
+        }
+        panel.add(stats).expandX().left();
+        Integer upgrading = state.getBuildingUpgradeSeasonsRemaining().get(building);
+        if (upgrading != null) {
+            panel.add(ui.badge(Theme.BadgeKind.ACTIVE, "Upgrading \u00b7 " + upgrading
+                + (upgrading == 1 ? " season left" : " seasons left"))).right();
+        } else if (level >= levels.maxLevel()) {
+            panel.add(ui.label("Top level", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).right();
+        } else {
+            panel.add(actionButton("Upgrade \u2014 Level " + (level + 1), Theme.ButtonKind.SECONDARY,
+                () -> confirmUpgrade(building, name, capNoun))).right();
+        }
+        return panel;
+    }
+
+    /**
+     * Asks to upgrade a building, showing the price and what the next level raises the cap to.
+     *
+     * @param building the building
+     * @param name     the building's name
+     * @param capNoun  what its cap is called in a sentence
+     */
+    public void confirmUpgrade(Building building, String name, String capNoun) {
+        BuildingSchedule.Levels levels = session.catalog().buildings().of(building);
+        int level = session.state().buildingLevel(building);
+        long cost = levels.upgradeCosts().get(level - 1);
+        int seasons = levels.upgradeSeasons().get(level - 1);
+        String duration = seasons + (seasons == 1 ? " season" : " seasons");
+        Table card = dialogCard("Confirm", "Upgrade " + name + " to Level " + (level + 1) + "?");
+        card.add(ui.paragraph("Raises the " + capNoun + " from " + levels.caps().get(level - 1) + " to "
+            + levels.caps().get(level) + ". Takes " + duration + ", and upgrading is final.", Theme.TextStyle.BODY,
+            Theme.INK_MUTED)).padBottom(Theme.SPACE_4).row();
+        card.add(priceBreakdown(List.of(new Programs.PriceLine("Upgrade cost", cost, null)), cost))
+            .padBottom(Theme.SPACE_4).row();
+        Table buttons = new Table();
+        buttons.add(actionButton("Cancel", Theme.ButtonKind.SECONDARY, this::closeDialog)).padRight(10f);
+        buttons.add(actionButton("Upgrade", Theme.ButtonKind.PRIMARY, () -> submit(new UpgradeBuildingAction(building),
+            result -> {
+                closeDialog();
+                toast("Upgrade started \u2014 " + duration + " left.", Theme.NoticeKind.SUCCESS);
+            })));
+        card.add(buttons).right().fill(false, false);
+        showDialog(card);
     }
 
     @Override
@@ -387,7 +568,7 @@ abstract class ChromeScreen extends StageScreen {
             () -> notBuiltYet("Mission Control"))).expandX();
         footer.add(footerStat("open_programs", state.getOpenedProgramIds().size() + " / "
             + catalog.buildings().capacity(Building.HEADQUARTERS, state.buildingLevel(Building.HEADQUARTERS)),
-            () -> notBuiltYet("Headquarters"))).expandX().right();
+            this::goHeadquarters)).expandX().right();
     }
 
     private static String counts(List<? extends Personnel> roster, ContentCatalog catalog, PlayerSnapshot state,

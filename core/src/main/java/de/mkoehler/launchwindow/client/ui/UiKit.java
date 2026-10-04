@@ -49,6 +49,7 @@ public final class UiKit implements Disposable {
     private final Drawable badgeFill;
     private final FileHandle assets;
     private final Map<String, Texture> icons = new HashMap<>();
+    private final Map<String, Texture> pictures = new HashMap<>();
     private final Map<String, Drawable> rects = new HashMap<>();
     private final Map<Theme.BadgeKind, Drawable> badgeFills = new EnumMap<>(Theme.BadgeKind.class);
     private Slider.SliderStyle sliderStyle;
@@ -99,6 +100,42 @@ public final class UiKit implements Disposable {
     public TextureRegionDrawable icon(String name) {
         Texture texture = icons.computeIfAbsent(name, key -> smoothTexture(assets.child("ui/icons/" + key + ".png")));
         return new TextureRegionDrawable(texture);
+    }
+
+    /**
+     * Returns a picture from {@code assets/ui/}, such as a program's art, loaded once and kept.
+     *
+     * @param path the path under {@code assets/ui/}, such as {@code programs/vostok.jpg}
+     * @return the drawable, or {@code null} if there's no such picture
+     */
+    public TextureRegionDrawable picture(String path) {
+        if (!pictures.containsKey(path)) {
+            FileHandle file = assets.child("ui/" + path);
+            pictures.put(path, file.exists() ? smoothTexture(file) : null);
+        }
+        Texture texture = pictures.get(path);
+        return texture == null ? null : new TextureRegionDrawable(texture);
+    }
+
+    /**
+     * Returns the hover highlight for a round hotspot (a celestial body): the hub's decided look,
+     * white at 18% for both fill and outline, as a circle stretched to the hotspot's ellipse.
+     *
+     * @return the drawable
+     */
+    public Drawable ellipseHighlight() {
+        Color white = new Color(1f, 1f, 1f, 0.18f);
+        return rects.computeIfAbsent("ellipse", key -> shapes.circle(white, white, 2f, 256));
+    }
+
+    /**
+     * Returns a goal badge's patch ({@link Theme.Shapes#goalPatch}), built once per look.
+     *
+     * @param achieved whether the goal is achieved
+     * @return the drawable
+     */
+    public Drawable goalPatch(boolean achieved) {
+        return rects.computeIfAbsent("goal/" + achieved, key -> shapes.goalPatch(achieved, 128));
     }
 
     /**
@@ -418,6 +455,7 @@ public final class UiKit implements Disposable {
         historyNoteIcon.dispose();
         archetypeArt.values().forEach(Texture::dispose);
         icons.values().forEach(Texture::dispose);
+        pictures.values().stream().filter(java.util.Objects::nonNull).forEach(Texture::dispose);
     }
 
     private static Texture smoothTexture(FileHandle file) {

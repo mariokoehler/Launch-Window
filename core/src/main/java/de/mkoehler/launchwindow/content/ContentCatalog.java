@@ -172,6 +172,33 @@ public final class ContentCatalog {
     }
 
     /**
+     * Returns every program category, in the pack's order.
+     *
+     * @return the categories, unmodifiable
+     */
+    public java.util.Collection<ProgramCategory> categories() {
+        return java.util.Collections.unmodifiableCollection(categoriesById.values());
+    }
+
+    /**
+     * Returns every program, in the pack's order.
+     *
+     * @return the programs, unmodifiable
+     */
+    public java.util.Collection<Program> programs() {
+        return java.util.Collections.unmodifiableCollection(programsById.values());
+    }
+
+    /**
+     * Returns every mission configuration, in the pack's order.
+     *
+     * @return the configurations, unmodifiable
+     */
+    public java.util.Collection<MissionConfiguration> missionConfigurations() {
+        return java.util.Collections.unmodifiableCollection(missionConfigurationsById.values());
+    }
+
+    /**
      * Returns every mission component, in the pack's order.
      *
      * @return the components, unmodifiable

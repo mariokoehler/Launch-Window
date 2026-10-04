@@ -31,7 +31,16 @@ public final class Refusals {
         Map.entry("UNKNOWN_SKILL", "That isn't one of their skills."),
         Map.entry("UNSUPPORTED_KIND", "That kind of training isn't available here."),
         Map.entry("INVALID_PERCENT", "Pick a change between −50 % and +50 %."),
-        Map.entry("EMPTY_DEPARTMENT", "There's nobody in the department yet."));
+        Map.entry("EMPTY_DEPARTMENT", "There's nobody in the department yet."),
+        Map.entry("HEADQUARTERS_FULL", "Headquarters can't run more programs. Upgrade it or close one."),
+        Map.entry("WRONG_AGENCY", "That belongs to another agency."),
+        Map.entry("GOALS_NOT_MET", "Achieve the required goals first."),
+        Map.entry("ALREADY_OPEN", "Already open."),
+        Map.entry("NOT_OPEN", "Not open."),
+        Map.entry("UNKNOWN_PROGRAM", "That program doesn't exist in this game."),
+        Map.entry("MISSIONS_IN_FLIGHT", "Can't close while a mission uses it."),
+        Map.entry("MAX_LEVEL", "Already at the top level."),
+        Map.entry("ALREADY_UPGRADING", "Already upgrading."));
 
     /**
      * Not instantiable; this class only holds the wording.

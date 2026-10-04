@@ -213,6 +213,15 @@ shadow questions below are both closed now.)
 date and countdown. **Pitfall:** KryoNet's `Client.stop()` can block up to about 11 s
 on Windows after a finished exchange. That was the "weird timeouts" with quick
 connect/close cycles. Never close a client on a thread a result waits on.
+**Headquarters built in libGDX (2026-10-04),** as far as opening a program, from the
+Headquarters mockup: landing with the building panel and upgrade, Manage open
+programs, Select celestial body, a body's programs, and Program details with Open
+and Close. The user confirmed the program, category and solar-system art is their
+own; `assets-raw/make_content_art.py` converts it. G9 is partly done (categories
+default to Earth). See `ui-spec.md` §4.6's "Implemented" note for the unconfirmed
+choices (no Closed state, no First ribbon). **Next:** the VAB (its mockup exists, ask
+the user for the link if needed) or the hub.
+
 **SET Centre built in libGDX (2026-10-04),** from the SET Centre mockup and the old
 Personnel Recruitment mockup: overview with Training, Confirm and Manage department
 dialogs, Payload R&D, and Hire, on a shared `ChromeScreen`. Also done: G5 candidate

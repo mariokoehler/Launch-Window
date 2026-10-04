@@ -123,6 +123,20 @@ public final class HistoryNote extends Image {
         return super.remove();
     }
 
+    /**
+     * Removes the card when the icon leaves the stage another way, such as a rebuild's
+     * {@code clearChildren()}, which detaches children without calling {@link #remove()}.
+     *
+     * @param stage the new stage, or null when detached
+     */
+    @Override
+    protected void setStage(Stage stage) {
+        if (stage == null) {
+            hideCard();
+        }
+        super.setStage(stage);
+    }
+
     private boolean isOver() {
         Stage stage = getStage();
         if (stage == null) {

@@ -68,7 +68,7 @@ public final class AgencyScreen extends StageScreen {
                 + "may be off until the client can download the game's own copy.", Theme.TextStyle.CAPTION,
                 Theme.DANGER)).row();
         }
-        card.add(ui.paragraph("The Space Complex isn't built yet. This page stands in for it; the SET Centre is built.",
+        card.add(ui.paragraph("The Space Complex isn't built yet. This page stands in for it; Headquarters and the SET Centre are built.",
             Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padBottom(Theme.SPACE_4).row();
         TextButton setCentre = ui.button("SET Centre", Theme.ButtonKind.PRIMARY);
         setCentre.addListener(new ChangeListener() {
@@ -77,7 +77,15 @@ public final class AgencyScreen extends StageScreen {
                 game.setScreen(new SetCentreScreen(game));
             }
         });
+        TextButton headquarters = ui.button("Headquarters", Theme.ButtonKind.PRIMARY);
+        headquarters.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new HeadquartersScreen(game));
+            }
+        });
         Table buttons = new Table();
+        buttons.add(headquarters).padRight(Theme.SPACE_2);
         buttons.add(setCentre).padRight(Theme.SPACE_2);
         buttons.add(logOut);
         card.add(buttons).left().expand(false, false).fill(false, false).padBottom(0f);

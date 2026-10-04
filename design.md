@@ -5677,6 +5677,26 @@ here.
       filter chips, the segmented control, the reliability bar, the skill bar, the
       R&D slot box, and the white on-page secondary button. They should be promoted
       to the design system and the UI Asset Sheet.
+  - **Slice: Headquarters, as far as opening a program — done (2026-10-04).** The
+    landing screen with the building panel and its upgrade flow, Manage open programs,
+    Select celestial body, a body's categories and programs, and Program details with
+    Open and Close. Details and unconfirmed choices are in `ui-spec.md` §4.6's
+    "Implemented" note.
+    - **View logic:** `client.view.Programs` (states, the price breakdown, missions in
+      flight, next goal, counts) and `BodyMap` (body positions on the art).
+      `ProgramsTest` builds its own small catalog, because the real pack has no locked
+      program, no discount that can apply, and no body besides Earth. It checks that the
+      price lines always add up to `ProgramOpening.openingPrice`, including stacked
+      discounts capped at 100% and one from another agency's program.
+    - **Content:** `ProgramCategory.body` (G9, defaulting to Earth), and `ContentCatalog`
+      gained `categories()`, `programs()` and `missionConfigurations()`.
+    - **Shared pieces in `ChromeScreen`:** the building panel (component 7) with its
+      upgrade confirmation, the price breakdown (component 4), the program state mark,
+      and button helpers. `Theme.Shapes.goalPatch` draws the goal badge (component 8):
+      a solid green ring when achieved, a dashed navy ring when not.
+    - **Assets:** `assets-raw/make_content_art.py` converts the user's own program,
+      category and solar-system art into `assets/ui/` (programs by id, categories by id
+      and agency). Add a line to its maps when the pack gains a program or category.
 - **M6 — Deployment.** jpackage client zip, Docker server image,
   tag-driven GitHub Actions release, reusing the sibling projects' own
   working templates (§3.3/§3.9). Comes after M5's playtest validates the

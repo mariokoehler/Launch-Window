@@ -22,6 +22,13 @@ import de.mkoehler.launchwindow.client.screen.AgencyScreen;
 import de.mkoehler.launchwindow.client.screen.ConnectScreen;
 import de.mkoehler.launchwindow.client.screen.JoinScreen;
 import de.mkoehler.launchwindow.client.ui.Theme;
+import de.mkoehler.launchwindow.client.screen.BodyProgramsScreen;
+import de.mkoehler.launchwindow.client.screen.HeadquartersScreen;
+import de.mkoehler.launchwindow.client.screen.OpenProgramsScreen;
+import de.mkoehler.launchwindow.client.screen.ProgramDetailsScreen;
+import de.mkoehler.launchwindow.client.screen.SelectBodyScreen;
+import de.mkoehler.launchwindow.client.view.Programs;
+import de.mkoehler.launchwindow.content.CelestialBody;
 import de.mkoehler.launchwindow.client.screen.HireScreen;
 import de.mkoehler.launchwindow.client.screen.PayloadRndScreen;
 import de.mkoehler.launchwindow.client.screen.SetCentreScreen;
@@ -196,6 +203,27 @@ public final class ScreenSnapshot {
         fresh.setDirectorName("A. Reyes");
         game.setSession(ClientSession.start(CREDENTIALS, fresh, new GameInfo(info, System.currentTimeMillis()),
             ScreenSnapshot.class.getClassLoader()));
+        game.setSession(ClientSession.start(CREDENTIALS, headquartersState(), new GameInfo(info,
+            System.currentTimeMillis()), ScreenSnapshot.class.getClassLoader()));
+        write(folder, "hq-overview.png", new HeadquartersScreen(game), null);
+        write(folder, "hq-upgrade.png", new HeadquartersScreen(game), screen -> screen.confirmUpgrade(
+            Building.HEADQUARTERS, "Headquarters", "open-program cap"));
+        write(folder, "hq-open-programs.png", new OpenProgramsScreen(game), null);
+        write(folder, "hq-select-body.png", new SelectBodyScreen(game), null);
+        write(folder, "hq-body-earth.png", new BodyProgramsScreen(game, CelestialBody.EARTH), null);
+        write(folder, "hq-body-earth-capsules.png", new BodyProgramsScreen(game, CelestialBody.EARTH),
+            screen -> screen.select("one-crew-capsules"));
+        write(folder, "hq-details-vostok.png", new ProgramDetailsScreen(game, "vostok", CelestialBody.EARTH), null);
+        write(folder, "hq-details-vostok-open.png", new ProgramDetailsScreen(game, "vostok", CelestialBody.EARTH),
+            screen -> screen.tryOpen(game.session().catalog().program("vostok").orElseThrow(),
+                Programs.price(game.session().catalog().program("vostok").orElseThrow(), game.session().state(),
+                    game.session().catalog())));
+        write(folder, "hq-details-sputnik-1.png", new ProgramDetailsScreen(game, "sputnik-1", null), null);
+        write(folder, "hq-details-sputnik-2.png", new ProgramDetailsScreen(game, "sputnik-2", CelestialBody.EARTH), null);
+
+        game.setSession(ClientSession.start(CREDENTIALS, fresh, new GameInfo(info, System.currentTimeMillis()),
+            ScreenSnapshot.class.getClassLoader()));
+        write(folder, "hq-open-programs-empty.png", new OpenProgramsScreen(game), null);
         write(folder, "set-empty.png", new SetCentreScreen(game), null);
         write(folder, "payload-rnd-empty.png", new PayloadRndScreen(game), null);
     }
@@ -248,6 +276,23 @@ public final class ScreenSnapshot {
             specialist("c3", "H. Bergman", 41, 58, 61, 67, 39, 52, 60, 35),
             specialist("c4", "S. Delacroix", 27, 75, 38.5, 44, 48, 28, 33, 41),
             specialist("c5", "K. Osei", 33, 62, 55.5, 53, 46, 47, 56, 62)));
+        return state;
+    }
+
+    /**
+     * A Soviet agency with Sputnik 1 and Korabl-Sputnik 2 open (its Vostok capsule owned), Sputnik 2's
+     * satellite kept from an earlier opening, and the first satellite goal achieved.
+     */
+    private static PlayerSnapshot headquartersState() {
+        PlayerSnapshot state = new PlayerSnapshot("Baltic Star Agency", Archetype.SOVIET, 24_355, 850, 3_000, 13);
+        state.setDirectorName("A. Reyes");
+        state.getOpenedProgramIds().addAll(List.of("sputnik-1", "korabl-sputnik-2"));
+        state.getMissionComponents().put("sputnik-1-satellite", new OwnedMissionComponent(58.4, 3.0));
+        state.getMissionComponents().put("vostok-capsule", new OwnedMissionComponent(47.2, 3.0));
+        OwnedMissionComponent kept = new OwnedMissionComponent(22.0, 3.0);
+        kept.setActive(false);
+        state.getMissionComponents().put("sputnik-2-satellite", kept);
+        state.getAchievedGoals().put("earth-orbit-satellite", 4);
         return state;
     }
 

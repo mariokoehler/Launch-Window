@@ -444,6 +444,28 @@ does (`baspm.md` §10.11), plus the chosen rocket per launch:
 **States:** the launch cap is reached (random event); a component is unavailable
 this window (random event); short of staff; short of funds.
 
+**Implemented in libGDX (2026-10-04), §4.6 to §4.6.4,** from the Headquarters mockup
+(`client.screen.HeadquartersScreen`, `OpenProgramsScreen`, `SelectBodyScreen`,
+`BodyProgramsScreen`, `ProgramDetailsScreen`). Choices made while building them,
+**unconfirmed**:
+- **No "Closed · components kept" state.** The state can't tell a closed program from
+  one whose components are owned through another program (Vostok's capsule through
+  Korabl-Sputnik 2), so a closed program reads Available. Its price breakdown's
+  "already owned · Free" lines say what the label said.
+- **No "First" ribbon on goal badges,** and next-goal rewards read "Up to N prestige":
+  who reached a goal first is the race's standings (G3).
+- **Program cards show the full price to open** (opening cost after discounts plus
+  components still to create), from the same rule the server charges, rather than the
+  bare opening cost.
+- **Program and goal names come from their ids** ("Korabl Sputnik 2") until the pack
+  has display text (G4); category names are the pack's own.
+- **Inert bodies' labels** read "No programs for / your agency" on two lines, so
+  neighbouring chips don't overlap.
+- **The building panel** (component 7) is built as a reusable piece and used here.
+  The SET Centre landing could show it too (§2 says all five capped buildings), but
+  its mockup doesn't, so it isn't added there yet.
+- **Mission configurations** shows an "isn't built yet" toast until §4.6.5 exists.
+
 ### 4.7 Mission Control: controllers and missions
 **Purpose:** the flight-controller department, and watching missions. Controller
 cap 5/13/22/35. **Ref:** `mission_control_*.png`,
@@ -621,6 +643,7 @@ for the mockups.
 | MAX_LEVEL / ALREADY_UPGRADING | Already at the top level. / Already upgrading. |
 | NOT_IN_DEBT / EXCEEDS_CAP / INSUFFICIENT_PRESTIGE | Only possible while in debt. / More than the conversion allows. / Not enough prestige. |
 | SLOT_CLAIM_REQUIRED | (Client goes to §4.2.) |
+| Building upgrade: MAX_LEVEL / ALREADY_UPGRADING; program opening also UNKNOWN_PROGRAM | Already at the top level. / Already upgrading. / That program doesn't exist in this game. |
 | Manage department (`AdjustSalariesAction`, added 2026-10-04): INVALID_PERCENT / EMPTY_DEPARTMENT | Pick a change between −50 % and +50 %. / There's nobody in the department yet. |
 | Join game (`ClaimSlotResponse.Reason`, added 2026-10-04): AGENCY_NAME_TAKEN / DIRECTOR_NAME_TAKEN / MISSING_FIELDS / ALREADY_CLAIMED / NOT_AUTHENTICATED / SERVER_ERROR | Already taken by another agency. (under the field) / the same / Required. / (client logs in again and opens the agency) / (danger notice with the server's words) |
 
@@ -675,7 +698,10 @@ current state alone. Each is an M5 task.
   morale in it by +p for a raise or −3p for a cut, clamped to 0–100
   (`baspm.md` §9.8). Morale feeds hiring quality and resignations, so this is a
   real lever, not a cosmetic one.
-- **G9. Celestial bodies (content).** Program categories need a body field
+- **G9. Celestial bodies (content).** *(Partly done 2026-10-04: `ProgramCategory.body`, a
+  `CelestialBody`, optional in packs and Earth when absent, so the early-era pack and its
+  hash are unchanged. The converter needs a body mapping once non-Earth categories
+  exist.)* Program categories need a body field
   (Earth, Moon, Sun, Mercury, Venus, Mars, Jupiter, Saturn) for the body picker.
   The available and open counts per body are then derived in the client.
 

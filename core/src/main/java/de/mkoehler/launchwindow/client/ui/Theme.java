@@ -742,6 +742,48 @@ public final class Theme {
         }
 
         /**
+         * A goal badge's patch ({@code ui-spec.md} component 8, as the Headquarters mockup first
+         * built it): achieved is a solid {@link #SUCCESS} ring over a pale green fill; not yet is
+         * a dashed {@link #NAVY} ring on white. The {@code logo.svg} patch frame the spec mentions
+         * is a later option.
+         *
+         * @param achieved whether the goal is achieved
+         * @param diameter the patch's diameter in pixels
+         * @return the drawable; its texture is owned by this object
+         */
+        public Drawable goalPatch(boolean achieved, int diameter) {
+            if (achieved) {
+                return circle(new Color(SURFACE_CARD).lerp(SUCCESS, 0.1f), SUCCESS, 3f, diameter);
+            }
+            int size = Math.max(1, diameter);
+            Pixmap pixmap = new Pixmap(size, size, Pixmap.Format.RGBA8888);
+            double r = size / 2.0;
+            double ring = BORDER_EMPHASIS;
+            int fill = Color.rgba8888(SURFACE_CARD);
+            int border = Color.rgba8888(NAVY);
+            int dashes = 16;
+            for (int y = 0; y < size; y++) {
+                for (int x = 0; x < size; x++) {
+                    double px = x + 0.5 - r;
+                    double py = y + 0.5 - r;
+                    double distance = Math.hypot(px, py);
+                    double outer = coverage(distance - r);
+                    double inner = coverage(distance - (r - ring));
+                    double angle = Math.atan2(py, px) + Math.PI;
+                    boolean dashOn = ((int) (angle / (2 * Math.PI) * dashes * 2)) % 2 == 0;
+                    int out = over(0, dashOn ? border : fill, Math.max(0.0, outer - inner));
+                    out = over(out, fill, inner);
+                    pixmap.drawPixel(x, y, out);
+                }
+            }
+            Texture texture = new Texture(pixmap);
+            texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+            pixmap.dispose();
+            textures.add(texture);
+            return new TextureRegionDrawable(new TextureRegion(texture));
+        }
+
+        /**
          * A short repeating dash unit (8 px on, 4 px off) tiled to fill
          * whatever width it's stretched to &mdash; the connector between two
          * {@link #progressDot}s.
