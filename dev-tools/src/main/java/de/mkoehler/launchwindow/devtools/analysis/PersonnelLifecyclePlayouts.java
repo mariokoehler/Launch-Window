@@ -1,5 +1,8 @@
 package de.mkoehler.launchwindow.devtools.analysis;
 
+import java.util.Iterator;
+import de.mkoehler.launchwindow.rules.LaunchRequest;
+import de.mkoehler.launchwindow.content.StaffingSlot;
 import de.mkoehler.launchwindow.content.BudgetSchedule;
 import de.mkoehler.launchwindow.content.BuildingSchedule;
 import de.mkoehler.launchwindow.content.ContentCatalog;
@@ -335,41 +338,44 @@ public final class PersonnelLifecyclePlayouts {
 
         MissionStep sputnikLaunchStep = new MissionStep("launch",
             List.of(new MissionStep.ComponentInvolvement("satellite-sputnik", 100)),
-            List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 60),
-                new MissionStep.ControllerInvolvement(MissionControlSkill.TRAJECTORY_AND_GNC, 40)),
+            List.of(new MissionStep.ControllerInvolvement(0, 60),
+                new MissionStep.ControllerInvolvement(1, 40)),
             List.of(), false, 100, 100, List.of("satellite-in-orbit"));
         MissionConfiguration sputnikLaunchConfiguration = new MissionConfiguration("sputnik-launch-std",
-            "sputnik-program", List.of(new MissionSeason(List.of(sputnikLaunchStep))), 0, 1, 488, 250);
+            "sputnik-program", List.of(new MissionSeason(List.of(sputnikLaunchStep))), 0, 2, 488, 250);
 
         MissionStep explorerLaunchStep = new MissionStep("launch",
             List.of(new MissionStep.ComponentInvolvement("satellite-explorer", 100)),
-            List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 50),
-                new MissionStep.ControllerInvolvement(MissionControlSkill.MISSION_OPERATIONS, 50)),
+            List.of(new MissionStep.ControllerInvolvement(0, 50),
+                new MissionStep.ControllerInvolvement(4, 50)),
             List.of(), false, 40, 80, List.of());
         MissionStep explorerOrbitOpsStep = new MissionStep("orbit-ops",
             List.of(new MissionStep.ComponentInvolvement("satellite-explorer", 100)),
-            List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.MISSION_OPERATIONS, 100)),
+            List.of(new MissionStep.ControllerInvolvement(4, 100)),
             List.of(), false, 60, 60, List.of());
         MissionConfiguration explorerMissionConfiguration = new MissionConfiguration("explorer-mission-std",
             "explorer-program",
             List.of(new MissionSeason(List.of(explorerLaunchStep)), new MissionSeason(List.of(explorerOrbitOpsStep))),
-            0, 1, 585, 500);
+            0, 5, 585, 500);
 
         MissionStep mercuryLaunchStep = new MissionStep("launch",
             List.of(new MissionStep.ComponentInvolvement("rocket-redstone", 60),
                 new MissionStep.ComponentInvolvement("capsule-mercury", 40)),
-            List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 50),
-                new MissionStep.ControllerInvolvement(MissionControlSkill.TRAJECTORY_AND_GNC, 50)),
-            List.of(new MissionStep.CrewInvolvement(AstronautSkill.PILOTING, 70),
-                new MissionStep.CrewInvolvement(AstronautSkill.FITNESS, 30)), true, 50, 200, List.of("crewed-training"));
+            List.of(new MissionStep.ControllerInvolvement(0, 50),
+                new MissionStep.ControllerInvolvement(1, 50)),
+            List.of(new MissionStep.CrewInvolvement(0, AstronautSkill.PILOTING, 35),
+                new MissionStep.CrewInvolvement(0, AstronautSkill.FITNESS, 15),
+                new MissionStep.CrewInvolvement(1, AstronautSkill.PILOTING, 35),
+                new MissionStep.CrewInvolvement(1, AstronautSkill.FITNESS, 15)), true, 50, 200, List.of("crewed-training"));
         MissionStep mercuryOrbitOpsStep = new MissionStep("orbit-ops",
             List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
-            List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.SPACECRAFT_SYSTEMS, 100)),
-            List.of(new MissionStep.CrewInvolvement(AstronautSkill.SCIENCE, 100)), true, 50, 150, List.of("crewed-flight"));
+            List.of(new MissionStep.ControllerInvolvement(2, 100)),
+            List.of(new MissionStep.CrewInvolvement(0, AstronautSkill.SCIENCE, 50),
+                new MissionStep.CrewInvolvement(1, AstronautSkill.SCIENCE, 50)), true, 50, 150, List.of("crewed-flight"));
         MissionConfiguration mercuryMissionConfiguration = new MissionConfiguration("mercury-mission-std",
             "mercury-program",
             List.of(new MissionSeason(List.of(mercuryLaunchStep)), new MissionSeason(List.of(mercuryOrbitOpsStep))),
-            2, 1, 2_243, 1_000, List.of(new MissionConfiguration.GoalModifier("satellite-in-orbit", "capsule-mercury", 5)),
+            2, 3, 2_243, 1_000, List.of(new MissionConfiguration.GoalModifier("satellite-in-orbit", "capsule-mercury", 5)),
             List.of());
 
         return new ContentCatalog(List.of(category), List.of(sputnikProgram, explorerProgram, mercuryProgram),
@@ -794,10 +800,8 @@ public final class PersonnelLifecyclePlayouts {
      * The bot's stand-in for a journaled "launch mission" player action:
      * with probability {@link #LAUNCH_MISSION_CHANCE_PER_SEASON}, picks one
      * random mission configuration whose own program is currently open,
-     * and attempts to launch it with exactly
-     * {@link MissionConfiguration#requiredAstronautCount()}/
-     * {@link MissionConfiguration#requiredMissionControlOfficerCount()}
-     * randomly-picked currently idle astronauts/Mission Control officers.
+     * and attempts to launch it with one randomly-picked currently idle
+     * person of the right type in each staffing slot its steps use.
      * A no-op (not an error) if no program is open yet, not enough idle
      * personnel exist to meet either exact count, the player's funds are
      * below the picked configuration's own {@link MissionConfiguration#cost()}
@@ -828,8 +832,8 @@ public final class PersonnelLifecyclePlayouts {
         String configurationId = candidateConfigurationIds.get(random.nextInt(candidateConfigurationIds.size()));
         MissionConfiguration configuration = CATALOG.missionConfiguration(configurationId).orElseThrow();
 
-        List<String> astronautIds =
-            pickExactlyIdleIds(snapshot.getAstronauts(), configuration.requiredAstronautCount(), random);
+        List<String> astronautIds = pickExactlyIdleIds(snapshot.getAstronauts(),
+            configuration.requiredAstronautCount() + configuration.requiredCapcomCount(), random);
         if (astronautIds == null) {
             return 0;
         }
@@ -839,8 +843,22 @@ public final class PersonnelLifecyclePlayouts {
             return 0;
         }
 
-        MissionLaunchOutcome outcome =
-            MissionLaunch.launch(snapshot, configurationId, astronautIds, controllerIds, CATALOG);
+        // One picked person per used slot, in slot order; an unused slot stays empty.
+        Iterator<String> astronauts = astronautIds.iterator();
+        Iterator<String> controllers = controllerIds.iterator();
+        List<String> crewSlotIds = new ArrayList<>();
+        for (int slot = 0; slot < configuration.crewSlots().size(); slot++) {
+            crewSlotIds.add(configuration.usedCrewSlots().contains(slot) ? astronauts.next() : null);
+        }
+        List<String> controlSlotIds = new ArrayList<>();
+        for (int slot = 0; slot < configuration.controlSlots().size(); slot++) {
+            boolean astronautSlot = configuration.controlSlots().get(slot).kind() == StaffingSlot.Kind.ASTRONAUT;
+            controlSlotIds.add(!configuration.usedControlSlots().contains(slot) ? null
+                : astronautSlot ? astronauts.next() : controllers.next());
+        }
+
+        MissionLaunchOutcome outcome = MissionLaunch.launch(snapshot,
+            new LaunchRequest(configurationId, crewSlotIds, controlSlotIds, List.of()), CATALOG);
         return outcome == MissionLaunchOutcome.LAUNCHED ? 1 : 0;
     }
 
@@ -1734,13 +1752,16 @@ public final class PersonnelLifecyclePlayouts {
 
         Set<String> claimedPersonnelIds = new HashSet<>();
         for (InProgressMission mission : snapshot.getInProgressMissions().values()) {
-            checkMissionSideGroup(mission.getId(), mission.getAssignedAstronautIds(), snapshot.getAstronauts(),
+            // Ids are unique across rosters, so each slot holder belongs to exactly one roster.
+            checkMissionSideGroup(mission.getId(), mission.crewIds(), snapshot.getAstronauts(), claimedPersonnelIds);
+            List<String> groundAstronauts = new ArrayList<>();
+            List<String> groundControllers = new ArrayList<>();
+            for (String id : mission.groundIds()) {
+                (findAstronautById(snapshot, id) != null ? groundAstronauts : groundControllers).add(id);
+            }
+            checkMissionSideGroup(mission.getId(), groundAstronauts, snapshot.getAstronauts(), claimedPersonnelIds);
+            checkMissionSideGroup(mission.getId(), groundControllers, snapshot.getMissionControlOfficers(),
                 claimedPersonnelIds);
-            // CAPCOM astronauts are ASSIGNED to the mission too, and may not double as crew.
-            checkMissionSideGroup(mission.getId(), mission.getCapcomAstronautIds(), snapshot.getAstronauts(),
-                claimedPersonnelIds);
-            checkMissionSideGroup(mission.getId(), mission.getAssignedMissionControlOfficerIds(),
-                snapshot.getMissionControlOfficers(), claimedPersonnelIds);
 
             MissionConfiguration configuration =
                 CATALOG.missionConfiguration(mission.getMissionConfigurationId()).orElse(null);
@@ -1752,29 +1773,64 @@ public final class PersonnelLifecyclePlayouts {
                 throw new IllegalStateException(
                     "Mission " + mission.getId() + " season index out of range: " + mission.getCurrentSeasonIndex());
             }
-            if (mission.getAssignedAstronautIds().size() != configuration.requiredAstronautCount()) {
-                throw new IllegalStateException("Mission " + mission.getId() + " assigned astronaut count "
-                    + mission.getAssignedAstronautIds().size() + " does not match its own configuration's required "
-                    + configuration.requiredAstronautCount());
-            }
-            if (mission.getCapcomAstronautIds().size() != configuration.requiredCapcomCount()) {
-                throw new IllegalStateException("Mission " + mission.getId() + " has "
-                    + mission.getCapcomAstronautIds().size() + " CAPCOM, its configuration requires "
-                    + configuration.requiredCapcomCount());
-            }
+            checkSlotFilling(snapshot, mission, configuration);
             if (mission.getRocketIds().size() != configuration.launches().size()) {
                 throw new IllegalStateException("Mission " + mission.getId() + " flies " + mission.getRocketIds().size()
                     + " rocket(s) for " + configuration.launches().size() + " launch(es)");
             }
-            if (mission.getAssignedMissionControlOfficerIds().size() != configuration
-                    .requiredMissionControlOfficerCount()) {
-                throw new IllegalStateException("Mission " + mission.getId()
-                    + " assigned Mission Control officer count "
-                    + mission.getAssignedMissionControlOfficerIds().size()
-                    + " does not match its own configuration's required "
-                    + configuration.requiredMissionControlOfficerCount());
+        }
+    }
+
+    /**
+     * Checks a mission's staffing slot by slot, re-derived from the configuration's
+     * steps rather than trusting {@link MissionLaunch}: a slot some step uses holds
+     * exactly one person of the slot's type, and a slot no step uses holds nobody.
+     *
+     * @param snapshot      the player
+     * @param mission       the mission
+     * @param configuration its configuration
+     * @throws IllegalStateException if a slot is filled wrongly
+     */
+    private static void checkSlotFilling(PlayerSnapshot snapshot, InProgressMission mission,
+            MissionConfiguration configuration) {
+        Set<Integer> usedCrew = new HashSet<>();
+        Set<Integer> usedControl = new HashSet<>();
+        // The crew stays aboard for the whole mission; a control slot is held only while the current or a
+        // later season still uses it.
+        for (int season = 0; season < configuration.seasons().size(); season++) {
+            for (MissionStep step : configuration.seasons().get(season).steps()) {
+                step.crewInvolvements().forEach(involvement -> usedCrew.add(involvement.slot()));
+                if (season >= mission.getCurrentSeasonIndex()) {
+                    step.controllerInvolvements().forEach(involvement -> usedControl.add(involvement.slot()));
+                }
             }
         }
+        for (int slot = 0; slot < Math.max(configuration.crewSlots().size(), mission.getCrewSlotIds().size());
+                slot++) {
+            String holder = slot < mission.getCrewSlotIds().size() ? mission.getCrewSlotIds().get(slot) : null;
+            if ((holder != null) != usedCrew.contains(slot)
+                    || (holder != null && findAstronautById(snapshot, holder) == null)) {
+                throw new IllegalStateException("Mission " + mission.getId() + " crew slot " + slot + " holds "
+                    + holder);
+            }
+        }
+        for (int slot = 0; slot < Math.max(configuration.controlSlots().size(), mission.getControlSlotIds().size());
+                slot++) {
+            String holder = slot < mission.getControlSlotIds().size() ? mission.getControlSlotIds().get(slot) : null;
+            boolean wantsAstronaut = slot < configuration.controlSlots().size()
+                && configuration.controlSlots().get(slot).kind() == StaffingSlot.Kind.ASTRONAUT;
+            boolean rightType = holder == null || (wantsAstronaut
+                ? findAstronautById(snapshot, holder) != null
+                : snapshot.getMissionControlOfficers().stream().anyMatch(o -> o.getId().equals(holder)));
+            if ((holder != null) != usedControl.contains(slot) || !rightType) {
+                throw new IllegalStateException("Mission " + mission.getId() + " control slot " + slot + " holds "
+                    + holder);
+            }
+        }
+    }
+
+    private static Astronaut findAstronautById(PlayerSnapshot snapshot, String id) {
+        return snapshot.getAstronauts().stream().filter(a -> a.getId().equals(id)).findFirst().orElse(null);
     }
 
     /**

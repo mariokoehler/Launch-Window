@@ -126,6 +126,25 @@ same session it comes up**, the same standing-note-to-self habit as
   proposed now has a confirmed place to live; still not designed in any
   detail (content model, how it surfaces the §1.1 beats scattered through
   this section), just no longer an "if."
+- **History notes: the in-the-moment form, decided (user, 2026-10-04).**
+  A small icon of its own sits next to a label, field, or value. On
+  mouse-over it shows two to four sentences of real history or engineering;
+  a click pins the card. It's always optional, and it never carries rules
+  help, so the icon means one thing only: "there's a real story here". The
+  join screen has the first one on purpose, so players learn the icon there
+  (`ui-spec.md` component 15). The glyph and card style are proposals for
+  Claude Design (§3.12). The user expects many more of these to turn up as
+  the work goes on: add each one where it comes up.
+  - **First note: Director vs. Administrator vs. Chief Designer.** Launch
+    Window gives both agencies a "Director" (§3.8). The real jobs differed
+    sharply. NASA's Administrator was a public appointee, confirmed by the
+    Senate and questioned by Congress. Sergei Korolev, who drove the Soviet
+    program, was kept secret: the world knew him only as "the Chief Designer"
+    until his obituary in 1966. The secrecy was partly about shielding him
+    from foreign intelligence, and it also meant the Soviet successes were
+    credited to the state, not to a person. That contrast is a good way into
+    how the two programs were run (an open, budget-debated civilian agency
+    vs. rival design bureaus under military and Party control).
 - **Real images:** wanted, per the user. **Flagging a licensing
   consideration proactively** (unprompted, per this project's existing
   security/legal-flagging convention): NASA-produced photos/footage are
@@ -1198,7 +1217,9 @@ proceeds:
     produces once launched — `id` (a fresh instance id, since the same
     configuration can run more than once), `missionConfigurationId`,
     `currentSeasonIndex` (0-based, into `seasons()`), and the two assigned-
-    personnel id lists (`assignedAstronautIds`/`assignedMissionControlOfficerIds`).
+    personnel id lists (`assignedAstronautIds`/`assignedMissionControlOfficerIds`;
+    **Superseded 2026-10-03 by BASPM staffing slots (§5 M5, "Slot staffing").** They are now
+    the slot-aligned `crewSlotIds`/`controlSlotIds`).
     `PlayerSnapshot` gains `inProgressMissions` (keyed by instance id, a
     `LinkedHashMap` for reproducible iteration order against the shared
     random source — same reasoning as `ContentCatalog.indexById`) and
@@ -1258,7 +1279,8 @@ proceeds:
       exist) by involvement percentage, exactly as `MissionStepResolution`
       expects. **Decided (user, 2026-10-02): the crew/controller
       contribution for a given skill is the *average* skill value across
-      every assigned crew/controller**, not a sum — a sum would push the
+      every assigned crew/controller** (**Superseded 2026-10-03 by BASPM staffing slots (§5 M5, "Slot staffing").** Each involvement now reads the one person in
+      its slot), not a sum — a sum would push the
       weighted-average blend's inputs past the 0-100 scale §2.5(e)'s own
       fix depends on, rewarding crew size rather than crew quality; average
       keeps both contributions on the same 0-100 scale regardless of how
@@ -1426,7 +1448,8 @@ proceeds:
       reliability changes (components in first-involved-this-season
       order), then skill growth (astronauts in `assignedAstronautIds`
       order, then controllers in `assignedMissionControlOfficerIds`
-      order).
+      order). **Superseded 2026-10-03 by BASPM staffing slots (§5 M5, "Slot staffing").** Growth now runs over the crew in slot
+      order, then each control slot an executed step used, in slot order.
     - **Harness-wired the same day:** since
       `PersonnelLifecyclePlayouts` already calls
       `MissionProgress.advanceSeason` (§3.10's "mission simulation wired
@@ -2978,10 +3001,12 @@ so directly reusing its actual shape (not just its idea) carries none of
 - **Account fields, deliberately minimal:** a server-assigned `id`
   (generated once at account creation, never reused/reassigned), `login`
   (unique), `passwordHash` + `passwordSalt` (the raw password is never
-  stored, never logged), and a re-writable `displayName` — StarWars' own
-  convention is that a successful login simply re-writes whatever display
-  name was supplied that time, so "change how I present in-game" needs no
-  separate edit-profile flow, just typing a different name next login.
+  stored, never logged). **Changed (user, 2026-10-04): no display name.**
+  The account first carried StarWars' re-writable `displayName`, but it
+  duplicated the per-game director name, which is how players actually see
+  each other. It's gone from the account, the handshake, and the connect
+  screen. A player's in-game name is now chosen once per game, at slot claim,
+  and stays fixed.
   **Explicitly excludes anything game-specific** (StarWars' account also
   carries lifetime XP/kills/deaths/ship-unlocks, because those are
   cross-game persistent progression in that project) — **decided (user,
@@ -3008,10 +3033,10 @@ so directly reusing its actual shape (not just its idea) carries none of
   per-player game snapshots and the action journal, not a new persistence
   idea.
 - **Login flow: reuse the exact same semantics** — a login name that doesn't
-  exist yet auto-creates the account from the supplied password + display
-  name; an existing login requires the password to match, or the attempt is
+  exist yet auto-creates the account from the supplied password; an
+  existing login requires the password to match, or the attempt is
   rejected. **Decided (2026-09-29): a login is restricted to
-  `[A-Za-z0-9_-]{1,32}`**, and a blank/null display name is rejected. The
+  `[A-Za-z0-9_-]{1,32}`**. The
   login charset restriction is defense in depth, not the actual mapping
   mechanism (see below) — it still matters because a rejected-but-not-yet-
   mapped login is a cheaper failure than a malformed one reaching a path
@@ -3044,13 +3069,16 @@ so directly reusing its actual shape (not just its idea) carries none of
     created on first login (§3.8 above), then immediately walks through
     **claiming a slot** — picking an agency archetype (NASA-style or
     Soviet-style only, per §2.1(a1)/(c1)'s decision to drop the GSA-
-    equivalent third archetype entirely), and naming both the agency and the
-    player's own in-game persona/callsign. An existing
+    equivalent third archetype entirely), and naming both the agency and its
+    **director**, the player's own persona (decided 2026-10-04: one title for
+    both archetypes, replacing the earlier "callsign", which read like a
+    fighter pilot's nickname; the director is the agency's head, someone like
+    NASA's Administrator). An existing
     account with an existing slot just logs into it as before; a login that
     doesn't have a slot yet in *this* game always gets the claim flow,
     whether that's on day one of the signup window or in the middle of an
     already-months-long game.
-  - **(Decision:) Agency name and persona/callsign must be unique
+  - **(Decision:) Agency name and director name must be unique
     within a given game** (first claimed, first served — hence the "already
     taken" joke), but nothing about identity needs to be unique *across*
     different games.
@@ -3873,6 +3901,17 @@ SET Centre UI got caught and removed the same day (see `CLAUDE.md`'s
 source-material note for the full story); don't conflate the two when
 this section is read back later.
 
+**History-note icon (user, 2026-10-04; the look is a proposal, unconfirmed).**
+A new glyph with exactly one meaning: "a real-world story is here" (§1.1,
+`ui-spec.md` component 15). It must not look like a generic "i" or "?"
+help icon, because rules help is a different kind of content and must never
+share it. *Proposal:* a small open book in navy line art at body-text size,
+with the hover card styled like an archive index card: a white surface (body
+text always sits on white, per this section), a thin navy rule, and a small
+"History" kicker. Gold is ruled out (it means "active") and so is the unused
+violet `commit` token, which stays reserved. Add the glyph to the UI Asset
+Sheet once Claude Design settles it.
+
 ### 3.13 Common screen chrome & the main-menu hub (2026-09-30, groundwork ahead of M5)
 
 **Not implemented yet — M5 scope (§5). Recorded now because the user
@@ -4223,7 +4262,8 @@ here.
   2026-09-28):** §2.9's "email"
   means in-game player-to-player mail, not turn-notification email — no
   email-address field needed on §3.8's account schema (login, password
-  hash/salt, display name stays as-is). In-game mail itself is still M7+
+  hash/salt, display name stays as-is; the display name itself was later
+  dropped, 2026-10-04, §3.8). In-game mail itself is still M7+
   scope (§2.9's own sequencing), not part of this milestone.
   - **Slice: snapshot + journal + atomic writes + login-time replay — done
     (2026-09-28, hardened 2026-09-29).** `de.mkoehler.launchwindow.persistence`:
@@ -4275,7 +4315,10 @@ here.
       the login, in one step, before anything else on that connection is
       honored. `AccountStore.login` needs a `displayName` to auto-create an
       account, so credentials and the display name travel here, once per
-      connection, not on every subsequent request. This is
+      connection, not on every subsequent request. **Superseded (user,
+      2026-10-04):** the account has no display name any more; players are
+      known per game by agency name and director name (§3.8). The handshake is now `HandshakeRequest(clientVersion, login, password)`,
+      its one field change before any release. This is
       connection-scoped, not a cross-connection session the way
       Robot-Rampage's own reconnect tokens are — §3.3's "no held session"
       still holds, since nothing survives past that one short connection.
@@ -4308,7 +4351,8 @@ here.
       display name, archetype `NASA`, replaced by the real slot-claim flow
       in M4), then tracks `connectionId → accountId` for the rest of that
       connection's life so `SubmitActionRequest`/`FetchStateRequest` need
-      no credentials of their own.
+      no credentials of their own. (The placeholder snapshot went away in M4,
+      and the display name with it on 2026-10-04.)
     - **`NetworkServer`** (`core`, adapted from Robot-Rampage's own,
       poll-based) closes a rejected connection only on the *next* call to
       `poll()`, not immediately after sending the rejection - an immediate
@@ -4416,7 +4460,7 @@ here.
   - **Slice: CLI/console dev client — done.** `dev-tools`'s
     `de.mkoehler.launchwindow.devtools.DevClient`: no libGDX UI, a plain
     console REPL over `core`'s `NetworkClient` - prompts for login/
-    password/display name, sends the handshake, then accepts `state`
+    password (display name until 2026-10-04), sends the handshake, then accepts `state`
     (`FetchStateRequest`, prints a one-line summary), `funds <amount>`
     (`SubmitActionRequest` with `SetFundsAction`), `help`, and `quit`/
     `exit`. `main()` itself (the interactive console/socket loop) is
@@ -4740,7 +4784,11 @@ here.
        crewed Mercury and Vostok need 10 controllers plus 1 CAPCOM, and the
        uncrewed tests need 9. (This first said nine for crewed; corrected after the
        layouts were traced.) A CAPCOM slot is an extra required astronaut whose
-       skill counts on the controller side.
+       skill counts on the controller side. **Corrected 2026-10-03:** only the slots
+       some step uses are required, as BASPM shows unused slots as "Not required".
+       Crewed Mercury and Vostok need 9 controllers plus 1 CAPCOM (the layout's
+       FLIGHT slot is never used), the uncrewed tests 8, Sputnik 2 needs 4, and the
+       satellites 2. No early-era step uses a Flight Director slot.
     7. **Buildings and upgrades, all five of BASPM's.** Astronaut Center, Mission
        Control, SET Center, Headquarters, and the VAB all start at level 1 for
        free; there is no construction step. Upgrades use BASPM's costs, build
@@ -4756,7 +4804,8 @@ here.
     doesn't own yet, as BASPM does. A mission costs the unit cost of its rocket
     plus its payloads. The repeat-flight prestige tiers move from 60%/40% to
     BASPM's 50%/30%. A Flight Director slot's involvement is spread evenly
-    across the five controller skills. Controller slots map to skills by
+    across the five controller skills (superseded by slot staffing: the slot reads
+    the person's Flight Director value). Controller slots map to skills by
     BASPM's speciality index, not by the slot's name. A category's required goals
     are copied onto every program in it. Goal dependencies and boosts that
     reference goals outside the pack are dropped.
@@ -4824,7 +4873,8 @@ here.
     `launch` overload still works for configurations without launches. The harness
     fixtures have no launches, so the bot exercises rockets only once it runs on
     the real pack (slice 5); `RocketsTest` covers the rules meanwhile.
-  - **Slice 3c, CAPCOM — done (2026-10-03).** `MissionStep.capcomInvolvements` (astronaut
+  - **Slice 3c, CAPCOM — done (2026-10-03).** **Superseded 2026-10-03 by BASPM staffing slots (§5 M5, "Slot staffing").** CAPCOM is now an astronaut-type
+    control slot; `capcomInvolvements` and the CAPCOM id list are gone. `MissionStep.capcomInvolvements` (astronaut
     skills, on the controller side, sharing the 100% budget with
     `controllerInvolvements`) and `MissionConfiguration.requiredCapcomCount`
     (positive exactly when some step involves CAPCOM). The `LaunchRequest`'s CAPCOM
@@ -4858,6 +4908,11 @@ here.
       Every configuration's shares already summed to 100. The step's failure value
       is a percentage of the first-time total, so `failurePrestigeDeduction` =
       round(pct × firstTime / 100).
+    - **Superseded 2026-10-03 by BASPM staffing slots (§5 M5, "Slot staffing").** The converter now emits each layout one to
+      one (`crewSlots` titles, `controlSlots` with title, kind, and skill), slot-indexed
+      controller involvements, and per-slot crew weights. The four rules below
+      (controller slots, crew slots, staffing counts, joint flights) describe the
+      earlier pack.
     - **Controller slots** map through the configuration's mission-control layout
       by speciality index. A Flight Director slot's amount is spread evenly over
       the five controller skills, and an astronaut slot becomes a `LEADERSHIP`
@@ -4909,7 +4964,8 @@ here.
     funds reconciliation, the hires against the cap read from the table, the
     Headquarters and VAB caps, the agency filter, and every flying mission's
     counts, rocket lift and human rating, and seat pairing. `BudgetSchedule.baspmClose()`
-    moved into core for it. **Numbers (200 games, 80 seasons, seed 42, alternating
+    moved into core for it. (Re-recorded under slot staffing in §5 M5, "Slot staffing".)
+    **Numbers (200 games, 80 seasons, seed 42, alternating
     NASA and Soviet):** 189 games reached every declared goal (NASA 90 of 100,
     Soviet 99 of 100), at an average of season 59.1. Earth-orbit satellite was
     reached in all 200, human in space in 199, and human in orbit in 189. About
@@ -4995,13 +5051,15 @@ here.
       preview and journals only what takes effect.
   - **Slice 4c, server wiring — done (2026-10-03).**
     - **Game meta and pack:** `game-meta.json` gained `contentPack` (pinned at
-      startup; changing it mid-game would break replays), `declaredGoalIds`
+      startup; changing it mid-game would break replays - more precisely, the open
+      turn and in-flight state, see M5 "Content packs"), `declaredGoalIds`
       (default: earth-orbit satellite, human in space, human in orbit),
       `gameSeed` (random for a new game), and `devMode`.
     - **Slot claim:** the handshake no longer bootstraps a placeholder player;
       `ClaimSlotRequest` creates the slot. It takes the archetype, a unique
-      agency name, and a unique callsign (case-insensitive;
-      `PlayerSnapshot.callsign` is new) and creates the starting state
+      agency name, and a unique director name (case-insensitive;
+      `PlayerSnapshot.directorName` is new; called "callsign" until
+      2026-10-04) and creates the starting state
       (decision 2), with candidate pools seeded from the game seed. Until then,
       fetch and submit answer `SLOT_CLAIM_REQUIRED`. `HandshakeResponse` keeps its
       fields, since its shape must never change.
@@ -5074,7 +5132,116 @@ here.
       and open counts per body. Categories need a body field (content).
     - **Configurations are viewable before their program is open**, but read-only.
     - **Mission assessment is computed in the client** from `core`.
-    - **R&D splits into Rocket R&D (VAB) and Payload R&D (SET Centre).** First real playtest happens at the
+    - **R&D splits into Rocket R&D (VAB) and Payload R&D (SET Centre).**
+    - **Staffing moves to BASPM's slots (user, 2026-10-03; `baspm.md` §10.11).** This replaces the
+      2026-10-02 averaged model: configurations get BASPM's mission-control and flight-crew layouts
+      one to one (titled slots, each with a skill and an employee type). Steps involve slots, a launch
+      fills each slot with one person, and the roll reads that person's value in the slot's skill (a
+      Flight Director slot reads the average of the person's five skills). A slot accepts any employee
+      of its type. Skill growth follows the slot's skill.
+    - **Ground slots can be re-staffed during a mission, for free** (user, 2026-10-03): from Inspect
+      active missions, the assembly screen reopens with crew slots locked and the mission-control slots
+      reassignable to available people. BASPM offers the same between seasons. **Confirmed (user,
+      2026-10-03):** CAPCOM counts as a ground slot and is reassignable too, though it holds an
+      astronaut; "astronaut slots are locked" means the crew aboard.
+    - **Control slots are released per season, as in BASPM** (user, 2026-10-03): after each season,
+      whoever holds a control slot no remaining season uses goes idle (or retires at age). The crew
+      stays aboard to the end.
+  - **Content packs: freezing, growth, and fixes (decided 2026-10-03, not built yet).**
+    - **Frozen per game.** At game creation the server copies the pack named by
+      `contentPack` into the game's data folder and only loads it from there. A
+      content hash of that copy identifies the version; G1 (`ui-spec.md` §6) sends
+      id and hash, and a client whose copy differs downloads the game's pack. Do
+      this before long-running games exist; retrofitting it is awkward.
+    - **Why freeze:** not history - each turn's resolved snapshot is saved, and only
+      the open turn's actions are replayed onto it. Freezing keeps the open turn
+      consistent (actions are validated at submit and applied at resolution, and a
+      crash-and-retry must resolve identically), keeps in-flight state valid (it
+      references configuration ids and season indices), and gives every player the
+      same numbers.
+    - **Growth:** one main pack grows slice by slice in `assets/content/` and is
+      renamed to something neutral (`standard`) once it covers more than the early
+      era. Separate packs remain an option for shorter scenarios (an early-era-only
+      race), since a scenario is just a pack plus the declared goal list in
+      `game-meta.json`.
+    - **Fixes in a running game:**
+      - *Code fixes* (rules, server) need nothing special: they ship with a server
+        update and apply from the next resolution, because past turns are stored,
+        not recomputed. Deploy between resolutions, never mid-resolution. A
+        protocol change still needs clients updated, as today.
+      - *Content fixes* are a deliberate host operation between resolutions: replace
+        the game's frozen pack with the fixed one. It's refused unless it's
+        compatible with the running state: every id any snapshot references still
+        exists, every in-flight mission's configuration keeps its season count and
+        its slots, and every journaled action of the open turn still validates.
+        Clients pick the new pack up through the hash. Numbers (costs, reliability,
+        prestige) can change freely this way; removing or restructuring content
+        can't while it's in use.
+      - Freezing doesn't block fixes; it makes a content change an explicit,
+        checked step instead of a side effect of a server update.
+  - **Slot staffing — done (2026-10-03).** The two decisions above, implemented.
+    - **Content:** `StaffingSlot` (title, kind `MISSION_CONTROL` or `ASTRONAUT`, and a
+      skill name, `FLIGHT_DIRECTOR` for a Flight Director slot). `MissionConfiguration`
+      carries `crewSlots` (titles) and `controlSlots`, and derives the required counts
+      from the slots any step of any season uses. `usedControlSlotsFrom(season)` gives
+      the slots still needed from a season on; `MissionProgress` releases the rest
+      after each season (`releaseFinishedControlSlots`), and `reassign` refuses a
+      released slot. `MissionStep` involvements are
+      slot-indexed: `ControllerInvolvement(slot, percent)` for control slots, CAPCOM
+      included, and `CrewInvolvement(slot, skill, weight)`, with crew weights as
+      doubles summing to 100. The old count constructors remain for fixtures and
+      build generic slots (`CREW n`; `CONTROLLER n` cycling through the five skills;
+      `CAPCOM n` reading Leadership). The pack was regenerated, and nothing but
+      staffing changed.
+    - **Rules:** `MissionLaunch` validates one person per used slot, of the slot's
+      type, idle and available, and nobody in an unused slot. The roll reads each
+      slot holder (`MissionProgress.slotValue`). Growth follows the slot: the crew
+      grows all five skills; each used control slot's holder grows that slot's
+      skill; a Flight Director grows from their Flight Director value, spread evenly
+      over the five skills, as BASPM does (`baspm.md` §9.3). Release and crew loss
+      read the derived `crewIds()`/`groundIds()`.
+    - **Auto-assign:** `MissionStaffing.autoAssign` proposes the best idle person per
+      used slot, with Flight Director slots first, then the rest, as BASPM's
+      `AssignFlightControllersBestFit` does. **Unconfirmed defaults:** crew slots are
+      filled before the control slots (so CAPCOM never takes the best pilot), each
+      crew seat by the step weights on that seat, and ties go to roster order.
+    - **Re-staffing:** `MissionStaffing.reassign`, journaled as
+      `ReassignControlSlotAction` (`reassignControlSlot`, appended to the Kryo
+      registry). It is free, works on scheduled and flying missions, takes control
+      slots only (the crew is locked), and needs a person of the slot's type who is
+      idle and available; the previous holder goes idle. CAPCOM stays reassignable,
+      as confirmed above.
+    - **Expert rescue:** a step's rescuing skills come from its slots. **Unconfirmed
+      default:** a Flight Director slot names no single skill, so it adds none. A
+      used CAPCOM slot adds its astronaut skill (Leadership), so a Leadership Expert
+      can now rescue that step, which slice 3c's note didn't allow.
+    - **Retire on release:** a re-staffed slot's previous holder, and everyone on a
+      cancelled mission, is released through `MissionProgress.releaseOrRetire`, the
+      same retire-at-age rule as a mission's end, so a swap can't keep an over-age
+      person assigned. These retirements aren't reported as events yet (no event
+      channel for actions; see `ui-spec.md` G2).
+    - **DevClient:** `launch <config> rockets=... crew=a,b control=x,-,y` takes one
+      entry per slot (`-` for empty), and `reassign <mission> <slot> <person>` is new.
+      `missions` prints the slot lists.
+    - **Dev data:** the journaled launch action's fields changed, so reset the dev
+      data root again.
+    - **Harness numbers (200 games, 80 seasons, seed 42).** `ContentPackPlayouts` now
+      staffs through `autoAssign` and checks every slot's holder and type
+      independently: 186 games completed every declared goal (NASA 88, Soviet 98;
+      189 before), average season 58.9; steps 10,468 successful, 1,367 glitch
+      solved, 453 minor glitch, 623 failure, 30 catastrophic; 77 astronauts lost;
+      lowest funds 19,421. `ContentPackPlayoutsTest` (the M3 exit criterion) still
+      passes. `PersonnelLifecyclePlayouts`' fixtures had to grow slots for the
+      controllers their steps name (Sputnik 2, Explorer 2 of 5, Mercury 3) and split
+      the Mercury crew weights over both seats, so its numbers move a lot: 1,452
+      missions; steps 1,098 / 650 / 182 / 236 / 16; 102 astronauts lost; 871
+      resigned, 1,039 retired, 4,687 hires. **With the per-season release** (the
+      content-pack numbers are unchanged, since the bot's plan flies only
+      single-season configurations): 1,450 missions; steps 1,071 / 606 / 181 / 256 /
+      12; 92 astronauts lost; 995 resigned (released controllers sit idle and lose
+      morale), 1,031 retired, 4,778 hires.
+
+  First real playtest happens at the
   end of this milestone. Expected slices, sizing not yet estimated:
   connect/login/slot-claim screens; roster/personnel management;
   program/mission selection bundled with the budget/prestige overview and

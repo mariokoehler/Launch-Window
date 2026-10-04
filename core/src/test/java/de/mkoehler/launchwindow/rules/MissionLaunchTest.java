@@ -39,8 +39,8 @@ class MissionLaunchTest {
 
     private final MissionStep crewedStep = new MissionStep("launch",
         List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
-        List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 100)),
-        List.of(new MissionStep.CrewInvolvement(AstronautSkill.PILOTING, 100)), true);
+        List.of(new MissionStep.ControllerInvolvement(0, 100)),
+        List.of(new MissionStep.CrewInvolvement(0, AstronautSkill.PILOTING, 100)), true);
     private final MissionConfiguration crewedConfiguration = new MissionConfiguration("crewed-std",
         "mercury-program", List.of(new MissionSeason(List.of(crewedStep))), 1, 1, 500);
 

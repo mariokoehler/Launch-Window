@@ -1,151 +1,99 @@
 package de.mkoehler.launchwindow.content;
 
+import de.mkoehler.launchwindow.model.AstronautSkill;
+import de.mkoehler.launchwindow.model.MissionControlSkill;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Predicate;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
- * <p>One way of flying a {@link Program} - the third level of the
- * four-level containment hierarchy (see {@code design.md} &sect;2.3(c)).
- * Holds its own step-by-step resolution content - {@link #seasons()} - but
- * nothing about prestige or goals granted, nor the "extended duration"
- * variant's own higher-risk/higher-reward shape (see {@code baspm.md}
- * &sect;10.1); see {@code design.md} &sect;2.5(e) and &sect;2.6
- * (prestige/goals) for what is still deferred. Adding those fields later is
- * not a migration concern for this type, since it isn't persisted anywhere
- * yet (see {@link ContentCatalog}'s own class Javadoc).</p>
+ * <p>One way of flying a {@link Program} - the third level of the four-level
+ * containment hierarchy ({@code design.md} &sect;2.3(c)) - with its step-by-step
+ * resolution content ({@link #seasons()}).</p>
  *
- * <p><b>Declares the exact crew/controller headcount
- * {@link de.mkoehler.launchwindow.rules.MissionLaunch} requires</b> (user
- * decision, {@code design.md} &sect;2.5(f), 2026-10-02) - a mission states
- * how many astronauts/controllers it needs, and a launch must supply
- * exactly that many, not "at least one" or "any number." Which skills they
- * need is still expressed by each {@link MissionStep}'s own
- * {@code crewInvolvements}/{@code controllerInvolvements}, unchanged -
- * this is a headcount requirement layered on top of that, not a
- * replacement for it, and does not assign a specific seat to a specific
- * skill.</p>
+ * <p><b>Staffing is by slot, as in BASPM</b> ({@code baspm.md} &sect;10.11, user
+ * decision 2026-10-03). The configuration carries its mission-control layout as
+ * {@link #controlSlots()} - titled seats, each with an employee type and a skill -
+ * and its flight-crew layout as {@link #crewSlots()} (titles). A launch fills each
+ * slot the steps use with one person. Layout slots no step uses stay empty, as
+ * BASPM's "Not required" slots do. The required head-counts
+ * ({@link #requiredAstronautCount()} and friends) are derived from the slots the
+ * steps use across every season. As in BASPM, a control slot is released after the
+ * last season that uses it ({@link #usedControlSlotsFrom(int)}, user decision
+ * 2026-10-03); the crew stays aboard to the end.</p>
  *
- * <p><b>{@link #cost()} is a one-time launch cost, charged once per
- * {@link de.mkoehler.launchwindow.rules.MissionLaunch#launch} call</b>
- * (user decision, {@code design.md} &sect;2.5(h), 2026-10-02) - distinct
- * from both the recurring per-season costs this type does not yet model
- * (see {@code design.md} &sect;2.1) and from {@link Program#openingCost()},
- * which prices owning the program itself, not flying one of its missions.
- * {@code 0} is a valid cost (a free mission).</p>
+ * <p>{@link #cost()} is a one-time launch cost for the payloads; each chosen
+ * rocket's unit cost is added at launch ({@code design.md} &sect;2.5(h), &sect;5 M3).</p>
  *
- * <p>A content-definition type: shared, read-only game data loaded from a
- * content pack (not yet implemented - see {@code design.md} &sect;5's M3),
- * never per-player state, and never sent over the network.</p>
+ * <p>A content-definition type: shared, read-only game data loaded from a content
+ * pack, never per-player state, and never sent over the network.</p>
  *
- * @param id        a stable identifier, unique within a {@link ContentCatalog}
- * @param programId the {@link Program#id()} this configuration belongs to
- * @param seasons   this configuration's ordered step batches, one per
- *                  season it runs - see {@code baspm.md} &sect;8.1's
- *                  one-file-per-season shape; never empty.
- *                  {@link #durationInSeasons()} is {@code seasons.size()}
- * @param requiredAstronautCount the exact number of astronauts a launch of
- *                  this configuration must supply; must be positive if, and
- *                  only if, some step of some season has a non-empty
- *                  {@code crewInvolvements} - {@code 0} for an uncrewed
- *                  mission
- * @param requiredMissionControlOfficerCount the exact number of Mission
- *                  Control officers a launch of this configuration must
- *                  supply; must be positive if, and only if, some step of
- *                  some season has a non-empty {@code controllerInvolvements}
- * @param cost      the funds cost {@link de.mkoehler.launchwindow.rules.MissionLaunch#launch}
- *                  deducts up front when launching this configuration - a
- *                  one-time launch cost, distinct from
- *                  {@link Program#openingCost()}/{@link Program#maintenanceCost()},
- *                  which price owning the program itself, not flying one of
- *                  its missions
- * @param firstTimePrestige the prestige total this configuration pays when
- *                  flown for the first time; later flights pay a fixed
- *                  fraction of it, by {@link de.mkoehler.launchwindow.rules.MissionPrestige}'s
- *                  own repeat-tier ratios. Each step pays its
- *                  {@link MissionStep#prestigeSharePercent()} share of the
- *                  tier's total. {@code 0} means the configuration pays no
- *                  prestige at all
- * @param goalDependencies reliability penalties while a goal is unmet
- * @param goalBoosts       reliability bonuses once a goal is met
- * @param launches  the launches this configuration flies, one rocket each, chosen at
- *                  launch time - BASPM's {@code LaunchInformation} ({@code baspm.md}
- *                  &sect;10.9). A step names launch {@code n}'s rocket by the slot id
- *                  {@link #rocketSlotId(int) @rocket-n}. Empty for a configuration
- *                  with no rocket choice (its components all come from its program)
- * @param requiredCapcomCount the exact number of astronauts a launch must supply as
- *                  CAPCOM on the ground; positive if, and only if, some step has a
- *                  CAPCOM involvement ({@code baspm.md} &sect;10.9)
+ * @param id                 a stable identifier, unique within a {@link ContentCatalog}
+ * @param programId          the {@link Program#id()} this configuration belongs to
+ * @param seasons            the ordered step batches, one per season; never empty
+ * @param crewSlots          the flight-crew layout's slot titles; empty for an uncrewed
+ *                           mission. A crew slot holds one astronaut aboard
+ * @param controlSlots       the mission-control layout: flight-controller slots and
+ *                           ground astronaut slots such as CAPCOM
+ * @param cost               the payloads' launch cost
+ * @param firstTimePrestige  the prestige total of a first flight; later flights pay
+ *                           {@link de.mkoehler.launchwindow.rules.MissionPrestige}'s
+ *                           repeat-tier share of it
+ * @param goalDependencies   reliability penalties while a goal is unmet
+ * @param goalBoosts         reliability bonuses once a goal is met
+ * @param launches           the launches, one chosen rocket each ({@code baspm.md}
+ *                           &sect;10.9); a step names launch {@code n}'s rocket by
+ *                           {@link #rocketSlotId(int) @rocket-n}
  * @param cancellationPrestigeDeduction the prestige an uncrewed mission loses when
- *                  cancelled in flight - BASPM's configuration-level
- *                  {@code PrestigeDeductedOnFailure} ({@code baspm.md} &sect;10.10)
+ *                           cancelled in flight ({@code baspm.md} &sect;10.10)
  * @param cancellationRefundPercent the share of the launch cost an in-flight
- *                  cancellation restores, 0-100 - BASPM's {@code OnCancellation FundsRestored}
+ *                           cancellation restores, 0-100
  * @author Mario Koehler
  */
 public record MissionConfiguration(String id, String programId, List<MissionSeason> seasons,
-                                    int requiredAstronautCount, int requiredMissionControlOfficerCount, long cost,
+                                    List<String> crewSlots, List<StaffingSlot> controlSlots, long cost,
                                     long firstTimePrestige, List<GoalModifier> goalDependencies,
                                     List<GoalModifier> goalBoosts, List<Launch> launches,
-                                    int requiredCapcomCount, long cancellationPrestigeDeduction,
-                                    int cancellationRefundPercent) {
+                                    long cancellationPrestigeDeduction, int cancellationRefundPercent) {
 
-    /**
-     * A configuration with no cancellation terms - the shape before M4.
-     *
-     * @param id                                 see {@link MissionConfiguration}
-     * @param programId                          see {@link MissionConfiguration}
-     * @param seasons                            see {@link MissionConfiguration}
-     * @param requiredAstronautCount             see {@link MissionConfiguration}
-     * @param requiredMissionControlOfficerCount see {@link MissionConfiguration}
-     * @param cost                               see {@link MissionConfiguration}
-     * @param firstTimePrestige                  see {@link MissionConfiguration}
-     * @param goalDependencies                   see {@link MissionConfiguration}
-     * @param goalBoosts                         see {@link MissionConfiguration}
-     * @param launches                           see {@link MissionConfiguration}
-     * @param requiredCapcomCount                see {@link MissionConfiguration}
-     * @throws NullPointerException     see the canonical constructor
-     * @throws IllegalArgumentException see the canonical constructor
-     */
-    public MissionConfiguration(String id, String programId, List<MissionSeason> seasons,
-                                int requiredAstronautCount, int requiredMissionControlOfficerCount, long cost,
-                                long firstTimePrestige, List<GoalModifier> goalDependencies,
-                                List<GoalModifier> goalBoosts, List<Launch> launches, int requiredCapcomCount) {
-        this(id, programId, seasons, requiredAstronautCount, requiredMissionControlOfficerCount, cost,
-            firstTimePrestige, goalDependencies, goalBoosts, launches, requiredCapcomCount, 0, 0);
-    }
-
-    /**
-     * A configuration with no CAPCOM - the shape before CAPCOM was modeled.
-     *
-     * @param id                                 see {@link MissionConfiguration}
-     * @param programId                          see {@link MissionConfiguration}
-     * @param seasons                            see {@link MissionConfiguration}
-     * @param requiredAstronautCount             see {@link MissionConfiguration}
-     * @param requiredMissionControlOfficerCount see {@link MissionConfiguration}
-     * @param cost                               see {@link MissionConfiguration}
-     * @param firstTimePrestige                  see {@link MissionConfiguration}
-     * @param goalDependencies                   see {@link MissionConfiguration}
-     * @param goalBoosts                         see {@link MissionConfiguration}
-     * @param launches                           see {@link MissionConfiguration}
-     * @throws NullPointerException     see the canonical constructor
-     * @throws IllegalArgumentException see the canonical constructor
-     */
-    public MissionConfiguration(String id, String programId, List<MissionSeason> seasons,
-                                int requiredAstronautCount, int requiredMissionControlOfficerCount, long cost,
-                                long firstTimePrestige, List<GoalModifier> goalDependencies,
-                                List<GoalModifier> goalBoosts, List<Launch> launches) {
-        this(id, programId, seasons, requiredAstronautCount, requiredMissionControlOfficerCount, cost,
-            firstTimePrestige, goalDependencies, goalBoosts, launches, 0);
-    }
-
-    /** The prefix of a step's rocket slot id; launch {@code n} (1-based) is {@code @rocket-n}. The {@code @} keeps it apart from real component ids. */
+    /** The prefix of a step's rocket slot id; launch {@code n} (1-based) is {@code @rocket-n}. */
     public static final String ROCKET_SLOT_PREFIX = "@rocket-";
 
     /**
+     * A goal-linked reliability modifier on one mission component: a dependency
+     * subtracts {@code amount} while the goal is still unfulfilled, a boost adds it once
+     * the goal is achieved or cancelled ({@code design.md} &sect;2.6(d)).
+     *
+     * @param goalId      the {@link Goal#id()} the modifier depends on
+     * @param componentId the {@link MissionComponent#id()} it changes
+     * @param amount      the reliability magnitude, positive
+     */
+    public record GoalModifier(String goalId, String componentId, int amount) {
+
+        /**
+         * Validates every field.
+         *
+         * @throws NullPointerException     if an id is {@code null}
+         * @throws IllegalArgumentException if an id is blank or {@code amount} is not positive
+         */
+        public GoalModifier {
+            Objects.requireNonNull(goalId, "goalId must not be null");
+            Objects.requireNonNull(componentId, "componentId must not be null");
+            if (goalId.isBlank() || componentId.isBlank()) {
+                throw new IllegalArgumentException("goalModifier ids must not be blank");
+            }
+            if (amount <= 0) {
+                throw new IllegalArgumentException("goalModifier amount must be positive: " + amount);
+            }
+        }
+    }
+
+    /**
      * One launch: where it goes, and which payloads ride on it. The rocket is the
-     * player's choice at launch time, from their owned, active rockets that can lift
-     * the summed payload mass to this launch type ({@code baspm.md} &sect;10.9).
+     * player's choice at launch time ({@code baspm.md} &sect;10.9).
      *
      * @param launchType          the destination, and whether the launch is crewed
      * @param payloadComponentIds the payload components this launch carries; never empty
@@ -163,6 +111,194 @@ public record MissionConfiguration(String id, String programId, List<MissionSeas
             payloadComponentIds = List.copyOf(payloadComponentIds);
             if (payloadComponentIds.isEmpty()) {
                 throw new IllegalArgumentException("a launch carries at least one payload");
+            }
+        }
+    }
+
+    /**
+     * Compatibility form for fixtures written before slots: {@code astronauts} crew
+     * slots titled {@code CREW n}, then {@code controllers} flight-controller slots
+     * titled {@code CONTROLLER n} whose skills cycle through {@link MissionControlSkill}
+     * in declaration order (slot 0 Propulsion, slot 1 Trajectory and GNC, ...), then
+     * {@code capcom} astronaut slots titled {@code CAPCOM n} reading Leadership.
+     *
+     * @param id                            see {@link MissionConfiguration}
+     * @param programId                     see {@link MissionConfiguration}
+     * @param seasons                       see {@link MissionConfiguration}
+     * @param astronauts                    the number of crew slots
+     * @param controllers                   the number of flight-controller slots
+     * @param cost                          see {@link MissionConfiguration}
+     * @param firstTimePrestige             see {@link MissionConfiguration}
+     * @param goalDependencies              see {@link MissionConfiguration}
+     * @param goalBoosts                    see {@link MissionConfiguration}
+     * @param launches                      see {@link MissionConfiguration}
+     * @param capcom                        the number of CAPCOM slots
+     * @param cancellationPrestigeDeduction see {@link MissionConfiguration}
+     * @param cancellationRefundPercent     see {@link MissionConfiguration}
+     * @throws NullPointerException     see the canonical constructor
+     * @throws IllegalArgumentException see the canonical constructor
+     */
+    public MissionConfiguration(String id, String programId, List<MissionSeason> seasons, int astronauts,
+                                int controllers, long cost, long firstTimePrestige,
+                                List<GoalModifier> goalDependencies, List<GoalModifier> goalBoosts,
+                                List<Launch> launches, int capcom, long cancellationPrestigeDeduction,
+                                int cancellationRefundPercent) {
+        this(id, programId, seasons, genericCrewSlots(astronauts), genericControlSlots(controllers, capcom), cost,
+            firstTimePrestige, goalDependencies, goalBoosts, launches, cancellationPrestigeDeduction,
+            cancellationRefundPercent);
+    }
+
+    /**
+     * Compatibility form with generic slots and no cancellation terms.
+     *
+     * @param id                see {@link MissionConfiguration}
+     * @param programId         see {@link MissionConfiguration}
+     * @param seasons           see {@link MissionConfiguration}
+     * @param astronauts        the number of crew slots
+     * @param controllers       the number of flight-controller slots
+     * @param cost              see {@link MissionConfiguration}
+     * @param firstTimePrestige see {@link MissionConfiguration}
+     * @param goalDependencies  see {@link MissionConfiguration}
+     * @param goalBoosts        see {@link MissionConfiguration}
+     * @param launches          see {@link MissionConfiguration}
+     * @param capcom            the number of CAPCOM slots
+     */
+    public MissionConfiguration(String id, String programId, List<MissionSeason> seasons, int astronauts,
+                                int controllers, long cost, long firstTimePrestige,
+                                List<GoalModifier> goalDependencies, List<GoalModifier> goalBoosts,
+                                List<Launch> launches, int capcom) {
+        this(id, programId, seasons, astronauts, controllers, cost, firstTimePrestige, goalDependencies, goalBoosts,
+            launches, capcom, 0, 0);
+    }
+
+    /**
+     * Compatibility form with generic slots, no CAPCOM, and no cancellation terms.
+     *
+     * @param id                see {@link MissionConfiguration}
+     * @param programId         see {@link MissionConfiguration}
+     * @param seasons           see {@link MissionConfiguration}
+     * @param astronauts        the number of crew slots
+     * @param controllers       the number of flight-controller slots
+     * @param cost              see {@link MissionConfiguration}
+     * @param firstTimePrestige see {@link MissionConfiguration}
+     * @param goalDependencies  see {@link MissionConfiguration}
+     * @param goalBoosts        see {@link MissionConfiguration}
+     * @param launches          see {@link MissionConfiguration}
+     */
+    public MissionConfiguration(String id, String programId, List<MissionSeason> seasons, int astronauts,
+                                int controllers, long cost, long firstTimePrestige,
+                                List<GoalModifier> goalDependencies, List<GoalModifier> goalBoosts,
+                                List<Launch> launches) {
+        this(id, programId, seasons, astronauts, controllers, cost, firstTimePrestige, goalDependencies, goalBoosts,
+            launches, 0);
+    }
+
+    /**
+     * Compatibility form with generic slots and no launches.
+     *
+     * @param id                see {@link MissionConfiguration}
+     * @param programId         see {@link MissionConfiguration}
+     * @param seasons           see {@link MissionConfiguration}
+     * @param astronauts        the number of crew slots
+     * @param controllers       the number of flight-controller slots
+     * @param cost              see {@link MissionConfiguration}
+     * @param firstTimePrestige see {@link MissionConfiguration}
+     * @param goalDependencies  see {@link MissionConfiguration}
+     * @param goalBoosts        see {@link MissionConfiguration}
+     */
+    public MissionConfiguration(String id, String programId, List<MissionSeason> seasons, int astronauts,
+                                int controllers, long cost, long firstTimePrestige,
+                                List<GoalModifier> goalDependencies, List<GoalModifier> goalBoosts) {
+        this(id, programId, seasons, astronauts, controllers, cost, firstTimePrestige, goalDependencies, goalBoosts,
+            List.of());
+    }
+
+    /**
+     * Compatibility form with generic slots and no goal modifiers.
+     *
+     * @param id                see {@link MissionConfiguration}
+     * @param programId         see {@link MissionConfiguration}
+     * @param seasons           see {@link MissionConfiguration}
+     * @param astronauts        the number of crew slots
+     * @param controllers       the number of flight-controller slots
+     * @param cost              see {@link MissionConfiguration}
+     * @param firstTimePrestige see {@link MissionConfiguration}
+     */
+    public MissionConfiguration(String id, String programId, List<MissionSeason> seasons, int astronauts,
+                                int controllers, long cost, long firstTimePrestige) {
+        this(id, programId, seasons, astronauts, controllers, cost, firstTimePrestige, List.of(), List.of());
+    }
+
+    /**
+     * Compatibility form with generic slots and no prestige.
+     *
+     * @param id          see {@link MissionConfiguration}
+     * @param programId   see {@link MissionConfiguration}
+     * @param seasons     see {@link MissionConfiguration}
+     * @param astronauts  the number of crew slots
+     * @param controllers the number of flight-controller slots
+     * @param cost        see {@link MissionConfiguration}
+     */
+    public MissionConfiguration(String id, String programId, List<MissionSeason> seasons, int astronauts,
+                                int controllers, long cost) {
+        this(id, programId, seasons, astronauts, controllers, cost, 0);
+    }
+
+    /**
+     * Validates every field and copies the lists.
+     *
+     * @throws NullPointerException     if a reference field is {@code null}
+     * @throws IllegalArgumentException if an id is blank, {@code seasons} is empty, a
+     *                                   value is negative or out of range, or a step names a
+     *                                   crew or control slot the layouts don't have
+     */
+    public MissionConfiguration {
+        Objects.requireNonNull(id, "id must not be null");
+        Objects.requireNonNull(programId, "programId must not be null");
+        Objects.requireNonNull(seasons, "seasons must not be null");
+        Objects.requireNonNull(crewSlots, "crewSlots must not be null");
+        Objects.requireNonNull(controlSlots, "controlSlots must not be null");
+        Objects.requireNonNull(goalDependencies, "goalDependencies must not be null");
+        Objects.requireNonNull(goalBoosts, "goalBoosts must not be null");
+        Objects.requireNonNull(launches, "launches must not be null");
+        if (id.isBlank()) {
+            throw new IllegalArgumentException("id must not be blank");
+        }
+        if (programId.isBlank()) {
+            throw new IllegalArgumentException("programId must not be blank");
+        }
+        if (seasons.isEmpty()) {
+            throw new IllegalArgumentException("seasons must not be empty");
+        }
+        if (cost < 0) {
+            throw new IllegalArgumentException("cost must not be negative: " + cost);
+        }
+        if (firstTimePrestige < 0) {
+            throw new IllegalArgumentException("firstTimePrestige must not be negative: " + firstTimePrestige);
+        }
+        if (cancellationPrestigeDeduction < 0 || cancellationRefundPercent < 0 || cancellationRefundPercent > 100) {
+            throw new IllegalArgumentException("cancellation terms out of range for " + id);
+        }
+        seasons = List.copyOf(seasons);
+        crewSlots = List.copyOf(crewSlots);
+        controlSlots = List.copyOf(controlSlots);
+        goalDependencies = List.copyOf(goalDependencies);
+        goalBoosts = List.copyOf(goalBoosts);
+        launches = List.copyOf(launches);
+        for (MissionSeason season : seasons) {
+            for (MissionStep step : season.steps()) {
+                for (MissionStep.ControllerInvolvement involvement : step.controllerInvolvements()) {
+                    if (involvement.slot() >= controlSlots.size()) {
+                        throw new IllegalArgumentException(id + " step " + step.id() + " names control slot "
+                            + involvement.slot() + " of " + controlSlots.size());
+                    }
+                }
+                for (MissionStep.CrewInvolvement involvement : step.crewInvolvements()) {
+                    if (involvement.slot() >= crewSlots.size()) {
+                        throw new IllegalArgumentException(id + " step " + step.id() + " names crew slot "
+                            + involvement.slot() + " of " + crewSlots.size());
+                    }
+                }
             }
         }
     }
@@ -196,197 +332,111 @@ public record MissionConfiguration(String id, String programId, List<MissionSeas
     }
 
     /**
-     * A configuration with no rocket choice - the shape before rockets were modeled.
+     * Returns the crew slots some step of some season involves - the seats a launch
+     * must fill aboard.
      *
-     * @param id                                 see {@link MissionConfiguration}
-     * @param programId                          see {@link MissionConfiguration}
-     * @param seasons                            see {@link MissionConfiguration}
-     * @param requiredAstronautCount             see {@link MissionConfiguration}
-     * @param requiredMissionControlOfficerCount see {@link MissionConfiguration}
-     * @param cost                               see {@link MissionConfiguration}
-     * @param firstTimePrestige                  see {@link MissionConfiguration}
-     * @param goalDependencies                   see {@link MissionConfiguration}
-     * @param goalBoosts                         see {@link MissionConfiguration}
-     * @throws NullPointerException     see the canonical constructor
-     * @throws IllegalArgumentException see the canonical constructor
+     * @return the slot indices, ascending
      */
-    public MissionConfiguration(String id, String programId, List<MissionSeason> seasons,
-                                int requiredAstronautCount, int requiredMissionControlOfficerCount, long cost,
-                                long firstTimePrestige, List<GoalModifier> goalDependencies,
-                                List<GoalModifier> goalBoosts) {
-        this(id, programId, seasons, requiredAstronautCount, requiredMissionControlOfficerCount, cost,
-            firstTimePrestige, goalDependencies, goalBoosts, List.of());
-    }
-
-    /**
-     * A goal-linked reliability modifier on one mission component: a
-     * dependency subtracts {@code amount} while the goal is still unfulfilled,
-     * a boost adds {@code amount} once it is achieved or cancelled - see
-     * {@code design.md} &sect;2.6(d) and {@code baspm.md} &sect;11.3.
-     *
-     * @param goalId      the {@link Goal#id()} the modifier depends on
-     * @param componentId the {@link MissionComponent#id()} it changes
-     * @param amount      the reliability magnitude, positive
-     */
-    public record GoalModifier(String goalId, String componentId, int amount) {
-
-        /**
-         * Validates every field.
-         *
-         * @throws NullPointerException     if {@code goalId} or {@code componentId} is {@code null}
-         * @throws IllegalArgumentException if either id is blank or {@code amount} is not positive
-         */
-        public GoalModifier {
-            Objects.requireNonNull(goalId, "goalId must not be null");
-            Objects.requireNonNull(componentId, "componentId must not be null");
-            if (goalId.isBlank() || componentId.isBlank()) {
-                throw new IllegalArgumentException("goalModifier ids must not be blank");
-            }
-            if (amount <= 0) {
-                throw new IllegalArgumentException("goalModifier amount must be positive: " + amount);
-            }
-        }
-    }
-
-    /**
-     * A configuration with no goal modifiers - the shape before goal
-     * modifiers were modeled.
-     *
-     * @param id                                 see {@link MissionConfiguration}
-     * @param programId                          see {@link MissionConfiguration}
-     * @param seasons                            see {@link MissionConfiguration}
-     * @param requiredAstronautCount             see {@link MissionConfiguration}
-     * @param requiredMissionControlOfficerCount see {@link MissionConfiguration}
-     * @param cost                               see {@link MissionConfiguration}
-     * @param firstTimePrestige                  see {@link MissionConfiguration}
-     * @throws NullPointerException     see the canonical constructor
-     * @throws IllegalArgumentException see the canonical constructor
-     */
-    public MissionConfiguration(String id, String programId, List<MissionSeason> seasons,
-                                int requiredAstronautCount, int requiredMissionControlOfficerCount, long cost,
-                                long firstTimePrestige) {
-        this(id, programId, seasons, requiredAstronautCount, requiredMissionControlOfficerCount, cost,
-            firstTimePrestige, List.of(), List.of());
-    }
-
-    /**
-     * A configuration that pays no prestige at all - the shape every
-     * configuration had before prestige was modeled, kept so existing
-     * content and tests don't all need touching.
-     *
-     * @param id                                 see {@link MissionConfiguration}
-     * @param programId                          see {@link MissionConfiguration}
-     * @param seasons                            see {@link MissionConfiguration}
-     * @param requiredAstronautCount             see {@link MissionConfiguration}
-     * @param requiredMissionControlOfficerCount see {@link MissionConfiguration}
-     * @param cost                               see {@link MissionConfiguration}
-     * @throws NullPointerException     see the canonical constructor
-     * @throws IllegalArgumentException see the canonical constructor
-     */
-    public MissionConfiguration(String id, String programId, List<MissionSeason> seasons,
-                                int requiredAstronautCount, int requiredMissionControlOfficerCount, long cost) {
-        this(id, programId, seasons, requiredAstronautCount, requiredMissionControlOfficerCount, cost, 0);
-    }
-
-    /**
-     * Validates every field (including that both required-count fields
-     * agree with whether {@code seasons} actually involves any crew/
-     * controllers at all) and defensively copies {@code seasons} into an
-     * unmodifiable view.
-     *
-     * @throws NullPointerException     if {@code id}/{@code programId}/
-     *                                   {@code seasons} is {@code null}
-     * @throws IllegalArgumentException if {@code id}/{@code programId} is
-     *                                   blank, {@code seasons} is empty,
-     *                                   either required-count field or
-     *                                   {@code cost} is negative, or either
-     *                                   required-count field disagrees with
-     *                                   whether {@code seasons} actually
-     *                                   involves any crew/controllers
-     */
-    public MissionConfiguration {
-        Objects.requireNonNull(id, "id must not be null");
-        Objects.requireNonNull(programId, "programId must not be null");
-        Objects.requireNonNull(seasons, "seasons must not be null");
-        if (id.isBlank()) {
-            throw new IllegalArgumentException("id must not be blank");
-        }
-        if (programId.isBlank()) {
-            throw new IllegalArgumentException("programId must not be blank");
-        }
-        if (seasons.isEmpty()) {
-            throw new IllegalArgumentException("seasons must not be empty");
-        }
-        if (requiredAstronautCount < 0) {
-            throw new IllegalArgumentException("requiredAstronautCount must not be negative: " + requiredAstronautCount);
-        }
-        if (requiredMissionControlOfficerCount < 0) {
-            throw new IllegalArgumentException(
-                "requiredMissionControlOfficerCount must not be negative: " + requiredMissionControlOfficerCount);
-        }
-        if (cost < 0) {
-            throw new IllegalArgumentException("cost must not be negative: " + cost);
-        }
-        if (firstTimePrestige < 0) {
-            throw new IllegalArgumentException("firstTimePrestige must not be negative: " + firstTimePrestige);
-        }
-        seasons = List.copyOf(seasons);
-        Objects.requireNonNull(goalDependencies, "goalDependencies must not be null");
-        Objects.requireNonNull(goalBoosts, "goalBoosts must not be null");
-        goalDependencies = List.copyOf(goalDependencies);
-        goalBoosts = List.copyOf(goalBoosts);
-        Objects.requireNonNull(launches, "launches must not be null");
-        launches = List.copyOf(launches);
-
-        boolean anyCrewInvolvement = anyStepMatches(seasons, step -> !step.crewInvolvements().isEmpty());
-        if ((requiredAstronautCount > 0) != anyCrewInvolvement) {
-            throw new IllegalArgumentException(
-                "requiredAstronautCount " + requiredAstronautCount + " disagrees with whether any step has crew involvement");
-        }
-        if (cancellationPrestigeDeduction < 0 || cancellationRefundPercent < 0 || cancellationRefundPercent > 100) {
-            throw new IllegalArgumentException("cancellation terms out of range for " + id);
-        }
-        if (requiredCapcomCount < 0) {
-            throw new IllegalArgumentException("requiredCapcomCount must not be negative: " + requiredCapcomCount);
-        }
-        boolean anyCapcomInvolvement = anyStepMatches(seasons, step -> !step.capcomInvolvements().isEmpty());
-        if ((requiredCapcomCount > 0) != anyCapcomInvolvement) {
-            throw new IllegalArgumentException("requiredCapcomCount " + requiredCapcomCount
-                + " disagrees with whether any step has CAPCOM involvement");
-        }
-        boolean anyControllerInvolvement = anyStepMatches(seasons, step -> !step.controllerInvolvements().isEmpty());
-        if ((requiredMissionControlOfficerCount > 0) != anyControllerInvolvement) {
-            throw new IllegalArgumentException("requiredMissionControlOfficerCount "
-                + requiredMissionControlOfficerCount + " disagrees with whether any step has controller involvement");
-        }
-    }
-
-    /**
-     * Whether any step of any given season matches the given predicate.
-     *
-     * @param seasons   the seasons to scan
-     * @param predicate the per-step condition to test
-     * @return {@code true} if any step matches
-     */
-    private static boolean anyStepMatches(List<MissionSeason> seasons, Predicate<MissionStep> predicate) {
+    public SortedSet<Integer> usedCrewSlots() {
+        SortedSet<Integer> used = new TreeSet<>();
         for (MissionSeason season : seasons) {
             for (MissionStep step : season.steps()) {
-                if (predicate.test(step)) {
-                    return true;
-                }
+                step.crewInvolvements().forEach(involvement -> used.add(involvement.slot()));
             }
         }
-        return false;
+        return used;
     }
 
     /**
-     * How many seasons flying this configuration takes - derived from
-     * {@link #seasons()} rather than stored separately, so the two can
-     * never disagree.
+     * Returns the control slots some step of some season involves - the seats a launch
+     * must fill on the ground.
+     *
+     * @return the slot indices, ascending
+     */
+    public SortedSet<Integer> usedControlSlots() {
+        return usedControlSlotsFrom(0);
+    }
+
+    /**
+     * Returns the control slots some step of season {@code seasonIndex} or later
+     * involves - the seats a mission still needs from that season on. A slot outside
+     * this set is released once its last season has flown ({@code baspm.md} &sect;10.11).
+     *
+     * @param seasonIndex the 0-based season index
+     * @return the slot indices, ascending; empty past the last season
+     */
+    public SortedSet<Integer> usedControlSlotsFrom(int seasonIndex) {
+        SortedSet<Integer> used = new TreeSet<>();
+        for (int i = Math.max(0, seasonIndex); i < seasons.size(); i++) {
+            for (MissionStep step : seasons.get(i).steps()) {
+                step.controllerInvolvements().forEach(involvement -> used.add(involvement.slot()));
+            }
+        }
+        return used;
+    }
+
+    /**
+     * Returns how many astronauts fly: the used crew slots.
+     *
+     * @return the crew count
+     */
+    public int requiredAstronautCount() {
+        return usedCrewSlots().size();
+    }
+
+    /**
+     * Returns how many flight controllers the mission needs: the used mission-control slots.
+     *
+     * @return the controller count
+     */
+    public int requiredMissionControlOfficerCount() {
+        return (int) usedControlSlots().stream()
+            .filter(slot -> controlSlots.get(slot).kind() == StaffingSlot.Kind.MISSION_CONTROL).count();
+    }
+
+    /**
+     * Returns how many astronauts the mission needs on the ground (CAPCOM): the used
+     * astronaut-type control slots.
+     *
+     * @return the CAPCOM count
+     */
+    public int requiredCapcomCount() {
+        return (int) usedControlSlots().stream()
+            .filter(slot -> controlSlots.get(slot).kind() == StaffingSlot.Kind.ASTRONAUT).count();
+    }
+
+    /**
+     * How many seasons flying this configuration takes.
      *
      * @return {@code seasons().size()}
      */
     public int durationInSeasons() {
         return seasons.size();
+    }
+
+    private static List<String> genericCrewSlots(int count) {
+        if (count < 0) {
+            throw new IllegalArgumentException("crew slot count must not be negative: " + count);
+        }
+        List<String> slots = new ArrayList<>();
+        for (int i = 1; i <= count; i++) {
+            slots.add("CREW " + i);
+        }
+        return slots;
+    }
+
+    private static List<StaffingSlot> genericControlSlots(int controllers, int capcom) {
+        if (controllers < 0 || capcom < 0) {
+            throw new IllegalArgumentException("slot counts must not be negative");
+        }
+        List<StaffingSlot> slots = new ArrayList<>();
+        MissionControlSkill[] skills = MissionControlSkill.values();
+        for (int i = 0; i < controllers; i++) {
+            slots.add(StaffingSlot.controller("CONTROLLER " + (i + 1), skills[i % skills.length]));
+        }
+        for (int i = 0; i < capcom; i++) {
+            slots.add(StaffingSlot.astronaut("CAPCOM " + (i + 1), AstronautSkill.LEADERSHIP));
+        }
+        return slots;
     }
 }

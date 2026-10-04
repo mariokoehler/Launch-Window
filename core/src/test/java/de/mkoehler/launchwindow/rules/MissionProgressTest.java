@@ -142,29 +142,22 @@ class MissionProgressTest {
     }
 
     /**
-     * Verifies the crew contribution is the average skill across every
-     * assigned astronaut, not the sum, the best member, or just the first
-     * id in the list: with capsule reliability 80 (clears the 65 blend
-     * threshold) and two astronauts at piloting 40/90, the correct average
-     * (65) gives base probability 80*0.8+65*0.2=77 and saving-throw
-     * probability 77*50/100=38.5 (pass threshold 61.5). A first roll of 20
-     * fails under the average or a first-member-only (skill 40 alone, base
-     * 72, pass threshold 28) reading, but would instead succeed outright
-     * under a max (skill 90, base 82, threshold 18) or sum (base 90+,
-     * threshold under 10) reading, which never even reach the saving
-     * throw. A saving roll of 63 then distinguishes the two readings that
-     * did fall through: 63 &gt; 61.5 resolves to {@code MINOR_GLITCH_SOLVED}
-     * under the correct average, but the first-member-only reading's own
-     * pass threshold is 64 (saving-throw probability 72*50/100=36), so 63
-     * is not above it, landing in the {@code MINOR_GLITCH} band instead.
+     * Verifies a crew involvement reads the one astronaut in its slot, as in BASPM
+     * ({@code baspm.md} &sect;10.11) - not an average, sum, or max across the crew.
+     * Slot 0 holds skill 40 and slot 1 skill 90; only slot 0 is involved. Capsule 80
+     * blended with crew 40 gives base probability 72 (first-roll threshold 28) and
+     * saving-throw probability 72*50/100=36 (pass threshold 64). A first roll of 20
+     * fails, and a saving roll of 63 lands in the {@code MINOR_GLITCH} band. Reading
+     * slot 1 (base 82) would succeed on the first roll, and the old average (77,
+     * threshold 61.5) would solve the glitch.
      */
     @Test
-    void crewContributionIsTheAverageAcrossAssignedMembersNotSumOrMax() {
+    void crewContributionReadsTheAstronautInTheInvolvedSlot() {
         MissionStep step = new MissionStep("ops", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
-            List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 100)),
-            List.of(new MissionStep.CrewInvolvement(AstronautSkill.PILOTING, 100)), false);
+            List.of(new MissionStep.ControllerInvolvement(0, 100)),
+            List.of(new MissionStep.CrewInvolvement(0, AstronautSkill.PILOTING, 100)), false);
         MissionConfiguration configuration =
-            new MissionConfiguration("avg-std", "mercury-program", List.of(new MissionSeason(List.of(step))), 2, 1, 0);
+            new MissionConfiguration("slot-std", "mercury-program", List.of(new MissionSeason(List.of(step))), 2, 1, 0);
         ContentCatalog catalog = catalogWith(configuration);
 
         PlayerSnapshot snapshot = snapshotWithOwnedCapsule(80.0);
@@ -172,21 +165,17 @@ class MissionProgressTest {
         addAssignedAstronaut(snapshot, "astro-2", 90.0, "m0");
         addAssignedController(snapshot, "mco-1", 50.0, "m0");
         snapshot.getInProgressMissions().put("m0",
-            new InProgressMission("m0", "avg-std", List.of("astro-1", "astro-2"), List.of("mco-1")));
+            new InProgressMission("m0", "slot-std", List.of("astro-1", "astro-2"), List.of("mco-1")));
 
-        // base probability (average) = 77 -> first-roll threshold 23; saving-throw probability
-        // = 77 * 50 / 100 = 38.5 -> saving-throw pass threshold 61.5. A first-member-only bug
-        // would instead compute a pass threshold of 64 - see this test's own Javadoc. The 12
-        // filler values after the two step rolls cover this season's post-flight draws: 1
-        // reliability-change factor (capsule-mercury, MINOR_GLITCH_SOLVED -> SUCCESS category),
-        // then 5 skill-growth factors per assigned astronaut (astro-1, astro-2) and 1 per
-        // controller skill exercised this season (mco-1, PROPULSION only).
+        // The 12 filler values after the two step rolls cover this season's post-flight draws: 1
+        // reliability-change factor, 5 skill-growth factors per astronaut aboard, and 1 for the
+        // controller slot exercised this season.
         ScriptedRandomGenerator random = new ScriptedRandomGenerator(20.0, 63.0,
             0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1);
         List<ResolutionEvent> events = MissionProgress.advanceSeason(snapshot, catalog, random);
 
         MissionStepResolved resolved = (MissionStepResolved) events.get(0);
-        assertEquals(MissionStepOutcome.MINOR_GLITCH_SOLVED, resolved.outcome());
+        assertEquals(MissionStepOutcome.MINOR_GLITCH, resolved.outcome());
     }
 
     /**
@@ -198,7 +187,7 @@ class MissionProgressTest {
     @Test
     void completingTheFinalSeasonReleasesEveryoneAndEndsTheMission() {
         MissionStep step = new MissionStep("ops", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
-            List.of(), List.of(new MissionStep.CrewInvolvement(AstronautSkill.PILOTING, 100)), false);
+            List.of(), List.of(new MissionStep.CrewInvolvement(0, AstronautSkill.PILOTING, 100)), false);
         MissionConfiguration configuration = new MissionConfiguration("complete-std", "mercury-program",
             List.of(new MissionSeason(List.of(step))), 1, 0, 0);
         ContentCatalog catalog = catalogWith(configuration);
@@ -228,7 +217,7 @@ class MissionProgressTest {
     @Test
     void overAgeAstronautRetiresInsteadOfReleasingOnMissionCompletion() {
         MissionStep step = new MissionStep("ops", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
-            List.of(), List.of(new MissionStep.CrewInvolvement(AstronautSkill.PILOTING, 100)), false);
+            List.of(), List.of(new MissionStep.CrewInvolvement(0, AstronautSkill.PILOTING, 100)), false);
         MissionConfiguration configuration = new MissionConfiguration("complete-std", "mercury-program",
             List.of(new MissionSeason(List.of(step))), 1, 0, 0);
         ContentCatalog catalog = catalogWith(configuration);
@@ -264,7 +253,7 @@ class MissionProgressTest {
     @Test
     void astronautExactlyAtRetirementAgeRetiresOnRelease() {
         MissionStep step = new MissionStep("ops", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
-            List.of(), List.of(new MissionStep.CrewInvolvement(AstronautSkill.PILOTING, 100)), false);
+            List.of(), List.of(new MissionStep.CrewInvolvement(0, AstronautSkill.PILOTING, 100)), false);
         MissionConfiguration configuration = new MissionConfiguration("complete-std", "mercury-program",
             List.of(new MissionSeason(List.of(step))), 1, 0, 0);
         ContentCatalog catalog = catalogWith(configuration);
@@ -291,8 +280,8 @@ class MissionProgressTest {
     @Test
     void overAgeControllerRetiresAfterFailure() {
         MissionStep step = new MissionStep("launch", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
-            List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 100)),
-            List.of(new MissionStep.CrewInvolvement(AstronautSkill.PILOTING, 100)), false);
+            List.of(new MissionStep.ControllerInvolvement(0, 100)),
+            List.of(new MissionStep.CrewInvolvement(0, AstronautSkill.PILOTING, 100)), false);
         MissionConfiguration configuration = new MissionConfiguration("failure-std", "mercury-program",
             List.of(new MissionSeason(List.of(step))), 1, 1, 0);
         ContentCatalog catalog = catalogWith(configuration);
@@ -334,7 +323,7 @@ class MissionProgressTest {
     @Test
     void catastrophicOutcomeOnOverAgeAstronautEmitsOnlyLostInAccident() {
         MissionStep step = new MissionStep("launch", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
-            List.of(), List.of(new MissionStep.CrewInvolvement(AstronautSkill.PILOTING, 100)), true);
+            List.of(), List.of(new MissionStep.CrewInvolvement(0, AstronautSkill.PILOTING, 100)), true);
         MissionConfiguration configuration = new MissionConfiguration("catastrophic-std", "mercury-program",
             List.of(new MissionSeason(List.of(step))), 1, 0, 0);
         ContentCatalog catalog = catalogWith(configuration);
@@ -368,7 +357,7 @@ class MissionProgressTest {
     @Test
     void overAgeAstronautInNonFinalSeasonStaysAssignedNotRetiredEarly() {
         MissionStep step = new MissionStep("ops", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
-            List.of(), List.of(new MissionStep.CrewInvolvement(AstronautSkill.PILOTING, 100)), false);
+            List.of(), List.of(new MissionStep.CrewInvolvement(0, AstronautSkill.PILOTING, 100)), false);
         MissionConfiguration configuration = new MissionConfiguration("multi-std", "mercury-program",
             List.of(new MissionSeason(List.of(step)), new MissionSeason(List.of(step))), 1, 0, 0);
         ContentCatalog catalog = catalogWith(configuration);
@@ -396,7 +385,7 @@ class MissionProgressTest {
     @Test
     void successfulNonFinalSeasonAdvancesTheSeasonIndex() {
         MissionStep step = new MissionStep("ops", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
-            List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 100)), List.of(), false);
+            List.of(new MissionStep.ControllerInvolvement(0, 100)), List.of(), false);
         MissionConfiguration configuration = new MissionConfiguration("multi-std", "mercury-program",
             List.of(new MissionSeason(List.of(step)), new MissionSeason(List.of(step))), 0, 1, 0);
         ContentCatalog catalog = catalogWith(configuration);
@@ -502,7 +491,7 @@ class MissionProgressTest {
     @Test
     void failureEndsTheMissionAndReleasesTheCrewUnharmed() {
         MissionStep step = new MissionStep("launch", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
-            List.of(), List.of(new MissionStep.CrewInvolvement(AstronautSkill.PILOTING, 100)), false);
+            List.of(), List.of(new MissionStep.CrewInvolvement(0, AstronautSkill.PILOTING, 100)), false);
         MissionConfiguration configuration = new MissionConfiguration("failure-std", "mercury-program",
             List.of(new MissionSeason(List.of(step))), 1, 0, 0);
         ContentCatalog catalog = catalogWith(configuration);
@@ -539,7 +528,7 @@ class MissionProgressTest {
     @Test
     void catastrophicOutcomeLosesTheWholeCrew() {
         MissionStep step = new MissionStep("launch", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
-            List.of(), List.of(new MissionStep.CrewInvolvement(AstronautSkill.PILOTING, 100)), true);
+            List.of(), List.of(new MissionStep.CrewInvolvement(0, AstronautSkill.PILOTING, 100)), true);
         MissionConfiguration configuration = new MissionConfiguration("catastrophic-std", "mercury-program",
             List.of(new MissionSeason(List.of(step))), 2, 0, 0);
         ContentCatalog catalog = catalogWith(configuration);
@@ -576,8 +565,8 @@ class MissionProgressTest {
     @Test
     void catastrophicOutcomeReleasesControllersUnharmed() {
         MissionStep step = new MissionStep("launch", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
-            List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 100)),
-            List.of(new MissionStep.CrewInvolvement(AstronautSkill.PILOTING, 100)), true);
+            List.of(new MissionStep.ControllerInvolvement(0, 100)),
+            List.of(new MissionStep.CrewInvolvement(0, AstronautSkill.PILOTING, 100)), true);
         MissionConfiguration configuration = new MissionConfiguration("catastrophic-ctrl-std", "mercury-program",
             List.of(new MissionSeason(List.of(step))), 1, 1, 0);
         ContentCatalog catalog = catalogWith(configuration);
@@ -846,7 +835,7 @@ class MissionProgressTest {
     @Test
     void controllerSkillGrowthOnlyAppliesToSkillsExercisedThisSeason() {
         MissionStep step = new MissionStep("ops", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
-            List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 100)), List.of(), false);
+            List.of(new MissionStep.ControllerInvolvement(0, 100)), List.of(), false);
         MissionConfiguration configuration = new MissionConfiguration("controller-growth-std", "mercury-program",
             List.of(new MissionSeason(List.of(step))), 0, 1, 0);
         ContentCatalog catalog = catalogWith(configuration);
@@ -919,7 +908,7 @@ class MissionProgressTest {
     @Test
     void idleRosterWideControllerExpertRescuesTheSavingThrow() {
         MissionStep step = new MissionStep("ops", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
-            List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 100)), List.of(), false);
+            List.of(new MissionStep.ControllerInvolvement(0, 100)), List.of(), false);
         MissionConfiguration configuration =
             new MissionConfiguration("expert-std", "mercury-program", List.of(new MissionSeason(List.of(step))), 0, 1,
                 0);
@@ -960,7 +949,7 @@ class MissionProgressTest {
     @Test
     void astronautExpertAssignedToAnotherMissionIsExcludedEntirely() {
         MissionStep step = new MissionStep("ops", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
-            List.of(), List.of(new MissionStep.CrewInvolvement(AstronautSkill.PILOTING, 100)), false);
+            List.of(), List.of(new MissionStep.CrewInvolvement(0, AstronautSkill.PILOTING, 100)), false);
         MissionConfiguration configuration =
             new MissionConfiguration("expert-std", "mercury-program", List.of(new MissionSeason(List.of(step))), 1, 0,
                 0);
@@ -992,7 +981,7 @@ class MissionProgressTest {
     @Test
     void controllerExpertAssignedToAnotherMissionGetsSeventyFivePercentEfficiency() {
         MissionStep step = new MissionStep("ops", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
-            List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 100)), List.of(), false);
+            List.of(new MissionStep.ControllerInvolvement(0, 100)), List.of(), false);
         MissionConfiguration configuration =
             new MissionConfiguration("expert-std", "mercury-program", List.of(new MissionSeason(List.of(step))), 0, 1,
                 0);
@@ -1025,7 +1014,7 @@ class MissionProgressTest {
     @Test
     void controllerExpertCurrentlyInTrainingIsStillFullyEligible() {
         MissionStep step = new MissionStep("ops", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
-            List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 100)), List.of(), false);
+            List.of(new MissionStep.ControllerInvolvement(0, 100)), List.of(), false);
         MissionConfiguration configuration =
             new MissionConfiguration("expert-std", "mercury-program", List.of(new MissionSeason(List.of(step))), 0, 1,
                 0);
@@ -1060,7 +1049,7 @@ class MissionProgressTest {
     @Test
     void twoDifferentExpertsStackSequentially() {
         MissionStep step = new MissionStep("ops", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
-            List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 100)), List.of(), false);
+            List.of(new MissionStep.ControllerInvolvement(0, 100)), List.of(), false);
         MissionConfiguration configuration =
             new MissionConfiguration("expert-std", "mercury-program", List.of(new MissionSeason(List.of(step))), 0, 1,
                 0);
@@ -1101,7 +1090,7 @@ class MissionProgressTest {
     @Test
     void sameExpertsExhaustionCarriesAcrossDifferentMissionsInOneTurn() {
         MissionStep step = new MissionStep("ops", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
-            List.of(new MissionStep.ControllerInvolvement(MissionControlSkill.PROPULSION, 100)), List.of(), false);
+            List.of(new MissionStep.ControllerInvolvement(0, 100)), List.of(), false);
         MissionConfiguration configuration =
             new MissionConfiguration("expert-std", "mercury-program", List.of(new MissionSeason(List.of(step))), 0, 1,
                 0);

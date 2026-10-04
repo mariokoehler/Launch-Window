@@ -45,7 +45,8 @@ class InverseActionsTest {
     }
 
     private static LaunchRequest sputnik(String configurationId) {
-        return new LaunchRequest(configurationId, List.of(), List.of("mc0", "mc1", "mc2"), List.of(),
+        // Sputnik's steps use the BOOSTER and SPACECRAFT SYSTEMS slots; the third slot stays empty.
+        return new LaunchRequest(configurationId, List.of(), List.of("mc0", "mc1"), List.of(),
             List.of("r7-sputnik"));
     }
 

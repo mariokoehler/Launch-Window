@@ -72,7 +72,7 @@ from scratch.
 (`design.md` §5, M4 slices 4a–4e). Players act through journaled
 `PlayerAction`s, and undo is by inverse actions only, so the journal stays
 append-only. The server pins the content pack from `game-meta.json`, players
-claim a slot (archetype, unique agency name and callsign), turns resolve
+claim a slot (archetype, unique agency name and director name), turns resolve
 through `SeasonResolver` with seeded randomness, and the first winner goes to
 `game-result.json`. The exit proof ran over real sockets with a scheduled
 resolution. Next is M5, the libGDX client. **Workflow (user, 2026-10-03):**
@@ -119,6 +119,32 @@ directed exception, to revisit if they prefer stricter re-derivation. The
 conversion rate (4 prestige per fund) is my own, unconfirmed. In the harness, the
 bot never goes into debt at these values, so the conversion is covered by unit
 tests only.
+
+**Slot staffing done (2026-10-03, M5 groundwork):** missions are staffed through
+BASPM's mission-control and flight-crew layouts one to one (`StaffingSlot`,
+slot-indexed step involvements, `MissionStaffing.autoAssign`/`reassign`, the new
+`ReassignControlSlotAction`). Each roll reads the one person in each slot, which
+**supersedes the 2026-10-02 averaging rule described below**. Only used slots are
+required: crewed Mercury/Vostok need 9 controllers + 1 CAPCOM, not "10 + 1".
+Control slots are released after their last season, as in BASPM, and CAPCOM is
+re-staffable mid-mission (both confirmed by the user the same day). The
+converter (`E:\Temp\BASPM\tools\baspm_pack.py`, pre-slot copy kept as
+`.bak-preslots`) now emits the layouts. Details and harness numbers are in
+`design.md` §5 M5, "Slot staffing". **Next:** the M5 server gaps G1-G9
+(`ui-spec.md` §6) and the libGDX screens as mockups arrive. Reset the dev data
+root before a DevClient run: the journaled launch action's fields changed.
+
+**Display name dropped, "callsign" renamed (user, 2026-10-04):** the account
+has no display name any more (login and password only, handshake included).
+The per-game persona is the agency's **Director** (`directorName`, one title
+for both archetypes), chosen once at slot claim. Old `accounts.json` and
+snapshots won't load (Jackson is strict on unknown fields), so reset the dev
+data root. The same day the user decided on **history notes**: a dedicated
+icon with a hover card for optional real-world tidbits (`ui-spec.md`
+component 15, `design.md` §1.1/§3.12), with the first one on the join
+screen's Director field (Korolev as the secret "Chief Designer"). When a
+tidbit turns up during any work, add it to `design.md` §1.1 as a history
+note candidate.
 
 Everything below is history; if this paragraph and a later one disagree, the
 later one wins.

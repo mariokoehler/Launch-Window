@@ -19,10 +19,9 @@ public class InProgressMission {
     private String id;
     private String missionConfigurationId;
     private int currentSeasonIndex;
-    private List<String> assignedAstronautIds = new ArrayList<>();
-    private List<String> assignedMissionControlOfficerIds = new ArrayList<>();
+    private List<String> crewSlotIds = new ArrayList<>();
+    private List<String> controlSlotIds = new ArrayList<>();
     private List<String> rocketIds = new ArrayList<>();
-    private List<String> capcomAstronautIds = new ArrayList<>();
     private long launchCost;
 
     /**
@@ -32,32 +31,26 @@ public class InProgressMission {
     }
 
     /**
-     * Creates a new in-progress mission at season 0, with the given
-     * assigned personnel.
+     * Creates a new in-progress mission at season 0, with one person per slot.
      *
-     * @param id                                a fresh instance id, unique
-     *                                          within a player's snapshot -
-     *                                          see
-     *                                          {@link PlayerSnapshot#allocateMissionInstanceId()}
-     * @param missionConfigurationId            the
-     *                                          {@link de.mkoehler.launchwindow.content.MissionConfiguration#id()}
-     *                                          this instance is running
-     * @param assignedAstronautIds              the crew assigned to this
-     *                                          mission; empty if uncrewed
-     * @param assignedMissionControlOfficerIds  the flight controllers
-     *                                          assigned to this mission;
-     *                                          may be empty
+     * @param id                     a fresh instance id, unique within a player's
+     *                               snapshot ({@link PlayerSnapshot#allocateMissionInstanceId()})
+     * @param missionConfigurationId the configuration this instance is running
+     * @param crewSlotIds            one astronaut id per crew slot of the configuration, in
+     *                               slot order; {@code null} for a slot no step uses
+     * @param controlSlotIds         one id per control slot, in slot order - a flight
+     *                               controller, or an astronaut for a ground astronaut
+     *                               slot such as CAPCOM; {@code null} for an unused slot
      */
-    public InProgressMission(String id, String missionConfigurationId, List<String> assignedAstronautIds,
-            List<String> assignedMissionControlOfficerIds) {
+    public InProgressMission(String id, String missionConfigurationId, List<String> crewSlotIds,
+            List<String> controlSlotIds) {
         this.id = Objects.requireNonNull(id, "id must not be null");
         this.missionConfigurationId =
             Objects.requireNonNull(missionConfigurationId, "missionConfigurationId must not be null");
         this.currentSeasonIndex = 0;
-        setAssignedAstronautIds(assignedAstronautIds);
-        setAssignedMissionControlOfficerIds(assignedMissionControlOfficerIds);
+        setCrewSlotIds(crewSlotIds);
+        setControlSlotIds(controlSlotIds);
     }
-
     /**
      * Returns this instance's own id, unique within a player's snapshot.
      *
@@ -115,47 +108,65 @@ public class InProgressMission {
     }
 
     /**
-     * Returns the astronaut ids assigned as this mission's crew. Empty for
-     * an uncrewed mission.
+     * Returns the crew, one astronaut id per crew slot in slot order, {@code null} where
+     * a slot isn't used ({@code baspm.md} &sect;10.11). The live list is returned.
      *
-     * @return the assigned astronaut ids
+     * @return the crew slot assignments
      */
-    public List<String> getAssignedAstronautIds() {
-        return assignedAstronautIds;
+    public List<String> getCrewSlotIds() {
+        return crewSlotIds;
     }
 
     /**
-     * Replaces the assigned astronaut ids.
+     * Replaces the crew slot assignments. Copied; {@code null} entries are allowed.
      *
-     * @param assignedAstronautIds the assigned astronaut ids
+     * @param crewSlotIds the crew slot assignments
      */
-    public void setAssignedAstronautIds(List<String> assignedAstronautIds) {
-        Objects.requireNonNull(assignedAstronautIds, "assignedAstronautIds must not be null");
-        this.assignedAstronautIds = new ArrayList<>(assignedAstronautIds);
+    public void setCrewSlotIds(List<String> crewSlotIds) {
+        Objects.requireNonNull(crewSlotIds, "crewSlotIds must not be null");
+        this.crewSlotIds = new ArrayList<>(crewSlotIds);
     }
 
     /**
-     * Returns the Mission Control officer ids assigned to this mission.
-     * May be empty.
+     * Returns the ground staff, one id per control slot in slot order: a flight
+     * controller, or an astronaut for a ground astronaut slot such as CAPCOM;
+     * {@code null} where a slot isn't used. Ids are unique across every roster, so
+     * the roster that holds an id says which kind it is. The live list is returned.
      *
-     * @return the assigned Mission Control officer ids
+     * @return the control slot assignments
      */
-    public List<String> getAssignedMissionControlOfficerIds() {
-        return assignedMissionControlOfficerIds;
+    public List<String> getControlSlotIds() {
+        return controlSlotIds;
     }
 
     /**
-     * Replaces the assigned Mission Control officer ids.
+     * Replaces the control slot assignments. Copied; {@code null} entries are allowed.
      *
-     * @param assignedMissionControlOfficerIds the assigned Mission Control
-     *                                          officer ids
+     * @param controlSlotIds the control slot assignments
      */
-    public void setAssignedMissionControlOfficerIds(List<String> assignedMissionControlOfficerIds) {
-        Objects.requireNonNull(assignedMissionControlOfficerIds,
-            "assignedMissionControlOfficerIds must not be null");
-        this.assignedMissionControlOfficerIds = new ArrayList<>(assignedMissionControlOfficerIds);
+    public void setControlSlotIds(List<String> controlSlotIds) {
+        Objects.requireNonNull(controlSlotIds, "controlSlotIds must not be null");
+        this.controlSlotIds = new ArrayList<>(controlSlotIds);
     }
 
+    /**
+     * Returns the astronauts aboard: the filled crew slots. Derived, not stored.
+     *
+     * @return the crew ids, in slot order
+     */
+    public List<String> crewIds() {
+        return crewSlotIds.stream().filter(Objects::nonNull).toList();
+    }
+
+    /**
+     * Returns everyone on the ground: the filled control slots, flight controllers and
+     * CAPCOM astronauts alike. Derived, not stored.
+     *
+     * @return the ground staff ids, in slot order
+     */
+    public List<String> groundIds() {
+        return controlSlotIds.stream().filter(Objects::nonNull).toList();
+    }
     /**
      * Returns the rocket chosen for each launch, in launch order - empty for a
      * configuration with no launches. A step's rocket slot {@code @rocket-n} resolves
@@ -176,28 +187,6 @@ public class InProgressMission {
     public void setRocketIds(List<String> rocketIds) {
         Objects.requireNonNull(rocketIds, "rocketIds must not be null");
         this.rocketIds = new ArrayList<>(rocketIds);
-    }
-
-    /**
-     * Returns the astronauts serving as CAPCOM on the ground for this mission - BASPM's
-     * CAPCOM slot ({@code baspm.md} &sect;10.9). They are {@code ASSIGNED} to this mission
-     * like the crew, but never fly, so a crew loss never touches them.
-     *
-     * @return the CAPCOM astronaut ids, never {@code null}
-     */
-    public List<String> getCapcomAstronautIds() {
-        return capcomAstronautIds;
-    }
-
-    /**
-     * Replaces the CAPCOM astronauts. Public for Jackson/Kryo, and copied defensively.
-     *
-     * @param capcomAstronautIds the CAPCOM astronaut ids
-     * @throws NullPointerException if {@code capcomAstronautIds} is {@code null}
-     */
-    public void setCapcomAstronautIds(List<String> capcomAstronautIds) {
-        Objects.requireNonNull(capcomAstronautIds, "capcomAstronautIds must not be null");
-        this.capcomAstronautIds = new ArrayList<>(capcomAstronautIds);
     }
 
     /**

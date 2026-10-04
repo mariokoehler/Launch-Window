@@ -68,7 +68,7 @@ public final class DevClient {
     }
 
     /**
-     * Prompts for login credentials and a display name, sends the
+     * Prompts for login credentials, sends the
      * handshake, and prints the server's response.
      *
      * @param client  the connected client to send the handshake on
@@ -82,11 +82,9 @@ public final class DevClient {
         String login = console.readLine();
         System.out.print("Password: ");
         String password = console.readLine();
-        System.out.print("Display name: ");
-        String displayName = console.readLine();
 
         HandshakeResponse response = client.sendAndReceive(
-            new HandshakeRequest(AppVersion.getVersion(), login, password, displayName), HandshakeResponse.class);
+            new HandshakeRequest(AppVersion.getVersion(), login, password), HandshakeResponse.class);
         System.out.println(response.message());
         return response.accepted();
     }
@@ -141,7 +139,7 @@ public final class DevClient {
         if (response.success()) {
             System.out.println(formatSnapshot(response.state()));
         } else if (ClaimSlotRequest.SLOT_CLAIM_REQUIRED.equals(response.message())) {
-            System.out.println("No slot in this game yet - claim one: claim <NASA|SOVIET> <agencyName> <callsign>");
+            System.out.println("No slot in this game yet - claim one: claim <NASA|SOVIET> <agencyName> <directorName>");
         } else {
             System.out.println("Failed: " + response.message());
         }
@@ -158,7 +156,7 @@ public final class DevClient {
     private static void handleClaim(NetworkClient client, String line) throws IOException {
         String[] words = line.strip().split("\\s+");
         if (words.length != 4) {
-            System.out.println("Usage: claim <NASA|SOVIET> <agencyName> <callsign>");
+            System.out.println("Usage: claim <NASA|SOVIET> <agencyName> <directorName>");
             return;
         }
         Archetype archetype;
@@ -191,7 +189,7 @@ public final class DevClient {
      */
 
     private static void printHelp() {
-        System.out.println("Commands: claim <NASA|SOVIET> <agencyName> <callsign> | state | help | quit");
+        System.out.println("Commands: claim <NASA|SOVIET> <agencyName> <directorName> | state | help | quit");
         System.out.println(DevViews.HELP);
         System.out.println(DevCommands.HELP);
     }

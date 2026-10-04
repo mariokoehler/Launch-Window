@@ -162,6 +162,22 @@ On the right:
     building's roster cap is reached. New hires go straight into basic training on
     a random skill (astronauts 3 seasons, SET 1, controllers 3). The existing
     Personnel Recruitment mockup is this screen.
+15. **History note** *(decided 2026-10-04; how it looks is open)*. A small icon
+    placed next to a label, field, or value. On mouse-over it shows a short card,
+    two to four sentences, about the real history or engineering behind that
+    thing. Clicking pins the card open until it's dismissed. It's the
+    educational layer's in-the-moment form (`design.md` §1.1). Rules:
+    - **It's always optional.** Nothing in a history note is ever needed to play.
+      Rules help (how a mechanic works) is a different thing and never uses this
+      icon.
+    - **Its glyph is its own** and must not look like a generic "i" or "?" help
+      icon, so players learn that this icon always means "a real-world story".
+      *Proposal:* a small open book in navy line art, with the card styled like
+      an archive index card (white, thin navy rule, a small "History" kicker).
+    - **The text is our own,** written from real-world facts, never from BASPM's
+      historical-facts text (`design.md` §1.2).
+    - **The join screen has the first one** (§4.2). That's on purpose: it's where
+      players meet the icon and learn what it means.
 
 ---
 
@@ -220,16 +236,28 @@ screenshot shows the equivalent screen, it's listed as **Ref**.
 
 ### 4.1 Connect
 **Purpose:** connect and authenticate. One form: server (host:port), login,
-password, display name. A new login creates the account. **States:** connecting;
+password. A new login creates the account. There's no display name: other
+players see you by your agency and director name, chosen per game (§4.2).
+**States:** connecting;
 wrong password; login has invalid characters (`[A-Za-z0-9_-]`, up to 32); client
 and server versions don't match (show both versions); server unreachable.
 
 ### 4.2 Join game (first visit to a game only)
 **Purpose:** join the game. **Shows:** an archetype choice between NASA-style and
 Soviet-style, with the two hub artworks as large cards (several players may pick
-the same one); an agency name; a callsign; a short line saying the game is in
-progress and you start fresh. **Actions:** Join. **States:** name taken; callsign
-taken (both checked ignoring case); empty fields. **After joining:** the starting
+the same one); an agency name; the **director's name** (the player's persona,
+the head of the agency, fixed for the whole game); a short line saying the game
+is in progress and you start fresh. **Actions:** Join. **States:** agency name
+taken; director name taken (both checked ignoring case); empty fields.
+
+**History note on the Director field** (component 15, the first one a player
+sees). Suggested text: *"Both agencies here have a Director, but in reality the
+two jobs were very different. NASA's Administrator was a public figure,
+appointed by the President, confirmed by the Senate, and questioned by Congress.
+The man who drove the Soviet program, Sergei Korolev, was a state secret. Until
+his death in 1966, the world knew him only as "the Chief Designer"."*
+
+**After joining:** the starting
 state is 25,000 funds, 250 prestige, 3,000 per season, every building at level 1,
 empty rosters, and six candidates per group. So the first thing to show is a hint
 to hire staff (SET Centre first).
@@ -239,7 +267,7 @@ to hire staff (SET Centre first).
 the player's archetype, picked by the game season, with the time of day advancing
 every 4 real minutes on re-entry (`design.md` §3.13). The seven building hotspots
 highlight on hover with a label. A slim overlay strip shows:
-- the agency name and callsign;
+- the agency name and director name;
 - the game date and the next-resolution countdown;
 - a turn-report button, badged when unread;
 - the funds and prestige chips.
@@ -359,24 +387,27 @@ four parts:
 - **Assemble mission** (below).
 
 **4.6.8 Assemble mission** *(decided: one screen merging BASPM's schedule and
-assemble)*. It shows the mission's **slots**: one per crew member
-(`requiredAstronautCount`), per CAPCOM (`requiredCapcomCount`, an astronaut on
-the ground), and per flight controller (`requiredMissionControlOfficerCount`),
-plus the chosen rocket per launch.
-- Click a slot to pick an available employee: idle, not unavailable, and not in
-  another slot. Each candidate shows the skills this mission uses.
-- **Auto-assign** fills every slot with the best available person, ranked by how
-  well their skills match what the mission's steps use:
-  - crew are ranked by the steps' crew skills;
-  - CAPCOM by Leadership (or the CAPCOM skill the steps name);
-  - controllers by the steps' controller skills, with Flight Director shares
-    spread evenly over the five skills.
-
-  *Note for the design:* our rules average each skill across everyone assigned,
-  so slots are seats, not named jobs like BASPM's BOOSTER or FIDO. Labelling seats
-  by the skill they most help is a good aid, but it isn't a rule.
+assemble)*. It shows the configuration's **staffing layouts** one to one, as BASPM
+does (`baspm.md` §10.11), plus the chosen rocket per launch:
+- **Flight crew** (`crewSlots`): one titled seat per astronaut aboard, for example
+  ASTRONAUT, or COSMONAUT A and B on a joint flight.
+- **Mission control** (`controlSlots`): titled jobs such as BOOSTER, RETRO, FIDO,
+  GUIDO, SURGEON, FLIGHT, and CAPCOM. Each slot shows its icon for the skill it reads
+  (the Flight Director icon for a FLIGHT slot) and its employee type; CAPCOM takes an
+  astronaut, every other slot a flight controller.
+- Slots no step uses show **"Not required"** and stay empty, as in BASPM. Crewed
+  Mercury, for example, has 11 control slots and uses 10 (9 controllers + CAPCOM).
+- Click a slot to pick an available employee of its type: idle, not unavailable, and
+  not in another slot. Any controller fits any controller slot; each candidate shows
+  their value in the slot's skill (a Flight Director slot reads the average of the
+  five skills), which is exactly what the roll will read.
+- **Auto-assign** (`MissionStaffing.autoAssign` in `core`) fills the crew seats first,
+  each with the astronaut best at the skills the steps weight on that seat, then the
+  Flight Director slots, then every other used slot, each with the best available
+  person at the slot's skill. Nobody is placed twice; a slot nobody is left for stays
+  empty.
 - A slot that can't be filled says why ("only 5 flight controllers; this mission
-  needs 10. Upgrade Mission Control and hire").
+  needs 9. Upgrade Mission Control and hire").
 - **Confirm & pay**: a price breakdown (configuration cost + the rockets' unit
   costs) and one confirmation ("Launch for 2,243? It flies at the next turn.
   Scrubbing before then refunds in full"). On confirm, the cost is deducted and the
@@ -399,6 +430,15 @@ cost. **Scrub** (red, confirmation) refunds in full and frees everyone.
 
 **4.7.3 Inspect active missions, and the mission replay.** Missions in flight,
 each with season n of m, its people, and the components' reliability.
+- **Re-staff mission control** *(decided 2026-10-03)*: reopens the assembly screen
+  (§4.6.8) for this mission with the crew seats locked and every used control slot
+  reassignable to an available person of its type, at no cost
+  (`ReassignControlSlotAction`, one action per changed slot; the previous holder
+  goes idle). CAPCOM is reassignable too. The same applies to scheduled missions
+  (§4.7.2).
+- A control slot whose last season has flown is **released**: its holder went idle at
+  the season's end, as in BASPM, and the slot shows "Released" and can't be refilled.
+  The crew stays aboard until the mission ends.
 - **Cancel** (red, confirmation) is offered only for **uncrewed** missions: it
   shows the prestige loss and the percentage refunded.
 - Crewed missions show "Can't be abandoned", with no button.
@@ -463,7 +503,7 @@ multiplier is active (random event, n seasons left).
 
 **Tabs:**
 - **The race:** the declared goals as goal badges, own progress, and every
-  player's progress side by side, by agency name and callsign: which goals they
+  player's progress side by side, by agency name and director name: which goals they
   hold and the turn they got them. **Needs server work:** G3.
 - **Achievements:** every goal achieved or cancelled, with the turn and the
   prestige.
@@ -477,7 +517,7 @@ Log out; server address; sound on or off (later); about and version.
 
 ### 4.13 Game result
 **Purpose:** announce the winner. **Shows:** an overlay on the hub when a result
-exists: winner or tied winners (agency and callsign), the turn decided, and the
+exists: winner or tied winners (agency and director name), the turn decided, and the
 race table. Play continues, so the overlay can be dismissed and is reopenable from
 the Museum.
 
@@ -508,8 +548,10 @@ for the mockups.
 | TARGET_NOT_ABOVE_SKILL | Pick a target above the current skill. |
 | PROGRAM_NOT_OPEN | Open the program first. |
 | WRONG_ROCKET_COUNT / ROCKET_NOT_AVAILABLE / ROCKET_CANNOT_LIFT_PAYLOAD | Pick one rocket per launch. / That rocket isn't available. / That rocket can't lift this payload there (or isn't human-rated). |
-| WRONG_ASTRONAUT_COUNT / WRONG_MISSION_CONTROL_OFFICER_COUNT / WRONG_CAPCOM_COUNT | This mission needs exactly n. |
-| ASTRONAUT_NOT_IDLE / MISSION_CONTROL_OFFICER_NOT_IDLE / CAPCOM_NOT_AVAILABLE | Someone picked isn't available. |
+| WRONG_ASTRONAUT_COUNT / WRONG_MISSION_CONTROL_OFFICER_COUNT / WRONG_CAPCOM_COUNT | Fill every required slot, and leave "Not required" slots empty. (A required slot is empty, a "Not required" one is filled, or there are more people than slots.) |
+| UNKNOWN_MISSION_CONTROL_OFFICER | Only a flight controller can take that slot. |
+| ASTRONAUT_NOT_IDLE / MISSION_CONTROL_OFFICER_NOT_IDLE / CAPCOM_NOT_AVAILABLE | Someone picked isn't available. (CAPCOM: it must be an available astronaut who isn't also in the crew.) |
+| Re-staffing (`ReassignControlSlotAction`): UNKNOWN_MISSION / UNKNOWN_SLOT / SLOT_NOT_USED / WRONG_EMPLOYEE_TYPE / PERSON_NOT_AVAILABLE | That mission has ended. / There's no such slot. / That slot isn't required. / That slot needs an astronaut (CAPCOM) or a flight controller. / They're busy or unavailable. |
 | LAUNCH_CAP_REACHED | No more launches this window. |
 | MISSION_COMPONENT_UNAVAILABLE | A component is grounded this window. |
 | CREWED_MISSION_IN_FLIGHT | A crewed mission can't be abandoned. |
@@ -524,22 +566,30 @@ for the mockups.
 Found while writing this spec. The client can't build these screens from the
 current state alone. Each is an M5 task.
 
-- **G1. Game info.** The content pack id (so the client loads the same pack), the
-  declared goals, the current game turn and the game date (start year and
-  season), the next resolution time, and the game result if any. Needs a new
-  `GameInfoRequest`/`GameInfoResponse`; the handshake can't change.
+- **G1. Game info.** The content pack id and its content hash (so the client loads
+  exactly the game's pack), the declared goals, the current game turn and the game
+  date (start year and season), the next resolution time, and the game result if
+  any. Needs a new `GameInfoRequest`/`GameInfoResponse`; the handshake can't change.
+  - **Content is frozen per game** (`design.md` §5 M5, "Content packs"): the server
+    copies the pack into the game's data folder at creation and only loads it from
+    there. The hash covers that frozen copy.
+  - **On a hash mismatch** the client downloads the game's pack from the server
+    (a new `FetchContentPackRequest`/`Response`, a few hundred KB of JSON) and
+    uses it for this game, instead of refusing to play. A client may hold several
+    packs at once, one per game version.
 - **G2. Turn report and replay data.** Resolution events (`MissionStepResolved`,
   `GoalSettled`, `ResearchCompleted`, `TrainingCompleted`, `PersonnelDeparture`,
   `SeasonFundsSettled`, `BudgetReviewed`, and so on) are computed and then thrown
   away. Persist each player's events per turn and serve them. The replay viewer
   also needs the step's success chance, which isn't in `MissionStepResolved` yet.
-- **G3. Rival summaries.** Each player's agency name, callsign, archetype, and the
+- **G3. Rival summaries.** Each player's agency name, director name, archetype, and the
   declared goals they hold, with turns, for the race tab. This is the
   "per-player summary" `design.md` §3.7 planned for game-meta.
 - **G4. Display text.** Content has ids only. The UI needs names and short
   descriptions for categories, programs, components, configurations, steps, and
   goals, written in our own words (never BASPM's, `design.md` §1.2). Add a
-  strings file per pack.
+  strings file per pack. Each entry can also carry an optional history note
+  (component 15), so the content screens can show the icon where a story exists.
 - **G5. Personnel names.** Candidates are all called "Candidate". Generate
   plausible names per archetype (our own name lists).
 - **G6. Today's queue.** Today's pending actions and their results, for the queue

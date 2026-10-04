@@ -76,10 +76,10 @@ public final class DevViews {
             }
             case "missions" -> {
                 for (InProgressMission mission : snapshot.getInProgressMissions().values()) {
-                    out.append(String.format("  %s %s season %d, rockets %s, crew %s, capcom %s, mc %s%n",
+                    // Slot lists in slot order; "null" marks a slot no step uses.
+                    out.append(String.format("  %s %s season %d, rockets %s, crew %s, control slots %s%n",
                         mission.getId(), mission.getMissionConfigurationId(), mission.getCurrentSeasonIndex() + 1,
-                        mission.getRocketIds(), mission.getAssignedAstronautIds(), mission.getCapcomAstronautIds(),
-                        mission.getAssignedMissionControlOfficerIds()));
+                        mission.getRocketIds(), mission.getCrewSlotIds(), mission.getControlSlotIds()));
                 }
                 out.append("Completed flights: ").append(snapshot.getSuccessfulFlightCounts()).append('\n');
             }

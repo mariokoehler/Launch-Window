@@ -123,7 +123,7 @@ class TimedEffectsTest {
         MissionConfiguration crewed = new MissionConfiguration("crewed-std", "mercury-program",
             List.of(new MissionSeason(List.of(new MissionStep("s1",
                 List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)), List.of(),
-                List.of(new MissionStep.CrewInvolvement(de.mkoehler.launchwindow.model.AstronautSkill.PILOTING, 100)),
+                List.of(new MissionStep.CrewInvolvement(0, de.mkoehler.launchwindow.model.AstronautSkill.PILOTING, 100)),
                 false)))),
             1, 0, 0, 0);
         ContentCatalog crewCatalog = new ContentCatalog(List.of(CATEGORY), List.of(PROGRAM), List.of(crewed),

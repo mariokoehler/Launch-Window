@@ -158,7 +158,7 @@ class ServerClientIntegrationTest {
         client.connect("localhost", port);
 
         HandshakeResponse handshake = client.sendAndReceive(
-            new HandshakeRequest(AppVersion.getVersion(), "mario", "hunter2", "Hanseatic Space Agency"),
+            new HandshakeRequest(AppVersion.getVersion(), "mario", "hunter2"),
             HandshakeResponse.class);
         assertTrue(handshake.accepted());
 
@@ -187,7 +187,7 @@ class ServerClientIntegrationTest {
         client.connect("localhost", port);
 
         HandshakeResponse handshake = client.sendAndReceive(
-            new HandshakeRequest("not-a-real-version", "mario", "hunter2", "Hanseatic Space Agency"),
+            new HandshakeRequest("not-a-real-version", "mario", "hunter2"),
             HandshakeResponse.class);
         assertFalse(handshake.accepted());
 

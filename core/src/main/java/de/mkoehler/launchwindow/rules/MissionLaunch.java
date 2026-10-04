@@ -5,6 +5,7 @@ import de.mkoehler.launchwindow.content.MissionComponent;
 import de.mkoehler.launchwindow.content.MissionConfiguration;
 import de.mkoehler.launchwindow.content.MissionSeason;
 import de.mkoehler.launchwindow.content.MissionStep;
+import de.mkoehler.launchwindow.content.StaffingSlot;
 import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.InProgressMission;
@@ -13,6 +14,7 @@ import de.mkoehler.launchwindow.model.OwnedMissionComponent;
 import de.mkoehler.launchwindow.model.Personnel;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -29,20 +31,15 @@ import java.util.Set;
  * {@code ProgramOpening.open}: there is no player-action dispatch path yet,
  * so this is a method a future action handler will call.</p>
  *
- * <p><b>A mission's crew/controller headcount is declared on
- * {@link MissionConfiguration} itself, not inferred from its content</b> -
- * {@link MissionConfiguration#requiredAstronautCount()}/
- * {@link MissionConfiguration#requiredMissionControlOfficerCount()} say
- * exactly how many of each a launch must supply; a launch supplying any
- * other count is rejected outright, not just "too few." This also closes
- * a departure-protection exploit:
- * {@link de.mkoehler.launchwindow.model.AssignmentState#ASSIGNED} shields
- * an Astronaut/Mission Control officer from the resignation/retirement
- * check ({@link PersonnelLifecycle#isProtectedFromDeparture}), so a
- * configuration requiring 0 of a kind can never have anyone of that kind
- * assigned to it at all - there is no way to park an idle employee on a
- * mission that has no actual need for them just to make them
- * {@code ASSIGNED}.</p>
+ * <p><b>A launch fills staffing slots, as in BASPM</b> ({@code baspm.md}
+ * &sect;10.11): one person per slot the configuration's steps use, of the slot's
+ * type, and nobody in a slot no step uses. Any other filling is rejected. This
+ * also closes a departure-protection exploit:
+ * {@link de.mkoehler.launchwindow.model.AssignmentState#ASSIGNED} shields an
+ * Astronaut/Mission Control officer from the resignation/retirement check
+ * ({@link PersonnelLifecycle#isProtectedFromDeparture}), and since an unused slot
+ * can never hold anyone, there is no way to park an idle employee on a mission
+ * that has no actual need for them just to make them {@code ASSIGNED}.</p>
  *
  * <p><b>Composition order for whoever wires this into one season pass
  * (M4):</b> launching a mission is a journaled player action, like
@@ -74,12 +71,10 @@ public final class MissionLaunch {
      * @param snapshot               the player snapshot to launch the
      *                               mission for; mutated in place on success
      * @param missionConfigurationId the mission configuration to launch
-     * @param astronautIds           the astronaut ids to assign as crew;
-     *                               must number exactly
-     *                               {@link MissionConfiguration#requiredAstronautCount()}
-     * @param missionControlOfficerIds the Mission Control officer ids to
-     *                               assign; must number exactly
-     *                               {@link MissionConfiguration#requiredMissionControlOfficerCount()}
+     * @param astronautIds           one astronaut per crew slot, in slot order
+     *                               ({@link LaunchRequest#crewSlotIds()})
+     * @param missionControlOfficerIds one person per control slot, in slot order
+     *                               ({@link LaunchRequest#controlSlotIds()})
      * @param catalog                the content catalog the configuration
      *                               is looked up in
      * @return the outcome
@@ -91,7 +86,7 @@ public final class MissionLaunch {
         Objects.requireNonNull(astronautIds, "astronautIds must not be null");
         Objects.requireNonNull(missionControlOfficerIds, "missionControlOfficerIds must not be null");
         return launch(snapshot, new LaunchRequest(missionConfigurationId, astronautIds, missionControlOfficerIds,
-            List.of(), List.of()), catalog);
+            List.of()), catalog);
     }
 
     /**
@@ -173,17 +168,14 @@ public final class MissionLaunch {
      * The rest of {@link #launch} once the mission configuration itself is
      * known to exist in the catalog.
      *
-     * @param snapshot                 the player snapshot to launch the
-     *                                 mission for; mutated in place on success
-     * @param configuration            the mission configuration to launch
-     * @param astronautIds             the astronaut ids to assign as crew
-     * @param missionControlOfficerIds the Mission Control officer ids to assign
+     * @param snapshot      the player; mutated in place on success
+     * @param configuration the mission configuration to launch
+     * @param request       the launch choices
+     * @param catalog       the content catalog
      * @return the outcome
      */
     private static MissionLaunchOutcome launchKnownConfiguration(PlayerSnapshot snapshot,
             MissionConfiguration configuration, LaunchRequest request, ContentCatalog catalog) {
-        List<String> astronautIds = request.astronautIds();
-        List<String> missionControlOfficerIds = request.missionControlOfficerIds();
         if (!snapshot.getOpenedProgramIds().contains(configuration.programId())) {
             return MissionLaunchOutcome.PROGRAM_NOT_OPEN;
         }
@@ -210,36 +202,39 @@ public final class MissionLaunch {
             }
         }
 
-        MissionLaunchOutcome crewProblem =
-            validateAstronauts(snapshot, astronautIds, configuration.requiredAstronautCount());
+        MissionLaunchOutcome crewProblem = validateCrew(snapshot, configuration, request.crewSlotIds());
         if (crewProblem != null) {
             return crewProblem;
         }
-        MissionLaunchOutcome controllerProblem = validateMissionControlOfficers(snapshot, missionControlOfficerIds,
-            configuration.requiredMissionControlOfficerCount());
+        List<String> crewSlotIds = padded(request.crewSlotIds(), configuration.crewSlots().size());
+        List<String> controlSlotIds = padded(request.controlSlotIds(), configuration.controlSlots().size());
+        if (controlSlotIds == null) {
+            return MissionLaunchOutcome.WRONG_MISSION_CONTROL_OFFICER_COUNT;
+        }
+        MissionLaunchOutcome controllerProblem = validateControllerSlots(snapshot, configuration, controlSlotIds);
         if (controllerProblem != null) {
             return controllerProblem;
         }
-        MissionLaunchOutcome capcomProblem = validateCapcom(snapshot, request.capcomAstronautIds(), astronautIds,
-            configuration.requiredCapcomCount());
+        MissionLaunchOutcome capcomProblem =
+            validateGroundAstronautSlots(snapshot, configuration, controlSlotIds, crewSlotIds);
         if (capcomProblem != null) {
             return capcomProblem;
         }
 
         String instanceId = snapshot.allocateMissionInstanceId();
-        InProgressMission mission =
-            new InProgressMission(instanceId, configuration.id(), astronautIds, missionControlOfficerIds);
+        InProgressMission mission = new InProgressMission(instanceId, configuration.id(), crewSlotIds, controlSlotIds);
         mission.setRocketIds(request.rocketIds());
-        mission.setCapcomAstronautIds(request.capcomAstronautIds());
         mission.setLaunchCost(cost);
         snapshot.getInProgressMissions().put(instanceId, mission);
 
         snapshot.setFunds(snapshot.getFunds() - cost);
         snapshot.setLaunchesThisWindow(snapshot.getLaunchesThisWindow() + 1);
-        assign(snapshot.getAstronauts(), astronautIds, instanceId);
-        assign(snapshot.getAstronauts(), request.capcomAstronautIds(), instanceId);
-        assign(snapshot.getMissionControlOfficers(), missionControlOfficerIds, instanceId);
-
+        for (String id : mission.crewIds()) {
+            assign(findPerson(snapshot, id), instanceId);
+        }
+        for (String id : mission.groundIds()) {
+            assign(findPerson(snapshot, id), instanceId);
+        }
         return MissionLaunchOutcome.LAUNCHED;
     }
 
@@ -258,112 +253,156 @@ public final class MissionLaunch {
     }
 
     /**
-     * Validates the given astronaut ids: no duplicates, each exists and is
-     * currently {@code IDLE}, and the list's size exactly matches
-     * {@code requiredCount}.
+     * Pads a slot list with {@code null}s to the layout's size.
      *
-     * @param snapshot      the player snapshot the ids are looked up against
-     * @param astronautIds  the astronaut ids to validate
-     * @param requiredCount how many are required
-     * @return the first problem found, or {@code null} if the ids are valid
+     * @param ids  the given slot ids
+     * @param size the layout's slot count
+     * @return the padded copy, or {@code null} when more ids than slots were given
      */
-    private static MissionLaunchOutcome validateAstronauts(PlayerSnapshot snapshot, List<String> astronautIds,
-            int requiredCount) {
-        if (hasDuplicate(astronautIds)) {
+    private static List<String> padded(List<String> ids, int size) {
+        if (ids.size() > size) {
+            return null;
+        }
+        List<String> copy = new ArrayList<>(ids);
+        while (copy.size() < size) {
+            copy.add(null);
+        }
+        return copy;
+    }
+
+    /**
+     * Validates the crew: nobody twice, each astronaut known, idle, and available,
+     * then no more ids than crew slots, every used crew slot filled, and no unused one.
+     *
+     * @return the first problem, or {@code null}
+     */
+    private static MissionLaunchOutcome validateCrew(PlayerSnapshot snapshot, MissionConfiguration configuration,
+            List<String> requestedIds) {
+        List<String> filled = requestedIds.stream().filter(Objects::nonNull).toList();
+        if (hasDuplicate(filled)) {
             return MissionLaunchOutcome.DUPLICATE_ASTRONAUT;
         }
-        for (String id : astronautIds) {
+        for (String id : filled) {
             Astronaut astronaut = findById(snapshot.getAstronauts(), id);
             if (astronaut == null) {
                 return MissionLaunchOutcome.UNKNOWN_ASTRONAUT;
             }
-            if (astronaut.getAssignmentState() != AssignmentState.IDLE || astronaut.getUnavailableSeasons() > 0) {
+            if (!isAvailable(astronaut)) {
                 return MissionLaunchOutcome.ASTRONAUT_NOT_IDLE;
             }
         }
-        if (astronautIds.size() != requiredCount) {
+        List<String> crewSlotIds = padded(requestedIds, configuration.crewSlots().size());
+        if (crewSlotIds == null) {
             return MissionLaunchOutcome.WRONG_ASTRONAUT_COUNT;
         }
-        return null;
-    }
-
-    /**
-     * Validates the CAPCOM astronauts: each known, idle and available, none repeated
-     * and none also in the crew, and exactly the configuration's CAPCOM count.
-     *
-     * @param snapshot      the player
-     * @param capcomIds     the CAPCOM astronaut ids
-     * @param crewIds       the crew astronaut ids
-     * @param requiredCount how many CAPCOM astronauts the configuration needs
-     * @return the first problem, or {@code null}
-     */
-    private static MissionLaunchOutcome validateCapcom(PlayerSnapshot snapshot, List<String> capcomIds,
-            List<String> crewIds, int requiredCount) {
-        if (hasDuplicate(capcomIds)) {
-            return MissionLaunchOutcome.CAPCOM_NOT_AVAILABLE;
-        }
-        for (String id : capcomIds) {
-            Astronaut astronaut = findById(snapshot.getAstronauts(), id);
-            if (astronaut == null || crewIds.contains(id) || astronaut.getAssignmentState() != AssignmentState.IDLE
-                    || astronaut.getUnavailableSeasons() > 0) {
-                return MissionLaunchOutcome.CAPCOM_NOT_AVAILABLE;
+        Set<Integer> used = configuration.usedCrewSlots();
+        for (int slot = 0; slot < crewSlotIds.size(); slot++) {
+            if (used.contains(slot) != (crewSlotIds.get(slot) != null)) {
+                return MissionLaunchOutcome.WRONG_ASTRONAUT_COUNT;
             }
         }
-        if (capcomIds.size() != requiredCount) {
-            return MissionLaunchOutcome.WRONG_CAPCOM_COUNT;
-        }
         return null;
     }
 
     /**
-     * Validates the given Mission Control officer ids: no duplicates, each
-     * exists and is currently {@code IDLE}, and the list's size exactly
-     * matches {@code requiredCount}.
+     * Validates the flight-controller slots: every used one holds a flight controller,
+     * no unused one holds anyone, nobody twice, and each known, idle, and available.
      *
-     * @param snapshot                 the player snapshot the ids are
-     *                                 looked up against
-     * @param missionControlOfficerIds the Mission Control officer ids to
-     *                                 validate
-     * @param requiredCount            how many are required
-     * @return the first problem found, or {@code null} if the ids are valid
+     * @return the first problem, or {@code null}
      */
-    private static MissionLaunchOutcome validateMissionControlOfficers(PlayerSnapshot snapshot,
-            List<String> missionControlOfficerIds, int requiredCount) {
-        if (hasDuplicate(missionControlOfficerIds)) {
+    private static MissionLaunchOutcome validateControllerSlots(PlayerSnapshot snapshot,
+            MissionConfiguration configuration, List<String> controlSlotIds) {
+        List<String> filled = new ArrayList<>();
+        for (int slot = 0; slot < controlSlotIds.size(); slot++) {
+            if (isControllerSlot(configuration, slot) && controlSlotIds.get(slot) != null) {
+                filled.add(controlSlotIds.get(slot));
+            }
+        }
+        if (hasDuplicate(filled)) {
             return MissionLaunchOutcome.DUPLICATE_MISSION_CONTROL_OFFICER;
         }
-        for (String id : missionControlOfficerIds) {
+        for (String id : filled) {
             MissionControlOfficer officer = findById(snapshot.getMissionControlOfficers(), id);
             if (officer == null) {
                 return MissionLaunchOutcome.UNKNOWN_MISSION_CONTROL_OFFICER;
             }
-            if (officer.getAssignmentState() != AssignmentState.IDLE || officer.getUnavailableSeasons() > 0) {
+            if (!isAvailable(officer)) {
                 return MissionLaunchOutcome.MISSION_CONTROL_OFFICER_NOT_IDLE;
             }
         }
-        if (missionControlOfficerIds.size() != requiredCount) {
-            return MissionLaunchOutcome.WRONG_MISSION_CONTROL_OFFICER_COUNT;
+        Set<Integer> used = configuration.usedControlSlots();
+        for (int slot = 0; slot < controlSlotIds.size(); slot++) {
+            if (isControllerSlot(configuration, slot) && used.contains(slot) != (controlSlotIds.get(slot) != null)) {
+                return MissionLaunchOutcome.WRONG_MISSION_CONTROL_OFFICER_COUNT;
+            }
         }
         return null;
     }
 
     /**
-     * Marks every given id's {@link Personnel} record
-     * {@link AssignmentState#ASSIGNED} with
-     * {@link Personnel#setAssignedMissionId} pointing at {@code instanceId}.
-     * Every id is already known to exist and be {@code IDLE} by the time
-     * this runs - see {@link #validateAstronauts}/{@link #validateMissionControlOfficers}.
+     * Validates the ground astronaut slots (CAPCOM): every used one holds an astronaut,
+     * no unused one holds anyone, and each astronaut known, idle, available, not
+     * repeated, and not also in the crew.
      *
-     * @param roster     the roster the ids belong to
-     * @param ids        the ids to assign
-     * @param instanceId the mission instance id to point them at
+     * @return the first problem, or {@code null}
      */
-    private static void assign(List<? extends Personnel> roster, List<String> ids, String instanceId) {
-        for (String id : ids) {
-            Personnel person = findById(roster, id);
-            person.setAssignmentState(AssignmentState.ASSIGNED);
-            person.setAssignedMissionId(instanceId);
+    private static MissionLaunchOutcome validateGroundAstronautSlots(PlayerSnapshot snapshot,
+            MissionConfiguration configuration, List<String> controlSlotIds, List<String> crewSlotIds) {
+        Set<String> seen = new HashSet<>();
+        for (int slot = 0; slot < controlSlotIds.size(); slot++) {
+            String id = controlSlotIds.get(slot);
+            if (isControllerSlot(configuration, slot) || id == null) {
+                continue;
+            }
+            Astronaut astronaut = findById(snapshot.getAstronauts(), id);
+            if (astronaut == null || crewSlotIds.contains(id) || !seen.add(id) || !isAvailable(astronaut)) {
+                return MissionLaunchOutcome.CAPCOM_NOT_AVAILABLE;
+            }
         }
+        Set<Integer> used = configuration.usedControlSlots();
+        for (int slot = 0; slot < controlSlotIds.size(); slot++) {
+            if (!isControllerSlot(configuration, slot) && used.contains(slot) != (controlSlotIds.get(slot) != null)) {
+                return MissionLaunchOutcome.WRONG_CAPCOM_COUNT;
+            }
+        }
+        return null;
+    }
+
+    private static boolean isControllerSlot(MissionConfiguration configuration, int slot) {
+        return configuration.controlSlots().get(slot).kind() == StaffingSlot.Kind.MISSION_CONTROL;
+    }
+
+    /**
+     * Whether a person can be put into a slot: idle and not unavailable.
+     *
+     * @param person the person
+     * @return {@code true} when free
+     */
+    static boolean isAvailable(Personnel person) {
+        return person.getAssignmentState() == AssignmentState.IDLE && person.getUnavailableSeasons() <= 0;
+    }
+
+    /**
+     * Marks a person {@link AssignmentState#ASSIGNED} to a mission instance.
+     *
+     * @param person     the person, already validated
+     * @param instanceId the mission instance id
+     */
+    static void assign(Personnel person, String instanceId) {
+        person.setAssignmentState(AssignmentState.ASSIGNED);
+        person.setAssignedMissionId(instanceId);
+    }
+
+    /**
+     * Finds an astronaut or flight controller by id. Ids are unique across rosters.
+     *
+     * @param snapshot the player
+     * @param id       the id
+     * @return the person, or {@code null}
+     */
+    static Personnel findPerson(PlayerSnapshot snapshot, String id) {
+        Personnel astronaut = findById(snapshot.getAstronauts(), id);
+        return astronaut != null ? astronaut : findById(snapshot.getMissionControlOfficers(), id);
     }
 
     /**

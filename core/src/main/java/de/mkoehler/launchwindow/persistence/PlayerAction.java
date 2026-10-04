@@ -13,6 +13,7 @@ import de.mkoehler.launchwindow.actions.LaunchMissionAction;
 import de.mkoehler.launchwindow.actions.OpenProgramAction;
 import de.mkoehler.launchwindow.actions.OpenRocketProgramAction;
 import de.mkoehler.launchwindow.actions.PullOutOfTrainingAction;
+import de.mkoehler.launchwindow.actions.ReassignControlSlotAction;
 import de.mkoehler.launchwindow.actions.ReleaseResearchAction;
 import de.mkoehler.launchwindow.actions.StartExpertTrainingAction;
 import de.mkoehler.launchwindow.actions.StartTrainingAction;
@@ -53,7 +54,8 @@ import de.mkoehler.launchwindow.model.PlayerSnapshot;
     @JsonSubTypes.Type(value = ReleaseResearchAction.class, name = "releaseResearch"),
     @JsonSubTypes.Type(value = StartTrainingAction.class, name = "startTraining"),
     @JsonSubTypes.Type(value = StartExpertTrainingAction.class, name = "startExpertTraining"),
-    @JsonSubTypes.Type(value = PullOutOfTrainingAction.class, name = "pullOutOfTraining")
+    @JsonSubTypes.Type(value = PullOutOfTrainingAction.class, name = "pullOutOfTraining"),
+    @JsonSubTypes.Type(value = ReassignControlSlotAction.class, name = "reassignControlSlot")
 })
 public abstract class PlayerAction {
 

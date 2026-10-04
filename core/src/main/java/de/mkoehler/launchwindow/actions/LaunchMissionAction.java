@@ -12,7 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Launches a mission with the chosen crew, controllers, CAPCOM, and rockets ({@link MissionLaunch#launch}).
+ * Launches a mission with one person per staffing slot and one rocket per launch
+ * ({@link MissionLaunch#launch}, {@code baspm.md} &sect;10.11).
  *
  * <p>Journaled as {@code "launchMission"}; see {@code design.md} &sect;5, M4.</p>
  *
@@ -21,9 +22,8 @@ import java.util.List;
 public class LaunchMissionAction extends PlayerAction {
 
     private String missionConfigurationId;
-    private List<String> astronautIds = new ArrayList<>();
-    private List<String> missionControlOfficerIds = new ArrayList<>();
-    private List<String> capcomAstronautIds = new ArrayList<>();
+    private List<String> crewSlotIds = new ArrayList<>();
+    private List<String> controlSlotIds = new ArrayList<>();
     private List<String> rocketIds = new ArrayList<>();
 
     /**
@@ -36,17 +36,33 @@ public class LaunchMissionAction extends PlayerAction {
      * Creates the action.
      *
      * @param missionConfigurationId the configuration to fly
-     * @param astronautIds the crew
-     * @param missionControlOfficerIds the flight controllers
-     * @param capcomAstronautIds the CAPCOM astronauts
-     * @param rocketIds one rocket per launch, in launch order
+     * @param crewSlotIds            one astronaut per crew slot, {@code null} for an unused slot
+     * @param controlSlotIds         one person per control slot, {@code null} for an unused slot
+     * @param rocketIds              one rocket per launch, in launch order
      */
-    public LaunchMissionAction(String missionConfigurationId, List<String> astronautIds, List<String> missionControlOfficerIds, List<String> capcomAstronautIds, List<String> rocketIds) {
+    public LaunchMissionAction(String missionConfigurationId, List<String> crewSlotIds, List<String> controlSlotIds,
+            List<String> rocketIds) {
         setMissionConfigurationId(missionConfigurationId);
-        setAstronautIds(astronautIds);
-        setMissionControlOfficerIds(missionControlOfficerIds);
-        setCapcomAstronautIds(capcomAstronautIds);
+        setCrewSlotIds(crewSlotIds);
+        setControlSlotIds(controlSlotIds);
         setRocketIds(rocketIds);
+    }
+
+    /**
+     * Compatibility form for configurations with generic slots: the controllers fill
+     * the first control slots and the CAPCOM astronauts the ones after them
+     * ({@link LaunchRequest}'s matching constructor).
+     *
+     * @param missionConfigurationId   the configuration to fly
+     * @param astronautIds             the crew
+     * @param missionControlOfficerIds the flight controllers
+     * @param capcomAstronautIds       the CAPCOM astronauts
+     * @param rocketIds                one rocket per launch, in launch order
+     */
+    public LaunchMissionAction(String missionConfigurationId, List<String> astronautIds,
+            List<String> missionControlOfficerIds, List<String> capcomAstronautIds, List<String> rocketIds) {
+        this(missionConfigurationId, astronautIds, new LaunchRequest(missionConfigurationId, astronautIds,
+            missionControlOfficerIds, capcomAstronautIds, rocketIds).controlSlotIds(), rocketIds);
     }
 
     /**
@@ -68,57 +84,39 @@ public class LaunchMissionAction extends PlayerAction {
     }
 
     /**
-     * Returns the crew.
+     * Returns the crew, one astronaut per crew slot.
      *
-     * @return the crew
+     * @return the crew slot assignments
      */
-    public List<String> getAstronautIds() {
-        return astronautIds;
+    public List<String> getCrewSlotIds() {
+        return crewSlotIds;
     }
 
     /**
-     * Sets the crew.
+     * Sets the crew slot assignments.
      *
-     * @param astronautIds the crew
+     * @param crewSlotIds the crew slot assignments
      */
-    public void setAstronautIds(List<String> astronautIds) {
-        this.astronautIds = astronautIds == null ? new ArrayList<>() : new ArrayList<>(astronautIds);
+    public void setCrewSlotIds(List<String> crewSlotIds) {
+        this.crewSlotIds = crewSlotIds == null ? new ArrayList<>() : new ArrayList<>(crewSlotIds);
     }
 
     /**
-     * Returns the flight controllers.
+     * Returns the ground staff, one person per control slot.
      *
-     * @return the flight controllers
+     * @return the control slot assignments
      */
-    public List<String> getMissionControlOfficerIds() {
-        return missionControlOfficerIds;
+    public List<String> getControlSlotIds() {
+        return controlSlotIds;
     }
 
     /**
-     * Sets the flight controllers.
+     * Sets the control slot assignments.
      *
-     * @param missionControlOfficerIds the flight controllers
+     * @param controlSlotIds the control slot assignments
      */
-    public void setMissionControlOfficerIds(List<String> missionControlOfficerIds) {
-        this.missionControlOfficerIds = missionControlOfficerIds == null ? new ArrayList<>() : new ArrayList<>(missionControlOfficerIds);
-    }
-
-    /**
-     * Returns the CAPCOM astronauts.
-     *
-     * @return the CAPCOM astronauts
-     */
-    public List<String> getCapcomAstronautIds() {
-        return capcomAstronautIds;
-    }
-
-    /**
-     * Sets the CAPCOM astronauts.
-     *
-     * @param capcomAstronautIds the CAPCOM astronauts
-     */
-    public void setCapcomAstronautIds(List<String> capcomAstronautIds) {
-        this.capcomAstronautIds = capcomAstronautIds == null ? new ArrayList<>() : new ArrayList<>(capcomAstronautIds);
+    public void setControlSlotIds(List<String> controlSlotIds) {
+        this.controlSlotIds = controlSlotIds == null ? new ArrayList<>() : new ArrayList<>(controlSlotIds);
     }
 
     /**
@@ -141,7 +139,7 @@ public class LaunchMissionAction extends PlayerAction {
 
     @Override
     public ActionResult apply(PlayerSnapshot snapshot, ActionContext context) {
-        return ActionResult.of(MissionLaunch.launch(snapshot, new LaunchRequest(missionConfigurationId, astronautIds,
-            missionControlOfficerIds, capcomAstronautIds, rocketIds), context.catalog()), MissionLaunchOutcome.LAUNCHED);
+        return ActionResult.of(MissionLaunch.launch(snapshot, new LaunchRequest(missionConfigurationId, crewSlotIds,
+            controlSlotIds, rocketIds), context.catalog()), MissionLaunchOutcome.LAUNCHED);
     }
 }

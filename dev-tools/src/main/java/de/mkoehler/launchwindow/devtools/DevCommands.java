@@ -1,5 +1,6 @@
 package de.mkoehler.launchwindow.devtools;
 
+import de.mkoehler.launchwindow.actions.ReassignControlSlotAction;
 import de.mkoehler.launchwindow.actions.AssignResearchAction;
 import de.mkoehler.launchwindow.actions.CancelMissionAction;
 import de.mkoehler.launchwindow.actions.CloseProgramAction;
@@ -46,7 +47,8 @@ public final class DevCommands {
         "  research <specialistId> <componentId> | release <specialistId>",
         "  train <group> <employeeId> <BASIC|ADVANCED|PERMANENT> <SKILL> [targetLevel]",
         "  expert <ASTRONAUT|MISSION_CONTROL> <employeeId> <SKILL> | pullout <group> <employeeId>",
-        "  launch <configId> rockets=<id,...> [crew=<id,...>] [mc=<id,...>] [capcom=<id,...>]",
+        "  launch <configId> rockets=<id,...> [crew=<id|-,...>] [control=<id|-,...>]  (one entry per slot, - = empty)",
+        "  reassign <missionId> <controlSlot> <personId>",
         "  cancel <missionInstanceId>",
         "  funds <amount>   (dev mode only)");
 
@@ -85,6 +87,8 @@ public final class DevCommands {
             case "pullout" -> new PullOutOfTrainingAction(group(arg(words, 1)), arg(words, 2));
             case "launch" -> launch(words);
             case "cancel" -> new CancelMissionAction(arg(words, 1));
+            case "reassign" -> new ReassignControlSlotAction(arg(words, 1), Integer.parseInt(arg(words, 2)),
+                arg(words, 3));
             case "funds" -> new SetFundsAction(Long.parseLong(arg(words, 1)));
             default -> throw new IllegalArgumentException("Unknown command: " + words[0]);
         };
@@ -92,24 +96,27 @@ public final class DevCommands {
 
     private static LaunchMissionAction launch(String[] words) {
         List<String> crew = new ArrayList<>();
-        List<String> controllers = new ArrayList<>();
-        List<String> capcom = new ArrayList<>();
+        List<String> control = new ArrayList<>();
         List<String> rockets = new ArrayList<>();
         for (int i = 2; i < words.length; i++) {
             String[] pair = words[i].split("=", 2);
             if (pair.length != 2) {
                 throw new IllegalArgumentException("Expected key=value, got " + words[i]);
             }
-            List<String> ids = pair[1].isEmpty() ? List.of() : Arrays.asList(pair[1].split(","));
+            List<String> ids = new ArrayList<>();
+            if (!pair[1].isEmpty()) {
+                for (String id : pair[1].split(",")) {
+                    ids.add(id.equals("-") ? null : id);
+                }
+            }
             switch (pair[0].toLowerCase(Locale.ROOT)) {
                 case "crew" -> crew.addAll(ids);
-                case "mc" -> controllers.addAll(ids);
-                case "capcom" -> capcom.addAll(ids);
+                case "control" -> control.addAll(ids);
                 case "rockets" -> rockets.addAll(ids);
                 default -> throw new IllegalArgumentException("Unknown launch option: " + pair[0]);
             }
         }
-        return new LaunchMissionAction(arg(words, 1), crew, controllers, capcom, rockets);
+        return new LaunchMissionAction(arg(words, 1), crew, control, rockets);
     }
 
     private static PersonnelGroup group(String word) {

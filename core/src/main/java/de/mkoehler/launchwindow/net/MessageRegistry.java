@@ -12,6 +12,7 @@ import de.mkoehler.launchwindow.actions.LaunchMissionAction;
 import de.mkoehler.launchwindow.actions.OpenProgramAction;
 import de.mkoehler.launchwindow.actions.OpenRocketProgramAction;
 import de.mkoehler.launchwindow.actions.PullOutOfTrainingAction;
+import de.mkoehler.launchwindow.actions.ReassignControlSlotAction;
 import de.mkoehler.launchwindow.actions.ReleaseResearchAction;
 import de.mkoehler.launchwindow.actions.StartExpertTrainingAction;
 import de.mkoehler.launchwindow.actions.StartTrainingAction;
@@ -177,5 +178,7 @@ public final class MessageRegistry {
         // Appended 2026-10-03 (M4 slot claim, design.md section 3.8). Never move these lines.
         kryo.register(ClaimSlotRequest.class);
         kryo.register(ClaimSlotResponse.class);
+        // Appended 2026-10-03 (M5 staffing slots, baspm.md section 10.11). Never move this line.
+        kryo.register(ReassignControlSlotAction.class);
     }
 }

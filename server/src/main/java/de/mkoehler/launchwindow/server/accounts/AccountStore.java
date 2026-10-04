@@ -14,7 +14,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -49,7 +48,7 @@ import java.util.stream.Stream;
  *
  * <p>Implements {@code design.md} &sect;3.8's account creation flow:
  * {@link #login} with a login name that doesn't exist yet auto-creates the
- * account from the supplied password/display name; an existing login
+ * account from the supplied password; an existing login
  * requires the password to match, otherwise the attempt is rejected.
  * Deliberately has no dependency on libGDX (plain {@link Path} I/O), so
  * it's directly unit-testable without a running application.</p>
@@ -150,17 +149,11 @@ public class AccountStore {
      * connections racing on the same brand-new login can't both "win"
      * account creation.
      *
-     * <p>On every successful login (new or existing), the supplied display
-     * name is (re)written onto the account - a player can change how they
-     * present in-game simply by typing a different one next time, without a
-     * separate "edit profile" flow.</p>
-     *
      * @param login       the login name
      * @param password    the plain-text password to create/verify with
-     * @param displayName the name to show this player as in-game
      * @return the login result
      */
-    public synchronized AuthResult login(String login, String password, String displayName) {
+    public synchronized AuthResult login(String login, String password) {
         if (login == null || login.isBlank()) {
             return AuthResult.failure("Login is required.");
         }
@@ -171,28 +164,21 @@ public class AccountStore {
         if (password == null || password.isEmpty()) {
             return AuthResult.failure("Password is required.");
         }
-        if (displayName == null || displayName.isBlank()) {
-            return AuthResult.failure("Display name is required.");
-        }
 
         PlayerAccount existing = accountsByLogin.get(login);
         if (existing == null) {
             String salt = PasswordHasher.generateSalt();
             String hash = PasswordHasher.hash(password, salt);
-            PlayerAccount created = new PlayerAccount(UUID.randomUUID().toString(), login, hash, salt, displayName);
+            PlayerAccount created = new PlayerAccount(UUID.randomUUID().toString(), login, hash, salt);
             accountsByLogin.put(login, created);
             dirty.set(true);
-            return AuthResult.success(created, "Welcome, " + displayName + "! Account created.");
+            return AuthResult.success(created, "Welcome, " + login + "! Account created.");
         }
 
         if (!PasswordHasher.matches(password, existing.getPasswordSalt(), existing.getPasswordHash())) {
             return AuthResult.failure("Incorrect password for '" + login + "'.");
         }
-        if (!Objects.equals(existing.getDisplayName(), displayName)) {
-            existing.setDisplayName(displayName);
-            dirty.set(true);
-        }
-        return AuthResult.success(existing, "Welcome back, " + displayName + ".");
+        return AuthResult.success(existing, "Welcome back, " + login + ".");
     }
 
     /**

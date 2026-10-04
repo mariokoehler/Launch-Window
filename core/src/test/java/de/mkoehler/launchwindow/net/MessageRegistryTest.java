@@ -35,6 +35,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -150,14 +151,13 @@ class MessageRegistryTest {
      */
     @Test
     void handshakeRequestSurvivesRoundTrip() {
-        HandshakeRequest original = new HandshakeRequest("1.0", "mario", "hunter2", "Hanseatic Space Agency");
+        HandshakeRequest original = new HandshakeRequest("1.0", "mario", "hunter2");
 
         HandshakeRequest copy = roundTrip(original, HandshakeRequest.class);
 
         assertEquals("1.0", copy.clientVersion());
         assertEquals("mario", copy.login());
         assertEquals("hunter2", copy.password());
-        assertEquals("Hanseatic Space Agency", copy.displayName());
     }
 
     /**
@@ -166,7 +166,7 @@ class MessageRegistryTest {
      */
     @Test
     void handshakeRequestToStringRedactsThePassword() {
-        HandshakeRequest request = new HandshakeRequest("1.0", "mario", "hunter2", "Hanseatic Space Agency");
+        HandshakeRequest request = new HandshakeRequest("1.0", "mario", "hunter2");
 
         assertFalse(request.toString().contains("hunter2"));
     }
@@ -275,9 +275,10 @@ class MessageRegistryTest {
         OwnedMissionComponent closed = new OwnedMissionComponent(42.5, 17.0);
         closed.setActive(false);
         snapshot.setMissionComponents(Map.of("rocket-1", closed));
-        InProgressMission flying = new InProgressMission("m0", "sputnik-1-std", List.of("astro-1"), List.of("mco-1"));
+        // A null marks a slot no step uses; it must survive the round trip.
+        InProgressMission flying = new InProgressMission("m0", "sputnik-1-std", List.of("astro-1"),
+            Arrays.asList("mco-1", null, "astro-2"));
         flying.setRocketIds(List.of("r7-sputnik"));
-        flying.setCapcomAstronautIds(List.of("astro-2"));
         snapshot.setInProgressMissions(Map.of("m0", flying));
         snapshot.setNextMissionInstanceId(1);
         snapshot.setSuccessfulFlightCounts(Map.of("sputnik-1-std", 2));
@@ -320,10 +321,9 @@ class MessageRegistryTest {
         assertEquals(1, copy.state().getInProgressMissions().size());
         InProgressMission copiedMission = copy.state().getInProgressMissions().get("m0");
         assertEquals("sputnik-1-std", copiedMission.getMissionConfigurationId());
-        assertEquals(List.of("astro-1"), copiedMission.getAssignedAstronautIds());
-        assertEquals(List.of("mco-1"), copiedMission.getAssignedMissionControlOfficerIds());
+        assertEquals(List.of("astro-1"), copiedMission.getCrewSlotIds());
+        assertEquals(Arrays.asList("mco-1", null, "astro-2"), copiedMission.getControlSlotIds());
         assertEquals(List.of("r7-sputnik"), copiedMission.getRocketIds());
-        assertEquals(List.of("astro-2"), copiedMission.getCapcomAstronautIds());
         assertEquals(false, copy.state().getMissionComponents().get("rocket-1").isActive());
         assertEquals(2, copy.state().buildingLevel(Building.MISSION_CONTROL));
         assertEquals(1, copy.state().buildingLevel(Building.HEADQUARTERS));

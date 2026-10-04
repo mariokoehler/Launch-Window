@@ -26,9 +26,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Tests for M3 slice 3c: CAPCOM, an astronaut on the ground whose skill feeds the
- * saving throw from the controller side (BASPM's CAPCOM slot, {@code baspm.md}
- * &sect;10.9).
+ * Tests for CAPCOM, an astronaut in a control slot whose skill feeds the saving
+ * throw from the controller side (BASPM's CAPCOM slot, {@code baspm.md} &sect;10.9,
+ * &sect;10.11).
  *
  * @author Mario Koehler
  */
@@ -43,8 +43,8 @@ class CapcomTest {
     private static final MissionConfiguration CAPCOM_ONLY = new MissionConfiguration("capcom-test",
         "capsule-program",
         List.of(new MissionSeason(List.of(new MissionStep("relay",
-            List.of(new MissionStep.ComponentInvolvement("capsule", 100)), List.of(), List.of(), false, 0, 0,
-            List.of(), List.of(new MissionStep.CrewInvolvement(AstronautSkill.LEADERSHIP, 100)))))),
+            List.of(new MissionStep.ComponentInvolvement("capsule", 100)),
+            List.of(new MissionStep.ControllerInvolvement(0, 100)), List.of(), false)))),
         0, 0, 0, 0, List.of(), List.of(), List.of(), 1);
     private static final ContentCatalog CATALOG = TestBuildings.catalogWithoutUpkeep(List.of(CATEGORY),
         List.of(PROGRAM), List.of(CAPCOM_ONLY), List.of(CAPSULE));
@@ -81,7 +81,7 @@ class CapcomTest {
             MissionLaunch.launch(snapshot, withCapcom(List.of(), List.of("capcom")), CATALOG));
         assertEquals(AssignmentState.ASSIGNED, snapshot.getAstronauts().get(0).getAssignmentState());
         assertEquals(List.of("capcom"),
-            snapshot.getInProgressMissions().values().iterator().next().getCapcomAstronautIds());
+            snapshot.getInProgressMissions().values().iterator().next().getControlSlotIds());
     }
 
     @Test
@@ -129,7 +129,17 @@ class CapcomTest {
     }
 
     @Test
-    void configurationCountMustMatchCapcomInvolvement() {
+    void aFlightControllerCannotSitInTheCapcomSlot() {
+        PlayerSnapshot snapshot = player(50, 50);
+        snapshot.setMissionControlOfficers(List.of(
+            new de.mkoehler.launchwindow.model.MissionControlOfficer("mco", "mco", 40, 70, 50)));
+
+        assertEquals(MissionLaunchOutcome.CAPCOM_NOT_AVAILABLE,
+            MissionLaunch.launch(snapshot, withCapcom(List.of(), List.of("mco")), CATALOG));
+    }
+
+    @Test
+    void stepMustNameAnExistingCapcomSlot() {
         MissionSeason withCapcom = CAPCOM_ONLY.seasons().get(0);
         assertThrows(IllegalArgumentException.class, () -> new MissionConfiguration("bad", "capsule-program",
             List.of(withCapcom), 0, 0, 0, 0, List.of(), List.of(), List.of(), 0));
@@ -139,9 +149,7 @@ class CapcomTest {
     void controllersAndCapcomShareOneHundredPercent() {
         assertThrows(IllegalArgumentException.class, () -> new MissionStep("over",
             List.of(new MissionStep.ComponentInvolvement("capsule", 100)),
-            List.of(new MissionStep.ControllerInvolvement(
-                de.mkoehler.launchwindow.model.MissionControlSkill.PROPULSION, 80)),
-            List.of(), false, 0, 0, List.of(),
-            List.of(new MissionStep.CrewInvolvement(AstronautSkill.LEADERSHIP, 30))));
+            List.of(new MissionStep.ControllerInvolvement(0, 80), new MissionStep.ControllerInvolvement(1, 30)),
+            List.of(), false));
     }
 }
