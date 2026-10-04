@@ -291,6 +291,36 @@ ordinary sibling building. The SET Centre mockup's breadcrumb root is
 left as-is (out of scope unless asked). No new icons were needed — the
 board reuses the five SET skill icons already in the UI Asset Sheet.
 
+**VAB mockup built — Overview, Open Rocket Program, Manage Rocket Programs,
+Rocket R&D (2026-10-04, later the same day, next in `ui-spec.md` §7's
+order).** Four linked artboards (`Launch Window — VAB mockup`, private, ask
+the user for the link). First real build of **component 7, the Building
+Panel** (level/cap/rocket-class gate/upkeep, a real Upgrade flow with a
+price breakdown and confirmation, then an "Upgrading — 1 season left"
+state) — reusable as-is for the other four capped buildings. Also the
+first use of **component 4, the Price Breakdown** (line items + a total),
+built as plain local markup rather than a design-system component, same
+posture as the modal-dialog pattern the SET Centre mockup introduced:
+nothing has needed either one twice yet, so neither is promoted. Open
+Rocket Program (4.5.1) lists not-yet-open rockets with real
+`ROCKETS`/`HUMAN_RATED_ROCKETS` payload figures (suborbital/LEO/TLI/TPI,
+straight from `MissionComponent.RocketSpec`'s own fields) and demonstrates
+`ROCKET_CLASS_TOO_LARGE` (a Medium-class rocket greyed out against a
+Level-1, Light-only VAB). Manage Rocket Programs (4.5.2) shows reliability
+bars (component 3) for the two already-open rockets and demonstrates
+`MISSIONS_IN_FLIGHT` (Close refused, with the navy refusal toast, for a
+rocket flagged on a mission). Rocket R&D (4.5.3) reuses the SET Centre's
+R&D-board pattern (component 10) verbatim, retargeted at rocket components
+— real assign/release interactivity, same two rockets as Manage Rocket
+Programs for narrative consistency. Breadcrumb root is "Space Complex"
+throughout. No new design-system components, tokens, or icons were needed.
+**Footer fix (user, 2026-10-04):** the footer must stay at the bottom of the
+frame. It had ridden up under short lists in the VAB and SET Centre mockups.
+Both are fixed, and the rule is in `design.md` §3.13. **Mockup pitfall:** a
+style on an `x-import` only sizes its slot, so `flex: 1` on a
+`LaunchWindow.Card` doesn't fill. Put the fill and scroll on a plain wrapper
+`div`, and give the footer `margin-top: auto`.
+
 Everything below is history; if this paragraph and a later one disagree, the
 later one wins.
 
