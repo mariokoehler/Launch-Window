@@ -150,6 +150,10 @@ public final class ScreenSnapshot {
         }
 
         @Override
+        public void resolveTurnNow(Credentials credentials, Consumer<ServerResult> done) {
+        }
+
+        @Override
         public void fetchRivals(Credentials credentials,
                                 Consumer<de.mkoehler.launchwindow.client.connect.RivalsResult> done) {
         }
@@ -597,6 +601,11 @@ public final class ScreenSnapshot {
         spared.setMemorial(List.of());
         startSession(game, spared, won);
         write(folder, "museum-memorial-empty.png", new MuseumScreen(game, MuseumScreen.Tab.MEMORIAL), null);
+
+        // A dev-mode server: the hub strip offers to resolve the turn now.
+        startSession(game, spared, GameInfoResponse.success("early-era", hash, DECLARED, 25, true,
+            23 * 3_600_000L + 40 * 60_000L, 0L, null, List.of(), List.of(), 0, true));
+        write(folder, "hub-dev-mode.png", new SpaceComplexScreen(game), null);
     }
 
     /** The mockup's agency at 1960 · S4, with the goal records and memorial the Museum reads. */

@@ -107,6 +107,7 @@ public class GameServer extends ApplicationAdapter {
         dispatcher = new RequestDispatcher(accountStore, dataRoot, mapper, context, meta, gameInfo);
         scheduler = new TurnScheduler(dataRoot, mapper, Clock.systemDefaultZone(), context,
             RandomEventRoster.baspmClose());
+        dispatcher.setTurnForcer(scheduler::resolveNow);
         networkServer = new NetworkServer();
         try {
             networkServer.start(tcpPort);

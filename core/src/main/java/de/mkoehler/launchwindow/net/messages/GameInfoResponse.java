@@ -27,18 +27,20 @@ import java.util.List;
  *                             signup window)
  * @param nextResolutionMillis when the open turn resolves, or -1 if no resolution is scheduled
  * @param serverNowMillis      the server's clock when it answered
- * @param resultStatus         the game result's status ({@code WINNER} or {@code TIE}), or
+ * @param resultStatus         the game result's status ({@code WON} or {@code TIED}), or
  *                             {@code null} while undecided
  * @param winnerAgencies       the winning agencies' names; empty while undecided
  * @param winnerDirectors      their directors' names, in the same order; empty while undecided
  * @param resultTurn           the game turn the result was decided on, or 0 while undecided
+ * @param devMode              whether the server runs in dev mode, so the client offers its play
+ *                             testing tools (resolving the turn now)
  * @author Mario Koehler
  */
 public record GameInfoResponse(boolean success, String message, String contentPackId, String contentPackHash,
                                List<String> declaredGoalIds, long gameTurn, int year, Season season,
                                boolean started, long nextResolutionMillis, long serverNowMillis,
                                String resultStatus, List<String> winnerAgencies, List<String> winnerDirectors,
-                               long resultTurn) {
+                               long resultTurn, boolean devMode) {
 
     /**
      * Creates a successful response, copying every list into an {@link ArrayList}.
@@ -60,10 +62,36 @@ public record GameInfoResponse(boolean success, String message, String contentPa
                                            long gameTurn, boolean started, long nextResolutionMillis,
                                            long serverNowMillis, String resultStatus, List<String> winnerAgencies,
                                            List<String> winnerDirectors, long resultTurn) {
+        return success(contentPackId, contentPackHash, declaredGoalIds, gameTurn, started, nextResolutionMillis,
+            serverNowMillis, resultStatus, winnerAgencies, winnerDirectors, resultTurn, false);
+    }
+
+    /**
+     * Creates a successful response that also says whether the server runs in dev mode.
+     *
+     * @param contentPackId        the content pack
+     * @param contentPackHash      its hash
+     * @param declaredGoalIds      the declared goals
+     * @param gameTurn             the open game turn
+     * @param started              whether any turn has resolved
+     * @param nextResolutionMillis the next resolution, or -1
+     * @param serverNowMillis      the server's clock
+     * @param resultStatus         the result status, or {@code null}
+     * @param winnerAgencies       the winners' agencies
+     * @param winnerDirectors      the winners' directors
+     * @param resultTurn           the deciding turn, or 0
+     * @param devMode              whether the server runs in dev mode
+     * @return the response
+     */
+    public static GameInfoResponse success(String contentPackId, String contentPackHash, List<String> declaredGoalIds,
+                                           long gameTurn, boolean started, long nextResolutionMillis,
+                                           long serverNowMillis, String resultStatus, List<String> winnerAgencies,
+                                           List<String> winnerDirectors, long resultTurn,
+                                           boolean devMode) {
         GameDate date = GameDate.ofTurn(gameTurn);
         return new GameInfoResponse(true, "", contentPackId, contentPackHash, new ArrayList<>(declaredGoalIds),
             gameTurn, date.year(), date.season(), started, nextResolutionMillis, serverNowMillis, resultStatus,
-            new ArrayList<>(winnerAgencies), new ArrayList<>(winnerDirectors), resultTurn);
+            new ArrayList<>(winnerAgencies), new ArrayList<>(winnerDirectors), resultTurn, devMode);
     }
 
     /**
@@ -74,7 +102,7 @@ public record GameInfoResponse(boolean success, String message, String contentPa
      */
     public static GameInfoResponse failure(String message) {
         return new GameInfoResponse(false, message, null, null, new ArrayList<>(), 0, 0, null, false, -1, 0, null,
-            new ArrayList<>(), new ArrayList<>(), 0);
+            new ArrayList<>(), new ArrayList<>(), 0, false);
     }
 
     /**

@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.client.ClientSession;
+import de.mkoehler.launchwindow.client.connect.ServerResult;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.view.Hub;
@@ -55,6 +56,7 @@ public final class SpaceComplexScreen extends SessionScreen {
     private final Image art = new Image();
     private final HotspotLayer layer = new HotspotLayer();
     private final Table strip = new Table();
+    private boolean resolving;
     private final Label countdown;
     private final ShapeRenderer shapes = new ShapeRenderer();
 
@@ -97,6 +99,34 @@ public final class SpaceComplexScreen extends SessionScreen {
             // The first hub visit after the result announces it, until the player closes it.
             showResult();
         }
+    }
+
+    /**
+     * Asks the dev-mode server to resolve the open turn now, then opens its report.
+     */
+    private void resolveTurnNow() {
+        if (resolving) {
+            return;
+        }
+        resolving = true;
+        rebuildStrip(session.state());
+        game.gateway().resolveTurnNow(session.credentials(), result -> {
+            resolving = false;
+            if (!isShowing()) {
+                return;
+            }
+            if (result.kind() != ServerResult.Kind.OK) {
+                rebuildStrip(session.state());
+                toast("DEV_MODE_REQUIRED".equals(result.message()) ? "The server isn't in dev mode any more."
+                    : "Couldn't resolve the turn: " + result.message(), Theme.NoticeKind.DANGER);
+                return;
+            }
+            if (result.state() != null) {
+                session.update(result);
+            }
+            stateChanged();
+            openLatestReport(null);
+        });
     }
 
     /**
@@ -148,6 +178,14 @@ public final class SpaceComplexScreen extends SessionScreen {
 
         Table chips = new Table();
         float gap = 10f;
+        if (session.gameInfo().response().devMode()) {
+            // Play testing only: a dev-mode server resolves the open turn on demand.
+            Table resolve = chip(ui.rect(Theme.GOLD, Theme.NAVY, Theme.BORDER_EMPHASIS), "clock", Theme.NAVY,
+                ui.label(resolving ? "RESOLVING…" : "DEV · RESOLVE TURN NOW", Theme.TextStyle.LABEL, Theme.NAVY));
+            resolve.setTouchable(Touchable.enabled);
+            resolve.addListener(clicked(this::resolveTurnNow));
+            chips.add(resolve).height(CHIP_HEIGHT).padRight(gap * 2);
+        }
         chips.add(chip(ui.solid(Theme.NAVY), "game_time", Theme.ON_FILL,
             ui.label(session.gameInfo().response().date().label().toUpperCase(Locale.ROOT), Theme.TextStyle.LABEL,
                 Theme.ON_FILL))).height(CHIP_HEIGHT).padRight(gap);

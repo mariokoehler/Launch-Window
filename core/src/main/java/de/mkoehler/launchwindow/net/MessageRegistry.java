@@ -40,6 +40,8 @@ import de.mkoehler.launchwindow.net.messages.ClaimSlotRequest;
 import de.mkoehler.launchwindow.net.messages.ClaimSlotResponse;
 import de.mkoehler.launchwindow.net.messages.GameInfoRequest;
 import de.mkoehler.launchwindow.net.messages.GameInfoResponse;
+import de.mkoehler.launchwindow.net.messages.ResolveTurnNowRequest;
+import de.mkoehler.launchwindow.net.messages.ResolveTurnNowResponse;
 import de.mkoehler.launchwindow.net.messages.RivalSummary;
 import de.mkoehler.launchwindow.net.messages.RivalsRequest;
 import de.mkoehler.launchwindow.net.messages.RivalsResponse;
@@ -211,5 +213,8 @@ public final class MessageRegistry {
         kryo.register(MemorialEntry.class);
         kryo.register(MemorialEntry.Cause.class);
         kryo.register(GoalRecord.class);
+        // Appended 2026-10-04 (dev mode: resolve the open turn on demand). Never move these lines.
+        kryo.register(ResolveTurnNowRequest.class);
+        kryo.register(ResolveTurnNowResponse.class);
     }
 }

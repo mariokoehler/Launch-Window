@@ -6167,6 +6167,13 @@ here.
       filter chips, the segmented control, the reliability bar, the skill bar, the
       R&D slot box, and the white on-page secondary button. They should be promoted
       to the design system and the UI Asset Sheet.
+  - **Slice: resolve the turn now, in dev mode — done (2026-10-04, user request for play
+    testing).** `ResolveTurnNowRequest` makes the server run `TurnScheduler.resolveNow`: the
+    scheduled pass for the open turn, at once. It leaves the schedule alone, so the day's
+    scheduled resolution still comes and resolves the next turn. Refused (`DEV_MODE_REQUIRED`)
+    unless `game-meta.json` has `"devMode": true`. `GameInfoResponse` gained `devMode`, and the
+    hub strip shows a gold "Dev · Resolve turn now" button only then; it opens the new turn's
+    report. Runs on the server's render thread, like the scheduler, so the two never overlap.
   - **Slice: the Museum, Settings and the game result — done (2026-10-04).** From the
     `Launch Window — Museum, Settings & Game Result mockup` canvas. Details and unconfirmed
     choices are in `ui-spec.md` §4.11–§4.13.

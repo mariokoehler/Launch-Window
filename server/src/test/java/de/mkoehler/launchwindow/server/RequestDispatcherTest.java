@@ -16,6 +16,8 @@ import de.mkoehler.launchwindow.net.messages.GameInfoRequest;
 import de.mkoehler.launchwindow.net.messages.GameInfoResponse;
 import de.mkoehler.launchwindow.net.messages.HandshakeRequest;
 import de.mkoehler.launchwindow.net.messages.HandshakeResponse;
+import de.mkoehler.launchwindow.net.messages.ResolveTurnNowRequest;
+import de.mkoehler.launchwindow.net.messages.ResolveTurnNowResponse;
 import de.mkoehler.launchwindow.net.messages.SubmitActionRequest;
 import de.mkoehler.launchwindow.net.messages.SubmitActionResponse;
 import de.mkoehler.launchwindow.persistence.PlayerAction;
@@ -221,6 +223,29 @@ class RequestDispatcherTest {
         assertEquals(SubmitActionResponse.success("OPENED"), opened);
         assertEquals(25_000 - 876, fetchResponse.state().getFunds());
         assertEquals(List.of("sputnik-1"), fetchResponse.state().getOpenedProgramIds());
+    }
+
+    /**
+     * Resolving the turn now needs dev mode; in dev mode it runs the scheduler's resolve-now.
+     */
+    @Test
+    void resolvingTheTurnNowNeedsDevMode(@TempDir Path dataRoot) {
+        java.util.concurrent.atomic.AtomicInteger calls = new java.util.concurrent.atomic.AtomicInteger();
+        RequestDispatcher normal = dispatcher(createAccountStore(dataRoot), dataRoot, false);
+        normal.setTurnForcer(() -> calls.incrementAndGet());
+        normal.handleHandshake(1, new HandshakeRequest(AppVersion.getVersion(), "mario", "hunter2"));
+        ResolveTurnNowResponse refused = normal.handleResolveTurnNow(1, new ResolveTurnNowRequest());
+        assertFalse(refused.success());
+        assertEquals("DEV_MODE_REQUIRED", refused.message());
+        assertEquals(0, calls.get());
+
+        RequestDispatcher dev = dispatcher(createAccountStore(dataRoot), dataRoot, true);
+        dev.setTurnForcer(() -> 7L);
+        assertFalse(dev.handleResolveTurnNow(2, new ResolveTurnNowRequest()).success(), "needs a login");
+        dev.handleHandshake(2, new HandshakeRequest(AppVersion.getVersion(), "mario", "hunter2"));
+        ResolveTurnNowResponse resolved = dev.handleResolveTurnNow(2, new ResolveTurnNowRequest());
+        assertTrue(resolved.success(), resolved.message());
+        assertEquals(7L, resolved.resolvedTurn());
     }
 
     /**

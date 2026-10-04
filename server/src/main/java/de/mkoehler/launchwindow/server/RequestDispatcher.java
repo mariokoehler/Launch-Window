@@ -15,6 +15,8 @@ import de.mkoehler.launchwindow.net.messages.TurnReportResponse;
 import de.mkoehler.launchwindow.net.messages.GameInfoResponse;
 import de.mkoehler.launchwindow.net.messages.HandshakeRequest;
 import de.mkoehler.launchwindow.net.messages.HandshakeResponse;
+import de.mkoehler.launchwindow.net.messages.ResolveTurnNowRequest;
+import de.mkoehler.launchwindow.net.messages.ResolveTurnNowResponse;
 import de.mkoehler.launchwindow.net.messages.RivalSummary;
 import de.mkoehler.launchwindow.net.messages.RivalsRequest;
 import de.mkoehler.launchwindow.net.messages.RivalsResponse;
@@ -89,6 +91,7 @@ public class RequestDispatcher {
     private final GameInfoService gameInfo;
     private final SecureRandom actionSeeds = new SecureRandom();
     private final Map<Integer, String> connectionAccountIds = new HashMap<>();
+    private TurnForcer turnForcer;
 
     /**
      * Creates a new dispatcher.
@@ -141,6 +144,9 @@ public class RequestDispatcher {
         }
         if (message instanceof TurnReportRequest request) {
             return new DispatchResult(handleTurnReport(connectionId, request), false);
+        }
+        if (message instanceof ResolveTurnNowRequest request) {
+            return new DispatchResult(handleResolveTurnNow(connectionId, request), false);
         }
         if (message instanceof RivalsRequest request) {
             return new DispatchResult(handleRivals(connectionId, request), false);
@@ -313,6 +319,56 @@ public class RequestDispatcher {
             return response;
         } catch (IOException e) {
             return TurnReportResponse.failure("Failed to read the turn report: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Resolves the open turn on demand: the scheduler's own pass, for dev mode.
+     */
+    @FunctionalInterface
+    public interface TurnForcer {
+
+        /**
+         * Resolves the open turn now.
+         *
+         * @return the game turn that was resolved
+         * @throws IOException if the game's files can't be read or written
+         */
+        long resolveNow() throws IOException;
+    }
+
+    /**
+     * Sets what resolves a turn on demand. Without one, every {@link ResolveTurnNowRequest} fails.
+     *
+     * @param turnForcer the scheduler's resolve-now
+     */
+    public void setTurnForcer(TurnForcer turnForcer) {
+        this.turnForcer = turnForcer;
+    }
+
+    /**
+     * Handles a {@link ResolveTurnNowRequest}: resolves the open turn for every player at once,
+     * for play testing. Refused unless the server runs in dev mode. Runs on the thread that also
+     * runs the scheduler, so the two never resolve at the same time.
+     *
+     * @param connectionId the connection the request arrived on
+     * @param request      the request
+     * @return the response
+     */
+    public ResolveTurnNowResponse handleResolveTurnNow(int connectionId, ResolveTurnNowRequest request) {
+        if (connectionAccountIds.get(connectionId) == null) {
+            return ResolveTurnNowResponse.failure("Not authenticated - send a HandshakeRequest first.");
+        }
+        if (!meta.isDevMode()) {
+            return ResolveTurnNowResponse.failure("DEV_MODE_REQUIRED");
+        }
+        if (turnForcer == null) {
+            return ResolveTurnNowResponse.failure("This server can't resolve a turn on demand.");
+        }
+        try {
+            return ResolveTurnNowResponse.resolved(turnForcer.resolveNow());
+        } catch (IOException | RuntimeException e) {
+            return ResolveTurnNowResponse.failure("Failed to resolve the turn: " + e.getMessage());
         }
     }
 

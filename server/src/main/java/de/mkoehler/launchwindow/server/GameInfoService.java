@@ -95,6 +95,6 @@ public final class GameInfoService {
             resultTurn = result.decidedOnTurn();
         }
         return GameInfoResponse.success(contentPackId, contentPackHash, meta.getDeclaredGoalIds(), gameTurn,
-            gameTurn > 1, nextMillis, clock.millis(), status, agencies, directors, resultTurn);
+            gameTurn > 1, nextMillis, clock.millis(), status, agencies, directors, resultTurn, meta.isDevMode());
     }
 }

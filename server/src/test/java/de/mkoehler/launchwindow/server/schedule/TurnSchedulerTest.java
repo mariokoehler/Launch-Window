@@ -210,6 +210,25 @@ class TurnSchedulerTest {
     }
 
     /**
+     * Resolving now (dev mode) resolves the open turn at once and leaves the schedule alone:
+     * the day's scheduled resolution still comes, and resolves the next turn.
+     */
+    @Test
+    void resolveNowResolvesTheOpenTurnAndKeepsTheSchedule(@TempDir Path dataRoot) throws IOException {
+        createPlayer(dataRoot, "acct-1");
+        Clock beforeResolutionTime = Clock.fixed(Instant.parse("2026-09-29T06:00:00Z"), ZONE);
+
+        assertEquals(1, scheduler(dataRoot, beforeResolutionTime).resolveNow());
+        PlayerSnapshotStore store = new PlayerSnapshotStore(dataRoot.resolve("players/acct-1"), mapper);
+        assertTrue(store.load(1).isPresent());
+        assertTrue(store.load(2).isEmpty());
+
+        scheduler(dataRoot, Clock.fixed(Instant.parse("2026-09-29T08:00:00Z"), ZONE)).checkAndResolveIfDue();
+        assertTrue(store.load(2).isPresent(), "the scheduled resolution still comes, a turn later");
+        assertTrue(store.load(3).isEmpty());
+    }
+
+    /**
      * Verifies that a resolving day before its configured resolution time
      * does not resolve yet.
      */

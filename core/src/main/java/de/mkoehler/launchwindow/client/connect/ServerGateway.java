@@ -77,6 +77,16 @@ public interface ServerGateway {
     void fetchRivals(Credentials credentials, Consumer<RivalsResult> done);
 
     /**
+     * Asks a dev-mode server to resolve the open turn now, then fetches the new state and game
+     * info. Never repeated if the connection breaks mid-exchange.
+     *
+     * @param credentials who and where
+     * @param done        called on the render thread: OK with the new state, or REFUSED with the
+     *                    server's reason
+     */
+    void resolveTurnNow(Credentials credentials, Consumer<ServerResult> done);
+
+    /**
      * Ends the session: closes its connection. The next {@link #logIn} opens a new one.
      */
     void logOut();

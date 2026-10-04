@@ -212,12 +212,12 @@ Notes:
   - [X] Orbital flight (Duration Level III)
 
 - [x] **Circumlunar Gemini test flights in Earth orbit** (NASA, `28-01`) — `circumlunar_gemini?`
-  - [ ] Uncrewed Gemini heat shield test (reentry at near-lunar velocity)
-  - [ ] Crewed Gemini Transtage and heat shield test flight in Earth Orbit
+  - [X] Uncrewed Gemini heat shield test (reentry at near-lunar velocity)
+  - [X] Crewed Gemini Transtage and heat shield test flight in Earth Orbit
 
 - [x] **Lunar orbital Gemini test flights in Earth orbit** (NASA, `28-02`) — `lunar_orbital_gemini?`
-  - [ ] Uncrewed Gemini heat shield test (reentry at near-lunar velocity)
-  - [ ] Crewed Gemini Lunar Propulsion Module and heat shield test flight in Earth Orbit
+  - [X] Uncrewed Gemini heat shield test (reentry at near-lunar velocity)
+  - [X] Crewed Gemini Lunar Propulsion Module and heat shield test flight in Earth Orbit
 
 - [x] **Gemini Direct Ascent test flights in Earth orbit** (NASA, `28-03`) — `gemini_direct_ascent?`
   - [ ] Uncrewed Direct Ascent Configuration test flight in Earth Orbit (reentry at near-lunar velocity)

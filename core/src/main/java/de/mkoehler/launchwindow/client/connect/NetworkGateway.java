@@ -15,6 +15,8 @@ import de.mkoehler.launchwindow.net.messages.HandshakeRequest;
 import de.mkoehler.launchwindow.net.messages.HandshakeResponse;
 import de.mkoehler.launchwindow.net.messages.SubmitActionRequest;
 import de.mkoehler.launchwindow.net.messages.SubmitActionResponse;
+import de.mkoehler.launchwindow.net.messages.ResolveTurnNowRequest;
+import de.mkoehler.launchwindow.net.messages.ResolveTurnNowResponse;
 import de.mkoehler.launchwindow.net.messages.RivalsRequest;
 import de.mkoehler.launchwindow.net.messages.RivalsResponse;
 import de.mkoehler.launchwindow.net.messages.TurnReportRequest;
@@ -174,6 +176,28 @@ public final class NetworkGateway implements ServerGateway {
             return first.kind() == TurnReportResult.Kind.FAILED && first.report() == null && client == null
                 ? fetchReportOnce(credentials, turn) : first;
         }, message -> new TurnReportResult(TurnReportResult.Kind.FAILED, message, null), done);
+    }
+
+    @Override
+    public void resolveTurnNow(Credentials credentials, Consumer<ServerResult> done) {
+        run(() -> {
+            Optional<LoginResult> refusal = ensureSession(credentials);
+            if (refusal.isPresent()) {
+                return sessionFailure(refusal.get());
+            }
+            ResolveTurnNowResponse response;
+            try {
+                response = client.sendAndReceive(new ResolveTurnNowRequest(), ResolveTurnNowResponse.class);
+            } catch (IOException | RuntimeException e) {
+                dropConnection();
+                return ServerResult.of(ServerResult.Kind.FAILED, e.getMessage());
+            }
+            if (!response.success()) {
+                return ServerResult.of(ServerResult.Kind.REFUSED, response.message());
+            }
+            ServerResult fetched = readWithRetry(credentials);
+            return fetched.kind() == ServerResult.Kind.OK ? fetched : ServerResult.of(ServerResult.Kind.OK, "");
+        }, message -> ServerResult.of(ServerResult.Kind.FAILED, message), done);
     }
 
     @Override

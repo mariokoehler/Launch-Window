@@ -330,6 +330,8 @@ Choices made while building it, **confirmed by the user (2026-10-04)**:
 - **Turn Report** opens the latest turn's report (§4.4), and a gold dot marks it unread.
   Both came with G2.
 - **Log out** is in Settings (§4.12), from the gear button at the end of the strip.
+- **Dev mode only:** a gold "Dev · Resolve turn now" chip at the start of the strip resolves
+  the open turn at once and opens its report, for play testing (`design.md` §5, M5).
 - **The content-differs warning** from the stand-in stays, as a warning notice under the
   agency name.
 - **The strip follows the revised mockup** (solid chips, navy nameplate, outlined

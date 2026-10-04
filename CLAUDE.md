@@ -266,6 +266,11 @@ approved by the user as additive save fields. The client reads the race through
 `WinCondition`'s goal-time helpers, never its own port. The hub strip has a gear for
 Settings.
 
+**Dev mode for play testing (2026-10-04):** set `"devMode": true` in the server's
+`game-meta.json` and restart it. The hub strip then shows "Dev · Resolve turn now", which
+resolves the open turn at once (the day's scheduled resolution still comes). Dev mode also
+allows `DevClient`'s `funds` cheat.
+
 **Font pitfall (2026-10-04):** fonts are generated at the monitor's scale and drawn scaled
 down, so `BitmapFont`'s default integer positions rounded each glyph apart and made baselines
 wobble. `Theme.Fonts` turns them off. Mipmaps were tried and made text greyer, so the filter

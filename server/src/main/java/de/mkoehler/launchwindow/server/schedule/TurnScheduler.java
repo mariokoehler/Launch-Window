@@ -131,6 +131,26 @@ public class TurnScheduler {
     }
 
     /**
+     * Resolves the open turn right away, for play testing in dev mode: the same pass as a
+     * scheduled resolution, but it leaves the schedule alone, so today's scheduled turn still
+     * resolves at its time.
+     *
+     * @return the game turn that was resolved
+     * @throws IOException if {@code game-meta.json}, the scheduler state, or any player's own data
+     *                     cannot be read or written
+     */
+    public long resolveNow() throws IOException {
+        GameMeta meta = GameMetaStore.loadOrCreateDefault(gameMetaFile, mapper).meta();
+        ZonedDateTime now = ZonedDateTime.now(clock).withZoneSameInstant(meta.getSchedule().getTimezone());
+        SchedulerState state = loadOrBootstrapState(now, meta);
+        long turn = state.getNextGameTurn();
+        resolveAllPlayers(turn, meta);
+        state.setNextGameTurn(turn + 1);
+        stateStore.save(state);
+        return turn;
+    }
+
+    /**
      * Loads the persisted scheduler state, or bootstraps and saves a fresh
      * one on the very first call: {@code nextGameTurn} 1, and
      * {@code lastResolvedDate} set to yesterday if today's resolution time

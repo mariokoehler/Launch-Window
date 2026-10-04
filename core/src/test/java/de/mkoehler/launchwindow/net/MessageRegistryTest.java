@@ -27,6 +27,8 @@ import de.mkoehler.launchwindow.net.messages.FetchStateRequest;
 import de.mkoehler.launchwindow.net.messages.FetchStateResponse;
 import de.mkoehler.launchwindow.net.messages.GameInfoRequest;
 import de.mkoehler.launchwindow.net.messages.GameInfoResponse;
+import de.mkoehler.launchwindow.net.messages.ResolveTurnNowRequest;
+import de.mkoehler.launchwindow.net.messages.ResolveTurnNowResponse;
 import de.mkoehler.launchwindow.net.messages.RivalSummary;
 import de.mkoehler.launchwindow.net.messages.RivalsRequest;
 import de.mkoehler.launchwindow.net.messages.RivalsResponse;
@@ -229,6 +231,16 @@ class MessageRegistryTest {
     /**
      * The game-info request and its reply must survive the wire.
      */
+    @Test
+    void devModeMessagesSurviveRoundTrip() {
+        assertEquals(new ResolveTurnNowRequest(), roundTrip(new ResolveTurnNowRequest(), ResolveTurnNowRequest.class));
+        assertEquals(ResolveTurnNowResponse.resolved(4), roundTrip(ResolveTurnNowResponse.resolved(4),
+            ResolveTurnNowResponse.class));
+        GameInfoResponse dev = GameInfoResponse.success("early-era", "ab12", List.of("goal-a"), 6, true, 1_000L, 900L,
+            null, List.of(), List.of(), 0, true);
+        assertTrue(roundTrip(dev, GameInfoResponse.class).devMode());
+    }
+
     @Test
     void rivalMessagesSurviveRoundTrip() {
         assertEquals(new RivalsRequest(), roundTrip(new RivalsRequest(), RivalsRequest.class));
