@@ -25,6 +25,8 @@ import de.mkoehler.launchwindow.net.messages.FetchStateRequest;
 import de.mkoehler.launchwindow.net.messages.FetchStateResponse;
 import de.mkoehler.launchwindow.net.messages.GameInfoRequest;
 import de.mkoehler.launchwindow.net.messages.GameInfoResponse;
+import de.mkoehler.launchwindow.net.messages.TurnReportRequest;
+import de.mkoehler.launchwindow.net.messages.TurnReportResponse;
 import de.mkoehler.launchwindow.net.messages.HandshakeRequest;
 import de.mkoehler.launchwindow.net.messages.HandshakeResponse;
 import de.mkoehler.launchwindow.net.messages.SubmitActionRequest;
@@ -222,6 +224,16 @@ class MessageRegistryTest {
     /**
      * The game-info request and its reply must survive the wire.
      */
+    @Test
+    void turnReportMessagesSurviveRoundTrip() throws Exception {
+        assertEquals(new TurnReportRequest(4), roundTrip(new TurnReportRequest(4), TurnReportRequest.class));
+        TurnReportResponse found = TurnReportResponse.of(4, "{\"gameTurn\":4}");
+        TurnReportResponse back = roundTrip(found, TurnReportResponse.class);
+        assertEquals(found, back);
+        assertEquals("{\"gameTurn\":4}", back.json());
+        assertEquals(TurnReportResponse.none(), roundTrip(TurnReportResponse.none(), TurnReportResponse.class));
+    }
+
     @Test
     void gameInfoMessagesSurviveRoundTrip() {
         assertEquals(new GameInfoRequest(), roundTrip(new GameInfoRequest(), GameInfoRequest.class));

@@ -39,6 +39,11 @@ CHROME = {
     "learning_potential": '<path d="M22 12l-9-9-11 6 11 6 9-9z"/><path d="M11 9v9l-7-3.9V9"/>',
     "check": '<polyline points="5 12.5 10 17 19 7"/>',
     "lock": '<rect x="4" y="11" width="16" height="10"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+    "play": '<polygon points="7 4 19 12 7 20 7 4"/>',
+    "pause": '<line x1="9" y1="5" x2="9" y2="19"/><line x1="15" y1="5" x2="15" y2="19"/>',
+    "step_back": '<polygon points="17 5 8 12 17 19 17 5"/><line x1="7" y1="5" x2="7" y2="19"/>',
+    "step_forward": '<polygon points="7 5 16 12 7 19 7 5"/><line x1="17" y1="5" x2="17" y2="19"/>',
+    "restart": '<polyline points="4 4 4 10 10 10"/><path d="M5.5 15a7 7 0 1 0 1.6-7.3L4 10"/>',
     "document": '<path d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="15" y2="16"/>',
 }
 

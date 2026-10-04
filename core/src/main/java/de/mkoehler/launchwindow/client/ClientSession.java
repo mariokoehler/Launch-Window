@@ -9,6 +9,7 @@ import de.mkoehler.launchwindow.content.ContentPackHash;
 import de.mkoehler.launchwindow.content.ContentPackLoader;
 import de.mkoehler.launchwindow.content.MissionConfiguration;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
+import de.mkoehler.launchwindow.rules.TurnReport;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,6 +45,7 @@ public final class ClientSession {
     private PlayerSnapshot state;
     private GameInfo gameInfo;
     private final Map<String, MissionDraft> drafts = new HashMap<>();
+    private final Map<Long, TurnReport> reports = new HashMap<>();
 
     private ClientSession(Credentials credentials, ContentCatalog catalog, PackStatus packStatus, PlayerSnapshot state,
                           GameInfo gameInfo) {
@@ -157,6 +159,34 @@ public final class ClientSession {
             draft.refit(state, catalog);
         }
         return draft;
+    }
+
+    /**
+     * Returns the latest turn that has resolved: the one before the game's open turn.
+     *
+     * @return the turn, 0 before the first resolution
+     */
+    public long latestResolvedTurn() {
+        return Math.max(0, gameInfo.response().gameTurn() - 1);
+    }
+
+    /**
+     * Returns a turn report fetched earlier in this session.
+     *
+     * @param turn the turn
+     * @return the report, or {@code null} if it hasn't been fetched
+     */
+    public TurnReport report(long turn) {
+        return reports.get(turn);
+    }
+
+    /**
+     * Keeps a fetched turn report for the rest of the session; reports never change once written.
+     *
+     * @param report the report
+     */
+    public void keepReport(TurnReport report) {
+        reports.put(report.gameTurn(), report);
     }
 
     /**

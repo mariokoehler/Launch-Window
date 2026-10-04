@@ -324,8 +324,8 @@ Choices made while building it, **confirmed by the user (2026-10-04)**:
   "$ 25,000") rather than the mockup's "1958 · S2" and "$ 27,420.0".
 - **Hover labels use `HEADING_SM` (18 px), upper case,** rather than the mockup's local 20 px
   CSS, which has no design-system token.
-- **Turn Report** shows an "isn't built yet" toast, and its unread badge never shows. Both
-  need G2.
+- **Turn Report** opens the latest turn's report (§4.4), and a gold dot marks it unread.
+  Both came with G2.
 - **No Log out:** the mockup has none, so the hub drops the stand-in's button. Switching
   servers means restarting the client until Settings exists.
 - **The content-differs warning** from the stand-in stays, as a warning notice under the
@@ -358,7 +358,7 @@ end-of-season news screen. **Ref:** `bulletin_news_*.png`,
 - building upgrades finished.
 
 **Actions:** open a mission's replay (§4.7.3); continue to the hub.
-**Needs server work:** G2.
+**Server work:** G2, done.
 
 **Mocked up (2026-10-04)** as `TurnReport` on the `Launch Window — Mission Control & Turn
 Report mockup` canvas, in two variants: an ordinary turn and a milestone turn with goals
@@ -366,6 +366,24 @@ and a funding review. `design.md` §3.13 has the writeup. Choices still **unconf
 - one scrolling screen, not tabs;
 - running costs broken down by kind;
 - the morale warning is derived by the client.
+
+**Implemented in libGDX (2026-10-04)** as `client.screen.TurnReportScreen`, with its
+wording in `client.view.TurnReportView`, from G2's saved reports (see G2). Choices made
+while building it, **unconfirmed**:
+- **When it opens:** an unread report opens on entering the game. A turn that resolves
+  while the player is in the game shows a toast and lights the hub's Turn Report dot,
+  rather than taking over the screen.
+- **"Read" is remembered per device,** in the client's preferences, per server and login.
+- **No hires on the report:** hires are the player's own actions during the day, not
+  season events.
+- **Mission-end releases aren't listed** ("the 9 controllers are idle again"): no event
+  carries them yet.
+- **The funding review** names the new rate but not the old one, which the report
+  doesn't keep.
+- **The People column:** controllers' flight growth is summed into one line. The
+  morale warning goes to idle people at morale 50 or below (the resignation floor
+  plus 15).
+- **News wording** is the client's own, one line per kind of random event.
 
 ### 4.5 VAB: rockets
 **Purpose:** everything about rockets. The VAB's own cap limits the open rocket
@@ -545,7 +563,7 @@ Choices made while building them, **confirmed by the user (2026-10-04)**:
 - **Big odds figures** use `HEADING_LG` (24 px) rather than the mockup's local 40 px and
   32 px styles. Empty and "nobody free" tiles use solid borders, because `Theme` has no
   dashed rectangle.
-- **"See it in Mission Control"** shows the "isn't built yet" toast until §4.7 exists.
+- **"See it in Mission Control"** opens Mission Control's scheduled missions (§4.7).
 - **Configuration names come from their ids** ("Orbital duration 1"), until G4.
 - **Configuration art:** `assets-raw/make_content_art.py` converts the configuration art
   in `assets-raw/Mission Configuration/` (provenance as the design session noted it: the
@@ -612,7 +630,7 @@ season's steps one by one:
 - the prestige running total.
 
 Then the season summary: goals achieved, reliability changes, skill growth, and
-crew losses. Playback should be skippable and steppable. **Needs server work:** G2.
+crew losses. Playback should be skippable and steppable. **Server work:** G2, done.
 
 **Mocked up (2026-10-04)** in the `Launch Window — Mission Control mockup` canvas
 (`MCOverview`, `ScheduledMissions`, `ActiveMissions`, `Restaff`, `Replay`); `design.md`
@@ -624,7 +642,7 @@ crew losses. Playback should be skippable and steppable. **Needs server work:** 
 - "Can't be abandoned" is shown on a fixture card, because the early pack has no
   multi-season crewed configuration.
 
-**Implemented in libGDX (2026-10-04), all but the replay viewer,** from the Mission
+**Implemented in libGDX (2026-10-04), the replay viewer included,** from the Mission
 Control mockup:
 - **Screens:** `client.screen.MissionControlScreen` (flight controllers),
   `MissionsScreen` (scheduled or active missions, one class with two modes) and
@@ -638,8 +656,10 @@ Control mockup:
     mockup's $ 211.3.
   - `MissionAssessment` can start from a season, for the odds of what's left.
 
-**The replay viewer waits for G2:** the server keeps no per-turn events. "Replay season
-N" shows the "isn't built yet" toast.
+- **Replay viewer (came a little later, with G2):** `client.screen.ReplayScreen` plays a
+  mission's season from the saved report's step events. Nothing is rolled in the client.
+  It steps every 1.5 s, and play, pause, step and skip work. "Replay season N" opens it
+  for the latest turn.
 
 Choices made while building them, **unconfirmed**:
 - **Kept from the mockup's proposals:** no building panel; re-staffing has no
@@ -825,7 +845,13 @@ current state alone. Each is an M5 task.
     (a new `FetchContentPackRequest`/`Response`, a few hundred KB of JSON) and
     uses it for this game, instead of refusing to play. A client may hold several
     packs at once, one per game version.
-- **G2. Turn report and replay data.** Resolution events (`MissionStepResolved`,
+- **G2. Turn report and replay data.** *(Done 2026-10-04: each player's turn report,
+  `rules.TurnReport`, is saved per turn under `players/<id>/reports/<turn>.json` and served
+  by `TurnReportRequest`. Step events now carry the components as flown, both chances,
+  which rolls passed, and the season's running prestige. `GoalSettled` says whether a
+  goal was first in the game. `SeasonFundsSettled` carries the running costs by kind,
+  and R&D events carry the slot and released people's names. Still missing: "prestige
+  so far" on an active mission, which isn't part of the state.)* Resolution events (`MissionStepResolved`,
   `GoalSettled`, `ResearchCompleted`, `TrainingCompleted`, `PersonnelDeparture`,
   `SeasonFundsSettled`, `BudgetReviewed`, and so on) are computed and then thrown
   away. Persist each player's events per turn and serve them. The replay viewer

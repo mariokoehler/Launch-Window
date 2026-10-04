@@ -1,6 +1,7 @@
 package de.mkoehler.launchwindow.client.connect;
 
 import com.badlogic.gdx.Gdx;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.net.AppVersion;
 import de.mkoehler.launchwindow.net.NetworkClient;
@@ -14,7 +15,10 @@ import de.mkoehler.launchwindow.net.messages.HandshakeRequest;
 import de.mkoehler.launchwindow.net.messages.HandshakeResponse;
 import de.mkoehler.launchwindow.net.messages.SubmitActionRequest;
 import de.mkoehler.launchwindow.net.messages.SubmitActionResponse;
+import de.mkoehler.launchwindow.net.messages.TurnReportRequest;
+import de.mkoehler.launchwindow.net.messages.TurnReportResponse;
 import de.mkoehler.launchwindow.persistence.PlayerAction;
+import de.mkoehler.launchwindow.rules.TurnReport;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -46,6 +50,9 @@ import java.util.function.Supplier;
  * @author Mario Koehler
  */
 public final class NetworkGateway implements ServerGateway {
+
+    /** Reads turn reports as the server saves them: strict, unknown fields are errors. */
+    private static final ObjectMapper REPORTS = new ObjectMapper();
 
     private final ExecutorService worker = Executors.newSingleThreadExecutor(runnable -> {
         Thread thread = new Thread(runnable, "server-gateway");
@@ -156,6 +163,36 @@ public final class NetworkGateway implements ServerGateway {
     @Override
     public void refresh(Credentials credentials, Consumer<ServerResult> done) {
         run(() -> readWithRetry(credentials), message -> ServerResult.of(ServerResult.Kind.FAILED, message), done);
+    }
+
+    @Override
+    public void fetchTurnReport(Credentials credentials, long turn, Consumer<TurnReportResult> done) {
+        run(() -> {
+            TurnReportResult first = fetchReportOnce(credentials, turn);
+            return first.kind() == TurnReportResult.Kind.FAILED && first.report() == null && client == null
+                ? fetchReportOnce(credentials, turn) : first;
+        }, message -> new TurnReportResult(TurnReportResult.Kind.FAILED, message, null), done);
+    }
+
+    private TurnReportResult fetchReportOnce(Credentials credentials, long turn) {
+        Optional<LoginResult> refusal = ensureSession(credentials);
+        if (refusal.isPresent()) {
+            return new TurnReportResult(TurnReportResult.Kind.FAILED, refusal.get().message(), null);
+        }
+        try {
+            TurnReportResponse response = client.sendAndReceive(new TurnReportRequest(turn), TurnReportResponse.class);
+            if (!response.success()) {
+                return new TurnReportResult(TurnReportResult.Kind.FAILED, response.message(), null);
+            }
+            if (!response.found()) {
+                return new TurnReportResult(TurnReportResult.Kind.NONE, "", null);
+            }
+            return new TurnReportResult(TurnReportResult.Kind.FOUND, "", REPORTS.readValue(response.json(),
+                TurnReport.class));
+        } catch (IOException | RuntimeException e) {
+            dropConnection();
+            return new TurnReportResult(TurnReportResult.Kind.FAILED, e.getMessage(), null);
+        }
     }
 
     @Override

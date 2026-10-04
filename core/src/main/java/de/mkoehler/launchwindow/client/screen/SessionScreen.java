@@ -13,6 +13,7 @@ import de.mkoehler.launchwindow.client.ui.Countdown;
 import de.mkoehler.launchwindow.client.ui.Refusals;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.persistence.PlayerAction;
+import de.mkoehler.launchwindow.rules.TurnReport;
 
 import java.util.Locale;
 import java.util.OptionalLong;
@@ -113,11 +114,16 @@ abstract class SessionScreen extends StageScreen {
         }
         refreshing = true;
         lastRefreshMillis = System.currentTimeMillis();
+        long resolvedBefore = session.latestResolvedTurn();
         game.gateway().refresh(session.credentials(), result -> {
             refreshing = false;
             if (isShowing() && result.kind() == ServerResult.Kind.OK && result.state() != null) {
                 session.update(result);
                 stateChanged();
+                if (session.latestResolvedTurn() > resolvedBefore) {
+                    // A turn resolved while the player was here: say so rather than take over the screen.
+                    toast("The turn resolved. Its report is waiting on the Space Complex.", Theme.NoticeKind.INFO);
+                }
             }
         });
     }
@@ -278,6 +284,67 @@ abstract class SessionScreen extends StageScreen {
                 action.run();
             }
         };
+    }
+
+    /**
+     * Opens the latest turn's report, or one mission's replay from it, fetching the report if this
+     * session hasn't yet. Says so when there's no report (no turn resolved since the player joined)
+     * or the mission didn't fly in it.
+     *
+     * @param missionId the mission to replay, or {@code null} for the report
+     */
+    protected void openLatestReport(String missionId) {
+        openLatestReport(missionId, false);
+    }
+
+    /**
+     * Opens the latest turn's report on entering the game: like {@link #openLatestReport(String)},
+     * but quiet when there's nothing to open, since the player didn't ask.
+     */
+    protected void openUnreadReport() {
+        openLatestReport(null, true);
+    }
+
+    private void openLatestReport(String missionId, boolean quiet) {
+        long turn = session.latestResolvedTurn();
+        TurnReport cached = session.report(turn);
+        if (cached != null) {
+            openReport(cached, missionId);
+            return;
+        }
+        game.gateway().fetchTurnReport(session.credentials(), -1, result -> {
+            if (!isShowing()) {
+                return;
+            }
+            switch (result.kind()) {
+                case FOUND -> {
+                    session.keepReport(result.report());
+                    openReport(result.report(), missionId);
+                }
+                case NONE -> {
+                    game.markReportRead(turn);
+                    if (!quiet) {
+                        toast("No turn report yet: none has resolved since you joined.", Theme.NoticeKind.INFO);
+                    }
+                }
+                case FAILED -> {
+                    if (!quiet) {
+                        toast("Couldn't fetch the turn report. Try again.", Theme.NoticeKind.DANGER);
+                    }
+                }
+            }
+        });
+    }
+
+    private void openReport(TurnReport report, String missionId) {
+        game.markReportRead(report.gameTurn());
+        if (missionId == null) {
+            game.setScreen(new TurnReportScreen(game, report));
+        } else if (report.missions().stream().anyMatch(flown -> flown.missionInstanceId().equals(missionId))) {
+            game.setScreen(new ReplayScreen(game, report, missionId));
+        } else {
+            toast("That mission didn't fly in the last turn.", Theme.NoticeKind.INFO);
+        }
     }
 
     /**

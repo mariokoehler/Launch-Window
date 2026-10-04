@@ -36,6 +36,22 @@ import de.mkoehler.launchwindow.client.screen.RndBoardScreen;
 import de.mkoehler.launchwindow.client.screen.OpenRocketScreen;
 import de.mkoehler.launchwindow.client.screen.RocketProgramsScreen;
 import de.mkoehler.launchwindow.client.screen.VabScreen;
+import de.mkoehler.launchwindow.client.screen.ReplayScreen;
+import de.mkoehler.launchwindow.client.screen.TurnReportScreen;
+import de.mkoehler.launchwindow.client.view.TurnReportView;
+import de.mkoehler.launchwindow.content.RandomEventRoster;
+import de.mkoehler.launchwindow.persistence.ActionContext;
+import de.mkoehler.launchwindow.persistence.PlayerSnapshotStore;
+import de.mkoehler.launchwindow.persistence.PlayerStateService;
+import de.mkoehler.launchwindow.content.BudgetSchedule;
+import de.mkoehler.launchwindow.rules.GoalTally;
+import de.mkoehler.launchwindow.rules.MissionStepResolved;
+import de.mkoehler.launchwindow.rules.TurnReport;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import de.mkoehler.launchwindow.client.screen.MissionControlScreen;
 import de.mkoehler.launchwindow.client.screen.MissionsScreen;
 import de.mkoehler.launchwindow.client.screen.RestaffScreen;
@@ -121,6 +137,11 @@ public final class ScreenSnapshot {
 
         @Override
         public void refresh(Credentials credentials, Consumer<ServerResult> done) {
+        }
+
+        @Override
+        public void fetchTurnReport(Credentials credentials, long turn,
+                                    Consumer<de.mkoehler.launchwindow.client.connect.TurnReportResult> done) {
         }
 
         @Override
@@ -287,6 +308,7 @@ public final class ScreenSnapshot {
 
         planningShots(folder, game, info);
         missionControlShots(folder, game, info);
+        reportShots(folder, game, info);
     }
 
     /**
@@ -463,6 +485,55 @@ public final class ScreenSnapshot {
             state.getMissionControlCandidates().add(candidate);
         }
         return state;
+    }
+
+    /**
+     * The turn report and the replay, from a real season pass: the Mission Control agency resolves
+     * one turn with Vostok Orbital and Sputnik 1 Extended flying.
+     */
+    private static void reportShots(File folder, LaunchWindowGame game, GameInfoResponse info) {
+        TurnReport report;
+        PlayerSnapshot after;
+        try {
+            Path playerRoot = Files.createTempDirectory("snapshot-player");
+            ObjectMapper mapper = new ObjectMapper();
+            ContentCatalog catalog = ContentPackLoader.loadFromClasspath("content/early-era",
+                ScreenSnapshot.class.getClassLoader());
+            ActionContext context = new ActionContext(catalog, BudgetSchedule.baspmClose());
+            new PlayerSnapshotStore(playerRoot, mapper).save(0, missionControlState(), null);
+            PlayerStateService service = new PlayerStateService(playerRoot, mapper, context);
+            service.resolveTurn(23, new GoalTally(), new RandomEventRoster(100, 100,
+                RandomEventRoster.baspmClose().events()), REPORT_SEED);
+            report = service.turnReport(23).orElseThrow();
+            after = service.currentState();
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+        GameInfoResponse next = GameInfoResponse.success("early-era", info.contentPackHash(), List.of(), 24, true,
+            6 * 3_600_000L + 12 * 60_000L + 30_000L, 0L, null, List.of(), List.of(), 0);
+        startSession(game, after, next);
+        game.session().keepReport(report);
+        write(folder, "report.png", new TurnReportScreen(game, report), null);
+        String vostok = report.missions().stream().filter(flown -> flown.missionConfigurationId()
+            .equals("vostok-orbital")).findFirst().orElseThrow().missionInstanceId();
+        write(folder, "replay-step.png", new ReplayScreen(game, report, vostok), screen -> screen.show(
+            firstInteresting(report, vostok)));
+        write(folder, "replay-summary.png", new ReplayScreen(game, report, vostok), screen -> screen.show(99));
+        write(folder, "replay-sputnik.png", new ReplayScreen(game, report, "m-sputnik"), screen -> screen.show(0));
+    }
+
+    /** The seed for the report fixture's season pass. */
+    private static final long REPORT_SEED = 11L;
+
+    /** Picks the first step that needed a saving roll, or the first step. */
+    private static int firstInteresting(TurnReport report, String missionId) {
+        List<MissionStepResolved> steps = TurnReportView.steps(report, missionId);
+        for (int i = 0; i < steps.size(); i++) {
+            if (steps.get(i).savingChance() != null) {
+                return i;
+            }
+        }
+        return 0;
     }
 
     private static void startSession(LaunchWindowGame game, PlayerSnapshot state, GameInfoResponse info) {

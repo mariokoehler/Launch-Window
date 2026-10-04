@@ -49,24 +49,64 @@ public final class BudgetProgress {
      * @throws NullPointerException if an argument is {@code null}
      */
     public static long runningCosts(PlayerSnapshot snapshot, ContentCatalog catalog) {
+        return runningCostBreakdown(snapshot, catalog).total();
+    }
+
+    /**
+     * A season's running costs by kind, after the cost multiplier, adding up exactly to the total:
+     * the building upkeep line absorbs the rounding.
+     *
+     * @param salaries      every employee's salary
+     * @param employees     how many employees that is
+     * @param programs      the opened programs' upkeep
+     * @param programCount  how many programs are open
+     * @param components    the active components' upkeep
+     * @param componentCount how many components are active
+     * @param buildings     the buildings' upkeep at their levels
+     * @param total         the running costs charged
+     */
+    public record RunningCosts(long salaries, int employees, long programs, int programCount, long components,
+                               int componentCount, long buildings, long total) {
+    }
+
+    /**
+     * Returns a player's running costs by kind ({@code ui-spec.md} &sect;4.4's budget lines, gap G7).
+     *
+     * @param snapshot the player's state
+     * @param catalog  the content catalog the program and component maintenance comes from
+     * @return the breakdown, its total exactly {@link #runningCosts}
+     * @throws NullPointerException if an argument is {@code null}
+     */
+    public static RunningCosts runningCostBreakdown(PlayerSnapshot snapshot, ContentCatalog catalog) {
         Objects.requireNonNull(snapshot, "snapshot must not be null");
         Objects.requireNonNull(catalog, "catalog must not be null");
         long salaries = 0;
+        int employees = 0;
         for (Personnel person : allEmployees(snapshot)) {
             salaries += Math.round(person.getSalary());
+            employees++;
         }
-        long maintenance = 0;
+        long programs = 0;
         for (String programId : snapshot.getOpenedProgramIds()) {
-            maintenance += catalog.program(programId).orElseThrow().maintenanceCost();
+            programs += catalog.program(programId).orElseThrow().maintenanceCost();
         }
+        long components = 0;
+        int componentCount = 0;
         for (var owned : snapshot.getMissionComponents().entrySet()) {
             // An inactive component (its last program closed) is kept but pays no upkeep (baspm.md §10.9).
             if (owned.getValue().isActive()) {
-                maintenance += catalog.missionComponent(owned.getKey()).orElseThrow().maintenanceCost();
+                components += catalog.missionComponent(owned.getKey()).orElseThrow().maintenanceCost();
+                componentCount++;
             }
         }
-        maintenance += BuildingUpgrades.maintenance(snapshot, catalog.buildings());
-        return Math.round((salaries + maintenance) * snapshot.getCostMultiplier());
+        long buildings = BuildingUpgrades.maintenance(snapshot, catalog.buildings());
+        double multiplier = snapshot.getCostMultiplier();
+        long total = Math.round((salaries + programs + components + buildings) * multiplier);
+        long scaledSalaries = Math.round(salaries * multiplier);
+        long scaledPrograms = Math.round(programs * multiplier);
+        long scaledComponents = Math.round(components * multiplier);
+        return new RunningCosts(scaledSalaries, employees, scaledPrograms, snapshot.getOpenedProgramIds().size(),
+            scaledComponents, componentCount, total - scaledSalaries - scaledPrograms - scaledComponents, total);
     }
 
     /**
@@ -91,7 +131,8 @@ public final class BudgetProgress {
         }
         List<ResolutionEvent> events = new ArrayList<>();
 
-        long expenses = runningCosts(snapshot, catalog);
+        RunningCosts costs = runningCostBreakdown(snapshot, catalog);
+        long expenses = costs.total();
         snapshot.setFunds(snapshot.getFunds() - expenses);
 
         if (seasonsElapsed > 0 && seasonsElapsed % SEASONS_PER_REVIEW == 0) {
@@ -100,7 +141,7 @@ public final class BudgetProgress {
 
         long income = snapshot.getFundingRatePerSeason();
         snapshot.setFunds(snapshot.getFunds() + income);
-        events.add(new SeasonFundsSettled(expenses, income, snapshot.getFunds()));
+        events.add(new SeasonFundsSettled(expenses, income, snapshot.getFunds(), costs));
         return events;
     }
 

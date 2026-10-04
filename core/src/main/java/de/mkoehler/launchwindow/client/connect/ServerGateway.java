@@ -58,6 +58,16 @@ public interface ServerGateway {
     void refresh(Credentials credentials, Consumer<ServerResult> done);
 
     /**
+     * Fetches one of the player's turn reports (gap G2). A read: retried once if the connection
+     * broke.
+     *
+     * @param credentials who and where
+     * @param turn        the turn, or a negative number for the latest
+     * @param done        called on the render thread with the result
+     */
+    void fetchTurnReport(Credentials credentials, long turn, Consumer<TurnReportResult> done);
+
+    /**
      * Ends the session: closes its connection. The next {@link #logIn} opens a new one.
      */
     void logOut();

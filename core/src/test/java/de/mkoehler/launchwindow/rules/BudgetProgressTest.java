@@ -64,7 +64,10 @@ class BudgetProgressTest {
 
         assertEquals(1_000 - 70 + 200, snapshot.getFunds());
         assertEquals(1, events.size(), "no review falls due at season 1");
-        assertEquals(new SeasonFundsSettled(70, 200, 1_130), events.get(0));
+        SeasonFundsSettled settled = (SeasonFundsSettled) events.get(0);
+        assertEquals(List.of(70L, 200L, 1_130L), List.of(settled.expenses(), settled.income(), settled.fundsAfter()));
+        assertEquals(70, settled.costs().salaries() + settled.costs().programs() + settled.costs().components()
+            + settled.costs().buildings(), "the parts add up to the total");
     }
 
     /**
@@ -81,7 +84,8 @@ class BudgetProgressTest {
         assertEquals(new BudgetReviewed(1, 500, 0, 150), events.get(0));
         assertEquals(150, snapshot.getFundingRatePerSeason());
         assertEquals(500, snapshot.getPrestigeAtLastReview());
-        assertEquals(new SeasonFundsSettled(0, 150, 150), events.get(1));
+        SeasonFundsSettled settled = (SeasonFundsSettled) events.get(1);
+        assertEquals(List.of(0L, 150L, 150L), List.of(settled.expenses(), settled.income(), settled.fundsAfter()));
     }
 
     /**

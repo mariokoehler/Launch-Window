@@ -366,7 +366,7 @@ public final class MissionsScreen extends ChromeScreen {
         buttons.left();
         if (!scheduled) {
             buttons.add(actionButton("Replay season " + mission.getCurrentSeasonIndex(), Theme.ButtonKind.SECONDARY,
-                () -> notBuiltYet("The replay"))).padRight(Theme.SPACE_2).padBottom(Theme.SPACE_2);
+                () -> openLatestReport(mission.getId()))).padRight(Theme.SPACE_2).padBottom(Theme.SPACE_2);
         }
         buttons.add(actionButton("Re-staff mission control", Theme.ButtonKind.SECONDARY,
             () -> game.setScreen(new RestaffScreen(game, mission.getId())))).padRight(Theme.SPACE_2)

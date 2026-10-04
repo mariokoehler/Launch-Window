@@ -82,8 +82,54 @@ public class LaunchWindowGame extends Game {
         } catch (IllegalStateException e) {
             return e.getMessage();
         }
-        setScreen(new SpaceComplexScreen(this));
+        setScreen(new SpaceComplexScreen(this, true));
         return null;
+    }
+
+    /**
+     * Returns the latest turn whose report this player has read on this device. Kept in the
+     * client's preferences per server and login, so it's per device (unconfirmed).
+     *
+     * @return the turn, or -1 if none was read
+     */
+    public long lastReadReport() {
+        if (session == null) {
+            return -1;
+        }
+        return preferences().getLong(readKey(), -1);
+    }
+
+    /**
+     * Marks a turn's report as read, if it's newer than the one read before.
+     *
+     * @param turn the turn
+     */
+    public void markReportRead(long turn) {
+        if (session == null || turn <= lastReadReport()) {
+            return;
+        }
+        com.badlogic.gdx.Preferences preferences = preferences();
+        preferences.putLong(readKey(), turn);
+        preferences.flush();
+    }
+
+    /**
+     * Returns whether a resolved turn's report hasn't been read yet.
+     *
+     * @return whether one is unread
+     */
+    public boolean reportUnread() {
+        return session != null && session.latestResolvedTurn() >= 1 && session.latestResolvedTurn() > lastReadReport();
+    }
+
+    private String readKey() {
+        Credentials credentials = session.credentials();
+        return "reportRead." + credentials.address().host() + ":" + credentials.address().port() + "."
+            + credentials.login();
+    }
+
+    private static com.badlogic.gdx.Preferences preferences() {
+        return Gdx.app.getPreferences("launchwindow");
     }
 
     /**

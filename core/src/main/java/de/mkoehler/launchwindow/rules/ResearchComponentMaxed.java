@@ -34,10 +34,11 @@ import java.util.Objects;
  * @param releasedPersonnelIds the stable ids of every {@code SET} employee
  *                             freed back to {@code IDLE} as a result, in
  *                             slot order (0 before 1 before 2 before 3)
+ * @param releasedNames        their names, in the same order (G2: the turn report names them)
  * @author Mario Koehler
  */
-public record ResearchComponentMaxed(String componentId, List<String> releasedPersonnelIds)
-    implements ResolutionEvent {
+public record ResearchComponentMaxed(String componentId, List<String> releasedPersonnelIds,
+                                     List<String> releasedNames) implements ResolutionEvent {
 
     /**
      * Validates both fields and defensively copies
@@ -51,5 +52,6 @@ public record ResearchComponentMaxed(String componentId, List<String> releasedPe
         Objects.requireNonNull(componentId, "componentId must not be null");
         Objects.requireNonNull(releasedPersonnelIds, "releasedPersonnelIds must not be null");
         releasedPersonnelIds = List.copyOf(releasedPersonnelIds);
+        releasedNames = releasedNames == null ? List.of() : List.copyOf(releasedNames);
     }
 }

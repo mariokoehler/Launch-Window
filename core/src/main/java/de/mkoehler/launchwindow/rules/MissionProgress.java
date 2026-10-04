@@ -205,10 +205,11 @@ public final class MissionProgress {
         long tierTotal = MissionPrestige.tierTotal(configuration, tier);
         long seasonPrestige = 0;
         for (MissionStep step : season.steps()) {
-            MissionStepOutcome outcome = resolveStep(snapshot, catalog, random, mission, step, expertUseCounts,
+            MissionStepResolved resolved = resolveStep(snapshot, catalog, random, mission, step, expertUseCounts,
                 events);
-            events.add(new MissionStepResolved(mission.getId(), configuration.id(), mission.getCurrentSeasonIndex(),
-                step.id(), outcome));
+            MissionStepOutcome outcome = resolved.outcome();
+            int resolvedIndex = events.size();
+            events.add(resolved);
             executedSteps.add(step);
             executedOutcomes.add(outcome);
             // A step that ends or fails the mission awards no goals - BASPM's ProcessStepFailed has none
@@ -217,6 +218,7 @@ public final class MissionProgress {
                 ? settleStepGoals(snapshot, catalog, mission, step, goalTally, gameTurn, events)
                 : 0;
             seasonPrestige = stepPrestige(seasonPrestige, outcome, step, tierTotal, goalPrestige);
+            events.set(resolvedIndex, resolved.withSeasonPrestigeAfter(seasonPrestige));
 
             if (outcome == MissionStepOutcome.FAILURE || outcome == MissionStepOutcome.CATASTROPHIC) {
                 missionEndedThisSeason = true;
@@ -379,13 +381,14 @@ public final class MissionProgress {
         Goal goal = catalog.goal(goalId).orElseThrow(
             () -> new IllegalStateException("MissionStep references unknown Goal " + goalId));
         // Same-turn rule: the count read here is the committed count, never one this pass has advanced.
-        long prestige = goalTally.countOf(goalId) == 0 ? goal.firstTimePrestige() : goal.secondTimePrestige();
+        boolean first = goalTally.countOf(goalId) == 0;
+        long prestige = first ? goal.firstTimePrestige() : goal.secondTimePrestige();
         if (cancelled) {
             snapshot.getCancelledGoalIds().add(goalId);
         } else {
             snapshot.getAchievedGoals().put(goalId, gameTurn);
         }
-        events.add(new GoalSettled(mission.getId(), goalId, cancelled, prestige));
+        events.add(new GoalSettled(mission.getId(), goalId, cancelled, prestige, first));
         return prestige;
     }
 
@@ -437,29 +440,35 @@ public final class MissionProgress {
      *                        events to
      * @return the resolved outcome
      */
-    private static MissionStepOutcome resolveStep(PlayerSnapshot snapshot, ContentCatalog catalog,
+    private static MissionStepResolved resolveStep(PlayerSnapshot snapshot, ContentCatalog catalog,
             RandomGenerator random, InProgressMission mission, MissionStep step, Map<String, Integer> expertUseCounts,
             List<ResolutionEvent> events) {
-        double componentSum = componentContributionSum(snapshot, catalog, mission, step);
+        List<MissionStepResolved.ComponentFlown> flown = new ArrayList<>();
+        double componentSum = componentContributionSum(snapshot, catalog, mission, step,
+            snapshot::hasAchievedOrCancelledGoal, flown);
         boolean crewInvolved = !step.crewInvolvements().isEmpty();
         double crewSum = crewInvolved ? crewContributionSum(snapshot, mission, step) : 0;
         double baseProbability = MissionStepResolution.computeBaseProbability(componentSum, crewInvolved, crewSum);
 
         double firstRoll = MissionStepResolution.drawRoll(random);
         if (MissionStepResolution.firstRollSucceeded(baseProbability, firstRoll)) {
-            return MissionStepOutcome.SUCCESSFUL;
+            return new MissionStepResolved(mission.getId(), mission.getMissionConfigurationId(),
+                mission.getCurrentSeasonIndex(), step.id(), MissionStepOutcome.SUCCESSFUL, flown, baseProbability, true,
+                null, null, null, 0);
         }
 
         // CAPCOM is a control slot, so it sits on the controller side of the saving throw (baspm.md §10.9).
         double controllerSum = controlContributionSum(snapshot, catalog, mission, step);
-        double savingThrowProbability = MissionStepResolution.computeSavingThrowProbability(baseProbability,
-            controllerSum);
-        savingThrowProbability = applyExpertRescue(snapshot, catalog, mission, step, savingThrowProbability,
+        double beforeExperts = MissionStepResolution.computeSavingThrowProbability(baseProbability, controllerSum);
+        double savingThrowProbability = applyExpertRescue(snapshot, catalog, mission, step, beforeExperts,
             expertUseCounts, events);
 
         double savingRoll = MissionStepResolution.drawRoll(random);
-        return MissionStepResolution.resolve(baseProbability, savingThrowProbability, step.crewRisk(), firstRoll,
-            savingRoll);
+        MissionStepOutcome outcome = MissionStepResolution.resolve(baseProbability, savingThrowProbability,
+            step.crewRisk(), firstRoll, savingRoll);
+        return new MissionStepResolved(mission.getId(), mission.getMissionConfigurationId(),
+            mission.getCurrentSeasonIndex(), step.id(), outcome, flown, baseProbability, false, beforeExperts,
+            savingThrowProbability, outcome == MissionStepOutcome.MINOR_GLITCH_SOLVED, 0);
     }
 
     /**
@@ -602,24 +611,28 @@ public final class MissionProgress {
      * reliability plus its live goal modifier - weighted by its involvement
      * percentage.
      *
+     * The goal modifiers are read against any notion of which goals are held: the season
+     * pass passes the player's own, and the mission assessment holds a step's goals once
+     * its walk is past the step.
+     *
      * @param snapshot the player snapshot the components are owned in
      * @param catalog  the content catalog, for the mission's configuration
      * @param mission  the mission the step belongs to
      * @param step     the step to compute the sum for
+     * @param goalHeld whether a goal is achieved or cancelled
      * @return the component contribution sum
-     */
-    private static double componentContributionSum(PlayerSnapshot snapshot, ContentCatalog catalog,
-            InProgressMission mission, MissionStep step) {
-        return componentContributionSum(snapshot, catalog, mission, step, snapshot::hasAchievedOrCancelledGoal);
-    }
-
-    /**
-     * As {@link #componentContributionSum(PlayerSnapshot, ContentCatalog, InProgressMission, MissionStep)},
-     * with the goal modifiers read against any notion of which goals are held. For the mission
-     * assessment, which holds a step's goals once its walk is past the step.
      */
     static double componentContributionSum(PlayerSnapshot snapshot, ContentCatalog catalog,
             InProgressMission mission, MissionStep step, Predicate<String> goalHeld) {
+        return componentContributionSum(snapshot, catalog, mission, step, goalHeld, null);
+    }
+
+    /**
+     * As above, also listing each component as it flies, when {@code flown} isn't {@code null}.
+     */
+    private static double componentContributionSum(PlayerSnapshot snapshot, ContentCatalog catalog,
+            InProgressMission mission, MissionStep step, Predicate<String> goalHeld,
+            List<MissionStepResolved.ComponentFlown> flown) {
         MissionConfiguration configuration = catalog.missionConfiguration(mission.getMissionConfigurationId())
             .orElseThrow();
         double sum = 0;
@@ -631,6 +644,9 @@ public final class MissionProgress {
             double modifier = goalModifierFor(goalHeld, configuration, componentId);
             double effective = MissionStepResolution.effectiveReliability(current, modifier);
             sum += involvement.percent() / 100.0 * effective;
+            if (flown != null) {
+                flown.add(new MissionStepResolved.ComponentFlown(componentId, involvement.percent(), effective));
+            }
         }
         return sum;
     }

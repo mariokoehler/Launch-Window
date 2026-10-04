@@ -64,6 +64,17 @@ public final class SpaceComplexScreen extends SessionScreen {
      * @param game the game, in a session
      */
     public SpaceComplexScreen(LaunchWindowGame game) {
+        this(game, false);
+    }
+
+    /**
+     * Builds the hub, opening an unread turn report at once when asked: on entering the game, not
+     * on every return to the hub.
+     *
+     * @param game         the game, in a session
+     * @param unreadReport whether to open an unread report
+     */
+    public SpaceComplexScreen(LaunchWindowGame game, boolean unreadReport) {
         super(game);
         this.timeOfDay = game.hubClock().enter(System.currentTimeMillis());
         this.hotspots = loadHotspots();
@@ -80,6 +91,9 @@ public final class SpaceComplexScreen extends SessionScreen {
         stack.add(overlay);
         root.add(stack).grow();
         rebuild();
+        if (unreadReport && game.reportUnread()) {
+            openUnreadReport();
+        }
     }
 
     private List<Hub.Hotspot> loadHotspots() {
@@ -132,9 +146,12 @@ public final class SpaceComplexScreen extends SessionScreen {
         // The strip's one button: white like its neighbours, with a navy outline.
         Table report = chip(ui.rect(Theme.SURFACE_CARD, Theme.NAVY, Theme.BORDER_EMPHASIS), "document", Theme.NAVY,
             ui.label("TURN REPORT", Theme.TextStyle.LABEL, Theme.NAVY));
+        if (game.reportUnread()) {
+            // The unread mark: a gold dot, as in the mockup.
+            report.add(new Image(ui.unreadDot())).size(10f).padLeft(6f);
+        }
         report.setTouchable(Touchable.enabled);
-        report.addListener(clicked(() -> notBuiltYet("The turn report")));
-        // No unread badge: nothing in the state says a report is unread yet (gap G2).
+        report.addListener(clicked(() -> openLatestReport(null)));
         chips.add(report).height(CHIP_HEIGHT).padRight(gap);
         chips.add(chip(ui.solid(Theme.SURFACE_CARD), "funds", Theme.NAVY,
             ui.label(money(state.getFunds()), Theme.TextStyle.LABEL, Theme.NAVY))).height(CHIP_HEIGHT).padRight(gap);

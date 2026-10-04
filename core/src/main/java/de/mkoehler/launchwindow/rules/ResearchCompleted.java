@@ -14,6 +14,7 @@ package de.mkoehler.launchwindow.rules;
  * @param skillGain       how much the employee's own skill grew this season
  * @param reliabilityGain how much the component's reliability grew this
  *                        season
+ * @param slot            the R&amp;D slot they worked in, from 0
  * @author Mario Koehler
  */
 public record ResearchCompleted(
@@ -21,6 +22,7 @@ public record ResearchCompleted(
     String name,
     String componentId,
     double skillGain,
-    double reliabilityGain
+    double reliabilityGain,
+    int slot
 ) implements ResolutionEvent {
 }

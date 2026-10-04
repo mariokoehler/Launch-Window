@@ -288,7 +288,7 @@ public final class ResearchProgress {
             }
             double share = nominalTotal > 0.0 ? nominalGains[slot] / nominalTotal * actualAppliedTotal : 0.0;
             events.add(new ResearchCompleted(specialist.getId(), specialist.getName(), componentId,
-                specialist.getSkill(component.associatedSkill()) - skillBeforeGain.get(specialist), share));
+                specialist.getSkill(component.associatedSkill()) - skillBeforeGain.get(specialist), share, slot));
         }
 
         // Re-deriving baspm.md §10.8's own release-at-the-cap mechanic (see this class's own
@@ -334,7 +334,14 @@ public final class ResearchProgress {
             return null;
         }
         List<String> releasedPersonnelIds = releaseResearchers(snapshot, componentId);
-        return releasedPersonnelIds.isEmpty() ? null : new ResearchComponentMaxed(componentId, releasedPersonnelIds);
+        if (releasedPersonnelIds.isEmpty()) {
+            return null;
+        }
+        List<String> names = releasedPersonnelIds.stream()
+            .map(id -> snapshot.getSetSpecialists().stream().filter(specialist -> specialist.getId().equals(id))
+                .map(SetSpecialist::getName).findFirst().orElse(id))
+            .toList();
+        return new ResearchComponentMaxed(componentId, releasedPersonnelIds, names);
     }
 
     /**

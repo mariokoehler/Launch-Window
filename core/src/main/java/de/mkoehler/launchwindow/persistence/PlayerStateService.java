@@ -5,6 +5,7 @@ import de.mkoehler.launchwindow.content.RandomEventRoster;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.rules.GoalTally;
 import de.mkoehler.launchwindow.rules.ResolutionEvent;
+import de.mkoehler.launchwindow.rules.TurnReport;
 import de.mkoehler.launchwindow.rules.SeasonResolver;
 
 import java.io.IOException;
@@ -36,6 +37,7 @@ import java.util.SplittableRandom;
 public class PlayerStateService {
 
     private final PlayerSnapshotStore snapshotStore;
+    private final TurnReportStore reportStore;
     private final PlayerActionJournal journal;
     private final SnapshotReplay replay;
     private final ActionContext context;
@@ -52,6 +54,7 @@ public class PlayerStateService {
         Objects.requireNonNull(mapper, "mapper must not be null");
         this.context = Objects.requireNonNull(context, "context must not be null");
         this.snapshotStore = new PlayerSnapshotStore(playerRoot, mapper);
+        this.reportStore = new TurnReportStore(playerRoot, mapper);
         this.journal = new PlayerActionJournal(playerRoot, mapper);
         this.replay = new SnapshotReplay(mapper);
     }
@@ -122,12 +125,31 @@ public class PlayerStateService {
             pending.stream().map(PlayerActionJournal.PendingAction::action).toList(), context).state();
         SeasonResolver.Context season = new SeasonResolver.Context(context.catalog(), context.schedule(), roster,
             goalTally, Math.toIntExact(gameTurn), resolved.getSeason());
+        // The report's "before" is today's state, actions applied, not the stored previous snapshot.
+        PlayerSnapshot before = replay.copy(resolved);
         List<ResolutionEvent> events = SeasonResolver.advanceSeason(resolved, season, new SplittableRandom(seasonSeed));
         resolved.setSeason(resolved.getSeason() + 1);
         String cutoff = pending.isEmpty() ? null : lastFileName(pending);
+        // The report goes first: a crash before the snapshot redoes the turn, which writes the same report.
+        reportStore.save(TurnReport.build(before, resolved, events, gameTurn, context.catalog()));
         snapshotStore.save(gameTurn, resolved, cutoff);
         journal.archive(pending, gameTurn);
         return events;
+    }
+
+    /**
+     * Loads a turn's report.
+     *
+     * @param turn the turn, or a negative number for the latest
+     * @return the report, or empty if there's none
+     * @throws IOException if the report can't be read
+     */
+    public Optional<TurnReport> turnReport(long turn) throws IOException {
+        if (turn >= 0) {
+            return reportStore.load(turn);
+        }
+        OptionalLong latest = reportStore.latestTurn();
+        return latest.isPresent() ? reportStore.load(latest.getAsLong()) : Optional.empty();
     }
 
     private SnapshotReplay.Replayed replayPending() throws IOException {

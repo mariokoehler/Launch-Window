@@ -9,6 +9,17 @@ import de.mkoehler.launchwindow.client.connect.LoginResult;
 import de.mkoehler.launchwindow.client.connect.NetworkGateway;
 import de.mkoehler.launchwindow.client.connect.ServerAddress;
 import de.mkoehler.launchwindow.client.connect.ServerResult;
+import de.mkoehler.launchwindow.client.connect.TurnReportResult;
+import de.mkoehler.launchwindow.persistence.PlayerStateService;
+import de.mkoehler.launchwindow.persistence.TurnReportStore;
+import de.mkoehler.launchwindow.net.NetworkConstants;
+import de.mkoehler.launchwindow.rules.MissionStepOutcome;
+import de.mkoehler.launchwindow.rules.MissionStepResolved;
+import de.mkoehler.launchwindow.rules.ResolutionEvent;
+import de.mkoehler.launchwindow.rules.TurnReport;
+import de.mkoehler.launchwindow.rules.GoalTally;
+import de.mkoehler.launchwindow.content.RandomEventRoster;
+import de.mkoehler.launchwindow.rules.SeasonFundsSettled;
 import de.mkoehler.launchwindow.actions.AdjustSalariesAction;
 import de.mkoehler.launchwindow.actions.HireAction;
 import de.mkoehler.launchwindow.persistence.PlayerAction;
@@ -28,7 +39,9 @@ import org.junit.jupiter.api.io.TempDir;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
@@ -175,6 +188,80 @@ class ClientGatewayIntegrationTest {
 
     private ServerResult submit(Credentials credentials, PlayerAction action) throws Exception {
         return await(done -> gateway.submit(credentials, action, done));
+    }
+
+    /**
+     * Turn reports over real sockets: none before the first turn resolves, then the resolved
+     * turn's report, read back from the JSON it's saved as, with its budget breakdown adding up.
+     */
+    @Test
+    void theGatewayFetchesTurnReports(@TempDir Path dataRoot) throws Exception {
+        int port = startServer(dataRoot);
+        application = new HeadlessApplication(new ApplicationAdapter() {
+        });
+        gateway = new NetworkGateway();
+        Credentials mario = new Credentials(new ServerAddress("localhost", port), "mario", "hunter2");
+        logIn(mario);
+        assertEquals(ClaimResult.Kind.JOINED, claim(mario, "Baltic Star Agency", "A. Reyes").kind());
+        TurnReportResult none = await(done -> gateway.fetchTurnReport(mario, -1, done));
+        assertEquals(TurnReportResult.Kind.NONE, none.kind(), none.message());
+
+        Path playerDir;
+        try (var players = Files.list(dataRoot.resolve("players"))) {
+            playerDir = players.findFirst().orElseThrow();
+        }
+        new PlayerStateService(playerDir, GameServer.createMapper(), ServerTestGames.CONTEXT)
+            .resolveTurn(1, new GoalTally(), new RandomEventRoster(0, 0, RandomEventRoster.baspmClose().events()), 7L);
+
+        TurnReportResult latest = await(done -> gateway.fetchTurnReport(mario, -1, done));
+        assertEquals(TurnReportResult.Kind.FOUND, latest.kind(), latest.message());
+        assertEquals(1, latest.report().gameTurn());
+        assertEquals(latest.report(), await((Consumer<Consumer<TurnReportResult>>) done -> gateway.fetchTurnReport(
+            mario, 1, done)).report());
+        SeasonFundsSettled funds = latest.report().events().stream().filter(SeasonFundsSettled.class::isInstance)
+            .map(SeasonFundsSettled.class::cast).findFirst().orElseThrow();
+        assertEquals(funds.expenses(), funds.costs().salaries() + funds.costs().programs() + funds.costs().components()
+            + funds.costs().buildings());
+        assertEquals(TurnReportResult.Kind.NONE, await((Consumer<Consumer<TurnReportResult>>) done ->
+            gateway.fetchTurnReport(mario, 9, done)).kind());
+    }
+
+    /**
+     * A report far bigger than any real turn (400 step events, three times Kryo's object buffer as
+     * JSON) still comes back whole over real sockets, because it travels gzipped.
+     */
+    @Test
+    void aLargeTurnReportFitsOverTheWire(@TempDir Path dataRoot) throws Exception {
+        int port = startServer(dataRoot);
+        application = new HeadlessApplication(new ApplicationAdapter() {
+        });
+        gateway = new NetworkGateway();
+        Credentials mario = new Credentials(new ServerAddress("localhost", port), "mario", "hunter2");
+        logIn(mario);
+        assertEquals(ClaimResult.Kind.JOINED, claim(mario, "Baltic Star Agency", "A. Reyes").kind());
+        Path playerDir;
+        try (var players = Files.list(dataRoot.resolve("players"))) {
+            playerDir = players.findFirst().orElseThrow();
+        }
+        List<ResolutionEvent> events = new ArrayList<>();
+        for (int i = 0; i < 400; i++) {
+            events.add(new MissionStepResolved("mission-instance-" + (i / 20), "vostok-orbital-configuration",
+                i % 3, "step-" + i, MissionStepOutcome.MINOR_GLITCH_SOLVED, List.of(
+                    new MissionStepResolved.ComponentFlown("rocket-component-" + i, 40, 71.25),
+                    new MissionStepResolved.ComponentFlown("capsule-component-" + i, 35, 64.5),
+                    new MissionStepResolved.ComponentFlown("guidance-component-" + i, 25, 58.75)),
+                62.5, false, 41.0, 77.5, true, 30L * i));
+        }
+        TurnReport big = new TurnReport(TurnReport.VERSION, 1, 250, 400, 25_000, 22_000, List.of(), List.of(),
+            events);
+        ObjectMapper mapper = GameServer.createMapper();
+        int size = mapper.writeValueAsString(big).length();
+        assertTrue(size > 3 * NetworkConstants.OBJECT_BUFFER_SIZE, "the fixture should outgrow the buffer: " + size);
+        new TurnReportStore(playerDir, mapper).save(big);
+
+        TurnReportResult fetched = await(done -> gateway.fetchTurnReport(mario, 1, done));
+        assertEquals(TurnReportResult.Kind.FOUND, fetched.kind(), fetched.message());
+        assertEquals(big, fetched.report());
     }
 
     private LoginResult logIn(Credentials credentials) throws Exception {

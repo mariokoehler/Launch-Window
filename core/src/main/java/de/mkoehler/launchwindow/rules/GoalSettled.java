@@ -11,8 +11,10 @@ package de.mkoehler.launchwindow.rules;
  * @param goalId            the {@link de.mkoehler.launchwindow.content.Goal#id()} that settled
  * @param cancelled         {@code true} if the goal was cancelled by an achieved goal rather than achieved by a step
  * @param prestige          the first-time or second-time prestige this settlement paid
+ * @param firstInGame       whether no player held the goal at the start of the turn, so this
+ *                          paid first-time prestige; under the same-turn rule two players can both be first
  * @author Mario Koehler
  */
-public record GoalSettled(String missionInstanceId, String goalId, boolean cancelled, long prestige)
-    implements ResolutionEvent {
+public record GoalSettled(String missionInstanceId, String goalId, boolean cancelled, long prestige,
+                          boolean firstInGame) implements ResolutionEvent {
 }

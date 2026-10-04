@@ -243,16 +243,25 @@ mission, up to a real launch.
 - **Pitfall:** `LaunchRequest` copies `rocketIds` with `List.copyOf`, which rejects
   nulls, so `MissionDraft.request()` sends "" for a missing rocket.
 
-**Mission Control built in libGDX (2026-10-04),** all but the replay viewer
-(`ui-spec.md` §4.7): the flight controllers, scheduled and active missions with Scrub
+**Mission Control built in libGDX (2026-10-04)** (`ui-spec.md` §4.7; the replay viewer
+came with G2, below): the flight controllers, scheduled and active missions with Scrub
 and Cancel, and Re-staff. The SET Centre's hire and personnel dialogs are now shared
 by department.
 - **Pitfall:** `shoot.sh` clears `shots/` first and allows 400 s. A run killed
   part-way leaves stale PNGs that make a pixel diff look clean.
 
-**Next:** G2 (persist each player's resolution events per turn), which the replay
-viewer and the turn report (§4.4) both need. It's a persistence-format decision, so
-ask the user first.
+**G2, the turn report and the replay built (2026-10-04).** Each player's turn report is
+saved per turn (`players/<id>/reports/<turn>.json`, a `rules.TurnReport`). It's sent as
+JSON inside `TurnReportResponse`, and read by `TurnReportScreen` and `ReplayScreen`.
+- **Pitfall, a save format now:** `ResolutionEvent`'s `@JsonSubTypes` ids are never
+  renamed or reused, and event and report fields are only added, like
+  `MessageRegistry`'s append-only rule. See `design.md` §3.7.
+- **Pitfall, Kryo's 64 KB object buffer:** the report goes over the wire gzipped, because a
+  busy turn's JSON outgrows the buffer, and an oversized message drops the connection.
+  The server refuses a report that would still be too big.
+
+**Next in `ui-spec.md` §7:** phase 4 (Astronaut Complex, Public Affairs Office, Museum,
+settings, game result).
 
 **Headquarters built in libGDX (2026-10-04),** as far as opening a program, from the
 Headquarters mockup: landing with the building panel and upgrade, Manage open

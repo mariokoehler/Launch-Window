@@ -166,6 +166,15 @@ public final class UiKit implements Disposable {
     }
 
     /**
+     * Returns the unread mark: a small gold dot ringed in navy, as on the hub's Turn Report button.
+     *
+     * @return the drawable, 10 px across
+     */
+    public Drawable unreadDot() {
+        return rects.computeIfAbsent("unreadDot", key -> shapes.circle(Theme.GOLD, Theme.NAVY, 1.5f, 10));
+    }
+
+    /**
      * Returns a progress-track dot ({@link Theme.Shapes#progressDot}), built once per state.
      *
      * @param state the step's state

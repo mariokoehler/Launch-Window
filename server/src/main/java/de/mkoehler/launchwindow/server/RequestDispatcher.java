@@ -4,11 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.mkoehler.launchwindow.content.BudgetSchedule;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.net.AppVersion;
+import de.mkoehler.launchwindow.net.NetworkConstants;
 import de.mkoehler.launchwindow.net.messages.ClaimSlotRequest;
 import de.mkoehler.launchwindow.net.messages.ClaimSlotResponse;
 import de.mkoehler.launchwindow.net.messages.FetchStateRequest;
 import de.mkoehler.launchwindow.net.messages.FetchStateResponse;
 import de.mkoehler.launchwindow.net.messages.GameInfoRequest;
+import de.mkoehler.launchwindow.net.messages.TurnReportRequest;
+import de.mkoehler.launchwindow.net.messages.TurnReportResponse;
 import de.mkoehler.launchwindow.net.messages.GameInfoResponse;
 import de.mkoehler.launchwindow.net.messages.HandshakeRequest;
 import de.mkoehler.launchwindow.net.messages.HandshakeResponse;
@@ -21,6 +24,7 @@ import de.mkoehler.launchwindow.persistence.PlayerSnapshotStore;
 import de.mkoehler.launchwindow.persistence.PlayerStateService;
 import de.mkoehler.launchwindow.persistence.SetFundsAction;
 import de.mkoehler.launchwindow.rules.HiringPool;
+import de.mkoehler.launchwindow.rules.TurnReport;
 import de.mkoehler.launchwindow.server.accounts.AccountStore;
 import de.mkoehler.launchwindow.server.accounts.AuthResult;
 import de.mkoehler.launchwindow.server.schedule.GameMeta;
@@ -34,6 +38,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.SplittableRandom;
 import java.util.stream.Stream;
 
@@ -65,6 +70,12 @@ import java.util.stream.Stream;
  * @author Mario Koehler
  */
 public class RequestDispatcher {
+
+    /**
+     * The largest gzipped turn report sent: a little under Kryo's object buffer, which a bigger
+     * message would overflow and drop the connection.
+     */
+    static final int MAX_REPORT_BYTES = NetworkConstants.OBJECT_BUFFER_SIZE - 1_024;
 
     private final AccountStore accountStore;
     private final Path dataRoot;
@@ -123,6 +134,9 @@ public class RequestDispatcher {
         }
         if (message instanceof FetchStateRequest request) {
             return new DispatchResult(handleFetchState(connectionId, request), false);
+        }
+        if (message instanceof TurnReportRequest request) {
+            return new DispatchResult(handleTurnReport(connectionId, request), false);
         }
         if (message instanceof GameInfoRequest request) {
             return new DispatchResult(handleGameInfo(connectionId, request), false);
@@ -260,6 +274,38 @@ public class RequestDispatcher {
             return FetchStateResponse.success(state);
         } catch (IOException e) {
             return FetchStateResponse.failure("Failed to fetch state: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Handles a {@link TurnReportRequest}: one of the connection's own player's turn reports, as
+     * the JSON it's saved as. The account comes from the connection, never from the request.
+     *
+     * @param connectionId the connection the request arrived on
+     * @param request      the request
+     * @return the response; a missing report is a normal "none"
+     */
+    public TurnReportResponse handleTurnReport(int connectionId, TurnReportRequest request) {
+        String accountId = connectionAccountIds.get(connectionId);
+        if (accountId == null) {
+            return TurnReportResponse.failure("Not authenticated - send a HandshakeRequest first.");
+        }
+        try {
+            if (!hasSlot(accountId)) {
+                return TurnReportResponse.failure(ClaimSlotRequest.SLOT_CLAIM_REQUIRED);
+            }
+            Optional<TurnReport> report = playerStateService(accountId).turnReport(request.turn());
+            if (report.isEmpty()) {
+                return TurnReportResponse.none();
+            }
+            TurnReportResponse response = TurnReportResponse.of(report.get().gameTurn(),
+                mapper.writeValueAsString(report.get()));
+            if (response.gzippedJson().length > MAX_REPORT_BYTES) {
+                return TurnReportResponse.failure("This turn's report is too large to send.");
+            }
+            return response;
+        } catch (IOException e) {
+            return TurnReportResponse.failure("Failed to read the turn report: " + e.getMessage());
         }
     }
 

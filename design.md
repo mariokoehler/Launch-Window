@@ -2902,6 +2902,37 @@ concurrent games side by side.
 
 ### 3.7 Persistence & turn-resolution data model — decided (user, 2026-09-27): flat-file JSON, no database
 
+**Turn reports (G2, 2026-10-04; the format choices are unconfirmed).**
+- **What's saved:** each player's resolution gets one JSON file beside the snapshots,
+  `players/<id>/reports/<turn>.json`, holding a `rules.TurnReport`. That's the season
+  pass's events, with polymorphic type ids from `ResolutionEvent`'s `@JsonSubTypes`,
+  plus a few numbers taken from the state just before the pass (today's actions
+  applied) and just after.
+- **Crash safety:** it's written atomically before the turn's snapshot, so a crash in
+  between redoes the turn with the same seed and tally, and writes the same report.
+  `TurnReportTest` proves that byte for byte.
+- **On the wire:** the report travels as that same JSON, gzipped, inside
+  `TurnReportResponse` rather than as registered Kryo classes. That's a departure from
+  the rest of the protocol, chosen to keep about 16 event records out of
+  `MessageRegistry`. It's gzipped because Kryo's object buffer is 64 KB
+  (`NetworkConstants.OBJECT_BUFFER_SIZE`): a test report of 400 step events is about
+  230 KB as JSON, which overflowed it and dropped the connection. Measured sizes:
+  - **A real turn** (the screenshot fixture, two missions and 31 events): 8.3 KB as JSON,
+    1.6 KB gzipped. That's about 270 bytes per event raw, so about 240 events would
+    already have overflowed without gzip. Gzipped, it's about 50 bytes per event, so
+    roughly 1,200 events fit.
+  - **The 400-event test report** gzips to 7.4 KB. Its steps differ only by a counter,
+    so it compresses much better than real data (31 to 1, against about 5 to 1). It
+    proves the path works, not the headroom.
+  - **Too big:** the server refuses a report still over the buffer after gzip, less
+    1 KB, with a message, rather than letting the connection drop. The client then
+    shows its generic fetch error and the report stays unread. That's a known limit with
+    no test, since no real turn comes close.
+- **This is a save format:** event type ids are never renamed or reused. Fields are
+  only added, with values old reports can do without, and `TurnReport.VERSION` is bumped
+  when a field's meaning changes. The same rule as `MessageRegistry`'s append-only
+  list.
+
 **Decision: keep the server lightweight, matching the sibling projects' own
 convention — no database.** The game world's state serializes to JSON and
 persists as a flat file on disk, one snapshot per resolved turn, not a
@@ -5962,7 +5993,16 @@ here.
       filter chips, the segmented control, the reliability bar, the skill bar, the
       R&D slot box, and the white on-page secondary button. They should be promoted
       to the design system and the UI Asset Sheet.
-  - **Slice: Mission Control, all but the replay — done (2026-10-04).** The flight
+  - **Slice: G2 turn reports, the turn report and the replay — done (2026-10-04).** See
+    §3.7 for the format.
+    - **Richer events:** step events (components as flown, chances, rolls, running
+      prestige), first-in-the-game goals, running costs by kind
+      (`BudgetProgress.runningCostBreakdown`, whose total is the existing
+      `runningCosts`), and R&D slots and names. `ContentPackPlayouts` stayed
+      byte-identical.
+    - **Client:** `TurnReportScreen` and `ReplayScreen`, a hub unread dot, and the report
+      opening on entering the game.
+  - **Slice: Mission Control — done (2026-10-04).** The flight
     controllers, scheduled missions with Scrub, active missions with Cancel, and
     Re-staff. Details and unconfirmed choices are in `ui-spec.md` §4.7's
     "Implemented" note.
@@ -5971,7 +6011,7 @@ here.
     - **Client:** the personnel pieces are shared by department (`Department`,
       `PersonnelDialogs`, `HireScreen(game, department)`), and the seat and console
       tile is shared too (`SlotTile`). Every earlier screenshot is pixel-identical.
-    - **Waiting:** the replay viewer needs G2's persisted per-turn events.
+    - **The replay viewer** came with the G2 slice above.
   - **Slice: Headquarters mission planning — done (2026-10-04).** Configuration
     selection, configuration details, the planning hub (assessment, rockets, payload
     R&D) and Assemble mission, up to a real launch (`LaunchMissionAction`). Details and

@@ -8,7 +8,9 @@ package de.mkoehler.launchwindow.rules;
  * @param expenses   the running costs charged this season
  * @param income     the funding granted this season, at the rate in force after any review
  * @param fundsAfter the player's funds after both
+ * @param costs      the running costs by kind, adding up to {@code expenses}
  * @author Mario Koehler
  */
-public record SeasonFundsSettled(long expenses, long income, long fundsAfter) implements ResolutionEvent {
+public record SeasonFundsSettled(long expenses, long income, long fundsAfter, BudgetProgress.RunningCosts costs)
+    implements ResolutionEvent {
 }

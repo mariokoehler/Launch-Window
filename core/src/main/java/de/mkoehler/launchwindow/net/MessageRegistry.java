@@ -38,6 +38,8 @@ import de.mkoehler.launchwindow.net.messages.ClaimSlotRequest;
 import de.mkoehler.launchwindow.net.messages.ClaimSlotResponse;
 import de.mkoehler.launchwindow.net.messages.GameInfoRequest;
 import de.mkoehler.launchwindow.net.messages.GameInfoResponse;
+import de.mkoehler.launchwindow.net.messages.TurnReportRequest;
+import de.mkoehler.launchwindow.net.messages.TurnReportResponse;
 import de.mkoehler.launchwindow.net.messages.FetchStateRequest;
 import de.mkoehler.launchwindow.net.messages.FetchStateResponse;
 import de.mkoehler.launchwindow.net.messages.HandshakeRequest;
@@ -192,5 +194,9 @@ public final class MessageRegistry {
         kryo.register(GameInfoResponse.class);
         // Appended 2026-10-04 (M5 department salary adjustment, ui-spec.md gap G8). Never move this line.
         kryo.register(AdjustSalariesAction.class);
+        // Appended 2026-10-04 (M5 turn reports, ui-spec.md gap G2). Never move these lines.
+        kryo.register(TurnReportRequest.class);
+        kryo.register(TurnReportResponse.class);
+        kryo.register(byte[].class);
     }
 }
