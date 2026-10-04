@@ -520,6 +520,12 @@ public final class ScreenSnapshot {
             firstInteresting(report, vostok)));
         write(folder, "replay-summary.png", new ReplayScreen(game, report, vostok), screen -> screen.show(99));
         write(folder, "replay-sputnik.png", new ReplayScreen(game, report, "m-sputnik"), screen -> screen.show(0));
+        // The same report a turn later: an earlier report, with Next offered and no morale warnings.
+        GameInfoResponse later = GameInfoResponse.success("early-era", info.contentPackHash(), List.of(), 25, true,
+            6 * 3_600_000L + 12 * 60_000L + 30_000L, 0L, null, List.of(), List.of(), 0);
+        startSession(game, after, later);
+        game.session().keepReport(report);
+        write(folder, "report-earlier.png", new TurnReportScreen(game, report), null);
     }
 
     /** The seed for the report fixture's season pass. */

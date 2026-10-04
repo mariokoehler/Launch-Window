@@ -46,6 +46,7 @@ public final class ClientSession {
     private GameInfo gameInfo;
     private final Map<String, MissionDraft> drafts = new HashMap<>();
     private final Map<Long, TurnReport> reports = new HashMap<>();
+    private long lastTurnWithoutReport;
 
     private ClientSession(Credentials credentials, ContentCatalog catalog, PackStatus packStatus, PlayerSnapshot state,
                           GameInfo gameInfo) {
@@ -187,6 +188,27 @@ public final class ClientSession {
      */
     public void keepReport(TurnReport report) {
         reports.put(report.gameTurn(), report);
+    }
+
+    /**
+     * Notes that the server has no report for a turn, so none for any earlier turn either: the
+     * player joined after it resolved.
+     *
+     * @param turn the turn without a report
+     */
+    public void noReportAt(long turn) {
+        lastTurnWithoutReport = Math.max(lastTurnWithoutReport, turn);
+    }
+
+    /**
+     * Returns whether there may be a report for a turn: it has resolved, and it isn't known to
+     * predate the player.
+     *
+     * @param turn the turn
+     * @return whether to offer it
+     */
+    public boolean mayHaveReport(long turn) {
+        return turn >= 1 && turn <= latestResolvedTurn() && turn > lastTurnWithoutReport;
     }
 
     /**

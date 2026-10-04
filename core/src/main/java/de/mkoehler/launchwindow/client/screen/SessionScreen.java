@@ -323,6 +323,7 @@ abstract class SessionScreen extends StageScreen {
                 }
                 case NONE -> {
                     game.markReportRead(turn);
+                    session.noReportAt(turn);
                     if (!quiet) {
                         toast("No turn report yet: none has resolved since you joined.", Theme.NoticeKind.INFO);
                     }
@@ -332,6 +333,37 @@ abstract class SessionScreen extends StageScreen {
                         toast("Couldn't fetch the turn report. Try again.", Theme.NoticeKind.DANGER);
                     }
                 }
+            }
+        });
+    }
+
+    /**
+     * Opens an earlier (or later) turn's report, fetching it if this session hasn't yet. Says so
+     * when the turn resolved before the player joined, and rebuilds so the screen stops offering it.
+     *
+     * @param turn the turn
+     */
+    protected void openReportAt(long turn) {
+        TurnReport cached = session.report(turn);
+        if (cached != null) {
+            game.setScreen(new TurnReportScreen(game, cached));
+            return;
+        }
+        game.gateway().fetchTurnReport(session.credentials(), turn, result -> {
+            if (!isShowing()) {
+                return;
+            }
+            switch (result.kind()) {
+                case FOUND -> {
+                    session.keepReport(result.report());
+                    game.setScreen(new TurnReportScreen(game, result.report()));
+                }
+                case NONE -> {
+                    session.noReportAt(turn);
+                    rebuild();
+                    toast("No report for that turn: it resolved before you joined.", Theme.NoticeKind.INFO);
+                }
+                case FAILED -> toast("Couldn't fetch the turn report. Try again.", Theme.NoticeKind.DANGER);
             }
         });
     }

@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
@@ -33,6 +34,8 @@ import java.util.Optional;
 public final class TurnReportScreen extends ChromeScreen {
 
     private final TurnReport report;
+    private final TextButton previous;
+    private final TextButton next;
 
     /**
      * Builds the screen for a report.
@@ -45,6 +48,10 @@ public final class TurnReportScreen extends ChromeScreen {
             + GameDate.ofTurn(report.gameTurn()).label() + " → " + GameDate.ofTurn(report.gameTurn() + 1).label(),
             "What happened overnight");
         this.report = report;
+        previous = onClick(ui.pageButton("Previous turn"), () -> openReportAt(report.gameTurn() - 1));
+        next = onClick(ui.pageButton("Next turn"), () -> openReportAt(report.gameTurn() + 1));
+        titleActions.add(previous).padRight(Theme.SPACE_2);
+        titleActions.add(next).padRight(Theme.SPACE_4);
         titleActions.add(actionButton("Continue to Space Complex", Theme.ButtonKind.PRIMARY, this::goHome));
         rebuild();
     }
@@ -52,6 +59,8 @@ public final class TurnReportScreen extends ChromeScreen {
     @Override
     protected void rebuild() {
         ContentCatalog catalog = session.catalog();
+        previous.setDisabled(!session.mayHaveReport(report.gameTurn() - 1));
+        next.setDisabled(!session.mayHaveReport(report.gameTurn() + 1));
         content.clearChildren();
         content.top();
         content.defaults().growX();
@@ -260,7 +269,9 @@ public final class TurnReportScreen extends ChromeScreen {
 
     private Table people(ContentCatalog catalog) {
         Table card = section("People", null);
-        List<TurnReportView.Line> lines = TurnReportView.people(report, session.state(), catalog);
+        // Morale warnings are about now, so only the latest report shows them.
+        boolean latest = report.gameTurn() >= session.latestResolvedTurn();
+        List<TurnReportView.Line> lines = TurnReportView.people(report, latest ? session.state() : null, catalog);
         if (lines.isEmpty()) {
             card.add(ui.paragraph("No changes this season.", Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).row();
         }

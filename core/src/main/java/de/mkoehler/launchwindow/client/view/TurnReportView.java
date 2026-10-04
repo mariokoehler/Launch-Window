@@ -395,7 +395,7 @@ public final class TurnReportView {
      * morale warnings for idle people now (derived here, unconfirmed).
      *
      * @param report  the report
-     * @param state   the player's state now
+     * @param state   the player's state now, or {@code null} for no morale warnings (an older report)
      * @param catalog the content pack
      * @return the lines
      */
@@ -433,6 +433,9 @@ public final class TurnReportView {
                 lines.add(new Line(controllers + (controllers == 1 ? " controller" : " controllers")
                     + " grew in skill on " + name, "", "Flight", 1));
             }
+        }
+        if (state == null) {
+            return lines;
         }
         Stream.of(state.getAstronauts(), state.getSetSpecialists(), state.getMissionControlOfficers())
             .flatMap(List::stream)

@@ -379,6 +379,10 @@ while building it, **unconfirmed**:
   while the player is in the game shows a toast and lights the hub's Turn Report dot,
   rather than taking over the screen.
 - **"Read" is remembered per device,** in the client's preferences, per server and login.
+- **Earlier turns (user, 2026-10-04):** "Previous turn" and "Next turn" step through the
+  saved reports. Previous turns off once the server says a turn resolved before the
+  player joined. An earlier report leaves out the morale warnings, which describe the
+  roster now. Replays work from any report.
 - **No hires on the report:** hires are the player's own actions during the day, not
   season events.
 - **Mission-end releases aren't listed** ("the 9 controllers are idle again"): no event
