@@ -505,6 +505,10 @@ news, and the debt and multiplier states. Details and the unconfirmed choices ar
   declare extended goals.
 - **Mockup tip:** `<sc-for>` inside a CSS grid lays its items out as grid cells, so a
   table can be a grid with one `sc-for` per row.
+- **Trophy icon added (2026-10-04):** `assets-raw/svg/ui/trophy.svg` and
+  `assets/ui/icons/trophy.png` (via `make_ui_icons.py`, which needs `pip install
+  resvg-py`), and on the UI Asset Sheet with the news arrows (which reuse the sort
+  glyphs).
 
 Everything below is history; if this paragraph and a later one disagree, the
 later one wins.
