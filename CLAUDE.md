@@ -464,6 +464,22 @@ installing it on a new canvas.
 shows "Also credits …" under a step's goals, following `rules.GoalCascade`
 (see "Content findings closed" above).
 
+**Astronaut Complex and Public Affairs Office mocked up (2026-10-04, `ui-spec.md`
+§4.9/§4.10, first in §7's phase 4, so play testing can start):** a new canvas,
+`Launch Window — Astronaut Complex & Public Affairs Office mockup` (private, ask the
+user for the link). Expert training is a fourth kind in the Training dialog, and the
+Public Affairs Office shows the budget, the next-review forecast, the review table,
+news, and the debt and multiplier states. Details and the unconfirmed choices are in
+`design.md` §3.13.
+- **Open, for the user:** a new token `danger-on-page` (`#ffc4b8`) for negative funds
+  on the blue page. It's local to the mockups until confirmed; then it goes into the
+  design system and `Theme.java` together.
+- **Turn report fixture corrected:** its budget had invented numbers, and it put review
+  #2 in 1960. Reviews come every 16 of the player's seasons (1959 · S1, 1963 · S1, …).
+- **Pitfall:** a page's own `renderVals` key named like a `chromeVals` key (for example
+  `fundsCls`) is silently overwritten by the chrome, because `chromeVals` is merged last.
+- **Next in phase 4:** the Museum (§4.11), settings (§4.12), and the game result (§4.13).
+
 Everything below is history; if this paragraph and a later one disagree, the
 later one wins.
 

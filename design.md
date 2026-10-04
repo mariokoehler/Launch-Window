@@ -176,6 +176,12 @@ same session it comes up**, the same standing-note-to-self habit as
     ancestor of GPS. Verify the details before using it. It fits Sputnik 1
     and its Extended configuration, whose later seasons are "advanced
     experiments in orbit".
+  - **Candidate: the first cosmonauts were picked partly by size.** The
+    first Soviet cosmonaut group, chosen in 1960, had to fit the Vostok
+    cabin: candidates had to be under about 1.70 m and 72 kg, and younger
+    than about 30. Selection included centrifuge runs and days alone in a
+    silent isolation chamber. Verify the figures before shipping. The
+    Astronaut Complex mockup puts it on the Headcount stat as a draft.
 - **Real images:** wanted, per the user. **Flagging a licensing
   consideration proactively** (unprompted, per this project's existing
   security/legal-flagging convention): NASA-produced photos/footage are
@@ -4673,9 +4679,15 @@ one-line note), three columns:
   review happened.
 
 A mockup chip switches between "Last turn" (1960 · S2 → S3, the turn the
-other screens come from) and "A milestone turn" (the next one, when Vostok
-Orbital lands: four goals, three of them first in the game, 8,050 prestige,
-and funding review #2). Proposals, all **unconfirmed**:
+other screens come from), "A milestone turn" (the next one, when Vostok
+Orbital lands: four goals, three of them first in the game, 8,050 prestige)
+and "A review turn" (1962 · S4 → 1963 · S1, funding review #2). **Corrected
+the same day,** while building the Public Affairs Office: the first version
+had invented budget numbers (6,500 funding, 2,310 salaries) and put review #2
+on the milestone turn, but reviews come every 16 of the player's seasons
+(1959 · S1, 1963 · S1, ...). The budget lines are now `core`'s running costs
+on the fixture, the same numbers the Public Affairs Office shows, and the
+review has its own state. Proposals, all **unconfirmed**:
 - the report is one scrolling screen rather than tabs;
 - running costs are broken down by kind;
 - the morale warning ("may resign if he stays idle") is derived in the
@@ -4684,6 +4696,75 @@ and funding review #2). Proposals, all **unconfirmed**:
 Nothing new in the design system was needed. **For G2:** the budget lines
 need the expenses split by kind (`SeasonFundsSettled` has only totals), and
 the goal lines need to know whether a goal was the first in the game.
+
+**Astronaut Complex and Public Affairs Office mocked up (2026-10-04,
+`ui-spec.md` §4.9 and §4.10, the start of §7's phase 4).** The user asked
+for these two first, so that real play testing can start. A new canvas,
+`Launch Window — Astronaut Complex & Public Affairs Office mockup` (private,
+ask the user for the link), with two artboards. It's the same Soviet agency
+at 1960 · S3, with Vostok Orbital scheduled.
+- **Astronaut Complex (4.9.1):** the personnel overview (component 11) for
+  astronauts, in the Mission Control overview's layout. Rows show who's on a
+  mission and in which seat ("On Vostok · Orbital · CAPCOM"), who's training
+  (kind, skill, seasons left), Expert stars, and a gold "Can train toward
+  Expert in Fitness" hint under an idle astronaut with a skill at 80 or more
+  that isn't Expert yet. The department strip has headcount, on missions,
+  idle and in training, Experts, near retirement (within 5 years of 50),
+  average morale and salary, and a compact **building panel** (component 7):
+  level 2 of 4, upkeep, Upgrade to level 3 (24 places, $1,600, 2 seasons)
+  with a confirmation, then "Upgrading · 2 seasons left". Train opens the
+  training dialog (component 12); Pull out and Dismiss confirm first;
+  Dismiss on a mission gives the `ASSIGNED_TO_MISSION` toast; Manage
+  department is component 13. A history note on Headcount tells how the
+  first cosmonauts were picked by size (§1.1).
+- **Expert training lives in the Training dialog** as a fourth kind, next to
+  Basic (3 seasons for astronauts), Advanced and Permanent, rather than as a
+  separate row action. Only skills at 80 or more that aren't Expert yet can
+  be picked; the segment is disabled when there's none. The dialog states
+  the per-season chance from `core` (25 % at 80 rising linearly to 35 % at
+  100, so 25.5 % at 81), that the skill doesn't grow meanwhile, that pulling
+  out earns nothing, and what an Expert is for (the rescue, crew aboard or
+  anyone at home).
+- **Public Affairs Office (4.10):** three columns. *Funds*: the balance, last
+  season's actual change, funding (set by review #1), running costs and the
+  net per season; then *running costs* by kind: salaries per department,
+  program upkeep, active component upkeep, and building upkeep per building
+  with its level. *Prestige and the next review*: prestige, "#2 in 10
+  seasons, at the turn into 1963 · S1", a scale of review #2's prestige
+  range with a marker for the player and one for the prestige that keeps
+  today's funding, and a forecast `Notice`: at 2,140 prestige review #2
+  would pay $4,819, **less than today's $5,480**, so reach 2,563. Then the
+  shared review table (`Table`). *News*: the random events, newest first.
+- **States** (mockup chips): *In debt*, a labelled what-if with the
+  Astronaut Complex and Mission Control at level 3 so running costs ($5,900)
+  exceed funding: a danger `Notice` saying what's refused, red funds, and
+  **Convert prestige**. Its dialog has a slider from $1 to the most allowed,
+  and shows funds, prestige and what review #2 would then pay, before and
+  after. A `Notice` explains both limits: the two-season cap ($11,960) and
+  the prestige held (2,140 prestige buys $535). A warning follows when the
+  conversion still leaves next season short. *Cost cut + R&D setback*: both
+  timed multipliers as "Active effects" `Notice`s with seasons left, and the
+  cost multiplier as a line in the breakdown.
+
+Every budget number is `core`'s on the fixture (`BudgetProgress.runningCosts`,
+the review interpolation, `BudgetSchedule.baspmClose`, `PrestigeConversion`,
+`BuildingSchedule`). Proposals, all **unconfirmed**:
+- Expert training as a fourth kind in the Training dialog, not its own row
+  action;
+- the building panel as a compact cell of the department strip;
+- the forecast and the "keeps today's funding" figure (client-derived);
+- the footer's funds delta is last season's actual change, while the
+  Public Affairs Office also shows the net per season from now on;
+- the news log lists random events only; reviews appear in the review card.
+
+**New token proposed: `danger-on-page`** (`#ffc4b8`), red text on the blue
+page, for negative funds and a negative delta in the footer. The design
+system has `success-on-page` but no red counterpart, and `danger` itself
+is unreadable on the page. It's local to the mockups for now (also added to
+the Mission Control canvas's footer); it goes into the design system and
+`Theme.java` together once the user confirms it. **For G2:** a news entry
+stores the unexpected cost's share (8 %), not the amount taken, so the
+amount needs to be kept too.
 
 ## 4. Open questions (tracked here until resolved)
 

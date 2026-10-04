@@ -361,8 +361,10 @@ end-of-season news screen. **Ref:** `bulletin_news_*.png`,
 **Needs server work:** G2.
 
 **Mocked up (2026-10-04)** as `TurnReport` on the `Launch Window — Mission Control & Turn
-Report mockup` canvas, in two variants: an ordinary turn and a milestone turn with goals
-and a funding review. `design.md` §3.13 has the writeup. Choices still **unconfirmed**:
+Report mockup` canvas, in three variants: an ordinary turn, a milestone turn with goals,
+and a turn with a funding review (1963 · S1; reviews come every 16 seasons). Its budget
+lines are `core`'s running costs, as on the Public Affairs Office mockup. `design.md` §3.13
+has the writeup. Choices still **unconfirmed**:
 - one scrolling screen, not tabs;
 - running costs broken down by kind;
 - the morale warning is derived by the client.
@@ -717,6 +719,18 @@ toast and dialogs). Decisions made while building them, **all confirmed by the u
 mission (crew or CAPCOM) and Expert stars, with sub-screens Hire and Manage
 department.
 
+**Mocked up (2026-10-04)** as `AstronautComplex` on the `Launch Window — Astronaut
+Complex & Public Affairs Office mockup` canvas; `design.md` §3.13 has the writeup.
+Choices still **unconfirmed**:
+- **Expert training is a fourth kind in the Training dialog** (Basic · 3 seasons,
+  Advanced · 2 seasons, Permanent, Expert), not a separate row action. Only skills at
+  80+ that aren't Expert yet can be picked. The dialog shows the per-season chance
+  (25 % at 80 up to 35 % at 100), no skill growth, and nothing on pull-out.
+- An idle astronaut with such a skill gets a gold "Can train toward Expert in …" hint.
+- The building panel (component 7) is a compact cell at the end of the department
+  strip: level, cap, upkeep, and Upgrade with a confirmation.
+- "Near retirement" is within 5 years of 50, as the libGDX SET Centre does for 65.
+
 ### 4.10 Public Affairs Office: budget and prestige
 **Purpose:** money. **Ref:** `public_affairs_office.png`, `budget_info.png`.
 
@@ -737,6 +751,23 @@ cap and the price.
 
 **States:** in debt, where new spending is refused; a temporary cost or R&D
 multiplier is active (random event, n seasons left).
+
+**Mocked up (2026-10-04)** as `PublicAffairs` on the `Launch Window — Astronaut Complex
+& Public Affairs Office mockup` canvas, with the three states on mockup chips (the debt
+one is a labelled what-if). Every number is `core`'s on the fixture; `design.md` §3.13
+has the writeup. Choices still **unconfirmed**:
+- three columns: funds and running costs; prestige, the next review and the review
+  table; active effects and news;
+- the next review is shown as a scale of its prestige range with two markers (you, and
+  what keeps today's funding), plus a forecast `Notice` (warning when funding would
+  fall);
+- Convert prestige is a dialog with a slider from 1 to the most allowed, showing funds,
+  prestige and the next review's pay before and after, both limits, and a warning when
+  next season would still be short;
+- the footer delta is last season's actual change; the net per season is shown here;
+- the news log lists random events only.
+- **New token proposed, not yet in the design system:** `danger-on-page` (`#ffc4b8`)
+  for negative funds and deltas in the footer.
 
 ### 4.11 Museum: goals, history, rivals
 **Purpose:** the scoreboard and the archive. **Ref:** `museum*.png`.
@@ -845,6 +876,9 @@ current state alone. Each is an M5 task.
   (salaries, component maintenance, program upkeep, building upkeep; `SeasonFundsSettled`
   has only totals), whether each goal was the first in the game, and each R&D gain with
   its researchers and slots.
+  **What the Public Affairs Office mockup adds (2026-10-04):** the money amount of an
+  unexpected-cost event (a `NewsEntry` stores only its share of funds), and last
+  season's actual funds change for the footer.
 - **G3. Rival summaries.** Each player's agency name, director name, archetype, and the
   declared goals they hold, with turns, for the race tab. This is the
   "per-player summary" `design.md` §3.7 planned for game-meta.
