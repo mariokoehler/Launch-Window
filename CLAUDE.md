@@ -266,6 +266,17 @@ approved by the user as additive save fields. The client reads the race through
 `WinCondition`'s goal-time helpers, never its own port. The hub strip has a gear for
 Settings.
 
+**Personnel portraits via ComfyUI (2026-10-04):** the user's ComfyUI (Qwen Image 2.1) runs
+locally on port 8188, and `assets-raw/portraits/make_portraits.py` queues the user's portrait
+workflow over its HTTP API (`portraits_workflow_api.json`, the workflow's subgraph flattened into
+API format). It writes `assets-raw/portraits/<nasa|soviet>/*.png` and `manifest.json` (each
+portrait's role, sex, ethnicity, age, prompt and seed; reruns give the same prompts and seeds and
+skip existing files). 100 per agency so far, generated in blocks of 50 with their own random
+sequence each, so raising `--count` adds portraits without changing earlier ones. Next step:
+integrate them into the client. 256x256 is the smallest size the model holds together at. ComfyUI keeps its
+own copies in `E:\Comfy-Desktop\ComfyUI-Shared\output`; never delete those. The portraits are
+the user's own generated art (`assets-raw/` rule).
+
 **Dev mode for play testing (2026-10-04):** set `"devMode": true` in the server's
 `game-meta.json` and restart it. The hub strip then shows "Dev · Resolve turn now", which
 resolves the open turn at once (the day's scheduled resolution still comes). Dev mode also
