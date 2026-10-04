@@ -430,9 +430,9 @@ hub art against the brightest variant (Soviet winter noon) and the darkest
 (winter night), not just one sample. The hub canvas's dev panel switches the
 art for this. See `design.md` §3.13.
 
-**Open, content:** "Human in space" and "Human in orbit" aren't reached by any
-step; other goals only cancel them, so their prestige can never be earned.
-Check `baspm_pack.py`, along with the Explorer 1 discount above.
+**Goal cascade in the mockups (2026-10-04):** the Headquarters steps screen
+shows "Also credits …" under a step's goals, following `rules.GoalCascade`
+(see "Content findings closed" above).
 
 Everything below is history; if this paragraph and a later one disagree, the
 later one wins.

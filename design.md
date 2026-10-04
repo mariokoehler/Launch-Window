@@ -4573,14 +4573,12 @@ plus this one), since the planning screens are the first to show them, and a
 "Mission Planning" section (caution triangle, forward arrow, check).
 `Theme.java` needs nothing new: the screens use only existing tokens.
 
-**Open question for the content pack, found while building:** the goals
-"Human in space" (1,750 prestige) and "Human in orbit" (3,000) aren't in any
-step's `goalIdsAchieved`. Other goals only ever cancel them (Vostok
-suborbital flown cancels Human in space, Vostok orbital flown cancels Human
-in orbit). Their dependencies still lift correctly, because the rules count
-a goal as "achieved or cancelled", but their own prestige can never be
-earned. Check whether `baspm_pack.py` dropped BASPM's generic-goal awards,
-same as the Explorer 1 discount above.
+**The goal cascade on the steps screen (2026-10-04):** the "Human in space"
+question above is closed: those goals are earned through the cascade
+(`rules.GoalCascade`). The steps screen (4.6.6) now shows it under a step's
+goal chip. For example, Vostok Orbital's landing reads "Vostok orbital flown",
+then "Also credits Vostok suborbital flown, Human in space, Human in orbit":
+the cascade minus goals already reached.
 
 ## 4. Open questions (tracked here until resolved)
 
