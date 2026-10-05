@@ -39,22 +39,34 @@ public final class Hub {
      * The hub's buildings, named as in the hotspot files.
      */
     public enum Place {
-        VAB("VAB", "The VAB", Building.VEHICLE_ASSEMBLY),
-        MISSION_CONTROL("Mission Control", "Mission Control", Building.MISSION_CONTROL),
-        ASTRONAUT_COMPLEX("Astronaut Complex", "The Astronaut Complex", Building.ASTRONAUT_CENTER),
-        SET_CENTRE("SET Centre", "The SET Centre", Building.SET_CENTER),
-        PUBLIC_AFFAIRS_OFFICE("Public Affairs Office", "The Public Affairs Office", null),
-        HEADQUARTERS("Headquarters", "Headquarters", Building.HEADQUARTERS),
-        MUSEUM("Museum", "The Museum", null);
+        VAB("VAB", "The VAB", Building.VEHICLE_ASSEMBLY, "skill_rockets"),
+        MISSION_CONTROL("Mission Control", "Mission Control", Building.MISSION_CONTROL, "flight_controllers"),
+        ASTRONAUT_COMPLEX("Astronaut Complex", "The Astronaut Complex", Building.ASTRONAUT_CENTER, "astronauts"),
+        SET_CENTRE("SET Centre", "The SET Centre", Building.SET_CENTER, "set_employees"),
+        PUBLIC_AFFAIRS_OFFICE("Public Affairs Office", "The Public Affairs Office", null, "funds"),
+        HEADQUARTERS("Headquarters", "Headquarters", Building.HEADQUARTERS, "open_programs"),
+        MUSEUM("Museum", "The Museum", null, "trophy");
 
         private final String label;
         private final String inSentence;
         private final Building building;
+        private final String icon;
 
-        Place(String label, String inSentence, Building building) {
+        Place(String label, String inSentence, Building building, String icon) {
             this.label = label;
             this.inSentence = inSentence;
             this.building = building;
+            this.icon = icon;
+        }
+
+        /**
+         * Returns the icon of the place's marker on the hub, the same one the footer uses for what the
+         * place holds, so a place keeps one icon everywhere.
+         *
+         * @return the icon name
+         */
+        public String icon() {
+            return icon;
         }
 
         /**

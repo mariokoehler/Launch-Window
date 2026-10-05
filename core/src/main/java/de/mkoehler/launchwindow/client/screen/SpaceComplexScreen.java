@@ -47,9 +47,18 @@ public final class SpaceComplexScreen extends SessionScreen {
     private static final Color DIRECTOR = new Color(1f, 1f, 1f, 0.8f);
     /** Every strip chip's height. */
     private static final float CHIP_HEIGHT = 32f;
-    /** The under-construction marker: a gold disc this far above the building's label. */
+    /**
+     * Every building's marker, a disc this far above its label (art pixels): white with the place's
+     * icon, navy while hovered, and gold with a gear while upgrading. The markers show the player at
+     * a glance what can be clicked (play-test request, 2026-10-05).
+     */
     private static final float MARKER_RISE = 55f;
+    /** The upgrading marker's radius. */
     private static final float MARKER_RADIUS = 22f;
+    /** The plain marker's radius: a little smaller, so an upgrade still stands out. */
+    private static final float IDLE_MARKER_RADIUS = 18f;
+    /** The plain marker's icon size, in art pixels. */
+    private static final float IDLE_MARKER_ICON = 20f;
 
     private final List<Hub.Hotspot> hotspots;
     private final Hub.TimeOfDay timeOfDay;
@@ -276,6 +285,7 @@ public final class SpaceComplexScreen extends SessionScreen {
         private final Label name = ui.label("", Theme.TextStyle.HEADING_SM, Theme.ON_FILL);
         private final Label shadow = ui.label("", Theme.TextStyle.HEADING_SM, LABEL_SHADOW);
         private final Drawable gear = ui.icon("settings");
+        private final java.util.Map<Hub.Place, Drawable> markerIcons = new java.util.EnumMap<>(Hub.Place.class);
         private Hub.Place hovered;
 
         HotspotLayer() {
@@ -311,12 +321,21 @@ public final class SpaceComplexScreen extends SessionScreen {
         }
 
         private Hub.Place placeAt(float x, float y) {
+            float ax = artX(x);
+            float ay = artY(y);
             for (Hub.Hotspot spot : hotspots) {
-                if (spot.contains(artX(x), artY(y))) {
+                // The marker counts as the building: it's what draws the pointer there.
+                float dx = ax - spot.labelX();
+                float dy = ay - (spot.labelY() + MARKER_RISE);
+                if (spot.contains(ax, ay) || dx * dx + dy * dy <= MARKER_RADIUS * MARKER_RADIUS) {
                     return spot.place();
                 }
             }
             return null;
+        }
+
+        private Drawable markerIcon(Hub.Place place) {
+            return markerIcons.computeIfAbsent(place, p -> ui.icon(p.icon()));
         }
 
         @Override
@@ -333,10 +352,8 @@ public final class SpaceComplexScreen extends SessionScreen {
             float scaleX = getWidth() / Hub.ART_WIDTH;
             float scaleY = getHeight() / Hub.ART_HEIGHT;
             List<Hub.Hotspot> upgrading = hotspots.stream().filter(spot -> isUpgrading(spot.place())).toList();
+            List<Hub.Hotspot> plain = hotspots.stream().filter(spot -> !isUpgrading(spot.place())).toList();
             Hub.Hotspot hover = hotspots.stream().filter(spot -> spot.place() == hovered).findFirst().orElse(null);
-            if (hover == null && upgrading.isEmpty()) {
-                return;
-            }
             batch.end();
             Gdx.gl.glEnable(GL20.GL_BLEND);
             Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -361,6 +378,15 @@ public final class SpaceComplexScreen extends SessionScreen {
                 shapes.end();
                 Gdx.gl.glLineWidth(1f);
             }
+            shapes.begin(ShapeRenderer.ShapeType.Filled);
+            for (Hub.Hotspot spot : plain) {
+                boolean hot = spot.place() == hovered;
+                shapes.setColor(hot ? Color.WHITE : Theme.NAVY);
+                shapes.circle(spot.labelX(), spot.labelY() + MARKER_RISE, IDLE_MARKER_RADIUS + 1.5f, 40);
+                shapes.setColor(hot ? Theme.NAVY : Color.WHITE);
+                shapes.circle(spot.labelX(), spot.labelY() + MARKER_RISE, IDLE_MARKER_RADIUS, 40);
+            }
+            shapes.end();
             if (!upgrading.isEmpty()) {
                 shapes.begin(ShapeRenderer.ShapeType.Filled);
                 for (Hub.Hotspot spot : upgrading) {
@@ -373,6 +399,15 @@ public final class SpaceComplexScreen extends SessionScreen {
             }
             shapes.identity();
             batch.begin();
+            for (Hub.Hotspot spot : plain) {
+                Color tint = spot.place() == hovered ? Color.WHITE : Theme.NAVY;
+                batch.setColor(tint.r, tint.g, tint.b, parentAlpha);
+                Drawable icon = markerIcon(spot.place());
+                float half = IDLE_MARKER_ICON / 2f;
+                icon.draw(batch, getX() + (spot.labelX() - half) * scaleX,
+                    getY() + (spot.labelY() + MARKER_RISE - half) * scaleY, IDLE_MARKER_ICON * scaleX,
+                    IDLE_MARKER_ICON * scaleY);
+            }
             for (Hub.Hotspot spot : upgrading) {
                 batch.setColor(Theme.NAVY.r, Theme.NAVY.g, Theme.NAVY.b, parentAlpha);
                 gear.draw(batch, getX() + (spot.labelX() - 12f) * scaleX, getY() + (spot.labelY() + MARKER_RISE - 12f)

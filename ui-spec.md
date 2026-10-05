@@ -359,6 +359,16 @@ of the strip opens Settings (§4.12). This replaces "no Log out" below.
 **States:** a building that is upgrading shows a subtle "under construction"
 marker; a game result exists (§4.13).
 
+**Building markers** *(user's play-test request, built 2026-10-05; look unconfirmed)*: every
+building always shows a marker where the upgrade gear sits, so players see at once what can be
+clicked. It's a white disc with a navy ring and the place's own icon, the same one the footer uses
+(VAB rocket, Mission Control headset, Astronaut Complex astronauts, SET Centre engineers,
+Headquarters folder, Public Affairs Office dollar, Museum trophy). It turns navy with a white
+icon while its building is hovered, and an upgrading building shows the larger gold gear marker
+instead. The marker counts as part of its building for hover and click. The user offered a
+generic "clickable" icon from Claude Design instead; the icon is one field per place
+(`Hub.Place.icon()`), so it's easy to swap.
+
 **Implemented in libGDX (2026-10-04)** as `client.screen.SpaceComplexScreen`, from the Space
 Complex Hub mockup, replacing the stand-in agency screen. The logic is in `client.view.Hub`.
 The art comes from `assets-raw/make_hub_art.py`: 32 JPEGs, about 15 MB, cropped to 1080 rows.
