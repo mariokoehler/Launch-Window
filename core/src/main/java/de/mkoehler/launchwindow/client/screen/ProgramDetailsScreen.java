@@ -283,7 +283,11 @@ public final class ProgramDetailsScreen extends ChromeScreen {
         buttons.add(actionButton("Open program", Theme.ButtonKind.PRIMARY, () -> submit(new OpenProgramAction(program.id()),
             result -> {
                 closeDialog();
-                toast("Opened " + name + " — " + money(price.total()) + ".", Theme.NoticeKind.SUCCESS);
+                // Straight on to what the player opened it for: its missions (play-test request).
+                MissionConfigsScreen configs = new MissionConfigsScreen(game, program.id());
+                game.setScreen(configs);
+                configs.toast("Opened " + name + " — " + money(price.total()) + ". Pick a mission to plan.",
+                    Theme.NoticeKind.SUCCESS);
             })));
         card.add(buttons).right().fill(false, false);
         showDialog(card);

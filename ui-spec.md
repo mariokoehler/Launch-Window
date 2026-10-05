@@ -535,7 +535,8 @@ missing goals). Other agencies' programs are hidden entirely.
 **Actions:** Open (shows the price; refused if Headquarters is full, the goals
 aren't met, or funds are short). Close, which needs a confirmation: "no refund;
 its components go inactive and their researchers are released; refused while one
-of its missions flies".
+of its missions flies". After a successful Open the client goes straight to the program's mission
+configuration selection (§4.6.5) with the success toast *(user's play-test request, 2026-10-05)*.
 
 **4.6.5 Mission configuration selection.** The program's configurations, each with
 art, duration in seasons, prestige (first time, or the repeat tier: 50 % second
