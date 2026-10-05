@@ -9,7 +9,8 @@ Archivo and Work Sans, under the SIL Open Font License; see `fonts/OFL-Archivo.t
 
 ## Photos
 
-- `ui/portraits/laika.jpg`: Laika, the dog flown on Sputnik 2 (1957). Author: *(to fill in from the
-  Wikimedia Commons file page)*. Source: Wikimedia Commons *(file page URL to fill in)*. Licensed
-  under CC BY 4.0, https://creativecommons.org/licenses/by/4.0/. Cropped, converted to greyscale and
-  resized.
+- `ui/portraits/laika.jpg`: "Laika in 1957", Laika before her orbital flight. Photo: Museum of
+  Cosmonautics / Main Archive of Moscow (Музей космонавтики / Главархив Москвы), Mos.ru,
+  https://www.mos.ru/news/item/94754073/, via Wikimedia Commons,
+  https://commons.wikimedia.org/wiki/File:Laika_in_1957.jpg. Licensed under CC BY 4.0,
+  https://creativecommons.org/licenses/by/4.0/. Cropped, converted to greyscale and resized.

@@ -13,5 +13,10 @@ licence that allows a public repo; the credits players see are in `assets/CREDIT
   https://creativecommons.org/licenses/by/4.0/). Allows any use, including in a public repo,
   provided the author is credited, the licence is linked, and changes are noted.
 - **Changes made:** cropped square, converted to greyscale, resized to 192x192.
-- **Still to fill in:** the Commons file page URL and the author exactly as that page names them.
-  Copy both here and into `assets/CREDITS.md`.
+- **File page:** https://commons.wikimedia.org/wiki/File:Laika_in_1957.jpg ("Laika in 1957").
+- **Author, as the page names it:** "Музей космонавтики / Главархив Москвы" (Museum of
+  Cosmonautics / Main Archive of Moscow), originally published on Mos.ru,
+  https://www.mos.ru/news/item/94754073/. The page asks for attribution to Mos.ru.
+- **Description on the page:** "The dog Laika before her orbital flight. From the collections of
+  the Museum of Cosmonautics."
+- **Credit given:** in `assets/CREDITS.md`.

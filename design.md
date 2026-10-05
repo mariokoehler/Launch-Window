@@ -6372,8 +6372,9 @@ here.
       to `assets/ui/portraits/laika.jpg`. The user cropped the photo square, so it has no entry in
       `crops.json`. It was first a TASS press photo whose licence wasn't clear. It was replaced the same day with a
       Wikimedia Commons photo under CC BY 4.0, recorded in `assets-raw/memorial/SOURCES.md`, and
-      credited in `assets/CREDITS.md`, the new credits file for third-party assets. **Open:** the
-      author's name and the file page URL still need to be filled in there.
+      credited in `assets/CREDITS.md`, the new credits file for third-party assets. The credit is to
+      the Museum of Cosmonautics / Main Archive of Moscow (Mos.ru), from
+      `commons.wikimedia.org/wiki/File:Laika_in_1957.jpg`.
     - **Not done, possible follow-up:** a turn report line when a passenger is lost would need a new
       `ResolutionEvent` subtype. Korabl-Sputnik 2's dogs aren't covered: Belka and Strelka survived,
       and a failed flight would need the names of the dogs really lost, which hasn't been decided.
