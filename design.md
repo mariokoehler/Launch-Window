@@ -6378,6 +6378,15 @@ here.
     - **Not done, possible follow-up:** a turn report line when a passenger is lost would need a new
       `ResolutionEvent` subtype. Korabl-Sputnik 2's dogs aren't covered: Belka and Strelka survived,
       and a failed flight would need the names of the dogs really lost, which hasn't been decided.
+    - **Idea for later (user, 2026-10-05): remember the animals that came home too.** The Museum's
+      Flights tab, or a page of its own, could honour the animals that flew and survived, next to
+      the memorial's losses. Examples: Belka and Strelka (Korabl-Sputnik 2, August 1960), Ham
+      (Mercury-Redstone 2, January 1961), Enos (Mercury-Atlas 5, November 1961), Ivan Ivanovich's
+      dog companions Chernushka and Zvezdochka (March 1961), and the many dogs of the 1950s
+      suborbital rocket flights. The same `animalPassengers` content field could name them per
+      configuration. Each entry would be shown when the player flies that configuration
+      successfully, with photos where a freely licensed one exists (credited in
+      `assets/CREDITS.md`). Verify every name and date before using it.
   - **Slice: G4, display text — done (2026-10-05).** Every id in the early-era pack now
     has a name, and most have a short description. Programs, components, configurations
     and rockets with a real story behind them get a history note.
