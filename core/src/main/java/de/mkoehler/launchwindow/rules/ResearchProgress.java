@@ -118,7 +118,7 @@ public final class ResearchProgress {
      * threshold is {@code 0.1}; this is Launch Window's own value, per
      * {@code design.md} &sect;1.2, not a copy).
      */
-    private static final double HEADROOM_STAGNATION_THRESHOLD = 0.2;
+    static final double HEADROOM_STAGNATION_THRESHOLD = 0.2;
 
     /**
      * Not instantiable; this class only exposes static methods.

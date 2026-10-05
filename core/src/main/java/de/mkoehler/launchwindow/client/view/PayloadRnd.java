@@ -1,11 +1,14 @@
 package de.mkoehler.launchwindow.client.view;
 
+import de.mkoehler.launchwindow.actions.AssignResearchAction;
+import de.mkoehler.launchwindow.actions.ReleaseResearchAction;
 import de.mkoehler.launchwindow.content.ContentCatalog;
 import de.mkoehler.launchwindow.content.MissionComponent;
 import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.OwnedMissionComponent;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.model.SetSpecialist;
+import de.mkoehler.launchwindow.persistence.PlayerAction;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -122,6 +125,33 @@ public final class PayloadRnd {
      * @param component the component
      * @return the candidates, best first
      */
+    /**
+     * Returns the actions that seat a team on a component, best first: releases for whoever sits in
+     * the wrong slot or isn't in the team, then assignments in team order. The server seats each new
+     * researcher in the lowest free slot, so team member {@code i} ends up in slot {@code i}, the best
+     * in the richest. Engineers already in their right slot are left alone.
+     *
+     * @param card the component's card, with who sits where now
+     * @param team the team, best first, at most four ({@code ResearchPlanning.bestTeam})
+     * @return the actions, in order; empty if the team already sits that way
+     */
+    public static List<PlayerAction> autoAssignActions(Card card, List<SetSpecialist> team) {
+        List<PlayerAction> actions = new ArrayList<>();
+        for (int slot = 0; slot < SLOTS; slot++) {
+            SetSpecialist sitting = card.slots().get(slot);
+            if (sitting != null && (slot >= team.size() || !team.get(slot).getId().equals(sitting.getId()))) {
+                actions.add(new ReleaseResearchAction(sitting.getId()));
+            }
+        }
+        for (int slot = 0; slot < team.size(); slot++) {
+            SetSpecialist sitting = card.slots().get(slot);
+            if (sitting == null || !team.get(slot).getId().equals(sitting.getId())) {
+                actions.add(new AssignResearchAction(team.get(slot).getId(), card.component().id()));
+            }
+        }
+        return actions;
+    }
+
     public static List<SetSpecialist> assignable(PlayerSnapshot state, MissionComponent component) {
         return state.getSetSpecialists().stream()
             .filter(specialist -> !SetDepartment.isBusy(specialist))

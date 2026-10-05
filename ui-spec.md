@@ -769,6 +769,16 @@ component · slot".
 (component 10) for payload components: satellites, probes, capsules. Also reached
 from mission configuration (§4.6.7), filtered to that mission.
 
+*Play-test additions (user, built 2026-10-05), on both R&D boards (payload and rocket):*
+- **Projected gain.** A lighter navy segment after the reliability bar's fill shows what the
+  current team adds in an average season, and the caption says "about +4.2 next season"
+  (`ResearchPlanning.expectedSeasonGain`: `ResearchProgress`'s pass with each slot's band
+  midpoint; a test checks it against 4,000 simulated seasons).
+- **Auto-assign** (a card button) seats the four best engineers for the component, best in the
+  richest slot: those already on it plus anyone idle (`ResearchPlanning.bestTeam`). It releases
+  whoever is in the wrong slot or not in the team, then assigns the rest, one action after
+  another (`PayloadRnd.autoAssignActions`). Engineers busy elsewhere aren't touched.
+
 **Implemented in libGDX (2026-10-04)** from the SET Centre mockup (overview and
 Payload R&D) and the older Personnel Recruitment mockup (`client.screen.SetCentreScreen`,
 `PayloadRndScreen`, `HireScreen`, on a shared `ChromeScreen` with the header, footer,

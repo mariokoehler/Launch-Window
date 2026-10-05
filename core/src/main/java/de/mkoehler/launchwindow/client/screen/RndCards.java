@@ -4,12 +4,14 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.actions.AssignResearchAction;
 import de.mkoehler.launchwindow.actions.ReleaseResearchAction;
+import de.mkoehler.launchwindow.client.connect.ServerResult;
 import de.mkoehler.launchwindow.client.ui.ReliabilityBar;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.UiKit;
@@ -19,7 +21,11 @@ import de.mkoehler.launchwindow.client.view.SetDepartment;
 import de.mkoehler.launchwindow.client.view.SetSkills;
 import de.mkoehler.launchwindow.content.MissionComponent;
 import de.mkoehler.launchwindow.model.SetSpecialist;
+import de.mkoehler.launchwindow.persistence.PlayerAction;
+import de.mkoehler.launchwindow.rules.ResearchPlanning;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.List;
 import java.util.Locale;
 
@@ -36,6 +42,7 @@ final class RndCards {
     private final UiKit ui;
     private final String title;
     private final boolean editable;
+    private boolean autoAssigning;
 
     /**
      * Creates the cards for a screen.
@@ -70,14 +77,29 @@ final class RndCards {
         head.add(ui.label(ContentNames.of(component.id()), Theme.TextStyle.HEADING_SM, Theme.INK)).expandX().left();
         if (card.atCap()) {
             head.add(ui.badge(Theme.BadgeKind.SUCCESS, "Cap reached")).right();
+        } else if (editable) {
+            TextButton auto = button("Auto-assign", Theme.ButtonKind.SECONDARY, () -> autoAssign(card));
+            ui.tooltip(auto, "Auto-assign", "Seats the four best engineers for this component, best in the "
+                + "richest slot: those already on it and anyone idle. Engineers busy elsewhere stay where they are.");
+            head.add(auto).right();
         }
         box.add(head).padBottom(Theme.SPACE_3).row();
 
         double current = card.owned().getCurrentReliability();
+        double gain = ResearchPlanning.expectedSeasonGain(host.session.state(), host.session.catalog(),
+            component.id());
         box.add(new ReliabilityBar(ui, current, component.maxRdReliability(), component.maxReliability(),
-            card.owned().getFloorReliability())).height(14f).padBottom(Theme.SPACE_1).row();
-        box.add(ui.label(String.format(Locale.ROOT, "%.1f%% (R&D cap %.1f)", current, component.maxRdReliability()),
-            Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padBottom(Theme.SPACE_3).row();
+            card.owned().getFloorReliability()).projected(current + gain)).height(14f).padBottom(Theme.SPACE_1).row();
+        String caption = String.format(Locale.ROOT, "%.1f%% (R&D cap %.1f)", current, component.maxRdReliability());
+        if (gain >= 0.05) {
+            caption += String.format(Locale.ROOT, " · about +%.1f next season", gain);
+        }
+        Label captionLabel = ui.label(caption, Theme.TextStyle.CAPTION, Theme.INK_MUTED);
+        if (gain >= 0.05) {
+            ui.tooltip(captionLabel, "Expected R&D gain", "The lighter part of the bar: what this team adds in an "
+                + "average season. Each slot's draw is random, and gains shrink as reliability nears the R&D cap.");
+        }
+        box.add(captionLabel).padBottom(Theme.SPACE_3).row();
         if (card.atCap()) {
             box.add(ui.paragraph("Released automatically when the R&D ceiling was reached.", Theme.TextStyle.BODY_SM,
                 Theme.INK_MUTED)).padBottom(Theme.SPACE_3).row();
@@ -171,6 +193,56 @@ final class RndCards {
         dialogCard.add(list).padBottom(Theme.SPACE_3).row();
         dialogCard.add(button("Cancel", Theme.ButtonKind.SECONDARY, host::closeDialog)).right().fill(false, false);
         host.showDialog(dialogCard);
+    }
+
+    /**
+     * Seats the best team on a component ({@link ResearchPlanning#bestTeam}): releases whoever sits in
+     * the wrong slot or isn't in the team, then assigns the rest in order, each taking the lowest free
+     * slot, so the best engineer ends up in the richest slot. One action after another, like hiring.
+     *
+     * @param card the component's card
+     */
+    void autoAssign(PayloadRnd.Card card) {
+        if (autoAssigning) {
+            return;
+        }
+        MissionComponent component = card.component();
+        List<SetSpecialist> team = ResearchPlanning.bestTeam(host.session.state(), component);
+        if (team.isEmpty()) {
+            host.toast("No idle engineers. Hire more, or free someone up.", Theme.NoticeKind.INFO);
+            return;
+        }
+        List<PlayerAction> actions = PayloadRnd.autoAssignActions(card, team);
+        if (actions.isEmpty()) {
+            host.toast("Already the best team available.", Theme.NoticeKind.INFO);
+            return;
+        }
+        autoAssigning = true;
+        runChain(new ArrayDeque<>(actions), ContentNames.of(component.id()), team.size());
+    }
+
+    private void runChain(Deque<PlayerAction> queue, String name, int teamSize) {
+        if (queue.isEmpty()) {
+            autoAssigning = false;
+            host.stateChanged();
+            host.toast("Seated the best " + (teamSize == 1 ? "engineer" : teamSize + " engineers") + " on " + name
+                + ".", Theme.NoticeKind.SUCCESS);
+            return;
+        }
+        host.game.gateway().submit(host.session.credentials(), queue.poll(), result -> {
+            if (!host.isShowing()) {
+                autoAssigning = false;
+                return;
+            }
+            if (result.kind() == ServerResult.Kind.OK) {
+                host.session.update(result);
+                runChain(queue, name, teamSize);
+            } else {
+                // Stop at the first problem; the screen shows whatever was done.
+                autoAssigning = false;
+                host.handle(result, null);
+            }
+        });
     }
 
     private TextButton button(String text, Theme.ButtonKind kind, Runnable action) {

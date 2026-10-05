@@ -8,7 +8,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 /**
  * The reliability bar ({@code ui-spec.md} component 3): a thin track whose end is the component's
  * absolute maximum, filled to its current reliability, with a gold marker at its R&amp;D ceiling and
- * a dim marker at its floor. The fill turns green once the R&amp;D ceiling is reached.
+ * a dim marker at its floor. The fill turns green once the R&amp;D ceiling is reached. An R&amp;D
+ * board can add a lighter segment after the fill: the reliability its engineers are expected to add
+ * next season.
  *
  * @author Mario Koehler
  */
@@ -27,6 +29,8 @@ public final class ReliabilityBar extends Widget {
     private final float rdCap;
     private final float max;
     private final float floor;
+    private final Drawable projectedFill;
+    private float projected;
 
     /**
      * Builds the bar.
@@ -47,6 +51,19 @@ public final class ReliabilityBar extends Widget {
         this.rdCap = (float) rdCap;
         this.max = (float) Math.max(max, 0.0001);
         this.floor = (float) floor;
+        this.projectedFill = ui.solid(new Color(Theme.NAVY.r, Theme.NAVY.g, Theme.NAVY.b, 0.3f));
+        this.projected = this.current;
+    }
+
+    /**
+     * Shows the reliability expected after next season as a lighter segment after the fill.
+     *
+     * @param expected the expected reliability, at least the current one
+     * @return this bar
+     */
+    public ReliabilityBar projected(double expected) {
+        this.projected = (float) Math.max(current, expected);
+        return this;
     }
 
     @Override
@@ -67,6 +84,9 @@ public final class ReliabilityBar extends Widget {
         float trackY = getY() + (getHeight() - TRACK_HEIGHT) / 2f;
         track.draw(batch, getX(), trackY, width, TRACK_HEIGHT);
         boolean capped = current >= rdCap;
+        if (projected > current) {
+            projectedFill.draw(batch, getX(), trackY, width * Math.min(1f, projected / max), TRACK_HEIGHT);
+        }
         (capped ? cappedFill : fill).draw(batch, getX(), trackY, width * Math.min(1f, current / max), TRACK_HEIGHT);
         float floorX = getX() + width * Math.min(1f, floor / max);
         floorMarker.draw(batch, floorX, getY() + (getHeight() - FLOOR_MARKER_HEIGHT) / 2f, 1f, FLOOR_MARKER_HEIGHT);
