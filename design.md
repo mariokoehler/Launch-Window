@@ -6370,9 +6370,10 @@ here.
     - **Laika's photo:** a 1957 press photo the user supplied, in `assets-raw/memorial/` and
       converted by `make_portrait_assets.py` (192 px, cropped by `assets-raw/memorial/crops.json`)
       to `assets/ui/portraits/laika.jpg`. The user cropped the photo square, so it has no entry in
-      `crops.json`. The source is a TASS press photo, recorded in `assets-raw/memorial/SOURCES.md`.
-      **Open:** its licence isn't established (agencies still sell it), so find a freely licensed
-      copy or replace it before the repo goes public.
+      `crops.json`. It was first a TASS press photo whose licence wasn't clear. It was replaced the same day with a
+      Wikimedia Commons photo under CC BY 4.0, recorded in `assets-raw/memorial/SOURCES.md`, and
+      credited in `assets/CREDITS.md`, the new credits file for third-party assets. **Open:** the
+      author's name and the file page URL still need to be filled in there.
     - **Not done, possible follow-up:** a turn report line when a passenger is lost would need a new
       `ResolutionEvent` subtype. Korabl-Sputnik 2's dogs aren't covered: Belka and Strelka survived,
       and a failed flight would need the names of the dogs really lost, which hasn't been decided.
