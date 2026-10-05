@@ -105,12 +105,39 @@ class PersonnelNamesTest {
     }
 
     /**
+     * First names and surnames are drawn independently, so a famous person's full name can turn up even
+     * when neither half is famous alone. None of these can be generated; add to the list when a new
+     * combination is found.
+     */
+    @Test
+    void noFamousFullName() {
+        List<String> famous = List.of("Booker Washington", "Tigran Petrosyan", "Tigran Sargsyan",
+            "Karen Karapetyan", "Alisher Usmanov", "Vincent Lombardi", "Grigory Orlov", "Oleg Orlov",
+            "Mikhail Vorontsov", "Dmitri Polyansky", "Yuri Gagarin", "Valentina Tereshkova", "Sergei Korolev",
+            "John Glenn", "Alan Shepard", "Ellen Ochoa");
+        Set<String> possible = new HashSet<>();
+        for (NameLists lists : PersonnelNames.all().values()) {
+            for (String surname : lists.surnames()) {
+                for (String first : lists.male()) {
+                    possible.add(first + " " + PersonnelNames.surname(surname, Sex.MALE));
+                }
+                for (String first : lists.female()) {
+                    possible.add(first + " " + PersonnelNames.surname(surname, Sex.FEMALE));
+                }
+            }
+        }
+        for (String name : famous) {
+            assertFalse(possible.contains(name), name);
+        }
+    }
+
+    /**
      * Surnames take the form for the person's sex.
      */
     @Test
     void surnamesTakeTheFormForTheSex() {
-        assertEquals("Orlova", PersonnelNames.surname("Orlov/Orlova", Sex.FEMALE));
-        assertEquals("Orlov", PersonnelNames.surname("Orlov/Orlova", Sex.MALE));
+        assertEquals("Ozerova", PersonnelNames.surname("Ozerov/Ozerova", Sex.FEMALE));
+        assertEquals("Ozerov", PersonnelNames.surname("Ozerov/Ozerova", Sex.MALE));
         assertEquals("Kazlauskienė", PersonnelNames.surname("Kazlauskas/Kazlauskienė", Sex.FEMALE));
         assertEquals("Beridze", PersonnelNames.surname("Beridze", Sex.FEMALE));
     }

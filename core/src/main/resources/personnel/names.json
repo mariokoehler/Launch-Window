@@ -10,7 +10,7 @@
     "surnames": ["Brennan", "Gallagher", "Quigley", "Donovan", "Kavanagh", "Fitzgerald", "Callahan", "Doherty", "Sweeney", "Mahoney", "Flanagan", "Hennessy"]
   },
   "italian_american": {
-    "male": ["Anthony", "Joseph", "Salvatore", "Vincent", "Dominic", "Frank", "Carmine", "Louis", "Angelo", "Ralph"],
+    "male": ["Anthony", "Joseph", "Salvatore", "Carlo", "Dominic", "Frank", "Carmine", "Louis", "Angelo", "Ralph"],
     "female": ["Rosemary", "Angela", "Theresa", "Josephine", "Lucia", "Carmela", "Antoinette", "Concetta", "Rita", "Marie"],
     "surnames": ["Mancini", "Castellano", "Romano", "DeLuca", "Ferraro", "Marino", "Bianchi", "Esposito", "Giordano", "Lombardi", "Rinaldi", "Caruso"]
   },
@@ -40,7 +40,7 @@
     "surnames": ["Pappas", "Christopoulos", "Georgiou", "Nikolaidis", "Karras", "Demos", "Galanis", "Manos", "Andreou", "Vlahos", "Kouris", "Stavrakis"]
   },
   "black_american": {
-    "male": ["James", "Charles", "Willie", "Clarence", "Leroy", "Otis", "Earl", "Wendell", "Booker", "Cornelius", "Roosevelt", "Lucius"],
+    "male": ["James", "Charles", "Willie", "Clarence", "Leroy", "Otis", "Earl", "Wendell", "Alonzo", "Cornelius", "Roosevelt", "Lucius"],
     "female": ["Lucille", "Ernestine", "Gladys", "Bernice", "Juanita", "Loretta", "Hattie", "Odessa", "Mae", "Viola", "Geraldine", "Inez"],
     "surnames": ["Washington", "Jefferson", "Robinson", "Coleman", "Simmons", "Freeman", "Banks", "Mosley", "Gaines", "Tolliver", "Hawkins", "Pettiford", "Whitaker", "Battle", "Merriweather"]
   },
@@ -82,7 +82,7 @@
   "russian": {
     "male": ["Anatoly", "Boris", "Dmitri", "Fyodor", "Gennady", "Igor", "Kirill", "Lev", "Mikhail", "Nikolai", "Oleg", "Pavel", "Sergei", "Vadim", "Arkady", "Grigory", "Stanislav"],
     "female": ["Alla", "Galina", "Irina", "Larisa", "Lyudmila", "Marina", "Nadezhda", "Olga", "Raisa", "Svetlana", "Tamara", "Yelena", "Zoya", "Nina", "Vera"],
-    "surnames": ["Arkhipov/Arkhipova", "Belousov/Belousova", "Danilov/Danilova", "Gorelov/Gorelova", "Ignatyev/Ignatyeva", "Lavrentyev/Lavrentyeva", "Molchanov/Molchanova", "Nesterov/Nesterova", "Orlov/Orlova", "Pankratov/Pankratova", "Tarasov/Tarasova", "Vorontsov/Vorontsova", "Melnikov/Melnikova", "Shubin/Shubina", "Yermakov/Yermakova", "Kolesnikov/Kolesnikova", "Polyansky/Polyanskaya", "Barinov/Barinova"]
+    "surnames": ["Arkhipov/Arkhipova", "Belousov/Belousova", "Danilov/Danilova", "Gorelov/Gorelova", "Ignatyev/Ignatyeva", "Lavrentyev/Lavrentyeva", "Molchanov/Molchanova", "Nesterov/Nesterova", "Ozerov/Ozerova", "Pankratov/Pankratova", "Tarasov/Tarasova", "Rogachev/Rogacheva", "Melnikov/Melnikova", "Shubin/Shubina", "Yermakov/Yermakova", "Kolesnikov/Kolesnikova", "Zarechny/Zarechnaya", "Barinov/Barinova"]
   },
   "ukrainian": {
     "male": ["Taras", "Bohdan", "Vasyl", "Petro", "Yaroslav", "Mykola", "Ivan", "Stepan", "Ostap", "Hryhoriy"],
@@ -102,7 +102,7 @@
   "chuvash": {
     "male": ["Ivan", "Pyotr", "Vasily", "Yegor", "Gennady", "Arkady", "Mikhail", "Afanasy", "Prokopy", "Nikifor"],
     "female": ["Anna", "Mariya", "Klavdia", "Zinaida", "Yevdokia", "Anisya", "Praskovya", "Valentina", "Agrafena", "Lidiya"],
-    "surnames": ["Yakimov/Yakimova", "Kuzmin/Kuzmina", "Timofeyev/Timofeyeva", "Gerasimov/Gerasimova", "Prokopyev/Prokopyeva", "Filippov/Filippova", "Osipov/Osipova", "Afanasyev/Afanasyeva", "Matveyev/Matveyeva", "Kirillov/Kirillova", "Tarkhanov/Tarkhanova", "Yandushev/Yandusheva"]
+    "surnames": ["Yakimov/Yakimova", "Kuzmin/Kuzmina", "Timofeyev/Timofeyeva", "Yeremeyev/Yeremeyeva", "Prokopyev/Prokopyeva", "Filippov/Filippova", "Osipov/Osipova", "Afanasyev/Afanasyeva", "Matveyev/Matveyeva", "Kirillov/Kirillova", "Tarkhanov/Tarkhanova", "Yandushev/Yandusheva"]
   },
   "volga_tatar": {
     "male": ["Rinat", "Ildar", "Rustem", "Marat", "Ravil", "Fanis", "Ilshat", "Azat", "Rafael", "Damir"],
@@ -112,17 +112,17 @@
   "georgian": {
     "male": ["Giorgi", "Levan", "Zurab", "Otar", "Nodar", "Revaz", "Tengiz", "Guram", "Merab", "Shota"],
     "female": ["Nino", "Tamar", "Ketevan", "Nana", "Manana", "Lali", "Eteri", "Nato", "Medea", "Maia"],
-    "surnames": ["Beridze", "Kapanadze", "Lomidze", "Gelashvili", "Maisuradze", "Chikhladze", "Jorbenadze", "Gogoladze", "Natsvlishvili", "Kiknadze", "Dolidze", "Kobakhidze"]
+    "surnames": ["Beridze", "Kapanadze", "Lomidze", "Gelashvili", "Maisuradze", "Chikhladze", "Jorbenadze", "Gogoladze", "Natsvlishvili", "Kiknadze", "Dolidze", "Tsiklauri"]
   },
   "armenian": {
-    "male": ["Armen", "Ashot", "Vardan", "Karen", "Gagik", "Levon", "Hovhannes", "Tigran", "Suren", "Aram"],
+    "male": ["Armen", "Ashot", "Vardan", "Karen", "Gagik", "Levon", "Hovhannes", "Samvel", "Suren", "Aram"],
     "female": ["Anahit", "Gayane", "Lusine", "Siranush", "Hasmik", "Nune", "Armine", "Karine", "Astghik", "Marine"],
-    "surnames": ["Petrosyan", "Hakobyan", "Sargsyan", "Grigoryan", "Avetisyan", "Harutyunyan", "Martirosyan", "Ghazaryan", "Karapetyan", "Mkrtchyan", "Vardanyan", "Babayan"]
+    "surnames": ["Petrosyan", "Hakobyan", "Melkonyan", "Grigoryan", "Avetisyan", "Harutyunyan", "Martirosyan", "Ghazaryan", "Galstyan", "Mkrtchyan", "Vardanyan", "Babayan"]
   },
   "azerbaijani": {
     "male": ["Rashid", "Tofig", "Elchin", "Farid", "Kamal", "Vagif", "Rauf", "Nazim", "Arif", "Fikret"],
     "female": ["Aygun", "Leyla", "Gulnara", "Sevda", "Zarifa", "Tarana", "Shafiga", "Rena", "Firuza", "Nargiz"],
-    "surnames": ["Mammadov/Mammadova", "Huseynov/Huseynova", "Hasanov/Hasanova", "Ismayilov/Ismayilova", "Guliyev/Guliyeva", "Rzayev/Rzayeva", "Abbasov/Abbasova", "Jafarov/Jafarova", "Babayev/Babayeva", "Nasirov/Nasirova", "Valiyev/Valiyeva", "Bagirov/Bagirova"]
+    "surnames": ["Mammadov/Mammadova", "Huseynov/Huseynova", "Hasanov/Hasanova", "Ismayilov/Ismayilova", "Guliyev/Guliyeva", "Rzayev/Rzayeva", "Abbasov/Abbasova", "Jafarov/Jafarova", "Babayev/Babayeva", "Nasirov/Nasirova", "Valiyev/Valiyeva", "Gasimov/Gasimova"]
   },
   "kazakh": {
     "male": ["Serik", "Yerlan", "Bolat", "Marat", "Nurlan", "Kairat", "Askar", "Yerzhan", "Dauren", "Zhaksylyk"],
@@ -130,7 +130,7 @@
     "surnames": ["Akhmetov/Akhmetova", "Zhakupov/Zhakupova", "Abenov/Abenova", "Sarsenbayev/Sarsenbayeva", "Iskakov/Iskakova", "Kenzhebekov/Kenzhebekova", "Ospanov/Ospanova", "Baimukhanov/Baimukhanova", "Dzhaksybekov/Dzhaksybekova", "Utegenov/Utegenova", "Nurpeisov/Nurpeisova", "Seitov/Seitova"]
   },
   "uzbek": {
-    "male": ["Rustam", "Bakhtiyor", "Shukhrat", "Alisher", "Farkhod", "Ulugbek", "Anvar", "Ravshan", "Timur", "Dilshod"],
+    "male": ["Rustam", "Bakhtiyor", "Shukhrat", "Akmal", "Farkhod", "Ulugbek", "Anvar", "Ravshan", "Timur", "Dilshod"],
     "female": ["Dilfuza", "Gulchekhra", "Nodira", "Mukhabbat", "Zulfiya", "Dilbar", "Saodat", "Feruza", "Malika", "Shakhnoza"],
     "surnames": ["Islamov/Islamova", "Rakhimov/Rakhimova", "Usmanov/Usmanova", "Tursunov/Tursunova", "Mirzayev/Mirzayeva", "Nazarov/Nazarova", "Sadykov/Sadykova", "Khodzhayev/Khodzhayeva", "Ergashev/Ergasheva", "Akhmedov/Akhmedova", "Abdullayev/Abdullayeva", "Saidov/Saidova"]
   },

@@ -6175,7 +6175,7 @@ here.
       `core`'s `personnel/portraits.json`), then a name and a starting age that match
       it. The name comes from `personnel/names.json`: lists of men's names, women's
       names and surnames for each of the 31 ethnicities the portraits show. A gendered
-      surname is written `masculine/feminine` (`Orlov/Orlova`,
+      surname is written `masculine/feminine` (`Ozerov/Ozerova`,
       `Kazlauskas/Kazlauskienė`). The age is drawn from the portrait's age range,
       which replaces the old 22–40 candidate range.
       - **Data:** `make_portraits.py` writes the catalog from the manifest (`--catalog-only`

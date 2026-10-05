@@ -25,12 +25,14 @@ import java.util.SplittableRandom;
  *
  * <p>The name lists are in the classpath resource {@code personnel/names.json}, one entry per ethnicity
  * key, written for Launch Window (never taken from BASPM's data, {@code design.md} &sect;1.2). A surname
- * with a feminine form is written {@code masculine/feminine} ({@code Orlov/Orlova},
+ * with a feminine form is written {@code masculine/feminine} ({@code Ozerov/Ozerova},
  * {@code Kazlauskas/Kazlauskienė}); one without is written once and used for both. Surnames of
  * well-known people of the real space programs are left out on purpose (checked against the cosmonaut
  * and astronaut rosters, the chief designers and flight directors, 2026-10-04 and 2026-10-05), and so are
- * the surnames of famous political figures, so no candidate turns up as a famous person. Check new names
- * the same way before adding them.</p>
+ * the surnames of famous political figures, so no candidate turns up as a famous person. Since first
+ * names and surnames are drawn independently, a famous full name can appear even when neither half is
+ * famous on its own (Booker + Washington); {@code PersonnelNamesTest.noFamousFullName} lists the ones
+ * found so far. Check new names both ways before adding them.</p>
  *
  * <p>Everything is drawn from the candidate's own random stream, seeded from the candidate's id and the
  * agency, not from the hiring pool's stream, in a fixed order: portrait, age, first name, surname.</p>
@@ -120,7 +122,7 @@ public final class PersonnelNames {
     }
 
     /**
-     * Returns a surname entry's form for a sex: {@code Orlov/Orlova} gives Orlova for a woman, a
+     * Returns a surname entry's form for a sex: {@code Ozerov/Ozerova} gives Ozerova for a woman, a
      * one-form entry such as {@code Beridze} gives itself for both.
      *
      * @param entry the surname entry from {@code personnel/names.json}
@@ -164,7 +166,7 @@ public final class PersonnelNames {
      * A candidate's portrait, name and starting age, chosen together.
      *
      * @param portraitId the portrait id
-     * @param name       the full name, such as "Galina Orlova"
+     * @param name       the full name, such as "Galina Ozerova"
      * @param age        the starting age, inside the portrait's age range
      */
     public record Identity(String portraitId, String name, int age) {
