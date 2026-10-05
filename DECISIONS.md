@@ -53,12 +53,32 @@ first.
 ## B. Economy
 
 ### B1. Prestige-to-funds conversion rate (debt emergency)
-A player in debt can convert prestige into funds at 4 prestige per fund (`PrestigeConversion`).
-It's meant as an emergency tool that is always worse than letting the prestige count at the
-next review.
-- [ ] Keep 4 per fund **(recommended)**.
-- [ ] 3 per fund: kinder to players in debt.
-- [ ] 5 per fund: harsher.
+A player in debt can convert prestige into funds (`PrestigeConversion`). It's meant as an
+emergency tool that is always worse than letting the prestige count at the next review.
+Today's rate, 4 prestige per fund, was my own number and never checked against the reviews.
+
+**What a point is worth at a review** (`BudgetSchedule.baspmClose`): each review sets the
+funding rate linearly from prestige within its bracket, and that rate pays for 16 seasons.
+Prestige isn't spent at a review, so the same point counts again at every later one.
+
+| Review | Game year | Prestige range | Over 16 seasons, per point |
+|---|---|---|---|
+| 1 | 1959 | 250-2,500 | about 30 funds |
+| 2 | 1963 | 2,000-12,500 | about 25 |
+| 3 | 1967 | 5,000-35,000 | about 16 |
+| 4 | 1971 | 7,500-70,000 | about 10 |
+| 5-10 | 1975-1995 | up to 170,000 | about 6, falling to 3 |
+
+Today's conversion pays 0.25 funds per point: 120 times less than the first review, and the
+point is gone, lowering every later review too. Clearing a 1,000-fund debt costs 4,000
+prestige, more than an agency earns in its first years (Sputnik 1 plus its goals bring about
+1,400). In practice the tool can't be used.
+- [ ] A flat 1 prestige = 2 funds **(recommended)**: simple, still far worse than a review
+  early, and a 1,000-fund debt costs 500 prestige.
+- [ ] Tied to the next review: a tenth of what the point would earn there (about 3 funds
+  early, 0.3 late). Always proportionally worse, but harder to explain on screen.
+- [ ] Keep 4 prestige per fund: debt is close to unrecoverable before the next review.
+- [ ] Another flat rate (in the notes).
 
 *Notes:*
 
