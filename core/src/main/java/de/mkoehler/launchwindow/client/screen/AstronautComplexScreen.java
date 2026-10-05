@@ -151,7 +151,7 @@ public final class AstronautComplexScreen extends ChromeScreen {
     private Table row(Astronaut astronaut) {
         Table row = new Table();
         row.pad(Theme.SPACE_3, Theme.SPACE_4, Theme.SPACE_3, Theme.SPACE_4);
-        row.add(RosterCells.avatar(ui, astronaut.getName())).size(48f).padRight(Theme.SPACE_4);
+        row.add(RosterCells.avatar(ui, astronaut)).size(48f).padRight(Theme.SPACE_4);
         Table who = new Table();
         who.left();
         who.defaults().left();

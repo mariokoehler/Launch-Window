@@ -210,7 +210,7 @@ public final class MissionControlScreen extends ChromeScreen {
     private Table row(MissionControlOfficer officer) {
         Table row = new Table();
         row.pad(Theme.SPACE_3, Theme.SPACE_4, Theme.SPACE_3, Theme.SPACE_4);
-        row.add(RosterCells.avatar(ui, officer.getName())).size(48f).padRight(Theme.SPACE_4);
+        row.add(RosterCells.avatar(ui, officer)).size(48f).padRight(Theme.SPACE_4);
         Table who = new Table();
         who.left();
         who.defaults().left();

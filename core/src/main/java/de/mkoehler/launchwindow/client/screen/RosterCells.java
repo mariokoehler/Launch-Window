@@ -5,10 +5,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.UiKit;
+import de.mkoehler.launchwindow.model.Personnel;
 
 /**
  * The pieces of a crew roster row (component 11), shared by Mission Control's controllers and the
@@ -99,16 +101,25 @@ final class RosterCells {
     }
 
     /**
-     * Builds the navy avatar with the person's initials.
+     * Builds a person's avatar: their portrait ({@code assets/ui/portraits/<id>.jpg}, made by
+     * {@code assets-raw/portraits/make_portrait_assets.py}), or a navy square with their initials if
+     * they have none or the file is missing.
      *
-     * @param ui   the UI kit
-     * @param name the person's name
+     * @param ui     the UI kit
+     * @param person the person
      * @return the avatar
      */
-    static Table avatar(UiKit ui, String name) {
+    static Table avatar(UiKit ui, Personnel person) {
         Table avatar = new Table();
+        TextureRegionDrawable portrait = person.getPortraitId() == null ? null
+            : ui.picture("portraits/" + person.getPortraitId() + ".jpg");
+        if (portrait != null) {
+            avatar.add(new Image(portrait, Scaling.fill)).grow();
+            return avatar;
+        }
         avatar.setBackground(ui.solid(Theme.NAVY));
-        Label initials = ui.label(SetCentreScreen.initials(name), Theme.TextStyle.HEADING_SM, Theme.ON_FILL);
+        Label initials = ui.label(SetCentreScreen.initials(person.getName()), Theme.TextStyle.HEADING_SM,
+            Theme.ON_FILL);
         initials.setAlignment(Align.center);
         avatar.add(initials);
         return avatar;

@@ -172,7 +172,7 @@ public final class SetCentreScreen extends ChromeScreen {
     private Table row(SetSpecialist specialist) {
         Table row = new Table();
         row.pad(Theme.SPACE_3, Theme.SPACE_4, Theme.SPACE_3, Theme.SPACE_4);
-        row.add(avatar(specialist.getName())).size(48f).padRight(Theme.SPACE_4);
+        row.add(RosterCells.avatar(ui, specialist)).size(48f).padRight(Theme.SPACE_4);
 
         Table who = new Table();
         who.left();
@@ -241,21 +241,6 @@ public final class SetCentreScreen extends ChromeScreen {
             return Theme.SUCCESS;
         }
         return morale >= 45 ? Theme.GOLD_TEXT : Theme.DANGER;
-    }
-
-    /**
-     * Builds the navy initials square standing in for a portrait.
-     *
-     * @param name the person's name
-     * @return the avatar
-     */
-    Table avatar(String name) {
-        Table avatar = new Table();
-        avatar.setBackground(ui.solid(Theme.NAVY));
-        Label initials = ui.label(initials(name), Theme.TextStyle.HEADING_SM, Theme.ON_FILL);
-        initials.setAlignment(Align.center);
-        avatar.add(initials);
-        return avatar;
     }
 
     static String initials(String name) {

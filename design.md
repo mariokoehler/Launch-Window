@@ -6277,8 +6277,14 @@ here.
           (`Department.ageLine`). Learning potential was already a chip on the row.
         - **History note, used in the hire screen's spec (`ui-spec.md` component 2):**
           see §1.1, "veterans or rookies".
-      - **Open:** the client doesn't show the portraits yet. It still draws the initials
-        square, and the PNGs aren't in `assets/` yet.
+      - **Portraits in the client (2026-10-05):** `make_portrait_assets.py` converts each
+        portrait to a 128×128 greyscale JPEG in `assets/ui/portraits/` (718 KB for all 200,
+        down from 22 MB). At the 40–56 px the rows draw them, these look the same as the
+        256 px originals. They're saved as RGB, because libGDX loads a one-channel image as
+        an alpha texture. `RosterCells.avatar` shows the portrait, loaded on demand and
+        mipmapped through `UiKit.picture`, and falls back to the initials square. There's no
+        texture atlas: at most 10–20 portraits are on screen at once, single files need no
+        packing step, and only the portraits shown get loaded.
     - **G8 salary adjustment:** `rules.DepartmentSalaries` holds one formula that
       both `AdjustSalariesAction` (registered last in `MessageRegistry` and in
       `PlayerAction`'s subtypes) and the dialog's live preview call.

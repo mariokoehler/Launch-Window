@@ -107,7 +107,8 @@ On the right:
    could be a small rated value ("Learns: slow / steady / fast") rather than a bare
    number. *Implemented in libGDX (2026-10-05):* the caption reads "AGE 41 · RETIRES
    IN 24 YRS" ("RETIRES THIS YEAR" within a year), and learning potential stays the
-   existing number chip. The portrait is still open.
+   existing number chip. The portrait replaces the initials square in every personnel
+   and candidate row (`RosterCells.avatar`), and the initials remain the fallback.
 3. **Reliability bar.** The component's current reliability, a marker at its R&D
    ceiling (`maxRdReliability`), and the bar's end at its absolute maximum
    (`maxReliability`). Label "62.4 % (R&D cap 85.2)". Optionally a dim floor

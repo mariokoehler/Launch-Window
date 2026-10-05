@@ -286,8 +286,10 @@ writes `core/src/main/resources/personnel/portraits.json`, the trimmed catalog t
 younger ones with higher learning potential, measured against each group's career
 (`HiringPool.experience`). The skill shift is centred on the group's average candidate
 (`experienceBonus`), so it's a trade-off and not a difficulty change. Tune it with `dev-tools`' `CareerCurves` (rookie-vs-veteran skill curves);
-numbers in `design.md` §5 M5, G5. The hire screen shows "AGE 41 · RETIRES IN 24 YRS". **Next step:** show the portraits in the client (`Personnel.portraitId`; the
-PNGs aren't in `assets/` yet). 256x256 is the smallest size the model holds together at. ComfyUI keeps its
+numbers in `design.md` §5 M5, G5. The hire screen shows "AGE 41 · RETIRES IN 24 YRS". **Portraits are shown in the client (2026-10-05):** rerun
+`assets-raw/portraits/make_portrait_assets.py` after generating new portraits. It writes the 128 px
+greyscale JPEGs to `assets/ui/portraits/` (RGB on purpose: libGDX loads one-channel images as alpha).
+`ScreenSnapshot`'s `withPortraits` gives fixture people matching portraits and names. 256x256 is the smallest size the model holds together at. ComfyUI keeps its
 own copies in `E:\Comfy-Desktop\ComfyUI-Shared\output`; never delete those. The portraits are
 the user's own generated art (`assets-raw/` rule).
 

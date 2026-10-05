@@ -68,9 +68,16 @@ import de.mkoehler.launchwindow.client.view.Department;
 import de.mkoehler.launchwindow.content.ContentCatalog;
 import de.mkoehler.launchwindow.content.MissionConfiguration;
 import de.mkoehler.launchwindow.rules.LaunchRequest;
+import de.mkoehler.launchwindow.rules.PersonnelGroup;
+import de.mkoehler.launchwindow.rules.PersonnelNames;
+import de.mkoehler.launchwindow.model.Personnel;
 import de.mkoehler.launchwindow.rules.MissionLaunch;
 import de.mkoehler.launchwindow.rules.MissionStaffing;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumMap;
+import java.util.HashSet;
+import java.util.Set;
 import de.mkoehler.launchwindow.client.screen.AssembleMissionScreen;
 import de.mkoehler.launchwindow.client.screen.MissionConfigsScreen;
 import de.mkoehler.launchwindow.client.screen.MissionPlanScreen;
@@ -385,6 +392,43 @@ public final class ScreenSnapshot {
             specialist("c3", "H. Bergman", 41, 58, 61, 67, 39, 52, 60, 35),
             specialist("c4", "S. Delacroix", 27, 75, 38.5, 44, 48, 28, 33, 41),
             specialist("c5", "K. Osei", 33, 62, 55.5, 53, 46, 47, 56, 62)));
+        // c4 keeps no portrait, so the initials fallback stays in the shots.
+        return withPortraits(state, "c4");
+    }
+
+    /**
+     * Gives every fixture person without a portrait one, with the matching name, the way the hiring
+     * pool would (ages stay as the fixture set them), except the ids listed.
+     *
+     * @param state         the fixture
+     * @param keepInitials  ids to leave without a portrait
+     * @return the same fixture
+     */
+    private static PlayerSnapshot withPortraits(PlayerSnapshot state, String... keepInitials) {
+        Set<String> skip = Set.of(keepInitials);
+        Set<String> taken = new HashSet<>();
+        Map<PersonnelGroup, List<? extends Personnel>> people = new EnumMap<>(PersonnelGroup.class);
+        List<Personnel> astronauts = new ArrayList<>(state.getAstronauts());
+        astronauts.addAll(state.getAstronautCandidates());
+        List<Personnel> set = new ArrayList<>(state.getSetSpecialists());
+        set.addAll(state.getSetSpecialistCandidates());
+        List<Personnel> controllers = new ArrayList<>(state.getMissionControlOfficers());
+        controllers.addAll(state.getMissionControlCandidates());
+        people.put(PersonnelGroup.ASTRONAUT, astronauts);
+        people.put(PersonnelGroup.SET, set);
+        people.put(PersonnelGroup.MISSION_CONTROL, controllers);
+        people.forEach((group, list) -> {
+            for (Personnel person : list) {
+                if (person.getPortraitId() != null || skip.contains(person.getId())) {
+                    continue;
+                }
+                PersonnelNames.Identity identity = PersonnelNames.forCandidate(person.getId(), state.getArchetype(),
+                    "Screenshots", group, taken, Set.of());
+                taken.add(identity.portraitId());
+                person.setPortraitId(identity.portraitId());
+                person.setName(identity.name());
+            }
+        });
         return state;
     }
 
@@ -510,7 +554,7 @@ public final class ScreenSnapshot {
             candidate.setSalary(31 + i * 4);
             state.getMissionControlCandidates().add(candidate);
         }
-        return state;
+        return withPortraits(state);
     }
 
     /**

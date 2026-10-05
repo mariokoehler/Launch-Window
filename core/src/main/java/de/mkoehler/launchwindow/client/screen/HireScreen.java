@@ -176,7 +176,7 @@ public final class HireScreen extends ChromeScreen {
         row.add(accent).width(Theme.BORDER_ACCENT).fillY();
         Table inner = new Table();
         inner.pad(Theme.SPACE_3, Theme.SPACE_4, Theme.SPACE_3, Theme.SPACE_4);
-        inner.add(avatar(candidate.getName())).size(56f).padRight(Theme.SPACE_4);
+        inner.add(RosterCells.avatar(ui, candidate)).size(56f).padRight(Theme.SPACE_4);
 
         Table who = new Table();
         who.left();
@@ -242,7 +242,7 @@ public final class HireScreen extends ChromeScreen {
             entry.add(accent).width(Theme.BORDER_ACCENT).fillY();
             Table inner = new Table();
             inner.pad(Theme.SPACE_3);
-            inner.add(avatar(recruit.getName())).size(40f).padRight(Theme.SPACE_3);
+            inner.add(RosterCells.avatar(ui, recruit)).size(40f).padRight(Theme.SPACE_3);
             Table who = new Table();
             who.defaults().left();
             who.add(ui.label(recruit.getName(), Theme.TextStyle.HEADING_SM, Theme.INK)).row();
@@ -349,15 +349,6 @@ public final class HireScreen extends ChromeScreen {
         chip.add(glyph).size(12f).padRight(Theme.SPACE_1);
         chip.add(ui.label(text, Theme.TextStyle.CAPTION, Theme.INK)).expandX().left();
         return chip;
-    }
-
-    private Table avatar(String name) {
-        Table avatar = new Table();
-        avatar.setBackground(ui.solid(Theme.NAVY));
-        Label initials = ui.label(SetCentreScreen.initials(name), Theme.TextStyle.HEADING_SM, Theme.ON_FILL);
-        initials.setAlignment(Align.center);
-        avatar.add(initials);
-        return avatar;
     }
 
     private TextButton button(String text, Theme.ButtonKind kind, Runnable action) {
