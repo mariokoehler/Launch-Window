@@ -2711,7 +2711,9 @@ bot-harness tuning:**
   survives long below 35 morale to be averaged in. `EMPTY_ROSTER_FALLBACK_MORALE = 50`
   (lands in Average) for a brand-new agency with nobody hired yet.
   Candidate age 22-40, learning potential 20-80 (independent of quality
-  band), starting morale 55-75 (the new hire's own attitude on joining,
+  band) — **superseded 2026-10-05:** the age now comes from the
+  candidate's portrait, and age is a trade-off. Older candidates get a
+  skill bonus and lower learning potential (§5 M5, G5) — starting morale 55-75 (the new hire's own attitude on joining,
   independent of the hiring group's morale, which only gates skill
   quality).
 - **Roster capacity, decided at the user's own request (2026-09-30,
@@ -6231,10 +6233,19 @@ here.
           veteran's remaining career, and then stay for 20–35 years.
         - **Excellent band:** veterans retire before rookies fully catch up, but the gap
           closes from about 10 points to 2.
-        - **Weaker bonus, steeper drop:** a 15-point bonus with veteran learning
-          potential 20–45 gave the same crossover with a smaller head start. Raising
-          the bonus and lowering the veteran's learning potential move the crossover
-          in opposite directions, so the size of the head start is the real dial.
+        - **The two settings:** the bonus sets the head start, and the veteran's
+          learning potential sets when rookies catch up.
+          - A 15-point bonus with veteran learning potential 20–45 gave a smaller head
+            start and the same crossover. That run changed both settings at once.
+          - A one-setting check, the bonus kept at 20 and veteran learning potential
+            lowered to 5–25, moved the crossover from 23 to 19 seasons.
+          - The original target was a crossover around the middle of a veteran's
+            remaining career, about 16 seasons. Getting there would take near-untrainable
+            veterans, so the current ~2/3 is kept for now.
+        - **Measurement caveat:** each bucket is averaged over whoever is still
+          employed, and the oldest veterans retire first. The veteran curve's later
+          points therefore come from the less experienced survivors, which makes the
+          crossover look a little earlier than it is for one individual.
         - **Real play:** missions and R&D also grow skills, so the crossover there is
           probably a little later.
 
