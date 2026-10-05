@@ -517,6 +517,14 @@ public final class ScreenSnapshot {
                 .filter(officer -> officer.getAssignmentState() == AssignmentState.IDLE).reduce((a, b) -> b)
                 .orElseThrow()));
         write(folder, "mc-hire.png", new HireScreen(game, Department.MISSION_CONTROL), null);
+        write(folder, "mc-hire-tooltip-fd.png", new HireScreen(game, Department.MISSION_CONTROL),
+            screen -> showTooltip(screen.stage().getRoot(), "Flight Director"));
+        write(folder, "mc-overview-tooltip-footer.png", new MissionControlScreen(game),
+            screen -> showTooltip(screen.stage().getRoot(), "Flight controllers: "));
+        write(folder, "mc-overview-tooltip-skill.png", new MissionControlScreen(game),
+            screen -> showTooltip(screen.stage().getRoot(), "Propulsion"));
+        write(folder, "mc-overview-tooltip-morale.png", new MissionControlScreen(game),
+            screen -> showTooltip(screen.stage().getRoot(), "Morale"));
         write(folder, "mc-scheduled.png", new MissionsScreen(game, true), null);
         write(folder, "mc-scrub.png", new MissionsScreen(game, true), screen -> screen.confirmCallOff(scheduled));
         write(folder, "mc-active.png", new MissionsScreen(game, false), null);
@@ -936,6 +944,40 @@ public final class ScreenSnapshot {
         if (last != null) {
             last.setPinned(true);
         }
+    }
+
+    /**
+     * Shows the first tooltip under a widget whose title starts with the given text, as if the
+     * pointer rested on its actor.
+     *
+     * @param root  the widget to search
+     * @param title the tooltip title's start
+     */
+    private static void showTooltip(com.badlogic.gdx.scenes.scene2d.Group root, String title) {
+        java.util.ArrayDeque<com.badlogic.gdx.scenes.scene2d.Actor> todo = new java.util.ArrayDeque<>();
+        todo.add(root);
+        while (!todo.isEmpty()) {
+            com.badlogic.gdx.scenes.scene2d.Actor actor = todo.removeFirst();
+            for (com.badlogic.gdx.scenes.scene2d.EventListener listener : actor.getListeners()) {
+                if (listener instanceof com.badlogic.gdx.scenes.scene2d.ui.Tooltip<?> tooltip
+                    && tooltip.getActor() instanceof com.badlogic.gdx.scenes.scene2d.ui.Table card
+                    && card.getChildren().first() instanceof com.badlogic.gdx.scenes.scene2d.ui.Label label
+                    && label.getText().toString().startsWith(title)) {
+                    tooltip.setInstant(true);
+                    com.badlogic.gdx.scenes.scene2d.InputEvent event = new com.badlogic.gdx.scenes.scene2d.InputEvent();
+                    event.setStage(actor.getStage());
+                    event.setListenerActor(actor);
+                    tooltip.enter(event, actor.getWidth() / 2f, actor.getHeight() / 2f, -1, null);
+                    // Snapshots render with no time passing: finish the short fade-in at once.
+                    tooltip.getContainer().act(1f);
+                    return;
+                }
+            }
+            if (actor instanceof com.badlogic.gdx.scenes.scene2d.Group group) {
+                group.getChildren().forEach(todo::add);
+            }
+        }
+        throw new IllegalStateException("no tooltip titled " + title);
     }
 
     private static <S extends Screen> void write(File folder, String name, S screen, Consumer<S> state) {

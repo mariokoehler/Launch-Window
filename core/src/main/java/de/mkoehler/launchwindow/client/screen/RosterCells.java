@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.UiKit;
+import de.mkoehler.launchwindow.client.view.Tips;
 import de.mkoehler.launchwindow.model.Personnel;
 
 /**
@@ -24,16 +25,21 @@ final class RosterCells {
     private RosterCells() {
     }
 
+    /** A roster row's skill icon size: 20 % up from the mockup's 14 px, so the glyphs read (play test). */
+    static final float SKILL_ICON = 17f;
+
     /**
-     * Builds a skill cell: the skill's icon and value, tinted gold with a star for an Expert skill.
+     * Builds a skill cell: the skill's icon and value, tinted gold with a star for an Expert skill,
+     * with a tooltip naming the skill and what it's for.
      *
      * @param ui     the UI kit
      * @param icon   the skill's icon
      * @param value  the value
      * @param expert whether the person is an Expert in it
+     * @param tip    the skill's tooltip
      * @return the cell
      */
-    static Table skillCell(UiKit ui, String icon, double value, boolean expert) {
+    static Table skillCell(UiKit ui, String icon, double value, boolean expert, Tips.Tip tip) {
         Table cell = new Table();
         if (expert) {
             cell.setBackground(ui.rect(new Color(Theme.SURFACE_CARD).lerp(Theme.GOLD, 0.12f), Theme.GOLD,
@@ -42,7 +48,7 @@ final class RosterCells {
         cell.pad(2f, 4f, 2f, 4f);
         Image glyph = new Image(ui.icon(icon), Scaling.fit);
         glyph.setColor(Theme.NAVY);
-        cell.add(glyph).size(14f).padRight(4f);
+        cell.add(glyph).height(SKILL_ICON).width(SKILL_ICON * Math.min(1f, ui.iconAspect(icon))).padRight(4f);
         cell.add(ui.label(String.valueOf(Math.round(value)), Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).left();
         if (expert) {
             // The mockup's star glyph isn't in the font; the prestige star, in gold, stands in.
@@ -50,6 +56,7 @@ final class RosterCells {
             star.setColor(Theme.GOLD_TEXT);
             cell.add(star).size(10f).padLeft(3f);
         }
+        ui.tooltip(cell, tip.title() + (expert ? " · Expert" : ""), tip.text());
         return cell;
     }
 
@@ -84,6 +91,10 @@ final class RosterCells {
         glyph.setColor(color);
         chip.add(glyph).size(12f).padRight(Theme.SPACE_1);
         chip.add(ui.label(text, Theme.TextStyle.CAPTION, color)).expandX().left();
+        Tips.Tip tip = Tips.stat(icon);
+        if (tip != null) {
+            ui.tooltip(chip, tip.title(), tip.text());
+        }
         return chip;
     }
 

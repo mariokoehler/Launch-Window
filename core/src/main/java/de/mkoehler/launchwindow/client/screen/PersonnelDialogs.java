@@ -21,6 +21,7 @@ import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.UiKit;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.Department;
+import de.mkoehler.launchwindow.client.view.Tips;
 import de.mkoehler.launchwindow.client.view.SetDepartment;
 import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.Personnel;
@@ -275,6 +276,8 @@ final class PersonnelDialogs {
                 }
                 pick.add(value);
             }
+            Tips.Tip tip = Tips.skill(department.label(option), option);
+            ui.tooltip(pick, tip.title(), tip.text());
             if (!usable) {
                 return pick;
             }

@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.view.CrewSkills;
+import de.mkoehler.launchwindow.client.view.Tips;
 import de.mkoehler.launchwindow.client.view.Department;
 import de.mkoehler.launchwindow.client.view.MissionControl;
 import de.mkoehler.launchwindow.content.MissionConfiguration;
@@ -40,6 +41,8 @@ public final class MissionControlScreen extends ChromeScreen {
 
     private final PersonnelDialogs dialogs = new PersonnelDialogs(this, Department.MISSION_CONTROL);
     private MissionControl.Filter filter = MissionControl.Filter.ALL;
+    /** The skill the roster is sorted by, best first, or {@code null} for roster order. */
+    private String sortBy;
 
     /**
      * Builds the screen from the session.
@@ -79,8 +82,9 @@ public final class MissionControlScreen extends ChromeScreen {
         }
         Table bar = new Table();
         bar.add(filterChips()).left();
-        bar.add(ui.label("A gold star marks an Expert skill. FD is the average of all five, what a FLIGHT console reads.",
-            Theme.TextStyle.CAPTION, Theme.ON_PAGE_STRONG)).expandX().right();
+        bar.add(ui.label("A gold star marks an Expert skill.", Theme.TextStyle.CAPTION, Theme.ON_PAGE_STRONG))
+            .expandX().right().padRight(Theme.SPACE_4);
+        bar.add(sortButtons()).right();
         content.add(bar).padBottom(Theme.SPACE_4).row();
         content.add(roster()).expand().fill();
     }
@@ -185,12 +189,53 @@ public final class MissionControlScreen extends ChromeScreen {
         return chips;
     }
 
+    /**
+     * The sort buttons: one per skill plus Flight Director, best first. Clicking the active one goes
+     * back to roster order.
+     */
+    private Table sortButtons() {
+        Table buttons = new Table();
+        buttons.add(ui.label("SORT", Theme.TextStyle.LABEL, Theme.ON_PAGE_STRONG)).padRight(Theme.SPACE_2);
+        List<String> skills = new java.util.ArrayList<>();
+        for (MissionControlSkill skill : MissionControlSkill.values()) {
+            skills.add(skill.name());
+        }
+        skills.add(StaffingSlot.FLIGHT_DIRECTOR);
+        for (String skill : skills) {
+            boolean active = skill.equals(sortBy);
+            String icon = CrewSkills.icon(skill);
+            Table button = new Table();
+            button.setBackground(active ? ui.solid(Theme.NAVY)
+                : ui.rect(Theme.SURFACE_CARD, Theme.ON_PAGE, Theme.BORDER_THIN));
+            Image glyph = new Image(ui.icon(icon), Scaling.fit);
+            glyph.setColor(active ? Theme.ON_FILL : Theme.NAVY);
+            button.add(glyph).height(16f).width(16f * Math.min(1f, ui.iconAspect(icon)));
+            button.setTouchable(Touchable.enabled);
+            button.addListener(clicked(() -> {
+                sortBy = active ? null : skill;
+                rebuild();
+            }));
+            ui.tooltip(button, "Sort by " + CrewSkills.label(skill), active ? "Best first. Click again for roster "
+                + "order." : "Best first.");
+            buttons.add(button).size(30f).padLeft(4f);
+        }
+        return buttons;
+    }
+
+    private static double sortValue(MissionControlOfficer officer, String skill) {
+        return StaffingSlot.FLIGHT_DIRECTOR.equals(skill) ? officer.flightDirectorSkill()
+            : officer.getSkill(MissionControlSkill.valueOf(skill));
+    }
+
     private Table roster() {
         Table card = ui.card();
         card.pad(Theme.BORDER_EMPHASIS);
         card.top();
         List<MissionControlOfficer> rows = session.state().getMissionControlOfficers().stream()
-            .filter(officer -> MissionControl.matches(officer, filter)).toList();
+            .filter(officer -> MissionControl.matches(officer, filter))
+            .sorted(sortBy == null ? (a, b) -> 0
+                : java.util.Comparator.comparingDouble((MissionControlOfficer o) -> sortValue(o, sortBy)).reversed())
+            .toList();
         Table list = new Table();
         list.top();
         list.defaults().growX();
@@ -229,10 +274,12 @@ public final class MissionControlScreen extends ChromeScreen {
         Table skills = new Table();
         for (MissionControlSkill skill : MissionControlSkill.values()) {
             skills.add(RosterCells.skillCell(ui, CrewSkills.icon(skill.name()), officer.getSkill(skill),
-                officer.getExpertSkills().contains(skill))).width(64f).left().padRight(Theme.SPACE_2);
+                officer.getExpertSkills().contains(skill), Tips.skill(CrewSkills.label(skill.name()), skill.name())))
+                .width(68f).left().padRight(Theme.SPACE_2);
         }
-        skills.add(RosterCells.skillCell(ui, CrewSkills.icon(StaffingSlot.FLIGHT_DIRECTOR), officer.flightDirectorSkill(), false))
-            .width(64f).left();
+        skills.add(RosterCells.skillCell(ui, CrewSkills.icon(StaffingSlot.FLIGHT_DIRECTOR), officer.flightDirectorSkill(),
+            false, Tips.skill(CrewSkills.label(StaffingSlot.FLIGHT_DIRECTOR), StaffingSlot.FLIGHT_DIRECTOR)))
+            .width(68f).left();
         row.add(skills).expandX().left();
 
         Table chips = new Table();

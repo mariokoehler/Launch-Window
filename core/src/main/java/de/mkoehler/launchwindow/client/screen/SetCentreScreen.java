@@ -17,6 +17,7 @@ import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.view.Department;
 import de.mkoehler.launchwindow.client.view.SetDepartment;
 import de.mkoehler.launchwindow.client.view.SetSkills;
+import de.mkoehler.launchwindow.client.view.Tips;
 import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.Building;
 import de.mkoehler.launchwindow.model.SetSkill;
@@ -191,13 +192,8 @@ public final class SetCentreScreen extends ChromeScreen {
 
         Table skills = new Table();
         for (SetSkill skill : SetSkill.values()) {
-            Table cell = new Table();
-            Image glyph = new Image(ui.icon(SetSkills.icon(skill)), Scaling.fit);
-            glyph.setColor(Theme.NAVY);
-            cell.add(glyph).height(14f).width(14f * Math.min(1f, ui.iconAspect(SetSkills.icon(skill)))).padRight(4f);
-            cell.add(ui.label(String.valueOf(Math.round(SetDepartment.skill(specialist, skill))),
-                Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).left();
-            skills.add(cell).width(52f).left().padRight(Theme.SPACE_3);
+            skills.add(RosterCells.skillCell(ui, SetSkills.icon(skill), SetDepartment.skill(specialist, skill), false,
+                Tips.skill(SetSkills.label(skill), skill.name()))).width(58f).left().padRight(Theme.SPACE_2);
         }
         row.add(skills).expandX().left();
 
@@ -228,14 +224,7 @@ public final class SetCentreScreen extends ChromeScreen {
     }
 
     private Table statChip(String icon, String text, Color color) {
-        Table chip = new Table();
-        chip.setBackground(ui.rect(new Color(0f, 0f, 0f, 0f), Theme.NAVY_BORDER, Theme.BORDER_THIN));
-        chip.pad(3f, Theme.SPACE_2, 3f, Theme.SPACE_2);
-        Image glyph = new Image(ui.icon(icon), Scaling.fit);
-        glyph.setColor(color);
-        chip.add(glyph).size(12f).padRight(Theme.SPACE_1);
-        chip.add(ui.label(text, Theme.TextStyle.CAPTION, color)).expandX().left();
-        return chip;
+        return RosterCells.statChip(ui, icon, text, color);
     }
 
     private static Color moraleColor(int morale) {

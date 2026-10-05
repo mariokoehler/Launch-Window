@@ -9,6 +9,7 @@ import de.mkoehler.launchwindow.client.ui.HistoryNote;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.view.AstronautCorps;
 import de.mkoehler.launchwindow.client.view.CrewSkills;
+import de.mkoehler.launchwindow.client.view.Tips;
 import de.mkoehler.launchwindow.client.view.Department;
 import de.mkoehler.launchwindow.client.view.MissionControl;
 import de.mkoehler.launchwindow.model.AssignmentState;
@@ -176,7 +177,8 @@ public final class AstronautComplexScreen extends ChromeScreen {
         Table skills = new Table();
         for (AstronautSkill skill : AstronautSkill.values()) {
             skills.add(RosterCells.skillCell(ui, CrewSkills.icon(skill.name()), astronaut.getSkill(skill),
-                astronaut.getExpertSkills().contains(skill))).width(64f).left().padRight(Theme.SPACE_2);
+                astronaut.getExpertSkills().contains(skill), Tips.skill(CrewSkills.label(skill.name()), skill.name())))
+                .width(68f).left().padRight(Theme.SPACE_2);
         }
         row.add(skills).expandX().left();
 

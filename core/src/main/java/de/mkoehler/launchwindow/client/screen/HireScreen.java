@@ -18,6 +18,8 @@ import de.mkoehler.launchwindow.client.ui.Refusals;
 import de.mkoehler.launchwindow.client.ui.SkillBar;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.view.Department;
+import de.mkoehler.launchwindow.client.view.Tips;
+import de.mkoehler.launchwindow.content.StaffingSlot;
 import de.mkoehler.launchwindow.model.Personnel;
 
 import java.util.ArrayDeque;
@@ -136,11 +138,13 @@ public final class HireScreen extends ChromeScreen {
             rebuild();
         })).size(32f).padRight(Theme.SPACE_1);
         head.add(new Image(ui.solid(Theme.ON_PAGE))).width(Theme.BORDER_THIN).height(32f).padRight(Theme.SPACE_1);
-        for (String skill : department.skills()) {
-            head.add(sortButton(department.icon(skill), skill == sortBy, () -> {
+        for (String skill : department.ratings()) {
+            Table button = sortButton(department.icon(skill), skill.equals(sortBy), () -> {
                 sortBy = skill;
                 rebuild();
-            })).size(32f).padLeft(Theme.SPACE_1);
+            });
+            ui.tooltip(button, "Sort by " + department.label(skill), null);
+            head.add(button).size(32f).padLeft(Theme.SPACE_1);
         }
         panel.add(head).growX().padBottom(Theme.SPACE_2).row();
 
@@ -186,10 +190,15 @@ public final class HireScreen extends ChromeScreen {
         inner.add(who).width(170f).left().padRight(Theme.SPACE_4);
 
         Table skills = new Table();
-        for (String skill : department.skills()) {
+        for (String skill : department.ratings()) {
             double value = department.skill(candidate, skill);
-            skills.add(ui.label(department.label(skill), Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).width(148f).left()
-                .padRight(Theme.SPACE_2);
+            // The Flight Director value (controllers only) is the average of the five above it, set in bold.
+            boolean average = StaffingSlot.FLIGHT_DIRECTOR.equals(skill);
+            Label name = ui.label(average ? "Flight Director (avg.)" : department.label(skill),
+                average ? Theme.TextStyle.BODY_STRONG : Theme.TextStyle.BODY_SM, average ? Theme.INK : Theme.INK_MUTED);
+            Tips.Tip tip = Tips.skill(department.label(skill), skill);
+            ui.tooltip(name, tip.title(), tip.text());
+            skills.add(name).width(148f).left().padRight(Theme.SPACE_2);
             skills.add(new SkillBar(ui, value)).expandX().fillX().height(6f).padRight(Theme.SPACE_2);
             Label number = ui.label(String.format(Locale.ROOT, "%.1f%%", value), Theme.TextStyle.BODY_SM, Theme.INK);
             number.setAlignment(Align.right);
@@ -347,14 +356,7 @@ public final class HireScreen extends ChromeScreen {
     }
 
     private Table statChip(String icon, String text) {
-        Table chip = new Table();
-        chip.setBackground(ui.rect(new Color(0f, 0f, 0f, 0f), Theme.NAVY_BORDER, Theme.BORDER_THIN));
-        chip.pad(3f, Theme.SPACE_2, 3f, Theme.SPACE_2);
-        Image glyph = new Image(ui.icon(icon), Scaling.fit);
-        glyph.setColor(Theme.INK);
-        chip.add(glyph).size(12f).padRight(Theme.SPACE_1);
-        chip.add(ui.label(text, Theme.TextStyle.CAPTION, Theme.INK)).expandX().left();
-        return chip;
+        return RosterCells.statChip(ui, icon, text, Theme.INK);
     }
 
     private TextButton button(String text, Theme.ButtonKind kind, Runnable action) {

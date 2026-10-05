@@ -3,12 +3,16 @@ package de.mkoehler.launchwindow.client.ui;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.Tooltip;
+import com.badlogic.gdx.scenes.scene2d.ui.TooltipManager;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -52,6 +56,10 @@ public final class UiKit implements Disposable {
     private final Map<String, Texture> pictures = new HashMap<>();
     private final Map<String, Drawable> rects = new HashMap<>();
     private final Map<Theme.BadgeKind, Drawable> badgeFills = new EnumMap<>(Theme.BadgeKind.class);
+    /** The tooltips' timing: quicker than Scene2D's default two seconds, and no grow animation. */
+    private final TooltipManager tooltips = new TooltipManager();
+    /** How wide a tooltip's explanation wraps. */
+    private static final float TOOLTIP_TEXT_WIDTH = 280f;
     private Slider.SliderStyle sliderStyle;
     private TextButton.TextButtonStyle pageButtonStyle;
     private String backdropPath;
@@ -90,6 +98,12 @@ public final class UiKit implements Disposable {
         for (Theme.BadgeKind kind : Theme.BadgeKind.values()) {
             badgeFills.put(kind, shapes.badge(kind, fonts.get(Theme.TextStyle.LABEL)).background);
         }
+        tooltips.initialTime = 0.4f;
+        tooltips.subsequentTime = 0.1f;
+        tooltips.resetTime = 1.5f;
+        tooltips.animations = false;
+        tooltips.offsetX = 12f;
+        tooltips.offsetY = 12f;
     }
 
     /**
@@ -364,6 +378,36 @@ public final class UiKit implements Disposable {
     public Label label(String text, Theme.TextStyle style, Color color) {
         String shown = style == Theme.TextStyle.EYEBROW ? text.toUpperCase(Locale.ROOT) : text;
         return new Label(shown, new Label.LabelStyle(fonts.get(style), color));
+    }
+
+    /**
+     * Gives an actor a hover tooltip (ui-spec.md component 17): a small navy card with a bold title
+     * and a short explanation, shown when the pointer rests on the actor. It explains what a value,
+     * icon or control means and does, which is rules help; real-world stories use a history note
+     * instead (component 15), never this.
+     *
+     * @param target the actor to explain
+     * @param title  the title, such as "Morale"
+     * @param text   one to three short sentences, or {@code null} for the title alone
+     * @return the tooltip, already attached
+     */
+    public Tooltip<Table> tooltip(Actor target, String title, String text) {
+        Table card = new Table();
+        card.setBackground(solid(Theme.NAVY));
+        card.pad(Theme.SPACE_2, Theme.SPACE_3, Theme.SPACE_2, Theme.SPACE_3);
+        card.defaults().left();
+        card.add(label(title, Theme.TextStyle.BODY_STRONG, Theme.ON_FILL)).row();
+        if (text != null) {
+            card.add(paragraph(text, Theme.TextStyle.BODY_SM, Theme.ON_FILL)).width(TOOLTIP_TEXT_WIDTH).padTop(2f);
+        }
+        Tooltip<Table> tooltip = new Tooltip<>(card, tooltips);
+        tooltip.getContainer().setTouchable(Touchable.disabled);
+        if (target.getTouchable() == Touchable.childrenOnly) {
+            // A table's padding should count as hovering it too.
+            target.setTouchable(Touchable.enabled);
+        }
+        target.addListener(tooltip);
+        return tooltip;
     }
 
     /**

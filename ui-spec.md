@@ -200,6 +200,22 @@ On the right:
     screen, the hub included). It goes away when the answer arrives. `SessionScreen` draws it
     from `ServerGateway.isWaiting()`, so every in-game screen has it. Connect and Join keep their
     own busy buttons.
+17. **Tooltip** *(built in libGDX 2026-10-05, user's play-test request)*. Rules help on hover:
+    a small navy card with a bold title and one to three short sentences, shown 0.4 s after the
+    pointer rests on the thing it explains (`UiKit.tooltip`; the text lives in `client.view.Tips`,
+    with numbers read from the rules' constants). It's deliberately unlike the white history-note
+    card: a tooltip says what something means and does in the game, a history note tells a
+    real-world story (component 15). Used on: the salary, morale and learning-potential chips;
+    every skill icon in the roster rows, the hire screen's skill names and the training dialog's
+    skill tiles (what each skill is used for); the footer chips (what "6 / 3 / 7" means, where a
+    click goes); the header's prestige, date and countdown chips; and sort buttons.
+    - **Roster skill icons are 17 px** (were 14 px, 20 % up at the user's request) on all three
+      personnel overviews.
+    - **Flight Director rating:** the controller hire screen shows a sixth row, "Flight Director
+      (avg.)", the average of the five skills (`MissionControlOfficer.flightDirectorSkill()`, the
+      value a FLIGHT console reads), and can sort by it. The Mission Control overview has a sort row
+      (the five skills plus Flight Director, best first; click the active one again for roster
+      order). The overview's FD cell already existed.
 
 ---
 

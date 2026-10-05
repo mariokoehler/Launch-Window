@@ -1,6 +1,7 @@
 package de.mkoehler.launchwindow.client.view;
 
 import de.mkoehler.launchwindow.content.ContentCatalog;
+import de.mkoehler.launchwindow.content.StaffingSlot;
 import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.AstronautSkill;
 import de.mkoehler.launchwindow.model.Building;
@@ -131,6 +132,21 @@ public enum Department {
     }
 
     /**
+     * Returns what candidates and staff can be compared by: the skills, plus for flight controllers
+     * the Flight Director value, the average of their five skills.
+     *
+     * @return the skill names, then {@link StaffingSlot#FLIGHT_DIRECTOR} for Mission Control
+     */
+    public List<String> ratings() {
+        if (this != MISSION_CONTROL) {
+            return skills;
+        }
+        List<String> ratings = new java.util.ArrayList<>(skills);
+        ratings.add(StaffingSlot.FLIGHT_DIRECTOR);
+        return List.copyOf(ratings);
+    }
+
+    /**
      * Returns a skill's icon.
      *
      * @param skill the skill's name
@@ -174,10 +190,13 @@ public enum Department {
      * Returns a person's value in a skill.
      *
      * @param person the person, of this department
-     * @param skill  the skill's name
+     * @param skill  the skill's name, or {@link StaffingSlot#FLIGHT_DIRECTOR} for a controller
      * @return the value, 0-100
      */
     public double skill(Personnel person, String skill) {
+        if (StaffingSlot.FLIGHT_DIRECTOR.equals(skill)) {
+            return ((MissionControlOfficer) person).flightDirectorSkill();
+        }
         return switch (this) {
             case SET -> SetDepartment.skill((SetSpecialist) person, SetSkill.valueOf(skill));
             case ASTRONAUT -> ((Astronaut) person).getSkill(AstronautSkill.valueOf(skill));

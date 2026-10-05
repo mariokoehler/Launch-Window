@@ -1,6 +1,7 @@
 package de.mkoehler.launchwindow.client.screen;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -13,6 +14,7 @@ import de.mkoehler.launchwindow.client.connect.ServerResult;
 import de.mkoehler.launchwindow.client.ui.Countdown;
 import de.mkoehler.launchwindow.client.ui.Refusals;
 import de.mkoehler.launchwindow.client.ui.Theme;
+import de.mkoehler.launchwindow.client.view.Tips;
 import de.mkoehler.launchwindow.persistence.PlayerAction;
 import de.mkoehler.launchwindow.rules.TurnReport;
 
@@ -208,6 +210,19 @@ abstract class SessionScreen extends StageScreen {
             case LOGIN_FAILED -> toast("Couldn't log in again: " + result.message(), Theme.NoticeKind.DANGER);
             case FAILED -> toast("The connection broke off. Try again.", Theme.NoticeKind.DANGER);
         }
+    }
+
+    /**
+     * Attaches a hover tooltip and returns the actor, for use inside {@code add(...)}.
+     *
+     * @param actor the actor
+     * @param tip   what it means
+     * @param <A>   the actor's type
+     * @return the actor
+     */
+    protected <A extends Actor> A tip(A actor, Tips.Tip tip) {
+        ui.tooltip(actor, tip.title(), tip.text());
+        return actor;
     }
 
     /**
