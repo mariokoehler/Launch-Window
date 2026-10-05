@@ -58,9 +58,9 @@ public final class MuseumScreen extends ChromeScreen {
     private static final float PORTRAIT_SIZE = 96f;
 
     private static final String MEMORIAL_NOTE = "Valentin Bondarenko, the youngest of the first Soviet cosmonaut "
-        + "group, died in March 1961 after a fire in a pure-oxygen pressure chamber at the end of an isolation "
-        + "test. His death was kept secret until 1986. A pure-oxygen cabin fire also killed the Apollo 1 crew on "
-        + "the launch pad in 1967.";
+        + "group, died in March 1961 after a fire in an oxygen-rich, low-pressure chamber, ten days into a "
+        + "fifteen-day endurance test. His death was kept secret until 1986. A fire in a pure-oxygen cabin also "
+        + "killed the Apollo 1 crew on the launch pad in 1967.";
 
     private Tab tab;
     private Filter filter = Filter.ALL;

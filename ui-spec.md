@@ -888,7 +888,9 @@ Reached from the hub's Museum building. Choices made while building it, **confir
   "Reached" or "Credited through the cascade", without prestige or a First tag.
 - **Memorial plaques** leave out the astronaut's flight count, which the game doesn't keep.
 - **The race** is fetched each time the Museum opens; while it loads, the table says so.
-- **The memorial's history note** (Bondarenko) is the mockup's draft, still to verify.
+- **The memorial's history note** (Bondarenko) was checked on 2026-10-05: the chamber's air was
+  oxygen-rich (at least 50 %), not pure oxygen, and the fire came ten days into a fifteen-day test.
+  The note was corrected to match.
 
 ### 4.12 Settings (header gear)
 Log out; server address; sound on or off (later); about and version.
