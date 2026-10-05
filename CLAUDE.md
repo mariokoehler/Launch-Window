@@ -336,8 +336,9 @@ Sputnik 2) puts animals that don't come home on the memorial (`MemorialEntry.Cau
 - **Converter:** emits the field from its `ANIMAL_PASSENGERS` map.
 - **Memorial photos:** in `assets-raw/memorial/`, converted by `make_portrait_assets.py`, with the
   crops set in `crops.json`.
-- **Open:** the Laika photo (a TASS press photo, see `assets-raw/memorial/SOURCES.md`) has no established
-  licence. Replace it or find a freely licensed copy before the repo goes public.
+- **Laika's photo:** CC BY 4.0, from Wikimedia Commons. **Credit every third-party asset in
+  `assets/CREDITS.md`**; the photo's source notes are in `assets-raw/memorial/SOURCES.md`.
+  **Open:** the photo's author and file URL still need to be filled in.
 
 **G4 display text done (2026-10-05):** `assets/content/early-era/strings.json` names every id, and
 most entries also carry a description and, where there's a real story, a history note.
