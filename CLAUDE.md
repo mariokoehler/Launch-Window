@@ -330,6 +330,14 @@ create drawables in a rebuild loop; use `UiKit.rect`/`icon`/`cardAccent`, which 
 **Next:** the hub (its mockup exists), then the rest of `ui-spec.md` §7's first loop
 (Headquarters opening a program, VAB rocket programs).
 
+**Laika on the memorial (user, 2026-10-05):** `MissionConfiguration.animalPassengers` (only
+Sputnik 2) puts animals that don't come home on the memorial (`MemorialEntry.Cause.PASSENGER`).
+- **Pack hash changed:** reset the dev data root.
+- **Converter:** emits the field from its `ANIMAL_PASSENGERS` map.
+- **Memorial photos:** in `assets-raw/memorial/`, converted by `make_portrait_assets.py`, with the
+  crops set in `crops.json`.
+- **Open:** record the Laika photo's source and licence before the repo goes public.
+
 **G4 display text done (2026-10-05):** `assets/content/early-era/strings.json` names every id, and
 most entries also carry a description and, where there's a real story, a history note.
 `ContentNames` looks them up once `ClientSession.start` has installed the pack's text.

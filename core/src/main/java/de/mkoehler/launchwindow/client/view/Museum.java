@@ -284,11 +284,13 @@ public final class Museum {
     /**
      * One plaque on the memorial.
      *
-     * @param name   the astronaut
-     * @param line   how and when they were lost, and their age
-     * @param detail the mission and step, or the accident's context
+     * @param kind       what they were, for the plaque's eyebrow ("Astronaut", "Passenger")
+     * @param name       the astronaut's or the animal's name
+     * @param line       how and when they were lost, and an astronaut's age
+     * @param detail     the mission and step, or the accident's context
+     * @param portraitId their portrait or photo under {@code assets/ui/portraits/}, or {@code null}
      */
-    public record Plaque(String name, String line, String detail) {
+    public record Plaque(String kind, String name, String line, String detail, String portraitId) {
     }
 
     /**
@@ -301,6 +303,10 @@ public final class Museum {
     public static List<Plaque> memorial(PlayerSnapshot state, ContentCatalog catalog) {
         List<Plaque> plaques = new ArrayList<>();
         for (MemorialEntry entry : state.getMemorial()) {
+            if (entry.cause() == MemorialEntry.Cause.PASSENGER) {
+                plaques.add(passengerPlaque(entry, catalog));
+                continue;
+            }
             boolean mission = entry.cause() == MemorialEntry.Cause.MISSION;
             String cause = mission ? "Lost on a mission" : "Died in an accident";
             String detail;
@@ -312,9 +318,20 @@ public final class Museum {
             } else {
                 detail = "Not flying when it happened: reported in that turn's news.";
             }
-            plaques.add(new Plaque(entry.name(), cause + ", " + date(entry.turn()) + ", aged " + entry.age() + ".",
-                detail));
+            plaques.add(new Plaque("Astronaut", entry.name(), cause + ", " + date(entry.turn()) + ", aged "
+                + entry.age() + ".", detail, entry.portraitId()));
         }
         return plaques;
+    }
+
+    private static Plaque passengerPlaque(MemorialEntry entry, ContentCatalog catalog) {
+        String flight = catalog.missionConfiguration(entry.missionConfigurationId())
+            .map(MissionControl::missionName).orElse(ContentNames.of(entry.missionConfigurationId()));
+        String detail = entry.stepId() == null
+            ? "The flight had no way home."
+            : "Lost when the flight failed on the "
+                + TurnReportView.stepInSentence(entry.missionConfigurationId(), entry.stepId()) + " step.";
+        return new Plaque("Passenger", entry.name(), "Flew on " + flight + ", " + date(entry.turn()) + ".", detail,
+            entry.portraitId());
     }
 }

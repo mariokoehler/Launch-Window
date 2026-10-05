@@ -752,9 +752,10 @@ public final class ScreenSnapshot {
             new GoalRecord("human-in-orbit", 24, "vostok-orbital", "vostok-orbital-flown", true, 3_000)));
         state.setSuccessfulFlightCounts(Map.of("sputnik-1-orbit", 2, "sputnik-1-extended", 1,
             "vostok-uncrewed-suborbital", 1, "vostok-uncrewed-orbital", 2, "vostok-orbital", 1));
-        state.setMemorial(List.of(new MemorialEntry("Arseny Kolesov", 27, 19, MemorialEntry.Cause.ACCIDENT, null,
-            null, null), new MemorialEntry("Pavel Orlov", 31, 22, MemorialEntry.Cause.MISSION, "vostok-orbital",
-            "reentry", null)));
+        state.setMemorial(List.of(new MemorialEntry("Laika", 0, 4, MemorialEntry.Cause.PASSENGER, "sputnik-2-orbit",
+            null, "laika"), new MemorialEntry("Arseny Kolesov", 27, 19, MemorialEntry.Cause.ACCIDENT, null, null,
+            "soviet_051"), new MemorialEntry("Pavel Orlov", 31, 22, MemorialEntry.Cause.MISSION, "vostok-orbital",
+            "11-reentry", "soviet_019")));
         return state;
     }
 

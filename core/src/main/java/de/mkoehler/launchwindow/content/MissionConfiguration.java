@@ -51,13 +51,81 @@ import java.util.TreeSet;
  *                           cancelled in flight ({@code baspm.md} &sect;10.10)
  * @param cancellationRefundPercent the share of the launch cost an in-flight
  *                           cancellation restores, 0-100
+ * @param animalPassengers   the animals the flight carries, remembered on the memorial when
+ *                           they're lost; {@code null} for none (2026-10-05)
  * @author Mario Koehler
  */
 public record MissionConfiguration(String id, String programId, List<MissionSeason> seasons,
                                     List<String> crewSlots, List<StaffingSlot> controlSlots, long cost,
                                     long firstTimePrestige, List<GoalModifier> goalDependencies,
                                     List<GoalModifier> goalBoosts, List<Launch> launches,
-                                    long cancellationPrestigeDeduction, int cancellationRefundPercent) {
+                                    long cancellationPrestigeDeduction, int cancellationRefundPercent,
+                                    AnimalPassengers animalPassengers) {
+
+    /**
+     * The form without animal passengers, as every configuration had before they existed.
+     *
+     * @param id                            the id
+     * @param programId                     the program
+     * @param seasons                       the seasons
+     * @param crewSlots                     the flight-crew layout
+     * @param controlSlots                  the mission-control layout
+     * @param cost                          the launch cost
+     * @param firstTimePrestige             the first flight's prestige
+     * @param goalDependencies              reliability penalties
+     * @param goalBoosts                    reliability bonuses
+     * @param launches                      the launches
+     * @param cancellationPrestigeDeduction the prestige lost on an in-flight cancellation
+     * @param cancellationRefundPercent     the refund on an in-flight cancellation
+     */
+    public MissionConfiguration(String id, String programId, List<MissionSeason> seasons, List<String> crewSlots,
+                                List<StaffingSlot> controlSlots, long cost, long firstTimePrestige,
+                                List<GoalModifier> goalDependencies, List<GoalModifier> goalBoosts,
+                                List<Launch> launches, long cancellationPrestigeDeduction,
+                                int cancellationRefundPercent) {
+        this(id, programId, seasons, crewSlots, controlSlots, cost, firstTimePrestige, goalDependencies, goalBoosts,
+            launches, cancellationPrestigeDeduction, cancellationRefundPercent, null);
+    }
+
+    /**
+     * The animals a flight carries (user decision, 2026-10-05). They're remembered on the
+     * player's memorial when the flight costs their lives: always at its end if they don't come
+     * home, otherwise only if the flight fails. In the early-era pack only Sputnik 2 carries one.
+     *
+     * @param animals    the animals aboard, by name, as on the first flight
+     * @param returnHome whether the flight is meant to bring them back
+     * @param unnamed    the memorial name for an animal on a later flight, once the named
+     *                   animal is already remembered (a second "Laika" would be wrong)
+     */
+    public record AnimalPassengers(List<Animal> animals, boolean returnHome, String unnamed) {
+
+        /**
+         * Validates and copies.
+         */
+        public AnimalPassengers {
+            Objects.requireNonNull(unnamed, "unnamed must not be null");
+            animals = List.copyOf(animals);
+            if (animals.isEmpty()) {
+                throw new IllegalArgumentException("animalPassengers needs at least one animal");
+            }
+        }
+    }
+
+    /**
+     * One animal passenger.
+     *
+     * @param name       its name, as the memorial shows it
+     * @param portraitId its photo under {@code assets/ui/portraits/}, or {@code null}
+     */
+    public record Animal(String name, String portraitId) {
+
+        /**
+         * Checks the name.
+         */
+        public Animal {
+            Objects.requireNonNull(name, "name must not be null");
+        }
+    }
 
     /** The prefix of a step's rocket slot id; launch {@code n} (1-based) is {@code @rocket-n}. */
     public static final String ROCKET_SLOT_PREFIX = "@rocket-";

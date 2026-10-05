@@ -250,6 +250,7 @@ public final class MissionProgress {
         }
 
         if (missionEndedThisSeason) {
+            rememberPassengers(snapshot, configuration, executedSteps.get(executedSteps.size() - 1), gameTurn);
             releaseSurvivors(snapshot, mission, events);
             endedMissionIds.add(mission.getId());
             return;
@@ -257,6 +258,7 @@ public final class MissionProgress {
 
         int nextSeasonIndex = mission.getCurrentSeasonIndex() + 1;
         if (nextSeasonIndex >= configuration.durationInSeasons()) {
+            rememberPassengers(snapshot, configuration, null, gameTurn);
             releaseSurvivors(snapshot, mission, events);
             // Only a completed, non-failed flight counts toward the repeat tier - design.md §2.6(d).
             // A failing season returned above, so reaching this branch means no step failed.
@@ -1053,6 +1055,32 @@ public final class MissionProgress {
      * @param mission  the mission that just ended
      * @param events   the list to append any retirement departure to
      */
+    /**
+     * Puts a flight's animal passengers on the memorial if the flight cost their lives: at its end
+     * if it had no way home, or when it failed. An animal already remembered by name (a second
+     * flight of Sputnik 2) is remembered by the configuration's unnamed form instead. Draws nothing
+     * from the random stream.
+     *
+     * @param snapshot      the player
+     * @param configuration the configuration flown
+     * @param failedStep    the step the flight failed on, or {@code null} if it completed
+     * @param gameTurn      the turn this resolves
+     */
+    private static void rememberPassengers(PlayerSnapshot snapshot, MissionConfiguration configuration,
+            MissionStep failedStep, int gameTurn) {
+        MissionConfiguration.AnimalPassengers passengers = configuration.animalPassengers();
+        if (passengers == null || (failedStep == null && passengers.returnHome())) {
+            return;
+        }
+        for (MissionConfiguration.Animal animal : passengers.animals()) {
+            boolean remembered = snapshot.getMemorial().stream().anyMatch(entry ->
+                entry.cause() == MemorialEntry.Cause.PASSENGER && entry.name().equals(animal.name()));
+            snapshot.getMemorial().add(new MemorialEntry(remembered ? passengers.unnamed() : animal.name(), 0, gameTurn,
+                MemorialEntry.Cause.PASSENGER, configuration.id(), failedStep == null ? null : failedStep.id(),
+                remembered ? null : animal.portraitId()));
+        }
+    }
+
     private static void releaseSurvivors(PlayerSnapshot snapshot, InProgressMission mission,
             List<ResolutionEvent> events) {
         releaseGroup(snapshot.getAstronauts(), mission.crewIds(), PersonnelGroup.ASTRONAUT, events);

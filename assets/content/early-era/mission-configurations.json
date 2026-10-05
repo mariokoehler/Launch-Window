@@ -726,7 +726,17 @@
       }
     ],
     "cancellationPrestigeDeduction": 375,
-    "cancellationRefundPercent": 10
+    "cancellationRefundPercent": 10,
+    "animalPassengers": {
+      "animals": [
+        {
+          "name": "Laika",
+          "portraitId": "laika"
+        }
+      ],
+      "returnHome": false,
+      "unnamed": "An unnamed dog"
+    }
   },
   {
     "id": "korabl-sputnik-2-orbit",

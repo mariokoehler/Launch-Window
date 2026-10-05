@@ -11,6 +11,12 @@ make_portraits.py) becomes assets/ui/portraits/<archetype>_NNN.jpg: greyscale, 1
 - Saved as RGB, not single-channel: libGDX loads a one-channel image as an alpha texture, which
   would draw as a white smudge. With no colour in it, the extra channels cost almost nothing.
 
+It also converts the memorial photos in assets-raw/memorial/ (real historical photos, such as
+Laika's, 2026-10-05) into assets/ui/portraits/<name>.jpg at 192x192, the memorial plaque's size on a
+high-DPI monitor. Each is cropped to a square around its subject: assets-raw/memorial/crops.json
+gives the square per file as fractions of the image ([left / width, top / height, side / height]),
+so the crop doesn't depend on the file's resolution; a file without an entry is cropped centrally.
+
 Usage:
     python make_portrait_assets.py            # convert every portrait, overwriting
     python make_portrait_assets.py --size 96  # try another size
@@ -25,6 +31,8 @@ from PIL import Image
 HERE = os.path.dirname(os.path.abspath(__file__))
 MANIFEST = os.path.join(HERE, 'manifest.json')
 OUT = os.path.join(HERE, '..', '..', 'assets', 'ui', 'portraits')
+MEMORIAL = os.path.join(HERE, '..', 'memorial')
+MEMORIAL_SIZE = 192
 
 
 def main():
@@ -47,7 +55,36 @@ def main():
         image.save(target, 'JPEG', quality=args.quality, optimize=True, progressive=False)
         total += os.path.getsize(target)
     print(f'{len(manifest)} portraits, {total / 1024:.0f} KB')
+    convert_memorial(args.quality)
     return 0
+
+
+def convert_memorial(quality):
+    """Converts the memorial photos: cropped square around the subject, greyscale, RGB JPEG."""
+    if not os.path.isdir(MEMORIAL):
+        return
+    crops_file = os.path.join(MEMORIAL, 'crops.json')
+    crops = {}
+    if os.path.exists(crops_file):
+        with open(crops_file, encoding='utf-8') as source:
+            crops = json.load(source)
+    for name in sorted(os.listdir(MEMORIAL)):
+        stem, ext = os.path.splitext(name)
+        if ext.lower() not in ('.jpg', '.jpeg', '.png', '.webp'):
+            continue
+        image = Image.open(os.path.join(MEMORIAL, name)).convert('L')
+        width, height = image.size
+        if stem in crops:
+            left, top, side = crops[stem]
+            box = (round(left * width), round(top * height), round(left * width + side * height),
+                   round(top * height + side * height))
+        else:
+            side = min(width, height)
+            box = ((width - side) // 2, (height - side) // 2, (width + side) // 2, (height + side) // 2)
+        image = image.crop(box).resize((MEMORIAL_SIZE, MEMORIAL_SIZE), Image.LANCZOS).convert('RGB')
+        target = os.path.join(OUT, stem + '.jpg')
+        image.save(target, 'JPEG', quality=quality, optimize=True, progressive=False)
+        print('memorial', name, '->', os.path.basename(target))
 
 
 if __name__ == '__main__':

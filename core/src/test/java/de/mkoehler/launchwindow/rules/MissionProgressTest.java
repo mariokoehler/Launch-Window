@@ -54,6 +54,68 @@ class MissionProgressTest {
      * @param configurations the mission configurations to include
      * @return the built catalog
      */
+    /**
+     * A one-step uncrewed flight carrying an animal, with or without a way home.
+     */
+    private static MissionConfiguration passengerFlight(boolean returnHome) {
+        MissionStep step = new MissionStep("orbit",
+            List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)), List.of(), List.of(), false);
+        MissionConfiguration plain = new MissionConfiguration("dog-std", "mercury-program",
+            List.of(new MissionSeason(List.of(step))), 0, 0, 0);
+        return new MissionConfiguration(plain.id(), plain.programId(), plain.seasons(), plain.crewSlots(),
+            plain.controlSlots(), plain.cost(), plain.firstTimePrestige(), plain.goalDependencies(),
+            plain.goalBoosts(), plain.launches(), plain.cancellationPrestigeDeduction(),
+            plain.cancellationRefundPercent(), new MissionConfiguration.AnimalPassengers(
+                List.of(new MissionConfiguration.Animal("Laika", "laika")), returnHome, "An unnamed dog"));
+    }
+
+    /**
+     * A flight with no way home puts its passenger on the memorial when it completes, with her photo;
+     * a second flight remembers an unnamed dog, never a second "Laika".
+     */
+    @Test
+    void aNoReturnFlightRemembersItsPassenger() {
+        ContentCatalog catalog = catalogWith(passengerFlight(false));
+        PlayerSnapshot snapshot = snapshotWithOwnedCapsule(90.0);
+        for (int flight = 0; flight < 2; flight++) {
+            snapshot.getInProgressMissions().put("m" + flight,
+                new InProgressMission("m" + flight, "dog-std", List.of(), List.of()));
+            // First roll 99 passes; then 1 reliability-change factor.
+            MissionProgress.advanceSeason(snapshot, catalog, new ScriptedRandomGenerator(99.0, 0.1), new GoalTally(),
+                7 + flight);
+        }
+
+        assertEquals(2, snapshot.getMemorial().size());
+        MemorialEntry laika = snapshot.getMemorial().get(0);
+        assertEquals("Laika", laika.name());
+        assertEquals(MemorialEntry.Cause.PASSENGER, laika.cause());
+        assertEquals("laika", laika.portraitId());
+        assertEquals(7, laika.turn());
+        assertNull(laika.stepId());
+        assertEquals("An unnamed dog", snapshot.getMemorial().get(1).name());
+        assertNull(snapshot.getMemorial().get(1).portraitId());
+    }
+
+    /**
+     * A flight meant to bring its passengers home remembers them only when it fails, with the step.
+     */
+    @Test
+    void aReturningFlightRemembersItsPassengersOnlyOnFailure() {
+        ContentCatalog catalog = catalogWith(passengerFlight(true));
+        PlayerSnapshot snapshot = snapshotWithOwnedCapsule(90.0);
+        snapshot.getInProgressMissions().put("m0", new InProgressMission("m0", "dog-std", List.of(), List.of()));
+        MissionProgress.advanceSeason(snapshot, catalog, new ScriptedRandomGenerator(99.0, 0.1));
+        assertTrue(snapshot.getMemorial().isEmpty());
+
+        snapshot = snapshotWithOwnedCapsule(10.0);
+        snapshot.getInProgressMissions().put("m1", new InProgressMission("m1", "dog-std", List.of(), List.of()));
+        // First roll 0 fails; no controllers, so saving roll 30 lands in plain failure; 1 reliability factor.
+        MissionProgress.advanceSeason(snapshot, catalog, new ScriptedRandomGenerator(0.0, 30.0, 0.1));
+        assertEquals(1, snapshot.getMemorial().size());
+        assertEquals("Laika", snapshot.getMemorial().get(0).name());
+        assertEquals("orbit", snapshot.getMemorial().get(0).stepId());
+    }
+
     private static ContentCatalog catalogWith(MissionConfiguration... configurations) {
         return new ContentCatalog(List.of(CATEGORY), List.of(PROGRAM), List.of(configurations), List.of(CAPSULE));
     }

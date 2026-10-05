@@ -1074,7 +1074,9 @@ current state alone. Each is an M5 task.
   exist.)* Program categories need a body field
   (Earth, Moon, Sun, Mercury, Venus, Mars, Jupiter, Saturn) for the body picker.
   The available and open counts per body are then derived in the client.
-- **G10. Memorial records (found by the Museum mockup, 2026-10-04).** *(Done
+- **G10. Memorial records (found by the Museum mockup, 2026-10-04).** *(Extended 2026-10-05: animal
+  passengers too, `MemorialEntry.Cause.PASSENGER`, and every plaque shows its portrait or photo. See
+  `design.md` §5 M5, "Laika on the memorial".)* *(Done
   2026-10-04: `PlayerSnapshot.memorial`, a list of `MemorialEntry`, written by
   `MissionProgress` for a catastrophic step and by `RandomEvents` for the perished-astronaut
   event. The Achievements tab also got `PlayerSnapshot.goalRecords`, one `GoalRecord` per

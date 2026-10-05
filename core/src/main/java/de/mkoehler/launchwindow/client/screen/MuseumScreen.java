@@ -3,6 +3,8 @@ package de.mkoehler.launchwindow.client.screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
@@ -51,6 +53,9 @@ public final class MuseumScreen extends ChromeScreen {
     private enum Filter {
         ALL, DONE, OPEN
     }
+
+    /** The portrait on a memorial plaque. */
+    private static final float PORTRAIT_SIZE = 96f;
 
     private static final String MEMORIAL_NOTE = "Valentin Bondarenko, the youngest of the first Soviet cosmonaut "
         + "group, died in March 1961 after a fire in a pure-oxygen pressure chamber at the end of an isolation "
@@ -396,7 +401,8 @@ public final class MuseumScreen extends ChromeScreen {
         if (plaques.isEmpty()) {
             list.add(ui.label("No one has been lost.", Theme.TextStyle.HEADING_SM, Theme.ON_PAGE_STRONG)).padTop(60f)
                 .padBottom(6f).row();
-            list.add(ui.label("Astronauts lost on a mission or in an accident are remembered here.",
+            list.add(ui.label("Astronauts lost on a mission or in an accident, and animals that flew and didn't come "
+                + "home, are remembered here.",
                 Theme.TextStyle.BODY_SM, Theme.ON_PAGE_STRONG)).row();
         }
         for (Museum.Plaque plaque : plaques) {
@@ -409,7 +415,13 @@ public final class MuseumScreen extends ChromeScreen {
         Table card = new Table();
         card.setBackground(ui.rect(Theme.SURFACE_CARD, Theme.NAVY, Theme.BORDER_EMPHASIS));
         card.pad(28f, 32f, 28f, 32f);
-        card.add(ui.label("ASTRONAUT", Theme.TextStyle.EYEBROW, Theme.NAVY)).padBottom(8f).row();
+        TextureRegionDrawable portrait = plaque.portraitId() == null ? null
+            : ui.picture("portraits/" + plaque.portraitId() + ".jpg");
+        if (portrait != null) {
+            card.add(new Image(portrait, Scaling.fill)).size(PORTRAIT_SIZE).padBottom(14f).row();
+        }
+        card.add(ui.label(plaque.kind().toUpperCase(java.util.Locale.ROOT), Theme.TextStyle.EYEBROW, Theme.NAVY))
+            .padBottom(8f).row();
         card.add(ui.label(plaque.name(), Theme.TextStyle.HEADING_LG, Theme.INK)).padBottom(8f).row();
         card.add(new Image(ui.solid(Theme.NAVY))).size(64f, Theme.BORDER_EMPHASIS).padBottom(8f).row();
         card.add(ui.paragraph(plaque.line(), Theme.TextStyle.BODY, Theme.INK)).growX().padBottom(8f).row();

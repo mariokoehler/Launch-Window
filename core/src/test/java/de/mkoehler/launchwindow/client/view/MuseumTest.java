@@ -86,4 +86,23 @@ class MuseumTest {
         assertEquals("Lost on a mission, " + Museum.date(22) + ", aged 31.", plaques.get(0).line());
         assertTrue(plaques.get(0).detail().contains("reentry"), plaques.get(0).detail());
     }
+
+    /**
+     * The real pack's Sputnik 2 carries Laika, and her plaque reads as a passenger's: no age, and a
+     * flight with no way home.
+     */
+    @Test
+    void sputnik2sPassengerHasHerOwnPlaque() {
+        assertEquals("Laika", PACK.missionConfiguration("sputnik-2-orbit").orElseThrow().animalPassengers()
+            .animals().get(0).name());
+        PlayerSnapshot state = new PlayerSnapshot("Zarya", Archetype.SOVIET, 0, 0, 0, 25);
+        state.setMemorial(List.of(new MemorialEntry("Laika", 0, 4, MemorialEntry.Cause.PASSENGER,
+            "sputnik-2-orbit", null, "laika")));
+        Museum.Plaque plaque = Museum.memorial(state, PACK).get(0);
+        assertEquals("Passenger", plaque.kind());
+        assertEquals("laika", plaque.portraitId());
+        assertTrue(plaque.line().startsWith("Flew on "), plaque.line());
+        assertFalse(plaque.line().contains("aged"), plaque.line());
+        assertEquals("The flight had no way home.", plaque.detail());
+    }
 }

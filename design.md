@@ -6347,6 +6347,33 @@ here.
       byte-identical.
     - **Client:** `TurnReportScreen` and `ReplayScreen`, a hub unread dot, and the report
       opening on entering the game.
+  - **Slice: Laika on the memorial — done (2026-10-05, user's idea and decision).** The memorial
+    now remembers animals that flew and didn't come home, not only astronauts.
+    - **Content:** `MissionConfiguration.animalPassengers` (optional): the animals aboard (name and
+      photo id), whether the flight is meant to bring them home, and the name for a later flight's
+      animal once the named one is already remembered. Only `sputnik-2-orbit` carries one: Laika,
+      no return, "An unnamed dog" on repeat flights (unconfirmed, so that no second Laika and no
+      other real dog's name is used for a death that never happened).
+    - **Rule:** `MissionProgress.rememberPassengers` writes a `MemorialEntry` with the new
+      `Cause.PASSENGER` (added last, Kryo enum ordinals) at the flight's end when it had no way
+      home, or when it failed; then the failing step is recorded. It draws nothing from the
+      random stream, so both playouts are byte-identical. A scrub before launch writes nothing,
+      and Sputnik 2 is a one-season flight, so it can't be cancelled in flight. A future
+      multi-season flight with animals would need `MissionCancellation` to remember them too.
+    - **Pack hash changed:** the field is in `mission-configurations.json`, so the bundled pack's
+      hash changed. **Reset the dev data root**: an existing game keeps its frozen copy without
+      the field and shows "pack differs". `baspm_pack.py` emits the field from its
+      `ANIMAL_PASSENGERS` map (backup `.bak-prepassengers`), so regenerating keeps it.
+    - **Client:** a passenger plaque has a "Passenger" eyebrow, no age, and "The flight had no way
+      home." (or the failing step). Every plaque now shows the portrait or photo above the name
+      (`Museum.Plaque.portraitId`), astronauts included. The empty-state text mentions animals.
+    - **Laika's photo:** a 1957 press photo the user supplied, in `assets-raw/memorial/` and
+      converted by `make_portrait_assets.py` (192 px, cropped by `assets-raw/memorial/crops.json`)
+      to `assets/ui/portraits/laika.jpg`. **Open:** record the photo's source and licence before
+      the repo goes public.
+    - **Not done, possible follow-up:** a turn report line when a passenger is lost would need a new
+      `ResolutionEvent` subtype. Korabl-Sputnik 2's dogs aren't covered: Belka and Strelka survived,
+      and a failed flight would need the names of the dogs really lost, which hasn't been decided.
   - **Slice: G4, display text — done (2026-10-05).** Every id in the early-era pack now
     has a name, and most have a short description. Programs, components, configurations
     and rockets with a real story behind them get a history note.
