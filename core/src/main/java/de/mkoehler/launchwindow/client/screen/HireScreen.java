@@ -270,7 +270,11 @@ public final class HireScreen extends ChromeScreen {
                 rebuild();
             }
         });
-        row.add(cancel);
+        row.add(cancel).padRight(Theme.SPACE_4);
+        // Hiring costs time as well as money: nobody can be used before basic training ends.
+        int basic = department.basicSeasons();
+        row.add(ui.label("New hires start with " + basic + (basic == 1 ? " season" : " seasons")
+            + " of basic training.", Theme.TextStyle.BODY_SM, Theme.ON_PAGE));
         row.add().expandX();
         double total = chosen(pool).stream().mapToDouble(Personnel::getSalary).sum();
         row.add(ui.label("Added fixed costs", Theme.TextStyle.EYEBROW, Theme.GOLD_ON_PAGE)).padRight(Theme.SPACE_2);
@@ -301,7 +305,9 @@ public final class HireScreen extends ChromeScreen {
             selected.clear();
             refreshChrome();
             rebuild();
-            String done = hired == 0 ? "Nobody was hired." : "Hired " + hired + (hired == 1 ? " recruit." : " recruits.");
+            int basic = department.basicSeasons();
+            String done = hired == 0 ? "Nobody was hired." : "Hired " + hired + (hired == 1 ? " recruit" : " recruits")
+                + ", off to " + basic + (basic == 1 ? " season" : " seasons") + " of basic training.";
             toast(problems.isEmpty() ? done : done + " " + String.join(" ", new LinkedHashSet<>(problems)),
                 hired > 0 && problems.isEmpty() ? Theme.NoticeKind.SUCCESS : Theme.NoticeKind.INFO);
             if (!problems.isEmpty()) {

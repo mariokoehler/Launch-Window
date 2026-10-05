@@ -103,7 +103,7 @@ final class PersonnelDialogs {
      */
     final class TrainingDialog {
         private final Personnel specialist;
-        private TrainingKind kind = TrainingKind.BASIC;
+        private TrainingKind kind = TrainingKind.ADVANCED;
         private String skill;
         private int target;
 
@@ -152,9 +152,8 @@ final class PersonnelDialogs {
             Table segments = new Table();
             segments.setBackground(ui.rect(new Color(0f, 0f, 0f, 0f), Theme.NAVY, Theme.BORDER_THIN));
             segments.pad(Theme.BORDER_THIN);
-            int basic = department.basicSeasons();
+            // No Basic: basic training only follows a hire, it isn't a player's choice.
             int advanced = TrainingProgress.ADVANCED_TRAINING_SEASONS;
-            segments.add(segment("Basic · " + seasons(basic), TrainingKind.BASIC)).expandX().fillX().uniformX();
             segments.add(segment("Advanced · " + seasons(advanced), TrainingKind.ADVANCED)).expandX().fillX()
                 .uniformX();
             segments.add(segment("Permanent", TrainingKind.PERMANENT)).expandX().fillX().uniformX();
@@ -167,8 +166,7 @@ final class PersonnelDialogs {
             Table picks = new Table();
             picks.left();
             for (String option : department.skills()) {
-                picks.add(skillPick(option)).size(department.hasExperts() ? 96f : 64f, department.hasExperts() ? 66f
-                    : 52f).padRight(Theme.SPACE_2);
+                picks.add(skillPick(option)).size(department.hasExperts() ? 96f : 72f, 66f).padRight(Theme.SPACE_2);
             }
             card.add(picks).padBottom(Theme.SPACE_4).row();
             if (kind == TrainingKind.EXPERT) {
@@ -263,9 +261,10 @@ final class PersonnelDialogs {
             pick.add(glyph).height(18f).width(18f * Math.min(1f, ui.iconAspect(department.icon(option)))).padBottom(4f)
                 .row();
             pick.add(ui.label(department.shortLabel(option), Theme.TextStyle.CAPTION, tone)).row();
-            if (department.hasExperts()) {
-                // Astronauts and controllers see the value, and a gold star on an Expert skill.
-                boolean expert = department.isExpert(specialist, option);
+            {
+                // The current value, so the player sees what training would build on; a gold star on an Expert
+                // skill (astronauts and controllers only).
+                boolean expert = department.hasExperts() && department.isExpert(specialist, option);
                 Table value = new Table();
                 value.add(ui.label(String.valueOf((int) Math.floor(department.skill(specialist, option))),
                     Theme.TextStyle.BODY_STRONG, expert ? Theme.GOLD_TEXT : tone));

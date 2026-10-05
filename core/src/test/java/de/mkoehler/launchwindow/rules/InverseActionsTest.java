@@ -126,6 +126,9 @@ class InverseActionsTest {
 
         assertEquals(PersonnelActions.StartTrainingOutcome.UNKNOWN_SKILL, PersonnelActions.startTraining(snapshot,
             PersonnelGroup.SET, "s1", TrainingKind.ADVANCED, "PILOTING", 0));
+        // Basic training only follows a hire; a player can't choose it.
+        assertEquals(PersonnelActions.StartTrainingOutcome.UNSUPPORTED_KIND, PersonnelActions.startTraining(snapshot,
+            PersonnelGroup.SET, "s1", TrainingKind.BASIC, "ROCKETS", 0));
         assertEquals(PersonnelActions.StartTrainingOutcome.TARGET_NOT_ABOVE_SKILL, PersonnelActions.startTraining(
             snapshot, PersonnelGroup.SET, "s1", TrainingKind.PERMANENT, "ROCKETS", 30));
         assertEquals(PersonnelActions.ResearchOutcome.COMPONENT_NOT_AVAILABLE,

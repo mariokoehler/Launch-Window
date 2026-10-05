@@ -17,6 +17,7 @@ import de.mkoehler.launchwindow.client.view.MissionControl;
 import de.mkoehler.launchwindow.content.MissionConfiguration;
 import de.mkoehler.launchwindow.content.StaffingSlot;
 import de.mkoehler.launchwindow.model.AssignmentState;
+import de.mkoehler.launchwindow.model.TrainingKind;
 import de.mkoehler.launchwindow.model.Building;
 import de.mkoehler.launchwindow.model.InProgressMission;
 import de.mkoehler.launchwindow.model.MissionControlOfficer;
@@ -246,7 +247,9 @@ public final class MissionControlScreen extends ChromeScreen {
         if (officer.getUnavailableSeasons() == 0 && officer.getAssignmentState() == AssignmentState.IDLE) {
             actions.add(actionButton("Train", Theme.ButtonKind.SECONDARY, () -> dialogs.openTraining(officer)))
                 .padRight(6f);
-        } else if (officer.getAssignmentState() == AssignmentState.IN_TRAINING) {
+        } else if (officer.getAssignmentState() == AssignmentState.IN_TRAINING
+            && officer.getTrainingKind() != TrainingKind.BASIC) {
+            // Basic training can't be cut short (PullOutOfTrainingOutcome.BASIC_TRAINING).
             actions.add(actionButton("Pull out", Theme.ButtonKind.SECONDARY, () -> dialogs.confirmPullOut(officer)))
                 .padRight(6f);
         } else if (officer.getAssignmentState() == AssignmentState.ASSIGNED) {

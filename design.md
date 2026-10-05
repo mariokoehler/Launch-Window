@@ -991,6 +991,23 @@ proceeds:
         by coincidence — caught by the advisor, re-derived to 3 instead,
         since §1.2 forbids matching a BASPM tuning constant verbatim even
         unintentionally.
+        **Superseded (user, 2026-10-05, after the first play test):** the
+        lengths are now BASPM's own, **Astronaut basic 4, SET basic 2,
+        Mission Control basic 2, advanced 3**, the same directed exception
+        to §1.2 as the BASPM-close budget values. Basic training also took
+        BASPM's shape: it only follows a hire (a player can't start it,
+        `PersonnelActions.startTraining` refuses BASIC as
+        `UNSUPPORTED_KIND`), and it can't be cut short
+        (`PullOutOfTrainingOutcome.BASIC_TRAINING`). The point is BASPM's
+        "plan ahead" pressure: a new hire can't be bought the season they
+        are needed. One part stays our own, by the user's choice the same
+        day: basic training still grows one random skill on completion
+        (BASPM's gives nothing). **Effect:** `ContentPackPlayouts` reaches
+        all goals in 177 of 200 games, average season 62.2 (185 and 61.8
+        before). `CareerCurves`' average-band crossover moved from 19–21 to
+        26–31 seasons, since a 3-season advanced round gives the same gain
+        as a 2-season one did; a candidate for retuning the age trade-off
+        (§5 M5, G5).
       - **What `BASIC` training's completion actually *does* is this
         session's own invented behavior, not something `baspm.md` §9.3
         specifies — flagged for the user, not decided unilaterally.**

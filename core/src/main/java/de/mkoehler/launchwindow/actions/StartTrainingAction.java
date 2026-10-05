@@ -9,7 +9,7 @@ import de.mkoehler.launchwindow.rules.PersonnelActions;
 import de.mkoehler.launchwindow.rules.PersonnelGroup;
 
 /**
- * Starts basic, advanced, or permanent training ({@link PersonnelActions#startTraining}). The inverse is {@link PullOutOfTrainingAction}.
+ * Starts advanced or permanent training ({@link PersonnelActions#startTraining}). The inverse is {@link PullOutOfTrainingAction}.
  *
  * <p>Journaled as {@code "startTraining"}; see {@code design.md} &sect;5, M4.</p>
  *

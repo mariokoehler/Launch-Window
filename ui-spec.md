@@ -158,9 +158,12 @@ On the right:
     - **Dismiss:** free, refused for an astronaut or controller on a mission
       (crew, CAPCOM, or controller); SET can be dismissed mid-R&D, which frees the
       slot; needs a confirmation.
-12. **Training dialog.** Basic, Advanced (2 seasons), or Permanent (advanced
-    rounds until a target level). Pick the skill with the skill icons, and set the
-    target level for Permanent. **Ref:**
+12. **Training dialog.** Advanced (3 seasons) or Permanent (advanced
+    rounds until a target level), plus Expert for astronauts and controllers. No
+    Basic: basic training only follows a hire *(user, 2026-10-05)*. Pick the skill
+    with the skill icons, each showing the employee's current value in it, and set
+    the target level for Permanent. Nobody in basic training has a Pull out button:
+    it can't be cut short. **Ref:**
     `SET_centre_advanced_training_assignment*.png`.
 13. **Manage department dialog** *(decided: BASPM's one-off adjustment)*. A slider
     from −50 % to +50 % that changes **every salary in the group once** by that
@@ -171,7 +174,9 @@ On the right:
 14. **Hire screen.** The group's candidate pool (it refreshes every season), as
     candidate rows, sorted and filtered by skill. Hire is refused when the
     building's roster cap is reached. New hires go straight into basic training on
-    a random skill (astronauts 3 seasons, SET 1, controllers 3). The existing
+    a random skill (astronauts 4 seasons, SET 2, controllers 2, BASPM's lengths;
+    user, 2026-10-05). It can't be cut short, and the hire screen says how long it
+    takes. The existing
     Personnel Recruitment mockup is this screen.
 15. **History note** *(decided 2026-10-04; how it looks is open)*. A small icon
     placed next to a label, field, or value. On mouse-over it shows a short card,
@@ -741,8 +746,8 @@ toast and dialogs). Decisions made while building them, **all confirmed by the u
   the rules credit the current round of Basic, Advanced *and* Permanent; only Expert
   gets nothing. The dialog now says "They keep partial credit for the round in
   progress." The mockup should be fixed to match.
-- **Training lengths and limits come from `core`**, not the mockup: Basic is
-  `SET_BASIC_TRAINING_SEASONS`, Advanced `ADVANCED_TRAINING_SEASONS`, and Permanent's
+- **Training lengths and limits come from `core`**, not the mockup: Advanced is
+  `ADVANCED_TRAINING_SEASONS` (Basic left the dialog on 2026-10-05), and Permanent's
   target slider starts one above the employee's current value in the chosen skill
   (the server refuses anything else) and ends at the skill cap.
 - **Assigning R&D.** The server always seats a new researcher in the component's
@@ -778,8 +783,8 @@ department.
 **Mocked up (2026-10-04)** as `AstronautComplex` on the `Launch Window — Astronaut
 Complex & Public Affairs Office mockup` canvas; `design.md` §3.13 has the writeup.
 Choices still **unconfirmed**:
-- **Decided (user, 2026-10-04): Expert training is a fourth kind in the Training dialog** (Basic · 3 seasons,
-  Advanced · 2 seasons, Permanent, Expert), not a separate row action. Only skills at
+- **Decided (user, 2026-10-04): Expert training is a fourth kind in the Training dialog** (then Basic,
+  Advanced, Permanent, Expert; Basic left the dialog on 2026-10-05), not a separate row action. Only skills at
   80+ that aren't Expert yet can be picked. The dialog shows the per-season chance
   (25 % at 80 up to 35 % at 100), no skill growth, and nothing on pull-out.
 - An idle astronaut with such a skill gets a gold "Can train toward Expert in …" hint.

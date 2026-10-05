@@ -284,8 +284,8 @@ public final class ScreenSnapshot {
         write(folder, "set-overview.png", new SetCentreScreen(game), null);
         write(folder, "set-training-permanent.png", new SetCentreScreen(game), screen -> screen.openTraining(
             game.session().state().getSetSpecialists().get(0), TrainingKind.PERMANENT, SetSkill.SPACE_PROBES));
-        write(folder, "set-training-basic.png", new SetCentreScreen(game), screen -> screen.openTraining(
-            game.session().state().getSetSpecialists().get(3), TrainingKind.BASIC, null));
+        write(folder, "set-training-advanced.png", new SetCentreScreen(game), screen -> screen.openTraining(
+            game.session().state().getSetSpecialists().get(3), TrainingKind.ADVANCED, SetSkill.ROCKETS));
         write(folder, "set-confirm-dismiss.png", new SetCentreScreen(game), screen -> screen.confirmDismiss(
             game.session().state().getSetSpecialists().get(2)));
         write(folder, "set-manage-department.png", new SetCentreScreen(game),

@@ -12,6 +12,7 @@ import de.mkoehler.launchwindow.client.view.CrewSkills;
 import de.mkoehler.launchwindow.client.view.Department;
 import de.mkoehler.launchwindow.client.view.MissionControl;
 import de.mkoehler.launchwindow.model.AssignmentState;
+import de.mkoehler.launchwindow.model.TrainingKind;
 import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.AstronautSkill;
 import de.mkoehler.launchwindow.model.Building;
@@ -191,7 +192,9 @@ public final class AstronautComplexScreen extends ChromeScreen {
         if (astronaut.getUnavailableSeasons() == 0 && astronaut.getAssignmentState() == AssignmentState.IDLE) {
             actions.add(actionButton("Train", Theme.ButtonKind.SECONDARY, () -> dialogs.openTraining(astronaut)))
                 .padRight(6f);
-        } else if (astronaut.getAssignmentState() == AssignmentState.IN_TRAINING) {
+        } else if (astronaut.getAssignmentState() == AssignmentState.IN_TRAINING
+            && astronaut.getTrainingKind() != TrainingKind.BASIC) {
+            // Basic training can't be cut short (PullOutOfTrainingOutcome.BASIC_TRAINING).
             actions.add(actionButton("Pull out", Theme.ButtonKind.SECONDARY, () -> dialogs.confirmPullOut(astronaut)))
                 .padRight(6f);
         } else if (astronaut.getAssignmentState() == AssignmentState.ASSIGNED) {

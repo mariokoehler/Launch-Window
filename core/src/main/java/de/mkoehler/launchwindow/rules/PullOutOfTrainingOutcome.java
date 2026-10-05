@@ -15,5 +15,8 @@ public enum PullOutOfTrainingOutcome {
     UNKNOWN_PERSONNEL,
 
     /** The employee exists, but is not currently, genuinely training. */
-    NOT_IN_TRAINING
+    NOT_IN_TRAINING,
+
+    /** The employee is in basic training, which every new hire must finish. */
+    BASIC_TRAINING
 }

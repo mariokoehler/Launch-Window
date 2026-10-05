@@ -118,7 +118,7 @@ import java.util.Set;
  * <p>The "bot" here is intentionally simple, per employee per season
  * (chance {@link #REASSIGNMENT_CHANCE_PER_SEASON}): idle either stays idle
  * or starts a real training assignment - a random target skill from that
- * employee's own group, and evenly among {@link TrainingKind#BASIC}/
+ * employee's own group, and evenly between
  * {@link TrainingKind#ADVANCED}/{@link TrainingKind#PERMANENT} (the last
  * with a random target level strictly above the current skill and up to
  * {@link SkillGrowth#SKILL_CAP}, per {@code design.md} &sect;3.4's proposed
@@ -2490,8 +2490,9 @@ public final class PersonnelLifecyclePlayouts {
 
     /**
      * Picks which kind of training a newly-started assignment uses -
-     * evenly among {@link TrainingKind#BASIC}, {@link TrainingKind#ADVANCED},
-     * and {@link TrainingKind#PERMANENT}, except {@code PERMANENT} is
+     * evenly between {@link TrainingKind#ADVANCED} and
+     * {@link TrainingKind#PERMANENT} (basic training only follows a hire,
+     * user decision 2026-10-05), except {@code PERMANENT} is
      * skipped (falls back to {@code ADVANCED}) when the target skill is
      * already too close to {@link SkillGrowth#SKILL_CAP} to leave any
      * meaningful room for a target level above it.
@@ -2501,15 +2502,10 @@ public final class PersonnelLifecyclePlayouts {
      * @return the drawn training kind
      */
     private static TrainingKind drawTrainingKind(Random random, double currentSkill) {
-        int choice = random.nextInt(3);
-        if (choice == 2 && SkillGrowth.SKILL_CAP - currentSkill < 1.0) {
+        if (random.nextBoolean() || SkillGrowth.SKILL_CAP - currentSkill < 1.0) {
             return TrainingKind.ADVANCED;
         }
-        return switch (choice) {
-            case 0 -> TrainingKind.BASIC;
-            case 1 -> TrainingKind.ADVANCED;
-            default -> TrainingKind.PERMANENT;
-        };
+        return TrainingKind.PERMANENT;
     }
 
     /**

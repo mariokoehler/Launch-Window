@@ -77,22 +77,24 @@ import java.util.random.RandomGenerator;
  */
 public final class TrainingProgress {
 
+    /*
+     * The training lengths are BASPM's own (baspm.md 9.3), by the user's decision of 2026-10-05
+     * after the first play test, the same exception as the BASPM-close budget values: basic
+     * training is the time a new hire costs before they can be used, so it should feel like the
+     * original's "plan ahead" pressure.
+     */
+
     /** Fixed length, in seasons, of astronaut basic training. */
-    public static final int ASTRONAUT_BASIC_TRAINING_SEASONS = 3;
+    public static final int ASTRONAUT_BASIC_TRAINING_SEASONS = 4;
 
     /** Fixed length, in seasons, of SET basic training. */
-    public static final int SET_BASIC_TRAINING_SEASONS = 1;
+    public static final int SET_BASIC_TRAINING_SEASONS = 2;
 
-    /**
-     * Fixed length, in seasons, of Mission Control basic training.
-     * Deliberately <b>not</b> 2, BASPM's own value for this group
-     * ({@code baspm.md} &sect;9.3) - {@code design.md} &sect;1.2 forbids
-     * landing on a BASPM tuning constant verbatim, even by coincidence.
-     */
-    public static final int MISSION_CONTROL_BASIC_TRAINING_SEASONS = 3;
+    /** Fixed length, in seasons, of Mission Control basic training. */
+    public static final int MISSION_CONTROL_BASIC_TRAINING_SEASONS = 2;
 
     /** Fixed length, in seasons, of one advanced-training round, the same for every group. */
-    public static final int ADVANCED_TRAINING_SEASONS = 2;
+    public static final int ADVANCED_TRAINING_SEASONS = 3;
 
     /**
      * The minimum skill gain a {@link TrainingKind#PERMANENT} round must
@@ -430,6 +432,8 @@ public final class TrainingProgress {
 
     /**
      * Pulls an employee out of training early: a plain headless operation,
+     * for every kind except {@link TrainingKind#BASIC}, which a new hire must
+     * finish (refused with {@link PullOutOfTrainingOutcome#BASIC_TRAINING}),
      * same posture as {@link #startAstronautExpertTraining} - general
      * across every {@link TrainingKind}, not Expert-specific, since
      * nothing in this project had a pull-out path before this (see this
@@ -461,6 +465,16 @@ public final class TrainingProgress {
         Objects.requireNonNull(group, "group must not be null");
         Objects.requireNonNull(personnelId, "personnelId must not be null");
         Objects.requireNonNull(random, "random must not be null");
+
+        Personnel person = switch (group) {
+            case ASTRONAUT -> findById(snapshot.getAstronauts(), personnelId);
+            case SET -> findById(snapshot.getSetSpecialists(), personnelId);
+            case MISSION_CONTROL -> findById(snapshot.getMissionControlOfficers(), personnelId);
+        };
+        if (person != null && isActivelyTraining(person) && person.getTrainingKind() == TrainingKind.BASIC) {
+            // Basic training is the wait every new hire serves (BASPM's rule): it can't be cut short.
+            return PullOutOfTrainingOutcome.BASIC_TRAINING;
+        }
 
         return switch (group) {
             case ASTRONAUT -> pullOutAstronaut(findById(snapshot.getAstronauts(), personnelId), random);

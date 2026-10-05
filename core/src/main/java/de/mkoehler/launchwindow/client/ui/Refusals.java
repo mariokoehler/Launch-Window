@@ -25,6 +25,7 @@ public final class Refusals {
         Map.entry("SKILL_BELOW_THRESHOLD", "Expert training needs a skill of 80."),
         Map.entry("ALREADY_EXPERT_IN_SKILL", "Already an Expert."),
         Map.entry("NOT_IN_TRAINING", "They're not in training any more."),
+        Map.entry("BASIC_TRAINING", "Basic training can't be cut short."),
         Map.entry("UNKNOWN_EMPLOYEE", "That person isn't on the roster any more."),
         Map.entry("UNKNOWN_PERSONNEL", "That person isn't on the roster any more."),
         Map.entry("UNKNOWN_SPECIALIST", "That person isn't on the roster any more."),

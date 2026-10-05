@@ -210,7 +210,9 @@ public final class SetCentreScreen extends ChromeScreen {
 
         Table actions = new Table();
         actions.add(button("Train", Theme.ButtonKind.SECONDARY, () -> openTraining(specialist))).padRight(6f);
-        if (specialist.getAssignmentState() == AssignmentState.IN_TRAINING) {
+        if (specialist.getAssignmentState() == AssignmentState.IN_TRAINING
+            && specialist.getTrainingKind() != TrainingKind.BASIC) {
+            // Basic training can't be cut short (PullOutOfTrainingOutcome.BASIC_TRAINING).
             actions.add(button("Pull out", Theme.ButtonKind.SECONDARY, () -> confirmPullOut(specialist))).padRight(6f);
         }
         actions.add(button("Dismiss", Theme.ButtonKind.DESTRUCTIVE, () -> confirmDismiss(specialist)));

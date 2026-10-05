@@ -629,8 +629,8 @@ class TrainingProgressTest {
     void pullOutOfTrainingCreditsAPartialGainForASetSpecialist() {
         SetSpecialist specialist = new SetSpecialist("s1", "Set One", 30, 80, 50);
         specialist.setAssignmentState(AssignmentState.IN_TRAINING);
-        specialist.setTrainingKind(TrainingKind.BASIC);
-        specialist.setTrainingSeasonsTotal(TrainingProgress.SET_BASIC_TRAINING_SEASONS + 1);
+        specialist.setTrainingKind(TrainingKind.ADVANCED);
+        specialist.setTrainingSeasonsTotal(TrainingProgress.ADVANCED_TRAINING_SEASONS);
         specialist.setTrainingSeasonsCompleted(1);
         specialist.setTrainingTargetSkill(SetSkill.ROCKETS);
         specialist.setSkill(SetSkill.ROCKETS, 20.0);
@@ -641,7 +641,7 @@ class TrainingProgressTest {
         double expectedFullGain =
             SkillGrowth.diminishingReturnsGain(20.0, specialist.getLearningPotential(), expectedFactor);
         double expectedCreditedGain = SkillGrowth.partialCredit(expectedFullGain, 1,
-            TrainingProgress.SET_BASIC_TRAINING_SEASONS + 1);
+            TrainingProgress.ADVANCED_TRAINING_SEASONS);
 
         PullOutOfTrainingOutcome outcome =
             TrainingProgress.pullOutOfTraining(snapshot, PersonnelGroup.SET, "s1", new Random(1L));
@@ -651,6 +651,30 @@ class TrainingProgressTest {
         assertEquals(20.0 + expectedCreditedGain, specialist.getSkill(SetSkill.ROCKETS));
         assertEquals(TrainingKind.NONE, specialist.getTrainingKind());
         assertEquals(AssignmentState.IDLE, specialist.getAssignmentState());
+    }
+
+    /**
+     * Verifies basic training can't be cut short (BASPM's rule, user decision 2026-10-05), and
+     * that the refusal changes nothing.
+     */
+    @Test
+    void pullOutOfTrainingRefusesBasicTraining() {
+        SetSpecialist specialist = new SetSpecialist("s1", "Set One", 30, 80, 50);
+        specialist.setAssignmentState(AssignmentState.IN_TRAINING);
+        specialist.setTrainingKind(TrainingKind.BASIC);
+        specialist.setTrainingSeasonsTotal(TrainingProgress.SET_BASIC_TRAINING_SEASONS);
+        specialist.setTrainingSeasonsCompleted(1);
+        specialist.setTrainingTargetSkill(SetSkill.ROCKETS);
+        specialist.setSkill(SetSkill.ROCKETS, 20.0);
+        PlayerSnapshot snapshot = new PlayerSnapshot("Agency", Archetype.NASA, 0, 0, 0, 1);
+        snapshot.setSetSpecialists(List.of(specialist));
+
+        assertEquals(PullOutOfTrainingOutcome.BASIC_TRAINING,
+            TrainingProgress.pullOutOfTraining(snapshot, PersonnelGroup.SET, "s1", new Random(1L)));
+        assertEquals(20.0, specialist.getSkill(SetSkill.ROCKETS));
+        assertEquals(TrainingKind.BASIC, specialist.getTrainingKind());
+        assertEquals(AssignmentState.IN_TRAINING, specialist.getAssignmentState());
+        assertEquals(1, specialist.getTrainingSeasonsCompleted());
     }
 
     /**

@@ -48,7 +48,7 @@ public final class PersonnelActions {
         UNKNOWN_EMPLOYEE,
         /** The employee isn't idle (or is unavailable this season). */
         NOT_IDLE,
-        /** The kind isn't BASIC, ADVANCED, or PERMANENT. */
+        /** The kind isn't ADVANCED or PERMANENT (basic training only follows a hire). */
         UNSUPPORTED_KIND,
         /** The skill isn't one of the group's skills. */
         UNKNOWN_SKILL,
@@ -108,15 +108,17 @@ public final class PersonnelActions {
     }
 
     /**
-     * Starts basic, advanced, or permanent training in one skill. The employee must
-     * be idle and available. Permanent training needs a target level above the
+     * Starts advanced or permanent training in one skill. The employee must
+     * be idle and available. Basic training isn't a player's choice: every new hire
+     * starts it on joining ({@link HiringPool}), so BASIC is refused as
+     * {@link StartTrainingOutcome#UNSUPPORTED_KIND}. Permanent training needs a target level above the
      * current skill, and runs advanced-length rounds until it gets there
      * ({@code design.md} &sect;2.2(c)).
      *
      * @param snapshot    the player; mutated only on success
      * @param group       the employee's group
      * @param employeeId  the employee
-     * @param kind        BASIC, ADVANCED, or PERMANENT
+     * @param kind        ADVANCED or PERMANENT
      * @param skillName   the skill's enum name within the group
      * @param targetLevel the permanent target; ignored for the other kinds
      * @return the outcome
@@ -135,7 +137,7 @@ public final class PersonnelActions {
         if (person.getAssignmentState() != AssignmentState.IDLE || person.getUnavailableSeasons() > 0) {
             return StartTrainingOutcome.NOT_IDLE;
         }
-        if (kind != TrainingKind.BASIC && kind != TrainingKind.ADVANCED && kind != TrainingKind.PERMANENT) {
+        if (kind != TrainingKind.ADVANCED && kind != TrainingKind.PERMANENT) {
             return StartTrainingOutcome.UNSUPPORTED_KIND;
         }
         double current;
@@ -159,8 +161,7 @@ public final class PersonnelActions {
         }
         person.setTrainingKind(kind);
         person.setTrainingSeasonsCompleted(0);
-        person.setTrainingSeasonsTotal(kind == TrainingKind.BASIC ? basicLength(group)
-            : TrainingProgress.ADVANCED_TRAINING_SEASONS);
+        person.setTrainingSeasonsTotal(TrainingProgress.ADVANCED_TRAINING_SEASONS);
         person.setTrainingTargetLevel(kind == TrainingKind.PERMANENT ? targetLevel : 0);
         person.setAssignmentState(AssignmentState.IN_TRAINING);
         return StartTrainingOutcome.STARTED;
@@ -236,14 +237,6 @@ public final class PersonnelActions {
         specialist.setRdTargetComponentId(null);
         specialist.setRdSlot(null);
         return ResearchOutcome.RELEASED;
-    }
-
-    private static int basicLength(PersonnelGroup group) {
-        return switch (group) {
-            case ASTRONAUT -> TrainingProgress.ASTRONAUT_BASIC_TRAINING_SEASONS;
-            case SET -> TrainingProgress.SET_BASIC_TRAINING_SEASONS;
-            case MISSION_CONTROL -> TrainingProgress.MISSION_CONTROL_BASIC_TRAINING_SEASONS;
-        };
     }
 
     private static List<? extends Personnel> roster(PlayerSnapshot snapshot, PersonnelGroup group) {
