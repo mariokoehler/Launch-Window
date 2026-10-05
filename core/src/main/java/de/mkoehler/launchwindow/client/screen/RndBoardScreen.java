@@ -57,10 +57,26 @@ public final class RndBoardScreen extends ChromeScreen {
      * @param board which board
      */
     public RndBoardScreen(LaunchWindowGame game, Board board) {
+        this(game, board, null);
+    }
+
+    /**
+     * Builds the screen and opens the assign dialog for one component, as after opening its
+     * program: the player said they want to staff its R&amp;D now.
+     *
+     * @param game        the game, in a session
+     * @param board       which board
+     * @param componentId the component to assign engineers to, or {@code null} for none
+     */
+    public RndBoardScreen(LaunchWindowGame game, Board board, String componentId) {
         super(game, board.crumbs(), board.building, board.title);
         this.board = board;
         this.cards = new RndCards(this, board.title, true);
         rebuild();
+        if (componentId != null) {
+            cards().stream().filter(card -> card.component().id().equals(componentId)).findFirst()
+                .ifPresent(this::openAssign);
+        }
     }
 
     @Override

@@ -119,6 +119,25 @@ class RocketsTest {
     }
 
     @Test
+    void openingReliabilityTakesTheTransferFromRelatedRocketsAsTheyAreNow() {
+        MissionComponent heavy = new MissionComponent("heavy-rocket", SetSkill.ROCKETS, 3, 90, 80,
+            List.of(1.0, 2.0, 3.0, 4.0), 30, List.of(new MissionComponent.ReliabilityTransferSource("light-rocket", 50)),
+            250, 5_000, 3_000, 0, null, new MissionComponent.RocketSpec(RocketClass.LIGHT, 4_000, 1_000, 0, 0));
+        PlayerSnapshot snapshot = soviet(10_000);
+        assertEquals(3, RocketPrograms.openingReliability(snapshot, heavy), "nothing related owned: the baseline");
+
+        RocketPrograms.open(snapshot, "light-rocket", CATALOG);
+        snapshot.getMissionComponents().get("light-rocket").setCurrentReliability(40);
+        assertEquals(23, RocketPrograms.openingReliability(snapshot, heavy), 1e-9, "half of 40 on top of 3");
+
+        snapshot.getMissionComponents().get("light-rocket").setCurrentReliability(80);
+        assertEquals(33, RocketPrograms.openingReliability(snapshot, heavy), 1e-9, "the transfer is capped at 30");
+
+        // A rocket owned from before keeps its own reliability.
+        assertEquals(80, RocketPrograms.openingReliability(snapshot, LIGHT), 1e-9);
+    }
+
+    @Test
     void reopeningAClosedRocketChargesAgainAndKeepsReliability() {
         PlayerSnapshot snapshot = soviet(10_000);
         RocketPrograms.open(snapshot, "light-rocket", CATALOG);

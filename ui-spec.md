@@ -456,6 +456,21 @@ Open shows the price: the creation cost, charged again on every reopening.
 Refused if the VAB is full or its level is too low for the class. Other agencies'
 rockets are hidden.
 
+*Play-test additions (user, built 2026-10-05):*
+- **Explained terms.** Each payload heading has a tooltip (suborbital, LEO low Earth orbit,
+  TLI trans-lunar injection, TPI trans-planetary injection), and the costs read "Creation ·
+  once", "Unit · per launch" and "Upkeep · per season", each with a tooltip.
+- **Related rockets.** An info notice above the list explains that a rocket starts with part of
+  the reliability of related rockets the player owns, taken when it opens, so researching a
+  small rocket first gives a big one a head start. Each row's "Starts at" column shows the
+  reliability the rocket would open with right now (`RocketPrograms.openingReliability`, the
+  value `open()` itself uses), where it comes from, and an **R&D pace** (fast, average or slow,
+  from the slot bands via `SkillGrowth.expectedFullTeamRawAmount`; the thresholds are an
+  unconfirmed default). The mechanic already existed: it's BASPM's own transfer data
+  (`baspm.md` §10.3), e.g. Atlas takes 35 % of Redstone's reliability and 20 % of Jupiter-C's.
+- **After opening,** a dialog asks whether to assign engineers now; **Assign R&D** goes to Rocket
+  R&D with that rocket's assign dialog open.
+
 **4.5.2 Manage rocket programs.** The open rockets with reliability bars, which
 in-flight missions use them, upkeep, and links to Rocket R&D. **Close** needs a
 confirmation: "kept with its reliability, no upkeep; reopening costs the creation

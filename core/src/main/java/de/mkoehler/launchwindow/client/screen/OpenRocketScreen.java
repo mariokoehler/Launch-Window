@@ -14,6 +14,7 @@ import de.mkoehler.launchwindow.client.ui.HistoryNote;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.Programs;
 import de.mkoehler.launchwindow.client.view.Rockets;
+import de.mkoehler.launchwindow.client.view.Tips;
 import de.mkoehler.launchwindow.client.view.SetSkills;
 import de.mkoehler.launchwindow.content.MissionComponent;
 import de.mkoehler.launchwindow.model.SetSkill;
@@ -73,6 +74,11 @@ public final class OpenRocketScreen extends ChromeScreen {
         }
         ScrollPane scroll = scrollPane(list);
         card.add(scroll).expand().fill();
+        // The strategy BASPM never spelled out: open and research a small rocket before a big one.
+        content.add(ui.notice(Theme.NoticeKind.INFO, "Related rockets share their reliability.",
+            "A rocket starts with part of the reliability of related rockets you already own, as they are when "
+                + "you open it. Big rockets are slow to research, so opening and researching a smaller one first "
+                + "gives them a head start.")).growX().padBottom(Theme.SPACE_4).row();
         content.add(card).expand().fill();
     }
 
@@ -102,9 +108,17 @@ public final class OpenRocketScreen extends ChromeScreen {
 
         Table payload = new Table();
         payload.left();
-        String[][] stats = {{"Suborbital", kg(rocket.rocket().payloadToSuborbital())},
-            {"LEO", kg(rocket.rocket().payloadToLeo())}, {"TLI", kg(rocket.rocket().payloadToTli())},
-            {"TPI", kg(rocket.rocket().payloadToTpi())}};
+        String[][] stats = {
+            {"Suborbital", kg(rocket.rocket().payloadToSuborbital()), "Suborbital: up and back down",
+                "The most this rocket can lift on a hop into space that falls back without circling the Earth, "
+                    + "like the first Mercury and Vostok tests."},
+            {"LEO", kg(rocket.rocket().payloadToLeo()), "LEO: low Earth orbit",
+                "The most this rocket can put into orbit a few hundred kilometres up, where satellites and the "
+                    + "first crewed flights circled the Earth."},
+            {"TLI", kg(rocket.rocket().payloadToTli()), "TLI: trans-lunar injection",
+                "The most this rocket can send from Earth onto a path to the Moon."},
+            {"TPI", kg(rocket.rocket().payloadToTpi()), "TPI: trans-planetary injection",
+                "The most this rocket can send onto a path to another planet."}};
         for (String[] stat : stats) {
             Table cell = new Table();
             cell.left();
@@ -112,18 +126,25 @@ public final class OpenRocketScreen extends ChromeScreen {
             cell.add(ui.label(stat[0].toUpperCase(Locale.ROOT), Theme.TextStyle.CAPTION, Theme.INK_MUTED))
                 .padBottom(2f).row();
             cell.add(ui.label(stat[1], Theme.TextStyle.BODY_SM, Theme.INK));
-            payload.add(cell).width(90f).padRight(Theme.SPACE_4);
+            ui.tooltip(cell, stat[2], stat[3]);
+            payload.add(cell).width(84f).padRight(Theme.SPACE_3);
         }
         row.add(payload).expandX().left().padRight(Theme.SPACE_4);
+
+        row.add(reliability(rocket)).width(250f).left().padRight(Theme.SPACE_4);
 
         Table costs = new Table();
         costs.left();
         costs.defaults().left();
-        costs.add(ui.label("Creation " + money(rocket.creationCost()), Theme.TextStyle.CAPTION, Theme.INK_MUTED))
-            .padBottom(2f).row();
-        costs.add(ui.label("Unit " + money(rocket.unitCost()) + " · Upkeep " + money(rocket.maintenanceCost())
-            + "/season", Theme.TextStyle.CAPTION, Theme.INK_MUTED));
-        row.add(costs).width(220f).left().padRight(Theme.SPACE_4);
+        costs.add(tip(ui.label("Creation " + money(rocket.creationCost()) + " · once", Theme.TextStyle.CAPTION,
+            Theme.INK_MUTED), new Tips.Tip("Creation cost", "Paid once to open the program, and again if you "
+                + "reopen it after closing it."))).padBottom(2f).row();
+        costs.add(tip(ui.label("Unit " + money(rocket.unitCost()) + " · per launch", Theme.TextStyle.CAPTION,
+            Theme.INK_MUTED), new Tips.Tip("Unit cost", "Paid for every rocket a mission launches, on top of the "
+                + "mission's own cost."))).padBottom(2f).row();
+        costs.add(tip(ui.label("Upkeep " + money(rocket.maintenanceCost()) + " · per season", Theme.TextStyle.CAPTION,
+            Theme.INK_MUTED), new Tips.Tip("Upkeep", "Paid every season while the program is open.")));
+        row.add(costs).width(190f).left().padRight(Theme.SPACE_4);
 
         Table action = new Table();
         action.right();
@@ -140,6 +161,65 @@ public final class OpenRocketScreen extends ChromeScreen {
         }
         row.add(action).width(240f).right();
         return row;
+    }
+
+    /**
+     * The reliability the rocket would start at if opened now (from the rules), where that comes
+     * from, and how fast it researches.
+     */
+    private Table reliability(MissionComponent rocket) {
+        double start = RocketPrograms.openingReliability(session.state(), rocket);
+        double transfer = start - rocket.baselineReliability();
+        List<String> sources = Rockets.transferSources(rocket, session.state(), session.catalog());
+        Table column = new Table();
+        column.left();
+        column.defaults().left();
+        column.add(ui.label("STARTS AT", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padBottom(2f).row();
+        column.add(ui.label(String.format(Locale.ROOT, "%.0f %% reliability", start), Theme.TextStyle.BODY_STRONG,
+            Theme.INK)).padBottom(2f).row();
+        String from;
+        if (Rockets.kept(rocket, session.state())) {
+            from = "Kept from when it was open";
+        } else if (transfer >= 0.5) {
+            from = String.format(Locale.ROOT, "+%.0f from related rockets", transfer);
+        } else if (!sources.isEmpty()) {
+            from = "Gains from " + String.join(", ", sources);
+        } else {
+            from = "Shares with no other rocket";
+        }
+        column.add(ui.label(from, Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padBottom(2f).row();
+        column.add(ui.label("R&D pace: " + Rockets.rdPace(rocket), Theme.TextStyle.CAPTION, Theme.INK_MUTED));
+        String detail = sources.isEmpty() ? "No other rocket passes reliability to this one."
+            : "When it opens, it gets a share of each related rocket's reliability at that moment: "
+                + String.join(", ", sources) + String.format(Locale.ROOT, ", up to +%.0f in all.",
+                rocket.maxReliabilityTransfer());
+        ui.tooltip(column, "Reliability on opening", detail + " R&D pace is how quickly engineers raise its "
+            + "reliability compared with other rockets.");
+        return column;
+    }
+
+    /**
+     * After a rocket program opens: offers to staff its R&amp;D straight away, since a new rocket
+     * starts with low reliability and engineers are what raise it.
+     *
+     * @param rocket the rocket just opened
+     * @param name   its display name
+     */
+    public void offerResearch(MissionComponent rocket, String name) {
+        Table card = dialogCard("Program opened", "Assign engineers to " + name + "?");
+        card.add(ui.paragraph(String.format(Locale.ROOT, "%s starts at %.0f %% reliability. Engineers on its R&D "
+                + "raise it every season; up to four can work on it at once.", name,
+            RocketPrograms.openingReliability(session.state(), rocket)), Theme.TextStyle.BODY,
+            Theme.INK_MUTED)).padBottom(Theme.SPACE_4).row();
+        Table buttons = new Table();
+        buttons.add(actionButton("Later", Theme.ButtonKind.SECONDARY, () -> {
+            closeDialog();
+            toast("Opened " + name + " — " + money(rocket.creationCost()) + ".", Theme.NoticeKind.SUCCESS);
+        })).padRight(10f);
+        buttons.add(actionButton("Assign R&D", Theme.ButtonKind.PRIMARY,
+            () -> game.setScreen(new RndBoardScreen(game, RndBoardScreen.Board.ROCKET, rocket.id()))));
+        card.add(buttons).right().fill(false, false);
+        showDialog(card);
     }
 
     private Image rocketIcon(SetSkill skill) {
@@ -185,7 +265,7 @@ public final class OpenRocketScreen extends ChromeScreen {
         buttons.add(actionButton("Open Program", Theme.ButtonKind.PRIMARY,
             () -> submit(new OpenRocketProgramAction(rocket.id()), result -> {
                 closeDialog();
-                toast("Opened " + name + " — " + money(rocket.creationCost()) + ".", Theme.NoticeKind.SUCCESS);
+                offerResearch(rocket, name);
             })));
         card.add(buttons).right().fill(false, false);
         showDialog(card);

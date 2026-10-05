@@ -7,6 +7,7 @@ import de.mkoehler.launchwindow.model.Building;
 import de.mkoehler.launchwindow.model.InProgressMission;
 import de.mkoehler.launchwindow.model.OwnedMissionComponent;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
+import de.mkoehler.launchwindow.rules.SkillGrowth;
 import de.mkoehler.launchwindow.rules.BuildingUpgrades;
 import de.mkoehler.launchwindow.rules.RocketPrograms;
 
@@ -71,6 +72,44 @@ public final class Rockets {
      * @param state  the player's state
      * @return whether kept
      */
+    /** A full R&amp;D team's expected raw amount per season at and above which research counts as fast. */
+    private static final double FAST_RD = 50;
+    /** The same, at and above which research counts as average; below it, slow. */
+    private static final double AVERAGE_RD = 42;
+
+    /**
+     * Returns how quickly engineers raise a component's reliability, compared with the other early
+     * rockets: "fast", "average" or "slow", from {@link SkillGrowth#expectedFullTeamRawAmount}.
+     * The thresholds split the early-era rockets (Jupiter-C 56, R-7 Sputnik 52, Redstone 46.5, Atlas
+     * 38.5, R-7 Vostok 35.5); an unconfirmed default.
+     *
+     * @param component the component
+     * @return the pace
+     */
+    public static String rdPace(MissionComponent component) {
+        double raw = SkillGrowth.expectedFullTeamRawAmount(component.rdSlotBandMaxAmounts());
+        return raw >= FAST_RD ? "fast" : raw >= AVERAGE_RD ? "average" : "slow";
+    }
+
+    /**
+     * Returns the related rockets a rocket takes reliability from when it opens, as "Redstone 50 %"
+     * (the share of that rocket's reliability it gets), the agency's own rockets only.
+     *
+     * @param rocket the rocket
+     * @param state  the player
+     * @param catalog the content
+     * @return the sources, in content order
+     */
+    public static List<String> transferSources(MissionComponent rocket, PlayerSnapshot state, ContentCatalog catalog) {
+        List<String> sources = new java.util.ArrayList<>();
+        for (MissionComponent.ReliabilityTransferSource source : rocket.reliabilityTransferSources()) {
+            catalog.missionComponent(source.sourceComponentId())
+                .filter(from -> from.agency() == null || from.agency() == state.getArchetype())
+                .ifPresent(from -> sources.add(ContentNames.of(from.id()) + " " + source.transferPercent() + " %"));
+        }
+        return sources;
+    }
+
     public static boolean kept(MissionComponent rocket, PlayerSnapshot state) {
         OwnedMissionComponent owned = state.getMissionComponents().get(rocket.id());
         return owned != null && !owned.isActive();

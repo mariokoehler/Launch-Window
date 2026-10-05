@@ -132,11 +132,32 @@ public final class RocketPrograms {
         if (owned != null) {
             owned.setActive(true);
         } else {
-            double transfer = ProgramOpening.reliabilityTransferFor(rocket, snapshot.getMissionComponents());
-            double initial = Math.min(rocket.maxReliability(), rocket.baselineReliability() + transfer);
+            double initial = openingReliability(snapshot, rocket);
             snapshot.getMissionComponents().put(rocketId, new OwnedMissionComponent(initial, initial));
         }
         return RocketProgramOutcome.OPENED;
+    }
+
+    /**
+     * Returns the reliability a rocket would have if its program opened now: the reliability it kept
+     * if it was open before, else its baseline plus the one-time transfer from the related rockets
+     * the player owns, at their reliability right now ({@link ProgramOpening#reliabilityTransferFor}).
+     * The transfer is taken only at opening, so researching a related rocket first raises it.
+     *
+     * @param snapshot the player
+     * @param rocket   the rocket
+     * @return the reliability, in percent
+     * @throws NullPointerException if an argument is {@code null}
+     */
+    public static double openingReliability(PlayerSnapshot snapshot, MissionComponent rocket) {
+        Objects.requireNonNull(snapshot, "snapshot must not be null");
+        Objects.requireNonNull(rocket, "rocket must not be null");
+        OwnedMissionComponent owned = snapshot.getMissionComponents().get(rocket.id());
+        if (owned != null) {
+            return owned.getCurrentReliability();
+        }
+        double transfer = ProgramOpening.reliabilityTransferFor(rocket, snapshot.getMissionComponents());
+        return Math.min(rocket.maxReliability(), rocket.baselineReliability() + transfer);
     }
 
     /**

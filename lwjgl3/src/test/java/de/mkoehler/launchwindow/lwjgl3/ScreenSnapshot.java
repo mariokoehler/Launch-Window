@@ -342,6 +342,14 @@ public final class ScreenSnapshot {
         write(folder, "vab-open-confirm.png", new OpenRocketScreen(game), screen -> screen.tryOpen(
             game.session().catalog().missionComponent("r7-vostok").orElseThrow()));
         write(folder, "vab-rocket-rnd.png", new RndBoardScreen(game, RndBoardScreen.Board.ROCKET), null);
+        write(folder, "vab-open-tooltip-leo.png", new OpenRocketScreen(game),
+            screen -> showTooltip(screen.stage().getRoot(), "LEO"));
+        write(folder, "vab-open-tooltip-reliability.png", new OpenRocketScreen(game),
+            screen -> showTooltip(screen.stage().getRoot(), "Reliability on opening"));
+        write(folder, "vab-open-offer-rnd.png", new OpenRocketScreen(game), screen -> screen.offerResearch(
+            game.session().catalog().missionComponent("r7-sputnik").orElseThrow(), "R-7 Sputnik"));
+        write(folder, "vab-rocket-rnd-focus.png", new RndBoardScreen(game, RndBoardScreen.Board.ROCKET,
+            "r7-sputnik"), null);
         game.setSession(ClientSession.start(CREDENTIALS, vabState(true), new GameInfo(info,
             System.currentTimeMillis()), ScreenSnapshot.class.getClassLoader()));
         write(folder, "vab-manage.png", new RocketProgramsScreen(game), null);

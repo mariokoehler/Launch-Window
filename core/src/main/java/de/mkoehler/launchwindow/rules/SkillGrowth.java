@@ -289,6 +289,22 @@ public final class SkillGrowth {
      *                                   {@value MissionComponent#RD_SLOT_COUNT}
      *                                   entries
      */
+    /**
+     * Returns how much a full R&amp;D team draws for a component in an average season, before the
+     * headroom and skill factors of {@link #rdReliabilityGain}: the middle of each of the four slots'
+     * bands, summed. Compares how fast components research; bigger rockets have smaller bands.
+     *
+     * @param rdSlotBandMaxAmounts the component's {@link MissionComponent#rdSlotBandMaxAmounts()}
+     * @return the expected raw amount per season with all four slots filled
+     */
+    public static double expectedFullTeamRawAmount(List<Double> rdSlotBandMaxAmounts) {
+        double total = 0;
+        for (int slot = 0; slot < MissionComponent.RD_SLOT_COUNT; slot++) {
+            total += (rdSlotBandLower(rdSlotBandMaxAmounts, slot) + rdSlotBandUpper(rdSlotBandMaxAmounts, slot)) / 2.0;
+        }
+        return total;
+    }
+
     public static double drawRdSlotRawAmount(List<Double> rdSlotBandMaxAmounts, int slot, RandomGenerator random) {
         double lower = rdSlotBandLower(rdSlotBandMaxAmounts, slot);
         double upper = rdSlotBandUpper(rdSlotBandMaxAmounts, slot);

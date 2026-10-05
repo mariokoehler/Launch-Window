@@ -18,6 +18,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class SkillGrowthTest {
 
     /**
+     * Verifies a full team's expected raw R&amp;D amount is the middle of each slot's band, summed:
+     * bands 19-28, 14-19, 9-14 and 0-9 for these maxima.
+     */
+    @Test
+    void expectedFullTeamRawAmountSumsTheMiddleOfEachBand() {
+        assertEquals(23.5 + 16.5 + 11.5 + 4.5, SkillGrowth.expectedFullTeamRawAmount(List.of(9.0, 14.0, 19.0, 28.0)),
+            1e-9);
+    }
+
+    /**
      * Verifies that applying the diminishing-returns gain never pushes a
      * skill above the cap, even at the highest possible factor and
      * learning potential.
