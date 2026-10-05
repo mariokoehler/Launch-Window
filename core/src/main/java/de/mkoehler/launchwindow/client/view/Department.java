@@ -246,6 +246,20 @@ public enum Department {
     }
 
     /**
+     * Returns a candidate's age line with the years left until they retire, such as
+     * "AGE 58 · RETIRES IN 7 YRS" (2026-10-05): age is a trade-off between experience and a long
+     * career, so the hire screen shows both sides.
+     *
+     * @param person the candidate
+     * @return the caption text
+     */
+    public String ageLine(Personnel person) {
+        int years = retirementAge() - person.getAge();
+        String retires = years <= 1 ? "RETIRES THIS YEAR" : "RETIRES IN " + years + " YRS";
+        return "AGE " + person.getAge() + " · " + retires;
+    }
+
+    /**
      * Returns the roster.
      *
      * @param state the player's state

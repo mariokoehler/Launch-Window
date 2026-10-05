@@ -38,6 +38,9 @@ class DepartmentTest {
         assertTrue(department.isExpert(astronaut, "LEADERSHIP"));
         assertEquals(List.of("FITNESS"), department.expertEligible(astronaut));
         assertEquals(50, department.retirementAge());
+        assertEquals("AGE 30 · RETIRES IN 20 YRS", department.ageLine(astronaut));
+        astronaut.setAge(49);
+        assertEquals("AGE 49 · RETIRES THIS YEAR", department.ageLine(astronaut));
         assertFalse(Department.SET.hasExperts());
     }
 }

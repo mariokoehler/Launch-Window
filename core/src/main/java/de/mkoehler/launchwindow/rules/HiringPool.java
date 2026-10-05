@@ -16,8 +16,10 @@ import de.mkoehler.launchwindow.model.SetSpecialist;
 import de.mkoehler.launchwindow.model.TrainingKind;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.random.RandomGenerator;
@@ -72,11 +74,15 @@ import java.util.random.RandomGenerator;
  *
  * <p><b>Age is a trade-off: experience against potential</b> (user
  * decision, 2026-10-05). A candidate's {@link #experience}, their age
- * measured against their group's career, adds up to
- * {@link #EXPERIENCE_SKILL_BONUS_MAX} to every skill on top of the band's
- * roll, and slides their learning potential from the rookie range down to
- * the veteran range. A veteran helps the next mission but retires soon and
- * barely improves; a rookie needs training but grows and stays. The
+ * measured against their group's career, shifts every skill away from the
+ * band's roll by {@link #experienceBonus}, and slides their learning
+ * potential from the rookie range down to the veteran range. A veteran
+ * helps the next mission but retires soon and barely improves; a rookie
+ * needs training but grows and stays. The shift is centred on the group's
+ * average candidate ({@link #meanExperience}, from the portraits), so the
+ * average hire is exactly as skilled as the band alone makes them: rookies
+ * start a little below the band's roll, veterans above it, and age is a
+ * trade-off, not a difficulty change (user decision, 2026-10-05). The
  * crossover is measured by {@code CareerCurves} in {@code dev-tools}.</p>
  *
  * <p><b>All the numeric constants below are Launch Window's own values, not
@@ -132,11 +138,12 @@ public final class HiringPool {
     public static final int CAREER_START_AGE = 27;
 
     /**
-     * The most a candidate's experience adds to each skill on top of their
-     * band's roll, reached at full {@link #experience} (a candidate at their
-     * group's retirement age). Unconfirmed default, 2026-10-05.
+     * How far apart in every skill a candidate at experience 0 and one at
+     * experience 1 start, all else equal: {@link #experienceBonus} is this
+     * times the candidate's experience minus the group's mean. Unconfirmed
+     * default, 2026-10-05.
      */
-    public static final double EXPERIENCE_SKILL_BONUS_MAX = 20.0;
+    public static final double EXPERIENCE_SKILL_RANGE = 20.0;
 
     /**
      * No candidate starts above this in any skill, however experienced: a
@@ -166,6 +173,8 @@ public final class HiringPool {
 
     /** The highest starting morale a freshly generated candidate can have. */
     public static final int NEW_HIRE_MAX_STARTING_MORALE = 75;
+
+    private static final Map<PersonnelGroup, Double> MEAN_EXPERIENCE = computeMeanExperience();
 
 
     /**
@@ -248,12 +257,13 @@ public final class HiringPool {
             PersonnelNames.Identity who = candidateIdentity(snapshot, id, PersonnelGroup.ASTRONAUT, astronautTaken,
                 astronautRecent);
             double experience = experience(who.age(), PersonnelGroup.ASTRONAUT);
+            double bonus = experienceBonus(who.age(), PersonnelGroup.ASTRONAUT);
             Astronaut candidate = new Astronaut(id, who.name(), who.age(),
                 randomStartingMorale(random), randomLearningPotential(random, experience));
             candidate.setPortraitId(who.portraitId());
             candidate.setSalary(randomSalary(random));
             for (AstronautSkill skill : AstronautSkill.values()) {
-                candidate.setSkill(skill, randomSkill(random, astronautBand, experience));
+                candidate.setSkill(skill, randomSkill(random, astronautBand, bonus));
             }
             astronautBatch.add(candidate);
         }
@@ -268,12 +278,13 @@ public final class HiringPool {
             PersonnelNames.Identity who = candidateIdentity(snapshot, id, PersonnelGroup.SET, setTaken,
                 setRecent);
             double experience = experience(who.age(), PersonnelGroup.SET);
+            double bonus = experienceBonus(who.age(), PersonnelGroup.SET);
             SetSpecialist candidate = new SetSpecialist(id, who.name(), who.age(),
                 randomStartingMorale(random), randomLearningPotential(random, experience));
             candidate.setPortraitId(who.portraitId());
             candidate.setSalary(randomSalary(random));
             for (SetSkill skill : SetSkill.values()) {
-                candidate.setSkill(skill, randomSkill(random, setBand, experience));
+                candidate.setSkill(skill, randomSkill(random, setBand, bonus));
             }
             setBatch.add(candidate);
         }
@@ -288,12 +299,13 @@ public final class HiringPool {
             PersonnelNames.Identity who = candidateIdentity(snapshot, id, PersonnelGroup.MISSION_CONTROL,
                 missionControlTaken, missionControlRecent);
             double experience = experience(who.age(), PersonnelGroup.MISSION_CONTROL);
+            double bonus = experienceBonus(who.age(), PersonnelGroup.MISSION_CONTROL);
             MissionControlOfficer candidate = new MissionControlOfficer(id, who.name(), who.age(),
                 randomStartingMorale(random), randomLearningPotential(random, experience));
             candidate.setPortraitId(who.portraitId());
             candidate.setSalary(randomSalary(random));
             for (MissionControlSkill skill : MissionControlSkill.values()) {
-                candidate.setSkill(skill, randomSkill(random, missionControlBand, experience));
+                candidate.setSkill(skill, randomSkill(random, missionControlBand, bonus));
             }
             missionControlBatch.add(candidate);
         }
@@ -499,8 +511,55 @@ public final class HiringPool {
         return Math.max(0.0, Math.min(1.0, (age - CAREER_START_AGE) / career));
     }
 
-    private static double randomSkill(RandomGenerator random, SkillBand band, double experience) {
-        return Math.min(CANDIDATE_SKILL_CAP, bandSkill(random, band) + experience * EXPERIENCE_SKILL_BONUS_MAX);
+    /**
+     * Returns how much a candidate's age shifts each of their starting
+     * skills: {@link #EXPERIENCE_SKILL_RANGE} times how far their
+     * {@link #experience} is from the group's {@link #meanExperience}.
+     * Negative for a candidate younger in their career than the average one.
+     *
+     * @param age   the candidate's age
+     * @param group the personnel group
+     * @return the shift, in skill points
+     */
+    public static double experienceBonus(int age, PersonnelGroup group) {
+        return (experience(age, group) - meanExperience(group)) * EXPERIENCE_SKILL_RANGE;
+    }
+
+    /**
+     * Returns the average {@link #experience} of a candidate of this group:
+     * over every portrait the group's candidates can get, each age in the
+     * portrait's range counted equally, as {@link PersonnelNames} draws them.
+     *
+     * @param group the personnel group
+     * @return the mean experience, between 0 and 1
+     */
+    public static double meanExperience(PersonnelGroup group) {
+        return MEAN_EXPERIENCE.get(group);
+    }
+
+    private static Map<PersonnelGroup, Double> computeMeanExperience() {
+        Map<PersonnelGroup, Double> means = new EnumMap<>(PersonnelGroup.class);
+        for (PersonnelGroup group : PersonnelGroup.values()) {
+            double total = 0;
+            int portraits = 0;
+            for (PortraitCatalog.Portrait portrait : PortraitCatalog.all()) {
+                if (portrait.group() != group) {
+                    continue;
+                }
+                double sum = 0;
+                for (int age = portrait.minAge(); age <= portrait.maxAge(); age++) {
+                    sum += experience(age, group);
+                }
+                total += sum / (portrait.maxAge() - portrait.minAge() + 1);
+                portraits++;
+            }
+            means.put(group, portraits == 0 ? 0.0 : total / portraits);
+        }
+        return means;
+    }
+
+    private static double randomSkill(RandomGenerator random, SkillBand band, double bonus) {
+        return Math.max(0.0, Math.min(CANDIDATE_SKILL_CAP, bandSkill(random, band) + bonus));
     }
 
     private static double bandSkill(RandomGenerator random, SkillBand band) {

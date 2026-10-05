@@ -6215,22 +6215,30 @@ here.
         `HiringPool.experience` = (age − 27) / (retirement age − 27), from 0 to 1. So a
         42-year-old astronaut (retires at 50) is a veteran, while a 42-year-old
         engineer (retires at 65) is mid-career.
-        - **Skills:** experience adds up to 20 points to every skill, on top of the
-          band's roll, and no candidate starts above 95.
+        - **Skills:** experience shifts every skill away from the band's roll by
+          `HiringPool.experienceBonus` = (experience − the group's mean experience) × 20.
+          The shift is centred: the average candidate gets none, rookies start a few
+          points below the band's roll and veterans above it. *(Centred at the user's
+          request the same day. The first version only ever added, which made hiring
+          easier overall.)* The mean experience is derived from the portraits
+          (`HiringPool.meanExperience`: about 0.32 for astronauts, 0.38 for flight
+          controllers and 0.43 for SET). Skills are clamped to 0–95.
         - **Learning potential:** slides from 45–80 for a rookie to 10–35 at full
           experience.
         - **What the player chooses between:** a veteran helps the next mission at once
           but retires soon and barely improves. A rookie needs training but grows and
           stays.
-        - **Unconfirmed defaults:** the 20-point bonus, the 95 cap, and both
+        - **Unconfirmed defaults:** the 20-point range, the 95 cap, and both
           learning-potential ranges.
 
         `CareerCurves` (`dev-tools`) follows 3,000 real candidates per group and band
         through a training-only career and prints their average skill by seasons since
         hire.
-        - **Average band:** veterans start 11–15 points ahead. Rookies catch up after
-          21–23 seasons (about 5 years), roughly two thirds of the way through a
-          veteran's remaining career, and then stay for 20–35 years.
+        - **Average band (centred):** veterans start 11–15 points ahead. Rookies catch up
+          after 19–21 seasons (about 5 years), roughly 60 % of the way through a
+          veteran's remaining career, and then stay for 20–35 years. The uncentred
+          version caught up after 21–23 seasons: rookies now start lower, with more
+          room to grow.
         - **Excellent band:** veterans retire before rookies fully catch up, but the gap
           closes from about 10 points to 2.
         - **The two settings:** the bonus sets the head start, and the veteran's
@@ -6249,15 +6257,18 @@ here.
         - **Real play:** missions and R&D also grow skills, so the crossover there is
           probably a little later.
 
-        **Harness shift:** random bot hires now get the bonus on average, so staff are
-        more skilled overall.
-        - `ContentPackPlayouts`: 193 → 197 of 200 games complete every goal, failed steps
-          go from 590 to 484 and catastrophic ones from 35 to 15, and the average
-          completion season goes from 54.7 to 53.7.
-        - `PersonnelLifecyclePlayouts`: retired 1,768 → 1,862 (average tenure 42.8
-          seasons), resigned 957, hired 5,579.
-        - Hiring in general is a little more generous now. Worth checking once real
-          players hire deliberately.
+        **Harness shift.** The uncentred first version made random bot hires more
+        skilled on average: 197 of 200 games completed every goal, and catastrophic
+        steps fell from 35 to 15. Centred, `ContentPackPlayouts` is back near where it was
+        before portrait ages: 185 of 200 games complete every goal (186 before portrait
+        ages, 193 with portrait ages alone). There are 42 catastrophic and 572 failed
+        steps, and the average completion season is 61.8. That's a single seed, and the
+        bots hire at random, so treat the gaps between these runs as noise until real
+        players hire deliberately. `PersonnelLifecyclePlayouts`: retired 1,791 (average
+        tenure 44.0 seasons), resigned 973, hired 5,347.
+        - **Hire screen, done in libGDX without a mockup (see the workflow note in
+          `CLAUDE.md`):** the candidate's caption reads "AGE 41 · RETIRES IN 24 YRS"
+          (`Department.ageLine`). Learning potential was already a chip on the row.
         - **History note, used in the hire screen's spec (`ui-spec.md` component 2):**
           see §1.1, "veterans or rookies".
       - **Open:** the client doesn't show the portraits yet. It still draws the initials

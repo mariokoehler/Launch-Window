@@ -78,7 +78,11 @@ through `SeasonResolver` with seeded randomness, and the first winner goes to
 resolution. Next is M5, the libGDX client. **Workflow (user, 2026-10-03):**
 Claude writes the screen spec (`ui-spec.md`, read by Claude Design from GitHub), the user makes
 the mockups in Claude Design, and Claude implements them. Keep `ui-spec.md` current as screens
-change, and close its server gaps G1–G7. **Gotcha for proof runs:** pipe
+change, and close its server gaps G1–G7. **Workflow update (user, 2026-10-05):** small changes to
+screens and components that already exist in libGDX are made in libGDX directly, without a mockup
+round. Check them with `ScreenSnapshot` and record them in `ui-spec.md`. Mockups remain for new
+screens, new components and bigger layout changes. The libGDX client is now the reference for
+anything already built. **Gotcha for proof runs:** pipe
 DevClient input from the Bash tool, not PowerShell. PowerShell's pipe to a
 native process prepends a byte-order mark, which breaks the login line.
 
@@ -278,11 +282,11 @@ writes `core/src/main/resources/personnel/portraits.json`, the trimmed catalog t
 `PersonnelNames` draws the name (lists per ethnicity and sex in `personnel/names.json`) and the age
 (the portrait's age range) to match. A new ethnicity in the art needs a `names.json` entry and a key in
 `make_portraits.py`'s `ETHNICITY_KEYS`; `PersonnelNamesTest` fails until both exist. Details are in
-`design.md` §5 M5, G5. **Age is a trade-off too (user, 2026-10-05):** older candidates start up to 20
-points more skilled but with lower learning potential, measured against each group's career
-(`HiringPool.experience`). Tune it with `dev-tools`' `CareerCurves` (rookie-vs-veteran skill curves);
-numbers in `design.md` §5 M5, G5. The hire screen should show "retires in N years" next to the age
-(`ui-spec.md` component 2). **Next step:** show the portraits in the client (`Personnel.portraitId`; the
+`design.md` §5 M5, G5. **Age is a trade-off too (user, 2026-10-05):** older candidates start more skilled,
+younger ones with higher learning potential, measured against each group's career
+(`HiringPool.experience`). The skill shift is centred on the group's average candidate
+(`experienceBonus`), so it's a trade-off and not a difficulty change. Tune it with `dev-tools`' `CareerCurves` (rookie-vs-veteran skill curves);
+numbers in `design.md` §5 M5, G5. The hire screen shows "AGE 41 · RETIRES IN 24 YRS". **Next step:** show the portraits in the client (`Personnel.portraitId`; the
 PNGs aren't in `assets/` yet). 256x256 is the smallest size the model holds together at. ComfyUI keeps its
 own copies in `E:\Comfy-Desktop\ComfyUI-Shared\output`; never delete those. The portraits are
 the user's own generated art (`assets-raw/` rule).

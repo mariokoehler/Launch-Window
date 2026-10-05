@@ -182,7 +182,7 @@ public final class HireScreen extends ChromeScreen {
         who.left();
         who.defaults().left();
         who.add(ui.label(candidate.getName(), Theme.TextStyle.HEADING_SM, Theme.INK)).padBottom(2f).row();
-        who.add(ui.label("AGE " + candidate.getAge(), Theme.TextStyle.CAPTION, Theme.INK_MUTED));
+        who.add(ui.label(department.ageLine(candidate), Theme.TextStyle.CAPTION, Theme.INK_MUTED));
         inner.add(who).width(170f).left().padRight(Theme.SPACE_4);
 
         Table skills = new Table();

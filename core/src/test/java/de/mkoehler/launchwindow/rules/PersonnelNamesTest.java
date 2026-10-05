@@ -183,10 +183,8 @@ class PersonnelNamesTest {
         HiringPool.refreshCandidates(second, new SplittableRandom(7));
         SetSpecialist nasa = first.getSetSpecialistCandidates().get(0);
         SetSpecialist soviet = second.getSetSpecialistCandidates().get(0);
-        double nasaBonus = HiringPool.experience(nasa.getAge(), PersonnelGroup.SET)
-            * HiringPool.EXPERIENCE_SKILL_BONUS_MAX;
-        double sovietBonus = HiringPool.experience(soviet.getAge(), PersonnelGroup.SET)
-            * HiringPool.EXPERIENCE_SKILL_BONUS_MAX;
+        double nasaBonus = HiringPool.experienceBonus(nasa.getAge(), PersonnelGroup.SET);
+        double sovietBonus = HiringPool.experienceBonus(soviet.getAge(), PersonnelGroup.SET);
         for (var skill : SetSkill.values()) {
             assertEquals(nasa.getSkill(skill) - nasaBonus,
                 soviet.getSkill(skill) - sovietBonus, 1e-9);

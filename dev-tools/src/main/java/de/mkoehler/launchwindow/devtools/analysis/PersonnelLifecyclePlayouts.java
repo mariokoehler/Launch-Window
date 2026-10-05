@@ -2043,7 +2043,7 @@ public final class PersonnelLifecyclePlayouts {
     }
 
     /**
-     * Checks a candidate's skills against their band's range, shifted up by their experience bonus
+     * Checks a candidate's skills against their band's range, shifted by their experience bonus
      * (re-derived here from the age, the group's retirement age and {@link HiringPool}'s public
      * constants) and capped at {@link HiringPool#CANDIDATE_SKILL_CAP}; also checks their learning
      * potential lies in the range for their experience.
@@ -2057,8 +2057,10 @@ public final class PersonnelLifecyclePlayouts {
         };
         double experience = Math.max(0.0, Math.min(1.0, (candidate.getAge() - HiringPool.CAREER_START_AGE)
             / (double) (retirementAge - HiringPool.CAREER_START_AGE)));
-        double bonus = experience * HiringPool.EXPERIENCE_SKILL_BONUS_MAX;
-        double min = Math.min(HiringPool.CANDIDATE_SKILL_CAP, HIRING_SKILL_RANGES[band][0] + bonus) - 1e-9;
+        // Centred on the group's average candidate, whose experience HiringPool derives from the portraits.
+        double bonus = (experience - HiringPool.meanExperience(group)) * HiringPool.EXPERIENCE_SKILL_RANGE;
+        double min = Math.max(0.0, Math.min(HiringPool.CANDIDATE_SKILL_CAP, HIRING_SKILL_RANGES[band][0] + bonus))
+            - 1e-9;
         double max = Math.min(HiringPool.CANDIDATE_SKILL_CAP, HIRING_SKILL_RANGES[band][1] + bonus) + 1e-9;
         double lpMin = HiringPool.ROOKIE_MIN_LEARNING_POTENTIAL
             + experience * (HiringPool.VETERAN_MIN_LEARNING_POTENTIAL - HiringPool.ROOKIE_MIN_LEARNING_POTENTIAL);

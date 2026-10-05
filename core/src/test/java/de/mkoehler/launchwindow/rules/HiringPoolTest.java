@@ -123,8 +123,33 @@ class HiringPoolTest {
      * Returns a candidate's skill without their experience bonus: the band's own roll.
      */
     private static double bandRoll(Astronaut candidate, double skill) {
-        return skill - HiringPool.experience(candidate.getAge(), PersonnelGroup.ASTRONAUT)
-            * HiringPool.EXPERIENCE_SKILL_BONUS_MAX;
+        return skill - HiringPool.experienceBonus(candidate.getAge(), PersonnelGroup.ASTRONAUT);
+    }
+
+    /**
+     * The experience shift is centred: averaged over many candidates it is about zero, so age is a
+     * trade-off and not a difficulty change. Rookies start below the band's roll, veterans above it.
+     */
+    @Test
+    void theExperienceShiftIsCentred() {
+        for (PersonnelGroup group : PersonnelGroup.values()) {
+            double mean = HiringPool.meanExperience(group);
+            assertTrue(mean > 0.0 && mean < 1.0, group + ": " + mean);
+            assertTrue(HiringPool.experienceBonus(HiringPool.CAREER_START_AGE, group) < 0.0);
+            assertTrue(HiringPool.experienceBonus(PersonnelLifecycle.retirementAgeFor(group), group) > 0.0);
+        }
+        double total = 0;
+        int count = 0;
+        for (int round = 0; round < 300; round++) {
+            PlayerSnapshot snapshot = new PlayerSnapshot("Agency " + round,
+                round % 2 == 0 ? Archetype.NASA : Archetype.SOVIET, 0, 0, 0, 1);
+            HiringPool.refreshCandidates(snapshot, new Random(round));
+            for (Astronaut candidate : snapshot.getAstronautCandidates()) {
+                total += HiringPool.experienceBonus(candidate.getAge(), PersonnelGroup.ASTRONAUT);
+                count++;
+            }
+        }
+        assertEquals(0.0, total / count, 1.0, "the average candidate's shift");
     }
 
     /**
