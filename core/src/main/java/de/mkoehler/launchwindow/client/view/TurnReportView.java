@@ -263,6 +263,23 @@ public final class TurnReportView {
     }
 
     /**
+     * Names a step for use inside a sentence ("on the retrofire step"): lowercased, except a joint
+     * flight's craft prefix ("on the Craft B: retrofire step").
+     *
+     * @param configurationId the configuration flown
+     * @param stepId          the step's id
+     * @return the name
+     */
+    public static String stepInSentence(String configurationId, String stepId) {
+        String name = stepName(configurationId, stepId);
+        if (name.startsWith("Craft ") && name.indexOf(": ") > 0) {
+            int colon = name.indexOf(": ") + 2;
+            return name.substring(0, colon) + name.substring(colon).toLowerCase(Locale.ROOT);
+        }
+        return name.toLowerCase(Locale.ROOT);
+    }
+
+    /**
      * Returns the goals settled, with how each came.
      *
      * @param report the report
@@ -277,7 +294,7 @@ public final class TurnReportView {
             } else if (event instanceof GoalSettled goal) {
                 String how = goal.cancelled() ? "credited through the cascade"
                     : lastStep == null ? "reached" : "reached on the "
-                        + stepName(lastStep.missionConfigurationId(), lastStep.stepId()).toLowerCase(Locale.ROOT) + " step";
+                        + stepInSentence(lastStep.missionConfigurationId(), lastStep.stepId()) + " step";
                 lines.add(new GoalLine(goal.goalId(), goal.firstInGame(), how, goal.prestige()));
             }
         }

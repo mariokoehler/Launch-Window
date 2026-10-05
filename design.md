@@ -6380,6 +6380,18 @@ here.
       `hq-details-sputnik-1-note.png`, which pins open the longest note.
     - **History notes moved:** `HistoryNotes` now only holds the client's own notes (the
       Director field). Vostok's Gagarin note moved into the pack.
+    - **Follow-up fixes the same day (advisor review):**
+      - **Category names:** categories carry their own name in `categories.json` (from the
+        converter), and screens now prefer the text file's (`ContentNames.of(id, fallback)`).
+      - **Step text per flight:** shared step text is worded to fit every flight. The suborbital
+        flights override reentry and retrofire, and Korabl-Sputnik 2 overrides its landing,
+        which was on land. An override that only renames a step keeps the shared description.
+      - **Sentences:** step names inside sentences keep the "Craft B:" prefix
+        (`TurnReportView.stepInSentence`).
+      - **Corrected facts:** PS-1 means "simplest satellite". Sputnik 3 flew seven months
+        later. Explorer 1 flipped after its first orbit, not within it.
+      - **Overlap check:** a six-word overlap check against BASPM's full raw text files,
+        comments included, leaves only shared names and dates.
     - **BASPM has no step descriptions,** only names. Ours explain why each step is hard,
       in line with §1.1.
   - **Slice: Mission Control — done (2026-10-04).** The flight

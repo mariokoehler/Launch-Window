@@ -13,7 +13,7 @@
     "sputnik-1": {
       "name": "Sputnik 1",
       "description": "The simplest satellite that could still make history: a polished sphere with a radio transmitter that anyone with a receiver can hear. Fly it to show the world your agency can reach orbit.",
-      "historyNote": "Sputnik 1 was a stopgap. Korolev's bureau was building a much heavier science satellite, Object D, but it was running late and the R-7 was falling short of its planned performance. Korolev pushed for a far simpler 'preliminary satellite', PS-1, instead, and it was built in a few months. Object D flew a year later, as Sputnik 3."
+      "historyNote": "Sputnik 1 was a stopgap. Korolev's bureau was building a much heavier science satellite, Object D, but it was running late and the R-7 was falling short of its planned performance. Korolev pushed for PS-1 instead, short for 'simplest satellite', and it was built in a few months. Object D flew the following May, as Sputnik 3."
     },
     "sputnik-2": {
       "name": "Sputnik 2",
@@ -59,7 +59,7 @@
     "explorer-1-satellite": {
       "name": "Explorer 1 satellite",
       "description": "A slim cylinder of about 14 kg carrying a Geiger counter, temperature sensors and a micrometeorite detector.",
-      "historyNote": "Explorer 1 was meant to spin like a bullet around its long axis. Within its first orbit it was tumbling end over end instead. Its flexing wire antennas were bleeding off energy, and a spinning body that loses energy drifts toward spinning around its fattest axis. The surprise taught engineers a rule that every spacecraft designer has followed since."
+      "historyNote": "Explorer 1 was meant to spin like a bullet around its long axis. After its first orbit it was tumbling end over end instead. Its flexing wire antennas were bleeding off energy, and a spinning body that loses energy drifts toward spinning around its fattest axis. The surprise taught engineers a rule that every spacecraft designer has followed since."
     },
     "mercury-capsule": {
       "name": "Mercury capsule",
@@ -105,15 +105,37 @@
     },
     "korabl-sputnik-2-orbit": {
       "name": "Biological flight and recovery",
-      "description": "A day in orbit with a cabin full of animals and plants, then retrofire, reentry and a landing on home territory with everything alive."
+      "description": "A day in orbit with a cabin full of animals and plants, then retrofire, reentry and a landing on home territory with everything alive.",
+      "steps": {
+        "11-descent-and-splashdown": {
+          "name": "Descent and landing",
+          "description": "Parachutes bring the capsule down on home territory, where the recovery team gets the animals out and back to the doctors."
+        }
+      }
     },
     "vostok-uncrewed-suborbital": {
       "name": "Uncrewed suborbital test",
-      "description": "Try out the capsule on a short up-and-down flight, with a mannequin in the seat, before risking a pilot. The real program skipped this step: the R-7 was built for orbit."
+      "description": "Try out the capsule on a short up-and-down flight, with a mannequin in the seat, before risking a pilot. The real program skipped this step: the R-7 was built for orbit.",
+      "steps": {
+        "08-retrofire": {
+          "description": "The retrorockets fire anyway, to test them for the orbital flights to come. On a suborbital arc the craft comes down whether they work or not."
+        },
+        "10-reentry": {
+          "description": "Falling back steeply into the atmosphere: much slower than coming down from orbit, but hard enough to brake at around ten times normal weight."
+        }
+      }
     },
     "vostok-suborbital": {
       "name": "Suborbital flight",
-      "description": "A pilot's first ride: about a quarter of an hour on a ballistic arc with a few minutes of weightlessness, then an ejection and a parachute landing."
+      "description": "A pilot's first ride: about a quarter of an hour on a ballistic arc with a few minutes of weightlessness, then an ejection and a parachute landing.",
+      "steps": {
+        "07-retrofire": {
+          "description": "The retrorockets fire anyway, to test them for the orbital flights to come. On a suborbital arc the craft comes down whether they work or not."
+        },
+        "10-reentry": {
+          "description": "Falling back steeply into the atmosphere: much slower than coming down from orbit, but hard enough to brake at around ten times normal weight."
+        }
+      }
     },
     "vostok-uncrewed-orbital": {
       "name": "Uncrewed orbital test",
@@ -140,18 +162,42 @@
       "description": "Launch two capsules a day apart into almost the same orbit, so that they pass close enough to talk by radio.",
       "historyNote": "In August 1962 Vostok 3 and 4 came within about 6.5 km of each other, and the press spoke of a rendezvous. It wasn't one: neither capsule could change its orbit, the second launch was simply timed perfectly, and the two drifted apart. Real rendezvous is counterintuitive: to catch a craft ahead of you, you first slow down, which drops you to a lower, faster orbit.",
       "steps": {
-        "01-launch-preparations": { "name": "Craft A: Launch preparations" },
-        "02-countdown": { "name": "Craft A: Countdown" },
-        "03-launch": { "name": "Craft A: Launch" },
-        "04-ascent": { "name": "Craft A: Ascent" },
-        "07-launch-preparations": { "name": "Craft B: Launch preparations" },
-        "08-countdown": { "name": "Craft B: Countdown" },
-        "09-launch": { "name": "Craft B: Launch" },
-        "10-ascent": { "name": "Craft B: Ascent" },
-        "20-retrofire": { "name": "Craft B: Retrofire" },
-        "21-modules-separation": { "name": "Craft B: Modules separation" },
-        "22-reentry": { "name": "Craft B: Reentry" },
-        "23-descent-and-landing": { "name": "Craft B: Descent and landing" }
+        "01-launch-preparations": {
+          "name": "Craft A: Launch preparations"
+        },
+        "02-countdown": {
+          "name": "Craft A: Countdown"
+        },
+        "03-launch": {
+          "name": "Craft A: Launch"
+        },
+        "04-ascent": {
+          "name": "Craft A: Ascent"
+        },
+        "07-launch-preparations": {
+          "name": "Craft B: Launch preparations"
+        },
+        "08-countdown": {
+          "name": "Craft B: Countdown"
+        },
+        "09-launch": {
+          "name": "Craft B: Launch"
+        },
+        "10-ascent": {
+          "name": "Craft B: Ascent"
+        },
+        "20-retrofire": {
+          "name": "Craft B: Retrofire"
+        },
+        "21-modules-separation": {
+          "name": "Craft B: Modules separation"
+        },
+        "22-reentry": {
+          "name": "Craft B: Reentry"
+        },
+        "23-descent-and-landing": {
+          "name": "Craft B: Descent and landing"
+        }
       }
     },
     "explorer-1-orbit": {
@@ -166,12 +212,28 @@
     "mercury-uncrewed-suborbital": {
       "name": "Uncrewed suborbital test",
       "description": "Fly the capsule on a short arc without an astronaut, to prove the rocket, the escape system and the recovery at sea.",
-      "historyNote": "Before Alan Shepard flew, the capsule carried a chimpanzee named Ham, in January 1961. He pulled levers in answer to lights during the flight, showing that work was possible in weightlessness. His capsule came down far off target and began taking on water before the recovery helicopter reached it."
+      "historyNote": "In January 1961, ahead of Alan Shepard, a chimpanzee named Ham rode the capsule. He pulled levers in answer to lights during the flight, showing that work was possible in weightlessness. His capsule came down far off target and began taking on water before the recovery helicopter reached it.",
+      "steps": {
+        "07-retrofire": {
+          "description": "The retrorockets fire anyway, to test them for the orbital flights to come. On a suborbital arc the craft comes down whether they work or not."
+        },
+        "10-reentry": {
+          "description": "Falling back steeply into the atmosphere: much slower than coming down from orbit, but hard enough to brake at around ten times normal weight."
+        }
+      }
     },
     "mercury-suborbital": {
       "name": "Suborbital flight",
       "description": "About fifteen minutes on a ballistic arc: launch, a few minutes of weightlessness, and a splashdown far downrange.",
-      "historyNote": "On the second suborbital flight, in July 1961, Liberty Bell 7's hatch blew off after splashdown. Gus Grissom swam out as the capsule filled and sank. It lay on the floor of the Atlantic, nearly 5 km down, until an expedition raised it in 1999."
+      "historyNote": "In July 1961, moments after splashdown, Liberty Bell 7's hatch blew off. Gus Grissom swam out as the capsule filled and sank. It lay on the floor of the Atlantic, nearly 5 km down, until an expedition raised it in 1999.",
+      "steps": {
+        "07-retrofire": {
+          "description": "The retrorockets fire anyway, to test them for the orbital flights to come. On a suborbital arc the craft comes down whether they work or not."
+        },
+        "10-reentry": {
+          "description": "Falling back steeply into the atmosphere: much slower than coming down from orbit, but hard enough to brake at around ten times normal weight."
+        }
+      }
     },
     "mercury-uncrewed-orbital": {
       "name": "Uncrewed orbital test",
@@ -180,7 +242,7 @@
     },
     "mercury-orbital": {
       "name": "Orbital flight",
-      "description": "An astronaut aboard for a few orbits, then retrofire, reentry and a splashdown in the recovery zone.",
+      "description": "An astronaut aboard for a few orbits, then retrofire, reentry and splashdown where the recovery ships wait.",
       "historyNote": "Scott Carpenter's Aurora 7, in May 1962, came down about 400 km past its target. The capsule was misaligned when the retrorockets fired, and they fired a few seconds late. He waited in his life raft for about three hours before a helicopter lifted him out."
     },
     "mercury-orbital-duration-1": {
@@ -192,18 +254,42 @@
       "name": "Joint launch",
       "description": "Two capsules launched close together into neighboring orbits. Mercury never flew this: it points toward the rendezvous flights that came next.",
       "steps": {
-        "01-launch-preparations": { "name": "Craft A: Launch preparations" },
-        "02-countdown": { "name": "Craft A: Countdown" },
-        "03-launch": { "name": "Craft A: Launch" },
-        "04-ascent": { "name": "Craft A: Ascent" },
-        "07-launch-preparations": { "name": "Craft B: Launch preparations" },
-        "08-countdown": { "name": "Craft B: Countdown" },
-        "09-launch": { "name": "Craft B: Launch" },
-        "10-ascent": { "name": "Craft B: Ascent" },
-        "18-retrofire": { "name": "Craft B: Retrofire" },
-        "19-retrofire-jettison": { "name": "Craft B: Retropack jettison" },
-        "20-reentry": { "name": "Craft B: Reentry" },
-        "21-descent-and-splashdown": { "name": "Craft B: Descent and splashdown" }
+        "01-launch-preparations": {
+          "name": "Craft A: Launch preparations"
+        },
+        "02-countdown": {
+          "name": "Craft A: Countdown"
+        },
+        "03-launch": {
+          "name": "Craft A: Launch"
+        },
+        "04-ascent": {
+          "name": "Craft A: Ascent"
+        },
+        "07-launch-preparations": {
+          "name": "Craft B: Launch preparations"
+        },
+        "08-countdown": {
+          "name": "Craft B: Countdown"
+        },
+        "09-launch": {
+          "name": "Craft B: Launch"
+        },
+        "10-ascent": {
+          "name": "Craft B: Ascent"
+        },
+        "18-retrofire": {
+          "name": "Craft B: Retrofire"
+        },
+        "19-retrofire-jettison": {
+          "name": "Craft B: Retropack jettison"
+        },
+        "20-reentry": {
+          "name": "Craft B: Reentry"
+        },
+        "21-descent-and-splashdown": {
+          "name": "Craft B: Descent and splashdown"
+        }
       }
     }
   },
@@ -254,7 +340,7 @@
     },
     "reentry-preparations": {
       "name": "Reentry preparations",
-      "description": "Turning the craft so its retrorockets point forward along its path, and checking the alignment. Firing at the wrong angle lands it far off target, or not at all."
+      "description": "Turning the craft so its retrorockets point forward along its path, and checking the alignment. Firing at the wrong angle can bring it down far off target."
     },
     "retrofire": {
       "name": "Retrofire",
@@ -274,11 +360,11 @@
     },
     "descent-and-landing": {
       "name": "Descent and landing",
-      "description": "Parachutes open a few kilometers up. The pilot ejects and lands under a separate parachute, because the capsule hits the ground too hard."
+      "description": "Parachutes open a few kilometers up. On a crewed flight the pilot ejects and lands under a separate parachute, because the capsule hits the ground too hard."
     },
     "descent-and-splashdown": {
       "name": "Descent and splashdown",
-      "description": "Parachutes slow the capsule for a landing at sea, where ships and helicopters wait to pick up the crew before the capsule takes on water."
+      "description": "Parachutes slow the capsule for a landing at sea, where ships and helicopters wait to recover it before it takes on water."
     },
     "duration-level-i": {
       "name": "A day in orbit",

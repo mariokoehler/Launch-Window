@@ -72,7 +72,8 @@ public record ContentStrings(Map<String, Text> categories, Map<String, Text> pro
             }
             return new ObjectMapper().readValue(in, ContentStrings.class);
         } catch (com.fasterxml.jackson.core.JsonProcessingException e) {
-            throw new IllegalArgumentException("invalid " + resourcePrefix + "/" + FILE + ": " + e.getOriginalMessage(), e);
+            throw new IllegalArgumentException("invalid " + resourcePrefix + "/" + FILE + ": " + e.getOriginalMessage(),
+                e);
         } catch (IOException e) {
             throw new UncheckedIOException("cannot read " + resourcePrefix + "/" + FILE, e);
         }
@@ -120,10 +121,18 @@ public record ContentStrings(Map<String, Text> categories, Map<String, Text> pro
      */
     public Text step(String configurationId, String stepId) {
         ConfigurationText configuration = configurationId == null ? null : configurations.get(configurationId);
-        if (configuration != null && configuration.steps().containsKey(stepId)) {
-            return configuration.steps().get(stepId);
-        }
         String type = stepType(stepId);
+        if (configuration != null && configuration.steps().containsKey(stepId)) {
+            Text override = configuration.steps().get(stepId);
+            Text shared = steps.get(type);
+            if (shared == null || (override.description() != null && override.name() != null)) {
+                return override;
+            }
+            // An override may rename a step without describing it again, or the other way round.
+            return new Text(override.name() != null ? override.name() : shared.name(),
+                override.description() != null ? override.description() : shared.description(),
+                override.historyNote() != null ? override.historyNote() : shared.historyNote());
+        }
         Text text = steps.get(type);
         if (text == null && (type.startsWith("spc-a-") || type.startsWith("spc-b-"))) {
             // A joint flight's craft-specific step: the shared step's text, named for its craft.

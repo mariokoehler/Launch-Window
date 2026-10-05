@@ -355,7 +355,7 @@ public final class MissionsScreen extends ChromeScreen {
                 null));
             for (String rocketId : mission.getRocketIds()) {
                 session.catalog().missionComponent(rocketId).ifPresent(rocket -> lines.add(new Programs.PriceLine(
-                    ContentNames.of(rocketId) + " (unit cost)", rocket.unitCost(), null)));
+                    ContentNames.of(rocketId) + ", unit cost", rocket.unitCost(), null)));
             }
             Table breakdown = priceBreakdown(lines, preview.refund());
             side.add(breakdown).padBottom(2f).row();

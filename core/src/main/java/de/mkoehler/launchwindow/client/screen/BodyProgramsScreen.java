@@ -89,7 +89,7 @@ public final class BodyProgramsScreen extends ChromeScreen {
             return;
         }
         List<Program> programs = Programs.inCategory(selected, session.state(), session.catalog());
-        right.add(ui.label(selected.name() + " · " + programs.size() + (programs.size() == 1 ? " program"
+        right.add(ui.label(ContentNames.of(selected.id(), selected.name()) + " · " + programs.size() + (programs.size() == 1 ? " program"
             : " programs"), Theme.TextStyle.EYEBROW, Theme.ON_PAGE_STRONG)).left().padBottom(Theme.SPACE_2).row();
         Table grid = new Table();
         grid.top().left();
@@ -119,7 +119,8 @@ public final class BodyProgramsScreen extends ChromeScreen {
         Table text = new Table();
         text.left();
         text.defaults().left();
-        text.add(ui.label(category.name(), Theme.TextStyle.HEADING_SM, Theme.INK)).padBottom(4f).row();
+        text.add(ui.label(ContentNames.of(category.id(), category.name()), Theme.TextStyle.HEADING_SM, Theme.INK))
+            .padBottom(4f).row();
         text.add(ui.label(Programs.counts(Programs.inCategory(category, session.state(), session.catalog()),
             session.state()).text(), Theme.TextStyle.CAPTION, Theme.INK_MUTED));
         button.add(text).expandX().left();

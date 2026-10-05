@@ -266,7 +266,7 @@ public final class AssembleMissionScreen extends ChromeScreen {
             if (rocketId != null) {
                 long unit = session.catalog().missionComponent(rocketId).orElseThrow().unitCost();
                 lines.add(new Programs.PriceLine(ContentNames.of(rocketId) + ", launch " + (launch + 1)
-                    + " (unit cost)", unit, null));
+                    + ", unit cost", unit, null));
                 total += unit;
             }
         }

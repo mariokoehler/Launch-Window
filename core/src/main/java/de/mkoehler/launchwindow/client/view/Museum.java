@@ -307,8 +307,8 @@ public final class Museum {
             if (mission) {
                 String flight = catalog.missionConfiguration(entry.missionConfigurationId())
                     .map(MissionControl::missionName).orElse(ContentNames.of(entry.missionConfigurationId()));
-                detail = "Lost with the crew of " + flight + ", on the " + TurnReportView.stepName(entry.missionConfigurationId(), entry.stepId())
-                    .toLowerCase(Locale.ROOT) + " step.";
+                detail = "Lost with the crew of " + flight + ", on the "
+                    + TurnReportView.stepInSentence(entry.missionConfigurationId(), entry.stepId()) + " step.";
             } else {
                 detail = "Not flying when it happened: reported in that turn's news.";
             }

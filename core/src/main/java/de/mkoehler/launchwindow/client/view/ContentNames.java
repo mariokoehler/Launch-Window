@@ -89,6 +89,19 @@ public final class ContentNames {
         return of(id, installed.names());
     }
 
+    /**
+     * Returns the display name for a content id, or a given name if the pack's text has none: for
+     * records that carry a name of their own, such as program categories.
+     *
+     * @param id       the id
+     * @param fallback the name to use if the pack's text has none
+     * @return the name
+     */
+    public static String of(String id, String fallback) {
+        String name = installed.names().get(id);
+        return name != null ? name : fallback;
+    }
+
     private static String of(String id, Map<String, String> names) {
         if (id == null || id.isBlank()) {
             return "";

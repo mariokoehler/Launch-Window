@@ -55,7 +55,7 @@ public final class ProgramDetailsScreen extends ChromeScreen {
     public ProgramDetailsScreen(LaunchWindowGame game, String programId, CelestialBody fromBody) {
         super(game, crumbs(fromBody, programId), "Headquarters · "
                 + game.session().catalog().category(game.session().catalog().program(programId).orElseThrow().categoryId())
-                .map(category -> category.name()).orElse(""), "Program details");
+                .map(category -> ContentNames.of(category.id(), category.name())).orElse(""), "Program details");
         this.programId = programId;
         this.fromBody = fromBody;
         rebuild();

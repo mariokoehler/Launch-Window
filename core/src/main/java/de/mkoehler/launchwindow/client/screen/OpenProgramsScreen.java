@@ -88,7 +88,8 @@ public final class OpenProgramsScreen extends ChromeScreen {
         about.left();
         about.defaults().left().padBottom(6f);
         about.add(ui.label(ContentNames.of(program.id()), Theme.TextStyle.HEADING_SM, Theme.INK)).row();
-        about.add(chip(session.catalog().category(program.categoryId()).map(c -> c.name()).orElse(""))).row();
+        about.add(chip(session.catalog().category(program.categoryId())
+            .map(c -> ContentNames.of(c.id(), c.name())).orElse(""))).row();
         about.add(ui.label("Upkeep " + money(program.maintenanceCost()) + " / season", Theme.TextStyle.CAPTION,
             Theme.INK_MUTED));
         row.add(about).width(220f).top().left().padRight(Theme.SPACE_5);
