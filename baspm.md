@@ -1081,6 +1081,16 @@ take twice as long to clear basic training as the other two groups, a
 plausible echo of how demanding real astronaut selection/training is.
 Advanced training is a flat **3 seasons** for all three groups.
 
+**What basic training is, code-confirmed (traced 2026-10-05):** a pure waiting period after a
+hire, with no skill gain. When its countdown ends, `Player.UpdateEmployeeInTraining` only calls
+`SetAsAvailable` for a basic trainee (the skill update runs for advanced training alone). It has
+no specialty index, so it trains no particular skill. It **can't be interrupted**: the personnel
+row's Remove from training button (`EmployeeEntryWide.SetValues`) is shown only while
+`IsInAdvancedOrPermanentAdvancedTraining()`, and its confirmation string is
+`CONFIRM_REMOVE_EMPLOYEE_FROM_ADV_TRAINING`. A player can't send anyone to basic training; it
+starts on hiring (`SendToBasicTraining`). The only ways it changes are random events: one more
+season (`REBEmployeeBasicTrainingExtension`) or failing it (`REBEmployeeFailedBasicTraining`).
+
 - **The learning-capacity formula, confirmed exactly as the manual implies**
   (`PersonnelManagerConstants.xml`'s doc comment plus `Player.
   UpdateEmployeeSkillsAfterAdvancedTrainingInner`):

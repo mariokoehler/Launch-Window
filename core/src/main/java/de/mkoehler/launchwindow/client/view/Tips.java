@@ -34,12 +34,14 @@ public final class Tips {
         Map.entry("EVA", "Counts in steps outside the spacecraft. No early mission has one yet."),
         // Flight controllers: the console seats that read each skill.
         Map.entry("PROPULSION", "Read at the BOOSTER console, which watches the rocket."),
-        Map.entry("TRAJECTORY_AND_GNC", "Read at the trajectory consoles: FIDO, GUIDO, RETRO and navigation."),
+        Map.entry("TRAJECTORY_AND_GNC", "Read at the trajectory consoles: FIDO, GUIDO, RETRO and navigation, and at "
+            + "the first satellite flights' FLIGHT DIRECTOR seat."),
         Map.entry("SPACECRAFT_SYSTEMS", "Read at the spacecraft consoles: systems, environmental and network."),
         Map.entry("CREW_SYSTEMS_AND_PAYLOADS", "Read at the SURGEON and EXPERIMENTS consoles."),
         Map.entry("MISSION_OPERATIONS", "Read at the PROCEDURES console."),
         Map.entry(StaffingSlot.FLIGHT_DIRECTOR, "The average of a controller's five skills: what the FLIGHT "
-            + "console reads. The best all-rounders make the best Flight Directors."));
+            + "seat reads on crewed and later flights. The best all-rounders make the best Flight Directors. (The "
+            + "first satellite flights' FLIGHT DIRECTOR seat reads Trajectory & guidance instead.)"));
 
     private Tips() {
     }
@@ -87,10 +89,10 @@ public final class Tips {
      */
     public static Tip morale() {
         return new Tip("Morale", String.format(java.util.Locale.ROOT, "0 to 100. It rises %d a season while they "
-            + "are busy and falls %d while idle. At %d or less they quit, and up to %d they may. A department's "
-            + "average morale also decides how good its next candidates are.",
+            + "are busy (training, R&D or a mission) and falls %d while idle. At %d or less they quit, unless "
+            + "they're on a mission. A department's average morale also decides how good its next candidates are.",
             PersonnelLifecycle.BUSY_MORALE_GAIN_PER_SEASON, PersonnelLifecycle.IDLE_MORALE_LOSS_PER_SEASON,
-            PersonnelLifecycle.RESIGNATION_MORALE_FLOOR, PersonnelLifecycle.DISGRUNTLED_MORALE_BAND_MAX));
+            PersonnelLifecycle.RESIGNATION_MORALE_FLOOR));
     }
 
     /**

@@ -1011,6 +1011,9 @@ proceeds:
       - **What `BASIC` training's completion actually *does* is this
         session's own invented behavior, not something `baspm.md` §9.3
         specifies — flagged for the user, not decided unilaterally.**
+        *(2026-10-05: `baspm.md` §9.3 now traces it. BASPM's basic training
+        gives no skill gain at all; ours keeps a random-skill gain by the
+        user's choice, see the "Superseded" note above.)*
         `baspm.md` §9.3's diminishing-returns gain formula is documented
         there for *advanced* training and mission-based growth; BASPM's own
         basic training is described as a one-time post-hire phase with its
@@ -6268,7 +6271,8 @@ here.
 
         `CareerCurves` (`dev-tools`) follows 3,000 real candidates per group and band
         through a training-only career and prints their average skill by seasons since
-        hire.
+        hire. *(Since 2026-10-05's BASPM training lengths, a 3-season advanced round, the
+        average-band crossover is 26–31 seasons; the numbers below are from before.)*
         - **Average band (centred):** veterans start 11–15 points ahead. Rookies catch up
           after 19–21 seasons (about 5 years), roughly 60 % of the way through a
           veteran's remaining career, and then stay for 20–35 years. The uncentred

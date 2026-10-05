@@ -119,7 +119,9 @@ instruction: starting funds 25,000 / prestige 250 / 3,000 per season, BASPM's
 Normal-difficulty review table, salaries drawn from BASPM's 25-60 range, and
 component maintenance from BASPM's `MaintenanceCost` values. `design.md` §2.1(d)
 flags that §1.2 normally asks for re-derived numbers; this is the user's
-directed exception, to revisit if they prefer stricter re-derivation. The
+directed exception, to revisit if they prefer stricter re-derivation. **Second exception (user, 2026-10-05):** the training lengths are BASPM's own
+too (basic 4/2/2, advanced 3), and basic training follows BASPM's shape
+(mandatory after hiring, can't be cut short), see `design.md` §2.2(c). The
 conversion rate (4 prestige per fund) is my own, unconfirmed. In the harness, the
 bot never goes into debt at these values, so the conversion is covered by unit
 tests only.
@@ -237,6 +239,9 @@ R&D). The hub strip also follows the revised, all-solid mockup.
   every PNG with PIL's `ImageChops.difference(...).getbbox()`.
 - **Pitfall:** a snapshot block that calls `game.setSession` changes the session for
   every shot after it. Add new blocks at the end.
+- **Pitfall:** shots render with no time passing (delta 0). A tooltip's fade-in never finishes
+  unless the shot calls `ScreenSnapshot.showTooltip` (it acts the container), and the waiting chip
+  needs a `render(0.6f)` first.
 
 **Headquarters mission planning built in libGDX (2026-10-04)** (`ui-spec.md`
 §4.6.5–§4.6.8): configuration selection, steps, the planning hub, and Assemble
@@ -334,6 +339,16 @@ create drawables in a rebuild loop; use `UiKit.rect`/`icon`/`cardAccent`, which 
 multiple-choice options and a recommendation each. The user fills it in after the first play test.
 When it comes back, write each outcome into `design.md`/`ui-spec.md` (and the code where it changes
 anything), then remove the settled items from the file.
+
+**First play-test feedback built (2026-10-05):** the server tick fix (see the connection
+paragraph), a waiting chip and hover tooltips (`ui-spec.md` components 16 and 17, built without a
+mockup round and still awaiting the user's OK), BASPM's basic training, the rocket screen's
+explanations and shared-reliability column, post-open navigation, Flight Director sorting, and
+R&D auto-assign with a projected-gain bar (`rules.ResearchPlanning`). Tooltip text lives in
+`client.view.Tips`; read numbers from the rules' constants there, never hard-code them.
+**Pitfall:** a seat titled "FLIGHT DIRECTOR" doesn't always read the average. On the first
+satellite flights it reads Trajectory & guidance (BASPM's own data, `baspm.md` §10.11). Go by the
+seat's skill, never its title.
 
 **Laika on the memorial (user, 2026-10-05):** `MissionConfiguration.animalPassengers` (only
 Sputnik 2) puts animals that don't come home on the memorial (`MemorialEntry.Cause.PASSENGER`).
