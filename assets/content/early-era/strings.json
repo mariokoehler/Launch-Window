@@ -77,12 +77,12 @@
     "jupiter-c": {
       "name": "Jupiter-C",
       "description": "A lengthened Redstone missile topped with a spinning cluster of small solid rockets, just enough to put a very light satellite into orbit.",
-      "historyNote": "Von Braun's team could have reached orbit in September 1956, more than a year before Sputnik. Washington wanted the first American satellite to come from the civilian Vanguard project instead, so that test flew with its top stage left inert, and the rocket only lobbed its payload far downrange."
+      "historyNote": "In September 1956 this rocket could have put a satellite in orbit, a year before Sputnik. Washington wanted the first American satellite to come from the civilian Vanguard project, so the Army flew with a dummy top stage filled with sand, and the payload only arced 5,300 km downrange. After Sputnik and a Vanguard exploding on its pad, a Jupiter-C finally launched Explorer 1 in January 1958."
     },
     "redstone": {
       "name": "Redstone",
       "description": "A single-stage missile, made safe enough to carry an astronaut. It can only lob a capsule on a short suborbital hop.",
-      "historyNote": "Mercury-Redstone 1, in November 1960, rose about ten centimeters and shut itself down: a plug had come out in the wrong order, and the rocket decided the flight was over. The capsule then fired its escape tower away on its own and released its parachutes, leaving a fully fueled rocket on the pad with parachutes draped down its side."
+      "historyNote": "Mercury-Redstone 1, in November 1960, became known as the \"four-inch flight\": the rocket rose about ten centimeters and shut itself down, because a plug had come out in the wrong order and told it the flight was over. The capsule then fired its escape tower away on its own and released its parachutes, leaving a fully fueled rocket on the pad with parachutes draped down its side."
     },
     "atlas": {
       "name": "Atlas",
