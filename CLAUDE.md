@@ -1548,6 +1548,13 @@ Java 25 (`maven.compiler.release`), Maven 3.8.4 confirmed working locally.
 
 - `mvn clean package` from the repo root builds everything and runs the
   tests.
+- **`reset_dev_data.cmd` resets the dev game** (2026-10-05): it deletes everything in `data/` except
+  `game-meta.json` (the game's settings, dev mode included) and `accounts.json`, and clears the
+  client's report read marks (`%USERPROFILE%\.prefs\launchwindow`). `/all` also deletes the
+  accounts, and `/y` skips the question. Run it with the server stopped, whenever a note says
+  "reset the dev data root". It ends in `pause` like the start scripts. In an automated shell, pass
+  `/y` with `< nul` and call it as `.eset_dev_data.cmd`: this sandbox sets
+  `NoDefaultCurrentDirectoryInExePath`, so a bare script name isn't found.
 - `start_client.cmd` / `start_server.cmd` reinstall `core` and run the
   module — but **don't run them from an automated/non-interactive shell,
   they end in `pause`**; use the underlying commands directly instead (see
