@@ -473,6 +473,8 @@ public final class ScreenSnapshot {
         startSession(game, planningState(11, 25_000), info);
         write(folder, "plan-configs.png", new MissionConfigsScreen(game, "vostok"), null);
         write(folder, "plan-steps.png", new MissionStepsScreen(game, "vostok-orbital"), null);
+        write(folder, "plan-steps-one-season.png", new MissionStepsScreen(game, "sputnik-1-orbit"), null);
+        write(folder, "plan-steps-extended.png", new MissionStepsScreen(game, "sputnik-1-extended"), null);
         write(folder, "plan-assessment.png", new MissionPlanScreen(game, "vostok-orbital",
             MissionPlanScreen.Tab.ASSESSMENT), null);
         write(folder, "plan-rockets.png", new MissionPlanScreen(game, "vostok-orbital", MissionPlanScreen.Tab.ROCKETS),

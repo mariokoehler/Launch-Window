@@ -137,9 +137,20 @@ public final class MissionStepsScreen extends ChromeScreen {
         }
         kv(card, "Staffing", staffing());
         boolean crewed = Missions.crewCount(configuration) > 0;
-        kv(card, "Once flying", crewed ? "Crewed, so it can't be abandoned. Scrubbing before launch refunds in full."
-            : "Can be abandoned in flight for a " + configuration.cancellationRefundPercent() + " % refund and "
-                + configuration.cancellationPrestigeDeduction() + " prestige. Scrubbing before launch refunds in full.");
+        // A mission can only be called off between its seasons (MissionCancellation), so a one-season
+        // flight never can; and the prestige figure is a loss, never a reward (play-test confusion).
+        String scrub = "Scrubbing before launch refunds in full.";
+        String onceFlying;
+        if (configuration.durationInSeasons() == 1) {
+            onceFlying = scrub + " It flies in a single season, so once launched it runs to the end.";
+        } else if (crewed) {
+            onceFlying = scrub + " Crewed, so once flying it can't be called off.";
+        } else {
+            onceFlying = scrub + String.format(Locale.ROOT, " Between seasons it can be called off: %d %% of the "
+                + "launch cost back, but you lose %,d prestige. Prestige already earned is kept.",
+                configuration.cancellationRefundPercent(), configuration.cancellationPrestigeDeduction());
+        }
+        kv(card, "Once flying", onceFlying);
         return card;
     }
 
