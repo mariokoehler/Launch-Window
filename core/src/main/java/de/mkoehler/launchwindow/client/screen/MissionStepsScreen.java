@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.Theme;
+import de.mkoehler.launchwindow.client.ui.HistoryNote;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.CrewSkills;
 import de.mkoehler.launchwindow.client.view.Missions;
@@ -34,6 +35,9 @@ import java.util.Locale;
  * @author Mario Koehler
  */
 public final class MissionStepsScreen extends ChromeScreen {
+
+    /** The width of the summary card's description: the 420 px column less the card's padding. */
+    private static final float SUMMARY_TEXT_WIDTH = 384f;
 
     private final MissionConfiguration configuration;
 
@@ -103,11 +107,22 @@ public final class MissionStepsScreen extends ChromeScreen {
         Table card = ui.card();
         card.defaults().left();
         Table head = new Table();
-        head.add(ui.label(Missions.name(configuration), Theme.TextStyle.HEADING_SM, Theme.INK)).expandX().left();
+        Table title = new Table();
+        title.add(ui.label(Missions.name(configuration), Theme.TextStyle.HEADING_SM, Theme.INK));
+        String note = ContentNames.historyNote(configuration.id());
+        if (note != null) {
+            title.add(new HistoryNote(ui, note)).size(HistoryNote.ICON_SIZE).padLeft(Theme.SPACE_2);
+        }
+        head.add(title).expandX().left();
         int flown = Missions.flown(configuration, session.state());
         head.add(ui.label(flown == 0 ? "Not flown yet" : "Flown " + flown + " ×", Theme.TextStyle.CAPTION,
             Theme.INK_MUTED));
         card.add(head).growX().colspan(2).padBottom(Theme.SPACE_3).row();
+        String description = ContentNames.description(configuration.id());
+        if (description != null) {
+            card.add(ui.paragraph(description, Theme.TextStyle.BODY_SM, Theme.INK)).width(SUMMARY_TEXT_WIDTH).colspan(2)
+                .padBottom(Theme.SPACE_3).row();
+        }
         String rockets = configuration.launches().size() == 1 ? "the rocket" : "the rockets";
         kv(card, "Cost", money(configuration.cost()) + " + " + rockets);
         kv(card, "Prestige", String.format(Locale.ROOT, "%,d", Missions.nextPrestige(configuration, session.state()))
@@ -245,7 +260,7 @@ public final class MissionStepsScreen extends ChromeScreen {
     private void stepRow(Table grid, float[] widths, int number, MissionStep step) {
         cell(grid, ui.label(String.valueOf(number), Theme.TextStyle.BODY_SM, Theme.INK_MUTED), widths[0]).pad(7f, 0f,
             7f, 14f);
-        cell(grid, ui.paragraph(MissionPlanScreen.stepName(step), Theme.TextStyle.BODY_STRONG, Theme.INK), widths[1])
+        cell(grid, ui.paragraph(MissionPlanScreen.stepName(configuration.id(), step), Theme.TextStyle.BODY_STRONG, Theme.INK), widths[1])
             .pad(7f, 0f, 7f, 14f);
 
         HorizontalGroup components = flow();

@@ -364,7 +364,7 @@ public final class MissionPlanScreen extends ChromeScreen {
             }
             Table nameCell = new Table();
             nameCell.left();
-            nameCell.add(ui.label(stepName(step.step()), Theme.TextStyle.BODY_STRONG, Theme.INK)).left();
+            nameCell.add(ui.label(stepName(configuration.id(), step.step()), Theme.TextStyle.BODY_STRONG, Theme.INK)).left();
             if (step.endsFlight() >= WEAK_STEP) {
                 Table weak = new Table();
                 weak.setBackground(ui.rect(new Color(0f, 0f, 0f, 0f), Theme.GOLD_TEXT, Theme.BORDER_THIN));
@@ -411,14 +411,14 @@ public final class MissionPlanScreen extends ChromeScreen {
     }
 
     /**
-     * Names a step from its id ("Launch preparations" for {@code 01-launch-preparations}).
+     * Names a step from the pack's text ("Launch preparations" for {@code 01-launch-preparations}).
      *
-     * @param step the step
+     * @param configurationId the configuration, for steps it names on its own
+     * @param step            the step
      * @return the name
      */
-    static String stepName(MissionStep step) {
-        String name = ContentNames.of(step.id().replaceFirst("^\\d+-", ""));
-        return name.isEmpty() ? name : name.charAt(0) + name.substring(1).toLowerCase(Locale.ROOT);
+    static String stepName(String configurationId, MissionStep step) {
+        return ContentNames.step(configurationId, step.id());
     }
 
     /**

@@ -438,6 +438,27 @@ confirms `MissionStep.TypeID` values
 vocabulary, not yet fully enumerated) and reinforces the outcome taxonomy
 from `MissionStepOutcome.cs` (§2.1).
 
+**Where each kind of content text lives (indexed 2026-10-05, for G4).** All under
+`General Container\EN\`, keyed by BASPM's own ids (the converter's maps in
+`E:\Temp\BASPM	oolsaspm_pack.py` and `goals.map.json` translate to ours):
+
+- **Categories:** `ProgramCategoriesStringsEN.xml`, `<NN>-Name`/`-Description`/`-Brief`.
+- **Programs:** `ProgramsStringsEN.xml`, `<NN-NN>-Name`/`-Description`; historic facts in
+  `ProgramsHistoricFactsStringsEN.xml`, keyed `<NN-NN>`.
+- **Components:** `MissionComponentsStringsEN.xml`, `<COMPONENT_ID>-Name`/`-Description`;
+  facts in `MissionComponentsHistoricFactsStringsEN.xml`, keyed by component id.
+- **Configurations:** one `MsnCnfg<NN-NN>StringsEN.xml` per program, `<NN-NN-i>-Name`/
+  `-Description`, with a "Did you know" comment block; facts in
+  `MissionsConfigurationsHistoricFactsStringsEN.xml`, keyed `<NN-NN-i>`.
+- **Steps:** `MsnSimCommonStringsEN.xml`, `STRING_NNN` with `Type="Name"` only. BASPM has
+  **no step descriptions**.
+- **Goals:** `GoalsStringsEN.xml`, `<GOAL_ID>-Name`/`-Description`.
+
+**Its facts aren't always right.** The program text has 40 mice on Korabl-Sputnik 2 and
+the configuration facts 28. Vostok 5's launch is 14 June in one entry and 15 June in another.
+It repeats the old account that Laika lived for days. Check the figures before using any of
+them.
+
 ### 3.3 Unity-serialized scene data
 
 `monobehaviours\` (§1.2) — scene wiring only, not balance data (confirmed:

@@ -10,6 +10,7 @@ import de.mkoehler.launchwindow.actions.OpenRocketProgramAction;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.Refusals;
 import de.mkoehler.launchwindow.client.ui.Theme;
+import de.mkoehler.launchwindow.client.ui.HistoryNote;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.Programs;
 import de.mkoehler.launchwindow.client.view.Rockets;
@@ -84,7 +85,13 @@ public final class OpenRocketScreen extends ChromeScreen {
         Table about = new Table();
         about.left();
         about.defaults().left();
-        about.add(ui.label(ContentNames.of(rocket.id()), Theme.TextStyle.HEADING_SM, Theme.INK)).padBottom(4f).row();
+        Table name = new Table();
+        name.add(ui.label(ContentNames.of(rocket.id()), Theme.TextStyle.HEADING_SM, Theme.INK));
+        String note = ContentNames.historyNote(rocket.id());
+        if (note != null) {
+            name.add(new HistoryNote(ui, note)).size(HistoryNote.ICON_SIZE).padLeft(Theme.SPACE_2);
+        }
+        about.add(name).padBottom(4f).row();
         Table chips = new Table();
         chips.add(chip(Rockets.className(rocket.rocket().rocketClass())));
         if (rocket.associatedSkill() == SetSkill.HUMAN_RATED_ROCKETS) {

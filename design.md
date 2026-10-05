@@ -176,7 +176,18 @@ same session it comes up**, the same standing-note-to-self habit as
     and "Kazuo". Many of them, and their families, were held in internment
     camps during the Second World War. It fits a history note on a Japanese-
     American employee's portrait card, if the game ever shows one.
-  - **Candidate: Belka and Strelka (Korabl-Sputnik 2).** In August 1960 the
+  - **G4's history notes (2026-10-05)** are now in `assets/content/early-era/strings.json`,
+    including the two candidates below marked as used. New ones written there: Sputnik 1 as
+    a stopgap for Object D, Laika (dying within hours, disclosed in 2002), Vanguard's
+    televised explosion, Glenn's heat-shield warning, Vostok's self-righting sphere, Explorer
+    1's flat spin (the major-axis rule), the R-7 and Atlas lighting every engine on the
+    ground, the Atlas's pressurized balloon tanks, the Jupiter-C's held-back 1956 flight,
+    Mercury-Redstone 1's "four-inch flight", Ivan Ivanovich's choir and borscht recording,
+    Gagarin's 1-2-5 unlock code, Titov, Bykovsky and Tereshkova, the Vostok 3/4 "group
+    flight" (why rendezvous is counterintuitive), Van Allen's belts, Ham, Liberty Bell 7,
+    Enos, Aurora 7 and Faith 7.
+  - **Candidate: Belka and Strelka (Korabl-Sputnik 2).** *(Used, 2026-10-05: the
+    Korabl-Sputnik 2 program's note.)* In August 1960 the
     two dogs became the first animals to orbit Earth and come back alive,
     along with mice, rats and plants. Strelka later had puppies, and
     Khrushchev gave one of them, Pushinka, to Caroline Kennedy in 1961. It
@@ -191,7 +202,8 @@ same session it comes up**, the same standing-note-to-self habit as
     the figures before using it. It fits Vostok Orbital's "Retrofire" step
     on the configuration details screen, and it says why that step matters
     so much in the odds.
-  - **Candidate: Sputnik 1's beeps led to satellite navigation.** Sputnik 1
+  - **Candidate: Sputnik 1's beeps led to satellite navigation.** *(Used, 2026-10-05: the
+    Sputnik 1 satellite's note.)* Sputnik 1
     radioed only a simple beep, for about three weeks until its batteries
     ran out. Two young physicists at Johns Hopkins' Applied Physics
     Laboratory listened to it and found they could work out its whole orbit
@@ -6335,6 +6347,41 @@ here.
       byte-identical.
     - **Client:** `TurnReportScreen` and `ReplayScreen`, a hub unread dot, and the report
       opening on entering the game.
+  - **Slice: G4, display text — done (2026-10-05).** Every id in the early-era pack now
+    has a name, and most have a short description. Programs, components, configurations
+    and rockets with a real story behind them get a history note.
+    - **Source (user decision, 2026-10-05):** the content follows BASPM's own data, as the
+      pack already did, with names and text rewritten in our own words. The facts were
+      pulled out of BASPM's English Text Scripts (`baspm.md` §3.2) and written up from
+      those facts, never from BASPM's sentences. The numbers in the history notes were
+      checked against outside sources, because BASPM's own facts contradict each other.
+      Its program text has 40 mice on Korabl-Sputnik 2 and its configuration facts say 28,
+      and it repeats the outdated account that Laika lived for days.
+    - **Format:** `assets/content/<pack>/strings.json` holds categories, programs,
+      components, configurations, steps and goals, each with `name`, `description` and an
+      optional `historyNote`.
+      - **Steps:** keyed by step type, the id without its number. A `spc-a-`/`spc-b-` type
+        falls back to the shared step's text, named "Craft A: …"/"Craft B: …". A
+        configuration can override single steps by their full id, which the joint flights
+        need for their second launch.
+      - **Configuration names:** relative to their program ("Orbital flight").
+        `ContentNames.of` gives the full "Vostok · Orbital flight", and `Missions.name` the
+        relative one.
+    - **Deliberately not frozen:** `strings.json` is not in `ContentPackLoader.FILES`. It
+      changes no rule, so it isn't hashed or copied into a game's frozen pack, and the
+      client reads its own bundled copy (installed in `ClientSession.start`). A text fix
+      reaches running games without changing their hash, and no dev data reset was needed.
+      Once the G1 pack download exists, a downloaded pack uses the client's bundled text,
+      or names made from ids where there is none.
+    - **Checks:** `ContentStringsTest` covers the pack both ways (everything named, no stray
+      or mistyped keys, every step resolves), ids unique across kinds, length caps (name
+      40, description 260, note 460), and every letter in `Theme.CHARACTERS`.
+      `ContentPackPlayouts` stayed byte-identical. `ScreenSnapshot` gained
+      `hq-details-sputnik-1-note.png`, which pins open the longest note.
+    - **History notes moved:** `HistoryNotes` now only holds the client's own notes (the
+      Director field). Vostok's Gagarin note moved into the pack.
+    - **BASPM has no step descriptions,** only names. Ours explain why each step is hard,
+      in line with §1.1.
   - **Slice: Mission Control — done (2026-10-04).** The flight
     controllers, scheduled missions with Scrub, active missions with Cancel, and
     Re-staff. Details and unconfirmed choices are in `ui-spec.md` §4.7's

@@ -224,7 +224,7 @@ public final class TurnReportView {
             return "";
         }
         MissionStepResolved last = steps.get(steps.size() - 1);
-        String stepName = stepName(last.stepId());
+        String stepName = stepName(last.missionConfigurationId(), last.stepId());
         if (last.outcome() == MissionStepOutcome.CATASTROPHIC) {
             return "Lost on step " + steps.size() + ", " + stepName + ". The crew didn't survive.";
         }
@@ -252,14 +252,14 @@ public final class TurnReportView {
     }
 
     /**
-     * Names a step from its id ("Launch preparations" for {@code 01-launch-preparations}).
+     * Names a step from the pack's text ("Launch preparations" for {@code 01-launch-preparations}).
      *
-     * @param stepId the step's id
+     * @param configurationId the configuration flown, for steps it names on its own
+     * @param stepId          the step's id
      * @return the name
      */
-    public static String stepName(String stepId) {
-        String name = ContentNames.of(stepId.replaceFirst("^\\d+-", ""));
-        return name.isEmpty() ? name : name.charAt(0) + name.substring(1).toLowerCase(Locale.ROOT);
+    public static String stepName(String configurationId, String stepId) {
+        return ContentNames.step(configurationId, stepId);
     }
 
     /**
@@ -270,14 +270,14 @@ public final class TurnReportView {
      */
     public static List<GoalLine> goals(TurnReport report) {
         List<GoalLine> lines = new ArrayList<>();
-        String lastStep = null;
+        MissionStepResolved lastStep = null;
         for (ResolutionEvent event : report.events()) {
             if (event instanceof MissionStepResolved step) {
-                lastStep = step.stepId();
+                lastStep = step;
             } else if (event instanceof GoalSettled goal) {
                 String how = goal.cancelled() ? "credited through the cascade"
-                    : lastStep == null ? "reached" : "reached on the " + stepName(lastStep).toLowerCase(Locale.ROOT)
-                        + " step";
+                    : lastStep == null ? "reached" : "reached on the "
+                        + stepName(lastStep.missionConfigurationId(), lastStep.stepId()).toLowerCase(Locale.ROOT) + " step";
                 lines.add(new GoalLine(goal.goalId(), goal.firstInGame(), how, goal.prestige()));
             }
         }

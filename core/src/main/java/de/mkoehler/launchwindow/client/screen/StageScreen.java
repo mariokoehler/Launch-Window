@@ -40,6 +40,15 @@ abstract class StageScreen extends ScreenAdapter {
     }
 
     /**
+     * Returns the screen's stage, for the offscreen screenshot tool to find widgets in.
+     *
+     * @return the stage
+     */
+    public Stage stage() {
+        return stage;
+    }
+
+    /**
      * Returns whether this screen is the one showing. A result that arrives from the server
      * after the player has moved on must be dropped, not applied to a screen nobody sees.
      *

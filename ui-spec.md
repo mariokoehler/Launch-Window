@@ -1036,7 +1036,12 @@ current state alone. Each is an M5 task.
   `WinCondition.goalTimes`.)* Each player's agency name, director name, archetype, and the
   declared goals they hold, with turns, for the race tab. This is the
   "per-player summary" `design.md` §3.7 planned for game-meta.
-- **G4. Display text.** Content has ids only. The UI needs names and short
+- **G4. Display text.** *(Done 2026-10-05 for the early-era pack: `strings.json` beside the
+  pack's rules files, read by `content.ContentStrings` and looked up through
+  `client.view.ContentNames`. Shown as names everywhere, as descriptions on Program details,
+  its components, the configuration summary, the replay's step card and the Museum's race
+  goals, and as history notes on programs, components, configurations and rockets. Not part
+  of the frozen, hashed pack. See `design.md` §5 M5.)* Content has ids only. The UI needs names and short
   descriptions for categories, programs, components, configurations, steps, and
   goals, written in our own words (never BASPM's, `design.md` §1.2). Add a
   strings file per pack. Each entry can also carry an optional history note

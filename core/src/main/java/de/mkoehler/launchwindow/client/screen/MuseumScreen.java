@@ -199,6 +199,10 @@ public final class MuseumScreen extends ChromeScreen {
             Table text = new Table();
             text.defaults().left().growX();
             text.add(ui.label(ContentNames.of(goalId), Theme.TextStyle.BODY_STRONG, Theme.INK)).row();
+            String about = ContentNames.description(goalId);
+            if (about != null) {
+                text.add(ui.paragraph(about, Theme.TextStyle.BODY_SM, Theme.INK)).padBottom(2f).row();
+            }
             String credited = creditedBy(goalId, catalog);
             if (!credited.isEmpty()) {
                 text.add(ui.paragraph(credited, Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).row();

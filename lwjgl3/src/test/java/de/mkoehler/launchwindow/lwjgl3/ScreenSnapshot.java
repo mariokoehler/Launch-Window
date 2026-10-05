@@ -21,6 +21,7 @@ import de.mkoehler.launchwindow.persistence.PlayerAction;
 import de.mkoehler.launchwindow.client.screen.ConnectScreen;
 import de.mkoehler.launchwindow.client.settings.SettingsStore;
 import de.mkoehler.launchwindow.client.screen.JoinScreen;
+import de.mkoehler.launchwindow.client.ui.HistoryNote;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.screen.BodyProgramsScreen;
 import de.mkoehler.launchwindow.client.screen.HeadquartersScreen;
@@ -313,6 +314,9 @@ public final class ScreenSnapshot {
                 Programs.price(game.session().catalog().program("vostok").orElseThrow(), game.session().state(),
                     game.session().catalog())));
         write(folder, "hq-details-sputnik-1.png", new ProgramDetailsScreen(game, "sputnik-1", null), null);
+        // The longest history note in the pack (the Sputnik 1 satellite's), pinned open.
+        write(folder, "hq-details-sputnik-1-note.png", new ProgramDetailsScreen(game, "sputnik-1", null),
+            screen -> pinLastHistoryNote(screen.stage().getRoot()));
         write(folder, "hq-details-sputnik-2.png", new ProgramDetailsScreen(game, "sputnik-2", CelestialBody.EARTH), null);
 
         game.setSession(ClientSession.start(CREDENTIALS, fresh, new GameInfo(info, System.currentTimeMillis()),
@@ -896,6 +900,29 @@ public final class ScreenSnapshot {
      * relative to a laid-out widget, such as a history-note card, lands where it would on screen),
      * draws it into a frame buffer and writes it out.
      */
+    /**
+     * Pins open the last history note found under a widget, in drawing order.
+     *
+     * @param root the widget to search
+     */
+    private static void pinLastHistoryNote(com.badlogic.gdx.scenes.scene2d.Group root) {
+        HistoryNote last = null;
+        java.util.ArrayDeque<com.badlogic.gdx.scenes.scene2d.Actor> todo = new java.util.ArrayDeque<>();
+        todo.add(root);
+        while (!todo.isEmpty()) {
+            com.badlogic.gdx.scenes.scene2d.Actor actor = todo.removeFirst();
+            if (actor instanceof HistoryNote note) {
+                last = note;
+            }
+            if (actor instanceof com.badlogic.gdx.scenes.scene2d.Group group) {
+                group.getChildren().forEach(todo::add);
+            }
+        }
+        if (last != null) {
+            last.setPinned(true);
+        }
+    }
+
     private static <S extends Screen> void write(File folder, String name, S screen, Consumer<S> state) {
         screen.show();
         screen.resize(width, height);

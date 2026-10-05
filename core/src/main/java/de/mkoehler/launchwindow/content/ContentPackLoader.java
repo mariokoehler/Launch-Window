@@ -47,9 +47,12 @@ public final class ContentPackLoader {
     /** The goals file. */
     public static final String GOALS_FILE = "goals.json";
     /**
-     * Every file a pack consists of, in a fixed order. The one list the loader, the server's
-     * freezing step and {@link ContentPackHash} all go by, so a file added to packs later (the
-     * display strings, gap G4) joins all three at once.
+     * Every rules file a pack consists of, in a fixed order. The one list the loader, the server's
+     * freezing step and {@link ContentPackHash} all go by, so a rules file added to packs later
+     * joins all three at once. The display text ({@link ContentStrings#FILE}, gap G4) is
+     * deliberately <b>not</b> in here: it changes no rule, so it isn't hashed or frozen, and the
+     * client reads its own bundled copy (see {@link ContentStrings}). Adding it would change every
+     * bundled pack's hash.
      */
     public static final List<String> FILES = List.of(CATEGORIES_FILE, PROGRAMS_FILE, MISSION_COMPONENTS_FILE,
         MISSION_CONFIGURATIONS_FILE, GOALS_FILE);

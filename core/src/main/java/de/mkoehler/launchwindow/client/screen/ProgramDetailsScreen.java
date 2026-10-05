@@ -13,7 +13,6 @@ import de.mkoehler.launchwindow.actions.CloseProgramAction;
 import de.mkoehler.launchwindow.actions.OpenProgramAction;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.HistoryNote;
-import de.mkoehler.launchwindow.client.ui.HistoryNotes;
 import de.mkoehler.launchwindow.client.ui.ReliabilityBar;
 import de.mkoehler.launchwindow.client.ui.Refusals;
 import de.mkoehler.launchwindow.client.ui.Theme;
@@ -116,13 +115,17 @@ public final class ProgramDetailsScreen extends ChromeScreen {
         Table head = new Table();
         Table title = new Table();
         title.add(ui.label(ContentNames.of(program.id()), Theme.TextStyle.HEADING_LG, Theme.INK));
-        String note = HistoryNotes.forProgram(program.id());
+        String note = ContentNames.historyNote(program.id());
         if (note != null) {
             title.add(new HistoryNote(ui, note)).size(HistoryNote.ICON_SIZE).padLeft(Theme.SPACE_2);
         }
         head.add(title).expandX().left();
         head.add(programStateMark(programState)).right();
-        card.add(head).padBottom(22f).row();
+        String description = ContentNames.description(program.id());
+        card.add(head).padBottom(description == null ? 22f : Theme.SPACE_2).row();
+        if (description != null) {
+            card.add(ui.paragraph(description, Theme.TextStyle.BODY, Theme.INK)).width(760f).padBottom(22f).row();
+        }
 
         card.add(caption("Required goals")).padBottom(10f).row();
         if (program.requiredGoalIds().isEmpty()) {
@@ -191,7 +194,13 @@ public final class ProgramDetailsScreen extends ChromeScreen {
         Table block = new Table();
         block.defaults().growX().left();
         Table head = new Table();
-        head.add(ui.label(ContentNames.of(componentId), Theme.TextStyle.BODY_STRONG, Theme.INK)).expandX().left();
+        Table name = new Table();
+        name.add(ui.label(ContentNames.of(componentId), Theme.TextStyle.BODY_STRONG, Theme.INK));
+        String note = ContentNames.historyNote(componentId);
+        if (note != null) {
+            name.add(new HistoryNote(ui, note)).size(HistoryNote.ICON_SIZE).padLeft(Theme.SPACE_2);
+        }
+        head.add(name).expandX().left();
         String status;
         if (owned == null) {
             status = "Not owned yet · creation " + money(component.creationCost());
@@ -202,6 +211,10 @@ public final class ProgramDetailsScreen extends ChromeScreen {
         }
         head.add(ui.label(status, Theme.TextStyle.CAPTION, Theme.INK_MUTED)).right();
         block.add(head).padBottom(4f).row();
+        String description = ContentNames.description(componentId);
+        if (description != null) {
+            block.add(ui.paragraph(description, Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).padBottom(6f).row();
+        }
         if (owned != null) {
             ReliabilityBar bar = new ReliabilityBar(ui, owned.getCurrentReliability(), component.maxRdReliability(),
                 component.maxReliability(), owned.getFloorReliability());

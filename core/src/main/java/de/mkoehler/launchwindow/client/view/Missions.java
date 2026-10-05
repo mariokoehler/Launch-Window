@@ -43,13 +43,17 @@ public final class Missions {
     }
 
     /**
-     * Names a configuration within its program ("Orbital" for {@code vostok-orbital}), from its id
-     * until the pack has display text (G4).
+     * Names a configuration within its program ("Orbital flight" for {@code vostok-orbital}), from the
+     * pack's text, or from its id if the pack has none.
      *
      * @param configuration the configuration
      * @return the name
      */
     public static String name(MissionConfiguration configuration) {
+        String own = ContentNames.configuration(configuration.id());
+        if (own != null) {
+            return own;
+        }
         String id = configuration.id();
         String prefix = configuration.programId() + "-";
         String rest = id.startsWith(prefix) && id.length() > prefix.length() ? id.substring(prefix.length()) : id;

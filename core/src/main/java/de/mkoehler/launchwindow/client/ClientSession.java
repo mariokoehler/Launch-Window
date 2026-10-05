@@ -3,10 +3,12 @@ package de.mkoehler.launchwindow.client;
 import de.mkoehler.launchwindow.client.connect.Credentials;
 import de.mkoehler.launchwindow.client.connect.GameInfo;
 import de.mkoehler.launchwindow.client.connect.ServerResult;
+import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.MissionDraft;
 import de.mkoehler.launchwindow.content.ContentCatalog;
 import de.mkoehler.launchwindow.content.ContentPackHash;
 import de.mkoehler.launchwindow.content.ContentPackLoader;
+import de.mkoehler.launchwindow.content.ContentStrings;
 import de.mkoehler.launchwindow.content.MissionConfiguration;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.net.messages.RivalSummary;
@@ -84,6 +86,8 @@ public final class ClientSession {
             throw new IllegalStateException("This client doesn't have the game's content pack \"" + packId + "\".", e);
         }
         PackStatus status = hash.equals(gameInfo.response().contentPackHash()) ? PackStatus.MATCH : PackStatus.DIFFERENT;
+        // The display text is the client's own bundled copy, never part of the frozen pack (ContentStrings).
+        ContentNames.install(ContentStrings.loadFromClasspath(prefix, classLoader), catalog);
         return new ClientSession(credentials, catalog, status, state, gameInfo);
     }
 

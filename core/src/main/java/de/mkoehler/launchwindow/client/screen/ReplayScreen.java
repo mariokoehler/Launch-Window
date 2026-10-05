@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.ReliabilityBar;
 import de.mkoehler.launchwindow.client.ui.Theme;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.MissionControl;
 import de.mkoehler.launchwindow.client.view.SetSkills;
@@ -206,7 +207,7 @@ public final class ReplayScreen extends ChromeScreen {
             }
             row.pad(6f, 8f, 6f, 8f);
             row.add(ui.label(String.valueOf(i + 1), Theme.TextStyle.CAPTION, Theme.INK_MUTED)).width(22f).left();
-            row.add(ui.label(TurnReportView.stepName(step.stepId()), Theme.TextStyle.BODY_SM, Theme.INK)).expandX().left();
+            row.add(ui.label(TurnReportView.stepName(step.missionConfigurationId(), step.stepId()), Theme.TextStyle.BODY_SM, Theme.INK)).expandX().left();
             row.add(ui.label(revealed ? outcomeShort(step.outcome()) : "—", Theme.TextStyle.LABEL,
                 revealed ? outcomeColor(step.outcome()) : Theme.INK_MUTED));
             int index = i;
@@ -256,8 +257,13 @@ public final class ReplayScreen extends ChromeScreen {
         card.defaults().growX().left();
         card.add(ui.label(("Step " + (index + 1) + " of " + steps.size()).toUpperCase(Locale.ROOT),
             Theme.TextStyle.EYEBROW, Theme.NAVY)).padBottom(2f).row();
-        card.add(ui.label(TurnReportView.stepName(step.stepId()), Theme.TextStyle.HEADING_LG, Theme.INK))
-            .padBottom(Theme.SPACE_4).row();
+        card.add(ui.label(TurnReportView.stepName(step.missionConfigurationId(), step.stepId()),
+            Theme.TextStyle.HEADING_LG, Theme.INK)).padBottom(Theme.SPACE_4).row();
+        String about = ContentNames.stepDescription(step.missionConfigurationId(), step.stepId());
+        if (about != null) {
+            Label text = ui.paragraph(about, Theme.TextStyle.BODY_SM, Theme.INK_MUTED);
+            card.add(text).padTop(-Theme.SPACE_2).padBottom(Theme.SPACE_4).row();
+        }
         for (MissionStepResolved.ComponentFlown component : step.components()) {
             Optional<MissionComponent> spec = session.catalog().missionComponent(component.componentId());
             Table head = new Table();

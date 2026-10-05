@@ -1,0 +1,382 @@
+{
+  "categories": {
+    "earth-orbit-satellites": {
+      "name": "Earth-orbit satellites",
+      "description": "Small uncrewed satellites: the first step into orbit, and the first test of what space does to living things."
+    },
+    "one-crew-capsules": {
+      "name": "One-person capsules",
+      "description": "Capsules for a single pilot: the first flights to carry a person into space and bring them home."
+    }
+  },
+  "programs": {
+    "sputnik-1": {
+      "name": "Sputnik 1",
+      "description": "The simplest satellite that could still make history: a polished sphere with a radio transmitter that anyone with a receiver can hear. Fly it to show the world your agency can reach orbit.",
+      "historyNote": "Sputnik 1 was a stopgap. Korolev's bureau was building a much heavier science satellite, Object D, but it was running late and the R-7 was falling short of its planned performance. Korolev pushed for a far simpler 'preliminary satellite', PS-1, instead, and it was built in a few months. Object D flew a year later, as Sputnik 3."
+    },
+    "sputnik-2": {
+      "name": "Sputnik 2",
+      "description": "A heavier satellite with a sealed cabin for a passenger: the first animal in orbit. There is no way to bring the passenger home.",
+      "historyNote": "Sputnik 2 was ordered in time for the 40th anniversary of the October Revolution, which left the engineers about four weeks. Its passenger, a stray dog named Laika, could not come home. For decades the official story was that she lived for days in orbit. In 2002 a Russian scientist revealed that her cabin had overheated and she died within hours of launch."
+    },
+    "korabl-sputnik-2": {
+      "name": "Korabl-Sputnik 2",
+      "description": "A Vostok capsule flown without a pilot, carrying two dogs, mice, rats and plants, and bringing them all back. It proves the capsule can keep living things alive in orbit and return them safely.",
+      "historyNote": "In August 1960 the dogs Belka and Strelka became the first animals to orbit the Earth and come back alive, after about a day in space. Strelka later had puppies. Khrushchev gave one of them, Pushinka, to Caroline Kennedy, and Pushinka went on to raise puppies of her own at the White House."
+    },
+    "vostok": {
+      "name": "Vostok",
+      "description": "A ball-shaped capsule for one cosmonaut, flown mostly by its automatics. It can make short hops or stay in orbit for days, and its pilot leaves by ejection seat before landing.",
+      "historyNote": "On 12 April 1961, Vostok 1 carried Yuri Gagarin once around the Earth in 108 minutes. He did not land in the capsule: he ejected at about 7 km and came down under his own parachute. Soviet officials kept that quiet for years, because the rules for an official flight record required the pilot to land with his craft."
+    },
+    "explorer-1": {
+      "name": "Explorer 1",
+      "description": "A small, light satellite packed with instruments instead of mass: a cosmic-ray counter, temperature sensors and a micrometeorite detector. What it measures matters as much as reaching orbit.",
+      "historyNote": "America's first planned satellite was the Navy's Vanguard, picked because it wasn't a missile program. After Sputnik, the first Vanguard attempt, shown on television in December 1957, rose a little over a meter and exploded. The Army's rocket team under Wernher von Braun, with JPL building the satellite, had Explorer 1 in orbit within two months, on 31 January 1958."
+    },
+    "mercury": {
+      "name": "Project Mercury",
+      "description": "America's first crewed spacecraft: a cone-shaped capsule for one astronaut, flown first on short suborbital hops, then in orbit. Unlike Vostok, the astronaut stays aboard and splashes down at sea.",
+      "historyNote": "During John Glenn's orbital flight in February 1962, a sensor suggested that Friendship 7's heat shield had come loose. Mission Control told him to keep the retrorocket pack strapped on through reentry, in the hope that its straps would hold the shield in place. He came home safely. The warning turned out to come from a faulty switch."
+    }
+  },
+  "components": {
+    "sputnik-1-satellite": {
+      "name": "Sputnik 1 satellite",
+      "description": "A polished aluminum sphere about half a meter across, with four long antennas and a battery-powered transmitter.",
+      "historyNote": "Sputnik 1 only sent a simple beep, for about three weeks until its batteries ran down. Two physicists at Johns Hopkins' Applied Physics Laboratory found they could work out its whole orbit from the Doppler shift of that beep. Their lab then turned the idea around: if you know a satellite's orbit, the same shift tells you where you are. That became Transit, the US Navy's satellite navigation system, an ancestor of GPS."
+    },
+    "sputnik-2-satellite": {
+      "name": "Sputnik 2 satellite",
+      "description": "A sealed, air-conditioned cabin for one dog, with instruments for radiation and sunlight. It stays attached to the rocket's core stage in orbit."
+    },
+    "vostok-capsule": {
+      "name": "Vostok capsule",
+      "description": "A steel sphere for the cosmonaut, joined to an equipment module with batteries, oxygen and a single retrorocket that can't be restarted.",
+      "historyNote": "Why a ball? A sphere whose weight sits slightly off-center settles heat-shield-first into the air on its own, like a weighted toy that rights itself. So Vostok needed no thrusters to hold its attitude during reentry. The price was a steep, uncontrolled descent: cosmonauts felt around eight times their own weight on the way down."
+    },
+    "explorer-1-satellite": {
+      "name": "Explorer 1 satellite",
+      "description": "A slim cylinder of about 14 kg carrying a Geiger counter, temperature sensors and a micrometeorite detector.",
+      "historyNote": "Explorer 1 was meant to spin like a bullet around its long axis. Within its first orbit it was tumbling end over end instead. Its flexing wire antennas were bleeding off energy, and a spinning body that loses energy drifts toward spinning around its fattest axis. The surprise taught engineers a rule that every spacecraft designer has followed since."
+    },
+    "mercury-capsule": {
+      "name": "Mercury capsule",
+      "description": "A small cone for one astronaut, with an escape tower on top, a heat shield at the base and a pack of retrorockets strapped over it."
+    },
+    "r7-sputnik": {
+      "name": "R-7 (Sputnik)",
+      "description": "The world's first intercontinental missile, adapted to carry a satellite: a core stage ringed by four strap-on boosters, all lit on the launch pad.",
+      "historyNote": "Why light every engine on the ground? In the early 1950s nobody knew whether a large rocket engine could be started reliably high up, in thin air or in vacuum. The R-7's designers sidestepped the question: the core and all four boosters ignite on the pad, and the empty boosters simply fall away. Its descendant, Soyuz, still flies this way."
+    },
+    "r7-vostok": {
+      "name": "R-7 (Vostok)",
+      "description": "The R-7 with a small upper stage on top, enough to put a crewed Vostok capsule into orbit."
+    },
+    "jupiter-c": {
+      "name": "Jupiter-C",
+      "description": "A lengthened Redstone missile topped with a spinning cluster of small solid rockets, just enough to put a very light satellite into orbit.",
+      "historyNote": "Von Braun's team could have reached orbit in September 1956, more than a year before Sputnik. Washington wanted the first American satellite to come from the civilian Vanguard project instead, so that test flew with its top stage left inert, and the rocket only lobbed its payload far downrange."
+    },
+    "redstone": {
+      "name": "Redstone",
+      "description": "A single-stage missile, made safe enough to carry an astronaut. It can only lob a capsule on a short suborbital hop.",
+      "historyNote": "Mercury-Redstone 1, in November 1960, rose about ten centimeters and shut itself down: a plug had come out in the wrong order, and the rocket decided the flight was over. The capsule then fired its escape tower away on its own and released its parachutes, leaving a fully fueled rocket on the pad with parachutes draped down its side."
+    },
+    "atlas": {
+      "name": "Atlas",
+      "description": "A missile built so light that it needs the pressure in its tanks to keep its shape, and powerful enough to put a Mercury capsule into orbit.",
+      "historyNote": "The Atlas's steel skin was thinner than a coin, so the rocket had to stay pressurized even on the ground, or it would buckle under its own weight. Like the R-7, it lit all its engines at liftoff, because nobody was sure an engine would start in space. Partway up it simply dropped its two outer engines and flew on with the one in the middle."
+    }
+  },
+  "configurations": {
+    "sputnik-1-orbit": {
+      "name": "Orbital flight",
+      "description": "Launch the satellite and keep it transmitting from orbit for a season."
+    },
+    "sputnik-1-extended": {
+      "name": "Extended mission",
+      "description": "A longer flight with more battery capacity, spread over three seasons, for more science and more prestige. Sputnik 1 never flew one: this is what a next step could have looked like."
+    },
+    "sputnik-2-orbit": {
+      "name": "Orbital flight with a dog",
+      "description": "Put the cabin and its passenger into orbit and send back the dog's heartbeat and breathing. There is no return."
+    },
+    "korabl-sputnik-2-orbit": {
+      "name": "Biological flight and recovery",
+      "description": "A day in orbit with a cabin full of animals and plants, then retrofire, reentry and a landing on home territory with everything alive."
+    },
+    "vostok-uncrewed-suborbital": {
+      "name": "Uncrewed suborbital test",
+      "description": "Try out the capsule on a short up-and-down flight, with a mannequin in the seat, before risking a pilot. The real program skipped this step: the R-7 was built for orbit."
+    },
+    "vostok-suborbital": {
+      "name": "Suborbital flight",
+      "description": "A pilot's first ride: about a quarter of an hour on a ballistic arc with a few minutes of weightlessness, then an ejection and a parachute landing."
+    },
+    "vostok-uncrewed-orbital": {
+      "name": "Uncrewed orbital test",
+      "description": "One full orbit with nobody aboard, flown by the automatics and brought down on command from the ground. A mannequin in the seat tests the ejection.",
+      "historyNote": "The 'pilot' of the last two test flights, in March 1961, was a mannequin called Ivan Ivanovich, the Russian 'John Doe'. To test the radio without starting rumors of a secret cosmonaut, his voice channel played a recording of a choir and of a man reading out a recipe for borscht."
+    },
+    "vostok-orbital": {
+      "name": "Orbital flight",
+      "description": "The real thing: a cosmonaut aboard for at least one full orbit, then retrofire, reentry and ejection over home ground.",
+      "historyNote": "Nobody knew whether a person could still think clearly in weightlessness, so Vostok 1's manual controls were locked. The unlock code, 1-2-5, was sealed in an envelope on board, on the theory that anyone able to enter it was fit to fly. Several people simply told Gagarin the code before launch."
+    },
+    "vostok-orbital-duration-1": {
+      "name": "Day-long orbital flight",
+      "description": "Stay up for a full day or more and show that a person can eat, sleep and work in weightlessness.",
+      "historyNote": "In August 1961 Gherman Titov spent just over a day in orbit on Vostok 2. He was the first person to sleep in space, and the first to suffer from space sickness, which worried the doctors enough to shape the following flights."
+    },
+    "vostok-orbital-duration-2": {
+      "name": "Multi-day orbital flight",
+      "description": "Several days in orbit, as long as the capsule's supplies allow, with the cosmonaut's health watched the whole time.",
+      "historyNote": "Valery Bykovsky's Vostok 5, in June 1963, stayed up for almost five days. It is still the longest spaceflight anyone has made alone. Two days into his flight, Valentina Tereshkova launched on Vostok 6 and became the first woman in space."
+    },
+    "vostok-joint-orbital": {
+      "name": "Group flight",
+      "description": "Launch two capsules a day apart into almost the same orbit, so that they pass close enough to talk by radio.",
+      "historyNote": "In August 1962 Vostok 3 and 4 came within about 6.5 km of each other, and the press spoke of a rendezvous. It wasn't one: neither capsule could change its orbit, the second launch was simply timed perfectly, and the two drifted apart. Real rendezvous is counterintuitive: to catch a craft ahead of you, you first slow down, which drops you to a lower, faster orbit.",
+      "steps": {
+        "01-launch-preparations": { "name": "Craft A: Launch preparations" },
+        "02-countdown": { "name": "Craft A: Countdown" },
+        "03-launch": { "name": "Craft A: Launch" },
+        "04-ascent": { "name": "Craft A: Ascent" },
+        "07-launch-preparations": { "name": "Craft B: Launch preparations" },
+        "08-countdown": { "name": "Craft B: Countdown" },
+        "09-launch": { "name": "Craft B: Launch" },
+        "10-ascent": { "name": "Craft B: Ascent" },
+        "20-retrofire": { "name": "Craft B: Retrofire" },
+        "21-modules-separation": { "name": "Craft B: Modules separation" },
+        "22-reentry": { "name": "Craft B: Reentry" },
+        "23-descent-and-landing": { "name": "Craft B: Descent and landing" }
+      }
+    },
+    "explorer-1-orbit": {
+      "name": "Orbital flight",
+      "description": "Launch the satellite and send back what its instruments find, for a season.",
+      "historyNote": "Explorer 1's Geiger counter kept going quiet at high altitude. James Van Allen's team worked out why: the radiation up there was so intense that it overwhelmed the counter. They had found belts of charged particles trapped by the Earth's magnetic field, now named after him: the first great scientific discovery of the space age."
+    },
+    "explorer-1-extended": {
+      "name": "Extended mission",
+      "description": "A longer flight with more battery capacity, spread over three seasons, for more science and more prestige. Explorer 1 never flew one: this is what a next step could have looked like."
+    },
+    "mercury-uncrewed-suborbital": {
+      "name": "Uncrewed suborbital test",
+      "description": "Fly the capsule on a short arc without an astronaut, to prove the rocket, the escape system and the recovery at sea.",
+      "historyNote": "Before Alan Shepard flew, the capsule carried a chimpanzee named Ham, in January 1961. He pulled levers in answer to lights during the flight, showing that work was possible in weightlessness. His capsule came down far off target and began taking on water before the recovery helicopter reached it."
+    },
+    "mercury-suborbital": {
+      "name": "Suborbital flight",
+      "description": "About fifteen minutes on a ballistic arc: launch, a few minutes of weightlessness, and a splashdown far downrange.",
+      "historyNote": "On the second suborbital flight, in July 1961, Liberty Bell 7's hatch blew off after splashdown. Gus Grissom swam out as the capsule filled and sank. It lay on the floor of the Atlantic, nearly 5 km down, until an expedition raised it in 1999."
+    },
+    "mercury-uncrewed-orbital": {
+      "name": "Uncrewed orbital test",
+      "description": "Send the capsule around the Earth with no astronaut aboard, to prove its life support and controls before risking a crew.",
+      "historyNote": "In November 1961 a chimpanzee named Enos flew two orbits in a Mercury capsule. The flight was cut short by a stuck thruster and an overheating suit system, problems that were fixed before John Glenn flew the same mission three months later."
+    },
+    "mercury-orbital": {
+      "name": "Orbital flight",
+      "description": "An astronaut aboard for a few orbits, then retrofire, reentry and a splashdown in the recovery zone.",
+      "historyNote": "Scott Carpenter's Aurora 7, in May 1962, came down about 400 km past its target. The capsule was misaligned when the retrorockets fired, and they fired a few seconds late. He waited in his life raft for about three hours before a helicopter lifted him out."
+    },
+    "mercury-orbital-duration-1": {
+      "name": "Day-long orbital flight",
+      "description": "A day or more in orbit, to learn how a person copes with weightlessness over a whole day of work and sleep.",
+      "historyNote": "Gordon Cooper's Faith 7, in May 1963, flew 22 orbits in about 34 hours. Near the end, a short circuit knocked out the automatic controls. Cooper lined the capsule up using lines drawn on his window, timed the retrofire with his wristwatch, and flew the reentry by hand, splashing down a few kilometers from the recovery ship."
+    },
+    "mercury-joint-orbital": {
+      "name": "Joint launch",
+      "description": "Two capsules launched close together into neighboring orbits. Mercury never flew this: it points toward the rendezvous flights that came next.",
+      "steps": {
+        "01-launch-preparations": { "name": "Craft A: Launch preparations" },
+        "02-countdown": { "name": "Craft A: Countdown" },
+        "03-launch": { "name": "Craft A: Launch" },
+        "04-ascent": { "name": "Craft A: Ascent" },
+        "07-launch-preparations": { "name": "Craft B: Launch preparations" },
+        "08-countdown": { "name": "Craft B: Countdown" },
+        "09-launch": { "name": "Craft B: Launch" },
+        "10-ascent": { "name": "Craft B: Ascent" },
+        "18-retrofire": { "name": "Craft B: Retrofire" },
+        "19-retrofire-jettison": { "name": "Craft B: Retropack jettison" },
+        "20-reentry": { "name": "Craft B: Reentry" },
+        "21-descent-and-splashdown": { "name": "Craft B: Descent and splashdown" }
+      }
+    }
+  },
+  "steps": {
+    "launch-preparations": {
+      "name": "Launch preparations",
+      "description": "Fueling, checks and loading the payload. Liquid oxygen boils away at minus 183 degrees Celsius, so it goes in last and is topped up until the final minutes."
+    },
+    "countdown": {
+      "name": "Countdown",
+      "description": "The final sequence before ignition. Any reading outside its limits stops the clock, and a long hold can push the launch to another day."
+    },
+    "launch": {
+      "name": "Launch",
+      "description": "Ignition and liftoff. The first seconds are the most dangerous: the rocket is full of propellant and barely moving, and a failing engine can bring it down on the pad."
+    },
+    "ascent": {
+      "name": "Ascent",
+      "description": "Climbing through the thick lower air, past the point of greatest aerodynamic stress, and on to staging. Steering errors here decide whether the payload reaches the planned orbit."
+    },
+    "deployment": {
+      "name": "Deployment",
+      "description": "The payload separates from the last stage. Springs or small rockets push the two apart so they don't collide."
+    },
+    "earth-orbit": {
+      "name": "Earth orbit",
+      "description": "Circling the Earth about every hour and a half, sending what it measures to ground stations as it passes over them."
+    },
+    "earth-orbital": {
+      "name": "Earth orbit",
+      "description": "Circling the Earth about every hour and a half, sending what it measures to ground stations as it passes over them."
+    },
+    "orbital-flight": {
+      "name": "Orbital flight",
+      "description": "Falling around the Earth about once every ninety minutes. Ground stations can only talk to the craft for a few minutes as it passes overhead."
+    },
+    "suborbital-flight": {
+      "name": "Suborbital flight",
+      "description": "Too slow to stay in orbit, the craft coasts on a ballistic arc above the atmosphere: a few minutes of weightlessness before it falls back."
+    },
+    "advanced-experiments-earth-orbit": {
+      "name": "Extended experiments in orbit",
+      "description": "More time in orbit for longer measurements, as long as the batteries and the instruments hold out."
+    },
+    "biometric-data-transmission": {
+      "name": "Biometric data transmission",
+      "description": "Sensors on the passenger send back heartbeat, breathing and movement: the first data on how a living body copes with launch and weightlessness."
+    },
+    "reentry-preparations": {
+      "name": "Reentry preparations",
+      "description": "Turning the craft so its retrorockets point forward along its path, and checking the alignment. Firing at the wrong angle lands it far off target, or not at all."
+    },
+    "retrofire": {
+      "name": "Retrofire",
+      "description": "The retrorockets fire against the direction of travel. Losing only a small fraction of orbital speed is enough to lower the orbit into the atmosphere."
+    },
+    "retrofire-jettison": {
+      "name": "Retropack jettison",
+      "description": "The spent retrorocket pack is cast off, so that it doesn't burn up against the heat shield."
+    },
+    "modules-separation": {
+      "name": "Modules separation",
+      "description": "The capsule separates from its equipment module, which burns up on its own. If the two stay joined, they tumble together in the thickening air."
+    },
+    "reentry": {
+      "name": "Reentry",
+      "description": "Hitting the air at around 28,000 km/h, the craft is slowed by the air piling up ahead of it. That air turns to glowing plasma, which blocks the radio for several minutes."
+    },
+    "descent-and-landing": {
+      "name": "Descent and landing",
+      "description": "Parachutes open a few kilometers up. The pilot ejects and lands under a separate parachute, because the capsule hits the ground too hard."
+    },
+    "descent-and-splashdown": {
+      "name": "Descent and splashdown",
+      "description": "Parachutes slow the capsule for a landing at sea, where ships and helicopters wait to pick up the crew before the capsule takes on water."
+    },
+    "duration-level-i": {
+      "name": "A day in orbit",
+      "description": "Staying up for a day or more: eating, sleeping and working in weightlessness, while doctors on the ground watch the pilot's health."
+    },
+    "duration-level-ii": {
+      "name": "Several days in orbit",
+      "description": "Days in orbit, near the limit of the capsule's oxygen, power and food."
+    },
+    "joint-orbital-flight": {
+      "name": "Flying together",
+      "description": "Both craft in orbit close to each other, talking by radio. With no engines to change their orbits, they slowly drift apart."
+    }
+  },
+  "goals": {
+    "earth-orbit-satellite": {
+      "name": "Satellite in orbit",
+      "description": "Put any satellite into orbit around the Earth."
+    },
+    "radio-signals-from-orbit": {
+      "name": "Radio from orbit",
+      "description": "Fly a satellite that broadcasts from orbit to the ground."
+    },
+    "sputnik-1-flown": {
+      "name": "Sputnik 1 flown",
+      "description": "Fly the Sputnik 1 satellite successfully."
+    },
+    "explorer-1-flown": {
+      "name": "Explorer 1 flown",
+      "description": "Fly the Explorer 1 satellite successfully."
+    },
+    "magnetic-field-study": {
+      "name": "Space environment measured",
+      "description": "Measure radiation and the magnetic field in orbit: knowledge every later spacecraft design depends on."
+    },
+    "organisms-in-microgravity": {
+      "name": "Life in weightlessness",
+      "description": "Fly living organisms in orbit and study how weightlessness affects them."
+    },
+    "sputnik-2-flown": {
+      "name": "Sputnik 2 flown",
+      "description": "Fly Sputnik 2 and its passenger successfully."
+    },
+    "korabl-sputnik-2-flown": {
+      "name": "Korabl-Sputnik 2 flown",
+      "description": "Fly the biological capsule and bring its passengers home alive."
+    },
+    "vostok-uncrewed-suborbital-flown": {
+      "name": "Vostok uncrewed suborbital test",
+      "description": "Complete an uncrewed suborbital test of the Vostok capsule."
+    },
+    "vostok-suborbital-flown": {
+      "name": "Vostok suborbital flight",
+      "description": "Complete a crewed suborbital flight in a Vostok capsule."
+    },
+    "vostok-uncrewed-orbital-flown": {
+      "name": "Vostok uncrewed orbital test",
+      "description": "Complete an uncrewed orbital test of the Vostok capsule."
+    },
+    "vostok-orbital-flown": {
+      "name": "Vostok orbital flight",
+      "description": "Complete a crewed orbital flight in a Vostok capsule."
+    },
+    "mercury-uncrewed-suborbital-flown": {
+      "name": "Mercury uncrewed suborbital test",
+      "description": "Complete an uncrewed suborbital test of the Mercury capsule."
+    },
+    "mercury-suborbital-flown": {
+      "name": "Mercury suborbital flight",
+      "description": "Complete a crewed suborbital flight in a Mercury capsule."
+    },
+    "mercury-uncrewed-orbital-flown": {
+      "name": "Mercury uncrewed orbital test",
+      "description": "Complete an uncrewed orbital test of the Mercury capsule."
+    },
+    "mercury-orbital-flown": {
+      "name": "Mercury orbital flight",
+      "description": "Complete a crewed orbital flight in a Mercury capsule."
+    },
+    "duration-level-1": {
+      "name": "A day in space",
+      "description": "Keep a crew in space for between 6 and 36 hours."
+    },
+    "duration-level-2": {
+      "name": "Days in space",
+      "description": "Keep a crew in space for between 36 hours and a week."
+    },
+    "joint-crewed-launch": {
+      "name": "Two crews together",
+      "description": "Launch two crewed craft so that they fly within a few kilometers of each other."
+    },
+    "human-in-space": {
+      "name": "Human in space",
+      "description": "Send a person above 100 km and bring them back safely."
+    },
+    "human-in-orbit": {
+      "name": "Human in orbit",
+      "description": "Put a person into orbit, once around the Earth or more, and bring them back safely."
+    }
+  }
+}

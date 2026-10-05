@@ -330,6 +330,18 @@ create drawables in a rebuild loop; use `UiKit.rect`/`icon`/`cardAccent`, which 
 **Next:** the hub (its mockup exists), then the rest of `ui-spec.md` §7's first loop
 (Headquarters opening a program, VAB rocket programs).
 
+**G4 display text done (2026-10-05):** `assets/content/early-era/strings.json` names every id, and
+most entries also carry a description and, where there's a real story, a history note.
+`ContentNames` looks them up once `ClientSession.start` has installed the pack's text.
+- **Sources (user decision):** content follows BASPM's data, with the text rewritten in our
+  own words. Extract the facts, then write from the facts, not from BASPM's sentences.
+- **Verify the figures** in every history note before using it, because BASPM's facts
+  contradict each other.
+- **Not frozen:** `strings.json` is deliberately outside `ContentPackLoader.FILES`, so it's
+  neither hashed nor frozen. Never add it there.
+- **Checks:** `ContentStringsTest` checks coverage, stray keys, lengths and font
+  characters. When the pack grows, add text for every new id or the test fails.
+
 **Connect screen remembers the last login (user, 2026-10-05):** server, login and password of the
 last successful login live in `~/.launch-window/client-settings.json` (`client.settings`, ported from
 Robot-Rampage's `SettingsStore`), so Enter logs straight in. Clear text on purpose (`design.md` §5's
