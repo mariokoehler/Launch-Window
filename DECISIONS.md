@@ -151,7 +151,9 @@ veteran). No candidate starts above 95. Rookies catch up after about 5 years
 *Notes:*
 
 ### C2. New hires' first training
-A new hire starts Basic training at once, on a random skill of their group.
+A new hire starts Basic training at once, on a random skill of their group. *(Update
+2026-10-05: basic training is now BASPM's mandatory, uninterruptible wait, see C4, and you chose
+to keep its skill gain. Only the question below, which skill it trains, is still open.)*
 - [ ] Train their weakest skill instead **(recommended)**: more sensible, and it changes no
   balance.
 - [ ] Keep a random skill.
@@ -168,12 +170,10 @@ values, re-derived from BASPM's shape.
 
 *Notes:*
 
-### C4. Training lengths
-Basic training: astronauts 3 seasons, SET 1, flight controllers 3. Advanced: 2 for everyone.
-- [ ] Keep **(recommended)**.
-- [ ] Change (say what in the notes).
-
-*Notes:*
+### C4. Training lengths — settled 2026-10-05
+**Settled in the play-test feedback round:** BASPM's lengths, basic 4 (astronauts) / 2 (SET) /
+2 (flight controllers) and advanced 3. Basic training is now mandatory after hiring and can't be
+cut short or chosen in the dialog. Nothing to tick; it can go when the file comes back.
 
 ### C5. Hiring pool size
 Each department sees 6 new candidates every season (BASPM shows 10).
