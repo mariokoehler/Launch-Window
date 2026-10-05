@@ -330,6 +330,11 @@ create drawables in a rebuild loop; use `UiKit.rect`/`icon`/`cardAccent`, which 
 **Next:** the hub (its mockup exists), then the rest of `ui-spec.md` §7's first loop
 (Headquarters opening a program, VAB rocket programs).
 
+**Decisions checklist (2026-10-05):** `DECISIONS.md` gathers every still-unconfirmed choice with
+multiple-choice options and a recommendation each. The user fills it in after the first play test.
+When it comes back, write each outcome into `design.md`/`ui-spec.md` (and the code where it changes
+anything), then remove the settled items from the file.
+
 **Laika on the memorial (user, 2026-10-05):** `MissionConfiguration.animalPassengers` (only
 Sputnik 2) puts animals that don't come home on the memorial (`MemorialEntry.Cause.PASSENGER`).
 - **Pack hash changed:** reset the dev data root.
