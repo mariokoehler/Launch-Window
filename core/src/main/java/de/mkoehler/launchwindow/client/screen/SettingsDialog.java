@@ -155,7 +155,7 @@ final class SettingsDialog {
     /** Ends the session and goes back to Connect, with the given server filled in. */
     private void leave(String server) {
         Credentials credentials = host.session.credentials();
-        game.rememberConnect(server, credentials.login());
+        game.rememberConnect(server, credentials.login(), credentials.password());
         game.gateway().logOut();
         host.closeDialog();
         game.setScreen(new ConnectScreen(game));

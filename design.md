@@ -5202,7 +5202,13 @@ here.
       dedicated server, not a target worth pulling in bcrypt/Argon2 for")
       already covers password *storage*; this extends the same acceptance
       to *transport*, for the same reasons (invite-only, non-real-time,
-      small-group, self-hosted-among-friends).
+      small-group, self-hosted-among-friends). **The same acceptance covers the
+      client's copy too (user decision, 2026-10-05):** the Connect screen keeps the
+      last successful login's password in clear text in
+      `~/.launch-window/client-settings.json`, readable by anyone with access to
+      the player's account on that machine, as the sibling projects do. A
+      game-only password is the mitigation. If accounts ever hold anything more
+      valuable, move this to the OS credential store.
     - **`RequestDispatcher`** (`server` module, plain class, no KryoNet/
       libGDX dependency, so it's testable without sockets): its single
       entry point, `handle(connectionId, message)`, dispatches by message

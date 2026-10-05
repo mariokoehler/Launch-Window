@@ -9,6 +9,8 @@ import de.mkoehler.launchwindow.client.connect.NetworkGateway;
 import de.mkoehler.launchwindow.client.connect.ServerGateway;
 import de.mkoehler.launchwindow.client.screen.ConnectScreen;
 import de.mkoehler.launchwindow.client.screen.SpaceComplexScreen;
+import de.mkoehler.launchwindow.client.settings.ClientSettings;
+import de.mkoehler.launchwindow.client.settings.SettingsStore;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.UiKit;
 import de.mkoehler.launchwindow.client.view.Hub;
@@ -27,8 +29,8 @@ public class LaunchWindowGame extends Game {
 
     private UiKit ui;
     private ServerGateway gateway;
-    private String lastServer = "localhost:45825";
-    private String lastLogin = "";
+    private SettingsStore settingsStore;
+    private ClientSettings settings = ClientSettings.defaults();
     private ClientSession session;
     private final Hub.Clock hubClock = new Hub.Clock();
 
@@ -36,7 +38,19 @@ public class LaunchWindowGame extends Game {
     public void create() {
         ui = new UiKit(Gdx.files.internal(""), fontScale());
         gateway = createGateway();
+        settingsStore = createSettingsStore();
+        settings = settingsStore.load();
         setScreen(new ConnectScreen(this));
+    }
+
+    /**
+     * Creates the store the Connect screen's server, login and password are remembered in. The
+     * offscreen screenshot tool overrides this, so it never reads the player's real file.
+     *
+     * @return the store
+     */
+    protected SettingsStore createSettingsStore() {
+        return SettingsStore.inHomeDirectory();
     }
 
     /**
@@ -193,28 +207,39 @@ public class LaunchWindowGame extends Game {
      * @return the address text
      */
     public String lastServer() {
-        return lastServer;
+        return settings.server();
     }
 
     /**
-     * Returns the login typed at the last connect, to prefill the Connect screen. The password
-     * is never remembered.
+     * Returns the login of the last successful login, to prefill the Connect screen.
      *
      * @return the login
      */
     public String lastLogin() {
-        return lastLogin;
+        return settings.login();
     }
 
     /**
-     * Remembers what was typed at a connect, for the next visit to the Connect screen.
+     * Returns the password of the last successful login, to prefill the Connect screen, so Enter
+     * logs straight in. Kept in clear text in the player's home folder (user decision, 2026-10-05).
      *
-     * @param server the address text
-     * @param login  the login
+     * @return the password
      */
-    public void rememberConnect(String server, String login) {
-        lastServer = server;
-        lastLogin = login;
+    public String lastPassword() {
+        return settings.password();
+    }
+
+    /**
+     * Remembers a successful login's server, login and password, for this run and the next ones.
+     * Only called once the server accepted them, so a mistyped password is never kept.
+     *
+     * @param server   the address text, as typed
+     * @param login    the login
+     * @param password the password
+     */
+    public void rememberConnect(String server, String login, String password) {
+        settings = new ClientSettings(server, login, password);
+        settingsStore.save(settings);
     }
 
     /**

@@ -328,6 +328,11 @@ create drawables in a rebuild loop; use `UiKit.rect`/`icon`/`cardAccent`, which 
 **Next:** the hub (its mockup exists), then the rest of `ui-spec.md` §7's first loop
 (Headquarters opening a program, VAB rocket programs).
 
+**Connect screen remembers the last login (user, 2026-10-05):** server, login and password of the
+last successful login live in `~/.launch-window/client-settings.json` (`client.settings`, ported from
+Robot-Rampage's `SettingsStore`), so Enter logs straight in. Clear text on purpose (`design.md` §5's
+accepted-risk note). `ScreenSnapshot` overrides `createSettingsStore()` so shots never read the real file.
+
 **One long-lived connection per client session (user, 2026-10-04),** replacing
 the connection-per-call design (`design.md` §3.3). `NetworkGateway` logs in once
 at Connect, reuses the connection, reconnects and logs in again by itself if it

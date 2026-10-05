@@ -251,6 +251,12 @@ players see you by your agency and director name, chosen per game (§4.2).
 **States:** connecting;
 wrong password; login has invalid characters (`[A-Za-z0-9_-]`, up to 32); client
 and server versions don't match (show both versions); server unreachable.
+**Remembered between runs (user decision, 2026-10-05):** the server, login and
+password of the last successful login are kept in
+`~/.launch-window/client-settings.json` (`client.settings.SettingsStore`, as in the
+sibling projects), so the form comes up filled in, focus starts on the password
+field, and Enter logs in. A failed login is never saved. Log out and Switch server
+in Settings keep the login and password and save the server chosen there.
 
 ### 4.2 Join game (first visit to a game only)
 **Purpose:** join the game. **Shows:** an archetype choice between NASA-style and

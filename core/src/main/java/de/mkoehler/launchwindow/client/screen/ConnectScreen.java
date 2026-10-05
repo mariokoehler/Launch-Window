@@ -35,7 +35,8 @@ public final class ConnectScreen extends StageScreen {
     private final Cell<Actor> bannerCell;
 
     /**
-     * Builds the screen, prefilled with the last server and login typed this run.
+     * Builds the screen, prefilled with the server, login and password of the last successful login
+     * (remembered between runs), so Enter logs straight in.
      *
      * @param game the game
      */
@@ -43,7 +44,7 @@ public final class ConnectScreen extends StageScreen {
         super(game);
         server = new FormField(ui, "Server", game.lastServer(), "host:port");
         login = new FormField(ui, "Login", game.lastLogin(), "your-login");
-        password = new FormField(ui, "Password", "", "");
+        password = new FormField(ui, "Password", game.lastPassword(), "");
         password.input().setPasswordMode(true);
         password.input().setPasswordCharacter('•');
         connect = ui.button("Connect", Theme.ButtonKind.PRIMARY);
@@ -140,9 +141,12 @@ public final class ConnectScreen extends StageScreen {
             return;
         }
         Credentials credentials = new Credentials(address, login.text(), password.input().getText());
-        game.rememberConnect(server.text(), login.text());
+        String serverText = server.text();
         setBusy(true);
         game.gateway().logIn(credentials, result -> {
+            if (result.kind() == LoginResult.Kind.IN_GAME || result.kind() == LoginResult.Kind.NEEDS_SLOT) {
+                game.rememberConnect(serverText, credentials.login(), credentials.password());
+            }
             if (isShowing()) {
                 applyLoginResult(credentials, result);
             }

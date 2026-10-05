@@ -19,6 +19,7 @@ import de.mkoehler.launchwindow.client.connect.ServerGateway;
 import de.mkoehler.launchwindow.client.connect.ServerResult;
 import de.mkoehler.launchwindow.persistence.PlayerAction;
 import de.mkoehler.launchwindow.client.screen.ConnectScreen;
+import de.mkoehler.launchwindow.client.settings.SettingsStore;
 import de.mkoehler.launchwindow.client.screen.JoinScreen;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.screen.BodyProgramsScreen;
@@ -191,6 +192,12 @@ public final class ScreenSnapshot {
             @Override
             protected ServerGateway createGateway() {
                 return new SilentGateway();
+            }
+
+            @Override
+            protected SettingsStore createSettingsStore() {
+                // Never the player's real file: the shots always start from the defaults.
+                return new SettingsStore(folder.toPath().resolve("no-such-folder").resolve("client-settings.json"));
             }
 
             @Override
