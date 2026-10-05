@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -58,6 +59,8 @@ public final class NetworkGateway implements ServerGateway {
     /** Reads turn reports as the server saves them: strict, unknown fields are errors. */
     private static final ObjectMapper REPORTS = new ObjectMapper();
 
+    /** Calls handed to the worker whose result hasn't been delivered yet. */
+    private final AtomicInteger pending = new AtomicInteger();
     private final ExecutorService worker = Executors.newSingleThreadExecutor(runnable -> {
         Thread thread = new Thread(runnable, "server-gateway");
         thread.setDaemon(true);
@@ -137,6 +140,11 @@ public final class NetworkGateway implements ServerGateway {
                 return ClaimResult.failure(ClaimResult.Kind.FAILED, e.getMessage());
             }
         }, message -> ClaimResult.failure(ClaimResult.Kind.FAILED, message), done);
+    }
+
+    @Override
+    public boolean isWaiting() {
+        return pending.get() > 0;
     }
 
     @Override
@@ -372,6 +380,7 @@ public final class NetworkGateway implements ServerGateway {
      * something unexpected: a screen waiting on a call must never be left disabled for good.
      */
     private <T> void run(Supplier<T> work, Function<String, T> ifCrashed, Consumer<T> done) {
+        pending.incrementAndGet();
         worker.execute(() -> {
             T result;
             try {
@@ -382,7 +391,10 @@ public final class NetworkGateway implements ServerGateway {
                 result = ifCrashed.apply(e.toString());
             }
             T delivered = result;
-            Gdx.app.postRunnable(() -> done.accept(delivered));
+            Gdx.app.postRunnable(() -> {
+                pending.decrementAndGet();
+                done.accept(delivered);
+            });
         });
     }
 }

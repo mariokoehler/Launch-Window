@@ -49,6 +49,16 @@ public interface ServerGateway {
     void submit(Credentials credentials, PlayerAction action, Consumer<ServerResult> done);
 
     /**
+     * Returns whether a call is under way: sent, and its result not yet delivered. Screens show a
+     * waiting indicator while it stays true for a moment. Stubs that answer at once keep the default.
+     *
+     * @return whether a call is under way
+     */
+    default boolean isWaiting() {
+        return false;
+    }
+
+    /**
      * Fetches the player's state and the game info again. A read, so it may reconnect and retry
      * once if the connection breaks.
      *

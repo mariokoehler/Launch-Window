@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import de.mkoehler.launchwindow.client.ClientSession;
@@ -37,11 +38,20 @@ abstract class SessionScreen extends StageScreen {
     private static final long RESOLUTION_GRACE_MILLIS = 5_000;
     /** The least time between automatic refreshes. */
     private static final long REFRESH_SPACING_MILLIS = 15_000;
+    /** How long a server call may take before the waiting indicator shows, so quick calls don't flicker. */
+    private static final float WAITING_DELAY_SECONDS = 0.3f;
+    /** Where the indicator's middle sits, measured from the top: level with the header's chips. */
+    private static final float WAITING_CENTRE_FROM_TOP = 46f;
+    /** How long each of the indicator's dots stays lit. */
+    private static final float WAITING_DOT_SECONDS = 0.25f;
 
     protected final ClientSession session;
 
     private Table dialog;
     private Table toast;
+    private Table waiting;
+    private final Image[] waitingDots = new Image[3];
+    private float waitingSeconds;
     private boolean busy;
     private boolean refreshing;
     private long lastRefreshMillis = System.currentTimeMillis();
@@ -444,6 +454,52 @@ abstract class SessionScreen extends StageScreen {
             && now - session.gameInfo().receivedAtMillis() > RESOLUTION_GRACE_MILLIS) {
             refresh();
         }
+        updateWaiting(delta);
         super.render(delta);
+    }
+
+    /**
+     * Shows a small "waiting for the server" chip at the top centre while a server call
+     * takes longer than {@link #WAITING_DELAY_SECONDS}, so a slow answer doesn't look like a hang.
+     * Three dots light up in turn while it waits.
+     *
+     * @param delta the seconds since the last frame
+     */
+    private void updateWaiting(float delta) {
+        if (!game.gateway().isWaiting()) {
+            waitingSeconds = 0f;
+            if (waiting != null) {
+                waiting.remove();
+                waiting = null;
+            }
+            return;
+        }
+        waitingSeconds += delta;
+        if (waitingSeconds < WAITING_DELAY_SECONDS) {
+            return;
+        }
+        if (waiting == null) {
+            waiting = new Table();
+            waiting.setBackground(ui.solid(Theme.NAVY));
+            waiting.pad(8f, 14f, 8f, 14f);
+            Table dots = new Table();
+            for (int i = 0; i < waitingDots.length; i++) {
+                waitingDots[i] = new Image(ui.solid(Theme.ON_FILL));
+                dots.add(waitingDots[i]).size(6f).padRight(i < waitingDots.length - 1 ? 4f : 0f);
+            }
+            waiting.add(dots).padRight(10f);
+            waiting.add(ui.label("WAITING FOR THE SERVER", Theme.TextStyle.LABEL, Theme.ON_FILL));
+            waiting.pack();
+            // Centred in the header row, which is empty in the middle on every screen, the hub included.
+            waiting.setPosition((stage.getWidth() - waiting.getWidth()) / 2f,
+                stage.getHeight() - WAITING_CENTRE_FROM_TOP - waiting.getHeight() / 2f);
+            waiting.setTouchable(Touchable.disabled);
+            stage.addActor(waiting);
+        }
+        waiting.toFront();
+        int lit = (int) ((waitingSeconds - WAITING_DELAY_SECONDS) / WAITING_DOT_SECONDS) % waitingDots.length;
+        for (int i = 0; i < waitingDots.length; i++) {
+            waitingDots[i].getColor().a = i == lit ? 1f : 0.35f;
+        }
     }
 }

@@ -140,6 +140,14 @@ public final class ScreenSnapshot {
      * A gateway that never answers: screens can be built, but no call ever comes back.
      */
     private static final class SilentGateway implements ServerGateway {
+        /** What {@link #isWaiting()} says, for the waiting indicator's shot. */
+        boolean waiting;
+
+        @Override
+        public boolean isWaiting() {
+            return waiting;
+        }
+
         @Override
         public void logIn(Credentials credentials, Consumer<LoginResult> done) {
         }
@@ -729,6 +737,12 @@ public final class ScreenSnapshot {
             new NewsEntry(22, RandomEventKind.RD_RESULTS_SETBACK, null, 0.9)));
         startSession(game, effects, info);
         write(folder, "pao-effects.png", new PublicAffairsScreen(game), null);
+
+        SilentGateway gateway = (SilentGateway) game.gateway();
+        gateway.waiting = true;
+        write(folder, "waiting-for-server.png", new PublicAffairsScreen(game), screen -> screen.render(0.6f));
+        write(folder, "waiting-for-server-hub.png", new SpaceComplexScreen(game), screen -> screen.render(0.6f));
+        gateway.waiting = false;
     }
 
     /** The mockup's agency at 1960 · S4, with the goal records and memorial the Museum reads. */

@@ -189,6 +189,12 @@ On the right:
       historical-facts text (`design.md` §1.2).
     - **The join screen has the first one** (§4.2). That's on purpose: it's where
       players meet the icon and learn what it means.
+16. **Waiting indicator** *(built in libGDX 2026-10-05, user's play-test request)*. When a
+    server call takes longer than 0.3 s, a small navy chip, "WAITING FOR THE SERVER" with three
+    dots lighting up in turn, shows in the middle of the header row (empty there on every
+    screen, the hub included). It goes away when the answer arrives. `SessionScreen` draws it
+    from `ServerGateway.isWaiting()`, so every in-game screen has it. Connect and Join keep their
+    own busy buttons.
 
 ---
 
