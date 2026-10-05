@@ -38,10 +38,11 @@ public final class ServerLauncher {
         int port = args.length > 0 ? Integer.parseInt(args[0]) : NetworkConstants.TCP_PORT;
         Path dataRoot = args.length > 1 ? Path.of(args[1]) : DEFAULT_DATA_ROOT;
         HeadlessApplicationConfiguration config = new HeadlessApplicationConfiguration();
-        // Async/daily-batch (design.md 3.1): there is no continuous simulation to tick, just
-        // short-lived client connections plus one scheduled turn-resolution check on every render()
-        // tick (see TurnScheduler). A modest rate is plenty for now.
-        config.updatesPerSecond = 1;
+        // Requests are handled on the render() tick, so the tick rate is the server's response
+        // latency: at 1 per second every call waited up to a second, and hiring five people (a
+        // submit and a fetch each) took several seconds. 50 ticks a second answers within 20 ms;
+        // GameServer runs the turn scheduler only once a second.
+        config.updatesPerSecond = 50;
         new HeadlessApplication(new GameServer(port, dataRoot), config);
     }
 }

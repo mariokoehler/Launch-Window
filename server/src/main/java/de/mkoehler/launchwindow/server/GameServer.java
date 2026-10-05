@@ -48,6 +48,10 @@ public class GameServer extends ApplicationAdapter {
     private RequestDispatcher dispatcher;
     private TurnScheduler scheduler;
     private String lastSchedulerFailure;
+    private long nextSchedulerCheckNanos = System.nanoTime();
+
+    /** How often the turn scheduler runs; it re-reads {@code game-meta.json} each time. */
+    private static final long SCHEDULER_INTERVAL_NANOS = 1_000_000_000L;
 
     /**
      * Creates the application.
@@ -130,6 +134,11 @@ public class GameServer extends ApplicationAdapter {
                 dispatcher.handleDisconnect(connectionId);
             }
         });
+        long now = System.nanoTime();
+        if (now - nextSchedulerCheckNanos < 0) {
+            return;
+        }
+        nextSchedulerCheckNanos = now + SCHEDULER_INTERVAL_NANOS;
         try {
             scheduler.checkAndResolveIfDue();
             lastSchedulerFailure = null;

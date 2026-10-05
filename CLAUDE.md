@@ -367,7 +367,10 @@ the connection-per-call design (`design.md` §3.3). `NetworkGateway` logs in onc
 at Connect, reuses the connection, reconnects and logs in again by itself if it
 has dropped, never repeats a call that broke mid-exchange, and closes off-thread.
 `ClientGatewayIntegrationTest` proves the reuse and a reconnect after a server
-restart. **Next:** main-menu groundwork (art by season and time of day, hotspots,
+restart. **Server tick = response latency (2026-10-05):** requests are handled on `GameServer.render()`,
+which ran once a second, so every call waited up to 1 s (measured 999 ms per round trip; a hire is a
+submit plus a fetch). It now ticks 50 times a second (measured 20 ms), the turn scheduler still runs
+once a second, and `sendThenClose` waits 500 ms by the clock instead of one poll. **Next:** main-menu groundwork (art by season and time of day, hotspots,
 hover; the hub stays chrome-free), then G5 names, then G8 salary adjustment.
 
 **Mockup feedback from the libGDX build, closed out the same day (2026-10-04).**

@@ -5,7 +5,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
 import java.io.IOException;
-import java.util.Set;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -67,7 +67,14 @@ public final class NetworkServer {
 
     private final Server server;
     private final ConcurrentLinkedQueue<Event> inbox = new ConcurrentLinkedQueue<>();
-    private final Set<Integer> pendingCloses = ConcurrentHashMap.newKeySet();
+    /** Connection id to the {@link System#nanoTime()} after which it may be closed. */
+    private final Map<Integer, Long> pendingCloses = new ConcurrentHashMap<>();
+
+    /**
+     * How long {@link #sendThenClose(int, Object)} waits before closing, so the message can reach
+     * the client first. Measured in time, not in polls: the server polls many times a second.
+     */
+    static final long CLOSE_DELAY_NANOS = 500_000_000L;
 
     /**
      * Creates a server that is not listening yet; call {@link #start(int)}.
@@ -111,19 +118,22 @@ public final class NetworkServer {
     /**
      * Hands every event that has arrived since the last call to a handler,
      * in arrival order. Also closes every connection queued by
-     * {@link #sendThenClose(int, Object)} on a <em>previous</em> call,
-     * before handing over any new events - see that method for why the
-     * close is deferred by one call rather than immediate. Call this
-     * regularly from the thread that owns the server state.
+     * {@link #sendThenClose(int, Object)} whose delay has passed, before
+     * handing over any new events - see that method for why the close is
+     * deferred rather than immediate. Call this regularly from the thread
+     * that owns the server state.
      *
      * @param handler where the events go
      */
     public void poll(Handler handler) {
         if (!pendingCloses.isEmpty()) {
-            for (int connectionId : pendingCloses) {
-                close(connectionId);
+            long now = System.nanoTime();
+            for (Map.Entry<Integer, Long> pending : pendingCloses.entrySet()) {
+                if (now - pending.getValue() >= 0) {
+                    pendingCloses.remove(pending.getKey());
+                    close(pending.getKey());
+                }
             }
-            pendingCloses.clear();
         }
         Event event;
         while ((event = inbox.poll()) != null) {
@@ -148,13 +158,13 @@ public final class NetworkServer {
     }
 
     /**
-     * Sends a message to one client, then closes the connection - once the
-     * <em>next</em> call to {@link #poll(Handler)} runs, not immediately.
-     * Closing a connection can drop a write still in flight, so an
-     * immediate close right after {@link #send(int, Object)} risks the
-     * client never actually receiving this message (e.g. a rejected
-     * handshake's reason); deferring the close by one polling cycle gives
-     * the underlying socket a chance to flush it first.
+     * Sends a message to one client, then closes the connection - on the
+     * first call to {@link #poll(Handler)} at least {@link #CLOSE_DELAY_NANOS}
+     * later, not immediately. Closing a connection can drop a write still in
+     * flight, so an immediate close right after {@link #send(int, Object)}
+     * risks the client never actually receiving this message (e.g. a
+     * rejected handshake's reason); the delay gives the underlying socket a
+     * chance to flush it first.
      *
      * @param connectionId the connection to send on, then close
      * @param message      the message, one of the classes registered in
@@ -162,7 +172,7 @@ public final class NetworkServer {
      */
     public void sendThenClose(int connectionId, Object message) {
         send(connectionId, message);
-        pendingCloses.add(connectionId);
+        pendingCloses.put(connectionId, System.nanoTime() + CLOSE_DELAY_NANOS);
     }
 
     /**
