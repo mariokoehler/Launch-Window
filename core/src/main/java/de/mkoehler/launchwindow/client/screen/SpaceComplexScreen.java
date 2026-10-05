@@ -59,6 +59,8 @@ public final class SpaceComplexScreen extends SessionScreen {
     private static final float IDLE_MARKER_RADIUS = 18f;
     /** The plain marker's icon size, in art pixels. */
     private static final float IDLE_MARKER_ICON = 20f;
+    /** The most height a tall, narrow marker icon (the VAB's rocket) may use inside the disc. */
+    private static final float TALL_MARKER_ICON = 26f;
 
     private final List<Hub.Hotspot> hotspots;
     private final Hub.TimeOfDay timeOfDay;
@@ -403,10 +405,12 @@ public final class SpaceComplexScreen extends SessionScreen {
                 Color tint = spot.place() == hovered ? Color.WHITE : Theme.NAVY;
                 batch.setColor(tint.r, tint.g, tint.b, parentAlpha);
                 Drawable icon = markerIcon(spot.place());
-                float half = IDLE_MARKER_ICON / 2f;
-                icon.draw(batch, getX() + (spot.labelX() - half) * scaleX,
-                    getY() + (spot.labelY() + MARKER_RISE - half) * scaleY, IDLE_MARKER_ICON * scaleX,
-                    IDLE_MARKER_ICON * scaleY);
+                // Keep the icon's own proportions: the rocket is tall and narrow, and a square stretched it.
+                float aspect = ui.iconAspect(spot.place().icon());
+                float h = aspect < 1f ? Math.min(TALL_MARKER_ICON, IDLE_MARKER_ICON / aspect) : IDLE_MARKER_ICON / aspect;
+                float w = h * aspect;
+                icon.draw(batch, getX() + (spot.labelX() - w / 2f) * scaleX,
+                    getY() + (spot.labelY() + MARKER_RISE - h / 2f) * scaleY, w * scaleX, h * scaleY);
             }
             for (Hub.Hotspot spot : upgrading) {
                 batch.setColor(Theme.NAVY.r, Theme.NAVY.g, Theme.NAVY.b, parentAlpha);
