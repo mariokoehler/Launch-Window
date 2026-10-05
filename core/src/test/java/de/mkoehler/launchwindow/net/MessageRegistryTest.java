@@ -350,7 +350,7 @@ class MessageRegistryTest {
         snapshot.setCancelledGoalIds(Set.of("pre-flight"));
         // M5 Museum state: the memorial (G10) and the goal records.
         snapshot.setMemorial(List.of(new MemorialEntry("Ivan Petrov", 31, 19, MemorialEntry.Cause.MISSION,
-            "vostok-orbital", "reentry")));
+            "vostok-orbital", "reentry", "soviet_007")));
         snapshot.setGoalRecords(List.of(new GoalRecord("pre-flight", 4, "sputnik-1-std", "orbit", true, 30)));
 
         FetchStateResponse copy = roundTrip(FetchStateResponse.success(snapshot), FetchStateResponse.class);

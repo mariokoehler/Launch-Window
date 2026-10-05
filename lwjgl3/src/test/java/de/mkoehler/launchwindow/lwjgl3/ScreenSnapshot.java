@@ -698,8 +698,8 @@ public final class ScreenSnapshot {
         state.setSuccessfulFlightCounts(Map.of("sputnik-1-orbit", 2, "sputnik-1-extended", 1,
             "vostok-uncrewed-suborbital", 1, "vostok-uncrewed-orbital", 2, "vostok-orbital", 1));
         state.setMemorial(List.of(new MemorialEntry("Arseny Kolesov", 27, 19, MemorialEntry.Cause.ACCIDENT, null,
-            null), new MemorialEntry("Pavel Orlov", 31, 22, MemorialEntry.Cause.MISSION, "vostok-orbital",
-            "reentry")));
+            null, null), new MemorialEntry("Pavel Orlov", 31, 22, MemorialEntry.Cause.MISSION, "vostok-orbital",
+            "reentry", null)));
         return state;
     }
 

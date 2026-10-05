@@ -1026,7 +1026,11 @@ current state alone. Each is an M5 task.
   (component 15), so the content screens can show the icon where a story exists.
 - **G5. Personnel names.** *(Done 2026-10-04: `rules.PersonnelNames`, our own lists per
   archetype, well-known space-program people left out, seeded per candidate so no
-  skill roll changes.)* Candidates are all called "Candidate". Generate
+  skill roll changes. Since 2026-10-05 each candidate gets a portrait first, from
+  `rules.PortraitCatalog`, and a name and starting age that match it: name lists per
+  ethnicity and sex in `core`'s `personnel/names.json`, the age from the portrait's age
+  range. `Personnel.portraitId` says which portrait; the screens don't show it yet.)*
+  Candidates are all called "Candidate". Generate
   plausible names per archetype (our own name lists).
 - **G6. Today's queue.** Today's pending actions and their results, for the queue
   panel.

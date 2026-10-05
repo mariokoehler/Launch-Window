@@ -10,8 +10,12 @@ Usage (ComfyUI running locally):
     python make_portraits.py --force          # regenerate files that already exist
 
 Writes <archetype>/<archetype>_NNN.png next to this script and manifest.json, which records
-each portrait's attributes, prompt and seed. ComfyUI also keeps its own copy in its output
-folder (named lw_portrait_<archetype>_NNN_*.png); this script never deletes those.
+each portrait's attributes, prompt and seed. It also writes the trimmed catalog the game reads,
+core/src/main/resources/personnel/portraits.json (id, archetype, personnel group, sex, ethnicity
+key and age range), which PersonnelNames uses to give each candidate a portrait and a matching
+name. `python make_portraits.py --catalog-only` rewrites just that catalog from manifest.json.
+ComfyUI also keeps its own copy in its output folder (named lw_portrait_<archetype>_NNN_*.png);
+this script never deletes those.
 """
 import argparse
 import json
@@ -26,6 +30,7 @@ import urllib.request
 HERE = os.path.dirname(os.path.abspath(__file__))
 WORKFLOW = os.path.join(HERE, 'portraits_workflow_api.json')
 MANIFEST = os.path.join(HERE, 'manifest.json')
+CATALOG = os.path.join(HERE, '..', '..', 'core', 'src', 'main', 'resources', 'personnel', 'portraits.json')
 
 ROLES = ['engineer'] * 18 + ['flight controller'] * 16 + ['astronaut'] * 16
 
@@ -242,6 +247,47 @@ def portrait_block(archetype, block, count):
     return result
 
 
+GROUPS = {'astronaut': 'ASTRONAUT', 'engineer': 'SET', 'flight controller': 'MISSION_CONTROL'}
+
+AGE_RANGES = {
+    'late twenties': (27, 29), 'early thirties': (30, 33), 'mid thirties': (34, 36), 'late thirties': (37, 39),
+    'thirties': (30, 39), 'early forties': (40, 43), 'late forties': (47, 49), 'fifties': (50, 59),
+    'early sixties': (60, 63),
+}
+
+ETHNICITY_KEYS = {
+    'white American': 'white_american', 'white American of Irish descent': 'irish_american',
+    'white American of Italian descent': 'italian_american', 'white American of German descent': 'german_american',
+    'white American of Polish descent': 'polish_american', 'Black American': 'black_american',
+    'Mexican-American': 'mexican_american', 'Puerto Rican American': 'puerto_rican_american',
+    'Japanese-American': 'japanese_american', 'Chinese-American': 'chinese_american',
+    'Filipino-American': 'filipino_american', 'Native American (Navajo)': 'navajo',
+    'Korean-American': 'korean_american', 'white American of Scandinavian descent': 'scandinavian_american',
+    'Jewish American': 'jewish_american', 'Greek-American': 'greek_american',
+    'Russian': 'russian', 'Ukrainian': 'ukrainian', 'Belarusian': 'belarusian', 'Georgian': 'georgian',
+    'Armenian': 'armenian', 'Kazakh': 'kazakh', 'Uzbek': 'uzbek', 'Volga Tatar': 'volga_tatar',
+    'Azerbaijani': 'azerbaijani', 'Buryat': 'buryat', 'Estonian': 'estonian', 'Latvian': 'latvian',
+    'Lithuanian': 'lithuanian', 'Soviet Jewish': 'soviet_jewish', 'Chuvash': 'chuvash',
+}
+
+
+def write_catalog(manifest):
+    """Writes the trimmed catalog the game reads: no prompts, ethnicity as a key into
+    personnel/names.json, the age phrase as a numeric range, sorted by id."""
+    entries = []
+    for e in manifest:
+        low, high = AGE_RANGES[e['age']]
+        entries.append({
+            'id': os.path.splitext(os.path.basename(e['file']))[0], 'archetype': e['archetype'].upper(),
+            'group': GROUPS[e['role']], 'sex': e['sex'].upper(), 'ethnicity': ETHNICITY_KEYS[e['ethnicity']],
+            'minAge': low, 'maxAge': high,
+        })
+    entries.sort(key=lambda entry: entry['id'])
+    os.makedirs(os.path.dirname(CATALOG), exist_ok=True)
+    with open(CATALOG, 'w', encoding='utf-8', newline='\n') as out:
+        out.write('[\n' + ',\n'.join('  ' + json.dumps(entry, ensure_ascii=False) for entry in entries) + '\n]\n')
+
+
 def pronoun(sex):
     return 'He' if sex == 'male' else 'She'
 
@@ -288,7 +334,12 @@ def main():
     parser.add_argument('--count', type=int, default=100)
     parser.add_argument('--only', choices=['nasa', 'soviet'])
     parser.add_argument('--force', action='store_true')
+    parser.add_argument('--catalog-only', action='store_true', help='only rewrite the game catalog from manifest.json')
     args = parser.parse_args()
+    if args.catalog_only:
+        with open(MANIFEST, encoding='utf-8') as source:
+            write_catalog(json.load(source))
+        return 0
     with open(WORKFLOW, encoding='utf-8') as source:
         workflow = json.load(source)
     archetypes = [args.only] if args.only else ['nasa', 'soviet']

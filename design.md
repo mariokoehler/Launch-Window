@@ -151,6 +151,19 @@ same session it comes up**, the same standing-note-to-self habit as
     he ejected at about 7 km and came down under his own parachute. Soviet
     officials kept this quiet for years, because the rules for an official
     flight record required the pilot to land with his craft.
+  - **Candidate: Mary Golda Ross.** A Cherokee engineer, often named the
+    first Native American woman engineer. She worked at Lockheed from 1942,
+    and as one of the founding members of its Missiles Systems Division she
+    worked on the Agena upper stage and on early studies of flights to Mars
+    and Venus. It fits next to a SET engineer's portrait or the hire screen,
+    and shows the period's engineering staff were more varied than the usual
+    picture. Verify the details before using it.
+  - **Candidate: Nisei first names.** Many Japanese Americans born in the US
+    in the 1920s-30s (the Nisei) had an English first name, often alongside a
+    Japanese one, which is why the Japanese-American name list mixes "George"
+    and "Kazuo". Many of them, and their families, were held in internment
+    camps during the Second World War. It fits a history note on a Japanese-
+    American employee's portrait card, if the game ever shows one.
   - **Candidate: Belka and Strelka (Korabl-Sputnik 2).** In August 1960 the
     two dogs became the first animals to orbit Earth and come back alive,
     along with mice, rats and plants. Strelka later had puppies, and
@@ -6157,6 +6170,34 @@ here.
       prints byte-identical output with and without names. Its current figure is 186
       of 200 games completing every declared goal; the older "189 of 200" in these docs
       predates later rules changes (slot staffing and others), not this one.
+    - **G5 follow-up, names that match the portraits (2026-10-05, user request):** each
+      candidate now gets a portrait first (`rules.PortraitCatalog`, read from
+      `core`'s `personnel/portraits.json`), then a name and a starting age that match
+      it. The name comes from `personnel/names.json`: lists of men's names, women's
+      names and surnames for each of the 31 ethnicities the portraits show. A gendered
+      surname is written `masculine/feminine` (`Orlov/Orlova`,
+      `Kazlauskas/Kazlauskienė`). The age is drawn from the portrait's age range,
+      which replaces the old 22–40 candidate range.
+      - **Data:** `make_portraits.py` writes the catalog from the manifest (`--catalog-only`
+        rewrites only it), so the catalog stays in sync with the art. Both JSON files sit in
+        `core`, not `assets/`, so the headless rules and the harnesses can read them.
+      - **Portrait choice:** a batch avoids portraits on the roster, on the memorial
+        (`MemorialEntry.portraitId`, new), and in the same batch. While enough others are
+        free, it also avoids the pool it replaces. When none is free it gives up the
+        previous pool first and then everything else, so a long game reuses faces rather
+        than failing.
+      - **New letters:** `Theme.CHARACTERS` gained `ĢģĪīĮįĶķĻļŅņ` for Latvian and
+        Lithuanian names. All six bundled fonts have them, and `PersonnelNamesTest` checks
+        every letter of every name against `Theme.CHARACTERS`.
+      - **Harness shift (behaviour, not just the random stream):** hires are older now
+        (the portraits run from the late twenties to the early sixties), so more of them
+        retire. `PersonnelLifecyclePlayouts`: retired 1,031 → 1,768 (average tenure
+        54.4 → 43.9 seasons), resigned 995 → 900, hired 4,778 → 5,162.
+        `ContentPackPlayouts`: 186 → 193 of 200 games complete every declared goal, hires
+        4,063 → 4,886, and the average completion season goes from 58.9 to 54.7.
+      - **Soviet share of women:** about 40 %, set by the art. It was a fixed 1 in 4 before.
+      - **Open:** the client doesn't show the portraits yet. It still draws the initials
+        square, and the PNGs aren't in `assets/` yet.
     - **G8 salary adjustment:** `rules.DepartmentSalaries` holds one formula that
       both `AdjustSalariesAction` (registered last in `MessageRegistry` and in
       `PlayerAction`'s subtypes) and the dialog's live preview call.

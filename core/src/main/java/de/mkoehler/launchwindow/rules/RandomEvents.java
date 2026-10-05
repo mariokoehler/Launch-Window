@@ -346,7 +346,7 @@ public final class RandomEvents {
         }
         Personnel astronaut = idle.get(random.nextInt(idle.size()));
         snapshot.getMemorial().add(new MemorialEntry(astronaut.getName(), astronaut.getAge(), turn,
-            MemorialEntry.Cause.ACCIDENT, null, null));
+            MemorialEntry.Cause.ACCIDENT, null, null, astronaut.getPortraitId()));
         depart(snapshot, PersonnelGroup.ASTRONAUT, astronaut, DepartureReason.PERISHED,
             RandomEventKind.PERISHED_ASTRONAUT, turn, events);
         return true;

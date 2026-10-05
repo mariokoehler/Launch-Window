@@ -1,0 +1,157 @@
+{
+  "white_american": {
+    "male": ["Robert", "Richard", "Donald", "Gary", "Dale", "Wayne", "Harold", "Ralph", "Lloyd", "Russell", "Calvin", "Dean"],
+    "female": ["Carol", "Patricia", "Joan", "Betty", "Marilyn", "Janet", "Shirley", "Phyllis", "Nancy", "Barbara", "Lorraine", "Judith"],
+    "surnames": ["Langford", "Caldwell", "Bennett", "Fletcher", "Hayes", "Holloway", "Ellsworth", "Pemberton", "Prescott", "Whitfield", "Underwood", "Ashworth", "Hartley", "Fairbanks", "Marsh"]
+  },
+  "irish_american": {
+    "male": ["Patrick", "Michael", "Francis", "Thomas", "Brendan", "Dennis", "Martin", "Joseph", "Gerald", "Edmund"],
+    "female": ["Kathleen", "Maureen", "Eileen", "Bridget", "Colleen", "Margaret", "Noreen", "Mary Ellen", "Rosemary", "Agnes"],
+    "surnames": ["Brennan", "Gallagher", "Quigley", "Donovan", "Kavanagh", "Fitzgerald", "Callahan", "Doherty", "Sweeney", "Mahoney", "Flanagan", "Hennessy"]
+  },
+  "italian_american": {
+    "male": ["Anthony", "Joseph", "Salvatore", "Vincent", "Dominic", "Frank", "Carmine", "Louis", "Angelo", "Ralph"],
+    "female": ["Rosemary", "Angela", "Theresa", "Josephine", "Lucia", "Carmela", "Antoinette", "Concetta", "Rita", "Marie"],
+    "surnames": ["Mancini", "Castellano", "Romano", "DeLuca", "Ferraro", "Marino", "Bianchi", "Esposito", "Giordano", "Lombardi", "Rinaldi", "Caruso"]
+  },
+  "german_american": {
+    "male": ["Herman", "Walter", "Ernest", "Carl", "Frederick", "Otto", "Herbert", "Raymond", "Eugene", "Albert"],
+    "female": ["Gertrude", "Hilda", "Irma", "Elsie", "Lorraine", "Ruth", "Marlene", "Emma", "Frieda", "Doris"],
+    "surnames": ["Schneider", "Becker", "Krueger", "Vogel", "Hartmann", "Zimmerman", "Brandt", "Kessler", "Lehmann", "Albrecht", "Pfeiffer", "Baumgartner"]
+  },
+  "polish_american": {
+    "male": ["Stanley", "Casimir", "Edward", "Thaddeus", "Walter", "Joseph", "Chester", "Leonard", "Raymond", "Henry"],
+    "female": ["Helen", "Stella", "Irene", "Wanda", "Sophie", "Jean", "Dorothy", "Genevieve", "Florence", "Bernice"],
+    "surnames": ["Kowalczyk", "Jablonski", "Zielinski", "Sadowski", "Wisniewski", "Kaminski", "Lewandowski", "Wojcik", "Mazur", "Sobczak", "Pawlak", "Grabowski"]
+  },
+  "scandinavian_american": {
+    "male": ["Arne", "Gunnar", "Harold", "Norman", "Roy", "Elmer", "Leif", "Orville", "Clarence", "Arnold"],
+    "female": ["Ingrid", "Solveig", "Karin", "Marjorie", "Astrid", "Linnea", "Signe", "Elaine", "Mildred", "Gladys"],
+    "surnames": ["Lindqvist", "Eriksen", "Johansen", "Nilsson", "Halvorsen", "Lundquist", "Bergstrom", "Sundberg", "Olsen", "Thorsen", "Dahl", "Hagen"]
+  },
+  "jewish_american": {
+    "male": ["Irving", "Morris", "Sidney", "Bernard", "Herbert", "Seymour", "Milton", "Leonard", "Stanley", "Arthur"],
+    "female": ["Ruth", "Esther", "Miriam", "Sylvia", "Rhoda", "Estelle", "Shirley", "Naomi", "Beatrice", "Lillian"],
+    "surnames": ["Goldberg", "Rosen", "Feldman", "Kaplan", "Weiss", "Shapiro", "Levine", "Silverman", "Abramson", "Lieberman", "Blum", "Gross"]
+  },
+  "greek_american": {
+    "male": ["George", "Nicholas", "Constantine", "Peter", "Gus", "Demetrios", "Theodore", "Christopher", "Anastasios", "James"],
+    "female": ["Helen", "Katherine", "Sophia", "Irene", "Despina", "Maria", "Athena", "Georgia", "Vasiliki", "Penelope"],
+    "surnames": ["Pappas", "Christopoulos", "Georgiou", "Nikolaidis", "Karras", "Demos", "Galanis", "Manos", "Andreou", "Vlahos", "Kouris", "Stavrakis"]
+  },
+  "black_american": {
+    "male": ["James", "Charles", "Willie", "Clarence", "Leroy", "Otis", "Earl", "Wendell", "Booker", "Cornelius", "Roosevelt", "Lucius"],
+    "female": ["Lucille", "Ernestine", "Gladys", "Bernice", "Juanita", "Loretta", "Hattie", "Odessa", "Mae", "Viola", "Geraldine", "Inez"],
+    "surnames": ["Washington", "Jefferson", "Robinson", "Coleman", "Simmons", "Freeman", "Banks", "Mosley", "Gaines", "Tolliver", "Hawkins", "Pettiford", "Whitaker", "Battle", "Merriweather"]
+  },
+  "mexican_american": {
+    "male": ["Manuel", "Roberto", "Raul", "Arturo", "Ruben", "Alfonso", "Ignacio", "Ernesto", "Gilberto", "Ramon"],
+    "female": ["Guadalupe", "Dolores", "Esperanza", "Consuelo", "Alicia", "Yolanda", "Socorro", "Graciela", "Elvira", "Rosalinda"],
+    "surnames": ["Garcia", "Martinez", "Gonzales", "Rodriguez", "Sanchez", "Torres", "Flores", "Gutierrez", "Salazar", "Vasquez", "Delgado", "Sandoval", "Castillo", "Ramirez"]
+  },
+  "puerto_rican_american": {
+    "male": ["Angel", "Luis", "Rafael", "Hector", "Efrain", "Wilfredo", "Israel", "Felix", "Orlando", "Juan"],
+    "female": ["Carmen", "Gloria", "Iris", "Lydia", "Nilda", "Migdalia", "Aida", "Norma", "Haydee", "Evelyn"],
+    "surnames": ["Rivera", "Colón", "Ortiz", "Santiago", "Figueroa", "Velázquez", "Rosado", "Quiñones", "Maldonado", "Rosario", "Negrón", "Cintrón"]
+  },
+  "japanese_american": {
+    "male": ["George", "Frank", "Henry", "Kazuo", "Tadashi", "Minoru", "Roy", "Hiroshi", "Ben", "Shigeru"],
+    "female": ["Mary", "Grace", "Alice", "Yoshiko", "Fumiko", "Kiyoko", "Amy", "Setsuko", "Ruby", "Michiko"],
+    "surnames": ["Nakamura", "Watanabe", "Ishikawa", "Tanaka", "Fujimoto", "Matsumoto", "Kobayashi", "Hayashi", "Shimizu", "Okada", "Kimura", "Takahashi", "Yamada"]
+  },
+  "chinese_american": {
+    "male": ["Robert", "Henry", "Edward", "Walter", "Albert", "Wilbur", "Raymond", "Thomas", "Howard", "Kenneth"],
+    "female": ["Dorothy", "Rose", "Helen", "May", "Alice", "Lily", "Florence", "Jade", "Pearl", "Frances"],
+    "surnames": ["Wong", "Chin", "Lee", "Chan", "Fong", "Leong", "Louie", "Yee", "Eng", "Lum", "Quan", "Jung", "Tom"]
+  },
+  "korean_american": {
+    "male": ["Paul", "Samuel", "Daniel", "Harold", "Philip", "David", "Young-ho", "Sung-min", "Peter", "Timothy"],
+    "female": ["Grace", "Esther", "Ruth", "Mary", "Martha", "Young-soon", "Helen", "Sarah", "Hannah", "Mi-ja"],
+    "surnames": ["Lee", "Park", "Choi", "Kang", "Yoon", "Cho", "Han", "Shin", "Song", "Ahn", "Chung", "Hong"]
+  },
+  "filipino_american": {
+    "male": ["Jose", "Ricardo", "Antonio", "Ernesto", "Rodrigo", "Benjamin", "Teodoro", "Florencio", "Romeo", "Domingo"],
+    "female": ["Maria", "Rosario", "Teresita", "Lourdes", "Josefina", "Carmen", "Corazon", "Perla", "Remedios", "Leonora"],
+    "surnames": ["Santos", "Reyes", "Cruz", "Bautista", "Mendoza", "Villanueva", "Ramos", "Pascual", "Dizon", "Manalo", "Ocampo", "Tolentino"]
+  },
+  "navajo": {
+    "male": ["Harold", "Frank", "Wilson", "Kee", "Raymond", "Lorenzo", "Freddie", "Benjamin", "Chester", "Leroy"],
+    "female": ["Mary", "Lena", "Rose", "Marjorie", "Nora", "Bessie", "Louise", "Annie", "Rita", "Irene"],
+    "surnames": ["Yazzie", "Tsosie", "Benally", "Nez", "Tso", "Etsitty", "Chee", "Begaye", "Bitsui", "Yellowhair", "Manygoats", "Silversmith", "Tsinajinnie"]
+  },
+  "russian": {
+    "male": ["Anatoly", "Boris", "Dmitri", "Fyodor", "Gennady", "Igor", "Kirill", "Lev", "Mikhail", "Nikolai", "Oleg", "Pavel", "Sergei", "Vadim", "Arkady", "Grigory", "Stanislav"],
+    "female": ["Alla", "Galina", "Irina", "Larisa", "Lyudmila", "Marina", "Nadezhda", "Olga", "Raisa", "Svetlana", "Tamara", "Yelena", "Zoya", "Nina", "Vera"],
+    "surnames": ["Arkhipov/Arkhipova", "Belousov/Belousova", "Danilov/Danilova", "Gorelov/Gorelova", "Ignatyev/Ignatyeva", "Lavrentyev/Lavrentyeva", "Molchanov/Molchanova", "Nesterov/Nesterova", "Orlov/Orlova", "Pankratov/Pankratova", "Tarasov/Tarasova", "Vorontsov/Vorontsova", "Melnikov/Melnikova", "Shubin/Shubina", "Yermakov/Yermakova", "Kolesnikov/Kolesnikova", "Polyansky/Polyanskaya", "Barinov/Barinova"]
+  },
+  "ukrainian": {
+    "male": ["Taras", "Bohdan", "Vasyl", "Petro", "Yaroslav", "Mykola", "Ivan", "Stepan", "Ostap", "Hryhoriy"],
+    "female": ["Oksana", "Halyna", "Lesya", "Nataliya", "Kateryna", "Olena", "Hanna", "Mariya", "Iryna", "Zinaida"],
+    "surnames": ["Fedorchuk", "Rudenko", "Savchenko", "Kovalenko", "Tkachenko", "Moroz", "Hrytsenko", "Boyko", "Pavlenko", "Shevchuk", "Didenko", "Kostenko", "Melnyk", "Ponomarenko"]
+  },
+  "belarusian": {
+    "male": ["Ales", "Vladimir", "Aleksei", "Stepan", "Yanka", "Mikola", "Viktor", "Pyotr", "Kastus", "Anton"],
+    "female": ["Alesya", "Yanina", "Tatyana", "Antonina", "Lyubov", "Ganna", "Yadviga", "Valentina", "Zoya", "Volha"],
+    "surnames": ["Zhuravlevich", "Kasperovich", "Yakubovich", "Lukashevich", "Sakovich", "Martinkevich", "Radkevich", "Kuleshov/Kuleshova", "Lapitsky/Lapitskaya", "Shimanovsky/Shimanovskaya", "Dubovik", "Karpovich"]
+  },
+  "soviet_jewish": {
+    "male": ["Yakov", "Naum", "Mark", "Lev", "Iosif", "Grigory", "Semyon", "Yefim", "Isaak", "Boris"],
+    "female": ["Raisa", "Sofia", "Fanya", "Ida", "Rosa", "Dina", "Yevgenia", "Bella", "Asya", "Riva"],
+    "surnames": ["Rabinovich", "Vaisman", "Kogan", "Shapiro", "Feldman", "Gershtein", "Zilberman", "Rozenberg", "Katsnelson", "Lifshits", "Berman", "Kaplan"]
+  },
+  "chuvash": {
+    "male": ["Ivan", "Pyotr", "Vasily", "Yegor", "Gennady", "Arkady", "Mikhail", "Afanasy", "Prokopy", "Nikifor"],
+    "female": ["Anna", "Mariya", "Klavdia", "Zinaida", "Yevdokia", "Anisya", "Praskovya", "Valentina", "Agrafena", "Lidiya"],
+    "surnames": ["Yakimov/Yakimova", "Kuzmin/Kuzmina", "Timofeyev/Timofeyeva", "Gerasimov/Gerasimova", "Prokopyev/Prokopyeva", "Filippov/Filippova", "Osipov/Osipova", "Afanasyev/Afanasyeva", "Matveyev/Matveyeva", "Kirillov/Kirillova", "Tarkhanov/Tarkhanova", "Yandushev/Yandusheva"]
+  },
+  "volga_tatar": {
+    "male": ["Rinat", "Ildar", "Rustem", "Marat", "Ravil", "Fanis", "Ilshat", "Azat", "Rafael", "Damir"],
+    "female": ["Gulnara", "Alsu", "Rezeda", "Guzel", "Dilyara", "Liliya", "Zulfiya", "Faniya", "Rauza", "Venera"],
+    "surnames": ["Gabdullin/Gabdullina", "Valiullin/Valiullina", "Sabirov/Sabirova", "Khairullin/Khairullina", "Mingazov/Mingazova", "Galeyev/Galeyeva", "Shakirov/Shakirova", "Zaripov/Zaripova", "Nurullin/Nurullina", "Fatkhullin/Fatkhullina", "Gizatullin/Gizatullina", "Safin/Safina"]
+  },
+  "georgian": {
+    "male": ["Giorgi", "Levan", "Zurab", "Otar", "Nodar", "Revaz", "Tengiz", "Guram", "Merab", "Shota"],
+    "female": ["Nino", "Tamar", "Ketevan", "Nana", "Manana", "Lali", "Eteri", "Nato", "Medea", "Maia"],
+    "surnames": ["Beridze", "Kapanadze", "Lomidze", "Gelashvili", "Maisuradze", "Chikhladze", "Jorbenadze", "Gogoladze", "Natsvlishvili", "Kiknadze", "Dolidze", "Kobakhidze"]
+  },
+  "armenian": {
+    "male": ["Armen", "Ashot", "Vardan", "Karen", "Gagik", "Levon", "Hovhannes", "Tigran", "Suren", "Aram"],
+    "female": ["Anahit", "Gayane", "Lusine", "Siranush", "Hasmik", "Nune", "Armine", "Karine", "Astghik", "Marine"],
+    "surnames": ["Petrosyan", "Hakobyan", "Sargsyan", "Grigoryan", "Avetisyan", "Harutyunyan", "Martirosyan", "Ghazaryan", "Karapetyan", "Mkrtchyan", "Vardanyan", "Babayan"]
+  },
+  "azerbaijani": {
+    "male": ["Rashid", "Tofig", "Elchin", "Farid", "Kamal", "Vagif", "Rauf", "Nazim", "Arif", "Fikret"],
+    "female": ["Aygun", "Leyla", "Gulnara", "Sevda", "Zarifa", "Tarana", "Shafiga", "Rena", "Firuza", "Nargiz"],
+    "surnames": ["Mammadov/Mammadova", "Huseynov/Huseynova", "Hasanov/Hasanova", "Ismayilov/Ismayilova", "Guliyev/Guliyeva", "Rzayev/Rzayeva", "Abbasov/Abbasova", "Jafarov/Jafarova", "Babayev/Babayeva", "Nasirov/Nasirova", "Valiyev/Valiyeva", "Bagirov/Bagirova"]
+  },
+  "kazakh": {
+    "male": ["Serik", "Yerlan", "Bolat", "Marat", "Nurlan", "Kairat", "Askar", "Yerzhan", "Dauren", "Zhaksylyk"],
+    "female": ["Aigul", "Gulnar", "Saule", "Raushan", "Bayan", "Aliya", "Zhanar", "Dinara", "Kulyash", "Mairam"],
+    "surnames": ["Akhmetov/Akhmetova", "Zhakupov/Zhakupova", "Abenov/Abenova", "Sarsenbayev/Sarsenbayeva", "Iskakov/Iskakova", "Kenzhebekov/Kenzhebekova", "Ospanov/Ospanova", "Baimukhanov/Baimukhanova", "Dzhaksybekov/Dzhaksybekova", "Utegenov/Utegenova", "Nurpeisov/Nurpeisova", "Seitov/Seitova"]
+  },
+  "uzbek": {
+    "male": ["Rustam", "Bakhtiyor", "Shukhrat", "Alisher", "Farkhod", "Ulugbek", "Anvar", "Ravshan", "Timur", "Dilshod"],
+    "female": ["Dilfuza", "Gulchekhra", "Nodira", "Mukhabbat", "Zulfiya", "Dilbar", "Saodat", "Feruza", "Malika", "Shakhnoza"],
+    "surnames": ["Islamov/Islamova", "Rakhimov/Rakhimova", "Usmanov/Usmanova", "Tursunov/Tursunova", "Mirzayev/Mirzayeva", "Nazarov/Nazarova", "Sadykov/Sadykova", "Khodzhayev/Khodzhayeva", "Ergashev/Ergasheva", "Akhmedov/Akhmedova", "Abdullayev/Abdullayeva", "Saidov/Saidova"]
+  },
+  "buryat": {
+    "male": ["Bair", "Dorzhi", "Tsyren", "Bato", "Zhargal", "Bulat", "Ayur", "Dashi", "Badma", "Munko"],
+    "female": ["Darima", "Sesegma", "Tuyana", "Erzhena", "Sayana", "Dulma", "Bayarma", "Tsypilma", "Oyuna", "Seseg"],
+    "surnames": ["Dorzhiyev/Dorzhiyeva", "Tsyrenov/Tsyrenova", "Badmayev/Badmayeva", "Batuyev/Batuyeva", "Dambayev/Dambayeva", "Garmayev/Garmayeva", "Tsydenov/Tsydenova", "Baldanov/Baldanova", "Sanzhiyev/Sanzhiyeva", "Dashiyev/Dashiyeva", "Namsarayev/Namsarayeva", "Zhamsuyev/Zhamsuyeva"]
+  },
+  "estonian": {
+    "male": ["Jaan", "Toomas", "Peeter", "Rein", "Mati", "Tiit", "Enn", "Ants", "Jüri", "Heino"],
+    "female": ["Mari", "Kadri", "Tiiu", "Malle", "Aino", "Helgi", "Reet", "Sirje", "Ene", "Maie"],
+    "surnames": ["Mets", "Saar", "Sepp", "Mägi", "Kask", "Rebane", "Koppel", "Lepik", "Kuusk", "Raudsepp", "Kivi", "Vaher", "Pärn"]
+  },
+  "latvian": {
+    "male": ["Jānis", "Andris", "Juris", "Valdis", "Gunārs", "Imants", "Edgars", "Aivars", "Uldis", "Ojārs"],
+    "female": ["Inese", "Ilze", "Dzintra", "Māra", "Biruta", "Rasma", "Vija", "Aina", "Skaidrīte", "Velta"],
+    "surnames": ["Ozols/Ozola", "Bērziņš/Bērziņa", "Kalniņš/Kalniņa", "Liepiņš/Liepiņa", "Jansons/Jansone", "Krūmiņš/Krūmiņa", "Zariņš/Zariņa", "Ozoliņš/Ozoliņa", "Pētersons/Pētersone", "Vītols/Vītola", "Lācis/Lāce", "Kļaviņš/Kļaviņa"]
+  },
+  "lithuanian": {
+    "male": ["Algirdas", "Vytautas", "Jonas", "Kęstutis", "Rimantas", "Antanas", "Juozas", "Povilas", "Romualdas", "Stasys"],
+    "female": ["Aldona", "Birutė", "Danutė", "Genovaitė", "Irena", "Jūratė", "Ona", "Regina", "Laima", "Elena"],
+    "surnames": ["Kazlauskas/Kazlauskienė", "Petrauskas/Petrauskienė", "Jankauskas/Jankauskienė", "Stankevičius/Stankevičienė", "Vasiliauskas/Vasiliauskienė", "Žukauskas/Žukauskienė", "Butkus/Butkienė", "Urbonas/Urbonienė", "Kavaliauskas/Kavaliauskienė", "Navickas/Navickienė", "Rimkus/Rimkienė", "Mockus/Mockienė"]
+  }
+}

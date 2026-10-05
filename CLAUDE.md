@@ -272,8 +272,14 @@ workflow over its HTTP API (`portraits_workflow_api.json`, the workflow's subgra
 API format). It writes `assets-raw/portraits/<nasa|soviet>/*.png` and `manifest.json` (each
 portrait's role, sex, ethnicity, age, prompt and seed; reruns give the same prompts and seeds and
 skip existing files). 100 per agency so far, generated in blocks of 50 with their own random
-sequence each, so raising `--count` adds portraits without changing earlier ones. Next step:
-integrate them into the client. 256x256 is the smallest size the model holds together at. ComfyUI keeps its
+sequence each, so raising `--count` adds portraits without changing earlier ones. The script also
+writes `core/src/main/resources/personnel/portraits.json`, the trimmed catalog the game reads.
+**Candidates are named after their portrait (2026-10-05):** `HiringPool` picks a portrait first, and
+`PersonnelNames` draws the name (lists per ethnicity and sex in `personnel/names.json`) and the age
+(the portrait's age range) to match. A new ethnicity in the art needs a `names.json` entry and a key in
+`make_portraits.py`'s `ETHNICITY_KEYS`; `PersonnelNamesTest` fails until both exist. Details are in
+`design.md` §5 M5, G5. **Next step:** show the portraits in the client (`Personnel.portraitId`; the
+PNGs aren't in `assets/` yet). 256x256 is the smallest size the model holds together at. ComfyUI keeps its
 own copies in `E:\Comfy-Desktop\ComfyUI-Shared\output`; never delete those. The portraits are
 the user's own generated art (`assets-raw/` rule).
 

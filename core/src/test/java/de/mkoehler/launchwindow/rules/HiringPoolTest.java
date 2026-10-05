@@ -64,7 +64,7 @@ class HiringPoolTest {
     }
 
     /**
-     * Verifies every generated candidate's skills, age, and learning
+     * Verifies every generated candidate's skills, age (within their portrait's range), and learning
      * potential all fall within their documented ranges.
      */
     @Test
@@ -74,8 +74,8 @@ class HiringPoolTest {
         HiringPool.refreshCandidates(snapshot, new Random(1L));
 
         for (Astronaut candidate : snapshot.getAstronautCandidates()) {
-            assertTrue(candidate.getAge() >= HiringPool.CANDIDATE_MIN_AGE
-                && candidate.getAge() <= HiringPool.CANDIDATE_MAX_AGE);
+            PortraitCatalog.Portrait portrait = PortraitCatalog.byId(candidate.getPortraitId());
+            assertTrue(candidate.getAge() >= portrait.minAge() && candidate.getAge() <= portrait.maxAge());
             assertTrue(candidate.getLearningPotential() >= HiringPool.CANDIDATE_MIN_LEARNING_POTENTIAL
                 && candidate.getLearningPotential() <= HiringPool.CANDIDATE_MAX_LEARNING_POTENTIAL);
             assertTrue(candidate.getMorale() >= HiringPool.NEW_HIRE_MIN_STARTING_MORALE

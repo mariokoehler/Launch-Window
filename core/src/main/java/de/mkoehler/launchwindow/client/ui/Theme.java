@@ -458,9 +458,11 @@ public final class Theme {
     /**
      * The characters every font is generated with: the basic set plus Latin
      * Extended letters, so names such as Koehler, Lodz and Istanbul render,
-     * and the punctuation the screens use. Shared verbatim with the sibling
-     * projects' own {@code Theme} classes &mdash; generic Unicode range data,
-     * not project-specific content.
+     * and the punctuation the screens use. Taken from the sibling projects'
+     * own {@code Theme} classes &mdash; generic Unicode range data, not
+     * project-specific content &mdash; plus the Latvian and Lithuanian
+     * letters ({@code ĢģĪīĮįĶķĻļŅņ}) that personnel names need.
+     * {@code PersonnelNamesTest} checks every name's letters are in here.
      */
     public static final String CHARACTERS = FreeTypeFontGenerator.DEFAULT_CHARS
         + "ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏ"
@@ -469,6 +471,7 @@ public final class Theme {
         + "ðñòóôõöøùúûüýþÿ"
         + "ĀāĂăĄąĆćĈĉĊċČčĎď"
         + "ĐđĒēĔĕĖėĘęĚěĜĝĞğ"
+        + "ĢģĪīĮįĶķĻļŅņ"
         + "İıŁłŒœŚśŠšŤťŪūŮů"
         + "ŰűŲųŸŹźŻżŽž"
         + "€×–—…‘’“”·−•→↑↓›";

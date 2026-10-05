@@ -12,10 +12,12 @@ import java.util.Objects;
  * @param cause                  how they were lost
  * @param missionConfigurationId the mission flown, for a {@link Cause#MISSION} loss, else {@code null}
  * @param stepId                 the step that failed, for a {@link Cause#MISSION} loss, else {@code null}
+ * @param portraitId             the astronaut's portrait, or {@code null} if they had none; never given
+ *                               to a new candidate afterwards
  * @author Mario Koehler
  */
 public record MemorialEntry(String name, int age, int turn, Cause cause, String missionConfigurationId,
-                            String stepId) {
+                            String stepId, String portraitId) {
 
     /**
      * How an astronaut was lost.

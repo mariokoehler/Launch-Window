@@ -14,6 +14,7 @@ public abstract class Personnel {
 
     private String id;
     private String name;
+    private String portraitId;
     private int age;
     private int agingProgressSeasons;
     private int morale;
@@ -85,6 +86,25 @@ public abstract class Personnel {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * Returns this employee's portrait, an id from {@code personnel/portraits.json} such as
+     * {@code nasa_001}. Their name and starting age were chosen to match it.
+     *
+     * @return the portrait id, or {@code null} for someone created without one (tests, fixtures)
+     */
+    public String getPortraitId() {
+        return portraitId;
+    }
+
+    /**
+     * Sets this employee's portrait.
+     *
+     * @param portraitId the portrait id, or {@code null}
+     */
+    public void setPortraitId(String portraitId) {
+        this.portraitId = portraitId;
     }
 
     /**

@@ -77,7 +77,7 @@ class MuseumTest {
         PlayerSnapshot state = new PlayerSnapshot("Zarya", Archetype.SOVIET, 0, 0, 0, 25);
         state.setSuccessfulFlightCounts(Map.of("vostok-orbital", 1));
         state.setMemorial(List.of(new MemorialEntry("Pavel Orlov", 31, 22, MemorialEntry.Cause.MISSION,
-            "vostok-orbital", "reentry")));
+            "vostok-orbital", "reentry", null)));
 
         List<Museum.Flight> flights = Museum.flights(state, PACK);
         assertEquals(1, flights.size());

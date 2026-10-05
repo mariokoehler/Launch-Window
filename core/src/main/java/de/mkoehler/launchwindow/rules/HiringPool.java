@@ -6,6 +6,7 @@ import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.Building;
 import de.mkoehler.launchwindow.model.AstronautSkill;
+import de.mkoehler.launchwindow.model.MemorialEntry;
 import de.mkoehler.launchwindow.model.MissionControlOfficer;
 import de.mkoehler.launchwindow.model.MissionControlSkill;
 import de.mkoehler.launchwindow.model.Personnel;
@@ -15,8 +16,10 @@ import de.mkoehler.launchwindow.model.SetSpecialist;
 import de.mkoehler.launchwindow.model.TrainingKind;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.random.RandomGenerator;
 
 /**
@@ -60,6 +63,13 @@ import java.util.random.RandomGenerator;
  * this is this class's own unconfirmed default, same status as every other
  * numeric constant below.</p>
  *
+ * <p><b>Each candidate gets a portrait first, and their name and starting age
+ * follow from it</b> ({@link PersonnelNames}, 2026-10-05): the age is drawn
+ * from the age range the portrait's person looks, so candidates span the
+ * portraits' late twenties to early sixties rather than a fixed age range.
+ * A batch avoids portraits already on the roster, on the memorial, in the
+ * same batch and, when there are enough others, in the pool it replaces.</p>
+ *
  * <p><b>All the numeric constants below are Launch Window's own values, not
  * BASPM's</b> (unconfirmed defaults, {@code design.md} &sect;2.2(c),
  * 2026-09-30, pending bot-harness tuning).</p>
@@ -100,17 +110,11 @@ public final class HiringPool {
     public static final double EXCELLENT_SKILL_MIN = 55.0;
     public static final double EXCELLENT_SKILL_MAX = 90.0;
 
-    /** The youngest age a freshly generated candidate can have. */
     /** The lowest salary a candidate can ask for, per season - BASPM's own range floor. */
     public static final int SALARY_MIN = 25;
 
     /** The highest salary a candidate can ask for, per season - BASPM's own range ceiling. */
     public static final int SALARY_MAX = 60;
-
-    public static final int CANDIDATE_MIN_AGE = 22;
-
-    /** The oldest age a freshly generated candidate can have. */
-    public static final int CANDIDATE_MAX_AGE = 40;
 
     /** The lowest learning-potential a freshly generated candidate can have - independent of quality band. */
     public static final int CANDIDATE_MIN_LEARNING_POTENTIAL = 20;
@@ -137,15 +141,52 @@ public final class HiringPool {
     }
 
     /**
-     * Names a new candidate from their own seed (gap G5), never from the pool's random stream.
+     * Gives a new candidate a portrait and a matching name and age (gap G5), from the candidate's own
+     * seed, never from the pool's random stream. The chosen portrait is added to {@code taken}, so the
+     * rest of the batch avoids it.
      *
      * @param snapshot    the hiring player's state
      * @param candidateId the candidate's id
-     * @return the name
+     * @param group       the candidate's personnel group
+     * @param taken       portraits to avoid: the roster, the memorial and the batch so far
+     * @param recent      portraits to avoid if possible: the pool being replaced
+     * @return the identity
      */
-    private static String candidateName(PlayerSnapshot snapshot, String candidateId) {
+    private static PersonnelNames.Identity candidateIdentity(PlayerSnapshot snapshot, String candidateId,
+            PersonnelGroup group, Set<String> taken, Set<String> recent) {
         Archetype archetype = snapshot.getArchetype() == null ? Archetype.NASA : snapshot.getArchetype();
-        return PersonnelNames.forCandidate(candidateId, archetype, snapshot.getAgencyName());
+        PersonnelNames.Identity identity = PersonnelNames.forCandidate(candidateId, archetype,
+            snapshot.getAgencyName(), group, taken, recent);
+        taken.add(identity.portraitId());
+        return identity;
+    }
+
+    /**
+     * Returns the portraits a candidate of a group should not get: everyone on the group's roster and
+     * every astronaut on the memorial.
+     *
+     * @param snapshot the hiring player's state
+     * @param roster   the group's roster
+     * @return the portrait ids, a new mutable set
+     */
+    private static Set<String> takenPortraits(PlayerSnapshot snapshot, List<? extends Personnel> roster) {
+        Set<String> taken = portraitsOf(roster);
+        for (MemorialEntry entry : snapshot.getMemorial()) {
+            if (entry.portraitId() != null) {
+                taken.add(entry.portraitId());
+            }
+        }
+        return taken;
+    }
+
+    private static Set<String> portraitsOf(List<? extends Personnel> people) {
+        Set<String> ids = new HashSet<>();
+        for (Personnel person : people) {
+            if (person.getPortraitId() != null) {
+                ids.add(person.getPortraitId());
+            }
+        }
+        return ids;
     }
 
     /**
@@ -166,11 +207,16 @@ public final class HiringPool {
 
         SkillBand astronautBand = bandFor(averageMorale(snapshot.getAstronauts()));
         List<Astronaut> astronautBatch = new ArrayList<>(HIRING_BATCH_SIZE);
+        Set<String> astronautTaken = takenPortraits(snapshot, snapshot.getAstronauts());
+        Set<String> astronautRecent = portraitsOf(snapshot.getAstronautCandidates());
         for (int i = 0; i < HIRING_BATCH_SIZE; i++) {
-            Astronaut candidate = new Astronaut(snapshot.allocatePersonnelId(), "Candidate",
-                randomAge(random), randomStartingMorale(random), randomLearningPotential(random));
+            String id = snapshot.allocatePersonnelId();
+            PersonnelNames.Identity who = candidateIdentity(snapshot, id, PersonnelGroup.ASTRONAUT, astronautTaken,
+                astronautRecent);
+            Astronaut candidate = new Astronaut(id, who.name(), who.age(),
+                randomStartingMorale(random), randomLearningPotential(random));
+            candidate.setPortraitId(who.portraitId());
             candidate.setSalary(randomSalary(random));
-            candidate.setName(candidateName(snapshot, candidate.getId()));
             for (AstronautSkill skill : AstronautSkill.values()) {
                 candidate.setSkill(skill, randomSkill(random, astronautBand));
             }
@@ -180,11 +226,16 @@ public final class HiringPool {
 
         SkillBand setBand = bandFor(averageMorale(snapshot.getSetSpecialists()));
         List<SetSpecialist> setBatch = new ArrayList<>(HIRING_BATCH_SIZE);
+        Set<String> setTaken = takenPortraits(snapshot, snapshot.getSetSpecialists());
+        Set<String> setRecent = portraitsOf(snapshot.getSetSpecialistCandidates());
         for (int i = 0; i < HIRING_BATCH_SIZE; i++) {
-            SetSpecialist candidate = new SetSpecialist(snapshot.allocatePersonnelId(), "Candidate",
-                randomAge(random), randomStartingMorale(random), randomLearningPotential(random));
+            String id = snapshot.allocatePersonnelId();
+            PersonnelNames.Identity who = candidateIdentity(snapshot, id, PersonnelGroup.SET, setTaken,
+                setRecent);
+            SetSpecialist candidate = new SetSpecialist(id, who.name(), who.age(),
+                randomStartingMorale(random), randomLearningPotential(random));
+            candidate.setPortraitId(who.portraitId());
             candidate.setSalary(randomSalary(random));
-            candidate.setName(candidateName(snapshot, candidate.getId()));
             for (SetSkill skill : SetSkill.values()) {
                 candidate.setSkill(skill, randomSkill(random, setBand));
             }
@@ -194,11 +245,16 @@ public final class HiringPool {
 
         SkillBand missionControlBand = bandFor(averageMorale(snapshot.getMissionControlOfficers()));
         List<MissionControlOfficer> missionControlBatch = new ArrayList<>(HIRING_BATCH_SIZE);
+        Set<String> missionControlTaken = takenPortraits(snapshot, snapshot.getMissionControlOfficers());
+        Set<String> missionControlRecent = portraitsOf(snapshot.getMissionControlCandidates());
         for (int i = 0; i < HIRING_BATCH_SIZE; i++) {
-            MissionControlOfficer candidate = new MissionControlOfficer(snapshot.allocatePersonnelId(), "Candidate",
-                randomAge(random), randomStartingMorale(random), randomLearningPotential(random));
+            String id = snapshot.allocatePersonnelId();
+            PersonnelNames.Identity who = candidateIdentity(snapshot, id, PersonnelGroup.MISSION_CONTROL, missionControlTaken,
+                missionControlRecent);
+            MissionControlOfficer candidate = new MissionControlOfficer(id, who.name(), who.age(),
+                randomStartingMorale(random), randomLearningPotential(random));
+            candidate.setPortraitId(who.portraitId());
             candidate.setSalary(randomSalary(random));
-            candidate.setName(candidateName(snapshot, candidate.getId()));
             for (MissionControlSkill skill : MissionControlSkill.values()) {
                 candidate.setSkill(skill, randomSkill(random, missionControlBand));
             }
@@ -407,10 +463,6 @@ public final class HiringPool {
      */
     static double randomSalary(RandomGenerator random) {
         return SALARY_MIN + random.nextInt(SALARY_MAX - SALARY_MIN + 1);
-    }
-
-    private static int randomAge(RandomGenerator random) {
-        return CANDIDATE_MIN_AGE + random.nextInt(CANDIDATE_MAX_AGE - CANDIDATE_MIN_AGE + 1);
     }
 
     private static int randomLearningPotential(RandomGenerator random) {

@@ -1032,7 +1032,8 @@ public final class MissionProgress {
                         astronaut.getName(), DepartureReason.LOST_IN_ACCIDENT, astronaut.getAge(),
                         astronaut.getMorale(), astronaut.getAssignmentState(), null));
                     snapshot.getMemorial().add(new MemorialEntry(astronaut.getName(), astronaut.getAge(), gameTurn,
-                        MemorialEntry.Cause.MISSION, mission.getMissionConfigurationId(), step.id()));
+                        MemorialEntry.Cause.MISSION, mission.getMissionConfigurationId(), step.id(),
+                        astronaut.getPortraitId()));
                     iterator.remove();
                     break;
                 }
