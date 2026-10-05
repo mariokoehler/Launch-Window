@@ -70,6 +70,15 @@ import java.util.random.RandomGenerator;
  * A batch avoids portraits already on the roster, on the memorial, in the
  * same batch and, when there are enough others, in the pool it replaces.</p>
  *
+ * <p><b>Age is a trade-off: experience against potential</b> (user
+ * decision, 2026-10-05). A candidate's {@link #experience}, their age
+ * measured against their group's career, adds up to
+ * {@link #EXPERIENCE_SKILL_BONUS_MAX} to every skill on top of the band's
+ * roll, and slides their learning potential from the rookie range down to
+ * the veteran range. A veteran helps the next mission but retires soon and
+ * barely improves; a rookie needs training but grows and stays. The
+ * crossover is measured by {@code CareerCurves} in {@code dev-tools}.</p>
+ *
  * <p><b>All the numeric constants below are Launch Window's own values, not
  * BASPM's</b> (unconfirmed defaults, {@code design.md} &sect;2.2(c),
  * 2026-09-30, pending bot-harness tuning).</p>
@@ -116,11 +125,36 @@ public final class HiringPool {
     /** The highest salary a candidate can ask for, per season - BASPM's own range ceiling. */
     public static final int SALARY_MAX = 60;
 
-    /** The lowest learning-potential a freshly generated candidate can have - independent of quality band. */
-    public static final int CANDIDATE_MIN_LEARNING_POTENTIAL = 20;
+    /**
+     * The age a career starts at, for {@link #experience}: the youngest
+     * portraits show people in their late twenties.
+     */
+    public static final int CAREER_START_AGE = 27;
 
-    /** The highest learning-potential a freshly generated candidate can have. */
-    public static final int CANDIDATE_MAX_LEARNING_POTENTIAL = 80;
+    /**
+     * The most a candidate's experience adds to each skill on top of their
+     * band's roll, reached at full {@link #experience} (a candidate at their
+     * group's retirement age). Unconfirmed default, 2026-10-05.
+     */
+    public static final double EXPERIENCE_SKILL_BONUS_MAX = 20.0;
+
+    /**
+     * No candidate starts above this in any skill, however experienced: a
+     * veteran is strong, never already at the top.
+     */
+    public static final double CANDIDATE_SKILL_CAP = 95.0;
+
+    /** The learning-potential range of a candidate just starting a career (experience 0). */
+    public static final int ROOKIE_MIN_LEARNING_POTENTIAL = 45;
+    public static final int ROOKIE_MAX_LEARNING_POTENTIAL = 80;
+
+    /**
+     * The learning-potential range of a candidate at full experience;
+     * the range slides linearly between the two. Unconfirmed default,
+     * 2026-10-05.
+     */
+    public static final int VETERAN_MIN_LEARNING_POTENTIAL = 10;
+    public static final int VETERAN_MAX_LEARNING_POTENTIAL = 35;
 
     /**
      * The lowest starting morale a freshly generated candidate can have -
@@ -213,12 +247,13 @@ public final class HiringPool {
             String id = snapshot.allocatePersonnelId();
             PersonnelNames.Identity who = candidateIdentity(snapshot, id, PersonnelGroup.ASTRONAUT, astronautTaken,
                 astronautRecent);
+            double experience = experience(who.age(), PersonnelGroup.ASTRONAUT);
             Astronaut candidate = new Astronaut(id, who.name(), who.age(),
-                randomStartingMorale(random), randomLearningPotential(random));
+                randomStartingMorale(random), randomLearningPotential(random, experience));
             candidate.setPortraitId(who.portraitId());
             candidate.setSalary(randomSalary(random));
             for (AstronautSkill skill : AstronautSkill.values()) {
-                candidate.setSkill(skill, randomSkill(random, astronautBand));
+                candidate.setSkill(skill, randomSkill(random, astronautBand, experience));
             }
             astronautBatch.add(candidate);
         }
@@ -232,12 +267,13 @@ public final class HiringPool {
             String id = snapshot.allocatePersonnelId();
             PersonnelNames.Identity who = candidateIdentity(snapshot, id, PersonnelGroup.SET, setTaken,
                 setRecent);
+            double experience = experience(who.age(), PersonnelGroup.SET);
             SetSpecialist candidate = new SetSpecialist(id, who.name(), who.age(),
-                randomStartingMorale(random), randomLearningPotential(random));
+                randomStartingMorale(random), randomLearningPotential(random, experience));
             candidate.setPortraitId(who.portraitId());
             candidate.setSalary(randomSalary(random));
             for (SetSkill skill : SetSkill.values()) {
-                candidate.setSkill(skill, randomSkill(random, setBand));
+                candidate.setSkill(skill, randomSkill(random, setBand, experience));
             }
             setBatch.add(candidate);
         }
@@ -249,14 +285,15 @@ public final class HiringPool {
         Set<String> missionControlRecent = portraitsOf(snapshot.getMissionControlCandidates());
         for (int i = 0; i < HIRING_BATCH_SIZE; i++) {
             String id = snapshot.allocatePersonnelId();
-            PersonnelNames.Identity who = candidateIdentity(snapshot, id, PersonnelGroup.MISSION_CONTROL, missionControlTaken,
-                missionControlRecent);
+            PersonnelNames.Identity who = candidateIdentity(snapshot, id, PersonnelGroup.MISSION_CONTROL,
+                missionControlTaken, missionControlRecent);
+            double experience = experience(who.age(), PersonnelGroup.MISSION_CONTROL);
             MissionControlOfficer candidate = new MissionControlOfficer(id, who.name(), who.age(),
-                randomStartingMorale(random), randomLearningPotential(random));
+                randomStartingMorale(random), randomLearningPotential(random, experience));
             candidate.setPortraitId(who.portraitId());
             candidate.setSalary(randomSalary(random));
             for (MissionControlSkill skill : MissionControlSkill.values()) {
-                candidate.setSkill(skill, randomSkill(random, missionControlBand));
+                candidate.setSkill(skill, randomSkill(random, missionControlBand, experience));
             }
             missionControlBatch.add(candidate);
         }
@@ -443,7 +480,30 @@ public final class HiringPool {
         return SkillBand.EXCELLENT;
     }
 
-    private static double randomSkill(RandomGenerator random, SkillBand band) {
+    /**
+     * Returns how far into their career a person of this age is, from 0 at
+     * {@link #CAREER_START_AGE} to 1 at their group's retirement age. A
+     * candidate's experience raises their starting skills and lowers their
+     * learning potential: a veteran helps at once but retires soon and
+     * learns slowly, a rookie needs training but stays for years. Measured
+     * against each group's own career, so a 42-year-old astronaut (retiring
+     * at 50) is a veteran while a 42-year-old engineer (retiring at 65) is
+     * mid-career.
+     *
+     * @param age   the age in years
+     * @param group the personnel group
+     * @return the experience, between 0 and 1
+     */
+    public static double experience(int age, PersonnelGroup group) {
+        double career = PersonnelLifecycle.retirementAgeFor(group) - CAREER_START_AGE;
+        return Math.max(0.0, Math.min(1.0, (age - CAREER_START_AGE) / career));
+    }
+
+    private static double randomSkill(RandomGenerator random, SkillBand band, double experience) {
+        return Math.min(CANDIDATE_SKILL_CAP, bandSkill(random, band) + experience * EXPERIENCE_SKILL_BONUS_MAX);
+    }
+
+    private static double bandSkill(RandomGenerator random, SkillBand band) {
         return switch (band) {
             case POOR -> POOR_SKILL_MIN + random.nextDouble() * (POOR_SKILL_MAX - POOR_SKILL_MIN);
             case AVERAGE -> AVERAGE_SKILL_MIN + random.nextDouble() * (AVERAGE_SKILL_MAX - AVERAGE_SKILL_MIN);
@@ -465,9 +525,40 @@ public final class HiringPool {
         return SALARY_MIN + random.nextInt(SALARY_MAX - SALARY_MIN + 1);
     }
 
-    private static int randomLearningPotential(RandomGenerator random) {
-        return CANDIDATE_MIN_LEARNING_POTENTIAL
-            + random.nextInt(CANDIDATE_MAX_LEARNING_POTENTIAL - CANDIDATE_MIN_LEARNING_POTENTIAL + 1);
+    /**
+     * Draws a candidate's learning potential from a range that slides from
+     * the rookie range to the veteran range with their experience.
+     *
+     * @param random     the random source
+     * @param experience the candidate's {@link #experience}
+     * @return the learning potential
+     */
+    private static int randomLearningPotential(RandomGenerator random, double experience) {
+        int min = (int) Math.round(learningPotentialMin(experience));
+        int max = (int) Math.round(learningPotentialMax(experience));
+        return min + random.nextInt(max - min + 1);
+    }
+
+    /**
+     * Returns the lowest learning potential a candidate with this experience can have.
+     *
+     * @param experience the candidate's {@link #experience}
+     * @return the lower bound, before rounding
+     */
+    public static double learningPotentialMin(double experience) {
+        return ROOKIE_MIN_LEARNING_POTENTIAL
+            + experience * (VETERAN_MIN_LEARNING_POTENTIAL - ROOKIE_MIN_LEARNING_POTENTIAL);
+    }
+
+    /**
+     * Returns the highest learning potential a candidate with this experience can have.
+     *
+     * @param experience the candidate's {@link #experience}
+     * @return the upper bound, before rounding
+     */
+    public static double learningPotentialMax(double experience) {
+        return ROOKIE_MAX_LEARNING_POTENTIAL
+            + experience * (VETERAN_MAX_LEARNING_POTENTIAL - ROOKIE_MAX_LEARNING_POTENTIAL);
     }
 
     private static int randomStartingMorale(RandomGenerator random) {

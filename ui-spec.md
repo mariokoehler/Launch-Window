@@ -97,7 +97,15 @@ On the right:
    component · slot, Unavailable · n seasons), the group's five skills as icon +
    value, and Expert stars on the skills that have them. Row actions are listed
    per screen.
-2. **Candidate card or row.** The same fields, plus a Hire button.
+2. **Candidate card or row.** The same fields, plus a Hire button, the portrait
+   (`Personnel.portraitId`, in place of the initials square) and the learning
+   potential. *(Added 2026-10-05, user decision:)* next to the age, the years left
+   until the group's retirement age (astronauts 50, flight controllers 60, SET 65),
+   for example "Age 58 · retires in 7 years". Age is now a real trade-off: older
+   candidates start with higher skills but lower learning potential and a shorter
+   career, so the player has to see both sides at a glance. The learning potential
+   could be a small rated value ("Learns: slow / steady / fast") rather than a bare
+   number. That is unconfirmed and for the mockup to settle.
 3. **Reliability bar.** The component's current reliability, a marker at its R&D
    ceiling (`maxRdReliability`), and the bar's end at its absolute maximum
    (`maxReliability`). Label "62.4 % (R&D cap 85.2)". Optionally a dim floor

@@ -2002,19 +2002,19 @@ public final class PersonnelLifecyclePlayouts {
         int astronautBand = bandIndex(independentAverageMorale(snapshot.getAstronauts()));
         bandHits[astronautBand]++;
         for (Astronaut candidate : snapshot.getAstronautCandidates()) {
-            checkSkillsInBand(candidate.getId(), candidate.getSkills().values(), astronautBand);
+            checkSkillsInBand(candidate, PersonnelGroup.ASTRONAUT, candidate.getSkills().values(), astronautBand);
         }
 
         int setBand = bandIndex(independentAverageMorale(snapshot.getSetSpecialists()));
         bandHits[setBand]++;
         for (SetSpecialist candidate : snapshot.getSetSpecialistCandidates()) {
-            checkSkillsInBand(candidate.getId(), candidate.getSkills().values(), setBand);
+            checkSkillsInBand(candidate, PersonnelGroup.SET, candidate.getSkills().values(), setBand);
         }
 
         int missionControlBand = bandIndex(independentAverageMorale(snapshot.getMissionControlOfficers()));
         bandHits[missionControlBand]++;
         for (MissionControlOfficer candidate : snapshot.getMissionControlCandidates()) {
-            checkSkillsInBand(candidate.getId(), candidate.getSkills().values(), missionControlBand);
+            checkSkillsInBand(candidate, PersonnelGroup.MISSION_CONTROL, candidate.getSkills().values(), missionControlBand);
         }
     }
 
@@ -2042,9 +2042,35 @@ public final class PersonnelLifecyclePlayouts {
         }
     }
 
-    private static void checkSkillsInBand(String candidateId, Iterable<Double> skills, int band) {
-        double min = HIRING_SKILL_RANGES[band][0];
-        double max = HIRING_SKILL_RANGES[band][1];
+    /**
+     * Checks a candidate's skills against their band's range, shifted up by their experience bonus
+     * (re-derived here from the age, the group's retirement age and {@link HiringPool}'s public
+     * constants) and capped at {@link HiringPool#CANDIDATE_SKILL_CAP}; also checks their learning
+     * potential lies in the range for their experience.
+     */
+    private static void checkSkillsInBand(Personnel candidate, PersonnelGroup group, Iterable<Double> skills,
+            int band) {
+        int retirementAge = switch (group) {
+            case ASTRONAUT -> PersonnelLifecycle.ASTRONAUT_RETIREMENT_AGE;
+            case SET -> PersonnelLifecycle.SET_RETIREMENT_AGE;
+            case MISSION_CONTROL -> PersonnelLifecycle.MISSION_CONTROL_RETIREMENT_AGE;
+        };
+        double experience = Math.max(0.0, Math.min(1.0, (candidate.getAge() - HiringPool.CAREER_START_AGE)
+            / (double) (retirementAge - HiringPool.CAREER_START_AGE)));
+        double bonus = experience * HiringPool.EXPERIENCE_SKILL_BONUS_MAX;
+        double min = Math.min(HiringPool.CANDIDATE_SKILL_CAP, HIRING_SKILL_RANGES[band][0] + bonus) - 1e-9;
+        double max = Math.min(HiringPool.CANDIDATE_SKILL_CAP, HIRING_SKILL_RANGES[band][1] + bonus) + 1e-9;
+        double lpMin = HiringPool.ROOKIE_MIN_LEARNING_POTENTIAL
+            + experience * (HiringPool.VETERAN_MIN_LEARNING_POTENTIAL - HiringPool.ROOKIE_MIN_LEARNING_POTENTIAL);
+        double lpMax = HiringPool.ROOKIE_MAX_LEARNING_POTENTIAL
+            + experience * (HiringPool.VETERAN_MAX_LEARNING_POTENTIAL - HiringPool.ROOKIE_MAX_LEARNING_POTENTIAL);
+        int learningPotential = candidate.getLearningPotential();
+        if (learningPotential < Math.round(lpMin) || learningPotential > Math.round(lpMax)) {
+            throw new IllegalStateException("Candidate " + candidate.getId() + " learning potential "
+                + candidate.getLearningPotential() + " outside [" + lpMin + ", " + lpMax + "] for experience "
+                + experience);
+        }
+        String candidateId = candidate.getId();
         for (double skill : skills) {
             if (skill < min || skill > max) {
                 throw new IllegalStateException("Candidate " + candidateId + " skill " + skill

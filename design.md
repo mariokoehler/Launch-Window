@@ -151,6 +151,18 @@ same session it comes up**, the same standing-note-to-self habit as
     he ejected at about 7 km and came down under his own parachute. Soviet
     officials kept this quiet for years, because the rules for an official
     flight record required the pilot to land with his craft.
+  - **Candidate: veterans or rookies (2026-10-05).** The two agencies picked
+    their first spacefarers in opposite ways. NASA's Mercury Seven (1959)
+    were experienced military test pilots aged 32 to 37, with college
+    degrees and at least 1,500 flying hours, chosen to fly almost at once.
+    The Soviet Air Force picked its first twenty cosmonauts (1960) from
+    young fighter pilots, most in their mid-twenties. Gagarin was 27 when he
+    flew, and the Vostok capsule's tight size and weight limits favoured
+    small, young men who could be trained up. Mission control was young too:
+    the flight controllers in the room for Apollo 11 were about 27 on
+    average. It fits the hire screen, next to a candidate's age, where Launch
+    Window asks the same question (experience against potential). Verify the
+    figures before using it.
   - **Candidate: Mary Golda Ross.** A Cherokee engineer, often named the
     first Native American woman engineer. She worked at Lockheed from 1942,
     and as one of the founding members of its Missiles Systems Division she
@@ -6196,6 +6208,47 @@ here.
         `ContentPackPlayouts`: 186 → 193 of 200 games complete every declared goal, hires
         4,063 → 4,886, and the average completion season goes from 58.9 to 54.7.
       - **Soviet share of women:** about 40 %, set by the art. It was a fixed 1 in 4 before.
+      - **Age is a trade-off: experience against potential (user decision, 2026-10-05).**
+        A candidate's experience is their age measured against their group's career:
+        `HiringPool.experience` = (age − 27) / (retirement age − 27), from 0 to 1. So a
+        42-year-old astronaut (retires at 50) is a veteran, while a 42-year-old
+        engineer (retires at 65) is mid-career.
+        - **Skills:** experience adds up to 20 points to every skill, on top of the
+          band's roll, and no candidate starts above 95.
+        - **Learning potential:** slides from 45–80 for a rookie to 10–35 at full
+          experience.
+        - **What the player chooses between:** a veteran helps the next mission at once
+          but retires soon and barely improves. A rookie needs training but grows and
+          stays.
+        - **Unconfirmed defaults:** the 20-point bonus, the 95 cap, and both
+          learning-potential ranges.
+
+        `CareerCurves` (`dev-tools`) follows 3,000 real candidates per group and band
+        through a training-only career and prints their average skill by seasons since
+        hire.
+        - **Average band:** veterans start 11–15 points ahead. Rookies catch up after
+          21–23 seasons (about 5 years), roughly two thirds of the way through a
+          veteran's remaining career, and then stay for 20–35 years.
+        - **Excellent band:** veterans retire before rookies fully catch up, but the gap
+          closes from about 10 points to 2.
+        - **Weaker bonus, steeper drop:** a 15-point bonus with veteran learning
+          potential 20–45 gave the same crossover with a smaller head start. Raising
+          the bonus and lowering the veteran's learning potential move the crossover
+          in opposite directions, so the size of the head start is the real dial.
+        - **Real play:** missions and R&D also grow skills, so the crossover there is
+          probably a little later.
+
+        **Harness shift:** random bot hires now get the bonus on average, so staff are
+        more skilled overall.
+        - `ContentPackPlayouts`: 193 → 197 of 200 games complete every goal, failed steps
+          go from 590 to 484 and catastrophic ones from 35 to 15, and the average
+          completion season goes from 54.7 to 53.7.
+        - `PersonnelLifecyclePlayouts`: retired 1,768 → 1,862 (average tenure 42.8
+          seasons), resigned 957, hired 5,579.
+        - Hiring in general is a little more generous now. Worth checking once real
+          players hire deliberately.
+        - **History note, used in the hire screen's spec (`ui-spec.md` component 2):**
+          see §1.1, "veterans or rookies".
       - **Open:** the client doesn't show the portraits yet. It still draws the initials
         square, and the PNGs aren't in `assets/` yet.
     - **G8 salary adjustment:** `rules.DepartmentSalaries` holds one formula that

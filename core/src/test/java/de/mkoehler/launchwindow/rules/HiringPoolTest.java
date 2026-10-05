@@ -76,8 +76,9 @@ class HiringPoolTest {
         for (Astronaut candidate : snapshot.getAstronautCandidates()) {
             PortraitCatalog.Portrait portrait = PortraitCatalog.byId(candidate.getPortraitId());
             assertTrue(candidate.getAge() >= portrait.minAge() && candidate.getAge() <= portrait.maxAge());
-            assertTrue(candidate.getLearningPotential() >= HiringPool.CANDIDATE_MIN_LEARNING_POTENTIAL
-                && candidate.getLearningPotential() <= HiringPool.CANDIDATE_MAX_LEARNING_POTENTIAL);
+            double experience = HiringPool.experience(candidate.getAge(), PersonnelGroup.ASTRONAUT);
+            assertTrue(candidate.getLearningPotential() >= Math.round(HiringPool.learningPotentialMin(experience))
+                && candidate.getLearningPotential() <= Math.round(HiringPool.learningPotentialMax(experience)));
             assertTrue(candidate.getMorale() >= HiringPool.NEW_HIRE_MIN_STARTING_MORALE
                 && candidate.getMorale() <= HiringPool.NEW_HIRE_MAX_STARTING_MORALE);
         }
@@ -108,7 +109,7 @@ class HiringPoolTest {
         boolean sawSomethingAbovePoorsCeiling = false;
         for (Astronaut candidate : snapshot.getAstronautCandidates()) {
             for (var skill : de.mkoehler.launchwindow.model.AstronautSkill.values()) {
-                double value = candidate.getSkill(skill);
+                double value = bandRoll(candidate, candidate.getSkill(skill));
                 assertTrue(value <= 60.0, "an empty-roster refresh should never produce a Good/Excellent-band skill");
                 if (value > 40.0) {
                     sawSomethingAbovePoorsCeiling = true;
@@ -116,6 +117,31 @@ class HiringPoolTest {
             }
         }
         assertTrue(sawSomethingAbovePoorsCeiling, "an empty-roster refresh should use Average, not Poor");
+    }
+
+    /**
+     * Returns a candidate's skill without their experience bonus: the band's own roll.
+     */
+    private static double bandRoll(Astronaut candidate, double skill) {
+        return skill - HiringPool.experience(candidate.getAge(), PersonnelGroup.ASTRONAUT)
+            * HiringPool.EXPERIENCE_SKILL_BONUS_MAX;
+    }
+
+    /**
+     * An older candidate starts with more skill and less learning potential than a younger one: the
+     * experience bonus grows with age against the group's career, and the learning-potential range
+     * slides down.
+     */
+    @Test
+    void experienceRaisesSkillAndLowersLearningPotential() {
+        assertEquals(0.0, HiringPool.experience(HiringPool.CAREER_START_AGE, PersonnelGroup.SET));
+        assertEquals(1.0, HiringPool.experience(PersonnelLifecycle.SET_RETIREMENT_AGE, PersonnelGroup.SET));
+        assertTrue(HiringPool.experience(42, PersonnelGroup.ASTRONAUT) > HiringPool.experience(42, PersonnelGroup.SET),
+            "the same age is later in an astronaut's career than in an engineer's");
+        assertEquals(HiringPool.ROOKIE_MIN_LEARNING_POTENTIAL, HiringPool.learningPotentialMin(0.0));
+        assertEquals(HiringPool.VETERAN_MAX_LEARNING_POTENTIAL, HiringPool.learningPotentialMax(1.0));
+        assertTrue(HiringPool.learningPotentialMax(1.0) <= HiringPool.learningPotentialMin(0.0),
+            "a veteran never learns faster than a rookie");
     }
 
     /**
@@ -152,8 +178,11 @@ class HiringPoolTest {
 
         for (Astronaut candidate : snapshot.getAstronautCandidates()) {
             for (var skill : de.mkoehler.launchwindow.model.AstronautSkill.values()) {
-                double value = candidate.getSkill(skill);
-                assertTrue(value >= expectedMin && value <= expectedMax,
+                if (candidate.getSkill(skill) == HiringPool.CANDIDATE_SKILL_CAP) {
+                    continue;
+                }
+                double value = bandRoll(candidate, candidate.getSkill(skill));
+                assertTrue(value >= expectedMin - 1e-9 && value <= expectedMax + 1e-9,
                     "roster morale " + rosterMorale + ": expected [" + expectedMin + ", " + expectedMax
                         + "], got " + value);
             }

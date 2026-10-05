@@ -6,6 +6,8 @@ import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.MemorialEntry;
 import de.mkoehler.launchwindow.model.Personnel;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
+import de.mkoehler.launchwindow.model.SetSkill;
+import de.mkoehler.launchwindow.model.SetSpecialist;
 import de.mkoehler.launchwindow.rules.PersonnelNames.Identity;
 import de.mkoehler.launchwindow.rules.PersonnelNames.NameLists;
 import de.mkoehler.launchwindow.rules.PortraitCatalog.Portrait;
@@ -169,8 +171,9 @@ class PersonnelNamesTest {
 
     /**
      * The hiring pool gives its candidates portraits, names and ages that match. Two agencies with the
-     * same pool seed get the same skills but different identities: an identity depends on the agency, the
-     * skills only on the pool's stream.
+     * same pool seed get the same band rolls but different identities: an identity depends on the agency,
+     * the band rolls only on the pool's stream. (The skills themselves differ by each candidate's
+     * experience bonus, which comes from the age.)
      */
     @Test
     void thePoolGivesCandidatesMatchingIdentitiesWithoutTouchingItsStream() {
@@ -178,8 +181,16 @@ class PersonnelNamesTest {
         PlayerSnapshot second = new PlayerSnapshot("Vega", Archetype.SOVIET, 0, 0, 0, 1);
         HiringPool.refreshCandidates(first, new SplittableRandom(7));
         HiringPool.refreshCandidates(second, new SplittableRandom(7));
-        assertEquals(first.getSetSpecialistCandidates().get(0).getSkills(),
-            second.getSetSpecialistCandidates().get(0).getSkills());
+        SetSpecialist nasa = first.getSetSpecialistCandidates().get(0);
+        SetSpecialist soviet = second.getSetSpecialistCandidates().get(0);
+        double nasaBonus = HiringPool.experience(nasa.getAge(), PersonnelGroup.SET)
+            * HiringPool.EXPERIENCE_SKILL_BONUS_MAX;
+        double sovietBonus = HiringPool.experience(soviet.getAge(), PersonnelGroup.SET)
+            * HiringPool.EXPERIENCE_SKILL_BONUS_MAX;
+        for (var skill : SetSkill.values()) {
+            assertEquals(nasa.getSkill(skill) - nasaBonus,
+                soviet.getSkill(skill) - sovietBonus, 1e-9);
+        }
         assertNotEquals(first.getSetSpecialistCandidates().get(0).getName(),
             second.getSetSpecialistCandidates().get(0).getName());
         for (Personnel candidate : first.getAstronautCandidates()) {

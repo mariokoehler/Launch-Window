@@ -278,7 +278,11 @@ writes `core/src/main/resources/personnel/portraits.json`, the trimmed catalog t
 `PersonnelNames` draws the name (lists per ethnicity and sex in `personnel/names.json`) and the age
 (the portrait's age range) to match. A new ethnicity in the art needs a `names.json` entry and a key in
 `make_portraits.py`'s `ETHNICITY_KEYS`; `PersonnelNamesTest` fails until both exist. Details are in
-`design.md` §5 M5, G5. **Next step:** show the portraits in the client (`Personnel.portraitId`; the
+`design.md` §5 M5, G5. **Age is a trade-off too (user, 2026-10-05):** older candidates start up to 20
+points more skilled but with lower learning potential, measured against each group's career
+(`HiringPool.experience`). Tune it with `dev-tools`' `CareerCurves` (rookie-vs-veteran skill curves);
+numbers in `design.md` §5 M5, G5. The hire screen should show "retires in N years" next to the age
+(`ui-spec.md` component 2). **Next step:** show the portraits in the client (`Personnel.portraitId`; the
 PNGs aren't in `assets/` yet). 256x256 is the smallest size the model holds together at. ComfyUI keeps its
 own copies in `E:\Comfy-Desktop\ComfyUI-Shared\output`; never delete those. The portraits are
 the user's own generated art (`assets-raw/` rule).
