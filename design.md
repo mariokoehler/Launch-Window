@@ -241,10 +241,33 @@ same session it comes up**, the same standing-note-to-self habit as
   tank walls "thinner than a coin". Worked out from physics, not sources: 5 m
   of curvature per 8 km, ½v² of 2.6 against 30.7 MJ/kg, and the propellant
   shares from a 2.9 km/s exhaust (2.5 km/s needs 57 %, 9.4 km/s needs 96 %).
-  **Candidates for the next explainers:** why rendezvous is counterintuitive
-  (speed up to fall behind), why the Moon needs a bigger rocket again (TLI),
-  and why restarting an engine in weightlessness is hard (propellant floats
-  away from the pumps).
+  **E-02 to E-04 mocked up the same day** (two sheets each, same canvas, now
+  titled "Launch Window — Explainers"): **E-02 "Rendezvous"** (to catch a
+  craft ahead you brake into a lower, quicker orbit; how it was learned, from
+  Vostok 3/4 to the first dockings), **E-03 "Going to the Moon"** (the trip
+  priced in delta-v, and why that makes the rocket so big), **E-04
+  "Restarting an engine in space"** (propellant floats in free fall; settling
+  burns, self-lighting gas-fed engines, bags and vanes). **Figures to verify
+  before shipping:** lap about 88 min at 200 km and 92 min at 400 km (worked
+  out); Vostok 3/4 closest about 6.5 km (as in the pack's history note); Gemini
+  4 giving up on its upper stage (June 1965); Buzz Aldrin's 1963 MIT doctorate
+  on line-of-sight rendezvous and his sextant-and-charts approach on Gemini 12
+  (November 1966); Gemini 6A/7 within about 30 cm (December 1965); Gemini 8
+  first docking (March 1966); Kosmos 186/188 first automatic docking (October
+  1967); delta-v 9.4 to orbit, 3.1 to leave for the Moon, 0.9, 2.0, 1.9 and 1.0
+  for the rest (Apollo-style, rounded); heights 25.4 / 28.7 / 33.2 / 110.6 /
+  105.3 m and liftoff masses about 30 / 120 / 150 / 2,900 / 2,750 t for
+  Redstone, Atlas, Titan II, Saturn V and N1; about 45 t sent toward the Moon
+  and about 5 t home; John Houbolt's part in lunar orbit rendezvous; the N1's
+  four failed launches (1969–72); the "halfway to anywhere" line (paraphrased
+  Heinlein); Saturn V's third stage firing settling rockets before its relight;
+  Apollo's service module and ascent engines gas-fed and self-igniting, the
+  ascent engine without a backup; Soviet Venus and Mars probes of 1961–62
+  stranded in Earth orbit by upper-stage relight failures. **Next candidates:**
+  why re-entry needs a blunt shape (a pointed nose melts), what reliability
+  really means for a 30-step mission (odds multiply), and why the launch site's
+  latitude matters (Earth's spin as a free boost, Baikonur against Cape
+  Canaveral).
 - **Idea, for later (user, 2026-10-04): a real-world news item every turn.**
   The turn report's news (today: the season's random events, `ui-spec.md`
   §4.4) always gets one more item: something memorable that happened in the

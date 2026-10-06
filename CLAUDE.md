@@ -598,9 +598,11 @@ news, and the debt and multiplier states. Details and the unconfirmed choices ar
   table can be a grid with one `sc-for` per row.
 - **Explainers mocked up (2026-10-06, the user's idea):** full-screen "infographic" sheets
   that teach an aerospace idea when it comes up (`ui-spec.md` component 18, `design.md`
-  §1.1). The first is E-01 "Suborbital vs orbital", three sheets on the canvas `Launch Window
-  — Explainers: Suborbital vs Orbital` (private, ask the user for the link). Not built in
-  libGDX yet; the trigger, the look and the figures are all unconfirmed.
+  §1.1). Four so far, on the canvas `Launch Window — Explainers` (private, ask the user for
+  the link): E-01 "Suborbital vs orbital" (three sheets), E-02 "Rendezvous", E-03 "Going to
+  the Moon" and E-04 "Restarting an engine in space" (two sheets each). Not built in libGDX
+  yet; the triggers, the look and the figures are all unconfirmed (figures to verify are
+  listed in `design.md` §1.1 and on the canvas).
 - **Trophy icon added (2026-10-04):** `assets-raw/svg/ui/trophy.svg` and
   `assets/ui/icons/trophy.png` (via `make_ui_icons.py`, which needs `pip install
   resvg-py`), and on the UI Asset Sheet with the news arrows (which reuse the sort

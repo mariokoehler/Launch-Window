@@ -232,8 +232,9 @@ On the right:
       the Museum (the encyclopedia, §4.11's "Later").
     - **Text** lives in the pack's strings, like the history notes, written in our own words,
       with every figure checked before shipping.
-    - **First explainer, E-01 "Suborbital vs orbital"**, three sheets on the canvas `Launch
-      Window — Explainers: Suborbital vs Orbital` (private, ask the user for the link):
+    - **Canvas:** `Launch Window — Explainers` (private, ask the user for the link), one row
+      per explainer, each with a yellow note of the figures still to verify.
+    - **First explainer, E-01 "Suborbital vs orbital"**, three sheets:
       1. *Falling around the world:* Newton's cannon, the 100 km edge of space, and the
          "8-kilometre rule" (the ground curves away 5 m every 8 km, and anything falls 5 m in
          its first second, so 8 km/s keeps you falling around the Earth).
@@ -242,6 +243,33 @@ On the right:
       3. *The rocket's hardest bargain:* the rocket equation's propellant share (about 57 %
          for a hop, about 96 % for orbit), staging, and the harder way home (retrofire, then
          about 12 times the heat).
+    - **E-02 "Rendezvous"**, two sheets:
+      1. *Slow down to catch up:* two chases seen from above, timed to Kepler's law. Burning
+         forward lifts you into a bigger, slower orbit and the gap grows; burning backward
+         drops you into a quicker one and you meet the target one lap later. Lap times at
+         about 200 and 400 km. In the game: Retrofire uses the same idea.
+      2. *Learning to meet in orbit:* the approach in a view that travels with the target
+         (settle in below, drift forward, burn along the line of sight, brake), and the
+         history: Vostok 3 and 4, Gemini 4, Buzz Aldrin's doctorate and Gemini 12, Gemini
+         6A/7, Gemini 8, Kosmos 186/188. In the game: the Two crews together goal.
+    - **E-03 "Going to the Moon"**, two sheets:
+      1. *The speed bill for the Moon:* a route map priced in delta-v (9.4 to orbit, then
+         3.1, 0.9, 2.0, 1.9 and 1.0 km/s; the air brakes the trip home for free), with bars
+         showing the trip after orbit costs almost as much again. In the game: the VAB's TLI
+         payload, 0 kg for every early-era rocket.
+      2. *Why the Moon rocket is so big:* Redstone, Atlas, Titan II, Saturn V and N1 with
+         heights to scale, a liftoff-mass inset (area to scale), lunar orbit rendezvous, and
+         the N1's four failures. In the game: rocket classes and the VAB level.
+    - **E-04 "Restarting an engine in space"**, two sheets:
+      1. *Fuel with no down:* one tank under thrust (settled), coasting (blobs, a film on the
+         walls, gas at the pump) and during a settling burn. In the game: the R-7's history
+         note (every engine lit on the ground).
+      2. *Three ways to a sure restart:* self-lighting gas-fed engines, a bag in the tank, and
+         vanes and screens, with their costs and the early Soviet probes stranded in orbit.
+         In the game: Vostok's single retrofire and Payload R&D.
+    - **Triggers for E-02 to E-04 (proposals):** E-02 when a joint-launch configuration is
+      first opened, E-03 the first time the VAB shows a TLI figure (or the first lunar
+      program), E-04 the first configuration with a Retrofire step.
     - **libGDX build idea:** the drawings become SVG assets rasterized like the icons; the text
       stays as labels so the strings can change without redrawing.
 
