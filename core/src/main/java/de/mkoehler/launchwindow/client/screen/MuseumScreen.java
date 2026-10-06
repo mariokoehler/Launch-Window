@@ -173,8 +173,8 @@ public final class MuseumScreen extends ChromeScreen {
                 : "Fetching the race…", Theme.TextStyle.BODY, rivalsFailed ? Theme.DANGER : Theme.INK_MUTED))
                 .padBottom(Theme.SPACE_3).row();
         } else {
-            raceCard.add(RaceTable.build(ui, Museum.race(rivals, declared),
-                declared.stream().map(ContentNames::of).toList(), true)).padBottom(Theme.SPACE_3).row();
+            raceCard.add(RaceTable.build(ui, Museum.race(rivals, declared), declared, true)).padBottom(Theme.SPACE_3)
+                .row();
         }
         raceCard.add(ui.paragraph("First to finish all " + declared.size() + " wins. If several agencies finish at "
             + "the same turn, a medal table over the " + declared.size() + " goals decides: the most first places, "
@@ -200,7 +200,7 @@ public final class MuseumScreen extends ChromeScreen {
             String goalId = declared.get(i);
             Integer turn = times.get(goalId);
             Table row = new Table();
-            row.add(RaceTable.patch(ui, turn != null, 64f)).size(64f).padRight(14f);
+            row.add(RaceTable.patch(ui, goalId, turn != null, 64f)).size(64f).padRight(14f);
             Table text = new Table();
             text.defaults().left().growX();
             text.add(ui.label(ContentNames.of(goalId), Theme.TextStyle.BODY_STRONG, Theme.INK)).row();
@@ -315,7 +315,7 @@ public final class MuseumScreen extends ChromeScreen {
     private Table achievement(Museum.Achievement row) {
         Table line = new Table();
         line.pad(10f, 0f, 10f, 0f);
-        line.add(RaceTable.patch(ui, row.done(), 40f)).size(40f).padRight(12f);
+        line.add(RaceTable.patch(ui, row.goalId(), row.done(), 40f)).size(40f).padRight(12f);
         Table text = new Table();
         text.left();
         text.defaults().left();

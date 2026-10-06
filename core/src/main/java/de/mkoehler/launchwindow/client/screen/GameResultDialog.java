@@ -111,7 +111,7 @@ final class GameResultDialog {
 
         List<String> goalNames = declared.stream().map(ContentNames::of).toList();
         if (!rivals.isEmpty()) {
-            card.add(RaceTable.build(ui, Museum.race(rivals, declared), goalNames, false)).padBottom(Theme.SPACE_4)
+            card.add(RaceTable.build(ui, Museum.race(rivals, declared), declared, false)).padBottom(Theme.SPACE_4)
                 .row();
         }
         medals.ifPresent(table -> card.add(medalTable(table, rivals, goalNames)).padBottom(Theme.SPACE_4).row());

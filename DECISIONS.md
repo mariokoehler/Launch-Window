@@ -359,6 +359,15 @@ animals.
 
 *Notes:*
 
+### F9. Open goals' mission patches (`ui-spec.md` component 8)
+The goal badges now show each goal's embroidered patch. An open goal shows the patch in
+greyscale at 60% opacity, with no glyph; a done goal shows it in colour.
+- [ ] Keep: greyscale and faded while open **(recommended)**.
+- [ ] Show open goals in colour but faded.
+- [ ] Hide an open goal's patch (a plain outline or a question mark), revealed when done.
+
+*Notes:*
+
 ---
 
 ## G. Technical defaults

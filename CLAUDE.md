@@ -310,7 +310,14 @@ writes the alpha channel itself, so patches come back as 256x256 RGBA circles on
   next deterministic seed.
 - **Spelling is checked by eye** in `review/` (gitignored), and the chosen variant per goal goes in
   `picks.json`. About one variant in six is misspelled.
-- **Pending:** scaling into `assets/` comes later. A new goal needs a `GOALS` entry and a pick.
+- **In the client (2026-10-06):** `make_patch_assets.py` turns the picks into
+  `assets/ui/patches/<goal-id>.png` (128 px RGBA PNG, never JPEG, which would drop the alpha) and a
+  greyscale `<goal-id>_open.png` for open goals. `RaceTable.patch` shows them in the Museum and
+  falls back to the drawn circle without art. Rerun the converter after changing a pick. A new goal
+  needs a `GOALS` entry, a pick and a converter run.
+- **Pitfall:** the model leaves arbitrary colours (mostly purple) and a faint alpha haze in the
+  transparent pixels. With mipmaps and straight alpha, those bleed into the rim at small sizes. The
+  converter clears alpha below 4 and fills transparent pixels with the nearest opaque colour.
 - ComfyUI keeps its own copies (`lw_patch_*`); never delete those.
 
 **Dev mode for play testing (2026-10-04):** set `"devMode": true` in the server's

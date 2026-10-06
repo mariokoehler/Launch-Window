@@ -128,6 +128,14 @@ On the right:
    a confirmation.
 8. **Goal badge.** The mission-patch circle (`logo.svg` frame), open or
    achieved, with a "first" ribbon when the player was first to it.
+   *Implemented (2026-10-06, built in libGDX without a mockup round):* each goal has its own
+   embroidered mission patch (`assets/ui/patches/<goal-id>.png`, 128 px RGBA, made by
+   `assets-raw/patches/make_patch_assets.py` from the generated variants). A done goal shows
+   it in colour; an open goal shows a greyscale copy (`<goal-id>_open.png`) at 60% opacity,
+   with no check or star glyph. A goal without patch art falls back to the drawn circle with a
+   check or star. Used so far in the Museum: the race table's cells (30 px), "This game is won
+   by" (64 px) and the achievements list (40 px). The program screens still use the drawn
+   circle.
 9. **Today's queue panel** (optional but recommended). A collapsible list of
    today's actions with their results ("Opened Sputnik 1 · −876"). Undo is by
    opposite action only, so this is how a player sees what they've committed to.
