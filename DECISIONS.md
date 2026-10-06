@@ -21,7 +21,7 @@ with "keep what's built" in one tick.
 Turn 1 is Winter 1955, one season per turn, as in BASPM (`design.md` §5 M5 "Game info").
 Real Sputnik flew in fall 1957, so players have about 11 turns of setup before the
 historical first satellite.
-- [ ] Keep Winter 1955 **(recommended)**: time to hire and research before the race starts.
+- [X] Keep Winter 1955 **(recommended)**: time to hire and research before the race starts.
 - [ ] Start in Winter 1957: a tighter, faster start.
 - [ ] Start in 1956: in between.
 
@@ -32,7 +32,7 @@ A game is won by the first agency to reach all of the declared goals
 (`GameMeta.DEFAULT_DECLARED_GOALS`). Right now they're satellite in orbit, human in space and
 human in orbit, which ends the race at the first crewed orbital flight, around turn 24, about
 six real weeks at one turn a day. A host can change the list per game in `game-meta.json`.
-- [ ] Keep the three for the first play test, and decide again before the colleagues' game
+- [X] Keep the three for the first play test, and decide again before the colleagues' game
   **(recommended)**.
 - [ ] Add "A day in space" (duration level 1): roughly two to three more weeks.
 - [ ] Add "A day in space" and "Two crews together" (joint launch): the longest of the three.
@@ -43,7 +43,7 @@ six real weeks at one turn a day. A host can change the list per game in `game-m
 Players who finish on the same turn share a place, and the next place skips (1, 1, 3), which
 is standard competition ranking (`design.md` §2.9). The medal table only breaks a tie for
 first.
-- [ ] Keep standard competition ranking **(recommended)**.
+- [X] Keep standard competition ranking **(recommended)**.
 - [ ] Dense ranking (1, 1, 2).
 
 *Notes:*
@@ -73,7 +73,7 @@ Today's conversion pays 0.25 funds per point: 120 times less than the first revi
 point is gone, lowering every later review too. Clearing a 1,000-fund debt costs 4,000
 prestige, more than an agency earns in its first years (Sputnik 1 plus its goals bring about
 1,400). In practice the tool can't be used.
-- [ ] A flat 1 prestige = 2 funds **(recommended)**: simple, still far worse than a review
+- [X] A flat 1 prestige = 2 funds **(recommended)**: simple, still far worse than a review
   early, and a 1,000-fund debt costs 500 prestige.
 - [ ] Tied to the next review: a tenth of what the point would earn there (about 3 funds
   early, 0.3 late). Always proportionally worse, but harder to explain on screen.
@@ -87,7 +87,7 @@ Starting funds 25,000, prestige 250, funding 3,000 per season, BASPM's review ta
 of 25–60, and component maintenance all follow BASPM's values, at your instruction of
 2026-10-03. `design.md` §1.2 normally asks for our own numbers, and this is flagged as an
 exception.
-- [ ] Keep BASPM's values, and tune from play tests **(recommended)**. Numbers aren't
+- [X] Keep BASPM's values, and tune from play tests **(recommended)**. Numbers aren't
   creative text or art, and they're what make the game feel right.
 - [ ] Re-derive our own numbers before the repo goes public.
 - [ ] Re-derive our own numbers now.
@@ -96,7 +96,7 @@ exception.
 
 ### B3. After the tenth funding review
 BASPM's review table has ten brackets. After the tenth review, ours repeats the last bracket.
-- [ ] Keep repeating the last bracket **(recommended)**: games rarely last that long (reviews
+- [X] Keep repeating the last bracket **(recommended)**: games rarely last that long (reviews
   come every 16 seasons, so the tenth is around game year 40).
 - [ ] Keep growing the brackets in the same steps.
 
@@ -106,21 +106,22 @@ BASPM's review table has ten brackets. After the tenth review, ours repeats the 
 Hiring is free; a new employee only costs their salary every season.
 - [ ] Keep free hiring **(recommended)**: salary is already a running cost.
 - [ ] Charge a one-time hiring fee (for example one season's salary).
+- [X] Keep free hiring, but give the player the option to pay the candiate a one-time immediate bonus (equal to his salary) on hiring. This will lead to one-off instant 10% increase in the candidates morale. This could be a "checkbox" that either applies to all selected candidates when the "hire" button is pressed, or a checkbox per selected candidate, either would be fine with me.
 
-*Notes:*
+*Notes:* 
 
 ### B5. Department salary changes per season
 "Manage department" raises or cuts a whole department's salaries, which raises or lowers its
 morale (G8). As in BASPM, there's no limit on how often.
 - [ ] Keep no limit **(recommended)**: every raise costs salary for good, which limits it.
-- [ ] Once per department per season.
+- [X] Once per department per season.
 
 *Notes:*
 
 ### B6. Repeat-flight prestige
 A configuration pays 100 % of its prestige on the first flight, 50 % on the second and 30 %
 after that (BASPM's ratios).
-- [ ] Keep 100 / 50 / 30 **(recommended)**.
+- [X] Keep 100 / 50 / 30 **(recommended)**.
 - [ ] 100 / 60 / 40: repeats pay a little more.
 
 *Notes:*
@@ -129,7 +130,7 @@ after that (BASPM's ratios).
 The Public Affairs Office computes its review forecast and conversion limits with the
 standard budget table, because the server doesn't send the game's own. That's correct for
 every game today, but a host who changes the table would see wrong numbers.
-- [ ] Send the game's budget table with the game info, before any game uses a different
+- [X] Send the game's budget table with the game info, before any game uses a different
   one **(recommended)**.
 - [ ] Leave it until someone needs a custom table.
 
@@ -144,7 +145,7 @@ Older candidates start with up to about 20 points more skill (centred, so the av
 unchanged), younger ones learn faster (45–80 learning potential for a rookie, 10–35 for a
 veteran). No candidate starts above 95. Rookies catch up after about 5 years
 (`design.md` §5 M5, G5).
-- [ ] Keep these numbers and judge in play **(recommended)**.
+- [X] Keep these numbers and judge in play **(recommended)**.
 - [ ] Stronger veterans (a 25-point range): the head start matters more.
 - [ ] Milder (a 15-point range): age matters less.
 
@@ -156,7 +157,7 @@ A new hire starts Basic training at once, on a random skill of their group. *(Up
 to keep its skill gain. Only the question below, which skill it trains, is still open.)*
 - [ ] Train their weakest skill instead **(recommended)**: more sensible, and it changes no
   balance.
-- [ ] Keep a random skill.
+- [X] Keep a random skill.
 - [ ] Let the player pick the skill when hiring (needs a UI change).
 
 *Notes:*
@@ -165,7 +166,7 @@ to keep its skill gain. Only the question below, which skill it trains, is still
 Idle staff lose 2 morale per season, busy staff gain 3. Anyone at or below 35 resigns.
 Retirement at 50 (astronauts), 60 (flight controllers) and 65 (SET). These are our own
 values, re-derived from BASPM's shape.
-- [ ] Keep them and judge in play **(recommended)**.
+- [X] Keep them and judge in play **(recommended)**.
 - [ ] Change something (say what in the notes).
 
 *Notes:*
@@ -179,14 +180,14 @@ cut short or chosen in the dialog. Nothing to tick; it can go when the file come
 Each department sees 6 new candidates every season (BASPM shows 10).
 - [ ] Keep 6 **(recommended)**: about one real choice per season, and portraits repeat less.
 - [ ] 8.
-- [ ] 10, as in BASPM.
+- [X] 10, as in BASPM.
 
 *Notes:*
 
 ### C6. Lithuanian women's surnames
 Every Lithuanian woman gets the married surname form (-ienė). A young unmarried woman would
 really use -aitė or -ytė.
-- [ ] Keep the married form for everyone **(recommended)**: simple, and correct for most
+- [X] Keep the married form for everyone **(recommended)**: simple, and correct for most
   adults of the time.
 - [ ] Use the unmarried form under 30.
 
@@ -198,14 +199,14 @@ Expert controllers and astronauts can rescue a failing step. The details:
   and not at all if they're an astronaut (in space).
 - A rescue can't push the saving roll above 95 %.
 - Every consultation counts toward an Expert's tiredness, even an unsuccessful one.
-- [ ] Keep all three **(recommended)**.
+- [X] Keep all three **(recommended)**.
 - [ ] Change something (say what in the notes).
 
 *Notes:*
 
 ### C8. CAPCOM's skill growth
 The astronaut serving as CAPCOM grows the skills they used that season, as a controller does.
-- [ ] Keep **(recommended)**.
+- [X] Keep **(recommended)**.
 - [ ] CAPCOM duty grows no skills.
 
 *Notes:*
@@ -217,7 +218,7 @@ The astronaut serving as CAPCOM grows the skills they used that season, as a con
 ### D1. Opening a program charges for its components
 Opening a program also pays the creation cost of every component it grants that the agency
 doesn't own yet, as BASPM does. The price card shows the full sum.
-- [ ] Keep **(recommended)**.
+- [X] Keep **(recommended)**.
 - [ ] Charge only the opening cost.
 
 *Notes:*
@@ -226,7 +227,7 @@ doesn't own yet, as BASPM does. The price card shows the full sum.
 The step-resolution numbers are our own placeholders, re-derived from BASPM's shape: crew skill
 counts from component reliability 65 up, crew weight 20 %, and the size of the failure bands.
 The outcomes in the simulations look sensible.
-- [ ] Keep them until play tests say otherwise **(recommended)**.
+- [X] Keep them until play tests say otherwise **(recommended)**.
 - [ ] Ask me to tune for harder or easier missions (say which in the notes).
 
 *Notes:*
@@ -234,7 +235,7 @@ The outcomes in the simulations look sensible.
 ### D3. Random events
 Each season rolls once for a bad event (5 %) and once for a good one (20 %), as in BASPM,
 with our own triggering conditions where Launch Window has no BASPM equivalent.
-- [ ] Keep **(recommended)**.
+- [X] Keep **(recommended)**.
 - [ ] Fewer bad events (for example 3 %).
 
 *Notes:*
@@ -242,7 +243,7 @@ with our own triggering conditions where Launch Window has no BASPM equivalent.
 ### D4. Auto-assign order
 Auto-assign fills the crew seats before the control slots, so CAPCOM never takes the best
 pilot. Ties go to roster order.
-- [ ] Keep **(recommended)**.
+- [X] Keep **(recommended)**.
 
 *Notes:*
 
@@ -252,7 +253,7 @@ pilot. Ties go to roster order.
 
 ### E1. Repeat Sputnik 2 flights
 Laika is remembered on the first Sputnik 2 flight. Later flights add "An unnamed dog" each.
-- [ ] Keep "An unnamed dog" **(recommended)**.
+- [X] Keep "An unnamed dog" **(recommended)**.
 - [ ] Let Sputnik 2 fly only once, as in history.
 - [ ] Other wording (in the notes).
 
@@ -264,14 +265,14 @@ fails, the game could remember the dogs aboard. I'd use the names of the two dog
 on the failed July 1960 attempt (Chaika and Lisichka, to be verified first), not Belka and
 Strelka.
 - [ ] Leave it for now **(recommended)**.
-- [ ] Remember the dogs on a failed flight, with Chaika and Lisichka's names.
+- [X] Remember the dogs on a failed flight, with Chaika and Lisichka's names.
 
-*Notes:*
+*Notes:* I'll try and find historical photos of the two, like i did with Laika. (not yet done)
 
 ### E3. A turn report line for a lost passenger
 The turn report doesn't mention a passenger lost that season ("Laika did not come home.").
 It needs a new report event.
-- [ ] Add it **(recommended)**: the memorial alone is easy to miss.
+- [X] Add it **(recommended)**: the memorial alone is easy to miss.
 - [ ] Not needed.
 
 *Notes:*
@@ -287,7 +288,7 @@ For each screen, the full list is in that section's "Implemented" note in `ui-sp
 The heading "Found your agency", the hint text ("Everyone starts from the same line…"), light
 text on the blue page, "Pick an agency style." when no style is picked, and where each refusal
 appears. These have been waiting for your OK since 2026-10-04.
-- [ ] Keep everything as built **(recommended)**.
+- [X] Keep everything as built **(recommended)**.
 - [ ] Keep, with exceptions (in the notes).
 
 *Notes:*
@@ -298,7 +299,7 @@ appears. These have been waiting for your OK since 2026-10-04.
 - "Read" is remembered per device, not on the server.
 - One scrolling screen; running costs by kind; hires not listed.
 - Morale warnings for idle people at morale 50 or below.
-- [ ] Keep everything as built **(recommended)**.
+- [X] Keep everything as built **(recommended)**.
 - [ ] Keep, with exceptions (in the notes).
 
 *Notes:*
@@ -308,7 +309,7 @@ appears. These have been waiting for your OK since 2026-10-04.
   price shows the owned parts as free.
 - No "First" ribbon on goal badges.
 - Program cards show the full price to open.
-- [ ] Keep everything as built **(recommended)**.
+- [X] Keep everything as built **(recommended)**.
 - [ ] Keep, with exceptions (in the notes).
 
 *Notes:*
@@ -318,7 +319,7 @@ appears. These have been waiting for your OK since 2026-10-04.
 - A released console just says "Released".
 - The re-staff picker lists only idle people, with no "empty this slot".
 - The Expert mark is a gold star icon.
-- [ ] Keep everything as built **(recommended)**.
+- [X] Keep everything as built **(recommended)**.
 - [ ] Keep, with exceptions (in the notes).
 
 *Notes:*
@@ -327,14 +328,14 @@ appears. These have been waiting for your OK since 2026-10-04.
 It shows the chances and pass or fail, not the dice numbers, and steps every 1.5 seconds.
 - [ ] Keep **(recommended)**.
 - [ ] Show the dice numbers too.
-- [ ] A different speed (in the notes).
+- [X] A different speed (in the notes).
 
-*Notes:*
+*Notes:* don't auto-advance the steps at all. let the player go through them manually at their own pace.
 
 ### F6. Astronaut Complex (`ui-spec.md` §4.9)
 - Expert training is offered to flight controllers too, through the shared training dialog.
 - "Near retirement" means within 5 years of the retirement age.
-- [ ] Keep **(recommended)**.
+- [X] Keep **(recommended)**.
 - [ ] Keep, with exceptions (in the notes).
 
 *Notes:*
@@ -345,7 +346,7 @@ It shows the chances and pass or fail, not the dice numbers, and steps every 1.5
 - Converting prestige is a dialog with a slider.
 - The news lists random events only; reviews have their own card.
 - The footer shows no funds change per season yet.
-- [ ] Keep everything as built **(recommended)**.
+- [X] Keep everything as built **(recommended)**.
 - [ ] Keep, with exceptions (in the notes).
 
 *Notes:*
@@ -354,7 +355,7 @@ It shows the chances and pass or fail, not the dice numbers, and steps every 1.5
 Tabs in the header; the race as a table next to "This game is won by"; achievements in two
 columns; one card per flown configuration; one plaque per loss, now with portraits and
 animals.
-- [ ] Keep **(recommended)**.
+- [X] Keep **(recommended)**.
 - [ ] Keep, with exceptions (in the notes).
 
 *Notes:*
@@ -362,7 +363,7 @@ animals.
 ### F9. Open goals' mission patches (`ui-spec.md` component 8)
 The goal badges now show each goal's embroidered patch. An open goal shows the patch in
 greyscale at 60% opacity, with no glyph; a done goal shows it in colour.
-- [ ] Keep: greyscale and faded while open **(recommended)**.
+- [X] Keep: greyscale and faded while open **(recommended)**.
 - [ ] Show open goals in colour but faded.
 - [ ] Hide an open goal's patch (a plain outline or a question mark), revealed when done.
 
@@ -376,7 +377,7 @@ These hardly affect play.
 
 ### G1. Server data folder
 The server keeps its data in a plain `data/` folder next to it, unless a path is given.
-- [ ] Keep **(recommended)**.
+- [X] Keep **(recommended)**.
 
 *Notes:*
 
@@ -385,9 +386,9 @@ The client still opens the game but warns, and uses its own copy. The plan (ui-s
 download the game's pack instead.
 - [ ] Build the download before inviting other players **(recommended)**: once you change
   content between games, players with older clients would otherwise see wrong numbers.
-- [ ] Later.
+- [X] Later.
 
-*Notes:*
+*Notes:* i think this should be solved automatically by the version tag check during login. if i make changes to the content pack, i'll publish a new server version, which forces all clients to update (which will be easy via the update.cmd skript that we will supply as part of the client zip file.
 
 ---
 
@@ -396,25 +397,25 @@ download the game's pack instead.
 ### H1. PR duty for astronauts
 An idle astronaut could do public-relations work, earning a little prestige each season based
 on Leadership (`design.md` §2.2). Real astronauts did this.
-- [ ] Build it soon.
+- [X] Build it soon.
 - [ ] Later **(recommended)**: worth a design pass of its own.
 - [ ] Drop it.
 
-*Notes:*
+*Notes:* please, prepare some ideas of how this could work/look in the game.
 
 ### H2. A real space-race story in each turn report
 One real event from the same three months of the real space race in each report's news
 (`design.md` §1.1, your idea of 2026-10-04).
-- [ ] Build it soon **(recommended)**: cheap, and it suits the history notes.
+- [X] Build it soon **(recommended)**: cheap, and it suits the history notes.
 - [ ] Later.
 - [ ] Drop it.
 
-*Notes:*
+*Notes:* where applicable (aka enough historic events exist) we can have more than one story per season in our "database" and chose randomly, so not every player necessarily gets the same story in their news feed. OPTIONAL: it would also be cool if each event would be reported through the "lens" of the agency archetype. for example launching Sputnik was probably reported very differently in the Russian media than it was in the US media. Would be cool if we could reflect this bias in the news clips we present.
 
 ### H3. Honour the animals that came home
 The Museum's Flights tab could honour Belka and Strelka, Ham, Enos and others (`design.md`
 §5 M5, your idea of 2026-10-05).
-- [ ] Build it soon.
+- [X] Build it soon.
 - [ ] Later **(recommended)**: after the play test, together with E2.
 - [ ] Drop it.
 
@@ -423,7 +424,7 @@ The Museum's Flights tab could honour Belka and Strelka, Ham, Enos and others (`
 ### H4. Credits in Settings
 Show `assets/CREDITS.md` (fonts, Laika's photo) in the Settings dialog's About section, so the
 credit is visible in the game, not only in the files.
-- [ ] Build it soon **(recommended)**: small, and the right thing to do for CC BY.
+- [X] Build it soon **(recommended)**: small, and the right thing to do for CC BY.
 - [ ] Later.
 
 *Notes:*
