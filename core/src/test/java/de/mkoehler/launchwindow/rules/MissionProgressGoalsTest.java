@@ -9,6 +9,8 @@ import de.mkoehler.launchwindow.content.MissionStep;
 import de.mkoehler.launchwindow.content.Program;
 import de.mkoehler.launchwindow.content.ProgramCategory;
 import de.mkoehler.launchwindow.model.Archetype;
+import de.mkoehler.launchwindow.model.AssignmentState;
+import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.InProgressMission;
 import de.mkoehler.launchwindow.model.OwnedMissionComponent;
 import de.mkoehler.launchwindow.model.GoalRecord;
@@ -85,6 +87,36 @@ class MissionProgressGoalsTest {
 
     private static List<GoalSettled> settlements(List<ResolutionEvent> events) {
         return events.stream().filter(e -> e instanceof GoalSettled).map(e -> (GoalSettled) e).toList();
+    }
+
+    /**
+     * A completed flight credits its crew with a flight, and with one first if a step set a first in
+     * the game, however many goals the cascade credits (PR duty's fame, design.md section 2.2(c)).
+     */
+    @Test
+    void aCompletedFlightCreditsItsCrewOnceForAFirst() {
+        MissionConfiguration crewed = new MissionConfiguration(CONFIG, "mercury-program",
+            List.of(new MissionSeason(List.of(step("s1", 100, 0, List.of("orbit"))))), 1, 0, 0, 1_000, List.of(),
+            List.of());
+        ContentCatalog catalog = catalog(crewed);
+        GoalTally tally = new GoalTally();
+        PlayerSnapshot snapshot = snapshotWithMission(0);
+        Astronaut pilot = new Astronaut("a1", "Pilot", 30, 60, 50);
+        pilot.setAssignmentState(AssignmentState.ASSIGNED);
+        pilot.setAssignedMissionId("m0");
+        snapshot.getAstronauts().add(pilot);
+        snapshot.getInProgressMissions().put("m0", new InProgressMission("m0", CONFIG, List.of("a1"), List.of()));
+
+        tally.commit(MissionProgress.advanceSeason(snapshot, catalog, scripted(rolls(99.0)), tally, 7));
+        assertEquals(1, pilot.getFlightsFlown());
+        assertEquals(1, pilot.getFirstsFlown(), "orbit and its cascade set three firsts, but count once");
+
+        pilot.setAssignmentState(AssignmentState.ASSIGNED);
+        pilot.setAssignedMissionId("m1");
+        snapshot.getInProgressMissions().put("m1", new InProgressMission("m1", CONFIG, List.of("a1"), List.of()));
+        MissionProgress.advanceSeason(snapshot, catalog, scripted(rolls(99.0)), tally, 8);
+        assertEquals(2, pilot.getFlightsFlown());
+        assertEquals(1, pilot.getFirstsFlown(), "the second flight set no first");
     }
 
     /**

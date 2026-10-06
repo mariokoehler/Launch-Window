@@ -12,11 +12,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class AssignmentStateTest {
 
     /**
-     * Verifies the enum's value count.
+     * Pins the constants' order: Kryo sends enums by ordinal, so new ones are only ever appended
+     * (PR_DUTY came last, 2026-10-06).
      */
     @Test
-    void hasExactlyThreeValues() {
-        assertEquals(3, AssignmentState.values().length);
+    void constantsKeepTheirOrdinals() {
+        assertEquals(java.util.List.of(AssignmentState.IDLE, AssignmentState.ASSIGNED, AssignmentState.IN_TRAINING,
+            AssignmentState.PR_DUTY), java.util.List.of(AssignmentState.values()));
     }
 
     /**

@@ -260,6 +260,7 @@ public final class MissionProgress {
         int nextSeasonIndex = mission.getCurrentSeasonIndex() + 1;
         if (nextSeasonIndex >= configuration.durationInSeasons()) {
             rememberPassengers(snapshot, configuration, mission, null, gameTurn, events);
+            creditCrew(snapshot, mission);
             releaseSurvivors(snapshot, mission, events);
             // Only a completed, non-failed flight counts toward the repeat tier - design.md §2.6(d).
             // A failing season returned above, so reaching this branch means no step failed.
@@ -397,6 +398,9 @@ public final class MissionProgress {
             snapshot.getAchievedGoals().put(goalId, gameTurn);
         }
         events.add(new GoalSettled(mission.getId(), goalId, cancelled, prestige, first));
+        if (first) {
+            mission.setFirstInGame(true);
+        }
         snapshot.getGoalRecords().add(new GoalRecord(goalId, gameTurn, mission.getMissionConfigurationId(), root,
             first, prestige));
         return prestige;
@@ -543,8 +547,11 @@ public final class MissionProgress {
                 // 2026-10-02 - never consulted, never exhausted.
                 continue;
             }
+            // On a PR tour: still on Earth, but probably not in town (user decision 2026-10-06).
+            double efficiency = astronaut.getAssignmentState() == AssignmentState.PR_DUTY
+                ? MissionStepResolution.EXPERT_RESCUE_ON_PR_TOUR_EFFICIENCY : 1.0;
             boosted = applyOneExpert(mission, step, PersonnelGroup.ASTRONAUT, astronaut.getId(), astronaut.getName(),
-                matchedSkill.name(), 1.0, boosted, expertUseCounts, events);
+                matchedSkill.name(), efficiency, boosted, expertUseCounts, events);
         }
 
         for (MissionControlOfficer officer : snapshot.getMissionControlOfficers()) {
@@ -1081,6 +1088,21 @@ public final class MissionProgress {
             snapshot.getMemorial().add(new MemorialEntry(name, 0, gameTurn, MemorialEntry.Cause.PASSENGER,
                 configuration.id(), failedStepId, remembered ? null : animal.portraitId()));
             events.add(new PassengerLost(mission.getId(), configuration.id(), name, failedStepId));
+        }
+    }
+
+    /**
+     * Credits a completed flight to its crew, never CAPCOM: one flight each, and one first if a step
+     * of it set a first in the game - their fame on PR duty ({@code design.md} &sect;2.2(c)).
+     */
+    private static void creditCrew(PlayerSnapshot snapshot, InProgressMission mission) {
+        for (Astronaut astronaut : snapshot.getAstronauts()) {
+            if (mission.crewIds().contains(astronaut.getId())) {
+                astronaut.setFlightsFlown(astronaut.getFlightsFlown() + 1);
+                if (mission.isFirstInGame()) {
+                    astronaut.setFirstsFlown(astronaut.getFirstsFlown() + 1);
+                }
+            }
         }
     }
 

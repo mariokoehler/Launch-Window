@@ -35,5 +35,12 @@ public enum AssignmentState {
     /**
      * Currently undergoing training.
      */
-    IN_TRAINING
+    IN_TRAINING,
+
+    /**
+     * An astronaut on PR duty ({@code design.md} &sect;2.2(c)): touring and appearing in public, a
+     * standing order until recalled. Busy for morale, never protected from departure, and off crews
+     * and CAPCOM. Only astronauts take it. Appended last: Kryo sends enums by ordinal.
+     */
+    PR_DUTY
 }

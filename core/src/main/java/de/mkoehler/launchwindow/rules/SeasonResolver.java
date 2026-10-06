@@ -1,5 +1,6 @@
 package de.mkoehler.launchwindow.rules;
 
+import de.mkoehler.launchwindow.content.PrPress;
 import de.mkoehler.launchwindow.content.BudgetSchedule;
 import de.mkoehler.launchwindow.content.ContentCatalog;
 import de.mkoehler.launchwindow.content.RandomEventRoster;
@@ -46,6 +47,8 @@ public final class SeasonResolver {
         MISSIONS,
         /** Building upgrades count down and land. */
         BUILDINGS,
+        /** Astronauts on PR duty earn prestige, before the budget so a review this season counts it. */
+        PR_DUTY,
         /** Running costs, the review if due, and funding. */
         BUDGET,
         /** Random events and their timed state. */
@@ -170,6 +173,7 @@ public final class SeasonResolver {
             case MISSIONS -> MissionProgress.advanceSeason(snapshot, context.catalog(), random, context.goalTally(),
                 context.gameTurn());
             case BUILDINGS -> BuildingUpgrades.advanceSeason(snapshot, context.catalog().buildings());
+            case PR_DUTY -> PrDuty.advanceSeason(snapshot, PrPress.standard(), random);
             case BUDGET -> BudgetProgress.advanceSeason(snapshot, context.catalog(), context.schedule(),
                 context.seasonsElapsed());
             case RANDOM_EVENTS -> RandomEvents.advanceSeason(snapshot, context.roster(), random, context.gameTurn(),

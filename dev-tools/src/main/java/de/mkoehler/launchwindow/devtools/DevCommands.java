@@ -1,5 +1,7 @@
 package de.mkoehler.launchwindow.devtools;
 
+import de.mkoehler.launchwindow.actions.RecallFromPrDutyAction;
+import de.mkoehler.launchwindow.actions.StartPrDutyAction;
 import de.mkoehler.launchwindow.actions.ReassignControlSlotAction;
 import de.mkoehler.launchwindow.actions.AssignResearchAction;
 import de.mkoehler.launchwindow.actions.CancelMissionAction;
@@ -49,6 +51,7 @@ public final class DevCommands {
         "  expert <ASTRONAUT|MISSION_CONTROL> <employeeId> <SKILL> | pullout <group> <employeeId>",
         "  launch <configId> rockets=<id,...> [crew=<id|-,...>] [control=<id|-,...>]  (one entry per slot, - = empty)",
         "  reassign <missionId> <controlSlot> <personId>",
+        "  pr <astronautId> | recall <astronautId>   (PR duty)",
         "  cancel <missionInstanceId>",
         "  funds <amount>   (dev mode only)");
 
@@ -88,6 +91,8 @@ public final class DevCommands {
             case "pullout" -> new PullOutOfTrainingAction(group(arg(words, 1)), arg(words, 2));
             case "launch" -> launch(words);
             case "cancel" -> new CancelMissionAction(arg(words, 1));
+            case "pr" -> new StartPrDutyAction(arg(words, 1));
+            case "recall" -> new RecallFromPrDutyAction(arg(words, 1));
             case "reassign" -> new ReassignControlSlotAction(arg(words, 1), Integer.parseInt(arg(words, 2)),
                 arg(words, 3));
             case "funds" -> new SetFundsAction(Long.parseLong(arg(words, 1)));

@@ -1,0 +1,29 @@
+{
+  "_comment": "Press stories about astronauts on PR duty (design.md 2.2(c)). PLACEHOLDERS: the user asked for the skeleton first; replace and add varied stories later. '{name}' is the astronaut's name. 'tone' GOOD pays a bonus, BAD costs prestige. Ids are stored in turn reports: never rename or reuse one.",
+  "stories": [
+    {
+      "id": "placeholder-good-1",
+      "tone": "GOOD",
+      "headline": "Crowds turn out for {name}",
+      "text": "[Placeholder] {name}'s visit draws large, cheering crowds, and the papers run the pictures for days."
+    },
+    {
+      "id": "placeholder-good-2",
+      "tone": "GOOD",
+      "headline": "{name} wins over the reporters",
+      "text": "[Placeholder] A relaxed, funny press conference makes {name} the most quoted person of the week."
+    },
+    {
+      "id": "placeholder-bad-1",
+      "tone": "BAD",
+      "headline": "An awkward remark from {name}",
+      "text": "[Placeholder] An offhand comment from {name} is taken badly, and the agency spends the week explaining it."
+    },
+    {
+      "id": "placeholder-bad-2",
+      "tone": "BAD",
+      "headline": "{name} skips an event",
+      "text": "[Placeholder] {name} misses a scheduled appearance, and the local press is not forgiving."
+    }
+  ]
+}

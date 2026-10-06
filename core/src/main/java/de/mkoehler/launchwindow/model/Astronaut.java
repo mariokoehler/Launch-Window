@@ -27,6 +27,9 @@ public class Astronaut extends Personnel {
     private Map<AstronautSkill, Double> skills = new LinkedHashMap<>();
     private AstronautSkill trainingTargetSkill;
     private Set<AstronautSkill> expertSkills = new LinkedHashSet<>();
+    private int flightsFlown;
+    private int firstsFlown;
+    private int prDutySeasons;
 
     /**
      * No-argument constructor required for Jackson deserialization.
@@ -129,5 +132,61 @@ public class Astronaut extends Personnel {
     public void setExpertSkills(Set<AstronautSkill> expertSkills) {
         Objects.requireNonNull(expertSkills, "expertSkills must not be null");
         this.expertSkills = new LinkedHashSet<>(expertSkills);
+    }
+
+    /**
+     * Returns how many flights this astronaut completed as crew: part of their fame on PR duty
+     * ({@code design.md} &sect;2.2(c)).
+     *
+     * @return the completed flights
+     */
+    public int getFlightsFlown() {
+        return flightsFlown;
+    }
+
+    /**
+     * Sets the completed flights.
+     *
+     * @param flightsFlown the count, zero or more
+     */
+    public void setFlightsFlown(int flightsFlown) {
+        this.flightsFlown = flightsFlown;
+    }
+
+    /**
+     * Returns how many of their completed flights set a first in the game, counted once per flight.
+     *
+     * @return the flights with a first
+     */
+    public int getFirstsFlown() {
+        return firstsFlown;
+    }
+
+    /**
+     * Sets the flights with a first.
+     *
+     * @param firstsFlown the count, zero or more
+     */
+    public void setFirstsFlown(int firstsFlown) {
+        this.firstsFlown = firstsFlown;
+    }
+
+    /**
+     * Returns how many season passes in a row found this astronaut on PR duty; rust sets in after
+     * {@code PrDuty.RUST_FREE_SEASONS}. Kept by the season pass only.
+     *
+     * @return the seasons in a row
+     */
+    public int getPrDutySeasons() {
+        return prDutySeasons;
+    }
+
+    /**
+     * Sets the seasons in a row on PR duty.
+     *
+     * @param prDutySeasons the count, zero or more
+     */
+    public void setPrDutySeasons(int prDutySeasons) {
+        this.prDutySeasons = prDutySeasons;
     }
 }

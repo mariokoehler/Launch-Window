@@ -313,6 +313,12 @@ public final class MissionStepResolution {
     public static final double EXPERT_RESCUE_OFF_MISSION_CONTROLLER_EFFICIENCY = 0.75;
 
     /**
+     * How much an Astronaut Expert's rescue contribution scales by while they're on PR duty: still on
+     * Earth, but likely not in town (user decision, 2026-10-06, see {@code design.md} &sect;2.5(i)).
+     */
+    public static final double EXPERT_RESCUE_ON_PR_TOUR_EFFICIENCY = 0.75;
+
+    /**
      * Looks up how much of the remaining gap to 100% an Expert's rescue
      * attempt closes, by how many times that same employee has already
      * been drawn on this turn (see {@code design.md} &sect;2.5(i)'s own

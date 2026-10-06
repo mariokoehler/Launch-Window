@@ -30,6 +30,7 @@ import de.mkoehler.launchwindow.rules.MissionStaffing;
 import de.mkoehler.launchwindow.rules.MissionStepOutcome;
 import de.mkoehler.launchwindow.rules.MissionStepResolved;
 import de.mkoehler.launchwindow.rules.PassengerLost;
+import de.mkoehler.launchwindow.rules.PrDutyPerformed;
 import de.mkoehler.launchwindow.rules.PersonnelDeparture;
 import de.mkoehler.launchwindow.rules.PersonnelGroup;
 import de.mkoehler.launchwindow.rules.RandomEventOccurred;
@@ -85,6 +86,8 @@ class TurnReportTest {
             new PersonnelDeparture(PersonnelGroup.SET, "s9", "Nadezhda Orlova", DepartureReason.RETIRED, 65, 60,
                 AssignmentState.IDLE, null),
             new PassengerLost("m2", "sputnik-2-orbit", "Laika", null),
+            new PrDutyPerformed("a2", "Alan Shepard", 13, 13, null, 0.0),
+            new PrDutyPerformed("a3", "Yuri Gagarin", 16, 24, "placeholder-good-1", 1.0),
             new RandomEventOccurred(RandomEventKind.values()[0], "a1", 1, 7),
             new ResearchCompleted("s1", "Irina Petrova", "vostok-capsule", 0.4, 0.7, 0),
             new ResearchComponentMaxed("r7-sputnik", List.of("s2"), List.of("Pyotr Morozov")),

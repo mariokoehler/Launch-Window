@@ -1,5 +1,7 @@
 package de.mkoehler.launchwindow.net;
 
+import de.mkoehler.launchwindow.actions.RecallFromPrDutyAction;
+import de.mkoehler.launchwindow.actions.StartPrDutyAction;
 import com.esotericsoftware.kryo.Kryo;
 import de.mkoehler.launchwindow.actions.AdjustSalariesAction;
 import de.mkoehler.launchwindow.actions.AssignResearchAction;
@@ -222,5 +224,9 @@ public final class MessageRegistry {
         // The game's budget schedule in the game info (design.md section 2.1(d), 2026-10-06).
         kryo.register(BudgetScheduleInfo.class);
         kryo.register(BudgetSchedule.Review.class);
+
+        // PR duty for astronauts (design.md section 2.2(c), 2026-10-06).
+        kryo.register(StartPrDutyAction.class);
+        kryo.register(RecallFromPrDutyAction.class);
     }
 }

@@ -23,6 +23,7 @@ public class InProgressMission {
     private List<String> controlSlotIds = new ArrayList<>();
     private List<String> rocketIds = new ArrayList<>();
     private long launchCost;
+    private boolean firstInGame;
 
     /**
      * No-argument constructor required for Jackson/Kryo deserialization.
@@ -207,5 +208,24 @@ public class InProgressMission {
      */
     public void setLaunchCost(long launchCost) {
         this.launchCost = launchCost;
+    }
+
+    /**
+     * Returns whether a step of this flight set a first in the game, which adds to the crew's fame
+     * once the flight completes ({@code design.md} &sect;2.2(c)).
+     *
+     * @return whether the flight set a first
+     */
+    public boolean isFirstInGame() {
+        return firstInGame;
+    }
+
+    /**
+     * Records whether the flight set a first in the game.
+     *
+     * @param firstInGame whether it did
+     */
+    public void setFirstInGame(boolean firstInGame) {
+        this.firstInGame = firstInGame;
     }
 }

@@ -30,6 +30,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
     @JsonSubTypes.Type(value = MissionStepResolved.class, name = "missionStepResolved"),
     @JsonSubTypes.Type(value = PassengerLost.class, name = "passengerLost"),
     @JsonSubTypes.Type(value = PersonnelDeparture.class, name = "personnelDeparture"),
+    @JsonSubTypes.Type(value = PrDutyPerformed.class, name = "prDutyPerformed"),
     @JsonSubTypes.Type(value = RandomEventOccurred.class, name = "randomEventOccurred"),
     @JsonSubTypes.Type(value = ResearchCompleted.class, name = "researchCompleted"),
     @JsonSubTypes.Type(value = ResearchComponentMaxed.class, name = "researchComponentMaxed"),

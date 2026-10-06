@@ -1048,6 +1048,34 @@ class MissionProgressTest {
     }
 
     /**
+     * An Astronaut Expert on a PR tour still helps, but at 75 % (user decision 2026-10-06): on Earth,
+     * but probably not in town.
+     */
+    @Test
+    void astronautExpertOnPrTourGetsSeventyFivePercentEfficiency() {
+        MissionStep step = new MissionStep("ops", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
+            List.of(), List.of(new MissionStep.CrewInvolvement(0, AstronautSkill.PILOTING, 100)), false);
+        MissionConfiguration configuration =
+            new MissionConfiguration("expert-std", "mercury-program", List.of(new MissionSeason(List.of(step))), 1, 0,
+                0);
+        ContentCatalog catalog = catalogWith(configuration);
+
+        PlayerSnapshot snapshot = snapshotWithOwnedCapsule(50.0);
+        snapshot.getInProgressMissions().put("m0", new InProgressMission("m0", "expert-std", List.of(), List.of()));
+        Astronaut onTour = new Astronaut("astro-expert", "Touring Expert", 34, 80, 60);
+        onTour.getExpertSkills().add(AstronautSkill.PILOTING);
+        onTour.setAssignmentState(AssignmentState.PR_DUTY);
+        snapshot.setAstronauts(List.of(onTour));
+
+        // 1st-use boost scaled to 75%: 0 + (100-0)*37.5/100 = 37.5 -> pass threshold 62.5; roll 70 clears it.
+        ScriptedRandomGenerator random = new ScriptedRandomGenerator(10.0, 70.0, 0.1);
+        List<ResolutionEvent> events = MissionProgress.advanceSeason(snapshot, catalog, random);
+
+        assertEquals(MissionStepOutcome.MINOR_GLITCH_SOLVED, findEvent(events, MissionStepResolved.class).outcome());
+        assertEquals(37.5, findEvent(events, ExpertRescueApplied.class).boostPercent());
+    }
+
+    /**
      * Verifies a Mission Control officer Expert assigned to a different
      * active mission is never excluded, but scales to 75% efficiency
      * instead - still on Earth, just not fully dedicated.
