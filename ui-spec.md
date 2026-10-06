@@ -216,6 +216,34 @@ On the right:
       value a FLIGHT console reads), and can sort by it. The Mission Control overview has a sort row
       (the five skills plus Flight Director, best first; click the active one again for roster
       order). The overview's FD cell already existed.
+18. **Explainer** *(mocked up 2026-10-06, the user's idea; not built yet, all of it
+    unconfirmed)*. A short series of full-screen "infographic" sheets that explain an
+    aerospace idea as it comes up in play. It's the third kind of help, beside the tooltip
+    (what a game thing means) and the history note (what really happened): an explainer says
+    **how and why something works** in the real world.
+    - **Look:** each sheet is drawn like an engineering drawing on the blue page: a white sheet
+      with a navy line drawing on the left, three numbered points on the right, a gold "In
+      Launch Window" strip tying the idea to a mechanic, and a drawing title block (drawing
+      number, title, sheet n of m, scale).
+    - **Controls:** Close (top right), Previous and Next with page dots, Done on the last sheet.
+    - **Trigger (proposal):** the first time a player meets the idea (for E-01, opening a
+      configuration whose name says suborbital or orbital), a notice offers it ("New idea:
+      suborbital vs orbital"). It never opens by itself. Every explainer seen stays readable in
+      the Museum (the encyclopedia, §4.11's "Later").
+    - **Text** lives in the pack's strings, like the history notes, written in our own words,
+      with every figure checked before shipping.
+    - **First explainer, E-01 "Suborbital vs orbital"**, three sheets on the canvas `Launch
+      Window — Explainers: Suborbital vs Orbital` (private, ask the user for the link):
+      1. *Falling around the world:* Newton's cannon, the 100 km edge of space, and the
+         "8-kilometre rule" (the ground curves away 5 m every 8 km, and anything falls 5 m in
+         its first second, so 8 km/s keeps you falling around the Earth).
+      2. *Height isn't the hard part:* Freedom 7 against Friendship 7, drawn to scale (both
+         barely above the air), with paired bars for height, speed, energy of motion and time.
+      3. *The rocket's hardest bargain:* the rocket equation's propellant share (about 57 %
+         for a hop, about 96 % for orbit), staging, and the harder way home (retrofire, then
+         about 12 times the heat).
+    - **libGDX build idea:** the drawings become SVG assets rasterized like the icons; the text
+      stays as labels so the strings can change without redrawing.
 
 ---
 

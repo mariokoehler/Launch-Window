@@ -596,6 +596,11 @@ news, and the debt and multiplier states. Details and the unconfirmed choices ar
   declare extended goals.
 - **Mockup tip:** `<sc-for>` inside a CSS grid lays its items out as grid cells, so a
   table can be a grid with one `sc-for` per row.
+- **Explainers mocked up (2026-10-06, the user's idea):** full-screen "infographic" sheets
+  that teach an aerospace idea when it comes up (`ui-spec.md` component 18, `design.md`
+  §1.1). The first is E-01 "Suborbital vs orbital", three sheets on the canvas `Launch Window
+  — Explainers: Suborbital vs Orbital` (private, ask the user for the link). Not built in
+  libGDX yet; the trigger, the look and the figures are all unconfirmed.
 - **Trophy icon added (2026-10-04):** `assets-raw/svg/ui/trophy.svg` and
   `assets/ui/icons/trophy.png` (via `make_ui_icons.py`, which needs `pip install
   resvg-py`), and on the UI Asset Sheet with the news arrows (which reuse the sort
@@ -1571,7 +1576,8 @@ Java 25 (`maven.compiler.release`), Maven 3.8.4 confirmed working locally.
   client's report read marks (`%USERPROFILE%\.prefs\launchwindow`). `/all` also deletes the
   accounts, and `/y` skips the question. Run it with the server stopped, whenever a note says
   "reset the dev data root". It ends in `pause` like the start scripts. In an automated shell, pass
-  `/y` with `< nul` and call it as `.eset_dev_data.cmd`: this sandbox sets
+  `/y` with `< nul` and call it as `.
+eset_dev_data.cmd`: this sandbox sets
   `NoDefaultCurrentDirectoryInExePath`, so a bare script name isn't found.
 - `start_client.cmd` / `start_server.cmd` reinstall `core` and run the
   module — but **don't run them from an automated/non-interactive shell,

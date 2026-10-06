@@ -226,6 +226,25 @@ same session it comes up**, the same standing-note-to-self habit as
     Apollo 1 crew in 1967, which is why later cabins used a nitrogen-oxygen
     mix on the pad. Verify the details before shipping. The Museum's
     Memorial tab (built 2026-10-04) carries it as a draft.
+- **Explainers (user's idea, 2026-10-06; mocked up, unconfirmed):** short
+  "infographic" series that explain an aerospace idea or a piece of jargon as
+  it comes up in play, the third form of the educational layer beside history
+  notes and the planned encyclopedia (`ui-spec.md` component 18). The first,
+  **E-01 "Suborbital vs orbital"**, has three sheets: what an orbit is
+  (Newton's cannon and the 8-kilometre rule), why speed and not height is the
+  hard part (Freedom 7 against Friendship 7, drawn to scale), and why orbit
+  needs so much more rocket (the rocket equation's propellant share, staging,
+  retrofire and re-entry heat). **Figures to verify before shipping:** Freedom
+  7's 187 km, about 8,300 km/h, 15 min and 487 km; Friendship 7's 265 km,
+  about 28,200 km/h and 4 h 55 min; Redstone about 30 t and Atlas about 120 t
+  at liftoff; the R-7 dropping its boosters after about two minutes; Atlas's
+  tank walls "thinner than a coin". Worked out from physics, not sources: 5 m
+  of curvature per 8 km, ½v² of 2.6 against 30.7 MJ/kg, and the propellant
+  shares from a 2.9 km/s exhaust (2.5 km/s needs 57 %, 9.4 km/s needs 96 %).
+  **Candidates for the next explainers:** why rendezvous is counterintuitive
+  (speed up to fall behind), why the Moon needs a bigger rocket again (TLI),
+  and why restarting an engine in weightlessness is hard (propellant floats
+  away from the pumps).
 - **Idea, for later (user, 2026-10-04): a real-world news item every turn.**
   The turn report's news (today: the season's random events, `ui-spec.md`
   §4.4) always gets one more item: something memorable that happened in the
