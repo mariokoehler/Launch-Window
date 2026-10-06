@@ -49,6 +49,25 @@ missions. Decisions from that review are marked *(decided)*.
   what they normally cost: closing refunds nothing. So actions that can't be
   undone cheaply need a confirmation, as listed per screen below.
 
+**Notes for mockup sessions** (lessons from earlier canvases):
+- **The footer stays at the bottom of the frame,** also under short lists. A style on an
+  `x-import` only sizes its slot, so `flex: 1` on a `LaunchWindow.Card` doesn't fill: put the
+  fill and the scroll on a plain wrapper `div`, and give the footer `margin-top: auto`.
+- **Never put a `<button>` (or a mounted `LaunchWindow.Button`) inside an `<a href>`:** the
+  button swallows the click. Style the `<a>` itself with `class="lw-btn lw-btn--primary label"`.
+- **A page's own `renderVals` key named like a `chromeVals` key** (such as `fundsCls`) is
+  silently overwritten, because `chromeVals` is merged last.
+- **The design system serves no `tokens.css`:** send the local copy as a file when installing
+  the system on a new canvas.
+- **`<sc-for>` inside a CSS grid** lays its items out as grid cells, so a table can be a grid
+  with one `sc-for` per row.
+- **Anything drawn over the hub art** must be checked on the brightest variant (Soviet winter
+  noon) and the darkest (winter night).
+- **Local screenshots of an artboard:** save the canvas's `artifact-type/dc-runtime.js` next to
+  the `.dc.html` files as `support.js`, copy the `/_blob/` assets into a local `_blob/` folder,
+  serve the folder over HTTP (SVGs as `image/svg+xml`) and screenshot with headless Chromium,
+  giving the window about 87 px of extra height.
+
 ---
 
 ## 1. How the client works (what the mockups must account for)
@@ -132,7 +151,7 @@ On the right:
    embroidered mission patch (`assets/ui/patches/<goal-id>.png`, 128 px RGBA, made by
    `assets-raw/patches/make_patch_assets.py` from the generated variants). A done goal shows
    it in colour; an open goal shows a greyscale copy (`<goal-id>_open.png`) at 60% opacity,
-   with no check or star glyph. A goal without patch art falls back to the drawn circle with a
+   with no check or star glyph (confirmed by the user, 2026-10-06). A goal without patch art falls back to the drawn circle with a
    check or star. Used so far in the Museum: the race table's cells, "This game is won by" and
    the achievements list, all at 64 px (`RaceTable.PATCH_SIZE`), the smallest size the patch
    text stays legible at (user, 2026-10-06: 30 and 40 px were illegible). The program screens
@@ -312,12 +331,13 @@ his death in 1966, the world knew him only as "the Chief Designer"."*
 
 **After joining:** the starting
 state is 25,000 funds, 250 prestige, 3,000 per season, every building at level 1,
-empty rosters, and six candidates per group. So the first thing to show is a hint
+empty rosters, and ten candidates per group (BASPM's ten, decided 2026-10-06; the code still
+draws six, see `design.md` §5's backlog). So the first thing to show is a hint
 to hire staff (SET Centre first).
 
 **Implemented in libGDX (2026-10-04)** from the Connect and Join Game mockups
 (`client.screen.ConnectScreen`/`JoinScreen`). Decisions made while building them,
-**all unconfirmed**:
+**confirmed by the user (2026-10-06)**:
 - **No BASPM name in the heading.** The mockup's heading names BASPM's own product
   and a game date the client can't know yet (that needs G1). It's now "Join game" /
   "Found your agency" until G1 brings the date.
@@ -325,7 +345,7 @@ to hire staff (SET Centre first).
   progress" can be false during the signup window, and the starting funds come
   from the game's own pack. New text: *"Everyone starts from the same line.
   Whenever you join, your agency starts fresh: every building at level 1, empty
-  rosters, and six candidates waiting in each hiring pool. Hire SET specialists
+  rosters, and ten candidates waiting in each hiring pool ("six" until the pool grows). Hire SET specialists
   first. They research the parts every mission flies on."*
 - **Text on the blue page is light.** The mockup set the heading, eyebrow and
   footnote in ink and navy directly on the page, which is illegible there. They
@@ -431,14 +451,14 @@ end-of-season news screen. **Ref:** `bulletin_news_*.png`,
 Report mockup` canvas, in three variants: an ordinary turn, a milestone turn with goals,
 and a turn with a funding review (1963 · S1; reviews come every 16 seasons). Its budget
 lines are `core`'s running costs, as on the Public Affairs Office mockup. `design.md` §3.13
-has the writeup. Choices still **unconfirmed**:
+has the writeup. Choices **confirmed by the user (2026-10-06)**:
 - one scrolling screen, not tabs;
 - running costs broken down by kind;
 - the morale warning is derived by the client.
 
 **Implemented in libGDX (2026-10-04)** as `client.screen.TurnReportScreen`, with its
 wording in `client.view.TurnReportView`, from G2's saved reports (see G2). Choices made
-while building it, **unconfirmed**:
+while building it, **confirmed by the user (2026-10-06)**:
 - **When it opens:** an unread report opens on entering the game. A turn that resolves
   while the player is in the game shows a toast and lights the hub's Turn Report dot,
   rather than taking over the screen.
@@ -457,8 +477,11 @@ while building it, **unconfirmed**:
   morale warning goes to idle people at morale 50 or below (the resignation floor
   plus 15).
 - **News wording** is the client's own, one line per kind of random event.
-- **Later idea (user, 2026-10-04):** one real-world space-race story from the same three
-  months in every report's news. See `design.md` §1.1.
+- **To build (user, 2026-10-04, confirmed 2026-10-06):** real space-race stories from the same
+  three months in the report's news, picked at random per player where several exist, optionally
+  told through the player's archetype's press. See `design.md` §1.1.
+- **To build (2026-10-06):** a line for a passenger lost that season ("Laika did not come
+  home."), from a new report event (`design.md` §5's backlog).
 
 ### 4.5 VAB: rockets
 **Purpose:** everything about rockets. The VAB's own cap limits the open rocket
@@ -615,7 +638,7 @@ this window (random event); short of staff; short of funds.
 
 **Mocked up (2026-10-04), §4.6.5 to §4.6.8,** on the Headquarters canvas (bottom row:
 `ConfigSelection`, `ConfigDetails`, `MissionPlanning`, `AssembleMission`), for Vostok
-Orbital. `design.md` §3.13 has the full writeup and the choices still **unconfirmed**: the
+Orbital. `design.md` §3.13 has the full writeup and the choices, **confirmed by the user (2026-10-06)**: the
 assessment assumes Auto-assign's staff; a step is "Weak" when it ends the mission at least
 one time in ten; the slot picker lists only free people; a crew seat shows a "seat fit"
 (the same weighted score Auto-assign ranks by). **For G7:** the assessment needs each
@@ -665,7 +688,7 @@ Choices made while building them, **confirmed by the user (2026-10-04)**:
 **Implemented in libGDX (2026-10-04), §4.6 to §4.6.4,** from the Headquarters mockup
 (`client.screen.HeadquartersScreen`, `OpenProgramsScreen`, `SelectBodyScreen`,
 `BodyProgramsScreen`, `ProgramDetailsScreen`). Choices made while building them,
-**unconfirmed**:
+**confirmed by the user (2026-10-06)**:
 - **No "Closed · components kept" state.** The state can't tell a closed program from
   one whose components are owned through another program (Vostok's capsule through
   Korabl-Sputnik 2), so a closed program reads Available. Its price breakdown's
@@ -725,11 +748,12 @@ crew losses. Playback should be skippable and steppable. **Server work:** G2, do
 
 **Mocked up (2026-10-04)** in the `Launch Window — Mission Control mockup` canvas
 (`MCOverview`, `ScheduledMissions`, `ActiveMissions`, `Restaff`, `Replay`); `design.md`
-§3.13 has the writeup. Choices still **unconfirmed**:
-- no building panel on the overview, as in the SET Centre;
+§3.13 has the writeup. Choices **confirmed by the user (2026-10-06)**:
+- no building panel on the overview, as in the SET Centre (later changed, see below);
 - re-staffing has no confirmation (it's free and reversible);
-- the replay shows chances and pass/fail rather than dice numbers, and steps every
-  1.5 s;
+- the replay shows chances and pass/fail rather than dice numbers. **It doesn't step on by
+  itself (user, 2026-10-06):** the player steps through at their own pace; the built viewer
+  still auto-steps every 1.5 s (`design.md` §5's backlog);
 - "Can't be abandoned" is shown on a fixture card, because the early pack has no
   multi-season crewed configuration.
 
@@ -749,10 +773,10 @@ Control mockup:
 
 - **Replay viewer (came a little later, with G2):** `client.screen.ReplayScreen` plays a
   mission's season from the saved report's step events. Nothing is rolled in the client.
-  It steps every 1.5 s, and play, pause, step and skip work. "Replay season N" opens it
-  for the latest turn.
+  It steps every 1.5 s, and play, pause, step and skip work, until manual stepping replaces
+  the timer. "Replay season N" opens it for the latest turn.
 
-Choices made while building them, **unconfirmed**:
+Choices made while building them, **confirmed by the user (2026-10-06)**:
 - **Building panel (changed 2026-10-04, user):** the mockup had none, which left Mission Control
   with no way to upgrade. A compact building cell (level, upkeep, Upgrade) now ends the summary
   strip, as the Astronaut Complex mockup places it, and the SET Centre has the same.
@@ -843,7 +867,7 @@ department.
 
 **Mocked up (2026-10-04)** as `AstronautComplex` on the `Launch Window — Astronaut
 Complex & Public Affairs Office mockup` canvas; `design.md` §3.13 has the writeup.
-Choices still **unconfirmed**:
+Choices **confirmed by the user (2026-10-06)**:
 - **Decided (user, 2026-10-04): Expert training is a fourth kind in the Training dialog** (then Basic,
   Advanced, Permanent, Expert; Basic left the dialog on 2026-10-05), not a separate row action. Only skills at
   80+ that aren't Expert yet can be picked. The dialog shows the per-season chance
@@ -856,7 +880,7 @@ Choices still **unconfirmed**:
 **Implemented in libGDX (2026-10-04)** as `client.screen.AstronautComplexScreen`, with its
 wording in `client.view.AstronautCorps`. Hire, training, pull out, dismiss and Manage
 department are the shared department pieces (`Department.ASTRONAUT`). Choices made while
-building it, **unconfirmed**:
+building it, **confirmed by the user (2026-10-06)**:
 - **Expert training reaches controllers too:** the fourth kind sits in the shared training
   dialog, so Mission Control's controllers get it as well (SET never does). The threshold
   and the per-season chance come from `SkillGrowth`. Skills that can't train toward Expert
@@ -880,8 +904,9 @@ building it, **unconfirmed**:
 - the bracket table, and what the current prestige would earn;
 - the news log.
 
-**Actions:** **Convert prestige to funds** (only while in debt, at 4 prestige per
-fund, capped so funds end at no more than two seasons of running costs). Show the
+**Actions:** **Convert prestige to funds** (only while in debt, at 2 funds per prestige,
+decided 2026-10-06; the code still charges 4 prestige per fund, see `design.md` §5's backlog;
+capped so funds end at no more than two seasons of running costs). Show the
 cap and the price.
 
 **States:** in debt, where new spending is refused; a temporary cost or R&D
@@ -890,7 +915,7 @@ multiplier is active (random event, n seasons left).
 **Mocked up (2026-10-04)** as `PublicAffairs` on the `Launch Window — Astronaut Complex
 & Public Affairs Office mockup` canvas, with the three states on mockup chips (the debt
 one is a labelled what-if). Every number is `core`'s on the fixture; `design.md` §3.13
-has the writeup. Choices still **unconfirmed**:
+has the writeup. Choices **confirmed by the user (2026-10-06)**:
 - three columns: funds and running costs; prestige, the next review and the review
   table; active effects and news;
 - the next review is shown as a scale of its prestige range with two markers (you, and
@@ -909,10 +934,11 @@ has the writeup. Choices still **unconfirmed**:
 hub and the footer's funds chip. The numbers come from `core`: `BudgetProgress.costDetail`
 (the lines, the base and the multiplier's saving), `BudgetProgress.forecast` (the next
 review: when, what it pays, what keeps today's funding) and `PrestigeConversion`. Choices,
-**unconfirmed**:
-- **Known limit:** the client prices reviews and conversions with
+**confirmed by the user (2026-10-06)**:
+- **Known limit, to fix (user, 2026-10-06):** the client prices reviews and conversions with
   `BudgetSchedule.baspmClose()`, the schedule the server uses today, because the schedule
-  isn't sent to the client. A game with another schedule would show wrong numbers here.
+  isn't sent to the client. The game info will carry the game's schedule before any game uses
+  another one (`design.md` §5's backlog).
 - **"Last season"** under the funds is the latest turn report's funds change, fetched
   quietly; it's left out when there's no report. The footer delta stays deferred.
 - **The review scale** has no tag above the gold mark; the legend names both marks.
@@ -934,7 +960,7 @@ review: when, what it pays, what keeps today's funding) and `PrestigeConversion`
 
 **Mocked up (2026-10-04)** on the `Launch Window — Museum, Settings & Game Result mockup`
 canvas, one artboard per tab (`Museum`, `MuseumAchievements`, `MuseumFlights`,
-`MuseumMemorial`); `design.md` §3.13 has the writeup. Choices still **unconfirmed**:
+`MuseumMemorial`); `design.md` §3.13 has the writeup. Choices **confirmed by the user (2026-10-06)**:
 - the tabs are `NavTabs` in the header;
 - the race is a table (place, agency with director and archetype, one column per declared
   goal with the turn done and a First tag, done count, finished turn), next to a "This
@@ -1063,8 +1089,8 @@ Found while writing this spec. The client can't build these screens from the
 current state alone. Each is an M5 task.
 
 - **G1. Game info.** *(Done 2026-10-04, except the pack download: `GameInfoRequest`/
-  `GameInfoResponse`, `design.md` §5 M5 "Game info". Game date: turn 1 is Winter 1955,
-  one season per turn, unconfirmed.)* The content pack id and its content hash (so the client loads
+  `GameInfoResponse`, `design.md` §3.6 and §5 M5. Game date: turn 1 is Winter 1955,
+  one season per turn, confirmed 2026-10-06.)* The content pack id and its content hash (so the client loads
   exactly the game's pack), the declared goals, the current game turn and the game
   date (start year and season), the next resolution time, and the game result if
   any. Needs a new `GameInfoRequest`/`GameInfoResponse`; the handshake can't change.
@@ -1075,6 +1101,10 @@ current state alone. Each is an M5 task.
     (a new `FetchContentPackRequest`/`Response`, a few hundred KB of JSON) and
     uses it for this game, instead of refusing to play. A client may hold several
     packs at once, one per game version.
+  - **Deferred (user, 2026-10-06):** content changes ship as a new server version, and the
+    version check at login makes every client update (the client zip's update script), so a
+    pack mismatch shouldn't happen in practice. Until the download exists, the client warns
+    and uses its own copy.
 - **G2. Turn report and replay data.** *(Done 2026-10-04: each player's turn report,
   `rules.TurnReport`, is saved per turn under `players/<id>/reports/<turn>.json` and served
   by `TurnReportRequest`. Step events now carry the components as flown, both chances,
@@ -1136,8 +1166,9 @@ current state alone. Each is an M5 task.
   client ships `core` and calls the same methods locally against the preview
   state, so the UI never duplicates the rules.
 - **G8. Department salary adjustment (new rule)** *(decided: BASPM's one-off; done
-  2026-10-04: `rules.DepartmentSalaries` and `AdjustSalariesAction`, no once-per-season
-  limit, as in BASPM, unconfirmed)*.
+  2026-10-04: `rules.DepartmentSalaries` and `AdjustSalariesAction`. **Once per department
+  per season (user, 2026-10-06),** reversing the 2026-10-04 "no limit, as in BASPM"; the limit
+  isn't built yet, see `design.md` §5's backlog)*.
   An action that changes every salary in one group by p % (−50 to +50) and every
   morale in it by +p for a raise or −3p for a cut, clamped to 0–100
   (`baspm.md` §9.8). Morale feeds hiring quality and resignations, so this is a
@@ -1150,7 +1181,7 @@ current state alone. Each is an M5 task.
   The available and open counts per body are then derived in the client.
 - **G10. Memorial records (found by the Museum mockup, 2026-10-04).** *(Extended 2026-10-05: animal
   passengers too, `MemorialEntry.Cause.PASSENGER`, and every plaque shows its portrait or photo. See
-  `design.md` §5 M5, "Laika on the memorial".)* *(Done
+  `design.md` §2.5(f).)* *(Done
   2026-10-04: `PlayerSnapshot.memorial`, a list of `MemorialEntry`, written by
   `MissionProgress` for a catastrophic step and by `RandomEvents` for the perished-astronaut
   event. The Achievements tab also got `PlayerSnapshot.goalRecords`, one `GoalRecord` per

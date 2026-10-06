@@ -1,6 +1,6 @@
 # Launch Window logo
 
-`logo.svg` is the approved mission-patch logo (`design.md` §3.12/§4,
+`logo.svg` is the approved mission-patch logo (`design.md` §3.12,
 decided 2026-09-28), built entirely from this repo's own design system —
 no traced or generated bitmap art, no BASPM content. A rocket ascending
 past Earth's limb into a starfield, with a partial gold arc marking "the
@@ -18,8 +18,7 @@ placement, and ribbon spacing against specific feedback each round.
 - The wordmark/tagline are still live `<text>` elements set in Archivo/
   Work Sans, not outlined paths — correct for editing, but a production
   export (rasterized icon, or an outlined vector for print/merch) needs
-  the real font files first (`design.md` §3.12 already flags these as
-  missing from the repo) or the text converted to outlines in a vector
+  the real font files (now in `assets/fonts/`) or the text converted to outlines in a vector
   editor so rendering doesn't depend on the viewer having those fonts
   installed.
 - **`logo.png` (300×300) now exists (2026-10-04)** for the Connect screen's
@@ -29,5 +28,4 @@ placement, and ribbon spacing against specific feedback each round.
   whenever the SVG changes.
 - This is the primary lockup (icon + wordmark + tagline). An icon-only
   cropped version (for a small app/window icon, where the full patch
-  reads as just a colored dot per `design.md` §3.12's own honesty note
-  about legibility at small sizes) hasn't been produced separately yet.
+  reads as just a colored dot at small sizes, `design.md` §3.12) hasn't been produced separately yet.
