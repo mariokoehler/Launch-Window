@@ -3033,7 +3033,8 @@
             "portraitId": null
           }
         ]
-      ]
+      ],
+      "unnamedLostOnFailure": true
     }
   },
   {
