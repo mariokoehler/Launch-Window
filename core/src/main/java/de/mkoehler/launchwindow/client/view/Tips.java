@@ -1,6 +1,7 @@
 package de.mkoehler.launchwindow.client.view;
 
 import de.mkoehler.launchwindow.content.StaffingSlot;
+import de.mkoehler.launchwindow.rules.HiringPool;
 import de.mkoehler.launchwindow.rules.PersonnelLifecycle;
 
 import java.util.Map;
@@ -115,6 +116,17 @@ public final class Tips {
     public static Tip staffCounts(String people, String building) {
         return new Tip(people + ": on staff / busy / places", "Busy means in training, on a mission, on R&D or "
             + "unavailable. Places is what the building holds at its level. Click to open " + building + ".");
+    }
+
+    /**
+     * Returns the hire screen's signing-bonus tooltip.
+     *
+     * @return the tip
+     */
+    public static Tip signingBonus() {
+        return new Tip("Signing bonus", String.format(java.util.Locale.ROOT, "A one-off payment of one season's "
+            + "salary when hiring. The new recruit's morale rises to %d %% of what it was (at most 100), so they "
+            + "start keener and stay longer.", Math.round(HiringPool.SIGNING_BONUS_MORALE_FACTOR * 100)));
     }
 
     /**

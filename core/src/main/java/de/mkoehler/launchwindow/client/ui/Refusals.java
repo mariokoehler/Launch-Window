@@ -33,6 +33,8 @@ public final class Refusals {
         Map.entry("UNSUPPORTED_KIND", "That kind of training isn't available here."),
         Map.entry("INVALID_PERCENT", "Pick a change between −50 % and +50 %."),
         Map.entry("EMPTY_DEPARTMENT", "There's nobody in the department yet."),
+        Map.entry("ALREADY_ADJUSTED", "This department's salaries were already changed this season. Try again "
+            + "after the next turn."),
         Map.entry("HEADQUARTERS_FULL", "Headquarters can't run more programs. Upgrade it or close one."),
         Map.entry("WRONG_AGENCY", "That belongs to another agency."),
         Map.entry("GOALS_NOT_MET", "Achieve the required goals first."),

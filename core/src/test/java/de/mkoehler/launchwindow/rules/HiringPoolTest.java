@@ -239,6 +239,49 @@ class HiringPoolTest {
     }
 
     /**
+     * A signing bonus costs one season's salary and multiplies the new hire's morale by 1.1, capped
+     * at 100 (user decision 2026-10-06).
+     */
+    @Test
+    void signingBonusPaysOneSalaryAndRaisesMorale() {
+        PlayerSnapshot snapshot = newSnapshot();
+        snapshot.setFunds(1_000);
+        HiringPool.refreshCandidates(snapshot, new Random(1L));
+        Astronaut candidate = snapshot.getAstronautCandidates().get(0);
+        candidate.setSalary(52.4);
+        candidate.setMorale(62);
+
+        HireOutcome outcome = HiringPool.hire(snapshot, PersonnelGroup.ASTRONAUT, candidate.getId(), new Random(2L),
+            BuildingSchedule.baspmClose(), true);
+
+        assertEquals(HireOutcome.HIRED, outcome);
+        assertEquals(1_000 - 52, snapshot.getFunds(), "one season's salary, rounded");
+        assertEquals(68, snapshot.getAstronauts().get(0).getMorale(), "62 x 1.1 = 68.2, rounded");
+        assertEquals(100, HiringPool.moraleWithSigningBonus(95), "capped at 100");
+    }
+
+    /**
+     * Without the funds for the bonus, the hire is refused and nothing changes.
+     */
+    @Test
+    void signingBonusNeedsTheFunds() {
+        PlayerSnapshot snapshot = newSnapshot();
+        snapshot.setFunds(10);
+        HiringPool.refreshCandidates(snapshot, new Random(1L));
+        Astronaut candidate = snapshot.getAstronautCandidates().get(0);
+        candidate.setSalary(40);
+
+        HireOutcome outcome = HiringPool.hire(snapshot, PersonnelGroup.ASTRONAUT, candidate.getId(), new Random(2L),
+            BuildingSchedule.baspmClose(), true);
+
+        assertEquals(HireOutcome.INSUFFICIENT_FUNDS, outcome);
+        assertEquals(10, snapshot.getFunds());
+        assertTrue(snapshot.getAstronauts().isEmpty());
+        assertEquals(HireOutcome.HIRED, HiringPool.hire(snapshot, PersonnelGroup.ASTRONAUT, candidate.getId(),
+            new Random(2L), BuildingSchedule.baspmClose(), false), "without the bonus, the hire is free");
+    }
+
+    /**
      * Verifies hiring an id that isn't in the pool fails cleanly, without
      * mutating the snapshot - the normal async case of a stale candidate
      * view.

@@ -21,6 +21,7 @@ public class HireAction extends PlayerAction {
 
     private PersonnelGroup group;
     private String candidateId;
+    private boolean signingBonus;
 
     /**
      * No-argument constructor for Jackson and Kryo.
@@ -37,6 +38,18 @@ public class HireAction extends PlayerAction {
     public HireAction(PersonnelGroup group, String candidateId) {
         setGroup(group);
         setCandidateId(candidateId);
+    }
+
+    /**
+     * Creates the action, optionally with a signing bonus.
+     *
+     * @param group        the group
+     * @param candidateId  the candidate
+     * @param signingBonus whether to pay the one-off signing bonus
+     */
+    public HireAction(PersonnelGroup group, String candidateId, boolean signingBonus) {
+        this(group, candidateId);
+        setSigningBonus(signingBonus);
     }
 
     /**
@@ -75,9 +88,28 @@ public class HireAction extends PlayerAction {
         this.candidateId = candidateId;
     }
 
+    /**
+     * Returns whether the hire pays the one-off signing bonus ({@link HiringPool#signingBonusCost}).
+     * Journal entries from before the bonus existed read as {@code false}.
+     *
+     * @return whether the bonus is paid
+     */
+    public boolean isSigningBonus() {
+        return signingBonus;
+    }
+
+    /**
+     * Sets whether the hire pays the signing bonus.
+     *
+     * @param signingBonus whether the bonus is paid
+     */
+    public void setSigningBonus(boolean signingBonus) {
+        this.signingBonus = signingBonus;
+    }
+
     @Override
     public ActionResult apply(PlayerSnapshot snapshot, ActionContext context) {
         return ActionResult.of(HiringPool.hire(snapshot, group, candidateId, new SplittableRandom(getSeed()),
-            context.catalog().buildings()), HireOutcome.HIRED);
+            context.catalog().buildings(), signingBonus), HireOutcome.HIRED);
     }
 }

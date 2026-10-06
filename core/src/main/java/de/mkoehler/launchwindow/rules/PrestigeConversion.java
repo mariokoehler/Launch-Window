@@ -9,8 +9,8 @@ import java.util.Objects;
 /**
  * <p>The prestige-to-funds conversion a player may take while in debt
  * ({@code design.md} &sect;2.1(d), decided 2026-10-03): the player chooses an
- * amount of funds, paid for at {@link BudgetSchedule#prestigePerFund()} prestige
- * points per fund. A player is only offered this while their funds are below
+ * amount of funds, paid for in prestige at {@link BudgetSchedule#fundsPerPrestige()}
+ * funds per point ({@link BudgetSchedule#prestigeCost(long)}). A player is only offered this while their funds are below
  * zero, and the amount is capped so that the funds end up no higher than two
  * seasons of running costs.</p>
  *
@@ -72,7 +72,7 @@ public final class PrestigeConversion {
         if (amount > cap) {
             return Outcome.EXCEEDS_CAP;
         }
-        long prestigeCost = amount * schedule.prestigePerFund();
+        long prestigeCost = schedule.prestigeCost(amount);
         if (prestigeCost > snapshot.getPrestige()) {
             return Outcome.INSUFFICIENT_PRESTIGE;
         }

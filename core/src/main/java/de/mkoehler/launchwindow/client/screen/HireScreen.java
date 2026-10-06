@@ -21,6 +21,7 @@ import de.mkoehler.launchwindow.client.view.Department;
 import de.mkoehler.launchwindow.client.view.Tips;
 import de.mkoehler.launchwindow.content.StaffingSlot;
 import de.mkoehler.launchwindow.model.Personnel;
+import de.mkoehler.launchwindow.rules.HiringPool;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -49,6 +50,8 @@ public final class HireScreen extends ChromeScreen {
     private static final float LIST_WIDTH = 1180f;
 
     private final Set<String> selected = new LinkedHashSet<>();
+    /** The selected recruits who get the one-off signing bonus. */
+    private final Set<String> bonuses = new LinkedHashSet<>();
     private final Department department;
     private String sortBy;
     private boolean descending = true;
@@ -97,6 +100,7 @@ public final class HireScreen extends ChromeScreen {
      */
     public void toggle(String candidateId) {
         if (selected.remove(candidateId)) {
+            bonuses.remove(candidateId);
             rebuild();
             return;
         }
@@ -105,6 +109,21 @@ public final class HireScreen extends ChromeScreen {
             return;
         }
         selected.add(candidateId);
+        rebuild();
+    }
+
+    /**
+     * Switches the signing bonus on or off for a selected recruit, as its toggle does.
+     *
+     * @param candidateId the recruit's id
+     */
+    public void toggleBonus(String candidateId) {
+        if (!selected.contains(candidateId)) {
+            return;
+        }
+        if (!bonuses.remove(candidateId)) {
+            bonuses.add(candidateId);
+        }
         rebuild();
     }
 
@@ -258,7 +277,8 @@ public final class HireScreen extends ChromeScreen {
             who.add(ui.label(String.format(Locale.ROOT, "AGE %d · $ %.1f", recruit.getAge(), recruit.getSalary()),
                 Theme.TextStyle.CAPTION, Theme.INK_MUTED));
             inner.add(who).expandX().left();
-            inner.add(button("Remove", Theme.ButtonKind.DESTRUCTIVE, () -> toggle(recruit.getId())));
+            inner.add(button("Remove", Theme.ButtonKind.DESTRUCTIVE, () -> toggle(recruit.getId()))).row();
+            inner.add(bonusToggle(recruit)).colspan(3).left().padTop(Theme.SPACE_2);
             entry.add(inner).expandX().fillX();
             card.add(entry).padBottom(Theme.SPACE_3).row();
         }
@@ -285,6 +305,13 @@ public final class HireScreen extends ChromeScreen {
         row.add(ui.label("New hires start with " + basic + (basic == 1 ? " season" : " seasons")
             + " of basic training.", Theme.TextStyle.BODY_SM, Theme.ON_PAGE));
         row.add().expandX();
+        long bonusTotal = chosen(pool).stream().filter(recruit -> bonuses.contains(recruit.getId()))
+            .mapToLong(HiringPool::signingBonusCost).sum();
+        if (bonusTotal > 0) {
+            row.add(ui.label("Signing bonuses", Theme.TextStyle.EYEBROW, Theme.GOLD_ON_PAGE)).padRight(Theme.SPACE_2);
+            row.add(ui.label(String.format(Locale.ROOT, "$ %,d once", bonusTotal), Theme.TextStyle.HEADING_SM,
+                Theme.ON_PAGE_STRONG)).padRight(Theme.SPACE_5);
+        }
         double total = chosen(pool).stream().mapToDouble(Personnel::getSalary).sum();
         row.add(ui.label("Added fixed costs", Theme.TextStyle.EYEBROW, Theme.GOLD_ON_PAGE)).padRight(Theme.SPACE_2);
         row.add(ui.label(String.format(Locale.ROOT, "$ %,.1f / season", total), Theme.TextStyle.HEADING_SM,
@@ -312,6 +339,7 @@ public final class HireScreen extends ChromeScreen {
         if (queue.isEmpty()) {
             hiring = false;
             selected.clear();
+            bonuses.clear();
             refreshChrome();
             rebuild();
             int basic = department.basicSeasons();
@@ -325,7 +353,8 @@ public final class HireScreen extends ChromeScreen {
             return;
         }
         String candidateId = queue.poll();
-        game.gateway().submit(session.credentials(), new HireAction(department.group(), candidateId), result -> {
+        HireAction action = new HireAction(department.group(), candidateId, bonuses.contains(candidateId));
+        game.gateway().submit(session.credentials(), action, result -> {
             if (!isShowing()) {
                 return;
             }
@@ -342,6 +371,29 @@ public final class HireScreen extends ChromeScreen {
                 hireNext(queue, hired, problems);
             }
         });
+    }
+
+    /**
+     * The signing-bonus toggle under a recruit: a check box with its cost and the morale it gives.
+     */
+    private Table bonusToggle(Personnel recruit) {
+        boolean on = bonuses.contains(recruit.getId());
+        Table toggle = new Table();
+        Table box = new Table();
+        box.setBackground(on ? ui.solid(Theme.NAVY) : ui.rect(Theme.SURFACE_CARD, Theme.NAVY, Theme.BORDER_THIN));
+        if (on) {
+            Image check = new Image(ui.icon("check"), Scaling.fit);
+            check.setColor(Theme.ON_FILL);
+            box.add(check).size(12f);
+        }
+        toggle.add(box).size(18f).padRight(Theme.SPACE_2);
+        toggle.add(ui.label(String.format(Locale.ROOT, "Signing bonus · $ %,d once · morale %d → %d",
+            HiringPool.signingBonusCost(recruit), recruit.getMorale(),
+            HiringPool.moraleWithSigningBonus(recruit.getMorale())), Theme.TextStyle.BODY_SM, Theme.INK));
+        toggle.setTouchable(Touchable.enabled);
+        toggle.addListener(clicked(() -> toggleBonus(recruit.getId())));
+        tip(toggle, Tips.signingBonus());
+        return toggle;
     }
 
     private Table sortButton(String icon, boolean active, Runnable action) {

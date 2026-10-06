@@ -4,6 +4,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
+import de.mkoehler.launchwindow.content.BudgetSchedule;
 import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.Astronaut;
@@ -271,6 +272,8 @@ class MessageRegistryTest {
         GameInfoResponse info = GameInfoResponse.success("early-era", "ab12", List.of("goal-a", "goal-b"), 6, true,
             1_000L, 900L, "WINNER", List.of("Orion"), List.of("A. Reyes"), 5);
         assertEquals(info, roundTrip(info, GameInfoResponse.class));
+        assertEquals(BudgetSchedule.baspmClose(), roundTrip(info, GameInfoResponse.class).budgetSchedule(),
+            "the game's budget schedule survives the wire");
         assertEquals(GameInfoResponse.failure("nope"), roundTrip(GameInfoResponse.failure("nope"), GameInfoResponse.class));
     }
 

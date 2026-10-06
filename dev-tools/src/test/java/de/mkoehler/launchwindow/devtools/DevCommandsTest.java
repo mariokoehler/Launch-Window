@@ -15,7 +15,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests for {@link DevCommands}.
@@ -49,6 +51,8 @@ class DevCommandsTest {
         HireAction hire = (HireAction) DevCommands.parse("hire set p7");
         assertEquals(PersonnelGroup.SET, hire.getGroup());
         assertEquals("p7", hire.getCandidateId());
+        assertFalse(hire.isSigningBonus());
+        assertTrue(((HireAction) DevCommands.parse("hire set p7 bonus")).isSigningBonus());
         assertEquals(Building.MISSION_CONTROL,
             ((UpgradeBuildingAction) DevCommands.parse("upgrade mission_control")).getBuilding());
         StartTrainingAction train = (StartTrainingAction) DevCommands.parse("train set p7 permanent rockets 60");

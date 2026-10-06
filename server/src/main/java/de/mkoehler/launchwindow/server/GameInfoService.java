@@ -1,6 +1,7 @@
 package de.mkoehler.launchwindow.server;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.mkoehler.launchwindow.content.BudgetSchedule;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.net.messages.GameInfoResponse;
 import de.mkoehler.launchwindow.persistence.PlayerSnapshotStore;
@@ -41,6 +42,7 @@ public final class GameInfoService {
     private final String contentPackHash;
     private final GameMeta startupMeta;
     private final Clock clock;
+    private final BudgetSchedule schedule;
 
     /**
      * Creates the service.
@@ -54,12 +56,30 @@ public final class GameInfoService {
      */
     public GameInfoService(Path dataRoot, ObjectMapper mapper, String contentPackId, String contentPackHash,
                            GameMeta startupMeta, Clock clock) {
+        this(dataRoot, mapper, contentPackId, contentPackHash, startupMeta, clock, BudgetSchedule.baspmClose());
+    }
+
+    /**
+     * Creates the service for a game with its own budget schedule, which the game info carries to the
+     * client.
+     *
+     * @param dataRoot        the game's data root
+     * @param mapper          the server's shared mapper (with {@code java.time} support)
+     * @param contentPackId   the loaded content pack's id
+     * @param contentPackHash the loaded content pack's hash
+     * @param startupMeta     the configuration read at startup, used only if {@code game-meta.json} is gone
+     * @param clock           the clock for "now"
+     * @param schedule        the game's budget schedule
+     */
+    public GameInfoService(Path dataRoot, ObjectMapper mapper, String contentPackId, String contentPackHash,
+                           GameMeta startupMeta, Clock clock, BudgetSchedule schedule) {
         this.dataRoot = Objects.requireNonNull(dataRoot, "dataRoot must not be null");
         this.mapper = Objects.requireNonNull(mapper, "mapper must not be null");
         this.contentPackId = Objects.requireNonNull(contentPackId, "contentPackId must not be null");
         this.contentPackHash = Objects.requireNonNull(contentPackHash, "contentPackHash must not be null");
         this.startupMeta = Objects.requireNonNull(startupMeta, "startupMeta must not be null");
         this.clock = Objects.requireNonNull(clock, "clock must not be null");
+        this.schedule = Objects.requireNonNull(schedule, "schedule must not be null");
     }
 
     /**
@@ -95,6 +115,7 @@ public final class GameInfoService {
             resultTurn = result.decidedOnTurn();
         }
         return GameInfoResponse.success(contentPackId, contentPackHash, meta.getDeclaredGoalIds(), gameTurn,
-            gameTurn > 1, nextMillis, clock.millis(), status, agencies, directors, resultTurn, meta.isDevMode());
+            gameTurn > 1, nextMillis, clock.millis(), status, agencies, directors, resultTurn, meta.isDevMode(),
+            schedule);
     }
 }

@@ -377,12 +377,16 @@ final class PersonnelDialogs {
             host.toast("There's nobody in the department yet.", Theme.NoticeKind.INFO);
             return;
         }
+        if (DepartmentSalaries.adjustedThisSeason(host.session.state(), department.group())) {
+            host.toast(Refusals.text("ALREADY_ADJUSTED"), Theme.NoticeKind.INFO);
+            return;
+        }
         Table card = host.dialogCard(department.place(), "Manage department");
         card.add(ui.paragraph("A one-off adjustment to every " + switch (department) {
             case SET -> "SET salary";
             case ASTRONAUT -> "astronaut's salary";
             case MISSION_CONTROL -> "flight controller's salary";
-        } + ". Morale moves with it — up for a raise, "
+        } + ", once per season. Morale moves with it — up for a raise, "
             + "down three times as much for a cut.", Theme.TextStyle.BODY, Theme.INK_MUTED)).padBottom(Theme.SPACE_4)
             .row();
         Table head = new Table();

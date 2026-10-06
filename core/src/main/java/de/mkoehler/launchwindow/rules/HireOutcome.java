@@ -27,5 +27,11 @@ public enum HireOutcome {
      * The candidate exists, but that group's roster is already at its
      * capacity.
      */
-    ROSTER_FULL
+    ROSTER_FULL,
+
+    /**
+     * A signing bonus was asked for, but the player's funds don't cover it
+     * ({@link HiringPool#signingBonusCost}).
+     */
+    INSUFFICIENT_FUNDS
 }

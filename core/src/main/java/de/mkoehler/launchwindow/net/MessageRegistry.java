@@ -18,6 +18,7 @@ import de.mkoehler.launchwindow.actions.ReleaseResearchAction;
 import de.mkoehler.launchwindow.actions.StartExpertTrainingAction;
 import de.mkoehler.launchwindow.actions.StartTrainingAction;
 import de.mkoehler.launchwindow.actions.UpgradeBuildingAction;
+import de.mkoehler.launchwindow.content.BudgetSchedule;
 import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.Astronaut;
@@ -36,6 +37,7 @@ import de.mkoehler.launchwindow.model.Season;
 import de.mkoehler.launchwindow.model.SetSkill;
 import de.mkoehler.launchwindow.model.SetSpecialist;
 import de.mkoehler.launchwindow.model.TrainingKind;
+import de.mkoehler.launchwindow.net.messages.BudgetScheduleInfo;
 import de.mkoehler.launchwindow.net.messages.ClaimSlotRequest;
 import de.mkoehler.launchwindow.net.messages.ClaimSlotResponse;
 import de.mkoehler.launchwindow.net.messages.GameInfoRequest;
@@ -216,5 +218,9 @@ public final class MessageRegistry {
         // Appended 2026-10-04 (dev mode: resolve the open turn on demand). Never move these lines.
         kryo.register(ResolveTurnNowRequest.class);
         kryo.register(ResolveTurnNowResponse.class);
+
+        // The game's budget schedule in the game info (design.md section 2.1(d), 2026-10-06).
+        kryo.register(BudgetScheduleInfo.class);
+        kryo.register(BudgetSchedule.Review.class);
     }
 }

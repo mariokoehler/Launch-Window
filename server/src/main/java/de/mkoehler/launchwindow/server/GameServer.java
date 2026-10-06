@@ -107,7 +107,7 @@ public class GameServer extends ApplicationAdapter {
         WinCondition.evaluate(java.util.Map.of(), meta.getDeclaredGoalIds(), catalog);
         ActionContext context = new ActionContext(catalog, BudgetSchedule.baspmClose());
         GameInfoService gameInfo = new GameInfoService(dataRoot, mapper, pack.packId(), pack.hash(), meta,
-            Clock.systemDefaultZone());
+            Clock.systemDefaultZone(), context.schedule());
         dispatcher = new RequestDispatcher(accountStore, dataRoot, mapper, context, meta, gameInfo);
         scheduler = new TurnScheduler(dataRoot, mapper, Clock.systemDefaultZone(), context,
             RandomEventRoster.baspmClose());

@@ -159,6 +159,7 @@ public final class SeasonResolver {
             observer.after(phase, snapshot, events);
             all.addAll(events);
         }
+        DepartmentSalaries.startNewSeason(snapshot);
         return all;
     }
 

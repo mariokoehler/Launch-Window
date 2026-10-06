@@ -19,12 +19,12 @@ import java.util.Objects;
  * @param initialFunds        the funds a new player starts with
  * @param initialPrestige     the prestige a new player starts with
  * @param initialFundingRate  the funding granted per season before the first review
- * @param prestigePerFund     prestige points spent per fund converted while in debt; {@code design.md} &sect;2.1(d)
+ * @param fundsPerPrestige    funds one prestige point buys when converted while in debt; {@code design.md} &sect;2.1(d)
  * @param reviews             the bracket table, one entry per successive review; never empty
  * @author Mario Koehler
  */
 public record BudgetSchedule(long initialFunds, long initialPrestige, long initialFundingRate,
-                             long prestigePerFund, List<Review> reviews) {
+                             long fundsPerPrestige, List<Review> reviews) {
 
     /**
      * One review's bracket: funding interpolates linearly between the two
@@ -58,7 +58,7 @@ public record BudgetSchedule(long initialFunds, long initialPrestige, long initi
      *
      * @throws NullPointerException     if {@code reviews} is {@code null}
      * @throws IllegalArgumentException if a starting value is negative,
-     *                                   {@code prestigePerFund} is not positive,
+     *                                   {@code fundsPerPrestige} is not positive,
      *                                   or {@code reviews} is empty
      */
     public BudgetSchedule {
@@ -66,8 +66,8 @@ public record BudgetSchedule(long initialFunds, long initialPrestige, long initi
         if (initialFunds < 0 || initialPrestige < 0 || initialFundingRate < 0) {
             throw new IllegalArgumentException("starting budget values must not be negative");
         }
-        if (prestigePerFund <= 0) {
-            throw new IllegalArgumentException("prestigePerFund must be positive: " + prestigePerFund);
+        if (fundsPerPrestige <= 0) {
+            throw new IllegalArgumentException("fundsPerPrestige must be positive: " + fundsPerPrestige);
         }
         reviews = List.copyOf(reviews);
         if (reviews.isEmpty()) {
@@ -77,13 +77,14 @@ public record BudgetSchedule(long initialFunds, long initialPrestige, long initi
 
     /**
      * The BASPM-close schedule (Normal difficulty): 25,000 funds, 250 prestige,
-     * 3,000 per season to start, BASPM's review table, and 4 prestige per fund
-     * (the conversion rate is Launch Window's own) - {@code design.md} &sect;2.1(d).
+     * 3,000 per season to start, BASPM's review table, and 2 funds per prestige
+     * point (the conversion rate is Launch Window's own, decided by the user on
+     * 2026-10-06) - {@code design.md} &sect;2.1(d).
      *
      * @return the default schedule
      */
     public static BudgetSchedule baspmClose() {
-        return new BudgetSchedule(25_000, 250, 3_000, 4, List.of(
+        return new BudgetSchedule(25_000, 250, 3_000, 2, List.of(
             new Review(250, 3_800, 2_500, 8_000),
             new Review(2_000, 4_600, 12_500, 21_000),
             new Review(5_000, 5_500, 35_000, 35_000),
@@ -109,5 +110,30 @@ public record BudgetSchedule(long initialFunds, long initialPrestige, long initi
             throw new IllegalArgumentException("reviewNumber must be positive: " + reviewNumber);
         }
         return reviews.get(Math.min(reviewNumber, reviews.size()) - 1);
+    }
+
+    /**
+     * The prestige a conversion of {@code funds} costs: one point per
+     * {@link #fundsPerPrestige()} funds, rounded up, so a part point is paid in full.
+     *
+     * @param funds the funds converted; must not be negative
+     * @return the prestige spent
+     * @throws IllegalArgumentException if {@code funds} is negative
+     */
+    public long prestigeCost(long funds) {
+        if (funds < 0) {
+            throw new IllegalArgumentException("funds must not be negative: " + funds);
+        }
+        return (funds + fundsPerPrestige - 1) / fundsPerPrestige;
+    }
+
+    /**
+     * The most funds {@code prestige} points can pay for.
+     *
+     * @param prestige the prestige held; a negative value counts as none
+     * @return the funds, never negative
+     */
+    public long affordableFunds(long prestige) {
+        return Math.max(0, prestige) * fundsPerPrestige;
     }
 }

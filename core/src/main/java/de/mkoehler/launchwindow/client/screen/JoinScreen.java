@@ -97,7 +97,7 @@ public final class JoinScreen extends StageScreen {
         column.add(centered(ui.label("Found your agency", Theme.TextStyle.HEADING_LG, Theme.ON_PAGE_STRONG)))
             .padBottom(Theme.SPACE_5).row();
         column.add(ui.notice(Theme.NoticeKind.INFO, "Everyone starts from the same line.",
-            "Whenever you join, your agency starts fresh: every building at level 1, empty rosters, and six "
+            "Whenever you join, your agency starts fresh: every building at level 1, empty rosters, and ten "
                 + "candidates waiting in each hiring pool. Hire SET specialists first. They research the parts "
                 + "every mission flies on.")).padBottom(Theme.SPACE_5).row();
         bannerCell = column.add((Actor) null);

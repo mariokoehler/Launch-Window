@@ -61,6 +61,7 @@ public class PlayerSnapshot {
     private int launchCap = -1;
     private int launchesThisWindow;
     private Map<String, Integer> unavailableComponents = new LinkedHashMap<>();
+    private List<String> salaryAdjustedGroups = new ArrayList<>();
     private Map<Building, Integer> buildingLevels = new LinkedHashMap<>();
     private Map<Building, Integer> buildingUpgradeSeasonsRemaining = new LinkedHashMap<>();
 
@@ -590,6 +591,28 @@ public class PlayerSnapshot {
      */
     public void setLaunchesThisWindow(int launchesThisWindow) {
         this.launchesThisWindow = launchesThisWindow;
+    }
+
+    /**
+     * Returns the personnel groups whose salaries were adjusted this season, by group
+     * name: a department may be adjusted once per season ({@code design.md} &sect;2.2(c),
+     * user decision 2026-10-06). Cleared by every season pass. The live list is returned.
+     *
+     * @return the group names, never {@code null}
+     */
+    public List<String> getSalaryAdjustedGroups() {
+        return salaryAdjustedGroups;
+    }
+
+    /**
+     * Sets the personnel groups adjusted this season, by group name.
+     *
+     * @param salaryAdjustedGroups the group names
+     * @throws NullPointerException if {@code salaryAdjustedGroups} is {@code null}
+     */
+    public void setSalaryAdjustedGroups(List<String> salaryAdjustedGroups) {
+        Objects.requireNonNull(salaryAdjustedGroups, "salaryAdjustedGroups must not be null");
+        this.salaryAdjustedGroups = new ArrayList<>(salaryAdjustedGroups);
     }
 
     /**

@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests {@link DepartmentSalaries} (gap G8, BASPM's one-off adjustment).
@@ -69,5 +71,27 @@ class DepartmentSalariesTest {
             DepartmentSalaries.adjust(state, PersonnelGroup.SET, 0));
         assertEquals(50.0, state.getSetSpecialists().get(0).getSalary(), 1e-9);
         assertEquals(60, state.getSetSpecialists().get(0).getMorale());
+    }
+
+    /**
+     * A department may be adjusted once per season: a second adjustment is refused and changes
+     * nothing, another department is unaffected, and the season pass's reset allows it again.
+     */
+    @Test
+    void eachDepartmentOncePerSeason() {
+        PlayerSnapshot state = new PlayerSnapshot("Orion", Archetype.NASA, 0, 0, 0, 1);
+        state.getSetSpecialists().add(engineer("a", 60, 50.0));
+        assertEquals(DepartmentSalaries.AdjustOutcome.ADJUSTED, DepartmentSalaries.adjust(state, PersonnelGroup.SET, 10));
+        assertTrue(DepartmentSalaries.adjustedThisSeason(state, PersonnelGroup.SET));
+        assertFalse(DepartmentSalaries.adjustedThisSeason(state, PersonnelGroup.ASTRONAUT));
+
+        assertEquals(DepartmentSalaries.AdjustOutcome.ALREADY_ADJUSTED,
+            DepartmentSalaries.adjust(state, PersonnelGroup.SET, -10));
+        assertEquals(55.0, state.getSetSpecialists().get(0).getSalary(), 1e-9, "the refused cut changed nothing");
+        assertEquals(70, state.getSetSpecialists().get(0).getMorale());
+
+        DepartmentSalaries.startNewSeason(state);
+        assertEquals(DepartmentSalaries.AdjustOutcome.ADJUSTED,
+            DepartmentSalaries.adjust(state, PersonnelGroup.SET, -10));
     }
 }

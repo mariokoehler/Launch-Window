@@ -1,5 +1,6 @@
 package de.mkoehler.launchwindow.net.messages;
 
+import de.mkoehler.launchwindow.content.BudgetSchedule;
 import de.mkoehler.launchwindow.model.GameDate;
 import de.mkoehler.launchwindow.model.Season;
 
@@ -34,13 +35,15 @@ import java.util.List;
  * @param resultTurn           the game turn the result was decided on, or 0 while undecided
  * @param devMode              whether the server runs in dev mode, so the client offers its play
  *                             testing tools (resolving the turn now)
+ * @param budget               the game's budget schedule, or {@code null} on failure; read it through
+ *                             {@link #budgetSchedule()}
  * @author Mario Koehler
  */
 public record GameInfoResponse(boolean success, String message, String contentPackId, String contentPackHash,
                                List<String> declaredGoalIds, long gameTurn, int year, Season season,
                                boolean started, long nextResolutionMillis, long serverNowMillis,
                                String resultStatus, List<String> winnerAgencies, List<String> winnerDirectors,
-                               long resultTurn, boolean devMode) {
+                               long resultTurn, boolean devMode, BudgetScheduleInfo budget) {
 
     /**
      * Creates a successful response, copying every list into an {@link ArrayList}.
@@ -88,10 +91,39 @@ public record GameInfoResponse(boolean success, String message, String contentPa
                                            long serverNowMillis, String resultStatus, List<String> winnerAgencies,
                                            List<String> winnerDirectors, long resultTurn,
                                            boolean devMode) {
+        return success(contentPackId, contentPackHash, declaredGoalIds, gameTurn, started, nextResolutionMillis,
+            serverNowMillis, resultStatus, winnerAgencies, winnerDirectors, resultTurn, devMode,
+            BudgetSchedule.baspmClose());
+    }
+
+    /**
+     * Creates a successful response carrying the game's budget schedule.
+     *
+     * @param contentPackId        the content pack
+     * @param contentPackHash      its hash
+     * @param declaredGoalIds      the declared goals
+     * @param gameTurn             the open game turn
+     * @param started              whether any turn has resolved
+     * @param nextResolutionMillis the next resolution, or -1
+     * @param serverNowMillis      the server's clock
+     * @param resultStatus         the result status, or {@code null}
+     * @param winnerAgencies       the winners' agencies
+     * @param winnerDirectors      the winners' directors
+     * @param resultTurn           the deciding turn, or 0
+     * @param devMode              whether the server runs in dev mode
+     * @param schedule             the game's budget schedule
+     * @return the response
+     */
+    public static GameInfoResponse success(String contentPackId, String contentPackHash, List<String> declaredGoalIds,
+                                           long gameTurn, boolean started, long nextResolutionMillis,
+                                           long serverNowMillis, String resultStatus, List<String> winnerAgencies,
+                                           List<String> winnerDirectors, long resultTurn, boolean devMode,
+                                           BudgetSchedule schedule) {
         GameDate date = GameDate.ofTurn(gameTurn);
         return new GameInfoResponse(true, "", contentPackId, contentPackHash, new ArrayList<>(declaredGoalIds),
             gameTurn, date.year(), date.season(), started, nextResolutionMillis, serverNowMillis, resultStatus,
-            new ArrayList<>(winnerAgencies), new ArrayList<>(winnerDirectors), resultTurn, devMode);
+            new ArrayList<>(winnerAgencies), new ArrayList<>(winnerDirectors), resultTurn, devMode,
+            BudgetScheduleInfo.of(schedule));
     }
 
     /**
@@ -102,7 +134,16 @@ public record GameInfoResponse(boolean success, String message, String contentPa
      */
     public static GameInfoResponse failure(String message) {
         return new GameInfoResponse(false, message, null, null, new ArrayList<>(), 0, 0, null, false, -1, 0, null,
-            new ArrayList<>(), new ArrayList<>(), 0, false);
+            new ArrayList<>(), new ArrayList<>(), 0, false, null);
+    }
+
+    /**
+     * Returns the game's budget schedule, or the default one if the response carries none.
+     *
+     * @return the schedule
+     */
+    public BudgetSchedule budgetSchedule() {
+        return budget == null ? BudgetSchedule.baspmClose() : budget.toSchedule();
     }
 
     /**

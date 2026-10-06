@@ -14,8 +14,9 @@ import java.util.Objects;
  *
  * <p>The Manage department dialog previews the outcome with {@link #projectedSalary} and
  * {@link #projectedAverageMorale}, the same code {@link #adjust} applies, so the preview can never
- * disagree with the result (gap G7). Like BASPM, there is no once-per-season limit: it's a one-off
- * action the player may repeat (<b>unconfirmed</b>, 2026-10-04).</p>
+ * disagree with the result (gap G7). Unlike BASPM, each department may be adjusted only once per
+ * season (user decision 2026-10-06): {@link #adjust} records the group on the snapshot, and the
+ * season pass clears the record ({@link #startNewSeason}).</p>
  *
  * @author Mario Koehler
  */
@@ -34,7 +35,9 @@ public final class DepartmentSalaries {
         /** The percentage is outside -50 to +50, or zero. */
         INVALID_PERCENT,
         /** The group has nobody in it. */
-        EMPTY_DEPARTMENT
+        EMPTY_DEPARTMENT,
+        /** The group's salaries were already adjusted this season. */
+        ALREADY_ADJUSTED
     }
 
     /**
@@ -123,10 +126,35 @@ public final class DepartmentSalaries {
         if (roster.isEmpty()) {
             return AdjustOutcome.EMPTY_DEPARTMENT;
         }
+        if (adjustedThisSeason(snapshot, group)) {
+            return AdjustOutcome.ALREADY_ADJUSTED;
+        }
         for (Personnel person : roster) {
             person.setSalary(adjustedSalary(person.getSalary(), percent));
             person.setMorale(adjustedMorale(person.getMorale(), percent));
         }
+        snapshot.getSalaryAdjustedGroups().add(group.name());
         return AdjustOutcome.ADJUSTED;
+    }
+
+    /**
+     * Returns whether a group's salaries were already adjusted this season.
+     *
+     * @param snapshot the player's state
+     * @param group    the group
+     * @return {@code true} if another adjustment this season would be refused
+     */
+    public static boolean adjustedThisSeason(PlayerSnapshot snapshot, PersonnelGroup group) {
+        return snapshot.getSalaryAdjustedGroups().contains(group.name());
+    }
+
+    /**
+     * Clears the record of this season's adjustments, so every department may be adjusted again.
+     * Run once per season pass, after the season's actions.
+     *
+     * @param snapshot the player's state
+     */
+    public static void startNewSeason(PlayerSnapshot snapshot) {
+        snapshot.getSalaryAdjustedGroups().clear();
     }
 }

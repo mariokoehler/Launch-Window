@@ -41,7 +41,7 @@ public final class DevCommands {
         "Actions:",
         "  open <programId> | close <programId>",
         "  rocket open <rocketId> | rocket close <rocketId>",
-        "  hire <ASTRONAUT|SET|MISSION_CONTROL> <candidateId> | dismiss <group> <employeeId>",
+        "  hire <ASTRONAUT|SET|MISSION_CONTROL> <candidateId> [bonus] | dismiss <group> <employeeId>",
         "  upgrade <ASTRONAUT_CENTER|MISSION_CONTROL|SET_CENTER|HEADQUARTERS|VEHICLE_ASSEMBLY>",
         "  convert <funds>",
         "  research <specialistId> <componentId> | release <specialistId>",
@@ -73,7 +73,8 @@ public final class DevCommands {
                 case "close" -> new CloseRocketProgramAction(arg(words, 2));
                 default -> throw new IllegalArgumentException("rocket open|close <rocketId>");
             };
-            case "hire" -> new HireAction(group(arg(words, 1)), arg(words, 2));
+            case "hire" -> new HireAction(group(arg(words, 1)), arg(words, 2),
+                words.length > 3 && words[3].equalsIgnoreCase("bonus"));
             case "dismiss" -> new DismissAction(group(arg(words, 1)), arg(words, 2));
             case "upgrade" -> new UpgradeBuildingAction(Building.valueOf(arg(words, 1).toUpperCase(Locale.ROOT)));
             case "convert" -> new ConvertPrestigeAction(Long.parseLong(arg(words, 1)));

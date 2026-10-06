@@ -33,17 +33,20 @@ import java.util.Locale;
  * to funds while in debt. Every number comes from {@code core}'s rules ({@link BudgetProgress},
  * {@link PrestigeConversion}).
  *
- * <p>Known limit: the client prices reviews and conversions with {@link BudgetSchedule#baspmClose()},
- * the schedule the server uses today; the schedule isn't sent to the client.</p>
+ * <p>Reviews and conversions are priced with the game's own budget schedule, which the game info
+ * carries ({@link de.mkoehler.launchwindow.net.messages.GameInfoResponse#budgetSchedule()}).</p>
  *
  * @author Mario Koehler
  */
 public final class PublicAffairsScreen extends ChromeScreen {
 
-    /** The budget schedule the server uses (see the class note). */
-    private static final BudgetSchedule SCHEDULE = BudgetSchedule.baspmClose();
 
     private TurnReport lastReport;
+
+    /** The game's budget schedule, from the game info. */
+    private BudgetSchedule schedule() {
+        return session.gameInfo().response().budgetSchedule();
+    }
 
     /**
      * Builds the screen from the session, fetching the latest turn report for last season's change.
@@ -178,7 +181,7 @@ public final class PublicAffairsScreen extends ChromeScreen {
     }
 
     private int lastReviewNumber() {
-        return BudgetProgress.forecast(session.state(), SCHEDULE).reviewNumber() - 1;
+        return BudgetProgress.forecast(session.state(), schedule()).reviewNumber() - 1;
     }
 
     private String lastSeasonLine() {
@@ -200,7 +203,7 @@ public final class PublicAffairsScreen extends ChromeScreen {
 
     private Table reviewColumn() {
         PlayerSnapshot state = session.state();
-        BudgetProgress.ReviewForecast forecast = BudgetProgress.forecast(state, SCHEDULE);
+        BudgetProgress.ReviewForecast forecast = BudgetProgress.forecast(state, schedule());
         Table column = new Table();
         column.top();
         column.defaults().growX();
@@ -298,7 +301,7 @@ public final class PublicAffairsScreen extends ChromeScreen {
             grid.add(cell).expandX().uniformX();
         }
         grid.row();
-        List<BudgetSchedule.Review> reviews = SCHEDULE.reviews();
+        List<BudgetSchedule.Review> reviews = schedule().reviews();
         for (int i = 0; i < reviews.size(); i++) {
             BudgetSchedule.Review review = reviews.get(i);
             boolean upcoming = i + 1 == Math.min(next, reviews.size());
@@ -408,7 +411,7 @@ public final class PublicAffairsScreen extends ChromeScreen {
     public void openConvert() {
         PlayerSnapshot state = session.state();
         long cap = PrestigeConversion.maxConversion(state, session.catalog());
-        long affordable = state.getPrestige() / SCHEDULE.prestigePerFund();
+        long affordable = schedule().affordableFunds(state.getPrestige());
         long max = Math.min(cap, affordable);
         if (state.getFunds() >= 0 || max <= 0) {
             toast(state.getFunds() >= 0 ? "Prestige can only be converted while in debt."
@@ -420,10 +423,10 @@ public final class PublicAffairsScreen extends ChromeScreen {
 
     private Table convertCard(long amount, long max, long cap, long affordable) {
         PlayerSnapshot state = session.state();
-        long perFund = SCHEDULE.prestigePerFund();
+        long perPoint = schedule().fundsPerPrestige();
         Table card = dialogCard("Public Affairs Office", "Convert prestige to funds");
-        card.add(ui.paragraph("Only while in debt. Each fund costs " + perFund + " prestige, and the prestige is gone "
-            + "for good, including at the next funding review.", Theme.TextStyle.BODY, Theme.INK_MUTED))
+        card.add(ui.paragraph("Only while in debt. Each prestige point buys " + money(perPoint) + ", and the prestige "
+            + "is gone for good, including at the next funding review.", Theme.TextStyle.BODY, Theme.INK_MUTED))
             .padBottom(Theme.SPACE_4).row();
         Table head = new Table();
         head.add(ui.label("FUNDS TO RAISE", Theme.TextStyle.LABEL, Theme.INK_MUTED)).expandX().left();
@@ -446,14 +449,14 @@ public final class PublicAffairsScreen extends ChromeScreen {
             long chosen = Math.round(slider.getValue());
             value.setText(money(chosen));
             lines.clearChildren();
-            long price = chosen * perFund;
+            long price = schedule().prestigeCost(chosen);
             lines.add(row("Funds", money(state.getFunds()) + " → " + money(state.getFunds() + chosen), Theme.INK,
                 Theme.TextStyle.BODY_SM)).row();
-            lines.add(row("Prestige, at " + perFund + " per fund", String.format(Locale.ROOT, "%,d → %,d",
+            lines.add(row("Prestige, at " + money(perPoint) + " a point", String.format(Locale.ROOT, "%,d → %,d",
                 state.getPrestige(), state.getPrestige() - price), Theme.INK, Theme.TextStyle.BODY_SM)).row();
-            BudgetProgress.ReviewForecast after = BudgetProgress.forecast(state, SCHEDULE, state.getPrestige() - price);
+            BudgetProgress.ReviewForecast after = BudgetProgress.forecast(state, schedule(), state.getPrestige() - price);
             lines.add(row("Review #" + after.reviewNumber() + " would then pay", money(BudgetProgress.forecast(state,
-                SCHEDULE).payToday()) + " → " + money(after.payToday()), Theme.INK, Theme.TextStyle.BODY_SM)).row();
+                schedule()).payToday()) + " → " + money(after.payToday()), Theme.INK, Theme.TextStyle.BODY_SM)).row();
             lines.add(new Image(ui.solid(Theme.NAVY))).height(Theme.BORDER_EMPHASIS).padTop(4f).row();
             lines.add(row("Price", String.format(Locale.ROOT, "%,d prestige", price), Theme.INK,
                 Theme.TextStyle.HEADING_SM)).padTop(4f).row();
@@ -483,7 +486,7 @@ public final class PublicAffairsScreen extends ChromeScreen {
             long chosen = Math.round(slider.getValue());
             submit(new ConvertPrestigeAction(chosen), result -> {
                 closeDialog();
-                toast("Converted " + String.format(Locale.ROOT, "%,d", chosen * perFund) + " prestige into "
+                toast("Converted " + String.format(Locale.ROOT, "%,d", schedule().prestigeCost(chosen)) + " prestige into "
                     + money(chosen) + ".", Theme.NoticeKind.SUCCESS);
             });
         });

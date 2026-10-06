@@ -230,7 +230,7 @@ class BudgetProgressTest {
 
         assertEquals(PrestigeConversion.Outcome.CONVERTED, PrestigeConversion.convert(indebted, EMPTY, SCHEDULE, 900));
         assertEquals(400, indebted.getFunds(), "funds end at exactly two seasons of running costs");
-        assertEquals(10_000 - 900 * 4, indebted.getPrestige(), "4 prestige per fund");
+        assertEquals(10_000 - 900 / 4, indebted.getPrestige(), "this schedule pays 4 funds per prestige point");
     }
 
     /**

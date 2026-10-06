@@ -191,7 +191,6 @@ public final class PersonnelLifecyclePlayouts {
     private static final long STARTING_FUNDS = 25_000;
     private static final long STARTING_PRESTIGE = 250;
     private static final long STARTING_FUNDING_RATE = 3_000;
-    private static final long PRESTIGE_PER_FUND = 4;
     private static final RandomEventRoster ROSTER = RandomEventRoster.baspmClose();
     private static final BudgetSchedule SCHEDULE = BudgetSchedule.baspmClose();
 
@@ -1684,7 +1683,7 @@ public final class PersonnelLifecyclePlayouts {
         if (snapshot.getFunds() >= 0 || random.nextDouble() >= 0.5) {
             return 0;
         }
-        long affordable = snapshot.getPrestige() / PRESTIGE_PER_FUND;
+        long affordable = SCHEDULE.affordableFunds(snapshot.getPrestige());
         long max = Math.min(PrestigeConversion.maxConversion(snapshot, CATALOG), affordable);
         if (max <= 0) {
             return 0;

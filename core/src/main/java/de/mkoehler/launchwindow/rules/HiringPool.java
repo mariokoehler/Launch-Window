@@ -93,8 +93,11 @@ import java.util.random.RandomGenerator;
  */
 public final class HiringPool {
 
-    /** How many fresh candidates each group's pool holds after a refresh. */
-    public static final int HIRING_BATCH_SIZE = 6;
+    /** How many fresh candidates each group's pool holds after a refresh (BASPM's ten, user 2026-10-06). */
+    public static final int HIRING_BATCH_SIZE = 10;
+
+    /** What a signing bonus multiplies a new hire's morale by (user decision 2026-10-06). */
+    public static final double SIGNING_BONUS_MORALE_FACTOR = 1.1;
 
     /** At or below this average roster morale, candidate quality is "Poor." */
     public static final int POOR_MORALE_CEILING = 44;
@@ -347,19 +350,90 @@ public final class HiringPool {
      */
     public static HireOutcome hire(PlayerSnapshot snapshot, PersonnelGroup group, String candidateId,
             RandomGenerator random, BuildingSchedule buildings) {
+        return hire(snapshot, group, candidateId, random, buildings, false);
+    }
+
+    /**
+     * Hires one candidate, optionally paying them a one-off signing bonus (user decision
+     * 2026-10-06): one season's salary ({@link #signingBonusCost}), which raises the new hire's
+     * morale to {@link #moraleWithSigningBonus} at once. Without enough funds for the bonus the
+     * hire is refused ({@link HireOutcome#INSUFFICIENT_FUNDS}) and nothing changes.
+     *
+     * @param snapshot     the player snapshot to hire into; mutated in place on success
+     * @param group        which group to hire from
+     * @param candidateId  the candidate's id, from that group's current pool
+     * @param random       the random source the auto-started training's target skill is drawn from
+     * @param buildings    the building table the roster caps come from
+     * @param signingBonus whether to pay the signing bonus
+     * @return the outcome
+     * @throws NullPointerException if any argument is {@code null}
+     */
+    public static HireOutcome hire(PlayerSnapshot snapshot, PersonnelGroup group, String candidateId,
+            RandomGenerator random, BuildingSchedule buildings, boolean signingBonus) {
         Objects.requireNonNull(snapshot, "snapshot must not be null");
         Objects.requireNonNull(group, "group must not be null");
         Objects.requireNonNull(candidateId, "candidateId must not be null");
         Objects.requireNonNull(random, "random must not be null");
         Objects.requireNonNull(buildings, "buildings must not be null");
 
-        return switch (group) {
+        long bonus = 0;
+        if (signingBonus) {
+            Personnel candidate = candidates(snapshot, group).stream()
+                .filter(person -> person.getId().equals(candidateId)).findFirst().orElse(null);
+            if (candidate != null) {
+                bonus = signingBonusCost(candidate);
+                if (snapshot.getFunds() < bonus) {
+                    return HireOutcome.INSUFFICIENT_FUNDS;
+                }
+            }
+        }
+        HireOutcome outcome = switch (group) {
             case ASTRONAUT -> hireAstronaut(snapshot, candidateId, random,
                 BuildingUpgrades.capacity(snapshot, Building.ASTRONAUT_CENTER, buildings));
             case SET -> hireSetSpecialist(snapshot, candidateId, random,
                 BuildingUpgrades.capacity(snapshot, Building.SET_CENTER, buildings));
             case MISSION_CONTROL -> hireMissionControlOfficer(snapshot, candidateId, random,
                 BuildingUpgrades.capacity(snapshot, Building.MISSION_CONTROL, buildings));
+        };
+        if (outcome == HireOutcome.HIRED && signingBonus) {
+            List<? extends Personnel> roster = switch (group) {
+                case ASTRONAUT -> snapshot.getAstronauts();
+                case SET -> snapshot.getSetSpecialists();
+                case MISSION_CONTROL -> snapshot.getMissionControlOfficers();
+            };
+            Personnel hired = roster.get(roster.size() - 1);
+            hired.setMorale(moraleWithSigningBonus(hired.getMorale()));
+            snapshot.setFunds(snapshot.getFunds() - bonus);
+        }
+        return outcome;
+    }
+
+    /**
+     * Returns what a signing bonus costs: one season of the candidate's salary, in whole funds.
+     *
+     * @param candidate the candidate
+     * @return the cost
+     */
+    public static long signingBonusCost(Personnel candidate) {
+        return Math.round(candidate.getSalary());
+    }
+
+    /**
+     * Returns a new hire's morale after a signing bonus: their morale times
+     * {@link #SIGNING_BONUS_MORALE_FACTOR}, rounded, at most 100.
+     *
+     * @param morale the candidate's morale
+     * @return the morale after the bonus
+     */
+    public static int moraleWithSigningBonus(int morale) {
+        return (int) Math.min(100, Math.round(morale * SIGNING_BONUS_MORALE_FACTOR));
+    }
+
+    private static List<? extends Personnel> candidates(PlayerSnapshot snapshot, PersonnelGroup group) {
+        return switch (group) {
+            case ASTRONAUT -> snapshot.getAstronautCandidates();
+            case SET -> snapshot.getSetSpecialistCandidates();
+            case MISSION_CONTROL -> snapshot.getMissionControlCandidates();
         };
     }
 
