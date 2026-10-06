@@ -1,0 +1,123 @@
+{
+ "width": 1060,
+ "height": 660,
+ "labels": [
+  {
+   "x": 497.0,
+   "y": 93.0,
+   "anchor": "middle",
+   "kind": "num",
+   "size": 14.0,
+   "color": "#f5efe1",
+   "text": "1"
+  },
+  {
+   "x": 518.0,
+   "y": 84.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 0,
+   "color": "#16305c",
+   "text": "Slow: a short hop"
+  },
+  {
+   "x": 518.0,
+   "y": 102.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 0,
+   "color": "#5b5548",
+   "text": "Up past the edge of space, then straight back down."
+  },
+  {
+   "x": 672.0,
+   "y": 201.0,
+   "anchor": "middle",
+   "kind": "num",
+   "size": 14.0,
+   "color": "#f5efe1",
+   "text": "2"
+  },
+  {
+   "x": 693.0,
+   "y": 192.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 0,
+   "color": "#16305c",
+   "text": "Faster: lands farther away"
+  },
+  {
+   "x": 693.0,
+   "y": 210.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 0,
+   "color": "#5b5548",
+   "text": "The ground curves away below it for longer."
+  },
+  {
+   "x": 745.0,
+   "y": 525.0,
+   "anchor": "middle",
+   "kind": "num",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "3"
+  },
+  {
+   "x": 766.0,
+   "y": 516.0,
+   "anchor": "start",
+   "kind": "d-lbl-gold",
+   "size": 0,
+   "color": "#8a5d12",
+   "text": "7.8 km/s: it never lands"
+  },
+  {
+   "x": 766.0,
+   "y": 534.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 0,
+   "color": "#5b5548",
+   "text": "It falls just as fast as the ground"
+  },
+  {
+   "x": 766.0,
+   "y": 550.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 0,
+   "color": "#5b5548",
+   "text": "curves away. That is an orbit."
+  },
+  {
+   "x": 40.0,
+   "y": 282.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 0,
+   "color": "#5b5548",
+   "text": "Edge of space"
+  },
+  {
+   "x": 40.0,
+   "y": 298.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 0,
+   "color": "#5b5548",
+   "text": "about 100 km up"
+  },
+  {
+   "x": 24.0,
+   "y": 640.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 0,
+   "color": "#5b5548",
+   "text": "Newton’s cannon · a thought experiment from the 1680s · heights hugely exaggerated"
+  }
+ ]
+}

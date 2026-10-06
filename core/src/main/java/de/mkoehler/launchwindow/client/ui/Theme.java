@@ -406,7 +406,32 @@ public final class Theme {
          * accents: Work Sans SemiBold Italic 12, line-height 15. Pair with
          * {@link #GOLD_ON_PAGE} when set directly on {@link #SURFACE_PAGE}.
          */
-        TAGLINE(FontFile.WORK_SANS_SEMIBOLD_ITALIC, 12, 15, 0f);
+        TAGLINE(FontFile.WORK_SANS_SEMIBOLD_ITALIC, 12, 15, 0f),
+        /*
+         * The explainer sheets' styles (ui-spec.md component 18), from the Explainers mockup
+         * canvas, 2026-10-06; not design-system tokens yet. A reading page sets larger type than
+         * the working screens.
+         */
+        /** An explainer sheet's title: Archivo Bold 38, line-height 44. */
+        EXPLAINER_TITLE(FontFile.ARCHIVO_BOLD, 38, 44, 0f),
+        /** A numbered point's title on an explainer sheet: Archivo Bold 21, line-height 26. */
+        POINT_TITLE(FontFile.ARCHIVO_BOLD, 21, 26, 0f),
+        /** An explainer's reading text: Work Sans Regular 16, line-height 24. */
+        READING(FontFile.WORK_SANS_REGULAR, 16, 24, 0f),
+        /** A larger caption, such as an explainer's "In Launch Window" line: Work Sans Medium 14, line-height 20. */
+        CAPTION_LG(FontFile.WORK_SANS_MEDIUM, 14, 20, 0f),
+        /** A drawing's label: Archivo Bold 15, letter-spaced 0.4px. */
+        DRAWING_LABEL(FontFile.ARCHIVO_BOLD, 15, 18, 0.4f / 15f),
+        /** A drawing's smaller label, or a title block's value: Archivo Bold 13, letter-spaced 0.3px. */
+        DRAWING_LABEL_SM(FontFile.ARCHIVO_BOLD, 13, 16, 0.3f / 13f),
+        /** A drawing's heading or a bar chart's key, upper case: Archivo Bold 13, letter-spaced 0.8px. */
+        DRAWING_HEAD(FontFile.ARCHIVO_BOLD, 13, 16, 0.8f / 13f),
+        /** A drawing's big figure, such as "96%": Archivo Bold 26. */
+        DRAWING_BIG(FontFile.ARCHIVO_BOLD, 26, 30, 0f),
+        /** A drawing's small upper-case note: Archivo SemiBold 11, letter-spaced 0.5px. */
+        DRAWING_SMALL(FontFile.ARCHIVO_SEMIBOLD, 11, 13, 0.5f / 11f),
+        /** A drawing's explanatory text: Work Sans Medium 13. */
+        DRAWING_TEXT(FontFile.WORK_SANS_MEDIUM, 13, 16, 0f);
 
         private final FontFile file;
         private final int size;
@@ -479,7 +504,7 @@ public final class Theme {
         + "ĢģĪīĮįĶķĻļŅņ"
         + "İıŁłŒœŚśŠšŤťŪūŮů"
         + "ŰűŲųŸŹźŻżŽž"
-        + "€×–—…‘’“”·−•→↑↓›";
+        + "€×÷–—…‘’“”·−•→↑↓‹›";
 
     /**
      * One {@link BitmapFont} per {@link TextStyle}, owned by this object.

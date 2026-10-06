@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 660" width="1060" height="660">
+          <defs>
+            <marker id="arN3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#16305c"/></marker>
+            <marker id="arG3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#e0a72e"/></marker>
+            <pattern id="fuel" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="8" fill="rgba(22,48,92,0.10)"/><line x1="0" y1="0" x2="0" y2="8" stroke="rgba(22,48,92,0.35)" stroke-width="2"/></pattern>
+          </defs>
+          <!-- Panel dividers -->
+          <path d="M370 30 L370 590 M710 30 L710 590" stroke="rgba(22,48,92,0.25)" stroke-width="1" stroke-dasharray="4 5"/>
+
+          <!-- A · The propellant share -->
+          <text x="24" y="44" class="d-head">A · What the rocket is made of</text>
+          <!-- Hop column: 57 % propellant -->
+          <rect x="70" y="120" width="100" height="189" fill="#ffffff" stroke="#16305c" stroke-width="2"/>
+          <rect x="70" y="309" width="100" height="251" fill="url(#fuel)" stroke="#16305c" stroke-width="2"/>
+          <text x="120" y="214" text-anchor="middle" class="d-big" style="font-size: 20px;">43%</text>
+          <text x="120" y="232" text-anchor="middle" class="d-txt">everything else</text>
+          <text x="120" y="440" text-anchor="middle" class="d-big">57%</text>
+          <text x="120" y="458" text-anchor="middle" class="d-txt">propellant</text>
+          <text x="120" y="584" text-anchor="middle" class="d-lbl">Suborbital hop</text>
+          <text x="120" y="600" text-anchor="middle" class="d-txt">about 2.5 km/s</text>
+          <!-- Orbit column: 96 % propellant -->
+          <rect x="220" y="120" width="100" height="18" fill="#e0a72e" stroke="#16305c" stroke-width="2"/>
+          <rect x="220" y="138" width="100" height="422" fill="url(#fuel)" stroke="#16305c" stroke-width="2"/>
+          <text x="120" y="104" text-anchor="middle" class="d-sm">At liftoff</text>
+          <path d="M326 129 L346 129" stroke="#8a5d12" stroke-width="1.5"/>
+          <text x="270" y="104" text-anchor="middle" class="d-lbl-gold" style="font-size: 12px;">4% for everything else</text>
+          <text x="270" y="350" text-anchor="middle" class="d-big">96%</text>
+          <text x="270" y="368" text-anchor="middle" class="d-txt">propellant</text>
+          <text x="270" y="584" text-anchor="middle" class="d-lbl">Reaching orbit</text>
+          <text x="270" y="600" text-anchor="middle" class="d-txt">about 9.4 km/s</text>
+
+          <!-- B · Staging -->
+          <text x="394" y="44" class="d-head">B · Drop what’s empty</text>
+          <!-- Core stage, still flying -->
+          <path d="M540 92 L552 66 L564 92 Z" fill="#ffffff" stroke="#16305c" stroke-width="2" stroke-linejoin="round"/>
+          <rect x="540" y="92" width="24" height="44" fill="#ffffff" stroke="#16305c" stroke-width="2"/>
+          <rect x="536" y="136" width="32" height="250" fill="#ffffff" stroke="#16305c" stroke-width="2"/>
+          <path d="M540 386 L536 404 L568 404 L564 386" fill="#ffffff" stroke="#16305c" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M546 406 L552 432 L558 406" fill="#e0a72e" stroke="#8a5d12" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M552 60 L552 40" stroke="#16305c" stroke-width="2" marker-end="url(#arN3)"/>
+          <!-- Left booster, falling away -->
+          <g transform="rotate(-18 470 410)">
+            <path d="M458 300 L470 268 L482 300 L482 470 L458 470 Z" fill="#ffffff" stroke="#16305c" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M460 470 L456 486 L484 486 L480 470" fill="none" stroke="#16305c" stroke-width="2"/>
+          </g>
+          <!-- Right booster, falling away -->
+          <g transform="rotate(18 634 410)">
+            <path d="M622 300 L634 268 L646 300 L646 470 L622 470 Z" fill="#ffffff" stroke="#16305c" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M624 470 L620 486 L648 486 L644 470" fill="none" stroke="#16305c" stroke-width="2"/>
+          </g>
+          <path d="M498 300 L486 320 M488 330 L476 350 M606 300 L618 320 M616 330 L628 350" stroke="rgba(22,48,92,0.45)" stroke-width="1.5" stroke-linecap="round"/>
+          <text x="394" y="530" class="d-lbl">Empty boosters fall away</text>
+          <text x="394" y="548" class="d-txt">after about 2 minutes (the R-7 drops four),</text>
+          <text x="394" y="564" class="d-txt">so the core no longer carries their weight.</text>
+
+          <!-- C · Coming home -->
+          <text x="734" y="44" class="d-head">C · Coming home</text>
+          <path d="M710 610 Q885 470 1060 520" fill="rgba(22,48,92,0.10)" stroke="none"/>
+          <path d="M710 610 Q885 470 1060 520" fill="none" stroke="#16305c" stroke-width="2"/>
+          <path d="M710 580 Q885 440 1060 490" fill="none" stroke="rgba(22,48,92,0.35)" stroke-width="1" stroke-dasharray="4 5"/>
+          <!-- Orbit and the retro burn -->
+          <path d="M730 170 Q890 120 1050 160" fill="none" stroke="#e0a72e" stroke-width="2.5"/>
+          <g transform="translate(800 148) rotate(-12)">
+            <path d="M-14 -10 L10 -6 L10 6 L-14 10 Z" fill="#ffffff" stroke="#16305c" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M10 -4 L26 0 L10 4 Z" fill="#e0a72e" stroke="#8a5d12" stroke-width="1"/>
+          </g>
+          <text x="734" y="104" class="d-lbl-gold">1 · Retrofire</text>
+          <text x="734" y="122" class="d-txt">Fire a rocket forwards, to brake.</text>
+          <text x="734" y="200" class="d-txt">An orbit never ends by itself.</text>
+          <!-- The way down -->
+          <path d="M812 168 Q870 320 958 470" fill="none" stroke="#16305c" stroke-width="2" stroke-dasharray="8 6" marker-end="url(#arN3)"/>
+          <!-- Capsule in the heat of re-entry -->
+          <path d="M968 486 Q948 470 952 446" fill="none" stroke="#e0a72e" stroke-width="6" stroke-linecap="round"/>
+          <circle cx="972" cy="472" r="13" fill="#ffffff" stroke="#16305c" stroke-width="2"/>
+          <text x="882" y="330" class="d-lbl">2 · Into the air</text>
+          <text x="882" y="348" class="d-txt">About 12 times the energy</text>
+          <text x="882" y="364" class="d-txt">of a suborbital return,</text>
+          <text x="882" y="380" class="d-txt">all turned into heat.</text>
+
+          <!-- Formula -->
+          <path d="M24 620 L1036 620" stroke="rgba(22,48,92,0.25)" stroke-width="1"/>
+          <text x="24" y="645" class="d-sm">Rocket equation (Tsiolkovsky, 1903): speed gained = exhaust speed × ln(mass at start ÷ mass at end) · exhaust about 2.9 km/s for engines of the era</text>
+        </svg>

@@ -35,6 +35,8 @@ CHROME = {
     "sort_desc": '<path d="M12 5v14M19 12l-7 7-7-7"/>',
     "sort_asc": '<path d="M12 19V5M5 12l7-7 7 7"/>',
     "chevron": '<path d="M9 18l6-6-6-6"/>',
+    # The explainer's close button (ui-spec.md component 18), 2026-10-06.
+    "close": '<path d="M6 6l12 12M18 6 6 18"/>',
     "morale": '<path d="M12 21C12 21 4 15.5 4 9.5A4.5 4.5 0 0 1 12 6.5 4.5 4.5 0 0 1 20 9.5C20 15.5 12 21 12 21Z"/>',
     # A mortarboard: a flat board, the cap under it, and the tassel off the right corner (redrawn 2026-10-06).
     "learning_potential": '<path d="M2 9.5 12 5l10 4.5L12 14z"/><path d="M6 11.3V16c0 1.7 2.7 3 6 3s6-1.3 6-3v-4.7"/><path d="M22 9.5V15"/>',

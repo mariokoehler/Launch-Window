@@ -43,9 +43,9 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
 - **The decisions checklist came back on 2026-10-06,** was merged into the docs, and its code
   work is built (`design.md` §5, Backlog). Reset the dev data root before the next play test: the
   pack hash changed.
-- **Explainers are mocked up** (`ui-spec.md` component 18, `design.md` §1.1): E-01 to E-05 on
-  the canvas `Launch Window — Explainers` (ask the user for the link). Not built in libGDX; the
-  triggers, the look and the figures are unconfirmed.
+- **Explainers** (`ui-spec.md` component 18, `design.md` §1.1): E-01 to E-05 are mocked up on
+  the canvas `Launch Window — Explainers` (ask the user for the link). E-01 is built, in the
+  Museum's Encyclopedia tab; E-02 to E-05, the triggers and their figures are unconfirmed.
 - **PR duty for astronauts is built** (`design.md` §2.2(c)), with 39 press stories
   (`assets/content/pr-press.json`), no repeats, and effects beyond prestige. Next is the next
   play test.
@@ -109,7 +109,8 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
     `make_patch_assets.py` for the 128 px RGBA PNGs (never JPEG, which drops the alpha). A new goal needs a `GOALS` entry, a pick and
     a converter run.
 - **Other converters** in `assets-raw/`: `make_hub_art.py`, `make_content_art.py`,
-  `svg/ui/make_ui_icons.py` (needs `pip install resvg-py`).
+  `svg/ui/make_ui_icons.py` (needs `pip install resvg-py`), and `explainers/make_explainer_art.py`
+  (the explainers' drawings: PNG without text plus a labels file, `ui-spec.md` component 18).
 
 ## Build and run
 

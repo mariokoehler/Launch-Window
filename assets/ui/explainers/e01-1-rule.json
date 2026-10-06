@@ -1,0 +1,33 @@
+{
+ "width": 520,
+ "height": 120,
+ "labels": [
+  {
+   "x": 250.0,
+   "y": 22.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 0,
+   "color": "#5b5548",
+   "text": "8 km in a straight line, in 1 second"
+  },
+  {
+   "x": 490.0,
+   "y": 68.0,
+   "anchor": "end",
+   "kind": "d-lbl-gold",
+   "size": 13.0,
+   "color": "#8a5d12",
+   "text": "5 m"
+  },
+  {
+   "x": 200.0,
+   "y": 64.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 0,
+   "color": "#5b5548",
+   "text": "the ground curves away below"
+  }
+ ]
+}

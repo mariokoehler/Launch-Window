@@ -238,6 +238,21 @@ public final class UiKit implements Disposable {
     }
 
     /**
+     * Returns a small circle ({@link Theme.Shapes#circle}), such as an explainer's numbered disc or
+     * its page dots, built once per look.
+     *
+     * @param fill        the fill
+     * @param border      the ring, or {@code null} for none
+     * @param borderWidth the ring's width
+     * @param diameter    the diameter in pixels
+     * @return the drawable
+     */
+    public Drawable circle(Color fill, Color border, float borderWidth, int diameter) {
+        return rects.computeIfAbsent("circle:" + fill + "/" + border + "/" + borderWidth + "/" + diameter,
+            key -> shapes.circle(fill, border, borderWidth, diameter));
+    }
+
+    /**
      * Returns a progress-track dot ({@link Theme.Shapes#progressDot}), built once per state.
      *
      * @param state the step's state

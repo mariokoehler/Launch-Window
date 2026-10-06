@@ -1,0 +1,87 @@
+{
+ "width": 1060,
+ "height": 400,
+ "labels": [
+  {
+   "x": 900.0,
+   "y": 236.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 0,
+   "color": "#5b5548",
+   "text": "Edge of space · 100 km"
+  },
+  {
+   "x": 50.0,
+   "y": 164.0,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 0,
+   "color": "#5b5548",
+   "text": "200 km"
+  },
+  {
+   "x": 50.0,
+   "y": 64.0,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 0,
+   "color": "#5b5548",
+   "text": "300 km"
+  },
+  {
+   "x": 196.0,
+   "y": 300.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 0,
+   "color": "#16305c",
+   "text": "Freedom 7 · suborbital"
+  },
+  {
+   "x": 196.0,
+   "y": 318.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 0,
+   "color": "#5b5548",
+   "text": "Peak 187 km · splashdown 487 km away"
+  },
+  {
+   "x": 640.0,
+   "y": 104.0,
+   "anchor": "start",
+   "kind": "d-lbl-gold",
+   "size": 0,
+   "color": "#8a5d12",
+   "text": "Friendship 7 · orbital"
+  },
+  {
+   "x": 640.0,
+   "y": 122.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 0,
+   "color": "#5b5548",
+   "text": "About 160–260 km up, and on around the world, three times"
+  },
+  {
+   "x": 16.0,
+   "y": 392.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 0,
+   "color": "#5b5548",
+   "text": "Drawn to scale: 1 km across = 1 km up"
+  },
+  {
+   "x": 810.0,
+   "y": 380.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 0,
+   "color": "#5b5548",
+   "text": "500 km"
+  }
+ ]
+}

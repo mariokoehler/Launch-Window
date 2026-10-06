@@ -30,8 +30,10 @@ import de.mkoehler.launchwindow.client.screen.ProgramDetailsScreen;
 import de.mkoehler.launchwindow.client.screen.SelectBodyScreen;
 import de.mkoehler.launchwindow.client.view.Programs;
 import de.mkoehler.launchwindow.content.CelestialBody;
+import de.mkoehler.launchwindow.client.screen.ExplainerScreen;
 import de.mkoehler.launchwindow.client.screen.HireScreen;
 import de.mkoehler.launchwindow.client.screen.SpaceComplexScreen;
+import de.mkoehler.launchwindow.client.view.Explainers;
 import de.mkoehler.launchwindow.client.view.Hub;
 import de.mkoehler.launchwindow.content.ContentPackHash;
 import de.mkoehler.launchwindow.client.screen.RndBoardScreen;
@@ -793,6 +795,16 @@ public final class ScreenSnapshot {
         game.session().state().getHiringPoolBonuses().add(new HiringPoolBonus("SET", 3, 1, 1));
         HiringPool.refreshCandidates(game.session().state(), new java.util.Random(7));
         write(folder, "hire-press-bonus.png", new HireScreen(game), null);
+
+        // The Museum encyclopedia (2026-10-06): its tab, and every sheet of every explainer.
+        write(folder, "museum-encyclopedia.png", new MuseumScreen(game, MuseumScreen.Tab.ENCYCLOPEDIA), null);
+        for (Explainers.Explainer explainer : Explainers.standard().explainers()) {
+            for (int sheet = 0; sheet < explainer.sheets().size(); sheet++) {
+                write(folder, "explainer-" + explainer.code().toLowerCase(java.util.Locale.ROOT) + "-" + (sheet + 1)
+                    + ".png", new ExplainerScreen(game, explainer, sheet, () -> new MuseumScreen(game,
+                    MuseumScreen.Tab.ENCYCLOPEDIA)), null);
+            }
+        }
     }
 
     /** The mockup's agency at 1960 · S4, with the goal records and memorial the Museum reads. */

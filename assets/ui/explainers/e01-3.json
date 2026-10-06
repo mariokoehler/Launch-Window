@@ -1,0 +1,240 @@
+{
+ "width": 1060,
+ "height": 660,
+ "labels": [
+  {
+   "x": 24.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 0,
+   "color": "#16305c",
+   "text": "A · What the rocket is made of"
+  },
+  {
+   "x": 120.0,
+   "y": 214.0,
+   "anchor": "middle",
+   "kind": "d-big",
+   "size": 20.0,
+   "color": "#16305c",
+   "text": "43%"
+  },
+  {
+   "x": 120.0,
+   "y": 232.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 0,
+   "color": "#5b5548",
+   "text": "everything else"
+  },
+  {
+   "x": 120.0,
+   "y": 440.0,
+   "anchor": "middle",
+   "kind": "d-big",
+   "size": 0,
+   "color": "#16305c",
+   "text": "57%"
+  },
+  {
+   "x": 120.0,
+   "y": 458.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 0,
+   "color": "#5b5548",
+   "text": "propellant"
+  },
+  {
+   "x": 120.0,
+   "y": 584.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 0,
+   "color": "#16305c",
+   "text": "Suborbital hop"
+  },
+  {
+   "x": 120.0,
+   "y": 600.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 0,
+   "color": "#5b5548",
+   "text": "about 2.5 km/s"
+  },
+  {
+   "x": 120.0,
+   "y": 104.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 0,
+   "color": "#5b5548",
+   "text": "At liftoff"
+  },
+  {
+   "x": 270.0,
+   "y": 104.0,
+   "anchor": "middle",
+   "kind": "d-lbl-gold",
+   "size": 12.0,
+   "color": "#8a5d12",
+   "text": "4% for everything else"
+  },
+  {
+   "x": 270.0,
+   "y": 350.0,
+   "anchor": "middle",
+   "kind": "d-big",
+   "size": 0,
+   "color": "#16305c",
+   "text": "96%"
+  },
+  {
+   "x": 270.0,
+   "y": 368.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 0,
+   "color": "#5b5548",
+   "text": "propellant"
+  },
+  {
+   "x": 270.0,
+   "y": 584.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 0,
+   "color": "#16305c",
+   "text": "Reaching orbit"
+  },
+  {
+   "x": 270.0,
+   "y": 600.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 0,
+   "color": "#5b5548",
+   "text": "about 9.4 km/s"
+  },
+  {
+   "x": 394.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 0,
+   "color": "#16305c",
+   "text": "B · Drop what’s empty"
+  },
+  {
+   "x": 394.0,
+   "y": 530.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 0,
+   "color": "#16305c",
+   "text": "Empty boosters fall away"
+  },
+  {
+   "x": 394.0,
+   "y": 548.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 0,
+   "color": "#5b5548",
+   "text": "after about 2 minutes (the R-7 drops four),"
+  },
+  {
+   "x": 394.0,
+   "y": 564.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 0,
+   "color": "#5b5548",
+   "text": "so the core no longer carries their weight."
+  },
+  {
+   "x": 734.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 0,
+   "color": "#16305c",
+   "text": "C · Coming home"
+  },
+  {
+   "x": 734.0,
+   "y": 104.0,
+   "anchor": "start",
+   "kind": "d-lbl-gold",
+   "size": 0,
+   "color": "#8a5d12",
+   "text": "1 · Retrofire"
+  },
+  {
+   "x": 734.0,
+   "y": 122.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 0,
+   "color": "#5b5548",
+   "text": "Fire a rocket forwards, to brake."
+  },
+  {
+   "x": 734.0,
+   "y": 200.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 0,
+   "color": "#5b5548",
+   "text": "An orbit never ends by itself."
+  },
+  {
+   "x": 882.0,
+   "y": 330.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 0,
+   "color": "#16305c",
+   "text": "2 · Into the air"
+  },
+  {
+   "x": 882.0,
+   "y": 348.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 0,
+   "color": "#5b5548",
+   "text": "About 12 times the energy"
+  },
+  {
+   "x": 882.0,
+   "y": 364.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 0,
+   "color": "#5b5548",
+   "text": "of a suborbital return,"
+  },
+  {
+   "x": 882.0,
+   "y": 380.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 0,
+   "color": "#5b5548",
+   "text": "all turned into heat."
+  },
+  {
+   "x": 24.0,
+   "y": 645.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 0,
+   "color": "#5b5548",
+   "text": "Rocket equation (Tsiolkovsky, 1903): speed gained = exhaust speed × ln(mass at start ÷ mass at end) · exhaust about 2.9 km/s for engines of the era"
+  }
+ ]
+}

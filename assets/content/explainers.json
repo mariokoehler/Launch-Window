@@ -1,0 +1,96 @@
+{
+  "_comment": "The Museum encyclopedia's explainers (ui-spec.md component 18, design.md 1.1): how things work, drawn as engineering sheets. Outside the frozen content pack, like strings.json, so text fixes reach running games. Each sheet has a drawing from assets/ui/explainers/ (made by assets-raw/explainers/make_explainer_art.py), three points, an 'In Launch Window' line, and optionally a legend and bars drawn by the client. Every figure is checked (design.md 1.1). No inline bold: a label can't switch fonts mid-text.",
+  "explainers": [
+    {
+      "id": "suborbital-vs-orbital",
+      "code": "E-01",
+      "title": "Suborbital vs orbital",
+      "summary": "Why reaching space is easy and staying up is hard: Newton's cannon, two Mercury flights side by side, and the rocket equation.",
+      "sheets": [
+        {
+          "title": "Falling around the world",
+          "drawing": "e01-1",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "Space is close",
+              "text": "The edge of space is only about 100 km up: an hour's drive, if you could drive straight up. Reaching it is the easy part. Go up, then fall straight back down. That's a suborbital flight."
+            },
+            {
+              "title": "Orbit means falling sideways",
+              "text": "Anything you throw falls back down. Throw it faster and it lands farther away. Throw it fast enough and the ground curves away beneath it as quickly as it falls: it keeps falling, all the way around the Earth. That's an orbit."
+            },
+            {
+              "title": "The 8-kilometre rule",
+              "text": "Earth's surface drops away about 5 metres for every 8 km you travel in a straight line. Anything you let go of falls about 5 metres in its first second. So travel 8 km every second, about 28,000 km/h, and you fall exactly as fast as the ground drops away.",
+              "drawing": "e01-1-rule"
+            }
+          ],
+          "inGame": "The goal Human in space needs only a suborbital flight. Human in orbit needs the full 7.8 km/s, and a rocket that can lift your capsule to low Earth orbit."
+        },
+        {
+          "title": "Height isn't the hard part",
+          "drawing": "e01-2",
+          "scale": "To scale (top)",
+          "legend": [
+            {"gold": false, "text": "Freedom 7 · Alan Shepard · 5 May 1961"},
+            {"gold": true, "text": "Friendship 7 · John Glenn · 20 February 1962"}
+          ],
+          "bars": [
+            {"label": "Highest point", "max": 300, "rows": [
+              {"value": 187, "text": "187 km"},
+              {"value": 261, "text": "261 km · only 1.4 times higher"}
+            ]},
+            {"label": "Top speed", "max": 28200, "rows": [
+              {"value": 8300, "text": "8,300 km/h"},
+              {"value": 28200, "text": "28,200 km/h · 3.4 times faster"}
+            ]},
+            {"label": "Energy of motion, per kg", "max": 30.7, "rows": [
+              {"value": 2.6, "text": "2.6 MJ"},
+              {"value": 30.7, "text": "30.7 MJ · 12 times as much"}
+            ]},
+            {"label": "Time in flight", "max": 295, "rows": [
+              {"value": 15, "text": "15 minutes"},
+              {"value": 295, "text": "4 h 55 min · about 120,000 km flown"}
+            ]}
+          ],
+          "points": [
+            {
+              "title": "Same capsule, similar height",
+              "text": "In May 1961 a Mercury capsule carried Alan Shepard on a 15-minute suborbital hop. Nine months later the same kind of capsule carried John Glenn three times around the world. Glenn flew only a little higher. Drawn to scale, both flights skim just above the air."
+            },
+            {
+              "title": "The difference is speed",
+              "text": "Glenn went about 3.4 times as fast. The energy of motion grows with the square of the speed, so every kilogram of his capsule carried about 12 times as much of it. The rocket had to supply all of it."
+            },
+            {
+              "title": "So orbit needs a much bigger rocket",
+              "text": "Shepard's Redstone weighed about 30 tonnes at liftoff. Glenn needed an Atlas of about 120 tonnes, first built as an intercontinental missile. Yuri Gagarin had already orbited in April 1961 on the Soviet R-7, another missile turned launcher."
+            }
+          ],
+          "inGame": "Crewed programs fly a suborbital configuration first, such as Vostok · Suborbital flight. The orbital one needs a stronger human-rated rocket, and its program goal pays twice the prestige."
+        },
+        {
+          "title": "The rocket's hardest bargain",
+          "drawing": "e01-3",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "Fuel to carry fuel",
+              "text": "A rocket has to lift its own propellant, and the propellant that lifts that. In 1903 Konstantin Tsiolkovsky worked out the result: the propellant needed grows exponentially with the speed you want. Needing about 3.8 times the speed (counting what gravity and air take on the way up) raises the propellant share from 57% to 96%."
+            },
+            {
+              "title": "Why rockets come in stages",
+              "text": "Tanks, engines and the crew all have to fit in the last 4%. That's barely possible in one piece, so orbital rockets throw weight away on the way up. Even the Atlas, with steel tank walls thinner than a coin, dropped two of its three main engines."
+            },
+            {
+              "title": "Getting home is harder too",
+              "text": "A suborbital capsule falls back by itself. An orbit never ends on its own: a retrorocket must brake the capsule just enough to dip into the air. Then the air turns about 12 times as much energy into heat, and the heat shield has to survive it."
+            }
+          ],
+          "inGame": "In the VAB, compare a rocket's Suborbital payload with its LEO payload: the same rocket lifts far less to orbit. On Vostok · Orbital flight, the Retrofire step is the brake that brings the capsule home."
+        }
+      ]
+    }
+  ]
+}

@@ -60,13 +60,14 @@ engineering problem or tidbit, note it here the same session.
   - **Writing rules:** our own words from checked facts (§1.2). A side's view is paraphrased
     framing that's documented, never an invented quote. When the game runs past 1963, add stories
     for the later seasons.
-- **Explainers (user's idea, 2026-10-06; mocked up, not built, all unconfirmed):** short
-  full-screen "infographic" series that explain *how and why* an aerospace idea works, offered
-  (never forced) when it first comes up in play and kept in the Museum (`ui-spec.md` component
-  18, with each sheet's content and the proposed triggers). Canvas `Launch Window — Explainers`
+- **Explainers (user's idea, 2026-10-06; mocked up; E-01 built in libGDX the same day, E-02 to
+  E-05 unconfirmed):** short full-screen "infographic" series that explain *how and why* an
+  aerospace idea works, offered (never forced) when it first comes up in play and kept in the
+  Museum (`ui-spec.md` component 18, with each sheet's content and the proposed triggers). Canvas `Launch Window — Explainers`
   (private; ask the user for the link), one row per explainer with a yellow note of what to verify.
-  - **E-01 Suborbital vs orbital** (3 sheets): Newton's cannon and the 8-kilometre rule; Freedom 7
-    against Friendship 7 to scale; the rocket equation's propellant share, staging, re-entry.
+  - **E-01 Suborbital vs orbital** (3 sheets, built, in the Museum's Encyclopedia tab): Newton's
+    cannon and the 8-kilometre rule; Freedom 7 against Friendship 7 to scale; the rocket
+    equation's propellant share, staging, re-entry.
   - **E-02 Rendezvous** (2): brake into a lower, quicker orbit to catch up (drawn true to
     Kepler); Vostok 3/4, Gemini 4, Aldrin's doctorate and Gemini 12, Gemini 6A/7, the first dockings.
   - **E-03 Going to the Moon** (2): the trip priced in delta-v; Redstone to Saturn V and N1 to
@@ -76,10 +77,17 @@ engineering problem or tidbit, note it here the same session.
   - **E-05 Hypergolic propellants and steering jets** (2, user's suggestion): the three
     propellant families compared; thruster quads turning, sliding and stopping a craft, Gemini 8.
   - **Figures to verify before shipping:**
-    - E-01: Freedom 7 187 km, about 8,300 km/h, 15 min, 487 km; Friendship 7 265 km, about
-      28,200 km/h, 4 h 55 min; Redstone about 30 t and Atlas about 120 t; R-7 boosters dropped
-      after about 2 min; Atlas tank walls "thinner than a coin". Worked out from physics: 5 m of
-      curvature per 8 km, ½v² of 2.6 vs 30.7 MJ/kg, propellant shares from a 2.9 km/s exhaust.
+    - E-01 is checked (2026-10-06): Freedom 7 (5 May 1961): peak 187.5 km, 487 km downrange,
+      top speed 8,262 km/h, 15 min 28 s. Friendship 7 (20 February 1962): about 161 by 261 km
+      (NASA: 100 by 162.2 statute miles; the mockup's 265 km was corrected), 28,234 km/h, 4 h 55
+      min 23 s, three orbits, about 121,800 km. Mercury-Redstone about 30 t and Mercury-Atlas
+      about 120 t at liftoff. Worked out: Earth curves away about 5 m per 8 km (8² / 2 × 6,371
+      km); energy of motion ½v² is 2.6 and 30.7 MJ per kg (ratio about 12); with a 2.9 km/s
+      exhaust the rocket equation gives 57 % propellant for 2.5 km/s and 96 % for 9.4 km/s.
+      Newton's cannon is from his *Treatise of the System of the World* (written in the 1680s,
+      published 1728); Tsiolkovsky published the rocket equation in 1903; the R-7 drops its four
+      boosters about two minutes up; the Mercury Atlas dropped its two booster engines and flew
+      on with the sustainer. Still to source: the Atlas's tank walls "thinner than a coin".
     - E-02: laps about 88 min at 200 km and 92 min at 400 km (worked out); Vostok 3/4 about
       6.5 km apart; Gemini 4 (June 1965); Aldrin's 1963 MIT doctorate and Gemini 12's sextant
       approach (November 1966); Gemini 6A/7 within about 30 cm (December 1965); Gemini 8 (March
@@ -99,7 +107,8 @@ engineering problem or tidbit, note it here the same session.
       peroxide jets; Gemini 8's spin near one turn a second and the rule that ended the flight.
   - **Next candidates:** why re-entry capsules are blunt, why reliability matters over a
     30-step mission (the odds multiply), why launch latitude matters (Earth's spin as a boost).
-- **A Museum encyclopedia (later, M7+):** the deeper version of the same content.
+- **A Museum encyclopedia** (started 2026-10-06): the deeper version of the same content; its
+  first entries are the explainers above (`ui-spec.md` §4.11).
 - **Real images:** NASA photos are US government works and normally public domain. Soviet and
   other imagery needs a per-image rights check, and every third-party image gets an entry in
   `assets/CREDITS.md`.
@@ -1212,5 +1221,5 @@ else is queued: next is the next play test.
   whether the repo goes public (a private repo makes `update.cmd` and the NAS's image pull need
   a GitHub login) and the first version number.
 - **M7+ (order open):** interaction beyond passive competition (§2.9); the rest of the content
-  tree beyond the early era; the Museum encyclopedia (§1.1); a game-host role and UI;
+  tree beyond the early era; the rest of the Museum encyclopedia (§1.1; E-01 built 2026-10-06); a game-host role and UI;
   validating the `WEEKDAYS` profile with the colleagues' group.

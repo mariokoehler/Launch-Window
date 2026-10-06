@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 400" width="1060" height="400">
+            <defs>
+              <marker id="arN2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#16305c"></path></marker>
+              <marker id="arG2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#e0a72e"></path></marker>
+            </defs>
+            <!-- Earth's surface, with its real curvature over 1,060 km -->
+            <path d="M0 362 Q530 318 1060 362 L1060 400 L0 400 Z" fill="rgba(22,48,92,0.10)" stroke="none"></path>
+            <path d="M0 362 Q530 318 1060 362" fill="none" stroke="#16305c" stroke-width="2"></path>
+            <!-- Edge of space, 100 km -->
+            <path d="M0 262 Q530 218 1060 262" fill="none" stroke="rgba(22,48,92,0.35)" stroke-width="1" stroke-dasharray="4 5"></path>
+            <text x="900" y="236" class="d-sm">Edge of space · 100 km</text>
+            <!-- Height scale -->
+            <path d="M60 360 L60 60" stroke="#16305c" stroke-width="1"></path>
+            <path d="M54 360 L66 360 M54 260 L66 260 M54 160 L66 160 M54 60 L66 60" stroke="#16305c" stroke-width="1"></path>
+            <text x="50" y="164" text-anchor="end" class="d-sm">200 km</text>
+            <text x="50" y="64" text-anchor="end" class="d-sm">300 km</text>
+            <!-- Freedom 7 -->
+            <path d="M80 356 Q323 -35 567 340" fill="none" stroke="#16305c" stroke-width="3" marker-end="url(#arN2)"></path>
+            <circle cx="80" cy="356" r="5" fill="#16305c"></circle>
+            <text x="196" y="300" class="d-lbl">Freedom 7 · suborbital</text>
+            <text x="196" y="318" class="d-txt">Peak 187 km · splashdown 487 km away</text>
+            <!-- Friendship 7 -->
+            <path d="M0 162 Q530 118 1060 162" fill="none" stroke="#e0a72e" stroke-width="3" marker-end="url(#arG2)"></path>
+            <text x="640" y="104" class="d-lbl-gold">Friendship 7 · orbital</text>
+            <text x="640" y="122" class="d-txt">About 160–260 km up, and on around the world, three times</text>
+            <!-- Distance scale -->
+            <path d="M560 388 L1060 388" stroke="#16305c" stroke-width="1"></path>
+            <path d="M560 382 L560 394 M810 384 L810 392 M1060 382 L1060 394" stroke="#16305c" stroke-width="1"></path>
+            <text x="16" y="392" class="d-sm">Drawn to scale: 1 km across = 1 km up</text>
+            <text x="810" y="380" text-anchor="middle" class="d-sm">500 km</text>
+          </svg>

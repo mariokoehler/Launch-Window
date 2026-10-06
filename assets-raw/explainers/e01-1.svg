@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 660" width="1060" height="660">
+          <defs>
+            <marker id="arN" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#16305c"/></marker>
+            <marker id="arG" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#e0a72e"/></marker>
+          </defs>
+          <!-- Earth -->
+          <circle cx="430" cy="390" r="210" fill="rgba(22,48,92,0.07)" stroke="#16305c" stroke-width="2"/>
+          <path d="M300 300 q40 -30 80 -8 q30 18 64 -4 M330 430 q50 20 90 -6 q40 -24 90 10 M380 520 q40 -20 70 4" fill="none" stroke="rgba(22,48,92,0.3)" stroke-width="1.5" stroke-linecap="round"/>
+          <!-- Edge of space (heights exaggerated) -->
+          <circle cx="430" cy="390" r="226" fill="none" stroke="rgba(22,48,92,0.35)" stroke-width="1" stroke-dasharray="4 5"/>
+          <!-- Mountain and cannon -->
+          <path d="M396 184 L430 138 L464 184" fill="#ffffff" stroke="#16305c" stroke-width="2" stroke-linejoin="round"/>
+          <rect x="424" y="128" width="26" height="9" fill="#16305c"/>
+          <circle cx="428" cy="138" r="5" fill="#ffffff" stroke="#16305c" stroke-width="2"/>
+          <!-- Orbit -->
+          <circle cx="430" cy="390" r="257" fill="none" stroke="#e0a72e" stroke-width="3"/>
+          <path d="M687 392 A257 257 0 0 1 680 450" fill="none" stroke="#e0a72e" stroke-width="3" marker-end="url(#arG)"/>
+          <!-- Trajectory 1: a short hop -->
+          <path d="M452 132 Q482 112 494 192" fill="none" stroke="#16305c" stroke-width="2.5" marker-end="url(#arN)"/>
+          <!-- Trajectory 2: faster, lands farther -->
+          <path d="M452 132 C560 102 645 205 626 315" fill="none" stroke="#16305c" stroke-width="2.5" stroke-dasharray="9 6" marker-end="url(#arN)"/>
+          <!-- Labels -->
+          <circle cx="497" cy="88" r="13" fill="#16305c"/><text x="497" y="93" text-anchor="middle" style="font-family: var(--font-display); font-weight: 700; font-size: 14px; fill: #f5efe1;">1</text>
+          <text x="518" y="84" class="d-lbl">Slow: a short hop</text>
+          <text x="518" y="102" class="d-txt">Up past the edge of space, then straight back down.</text>
+          <circle cx="672" cy="196" r="13" fill="#16305c"/><text x="672" y="201" text-anchor="middle" style="font-family: var(--font-display); font-weight: 700; font-size: 14px; fill: #f5efe1;">2</text>
+          <text x="693" y="192" class="d-lbl">Faster: lands farther away</text>
+          <text x="693" y="210" class="d-txt">The ground curves away below it for longer.</text>
+          <circle cx="745" cy="520" r="13" fill="#e0a72e"/><text x="745" y="525" text-anchor="middle" style="font-family: var(--font-display); font-weight: 700; font-size: 14px; fill: #16305c;">3</text>
+          <text x="766" y="516" class="d-lbl-gold">7.8 km/s: it never lands</text>
+          <text x="766" y="534" class="d-txt">It falls just as fast as the ground</text>
+          <text x="766" y="550" class="d-txt">curves away. That is an orbit.</text>
+          <!-- Edge of space label -->
+          <path d="M214 330 L150 300" stroke="rgba(22,48,92,0.5)" stroke-width="1"/>
+          <text x="40" y="282" class="d-sm">Edge of space</text>
+          <text x="40" y="298" class="d-txt">about 100 km up</text>
+          <!-- Footer of drawing -->
+          <text x="24" y="640" class="d-sm">Newton’s cannon · a thought experiment from the 1680s · heights hugely exaggerated</text>
+        </svg>

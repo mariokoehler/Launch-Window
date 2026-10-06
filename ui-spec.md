@@ -248,9 +248,9 @@ On the right:
       value a FLIGHT console reads), and can sort by it. The Mission Control overview has a sort row
       (the five skills plus Flight Director, best first; click the active one again for roster
       order). The overview's FD cell already existed.
-18. **Explainer** *(mocked up 2026-10-06, the user's idea; not built yet, all of it
-    unconfirmed)*. A short series of full-screen "infographic" sheets that explain an
-    aerospace idea as it comes up in play. It's the third kind of help, beside the tooltip
+18. **Explainer** *(mocked up 2026-10-06, the user's idea; E-01 built in libGDX the same day as
+    `client.screen.ExplainerScreen`; E-02 to E-05 and the triggers unconfirmed)*. A short series
+    of full-screen "infographic" sheets that explain an aerospace idea as it comes up in play. It's the third kind of help, beside the tooltip
     (what a game thing means) and the history note (what really happened): an explainer says
     **how and why something works** in the real world.
     - **Look:** each sheet is drawn like an engineering drawing on the blue page: a white sheet
@@ -262,8 +262,8 @@ On the right:
       configuration whose name says suborbital or orbital), a notice offers it ("New idea:
       suborbital vs orbital"). It never opens by itself. Every explainer seen stays readable in
       the Museum (the encyclopedia, §4.11's "Later").
-    - **Text** lives in the pack's strings, like the history notes, written in our own words,
-      with every figure checked before shipping.
+    - **Text** lives in `assets/content/explainers.json` (`client.view.Explainers`), outside the
+      frozen pack like `strings.json`; `ExplainersTest` checks every string and drawing.
     - **Canvas:** `Launch Window — Explainers` (private, ask the user for the link), one row
       per explainer, each with a yellow note of the figures still to verify.
     - **First explainer, E-01 "Suborbital vs orbital"**, three sheets:
@@ -312,8 +312,25 @@ On the right:
       program), E-04 the first configuration with a Retrofire step, E-05 the first
       configuration with a Reentry preparations step (or later, the first rocket or
       spacecraft that burns a hypergolic pair).
-    - **libGDX build idea:** the drawings become SVG assets rasterized like the icons; the text
-      stays as labels so the strings can change without redrawing.
+    - **As built (E-01):** full screen with no app chrome; page dots are clickable; Close and
+      Done go back to the screen that opened it (the Museum's Encyclopedia tab for now).
+    - **Drawings** are SVG sources in `assets-raw/explainers/`, rasterized at 2x without their
+      text by `make_explainer_art.py`; the text goes to a labels file beside the PNG and the
+      client sets it as real labels (`client.ui.DrawingView`), so it stays sharp at any window
+      size. A sheet's bar chart and key are drawn by the client from values, not pictured.
+    - **Type:** the reading page sets larger type than the working screens: new `Theme`
+      styles `EXPLAINER_TITLE` (38), `POINT_TITLE` (21), `READING` (16/24), `CAPTION_LG` (14),
+      and the drawing styles `DRAWING_LABEL` (15), `DRAWING_LABEL_SM` (13), `DRAWING_HEAD` (13,
+      upper case), `DRAWING_BIG` (26), `DRAWING_SMALL` (11, upper case), `DRAWING_TEXT` (13).
+      Not design-system tokens yet.
+    - **Built differently from the mockup:** no mid-sentence bold (a label can't switch fonts);
+      the drawing frame hugs the drawing and sits centred in its column; sheet 2's bars span
+      560 px, not 700, so the longest value fits beside its bar; the close button has no
+      tooltip.
+    - **Not built yet:** offering an explainer from the screens it explains (the canvas proposes
+      a notice the first time a player opens a suborbital or orbital configuration), and
+      remembering which explainers a player has seen. Only E-01 is built; E-02 to E-05
+      (rendezvous, the Moon, engine restarts, hypergolic propellants) are mocked up.
 
 ---
 
@@ -1047,7 +1064,9 @@ review: when, what it pays, what keeps today's funding) and `PrestigeConversion`
   (2026-10-06).
 - **Memorial:** astronauts lost.
 
-**Later (M7+):** the educational encyclopedia (`design.md` §1.1).
+- **Encyclopedia** *(built 2026-10-06)*: one card per explainer (component 18), with the first
+  sheet's drawing, the drawing number and sheet count, the title, a one-line summary and "Read
+  it". An explainer opened here closes back to this tab.
 
 **Mocked up (2026-10-04)** on the `Launch Window — Museum, Settings & Game Result mockup`
 canvas, one artboard per tab (`Museum`, `MuseumAchievements`, `MuseumFlights`,

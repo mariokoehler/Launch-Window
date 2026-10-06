@@ -1,17 +1,21 @@
 package de.mkoehler.launchwindow.client.screen;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.HistoryNote;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.view.ContentNames;
+import de.mkoehler.launchwindow.client.view.Explainers;
 import de.mkoehler.launchwindow.client.view.Museum;
 import de.mkoehler.launchwindow.content.ContentCatalog;
 import de.mkoehler.launchwindow.content.Goal;
@@ -40,7 +44,9 @@ public final class MuseumScreen extends ChromeScreen {
         /** Completed flights per configuration. */
         FLIGHTS("Flights"),
         /** Astronauts lost. */
-        MEMORIAL("Memorial");
+        MEMORIAL("Memorial"),
+        /** How things work: the explainers (ui-spec.md component 18). */
+        ENCYCLOPEDIA("Encyclopedia");
 
         private final String label;
 
@@ -75,7 +81,8 @@ public final class MuseumScreen extends ChromeScreen {
      * @param tab  the tab to show
      */
     public MuseumScreen(LaunchWindowGame game, Tab tab) {
-        super(game, List.of(Crumb.SPACE_COMPLEX, new Crumb("Museum", null)), "Museum", "Goals, flights and the race");
+        super(game, List.of(Crumb.SPACE_COMPLEX, new Crumb("Museum", null)), "Museum",
+            "Goals, flights, the race and how it works");
         this.tab = tab;
         rebuild();
         fetchRivals();
@@ -125,6 +132,7 @@ public final class MuseumScreen extends ChromeScreen {
             case ACHIEVEMENTS -> achievements();
             case FLIGHTS -> flights();
             case MEMORIAL -> memorial();
+            case ENCYCLOPEDIA -> encyclopedia();
         }
     }
 
@@ -411,6 +419,68 @@ public final class MuseumScreen extends ChromeScreen {
     }
 
     // ---- Memorial
+
+    private void encyclopedia() {
+        List<Explainers.Explainer> explainers = Explainers.standard().explainers();
+        Table head = new Table();
+        head.add(ui.label("How it works", Theme.TextStyle.HEADING_SM, Theme.ON_PAGE_STRONG)).expandX().left();
+        head.add(ui.label("Each explainer is a few sheets on one idea, drawn like an engineering drawing.",
+            Theme.TextStyle.CAPTION, Theme.ON_PAGE_STRONG));
+        content.add(head).padBottom(Theme.SPACE_4).row();
+        Table grid = new Table();
+        grid.top().left();
+        for (int i = 0; i < explainers.size(); i++) {
+            grid.add(explainerCard(explainers.get(i))).width(448f).top().padRight(i % 4 == 3 ? 0f : 16f)
+                .padBottom(16f);
+            if (i % 4 == 3) {
+                grid.row();
+            }
+        }
+        content.add(scrollPane(grid)).expand().fill();
+    }
+
+    private Table explainerCard(Explainers.Explainer explainer) {
+        Table card = ui.card();
+        card.pad(Theme.BORDER_EMPHASIS);
+        card.defaults().growX().left();
+        if (!explainer.sheets().isEmpty()) {
+            Drawable art = ui.croppedPicture("explainers/" + explainer.sheets().get(0).drawing() + ".png",
+                1060f / 600f);
+            if (art != null) {
+                card.add(new Image(art)).height(251f).row();
+            }
+        }
+        Table text = new Table();
+        text.pad(10f, 16f, 16f, 16f);
+        text.defaults().left().growX();
+        int sheets = explainer.sheets().size();
+        text.add(ui.label(explainer.code() + " · " + sheets + (sheets == 1 ? " sheet" : " sheets"),
+            Theme.TextStyle.EYEBROW, Theme.NAVY)).row();
+        text.add(ui.label(explainer.title(), Theme.TextStyle.HEADING_SM, Theme.INK)).padBottom(6f).row();
+        text.add(ui.paragraph(explainer.summary(), Theme.TextStyle.BODY, Theme.INK_MUTED)).padBottom(12f).row();
+        TextButton open = ui.button("Read it", Theme.ButtonKind.PRIMARY);
+        open.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                openExplainer(explainer);
+            }
+        });
+        Table action = new Table();
+        action.left();
+        action.add(open);
+        text.add(action);
+        card.add(text);
+        return card;
+    }
+
+    /**
+     * Opens an explainer, coming back to the encyclopedia when it closes.
+     *
+     * @param explainer the explainer
+     */
+    public void openExplainer(Explainers.Explainer explainer) {
+        game.setScreen(new ExplainerScreen(game, explainer, 0, () -> new MuseumScreen(game, Tab.ENCYCLOPEDIA)));
+    }
 
     private void memorial() {
         Table head = new Table();
