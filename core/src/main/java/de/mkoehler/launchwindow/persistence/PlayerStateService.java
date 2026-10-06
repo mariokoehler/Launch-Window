@@ -1,6 +1,8 @@
 package de.mkoehler.launchwindow.persistence;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.mkoehler.launchwindow.content.SpaceRaceNews;
+import de.mkoehler.launchwindow.model.GameDate;
 import de.mkoehler.launchwindow.content.RandomEventRoster;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.rules.GoalTally;
@@ -131,7 +133,10 @@ public class PlayerStateService {
         resolved.setSeason(resolved.getSeason() + 1);
         String cutoff = pending.isEmpty() ? null : lastFileName(pending);
         // The report goes first: a crash before the snapshot redoes the turn, which writes the same report.
-        reportStore.save(TurnReport.build(before, resolved, events, gameTurn, context.catalog()));
+        // One real space-race story from the season this turn played out in, picked from the season seed
+        // so a redone turn picks the same one (design.md section 1.1).
+        String story = SpaceRaceNews.standard().pick(GameDate.ofTurn(gameTurn), seasonSeed);
+        reportStore.save(TurnReport.build(before, resolved, events, gameTurn, context.catalog()).withNewsStory(story));
         snapshotStore.save(gameTurn, resolved, cutoff);
         journal.archive(pending, gameTurn);
         return events;

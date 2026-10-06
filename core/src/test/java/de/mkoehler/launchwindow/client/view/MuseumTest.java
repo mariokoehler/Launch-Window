@@ -88,6 +88,27 @@ class MuseumTest {
     }
 
     /**
+     * The animals that came home are honoured per successful flight: Belka and Strelka on the first
+     * Korabl-Sputnik 2, Chernushka after one uncrewed Vostok and Zvezdochka after the second.
+     */
+    @Test
+    void flightsHonourTheAnimalsThatCameHome() {
+        PlayerSnapshot state = new PlayerSnapshot("Zarya", Archetype.SOVIET, 0, 0, 0, 25);
+        state.setSuccessfulFlightCounts(Map.of("korabl-sputnik-2-orbit", 3, "vostok-uncrewed-orbital", 1,
+            "vostok-orbital", 1));
+        Map<String, List<String>> honoured = new java.util.HashMap<>();
+        Museum.flights(state, PACK).forEach(flight -> honoured.put(flight.configurationId(), flight.cameHome()));
+        assertEquals(List.of("Belka", "Strelka"), honoured.get("korabl-sputnik-2-orbit"), "once, however often flown");
+        assertEquals(List.of("Chernushka"), honoured.get("vostok-uncrewed-orbital"));
+        assertEquals(List.of(), honoured.get("vostok-orbital"));
+
+        state.setSuccessfulFlightCounts(Map.of("vostok-uncrewed-orbital", 2));
+        assertEquals(List.of("Chernushka", "Zvezdochka"), Museum.flights(state, PACK).get(0).cameHome());
+        assertEquals("Chernushka, Zvezdochka and Ham", Museum.names(List.of("Chernushka", "Zvezdochka", "Ham")));
+        assertEquals("Belka and Strelka", Museum.names(List.of("Belka", "Strelka")));
+    }
+
+    /**
      * The real pack's Sputnik 2 carries Laika, and her plaque reads as a passenger's: no age, and a
      * flight with no way home.
      */

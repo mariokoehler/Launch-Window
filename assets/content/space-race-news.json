@@ -1,0 +1,322 @@
+{
+  "_comment": "Real space-race events for the turn report's news (design.md 1.1). One story per player per turn is picked from the season the turn played out in (Winter = January to March). Written in our own words from the history, never from BASPM's text. 'nasa' and 'soviet' are optional: how that side's press and public saw it, shown to players of that archetype.",
+  "stories": [
+    {
+      "id": "1955-winter-test-range",
+      "year": 1955, "season": "WINTER",
+      "headline": "A secret test range for a giant rocket",
+      "text": "In February 1955 the Soviet government ordered a missile test range built on the steppe of Kazakhstan, near the railway halt of Tyuratam. It was meant for Korolev's R-7 intercontinental missile, and it would become the Baikonur Cosmodrome."
+    },
+    {
+      "id": "1955-spring-baikonur",
+      "year": 1955, "season": "SPRING",
+      "headline": "Building starts in the Kazakh steppe",
+      "text": "Soldiers and builders arrived at Tyuratam in the spring of 1955 and began work on the launch site, in heat, dust and isolation. Its official founding date is 2 June 1955. To mislead the West, it was named after Baikonur, a town hundreds of kilometres away."
+    },
+    {
+      "id": "1955-summer-igy-satellites",
+      "year": 1955, "season": "SUMMER",
+      "headline": "Both powers promise a satellite",
+      "text": "On 29 July 1955 the White House announced that the United States would launch a small satellite for the International Geophysical Year of 1957-58. Days later, at a congress in Copenhagen, Soviet scientist Leonid Sedov said the Soviet Union planned one too. Few in the West took him seriously.",
+      "nasa": "American papers treated the satellite as a peaceful science project. The Soviet claim got little attention.",
+      "soviet": "Soviet scientists spoke of their plans openly. The rocket that would carry them stayed secret."
+    },
+    {
+      "id": "1955-summer-vanguard-chosen",
+      "year": 1955, "season": "SUMMER",
+      "headline": "The Navy's Vanguard wins the satellite job",
+      "text": "In September 1955 a US committee chose the Navy's Vanguard proposal over the Army's Project Orbiter, which would have used von Braun's proven Redstone rocket. Vanguard was a civilian-looking science rocket that had not flown yet, and the decision kept military missiles out of the satellite effort."
+    },
+    {
+      "id": "1956-winter-object-d",
+      "year": 1956, "season": "WINTER",
+      "headline": "Object D: a laboratory for orbit",
+      "text": "On 30 January 1956 the Soviet government approved Object D, a heavy satellite of more than a tonne, packed with instruments. It would take longer to build than anyone hoped, and that delay would open the door to a much simpler first satellite."
+    },
+    {
+      "id": "1956-summer-jupiter-c",
+      "year": 1956, "season": "SUMMER",
+      "headline": "A rocket that wasn't allowed to orbit",
+      "text": "On 20 September 1956 von Braun's team flew a Jupiter-C rocket from Cape Canaveral to a record height and range. Its last stage was filled with sand instead of fuel: the Army had orders not to put anything into orbit and steal Vanguard's mission. Many believe it could have launched a satellite that day."
+    },
+    {
+      "id": "1957-winter-simple-satellite",
+      "year": 1957, "season": "WINTER",
+      "headline": "Korolev settles for the simplest satellite",
+      "text": "With Object D running late and rumours of an American launch, Korolev proposed something far simpler: a polished sphere with a radio transmitter and little else. In February 1957 the government agreed. The Russian name means 'the simplest satellite'."
+    },
+    {
+      "id": "1957-spring-first-r7",
+      "year": 1957, "season": "SPRING",
+      "headline": "The R-7's first launch ends in fire",
+      "text": "On 15 May 1957 the first R-7 lifted off from Tyuratam. A fire broke out in one of its strap-on boosters, which tore away about a minute and a half into the flight. The next attempts failed too, and Korolev's team worked on under heavy pressure."
+    },
+    {
+      "id": "1957-summer-icbm",
+      "year": 1957, "season": "SUMMER",
+      "headline": "The first intercontinental missile flies",
+      "text": "On 21 August 1957 an R-7 finally flew its full course, about 6,000 kilometres to the Kamchatka peninsula. A few days later TASS announced that the Soviet Union had a working intercontinental ballistic missile. The same rocket could lift a satellite.",
+      "nasa": "Many in the West doubted the Soviet claim. Those doubts did not last long.",
+      "soviet": "The announcement was short, and it made a clear point: Soviet rockets could now reach any place on Earth."
+    },
+    {
+      "id": "1957-fall-sputnik-1",
+      "year": 1957, "season": "FALL",
+      "headline": "Sputnik: the first satellite circles the Earth",
+      "text": "On 4 October 1957 an R-7 put Sputnik 1 into orbit: a 58-centimetre sphere with four long antennas, beeping on two radio frequencies. Radio amateurs around the world tuned in, and the space age had begun.",
+      "nasa": "American newspapers ran the news under huge headlines. Many people feared the US had fallen behind in science, and in missiles that could carry bombs.",
+      "soviet": "Pravda first printed the news as a short TASS report. Only when the world reacted did the Soviet press turn it into the triumph it became."
+    },
+    {
+      "id": "1957-fall-sputnik-2",
+      "year": 1957, "season": "FALL",
+      "headline": "A dog in orbit",
+      "text": "On 3 November 1957, less than a month after the first, Sputnik 2 carried the dog Laika into orbit. The flight proved a living animal could survive launch and weightlessness. There was no way to bring her back, and she died within hours of the launch, though this was only disclosed decades later.",
+      "nasa": "Western newspapers nicknamed it 'Muttnik', and animal lovers protested. To many it was a sign that a man would soon follow.",
+      "soviet": "The Soviet press praised Laika as a pioneer of space biology. For years it told a softer story about how and when she died."
+    },
+    {
+      "id": "1957-fall-vanguard-explodes",
+      "year": 1957, "season": "FALL",
+      "headline": "America's answer explodes on live television",
+      "text": "On 6 December 1957 the first Vanguard satellite launch rose about a metre from its pad at Cape Canaveral, sank back and exploded. The small satellite rolled clear, still beeping. Reporters and cameras had watched it all.",
+      "nasa": "The press called it 'Flopnik' and 'Kaputnik'. It was a public humiliation, and it gave von Braun's Army team its chance.",
+      "soviet": "Soviet commentators made the most of it. The failure seemed to prove how far ahead their own rockets were."
+    },
+    {
+      "id": "1958-winter-explorer-1",
+      "year": 1958, "season": "WINTER",
+      "headline": "Explorer 1: America reaches orbit",
+      "text": "On 31 January 1958 a Juno I rocket, a Jupiter-C with a fourth stage, put Explorer 1 into orbit. Its instruments, built by James Van Allen's group, found far more radiation than expected: belts of charged particles trapped around the Earth.",
+      "nasa": "Relief swept the country. Von Braun, Van Allen and Pickering held a model of the satellite over their heads for the press."
+    },
+    {
+      "id": "1958-winter-vanguard-1",
+      "year": 1958, "season": "WINTER",
+      "headline": "Vanguard finally flies",
+      "text": "On 17 March 1958 a Vanguard rocket put a grapefruit-sized satellite into orbit. Its solar cells kept it transmitting for years. It is still up there today, the oldest human-made object in orbit.",
+      "soviet": "Khrushchev mocked it as 'the grapefruit satellite'. Sputnik 3, two months later, weighed about 900 times as much."
+    },
+    {
+      "id": "1958-spring-sputnik-3",
+      "year": 1958, "season": "SPRING",
+      "headline": "Object D flies as Sputnik 3",
+      "text": "On 15 May 1958 the big laboratory satellite, the original Object D, reached orbit as Sputnik 3, with well over a tonne of mass and instruments. A tape recorder failed, so much of its data was lost, including readings over the radiation belts Explorer 1 had found."
+    },
+    {
+      "id": "1958-summer-nasa-founded",
+      "year": 1958, "season": "SUMMER",
+      "headline": "A new civilian space agency",
+      "text": "On 29 July 1958 President Eisenhower signed the act creating NASA, the National Aeronautics and Space Administration. It took over the old aviation research agency NACA and its laboratories, and civilian space work was gathered under one roof."
+    },
+    {
+      "id": "1958-fall-nasa-opens",
+      "year": 1958, "season": "FALL",
+      "headline": "NASA opens its doors",
+      "text": "NASA began work on 1 October 1958 with about 8,000 staff, most of them from NACA. Within days it approved a programme to put a man in orbit, soon named Project Mercury."
+    },
+    {
+      "id": "1958-fall-score",
+      "year": 1958, "season": "FALL",
+      "headline": "A Christmas message from space",
+      "text": "On 18 December 1958 a whole Atlas rocket went into orbit as Project SCORE, the first communications satellite. Its tape recorder broadcast a Christmas message from President Eisenhower to the world."
+    },
+    {
+      "id": "1959-winter-luna-1",
+      "year": 1959, "season": "WINTER",
+      "headline": "A probe flies past the Moon",
+      "text": "On 2 January 1959 the Soviet probe Luna 1 became the first spacecraft to reach escape velocity. It was meant to hit the Moon, but missed by about 6,000 kilometres and went into orbit around the Sun.",
+      "nasa": "It showed how powerful the Soviet rockets were: every American probe aimed at the Moon so far had failed to escape Earth's gravity.",
+      "soviet": "The Soviet press named it Mechta, 'Dream', and called it the first artificial planet."
+    },
+    {
+      "id": "1959-spring-mercury-seven",
+      "year": 1959, "season": "SPRING",
+      "headline": "Meet the Mercury Seven",
+      "text": "On 9 April 1959 NASA introduced its first astronauts at a press conference in Washington: seven military test pilots, Carpenter, Cooper, Glenn, Grissom, Schirra, Shepard and Slayton. Overnight they became national heroes.",
+      "nasa": "The press loved them, and Life magazine bought the rights to their personal stories.",
+      "soviet": "The Soviet Union named nobody. Its cosmonauts would stay secret until each one had flown."
+    },
+    {
+      "id": "1959-spring-able-baker",
+      "year": 1959, "season": "SPRING",
+      "headline": "Two monkeys come home",
+      "text": "On 28 May 1959 a Jupiter missile carried the monkeys Able and Baker on a suborbital flight and they were recovered alive from the Atlantic. They were the first primates to survive a flight into space."
+    },
+    {
+      "id": "1959-summer-luna-2",
+      "year": 1959, "season": "SUMMER",
+      "headline": "A Soviet probe hits the Moon",
+      "text": "On 14 September 1959 Luna 2 struck the Moon, the first human-made object to reach another world. It carried metal pennants with the Soviet coat of arms.",
+      "nasa": "The timing was not lost on anyone: Khrushchev arrived in the United States the next day and gave Eisenhower a copy of the pennant.",
+      "soviet": "The Soviet press celebrated a red pennant on the Moon, and Khrushchev carried a replica to America."
+    },
+    {
+      "id": "1959-fall-luna-3",
+      "year": 1959, "season": "FALL",
+      "headline": "The first look at the Moon's far side",
+      "text": "In October 1959 Luna 3 swung around the Moon and photographed the side no one had ever seen. The film was developed on board and scanned for transmission back to Earth. The pictures were grainy, but they showed a far side with few of the dark seas of the near side."
+    },
+    {
+      "id": "1960-winter-cosmonauts",
+      "year": 1960, "season": "WINTER",
+      "headline": "Twenty young pilots begin secret training",
+      "text": "In the early months of 1960 the Soviet Air Force chose its first group of twenty cosmonaut candidates, young fighter pilots small enough for the Vostok cabin. Their training began near Moscow in March. Their names stayed secret."
+    },
+    {
+      "id": "1960-spring-tiros",
+      "year": 1960, "season": "SPRING",
+      "headline": "The first weather satellite",
+      "text": "On 1 April 1960 the United States launched TIROS 1, which sent back television pictures of cloud patterns across the globe. Meteorologists had never seen weather from above before."
+    },
+    {
+      "id": "1960-spring-korabl-sputnik-1",
+      "year": 1960, "season": "SPRING",
+      "headline": "A spaceship for a man, tested empty",
+      "text": "On 15 May 1960 the Soviet Union orbited a prototype of its crewed spacecraft as Korabl-Sputnik, 'ship-satellite'. When it fired its braking engine, it was pointing the wrong way and climbed into a higher orbit instead of coming home."
+    },
+    {
+      "id": "1960-summer-belka-strelka",
+      "year": 1960, "season": "SUMMER",
+      "headline": "Two dogs return alive from orbit",
+      "text": "On 19 August 1960 Korabl-Sputnik 2 carried the dogs Belka and Strelka, with mice, rats and plants, on a day-long flight. The capsule landed safely the next day, and they became the first animals to return alive from orbit. Two other dogs had died a few weeks earlier when their rocket failed shortly after launch.",
+      "nasa": "The flight showed that a person could soon follow, and that the Soviets could bring a capsule back from orbit.",
+      "soviet": "Belka and Strelka became celebrities, shown on television and later on stamps and posters."
+    },
+    {
+      "id": "1960-summer-discoverer-13",
+      "year": 1960, "season": "SUMMER",
+      "headline": "A capsule comes back from orbit",
+      "text": "On 11 August 1960 a capsule from the satellite Discoverer 13 was recovered from the Pacific, the first object ever returned from orbit. Discoverer was the public name of Corona, a secret spy satellite programme whose film capsules were soon being caught in mid-air."
+    },
+    {
+      "id": "1960-summer-echo",
+      "year": 1960, "season": "SUMMER",
+      "headline": "A balloon you can see from the ground",
+      "text": "On 12 August 1960 NASA launched Echo 1, a 30-metre balloon of metallised plastic that inflated in orbit. Radio signals were bounced off it across the continent, and people all over the world could watch it cross the night sky."
+    },
+    {
+      "id": "1960-fall-mr1",
+      "year": 1960, "season": "FALL",
+      "headline": "The four-inch flight",
+      "text": "On 21 November 1960 the first Mercury-Redstone lifted about ten centimetres, shut down and settled back onto the pad. The escape tower fired off on its own, and the parachutes popped out of the capsule on the top of the stranded rocket."
+    },
+    {
+      "id": "1960-fall-korabl-sputnik-3",
+      "year": 1960, "season": "FALL",
+      "headline": "Two dogs lost on reentry",
+      "text": "On 1 December 1960 Korabl-Sputnik 3 carried the dogs Pchyolka and Mushka into orbit. The braking engine failed to shut off on time, and the capsule was destroyed by its own self-destruct charge, built to keep it out of foreign hands if it came down off course."
+    },
+    {
+      "id": "1961-winter-ham",
+      "year": 1961, "season": "WINTER",
+      "headline": "A chimpanzee flies for Mercury",
+      "text": "On 31 January 1961 the chimpanzee Ham flew a Mercury capsule on a suborbital arc, pulling levers on cue during the flight. The rocket flew too fast and too far, but Ham was recovered from the Atlantic alive and well.",
+      "nasa": "Ham's flight cleared the way for a man, though engineers asked for one more test flight first."
+    },
+    {
+      "id": "1961-winter-ivan-ivanovich",
+      "year": 1961, "season": "WINTER",
+      "headline": "A mannequin rehearses the flight of a man",
+      "text": "In March 1961 two more Vostok test flights each carried a dog and a life-size mannequin, Ivan Ivanovich, in a spacesuit and ejection seat. Chernushka flew on 9 March and Zvezdochka on 25 March. Both flights went to plan, and the way was clear for a man."
+    },
+    {
+      "id": "1961-spring-gagarin",
+      "year": 1961, "season": "SPRING",
+      "headline": "Gagarin: a man in space",
+      "text": "On 12 April 1961 Yuri Gagarin, a 27-year-old Soviet pilot, made one orbit of the Earth in Vostok 1, a flight of 108 minutes. He ejected from the capsule during the descent and landed by parachute near the Volga.",
+      "nasa": "The news reached Washington in the middle of the night. Kennedy congratulated the Soviet Union, and newspapers asked again how far behind America was.",
+      "soviet": "The Soviet press filled its front pages with Gagarin's smiling portrait, and Moscow gave him a hero's welcome in Red Square."
+    },
+    {
+      "id": "1961-spring-shepard",
+      "year": 1961, "season": "SPRING",
+      "headline": "Shepard's fifteen minutes",
+      "text": "On 5 May 1961 Alan Shepard flew Freedom 7 on a 15-minute suborbital arc and splashed down in the Atlantic. Unlike Gagarin, he controlled his capsule's attitude himself for part of the flight, and the launch was broadcast live.",
+      "nasa": "America celebrated its first astronaut with parades, and the open, televised launch was made a point of pride.",
+      "soviet": "Khrushchev dismissed it as a 'flea hop' next to Gagarin's orbit."
+    },
+    {
+      "id": "1961-spring-kennedy-moon",
+      "year": 1961, "season": "SPRING",
+      "headline": "Kennedy sets a goal: the Moon",
+      "text": "On 25 May 1961 President Kennedy asked Congress to commit the United States to landing a man on the Moon and returning him safely before the decade was out. Just three weeks earlier, America's whole experience of human spaceflight had been Shepard's fifteen minutes.",
+      "nasa": "Congress agreed, and NASA's budget began to grow enormously.",
+      "soviet": "There was not yet any Soviet plan to land on the Moon. One would not be approved until 1964."
+    },
+    {
+      "id": "1961-summer-grissom",
+      "year": 1961, "season": "SUMMER",
+      "headline": "Liberty Bell 7 sinks",
+      "text": "On 21 July 1961 Gus Grissom flew the second suborbital Mercury flight. After splashdown the hatch blew off early, the capsule filled with water, and Grissom nearly drowned before a helicopter pulled him out. Liberty Bell 7 sank and stayed on the sea floor until 1999."
+    },
+    {
+      "id": "1961-summer-titov",
+      "year": 1961, "season": "SUMMER",
+      "headline": "A whole day in orbit",
+      "text": "On 6 and 7 August 1961 Gherman Titov flew Vostok 2 for 17 orbits, more than a day. He was the first person to sleep in space, and to suffer from space sickness, which worried the doctors.",
+      "nasa": "America had not yet put a man in orbit at all, and the gap looked wider than ever.",
+      "soviet": "The Soviet press celebrated a second hero, and a full day in space."
+    },
+    {
+      "id": "1961-fall-enos",
+      "year": 1961, "season": "FALL",
+      "headline": "Enos orbits the Earth",
+      "text": "On 29 November 1961 the chimpanzee Enos flew two orbits in a Mercury capsule on an Atlas rocket. A fault in his test console gave him small electric shocks even when he pulled the right lever, but he kept working, and he came home safely. The way was open for an American in orbit."
+    },
+    {
+      "id": "1962-winter-glenn",
+      "year": 1962, "season": "WINTER",
+      "headline": "John Glenn orbits the Earth",
+      "text": "On 20 February 1962 John Glenn flew three orbits in Friendship 7. A signal suggested his heat shield had come loose, so he kept the retrorocket pack strapped on through reentry, as a precaution. The signal turned out to be a faulty sensor.",
+      "nasa": "Glenn became a national hero overnight, welcomed by a ticker-tape parade in New York.",
+      "soviet": "Khrushchev sent his congratulations and suggested the two nations might cooperate in space."
+    },
+    {
+      "id": "1962-spring-carpenter",
+      "year": 1962, "season": "SPRING",
+      "headline": "Aurora 7 lands far from home",
+      "text": "On 24 May 1962 Scott Carpenter flew three orbits in Aurora 7. He used too much attitude fuel and fired his retrorockets late and at a slight angle, and he landed about 400 kilometres beyond the target. For some 40 minutes no one knew whether he was alive."
+    },
+    {
+      "id": "1962-summer-telstar",
+      "year": 1962, "season": "SUMMER",
+      "headline": "Live television across the Atlantic",
+      "text": "On 10 July 1962 Telstar was launched, and within weeks it relayed the first live television pictures between America and Europe. A record named after it became a hit in both."
+    },
+    {
+      "id": "1962-summer-group-flight",
+      "year": 1962, "season": "SUMMER",
+      "headline": "Two Vostoks in orbit together",
+      "text": "In August 1962 Vostok 3 and Vostok 4 were launched a day apart and passed within a few kilometres of each other. The capsules couldn't change orbit, so the 'group flight' was a matter of precise launch timing, not of steering. Each stayed up for days.",
+      "nasa": "Western observers wondered whether the Soviets could already rendezvous in orbit. They could not, not yet.",
+      "soviet": "The Soviet press hailed the first group flight of two spaceships."
+    },
+    {
+      "id": "1962-fall-schirra",
+      "year": 1962, "season": "FALL",
+      "headline": "Sigma 7: a textbook flight",
+      "text": "On 3 October 1962 Wally Schirra flew six orbits in Sigma 7, conserving fuel carefully. He splashed down within a few kilometres of the recovery ship, the most precise Mercury landing yet."
+    },
+    {
+      "id": "1962-fall-cuba",
+      "year": 1962, "season": "FALL",
+      "headline": "The world on the brink",
+      "text": "In October 1962 American spy planes found Soviet nuclear missiles being installed in Cuba. For thirteen days the two powers stood close to war, until the Soviet Union agreed to remove the missiles. The rockets of the space race were, after all, also weapons."
+    },
+    {
+      "id": "1963-spring-faith-7",
+      "year": 1963, "season": "SPRING",
+      "headline": "Cooper flies Faith 7 by hand",
+      "text": "On 15 and 16 May 1963 Gordon Cooper flew the last Mercury mission, 22 orbits over a day and a half. Near the end the capsule's automatic systems failed, and Cooper aligned it and fired the retrorockets by hand, using a window, a wristwatch and his own judgement."
+    },
+    {
+      "id": "1963-spring-tereshkova",
+      "year": 1963, "season": "SPRING",
+      "headline": "The first woman in space",
+      "text": "On 16 June 1963 Valentina Tereshkova, a former textile worker and amateur parachutist, was launched in Vostok 6. She flew for almost three days, longer than all the Mercury astronauts together. It would be nearly twenty years before another woman flew.",
+      "nasa": "NASA had no women in training. Some women pilots had passed the astronaut medical tests privately, but the agency had not taken them on.",
+      "soviet": "The Soviet press presented her as proof of the equality of women in socialist society."
+    }
+  ]
+}

@@ -28,6 +28,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
     @JsonSubTypes.Type(value = MissionReliabilityChanged.class, name = "missionReliabilityChanged"),
     @JsonSubTypes.Type(value = MissionSkillGrowthApplied.class, name = "missionSkillGrowthApplied"),
     @JsonSubTypes.Type(value = MissionStepResolved.class, name = "missionStepResolved"),
+    @JsonSubTypes.Type(value = PassengerLost.class, name = "passengerLost"),
     @JsonSubTypes.Type(value = PersonnelDeparture.class, name = "personnelDeparture"),
     @JsonSubTypes.Type(value = RandomEventOccurred.class, name = "randomEventOccurred"),
     @JsonSubTypes.Type(value = ResearchCompleted.class, name = "researchCompleted"),

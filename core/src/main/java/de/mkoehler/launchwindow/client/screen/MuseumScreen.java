@@ -380,7 +380,13 @@ public final class MuseumScreen extends ChromeScreen {
         count.add(ui.label(flight.count() == 1 ? "completed flight" : "completed flights", Theme.TextStyle.BODY_SM,
             Theme.INK_MUTED)).bottom().padBottom(3f);
         text.add(count).row();
-        text.add(ui.label(flight.crewed() ? "Crewed" : "Uncrewed", Theme.TextStyle.CAPTION, Theme.INK_MUTED));
+        text.add(ui.label(flight.crewed() ? "Crewed" : "Uncrewed", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).row();
+        if (!flight.cameHome().isEmpty()) {
+            text.add(new Image(ui.solid(Theme.NAVY_BORDER))).height(Theme.BORDER_THIN).growX().padTop(8f)
+                .padBottom(8f).row();
+            text.add(ui.label("CAME HOME", Theme.TextStyle.EYEBROW, Theme.SUCCESS)).padBottom(2f).row();
+            text.add(ui.paragraph(Museum.names(flight.cameHome()), Theme.TextStyle.BODY_SM, Theme.INK)).growX();
+        }
         card.add(text).row();
         return card;
     }

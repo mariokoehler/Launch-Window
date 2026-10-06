@@ -206,6 +206,10 @@ On the right:
     user, 2026-10-05). It can't be cut short, and the hire screen says how long it
     takes. The existing
     Personnel Recruitment mockup is this screen.
+    *Signing bonus (built in libGDX 2026-10-06, user decision):* each selected recruit has a
+    check box, "Signing bonus · $ 48 once · morale 71 → 78": a one-off payment of one season's
+    salary that multiplies the new hire's morale by 1.1 (at most 100). The footer adds up the
+    bonuses next to the added fixed costs. A hire whose bonus the funds can't cover is refused.
 15. **History note** *(decided 2026-10-04; how it looks is open)*. A small icon
     placed next to a label, field, or value. On mouse-over it shows a short card,
     two to four sentences, about the real history or engineering behind that
@@ -331,8 +335,7 @@ his death in 1966, the world knew him only as "the Chief Designer"."*
 
 **After joining:** the starting
 state is 25,000 funds, 250 prestige, 3,000 per season, every building at level 1,
-empty rosters, and ten candidates per group (BASPM's ten, decided 2026-10-06; the code still
-draws six, see `design.md` §5's backlog). So the first thing to show is a hint
+empty rosters, and ten candidates per group (BASPM's ten, decided 2026-10-06). So the first thing to show is a hint
 to hire staff (SET Centre first).
 
 **Implemented in libGDX (2026-10-04)** from the Connect and Join Game mockups
@@ -345,7 +348,7 @@ to hire staff (SET Centre first).
   progress" can be false during the signup window, and the starting funds come
   from the game's own pack. New text: *"Everyone starts from the same line.
   Whenever you join, your agency starts fresh: every building at level 1, empty
-  rosters, and ten candidates waiting in each hiring pool ("six" until the pool grows). Hire SET specialists
+  rosters, and ten candidates waiting in each hiring pool. Hire SET specialists
   first. They research the parts every mission flies on."*
 - **Text on the blue page is light.** The mockup set the heading, eyebrow and
   footnote in ink and navy directly on the page, which is illegible there. They
@@ -477,11 +480,13 @@ while building it, **confirmed by the user (2026-10-06)**:
   morale warning goes to idle people at morale 50 or below (the resignation floor
   plus 15).
 - **News wording** is the client's own, one line per kind of random event.
-- **To build (user, 2026-10-04, confirmed 2026-10-06):** real space-race stories from the same
-  three months in the report's news, picked at random per player where several exist, optionally
-  told through the player's archetype's press. See `design.md` §1.1.
-- **To build (2026-10-06):** a line for a passenger lost that season ("Laika did not come
-  home."), from a new report event (`design.md` §5's backlog).
+- **Real space-race news (built 2026-10-06, `design.md` §1.1):** the news card opens with one
+  real event from the season the turn played out in, under an "On the real timeline · <season>"
+  eyebrow, with a navy accent bar. Below the story, "At home:" gives the player's own side's view
+  where the story has one. The card's caption is now "This season". A season without stories shows
+  only the random events.
+- **A lost passenger (built 2026-10-06):** the People column says "Laika did not come home", with
+  "The flight had no way home." or the step that failed (`PassengerLost` event).
 
 ### 4.5 VAB: rockets
 **Purpose:** everything about rockets. The VAB's own cap limits the open rocket
@@ -752,8 +757,7 @@ crew losses. Playback should be skippable and steppable. **Server work:** G2, do
 - no building panel on the overview, as in the SET Centre (later changed, see below);
 - re-staffing has no confirmation (it's free and reversible);
 - the replay shows chances and pass/fail rather than dice numbers. **It doesn't step on by
-  itself (user, 2026-10-06):** the player steps through at their own pace; the built viewer
-  still auto-steps every 1.5 s (`design.md` §5's backlog);
+  itself (user, 2026-10-06):** the player steps through at their own pace (built the same day);
 - "Can't be abandoned" is shown on a fixture card, because the early pack has no
   multi-season crewed configuration.
 
@@ -773,8 +777,9 @@ Control mockup:
 
 - **Replay viewer (came a little later, with G2):** `client.screen.ReplayScreen` plays a
   mission's season from the saved report's step events. Nothing is rolled in the client.
-  It steps every 1.5 s, and play, pause, step and skip work, until manual stepping replaces
-  the timer. "Replay season N" opens it for the latest turn.
+  The player steps through by hand (2026-10-06): back to start, previous, a primary "Next step"
+  ("Season summary" on the last step), "Skip to summary", or a click on any step in the list.
+  There's no timer and no play/pause. "Replay season N" opens it for the latest turn.
 
 Choices made while building them, **confirmed by the user (2026-10-06)**:
 - **Building panel (changed 2026-10-04, user):** the mockup had none, which left Mission Control
@@ -904,10 +909,9 @@ building it, **confirmed by the user (2026-10-06)**:
 - the bracket table, and what the current prestige would earn;
 - the news log.
 
-**Actions:** **Convert prestige to funds** (only while in debt, at 2 funds per prestige,
-decided 2026-10-06; the code still charges 4 prestige per fund, see `design.md` §5's backlog;
-capped so funds end at no more than two seasons of running costs). Show the
-cap and the price.
+**Actions:** **Convert prestige to funds** (only while in debt, at 2 funds per prestige
+point, decided 2026-10-06, a part point rounded up; capped so funds end at no more than two
+seasons of running costs). Show the cap and the price.
 
 **States:** in debt, where new spending is refused; a temporary cost or R&D
 multiplier is active (random event, n seasons left).
@@ -935,10 +939,9 @@ hub and the footer's funds chip. The numbers come from `core`: `BudgetProgress.c
 (the lines, the base and the multiplier's saving), `BudgetProgress.forecast` (the next
 review: when, what it pays, what keeps today's funding) and `PrestigeConversion`. Choices,
 **confirmed by the user (2026-10-06)**:
-- **Known limit, to fix (user, 2026-10-06):** the client prices reviews and conversions with
-  `BudgetSchedule.baspmClose()`, the schedule the server uses today, because the schedule
-  isn't sent to the client. The game info will carry the game's schedule before any game uses
-  another one (`design.md` §5's backlog).
+- **The game's own schedule (built 2026-10-06):** reviews and conversions are priced with the
+  budget schedule the game info carries (`GameInfoResponse.budgetSchedule()`), so a game with
+  another schedule shows its own numbers.
 - **"Last season"** under the funds is the latest turn report's funds change, fetched
   quietly; it's left out when there's no report. The footer delta stays deferred.
 - **The review scale** has no tag above the gold mark; the legend names both marks.
@@ -954,6 +957,9 @@ review: when, what it pays, what keeps today's funding) and `PrestigeConversion`
 - **Achievements:** every goal achieved or cancelled, with the turn and the
   prestige.
 - **Flights:** the completed flight count per configuration (`successfulFlightCounts`).
+  *Built 2026-10-06:* a card whose configuration really carried animals that came home names
+  them under a green "Came home" eyebrow once flown (Belka and Strelka; Ham; Enos; Chernushka,
+  then Zvezdochka on a second flight). See `design.md` §2.5(f).
 - **Memorial:** astronauts lost.
 
 **Later (M7+):** the educational encyclopedia (`design.md` §1.1).
@@ -1010,6 +1016,10 @@ filled in (a bad address shows the Connect screen's own error under the field). 
 two disabled segments. **Confirmed by the user (2026-10-04):** the hash is shortened to 8 characters; the
 "connected" label is fixed text; and the account note says an unlaunched mission plan is
 dropped (plans live on the client session), instead of the mockup's "logging out loses nothing".
+**Credits (built 2026-10-06, user decision):** About has a "Credits" button that shows
+`assets/CREDITS.md` in the dialog (headings, paragraphs and bullets, scrolling past 520 px),
+with Back and Done. A parenthesis in a script the fonts lack (the archive's Russian name) is
+left out, since its English name stands next to it.
 
 ### 4.13 Game result
 **Purpose:** announce the winner. **Shows:** an overlay on the hub when a result
@@ -1167,8 +1177,9 @@ current state alone. Each is an M5 task.
   state, so the UI never duplicates the rules.
 - **G8. Department salary adjustment (new rule)** *(decided: BASPM's one-off; done
   2026-10-04: `rules.DepartmentSalaries` and `AdjustSalariesAction`. **Once per department
-  per season (user, 2026-10-06),** reversing the 2026-10-04 "no limit, as in BASPM"; the limit
-  isn't built yet, see `design.md` §5's backlog)*.
+  per season (user, 2026-10-06),** reversing the 2026-10-04 "no limit, as in BASPM"; built the
+  same day: a second change is refused as `ALREADY_ADJUSTED`, and Manage department says so in a
+  toast instead of opening)*.
   An action that changes every salary in one group by p % (−50 to +50) and every
   morale in it by +p for a raise or −3p for a cut, clamped to 0–100
   (`baspm.md` §9.8). Morale feeds hiring quality and resignations, so this is a

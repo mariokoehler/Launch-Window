@@ -40,10 +40,11 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   season pass.
 - **M5, the libGDX client, is in play testing.** Every hub building has its screen, as do the
   turn report, replay, Museum, Settings and game result. The first play-test feedback is built.
-- **The decisions checklist came back on 2026-10-06** and was merged into the docs.
-  Its code work is the backlog in `design.md` §5; that's what comes next.
-- **Waiting on Claude:** ideas for astronauts' PR duty (`design.md` §2.2), asked for by the
-  user.
+- **The decisions checklist came back on 2026-10-06,** was merged into the docs, and its code
+  work is built (`design.md` §5, Backlog). Reset the dev data root before the next play test: the
+  pack hash changed.
+- **Next, waiting on Claude:** ideas for astronauts' PR duty (`design.md` §2.2), asked for by
+  the user.
 
 ## How we work
 
@@ -188,7 +189,9 @@ cd assets && java --enable-native-access=ALL-UNNAMED -cp "../lwjgl3/target/class
 
 **Content and rules**
 - `strings.json` is deliberately outside `ContentPackLoader.FILES` (not hashed, not frozen).
-  Never add it there. `ContentStringsTest` fails until every new id has text.
+  Never add it there. `ContentStringsTest` fails until every new id has text. The same goes for
+  `assets/content/space-race-news.json` (`SpaceRaceNewsTest`); turn reports store its story ids,
+  so never rename or reuse one.
 - `cancelsGoalIds` means "also credits, with prestige" (`rules.GoalCascade`), not "makes
   unearnable".
 - A seat titled "FLIGHT DIRECTOR" doesn't always read the average skill; go by the seat's skill

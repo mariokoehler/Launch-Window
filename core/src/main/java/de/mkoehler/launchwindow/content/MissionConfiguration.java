@@ -90,14 +90,21 @@ public record MissionConfiguration(String id, String programId, List<MissionSeas
     /**
      * The animals a flight carries (user decision, 2026-10-05). They're remembered on the
      * player's memorial when the flight costs their lives: always at its end if they don't come
-     * home, otherwise only if the flight fails. In the early-era pack only Sputnik 2 carries one.
+     * home, otherwise only if the flight fails. The animals that really flew and came home are
+     * honoured in the Museum instead, one entry per successful flight in order (user decision
+     * 2026-10-06), so a flight can honour Belka and Strelka while a failure remembers the dogs
+     * really lost on another attempt.
      *
-     * @param animals    the animals aboard, by name, as on the first flight
+     * @param animals    the animals remembered if the flight costs their lives, as on the first
+     *                   flight; may be empty only when the flight comes home and honours someone
      * @param returnHome whether the flight is meant to bring them back
      * @param unnamed    the memorial name for an animal on a later flight, once the named
      *                   animal is already remembered (a second "Laika" would be wrong)
+     * @param cameHome   for each successful flight in turn, the animals honoured for coming home
+     *                   on it; a flight past the end of the list honours nobody. Missing means none.
      */
-    public record AnimalPassengers(List<Animal> animals, boolean returnHome, String unnamed) {
+    public record AnimalPassengers(List<Animal> animals, boolean returnHome, String unnamed,
+                                   List<List<Animal>> cameHome) {
 
         /**
          * Validates and copies.
@@ -105,9 +112,31 @@ public record MissionConfiguration(String id, String programId, List<MissionSeas
         public AnimalPassengers {
             Objects.requireNonNull(unnamed, "unnamed must not be null");
             animals = List.copyOf(animals);
-            if (animals.isEmpty()) {
-                throw new IllegalArgumentException("animalPassengers needs at least one animal");
+            cameHome = cameHome == null ? List.of() : cameHome.stream().map(List::copyOf).toList();
+            if (animals.isEmpty() && (!returnHome || cameHome.isEmpty())) {
+                throw new IllegalArgumentException("animalPassengers needs an animal to remember or to honour");
             }
+        }
+
+        /**
+         * Animals carried with nobody to honour for coming home.
+         *
+         * @param animals    the animals remembered if the flight costs their lives
+         * @param returnHome whether the flight is meant to bring them back
+         * @param unnamed    the memorial name for an animal on a later flight
+         */
+        public AnimalPassengers(List<Animal> animals, boolean returnHome, String unnamed) {
+            this(animals, returnHome, unnamed, List.of());
+        }
+
+        /**
+         * Returns the animals honoured after a number of successful flights, in flight order.
+         *
+         * @param completedFlights the configuration's successful flights so far
+         * @return the honoured animals, possibly none
+         */
+        public List<Animal> honouredAfter(int completedFlights) {
+            return cameHome.stream().limit(Math.max(0, completedFlights)).flatMap(List::stream).toList();
         }
     }
 

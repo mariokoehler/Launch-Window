@@ -81,8 +81,10 @@ class MissionProgressTest {
             snapshot.getInProgressMissions().put("m" + flight,
                 new InProgressMission("m" + flight, "dog-std", List.of(), List.of()));
             // First roll 99 passes; then 1 reliability-change factor.
-            MissionProgress.advanceSeason(snapshot, catalog, new ScriptedRandomGenerator(99.0, 0.1), new GoalTally(),
-                7 + flight);
+            List<ResolutionEvent> events = MissionProgress.advanceSeason(snapshot, catalog,
+                new ScriptedRandomGenerator(99.0, 0.1), new GoalTally(), 7 + flight);
+            assertEquals(List.of(new PassengerLost("m" + flight, "dog-std", flight == 0 ? "Laika" : "An unnamed dog",
+                null)), events.stream().filter(PassengerLost.class::isInstance).toList());
         }
 
         assertEquals(2, snapshot.getMemorial().size());
@@ -110,7 +112,10 @@ class MissionProgressTest {
         snapshot = snapshotWithOwnedCapsule(10.0);
         snapshot.getInProgressMissions().put("m1", new InProgressMission("m1", "dog-std", List.of(), List.of()));
         // First roll 0 fails; no controllers, so saving roll 30 lands in plain failure; 1 reliability factor.
-        MissionProgress.advanceSeason(snapshot, catalog, new ScriptedRandomGenerator(0.0, 30.0, 0.1));
+        List<ResolutionEvent> events = MissionProgress.advanceSeason(snapshot, catalog,
+            new ScriptedRandomGenerator(0.0, 30.0, 0.1));
+        assertEquals(List.of(new PassengerLost("m1", "dog-std", "Laika", "orbit")),
+            events.stream().filter(PassengerLost.class::isInstance).toList(), "the turn report hears of it");
         assertEquals(1, snapshot.getMemorial().size());
         assertEquals("Laika", snapshot.getMemorial().get(0).name());
         assertEquals("orbit", snapshot.getMemorial().get(0).stepId());

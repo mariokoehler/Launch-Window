@@ -38,7 +38,7 @@ import java.util.stream.Stream;
  */
 public record TurnReport(int version, long gameTurn, long prestigeBefore, long prestigeAfter, long fundsBefore,
                          long fundsAfter, List<ComponentChange> components, List<MissionFlown> missions,
-                         List<ResolutionEvent> events) {
+                         List<ResolutionEvent> events, String newsStoryId) {
 
     /** The current format. */
     public static final int VERSION = 1;
@@ -50,6 +50,37 @@ public record TurnReport(int version, long gameTurn, long prestigeBefore, long p
         components = components == null ? List.of() : List.copyOf(components);
         missions = missions == null ? List.of() : List.copyOf(missions);
         events = events == null ? List.of() : List.copyOf(events);
+    }
+
+    /**
+     * A report without a space-race story, as every report was before the stories existed.
+     *
+     * @param version        the format version
+     * @param gameTurn       the turn resolved
+     * @param prestigeBefore prestige before the pass
+     * @param prestigeAfter  prestige after it
+     * @param fundsBefore    funds before the pass
+     * @param fundsAfter     funds after it
+     * @param components     the components' reliability changes
+     * @param missions       the missions flown
+     * @param events         the pass's events
+     */
+    public TurnReport(int version, long gameTurn, long prestigeBefore, long prestigeAfter, long fundsBefore,
+                      long fundsAfter, List<ComponentChange> components, List<MissionFlown> missions,
+                      List<ResolutionEvent> events) {
+        this(version, gameTurn, prestigeBefore, prestigeAfter, fundsBefore, fundsAfter, components, missions, events,
+            null);
+    }
+
+    /**
+     * Returns this report with a real space-race story for its news ({@code design.md} &sect;1.1).
+     *
+     * @param storyId the story's id from {@link de.mkoehler.launchwindow.content.SpaceRaceNews}, or {@code null}
+     * @return the report with the story
+     */
+    public TurnReport withNewsStory(String storyId) {
+        return new TurnReport(version, gameTurn, prestigeBefore, prestigeAfter, fundsBefore, fundsAfter, components,
+            missions, events, storyId);
     }
 
     /**

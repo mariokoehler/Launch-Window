@@ -1255,7 +1255,33 @@
       }
     ],
     "cancellationPrestigeDeduction": 375,
-    "cancellationRefundPercent": 10
+    "cancellationRefundPercent": 10,
+    "animalPassengers": {
+      "animals": [
+        {
+          "name": "Chaika",
+          "portraitId": null
+        },
+        {
+          "name": "Lisichka",
+          "portraitId": null
+        }
+      ],
+      "returnHome": true,
+      "unnamed": "An unnamed dog",
+      "cameHome": [
+        [
+          {
+            "name": "Belka",
+            "portraitId": null
+          },
+          {
+            "name": "Strelka",
+            "portraitId": null
+          }
+        ]
+      ]
+    }
   },
   {
     "id": "vostok-uncrewed-suborbital",
@@ -2989,7 +3015,26 @@
       }
     ],
     "cancellationPrestigeDeduction": 75,
-    "cancellationRefundPercent": 10
+    "cancellationRefundPercent": 10,
+    "animalPassengers": {
+      "animals": [],
+      "returnHome": true,
+      "unnamed": "An unnamed dog",
+      "cameHome": [
+        [
+          {
+            "name": "Chernushka",
+            "portraitId": null
+          }
+        ],
+        [
+          {
+            "name": "Zvezdochka",
+            "portraitId": null
+          }
+        ]
+      ]
+    }
   },
   {
     "id": "vostok-orbital",
@@ -7723,7 +7768,20 @@
       }
     ],
     "cancellationPrestigeDeduction": 50,
-    "cancellationRefundPercent": 10
+    "cancellationRefundPercent": 10,
+    "animalPassengers": {
+      "animals": [],
+      "returnHome": true,
+      "unnamed": "An unnamed chimpanzee",
+      "cameHome": [
+        [
+          {
+            "name": "Ham",
+            "portraitId": null
+          }
+        ]
+      ]
+    }
   },
   {
     "id": "mercury-suborbital",
@@ -8975,7 +9033,20 @@
       }
     ],
     "cancellationPrestigeDeduction": 75,
-    "cancellationRefundPercent": 10
+    "cancellationRefundPercent": 10,
+    "animalPassengers": {
+      "animals": [],
+      "returnHome": true,
+      "unnamed": "An unnamed chimpanzee",
+      "cameHome": [
+        [
+          {
+            "name": "Enos",
+            "portraitId": null
+          }
+        ]
+      ]
+    }
   },
   {
     "id": "mercury-orbital",

@@ -258,8 +258,10 @@ public final class Museum {
      * @param name            its name
      * @param count           its completed flights
      * @param crewed          whether it flies a crew
+     * @param cameHome        the animals honoured for flying it and coming home, by name, in flight order
      */
-    public record Flight(String configurationId, String program, String name, int count, boolean crewed) {
+    public record Flight(String configurationId, String program, String name, int count, boolean crewed,
+                         List<String> cameHome) {
     }
 
     /**
@@ -274,11 +276,28 @@ public final class Museum {
         for (MissionConfiguration configuration : catalog.missionConfigurations()) {
             int count = state.getSuccessfulFlightCounts().getOrDefault(configuration.id(), 0);
             if (count > 0) {
+                List<String> honoured = configuration.animalPassengers() == null ? List.of()
+                    : configuration.animalPassengers().honouredAfter(count).stream()
+                        .map(MissionConfiguration.Animal::name).toList();
                 flights.add(new Flight(configuration.id(), ContentNames.of(configuration.programId()),
-                    MissionControl.missionName(configuration), count, configuration.requiredAstronautCount() > 0));
+                    MissionControl.missionName(configuration), count, configuration.requiredAstronautCount() > 0,
+                    honoured));
             }
         }
         return flights;
+    }
+
+    /**
+     * Joins names for a sentence: "Ham", "Belka and Strelka", "Chernushka, Zvezdochka and Ham".
+     *
+     * @param names the names
+     * @return the joined names
+     */
+    public static String names(List<String> names) {
+        if (names.size() <= 1) {
+            return String.join("", names);
+        }
+        return String.join(", ", names.subList(0, names.size() - 1)) + " and " + names.get(names.size() - 1);
     }
 
     /**

@@ -43,16 +43,23 @@ engineering problem or tidbit, note it here the same session.
   card (`ui-spec.md` component 15). Always optional, never rules help. The join screen's
   Director field has the first, so players learn the icon there. Content history notes live in
   `assets/content/early-era/strings.json` (G4).
-- **Space-race news in the turn report (to build, user 2026-10-04, confirmed 2026-10-06):**
-  real events from the same three months as the turn's game date, in the report's news.
-  - Stories live in a content file keyed by year and season, one or more each. Where several
-    exist, each player gets a random pick, seeded from the game seed and turn and stored in the
-    saved report (an added field, §3.7), so not everyone reads the same story.
-  - **Optional, user's idea:** tell each story through the player's archetype's press (Sputnik
-    reads very differently in *Pravda* and the *New York Times*).
-  - Our own words from checked facts (§1.2). Label items as "on the real timeline", since a
-    story can contradict what happened in this game. Decide what shows once the game date runs
-    past the written quarters.
+- **Space-race news in the turn report (user 2026-10-04, built 2026-10-06):** real events from
+  the same three months as the turn's game date open the report's news.
+  - **The stories:** `assets/content/space-race-news.json`, 47 stories from Winter 1955 to
+    Spring 1963, keyed by year and season (Winter is January to March), each with a headline,
+    two to four sentences, and for the big events an optional American and Soviet view
+    (`nasa`, `soviet`). Like `strings.json` it sits outside the frozen pack, so corrections reach
+    running games. Never reuse or rename a story id: reports store it.
+  - **The pick** (`content.SpaceRaceNews`): when a player's turn resolves, one story from that
+    season is picked with the player's season seed (salted, so the season pass's random stream is
+    untouched) and stored as `TurnReport.newsStoryId`. Players therefore read different stories
+    where a season has several, and a redone turn picks the same one.
+  - **Shown** under "On the real timeline · <season>", with "At home:" and the player's own
+    side's view where the story has one. Seasons without stories, and dates past the written
+    ones, show only the random events.
+  - **Writing rules:** our own words from checked facts (§1.2). A side's view is paraphrased
+    framing that's documented, never an invented quote. When the game runs past 1963, add stories
+    for the later seasons.
 - **A Museum encyclopedia (later, M7+):** the deeper version of the same content.
 - **Real images:** NASA photos are US government works and normally public domain. Soviet and
   other imagery needs a per-image rights check, and every third-party image gets an entry in
@@ -109,7 +116,7 @@ leading to satellite navigation.
   aboard, the real basis of §2.5(f). A sober note the first time it happens.
 - **Bars (also called Chaika) and Lisichka** died when their Korabl-Sputnik launch failed on 28
   July 1960, 19 seconds in: a strap-on broke away and the capsule's parachutes opened too low.
-  They're the dogs remembered on a failed Korabl-Sputnik 2 flight (§2.5, backlog). Sources
+  They're the dogs remembered on a failed Korabl-Sputnik 2 flight (§2.5(f)), as "Chaika". Sources
   differ on the first dog's name.
 - **Rendezvous is counterintuitive:** burning toward a target raises your orbit and you fall
   behind; you catch up by dropping lower. Restarting an engine in zero-g is hard because nothing
@@ -186,12 +193,14 @@ reaches its first review later in real time, which is fine.
   the intended trade-off. Validated when applied, not when submitted.
   **Rate: 2 funds per prestige** (user, 2026-10-06). A point is worth about 30 funds at the
   first review and is never spent there, so conversion stays an emergency tool; at the old
-  0.25 funds per point a 1,000-fund debt cost 4,000 prestige, which made it unusable. *The code
-  still uses 4 prestige per fund (backlog, §5).*
+  0.25 funds per point a 1,000-fund debt cost 4,000 prestige, which made it unusable. A part
+  point is rounded up (`BudgetSchedule.fundsPerPrestige`, `prestigeCost`).
 - **Budget order inside `BudgetProgress`** (`baspm.md` §11.7): fixed costs, count the season,
   run a review if due (new rate), then grant this season's funding at the new rate.
-- **The client prices reviews with `BudgetSchedule.baspmClose()`** because the game info
-  doesn't carry the schedule yet; sending it is on the backlog (decided 2026-10-06).
+- **The game info carries the game's budget schedule** (`BudgetScheduleInfo` in
+  `GameInfoResponse`, 2026-10-06), so the client prices reviews and conversions with the game's
+  own numbers. Today every game uses `BudgetSchedule.baspmClose()`; a configurable schedule would
+  only need the server to load it.
 
 ### 2.2 Personnel
 
@@ -233,11 +242,14 @@ season unchanged. Tiger Teams' live per-step choice doesn't fit, so it was redes
   trait for good. Several skills can be earned over a career. Expert training is the fourth kind
   in the shared training dialog. How Experts rescue steps: §2.5(i).
 - **Hiring** (`HiringPool`): each season every group gets a fresh batch of candidates, quality
-  banded by the group's average morale. **Batch size: 10, as in BASPM** (user, 2026-10-06; *the
-  code still draws 6, backlog*). Rosters are capped by their buildings' levels (§5, M3).
-  **Hiring is free** apart from salary. **Hiring bonus (to build, user 2026-10-06):** the player
-  may pay a one-off bonus equal to the candidate's salary, raising their morale by 10 at once
-  (open: +10 points or ×1.1); a checkbox per candidate or for the whole selection.
+  banded by the group's average morale. **Batch size: 10, as in BASPM** (user, 2026-10-06).
+  Rosters are capped by their buildings' levels (§5, M3). Each agency has about 32 to 36
+  portraits per group, so with large rosters a batch reuses faces from the previous pool first.
+  **Hiring is free** apart from salary. **Signing bonus** (user, 2026-10-06): the player may pay a
+  one-off bonus of one season's salary (rounded to whole funds) to multiply the new hire's morale
+  by 1.1, at most 100 (`HireAction.signingBonus`, `HiringPool.signingBonusCost`). A hire whose
+  bonus the funds can't cover is refused (`INSUFFICIENT_FUNDS`); the hire screen has a check box
+  per selected recruit.
 - **Candidates are named after their portrait** (`PersonnelNames`, `HiringPool`): a portrait is
   picked first, then a name matching its ethnicity and sex and an age in its range. Lithuanian
   women always get the married surname form (confirmed 2026-10-06).
@@ -247,7 +259,9 @@ season unchanged. Tiger Teams' live per-step choice doesn't fit, so it was redes
   Rookies catch up after about five years. Tune with `dev-tools`' `CareerCurves`.
 - **Department salary adjustment** (G8, `DepartmentSalaries`, BASPM's one-off): a whole group's
   salaries change by −50 to +50 %, morale by +p for a raise or −3p for a cut (`baspm.md` §9.8).
-  **Once per department per season** (user, 2026-10-06; *not enforced yet, backlog*).
+  **Once per department per season** (user, 2026-10-06): `PlayerSnapshot.salaryAdjustedGroups`
+  records the groups changed during the open turn, a second change is refused
+  (`ALREADY_ADJUSTED`), and the season pass clears the record.
 - **CAPCOM:** the astronaut on CAPCOM grows the skills they used that season, as a controller
   does (confirmed 2026-10-06).
 - **PR duty for astronauts (user wants it soon, 2026-10-06; ideas still to propose):** an idle
@@ -336,13 +350,21 @@ layouts.
   across a turn boundary without flying.
 - **A catastrophic step loses the whole crew** (user, 2026-10-02; real accidents lost everyone,
   §1.1), reported as `LOST_IN_ACCIDENT`. Controllers are never at risk.
-- **Animal passengers** (`MissionConfiguration.animalPassengers`, only Sputnik 2 today) who
-  don't come home go on the memorial (`MemorialEntry.Cause.PASSENGER`). Laika is remembered on
-  the first Sputnik 2 flight; later flights add "An unnamed dog" each (confirmed 2026-10-06).
-  **To build (2026-10-06):** a failed Korabl-Sputnik 2 flight remembers Bars (also called
-  Chaika) and Lisichka, the dogs really lost on 28 July 1960 (the user is looking for photos),
-  and the turn report gets a line for a passenger lost that season (a new `ResolutionEvent`,
-  append-only rules, §3.7).
+- **Animal passengers** (`MissionConfiguration.animalPassengers`) who don't come home go on the
+  memorial (`MemorialEntry.Cause.PASSENGER`), and the turn report says so (`PassengerLost`,
+  2026-10-06).
+  - **Sputnik 2:** Laika, on the first flight; later flights add "An unnamed dog" each
+    (confirmed 2026-10-06).
+  - **Korabl-Sputnik 2** (built 2026-10-06): Belka and Strelka really came home, so a *failed*
+    flight remembers Chaika (also recorded as Bars) and Lisichka, the dogs really lost on 28
+    July 1960. No photos yet; the user is looking for licensed ones.
+  - **Animals that came home are honoured** in the Museum's Flights tab (user, 2026-10-06):
+    `animalPassengers.cameHome` lists them per successful flight, in order, and the count of
+    completed flights says which are earned. Belka and Strelka (Korabl-Sputnik 2), Ham (the
+    uncrewed suborbital Mercury test), Enos (the uncrewed orbital Mercury test), Chernushka and
+    then Zvezdochka (the uncrewed orbital Vostok test, first and second flight). A flight that
+    honours someone may remember nobody on failure; no real animal is invented a death.
+    **Open:** whether a failed Mercury test should remember an unnamed chimpanzee.
 
 **(g) After each season's steps** (once per mission per season, whatever the outcome):
 - **Reliability change per component** (user, 2026-10-02): the worst outcome the component was
@@ -689,8 +711,10 @@ purpose-built report).
 
 **Harnesses** (`dev-tools`, `devtools.analysis`; run commands in `CLAUDE.md`):
 - **`ContentPackPlayouts`:** bots play the real early-era pack through the real season pass
-  and report whether and when they reach the declared goals. After BASPM's training lengths
-  (2026-10-05): 177 of 200 games reach all goals, average season 62.2.
+  and report whether and when they reach the declared goals. With the pool of 10 (2026-10-06):
+  198 of 200 games reach all goals (NASA 98, Soviet 100), average season 57.4; before, with 6
+  candidates, 177 at 62.2. The bot hires the best of the batch, so a bigger pool means better
+  hires.
 - **`PersonnelLifecyclePlayouts`:** the personnel, R&D and mission resolvers on a small fixture
   catalog, with a bot that hires, trains, pulls out, opens programs, researches and launches
   through the validated actions.
@@ -826,7 +850,6 @@ patches (`ui-spec.md` component 8).
 
 ## 4. Open questions
 
-- **Hiring bonus:** does "+10 % morale" mean +10 points or ×1.1? (B4, §2.2(c).)
 - **Declared goals for the colleagues' game:** decide before it starts (§2.9).
 - **Astronauts' PR duty:** Claude owes the user a set of ideas (§2.2(c)).
 - **NASA/Soviet prestige balance:** BASPM's Soviet programs pay a little more each (about 4 %)
@@ -919,8 +942,9 @@ first (login → action → scheduled resolution → result, end to end) before 
     reliability transfers keep only sources in the pack; **discounts whose source program
     belongs to the other agency are dropped** (BASPM's one such case only works for GSA).
   - A category's required goals are copied onto each of its programs. Controller slots map to
-    skills by BASPM's speciality index, not the slot name. Animal passengers come from the
-    converter's `ANIMAL_PASSENGERS` map.
+    skills by BASPM's speciality index, not the slot name. Animal passengers, and the animals
+    honoured for coming home (`cameHome`), come from the converter's `ANIMAL_PASSENGERS` map, not
+    from BASPM's data (backups `.bak-prepassengers`, `.bak-predogs`).
 
   `EarlyEraPackTest` checks the pack loads, every configuration has a liftable rocket of its
   agency at VAB level 1, staffing fits a reachable building level, and both agencies can reach
@@ -1013,32 +1037,16 @@ replace step):
 - **Goal mission patches** (2026-10-06): generated per goal (§3.5) and shown in the Museum at 64
   px (`ui-spec.md` component 8).
 
-### Backlog (from the decisions checklist, 2026-10-06)
+### Backlog
 
-Code work the user's decisions call for, roughly in order of size and impact:
-1. **Prestige conversion rate:** 2 funds per prestige instead of 4 prestige per fund
-   (`BudgetSchedule`/`PrestigeConversion`, the Public Affairs Office's numbers and tooltips).
-2. **Hiring pool of 10** per group (`HiringPool.HIRING_BATCH_SIZE`; the join screen's hint says
-   six). More portraits repeat; check portrait reuse.
-3. **Salary adjustment once per department per season** (`DepartmentSalaries` /
-   `AdjustSalariesAction` refusal plus snapshot bookkeeping, the Manage department dialog).
-4. **Replay without auto-advance:** the player steps through manually (`ReplayScreen`).
-5. **Credits in Settings:** show `assets/CREDITS.md` (fonts, Laika's photo) in the About section.
-6. **Hiring bonus:** an optional one-off payment equal to the candidate's salary for an instant
-   morale boost (+10 points or ×1.1, to ask), per candidate or for the selection. A new action
-   field or action, append-only rules.
-7. **The budget schedule in the game info:** `GameInfoResponse` carries the game's schedule so
-   the client stops assuming `baspmClose()` (a protocol change: append-only registry).
-8. **A turn report line for a lost passenger** ("Laika did not come home."): a new
-   `ResolutionEvent` subtype (never rename or reuse type ids, §3.7).
-9. **Korabl-Sputnik 2's dogs:** a failed flight remembers Bars (Chaika) and Lisichka
-   (`animalPassengers`, converter map); photos when the user finds licensed ones.
-10. **Honour the animals that came home** in the Museum (Belka and Strelka, Ham, Enos,
-    Chernushka and Zvezdochka with Ivan Ivanovich, the 1950s suborbital dogs), per configuration
-    flown successfully, with credited photos where licensed. Verify every name and date.
-11. **Space-race news stories** in the turn report (§1.1): the content file, the seeded pick
-    stored in the report, optionally the archetype's press angle.
-12. **Astronauts' PR duty** (§2.2(c)): Claude first proposes ideas to the user.
+**The decisions checklist's code work is done (2026-10-06):** the conversion rate, the pool of
+10, the once-per-season salary limit, manual replay stepping, credits in Settings, the signing
+bonus, the budget schedule in the game info, the lost-passenger report line, Korabl-Sputnik 2's
+dogs, the animals that came home, and the space-race news (each recorded in its section above).
+**Reset the dev data root** before the next play test: the pack's hash changed with the new
+passengers.
+
+**Next:** astronauts' PR duty (§2.2(c)): Claude first proposes ideas to the user.
 
 ### Later
 

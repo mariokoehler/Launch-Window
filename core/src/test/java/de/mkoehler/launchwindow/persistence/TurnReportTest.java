@@ -29,6 +29,7 @@ import de.mkoehler.launchwindow.rules.MissionSkillGrowthApplied;
 import de.mkoehler.launchwindow.rules.MissionStaffing;
 import de.mkoehler.launchwindow.rules.MissionStepOutcome;
 import de.mkoehler.launchwindow.rules.MissionStepResolved;
+import de.mkoehler.launchwindow.rules.PassengerLost;
 import de.mkoehler.launchwindow.rules.PersonnelDeparture;
 import de.mkoehler.launchwindow.rules.PersonnelGroup;
 import de.mkoehler.launchwindow.rules.RandomEventOccurred;
@@ -83,6 +84,7 @@ class TurnReportTest {
                 List.of(), 72.4, true, null, null, null, 0),
             new PersonnelDeparture(PersonnelGroup.SET, "s9", "Nadezhda Orlova", DepartureReason.RETIRED, 65, 60,
                 AssignmentState.IDLE, null),
+            new PassengerLost("m2", "sputnik-2-orbit", "Laika", null),
             new RandomEventOccurred(RandomEventKind.values()[0], "a1", 1, 7),
             new ResearchCompleted("s1", "Irina Petrova", "vostok-capsule", 0.4, 0.7, 0),
             new ResearchComponentMaxed("r7-sputnik", List.of("s2"), List.of("Pyotr Morozov")),
@@ -92,11 +94,18 @@ class TurnReportTest {
                 3.1));
         TurnReport report = new TurnReport(TurnReport.VERSION, 23, 1_940, 2_140, 12_410, 14_820,
             List.of(new TurnReport.ComponentChange("vostok-capsule", 77.8, 79.0)),
-            List.of(new TurnReport.MissionFlown("m1", "vostok-orbital", 0, 1, true, List.of("Pavel Orlov"))), events);
+            List.of(new TurnReport.MissionFlown("m1", "vostok-orbital", 0, 1, true, List.of("Pavel Orlov"))), events)
+            .withNewsStory("1960-summer-echo");
         String json = mapper.writeValueAsString(report);
         TurnReport copy = mapper.readValue(json, TurnReport.class);
         assertEquals(report, copy);
         assertTrue(json.contains("\"type\":\"missionStepResolved\""), json);
+        assertTrue(json.contains("\"type\":\"passengerLost\""), json);
+        // A report saved before the story field existed still loads, without a story.
+        TurnReport older = mapper.readValue(json.replace(",\"newsStoryId\":\"1960-summer-echo\"", ""),
+            TurnReport.class);
+        assertEquals(null, older.newsStoryId());
+        assertEquals(report.events(), older.events());
     }
 
     /**

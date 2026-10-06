@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
+import de.mkoehler.launchwindow.content.SpaceRaceNews;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.OutcomeBar;
 import de.mkoehler.launchwindow.client.ui.ReliabilityBar;
@@ -246,7 +247,23 @@ public final class TurnReportScreen extends ChromeScreen {
     }
 
     private Table news(ContentCatalog catalog) {
-        Table card = section("News", "Random events");
+        Table card = section("News", "This season");
+        TurnReportView.realNews(report, SpaceRaceNews.standard(), session.state().getArchetype()).ifPresent(story -> {
+            Table real = new Table();
+            real.setBackground(ui.cardAccent(Theme.NAVY));
+            real.pad(Theme.SPACE_3, Theme.SPACE_3 + Theme.BORDER_ACCENT, Theme.SPACE_3, Theme.SPACE_3);
+            real.left();
+            real.defaults().left().growX();
+            real.add(ui.label(("On the real timeline · " + GameDate.ofTurn(report.gameTurn()).label())
+                .toUpperCase(Locale.ROOT), Theme.TextStyle.EYEBROW, Theme.NAVY)).padBottom(4f).row();
+            real.add(ui.paragraph(story.title(), Theme.TextStyle.BODY_STRONG, Theme.INK)).padBottom(2f).row();
+            real.add(ui.paragraph(story.text(), Theme.TextStyle.BODY_SM, Theme.INK));
+            if (!story.tag().isEmpty()) {
+                real.row();
+                real.add(ui.paragraph("At home: " + story.tag(), Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).padTop(4f);
+            }
+            card.add(real).padBottom(Theme.SPACE_4).row();
+        });
         List<TurnReportView.Line> lines = TurnReportView.news(report, catalog);
         if (lines.isEmpty()) {
             card.add(ui.paragraph("A quiet season: no random events.", Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).row();

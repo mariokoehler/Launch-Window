@@ -215,4 +215,20 @@ class MissionConfigurationTest {
 
         assertEquals(1, configuration.requiredAstronautCount());
     }
+
+    /**
+     * Passengers may be honour-only when the flight comes home, never remember-nobody otherwise.
+     */
+    @Test
+    void animalPassengersNeedSomeoneToRememberOrHonour() {
+        MissionConfiguration.Animal ham = new MissionConfiguration.Animal("Ham", null);
+        MissionConfiguration.AnimalPassengers honourOnly = new MissionConfiguration.AnimalPassengers(List.of(), true,
+            "An unnamed chimpanzee", List.of(List.of(ham)));
+        assertEquals(List.of(), honourOnly.honouredAfter(0));
+        assertEquals(List.of(ham), honourOnly.honouredAfter(5));
+        assertThrows(IllegalArgumentException.class,
+            () -> new MissionConfiguration.AnimalPassengers(List.of(), true, "x"));
+        assertThrows(IllegalArgumentException.class,
+            () -> new MissionConfiguration.AnimalPassengers(List.of(), false, "x", List.of(List.of(ham))));
+    }
 }

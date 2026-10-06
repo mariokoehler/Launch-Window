@@ -6,6 +6,7 @@ import de.mkoehler.launchwindow.rules.BudgetProgress;
 import de.mkoehler.launchwindow.rules.GoalSettled;
 import de.mkoehler.launchwindow.rules.MissionStepOutcome;
 import de.mkoehler.launchwindow.rules.MissionStepResolved;
+import de.mkoehler.launchwindow.rules.PassengerLost;
 import de.mkoehler.launchwindow.rules.SeasonFundsSettled;
 import de.mkoehler.launchwindow.rules.TurnReport;
 import org.junit.jupiter.api.Test;
@@ -68,5 +69,16 @@ class TurnReportViewTest {
         assertEquals("2 flown", missions.value());
         assertEquals("1 failed", missions.note());
         assertEquals(-1, missions.tone());
+    }
+
+    @Test
+    void aLostPassengerGetsALine() {
+        TurnReport report = new TurnReport(TurnReport.VERSION, 5, 300, 340, 20_000, 21_400, List.of(), List.of(),
+            List.of(new PassengerLost("m-3", "sputnik-2-orbit", "Laika", null)));
+        List<TurnReportView.Line> lines = TurnReportView.people(report, null, PACK);
+        assertEquals(1, lines.size());
+        assertEquals("Laika did not come home", lines.get(0).title());
+        assertEquals("The flight had no way home.", lines.get(0).text());
+        assertEquals(-1, lines.get(0).tone());
     }
 }

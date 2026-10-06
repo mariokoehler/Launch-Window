@@ -250,7 +250,8 @@ public final class MissionProgress {
         }
 
         if (missionEndedThisSeason) {
-            rememberPassengers(snapshot, configuration, executedSteps.get(executedSteps.size() - 1), gameTurn);
+            rememberPassengers(snapshot, configuration, mission, executedSteps.get(executedSteps.size() - 1), gameTurn,
+                events);
             releaseSurvivors(snapshot, mission, events);
             endedMissionIds.add(mission.getId());
             return;
@@ -258,7 +259,7 @@ public final class MissionProgress {
 
         int nextSeasonIndex = mission.getCurrentSeasonIndex() + 1;
         if (nextSeasonIndex >= configuration.durationInSeasons()) {
-            rememberPassengers(snapshot, configuration, null, gameTurn);
+            rememberPassengers(snapshot, configuration, mission, null, gameTurn, events);
             releaseSurvivors(snapshot, mission, events);
             // Only a completed, non-failed flight counts toward the repeat tier - design.md §2.6(d).
             // A failing season returned above, so reaching this branch means no step failed.
@@ -1067,7 +1068,7 @@ public final class MissionProgress {
      * @param gameTurn      the turn this resolves
      */
     private static void rememberPassengers(PlayerSnapshot snapshot, MissionConfiguration configuration,
-            MissionStep failedStep, int gameTurn) {
+            InProgressMission mission, MissionStep failedStep, int gameTurn, List<ResolutionEvent> events) {
         MissionConfiguration.AnimalPassengers passengers = configuration.animalPassengers();
         if (passengers == null || (failedStep == null && passengers.returnHome())) {
             return;
@@ -1075,9 +1076,11 @@ public final class MissionProgress {
         for (MissionConfiguration.Animal animal : passengers.animals()) {
             boolean remembered = snapshot.getMemorial().stream().anyMatch(entry ->
                 entry.cause() == MemorialEntry.Cause.PASSENGER && entry.name().equals(animal.name()));
-            snapshot.getMemorial().add(new MemorialEntry(remembered ? passengers.unnamed() : animal.name(), 0, gameTurn,
-                MemorialEntry.Cause.PASSENGER, configuration.id(), failedStep == null ? null : failedStep.id(),
-                remembered ? null : animal.portraitId()));
+            String name = remembered ? passengers.unnamed() : animal.name();
+            String failedStepId = failedStep == null ? null : failedStep.id();
+            snapshot.getMemorial().add(new MemorialEntry(name, 0, gameTurn, MemorialEntry.Cause.PASSENGER,
+                configuration.id(), failedStepId, remembered ? null : animal.portraitId()));
+            events.add(new PassengerLost(mission.getId(), configuration.id(), name, failedStepId));
         }
     }
 

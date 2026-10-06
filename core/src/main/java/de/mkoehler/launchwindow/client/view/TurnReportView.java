@@ -1,5 +1,7 @@
 package de.mkoehler.launchwindow.client.view;
 
+import de.mkoehler.launchwindow.content.SpaceRaceNews;
+import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.content.ContentCatalog;
 import de.mkoehler.launchwindow.content.MissionConfiguration;
 import de.mkoehler.launchwindow.model.AssignmentState;
@@ -16,6 +18,7 @@ import de.mkoehler.launchwindow.rules.MissionReliabilityChanged;
 import de.mkoehler.launchwindow.rules.MissionSkillGrowthApplied;
 import de.mkoehler.launchwindow.rules.MissionStepOutcome;
 import de.mkoehler.launchwindow.rules.MissionStepResolved;
+import de.mkoehler.launchwindow.rules.PassengerLost;
 import de.mkoehler.launchwindow.rules.PersonnelDeparture;
 import de.mkoehler.launchwindow.rules.PersonnelGroup;
 import de.mkoehler.launchwindow.rules.PersonnelLifecycle;
@@ -363,6 +366,20 @@ public final class TurnReportView {
      * @param catalog the content pack
      * @return the lines
      */
+    /**
+     * Returns the report's real space-race story, told for the player's archetype: the headline as the
+     * title, the story as the text, and that side's view as the tag, empty if the story has none.
+     *
+     * @param report    the report
+     * @param news      the stories
+     * @param archetype the player's archetype
+     * @return the story's line, or empty if the report has none (or the story is gone)
+     */
+    public static Optional<Line> realNews(TurnReport report, SpaceRaceNews news, Archetype archetype) {
+        return news.byId(report.newsStoryId()).map(story -> new Line(story.headline(), story.text(),
+            story.viewFor(archetype).orElse(""), 0));
+    }
+
     public static List<Line> news(TurnReport report, ContentCatalog catalog) {
         return events(report, RandomEventOccurred.class).stream()
             .map(event -> newsLine(event.kind(), event.subjectId(), event.magnitude(), catalog, true))
@@ -439,6 +456,11 @@ public final class TurnReportView {
                     "Training", 0));
             } else if (event instanceof PersonnelDeparture departure) {
                 lines.add(departure(departure));
+            } else if (event instanceof PassengerLost lost) {
+                lines.add(new Line(lost.name() + " did not come home", lost.failedStepId() == null
+                    ? "The flight had no way home."
+                    : "Lost at " + stepInSentence(lost.missionConfigurationId(), lost.failedStepId()) + ".",
+                    "Lost", -1));
             }
         }
         Map<String, List<MissionSkillGrowthApplied>> growth = new LinkedHashMap<>();
