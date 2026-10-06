@@ -259,9 +259,21 @@ public final class Museum {
      * @param count           its completed flights
      * @param crewed          whether it flies a crew
      * @param cameHome        the animals honoured for flying it and coming home, by name, in flight order
+     * @param honours         the same animals, grouped by the photo they share, in flight order
      */
     public record Flight(String configurationId, String program, String name, int count, boolean crewed,
-                         List<String> cameHome) {
+                         List<String> cameHome, List<Honour> honours) {
+    }
+
+    /**
+     * Animals honoured under one photo on the flights tab, such as Belka and Strelka, who were
+     * photographed together.
+     *
+     * @param names      their names, joined for a sentence
+     * @param portraitId their photo under {@code assets/ui/portraits/}, or {@code null} if there's
+     *                   no licensed one
+     */
+    public record Honour(String names, String portraitId) {
     }
 
     /**
@@ -276,15 +288,33 @@ public final class Museum {
         for (MissionConfiguration configuration : catalog.missionConfigurations()) {
             int count = state.getSuccessfulFlightCounts().getOrDefault(configuration.id(), 0);
             if (count > 0) {
-                List<String> honoured = configuration.animalPassengers() == null ? List.of()
-                    : configuration.animalPassengers().honouredAfter(count).stream()
-                        .map(MissionConfiguration.Animal::name).toList();
+                List<MissionConfiguration.Animal> animals = configuration.animalPassengers() == null ? List.of()
+                    : configuration.animalPassengers().honouredAfter(count);
                 flights.add(new Flight(configuration.id(), ContentNames.of(configuration.programId()),
                     MissionControl.missionName(configuration), count, configuration.requiredAstronautCount() > 0,
-                    honoured));
+                    animals.stream().map(MissionConfiguration.Animal::name).toList(), honours(animals)));
             }
         }
         return flights;
+    }
+
+    /**
+     * Groups honoured animals that follow each other and share a photo; an animal without a photo
+     * stands alone.
+     */
+    private static List<Honour> honours(List<MissionConfiguration.Animal> animals) {
+        List<Honour> honours = new ArrayList<>();
+        for (int i = 0; i < animals.size(); ) {
+            String portraitId = animals.get(i).portraitId();
+            int end = i + 1;
+            while (portraitId != null && end < animals.size() && portraitId.equals(animals.get(end).portraitId())) {
+                end++;
+            }
+            honours.add(new Honour(names(animals.subList(i, end).stream().map(MissionConfiguration.Animal::name)
+                .toList()), portraitId));
+            i = end;
+        }
+        return honours;
     }
 
     /**

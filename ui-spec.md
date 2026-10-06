@@ -974,7 +974,10 @@ review: when, what it pays, what keeps today's funding) and `PrestigeConversion`
 - **Flights:** the completed flight count per configuration (`successfulFlightCounts`).
   *Built 2026-10-06:* a card whose configuration really carried animals that came home names
   them under a green "Came home" eyebrow once flown (Belka and Strelka; Ham; Enos; Chernushka,
-  then Zvezdochka on a second flight). See `design.md` §2.5(f).
+  then Zvezdochka on a second flight). See `design.md` §2.5(f). Each name, or each pair
+  photographed together, sits on a row with its 48 px greyscale photo; an animal with no
+  licensed photo gets an empty square in the faint navy tint so the names stay aligned
+  (2026-10-06).
 - **Memorial:** astronauts lost.
 
 **Later (M7+):** the educational encyclopedia (`design.md` §1.1).

@@ -56,6 +56,8 @@ public final class MuseumScreen extends ChromeScreen {
 
     /** The portrait on a memorial plaque. */
     private static final float PORTRAIT_SIZE = 96f;
+    /** An honoured animal's photo on the flights tab. */
+    private static final float HONOUR_PHOTO_SIZE = 48f;
 
     private static final String MEMORIAL_NOTE = "Valentin Bondarenko, the youngest of the first Soviet cosmonaut "
         + "group, died in March 1961 after a fire in an oxygen-rich, low-pressure chamber, ten days into a "
@@ -385,10 +387,27 @@ public final class MuseumScreen extends ChromeScreen {
             text.add(new Image(ui.solid(Theme.NAVY_BORDER))).height(Theme.BORDER_THIN).growX().padTop(8f)
                 .padBottom(8f).row();
             text.add(ui.label("CAME HOME", Theme.TextStyle.EYEBROW, Theme.SUCCESS)).padBottom(2f).row();
-            text.add(ui.paragraph(Museum.names(flight.cameHome()), Theme.TextStyle.BODY_SM, Theme.INK)).growX();
+            for (Museum.Honour honour : flight.honours()) {
+                text.add(honour(honour)).growX().padTop(4f).row();
+            }
         }
         card.add(text).row();
         return card;
+    }
+
+    /** One honoured animal, or two photographed together: their photo, if licensed, and names. */
+    private Table honour(Museum.Honour honour) {
+        Table row = new Table();
+        row.left();
+        TextureRegionDrawable photo = honour.portraitId() == null ? null
+            : ui.picture("portraits/" + honour.portraitId() + ".jpg");
+        if (photo != null) {
+            row.add(new Image(photo, Scaling.fill)).size(HONOUR_PHOTO_SIZE).padRight(Theme.SPACE_3);
+        } else {
+            row.add(new Image(ui.solid(Theme.SKILL_TRACK))).size(HONOUR_PHOTO_SIZE).padRight(Theme.SPACE_3);
+        }
+        row.add(ui.paragraph(honour.names(), Theme.TextStyle.BODY_SM, Theme.INK)).growX();
+        return row;
     }
 
     // ---- Memorial

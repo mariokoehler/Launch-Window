@@ -1273,11 +1273,11 @@
         [
           {
             "name": "Belka",
-            "portraitId": null
+            "portraitId": "belka_strelka"
           },
           {
             "name": "Strelka",
-            "portraitId": null
+            "portraitId": "belka_strelka"
           }
         ]
       ]
@@ -3024,7 +3024,7 @@
         [
           {
             "name": "Chernushka",
-            "portraitId": null
+            "portraitId": "chernushka"
           }
         ],
         [
@@ -7777,7 +7777,7 @@
         [
           {
             "name": "Ham",
-            "portraitId": null
+            "portraitId": "ham"
           }
         ]
       ]
@@ -9042,7 +9042,7 @@
         [
           {
             "name": "Enos",
-            "portraitId": null
+            "portraitId": "enos"
           }
         ]
       ]

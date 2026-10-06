@@ -388,7 +388,10 @@ layouts.
     uncrewed suborbital Mercury test), Enos (the uncrewed orbital Mercury test), Chernushka and
     then Zvezdochka (the uncrewed orbital Vostok test, first and second flight). A flight that
     honours someone may remember nobody on failure; no real animal is invented a death.
-    **Open:** whether a failed Mercury test should remember an unnamed chimpanzee.
+    **Photos** (2026-10-06, found by the user): Belka and Strelka (one photo of both), Ham, Enos
+    and Chernushka show theirs on the Flights tab. Zvezdochka has none: her only known photo is
+    non-free (fair use on Russian Wikipedia only), so it can't go in the repo.
+    **Confirmed:** a failed Mercury test should remember an unnamed chimpanzee.
 
 **(g) After each season's steps** (once per mission per season, whatever the outcome):
 - **Reliability change per component** (user, 2026-10-02): the worst outcome the component was
