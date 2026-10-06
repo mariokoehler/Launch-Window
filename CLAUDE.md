@@ -298,6 +298,21 @@ greyscale JPEGs to `assets/ui/portraits/` (RGB on purpose: libGDX loads one-chan
 own copies in `E:\Comfy-Desktop\ComfyUI-Shared\output`; never delete those. The portraits are
 the user's own generated art (`assets-raw/` rule).
 
+**Goal mission patches via ComfyUI (2026-10-06, user's idea, not wired into the game yet):**
+`assets-raw/patches/make_patches.py` reuses the portrait workflow with a patch prompt. Qwen Image 2.1
+writes the alpha channel itself, so patches come back as 256x256 RGBA circles on transparency.
+- **Prompts:** each goal's ring text, artwork and colors are in the script's `GOALS` table, written
+  from the real hardware, never from BASPM's patches. Ring text is set there rather than read from
+  `strings.json`, because long names split between the top and bottom of the ring.
+- **No dates on patches:** a player earns a goal whenever they reach it.
+- **Soviet goals** get a red/gold palette, and no patch has agency logos.
+- **Variants and checks:** 3 variants per goal. A patch that runs off the image is rerolled with the
+  next deterministic seed.
+- **Spelling is checked by eye** in `review/` (gitignored), and the chosen variant per goal goes in
+  `picks.json`. About one variant in six is misspelled.
+- **Pending:** scaling into `assets/` comes later. A new goal needs a `GOALS` entry and a pick.
+- ComfyUI keeps its own copies (`lw_patch_*`); never delete those.
+
 **Dev mode for play testing (2026-10-04):** set `"devMode": true` in the server's
 `game-meta.json` and restart it. The hub strip then shows "Dev · Resolve turn now", which
 resolves the open turn at once (the day's scheduled resolution still comes). Dev mode also
