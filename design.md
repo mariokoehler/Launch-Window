@@ -149,7 +149,7 @@ difficulty unless marked as our own (§1.2, §2.10).
 
 **The season pass** (`rules.SeasonResolver`, per player, once per resolution): journaled
 player actions first, then `PersonnelLifecycle` → `MissionProgress` (goals and mission prestige
-inside it, per step) → `BuildingUpgrades` → `BudgetProgress` → `RandomEvents` →
+inside it, per step) → `BuildingUpgrades` → `PrDuty` → `BudgetProgress` → `RandomEvents` →
 `TrainingProgress` → `ResearchProgress` → `HiringPool.refreshCandidates`. The cross-player win
 check runs once after every player has resolved. Each resolver is headless and reports
 `ResolutionEvent`s, which become the turn report (§3.7).
@@ -264,10 +264,34 @@ season unchanged. Tiger Teams' live per-step choice doesn't fit, so it was redes
   (`ALREADY_ADJUSTED`), and the season pass clears the record.
 - **CAPCOM:** the astronaut on CAPCOM grows the skills they used that season, as a controller
   does (confirmed 2026-10-06).
-- **PR duty for astronauts (user wants it soon, 2026-10-06; ideas still to propose):** an idle
-  astronaut does public-relations work and earns a little prestige each season, probably scaled
-  by Leadership; a standout season could make a news item. Open: the formula, whether other
-  groups get an equivalent, and how it competes with permanent training. Real precedent: §1.1.
+- **PR duty for astronauts** (user decisions 2026-10-06, built the same day; `rules.PrDuty`): a
+  **standing order** for an idle astronaut to tour and appear in public instead of training,
+  until recalled. Real precedent: the Mercury Seven's *Life* deal and Gagarin's world tours (§1.1).
+  - **Astronauts only** (user: the public wanted the people with "the right stuff").
+  - **Busy, not protected:** state `PR_DUTY` counts as busy for morale (+3 a season, as training)
+    but never protects from departure. No skill growth. An astronaut on tour can't fly or sit at
+    CAPCOM; recalling is free and immediate. An Expert on tour still helps rescue steps, at 75 %
+    (user, 2026-10-06), like a controller on another mission. A touring astronaut can resign, retire or be dismissed, but random
+    events that sideline or remove staff only pick idle astronauts, so they never hit one on tour.
+  - **Yield with fame** (user: keep fame): Leadership / 10, plus 3 per completed flight and 5 per
+    completed flight that set a first in the game, at most 25 a season. A flight credits its crew
+    (never CAPCOM) when it completes; a first counts once per flight however many goals the
+    cascade credits (`Astronaut.flightsFlown`, `firstsFlown`).
+  - **Diminishing returns** (user: yes): ranked by yield, the astronauts on tour earn 100 %, 60 %,
+    30 %, then nothing (ties keep roster order). One function serves the season pass, the
+    dialog's projection, the badge and the Public Affairs Office.
+  - **Rust** (user: yes): from the third season in a row on tour, Piloting and Fitness each lose 1
+    a season, floored at 0. The count lives in the season pass (`prDutySeasons`), so a recall and
+    restart on the same day doesn't reset it; a pass that finds the astronaut off duty does. An
+    Expert keeps the trait even below 80.
+  - **Press stories** (user: skeleton now, varied stories later): each season on tour has a 10 %
+    chance of making the papers, 70 % of them good. A good story adds half the season's yield, a
+    bad one turns the season into a loss of half of it. Stories live in
+    `assets/content/pr-press.json` (outside the frozen pack; four **placeholders** for now, ids
+    never reused). No randomness is drawn while nobody is on tour.
+  - **Timing:** the phase runs before the budget, so PR prestige counts at a review that season,
+    as mission prestige does.
+  - Every number and default here is our own, confirmed by the user on 2026-10-06; tune in play.
 
 ### 2.3 Programs & mission configurations
 
@@ -383,7 +407,8 @@ layouts.
   involves (crew or controller) boosts the saving throw. Crew Experts get a role BASPM's
   controller-only Tiger Teams never gave them (Apollo 13's precedent, §1.1).
 - **Roster-wide:** idle, training or on this mission counts fully. An astronaut on *another*
-  mission can't help (they're in space); a controller on another mission helps at **75 %**.
+  mission can't help (they're in space); a controller on another mission helps at **75 %**, and so
+  does an astronaut on PR duty (user, 2026-10-06: on Earth, but probably not in town).
   Each person is consulted once per step.
 - **Stacking with exhaustion:** each Expert closes part of the remaining gap to 100 %, applied in
   turn: 50 % on their first use in a resolution, 40 % on the second, 10 % on the third, nothing
@@ -557,11 +582,13 @@ artifact. **Content definitions are immutable records** (`content` package), val
 - **Personnel** (`Personnel` with `Astronaut`, `SetSpecialist`, `MissionControlOfficer`):
   id, name, age (whole years, plus `agingProgressSeasons` 0–3, so age rises once every four
   seasons), morale, learning potential, salary, portrait id, `AssignmentState` (`IDLE`,
-  `ASSIGNED`, `IN_TRAINING`; plus an unavailability counter from events), training fields
+  `ASSIGNED`, `IN_TRAINING`, `PR_DUTY` for astronauts; plus an unavailability counter from
+  events; enum constants are only ever appended), training fields
   (`TrainingKind` `NONE`/`BASIC`/`ADVANCED`/`PERMANENT`/`EXPERT`, seasons completed and total,
   target level; the target skill on each subclass), and per-subclass skill maps (doubles).
   Flight Director is computed (the average of the five), never stored. Astronauts and
-  controllers have `expertSkills`. **`ASSIGNED` means a mission** for astronauts and
+  controllers have `expertSkills`; astronauts also `flightsFlown`, `firstsFlown` and
+  `prDutySeasons` (PR duty, §2.2(c)). **`ASSIGNED` means a mission** for astronauts and
   controllers (`assignedMissionId`) and **R&D** for SET (`rdTargetComponentId` plus `rdSlot`
   0–3; both must be set). A freed slot leaves a gap.
 - **Candidates** reuse the personnel classes; only the list they're in differs. A hire action
@@ -851,7 +878,8 @@ patches (`ui-spec.md` component 8).
 ## 4. Open questions
 
 - **Declared goals for the colleagues' game:** decide before it starts (§2.9).
-- **Astronauts' PR duty:** Claude owes the user a set of ideas (§2.2(c)).
+- **PR press stories:** the four placeholders in `assets/content/pr-press.json` need replacing
+  with varied stories (§2.2(c)).
 - **NASA/Soviet prestige balance:** BASPM's Soviet programs pay a little more each (about 4 %)
   but NASA has nine more programs, about 34 % more prestige in total. Decided (user,
   2026-10-01) not to close the gap up front; revisit with play-test and harness data.
@@ -1046,7 +1074,8 @@ dogs, the animals that came home, and the space-race news (each recorded in its 
 **Reset the dev data root** before the next play test: the pack's hash changed with the new
 passengers.
 
-**Next:** astronauts' PR duty (§2.2(c)): Claude first proposes ideas to the user.
+**PR duty for astronauts** is built too (2026-10-06, §2.2(c)), with placeholder press stories
+to replace later. Nothing else is queued: next is the next play test.
 
 ### Later
 

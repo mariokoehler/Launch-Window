@@ -870,6 +870,21 @@ toast and dialogs). Decisions made while building them, **all confirmed by the u
 mission (crew or CAPCOM) and Expert stars, with sub-screens Hire and Manage
 department.
 
+**PR duty (built in libGDX 2026-10-06, `design.md` §2.2(c)):**
+- An idle astronaut's row has **PR duty** next to Train; one on tour has **Recall** instead, and
+  the badge reads "On PR tour · +17 prestige / season". A filter chip "On PR tour" exists only
+  here, not on Mission Control.
+- The strip's first stat is "On missions / PR tour" with the PR income under it.
+- **The PR duty dialog:** what the tour does, a history note (the *Life* deal for NASA, Gagarin's
+  tours for Soviet), the yield's parts (Leadership, flights and firsts, any cap), what the
+  astronaut would earn on tour and the agency's PR income before and after, an info notice on
+  diminishing returns when others are already on tour, a warning on rust, and Cancel / Send on
+  tour.
+- **The turn report's People column** names each tour and its prestige, or the press story's
+  headline and text when the papers picked it up, and the rust. Lines with detail text now show
+  it under the title (also the lost passenger's).
+- **The Public Affairs Office** shows "PR duty: +N / season" under the prestige.
+
 **Mocked up (2026-10-04)** as `AstronautComplex` on the `Launch Window — Astronaut
 Complex & Public Affairs Office mockup` canvas; `design.md` §3.13 has the writeup.
 Choices **confirmed by the user (2026-10-06)**:
