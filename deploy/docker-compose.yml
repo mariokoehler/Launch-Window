@@ -1,0 +1,24 @@
+# Launch Window dedicated server - QNAP Container Station "Application". Deploy: Container
+# Station > Applications > Create Application, paste this file (or import it), review, Create.
+# Ported from the Robot-Rampage project's compose file, plus a data volume.
+#
+# One game per container (design.md 3.9): a second game (the friends' and the colleagues')
+# is a second copy of this service with its own name, port and data folder.
+#
+# The image tag is pinned, not "latest": the login version check is an exact match between
+# client and server, so which release runs here must be a conscious choice. To update: change
+# the tag to the new release, then Update/Recreate the application. Stop the server between
+# turn resolutions, never during one.
+services:
+  launchwindow-server:
+    image: ghcr.io/mariokoehler/launchwindow-server:v0.0.1
+    container_name: launchwindow-server
+    restart: unless-stopped
+    ports:
+      # Deliberately different from StarWars (45625/45626) and Robot-Rampage (45725).
+      - "45825:45825/tcp"
+    volumes:
+      # The game's data root. On the first start the server creates game-meta.json here with
+      # defaults; edit it (schedule, blackouts, declared goals; devMode stays false) and
+      # restart the container. Back this folder up: it is the whole game.
+      - /share/Container/launchwindow/data:/app/data

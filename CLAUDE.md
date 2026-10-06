@@ -138,8 +138,28 @@ mvn -pl dev-tools compile exec:java -DmainClass=de.mkoehler.launchwindow.devtool
   "Dev · Resolve turn now" on the hub and allows `DevClient`'s `funds` cheat.
 - **Bot playouts:** `mvn -pl dev-tools compile exec:java -DmainClass=de.mkoehler.launchwindow.devtools.analysis.ContentPackPlayouts`
   (also `PersonnelLifecyclePlayouts`, `CareerCurves`; `design.md` §3.10).
-- **Release packaging** is deferred; copy the sibling projects' `release-client` profile,
-  Dockerfile and GitHub Actions when it's needed.
+- **Releasing** (ported from Robot-Rampage 2026-10-06; its and StarWars' CLAUDE.md hold the
+  gotchas):
+  - **Client zip, locally:** `mvn -pl lwjgl3 -am -Prelease-client -DskipTests verify` gives
+    `lwjgl3/target/LaunchWindow-Client.zip` (jpackage app-image: `LaunchWindow.exe`, `app/`,
+    `runtime/`, `update.cmd`). jpackage refuses an existing destination: delete
+    `lwjgl3/target/jpackage` (or `clean`) before re-running. The runtime has no `java.exe`; to
+    see startup errors run the jar in `app/` with the system JDK from outside `assets/`.
+  - **DPI:** the exe's manifest declares it DPI-unaware, so Windows bitmap-scales it
+    (`lwjgl3/src/main/jpackage-resources/LaunchWindow.manifest`). A player can override it per
+    exe (Properties > Compatibility > Change high DPI settings > Application).
+  - **A release:** push a tag `vX.Y.Z`. `.github/workflows/release-client.yml` (Windows,
+    publishes the zip as a GitHub Release) and `release-server.yml` (Linux, pushes
+    `ghcr.io/mariokoehler/launchwindow-server` to GHCR) run on it, passing the version to
+    jgitver explicitly. Never push a tag without the user's go-ahead.
+  - **Server:** `server/Dockerfile` (no Docker on this PC, so CI is its only build),
+    `deploy/docker-compose.yml` for the NAS, with the data root bind-mounted at
+    `/share/Container/launchwindow/data`. `.dockerignore` keeps `data/` (password hashes) and
+    `assets-raw/` out of the image.
+  - **While the repo is private,** the release zip and the image need a GitHub login:
+    `update.cmd` can't download anonymously and the NAS needs a token for GHCR.
+  - **Icons:** `assets-raw/icon.ico` (exe) and `lwjgl3/src/main/resources/launchwindow-icon-*.png`
+    (window), both from `assets/branding/logo.png`: placeholders until an icon-only logo exists.
 
 **Checking a screen: `ScreenSnapshot`** renders every screen state on a hidden window, one PNG
 each; Read the PNGs afterwards.

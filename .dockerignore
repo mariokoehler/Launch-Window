@@ -1,0 +1,13 @@
+# Keeps the Docker build context for server/Dockerfile lean and free of local state. The
+# context is the repo root; .git is deliberately NOT excluded (jgitver needs the history).
+target/
+core/target/
+lwjgl3/target/
+server/target/
+dev-tools/target/
+.idea/
+# Local dev game data: accounts.json holds password hashes, and none of it belongs in an image.
+data/
+client-settings.json
+# Raw source art is never shipped; assets/ holds what the game uses.
+assets-raw/

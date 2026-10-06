@@ -540,9 +540,9 @@ starting schema, and its data-driven XML is where formulas and numbers are trace
 
 **Decided (user, 2026-09-27):** the sibling projects' stack: libGDX client, KryoNet network
 layer, Jackson for JSON persistence, JUnit 5, Java 25, Maven multi-module (`core`, `lwjgl3`,
-`server`, `dev-tools`), modelled on Robot-Rampage's parent pom. Release packaging (client zip
-via jpackage, server Docker image, tag-triggered GitHub Actions) is deferred; copy the sibling
-projects' templates when needed.
+`server`, `dev-tools`), modelled on Robot-Rampage's parent pom. Release packaging (a jpackage
+client zip with `update.cmd`, a server Docker image, tag-triggered GitHub Actions) was ported
+from the siblings on 2026-10-06 (§5, M6; commands in `CLAUDE.md`).
 
 - **Wire format is Kryo, not Jackson.** Message classes are registered in `MessageRegistry`,
   **append-only** (Kryo matches by registration order), with a test guarding every type. Jackson
@@ -1079,8 +1079,13 @@ to replace later. Nothing else is queued: next is the next play test.
 
 ### Later
 
-- **M6 — Deployment:** jpackage client zip, Docker server image, tag-driven GitHub Actions,
-  from the sibling projects' templates. After the play tests show the loop is worth packaging.
+- **M6 — Deployment: built 2026-10-06, no release cut yet.** The jpackage client zip (built and
+  launched locally, also under a pinned version as CI will), the server Docker image with a
+  bind-mounted data root (`deploy/docker-compose.yml`, unverified until its first CI run), and
+  the two tag-triggered workflows. The packaged exe is DPI-unaware by default (Windows scales
+  it); the user is judging the fonts in both modes. Before the first real release: decide
+  whether the repo goes public (a private repo makes `update.cmd` and the NAS's image pull need
+  a GitHub login) and the first version number.
 - **M7+ (order open):** interaction beyond passive competition (§2.9); the rest of the content
   tree beyond the early era; the Museum encyclopedia (§1.1); a game-host role and UI;
   validating the `WEEKDAYS` profile with the colleagues' group.
