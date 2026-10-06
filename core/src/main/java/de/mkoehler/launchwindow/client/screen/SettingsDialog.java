@@ -3,6 +3,7 @@ package de.mkoehler.launchwindow.client.screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -13,8 +14,11 @@ import de.mkoehler.launchwindow.client.connect.ServerAddress;
 import de.mkoehler.launchwindow.client.ui.FormField;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.UiKit;
+import de.mkoehler.launchwindow.client.view.Credits;
 import de.mkoehler.launchwindow.net.AppVersion;
 import de.mkoehler.launchwindow.net.messages.GameInfoResponse;
+
+import java.util.List;
 
 /**
  * Settings ({@code ui-spec.md} &sect;4.12), a dialog over any session screen: the account and
@@ -27,6 +31,9 @@ final class SettingsDialog {
 
     /** The dialog's width, from the mockup. */
     static final float WIDTH = 620f;
+
+    /** The tallest the credits list grows before it scrolls. */
+    private static final float CREDITS_HEIGHT = 520f;
 
     private final SessionScreen host;
     private final LaunchWindowGame game;
@@ -104,12 +111,54 @@ final class SettingsDialog {
         card.add(ui.paragraph("A non-commercial fan project inspired by Buzz Aldrin's Space Program Manager. Not "
             + "affiliated with or endorsed by its makers.", Theme.TextStyle.BODY_SM, Theme.INK_MUTED))
             .padBottom(2f).row();
-        card.add(ui.paragraph("Fonts: Archivo and Work Sans, under the SIL Open Font License.",
-            Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padBottom(Theme.SPACE_4).row();
+        Table credits = new Table();
+        credits.add(ui.paragraph("Fonts, photos and their licences, as each one asks to be credited.",
+            Theme.TextStyle.CAPTION, Theme.INK_MUTED)).expandX().fillX().left().padRight(Theme.SPACE_3);
+        credits.add(ChromeScreen.onClick(ui.button("Credits", Theme.ButtonKind.SECONDARY), this::openCredits))
+            .right();
+        card.add(credits).padBottom(Theme.SPACE_4).row();
 
         card.add(ChromeScreen.onClick(ui.button("Done", Theme.ButtonKind.PRIMARY), host::closeDialog)).right()
             .fill(false, false).row();
         return card;
+    }
+
+    /**
+     * Opens the credits page ({@code assets/CREDITS.md}) in place of the settings, with a way back.
+     */
+    void openCredits() {
+        Table card = host.dialogCard("Settings", "Credits");
+        Table list = new Table();
+        list.top().left();
+        list.defaults().growX().left();
+        list.add(ui.paragraph("Assets not made for Launch Window, with the credit their licence asks for.",
+            Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).padBottom(Theme.SPACE_2).row();
+        // The file's own intro talks about "this folder"; the paragraph above says it for the game.
+        List<Credits.Section> sections = Credits.parse(ui.text("CREDITS.md")).stream()
+            .filter(section -> !section.title().isEmpty()).toList();
+        if (sections.isEmpty()) {
+            list.add(ui.paragraph("The credits file is missing from this installation.", Theme.TextStyle.BODY_SM,
+                Theme.INK_MUTED)).row();
+        }
+        for (Credits.Section section : sections) {
+            if (!section.title().isEmpty()) {
+                list.add(section(section.title())).padTop(Theme.SPACE_3).padBottom(Theme.SPACE_2).row();
+            }
+            for (Credits.Entry entry : section.entries()) {
+                list.add(ui.paragraph((entry.bullet() ? "• " : "") + Credits.drawable(entry.text(),
+                    Theme.CHARACTERS), Theme.TextStyle.BODY_SM, Theme.INK)).padBottom(Theme.SPACE_2).row();
+            }
+        }
+        ScrollPane scroll = new ScrollPane(list, new ScrollPane.ScrollPaneStyle());
+        scroll.setFadeScrollBars(false);
+        scroll.setScrollingDisabled(true, false);
+        card.add(scroll).maxHeight(CREDITS_HEIGHT).padBottom(Theme.SPACE_4).row();
+        Table buttons = new Table();
+        buttons.add(ChromeScreen.onClick(ui.button("Back", Theme.ButtonKind.SECONDARY), this::open))
+            .padRight(10f);
+        buttons.add(ChromeScreen.onClick(ui.button("Done", Theme.ButtonKind.PRIMARY), host::closeDialog));
+        card.add(buttons).right().fill(false, false).row();
+        host.showDialog(card, WIDTH);
     }
 
     private Label section(String title) {

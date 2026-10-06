@@ -290,6 +290,10 @@ public final class ScreenSnapshot {
             game.session().state().getSetSpecialists().get(2)));
         write(folder, "set-manage-department.png", new SetCentreScreen(game),
             screen -> screen.openManageDepartment(-10));
+        game.session().state().getSalaryAdjustedGroups().add("SET");
+        write(folder, "set-manage-already-adjusted.png", new SetCentreScreen(game),
+            screen -> screen.openManageDepartment(-10));
+        game.session().state().getSalaryAdjustedGroups().clear();
         write(folder, "set-toast.png", new SetCentreScreen(game), screen -> screen.toast(
             "Started training \u2014 Elena Markova (Permanent, Space probes).", Theme.NoticeKind.SUCCESS));
         write(folder, "payload-rnd.png", new RndBoardScreen(game, RndBoardScreen.Board.PAYLOAD), null);
@@ -299,6 +303,7 @@ public final class ScreenSnapshot {
             List<SetSpecialist> pool = game.session().state().getSetSpecialistCandidates();
             screen.toggle(pool.get(1).getId());
             screen.toggle(pool.get(4).getId());
+            screen.toggleBonus(pool.get(1).getId());
         });
         write(folder, "hire-none-selected.png", new HireScreen(game), null);
 
@@ -658,6 +663,7 @@ public final class ScreenSnapshot {
         write(folder, "settings.png", new SpaceComplexScreen(game), SpaceComplexScreen::openSettings);
         write(folder, "settings-chrome.png", new MuseumScreen(game, MuseumScreen.Tab.FLIGHTS),
             MuseumScreen::openSettings);
+        write(folder, "settings-credits.png", new SpaceComplexScreen(game), SpaceComplexScreen::openCredits);
         write(folder, "result-won.png", new SpaceComplexScreen(game), SpaceComplexScreen::showResult);
 
         // A rival won on the medal table: two agencies finished at turn 24.

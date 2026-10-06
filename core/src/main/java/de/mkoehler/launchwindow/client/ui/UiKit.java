@@ -134,6 +134,17 @@ public final class UiKit implements Disposable {
     }
 
     /**
+     * Returns a text file from the assets folder, such as {@code CREDITS.md}.
+     *
+     * @param path the path under the assets folder
+     * @return the text, or {@code null} if there's no such file
+     */
+    public String text(String path) {
+        FileHandle file = assets.child(path);
+        return file.exists() ? file.readString("UTF-8") : null;
+    }
+
+    /**
      * Returns a picture from {@code assets/ui/} cropped about its centre to an aspect ratio, so it
      * fills a box of that shape without spilling out of it.
      *

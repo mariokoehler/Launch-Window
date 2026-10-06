@@ -37,22 +37,17 @@ import java.util.Optional;
  * The mission replay ({@code ui-spec.md} &sect;4.7.3): plays a resolved season's steps one by one,
  * each with its components as flown, the chances, which rolls passed, any Expert rescue and the
  * outcome, then the season summary. Nothing is rolled here: every step is an event the season pass
- * already resolved. Playback steps every {@value #STEP_SECONDS} s and can be paused, stepped and
- * skipped.
+ * already resolved. The player steps through at their own pace (user decision 2026-10-06: no
+ * automatic playback): previous and next, a click on any step, or straight to the summary.
  *
  * @author Mario Koehler
  */
 public final class ReplayScreen extends ChromeScreen {
 
-    /** How long playback shows each step (unconfirmed, from the mockup). */
-    static final float STEP_SECONDS = 1.5f;
-
     private final TurnReport report;
     private String missionId;
     /** The step shown, from 0; the step count means the season summary. */
     private int shown;
-    private boolean playing;
-    private float timer;
 
     /**
      * Builds the replay of one mission's season.
@@ -67,7 +62,6 @@ public final class ReplayScreen extends ChromeScreen {
             "Mission replay");
         this.report = report;
         this.missionId = missionId;
-        this.playing = true;
         rebuild();
     }
 
@@ -80,39 +74,13 @@ public final class ReplayScreen extends ChromeScreen {
         return TurnReportView.steps(report, missionId);
     }
 
-    @Override
-    public void render(float delta) {
-        if (playing && !isBusy()) {
-            timer += delta;
-            if (timer >= STEP_SECONDS) {
-                timer = 0;
-                show(shown + 1);
-            }
-        }
-        super.render(delta);
-    }
-
     /**
-     * Shows a step, or the season summary for the step count, and stops playback at the summary.
+     * Shows a step, or the season summary for the step count.
      *
      * @param step the step, from 0
      */
     public void show(int step) {
         shown = Math.max(0, Math.min(step, steps().size()));
-        if (shown >= steps().size()) {
-            playing = false;
-        }
-        rebuild();
-    }
-
-    /**
-     * Starts or pauses playback.
-     *
-     * @param play whether to play
-     */
-    public void play(boolean play) {
-        playing = play && shown < steps().size();
-        timer = 0;
         rebuild();
     }
 
@@ -121,16 +89,12 @@ public final class ReplayScreen extends ChromeScreen {
         List<MissionStepResolved> steps = steps();
         titleActions.clearChildren();
         titleActions.add(transport("restart", () -> show(0))).size(36f).padRight(6f);
-        titleActions.add(transport("step_back", () -> {
-            playing = false;
-            show(shown - 1);
-        })).size(36f).padRight(6f);
-        titleActions.add(transport(playing ? "pause" : "play", () -> play(!playing))).size(36f).padRight(6f);
-        titleActions.add(transport("step_forward", () -> {
-            playing = false;
-            show(shown + 1);
-        })).size(36f).padRight(Theme.SPACE_3);
-        titleActions.add(onClick(ui.pageButton("Skip to summary"), () -> show(steps.size())));
+        titleActions.add(transport("step_back", () -> show(shown - 1))).size(36f).padRight(6f);
+        if (shown < steps.size()) {
+            titleActions.add(actionButton(shown == steps.size() - 1 ? "Season summary" : "Next step",
+                Theme.ButtonKind.PRIMARY, () -> show(shown + 1))).height(36f).padRight(Theme.SPACE_3);
+            titleActions.add(onClick(ui.pageButton("Skip to summary"), () -> show(steps.size())));
+        }
 
         content.clearChildren();
         content.top();
@@ -149,8 +113,6 @@ public final class ReplayScreen extends ChromeScreen {
             chip.addListener(clicked(() -> {
                 missionId = flown.missionInstanceId();
                 shown = 0;
-                playing = true;
-                timer = 0;
                 rebuild();
             }));
             chooser.add(chip).padRight(6f);
@@ -212,10 +174,7 @@ public final class ReplayScreen extends ChromeScreen {
                 revealed ? outcomeColor(step.outcome()) : Theme.INK_MUTED));
             int index = i;
             row.setTouchable(Touchable.enabled);
-            row.addListener(clicked(() -> {
-                playing = false;
-                show(index);
-            }));
+            row.addListener(clicked(() -> show(index)));
             card.add(row).padBottom(2f).row();
         }
         Table summaryRow = new Table();

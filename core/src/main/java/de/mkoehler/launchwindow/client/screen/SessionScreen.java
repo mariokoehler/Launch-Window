@@ -298,6 +298,13 @@ abstract class SessionScreen extends StageScreen {
     }
 
     /**
+     * Opens the credits page from Settings' About section over this screen.
+     */
+    public void openCredits() {
+        new SettingsDialog(this).openCredits();
+    }
+
+    /**
      * Closes the dialog, if one is open.
      */
     public void closeDialog() {
