@@ -22,6 +22,12 @@ import java.util.Locale;
  */
 final class RaceTable {
 
+    /** The smallest size a goal's mission patch stays legible at; the Museum never draws one smaller. */
+    static final float PATCH_SIZE = 64f;
+
+    /** A row's height: room for a patch in the Museum, the old compact height in the result dialog. */
+    private static final float MUSEUM_CELL_HEIGHT = PATCH_SIZE + 16f;
+
     private static final float CELL_HEIGHT = 60f;
 
     /** An open goal's greyed patch is also faded, so it reads as not yet earned. */
@@ -58,12 +64,13 @@ final class RaceTable {
         table.add(head(ui, "Finished")).width(150f);
         table.row();
         Color mine = new Color(Theme.SURFACE_CARD).lerp(Theme.GOLD, 0.12f);
+        float height = museum ? MUSEUM_CELL_HEIGHT : CELL_HEIGHT;
         for (Museum.RaceRow row : rows) {
             boolean tinted = museum ? row.you() : row.winner();
             Color fill = tinted ? mine : Theme.SURFACE_CARD;
             if (museum) {
                 table.add(cell(ui, fill).add(ui.label(String.valueOf(row.place()), Theme.TextStyle.HEADING_SM,
-                    Theme.NAVY)).getTable()).height(CELL_HEIGHT);
+                    Theme.NAVY)).getTable()).height(height);
             }
             Table agency = cell(ui, fill);
             Table who = new Table();
@@ -78,12 +85,12 @@ final class RaceTable {
             line.add(archetype);
             who.add(line);
             agency.add(who).expandX().left();
-            table.add(agency).height(CELL_HEIGHT);
+            table.add(agency).height(height);
             for (int i = 0; i < row.cells().size(); i++) {
                 Museum.Cell goal = row.cells().get(i);
                 Table cell = cell(ui, fill);
                 if (museum) {
-                    cell.add(patch(ui, goalIds.get(i), goal.done(), 30f)).size(30f).padRight(Theme.SPACE_2);
+                    cell.add(patch(ui, goalIds.get(i), goal.done(), PATCH_SIZE)).size(PATCH_SIZE).padRight(Theme.SPACE_2);
                 }
                 Table text = new Table();
                 text.defaults().left();
@@ -93,14 +100,14 @@ final class RaceTable {
                     text.add(firstTag(ui, "First")).padTop(2f);
                 }
                 cell.add(text).expandX().left();
-                table.add(cell).height(CELL_HEIGHT);
+                table.add(cell).height(height);
             }
             if (museum) {
                 table.add(cell(ui, fill).add(ui.label(row.count() + " of " + row.cells().size(),
-                    Theme.TextStyle.BODY_STRONG, Theme.INK)).expandX().left().getTable()).height(CELL_HEIGHT);
+                    Theme.TextStyle.BODY_STRONG, Theme.INK)).expandX().left().getTable()).height(height);
             }
             table.add(cell(ui, fill).add(ui.label(row.finished(), Theme.TextStyle.BODY_SM, Theme.INK)).expandX()
-                .left().getTable()).height(CELL_HEIGHT);
+                .left().getTable()).height(height);
             table.row();
         }
         return table;

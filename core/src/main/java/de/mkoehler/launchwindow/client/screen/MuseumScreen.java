@@ -200,7 +200,8 @@ public final class MuseumScreen extends ChromeScreen {
             String goalId = declared.get(i);
             Integer turn = times.get(goalId);
             Table row = new Table();
-            row.add(RaceTable.patch(ui, goalId, turn != null, 64f)).size(64f).padRight(14f);
+            row.add(RaceTable.patch(ui, goalId, turn != null, RaceTable.PATCH_SIZE)).size(RaceTable.PATCH_SIZE)
+                .padRight(14f);
             Table text = new Table();
             text.defaults().left().growX();
             text.add(ui.label(ContentNames.of(goalId), Theme.TextStyle.BODY_STRONG, Theme.INK)).row();
@@ -315,7 +316,8 @@ public final class MuseumScreen extends ChromeScreen {
     private Table achievement(Museum.Achievement row) {
         Table line = new Table();
         line.pad(10f, 0f, 10f, 0f);
-        line.add(RaceTable.patch(ui, row.goalId(), row.done(), 40f)).size(40f).padRight(12f);
+        line.add(RaceTable.patch(ui, row.goalId(), row.done(), RaceTable.PATCH_SIZE)).size(RaceTable.PATCH_SIZE)
+            .padRight(14f);
         Table text = new Table();
         text.left();
         text.defaults().left();
