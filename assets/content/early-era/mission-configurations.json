@@ -7780,7 +7780,8 @@
             "portraitId": "ham"
           }
         ]
-      ]
+      ],
+      "unnamedLostOnFailure": true
     }
   },
   {
@@ -9045,7 +9046,8 @@
             "portraitId": "enos"
           }
         ]
-      ]
+      ],
+      "unnamedLostOnFailure": true
     }
   },
   {

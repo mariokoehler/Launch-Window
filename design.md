@@ -391,7 +391,10 @@ layouts.
     **Photos** (2026-10-06, found by the user): Belka and Strelka (one photo of both), Ham, Enos
     and Chernushka show theirs on the Flights tab. Zvezdochka has none: her only known photo is
     non-free (fair use on Russian Wikipedia only), so it can't go in the repo.
-    **Confirmed:** a failed Mercury test should remember an unnamed chimpanzee.
+    **A failed Mercury test remembers an unnamed chimpanzee** (user, built 2026-10-06):
+    `animalPassengers.unnamedLostOnFailure` puts one "An unnamed chimpanzee" on the memorial per
+    failed uncrewed Mercury test, with the step and no photo, and the turn report says so. The
+    uncrewed Vostok tests don't set it, so a failed one still remembers nobody.
 
 **(g) After each season's steps** (once per mission per season, whatever the outcome):
 - **Reliability change per component** (user, 2026-10-02): the worst outcome the component was

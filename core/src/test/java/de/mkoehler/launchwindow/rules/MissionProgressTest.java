@@ -121,6 +121,56 @@ class MissionProgressTest {
         assertEquals("orbit", snapshot.getMemorial().get(0).stepId());
     }
 
+    /**
+     * A flight that only honours an animal for coming home (Ham) remembers nobody when it fails,
+     * unless the configuration says a failure loses an unnamed animal: then one unnamed
+     * chimpanzee is remembered, without a photo, each time it fails.
+     */
+    @Test
+    void aFailedHonouringFlightRemembersAnUnnamedAnimalOnlyWhenConfigured() {
+        for (boolean lostOnFailure : new boolean[] {false, true}) {
+            MissionConfiguration.AnimalPassengers passengers = new MissionConfiguration.AnimalPassengers(List.of(),
+                true, "An unnamed chimpanzee", List.of(List.of(new MissionConfiguration.Animal("Ham", "ham"))),
+                lostOnFailure);
+            ContentCatalog catalog = catalogWith(withPassengers(passengerFlight(true), passengers));
+
+            PlayerSnapshot snapshot = snapshotWithOwnedCapsule(90.0);
+            snapshot.getInProgressMissions().put("m0", new InProgressMission("m0", "dog-std", List.of(), List.of()));
+            MissionProgress.advanceSeason(snapshot, catalog, new ScriptedRandomGenerator(99.0, 0.1));
+            assertTrue(snapshot.getMemorial().isEmpty(), "a successful flight loses nobody");
+
+            snapshot = snapshotWithOwnedCapsule(10.0);
+            for (int flight = 1; flight <= 2; flight++) {
+                snapshot.getInProgressMissions().put("m" + flight,
+                    new InProgressMission("m" + flight, "dog-std", List.of(), List.of()));
+                // First roll 0 fails; no controllers, so saving roll 30 lands in plain failure; 1 reliability factor.
+                List<ResolutionEvent> events = MissionProgress.advanceSeason(snapshot, catalog,
+                    new ScriptedRandomGenerator(0.0, 30.0, 0.1));
+                List<ResolutionEvent> lost = events.stream().filter(PassengerLost.class::isInstance).toList();
+                assertEquals(lostOnFailure ? List.of(new PassengerLost("m" + flight, "dog-std",
+                    "An unnamed chimpanzee", "orbit")) : List.of(), lost);
+            }
+            if (lostOnFailure) {
+                assertEquals(2, snapshot.getMemorial().size(), "each failure remembers one");
+                MemorialEntry entry = snapshot.getMemorial().get(0);
+                assertEquals("An unnamed chimpanzee", entry.name());
+                assertEquals(MemorialEntry.Cause.PASSENGER, entry.cause());
+                assertEquals("orbit", entry.stepId());
+                assertNull(entry.portraitId());
+            } else {
+                assertTrue(snapshot.getMemorial().isEmpty(), "no real animal is invented a death");
+            }
+        }
+    }
+
+    private static MissionConfiguration withPassengers(MissionConfiguration plain,
+                                                       MissionConfiguration.AnimalPassengers passengers) {
+        return new MissionConfiguration(plain.id(), plain.programId(), plain.seasons(), plain.crewSlots(),
+            plain.controlSlots(), plain.cost(), plain.firstTimePrestige(), plain.goalDependencies(),
+            plain.goalBoosts(), plain.launches(), plain.cancellationPrestigeDeduction(),
+            plain.cancellationRefundPercent(), passengers);
+    }
+
     private static ContentCatalog catalogWith(MissionConfiguration... configurations) {
         return new ContentCatalog(List.of(CATEGORY), List.of(PROGRAM), List.of(configurations), List.of(CAPSULE));
     }

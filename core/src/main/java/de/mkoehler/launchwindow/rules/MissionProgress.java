@@ -1066,8 +1066,9 @@ public final class MissionProgress {
     /**
      * Puts a flight's animal passengers on the memorial if the flight cost their lives: at its end
      * if it had no way home, or when it failed. An animal already remembered by name (a second
-     * flight of Sputnik 2) is remembered by the configuration's unnamed form instead. Draws nothing
-     * from the random stream.
+     * flight of Sputnik 2) is remembered by the configuration's unnamed form instead. A failed
+     * flight with no named animal remembers one unnamed animal if the configuration says so (a
+     * failed uncrewed Mercury test's chimpanzee). Draws nothing from the random stream.
      *
      * @param snapshot      the player
      * @param configuration the configuration flown
@@ -1088,6 +1089,11 @@ public final class MissionProgress {
             snapshot.getMemorial().add(new MemorialEntry(name, 0, gameTurn, MemorialEntry.Cause.PASSENGER,
                 configuration.id(), failedStepId, remembered ? null : animal.portraitId()));
             events.add(new PassengerLost(mission.getId(), configuration.id(), name, failedStepId));
+        }
+        if (failedStep != null && passengers.animals().isEmpty() && passengers.unnamedLostOnFailure()) {
+            snapshot.getMemorial().add(new MemorialEntry(passengers.unnamed(), 0, gameTurn,
+                MemorialEntry.Cause.PASSENGER, configuration.id(), failedStep.id(), null));
+            events.add(new PassengerLost(mission.getId(), configuration.id(), passengers.unnamed(), failedStep.id()));
         }
     }
 

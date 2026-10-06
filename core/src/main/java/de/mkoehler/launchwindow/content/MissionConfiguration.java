@@ -102,9 +102,12 @@ public record MissionConfiguration(String id, String programId, List<MissionSeas
      *                   animal is already remembered (a second "Laika" would be wrong)
      * @param cameHome   for each successful flight in turn, the animals honoured for coming home
      *                   on it; a flight past the end of the list honours nobody. Missing means none.
+     * @param unnamedLostOnFailure whether a failed flight with no named animal to remember
+     *                   remembers one animal by the unnamed form, such as a failed uncrewed Mercury
+     *                   test's chimpanzee (user decision 2026-10-06). Missing means no.
      */
     public record AnimalPassengers(List<Animal> animals, boolean returnHome, String unnamed,
-                                   List<List<Animal>> cameHome) {
+                                   List<List<Animal>> cameHome, Boolean unnamedLostOnFailure) {
 
         /**
          * Validates and copies.
@@ -113,9 +116,23 @@ public record MissionConfiguration(String id, String programId, List<MissionSeas
             Objects.requireNonNull(unnamed, "unnamed must not be null");
             animals = List.copyOf(animals);
             cameHome = cameHome == null ? List.of() : cameHome.stream().map(List::copyOf).toList();
-            if (animals.isEmpty() && (!returnHome || cameHome.isEmpty())) {
+            unnamedLostOnFailure = Boolean.TRUE.equals(unnamedLostOnFailure);
+            if (animals.isEmpty() && !unnamedLostOnFailure && (!returnHome || cameHome.isEmpty())) {
                 throw new IllegalArgumentException("animalPassengers needs an animal to remember or to honour");
             }
+        }
+
+        /**
+         * Animals carried and honoured per successful flight, with nobody unnamed lost on a failure.
+         *
+         * @param animals    the animals remembered if the flight costs their lives
+         * @param returnHome whether the flight is meant to bring them back
+         * @param unnamed    the memorial name for an animal on a later flight
+         * @param cameHome   for each successful flight in turn, the animals honoured for coming home
+         */
+        public AnimalPassengers(List<Animal> animals, boolean returnHome, String unnamed,
+                                List<List<Animal>> cameHome) {
+            this(animals, returnHome, unnamed, cameHome, false);
         }
 
         /**
