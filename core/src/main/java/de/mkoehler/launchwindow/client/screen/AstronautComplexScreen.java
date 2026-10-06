@@ -1,5 +1,10 @@
 package de.mkoehler.launchwindow.client.screen;
 
+import de.mkoehler.launchwindow.rules.PrDuty;
+import de.mkoehler.launchwindow.model.Archetype;
+import de.mkoehler.launchwindow.client.ui.HistoryNotes;
+import de.mkoehler.launchwindow.actions.RecallFromPrDutyAction;
+import de.mkoehler.launchwindow.actions.StartPrDutyAction;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -80,7 +85,8 @@ public final class AstronautComplexScreen extends ChromeScreen {
         strip.pad(Theme.BORDER_EMPHASIS);
         String[][] stats = {
             {"Headcount", summary.headcount() + " / " + summary.cap(), null},
-            {"On missions", String.valueOf(summary.onMission()), null},
+            {"On missions / PR tour", summary.onMission() + " / " + summary.onPrTour(),
+                summary.onPrTour() == 0 ? null : "+" + summary.prPerSeason() + " prestige / season"},
             {"Idle / in training", summary.idle() + " / " + summary.inTraining(), null},
             {"Experts", String.valueOf(summary.experts()), null},
             {"Near retirement", String.valueOf(summary.nearRetirement()), "retire at " + summary.retirementAge()},
@@ -194,6 +200,10 @@ public final class AstronautComplexScreen extends ChromeScreen {
         if (astronaut.getUnavailableSeasons() == 0 && astronaut.getAssignmentState() == AssignmentState.IDLE) {
             actions.add(actionButton("Train", Theme.ButtonKind.SECONDARY, () -> dialogs.openTraining(astronaut)))
                 .padRight(6f);
+            actions.add(tip(actionButton("PR duty", Theme.ButtonKind.SECONDARY, () -> openPrDuty(astronaut)),
+                Tips.prDuty())).padRight(6f);
+        } else if (astronaut.getAssignmentState() == AssignmentState.PR_DUTY) {
+            actions.add(actionButton("Recall", Theme.ButtonKind.SECONDARY, () -> recall(astronaut))).padRight(6f);
         } else if (astronaut.getAssignmentState() == AssignmentState.IN_TRAINING
             && astronaut.getTrainingKind() != TrainingKind.BASIC) {
             // Basic training can't be cut short (PullOutOfTrainingOutcome.BASIC_TRAINING).
@@ -206,8 +216,70 @@ public final class AstronautComplexScreen extends ChromeScreen {
                 () -> game.setScreen(new MissionsScreen(game, scheduled)))).padRight(6f);
         }
         actions.add(actionButton("Dismiss", Theme.ButtonKind.DESTRUCTIVE, () -> dialogs.confirmDismiss(astronaut)));
-        row.add(actions).width(250f).right();
+        row.add(actions).width(330f).right();
         return row;
+    }
+
+    /**
+     * Opens the PR duty dialog for an idle astronaut, as their PR duty button does: what the tour
+     * would earn, how diminishing returns and rust work, and a history note.
+     *
+     * @param astronaut the astronaut
+     */
+    public void openPrDuty(Astronaut astronaut) {
+        AstronautCorps.PrProjection projection = AstronautCorps.prProjection(astronaut, session.state());
+        Table card = dialogCard("Astronaut Complex", "PR duty · " + astronaut.getName());
+        Table intro = new Table();
+        intro.add(ui.paragraph("Interviews, tours and public appearances instead of training. The astronaut stays "
+            + "busy, so morale rises, and earns prestige every season until you recall them. On tour they can't "
+            + "fly or sit at CAPCOM.", Theme.TextStyle.BODY, Theme.INK_MUTED)).expandX().fillX().padRight(6f);
+        intro.add(new HistoryNote(ui, session.state().getArchetype() == Archetype.SOVIET ? HistoryNotes.PR_SOVIET
+            : HistoryNotes.PR_NASA)).size(HistoryNote.ICON_SIZE).top();
+        card.add(intro).padBottom(Theme.SPACE_4).row();
+        Table lines = new Table();
+        lines.defaults().growX();
+        lines.add(prLine("Leadership " + Math.round(astronaut.getSkill(AstronautSkill.LEADERSHIP)),
+            "+" + projection.leadership())).row();
+        lines.add(prLine(astronaut.getFlightsFlown() + (astronaut.getFlightsFlown() == 1 ? " flight" : " flights")
+            + ", " + astronaut.getFirstsFlown() + " with a first in the game", "+" + projection.fame())).row();
+        if (projection.leadership() + projection.fame() > PrDuty.MAX_YIELD) {
+            lines.add(prLine("Capped at", String.valueOf(PrDuty.MAX_YIELD))).row();
+        }
+        lines.add(new Image(ui.solid(Theme.NAVY))).height(Theme.BORDER_EMPHASIS).padTop(4f).padBottom(4f).row();
+        lines.add(prLine("Earns on tour", "+" + projection.earns() + " prestige / season")).row();
+        lines.add(prLine("Agency PR income", "+" + projection.before() + " → +" + projection.after()
+            + " / season")).row();
+        card.add(lines).padBottom(Theme.SPACE_4).row();
+        if (projection.others() > 0) {
+            card.add(ui.notice(Theme.NoticeKind.INFO, "The public's attention is limited.", projection.others()
+                + (projection.others() == 1 ? " astronaut is" : " astronauts are") + " already on tour. Ranked by "
+                + "what they bring, the first earns all of it, the second 60 %, the third 30 %, and any more "
+                + "nothing.")).padBottom(Theme.SPACE_3).row();
+        }
+        card.add(ui.notice(Theme.NoticeKind.WARNING, "Out of practice.", "After " + PrDuty.RUST_FREE_SEASONS
+            + " seasons in a row on tour, Piloting and Fitness each drop by " + Math.round(PrDuty.RUST_PER_SEASON)
+            + " a season.")).padBottom(Theme.SPACE_4).row();
+        Table buttons = new Table();
+        buttons.add(actionButton("Cancel", Theme.ButtonKind.SECONDARY, this::closeDialog)).padRight(10f);
+        buttons.add(actionButton("Send on tour", Theme.ButtonKind.PRIMARY, () ->
+            submit(new StartPrDutyAction(astronaut.getId()), result -> {
+                closeDialog();
+                toast(astronaut.getName() + " is on a PR tour.", Theme.NoticeKind.SUCCESS);
+            })));
+        card.add(buttons).right().fill(false, false);
+        showDialog(card, 600f);
+    }
+
+    private Table prLine(String label, String value) {
+        Table line = new Table();
+        line.add(ui.label(label, Theme.TextStyle.BODY_SM, Theme.INK)).expandX().left();
+        line.add(ui.label(value, Theme.TextStyle.BODY_STRONG, Theme.INK)).right();
+        return line;
+    }
+
+    private void recall(Astronaut astronaut) {
+        submit(new RecallFromPrDutyAction(astronaut.getId()), result ->
+            toast(astronaut.getName() + " is back from the PR tour.", Theme.NoticeKind.SUCCESS));
     }
 
     /**

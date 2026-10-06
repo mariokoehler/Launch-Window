@@ -1,5 +1,6 @@
 package de.mkoehler.launchwindow.client.screen;
 
+import de.mkoehler.launchwindow.rules.PrDuty;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -215,7 +216,11 @@ public final class PublicAffairsScreen extends ChromeScreen {
         left.defaults().left();
         left.add(ui.label("PRESTIGE", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padBottom(2f).row();
         left.add(ui.label(String.format(Locale.ROOT, "%,d", state.getPrestige()), Theme.TextStyle.HEADING_LG,
-            Theme.NAVY));
+            Theme.NAVY)).row();
+        long pr = PrDuty.perSeason(state);
+        if (pr > 0) {
+            left.add(ui.label("PR duty: +" + pr + " / season", Theme.TextStyle.CAPTION, Theme.SUCCESS));
+        }
         head.add(left).expandX().left();
         Table right = new Table();
         right.right();

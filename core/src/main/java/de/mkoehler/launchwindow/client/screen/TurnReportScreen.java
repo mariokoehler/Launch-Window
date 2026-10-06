@@ -294,7 +294,12 @@ public final class TurnReportScreen extends ChromeScreen {
         }
         for (TurnReportView.Line line : lines) {
             Color color = line.tone() > 0 ? Theme.SUCCESS : line.tone() < 0 ? Theme.DANGER : Theme.INK_MUTED;
-            card.add(line(line.title(), line.tag().toUpperCase(Locale.ROOT), color)).padBottom(Theme.SPACE_2).row();
+            card.add(line(line.title(), line.tag().toUpperCase(Locale.ROOT), color))
+                .padBottom(line.text().isEmpty() ? Theme.SPACE_2 : 2f).row();
+            if (!line.text().isEmpty()) {
+                card.add(ui.paragraph(line.text(), Theme.TextStyle.CAPTION, Theme.INK_MUTED)).growX()
+                    .padBottom(Theme.SPACE_2).row();
+            }
         }
         return card;
     }

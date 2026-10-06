@@ -1,5 +1,6 @@
 package de.mkoehler.launchwindow.client.view;
 
+import de.mkoehler.launchwindow.rules.PrDuty;
 import de.mkoehler.launchwindow.content.ContentCatalog;
 import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.Astronaut;
@@ -41,7 +42,8 @@ public final class AstronautCorps {
      * @param totalSalary    the roster's salaries per season
      */
     public record Summary(int headcount, int cap, int onMission, int idle, int inTraining, int experts,
-                          int nearRetirement, int retirementAge, int averageMorale, double totalSalary) {
+                          int nearRetirement, int retirementAge, int averageMorale, double totalSalary,
+                          int onPrTour, long prPerSeason) {
     }
 
     /**
@@ -57,6 +59,7 @@ public final class AstronautCorps {
         int onMission = 0;
         int idle = 0;
         int training = 0;
+        int onPr = 0;
         int experts = 0;
         int near = 0;
         double morale = 0;
@@ -69,6 +72,8 @@ public final class AstronautCorps {
                 idle++;
             } else if (available && astronaut.getAssignmentState() == AssignmentState.IN_TRAINING) {
                 training++;
+            } else if (astronaut.getAssignmentState() == AssignmentState.PR_DUTY) {
+                onPr++;
             }
             if (!astronaut.getExpertSkills().isEmpty()) {
                 experts++;
@@ -81,7 +86,7 @@ public final class AstronautCorps {
         }
         int cap = catalog.buildings().capacity(Building.ASTRONAUT_CENTER, state.buildingLevel(Building.ASTRONAUT_CENTER));
         return new Summary(roster.size(), cap, onMission, idle, training, experts, near, retirementAge,
-            roster.isEmpty() ? 0 : Math.round((float) (morale / roster.size())), salary);
+            roster.isEmpty() ? 0 : Math.round((float) (morale / roster.size())), salary, onPr, PrDuty.perSeason(state));
     }
 
     /**
@@ -105,7 +110,43 @@ public final class AstronautCorps {
                     : "On " + MissionControl.missionName(post.configuration()) + " · " + post.slotTitle();
             }
             case IN_TRAINING -> trainingText(astronaut);
+            case PR_DUTY -> "On PR tour · +" + PrDuty.effectiveYields(PrDuty.onDuty(state)).getOrDefault(astronaut.getId(),
+                0L) + " prestige / season";
         };
+    }
+
+    /**
+     * What sending an idle astronaut on PR duty would earn: their own yield and its parts, what they'd
+     * earn among those already on tour, and the agency's PR income before and after.
+     *
+     * @param ownYield   their yield before diminishing returns
+     * @param leadership the Leadership part
+     * @param fame       the flights-and-firsts part
+     * @param earns      what they'd earn on tour with the others
+     * @param before     the agency's PR income per season now
+     * @param after      and with them on tour
+     * @param others     how many are already on tour
+     */
+    public record PrProjection(long ownYield, long leadership, long fame, long earns, long before, long after,
+                               int others) {
+    }
+
+    /**
+     * Projects an astronaut's PR duty, with the same numbers the season pass uses.
+     *
+     * @param astronaut the astronaut, idle
+     * @param state     the player's state
+     * @return the projection
+     */
+    public static PrProjection prProjection(Astronaut astronaut, PlayerSnapshot state) {
+        List<Astronaut> onDuty = PrDuty.onDuty(state);
+        List<Astronaut> with = new java.util.ArrayList<>(onDuty);
+        with.add(astronaut);
+        java.util.Map<String, Long> withYields = PrDuty.effectiveYields(with);
+        long leadership = Math.round(astronaut.getSkill(AstronautSkill.LEADERSHIP) / 10.0);
+        long fame = PrDuty.PER_FLIGHT * astronaut.getFlightsFlown() + PrDuty.PER_FIRST * astronaut.getFirstsFlown();
+        return new PrProjection(PrDuty.individualYield(astronaut), leadership, fame, withYields.get(astronaut.getId()),
+            PrDuty.perSeason(state), withYields.values().stream().mapToLong(Long::longValue).sum(), onDuty.size());
     }
 
     private static String trainingText(Astronaut astronaut) {
@@ -139,6 +180,7 @@ public final class AstronautCorps {
             case IDLE -> !unavailable && astronaut.getAssignmentState() == AssignmentState.IDLE;
             case IN_TRAINING -> !unavailable && astronaut.getAssignmentState() == AssignmentState.IN_TRAINING;
             case ON_A_MISSION -> !unavailable && astronaut.getAssignmentState() == AssignmentState.ASSIGNED;
+            case ON_PR_TOUR -> astronaut.getAssignmentState() == AssignmentState.PR_DUTY;
         };
     }
 

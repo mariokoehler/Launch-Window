@@ -1,5 +1,6 @@
 package de.mkoehler.launchwindow.client.view;
 
+import de.mkoehler.launchwindow.rules.PrDuty;
 import de.mkoehler.launchwindow.content.StaffingSlot;
 import de.mkoehler.launchwindow.rules.HiringPool;
 import de.mkoehler.launchwindow.rules.PersonnelLifecycle;
@@ -116,6 +117,18 @@ public final class Tips {
     public static Tip staffCounts(String people, String building) {
         return new Tip(people + ": on staff / busy / places", "Busy means in training, on a mission, on R&D or "
             + "unavailable. Places is what the building holds at its level. Click to open " + building + ".");
+    }
+
+    /**
+     * Returns the PR duty button's tooltip.
+     *
+     * @return the tip
+     */
+    public static Tip prDuty() {
+        return new Tip("PR duty", String.format(java.util.Locale.ROOT, "Send this astronaut on tour instead of "
+            + "training: prestige every season from Leadership and fame (%d per flight, %d per flight with a first), "
+            + "at most %d. Each extra astronaut on tour earns less. After %d seasons in a row, flying skills rust.",
+            PrDuty.PER_FLIGHT, PrDuty.PER_FIRST, PrDuty.MAX_YIELD, PrDuty.RUST_FREE_SEASONS));
     }
 
     /**

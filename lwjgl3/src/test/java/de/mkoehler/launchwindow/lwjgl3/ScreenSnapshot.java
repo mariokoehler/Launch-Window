@@ -56,6 +56,7 @@ import de.mkoehler.launchwindow.persistence.PlayerStateService;
 import de.mkoehler.launchwindow.content.BudgetSchedule;
 import de.mkoehler.launchwindow.rules.GoalTally;
 import de.mkoehler.launchwindow.rules.MissionStepResolved;
+import de.mkoehler.launchwindow.rules.PrDutyPerformed;
 import de.mkoehler.launchwindow.rules.TurnReport;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
@@ -767,6 +768,22 @@ public final class ScreenSnapshot {
         write(folder, "waiting-for-server.png", new PublicAffairsScreen(game), screen -> screen.render(0.6f));
         write(folder, "waiting-for-server-hub.png", new SpaceComplexScreen(game), screen -> screen.render(0.6f));
         gateway.waiting = false;
+
+        // PR duty (2026-10-06): a flown veteran on tour, an idle astronaut about to go, the Public Affairs
+        // Office's PR line, and a report with a quiet tour and one that made the papers.
+        expert.setFlightsFlown(1);
+        expert.setFirstsFlown(1);
+        expert.setAssignmentState(AssignmentState.PR_DUTY);
+        expert.setPrDutySeasons(3);
+        startSession(game, state, info);
+        write(folder, "ac-pr-tour.png", new AstronautComplexScreen(game), null);
+        write(folder, "ac-pr-dialog.png", new AstronautComplexScreen(game), screen -> screen.openPrDuty(eligible));
+        write(folder, "pao-pr.png", new PublicAffairsScreen(game), null);
+        TurnReport prReport = new TurnReport(TurnReport.VERSION, 22, 2_100, 2_140, 12_000, 12_400, List.of(),
+            List.of(), List.of(new PrDutyPerformed(expert.getId(), expert.getName(), 16, 24, "placeholder-good-1", 1.0),
+            new PrDutyPerformed(eligible.getId(), eligible.getName(), 6, 6, null, 0.0)));
+        game.session().keepReport(prReport);
+        write(folder, "report-pr.png", new TurnReportScreen(game, prReport), null);
     }
 
     /** The mockup's agency at 1960 · S4, with the goal records and memorial the Museum reads. */

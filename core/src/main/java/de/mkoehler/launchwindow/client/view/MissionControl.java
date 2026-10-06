@@ -34,7 +34,9 @@ public final class MissionControl {
         IDLE("Idle"),
         IN_TRAINING("In training"),
         ON_A_MISSION("On a mission"),
-        UNAVAILABLE("Unavailable");
+        UNAVAILABLE("Unavailable"),
+        /** Astronauts only: on PR duty. */
+        ON_PR_TOUR("On PR tour");
 
         private final String label;
 
@@ -190,6 +192,7 @@ public final class MissionControl {
                 yield post == null ? "On a mission" : "On " + missionName(post.configuration()) + " · " + post.slotTitle();
             }
             case IN_TRAINING -> trainingText(officer);
+            case PR_DUTY -> "On PR tour";
         };
     }
 
@@ -224,6 +227,7 @@ public final class MissionControl {
             case IDLE -> !unavailable && officer.getAssignmentState() == AssignmentState.IDLE;
             case IN_TRAINING -> !unavailable && officer.getAssignmentState() == AssignmentState.IN_TRAINING;
             case ON_A_MISSION -> !unavailable && officer.getAssignmentState() == AssignmentState.ASSIGNED;
+            case ON_PR_TOUR -> false;
         };
     }
 

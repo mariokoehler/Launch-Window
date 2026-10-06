@@ -173,6 +173,9 @@ public final class MissionControlScreen extends ChromeScreen {
     private Table filterChips() {
         Table chips = new Table();
         for (MissionControl.Filter option : MissionControl.Filter.values()) {
+            if (option == MissionControl.Filter.ON_PR_TOUR) {
+                continue;
+            }
             boolean active = option == filter;
             Table chip = new Table();
             chip.setBackground(active ? ui.solid(Theme.SURFACE_CARD)

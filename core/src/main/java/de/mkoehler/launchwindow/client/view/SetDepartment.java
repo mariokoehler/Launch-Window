@@ -112,6 +112,7 @@ public final class SetDepartment {
             case ASSIGNED -> "Researching · " + ContentNames.of(specialist.getRdTargetComponentId())
                 + " · slot " + (specialist.getRdSlot() == null ? "?" : specialist.getRdSlot() + 1);
             case IN_TRAINING -> trainingText(specialist);
+            case PR_DUTY -> "On PR tour";
         };
     }
 

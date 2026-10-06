@@ -17,6 +17,7 @@ public final class Refusals {
         Map.entry("UNKNOWN_CANDIDATE", "That candidate has left the pool."),
         Map.entry("ASSIGNED_TO_MISSION", "Can't dismiss someone on a mission."),
         Map.entry("NOT_IDLE", "They're busy."),
+        Map.entry("NOT_ON_DUTY", "They aren't on a PR tour."),
         Map.entry("WRONG_STATE", "They're busy."),
         Map.entry("AT_RD_CEILING", "R&D can't improve this further."),
         Map.entry("NO_FREE_SLOT", "All four R&D slots are taken."),

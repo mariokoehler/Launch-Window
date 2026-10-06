@@ -1,5 +1,7 @@
 package de.mkoehler.launchwindow.client.view;
 
+import de.mkoehler.launchwindow.content.PrPress;
+import de.mkoehler.launchwindow.rules.PrDutyPerformed;
 import de.mkoehler.launchwindow.content.SpaceRaceNews;
 import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.content.ContentCatalog;
@@ -456,6 +458,8 @@ public final class TurnReportView {
                     "Training", 0));
             } else if (event instanceof PersonnelDeparture departure) {
                 lines.add(departure(departure));
+            } else if (event instanceof PrDutyPerformed pr) {
+                lines.add(prLine(pr));
             } else if (event instanceof PassengerLost lost) {
                 lines.add(new Line(lost.name() + " did not come home", lost.failedStepId() == null
                     ? "The flight had no way home."
@@ -495,6 +499,21 @@ public final class TurnReportView {
             .forEach(person -> lines.add(new Line(person.getName() + "'s morale is down to " + person.getMorale()
                 + ": they may resign if they stay idle", "", "Warning", -1)));
         return lines;
+    }
+
+    /**
+     * Words a season of PR duty: the press story where the papers picked the tour up, the prestige,
+     * and any rust.
+     */
+    private static Line prLine(PrDutyPerformed pr) {
+        String rust = pr.rust() > 0 ? String.format(Locale.ROOT, " Out of practice: Piloting and Fitness -%.0f.",
+            pr.rust()) : "";
+        String earned = (pr.prestige() < 0 ? "−" : "+") + Math.abs(pr.prestige()) + " prestige";
+        return PrPress.standard().byId(pr.pressStoryId())
+            .map(story -> new Line(story.headlineFor(pr.name()) + ": " + earned, story.textFor(pr.name()) + rust,
+                "PR", story.tone() == PrPress.Tone.GOOD ? 1 : -1))
+            .orElseGet(() -> new Line(pr.name() + "'s PR tour: " + earned, rust.strip(), "PR",
+                pr.prestige() > 0 ? 1 : 0));
     }
 
     private static Line departure(PersonnelDeparture departure) {
