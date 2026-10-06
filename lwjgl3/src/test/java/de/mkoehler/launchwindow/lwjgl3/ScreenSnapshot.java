@@ -57,6 +57,9 @@ import de.mkoehler.launchwindow.content.BudgetSchedule;
 import de.mkoehler.launchwindow.rules.GoalTally;
 import de.mkoehler.launchwindow.rules.MissionStepResolved;
 import de.mkoehler.launchwindow.rules.PrDutyPerformed;
+import de.mkoehler.launchwindow.content.PrPress;
+import de.mkoehler.launchwindow.model.HiringPoolBonus;
+import de.mkoehler.launchwindow.rules.HiringPool;
 import de.mkoehler.launchwindow.rules.TurnReport;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
@@ -780,10 +783,16 @@ public final class ScreenSnapshot {
         write(folder, "ac-pr-dialog.png", new AstronautComplexScreen(game), screen -> screen.openPrDuty(eligible));
         write(folder, "pao-pr.png", new PublicAffairsScreen(game), null);
         TurnReport prReport = new TurnReport(TurnReport.VERSION, 22, 2_100, 2_140, 12_000, 12_400, List.of(),
-            List.of(), List.of(new PrDutyPerformed(expert.getId(), expert.getName(), 16, 24, "placeholder-good-1", 1.0),
+            List.of(), List.of(new PrDutyPerformed(expert.getId(), expert.getName(), 16, 24, "applications-soar", 1.0,
+                List.of(new PrPress.Effect(PrPress.EffectKind.HIRING_POOL, "SET", 3, 2))),
             new PrDutyPerformed(eligible.getId(), eligible.getName(), 6, 6, null, 0.0)));
         game.session().keepReport(prReport);
         write(folder, "report-pr.png", new TurnReportScreen(game, prReport), null);
+
+        // Press-story effects (2026-10-06): a SET pool grown by three, one of them a standout.
+        game.session().state().getHiringPoolBonuses().add(new HiringPoolBonus("SET", 3, 1, 1));
+        HiringPool.refreshCandidates(game.session().state(), new java.util.Random(7));
+        write(folder, "hire-press-bonus.png", new HireScreen(game), null);
     }
 
     /** The mockup's agency at 1960 · S4, with the goal records and memorial the Museum reads. */

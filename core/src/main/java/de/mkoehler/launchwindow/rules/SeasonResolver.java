@@ -173,7 +173,8 @@ public final class SeasonResolver {
             case MISSIONS -> MissionProgress.advanceSeason(snapshot, context.catalog(), random, context.goalTally(),
                 context.gameTurn());
             case BUILDINGS -> BuildingUpgrades.advanceSeason(snapshot, context.catalog().buildings());
-            case PR_DUTY -> PrDuty.advanceSeason(snapshot, PrPress.standard(), random);
+            case PR_DUTY -> PrDuty.advanceSeason(snapshot, PrPress.standard(), random, context.catalog(),
+                context.seasonsElapsed());
             case BUDGET -> BudgetProgress.advanceSeason(snapshot, context.catalog(), context.schedule(),
                 context.seasonsElapsed());
             case RANDOM_EVENTS -> RandomEvents.advanceSeason(snapshot, context.roster(), random, context.gameTurn(),

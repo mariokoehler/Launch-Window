@@ -62,6 +62,8 @@ public class PlayerSnapshot {
     private int launchesThisWindow;
     private Map<String, Integer> unavailableComponents = new LinkedHashMap<>();
     private List<String> salaryAdjustedGroups = new ArrayList<>();
+    private List<String> usedPressStoryIds = new ArrayList<>();
+    private List<HiringPoolBonus> hiringPoolBonuses = new ArrayList<>();
     private Map<Building, Integer> buildingLevels = new LinkedHashMap<>();
     private Map<Building, Integer> buildingUpgradeSeasonsRemaining = new LinkedHashMap<>();
 
@@ -613,6 +615,49 @@ public class PlayerSnapshot {
     public void setSalaryAdjustedGroups(List<String> salaryAdjustedGroups) {
         Objects.requireNonNull(salaryAdjustedGroups, "salaryAdjustedGroups must not be null");
         this.salaryAdjustedGroups = new ArrayList<>(salaryAdjustedGroups);
+    }
+
+    /**
+     * Returns the press stories this player has already been shown, by id, so no story repeats
+     * until every story of its tone has run once ({@code design.md} &sect;2.2(c), user decision
+     * 2026-10-06). The live list is returned.
+     *
+     * @return the story ids, oldest first, never {@code null}
+     */
+    public List<String> getUsedPressStoryIds() {
+        return usedPressStoryIds;
+    }
+
+    /**
+     * Sets the press stories this player has already been shown, by id.
+     *
+     * @param usedPressStoryIds the story ids
+     * @throws NullPointerException if {@code usedPressStoryIds} is {@code null}
+     */
+    public void setUsedPressStoryIds(List<String> usedPressStoryIds) {
+        Objects.requireNonNull(usedPressStoryIds, "usedPressStoryIds must not be null");
+        this.usedPressStoryIds = new ArrayList<>(usedPressStoryIds);
+    }
+
+    /**
+     * Returns the press stories' boosts to the hiring pools still running ({@code design.md}
+     * &sect;2.2(c)). The live list is returned.
+     *
+     * @return the bonuses, never {@code null}
+     */
+    public List<HiringPoolBonus> getHiringPoolBonuses() {
+        return hiringPoolBonuses;
+    }
+
+    /**
+     * Sets the boosts to the hiring pools still running.
+     *
+     * @param hiringPoolBonuses the bonuses
+     * @throws NullPointerException if {@code hiringPoolBonuses} is {@code null}
+     */
+    public void setHiringPoolBonuses(List<HiringPoolBonus> hiringPoolBonuses) {
+        Objects.requireNonNull(hiringPoolBonuses, "hiringPoolBonuses must not be null");
+        this.hiringPoolBonuses = new ArrayList<>(hiringPoolBonuses);
     }
 
     /**

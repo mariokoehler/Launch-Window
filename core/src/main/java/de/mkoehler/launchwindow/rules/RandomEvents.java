@@ -54,7 +54,7 @@ public final class RandomEvents {
     private static final int RECENT_SEASONS = 4;
 
     /** Seasons of budget review lead time an event needs to be worth applying - BASPM's own gate. */
-    private static final int MIN_SEASONS_UNTIL_REVIEW = 6;
+    static final int MIN_SEASONS_UNTIL_REVIEW = 6;
 
     /** Seasons between budget reviews, as {@link BudgetProgress} uses. */
     private static final int SEASONS_PER_REVIEW = BudgetProgress.SEASONS_PER_REVIEW;
@@ -256,21 +256,23 @@ public final class RandomEvents {
     }
 
     /**
-     * Sets the R&amp;D results multiplier for a rolled number of seasons. A setback and a
-     * boost share one slot, so the newer event replaces the older one, as BASPM's setter does.
+     * Adds an R&amp;D results multiplier for a rolled number of seasons. A setback, a boost and a
+     * press story share one slot: the factors multiply and the longer duration stays
+     * ({@link TimedEffects}; BASPM's setter replaced the older one).
      */
     private static boolean rdMultiplier(RandomEventKind kind, PlayerSnapshot snapshot, RandomEventRoster roster,
             RandomGenerator random, int turn, List<ResolutionEvent> events) {
         RandomEventRoster.EventSpec spec = roster.spec(kind);
         double factor = drawFraction(random, spec.min(), spec.max());
         int seasons = drawInt(random, spec.durationMin(), spec.durationMax());
-        snapshot.setRdResults(factor, seasons);
+        TimedEffects.addRdResults(snapshot, factor, seasons);
         occurred(snapshot, events, kind, null, factor, turn);
         return true;
     }
 
     /**
-     * Scales running costs for a rolled number of seasons. Needs at least
+     * Scales running costs for a rolled number of seasons, multiplying with any running cost
+     * effect ({@link TimedEffects}). Needs at least
      * {@link #MIN_SEASONS_UNTIL_REVIEW} seasons until the next review, as BASPM's gate does.
      */
     private static boolean costMultiplier(PlayerSnapshot snapshot, RandomEventRoster roster, RandomGenerator random,
@@ -281,7 +283,7 @@ public final class RandomEvents {
         RandomEventRoster.EventSpec spec = roster.spec(RandomEventKind.REDUCED_EXPENDITURES);
         double factor = drawFraction(random, spec.min(), spec.max());
         int seasons = drawInt(random, spec.durationMin(), spec.durationMax());
-        snapshot.setCostMultiplier(factor, seasons);
+        TimedEffects.addCostMultiplier(snapshot, factor, seasons);
         occurred(snapshot, events, RandomEventKind.REDUCED_EXPENDITURES, null, factor, turn);
         return true;
     }
@@ -544,7 +546,7 @@ public final class RandomEvents {
         throw new IllegalStateException("personnel not on any roster: " + person.getId());
     }
 
-    private static List<Personnel> groupRoster(PlayerSnapshot snapshot, PersonnelGroup group) {
+    static List<Personnel> groupRoster(PlayerSnapshot snapshot, PersonnelGroup group) {
         return switch (group) {
             case ASTRONAUT -> new ArrayList<>(snapshot.getAstronauts());
             case SET -> new ArrayList<>(snapshot.getSetSpecialists());
@@ -553,7 +555,7 @@ public final class RandomEvents {
     }
 
     /** Component ids currently being researched by a SET specialist, in roster order, without repeats. */
-    private static List<String> componentsInResearch(PlayerSnapshot snapshot) {
+    static List<String> componentsInResearch(PlayerSnapshot snapshot) {
         LinkedHashSet<String> ids = new LinkedHashSet<>();
         for (SetSpecialist specialist : snapshot.getSetSpecialists()) {
             if (specialist.getAssignmentState() == AssignmentState.ASSIGNED

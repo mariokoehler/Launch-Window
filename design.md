@@ -112,6 +112,30 @@ leading to satellite navigation.
   objectives. For wherever a mission's extended phase is explained.
 - **Astronauts as PR:** the Mercury Seven's *Life* magazine deal and tours were a deliberate
   strategy to build support. Fits the PR-duty idea (§2.2).
+- **Press stories that really happened** (easter eggs in `pr-press.json`, §2.2(c), the player's
+  astronaut in the real person's place; no history-note icon):
+  - `do-good-work`: Gus Grissom, asked for a pep talk at Convair's Atlas plant in 1959, said
+    only "Do good work"; the workers made banners of it.
+  - `both-hands`: at the Mercury Seven's introduction on 9 April 1959, asked who expected to
+    come back, all raised a hand and John Glenn raised both.
+  - `open-car-in-the-rain`: Yuri Gagarin in Manchester on 12 July 1961, guest of the foundry
+    workers' union, rode an open-top car in pouring rain: "Surely the least I can do is get wet,
+    too."
+  - `loose-at-the-ankle`: the newsreels of Gagarin's walk down the red carpet at Vnukovo on 14
+    April 1961 show something loose at his ankle, usually told as an untied shoelace (some
+    accounts say a sock suspender).
+  - `puppy-for-the-children`: Khrushchev sent Pushinka, a puppy of the orbital dog Strelka, to
+    the Kennedys in 1961; the White House got about 5,000 requests for her puppies.
+  - `family-on-the-cover`: the Mercury Seven's exclusive *Life* contract (April 1959) put the
+    wives on its cover that September.
+  - `paintings-on-stamps`: Alexei Leonov painted space scenes with Andrei Sokolov; Soviet stamps
+    reproduced them from 1967.
+  - `fall-from-a-balcony`: on 3 October 1961, at a Crimean sanatorium, Gagarin jumped from a
+    balcony and was badly hurt; the official account was vague.
+  - `bathroom-mirror`: on 26 February 1964 John Glenn slipped while fixing a bathroom mirror and
+    hurt his inner ear, and withdrew from the Ohio Senate race.
+  - `station-patrol`: on 27 March 1963 cosmonaut Grigory Nelyubov argued with a military patrol at
+    Chkalovsky station and refused to apologise; he and two others were dropped from the corps.
 - **Whole-crew losses:** Apollo 1, Soyuz 1, Soyuz 11, Challenger and Columbia lost everyone
   aboard, the real basis of §2.5(f). A sober note the first time it happens.
 - **Bars (also called Chaika) and Lisichka** died when their Korabl-Sputnik launch failed on 28
@@ -284,11 +308,62 @@ season unchanged. Tiger Teams' live per-step choice doesn't fit, so it was redes
     a season, floored at 0. The count lives in the season pass (`prDutySeasons`), so a recall and
     restart on the same day doesn't reset it; a pass that finds the astronaut off duty does. An
     Expert keeps the trait even below 80.
-  - **Press stories** (user: skeleton now, varied stories later): each season on tour has a 10 %
-    chance of making the papers, 70 % of them good. A good story adds half the season's yield, a
-    bad one turns the season into a loss of half of it. Stories live in
-    `assets/content/pr-press.json` (outside the frozen pack; four **placeholders** for now, ids
-    never reused). No randomness is drawn while nobody is on tour.
+  - **Press stories:** each season on tour has a 10 % chance of making the papers, 70 % of them
+    good. A good story adds half the season's yield, a bad one turns the season into a loss of
+    half of it. Stories live in `assets/content/pr-press.json` (outside the frozen pack, ids never
+    reused). No randomness is drawn while nobody is on tour.
+  - **No repeats** (user, 2026-10-06): `PlayerSnapshot.usedPressStoryIds` records the stories a
+    player has seen; a draw picks only unseen ones of its tone, and once every story of a tone has
+    run that tone starts over. Per player, not per astronaut: the player reads them all.
+  - **Effects beyond prestige** (user idea and confirmation, 2026-10-06; `rules.PressEffects`,
+    authored in the JSON as `effects`, kinds in `PrPress.EffectKind`; the turn report adds one
+    sentence per effect). 16 of the 39 stories carry one:
+
+    | Story | Effect |
+    |---|---|
+    | Applications soar (engineering colleges) | SET pool +3 for 2 seasons |
+    | Salutes the old pilots | Astronaut pool +3 for 2 seasons |
+    | An engineer writes in | One SET candidate from the best quality band, this season |
+    | Credits the engineers | SET morale +5 |
+    | Do good work | R&D results ×1.10 for 2 seasons |
+    | On the night shift | Running costs ×0.95 for 2 seasons |
+    | Both hands | Astronaut morale +3 |
+    | Answers every letter | That astronaut's morale +5 |
+    | Family on the cover | Funds +10 % of the season's funding rate |
+    | Stars in a supplier's adverts | Funds +5 % of the rate, that astronaut's morale −3 |
+    | Charms the budget committee | Funding rate +5 % until the next review |
+    | Crowds close a runway | The full yield as the bonus instead of half |
+    | *Bad:* Shiny new car | SET and Mission Control morale −3 |
+    | *Bad:* Argues with a patrol | That astronaut's morale −5 |
+    | *Bad:* Slips at home | That astronaut's Fitness −2 |
+    | *Bad:* A photographer follows in | One component in R&D loses a season of its expected gain (`ResearchPlanning`), floored |
+
+    - **Coverage:** an effect of N seasons covers this season and the next N − 1 in the phase
+      that reads it (budgets, research, pool refreshes); the PR phase runs before the budget and
+      before the timed slots count down, so an R&D effect is stored one season longer. Tested
+      end to end in `SeasonResolverTest`.
+    - **Overlaps multiply** (user, 2026-10-06): the R&D and running-cost slots are shared with
+      the random events (§2.7); a new effect multiplies into a running one and the longer
+      duration stays (`rules.TimedEffects`).
+    - **Bigger pools** live in `PlayerSnapshot.hiringPoolBonuses` until their refreshes run out.
+      A standout comes from the best quality band, at whatever age the portrait gives, so its
+      story gives no age ("a brilliant engineer").
+    - **Only when there's something to act on:** a research setback needs a component in R&D
+      expected to gain something; a raised funding rate needs six seasons before the next review
+      and no review this season (which would reset it), as BASPM's extra-funding event does.
+      When the only unseen stories of a tone can't run, the usable one seen longest ago runs
+      again and moves to the back of the record, so the usable ones keep cycling without repeats
+      and the others keep their turn.
+    - **Effects live in the JSON** (user, 2026-10-06), outside the frozen pack: editing one in a
+      running game changes the rules for stories drawn afterwards. Applied effects are stored in
+      the turn report (`PrDutyPerformed.pressEffects`), so old reports still read right.
+  - **The stories** (written 2026-10-06; user: a good variety, mostly fictional, some real events
+    with the player's astronaut in the historical person's place as an easter egg): 27 good and
+    12 bad, about the same 70/30 split as the draw, so each story turns up about as often. That
+    is roughly 5 to 20 stories per player in an early-era game, so repeats stay rare; add more any
+    time. Each story reads for either agency and any astronaut (no pronouns, no country-specific
+    terms), models nothing the rules don't (no grounding injuries, no dismissals) and can happen
+    twice to the same person. Ten are nods to history (§1.1).
   - **Timing:** the phase runs before the budget, so PR prestige counts at a review that season,
     as mission prestige does.
   - Every number and default here is our own, confirmed by the user on 2026-10-06; tune in play.
@@ -487,7 +562,9 @@ the start of the pass, so an N-season effect covers N seasons.
   (×0.75–0.95 for 3–11 seasons; needs six seasons to the review).
 - **Our deviations:** personnel events only take people not on a mission; BASPM's R&D and cost
   multipliers are never read in the shipped game, but ours apply; an unavailable employee still
-  trains and researches.
+  trains and researches. Two multipliers in one slot multiply and the longer duration stays
+  (`rules.TimedEffects`, user 2026-10-06, for press stories, §2.2(c)); BASPM's setter replaced
+  the older one.
 
 ### 2.8 Campaign objectives
 
@@ -581,7 +658,8 @@ artifact. **Content definitions are immutable records** (`content` package), val
   `Archetype` (`NASA`/`SOVIET`), funds, prestige, funding rate, the player's own season counter,
   rosters and candidate pools per group, opened programs and rocket programs, owned components
   (`OwnedMissionComponent`: current reliability and floor), buildings, in-progress missions,
-  goal bookkeeping (§2.6(d)), the news log, timed event state (§2.7), the memorial, and id
+  goal bookkeeping (§2.6(d)), the news log, timed event state (§2.7), the press stories seen and
+  the hiring-pool bonuses (§2.2(c)), the memorial, and id
   counters. Content is referenced by id, never embedded.
 - **Ids are never reused:** `allocatePersonnelId()` (`p…`, shared by all groups and by
   candidates) and `allocateMissionInstanceId()` (`m…`). A stale action from an old view of the
@@ -885,8 +963,6 @@ patches (`ui-spec.md` component 8).
 ## 4. Open questions
 
 - **Declared goals for the colleagues' game:** decide before it starts (§2.9).
-- **PR press stories:** the four placeholders in `assets/content/pr-press.json` need replacing
-  with varied stories (§2.2(c)).
 - **NASA/Soviet prestige balance:** BASPM's Soviet programs pay a little more each (about 4 %)
   but NASA has nine more programs, about 34 % more prestige in total. Decided (user,
   2026-10-01) not to close the gap up front; revisit with play-test and harness data.
@@ -1081,8 +1157,9 @@ dogs, the animals that came home, and the space-race news (each recorded in its 
 **Reset the dev data root** before the next play test: the pack's hash changed with the new
 passengers.
 
-**PR duty for astronauts** is built too (2026-10-06, §2.2(c)), with placeholder press stories
-to replace later. Nothing else is queued: next is the next play test.
+**PR duty for astronauts** is built too (2026-10-06, §2.2(c)), with 39 press stories, no repeats
+until all have run, and effects beyond prestige. Nothing
+else is queued: next is the next play test.
 
 ### Later
 

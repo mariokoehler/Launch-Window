@@ -10,6 +10,7 @@ import de.mkoehler.launchwindow.model.MemorialEntry;
 import de.mkoehler.launchwindow.model.MissionControlOfficer;
 import de.mkoehler.launchwindow.model.MissionControlSkill;
 import de.mkoehler.launchwindow.model.Personnel;
+import de.mkoehler.launchwindow.model.HiringPoolBonus;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.model.SetSkill;
 import de.mkoehler.launchwindow.model.SetSpecialist;
@@ -240,7 +241,9 @@ public final class HiringPool {
      * {@link #HIRING_BATCH_SIZE}-sized batch, discarding whoever was in it
      * before (the job market moves on, not an accumulating pool). Quality
      * is banded by each group's own current roster morale, independently
-     * per group.
+     * per group. Press stories' {@link HiringPoolBonus bonuses} add
+     * candidates, the standouts among them from the best band, and each
+     * refresh counts them down ({@code design.md} &sect;2.2(c)).
      *
      * @param snapshot the player snapshot to refresh; mutated in place
      * @param random   the random source candidates are generated from
@@ -255,7 +258,9 @@ public final class HiringPool {
         List<Astronaut> astronautBatch = new ArrayList<>(HIRING_BATCH_SIZE);
         Set<String> astronautTaken = takenPortraits(snapshot, snapshot.getAstronauts());
         Set<String> astronautRecent = portraitsOf(snapshot.getAstronautCandidates());
-        for (int i = 0; i < HIRING_BATCH_SIZE; i++) {
+        int astronautSize = HIRING_BATCH_SIZE + bonusExtra(snapshot, PersonnelGroup.ASTRONAUT);
+        int astronautStandouts = bonusStandouts(snapshot, PersonnelGroup.ASTRONAUT);
+        for (int i = 0; i < astronautSize; i++) {
             String id = snapshot.allocatePersonnelId();
             PersonnelNames.Identity who = candidateIdentity(snapshot, id, PersonnelGroup.ASTRONAUT, astronautTaken,
                 astronautRecent);
@@ -265,8 +270,9 @@ public final class HiringPool {
                 randomStartingMorale(random), randomLearningPotential(random, experience));
             candidate.setPortraitId(who.portraitId());
             candidate.setSalary(randomSalary(random));
+            SkillBand quality = i >= astronautSize - astronautStandouts ? SkillBand.EXCELLENT : astronautBand;
             for (AstronautSkill skill : AstronautSkill.values()) {
-                candidate.setSkill(skill, randomSkill(random, astronautBand, bonus));
+                candidate.setSkill(skill, randomSkill(random, quality, bonus));
             }
             astronautBatch.add(candidate);
         }
@@ -276,7 +282,9 @@ public final class HiringPool {
         List<SetSpecialist> setBatch = new ArrayList<>(HIRING_BATCH_SIZE);
         Set<String> setTaken = takenPortraits(snapshot, snapshot.getSetSpecialists());
         Set<String> setRecent = portraitsOf(snapshot.getSetSpecialistCandidates());
-        for (int i = 0; i < HIRING_BATCH_SIZE; i++) {
+        int setSize = HIRING_BATCH_SIZE + bonusExtra(snapshot, PersonnelGroup.SET);
+        int setStandouts = bonusStandouts(snapshot, PersonnelGroup.SET);
+        for (int i = 0; i < setSize; i++) {
             String id = snapshot.allocatePersonnelId();
             PersonnelNames.Identity who = candidateIdentity(snapshot, id, PersonnelGroup.SET, setTaken,
                 setRecent);
@@ -286,8 +294,9 @@ public final class HiringPool {
                 randomStartingMorale(random), randomLearningPotential(random, experience));
             candidate.setPortraitId(who.portraitId());
             candidate.setSalary(randomSalary(random));
+            SkillBand quality = i >= setSize - setStandouts ? SkillBand.EXCELLENT : setBand;
             for (SetSkill skill : SetSkill.values()) {
-                candidate.setSkill(skill, randomSkill(random, setBand, bonus));
+                candidate.setSkill(skill, randomSkill(random, quality, bonus));
             }
             setBatch.add(candidate);
         }
@@ -297,7 +306,9 @@ public final class HiringPool {
         List<MissionControlOfficer> missionControlBatch = new ArrayList<>(HIRING_BATCH_SIZE);
         Set<String> missionControlTaken = takenPortraits(snapshot, snapshot.getMissionControlOfficers());
         Set<String> missionControlRecent = portraitsOf(snapshot.getMissionControlCandidates());
-        for (int i = 0; i < HIRING_BATCH_SIZE; i++) {
+        int missionControlSize = HIRING_BATCH_SIZE + bonusExtra(snapshot, PersonnelGroup.MISSION_CONTROL);
+        int missionControlStandouts = bonusStandouts(snapshot, PersonnelGroup.MISSION_CONTROL);
+        for (int i = 0; i < missionControlSize; i++) {
             String id = snapshot.allocatePersonnelId();
             PersonnelNames.Identity who = candidateIdentity(snapshot, id, PersonnelGroup.MISSION_CONTROL,
                 missionControlTaken, missionControlRecent);
@@ -307,12 +318,38 @@ public final class HiringPool {
                 randomStartingMorale(random), randomLearningPotential(random, experience));
             candidate.setPortraitId(who.portraitId());
             candidate.setSalary(randomSalary(random));
+            SkillBand quality = i >= missionControlSize - missionControlStandouts ? SkillBand.EXCELLENT : missionControlBand;
             for (MissionControlSkill skill : MissionControlSkill.values()) {
-                candidate.setSkill(skill, randomSkill(random, missionControlBand, bonus));
+                candidate.setSkill(skill, randomSkill(random, quality, bonus));
             }
             missionControlBatch.add(candidate);
         }
         snapshot.setMissionControlCandidates(missionControlBatch);
+        ageBonuses(snapshot);
+    }
+
+    /** The extra candidates the running press-story bonuses add to one group's pool. */
+    private static int bonusExtra(PlayerSnapshot snapshot, PersonnelGroup group) {
+        return snapshot.getHiringPoolBonuses().stream().filter(bonus -> bonus.group().equals(group.name()))
+            .mapToInt(HiringPoolBonus::extra).sum();
+    }
+
+    /** How many of a group's extra candidates come from the best quality band. */
+    private static int bonusStandouts(PlayerSnapshot snapshot, PersonnelGroup group) {
+        return Math.min(bonusExtra(snapshot, group), snapshot.getHiringPoolBonuses().stream()
+            .filter(bonus -> bonus.group().equals(group.name())).mapToInt(HiringPoolBonus::standout).sum());
+    }
+
+    /** Counts every bonus down by the refresh just made, dropping the spent ones. */
+    private static void ageBonuses(PlayerSnapshot snapshot) {
+        List<HiringPoolBonus> aged = new ArrayList<>();
+        for (HiringPoolBonus bonus : snapshot.getHiringPoolBonuses()) {
+            if (bonus.refreshesRemaining() > 1) {
+                aged.add(new HiringPoolBonus(bonus.group(), bonus.extra(), bonus.standout(),
+                    bonus.refreshesRemaining() - 1));
+            }
+        }
+        snapshot.setHiringPoolBonuses(aged);
     }
 
     /**

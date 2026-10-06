@@ -5,7 +5,10 @@ import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.model.Building;
 import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.AssignmentState;
+import de.mkoehler.launchwindow.model.HiringPoolBonus;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
+import de.mkoehler.launchwindow.model.SetSkill;
+import de.mkoehler.launchwindow.model.SetSpecialist;
 import de.mkoehler.launchwindow.model.TrainingKind;
 
 import org.junit.jupiter.api.Test;
@@ -393,6 +396,38 @@ class HiringPoolTest {
             ids.add(candidate.getId());
         }
         return ids;
+    }
+
+    /**
+     * A press story's bonus grows one group's pool for as many refreshes as it says, its standouts
+     * from the best band, then it's gone.
+     */
+    @Test
+    void pressBonusesGrowAPoolForTheirRefreshes() {
+        PlayerSnapshot snapshot = newSnapshot();
+        snapshot.getHiringPoolBonuses().add(new HiringPoolBonus("SET", 3, 2, 2));
+
+        HiringPool.refreshCandidates(snapshot, new Random(1L));
+        List<SetSpecialist> pool = snapshot.getSetSpecialistCandidates();
+        assertEquals(HiringPool.HIRING_BATCH_SIZE + 3, pool.size());
+        assertEquals(HiringPool.HIRING_BATCH_SIZE, snapshot.getAstronautCandidates().size());
+        double regular = pool.subList(0, pool.size() - 2).stream().mapToDouble(HiringPoolTest::meanSkill)
+            .average().orElseThrow();
+        for (SetSpecialist standout : pool.subList(pool.size() - 2, pool.size())) {
+            assertTrue(meanSkill(standout) > regular, "a standout beats the average candidate");
+        }
+        assertEquals(List.of(new HiringPoolBonus("SET", 3, 2, 1)), snapshot.getHiringPoolBonuses());
+
+        HiringPool.refreshCandidates(snapshot, new Random(2L));
+        assertEquals(HiringPool.HIRING_BATCH_SIZE + 3, snapshot.getSetSpecialistCandidates().size());
+        assertTrue(snapshot.getHiringPoolBonuses().isEmpty());
+
+        HiringPool.refreshCandidates(snapshot, new Random(3L));
+        assertEquals(HiringPool.HIRING_BATCH_SIZE, snapshot.getSetSpecialistCandidates().size());
+    }
+
+    private static double meanSkill(SetSpecialist specialist) {
+        return java.util.Arrays.stream(SetSkill.values()).mapToDouble(specialist::getSkill).average().orElseThrow();
     }
 
     private static PlayerSnapshot newSnapshot() {

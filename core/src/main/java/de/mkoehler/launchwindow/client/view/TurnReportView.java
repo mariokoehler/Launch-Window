@@ -502,18 +502,86 @@ public final class TurnReportView {
     }
 
     /**
-     * Words a season of PR duty: the press story where the papers picked the tour up, the prestige,
-     * and any rust.
+     * Words a season of PR duty: the press story where the papers picked the tour up, what else it
+     * did, the prestige, and any rust.
      */
     private static Line prLine(PrDutyPerformed pr) {
         String rust = pr.rust() > 0 ? String.format(Locale.ROOT, " Out of practice: Piloting and Fitness -%.0f.",
             pr.rust()) : "";
         String earned = (pr.prestige() < 0 ? "−" : "+") + Math.abs(pr.prestige()) + " prestige";
+        StringBuilder effects = new StringBuilder();
+        for (PrPress.Effect effect : pr.pressEffects()) {
+            String words = pressEffect(effect, pr.name());
+            if (!words.isEmpty()) {
+                effects.append(' ').append(words);
+            }
+        }
         return PrPress.standard().byId(pr.pressStoryId())
-            .map(story -> new Line(story.headlineFor(pr.name()) + ": " + earned, story.textFor(pr.name()) + rust,
-                "PR", story.tone() == PrPress.Tone.GOOD ? 1 : -1))
+            .map(story -> new Line(story.headlineFor(pr.name()) + ": " + earned,
+                story.textFor(pr.name()) + effects + rust, "PR", story.tone() == PrPress.Tone.GOOD ? 1 : -1))
             .orElseGet(() -> new Line(pr.name() + "'s PR tour: " + earned, rust.strip(), "PR",
                 pr.prestige() > 0 ? 1 : 0));
+    }
+
+    /**
+     * Words one applied press-story effect as a sentence ("3 more SET candidates in the pool for two
+     * seasons."), from the values the season pass stored.
+     *
+     * @param effect the effect as applied
+     * @param name   the astronaut in the story
+     * @return the sentence, or "" for an effect the prestige already shows
+     */
+    public static String pressEffect(PrPress.Effect effect, String name) {
+        long amount = Math.round(effect.amount());
+        return switch (effect.kind()) {
+            case PRESTIGE_SHARE -> "";
+            case HIRING_POOL -> amount + " more " + candidates(effect.target(), amount) + " in the pool "
+                + seasons(effect.seasons()) + ".";
+            case STANDOUT_CANDIDATE -> (amount == 1 ? "An outstanding " + candidates(effect.target(), 1) + " is"
+                : amount + " outstanding " + candidates(effect.target(), amount) + " are") + " in the pool "
+                + seasons(effect.seasons()) + ".";
+            case GROUP_MORALE -> groupLabel(effect.target()) + " morale " + tightSigned(amount) + ".";
+            case ASTRONAUT_MORALE -> name + "'s morale " + tightSigned(amount) + ".";
+            case ASTRONAUT_SKILL -> name + "'s " + skillLabel(effect.target()) + " " + tightSigned(amount) + ".";
+            case FUNDS -> "Funds " + signedMoney(amount) + ".";
+            case FUNDING_RATE -> "Funding " + signedMoney(amount) + " a season until the next review.";
+            case RD_RESULTS -> "R&D results " + tightSigned(Math.round((effect.amount() - 1) * 100)) + "% "
+                + seasons(effect.seasons()) + ".";
+            case RUNNING_COSTS -> "Running costs " + tightSigned(Math.round((effect.amount() - 1) * 100)) + "% "
+                + seasons(effect.seasons()) + ".";
+            case RESEARCH_SETBACK -> String.format(Locale.ROOT, "%s lost %.1f reliability.",
+                effect.target() == null ? "A component" : ContentNames.of(effect.target()), effect.amount());
+        };
+    }
+
+    private static String candidates(String group, long count) {
+        String noun = switch (group == null ? "" : group) {
+            case "ASTRONAUT" -> "astronaut candidate";
+            case "MISSION_CONTROL" -> "controller candidate";
+            default -> "SET candidate";
+        };
+        return count == 1 ? noun : noun + "s";
+    }
+
+    private static String groupLabel(String group) {
+        return switch (group == null ? "" : group) {
+            case "ASTRONAUT" -> "Astronaut";
+            case "MISSION_CONTROL" -> "Mission Control";
+            default -> "SET";
+        };
+    }
+
+    private static String seasons(int seasons) {
+        return switch (seasons) {
+            case 0, 1 -> "this season";
+            case 2 -> "for two seasons";
+            case 3 -> "for three seasons";
+            default -> "for " + seasons + " seasons";
+        };
+    }
+
+    private static String tightSigned(long value) {
+        return (value < 0 ? "−" : "+") + Math.abs(value);
     }
 
     private static Line departure(PersonnelDeparture departure) {

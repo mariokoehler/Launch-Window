@@ -1,5 +1,6 @@
 package de.mkoehler.launchwindow.rules;
 
+import de.mkoehler.launchwindow.content.ContentCatalog;
 import de.mkoehler.launchwindow.content.PrPress;
 import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.Astronaut;
@@ -30,7 +31,9 @@ import java.util.random.RandomGenerator;
  *       Fitness each lose {@link #RUST_PER_SEASON} a season. The count lives in the season pass, so a
  *       recall and restart on the same day doesn't reset it. An Expert keeps the trait.</li>
  *   <li><b>Press stories</b>: each season on duty has a {@link #PRESS_CHANCE} chance of making the
- *       papers ({@link PrPress}); a good story adds half the yield, a bad one costs half of it.</li>
+ *       papers ({@link PrPress}); a good story adds half the yield (or the share it sets), a bad
+ *       one costs half of it, and some stories do more ({@link PressEffects}). No story repeats for
+ *       a player until every story of its tone has run once.</li>
  * </ul>
  *
  * <p>Every number here is our own and unconfirmed, to be tuned in play.</p>
@@ -188,6 +191,22 @@ public final class PrDuty {
      * @return one event per astronaut on duty, in roster order
      */
     public static List<ResolutionEvent> advanceSeason(PlayerSnapshot snapshot, PrPress press, RandomGenerator random) {
+        return advanceSeason(snapshot, press, random, null, 1);
+    }
+
+    /**
+     * Runs one season of PR duty, with the content and the season count that some press stories'
+     * effects need ({@link PressEffects#usable}).
+     *
+     * @param snapshot       the player; mutated in place
+     * @param press          the press stories
+     * @param random         the season's random source
+     * @param catalog        the content, or {@code null} (stories that set research back can't run)
+     * @param seasonsElapsed the player's seasons elapsed counting this one
+     * @return one event per astronaut on duty, in roster order
+     */
+    public static List<ResolutionEvent> advanceSeason(PlayerSnapshot snapshot, PrPress press, RandomGenerator random,
+            ContentCatalog catalog, int seasonsElapsed) {
         Objects.requireNonNull(snapshot, "snapshot must not be null");
         Objects.requireNonNull(press, "press must not be null");
         Objects.requireNonNull(random, "random must not be null");
@@ -203,12 +222,17 @@ public final class PrDuty {
             long yield = yields.get(astronaut.getId());
             long earned = yield;
             String story = null;
+            List<PrPress.Effect> effects = List.of();
             if (random.nextDouble() < PRESS_CHANCE) {
                 boolean good = random.nextDouble() < GOOD_PRESS_CHANCE;
-                story = press.pick(good ? PrPress.Tone.GOOD : PrPress.Tone.BAD, random);
+                story = press.pick(good ? PrPress.Tone.GOOD : PrPress.Tone.BAD, random,
+                    snapshot.getUsedPressStoryIds(),
+                    candidate -> PressEffects.usable(candidate, snapshot, catalog, seasonsElapsed));
                 if (story != null) {
-                    long effect = Math.round(yield * PRESS_SHARE);
+                    PrPress.Story picked = press.byId(story).orElseThrow();
+                    long effect = Math.round(yield * PressEffects.prestigeShare(picked, PRESS_SHARE));
                     earned = good ? yield + effect : -effect;
+                    effects = PressEffects.apply(picked, astronaut, snapshot, catalog, random);
                 }
             }
             int seasons = astronaut.getPrDutySeasons() + 1;
@@ -221,7 +245,8 @@ public final class PrDuty {
                 }
             }
             total += earned;
-            events.add(new PrDutyPerformed(astronaut.getId(), astronaut.getName(), yield, earned, story, rust));
+            events.add(new PrDutyPerformed(astronaut.getId(), astronaut.getName(), yield, earned, story, rust,
+                effects));
         }
         snapshot.setPrestige(Math.max(0, snapshot.getPrestige() + total));
         return events;

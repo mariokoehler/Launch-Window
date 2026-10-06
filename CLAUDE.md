@@ -43,8 +43,9 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
 - **The decisions checklist came back on 2026-10-06,** was merged into the docs, and its code
   work is built (`design.md` §5, Backlog). Reset the dev data root before the next play test: the
   pack hash changed.
-- **PR duty for astronauts is built** (`design.md` §2.2(c)); its press stories are placeholders
-  to replace (`assets/content/pr-press.json`). Next is the next play test.
+- **PR duty for astronauts is built** (`design.md` §2.2(c)), with 39 press stories
+  (`assets/content/pr-press.json`), no repeats, and effects beyond prestige. Next is the next
+  play test.
 
 ## How we work
 

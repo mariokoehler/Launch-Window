@@ -159,4 +159,35 @@ class TimedEffectsTest {
         RandomEvents.advanceSeason(snapshot, QUIET, new Random(1), 2, 2);
         assertTrue(snapshot.getUnavailableComponents().isEmpty());
     }
+
+    /**
+     * Overlapping multipliers in one slot multiply and the longer duration stays ({@link TimedEffects},
+     * user decision 2026-10-06).
+     */
+    @Test
+    void overlappingMultipliersMultiplyAndTheLongerStays() {
+        PlayerSnapshot snapshot = player();
+
+        TimedEffects.addRdResults(snapshot, 1.2, 3);
+        TimedEffects.addRdResults(snapshot, 0.9, 2);
+        assertEquals(1.08, snapshot.getRdResultsMultiplier(), 1e-9);
+        assertEquals(3, snapshot.getRdResultsSeasonsRemaining());
+
+        TimedEffects.addCostMultiplier(snapshot, 0.95, 2);
+        TimedEffects.addCostMultiplier(snapshot, 0.8, 5);
+        assertEquals(0.76, snapshot.getCostMultiplier(), 1e-9);
+        assertEquals(5, snapshot.getCostMultiplierSeasonsRemaining());
+    }
+
+    /**
+     * A multiplier whose seasons ran out is replaced, not multiplied into.
+     */
+    @Test
+    void anExpiredSlotStartsFresh() {
+        PlayerSnapshot snapshot = player();
+        snapshot.setRdResults(0.5, 0);
+
+        TimedEffects.addRdResults(snapshot, 1.1, 2);
+        assertEquals(1.1, snapshot.getRdResultsMultiplier(), 1e-9);
+    }
 }

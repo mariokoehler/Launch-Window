@@ -28,6 +28,7 @@ import de.mkoehler.launchwindow.model.AstronautSkill;
 import de.mkoehler.launchwindow.model.Building;
 import de.mkoehler.launchwindow.model.InProgressMission;
 import de.mkoehler.launchwindow.model.GoalRecord;
+import de.mkoehler.launchwindow.model.HiringPoolBonus;
 import de.mkoehler.launchwindow.model.MemorialEntry;
 import de.mkoehler.launchwindow.model.NewsEntry;
 import de.mkoehler.launchwindow.model.RandomEventKind;
@@ -228,5 +229,9 @@ public final class MessageRegistry {
         // PR duty for astronauts (design.md section 2.2(c), 2026-10-06).
         kryo.register(StartPrDutyAction.class);
         kryo.register(RecallFromPrDutyAction.class);
+
+        // Press-story effects: PlayerSnapshot.hiringPoolBonuses (design.md section 2.2(c), 2026-10-06).
+        // Never move this line.
+        kryo.register(HiringPoolBonus.class);
     }
 }

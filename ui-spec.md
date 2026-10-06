@@ -881,7 +881,8 @@ department.
   diminishing returns when others are already on tour, a warning on rust, and Cancel / Send on
   tour.
 - **The turn report's People column** names each tour and its prestige, or the press story's
-  headline and text when the papers picked it up, and the rust. Lines with detail text now show
+  headline and text when the papers picked it up, one sentence per effect the story had ("3 more
+  SET candidates in the pool for two seasons.", `TurnReportView.pressEffect`), and the rust. Lines with detail text now show
   it under the title (also the lost passenger's).
 - **The Public Affairs Office** shows "PR duty: +N / season" under the prestige.
 

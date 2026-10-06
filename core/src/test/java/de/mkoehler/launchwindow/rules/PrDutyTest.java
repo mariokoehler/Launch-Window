@@ -1,15 +1,19 @@
 package de.mkoehler.launchwindow.rules;
 
+import de.mkoehler.launchwindow.client.view.TurnReportView;
 import de.mkoehler.launchwindow.content.PrPress;
 import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.AstronautSkill;
+import de.mkoehler.launchwindow.model.HiringPoolBonus;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
+import de.mkoehler.launchwindow.model.SetSpecialist;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
@@ -17,6 +21,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.random.RandomGenerator;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -174,6 +179,29 @@ class PrDutyTest {
     }
 
     /**
+     * No story repeats until every story of its tone has run; then the tone starts over, and the
+     * other tone's record is kept.
+     */
+    @Test
+    void storiesDontRepeatUntilAllHaveRun() {
+        PrPress press = new PrPress(List.of(
+            new PrPress.Story("g1", PrPress.Tone.GOOD, "h", "t"),
+            new PrPress.Story("g2", PrPress.Tone.GOOD, "h", "t"),
+            new PrPress.Story("g3", PrPress.Tone.GOOD, "h", "t"),
+            new PrPress.Story("b1", PrPress.Tone.BAD, "h", "t")));
+        RandomGenerator first = scripted();
+        List<String> used = new ArrayList<>(List.of("gone", "b1"));
+        Set<String> seen = new HashSet<>();
+        for (int i = 0; i < 3; i++) {
+            assertTrue(seen.add(press.pick(PrPress.Tone.GOOD, first, used)), "no repeat within a round");
+        }
+        assertEquals(Set.of("g1", "g2", "g3"), seen);
+        assertFalse(used.contains("gone"), "ids no longer in the file are dropped");
+        assertEquals("g1", press.pick(PrPress.Tone.GOOD, first, used), "a new round starts");
+        assertEquals(List.of("b1", "g1"), used, "the bad record is kept");
+    }
+
+    /**
      * The bundled press file loads, has both tones, unique ids, and only letters the fonts can draw.
      */
     @Test
@@ -187,7 +215,105 @@ class PrDutyTest {
             String text = story.headlineFor("Yuri Gagarin") + story.textFor("Yuri Gagarin");
             text.chars().forEach(c -> assertTrue(c == ' '
                 || de.mkoehler.launchwindow.client.ui.Theme.CHARACTERS.indexOf(c) >= 0, story.id()));
+            assertTrue(story.effects(PrPress.EffectKind.PRESTIGE_SHARE).size()
+                <= (story.tone() == PrPress.Tone.GOOD ? 1 : 0), story.id() + ": one share, good stories only");
+            for (PrPress.Effect effect : story.effects()) {
+                String where = story.id() + " " + effect.kind();
+                switch (effect.kind()) {
+                    case HIRING_POOL, STANDOUT_CANDIDATE, GROUP_MORALE ->
+                        assertDoesNotThrow(() -> PersonnelGroup.valueOf(effect.target()), where);
+                    case ASTRONAUT_SKILL -> assertDoesNotThrow(() -> AstronautSkill.valueOf(effect.target()), where);
+                    default -> assertEquals(null, effect.target(), where);
+                }
+                switch (effect.kind()) {
+                    case HIRING_POOL, STANDOUT_CANDIDATE, RD_RESULTS, RUNNING_COSTS ->
+                        assertTrue(effect.seasons() >= 1, where + " lasts");
+                    default -> assertEquals(0, effect.seasons(), where + " is a one-off");
+                }
+                assertTrue(effect.amount() != 0, where + " does something");
+                for (String sentence : List.of(TurnReportView.pressEffect(effect, "Yuri Gagarin"))) {
+                    sentence.chars().forEach(c -> assertTrue(c == ' '
+                        || de.mkoehler.launchwindow.client.ui.Theme.CHARACTERS.indexOf(c) >= 0, where));
+                }
+            }
         }
+    }
+
+    /**
+     * A story's effects apply when it runs: its own prestige share, morale, a skill, cash and a
+     * bigger pool, each reported as applied (cash in money).
+     */
+    @Test
+    void storyEffectsApply() {
+        PrPress press = new PrPress(List.of(new PrPress.Story("fx", PrPress.Tone.GOOD, "h", "t", List.of(
+            new PrPress.Effect(PrPress.EffectKind.PRESTIGE_SHARE, null, 1.0, 0),
+            new PrPress.Effect(PrPress.EffectKind.GROUP_MORALE, "SET", 5, 0),
+            new PrPress.Effect(PrPress.EffectKind.ASTRONAUT_MORALE, null, -3, 0),
+            new PrPress.Effect(PrPress.EffectKind.ASTRONAUT_SKILL, "FITNESS", -2, 0),
+            new PrPress.Effect(PrPress.EffectKind.FUNDS, null, 0.1, 0),
+            new PrPress.Effect(PrPress.EffectKind.FUNDING_RATE, null, 0.05, 0),
+            new PrPress.Effect(PrPress.EffectKind.HIRING_POOL, "ASTRONAUT", 3, 2)))));
+        PlayerSnapshot snapshot = snapshot(astronaut("a", 80, 1, 1));
+        snapshot.setFundingRatePerSeason(2_000);
+        SetSpecialist engineer = new SetSpecialist("s", "S", 30, 50, 50);
+        snapshot.getSetSpecialists().add(engineer);
+        PrDuty.start(snapshot, "a");
+
+        PrDutyPerformed event = (PrDutyPerformed) PrDuty.advanceSeason(snapshot, press, scripted(0.05, 0.5)).get(0);
+
+        assertEquals(32, event.prestige(), "16 + the full 16");
+        assertEquals(55, engineer.getMorale());
+        Astronaut astronaut = snapshot.getAstronauts().get(0);
+        assertEquals(57, astronaut.getMorale(), "60 - 3");
+        assertEquals(48.0, astronaut.getSkill(AstronautSkill.FITNESS));
+        assertEquals(1_000 + 200, snapshot.getFunds());
+        assertEquals(2_100, snapshot.getFundingRatePerSeason());
+        assertEquals(List.of(new HiringPoolBonus("ASTRONAUT", 3, 0, 2)), snapshot.getHiringPoolBonuses());
+        assertEquals(6, event.pressEffects().size(), "everything but the share");
+        assertTrue(event.pressEffects().contains(new PrPress.Effect(PrPress.EffectKind.FUNDS, null, 200, 0)));
+        assertTrue(event.pressEffects().contains(new PrPress.Effect(PrPress.EffectKind.FUNDING_RATE, null, 100, 0)));
+    }
+
+    /**
+     * A raised funding rate only runs well clear of a review, which would reset it; a research
+     * setback needs the content and a component in R&amp;D.
+     */
+    @Test
+    void storiesNeedSomethingToActOn() {
+        PrPress.Story raise = new PrPress.Story("r", PrPress.Tone.GOOD, "h", "t",
+            List.of(new PrPress.Effect(PrPress.EffectKind.FUNDING_RATE, null, 0.05, 0)));
+        PrPress.Story setback = new PrPress.Story("s", PrPress.Tone.BAD, "h", "t",
+            List.of(new PrPress.Effect(PrPress.EffectKind.RESEARCH_SETBACK, null, 1, 0)));
+        PlayerSnapshot snapshot = snapshot();
+        assertTrue(PressEffects.usable(raise, snapshot, null, 1));
+        assertTrue(PressEffects.usable(raise, snapshot, null, 10), "6 seasons to the review");
+        assertFalse(PressEffects.usable(raise, snapshot, null, 11), "5 seasons to the review");
+        assertFalse(PressEffects.usable(raise, snapshot, null, 16), "the review runs this season");
+        assertFalse(PressEffects.usable(setback, snapshot, null, 1));
+    }
+
+    /**
+     * When the only fresh story can't run, the usable ones keep cycling oldest first, so none
+     * repeats within a round, and the fresh one keeps its turn for when it can run.
+     */
+    @Test
+    void anUnusableFreshStoryKeepsItsTurn() {
+        PrPress press = new PrPress(List.of(
+            new PrPress.Story("a", PrPress.Tone.GOOD, "h", "t"),
+            new PrPress.Story("b", PrPress.Tone.GOOD, "h", "t"),
+            new PrPress.Story("c", PrPress.Tone.GOOD, "h", "t"),
+            new PrPress.Story("fresh", PrPress.Tone.GOOD, "h", "t")));
+        List<String> used = new ArrayList<>();
+        List<String> drawn = new ArrayList<>();
+        for (int i = 0; i < 9; i++) {
+            drawn.add(press.pick(PrPress.Tone.GOOD, scripted(), used, story -> !story.id().equals("fresh")));
+        }
+        for (int i = 0; i + 3 <= drawn.size(); i++) {
+            assertEquals(3, Set.copyOf(drawn.subList(i, i + 3)).size(), "no repeat within three: " + drawn);
+        }
+        assertFalse(used.contains("fresh"));
+        assertEquals(null, press.pick(PrPress.Tone.GOOD, scripted(), used, story -> false));
+        assertEquals("fresh", press.pick(PrPress.Tone.GOOD, scripted(), used));
     }
 
     /**

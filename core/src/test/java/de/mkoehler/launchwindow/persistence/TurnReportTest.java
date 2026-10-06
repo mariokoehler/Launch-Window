@@ -2,6 +2,7 @@ package de.mkoehler.launchwindow.persistence;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.mkoehler.launchwindow.content.MissionConfiguration;
+import de.mkoehler.launchwindow.content.PrPress;
 import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.Astronaut;
@@ -87,7 +88,8 @@ class TurnReportTest {
                 AssignmentState.IDLE, null),
             new PassengerLost("m2", "sputnik-2-orbit", "Laika", null),
             new PrDutyPerformed("a2", "Alan Shepard", 13, 13, null, 0.0),
-            new PrDutyPerformed("a3", "Yuri Gagarin", 16, 24, "placeholder-good-1", 1.0),
+            new PrDutyPerformed("a3", "Yuri Gagarin", 16, 24, "do-good-work", 1.0,
+                List.of(new PrPress.Effect(PrPress.EffectKind.RD_RESULTS, null, 1.1, 2))),
             new RandomEventOccurred(RandomEventKind.values()[0], "a1", 1, 7),
             new ResearchCompleted("s1", "Irina Petrova", "vostok-capsule", 0.4, 0.7, 0),
             new ResearchComponentMaxed("r7-sputnik", List.of("s2"), List.of("Pyotr Morozov")),
@@ -109,6 +111,10 @@ class TurnReportTest {
             TurnReport.class);
         assertEquals(null, older.newsStoryId());
         assertEquals(report.events(), older.events());
+        // A PR season saved before press effects existed loads with none.
+        assertTrue(json.contains(",\"pressEffects\":[]"), json);
+        TurnReport beforeEffects = mapper.readValue(json.replace(",\"pressEffects\":[]", ""), TurnReport.class);
+        assertEquals(report.events(), beforeEffects.events());
     }
 
     /**

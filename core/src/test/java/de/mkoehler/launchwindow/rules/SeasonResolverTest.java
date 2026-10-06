@@ -3,8 +3,10 @@ package de.mkoehler.launchwindow.rules;
 import de.mkoehler.launchwindow.content.BudgetSchedule;
 import de.mkoehler.launchwindow.content.ContentCatalog;
 import de.mkoehler.launchwindow.content.ContentPackLoader;
+import de.mkoehler.launchwindow.content.PrPress;
 import de.mkoehler.launchwindow.content.RandomEventRoster;
 import de.mkoehler.launchwindow.model.Archetype;
+import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import org.junit.jupiter.api.Test;
 
@@ -76,5 +78,51 @@ class SeasonResolverTest {
         assertEquals(a, b);
         assertEquals(first.getFunds(), second.getFunds());
         assertEquals(first.getAstronautCandidates().size(), second.getAstronautCandidates().size());
+    }
+
+    /**
+     * A press story's timed effects, applied where the PR phase applies them, cover the seasons
+     * they say in every phase that reads them: two budgets, two research phases, two pool
+     * refreshes, then nothing ({@code PressEffects}' class note).
+     */
+    @Test
+    void pressEffectsCoverTheSeasonsTheySay() {
+        PrPress.Story story = new PrPress.Story("fx", PrPress.Tone.GOOD, "h", "t", List.of(
+            new PrPress.Effect(PrPress.EffectKind.RD_RESULTS, null, 1.1, 2),
+            new PrPress.Effect(PrPress.EffectKind.RUNNING_COSTS, null, 0.95, 2),
+            new PrPress.Effect(PrPress.EffectKind.HIRING_POOL, "ASTRONAUT", 3, 2)));
+        PlayerSnapshot player = newPlayer();
+        List<Double> costs = new ArrayList<>();
+        List<Double> research = new ArrayList<>();
+        List<Integer> pools = new ArrayList<>();
+        for (int season = 1; season <= 3; season++) {
+            boolean first = season == 1;
+            SeasonResolver.advanceSeason(player,
+                new SeasonResolver.Context(CATALOG, SCHEDULE, QUIET, new GoalTally(), season, season),
+                new Random(season), new SeasonResolver.Observer() {
+                    @Override
+                    public void before(SeasonResolver.Phase phase, PlayerSnapshot snapshot) {
+                        if (phase == SeasonResolver.Phase.BUDGET) {
+                            costs.add(snapshot.getCostMultiplier());
+                        } else if (phase == SeasonResolver.Phase.RESEARCH) {
+                            research.add(snapshot.getRdResultsMultiplier());
+                        }
+                    }
+
+                    @Override
+                    public void after(SeasonResolver.Phase phase, PlayerSnapshot snapshot,
+                            List<ResolutionEvent> events) {
+                        if (phase == SeasonResolver.Phase.PR_DUTY && first) {
+                            PressEffects.apply(story, new Astronaut("a", "A", 30, 60, 50), snapshot, CATALOG,
+                                new Random(0));
+                        } else if (phase == SeasonResolver.Phase.HIRING_POOL) {
+                            pools.add(snapshot.getAstronautCandidates().size());
+                        }
+                    }
+                });
+        }
+        assertEquals(List.of(0.95, 0.95, 1.0), costs);
+        assertEquals(List.of(1.1, 1.1, 1.0), research);
+        assertEquals(List.of(13, 13, 10), pools);
     }
 }
