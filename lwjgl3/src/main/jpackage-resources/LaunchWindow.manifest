@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  Overrides jpackage's default embedded Windows application manifest for the
+  packaged client, picked up by jpackage's resource-dir mechanism by launcher
+  name (LaunchWindow.exe -> LaunchWindow.manifest). Ported from the
+  Robot-Rampage and StarWars projects, whose reasoning applies here too: the
+  whole UI is one fixed-size FitViewport layout (Theme.VIEW_WIDTH/HEIGHT).
+
+  Declares the app DPI-UNAWARE. Windows then bitmap-scales the whole rendered
+  window to the monitor's scale factor: reliably the right physical size on
+  any display, a little softer than a true per-monitor-aware render. A player
+  who prefers sharp, real-pixel rendering can override this per exe:
+  Properties > Compatibility > Change high DPI settings > Override high DPI
+  scaling behavior, performed by: Application (design.md 3.12).
+-->
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+  <application xmlns="urn:schemas-microsoft-com:asm.v3">
+    <windowsSettings>
+      <dpiAware xmlns="http://schemas.microsoft.com/SMI/2005/WindowsSettings">false</dpiAware>
+    </windowsSettings>
+  </application>
+</assembly>

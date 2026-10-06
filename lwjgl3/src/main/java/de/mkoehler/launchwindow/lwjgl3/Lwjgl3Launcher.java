@@ -8,10 +8,11 @@ import de.mkoehler.launchwindow.client.LaunchWindowGame;
 /**
  * Launches the desktop (LWJGL3) client.
  * <p>
- * No window icon is set yet - there is no game art yet (design.md 1.2), so
- * this deliberately doesn't point at placeholder libGDX icon files the way a
- * freshly generated libGDX project template would; wire one up once real art
- * exists (see the sibling projects' own Lwjgl3Launcher for the pattern).
+ * The window icon (what the taskbar shows for the running window) comes from
+ * {@code launchwindow-icon-*.png} on the classpath, made from the mission-patch
+ * logo; the packaged exe's own icon is {@code assets-raw/icon.ico}, set by
+ * jpackage. Both are placeholders until a small icon-only logo exists (design.md
+ * 3.12): the full patch reads as a coloured dot at 16 px.
  *
  * @author Mario Koehler
  */
@@ -36,6 +37,8 @@ public final class Lwjgl3Launcher {
     private static Lwjgl3ApplicationConfiguration getDefaultConfiguration() {
         Lwjgl3ApplicationConfiguration configuration = new Lwjgl3ApplicationConfiguration();
         configuration.setTitle("Launch Window");
+        configuration.setWindowIcon("launchwindow-icon-128.png", "launchwindow-icon-64.png",
+            "launchwindow-icon-32.png", "launchwindow-icon-16.png");
         configuration.useVsync(true);
         Graphics.DisplayMode display = Lwjgl3ApplicationConfiguration.getDisplayMode();
         // Limits FPS to the refresh rate of the active monitor, plus 1 to match fractional refresh rates.
