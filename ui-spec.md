@@ -267,9 +267,19 @@ On the right:
       2. *Three ways to a sure restart:* self-lighting gas-fed engines, a bag in the tank, and
          vanes and screens, with their costs and the early Soviet probes stranded in orbit.
          In the game: Vostok's single retrofire and Payload R&D.
-    - **Triggers for E-02 to E-04 (proposals):** E-02 when a joint-launch configuration is
+    - **E-05 "Hypergolic propellants and steering jets"**, two sheets (the user's idea):
+      1. *Fuels that light themselves:* kerosene and oxygen, hydrogen and oxygen, and a
+         hypergolic pair side by side, with temperatures to scale, how long each waits in the
+         tank, how it lights, its hazards and its exhaust speed; the R-16 disaster. In the
+         game: every early-era rocket is fuelled on launch day (the Countdown step).
+      2. *Steering with small jets:* one craft from above, turning, sliding and stopping with
+         its thruster quads; cold gas and peroxide in Vostok and Mercury; Gemini 8's spin. In
+         the game: the Reentry preparations step and Cooper's hand-flown Faith 7.
+    - **Triggers for E-02 to E-05 (proposals):** E-02 when a joint-launch configuration is
       first opened, E-03 the first time the VAB shows a TLI figure (or the first lunar
-      program), E-04 the first configuration with a Retrofire step.
+      program), E-04 the first configuration with a Retrofire step, E-05 the first
+      configuration with a Reentry preparations step (or later, the first rocket or
+      spacecraft that burns a hypergolic pair).
     - **libGDX build idea:** the drawings become SVG assets rasterized like the icons; the text
       stays as labels so the strings can change without redrawing.
 

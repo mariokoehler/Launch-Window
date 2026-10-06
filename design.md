@@ -263,7 +263,22 @@ same session it comes up**, the same standing-note-to-self habit as
   Heinlein); Saturn V's third stage firing settling rockets before its relight;
   Apollo's service module and ascent engines gas-fed and self-igniting, the
   ascent engine without a backup; Soviet Venus and Mars probes of 1961–62
-  stranded in Earth orbit by upper-stage relight failures. **Next candidates:**
+  stranded in Earth orbit by upper-stage relight failures. **E-05
+  "Hypergolic propellants and steering jets"** followed the same day, at the
+  user's suggestion (two sheets: the three propellant families compared, then
+  how thruster quads turn, slide and stop a craft). **Its figures to verify:**
+  liquid oxygen −183 °C and hydrogen −253 °C; exhaust speeds about 3.0, 4.2 and
+  3.1 km/s (vacuum, rounded); "hypergol" coined by German chemists in the
+  1940s; Titan II and Apollo's spacecraft engines on hydrazine fuels with
+  nitrogen tetroxide; the R-16 disaster at Baikonur (24 October 1960), its toll
+  (officially about 78, other counts higher) and its propellants (UDMH with a
+  nitric-acid oxidiser); Vostok's cold-nitrogen and Mercury's
+  hydrogen-peroxide attitude jets; Gemini 8's stuck thruster (16 March 1966),
+  a spin near one turn per second, stopped with the re-entry jets, and the
+  rule that ended the flight. **History note candidates from it:** the R-16
+  disaster (for a later memorial or news context, handled with care), and
+  Apollo-Soyuz's crew breathing nitrogen tetroxide fumes on the way down
+  (1975). **Next candidates:**
   why re-entry needs a blunt shape (a pointed nose melts), what reliability
   really means for a 30-step mission (odds multiply), and why the launch site's
   latitude matters (Earth's spin as a free boost, Baikonur against Cape
