@@ -25,7 +25,10 @@ import de.mkoehler.launchwindow.model.PlayerSnapshot;
  */
 public class LaunchWindowGame extends Game {
 
-    private static final float MAX_FONT_SCALE = 2f;
+    private static final float MIN_FONT_SCALE = 0.5f;
+    private static final float MAX_FONT_SCALE = 3f;
+    /** How long the window's size has to stay put before the fonts are rebuilt for it. */
+    private static final long FONT_REBUILD_DELAY_MS = 250;
 
     private UiKit ui;
     private ServerGateway gateway;
@@ -33,10 +36,15 @@ public class LaunchWindowGame extends Game {
     private ClientSettings settings = ClientSettings.defaults();
     private ClientSession session;
     private final Hub.Clock hubClock = new Hub.Clock();
+    private float pendingFontScale;
+    private long lastResizeMillis;
 
     @Override
     public void create() {
-        ui = new UiKit(Gdx.files.internal(""), fontScale());
+        float[] scale = Theme.Fonts.windowScale(Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight());
+        ui = new UiKit(Gdx.files.internal(""), fontScale(scale[1]));
+        ui.fonts().setPixelGrid(scale[0], scale[1]);
+        pendingFontScale = ui.fonts().scale();
         gateway = createGateway();
         settingsStore = createSettingsStore();
         settings = settingsStore.load();
@@ -256,6 +264,36 @@ public class LaunchWindowGame extends Game {
         }
     }
 
+    /**
+     * Moves the glyphs' pixel grid to the new window size at once, and rebuilds the fonts for it
+     * once the size has settled ({@link #render}).
+     */
+    @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+        if (ui == null || width <= 0 || height <= 0) {
+            return; // minimized
+        }
+        float[] scale = Theme.Fonts.windowScale(width, height);
+        ui.fonts().setPixelGrid(scale[0], scale[1]);
+        pendingFontScale = fontScale(scale[1]);
+        lastResizeMillis = System.currentTimeMillis();
+    }
+
+    /**
+     * Rebuilds the fonts once the window has kept a new size for {@value #FONT_REBUILD_DELAY_MS}
+     * ms, so dragging a window's border doesn't rebuild them on every step. The screens notice
+     * the rebuild ({@link Theme.Fonts#generation}) and lay their text out again.
+     */
+    @Override
+    public void render() {
+        if (ui != null && pendingFontScale != ui.fonts().scale()
+            && System.currentTimeMillis() - lastResizeMillis >= FONT_REBUILD_DELAY_MS) {
+            ui.fonts().regenerate(pendingFontScale);
+        }
+        super.render();
+    }
+
     @Override
     public void dispose() {
         Screen current = getScreen();
@@ -272,12 +310,13 @@ public class LaunchWindowGame extends Game {
     }
 
     /**
-     * Picks the font scale from the monitor height, so text stays sharp on large displays.
+     * Picks the scale the fonts are generated at: the window's own pixels per layout unit, so each
+     * glyph texel lands on one screen pixel. Clamped, which keeps the glyph pages small.
      *
-     * @return the scale, from 1 to {@value #MAX_FONT_SCALE}
+     * @param windowScale the window's vertical pixels per layout unit
+     * @return the scale, from {@value #MIN_FONT_SCALE} to {@value #MAX_FONT_SCALE}
      */
-    private static float fontScale() {
-        float monitorHeight = Gdx.graphics.getDisplayMode().height;
-        return Math.min(MAX_FONT_SCALE, Math.max(1f, monitorHeight / Theme.VIEW_HEIGHT));
+    private static float fontScale(float windowScale) {
+        return Math.min(MAX_FONT_SCALE, Math.max(MIN_FONT_SCALE, windowScale));
     }
 }

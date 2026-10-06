@@ -4,11 +4,15 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
@@ -16,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
 import java.util.ArrayList;
@@ -479,12 +484,25 @@ public final class Theme {
     /**
      * One {@link BitmapFont} per {@link TextStyle}, owned by this object.
      * Dispose it when the game closes.
+     *
+     * <p>Text is sharpest when one glyph texel lands on one screen pixel. So the
+     * fonts are generated at the window's own scale (its pixels per layout
+     * unit), drawn scaled back down by the same factor, and every glyph is
+     * snapped to the window's pixel grid. When the window's size changes,
+     * {@link #regenerate} rebuilds the glyphs in place: the {@code BitmapFont}
+     * objects every style holds stay the same, so the screens only need to lay
+     * their text out again ({@link #generation}).
      */
     public static final class Fonts implements Disposable {
 
         private final Map<TextStyle, BitmapFont> fonts = new EnumMap<>(TextStyle.class);
+        private final FileHandle directory;
+        private final PixelGrid grid = new PixelGrid();
+        private float scale;
+        private int generation;
 
-        private Fonts() {
+        private Fonts(FileHandle directory) {
+            this.directory = directory;
         }
 
         /**
@@ -494,10 +512,10 @@ public final class Theme {
          * a scale above 1 to keep text sharp; the fonts are scaled back down
          * by the same factor, so their size in the {@value Theme#VIEW_WIDTH}
          * by {@value Theme#VIEW_HEIGHT} layout stays the one the style
-         * declares.
+         * declares (give or take the half pixel the size is rounded by).
          *
          * @param directory the folder holding the font files, for example {@code Gdx.files.internal("fonts")}
-         * @param scale     the ratio of the real window height to {@value Theme#VIEW_HEIGHT}; 1 for the design size
+         * @param scale     the window's pixels per layout unit, see {@link #windowScale}; 1 for the design size
          * @return the generated fonts
          * @throws IllegalArgumentException if the scale is not positive
          */
@@ -505,19 +523,93 @@ public final class Theme {
             if (scale <= 0f) {
                 throw new IllegalArgumentException("Scale must be positive: " + scale);
             }
-            Fonts result = new Fonts();
+            Fonts result = new Fonts(directory);
+            result.grid.set(scale, scale);
+            result.scale = scale;
+            result.fonts.putAll(result.generate(scale));
+            return result;
+        }
+
+        /**
+         * Returns the pixels per layout unit a window of the given size shows
+         * the {@value Theme#VIEW_WIDTH} by {@value Theme#VIEW_HEIGHT} layout
+         * at, rounded the way the screens' {@code FitViewport} rounds it.
+         *
+         * @param width  the window's back buffer width, in pixels
+         * @param height the window's back buffer height, in pixels
+         * @return the horizontal and vertical scale, in that order
+         */
+        public static float[] windowScale(int width, int height) {
+            float fit = Math.min(width / (float) VIEW_WIDTH, height / (float) VIEW_HEIGHT);
+            return new float[] {Math.round(VIEW_WIDTH * fit) / (float) VIEW_WIDTH,
+                Math.round(VIEW_HEIGHT * fit) / (float) VIEW_HEIGHT};
+        }
+
+        /**
+         * Returns the scale the glyphs were last generated at.
+         *
+         * @return the scale
+         */
+        public float scale() {
+            return scale;
+        }
+
+        /**
+         * Returns a number that changes whenever {@link #regenerate} rebuilds
+         * the glyphs. A screen that sees it change must lay its text out again:
+         * text laid out before still points at the old glyphs.
+         *
+         * @return the generation
+         */
+        public int generation() {
+            return generation;
+        }
+
+        /**
+         * Sets the pixel grid glyphs are snapped to. Call it whenever the
+         * window's size changes, before the next frame is drawn.
+         *
+         * @param scaleX the window's horizontal pixels per layout unit
+         * @param scaleY the window's vertical pixels per layout unit
+         */
+        public void setPixelGrid(float scaleX, float scaleY) {
+            grid.set(scaleX, scaleY);
+        }
+
+        /**
+         * Rebuilds every style's glyphs at a new scale, inside the same
+         * {@code BitmapFont} objects, and releases the old glyph pages. Text
+         * laid out before must be laid out again ({@link #generation}).
+         *
+         * @param newScale the window's pixels per layout unit
+         * @throws IllegalArgumentException if the scale is not positive
+         */
+        public void regenerate(float newScale) {
+            if (newScale <= 0f) {
+                throw new IllegalArgumentException("Scale must be positive: " + newScale);
+            }
+            Map<TextStyle, BitmapFont> fresh = generate(newScale);
+            for (TextStyle style : TextStyle.values()) {
+                adopt(fonts.get(style), fresh.get(style));
+            }
+            scale = newScale;
+            generation++;
+        }
+
+        private Map<TextStyle, BitmapFont> generate(float scale) {
+            Map<TextStyle, BitmapFont> result = new EnumMap<>(TextStyle.class);
             Map<FontFile, FreeTypeFontGenerator> generators = new EnumMap<>(FontFile.class);
             try {
                 for (TextStyle style : TextStyle.values()) {
                     FreeTypeFontGenerator generator = generators.computeIfAbsent(style.file(),
-                        file -> new FreeTypeFontGenerator(directory.child(file.fileName())));
+                        file -> new PixelFontGenerator(directory.child(file.fileName()), grid));
                     BitmapFont font = generator.generateFont(parameterFor(style, scale));
                     font.getData().setScale(1f / scale);
-                    // Glyphs are made at the monitor's scale and drawn scaled back down, so their
-                    // offsets are fractional. Snapping each glyph to a whole unit rounds them apart,
-                    // which makes baselines wobble (worst on y and g).
+                    // The glyphs are snapped to the window's pixels by PixelSnapCache. libGDX's own
+                    // integer positions round to whole layout units instead, which are only pixels
+                    // at scale 1.
                     font.setUseIntegerPositions(false);
-                    result.fonts.put(style, font);
+                    result.put(style, font);
                 }
             } finally {
                 generators.values().forEach(FreeTypeFontGenerator::dispose);
@@ -525,14 +617,49 @@ public final class Theme {
             return result;
         }
 
+        /**
+         * Moves a freshly generated font's glyphs and pages into a font that's
+         * already in use, and releases that font's old pages. The fresh font
+         * object is dropped afterwards; its pages now belong to the old one.
+         */
+        private static void adopt(BitmapFont target, BitmapFont source) {
+            BitmapFont.BitmapFontData to = target.getData();
+            BitmapFont.BitmapFontData from = source.getData();
+            System.arraycopy(from.glyphs, 0, to.glyphs, 0, to.glyphs.length);
+            to.missingGlyph = from.missingGlyph;
+            to.imagePaths = from.imagePaths;
+            to.padTop = from.padTop;
+            to.padRight = from.padRight;
+            to.padBottom = from.padBottom;
+            to.padLeft = from.padLeft;
+            to.lineHeight = from.lineHeight;
+            to.capHeight = from.capHeight;
+            to.ascent = from.ascent;
+            to.descent = from.descent;
+            to.down = from.down;
+            to.blankLineScale = from.blankLineScale;
+            to.scaleX = from.scaleX;
+            to.scaleY = from.scaleY;
+            to.cursorX = from.cursorX;
+            to.spaceXadvance = from.spaceXadvance;
+            to.xHeight = from.xHeight;
+            for (TextureRegion page : target.getRegions()) {
+                page.getTexture().dispose();
+            }
+            target.getRegions().clear();
+            target.getRegions().addAll(source.getRegions());
+        }
+
         private static FreeTypeFontParameter parameterFor(TextStyle style, float scale) {
             FreeTypeFontParameter parameter = new FreeTypeFontParameter();
             parameter.size = Math.max(1, Math.round(style.size() * scale));
-            parameter.spaceX = Math.round(parameter.size * style.letterSpacingEm());
+            // Halves round down: LABEL's 0.5 px at 1x would otherwise become a whole pixel and widen
+            // every button by a tenth.
+            parameter.spaceX = (int) Math.ceil(parameter.size * style.letterSpacingEm() - 0.5f);
             parameter.color = Color.WHITE;
             parameter.characters = CHARACTERS;
             // Linear, not mipmapped: mipmaps were tried (2026-10-04) and made the text greyer and
-            // softer at the usual 0.6-1x draw scale.
+            // softer. Glyphs are drawn at about one texel per pixel, so neither filter kicks in much.
             parameter.minFilter = Texture.TextureFilter.Linear;
             parameter.magFilter = Texture.TextureFilter.Linear;
             return parameter;
@@ -556,6 +683,162 @@ public final class Theme {
         public void dispose() {
             fonts.values().forEach(BitmapFont::dispose);
             fonts.clear();
+        }
+    }
+
+    /**
+     * The window's pixels per layout unit, shared by every font, which glyphs
+     * are snapped to. Changes with the window's size.
+     */
+    private static final class PixelGrid {
+
+        private float scaleX = 1f;
+        private float scaleY = 1f;
+
+        void set(float x, float y) {
+            scaleX = x;
+            scaleY = y;
+        }
+
+        float snapX(float value) {
+            return Math.round(value * scaleX) / scaleX;
+        }
+
+        float snapY(float value) {
+            return Math.round(value * scaleY) / scaleY;
+        }
+    }
+
+    /**
+     * Generates {@link PixelFont}s instead of plain bitmap fonts.
+     */
+    private static final class PixelFontGenerator extends FreeTypeFontGenerator {
+
+        private final PixelGrid grid;
+
+        PixelFontGenerator(FileHandle file, PixelGrid grid) {
+            super(file);
+            this.grid = grid;
+        }
+
+        @Override
+        protected BitmapFont newBitmapFont(BitmapFont.BitmapFontData data, Array<TextureRegion> pageRegions,
+                                           boolean integer) {
+            return new PixelFont(data, pageRegions, integer, grid);
+        }
+    }
+
+    /**
+     * A bitmap font whose text, wherever it's drawn, sits on the window's
+     * pixel grid.
+     */
+    private static final class PixelFont extends BitmapFont {
+
+        // Not final, and read lazily by the cache: BitmapFont's constructor makes its own cache
+        // before this field is set.
+        private PixelGrid grid;
+
+        PixelFont(BitmapFontData data, Array<TextureRegion> pageRegions, boolean integer, PixelGrid grid) {
+            super(data, pageRegions, integer);
+            this.grid = grid;
+        }
+
+        @Override
+        public BitmapFontCache newFontCache() {
+            return new PixelSnapCache(this);
+        }
+    }
+
+    /**
+     * A font cache that snaps every glyph's corners, and every move, to the
+     * window's pixel grid. Glyphs are generated at the window's scale, so a
+     * snapped glyph lands one texel per pixel and the linear filter has
+     * nothing to blur. Each corner is snapped on its own, but a glyph is a
+     * whole number of pixels wide, so its size never changes.
+     */
+    private static final class PixelSnapCache extends BitmapFontCache {
+
+        PixelSnapCache(PixelFont font) {
+            super(font, false);
+        }
+
+        private PixelGrid grid() {
+            return ((PixelFont) getFont()).grid;
+        }
+
+        @Override
+        public void addText(GlyphLayout layout, float x, float y) {
+            super.addText(layout, x, y);
+            PixelGrid grid = grid();
+            if (grid == null) {
+                return;
+            }
+            for (int page = 0, pages = getFont().getRegions().size; page < pages; page++) {
+                float[] vertices = getVertices(page);
+                for (int i = 0, n = getVertexCount(page); i < n; i += 5) {
+                    vertices[i] = grid.snapX(vertices[i]);
+                    vertices[i + 1] = grid.snapY(vertices[i + 1]);
+                }
+            }
+        }
+
+        @Override
+        public void translate(float xAmount, float yAmount) {
+            PixelGrid grid = grid();
+            if (grid == null) {
+                super.translate(xAmount, yAmount);
+                return;
+            }
+            super.translate(grid.snapX(getX() + xAmount) - getX(), grid.snapY(getY() + yAmount) - getY());
+        }
+
+        // A ScrollPane draws its content through a transform matrix, which can move the snapped
+        // glyphs by a fraction of a pixel again: that crops a glyph's soft edge on one side and
+        // smears it on the other. So shift the glyphs by that fraction while drawing, then back.
+        @Override
+        public void draw(Batch batch) {
+            float[] shift = beginShift(batch);
+            super.draw(batch);
+            endShift(shift);
+        }
+
+        @Override
+        public void draw(Batch batch, int start, int end) {
+            float[] shift = beginShift(batch);
+            super.draw(batch, start, end);
+            endShift(shift);
+        }
+
+        private float[] beginShift(Batch batch) {
+            PixelGrid grid = grid();
+            if (grid == null) {
+                return null;
+            }
+            float[] matrix = batch.getTransformMatrix().val;
+            float x = matrix[Matrix4.M03];
+            float y = matrix[Matrix4.M13];
+            float[] shift = {grid.snapX(x) - x, grid.snapY(y) - y};
+            if (shift[0] == 0f && shift[1] == 0f) {
+                return null;
+            }
+            moveVertices(shift[0], shift[1]);
+            return shift;
+        }
+
+        private void endShift(float[] shift) {
+            if (shift != null) {
+                moveVertices(-shift[0], -shift[1]);
+            }
+        }
+
+        private void moveVertices(float dx, float dy) {
+            for (int page = 0, pages = getFont().getRegions().size; page < pages; page++) {
+                float[] vertices = getVertices(page);
+                for (int i = 0, n = getVertexCount(page); i < n; i += 5) {
+                    vertices[i] += dx;
+                    vertices[i + 1] += dy;
+                }
+            }
         }
     }
 

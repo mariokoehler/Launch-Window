@@ -24,6 +24,7 @@ abstract class StageScreen extends ScreenAdapter {
     protected final Stage stage;
     protected final Table root = new Table();
     private boolean shown;
+    private int fontGeneration;
 
     /**
      * Creates the stage and its root table.
@@ -37,6 +38,7 @@ abstract class StageScreen extends ScreenAdapter {
         root.setFillParent(true);
         root.setBackground(ui.blueprintGrid());
         stage.addActor(root);
+        fontGeneration = ui.fonts().generation();
     }
 
     /**
@@ -76,6 +78,11 @@ abstract class StageScreen extends ScreenAdapter {
     public void render(float delta) {
         Gdx.gl.glClearColor(Theme.SURFACE_PAGE.r, Theme.SURFACE_PAGE.g, Theme.SURFACE_PAGE.b, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        if (fontGeneration != ui.fonts().generation()) {
+            // The fonts were rebuilt for a new window size: text laid out before points at the old glyphs.
+            fontGeneration = ui.fonts().generation();
+            stage.getActors().forEach(UiKit::relayout);
+        }
         stage.act(delta);
         stage.draw();
     }

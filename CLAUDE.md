@@ -223,9 +223,16 @@ cd assets && java --enable-native-access=ALL-UNNAMED -cp "../lwjgl3/target/class
 - Never create drawables in a rebuild loop: use `UiKit.rect`/`icon`/`cardAccent`, which cache.
 - Never use linear filtering on a stretched few-pixel nine-patch: it turns a flat fill into a
   gradient (`Theme.Shapes.rect`).
-- Fonts are generated at the monitor's scale and drawn scaled down, so `Theme.Fonts` turns off
-  integer positions (they made baselines wobble). Mipmaps made text greyer; the filter stays
-  linear.
+- Fonts are generated at the window's own scale (`Theme.Fonts.windowScale`), rebuilt in place
+  250 ms after a resize, and snapped to the window's pixels (`Theme.PixelSnapCache`), so one
+  glyph texel lands on one pixel. The snap also corrects for the batch's transform translation,
+  since a `ScrollPane` always draws through one and its fractional offset cropped one side of
+  every glyph's anti-aliasing. Screens re-lay out their text when `Fonts.generation()`
+  changes; anything built off-stage must too (tooltips do it on show). Never turn libGDX's
+  integer positions back on (they round to layout units, which are pixels only at 1x, and made
+  baselines wobble), and never mipmap glyphs (greyer text).
+- At 1x, glyph advances are whole pixels, so text runs a few percent wider than the design's
+  fractional widths. Leave some slack in tight rows.
 - libGDX loads a one-channel image as alpha: save greyscale art as RGB.
 - An image with transparency needs colour bled into its fully transparent pixels, or mipmaps
   fringe its edge (`make_patch_assets.py`).

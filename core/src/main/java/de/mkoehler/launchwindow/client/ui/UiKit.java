@@ -4,6 +4,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.Tooltip;
 import com.badlogic.gdx.scenes.scene2d.ui.TooltipManager;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.Layout;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
@@ -56,8 +58,18 @@ public final class UiKit implements Disposable {
     private final Map<String, Texture> pictures = new HashMap<>();
     private final Map<String, Drawable> rects = new HashMap<>();
     private final Map<Theme.BadgeKind, Drawable> badgeFills = new EnumMap<>(Theme.BadgeKind.class);
-    /** The tooltips' timing: quicker than Scene2D's default two seconds, and no grow animation. */
-    private final TooltipManager tooltips = new TooltipManager();
+    /**
+     * The tooltips' timing: quicker than Scene2D's default two seconds, and no grow animation. A
+     * tooltip is laid out again each time it shows, since it lives off the stage and so misses the
+     * re-layout after the fonts are rebuilt for a new window size.
+     */
+    private final TooltipManager tooltips = new TooltipManager() {
+        @Override
+        protected void showAction(Tooltip tooltip) {
+            relayout(tooltip.getContainer());
+            super.showAction(tooltip);
+        }
+    };
     /** How wide a tooltip's explanation wraps. */
     private static final float TOOLTIP_TEXT_WIDTH = 280f;
     private Slider.SliderStyle sliderStyle;
@@ -69,7 +81,7 @@ public final class UiKit implements Disposable {
      * Loads the fonts and images and builds the shared styles.
      *
      * @param assets    the assets root, holding {@code fonts/}, {@code branding/} and {@code ui/}
-     * @param fontScale the ratio of the real window height to {@value Theme#VIEW_HEIGHT}, so text stays sharp
+     * @param fontScale the window's pixels per layout unit ({@link Theme.Fonts#windowScale}), so text stays sharp
      */
     public UiKit(FileHandle assets, float fontScale) {
         this.assets = assets;
@@ -104,6 +116,23 @@ public final class UiKit implements Disposable {
         tooltips.animations = false;
         tooltips.offsetX = 12f;
         tooltips.offsetY = 12f;
+    }
+
+    /**
+     * Marks an actor and everything inside it for a new layout, so text laid out with the old
+     * glyphs is laid out again with the new ones ({@link Theme.Fonts#generation}).
+     *
+     * @param actor the actor
+     */
+    public static void relayout(Actor actor) {
+        if (actor instanceof Layout layout) {
+            layout.invalidate();
+        }
+        if (actor instanceof Group group) {
+            for (Actor child : group.getChildren()) {
+                relayout(child);
+            }
+        }
     }
 
     /**
