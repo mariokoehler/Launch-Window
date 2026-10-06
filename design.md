@@ -60,6 +60,45 @@ engineering problem or tidbit, note it here the same session.
   - **Writing rules:** our own words from checked facts (§1.2). A side's view is paraphrased
     framing that's documented, never an invented quote. When the game runs past 1963, add stories
     for the later seasons.
+- **Explainers (user's idea, 2026-10-06; mocked up, not built, all unconfirmed):** short
+  full-screen "infographic" series that explain *how and why* an aerospace idea works, offered
+  (never forced) when it first comes up in play and kept in the Museum (`ui-spec.md` component
+  18, with each sheet's content and the proposed triggers). Canvas `Launch Window — Explainers`
+  (private; ask the user for the link), one row per explainer with a yellow note of what to verify.
+  - **E-01 Suborbital vs orbital** (3 sheets): Newton's cannon and the 8-kilometre rule; Freedom 7
+    against Friendship 7 to scale; the rocket equation's propellant share, staging, re-entry.
+  - **E-02 Rendezvous** (2): brake into a lower, quicker orbit to catch up (drawn true to
+    Kepler); Vostok 3/4, Gemini 4, Aldrin's doctorate and Gemini 12, Gemini 6A/7, the first dockings.
+  - **E-03 Going to the Moon** (2): the trip priced in delta-v; Redstone to Saturn V and N1 to
+    scale, lunar orbit rendezvous.
+  - **E-04 Restarting an engine in space** (2): propellant floats in free fall; settling burns,
+    self-lighting gas-fed engines, bags and vanes.
+  - **E-05 Hypergolic propellants and steering jets** (2, user's suggestion): the three
+    propellant families compared; thruster quads turning, sliding and stopping a craft, Gemini 8.
+  - **Figures to verify before shipping:**
+    - E-01: Freedom 7 187 km, about 8,300 km/h, 15 min, 487 km; Friendship 7 265 km, about
+      28,200 km/h, 4 h 55 min; Redstone about 30 t and Atlas about 120 t; R-7 boosters dropped
+      after about 2 min; Atlas tank walls "thinner than a coin". Worked out from physics: 5 m of
+      curvature per 8 km, ½v² of 2.6 vs 30.7 MJ/kg, propellant shares from a 2.9 km/s exhaust.
+    - E-02: laps about 88 min at 200 km and 92 min at 400 km (worked out); Vostok 3/4 about
+      6.5 km apart; Gemini 4 (June 1965); Aldrin's 1963 MIT doctorate and Gemini 12's sextant
+      approach (November 1966); Gemini 6A/7 within about 30 cm (December 1965); Gemini 8 (March
+      1966); Kosmos 186/188 (October 1967).
+    - E-03: delta-v 9.4 to orbit, then 3.1, 0.9, 2.0, 1.9, 1.0 km/s (Apollo-style, rounded);
+      heights 25.4 / 28.7 / 33.2 / 110.6 / 105.3 m and masses about 30 / 120 / 150 / 2,900 /
+      2,750 t (Redstone, Atlas, Titan II, Saturn V, N1); about 45 t sent to the Moon, about 5 t
+      home; Houbolt and lunar orbit rendezvous; the N1's four failures (1969–72); Heinlein's
+      "halfway to anywhere" (paraphrased).
+    - E-04: Saturn V's third stage settling before its relight; Apollo's service module and
+      ascent engines gas-fed and self-igniting, the ascent engine without a backup; Soviet Venus
+      and Mars probes of 1961–62 stranded by upper-stage relight failures.
+    - E-05: oxygen −183 °C, hydrogen −253 °C; exhaust about 3.0 / 4.2 / 3.1 km/s; "hypergol"
+      coined by German chemists in the 1940s; Titan II and Apollo on hydrazine fuels with
+      nitrogen tetroxide; the R-16 disaster (24 October 1960, officially about 78 dead, other
+      counts higher, UDMH with a nitric-acid oxidiser); Vostok's cold-nitrogen and Mercury's
+      peroxide jets; Gemini 8's spin near one turn a second and the rule that ended the flight.
+  - **Next candidates:** why re-entry capsules are blunt, why reliability matters over a
+    30-step mission (the odds multiply), why launch latitude matters (Earth's spin as a boost).
 - **A Museum encyclopedia (later, M7+):** the deeper version of the same content.
 - **Real images:** NASA photos are US government works and normally public domain. Soviet and
   other imagery needs a per-image rights check, and every third-party image gets an entry in
@@ -142,9 +181,11 @@ leading to satellite navigation.
   July 1960, 19 seconds in: a strap-on broke away and the capsule's parachutes opened too low.
   They're the dogs remembered on a failed Korabl-Sputnik 2 flight (§2.5(f)), as "Chaika". Sources
   differ on the first dog's name.
-- **Rendezvous is counterintuitive:** burning toward a target raises your orbit and you fall
-  behind; you catch up by dropping lower. Restarting an engine in zero-g is hard because nothing
-  settles the propellant. Fits Gemini-era steps.
+- **Rendezvous is counterintuitive** and **restarting an engine in zero-g is hard:** both now
+  explainers (E-02, E-04 above).
+- **The R-16 disaster** (Baikonur, 24 October 1960) for a later memorial or news context,
+  handled with care; **Apollo-Soyuz's crew breathing nitrogen tetroxide fumes** on the way
+  down (1975). Both turned up while writing E-05.
 
 ### 1.2 Content & asset policy: no copying BASPM's copyrighted content
 

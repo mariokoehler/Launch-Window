@@ -43,6 +43,9 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
 - **The decisions checklist came back on 2026-10-06,** was merged into the docs, and its code
   work is built (`design.md` §5, Backlog). Reset the dev data root before the next play test: the
   pack hash changed.
+- **Explainers are mocked up** (`ui-spec.md` component 18, `design.md` §1.1): E-01 to E-05 on
+  the canvas `Launch Window — Explainers` (ask the user for the link). Not built in libGDX; the
+  triggers, the look and the figures are unconfirmed.
 - **PR duty for astronauts is built** (`design.md` §2.2(c)), with 39 press stories
   (`assets/content/pr-press.json`), no repeats, and effects beyond prestige. Next is the next
   play test.
