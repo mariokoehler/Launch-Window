@@ -184,7 +184,7 @@ public final class AstronautComplexScreen extends ChromeScreen {
 
         Table chips = new Table();
         chips.defaults().left().growX();
-        chips.add(RosterCells.statChip(ui, "funds", String.format(Locale.ROOT, "$ %.1f", astronaut.getSalary()),
+        chips.add(RosterCells.statChip(ui, "funds", String.format(Locale.ROOT, "%.1f", astronaut.getSalary()),
             Theme.INK)).padBottom(4f).row();
         chips.add(RosterCells.statChip(ui, "morale", String.valueOf(astronaut.getMorale()),
             RosterCells.moraleColor(astronaut.getMorale())));

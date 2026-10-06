@@ -284,7 +284,7 @@ public final class MissionControlScreen extends ChromeScreen {
 
         Table chips = new Table();
         chips.defaults().left().growX();
-        chips.add(RosterCells.statChip(ui, "funds", String.format(Locale.ROOT, "$ %.1f", officer.getSalary()), Theme.INK))
+        chips.add(RosterCells.statChip(ui, "funds", String.format(Locale.ROOT, "%.1f", officer.getSalary()), Theme.INK))
             .padBottom(4f).row();
         chips.add(RosterCells.statChip(ui, "morale", String.valueOf(officer.getMorale()),
             RosterCells.moraleColor(officer.getMorale())));

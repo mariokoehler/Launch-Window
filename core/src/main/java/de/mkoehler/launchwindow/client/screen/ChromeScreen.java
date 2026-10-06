@@ -446,7 +446,7 @@ abstract class ChromeScreen extends SessionScreen {
     private void rebuildFooter(PlayerSnapshot state, ContentCatalog catalog) {
         footer.clearChildren();
         // No funds delta: last season's net change isn't in the state yet (gap G2), so none is invented.
-        footer.add(tip(footerStat("funds", String.format(Locale.ROOT, state.getFunds() < 0 ? "− $ %,d" : "$ %,d",
+        footer.add(tip(footerStat("funds", String.format(Locale.ROOT, state.getFunds() < 0 ? "− %,d" : "%,d",
             Math.abs(state.getFunds())), state.getFunds() < 0, this::goPublicAffairs), Tips.funds())).expandX().left();
         footer.add(tip(footerStat("set_employees", counts(state.getSetSpecialists(), catalog, state,
             Building.SET_CENTER), this::goSetCentre), Tips.staffCounts("Engineers", "SET Centre"))).expandX();

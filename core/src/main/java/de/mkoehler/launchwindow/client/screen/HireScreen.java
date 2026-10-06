@@ -208,7 +208,7 @@ public final class HireScreen extends ChromeScreen {
 
         Table chips = new Table();
         chips.defaults().growX().left().padBottom(4f);
-        chips.add(statChip("funds", String.format(Locale.ROOT, "$ %.1f", candidate.getSalary()))).row();
+        chips.add(statChip("funds", String.format(Locale.ROOT, "%.1f", candidate.getSalary()))).row();
         chips.add(statChip("morale", String.valueOf(candidate.getMorale()))).row();
         chips.add(statChip("learning_potential", String.valueOf(candidate.getLearningPotential())));
         inner.add(chips).width(108f).padRight(Theme.SPACE_4);

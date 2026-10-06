@@ -199,7 +199,7 @@ public final class SetCentreScreen extends ChromeScreen {
 
         Table chips = new Table();
         chips.defaults().left().growX();
-        chips.add(statChip("funds", String.format(Locale.ROOT, "$ %.1f", specialist.getSalary()), Theme.INK))
+        chips.add(statChip("funds", String.format(Locale.ROOT, "%.1f", specialist.getSalary()), Theme.INK))
             .padBottom(4f).row();
         chips.add(statChip("morale", String.valueOf(specialist.getMorale()), moraleColor(specialist.getMorale())));
         row.add(chips).width(96f).padRight(Theme.SPACE_4);

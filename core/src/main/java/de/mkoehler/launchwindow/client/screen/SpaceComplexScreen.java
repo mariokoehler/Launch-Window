@@ -241,7 +241,7 @@ public final class SpaceComplexScreen extends SessionScreen {
     }
 
     private static String money(long amount) {
-        return String.format(Locale.ROOT, "$ %,d", amount);
+        return String.format(Locale.ROOT, "%,d", amount);
     }
 
     @Override
