@@ -184,6 +184,12 @@ public final class Careers {
     /** What the season did, in the terms ambitions and careers need. */
     private static final class Season {
         final Set<String> crewFlew = new HashSet<>();
+        /** Crew of a flight's first season only, so one flight passes others over once. */
+        final Set<String> crewLaunched = new HashSet<>();
+        final Set<String> crewLaunchedOrbital = new HashSet<>();
+        final Set<String> crewSecondSeason = new HashSet<>();
+        final Set<String> crewLaunchedJoint = new HashSet<>();
+        final Set<String> consolesLaunchedOrbital = new HashSet<>();
         final Set<String> crewFlewOrbital = new HashSet<>();
         final Set<String> crewDaysInOrbit = new HashSet<>();
         final Set<String> crewJoint = new HashSet<>();
@@ -273,17 +279,32 @@ public final class Careers {
             if (!flew || configuration == null || !crewed(configuration)) {
                 continue;
             }
+            boolean first = resolved.stream().anyMatch(step -> step.seasonIndex() == 0);
+            boolean second = resolved.stream().anyMatch(step -> step.seasonIndex() == 1);
             season.crewFlew.addAll(flight.crewIds());
+            if (first) {
+                season.crewLaunched.addAll(flight.crewIds());
+            }
             if (orbital(configuration)) {
                 season.crewFlewOrbital.addAll(flight.crewIds());
                 season.consolesOrbital.addAll(flight.groundIds());
+                if (first) {
+                    season.crewLaunchedOrbital.addAll(flight.crewIds());
+                    season.consolesLaunchedOrbital.addAll(flight.groundIds());
+                }
                 boolean later = resolved.stream().anyMatch(step -> step.seasonIndex() >= 1);
                 if (later && configuration.durationInSeasons() >= 2) {
                     season.crewDaysInOrbit.addAll(flight.crewIds());
+                    if (second) {
+                        season.crewSecondSeason.addAll(flight.crewIds());
+                    }
                 }
             }
             if (configuration.launches().size() >= 2) {
                 season.crewJoint.addAll(flight.crewIds());
+                if (first) {
+                    season.crewLaunchedJoint.addAll(flight.crewIds());
+                }
             }
         }
         return season;
@@ -414,7 +435,8 @@ public final class Careers {
         }
         Ambition ambition = person.getAmbition();
         if (ambition == null) {
-            if (person.isAmbitionPending() && person.getTenureSeasons() >= SAY_AFTER_SEASONS) {
+            if (person.isAmbitionPending() && person.getTenureSeasons() >= SAY_AFTER_SEASONS
+                    && person.getTrainingKind() != de.mkoehler.launchwindow.model.TrainingKind.BASIC) {
                 say(snapshot, catalog, tally, person, gameTurn, out);
             }
             return;
@@ -480,16 +502,19 @@ public final class Careers {
         SplittableRandom random = new SplittableRandom(Intelligence.seed(snapshot.getAgencyName(),
             person.getId() + "/say/" + gameTurn) ^ DRAW_SALT);
         List<Ambition.Kind> options = new ArrayList<>();
+        Map<Ambition.Kind, String> refs = new HashMap<>();
         for (Ambition.Kind kind : Ambition.Kind.forGroup(groupOf(person).name())) {
-            if (reachable(snapshot, catalog, tally, person, kind, componentFor(snapshot, catalog, person, kind, random))) {
+            String ref = componentFor(snapshot, catalog, person, kind, random);
+            if (reachable(snapshot, catalog, tally, person, kind, ref)) {
                 options.add(kind);
+                refs.put(kind, ref);
             }
         }
         if (options.isEmpty()) {
             return;
         }
         Ambition.Kind kind = options.get(random.nextInt(options.size()));
-        String ref = componentFor(snapshot, catalog, person, kind, random);
+        String ref = refs.get(kind);
         int window = kind.window();
         if (Personality.has(person, Trait.AMBITIOUS)) {
             window = Math.max(WINDOW_MIN, window + WINDOW_AMBITIOUS);
@@ -508,7 +533,7 @@ public final class Careers {
 
     /**
      * Returns the component a "bring a component to its cap" ambition is about: the one the engineer
-     * works on if it's below its cap, else the first owned one below its cap; {@code ""} for other
+     * works on if it's below its cap, else a random owned one below its cap; {@code ""} for other
      * ambitions or none.
      */
     private static String componentFor(PlayerSnapshot snapshot, ContentCatalog catalog, Personnel person,
@@ -520,12 +545,9 @@ public final class Careers {
                 && belowCap(snapshot, catalog, engineer.getRdTargetComponentId())) {
             return engineer.getRdTargetComponentId();
         }
-        for (String id : snapshot.getMissionComponents().keySet()) {
-            if (belowCap(snapshot, catalog, id)) {
-                return id;
-            }
-        }
-        return "";
+        List<String> below = snapshot.getMissionComponents().keySet().stream()
+            .filter(id -> belowCap(snapshot, catalog, id)).toList();
+        return below.isEmpty() ? "" : below.get(random.nextInt(below.size()));
     }
 
     private static boolean belowCap(PlayerSnapshot snapshot, ContentCatalog catalog, String componentId) {
@@ -556,12 +578,13 @@ public final class Careers {
     private static boolean passedOver(Season season, Personnel person, Ambition ambition) {
         String id = person.getId();
         return switch (ambition.kind()) {
-            case FLY_IN_SPACE -> others(season.crewFlew, id, season.astronautIds);
-            case FLY_TO_ORBIT -> others(season.crewFlewOrbital, id, season.astronautIds);
-            case DAYS_IN_ORBIT -> others(season.crewDaysInOrbit, id, season.astronautIds);
+            // A flight passes others over once: in its first season (its second, for days in orbit).
+            case FLY_IN_SPACE -> others(season.crewLaunched, id, season.astronautIds);
+            case FLY_TO_ORBIT -> others(season.crewLaunchedOrbital, id, season.astronautIds);
+            case DAYS_IN_ORBIT -> others(season.crewSecondSeason, id, season.astronautIds);
             case BE_FIRST -> others(season.aboardFirst, id, season.astronautIds);
-            case JOINT_FLIGHT -> others(season.crewJoint, id, season.astronautIds);
-            case CONSOLES_ORBITAL -> others(season.consolesOrbital, id, season.controllerIds);
+            case JOINT_FLIGHT -> others(season.crewLaunchedJoint, id, season.astronautIds);
+            case CONSOLES_ORBITAL -> others(season.consolesLaunchedOrbital, id, season.controllerIds);
             case CONSOLES_FIRST -> others(season.consolesFirst, id, season.controllerIds);
             case COMPONENT_CAP -> season.capped.containsKey(ambition.ref());
             case BECOME_EXPERT, FIRST_HARDWARE, TOP_ENGINEER -> false;

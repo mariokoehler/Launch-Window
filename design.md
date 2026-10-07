@@ -790,8 +790,8 @@ such as letting a brilliant troublemaker go.
   career record and the memorial's person page.
   - **Who gets an ambition:** decided when a candidate is drawn, from the candidate's own seed
     (Ambitious 100 %, Glory seeker 70 %, anyone else 25 %, as above). It stays hidden, and the
-    server strips it, until the person **says so after two seasons with the agency** (so after
-    basic training for most). Which ambition is drawn then, from those the agency can reach
+    server strips it, until the person **says so after two seasons with the agency, once out of
+    basic training** (astronauts train for four). Which ambition is drawn then, from those the agency can reach
     now, again from the person's own seed. If none can be reached, it waits a season and tries
     again.
   - **The ambitions and their checks** ("flew" means: on a mission in flight whose season ended
@@ -816,6 +816,8 @@ such as letting a brilliant troublemaker go.
     component" became the agency's most skilled engineer in their best skill. The component for
     "bring a component to its cap" is the one they work on when they say it, else a random owned
     one below its cap.
+  - **A flight passes others over once,** in its first season (its second, for days in orbit),
+    however many seasons it lasts.
   - **The window** counts down once the ambition is said: the table's seasons, −1 for Ambitious
     (at least 3), +2 for Steady. Each season, in this order: fulfilled; else passed over; else no
     longer possible (it can't be reached any more: a program closed, no goal left unreached,
@@ -845,10 +847,11 @@ such as letting a brilliant troublemaker go.
     phase changes nothing. Careers stay in the player state: a full agency with every record full
     is about 22 KB zipped (`StateSizeTest`). The hiring line is written at the first resolution
     after hiring, and an R&D stint's reliability is what the person added (`ResearchCompleted`).
-  - **Measured, and worth deciding** (`ContentPackPlayouts`, 200 bot games): over 24 seasons the
-    bots' people said 1,829 ambitions; **113 were fulfilled and 1,287 ran out** (astronauts: none
-    fulfilled, 164 ran out). Over 80 seasons it's 520 fulfilled to 2,429 run out. Morale at season
-    24 averages 81 (lowest 35), loyalty 65. The bots are slow (a first crewed orbit around season
+  - **Measured, and worth deciding** (`ContentPackPlayouts`, 200 bot games, after counting a pass-over
+    once per flight and waiting out basic training): over 24 seasons the bots' people said 1,852
+    ambitions; **122 were fulfilled and 1,310 ran out** (astronauts: none fulfilled, 107 ran out,
+    50 became impossible). Over 80 seasons, before those two fixes, it was 520 fulfilled to 2,429.
+    Morale at season 24 averages 81 (lowest 36), loyalty 65. The bots are slow (a first crewed orbit around season
     56), but people even in a quick human game will mostly see ambitions run out: crewed flights
     are few, and 5 to 8 seasons of patience is short. Options: longer windows (say 10 to 16), a
     window that only counts down while the ambition can be acted on (a crewed configuration ready

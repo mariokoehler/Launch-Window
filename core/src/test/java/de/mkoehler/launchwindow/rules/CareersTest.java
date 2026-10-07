@@ -180,6 +180,67 @@ class CareersTest {
         assertEquals(Careers.CAREER_KEPT + 10, engineer.getCareer().getLast().turn());
     }
 
+    private static MissionStepResolved step(String mission, int seasonIndex, MissionStepOutcome outcome) {
+        return new MissionStepResolved(mission, "vostok-orbital", seasonIndex, "s" + seasonIndex, outcome, List.of(),
+            0.9, true, null, null, null, 0);
+    }
+
+    private static Astronaut astronaut(PlayerSnapshot snapshot, String id, Ambition.Kind kind) {
+        Astronaut astronaut = new Astronaut(id, "Pilot " + id, 30, 60, 50);
+        astronaut.setAmbition(new Ambition(kind, "", 6, 6, 1));
+        snapshot.getAstronauts().add(astronaut);
+        return astronaut;
+    }
+
+    @Test
+    void theCrewIsFulfilledAndOthersArePassedOverOncePerFlight() {
+        PlayerSnapshot snapshot = agency();
+        snapshot.getOpenedProgramIds().add("vostok");
+        Astronaut aboard = astronaut(snapshot, "a1", Ambition.Kind.FLY_TO_ORBIT);
+        Astronaut ground = astronaut(snapshot, "a2", Ambition.Kind.FLY_TO_ORBIT);
+        Careers.Flight flight = new Careers.Flight("m1", "vostok-orbital", List.of("a1"), List.of(), List.of());
+        snapshot.getInProgressMissions().put("m1", new de.mkoehler.launchwindow.model.InProgressMission());
+        List<ResolutionEvent> first = Careers.advanceSeason(snapshot, CATALOG, new GoalTally(), List.of(flight),
+            List.of(step("m1", 0, MissionStepOutcome.SUCCESSFUL)), 5);
+        assertNull(aboard.getAmbition());
+        assertEquals(AmbitionSettled.Outcome.FULFILLED, ((AmbitionSettled) first.getFirst()).outcome());
+        assertEquals(4, ground.getAmbition().seasonsLeft());
+        Careers.advanceSeason(snapshot, CATALOG, new GoalTally(), List.of(flight),
+            List.of(step("m1", 1, MissionStepOutcome.SUCCESSFUL)), 6);
+        assertEquals(3, ground.getAmbition().seasonsLeft(), "the same flight's second season doesn't pass over again");
+    }
+
+    @Test
+    void aLostCrewsLastFlightGoesOnTheirMemorial() {
+        PlayerSnapshot snapshot = agency();
+        Astronaut lost = new Astronaut("a9", "Lost Pilot", 33, 70, 50);
+        snapshot.getMemorial().add(Careers.memorial(lost, 8, MemorialEntry.Cause.MISSION, "vostok-orbital", "s0"));
+        Careers.Flight flight = new Careers.Flight("m2", "vostok-orbital", List.of("a9"), List.of(), List.of());
+        Careers.advanceSeason(snapshot, CATALOG, new GoalTally(), List.of(flight),
+            List.of(step("m2", 0, MissionStepOutcome.CATASTROPHIC)), 8);
+        CareerEntry last = snapshot.getMemorial().getFirst().career().getLast();
+        assertEquals(CareerEntry.Kind.FLIGHT, last.kind());
+        assertEquals("s0", last.outcome());
+    }
+
+    @Test
+    void aRetriedResolutionSaysTheSameAmbition() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        PlayerSnapshot snapshot = agency();
+        snapshot.getOpenedProgramIds().add("vostok");
+        for (int i = 0; i < 6; i++) {
+            SetSpecialist engineer = engineer(snapshot, "p" + i);
+            engineer.setAmbitionPending(true);
+            engineer.setTenureSeasons(3);
+        }
+        PlayerSnapshot again = mapper.readValue(mapper.writeValueAsBytes(snapshot), PlayerSnapshot.class);
+        season(snapshot, 9);
+        season(again, 9);
+        for (int i = 0; i < 6; i++) {
+            assertEquals(snapshot.getSetSpecialists().get(i).getAmbition(), again.getSetSpecialists().get(i).getAmbition());
+        }
+    }
+
     @Test
     void aRaiseBuildsLoyalty() {
         PlayerSnapshot snapshot = agency();
