@@ -137,8 +137,7 @@ engineering problem or tidbit, note it here the same session.
     sheet), Power, Guidance, Orbital decay and Balloon tanks (one sheet). Sheet titles in
     `ui-spec.md` component 18. E-14's "In Launch Window" strips say the game has no latitude
     rule and that the VAB's payloads already include each real site's push (built as mocked;
-    **the user's call**, the alternative being to fold it into E-01 until the mechanic in §5
-    "Later" exists).
+    kept as it is, user 2026-10-07, until the latitude mechanic in §5 "Later" exists).
   - **E-06 to E-19, checked (2026-10-07).** Corrections to the mockups' text:
     - E-06: Gagarin ate paste from tubes on Vostok 1 (whether he drank isn't sourced, so the
       sheet says only that he ate). Gravity at 300 km is 91 % ((6,371 / 6,671)²). Titov's

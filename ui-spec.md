@@ -376,7 +376,9 @@ On the right:
     - **As built for E-06 to E-19:** a one-sheet explainer's eyebrow has no sheet count; the
       Museum's cards use a 1x thumbnail of each first drawing (`<name>-thumb.png`, written by
       the converter) instead of the full 2x picture; halo outlines are drawn last, over every
-      line. Changed from the mockups by the visual check: E-07's "Weight set low" moved under
+      line. Closing an explainer frees its full drawings (`UiKit.releasePictures`; user
+      2026-10-07), so reading every sheet doesn't pile up hundreds of MB of textures; reopening
+      one loads them again, a short wait. Changed from the mockups by the visual check: E-07's "Weight set low" moved under
       the ball, E-11's sound rings shrunk clear of the heading, E-14's bar labels pulled inside
       their bars, halos on labels that cross lines in E-10, E-13, E-14 and E-19, E-12's scale
       "Roughly to scale" (the longer one overflowed its cell), and E-13's "A gentler ride"

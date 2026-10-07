@@ -163,6 +163,26 @@ public final class UiKit implements Disposable {
     }
 
     /**
+     * Frees the cached pictures under a folder, such as an explainer's full drawings once it closes:
+     * each is a large texture, and a player reading every explainer would otherwise keep them all.
+     * The next {@link #picture} call loads one again.
+     *
+     * @param folder     the folder under {@code ui/}, such as {@code explainers/}
+     * @param keepSuffix pictures ending in this stay cached, such as the Museum's small thumbnails
+     */
+    public void releasePictures(String folder, String keepSuffix) {
+        pictures.entrySet().removeIf(entry -> {
+            if (!entry.getKey().startsWith(folder) || entry.getKey().endsWith(keepSuffix)) {
+                return false;
+            }
+            if (entry.getValue() != null) {
+                entry.getValue().dispose();
+            }
+            return true;
+        });
+    }
+
+    /**
      * Returns a text file from the assets folder, such as {@code CREDITS.md}.
      *
      * @param path the path under the assets folder

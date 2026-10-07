@@ -81,6 +81,13 @@ public final class ExplainerScreen extends SessionScreen {
     }
 
     @Override
+    public void dispose() {
+        super.dispose();
+        // The full drawings are big; free them once the explainer is gone (the Museum's thumbnails stay).
+        ui.releasePictures("explainers/", "-thumb.png");
+    }
+
+    @Override
     protected void rebuild() {
         Explainers.Sheet current = explainer.sheets().get(sheet);
         root.clearChildren();
