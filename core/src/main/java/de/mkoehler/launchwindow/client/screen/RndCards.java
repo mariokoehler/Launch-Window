@@ -12,17 +12,26 @@ import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.actions.AssignResearchAction;
 import de.mkoehler.launchwindow.actions.ReleaseResearchAction;
 import de.mkoehler.launchwindow.client.connect.ServerResult;
+import de.mkoehler.launchwindow.client.ui.ChemistryIndicator;
+import de.mkoehler.launchwindow.client.ui.RelationshipMarker;
 import de.mkoehler.launchwindow.client.ui.ReliabilityBar;
 import de.mkoehler.launchwindow.client.ui.Theme;
+import de.mkoehler.launchwindow.client.ui.TraitChip;
 import de.mkoehler.launchwindow.client.ui.UiKit;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.PayloadRnd;
+import de.mkoehler.launchwindow.client.view.People;
 import de.mkoehler.launchwindow.client.view.SetDepartment;
 import de.mkoehler.launchwindow.client.view.SetSkills;
 import de.mkoehler.launchwindow.content.MissionComponent;
+import de.mkoehler.launchwindow.model.Personnel;
 import de.mkoehler.launchwindow.model.SetSpecialist;
+import de.mkoehler.launchwindow.model.Trait;
 import de.mkoehler.launchwindow.persistence.PlayerAction;
+import de.mkoehler.launchwindow.rules.Chemistry;
+import de.mkoehler.launchwindow.rules.Personality;
 import de.mkoehler.launchwindow.rules.ResearchPlanning;
+import de.mkoehler.launchwindow.rules.TraitEffects;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -32,11 +41,16 @@ import java.util.Locale;
 /**
  * R&amp;D cards (component 10), shared by the R&amp;D boards and the mission planning screen's
  * Payload R&amp;D tab: a component's reliability bar and four slots, with assign and release going
- * through the host screen's submit loop. Read-only cards show the slots without the actions.
+ * through the host screen's submit loop. Read-only cards show the slots without the actions. Each
+ * card shows its team's chemistry as the player knows it (component 21), and a revealed
+ * Perfectionist's raised cap as a second, dashed marker (People canvas, 2026-10-07).
  *
  * @author Mario Koehler
  */
 final class RndCards {
+
+    /** The assign dialog's width: wide enough for traits, marks and the chemistry preview. */
+    private static final float ASSIGN_DIALOG_WIDTH = 1080f;
 
     private final ChromeScreen host;
     private final UiKit ui;
@@ -88,9 +102,21 @@ final class RndCards {
         double current = card.owned().getCurrentReliability();
         double gain = ResearchPlanning.expectedSeasonGain(host.session.state(), host.session.catalog(),
             component.id());
+        // The cap the player is told: raised while a revealed Perfectionist is on the team.
+        double cap = TraitEffects.effectiveCap(host.session.state(), component, List.of(), true);
         box.add(new ReliabilityBar(ui, current, component.maxRdReliability(), component.maxReliability(),
-            card.owned().getFloorReliability()).projected(current + gain)).height(14f).padBottom(Theme.SPACE_1).row();
+            card.owned().getFloorReliability()).projected(current + gain).raisedCap(cap)).height(14f)
+            .padBottom(Theme.SPACE_1).row();
         String caption = String.format(Locale.ROOT, "%.1f%% (R&D cap %.1f)", current, component.maxRdReliability());
+        if (cap > component.maxRdReliability()) {
+            List<String> perfectionists = team(card).stream()
+                .filter(engineer -> Personality.known(engineer, Trait.PERFECTIONIST))
+                .map(engineer -> People.surname(engineer.getName())).toList();
+            boolean one = perfectionists.size() == 1;
+            caption = String.format(Locale.ROOT, "%.1f%% (R&D cap %.1f, raised to %.1f while %s, %s, %s on the team)",
+                current, component.maxRdReliability(), cap, String.join(" and ", perfectionists),
+                one ? "a perfectionist" : "perfectionists", one ? "is" : "are");
+        }
         if (gain >= 0.05) {
             caption += String.format(Locale.ROOT, " · about +%.1f next season", gain);
         }
@@ -100,9 +126,14 @@ final class RndCards {
                 + "average season. Each slot's draw is random, and gains shrink as reliability nears the R&D cap.");
         }
         box.add(captionLabel).padBottom(Theme.SPACE_3).row();
-        if (card.atCap()) {
+        List<SetSpecialist> team = team(card);
+        // Past the cap the player knows of while people still sit there: a hidden Perfectionist's doing.
+        if (card.atCap() && team.isEmpty()) {
             box.add(ui.paragraph("Released automatically when the R&D ceiling was reached.", Theme.TextStyle.BODY_SM,
                 Theme.INK_MUTED)).padBottom(Theme.SPACE_3).row();
+        }
+        if (!team.isEmpty()) {
+            box.add(chemistryRow(component, team)).padBottom(Theme.SPACE_3).row();
         }
 
         Table slots = new Table();
@@ -113,6 +144,27 @@ final class RndCards {
         }
         box.add(slots);
         return box;
+    }
+
+    private static List<SetSpecialist> team(PayloadRnd.Card card) {
+        return card.slots().stream().filter(java.util.Objects::nonNull).toList();
+    }
+
+    /**
+     * Builds a card's team chemistry row: the indicator, whose breakdown hover previews and a click
+     * pins.
+     */
+    private Table chemistryRow(MissionComponent component, List<SetSpecialist> team) {
+        Chemistry.Result chemistry = People.research(host.session.state(), component, team, null);
+        Table row = new Table();
+        row.setBackground(ui.rect(new Color(Theme.SURFACE_CARD).lerp(Theme.NAVY, 0.04f), Theme.NAVY_BORDER,
+            Theme.BORDER_THIN));
+        row.pad(Theme.SPACE_2, Theme.SPACE_3, Theme.SPACE_2, Theme.SPACE_3);
+        row.add(ui.label("TEAM CHEMISTRY", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).width(130f).left().top()
+            .padTop(3f);
+        row.add(ChemistryIndicator.withBreakdown(ui, chemistry, People.reasons(host.session.state(), chemistry)))
+            .expandX().left();
+        return row;
     }
 
     private Table slot(PayloadRnd.Card card, int slot, int nextFree) {
@@ -171,28 +223,91 @@ final class RndCards {
             return;
         }
         Table dialogCard = host.dialogCard(title, "Assign to " + ContentNames.of(component.id()));
-        dialogCard.add(ui.paragraph("They take slot " + (card.nextFreeSlot() + 1) + ". Sorted by "
+        dialogCard.add(ui.paragraph("The engineer takes slot " + (card.nextFreeSlot() + 1) + ". Sorted by "
             + SetSkills.label(component.associatedSkill()) + ", the skill this component needs.",
             Theme.TextStyle.BODY, Theme.INK_MUTED)).padBottom(Theme.SPACE_3).row();
+        List<SetSpecialist> team = team(card);
+        Chemistry.Result now = People.research(host.session.state(), component, team, null);
+        if (!team.isEmpty()) {
+            Table teamNow = new Table();
+            teamNow.setBackground(ui.rect(new Color(Theme.SURFACE_CARD).lerp(Theme.NAVY, 0.04f), Theme.NAVY_BORDER,
+                Theme.BORDER_THIN));
+            teamNow.pad(Theme.SPACE_2, Theme.SPACE_3, Theme.SPACE_2, Theme.SPACE_3);
+            teamNow.add(ui.label("THE TEAM NOW", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padRight(Theme.SPACE_4);
+            teamNow.add(ui.label(String.join(", ", team.stream().map(engineer -> People.surname(engineer.getName()))
+                .toList()), Theme.TextStyle.BODY_SM, Theme.INK)).expandX().left();
+            teamNow.add(ChemistryIndicator.full(ui, now));
+            dialogCard.add(teamNow).growX().padBottom(Theme.SPACE_3).row();
+        }
         Table list = new Table();
-        list.defaults().growX();
+        list.defaults().left();
+        list.add();
+        list.add(header("Idle engineer · traits")).left();
+        list.add(header("With this team")).left();
+        list.add(header("Skill")).left();
+        list.add(header(team.isEmpty() ? "Chemistry" : "Chemistry with them")).left();
+        list.add().row();
+        list.add(new com.badlogic.gdx.scenes.scene2d.ui.Image(ui.solid(Theme.NAVY))).colspan(6).growX()
+            .height(Theme.BORDER_THIN).padTop(4f).row();
+        List<String> teamIds = team.stream().map(Personnel::getId).toList();
         for (SetSpecialist specialist : candidates.subList(0, Math.min(6, candidates.size()))) {
-            Table row = new Table();
-            row.add(ui.label(specialist.getName(), Theme.TextStyle.BODY, Theme.INK)).expandX().left();
-            row.add(ui.label(SetSkills.label(component.associatedSkill()) + " "
-                    + Math.round(SetDepartment.skill(specialist, component.associatedSkill())),
-                Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).padRight(Theme.SPACE_3);
-            row.add(button("Assign", Theme.ButtonKind.PRIMARY, () -> host.submit(
+            list.add(RosterCells.avatar(ui, specialist)).size(36f).padRight(Theme.SPACE_3).padTop(Theme.SPACE_2)
+                .padBottom(Theme.SPACE_2);
+            Table who = new Table();
+            who.left();
+            who.defaults().left();
+            who.add(ui.label(specialist.getName(), Theme.TextStyle.BODY_STRONG, Theme.INK)).row();
+            List<Trait> traits = People.traits(specialist);
+            if (!traits.isEmpty()) {
+                who.add(TraitChip.row(ui, traits, 260f)).padTop(4f).row();
+            }
+            if (People.gettingToKnow(specialist)) {
+                who.add(ui.label("Still getting to know each other", Theme.TextStyle.CAPTION_ITALIC, Theme.INK_MUTED))
+                    .padTop(2f);
+            }
+            list.add(who).width(270f).padRight(Theme.SPACE_3);
+            Table marks = new Table();
+            marks.left();
+            List<People.Relationship> relationships = People.marks(host.session.state(), specialist, teamIds);
+            for (People.Relationship relationship : relationships) {
+                marks.add(RelationshipMarker.mark(ui, relationship.positive(), relationship.partner().getName(),
+                    "Already on this team.")).left().padRight(Theme.SPACE_3);
+            }
+            if (relationships.isEmpty()) {
+                marks.add(ui.label("—", Theme.TextStyle.BODY_SM, Theme.INK_MUTED));
+            }
+            list.add(marks).width(170f).padRight(Theme.SPACE_3);
+            Table skill = new Table();
+            String icon = SetSkills.icon(component.associatedSkill());
+            com.badlogic.gdx.scenes.scene2d.ui.Image glyph = new com.badlogic.gdx.scenes.scene2d.ui.Image(
+                ui.icon(icon), Scaling.fit);
+            glyph.setColor(Theme.NAVY);
+            skill.add(glyph).height(14f).width(14f * Math.min(1f, ui.iconAspect(icon))).padRight(6f);
+            skill.add(ui.label(String.valueOf(Math.round(SetDepartment.skill(specialist, component.associatedSkill()))),
+                Theme.TextStyle.BODY_SM, Theme.INK));
+            list.add(skill).width(70f).padRight(Theme.SPACE_3);
+            Chemistry.Result then = People.research(host.session.state(), component, team, specialist);
+            list.add(team.isEmpty() ? ChemistryIndicator.compact(ui, then) : ChemistryIndicator.preview(ui, now, then))
+                .width(210f).padRight(Theme.SPACE_3);
+            list.add(button("Assign", Theme.ButtonKind.PRIMARY, () -> host.submit(
                 new AssignResearchAction(specialist.getId(), component.id()), result -> {
                     host.closeDialog();
                     host.toast("Assigned " + specialist.getName() + " to " + ContentNames.of(component.id()) + ".",
                         Theme.NoticeKind.SUCCESS);
-                })));
-            list.add(row).padBottom(Theme.SPACE_2).row();
+                }))).right().row();
+            list.add(new com.badlogic.gdx.scenes.scene2d.ui.Image(ui.solid(Theme.NAVY_BORDER))).colspan(6).growX()
+                .height(Theme.BORDER_THIN).row();
         }
-        dialogCard.add(list).padBottom(Theme.SPACE_3).row();
+        dialogCard.add(list).growX().padBottom(Theme.SPACE_3).row();
+        dialogCard.add(ui.paragraph("Chemistry counts only what has come out: revealed traits and relationships that "
+            + "show. \u201cMay differ\u201d means someone new to the team is still an unknown.",
+            Theme.TextStyle.CAPTION, Theme.INK_MUTED)).growX().padBottom(Theme.SPACE_3).row();
         dialogCard.add(button("Cancel", Theme.ButtonKind.SECONDARY, host::closeDialog)).right().fill(false, false);
-        host.showDialog(dialogCard);
+        host.showDialog(dialogCard, ASSIGN_DIALOG_WIDTH);
+    }
+
+    private Label header(String text) {
+        return ui.label(text.toUpperCase(Locale.ROOT), Theme.TextStyle.LABEL, Theme.INK_MUTED);
     }
 
     /**
