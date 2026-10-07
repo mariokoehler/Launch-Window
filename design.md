@@ -730,6 +730,9 @@ such as letting a brilliant troublemaker go.
       accepted for now.
     - **Morale effects, first pass:** Workaholic, Steady and Ambitious act on the season's own
       morale change only, not on salary changes, press stories or random events.
+    - **Early tells are welcome** (user decision 2026-10-07): Workaholic and Steady change the
+      visible morale numbers before they're revealed, so an attentive player can guess them.
+      That rewards perception; hidden traits don't have to leave no trace.
     - **Perfectionist's cap:** reliability gained above the normal cap stays when they leave; the
       rest of the team is then released once, as at any cap. Every rule that checks the cap reads
       `TraitEffects.effectiveCap` (R&D, the release after a flight, and the refusal to assign at
