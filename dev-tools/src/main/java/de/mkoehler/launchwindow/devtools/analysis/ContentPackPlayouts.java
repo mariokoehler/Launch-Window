@@ -153,6 +153,42 @@ public final class ContentPackPlayouts {
      * @return the report
      * @throws IllegalStateException if any invariant breaks
      */
+    /**
+     * What teamwork shows a player over a game (design.md 2.2(d)): traits revealed and relationships
+     * shown per game, playing every season even after the declared goals are reached.
+     *
+     * @param games               how many games
+     * @param traitsRevealed      traits revealed, over all games
+     * @param relationshipsShown  relationships shown, over all games
+     * @param positive            of those, how many were friendships
+     * @param pairs               pairs who ever shared a team, over all games
+     * @param employees           employees on the rosters at the end, over all games
+     */
+    public record PeopleReport(int games, int traitsRevealed, int relationshipsShown, int positive, int pairs,
+                               int employees) {
+    }
+
+    /**
+     * Plays games for a fixed number of seasons and counts what teamwork showed.
+     *
+     * @param games   how many games
+     * @param seasons seasons per game
+     * @param seed    the random seed
+     * @return the counts
+     */
+    public PeopleReport people(int games, int seasons, long seed) {
+        keepPlaying = true;
+        try {
+            run(games, seasons, seed);
+        } finally {
+            keepPlaying = false;
+        }
+        return new PeopleReport(games, peopleTally[0], peopleTally[1], peopleTally[2], peopleTally[3], peopleTally[4]);
+    }
+
+    private boolean keepPlaying;
+    private final int[] peopleTally = new int[5];
+
     public Report run(int games, int seasons, long seed) {
         Random random = new Random(seed);
         Tally tally = new Tally();
@@ -193,7 +229,19 @@ public final class ContentPackPlayouts {
             for (ResolutionEvent event : seasonEvents) {
                 if (event instanceof MissionStepResolved resolved) {
                     tally.stepOutcomes.merge(resolved.outcome().name(), 1, Integer::sum);
+                } else if (event instanceof de.mkoehler.launchwindow.rules.TraitRevealed) {
+                    peopleTally[0]++;
+                } else if (event instanceof de.mkoehler.launchwindow.rules.RelationshipShown shown) {
+                    peopleTally[1]++;
+                    if (shown.positive()) {
+                        peopleTally[2]++;
+                    }
                 }
+            }
+            if (keepPlaying && season == seasons - 1) {
+                peopleTally[3] += snapshot.getRapports().size();
+                peopleTally[4] += snapshot.getAstronauts().size() + snapshot.getSetSpecialists().size()
+                    + snapshot.getMissionControlOfficers().size();
             }
             for (List<ResolutionEvent> list : List.of(seasonEvents)) {
                 for (ResolutionEvent event : list) {
@@ -216,7 +264,7 @@ public final class ContentPackPlayouts {
             if (complete != (win.status() == WinCondition.Status.WON && win.winners().equals(List.of("bot")))) {
                 throw new IllegalStateException("Completion " + complete + " disagrees with WinCondition " + win);
             }
-            if (complete) {
+            if (complete && !keepPlaying) {
                 tally.completedByArchetype.merge(archetype, 1, Integer::sum);
                 tally.completionSeasons.add(season + 1);
                 return;
@@ -809,5 +857,11 @@ public final class ContentPackPlayouts {
             + report.debtConversions() + ", lowest funds " + report.lowestFunds() + ", astronauts lost "
             + report.astronautsLost());
         System.out.println("Stalls: " + report.stalls());
+        PeopleReport people = new ContentPackPlayouts(catalog).people(200, 24, 42L);
+        System.out.printf("People over 24 seasons, per game: %.1f traits revealed, %.1f relationships shown "
+                + "(%.1f friendships), %.1f pairs who shared a team, %.1f employees at the end%n",
+            people.traitsRevealed() / (double) people.games(), people.relationshipsShown() / (double) people.games(),
+            people.positive() / (double) people.games(), people.pairs() / (double) people.games(),
+            people.employees() / (double) people.games());
     }
 }
