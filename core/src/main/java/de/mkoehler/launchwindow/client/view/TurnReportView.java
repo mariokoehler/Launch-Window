@@ -29,7 +29,10 @@ import de.mkoehler.launchwindow.rules.ResearchCompleted;
 import de.mkoehler.launchwindow.rules.ResearchComponentMaxed;
 import de.mkoehler.launchwindow.rules.ResolutionEvent;
 import de.mkoehler.launchwindow.rules.SeasonFundsSettled;
+import de.mkoehler.launchwindow.rules.RelationshipShown;
+import de.mkoehler.launchwindow.rules.Teams;
 import de.mkoehler.launchwindow.rules.TrainingCompleted;
+import de.mkoehler.launchwindow.rules.TraitRevealed;
 import de.mkoehler.launchwindow.rules.TurnReport;
 
 import java.util.ArrayList;
@@ -437,6 +440,18 @@ public final class TurnReportView {
         return Character.toUpperCase(words.charAt(0)) + words.substring(1);
     }
 
+    /** What someone was working on, for a people line: ", on Atlas R&D". */
+    private static String workingOn(String teamKind, String subjectId, ContentCatalog catalog) {
+        if (subjectId == null) {
+            return "";
+        }
+        if (Teams.MISSION.equals(teamKind)) {
+            return catalog.missionConfiguration(subjectId).map(configuration -> ", on " + MissionControl.missionName(
+                configuration)).orElse("");
+        }
+        return ", on " + ContentNames.of(subjectId) + " R&D";
+    }
+
     /**
      * Returns the people lines: Experts earned, training finished, departures, flight growth, and
      * morale warnings for idle people now (derived here, unconfirmed).
@@ -460,6 +475,17 @@ public final class TurnReportView {
                 lines.add(departure(departure));
             } else if (event instanceof PrDutyPerformed pr) {
                 lines.add(prLine(pr));
+            } else if (event instanceof TraitRevealed revealed) {
+                lines.add(new Line(revealed.name() + " turns out to be " + TraitTexts.inSentence(revealed.trait()),
+                    "Noticed after " + revealed.workSeasons() + (revealed.workSeasons() == 1 ? " season" : " seasons")
+                        + " of teamwork" + workingOn(revealed.teamKind(), revealed.subjectId(), catalog) + ". "
+                        + TraitTexts.effect(revealed.trait()), "Trait", 0));
+            } else if (event instanceof RelationshipShown shown) {
+                lines.add(new Line(shown.firstName() + " and " + shown.secondName()
+                    + (shown.positive() ? " work well together" : " clash"),
+                    "Noticed" + workingOn(shown.teamKind(), shown.subjectId(), catalog) + ". "
+                        + (shown.positive() ? "Teams with both of them work better." : "Teams with both of them suffer."),
+                    "Team", shown.positive() ? 1 : -1));
             } else if (event instanceof PassengerLost lost) {
                 lines.add(new Line(lost.name() + " did not come home", lost.failedStepId() == null
                     ? "The flight had no way home."

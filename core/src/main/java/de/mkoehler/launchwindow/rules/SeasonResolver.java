@@ -21,7 +21,7 @@ import java.util.random.RandomGenerator;
  * {@link Phase#BUILDINGS} (an upgrade lands before the budget, so its new upkeep
  * is charged the season it finishes), {@link Phase#BUDGET},
  * {@link Phase#RANDOM_EVENTS}, {@link Phase#TRAINING}, {@link Phase#RESEARCH},
- * and {@link Phase#HIRING_POOL} last.</p>
+ * {@link Phase#TEAMS}, and {@link Phase#HIRING_POOL} last.</p>
  *
  * <p><b>Two clocks.</b> {@link Context#gameTurn()} is the shared game turn: goal
  * achievements, news, and flight and failure turns are stamped with it, and the
@@ -57,6 +57,8 @@ public final class SeasonResolver {
         TRAINING,
         /** R&D on mission components. */
         RESEARCH,
+        /** Teamwork: work seasons, pairs' rapport and traits shown (design.md 2.2(d)). */
+        TEAMS,
         /** Fresh candidate pools. */
         HIRING_POOL
     }
@@ -156,9 +158,16 @@ public final class SeasonResolver {
         Objects.requireNonNull(random, "random must not be null");
         Objects.requireNonNull(observer, "observer must not be null");
         List<ResolutionEvent> all = new ArrayList<>();
+        List<Teams.Team> teams = List.of();
         for (Phase phase : Phase.values()) {
             observer.before(phase, snapshot);
-            List<ResolutionEvent> events = run(phase, snapshot, context, random);
+            List<ResolutionEvent> events = phase == Phase.TEAMS ? Teams.advanceSeason(snapshot, teams)
+                : run(phase, snapshot, context, random);
+            if (phase == Phase.PERSONNEL_LIFECYCLE) {
+                // This season's teams, after departures and before missions resolve (a finishing
+                // mission releases its crew).
+                teams = Teams.capture(snapshot, context.catalog());
+            }
             observer.after(phase, snapshot, events);
             all.addAll(events);
         }
@@ -181,6 +190,7 @@ public final class SeasonResolver {
                 context.seasonsElapsed());
             case TRAINING -> TrainingProgress.advanceSeason(snapshot, random);
             case RESEARCH -> ResearchProgress.advanceSeason(snapshot, context.catalog(), random);
+            case TEAMS -> throw new IllegalStateException("teams run with their captured teams");
             case HIRING_POOL -> {
                 HiringPool.refreshCandidates(snapshot, random);
                 yield List.of();
