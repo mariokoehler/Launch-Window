@@ -82,7 +82,7 @@ final class PersonnelDialogs {
      */
     void openTraining(Personnel specialist) {
         if (SetDepartment.isBusy(specialist)) {
-            host.toast("They're busy.", Theme.NoticeKind.INFO);
+            host.toast("Busy right now.", Theme.NoticeKind.INFO);
             return;
         }
         new TrainingDialog(specialist).show();

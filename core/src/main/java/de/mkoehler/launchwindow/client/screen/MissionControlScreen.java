@@ -260,12 +260,9 @@ public final class MissionControlScreen extends ChromeScreen {
         Table row = new Table();
         row.pad(Theme.SPACE_3, Theme.SPACE_4, Theme.SPACE_3, Theme.SPACE_4);
         row.add(RosterCells.avatar(ui, officer)).size(48f).padRight(Theme.SPACE_4);
-        Table who = new Table();
-        who.left();
-        who.defaults().left();
-        who.add(ui.label(officer.getName(), Theme.TextStyle.HEADING_SM, Theme.INK)).padBottom(2f).row();
-        who.add(ui.label("AGE " + officer.getAge(), Theme.TextStyle.CAPTION, Theme.INK_MUTED));
-        row.add(who).width(170f).left().padRight(Theme.SPACE_4);
+        row.add(RosterCells.who(ui, officer, "AGE " + officer.getAge(), () -> game.setScreen(
+            new PersonScreen(game, officer, () -> new MissionControlScreen(game))))).width(170f).left()
+            .padRight(Theme.SPACE_4);
 
         String text = MissionControl.stateText(officer, session.state(), session.catalog());
         boolean active = officer.getUnavailableSeasons() == 0 && officer.getAssignmentState() != AssignmentState.IDLE;
@@ -273,6 +270,7 @@ public final class MissionControlScreen extends ChromeScreen {
         stateHolder.left();
         stateHolder.add(active ? ui.badge(Theme.BadgeKind.ACTIVE, text) : RosterCells.pill(ui, text));
         row.add(stateHolder).width(300f).left().padRight(Theme.SPACE_4);
+        row.add(RosterCells.traits(ui, officer)).width(RosterCells.TRAITS_WIDTH).left().padRight(Theme.SPACE_4);
 
         Table skills = new Table();
         for (MissionControlSkill skill : MissionControlSkill.values()) {

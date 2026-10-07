@@ -8,15 +8,22 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import de.mkoehler.launchwindow.client.ui.Theme;
+import de.mkoehler.launchwindow.client.ui.TraitChip;
 import de.mkoehler.launchwindow.client.ui.UiKit;
+import de.mkoehler.launchwindow.client.view.People;
 import de.mkoehler.launchwindow.client.view.Tips;
 import de.mkoehler.launchwindow.model.Personnel;
+import de.mkoehler.launchwindow.model.Trait;
+
+import java.util.List;
 
 /**
  * The pieces of a crew roster row (component 11), shared by Mission Control's controllers and the
- * Astronaut Complex's astronauts: the avatar, a skill cell with its Expert mark, the plain state
- * pill, and the salary and morale chips.
+ * Astronaut Complex's astronauts, and the SET Centre's engineers: the avatar, the name that opens the
+ * person page, a skill cell with its Expert mark, the plain state pill, the traits, and the salary
+ * and morale chips.
  *
  * @author Mario Koehler
  */
@@ -57,6 +64,55 @@ final class RosterCells {
             cell.add(star).size(10f).padLeft(3f);
         }
         ui.tooltip(cell, tip.title() + (expert ? " · Expert" : ""), tip.text());
+        return cell;
+    }
+
+    /** A roster row's traits column ({@code ui-spec.md} component 11, People canvas, 2026-10-07). */
+    static final float TRAITS_WIDTH = 230f;
+
+    /**
+     * Builds a person's name and age line; clicking the name opens their person page
+     * ({@code ui-spec.md} &sect;4.14).
+     *
+     * @param ui      the UI kit
+     * @param person  the person
+     * @param ageLine the caption under the name
+     * @param open    opens the person page
+     * @return the cell
+     */
+    static Table who(UiKit ui, Personnel person, String ageLine, Runnable open) {
+        Table who = new Table();
+        who.left();
+        who.defaults().left();
+        Label name = ui.label(person.getName(), Theme.TextStyle.HEADING_SM, Theme.INK);
+        name.setTouchable(Touchable.enabled);
+        name.addListener(ChromeScreen.clicked(open));
+        ui.tooltip(name, person.getName(), "Opens the person page: skills, traits and relationships.");
+        who.add(name).padBottom(2f).row();
+        who.add(ui.label(ageLine, Theme.TextStyle.CAPTION, Theme.INK_MUTED));
+        return who;
+    }
+
+    /**
+     * Builds a row's traits cell: the revealed trait chips, and "Still getting to know each other"
+     * while the person is inside the reveal window. Never empty slots or a count.
+     *
+     * @param ui     the UI kit
+     * @param person the person
+     * @return the cell
+     */
+    static Table traits(UiKit ui, Personnel person) {
+        Table cell = new Table();
+        cell.left();
+        cell.defaults().left();
+        List<Trait> traits = People.traits(person);
+        if (!traits.isEmpty()) {
+            cell.add(TraitChip.row(ui, traits, TRAITS_WIDTH)).row();
+        }
+        if (People.gettingToKnow(person)) {
+            cell.add(ui.label("Still getting to know each other", Theme.TextStyle.CAPTION_ITALIC, Theme.INK_MUTED))
+                .padTop(traits.isEmpty() ? 0f : 4f);
+        }
         return cell;
     }
 

@@ -175,12 +175,9 @@ public final class SetCentreScreen extends ChromeScreen {
         row.pad(Theme.SPACE_3, Theme.SPACE_4, Theme.SPACE_3, Theme.SPACE_4);
         row.add(RosterCells.avatar(ui, specialist)).size(48f).padRight(Theme.SPACE_4);
 
-        Table who = new Table();
-        who.left();
-        who.defaults().left();
-        who.add(ui.label(specialist.getName(), Theme.TextStyle.HEADING_SM, Theme.INK)).padBottom(2f).row();
-        who.add(ui.label("AGE " + specialist.getAge(), Theme.TextStyle.CAPTION, Theme.INK_MUTED));
-        row.add(who).width(160f).left().padRight(Theme.SPACE_4);
+        row.add(RosterCells.who(ui, specialist, "AGE " + specialist.getAge(), () -> game.setScreen(
+            new PersonScreen(game, specialist, () -> new SetCentreScreen(game))))).width(160f).left()
+            .padRight(Theme.SPACE_4);
 
         Container<Label> state = SetDepartment.isActive(specialist)
             ? ui.badge(Theme.BadgeKind.ACTIVE, SetDepartment.stateText(specialist))
@@ -189,6 +186,7 @@ public final class SetCentreScreen extends ChromeScreen {
         stateHolder.left();
         stateHolder.add(state);
         row.add(stateHolder).width(280f).left().padRight(Theme.SPACE_4);
+        row.add(RosterCells.traits(ui, specialist)).width(RosterCells.TRAITS_WIDTH).left().padRight(Theme.SPACE_4);
 
         Table skills = new Table();
         for (SetSkill skill : SetSkill.values()) {

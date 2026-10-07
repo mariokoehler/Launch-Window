@@ -160,12 +160,9 @@ public final class AstronautComplexScreen extends ChromeScreen {
         Table row = new Table();
         row.pad(Theme.SPACE_3, Theme.SPACE_4, Theme.SPACE_3, Theme.SPACE_4);
         row.add(RosterCells.avatar(ui, astronaut)).size(48f).padRight(Theme.SPACE_4);
-        Table who = new Table();
-        who.left();
-        who.defaults().left();
-        who.add(ui.label(astronaut.getName(), Theme.TextStyle.HEADING_SM, Theme.INK)).padBottom(2f).row();
-        who.add(ui.label("AGE " + astronaut.getAge(), Theme.TextStyle.CAPTION, Theme.INK_MUTED));
-        row.add(who).width(170f).left().padRight(Theme.SPACE_4);
+        row.add(RosterCells.who(ui, astronaut, "AGE " + astronaut.getAge(), () -> game.setScreen(
+            new PersonScreen(game, astronaut, () -> new AstronautComplexScreen(game))))).width(170f).left()
+            .padRight(Theme.SPACE_4);
 
         String text = AstronautCorps.stateText(astronaut, session.state(), session.catalog());
         boolean active = astronaut.getUnavailableSeasons() == 0
@@ -179,6 +176,7 @@ public final class AstronautComplexScreen extends ChromeScreen {
             stateHolder.add(ui.label(hint, Theme.TextStyle.CAPTION, Theme.GOLD_TEXT)).padTop(4f);
         }
         row.add(stateHolder).width(330f).left().padRight(Theme.SPACE_4);
+        row.add(RosterCells.traits(ui, astronaut)).width(RosterCells.TRAITS_WIDTH).left().padRight(Theme.SPACE_4);
 
         Table skills = new Table();
         for (AstronautSkill skill : AstronautSkill.values()) {
