@@ -45,7 +45,10 @@ public final class PayloadRnd {
          * @return whether at the ceiling
          */
         public boolean atCap() {
-            return owned.getCurrentReliability() >= component.maxRdReliability();
+            // A revealed Perfectionist on the team raises the cap (design.md 2.2(d)).
+            List<SetSpecialist> team = slots.stream().filter(java.util.Objects::nonNull).toList();
+            return owned.getCurrentReliability() >= Math.min(component.maxReliability(),
+                component.maxRdReliability() + de.mkoehler.launchwindow.rules.TraitEffects.capBonus(team, true));
         }
 
         /**

@@ -127,4 +127,35 @@ class TraitEffectsTest {
         assertTrue(ResearchProgress.advanceSeason(snapshot, catalog, random).isEmpty());
         assertEquals(reliability, snapshot.getMissionComponents().get("rocket-redstone").getCurrentReliability(), 1e-9);
     }
+
+    @Test
+    void everyCapCheckReadsTheEffectiveCap() {
+        MissionComponent redstone = new MissionComponent("rocket-redstone", SetSkill.ROCKETS, 3, 95, 90,
+            List.of(3.0, 6.0, 9.0, 12.0), 0, List.of());
+        ContentCatalog catalog = new ContentCatalog(List.of(), List.of(), List.of(), List.of(redstone));
+        PlayerSnapshot snapshot = new PlayerSnapshot("Agency", Archetype.NASA, 0, 0, 0, 1);
+        SetSpecialist hidden = new SetSpecialist("set-1", "Hidden", 30, 70, 50);
+        hidden.setTraits(List.of(new TraitState(Trait.PERFECTIONIST, 4, false)));
+        SetSpecialist known = new SetSpecialist("set-2", "Known", 30, 70, 50);
+        known.setTraits(List.of(new TraitState(Trait.PERFECTIONIST, 2, true)));
+        snapshot.setSetSpecialists(new ArrayList<>(List.of(hidden, known)));
+        snapshot.setMissionComponents(Map.of("rocket-redstone", new OwnedMissionComponent(91, 3.0)));
+
+        assertEquals(90, TraitEffects.effectiveCap(snapshot, redstone, List.of(), false), 1e-9);
+        hidden.setAssignmentState(AssignmentState.ASSIGNED);
+        hidden.setRdTargetComponentId("rocket-redstone");
+        hidden.setRdSlot(0);
+        // The real cap rises with the hidden Perfectionist (a flight's release check reads this one) ...
+        assertEquals(93, TraitEffects.effectiveCap(snapshot, redstone, List.of(), false), 1e-9);
+        // ... but what the player is told doesn't.
+        assertEquals(90, TraitEffects.effectiveCap(snapshot, redstone, List.of(), true), 1e-9);
+
+        // At 91, only the revealed Perfectionist may join.
+        SetSpecialist plain = new SetSpecialist("set-3", "Plain", 30, 70, 50);
+        snapshot.getSetSpecialists().add(plain);
+        assertEquals(PersonnelActions.ResearchOutcome.AT_RD_CEILING,
+            PersonnelActions.assignResearch(snapshot, "set-3", "rocket-redstone", catalog));
+        assertEquals(PersonnelActions.ResearchOutcome.ASSIGNED,
+            PersonnelActions.assignResearch(snapshot, "set-2", "rocket-redstone", catalog));
+    }
 }

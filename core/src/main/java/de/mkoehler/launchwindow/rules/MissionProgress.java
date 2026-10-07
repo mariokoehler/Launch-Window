@@ -744,7 +744,10 @@ public final class MissionProgress {
      */
     private static void passOverGlorySeekers(PlayerSnapshot snapshot, InProgressMission mission) {
         for (Astronaut astronaut : snapshot.getAstronauts()) {
-            if (!mission.crewIds().contains(astronaut.getId())
+            // Only someone left on the ground: not on this mission (crew or CAPCOM), nor flying another.
+            boolean onThisMission = mission.crewIds().contains(astronaut.getId())
+                || mission.getControlSlotIds().contains(astronaut.getId());
+            if (!onThisMission && astronaut.getAssignedMissionId() == null
                 && Personality.has(astronaut, de.mkoehler.launchwindow.model.Trait.GLORY_SEEKER)) {
                 astronaut.setMorale(Math.max(PersonnelLifecycle.MORALE_MIN,
                     astronaut.getMorale() - TraitEffects.GLORY_SEEKER_PASSED_OVER));
@@ -970,7 +973,8 @@ public final class MissionProgress {
         events.add(new MissionReliabilityChanged(missionInstanceId, componentId, after - before));
 
         ResearchComponentMaxed maxedEvent =
-            ResearchProgress.releaseResearchersIfMaxed(snapshot, componentId, after, component.maxRdReliability());
+            ResearchProgress.releaseResearchersIfMaxed(snapshot, componentId, after,
+                TraitEffects.effectiveCap(snapshot, component, List.of(), false));
         if (maxedEvent != null) {
             events.add(maxedEvent);
         }

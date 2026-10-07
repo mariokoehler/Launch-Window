@@ -195,7 +195,9 @@ public final class PersonnelActions {
         if (owned == null || !owned.isActive() || component == null) {
             return ResearchOutcome.COMPONENT_NOT_AVAILABLE;
         }
-        if (owned.getCurrentReliability() >= component.maxRdReliability()) {
+        // A revealed Perfectionist on the team, or the one being assigned, raises the cap (design.md 2.2(d));
+        // only revealed traits count, so a refusal never gives a hidden trait away.
+        if (owned.getCurrentReliability() >= TraitEffects.effectiveCap(snapshot, component, List.of(specialist), true)) {
             return ResearchOutcome.AT_RD_CEILING;
         }
         Set<Integer> taken = new HashSet<>();

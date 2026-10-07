@@ -731,7 +731,15 @@ such as letting a brilliant troublemaker go.
     - **Morale effects, first pass:** Workaholic, Steady and Ambitious act on the season's own
       morale change only, not on salary changes, press stories or random events.
     - **Perfectionist's cap:** reliability gained above the normal cap stays when they leave; the
-      rest of the team is then released once, as at any cap.
+      rest of the team is then released once, as at any cap. Every rule that checks the cap reads
+      `TraitEffects.effectiveCap` (R&D, the release after a flight, and the refusal to assign at
+      the cap, which counts only a revealed Perfectionist so it never gives a hidden one away).
+      The client's "cap reached" captions and the reliability bar's cap marker still show the
+      normal cap; they change with the screens.
+    - **Glory seeker** loses morale only when left on the ground: not on that mission (crew or
+      CAPCOM) and not assigned to another one.
+    - **Hidden data audit:** only the player state carried hidden traits; the turn report, the
+      rivals and the game info take names, goals and directors only.
     - **Measured** (`ContentPackPlayouts.people`, 200 bot games of 24 seasons): 8.7 traits revealed
       and 5.1 relationships shown per game (2.2 friendships), from 8.5 pairs. The bots finish in
       55.0 seasons on average, against 56.7 before personalities; step outcomes within noise.

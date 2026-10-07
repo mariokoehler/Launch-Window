@@ -114,6 +114,29 @@ public final class TraitEffects {
     }
 
     /**
+     * Returns a component's R&amp;D cap with the engineers assigned to it now (plus any extra, such
+     * as one about to be assigned): the normal cap, raised while a Perfectionist is on the team,
+     * never past the component's own maximum. The one place every cap check reads.
+     *
+     * @param snapshot  the player
+     * @param component the component
+     * @param extra     engineers to count as on the team too
+     * @param knownOnly whether to count only revealed traits (anything the player is told)
+     * @return the cap
+     */
+    public static double effectiveCap(de.mkoehler.launchwindow.model.PlayerSnapshot snapshot,
+            de.mkoehler.launchwindow.content.MissionComponent component, List<SetSpecialist> extra, boolean knownOnly) {
+        List<SetSpecialist> team = new java.util.ArrayList<>(extra);
+        for (SetSpecialist engineer : snapshot.getSetSpecialists()) {
+            if (engineer.getAssignmentState() == AssignmentState.ASSIGNED
+                && component.id().equals(engineer.getRdTargetComponentId()) && !team.contains(engineer)) {
+                team.add(engineer);
+            }
+        }
+        return Math.min(component.maxReliability(), component.maxRdReliability() + capBonus(team, knownOnly));
+    }
+
+    /**
      * Returns what someone's traits do to their training gain.
      *
      * @param person the trainee
