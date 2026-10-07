@@ -145,7 +145,8 @@ public final class MissionAssessment {
         double base = MissionStepResolution.computeBaseProbability(componentSum, crewInvolved, crewSum);
         double controllerSum = Math.min(100, MissionProgress.controlContributionSum(snapshot, catalog, plan, step)
             * chemistry);
-        double save = MissionStepResolution.computeSavingThrowProbability(base, controllerSum);
+        double save = Math.min(100, MissionStepResolution.computeSavingThrowProbability(base, controllerSum)
+            + TraitEffects.savingThrowBonus(MissionProgress.missionTeam(snapshot, plan), true));
 
         double first = clamp(base / 100.0);
         double saving = clamp(save / 100.0);

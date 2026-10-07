@@ -13,12 +13,9 @@ import de.mkoehler.launchwindow.model.SetSpecialist;
 import de.mkoehler.launchwindow.model.Trait;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.function.ToDoubleFunction;
-import java.util.stream.Stream;
 
 /**
  * A team's chemistry ({@code design.md} &sect;2.2(d)): how well it works together, from -1 to +1,
@@ -185,17 +182,7 @@ public final class Chemistry {
      * @return the chemistry
      */
     public static Result mission(PlayerSnapshot snapshot, InProgressMission mission, boolean knownOnly) {
-        Set<String> ids = new LinkedHashSet<>();
-        Stream.concat(mission.getCrewSlotIds().stream(), mission.getControlSlotIds().stream())
-            .filter(Objects::nonNull).forEach(ids::add);
-        List<Personnel> members = new ArrayList<>();
-        for (String id : ids) {
-            Personnel person = Teams.find(snapshot, id);
-            if (person != null) {
-                members.add(person);
-            }
-        }
-        return of(snapshot, members, Chemistry::bestSkill, knownOnly);
+        return of(snapshot, MissionProgress.missionTeam(snapshot, mission), Chemistry::bestSkill, knownOnly);
     }
 
     /**

@@ -196,6 +196,9 @@ public final class MissionProgress {
             return;
         }
 
+        if (mission.getCurrentSeasonIndex() == 0 && !mission.crewIds().isEmpty()) {
+            passOverGlorySeekers(snapshot, mission);
+        }
         MissionSeason season = configuration.seasons().get(mission.getCurrentSeasonIndex());
         List<MissionStep> executedSteps = new ArrayList<>();
         List<MissionStepOutcome> executedOutcomes = new ArrayList<>();
@@ -475,7 +478,9 @@ public final class MissionProgress {
 
         // CAPCOM is a control slot, so it sits on the controller side of the saving throw (baspm.md §10.9).
         double controllerSum = Math.min(100, controlContributionSum(snapshot, catalog, mission, step) * chemistry);
-        double beforeExperts = MissionStepResolution.computeSavingThrowProbability(baseProbability, controllerSum);
+        // Cool heads on the mission help save a failing step (design.md 2.2(d)).
+        double beforeExperts = Math.min(100, MissionStepResolution.computeSavingThrowProbability(baseProbability,
+            controllerSum) + TraitEffects.savingThrowBonus(missionTeam(snapshot, mission), false));
         double savingThrowProbability = applyExpertRescue(snapshot, catalog, mission, step, beforeExperts,
             expertUseCounts, events);
 
@@ -711,6 +716,40 @@ public final class MissionProgress {
             }
         }
         return modifier;
+    }
+
+    /**
+     * Returns a mission's crew and controllers who are still with the agency.
+     *
+     * @param snapshot the player
+     * @param mission  the mission
+     * @return the team
+     */
+    static List<Personnel> missionTeam(PlayerSnapshot snapshot, InProgressMission mission) {
+        Set<String> ids = new LinkedHashSet<>();
+        java.util.stream.Stream.concat(mission.getCrewSlotIds().stream(), mission.getControlSlotIds().stream())
+            .filter(Objects::nonNull).forEach(ids::add);
+        List<Personnel> team = new ArrayList<>();
+        for (String id : ids) {
+            Personnel person = Teams.find(snapshot, id);
+            if (person != null) {
+                team.add(person);
+            }
+        }
+        return team;
+    }
+
+    /**
+     * A crewed mission goes up: every Glory seeker left on the ground loses morale.
+     */
+    private static void passOverGlorySeekers(PlayerSnapshot snapshot, InProgressMission mission) {
+        for (Astronaut astronaut : snapshot.getAstronauts()) {
+            if (!mission.crewIds().contains(astronaut.getId())
+                && Personality.has(astronaut, de.mkoehler.launchwindow.model.Trait.GLORY_SEEKER)) {
+                astronaut.setMorale(Math.max(PersonnelLifecycle.MORALE_MIN,
+                    astronaut.getMorale() - TraitEffects.GLORY_SEEKER_PASSED_OVER));
+            }
+        }
     }
 
     /**
@@ -963,10 +1002,13 @@ public final class MissionProgress {
                 continue;
             }
             double totalGain = 0;
+            // A Glory seeker learns more from flying, and a more skilled Mentor aboard speeds everyone.
+            double traits = TraitEffects.flightGrowth(astronaut)
+                * TraitEffects.mentored(astronaut, missionTeam(snapshot, mission), Chemistry::bestSkill);
             for (AstronautSkill skill : AstronautSkill.values()) {
                 double factor = SkillGrowth.drawMissionSkillGrowthFactor(random);
                 double gain = SkillGrowth.diminishingReturnsGain(astronaut.getSkill(skill),
-                    astronaut.getLearningPotential(), factor);
+                    astronaut.getLearningPotential(), factor) * traits;
                 astronaut.setSkill(skill, astronaut.getSkill(skill) + gain);
                 totalGain += gain;
             }
@@ -987,6 +1029,10 @@ public final class MissionProgress {
                 continue;
             }
             double factor = SkillGrowth.drawMissionSkillGrowthFactor(random);
+            Personnel holder = Teams.find(snapshot, holderId);
+            if (holder != null) {
+                factor *= TraitEffects.mentored(holder, missionTeam(snapshot, mission), Chemistry::bestSkill);
+            }
             if (slot.kind() == StaffingSlot.Kind.ASTRONAUT) {
                 Astronaut astronaut = findById(snapshot.getAstronauts(), holderId);
                 if (astronaut != null) {

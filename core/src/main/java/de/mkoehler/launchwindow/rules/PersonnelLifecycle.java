@@ -271,8 +271,10 @@ public final class PersonnelLifecycle {
      */
     private static DepartureReason advanceOne(Personnel person, PersonnelGroup group, int retirementAge) {
         boolean idle = person.getAssignmentState() == AssignmentState.IDLE;
-        int moraleDelta = idle ? -IDLE_MORALE_LOSS_PER_SEASON : BUSY_MORALE_GAIN_PER_SEASON;
+        int moraleDelta = TraitEffects.seasonMorale(person,
+            idle ? -IDLE_MORALE_LOSS_PER_SEASON : BUSY_MORALE_GAIN_PER_SEASON);
         person.setMorale(clamp(person.getMorale() + moraleDelta, MORALE_MIN, MORALE_MAX));
+        person.setSeasonsSinceTraining(TraitEffects.inTraining(person) ? 0 : person.getSeasonsSinceTraining() + 1);
         advanceAge(person);
 
         if (isProtectedFromDeparture(group, person.getAssignmentState())) {

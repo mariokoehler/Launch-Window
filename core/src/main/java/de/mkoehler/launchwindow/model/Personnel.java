@@ -32,6 +32,9 @@ public abstract class Personnel {
     private List<TraitState> traits = new ArrayList<>();
     private String hint;
     private int workSeasons;
+    private int seasonsSinceTraining;
+    private String projectId;
+    private int projectSeasons;
 
     /**
      * No-argument constructor required for Jackson deserialization.
@@ -431,5 +434,59 @@ public abstract class Personnel {
      */
     public void setWorkSeasons(int workSeasons) {
         this.workSeasons = workSeasons;
+    }
+
+    /**
+     * Returns the seasons since this person last trained, for an Ambitious person's patience.
+     *
+     * @return the seasons
+     */
+    public int getSeasonsSinceTraining() {
+        return seasonsSinceTraining;
+    }
+
+    /**
+     * Sets the seasons since this person last trained.
+     *
+     * @param seasonsSinceTraining the seasons
+     */
+    public void setSeasonsSinceTraining(int seasonsSinceTraining) {
+        this.seasonsSinceTraining = seasonsSinceTraining;
+    }
+
+    /**
+     * Returns what this person worked on last: a component (R&amp;D) or a mission configuration.
+     *
+     * @return the id, or {@code null} before their first work season
+     */
+    public String getProjectId() {
+        return projectId;
+    }
+
+    /**
+     * Sets what this person worked on last.
+     *
+     * @param projectId the id
+     */
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
+    }
+
+    /**
+     * Returns how many work seasons in a row this person has spent on {@link #getProjectId()}.
+     *
+     * @return the seasons
+     */
+    public int getProjectSeasons() {
+        return projectSeasons;
+    }
+
+    /**
+     * Sets the work seasons in a row on the current project.
+     *
+     * @param projectSeasons the seasons
+     */
+    public void setProjectSeasons(int projectSeasons) {
+        this.projectSeasons = projectSeasons;
     }
 }

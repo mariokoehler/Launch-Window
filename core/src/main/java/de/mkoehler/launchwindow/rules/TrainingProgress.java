@@ -213,7 +213,8 @@ public final class TrainingProgress {
         var targetSkill = astronaut.getTrainingTargetSkill();
         double factor = SkillGrowth.drawTrainingFactor(random);
         double currentSkill = astronaut.getSkill(targetSkill);
-        double gain = SkillGrowth.diminishingReturnsGain(currentSkill, astronaut.getLearningPotential(), factor);
+        double gain = SkillGrowth.diminishingReturnsGain(currentSkill, astronaut.getLearningPotential(), factor)
+            * TraitEffects.trainingGain(astronaut);
         double newSkill = currentSkill + gain;
         astronaut.setSkill(targetSkill, newSkill);
         if (shouldReenroll(kind, newSkill, astronaut.getTrainingTargetLevel(), gain)) {
@@ -239,7 +240,8 @@ public final class TrainingProgress {
         var targetSkill = specialist.getTrainingTargetSkill();
         double factor = SkillGrowth.drawTrainingFactor(random);
         double currentSkill = specialist.getSkill(targetSkill);
-        double gain = SkillGrowth.diminishingReturnsGain(currentSkill, specialist.getLearningPotential(), factor);
+        double gain = SkillGrowth.diminishingReturnsGain(currentSkill, specialist.getLearningPotential(), factor)
+            * TraitEffects.trainingGain(specialist);
         double newSkill = currentSkill + gain;
         specialist.setSkill(targetSkill, newSkill);
         if (shouldReenroll(kind, newSkill, specialist.getTrainingTargetLevel(), gain)) {
@@ -270,7 +272,8 @@ public final class TrainingProgress {
         var targetSkill = officer.getTrainingTargetSkill();
         double factor = SkillGrowth.drawTrainingFactor(random);
         double currentSkill = officer.getSkill(targetSkill);
-        double gain = SkillGrowth.diminishingReturnsGain(currentSkill, officer.getLearningPotential(), factor);
+        double gain = SkillGrowth.diminishingReturnsGain(currentSkill, officer.getLearningPotential(), factor)
+            * TraitEffects.trainingGain(officer);
         double newSkill = currentSkill + gain;
         officer.setSkill(targetSkill, newSkill);
         if (shouldReenroll(kind, newSkill, officer.getTrainingTargetLevel(), gain)) {
@@ -496,7 +499,7 @@ public final class TrainingProgress {
             double factor = SkillGrowth.drawTrainingFactor(random);
             double fullGain =
                 SkillGrowth.diminishingReturnsGain(astronaut.getSkill(targetSkill), astronaut.getLearningPotential(),
-                    factor);
+                    factor) * TraitEffects.trainingGain(astronaut);
             double creditedGain =
                 SkillGrowth.partialCredit(fullGain, astronaut.getTrainingSeasonsCompleted(),
                     astronaut.getTrainingSeasonsTotal());
@@ -517,7 +520,7 @@ public final class TrainingProgress {
         var targetSkill = specialist.getTrainingTargetSkill();
         double factor = SkillGrowth.drawTrainingFactor(random);
         double fullGain = SkillGrowth.diminishingReturnsGain(specialist.getSkill(targetSkill),
-            specialist.getLearningPotential(), factor);
+            specialist.getLearningPotential(), factor) * TraitEffects.trainingGain(specialist);
         double creditedGain = SkillGrowth.partialCredit(fullGain, specialist.getTrainingSeasonsCompleted(),
             specialist.getTrainingSeasonsTotal());
         specialist.setSkill(targetSkill, specialist.getSkill(targetSkill) + creditedGain);
@@ -539,7 +542,7 @@ public final class TrainingProgress {
             double factor = SkillGrowth.drawTrainingFactor(random);
             double fullGain =
                 SkillGrowth.diminishingReturnsGain(officer.getSkill(targetSkill), officer.getLearningPotential(),
-                    factor);
+                    factor) * TraitEffects.trainingGain(officer);
             double creditedGain =
                 SkillGrowth.partialCredit(fullGain, officer.getTrainingSeasonsCompleted(),
                     officer.getTrainingSeasonsTotal());

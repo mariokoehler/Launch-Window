@@ -77,6 +77,15 @@ public final class ResearchPlanning {
      */
     static double expectedSeasonGain(MissionComponent component, double current, SetSpecialist[] team,
                                      double multiplier) {
+        // Traits as the player knows them: a revealed Perfectionist's higher cap, revealed R&D traits.
+        List<SetSpecialist> members = new java.util.ArrayList<>();
+        for (SetSpecialist member : team) {
+            if (member != null) {
+                members.add(member);
+            }
+        }
+        double cap = Math.min(component.maxReliability(),
+            component.maxRdReliability() + TraitEffects.capBonus(members, true));
         double nominal = 0;
         for (int slot = 0; slot < team.length; slot++) {
             if (team[slot] == null) {
@@ -84,15 +93,16 @@ public final class ResearchPlanning {
             }
             List<Double> bands = component.rdSlotBandMaxAmounts();
             double raw = (SkillGrowth.rdSlotBandLower(bands, slot) + SkillGrowth.rdSlotBandUpper(bands, slot)) / 2.0;
-            nominal += SkillGrowth.rdReliabilityGain(raw, current, component.maxRdReliability(),
-                team[slot].getSkill(component.associatedSkill())) * multiplier;
+            nominal += SkillGrowth.rdReliabilityGain(raw, current, cap,
+                team[slot].getSkill(component.associatedSkill())) * multiplier
+                * TraitEffects.rdGain(team[slot], component.id(), true);
         }
         if (nominal <= 0) {
             return 0;
         }
-        double headroom = Math.max(0.0, component.maxRdReliability() - current);
+        double headroom = Math.max(0.0, cap - current);
         double applied = headroom < ResearchProgress.HEADROOM_STAGNATION_THRESHOLD ? headroom : nominal;
-        return Math.min(component.maxRdReliability(), current + applied) - current;
+        return Math.min(cap, current + applied) - current;
     }
 
     /**

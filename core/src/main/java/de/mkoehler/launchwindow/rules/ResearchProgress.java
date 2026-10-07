@@ -168,7 +168,11 @@ public final class ResearchProgress {
                 double skillBefore = specialist.getSkill(group);
                 skillBeforeGain.put(specialist, skillBefore);
                 double skillFactor = SkillGrowth.drawRdGainFactor(random);
-                double skillGain = SkillGrowth.flatRdGain(skillBefore, skillFactor) * snapshot.getRdResultsMultiplier();
+                // A more skilled Mentor on the team speeds learning (design.md 2.2(d)).
+                double mentored = TraitEffects.mentored(specialist, teamOf(slots),
+                    person -> ((SetSpecialist) person).getSkill(group));
+                double skillGain = SkillGrowth.flatRdGain(skillBefore, skillFactor) * snapshot.getRdResultsMultiplier()
+                    * mentored;
                 specialist.setSkill(group, Math.min(SkillGrowth.SKILL_CAP, skillBefore + skillGain));
             }
         }
@@ -179,6 +183,16 @@ public final class ResearchProgress {
             advanceComponent(entry.getKey(), entry.getValue(), snapshot, catalog, skillBeforeGain, random, events);
         }
         return events;
+    }
+
+    private static List<SetSpecialist> teamOf(SetSpecialist[] slots) {
+        List<SetSpecialist> team = new ArrayList<>();
+        for (SetSpecialist member : slots) {
+            if (member != null) {
+                team.add(member);
+            }
+        }
+        return team;
     }
 
     /**
@@ -263,6 +277,9 @@ public final class ResearchProgress {
             }
         }
         double chemistry = Chemistry.research(snapshot, team, component.associatedSkill(), false).multiplier();
+        // A Perfectionist on the team raises the R&D cap, never past the component's own maximum.
+        double cap = Math.min(component.maxReliability(),
+            component.maxRdReliability() + TraitEffects.capBonus(team, false));
         for (int slot = 0; slot < MissionComponent.RD_SLOT_COUNT; slot++) {
             SetSpecialist specialist = slots[slot];
             if (specialist == null) {
@@ -271,16 +288,17 @@ public final class ResearchProgress {
             double rawAmount = SkillGrowth.drawRdSlotRawAmount(component.rdSlotBandMaxAmounts(), slot, random);
             double skillBefore = skillBeforeGain.get(specialist);
             double nominalGain = SkillGrowth.rdReliabilityGain(rawAmount, startReliability,
-                component.maxRdReliability(), skillBefore) * snapshot.getRdResultsMultiplier() * chemistry;
+                cap, skillBefore) * snapshot.getRdResultsMultiplier() * chemistry
+                * TraitEffects.rdGain(specialist, componentId, false);
             nominalGains[slot] = nominalGain;
             nominalTotal += nominalGain;
         }
 
         double actualAppliedTotal = 0.0;
         if (nominalTotal > 0.0) {
-            double headroom = Math.max(0.0, component.maxRdReliability() - startReliability);
+            double headroom = Math.max(0.0, cap - startReliability);
             double appliedTotal = headroom < HEADROOM_STAGNATION_THRESHOLD ? headroom : nominalTotal;
-            double newReliability = Math.min(component.maxRdReliability(), startReliability + appliedTotal);
+            double newReliability = Math.min(cap, startReliability + appliedTotal);
             actualAppliedTotal = newReliability - startReliability;
             owned.setCurrentReliability(newReliability);
         }
@@ -305,8 +323,7 @@ public final class ResearchProgress {
         // already sitting at its cap when a specialist is first assigned to it releases them the
         // very next season, same as one that just reached the cap this season.
         ResearchComponentMaxed maxedEvent =
-            releaseResearchersIfMaxed(snapshot, componentId, owned.getCurrentReliability(),
-                component.maxRdReliability());
+            releaseResearchersIfMaxed(snapshot, componentId, owned.getCurrentReliability(), cap);
         if (maxedEvent != null) {
             events.add(maxedEvent);
         }

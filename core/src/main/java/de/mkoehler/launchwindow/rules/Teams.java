@@ -127,6 +127,12 @@ public final class Teams {
             for (Personnel person : members) {
                 if (counted.add(person.getId())) {
                     person.setWorkSeasons(person.getWorkSeasons() + 1);
+                    if (team.subjectId() != null && team.subjectId().equals(person.getProjectId())) {
+                        person.setProjectSeasons(person.getProjectSeasons() + 1);
+                    } else {
+                        person.setProjectId(team.subjectId());
+                        person.setProjectSeasons(1);
+                    }
                 }
             }
             for (int i = 0; i < members.size(); i++) {
