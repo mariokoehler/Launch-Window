@@ -50,6 +50,9 @@ CHROME = {
     "document": '<path d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="15" y2="16"/>',
     # The game result's trophy (Museum, Settings & Game Result mockup).
     "trophy": '<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/>',
+    # A set square with its cut-out and two scale ticks: the concept chip's "how it works" glyph
+    # (ui-spec.md component 19, Explainers canvas, 2026-10-07).
+    "concept": '<path d="M4 20V4l16 16z"/><path d="M8 16v-3.2l3.2 3.2z"/><path d="M4 8h2M4 12h2.5"/>',
 }
 
 # The astronaut glyph's antenna tip is a filled dot.

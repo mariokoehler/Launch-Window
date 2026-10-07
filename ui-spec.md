@@ -345,8 +345,8 @@ On the right:
       remembering which explainers a player has seen. All five are readable in the Museum.
     - **Known blemish:** the Museum card's thumbnail shows E-04's halo outlines without their
       labels (a white smudge on the first tank).
-19. **Concept chips** *(user's idea, 2026-10-07; specified, to be mocked up; the look and the
-    details marked "default" are unconfirmed)*. A small **Concepts** section listing the
+19. **Concept chips** *(user's idea, 2026-10-07; specified, mocked up the same day; the look and
+    the details marked "default" are unconfirmed)*. A small **Concepts** section listing the
     real-world ideas behind a piece of game content, as clickable chips. A chip opens the
     explainer (component 18) that explains it, at the right sheet; Close and Done come back to
     the screen the chip was on. It's how players reach explainers from play, instead of a
@@ -387,6 +387,36 @@ On the right:
       the base ids, without the season number or the `spc-a-`/`spc-b-` prefix of a joint flight.
       A test checks that every id exists in the pack, every target explainer and sheet exists,
       and every label uses only letters the fonts can draw.
+    - **Mocked up (2026-10-07)** on the `Launch Window — Explainers` canvas, bottom row: the chip
+      on its own (`ConceptChips`), Program details for Vostok (`ProgramDetailsConcepts`), Vostok
+      Orbital's steps and goals (`ConfigDetailsConcepts`), the VAB's Open rocket program with
+      Jupiter-C and Atlas (`OpenRocketConcepts`), and the Museum's Encyclopedia
+      (`MuseumEncyclopedia`). The screens are copies of the existing mockups (the libGDX layout
+      for the VAB row and the Encyclopedia) with only the Concepts section added. A sticky note
+      lists the choices, all **unconfirmed**:
+      - **Look:** 32 px high, white, a 1 px navy rule; the set square (new icon `concept`,
+        `assets/ui/icons/concept.png`) sits in its own 30 px cell with a thin navy-border divider,
+        like a title-block cell; the label in Archivo Bold 13 navy. Hover thickens the rule to
+        1.5 px and tints the glyph cell; pressed fills navy; keyboard focus is the gold ring.
+      - **New dot:** 8 px gold with a 2 px white ring on the chip's top-right corner, like the
+        Turn Report's. A Museum card gets a 10 px one on its corner and nothing else.
+      - **No hover tooltip** on a chip, so it never reads as rules help.
+      - **Section header:** "Concepts" in the card's own section-title style (caption, upper
+        case, muted), not the eyebrow, so it sits with Required goals and Components. A wide
+        card adds the hint "How the real thing works: each opens an explainer sheet"; the
+        narrow configuration column shows "N not read yet" instead.
+      - **Program details** shows the program's own concepts *and* those of the components it
+        grants, each once (Vostok: Orbital speed, Retrofire, One-shot retrorocket, Steering
+        jets), since a capsule has no screen of its own; after "Components it grants". This
+        widens the "Where chips appear" default above.
+      - **Configuration details:** inside the summary card in the left column, under the key
+        facts. Vostok Orbital shows Orbit, Staging, Retrofire, Engine restarts, Cryogenic
+        propellant and Steering jets.
+      - **Open rocket program:** six chips don't fit on a row, so every row gets an
+        always-shown Concepts line under it, aligned with the name column (no expandable
+        detail).
+      - **Not yet in the design system** (local CSS in the mockups): promote it as
+        `ConceptChip` and add it to `Theme.java` once the look is confirmed.
 
 ---
 
