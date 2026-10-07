@@ -169,6 +169,16 @@ public final class Careers {
     }
 
     /**
+     * Returns a loyalty band, as the person page and intelligence files show it.
+     *
+     * @param loyalty the loyalty, 0 to 100
+     * @return "Low" (below 40), "Middling" (below 70) or "High"
+     */
+    public static String loyaltyBand(int loyalty) {
+        return loyalty < 40 ? "Low" : loyalty < 70 ? "Middling" : "High";
+    }
+
+    /**
      * Moves a department's loyalty with a salary change: half the percentage, rounded.
      *
      * @param roster  the department

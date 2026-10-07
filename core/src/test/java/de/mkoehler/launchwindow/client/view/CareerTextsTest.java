@@ -69,8 +69,14 @@ class CareerTextsTest {
 
     @Test
     void careerLinesNameTheirSubject() {
-        assertEquals("Turned out to be a mentor", CareerTexts.line(new CareerEntry(3, CareerEntry.Kind.TRAIT, "MENTOR",
-            "", "", 0, 0), CATALOG));
+        assertEquals("Turned out to be a natural mentor", CareerTexts.line(new CareerEntry(3, CareerEntry.Kind.TRAIT,
+            "MENTOR", "", "", 0, 0), CATALOG));
+        for (de.mkoehler.launchwindow.model.Trait trait : de.mkoehler.launchwindow.model.Trait.values()) {
+            String line = CareerTexts.line(new CareerEntry(3, CareerEntry.Kind.TRAIT, trait.name(), "", "", 0, 0),
+                CATALOG);
+            assertEquals("Turned out to be " + TraitTexts.inSentence(trait), line);
+            assertFalse(line.matches(".* an? (steady|ambitious|restless|abrasive|easy-going|cool|must).*"), line);
+        }
         assertEquals("Hired. A former colleague: “driven”.", CareerTexts.line(new CareerEntry(1, CareerEntry.Kind.HIRED,
             "", "driven", "", 0, 0), CATALOG));
         assertEquals("Ambition came true: become an Expert", CareerTexts.line(new CareerEntry(9,

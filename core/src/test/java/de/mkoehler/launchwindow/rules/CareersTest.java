@@ -236,6 +236,8 @@ class CareersTest {
         PlayerSnapshot again = mapper.readValue(mapper.writeValueAsBytes(snapshot), PlayerSnapshot.class);
         season(snapshot, 9);
         season(again, 9);
+        assertTrue(snapshot.getSetSpecialists().stream().anyMatch(engineer -> engineer.getAmbition() != null),
+            "someone said an ambition, so the comparison means something");
         for (int i = 0; i < 6; i++) {
             assertEquals(snapshot.getSetSpecialists().get(i).getAmbition(), again.getSetSpecialists().get(i).getAmbition());
         }

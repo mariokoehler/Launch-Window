@@ -149,8 +149,7 @@ public final class IntelligenceBoard {
         }
         List<TraitState> traits = person.getTraits();
         Trait trait = traits.isEmpty() ? null : traits.get(random.nextInt(traits.size())).trait();
-        int loyalty = person.getLoyalty();
-        String band = loyalty < 40 ? "Low" : loyalty < 70 ? "Middling" : "High";
+        String band = Careers.loyaltyBand(person.getLoyalty());
         PersonnelFile file = new PersonnelFile(person.getId(), person.getName(), person.getPortraitId(),
             operation.group(), person.getAge(), gameTurn, skills, trait, band, person.getAmbition(),
             person.getDisappointedSeasons() > 0);

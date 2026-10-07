@@ -106,7 +106,7 @@ public final class CareerTexts {
      * @return "Low", "Middling" or "High"
      */
     public static String loyaltyBand(int loyalty) {
-        return loyalty < 40 ? "Low" : loyalty < 70 ? "Middling" : "High";
+        return Careers.loyaltyBand(loyalty);
     }
 
     /**
@@ -232,16 +232,10 @@ public final class CareerTexts {
 
     private static String traitPhrase(String trait) {
         try {
-            String label = TraitTexts.label(Trait.valueOf(trait));
-            String lower = label.toLowerCase(Locale.ROOT);
-            return (startsWithVowel(lower) ? "an " : "a ") + lower;
+            return TraitTexts.inSentence(Trait.valueOf(trait));
         } catch (IllegalArgumentException unknown) {
             return trait.toLowerCase(Locale.ROOT);
         }
-    }
-
-    private static boolean startsWithVowel(String text) {
-        return !text.isEmpty() && "aeiou".indexOf(text.charAt(0)) >= 0;
     }
 
     private static String capitalise(String text) {
