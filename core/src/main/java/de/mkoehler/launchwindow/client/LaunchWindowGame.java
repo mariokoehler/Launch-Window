@@ -36,6 +36,8 @@ public class LaunchWindowGame extends Game {
     private ClientSettings settings = ClientSettings.defaults();
     private ClientSession session;
     private final Hub.Clock hubClock = new Hub.Clock();
+    /** The explainers' read marks when kept in memory (screenshots), else {@code null}. */
+    private java.util.Set<String> explainersReadInMemory;
     private float pendingFontScale;
     private long lastResizeMillis;
 
@@ -165,6 +167,49 @@ public class LaunchWindowGame extends Game {
         com.badlogic.gdx.Preferences preferences = preferences();
         preferences.putBoolean(key("resultSeen"), true);
         preferences.flush();
+    }
+
+    /**
+     * Returns whether this player has opened an explainer on this device, for the concept chips'
+     * and the Museum's "new" dot ({@code ui-spec.md} component 19). Kept in the client's
+     * preferences per server and login, like the report's read mark.
+     *
+     * @param explainerId the explainer
+     * @return whether it was read
+     */
+    public boolean explainerRead(String explainerId) {
+        if (explainersReadInMemory != null) {
+            return explainersReadInMemory.contains(explainerId);
+        }
+        return session != null && preferences().getBoolean(key("explainerRead." + explainerId), false);
+    }
+
+    /**
+     * Marks an explainer as read, as soon as any of its sheets opens.
+     *
+     * @param explainerId the explainer
+     */
+    public void markExplainerRead(String explainerId) {
+        if (explainersReadInMemory != null) {
+            explainersReadInMemory.add(explainerId);
+            return;
+        }
+        if (session == null || explainerRead(explainerId)) {
+            return;
+        }
+        com.badlogic.gdx.Preferences preferences = preferences();
+        preferences.putBoolean(key("explainerRead." + explainerId), true);
+        preferences.flush();
+    }
+
+    /**
+     * Keeps the explainers' read marks in memory instead of the preferences, starting from the
+     * given set, so that screenshots don't depend on what this machine has read before.
+     *
+     * @param read the explainers to treat as read; the set is changed as more are read
+     */
+    public void useExplainerReadMarksInMemory(java.util.Set<String> read) {
+        explainersReadInMemory = read;
     }
 
     private String readKey() {

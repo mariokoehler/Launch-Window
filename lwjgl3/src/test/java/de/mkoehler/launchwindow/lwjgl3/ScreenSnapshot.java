@@ -232,6 +232,8 @@ public final class ScreenSnapshot {
     }
 
     private static void renderAll(LaunchWindowGame game, File folder) {
+        // Explainers' read marks in memory, never this machine's: every explainer starts unread.
+        game.useExplainerReadMarksInMemory(new java.util.HashSet<>());
         write(folder, "connect-default.png", new ConnectScreen(game), null);
         write(folder, "connect-connecting.png", filledConnect(game), screen -> screen.setBusy(true));
         write(folder, "connect-wrong-password.png", filledConnect(game), screen -> screen.applyLoginResult(
@@ -805,6 +807,17 @@ public final class ScreenSnapshot {
                     MuseumScreen.Tab.ENCYCLOPEDIA)), null);
             }
         }
+
+        // Concept chips (2026-10-07): the loop above opened every explainer, so all read now. The
+        // unread shots are the earlier hq-details-vostok, plan-steps, vab-open and museum-encyclopedia.
+        write(folder, "concepts-program-read.png", new ProgramDetailsScreen(game, "vostok", CelestialBody.EARTH), null);
+        write(folder, "concepts-config-read.png", new MissionStepsScreen(game, "vostok-orbital"), null);
+        write(folder, "concepts-museum-read.png", new MuseumScreen(game, MuseumScreen.Tab.ENCYCLOPEDIA), null);
+        game.useExplainerReadMarksInMemory(new java.util.HashSet<>(java.util.Set.of("rendezvous")));
+        write(folder, "concepts-config-partly-read.png", new MissionStepsScreen(game, "mercury-joint-orbital"), null);
+        // The pointer's states: the first chip hovered, the second pressed.
+        write(folder, "concepts-chip-states.png", new ProgramDetailsScreen(game, "vostok", CelestialBody.EARTH),
+            screen -> pointAtChips(screen.stage().getRoot()));
     }
 
     /** The mockup's agency at 1960 · S4, with the goal records and memorial the Museum reads. */
@@ -1007,6 +1020,37 @@ public final class ScreenSnapshot {
      * @param root  the widget to search
      * @param title the tooltip title's start
      */
+    /** Hovers the first concept chip under a root and presses the second, as a pointer would. */
+    private static void pointAtChips(com.badlogic.gdx.scenes.scene2d.Group root) {
+        java.util.List<de.mkoehler.launchwindow.client.ui.ConceptChip> chips = new java.util.ArrayList<>();
+        java.util.ArrayDeque<com.badlogic.gdx.scenes.scene2d.Actor> todo = new java.util.ArrayDeque<>();
+        todo.add(root);
+        while (!todo.isEmpty()) {
+            com.badlogic.gdx.scenes.scene2d.Actor actor = todo.removeFirst();
+            if (actor instanceof de.mkoehler.launchwindow.client.ui.ConceptChip chip) {
+                chips.add(chip);
+            } else if (actor instanceof com.badlogic.gdx.scenes.scene2d.Group group) {
+                group.getChildren().forEach(todo::add);
+            }
+        }
+        for (int i = 0; i < Math.min(2, chips.size()); i++) {
+            de.mkoehler.launchwindow.client.ui.ConceptChip chip = chips.get(i);
+            for (com.badlogic.gdx.scenes.scene2d.EventListener listener : chip.getListeners()) {
+                if (listener instanceof com.badlogic.gdx.scenes.scene2d.utils.ClickListener click) {
+                    com.badlogic.gdx.scenes.scene2d.InputEvent event = new com.badlogic.gdx.scenes.scene2d.InputEvent();
+                    event.setStage(chip.getStage());
+                    event.setListenerActor(chip);
+                    click.enter(event, 1f, 1f, -1, null);
+                    if (i == 1) {
+                        event.setType(com.badlogic.gdx.scenes.scene2d.InputEvent.Type.touchDown);
+                        click.touchDown(event, 1f, 1f, 0, 0);
+                    }
+                }
+            }
+            chip.act(0f);
+        }
+    }
+
     private static void showTooltip(com.badlogic.gdx.scenes.scene2d.Group root, String title) {
         java.util.ArrayDeque<com.badlogic.gdx.scenes.scene2d.Actor> todo = new java.util.ArrayDeque<>();
         todo.add(root);

@@ -53,6 +53,8 @@ public final class ExplainerScreen extends SessionScreen {
         this.explainer = explainer;
         this.back = back;
         this.sheet = Math.max(0, Math.min(sheet, explainer.sheets().size() - 1));
+        // Opening any sheet clears its "new" dot on the concept chips and in the Museum.
+        game.markExplainerRead(explainer.id());
         rebuild();
     }
 

@@ -1302,9 +1302,10 @@ passengers.
 **PR duty for astronauts** is built too (2026-10-06, §2.2(c)), with 39 press stories, no repeats
 until all have run, and effects beyond prestige.
 
-**Concept chips** (2026-10-07, `ui-spec.md` component 19): specified, with the early era's
-concept audit (§1.1); waiting for the user's mockup, then the build (`concepts.json`, the chip
-row on §4.5.1, §4.6.4, §4.6.6/§4.6.7, the "new" dot). Otherwise next is the next play test.
+**Concept chips** (2026-10-07, `ui-spec.md` component 19) are built: `concepts.json` from the
+concept audit (§1.1), the chips on program details, configuration details and the VAB's rocket
+rows, and the "new" dot there and in the Museum. Their look is still to be confirmed. Otherwise
+next is the next play test.
 
 ### Later
 

@@ -1,5 +1,7 @@
 package de.mkoehler.launchwindow.client.screen;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -429,6 +431,8 @@ public final class MuseumScreen extends ChromeScreen {
         content.add(head).padBottom(Theme.SPACE_4).row();
         Table grid = new Table();
         grid.top().left();
+        // Room for the "new" dots that stick out over the top row's corners (the scroll pane clips).
+        grid.padTop(8f).padRight(8f);
         for (int i = 0; i < explainers.size(); i++) {
             grid.add(explainerCard(explainers.get(i))).width(448f).top().fillY().padRight(i % 4 == 3 ? 0f : 16f)
                 .padBottom(16f);
@@ -439,7 +443,7 @@ public final class MuseumScreen extends ChromeScreen {
         content.add(scrollPane(grid)).expand().fill();
     }
 
-    private Table explainerCard(Explainers.Explainer explainer) {
+    private Actor explainerCard(Explainers.Explainer explainer) {
         Table card = ui.card();
         card.top();
         card.pad(Theme.BORDER_EMPHASIS);
@@ -471,7 +475,18 @@ public final class MuseumScreen extends ChromeScreen {
         action.add(open);
         text.add(action);
         card.add(text);
-        return card;
+        if (game.explainerRead(explainer.id())) {
+            return card;
+        }
+        // Not opened yet: the gold "new" dot of the concept chips, on the card's corner.
+        Table overlay = new Table();
+        overlay.top().right();
+        overlay.setTouchable(Touchable.disabled);
+        overlay.add(new Image(ui.circle(Theme.GOLD, Theme.SURFACE_CARD, 2f, 14))).size(14f).padTop(-7f).padRight(-7f);
+        Stack marked = new Stack();
+        marked.add(card);
+        marked.add(overlay);
+        return marked;
     }
 
     /**

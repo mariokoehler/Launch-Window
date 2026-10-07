@@ -1,10 +1,12 @@
 package de.mkoehler.launchwindow.client.screen;
 
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
@@ -13,7 +15,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
+import de.mkoehler.launchwindow.client.ui.ConceptChip;
 import de.mkoehler.launchwindow.client.ui.Theme;
+import de.mkoehler.launchwindow.client.view.Concepts;
+import de.mkoehler.launchwindow.client.view.Explainers;
 import de.mkoehler.launchwindow.client.view.Programs;
 import de.mkoehler.launchwindow.client.view.Tips;
 import de.mkoehler.launchwindow.client.view.SetDepartment;
@@ -26,6 +31,7 @@ import de.mkoehler.launchwindow.model.PlayerSnapshot;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Supplier;
 
 /**
  * The base of every in-game screen except the hub ({@code ui-spec.md} &sect;2, {@code design.md}
@@ -524,4 +530,52 @@ abstract class ChromeScreen extends SessionScreen {
         return scroll;
     }
 
+
+    /**
+     * Builds a Concepts section ({@code ui-spec.md} component 19): the "Concepts" title, a hint on
+     * the right, and the concepts as chips that wrap onto more rows. A chip opens its explainer at
+     * its sheet, coming back to a fresh copy of this screen when the explainer closes; a gold dot
+     * marks an explainer the player hasn't opened yet.
+     *
+     * @param concepts the concepts, in chip order
+     * @param hint     the text on the right of the title, or {@code null} for the count not read yet
+     * @param width    the section's width, so the chips know where to wrap
+     * @param back     builds this screen again, for the explainer's Close
+     * @return the section
+     */
+    protected Table conceptsSection(List<Concepts.Concept> concepts, String hint, float width, Supplier<Screen> back) {
+        Table section = new Table();
+        section.left();
+        section.defaults().left();
+        Table head = new Table();
+        head.add(ui.label("CONCEPTS", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).expandX().left();
+        long unread = concepts.stream().map(Concepts.Concept::explainer).distinct()
+            .filter(id -> !game.explainerRead(id)).count();
+        String right = hint != null ? hint : unread > 0 ? unread + " not read yet" : "All read";
+        head.add(ui.label(right, Theme.TextStyle.CAPTION, Theme.INK_MUTED)).right();
+        section.add(head).width(width).padBottom(Theme.SPACE_2).row();
+        section.add(conceptChips(concepts, back)).width(width);
+        return section;
+    }
+
+    /**
+     * Lays concepts out as chips that wrap onto more rows ({@code ui-spec.md} component 19).
+     *
+     * @param concepts the concepts, in chip order
+     * @param back     builds this screen again, for the explainer's Close
+     * @return the chips
+     */
+    protected HorizontalGroup conceptChips(List<Concepts.Concept> concepts, Supplier<Screen> back) {
+        HorizontalGroup chips = new HorizontalGroup();
+        chips.wrap().space(ConceptChip.GAP).wrapSpace(ConceptChip.GAP).rowLeft().left();
+        for (Concepts.Concept concept : concepts) {
+            Explainers.Explainer explainer = Explainers.standard().byId(concept.explainer()).orElse(null);
+            if (explainer == null) {
+                continue;
+            }
+            chips.addActor(new ConceptChip(ui, concept.label(), !game.explainerRead(explainer.id()),
+                () -> game.setScreen(new ExplainerScreen(game, explainer, concept.sheet() - 1, back))));
+        }
+        return chips;
+    }
 }

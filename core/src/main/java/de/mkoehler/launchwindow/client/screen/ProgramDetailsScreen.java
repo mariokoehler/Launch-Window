@@ -16,6 +16,7 @@ import de.mkoehler.launchwindow.client.ui.HistoryNote;
 import de.mkoehler.launchwindow.client.ui.ReliabilityBar;
 import de.mkoehler.launchwindow.client.ui.Refusals;
 import de.mkoehler.launchwindow.client.ui.Theme;
+import de.mkoehler.launchwindow.client.view.Concepts;
 import de.mkoehler.launchwindow.client.view.BodyMap;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.Programs;
@@ -153,6 +154,11 @@ public final class ProgramDetailsScreen extends ChromeScreen {
         card.add(caption("Components it grants")).padBottom(Theme.SPACE_2).row();
         for (String componentId : program.requiredMissionComponentIds()) {
             card.add(componentBlock(componentId, programState, state)).width(760f).padBottom(Theme.SPACE_3).row();
+        }
+        List<Concepts.Concept> concepts = Concepts.standard().forProgram(program);
+        if (!concepts.isEmpty()) {
+            card.add(conceptsSection(concepts, "How the real thing works: each opens an explainer sheet", 760f,
+                () -> new ProgramDetailsScreen(game, programId, fromBody))).padTop(Theme.SPACE_2).row();
         }
 
         card.add(new Image(ui.solid(Theme.NAVY_BORDER))).height(Theme.BORDER_THIN).padTop(Theme.SPACE_3)

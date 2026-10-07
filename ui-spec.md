@@ -390,11 +390,12 @@ On the right:
       (default): no dead ends in the game, and the list doubles as the backlog of explainers
       to write.
     - **Where chips appear** (default):
-      - **Program details** (§4.6.4): the program's own concepts.
-      - **Mission configuration details and steps overview** (§4.6.6) and the **planning hub**
-        (§4.6.7): the configuration's concepts plus those of its steps, each once.
-      - **Open rocket program** (§4.5.1): a rocket's concepts, on its row if it fits, else in
-        the row's expanded detail.
+      - **Program details** (§4.6.4): the program's own concepts and those of the components it
+        grants (the mockup's choice, built).
+      - **Mission configuration details and steps overview** (§4.6.6): the configuration's
+        concepts plus those of its steps, each once. Not on the planning hub (§4.6.7): it's a
+        tabbed screen with no summary, and the mockups leave it out.
+      - **Open rocket program** (§4.5.1): a line of its own under each rocket's row.
       - Not on the step rows themselves (too dense), nor on the mission selection list.
       - **Later, if wanted:** the same chip row under other text, such as a pinned history
         note card (component 15). Inline links inside text are out (user, 2026-10-07: a
@@ -448,6 +449,20 @@ On the right:
         detail).
       - **Not yet in the design system** (local CSS in the mockups): promote it as
         `ConceptChip` and add it to `Theme.java` once the look is confirmed.
+    - **As built (2026-10-07):** `client.ui.ConceptChip`, laid out by
+      `ChromeScreen.conceptsSection`/`conceptChips` (a wrapping `HorizontalGroup`), the data in
+      `assets/content/concepts.json` read by `client.view.Concepts` (checked by `ConceptsTest`,
+      which pins the mockup's four chip lists). Read marks: `LaunchWindowGame.explainerRead`/
+      `markExplainerRead`, in the client's preferences per server and login; opening any sheet
+      marks its explainer read. Built differently from the mockup:
+      - the set square is drawn at 18 px, not 16, because the 48 px icon's thin strokes turned to
+        grey mush at 16;
+      - no keyboard focus ring (the client has no keyboard focus traversal);
+      - coming back from an explainer rebuilds the screen, so a scrolled screen opens at the top
+        again;
+      - the Museum's encyclopedia grid is 8 px lower, to leave room for the dots over its top row.
+      - Engine restarts is attached to the Vostok configurations and R-7 (Vostok) by name, not
+        to the Retrofire step, so it stays off Mercury, whose retropack was solid rockets.
 
 ---
 
@@ -798,8 +813,8 @@ season by season. For each step: the components involved (with shares), the
 controller skills and CAPCOM involved, the crew skills, whether the crew is at
 risk, the prestige share, and the goals it achieves. Also the goal dependencies
 (penalties until a goal is reached) and boosts. *(Specified 2026-10-07:)* a Concepts section
-(component 19) with the configuration's concepts and its steps', shown here and on the planning
-hub (§4.6.7).
+(component 19) with the configuration's concepts and its steps' (built 2026-10-07, in the summary
+card).
 
 **4.6.7 Mission configuration** (the planning hub for one configuration), with
 four parts:

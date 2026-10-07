@@ -44,11 +44,11 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   work is built (`design.md` §5, Backlog). Reset the dev data root before the next play test: the
   pack hash changed.
 - **Explainers** (`ui-spec.md` component 18, `design.md` §1.1): E-01 to E-05 are mocked up on
-  the canvas `Launch Window — Explainers` (ask the user for the link). All five are built, in the
+  the canvas `Launch Window — Explainers` (the Artifact tool's list finds it). All five are built, in the
   Museum's Encyclopedia tab, with every figure checked. Players will reach them through concept
   chips on the program, configuration and rocket screens (`ui-spec.md` component 19; the audit
-  is in `design.md` §1.1). The chips are mocked up on the same canvas's bottom row (2026-10-07),
-  their look still unconfirmed; not built in libGDX yet. E-06 to E-19 are mocked up on the same
+  is in `design.md` §1.1). The chips are mocked up on the same canvas's bottom row and built in
+  libGDX (2026-10-07); their look is confirmed. E-06 to E-19 are mocked up on the same
   canvas (2026-10-07), not built and not fact-checked: each row's yellow note lists what to verify.
 - **PR duty for astronauts is built** (`design.md` §2.2(c)), with 39 press stories
   (`assets/content/pr-press.json`), no repeats, and effects beyond prestige. Next is the next

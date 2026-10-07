@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.HistoryNote;
+import de.mkoehler.launchwindow.client.view.Concepts;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.CrewSkills;
 import de.mkoehler.launchwindow.client.view.Missions;
@@ -151,6 +152,13 @@ public final class MissionStepsScreen extends ChromeScreen {
                 configuration.cancellationRefundPercent(), configuration.cancellationPrestigeDeduction());
         }
         kv(card, "Once flying", onceFlying);
+        List<Concepts.Concept> concepts = Concepts.standard().forConfiguration(configuration);
+        if (!concepts.isEmpty()) {
+            card.add(new Image(ui.solid(Theme.NAVY_BORDER))).height(Theme.BORDER_THIN).growX().colspan(2)
+                .padTop(Theme.SPACE_2).padBottom(Theme.SPACE_3).row();
+            card.add(conceptsSection(concepts, null, SUMMARY_TEXT_WIDTH,
+                () -> new MissionStepsScreen(game, configuration.id()))).colspan(2).left();
+        }
         return card;
     }
 

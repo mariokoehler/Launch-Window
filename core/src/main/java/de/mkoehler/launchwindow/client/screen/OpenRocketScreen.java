@@ -11,6 +11,7 @@ import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.Refusals;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.HistoryNote;
+import de.mkoehler.launchwindow.client.view.Concepts;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.Programs;
 import de.mkoehler.launchwindow.client.view.Rockets;
@@ -157,10 +158,23 @@ public final class OpenRocketScreen extends ChromeScreen {
             action.add(open).right().row();
             action.add(ui.label("Upgrade the VAB to build this rocket class.", Theme.TextStyle.CAPTION, Theme.DANGER))
                 .right().padTop(4f);
-            row.setColor(1f, 1f, 1f, DISABLED_ALPHA);
         }
         row.add(action).width(240f).right();
-        return row;
+        Table block = new Table();
+        block.add(row).growX().row();
+        List<Concepts.Concept> concepts = Concepts.standard().forComponent(rocket.id());
+        if (!concepts.isEmpty()) {
+            // Six chips don't fit in the row, so they get a line of their own, under the name.
+            Table line = new Table();
+            line.left();
+            line.add(ui.label("CONCEPTS", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).width(64f).padRight(14f);
+            line.add(conceptChips(concepts, () -> new OpenRocketScreen(game))).growX();
+            block.add(line).growX().padLeft(72f).padRight(Theme.SPACE_4).padBottom(14f);
+        }
+        if (!buildable) {
+            block.setColor(1f, 1f, 1f, DISABLED_ALPHA);
+        }
+        return block;
     }
 
     /**
