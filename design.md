@@ -563,7 +563,7 @@ season unchanged. Tiger Teams' live per-step choice doesn't fit, so it was redes
 **(d) People worth caring about** *(user's idea, 2026-10-07; designed, not built. Decided: the
 split between morale and chemistry, pair rapport that builds over years, hidden traits with
 ambiguous hints, the background check through intelligence, ambitions, career records and
-poaching. Confirmed the same day: one or two traits per person, chemistry's ±15 % band, and
+poaching. Confirmed the same day: none to two traits per person, chemistry's ±15 % band, and
 rapport's range, drift and threshold; ambitions in every group, for some people only. The rest
 are proposed defaults, unconfirmed.)* The aim: employees
 stop being a commodity. Players learn who their people are, care about them, and face hard calls
@@ -582,10 +582,15 @@ such as letting a brilliant troublemaker go.
   never resets, so old colleagues meet again as friends or enemies. Confirmed: a range of −100 to
   +100, a drift of about 5 a season, shown once past ±30 ("work well together", "clash"),
   lost when either leaves.
-- **Traits** (decided): one or two per person (confirmed), hidden when hired. A trait shows itself
+- **Traits** (decided): **none, one or two** per person (confirmed, user 2026-10-07; default
+  split 20 / 50 / 30 %, unconfirmed), hidden when hired. A person without traits is the safe,
+  unremarkable hire: rapport still drifts (unbiased), chemistry still forms, the base ambition
+  chance applies. A trait shows itself
   after the person has worked in teams for a while (default: 2 to 4 seasons, drawn per trait),
   or sooner when it matters (an Abrasive member's first clash), and the turn report says so
-  ("After two seasons on the Atlas team, Kowalski turns out to be a workaholic"). Most traits cut
+  ("After two seasons on the Atlas team, Kowalski turns out to be a workaholic"). Once someone has
+  worked long enough for every trait to have shown (the end of the reveal window), their page
+  says **"nothing more to discover"**, whether they turned out to have two traits, one or none. Most traits cut
   both ways. Proposed list, to cut down in play:
   - *Personal:* **Workaholic** (more R&D gain; morale falls fast when idle) · **Steady** (morale
     changes halved, both ways) · **Ambitious** (trains faster; morale falls without training or a
@@ -600,13 +605,17 @@ such as letting a brilliant troublemaker go.
     harder as the team's most skilled, sulks when not) · **Team player** (lifts the whole team's
     chemistry a little).
 - **Hints at hiring** (decided): each candidate shows one vague hint from a colleague
-  ("colleagues call her driven"). A hint is always true to one of the person's traits, but every
-  hint is shared by several traits, so a player can't learn a code. Proposed hints: *driven*
+  ("colleagues call her driven"). A telling hint is always true to one of the person's traits,
+  but every hint is shared by several traits, so a player can't learn a code. There are also
+  **bland hints** ("reliable", "pleasant to work with"): a candidate without traits always gets
+  one, and a candidate with traits sometimes does too (default: 1 in 4), so a bland hint never
+  proves a candidate has none. Proposed hints: *driven*
   (Workaholic, Ambitious, Must be the best), *calm* (Steady, Cool under pressure, Loner),
   *sociable* (Easy-going, Team player, Glory seeker), *exacting* (Perfectionist, Abrasive, Must be
   the best), *independent* (Loner, Restless, Abrasive), *keen to learn* (Quick study, Ambitious,
   Mentor), *patient* (Mentor, Steady, Perfectionist).
-- **Background check** (decided): reveals one of a candidate's traits before hiring, but only for
+- **Background check** (decided): reveals one of a candidate's traits before hiring (or reports
+  "no notable traits"), but only for
   an agency that keeps an intelligence service, part of the later espionage work (§2.9). Without
   one, the hint is all there is.
 - **Ambitions** (decided, user 2026-10-07): in **every group**, but **only some people have
