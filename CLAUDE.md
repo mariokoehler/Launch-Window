@@ -48,7 +48,8 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   Museum's Encyclopedia tab, with every figure checked. Players will reach them through concept
   chips on the program, configuration and rocket screens (`ui-spec.md` component 19; the audit
   is in `design.md` §1.1). The chips are mocked up on the same canvas's bottom row (2026-10-07),
-  their look still unconfirmed; not built in libGDX yet.
+  their look still unconfirmed; not built in libGDX yet. E-06 to E-19 are mocked up on the same
+  canvas (2026-10-07), not built and not fact-checked: each row's yellow note lists what to verify.
 - **PR duty for astronauts is built** (`design.md` §2.2(c)), with 39 press stories
   (`assets/content/pr-press.json`), no repeats, and effects beyond prestige. Next is the next
   play test.
