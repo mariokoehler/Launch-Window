@@ -158,16 +158,23 @@ def convert(path):
     width, height = (int(float(v)) for v in root.get("viewBox").split()[2:])
     grid = root.get("data-grid") != "none"
     labels = labels_of(root)
-    body = ET.tostring(root, encoding="unicode")
-    body = re.sub(r"^<svg[^>]*>", "", body)[: -len("</svg>")]
-    svg = (f'<svg xmlns="{SVG}" viewBox="0 0 {width} {height}" width="{width * SCALE}" '
-           f'height="{height * SCALE}">{ground(width, height, grid)}{body}</svg>')
     fonts = sorted(glob.glob(os.path.join(FONTS, "*.ttf")))
-    png = bytes(resvg_py.svg_to_bytes(svg_string=svg, font_files=fonts, skip_system_fonts=True))
-    image = Image.open(io.BytesIO(png)).convert("RGB")
-    image.save(os.path.join(OUT, name + ".png"), optimize=True)
+
+    def render(scale):
+        body = re.sub(r"^<svg[^>]*>", "", ET.tostring(root, encoding="unicode"))[: -len("</svg>")]
+        svg = (f'<svg xmlns="{SVG}" viewBox="0 0 {width} {height}" width="{width * scale}" '
+               f'height="{height * scale}">{ground(width, height, grid)}{body}</svg>')
+        png = bytes(resvg_py.svg_to_bytes(svg_string=svg, font_files=fonts, skip_system_fonts=True))
+        return Image.open(io.BytesIO(png)).convert("RGB")
+
+    render(SCALE).save(os.path.join(OUT, name + ".png"), optimize=True)
     if grid:
-        image.resize((width, height), Image.LANCZOS).save(os.path.join(OUT, name + "-thumb.png"), optimize=True)
+        # The Museum's card shows the picture without labels, so it leaves out the halos too:
+        # an outline without its label would read as a smudge.
+        for halo in [child for child in root if child.get("style") == HALO]:
+            root.remove(halo)
+        thumb = render(SCALE).resize((width, height), Image.LANCZOS)
+        thumb.save(os.path.join(OUT, name + "-thumb.png"), optimize=True)
     with open(os.path.join(OUT, name + ".json"), "w", encoding="utf-8", newline="\n") as file:
         json.dump({"width": width, "height": height, "labels": labels}, file, indent=1, ensure_ascii=False)
         file.write("\n")

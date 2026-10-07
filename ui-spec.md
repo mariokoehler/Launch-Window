@@ -381,8 +381,8 @@ On the right:
       their bars, halos on labels that cross lines in E-10, E-13, E-14 and E-19, E-12's scale
       "Roughly to scale" (the longer one overflowed its cell), and E-13's "A gentler ride"
       replaced by "A safer fuel" (fact check).
-    - **Known blemish:** the Museum card's thumbnail shows E-04's halo outlines without their
-      labels (a white smudge on the first tank).
+    - **Thumbnails leave out halo outlines** (fixed 2026-10-07): a card shows the picture without
+      its labels, so an outline alone would read as a smudge (E-04, E-10, E-13, E-14, E-19).
 19. **Concept chips** *(user's idea, 2026-10-07; specified, mocked up and built the same day; the
     look confirmed by the user that day)*. A small **Concepts** section listing the
     real-world ideas behind a piece of game content, as clickable chips. A chip opens the
