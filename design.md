@@ -328,6 +328,21 @@ leading to satellite navigation.
     Chkalovsky station and refused to apologise; he and two others were dropped from the corps.
 - **Whole-crew losses:** Apollo 1, Soyuz 1, Soyuz 11, Challenger and Columbia lost everyone
   aboard, the real basis of §2.5(f). A sober note the first time it happens.
+- **Spying on the Moon race** (checked 2026-10-07, for the Intelligence Office's history notes):
+  - A CORONA satellite caught the first signs of a huge new construction project at Tyuratam
+    (Baikonur) in 1963. In December 1967 the President's Daily Brief reported that a US satellite
+    had, for the first time, seen a giant rocket on one of the two new pads: the N1. Sources:
+    The Space Review, Wikipedia's N1 article.
+  - In August 1968 Frank Borman was told the CIA reported a Soviet crewed lunar fly-by planned
+    before year's end, as NASA moved Apollo 8 to lunar orbit. The CIA's science directorate
+    credited its own reports for the change; historians (Murray and Cox) find the decision was
+    driven mainly by the schedule, and NASA's own papers from that August focus on the schedule
+    and don't mention the press reports of Zond 4. A good note on how sure intelligence ever is. Sources: The Space Review,
+    Smithsonian Air and Space.
+  - NASA was public: congressional hearings, published budgets, famous faces. The Soviet program
+    was secret down to the name of its chief. Still, NASA kept plenty quiet, and the user decided
+    against any secrecy bonus (§2.9). The claim that Soviet engineers learned much about Apollo
+    from the US trade press is **not yet verified**: don't use it until it is.
 - **Bars (also called Chaika) and Lisichka** died when their Korabl-Sputnik launch failed on 28
   July 1960, 19 seconds in: a strap-on broke away and the capsule's parachutes opened too low.
   They're the dogs remembered on a failed Korabl-Sputnik 2 flight (§2.5(f)), as "Chaika". Sources
@@ -616,8 +631,8 @@ such as letting a brilliant troublemaker go.
   Mentor), *patient* (Mentor, Steady, Perfectionist).
 - **Background check** (decided): reveals one of a candidate's traits before hiring (or reports
   "no notable traits"), but only for
-  an agency that keeps an intelligence service, part of the later espionage work (§2.9). Without
-  one, the hint is all there is.
+  an agency that keeps an intelligence service (§2.9, Intelligence: a guaranteed active check and a
+  passive 20 % per candidate from level 1). Without one, the hint is all there is.
 - **Ambitions** (decided, user 2026-10-07): in **every group**, but **only some people have
   one**, so there are only a few to keep track of. Traits shape who: **Ambitious practically
   guarantees one**, **Glory seeker** makes one much more likely, and others start with a modest
@@ -1011,6 +1026,90 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
   idea. Two pieces are already designed for it (§2.2(d), user 2026-10-07): an **intelligence
   service** that can run background checks on job candidates, and **poaching** other agencies'
   employees, with matching as a standing order.
+- **Intelligence** (designed with the user, 2026-10-07; every number is ours, a default and
+  unconfirmed). Espionage here buys **information, never damage**: **no sabotage** (user,
+  2026-10-07), since a rival breaking your hardware overnight can't be answered until morning and
+  a player-caused death would kill the fun. No BASPM precedent (its source has no espionage).
+  - **Async rules it keeps:** every operation is settled in the season pass (except the background
+    check below), defence is passive, and the service's level is a standing order. Nothing asks a
+    player to react, so logging in less never costs anything here.
+  - **The Intelligence Office**, an **eighth hub building** (user, 2026-10-07), because the feature
+    will grow. It holds the level dial, the operations, the folders on rivals, and later perhaps
+    intelligence officers as a fourth roster (the building's level would cap it, like the others).
+    No building upgrade for now. One name for both archetypes. The user draws its hotspot polygon
+    (`INTELLIGENCE_OFFICE`) on both hub images.
+  - **The level** (0 to 3) is a **budget dial**, no staff for now. The player sets a **target
+    level**; at each resolution the level moves **one step** toward it (user, 2026-10-07: a
+    network takes time to spool up and to dismantle), so a change only ever takes effect next
+    season and nobody can sit at 0 and spike to 3 when a need arises. The level steps first in the
+    season pass, so the candidate pool drawn that resolution and the next season's actions use
+    the new level. **Cost per season** at the level in effect, paid with the fixed costs: 0 / 150
+    / 350 / 700 (against a starting funding of 3,000). Winding down costs the levels on the way.
+    If funds don't cover it (in debt), the level drops one step that season.
+  - **What each level brings.** A level keeps everything the levels below it bring. **Actions per
+    season** equal the level; unused ones don't carry over. **Passives** are independent of the
+    actions: using an action never cancels a passive roll (user, 2026-10-07).
+
+    | Level | Active (unlocked) | Passive |
+    |---|---|---|
+    | 0 | none | none; a small baseline counter-intelligence |
+    | 1 · Security office | **Background check** on one candidate | **20 %** per candidate to reveal a trait; counter-intelligence I |
+    | 2 · Analysis section | **Agency assessment** of a chosen rival, one area | **25 %** per season: a tidbit about a random rival (R&D or plans); counter-intelligence II |
+    | 3 · Field network | **Personnel file** on a rival's employee | the tidbit chance rises to **40 %** and can come from any area, people included; counter-intelligence III |
+
+    The ladder is people, then agencies, then rivals' people (user, 2026-10-07); level 3's
+    personnel file is what makes a poaching offer an informed one.
+  - **Background check** (the decided feature above, now concrete). The **active check answers
+    at once**: the server replies during the season with one of the candidate's traits, or "no
+    notable traits", and the action is used. It's desk work, so instant fits, and an answer at
+    resolution would arrive just as the pool refreshes. It never fails and isn't against a rival,
+    so counter-intelligence plays no part. A second check on the same candidate (a second
+    action, level 2 or more) reveals another trait if there is one. **The passive 20 %** is
+    rolled once per candidate when the pool is drawn, from the candidate's seed, so it shows the
+    moment the pool appears and can't be rerolled. Both report "no notable traits" too, so a
+    missing reveal never hints at none. A trait found this way stays revealed after hiring.
+    **The active check is the game's first action that changes state mid-turn,** so it is
+    pinned down: which trait it reveals comes from the candidate's seed; the answer is saved on
+    the candidate, so asking again returns the same answer and a retried resolution never
+    changes it; it can't be cancelled or refunded (unlike queued operations); it counts against
+    the season's actions even if the level drops at the resolution; and the server's stripping
+    lets that one revealed trait through.
+  - **Agency assessment** (level 2): one action looks at **one area** of one rival, settled at
+    resolution, the result a **dossier dated to that resolution** that stays in the rival's folder
+    until a newer one replaces it:
+    - **R&D:** the rival's components with reliability as **ranges** ("55–70 %").
+    - **Programs and plans:** open programs, missions in flight, and launches scheduled for next
+      season. A rival can still scrub after the report: intelligence can be wrong, and that is the
+      rival's counter without having to react.
+    - **Personnel:** roster sizes and average skill per group.
+  - **Personnel file** (level 3): one rival employee, in a group the player picks: the most
+    skilled person there without a current file, or a person the player names from an earlier
+    file. It shows name and portrait, skills as ranges, a loyalty band (low, middling, high; needs phase 4's loyalty), their ambition and
+    whether they're disappointed, and one of their traits.
+  - **Odds against a rival's counter-intelligence** (the target's level, 0 to 3): a targeted
+    action succeeds at **85 % minus 15 points per level** of the target's counter-intelligence
+    (85 / 70 / 55 / 40). Ranges are tighter the higher the spy's level is over the target's:
+    half-width **5 + 5 × (target level − spy level + 2)** points, at least 2 and at most 15. A
+    failed action learns nothing, and is **caught** with **10 % + 10 % per target level**: the
+    target's turn report names the spying agency, the spy loses **20 prestige**, and the spy's
+    report says the operation was blown. Passive tidbits roll against the same counter-
+    intelligence but are never caught (no one is sent). No secrecy bonus for either archetype
+    (user, 2026-10-07: NASA didn't spill everything either).
+  - **Turn report:** a new "Intelligence" section with reveals, dossiers, tidbits, catches on both
+    sides, and level changes.
+  - **Hidden information stays on the server:** a dossier holds only what the server granted
+    and is kept in the player's own state; a rival's real values never travel to the client, as
+    with traits.
+  - **Still open:** whether the target ever learns of an operation that failed but wasn't caught
+    (default: no); a dossier ages by its date only, no visible decay (default). **For the user:**
+    no operation reveals a rival's level, so the success chance can't be shown exactly; either
+    show the range (40–85 %) or let the programs-and-plans dossier include the rival's
+    Intelligence level. And level 3's passive 40 % may be more than the "small chance" asked for.
+  - **Before the hotspot reaches the client:** `make_hub_art.py` copies the raw hotspot files to
+    `assets/ui/hub/` as they are, and `Hub` turns each polygon name into a `Hub.Place` with
+    `valueOf`, which throws on an unknown name; `HubTest` expects seven places. Add
+    `Hub.Place.INTELLIGENCE_OFFICE` (icon, names, "isn't built yet") and update the test before
+    running the converter with the new polygons.
 - **Win condition** (user, 2026-09-28): the host declares a **list of goal ids** per game
   (`game-meta.json`, visible in the UI). **The first agency to reach all of them wins.** A listed
   goal counts as done when achieved or credited through the cascade. Its time is the game turn
@@ -1396,8 +1495,8 @@ patches (`ui-spec.md` component 8).
   2026-10-01) not to close the gap up front; revisit with play-test and harness data.
 - **A game-host role and UI** (announcing games, blackouts, allowlists): direct file edits for
   now.
-- **Interaction beyond passive competition** (mail, espionage, sabotage, cooperation): after
-  the daily loop is proven (§2.9).
+- **Interaction beyond passive competition** (mail, cooperation): after the daily loop is
+  proven (§2.9). Intelligence is designed (§2.9, 2026-10-07); sabotage is ruled out.
 - **Can SET staff reach retirement in a realistic game?** At 65 and today's game lengths, few
   will; it matters only if games run decades.
 
@@ -1592,6 +1691,12 @@ until all have run, and effects beyond prestige.
 concept audit (§1.1), the chips on program details, configuration details and the VAB's rocket
 rows, and the "new" dot there and in the Museum. Their look is confirmed (user, 2026-10-07). Otherwise
 next is the next play test.
+
+**Intelligence** (designed 2026-10-07, §2.9): an eighth building, the Intelligence Office, with a
+level dial (0 to 3, one step a season), actions per season equal to the level, passives, the
+background check on the hire screen, agency assessments and personnel files. Next: mock up its
+screens (`ui-spec.md` §4.15), the user's hotspot polygons, then build. The personnel file's
+loyalty band waits for phase 4.
 
 ### Later
 

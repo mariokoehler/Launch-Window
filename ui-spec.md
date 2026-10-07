@@ -255,6 +255,14 @@ On the right:
     *As built (2026-10-07):* "A former colleague:" with the word in italics under the age line; the
     selected recruit's card repeats it. The mockup's locked Background check button is left out
     until espionage (the column has room for it).
+    *Specified 2026-10-07 (`design.md` §2.9, Intelligence):* the **Background check** button
+    comes back, live from Intelligence level 1: "Background check · uses 1 of 1 action". A click
+    asks the server and answers at once, in the same place: a trait chip (component 20) or "No
+    notable traits". With no action left or below level 1 the button is disabled with the reason
+    ("Needs the Intelligence Office at level 1", "No intelligence action left this season").
+    The **passive** find (20 % per candidate) shows the same way from the moment the pool
+    appears, marked "Found by the Intelligence Office". A candidate can show the colleague's hint
+    and a revealed trait together.
 15. **History note** *(decided 2026-10-04; how it looks is open)*. A small icon
     placed next to a label, field, or value. On mouse-over it shows a short card,
     two to four sentences, about the real history or engineering behind that
@@ -655,6 +663,10 @@ Space Complex hub
 │   │                           └─ Assemble mission ─► confirm & pay ─► (Mission Control: scheduled)
 │   └─ (building panel)
 ├─ Public Affairs Office
+├─ Intelligence Office (§4.15)
+│   ├─ Overview (level dial, actions, costs, counter-intelligence)
+│   ├─ Operations (agency assessment, personnel file)
+│   └─ Folders (one per rival)
 └─ Museum
 ```
 
@@ -1513,6 +1525,54 @@ Phase 3 needs the top half; the rest arrives with phase 4.
   record), the loyalty bar and the memorial's read-only page arrive with phase 4: a memorial entry
   keeps no skills, traits or id yet (`design.md` §2.2(d)). The mockup's "Mockup only" switchers and
   dashed phase 4 boxes aren't built.
+
+### 4.15 Intelligence Office *(specified 2026-10-07 for `design.md` §2.9, Intelligence; not mocked up yet)*
+**Purpose:** the agency's intelligence service: how big it is, what it does this season, and
+everything it has learned about rivals. An **eighth hub building** (polygon `INTELLIGENCE_OFFICE`,
+drawn by the user on both hub images), with a marker and footer icon of its own (proposed:
+binoculars, our own drawing; add it to the UI Asset Sheet). All rules and numbers are in
+`design.md` §2.9; the screens read them from the rules' constants (G7).
+
+**Overview** (the landing screen):
+- **The level:** the current level (0 to 3, with its name: none, Security office, Analysis
+  section, Field network) and the **target level**, set with a stepper or four segments. When
+  they differ: "Reaches level 3 in 2 seasons", one step per season. The stepper says changes take
+  effect next season and move one step a season.
+- **Costs:** cost per season now, and at the target level; what the way there costs.
+- **This season's actions:** "1 of 2 used", each used one named (a background check on a
+  candidate, an assessment queued).
+- **What each level brings:** the four levels as a ladder (component 7's look may fit), each with
+  its actions, unlocked operation and passives; levels above the current one dimmed, the target
+  marked.
+- **Counter-intelligence:** its strength (I to III) and agents caught this game.
+- An empty state for level 0: what the service would do, and the target stepper.
+
+**Operations:** pick an operation, then its target:
+- **Agency assessment** (level 2): a rival agency (name, director, archetype), then an area:
+  R&D, programs and plans, or personnel. Shows the success chance (open: the range 40–85 %, or
+  exact if a dossier has shown the rival's level, `design.md` §2.9), what a failure risks (getting caught, −20 prestige),
+  and when the answer comes ("in the next turn report").
+- **Personnel file** (level 3): a rival, then a group, or a person named in an earlier file.
+- Queued operations this season, cancellable until the resolution. The background check isn't
+  here: it lives on the hire screen (component 14).
+- Last season's results, linked to their folders.
+
+**Folders:** one per rival agency, a list on the left, the open folder on the right:
+- **Header:** agency, director, archetype, goals reached (as the Museum's rivals show).
+- **One dossier per area** (R&D, programs and plans, personnel), each stamped "As of Spring
+  1962" (no visible decay, the date says how old it is); an area never assessed says so. R&D shows the rival's
+  components with reliability as ranges (component 3 with a range band rather than a value);
+  plans list open programs, missions in flight and next season's scheduled launches, with "may
+  have changed since".
+- **Personnel files:** a small card per person (portrait, name, skills as ranges, loyalty band,
+  ambition, one trait as component 20).
+- **Tidbits:** the passive finds, newest first, each dated.
+- **Caught:** agents of yours this rival caught, and theirs you caught.
+
+**Hire screen addition** (component 14): see there.
+
+**Turn report:** an "Intelligence" section (level changes, reveals, dossiers, tidbits, catches),
+each line linking to its folder.
 
 ---
 

@@ -55,6 +55,9 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   the canvas `Launch Window — People` (`ui-spec.md` components 20 to 22, §4.14). Two rules
   findings from that canvas and the memorial page wait for the user (`design.md` §2.2(d)). Reset
   the dev data root before the next play test (new fields on employees).
+- **Intelligence is designed** (`design.md` §2.9, 2026-10-07): no sabotage, an eighth building
+  (the Intelligence Office, hotspot `INTELLIGENCE_OFFICE`), a level dial with actions and
+  passives. Its screens (`ui-spec.md` §4.15) are next for Claude Design.
 - **PR duty for astronauts is built** (`design.md` §2.2(c)), with 39 press stories
   (`assets/content/pr-press.json`), no repeats, and effects beyond prestige. Next is the next
   play test.
