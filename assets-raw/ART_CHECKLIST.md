@@ -220,71 +220,71 @@ Notes:
   - [X] Crewed Gemini Lunar Propulsion Module and heat shield test flight in Earth Orbit
 
 - [x] **Gemini Direct Ascent test flights in Earth orbit** (NASA, `28-03`) — `gemini_direct_ascent?`
-  - [ ] Uncrewed Direct Ascent Configuration test flight in Earth Orbit (reentry at near-lunar velocity)
-  - [ ] Crewed Direct Ascent Configuration test flight in Earth Orbit (reentry at near-lunar velocity)
+  - [X] Uncrewed Direct Ascent Configuration test flight in Earth Orbit (reentry at near-lunar velocity)
+  - [X] Crewed Direct Ascent Configuration test flight in Earth Orbit (reentry at near-lunar velocity)
 
 - [x] **Voskhod** (SOVIET, `28-04`) — `voskhod`
-  - [ ] Uncrewed suborbital flight test
-  - [ ] Suborbital flight
-  - [ ] Uncrewed orbital flight test
-  - [ ] Orbital flight
-  - [ ] Orbital flight (Duration Level I)
-  - [ ] Orbital flight (Duration Level II)
-  - [ ] Orbital flight (Duration Level III)
-  - [ ] Orbital flight (Duration Level IV)
-  - [ ] Spacewalk (Duration Level I)
-  - [ ] Joint launch and orbital flight (Duration Level I)
+  - [X] Uncrewed suborbital flight test
+  - [X] Suborbital flight
+  - [X] Uncrewed orbital flight test
+  - [X] Orbital flight
+  - [X] Orbital flight (Duration Level I)
+  - [X] Orbital flight (Duration Level II)
+  - [X] Orbital flight (Duration Level III)
+  - [X] Orbital flight (Duration Level IV)
+  - [X] Spacewalk (Duration Level I)
+  - [X] Joint launch and orbital flight (Duration Level I)
 
 - [x] **Soyuz 7K-L1 Earth orbit** (SOVIET, `28-05`) — `soyuz_7K_L1`
-  - [ ] Uncrewed suborbital flight test
-  - [ ] Suborbital flight
-  - [ ] Uncrewed orbital flight test
-  - [ ] Orbital flight
-  - [ ] Orbital flight (Duration Level I)
-  - [ ] Orbital flight (Duration Level II)
+  - [X] Uncrewed suborbital flight test
+  - [X] Suborbital flight
+  - [X] Uncrewed orbital flight test
+  - [X] Orbital flight
+  - [X] Orbital flight (Duration Level I)
+  - [X] Orbital flight (Duration Level II)
 
 - [x] **Soyuz 7K-L3 LOK Earth orbit** (SOVIET, `28-06`) — `soyuz_7K_L3`
-  - [ ] Uncrewed suborbital flight test
-  - [ ] Suborbital flight
-  - [ ] Uncrewed orbital flight test
+  - [X] Uncrewed suborbital flight test
+  - [X] Suborbital flight
+  - [X] Uncrewed orbital flight test
   - [x] Orbital flight — `soyuz_7K_LOK_orbital?`
-  - [ ] Orbital flight (Duration Level I)
-  - [ ] Orbital flight (Duration Level II)
-  - [ ] Orbital flight (Duration Level III)
-  - [ ] Spacewalk (Duration Level I)
-  - [ ] Joint launch and orbital flight (Duration Level I)
-  - [ ] Automatic rendezvous
-  - [ ] LK lander uncrewed test
-  - [ ] LK lander test
+  - [X] Orbital flight (Duration Level I)
+  - [X] Orbital flight (Duration Level II)
+  - [X] Orbital flight (Duration Level III)
+  - [X] Spacewalk (Duration Level I)
+  - [X] Joint launch and orbital flight (Duration Level I)
+  - [X] Automatic rendezvous
+  - [X] LK lander uncrewed test
+  - [X] LK lander test
 
 - [x] **LK-700 Earth orbit** (SOVIET, `28-07`) — `lk_700`
   - [x] Uncrewed suborbital flight test — `lk_700_uncrewed_suborbital`
   - [x] Suborbital flight — `lk_700_suborbital`
   - [x] Uncrewed orbital flight test — `lk_700_uncrewed_orbital`
   - [x] Orbital flight — `lk_700_orbital`
-  - [ ] Orbital flight (Duration Level I)
-  - [ ] Orbital flight (Duration Level II)
-  - [ ] Orbital flight (Duration Level III)
-  - [ ] Orbital flight (Duration Level IV)
-  - [ ] Orbital flight (Duration Level V)
-  - [ ] Orbital flight (Duration Level VI)
+  - [X] Orbital flight (Duration Level I)
+  - [X] Orbital flight (Duration Level II)
+  - [X] Orbital flight (Duration Level III)
+  - [X] Orbital flight (Duration Level IV)
+  - [X] Orbital flight (Duration Level V)
+  - [X] Orbital flight (Duration Level VI)
   - [x] Spacewalk (Duration Level I) — `lk_700_spacewalk`
 
 - [x] **Gemini EOR test flights in Earth orbit** (NASA, `28-08`) — `gemeni_eor?`
-  - [ ] Gemini Lander Test in LEO
-  - [ ] Gemini Lander  and Heat-Shield Test in MEO
+  - [X] Gemini Lander Test in LEO
+  - [X] Gemini Lander  and Heat-Shield Test in MEO
 
 ### `29` Short-duration lunar expeditions
 
 - [x] **Circumlunar Gemini** (NASA, `29-00`) — `circumlunar_gemini?`
-  - [ ] Transtage lunar flyby test
-  - [ ] Lunar flyby (Duration Level II)
+  - [X] Transtage lunar flyby test
+  - [X] Lunar flyby (Duration Level II)
 
 - [x] **Lunar orbital Gemini** (NASA, `29-01`) — `lunar_orbital_gemini?`
-  - [ ] Uncrewed lunar flyby test
-  - [ ] Lunar flyby (Duration Level II)
-  - [ ] Uncrewed lunar orbital flight test
-  - [ ] Lunar orbital flight (Duration Level II)
+  - [X] Uncrewed lunar flyby test
+  - [X] Lunar flyby (Duration Level II)
+  - [X] Uncrewed lunar orbital flight test
+  - [X] Lunar orbital flight (Duration Level II)
 
 - [x] **Gemini Direct ascent** (NASA, `29-02`) — `gemini_direct_ascent?`
   - [ ] Uncrewed lunar flyby flight test
