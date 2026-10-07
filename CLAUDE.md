@@ -45,7 +45,9 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   pack hash changed.
 - **Explainers** (`ui-spec.md` component 18, `design.md` §1.1): E-01 to E-05 are mocked up on
   the canvas `Launch Window — Explainers` (ask the user for the link). All five are built, in the
-  Museum's Encyclopedia tab, with every figure checked; the triggers are unconfirmed.
+  Museum's Encyclopedia tab, with every figure checked. Players will reach them through concept
+  chips on the program, configuration and rocket screens (`ui-spec.md` component 19, specified
+  2026-10-07, awaiting the user's mockup; the audit is in `design.md` §1.1).
 - **PR duty for astronauts is built** (`design.md` §2.2(c)), with 39 press stories
   (`assets/content/pr-press.json`), no repeats, and effects beyond prestige. Next is the next
   play test.

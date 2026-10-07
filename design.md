@@ -132,6 +132,68 @@ engineering problem or tidbit, note it here the same session.
       burns liquid oxygen "in its main stages".
   - **Next candidates:** why re-entry capsules are blunt, why reliability matters over a
     30-step mission (the odds multiply), why launch latitude matters (Earth's spin as a boost).
+    The concept audit below adds more.
+- **Concepts: linking game content to the explainers** (user's idea, 2026-10-07; specified in
+  `ui-spec.md` component 19, to be mocked up). Programs, configurations, steps, rockets and
+  capsules each list the real-world concepts behind them; a Concepts section on their screens
+  shows them as chips that open the right explainer sheet, with a gold dot until the player
+  has read it. This replaces the proposed "New idea" notices. No inline links in text (user,
+  2026-10-07); if other text should link, it gets the same chip row below it.
+  - **Audit of the early era** (2026-10-07; a first pass, unconfirmed). Step ids without season
+    numbers; "all orbital" means every configuration whose flight step is `earth-orbit`,
+    `earth-orbital` or `orbital-flight`.
+    - *With an explainer today:*
+      - **Suborbital** → E-01 sheet 1: the four suborbital configurations, step
+        `suborbital-flight`, goal Human in space, Redstone.
+      - **Orbit** → E-01 sheet 1: all orbital configurations, steps `earth-orbit`,
+        `earth-orbital`, `orbital-flight`, goals Satellite in orbit and Human in orbit,
+        programs Sputnik 1, Sputnik 2 and Explorer 1.
+      - **Orbital speed** → E-01 sheet 2: Vostok, Mercury, Atlas, R-7 (Vostok).
+      - **Staging** → E-01 sheet 3: step `ascent`, R-7 (Sputnik), R-7 (Vostok), Atlas,
+        Jupiter-C.
+      - **Rocket equation** → E-01 sheet 3: the four rockets that reach orbit.
+      - **Retrofire** → E-02 sheet 1: steps `retrofire`, `retrofire-jettison`, every
+        configuration that has them, the Vostok and Mercury capsules.
+      - **Rendezvous** → E-02 sheet 1 (sheet 2 for the history): both joint configurations,
+        step `joint-orbital-flight`, goal Two crews together.
+      - **Delta-v** → E-03 sheet 1: the VAB's payload columns (the four rockets), Atlas.
+      - **Rocket classes** → E-03 sheet 2: every rocket (all Light).
+      - **Engine restarts** → E-04 sheet 1: R-7 (Vostok) (its upper stage lights in flight),
+        step `retrofire`.
+      - **One-shot retrorocket** → E-04 sheet 2: Vostok capsule.
+      - **Cryogenic propellant** → E-05 sheet 1: step `launch-preparations` (liquid oxygen
+        boils away), `countdown`, every rocket.
+      - **Steering jets** → E-05 sheet 2: step `reentry-preparations`, the Vostok and Mercury
+        capsules.
+    - *No explainer yet (shown nowhere until one exists; the candidate list):*
+      - **Weightlessness** (they're falling, not out of gravity): steps `duration-level-i` and
+        `-ii`, `biometric-data-transmission`, goals Life in weightlessness, A day in space, Days
+        in space, Sputnik 2, Korabl-Sputnik 2, the duration configurations.
+      - **Heat shield and re-entry** (why capsules are blunt): steps `reentry`,
+        `modules-separation`, every returning configuration, both capsules.
+      - **The odds multiply** (reliability over many steps): every configuration.
+      - **Launch escape** (Mercury's tower against Vostok's ejection seat): step `launch`, both
+        capsules, steps `descent-and-landing` (Vostok's pilot ejects).
+      - **Landing on land or sea** (parachutes, recovery): steps `descent-and-landing`,
+        `descent-and-splashdown`.
+      - **Talking to an orbiting craft** (ground stations and coverage gaps): steps
+        `earth-orbit`, `orbital-flight`, goal Radio from orbit, Sputnik 1.
+      - **The space environment** (radiation belts; what Explorer 1 found): Explorer 1, goal
+        Space environment measured, step `advanced-experiments-earth-orbit`.
+      - **Human rating** (what makes a rocket safe for people): Redstone, Atlas, R-7 (Vostok),
+        the crewed configurations.
+      - **Launch latitude** (Earth's spin as a boost): step `launch`, every rocket.
+      - **Max Q** (the point of greatest aerodynamic stress): step `ascent`.
+      - **Power in orbit** (batteries, then solar cells): the extended configurations, Sputnik 1.
+      - **Keeping a rocket pointed** (gimbals, vanes, Jupiter-C's spinning upper stages):
+        Jupiter-C, step `ascent`.
+      - **Orbits decay** (thin air drags a satellite down): Sputnik 1, the extended
+        configurations.
+      - **Balloon tanks** (Atlas's pressure-stiffened skin): Atlas. Small; its history note may
+        be enough.
+    - *First impressions:* weightlessness and the heat shield would each attach to most
+      crewed content, and "the odds multiply" ties straight to how the game resolves a
+      mission, so those three are the strongest next explainers.
 - **A Museum encyclopedia** (started 2026-10-06): the deeper version of the same content; its
   first entries are the explainers above (`ui-spec.md` §4.11).
 - **Real images:** NASA photos are US government works and normally public domain. Soviet and
@@ -1233,8 +1295,11 @@ dogs, the animals that came home, and the space-race news (each recorded in its 
 passengers.
 
 **PR duty for astronauts** is built too (2026-10-06, §2.2(c)), with 39 press stories, no repeats
-until all have run, and effects beyond prestige. Nothing
-else is queued: next is the next play test.
+until all have run, and effects beyond prestige.
+
+**Concept chips** (2026-10-07, `ui-spec.md` component 19): specified, with the early era's
+concept audit (§1.1); waiting for the user's mockup, then the build (`concepts.json`, the chip
+row on §4.5.1, §4.6.4, §4.6.6/§4.6.7, the "new" dot). Otherwise next is the next play test.
 
 ### Later
 

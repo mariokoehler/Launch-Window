@@ -258,10 +258,9 @@ On the right:
       Launch Window" strip tying the idea to a mechanic, and a drawing title block (drawing
       number, title, sheet n of m, scale).
     - **Controls:** Close (top right), Previous and Next with page dots, Done on the last sheet.
-    - **Trigger (proposal):** the first time a player meets the idea (for E-01, opening a
-      configuration whose name says suborbital or orbital), a notice offers it ("New idea:
-      suborbital vs orbital"). It never opens by itself. Every explainer seen stays readable in
-      the Museum (the encyclopedia, §4.11's "Later").
+    - **How players find it** *(user, 2026-10-07; replaces the notice proposals below)*:
+      concept chips (component 19) on the screens that show the content an idea belongs to,
+      plus the Museum's Encyclopedia tab. It never opens by itself.
     - **Text** lives in `assets/content/explainers.json` (`client.view.Explainers`), outside the
       frozen pack like `strings.json`; `ExplainersTest` checks every string and drawing.
     - **Canvas:** `Launch Window — Explainers` (private, ask the user for the link), one row
@@ -309,11 +308,6 @@ On the right:
       2. *Steering with small jets:* one craft from above, turning, sliding and stopping with
          its thruster quads; cold gas and peroxide in Vostok and Mercury; Gemini 8's spin. In
          the game: the Reentry preparations step and Cooper's hand-flown Faith 7.
-    - **Triggers for E-02 to E-05 (proposals):** E-02 when a joint-launch configuration is
-      first opened, E-03 the first time the VAB shows a TLI figure (or the first lunar
-      program), E-04 the first configuration with a Retrofire step, E-05 the first
-      configuration with a Reentry preparations step (or later, the first rocket or
-      spacecraft that burns a hypergolic pair).
     - **As built:** full screen with no app chrome; page dots are clickable; Close and
       Done go back to the screen that opened it (the Museum's Encyclopedia tab for now).
     - **Drawings** are SVG sources in `assets-raw/explainers/`, rasterized at 2x without their
@@ -347,11 +341,52 @@ On the right:
       78", not "more than 70"; Gemini 8 spun "up to about one turn a second"; E-05's "In Launch
       Window" says every early-era rocket burns liquid oxygen "in its main stages" (Jupiter-C's
       upper stages are solid).
-    - **Not built yet:** offering an explainer from the screens it explains (the canvas proposes
-      a notice the first time a player opens a suborbital or orbital configuration), and
+    - **Not built yet:** the concept chips that link game content to it (component 19), and
       remembering which explainers a player has seen. All five are readable in the Museum.
     - **Known blemish:** the Museum card's thumbnail shows E-04's halo outlines without their
       labels (a white smudge on the first tank).
+19. **Concept chips** *(user's idea, 2026-10-07; specified, to be mocked up; the look and the
+    details marked "default" are unconfirmed)*. A small **Concepts** section listing the
+    real-world ideas behind a piece of game content, as clickable chips. A chip opens the
+    explainer (component 18) that explains it, at the right sheet; Close and Done come back to
+    the screen the chip was on. It's how players reach explainers from play, instead of a
+    notice the first time an idea comes up.
+    - **A concept** is an id, a chip label ("Suborbital", "Retrofire") and a target: an
+      explainer and a sheet. Several concepts can share an explainer ("Suborbital" and "Orbit"
+      both open E-01 sheet 1). Each concept lists the programs, configurations, steps,
+      components and goals it belongs to. The audit that assigns them is in `design.md` §1.1.
+    - **A concept without an explainer yet** is listed in the data but shows no chip
+      (default): no dead ends in the game, and the list doubles as the backlog of explainers
+      to write.
+    - **Where chips appear** (default):
+      - **Program details** (§4.6.4): the program's own concepts.
+      - **Mission configuration details and steps overview** (§4.6.6) and the **planning hub**
+        (§4.6.7): the configuration's concepts plus those of its steps, each once.
+      - **Open rocket program** (§4.5.1): a rocket's concepts, on its row if it fits, else in
+        the row's expanded detail.
+      - Not on the step rows themselves (too dense), nor on the mission selection list.
+      - **Later, if wanted:** the same chip row under other text, such as a pinned history
+        note card (component 15). Inline links inside text are out (user, 2026-10-07: a
+        libGDX label can't make one word clickable, and a word-by-word paragraph widget isn't
+        worth it).
+    - **Order:** the order of the concepts list, so related chips sit together. If a row runs
+      long it wraps; there is no "more" overflow (default; the audit gives at most six per
+      item).
+    - **Look (proposal for the mockup):** a compact chip in the explainer's drafting style: white
+      fill, thin navy rule, the label in `DRAWING_LABEL_SM` navy, and a small glyph of its own
+      (a drafting triangle or set square) so players learn that it always means "how it works",
+      distinct from the history note's open book and from the rules tooltip. Hover darkens the
+      rule; the whole chip is the click target (at least 32 px high). The section's kicker
+      reads "Concepts" in the eyebrow style.
+    - **New:** a chip whose explainer the player has never opened carries a small gold dot,
+      and so does its card in the Museum's Encyclopedia tab. Opening any sheet of the explainer
+      clears it everywhere. Seen explainers are remembered on this machine, in the client's
+      preferences, keyed by account and explainer id (default; the server doesn't need to know).
+    - **Data:** `assets/content/concepts.json` (`client.view.Concepts`), outside the frozen pack
+      like `explainers.json`, so a new concept never changes the pack's hash. Step ids are
+      the base ids, without the season number or the `spc-a-`/`spc-b-` prefix of a joint flight.
+      A test checks that every id exists in the pack, every target explainer and sheet exists,
+      and every label uses only letters the fonts can draw.
 
 ---
 
@@ -601,7 +636,8 @@ Medium, then Heavy). Both sit on this screen next to its building panel. **Ref:*
 **4.5.1 Open rocket program.** The agency's rockets that aren't open, each with:
 - class, and payload capacity to suborbital, LEO, TLI, and TPI;
 - human-rated or not;
-- creation cost, unit cost per flight, upkeep.
+- creation cost, unit cost per flight, upkeep;
+- *(specified 2026-10-07)* its concepts (component 19).
 
 Open shows the price: the creation cost, charged again on every reopening.
 Refused if the VAB is full or its level is too low for the class. Other agencies'
@@ -681,7 +717,8 @@ missing goals). Other agencies' programs are hidden entirely.
 - the required goals as goal badges (a goal credited through another goal's
   cascade reads "Achieved", without a date);
 - the components it grants, each with its reliability bar if owned;
-- a link to mission configuration selection.
+- a link to mission configuration selection;
+- *(specified 2026-10-07)* a Concepts section (component 19) with the program's concepts.
 
 **Actions:** Open (shows the price; refused if Headquarters is full, the goals
 aren't met, or funds are short). Close, which needs a confirmation: "no refund;
@@ -699,7 +736,9 @@ are read-only, with an "Open program" call to action.
 season by season. For each step: the components involved (with shares), the
 controller skills and CAPCOM involved, the crew skills, whether the crew is at
 risk, the prestige share, and the goals it achieves. Also the goal dependencies
-(penalties until a goal is reached) and boosts.
+(penalties until a goal is reached) and boosts. *(Specified 2026-10-07:)* a Concepts section
+(component 19) with the configuration's concepts and its steps', shown here and on the planning
+hub (§4.6.7).
 
 **4.6.7 Mission configuration** (the planning hub for one configuration), with
 four parts:
@@ -1087,7 +1126,8 @@ review: when, what it pays, what keeps today's funding) and `PrestigeConversion`
 
 - **Encyclopedia** *(built 2026-10-06)*: one card per explainer (component 18), with the first
   sheet's drawing, the drawing number and sheet count, the title, a one-line summary and "Read
-  it". An explainer opened here closes back to this tab.
+  it". An explainer opened here closes back to this tab. *(Specified 2026-10-07:)* a card whose
+  explainer the player hasn't opened yet carries the gold "new" dot of component 19.
 
 **Mocked up (2026-10-04)** on the `Launch Window — Museum, Settings & Game Result mockup`
 canvas, one artboard per tab (`Museum`, `MuseumAchievements`, `MuseumFlights`,
