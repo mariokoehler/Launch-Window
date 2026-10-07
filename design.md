@@ -711,6 +711,30 @@ such as letting a brilliant troublemaker go.
     out of the client.
   - **Turn report** lines: a trait revealed; a relationship shown (passed ±30); with the person,
     the trait or partner, and what they were working on.
+  - **As built, phases 1 to 3 and the personal traits** (2026-10-07; rules only, the screens wait
+    for mockups): `model.Trait`, `TraitState`, `Rapport`; `rules.Personality` (trait draws, hints,
+    affinity, `forClient`), `rules.Teams` (the TEAMS phase after RESEARCH), `rules.Chemistry`,
+    `rules.TraitEffects`; events `TraitRevealed` and `RelationshipShown` with turn report lines
+    (`client.view.TraitTexts` has the words). Notes on how it came out:
+    - **Separate random streams:** traits come from a stream seeded by the agency and the
+      candidate's id, and a pair's affinity from one seeded by the agency and both ids, so no
+      other random draw moved (seeded tests and screenshots unchanged).
+    - **Teams are captured** after departures and before missions resolve, because a finishing
+      mission releases its crew; the TEAMS phase then skips anyone lost meanwhile. A person's
+      **project** (what they last worked on, and for how many seasons in a row) feeds Restless.
+    - **"Unknown factors"** shows while any member is still inside the reveal window (fewer
+      than 4 work seasons). A pair's rapport below ±30 isn't shown and counts as known noise: it
+      moves chemistry by at most ±0.3 (±4.5 % output).
+    - **The report's exact step odds** (`MissionStepResolved`) include hidden chemistry. The
+      client never displays them, so only someone reading the report's raw JSON could work it out;
+      accepted for now.
+    - **Morale effects, first pass:** Workaholic, Steady and Ambitious act on the season's own
+      morale change only, not on salary changes, press stories or random events.
+    - **Perfectionist's cap:** reliability gained above the normal cap stays when they leave; the
+      rest of the team is then released once, as at any cap.
+    - **Measured** (`ContentPackPlayouts.people`, 200 bot games of 24 seasons): 8.7 traits revealed
+      and 5.1 relationships shown per game (2.2 friendships), from 8.5 pairs. The bots finish in
+      55.0 seasons on average, against 56.7 before personalities; step outcomes within noise.
 - **History notes to go with it:** Deke Slayton picked NASA's crews partly on who worked well
   together; Gagarin was reportedly chosen over Titov partly for his manner and background.
   Verify both before use (§1.1).
