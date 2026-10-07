@@ -18,6 +18,7 @@ import de.mkoehler.launchwindow.client.ui.Refusals;
 import de.mkoehler.launchwindow.client.ui.SkillBar;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.view.Department;
+import de.mkoehler.launchwindow.client.view.People;
 import de.mkoehler.launchwindow.client.view.Tips;
 import de.mkoehler.launchwindow.content.StaffingSlot;
 import de.mkoehler.launchwindow.model.Personnel;
@@ -199,14 +200,27 @@ public final class HireScreen extends ChromeScreen {
         row.add(accent).width(Theme.BORDER_ACCENT).fillY();
         Table inner = new Table();
         inner.pad(Theme.SPACE_3, Theme.SPACE_4, Theme.SPACE_3, Theme.SPACE_4);
-        inner.add(RosterCells.avatar(ui, candidate)).size(56f).padRight(Theme.SPACE_4);
+        inner.add(RosterCells.avatar(ui, candidate)).size(56f).top().padRight(Theme.SPACE_4);
 
         Table who = new Table();
         who.left();
         who.defaults().left();
         who.add(ui.label(candidate.getName(), Theme.TextStyle.HEADING_SM, Theme.INK)).padBottom(2f).row();
-        who.add(ui.label(department.ageLine(candidate), Theme.TextStyle.CAPTION, Theme.INK_MUTED));
-        inner.add(who).width(170f).left().padRight(Theme.SPACE_4);
+        who.add(ui.label(department.ageLine(candidate), Theme.TextStyle.CAPTION, Theme.INK_MUTED)).row();
+        // One hint from a former colleague (People canvas, 2026-10-07); the traits stay hidden.
+        String hint = People.hintQuote(candidate.getHint());
+        if (hint != null) {
+            Table quote = new Table();
+            quote.left();
+            quote.defaults().left();
+            quote.add(ui.label("A former colleague:", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).row();
+            quote.add(ui.label(hint, Theme.TextStyle.TAGLINE, Theme.INK));
+            ui.tooltip(quote, "A colleague's hint", "A word from someone who worked with this candidate before. A "
+                + "telling hint is true to one of the candidate's traits, but every hint fits several; a plain one "
+                + "proves nothing.");
+            who.add(quote).padTop(Theme.SPACE_2).padLeft(Theme.SPACE_2);
+        }
+        inner.add(who).width(190f).left().top().padRight(Theme.SPACE_4);
 
         Table skills = new Table();
         for (String skill : department.ratings()) {
@@ -274,8 +288,9 @@ public final class HireScreen extends ChromeScreen {
             Table who = new Table();
             who.defaults().left();
             who.add(ui.label(recruit.getName(), Theme.TextStyle.HEADING_SM, Theme.INK)).row();
-            who.add(ui.label(String.format(Locale.ROOT, "AGE %d · $ %.1f", recruit.getAge(), recruit.getSalary()),
-                Theme.TextStyle.CAPTION, Theme.INK_MUTED));
+            String hint = People.hintQuote(recruit.getHint());
+            who.add(ui.label(String.format(Locale.ROOT, "AGE %d · $ %.1f", recruit.getAge(), recruit.getSalary())
+                + (hint == null ? "" : " · a former colleague: " + hint), Theme.TextStyle.CAPTION, Theme.INK_MUTED));
             inner.add(who).expandX().left();
             inner.add(button("Remove", Theme.ButtonKind.DESTRUCTIVE, () -> toggle(recruit.getId()))).row();
             inner.add(bonusToggle(recruit)).colspan(3).left().padTop(Theme.SPACE_2);
