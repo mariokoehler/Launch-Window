@@ -13,6 +13,12 @@ public final class Refusals {
 
     private static final Map<String, String> WORDING = Map.ofEntries(
         Map.entry("INSUFFICIENT_FUNDS", "Not enough funds."),
+        Map.entry("LEVEL_TOO_LOW", "The Intelligence Office's level is too low for that."),
+        Map.entry("NO_ACTION_LEFT", "No intelligence action left this season."),
+        Map.entry("NOTHING_LEFT_TO_FIND", "An earlier check already found everything there is."),
+        Map.entry("UNKNOWN_OPERATION", "That operation isn't queued any more."),
+        Map.entry("INVALID_OPERATION", "Pick a rival and an area or group first."),
+        Map.entry("INVALID_LEVEL", "Pick a level from 0 to 3."),
         Map.entry("ROSTER_FULL", "No room. Upgrade the building."),
         Map.entry("UNKNOWN_CANDIDATE", "That candidate has left the pool."),
         Map.entry("ASSIGNED_TO_MISSION", "Can't dismiss someone on a mission."),

@@ -1078,10 +1078,14 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
     resolution, the result a **dossier dated to that resolution** that stays in the rival's folder
     until a newer one replaces it:
     - **R&D:** the rival's components with reliability as **ranges** ("55–70 %").
-    - **Programs and plans:** open programs, missions in flight, launches scheduled for next
-      season, and the rival's **Intelligence level** (user, 2026-10-07), so one assessment tells a
-      player how hard the rival is to spy on before spending more. A rival can still scrub after the report: intelligence can be wrong, and that is the
-      rival's counter without having to react.
+    - **Programs and plans:** open programs, missions in flight, **R&D focus** (which components
+      their engineers work on, with how many), **hardware not flown yet** (owned payloads never
+      carried on a successful flight), and the rival's **Intelligence level** (user, 2026-10-07), so
+      one assessment tells a player how hard the rival is to spy on before spending more. The
+      mockup's "launches scheduled for next season" can't exist: a mission scheduled during a
+      season launches at that season's resolution, so a dossier made there would always find none.
+      The user chose both replacements (2026-10-07). A rival's plans can still change after the
+      report: intelligence can be wrong, and that is the rival's counter without having to react.
     - **Personnel:** roster sizes and average skill per group.
   - **Personnel file** (level 3): one rival employee, in a group the player picks: the most
     skilled person there without a current file, or a person the player names from an earlier
@@ -1106,6 +1110,21 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
   - **Hidden information stays on the server:** a dossier holds only what the server granted
     and is kept in the player's own state; a rival's real values never travel to the client, as
     with traits.
+  - **As built (2026-10-07):**
+    - **Rules** (`rules.Intelligence`, `rules.IntelligenceBoard`; state in
+      `PlayerSnapshot.intelligence`): a new `INTELLIGENCE` phase of the season pass, before the
+      budget, applies the agency's findings, clears the queue, frees the actions and steps the
+      level (the budget then charges the new level, `BudgetProgress.RunningCosts.intelligence`).
+      The passive candidate roll and every operation, catch and tidbit draw from their own salted
+      seeds, never the season's stream: the bot playouts match the old baseline exactly.
+    - **Settled once a turn** (`TurnScheduler`): from every player's state with the turn's
+      actions applied, before anyone's pass, and kept in `intelligence/turn-N.json`, so a retry
+      after a crash applies the same findings. An operation queued after that file was written
+      comes to nothing and says so in the report ("queued too late").
+    - **Rivals are named by an opaque key** (`GameSeeds.rivalKey`, carried as
+      `RivalSummary.playerId`): operations and folders use it, and account ids never leave the
+      server.
+    - **Tidbits** are one fact from one dossier area; a rival's event history isn't read.
   - **Still open:** whether the target ever learns of an operation that failed but wasn't caught
     (default: no); a dossier ages by its date only, no visible decay (default).
   - **Before the hotspot reaches the client:** `make_hub_art.py` copies the raw hotspot files to
@@ -1469,9 +1488,10 @@ the outcomes are in each screen's "Implemented" note.
 - **Full-bleed art, no chrome** (user, 2026-10-04, after comparing both mockups). 32 images:
   NASA and Soviet, 4 seasons × 4 times of day (`make_hub_art.py`, cropped from 1088 to 1080 rows
   off the bottom).
-- **Seven buildings** with one hotspot polygon set per archetype (`*.hotspots.json`, authored
+- **Eight buildings** with one hotspot polygon set per archetype (`*.hotspots.json`, authored
   with `HotspotEditor`; one set fits every variant): VAB, Mission Control, Astronaut Complex,
-  SET Centre, Public Affairs Office, Headquarters, Museum. Hover is a hard-edged near-white
+  SET Centre, Public Affairs Office, Headquarters, Museum, and the Intelligence Office (2026-10-07,
+  §2.9; drawn by the user, a different building on each archetype's art). Hover is a hard-edged near-white
   highlight (fill and outline at the same 0.18 alpha) with a label. Every building also shows a
   marker icon (built 2026-10-05; a gold gear while upgrading).
 - **Season art follows the game season; time of day is a client-only ambience:** it steps
@@ -1697,9 +1717,10 @@ next is the next play test.
 
 **Intelligence** (designed 2026-10-07, §2.9): an eighth building, the Intelligence Office, with a
 level dial (0 to 3, one step a season), actions per season equal to the level, passives, the
-background check on the hire screen, agency assessments and personnel files. Next: mock up its
-screens (`ui-spec.md` §4.15), the user's hotspot polygons, then build. The personnel file's
-loyalty band waits for phase 4.
+background check on the hire screen, agency assessments and personnel files. Mocked up on the
+canvas `Launch Window — Intelligence Office` and built (2026-10-07), with the user's hotspot
+polygons. The personnel file's loyalty band and ambition wait for phase 4. **Reset the dev data
+root** before the next play test (new fields on the snapshot and on employees).
 
 ### Later
 

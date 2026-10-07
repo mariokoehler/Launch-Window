@@ -11,7 +11,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
  * a dim marker at its floor. The fill turns green once the R&amp;D ceiling is reached. An R&amp;D
  * board can add a lighter segment after the fill: the reliability its engineers are expected to add
  * next season, and a second, dashed gold marker for a cap a revealed Perfectionist raises while on
- * the team (People canvas, 2026-10-07).
+ * the team (People canvas, 2026-10-07). As a <em>range</em> (Intelligence Office canvas, 2026-10-07)
+ * it shows what intelligence learned about a rival's component: a navy band at 42 % between the
+ * bounds with a solid 2 px end at each, no fill from zero, the gold cap kept (the cap is the content
+ * pack's, not a secret).
  *
  * @author Mario Koehler
  */
@@ -33,6 +36,9 @@ public final class ReliabilityBar extends Widget {
     private final Drawable projectedFill;
     private float projected;
     private float raisedCap;
+    private float rangeLow = Float.NaN;
+    private float rangeHigh;
+    private Drawable band;
 
     /**
      * Builds the bar.
@@ -80,6 +86,21 @@ public final class ReliabilityBar extends Widget {
         return this;
     }
 
+    /**
+     * Draws the bar as a range instead of a fill.
+     *
+     * @param ui   the widget kit
+     * @param low  the range's low end
+     * @param high the range's high end
+     * @return this bar
+     */
+    public ReliabilityBar range(UiKit ui, double low, double high) {
+        this.rangeLow = (float) low;
+        this.rangeHigh = (float) high;
+        this.band = ui.solid(new Color(Theme.NAVY.r, Theme.NAVY.g, Theme.NAVY.b, 0.42f));
+        return this;
+    }
+
     @Override
     public float getPrefHeight() {
         return CAP_MARKER_HEIGHT;
@@ -97,6 +118,16 @@ public final class ReliabilityBar extends Widget {
         float width = getWidth();
         float trackY = getY() + (getHeight() - TRACK_HEIGHT) / 2f;
         track.draw(batch, getX(), trackY, width, TRACK_HEIGHT);
+        if (!Float.isNaN(rangeLow)) {
+            float lowX = getX() + width * Math.min(1f, rangeLow / max);
+            float highX = getX() + width * Math.min(1f, rangeHigh / max);
+            band.draw(batch, lowX, trackY, Math.max(2f, highX - lowX), TRACK_HEIGHT);
+            fill.draw(batch, lowX, trackY, 2f, TRACK_HEIGHT);
+            fill.draw(batch, highX - 2f, trackY, 2f, TRACK_HEIGHT);
+            float capX = getX() + width * Math.min(1f, rdCap / max);
+            capMarker.draw(batch, capX - 1f, getY() + (getHeight() - CAP_MARKER_HEIGHT) / 2f, 2f, CAP_MARKER_HEIGHT);
+            return;
+        }
         boolean raised = raisedCap > rdCap;
         boolean capped = current >= (raised ? raisedCap : rdCap);
         if (projected > current) {

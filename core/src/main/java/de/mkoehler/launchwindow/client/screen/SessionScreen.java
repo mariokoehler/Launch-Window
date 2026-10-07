@@ -131,6 +131,13 @@ abstract class SessionScreen extends StageScreen {
     }
 
     /**
+     * Goes to the Intelligence Office's overview.
+     */
+    protected void goIntelligenceOffice() {
+        game.setScreen(new IntelligenceOfficeScreen(game, IntelligenceOfficeScreen.Tab.OVERVIEW));
+    }
+
+    /**
      * Goes to the Museum, on the race.
      */
     protected void goMuseum() {

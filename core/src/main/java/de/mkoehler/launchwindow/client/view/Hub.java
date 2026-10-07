@@ -17,7 +17,7 @@ import java.util.Objects;
 
 /**
  * The Space Complex hub's view logic ({@code ui-spec.md} &sect;4.3, {@code design.md} &sect;3.13):
- * its seven places, their hotspot polygons, which art to show, and the time-of-day clock.
+ * its eight places, their hotspot polygons, which art to show, and the time-of-day clock.
  *
  * @author Mario Koehler
  */
@@ -45,7 +45,8 @@ public final class Hub {
         SET_CENTRE("SET Centre", "The SET Centre", Building.SET_CENTER, "set_employees"),
         PUBLIC_AFFAIRS_OFFICE("Public Affairs Office", "The Public Affairs Office", null, "funds"),
         HEADQUARTERS("Headquarters", "Headquarters", Building.HEADQUARTERS, "open_programs"),
-        MUSEUM("Museum", "The Museum", null, "trophy");
+        MUSEUM("Museum", "The Museum", null, "trophy"),
+        INTELLIGENCE_OFFICE("Intelligence Office", "The Intelligence Office", null, "binoculars");
 
         private final String label;
         private final String inSentence;
@@ -90,7 +91,8 @@ public final class Hub {
         /**
          * Returns the capped building this place is, if any.
          *
-         * @return the building, or {@code null} for the Public Affairs Office and the Museum
+         * @return the building, or {@code null} for the Public Affairs Office, the Museum and the
+         *         Intelligence Office
          */
         public Building building() {
             return building;

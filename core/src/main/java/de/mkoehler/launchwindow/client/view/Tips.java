@@ -153,6 +153,17 @@ public final class Tips {
     }
 
     /**
+     * Returns the footer Intelligence Office chip's tooltip.
+     *
+     * @return the tip
+     */
+    public static Tip intelligence() {
+        return new Tip("Intelligence: level · actions used", "The Intelligence Office's level, the target it's "
+            + "moving to when that differs, and this season's actions used of those the level gives. Click to open "
+            + "the Intelligence Office.");
+    }
+
+    /**
      * Returns the footer programs chip's tooltip.
      *
      * @return the tip

@@ -58,6 +58,8 @@ CHROME = {
     "trait_team": '',
     "rel_good": '<circle cx="8.5" cy="12" r="5.5"/><circle cx="15.5" cy="12" r="5.5"/>',
     "rel_clash": '<path d="M13.5 2.5L5.5 13.5h6l-1.5 8 8.5-11.5h-6z"/>',
+    # The Intelligence Office (Intelligence Office canvas, 2026-10-07): marker, footer, check button.
+    "binoculars": '<path d="M2.6 15.5 4.6 6.6A2 2 0 0 1 6.5 5h1.6A1.5 1.5 0 0 1 9.6 6.5V13"/><path d="M21.4 15.5 19.4 6.6A2 2 0 0 0 17.5 5h-1.6a1.5 1.5 0 0 0-1.5 1.5V13"/><path d="M9.6 9.5h4.8"/><circle cx="6.3" cy="16.5" r="3.8"/><circle cx="17.7" cy="16.5" r="3.8"/>',
 }
 
 # The astronaut glyph's antenna tip is a filled dot.

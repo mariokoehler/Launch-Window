@@ -80,6 +80,10 @@ public final class TurnReportScreen extends ChromeScreen {
         Table second = column();
         second.add(rnd(catalog)).row();
         second.add(news(catalog)).row();
+        List<TurnReportView.Line> intelligence = TurnReportView.intelligence(report);
+        if (!intelligence.isEmpty()) {
+            second.add(intelligence(intelligence)).row();
+        }
         Table third = column();
         third.add(people(catalog)).row();
         third.add(budget()).row();
@@ -285,6 +289,30 @@ public final class TurnReportScreen extends ChromeScreen {
             row.add(text).expandX().fillX();
             card.add(row).padBottom(Theme.SPACE_3).row();
         }
+        return card;
+    }
+
+    private Table intelligence(List<TurnReportView.Line> lines) {
+        Table card = section("Intelligence", null);
+        for (TurnReportView.Line line : lines) {
+            Table row = new Table();
+            Image glyph = new Image(ui.icon(line.tone() > 0 ? "check" : line.tone() < 0 ? "close" : "binoculars"),
+                Scaling.fit);
+            glyph.setColor(line.tone() > 0 ? Theme.SUCCESS : line.tone() < 0 ? Theme.DANGER : Theme.INK_MUTED);
+            row.add(glyph).size(14f).top().padRight(Theme.SPACE_2).padTop(2f);
+            Table text = new Table();
+            text.left();
+            text.defaults().left().growX();
+            text.add(ui.label(line.title(), Theme.TextStyle.BODY_STRONG, Theme.INK)).row();
+            text.add(ui.paragraph(line.text(), Theme.TextStyle.BODY_SM, Theme.INK_MUTED));
+            row.add(text).expandX().fillX();
+            card.add(row).padBottom(Theme.SPACE_3).row();
+        }
+        Label open = ui.label("Open the Intelligence Office", Theme.TextStyle.CAPTION, Theme.NAVY);
+        open.setTouchable(com.badlogic.gdx.scenes.scene2d.Touchable.enabled);
+        open.addListener(clicked(() -> game.setScreen(new IntelligenceOfficeScreen(game,
+            IntelligenceOfficeScreen.Tab.FOLDERS))));
+        card.add(open).left().row();
         return card;
     }
 

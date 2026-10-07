@@ -34,7 +34,7 @@ class HubTest {
     }
 
     /**
-     * Each agency has exactly the seven places, every point sits on the cropped art (so the bottom
+     * Each agency has exactly the eight places, every point sits on the cropped art (so the bottom
      * crop cut no polygon), and each label anchor lies inside its own polygon.
      */
     @Test
@@ -43,7 +43,7 @@ class HubTest {
             List<Hub.Hotspot> spots = hotspots(archetype);
             Set<Hub.Place> places = spots.stream().map(Hub.Hotspot::place).collect(Collectors.toSet());
             assertEquals(EnumSet.allOf(Hub.Place.class), places, archetype.name());
-            assertEquals(7, spots.size(), archetype.name());
+            assertEquals(8, spots.size(), archetype.name());
             for (Hub.Hotspot spot : spots) {
                 for (int i = 1; i < spot.vertices().length; i += 2) {
                     assertTrue(spot.vertices()[i] > 0 && spot.vertices()[i] <= Hub.ART_HEIGHT, spot.place().name());

@@ -467,6 +467,35 @@ public final class TurnReportView {
     }
 
     /**
+     * Returns the Intelligence section ({@code design.md} &sect;2.9): the service's level changes,
+     * then every finding, in the order they were applied.
+     *
+     * @param report the report
+     * @return the lines; empty when the service did nothing this season
+     */
+    public static List<Line> intelligence(TurnReport report) {
+        List<Line> lines = new ArrayList<>();
+        for (ResolutionEvent event : report.events()) {
+            if (event instanceof de.mkoehler.launchwindow.rules.IntelligenceLevelChanged changed) {
+                String title = "The Intelligence Office " + (changed.to() > changed.from() ? "grew" : "shrank")
+                    + " to level " + changed.to() + ", " + IntelTexts.levelName(changed.to());
+                String text = changed.debt() ? "The funds didn't cover it, so the service lost a level."
+                    : changed.to() == changed.target() ? "It's at its target now."
+                    : "Target: level " + changed.target() + ".";
+                lines.add(new Line(title, text, changed.debt() ? "Debt" : "Level", changed.debt() ? -1 : 0));
+            }
+        }
+        for (ResolutionEvent event : report.events()) {
+            if (event instanceof de.mkoehler.launchwindow.rules.IntelligenceFound found) {
+                String[] text = IntelTexts.finding(found.finding());
+                lines.add(new Line(text[0], text[1], found.finding().kind().name(),
+                    IntelTexts.tone(found.finding())));
+            }
+        }
+        return lines;
+    }
+
+    /**
      * Returns the people news: traits that came out and relationships that showed, in the order
      * they happened.
      *
@@ -662,7 +691,7 @@ public final class TurnReportView {
         };
     }
 
-    private static String skillLabel(String skill) {
+    static String skillLabel(String skill) {
         String crew = CrewSkills.label(skill);
         try {
             return SetSkills.label(de.mkoehler.launchwindow.model.SetSkill.valueOf(skill));
@@ -697,6 +726,9 @@ public final class TurnReportView {
             lines.add(new BudgetLine("Component maintenance (" + costs.componentCount() + ")", -costs.components()));
             lines.add(new BudgetLine("Program upkeep (" + costs.programCount() + ")", -costs.programs()));
             lines.add(new BudgetLine("Building upkeep", -costs.buildings()));
+            if (costs.intelligence() != 0) {
+                lines.add(new BudgetLine("Intelligence Office", -costs.intelligence()));
+            }
         } else {
             lines.add(new BudgetLine("Running costs", -settled.get().expenses()));
         }

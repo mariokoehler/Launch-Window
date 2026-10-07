@@ -19,6 +19,7 @@ import de.mkoehler.launchwindow.client.ui.ConceptChip;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.view.Concepts;
 import de.mkoehler.launchwindow.client.view.Explainers;
+import de.mkoehler.launchwindow.client.view.IntelTexts;
 import de.mkoehler.launchwindow.client.view.Programs;
 import de.mkoehler.launchwindow.client.view.Tips;
 import de.mkoehler.launchwindow.client.view.SetDepartment;
@@ -84,6 +85,8 @@ abstract class ChromeScreen extends SessionScreen {
     private final Label gameDate;
     private final Label countdown;
     private final Table footer = new Table();
+    private final Label eyebrowLabel;
+    private final Label titleLabel;
 
     /**
      * Builds the chrome.
@@ -106,8 +109,10 @@ abstract class ChromeScreen extends SessionScreen {
         Table titleRow = new Table();
         Table titles = new Table();
         titles.defaults().left();
-        titles.add(ui.label(eyebrow, Theme.TextStyle.EYEBROW, Theme.GOLD_ON_PAGE)).padBottom(Theme.SPACE_1).row();
-        titles.add(ui.label(title, Theme.TextStyle.HEADING_LG, Theme.ON_PAGE_STRONG));
+        eyebrowLabel = ui.label(eyebrow, Theme.TextStyle.EYEBROW, Theme.GOLD_ON_PAGE);
+        titleLabel = ui.label(title, Theme.TextStyle.HEADING_LG, Theme.ON_PAGE_STRONG);
+        titles.add(eyebrowLabel).padBottom(Theme.SPACE_1).row();
+        titles.add(titleLabel);
         titleRow.add(titles).expandX().left().bottom();
         titleRow.add(titleActions).right().bottom();
         root.add(titleRow).padTop(Theme.SPACE_2).padBottom(Theme.SPACE_4).row();
@@ -125,6 +130,17 @@ abstract class ChromeScreen extends SessionScreen {
      * @param action the action
      * @return the button
      */
+    /**
+     * Changes the title row, for a screen whose tabs name what it shows.
+     *
+     * @param eyebrow the eyebrow
+     * @param title   the title
+     */
+    protected void setTitles(String eyebrow, String title) {
+        eyebrowLabel.setText(eyebrow.toUpperCase(Locale.ROOT));
+        titleLabel.setText(title);
+    }
+
     protected TextButton actionButton(String text, Theme.ButtonKind kind, Runnable action) {
         return onClick(ui.button(text, kind), action);
     }
@@ -464,7 +480,9 @@ abstract class ChromeScreen extends SessionScreen {
             this::goMissionControl), Tips.staffCounts("Flight controllers", "Mission Control"))).expandX();
         footer.add(tip(footerStat("open_programs", state.getOpenedProgramIds().size() + " / "
             + catalog.buildings().capacity(Building.HEADQUARTERS, state.buildingLevel(Building.HEADQUARTERS)),
-            this::goHeadquarters), Tips.programs())).expandX().right();
+            this::goHeadquarters), Tips.programs())).expandX();
+        footer.add(tip(footerStat("binoculars", IntelTexts.footer(state), this::goIntelligenceOffice),
+            Tips.intelligence())).expandX().right();
     }
 
     private static String counts(List<? extends Personnel> roster, ContentCatalog catalog, PlayerSnapshot state,

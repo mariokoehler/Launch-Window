@@ -390,6 +390,154 @@ public final class ScreenSnapshot {
         startSession(game, none, info);
         write(folder, "hq-plan-mission-empty.png", new de.mkoehler.launchwindow.client.screen.PlanMissionScreen(game),
             null);
+
+        intelligenceShots(folder, game);
+    }
+
+    /**
+     * The Intelligence Office canvas (2026-10-07): the overview at level 2 climbing to 3 and at level
+     * 0, an assessment being picked, a rival's folder and an empty one, the hire screen's background
+     * check, the hub's new building, and the turn report's Intelligence section.
+     */
+    private static void intelligenceShots(File folder, LaunchWindowGame game) {
+        String hash = ContentPackHash.ofClasspath("content/early-era", ScreenSnapshot.class.getClassLoader());
+        GameInfoResponse info = GameInfoResponse.success("early-era", hash, DECLARED, 31, true,
+            6 * 3_600_000L + 12 * 60_000L, 0L, null, List.of(), List.of(), 0);
+        PlayerSnapshot state = new PlayerSnapshot("Orion Spaceworks", Archetype.NASA, 21_640, 4_310, 3_000, 31);
+        state.setDirectorName("A. Reyes");
+        de.mkoehler.launchwindow.model.IntelligenceState intel = state.getIntelligence();
+        intel.setLevel(2);
+        intel.setTargetLevel(3);
+        intel.setActionsUsed(1);
+        intel.getQueued().add(new de.mkoehler.launchwindow.model.IntelOperation("op7",
+            de.mkoehler.launchwindow.model.IntelOperation.Kind.ASSESSMENT, "kSever",
+            de.mkoehler.launchwindow.model.IntelArea.RND, null, null));
+        intel.setNextOperationId(8);
+
+        PlayerSnapshot pool = new PlayerSnapshot("Sever Design Bureau", Archetype.SOVIET, 0, 0, 0, 1);
+        HiringPool.refreshCandidates(pool, new java.util.SplittableRandom(11));
+        de.mkoehler.launchwindow.model.RivalFolder sever = intel.folder("kSever", "Sever Design Bureau");
+        sever.learnLevel(1, 30, de.mkoehler.launchwindow.model.RivalFolder.FROM_DOSSIER);
+        sever.getDossiers().put(de.mkoehler.launchwindow.model.IntelArea.RND, new de.mkoehler.launchwindow.model.Dossier(
+            de.mkoehler.launchwindow.model.IntelArea.RND, 29, List.of(
+                fact("COMPONENT_RELIABILITY", "r7-sputnik", 72, 92, 0),
+                fact("COMPONENT_RELIABILITY", "r7-vostok", 70, 90, 0),
+                fact("COMPONENT_RELIABILITY", "sputnik-1-satellite", 80, 92, 0),
+                fact("COMPONENT_RELIABILITY", "sputnik-2-satellite", 76, 94, 0),
+                fact("COMPONENT_RELIABILITY", "vostok-capsule", 64, 84, 0))));
+        sever.getDossiers().put(de.mkoehler.launchwindow.model.IntelArea.PLANS, new de.mkoehler.launchwindow.model.Dossier(
+            de.mkoehler.launchwindow.model.IntelArea.PLANS, 30, List.of(
+                fact("OPEN_PROGRAM", "sputnik-2", 0, 0, 0), fact("OPEN_PROGRAM", "vostok", 0, 0, 0),
+                fact("IN_FLIGHT", "vostok-orbital", 0, 0, 0),
+                fact("RD_FOCUS", "vostok-capsule", 0, 0, 3), fact("RD_FOCUS", "r7-vostok", 0, 0, 2),
+                fact("SHELF", "sputnik-2-satellite", 0, 0, 0), fact("INTEL_LEVEL", "", 0, 0, 1))));
+        for (int i = 0; i < 2; i++) {
+            Personnel person = i == 0 ? pool.getSetSpecialistCandidates().get(2) : pool.getAstronautCandidates().get(4);
+            String group = i == 0 ? "SET" : "ASTRONAUT";
+            List<de.mkoehler.launchwindow.model.IntelFact> skills = i == 0
+                ? List.of(fact("SKILL", "CREWED_SPACECRAFT", 66, 76, 0), fact("SKILL", "ROCKETS", 52, 62, 0),
+                    fact("SKILL", "SPACE_PROBES", 40, 50, 0), fact("SKILL", "EVA_SUITS", 22, 32, 0))
+                : List.of(fact("SKILL", "LEADERSHIP", 80, 90, 0), fact("SKILL", "PILOTING", 74, 84, 0),
+                    fact("SKILL", "EVA", 61, 71, 0), fact("SKILL", "SCIENCE", 30, 40, 0));
+            sever.getPersonnelFiles().add(new de.mkoehler.launchwindow.model.PersonnelFile(person.getId(),
+                person.getName(), person.getPortraitId(), group, person.getAge(), 28, skills,
+                i == 0 ? de.mkoehler.launchwindow.model.Trait.AMBITIOUS : de.mkoehler.launchwindow.model.Trait.GLORY_SEEKER));
+        }
+        sever.getTidbits().add(new de.mkoehler.launchwindow.model.Tidbit(28, fact("RD_FOCUS", "r7-vostok", 0, 0, 2)));
+        sever.getTidbits().add(new de.mkoehler.launchwindow.model.Tidbit(29, fact("HEADCOUNT", "ASTRONAUT", 0, 0, 7)));
+        sever.getTidbits().add(new de.mkoehler.launchwindow.model.Tidbit(30,
+            fact("COMPONENT_RELIABILITY", "r7-sputnik", 72, 92, 0)));
+        sever.getCatches().add(new de.mkoehler.launchwindow.model.IntelCatch(28, true,
+            de.mkoehler.launchwindow.model.IntelOperation.Kind.PERSONNEL_FILE, null, 1));
+        de.mkoehler.launchwindow.model.RivalFolder meridian = intel.folder("kMeridian", "Meridian Rocket Society");
+        meridian.getCatches().add(new de.mkoehler.launchwindow.model.IntelCatch(29, false,
+            de.mkoehler.launchwindow.model.IntelOperation.Kind.ASSESSMENT, de.mkoehler.launchwindow.model.IntelArea.RND, 1));
+        meridian.learnLevel(1, 29, de.mkoehler.launchwindow.model.RivalFolder.FROM_A_CATCH);
+        meridian.getDossiers().put(de.mkoehler.launchwindow.model.IntelArea.PLANS,
+            new de.mkoehler.launchwindow.model.Dossier(de.mkoehler.launchwindow.model.IntelArea.PLANS, 27, List.of(
+                fact("OPEN_PROGRAM", "explorer-1", 0, 0, 0), fact("OPEN_PROGRAM", "mercury", 0, 0, 0),
+                fact("RD_FOCUS", "mercury-capsule", 0, 0, 4), fact("INTEL_LEVEL", "", 0, 0, 1))));
+        de.mkoehler.launchwindow.model.RivalFolder aurora = intel.folder("kAurora", "Aurora Bureau");
+        aurora.getTidbits().add(new de.mkoehler.launchwindow.model.Tidbit(29, fact("OPEN_PROGRAM", "vostok", 0, 0, 0)));
+
+        startSession(game, state, info);
+        List<RivalSummary> rivals = List.of(
+            RivalSummary.of("Orion Spaceworks", "A. Reyes", Archetype.NASA, true, Map.of("earth-orbit-satellite", 9),
+                "kMe"),
+            RivalSummary.of("Sever Design Bureau", "Tamara Abenova", Archetype.SOVIET, false,
+                Map.of("earth-orbit-satellite", 8, "human-in-space", 20), "kSever"),
+            RivalSummary.of("Aurora Bureau", "Levan Gelashvili", Archetype.SOVIET, false,
+                Map.of("earth-orbit-satellite", 10), "kAurora"),
+            RivalSummary.of("Meridian Rocket Society", "Walter Krueger", Archetype.NASA, false,
+                Map.of("earth-orbit-satellite", 12), "kMeridian"));
+        game.session().keepRivals(rivals);
+        TurnReport report = new TurnReport(TurnReport.VERSION, 30, 4_310, 4_310, 21_000, 21_640, List.of(), List.of(),
+            List.of(
+                new de.mkoehler.launchwindow.rules.IntelligenceLevelChanged(1, 2, 3, false),
+                new de.mkoehler.launchwindow.rules.IntelligenceFound(new de.mkoehler.launchwindow.rules.IntelFinding(
+                    de.mkoehler.launchwindow.rules.IntelFinding.Kind.DOSSIER, "op5",
+                    de.mkoehler.launchwindow.model.IntelOperation.Kind.ASSESSMENT, "kSever", "Sever Design Bureau",
+                    de.mkoehler.launchwindow.model.IntelArea.PLANS, sever.getDossiers().get(
+                        de.mkoehler.launchwindow.model.IntelArea.PLANS), null, null, 1)),
+                new de.mkoehler.launchwindow.rules.IntelligenceFound(new de.mkoehler.launchwindow.rules.IntelFinding(
+                    de.mkoehler.launchwindow.rules.IntelFinding.Kind.FAILED, "op6",
+                    de.mkoehler.launchwindow.model.IntelOperation.Kind.ASSESSMENT, "kAurora", "Aurora Bureau",
+                    de.mkoehler.launchwindow.model.IntelArea.RND, null, null, null, -1)),
+                new de.mkoehler.launchwindow.rules.IntelligenceFound(new de.mkoehler.launchwindow.rules.IntelFinding(
+                    de.mkoehler.launchwindow.rules.IntelFinding.Kind.TIDBIT, null, null, "kSever",
+                    "Sever Design Bureau", de.mkoehler.launchwindow.model.IntelArea.RND, null, null,
+                    sever.getTidbits().getLast(), -1))));
+        game.session().keepReport(report);
+        write(folder, "intel-overview.png", new de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen(game,
+            de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen.Tab.OVERVIEW), null);
+        write(folder, "intel-operations.png", new de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen(game,
+            de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen.Tab.OPERATIONS), screen -> {
+                screen.pickRival("kMeridian");
+                screen.pickArea(de.mkoehler.launchwindow.model.IntelArea.PLANS);
+            });
+        write(folder, "intel-folders.png", new de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen(game,
+            de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen.Tab.FOLDERS),
+            screen -> screen.openFolder("kSever"));
+        write(folder, "intel-folders-tidbits-only.png", new de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen(
+            game, de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen.Tab.FOLDERS),
+            screen -> screen.openFolder("kAurora"));
+        write(folder, "intel-report.png", new TurnReportScreen(game, report), null);
+        write(folder, "intel-hub-hover.png", new SpaceComplexScreen(game),
+            screen -> screen.hover(Hub.Place.INTELLIGENCE_OFFICE));
+
+        PlayerSnapshot none = new PlayerSnapshot("Orion Spaceworks", Archetype.NASA, 21_640, 4_310, 3_000, 31);
+        none.setDirectorName("A. Reyes");
+        startSession(game, none, info);
+        game.session().keepRivals(rivals);
+        write(folder, "intel-overview-empty.png", new de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen(
+            game, de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen.Tab.OVERVIEW), null);
+        write(folder, "intel-operations-locked.png", new de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen(
+            game, de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen.Tab.OPERATIONS), null);
+
+        // The hire screen at level 1: a check answered, passive finds (a trait and "no notable
+        // traits"), and the check button.
+        PlayerSnapshot hiring = setCentreState();
+        hiring.getIntelligence().setLevel(1);
+        hiring.getIntelligence().setTargetLevel(1);
+        List<SetSpecialist> candidates = hiring.getSetSpecialistCandidates();
+        candidates.get(0).setTraits(List.of(new de.mkoehler.launchwindow.model.TraitState(
+            de.mkoehler.launchwindow.model.Trait.WORKAHOLIC, 0, true)));
+        candidates.get(0).setIntelFind(Personnel.FIND_CHECK);
+        candidates.get(1).setTraits(List.of(new de.mkoehler.launchwindow.model.TraitState(
+            de.mkoehler.launchwindow.model.Trait.STEADY, 0, true)));
+        candidates.get(1).setIntelFind(Personnel.FIND_PASSIVE);
+        candidates.get(3).setTraits(List.of());
+        candidates.get(3).setIntelFind(Personnel.FIND_PASSIVE);
+        candidates.get(3).setIntelExhausted(true);
+        startSession(game, hiring, info);
+        write(folder, "intel-hire-free.png", new HireScreen(game), null);
+        game.session().state().getIntelligence().setActionsUsed(1);
+        write(folder, "intel-hire-used.png", new HireScreen(game), screen -> screen.toggle(candidates.get(0).getId()));
+    }
+
+    private static de.mkoehler.launchwindow.model.IntelFact fact(String kind, String ref, int low, int high, int count) {
+        return new de.mkoehler.launchwindow.model.IntelFact(de.mkoehler.launchwindow.model.IntelFact.Kind.valueOf(kind),
+            ref, low, high, count);
     }
 
     /**

@@ -55,11 +55,10 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   the canvas `Launch Window — People` (`ui-spec.md` components 20 to 22, §4.14). Two rules
   findings from that canvas and the memorial page wait for the user (`design.md` §2.2(d)). Reset
   the dev data root before the next play test (new fields on employees).
-- **Intelligence is designed** (`design.md` §2.9, 2026-10-07), not built: no sabotage, an eighth
-  building (the Intelligence Office, hotspot `INTELLIGENCE_OFFICE`), a level dial with actions and
-  passives. Its screens (`ui-spec.md` §4.15) and the hire screen's background check are mocked up
-  on the canvas `Launch Window — Intelligence Office` (the Artifact tool's list finds it), look
-  unconfirmed.
+- **Intelligence is built** (`design.md` §2.9, 2026-10-07): no sabotage, an eighth building
+  (the Intelligence Office), a level dial with actions and passives, from the canvas
+  `Launch Window — Intelligence Office` (`ui-spec.md` §4.15). Reset the dev data root before the
+  next play test (new saved fields).
 - **PR duty for astronauts is built** (`design.md` §2.2(c)), with 39 press stories
   (`assets/content/pr-press.json`), no repeats, and effects beyond prestige. Next is the next
   play test.
@@ -240,6 +239,11 @@ cd assets && java --enable-native-access=ALL-UNNAMED -cp "../lwjgl3/target/class
   (`baspm.md` §10.11).
 - A flight's component reliability *is* stamped at launch (`InProgressMission.launchReliability`,
   `design.md` §2.5(d)); read it through `MissionProgress.flyingReliability`, never the owned value.
+- **Intelligence** is settled once a turn for every player (`IntelligenceBoard`, kept in
+  `data/intelligence/turn-N.json`) and names rivals by `GameSeeds.rivalKey`, never the account
+  id. Its random draws use their own salted seeds; keep them off the season's stream so playouts
+  stay comparable. A new hub building needs its `Hub.Place` before its hotspot reaches `assets/`
+  (`Place.valueOf` throws on an unknown name).
 - A mission's prestige tier is read live, never stamped at launch (simultaneous copies of one
   configuration would all pay first-time).
 

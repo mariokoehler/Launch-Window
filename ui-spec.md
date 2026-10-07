@@ -27,7 +27,7 @@ missions. Decisions from that review are marked *(decided)*.
   screen. Use them for layout ideas and to see what information BASPM showed.
   Never copy their art or text (`design.md` §1.2).
 - `assets-raw/main_menu/`: the hub art, NASA and Soviet, 4 seasons × 4 times of
-  day, plus `<faction>.hotspots.json` with the seven building polygons.
+  day, plus `<faction>.hotspots.json` with the eight building polygons.
 - `assets-raw/backgrounds/solar_system.png`: original art for the celestial-body
   picker (§3.6.2).
 - `assets-raw/Program Categories/`, `assets-raw/Programs/`,
@@ -269,6 +269,11 @@ On the right:
     small line saying where it came from ("Background check, this season" or "Found by the
     Intelligence Office"). Disabled, it greys out with the reason under it. A trait found before
     hiring rides along on the selected recruit's card.
+    *As built (2026-10-07, Intelligence Office canvas):* under the hint, the find (trait chips or a
+    framed "No notable traits") with a binoculars line saying where it came from, then the check
+    button while there's more to find; disabled, it shows the reason under it. A revealed trait
+    rides along on the selected recruit's card. The button shows at level 0 too, disabled, so
+    players learn it exists.
 15. **History note** *(decided 2026-10-04; how it looks is open)*. A small icon
     placed next to a label, field, or value. On mouse-over it shows a short card,
     two to four sentences, about the real history or engineering behind that
@@ -750,7 +755,7 @@ to hire staff (SET Centre first).
 ### 4.3 Space Complex hub (main menu)
 **Purpose:** navigation, and the game's front page. **Shows:** full-screen art for
 the player's archetype, picked by the game season, with the time of day advancing
-every 4 real minutes on re-entry (`design.md` §3.13). The seven building hotspots
+every 4 real minutes on re-entry (`design.md` §3.13). The eight building hotspots
 highlight on hover with a label. A slim overlay strip shows:
 - the agency name and director name;
 - the game date and the next-resolution countdown;
@@ -1532,7 +1537,7 @@ Phase 3 needs the top half; the rest arrives with phase 4.
   keeps no skills, traits or id yet (`design.md` §2.2(d)). The mockup's "Mockup only" switchers and
   dashed phase 4 boxes aren't built.
 
-### 4.15 Intelligence Office *(specified 2026-10-07 for `design.md` §2.9, Intelligence; mocked up the same day)*
+### 4.15 Intelligence Office *(specified 2026-10-07 for `design.md` §2.9, Intelligence; mocked up and built the same day)*
 **Purpose:** the agency's intelligence service: how big it is, what it does this season, and
 everything it has learned about rivals. An **eighth hub building** (polygon `INTELLIGENCE_OFFICE`,
 drawn by the user on both hub images), with a marker and footer icon of its own (proposed:
@@ -1612,6 +1617,15 @@ all **unconfirmed** (each row's yellow note lists them):
   art), the reliability bar as a range band (navy at 42 % with solid ends, the gold cap kept), the
   dossier stamp ("As of Spring 1962", a dashed "Never assessed"), the "may have changed since" tag,
   and the background-check states. No new colour tokens.
+
+*As built (2026-10-07):* `client.screen.IntelligenceOfficeScreen` (tabs in the title row, the title
+naming the tab), `client.view.IntelTexts` for every line, `ReliabilityBar.range`, the
+`binoculars` icon (`make_ui_icons.py`), `Hub.Place.INTELLIGENCE_OFFICE`, the footer chip, the
+report section (`TurnReportView.intelligence`) and an "Intelligence Office" budget line. Differences
+from the mockup: the plans dossier shows R&D focus and hardware not flown yet instead of next
+season's launches (`design.md` §2.9), personnel files show the three best skills, and loyalty and
+ambition are left out until phase 4 with a note saying so. Last season's results come from the
+latest turn report when the client has it.
 
 ---
 

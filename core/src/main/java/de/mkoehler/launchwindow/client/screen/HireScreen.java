@@ -11,18 +11,22 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
+import de.mkoehler.launchwindow.actions.BackgroundCheckAction;
 import de.mkoehler.launchwindow.actions.HireAction;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.connect.ServerResult;
 import de.mkoehler.launchwindow.client.ui.Refusals;
 import de.mkoehler.launchwindow.client.ui.SkillBar;
 import de.mkoehler.launchwindow.client.ui.Theme;
+import de.mkoehler.launchwindow.client.ui.TraitChip;
 import de.mkoehler.launchwindow.client.view.Department;
 import de.mkoehler.launchwindow.client.view.People;
 import de.mkoehler.launchwindow.client.view.Tips;
 import de.mkoehler.launchwindow.content.StaffingSlot;
 import de.mkoehler.launchwindow.model.Personnel;
+import de.mkoehler.launchwindow.model.TraitState;
 import de.mkoehler.launchwindow.rules.HiringPool;
+import de.mkoehler.launchwindow.rules.Intelligence;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -218,8 +222,9 @@ public final class HireScreen extends ChromeScreen {
             ui.tooltip(quote, "A colleague's hint", "A word from someone who worked with this candidate before. A "
                 + "telling hint is true to one of the candidate's traits, but every hint fits several; a plain one "
                 + "proves nothing.");
-            who.add(quote).padTop(Theme.SPACE_2).padLeft(Theme.SPACE_2);
+            who.add(quote).padTop(Theme.SPACE_2).padLeft(Theme.SPACE_2).row();
         }
+        who.add(intelligence(candidate)).padTop(Theme.SPACE_2).padLeft(Theme.SPACE_2);
         inner.add(who).width(190f).left().top().padRight(Theme.SPACE_4);
 
         Table skills = new Table();
@@ -251,6 +256,67 @@ public final class HireScreen extends ChromeScreen {
         inner.add(select).width(96f);
         row.add(inner).expandX().fillX();
         return row;
+    }
+
+    /**
+     * What the Intelligence Office found about a candidate, and the background check
+     * ({@code ui-spec.md} component 14, Intelligence Office canvas, 2026-10-07): a revealed trait or
+     * "No notable traits" with where it came from, then the check button while there's more to find.
+     */
+    private Table intelligence(Personnel candidate) {
+        Table box = new Table();
+        box.left();
+        box.defaults().left();
+        List<TraitState> found = candidate.getTraits().stream().filter(TraitState::revealed).toList();
+        if (candidate.getIntelFind() != null) {
+            Table chips = new Table();
+            if (found.isEmpty()) {
+                Table none = new Table();
+                none.setBackground(ui.rect(Theme.SURFACE_CARD, Theme.NAVY_BORDER, Theme.BORDER_THIN));
+                none.pad(0f, 8f, 0f, 8f);
+                none.add(ui.label("No notable traits", Theme.TextStyle.BODY_SM, Theme.INK_MUTED));
+                chips.add(none).height(TraitChip.HEIGHT).padRight(TraitChip.GAP);
+            }
+            for (TraitState trait : found) {
+                chips.add(new TraitChip(ui, trait.trait())).height(TraitChip.HEIGHT).padRight(TraitChip.GAP);
+            }
+            box.add(chips).padBottom(2f).row();
+            Table source = new Table();
+            Image glyph = new Image(ui.icon("binoculars"), Scaling.fit);
+            glyph.setColor(Theme.INK_MUTED);
+            source.add(glyph).size(11f).padRight(4f);
+            source.add(ui.label(Personnel.FIND_CHECK.equals(candidate.getIntelFind()) ? "Background check, this season"
+                : "Found by the Intelligence Office", Theme.TextStyle.CAPTION, Theme.INK_MUTED));
+            box.add(source).padBottom(Theme.SPACE_1).row();
+        }
+        if (candidate.isIntelExhausted()) {
+            return box;
+        }
+        int level = session.state().getIntelligence().getLevel();
+        int left = Intelligence.actionsLeft(session.state());
+        boolean enabled = level >= Intelligence.CHECK_LEVEL && left > 0;
+        Table button = new Table();
+        button.setBackground(ui.rect(Theme.SURFACE_CARD, enabled ? Theme.NAVY : Theme.NAVY_BORDER, Theme.BORDER_THIN));
+        button.pad(3f, 8f, 3f, 8f);
+        Image glyph = new Image(ui.icon("binoculars"), Scaling.fit);
+        glyph.setColor(enabled ? Theme.NAVY : Theme.INK_MUTED);
+        button.add(glyph).size(12f).padRight(5f);
+        button.add(ui.label("BACKGROUND CHECK", Theme.TextStyle.LABEL, enabled ? Theme.NAVY : Theme.INK_MUTED));
+        box.add(button).row();
+        if (enabled) {
+            box.add(ui.label("uses 1 of " + left + (left == 1 ? " action" : " actions"), Theme.TextStyle.CAPTION,
+                Theme.INK_MUTED)).row();
+            button.setTouchable(Touchable.enabled);
+            button.addListener(clicked(() -> submit(new BackgroundCheckAction(candidate.getId()), result ->
+                toast("Background check done: " + candidate.getName() + ".", Theme.NoticeKind.SUCCESS))));
+            ui.tooltip(button, "Background check", "Reveals one of this candidate's traits at once, or says there are "
+                + "none. Uses one of this season's intelligence actions and can't be undone.");
+        } else {
+            box.add(ui.paragraph(level < Intelligence.CHECK_LEVEL ? "Needs the Intelligence Office at level "
+                + Intelligence.CHECK_LEVEL : "No intelligence action left this season", Theme.TextStyle.CAPTION,
+                Theme.INK_MUTED)).width(170f).row();
+        }
+        return box;
     }
 
     private Table recruitsPanel(List<? extends Personnel> pool) {
@@ -291,6 +357,12 @@ public final class HireScreen extends ChromeScreen {
             String hint = People.hintQuote(recruit.getHint());
             who.add(ui.label(String.format(Locale.ROOT, "AGE %d · $ %.1f", recruit.getAge(), recruit.getSalary())
                 + (hint == null ? "" : " · a former colleague: " + hint), Theme.TextStyle.CAPTION, Theme.INK_MUTED));
+            for (TraitState trait : recruit.getTraits()) {
+                if (trait.revealed()) {
+                    who.row();
+                    who.add(new TraitChip(ui, trait.trait())).height(TraitChip.HEIGHT).padTop(Theme.SPACE_1);
+                }
+            }
             inner.add(who).expandX().left();
             inner.add(button("Remove", Theme.ButtonKind.DESTRUCTIVE, () -> toggle(recruit.getId()))).row();
             inner.add(bonusToggle(recruit)).colspan(3).left().padTop(Theme.SPACE_2);
