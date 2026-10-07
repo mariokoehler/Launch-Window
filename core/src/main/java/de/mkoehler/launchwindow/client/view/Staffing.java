@@ -163,15 +163,39 @@ public final class Staffing {
         for (int slot : configuration.usedCrewSlots()) {
             String skill = crew.getOrDefault(slot, Map.of()).entrySet().stream().max(Map.Entry.comparingByValue())
                 .map(Map.Entry::getKey).orElse(null);
-            seats.add(new String[] {configuration.crewSlots().get(slot), skill == null ? "" : CrewSkills.label(skill)});
+            seats.add(new String[] {title(configuration.crewSlots().get(slot)),
+                skill == null ? "" : CrewSkills.label(skill)});
         }
         for (int slot : configuration.usedControlSlots()) {
             StaffingSlot seat = configuration.controlSlots().get(slot);
             String skill = StaffingSlot.FLIGHT_DIRECTOR.equals(seat.skill()) ? "all five skills, averaged"
                 : CrewSkills.label(seat.skill());
-            seats.add(new String[] {seat.title() + (seat.kind() == StaffingSlot.Kind.ASTRONAUT ? " (an astronaut)"
-                : ""), skill});
+            seats.add(new String[] {title(seat.title()) + (seat.kind() == StaffingSlot.Kind.ASTRONAUT
+                ? " (an astronaut)" : ""), skill});
         }
         return seats;
+    }
+
+    /** Console call signs, written in capitals as they always were. */
+    private static final java.util.Set<String> CALL_SIGNS = java.util.Set.of("CAPCOM", "FIDO", "GUIDO", "RETRO");
+
+    /**
+     * Returns a seat title in normal case ("COSMONAUT A" reads "Cosmonaut A", "FLIGHT DIRECTOR"
+     * reads "Flight director"); call signs and single letters stay in capitals.
+     *
+     * @param title the pack's title
+     * @return the title
+     */
+    static String title(String title) {
+        String[] words = title.trim().split("\s+");
+        StringBuilder out = new StringBuilder();
+        for (int i = 0; i < words.length; i++) {
+            String word = words[i];
+            String shown = CALL_SIGNS.contains(word) || word.length() == 1 ? word
+                : i == 0 ? word.charAt(0) + word.substring(1).toLowerCase(java.util.Locale.ROOT)
+                : word.toLowerCase(java.util.Locale.ROOT);
+            out.append(i == 0 ? "" : " ").append(shown);
+        }
+        return out.toString();
     }
 }

@@ -80,4 +80,13 @@ class StaffingTest {
             seats.size());
         seats.forEach(seat -> assertFalse(seat[1].isBlank(), seat[0]));
     }
+
+    @Test
+    void seatTitlesReadInNormalCaseButCallSignsStay() {
+        assertEquals("Cosmonaut A", Staffing.title("COSMONAUT A"));
+        assertEquals("Flight director", Staffing.title("FLIGHT DIRECTOR"));
+        assertEquals("Spacecraft systems", Staffing.title("SPACECRAFT SYSTEMS"));
+        assertEquals("RETRO", Staffing.title("RETRO"));
+        assertEquals("CAPCOM", Staffing.title("CAPCOM"));
+    }
 }
