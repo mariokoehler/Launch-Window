@@ -1125,6 +1125,11 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
       `RivalSummary.playerId`): operations and folders use it, and account ids never leave the
       server.
     - **Tidbits** are one fact from one dossier area; a rival's event history isn't read.
+    - **Folders are capped** (12 tidbits, 8 personnel files, 10 catches per rival, oldest
+      dropped): they travel in the player's state, which isn't gzipped like the turn report, so
+      Kryo's 64 KB object buffer applies. Five rivals at every cap add about 10 KB
+      (`IntelligenceWireTest`). The snapshot as a whole grows over a long game too; gzipping it
+      like the report is the fix if it ever comes close.
   - **Still open:** whether the target ever learns of an operation that failed but wasn't caught
     (default: no); a dossier ages by its date only, no visible decay (default).
   - **Before the hotspot reaches the client:** `make_hub_art.py` copies the raw hotspot files to

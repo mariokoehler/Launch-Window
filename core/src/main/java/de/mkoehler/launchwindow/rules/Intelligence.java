@@ -61,6 +61,13 @@ public final class Intelligence {
     public static final long CAUGHT_PRESTIGE = 20;
     /** The tidbits kept per folder; older ones drop off. */
     public static final int TIDBITS_KEPT = 12;
+    /**
+     * The personnel files kept per folder; the oldest drops off. Folders travel in the player's
+     * state, which isn't gzipped, so every list in them is capped (Kryo's 64 KB object buffer).
+     */
+    public static final int FILES_KEPT = 8;
+    /** The catches kept per folder, both ways; the oldest drops off. */
+    public static final int CATCHES_KEPT = 10;
 
     private static final long CANDIDATE_SALT = 0x1A7E_5EC0_C0DE_1961L;
 
@@ -359,27 +366,34 @@ public final class Intelligence {
             case PERSONNEL_FILE -> {
                 folder.getPersonnelFiles().removeIf(file -> file.personId().equals(finding.file().personId()));
                 folder.getPersonnelFiles().add(finding.file());
+                trim(folder.getPersonnelFiles(), FILES_KEPT);
             }
             case TIDBIT -> {
                 folder.getTidbits().add(finding.tidbit());
-                while (folder.getTidbits().size() > TIDBITS_KEPT) {
-                    folder.getTidbits().removeFirst();
-                }
+                trim(folder.getTidbits(), TIDBITS_KEPT);
             }
             case CAUGHT -> {
                 snapshot.setPrestige(Math.max(0, snapshot.getPrestige() - CAUGHT_PRESTIGE));
                 folder.getCatches().add(new IntelCatch(gameTurn, true, finding.operationKind(), finding.area(),
                     finding.level()));
                 folder.learnLevel(finding.level(), gameTurn, RivalFolder.FROM_BEING_CAUGHT);
+                trim(folder.getCatches(), CATCHES_KEPT);
             }
             case CAUGHT_THEIRS -> {
                 folder.getCatches().add(new IntelCatch(gameTurn, false, finding.operationKind(), finding.area(),
                     finding.level()));
                 folder.learnLevel(finding.level(), gameTurn, RivalFolder.FROM_A_CATCH);
+                trim(folder.getCatches(), CATCHES_KEPT);
             }
             case FAILED, NO_TARGET, NOT_SETTLED -> {
                 // Nothing learned.
             }
+        }
+    }
+
+    private static void trim(List<?> list, int kept) {
+        while (list.size() > kept) {
+            list.removeFirst();
         }
     }
 

@@ -291,6 +291,24 @@ class IntelligenceTest {
     }
 
     @Test
+    void foldersKeepOnlyTheNewestFilesAndCatches() {
+        PlayerSnapshot spy = agency("Spy Bureau", 3);
+        for (int i = 0; i < Intelligence.FILES_KEPT + 3; i++) {
+            IntelFinding file = new IntelFinding(IntelFinding.Kind.PERSONNEL_FILE, "op" + i,
+                IntelOperation.Kind.PERSONNEL_FILE, "target", "Target Works", null, null,
+                new de.mkoehler.launchwindow.model.PersonnelFile("p" + i, "P " + i, null, "SET", 30, i, List.of(), null),
+                null, -1);
+            IntelFinding theirs = new IntelFinding(IntelFinding.Kind.CAUGHT_THEIRS, null, IntelOperation.Kind.ASSESSMENT,
+                "target", "Target Works", IntelArea.RND, null, null, null, 2);
+            Intelligence.advanceSeason(spy, List.of(file, theirs), i + 1);
+        }
+        RivalFolder folder = spy.getIntelligence().getFolders().get("target");
+        assertEquals(Intelligence.FILES_KEPT, folder.getPersonnelFiles().size());
+        assertEquals("p" + (Intelligence.FILES_KEPT + 2), folder.getPersonnelFiles().getLast().personId());
+        assertTrue(folder.getCatches().size() <= Intelligence.CATCHES_KEPT);
+    }
+
+    @Test
     void aSeasonPassAtLevelZeroDoesNothing() {
         PlayerSnapshot snapshot = agency("A", 0);
         assertTrue(Intelligence.advanceSeason(snapshot, List.of(), 1).isEmpty());

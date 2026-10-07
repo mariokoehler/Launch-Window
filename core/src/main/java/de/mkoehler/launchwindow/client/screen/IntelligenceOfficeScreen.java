@@ -686,7 +686,7 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
         text.defaults().left();
         text.add(ui.label(rival.agencyName(), Theme.TextStyle.BODY_STRONG, Theme.INK)).row();
         text.add(ui.label("Dir. " + rival.directorName() + " · " + Museum.archetype(rival.archetype()) + " · "
-            + rival.goalTurns().size() + " goals reached", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).row();
+            + goals(rival) + " reached", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).row();
         text.add(ui.paragraph(IntelTexts.oddsSource(folder), Theme.TextStyle.CAPTION, Theme.INK_MUTED)).growX();
         option.add(text).expandX().fillX().padRight(Theme.SPACE_3);
         Table odds = new Table();
@@ -885,7 +885,7 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
         tab.add(ui.label(name, Theme.TextStyle.BODY_STRONG, Theme.INK)).row();
         Optional<RivalSummary> summary = rival(key);
         summary.ifPresent(rival -> tab.add(ui.label("Dir. " + rival.directorName() + " · "
-            + Museum.archetype(rival.archetype()) + " · " + rival.goalTurns().size() + " goals", Theme.TextStyle.CAPTION,
+            + Museum.archetype(rival.archetype()) + " · " + goals(rival), Theme.TextStyle.CAPTION,
             Theme.INK_MUTED)).row());
         tab.add(ui.label(folder == null || folder.getKnownLevel() < 0 ? "Intelligence level unknown"
             : "Level " + folder.getKnownLevel() + " as of " + Museum.date(folder.getKnownLevelTurn()),
@@ -923,7 +923,7 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
         header.add(ui.label("FOLDER", Theme.TextStyle.EYEBROW, Theme.GOLD_TEXT)).row();
         header.add(ui.label(name, Theme.TextStyle.HEADING_LG, Theme.INK)).padBottom(Theme.SPACE_1).row();
         rival(key).ifPresent(rival -> header.add(ui.label("Dir. " + rival.directorName() + " · "
-            + Museum.archetype(rival.archetype()) + " archetype · " + rival.goalTurns().size() + " goals reached",
+            + Museum.archetype(rival.archetype()) + " archetype · " + goals(rival) + " reached",
             Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).padBottom(Theme.SPACE_2).row());
         header.add(ui.label(IntelTexts.knownLevel(folder), Theme.TextStyle.BODY_STRONG, Theme.INK)).row();
         if (folder != null && folder.getKnownLevel() >= 0) {
@@ -1175,6 +1175,11 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
         }
         intel().getFolders().forEach((key, folder) -> names.putIfAbsent(key, folder.getAgencyName()));
         return names;
+    }
+
+    private static String goals(RivalSummary rival) {
+        int count = rival.goalTurns().size();
+        return count + (count == 1 ? " goal" : " goals");
     }
 
     private String agencyName(String key) {
