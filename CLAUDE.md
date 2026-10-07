@@ -43,13 +43,13 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
 - **The decisions checklist came back on 2026-10-06,** was merged into the docs, and its code
   work is built (`design.md` §5, Backlog). Reset the dev data root before the next play test: the
   pack hash changed.
-- **Explainers** (`ui-spec.md` component 18, `design.md` §1.1): E-01 to E-05 are mocked up on
-  the canvas `Launch Window — Explainers` (the Artifact tool's list finds it). All five are built, in the
+- **Explainers** (`ui-spec.md` component 18, `design.md` §1.1): E-01 to E-19 are mocked up on
+  the canvas `Launch Window — Explainers` (the Artifact tool's list finds it). All 19 are built, in the
   Museum's Encyclopedia tab, with every figure checked. Players will reach them through concept
   chips on the program, configuration and rocket screens (`ui-spec.md` component 19; the audit
   is in `design.md` §1.1). The chips are mocked up on the same canvas's bottom row and built in
-  libGDX (2026-10-07); their look is confirmed. E-06 to E-19 are mocked up on the same
-  canvas (2026-10-07), not built and not fact-checked: each row's yellow note lists what to verify.
+  libGDX (2026-10-07); their look is confirmed. Open: E-14's tie-in (the game has no latitude
+  rule), the user's call.
 - **PR duty for astronauts is built** (`design.md` §2.2(c)), with 39 press stories
   (`assets/content/pr-press.json`), no repeats, and effects beyond prestige. Next is the next
   play test.
@@ -183,6 +183,9 @@ cd assets && java --enable-native-access=ALL-UNNAMED -cp "../lwjgl3/target/class
   missing or stale PNGs, which make a diff look clean.
 - **A snapshot block that calls `game.setSession`** changes the session for every shot after
   it: add new blocks at the end.
+- **Shots read content and label JSON from the classpath** (`lwjgl3/target/classes`): after
+  changing anything under `assets/content/` or a drawing's labels, run `mvn -q -pl lwjgl3
+  test-compile` again, or the shots show the old text while the PNGs are new.
 - **Shots render with no time passing:** a tooltip needs `ScreenSnapshot.showTooltip`, and the
   waiting chip a `render(0.6f)` first.
 

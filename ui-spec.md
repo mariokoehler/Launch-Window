@@ -249,7 +249,7 @@ On the right:
       (the five skills plus Flight Director, best first; click the active one again for roster
       order). The overview's FD cell already existed.
 18. **Explainer** *(mocked up 2026-10-06, the user's idea; E-01 built in libGDX the same day as
-    `client.screen.ExplainerScreen`, E-02 to E-05 on 2026-10-07; the triggers unconfirmed)*. A short series
+    `client.screen.ExplainerScreen`, E-02 to E-19 on 2026-10-07)*. A short series
     of full-screen "infographic" sheets that explain an aerospace idea as it comes up in play. It's the third kind of help, beside the tooltip
     (what a game thing means) and the history note (what really happened): an explainer says
     **how and why something works** in the real world.
@@ -308,10 +308,11 @@ On the right:
       2. *Steering with small jets:* one craft from above, turning, sliding and stopping with
          its thruster quads; cold gas and peroxide in Vostok and Mercury; Gemini 8's spin. In
          the game: the Reentry preparations step and Cooper's hand-flown Faith 7.
-    - **E-06 to E-19** *(mocked up 2026-10-07 from the user's brief; not built, no figure
-      checked yet)*, one canvas row each, below E-05, in E-02's sheet template, each with a
+    - **E-06 to E-19** *(mocked up and built 2026-10-07 from the user's brief; every figure
+      checked, `design.md` §1.1)*, one canvas row each, below E-05, in E-02's sheet template, each with a
       yellow note of the figures and claims to verify. The quoted name is the explainer's title
-      and the topic goes in the eyebrow (unconfirmed). Two sheets each unless noted:
+      and the topic goes in the eyebrow (built as `Explainer.topic`; E-04 and E-05 use it too,
+      as their mockups did). Two sheets each unless noted:
       - **E-06 "Falling, not floating"** (Weightlessness): *There is gravity in orbit*; *What
         it does to a body*.
       - **E-07 "Why capsules are blunt"** (Heat shields): *A blunt nose stays cooler*; *How
@@ -372,8 +373,14 @@ On the right:
       78", not "more than 70"; Gemini 8 spun "up to about one turn a second"; E-05's "In Launch
       Window" says every early-era rocket burns liquid oxygen "in its main stages" (Jupiter-C's
       upper stages are solid).
-    - **Not built yet:** the concept chips that link game content to it (component 19), and
-      remembering which explainers a player has seen. All five are readable in the Museum.
+    - **As built for E-06 to E-19:** a one-sheet explainer's eyebrow has no sheet count; the
+      Museum's cards use a 1x thumbnail of each first drawing (`<name>-thumb.png`, written by
+      the converter) instead of the full 2x picture; halo outlines are drawn last, over every
+      line. Changed from the mockups by the visual check: E-07's "Weight set low" moved under
+      the ball, E-11's sound rings shrunk clear of the heading, E-14's bar labels pulled inside
+      their bars, halos on labels that cross lines in E-10, E-13, E-14 and E-19, E-12's scale
+      "Roughly to scale" (the longer one overflowed its cell), and E-13's "A gentler ride"
+      replaced by "A safer fuel" (fact check).
     - **Known blemish:** the Museum card's thumbnail shows E-04's halo outlines without their
       labels (a white smudge on the first tank).
 19. **Concept chips** *(user's idea, 2026-10-07; specified, mocked up and built the same day; the

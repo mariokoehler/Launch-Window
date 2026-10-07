@@ -88,7 +88,8 @@ engineering problem or tidbit, note it here the same session.
       Newton's cannon is from his *Treatise of the System of the World* (written in the 1680s,
       published 1728); Tsiolkovsky published the rocket equation in 1903; the R-7 drops its four
       boosters about two minutes up; the Mercury Atlas dropped its two booster engines and flew
-      on with the sustainer. Still to source: the Atlas's tank walls "thinner than a coin".
+      on with the sustainer. The Atlas's tank walls were 0.36 to 0.94 mm of stainless steel
+      (sourced 2026-10-07 for E-19), so "thinner than a coin" holds.
     - E-02 to E-05 are checked (2026-10-07), with these corrections to the mockup's text:
     - E-02: laps 88.4 min at 200 km and 92.4 min at 400 km (Kepler's third law). Vostok 3 and 4
       (11 and 12 August 1962) came within about 6.5 km (5 km was planned). Gemini 4 (3 June
@@ -130,14 +131,60 @@ engineering problem or tidbit, note it here the same session.
       class, Payload R&D in the SET Centre, Vostok's single retrorocket, the R-7's and Faith 7's
       history notes. Jupiter-C's upper stages are solid, so E-05 says every early-era rocket
       burns liquid oxygen "in its main stages".
-  - **E-06 to E-19 are mocked up** (2026-10-07, the user's brief; not built), one per
+  - **E-06 to E-19 are built** (mocked up and built 2026-10-07 from the user's brief), one per
     candidate in the concept audit below: Weightlessness, Heat shields, Reliability, Launch
     escape, Coming home, Tracking, Space environment, Human rating, Launch latitude, Max Q (one
     sheet), Power, Guidance, Orbital decay and Balloon tanks (one sheet). Sheet titles in
-    `ui-spec.md` component 18. **No figure is checked yet:** each canvas row's yellow note
-    lists what to verify. E-14's "In Launch Window" strips say the game has no latitude rule
-    and that the VAB's payloads already include each real site's push (proposed; the
-    alternative is folding it into E-01).
+    `ui-spec.md` component 18. E-14's "In Launch Window" strips say the game has no latitude
+    rule and that the VAB's payloads already include each real site's push (built as mocked;
+    **the user's call**, the alternative being to fold it into E-01 until the mechanic in §5
+    "Later" exists).
+  - **E-06 to E-19, checked (2026-10-07).** Corrections to the mockups' text:
+    - E-06: Gagarin ate paste from tubes on Vostok 1 (whether he drank isn't sourced, so the
+      sheet says only that he ate). Gravity at 300 km is 91 % ((6,371 / 6,671)²). Titov's
+      Vostok 2 (6 to 7 August 1961), about 25 hours, first sleep and first space sickness;
+      Glenn's apple sauce (February 1962); parabolic flights about 25 s each.
+    - E-07: only Mercury's orbital capsules had the glass-fibre-and-resin ablative shield; the
+      suborbital ones used a beryllium heat sink (said now). Allen and Eggers' blunt body at
+      NACA Ames, early 1950s; about four minutes of blackout; about 8 g from orbit.
+    - E-08: 0.95^11 is about 57 %, 0.99^11 about 90 %, 0.9^11 about 31 %; Vostok's and
+      Mercury's orbital flights have 11 steps in the pack. Belka and Strelka (19 to 20 August
+      1960), Ham (31 January 1961).
+    - E-09: MA-3 (25 April 1961) was destroyed about 43 s in, the tower pulled the capsule
+      clear, and the same capsule flew again on MA-4 (13 September 1961) as No. 8A. "Would have
+      survived" became "would very likely have survived".
+    - E-10: drogue at about 6.4 km, main at about 3 km, landing bag about 1.2 m; Vostok's pilot
+      ejected at about 7 km. Liberty Bell 7 (21 July 1961) was the second crewed Mercury
+      flight; raised in 1999.
+    - E-11: a pass at 200 km lasts at most about 7 minutes (worked out). Mercury's network: 18
+      ground stations plus two ships (Rose Knot Victor, Coastal Sentry Quebec) by some counts,
+      18 in all by others, so the sheet says "stations on land, plus two ships". Guier and
+      Weiffenbach at Johns Hopkins, then Transit.
+    - E-12: the inner belt's drawn top was 6,000 km; NASA gives about 1,600 to 13,000 km and
+      others about 1,000 to 12,000, so the band and label now read 1,000 to 12,000 km. Explorer 1
+      (31 January 1958, 358 by 2,550 km); Explorer 3 (26 March 1958) confirmed.
+    - E-13: Mercury-Redstone's lengthened tanks (about 20 s more burn) and abort sensing are
+      right; the mockup's "a gentler ride" isn't sourced and became "a safer fuel": alcohol
+      instead of Jupiter-C's more toxic hydyne. Of the five uncrewed Mercury-Atlas flights two
+      failed and three succeeded (MA-5 was cut short, so not "as planned"). MA-1's fix was a
+      steel "belly band" on the adapter.
+    - E-14: 465 m/s times cos(latitude) gives about 409 m/s at 28.5° and about 323 at 45.9°.
+      Vostok's orbits were tilted about 65° because Baikonur couldn't launch due east (the
+      spent stages would have fallen on China), not, as mocked, for tracking coverage.
+    - E-15: MA-1 broke up 58 s after liftoff, near max Q.
+    - E-16: Sputnik 1 silent 26 October 1957, re-entered 4 January 1958; Explorer 1's radio to
+      23 May 1958; Vanguard 1 (17 March 1958), six solar panels, solar radio to May 1964; Bell
+      Labs' silicon cell 1954.
+    - E-17: Redstone's jet vanes, the R-7's verniers, Jupiter-C's 11 + 3 + 1 spun stages. The
+      "In Launch Window" line now says Jupiter-C lifts exactly Explorer 1's 11 kg (the pack's
+      figures).
+    - E-18: Sputnik 1 at 215 by 939 km, its core stage down about a month earlier; Explorer 1
+      down 31 March 1970; Skylab 11 July 1979; the lifetime curve is a rough standard one.
+    - E-19: the Atlas's skin 0.36 to 0.94 mm, kept at about 5 psi when empty; "one of the
+      lightest rockets of its size" became "very light for its size".
+    - "In Launch Window" lines checked against the pack: the steps named, Explorer 1 reaching
+      Space environment measured (its plain flight in Earth orbit, its extended one in the
+      experiments step, hence "Explorer 1's flights"), the Launch step's crew risk.
 - **Concepts: linking game content to the explainers** (user's idea, 2026-10-07; specified in
   `ui-spec.md` component 19, mocked up the same day). Programs, configurations, steps, rockets and
   capsules each list the real-world concepts behind them; a Concepts section on their screens
@@ -171,7 +218,7 @@ engineering problem or tidbit, note it here the same session.
         boils away), `countdown`, every rocket.
       - **Steering jets** → E-05 sheet 2: step `reentry-preparations`, the Vostok and Mercury
         capsules.
-    - *Explainer mocked up as E-06 to E-19 (2026-10-07), so no chip until each is built:*
+    - *Explainers E-06 to E-19, built 2026-10-07 (chips re-homed then, see `concepts.json`):*
       - **Weightlessness** (they're falling, not out of gravity): steps `duration-level-i` and
         `-ii`, `biometric-data-transmission`, goals Life in weightlessness, A day in space, Days
         in space, Sputnik 2, Korabl-Sputnik 2, the duration configurations.
