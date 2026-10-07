@@ -785,6 +785,59 @@ such as letting a brilliant troublemaker go.
     build it with the career record, capturing the id, skills and *revealed* traits at death
     (never hidden ones, so `Personality.forClient` needn't change).
   - **The Background check** stays out until espionage; the hire rows leave room for it.
+- **First-pass rules for phase 4** (2026-10-07, written while the user was away; **every number
+  and every reinterpretation below is a proposed default, unconfirmed**). Ambitions, loyalty, the
+  career record and the memorial's person page.
+  - **Who gets an ambition:** decided when a candidate is drawn, from the candidate's own seed
+    (Ambitious 100 %, Glory seeker 70 %, anyone else 25 %, as above). It stays hidden, and the
+    server strips it, until the person **says so after two seasons with the agency** (so after
+    basic training for most). Which ambition is drawn then, from those the agency can reach
+    now, again from the person's own seed. If none can be reached, it waits a season and tries
+    again.
+  - **The ambitions and their checks** ("flew" means: on a mission in flight whose season ended
+    without a failed step; "this season" is the season pass):
+
+    | Group | Ambition | Fulfilled when | Passed over when | Reachable while | Window |
+    |---|---|---|---|---|---|
+    | Astronaut | Fly in space | flew as crew on a crewed mission | another astronaut flew as crew | an open program has a crewed configuration | 5 |
+    | Astronaut | Fly to orbit | flew as crew, crewed orbital launch | another astronaut did | a crewed orbital configuration is open | 6 |
+    | Astronaut | Spend days in orbit | flew as crew in the second season or later of a crewed orbital mission | another astronaut did | a crewed orbital configuration of two seasons or more is open | 7 |
+    | Astronaut | Be first at something | aboard (crew or CAPCOM) a mission that settles a goal first in the game | someone else in the agency was | an open configuration still grants a goal no agency has | 8 |
+    | Astronaut | Fly on a joint flight | flew as crew on a configuration of two launches or more | another astronaut did | such a crewed configuration is open | 7 |
+    | Flight controller | Be on the consoles for a crewed orbital flight | flew on a control slot of a crewed orbital mission | another controller did | a crewed orbital configuration is open | 6 |
+    | Flight controller | Be on the consoles for a first | on a control slot of a mission that settles a goal first in the game | another controller was | as "be first" | 8 |
+    | Flight controller | Become an Expert | earns the Expert trait in their best skill | (never) | not yet Expert in it | 8 |
+    | Engineer | Bring a component to its R&D cap | on the team when *that* component reaches its cap | it reaches the cap without them | the component is owned, active and below its cap | 6 |
+    | Engineer | Build hardware for a first | a component they ever worked on flies on a mission that settles a goal first in the game | (never) | as "be first" | 8 |
+    | Engineer | Be the agency's best | the most skilled engineer in their own best skill (at least three engineers) | (never) | not already the best | 6 |
+
+    *Reinterpreted from the list above:* "spend a day in orbit" became days (a second season)
+    in orbit, since the game counts seasons, not hours; "be the most skilled engineer on a
+    component" became the agency's most skilled engineer in their best skill. The component for
+    "bring a component to its cap" is the one they work on when they say it, else a random owned
+    one below its cap.
+  - **The window** counts down once the ambition is said: the table's seasons, −1 for Ambitious
+    (at least 3), +2 for Steady. Each season, in this order: fulfilled; else passed over; else no
+    longer possible (it can't be reached any more: a program closed, no goal left unreached,
+    the component capped or gone); else the window counts down and may run out.
+  - **Outcomes** (morale, loyalty): **fulfilled** +5, +15 (Ambitious +20); **passed over** −5, −5,
+    and the window shortens by one more season, the ambition stays; **no longer possible** −2, −3;
+    **runs out** −10, −15, and the person stays **disappointed** for 4 seasons. After fulfilled, no
+    longer possible or disappointment, a new ambition may follow: Ambitious 75 %, anyone else 30 %.
+  - **Loyalty**, 0 to 100: starts at 50 on hiring, +1 for each season with the agency, and moves by
+    half a department salary change (+10 % salary: +5 loyalty; a cut takes it down the same way).
+    **Loyalty and disappointment do nothing else yet:** the design ties them to poaching (phase
+    5); they show on the person page and in intelligence personnel files.
+  - **The career record**, per person, newest first on the page, at most 30 lines (the oldest
+    drop off, the hiring line always stays): hired (with the colleague's hint); training done;
+    each R&D stint when it ends (component, seasons, reliability gained; the one still running
+    shows as "so far"); each flight or console shift when the mission ends (configuration, role:
+    crew, CAPCOM or flight controller, and success or the step it failed at); a goal first in the
+    game; traits that came out; relationships shown; the Expert trait; ambitions said, met,
+    passed over, impossible and run out.
+  - **The memorial** keeps the person's id, skills, *revealed* traits (never hidden ones), the
+    year they joined, and the career record at death, so its person page reads like the living
+    one.
 - **History notes to go with it:** Deke Slayton picked NASA's crews partly on who worked well
   together; Gagarin was reportedly chosen over Titov partly for his manner and background.
   Verify both before use (§1.1).
