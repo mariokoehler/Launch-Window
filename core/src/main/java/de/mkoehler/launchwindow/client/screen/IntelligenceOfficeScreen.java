@@ -893,7 +893,7 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
         tab.add(ui.label(folder == null || folder.getKnownLevel() < 0 ? "Intelligence level unknown"
             : "Level " + folder.getKnownLevel() + " as of " + Museum.date(folder.getKnownLevelTurn()),
             Theme.TextStyle.CAPTION, Theme.INK_MUTED)).row();
-        tab.add(ui.label(dossierDates(folder), Theme.TextStyle.CAPTION, Theme.INK_MUTED));
+        tab.add(ui.paragraph(dossierDates(folder), Theme.TextStyle.CAPTION, Theme.INK_MUTED)).growX();
         tab.setTouchable(Touchable.enabled);
         tab.addListener(clicked(() -> openFolder(key)));
         return tab;
@@ -997,6 +997,8 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
             }
             card.add(ui.paragraph("Reliability somewhere in the band; the gold mark is each component's R&D cap.",
                 Theme.TextStyle.CAPTION, Theme.INK_MUTED)).row();
+        } else if (which == IntelArea.PERSONNEL) {
+            card.add(personnelTable(dossier)).row();
         } else {
             Map<String, List<String>> rows = new LinkedHashMap<>();
             for (IntelFact fact : dossier.facts()) {
@@ -1020,6 +1022,45 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
             }
         }
         return card;
+    }
+
+    /**
+     * A personnel dossier as a small table: a row per group, its head count and its average skill
+     * (a range), so long group names never run into the numbers.
+     */
+    private Table personnelTable(Dossier dossier) {
+        Table table = new Table();
+        table.defaults().left().padBottom(Theme.SPACE_1);
+        table.add().expandX().fillX();
+        Label people = sectionTitle("People");
+        people.setAlignment(Align.right);
+        table.add(people).right().padRight(Theme.SPACE_4);
+        Label skill = sectionTitle("Average skill");
+        skill.setAlignment(Align.right);
+        table.add(skill).right().row();
+        for (PersonnelGroup each : PersonnelGroup.values()) {
+            IntelFact count = null;
+            IntelFact average = null;
+            for (IntelFact fact : dossier.facts()) {
+                if (each.name().equals(fact.ref())) {
+                    if (fact.kind() == IntelFact.Kind.HEADCOUNT) {
+                        count = fact;
+                    } else if (fact.kind() == IntelFact.Kind.AVERAGE_SKILL) {
+                        average = fact;
+                    }
+                }
+            }
+            if (count == null && average == null) {
+                continue;
+            }
+            table.add(ui.label(IntelTexts.groupName(each.name()), Theme.TextStyle.BODY_SM, Theme.INK)).expandX()
+                .fillX();
+            table.add(ui.label(count == null ? "—" : String.valueOf(count.count()), Theme.TextStyle.BODY_STRONG,
+                Theme.INK)).right().padRight(Theme.SPACE_4);
+            table.add(ui.label(average == null ? "—" : average.low() + "–" + average.high(), Theme.TextStyle.BODY_STRONG,
+                Theme.INK)).right().row();
+        }
+        return table;
     }
 
     private Table rangeRow(IntelFact fact) {

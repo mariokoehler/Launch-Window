@@ -431,6 +431,11 @@ public final class ScreenSnapshot {
                 fact("IN_FLIGHT", "vostok-orbital", 0, 0, 0),
                 fact("RD_FOCUS", "vostok-capsule", 0, 0, 3), fact("RD_FOCUS", "r7-vostok", 0, 0, 2),
                 fact("SHELF", "sputnik-2-satellite", 0, 0, 0), fact("INTEL_LEVEL", "", 0, 0, 1))));
+        sever.getDossiers().put(de.mkoehler.launchwindow.model.IntelArea.PERSONNEL,
+            new de.mkoehler.launchwindow.model.Dossier(de.mkoehler.launchwindow.model.IntelArea.PERSONNEL, 30, List.of(
+                fact("HEADCOUNT", "ASTRONAUT", 0, 0, 0), fact("HEADCOUNT", "SET", 0, 0, 7),
+                fact("AVERAGE_SKILL", "SET", 31, 61, 0), fact("HEADCOUNT", "MISSION_CONTROL", 0, 0, 5),
+                fact("AVERAGE_SKILL", "MISSION_CONTROL", 21, 51, 0))));
         for (int i = 0; i < 2; i++) {
             Personnel person = i == 0 ? pool.getSetSpecialistCandidates().get(2) : pool.getAstronautCandidates().get(4);
             String group = i == 0 ? "SET" : "ASTRONAUT";
