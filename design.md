@@ -563,7 +563,9 @@ season unchanged. Tiger Teams' live per-step choice doesn't fit, so it was redes
 **(d) People worth caring about** *(user's idea, 2026-10-07; designed, not built. Decided: the
 split between morale and chemistry, pair rapport that builds over years, hidden traits with
 ambiguous hints, the background check through intelligence, ambitions, career records and
-poaching. Every number and list below is a proposed default, unconfirmed.)* The aim: employees
+poaching. Confirmed the same day: one or two traits per person, chemistry's ±15 % band, and
+rapport's range, drift and threshold; ambitions in every group, for some people only. The rest
+are proposed defaults, unconfirmed.)* The aim: employees
 stop being a commodity. Players learn who their people are, care about them, and face hard calls
 such as letting a brilliant troublemaker go.
 - **Morale stays personal and public** (decided). It moves with what happens to the person and
@@ -574,13 +576,13 @@ such as letting a brilliant troublemaker go.
   rapport inside it plus its members' traits, and is worked out again whenever the team changes:
   a new project, a new team, a new chemistry. **It scales the team's output:** R&D gain, the
   crew's and controllers' contributions to a step's odds, and the controllers' rescue roll, within
-  a band of about ±15 % (default). Training is done alone, so chemistry doesn't touch it.
+  a band of about ±15 % (confirmed). Training is done alone, so chemistry doesn't touch it.
 - **Rapport between two people** (decided) lasts across projects and years. Each season two
   people share a team, their rapport drifts toward liking or friction, biased by their traits; it
-  never resets, so old colleagues meet again as friends or enemies. Defaults: a range of −100 to
+  never resets, so old colleagues meet again as friends or enemies. Confirmed: a range of −100 to
   +100, a drift of about 5 a season, shown once past ±30 ("work well together", "clash"),
   lost when either leaves.
-- **Traits** (decided): one or two per person (default), hidden when hired. A trait shows itself
+- **Traits** (decided): one or two per person (confirmed), hidden when hired. A trait shows itself
   after the person has worked in teams for a while (default: 2 to 4 seasons, drawn per trait),
   or sooner when it matters (an Abrasive member's first clash), and the turn report says so
   ("After two seasons on the Atlas team, Kowalski turns out to be a workaholic"). Most traits cut
@@ -607,11 +609,23 @@ such as letting a brilliant troublemaker go.
 - **Background check** (decided): reveals one of a candidate's traits before hiring, but only for
   an agency that keeps an intelligence service, part of the later espionage work (§2.9). Without
   one, the hint is all there is.
-- **Ambitions** (decided): each astronaut wants something, tied to goals and flights: fly in
-  space, fly to orbit, a day in orbit, be first at something, fly on a joint flight. Later perhaps
-  controllers (run a historic flight) and engineers (bring a component to its cap). Fulfilled, it
-  builds **loyalty**; passed over (someone else flies the flight they wanted) it costs morale and
-  loyalty. Loyalty also grows with tenure and raises, and is what resists poaching.
+- **Ambitions** (decided, user 2026-10-07): in **every group**, but **only some people have
+  one**, so there are only a few to keep track of. Traits shape who: **Ambitious practically
+  guarantees one**, **Glory seeker** makes one much more likely, and others start with a modest
+  chance (defaults: Ambitious 100 %, Glory seeker 70 %, anyone else 25 %, all unconfirmed). One
+  ambition at a time; a fulfilled one may be followed by a new one, likelier for the Ambitious.
+  An ambition shows in the turn report once the person has said so (default: after their first
+  season of work). Proposed ambitions, tied to goals, flights and R&D:
+  - *Astronauts:* fly in space, fly to orbit, spend a day in orbit, be first at something (a goal
+    no agency has reached yet), fly on a joint flight.
+  - *Mission Control:* be on the consoles for a crewed orbital flight, or for a first; reach
+    Expert in their best skill.
+  - *Engineers (SET):* bring a component to its R&D cap; work on the rocket or capsule of a flight
+    that reaches a first; be the most skilled engineer on a component.
+
+  Fulfilled, an ambition builds **loyalty**; passed over (someone else flies the flight they
+  wanted, or the component reaches its cap without them) it costs morale and loyalty. Loyalty also
+  grows with tenure and raises, and is what resists poaching.
 - **Career record** (decided): a page per person with a timeline of hiring, training, flights,
   the R&D they worked on, firsts, near misses, revealed traits, relationships and ambitions met.
   The Memorial's living counterpart; it makes a loss mean something.
@@ -632,9 +646,8 @@ such as letting a brilliant troublemaker go.
   (§3.7); screens: revealed traits on the personnel overviews, the hint on the hire screen, a
   chemistry preview where teams are formed (R&D slots, mission staffing), the career page, and
   the turn report's lines. Effects read their numbers from the rules' constants (`Tips`).
-- **Open:** how many traits per person, the band and the drift rates, which traits suit which
-  group, whether a trait can be misleading at first, and whether controllers and engineers get
-  ambitions in the first pass.
+- **Open:** which traits suit which group, whether a trait can be misleading at first, the
+  ambition chances and list, and when an ambition shows.
 
 ### 2.3 Programs & mission configurations
 
