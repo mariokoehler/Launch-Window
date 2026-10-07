@@ -1055,7 +1055,7 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
     | 0 | none | none; a small baseline counter-intelligence |
     | 1 · Security office | **Background check** on one candidate | **20 %** per candidate to reveal a trait; counter-intelligence I |
     | 2 · Analysis section | **Agency assessment** of a chosen rival, one area | **25 %** per season: a tidbit about a random rival (R&D or plans); counter-intelligence II |
-    | 3 · Field network | **Personnel file** on a rival's employee | the tidbit chance rises to **40 %** and can come from any area, people included; counter-intelligence III |
+    | 3 · Field network | **Personnel file** on a rival's employee | the tidbit chance rises to **40 %** (user: fine to start with, 2026-10-07) and can come from any area, people included; counter-intelligence III |
 
     The ladder is people, then agencies, then rivals' people (user, 2026-10-07); level 3's
     personnel file is what makes a poaching offer an informed one.
@@ -1078,8 +1078,9 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
     resolution, the result a **dossier dated to that resolution** that stays in the rival's folder
     until a newer one replaces it:
     - **R&D:** the rival's components with reliability as **ranges** ("55–70 %").
-    - **Programs and plans:** open programs, missions in flight, and launches scheduled for next
-      season. A rival can still scrub after the report: intelligence can be wrong, and that is the
+    - **Programs and plans:** open programs, missions in flight, launches scheduled for next
+      season, and the rival's **Intelligence level** (user, 2026-10-07), so one assessment tells a
+      player how hard the rival is to spy on before spending more. A rival can still scrub after the report: intelligence can be wrong, and that is the
       rival's counter without having to react.
     - **Personnel:** roster sizes and average skill per group.
   - **Personnel file** (level 3): one rival employee, in a group the player picks: the most
@@ -1092,7 +1093,12 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
     half-width **5 + 5 × (target level − spy level + 2)** points, at least 2 and at most 15. A
     failed action learns nothing, and is **caught** with **10 % + 10 % per target level**: the
     target's turn report names the spying agency, the spy loses **20 prestige**, and the spy's
-    report says the operation was blown. Passive tidbits roll against the same counter-
+    report says the operation was blown **and what the target's counter-intelligence level was**
+    that season (user, 2026-10-07: getting caught should still teach something). Catching works
+    the other way too: the catcher learns the spying agency's Intelligence level. A level learned
+    either way goes into the rival's folder, dated like a dossier. **The odds a player sees:**
+    exact ("55 %, their counter-intelligence was level 2 as of Spring 1962") once a dossier or a
+    catch has shown the level, otherwise the full range, 40–85 %. Passive tidbits roll against the same counter-
     intelligence but are never caught (no one is sent). No secrecy bonus for either archetype
     (user, 2026-10-07: NASA didn't spill everything either).
   - **Turn report:** a new "Intelligence" section with reveals, dossiers, tidbits, catches on both
@@ -1101,10 +1107,7 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
     and is kept in the player's own state; a rival's real values never travel to the client, as
     with traits.
   - **Still open:** whether the target ever learns of an operation that failed but wasn't caught
-    (default: no); a dossier ages by its date only, no visible decay (default). **For the user:**
-    no operation reveals a rival's level, so the success chance can't be shown exactly; either
-    show the range (40–85 %) or let the programs-and-plans dossier include the rival's
-    Intelligence level. And level 3's passive 40 % may be more than the "small chance" asked for.
+    (default: no); a dossier ages by its date only, no visible decay (default).
   - **Before the hotspot reaches the client:** `make_hub_art.py` copies the raw hotspot files to
     `assets/ui/hub/` as they are, and `Hub` turns each polygon name into a `Hub.Place` with
     `valueOf`, which throws on an unknown name; `HubTest` expects seven places. Add

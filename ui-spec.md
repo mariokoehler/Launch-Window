@@ -1549,8 +1549,10 @@ binoculars, our own drawing; add it to the UI Asset Sheet). All rules and number
 
 **Operations:** pick an operation, then its target:
 - **Agency assessment** (level 2): a rival agency (name, director, archetype), then an area:
-  R&D, programs and plans, or personnel. Shows the success chance (open: the range 40–85 %, or
-  exact if a dossier has shown the rival's level, `design.md` §2.9), what a failure risks (getting caught, −20 prestige),
+  R&D, programs and plans, or personnel. Shows the success chance: exact, with where the rival's
+  level comes from and its date ("55 % · their counter-intelligence was level 2 as of Spring
+  1962"), once a dossier or a catch has shown it, otherwise "40–85 %, depending on their
+  counter-intelligence" (`design.md` §2.9). Then what a failure risks (getting caught, −20 prestige),
   and when the answer comes ("in the next turn report").
 - **Personnel file** (level 3): a rival, then a group, or a person named in an earlier file.
 - Queued operations this season, cancellable until the resolution. The background check isn't
@@ -1558,7 +1560,9 @@ binoculars, our own drawing; add it to the UI Asset Sheet). All rules and number
 - Last season's results, linked to their folders.
 
 **Folders:** one per rival agency, a list on the left, the open folder on the right:
-- **Header:** agency, director, archetype, goals reached (as the Museum's rivals show).
+- **Header:** agency, director, archetype, goals reached (as the Museum's rivals show), and
+  their Intelligence level if known, dated ("Level 2 as of Spring 1962", learned from a dossier
+  or a catch), else "Intelligence level unknown".
 - **One dossier per area** (R&D, programs and plans, personnel), each stamped "As of Spring
   1962" (no visible decay, the date says how old it is); an area never assessed says so. R&D shows the rival's
   components with reliability as ranges (component 3 with a range band rather than a value);
