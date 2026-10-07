@@ -209,7 +209,10 @@ public final class MissionControl {
         }
         int left = Math.max(0, officer.getTrainingSeasonsTotal() - officer.getTrainingSeasonsCompleted());
         String kindLabel = kind == null ? "" : kind.name().charAt(0) + kind.name().substring(1).toLowerCase(Locale.ROOT);
-        return "In training · " + kindLabel + " · " + left + " left";
+        // The skill being trained, as the astronauts' rows show it.
+        MissionControlSkill target = officer.getTrainingTargetSkill();
+        String skill = target == null ? "" : " · " + CrewSkills.label(target.name());
+        return "In training · " + kindLabel + skill + " · " + left + " left";
     }
 
     /**

@@ -54,6 +54,9 @@ class SetDepartmentTest {
         advanced.setTrainingSeasonsTotal(2);
         advanced.setTrainingSeasonsCompleted(1);
         assertEquals("In training · Advanced · 1 left", SetDepartment.stateText(advanced));
+        // With the skill being trained, as on the astronauts' rows.
+        advanced.setTrainingTargetSkill(de.mkoehler.launchwindow.model.SetSkill.SPACE_PROBES);
+        assertEquals("In training · Advanced · Space probes · 1 left", SetDepartment.stateText(advanced));
         assertTrue(SetDepartment.isActive(advanced));
 
         SetSpecialist researching = engineer("c", 30, 50);

@@ -100,7 +100,8 @@ public final class SetDepartment {
      * Returns the row's state wording, as on the state badge.
      *
      * @param specialist the specialist
-     * @return for example "Idle", "In training · Advanced · 2 left" or "Researching · Vostok Capsule · slot 1"
+     * @return for example "Idle", "In training · Advanced · Rockets · 2 left" or "Researching · Vostok Capsule ·
+     *     slot 1"
      */
     public static String stateText(SetSpecialist specialist) {
         if (specialist.getUnavailableSeasons() > 0) {
@@ -125,7 +126,10 @@ public final class SetDepartment {
         }
         int left = Math.max(0, specialist.getTrainingSeasonsTotal() - specialist.getTrainingSeasonsCompleted());
         String kindLabel = kind == null ? "" : kind.name().charAt(0) + kind.name().substring(1).toLowerCase(Locale.ROOT);
-        return "In training · " + kindLabel + " · " + left + " left";
+        // The skill being trained, as the astronauts' rows show it.
+        SetSkill target = specialist.getTrainingTargetSkill();
+        String skill = target == null ? "" : " · " + SetSkills.label(target);
+        return "In training · " + kindLabel + skill + " · " + left + " left";
     }
 
     /**
