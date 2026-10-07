@@ -375,6 +375,7 @@ public final class ScreenSnapshot {
         missionControlShots(folder, game, info);
         reportShots(folder, game, info);
         museumShots(folder, game, info);
+        peopleShots(folder, game, info);
     }
 
     /**
@@ -949,6 +950,166 @@ public final class ScreenSnapshot {
             state.getBuildingUpgradeSeasonsRemaining().put(Building.VEHICLE_ASSEMBLY, 1);
         }
         return state;
+    }
+
+    /**
+     * People worth caring about (2026-10-07, People canvas): rosters with trait chips, person pages,
+     * the R&amp;D board's chemistry and its breakdown, the assign dialog's previews, and hire hints.
+     */
+    private static void peopleShots(File folder, LaunchWindowGame game, GameInfoResponse info) {
+        PlayerSnapshot state = peopleState();
+        startSession(game, state, info);
+        List<SetSpecialist> set = state.getSetSpecialists();
+        write(folder, "people-set-roster.png", new SetCentreScreen(game), null);
+        write(folder, "people-person-veteran.png", new de.mkoehler.launchwindow.client.screen.PersonScreen(game,
+            set.get(0), () -> new SetCentreScreen(game)), null);
+        write(folder, "people-person-new.png", new de.mkoehler.launchwindow.client.screen.PersonScreen(game,
+            set.get(5), () -> new SetCentreScreen(game)), null);
+        write(folder, "people-person-settled.png", new de.mkoehler.launchwindow.client.screen.PersonScreen(game,
+            set.get(4), () -> new SetCentreScreen(game)), null);
+        write(folder, "people-trait-tooltip.png", new de.mkoehler.launchwindow.client.screen.PersonScreen(game,
+            set.get(0), () -> new SetCentreScreen(game)), screen -> showTooltip(screen.stage().getRoot(), "Mentor"));
+        write(folder, "people-rnd.png", new RndBoardScreen(game, RndBoardScreen.Board.PAYLOAD), null);
+        write(folder, "people-rnd-breakdown.png", new RndBoardScreen(game, RndBoardScreen.Board.PAYLOAD),
+            screen -> pinFirstBreakdown(screen.stage().getRoot()));
+        write(folder, "people-rnd-assign.png", new RndBoardScreen(game, RndBoardScreen.Board.PAYLOAD),
+            screen -> screen.openAssign(PayloadRnd.cards(game.session().state(), game.session().catalog()).get(1)));
+        write(folder, "people-hire.png", new HireScreen(game), null);
+
+        // Headquarters: a crew and consoles with traits, a clash and a friendship.
+        PlayerSnapshot planning = planningState(11, 25_000);
+        for (Personnel person : java.util.stream.Stream.concat(planning.getAstronauts().stream(),
+            planning.getMissionControlOfficers().stream()).toList()) {
+            person.setWorkSeasons(6);
+        }
+        planning.getAstronauts().get(0).setTraits(List.of(revealed(de.mkoehler.launchwindow.model.Trait
+            .COOL_UNDER_PRESSURE)));
+        planning.getAstronauts().get(3).setTraits(List.of(revealed(de.mkoehler.launchwindow.model.Trait
+            .MUST_BE_THE_BEST)));
+        planning.getAstronauts().get(5).setWorkSeasons(1);
+        planning.getMissionControlOfficers().get(1).setTraits(List.of(revealed(de.mkoehler.launchwindow.model.Trait
+            .TEAM_PLAYER)));
+        planning.getMissionControlOfficers().get(4).setTraits(List.of(revealed(de.mkoehler.launchwindow.model.Trait
+            .LONER)));
+        planning.getMissionControlOfficers().get(6).setTraits(List.of(revealed(de.mkoehler.launchwindow.model.Trait
+            .STEADY)));
+        planning.setRapports(new ArrayList<>(List.of(
+            new de.mkoehler.launchwindow.model.Rapport("a0", "a3", -48, 0, 9, true),
+            new de.mkoehler.launchwindow.model.Rapport("a0", "a1", 40, 0, 8, true),
+            new de.mkoehler.launchwindow.model.Rapport("c0", "c2", 55, 0, 11, true))));
+        startSession(game, planning, info);
+        write(folder, "people-assemble.png", new AssembleMissionScreen(game, "vostok-orbital"), null);
+        write(folder, "people-assemble-picker.png", new AssembleMissionScreen(game, "vostok-orbital"),
+            screen -> screen.openPicker(false, 3));
+
+        // The turn report's people news: two traits, a clash and a friendship.
+        startSession(game, state, info);
+        TurnReport peopleReport = new TurnReport(TurnReport.VERSION, 13, 2_100, 2_140, 17_000, 18_420, List.of(),
+            List.of(), List.of(
+                new de.mkoehler.launchwindow.rules.TraitRevealed(PersonnelGroup.SET, "p3", set.get(2).getName(),
+                    de.mkoehler.launchwindow.model.Trait.TEAM_PLAYER, "rd", "vostok-capsule", 4),
+                new de.mkoehler.launchwindow.rules.TraitRevealed(PersonnelGroup.SET, "p4", set.get(3).getName(),
+                    de.mkoehler.launchwindow.model.Trait.QUICK_STUDY, "rd", "sputnik-1-satellite", 3),
+                new de.mkoehler.launchwindow.rules.RelationshipShown("p1", set.get(0).getName(), "p5",
+                    set.get(4).getName(), false, "rd", "vostok-capsule", 7),
+                new de.mkoehler.launchwindow.rules.RelationshipShown("p4", set.get(3).getName(), "p7",
+                    set.get(6).getName(), true, "rd", "sputnik-1-satellite", 0)));
+        game.session().keepReport(peopleReport);
+        write(folder, "people-report.png", new TurnReportScreen(game, peopleReport), null);
+    }
+
+    /**
+     * The People canvas's SET Centre: a Vostok capsule team with a friendship, a revealed
+     * Perfectionist and a Team player; a Sputnik team with someone new; idle engineers with traits; a
+     * clash; and a candidate pool with hints.
+     */
+    private static PlayerSnapshot peopleState() {
+        PlayerSnapshot state = new PlayerSnapshot("Baltic Star Agency", Archetype.SOVIET, 18_420, 2_140, 3_000, 13);
+        state.setDirectorName("A. Reyes");
+        state.getBuildingLevels().put(Building.SET_CENTER, 3);
+        state.getOpenedProgramIds().addAll(List.of("sputnik-1", "vostok"));
+        double capsuleCap = maxRd("vostok-capsule");
+        state.getMissionComponents().put("vostok-capsule", new OwnedMissionComponent(capsuleCap - 1.2, 38.0));
+        state.getMissionComponents().put("sputnik-1-satellite", new OwnedMissionComponent(62.4, 45.0));
+
+        SetSpecialist veteran = specialist("p1", "", 37, 81, 118, 52, 61, 44, 78, 30);
+        SetSpecialist perfectionist = specialist("p2", "", 48, 74, 124, 66, 40, 58, 71, 22);
+        SetSpecialist teamPlayer = specialist("p3", "", 48, 69, 112, 38, 57, 35, 66, 41);
+        SetSpecialist quick = specialist("p4", "", 28, 72, 86, 41, 63, 29, 37, 25);
+        SetSpecialist abrasive = specialist("p5", "", 41, 52, 109, 63, 50, 41, 68, 20);
+        SetSpecialist fresh = specialist("p6", "", 28, 76, 82, 24, 31, 18, 22, 15);
+        SetSpecialist mazur = specialist("p7", "", 42, 63, 104, 57, 59, 46, 40, 33);
+        SetSpecialist idle = specialist("p8", "", 54, 66, 97, 45, 55, 39, 58, 47);
+        for (SetSpecialist engineer : List.of(veteran, perfectionist, teamPlayer)) {
+            engineer.setAssignmentState(AssignmentState.ASSIGNED);
+            engineer.setRdTargetComponentId("vostok-capsule");
+        }
+        veteran.setRdSlot(0);
+        perfectionist.setRdSlot(1);
+        teamPlayer.setRdSlot(2);
+        for (SetSpecialist engineer : List.of(quick, mazur)) {
+            engineer.setAssignmentState(AssignmentState.ASSIGNED);
+            engineer.setRdTargetComponentId("sputnik-1-satellite");
+        }
+        quick.setRdSlot(0);
+        mazur.setRdSlot(1);
+        fresh.setAssignmentState(AssignmentState.IN_TRAINING);
+        fresh.setTrainingKind(TrainingKind.BASIC);
+        fresh.setTrainingSeasonsTotal(2);
+        fresh.setTrainingSeasonsCompleted(1);
+        fresh.setHint("keen-to-learn");
+        veteran.setHint("driven");
+        int[] seasons = {14, 12, 10, 3, 9, 0, 11, 6};
+        List<SetSpecialist> all = List.of(veteran, perfectionist, teamPlayer, quick, abrasive, fresh, mazur, idle);
+        for (int i = 0; i < all.size(); i++) {
+            all.get(i).setWorkSeasons(seasons[i]);
+        }
+        veteran.setTraits(List.of(revealed(de.mkoehler.launchwindow.model.Trait.WORKAHOLIC),
+            revealed(de.mkoehler.launchwindow.model.Trait.MENTOR)));
+        perfectionist.setTraits(List.of(revealed(de.mkoehler.launchwindow.model.Trait.PERFECTIONIST)));
+        teamPlayer.setTraits(List.of(revealed(de.mkoehler.launchwindow.model.Trait.TEAM_PLAYER)));
+        quick.setTraits(List.of(revealed(de.mkoehler.launchwindow.model.Trait.QUICK_STUDY)));
+        abrasive.setTraits(List.of(revealed(de.mkoehler.launchwindow.model.Trait.ABRASIVE),
+            revealed(de.mkoehler.launchwindow.model.Trait.LONER)));
+        state.getSetSpecialists().addAll(all);
+        state.setRapports(new ArrayList<>(List.of(
+            new de.mkoehler.launchwindow.model.Rapport("p1", "p2", 52, 0, 12, true),
+            new de.mkoehler.launchwindow.model.Rapport("p1", "p5", -34, 0, 7, true),
+            new de.mkoehler.launchwindow.model.Rapport("p4", "p7", 31, 0, 3, true))));
+
+        List<SetSpecialist> pool = List.of(
+            specialist("c1", "", 52, 64, 96, 48, 66, 39, 52, 30),
+            specialist("c2", "", 61, 70, 122, 71, 44, 63, 58, 35),
+            specialist("c3", "", 34, 58, 88, 44, 52, 36, 47, 40),
+            specialist("c4", "", 28, 73, 74, 33, 28, 41, 26, 19));
+        String[] hints = {"driven", "patient", "independent", "pleasant"};
+        for (int i = 0; i < pool.size(); i++) {
+            pool.get(i).setHint(hints[i]);
+        }
+        state.getSetSpecialistCandidates().addAll(pool);
+        return withPortraits(state);
+    }
+
+    private static de.mkoehler.launchwindow.model.TraitState revealed(de.mkoehler.launchwindow.model.Trait trait) {
+        return new de.mkoehler.launchwindow.model.TraitState(trait, 0, true);
+    }
+
+    /** Pins the first chemistry breakdown on the screen open, as a click on it does. */
+    private static void pinFirstBreakdown(com.badlogic.gdx.scenes.scene2d.Group root) {
+        java.util.ArrayDeque<com.badlogic.gdx.scenes.scene2d.Actor> todo = new java.util.ArrayDeque<>();
+        todo.add(root);
+        while (!todo.isEmpty()) {
+            com.badlogic.gdx.scenes.scene2d.Actor actor = todo.removeFirst();
+            if (actor instanceof de.mkoehler.launchwindow.client.ui.ChemistryIndicator indicator
+                && indicator.popover() != null) {
+                indicator.popover().setPinned(true);
+                return;
+            }
+            if (actor instanceof com.badlogic.gdx.scenes.scene2d.Group group) {
+                group.getChildren().forEach(todo::add);
+            }
+        }
+        throw new IllegalStateException("no chemistry breakdown on screen");
     }
 
     private static SetSpecialist specialist(String id, String name, int age, int morale, double salary,

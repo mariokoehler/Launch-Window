@@ -10,6 +10,7 @@ import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.Personnel;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.model.RandomEventKind;
+import de.mkoehler.launchwindow.model.Trait;
 import de.mkoehler.launchwindow.model.TrainingKind;
 import de.mkoehler.launchwindow.rules.BudgetReviewed;
 import de.mkoehler.launchwindow.rules.BuildingUpgraded;
@@ -112,6 +113,19 @@ public final class TurnReportView {
      * @param tone  1 for good news, -1 for bad, 0 for neutral
      */
     public record Line(String title, String text, String tag, int tone) {
+    }
+
+    /**
+     * A line of people news ({@code ui-spec.md} &sect;4.4, People canvas, 2026-10-07): a trait that
+     * came out, or a relationship that showed.
+     *
+     * @param text     the line, such as "After 4 seasons of teamwork, Grace Okada turns out to be a team
+     *                 player."
+     * @param trait    the trait revealed, or {@code null} for a relationship
+     * @param positive for a relationship, whether they work well together (else they clash)
+     * @param personId whose page the line opens: the person, or the first of the two
+     */
+    public record PeopleNews(String text, Trait trait, boolean positive, String personId) {
     }
 
     /**
@@ -440,21 +454,54 @@ public final class TurnReportView {
         return Character.toUpperCase(words.charAt(0)) + words.substring(1);
     }
 
-    /** What someone was working on, for a people line: ", on Atlas R&D". */
-    private static String workingOn(String teamKind, String subjectId, ContentCatalog catalog) {
+    /** Where something came out, for a people line: " Noticed on the Atlas team." */
+    private static String noticedOn(String teamKind, String subjectId, ContentCatalog catalog) {
         if (subjectId == null) {
             return "";
         }
         if (Teams.MISSION.equals(teamKind)) {
-            return catalog.missionConfiguration(subjectId).map(configuration -> ", on " + MissionControl.missionName(
-                configuration)).orElse("");
+            return catalog.missionConfiguration(subjectId).map(configuration -> " Noticed on "
+                + MissionControl.missionName(configuration) + ".").orElse("");
         }
-        return ", on " + ContentNames.of(subjectId) + " R&D";
+        return " Noticed on the " + ContentNames.of(subjectId) + " team.";
+    }
+
+    /**
+     * Returns the people news: traits that came out and relationships that showed, in the order
+     * they happened.
+     *
+     * @param report  the report
+     * @param catalog the content pack
+     * @return the lines
+     */
+    public static List<PeopleNews> peopleNews(TurnReport report, ContentCatalog catalog) {
+        List<PeopleNews> lines = new ArrayList<>();
+        for (ResolutionEvent event : report.events()) {
+            if (event instanceof TraitRevealed revealed) {
+                lines.add(new PeopleNews("After " + seasonCount(revealed.workSeasons()) + " of teamwork, " + revealed.name()
+                    + " turns out to be " + TraitTexts.inSentence(revealed.trait()) + "."
+                    + noticedOn(revealed.teamKind(), revealed.subjectId(), catalog), revealed.trait(), false,
+                    revealed.personnelId()));
+            } else if (event instanceof RelationshipShown shown) {
+                String after = shown.seasonsTogether() > 0
+                    ? ", after " + seasonCount(shown.seasonsTogether()) + " side by side" : "";
+                lines.add(new PeopleNews(shown.firstName() + " and " + shown.secondName()
+                    + (shown.positive() ? " work well together" : " clash") + after + "."
+                    + noticedOn(shown.teamKind(), shown.subjectId(), catalog), null, shown.positive(),
+                    shown.firstId()));
+            }
+        }
+        return lines;
+    }
+
+    private static String seasonCount(int count) {
+        return count + (count == 1 ? " season" : " seasons");
     }
 
     /**
      * Returns the people lines: Experts earned, training finished, departures, flight growth, and
-     * morale warnings for idle people now (derived here, unconfirmed).
+     * morale warnings for idle people now (derived here, unconfirmed). Traits and relationships are
+     * {@link #peopleNews}.
      *
      * @param report  the report
      * @param state   the player's state now, or {@code null} for no morale warnings (an older report)
@@ -475,17 +522,6 @@ public final class TurnReportView {
                 lines.add(departure(departure));
             } else if (event instanceof PrDutyPerformed pr) {
                 lines.add(prLine(pr));
-            } else if (event instanceof TraitRevealed revealed) {
-                lines.add(new Line(revealed.name() + " turns out to be " + TraitTexts.inSentence(revealed.trait()),
-                    "Noticed after " + revealed.workSeasons() + (revealed.workSeasons() == 1 ? " season" : " seasons")
-                        + " of teamwork" + workingOn(revealed.teamKind(), revealed.subjectId(), catalog) + ". "
-                        + TraitTexts.effect(revealed.trait()), "Trait", 0));
-            } else if (event instanceof RelationshipShown shown) {
-                lines.add(new Line(shown.firstName() + " and " + shown.secondName()
-                    + (shown.positive() ? " work well together" : " clash"),
-                    "Noticed" + workingOn(shown.teamKind(), shown.subjectId(), catalog) + ". "
-                        + (shown.positive() ? "Teams with both of them work better." : "Teams with both of them suffer."),
-                    "Team", shown.positive() ? 1 : -1));
             } else if (event instanceof PassengerLost lost) {
                 lines.add(new Line(lost.name() + " did not come home", lost.failedStepId() == null
                     ? "The flight had no way home."
@@ -523,7 +559,7 @@ public final class TurnReportView {
             .sorted(java.util.Comparator.comparingInt(Personnel::getMorale))
             .limit(3)
             .forEach(person -> lines.add(new Line(person.getName() + "'s morale is down to " + person.getMorale()
-                + ": they may resign if they stay idle", "", "Warning", -1)));
+                + ": may resign if left idle", "", "Warning", -1)));
         return lines;
     }
 

@@ -11,13 +11,17 @@ import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.content.SpaceRaceNews;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.OutcomeBar;
+import de.mkoehler.launchwindow.client.ui.RelationshipMarker;
 import de.mkoehler.launchwindow.client.ui.ReliabilityBar;
 import de.mkoehler.launchwindow.client.ui.Theme;
+import de.mkoehler.launchwindow.client.ui.TraitChip;
 import de.mkoehler.launchwindow.client.view.ContentNames;
+import de.mkoehler.launchwindow.client.view.People;
 import de.mkoehler.launchwindow.client.view.TurnReportView;
 import de.mkoehler.launchwindow.content.ContentCatalog;
 import de.mkoehler.launchwindow.content.MissionComponent;
 import de.mkoehler.launchwindow.model.GameDate;
+import de.mkoehler.launchwindow.model.Personnel;
 import de.mkoehler.launchwindow.rules.MissionStepOutcome;
 import de.mkoehler.launchwindow.rules.TurnReport;
 
@@ -289,8 +293,13 @@ public final class TurnReportScreen extends ChromeScreen {
         // Morale warnings are about now, so only the latest report shows them.
         boolean latest = report.gameTurn() >= session.latestResolvedTurn();
         List<TurnReportView.Line> lines = TurnReportView.people(report, latest ? session.state() : null, catalog);
-        if (lines.isEmpty()) {
+        List<TurnReportView.PeopleNews> news = TurnReportView.peopleNews(report, catalog);
+        if (lines.isEmpty() && news.isEmpty()) {
             card.add(ui.paragraph("No changes this season.", Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).row();
+        }
+        // Traits and relationships first, lightly tinted (People canvas, 2026-10-07).
+        for (TurnReportView.PeopleNews line : news) {
+            card.add(peopleNews(line)).padBottom(Theme.SPACE_2).row();
         }
         for (TurnReportView.Line line : lines) {
             Color color = line.tone() > 0 ? Theme.SUCCESS : line.tone() < 0 ? Theme.DANGER : Theme.INK_MUTED;
@@ -302,6 +311,34 @@ public final class TurnReportScreen extends ChromeScreen {
             }
         }
         return card;
+    }
+
+    /**
+     * A line of people news: who, what came out and where, ending with the trait's chip or the
+     * relationship's marker. A click opens the person's page while they're still in the agency.
+     */
+    private Table peopleNews(TurnReportView.PeopleNews line) {
+        Table row = new Table();
+        row.setBackground(ui.solid(new Color(Theme.SURFACE_CARD).lerp(Theme.NAVY, 0.04f)));
+        row.pad(Theme.SPACE_2, Theme.SPACE_2, Theme.SPACE_2, Theme.SPACE_2);
+        row.add(ui.paragraph(line.text(), Theme.TextStyle.BODY_SM, Theme.INK)).expandX().fillX().left()
+            .padRight(Theme.SPACE_2);
+        if (line.trait() != null) {
+            row.add(new TraitChip(ui, line.trait())).height(TraitChip.HEIGHT).right().top();
+        } else {
+            Table marker = new Table();
+            marker.add(RelationshipMarker.glyph(ui, line.positive())).size(12f).padRight(4f);
+            marker.add(ui.label(line.positive() ? "WORK WELL" : "CLASH", Theme.TextStyle.LABEL,
+                RelationshipMarker.color(line.positive())));
+            row.add(marker).right().top().padTop(2f);
+        }
+        Personnel person = People.find(session.state(), line.personId());
+        if (person != null) {
+            row.setTouchable(com.badlogic.gdx.scenes.scene2d.Touchable.enabled);
+            row.addListener(clicked(() -> game.setScreen(new PersonScreen(game, person,
+                () -> new TurnReportScreen(game, report)))));
+        }
+        return row;
     }
 
     private Table budget() {
