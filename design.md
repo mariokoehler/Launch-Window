@@ -342,7 +342,7 @@ leading to satellite navigation.
   - NASA was public: congressional hearings, published budgets, famous faces. The Soviet program
     was secret down to the name of its chief. Still, NASA kept plenty quiet, and the user decided
     against any secrecy bonus (§2.9). The claim that Soviet engineers learned much about Apollo
-    from the US trade press is **not yet verified**: don't use it until it is.
+    from the US trade press couldn't be sourced (searched 2026-10-07): **dropped**, don't use it.
 - **Bars (also called Chaika) and Lisichka** died when their Korabl-Sputnik launch failed on 28
   July 1960, 19 seconds in: a strap-on broke away and the capsule's parachutes opened too low.
   They're the dogs remembered on a failed Korabl-Sputnik 2 flight (§2.5(f)), as "Chaika". Sources
