@@ -549,8 +549,8 @@ abstract class ChromeScreen extends SessionScreen {
         section.defaults().left();
         Table head = new Table();
         head.add(ui.label("CONCEPTS", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).expandX().left();
-        long unread = concepts.stream().map(Concepts.Concept::explainer).distinct()
-            .filter(id -> !game.explainerRead(id)).count();
+        // Counts the chips with a dot, as the player sees them (two can share an explainer).
+        long unread = concepts.stream().filter(concept -> !game.explainerRead(concept.explainer())).count();
         String right = hint != null ? hint : unread > 0 ? unread + " not read yet" : "All read";
         head.add(ui.label(right, Theme.TextStyle.CAPTION, Theme.INK_MUTED)).right();
         section.add(head).width(width).padBottom(Theme.SPACE_2).row();

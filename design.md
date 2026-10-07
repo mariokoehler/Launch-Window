@@ -163,8 +163,9 @@ engineering problem or tidbit, note it here the same session.
         step `joint-orbital-flight`, goal Two crews together.
       - **Delta-v** → E-03 sheet 1: the VAB's payload columns (the four rockets), Atlas.
       - **Rocket classes** → E-03 sheet 2: every rocket (all Light).
-      - **Engine restarts** → E-04 sheet 1: R-7 (Vostok) (its upper stage lights in flight),
-        step `retrofire`.
+      - **Engine restarts** → E-04 sheet 1: R-7 (Vostok) (its upper stage lights in flight) and
+        the Vostok and Korabl-Sputnik 2 configurations by name, not the `retrofire` step, so it
+        stays off Mercury, whose retropack was solid rockets.
       - **One-shot retrorocket** → E-04 sheet 2: Vostok capsule.
       - **Cryogenic propellant** → E-05 sheet 1: step `launch-preparations` (liquid oxygen
         boils away), `countdown`, every rocket.
@@ -196,6 +197,8 @@ engineering problem or tidbit, note it here the same session.
         configurations.
       - **Balloon tanks** (Atlas's pressure-stiffened skin): Atlas. Small; its history note may
         be enough.
+    - *Since the build (2026-10-07), `assets/content/concepts.json` is the source of truth;*
+      *this audit is its rationale.*
     - *First impressions:* weightlessness and the heat shield would each attach to most
       crewed content, and "the odds multiply" ties straight to how the game resolves a
       mission, so those three (E-06 to E-08) are the first to build.

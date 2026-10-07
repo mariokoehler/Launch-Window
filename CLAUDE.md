@@ -62,8 +62,8 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   for new screens, new components and bigger layout changes. The libGDX client is the
   reference for anything built.
 - **Keep `Theme.java` in lockstep with the design system** whenever a mockup session adds or
-  changes a component or token. The **UI Asset Sheet** (a private Claude Design canvas; ask the
-  user for the link) collects every icon and texture: add to it whenever a mockup brings a new
+  changes a component or token. The **UI Asset Sheet** (a private Claude Design canvas; the
+  Artifact tool's list finds it) collects every icon and texture: add to it whenever a mockup brings a new
   one.
 - **Advisor before and after** any multi-file feature.
 - **Unspecified sub-details:** propose a concrete default in the doc, flagged unconfirmed,
