@@ -64,6 +64,19 @@ import de.mkoehler.launchwindow.net.messages.SubmitActionResponse;
 import de.mkoehler.launchwindow.persistence.SetFundsAction;
 import de.mkoehler.launchwindow.rules.PersonnelGroup;
 
+import de.mkoehler.launchwindow.actions.BackgroundCheckAction;
+import de.mkoehler.launchwindow.actions.CancelIntelOperationAction;
+import de.mkoehler.launchwindow.actions.QueueIntelOperationAction;
+import de.mkoehler.launchwindow.actions.SetIntelligenceTargetAction;
+import de.mkoehler.launchwindow.model.Dossier;
+import de.mkoehler.launchwindow.model.IntelArea;
+import de.mkoehler.launchwindow.model.IntelCatch;
+import de.mkoehler.launchwindow.model.IntelFact;
+import de.mkoehler.launchwindow.model.IntelOperation;
+import de.mkoehler.launchwindow.model.IntelligenceState;
+import de.mkoehler.launchwindow.model.PersonnelFile;
+import de.mkoehler.launchwindow.model.RivalFolder;
+import de.mkoehler.launchwindow.model.Tidbit;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -242,5 +255,23 @@ public final class MessageRegistry {
         kryo.register(Trait.class);
         kryo.register(TraitState.class);
         kryo.register(Rapport.class);
+
+        // Intelligence: PlayerSnapshot.intelligence, its actions, and RivalSummary.playerId (design.md
+        // section 2.9, 2026-10-07). Never move these lines.
+        kryo.register(IntelligenceState.class);
+        kryo.register(IntelOperation.class);
+        kryo.register(IntelOperation.Kind.class);
+        kryo.register(IntelArea.class);
+        kryo.register(IntelFact.class);
+        kryo.register(IntelFact.Kind.class);
+        kryo.register(Dossier.class);
+        kryo.register(PersonnelFile.class);
+        kryo.register(Tidbit.class);
+        kryo.register(IntelCatch.class);
+        kryo.register(RivalFolder.class);
+        kryo.register(SetIntelligenceTargetAction.class);
+        kryo.register(QueueIntelOperationAction.class);
+        kryo.register(CancelIntelOperationAction.class);
+        kryo.register(BackgroundCheckAction.class);
     }
 }

@@ -1,5 +1,6 @@
 package de.mkoehler.launchwindow.server.schedule;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.mkoehler.launchwindow.content.RandomEventRoster;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
@@ -8,6 +9,8 @@ import de.mkoehler.launchwindow.persistence.AtomicFiles;
 import de.mkoehler.launchwindow.persistence.PlayerSnapshotStore;
 import de.mkoehler.launchwindow.persistence.PlayerStateService;
 import de.mkoehler.launchwindow.rules.GoalTally;
+import de.mkoehler.launchwindow.rules.IntelFinding;
+import de.mkoehler.launchwindow.rules.IntelligenceBoard;
 import de.mkoehler.launchwindow.rules.WinCondition;
 import de.mkoehler.launchwindow.server.GameSeeds;
 
@@ -199,6 +202,7 @@ public class TurnScheduler {
         }
         Map<String, PlayerStateService> services = new LinkedHashMap<>();
         List<PlayerSnapshot> startOfTurn = new ArrayList<>();
+        Map<String, PlayerSnapshot> withActions = new LinkedHashMap<>();
         try (Stream<Path> listing = Files.list(playersDir)) {
             for (Path playerDir : listing.filter(Files::isDirectory).sorted().toList()) {
                 if (new PlayerSnapshotStore(playerDir, mapper).latestTurnNumber().isEmpty()) {
@@ -207,14 +211,46 @@ public class TurnScheduler {
                 PlayerStateService service = new PlayerStateService(playerDir, mapper, context);
                 services.put(playerDir.getFileName().toString(), service);
                 service.stateBefore(gameTurn).ifPresent(startOfTurn::add);
+                withActions.put(GameSeeds.rivalKey(meta.getGameSeed(), playerDir.getFileName().toString()),
+                    service.currentState());
             }
         }
         GoalTally tally = GoalTally.fromPlayers(startOfTurn);
+        Map<String, List<IntelFinding>> intelligence = intelligence(gameTurn, meta, withActions);
         for (Map.Entry<String, PlayerStateService> player : services.entrySet()) {
             player.getValue().resolveTurn(gameTurn, tally, roster,
-                GameSeeds.forSeason(meta.getGameSeed(), gameTurn, player.getKey()));
+                GameSeeds.forSeason(meta.getGameSeed(), gameTurn, player.getKey()),
+                intelligence.getOrDefault(GameSeeds.rivalKey(meta.getGameSeed(), player.getKey()), List.of()));
         }
         recordResultIfDecided(gameTurn, meta, services);
+    }
+
+    /**
+     * Settles the turn's intelligence for every player once ({@code design.md} &sect;2.9) and keeps
+     * it in {@code intelligence/turn-N.json}, so a retry after a crash halfway through applies the
+     * same findings, even to players whose actions were already archived. Settled from each player's
+     * state with the turn's actions applied, keyed by the opaque key operations name their target by.
+     *
+     * @param gameTurn    the turn
+     * @param meta        the game's configuration, for its seed
+     * @param withActions every player's state with the turn's actions applied, by key
+     * @return each player's findings, by key
+     * @throws IOException if the file can't be read or written
+     */
+    private Map<String, List<IntelFinding>> intelligence(long gameTurn, GameMeta meta,
+            Map<String, PlayerSnapshot> withActions) throws IOException {
+        Path file = dataRoot.resolve("intelligence").resolve("turn-" + gameTurn + ".json");
+        TypeReference<Map<String, List<IntelFinding>>> type = new TypeReference<>() { };
+        if (Files.exists(file)) {
+            return mapper.readValue(file.toFile(), type);
+        }
+        Map<String, List<IntelFinding>> findings = IntelligenceBoard.settle(withActions, context.catalog(),
+            meta.getGameSeed(), gameTurn);
+        Files.createDirectories(file.getParent());
+        Path temp = Files.createTempFile(file.getParent(), "turn-", ".json.tmp");
+        mapper.writerWithDefaultPrettyPrinter().writeValue(temp.toFile(), findings);
+        AtomicFiles.moveReplacingWithRetry(temp, file);
+        return findings;
     }
 
     private void recordResultIfDecided(long gameTurn, GameMeta meta, Map<String, PlayerStateService> services)

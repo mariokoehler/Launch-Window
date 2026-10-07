@@ -49,6 +49,8 @@ public final class SeasonResolver {
         BUILDINGS,
         /** Astronauts on PR duty earn prestige, before the budget so a review this season counts it. */
         PR_DUTY,
+        /** The intelligence service's findings, then its level steps (it sets the budget's cost). */
+        INTELLIGENCE,
         /** Running costs, the review if due, and funding. */
         BUDGET,
         /** Random events and their timed state. */
@@ -72,9 +74,25 @@ public final class SeasonResolver {
      * @param goalTally      the game-wide goal counts as of the start of this turn; read only
      * @param gameTurn       the shared game turn being resolved
      * @param seasonsElapsed the player's own seasons elapsed, counting this one
+     * @param intelligence   this player's intelligence findings for the turn ({@link IntelligenceBoard})
      */
     public record Context(ContentCatalog catalog, BudgetSchedule schedule, RandomEventRoster roster,
-                          GoalTally goalTally, int gameTurn, int seasonsElapsed) {
+                          GoalTally goalTally, int gameTurn, int seasonsElapsed, List<IntelFinding> intelligence) {
+
+        /**
+         * A context with no intelligence findings, for bot playouts and tests.
+         *
+         * @param catalog        the content catalog
+         * @param schedule       the budget schedule
+         * @param roster         the random events
+         * @param goalTally      the game-wide goal counts
+         * @param gameTurn       the turn being resolved
+         * @param seasonsElapsed the player's seasons elapsed, counting this one
+         */
+        public Context(ContentCatalog catalog, BudgetSchedule schedule, RandomEventRoster roster, GoalTally goalTally,
+                int gameTurn, int seasonsElapsed) {
+            this(catalog, schedule, roster, goalTally, gameTurn, seasonsElapsed, List.of());
+        }
 
         /**
          * Validates the context.
@@ -87,6 +105,7 @@ public final class SeasonResolver {
             Objects.requireNonNull(schedule, "schedule must not be null");
             Objects.requireNonNull(roster, "roster must not be null");
             Objects.requireNonNull(goalTally, "goalTally must not be null");
+            intelligence = intelligence == null ? List.of() : List.copyOf(intelligence);
             if (seasonsElapsed < 1) {
                 throw new IllegalArgumentException("seasonsElapsed must be at least 1: " + seasonsElapsed);
             }
@@ -184,6 +203,7 @@ public final class SeasonResolver {
             case BUILDINGS -> BuildingUpgrades.advanceSeason(snapshot, context.catalog().buildings());
             case PR_DUTY -> PrDuty.advanceSeason(snapshot, PrPress.standard(), random, context.catalog(),
                 context.seasonsElapsed());
+            case INTELLIGENCE -> Intelligence.advanceSeason(snapshot, context.intelligence(), context.gameTurn());
             case BUDGET -> BudgetProgress.advanceSeason(snapshot, context.catalog(), context.schedule(),
                 context.seasonsElapsed());
             case RANDOM_EVENTS -> RandomEvents.advanceSeason(snapshot, context.roster(), random, context.gameTurn(),

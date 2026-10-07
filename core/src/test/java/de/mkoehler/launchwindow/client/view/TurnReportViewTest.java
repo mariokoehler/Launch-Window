@@ -26,7 +26,7 @@ class TurnReportViewTest {
     private static final ContentCatalog PACK = ContentPackLoader.load(Path.of("..", "assets", "content", "early-era"));
 
     private static TurnReport report() {
-        BudgetProgress.RunningCosts costs = new BudgetProgress.RunningCosts(900, 12, 300, 2, 150, 3, 250, 1_600);
+        BudgetProgress.RunningCosts costs = new BudgetProgress.RunningCosts(900, 12, 300, 2, 150, 3, 250, 1_600, 0);
         return new TurnReport(TurnReport.VERSION, 5, 300, 340, 20_000, 21_400,
             List.of(), List.of(
                 new TurnReport.MissionFlown("m-1", "vostok-orbital", 0, 1, true, List.of()),

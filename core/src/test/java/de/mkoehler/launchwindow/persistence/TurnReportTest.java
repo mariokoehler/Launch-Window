@@ -94,7 +94,7 @@ class TurnReportTest {
             new ResearchCompleted("s1", "Irina Petrova", "vostok-capsule", 0.4, 0.7, 0),
             new ResearchComponentMaxed("r7-sputnik", List.of("s2"), List.of("Pyotr Morozov")),
             new SeasonFundsSettled(4_090, 6_500, 14_820,
-                new BudgetProgress.RunningCosts(2_310, 28, 193, 3, 997, 4, 590, 4_090)),
+                new BudgetProgress.RunningCosts(2_310, 28, 193, 3, 997, 4, 590, 4_090, 0)),
             new TrainingCompleted(PersonnelGroup.ASTRONAUT, "a6", "Viktor Dorofeev", TrainingKind.ADVANCED, "FITNESS",
                 3.1));
         TurnReport report = new TurnReport(TurnReport.VERSION, 23, 1_940, 2_140, 12_410, 14_820,

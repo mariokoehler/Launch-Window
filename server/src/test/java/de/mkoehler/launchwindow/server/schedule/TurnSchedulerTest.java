@@ -1,10 +1,15 @@
 package de.mkoehler.launchwindow.server.schedule;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.mkoehler.launchwindow.actions.QueueIntelOperationAction;
 import de.mkoehler.launchwindow.content.RandomEventRoster;
+import de.mkoehler.launchwindow.model.IntelArea;
 import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.persistence.PlayerSnapshotStore;
+import de.mkoehler.launchwindow.persistence.PlayerStateService;
+import de.mkoehler.launchwindow.rules.IntelligenceFound;
+import de.mkoehler.launchwindow.server.GameSeeds;
 import de.mkoehler.launchwindow.persistence.ResolvedSnapshot;
 import de.mkoehler.launchwindow.server.GameServer;
 import de.mkoehler.launchwindow.server.ServerTestGames;
@@ -102,6 +107,40 @@ class TurnSchedulerTest {
     private TurnScheduler scheduler(Path dataRoot, Clock clock) {
         return new TurnScheduler(dataRoot, mapper, clock, ServerTestGames.CONTEXT,
             new RandomEventRoster(0, 0, RandomEventRoster.baspmClose().events()));
+    }
+
+    /**
+     * Verifies a turn's intelligence is settled once for every player, from the actions queued that
+     * turn, kept on disk, and applied to the spying player's own state under the rival's opaque key
+     * ({@code design.md} &sect;2.9).
+     */
+    @Test
+    void intelligenceIsSettledOnceAcrossPlayersAndKept(@TempDir Path dataRoot) throws IOException {
+        createPlayer(dataRoot, "acct-target");
+        Path spyRoot = dataRoot.resolve("players").resolve("acct-spy");
+        PlayerSnapshot spy = new PlayerSnapshot("Spy Bureau", Archetype.SOVIET, 10_000, 100, 0, 1);
+        spy.getIntelligence().setLevel(2);
+        spy.getIntelligence().setTargetLevel(2);
+        new PlayerSnapshotStore(spyRoot, mapper).save(0, spy, null);
+        scheduler(dataRoot, Clock.fixed(Instant.parse("2026-09-28T08:00:00Z"), ZONE)).checkAndResolveIfDue();
+        long seed = GameMetaStore.loadOrCreateDefault(dataRoot.resolve("game-meta.json"), mapper).meta().getGameSeed();
+        String target = GameSeeds.rivalKey(seed, "acct-target");
+        PlayerStateService service = new PlayerStateService(spyRoot, mapper, ServerTestGames.CONTEXT);
+        assertTrue(service.submitAction(QueueIntelOperationAction.assessment(target, IntelArea.RND)).applied());
+        assertTrue(service.submitAction(QueueIntelOperationAction.assessment(target, IntelArea.PLANS)).applied());
+
+        scheduler(dataRoot, Clock.fixed(Instant.parse("2026-09-29T08:00:00Z"), ZONE)).checkAndResolveIfDue();
+
+        Path kept = dataRoot.resolve("intelligence").resolve("turn-1.json");
+        assertTrue(Files.exists(kept));
+        PlayerSnapshot resolved = new PlayerSnapshotStore(spyRoot, mapper).load(1).orElseThrow();
+        assertTrue(resolved.getIntelligence().getFolders().containsKey(target));
+        assertFalse(resolved.getIntelligence().getFolders().containsKey("acct-target"), "never the account id");
+        assertEquals(2, service.turnReport(1).orElseThrow().events().stream()
+            .filter(IntelligenceFound.class::isInstance).count());
+        String before = Files.readString(kept);
+        scheduler(dataRoot, Clock.fixed(Instant.parse("2026-09-30T08:00:00Z"), ZONE)).checkAndResolveIfDue();
+        assertEquals(before, Files.readString(kept), "a turn's findings are written once");
     }
 
     /**

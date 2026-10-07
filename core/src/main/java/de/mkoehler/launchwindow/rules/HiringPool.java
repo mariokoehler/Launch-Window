@@ -271,6 +271,7 @@ public final class HiringPool {
             candidate.setPortraitId(who.portraitId());
             candidate.setSalary(randomSalary(random));
             Personality.assign(snapshot, candidate, PersonnelGroup.ASTRONAUT);
+            Intelligence.passiveFind(snapshot, candidate);
             SkillBand quality = i >= astronautSize - astronautStandouts ? SkillBand.EXCELLENT : astronautBand;
             for (AstronautSkill skill : AstronautSkill.values()) {
                 candidate.setSkill(skill, randomSkill(random, quality, bonus));
@@ -296,6 +297,7 @@ public final class HiringPool {
             candidate.setPortraitId(who.portraitId());
             candidate.setSalary(randomSalary(random));
             Personality.assign(snapshot, candidate, PersonnelGroup.SET);
+            Intelligence.passiveFind(snapshot, candidate);
             SkillBand quality = i >= setSize - setStandouts ? SkillBand.EXCELLENT : setBand;
             for (SetSkill skill : SetSkill.values()) {
                 candidate.setSkill(skill, randomSkill(random, quality, bonus));
@@ -321,6 +323,7 @@ public final class HiringPool {
             candidate.setPortraitId(who.portraitId());
             candidate.setSalary(randomSalary(random));
             Personality.assign(snapshot, candidate, PersonnelGroup.MISSION_CONTROL);
+            Intelligence.passiveFind(snapshot, candidate);
             SkillBand quality = i >= missionControlSize - missionControlStandouts ? SkillBand.EXCELLENT : missionControlBand;
             for (MissionControlSkill skill : MissionControlSkill.values()) {
                 candidate.setSkill(skill, randomSkill(random, quality, bonus));

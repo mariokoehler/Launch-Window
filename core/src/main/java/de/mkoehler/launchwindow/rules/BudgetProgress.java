@@ -65,9 +65,10 @@ public final class BudgetProgress {
      * @param componentCount how many components are active
      * @param buildings     the buildings' upkeep at their levels
      * @param total         the running costs charged
+     * @param intelligence  the intelligence service at its level ({@code design.md} &sect;2.9)
      */
     public record RunningCosts(long salaries, int employees, long programs, int programCount, long components,
-                               int componentCount, long buildings, long total) {
+                               int componentCount, long buildings, long total, long intelligence) {
     }
 
     /**
@@ -101,13 +102,16 @@ public final class BudgetProgress {
             }
         }
         long buildings = BuildingUpgrades.maintenance(snapshot, catalog.buildings());
+        long intelligence = Intelligence.cost(snapshot.getIntelligence().getLevel());
         double multiplier = snapshot.getCostMultiplier();
-        long total = Math.round((salaries + programs + components + buildings) * multiplier);
+        long total = Math.round((salaries + programs + components + buildings + intelligence) * multiplier);
         long scaledSalaries = Math.round(salaries * multiplier);
         long scaledPrograms = Math.round(programs * multiplier);
         long scaledComponents = Math.round(components * multiplier);
+        long scaledIntelligence = Math.round(intelligence * multiplier);
         return new RunningCosts(scaledSalaries, employees, scaledPrograms, snapshot.getOpenedProgramIds().size(),
-            scaledComponents, componentCount, total - scaledSalaries - scaledPrograms - scaledComponents, total);
+            scaledComponents, componentCount,
+            total - scaledSalaries - scaledPrograms - scaledComponents - scaledIntelligence, total, scaledIntelligence);
     }
 
     /**
@@ -363,6 +367,11 @@ public final class BudgetProgress {
             if (cost != 0) {
                 buildings.add(new CostLine(buildingName(building) + ", level " + level, cost));
             }
+        }
+        int intelligenceLevel = snapshot.getIntelligence().getLevel();
+        if (intelligenceLevel > 0) {
+            buildings.add(new CostLine("Intelligence Office, level " + intelligenceLevel,
+                Intelligence.cost(intelligenceLevel)));
         }
         List<CostGroup> groups = List.of(new CostGroup("Salaries", salaries),
             new CostGroup("Programs and components", upkeep), new CostGroup("Buildings", buildings));

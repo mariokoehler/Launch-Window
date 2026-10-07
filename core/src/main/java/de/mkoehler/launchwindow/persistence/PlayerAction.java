@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import de.mkoehler.launchwindow.actions.AdjustSalariesAction;
 import de.mkoehler.launchwindow.actions.AssignResearchAction;
+import de.mkoehler.launchwindow.actions.BackgroundCheckAction;
+import de.mkoehler.launchwindow.actions.CancelIntelOperationAction;
 import de.mkoehler.launchwindow.actions.CancelMissionAction;
 import de.mkoehler.launchwindow.actions.CloseProgramAction;
 import de.mkoehler.launchwindow.actions.CloseRocketProgramAction;
@@ -16,8 +18,10 @@ import de.mkoehler.launchwindow.actions.LaunchMissionAction;
 import de.mkoehler.launchwindow.actions.OpenProgramAction;
 import de.mkoehler.launchwindow.actions.OpenRocketProgramAction;
 import de.mkoehler.launchwindow.actions.PullOutOfTrainingAction;
+import de.mkoehler.launchwindow.actions.QueueIntelOperationAction;
 import de.mkoehler.launchwindow.actions.ReassignControlSlotAction;
 import de.mkoehler.launchwindow.actions.ReleaseResearchAction;
+import de.mkoehler.launchwindow.actions.SetIntelligenceTargetAction;
 import de.mkoehler.launchwindow.actions.StartExpertTrainingAction;
 import de.mkoehler.launchwindow.actions.StartTrainingAction;
 import de.mkoehler.launchwindow.actions.UpgradeBuildingAction;
@@ -61,7 +65,11 @@ import de.mkoehler.launchwindow.model.PlayerSnapshot;
     @JsonSubTypes.Type(value = ReassignControlSlotAction.class, name = "reassignControlSlot"),
     @JsonSubTypes.Type(value = AdjustSalariesAction.class, name = "adjustSalaries"),
     @JsonSubTypes.Type(value = StartPrDutyAction.class, name = "startPrDuty"),
-    @JsonSubTypes.Type(value = RecallFromPrDutyAction.class, name = "recallFromPrDuty")
+    @JsonSubTypes.Type(value = RecallFromPrDutyAction.class, name = "recallFromPrDuty"),
+    @JsonSubTypes.Type(value = SetIntelligenceTargetAction.class, name = "setIntelligenceTarget"),
+    @JsonSubTypes.Type(value = QueueIntelOperationAction.class, name = "queueIntelOperation"),
+    @JsonSubTypes.Type(value = CancelIntelOperationAction.class, name = "cancelIntelOperation"),
+    @JsonSubTypes.Type(value = BackgroundCheckAction.class, name = "backgroundCheck")
 })
 public abstract class PlayerAction {
 

@@ -403,7 +403,8 @@ public class RequestDispatcher {
                     PlayerSnapshot player = snapshot.get();
                     rivals.add(RivalSummary.of(player.getAgencyName(), player.getDirectorName(),
                         player.getArchetype(), playerDir.getFileName().toString().equals(accountId),
-                        WinCondition.goalTimes(player, declared, context.catalog())));
+                        WinCondition.goalTimes(player, declared, context.catalog()),
+                        GameSeeds.rivalKey(meta.getGameSeed(), playerDir.getFileName().toString())));
                 }
             }
             return RivalsResponse.of(rivals);

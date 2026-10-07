@@ -230,7 +230,8 @@ public final class Personality {
                 .map(state -> new TraitState(state.trait(), 0, true)).toList()));
         Stream.of(copy.getAstronautCandidates(), copy.getSetSpecialistCandidates(), copy.getMissionControlCandidates())
             .flatMap(List::stream)
-            .forEach(candidate -> candidate.setTraits(List.of()));
+            .forEach(candidate -> candidate.setTraits(candidate.getTraits().stream().filter(TraitState::revealed)
+                .map(state -> new TraitState(state.trait(), 0, true)).toList()));
         copy.setRapports(copy.getRapports().stream().filter(Rapport::shown)
             .map(pair -> new Rapport(pair.first(), pair.second(), pair.rapport(), 0, pair.seasonsTogether(), true))
             .toList());

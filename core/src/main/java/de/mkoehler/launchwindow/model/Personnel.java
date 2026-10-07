@@ -14,6 +14,11 @@ import java.util.Objects;
  */
 public abstract class Personnel {
 
+    /** {@link #getIntelFind()}: a background check. */
+    public static final String FIND_CHECK = "CHECK";
+    /** {@link #getIntelFind()}: the passive find when the pool was drawn. */
+    public static final String FIND_PASSIVE = "PASSIVE";
+
     private String id;
     private String name;
     private String portraitId;
@@ -31,6 +36,8 @@ public abstract class Personnel {
     private int unavailableSeasons;
     private List<TraitState> traits = new ArrayList<>();
     private String hint;
+    private String intelFind;
+    private boolean intelExhausted;
     private int workSeasons;
     private int seasonsSinceTraining;
     private String projectId;
@@ -415,6 +422,44 @@ public abstract class Personnel {
      */
     public void setHint(String hint) {
         this.hint = hint;
+    }
+
+    /**
+     * Returns how the Intelligence Office looked into this candidate ({@code design.md} &sect;2.9):
+     * {@link #FIND_CHECK} for a background check, {@link #FIND_PASSIVE} for the passive find, or
+     * {@code null} if it hasn't. With no revealed trait it means "no notable traits".
+     *
+     * @return the find, or {@code null}
+     */
+    public String getIntelFind() {
+        return intelFind;
+    }
+
+    /**
+     * Sets how the Intelligence Office looked into this candidate.
+     *
+     * @param intelFind the find, or {@code null}
+     */
+    public void setIntelFind(String intelFind) {
+        this.intelFind = intelFind;
+    }
+
+    /**
+     * Returns whether a background check found no further trait to reveal.
+     *
+     * @return whether there's nothing more to find
+     */
+    public boolean isIntelExhausted() {
+        return intelExhausted;
+    }
+
+    /**
+     * Sets whether a background check found no further trait to reveal.
+     *
+     * @param intelExhausted whether there's nothing more to find
+     */
+    public void setIntelExhausted(boolean intelExhausted) {
+        this.intelExhausted = intelExhausted;
     }
 
     /**

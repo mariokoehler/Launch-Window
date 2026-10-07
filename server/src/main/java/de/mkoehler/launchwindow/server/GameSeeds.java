@@ -43,6 +43,19 @@ public final class GameSeeds {
         return new SplittableRandom(byTurn.nextLong() ^ mixString(accountId)).nextLong();
     }
 
+    /**
+     * Returns the opaque key other players know an agency by ({@code design.md} &sect;2.9): stable for
+     * the game, and never the account id, which stays on the server.
+     *
+     * @param gameSeed  the game's seed
+     * @param accountId the account
+     * @return the key
+     */
+    public static String rivalKey(long gameSeed, String accountId) {
+        return "a" + Long.toHexString(new SplittableRandom(gameSeed ^ 0x5EC2_E7A6_E7C1_1957L ^ mixString(accountId))
+            .nextLong());
+    }
+
     private static long mixString(String value) {
         long hash = 1125899906842597L;
         for (int i = 0; i < value.length(); i++) {

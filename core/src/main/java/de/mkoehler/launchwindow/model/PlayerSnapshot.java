@@ -67,6 +67,7 @@ public class PlayerSnapshot {
     private List<Rapport> rapports = new ArrayList<>();
     private Map<Building, Integer> buildingLevels = new LinkedHashMap<>();
     private Map<Building, Integer> buildingUpgradeSeasonsRemaining = new LinkedHashMap<>();
+    private IntelligenceState intelligence = new IntelligenceState();
 
     /**
      * No-argument constructor required for Jackson deserialization.
@@ -983,5 +984,23 @@ public class PlayerSnapshot {
         String id = "p" + nextPersonnelId;
         nextPersonnelId++;
         return id;
+    }
+
+    /**
+     * Returns the agency's intelligence service ({@code design.md} &sect;2.9).
+     *
+     * @return the service, never {@code null}
+     */
+    public IntelligenceState getIntelligence() {
+        return intelligence;
+    }
+
+    /**
+     * Sets the intelligence service.
+     *
+     * @param intelligence the service, or {@code null} for none (level 0)
+     */
+    public void setIntelligence(IntelligenceState intelligence) {
+        this.intelligence = intelligence == null ? new IntelligenceState() : intelligence;
     }
 }
