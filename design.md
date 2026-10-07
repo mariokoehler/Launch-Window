@@ -632,9 +632,23 @@ such as letting a brilliant troublemaker go.
   - *Engineers (SET):* bring a component to its R&D cap; work on the rocket or capsule of a flight
     that reaches a first; be the most skilled engineer on a component.
 
-  Fulfilled, an ambition builds **loyalty**; passed over (someone else flies the flight they
-  wanted, or the component reaches its cap without them) it costs morale and loyalty. Loyalty also
-  grows with tenure and raises, and is what resists poaching.
+  **Deadlines** (user's question, 2026-10-07; defaults unconfirmed): each ambition has a
+  **patience window** in seasons, shown as a number on the person's page and the personnel
+  overview ("4 seasons left"). It's sized by how hard the ambition is (fly in space short, be
+  first at something long; default 4 to 8 seasons, short because a default game lasts about 24)
+  and by traits: **Ambitious** is impatient (shorter window, bigger loyalty gain when met),
+  **Steady** waits longer. Only ambitions the agency can currently reach are drawn (a component
+  that's open, a program with a fitting configuration), so the clock is fair without pauses.
+  - **Fulfilled:** builds **loyalty**, and may be followed by a new ambition.
+  - **Passed over** (someone else in the agency gets it: flies the flight they wanted, or the
+    component reaches its cap without them): costs morale and loyalty and shortens the window,
+    but the ambition stays open.
+  - **No longer possible** (a rival reaches the first they wanted): a mild loss, since it wasn't
+    the player's fault; a new ambition may follow.
+  - **Runs out:** the biggest loss of loyalty and morale, and the person stays **disappointed**
+    for a while (default 4 seasons), easy to poach; then a new ambition may follow.
+
+  Loyalty also grows with tenure and raises, and is what resists poaching.
 - **Career record** (decided): a page per person with a timeline of hiring, training, flights,
   the R&D they worked on, firsts, near misses, revealed traits, relationships and ambitions met.
   The Memorial's living counterpart; it makes a loss mean something.
@@ -656,7 +670,7 @@ such as letting a brilliant troublemaker go.
   chemistry preview where teams are formed (R&D slots, mission staffing), the career page, and
   the turn report's lines. Effects read their numbers from the rules' constants (`Tips`).
 - **Open:** which traits suit which group, whether a trait can be misleading at first, the
-  ambition chances and list, and when an ambition shows.
+  ambition chances, list, windows and losses, and when an ambition shows.
 
 ### 2.3 Programs & mission configurations
 
