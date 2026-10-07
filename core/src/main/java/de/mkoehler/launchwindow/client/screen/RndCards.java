@@ -188,7 +188,9 @@ final class RndCards {
             box.add(release);
             return box;
         }
-        if (card.atCap()) {
+        // Released only once the team has gone; past the known cap with people seated, a hidden
+        // Perfectionist keeps them working.
+        if (card.atCap() && team(card).isEmpty()) {
             box.setBackground(ui.rect(Theme.SKILL_TRACK, Theme.NAVY_BORDER, Theme.BORDER_THIN));
             box.add(ui.label("Slot " + (slot + 1) + " · empty", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).row();
             box.add(ui.label("Released", Theme.TextStyle.CAPTION, Theme.INK_MUTED));

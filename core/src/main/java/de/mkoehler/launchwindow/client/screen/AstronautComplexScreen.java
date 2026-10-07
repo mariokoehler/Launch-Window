@@ -229,8 +229,8 @@ public final class AstronautComplexScreen extends ChromeScreen {
         Table card = dialogCard("Astronaut Complex", "PR duty · " + astronaut.getName());
         Table intro = new Table();
         intro.add(ui.paragraph("Interviews, tours and public appearances instead of training. The astronaut stays "
-            + "busy, so morale rises, and earns prestige every season until you recall them. On tour they can't "
-            + "fly or sit at CAPCOM.", Theme.TextStyle.BODY, Theme.INK_MUTED)).expandX().fillX().padRight(6f);
+            + "busy, so morale rises, and earns prestige every season until recalled. Nobody on tour can fly or "
+            + "sit at CAPCOM.", Theme.TextStyle.BODY, Theme.INK_MUTED)).expandX().fillX().padRight(6f);
         intro.add(new HistoryNote(ui, session.state().getArchetype() == Archetype.SOVIET ? HistoryNotes.PR_SOVIET
             : HistoryNotes.PR_NASA)).size(HistoryNote.ICON_SIZE).top();
         card.add(intro).padBottom(Theme.SPACE_4).row();

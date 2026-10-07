@@ -975,6 +975,11 @@ public final class ScreenSnapshot {
         write(folder, "people-rnd-assign.png", new RndBoardScreen(game, RndBoardScreen.Board.PAYLOAD),
             screen -> screen.openAssign(PayloadRnd.cards(game.session().state(), game.session().catalog()).get(1)));
         write(folder, "people-hire.png", new HireScreen(game), null);
+        // Past the cap the player knows of with people still seated: a hidden Perfectionist's early tell.
+        double sputnikCap = maxRd("sputnik-1-satellite");
+        state.getMissionComponents().put("sputnik-1-satellite", new OwnedMissionComponent(sputnikCap + 1.1, 45.0));
+        write(folder, "people-rnd-hidden-cap.png", new RndBoardScreen(game, RndBoardScreen.Board.PAYLOAD), null);
+        state.getMissionComponents().put("sputnik-1-satellite", new OwnedMissionComponent(62.4, 45.0));
 
         // Headquarters: a crew and consoles with traits, a clash and a friendship.
         PlayerSnapshot planning = planningState(11, 25_000);
