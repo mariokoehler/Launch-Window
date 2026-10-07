@@ -176,8 +176,9 @@ engineering problem or tidbit, note it here the same session.
       23 May 1958; Vanguard 1 (17 March 1958), six solar panels, solar radio to May 1964; Bell
       Labs' silicon cell 1954.
     - E-17: Redstone's jet vanes, the R-7's verniers, Jupiter-C's 11 + 3 + 1 spun stages. The
-      "In Launch Window" line now says Jupiter-C lifts exactly Explorer 1's 11 kg (the pack's
-      figures).
+      "In Launch Window" line says Jupiter-C lifts "just enough" for Explorer 1, with no figure:
+      the pack gives the satellite 11 kg (its mass, from BASPM) while its description says about
+      14 kg (the real mass), so the pack disagrees with itself there (left as it is).
     - E-18: Sputnik 1 at 215 by 939 km, its core stage down about a month earlier; Explorer 1
       down 31 March 1970; Skylab 11 July 1979; the lifetime curve is a rough standard one.
     - E-19: the Atlas's skin 0.36 to 0.94 mm, kept at about 5 psi when empty; "one of the
