@@ -13,6 +13,7 @@ import de.mkoehler.launchwindow.client.ui.OutcomeBar;
 import de.mkoehler.launchwindow.client.ui.Refusals;
 import de.mkoehler.launchwindow.client.ui.ReliabilityBar;
 import de.mkoehler.launchwindow.client.ui.Theme;
+import de.mkoehler.launchwindow.client.view.Staffing;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.MissionDraft;
 import de.mkoehler.launchwindow.client.view.Missions;
@@ -169,6 +170,7 @@ public final class MissionPlanScreen extends ChromeScreen {
         left.defaults().growX().padBottom(Theme.SPACE_4);
         left.add(headline(odds, draft)).row();
         left.add(componentsCard(draft)).row();
+        left.add(staffingCard()).row();
         for (Table notice : weakSpots(draft, odds)) {
             left.add(notice).row();
         }
@@ -197,6 +199,51 @@ public final class MissionPlanScreen extends ChromeScreen {
             + ", and the staff Auto-assign picked unless you changed it in assembly. Expert rescues, changes "
             + "between seasons and random events aren't counted.", Theme.TextStyle.CAPTION, Theme.INK_MUTED))
             .colspan(3).growX().padTop(Theme.SPACE_3);
+        return card;
+    }
+
+    /**
+     * The people this mission needs against those free, who's coming, and the skill each seat reads
+     * (play-test request 2026-10-07: plan hiring and training before assembly).
+     */
+    private Table staffingCard() {
+        Table card = ui.card();
+        card.defaults().growX().left();
+        card.add(ui.label("STAFFING", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padBottom(Theme.SPACE_3).row();
+        Table grid = new Table();
+        grid.defaults().right().padBottom(4f);
+        grid.add().expandX();
+        for (String head : new String[] {"Needed", "Free", "Training", "Basic", "Busy"}) {
+            grid.add(ui.label(head.toUpperCase(Locale.ROOT), Theme.TextStyle.LABEL, Theme.INK_MUTED)).width(62f);
+        }
+        grid.row();
+        List<Staffing.Group> groups = Staffing.of(configuration, session.state());
+        for (Staffing.Group group : groups) {
+            grid.add(ui.label(Character.toUpperCase(group.group().charAt(0)) + group.group().substring(1),
+                Theme.TextStyle.BODY_SM, Theme.INK)).left();
+            grid.add(ui.label(String.valueOf(group.needed()), Theme.TextStyle.BODY_STRONG, Theme.INK)).width(62f);
+            grid.add(ui.label(String.valueOf(group.free()), Theme.TextStyle.BODY_STRONG,
+                group.isShort() ? Theme.DANGER : Theme.SUCCESS)).width(62f);
+            grid.add(ui.label(String.valueOf(group.inTraining()), Theme.TextStyle.BODY_SM, Theme.INK)).width(62f);
+            grid.add(ui.label(String.valueOf(group.inBasic()), Theme.TextStyle.BODY_SM, Theme.INK)).width(62f);
+            grid.add(ui.label(String.valueOf(group.busy()), Theme.TextStyle.BODY_SM, Theme.INK)).width(62f).row();
+        }
+        card.add(grid).padBottom(Theme.SPACE_2).row();
+        for (Staffing.Group group : groups) {
+            String advice = Staffing.advice(group);
+            if (advice != null) {
+                card.add(ui.paragraph(advice, Theme.TextStyle.CAPTION, Theme.DANGER)).padBottom(Theme.SPACE_1).row();
+            }
+        }
+        card.add(ui.label("SEATS AND THE SKILL EACH READS", Theme.TextStyle.LABEL, Theme.INK_MUTED))
+            .padTop(Theme.SPACE_2).padBottom(4f).row();
+        Table seats = new Table();
+        seats.defaults().left().top().padBottom(2f);
+        for (String[] seat : Staffing.seats(configuration)) {
+            seats.add(ui.label(seat[0], Theme.TextStyle.BODY_SM, Theme.INK)).width(230f).padRight(Theme.SPACE_2);
+            seats.add(ui.label(seat[1], Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).expandX().row();
+        }
+        card.add(seats).row();
         return card;
     }
 

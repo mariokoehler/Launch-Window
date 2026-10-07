@@ -757,6 +757,8 @@ public final class ScreenSnapshot {
 
         startSession(game, planningState(5, 25_000), info);
         write(folder, "plan-assemble-short.png", new AssembleMissionScreen(game, "vostok-orbital"), null);
+        write(folder, "plan-assessment-short.png", new MissionPlanScreen(game, "vostok-orbital",
+            MissionPlanScreen.Tab.ASSESSMENT), null);
         startSession(game, planningState(11, 2_000), info);
         write(folder, "plan-assemble-funds.png", new AssembleMissionScreen(game, "vostok-orbital"), null);
         PlayerSnapshot capped = planningState(11, 25_000);

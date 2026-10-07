@@ -2,11 +2,13 @@ package de.mkoehler.launchwindow.client.screen;
 
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.UiKit;
 import de.mkoehler.launchwindow.client.view.Missions;
+import de.mkoehler.launchwindow.client.view.Staffing;
 import de.mkoehler.launchwindow.content.MissionConfiguration;
 import de.mkoehler.launchwindow.rules.MissionPrestige;
 
@@ -103,6 +105,15 @@ final class ConfigCards {
         stat(ui, stats, "Controllers", String.valueOf(Missions.controllerCount(configuration)));
         stat(ui, stats, "CAPCOM", String.valueOf(Missions.capcomCount(configuration)));
         body.add(stats).row();
+        // Free people against the need, so staffing can be planned seasons ahead (play test 2026-10-07).
+        String free = Staffing.cardLine(configuration, host.session.state());
+        if (free != null) {
+            boolean short_ = Staffing.isShort(configuration, host.session.state());
+            Label line = ui.label(free, Theme.TextStyle.CAPTION, short_ ? Theme.DANGER : Theme.INK_MUTED);
+            ui.tooltip(line, "People free now", "Free means idle and available: not on a mission, not in training, "
+                + "not on R&D. Assembly needs this many free at once. The planning screen shows who's coming.");
+            body.add(line).padBottom(4f).row();
+        }
         body.add(ui.label(tierNote(flown), Theme.TextStyle.CAPTION, Theme.INK_MUTED));
         card.add(body).growX().pad(14f, 16f, 16f, 16f);
         card.setTouchable(Touchable.enabled);

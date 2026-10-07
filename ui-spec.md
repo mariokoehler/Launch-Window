@@ -951,6 +951,14 @@ Headquarters' cap limits open payload programs (3/7/10/16). **Ref:**
 `program_details.png`, `goals_open_up_new_programs.png`, `mission_selection.png`,
 `assemble_mission*.png`, `schedule_mission.png`.
 
+**Staffing ahead of assembly** *(play-test request, built 2026-10-07 without a mockup)*. Every
+configuration card adds "Free now: 5 of 2 astronauts · 10 of 9 controllers" under its stats, red
+when short (free means what assembly counts: idle and available). The planning screen's assessment
+tab adds a Staffing card: per group needed, free, in training that can be cut short, in basic
+training and busy; a red line per short group saying how many short and who's coming ("the first
+done in 1 season"), with a reminder that hiring takes basic training; and every seat the mission
+uses with the skill it reads most (`client.view.Staffing`).
+
 **Plan a mission** *(play-test request, built 2026-10-07 without a mockup, from the configuration
 cards of §4.6.5)*. Headquarters' landing screen has three cards: Plan a mission ("Ready to plan · N
 missions"), Manage open programs, Browse programs. Plan a mission lists every configuration of
