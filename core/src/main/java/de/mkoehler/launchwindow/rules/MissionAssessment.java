@@ -138,9 +138,13 @@ public final class MissionAssessment {
             int seasonIndex, MissionStep step, java.util.function.Predicate<String> held) {
         double componentSum = MissionProgress.componentContributionSum(snapshot, catalog, plan, step, held);
         boolean crewInvolved = !step.crewInvolvements().isEmpty();
-        double crewSum = crewInvolved ? MissionProgress.crewContributionSum(snapshot, plan, step) : 0;
+        // The team's chemistry as the player knows it: revealed traits and shown relationships only.
+        double chemistry = Chemistry.mission(snapshot, plan, true).multiplier();
+        double crewSum = crewInvolved
+            ? Math.min(100, MissionProgress.crewContributionSum(snapshot, plan, step) * chemistry) : 0;
         double base = MissionStepResolution.computeBaseProbability(componentSum, crewInvolved, crewSum);
-        double controllerSum = MissionProgress.controlContributionSum(snapshot, catalog, plan, step);
+        double controllerSum = Math.min(100, MissionProgress.controlContributionSum(snapshot, catalog, plan, step)
+            * chemistry);
         double save = MissionStepResolution.computeSavingThrowProbability(base, controllerSum);
 
         double first = clamp(base / 100.0);

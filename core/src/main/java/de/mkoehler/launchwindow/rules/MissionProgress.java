@@ -461,7 +461,9 @@ public final class MissionProgress {
         double componentSum = componentContributionSum(snapshot, catalog, mission, step,
             snapshot::hasAchievedOrCancelledGoal, flown);
         boolean crewInvolved = !step.crewInvolvements().isEmpty();
-        double crewSum = crewInvolved ? crewContributionSum(snapshot, mission, step) : 0;
+        // The crew and controllers' chemistry scales what they bring (design.md 2.2(d)).
+        double chemistry = Chemistry.mission(snapshot, mission, false).multiplier();
+        double crewSum = crewInvolved ? Math.min(100, crewContributionSum(snapshot, mission, step) * chemistry) : 0;
         double baseProbability = MissionStepResolution.computeBaseProbability(componentSum, crewInvolved, crewSum);
 
         double firstRoll = MissionStepResolution.drawRoll(random);
@@ -472,7 +474,7 @@ public final class MissionProgress {
         }
 
         // CAPCOM is a control slot, so it sits on the controller side of the saving throw (baspm.md §10.9).
-        double controllerSum = controlContributionSum(snapshot, catalog, mission, step);
+        double controllerSum = Math.min(100, controlContributionSum(snapshot, catalog, mission, step) * chemistry);
         double beforeExperts = MissionStepResolution.computeSavingThrowProbability(baseProbability, controllerSum);
         double savingThrowProbability = applyExpertRescue(snapshot, catalog, mission, step, beforeExperts,
             expertUseCounts, events);

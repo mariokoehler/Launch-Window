@@ -255,6 +255,14 @@ public final class ResearchProgress {
 
         double[] nominalGains = new double[MissionComponent.RD_SLOT_COUNT];
         double nominalTotal = 0.0;
+        // The team's chemistry scales its progress (design.md 2.2(d)).
+        List<SetSpecialist> team = new ArrayList<>();
+        for (SetSpecialist member : slots) {
+            if (member != null) {
+                team.add(member);
+            }
+        }
+        double chemistry = Chemistry.research(snapshot, team, component.associatedSkill(), false).multiplier();
         for (int slot = 0; slot < MissionComponent.RD_SLOT_COUNT; slot++) {
             SetSpecialist specialist = slots[slot];
             if (specialist == null) {
@@ -263,7 +271,7 @@ public final class ResearchProgress {
             double rawAmount = SkillGrowth.drawRdSlotRawAmount(component.rdSlotBandMaxAmounts(), slot, random);
             double skillBefore = skillBeforeGain.get(specialist);
             double nominalGain = SkillGrowth.rdReliabilityGain(rawAmount, startReliability,
-                component.maxRdReliability(), skillBefore) * snapshot.getRdResultsMultiplier();
+                component.maxRdReliability(), skillBefore) * snapshot.getRdResultsMultiplier() * chemistry;
             nominalGains[slot] = nominalGain;
             nominalTotal += nominalGain;
         }

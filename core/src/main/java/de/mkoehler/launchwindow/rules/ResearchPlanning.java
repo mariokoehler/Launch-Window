@@ -54,8 +54,16 @@ public final class ResearchPlanning {
                 team[slot] = specialist;
             }
         }
+        // The chemistry the player can see: revealed traits and shown relationships only.
+        List<SetSpecialist> members = new java.util.ArrayList<>();
+        for (SetSpecialist member : team) {
+            if (member != null) {
+                members.add(member);
+            }
+        }
+        double chemistry = Chemistry.research(snapshot, members, component.associatedSkill(), true).multiplier();
         return expectedSeasonGain(component, owned.getCurrentReliability(), team,
-            snapshot.getRdResultsMultiplier());
+            snapshot.getRdResultsMultiplier() * chemistry);
     }
 
     /**
