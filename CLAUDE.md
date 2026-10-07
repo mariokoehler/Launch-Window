@@ -51,13 +51,11 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   libGDX (2026-10-07); their look is confirmed.
 - **People worth caring about** (`design.md` §2.2(d), the user's idea, 2026-10-07): team chemistry
   from pair rapport and hidden traits, ambitions, career records, later poaching. The rules for
-  phases 1 to 3 and the personal traits are built (2026-10-07); the screens are specified
-  (`ui-spec.md` components 20 to 22, §4.14) and wait for the user's mockups. Reset the dev data
-  root before the next play test (new fields on employees).
-- **People screens** (traits, chemistry, relationships; `design.md` §2.2(d)) are mocked up on the
-  canvas `Launch Window — People` (ask the user for the link), 2026-10-07: components 20 to 22,
-  the person page, and their places on six existing screens (`ui-spec.md`, the note after
-  component 22). The look is unconfirmed; not built in libGDX yet.
+  phases 1 to 3 and the personal traits are built (2026-10-07). The screens (`ui-spec.md`
+  components 20 to 22, §4.14) are mocked up on the canvas `Launch Window — People` (the Artifact
+  tool's list finds it), 2026-10-07: the three components, the person page, and their places on six
+  existing screens (`ui-spec.md`, the note after component 22). The look is unconfirmed; not built
+  in libGDX yet. Reset the dev data root before the next play test (new fields on employees).
 - **PR duty for astronauts is built** (`design.md` §2.2(c)), with 39 press stories
   (`assets/content/pr-press.json`), no repeats, and effects beyond prestige. Next is the next
   play test.
