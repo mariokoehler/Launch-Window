@@ -134,7 +134,7 @@ engineering problem or tidbit, note it here the same session.
     30-step mission (the odds multiply), why launch latitude matters (Earth's spin as a boost).
     The concept audit below adds more.
 - **Concepts: linking game content to the explainers** (user's idea, 2026-10-07; specified in
-  `ui-spec.md` component 19, to be mocked up). Programs, configurations, steps, rockets and
+  `ui-spec.md` component 19, mocked up the same day). Programs, configurations, steps, rockets and
   capsules each list the real-world concepts behind them; a Concepts section on their screens
   shows them as chips that open the right explainer sheet, with a gold dot until the player
   has read it. This replaces the proposed "New idea" notices. No inline links in text (user,
