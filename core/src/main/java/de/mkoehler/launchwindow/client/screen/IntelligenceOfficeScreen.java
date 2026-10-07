@@ -549,8 +549,11 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
         card.pad(Theme.SPACE_3, Theme.SPACE_4, Theme.SPACE_4, Theme.SPACE_4);
         card.top();
         Table head = new Table();
-        head.add(new Image(ui.historyNoteIcon(), Scaling.fit)).size(16f).padRight(Theme.SPACE_2);
-        head.add(sectionTitle("The real thing")).expandX().left();
+        // The glyph is white so it can be tinted: navy, as on every other history note (component 15).
+        Image glyph = new Image(ui.historyNoteIcon(), Scaling.fit);
+        glyph.setColor(Theme.NAVY);
+        head.add(glyph).size(16f).padRight(Theme.SPACE_2);
+        head.add(ui.label("HISTORY", Theme.TextStyle.LABEL, Theme.NAVY)).expandX().left();
         card.add(head).growX().padBottom(Theme.SPACE_2).row();
         card.add(ui.paragraph(HISTORY_NOTE, Theme.TextStyle.BODY_SM, Theme.INK)).growX();
         return card;
