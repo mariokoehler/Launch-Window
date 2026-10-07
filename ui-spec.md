@@ -376,8 +376,8 @@ On the right:
       remembering which explainers a player has seen. All five are readable in the Museum.
     - **Known blemish:** the Museum card's thumbnail shows E-04's halo outlines without their
       labels (a white smudge on the first tank).
-19. **Concept chips** *(user's idea, 2026-10-07; specified, mocked up the same day; the look and
-    the details marked "default" are unconfirmed)*. A small **Concepts** section listing the
+19. **Concept chips** *(user's idea, 2026-10-07; specified, mocked up and built the same day; the
+    look confirmed by the user that day)*. A small **Concepts** section listing the
     real-world ideas behind a piece of game content, as clickable chips. A chip opens the
     explainer (component 18) that explains it, at the right sheet; Close and Done come back to
     the screen the chip was on. It's how players reach explainers from play, instead of a
@@ -447,8 +447,9 @@ On the right:
       - **Open rocket program:** six chips don't fit on a row, so every row gets an
         always-shown Concepts line under it, aligned with the name column (no expandable
         detail).
-      - **Not yet in the design system** (local CSS in the mockups): promote it as
-        `ConceptChip` and add it to `Theme.java` once the look is confirmed.
+      - **Design system:** confirmed (user, 2026-10-07), so the next mockup session should add
+        it to the Launch Window design system as `ConceptChip` (it's local CSS in the mockups so
+        far). In the client it's `client.ui.ConceptChip`, using `Theme`'s existing tokens.
     - **As built (2026-10-07):** `client.ui.ConceptChip`, laid out by
       `ChromeScreen.conceptsSection`/`conceptChips` (a wrapping `HorizontalGroup`), the data in
       `assets/content/concepts.json` read by `client.view.Concepts` (checked by `ConceptsTest`,

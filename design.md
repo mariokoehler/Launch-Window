@@ -1307,7 +1307,7 @@ until all have run, and effects beyond prestige.
 
 **Concept chips** (2026-10-07, `ui-spec.md` component 19) are built: `concepts.json` from the
 concept audit (§1.1), the chips on program details, configuration details and the VAB's rocket
-rows, and the "new" dot there and in the Museum. Their look is still to be confirmed. Otherwise
+rows, and the "new" dot there and in the Museum. Their look is confirmed (user, 2026-10-07). Otherwise
 next is the next play test.
 
 ### Later
