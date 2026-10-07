@@ -663,8 +663,7 @@ public final class MissionProgress {
         for (MissionStep.ComponentInvolvement involvement : step.componentInvolvements()) {
             // A rocket slot reads the reliability of the rocket the player chose for that launch.
             String componentId = MissionLaunch.resolveComponentId(involvement.componentId(), mission.getRocketIds());
-            OwnedMissionComponent owned = snapshot.getMissionComponents().get(componentId);
-            double current = owned != null ? owned.getCurrentReliability() : 0;
+            double current = flyingReliability(snapshot, mission, componentId);
             double modifier = goalModifierFor(goalHeld, configuration, componentId);
             double effective = MissionStepResolution.effectiveReliability(current, modifier);
             sum += involvement.percent() / 100.0 * effective;
@@ -673,6 +672,26 @@ public final class MissionProgress {
             }
         }
         return sum;
+    }
+
+    /**
+     * Returns the reliability a component flies at on a mission: as it was at launch, since the
+     * copy that flies isn't changed by ground R&amp;D or by other flights (user decision
+     * 2026-10-07); the component as it is now for a mission launched before launch values were
+     * kept, or for a stand-in plan that hasn't launched.
+     *
+     * @param snapshot    the player
+     * @param mission     the mission
+     * @param componentId the component
+     * @return the reliability, 0 for a component not owned
+     */
+    public static double flyingReliability(PlayerSnapshot snapshot, InProgressMission mission, String componentId) {
+        Double atLaunch = mission.getLaunchReliability().get(componentId);
+        if (atLaunch != null) {
+            return atLaunch;
+        }
+        OwnedMissionComponent owned = snapshot.getMissionComponents().get(componentId);
+        return owned != null ? owned.getCurrentReliability() : 0;
     }
 
     /**

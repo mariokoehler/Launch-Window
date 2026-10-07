@@ -233,6 +233,8 @@ cd assets && java --enable-native-access=ALL-UNNAMED -cp "../lwjgl3/target/class
   unearnable".
 - A seat titled "FLIGHT DIRECTOR" doesn't always read the average skill; go by the seat's skill
   (`baspm.md` §10.11).
+- A flight's component reliability *is* stamped at launch (`InProgressMission.launchReliability`,
+  `design.md` §2.5(d)); read it through `MissionProgress.flyingReliability`, never the owned value.
 - A mission's prestige tier is read live, never stamped at launch (simultaneous copies of one
   configuration would all pay first-time).
 

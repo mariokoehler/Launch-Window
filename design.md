@@ -841,6 +841,16 @@ skill at **20 %** weight (a weighted average, so weak crew can lower the odds; c
 user 2026-10-01). Controller skill only scales the saving throw (base × controller sum / 100). A
 failed saving throw splits into catastrophic / failure / minor-glitch bands. These numbers are
 ours and confirmed for play testing (2026-10-06).
+- **The hardware that flies is the copy built at launch** (user decision 2026-10-07; BASPM reads
+  the one shared value at every step instead, `MissionSimBaseScreen.cs:917`). A launch records
+  each component's reliability (`InProgressMission.launchReliability`), and every step of that
+  flight reads it (`MissionProgress.flyingReliability`). Ground R&D, a random setback, and every
+  flight's own results, failures included, change only the component on the ground, for later
+  missions; never a copy already flying, whether on this mission or one in parallel. Missions
+  saved before this read the component as it is now. The client's odds and component list for a
+  launched mission read the launch values too. Today it only matters for the two extended
+  satellite missions (three seasons) and for two flights sharing a component in one turn; the
+  bot playouts, which fly neither, came out identical.
 
 **(e) Content shape** (`MissionStep`, `MissionSeason`, `MissionConfiguration`): a step lists
 component involvements (summing to exactly 100), crew involvements (none, or summing to exactly

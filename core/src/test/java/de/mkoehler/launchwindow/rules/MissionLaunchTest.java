@@ -289,4 +289,49 @@ class MissionLaunchTest {
         assertEquals(AssignmentState.IDLE, snapshot.getMissionControlOfficers().get(0).getAssignmentState());
         assertEquals(10_000, snapshot.getFunds());
     }
+
+    /**
+     * The copy that flies is built at launch (user decision 2026-10-07): later changes to the
+     * component on the ground, from R&amp;D or another flight's failure, don't reach it, but do
+     * reach the next mission.
+     */
+    @Test
+    void aFlightKeepsTheReliabilityItWasLaunchedWith() {
+        PlayerSnapshot snapshot = snapshotWithProgramOpenAndIdleCrew();
+        snapshot.getMissionComponents().put("capsule-mercury",
+            new de.mkoehler.launchwindow.model.OwnedMissionComponent(70.0, 3.0));
+        assertEquals(MissionLaunchOutcome.LAUNCHED,
+            MissionLaunch.launch(snapshot, "uncrewed-std", List.of(), List.of(), catalog));
+        de.mkoehler.launchwindow.model.InProgressMission flying =
+            snapshot.getInProgressMissions().values().iterator().next();
+        assertEquals(java.util.Map.of("capsule-mercury", 70.0), flying.getLaunchReliability());
+
+        // Ground R&D raises the component; the flying copy stays as built.
+        snapshot.getMissionComponents().get("capsule-mercury").setCurrentReliability(80.0);
+        assertEquals(70.0, MissionProgress.flyingReliability(snapshot, flying, "capsule-mercury"), 1e-9);
+        assertEquals(70.0, MissionProgress.componentContributionSum(snapshot, catalog, flying, uncrewedStep,
+            goal -> true), 1e-9);
+        assertEquals(MissionAssessment.assess(snapshot, catalog, flying, uncrewedConfiguration).steps().get(0)
+            .success(), withReliability(70.0).steps().get(0).success(), 1e-9);
+
+        // Another flight's failure lowers the ground template only: the next launch takes it.
+        snapshot.getMissionComponents().get("capsule-mercury").setCurrentReliability(55.0);
+        assertEquals(70.0, MissionProgress.flyingReliability(snapshot, flying, "capsule-mercury"), 1e-9);
+        assertEquals(MissionLaunchOutcome.LAUNCHED,
+            MissionLaunch.launch(snapshot, "uncrewed-std", List.of(), List.of(), catalog));
+        de.mkoehler.launchwindow.model.InProgressMission next = snapshot.getInProgressMissions().values().stream()
+            .filter(mission -> mission != flying).findFirst().orElseThrow();
+        assertEquals(55.0, MissionProgress.flyingReliability(snapshot, next, "capsule-mercury"), 1e-9);
+
+        // A mission saved before launch values were kept reads the component as it is now.
+        flying.setLaunchReliability(null);
+        assertEquals(55.0, MissionProgress.flyingReliability(snapshot, flying, "capsule-mercury"), 1e-9);
+    }
+
+    private MissionAssessment.Assessment withReliability(double reliability) {
+        PlayerSnapshot plain = snapshotWithProgramOpenAndIdleCrew();
+        plain.getMissionComponents().put("capsule-mercury",
+            new de.mkoehler.launchwindow.model.OwnedMissionComponent(reliability, 3.0));
+        return MissionAssessment.assess(plain, catalog, uncrewedConfiguration, List.of(), List.of(), List.of());
+    }
 }

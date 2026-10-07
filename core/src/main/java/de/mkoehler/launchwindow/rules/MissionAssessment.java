@@ -106,12 +106,38 @@ public final class MissionAssessment {
     public static Assessment assess(PlayerSnapshot snapshot, ContentCatalog catalog,
             MissionConfiguration configuration, List<String> crewSlotIds, List<String> controlSlotIds,
             List<String> rocketIds, int fromSeason) {
+        return assess(snapshot, catalog, configuration, crewSlotIds, controlSlotIds, rocketIds, fromSeason,
+            java.util.Map.of());
+    }
+
+    /**
+     * Assesses what's left of a launched flight: as above, with its components at the
+     * reliability they had at launch ({@link InProgressMission#getLaunchReliability}), the copies
+     * that actually fly.
+     *
+     * @param snapshot          the player
+     * @param catalog           the content catalog
+     * @param mission           the launched mission, scheduled or in flight
+     * @param configuration     its configuration
+     * @return the odds of the seasons still to fly
+     * @throws NullPointerException if an argument is {@code null}
+     */
+    public static Assessment assess(PlayerSnapshot snapshot, ContentCatalog catalog, InProgressMission mission,
+            MissionConfiguration configuration) {
+        return assess(snapshot, catalog, configuration, mission.getCrewSlotIds(), mission.getControlSlotIds(),
+            mission.getRocketIds(), mission.getCurrentSeasonIndex(), mission.getLaunchReliability());
+    }
+
+    private static Assessment assess(PlayerSnapshot snapshot, ContentCatalog catalog,
+            MissionConfiguration configuration, List<String> crewSlotIds, List<String> controlSlotIds,
+            List<String> rocketIds, int fromSeason, java.util.Map<String, Double> launchReliability) {
         Objects.requireNonNull(snapshot, "snapshot must not be null");
         Objects.requireNonNull(catalog, "catalog must not be null");
         Objects.requireNonNull(configuration, "configuration must not be null");
         // A stand-in for the mission as it would fly, so the odds come from the season pass's own sums.
         InProgressMission plan = new InProgressMission("assessment", configuration.id(), crewSlotIds, controlSlotIds);
         plan.setRocketIds(rocketIds);
+        plan.setLaunchReliability(launchReliability);
         Set<String> held = new HashSet<>(snapshot.getAchievedGoals().keySet());
         held.addAll(snapshot.getCancelledGoalIds());
 

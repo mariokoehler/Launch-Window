@@ -23,6 +23,7 @@ import de.mkoehler.launchwindow.model.OwnedMissionComponent;
 import de.mkoehler.launchwindow.model.Personnel;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.rules.MissionAssessment;
+import de.mkoehler.launchwindow.rules.MissionProgress;
 import de.mkoehler.launchwindow.rules.MissionCancellation;
 import de.mkoehler.launchwindow.rules.MissionLaunch;
 
@@ -214,12 +215,19 @@ public final class MissionsScreen extends ChromeScreen {
             glyph.setColor(Theme.NAVY);
             head.add(glyph).size(14f).padRight(6f);
             head.add(ui.label(ContentNames.of(id), Theme.TextStyle.BODY_STRONG, Theme.INK)).expandX().left();
-            head.add(ui.label(String.format(Locale.ROOT, "%.1f%%", owned.getCurrentReliability()), Theme.TextStyle.BODY_SM,
-                Theme.INK_MUTED));
+            // Still to fly: the copy built at launch, which ground R&D and other flights don't change.
+            double shown = later.contains(id) ? MissionProgress.flyingReliability(session.state(), mission, id)
+                : owned.getCurrentReliability();
+            head.add(ui.label(String.format(Locale.ROOT, "%.1f%%", shown), Theme.TextStyle.BODY_SM, Theme.INK_MUTED));
             box.add(head).padBottom(2f).row();
             if (later.contains(id)) {
-                box.add(new ReliabilityBar(ui, owned.getCurrentReliability(), component.maxRdReliability(),
-                    component.maxReliability(), owned.getFloorReliability())).height(12f).padBottom(6f).row();
+                box.add(new ReliabilityBar(ui, shown, component.maxRdReliability(),
+                    component.maxReliability(), owned.getFloorReliability())).height(12f).padBottom(2f).row();
+                String note = Math.abs(owned.getCurrentReliability() - shown) >= 0.05
+                    ? String.format(Locale.ROOT, "Flies as built at launch. On the ground it's %.1f%% now, for later "
+                        + "missions.", owned.getCurrentReliability())
+                    : "Flies as built at launch.";
+                box.add(ui.label(note, Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padBottom(6f).row();
             } else {
                 box.add(ui.label("Done flying on this mission; its reliability change was applied then.",
                     Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padBottom(6f).row();
@@ -327,9 +335,7 @@ public final class MissionsScreen extends ChromeScreen {
         Table side = new Table();
         side.top();
         side.defaults().growX().left();
-        int from = mission.getCurrentSeasonIndex();
-        MissionAssessment.Assessment odds = MissionAssessment.assess(state, session.catalog(), configuration,
-            mission.getCrewSlotIds(), mission.getControlSlotIds(), mission.getRocketIds(), from);
+        MissionAssessment.Assessment odds = MissionAssessment.assess(state, session.catalog(), mission, configuration);
         side.add(ui.label((scheduled ? "ODDS WITH THIS STAFF" : "ODDS FOR WHAT'S LEFT"), Theme.TextStyle.CAPTION,
             Theme.INK_MUTED)).padBottom(Theme.SPACE_2).row();
         Table stats = new Table();

@@ -1,7 +1,9 @@
 package de.mkoehler.launchwindow.model;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -24,6 +26,7 @@ public class InProgressMission {
     private List<String> rocketIds = new ArrayList<>();
     private long launchCost;
     private boolean firstInGame;
+    private Map<String, Double> launchReliability = new LinkedHashMap<>();
 
     /**
      * No-argument constructor required for Jackson/Kryo deserialization.
@@ -227,5 +230,27 @@ public class InProgressMission {
      */
     public void setFirstInGame(boolean firstInGame) {
         this.firstInGame = firstInGame;
+    }
+
+    /**
+     * Returns each flown component's reliability as it was at launch (user decision 2026-10-07):
+     * the hardware that flies is the copy built then, so ground R&amp;D and other flights' results
+     * only change the component for later missions. Empty for a mission launched before this was
+     * kept; such a flight reads the components as they are now.
+     *
+     * @return the reliabilities by component id
+     */
+    public Map<String, Double> getLaunchReliability() {
+        return launchReliability;
+    }
+
+    /**
+     * Sets the reliabilities recorded at launch.
+     *
+     * @param launchReliability the reliabilities by component id
+     */
+    public void setLaunchReliability(Map<String, Double> launchReliability) {
+        this.launchReliability = launchReliability == null ? new LinkedHashMap<>()
+            : new LinkedHashMap<>(launchReliability);
     }
 }

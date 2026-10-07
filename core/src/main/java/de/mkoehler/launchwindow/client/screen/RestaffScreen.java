@@ -143,8 +143,7 @@ public final class RestaffScreen extends ChromeScreen {
             .toUpperCase(Locale.ROOT), Theme.TextStyle.EYEBROW, Theme.NAVY)).padBottom(2f).row();
         card.add(ui.label(MissionControl.missionName(configuration), Theme.TextStyle.HEADING_SM, Theme.INK))
             .padBottom(Theme.SPACE_3).row();
-        MissionAssessment.Assessment odds = MissionAssessment.assess(state, session.catalog(), configuration,
-            mission.getCrewSlotIds(), mission.getControlSlotIds(), mission.getRocketIds(), mission.getCurrentSeasonIndex());
+        MissionAssessment.Assessment odds = MissionAssessment.assess(state, session.catalog(), mission, configuration);
         Table stats = new Table();
         stats.left();
         Table complete = new Table();

@@ -16,7 +16,9 @@ import de.mkoehler.launchwindow.model.PlayerSnapshot;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -233,6 +235,7 @@ public final class MissionLaunch {
         InProgressMission mission = new InProgressMission(instanceId, configuration.id(), crewSlotIds, controlSlotIds);
         mission.setRocketIds(request.rocketIds());
         mission.setLaunchCost(cost);
+        mission.setLaunchReliability(launchReliability(snapshot, configuration, request.rocketIds()));
         snapshot.getInProgressMissions().put(instanceId, mission);
 
         snapshot.setFunds(snapshot.getFunds() - cost);
@@ -293,6 +296,33 @@ public final class MissionLaunch {
             return controllerProblem;
         }
         return validateGroundAstronautSlots(snapshot, configuration, controlSlotIds, crewSlotIds);
+    }
+
+    /**
+     * Records every component a flight uses as it is at launch: the copy built for this flight,
+     * whose reliability later ground R&amp;D and other flights don't change (user decision
+     * 2026-10-07).
+     *
+     * @param snapshot      the player
+     * @param configuration the configuration
+     * @param rocketIds     the rockets chosen per launch
+     * @return the reliabilities by component id, in flight order
+     */
+    static Map<String, Double> launchReliability(PlayerSnapshot snapshot,
+            MissionConfiguration configuration, List<String> rocketIds) {
+        Map<String, Double> reliability = new LinkedHashMap<>();
+        for (MissionSeason season : configuration.seasons()) {
+            for (MissionStep step : season.steps()) {
+                for (MissionStep.ComponentInvolvement involvement : step.componentInvolvements()) {
+                    String componentId = resolveComponentId(involvement.componentId(), rocketIds);
+                    OwnedMissionComponent owned = snapshot.getMissionComponents().get(componentId);
+                    if (owned != null) {
+                        reliability.putIfAbsent(componentId, owned.getCurrentReliability());
+                    }
+                }
+            }
+        }
+        return reliability;
     }
 
     /**
