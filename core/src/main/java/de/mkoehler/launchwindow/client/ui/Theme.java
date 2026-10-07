@@ -407,6 +407,12 @@ public final class Theme {
          * {@link #GOLD_ON_PAGE} when set directly on {@link #SURFACE_PAGE}.
          */
         TAGLINE(FontFile.WORK_SANS_SEMIBOLD_ITALIC, 12, 15, 0f),
+        /**
+         * A small italic aside, such as "may differ: unknown factors" or "Still getting to know
+         * them" (People canvas, 2026-10-07): the mockup's Work Sans Medium Italic 11, set in the
+         * one italic face the client ships, SemiBold Italic. Not a design-system token yet.
+         */
+        CAPTION_ITALIC(FontFile.WORK_SANS_SEMIBOLD_ITALIC, 11, 14, 0f),
         /*
          * The explainer sheets' styles (ui-spec.md component 18), from the Explainers mockup
          * canvas, 2026-10-06; not design-system tokens yet. A reading page sets larger type than

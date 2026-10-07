@@ -172,7 +172,7 @@ public final class Teams {
             Personnel first = a.getId().equals(updated.first()) ? a : b;
             Personnel second = first == a ? b : a;
             events.add(new RelationshipShown(first.getId(), first.getName(), second.getId(), second.getName(),
-                rapport > 0, team.kind(), team.subjectId()));
+                rapport > 0, team.kind(), team.subjectId(), updated.seasonsTogether()));
             // The shortcuts: a clash gives an Abrasive member away, a friendship an Easy-going one.
             Trait tell = rapport > 0 ? Trait.EASY_GOING : Trait.ABRASIVE;
             for (Personnel person : List.of(first, second)) {

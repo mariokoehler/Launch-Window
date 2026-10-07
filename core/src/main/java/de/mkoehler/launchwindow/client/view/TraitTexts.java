@@ -84,9 +84,9 @@ public final class TraitTexts {
             case WORKAHOLIC -> "More R&D progress. Loses morale fast when idle.";
             case STEADY -> "Morale moves only half as much, up or down.";
             case AMBITIOUS -> "Gains more from training. Loses morale after a long time without any.";
-            case GLORY_SEEKER -> "Learns more on every flight. Loses morale whenever a crewed flight goes up without them.";
+            case GLORY_SEEKER -> "Learns more on every flight. Loses morale each time a crewed flight goes up and leaves this astronaut on the ground.";
             case PERFECTIONIST -> "Slower R&D, but raises the component's R&D cap while on its team.";
-            case COOL_UNDER_PRESSURE -> "Helps rescue a failing step on any mission they're part of.";
+            case COOL_UNDER_PRESSURE -> "Helps rescue a failing step on every mission this person flies or works a console for.";
             case RESTLESS -> "Quick on a new component, slow after a long stint on the same one.";
             case QUICK_STUDY -> "Gains more from training.";
             case MENTOR -> "Less skilled teammates learn faster.";

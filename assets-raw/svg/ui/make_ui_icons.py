@@ -53,10 +53,17 @@ CHROME = {
     # A set square with its cut-out and two scale ticks: the concept chip's "how it works" glyph
     # (ui-spec.md component 19, Explainers canvas, 2026-10-07).
     "concept": '<path d="M4 20V4l16 16z"/><path d="M8 16v-3.2l3.2 3.2z"/><path d="M4 8h2M4 12h2.5"/>',
+    # People (ui-spec.md components 20 and 22, People canvas, 2026-10-07): a team trait's mark (three
+    # filled dots, below), "works well with" (two linked rings) and "clashes with" (a spark).
+    "trait_team": '',
+    "rel_good": '<circle cx="8.5" cy="12" r="5.5"/><circle cx="15.5" cy="12" r="5.5"/>',
+    "rel_clash": '<path d="M13.5 2.5L5.5 13.5h6l-1.5 8 8.5-11.5h-6z"/>',
 }
 
 # The astronaut glyph's antenna tip is a filled dot.
-EXTRA_FILL = {"astronauts": '<circle cx="12" cy="1.5" r="0.8" fill="currentColor" stroke="none"/>'}
+EXTRA_FILL = {"astronauts": '<circle cx="12" cy="1.5" r="0.8" fill="currentColor" stroke="none"/>',
+              "trait_team": '<g fill="currentColor" stroke="none"><circle cx="12" cy="5.2" r="4"/>'
+                            '<circle cx="4.8" cy="18.4" r="4"/><circle cx="19.2" cy="18.4" r="4"/></g>'}
 
 SKILLS = ["rockets", "space_probes", "human_rated_rockets", "crewed_spacecraft", "eva_suits",
           # Astronaut skills (EVA reuses eva_suits) and Mission Control skills, plus the Flight Director.

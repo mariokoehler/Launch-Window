@@ -10,7 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
  * absolute maximum, filled to its current reliability, with a gold marker at its R&amp;D ceiling and
  * a dim marker at its floor. The fill turns green once the R&amp;D ceiling is reached. An R&amp;D
  * board can add a lighter segment after the fill: the reliability its engineers are expected to add
- * next season.
+ * next season, and a second, dashed gold marker for a cap a revealed Perfectionist raises while on
+ * the team (People canvas, 2026-10-07).
  *
  * @author Mario Koehler
  */
@@ -31,6 +32,7 @@ public final class ReliabilityBar extends Widget {
     private final float floor;
     private final Drawable projectedFill;
     private float projected;
+    private float raisedCap;
 
     /**
      * Builds the bar.
@@ -66,6 +68,18 @@ public final class ReliabilityBar extends Widget {
         return this;
     }
 
+    /**
+     * Shows a raised R&amp;D cap as a second, dashed marker, and counts the fill as capped only
+     * once it reaches that cap.
+     *
+     * @param cap the raised cap; nothing is drawn unless it's above the normal one
+     * @return this bar
+     */
+    public ReliabilityBar raisedCap(double cap) {
+        this.raisedCap = (float) cap;
+        return this;
+    }
+
     @Override
     public float getPrefHeight() {
         return CAP_MARKER_HEIGHT;
@@ -83,7 +97,8 @@ public final class ReliabilityBar extends Widget {
         float width = getWidth();
         float trackY = getY() + (getHeight() - TRACK_HEIGHT) / 2f;
         track.draw(batch, getX(), trackY, width, TRACK_HEIGHT);
-        boolean capped = current >= rdCap;
+        boolean raised = raisedCap > rdCap;
+        boolean capped = current >= (raised ? raisedCap : rdCap);
         if (projected > current) {
             projectedFill.draw(batch, getX(), trackY, width * Math.min(1f, projected / max), TRACK_HEIGHT);
         }
@@ -92,5 +107,13 @@ public final class ReliabilityBar extends Widget {
         floorMarker.draw(batch, floorX, getY() + (getHeight() - FLOOR_MARKER_HEIGHT) / 2f, 1f, FLOOR_MARKER_HEIGHT);
         float capX = getX() + width * Math.min(1f, rdCap / max);
         capMarker.draw(batch, capX - 1f, getY() + (getHeight() - CAP_MARKER_HEIGHT) / 2f, 2f, CAP_MARKER_HEIGHT);
+        if (raised) {
+            // Dashed: three 3 px dashes with 2.5 px gaps over the marker's height.
+            float raisedX = getX() + width * Math.min(1f, raisedCap / max);
+            float y = getY() + (getHeight() - CAP_MARKER_HEIGHT) / 2f;
+            for (int dash = 0; dash < 3; dash++) {
+                capMarker.draw(batch, raisedX - 1f, y + dash * 5.5f, 2f, 3f);
+            }
+        }
     }
 }
