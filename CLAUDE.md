@@ -49,6 +49,10 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   chips on the program, configuration and rocket screens (`ui-spec.md` component 19; the audit
   is in `design.md` §1.1). The chips are mocked up on the same canvas's bottom row and built in
   libGDX (2026-10-07); their look is confirmed.
+- **People worth caring about** (`design.md` §2.2(d), the user's idea, 2026-10-07): team chemistry
+  from pair rapport and hidden traits, ambitions, career records, later poaching. First-pass
+  rules are written; the screens are specified (`ui-spec.md` components 20 to 22, §4.14) and
+  wait for the user's mockups; the rules for phases 1 to 3 are being built.
 - **PR duty for astronauts is built** (`design.md` §2.2(c)), with 39 press stories
   (`assets/content/pr-press.json`), no repeats, and effects beyond prestige. Next is the next
   play test.

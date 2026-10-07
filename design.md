@@ -658,6 +658,59 @@ such as letting a brilliant troublemaker go.
   easy. The target's agency is told in its turn report and can match, and because players log in
   at different times, matching has to work as a standing order ("match offers up to N %") so it
   never punishes whoever logs in less.
+- **First-pass rules for phases 1 to 3** (2026-10-07; the user accepted the proposed defaults for
+  play testing; every number is ours and to be tuned):
+  - **A team** is the engineers working on one component's R&D this season, or the crew and
+    controllers of one mission in flight. Someone working alone is a team of one. A **work
+    season** is a season spent in a team (R&D or a mission in flight); training and PR duty
+    don't count.
+  - **Rapport** is kept per pair in `PlayerSnapshot` (both ids, the rapport, a hidden affinity,
+    the seasons they shared). When two people first share a team, the pair gets an **affinity**:
+    a random draw from −1 to +1, plus +0.5 for each Easy-going member, −0.6 for each Abrasive
+    one, +0.2 for each Team player, −0.2 for each Loner, and −0.4 if both are Must be the best,
+    clamped to −1..+1. Each work season they share, rapport moves by **5 × affinity**, within
+    −100..+100. It shows once past ±30 ("work well together", "clash").
+  - **Chemistry** of a team is a number from −1 to +1: the average rapport / 100 over all its
+    pairs (0 for a team of one), plus the team traits below, clamped. It scales the team's output
+    by **1 + 0.15 × chemistry**: the component's R&D reliability gain, and the mission's crew and
+    controller contribution sums (each still capped at 100). Team traits: **Team player** +0.15
+    for each one in the team; **Loner** +0.6 when alone, 0 in a pair, −0.3 each in a team of three
+    or more; **Must be the best** +0.2 when they're the team's most skilled, else −0.3 (R&D: the
+    component's skill; missions: compared within their own group by their best skill used on the
+    mission).
+  - **Personal traits** change the person's own numbers: **Workaholic** R&D gain ×1.1, idle morale
+    loss ×3; **Steady** the season's morale change halved (rounded toward zero); **Ambitious**
+    training gain ×1.2, and −2 morale a season once 6 seasons have passed without training;
+    **Glory seeker** (astronauts) flight skill growth ×1.5, and −4 morale each time a crewed
+    mission of the agency launches without them; **Perfectionist** (engineers) R&D gain ×0.85,
+    but while they're on its team the component's R&D cap is 3 points higher (reliability gained
+    above the normal cap stays); **Cool under pressure** (astronauts, controllers) +0.03 on the
+    saving throw for each one on the mission; **Restless** R&D gain ×1.15 in their first 2 seasons
+    on a component, ×0.85 from their 9th season on the same one; **Quick study** training gain
+    ×1.25; **Mentor** teammates less skilled than the mentor gain skill ×1.2 (R&D skill gain and
+    flight skill growth). *Changed from the first list:* Perfectionist's "milder failed steps"
+    became the higher cap, which is simpler and easy to see.
+  - **Which group can have which trait:** Glory seeker astronauts only; Perfectionist engineers
+    only; Cool under pressure astronauts and controllers; every other trait any group.
+  - **Drawing traits** when a candidate is generated: 0 / 1 / 2 traits at 20 / 50 / 30 %, distinct,
+    from the traits the group can have. Each trait gets a **reveal point** of 2 to 4 work seasons;
+    it shows when the person's work seasons reach it. Two shortcuts: Abrasive shows when one of
+    their pairs first passes −30, Easy-going when one passes +30. After 4 work seasons the person
+    reads "nothing more to discover".
+  - **Hints:** a candidate without traits gets a bland hint; one with traits gets a bland one 1 in
+    4, else a hint that fits one of their traits at random. Hints and their traits: driven
+    (Workaholic, Ambitious, Must be the best), calm (Steady, Cool under pressure, Loner), sociable
+    (Easy-going, Team player, Glory seeker), exacting (Perfectionist, Abrasive, Must be the best),
+    independent (Loner, Restless, Abrasive), keen to learn (Quick study, Ambitious, Mentor),
+    patient (Mentor, Steady, Perfectionist); bland: reliable, pleasant to work with, hard-working.
+  - **What the player sees stays honest about what's hidden.** The client's previews (the R&D
+    board, mission assessment and staffing) count only revealed traits and shown relationships, and
+    say "unknown factors" when the team's real chemistry may differ; the season resolves with the
+    real values. **The server strips hidden information** (unrevealed traits, affinities, rapport
+    not yet shown, candidates' traits) from the player state before sending it, so it can't be read
+    out of the client.
+  - **Turn report** lines: a trait revealed; a relationship shown (passed ±30); with the person,
+    the trait or partner, and what they were working on.
 - **History notes to go with it:** Deke Slayton picked NASA's crews partly on who worked well
   together; Gagarin was reportedly chosen over Titov partly for his manner and background.
   Verify both before use (§1.1).

@@ -169,13 +169,20 @@ On the right:
     Assign an idle SET specialist (they take the lowest free slot) or release one.
     Show "cap reached" when the R&D ceiling is hit; researchers are then released
     automatically.
+    *Specified 2026-10-07 (`design.md` §2.2(d)):* each card shows the team's chemistry
+    (component 21); the assign dialog previews how the chemistry would change with each
+    candidate, marks candidates with a shown relationship to someone on the team (component 22),
+    and shows candidates' revealed traits (component 20). A Perfectionist on the team shows the
+    raised cap on the reliability bar.
 11. **Personnel overview** (the landing screen of each personnel building,
     *(decided)*, as in BASPM). The roster as personnel rows with row actions;
     filter and sort by state and by skill (skill icons); a **department summary**
     strip (headcount, in training / assigned, near retirement age, average morale,
     total salary per season); and buttons to the sub-screens: **Hire** and
     **Manage department**. **Ref:** `manage_department.png`, `SET_centre.png`,
-    `astronaut_centre_*.png`.
+    `astronaut_centre_*.png`. *Specified 2026-10-07:* each row shows the person's revealed traits
+    (component 20) and, later, their ambition with seasons left; clicking the name opens the person
+    page (§4.14).
 
     **Row actions:**
     - **Train:** opens the training dialog (component 12);
@@ -210,6 +217,12 @@ On the right:
     check box, "Signing bonus · $ 48 once · morale 71 → 78": a one-off payment of one season's
     salary that multiplies the new hire's morale by 1.1 (at most 100). The footer adds up the
     bonuses next to the added fixed costs. A hire whose bonus the funds can't cover is refused.
+    *Specified 2026-10-07 (`design.md` §2.2(d)):* each candidate shows **one hint** from a former
+    colleague, such as "driven", "calm" or "reliable", in a quote style ("A former colleague:
+    “driven”"); no pronouns, since names don't say how someone wants to be referred to. Traits
+    themselves stay hidden. **Later**, an agency with an intelligence service gets a **Background
+    check** action per candidate that reveals one trait (or "no notable traits") for a fee;
+    design room for it now, but it isn't built until espionage.
 15. **History note** *(decided 2026-10-04; how it looks is open)*. A small icon
     placed next to a label, field, or value. On mouse-over it shows a short card,
     two to four sentences, about the real history or engineering behind that
@@ -473,6 +486,35 @@ On the right:
       - the Museum's encyclopedia grid is 8 px lower, to leave room for the dots over its top row.
       - Engine restarts is attached to the Vostok configurations and R-7 (Vostok) by name, not
         to the Retrofire step, so it stays off Mercury, whose retropack was solid rockets.
+20. **Trait chip** *(specified 2026-10-07 for `design.md` §2.2(d), to be mocked up)*. One of a
+    person's revealed traits, such as "Workaholic". Shown on personnel rows (component 11), the
+    person page (§4.14) and in staffing pickers. A tooltip says what it does in plain words
+    ("More R&D progress. Loses morale fast when idle."), read from the rules' constants.
+    - **Look (proposal):** a small tag, quieter than a concept chip (component 19) and not
+      clickable, so the two never get confused. Most traits cut both ways, so no good/bad colour
+      coding by default; perhaps a subtle mark for the team traits (they act on others) against
+      the personal ones.
+    - **Not known yet:** never show empty slots or a count (that would leak how many traits
+      someone has). Until someone's traits have all had time to show, their row or page may
+      say "still getting to know them"; afterwards "nothing more to discover" (or nothing).
+21. **Chemistry indicator** *(specified 2026-10-07, to be mocked up)*. How well a team works
+    together: one component's R&D engineers, or one mission's crew and controllers. Five levels
+    from the chemistry value (−1..+1): **Poor** (below −0.5), **Strained** (−0.5 to −0.15),
+    **Neutral**, **Good** (0.15 to 0.5), **Excellent** (above 0.5), with the effect on output as
+    a percentage (chemistry × 15 %, so −15 % to +15 %).
+    - **Where:** each R&D board card (component 10), the assign dialog's preview ("with Kowalski:
+      Good → Strained"), the mission plan's assessment (§4.6.7) and the assemble mission screen
+      (§4.6.8), next to the staffing.
+    - **Breakdown** on hover or click: the known reasons, one line each: "Ivanova and Petrov work
+      well together +", "Abrasive: Reyes", "Loner, working alone +", "Team player: Okafor +".
+    - **Unknown factors:** the client only knows revealed traits and shown relationships, so the
+      indicator says "may differ: unknown factors" while some of the team's traits or pairs are
+      still hidden. It must never hint at what is hidden.
+22. **Relationship marker** *(specified 2026-10-07, to be mocked up)*. A shown relationship
+    between two people: "works well with" or "clashes with". Shown on the person page as a list,
+    and in staffing pickers next to a candidate who has one with someone already in the team (a
+    small mark and the partner's name in the tooltip), so the player can build teams around
+    friendships or keep enemies apart.
 
 ---
 
@@ -666,6 +708,9 @@ end-of-season news screen. **Ref:** `bulletin_news_*.png`,
 - R&D gains per component, and components that hit their R&D cap (researchers
   released);
 - training finished (skill gain), Expert trait earned;
+- *(specified 2026-10-07)* people news: a trait revealed ("After two seasons on the Atlas team,
+  Kowalski turns out to be a workaholic"), a relationship shown ("Ivanova and Petrov work well
+  together"), and later ambitions formed, met, missed or overtaken; names open the person page;
 - departures (retired, resigned, dismissed, perished, lost in an accident),
   hires;
 - the budget: running costs, funding, and a review if one happened (new rate);
@@ -849,6 +894,10 @@ does (`baspm.md` §10.11), plus the chosen rocket per launch:
   GUIDO, SURGEON, FLIGHT, and CAPCOM. Each slot shows its icon for the skill it reads
   (the Flight Director icon for a FLIGHT slot) and its employee type; CAPCOM takes an
   astronaut, every other slot a flight controller.
+- **Team chemistry** *(specified 2026-10-07)*: the crew and controllers' chemistry (component 21)
+  next to the staffing, updating as slots are filled; pickers show candidates' revealed traits
+  and relationship marks with people already placed (components 20, 22). Auto-assign keeps
+  picking by skill only (first pass).
 - Slots no step uses show **"Not required"** and stay empty, as in BASPM. Crewed
   Mercury, for example, has 11 control slots and uses 10 (9 controllers + CAPCOM).
 - Click a slot to pick an available employee of its type: idle, not unavailable, and
@@ -1297,6 +1346,24 @@ user (2026-10-04)**:
 - **The medal table** lists the winner first.
 - **Without the summaries** (a failed fetch), it still names the winner and leaves the
   tables out.
+
+### 4.14 Person page *(specified 2026-10-07 for `design.md` §2.2(d), to be mocked up)*
+**Purpose:** everything about one employee, so the player gets to know them. Opened from a
+personnel row (component 11), from a name in the turn report, and from staffing pickers.
+Phase 3 needs the top half; the rest arrives with phase 4.
+- **Header:** portrait, name, group, age, salary, morale (bar), state (idle, training, R&D on X,
+  on mission Y), and for later, **loyalty** (bar).
+- **Skills** with their bars, Expert marks, and learning potential if shown elsewhere.
+- **Traits** (component 20), with "still getting to know them" or "nothing more to discover".
+- **Relationships** (component 22): works well with / clashes with, each with a portrait and how
+  long they've worked together.
+- **Ambition** (phase 4): what they want, "N seasons left", or "fulfilled" / "disappointed" (with
+  seasons remaining), or nothing for someone without one.
+- **Career record** (phase 4): a timeline, newest first: hired (with their hint), training done,
+  each R&D stint (component, seasons, reliability gained), each flight or console shift (mission,
+  outcome, goals), firsts, traits revealed, relationships formed, ambitions met or missed.
+- **Actions:** the row actions of component 11 (Train, Expert training, Dismiss).
+- **For a memorial entry,** the same page, read-only, ending with how they died.
 
 ---
 
