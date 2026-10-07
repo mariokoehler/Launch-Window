@@ -149,8 +149,11 @@ public final class IntelligenceBoard {
         }
         List<TraitState> traits = person.getTraits();
         Trait trait = traits.isEmpty() ? null : traits.get(random.nextInt(traits.size())).trait();
+        int loyalty = person.getLoyalty();
+        String band = loyalty < 40 ? "Low" : loyalty < 70 ? "Middling" : "High";
         PersonnelFile file = new PersonnelFile(person.getId(), person.getName(), person.getPortraitId(),
-            operation.group(), person.getAge(), gameTurn, skills, trait);
+            operation.group(), person.getAge(), gameTurn, skills, trait, band, person.getAmbition(),
+            person.getDisappointedSeasons() > 0);
         mine.add(new IntelFinding(IntelFinding.Kind.PERSONNEL_FILE, operation.id(), operation.kind(),
             operation.targetId(), target.getAgencyName(), null, null, file, null, -1));
     }

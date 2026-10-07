@@ -40,7 +40,7 @@ import java.util.function.Supplier;
 public final class PersonScreen extends ChromeScreen {
 
     private static final float LEFT_WIDTH = 400f;
-    private static final float MIDDLE_WIDTH = 860f;
+    private static final float MIDDLE_WIDTH = 720f;
     private static final float PORTRAIT = 128f;
 
     private final String personId;
@@ -117,8 +117,17 @@ public final class PersonScreen extends ChromeScreen {
         middle.add(skillsCard(person)).row();
         middle.add(traitsCard(person)).row();
         middle.add(relationshipsCard(person)).row();
-        content.add(scrollPane(middle)).width(MIDDLE_WIDTH).top().expandY().fillY();
-        content.add().expandX();
+        content.add(scrollPane(middle)).width(MIDDLE_WIDTH).top().expandY().fillY().padRight(Theme.SPACE_4);
+        // The story column (phase 4): the ambition and the career record.
+        Table story = new Table();
+        story.top();
+        story.defaults().growX().padBottom(Theme.SPACE_4);
+        Table ambition = CareerCards.ambition(ui, person);
+        if (ambition != null) {
+            story.add(ambition).row();
+        }
+        story.add(CareerCards.career(ui, person.getCareer(), CareerCards.running(person), session.catalog())).row();
+        content.add(scrollPane(story)).expand().fill().top();
     }
 
     // ---- Who they are
@@ -166,6 +175,13 @@ public final class PersonScreen extends ChromeScreen {
             ui.tooltip(morale, tip.title(), tip.text());
         }
         facts.add(morale).row();
+        facts.add(factLabel("Loyalty"));
+        Table loyalty = CareerCards.bar(ui, person.getLoyalty(), Theme.NAVY);
+        ui.tooltip(loyalty, "Loyalty · " + de.mkoehler.launchwindow.client.view.CareerTexts.loyaltyBand(
+            person.getLoyalty()), "How attached this person is to the agency. It grows with every season here and with "
+            + "raises, and with ambitions that come true; it falls when one is passed over or runs out. Later it will "
+            + "be what keeps rivals from hiring people away.");
+        facts.add(loyalty).row();
         card.add(facts).growX().row();
 
         Table actions = new Table();

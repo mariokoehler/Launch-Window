@@ -551,6 +551,9 @@ public final class TurnReportView {
                 lines.add(departure(departure));
             } else if (event instanceof PrDutyPerformed pr) {
                 lines.add(prLine(pr));
+            } else if (event instanceof de.mkoehler.launchwindow.rules.AmbitionSettled ambition) {
+                String[] text = CareerTexts.report(ambition);
+                lines.add(new Line(text[0], text[1], "Ambition", CareerTexts.tone(ambition)));
             } else if (event instanceof PassengerLost lost) {
                 lines.add(new Line(lost.name() + " did not come home", lost.failedStepId() == null
                     ? "The flight had no way home."

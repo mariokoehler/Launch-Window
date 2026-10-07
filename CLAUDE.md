@@ -52,9 +52,10 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
 - **People worth caring about** (`design.md` §2.2(d), the user's idea, 2026-10-07): team chemistry
   from pair rapport and hidden traits, ambitions, career records, later poaching. The rules for
   phases 1 to 3 and the personal traits are built (2026-10-07), and so are their screens, from
-  the canvas `Launch Window — People` (`ui-spec.md` components 20 to 22, §4.14). Two rules
-  findings from that canvas and the memorial page wait for the user (`design.md` §2.2(d)). Reset
-  the dev data root before the next play test (new fields on employees).
+  the canvas `Launch Window — People` (`ui-spec.md` components 20 to 22, §4.14). **Phase 4 is
+  built** (2026-10-07, while the user was away): ambitions, loyalty, career records and the
+  memorial's person page, rules and screens; its numbers, and the measured run-out ratio, wait for
+  the user (`design.md` §2.2(d)), as do two older rules findings. Poaching (phase 5) is next.
 - **Intelligence is built** (`design.md` §2.9, 2026-10-07): no sabotage, an eighth building
   (the Intelligence Office), a level dial with actions and passives, from the canvas
   `Launch Window — Intelligence Office` (`ui-spec.md` §4.15). Reset the dev data root before the

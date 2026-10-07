@@ -856,6 +856,11 @@ such as letting a brilliant troublemaker go.
     are few, and 5 to 8 seasons of patience is short. Options: longer windows (say 10 to 16), a
     window that only counts down while the ambition can be acted on (a crewed configuration ready
     to fly, an R&D slot on the component), or milder run-out losses. Not changed yet.
+  - **Screens as built** (2026-10-07): the person page's story column (ambition, career record)
+    and loyalty bar, the memorial's person page from the Museum, ambition lines on the rosters and
+    in the turn report, and loyalty and the said ambition in intelligence personnel files
+    (`ui-spec.md` §4.14, §4.15). **Reset the dev data root** before the next play test (new saved
+    fields).
 - **History notes to go with it:** Deke Slayton picked NASA's crews partly on who worked well
   together; Gagarin was reportedly chosen over Titov partly for his manner and background.
   Verify both before use (§1.1).

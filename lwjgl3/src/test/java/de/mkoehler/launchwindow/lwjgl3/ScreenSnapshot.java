@@ -392,6 +392,82 @@ public final class ScreenSnapshot {
             null);
 
         intelligenceShots(folder, game);
+        careerShots(folder, game, info);
+    }
+
+    /**
+     * People phase 4 (2026-10-07): a person page with an ambition, loyalty and a career record, one
+     * disappointed, the roster's ambition lines, the turn report's ambition lines, and the
+     * memorial's person page.
+     */
+    private static void careerShots(File folder, LaunchWindowGame game, GameInfoResponse info) {
+        PlayerSnapshot state = peopleState();
+        List<SetSpecialist> set = state.getSetSpecialists();
+        SetSpecialist veteran = set.get(0);
+        veteran.setLoyalty(72);
+        veteran.setTenureSeasons(12);
+        veteran.setAmbition(new de.mkoehler.launchwindow.model.Ambition(
+            de.mkoehler.launchwindow.model.Ambition.Kind.COMPONENT_CAP, "vostok-capsule", 4, 6, 10));
+        veteran.setStintComponentId("vostok-capsule");
+        veteran.setStintSeasons(7);
+        veteran.setStintGain(16.4);
+        veteran.setCareer(List.of(
+            career(2, "HIRED", "", "driven", "", 0, 0),
+            career(4, "TRAINING", "CREWED_SPACECRAFT", "ADVANCED", "", 4.5, 0),
+            career(5, "TRAIT", "WORKAHOLIC", "", "", 0, 0),
+            career(6, "RD_STINT", "sputnik-1-satellite", "", "", 11.0, 5),
+            career(7, "TRAIT", "MENTOR", "", "", 0, 0),
+            career(9, "RELATIONSHIP", set.get(4).getName(), "rd:vostok-capsule", "", 1, 7),
+            career(10, "AMBITION", "COMPONENT_CAP", "vostok-capsule", "SAID", 0, 6),
+            career(12, "RELATIONSHIP", set.get(1).getName(), "rd:vostok-capsule", "", -1, 7)));
+        SetSpecialist sulking = set.get(4);
+        sulking.setLoyalty(38);
+        sulking.setDisappointedSeasons(3);
+        sulking.setCareer(List.of(career(3, "HIRED", "", "calm", "", 0, 0),
+            career(5, "AMBITION", "TOP_ENGINEER", "", "SAID", 0, 6),
+            career(11, "AMBITION", "TOP_ENGINEER", "", "RAN_OUT", 0, 0)));
+        de.mkoehler.launchwindow.model.Astronaut lost = new de.mkoehler.launchwindow.model.Astronaut("p90",
+            "Hector Santiago", 36, 70, 50);
+        lost.setPortraitId(set.get(2).getPortraitId());
+        for (de.mkoehler.launchwindow.model.AstronautSkill skill : de.mkoehler.launchwindow.model.AstronautSkill.values()) {
+            lost.setSkill(skill, 48 + 7 * skill.ordinal());
+        }
+        lost.setTraits(List.of(new de.mkoehler.launchwindow.model.TraitState(
+            de.mkoehler.launchwindow.model.Trait.GLORY_SEEKER, 0, true)));
+        lost.setCareer(List.of(career(2, "HIRED", "", "sociable", "", 0, 0),
+            career(8, "FLIGHT", "vostok-suborbital", "CREW", "", 0, 0),
+            career(9, "FIRST", "human-in-space", "vostok-suborbital", "", 0, 0)));
+        state.getMemorial().add(de.mkoehler.launchwindow.rules.Careers.memorial(lost, 12,
+            de.mkoehler.launchwindow.model.MemorialEntry.Cause.MISSION, "vostok-orbital", "retrofire")
+            .withCareer(career(12, "FLIGHT", "vostok-orbital", "CREW", "retrofire", 0, 0)));
+        startSession(game, state, info);
+        write(folder, "career-person.png", new de.mkoehler.launchwindow.client.screen.PersonScreen(game, veteran,
+            () -> new SetCentreScreen(game)), null);
+        write(folder, "career-person-disappointed.png", new de.mkoehler.launchwindow.client.screen.PersonScreen(game,
+            sulking, () -> new SetCentreScreen(game)), null);
+        write(folder, "career-roster.png", new SetCentreScreen(game), null);
+        write(folder, "career-memorial-plaques.png", new MuseumScreen(game, MuseumScreen.Tab.MEMORIAL), null);
+        write(folder, "career-memorial-page.png", new de.mkoehler.launchwindow.client.screen.MemorialPersonScreen(game,
+            state.getMemorial().size() - 1, () -> new MuseumScreen(game, MuseumScreen.Tab.MEMORIAL)), null);
+        TurnReport report = new TurnReport(TurnReport.VERSION, 13, 2_100, 2_140, 17_000, 18_420, List.of(), List.of(),
+            List.of(
+                new de.mkoehler.launchwindow.rules.AmbitionSettled(PersonnelGroup.SET, set.get(3).getId(),
+                    set.get(3).getName(), de.mkoehler.launchwindow.model.Ambition.Kind.FIRST_HARDWARE, "",
+                    de.mkoehler.launchwindow.rules.AmbitionSettled.Outcome.SAID, 8, 0, 0),
+                new de.mkoehler.launchwindow.rules.AmbitionSettled(PersonnelGroup.SET, set.get(2).getId(),
+                    set.get(2).getName(), de.mkoehler.launchwindow.model.Ambition.Kind.COMPONENT_CAP,
+                    "sputnik-1-satellite", de.mkoehler.launchwindow.rules.AmbitionSettled.Outcome.FULFILLED, 2, 5, 15),
+                new de.mkoehler.launchwindow.rules.AmbitionSettled(PersonnelGroup.SET, sulking.getId(),
+                    sulking.getName(), de.mkoehler.launchwindow.model.Ambition.Kind.TOP_ENGINEER, "",
+                    de.mkoehler.launchwindow.rules.AmbitionSettled.Outcome.RAN_OUT, 0, -10, -15)));
+        game.session().keepReport(report);
+        write(folder, "career-report.png", new TurnReportScreen(game, report), null);
+    }
+
+    private static de.mkoehler.launchwindow.model.CareerEntry career(int turn, String kind, String ref, String note,
+            String outcome, double value, int count) {
+        return new de.mkoehler.launchwindow.model.CareerEntry(turn,
+            de.mkoehler.launchwindow.model.CareerEntry.Kind.valueOf(kind), ref, note, outcome, value, count);
     }
 
     /**
@@ -446,7 +522,9 @@ public final class ScreenSnapshot {
                     fact("SKILL", "EVA", 61, 71, 0), fact("SKILL", "SCIENCE", 30, 40, 0));
             sever.getPersonnelFiles().add(new de.mkoehler.launchwindow.model.PersonnelFile(person.getId(),
                 person.getName(), person.getPortraitId(), group, person.getAge(), 28, skills,
-                i == 0 ? de.mkoehler.launchwindow.model.Trait.AMBITIOUS : de.mkoehler.launchwindow.model.Trait.GLORY_SEEKER));
+                i == 0 ? de.mkoehler.launchwindow.model.Trait.AMBITIOUS : de.mkoehler.launchwindow.model.Trait.GLORY_SEEKER,
+                i == 0 ? "Low" : "High", i == 0 ? null : new de.mkoehler.launchwindow.model.Ambition(
+                    de.mkoehler.launchwindow.model.Ambition.Kind.FLY_TO_ORBIT, "", 3, 6, 25), i == 0));
         }
         sever.getTidbits().add(new de.mkoehler.launchwindow.model.Tidbit(28, fact("RD_FOCUS", "r7-vostok", 0, 0, 2)));
         sever.getTidbits().add(new de.mkoehler.launchwindow.model.Tidbit(29, fact("HEADCOUNT", "ASTRONAUT", 0, 0, 7)));

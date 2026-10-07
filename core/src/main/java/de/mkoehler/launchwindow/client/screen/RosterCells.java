@@ -111,7 +111,20 @@ final class RosterCells {
         }
         if (People.gettingToKnow(person)) {
             cell.add(ui.label("Still getting to know each other", Theme.TextStyle.CAPTION_ITALIC, Theme.INK_MUTED))
-                .padTop(traits.isEmpty() ? 0f : 4f);
+                .padTop(traits.isEmpty() ? 0f : 4f).row();
+        }
+        // An ambition running, or disappointment after one (phase 4, design.md 2.2(d)).
+        String status = de.mkoehler.launchwindow.client.view.CareerTexts.status(person);
+        if (status != null) {
+            String text = person.getAmbition() != null ? "Ambition · " + status : status;
+            Label line = ui.label(text, Theme.TextStyle.CAPTION, person.getAmbition() != null ? Theme.GOLD_TEXT
+                : Theme.DANGER);
+            if (person.getAmbition() != null) {
+                ui.tooltip(line, "Ambition", de.mkoehler.launchwindow.client.view.CareerTexts.ambition(
+                    person.getAmbition().kind(), person.getAmbition().ref()) + ". "
+                    + de.mkoehler.launchwindow.client.view.CareerTexts.ambitionHow(person.getAmbition().kind()));
+            }
+            cell.add(line).padTop(4f);
         }
         return cell;
     }

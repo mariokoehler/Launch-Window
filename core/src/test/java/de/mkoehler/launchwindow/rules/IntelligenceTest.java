@@ -202,6 +202,8 @@ class IntelligenceTest {
             star.setSkill(skill, 66);
         }
         star.setTraits(List.of(new TraitState(Trait.GLORY_SEEKER, 3, false)));
+        star.setLoyalty(80);
+        star.setAmbitionPending(true);
         target.getAstronauts().add(star);
         return new java.util.TreeMap<>(Map.of("spy", spy, "target", target));
     }
@@ -264,6 +266,8 @@ class IntelligenceTest {
         assertEquals("Vera Star", probe.file.file().name());
         assertEquals(Trait.GLORY_SEEKER, probe.file.file().trait());
         assertEquals(AstronautSkill.values().length, probe.file.file().skills().size());
+        assertEquals("High", probe.file.file().loyalty());
+        assertNull(probe.file.file().ambition(), "an ambition not said yet stays hidden, even from spies");
     }
 
     private static final class PersonnelFileProbe {

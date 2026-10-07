@@ -1536,6 +1536,18 @@ Phase 3 needs the top half; the rest arrives with phase 4.
   record), the loyalty bar and the memorial's read-only page arrive with phase 4: a memorial entry
   keeps no skills, traits or id yet (`design.md` §2.2(d)). The mockup's "Mockup only" switchers and
   dashed phase 4 boxes aren't built.
+- *Phase 4, as built (2026-10-07, `design.md` §2.2(d)):* a third column, the story: the Ambition
+  card (what, a gold "N seasons left" badge, how it comes true, when it was said) or a red
+  "Disappointed" badge with the seasons left, then the Career record, newest first, the running
+  R&D stint on top as "so far", gold dots for traits, relationships, flights, firsts, the Expert
+  trait and ambitions met (`client.screen.CareerCards`, `client.view.CareerTexts`). A navy loyalty
+  bar under morale, with a tooltip. Roster rows show "Ambition · N seasons left" (gold) or
+  "Disappointed · N seasons" (red) under the traits. The turn report's People section has a line
+  for each ambition said, met, passed over, impossible or given up. **The memorial's page**
+  (`MemorialPersonScreen`, from an "Open the page" link on a plaque that has one): who they were,
+  "Served 1959 to 1961", how it ended, skills at the end, the traits the player knew, and the
+  career; the portrait is dimmed rather than greyscale. Entries from before phase 4 keep the plain
+  plaque.
 
 ### 4.15 Intelligence Office *(specified 2026-10-07 for `design.md` §2.9, Intelligence; mocked up and built the same day)*
 **Purpose:** the agency's intelligence service: how big it is, what it does this season, and
@@ -1623,8 +1635,9 @@ naming the tab), `client.view.IntelTexts` for every line, `ReliabilityBar.range`
 `binoculars` icon (`make_ui_icons.py`), `Hub.Place.INTELLIGENCE_OFFICE`, the footer chip, the
 report section (`TurnReportView.intelligence`) and an "Intelligence Office" budget line. Differences
 from the mockup: the plans dossier shows R&D focus and hardware not flown yet instead of next
-season's launches (`design.md` §2.9), personnel files show the three best skills, and loyalty and
-ambition are left out until phase 4 with a note saying so. Last season's results come from the
+season's launches (`design.md` §2.9), and personnel files show the three best skills, then loyalty
+as a band and the ambition the person has said (phase 4; never one still hidden). Last season's
+results come from the
 latest turn report when the client has it.
 
 ---

@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
@@ -519,8 +520,19 @@ public final class MuseumScreen extends ChromeScreen {
                 + "home, are remembered here.",
                 Theme.TextStyle.BODY_SM, Theme.ON_PAGE_STRONG)).row();
         }
-        for (Museum.Plaque plaque : plaques) {
-            list.add(plaque(plaque)).width(620f).padBottom(Theme.SPACE_4).row();
+        for (int i = 0; i < plaques.size(); i++) {
+            Table plaque = plaque(plaques.get(i));
+            // From phase 4 an astronaut's entry has a person page (design.md 2.2(d)).
+            if (session.state().getMemorial().get(i).personnelId() != null) {
+                int index = i;
+                Label open = ui.label("Open the page", Theme.TextStyle.CAPTION, Theme.NAVY);
+                open.setTouchable(Touchable.enabled);
+                open.addListener(clicked(() -> game.setScreen(new MemorialPersonScreen(game, index,
+                    () -> new MuseumScreen(game, Tab.MEMORIAL)))));
+                plaque.row();
+                plaque.add(open).padTop(Theme.SPACE_3);
+            }
+            list.add(plaque).width(620f).padBottom(Theme.SPACE_4).row();
         }
         content.add(scrollPane(list)).expand().fill();
     }

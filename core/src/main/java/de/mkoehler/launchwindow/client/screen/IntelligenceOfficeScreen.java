@@ -1134,8 +1134,18 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
         }
         trait.add().expandX();
         card.add(trait).padTop(Theme.SPACE_2).row();
-        card.add(ui.label("Loyalty and ambition join files with phase 4", Theme.TextStyle.CAPTION_ITALIC,
-            Theme.INK_MUTED)).padTop(Theme.SPACE_2).row();
+        Table more = new Table();
+        more.defaults().left().top().padBottom(2f);
+        more.add(sectionTitle("Loyalty")).width(80f).padRight(Theme.SPACE_2);
+        more.add(ui.label(file.loyalty().isEmpty() ? "Not known" : file.loyalty(), Theme.TextStyle.BODY_SM, Theme.INK))
+            .expandX().row();
+        more.add(sectionTitle("Ambition")).width(80f).padRight(Theme.SPACE_2);
+        String ambition = file.ambition() != null
+            ? de.mkoehler.launchwindow.client.view.CareerTexts.ambition(file.ambition().kind(), file.ambition().ref())
+                + " · " + de.mkoehler.launchwindow.client.view.CareerTexts.seasonsLeft(file.ambition().seasonsLeft())
+            : file.disappointed() ? "Disappointed: an ambition ran out lately" : "None said";
+        more.add(ui.paragraph(ambition, Theme.TextStyle.BODY_SM, Theme.INK)).expandX().fillX().row();
+        card.add(more).padTop(Theme.SPACE_2).row();
         return card;
     }
 
