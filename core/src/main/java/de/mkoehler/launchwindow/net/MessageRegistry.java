@@ -36,6 +36,9 @@ import de.mkoehler.launchwindow.model.MissionControlOfficer;
 import de.mkoehler.launchwindow.model.MissionControlSkill;
 import de.mkoehler.launchwindow.model.OwnedMissionComponent;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
+import de.mkoehler.launchwindow.model.Rapport;
+import de.mkoehler.launchwindow.model.Trait;
+import de.mkoehler.launchwindow.model.TraitState;
 import de.mkoehler.launchwindow.model.Season;
 import de.mkoehler.launchwindow.model.SetSkill;
 import de.mkoehler.launchwindow.model.SetSpecialist;
@@ -233,5 +236,11 @@ public final class MessageRegistry {
         // Press-story effects: PlayerSnapshot.hiringPoolBonuses (design.md section 2.2(c), 2026-10-06).
         // Never move this line.
         kryo.register(HiringPoolBonus.class);
+
+        // Personalities: Personnel.traits and PlayerSnapshot.rapports (design.md section 2.2(d),
+        // 2026-10-07). Never move these lines.
+        kryo.register(Trait.class);
+        kryo.register(TraitState.class);
+        kryo.register(Rapport.class);
     }
 }

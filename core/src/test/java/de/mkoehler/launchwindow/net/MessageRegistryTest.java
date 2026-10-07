@@ -19,6 +19,9 @@ import de.mkoehler.launchwindow.model.MissionControlOfficer;
 import de.mkoehler.launchwindow.model.MissionControlSkill;
 import de.mkoehler.launchwindow.model.OwnedMissionComponent;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
+import de.mkoehler.launchwindow.model.Rapport;
+import de.mkoehler.launchwindow.model.Trait;
+import de.mkoehler.launchwindow.model.TraitState;
 import de.mkoehler.launchwindow.model.SetSkill;
 import de.mkoehler.launchwindow.model.SetSpecialist;
 import de.mkoehler.launchwindow.model.TrainingKind;
@@ -356,7 +359,17 @@ class MessageRegistryTest {
             "vostok-orbital", "reentry", "soviet_007")));
         snapshot.setGoalRecords(List.of(new GoalRecord("pre-flight", 4, "sputnik-1-std", "orbit", true, 30)));
 
+        // Personalities (design.md 2.2(d)): traits, the hint, work seasons and pair rapport.
+        astronaut.setTraits(List.of(new TraitState(Trait.WORKAHOLIC, 3, true), new TraitState(Trait.LONER, 2, false)));
+        astronaut.setHint("driven");
+        astronaut.setWorkSeasons(5);
+        snapshot.setRapports(List.of(new Rapport("astro-1", "mco-1", 34.5, 0.4, 7, true)));
+
         FetchStateResponse copy = roundTrip(FetchStateResponse.success(snapshot), FetchStateResponse.class);
+        assertEquals(snapshot.getAstronauts().get(0).getTraits(), copy.state().getAstronauts().get(0).getTraits());
+        assertEquals("driven", copy.state().getAstronauts().get(0).getHint());
+        assertEquals(5, copy.state().getAstronauts().get(0).getWorkSeasons());
+        assertEquals(snapshot.getRapports(), copy.state().getRapports());
         assertEquals(snapshot.getMemorial(), copy.state().getMemorial());
         assertEquals(snapshot.getGoalRecords(), copy.state().getGoalRecords());
 

@@ -29,6 +29,7 @@ import de.mkoehler.launchwindow.persistence.PlayerSnapshotStore;
 import de.mkoehler.launchwindow.persistence.PlayerStateService;
 import de.mkoehler.launchwindow.persistence.SetFundsAction;
 import de.mkoehler.launchwindow.rules.HiringPool;
+import de.mkoehler.launchwindow.rules.Personality;
 import de.mkoehler.launchwindow.rules.TurnReport;
 import de.mkoehler.launchwindow.rules.WinCondition;
 import de.mkoehler.launchwindow.server.accounts.AccountStore;
@@ -284,7 +285,8 @@ public class RequestDispatcher {
                 return FetchStateResponse.failure(ClaimSlotRequest.SLOT_CLAIM_REQUIRED);
             }
             PlayerSnapshot state = playerStateService(accountId).currentState();
-            return FetchStateResponse.success(state);
+            // Hidden traits, affinities and unseen rapport never leave the server (design.md 2.2(d)).
+            return FetchStateResponse.success(Personality.forClient(state, mapper));
         } catch (IOException e) {
             return FetchStateResponse.failure("Failed to fetch state: " + e.getMessage());
         }

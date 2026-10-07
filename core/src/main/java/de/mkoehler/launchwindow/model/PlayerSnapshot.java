@@ -64,6 +64,7 @@ public class PlayerSnapshot {
     private List<String> salaryAdjustedGroups = new ArrayList<>();
     private List<String> usedPressStoryIds = new ArrayList<>();
     private List<HiringPoolBonus> hiringPoolBonuses = new ArrayList<>();
+    private List<Rapport> rapports = new ArrayList<>();
     private Map<Building, Integer> buildingLevels = new LinkedHashMap<>();
     private Map<Building, Integer> buildingUpgradeSeasonsRemaining = new LinkedHashMap<>();
 
@@ -658,6 +659,26 @@ public class PlayerSnapshot {
     public void setHiringPoolBonuses(List<HiringPoolBonus> hiringPoolBonuses) {
         Objects.requireNonNull(hiringPoolBonuses, "hiringPoolBonuses must not be null");
         this.hiringPoolBonuses = new ArrayList<>(hiringPoolBonuses);
+    }
+
+    /**
+     * Returns how every pair of employees who have shared a team get on ({@code design.md}
+     * &sect;2.2(d)). The live list is returned; a pair leaves it when either of them leaves the
+     * agency.
+     *
+     * @return the pairs, never {@code null}
+     */
+    public List<Rapport> getRapports() {
+        return rapports;
+    }
+
+    /**
+     * Sets the pairs' rapport.
+     *
+     * @param rapports the pairs
+     */
+    public void setRapports(List<Rapport> rapports) {
+        this.rapports = rapports == null ? new ArrayList<>() : new ArrayList<>(rapports);
     }
 
     /**

@@ -1,5 +1,7 @@
 package de.mkoehler.launchwindow.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -27,6 +29,9 @@ public abstract class Personnel {
     private String assignedMissionId;
     private double salary;
     private int unavailableSeasons;
+    private List<TraitState> traits = new ArrayList<>();
+    private String hint;
+    private int workSeasons;
 
     /**
      * No-argument constructor required for Jackson deserialization.
@@ -370,5 +375,61 @@ public abstract class Personnel {
      */
     public void setAssignedMissionId(String assignedMissionId) {
         this.assignedMissionId = assignedMissionId;
+    }
+
+    /**
+     * Returns this person's traits, shown and hidden ({@code design.md} &sect;2.2(d)). The player
+     * only ever sees the revealed ones: the server strips the rest before sending the state.
+     *
+     * @return the traits, in the order they were drawn
+     */
+    public List<TraitState> getTraits() {
+        return traits;
+    }
+
+    /**
+     * Sets this person's traits.
+     *
+     * @param traits the traits
+     */
+    public void setTraits(List<TraitState> traits) {
+        this.traits = traits == null ? new ArrayList<>() : new ArrayList<>(traits);
+    }
+
+    /**
+     * Returns the hint a former colleague gave when they were a candidate, such as "driven".
+     *
+     * @return the hint's id, or {@code null} for someone hired before hints existed
+     */
+    public String getHint() {
+        return hint;
+    }
+
+    /**
+     * Sets the hint.
+     *
+     * @param hint the hint's id
+     */
+    public void setHint(String hint) {
+        this.hint = hint;
+    }
+
+    /**
+     * Returns how many seasons this person has worked in a team (R&amp;D or a mission in flight),
+     * which is what reveals their traits.
+     *
+     * @return the work seasons
+     */
+    public int getWorkSeasons() {
+        return workSeasons;
+    }
+
+    /**
+     * Sets the work seasons.
+     *
+     * @param workSeasons the work seasons
+     */
+    public void setWorkSeasons(int workSeasons) {
+        this.workSeasons = workSeasons;
     }
 }
