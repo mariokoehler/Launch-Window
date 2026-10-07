@@ -1,0 +1,177 @@
+{
+ "width": 1060,
+ "height": 660,
+ "labels": [
+  {
+   "x": 24.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "One craft seen from above · gold: exhaust · navy arrows: the push it gives"
+  },
+  {
+   "x": 345.0,
+   "y": 182.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Centre"
+  },
+  {
+   "x": 572.0,
+   "y": 208.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "nose swings up"
+  },
+  {
+   "x": 486.0,
+   "y": 104.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Thruster quad"
+  },
+  {
+   "x": 640.0,
+   "y": 125.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "A · Turn"
+  },
+  {
+   "x": 640.0,
+   "y": 149.0,
+   "anchor": "start",
+   "kind": "d-body",
+   "size": 14.0,
+   "color": "#1c1c1a",
+   "text": "Fire a jet at the back and the opposite jet at"
+  },
+  {
+   "x": 640.0,
+   "y": 168.0,
+   "anchor": "start",
+   "kind": "d-body",
+   "size": 14.0,
+   "color": "#1c1c1a",
+   "text": "the front. The two pushes twist the craft"
+  },
+  {
+   "x": 640.0,
+   "y": 187.0,
+   "anchor": "start",
+   "kind": "d-body",
+   "size": 14.0,
+   "color": "#1c1c1a",
+   "text": "around its middle, and the nose swings round."
+  },
+  {
+   "x": 315.0,
+   "y": 296.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "the craft slides up without turning"
+  },
+  {
+   "x": 640.0,
+   "y": 315.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "B · Slide"
+  },
+  {
+   "x": 640.0,
+   "y": 339.0,
+   "anchor": "start",
+   "kind": "d-body",
+   "size": 14.0,
+   "color": "#1c1c1a",
+   "text": "Fire two jets on the same side together. The"
+  },
+  {
+   "x": 640.0,
+   "y": 358.0,
+   "anchor": "start",
+   "kind": "d-body",
+   "size": 14.0,
+   "color": "#1c1c1a",
+   "text": "pushes add up instead of twisting, and the whole"
+  },
+  {
+   "x": 640.0,
+   "y": 377.0,
+   "anchor": "start",
+   "kind": "d-body",
+   "size": 14.0,
+   "color": "#1c1c1a",
+   "text": "craft moves the other way. That is how it docks."
+  },
+  {
+   "x": 566.0,
+   "y": 486.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "still turning"
+  },
+  {
+   "x": 640.0,
+   "y": 505.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "C · Stop"
+  },
+  {
+   "x": 640.0,
+   "y": 529.0,
+   "anchor": "start",
+   "kind": "d-body",
+   "size": 14.0,
+   "color": "#1c1c1a",
+   "text": "Nothing in space slows a turn: it carries on until"
+  },
+  {
+   "x": 640.0,
+   "y": 548.0,
+   "anchor": "start",
+   "kind": "d-body",
+   "size": 14.0,
+   "color": "#1c1c1a",
+   "text": "the opposite pair fires. Every turn is paid for"
+  },
+  {
+   "x": 640.0,
+   "y": 567.0,
+   "anchor": "start",
+   "kind": "d-body",
+   "size": 14.0,
+   "color": "#1c1c1a",
+   "text": "twice, once to start it and once to stop it."
+  },
+  {
+   "x": 24.0,
+   "y": 645.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "A generic craft · two of its thruster quads shown · real craft carry jets for every direction"
+  }
+ ]
+}

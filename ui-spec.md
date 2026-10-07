@@ -249,7 +249,7 @@ On the right:
       (the five skills plus Flight Director, best first; click the active one again for roster
       order). The overview's FD cell already existed.
 18. **Explainer** *(mocked up 2026-10-06, the user's idea; E-01 built in libGDX the same day as
-    `client.screen.ExplainerScreen`; E-02 to E-05 and the triggers unconfirmed)*. A short series
+    `client.screen.ExplainerScreen`, E-02 to E-05 on 2026-10-07; the triggers unconfirmed)*. A short series
     of full-screen "infographic" sheets that explain an aerospace idea as it comes up in play. It's the third kind of help, beside the tooltip
     (what a game thing means) and the history note (what really happened): an explainer says
     **how and why something works** in the real world.
@@ -299,7 +299,9 @@ On the right:
       2. *Three ways to a sure restart:* self-lighting gas-fed engines, a bag in the tank, and
          vanes and screens, with their costs and the early Soviet probes stranded in orbit.
          In the game: Vostok's single retrofire and Payload R&D.
-    - **E-05 "Hypergolic propellants and steering jets"**, two sheets (the user's idea):
+    - **E-05 "Hypergolic propellants and steering jets"**, two sheets (the user's idea; built
+      under the shorter title "Hypergolics and steering jets", the mockup's title block name, so
+      it fits the eyebrow, the title block and the Museum card alike):
       1. *Fuels that light themselves:* kerosene and oxygen, hydrogen and oxygen, and a
          hypergolic pair side by side, with temperatures to scale, how long each waits in the
          tank, how it lights, its hazards and its exhaust speed; the R-16 disaster. In the
@@ -312,25 +314,44 @@ On the right:
       program), E-04 the first configuration with a Retrofire step, E-05 the first
       configuration with a Reentry preparations step (or later, the first rocket or
       spacecraft that burns a hypergolic pair).
-    - **As built (E-01):** full screen with no app chrome; page dots are clickable; Close and
+    - **As built:** full screen with no app chrome; page dots are clickable; Close and
       Done go back to the screen that opened it (the Museum's Encyclopedia tab for now).
     - **Drawings** are SVG sources in `assets-raw/explainers/`, rasterized at 2x without their
       text by `make_explainer_art.py`; the text goes to a labels file beside the PNG and the
       client sets it as real labels (`client.ui.DrawingView`), so it stays sharp at any window
       size. A sheet's bar chart and key are drawn by the client from values, not pictured.
+      A drawing may carry the mockup's own `<style>` block: resvg styles the shapes with it,
+      and a text class's font size there becomes the label's size. Text inherits class,
+      anchor, fill and `translate()` from its groups. Two kinds of text stay in the picture,
+      set by resvg in the repo's own fonts: rotated text (E-02 sheet 2's "Line of sight"; a
+      label can't turn), and the white outline under text of class `halo`, so its label stays
+      readable over hatching (E-04).
     - **Type:** the reading page sets larger type than the working screens: new `Theme`
       styles `EXPLAINER_TITLE` (38), `POINT_TITLE` (21), `READING` (16/24), `CAPTION_LG` (14),
       and the drawing styles `DRAWING_LABEL` (15), `DRAWING_LABEL_SM` (13), `DRAWING_HEAD` (13,
-      upper case), `DRAWING_BIG` (26), `DRAWING_SMALL` (11, upper case), `DRAWING_TEXT` (13).
-      Not design-system tokens yet.
+      upper case), `DRAWING_BIG` (26), `DRAWING_SMALL` (11, upper case), `DRAWING_TEXT` (13),
+      and `DRAWING_LABEL_MD` (14, the label size from E-02 on). A drawing's `d-body` text
+      (E-05 sheet 2) is set in `CAPTION_LG`. Not design-system tokens yet.
     - **Built differently from the mockup:** no mid-sentence bold (a label can't switch fonts);
       the drawing frame hugs the drawing and sits centred in its column; sheet 2's bars span
       560 px, not 700, so the longest value fits beside its bar; the close button has no
-      tooltip.
+      tooltip. From E-02 on: a drawing's smaller text is set at 13 px, not 12.5, and one
+      gold semi-bold caption (E-02 sheet 1, "side by side after one lap") in the regular
+      drawing text; E-05 sheet 2's "the whole craft slides up, without turning" is shortened to
+      "the craft slides up without turning" so it clears the push arrows. The Museum's
+      cards in a row are stretched to one height.
+    - **Text changed from the mockup by the fact check** (`design.md` §1.1): E-03's Heinlein line
+      is "a saying credited to" him; the Saturn V is "some 24 times" the Atlas, not 25; E-04's
+      Soviet probes' top stage had to *start* after a coast (it was a separate stage, not a
+      relight), with the August 1962 settling-rocket failure added; the R-16 killed "at least
+      78", not "more than 70"; Gemini 8 spun "up to about one turn a second"; E-05's "In Launch
+      Window" says every early-era rocket burns liquid oxygen "in its main stages" (Jupiter-C's
+      upper stages are solid).
     - **Not built yet:** offering an explainer from the screens it explains (the canvas proposes
       a notice the first time a player opens a suborbital or orbital configuration), and
-      remembering which explainers a player has seen. Only E-01 is built; E-02 to E-05
-      (rendezvous, the Moon, engine restarts, hypergolic propellants) are mocked up.
+      remembering which explainers a player has seen. All five are readable in the Museum.
+    - **Known blemish:** the Museum card's thumbnail shows E-04's halo outlines without their
+      labels (a white smudge on the first tank).
 
 ---
 

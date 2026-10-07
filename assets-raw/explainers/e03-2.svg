@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 660" width="1060" height="660">
+  <style>
+  .d-head { font-family: Archivo; font-weight: 700; font-size: 13px; letter-spacing: 0.8px; fill: #16305c; text-transform: uppercase; }
+  .d-lbl { font-family: Archivo; font-weight: 700; font-size: 14px; letter-spacing: 0.3px; fill: #16305c; }
+  .d-lbl-gold { font-family: Archivo; font-weight: 700; font-size: 14px; letter-spacing: 0.3px; fill: #8a5d12; }
+  .d-txt { font-family: 'Work Sans'; font-weight: 500; font-size: 12.5px; fill: #5b5548; }
+  .d-sm { font-family: Archivo; font-weight: 600; font-size: 11px; letter-spacing: 0.5px; fill: #5b5548; text-transform: uppercase; }
+  </style>
+          <text x="24" y="44" class="d-head">Moon rockets next to the ones before them</text>
+
+          <!-- Ground and height scale -->
+          <path d="M20 560 L740 560" stroke="#16305c" stroke-width="2"/>
+          <path d="M30 560 L30 335 M26 335 L34 335 M26 447.5 L34 447.5" stroke="#16305c" stroke-width="1.5"/>
+          <text x="38" y="339" class="d-sm">50 m</text>
+          <text x="38" y="451" class="d-sm">25 m</text>
+
+          <g fill="#ffffff" stroke="#16305c" stroke-width="1.5" stroke-linejoin="round">
+            <!-- Redstone -->
+            <rect x="86" y="476" width="8" height="84"/>
+            <path d="M86 548 L80 560 L86 560 Z M94 548 L100 560 L94 560 Z"/>
+            <path d="M86 476 L88.5 463 L91.5 463 L94 476 Z"/>
+            <!-- Atlas -->
+            <rect x="183" y="476" width="14" height="84"/>
+            <path d="M183 546 L178 560 L202 560 L197 546 Z"/>
+            <path d="M183 476 L185.5 470 L194.5 470 L197 476 Z"/>
+            <path d="M185.5 470 L188 456 L192 456 L194.5 470 Z"/>
+            <!-- Titan II -->
+            <rect x="283" y="440" width="14" height="120"/>
+            <path d="M283 465.5 L297 465.5"/>
+            <path d="M283 440 L286.5 418 L293.5 418 L297 440 Z"/>
+            <path d="M286.5 418 L288 411 L292 411 L293.5 418 Z"/>
+            <!-- Saturn V -->
+            <rect x="447.25" y="371" width="45.5" height="189"/>
+            <path d="M447.25 545 L438 560 L447.25 560 Z M492.75 545 L502 560 L492.75 560 Z"/>
+            <rect x="447.25" y="259" width="45.5" height="112"/>
+            <path d="M447.25 259 L455 245 L485 245 L492.75 259 Z"/>
+            <rect x="455" y="179" width="30" height="66"/>
+            <path d="M455 179 L461 141 L479 141 L485 179 Z"/>
+            <rect x="461" y="107" width="18" height="34"/>
+            <path d="M461 107 L470 91 L479 107 Z"/>
+            <rect x="467" y="62" width="6" height="8"/>
+            <!-- N1 -->
+            <path d="M622 560 L698 560 L681 425 L639 425 Z"/>
+            <path d="M639 425 L681 425 L674 333 L646 333 Z"/>
+            <path d="M646 333 L674 333 L670 281 L650 281 Z"/>
+            <path d="M650 281 L670 281 L668 160 L652 160 Z"/>
+            <path d="M652 160 L660 128 L668 160 Z"/>
+          </g>
+          <!-- Escape towers -->
+          <path d="M90 463 L90 446 M190 456 L190 431 M470 91 L470 70 M660 128 L660 86" stroke="#16305c" stroke-width="1.5"/>
+          <!-- Saturn V bands -->
+          <path d="M447.25 420 L492.75 420 M447.25 300 L492.75 300" stroke="rgba(22,48,92,0.35)" stroke-width="1"/>
+
+          <!-- What went, what came back -->
+          <path d="M500 93 L506 93 L506 179 L500 179" fill="none" stroke="#e0a72e" stroke-width="2"/>
+          <text x="514" y="130" class="d-lbl-gold">Sent to the Moon</text>
+          <text x="514" y="146" class="d-txt">about 45 t</text>
+          <path d="M446 96 L464 100" stroke="#16305c" stroke-width="1"/>
+          <text x="440" y="84" text-anchor="end" class="d-lbl">Came home</text>
+          <text x="440" y="100" text-anchor="end" class="d-txt">about 5 t</text>
+
+          <!-- Names and liftoff masses -->
+          <text x="90" y="584" text-anchor="middle" class="d-lbl">Redstone</text>
+          <text x="90" y="600" text-anchor="middle" class="d-txt">about 30 t</text>
+          <text x="190" y="584" text-anchor="middle" class="d-lbl">Atlas</text>
+          <text x="190" y="600" text-anchor="middle" class="d-txt">about 120 t</text>
+          <text x="290" y="584" text-anchor="middle" class="d-lbl">Titan II</text>
+          <text x="290" y="600" text-anchor="middle" class="d-txt">about 150 t</text>
+          <text x="470" y="584" text-anchor="middle" class="d-lbl">Saturn V</text>
+          <text x="470" y="600" text-anchor="middle" class="d-txt">about 2,900 t</text>
+          <text x="660" y="584" text-anchor="middle" class="d-lbl">N1</text>
+          <text x="660" y="600" text-anchor="middle" class="d-txt">about 2,750 t</text>
+          <text x="660" y="616" text-anchor="middle" class="d-txt">four launches, all failed</text>
+
+          <!-- Liftoff mass, area to scale -->
+          <path d="M760 120 L760 600" stroke="rgba(22,48,92,0.25)" stroke-width="1" stroke-dasharray="4 5"/>
+          <text x="780" y="404" class="d-sm">Liftoff mass · area to scale</text>
+          <rect x="780" y="420" width="140" height="140" fill="rgba(224,167,46,0.25)" stroke="#16305c" stroke-width="1.5"/>
+          <text x="850" y="496" text-anchor="middle" class="d-lbl">2,900 t</text>
+          <rect x="940" y="531.5" width="28.5" height="28.5" fill="rgba(22,48,92,0.12)" stroke="#16305c" stroke-width="1.5"/>
+          <rect x="1010" y="546" width="14" height="14" fill="rgba(22,48,92,0.12)" stroke="#16305c" stroke-width="1.5"/>
+          <path d="M770 560 L1040 560" stroke="#16305c" stroke-width="1"/>
+          <text x="850" y="584" text-anchor="middle" class="d-lbl">Saturn V</text>
+          <text x="954" y="584" text-anchor="middle" class="d-lbl">Atlas</text>
+          <text x="1017" y="584" text-anchor="middle" class="d-lbl">Redstone</text>
+
+          <text x="24" y="640" class="d-sm">Heights to scale · liftoff masses rounded · shapes simplified</text>
+        </svg>

@@ -1,0 +1,186 @@
+{
+ "width": 1060,
+ "height": 660,
+ "labels": [
+  {
+   "x": 24.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "How a crew catches its target"
+  },
+  {
+   "x": 24.0,
+   "y": 78.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Direction of flight"
+  },
+  {
+   "x": 24.0,
+   "y": 160.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Target’s orbit"
+  },
+  {
+   "x": 24.0,
+   "y": 320.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Your orbit, a little lower"
+  },
+  {
+   "x": 34.0,
+   "y": 584.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Earth, far below"
+  },
+  {
+   "x": 856.0,
+   "y": 128.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Target"
+  },
+  {
+   "x": 856.0,
+   "y": 144.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "stands still in this view"
+  },
+  {
+   "x": 200.0,
+   "y": 387.0,
+   "anchor": "middle",
+   "kind": "num",
+   "size": 14.0,
+   "color": "#f5efe1",
+   "text": "1"
+  },
+  {
+   "x": 222.0,
+   "y": 378.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Settle in below and behind"
+  },
+  {
+   "x": 222.0,
+   "y": 396.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "an orbit shaped like the target’s, just lower"
+  },
+  {
+   "x": 300.0,
+   "y": 295.0,
+   "anchor": "middle",
+   "kind": "num",
+   "size": 14.0,
+   "color": "#f5efe1",
+   "text": "2"
+  },
+  {
+   "x": 322.0,
+   "y": 286.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Drift forward"
+  },
+  {
+   "x": 322.0,
+   "y": 304.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "the lower orbit is quicker: you gain every lap"
+  },
+  {
+   "x": 600.0,
+   "y": 387.0,
+   "anchor": "middle",
+   "kind": "num",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "3"
+  },
+  {
+   "x": 622.0,
+   "y": 378.0,
+   "anchor": "start",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "Burn toward the target"
+  },
+  {
+   "x": 622.0,
+   "y": 396.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "when it sits at a set angle above you"
+  },
+  {
+   "x": 870.0,
+   "y": 235.0,
+   "anchor": "middle",
+   "kind": "num",
+   "size": 14.0,
+   "color": "#f5efe1",
+   "text": "4"
+  },
+  {
+   "x": 892.0,
+   "y": 226.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Brake, match speed"
+  },
+  {
+   "x": 892.0,
+   "y": 244.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "then close in slowly"
+  },
+  {
+   "x": 24.0,
+   "y": 640.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "A view that travels with the target: it stands still while you drift past below · not to scale"
+  }
+ ]
+}

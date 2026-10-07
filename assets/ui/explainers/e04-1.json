@@ -1,0 +1,213 @@
+{
+ "width": 1060,
+ "height": 660,
+ "labels": [
+  {
+   "x": 24.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "A · Firing: it settles"
+  },
+  {
+   "x": 177.0,
+   "y": 204.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Gas"
+  },
+  {
+   "x": 177.0,
+   "y": 366.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Propellant"
+  },
+  {
+   "x": 196.0,
+   "y": 478.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Pump"
+  },
+  {
+   "x": 300.0,
+   "y": 158.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#8a5d12",
+   "text": "Push"
+  },
+  {
+   "x": 177.0,
+   "y": 606.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Under thrust the liquid lies over the"
+  },
+  {
+   "x": 177.0,
+   "y": 622.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "outlet, like water in a bottle."
+  },
+  {
+   "x": 377.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "B · Coasting: no down"
+  },
+  {
+   "x": 552.0,
+   "y": 478.0,
+   "anchor": "start",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "Gas at the pump"
+  },
+  {
+   "x": 616.0,
+   "y": 204.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "floating"
+  },
+  {
+   "x": 616.0,
+   "y": 219.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "blobs"
+  },
+  {
+   "x": 616.0,
+   "y": 370.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "a film on"
+  },
+  {
+   "x": 616.0,
+   "y": 385.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "the walls"
+  },
+  {
+   "x": 530.0,
+   "y": 606.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "In free fall the liquid floats in blobs"
+  },
+  {
+   "x": 530.0,
+   "y": 622.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "and creeps along the walls."
+  },
+  {
+   "x": 730.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "C · A nudge first"
+  },
+  {
+   "x": 716.0,
+   "y": 464.0,
+   "anchor": "start",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "Small rockets"
+  },
+  {
+   "x": 916.0,
+   "y": 516.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "then light"
+  },
+  {
+   "x": 916.0,
+   "y": 531.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "the engine"
+  },
+  {
+   "x": 1020.0,
+   "y": 268.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#8a5d12",
+   "text": "Small push"
+  },
+  {
+   "x": 882.0,
+   "y": 606.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Small rockets give a gentle push; the liquid"
+  },
+  {
+   "x": 882.0,
+   "y": 622.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "settles, then the main engine starts."
+  },
+  {
+   "x": 24.0,
+   "y": 648.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Cutaway of one propellant tank · simplified · a real stage has two, fuel and oxidiser"
+  }
+ ]
+}

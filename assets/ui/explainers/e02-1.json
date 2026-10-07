@@ -1,0 +1,231 @@
+{
+ "width": 1060,
+ "height": 660,
+ "labels": [
+  {
+   "x": 24.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "A · Instinct: speed up"
+  },
+  {
+   "x": 74.0,
+   "y": 252.0,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Direction"
+  },
+  {
+   "x": 74.0,
+   "y": 266.0,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "of flight"
+  },
+  {
+   "x": 260.0,
+   "y": 334.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Earth"
+  },
+  {
+   "x": 362.0,
+   "y": 492.0,
+   "anchor": "start",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "Higher, slower path"
+  },
+  {
+   "x": 176.0,
+   "y": 180.0,
+   "anchor": "end",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "Burn forward"
+  },
+  {
+   "x": 194.0,
+   "y": 222.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "You"
+  },
+  {
+   "x": 194.0,
+   "y": 238.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "back here after one lap"
+  },
+  {
+   "x": 286.0,
+   "y": 168.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Target"
+  },
+  {
+   "x": 376.0,
+   "y": 214.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "One lap later:"
+  },
+  {
+   "x": 376.0,
+   "y": 230.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "even farther ahead"
+  },
+  {
+   "x": 260.0,
+   "y": 546.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "The extra speed lifts you into a bigger orbit. A bigger orbit"
+  },
+  {
+   "x": 260.0,
+   "y": 562.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "takes longer to go round, so the gap grows."
+  },
+  {
+   "x": 554.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "B · What works: slow down"
+  },
+  {
+   "x": 604.0,
+   "y": 252.0,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Direction"
+  },
+  {
+   "x": 604.0,
+   "y": 266.0,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "of flight"
+  },
+  {
+   "x": 790.0,
+   "y": 334.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Earth"
+  },
+  {
+   "x": 840.0,
+   "y": 440.0,
+   "anchor": "start",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "Lower, quicker path"
+  },
+  {
+   "x": 704.0,
+   "y": 180.0,
+   "anchor": "end",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "Burn backward"
+  },
+  {
+   "x": 724.0,
+   "y": 222.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "You"
+  },
+  {
+   "x": 724.0,
+   "y": 238.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#8a5d12",
+   "text": "side by side after one lap"
+  },
+  {
+   "x": 816.0,
+   "y": 168.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Target"
+  },
+  {
+   "x": 790.0,
+   "y": 546.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Losing speed drops you into a smaller orbit. A smaller orbit"
+  },
+  {
+   "x": 790.0,
+   "y": 562.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "goes round faster, so you gain on the target every lap."
+  },
+  {
+   "x": 24.0,
+   "y": 640.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Seen from above · sizes hugely exaggerated · one lap of your new path shown, laps timed to Kepler’s law"
+  }
+ ]
+}

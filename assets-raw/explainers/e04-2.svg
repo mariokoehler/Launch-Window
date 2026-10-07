@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 660" width="1060" height="660">
+  <style>
+  .d-head { font-family: Archivo; font-weight: 700; font-size: 13px; letter-spacing: 0.8px; fill: #16305c; text-transform: uppercase; }
+  .d-lbl { font-family: Archivo; font-weight: 700; font-size: 14px; letter-spacing: 0.3px; fill: #16305c; }
+  .d-lbl-gold { font-family: Archivo; font-weight: 700; font-size: 14px; letter-spacing: 0.3px; fill: #8a5d12; }
+  .d-txt { font-family: 'Work Sans'; font-weight: 500; font-size: 12.5px; fill: #5b5548; }
+  .d-sm { font-family: Archivo; font-weight: 600; font-size: 11px; letter-spacing: 0.5px; fill: #5b5548; text-transform: uppercase; }
+  .halo { paint-order: stroke; stroke: #ffffff; stroke-width: 4px; stroke-linejoin: round; }
+  </style>
+          <defs>
+            <marker id="arG42" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#e0a72e"/></marker>
+            <pattern id="fuel42" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="8" fill="rgba(22,48,92,0.10)"/><line x1="0" y1="0" x2="0" y2="8" stroke="rgba(22,48,92,0.35)" stroke-width="2"/></pattern>
+            <clipPath id="tankC42"><rect x="808" y="100" width="150" height="330" rx="60"/></clipPath>
+          </defs>
+          <path d="M353 30 L353 600 M706 30 L706 600" stroke="rgba(22,48,92,0.25)" stroke-width="1" stroke-dasharray="4 5"/>
+
+          <!-- A · Self-lighting, pressure-fed -->
+          <text x="24" y="44" class="d-head">A · Self-lighting, gas-fed</text>
+          <path d="M176 164 L176 180 M116 180 L236 180 M116 180 L116 210 M236 180 L236 210" fill="none" stroke="#16305c" stroke-width="2"/>
+          <circle cx="176" cy="130" r="34" fill="#ffffff" stroke="#16305c" stroke-width="2"/>
+          <text x="176" y="134" text-anchor="middle" class="d-sm">Helium</text>
+          <text x="220" y="118" class="d-txt">gas pressure</text>
+          <text x="220" y="133" class="d-txt">pushes the liquids</text>
+          <rect x="76" y="210" width="80" height="200" rx="30" fill="url(#fuel42)" stroke="#16305c" stroke-width="2"/>
+          <rect x="196" y="210" width="80" height="200" rx="30" fill="url(#fuel42)" stroke="#16305c" stroke-width="2"/>
+          <text x="116" y="314" text-anchor="middle" class="d-lbl halo">Fuel</text>
+          <text x="236" y="314" text-anchor="middle" class="d-lbl halo">Oxidiser</text>
+          <path d="M116 410 L116 440 L166 440 L166 470 M236 410 L236 440 L186 440 L186 470" fill="none" stroke="#16305c" stroke-width="2"/>
+          <path d="M108 419 L124 431 L124 419 L108 431 Z M228 419 L244 431 L244 419 L228 431 Z" fill="#ffffff" stroke="#16305c" stroke-width="1.5" stroke-linejoin="round"/>
+          <rect x="160" y="470" width="32" height="22" fill="#ffffff" stroke="#16305c" stroke-width="2"/>
+          <path d="M176 474 L178 479 L183 481 L178 483 L176 488 L174 483 L169 481 L174 479 Z" fill="#e0a72e"/>
+          <path d="M160 492 L192 492 L206 556 L146 556 Z" fill="#ffffff" stroke="#16305c" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M150 560 Q176 622 202 560 Z" fill="rgba(224,167,46,0.35)" stroke="#e0a72e" stroke-width="1.5"/>
+          <text x="214" y="474" class="d-lbl-gold">They meet,</text>
+          <text x="214" y="490" class="d-txt">and burn: no spark</text>
+          <text x="176" y="606" text-anchor="middle" class="d-txt">No pumps to starve, no igniter to fail.</text>
+          <text x="176" y="622" text-anchor="middle" class="d-txt">Apollo’s spacecraft engines worked this way.</text>
+
+          <!-- B · A bag in the tank -->
+          <text x="377" y="44" class="d-head">B · A bag in the tank</text>
+          <path d="M530 70 L530 100" stroke="#16305c" stroke-width="2"/>
+          <text x="540" y="82" class="d-sm">Gas in</text>
+          <rect x="455" y="100" width="150" height="330" rx="60" fill="#ffffff" stroke="#16305c" stroke-width="2"/>
+          <text x="530" y="160" text-anchor="middle" class="d-sm">Gas</text>
+          <path d="M470 300 C480 262 520 280 530 270 C540 260 580 266 590 300 L590 392 Q590 418 530 418 Q470 418 470 392 Z" fill="url(#fuel42)" stroke="#16305c" stroke-width="1.5"/>
+          <path d="M495 196 L495 262 M530 186 L530 252 M565 196 L565 256" stroke="#e0a72e" stroke-width="2.5" marker-end="url(#arG42)"/>
+          <text x="530" y="356" text-anchor="middle" class="d-lbl halo">Flexible bag</text>
+          <path d="M530 418 L530 476" stroke="#16305c" stroke-width="2"/>
+          <path d="M518 476 L542 476 L552 520 L508 520 Z" fill="#ffffff" stroke="#16305c" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M510 524 Q530 568 550 524 Z" fill="rgba(224,167,46,0.35)" stroke="#e0a72e" stroke-width="1.5"/>
+          <path d="M600 226 L612 220" stroke="#16305c" stroke-width="1"/>
+          <text x="616" y="218" class="d-txt">squeezed</text>
+          <text x="616" y="233" class="d-txt">from above</text>
+          <text x="530" y="606" text-anchor="middle" class="d-txt">Gas squeezes the bag, so liquid comes out</text>
+          <text x="530" y="622" text-anchor="middle" class="d-txt">whichever way it floats.</text>
+
+          <!-- C · Liquid that clings -->
+          <text x="730" y="44" class="d-head">C · Liquid that clings</text>
+          <rect x="808" y="100" width="150" height="330" rx="60" fill="#ffffff"/>
+          <g clip-path="url(#tankC42)">
+            <path d="M818 200 Q860 380 878 428 M948 200 Q906 380 888 428 M883 130 L883 428" fill="none" stroke="rgba(22,48,92,0.30)" stroke-width="9" stroke-linecap="round"/>
+            <ellipse cx="883" cy="420" rx="40" ry="18" fill="url(#fuel42)" stroke="#16305c" stroke-width="1.2"/>
+            <path d="M818 200 Q860 380 878 428 M948 200 Q906 380 888 428 M883 130 L883 428" fill="none" stroke="#16305c" stroke-width="1.5"/>
+          </g>
+          <g fill="url(#fuel42)" stroke="#16305c" stroke-width="1.2">
+            <ellipse cx="840" cy="150" rx="12" ry="9"/>
+            <ellipse cx="930" cy="300" rx="10" ry="8"/>
+          </g>
+          <rect x="808" y="100" width="150" height="330" rx="60" fill="none" stroke="#16305c" stroke-width="2"/>
+          <path d="M883 430 L883 476" stroke="#16305c" stroke-width="2"/>
+          <path d="M871 476 L895 476 L905 520 L861 520 Z" fill="#ffffff" stroke="#16305c" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M863 524 Q883 568 903 524 Z" fill="rgba(224,167,46,0.35)" stroke="#e0a72e" stroke-width="1.5"/>
+          <path d="M934 252 L962 246" stroke="#16305c" stroke-width="1"/>
+          <text x="966" y="244" class="d-txt">vanes and</text>
+          <text x="966" y="259" class="d-txt">fine screens</text>
+          <path d="M924 418 L962 412" stroke="#16305c" stroke-width="1"/>
+          <text x="966" y="410" class="d-txt">gathers at</text>
+          <text x="966" y="425" class="d-txt">the outlet</text>
+          <text x="883" y="606" text-anchor="middle" class="d-txt">Liquid creeps along vanes and screens</text>
+          <text x="883" y="622" text-anchor="middle" class="d-txt">and gathers where the engine draws it.</text>
+
+          <text x="24" y="648" class="d-sm">Simplified cutaways · real spacecraft often combine these</text>
+        </svg>

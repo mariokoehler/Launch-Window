@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 660" width="1060" height="660">
+  <style>
+  .d-head { font-family: Archivo; font-weight: 700; font-size: 13px; letter-spacing: 0.8px; fill: #16305c; text-transform: uppercase; }
+  .d-lbl { font-family: Archivo; font-weight: 700; font-size: 14px; letter-spacing: 0.3px; fill: #16305c; }
+  .d-lbl-gold { font-family: Archivo; font-weight: 700; font-size: 14px; letter-spacing: 0.3px; fill: #8a5d12; }
+  .d-txt { font-family: 'Work Sans'; font-weight: 500; font-size: 12.5px; fill: #5b5548; }
+  .d-sm { font-family: Archivo; font-weight: 600; font-size: 11px; letter-spacing: 0.5px; fill: #5b5548; text-transform: uppercase; }
+  </style>
+          <defs>
+            <marker id="arN21" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#16305c"/></marker>
+            <marker id="arG21" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#e0a72e"/></marker>
+          </defs>
+          <path d="M530 30 L530 600" stroke="rgba(22,48,92,0.25)" stroke-width="1" stroke-dasharray="4 5"/>
+
+          <!-- A · The instinct: speed up -->
+          <g transform="translate(10 40)">
+            <text x="14" y="4" class="d-head">A · Instinct: speed up</text>
+            <!-- Direction of flight -->
+            <path d="M71.5 225 A190 190 0 0 1 104.5 167.9" fill="none" stroke="#16305c" stroke-width="2" marker-end="url(#arN21)"/>
+            <text x="64" y="212" text-anchor="end" class="d-sm">Direction</text>
+            <text x="64" y="226" text-anchor="end" class="d-sm">of flight</text>
+            <!-- Earth -->
+            <circle cx="250" cy="290" r="80" fill="rgba(22,48,92,0.07)" stroke="#16305c" stroke-width="2"/>
+            <text x="250" y="294" text-anchor="middle" class="d-sm">Earth</text>
+            <!-- Target's orbit -->
+            <circle cx="250" cy="290" r="153" fill="none" stroke="#16305c" stroke-width="2"/>
+            <!-- Your new path: higher, longer lap -->
+            <ellipse cx="250" cy="300.2" rx="162.9" ry="163.2" transform="rotate(-30 250 290)" fill="none" stroke="#e0a72e" stroke-width="2.5" stroke-dasharray="8 6"/>
+            <text x="352" y="452" class="d-lbl-gold">Higher, slower path</text>
+            <!-- Burn forward -->
+            <path d="M180.4 153.5 L208.1 137.5" stroke="#e0a72e" stroke-width="3" marker-end="url(#arG21)"/>
+            <text x="166" y="140" text-anchor="end" class="d-lbl-gold">Burn forward</text>
+            <!-- You -->
+            <circle cx="173.5" cy="157.5" r="7" fill="#e0a72e" stroke="#16305c" stroke-width="1.5"/>
+            <text x="184" y="182" class="d-lbl">You</text>
+            <text x="184" y="198" class="d-txt">back here after one lap</text>
+            <!-- Target now, and one lap later -->
+            <rect x="257.3" y="131.6" width="12" height="12" fill="#16305c"/>
+            <text x="276" y="128" class="d-lbl">Target</text>
+            <rect x="345.6" y="169.6" width="12" height="12" fill="#ffffff" stroke="#16305c" stroke-width="1.5" stroke-dasharray="3 2"/>
+            <text x="366" y="174" class="d-lbl">One lap later:</text>
+            <text x="366" y="190" class="d-txt">even farther ahead</text>
+            <!-- Caption -->
+            <text x="250" y="506" text-anchor="middle" class="d-txt">The extra speed lifts you into a bigger orbit. A bigger orbit</text>
+            <text x="250" y="522" text-anchor="middle" class="d-txt">takes longer to go round, so the gap grows.</text>
+          </g>
+
+          <!-- B · What works: slow down -->
+          <g transform="translate(540 40)">
+            <text x="14" y="4" class="d-head">B · What works: slow down</text>
+            <path d="M71.5 225 A190 190 0 0 1 104.5 167.9" fill="none" stroke="#16305c" stroke-width="2" marker-end="url(#arN21)"/>
+            <text x="64" y="212" text-anchor="end" class="d-sm">Direction</text>
+            <text x="64" y="226" text-anchor="end" class="d-sm">of flight</text>
+            <circle cx="250" cy="290" r="80" fill="rgba(22,48,92,0.07)" stroke="#16305c" stroke-width="2"/>
+            <text x="250" y="294" text-anchor="middle" class="d-sm">Earth</text>
+            <circle cx="250" cy="290" r="153" fill="none" stroke="#16305c" stroke-width="2"/>
+            <!-- Your new path: lower, shorter lap -->
+            <ellipse cx="250" cy="279.8" rx="142.4" ry="142.8" transform="rotate(-30 250 290)" fill="none" stroke="#e0a72e" stroke-width="2.5" stroke-dasharray="8 6"/>
+            <text x="300" y="400" class="d-lbl-gold">Lower, quicker path</text>
+            <!-- Burn backward -->
+            <path d="M166.6 161.5 L138.9 177.5" stroke="#e0a72e" stroke-width="3" marker-end="url(#arG21)"/>
+            <text x="164" y="140" text-anchor="end" class="d-lbl-gold">Burn backward</text>
+            <!-- You, and the target one lap later -->
+            <rect x="165.5" y="149.5" width="16" height="16" fill="none" stroke="#16305c" stroke-width="1.5" stroke-dasharray="3 2"/>
+            <circle cx="173.5" cy="157.5" r="7" fill="#e0a72e" stroke="#16305c" stroke-width="1.5"/>
+            <text x="184" y="182" class="d-lbl">You</text>
+            <text x="184" y="198" class="d-txt" style="fill: #8a5d12; font-weight: 600;">side by side after one lap</text>
+            <rect x="257.3" y="131.6" width="12" height="12" fill="#16305c"/>
+            <text x="276" y="128" class="d-lbl">Target</text>
+            <text x="250" y="506" text-anchor="middle" class="d-txt">Losing speed drops you into a smaller orbit. A smaller orbit</text>
+            <text x="250" y="522" text-anchor="middle" class="d-txt">goes round faster, so you gain on the target every lap.</text>
+          </g>
+
+          <text x="24" y="640" class="d-sm">Seen from above · sizes hugely exaggerated · one lap of your new path shown, laps timed to Kepler’s law</text>
+        </svg>

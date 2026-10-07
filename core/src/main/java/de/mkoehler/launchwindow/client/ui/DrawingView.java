@@ -23,7 +23,7 @@ public final class DrawingView extends WidgetGroup {
 
     /** The sizes the drawing's bold Archivo text comes in, for a source that sets its own size. */
     private static final Map<Integer, Theme.TextStyle> BOLD_SIZES = Map.of(
-        13, Theme.TextStyle.DRAWING_LABEL_SM, 15, Theme.TextStyle.DRAWING_LABEL,
+        13, Theme.TextStyle.DRAWING_LABEL_SM, 14, Theme.TextStyle.DRAWING_LABEL_MD, 15, Theme.TextStyle.DRAWING_LABEL,
         21, Theme.TextStyle.POINT_TITLE, 26, Theme.TextStyle.DRAWING_BIG);
 
     private final Explainers.Drawing drawing;
@@ -62,6 +62,7 @@ public final class DrawingView extends WidgetGroup {
         return switch (label.kind()) {
             case "d-txt" -> Theme.TextStyle.DRAWING_TEXT;
             case "d-sm" -> Theme.TextStyle.DRAWING_SMALL;
+            case "d-body" -> Theme.TextStyle.CAPTION_LG;
             default -> {
                 Theme.TextStyle own = switch (label.kind()) {
                     case "d-head" -> Theme.TextStyle.DRAWING_HEAD;

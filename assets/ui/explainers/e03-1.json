@@ -1,0 +1,348 @@
+{
+ "width": 1060,
+ "height": 660,
+ "labels": [
+  {
+   "x": 24.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "The trip, priced in speed changes"
+  },
+  {
+   "x": 24.0,
+   "y": 64.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Each leg shows how much speed a rocket must gain or lose: engineers call it delta-v."
+  },
+  {
+   "x": 90.0,
+   "y": 400.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Earth"
+  },
+  {
+   "x": 985.0,
+   "y": 388.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Moon"
+  },
+  {
+   "x": 330.0,
+   "y": 206.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Low Earth orbit"
+  },
+  {
+   "x": 600.0,
+   "y": 206.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Heading for the Moon"
+  },
+  {
+   "x": 790.0,
+   "y": 206.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Lunar orbit"
+  },
+  {
+   "x": 790.0,
+   "y": 482.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Lunar orbit"
+  },
+  {
+   "x": 600.0,
+   "y": 482.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Heading home"
+  },
+  {
+   "x": 330.0,
+   "y": 482.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Into the air"
+  },
+  {
+   "x": 220.0,
+   "y": 262.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "9.4 km/s"
+  },
+  {
+   "x": 220.0,
+   "y": 278.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Launch to orbit"
+  },
+  {
+   "x": 465.0,
+   "y": 262.0,
+   "anchor": "middle",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "3.1 km/s"
+  },
+  {
+   "x": 465.0,
+   "y": 278.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Leave Earth orbit"
+  },
+  {
+   "x": 695.0,
+   "y": 262.0,
+   "anchor": "middle",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "0.9 km/s"
+  },
+  {
+   "x": 695.0,
+   "y": 278.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Brake into lunar orbit"
+  },
+  {
+   "x": 935.0,
+   "y": 300.0,
+   "anchor": "end",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "2.0 km/s"
+  },
+  {
+   "x": 935.0,
+   "y": 316.0,
+   "anchor": "end",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Land: no air to brake"
+  },
+  {
+   "x": 935.0,
+   "y": 384.0,
+   "anchor": "end",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "1.9 km/s"
+  },
+  {
+   "x": 935.0,
+   "y": 400.0,
+   "anchor": "end",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Climb back to orbit"
+  },
+  {
+   "x": 695.0,
+   "y": 416.0,
+   "anchor": "middle",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "1.0 km/s"
+  },
+  {
+   "x": 695.0,
+   "y": 432.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Head for home"
+  },
+  {
+   "x": 465.0,
+   "y": 416.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Coast"
+  },
+  {
+   "x": 465.0,
+   "y": 432.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "a few small corrections"
+  },
+  {
+   "x": 250.0,
+   "y": 412.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "0 km/s"
+  },
+  {
+   "x": 250.0,
+   "y": 428.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "The air brakes you"
+  },
+  {
+   "x": 555.0,
+   "y": 336.0,
+   "anchor": "middle",
+   "kind": "d-lbl-gold",
+   "size": 22.0,
+   "color": "#8a5d12",
+   "text": "After orbit: about 8.9 km/s more"
+  },
+  {
+   "x": 555.0,
+   "y": 358.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "almost as much again as getting to orbit"
+  },
+  {
+   "x": 24.0,
+   "y": 543.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Earth to orbit"
+  },
+  {
+   "x": 757.0,
+   "y": 543.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "9.4 km/s"
+  },
+  {
+   "x": 24.0,
+   "y": 579.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Orbit to the Moon and back"
+  },
+  {
+   "x": 315.0,
+   "y": 579.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#16305c",
+   "text": "3.1"
+  },
+  {
+   "x": 425.0,
+   "y": 579.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#16305c",
+   "text": "0.9"
+  },
+  {
+   "x": 505.0,
+   "y": 579.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#16305c",
+   "text": "2.0"
+  },
+  {
+   "x": 612.0,
+   "y": 579.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#16305c",
+   "text": "1.9"
+  },
+  {
+   "x": 692.0,
+   "y": 579.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#16305c",
+   "text": "1.0"
+  },
+  {
+   "x": 729.5,
+   "y": 579.0,
+   "anchor": "start",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "8.9 km/s"
+  },
+  {
+   "x": 24.0,
+   "y": 640.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "An Apollo-style trip · figures rounded · the trip home brakes in Earth’s air for free"
+  }
+ ]
+}

@@ -1,0 +1,429 @@
+{
+ "width": 1060,
+ "height": 660,
+ "labels": [
+  {
+   "x": 24.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "Three ways to fill a rocket"
+  },
+  {
+   "x": 180.0,
+   "y": 84.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Kerosene + liquid oxygen"
+  },
+  {
+   "x": 180.0,
+   "y": 102.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "R-7, Atlas, Saturn V’s first stage"
+  },
+  {
+   "x": 40.0,
+   "y": 132.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "boils off"
+  },
+  {
+   "x": 40.0,
+   "y": 147.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "through a vent"
+  },
+  {
+   "x": 262.0,
+   "y": 281.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "−183 °C"
+  },
+  {
+   "x": 40.0,
+   "y": 364.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Kept at"
+  },
+  {
+   "x": 40.0,
+   "y": 381.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "−183 °C, the oxygen"
+  },
+  {
+   "x": 40.0,
+   "y": 408.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Waits in the tank"
+  },
+  {
+   "x": 40.0,
+   "y": 425.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Hours: the oxygen boils away"
+  },
+  {
+   "x": 40.0,
+   "y": 452.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Lights with"
+  },
+  {
+   "x": 40.0,
+   "y": 469.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "An igniter"
+  },
+  {
+   "x": 40.0,
+   "y": 496.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Hazards"
+  },
+  {
+   "x": 40.0,
+   "y": 513.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Fire, frostbite"
+  },
+  {
+   "x": 40.0,
+   "y": 544.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Exhaust speed"
+  },
+  {
+   "x": 183.0,
+   "y": 564.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "about 3.0 km/s"
+  },
+  {
+   "x": 530.0,
+   "y": 84.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Liquid hydrogen + oxygen"
+  },
+  {
+   "x": 530.0,
+   "y": 102.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Saturn V’s upper stages"
+  },
+  {
+   "x": 390.0,
+   "y": 132.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "boils off"
+  },
+  {
+   "x": 390.0,
+   "y": 147.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "fastest of all"
+  },
+  {
+   "x": 612.0,
+   "y": 316.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "−253 °C"
+  },
+  {
+   "x": 390.0,
+   "y": 364.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Kept at"
+  },
+  {
+   "x": 390.0,
+   "y": 381.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "−253 °C, the hydrogen"
+  },
+  {
+   "x": 390.0,
+   "y": 408.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Waits in the tank"
+  },
+  {
+   "x": 390.0,
+   "y": 425.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Hours: it boils off fastest"
+  },
+  {
+   "x": 390.0,
+   "y": 452.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Lights with"
+  },
+  {
+   "x": 390.0,
+   "y": 469.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "An igniter"
+  },
+  {
+   "x": 390.0,
+   "y": 496.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Hazards"
+  },
+  {
+   "x": 390.0,
+   "y": 513.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Fire, leaks, frostbite"
+  },
+  {
+   "x": 390.0,
+   "y": 544.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Exhaust speed"
+  },
+  {
+   "x": 587.0,
+   "y": 564.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "about 4.2 km/s"
+  },
+  {
+   "x": 880.0,
+   "y": 84.0,
+   "anchor": "middle",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "A hypergolic pair"
+  },
+  {
+   "x": 880.0,
+   "y": 102.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Titan II, Apollo’s spacecraft engines"
+  },
+  {
+   "x": 740.0,
+   "y": 132.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "sealed tight,"
+  },
+  {
+   "x": 740.0,
+   "y": 147.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "nothing escapes"
+  },
+  {
+   "x": 962.0,
+   "y": 166.0,
+   "anchor": "start",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "20 °C"
+  },
+  {
+   "x": 740.0,
+   "y": 364.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Kept at"
+  },
+  {
+   "x": 740.0,
+   "y": 381.0,
+   "anchor": "start",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "Room temperature"
+  },
+  {
+   "x": 740.0,
+   "y": 408.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Waits in the tank"
+  },
+  {
+   "x": 740.0,
+   "y": 425.0,
+   "anchor": "start",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "Months, even years"
+  },
+  {
+   "x": 740.0,
+   "y": 452.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Lights with"
+  },
+  {
+   "x": 740.0,
+   "y": 469.0,
+   "anchor": "start",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "Nothing: it lights on contact"
+  },
+  {
+   "x": 740.0,
+   "y": 496.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Hazards"
+  },
+  {
+   "x": 740.0,
+   "y": 513.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Poisonous and corrosive"
+  },
+  {
+   "x": 740.0,
+   "y": 544.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Exhaust speed"
+  },
+  {
+   "x": 887.0,
+   "y": 564.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "about 3.1 km/s"
+  },
+  {
+   "x": 24.0,
+   "y": 640.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Typical pairs of the 1960s · tanks drawn alike, temperatures to scale · a faster exhaust means more push per kilogram"
+  }
+ ]
+}

@@ -44,8 +44,8 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   work is built (`design.md` §5, Backlog). Reset the dev data root before the next play test: the
   pack hash changed.
 - **Explainers** (`ui-spec.md` component 18, `design.md` §1.1): E-01 to E-05 are mocked up on
-  the canvas `Launch Window — Explainers` (ask the user for the link). E-01 is built, in the
-  Museum's Encyclopedia tab; E-02 to E-05, the triggers and their figures are unconfirmed.
+  the canvas `Launch Window — Explainers` (ask the user for the link). All five are built, in the
+  Museum's Encyclopedia tab, with every figure checked; the triggers are unconfirmed.
 - **PR duty for astronauts is built** (`design.md` §2.2(c)), with 39 press stories
   (`assets/content/pr-press.json`), no repeats, and effects beyond prestige. Next is the next
   play test.

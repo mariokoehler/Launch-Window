@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 660" width="1060" height="660">
+  <style>
+  .d-head { font-family: Archivo; font-weight: 700; font-size: 13px; letter-spacing: 0.8px; fill: #16305c; text-transform: uppercase; }
+  .d-lbl { font-family: Archivo; font-weight: 700; font-size: 14px; letter-spacing: 0.3px; fill: #16305c; }
+  .d-txt { font-family: 'Work Sans'; font-weight: 500; font-size: 12.5px; fill: #5b5548; }
+  .d-body { font-family: 'Work Sans'; font-weight: 500; font-size: 14px; fill: #1c1c1a; }
+  .d-sm { font-family: Archivo; font-weight: 600; font-size: 11px; letter-spacing: 0.5px; fill: #5b5548; text-transform: uppercase; }
+  .craft { fill: #ffffff; stroke: #16305c; stroke-width: 2; stroke-linejoin: round; }
+  .quad { fill: #16305c; }
+  .plume { fill: rgba(224,167,46,0.35); stroke: #e0a72e; stroke-width: 1.5; stroke-linejoin: round; }
+  .push { stroke: #16305c; stroke-width: 2.5; }
+  </style>
+          <defs>
+            <marker id="arN52" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#16305c"/></marker>
+          </defs>
+          <text x="24" y="44" class="d-head">One craft seen from above · gold: exhaust · navy arrows: the push it gives</text>
+          <path d="M24 254 L1036 254 M24 444 L1036 444" stroke="rgba(22,48,92,0.25)" stroke-width="1" stroke-dasharray="4 5"/>
+
+          <!-- A · Turn -->
+          <path d="M160 129 L470 129 L530 147 L530 171 L470 189 L160 189 Z" class="craft"/>
+          <path d="M200 129 L200 189" stroke="rgba(22,48,92,0.35)" stroke-width="1"/>
+          <rect x="172" y="121" width="16" height="8" class="quad"/><rect x="172" y="189" width="16" height="8" class="quad"/>
+          <rect x="442" y="121" width="16" height="8" class="quad"/><rect x="442" y="189" width="16" height="8" class="quad"/>
+          <path d="M175 121 L185 121 L194 93 L166 93 Z" class="plume"/>
+          <path d="M445 197 L455 197 L464 225 L436 225 Z" class="plume"/>
+          <path d="M180 201 L180 227" class="push" marker-end="url(#arN52)"/>
+          <path d="M450 117 L450 91" class="push" marker-end="url(#arN52)"/>
+          <circle cx="345" cy="159" r="5" fill="#ffffff" stroke="#16305c" stroke-width="1.5"/>
+          <path d="M339 159 L351 159 M345 153 L345 165" stroke="#16305c" stroke-width="1"/>
+          <text x="345" y="182" text-anchor="middle" class="d-sm">Centre</text>
+          <path d="M552 187 A36 36 0 0 0 552 131" fill="none" stroke="#16305c" stroke-width="2" marker-end="url(#arN52)"/>
+          <text x="572" y="208" text-anchor="middle" class="d-txt">nose swings up</text>
+          <path d="M466 120 L482 106" stroke="#16305c" stroke-width="1"/>
+          <text x="486" y="104" class="d-sm">Thruster quad</text>
+          <text x="640" y="125" class="d-head">A · Turn</text>
+          <text x="640" y="149" class="d-body">Fire a jet at the back and the opposite jet at</text>
+          <text x="640" y="168" class="d-body">the front. The two pushes twist the craft</text>
+          <text x="640" y="187" class="d-body">around its middle, and the nose swings round.</text>
+
+          <!-- B · Slide -->
+          <path d="M160 319 L470 319 L530 337 L530 361 L470 379 L160 379 Z" class="craft"/>
+          <path d="M200 319 L200 379" stroke="rgba(22,48,92,0.35)" stroke-width="1"/>
+          <rect x="172" y="311" width="16" height="8" class="quad"/><rect x="172" y="379" width="16" height="8" class="quad"/>
+          <rect x="442" y="311" width="16" height="8" class="quad"/><rect x="442" y="379" width="16" height="8" class="quad"/>
+          <path d="M175 387 L185 387 L194 415 L166 415 Z" class="plume"/>
+          <path d="M445 387 L455 387 L464 415 L436 415 Z" class="plume"/>
+          <path d="M180 307 L180 281" class="push" marker-end="url(#arN52)"/>
+          <path d="M450 307 L450 281" class="push" marker-end="url(#arN52)"/>
+          <circle cx="345" cy="349" r="5" fill="#ffffff" stroke="#16305c" stroke-width="1.5"/>
+          <path d="M339 349 L351 349 M345 343 L345 355" stroke="#16305c" stroke-width="1"/>
+          <text x="315" y="296" text-anchor="middle" class="d-txt">the craft slides up without turning</text>
+          <text x="640" y="315" class="d-head">B · Slide</text>
+          <text x="640" y="339" class="d-body">Fire two jets on the same side together. The</text>
+          <text x="640" y="358" class="d-body">pushes add up instead of twisting, and the whole</text>
+          <text x="640" y="377" class="d-body">craft moves the other way. That is how it docks.</text>
+
+          <!-- C · Stop -->
+          <g transform="rotate(-6 345 539)">
+            <path d="M160 509 L470 509 L530 527 L530 551 L470 569 L160 569 Z" class="craft"/>
+            <path d="M200 509 L200 569" stroke="rgba(22,48,92,0.35)" stroke-width="1"/>
+            <rect x="172" y="501" width="16" height="8" class="quad"/><rect x="172" y="569" width="16" height="8" class="quad"/>
+            <rect x="442" y="501" width="16" height="8" class="quad"/><rect x="442" y="569" width="16" height="8" class="quad"/>
+            <path d="M175 577 L185 577 L194 605 L166 605 Z" class="plume"/>
+            <path d="M445 501 L455 501 L464 473 L436 473 Z" class="plume"/>
+            <path d="M180 497 L180 471" class="push" marker-end="url(#arN52)"/>
+            <path d="M450 581 L450 607" class="push" marker-end="url(#arN52)"/>
+            <circle cx="345" cy="539" r="5" fill="#ffffff" stroke="#16305c" stroke-width="1.5"/>
+            <path d="M339 539 L351 539 M345 533 L345 545" stroke="#16305c" stroke-width="1"/>
+          </g>
+          <path d="M556 555 A36 36 0 0 0 556 499" fill="none" stroke="#16305c" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arN52)"/>
+          <text x="566" y="486" text-anchor="middle" class="d-txt">still turning</text>
+          <text x="640" y="505" class="d-head">C · Stop</text>
+          <text x="640" y="529" class="d-body">Nothing in space slows a turn: it carries on until</text>
+          <text x="640" y="548" class="d-body">the opposite pair fires. Every turn is paid for</text>
+          <text x="640" y="567" class="d-body">twice, once to start it and once to stop it.</text>
+
+          <text x="24" y="645" class="d-sm">A generic craft · two of its thruster quads shown · real craft carry jets for every direction</text>
+        </svg>

@@ -422,6 +422,8 @@ public final class Theme {
         CAPTION_LG(FontFile.WORK_SANS_MEDIUM, 14, 20, 0f),
         /** A drawing's label: Archivo Bold 15, letter-spaced 0.4px. */
         DRAWING_LABEL(FontFile.ARCHIVO_BOLD, 15, 18, 0.4f / 15f),
+        /** A drawing's label on the later explainers' sheets (E-02 on): Archivo Bold 14, letter-spaced 0.3px. */
+        DRAWING_LABEL_MD(FontFile.ARCHIVO_BOLD, 14, 17, 0.3f / 14f),
         /** A drawing's smaller label, or a title block's value: Archivo Bold 13, letter-spaced 0.3px. */
         DRAWING_LABEL_SM(FontFile.ARCHIVO_BOLD, 13, 16, 0.3f / 13f),
         /** A drawing's heading or a bar chart's key, upper case: Archivo Bold 13, letter-spaced 0.8px. */
@@ -504,7 +506,7 @@ public final class Theme {
         + "ĢģĪīĮįĶķĻļŅņ"
         + "İıŁłŒœŚśŠšŤťŪūŮů"
         + "ŰűŲųŸŹźŻżŽž"
-        + "€×÷–—…‘’“”·−•→↑↓‹›";
+        + "€×÷°–—…‘’“”·−•→↑↓‹›";
 
     /**
      * One {@link BitmapFont} per {@link TextStyle}, owned by this object.

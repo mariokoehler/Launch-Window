@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 660" width="1060" height="660">
+  <style>
+  .d-head { font-family: Archivo; font-weight: 700; font-size: 13px; letter-spacing: 0.8px; fill: #16305c; text-transform: uppercase; }
+  .d-lbl { font-family: Archivo; font-weight: 700; font-size: 14px; letter-spacing: 0.3px; fill: #16305c; }
+  .d-lbl-gold { font-family: Archivo; font-weight: 700; font-size: 14px; letter-spacing: 0.3px; fill: #8a5d12; }
+  .d-txt { font-family: 'Work Sans'; font-weight: 500; font-size: 12.5px; fill: #5b5548; }
+  .d-sm { font-family: Archivo; font-weight: 600; font-size: 11px; letter-spacing: 0.5px; fill: #5b5548; text-transform: uppercase; }
+  .d-num { font-family: Archivo; font-weight: 700; font-size: 14px; fill: #f5efe1; }
+  </style>
+          <defs>
+            <marker id="arN22" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#16305c"/></marker>
+          </defs>
+          <text x="24" y="44" class="d-head">How a crew catches its target</text>
+          <!-- Direction of flight -->
+          <text x="24" y="78" class="d-sm">Direction of flight</text>
+          <path d="M24 92 L190 92" stroke="#16305c" stroke-width="2" marker-end="url(#arN22)"/>
+          <!-- Stars -->
+          <g fill="rgba(22,48,92,0.45)">
+            <path d="M760 59 L761.5 62.5 L765 64 L761.5 65.5 L760 69 L758.5 65.5 L755 64 L758.5 62.5 Z"/>
+            <path d="M880 91 L881.5 94.5 L885 96 L881.5 97.5 L880 101 L878.5 97.5 L875 96 L878.5 94.5 Z"/>
+            <path d="M930 65 L931.5 68.5 L935 70 L931.5 71.5 L930 75 L928.5 71.5 L925 70 L928.5 68.5 Z"/>
+            <path d="M995 103 L996.5 106.5 L1000 108 L996.5 109.5 L995 113 L993.5 109.5 L990 108 L993.5 106.5 Z"/>
+            <path d="M640 72 L641.5 75.5 L645 77 L641.5 78.5 L640 82 L638.5 78.5 L635 77 L638.5 75.5 Z"/>
+          </g>
+          <!-- Orbits -->
+          <path d="M24 170 L1036 170" stroke="#16305c" stroke-width="1.5"/>
+          <text x="24" y="160" class="d-sm">Target’s orbit</text>
+          <path d="M24 330 L1036 330" stroke="rgba(22,48,92,0.45)" stroke-width="1.5" stroke-dasharray="6 5"/>
+          <text x="24" y="320" class="d-sm">Your orbit, a little lower</text>
+          <!-- Earth -->
+          <rect x="24" y="560" width="1012" height="40" fill="rgba(22,48,92,0.07)"/>
+          <path d="M24 560 L1036 560" stroke="#16305c" stroke-width="2"/>
+          <text x="34" y="584" class="d-sm">Earth, far below</text>
+
+          <!-- 2 · drift forward -->
+          <path d="M210 330 L586 330" stroke="#16305c" stroke-width="2.5" marker-end="url(#arN22)"/>
+          <!-- 3 · line of sight and the climb -->
+          <path d="M600 330 L840 170" stroke="#e0a72e" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <path d="M640 330 A40 40 0 0 0 633.3 307.8" fill="none" stroke="#8a5d12" stroke-width="1.5"/>
+          <text transform="translate(690 250) rotate(-33.7)" class="d-sm" style="fill: #8a5d12;">LINE OF SIGHT</text>
+          <path d="M600 330 Q780 318 832 184" fill="none" stroke="#16305c" stroke-width="2.5" marker-end="url(#arN22)"/>
+
+          <!-- You: at the start and at the burn -->
+          <circle cx="200" cy="330" r="7" fill="#e0a72e" stroke="#16305c" stroke-width="1.5"/>
+          <circle cx="600" cy="330" r="7" fill="#e0a72e" stroke="#16305c" stroke-width="1.5"/>
+          <!-- Target -->
+          <rect x="834" y="164" width="12" height="12" fill="#16305c"/>
+          <text x="856" y="128" class="d-lbl">Target</text>
+          <text x="856" y="144" class="d-txt">stands still in this view</text>
+
+          <!-- Step labels -->
+          <circle cx="200" cy="382" r="13" fill="#16305c"/><text x="200" y="387" text-anchor="middle" class="d-num">1</text>
+          <text x="222" y="378" class="d-lbl">Settle in below and behind</text>
+          <text x="222" y="396" class="d-txt">an orbit shaped like the target’s, just lower</text>
+          <circle cx="300" cy="290" r="13" fill="#16305c"/><text x="300" y="295" text-anchor="middle" class="d-num">2</text>
+          <text x="322" y="286" class="d-lbl">Drift forward</text>
+          <text x="322" y="304" class="d-txt">the lower orbit is quicker: you gain every lap</text>
+          <circle cx="600" cy="382" r="13" fill="#e0a72e"/><text x="600" y="387" text-anchor="middle" class="d-num" style="fill: #16305c;">3</text>
+          <text x="622" y="378" class="d-lbl-gold">Burn toward the target</text>
+          <text x="622" y="396" class="d-txt">when it sits at a set angle above you</text>
+          <circle cx="870" cy="230" r="13" fill="#16305c"/><text x="870" y="235" text-anchor="middle" class="d-num">4</text>
+          <text x="892" y="226" class="d-lbl">Brake, match speed</text>
+          <text x="892" y="244" class="d-txt">then close in slowly</text>
+
+          <text x="24" y="640" class="d-sm">A view that travels with the target: it stands still while you drift past below · not to scale</text>
+        </svg>

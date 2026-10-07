@@ -430,7 +430,7 @@ public final class MuseumScreen extends ChromeScreen {
         Table grid = new Table();
         grid.top().left();
         for (int i = 0; i < explainers.size(); i++) {
-            grid.add(explainerCard(explainers.get(i))).width(448f).top().padRight(i % 4 == 3 ? 0f : 16f)
+            grid.add(explainerCard(explainers.get(i))).width(448f).top().fillY().padRight(i % 4 == 3 ? 0f : 16f)
                 .padBottom(16f);
             if (i % 4 == 3) {
                 grid.row();
@@ -441,6 +441,7 @@ public final class MuseumScreen extends ChromeScreen {
 
     private Table explainerCard(Explainers.Explainer explainer) {
         Table card = ui.card();
+        card.top();
         card.pad(Theme.BORDER_EMPHASIS);
         card.defaults().growX().left();
         if (!explainer.sheets().isEmpty()) {

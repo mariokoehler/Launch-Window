@@ -61,22 +61,23 @@ engineering problem or tidbit, note it here the same session.
     framing that's documented, never an invented quote. When the game runs past 1963, add stories
     for the later seasons.
 - **Explainers (user's idea, 2026-10-06; mocked up; E-01 built in libGDX the same day, E-02 to
-  E-05 unconfirmed):** short full-screen "infographic" series that explain *how and why* an
+  E-05 on 2026-10-07; triggers unconfirmed):** short full-screen "infographic" series that explain *how and why* an
   aerospace idea works, offered (never forced) when it first comes up in play and kept in the
   Museum (`ui-spec.md` component 18, with each sheet's content and the proposed triggers). Canvas `Launch Window — Explainers`
   (private; ask the user for the link), one row per explainer with a yellow note of what to verify.
   - **E-01 Suborbital vs orbital** (3 sheets, built, in the Museum's Encyclopedia tab): Newton's
     cannon and the 8-kilometre rule; Freedom 7 against Friendship 7 to scale; the rocket
     equation's propellant share, staging, re-entry.
-  - **E-02 Rendezvous** (2): brake into a lower, quicker orbit to catch up (drawn true to
+  - **E-02 Rendezvous** (2, built 2026-10-07, like E-03 to E-05): brake into a lower, quicker orbit to catch up (drawn true to
     Kepler); Vostok 3/4, Gemini 4, Aldrin's doctorate and Gemini 12, Gemini 6A/7, the first dockings.
   - **E-03 Going to the Moon** (2): the trip priced in delta-v; Redstone to Saturn V and N1 to
     scale, lunar orbit rendezvous.
   - **E-04 Restarting an engine in space** (2): propellant floats in free fall; settling burns,
     self-lighting gas-fed engines, bags and vanes.
-  - **E-05 Hypergolic propellants and steering jets** (2, user's suggestion): the three
+  - **E-05 Hypergolic propellants and steering jets** (2, user's suggestion; built as
+    "Hypergolics and steering jets"): the three
     propellant families compared; thruster quads turning, sliding and stopping a craft, Gemini 8.
-  - **Figures to verify before shipping:**
+  - **Figures, checked:**
     - E-01 is checked (2026-10-06): Freedom 7 (5 May 1961): peak 187.5 km, 487 km downrange,
       top speed 8,262 km/h, 15 min 28 s. Friendship 7 (20 February 1962): about 161 by 261 km
       (NASA: 100 by 162.2 statute miles; the mockup's 265 km was corrected), 28,234 km/h, 4 h 55
@@ -88,23 +89,47 @@ engineering problem or tidbit, note it here the same session.
       published 1728); Tsiolkovsky published the rocket equation in 1903; the R-7 drops its four
       boosters about two minutes up; the Mercury Atlas dropped its two booster engines and flew
       on with the sustainer. Still to source: the Atlas's tank walls "thinner than a coin".
-    - E-02: laps about 88 min at 200 km and 92 min at 400 km (worked out); Vostok 3/4 about
-      6.5 km apart; Gemini 4 (June 1965); Aldrin's 1963 MIT doctorate and Gemini 12's sextant
-      approach (November 1966); Gemini 6A/7 within about 30 cm (December 1965); Gemini 8 (March
-      1966); Kosmos 186/188 (October 1967).
-    - E-03: delta-v 9.4 to orbit, then 3.1, 0.9, 2.0, 1.9, 1.0 km/s (Apollo-style, rounded);
-      heights 25.4 / 28.7 / 33.2 / 110.6 / 105.3 m and masses about 30 / 120 / 150 / 2,900 /
-      2,750 t (Redstone, Atlas, Titan II, Saturn V, N1); about 45 t sent to the Moon, about 5 t
-      home; Houbolt and lunar orbit rendezvous; the N1's four failures (1969–72); Heinlein's
-      "halfway to anywhere" (paraphrased).
-    - E-04: Saturn V's third stage settling before its relight; Apollo's service module and
-      ascent engines gas-fed and self-igniting, the ascent engine without a backup; Soviet Venus
-      and Mars probes of 1961–62 stranded by upper-stage relight failures.
-    - E-05: oxygen −183 °C, hydrogen −253 °C; exhaust about 3.0 / 4.2 / 3.1 km/s; "hypergol"
-      coined by German chemists in the 1940s; Titan II and Apollo on hydrazine fuels with
-      nitrogen tetroxide; the R-16 disaster (24 October 1960, officially about 78 dead, other
-      counts higher, UDMH with a nitric-acid oxidiser); Vostok's cold-nitrogen and Mercury's
-      peroxide jets; Gemini 8's spin near one turn a second and the rule that ended the flight.
+    - E-02 to E-05 are checked (2026-10-07), with these corrections to the mockup's text:
+    - E-02: laps 88.4 min at 200 km and 92.4 min at 400 km (Kepler's third law). Vostok 3 and 4
+      (11 and 12 August 1962) came within about 6.5 km (5 km was planned). Gemini 4 (3 June
+      1965) gave up station-keeping with its Titan II upper stage to save fuel. Aldrin's Sc.D.,
+      MIT, January 1963: "Line-of-Sight Guidance Techniques for Manned Orbital Rendezvous"; on
+      Gemini 12 (November 1966) the rendezvous radar failed and he worked the approach with a
+      sextant and charts. Gemini 6A and 7 (15 December 1965) as close as about 30 cm (one foot).
+      Gemini 8 docked on 16 March 1966; Kosmos 186 and 188 docked automatically on 30 October
+      1967.
+    - E-03: delta-v rounded for an Apollo-style trip (9.4 to orbit with losses; 3.1 TLI, 0.9
+      lunar orbit, 2.0 landing, 1.9 ascent, 1.0 home). Heights 25.4 / 28.7 / 33.2 / 110.6 /
+      105.3 m and liftoff masses about 30 / 120 / 150 / 2,900 / 2,750 t (Mercury-Redstone,
+      Mercury-Atlas, Gemini-Titan II, Saturn V, N1). Command and service module plus lander
+      about 44 to 47 t toward the Moon, the command module about 5 t at splashdown. John Houbolt
+      pushed lunar orbit rendezvous. The N1 flew four times (February and July 1969, June 1971,
+      November 1972) and failed each time. "Halfway to anywhere" is widely credited to Robert
+      Heinlein (repeated by Jerry Pournelle) but not traced to a text, so the sheet says "a
+      saying credited to". 2,900 / 120 is about 24: "some 24 times", not 25.
+    - E-04: the Saturn V's third stage (S-IVB) fired its small ullage thrusters to settle its
+      propellant before relighting its J-2 for TLI, the first restart of a hydrogen-oxygen engine
+      in weightlessness. Apollo's service propulsion engine and the lunar module's ascent engine
+      were pressure-fed and hypergolic; the ascent engine had no backup. The Soviet probes: the
+      top stage (Blok L) was a separate stage that had to start for the first time after a coast
+      in orbit, so "relit" was wrong. It stranded the first Venus probe (4 February 1961, an
+      ignition failure) and Venus and Mars probes in August, September, October and November
+      1962; on 25 August 1962 an ullage motor failed to fire and the stage tumbled (added to
+      the sheet).
+    - E-05: oxygen boils at −183 °C, hydrogen at −253 °C. Vacuum exhaust speeds about 3.0
+      (F-1, 304 s), 4.2 (J-2, 421 s) and 3.1 km/s (Apollo's service engine, 314 s). The word
+      "Hypergol" was coined by Wolfgang Nöggerath (Braunschweig) in the early 1940s. The R-16
+      (24 October 1960) burned UDMH with a nitric-acid oxidiser and killed at least 78 (other
+      counts are higher): the sheet says "at least 78", not "more than 70". Vostok's attitude
+      jets used cold nitrogen, Mercury's hydrogen peroxide. Gemini 8 (16 March 1966): a stuck
+      thruster (No. 8), a spin reaching about one turn a second, stopped with the re-entry
+      control jets, whose use ended the flight by mission rule.
+    - "In Launch Window" lines checked against the pack and the rules: the steps (Retrofire,
+      Countdown, Reentry preparations), the goal Two crews together ("within a few
+      kilometers"), every early-era rocket Light with 0 kg to TLI, VAB level gating rocket
+      class, Payload R&D in the SET Centre, Vostok's single retrorocket, the R-7's and Faith 7's
+      history notes. Jupiter-C's upper stages are solid, so E-05 says every early-era rocket
+      burns liquid oxygen "in its main stages".
   - **Next candidates:** why re-entry capsules are blunt, why reliability matters over a
     30-step mission (the odds multiply), why launch latitude matters (Earth's spin as a boost).
 - **A Museum encyclopedia** (started 2026-10-06): the deeper version of the same content; its
@@ -1221,5 +1246,5 @@ else is queued: next is the next play test.
   whether the repo goes public (a private repo makes `update.cmd` and the NAS's image pull need
   a GitHub login) and the first version number.
 - **M7+ (order open):** interaction beyond passive competition (§2.9); the rest of the content
-  tree beyond the early era; the rest of the Museum encyclopedia (§1.1; E-01 built 2026-10-06); a game-host role and UI;
+  tree beyond the early era; the rest of the Museum encyclopedia (§1.1; E-01 to E-05 built 2026-10-06/07); a game-host role and UI;
   validating the `WEEKDAYS` profile with the colleagues' group.

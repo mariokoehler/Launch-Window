@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 660" width="1060" height="660">
+  <style>
+  .d-head { font-family: Archivo; font-weight: 700; font-size: 13px; letter-spacing: 0.8px; fill: #16305c; text-transform: uppercase; }
+  .d-lbl { font-family: Archivo; font-weight: 700; font-size: 14px; letter-spacing: 0.3px; fill: #16305c; }
+  .d-lbl-gold { font-family: Archivo; font-weight: 700; font-size: 14px; letter-spacing: 0.3px; fill: #8a5d12; }
+  .d-txt { font-family: 'Work Sans'; font-weight: 500; font-size: 12.5px; fill: #5b5548; }
+  .d-sm { font-family: Archivo; font-weight: 600; font-size: 11px; letter-spacing: 0.5px; fill: #5b5548; text-transform: uppercase; }
+  .halo { paint-order: stroke; stroke: #ffffff; stroke-width: 4px; stroke-linejoin: round; }
+  </style>
+          <defs>
+            <marker id="arN41" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#16305c"/></marker>
+            <marker id="arG41" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#e0a72e"/></marker>
+            <pattern id="fuel41" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="8" fill="rgba(22,48,92,0.10)"/><line x1="0" y1="0" x2="0" y2="8" stroke="rgba(22,48,92,0.35)" stroke-width="2"/></pattern>
+            <clipPath id="tankA41"><rect x="102" y="100" width="150" height="330" rx="60"/></clipPath>
+            <clipPath id="tankB41"><rect x="455" y="100" width="150" height="330" rx="60"/></clipPath>
+            <clipPath id="tankC41"><rect x="808" y="100" width="150" height="330" rx="60"/></clipPath>
+          </defs>
+          <path d="M353 30 L353 600 M706 30 L706 600" stroke="rgba(22,48,92,0.25)" stroke-width="1" stroke-dasharray="4 5"/>
+
+          <!-- A · Firing -->
+          <text x="24" y="44" class="d-head">A · Firing: it settles</text>
+          <rect x="102" y="100" width="150" height="330" rx="60" fill="#ffffff"/>
+          <g clip-path="url(#tankA41)">
+            <rect x="102" y="290" width="150" height="140" fill="url(#fuel41)"/>
+            <path d="M102 290 L252 290" stroke="#16305c" stroke-width="1.5"/>
+          </g>
+          <rect x="102" y="100" width="150" height="330" rx="60" fill="none" stroke="#16305c" stroke-width="2"/>
+          <text x="177" y="204" text-anchor="middle" class="d-sm">Gas</text>
+          <text x="177" y="366" text-anchor="middle" class="d-lbl halo">Propellant</text>
+          <path d="M177 430 L177 462" stroke="#16305c" stroke-width="2"/>
+          <circle cx="177" cy="474" r="12" fill="#ffffff" stroke="#16305c" stroke-width="2"/>
+          <path d="M171 474 L183 474 M177 468 L177 480" stroke="#16305c" stroke-width="1.5"/>
+          <rect x="171" y="486" width="12" height="6" fill="#16305c"/>
+          <path d="M165 492 L189 492 L203 552 L151 552 Z" fill="#ffffff" stroke="#16305c" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M154 556 Q177 622 200 556 Z" fill="rgba(224,167,46,0.35)" stroke="#e0a72e" stroke-width="1.5"/>
+          <text x="196" y="478" class="d-sm">Pump</text>
+          <path d="M300 400 L300 172" stroke="#e0a72e" stroke-width="3" marker-end="url(#arG41)"/>
+          <text x="300" y="158" text-anchor="middle" class="d-sm" style="fill: #8a5d12;">Push</text>
+          <text x="177" y="606" text-anchor="middle" class="d-txt">Under thrust the liquid lies over the</text>
+          <text x="177" y="622" text-anchor="middle" class="d-txt">outlet, like water in a bottle.</text>
+
+          <!-- B · Coasting -->
+          <text x="377" y="44" class="d-head">B · Coasting: no down</text>
+          <rect x="455" y="100" width="150" height="330" rx="60" fill="#ffffff"/>
+          <g clip-path="url(#tankB41)">
+            <rect x="455" y="100" width="150" height="330" rx="60" fill="none" stroke="rgba(22,48,92,0.30)" stroke-width="12" stroke-dasharray="230 130 140 360"/>
+            <g fill="url(#fuel41)" stroke="#16305c" stroke-width="1.2">
+              <ellipse cx="500" cy="170" rx="26" ry="18"/>
+              <ellipse cx="565" cy="225" rx="34" ry="26"/>
+              <ellipse cx="492" cy="300" rx="20" ry="22"/>
+              <ellipse cx="580" cy="330" rx="16" ry="12"/>
+              <circle cx="520" cy="380" r="10"/>
+              <circle cx="548" cy="282" r="7"/>
+            </g>
+          </g>
+          <rect x="455" y="100" width="150" height="330" rx="60" fill="none" stroke="#16305c" stroke-width="2"/>
+          <path d="M530 430 L530 462" stroke="#16305c" stroke-width="2"/>
+          <circle cx="530" cy="441" r="3.5" fill="#ffffff" stroke="#16305c" stroke-width="1.2"/>
+          <circle cx="530" cy="453" r="2.5" fill="#ffffff" stroke="#16305c" stroke-width="1.2"/>
+          <circle cx="530" cy="474" r="12" fill="#ffffff" stroke="#e0a72e" stroke-width="2.5"/>
+          <path d="M524 474 L536 474 M530 468 L530 480" stroke="#16305c" stroke-width="1.5"/>
+          <rect x="524" y="486" width="12" height="6" fill="#16305c"/>
+          <path d="M518 492 L542 492 L556 552 L504 552 Z" fill="#ffffff" stroke="#16305c" stroke-width="2" stroke-linejoin="round"/>
+          <text x="552" y="478" class="d-lbl-gold">Gas at the pump</text>
+          <path d="M600 214 L612 206" stroke="#16305c" stroke-width="1"/>
+          <text x="616" y="204" class="d-txt">floating</text>
+          <text x="616" y="219" class="d-txt">blobs</text>
+          <path d="M600 378 L612 372" stroke="#16305c" stroke-width="1"/>
+          <text x="616" y="370" class="d-txt">a film on</text>
+          <text x="616" y="385" class="d-txt">the walls</text>
+          <text x="530" y="606" text-anchor="middle" class="d-txt">In free fall the liquid floats in blobs</text>
+          <text x="530" y="622" text-anchor="middle" class="d-txt">and creeps along the walls.</text>
+
+          <!-- C · A nudge first -->
+          <text x="730" y="44" class="d-head">C · A nudge first</text>
+          <rect x="808" y="100" width="150" height="330" rx="60" fill="#ffffff"/>
+          <g clip-path="url(#tankC41)">
+            <path d="M808 340 Q845 332 883 340 Q920 348 958 340 L958 430 L808 430 Z" fill="url(#fuel41)"/>
+            <path d="M808 340 Q845 332 883 340 Q920 348 958 340" fill="none" stroke="#16305c" stroke-width="1.5"/>
+          </g>
+          <g fill="url(#fuel41)" stroke="#16305c" stroke-width="1.2">
+            <ellipse cx="850" cy="250" rx="14" ry="10"/>
+            <ellipse cx="910" cy="206" rx="10" ry="8"/>
+          </g>
+          <path d="M850 264 L850 300 M910 218 L910 254" stroke="#16305c" stroke-width="1.5" marker-end="url(#arN41)"/>
+          <rect x="808" y="100" width="150" height="330" rx="60" fill="none" stroke="#16305c" stroke-width="2"/>
+          <!-- Small settling rockets -->
+          <g fill="#ffffff" stroke="#16305c" stroke-width="1.5" stroke-linejoin="round">
+            <path d="M800 380 L808 380 M958 380 L966 380"/>
+            <rect x="788" y="372" width="12" height="30"/>
+            <path d="M790 402 L798 402 L801 412 L787 412 Z"/>
+            <rect x="966" y="372" width="12" height="30"/>
+            <path d="M968 402 L976 402 L979 412 L965 412 Z"/>
+          </g>
+          <path d="M788 414 Q794 438 800 414 Z M966 414 Q972 438 978 414 Z" fill="rgba(224,167,46,0.35)" stroke="#e0a72e" stroke-width="1.5"/>
+          <path d="M752 448 L784 424" stroke="#8a5d12" stroke-width="1"/>
+          <text x="716" y="464" class="d-lbl-gold">Small rockets</text>
+          <!-- Main engine, still off -->
+          <path d="M883 430 L883 462" stroke="#16305c" stroke-width="2"/>
+          <circle cx="883" cy="474" r="12" fill="#ffffff" stroke="#16305c" stroke-width="2"/>
+          <path d="M877 474 L889 474 M883 468 L883 480" stroke="#16305c" stroke-width="1.5"/>
+          <rect x="877" y="486" width="12" height="6" fill="#16305c"/>
+          <path d="M871 492 L895 492 L909 552 L857 552 Z" fill="#ffffff" stroke="#16305c" stroke-width="2" stroke-linejoin="round"/>
+          <text x="916" y="516" class="d-txt">then light</text>
+          <text x="916" y="531" class="d-txt">the engine</text>
+          <path d="M1020 400 L1020 282" stroke="#e0a72e" stroke-width="2" marker-end="url(#arG41)"/>
+          <text x="1020" y="268" text-anchor="middle" class="d-sm" style="fill: #8a5d12;">Small push</text>
+          <text x="882" y="606" text-anchor="middle" class="d-txt">Small rockets give a gentle push; the liquid</text>
+          <text x="882" y="622" text-anchor="middle" class="d-txt">settles, then the main engine starts.</text>
+
+          <text x="24" y="648" class="d-sm">Cutaway of one propellant tank · simplified · a real stage has two, fuel and oxidiser</text>
+        </svg>

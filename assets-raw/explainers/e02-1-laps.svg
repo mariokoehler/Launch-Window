@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 84" width="520" height="84" data-grid="none">
+  <style>
+  .d-head { font-family: Archivo; font-weight: 700; font-size: 13px; letter-spacing: 0.8px; fill: #16305c; text-transform: uppercase; }
+  .d-lbl { font-family: Archivo; font-weight: 700; font-size: 14px; letter-spacing: 0.3px; fill: #16305c; }
+  .d-lbl-gold { font-family: Archivo; font-weight: 700; font-size: 14px; letter-spacing: 0.3px; fill: #8a5d12; }
+  .d-txt { font-family: 'Work Sans'; font-weight: 500; font-size: 12.5px; fill: #5b5548; }
+  .d-sm { font-family: Archivo; font-weight: 600; font-size: 11px; letter-spacing: 0.5px; fill: #5b5548; text-transform: uppercase; }
+  </style>
+              <text x="0" y="12" class="d-sm">One lap, about 200 km up</text>
+              <rect x="0" y="18" width="442" height="16" fill="#e0a72e" stroke="#16305c" stroke-width="1.5"/>
+              <text x="450" y="31" class="d-lbl-gold" style="font-size: 13px;">88 min</text>
+              <text x="0" y="56" class="d-sm">One lap, about 400 km up</text>
+              <rect x="0" y="62" width="462" height="16" fill="#ffffff" stroke="#16305c" stroke-width="1.5"/>
+              <text x="470" y="75" class="d-lbl" style="font-size: 13px;">92 min</text>
+            </svg>

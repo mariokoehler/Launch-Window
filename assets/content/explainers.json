@@ -91,6 +91,199 @@
           "inGame": "In the VAB, compare a rocket's Suborbital payload with its LEO payload: the same rocket lifts far less to orbit. On Vostok · Orbital flight, the Retrofire step is the brake that brings the capsule home."
         }
       ]
+    },
+    {
+      "id": "rendezvous",
+      "code": "E-02",
+      "title": "Rendezvous",
+      "summary": "Why a spacecraft brakes to catch up with another, and how crews learned to meet and dock in orbit.",
+      "sheets": [
+        {
+          "title": "Slow down to catch up",
+          "drawing": "e02-1",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "Lower orbits are faster",
+              "text": "Gravity pulls harder close to the Earth, so a craft in a low orbit has to fly faster to keep falling around it, and it has a shorter way to go. The lower the orbit, the shorter the lap."
+            },
+            {
+              "title": "Speed up, and you fall behind",
+              "text": "Fire your engine towards a craft ahead of you and the extra speed lifts you into a higher orbit. A higher orbit takes longer to go round, so the target pulls away. A pilot's instincts, trained in aircraft, say the opposite."
+            },
+            {
+              "title": "Brake to catch up",
+              "text": "To close the gap, you brake. The lower, quicker orbit gains a few minutes on every lap. Once you're just below the target, burn forward to rise and match its orbit.",
+              "drawing": "e02-1-laps"
+            }
+          ],
+          "inGame": "Every Retrofire step uses the same idea. Braking lowers the orbit; on the far side of the Earth it dips into the air, and the craft comes home."
+        },
+        {
+          "title": "Learning to meet in orbit",
+          "drawing": "e02-2",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "Close isn't together",
+              "text": "In August 1962 Vostok 3 and 4 passed within about 6.5 km, but neither could change its orbit, and they drifted apart. In June 1965 Gemini 4 tried to fly up to its own spent upper stage by pointing at it and thrusting. The stage only seemed to slip away, and the crew gave up to save fuel."
+            },
+            {
+              "title": "“Dr. Rendezvous”",
+              "text": "In 1963 an Air Force pilot named Buzz Aldrin finished a doctorate at MIT on steering to a rendezvous by eye: hold the target still against the background stars, and correct whenever it drifts. On Gemini 12, in 1966, his radar failed, and he worked the approach out by hand with a sextant and charts."
+            },
+            {
+              "title": "Then came docking",
+              "text": "Gemini 6A and 7 met in December 1965 and flew as close as about 30 cm. Gemini 8 made the first docking in March 1966; two uncrewed Soviet craft, Kosmos 186 and 188, docked automatically in 1967. The Moon landings depended on it: the lander had to find its command ship again in lunar orbit."
+            }
+          ],
+          "inGame": "The goal Two crews together asks only for two craft within a few kilometres, which well-timed launches can manage, as Vostok 3 and 4 did. A real rendezvous needs a craft that can change its own orbit."
+        }
+      ]
+    },
+    {
+      "id": "going-to-the-moon",
+      "code": "E-03",
+      "title": "Going to the Moon",
+      "summary": "The trip to the Moon priced in speed changes, and why the rocket that pays for it is so big.",
+      "sheets": [
+        {
+          "title": "The speed bill for the Moon",
+          "drawing": "e03-1",
+          "scale": "Bars to scale",
+          "points": [
+            {
+              "title": "Orbit is halfway",
+              "text": "Reaching low Earth orbit costs about 9.4 km/s of speed change, counting what gravity and air take on the way up. A saying credited to the writer Robert Heinlein puts it neatly: once you're in orbit, you're halfway to anywhere."
+            },
+            {
+              "title": "Every stop costs speed",
+              "text": "Leaving Earth orbit for the Moon takes about 3.1 km/s more. The Moon has no air, so slowing into orbit around it, landing, climbing back up and setting off for home must all be done with rockets, and every one of those rockets has to be carried there first."
+            },
+            {
+              "title": "The air is free",
+              "text": "The way home is the cheap part. Earth's atmosphere does the braking that would otherwise need another big rocket; a returning crew pays for it with a heat shield and parachutes instead of fuel."
+            }
+          ],
+          "inGame": "In the VAB every rocket lists its payload to TLI, trans-lunar injection: what it can send toward the Moon. Every rocket of the early era reads 0 kg there."
+        },
+        {
+          "title": "Why the Moon rocket is so big",
+          "drawing": "e03-2",
+          "scale": "Heights to scale",
+          "points": [
+            {
+              "title": "Fuel to carry fuel",
+              "text": "Each extra km/s multiplies the size of the rocket instead of adding to it, because the propellant for the last leg has to be lifted by every leg before it. An orbital rocket is already about 96% propellant; for the Moon, its payload is mostly another rocket."
+            },
+            {
+              "title": "Split the spacecraft",
+              "text": "Landing one big ship on the Moon and flying it home would have needed an even larger rocket. Apollo landed only a light lander while the command ship waited in lunar orbit, and the two met again before going home. NASA engineer John Houbolt argued hard for this plan, and it fit the whole trip on one Saturn V."
+            },
+            {
+              "title": "Big, and still a gamble",
+              "text": "A Saturn V weighed about 2,900 t at liftoff, some 24 times the Atlas that flew America's first orbital missions. The Soviet N1, almost as big, flew four times between 1969 and 1972 and failed every time."
+            }
+          ],
+          "inGame": "Rockets come in classes, and a bigger class needs a higher VAB level before you can open it. Every rocket of the early era is Light."
+        }
+      ]
+    },
+    {
+      "id": "restarting-in-space",
+      "code": "E-04",
+      "title": "Restarting an engine in space",
+      "summary": "Why lighting a rocket engine after a coast is hard when the propellant floats, and the three ways engineers solved it.",
+      "sheets": [
+        {
+          "title": "Fuel with no down",
+          "drawing": "e04-1",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "Everything falls together",
+              "text": "While a spacecraft coasts, it and everything inside it are falling at the same rate, so nothing settles. Propellant breaks into floating blobs, creeps along the tank walls and sloshes at the slightest nudge."
+            },
+            {
+              "title": "Pumps want liquid, not gas",
+              "text": "A big engine's pumps spin very fast and need a steady column of liquid. A gulp of gas can make them race out of control or starve the engine as it starts. Some engines can be lit only a few times, or only once, so a bad start may be the last chance."
+            },
+            {
+              "title": "Nudge, then light",
+              "text": "The cure is a settling burn: small rockets fire for a few seconds to push the craft forward, the propellant drifts back to the bottom of its tanks, and only then does the main engine start. The Saturn V's third stage did this before it relit to leave Earth orbit for the Moon."
+            }
+          ],
+          "inGame": "The R-7 lights every engine on the ground for this reason: in the early 1950s nobody knew whether a big engine could be started reliably high up. Its history note tells the story."
+        },
+        {
+          "title": "Three ways to a sure restart",
+          "drawing": "e04-2",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "Simple engines restart best",
+              "text": "An engine fed by gas pressure has no pumps to starve, and propellants that ignite the moment they meet need no spark. Apollo's service module engine, which took the crew into lunar orbit and out again, was built this way. So was the lunar module's ascent engine, which had no backup."
+            },
+            {
+              "title": "Learned the hard way",
+              "text": "Several of the first Soviet probes to Venus and Mars, in 1961 and 1962, never left Earth orbit: their top stage had to start after a coast in orbit, and it failed. On one, in August 1962, a small settling rocket didn't fire and the stage tumbled. Starting an engine in weightlessness took years of trial and error."
+            },
+            {
+              "title": "Every fix has a price",
+              "text": "Self-igniting propellants are poisonous and attack seals. Gas-fed engines need heavy, thick-walled tanks. Bags and screens add weight and can wear out. Engineers pick the trade that fits: the more an engine must restart, the simpler it is built."
+            }
+          ],
+          "inGame": "Retrofire is a start in space too, and Vostok's single retrorocket can't be fired twice. A step's odds rest on the reliability of the parts it uses; Payload R&D in the SET Centre raises it."
+        }
+      ]
+    },
+    {
+      "id": "hypergolics-and-steering-jets",
+      "code": "E-05",
+      "title": "Hypergolics and steering jets",
+      "summary": "Propellants that light the moment they touch, and the small jets that turn, slide and stop a spacecraft.",
+      "sheets": [
+        {
+          "title": "Fuels that light themselves",
+          "drawing": "e05-1",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "Two liquids, one flame",
+              "text": "Hypergolic means a fuel and an oxidiser that burst into flame the instant they touch: no spark, no igniter, nothing to fail. Open two valves and the engine runs; close them and it stops. The word was coined by German rocket chemists in the 1940s."
+            },
+            {
+              "title": "Ready to wait",
+              "text": "Liquid oxygen boils at −183 °C and must be topped up until the last minutes before launch. A hypergolic pair stays liquid at room temperature for months, so a missile can stand ready in its silo, and a spacecraft can wait days in orbit before its next burn."
+            },
+            {
+              "title": "The price is poison",
+              "text": "The usual pair, a hydrazine fuel with nitrogen tetroxide, is toxic and eats through seals, so ground crews load it in sealed suits. In October 1960 an R-16 missile, fuelled with a similar self-igniting pair, exploded on its pad at Baikonur and killed at least 78 people."
+            }
+          ],
+          "inGame": "Every rocket of the early era burns liquid oxygen in its main stages, so each one is fuelled on launch day, and the Countdown step can still hold. Self-lighting propellants arrive with later rockets and spacecraft."
+        },
+        {
+          "title": "Steering with small jets",
+          "drawing": "e05-2",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "Push one way, move the other",
+              "text": "With no air there are no wings or fins to steer with. A reaction control system is a set of small rocket jets around the craft, usually grouped in fours. Each jet pushes the craft the opposite way to its exhaust."
+            },
+            {
+              "title": "Short, sharp and many",
+              "text": "Steering jets fire in bursts of a fraction of a second, thousands of times on one flight. Self-lighting propellants suit them: there's nothing to ignite, only valves to open. The first capsules used simpler stuff: Vostok puffed cold nitrogen gas, Mercury broke down hydrogen peroxide."
+            },
+            {
+              "title": "Gemini 8's spin",
+              "text": "In March 1966, just after the first docking, a jet on Gemini 8 stuck open. After undocking the capsule spun faster and faster, up to about one turn a second. Neil Armstrong shut the jets down and stopped the spin with the separate re-entry jets. Once those were used, the rules said come home, so the flight ended early."
+            }
+          ],
+          "inGame": "The Reentry preparations step is steering-jet work: turning the capsule so its retrorockets point forward. On Faith 7, Gordon Cooper did it by hand, lining up on marks drawn on his window."
+        }
+      ]
     }
   ]
 }
