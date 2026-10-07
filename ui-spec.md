@@ -308,6 +308,37 @@ On the right:
       2. *Steering with small jets:* one craft from above, turning, sliding and stopping with
          its thruster quads; cold gas and peroxide in Vostok and Mercury; Gemini 8's spin. In
          the game: the Reentry preparations step and Cooper's hand-flown Faith 7.
+    - **E-06 to E-19** *(mocked up 2026-10-07 from the user's brief; not built, no figure
+      checked yet)*, one canvas row each, below E-05, in E-02's sheet template, each with a
+      yellow note of the figures and claims to verify. The quoted name is the explainer's title
+      and the topic goes in the eyebrow (unconfirmed). Two sheets each unless noted:
+      - **E-06 "Falling, not floating"** (Weightlessness): *There is gravity in orbit*; *What
+        it does to a body*.
+      - **E-07 "Why capsules are blunt"** (Heat shields): *A blunt nose stays cooler*; *How
+        the shield survives*.
+      - **E-08 "The odds multiply"** (Reliability): *A chain of steps*; *Fighting the odds*.
+      - **E-09 "Getting out of a failing rocket"** (Launch escape): *Two answers to one
+        danger* (Mercury's tower, Vostok's seat); *When it worked*.
+      - **E-10 "Land or sea"** (Coming home): *Parachutes in stages*; *Why each side chose
+        its way*.
+      - **E-11 "Talking to an orbiting craft"** (Tracking): *Only while it's in sight*; *A
+        network around the world*.
+      - **E-12 "What Explorer 1 found"** (Space environment): *Belts of radiation*; *Why it
+        matters*.
+      - **E-13 "Safe enough for a person"** (Human rating): *From missile to crew launcher*;
+        *Earning trust*.
+      - **E-14 "Earth's free push"** (Launch latitude): *Launch east*; *Where the rocket can
+        go*. The game has no latitude rule, so its strips say the VAB's payloads already
+        include each real site's push (proposed; or fold it into E-01, `design.md` §5
+        Backlog has the mechanic idea).
+      - **E-15 "The hardest moment of the climb"** (Max Q), one sheet.
+      - **E-16 "Batteries and sunlight"** (Power): *A satellite's power budget*; *Day and
+        night in orbit*.
+      - **E-17 "Keeping a rocket pointed"** (Guidance): *Balancing on a flame*; *Spinning to
+        fly straight* (Jupiter-C).
+      - **E-18 "Why satellites fall"** (Orbital decay): *Thin air, long drag*; *The Sun stirs
+        the air*.
+      - **E-19 "A rocket held up by its own pressure"** (Balloon tanks), one sheet.
     - **As built:** full screen with no app chrome; page dots are clickable; Close and
       Done go back to the screen that opened it (the Museum's Encyclopedia tab for now).
     - **Drawings** are SVG sources in `assets-raw/explainers/`, rasterized at 2x without their

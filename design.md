@@ -130,9 +130,14 @@ engineering problem or tidbit, note it here the same session.
       class, Payload R&D in the SET Centre, Vostok's single retrorocket, the R-7's and Faith 7's
       history notes. Jupiter-C's upper stages are solid, so E-05 says every early-era rocket
       burns liquid oxygen "in its main stages".
-  - **Next candidates:** why re-entry capsules are blunt, why reliability matters over a
-    30-step mission (the odds multiply), why launch latitude matters (Earth's spin as a boost).
-    The concept audit below adds more.
+  - **E-06 to E-19 are mocked up** (2026-10-07, the user's brief; not built), one per
+    candidate in the concept audit below: Weightlessness, Heat shields, Reliability, Launch
+    escape, Coming home, Tracking, Space environment, Human rating, Launch latitude, Max Q (one
+    sheet), Power, Guidance, Orbital decay and Balloon tanks (one sheet). Sheet titles in
+    `ui-spec.md` component 18. **No figure is checked yet:** each canvas row's yellow note
+    lists what to verify. E-14's "In Launch Window" strips say the game has no latitude rule
+    and that the VAB's payloads already include each real site's push (proposed; the
+    alternative is folding it into E-01).
 - **Concepts: linking game content to the explainers** (user's idea, 2026-10-07; specified in
   `ui-spec.md` component 19, mocked up the same day). Programs, configurations, steps, rockets and
   capsules each list the real-world concepts behind them; a Concepts section on their screens
@@ -165,7 +170,7 @@ engineering problem or tidbit, note it here the same session.
         boils away), `countdown`, every rocket.
       - **Steering jets** → E-05 sheet 2: step `reentry-preparations`, the Vostok and Mercury
         capsules.
-    - *No explainer yet (shown nowhere until one exists; the candidate list):*
+    - *Explainer mocked up as E-06 to E-19 (2026-10-07), so no chip until each is built:*
       - **Weightlessness** (they're falling, not out of gravity): steps `duration-level-i` and
         `-ii`, `biometric-data-transmission`, goals Life in weightlessness, A day in space, Days
         in space, Sputnik 2, Korabl-Sputnik 2, the duration configurations.
@@ -193,7 +198,7 @@ engineering problem or tidbit, note it here the same session.
         be enough.
     - *First impressions:* weightlessness and the heat shield would each attach to most
       crewed content, and "the odds multiply" ties straight to how the game resolves a
-      mission, so those three are the strongest next explainers.
+      mission, so those three (E-06 to E-08) are the first to build.
 - **A Museum encyclopedia** (started 2026-10-06): the deeper version of the same content; its
   first entries are the explainers above (`ui-spec.md` §4.11).
 - **Real images:** NASA photos are US government works and normally public domain. Soviet and
