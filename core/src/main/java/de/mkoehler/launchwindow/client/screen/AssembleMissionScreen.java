@@ -9,13 +9,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.actions.LaunchMissionAction;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
+import de.mkoehler.launchwindow.client.ui.ChemistryIndicator;
 import de.mkoehler.launchwindow.client.ui.Refusals;
+import de.mkoehler.launchwindow.client.ui.RelationshipMarker;
 import de.mkoehler.launchwindow.client.ui.SkillBar;
 import de.mkoehler.launchwindow.client.ui.Theme;
+import de.mkoehler.launchwindow.client.ui.TraitChip;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.CrewSkills;
 import de.mkoehler.launchwindow.client.view.MissionDraft;
 import de.mkoehler.launchwindow.client.view.Missions;
+import de.mkoehler.launchwindow.client.view.People;
 import de.mkoehler.launchwindow.client.view.Programs;
 import de.mkoehler.launchwindow.client.view.SetSkills;
 import de.mkoehler.launchwindow.content.MissionComponent;
@@ -28,6 +32,8 @@ import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.AstronautSkill;
 import de.mkoehler.launchwindow.model.Personnel;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
+import de.mkoehler.launchwindow.model.Trait;
+import de.mkoehler.launchwindow.rules.Chemistry;
 import de.mkoehler.launchwindow.rules.LaunchRequest;
 import de.mkoehler.launchwindow.rules.MissionAssessment;
 import de.mkoehler.launchwindow.rules.MissionLaunch;
@@ -36,6 +42,7 @@ import de.mkoehler.launchwindow.rules.MissionProgress;
 import de.mkoehler.launchwindow.rules.MissionStaffing;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Locale;
@@ -46,13 +53,17 @@ import java.util.Set;
  * Assemble mission ({@code ui-spec.md} &sect;4.6.8): the configuration's crew seats and consoles,
  * one to one, filled by hand or by Auto-assign, the chosen rockets, the odds for exactly these
  * people, and Confirm &amp; pay. The launch check is {@link MissionLaunch#check}, the server's own,
- * so the button is only live when the server would accept the launch.
+ * so the button is only live when the server would accept the launch. The crew and consoles'
+ * chemistry, as the player knows it, has its own card; tiles and pickers show revealed traits and
+ * relationship marks (People canvas, 2026-10-07).
  *
  * @author Mario Koehler
  */
 public final class AssembleMissionScreen extends ChromeScreen {
 
     private static final int COLUMNS = 4;
+    /** The slot picker's width: room for traits, marks and the chemistry preview. */
+    private static final float PICKER_WIDTH = 920f;
 
     private final MissionConfiguration configuration;
     private final Program program;
@@ -129,6 +140,9 @@ public final class AssembleMissionScreen extends ChromeScreen {
         left.top();
         left.defaults().growX().padBottom(Theme.SPACE_4);
         left.add(crewCard(draft)).row();
+        if (!People.teamIds(draft.crewSlotIds(), draft.controlSlotIds()).isEmpty()) {
+            left.add(chemistryCard(draft)).row();
+        }
         left.add(rocketCard(draft)).row();
         left.add(payCard(draft)).row();
         columns.add(scrollPane(left)).width(560f).top().fillY().padRight(Theme.SPACE_5);
@@ -176,7 +190,7 @@ public final class AssembleMissionScreen extends ChromeScreen {
                 : String.valueOf(Math.round(MissionStaffing.seatFit(astronaut, configuration, seat)));
             card.add(tile(configuration.crewSlots().get(slot), "Astronaut", true, null, "Seat fit",
                 astronaut == null ? null : astronaut.getName(), value, used,
-                () -> openPicker(true, seat))).padBottom(4f).row();
+                () -> openPicker(true, seat), holderExtras(draft, astronaut, 480f))).padBottom(4f).row();
             if (astronaut != null) {
                 card.add(ui.paragraph(seatSkills(astronaut, seat), Theme.TextStyle.CAPTION, Theme.INK_MUTED))
                     .padBottom(Theme.SPACE_2).row();
@@ -204,6 +218,58 @@ public final class AssembleMissionScreen extends ChromeScreen {
             parts.add(CrewSkills.label(skill.name()) + " " + Math.round(astronaut.getSkill(skill)));
         }
         return "Seat fit weighs " + String.join(", ", parts) + " as the steps lean on them.";
+    }
+
+    /**
+     * The crew and consoles' chemistry: one for the whole mission, as the rules compute it, with
+     * its known reasons listed.
+     */
+    private Table chemistryCard(MissionDraft draft) {
+        PlayerSnapshot state = session.state();
+        List<String> ids = People.teamIds(draft.crewSlotIds(), draft.controlSlotIds());
+        Chemistry.Result chemistry = People.mission(state, configuration, draft.crewSlotIds(),
+            draft.controlSlotIds());
+        Table card = ui.card();
+        card.defaults().growX().left();
+        Table head = new Table();
+        head.add(ui.label("TEAM CHEMISTRY · CREW AND CONSOLES", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).expandX()
+            .left();
+        head.add(ui.label(ids.size() + (ids.size() == 1 ? " person" : " people"), Theme.TextStyle.CAPTION,
+            Theme.INK_MUTED));
+        card.add(head).padBottom(Theme.SPACE_2).row();
+        card.add(ChemistryIndicator.full(ui, chemistry)).padBottom(Theme.SPACE_3).row();
+        List<People.ReasonLine> reasons = People.reasons(state, chemistry);
+        if (!reasons.isEmpty()) {
+            card.add(ui.label("WHY", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padBottom(Theme.SPACE_2).row();
+            card.add(ChemistryIndicator.breakdown(ui, chemistry, reasons, false)).row();
+        }
+        return card;
+    }
+
+    /**
+     * What a tile shows about its holder: revealed traits, and a mark for each shown relationship
+     * with someone else on this mission. {@code null} for nothing to show.
+     */
+    private Table holderExtras(MissionDraft draft, Personnel person, float width) {
+        if (person == null) {
+            return null;
+        }
+        List<Trait> traits = People.traits(person);
+        List<People.Relationship> marks = People.marks(session.state(), person,
+            People.teamIds(draft.crewSlotIds(), draft.controlSlotIds()));
+        if (traits.isEmpty() && marks.isEmpty()) {
+            return null;
+        }
+        Table extras = new Table();
+        extras.left();
+        if (!traits.isEmpty()) {
+            extras.add(TraitChip.row(ui, traits, width)).padRight(Theme.SPACE_2);
+        }
+        for (People.Relationship mark : marks) {
+            extras.add(RelationshipMarker.mark(ui, mark.positive(), mark.partner().getName(), "Also on this mission."))
+                .padRight(Theme.SPACE_2);
+        }
+        return extras;
     }
 
     private Table rocketCard(MissionDraft draft) {
@@ -254,8 +320,9 @@ public final class AssembleMissionScreen extends ChromeScreen {
             stats.add(stat(MissionPlanScreen.pct(odds.crewLoss()), "Crew lost", Theme.GOLD_TEXT));
         }
         card.add(stats).padBottom(Theme.SPACE_2).row();
-        card.add(ui.paragraph("Odds for the people in the slots now; an empty slot reads 0. Expert rescues aren't "
-            + "counted.", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padBottom(Theme.SPACE_4).row();
+        card.add(ui.paragraph("Odds for the people in the slots now, with their known chemistry; an empty slot reads "
+            + "0. Expert rescues aren't counted.", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padBottom(Theme.SPACE_4)
+            .row();
 
         card.add(ui.label("CONFIRM & PAY", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padBottom(Theme.SPACE_2).row();
         List<Programs.PriceLine> lines = new ArrayList<>();
@@ -349,7 +416,7 @@ public final class AssembleMissionScreen extends ChromeScreen {
                     : "Flight controller", staffing.kind() == StaffingSlot.Kind.ASTRONAUT,
                     CrewSkills.icon(staffing.skill()), CrewSkills.label(staffing.skill()),
                     person == null ? null : person.getName(), value, configuration.usedControlSlots().contains(slot),
-                    () -> openPicker(false, index)))
+                    () -> openPicker(false, index), holderExtras(draft, person, 200f)))
                 .expandX().fillX().uniformX().top().pad(0f, 0f, 10f, slot % COLUMNS < COLUMNS - 1 ? 10f : 0f);
             if (slot % COLUMNS == COLUMNS - 1) {
                 grid.row();
@@ -366,12 +433,12 @@ public final class AssembleMissionScreen extends ChromeScreen {
     }
 
     private Table tile(String title, String type, boolean astronaut, String icon, String skill, String person,
-                       String value, boolean used, Runnable open) {
+                       String value, boolean used, Runnable open, Table extras) {
         boolean nobody = used && person == null && candidates(astronaut ? StaffingSlot.Kind.ASTRONAUT
             : StaffingSlot.Kind.MISSION_CONTROL, null).isEmpty();
         SlotTile.State state = !used ? SlotTile.State.UNUSED : person != null ? SlotTile.State.FILLED
             : nobody ? SlotTile.State.NOBODY : SlotTile.State.EMPTY;
-        Table tile = SlotTile.build(ui, title, type, astronaut, icon, skill, person, value, state);
+        Table tile = SlotTile.build(ui, title, type, astronaut, icon, skill, person, value, state, extras);
         if (used && editable()) {
             tile.setTouchable(Touchable.enabled);
             tile.addListener(clicked(open));
@@ -418,21 +485,55 @@ public final class AssembleMissionScreen extends ChromeScreen {
         boolean astronaut = kind == StaffingSlot.Kind.ASTRONAUT;
         Table card = dialogCard(title, astronaut ? "Pick an astronaut" : "Pick a flight controller");
         card.add(ui.paragraph("Free people only: idle, available, and not in another slot of this mission. Sorted by "
-            + skillLabel + ", the value the roll will read.", Theme.TextStyle.BODY, Theme.INK_MUTED))
-            .padBottom(Theme.SPACE_3).row();
+            + skillLabel + ", the value the roll will read. Chemistry is the whole mission's: crew and consoles "
+            + "together.", Theme.TextStyle.BODY, Theme.INK_MUTED)).padBottom(Theme.SPACE_3).row();
         List<? extends Personnel> people = candidates(kind, value);
+        // Marks and previews are against everyone else on the mission, without this slot's holder.
+        List<String> others = new ArrayList<>(People.teamIds(draft.crewSlotIds(), draft.controlSlotIds()));
+        if (holder != null && Collections.frequency(crewAndControl(draft), holder) == 1) {
+            others.remove(holder);
+        }
+        Chemistry.Result now = People.mission(state, configuration, draft.crewSlotIds(), draft.controlSlotIds());
         Table list = new Table();
         list.top();
         list.defaults().growX();
         for (Personnel person : people) {
             Table row = new Table();
+            row.left();
             row.setBackground(ui.rect(Theme.SURFACE_CARD, Theme.NAVY_BORDER, Theme.BORDER_THIN));
             row.pad(8f, 10f, 8f, 10f);
-            row.add(ui.label(person.getName(), Theme.TextStyle.BODY_STRONG, Theme.INK)).expandX().left();
-            row.add(ui.label(skillLabel, Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padRight(Theme.SPACE_2);
+            row.add(RosterCells.avatar(ui, person)).size(36f).padRight(Theme.SPACE_3);
+            Table who = new Table();
+            who.left();
+            who.defaults().left();
+            who.add(ui.label(person.getName(), Theme.TextStyle.BODY_STRONG, Theme.INK)).row();
+            List<Trait> traits = People.traits(person);
+            if (!traits.isEmpty()) {
+                who.add(TraitChip.row(ui, traits, 240f)).padTop(4f).row();
+            }
+            if (People.gettingToKnow(person)) {
+                who.add(ui.label("Still getting to know each other", Theme.TextStyle.CAPTION_ITALIC, Theme.INK_MUTED))
+                    .padTop(2f);
+            }
+            row.add(who).width(250f).left().padRight(Theme.SPACE_3);
+            Table marks = new Table();
+            marks.left();
+            List<People.Relationship> relationships = People.marks(state, person, others);
+            for (People.Relationship relationship : relationships) {
+                marks.add(RelationshipMarker.mark(ui, relationship.positive(), relationship.partner().getName(),
+                    "Already on this mission.")).padRight(Theme.SPACE_2);
+            }
+            if (relationships.isEmpty()) {
+                marks.add(ui.label("—", Theme.TextStyle.BODY_SM, Theme.INK_MUTED));
+            }
+            row.add(marks).width(150f).left().padRight(Theme.SPACE_3);
             double v = value.applyAsDouble(person);
-            row.add(new SkillBar(ui, v)).width(120f).height(8f).padRight(Theme.SPACE_2);
-            row.add(ui.label(String.valueOf(Math.round(v)), Theme.TextStyle.BODY_STRONG, Theme.NAVY)).width(28f);
+            row.add(new SkillBar(ui, v)).width(80f).height(8f).padRight(Theme.SPACE_2);
+            row.add(ui.label(String.valueOf(Math.round(v)), Theme.TextStyle.BODY_STRONG, Theme.NAVY)).width(28f)
+                .padRight(Theme.SPACE_3);
+            Chemistry.Result then = People.missionWith(state, configuration, draft.crewSlotIds(),
+                draft.controlSlotIds(), crew, slot, person.getId());
+            row.add(ChemistryIndicator.preview(ui, now, then)).width(200f).left();
             row.setTouchable(Touchable.enabled);
             row.addListener(clicked(() -> {
                 if (crew) {
@@ -465,7 +566,13 @@ public final class AssembleMissionScreen extends ChromeScreen {
         }
         buttons.add(actionButton("Cancel", Theme.ButtonKind.SECONDARY, this::closeDialog));
         card.add(buttons).right().fill(false, false);
-        showDialog(card);
+        showDialog(card, PICKER_WIDTH);
+    }
+
+    private static List<String> crewAndControl(MissionDraft draft) {
+        List<String> ids = new ArrayList<>(draft.crewSlotIds());
+        ids.addAll(draft.controlSlotIds());
+        return ids;
     }
 
     // ---- Launch

@@ -1,6 +1,7 @@
 package de.mkoehler.launchwindow.client.screen;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Scaling;
@@ -55,6 +56,27 @@ final class SlotTile {
      */
     static Table build(UiKit ui, String title, String type, boolean astronaut, String icon, String skill,
                        String person, String value, State state) {
+        return build(ui, title, type, astronaut, icon, skill, person, value, state, null);
+    }
+
+    /**
+     * Builds a tile with something about its holder under the skill line: their revealed traits and
+     * relationship marks ({@code ui-spec.md} &sect;4.6.8, People canvas, 2026-10-07).
+     *
+     * @param ui        the kit
+     * @param title     the slot's title ("BOOSTER")
+     * @param type      the employee type ("Flight controller")
+     * @param astronaut whether it takes an astronaut
+     * @param icon      the skill's icon, or {@code null}
+     * @param skill     the skill's name, or "Seat fit"
+     * @param person    the holder's name, or {@code null}
+     * @param value     the holder's value, or {@code null}
+     * @param state     what to show
+     * @param extras    what to show about the holder, or {@code null}
+     * @return the tile
+     */
+    static Table build(UiKit ui, String title, String type, boolean astronaut, String icon, String skill,
+                       String person, String value, State state, Actor extras) {
         Table tile = new Table();
         tile.top().left();
         tile.pad(10f, 12f, 10f, 12f);
@@ -86,7 +108,10 @@ final class SlotTile {
             skillRow.add(glyph).size(13f).padRight(6f);
         }
         skillRow.add(ui.label(skill, Theme.TextStyle.CAPTION, Theme.INK_MUTED));
-        tile.add(skillRow).padBottom(Theme.SPACE_3).row();
+        tile.add(skillRow).padBottom(extras == null ? Theme.SPACE_3 : Theme.SPACE_2).row();
+        if (extras != null) {
+            tile.add(extras).padBottom(Theme.SPACE_2).row();
+        }
         switch (state) {
             case UNUSED -> tile.add(ui.label("Not required", Theme.TextStyle.CAPTION, Theme.INK_MUTED));
             case RELEASED -> tile.add(ui.label("Released", Theme.TextStyle.CAPTION, Theme.INK_MUTED));
