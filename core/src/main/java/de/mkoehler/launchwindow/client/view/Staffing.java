@@ -187,7 +187,7 @@ public final class Staffing {
      * @return the title
      */
     static String title(String title) {
-        String[] words = title.trim().split("\s+");
+        String[] words = title.trim().split("\\s+");
         StringBuilder out = new StringBuilder();
         for (int i = 0; i < words.length; i++) {
             String word = words[i];
