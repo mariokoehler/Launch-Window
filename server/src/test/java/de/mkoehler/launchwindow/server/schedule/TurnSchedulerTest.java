@@ -137,7 +137,9 @@ class TurnSchedulerTest {
         assertTrue(resolved.getIntelligence().getFolders().containsKey(target));
         assertFalse(resolved.getIntelligence().getFolders().containsKey("acct-target"), "never the account id");
         assertEquals(2, service.turnReport(1).orElseThrow().events().stream()
-            .filter(IntelligenceFound.class::isInstance).count());
+            .filter(IntelligenceFound.class::isInstance).map(IntelligenceFound.class::cast)
+            .filter(found -> found.finding().operationId() != null).count(),
+            "both operations settled (a passive tidbit may come on top)");
         String before = Files.readString(kept);
         scheduler(dataRoot, Clock.fixed(Instant.parse("2026-09-30T08:00:00Z"), ZONE)).checkAndResolveIfDue();
         assertEquals(before, Files.readString(kept), "a turn's findings are written once");
