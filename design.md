@@ -1313,3 +1313,10 @@ row on §4.5.1, §4.6.4, §4.6.6/§4.6.7, the "new" dot). Otherwise next is the 
 - **M7+ (order open):** interaction beyond passive competition (§2.9); the rest of the content
   tree beyond the early era; the rest of the Museum encyclopedia (§1.1; E-01 to E-05 built 2026-10-06/07); a game-host role and UI;
   validating the `WEEKDAYS` profile with the colleagues' group.
+- **Idea to revisit: launch latitude as a mechanic** (user, 2026-10-07). Give the agencies'
+  launch sites their real latitudes (Cape Canaveral about 28.5° N, Baikonur about 46° N) and
+  let that matter: Earth's spin gives an eastward launch a free push of about 410 m/s at the
+  Cape against about 320 m/s at Baikonur, and no orbit can be tilted less than its site's
+  latitude. Possible handles: a site factor on a rocket's LEO and TLI payloads, a site per
+  agency (later perhaps more sites to build), orbit-inclination requirements on some goals.
+  Not designed yet; explainer E-14 (launch latitude) would explain it once it exists.
