@@ -746,6 +746,21 @@ such as letting a brilliant troublemaker go.
     - **Measured** (`ContentPackPlayouts.people`, 200 bot games of 24 seasons): 8.7 traits revealed
       and 5.1 relationships shown per game (2.2 friendships), from 8.5 pairs. The bots finish in
       55.0 seasons on average, against 56.7 before personalities; step outcomes within noise.
+  - **Screens mocked up (2026-10-07)** on the canvas `Launch Window — People`: components 20 to 22,
+    the person page in four states, the R&D board and assign dialog, assemble mission and its
+    picker, the roster, the hire screen and the turn report (`ui-spec.md`, the note after
+    component 22). Their look is unconfirmed. Two findings for the rules, from working out the
+    samples (not changed; for the user to decide):
+    - **The Abrasive and Easy-going shortcuts can never fire first.** Rapport moves at most
+      `RAPPORT_DRIFT` (5) a shared season and shows past `RAPPORT_SHOWN_AT` (30), so a pair needs at
+      least 7 shared work seasons to show. Every trait shows by `REVEAL_MAX_SEASONS` (4) work
+      seasons anyway, so the first clash or friendship always comes after the normal reveal. To make
+      the shortcuts matter, the reveal window would have to be longer, or the drift faster.
+    - **On a mission, relationships barely count.** Chemistry averages rapport over all pairs, and a
+      crewed Vostok or Mercury flight has 11 people (55 pairs), so one shown clash at −34 moves the
+      mission's chemistry by about 0.006 (0.1 % output), while one Loner moves it by 0.3. If crew
+      friendships and feuds should matter, weight the pairs involving the crew, or count the crew
+      and CAPCOM as their own small team.
 - **History notes to go with it:** Deke Slayton picked NASA's crews partly on who worked well
   together; Gagarin was reportedly chosen over Titov partly for his manner and background.
   Verify both before use (§1.1).
