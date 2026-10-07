@@ -13,7 +13,7 @@ shape classes): resvg applies it to the shapes, and a text class's font-size the
 label's size. Text inherits class, text-anchor, fill and translate() from its <g> ancestors. Two
 kinds of text stay in the picture, set by resvg in the repo's own fonts: text that is rotated (a
 label can't turn), written in its final case; and a white outline under any text of class "halo",
-so its label stays readable over hatching.
+so its label stays readable over hatching or a line (the outline is drawn last, over everything).
 
 Outputs, per drawing, under assets/ui/explainers/:
   <name>.png   the drawing without its text, 2x
@@ -124,12 +124,18 @@ def labels_of(root):
                 "color": context["fill"] or rules.get(kind, {}).get("fill") or CLASS_COLORS.get(kind, "#16305c"),
                 "text": "".join(child.itertext()),
             })
+            parent.remove(child)
             if "halo" in classes:
+                # Its outline goes on top of everything, so lines drawn after it don't cross it.
                 child.set("style", HALO)
-            else:
-                parent.remove(child)
+                child.set("x", str(float(child.get("x")) + context["tx"]))
+                child.set("y", str(float(child.get("y")) + context["ty"]))
+                child.set("text-anchor", context["anchor"])
+                halos.append(child)
 
+    halos = []
     walk(root, {"tx": 0.0, "ty": 0.0, "kind": None, "anchor": "start", "fill": None})
+    root.extend(halos)
     return labels
 
 
