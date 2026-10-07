@@ -560,6 +560,82 @@ season unchanged. Tiger Teams' live per-step choice doesn't fit, so it was redes
     as mission prestige does.
   - Every number and default here is our own, confirmed by the user on 2026-10-06; tune in play.
 
+**(d) People worth caring about** *(user's idea, 2026-10-07; designed, not built. Decided: the
+split between morale and chemistry, pair rapport that builds over years, hidden traits with
+ambiguous hints, the background check through intelligence, ambitions, career records and
+poaching. Every number and list below is a proposed default, unconfirmed.)* The aim: employees
+stop being a commodity. Players learn who their people are, care about them, and face hard calls
+such as letting a brilliant troublemaker go.
+- **Morale stays personal and public** (decided). It moves with what happens to the person and
+  the agency (a successful flight lifts everyone, even a quarrelsome crew), and it keeps driving
+  resignation and the hiring pool's quality, as now (c).
+- **Chemistry is per team and short-lived** (decided). A team is the engineers on one
+  component's R&D, or the crew and controllers of one mission. Its chemistry comes from the pair
+  rapport inside it plus its members' traits, and is worked out again whenever the team changes:
+  a new project, a new team, a new chemistry. **It scales the team's output:** R&D gain, the
+  crew's and controllers' contributions to a step's odds, and the controllers' rescue roll, within
+  a band of about ±15 % (default). Training is done alone, so chemistry doesn't touch it.
+- **Rapport between two people** (decided) lasts across projects and years. Each season two
+  people share a team, their rapport drifts toward liking or friction, biased by their traits; it
+  never resets, so old colleagues meet again as friends or enemies. Defaults: a range of −100 to
+  +100, a drift of about 5 a season, shown once past ±30 ("work well together", "clash"),
+  lost when either leaves.
+- **Traits** (decided): one or two per person (default), hidden when hired. A trait shows itself
+  after the person has worked in teams for a while (default: 2 to 4 seasons, drawn per trait),
+  or sooner when it matters (an Abrasive member's first clash), and the turn report says so
+  ("After two seasons on the Atlas team, Kowalski turns out to be a workaholic"). Most traits cut
+  both ways. Proposed list, to cut down in play:
+  - *Personal:* **Workaholic** (more R&D gain; morale falls fast when idle) · **Steady** (morale
+    changes halved, both ways) · **Ambitious** (trains faster; morale falls without training or a
+    new skill level for long) · **Glory seeker** (astronauts: skills grow more on flights; morale
+    falls each time someone else flies) · **Perfectionist** (engineers: less R&D gain, but their
+    component's failed steps are milder) · **Cool under pressure** (astronauts, controllers: a
+    bonus on rescue rolls) · **Restless** (a bonus on a new project, a penalty after many seasons
+    on one) · **Quick study** (more training gain).
+  - *In a team:* **Mentor** (younger or less skilled teammates learn faster) · **Loner** (a bonus
+    alone, a penalty in a full team) · **Easy-going** (rapport drifts up faster with everyone) ·
+    **Abrasive** (rapport drifts down faster, whatever their skill) · **Must be the best** (works
+    harder as the team's most skilled, sulks when not) · **Team player** (lifts the whole team's
+    chemistry a little).
+- **Hints at hiring** (decided): each candidate shows one vague hint from a colleague
+  ("colleagues call her driven"). A hint is always true to one of the person's traits, but every
+  hint is shared by several traits, so a player can't learn a code. Proposed hints: *driven*
+  (Workaholic, Ambitious, Must be the best), *calm* (Steady, Cool under pressure, Loner),
+  *sociable* (Easy-going, Team player, Glory seeker), *exacting* (Perfectionist, Abrasive, Must be
+  the best), *independent* (Loner, Restless, Abrasive), *keen to learn* (Quick study, Ambitious,
+  Mentor), *patient* (Mentor, Steady, Perfectionist).
+- **Background check** (decided): reveals one of a candidate's traits before hiring, but only for
+  an agency that keeps an intelligence service, part of the later espionage work (§2.9). Without
+  one, the hint is all there is.
+- **Ambitions** (decided): each astronaut wants something, tied to goals and flights: fly in
+  space, fly to orbit, a day in orbit, be first at something, fly on a joint flight. Later perhaps
+  controllers (run a historic flight) and engineers (bring a component to its cap). Fulfilled, it
+  builds **loyalty**; passed over (someone else flies the flight they wanted) it costs morale and
+  loyalty. Loyalty also grows with tenure and raises, and is what resists poaching.
+- **Career record** (decided): a page per person with a timeline of hiring, training, flights,
+  the R&D they worked on, firsts, near misses, revealed traits, relationships and ambitions met.
+  The Memorial's living counterpart; it makes a loss mean something.
+- **Poaching** (decided, with the player interaction work, §2.9): a rival agency can make an offer
+  to one of your people. Its chance rises with low loyalty, low morale and frustrated ambition, and
+  with the offer's size; a nurtured star is hard to take, someone passed over again and again is
+  easy. The target's agency is told in its turn report and can match, and because players log in
+  at different times, matching has to work as a standing order ("match offers up to N %") so it
+  never punishes whoever logs in less.
+- **History notes to go with it:** Deke Slayton picked NASA's crews partly on who worked well
+  together; Gagarin was reportedly chosen over Titov partly for his manner and background.
+  Verify both before use (§1.1).
+- **Phases:** (1) chemistry scales output; (2) traits, reveals and hints; (3) rapport and the
+  chemistry preview in the assignment dialogs; (4) ambitions, loyalty and the career page; (5)
+  poaching and the background check, with espionage.
+- **What it touches:** new fields on `Personnel` (traits, revealed traits, ambition, loyalty) and
+  a rapport table in `PlayerSnapshot` (a dev data reset); new `ResolutionEvent` types, appended
+  (§3.7); screens: revealed traits on the personnel overviews, the hint on the hire screen, a
+  chemistry preview where teams are formed (R&D slots, mission staffing), the career page, and
+  the turn report's lines. Effects read their numbers from the rules' constants (`Tips`).
+- **Open:** how many traits per person, the band and the drift rates, which traits suit which
+  group, whether a trait can be misleading at first, and whether controllers and engineers get
+  ambitions in the first pass.
+
 ### 2.3 Programs & mission configurations
 
 **(a) BASPM** (`baspm.md` §10): program categories (gated by goals) contain programs (opening
@@ -774,7 +850,9 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
   **in-game messages** between players over the game connection, never email (user,
   2026-09-28). Espionage, sabotage and interference come later, once the daily loop is proven
   fun and fair; they must not just punish whoever logs in less. Cooperative modes are a later
-  idea.
+  idea. Two pieces are already designed for it (§2.2(d), user 2026-10-07): an **intelligence
+  service** that can run background checks on job candidates, and **poaching** other agencies'
+  employees, with matching as a standing order.
 - **Win condition** (user, 2026-09-28): the host declares a **list of goal ids** per game
   (`game-meta.json`, visible in the UI). **The first agency to reach all of them wins.** A listed
   goal counts as done when achieved or credited through the cascade. Its time is the game turn
@@ -1366,7 +1444,8 @@ next is the next play test.
   it); the user is judging the fonts in both modes. Before the first real release: decide
   whether the repo goes public (a private repo makes `update.cmd` and the NAS's image pull need
   a GitHub login) and the first version number.
-- **M7+ (order open):** interaction beyond passive competition (§2.9); the rest of the content
+- **M7+ (order open):** people worth caring about (chemistry, traits, rapport, ambitions, career
+  records, poaching; §2.2(d), in five phases); interaction beyond passive competition (§2.9); the rest of the content
   tree beyond the early era; the rest of the Museum encyclopedia (§1.1; E-01 to E-05 built 2026-10-06/07); a game-host role and UI;
   validating the `WEEKDAYS` profile with the colleagues' group.
 - **Idea to revisit: launch latitude as a mechanic** (user, 2026-10-07). Give the agencies'
