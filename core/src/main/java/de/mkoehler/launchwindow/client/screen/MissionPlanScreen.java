@@ -85,7 +85,7 @@ public final class MissionPlanScreen extends ChromeScreen {
     }
 
     private MissionPlanScreen(LaunchWindowGame game, MissionConfiguration configuration, Tab tab) {
-        super(game, MissionConfigsScreen.crumbs(configuration.programId(), configuration, "Plan"),
+        super(game, MissionConfigsScreen.crumbs(game.session(), configuration.programId(), configuration, "Plan"),
             "Headquarters · " + ContentNames.of(configuration.programId()) + " · " + Missions.name(configuration),
             "Plan the mission");
         this.configuration = configuration;
@@ -96,7 +96,8 @@ public final class MissionPlanScreen extends ChromeScreen {
 
     @Override
     protected void goBack() {
-        game.setScreen(new MissionStepsScreen(game, configuration.id()));
+        game.setScreen(session.planningFromList() ? new PlanMissionScreen(game)
+            : new MissionStepsScreen(game, configuration.id()));
     }
 
     private boolean readOnly() {

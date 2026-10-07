@@ -928,6 +928,16 @@ Headquarters' cap limits open payload programs (3/7/10/16). **Ref:**
 `program_details.png`, `goals_open_up_new_programs.png`, `mission_selection.png`,
 `assemble_mission*.png`, `schedule_mission.png`.
 
+**Plan a mission** *(play-test request, built 2026-10-07 without a mockup, from the configuration
+cards of §4.6.5)*. Headquarters' landing screen has three cards: Plan a mission ("Ready to plan · N
+missions"), Manage open programs, Browse programs. Plan a mission lists every configuration of
+the open programs, one section per program (its name in gold above its cards), with the §4.6.5
+card at a shorter art height (`ConfigCards`). A card opens the mission plan on its assessment
+tab (§4.6.7), which isn't skipped. Back and the breadcrumb from the plan and from Assemble lead
+back to this list ("Space Complex › Headquarters › Plan a mission › Vostok · Orbital flight ›
+Plan"); the path through a program's pages works as before (`ClientSession.planningFromList`).
+With no program open it points to Browse programs.
+
 **4.6.1 Manage open programs.** A list of open programs, each with upkeep, its
 components' reliability, missions in flight, and the next goal it can reach. It
 leads to program details.

@@ -81,7 +81,8 @@ public final class AssembleMissionScreen extends ChromeScreen {
     }
 
     private AssembleMissionScreen(LaunchWindowGame game, MissionConfiguration configuration) {
-        super(game, MissionConfigsScreen.crumbs(configuration.programId(), configuration, "Assemble"),
+        super(game, MissionConfigsScreen.crumbs(game.session(), configuration.programId(), configuration,
+            "Assemble"),
             "Headquarters · " + ContentNames.of(configuration.programId()) + " · " + Missions.name(configuration),
             "Assemble mission");
         this.configuration = configuration;

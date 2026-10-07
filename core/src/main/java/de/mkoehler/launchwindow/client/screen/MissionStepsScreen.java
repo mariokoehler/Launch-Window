@@ -98,8 +98,11 @@ public final class MissionStepsScreen extends ChromeScreen {
             Theme.ON_PAGE_MUTED)).expandX().left();
         actions.add(onClick(ui.pageButton("All configurations"),
             () -> game.setScreen(new MissionConfigsScreen(game, configuration.programId())))).padRight(Theme.SPACE_3);
-        actions.add(actionButton("Plan this mission", Theme.ButtonKind.PRIMARY, () -> game.setScreen(
-            new MissionPlanScreen(game, configuration.id(), MissionPlanScreen.Tab.ASSESSMENT))));
+        actions.add(actionButton("Plan this mission", Theme.ButtonKind.PRIMARY, () -> {
+            // Through the program's pages: the plan leads back here, not to Headquarters' list.
+            session.setPlanningFromList(false);
+            game.setScreen(new MissionPlanScreen(game, configuration.id(), MissionPlanScreen.Tab.ASSESSMENT));
+        }));
         right.add(actions).growX().padTop(Theme.SPACE_3);
         content.add(right).expand().fill();
     }

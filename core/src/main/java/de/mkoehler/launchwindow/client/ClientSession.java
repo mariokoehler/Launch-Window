@@ -49,6 +49,7 @@ public final class ClientSession {
     private PlayerSnapshot state;
     private GameInfo gameInfo;
     private final Map<String, MissionDraft> drafts = new HashMap<>();
+    private boolean planningFromList;
     private final Map<Long, TurnReport> reports = new HashMap<>();
     private long lastTurnWithoutReport;
     private List<RivalSummary> rivals;
@@ -167,6 +168,25 @@ public final class ClientSession {
             draft.refit(state, catalog);
         }
         return draft;
+    }
+
+    /**
+     * Returns whether the player came to the mission plan through Headquarters' "Plan a mission"
+     * list, so the plan and assembly lead back there instead of to the configuration's page.
+     *
+     * @return whether planning started from the list
+     */
+    public boolean planningFromList() {
+        return planningFromList;
+    }
+
+    /**
+     * Records which way the player came to the mission plan.
+     *
+     * @param planningFromList whether from Headquarters' "Plan a mission" list
+     */
+    public void setPlanningFromList(boolean planningFromList) {
+        this.planningFromList = planningFromList;
     }
 
     /**

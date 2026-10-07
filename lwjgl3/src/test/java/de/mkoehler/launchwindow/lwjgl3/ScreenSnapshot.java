@@ -376,6 +376,20 @@ public final class ScreenSnapshot {
         reportShots(folder, game, info);
         museumShots(folder, game, info);
         peopleShots(folder, game, info);
+
+        // Plan a mission (play test, 2026-10-07): straight from Headquarters, and the plan it opens.
+        startSession(game, planningState(11, 25_000), info);
+        write(folder, "hq-overview-plan.png", new HeadquartersScreen(game), null);
+        write(folder, "hq-plan-mission.png", new de.mkoehler.launchwindow.client.screen.PlanMissionScreen(game), null);
+        game.session().setPlanningFromList(true);
+        write(folder, "hq-plan-mission-plan.png", new MissionPlanScreen(game, "vostok-orbital",
+            MissionPlanScreen.Tab.ASSESSMENT), null);
+        game.session().setPlanningFromList(false);
+        PlayerSnapshot none = new PlayerSnapshot("Baltic Star Agency", Archetype.SOVIET, 25_000, 250, 3_000, 1);
+        none.setDirectorName("A. Reyes");
+        startSession(game, none, info);
+        write(folder, "hq-plan-mission-empty.png", new de.mkoehler.launchwindow.client.screen.PlanMissionScreen(game),
+            null);
     }
 
     /**
