@@ -61,6 +61,8 @@ public final class SeasonResolver {
         RESEARCH,
         /** Teamwork: work seasons, pairs' rapport and traits shown (design.md 2.2(d)). */
         TEAMS,
+        /** Careers: tenure, loyalty, the career record and ambitions (design.md 2.2(d), phase 4). */
+        CAREERS,
         /** Fresh candidate pools. */
         HIRING_POOL
     }
@@ -178,14 +180,18 @@ public final class SeasonResolver {
         Objects.requireNonNull(observer, "observer must not be null");
         List<ResolutionEvent> all = new ArrayList<>();
         List<Teams.Team> teams = List.of();
+        List<Careers.Flight> flights = List.of();
         for (Phase phase : Phase.values()) {
             observer.before(phase, snapshot);
             List<ResolutionEvent> events = phase == Phase.TEAMS ? Teams.advanceSeason(snapshot, teams)
+                : phase == Phase.CAREERS ? Careers.advanceSeason(snapshot, context.catalog(), context.goalTally(),
+                    flights, all, context.gameTurn())
                 : run(phase, snapshot, context, random);
             if (phase == Phase.PERSONNEL_LIFECYCLE) {
-                // This season's teams, after departures and before missions resolve (a finishing
-                // mission releases its crew).
+                // This season's teams and flights, after departures and before missions resolve (a
+                // finishing mission releases its crew).
                 teams = Teams.capture(snapshot, context.catalog());
+                flights = Careers.capture(snapshot, context.catalog());
             }
             observer.after(phase, snapshot, events);
             all.addAll(events);
@@ -211,6 +217,7 @@ public final class SeasonResolver {
             case TRAINING -> TrainingProgress.advanceSeason(snapshot, random);
             case RESEARCH -> ResearchProgress.advanceSeason(snapshot, context.catalog(), random);
             case TEAMS -> throw new IllegalStateException("teams run with their captured teams");
+            case CAREERS -> throw new IllegalStateException("careers run with the season's flights and events");
             case HIRING_POOL -> {
                 HiringPool.refreshCandidates(snapshot, random);
                 yield List.of();

@@ -838,6 +838,21 @@ such as letting a brilliant troublemaker go.
   - **The memorial** keeps the person's id, skills, *revealed* traits (never hidden ones), the
     year they joined, and the career record at death, so its person page reads like the living
     one.
+  - **Rules as built** (2026-10-07; `rules.Careers`, a `CAREERS` phase after `TEAMS`; `model.Ambition`,
+    `CareerEntry`, new `Personnel` and `MemorialEntry` fields; event `AmbitionSettled`). Flights are
+    captured with the teams, before missions resolve; every draw uses the person's own seed. With
+    every ambition chance at 0 the bot playouts match the old output exactly, so the rest of the
+    phase changes nothing. Careers stay in the player state: a full agency with every record full
+    is about 22 KB zipped (`StateSizeTest`). The hiring line is written at the first resolution
+    after hiring, and an R&D stint's reliability is what the person added (`ResearchCompleted`).
+  - **Measured, and worth deciding** (`ContentPackPlayouts`, 200 bot games): over 24 seasons the
+    bots' people said 1,829 ambitions; **113 were fulfilled and 1,287 ran out** (astronauts: none
+    fulfilled, 164 ran out). Over 80 seasons it's 520 fulfilled to 2,429 run out. Morale at season
+    24 averages 81 (lowest 35), loyalty 65. The bots are slow (a first crewed orbit around season
+    56), but people even in a quick human game will mostly see ambitions run out: crewed flights
+    are few, and 5 to 8 seasons of patience is short. Options: longer windows (say 10 to 16), a
+    window that only counts down while the ambition can be acted on (a crewed configuration ready
+    to fly, an R&D slot on the component), or milder run-out losses. Not changed yet.
 - **History notes to go with it:** Deke Slayton picked NASA's crews partly on who worked well
   together; Gagarin was reportedly chosen over Titov partly for his manner and background.
   Verify both before use (§1.1).

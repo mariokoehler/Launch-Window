@@ -347,8 +347,8 @@ public final class RandomEvents {
             return false;
         }
         Personnel astronaut = idle.get(random.nextInt(idle.size()));
-        snapshot.getMemorial().add(new MemorialEntry(astronaut.getName(), astronaut.getAge(), turn,
-            MemorialEntry.Cause.ACCIDENT, null, null, astronaut.getPortraitId()));
+        snapshot.getMemorial().add(Careers.memorial((de.mkoehler.launchwindow.model.Astronaut) astronaut, turn,
+            MemorialEntry.Cause.ACCIDENT, null, null));
         depart(snapshot, PersonnelGroup.ASTRONAUT, astronaut, DepartureReason.PERISHED,
             RandomEventKind.PERISHED_ASTRONAUT, turn, events);
         return true;

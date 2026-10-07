@@ -188,6 +188,29 @@ public final class ContentPackPlayouts {
 
     private boolean keepPlaying;
     private final int[] peopleTally = new int[5];
+    /** Ambitions said and settled, by "GROUP OUTCOME", in people mode (phase 4). */
+    private final Map<String, Integer> ambitionTally = new java.util.TreeMap<>();
+    /** At each game's end in people mode: morale and loyalty of every employee. */
+    private final List<int[]> endOfGamePeople = new ArrayList<>();
+
+    /**
+     * Returns the ambitions said and settled in the last {@link #people} run, by group and outcome.
+     *
+     * @return the counts
+     */
+    public Map<String, Integer> ambitionTally() {
+        return ambitionTally;
+    }
+
+    /**
+     * Returns every employee's morale and loyalty at the end of each game of the last
+     * {@link #people} run.
+     *
+     * @return pairs of morale and loyalty
+     */
+    public List<int[]> endOfGamePeople() {
+        return endOfGamePeople;
+    }
 
     /**
      * How big the player's state gets on the wire, per season: the largest and the average size in
@@ -292,6 +315,8 @@ public final class ContentPackPlayouts {
             for (ResolutionEvent event : seasonEvents) {
                 if (event instanceof MissionStepResolved resolved) {
                     tally.stepOutcomes.merge(resolved.outcome().name(), 1, Integer::sum);
+                } else if (event instanceof de.mkoehler.launchwindow.rules.AmbitionSettled ambition && keepPlaying) {
+                    ambitionTally.merge(ambition.group() + " " + ambition.outcome(), 1, Integer::sum);
                 } else if (event instanceof de.mkoehler.launchwindow.rules.TraitRevealed) {
                     peopleTally[0]++;
                 } else if (event instanceof de.mkoehler.launchwindow.rules.RelationshipShown shown) {
@@ -305,6 +330,9 @@ public final class ContentPackPlayouts {
                 peopleTally[3] += snapshot.getRapports().size();
                 peopleTally[4] += snapshot.getAstronauts().size() + snapshot.getSetSpecialists().size()
                     + snapshot.getMissionControlOfficers().size();
+                for (Personnel person : allEmployees(snapshot)) {
+                    endOfGamePeople.add(new int[] {person.getMorale(), person.getLoyalty()});
+                }
             }
             for (List<ResolutionEvent> list : List.of(seasonEvents)) {
                 for (ResolutionEvent event : list) {
@@ -926,5 +954,14 @@ public final class ContentPackPlayouts {
             people.traitsRevealed() / (double) people.games(), people.relationshipsShown() / (double) people.games(),
             people.positive() / (double) people.games(), people.pairs() / (double) people.games(),
             people.employees() / (double) people.games());
+        ContentPackPlayouts careers = new ContentPackPlayouts(catalog);
+        careers.people(200, 24, 42L);
+        System.out.println("Ambitions over 24 seasons, all games: " + careers.ambitionTally());
+        List<int[]> end = careers.endOfGamePeople();
+        System.out.printf("At season 24: morale average %.1f (lowest %d), loyalty average %.1f (lowest %d, highest %d)%n",
+            end.stream().mapToInt(pair -> pair[0]).average().orElse(0), end.stream().mapToInt(pair -> pair[0]).min()
+                .orElse(0), end.stream().mapToInt(pair -> pair[1]).average().orElse(0),
+            end.stream().mapToInt(pair -> pair[1]).min().orElse(0), end.stream().mapToInt(pair -> pair[1]).max()
+                .orElse(0));
     }
 }

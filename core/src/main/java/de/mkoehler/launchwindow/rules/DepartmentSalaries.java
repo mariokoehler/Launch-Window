@@ -133,6 +133,7 @@ public final class DepartmentSalaries {
             person.setSalary(adjustedSalary(person.getSalary(), percent));
             person.setMorale(adjustedMorale(person.getMorale(), percent));
         }
+        Careers.salaryChanged(roster, percent);
         snapshot.getSalaryAdjustedGroups().add(group.name());
         return AdjustOutcome.ADJUSTED;
     }

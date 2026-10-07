@@ -8,6 +8,7 @@ import de.mkoehler.launchwindow.content.ContentPackLoader;
 import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.Building;
+import de.mkoehler.launchwindow.model.CareerEntry;
 import de.mkoehler.launchwindow.model.MissionControlOfficer;
 import de.mkoehler.launchwindow.model.Personnel;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
@@ -15,6 +16,7 @@ import de.mkoehler.launchwindow.model.Rapport;
 import de.mkoehler.launchwindow.model.SetSpecialist;
 import de.mkoehler.launchwindow.model.TraitState;
 import de.mkoehler.launchwindow.net.messages.FetchStateResponse;
+import de.mkoehler.launchwindow.rules.Careers;
 import de.mkoehler.launchwindow.rules.HiringPool;
 import de.mkoehler.launchwindow.rules.Personality;
 import org.junit.jupiter.api.Test;
@@ -29,11 +31,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Checks that a big agency's state fits Kryo's 64 KB object buffer with room to spare: every roster
- * at its building's top cap, all three candidate pools, a shown rapport for many pairs, and the
- * intelligence folders of {@link IntelligenceWireTest} at their caps. Sent as an object graph this
- * measured 34 KB (2026-10-07), so the state now travels gzipped ({@link FetchStateResponse}): about
- * 17 KB. The bot playouts stay far smaller ({@code StateSizes} in dev-tools), because bots hire only
- * what they need.
+ * at its building's top cap, all three candidate pools, a shown rapport for many pairs, every career
+ * record full (phase 4), and the intelligence folders of {@link IntelligenceWireTest} at their caps.
+ * Sent as an object graph this measured 34 KB (2026-10-07), so the state now travels gzipped
+ * ({@link FetchStateResponse}): about
+ * 17 KB, 22 KB with full career records. The bot playouts stay far smaller ({@code StateSizes} in
+ * dev-tools), because bots hire only what they need.
  *
  * @author Mario Koehler
  */
@@ -91,6 +94,14 @@ class StateSizeTest {
             }
         }
         state.setRapports(rapports);
+        // Phase 4: every career record full (design.md 2.2(d)), with varied lines.
+        CareerEntry.Kind[] kinds = CareerEntry.Kind.values();
+        for (Personnel person : everyone) {
+            for (int i = 0; i < Careers.CAREER_KEPT; i++) {
+                person.getCareer().add(new CareerEntry(i + 1, kinds[i % kinds.length], "vostok-orbital-duration-" + i,
+                    i % 2 == 0 ? "CREW" : "rd:vostok-capsule", i % 3 == 0 ? "retrofire" : "", 12.5 + i, i));
+            }
+        }
         int withoutIntelligence = size(state);
         IntelligenceWireTest.fillFolders(state, 5);
         int full = size(state);

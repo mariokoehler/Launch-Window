@@ -273,5 +273,12 @@ public final class MessageRegistry {
         kryo.register(QueueIntelOperationAction.class);
         kryo.register(CancelIntelOperationAction.class);
         kryo.register(BackgroundCheckAction.class);
+
+        // People phase 4: Personnel.ambition and career, and MemorialEntry's person page (design.md
+        // section 2.2(d), 2026-10-07). Never move these lines.
+        kryo.register(de.mkoehler.launchwindow.model.Ambition.class);
+        kryo.register(de.mkoehler.launchwindow.model.Ambition.Kind.class);
+        kryo.register(de.mkoehler.launchwindow.model.CareerEntry.class);
+        kryo.register(de.mkoehler.launchwindow.model.CareerEntry.Kind.class);
     }
 }

@@ -38,6 +38,15 @@ public abstract class Personnel {
     private String hint;
     private String intelFind;
     private boolean intelExhausted;
+    private int loyalty = 50;
+    private int tenureSeasons;
+    private Ambition ambition;
+    private boolean ambitionPending;
+    private int disappointedSeasons;
+    private String stintComponentId;
+    private int stintSeasons;
+    private double stintGain;
+    private List<CareerEntry> career = new ArrayList<>();
     private int workSeasons;
     private int seasonsSinceTraining;
     private String projectId;
@@ -533,5 +542,167 @@ public abstract class Personnel {
      */
     public void setProjectSeasons(int projectSeasons) {
         this.projectSeasons = projectSeasons;
+    }
+
+    /**
+     * Returns how attached the person is to the agency, 0 to 100 (phase 4); resists poaching later.
+     *
+     * @return the loyalty
+     */
+    public int getLoyalty() {
+        return loyalty;
+    }
+
+    /**
+     * Sets how attached the person is to the agency, 0 to 100 (phase 4); resists poaching later.
+     *
+     * @param loyalty the loyalty
+     */
+    public void setLoyalty(int loyalty) {
+        this.loyalty = loyalty;
+    }
+
+    /**
+     * Returns the seasons the person has been with the agency.
+     *
+     * @return the seasons
+     */
+    public int getTenureSeasons() {
+        return tenureSeasons;
+    }
+
+    /**
+     * Sets the seasons the person has been with the agency.
+     *
+     * @param tenureSeasons the seasons
+     */
+    public void setTenureSeasons(int tenureSeasons) {
+        this.tenureSeasons = tenureSeasons;
+    }
+
+    /**
+     * Returns the ambition the person has said, or {@code null}.
+     *
+     * @return the ambition, or {@code null}
+     */
+    public Ambition getAmbition() {
+        return ambition;
+    }
+
+    /**
+     * Sets the ambition the person has said, or {@code null}.
+     *
+     * @param ambition the ambition, or {@code null}
+     */
+    public void setAmbition(Ambition ambition) {
+        this.ambition = ambition;
+    }
+
+    /**
+     * Returns whether the person will say an ambition when the time comes; hidden from the client.
+     *
+     * @return whether one is coming
+     */
+    public boolean isAmbitionPending() {
+        return ambitionPending;
+    }
+
+    /**
+     * Sets whether the person will say an ambition when the time comes; hidden from the client.
+     *
+     * @param ambitionPending whether one is coming
+     */
+    public void setAmbitionPending(boolean ambitionPending) {
+        this.ambitionPending = ambitionPending;
+    }
+
+    /**
+     * Returns the seasons left of disappointment after an ambition ran out.
+     *
+     * @return the seasons
+     */
+    public int getDisappointedSeasons() {
+        return disappointedSeasons;
+    }
+
+    /**
+     * Sets the seasons left of disappointment after an ambition ran out.
+     *
+     * @param disappointedSeasons the seasons
+     */
+    public void setDisappointedSeasons(int disappointedSeasons) {
+        this.disappointedSeasons = disappointedSeasons;
+    }
+
+    /**
+     * Returns the component of the R&amp;D stint running now, or {@code null}.
+     *
+     * @return the component, or {@code null}
+     */
+    public String getStintComponentId() {
+        return stintComponentId;
+    }
+
+    /**
+     * Sets the component of the R&amp;D stint running now, or {@code null}.
+     *
+     * @param stintComponentId the component, or {@code null}
+     */
+    public void setStintComponentId(String stintComponentId) {
+        this.stintComponentId = stintComponentId;
+    }
+
+    /**
+     * Returns the seasons of the R&amp;D stint running now.
+     *
+     * @return the seasons
+     */
+    public int getStintSeasons() {
+        return stintSeasons;
+    }
+
+    /**
+     * Sets the seasons of the R&amp;D stint running now.
+     *
+     * @param stintSeasons the seasons
+     */
+    public void setStintSeasons(int stintSeasons) {
+        this.stintSeasons = stintSeasons;
+    }
+
+    /**
+     * Returns the reliability the person has added in the R&amp;D stint running now.
+     *
+     * @return the reliability
+     */
+    public double getStintGain() {
+        return stintGain;
+    }
+
+    /**
+     * Sets the reliability the person has added in the R&amp;D stint running now.
+     *
+     * @param stintGain the reliability
+     */
+    public void setStintGain(double stintGain) {
+        this.stintGain = stintGain;
+    }
+
+    /**
+     * Returns the person's career record, oldest first (phase 4).
+     *
+     * @return the record, live
+     */
+    public List<CareerEntry> getCareer() {
+        return career;
+    }
+
+    /**
+     * Sets the career record.
+     *
+     * @param career the record
+     */
+    public void setCareer(List<CareerEntry> career) {
+        this.career = career == null ? new ArrayList<>() : new ArrayList<>(career);
     }
 }

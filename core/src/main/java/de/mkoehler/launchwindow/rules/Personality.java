@@ -111,6 +111,7 @@ public final class Personality {
         }
         candidate.setTraits(traits);
         candidate.setHint(hintFor(traits, random));
+        Careers.assignPending(snapshot, candidate);
     }
 
     private static String hintFor(List<TraitState> traits, SplittableRandom random) {
@@ -224,6 +225,10 @@ public final class Personality {
         } catch (IOException e) {
             throw new UncheckedIOException("Could not copy the player's state", e);
         }
+        // An ambition not said yet is hidden: it nearly gives away an Ambitious trait.
+        Stream.of(copy.getAstronauts(), copy.getSetSpecialists(), copy.getMissionControlOfficers(),
+                copy.getAstronautCandidates(), copy.getSetSpecialistCandidates(), copy.getMissionControlCandidates())
+            .flatMap(List::stream).forEach(person -> person.setAmbitionPending(false));
         Stream.of(copy.getAstronauts(), copy.getSetSpecialists(), copy.getMissionControlOfficers())
             .flatMap(List::stream)
             .forEach(person -> person.setTraits(person.getTraits().stream().filter(TraitState::revealed)
