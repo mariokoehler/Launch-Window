@@ -1,0 +1,141 @@
+{
+ "width": 1060,
+ "height": 660,
+ "labels": [
+  {
+   "x": 24.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "A · The spinning tub, from above"
+  },
+  {
+   "x": 200.0,
+   "y": 474.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "11 small rockets in a ring,"
+  },
+  {
+   "x": 200.0,
+   "y": 490.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "3 inside them, 1 on top"
+  },
+  {
+   "x": 200.0,
+   "y": 516.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "spun to several hundred turns a minute"
+  },
+  {
+   "x": 404.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "B · The stack, side on"
+  },
+  {
+   "x": 584.0,
+   "y": 520.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Steered first"
+  },
+  {
+   "x": 584.0,
+   "y": 536.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "stage"
+  },
+  {
+   "x": 556.0,
+   "y": 150.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Explorer 1"
+  },
+  {
+   "x": 556.0,
+   "y": 166.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "on top"
+  },
+  {
+   "x": 724.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "C · Spin holds direction"
+  },
+  {
+   "x": 860.0,
+   "y": 270.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "A rifle bullet is spun"
+  },
+  {
+   "x": 860.0,
+   "y": 286.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "so it flies straight"
+  },
+  {
+   "x": 860.0,
+   "y": 510.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "A spinning top"
+  },
+  {
+   "x": 860.0,
+   "y": 526.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "stays upright"
+  },
+  {
+   "x": 24.0,
+   "y": 650.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Not to scale · simplified"
+  }
+ ]
+}

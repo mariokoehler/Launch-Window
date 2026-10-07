@@ -1,0 +1,177 @@
+{
+ "width": 1060,
+ "height": 660,
+ "labels": [
+  {
+   "x": 24.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "A · An ablative shield, cut open"
+  },
+  {
+   "x": 70.0,
+   "y": 86.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Heat from the glowing air"
+  },
+  {
+   "x": 440.0,
+   "y": 150.0,
+   "anchor": "start",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "Gases carry heat away"
+  },
+  {
+   "x": 440.0,
+   "y": 200.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Char layer"
+  },
+  {
+   "x": 440.0,
+   "y": 216.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "burns off slowly"
+  },
+  {
+   "x": 440.0,
+   "y": 236.0,
+   "anchor": "start",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "Charring zone"
+  },
+  {
+   "x": 440.0,
+   "y": 296.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Shield, untouched"
+  },
+  {
+   "x": 440.0,
+   "y": 312.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "so far"
+  },
+  {
+   "x": 440.0,
+   "y": 360.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Capsule wall"
+  },
+  {
+   "x": 440.0,
+   "y": 398.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Inside stays cool"
+  },
+  {
+   "x": 440.0,
+   "y": 414.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "enough for the crew"
+  },
+  {
+   "x": 614.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "B · Vostok’s self-turning ball"
+  },
+  {
+   "x": 910.0,
+   "y": 266.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Hatch"
+  },
+  {
+   "x": 906.0,
+   "y": 396.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Weight set low:"
+  },
+  {
+   "x": 906.0,
+   "y": 412.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "the heavy side"
+  },
+  {
+   "x": 906.0,
+   "y": 428.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "swings forward"
+  },
+  {
+   "x": 660.0,
+   "y": 548.0,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Direction of travel"
+  },
+  {
+   "x": 626.0,
+   "y": 580.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Coating all over, thickest on the heavy side"
+  },
+  {
+   "x": 24.0,
+   "y": 640.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Layers not to scale · Vostok’s ball was about 2.3 m across"
+  }
+ ]
+}

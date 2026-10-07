@@ -1,0 +1,213 @@
+{
+ "width": 1060,
+ "height": 660,
+ "labels": [
+  {
+   "x": 24.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "A · Heights, on a stretched scale"
+  },
+  {
+   "x": 184.0,
+   "y": 564.0,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "100 km"
+  },
+  {
+   "x": 184.0,
+   "y": 405.621,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "1,000 km"
+  },
+  {
+   "x": 184.0,
+   "y": 247.243,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "10,000 km"
+  },
+  {
+   "x": 184.0,
+   "y": 124.0,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "60,000 km"
+  },
+  {
+   "x": 256.0,
+   "y": 500.995,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Vostok and Mercury"
+  },
+  {
+   "x": 256.0,
+   "y": 516.995,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "about 150 to 330 km"
+  },
+  {
+   "x": 256.0,
+   "y": 296.379,
+   "anchor": "start",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "Inner belt"
+  },
+  {
+   "x": 256.0,
+   "y": 312.379,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "about 1,000 to 12,000 km"
+  },
+  {
+   "x": 256.0,
+   "y": 168.598,
+   "anchor": "start",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "Outer belt"
+  },
+  {
+   "x": 256.0,
+   "y": 184.598,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "about 13,000 km and up"
+  },
+  {
+   "x": 256.0,
+   "y": 341.234,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Explorer 1’s highest point, 2,550 km"
+  },
+  {
+   "x": 584.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "B · What a particle can do"
+  },
+  {
+   "x": 770.0,
+   "y": 205.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Memory chip"
+  },
+  {
+   "x": 746.0,
+   "y": 236.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "0"
+  },
+  {
+   "x": 800.0,
+   "y": 236.0,
+   "anchor": "middle",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "1"
+  },
+  {
+   "x": 890.0,
+   "y": 180.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "One particle can flip"
+  },
+  {
+   "x": 890.0,
+   "y": 196.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "a stored bit"
+  },
+  {
+   "x": 700.0,
+   "y": 430.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Shielding stops most,"
+  },
+  {
+   "x": 700.0,
+   "y": 446.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "not all"
+  },
+  {
+   "x": 810.0,
+   "y": 566.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "the rest add up"
+  },
+  {
+   "x": 810.0,
+   "y": 582.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "over the hours"
+  },
+  {
+   "x": 24.0,
+   "y": 640.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Heights on a logarithmic scale: each step up is ten times higher"
+  }
+ ]
+}

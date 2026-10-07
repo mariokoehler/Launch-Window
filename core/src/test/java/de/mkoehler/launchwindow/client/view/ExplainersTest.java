@@ -35,7 +35,8 @@ class ExplainersTest {
         for (Explainers.Explainer explainer : explainers.explainers()) {
             assertTrue(ids.add(explainer.id()), explainer.id());
             assertFalse(explainer.sheets().isEmpty(), explainer.id());
-            List<String> text = new ArrayList<>(List.of(explainer.code(), explainer.title(), explainer.summary()));
+            List<String> text = new ArrayList<>(List.of(explainer.code(), explainer.title(), explainer.eyebrowTopic(),
+                explainer.summary()));
             List<String> drawings = new ArrayList<>();
             for (Explainers.Sheet sheet : explainer.sheets()) {
                 assertEquals(3, sheet.points().size(), explainer.id() + ": " + sheet.title());
@@ -58,6 +59,8 @@ class ExplainersTest {
                     });
                 }
             }
+            assertTrue(Files.exists(ASSETS.resolve(Explainers.DRAWINGS).resolve(drawings.get(0) + "-thumb.png")),
+                drawings.get(0) + "-thumb.png");
             for (String drawing : drawings) {
                 Path folder = ASSETS.resolve(Explainers.DRAWINGS);
                 assertTrue(Files.exists(folder.resolve(drawing + ".png")), drawing + ".png");

@@ -44,11 +44,13 @@ public record Explainers(List<Explainer> explainers) {
      *
      * @param id      a stable id
      * @param code    the drawing number in the title block, such as "E-01"
-     * @param title   the idea, such as "Suborbital vs orbital"
+     * @param title   the idea, such as "Suborbital vs orbital", for the title block and the Museum
+     * @param topic   the topic word in a sheet's eyebrow, such as "Weightlessness", or {@code null} for the
+     *                title
      * @param summary one sentence for the Museum's list
      * @param sheets  the sheets, in reading order
      */
-    public record Explainer(String id, String code, String title, String summary, List<Sheet> sheets) {
+    public record Explainer(String id, String code, String title, String topic, String summary, List<Sheet> sheets) {
 
         /**
          * Checks the fields.
@@ -56,6 +58,15 @@ public record Explainers(List<Explainer> explainers) {
         public Explainer {
             Objects.requireNonNull(id, "id must not be null");
             sheets = sheets == null ? List.of() : List.copyOf(sheets);
+        }
+
+        /**
+         * Returns the topic for a sheet's eyebrow: its own, or else the title.
+         *
+         * @return the topic
+         */
+        public String eyebrowTopic() {
+            return topic != null ? topic : title;
         }
     }
 

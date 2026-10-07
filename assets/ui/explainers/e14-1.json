@@ -1,0 +1,123 @@
+{
+ "width": 1060,
+ "height": 660,
+ "labels": [
+  {
+   "x": 24.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "A · Earth turns east, and carries the launch pad with it"
+  },
+  {
+   "x": 374.0,
+   "y": 92.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Earth turns eastward"
+  },
+  {
+   "x": 598.0,
+   "y": 360.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Equator"
+  },
+  {
+   "x": 598.0,
+   "y": 376.0,
+   "anchor": "start",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "about 465 m/s"
+  },
+  {
+   "x": 598.0,
+   "y": 250.253,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Cape Canaveral, 28.5° N"
+  },
+  {
+   "x": 598.0,
+   "y": 266.253,
+   "anchor": "start",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "about 410 m/s"
+  },
+  {
+   "x": 598.0,
+   "y": 195.671,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Baikonur, about 46° N"
+  },
+  {
+   "x": 598.0,
+   "y": 211.671,
+   "anchor": "start",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "about 320 m/s"
+  },
+  {
+   "x": 598.0,
+   "y": 470.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "The push, against the 7.8 km/s an orbit needs"
+  },
+  {
+   "x": 1004.0,
+   "y": 499.0,
+   "anchor": "end",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Equator"
+  },
+  {
+   "x": 1004.0,
+   "y": 533.0,
+   "anchor": "end",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Cape Canaveral"
+  },
+  {
+   "x": 1004.0,
+   "y": 567.0,
+   "anchor": "end",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Baikonur"
+  },
+  {
+   "x": 24.0,
+   "y": 640.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Not to scale · ground speeds and bars to scale with each other"
+  }
+ ]
+}

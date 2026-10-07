@@ -449,7 +449,8 @@ public final class MuseumScreen extends ChromeScreen {
         card.pad(Theme.BORDER_EMPHASIS);
         card.defaults().growX().left();
         if (!explainer.sheets().isEmpty()) {
-            Drawable art = ui.croppedPicture("explainers/" + explainer.sheets().get(0).drawing() + ".png",
+            // The card-sized copy, so the tab doesn't load every full drawing (make_explainer_art.py).
+            Drawable art = ui.croppedPicture("explainers/" + explainer.sheets().get(0).drawing() + "-thumb.png",
                 1060f / 600f);
             if (art != null) {
                 card.add(new Image(art)).height(251f).row();

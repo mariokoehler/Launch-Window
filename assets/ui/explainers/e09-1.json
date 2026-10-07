@@ -1,0 +1,150 @@
+{
+ "width": 1060,
+ "height": 660,
+ "labels": [
+  {
+   "x": 24.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "A · Mercury: an escape tower"
+  },
+  {
+   "x": 196.0,
+   "y": 520.0,
+   "anchor": "end",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "The rocket"
+  },
+  {
+   "x": 196.0,
+   "y": 536.0,
+   "anchor": "end",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "below fails"
+  },
+  {
+   "x": 344.0,
+   "y": 270.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Pulled up"
+  },
+  {
+   "x": 344.0,
+   "y": 286.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "and away"
+  },
+  {
+   "x": 144.0,
+   "y": 118.0,
+   "anchor": "end",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Escape tower:"
+  },
+  {
+   "x": 144.0,
+   "y": 134.0,
+   "anchor": "end",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "a small solid rocket"
+  },
+  {
+   "x": 150.0,
+   "y": 312.0,
+   "anchor": "end",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Capsule"
+  },
+  {
+   "x": 554.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "B · Vostok: an ejection seat"
+  },
+  {
+   "x": 720.0,
+   "y": 566.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Inside the rocket’s nose fairing"
+  },
+  {
+   "x": 930.0,
+   "y": 230.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Seat fires out"
+  },
+  {
+   "x": 930.0,
+   "y": 246.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "through the hatch"
+  },
+  {
+   "x": 965.0,
+   "y": 506.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Later, the same way:"
+  },
+  {
+   "x": 965.0,
+   "y": 522.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "down under his own"
+  },
+  {
+   "x": 965.0,
+   "y": 538.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "parachute"
+  },
+  {
+   "x": 24.0,
+   "y": 640.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Not to scale"
+  }
+ ]
+}

@@ -1,0 +1,330 @@
+{
+ "width": 1060,
+ "height": 660,
+ "labels": [
+  {
+   "x": 24.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "Mercury-Atlas, the flights before John Glenn"
+  },
+  {
+   "x": 100.0,
+   "y": 140.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "MA-1"
+  },
+  {
+   "x": 100.0,
+   "y": 158.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "July 1960"
+  },
+  {
+   "x": 100.0,
+   "y": 246.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Broke up about"
+  },
+  {
+   "x": 100.0,
+   "y": 262.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "a minute in"
+  },
+  {
+   "x": 268.0,
+   "y": 140.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "MA-2"
+  },
+  {
+   "x": 268.0,
+   "y": 158.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Feb 1961"
+  },
+  {
+   "x": 268.0,
+   "y": 246.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Up and down,"
+  },
+  {
+   "x": 268.0,
+   "y": 262.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "re-entry tested"
+  },
+  {
+   "x": 436.0,
+   "y": 140.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "MA-3"
+  },
+  {
+   "x": 436.0,
+   "y": 158.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "April 1961"
+  },
+  {
+   "x": 436.0,
+   "y": 246.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Off course,"
+  },
+  {
+   "x": 436.0,
+   "y": 262.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "capsule saved"
+  },
+  {
+   "x": 604.0,
+   "y": 140.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "MA-4"
+  },
+  {
+   "x": 604.0,
+   "y": 158.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Sept 1961"
+  },
+  {
+   "x": 604.0,
+   "y": 246.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "One orbit,"
+  },
+  {
+   "x": 604.0,
+   "y": 262.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "no crew"
+  },
+  {
+   "x": 772.0,
+   "y": 140.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "MA-5"
+  },
+  {
+   "x": 772.0,
+   "y": 158.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Nov 1961"
+  },
+  {
+   "x": 772.0,
+   "y": 246.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Two orbits"
+  },
+  {
+   "x": 772.0,
+   "y": 262.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "with Enos"
+  },
+  {
+   "x": 940.0,
+   "y": 140.0,
+   "anchor": "middle",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "MA-6"
+  },
+  {
+   "x": 940.0,
+   "y": 158.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Feb 1962"
+  },
+  {
+   "x": 940.0,
+   "y": 246.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "John Glenn,"
+  },
+  {
+   "x": 940.0,
+   "y": 262.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "three orbits"
+  },
+  {
+   "x": 864.0,
+   "y": 96.0,
+   "anchor": "end",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "Trusted with a crew"
+  },
+  {
+   "x": 24.0,
+   "y": 360.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "What the failures taught"
+  },
+  {
+   "x": 100.0,
+   "y": 404.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "The top of the rocket flexed:"
+  },
+  {
+   "x": 100.0,
+   "y": 420.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "a steel band was added to stiffen it."
+  },
+  {
+   "x": 436.0,
+   "y": 404.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "A guidance fault was found"
+  },
+  {
+   "x": 436.0,
+   "y": 420.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "and fixed before the next try."
+  },
+  {
+   "x": 772.0,
+   "y": 404.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Enos’s flight was cut short"
+  },
+  {
+   "x": 772.0,
+   "y": 420.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "by a capsule fault: fixed too."
+  },
+  {
+   "x": 520.0,
+   "y": 526.0,
+   "anchor": "middle",
+   "kind": "d-body",
+   "size": 14.0,
+   "color": "#1c1c1a",
+   "text": "Five flights without a crew, two of them failures,"
+  },
+  {
+   "x": 520.0,
+   "y": 546.0,
+   "anchor": "middle",
+   "kind": "d-body",
+   "size": 14.0,
+   "color": "#1c1c1a",
+   "text": "before a person rode the rocket."
+  },
+  {
+   "x": 24.0,
+   "y": 640.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Record simplified to the flights that carried a Mercury capsule"
+  }
+ ]
+}

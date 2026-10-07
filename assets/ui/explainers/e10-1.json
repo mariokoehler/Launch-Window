@@ -1,0 +1,240 @@
+{
+ "width": 1060,
+ "height": 660,
+ "labels": [
+  {
+   "x": 24.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "Height against time, from about 12 km down"
+  },
+  {
+   "x": 108.0,
+   "y": 564.0,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "0 km"
+  },
+  {
+   "x": 108.0,
+   "y": 453.99,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "3 km"
+  },
+  {
+   "x": 108.0,
+   "y": 343.98,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "6 km"
+  },
+  {
+   "x": 108.0,
+   "y": 233.97,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "9 km"
+  },
+  {
+   "x": 108.0,
+   "y": 123.96,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "12 km"
+  },
+  {
+   "x": 120.0,
+   "y": 582.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "0 min"
+  },
+  {
+   "x": 266.6,
+   "y": 582.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "2 min"
+  },
+  {
+   "x": 413.2,
+   "y": 582.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "4 min"
+  },
+  {
+   "x": 559.8,
+   "y": 582.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "6 min"
+  },
+  {
+   "x": 706.4,
+   "y": 582.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "8 min"
+  },
+  {
+   "x": 853.0,
+   "y": 582.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "10 min"
+  },
+  {
+   "x": 999.6,
+   "y": 582.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "12 min"
+  },
+  {
+   "x": 336.0,
+   "y": 296.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Mercury: drogue opens, about 6 km"
+  },
+  {
+   "x": 336.0,
+   "y": 312.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "small, to steady and slow the capsule"
+  },
+  {
+   "x": 336.0,
+   "y": 406.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Main chute, about 3 km"
+  },
+  {
+   "x": 336.0,
+   "y": 210.0,
+   "anchor": "start",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "Vostok: hatch off, pilot ejects, about 7 km"
+  },
+  {
+   "x": 336.0,
+   "y": 466.0,
+   "anchor": "start",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "Empty ball’s own chute, about 2.5 km"
+  },
+  {
+   "x": 596.45,
+   "y": 534.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Ball lands hard"
+  },
+  {
+   "x": 679.75,
+   "y": 506.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Splashdown, with a landing"
+  },
+  {
+   "x": 679.75,
+   "y": 522.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "bag below the shield"
+  },
+  {
+   "x": 889.65,
+   "y": 534.0,
+   "anchor": "middle",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "Pilot lands"
+  },
+  {
+   "x": 808.0,
+   "y": 124.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Mercury capsule"
+  },
+  {
+   "x": 808.0,
+   "y": 150.0,
+   "anchor": "start",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "Vostok pilot"
+  },
+  {
+   "x": 808.0,
+   "y": 176.0,
+   "anchor": "start",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "Vostok ball, empty"
+  },
+  {
+   "x": 24.0,
+   "y": 640.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Rounded heights and times · simplified curves"
+  }
+ ]
+}

@@ -1,0 +1,213 @@
+{
+ "width": 1060,
+ "height": 660,
+ "labels": [
+  {
+   "x": 24.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "Mercury-Atlas 3, 25 April 1961, uncrewed"
+  },
+  {
+   "x": 560.0,
+   "y": 596.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Atlantic Ocean"
+  },
+  {
+   "x": 130.0,
+   "y": 505.0,
+   "anchor": "middle",
+   "kind": "num",
+   "size": 14.0,
+   "color": "#f5efe1",
+   "text": "1"
+  },
+  {
+   "x": 150.0,
+   "y": 505.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Liftoff"
+  },
+  {
+   "x": 236.0,
+   "y": 247.0,
+   "anchor": "middle",
+   "kind": "num",
+   "size": 14.0,
+   "color": "#f5efe1",
+   "text": "2"
+  },
+  {
+   "x": 244.0,
+   "y": 300.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "About 40 s: off course,"
+  },
+  {
+   "x": 244.0,
+   "y": 316.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "the rocket is destroyed"
+  },
+  {
+   "x": 200.0,
+   "y": 175.0,
+   "anchor": "middle",
+   "kind": "num",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "3"
+  },
+  {
+   "x": 184.0,
+   "y": 166.0,
+   "anchor": "end",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "Escape rocket fires,"
+  },
+  {
+   "x": 184.0,
+   "y": 182.0,
+   "anchor": "end",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "capsule pulled clear"
+  },
+  {
+   "x": 575.0,
+   "y": 191.0,
+   "anchor": "middle",
+   "kind": "num",
+   "size": 14.0,
+   "color": "#f5efe1",
+   "text": "4"
+  },
+  {
+   "x": 595.0,
+   "y": 191.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Drogue chute opens"
+  },
+  {
+   "x": 668.0,
+   "y": 335.0,
+   "anchor": "middle",
+   "kind": "num",
+   "size": 14.0,
+   "color": "#f5efe1",
+   "text": "5"
+  },
+  {
+   "x": 688.0,
+   "y": 335.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Main chute"
+  },
+  {
+   "x": 740.0,
+   "y": 525.0,
+   "anchor": "middle",
+   "kind": "num",
+   "size": 14.0,
+   "color": "#f5efe1",
+   "text": "6"
+  },
+  {
+   "x": 760.0,
+   "y": 518.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Splashdown: picked up,"
+  },
+  {
+   "x": 760.0,
+   "y": 534.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "and flown again on MA-4"
+  },
+  {
+   "x": 760.0,
+   "y": 84.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "On a normal Atlas flight"
+  },
+  {
+   "x": 760.0,
+   "y": 128.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "0 s"
+  },
+  {
+   "x": 940.0,
+   "y": 128.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "about 2.5 min"
+  },
+  {
+   "x": 760.0,
+   "y": 146.0,
+   "anchor": "start",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "Tower carried"
+  },
+  {
+   "x": 950.0,
+   "y": 146.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Tower gone"
+  },
+  {
+   "x": 24.0,
+   "y": 640.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Path sketched, not to scale · numbers follow the order of events"
+  }
+ ]
+}

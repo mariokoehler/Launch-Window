@@ -33,26 +33,72 @@
           "drawing": "e01-2",
           "scale": "To scale (top)",
           "legend": [
-            {"gold": false, "text": "Freedom 7 · Alan Shepard · 5 May 1961"},
-            {"gold": true, "text": "Friendship 7 · John Glenn · 20 February 1962"}
+            {
+              "gold": false,
+              "text": "Freedom 7 · Alan Shepard · 5 May 1961"
+            },
+            {
+              "gold": true,
+              "text": "Friendship 7 · John Glenn · 20 February 1962"
+            }
           ],
           "bars": [
-            {"label": "Highest point", "max": 300, "rows": [
-              {"value": 187, "text": "187 km"},
-              {"value": 261, "text": "261 km · only 1.4 times higher"}
-            ]},
-            {"label": "Top speed", "max": 28200, "rows": [
-              {"value": 8300, "text": "8,300 km/h"},
-              {"value": 28200, "text": "28,200 km/h · 3.4 times faster"}
-            ]},
-            {"label": "Energy of motion, per kg", "max": 30.7, "rows": [
-              {"value": 2.6, "text": "2.6 MJ"},
-              {"value": 30.7, "text": "30.7 MJ · 12 times as much"}
-            ]},
-            {"label": "Time in flight", "max": 295, "rows": [
-              {"value": 15, "text": "15 minutes"},
-              {"value": 295, "text": "4 h 55 min · about 120,000 km flown"}
-            ]}
+            {
+              "label": "Highest point",
+              "max": 300,
+              "rows": [
+                {
+                  "value": 187,
+                  "text": "187 km"
+                },
+                {
+                  "value": 261,
+                  "text": "261 km · only 1.4 times higher"
+                }
+              ]
+            },
+            {
+              "label": "Top speed",
+              "max": 28200,
+              "rows": [
+                {
+                  "value": 8300,
+                  "text": "8,300 km/h"
+                },
+                {
+                  "value": 28200,
+                  "text": "28,200 km/h · 3.4 times faster"
+                }
+              ]
+            },
+            {
+              "label": "Energy of motion, per kg",
+              "max": 30.7,
+              "rows": [
+                {
+                  "value": 2.6,
+                  "text": "2.6 MJ"
+                },
+                {
+                  "value": 30.7,
+                  "text": "30.7 MJ · 12 times as much"
+                }
+              ]
+            },
+            {
+              "label": "Time in flight",
+              "max": 295,
+              "rows": [
+                {
+                  "value": 15,
+                  "text": "15 minutes"
+                },
+                {
+                  "value": 295,
+                  "text": "4 h 55 min · about 120,000 km flown"
+                }
+              ]
+            }
           ],
           "points": [
             {
@@ -192,7 +238,7 @@
     {
       "id": "restarting-in-space",
       "code": "E-04",
-      "title": "Restarting an engine in space",
+      "title": "Restarting in space",
       "summary": "Why lighting a rocket engine after a coast is hard when the propellant floats, and the three ways engineers solved it.",
       "sheets": [
         {
@@ -235,7 +281,8 @@
           ],
           "inGame": "Retrofire is a start in space too, and Vostok's single retrorocket can't be fired twice. A step's odds rest on the reliability of the parts it uses; Payload R&D in the SET Centre raises it."
         }
-      ]
+      ],
+      "topic": "Restarting an engine in space"
     },
     {
       "id": "hypergolics-and-steering-jets",
@@ -282,6 +329,653 @@
             }
           ],
           "inGame": "The Reentry preparations step is steering-jet work: turning the capsule so its retrorockets point forward. On Faith 7, Gordon Cooper did it by hand, lining up on marks drawn on his window."
+        }
+      ],
+      "topic": "Hypergolic propellants and steering jets"
+    },
+    {
+      "id": "weightlessness",
+      "code": "E-06",
+      "title": "Falling, not floating",
+      "topic": "Weightlessness",
+      "summary": "Why a crew in orbit floats though gravity is still there, and what weeks of falling do to a body.",
+      "sheets": [
+        {
+          "title": "There is gravity in orbit",
+          "drawing": "e06-1",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "Gravity is still there",
+              "text": "At 300 km up, Earth's gravity is still about nine-tenths as strong as on the ground. If it switched off, a spacecraft would fly away in a straight line instead of circling the Earth. Gravity is what holds it in orbit."
+            },
+            {
+              "title": "Everything falls together",
+              "text": "A spacecraft in orbit is falling around the Earth, and so is everything inside it: the crew, the food, a loose pencil. Because they all fall at the same rate, nothing presses on anything else, and without that push you feel weightless."
+            },
+            {
+              "title": "“Zero g” means free fall",
+              "text": "You feel a moment of it at the top of a swing or on a roller coaster's drop. Aircraft flying steep arcs give trainees about 25 seconds of it at a time. In orbit the fall simply never ends, so the feeling never stops."
+            }
+          ],
+          "inGame": "The A day in orbit and Several days in orbit steps keep a crew falling around the Earth for a day or more."
+        },
+        {
+          "title": "What it does to a body",
+          "drawing": "e06-2",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "Could a person even swallow?",
+              "text": "Before the first flights, doctors worried that without weight a person might not swallow, see straight or think clearly. Animals flew first. Gagarin ate paste from tubes on Vostok 1, and John Glenn squeezed apple sauce from a tube on his flight in 1962, just to be sure."
+            },
+            {
+              "title": "Titov's long day",
+              "text": "In August 1961 Gherman Titov spent about 25 hours in orbit on Vostok 2. He was the first person to sleep in space, and the first to suffer space sickness: his inner ear and his eyes disagreed about which way was down."
+            },
+            {
+              "title": "Weeks bring weakness",
+              "text": "With no weight to carry, muscles shrink and bones lose minerals, while fluids drift toward the head. Crews on long flights exercise every day, and still need time to walk steadily after landing: at first, even standing up can make them dizzy, because the heart has got used to pumping less hard."
+            }
+          ],
+          "inGame": "Biometric data transmission sends a passenger's heartbeat and breathing home, and the Life in weightlessness goal asks you to fly living things in orbit and study how they cope."
+        }
+      ]
+    },
+    {
+      "id": "heat-shields",
+      "code": "E-07",
+      "title": "Why capsules are blunt",
+      "topic": "Heat shields",
+      "summary": "Why a blunt face beats a sharp nose coming home at 28,000 km/h, and how a shield survives the heat.",
+      "sheets": [
+        {
+          "title": "A blunt nose stays cooler",
+          "drawing": "e07-1",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "Speed becomes heat",
+              "text": "Coming home from orbit, a capsule has to lose about 28,000 km/h. The air does the braking, and all that energy of motion turns into heat: the air piled up in front of the capsule glows at thousands of degrees."
+            },
+            {
+              "title": "A sharp nose cooks",
+              "text": "A sleek, pointed nose cuts through the air, but the shock wave sits right on its tip and the hot air clings to its surface, so the heat flows into the craft. Make it hot enough and the nose melts. Early missile warheads had exactly this problem."
+            },
+            {
+              "title": "Allen's blunt body",
+              "text": "In the early 1950s H. Julian Allen, an engineer at NACA's Ames laboratory, showed that a broad, blunt face works better. It pushes the shock wave out ahead, and most of the heat stays in that air and blows away. Every capsule since has been blunt."
+            }
+          ],
+          "inGame": "The Reentry step is this moment: the capsule's blunt face takes the heat while the air brakes it from orbital speed."
+        },
+        {
+          "title": "How the shield survives",
+          "drawing": "e07-2",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "It burns so the capsule doesn't",
+              "text": "Mercury's orbital capsules carried a heat shield of glass fibre and resin. As it heated, the resin boiled away from its outer layer, and the gases carried the heat off with them. A shield that is used up like this is called ablative. The suborbital capsules made do with a metal heat sink."
+            },
+            {
+              "title": "Radio silence",
+              "text": "For a few minutes the air around the capsule is so hot that it glows and carries electricity, and radio signals can't get through it. On a Mercury flight this blackout lasted about four minutes, and Mission Control could only wait for the astronaut's voice to come back."
+            },
+            {
+              "title": "Eight times their weight",
+              "text": "Braking that hard presses the crew into their seats with about eight times their normal weight. They lie on their backs, with the shield behind them, so the force pushes them into their couches and their blood isn't drained from their heads."
+            }
+          ],
+          "inGame": "The Modules separation step frees the capsule from its equipment module before Reentry, so it can turn its shielded side forward."
+        }
+      ]
+    },
+    {
+      "id": "reliability",
+      "code": "E-08",
+      "title": "The odds multiply",
+      "topic": "Reliability",
+      "summary": "Why small risks multiply over a mission's chain of steps, and how testing, backups and people fight them.",
+      "sheets": [
+        {
+          "title": "A chain of steps",
+          "drawing": "e08-1",
+          "scale": "Bars to scale",
+          "points": [
+            {
+              "title": "Every step has to work",
+              "text": "A flight is a chain of steps: countdown, launch, ascent, orbit, retrofire, re-entry, landing. Each one has to succeed for the mission to succeed, just as a chain is only as strong as its weakest link. If one fails, every step after it is lost too."
+            },
+            {
+              "title": "Small risks add up",
+              "text": "Give each of 11 steps a 95 % chance and the whole flight succeeds only about 57 % of the time, not much better than a coin toss. Even at 99 % a step, about one flight in ten fails. Over a chain, chances multiply: 0.95 × 0.95 × … eleven times."
+            },
+            {
+              "title": "Not good enough for a person",
+              "text": "A missile that works nine times in ten is a useful missile. A rocket that loses its crew one time in ten is unthinkable. That's why every part of a crewed flight is tested, doubled and checked until each step is very nearly certain."
+            }
+          ],
+          "inGame": "Each step of a mission rolls on its own odds, and a failure that isn't rescued ends the mission. Vostok's and Mercury's orbital flights have 11 steps each."
+        },
+        {
+          "title": "Fighting the odds",
+          "drawing": "e08-2",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "Test it first",
+              "text": "Before a person flew, each spacecraft and rocket flew empty, then with instruments or animals. The dogs Belka and Strelka orbited in August 1960, and Ham the chimpanzee rode a Mercury capsule in January 1961. Each test found faults that were fixed before a crew was on board."
+            },
+            {
+              "title": "Two of everything vital",
+              "text": "A system that matters more than anything gets a backup. Vostok and Mercury each had an automatic way to aim the retrorockets and a manual one the pilot could use. If one failed, the other could still bring the crew home."
+            },
+            {
+              "title": "People catch what machines miss",
+              "text": "Flight controllers watch every reading and know the spacecraft inside out. When something goes wrong, they can spot it, work out a fix and talk the crew through it. Some of the most famous rescues in spaceflight were made from the ground."
+            }
+          ],
+          "inGame": "R&D raises a part's reliability, every program flies uncrewed test configurations before crewed ones, and when a step fails, your flight controllers' skill can still rescue it."
+        }
+      ]
+    },
+    {
+      "id": "launch-escape",
+      "code": "E-09",
+      "title": "Getting out of a failing rocket",
+      "topic": "Launch escape",
+      "summary": "Mercury's escape tower and Vostok's ejection seat, and the test flight where the tower saved a capsule.",
+      "sheets": [
+        {
+          "title": "Two answers to one danger",
+          "drawing": "e09-1",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "The most dangerous minutes",
+              "text": "On the pad and in the first minutes of flight, a rocket is full of propellant and barely moving. If it fails then, it can explode in a fireball. A crew needs a way out that is faster than any explosion can spread."
+            },
+            {
+              "title": "Mercury's tower",
+              "text": "Mercury carried a small solid rocket on a frame above the capsule. If the rocket below failed, the tower fired and pulled the whole capsule up and away in about a second, then dropped off so the parachutes could open."
+            },
+            {
+              "title": "Vostok's seat",
+              "text": "Vostok had no tower. Its pilot sat in an ejection seat that could fire him out through a hatch if a launch failed early. The same seat ejected him at the end of every flight, and he landed under his own parachute."
+            }
+          ],
+          "inGame": "The Launch step is one where the crew is at risk."
+        },
+        {
+          "title": "When it worked",
+          "drawing": "e09-2",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "Mercury-Atlas 3",
+              "text": "In April 1961 an Atlas carrying an empty Mercury capsule failed to turn onto its planned path. About 40 seconds after liftoff the range safety officer destroyed it. The escape tower fired first and pulled the capsule clear. Nobody was aboard: this was one of the tests that came before a crewed Atlas flight."
+            },
+            {
+              "title": "The capsule flew again",
+              "text": "The capsule came down under its parachutes, was picked up from the sea and flew again on the next Atlas test. An astronaut aboard would very likely have survived. The escape system had done exactly the job it was built for, at the worst possible moment."
+            },
+            {
+              "title": "Dropped when the danger is past",
+              "text": "An escape tower is heavy, and every kilogram on top costs payload. Once the rocket's most dangerous minutes are over, about two and a half minutes into an Atlas flight, the tower is thrown away. From then on the crew relies on the rocket itself."
+            }
+          ],
+          "inGame": "The Launch step is one where the crew is at risk, and its odds come from the rocket's and the capsule's reliability and the crew's skill. When it fails, your flight controllers' skill can still rescue it."
+        }
+      ]
+    },
+    {
+      "id": "coming-home",
+      "code": "E-10",
+      "title": "Land or sea",
+      "topic": "Coming home",
+      "summary": "Parachutes in stages, and why America came down at sea while the Soviet Union landed on the steppe.",
+      "sheets": [
+        {
+          "title": "Parachutes in stages",
+          "drawing": "e10-1",
+          "scale": "Rounded figures",
+          "points": [
+            {
+              "title": "One parachute isn't enough",
+              "text": "A capsule falls through the upper air at hundreds of kilometres an hour. A big parachute opened then would tear, or jerk the crew too hard. So a small drogue chute opens first to steady and slow the capsule, and the main chute opens lower down."
+            },
+            {
+              "title": "Mercury: into the sea",
+              "text": "Mercury came down in the ocean, where ships and helicopters waited. Before splashdown its heat shield dropped about a metre on a rubber skirt; air filled the skirt through holes in it, making a landing bag that softened the blow as the capsule hit the water."
+            },
+            {
+              "title": "Vostok: two landings",
+              "text": "Vostok's ball landed on the ground, too hard for a person inside. At about 7 km its hatch blew off and the pilot was ejected in his seat, then came down under his own parachute, a few kilometres from his spacecraft."
+            }
+          ],
+          "inGame": "A Mercury flight ends with the Descent and splashdown step, a Vostok flight with Descent and landing."
+        },
+        {
+          "title": "Why each side chose its way",
+          "drawing": "e10-2",
+          "scale": "Schematic",
+          "points": [
+            {
+              "title": "The sea",
+              "text": "America had oceans on both sides and a large navy to search them. Water is a soft place to land, and ships and helicopters could wait near the target. The catch: a capsule had to float, and its crew had to get out safely."
+            },
+            {
+              "title": "The land",
+              "text": "The Soviet Union had vast, empty steppes and few ships far from home. Landing on its own territory also kept the spacecraft secret. But the ground is hard, which is why Vostok's pilot came down on his own parachute."
+            },
+            {
+              "title": "Liberty Bell 7",
+              "text": "In July 1961 Gus Grissom splashed down after the second crewed Mercury flight. The hatch blew off too early, the capsule filled with water, and Grissom nearly drowned before a helicopter picked him up. The capsule sank; it was raised from the ocean floor in 1999."
+            }
+          ],
+          "inGame": "However you come home, the last step still rolls on the capsule's reliability and the crew's skill: Descent and landing for Vostok, Descent and splashdown for Mercury."
+        }
+      ]
+    },
+    {
+      "id": "tracking",
+      "code": "E-11",
+      "title": "Talking to an orbiting craft",
+      "topic": "Tracking",
+      "summary": "Why the ground hears an orbiting craft only for minutes at a time, and how a network of stations follows it.",
+      "sheets": [
+        {
+          "title": "Only while it's in sight",
+          "drawing": "e11-1",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "Radio goes in straight lines",
+              "text": "Radio waves travel in straight lines, like light. A ground station can only talk to a spacecraft while it is above the station's horizon. Once the craft drops below it, the Earth itself is in the way, and a craft over the far side of the world can't be reached at all."
+            },
+            {
+              "title": "A few minutes per pass",
+              "text": "A craft in low orbit races across the sky. About 200 km up, it stays above one station's horizon for at most about seven minutes. Then it is gone for the rest of its 88-minute lap, and the next pass may be far off to one side."
+            },
+            {
+              "title": "So, many stations",
+              "text": "One station hears a craft only briefly. To follow a flight around the world you need stations spread across continents and oceans, each handing the craft on to the next. Even then, Mercury's orbital flights had stretches where no station could hear the capsule."
+            }
+          ],
+          "inGame": "The Orbital flight step is a craft falling around the Earth, in touch with the ground only for a few minutes at a time as it passes over a station."
+        },
+        {
+          "title": "A network around the world",
+          "drawing": "e11-2",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "A ring of stations",
+              "text": "For Mercury, NASA built a network of tracking stations on land around the world, plus two ships, linked to Mission Control by telephone and teletype. Even so, a capsule spent part of every lap out of touch."
+            },
+            {
+              "title": "Anyone could listen",
+              "text": "Sputnik 1 sent a simple beep on frequencies that radio amateurs could pick up. People all over the world heard it and recorded it. Launched on 4 October 1957, it beeped for about three weeks. The beeping made the first satellite impossible to doubt."
+            },
+            {
+              "title": "The pitch gives away the orbit",
+              "text": "A passing satellite's signal sounds higher as it comes closer and lower as it leaves, like a passing siren. Two physicists at Johns Hopkins measured this change in Sputnik's signal and worked out its orbit. Turned around, the same trick became the first satellite navigation system."
+            }
+          ],
+          "inGame": "The Radio from orbit goal asks for a satellite that broadcasts from orbit to the ground, as Sputnik 1 did; it's reached in the Earth orbit step."
+        }
+      ]
+    },
+    {
+      "id": "space-environment",
+      "code": "E-12",
+      "title": "What Explorer 1 found",
+      "topic": "Space environment",
+      "summary": "How a silent Geiger counter on Explorer 1 revealed the radiation belts, and why they matter.",
+      "sheets": [
+        {
+          "title": "Belts of radiation",
+          "drawing": "e12-1",
+          "scale": "Earth and belts to scale",
+          "points": [
+            {
+              "title": "A counter that went quiet",
+              "text": "Explorer 1, launched in January 1958, carried a Geiger counter to count cosmic rays. On the high parts of its orbit, the count dropped to nothing. Either space was strangely empty up there, or something was wrong. Its readings only came down as it passed over a ground station, in short scraps."
+            },
+            {
+              "title": "Silence meant too much",
+              "text": "James Van Allen's team at the University of Iowa realised the counter wasn't idle: it was swamped by so many particles that it stopped counting, like a microphone overloaded by a roar. Explorer 3, two months later, confirmed it."
+            },
+            {
+              "title": "Trapped by the magnetic field",
+              "text": "Earth's magnetic field catches charged particles from the Sun and from space and holds them in two doughnut-shaped belts around the planet. The inner belt holds mostly protons, the outer one mostly electrons. They are named the Van Allen belts, after the scientist who explained them."
+            }
+          ],
+          "inGame": "Explorer 1's flights reach the Space environment measured goal."
+        },
+        {
+          "title": "Why it matters",
+          "drawing": "e12-2",
+          "scale": "Logarithmic",
+          "points": [
+            {
+              "title": "Harmful to crews",
+              "text": "The trapped particles carry enough energy to damage living cells. A quick pass through the belts can be survived, but a crew that stayed inside them would soon take a dangerous dose. Astronauts carried badges that recorded the dose each of them received."
+            },
+            {
+              "title": "Crewed flights stay low",
+              "text": "Vostok and Mercury flew a few hundred kilometres up, well beneath the inner belt. Later, Apollo crews crossed the belts on their way to the Moon, quickly and on a path that skirted the worst of them."
+            },
+            {
+              "title": "Know it, then design for it",
+              "text": "Radiation upsets electronics too: one particle can flip a bit in a memory, and many slowly wear a part out. Knowing where the radiation is lets engineers choose safe orbits, add shielding and pick sturdier parts."
+            }
+          ],
+          "inGame": "The Space environment measured goal stands for knowledge every later spacecraft design depends on."
+        }
+      ]
+    },
+    {
+      "id": "human-rating",
+      "code": "E-13",
+      "title": "Safe enough for a person",
+      "topic": "Human rating",
+      "summary": "What changes when a missile becomes a rocket for people, and how Mercury-Atlas earned its first crew.",
+      "sheets": [
+        {
+          "title": "From missile to crew launcher",
+          "drawing": "e13-1",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "A missile can afford to fail",
+              "text": "A military missile only has to work most of the time: if one in ten fails, another is launched. A rocket carrying a person can't be treated that way, so the same rocket has to be changed before a crew may ride it."
+            },
+            {
+              "title": "Sense trouble, get out",
+              "text": "The most important change is a system that watches the rocket. If an engine falters or the rocket starts to tumble, it shuts the engine down and fires the escape system faster than any person could react."
+            },
+            {
+              "title": "Mercury's Redstone",
+              "text": "NASA took the Army's Redstone missile, lengthened its tanks so it could burn longer, added an abort-sensing system and strengthened parts that might fail. The changes turned a reliable missile into a rocket trusted with Alan Shepard in May 1961."
+            }
+          ],
+          "inGame": "Only human-rated rockets can be assigned to crewed launches."
+        },
+        {
+          "title": "Earning trust",
+          "drawing": "e13-2",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "Flown before it carried anyone",
+              "text": "Before John Glenn flew on an Atlas in February 1962, Mercury-Atlas had flown five times without a crew. Two of those flights failed and three succeeded, the last of them carrying the chimpanzee Enos around the Earth twice."
+            },
+            {
+              "title": "Every failure taught something",
+              "text": "When the first Mercury-Atlas broke up in July 1960, engineers found the top of the rocket flexing and added a steel band to stiffen it. Each failure was traced, fixed and tested again before the next flight."
+            },
+            {
+              "title": "A record, not a promise",
+              "text": "Human-rated doesn't mean a rocket can't fail. It means it has a record of flights and fixes that convinced people to trust it with a crew, and a way out if it fails anyway. Even today, every new crewed rocket flies without a crew first."
+            }
+          ],
+          "inGame": "Only human-rated rockets can be assigned to crewed launches, and every program flies its uncrewed test configurations before its crewed ones."
+        }
+      ]
+    },
+    {
+      "id": "launch-latitude",
+      "code": "E-14",
+      "title": "Earth's free push",
+      "topic": "Launch latitude",
+      "summary": "Why rockets launch east, why the equator helps, and why Baikonur's orbits were tilted so steeply.",
+      "sheets": [
+        {
+          "title": "Launch east",
+          "drawing": "e14-1",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "The ground is already moving",
+              "text": "Earth turns once a day, and the ground turns with it. At the equator that's about 465 m/s, almost 1,700 km/h, toward the east. A rocket standing on the pad is already moving that fast before it lights its engines."
+            },
+            {
+              "title": "Launch east to keep it",
+              "text": "A rocket launched toward the east keeps that speed, and only has to add the rest of the 7.8 km/s it needs for orbit. Launched west, it would first have to cancel the Earth's spin, and then make up the whole of it."
+            },
+            {
+              "title": "Closer to the equator, a bigger push",
+              "text": "Away from the equator the ground moves more slowly, because it turns in a smaller circle. Cape Canaveral, at 28.5° north, gets about 410 m/s; Baikonur, at about 46° north, only about 320 m/s. A site near the equator, like Europe's in French Guiana, gets almost the full push."
+            }
+          ],
+          "inGame": "Launch Window doesn't have launch sites yet. The VAB's LEO payloads are what each real rocket lifted from its own site, so this push is already in them."
+        },
+        {
+          "title": "Where the rocket can go",
+          "drawing": "e14-2",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "An orbit circles the centre",
+              "text": "Every orbit goes around the centre of the Earth. A rocket launched due east from 28.5° north ends up in an orbit tilted 28.5° to the equator. It can choose a steeper tilt, but never a shallower one without a costly turn."
+            },
+            {
+              "title": "Baikonur's steep orbits",
+              "text": "Vostok's orbits were tilted about 65°. Baikonur couldn't launch due east, because the spent stages would have fallen on China, so its rockets flew north-east and got less of the Earth's push."
+            },
+            {
+              "title": "Over the sea, or empty land",
+              "text": "A rocket drops its empty stages on the way up. Florida launches east over the Atlantic, so the stages fall into the ocean. Baikonur sits in a huge, thinly peopled steppe, and the zones where stages fall are cleared."
+            }
+          ],
+          "inGame": "Vostok's R-7 and Mercury's Atlas lifted their real payloads from their own sites, and those payloads are what the VAB shows. The game has no rule for latitude itself."
+        }
+      ]
+    },
+    {
+      "id": "max-q",
+      "code": "E-15",
+      "title": "The hardest moment of the climb",
+      "topic": "Max Q",
+      "summary": "The moment about a minute into a launch when the air pushes on a rocket hardest.",
+      "sheets": [
+        {
+          "title": "The hardest moment of the climb",
+          "drawing": "e15-1",
+          "scale": "Shapes only",
+          "points": [
+            {
+              "title": "Speed against thick air",
+              "text": "As a rocket climbs it goes faster, and the faster it goes the harder the air pushes on it. But it also climbs into thinner air, which pushes less. For the first minute the speed wins; after that the thinning air does."
+            },
+            {
+              "title": "The peak: max Q",
+              "text": "Engineers call that push dynamic pressure, written q, and its peak max Q. It comes about a minute after liftoff, roughly 10 to 15 km up, when the rocket's structure is squeezed and shaken hardest. Some rockets throttle down to get through it."
+            },
+            {
+              "title": "Mercury-Atlas 1",
+              "text": "In July 1960 the first Atlas carrying a Mercury capsule broke up about a minute after liftoff, close to max Q. The top of the rocket had flexed too much where it met the capsule. A steel band was added to stiffen it, and later flights came through."
+            }
+          ],
+          "inGame": "The Ascent step is the climb through max Q, and its odds rest mostly on the rocket's reliability."
+        }
+      ]
+    },
+    {
+      "id": "power",
+      "code": "E-16",
+      "title": "Batteries and sunlight",
+      "topic": "Power",
+      "summary": "From batteries that ran down in weeks to solar cells that ran for years, and the nights every lap.",
+      "sheets": [
+        {
+          "title": "A satellite's power budget",
+          "drawing": "e16-1",
+          "scale": "Bars to scale",
+          "points": [
+            {
+              "title": "Batteries run down",
+              "text": "The first satellites carried batteries, like a torch. Sputnik 1's radio fell silent after about three weeks, though the satellite itself stayed in orbit for three months. Once its batteries were flat, a satellite was just a silent piece of metal."
+            },
+            {
+              "title": "Power from sunlight",
+              "text": "Solar cells turn sunlight straight into electricity. The silicon kind had been invented at Bell Labs only four years earlier. Vanguard 1, launched in March 1958, carried six small panels of them. Its battery-powered radio stopped within months, but the solar-powered one kept transmitting until 1964."
+            },
+            {
+              "title": "Years instead of weeks",
+              "text": "With solar cells a satellite could work for years, and that made weather, communication and navigation satellites worth building. Vanguard 1 is still in orbit today, the oldest human-made object up there, and is expected to stay up for centuries more."
+            }
+          ],
+          "inGame": "“Extended mission” configurations carry more battery capacity, and they're the ones with an Extended experiments in orbit step."
+        },
+        {
+          "title": "Day and night in orbit",
+          "drawing": "e16-2",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "Night every 90 minutes",
+              "text": "A satellite in low orbit goes round in about 90 minutes, so it passes through Earth's shadow about 16 times a day. On some orbits that's up to about 40 % of every lap with no sunlight at all."
+            },
+            {
+              "title": "Solar power needs batteries",
+              "text": "Solar cells only work in sunlight. So a solar-powered spacecraft still carries batteries: it charges them on the sunny part of each lap and runs on them through the night. Over a long mission they are charged and drained thousands of times."
+            },
+            {
+              "title": "Hot, then cold",
+              "text": "With no air to spread heat around, the side facing the Sun gets very hot and the shaded side very cold, and every pass into shadow swings the temperature again. Spacecraft are wrapped in shiny blankets and painted in patterns to keep their insides comfortable."
+            }
+          ],
+          "inGame": "“Extended mission” configurations carry more battery capacity than the standard ones."
+        }
+      ]
+    },
+    {
+      "id": "guidance",
+      "code": "E-17",
+      "title": "Keeping a rocket pointed",
+      "topic": "Guidance",
+      "summary": "Why a rocket must be steered every moment, and how Jupiter-C's spinning stages flew straight without steering.",
+      "sheets": [
+        {
+          "title": "Balancing on a flame",
+          "drawing": "e17-1",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "A rocket wants to tip over",
+              "text": "A rocket pushes from the bottom, like a hand pushing a broom up from underneath. Left alone it starts to tip, and the tip grows. It has to be steered every moment, just to keep flying straight, and a small error early on grows into a big miss later."
+            },
+            {
+              "title": "Push the exhaust sideways",
+              "text": "To steer, a rocket points part of its push slightly off centre. The Redstone put heat-proof vanes into its exhaust, like a rudder in water; the R-7 used small extra engines on swivels, called verniers; later rockets tilted the whole engine."
+            },
+            {
+              "title": "A guide inside",
+              "text": "Gyroscopes inside the rocket sense the slightest turn, and the guidance system answers with a correction, many times a second. Without that constant correction, no large rocket could stay on its path for more than a few seconds."
+            }
+          ],
+          "inGame": "The Ascent step rolls mostly on the rocket's reliability: steering errors there decide whether the payload reaches the planned orbit."
+        },
+        {
+          "title": "Spinning to fly straight",
+          "drawing": "e17-2",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "Spin holds direction",
+              "text": "A spinning object resists being tipped over. A spinning top stays upright, and a rifle bullet, spun by grooves in the barrel, flies straight. Spin gives a rocket stability without any steering at all. The gyroscopes that sense a rocket's turns work on the same effect."
+            },
+            {
+              "title": "Jupiter-C's spinning tub",
+              "text": "Jupiter-C's upper stages were small solid rockets: 11 in a ring, 3 inside them and 1 on top, all held in a tub that was spun up by an electric motor before launch. With no steering of their own, there was nothing in them to go wrong."
+            },
+            {
+              "title": "Aim first, then fire",
+              "text": "The stage below did the steering. It carried the tub up and tipped it level, and after a coast the spinning stages fired one after another along the line they had been aimed. That is how Explorer 1 reached orbit in January 1958."
+            }
+          ],
+          "inGame": "Jupiter-C lifts just enough to put Explorer 1 into orbit: 11 kg. Its Ascent step, like every rocket's, rolls mostly on the rocket's reliability."
+        }
+      ]
+    },
+    {
+      "id": "orbital-decay",
+      "code": "E-18",
+      "title": "Why satellites fall",
+      "topic": "Orbital decay",
+      "summary": "Why satellites in low orbit fall back, why height buys time, and how the Sun speeds the fall.",
+      "sheets": [
+        {
+          "title": "Thin air, long drag",
+          "drawing": "e18-1",
+          "scale": "Logarithmic time",
+          "points": [
+            {
+              "title": "A trace of air",
+              "text": "Even 200 to 400 km up there is still a trace of air, billions of times thinner than at the ground. A satellite racing through it at 7.8 km/s bumps into enough of it to slow down, very slightly, on every lap."
+            },
+            {
+              "title": "Slower means lower",
+              "text": "Slowing down lowers the orbit, and a lower orbit meets thicker air, which slows it more. The fall speeds up until the satellite drops into the thick air and burns up. Sputnik 1's big, light rocket stage felt more drag for its weight, and came down a month before the satellite."
+            },
+            {
+              "title": "Height buys time",
+              "text": "Sputnik 1 dipped to about 215 km on each lap and fell after three months, in January 1958. Explorer 1, which never came lower than about 358 km, stayed up until 1970. A few hundred kilometres of height can mean weeks or centuries."
+            }
+          ],
+          "inGame": "You fly Sputnik 1 and Explorer 1 in Launch Window. The real ones stayed up long after their radios fell silent: Sputnik 1 for about two more months, Explorer 1 for nearly twelve years."
+        },
+        {
+          "title": "The Sun stirs the air",
+          "drawing": "e18-2",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "The Sun heats the top of the air",
+              "text": "The highest layers of the atmosphere are heated by ultraviolet light and X-rays from the Sun. When the Sun is active, with many sunspots and flares, it heats them more and they swell outward. The Sun goes from quiet to active and back about every 11 years."
+            },
+            {
+              "title": "Swollen air, stronger drag",
+              "text": "At a satellite's height the air can become several times denser while the Sun is active. Drag rises, and orbits sink faster than expected. During a burst of solar activity in March 1989, so many objects dropped lower than predicted that trackers lost sight of hundreds of them for days."
+            },
+            {
+              "title": "Skylab came down early",
+              "text": "The American space station Skylab was expected to stay up into the 1980s. A busy Sun in the late 1970s swelled the upper air, and Skylab fell in July 1979, before a planned Space Shuttle visit could boost it higher."
+            }
+          ],
+          "inGame": "Launch Window doesn't model drag: a flight ends with its last step. The real Sputnik 1 and Explorer 1 came down when the air caught up with them."
+        }
+      ]
+    },
+    {
+      "id": "balloon-tanks",
+      "code": "E-19",
+      "title": "A rocket held up by its own pressure",
+      "topic": "Balloon tanks",
+      "summary": "How the Atlas saved weight with steel skin thinner than a millimetre, held in shape by its own pressure.",
+      "sheets": [
+        {
+          "title": "A rocket held up by its own pressure",
+          "drawing": "e19-1",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "Every kilogram counts",
+              "text": "Every kilogram of tank, frame or wiring is a kilogram less that a rocket can carry. The Atlas was designed as a missile that had to throw a heavy warhead across the world, so its builders cut its weight wherever they could."
+            },
+            {
+              "title": "Held up by pressure",
+              "text": "So the Atlas had no frame inside. Its tanks were its body: stainless steel, mostly thinner than a millimetre, held in shape by the pressure of the gas inside, like a balloon, or an unopened drink can, which is surprisingly hard to crush."
+            },
+            {
+              "title": "Never let it go flat",
+              "text": "Even standing on the pad, an empty Atlas had to be kept pressurised, or it would crumple under its own weight. The trick made the Atlas very light for its size, and strong enough to put the first Americans into orbit."
+            }
+          ],
+          "inGame": "Atlas is in the VAB, and its history note tells the story of its thin steel skin."
         }
       ]
     }

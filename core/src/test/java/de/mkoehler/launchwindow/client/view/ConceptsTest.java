@@ -63,16 +63,28 @@ class ConceptsTest {
 
     @Test
     void theChipsMatchTheMockups() throws IOException {
+        // The mockups' lists, re-homed (2026-10-07) when E-06 to E-19 got their explainers: flight ideas
+        // on steps, capsule ideas on capsules, rocket ideas on rockets.
         Concepts concepts = concepts();
-        assertEquals(List.of("Orbital speed", "Retrofire", "One-shot retrorocket", "Steering jets"),
+        assertEquals(List.of("Orbital speed", "Retrofire", "One-shot retrorocket", "Steering jets", "Launch escape"),
             labels(concepts.forProgram(PACK.program("vostok").orElseThrow())));
-        assertEquals(List.of("Orbit", "Staging", "Retrofire", "Engine restarts", "Cryogenic propellant",
-            "Steering jets"), labels(concepts.forConfiguration(PACK.missionConfiguration("vostok-orbital")
-            .orElseThrow())));
+        assertEquals(List.of("Orbit", "Retrofire", "Heat shield", "The odds multiply", "Land or sea"),
+            labels(concepts.forConfiguration(PACK.missionConfiguration("vostok-orbital").orElseThrow())));
         assertEquals(List.of("Orbital speed", "Staging", "Rocket equation", "Delta-v", "Rocket classes",
-            "Cryogenic propellant"), labels(concepts.forComponent("atlas")));
-        assertEquals(List.of("Staging", "Rocket equation", "Delta-v", "Rocket classes", "Cryogenic propellant"),
-            labels(concepts.forComponent("jupiter-c")));
+            "Cryogenic propellant", "Human rating", "Max Q", "Balloon tanks"), labels(concepts.forComponent("atlas")));
+        assertEquals(List.of("Staging", "Rocket equation", "Delta-v", "Rocket classes", "Cryogenic propellant",
+            "Launch latitude", "Guidance"), labels(concepts.forComponent("jupiter-c")));
+    }
+
+    @Test
+    void noItemCarriesTooManyChips() throws IOException {
+        // Six fit the narrow configuration column in three rows; a rocket's line has room for nine.
+        Concepts concepts = concepts();
+        PACK.programs().forEach(program -> assertTrue(concepts.forProgram(program).size() <= 6, program.id()));
+        PACK.missionConfigurations().forEach(configuration -> assertTrue(
+            concepts.forConfiguration(configuration).size() <= 6, configuration.id()));
+        PACK.missionComponents().stream().filter(component -> component.rocket() != null).forEach(rocket ->
+            assertTrue(concepts.forComponent(rocket.id()).size() <= 9, rocket.id()));
     }
 
     @Test

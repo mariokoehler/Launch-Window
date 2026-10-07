@@ -1,0 +1,195 @@
+{
+ "width": 1060,
+ "height": 660,
+ "labels": [
+  {
+   "x": 24.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "How long a satellite stays up, by height"
+  },
+  {
+   "x": 140.0,
+   "y": 582.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "1 day"
+  },
+  {
+   "x": 270.663,
+   "y": 582.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "1 week"
+  },
+  {
+   "x": 368.381,
+   "y": 582.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "1 month"
+  },
+  {
+   "x": 536.163,
+   "y": 582.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "1 year"
+  },
+  {
+   "x": 690.775,
+   "y": 582.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "10 years"
+  },
+  {
+   "x": 845.388,
+   "y": 582.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "100 years"
+  },
+  {
+   "x": 1000.0,
+   "y": 582.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "1,000 years"
+  },
+  {
+   "x": 128.0,
+   "y": 539.294,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "200 km"
+  },
+  {
+   "x": 128.0,
+   "y": 440.471,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "400 km"
+  },
+  {
+   "x": 128.0,
+   "y": 341.647,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "600 km"
+  },
+  {
+   "x": 128.0,
+   "y": 242.824,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "800 km"
+  },
+  {
+   "x": 128.0,
+   "y": 144.0,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "1000 km"
+  },
+  {
+   "x": 721.907,
+   "y": 401.882,
+   "anchor": "start",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "A round orbit, typical small satellite"
+  },
+  {
+   "x": 433.626,
+   "y": 189.412,
+   "anchor": "end",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Sputnik 1"
+  },
+  {
+   "x": 433.626,
+   "y": 205.412,
+   "anchor": "end",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "215 to 939 km"
+  },
+  {
+   "x": 433.626,
+   "y": 221.412,
+   "anchor": "end",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "fell after 3 months"
+  },
+  {
+   "x": 715.961,
+   "y": 149.882,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Explorer 1"
+  },
+  {
+   "x": 715.961,
+   "y": 165.882,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "358 to 2,550 km"
+  },
+  {
+   "x": 715.961,
+   "y": 181.882,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "fell after about 12 years"
+  },
+  {
+   "x": 24.0,
+   "y": 640.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Rough values: real lifetimes vary several times with the Sun and the satellite’s shape"
+  }
+ ]
+}

@@ -1,0 +1,231 @@
+{
+ "width": 1060,
+ "height": 660,
+ "labels": [
+  {
+   "x": 24.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "A · Two ways to power a satellite"
+  },
+  {
+   "x": 105.0,
+   "y": 154.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Launch"
+  },
+  {
+   "x": 235.0,
+   "y": 154.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "After 1 week"
+  },
+  {
+   "x": 365.0,
+   "y": 154.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "After 3 weeks"
+  },
+  {
+   "x": 60.0,
+   "y": 186.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Batteries run down, then the radio falls silent"
+  },
+  {
+   "x": 620.0,
+   "y": 186.0,
+   "anchor": "start",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "Solar cells make power whenever the Sun shines"
+  },
+  {
+   "x": 24.0,
+   "y": 252.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "B · How long their radios lasted"
+  },
+  {
+   "x": 220.0,
+   "y": 298.0,
+   "anchor": "end",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Sputnik 1"
+  },
+  {
+   "x": 247.7,
+   "y": 298.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "about 3 weeks"
+  },
+  {
+   "x": 220.0,
+   "y": 348.0,
+   "anchor": "end",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Explorer 1"
+  },
+  {
+   "x": 310.4,
+   "y": 348.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "about 4 months"
+  },
+  {
+   "x": 220.0,
+   "y": 398.0,
+   "anchor": "end",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Vanguard 1, battery radio"
+  },
+  {
+   "x": 319.2,
+   "y": 398.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "about 3 months"
+  },
+  {
+   "x": 220.0,
+   "y": 448.0,
+   "anchor": "end",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Vanguard 1, solar radio"
+  },
+  {
+   "x": 294.6,
+   "y": 448.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "solar powered: about six years"
+  },
+  {
+   "x": 257.5,
+   "y": 522.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "1958"
+  },
+  {
+   "x": 367.5,
+   "y": 522.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "1959"
+  },
+  {
+   "x": 477.5,
+   "y": 522.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "1960"
+  },
+  {
+   "x": 587.5,
+   "y": 522.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "1961"
+  },
+  {
+   "x": 697.5,
+   "y": 522.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "1962"
+  },
+  {
+   "x": 807.5,
+   "y": 522.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "1963"
+  },
+  {
+   "x": 917.5,
+   "y": 522.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "1964"
+  },
+  {
+   "x": 788.0,
+   "y": 551.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Battery"
+  },
+  {
+   "x": 898.0,
+   "y": 551.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Solar cells"
+  },
+  {
+   "x": 24.0,
+   "y": 640.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Dates rounded to the month · bars to scale"
+  }
+ ]
+}

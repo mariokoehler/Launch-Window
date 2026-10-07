@@ -17,6 +17,7 @@ so its label stays readable over hatching.
 
 Outputs, per drawing, under assets/ui/explainers/:
   <name>.png   the drawing without its text, 2x
+  <name>-thumb.png  the same at 1x, for the Museum's cards (a sheet's drawing, not a point's small one)
   <name>.json  {"width", "height", "labels": [{"x", "y", "anchor", "kind", "size", "color", "text"}]}
                x and y in the SVG's own units, y the text's baseline; anchor start/middle/end;
                kind the CSS class (d-lbl, d-lbl-gold, d-txt, d-sm, d-head, d-big, d-body) or "num"
@@ -157,7 +158,10 @@ def convert(path):
            f'height="{height * SCALE}">{ground(width, height, grid)}{body}</svg>')
     fonts = sorted(glob.glob(os.path.join(FONTS, "*.ttf")))
     png = bytes(resvg_py.svg_to_bytes(svg_string=svg, font_files=fonts, skip_system_fonts=True))
-    Image.open(io.BytesIO(png)).convert("RGB").save(os.path.join(OUT, name + ".png"), optimize=True)
+    image = Image.open(io.BytesIO(png)).convert("RGB")
+    image.save(os.path.join(OUT, name + ".png"), optimize=True)
+    if grid:
+        image.resize((width, height), Image.LANCZOS).save(os.path.join(OUT, name + "-thumb.png"), optimize=True)
     with open(os.path.join(OUT, name + ".json"), "w", encoding="utf-8", newline="\n") as file:
         json.dump({"width": width, "height": height, "labels": labels}, file, indent=1, ensure_ascii=False)
         file.write("\n")

@@ -1,0 +1,177 @@
+{
+ "width": 1060,
+ "height": 660,
+ "labels": [
+  {
+   "x": 24.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "A · Mercury: the ocean"
+  },
+  {
+   "x": 40.0,
+   "y": 420.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Florida"
+  },
+  {
+   "x": 60.0,
+   "y": 214.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Cape"
+  },
+  {
+   "x": 450.0,
+   "y": 352.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Carrier"
+  },
+  {
+   "x": 386.0,
+   "y": 196.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Helicopter"
+  },
+  {
+   "x": 330.0,
+   "y": 392.0,
+   "anchor": "middle",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "Splashdown area"
+  },
+  {
+   "x": 310.0,
+   "y": 440.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Ships wait around the target;"
+  },
+  {
+   "x": 310.0,
+   "y": 456.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "helicopters lift the capsule out."
+  },
+  {
+   "x": 320.0,
+   "y": 560.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Atlantic Ocean"
+  },
+  {
+   "x": 554.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "B · Vostok: the steppe"
+  },
+  {
+   "x": 656.0,
+   "y": 524.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Launch site"
+  },
+  {
+   "x": 777.0,
+   "y": 346.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Ball"
+  },
+  {
+   "x": 847.0,
+   "y": 290.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Pilot"
+  },
+  {
+   "x": 810.0,
+   "y": 410.0,
+   "anchor": "middle",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "Landing zone"
+  },
+  {
+   "x": 810.0,
+   "y": 426.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "ball and pilot land a few km apart"
+  },
+  {
+   "x": 940.0,
+   "y": 186.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Helicopter"
+  },
+  {
+   "x": 704.0,
+   "y": 476.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Truck"
+  },
+  {
+   "x": 810.0,
+   "y": 560.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Steppe of Kazakhstan and southern Russia"
+  },
+  {
+   "x": 24.0,
+   "y": 640.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Schematic, not real maps"
+  }
+ ]
+}

@@ -95,8 +95,11 @@ public final class ExplainerScreen extends SessionScreen {
         Table header = new Table();
         Table titles = new Table();
         titles.defaults().left();
-        titles.add(ui.label("Explainer · " + explainer.title() + " · Sheet " + (sheet + 1) + " of "
-            + explainer.sheets().size(), Theme.TextStyle.EYEBROW, Theme.GOLD_ON_PAGE)).padBottom(6f).row();
+        // A one-sheet explainer's eyebrow has no sheet count, as in the mockups.
+        String count = explainer.sheets().size() == 1 ? ""
+            : " · Sheet " + (sheet + 1) + " of " + explainer.sheets().size();
+        titles.add(ui.label("Explainer · " + explainer.eyebrowTopic() + count, Theme.TextStyle.EYEBROW,
+            Theme.GOLD_ON_PAGE)).padBottom(6f).row();
         titles.add(ui.label(current.title(), Theme.TextStyle.EXPLAINER_TITLE, Theme.ON_PAGE_STRONG));
         header.add(titles).expandX().left().bottom();
         Table close = new Table();

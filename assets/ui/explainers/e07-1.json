@@ -1,0 +1,123 @@
+{
+ "width": 1060,
+ "height": 660,
+ "labels": [
+  {
+   "x": 24.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "A · A pointed nose"
+  },
+  {
+   "x": 36.0,
+   "y": 226.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Air rushing past"
+  },
+  {
+   "x": 430.0,
+   "y": 150.0,
+   "anchor": "end",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "Shock wave"
+  },
+  {
+   "x": 170.0,
+   "y": 480.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "The shock touches the tip, and the hot air"
+  },
+  {
+   "x": 170.0,
+   "y": 496.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "hugs the surface: the heat soaks"
+  },
+  {
+   "x": 170.0,
+   "y": 512.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "straight into the nose."
+  },
+  {
+   "x": 554.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "B · A blunt face"
+  },
+  {
+   "x": 730.0,
+   "y": 130.0,
+   "anchor": "start",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "Most of the heat stays in the air"
+  },
+  {
+   "x": 730.0,
+   "y": 146.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "and streams away past the capsule"
+  },
+  {
+   "x": 660.0,
+   "y": 500.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "The shock stands off ahead: a cushion of"
+  },
+  {
+   "x": 660.0,
+   "y": 516.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "glowing air takes most of the heat, and"
+  },
+  {
+   "x": 660.0,
+   "y": 532.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "only a little reaches the capsule."
+  },
+  {
+   "x": 24.0,
+   "y": 640.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Not to scale · from orbit, the air meets the capsule at about 7.8 km/s"
+  }
+ ]
+}

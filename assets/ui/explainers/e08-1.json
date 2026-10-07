@@ -1,0 +1,240 @@
+{
+ "width": 1060,
+ "height": 660,
+ "labels": [
+  {
+   "x": 24.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "A · One flight, 11 steps"
+  },
+  {
+   "x": 75.0,
+   "y": 104.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "1"
+  },
+  {
+   "x": 166.0,
+   "y": 104.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "2"
+  },
+  {
+   "x": 257.0,
+   "y": 104.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "3"
+  },
+  {
+   "x": 348.0,
+   "y": 104.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "4"
+  },
+  {
+   "x": 439.0,
+   "y": 104.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "5"
+  },
+  {
+   "x": 530.0,
+   "y": 104.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "6"
+  },
+  {
+   "x": 621.0,
+   "y": 104.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "7"
+  },
+  {
+   "x": 712.0,
+   "y": 104.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "8"
+  },
+  {
+   "x": 803.0,
+   "y": 104.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "9"
+  },
+  {
+   "x": 894.0,
+   "y": 104.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "10"
+  },
+  {
+   "x": 985.0,
+   "y": 104.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "11"
+  },
+  {
+   "x": 712.0,
+   "y": 196.0,
+   "anchor": "middle",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "One weak link breaks the chain"
+  },
+  {
+   "x": 24.0,
+   "y": 236.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Vostok · Orbital flight: launch preparations, countdown, launch, ascent, deployment, orbital flight,"
+  },
+  {
+   "x": 24.0,
+   "y": 252.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "re-entry preparations, retrofire, modules separation, re-entry, descent and landing."
+  },
+  {
+   "x": 24.0,
+   "y": 310.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "B · Chance the whole flight succeeds"
+  },
+  {
+   "x": 980.0,
+   "y": 318.0,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Every time"
+  },
+  {
+   "x": 24.0,
+   "y": 359.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Each step 99.9 %"
+  },
+  {
+   "x": 961.682,
+   "y": 359.0,
+   "anchor": "end",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#ffffff",
+   "text": "about 99 %"
+  },
+  {
+   "x": 24.0,
+   "y": 423.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Each step 99 %"
+  },
+  {
+   "x": 890.457,
+   "y": 423.0,
+   "anchor": "end",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#ffffff",
+   "text": "about 90 %"
+  },
+  {
+   "x": 24.0,
+   "y": 487.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Each step 95 %"
+  },
+  {
+   "x": 642.288,
+   "y": 487.0,
+   "anchor": "end",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "about 57 %"
+  },
+  {
+   "x": 24.0,
+   "y": 551.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Each step 90 %"
+  },
+  {
+   "x": 448.496,
+   "y": 551.0,
+   "anchor": "end",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#ffffff",
+   "text": "about 31 %"
+  },
+  {
+   "x": 24.0,
+   "y": 640.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Whole-flight chance = the chance of one step, multiplied by itself 11 times"
+  }
+ ]
+}
