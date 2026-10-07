@@ -189,6 +189,66 @@ public final class ContentPackPlayouts {
     private boolean keepPlaying;
     private final int[] peopleTally = new int[5];
 
+    /**
+     * How big the player's state gets on the wire, per season: the largest and the average size in
+     * bytes of the {@code FetchStateResponse} a client would receive (the stripped copy, Kryo, not
+     * gzipped), which has to fit Kryo's 64 KB object buffer.
+     *
+     * @param games   the games played
+     * @param largest the largest size seen at each season, index 0 for season 1
+     * @param average the average size at each season
+     */
+    public record SizeReport(int games, int[] largest, double[] average) {
+    }
+
+    /**
+     * Plays games to their end, measuring the state each season ({@link SizeReport}). Draws nothing
+     * from the games' random stream, so the games play as in {@link #run}.
+     *
+     * @param games   how many games
+     * @param seasons how many seasons each
+     * @param seed    the seed
+     * @return the sizes
+     */
+    public SizeReport sizes(int games, int seasons, long seed) {
+        sizeLargest = new int[seasons];
+        sizeSum = new long[seasons];
+        sizeCount = new int[seasons];
+        keepPlaying = true;
+        try {
+            run(games, seasons, seed);
+        } finally {
+            keepPlaying = false;
+        }
+        double[] average = new double[seasons];
+        for (int i = 0; i < seasons; i++) {
+            average[i] = sizeCount[i] == 0 ? 0 : sizeSum[i] / (double) sizeCount[i];
+        }
+        int[] largest = sizeLargest;
+        sizeLargest = null;
+        return new SizeReport(games, largest, average);
+    }
+
+    private int[] sizeLargest;
+    private long[] sizeSum;
+    private int[] sizeCount;
+    private final com.fasterxml.jackson.databind.ObjectMapper sizeMapper =
+        new com.fasterxml.jackson.databind.ObjectMapper();
+
+    private void measure(PlayerSnapshot snapshot, int season) {
+        com.esotericsoftware.kryo.Kryo kryo = new com.esotericsoftware.kryo.Kryo();
+        de.mkoehler.launchwindow.net.MessageRegistry.register(kryo);
+        java.io.ByteArrayOutputStream bytes = new java.io.ByteArrayOutputStream();
+        try (com.esotericsoftware.kryo.io.Output output = new com.esotericsoftware.kryo.io.Output(bytes)) {
+            kryo.writeObject(output, de.mkoehler.launchwindow.net.messages.FetchStateResponse.success(
+                de.mkoehler.launchwindow.rules.Personality.forClient(snapshot, sizeMapper)));
+        }
+        int size = bytes.size();
+        sizeLargest[season] = Math.max(sizeLargest[season], size);
+        sizeSum[season] += size;
+        sizeCount[season]++;
+    }
+
     public Report run(int games, int seasons, long seed) {
         Random random = new Random(seed);
         Tally tally = new Tally();
@@ -225,6 +285,9 @@ public final class ContentPackPlayouts {
             List<ResolutionEvent> seasonEvents = SeasonResolver.advanceSeason(snapshot, context, random, watch);
             goalTally.commit(seasonEvents);
             checkState(snapshot);
+            if (sizeLargest != null) {
+                measure(snapshot, season);
+            }
 
             for (ResolutionEvent event : seasonEvents) {
                 if (event instanceof MissionStepResolved resolved) {

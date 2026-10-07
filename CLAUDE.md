@@ -155,7 +155,7 @@ mvn -pl dev-tools compile exec:java -DmainClass=de.mkoehler.launchwindow.devtool
 - **Dev mode:** `"devMode": true` in the server's `game-meta.json` (restart the server) shows
   "Dev · Resolve turn now" on the hub and allows `DevClient`'s `funds` cheat.
 - **Bot playouts:** `mvn -pl dev-tools compile exec:java -DmainClass=de.mkoehler.launchwindow.devtools.analysis.ContentPackPlayouts`
-  (also `PersonnelLifecyclePlayouts`, `CareerCurves`; `design.md` §3.10).
+  (also `PersonnelLifecyclePlayouts`, `CareerCurves`, `StateSizes`; `design.md` §3.10).
 - **Releasing** (ported from Robot-Rampage 2026-10-06; its and StarWars' CLAUDE.md hold the
   gotchas):
   - **Client zip, locally:** `mvn -pl lwjgl3 -am -Prelease-client -DskipTests verify` gives
@@ -221,8 +221,10 @@ cd assets && java --enable-native-access=ALL-UNNAMED -cp "../lwjgl3/target/class
 - **Append-only:** `MessageRegistry` registers new types last. `ResolutionEvent`'s
   `@JsonSubTypes` ids are never renamed or reused, and event and report fields are only added
   (`design.md` §3.7).
-- **Kryo's 64 KB object buffer:** the turn report goes over the wire gzipped, and the server
-  refuses a report that would still be too big; an oversized message drops the connection.
+- **Kryo's 64 KB object buffer:** the turn report and the player's state go over the wire as
+  gzipped JSON (`TurnReportResponse`, `FetchStateResponse`), and the server refuses a report that
+  would still be too big; an oversized message drops the connection. A full agency's state is
+  about 17 KB zipped (`StateSizeTest`; dev-tools `StateSizes` measures the bots' over 80 seasons).
 - **KryoNet's `Client.stop()`** can block about 11 s on Windows. Never close a client on a
   thread a result waits on.
 - `LaunchRequest` copies `rocketIds` with `List.copyOf`, which rejects nulls: send "" for a

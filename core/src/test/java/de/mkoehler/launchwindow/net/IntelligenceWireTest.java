@@ -109,6 +109,19 @@ class IntelligenceWireTest {
         return folder;
     }
 
+    /**
+     * Gives an agency full folders on several rivals, every list at its cap.
+     *
+     * @param state  the agency
+     * @param rivals how many rivals
+     */
+    static void fillFolders(PlayerSnapshot state, int rivals) {
+        for (int i = 0; i < rivals; i++) {
+            state.getIntelligence().getFolders().put("k" + i, folder("Rival Agency Number " + i,
+                Intelligence.FILES_KEPT, Intelligence.CATCHES_KEPT));
+        }
+    }
+
     @Test
     void aPopulatedIntelligenceStateCrossesTheWire() {
         PlayerSnapshot state = new PlayerSnapshot("Orion Spaceworks", Archetype.NASA, 20_000, 4_000, 3_000, 31);
@@ -164,10 +177,7 @@ class IntelligenceWireTest {
         // Five rivals with every list at its cap: full dossiers, 12 tidbits, 8 files, 10 catches.
         PlayerSnapshot state = new PlayerSnapshot("Orion Spaceworks", Archetype.NASA, 20_000, 4_000, 3_000, 60);
         int empty = write(FetchStateResponse.success(state)).length;
-        for (int i = 0; i < 5; i++) {
-            state.getIntelligence().getFolders().put("k" + i, folder("Rival Agency Number " + i,
-                Intelligence.FILES_KEPT, Intelligence.CATCHES_KEPT));
-        }
+        fillFolders(state, 5);
         int full = write(FetchStateResponse.success(state)).length;
         int added = full - empty;
         assertTrue(added < KRYO_BUFFER / 4, "five full folders add " + added + " bytes");

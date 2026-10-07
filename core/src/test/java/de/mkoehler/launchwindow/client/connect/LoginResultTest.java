@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -60,7 +59,7 @@ class LoginResultTest {
         PlayerSnapshot state = new PlayerSnapshot("Orion", Archetype.NASA, 1, 2, 3, 1);
         LoginResult inGame = LoginResult.fromFetch(FetchStateResponse.success(state));
         assertEquals(LoginResult.Kind.IN_GAME, inGame.kind());
-        assertSame(state, inGame.state());
+        assertEquals("Orion", inGame.state().getAgencyName(), "the state, unpacked from the reply");
         assertEquals(LoginResult.Kind.NEEDS_SLOT,
             LoginResult.fromFetch(FetchStateResponse.failure(ClaimSlotRequest.SLOT_CLAIM_REQUIRED)).kind());
         assertEquals(LoginResult.Kind.FAILED, LoginResult.fromFetch(FetchStateResponse.failure("disk full")).kind());
