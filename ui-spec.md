@@ -63,6 +63,11 @@ missions. Decisions from that review are marked *(decided)*.
   with one `sc-for` per row.
 - **Anything drawn over the hub art** must be checked on the brightest variant (Soviet winter
   noon) and the darkest (winter night).
+- **Screen canvases use the Design type** (the Design System type is for the design system
+  itself).
+- **UI icons and portraits:** upload `assets/ui/icons/*.png` and `assets/ui/portraits/*.jpg` as
+  canvas assets. The icons are white on transparent, so use them as CSS masks (`mask-image` in a
+  `<helmet>` rule, `background-color: currentColor`) to colour them like the client tints them.
 - **Local screenshots of an artboard:** save the canvas's `artifact-type/dc-runtime.js` next to
   the `.dc.html` files as `support.js`, copy the `/_blob/` assets into a local `_blob/` folder,
   serve the folder over HTTP (SVGs as `image/svg+xml`) and screenshot with headless Chromium,
@@ -174,6 +179,13 @@ On the right:
     candidate, marks candidates with a shown relationship to someone on the team (component 22),
     and shows candidates' revealed traits (component 20). A Perfectionist on the team shows the
     raised cap on the reliability bar.
+    *Mocked up (2026-10-07, unconfirmed; see the note after component 22):* a "Team chemistry" row
+    between the reliability bar and the slots; the expected gain includes the known chemistry. A
+    revealed Perfectionist adds a second, dashed gold cap marker, and the caption says "R&D cap
+    91.2, raised to 94.2 while Lindqvist, a perfectionist, is on the team". The assign dialog (the
+    built list of idle engineers, best in the component's skill first) adds a "The team now" strip
+    with its chemistry, and per candidate: traits under the name, marks for relationships with the
+    team, the skill, the chemistry preview and Assign.
 11. **Personnel overview** (the landing screen of each personnel building,
     *(decided)*, as in BASPM). The roster as personnel rows with row actions;
     filter and sort by state and by skill (skill icons); a **department summary**
@@ -182,7 +194,8 @@ On the right:
     **Manage department**. **Ref:** `manage_department.png`, `SET_centre.png`,
     `astronaut_centre_*.png`. *Specified 2026-10-07:* each row shows the person's revealed traits
     (component 20) and, later, their ambition with seasons left; clicking the name opens the person
-    page (§4.14).
+    page (§4.14). *Mocked up (2026-10-07, unconfirmed):* a 250 px Traits column after the state,
+    with "Still getting to know them" under any chips while the person is in the reveal window.
 
     **Row actions:**
     - **Train:** opens the training dialog (component 12);
@@ -223,6 +236,10 @@ On the right:
     themselves stay hidden. **Later**, an agency with an intelligence service gets a **Background
     check** action per candidate that reveals one trait (or "no notable traits") for a fee;
     design room for it now, but it isn't built until espionage.
+    *Mocked up (2026-10-07, unconfirmed):* the hint sits under the age line, set off by a thin
+    rule: "A former colleague:" in caption, then the word in italics. Below it, a locked, dashed
+    "Background check" button; its answer would be a trait chip (or "no notable traits") in the
+    same place. The selected recruit's card repeats the hint.
 15. **History note** *(decided 2026-10-04; how it looks is open)*. A small icon
     placed next to a label, field, or value. On mouse-over it shows a short card,
     two to four sentences, about the real history or engineering behind that
@@ -486,7 +503,7 @@ On the right:
       - the Museum's encyclopedia grid is 8 px lower, to leave room for the dots over its top row.
       - Engine restarts is attached to the Vostok configurations and R-7 (Vostok) by name, not
         to the Retrofire step, so it stays off Mercury, whose retropack was solid rockets.
-20. **Trait chip** *(specified 2026-10-07 for `design.md` §2.2(d), to be mocked up)*. One of a
+20. **Trait chip** *(specified 2026-10-07 for `design.md` §2.2(d), mocked up the same day)*. One of a
     person's revealed traits, such as "Workaholic". Shown on personnel rows (component 11), the
     person page (§4.14) and in staffing pickers. A tooltip says what it does in plain words
     ("More R&D progress. Loses morale fast when idle."), read from the rules' constants.
@@ -497,7 +514,16 @@ On the right:
     - **Not known yet:** never show empty slots or a count (that would leak how many traits
       someone has). Until someone's traits have all had time to show, their row or page may
       say "still getting to know them"; afterwards "nothing more to discover" (or nothing).
-21. **Chemistry indicator** *(specified 2026-10-07, to be mocked up)*. How well a team works
+    - **Mocked up (2026-10-07)** on the `Launch Window — People` canvas (see the note after
+      component 22). Look, all **unconfirmed**: a 22 px tag filled with `skill-track`, Work Sans 500
+      12 px in `ink`, no border, square corners, never wrapping. One fill for every trait. Team traits
+      carry a small three-dot mark (new icon `trait-team`) before the label; personal traits have
+      none. It isn't a button: default cursor and no hover change. Hovering shows the client's
+      tooltip with the label, "Personal trait" or "Team trait · acts on the whole team", and
+      `TraitTexts.effect`. While someone is in the reveal window, "Still getting to know them" sits
+      in italic `ink-muted` under any chips; after it, "Nothing more to discover" on the person page
+      only (rows show nothing).
+21. **Chemistry indicator** *(specified 2026-10-07, mocked up the same day)*. How well a team works
     together: one component's R&D engineers, or one mission's crew and controllers. Five levels
     from the chemistry value (−1..+1): **Poor** (below −0.5), **Strained** (−0.5 to −0.15),
     **Neutral**, **Good** (0.15 to 0.5), **Excellent** (above 0.5), with the effect on output as
@@ -510,11 +536,52 @@ On the right:
     - **Unknown factors:** the client only knows revealed traits and shown relationships, so the
       indicator says "may differ: unknown factors" while some of the team's traits or pairs are
       still hidden. It must never hint at what is hidden.
-22. **Relationship marker** *(specified 2026-10-07, to be mocked up)*. A shown relationship
+    - **Mocked up (2026-10-07).** Look, all **unconfirmed**: a five-step scale (12 × 8 px steps,
+      2 px apart) with only the current step filled, then the level's word in Work Sans 600 and
+      "+4 % output" in `ink-muted`. Unlike traits, colour does code good and bad here: Poor `danger`,
+      Strained `gold` (word in `gold-text`), Neutral `navy` (word in `ink`), Good and Excellent
+      `success`; the word and the step's position carry it too. "may differ: unknown factors" sits
+      under it in italic caption. A compact form (6 px steps, no "output") goes in rows and pickers,
+      and the preview reads "Good → Strained −5 %", with "may differ" under it when the candidate or
+      the team is still in the reveal window. The breakdown opens on hover and pins on click, like
+      a history note: a white card with a navy rule, one line per known reason with its glyph
+      (relationship marker, or the team-trait dots) and only a direction (+ or −, in `success` or
+      `danger`), never an amount; with unknown factors it ends with "May differ: unknown factors.
+      Some of this team are still new to each other, so the real chemistry can be better or worse."
+22. **Relationship marker** *(specified 2026-10-07, mocked up the same day)*. A shown relationship
     between two people: "works well with" or "clashes with". Shown on the person page as a list,
     and in staffing pickers next to a candidate who has one with someone already in the team (a
     small mark and the partner's name in the tooltip), so the player can build teams around
     friendships or keep enemies apart.
+    - **Mocked up (2026-10-07).** Look, all **unconfirmed**: linked rings in `success` for "works
+      well with" and a spark in `danger` for "clashes with" (new icons `rel-good`, `rel-clash`):
+      a relationship, unlike a trait, is plainly good or bad. On the person page each is a row:
+      40 px portrait, the kind in label caps in its colour, the name (opens their page), and on
+      the right what they do now and "7 seasons together". In pickers and on mission tiles, the
+      glyph and the partner's surname; the tooltip names them in full ("Works well with Gunnar
+      Lindqvist · Already on this team").
+
+**People screens mockup (2026-10-07)** on the canvas `Launch Window — People` (a Design canvas;
+ask the user for the link), for `design.md` §2.2(d) phases 1 to 3, with room for phase 4. Twelve
+artboards in six rows, each row with a yellow note of its choices, all **unconfirmed**:
+- **Components 20 to 22** (`Main`): every trait, tooltips, the five chemistry levels, unknown
+  factors, compact and preview forms, the breakdown, both relationship forms, and a list of what's
+  new: no new colour tokens; icons `trait-team`, `rel-good`, `rel-clash` (inline SVG so far, for
+  `assets-raw/svg/ui/` and the UI Asset Sheet); a dashed gold "raised cap" marker on the
+  reliability bar. `TraitChip`, `ChemistryIndicator` and `RelationshipMarker` go into the design
+  system once the user confirms the look.
+- **Person page** (§4.14) in four states: a new hire, a veteran with phase 4 placeholders, someone
+  with nothing more to discover, and a memorial entry.
+- **Payload R&D** (component 10): the board with chemistry, and the assign dialog.
+- **Assemble mission** (§4.6.8) with the mission's chemistry, and the CAPCOM picker.
+- **SET Centre roster** (component 11) with a Traits column, and the **hire screen** (component 14)
+  with the colleague's hint and the later Background check.
+- **Turn report** (§4.4) with the people lines.
+
+The samples are an American agency in 1961 · S3 (SET Centre, hiring, person pages, turn report) and
+a Soviet one in 1960 · S3 (Vostok Orbital), with names from the game's own lists, its portraits,
+and chemistry worked out by the as-built rules from the revealed traits and shown pairs.
+Writing them turned up two things for the rules, recorded in `design.md` §2.2(d).
 
 ---
 
@@ -710,7 +777,9 @@ end-of-season news screen. **Ref:** `bulletin_news_*.png`,
 - training finished (skill gain), Expert trait earned;
 - *(specified 2026-10-07)* people news: a trait revealed ("After two seasons on the Atlas team,
   Kowalski turns out to be a workaholic"), a relationship shown ("Ivanova and Petrov work well
-  together"), and later ambitions formed, met, missed or overtaken; names open the person page;
+  together"), and later ambitions formed, met, missed or overtaken; names open the person page
+  (*mocked up 2026-10-07, unconfirmed:* first in the People card, lightly tinted, a trait line
+  ending with its trait chip and a relationship line with its marker and "Clash" or "Work well");
 - departures (retired, resigned, dismissed, perished, lost in an accident),
   hires;
 - the budget: running costs, funding, and a review if one happened (new rate);
@@ -897,7 +966,12 @@ does (`baspm.md` §10.11), plus the chosen rocket per launch:
 - **Team chemistry** *(specified 2026-10-07)*: the crew and controllers' chemistry (component 21)
   next to the staffing, updating as slots are filled; pickers show candidates' revealed traits
   and relationship marks with people already placed (components 20, 22). Auto-assign keeps
-  picking by skill only (first pass).
+  picking by skill only (first pass). *Mocked up (2026-10-07, unconfirmed; see the note after
+  component 22):* one chemistry for the whole mission, crew and consoles together as the rules
+  compute it, in a card under the flight crew with its reasons listed; the odds say they include
+  it. Tiles show revealed traits and relationship marks (only when the partner is on this mission
+  too). The slot pickers get the R&D assign dialog's columns, the current holder highlighted with
+  "Keep".
 - Slots no step uses show **"Not required"** and stay empty, as in BASPM. Crewed
   Mercury, for example, has 11 control slots and uses 10 (9 controllers + CAPCOM).
 - Click a slot to pick an available employee of its type: idle, not unavailable, and
@@ -1347,7 +1421,7 @@ user (2026-10-04)**:
 - **Without the summaries** (a failed fetch), it still names the winner and leaves the
   tables out.
 
-### 4.14 Person page *(specified 2026-10-07 for `design.md` §2.2(d), to be mocked up)*
+### 4.14 Person page *(specified 2026-10-07 for `design.md` §2.2(d), mocked up the same day)*
 **Purpose:** everything about one employee, so the player gets to know them. Opened from a
 personnel row (component 11), from a name in the turn report, and from staffing pickers.
 Phase 3 needs the top half; the rest arrives with phase 4.
@@ -1364,6 +1438,22 @@ Phase 3 needs the top half; the rest arrives with phase 4.
   outcome, goals), firsts, traits revealed, relationships formed, ambitions met or missed.
 - **Actions:** the row actions of component 11 (Train, Expert training, Dismiss).
 - **For a memorial entry,** the same page, read-only, ending with how they died.
+
+**Mocked up (2026-10-07)** in four states (see the note after component 22). Choices, all
+**unconfirmed**:
+- **Three columns:** who they are (128 px portrait, group, age and retirement, state, salary, morale,
+  loyalty, Train and Dismiss), what they're like (skills with learning potential, traits,
+  relationships), and their story (ambition, career record).
+- **A new hire** shows "Still getting to know them" and the colleague's hint they were hired with.
+  Relationships: "None yet. A relationship shows once two people have worked side by side long
+  enough to really get on, or not."
+- **Phase 4:** loyalty as a navy bar under morale; an Ambition card with the goal, a gold "5 seasons
+  left" badge and when it was said (left out for someone without an ambition); the Career record as
+  a timeline, newest first, gold dots for traits, relationships and flights. The veteran shows them
+  with placeholder content; the other states mark the room with dashed boxes.
+- **Memorial:** reached from the Museum, the same page with a greyscale portrait, "Served 1959 to
+  1961", skills at the end, no state, salary, morale or actions, and a "How it ended" card under
+  the identity card.
 
 ---
 
