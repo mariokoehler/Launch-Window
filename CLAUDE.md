@@ -58,6 +58,9 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
 - **Intelligence is designed** (`design.md` §2.9, 2026-10-07): no sabotage, an eighth building
   (the Intelligence Office, hotspot `INTELLIGENCE_OFFICE`), a level dial with actions and
   passives. Its screens (`ui-spec.md` §4.15) are next for Claude Design.
+- **Intelligence** (`design.md` §2.9): designed 2026-10-07, not built. The Intelligence Office
+  (`ui-spec.md` §4.15) and the hire screen's background check are mocked up on the canvas
+  `Launch Window — Intelligence Office` (the Artifact tool's list finds it), look unconfirmed.
 - **PR duty for astronauts is built** (`design.md` §2.2(c)), with 39 press stories
   (`assets/content/pr-press.json`), no repeats, and effects beyond prestige. Next is the next
   play test.

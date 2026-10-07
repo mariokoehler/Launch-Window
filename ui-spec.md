@@ -263,6 +263,12 @@ On the right:
     The **passive** find (20 % per candidate) shows the same way from the moment the pool
     appears, marked "Found by the Intelligence Office". A candidate can show the colleague's hint
     and a revealed trait together.
+    *Mocked up (2026-10-07, unconfirmed):* on the `Launch Window — Intelligence Office` canvas
+    (§4.15). The button sits under the hint ("Background check · uses 1 of 1 action", with the
+    binoculars); the answer takes its place, a trait chip or a dashed "No notable traits", with a
+    small line saying where it came from ("Background check, this season" or "Found by the
+    Intelligence Office"). Disabled, it greys out with the reason under it. A trait found before
+    hiring rides along on the selected recruit's card.
 15. **History note** *(decided 2026-10-04; how it looks is open)*. A small icon
     placed next to a label, field, or value. On mouse-over it shows a short card,
     two to four sentences, about the real history or engineering behind that
@@ -1526,7 +1532,7 @@ Phase 3 needs the top half; the rest arrives with phase 4.
   keeps no skills, traits or id yet (`design.md` §2.2(d)). The mockup's "Mockup only" switchers and
   dashed phase 4 boxes aren't built.
 
-### 4.15 Intelligence Office *(specified 2026-10-07 for `design.md` §2.9, Intelligence; not mocked up yet)*
+### 4.15 Intelligence Office *(specified 2026-10-07 for `design.md` §2.9, Intelligence; mocked up the same day)*
 **Purpose:** the agency's intelligence service: how big it is, what it does this season, and
 everything it has learned about rivals. An **eighth hub building** (polygon `INTELLIGENCE_OFFICE`,
 drawn by the user on both hub images), with a marker and footer icon of its own (proposed:
@@ -1577,6 +1583,35 @@ binoculars, our own drawing; add it to the UI Asset Sheet). All rules and number
 
 **Turn report:** an "Intelligence" section (level changes, reveals, dossiers, tidbits, catches),
 each line linking to its folder.
+
+**Mocked up (2026-10-07)** on the canvas `Launch Window — Intelligence Office` (the Artifact tool's
+list finds it): the overview at level 2 climbing to 3 and at level 0, operations, the folder of one
+rival, the hire screen with the background check (an action free, the action used), and a sheet of
+the new pieces. Not mocked up: the turn report's Intelligence section. Choices the spec left open,
+all **unconfirmed** (each row's yellow note lists them):
+- **Tabs** Overview, Operations, Folders; at level 0 Operations is locked and Folders stays open,
+  empty.
+- **Overview:** the target as four segments with − and + (current navy, target framed gold), a gold
+  "Reaches level 3 in 1 season" badge; costs now, at the target and on the way; the season's
+  actions as a numbered list, each used one named; the ladder top-down (3 to 0), current solid,
+  target dashed gold, locked rungs dimmed with a lock on what they unlock; counter-intelligence as
+  three pips with the catches both ways; a history note card (the N1 seen from orbit, §1.1).
+  Level 0 explains the service in three lines (own people, rival agencies, rivals' people).
+- **Footer:** a sixth chip with the binoculars, "L2 → 3 · 1 / 2" (level, target when it differs,
+  actions used), opening the office.
+- **Operations:** one card walks operation, rival, area; each rival row shows its chance (exact
+  with source and date, or "40–85 %, depending on their counter-intelligence"). An odds card shows
+  Succeeds, Caught (failure × catch chance) and Answer, and a red box what being caught costs and
+  teaches each side. Queued operations have Cancel; last season's results link to their folders.
+- **Folders:** the rival list shows each rival's level line and newest dossier, with the gold new
+  dot; the header gives the level with date and source. Dossiers date independently. A personnel
+  file shows the three best skills as ranges, with loyalty and ambition marked as phase 4.
+- **Pieces:** the binoculars icon (24 px grid, 2 px round strokes; to become
+  `assets-raw/svg/ui/binoculars.svg` and `assets/ui/icons/binoculars.png`, and go on the UI Asset
+  Sheet), the hub marker in the other markers' style (checked on the brightest and darkest hub
+  art), the reliability bar as a range band (navy at 42 % with solid ends, the gold cap kept), the
+  dossier stamp ("As of Spring 1962", a dashed "Never assessed"), the "may have changed since" tag,
+  and the background-check states. No new colour tokens.
 
 ---
 
