@@ -1132,6 +1132,20 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
       the state now goes over the wire as gzipped JSON like the turn report: about 17 KB
       (`StateSizeTest`, 2026-10-07). The bots' states stay under 8 KB over 80 seasons
       (dev-tools `StateSizes`).
+  - **Balance check** (dev-tools `IntelligencePlayouts`, 2026-10-07: four agencies, each spending
+    every action every season, 24 seasons, 1,000 games; only the intelligence rules run). Per
+    agency over the 24 seasons:
+    - **Cost:** level 2 about 340 a season (8,200 in all), level 3 about 660 (15,900), against a
+      starting bank of 25,000 and funding of 3,000 a season.
+    - **Against a mix of levels 0 to 3:** level 2 gets 29 dossiers and 3.5 tidbits and is caught 4.6
+      times (92 prestige); level 3 gets 31 dossiers, 15 personnel files and 6 tidbits for the same
+      catches. Level 3 costs twice as much mainly for the files, which only pay off once poaching
+      exists. 65–70 % of operations succeed, 7–10 % are caught.
+    - **An arms race (all at level 3):** 40 % succeed, 24 % are caught, about 15 catches each way
+      and 306 prestige lost per agency: roughly one mid-sized goal (goals pay 120 to 3,000).
+    - **Rival levels become known fast:** 77–85 % of the time each rival's level is known, from
+      plans dossiers and catches; a level 1 service alone, by catching agents, knows 24 %.
+    - **Passive finds** come at the designed rate: 6 of a pool's 30 candidates each season.
   - **Still open:** whether the target ever learns of an operation that failed but wasn't caught
     (default: no); a dossier ages by its date only, no visible decay (default).
   - **Before the hotspot reaches the client:** `make_hub_art.py` copies the raw hotspot files to

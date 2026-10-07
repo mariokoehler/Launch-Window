@@ -155,7 +155,7 @@ mvn -pl dev-tools compile exec:java -DmainClass=de.mkoehler.launchwindow.devtool
 - **Dev mode:** `"devMode": true` in the server's `game-meta.json` (restart the server) shows
   "Dev · Resolve turn now" on the hub and allows `DevClient`'s `funds` cheat.
 - **Bot playouts:** `mvn -pl dev-tools compile exec:java -DmainClass=de.mkoehler.launchwindow.devtools.analysis.ContentPackPlayouts`
-  (also `PersonnelLifecyclePlayouts`, `CareerCurves`, `StateSizes`; `design.md` §3.10).
+  (also `PersonnelLifecyclePlayouts`, `CareerCurves`, `StateSizes`, `IntelligencePlayouts`; `design.md` §3.10).
 - **Releasing** (ported from Robot-Rampage 2026-10-06; its and StarWars' CLAUDE.md hold the
   gotchas):
   - **Client zip, locally:** `mvn -pl lwjgl3 -am -Prelease-client -DskipTests verify` gives
