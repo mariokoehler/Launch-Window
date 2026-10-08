@@ -1879,7 +1879,11 @@ first (login → action → scheduled resolution → result, end to end) before 
   The new configurations and components have none yet. A joint flight's craft-specific steps take their
   shared step's text, named for the craft (`ContentStrings.craftStep`: `gemini-a-`, `atv-` for the
   target, `transtage-`, `-a`/`-b`). **Its art is converted** (`make_content_art.py`: 55 programs,
-  189 configurations, 22 category images), and `ScreenSnapshot` shoots it (`standard-*.png`). The
+  189 configurations, 22 category images), and `ScreenSnapshot` shoots it (`standard-*.png`). **Its
+  goal patches are generated** (2026-10-08): all 207, the new 186 defined in
+  `assets-raw/patches/patches_full.py` (scene templates per kind of mission, each with its program's
+  craft), three variants each, spelling checked by eye, ten goals rerolled or reworded where no
+  variant was spelled right (the model can't spell "CIRCUMLUNAR", so those patches say "GEMINI"). The
   bots play it (`ContentPackPlayouts standard`) with no invariant broken. The text for the
   MiG E-154's program and missions should fit the user's art, a rocket plane of its era, not
   BASPM's PKA (user, 2026-10-08). **No animal passengers on the new flights:** Zond 5's tortoises,

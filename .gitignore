@@ -62,3 +62,8 @@ data/
 ## Client-local settings (design.md 3.8 - volume, resolution, keybindings, etc., never
 ## server/account state): no fixed filename decided yet - broaden once it exists.
 client-settings.json
+
+# Python bytecode from the asset scripts
+__pycache__/
+# Patch variants: only the picked one per goal is committed (git add -f); the rest stay local
+assets-raw/patches/variants/*.png

@@ -12,7 +12,8 @@ read from strings.json, because a patch splits a long name across the top and bo
 Every goal gets --variants patches with their own seeds. A patch that runs off the image, or doesn't
 come back as a transparent circle, is rerolled with the next seed (up to MAX_ATTEMPTS). Spelling can't
 be checked by the script, so it writes review sheets (review/, not committed) to check by eye. Record
-the chosen variant per goal in picks.json.
+the chosen variant per goal in picks.json. Only picked variants are committed (git add -f; .gitignore
+keeps the others local, 2026-10-08), so manifest.json lists some files a fresh clone won't have.
 
 Usage (ComfyUI running locally):
     python make_patches.py                       # every goal, 3 variants each
@@ -166,6 +167,10 @@ GOALS = [
              'visor, encircled by a thin white orbit ellipse that loops around the helmet like a ring, in flat '
              'vintage 1960s vector-illustration style.'),
 ]
+
+# The standard pack's goals beyond the early era (2026-10-08).
+from patches_full import FULL_GOALS  # noqa: E402
+GOALS += FULL_GOALS
 
 INTRO = ('A 1960s embroidered space mission patch, circular, isolated on a fully transparent background '
          '(PNG with alpha channel, no backdrop, no shadow, no surface beneath it). The whole patch is fully '
