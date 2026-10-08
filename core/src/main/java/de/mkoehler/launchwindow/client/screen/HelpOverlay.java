@@ -71,7 +71,8 @@ public final class HelpOverlay {
         this.host = host;
         this.game = host.game;
         this.ui = host.ui;
-        this.values = HelpValues.of(host.session.gameInfo().response().budgetSchedule());
+        this.values = HelpValues.of(host.session.gameInfo().response().budgetSchedule(),
+            host.session.catalog().buildings());
         this.context = context;
         search = ui.searchField("Search the rules");
         search.addListener(new ChangeListener() {
@@ -140,6 +141,15 @@ public final class HelpOverlay {
             refresh();
         }
         textScroll.setScrollY(0f);
+    }
+
+    /**
+     * Scrolls the topic list to its end, for the screenshot tool to show the last groups.
+     */
+    public void scrollListToEnd() {
+        listScroll.layout();
+        listScroll.setScrollPercentY(1f);
+        listScroll.updateVisualScroll();
     }
 
     /**

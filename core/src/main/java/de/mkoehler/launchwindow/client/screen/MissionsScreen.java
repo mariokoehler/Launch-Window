@@ -10,6 +10,7 @@ import de.mkoehler.launchwindow.client.ui.ReliabilityBar;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.CrewSkills;
+import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.MissionControl;
 import de.mkoehler.launchwindow.client.view.Missions;
 import de.mkoehler.launchwindow.client.view.Programs;
@@ -69,6 +70,11 @@ public final class MissionsScreen extends ChromeScreen {
 
     private List<InProgressMission> missions() {
         return scheduled ? MissionControl.scheduled(session.state()) : MissionControl.active(session.state());
+    }
+
+    @Override
+    protected Help.Context helpContext() {
+        return Help.Context.MISSION_CONTROL;
     }
 
     @Override

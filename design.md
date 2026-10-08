@@ -1959,12 +1959,10 @@ root** before the next play test (new fields on the snapshot and on employees).
 
 **Help** (the user's idea, built 2026-10-08, `ui-spec.md` component 23): a help button in every
 header and the hub strip, and F1, open the rules by topic over the current screen, filtered to that
-screen's topics; typing searches them all. Seven topics so far (turns, the budget, programs,
-component R&D, team chemistry, poaching, intelligence) for the user to judge the format. **Next:**
-write the remaining topics once the format is confirmed (about 30 to 40 in all: hiring and
-training, morale and retirement, each building, missions and their steps, goals and prestige,
-random events, PR duty, ambitions and careers, the turn report), each screen's topic list growing
-with them; and put the `help` and `search` glyphs on the UI Asset Sheet.
+screen's topics; typing searches them all. 28 topics, written 2026-10-08 from this document and
+the rules, every number a token. **Next:** keep the topics in step with the rules (a changed
+constant updates itself, a changed rule needs its text), and put the `help` and `search` glyphs on
+the UI Asset Sheet (prompt given to the user 2026-10-08).
 
 ### Later
 

@@ -1,5 +1,6 @@
 package de.mkoehler.launchwindow.client.screen;
 
+import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.rules.PrDuty;
 import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.client.ui.HistoryNotes;
@@ -57,6 +58,11 @@ public final class AstronautComplexScreen extends ChromeScreen {
     @Override
     protected void goAstronautComplex() {
         // Already here.
+    }
+
+    @Override
+    protected Help.Context helpContext() {
+        return Help.Context.ASTRONAUT_COMPLEX;
     }
 
     @Override

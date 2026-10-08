@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.view.ContentNames;
+import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.Missions;
 import de.mkoehler.launchwindow.content.MissionConfiguration;
 import de.mkoehler.launchwindow.content.Program;
@@ -52,6 +53,11 @@ public final class PlanMissionScreen extends ChromeScreen {
             .filter(program -> host.session.state().getOpenedProgramIds().contains(program.id()))
             .filter(program -> !Missions.of(program, host.session.catalog()).isEmpty())
             .toList();
+    }
+
+    @Override
+    protected Help.Context helpContext() {
+        return Help.Context.MISSION_PLAN;
     }
 
     @Override

@@ -15,6 +15,7 @@ import de.mkoehler.launchwindow.client.ui.HistoryNote;
 import de.mkoehler.launchwindow.client.view.Concepts;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.CrewSkills;
+import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.Missions;
 import de.mkoehler.launchwindow.client.view.SetSkills;
 import de.mkoehler.launchwindow.content.MissionComponent;
@@ -63,6 +64,11 @@ public final class MissionStepsScreen extends ChromeScreen {
     @Override
     protected void goBack() {
         game.setScreen(new MissionConfigsScreen(game, configuration.programId()));
+    }
+
+    @Override
+    protected Help.Context helpContext() {
+        return Help.Context.MISSION_PLAN;
     }
 
     @Override

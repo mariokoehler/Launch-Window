@@ -665,9 +665,15 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       rename or reuse a topic id). Numbers are tokens such as `{poaching.minTenure}`, filled from
       the rules' constants and the game's budget schedule (`client.view.HelpValues`), never typed
       into the text. `HelpTest` checks the ids, tokens, links, every screen's topic list and the
-      letters. **The first seven topics** (2026-10-08) are there for the user to judge the format:
-      turns, the budget, programs, component R&D, team chemistry, poaching and intelligence. The
-      rest (about 30 to 40 in all) follow once the format is confirmed.
+      letters. **28 topics** (2026-10-08) in six groups: Basics (turns, the buildings, the turn
+      report, winning, the Museum), Agency (the budget, prestige and goals, random events),
+      Programs and hardware (programs, component R&D, rockets), Missions (planning and launching,
+      how steps are decided, Experts, flight controllers and CAPCOM), People (hiring, training,
+      morale, salaries, traits, chemistry, ambitions and loyalty, careers, astronauts, PR duty,
+      poaching) and Rivals (the race, intelligence). Every number in them is a token, from the
+      rules, the budget schedule or the pack's buildings. 16 contexts cover the building screens,
+      the hire screen, mission planning, the person pages, the memorial, the turn report and the Museum; the hub
+      and the remaining screens open on every topic.
     - *As built:* `client.screen.HelpOverlay`, `client.view.Help` and `HelpValues`; the `help` and
       `search` glyphs in `make_ui_icons.py` (not on the UI Asset Sheet yet). Shots `help-*.png`.
 ---

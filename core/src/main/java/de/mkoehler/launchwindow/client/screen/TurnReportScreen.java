@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
+import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.content.SpaceRaceNews;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.OutcomeBar;
@@ -59,6 +60,11 @@ public final class TurnReportScreen extends ChromeScreen {
         titleActions.add(next).padRight(Theme.SPACE_4);
         titleActions.add(actionButton("Continue to Space Complex", Theme.ButtonKind.PRIMARY, this::goHome));
         rebuild();
+    }
+
+    @Override
+    protected Help.Context helpContext() {
+        return Help.Context.TURN_REPORT;
     }
 
     @Override

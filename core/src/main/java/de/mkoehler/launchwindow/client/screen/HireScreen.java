@@ -20,6 +20,7 @@ import de.mkoehler.launchwindow.client.ui.SkillBar;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.TraitChip;
 import de.mkoehler.launchwindow.client.view.Department;
+import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.People;
 import de.mkoehler.launchwindow.client.view.Tips;
 import de.mkoehler.launchwindow.content.StaffingSlot;
@@ -135,6 +136,11 @@ public final class HireScreen extends ChromeScreen {
     private int freePlaces() {
         return Math.max(0, department.cap(session.state(), session.catalog())
             - department.roster(session.state()).size());
+    }
+
+    @Override
+    protected Help.Context helpContext() {
+        return Help.Context.HIRING;
     }
 
     @Override

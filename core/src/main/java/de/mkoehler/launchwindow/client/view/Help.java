@@ -122,25 +122,41 @@ public record Help(List<Topic> topics) {
      */
     public enum Context {
         /** The Public Affairs Office. */
-        PUBLIC_AFFAIRS("the Public Affairs Office", "budget", "turns"),
+        PUBLIC_AFFAIRS("the Public Affairs Office", "budget", "prestige", "pr-duty", "random-events"),
         /** Headquarters and its program lists. */
-        HEADQUARTERS("Headquarters", "programs", "budget"),
+        HEADQUARTERS("Headquarters", "programs", "planning-missions", "buildings"),
         /** A program's details and its mission configurations. */
-        PROGRAM("this program", "programs", "rnd"),
-        /** The SET Centre. */
-        SET_CENTRE("the SET Centre", "rnd", "chemistry", "poaching"),
-        /** A Payload or Rocket R&amp;D board. */
-        RND("R&D", "rnd", "chemistry", "programs"),
-        /** The VAB and its rocket programs. */
-        VAB("the VAB", "rnd", "programs"),
-        /** Mission Control. */
-        MISSION_CONTROL("Mission Control", "chemistry", "poaching"),
+        PROGRAM("this program", "programs", "planning-missions", "rnd"),
+        /** Planning a mission: the plan, its steps and its odds. */
+        MISSION_PLAN("planning a mission", "planning-missions", "mission-steps", "rockets", "prestige"),
         /** Assembling a mission's crew and consoles. */
-        ASSEMBLE_MISSION("assembling a mission", "chemistry"),
-        /** A person's page. */
-        PERSON("this person", "chemistry", "poaching"),
+        ASSEMBLE_MISSION("assembling a mission", "planning-missions", "chemistry", "mission-steps",
+            "mission-control"),
+        /** The SET Centre. */
+        SET_CENTRE("the SET Centre", "rnd", "hiring", "training", "chemistry", "traits", "morale", "salaries",
+            "poaching"),
+        /** A Payload or Rocket R&amp;D board. */
+        RND("R&D", "rnd", "chemistry", "traits"),
+        /** The VAB and its rocket programs. */
+        VAB("the VAB", "rockets", "rnd", "programs"),
+        /** Mission Control and its missions. */
+        MISSION_CONTROL("Mission Control", "mission-control", "mission-steps", "experts", "hiring", "training",
+            "morale", "salaries", "poaching"),
+        /** The Astronaut Complex. */
+        ASTRONAUT_COMPLEX("the Astronaut Complex", "astronauts", "pr-duty", "training", "experts", "hiring",
+            "morale", "salaries"),
+        /** A department's hire screen. */
+        HIRING("hiring", "hiring", "traits", "salaries", "intelligence"),
+        /** A person's page, living or on the memorial. */
+        PERSON("this person", "traits", "chemistry", "ambitions", "careers", "morale", "poaching"),
+        /** Someone's page on the memorial. */
+        MEMORIAL("the memorial", "careers", "museum", "traits"),
+        /** The turn report and a mission's replay. */
+        TURN_REPORT("the turn report", "turn-report", "mission-steps", "random-events", "budget"),
+        /** The Museum. */
+        MUSEUM("the Museum", "museum", "winning", "the-race", "prestige", "careers"),
         /** The Intelligence Office. */
-        INTELLIGENCE("the Intelligence Office", "intelligence", "poaching");
+        INTELLIGENCE("the Intelligence Office", "intelligence", "poaching", "the-race");
 
         private final String place;
         private final List<String> topicIds;

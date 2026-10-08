@@ -2,6 +2,7 @@ package de.mkoehler.launchwindow.client.view;
 
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.content.BudgetSchedule;
+import de.mkoehler.launchwindow.content.BuildingSchedule;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -35,7 +36,7 @@ class HelpTest {
     void theBundledHelpIsWellFormed() throws IOException {
         Help help = bundled();
         Explainers explainers = Explainers.parse(Files.readString(CONTENT.resolve(Explainers.FILE)));
-        HelpValues values = HelpValues.of(BudgetSchedule.baspmClose());
+        HelpValues values = HelpValues.of(BudgetSchedule.baspmClose(), BuildingSchedule.baspmClose());
         assertFalse(help.topics().isEmpty());
         Set<String> ids = new HashSet<>();
         for (Help.Topic topic : help.topics()) {
@@ -67,7 +68,7 @@ class HelpTest {
     @Test
     void aContextFiltersUntilThePlayerTypes() throws IOException {
         Help help = bundled();
-        HelpValues values = HelpValues.of(BudgetSchedule.baspmClose());
+        HelpValues values = HelpValues.of(BudgetSchedule.baspmClose(), BuildingSchedule.baspmClose());
         assertEquals(help.topics(), help.shown("", null, values));
         List<Help.Topic> intelligence = help.shown("  ", Help.Context.INTELLIGENCE, values);
         assertEquals(Set.copyOf(Help.Context.INTELLIGENCE.topicIds()),
@@ -81,7 +82,7 @@ class HelpTest {
     @Test
     void searchFindsTheFilledNumbersNotTheTokens() throws IOException {
         Help help = bundled();
-        HelpValues values = HelpValues.of(BudgetSchedule.baspmClose());
+        HelpValues values = HelpValues.of(BudgetSchedule.baspmClose(), BuildingSchedule.baspmClose());
         assertTrue(help.shown("{", null, values).isEmpty());
         assertTrue(help.shown("minTenure", null, values).isEmpty());
         assertTrue(help.shown("16 seasons", null, values).stream().anyMatch(topic -> topic.id().equals("budget")));
@@ -92,6 +93,6 @@ class HelpTest {
         assertEquals(new Help.Line(Help.Line.Kind.HEADING, "Odds"), Help.Line.of("## Odds"));
         assertEquals(new Help.Line(Help.Line.Kind.BULLET, "one"), Help.Line.of("- one"));
         assertEquals(new Help.Line(Help.Line.Kind.PARAGRAPH, "-10 points"), Help.Line.of("-10 points"));
-        assertEquals("a 4 b {nope}", HelpValues.of(BudgetSchedule.baspmClose()).fill("a {rnd.slots} b {nope}"));
+        assertEquals("a 4 b {nope}", HelpValues.of(BudgetSchedule.baspmClose(), BuildingSchedule.baspmClose()).fill("a {rnd.slots} b {nope}"));
     }
 }

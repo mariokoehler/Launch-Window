@@ -418,6 +418,15 @@ public final class ScreenSnapshot {
         write(folder, "help-poaching.png", new SetCentreScreen(game),
             screen -> screen.openHelp().select("poaching"));
         write(folder, "help-search.png", new SetCentreScreen(game), screen -> screen.openHelp().search("loyalty"));
+        write(folder, "help-list-end.png", new SpaceComplexScreen(game), screen -> {
+            var help = screen.openHelp();
+            help.select("intelligence");
+            screen.stage().act(0f);
+            help.scrollListToEnd();
+        });
+        write(folder, "help-traits.png", new SetCentreScreen(game), screen -> screen.openHelp().select("traits"));
+        write(folder, "help-buildings.png", new SpaceComplexScreen(game), screen -> screen.openHelp().select("buildings"));
+        write(folder, "help-mission-steps.png", new SpaceComplexScreen(game), screen -> screen.openHelp().select("mission-steps"));
         write(folder, "help-search-none.png", new SetCentreScreen(game),
             screen -> screen.openHelp().search("sabotage of the moon"));
         write(folder, "help-button-tooltip.png", new SetCentreScreen(game),

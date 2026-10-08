@@ -13,6 +13,7 @@ import de.mkoehler.launchwindow.client.ui.OutcomeBar;
 import de.mkoehler.launchwindow.client.ui.Refusals;
 import de.mkoehler.launchwindow.client.ui.ReliabilityBar;
 import de.mkoehler.launchwindow.client.ui.Theme;
+import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.Staffing;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.MissionDraft;
@@ -113,6 +114,11 @@ public final class MissionPlanScreen extends ChromeScreen {
     public void select(Tab tab) {
         this.tab = tab;
         rebuild();
+    }
+
+    @Override
+    protected Help.Context helpContext() {
+        return Help.Context.MISSION_PLAN;
     }
 
     @Override

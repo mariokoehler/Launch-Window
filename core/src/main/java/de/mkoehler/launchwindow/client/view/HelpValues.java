@@ -1,15 +1,30 @@
 package de.mkoehler.launchwindow.client.view;
 
 import de.mkoehler.launchwindow.content.BudgetSchedule;
+import de.mkoehler.launchwindow.content.BuildingSchedule;
+import de.mkoehler.launchwindow.content.RandomEventRoster;
+import de.mkoehler.launchwindow.model.Ambition;
+import de.mkoehler.launchwindow.model.Building;
 import de.mkoehler.launchwindow.content.MissionComponent;
 import de.mkoehler.launchwindow.model.GameDate;
 import de.mkoehler.launchwindow.rules.BudgetProgress;
+import de.mkoehler.launchwindow.rules.Careers;
+import de.mkoehler.launchwindow.rules.DepartmentSalaries;
+import de.mkoehler.launchwindow.rules.HiringPool;
+import de.mkoehler.launchwindow.rules.MissionPrestige;
+import de.mkoehler.launchwindow.rules.MissionStepResolution;
+import de.mkoehler.launchwindow.rules.PersonnelLifecycle;
+import de.mkoehler.launchwindow.rules.PrDuty;
+import de.mkoehler.launchwindow.rules.SkillGrowth;
+import de.mkoehler.launchwindow.rules.TraitEffects;
+import de.mkoehler.launchwindow.rules.TrainingProgress;
 import de.mkoehler.launchwindow.rules.Chemistry;
 import de.mkoehler.launchwindow.rules.Intelligence;
 import de.mkoehler.launchwindow.rules.Personality;
 import de.mkoehler.launchwindow.rules.Poaching;
 import de.mkoehler.launchwindow.rules.PrestigeConversion;
 
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -18,6 +33,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 /**
  * The numbers the help's text names ({@link Help}), read from the rules' own constants and the
@@ -40,10 +56,11 @@ public final class HelpValues {
     /**
      * Builds the values for a game.
      *
-     * @param budget the game's budget schedule
+     * @param budget    the game's budget schedule
+     * @param buildings the content pack's buildings
      * @return the values
      */
-    public static HelpValues of(BudgetSchedule budget) {
+    public static HelpValues of(BudgetSchedule budget, BuildingSchedule buildings) {
         Map<String, String> v = new LinkedHashMap<>();
         v.put("game.startDate", GameDate.ofTurn(1).label());
 
@@ -55,6 +72,111 @@ public final class HelpValues {
         v.put("budget.coveredSeasons", whole(PrestigeConversion.COVERED_SEASONS));
 
         v.put("rnd.slots", whole(MissionComponent.RD_SLOT_COUNT));
+
+        v.put("buildings.astronauts", caps(buildings, Building.ASTRONAUT_CENTER));
+        v.put("buildings.controllers", caps(buildings, Building.MISSION_CONTROL));
+        v.put("buildings.engineers", caps(buildings, Building.SET_CENTER));
+        v.put("buildings.programs", caps(buildings, Building.HEADQUARTERS));
+        v.put("buildings.rockets", caps(buildings, Building.VEHICLE_ASSEMBLY));
+        v.put("buildings.upkeepStart", whole(buildings.levels().keySet().stream()
+            .mapToLong(building -> buildings.maintenance(building, 1)).sum()));
+
+        v.put("people.idleMorale", whole(PersonnelLifecycle.IDLE_MORALE_LOSS_PER_SEASON));
+        v.put("people.busyMorale", whole(PersonnelLifecycle.BUSY_MORALE_GAIN_PER_SEASON));
+        v.put("people.resignAt", whole(PersonnelLifecycle.RESIGNATION_MORALE_FLOOR));
+        v.put("people.retireAstronaut", whole(PersonnelLifecycle.ASTRONAUT_RETIREMENT_AGE));
+        v.put("people.retireController", whole(PersonnelLifecycle.MISSION_CONTROL_RETIREMENT_AGE));
+        v.put("people.retireEngineer", whole(PersonnelLifecycle.SET_RETIREMENT_AGE));
+        v.put("people.salaryMin", whole(HiringPool.SALARY_MIN));
+        v.put("people.salaryMax", whole(HiringPool.SALARY_MAX));
+        v.put("people.salaryAdjust", whole(DepartmentSalaries.MAX_PERCENT));
+        v.put("hiring.batch", whole(HiringPool.HIRING_BATCH_SIZE));
+        v.put("hiring.signingMorale", whole(Math.round((HiringPool.SIGNING_BONUS_MORALE_FACTOR - 1) * 100)));
+        v.put("hiring.experience", whole(Math.round(HiringPool.EXPERIENCE_SKILL_RANGE)));
+        v.put("hiring.rookieLearning", HiringPool.ROOKIE_MIN_LEARNING_POTENTIAL + " to "
+            + HiringPool.ROOKIE_MAX_LEARNING_POTENTIAL);
+        v.put("hiring.veteranLearning", HiringPool.VETERAN_MIN_LEARNING_POTENTIAL + " to "
+            + HiringPool.VETERAN_MAX_LEARNING_POTENTIAL);
+        v.put("training.basicAstronaut", whole(TrainingProgress.ASTRONAUT_BASIC_TRAINING_SEASONS));
+        v.put("training.basicEngineer", whole(TrainingProgress.SET_BASIC_TRAINING_SEASONS));
+        v.put("training.basicController", whole(TrainingProgress.MISSION_CONTROL_BASIC_TRAINING_SEASONS));
+        v.put("training.advanced", whole(TrainingProgress.ADVANCED_TRAINING_SEASONS));
+        v.put("training.expertSkill", whole(Math.round(SkillGrowth.EXPERT_TRAINING_SKILL_THRESHOLD)));
+        v.put("training.expertBase", whole(Math.round(SkillGrowth.EXPERT_TRAINING_BASE_SUCCESS_CHANCE)));
+        v.put("training.expertBest", whole(Math.round(SkillGrowth.EXPERT_TRAINING_BASE_SUCCESS_CHANCE
+            + SkillGrowth.EXPERT_TRAINING_SKILL_BONUS_MAX)));
+
+        v.put("pr.maxYield", whole(PrDuty.MAX_YIELD));
+        v.put("pr.perFlight", whole(PrDuty.PER_FLIGHT));
+        v.put("pr.perFirst", whole(PrDuty.PER_FIRST));
+        v.put("pr.shares", and(PrDuty.SHARES.stream().map(share -> whole(Math.round(share * 100))).toList()));
+        v.put("pr.rustFree", whole(PrDuty.RUST_FREE_SEASONS));
+        v.put("pr.rust", whole(Math.round(PrDuty.RUST_PER_SEASON)));
+        v.put("pr.pressChance", whole(Math.round(PrDuty.PRESS_CHANCE * 100)));
+        v.put("pr.goodPress", whole(Math.round(PrDuty.GOOD_PRESS_CHANCE * 100)));
+        v.put("pr.pressShare", whole(Math.round(PrDuty.PRESS_SHARE * 100)));
+        v.put("pr.expertShare", whole(Math.round(MissionStepResolution.EXPERT_RESCUE_ON_PR_TOUR_EFFICIENCY * 100)));
+
+        v.put("ambition.chanceAmbitious", whole(Careers.AMBITION_PERCENT_AMBITIOUS));
+        v.put("ambition.chanceGlory", whole(Careers.AMBITION_PERCENT_GLORY_SEEKER));
+        v.put("ambition.chanceOthers", whole(Careers.AMBITION_PERCENT_OTHERS));
+        v.put("ambition.nextAmbitious", whole(Careers.NEXT_PERCENT_AMBITIOUS));
+        v.put("ambition.nextOthers", whole(Careers.NEXT_PERCENT_OTHERS));
+        v.put("ambition.sayAfter", whole(Careers.SAY_AFTER_SEASONS));
+        v.put("ambition.windowMin", whole(Arrays.stream(Ambition.Kind.values()).mapToInt(Ambition.Kind::window)
+            .min().orElse(0)));
+        v.put("ambition.windowMax", whole(Arrays.stream(Ambition.Kind.values()).mapToInt(Ambition.Kind::window)
+            .max().orElse(0)));
+        v.put("ambition.ambitiousWindow", whole(-Careers.WINDOW_AMBITIOUS));
+        v.put("ambition.steadyWindow", whole(Careers.WINDOW_STEADY));
+        v.put("ambition.fulfilledMorale", whole(Careers.FULFILLED_MORALE));
+        v.put("ambition.fulfilledLoyalty", whole(Careers.FULFILLED_LOYALTY));
+        v.put("ambition.fulfilledLoyaltyAmbitious", whole(Careers.FULFILLED_LOYALTY_AMBITIOUS));
+        v.put("ambition.passedMorale", whole(-Careers.PASSED_OVER_MORALE));
+        v.put("ambition.passedLoyalty", whole(-Careers.PASSED_OVER_LOYALTY));
+        v.put("ambition.impossibleMorale", whole(-Careers.IMPOSSIBLE_MORALE));
+        v.put("ambition.impossibleLoyalty", whole(-Careers.IMPOSSIBLE_LOYALTY));
+        v.put("ambition.ranOutMorale", whole(-Careers.RAN_OUT_MORALE));
+        v.put("ambition.ranOutLoyalty", whole(-Careers.RAN_OUT_LOYALTY));
+        v.put("ambition.disappointed", whole(Careers.DISAPPOINTED_SEASONS));
+        v.put("loyalty.start", whole(Careers.LOYALTY_START));
+        v.put("loyalty.perSeason", whole(Careers.LOYALTY_PER_SEASON));
+        v.put("careers.kept", whole(Careers.CAREER_KEPT));
+
+        v.put("trait.workaholicRd", percentMore(TraitEffects.WORKAHOLIC_RD));
+        v.put("trait.workaholicIdle", whole(TraitEffects.WORKAHOLIC_IDLE_MORALE));
+        v.put("trait.ambitiousTraining", percentMore(TraitEffects.AMBITIOUS_TRAINING));
+        v.put("trait.ambitiousPatience", whole(TraitEffects.AMBITIOUS_PATIENCE_SEASONS));
+        v.put("trait.ambitiousLoss", whole(TraitEffects.AMBITIOUS_MORALE_LOSS));
+        v.put("trait.gloryFlight", percentMore(TraitEffects.GLORY_SEEKER_FLIGHT));
+        v.put("trait.gloryLoss", whole(TraitEffects.GLORY_SEEKER_PASSED_OVER));
+        v.put("trait.perfectionistRd", percentLess(TraitEffects.PERFECTIONIST_RD));
+        v.put("trait.perfectionistCap", whole(Math.round(TraitEffects.PERFECTIONIST_CAP)));
+        v.put("trait.cool", whole(Math.round(TraitEffects.COOL_SAVING_THROW)));
+        v.put("trait.restlessFresh", percentMore(TraitEffects.RESTLESS_FRESH));
+        v.put("trait.restlessFreshSeasons", whole(TraitEffects.RESTLESS_FRESH_SEASONS));
+        v.put("trait.restlessStale", percentLess(TraitEffects.RESTLESS_STALE));
+        v.put("trait.restlessStaleAfter", whole(TraitEffects.RESTLESS_STALE_AFTER));
+        v.put("trait.quickStudy", percentMore(TraitEffects.QUICK_STUDY_TRAINING));
+        v.put("trait.mentored", percentMore(TraitEffects.MENTORED));
+
+        v.put("missions.blendAbove", whole(Math.round(MissionStepResolution.CREW_BLEND_HARDWARE_THRESHOLD)));
+        v.put("missions.crewWeight", whole(Math.round(MissionStepResolution.CREW_BLEND_WEIGHT * 100)));
+        v.put("missions.catastrophic", whole(Math.round(MissionStepResolution.CATASTROPHIC_BAND_FRACTION * 100)));
+        v.put("missions.failure", whole(Math.round(MissionStepResolution.FAILURE_BAND_FRACTION * 100)));
+        v.put("missions.minor", whole(Math.round((1 - MissionStepResolution.CATASTROPHIC_BAND_FRACTION
+            - MissionStepResolution.FAILURE_BAND_FRACTION) * 100)));
+        v.put("missions.expertBoosts", and(Stream.of(MissionStepResolution.EXPERT_RESCUE_FIRST_USE_BOOST_PERCENT,
+            MissionStepResolution.EXPERT_RESCUE_SECOND_USE_BOOST_PERCENT,
+            MissionStepResolution.EXPERT_RESCUE_THIRD_USE_BOOST_PERCENT).map(boost -> whole(Math.round(boost)))
+            .toList()));
+        v.put("missions.expertCap", whole(Math.round(MissionStepResolution.EXPERT_RESCUE_PROBABILITY_CAP)));
+        v.put("missions.expertAway", whole(Math.round(
+            MissionStepResolution.EXPERT_RESCUE_OFF_MISSION_CONTROLLER_EFFICIENCY * 100)));
+        v.put("prestige.second", whole(MissionPrestige.SECOND_TIME_PERCENT));
+        v.put("prestige.later", whole(MissionPrestige.LATER_TIME_PERCENT));
+        v.put("events.bad", whole(RandomEventRoster.baspmClose().badChancePercent()));
+        v.put("events.good", whole(RandomEventRoster.baspmClose().goodChancePercent()));
 
         v.put("chemistry.band", whole(Math.round(Chemistry.OUTPUT_BAND * 100)));
         v.put("chemistry.rapportDrift", whole(Math.round(Personality.RAPPORT_DRIFT)));
@@ -82,7 +204,7 @@ public final class HelpValues {
         v.put("poaching.fileLevel", whole(Intelligence.PERSONNEL_FILE_LEVEL));
 
         v.put("intelligence.maxLevel", whole(Intelligence.MAX_LEVEL));
-        v.put("intelligence.costs", list(java.util.Arrays.stream(Intelligence.COST_PER_SEASON)
+        v.put("intelligence.costs", list(Arrays.stream(Intelligence.COST_PER_SEASON)
             .mapToObj(HelpValues::whole).toList()));
         v.put("intelligence.checkLevel", whole(Intelligence.CHECK_LEVEL));
         v.put("intelligence.assessmentLevel", whole(Intelligence.ASSESSMENT_LEVEL));
@@ -136,6 +258,28 @@ public final class HelpValues {
 
     private static String whole(long value) {
         return String.format(Locale.ROOT, "%,d", value);
+    }
+
+    /** A factor as the percent it adds: 1.2 is "20". */
+    private static String percentMore(double factor) {
+        return whole(Math.round((factor - 1) * 100));
+    }
+
+    /** A factor as the percent it takes off: 0.85 is "15". */
+    private static String percentLess(double factor) {
+        return whole(Math.round((1 - factor) * 100));
+    }
+
+    private static String caps(BuildingSchedule buildings, Building building) {
+        return and(buildings.of(building).caps().stream().map(cap -> whole(cap)).toList());
+    }
+
+    /** "a, b and c". */
+    private static String and(List<String> items) {
+        if (items.size() < 2) {
+            return String.join("", items);
+        }
+        return String.join(", ", items.subList(0, items.size() - 1)) + " and " + items.get(items.size() - 1);
     }
 
     /** "a, b or c". */
