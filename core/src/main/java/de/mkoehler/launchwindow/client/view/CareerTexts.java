@@ -186,6 +186,12 @@ public final class CareerTexts {
                 + seasons(entry.count()) + " together";
             case EXPERT -> "Expert trait earned: " + TurnReportView.skillLabel(entry.ref());
             case AMBITION -> ambitionLine(entry);
+            case JOINED -> String.format(Locale.ROOT, "Joined from %s, for +%d %%: salary %s → %d, a signing bonus of %d",
+                entry.ref(), entry.count(), entry.note(), Math.round(entry.value()), Math.round(entry.value()));
+            case OFFER -> "MATCHED".equals(entry.outcome())
+                ? String.format(Locale.ROOT, "Stayed: the agency matched %s's offer of +%d %%. Salary %s → %d.",
+                    entry.ref(), entry.count(), entry.note(), Math.round(entry.value()))
+                : String.format(Locale.ROOT, "Turned down an offer from %s of +%d %%", entry.ref(), entry.count());
         };
     }
 

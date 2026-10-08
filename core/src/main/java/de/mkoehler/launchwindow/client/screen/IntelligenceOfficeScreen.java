@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.actions.CancelIntelOperationAction;
+import de.mkoehler.launchwindow.actions.MakeOfferAction;
 import de.mkoehler.launchwindow.actions.QueueIntelOperationAction;
 import de.mkoehler.launchwindow.actions.SetIntelligenceTargetAction;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
@@ -16,6 +17,7 @@ import de.mkoehler.launchwindow.client.ui.ReliabilityBar;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.TraitChip;
 import de.mkoehler.launchwindow.client.view.IntelTexts;
+import de.mkoehler.launchwindow.client.view.PoachTexts;
 import de.mkoehler.launchwindow.client.view.Museum;
 import de.mkoehler.launchwindow.content.MissionComponent;
 import de.mkoehler.launchwindow.model.Dossier;
@@ -32,6 +34,8 @@ import de.mkoehler.launchwindow.net.messages.RivalSummary;
 import de.mkoehler.launchwindow.rules.IntelligenceFound;
 import de.mkoehler.launchwindow.rules.Intelligence;
 import de.mkoehler.launchwindow.rules.PersonnelGroup;
+import de.mkoehler.launchwindow.rules.BuildingUpgrades;
+import de.mkoehler.launchwindow.rules.Poaching;
 import de.mkoehler.launchwindow.rules.TurnReport;
 
 import java.util.ArrayList;
@@ -80,6 +84,7 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
     private IntelArea area = IntelArea.RND;
     private String group = PersonnelGroup.SET.name();
     private String folderKey;
+    private int offerRaise = Poaching.RAISE_PERCENTS.getFirst();
 
     /**
      * Builds the office on a tab, fetching the rival agencies.
@@ -160,6 +165,11 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
     @Override
     protected void rebuild() {
         titleActions.clearChildren();
+        if (intel().getLevel() >= Intelligence.PERSONNEL_FILE_LEVEL) {
+            titleActions.add(ui.label("Offer: " + Poaching.queuedOffers(session.state()).size() + " of "
+                + Poaching.OFFERS_PER_SEASON + " used", Theme.TextStyle.CAPTION, Theme.ON_PAGE_STRONG))
+                .padRight(Theme.SPACE_3);
+        }
         for (Tab each : Tab.values()) {
             titleActions.add(tabButton(each)).padLeft(Theme.SPACE_2);
         }
@@ -794,6 +804,10 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
         }
         int number = 1;
         for (IntelOperation operation : queued) {
+            if (operation.kind() == IntelOperation.Kind.OFFER) {
+                card.add(queuedOffer(operation)).padBottom(Theme.SPACE_2).row();
+                continue;
+            }
             RivalFolder folder = intel().getFolders().get(operation.targetId());
             Table line = new Table();
             line.add(stepNumber(number++)).top().padRight(Theme.SPACE_3);
@@ -812,6 +826,66 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
         card.add(ui.paragraph("Cancelling gives the action back. Background checks don't queue: they answer at once "
             + "on the hire screens.", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).row();
         return card;
+    }
+
+    /** A queued offer, set apart from the operations: its price, the room, and the answer as far as known. */
+    private Table queuedOffer(IntelOperation offer) {
+        PersonnelFile file = Poaching.file(session.state(), offer.targetId(), offer.personId());
+        String agency = agencyName(offer.targetId());
+        Table line = new Table();
+        line.setBackground(ui.solid(new Color(Theme.GOLD.r, Theme.GOLD.g, Theme.GOLD.b, 0.14f)));
+        line.pad(Theme.SPACE_2);
+        Image glyph = new Image(ui.icon("funds"), Scaling.fit);
+        glyph.setColor(Theme.NAVY);
+        line.add(glyph).size(16f).top().padRight(Theme.SPACE_3).padTop(2f);
+        Table text = new Table();
+        text.defaults().left();
+        Table head = new Table();
+        head.add(ui.label("Offer · " + (file == null ? "someone" : file.name()) + ", " + agency + " "
+            + (file == null ? "" : IntelTexts.groupOne(file.group()).toLowerCase(Locale.ROOT)), Theme.TextStyle.BODY_STRONG,
+            Theme.INK)).padRight(Theme.SPACE_2);
+        head.add(queuedBadge(offer.raisePercent()));
+        text.add(head).row();
+        if (file != null) {
+            text.add(ui.paragraph(PoachTexts.ifAccepted(file, offer.raisePercent()) + " " + room(file.group())
+                + ". Their answer, as far as you can tell: " + PoachTexts.range(Poaching.answerRange(offer.raisePercent(),
+                file)) + ", unless " + agency + " matches.", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).growX().row();
+        }
+        text.add(ui.paragraph("The season's one offer. It uses no action and can't be caught.", Theme.TextStyle.CAPTION,
+            Theme.INK_MUTED)).growX();
+        line.add(text).expandX().fillX().padRight(Theme.SPACE_3);
+        line.add(actionButton("Cancel", Theme.ButtonKind.DESTRUCTIVE, () -> cancelOffer(offer)));
+        return line;
+    }
+
+    private void cancelOffer(IntelOperation offer) {
+        submit(new CancelIntelOperationAction(offer.id()), result -> toast("Offer cancelled. You can make another "
+            + "this season.", Theme.NoticeKind.SUCCESS));
+    }
+
+    private Table queuedBadge(int raisePercent) {
+        Table badge = new Table();
+        badge.setBackground(ui.solid(Theme.GOLD));
+        badge.pad(2f, 6f, 2f, 6f);
+        Image clock = new Image(ui.icon("clock"), Scaling.fit);
+        clock.setColor(Theme.ON_GOLD);
+        badge.add(clock).size(11f).padRight(4f);
+        badge.add(ui.label("OFFER QUEUED: " + PoachTexts.raise(raisePercent), Theme.TextStyle.LABEL, Theme.ON_GOLD));
+        return badge;
+    }
+
+    /** "SET Centre: 8 of 12", the room an offer needs in this agency. */
+    private String room(String group) {
+        PersonnelGroup which = PersonnelGroup.valueOf(group);
+        int size = which == PersonnelGroup.SET ? session.state().getSetSpecialists().size()
+            : session.state().getMissionControlOfficers().size();
+        return PoachTexts.building(group) + ": " + size + " of " + capacity(which);
+    }
+
+    private int capacity(PersonnelGroup group) {
+        return BuildingUpgrades.capacity(session.state(), group == PersonnelGroup.SET
+            ? de.mkoehler.launchwindow.model.Building.SET_CENTER : de.mkoehler.launchwindow.model.Building.MISSION_CONTROL,
+            session.catalog().buildings());
     }
 
     private Table resultsCard() {
@@ -943,7 +1017,7 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
         first.add(dossierCard(folder, IntelArea.PLANS)).row();
         Table second = column();
         second.add(dossierCard(folder, IntelArea.PERSONNEL)).padBottom(COLUMN_GAP).row();
-        second.add(filesBlock(folder)).row();
+        second.add(filesBlock(key, folder)).row();
         Table third = column();
         third.add(tidbitsCard(folder)).padBottom(COLUMN_GAP).row();
         third.add(caughtCard(folder)).row();
@@ -1078,7 +1152,7 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
         return row;
     }
 
-    private Table filesBlock(RivalFolder folder) {
+    private Table filesBlock(String key, RivalFolder folder) {
         Table block = column();
         Table head = new Table();
         head.add(ui.label("PERSONNEL FILES", Theme.TextStyle.EYEBROW, Theme.GOLD_ON_PAGE)).expandX().left();
@@ -1093,13 +1167,17 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
             block.add(card).row();
         }
         for (int i = files.size() - 1; i >= 0; i--) {
-            block.add(fileCard(files.get(i))).padBottom(Theme.SPACE_3).row();
+            block.add(fileCard(key, files.get(i))).padBottom(Theme.SPACE_3).row();
         }
         return block;
     }
 
-    private Table fileCard(PersonnelFile file) {
+    private Table fileCard(String key, PersonnelFile file) {
+        IntelOperation queued = queuedOffer(key, file.personId());
         Table card = ui.card();
+        if (queued != null) {
+            card.setBackground(ui.rect(Theme.SURFACE_CARD, Theme.GOLD, Theme.BORDER_EMPHASIS));
+        }
         card.top();
         card.defaults().growX().left();
         Table head = new Table();
@@ -1110,7 +1188,10 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
         who.defaults().left();
         who.add(ui.label(file.name(), Theme.TextStyle.BODY_STRONG, Theme.INK)).row();
         who.add(ui.label(IntelTexts.groupOne(file.group()) + " · age " + file.age(), Theme.TextStyle.CAPTION,
-            Theme.INK_MUTED));
+            Theme.INK_MUTED)).row();
+        if (file.tenureSeasons() > 0) {
+            who.add(ui.label(PoachTexts.since(file, agencyName(key)), Theme.TextStyle.CAPTION, Theme.INK_MUTED));
+        }
         head.add(who).expandX().left();
         head.add(stamp(IntelTexts.asOf(file.turn()), false)).top();
         card.add(head).padBottom(Theme.SPACE_3).row();
@@ -1146,7 +1227,261 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
             : file.disappointed() ? "Disappointed: an ambition ran out lately" : "None said";
         more.add(ui.paragraph(ambition, Theme.TextStyle.BODY_SM, Theme.INK)).expandX().fillX().row();
         card.add(more).padTop(Theme.SPACE_2).row();
+        card.add(new Image(ui.solid(Theme.NAVY_BORDER))).height(1f).padTop(Theme.SPACE_3).padBottom(Theme.SPACE_3).row();
+        card.add(offerFooter(key, file, queued)).row();
         return card;
+    }
+
+    private IntelOperation queuedOffer(String key, String personId) {
+        return Poaching.queuedOffers(session.state()).stream()
+            .filter(offer -> offer.targetId().equals(key) && offer.personId().equals(personId)).findFirst().orElse(null);
+    }
+
+    /**
+     * A file card's footer: the offer button, why there can't be one, or the queued offer
+     * ({@code ui-spec.md} &sect;4.16, Poaching canvas).
+     */
+    private Table offerFooter(String key, PersonnelFile file, IntelOperation queued) {
+        Table footer = new Table();
+        footer.left();
+        footer.defaults().left();
+        if (queued != null) {
+            footer.add(queuedBadge(queued.raisePercent())).row();
+            footer.add(ui.paragraph(PoachTexts.ifAccepted(file, queued.raisePercent()), Theme.TextStyle.CAPTION,
+                Theme.INK_MUTED)).growX().padTop(Theme.SPACE_1).row();
+            Label cancel = ui.label("Cancel the offer", Theme.TextStyle.CAPTION, Theme.DANGER);
+            cancel.setTouchable(Touchable.enabled);
+            cancel.addListener(clicked(() -> cancelOffer(queued)));
+            footer.add(cancel).padTop(Theme.SPACE_1);
+            return footer;
+        }
+        Poaching.Blocker blocker = Poaching.blocker(file, (int) session.latestResolvedTurn() + 1);
+        if (blocker != null) {
+            footer.add(reason(blocker == Poaching.Blocker.ASTRONAUT ? "lock" : "clock",
+                PoachTexts.blocker(blocker, file, agencyName(key)))).growX();
+            return footer;
+        }
+        if (intel().getLevel() < Intelligence.PERSONNEL_FILE_LEVEL) {
+            footer.add(reason("lock", "Offers need the service at level " + Intelligence.PERSONNEL_FILE_LEVEL + "."))
+                .growX();
+            return footer;
+        }
+        List<IntelOperation> offers = Poaching.queuedOffers(session.state());
+        boolean used = offers.size() >= Poaching.OFFERS_PER_SEASON;
+        footer.add(offerButton(!used, () -> openOffer(key, file))).row();
+        if (used) {
+            IntelOperation other = offers.getFirst();
+            PersonnelFile to = Poaching.file(session.state(), other.targetId(), other.personId());
+            footer.add(reason("clock", "Your offer this season goes to " + (to == null ? "someone else" : to.name())
+                + ".")).growX().padTop(Theme.SPACE_2);
+        }
+        return footer;
+    }
+
+    private Table reason(String icon, String text) {
+        Table line = new Table();
+        Image glyph = new Image(ui.icon(icon), Scaling.fit);
+        glyph.setColor(Theme.INK_MUTED);
+        line.add(glyph).size(12f).top().padTop(2f).padRight(Theme.SPACE_2);
+        line.add(ui.paragraph(text, Theme.TextStyle.CAPTION, Theme.INK_MUTED)).expandX().fillX();
+        return line;
+    }
+
+    private Table offerButton(boolean enabled, Runnable action) {
+        Table button = new Table();
+        button.setBackground(ui.rect(enabled ? Theme.NAVY : Theme.SURFACE_CARD, enabled ? Theme.NAVY
+            : Theme.NAVY_BORDER, Theme.BORDER_THIN));
+        button.pad(Theme.SPACE_2, Theme.SPACE_3, Theme.SPACE_2, Theme.SPACE_3);
+        Color color = enabled ? Theme.ON_FILL : Theme.INK_MUTED;
+        Image funds = new Image(ui.icon("funds"), Scaling.fit);
+        funds.setColor(color);
+        button.add(funds).size(12f).padRight(Theme.SPACE_2);
+        button.add(ui.label("Make an offer", Theme.TextStyle.LABEL, color));
+        if (enabled) {
+            button.setTouchable(Touchable.enabled);
+            button.addListener(clicked(action));
+        }
+        return button;
+    }
+
+    // ---- The offer dialog
+
+    /**
+     * Opens the offer dialog for a person in a file.
+     *
+     * @param key  the rival's key
+     * @param file the file
+     */
+    public void openOffer(String key, PersonnelFile file) {
+        String agency = agencyName(key);
+        Table card = dialogCard("Intelligence Office · an offer to " + agency + "'s staff",
+            "Make " + file.name() + " an offer");
+        Table columns = new Table();
+        columns.top();
+        columns.add(offerFileColumn(key, file)).width(470f).top().padRight(Theme.SPACE_4);
+        columns.add(new Image(ui.solid(Theme.NAVY_BORDER))).width(1f).growY().padRight(Theme.SPACE_4);
+        columns.add(offerTermsColumn(key, file, agency)).expandX().fillX().top();
+        card.add(columns).growX().row();
+        showDialog(card, 1260f);
+    }
+
+    private Table offerFileColumn(String key, PersonnelFile file) {
+        Table column = column();
+        Table head = new Table();
+        Drawable portrait = file.portraitId() == null ? null : ui.picture("portraits/" + file.portraitId() + ".jpg");
+        head.add(new Image(portrait == null ? ui.solid(Theme.NAVY) : portrait, Scaling.fill)).size(96f).top()
+            .padRight(Theme.SPACE_3);
+        Table who = new Table();
+        who.defaults().left();
+        who.add(ui.label(file.name(), Theme.TextStyle.HEADING_SM, Theme.INK)).row();
+        who.add(ui.label(IntelTexts.groupOne(file.group()) + " · age " + file.age()
+            + (file.salary() > 0 ? " · salary " + Math.round(file.salary()) : ""), Theme.TextStyle.CAPTION,
+            Theme.INK_MUTED)).padBottom(Theme.SPACE_1).row();
+        who.add(stamp(IntelTexts.asOf(file.turn()), false)).padBottom(Theme.SPACE_1).row();
+        who.add(ui.label("What your file says", Theme.TextStyle.CAPTION, Theme.INK_MUTED));
+        head.add(who).expandX().left().top();
+        column.add(head).padBottom(Theme.SPACE_3).row();
+        List<IntelFact> best = file.skills().stream()
+            .sorted((a, b) -> Integer.compare(b.low() + b.high(), a.low() + a.high())).limit(3).toList();
+        for (IntelFact skill : best) {
+            Table row = new Table();
+            row.add(ui.label(IntelTexts.row(skill)[0], Theme.TextStyle.BODY_SM, Theme.INK)).width(170f).left()
+                .padRight(Theme.SPACE_2);
+            row.add(new ReliabilityBar(ui, 0, 0, 100, 0).range(ui, skill.low(), skill.high())).expandX().fillX()
+                .padRight(Theme.SPACE_2);
+            row.add(ui.label(skill.low() + "–" + skill.high(), Theme.TextStyle.BODY_SM, Theme.INK)).width(50f);
+            column.add(row).padBottom(Theme.SPACE_1).row();
+        }
+        Table more = new Table();
+        more.defaults().left().top().padBottom(Theme.SPACE_1);
+        more.add(sectionTitle("Loyalty")).width(100f).padRight(Theme.SPACE_2);
+        more.add(ui.label(file.loyalty().isEmpty() ? "Not known" : file.loyalty(), Theme.TextStyle.BODY_SM, Theme.INK))
+            .expandX().row();
+        more.add(sectionTitle("Ambition")).width(100f).padRight(Theme.SPACE_2);
+        Table ambition = new Table();
+        ambition.left();
+        String said = file.ambition() == null ? "None said"
+            : de.mkoehler.launchwindow.client.view.CareerTexts.ambition(file.ambition().kind(), file.ambition().ref())
+            + (file.disappointed() ? "" : " · " + de.mkoehler.launchwindow.client.view.CareerTexts.seasonsLeft(
+                file.ambition().seasonsLeft()));
+        ambition.add(ui.label(said, Theme.TextStyle.BODY_SM, Theme.INK));
+        if (file.disappointed()) {
+            ambition.add(ui.label(" · disappointed", Theme.TextStyle.BODY_SM, Theme.DANGER));
+        }
+        more.add(ambition).expandX().left().row();
+        more.add(sectionTitle("A trait")).width(100f).padRight(Theme.SPACE_2);
+        if (file.trait() == null) {
+            more.add(ui.label("No notable traits", Theme.TextStyle.CAPTION_ITALIC, Theme.INK_MUTED)).left();
+        } else {
+            more.add(new TraitChip(ui, file.trait())).height(TraitChip.HEIGHT).left();
+        }
+        column.add(more).padTop(Theme.SPACE_2).row();
+        return column;
+    }
+
+    private Table offerTermsColumn(String key, PersonnelFile file, String agency) {
+        Table column = column();
+        Table head = new Table();
+        head.add(sectionTitle("The raise over today's salary")).expandX().left();
+        head.add(ui.label("Offer: " + Poaching.queuedOffers(session.state()).size() + " of " + Poaching.OFFERS_PER_SEASON
+            + " used this season", Theme.TextStyle.CAPTION, Theme.INK_MUTED));
+        column.add(head).padBottom(Theme.SPACE_2).row();
+        Table segments = new Table();
+        for (int raise : Poaching.RAISE_PERCENTS) {
+            boolean on = raise == offerRaise;
+            Table segment = new Table();
+            segment.setBackground(ui.rect(on ? Theme.NAVY : Theme.SURFACE_CARD, Theme.NAVY, Theme.BORDER_THIN));
+            segment.pad(Theme.SPACE_2);
+            segment.add(ui.label(PoachTexts.raise(raise), Theme.TextStyle.BODY_STRONG, on ? Theme.ON_FILL : Theme.NAVY))
+                .row();
+            segment.add(ui.label(Poaching.offeredSalary(file.salary(), raise) + " a season", Theme.TextStyle.CAPTION,
+                on ? Theme.ON_FILL : Theme.INK_MUTED));
+            segment.setTouchable(Touchable.enabled);
+            segment.addListener(clicked(() -> {
+                offerRaise = raise;
+                closeDialog();
+                openOffer(key, file);
+            }));
+            segments.add(segment).expandX().fillX().uniformX();
+        }
+        column.add(segments).padBottom(Theme.SPACE_4).row();
+
+        long salary = Poaching.offeredSalary(file.salary(), offerRaise);
+        column.add(sectionTitle("What it costs if they come")).padBottom(Theme.SPACE_2).row();
+        Table costs = new Table();
+        costs.defaults().left().top().padBottom(Theme.SPACE_2);
+        costs.add(sectionTitle("New salary")).width(160f);
+        costs.add(ui.label("$ " + PoachTexts.money(salary) + " a season, from next season", Theme.TextStyle.BODY_STRONG,
+            Theme.INK)).expandX().row();
+        costs.add(sectionTitle("Signing bonus")).width(160f);
+        costs.add(ui.label("$ " + PoachTexts.money(Poaching.signingBonus(salary)) + " once, when they join",
+            Theme.TextStyle.BODY_STRONG, Theme.INK)).row();
+        PersonnelGroup group = PersonnelGroup.valueOf(file.group());
+        int size = group == PersonnelGroup.SET ? session.state().getSetSpecialists().size()
+            : session.state().getMissionControlOfficers().size();
+        int cap = capacity(group);
+        boolean full = size >= cap;
+        costs.add(sectionTitle("Room")).width(160f);
+        Table room = new Table();
+        room.left();
+        room.defaults().left();
+        room.add(ui.label(room(file.group()), Theme.TextStyle.BODY_STRONG, full ? Theme.DANGER : Theme.INK)).row();
+        room.add(ui.paragraph(full ? "The offer lapses unless a place is free at the resolution. Dismiss someone or "
+            + "finish an upgrade before then." : "Room for " + (cap - size) + " more.", Theme.TextStyle.CAPTION,
+            full ? Theme.DANGER : Theme.INK_MUTED)).growX();
+        costs.add(room).expandX().fillX().row();
+        column.add(costs).row();
+        column.add(ui.label("Nothing is paid unless they come.", Theme.TextStyle.CAPTION, Theme.INK_MUTED))
+            .padBottom(Theme.SPACE_4).row();
+
+        int[] range = Poaching.answerRange(offerRaise, file);
+        column.add(sectionTitle("Their answer, as far as you can tell")).padBottom(Theme.SPACE_1).row();
+        Table answer = new Table();
+        answer.left();
+        answer.add(ui.label(PoachTexts.range(range), Theme.TextStyle.HEADING_LG, Theme.INK)).padRight(Theme.SPACE_2);
+        answer.add(ui.label("chance they accept, if their agency doesn't match", Theme.TextStyle.CAPTION,
+            Theme.INK_MUTED)).bottom().padBottom(6f);
+        column.add(answer).left().row();
+        column.add(new ReliabilityBar(ui, 0, Poaching.ACCEPT_MAX_PERCENT, 100, 0).range(ui, range[0], range[1]))
+            .height(10f).padTop(Theme.SPACE_1).row();
+        Table scale = new Table();
+        scale.add(ui.label("0 %", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).expandX().left();
+        scale.add(ui.label(Poaching.ACCEPT_MAX_PERCENT + " %, the most anyone ever is", Theme.TextStyle.CAPTION,
+            Theme.INK_MUTED));
+        column.add(scale).padBottom(Theme.SPACE_2).row();
+        column.add(ui.paragraph("From their loyalty band and what the file shows; their morale and any trait the file "
+            + "doesn't show aren't counted. " + agency + " may match the offer to keep them, and you can't see how far "
+            + agency + " matches.", Theme.TextStyle.BODY_SM, Theme.INK)).growX().padBottom(Theme.SPACE_3).row();
+        column.add(new Image(ui.solid(Theme.NAVY_BORDER))).height(1f).padBottom(Theme.SPACE_3).row();
+        Table buttons = new Table();
+        buttons.add(reason("clock", "Answer in the next turn report.")).expandX().fillX().left();
+        buttons.add(actionButton("Cancel", Theme.ButtonKind.SECONDARY, this::closeDialog)).padRight(Theme.SPACE_2);
+        buttons.add(actionButton("Make the offer · " + PoachTexts.raise(offerRaise), Theme.ButtonKind.PRIMARY,
+            () -> makeOffer(key, file)));
+        column.add(buttons).row();
+        return column;
+    }
+
+    /**
+     * Picks the raise the offer dialog shows next, as a click on its segment does.
+     *
+     * @param raisePercent the raise
+     */
+    public void pickRaise(int raisePercent) {
+        offerRaise = raisePercent;
+    }
+
+    /**
+     * Queues the offer the dialog shows.
+     *
+     * @param key  the rival's key
+     * @param file the file
+     */
+    public void makeOffer(String key, PersonnelFile file) {
+        submit(new MakeOfferAction(key, file.personId(), offerRaise), result -> {
+            closeDialog();
+            toast("Offer queued. Their answer comes in the next turn report.", Theme.NoticeKind.SUCCESS);
+        });
     }
 
     private Table tidbitsCard(RivalFolder folder) {

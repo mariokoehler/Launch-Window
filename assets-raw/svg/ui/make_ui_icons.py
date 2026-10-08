@@ -60,6 +60,11 @@ CHROME = {
     "rel_clash": '<path d="M13.5 2.5L5.5 13.5h6l-1.5 8 8.5-11.5h-6z"/>',
     # The Intelligence Office (Intelligence Office canvas, 2026-10-07): marker, footer, check button.
     "binoculars": '<path d="M2.6 15.5 4.6 6.6A2 2 0 0 1 6.5 5h1.6A1.5 1.5 0 0 1 9.6 6.5V13"/><path d="M21.4 15.5 19.4 6.6A2 2 0 0 0 17.5 5h-1.6a1.5 1.5 0 0 0-1.5 1.5V13"/><path d="M9.6 9.5h4.8"/><circle cx="6.3" cy="16.5" r="3.8"/><circle cx="17.7" cy="16.5" r="3.8"/>',
+    # Poaching (Poaching canvas, 2026-10-08): keep at any price (a shield with a tick), let go (a door
+    # with an arrow out), joined from a rival (an arrow into a door).
+    "retain_keep": '<path d="M12 2.5 4.5 5.5v6c0 4.6 3.2 8.4 7.5 10 4.3-1.6 7.5-5.4 7.5-10v-6z"/><polyline points="8.5 12 11 14.5 15.5 9.5"/>',
+    "retain_go": '<path d="M13 4H5v16h8"/><path d="M15 12h7M19 8.5 22.5 12 19 15.5"/>',
+    "joined": '<path d="M11 4h8v16h-8"/><path d="M2 12h11M9.5 8.5 13 12l-3.5 3.5"/>',
 }
 
 # The astronaut glyph's antenna tip is a filled dot.

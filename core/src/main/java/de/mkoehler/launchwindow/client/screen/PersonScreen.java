@@ -39,7 +39,7 @@ import java.util.function.Supplier;
  */
 public final class PersonScreen extends ChromeScreen {
 
-    private static final float LEFT_WIDTH = 400f;
+    private static final float LEFT_WIDTH = 440f;
     private static final float MIDDLE_WIDTH = 720f;
     private static final float PORTRAIT = 128f;
 
@@ -145,7 +145,22 @@ public final class PersonScreen extends ChromeScreen {
         names.add(ui.label(department.place() + " · " + role(), Theme.TextStyle.EYEBROW, Theme.INK)).padBottom(4f)
             .row();
         names.add(ui.label(person.getName(), Theme.TextStyle.HEADING_SM, Theme.INK)).padBottom(4f).row();
-        names.add(ui.label(department.ageLine(person), Theme.TextStyle.CAPTION, Theme.INK_MUTED));
+        names.add(ui.label(department.ageLine(person), Theme.TextStyle.CAPTION, Theme.INK_MUTED)).row();
+        de.mkoehler.launchwindow.model.CareerEntry joined = de.mkoehler.launchwindow.client.view.PoachTexts
+            .joined(person);
+        if (joined != null) {
+            Table tag = new Table();
+            tag.setBackground(ui.rect(Theme.SURFACE_CARD, Theme.SUCCESS, Theme.BORDER_THIN));
+            tag.pad(2f, 6f, 2f, 6f);
+            Image arrow = new Image(ui.icon("joined"), Scaling.fit);
+            arrow.setColor(Theme.SUCCESS);
+            tag.add(arrow).size(11f).padRight(4f);
+            tag.add(ui.label(("Joined from " + joined.ref()).toUpperCase(Locale.ROOT), Theme.TextStyle.LABEL,
+                Theme.SUCCESS));
+            names.add(tag).padTop(Theme.SPACE_2).row();
+            names.add(ui.label(de.mkoehler.launchwindow.client.view.CareerTexts.date(joined) + ", for +" + joined.count()
+                + " %", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padTop(2f);
+        }
         head.add(names).expandX().fillX().top();
         card.add(head).growX().padBottom(Theme.SPACE_4).row();
 
@@ -179,10 +194,18 @@ public final class PersonScreen extends ChromeScreen {
         Table loyalty = CareerCards.bar(ui, person.getLoyalty(), Theme.NAVY);
         ui.tooltip(loyalty, "Loyalty · " + de.mkoehler.launchwindow.client.view.CareerTexts.loyaltyBand(
             person.getLoyalty()), "How attached this person is to the agency. It grows with every season here and with "
-            + "raises, and with ambitions that come true; it falls when one is passed over or runs out. Later it will "
-            + "be what keeps rivals from hiring people away.");
+            + "raises, and with ambitions that come true; it falls when one is passed over or runs out. It's what "
+            + "keeps rivals from hiring engineers and flight controllers away.");
         facts.add(loyalty).row();
         card.add(facts).growX().row();
+        if (department != Department.ASTRONAUT) {
+            card.add(new Image(ui.solid(Theme.NAVY_BORDER))).height(1f).growX().padBottom(Theme.SPACE_3).row();
+            float inner = LEFT_WIDTH - 2 * (Theme.SPACE_4 + Theme.BORDER_EMPHASIS);
+            card.add(RetentionCards.personRow(this, person, department == Department.SET
+                ? de.mkoehler.launchwindow.rules.PersonnelGroup.SET
+                : de.mkoehler.launchwindow.rules.PersonnelGroup.MISSION_CONTROL, inner)).width(inner)
+                .padBottom(Theme.SPACE_3).row();
+        }
 
         Table actions = new Table();
         actions.left();

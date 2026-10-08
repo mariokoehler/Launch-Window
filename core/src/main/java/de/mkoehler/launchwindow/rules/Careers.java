@@ -684,9 +684,14 @@ public final class Careers {
     }
 
     private static void trim(List<CareerEntry> career) {
+        // The hiring line and every move between agencies stay: the page names where each line was.
         while (career.size() > CAREER_KEPT) {
-            boolean keepFirst = career.getFirst().kind() == CareerEntry.Kind.HIRED;
-            career.remove(keepFirst ? 1 : 0);
+            int oldest = 0;
+            while (oldest < career.size() && (career.get(oldest).kind() == CareerEntry.Kind.HIRED
+                    || career.get(oldest).kind() == CareerEntry.Kind.JOINED)) {
+                oldest++;
+            }
+            career.remove(oldest < career.size() ? oldest : 0);
         }
     }
 

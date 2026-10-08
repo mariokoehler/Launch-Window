@@ -194,7 +194,7 @@ public final class Intelligence {
      */
     public static Outcome queue(PlayerSnapshot snapshot, IntelOperation.Kind kind, String targetId, IntelArea area,
             String group, String personId) {
-        if (kind == null || targetId == null || targetId.isBlank()
+        if (kind == null || kind == IntelOperation.Kind.OFFER || targetId == null || targetId.isBlank()
                 || kind == IntelOperation.Kind.ASSESSMENT && area == null
                 || kind == IntelOperation.Kind.PERSONNEL_FILE && !isGroup(group)) {
             return Outcome.INVALID_OPERATION;
@@ -224,11 +224,16 @@ public final class Intelligence {
      */
     public static Outcome cancel(PlayerSnapshot snapshot, String operationId) {
         IntelligenceState state = snapshot.getIntelligence();
-        boolean removed = state.getQueued().removeIf(operation -> operation.id().equals(operationId));
-        if (!removed) {
+        IntelOperation found = state.getQueued().stream().filter(operation -> operation.id().equals(operationId))
+            .findFirst().orElse(null);
+        if (found == null) {
             return Outcome.UNKNOWN_OPERATION;
         }
-        state.setActionsUsed(Math.max(0, state.getActionsUsed() - 1));
+        state.getQueued().remove(found);
+        // An offer uses no action, so cancelling one gives none back.
+        if (found.kind() != IntelOperation.Kind.OFFER) {
+            state.setActionsUsed(Math.max(0, state.getActionsUsed() - 1));
+        }
         return Outcome.CANCELLED;
     }
 
@@ -327,11 +332,18 @@ public final class Intelligence {
         List<ResolutionEvent> events = new ArrayList<>();
         Set<String> settled = new HashSet<>();
         for (IntelFinding finding : findings == null ? List.<IntelFinding>of() : findings) {
-            apply(snapshot, finding, gameTurn);
             if (finding.operationId() != null) {
                 settled.add(finding.operationId());
             }
-            events.add(new IntelligenceFound(finding));
+            // An offer's line is built from plain fields: its finding may carry a whole person.
+            switch (finding.kind()) {
+                case OFFER_MADE -> events.add(Poaching.applyMade(snapshot, finding, gameTurn));
+                case OFFER_RECEIVED -> events.add(Poaching.applyReceived(snapshot, finding, gameTurn));
+                default -> {
+                    apply(snapshot, finding, gameTurn);
+                    events.add(new IntelligenceFound(finding));
+                }
+            }
         }
         for (IntelOperation operation : state.getQueued()) {
             if (!settled.contains(operation.id())) {
@@ -385,8 +397,8 @@ public final class Intelligence {
                 folder.learnLevel(finding.level(), gameTurn, RivalFolder.FROM_A_CATCH);
                 trim(folder.getCatches(), CATCHES_KEPT);
             }
-            case FAILED, NO_TARGET, NOT_SETTLED -> {
-                // Nothing learned.
+            case FAILED, NO_TARGET, NOT_SETTLED, OFFER_MADE, OFFER_RECEIVED -> {
+                // Nothing learned (offers are applied by Poaching).
             }
         }
     }

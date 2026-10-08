@@ -170,8 +170,24 @@ public final class TurnReportView {
             firsts == 0 ? "" : firsts == goals.size() && firsts == 1 ? "first in the game"
                 : firsts + " of them first in the game", goals.isEmpty() ? 0 : 1));
         List<PersonnelDeparture> departures = events(report, PersonnelDeparture.class);
-        glance.add(new Glance("People", departures.isEmpty() ? "No one left" : departures.size() + " left",
-            departures.isEmpty() ? "" : departureNote(departures), departures.isEmpty() ? 0 : -1));
+        // Poaching moves people both ways (ui-spec.md 4.16): who came over, and who was hired away.
+        List<de.mkoehler.launchwindow.rules.OfferSettled> offers = events(report,
+            de.mkoehler.launchwindow.rules.OfferSettled.class);
+        long arrived = offers.stream().filter(offer -> offer.made() && PoachTexts.moved(offer.outcome())).count();
+        long poached = offers.stream().filter(offer -> !offer.made() && PoachTexts.moved(offer.outcome())).count();
+        long out = departures.size() + poached;
+        String value = arrived > 0 ? arrived + " in · " + out + " out" : out == 0 ? "No one left" : out + " left";
+        List<String> notes = new ArrayList<>();
+        if (!departures.isEmpty()) {
+            notes.add(departureNote(departures));
+        }
+        if (poached > 0) {
+            notes.add(poached + " hired away");
+        }
+        if (arrived > 0) {
+            notes.add(arrived + " from a rival");
+        }
+        glance.add(new Glance("People", value, String.join(", ", notes), out > 0 ? -1 : arrived > 0 ? 1 : 0));
         Optional<BudgetReviewed> review = events(report, BudgetReviewed.class).stream().findFirst();
         if (review.isPresent()) {
             glance.add(new Glance("Funding review", money(review.get().fundingRate()) + " / season",
@@ -539,6 +555,10 @@ public final class TurnReportView {
      */
     public static List<Line> people(TurnReport report, PlayerSnapshot state, ContentCatalog catalog) {
         List<Line> lines = new ArrayList<>();
+        // Poaching leads the section: offers to our people, then ours (ui-spec.md 4.16).
+        events(report, de.mkoehler.launchwindow.rules.OfferSettled.class).stream()
+            .sorted(java.util.Comparator.comparing(de.mkoehler.launchwindow.rules.OfferSettled::made))
+            .forEach(offer -> lines.add(PoachTexts.reportLine(offer)));
         for (ResolutionEvent event : report.events()) {
             if (event instanceof ExpertTrainingCompleted expert) {
                 lines.add(new Line(expert.name() + " earned the Expert trait in " + skillLabel(expert.skillName()), "",

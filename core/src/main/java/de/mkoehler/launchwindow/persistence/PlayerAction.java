@@ -8,6 +8,9 @@ import de.mkoehler.launchwindow.actions.AdjustSalariesAction;
 import de.mkoehler.launchwindow.actions.AssignResearchAction;
 import de.mkoehler.launchwindow.actions.BackgroundCheckAction;
 import de.mkoehler.launchwindow.actions.CancelIntelOperationAction;
+import de.mkoehler.launchwindow.actions.MakeOfferAction;
+import de.mkoehler.launchwindow.actions.SetRetentionAction;
+import de.mkoehler.launchwindow.actions.SetRetentionDefaultAction;
 import de.mkoehler.launchwindow.actions.CancelMissionAction;
 import de.mkoehler.launchwindow.actions.CloseProgramAction;
 import de.mkoehler.launchwindow.actions.CloseRocketProgramAction;
@@ -69,7 +72,10 @@ import de.mkoehler.launchwindow.model.PlayerSnapshot;
     @JsonSubTypes.Type(value = SetIntelligenceTargetAction.class, name = "setIntelligenceTarget"),
     @JsonSubTypes.Type(value = QueueIntelOperationAction.class, name = "queueIntelOperation"),
     @JsonSubTypes.Type(value = CancelIntelOperationAction.class, name = "cancelIntelOperation"),
-    @JsonSubTypes.Type(value = BackgroundCheckAction.class, name = "backgroundCheck")
+    @JsonSubTypes.Type(value = BackgroundCheckAction.class, name = "backgroundCheck"),
+    @JsonSubTypes.Type(value = MakeOfferAction.class, name = "makeOffer"),
+    @JsonSubTypes.Type(value = SetRetentionDefaultAction.class, name = "setRetentionDefault"),
+    @JsonSubTypes.Type(value = SetRetentionAction.class, name = "setRetention")
 })
 public abstract class PlayerAction {
 

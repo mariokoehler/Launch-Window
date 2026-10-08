@@ -41,6 +41,7 @@ import java.util.TreeMap;
 public final class IntelligenceBoard {
 
     private static final long TIDBIT_SALT = 0x71DB_17C0_FFEE_1962L;
+    private static final long OFFER_SALT = 0x0FFE_5EED_1945_0A55L;
 
     private IntelligenceBoard() {
     }
@@ -63,10 +64,14 @@ public final class IntelligenceBoard {
         for (Map.Entry<String, PlayerSnapshot> spy : sorted.entrySet()) {
             PlayerSnapshot agency = spy.getValue();
             for (IntelOperation operation : agency.getIntelligence().getQueued()) {
+                if (operation.kind() == IntelOperation.Kind.OFFER) {
+                    continue;
+                }
                 SplittableRandom random = new SplittableRandom(seed(gameSeed, gameTurn, spy.getKey(), operation.id()));
                 settleOperation(spy.getKey(), agency, operation, sorted, catalog, (int) gameTurn, random, findings);
             }
         }
+        settleOffers(sorted, catalog, gameSeed, gameTurn, findings);
         for (Map.Entry<String, PlayerSnapshot> spy : sorted.entrySet()) {
             int level = spy.getValue().getIntelligence().getLevel();
             if (Intelligence.TIDBIT_PERCENT[level] == 0) {
@@ -100,6 +105,82 @@ public final class IntelligenceBoard {
                 new Tidbit((int) gameTurn, fact), -1));
         }
         return findings;
+    }
+
+    /**
+     * Settles every poaching offer ({@code design.md} &sect;2.2(d)), highest raise first, so two
+     * offers to one person settle the same way whatever order agencies resolve in: the first decides,
+     * and later ones lapse. The target's standing order answers first; unmatched, the person rolls.
+     */
+    private static void settleOffers(Map<String, PlayerSnapshot> agencies, ContentCatalog catalog, long gameSeed,
+            long gameTurn, Map<String, List<IntelFinding>> findings) {
+        Set<String> settled = new HashSet<>();
+        Map<String, Integer> arriving = new java.util.HashMap<>();
+        for (Map.Entry<String, IntelOperation> entry : Poaching.allOffers(agencies)) {
+            String poacherId = entry.getKey();
+            IntelOperation offer = entry.getValue();
+            PlayerSnapshot poacher = agencies.get(poacherId);
+            PlayerSnapshot target = offer.targetId().equals(poacherId) ? null : agencies.get(offer.targetId());
+            PersonnelGroup group = Poaching.canBeApproached(offer.group()) ? PersonnelGroup.valueOf(offer.group())
+                : null;
+            Personnel person = target == null || group == null ? null : Poaching.roster(target, group).stream()
+                .filter(p -> p.getId().equals(offer.personId())).findFirst().orElse(null);
+            List<IntelFinding> mine = findings.computeIfAbsent(poacherId, id -> new ArrayList<>());
+            String targetAgency = target == null ? null : target.getAgencyName();
+            if (person == null) {
+                mine.add(offerFinding(IntelFinding.Kind.OFFER_MADE, offer.id(), offer.targetId(), targetAgency,
+                    lapsed(offer, OfferResult.Outcome.LAPSED_GONE)));
+                continue;
+            }
+            String key = offer.targetId() + "/" + person.getId();
+            OfferResult.Outcome blocked = settled.contains(key) ? OfferResult.Outcome.LAPSED_NOT_ELIGIBLE
+                : Poaching.ineligible(person, group, (int) gameTurn);
+            String arrivingKey = poacherId + "/" + group.name();
+            if (blocked == null && !Poaching.hasRoom(poacher, group, arriving.getOrDefault(arrivingKey, 0), catalog)) {
+                blocked = OfferResult.Outcome.LAPSED_NO_ROOM;
+            }
+            long newSalary = Poaching.offeredSalary(person.getSalary(), offer.raisePercent());
+            if (blocked != null) {
+                mine.add(offerFinding(IntelFinding.Kind.OFFER_MADE, offer.id(), offer.targetId(), targetAgency,
+                    new OfferResult(person.getId(), person.getName(), group.name(), offer.raisePercent(), blocked,
+                        person.getSalary(), newSalary, 0, null, null)));
+                continue;
+            }
+            settled.add(key);
+            OfferResult.Outcome outcome;
+            if (Poaching.matches(target, person, group, offer.raisePercent())) {
+                outcome = OfferResult.Outcome.MATCHED;
+            } else {
+                SplittableRandom random = new SplittableRandom(seed(gameSeed, gameTurn, poacherId, offer.id())
+                    ^ OFFER_SALT);
+                int chance = Poaching.acceptPercent(offer.raisePercent(), person.getLoyalty(), person.getMorale(),
+                    person.getDisappointedSeasons() > 0, Poaching.traits(person));
+                outcome = random.nextInt(100) < chance ? OfferResult.Outcome.JOINED : OfferResult.Outcome.TURNED_DOWN;
+            }
+            boolean joined = outcome == OfferResult.Outcome.JOINED;
+            if (joined) {
+                arriving.merge(arrivingKey, 1, Integer::sum);
+            }
+            OfferResult result = new OfferResult(person.getId(), person.getName(), group.name(), offer.raisePercent(),
+                outcome, person.getSalary(), newSalary, joined ? Poaching.signingBonus(newSalary) : 0,
+                joined && person instanceof SetSpecialist engineer ? Poaching.copy(engineer) : null,
+                joined && person instanceof de.mkoehler.launchwindow.model.MissionControlOfficer controller
+                    ? Poaching.copy(controller) : null);
+            mine.add(offerFinding(IntelFinding.Kind.OFFER_MADE, offer.id(), offer.targetId(), targetAgency, result));
+            findings.computeIfAbsent(offer.targetId(), id -> new ArrayList<>()).add(offerFinding(
+                IntelFinding.Kind.OFFER_RECEIVED, null, poacherId, poacher.getAgencyName(), result.plain()));
+        }
+    }
+
+    private static OfferResult lapsed(IntelOperation offer, OfferResult.Outcome outcome) {
+        return new OfferResult(offer.personId(), "", offer.group() == null ? "" : offer.group(), offer.raisePercent(),
+            outcome, 0, 0, 0, null, null);
+    }
+
+    private static IntelFinding offerFinding(IntelFinding.Kind kind, String operationId, String rivalId,
+            String rivalAgency, OfferResult offer) {
+        return new IntelFinding(kind, operationId, IntelOperation.Kind.OFFER, rivalId, rivalAgency, null, null, null,
+            null, -1, offer);
     }
 
     private static void settleOperation(String spyId, PlayerSnapshot spy, IntelOperation operation,
@@ -152,7 +233,8 @@ public final class IntelligenceBoard {
         String band = Careers.loyaltyBand(person.getLoyalty());
         PersonnelFile file = new PersonnelFile(person.getId(), person.getName(), person.getPortraitId(),
             operation.group(), person.getAge(), gameTurn, skills, trait, band, person.getAmbition(),
-            person.getDisappointedSeasons() > 0);
+            person.getDisappointedSeasons() > 0, person.getSalary(), person.getTenureSeasons(),
+            person.getLastApproachedTurn());
         mine.add(new IntelFinding(IntelFinding.Kind.PERSONNEL_FILE, operation.id(), operation.kind(),
             operation.targetId(), target.getAgencyName(), null, null, file, null, -1));
     }

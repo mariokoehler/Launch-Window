@@ -378,6 +378,9 @@ public final class IntelTexts {
      * @return the text, such as "Agency assessment · R&D"
      */
     public static String operation(IntelOperation.Kind kind, IntelArea area, String group) {
+        if (kind == IntelOperation.Kind.OFFER) {
+            return "Offer";
+        }
         if (kind == IntelOperation.Kind.PERSONNEL_FILE) {
             return "Personnel file" + (group == null ? "" : " · " + groupName(group).toLowerCase(Locale.ROOT));
         }
@@ -393,7 +396,8 @@ public final class IntelTexts {
     public static String[] finding(IntelFinding finding) {
         String rival = finding.rivalAgency() == null ? "Unknown agency" : finding.rivalAgency();
         String what = finding.operationKind() == null ? "" : " · " + (finding.operationKind()
-            == IntelOperation.Kind.ASSESSMENT && finding.area() != null ? area(finding.area()) : "personnel file");
+            == IntelOperation.Kind.ASSESSMENT && finding.area() != null ? area(finding.area())
+            : finding.operationKind() == IntelOperation.Kind.OFFER ? "offer" : "personnel file");
         return switch (finding.kind()) {
             case DOSSIER -> new String[] {rival + what, "A new dossier, as of "
                 + GameDate.ofTurn(finding.dossier().turn()).label() + "."
@@ -412,6 +416,8 @@ public final class IntelTexts {
                 + ". Their Intelligence level: " + finding.level() + "."};
             case NO_TARGET -> new String[] {rival + what, "Nothing to look at: the target wasn't there."};
             case NOT_SETTLED -> new String[] {"Operation" + what, "Queued too late for this turn; nothing happened."};
+            // Offers report through their own line (OfferSettled), never as a finding.
+            case OFFER_MADE, OFFER_RECEIVED -> new String[] {rival + what, ""};
         };
     }
 

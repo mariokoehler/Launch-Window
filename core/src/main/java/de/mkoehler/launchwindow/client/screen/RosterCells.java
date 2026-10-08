@@ -88,7 +88,15 @@ final class RosterCells {
         name.setTouchable(Touchable.enabled);
         name.addListener(ChromeScreen.clicked(open));
         ui.tooltip(name, person.getName(), "Opens the person page: skills, traits and relationships.");
-        who.add(name).padBottom(2f).row();
+        com.badlogic.gdx.scenes.scene2d.ui.Image mark = RetentionCards.mark(ui, person);
+        if (mark == null) {
+            who.add(name).padBottom(2f).row();
+        } else {
+            Table line = new Table();
+            line.add(name).padRight(6f);
+            line.add(mark).size(13f);
+            who.add(line).padBottom(2f).row();
+        }
         who.add(ui.label(ageLine, Theme.TextStyle.CAPTION, Theme.INK_MUTED));
         return who;
     }

@@ -280,5 +280,12 @@ public final class MessageRegistry {
         kryo.register(de.mkoehler.launchwindow.model.Ambition.Kind.class);
         kryo.register(de.mkoehler.launchwindow.model.CareerEntry.class);
         kryo.register(de.mkoehler.launchwindow.model.CareerEntry.Kind.class);
+
+        // Poaching: its actions and the standing orders (design.md section 2.2(d), phase 5,
+        // 2026-10-08). Never move these lines.
+        kryo.register(de.mkoehler.launchwindow.actions.MakeOfferAction.class);
+        kryo.register(de.mkoehler.launchwindow.actions.SetRetentionDefaultAction.class);
+        kryo.register(de.mkoehler.launchwindow.actions.SetRetentionAction.class);
+        kryo.register(de.mkoehler.launchwindow.model.Retention.class);
     }
 }

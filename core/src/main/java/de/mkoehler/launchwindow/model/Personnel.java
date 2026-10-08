@@ -51,6 +51,8 @@ public abstract class Personnel {
     private int seasonsSinceTraining;
     private String projectId;
     private int projectSeasons;
+    private Integer lastApproachedTurn;
+    private Retention retention = Retention.DEFAULT;
 
     /**
      * No-argument constructor required for Jackson deserialization.
@@ -560,6 +562,43 @@ public abstract class Personnel {
      */
     public void setLoyalty(int loyalty) {
         this.loyalty = loyalty;
+    }
+
+    /**
+     * Returns the game turn a rival last made the person an offer (poaching, {@code design.md}
+     * &sect;2.2(d)), or {@code null} if no one ever has.
+     *
+     * @return the turn, or {@code null}
+     */
+    public Integer getLastApproachedTurn() {
+        return lastApproachedTurn;
+    }
+
+    /**
+     * Sets the game turn a rival last made the person an offer.
+     *
+     * @param lastApproachedTurn the turn, or {@code null}
+     */
+    public void setLastApproachedTurn(Integer lastApproachedTurn) {
+        this.lastApproachedTurn = lastApproachedTurn;
+    }
+
+    /**
+     * Returns how the agency answers a rival's offer to this person.
+     *
+     * @return the standing order, never {@code null}
+     */
+    public Retention getRetention() {
+        return retention;
+    }
+
+    /**
+     * Sets how the agency answers a rival's offer to this person.
+     *
+     * @param retention the standing order, or {@code null} for the agency default
+     */
+    public void setRetention(Retention retention) {
+        this.retention = retention == null ? Retention.DEFAULT : retention;
     }
 
     /**

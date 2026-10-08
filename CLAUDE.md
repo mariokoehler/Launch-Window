@@ -57,8 +57,10 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   memorial's person page, rules and screens. Its numbers were confirmed on 2026-10-08, and
   three changes were built the same day: doubled ambition windows, faster rapport drift, and a
   mission as two teams for chemistry, the crew with CAPCOM and the controllers (`design.md`
-  §2.2(d)). Poaching (phase 5, `ui-spec.md` §4.16) is mocked up on the canvas `Launch Window —
-  Poaching` (2026-10-08), look unconfirmed; not built yet.
+  §2.2(d)). **Poaching (phase 5) is built** (2026-10-08, from the canvas
+  `Launch Window — Poaching`, `ui-spec.md` §4.16): engineers and controllers only, offers from a
+  personnel file, a standing order per department and per person. Its numbers are unconfirmed.
+  Reset the dev data root before the next play test.
 - **Intelligence is built** (`design.md` §2.9, 2026-10-07): no sabotage, an eighth building
   (the Intelligence Office), a level dial with actions and passives, from the canvas
   `Launch Window — Intelligence Office` (`ui-spec.md` §4.15). Reset the dev data root before the

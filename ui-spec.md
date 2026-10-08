@@ -1653,7 +1653,7 @@ as a band and the ambition the person has said (phase 4; never one still hidden)
 results come from the
 latest turn report when the client has it.
 
-### 4.16 Poaching *(specified 2026-10-08 for `design.md` §2.2(d), phase 5; mocked up the same day)*
+### 4.16 Poaching *(specified 2026-10-08 for `design.md` §2.2(d), phase 5; mocked up and built the same day)*
 **Purpose:** hiring a rival's engineer or flight controller away, and keeping your own. No new
 building: offers are made from the Intelligence Office's personnel files; the defence lives with
 each department and on the person page. Rules and numbers in `design.md` §2.2(d) (all unconfirmed);
@@ -1741,6 +1741,18 @@ all **unconfirmed**; the main ones:
 - **Reasons beyond the spec's three:** "Approached recently: wait until Summer 1963" (with the
   date) and "On a mission in flight this season".
 - **New:** no colour tokens; icons `retain_keep`, `retain_go` and `joined` (inline SVG so far).
+
+*As built (2026-10-08):* `IntelligenceOfficeScreen` (the file card's footer, the offer dialog,
+the queued offer, "Offer: n of 1 used" in the title row), `RetentionCards` (the department strip,
+the person page's row, the roster mark), `PersonScreen` (the joined tag, the row, a left column
+widened to 440 px to fit it), `CareerCards` ("At NASA:" before earlier lines, the new dots),
+`TurnReportView` (offer lines first in People, and the People tile counting who came and who was
+hired away), `client.view.PoachTexts` for every line, three icons in `make_ui_icons.py`, and
+refusal texts. Differences from the mockup: the report's People card has no subheads (the tags
+say which side), and its poaching lines don't open the person page yet; no "Set otherwise" filter chip; no "No offer made" line in last season's
+results; no "Kept from NASA" on a newcomer's ambition; no "Signing bonus" budget line (the report
+line names the bonus); the dialog's answer caption also says morale and unshown traits aren't
+counted. Not yet on the UI Asset Sheet: the three icons.
 
 ---
 

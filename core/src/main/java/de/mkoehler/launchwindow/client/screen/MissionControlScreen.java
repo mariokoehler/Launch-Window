@@ -76,6 +76,8 @@ public final class MissionControlScreen extends ChromeScreen {
         content.top();
         content.defaults().growX();
         content.add(summaryStrip()).padBottom(Theme.SPACE_4).row();
+        content.add(RetentionCards.strip(this, de.mkoehler.launchwindow.rules.PersonnelGroup.MISSION_CONTROL))
+            .padBottom(Theme.SPACE_4).row();
         Table glance = glance();
         if (glance != null) {
             content.add(glance).padBottom(Theme.SPACE_4).row();

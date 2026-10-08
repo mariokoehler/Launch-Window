@@ -393,6 +393,132 @@ public final class ScreenSnapshot {
 
         intelligenceShots(folder, game);
         careerShots(folder, game, info);
+        poachingShots(folder, game);
+    }
+
+    /**
+     * The Poaching canvas (2026-10-08): a rival's folder with an offer to make, the reasons there
+     * can't be one and an offer queued, the offer dialog (with room, and with the roster full), the
+     * queued offer among the operations, the SET Centre's Retention strip and roster marks, the person
+     * page's Retention row and someone who joined from a rival, and the turn report's offer lines.
+     */
+    private static void poachingShots(File folder, LaunchWindowGame game) {
+        String hash = ContentPackHash.ofClasspath("content/early-era", ScreenSnapshot.class.getClassLoader());
+        GameInfoResponse info = GameInfoResponse.success("early-era", hash, DECLARED, 31, true,
+            6 * 3_600_000L + 12 * 60_000L, 0L, null, List.of(), List.of(), 0);
+        PlayerSnapshot state = setCentreState();
+        state.getIntelligence().setLevel(3);
+        state.getIntelligence().setTargetLevel(3);
+        state.getIntelligence().setActionsUsed(2);
+        PlayerSnapshot pool = new PlayerSnapshot("Sever Design Bureau", Archetype.SOVIET, 0, 0, 0, 1);
+        HiringPool.refreshCandidates(pool, new java.util.SplittableRandom(11));
+        de.mkoehler.launchwindow.model.RivalFolder sever = state.getIntelligence().folder("kSever",
+            "Sever Design Bureau");
+        sever.learnLevel(2, 30, de.mkoehler.launchwindow.model.RivalFolder.FROM_DOSSIER);
+        Personnel engineer = pool.getSetSpecialistCandidates().get(2);
+        Personnel astronaut = pool.getAstronautCandidates().get(4);
+        Personnel newcomer = pool.getSetSpecialistCandidates().get(0);
+        Personnel controller = pool.getMissionControlCandidates().get(1);
+        List<de.mkoehler.launchwindow.model.IntelFact> engineerSkills = List.of(fact("SKILL", "CREWED_SPACECRAFT", 66, 76,
+            0), fact("SKILL", "ROCKETS", 52, 62, 0), fact("SKILL", "SPACE_PROBES", 40, 50, 0));
+        sever.getPersonnelFiles().add(new de.mkoehler.launchwindow.model.PersonnelFile(controller.getId(),
+            controller.getName(), controller.getPortraitId(), "MISSION_CONTROL", controller.getAge(), 30, List.of(
+                fact("SKILL", "TRAJECTORY_AND_GUIDANCE", 64, 74, 0), fact("SKILL", "PROPULSION", 58, 68, 0),
+                fact("SKILL", "MISSION_OPERATIONS", 51, 61, 0)), de.mkoehler.launchwindow.model.Trait.RESTLESS,
+            "Middling", null, false, 36, 9, null));
+        sever.getPersonnelFiles().add(new de.mkoehler.launchwindow.model.PersonnelFile(astronaut.getId(),
+            astronaut.getName(), astronaut.getPortraitId(), "ASTRONAUT", astronaut.getAge(), 30, List.of(
+                fact("SKILL", "PILOTING", 74, 84, 0)), de.mkoehler.launchwindow.model.Trait.GLORY_SEEKER, "High", null,
+            false, 40, 12, null));
+        sever.getPersonnelFiles().add(new de.mkoehler.launchwindow.model.PersonnelFile(newcomer.getId(),
+            newcomer.getName(), newcomer.getPortraitId(), "SET", newcomer.getAge(), 30, engineerSkills,
+            de.mkoehler.launchwindow.model.Trait.QUICK_STUDY, "Middling", null, false, 30, 1, null));
+        sever.getPersonnelFiles().add(new de.mkoehler.launchwindow.model.PersonnelFile(engineer.getId(),
+            engineer.getName(), engineer.getPortraitId(), "SET", engineer.getAge(), 30, engineerSkills,
+            de.mkoehler.launchwindow.model.Trait.STEADY, "Low", new de.mkoehler.launchwindow.model.Ambition(
+                de.mkoehler.launchwindow.model.Ambition.Kind.TOP_ENGINEER, "", 9, 12, 26), true, 38, 14, null));
+        startSession(game, state, info);
+        game.session().keepRivals(List.of(RivalSummary.of("Sever Design Bureau", "Tamara Abenova", Archetype.SOVIET,
+            false, Map.of("earth-orbit-satellite", 8), "kSever")));
+        de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen.Tab folders =
+            de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen.Tab.FOLDERS;
+        write(folder, "poach-folders-free.png", new de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen(game,
+            folders), screen -> screen.openFolder("kSever"));
+        de.mkoehler.launchwindow.model.PersonnelFile controllerFile = sever.getPersonnelFiles().getFirst();
+        de.mkoehler.launchwindow.model.PersonnelFile engineerFile = sever.getPersonnelFiles().getLast();
+        write(folder, "poach-offer.png", new de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen(game,
+            folders), screen -> {
+                screen.openFolder("kSever");
+                screen.openOffer("kSever", controllerFile);
+            });
+        // A full SET Centre: the offer at +100 % would lapse.
+        int cap = de.mkoehler.launchwindow.rules.BuildingUpgrades.capacity(game.session().state(), Building.SET_CENTER,
+            game.session().catalog().buildings());
+        for (int i = game.session().state().getSetSpecialists().size(); i < cap; i++) {
+            game.session().state().getSetSpecialists().add(specialist("f" + i, "Filler " + i, 30, 70, 30, 40, 40,
+                40, 40, 40));
+        }
+        write(folder, "poach-offer-full.png", new de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen(game,
+            folders), screen -> {
+                screen.openFolder("kSever");
+                screen.pickRaise(100);
+                screen.openOffer("kSever", engineerFile);
+            });
+        game.session().state().getSetSpecialists().removeIf(person -> person.getId().startsWith("f"));
+        game.session().state().getIntelligence().getQueued().add(new de.mkoehler.launchwindow.model.IntelOperation(
+            "op8", de.mkoehler.launchwindow.model.IntelOperation.Kind.ASSESSMENT, "kSever",
+            de.mkoehler.launchwindow.model.IntelArea.RND, null, null));
+        game.session().state().getIntelligence().getQueued().add(new de.mkoehler.launchwindow.model.IntelOperation(
+            "op9", de.mkoehler.launchwindow.model.IntelOperation.Kind.OFFER, "kSever", null, "SET", engineer.getId(),
+            50));
+        write(folder, "poach-folders-queued.png", new de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen(
+            game, folders), screen -> screen.openFolder("kSever"));
+        write(folder, "poach-operations.png", new de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen(game,
+            de.mkoehler.launchwindow.client.screen.IntelligenceOfficeScreen.Tab.OPERATIONS), null);
+
+        // Keeping people: one kept at any price, one let go, a person page on each order, a newcomer.
+        PlayerSnapshot own = game.session().state();
+        own.getSetSpecialists().get(0).setRetention(de.mkoehler.launchwindow.model.Retention.KEEP);
+        own.getSetSpecialists().get(3).setRetention(de.mkoehler.launchwindow.model.Retention.LET_GO);
+        write(folder, "poach-set-retention.png", new SetCentreScreen(game), null);
+        SetSpecialist kept = own.getSetSpecialists().get(0);
+        kept.setLoyalty(69);
+        kept.getCareer().add(career(26, "HIRED", "", "calm", "", 0, 0));
+        kept.getCareer().add(career(29, "OFFER", "Sever Design Bureau", "", "TURNED_DOWN", 52, 25));
+        kept.getCareer().add(career(30, "OFFER", "Sever Design Bureau", "52", "MATCHED", 78, 50));
+        write(folder, "poach-person-keep.png", new de.mkoehler.launchwindow.client.screen.PersonScreen(game, kept,
+            () -> new SetCentreScreen(game)), null);
+        SetSpecialist plain = own.getSetSpecialists().get(5);
+        write(folder, "poach-person-default.png", new de.mkoehler.launchwindow.client.screen.PersonScreen(game, plain,
+            () -> new SetCentreScreen(game)), null);
+        SetSpecialist joined = own.getSetSpecialists().get(4);
+        joined.setLoyalty(50);
+        joined.setTraits(List.of(new de.mkoehler.launchwindow.model.TraitState(
+            de.mkoehler.launchwindow.model.Trait.PERFECTIONIST, 2, true), new de.mkoehler.launchwindow.model.TraitState(
+            de.mkoehler.launchwindow.model.Trait.MENTOR, 3, false)));
+        joined.getCareer().add(career(12, "HIRED", "", "exacting", "", 0, 0));
+        joined.getCareer().add(career(18, "TRAIT", "PERFECTIONIST", "", "", 0, 0));
+        joined.getCareer().add(career(25, "RD_STINT", "vostok-capsule", "", "", 6.8, 4));
+        joined.getCareer().add(career(30, "JOINED", "Sever Design Bureau", "38", "", 57, 50));
+        write(folder, "poach-person-joined.png", new de.mkoehler.launchwindow.client.screen.PersonScreen(game, joined,
+            () -> new SetCentreScreen(game)), null);
+
+        TurnReport report = new TurnReport(TurnReport.VERSION, 30, 4_310, 4_370, 21_000, 21_512, List.of(), List.of(),
+            List.of(
+                new de.mkoehler.launchwindow.rules.OfferSettled(false, "kSever", "Sever Design Bureau", kept.getId(),
+                    kept.getName(), "SET", 50, de.mkoehler.launchwindow.rules.OfferResult.Outcome.MATCHED, 52, 78, 0,
+                    "KEEP", -1),
+                new de.mkoehler.launchwindow.rules.OfferSettled(false, "kMeridian", "Meridian Rocket Society", "p40",
+                    "Rein Saar", "SET", 100, de.mkoehler.launchwindow.rules.OfferResult.Outcome.JOINED, 44, 88, 0,
+                    "LET_GO", -1),
+                new de.mkoehler.launchwindow.rules.OfferSettled(true, "kSever", "Sever Design Bureau", joined.getId(),
+                    joined.getName(), "SET", 50, de.mkoehler.launchwindow.rules.OfferResult.Outcome.JOINED, 38, 57, 57,
+                    "", -1),
+                new de.mkoehler.launchwindow.rules.OfferSettled(true, "kSever", "Sever Design Bureau", "p9",
+                    "Lucille Banks", "MISSION_CONTROL", 100,
+                    de.mkoehler.launchwindow.rules.OfferResult.Outcome.LAPSED_NO_ROOM, 42, 84, 0, "", -1)));
+        game.session().keepReport(report);
+        write(folder, "poach-report.png", new TurnReportScreen(game, report), null);
     }
 
     /**

@@ -20,6 +20,11 @@ import java.util.Objects;
  *   <li>{@link Kind#EXPERT}: {@code ref} the skill.</li>
  *   <li>{@link Kind#AMBITION}: {@code ref} the ambition, {@code note} its component if any,
  *       {@code outcome} SAID, FULFILLED, PASSED_OVER, IMPOSSIBLE or RAN_OUT.</li>
+ *   <li>{@link Kind#JOINED}: {@code ref} the agency they left, {@code count} the raise in percent,
+ *       {@code value} the new salary, {@code note} the old salary.</li>
+ *   <li>{@link Kind#OFFER}: {@code ref} the agency that made it, {@code count} the raise in percent,
+ *       {@code outcome} MATCHED or TURNED_DOWN, {@code value} the salary after it, {@code note} the
+ *       salary before a match.</li>
  * </ul>
  *
  * @param turn    the game turn it happened
@@ -54,7 +59,11 @@ public record CareerEntry(int turn, Kind kind, String ref, String note, String o
         /** Earned the Expert trait. */
         EXPERT,
         /** An ambition was said or settled. */
-        AMBITION
+        AMBITION,
+        /** Came over from a rival agency (poaching). */
+        JOINED,
+        /** Stayed when a rival made an offer (poaching). */
+        OFFER
     }
 
     /**

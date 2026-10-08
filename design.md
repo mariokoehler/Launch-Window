@@ -343,6 +343,11 @@ leading to satellite navigation.
     was secret down to the name of its chief. Still, NASA kept plenty quiet, and the user decided
     against any secrecy bonus (§2.9). The claim that Soviet engineers learned much about Apollo
     from the US trade press couldn't be sourced (searched 2026-10-07): **dropped**, don't use it.
+- **Both space programs began with poached engineers** (for poaching's history note, §2.2(d);
+  **not yet checked against sources**): after the war the US brought Wernher von Braun's team and
+  other German rocket specialists over under Operation Paperclip, while the Soviet Union took
+  others, among them Helmut Gröttrup's group, to Gorodomlya island in Lake Seliger. Check the
+  dates and numbers before it reaches the game.
 - **Bars (also called Chaika) and Lisichka** died when their Korabl-Sputnik launch failed on 28
   July 1960, 19 seconds in: a strap-on broke away and the capsule's parachutes opened too low.
   They're the dogs remembered on a failed Korabl-Sputnik 2 flight (§2.5(f)), as "Chaika". Sources
@@ -715,6 +720,41 @@ such as letting a brilliant troublemaker go.
     German rocket engineers over under Operation Paperclip (von Braun's team), and the Soviets
     took others to the USSR (Gröttrup's group on Gorodomlya island). Both programs started from
     poached engineers.
+  - **Mocked up (2026-10-08)** on the canvas `Launch Window — Poaching` (`ui-spec.md` §4.16). The
+    canvas added to the rules, all unconfirmed: a file records the person's **salary, seasons with
+    the agency and the last approach** (a file card can then say why someone can't be approached
+    yet, with the date it ends); "on a mission in flight" is a reason too; **the offer stays
+    possible with the roster full** (it lapses at the resolution unless a place frees up); and the
+    **answer range counts only what the file shows** (the loyalty band's bounds, disappointment,
+    the one trait), never morale or unshown traits, and the dialog says so.
+  - **As built (2026-10-08):** `rules.Poaching` (numbers, the offer, the standing orders, the
+    answer, and each side's apply), offers settled with the intelligence by `IntelligenceBoard`
+    (an offer is an `IntelOperation` of kind `OFFER` with its raise; it uses no action, and
+    cancelling one gives none back), each side applied by its own `Intelligence` pass, and the
+    report line `OfferSettled` (event and `IntelFinding` kinds appended). Choices made while
+    building, all unconfirmed:
+    - **Who can be approached** is decided at the resolution: the file only tells as of its date,
+      so queuing checks the level, the file, the group, the raise and the one offer a season, and
+      the resolution checks tenure, the cooldown, training (excluded too) and, for controllers,
+      being on a mission (any assignment). An offer that fails these lapses, and the target is
+      never told.
+    - **Two offers to one person in one turn:** the highest raise settles first (then the
+      agency key, then the offer id), the others lapse, whatever order agencies resolve in.
+    - **The person who comes over** travels whole in the turn's intelligence file (concrete
+      engineer and controller fields, never sent to a client: the report line is built from plain
+      fields). They get a new id in the poacher's agency, the filed trait revealed and the rest
+      hidden again (work seasons back to 0, so the reveals re-arm), idle, tenure 0, loyalty 50,
+      the agency default, and the new salary; the poacher's file on them is dropped. They're on
+      the roster before the budget, so the new salary is paid from that resolution; the signing
+      bonus is paid at once, even into debt.
+    - **The person who leaves** is taken off the roster like a dismissal (an R&D slot frees up).
+      If they already left that season another way (retired, resigned), only the line remains.
+    - **Career:** `JOINED` and `OFFER` lines; the 30-line cap keeps every `JOINED` line, and the
+      page prefixes each earlier line with the agency it happened at.
+    - **Measured:** the bot playouts are unchanged (no bot makes offers); `PoachingTest` runs the
+      board and both passes through the saved findings' JSON.
+    - **Reset the dev data root** before the next play test (new fields on employees, files and
+      the snapshot).
 - **First-pass rules for phases 1 to 3** (2026-10-07; the user accepted the proposed defaults for
   play testing; every number is ours and to be tuned):
   - **A team** is the engineers working on one component's R&D this season, or one of a mission
@@ -1874,6 +1914,12 @@ concept audit (§1.1), the chips on program details, configuration details and t
 rows, and the "new" dot there and in the Museum. Their look is confirmed (user, 2026-10-07). Otherwise
 next is the next play test.
 
+**Poaching** (people phase 5, built 2026-10-08, §2.2(d), `ui-spec.md` §4.16): offers to a rival's
+engineers and flight controllers from a personnel file, one a season, and standing orders to match
+them, per department and per person. Mocked up on the canvas `Launch Window — Poaching`. Every number
+is unconfirmed and unmeasured: no bot makes offers yet. **Reset the dev data root** before the next
+play test.
+
 **Intelligence** (designed 2026-10-07, §2.9): an eighth building, the Intelligence Office, with a
 level dial (0 to 3, one step a season), actions per season equal to the level, passives, the
 background check on the hire screen, agency assessments and personnel files. Mocked up on the
@@ -1891,7 +1937,7 @@ root** before the next play test (new fields on the snapshot and on employees).
   2026-10-08). The NAS pulls the image with an access token. The repo goes public when a real
   first game starts. The first version number is still open.
 - **M7+ (order open):** people worth caring about (chemistry, traits, rapport, ambitions, career
-  records, poaching; §2.2(d), in five phases); interaction beyond passive competition (§2.9); the rest of the content
+  records, poaching; §2.2(d), in five phases, all built by 2026-10-08); interaction beyond passive competition (§2.9); the rest of the content
   tree beyond the early era; the rest of the Museum encyclopedia (§1.1; E-01 to E-05 built 2026-10-06/07); a game-host role and UI;
   validating the `WEEKDAYS` profile with the colleagues' group.
 - **Idea to revisit: launch latitude as a mechanic** (user, 2026-10-07). Give the agencies'

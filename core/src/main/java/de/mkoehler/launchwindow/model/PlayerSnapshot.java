@@ -68,6 +68,7 @@ public class PlayerSnapshot {
     private Map<Building, Integer> buildingLevels = new LinkedHashMap<>();
     private Map<Building, Integer> buildingUpgradeSeasonsRemaining = new LinkedHashMap<>();
     private IntelligenceState intelligence = new IntelligenceState();
+    private Map<String, Integer> retentionMatchPercent = new LinkedHashMap<>();
 
     /**
      * No-argument constructor required for Jackson deserialization.
@@ -1002,5 +1003,26 @@ public class PlayerSnapshot {
      */
     public void setIntelligence(IntelligenceState intelligence) {
         this.intelligence = intelligence == null ? new IntelligenceState() : intelligence;
+    }
+
+    /**
+     * Returns the agency's standing order against poaching, per group: rival offers up to this
+     * raise, in percent, are matched ({@code design.md} &sect;2.2(d)). A group missing here uses
+     * the rules' default.
+     *
+     * @return the percentages, by {@code PersonnelGroup} name, live
+     */
+    public Map<String, Integer> getRetentionMatchPercent() {
+        return retentionMatchPercent;
+    }
+
+    /**
+     * Sets the standing order against poaching, per group.
+     *
+     * @param retentionMatchPercent the percentages, by group name
+     */
+    public void setRetentionMatchPercent(Map<String, Integer> retentionMatchPercent) {
+        this.retentionMatchPercent = retentionMatchPercent == null ? new LinkedHashMap<>()
+            : new LinkedHashMap<>(retentionMatchPercent);
     }
 }

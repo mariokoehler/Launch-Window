@@ -24,11 +24,12 @@ import java.util.Objects;
  * @param tidbit        the tidbit, for {@link Kind#TIDBIT}
  * @param level         the rival's level learned: their counter-intelligence for {@link Kind#CAUGHT},
  *                      their Intelligence level for {@link Kind#CAUGHT_THEIRS} and a plans dossier; else -1
+ * @param offer         a poaching offer's result, for {@link Kind#OFFER_MADE} and {@link Kind#OFFER_RECEIVED}
  * @author Mario Koehler
  */
 public record IntelFinding(Kind kind, String operationId, IntelOperation.Kind operationKind, String rivalId,
                            String rivalAgency, IntelArea area, Dossier dossier, PersonnelFile file, Tidbit tidbit,
-                           int level) {
+                           int level, OfferResult offer) {
 
     /**
      * What happened.
@@ -49,7 +50,11 @@ public record IntelFinding(Kind kind, String operationId, IntelOperation.Kind op
         /** The target is gone or isn't a rival, or has nobody in the group: nothing happened. */
         NO_TARGET,
         /** Queued too late to be settled with the turn: nothing happened. */
-        NOT_SETTLED
+        NOT_SETTLED,
+        /** Our offer to a rival's person was settled (poaching, {@code design.md} &sect;2.2(d)). */
+        OFFER_MADE,
+        /** A rival's offer to one of our people was settled. */
+        OFFER_RECEIVED
     }
 
     /**
@@ -59,6 +64,25 @@ public record IntelFinding(Kind kind, String operationId, IntelOperation.Kind op
      */
     public IntelFinding {
         Objects.requireNonNull(kind, "kind must not be null");
+    }
+
+    /**
+     * A finding without an offer.
+     *
+     * @param kind          what happened
+     * @param operationId   the operation it settles
+     * @param operationKind the operation's kind
+     * @param rivalId       the rival's player id
+     * @param rivalAgency   the rival's agency name
+     * @param area          an assessment's area
+     * @param dossier       the new dossier
+     * @param file          the new personnel file
+     * @param tidbit        the tidbit
+     * @param level         the rival's level learned, or -1
+     */
+    public IntelFinding(Kind kind, String operationId, IntelOperation.Kind operationKind, String rivalId,
+            String rivalAgency, IntelArea area, Dossier dossier, PersonnelFile file, Tidbit tidbit, int level) {
+        this(kind, operationId, operationKind, rivalId, rivalAgency, area, dossier, file, tidbit, level, null);
     }
 
     /**

@@ -84,16 +84,27 @@ final class CareerCards {
         card.add(title(ui, "Career record")).padBottom(Theme.SPACE_3).row();
         List<String[]> lines = new ArrayList<>();
         List<Boolean> gold = new ArrayList<>();
+        List<CareerEntry.Kind> kinds = new ArrayList<>();
         if (running != null) {
             lines.add(new String[] {"Now", String.format(Locale.ROOT, "%s R&D, %d %s so far: reliability +%.1f",
                 ContentNames.of(running.componentId()), running.seasons(), running.seasons() == 1 ? "season"
                     : "seasons", running.gain())});
             gold.add(false);
+            kinds.add(null);
         }
         for (int i = career.size() - 1; i >= 0; i--) {
             CareerEntry entry = career.get(i);
-            lines.add(new String[] {CareerTexts.date(entry), CareerTexts.line(entry, catalog)});
+            // A line from before a move between agencies says where it happened.
+            String at = de.mkoehler.launchwindow.client.view.PoachTexts.earlierAgency(career, i);
+            String text = CareerTexts.line(entry, catalog);
+            if (at != null) {
+                // Lines that open on a name (a component, a mission) keep their capital.
+                boolean name = entry.kind() == CareerEntry.Kind.RD_STINT || entry.kind() == CareerEntry.Kind.FLIGHT;
+                text = "At " + at + ": " + (name ? text : Character.toLowerCase(text.charAt(0)) + text.substring(1));
+            }
+            lines.add(new String[] {CareerTexts.date(entry), text});
             gold.add(CareerTexts.highlight(entry));
+            kinds.add(entry.kind());
         }
         if (lines.isEmpty()) {
             card.add(ui.paragraph("The record starts at the next turn.", Theme.TextStyle.BODY_SM, Theme.INK_MUTED))
@@ -104,8 +115,13 @@ final class CareerCards {
             row.top().left();
             row.add(ui.label(lines.get(i)[0], Theme.TextStyle.CAPTION, Theme.INK_MUTED)).width(84f).top().left()
                 .padRight(Theme.SPACE_2);
-            Image dot = new Image(ui.circle(gold.get(i) ? Theme.GOLD : Theme.SURFACE_CARD,
-                gold.get(i) ? Theme.GOLD : Theme.NAVY_BORDER, 1.5f, (int) DOT));
+            // Joined: green. Stayed or turned an offer down: navy with a gold ring (Poaching canvas).
+            CareerEntry.Kind kind = kinds.get(i);
+            Color fill = kind == CareerEntry.Kind.JOINED ? Theme.SUCCESS : kind == CareerEntry.Kind.OFFER ? Theme.NAVY
+                : gold.get(i) ? Theme.GOLD : Theme.SURFACE_CARD;
+            Color ring = kind == CareerEntry.Kind.JOINED ? Theme.SUCCESS : kind == CareerEntry.Kind.OFFER ? Theme.GOLD
+                : gold.get(i) ? Theme.GOLD : Theme.NAVY_BORDER;
+            Image dot = new Image(ui.circle(fill, ring, kind == CareerEntry.Kind.OFFER ? 2.5f : 1.5f, (int) DOT));
             row.add(new Container<>(dot).size(DOT)).top().padTop(4f).padRight(Theme.SPACE_3);
             row.add(ui.paragraph(lines.get(i)[1], Theme.TextStyle.BODY_SM, Theme.INK)).expandX().fillX();
             card.add(row).padBottom(Theme.SPACE_2).row();
