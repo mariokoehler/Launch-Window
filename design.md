@@ -344,10 +344,24 @@ leading to satellite navigation.
     against any secrecy bonus (§2.9). The claim that Soviet engineers learned much about Apollo
     from the US trade press couldn't be sourced (searched 2026-10-07): **dropped**, don't use it.
 - **Both space programs began with poached engineers** (for poaching's history note, §2.2(d);
-  **not yet checked against sources**): after the war the US brought Wernher von Braun's team and
-  other German rocket specialists over under Operation Paperclip, while the Soviet Union took
-  others, among them Helmut Gröttrup's group, to Gorodomlya island in Lake Seliger. Check the
-  dates and numbers before it reaches the game.
+  checked 2026-10-08):
+  - **The US:** von Braun asked to bring about 500 of his Peenemünde people; the Army agreed to
+    118, and about 120 came under Operation Paperclip, most reaching Fort Bliss, Texas, in late 1945
+    and early 1946. In 1950 the group moved to Redstone Arsenal in Huntsville. Sources: White Sands
+    Missile Range Museum ("Operation Paperclip at Fort Bliss: 1945-1950"), German Way.
+  - **The Soviet Union:** in October 1946 (Albring's memoir gives 22 October) the leading German
+    rocket specialists still in the Soviet zone and their families were put on trains, without
+    warning, to the USSR; the core group, Helmut Gröttrup among them, ended up on Gorodomlya
+    Island in Lake Seliger as Branch 1 of the NII-88 institute, kept apart from the Soviet design
+    work. Their work fed the R-1, the Soviet copy of the V-2. **Numbers disagree** (73 at first,
+    "about 150", "more than 170"): say "over a hundred" or none. Sources: Wikipedia
+    ("Gorodomlya Island"), War on the Rocks ("The Forgotten Rocketeers", 2019), RussianSpaceWeb.
+  - **Not confirmed:** the name "Operation Osoaviakhim" for the October 1946 round-up wasn't in
+    the sources found; leave it out until checked.
+  - **Suggested note** (for the offer dialog): "Both sides began with poached engineers. After the
+    war about 120 of von Braun's Peenemünde team came to Texas under Operation Paperclip; in
+    October 1946 the Soviets put others on trains to an island in Lake Seliger, where they helped
+    build the R-1, a copy of the V-2."
 - **Bars (also called Chaika) and Lisichka** died when their Korabl-Sputnik launch failed on 28
   July 1960, 19 seconds in: a strap-on broke away and the capsule's parachutes opened too low.
   They're the dogs remembered on a failed Korabl-Sputnik 2 flight (§2.5(f)), as "Chaika". Sources
@@ -962,9 +976,23 @@ such as letting a brilliant troublemaker go.
     in the turn report, and loyalty and the said ambition in intelligence personnel files
     (`ui-spec.md` §4.14, §4.15). **Reset the dev data root** before the next play test (new saved
     fields).
-- **History notes to go with it:** Deke Slayton picked NASA's crews partly on who worked well
-  together; Gagarin was reportedly chosen over Titov partly for his manner and background.
-  Verify both before use (§1.1).
+- **History notes to go with it** (checked 2026-10-08):
+  - **Gagarin over Titov:** both were picked for their training results and for being short enough
+    for the cramped Vostok. In a secret vote, 17 of the 20 cosmonaut candidates named Gagarin to fly
+    first. Kamanin, who ran cosmonaut training, wrote in his diary on 5 April 1961 that he was
+    still torn, and that what kept him from choosing Titov was the need for the stronger man on the
+    next, day-long flight: Titov flew Vostok 2 in August 1961, over 25 hours. Gagarin's peasant
+    background and easy charm are often given as reasons too, but that's later journalism and
+    biography (Jenks), not the record: say "it was said" if used. Sources: Wikipedia ("Vostok 1",
+    citing Kamanin's diary), ESA ("Yuri Gagarin"), AFP via Space Daily.
+  - **Slayton's crews: only partly confirmed.** Deke Slayton, grounded in 1962, ran crew
+    assignments as Director of Flight Crew Operations from late 1963 to 1972 and had the deciding
+    say on the Gemini and Apollo crews, including the first Moon landing's (NASA history). That
+    he weighed who worked well together is said only in secondary accounts (forums, fan wikis); his
+    memoir *Deke!* (1994) is the primary source and hasn't been checked. **Use only the confirmed
+    part** ("one man chose the crews") until *Deke!* is read. Also from his memoir, via a secondary
+    source: the Gemini 9 crew's death in 1966 moved the backups along, which is how Buzz Aldrin came
+    to fly Gemini 12 and, Slayton said, to be in line for the first landing.
 - **Phases:** (1) chemistry scales output; (2) traits, reveals and hints; (3) rapport and the
   chemistry preview in the assignment dialogs; (4) ambitions, loyalty and the career page; (5)
   poaching and the background check, with espionage.

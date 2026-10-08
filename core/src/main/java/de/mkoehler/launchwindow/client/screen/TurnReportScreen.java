@@ -331,8 +331,16 @@ public final class TurnReportScreen extends ChromeScreen {
         }
         for (TurnReportView.Line line : lines) {
             Color color = line.tone() > 0 ? Theme.SUCCESS : line.tone() < 0 ? Theme.DANGER : Theme.INK_MUTED;
-            card.add(line(line.title(), line.tag().toUpperCase(Locale.ROOT), color))
-                .padBottom(line.text().isEmpty() ? Theme.SPACE_2 : 2f).row();
+            Table row = line(line.title(), line.tag().toUpperCase(Locale.ROOT), color);
+            // A line about someone still here opens their page (poaching's lines, ui-spec.md 4.16).
+            Personnel person = line.personId() == null ? null : People.find(session.state(), line.personId());
+            if (person != null) {
+                row.setTouchable(com.badlogic.gdx.scenes.scene2d.Touchable.enabled);
+                row.addListener(clicked(() -> game.setScreen(new PersonScreen(game, person,
+                    () -> new TurnReportScreen(game, report)))));
+                ui.tooltip(row, person.getName(), "Opens the person page.");
+            }
+            card.add(row).padBottom(line.text().isEmpty() ? Theme.SPACE_2 : 2f).row();
             if (!line.text().isEmpty()) {
                 card.add(ui.paragraph(line.text(), Theme.TextStyle.CAPTION, Theme.INK_MUTED)).growX()
                     .padBottom(Theme.SPACE_2).row();

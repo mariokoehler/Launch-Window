@@ -1750,12 +1750,17 @@ widened to 440 px to fit it), `CareerCards` ("At NASA:" before earlier lines, th
 `TurnReportView` (offer lines first in People, and the People tile counting who came and who was
 hired away), `client.view.PoachTexts` for every line, three icons in `make_ui_icons.py`, and
 refusal texts. Differences from the mockup: the report's People card has no subheads (the tags
-say which side), and its poaching lines don't open the person page yet; no "Set otherwise" filter chip; no "No offer made" line in last season's
+say which side); no "No offer made" line in last season's
 results; no "Kept from NASA" on a newcomer's ambition; no "Signing bonus" budget line (the report
 line names the bonus); the dialog's answer caption also says morale and unshown traits aren't
 counted. The three icons are on the UI Asset Sheet (2026-10-08, chrome section, with the
 roster marks and the joined tag in context), next to `binoculars`, `rel_good`, `rel_clash` and
 `trait_team`.
+*Gaps closed (2026-10-08):* a poaching line in the report opens the page of the person it's about
+while they're with the agency (one of ours who stayed, or someone who came over; never someone who
+left, and never the rival's person, whose id means nothing here; `PoachTexts.pageOf`). The SET Centre
+and Mission Control get the mockup's **"Set otherwise"** filter chip, shown once someone is set
+otherwise, and the Retention strip's **"Show them"** link switches to it.
 
 ---
 

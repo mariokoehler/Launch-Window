@@ -64,7 +64,10 @@ public final class SetCentreScreen extends ChromeScreen {
         content.top();
         content.defaults().growX();
         content.add(summaryStrip()).padBottom(Theme.SPACE_4).row();
-        content.add(RetentionCards.strip(this, de.mkoehler.launchwindow.rules.PersonnelGroup.SET))
+        content.add(RetentionCards.strip(this, de.mkoehler.launchwindow.rules.PersonnelGroup.SET, () -> {
+            filter = SetDepartment.Filter.SET_OTHERWISE;
+            rebuild();
+        }))
             .padBottom(Theme.SPACE_4).row();
         content.add(filterAndSortBar()).padBottom(Theme.SPACE_4).row();
         content.add(roster()).expand().fill();
@@ -104,6 +107,12 @@ public final class SetCentreScreen extends ChromeScreen {
         Table bar = new Table();
         Table chips = new Table();
         for (SetDepartment.Filter option : SetDepartment.Filter.values()) {
+            // Only once someone is set otherwise, so the chip never filters to nobody.
+            if (option == SetDepartment.Filter.SET_OTHERWISE && filter != option && session.state()
+                    .getSetSpecialists().stream().allMatch(engineer -> engineer.getRetention()
+                    == de.mkoehler.launchwindow.model.Retention.DEFAULT)) {
+                continue;
+            }
             boolean active = option == filter;
             Table chip = new Table();
             chip.setBackground(active ? ui.solid(Theme.SURFACE_CARD)

@@ -117,6 +117,9 @@ public final class AstronautComplexScreen extends ChromeScreen {
     private Table filterChips() {
         Table chips = new Table();
         for (MissionControl.Filter option : MissionControl.Filter.values()) {
+            if (option == MissionControl.Filter.SET_OTHERWISE) {
+                continue;
+            }
             boolean active = option == filter;
             Table chip = new Table();
             chip.setBackground(active ? ui.solid(Theme.SURFACE_CARD)

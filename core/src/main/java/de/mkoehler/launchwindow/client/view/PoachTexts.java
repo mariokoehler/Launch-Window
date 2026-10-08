@@ -215,6 +215,24 @@ public final class PoachTexts {
      * @return the text, the tag ("Matched", "Left", "Joined", "Declined", "Lapsed"), and the tone
      */
     public static TurnReportView.Line reportLine(OfferSettled offer) {
+        TurnReportView.Line line = words(offer);
+        return new TurnReportView.Line(line.title(), line.text(), line.tag(), line.tone(), pageOf(offer));
+    }
+
+    /**
+     * Returns whose page an offer's line opens: one of ours who stayed, or someone who came over.
+     * Never the rival's person (their id means nothing in this agency) or someone who left.
+     *
+     * @param offer the offer
+     * @return the person's id here, or {@code null}
+     */
+    public static String pageOf(OfferSettled offer) {
+        boolean ours = offer.made() ? offer.outcome() == OfferResult.Outcome.JOINED
+            : offer.outcome() == OfferResult.Outcome.MATCHED || offer.outcome() == OfferResult.Outcome.TURNED_DOWN;
+        return ours ? offer.personId() : null;
+    }
+
+    private static TurnReportView.Line words(OfferSettled offer) {
         String name = offer.personName() == null || offer.personName().isBlank() ? "someone" : offer.personName();
         String raise = raise(offer.raisePercent());
         String agency = offer.rivalAgency() == null || offer.rivalAgency().isBlank() ? "a rival agency"

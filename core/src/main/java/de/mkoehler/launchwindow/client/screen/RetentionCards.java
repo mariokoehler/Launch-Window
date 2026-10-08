@@ -35,11 +35,12 @@ final class RetentionCards {
      * Builds a department's Retention strip: the agency default as four segments, what a match does,
      * and who is set otherwise.
      *
-     * @param host  the screen, for its actions
-     * @param group the department's group
+     * @param host     the screen, for its actions
+     * @param group    the department's group
+     * @param showThem filters the roster to those set otherwise
      * @return the strip
      */
-    static Table strip(ChromeScreen host, PersonnelGroup group) {
+    static Table strip(ChromeScreen host, PersonnelGroup group, Runnable showThem) {
         UiKit ui = host.ui;
         PlayerSnapshot state = host.session.state();
         int current = Poaching.matchPercent(state, group);
@@ -79,7 +80,15 @@ final class RetentionCards {
             : state.getMissionControlOfficers();
         String otherwise = PoachTexts.setOtherwise(people, group);
         if (!otherwise.isEmpty()) {
-            text.add(ui.paragraph(otherwise, Theme.TextStyle.CAPTION, Theme.INK_MUTED)).growX().padTop(2f);
+            Table line = new Table();
+            line.left();
+            line.add(ui.label(otherwise, Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padRight(Theme.SPACE_2);
+            com.badlogic.gdx.scenes.scene2d.ui.Label show = ui.label("Show them", Theme.TextStyle.CAPTION, Theme.NAVY);
+            show.setTouchable(Touchable.enabled);
+            show.addListener(ChromeScreen.clicked(showThem));
+            line.add(show);
+            line.add().expandX();
+            text.add(line).growX().padTop(2f);
         }
         strip.add(text).expandX().fillX();
         return strip;

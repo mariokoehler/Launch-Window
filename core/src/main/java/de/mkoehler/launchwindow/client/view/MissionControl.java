@@ -36,7 +36,9 @@ public final class MissionControl {
         ON_A_MISSION("On a mission"),
         UNAVAILABLE("Unavailable"),
         /** Astronauts only: on PR duty. */
-        ON_PR_TOUR("On PR tour");
+        ON_PR_TOUR("On PR tour"),
+        /** Controllers only: not on the agency's retention default (poaching, ui-spec.md 4.16). */
+        SET_OTHERWISE("Set otherwise");
 
         private final String label;
 
@@ -231,6 +233,7 @@ public final class MissionControl {
             case IN_TRAINING -> !unavailable && officer.getAssignmentState() == AssignmentState.IN_TRAINING;
             case ON_A_MISSION -> !unavailable && officer.getAssignmentState() == AssignmentState.ASSIGNED;
             case ON_PR_TOUR -> false;
+            case SET_OTHERWISE -> officer.getRetention() != de.mkoehler.launchwindow.model.Retention.DEFAULT;
         };
     }
 

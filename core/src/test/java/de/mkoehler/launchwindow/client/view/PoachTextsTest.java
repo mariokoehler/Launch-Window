@@ -44,6 +44,31 @@ class PoachTextsTest {
     }
 
     @Test
+    void aLineOpensThePageOfSomeoneHereNeverOfTheRivalsPerson() {
+        OfferSettled stayed = new OfferSettled(false, "k", "NASA", "p1", "Ivan Kozlov", "SET", 50,
+            OfferResult.Outcome.MATCHED, 36, 54, 0, "KEEP", -1);
+        OfferSettled left = new OfferSettled(false, "k", "NASA", "p1", "Ivan Kozlov", "SET", 50,
+            OfferResult.Outcome.JOINED, 36, 54, 0, "LET_GO", -1);
+        OfferSettled came = new OfferSettled(true, "k", "NASA", "p30", "Ruth Feldman", "SET", 50,
+            OfferResult.Outcome.JOINED, 38, 57, 57, "", -1);
+        OfferSettled refused = new OfferSettled(true, "k", "NASA", "p4", "Ruth Feldman", "SET", 50,
+            OfferResult.Outcome.TURNED_DOWN, 38, 57, 0, "", -1);
+        assertEquals("p1", PoachTexts.reportLine(stayed).personId());
+        assertNull(PoachTexts.reportLine(left).personId());
+        assertEquals("p30", PoachTexts.reportLine(came).personId());
+        assertNull(PoachTexts.reportLine(refused).personId(), "p4 is the rival's id, not one of ours");
+    }
+
+    @Test
+    void theSetOtherwiseFilterShowsOnlyThoseOffTheDefault() {
+        SetSpecialist kept = new SetSpecialist("p1", "Gayane Martirosyan", 41, 70, 50);
+        kept.setRetention(Retention.KEEP);
+        SetSpecialist plain = new SetSpecialist("p2", "Plain", 41, 70, 50);
+        assertTrue(SetDepartment.matches(kept, SetDepartment.Filter.SET_OTHERWISE));
+        assertTrue(!SetDepartment.matches(plain, SetDepartment.Filter.SET_OTHERWISE));
+    }
+
+    @Test
     void careerLinesBeforeAMoveNameTheEarlierAgency() {
         List<CareerEntry> career = List.of(
             new CareerEntry(1, CareerEntry.Kind.HIRED, "", "", "", 0, 0),

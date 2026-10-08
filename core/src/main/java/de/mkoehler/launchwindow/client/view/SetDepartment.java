@@ -44,7 +44,9 @@ public final class SetDepartment {
         /** On payload or rocket R&amp;D. */
         RESEARCHING("Researching"),
         /** Out for a number of seasons (a random event). */
-        UNAVAILABLE("Unavailable");
+        UNAVAILABLE("Unavailable"),
+        /** Not on the agency's retention default (poaching, ui-spec.md 4.16). */
+        SET_OTHERWISE("Set otherwise");
 
         private final String label;
 
@@ -168,6 +170,7 @@ public final class SetDepartment {
             case IDLE -> !unavailable && specialist.getAssignmentState() == AssignmentState.IDLE;
             case IN_TRAINING -> !unavailable && specialist.getAssignmentState() == AssignmentState.IN_TRAINING;
             case RESEARCHING -> !unavailable && specialist.getAssignmentState() == AssignmentState.ASSIGNED;
+            case SET_OTHERWISE -> specialist.getRetention() != de.mkoehler.launchwindow.model.Retention.DEFAULT;
         };
     }
 

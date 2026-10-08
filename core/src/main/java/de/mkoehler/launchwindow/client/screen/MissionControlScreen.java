@@ -76,7 +76,10 @@ public final class MissionControlScreen extends ChromeScreen {
         content.top();
         content.defaults().growX();
         content.add(summaryStrip()).padBottom(Theme.SPACE_4).row();
-        content.add(RetentionCards.strip(this, de.mkoehler.launchwindow.rules.PersonnelGroup.MISSION_CONTROL))
+        content.add(RetentionCards.strip(this, de.mkoehler.launchwindow.rules.PersonnelGroup.MISSION_CONTROL, () -> {
+            filter = MissionControl.Filter.SET_OTHERWISE;
+            rebuild();
+        }))
             .padBottom(Theme.SPACE_4).row();
         Table glance = glance();
         if (glance != null) {
@@ -176,6 +179,12 @@ public final class MissionControlScreen extends ChromeScreen {
         Table chips = new Table();
         for (MissionControl.Filter option : MissionControl.Filter.values()) {
             if (option == MissionControl.Filter.ON_PR_TOUR) {
+                continue;
+            }
+            // Only once someone is set otherwise, so the chip never filters to nobody.
+            if (option == MissionControl.Filter.SET_OTHERWISE && filter != option && state().getMissionControlOfficers()
+                    .stream().allMatch(officer -> officer.getRetention() == de.mkoehler.launchwindow.model.Retention
+                    .DEFAULT)) {
                 continue;
             }
             boolean active = option == filter;

@@ -181,6 +181,8 @@ public final class AstronautCorps {
             case IN_TRAINING -> !unavailable && astronaut.getAssignmentState() == AssignmentState.IN_TRAINING;
             case ON_A_MISSION -> !unavailable && astronaut.getAssignmentState() == AssignmentState.ASSIGNED;
             case ON_PR_TOUR -> astronaut.getAssignmentState() == AssignmentState.PR_DUTY;
+            // Astronauts can't be poached, so none is ever set otherwise.
+            case SET_OTHERWISE -> false;
         };
     }
 

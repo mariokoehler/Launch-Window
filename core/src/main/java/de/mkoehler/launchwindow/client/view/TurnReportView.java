@@ -110,9 +110,22 @@ public final class TurnReportView {
      * @param title the lead, or the line itself
      * @param text  more, or {@code ""}
      * @param tag   a short tag ("Retired"), or {@code ""}
-     * @param tone  1 for good news, -1 for bad, 0 for neutral
+     * @param tone     1 for good news, -1 for bad, 0 for neutral
+     * @param personId whose page the line opens, or {@code null} for none
      */
-    public record Line(String title, String text, String tag, int tone) {
+    public record Line(String title, String text, String tag, int tone, String personId) {
+
+        /**
+         * A line that opens no page.
+         *
+         * @param title the lead, or the line itself
+         * @param text  more, or {@code ""}
+         * @param tag   a short tag, or {@code ""}
+         * @param tone  1 for good news, -1 for bad, 0 for neutral
+         */
+        public Line(String title, String text, String tag, int tone) {
+            this(title, text, tag, tone, null);
+        }
     }
 
     /**
