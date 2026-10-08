@@ -145,10 +145,10 @@ public final class MissionsScreen extends ChromeScreen {
         kv.left();
         for (int i = 0; i < configuration.launches().size(); i++) {
             MissionConfiguration.Launch launch = configuration.launches().get(i);
-            String rocket = i >= mission.getRocketIds().size() ? "?" : mission.getRocketIds().get(i).isEmpty()
-                ? "Carrier aircraft" : ContentNames.of(mission.getRocketIds().get(i));
-            kv(kv, "Launch " + (i + 1), rocket + " to " + Missions.launchLabel(launch.launchType()).toLowerCase(Locale.ROOT)
-                + " · payload " + String.join(", ", launch.payloadComponentIds().stream().map(ContentNames::of).toList()));
+            String rocket = i >= mission.getRocketIds().size() ? "?" : ContentNames.of(mission.getRocketIds().get(i));
+            String how = launch.launchType().needsRocket() ? rocket + " to " + Missions.destination(launch.launchType())
+                : Missions.launchLabel(launch.launchType());
+            kv(kv, "Launch " + (i + 1), how + " · payload " + String.join(", ", launch.payloadComponentIds().stream().map(ContentNames::of).toList()));
         }
         if (!scheduled) {
             int season = mission.getCurrentSeasonIndex();
@@ -357,6 +357,14 @@ public final class MissionsScreen extends ChromeScreen {
                 side.add(ui.paragraph(ContentNames.of(dependency.goalId()) + " isn't reached yet, so "
                     + ContentNames.of(dependency.componentId()) + " flies " + dependency.amount() + " points lower.",
                     Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padBottom(Theme.SPACE_2).row();
+            }
+        }
+        for (MissionConfiguration.GoalModifier boost : configuration.goalBoosts()) {
+            if (state.hasAchievedOrCancelledGoal(boost.goalId())) {
+                side.add(ui.paragraph(ContentNames.of(boost.goalId()) + " is reached, so "
+                    + ContentNames.of(boost.componentId()) + " flies " + boost.amount() + (boost.amount() == 1
+                    ? " point higher." : " points higher."), Theme.TextStyle.CAPTION, Theme.INK_MUTED))
+                    .padBottom(Theme.SPACE_2).row();
             }
         }
         MissionCancellation.Preview preview = MissionCancellation.preview(state, mission.getId(), session.catalog());

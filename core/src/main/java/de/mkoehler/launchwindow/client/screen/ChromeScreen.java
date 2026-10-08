@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.ConceptChip;
@@ -21,11 +22,13 @@ import de.mkoehler.launchwindow.client.view.Concepts;
 import de.mkoehler.launchwindow.client.view.Explainers;
 import de.mkoehler.launchwindow.client.view.IntelTexts;
 import de.mkoehler.launchwindow.client.view.Programs;
+import de.mkoehler.launchwindow.client.view.SetSkills;
 import de.mkoehler.launchwindow.client.view.Tips;
 import de.mkoehler.launchwindow.client.view.SetDepartment;
 import de.mkoehler.launchwindow.actions.UpgradeBuildingAction;
 import de.mkoehler.launchwindow.content.BuildingSchedule;
 import de.mkoehler.launchwindow.content.ContentCatalog;
+import de.mkoehler.launchwindow.content.MissionComponent;
 import de.mkoehler.launchwindow.model.Building;
 import de.mkoehler.launchwindow.model.Personnel;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
@@ -140,6 +143,31 @@ abstract class ChromeScreen extends SessionScreen {
         eyebrowLabel.setText(eyebrow.toUpperCase(Locale.ROOT));
         titleLabel.setText(title);
     }
+
+    /**
+     * Starts a VAB row with the rocket's picture (2026-10-08): its art, or its skill glyph in the same
+     * space while the rocket has no art yet, so the rows' columns line up either way.
+     *
+     * @param row    the row
+     * @param rocket the rocket
+     */
+    protected void addRocketPicture(Table row, MissionComponent rocket) {
+        Drawable art = ui.croppedPicture("rockets/" + rocket.id() + ".jpg", ROCKET_ART_WIDTH / ROCKET_ART_HEIGHT);
+        Image picture = art != null ? new Image(art) : new Image(ui.icon(SetSkills.icon(rocket.associatedSkill())),
+            Scaling.fit);
+        Table frame = new Table();
+        if (art != null) {
+            frame.add(picture).size(ROCKET_ART_WIDTH, ROCKET_ART_HEIGHT);
+        } else {
+            picture.setColor(Theme.NAVY);
+            frame.add(picture).size(40f);
+        }
+        row.add(frame).size(ROCKET_ART_WIDTH, ROCKET_ART_HEIGHT).padRight(Theme.SPACE_4);
+    }
+
+    /** A rocket's picture in the VAB's lists. */
+    private static final float ROCKET_ART_WIDTH = 140f;
+    private static final float ROCKET_ART_HEIGHT = 90f;
 
     protected TextButton actionButton(String text, Theme.ButtonKind kind, Runnable action) {
         return onClick(ui.button(text, kind), action);

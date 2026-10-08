@@ -1858,10 +1858,12 @@ first (login → action → scheduled resolution → result, end to end) before 
     two uncrewed Soyuz flights anyway.
   - A goal modifier BASPM repeats within one list (the X-15's research flights boost on the same
     goal twice) is merged into one with the summed amount; the engine sums them either way.
-  - **Open (user decision):** BASPM's loader never reads `GoalBoost` elements, so in the shipped
-    game only the penalties apply (`baspm.md` §11.3, found 2026-10-08). Our engine applies the
-    boosts the data declares: 2 in the early-era pack, 99 in the standard pack. Following BASPM
-    would mean dropping them in the converter.
+  - **Goal boosts stay (user, 2026-10-08).** BASPM's loader never reads `GoalBoost` elements, so in
+    the shipped game only the penalties apply (`baspm.md` §11.3). We keep applying the boosts the
+    data declares (2 in the early-era pack, 99 in the standard pack, +1 or +2 each): they reward
+    related work, such as Pegasus and Biosatellite for Mercury, or a robot lander for a crewed
+    one. The plan's components card lists every boost, including those not yet reached, as
+    "(+1)"; Mission Control names the active ones; help explains both kinds.
 
   **The full tree: the `standard` pack (converter scope `full`, 2026-10-08).** The converter writes
   all of BASPM's tree: 13 categories (with their `body`), 55 programs, 85 components (61 payloads,
@@ -1871,8 +1873,10 @@ first (login → action → scheduled resolution → result, end to end) before 
   2026-10-08). It is a second pack, `assets/content/standard`, beside `early-era`, which stays the
   server's default for now. **Its text is written** (2026-10-08): names and descriptions for every
   category, program, component, configuration, goal and step type, in our own words, with the
-  early-era text carried over unchanged. Only the early-era entries have history notes so far; the
-  new ones need every figure checked first. A joint flight's craft-specific steps take their
+  early-era text carried over unchanged. History notes: the early-era entries, and 44 of the 49
+  new programs (2026-10-08, every figure checked by web search; Pioneer 2, Mariner 6, the Pioneer
+  Venus Orbiter and both Gemini EOR programs have none yet, as nothing about them was confirmed).
+  The new configurations and components have none yet. A joint flight's craft-specific steps take their
   shared step's text, named for the craft (`ContentStrings.craftStep`: `gemini-a-`, `atv-` for the
   target, `transtage-`, `-a`/`-b`). **Its art is converted** (`make_content_art.py`: 55 programs,
   189 configurations, 22 category images), and `ScreenSnapshot` shoots it (`standard-*.png`). The

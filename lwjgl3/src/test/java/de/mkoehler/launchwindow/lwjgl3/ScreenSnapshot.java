@@ -437,6 +437,16 @@ public final class ScreenSnapshot {
         write(folder, "standard-apollo-rockets.png", new MissionPlanScreen(game, "apollo-orbital",
             MissionPlanScreen.Tab.ROCKETS), null);
         write(folder, "standard-vab-manage.png", new RocketProgramsScreen(game), null);
+
+        // Goal boosts: Mercury's orbital flight has four, one of them (Pegasus) reached.
+        nasa.getOpenedProgramIds().add("mercury");
+        nasa.getMissionComponents().put("mercury-capsule", new OwnedMissionComponent(74.0, 3.0));
+        nasa.getMissionComponents().put("atlas", new OwnedMissionComponent(69.0, 3.0));
+        nasa.getAchievedGoals().put("micrometeoroid-satellite-flown", 20);
+        startSession(game, nasa, info);
+        write(folder, "standard-boosts-steps.png", new MissionStepsScreen(game, "mercury-orbital"), null);
+        write(folder, "standard-boosts-plan.png", new MissionPlanScreen(game, "mercury-orbital",
+            MissionPlanScreen.Tab.ASSESSMENT), null);
     }
 
     /**

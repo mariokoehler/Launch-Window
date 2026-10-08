@@ -86,31 +86,38 @@
     },
     "pegasus": {
       "name": "Pegasus",
-      "description": "A satellite with huge folding panels that count the specks of dust that hit them, to show how often a spacecraft would be struck by micrometeoroids."
+      "description": "A satellite with huge folding panels that count the specks of dust that hit them, to show how often a spacecraft would be struck by micrometeoroids.",
+      "historyNote": "Three Pegasus satellites flew in 1965 on Saturn I rockets. Their detector wings spanned about 29 meters and rode up folded inside a dummy Apollo service module. Engineers feared micrometeoroids could puncture an Apollo spacecraft's skin; Pegasus counted the hits so designers knew what they were up against."
     },
     "biosatellite": {
       "name": "Biosatellite",
-      "description": "A recoverable capsule carrying plants, insects and other small organisms, to study how living things grow and change in weightlessness."
+      "description": "A recoverable capsule carrying plants, insects and other small organisms, to study how living things grow and change in weightlessness.",
+      "historyNote": "Biosatellite II came home in 1967 after 45 hours, about a day early, because a tropical storm threatened the recovery area; an aircraft caught its capsule. Biosatellite III carried a macaque named Bonny on a flight planned for 30 days. After about nine days he stopped eating and drinking, NASA brought him down early, and he died soon after."
     },
     "orbiting-frog-otolith": {
       "name": "Orbiting Frog Otolith",
-      "description": "A small satellite carrying two frogs wired up to record the organs of balance in their inner ears, to learn how weightlessness confuses the sense of up and down."
+      "description": "A small satellite carrying two frogs wired up to record the organs of balance in their inner ears, to learn how weightlessness confuses the sense of up and down.",
+      "historyNote": "NASA launched the Orbiting Frog Otolith on 9 November 1970 on a Scout rocket. Electrodes in the two bullfrogs' balance nerves recorded how the inner ear coped with weightlessness, and with spells of artificial gravity from a small centrifuge, for almost a week. The frogs were never meant to come back."
     },
     "pioneer-4": {
       "name": "Pioneer 4",
-      "description": "A small probe sent past the Moon and on into orbit around the Sun, the first American craft to escape the Earth's gravity."
+      "description": "A small probe sent past the Moon and on into orbit around the Sun, the first American craft to escape the Earth's gravity.",
+      "historyNote": "Pioneer 4, launched on 3 March 1959 on a Juno II, was the first American spacecraft to escape the Earth's gravity. Its second stage burned too long, so it passed about 60,000 km from the Moon, too far for its sensor to trigger. It sent data for 82 hours and still circles the Sun."
     },
     "zond-5": {
       "name": "Zond 5",
-      "description": "An uncrewed lunar capsule with living passengers aboard, flown around the Moon and brought home through the atmosphere at lunar return speed."
+      "description": "An uncrewed lunar capsule with living passengers aboard, flown around the Moon and brought home through the atmosphere at lunar return speed.",
+      "historyNote": "In September 1968 Zond 5 carried two steppe tortoises, fruit fly eggs and plants around the Moon and splashed down in the Indian Ocean, where Soviet ships recovered it. The tortoises were the first vertebrates to go around the Moon and come home. Apollo 8 took the first people there three months later."
     },
     "ranger-3": {
       "name": "Ranger 3",
-      "description": "A probe aimed straight at the Moon, taking pictures all the way down until it strikes the surface."
+      "description": "A probe aimed straight at the Moon, taking pictures all the way down until it strikes the surface.",
+      "historyNote": "Ranger 3 launched in January 1962. A guidance fault gave it too much speed: it reached the Moon 14 hours early and missed it by about 37,000 km. Its television camera and its seismometer capsule, meant to survive the crash and keep reporting, never got to work."
     },
     "luna-2": {
       "name": "Luna 2",
-      "description": "A probe aimed to hit the Moon: the first human-made object to reach another world."
+      "description": "A probe aimed to hit the Moon: the first human-made object to reach another world.",
+      "historyNote": "On 13 September 1959 Luna 2 struck the Moon east of Mare Imbrium, the first human-made object to reach another world. It carried two balls of small metal pentagons bearing the Soviet coat of arms, built to scatter on impact. Khrushchev gave a copy to President Eisenhower."
     },
     "pioneer-2": {
       "name": "Pioneer 2",
@@ -118,35 +125,43 @@
     },
     "lunar-orbiter": {
       "name": "Lunar Orbiter",
-      "description": "A camera platform in lunar orbit that develops its own film on board and scans the pictures for radio, to map landing sites."
+      "description": "A camera platform in lunar orbit that develops its own film on board and scans the pictures for radio, to map landing sites.",
+      "historyNote": "Five Lunar Orbiters flew in 1966 and 1967 to photograph possible Apollo landing sites, and all five worked. Each developed its film on board, scanned it and radioed the pictures home. When their work was done, each was deliberately crashed into the Moon."
     },
     "surveyor": {
       "name": "Surveyor",
-      "description": "A three-legged robot lander that brakes with a rocket and settles softly onto the Moon, to prove the ground can carry a spacecraft."
+      "description": "A three-legged robot lander that brakes with a rocket and settles softly onto the Moon, to prove the ground can carry a spacecraft.",
+      "historyNote": "Surveyor 3 landed in April 1967. In November 1969 Apollo 12 set down less than 200 meters away, and Pete Conrad and Alan Bean walked over and brought back its television camera and other parts, so engineers could see what more than two years on the Moon had done to them."
     },
     "luna-15": {
       "name": "Luna 15",
-      "description": "A robot lander with a drill and a small return rocket, meant to scoop up lunar soil and fly it back to Earth."
+      "description": "A robot lander with a drill and a small return rocket, meant to scoop up lunar soil and fly it back to Earth.",
+      "historyNote": "Luna 15 was the last Soviet chance to bring lunar soil home before Apollo 11. It was still in lunar orbit when Armstrong and Aldrin landed, and it crashed in Mare Crisium on 21 July 1969 while they were on the surface. A robot sample return finally succeeded with Luna 16 in 1970."
     },
     "luna-3": {
       "name": "Luna 3",
-      "description": "A probe that swings behind the Moon and photographs the side that never faces the Earth."
+      "description": "A probe that swings behind the Moon and photographs the side that never faces the Earth.",
+      "historyNote": "On 7 October 1959 Luna 3 took 29 photographs of the far side of the Moon in about 40 minutes, developed the film on board, and later scanned 17 of them for radio. Rough as they were, they showed mountainous ground quite unlike the side we see."
     },
     "luna-17": {
       "name": "Luna 17",
-      "description": "A lander that lowers ramps and sends a remote-controlled rover out to drive across the Moon."
+      "description": "A lander that lowers ramps and sends a remote-controlled rover out to drive across the Moon.",
+      "historyNote": "Lunokhod 1 rolled down Luna 17's ramps on 17 November 1970. Built to last three lunar days, it worked through eleven and drove about 10.5 km, steered by drivers on Earth through a delay of several seconds. Its operations ended on 4 October 1971, the anniversary of Sputnik 1."
     },
     "pioneer-sun-orbiter": {
       "name": "Pioneer Sun orbiter",
-      "description": "Spin-stabilized probes placed in their own orbits around the Sun, to measure the solar wind and space weather between the planets."
+      "description": "Spin-stabilized probes placed in their own orbits around the Sun, to measure the solar wind and space weather between the planets.",
+      "historyNote": "Pioneer 6 was launched in December 1965 to watch the solar wind from its own orbit around the Sun. It far outlived its design: on 8 December 2000 controllers made contact once more, 35 years after launch, the last time anyone heard from it."
     },
     "mariner-10": {
       "name": "Mariner 10",
-      "description": "A probe that uses Venus's gravity to fall inward to Mercury: the first flight to use one planet to reach another."
+      "description": "A probe that uses Venus's gravity to fall inward to Mercury: the first flight to use one planet to reach another.",
+      "historyNote": "Mariner 10 flew past Venus on 5 February 1974, the first spacecraft to use one planet's gravity to reach another. The flyby bent its path inward, and it passed Mercury three times in 1974 and 1975, the first time at 703 km. The technique had been worked out on paper decades before."
     },
     "mariner-5": {
       "name": "Mariner 5",
-      "description": "A flyby probe passing close to Venus, studying its atmosphere with radio signals that skim through it."
+      "description": "A flyby probe passing close to Venus, studying its atmosphere with radio signals that skim through it.",
+      "historyNote": "Mariner 5 flew past Venus on 19 October 1967, a day after the Soviet Venera 4 dropped a capsule into its atmosphere. Scientists from both countries published the two missions' results together, a rare joint effort in the middle of the space race."
     },
     "pioneer-venus-orbiter": {
       "name": "Pioneer Venus Orbiter",
@@ -154,19 +169,23 @@
     },
     "venera-15": {
       "name": "Venera 15",
-      "description": "An orbiter with a large side-looking radar, mapping Venus's northern hemisphere in detail."
+      "description": "An orbiter with a large side-looking radar, mapping Venus's northern hemisphere in detail.",
+      "historyNote": "Venera 15 reached Venus in October 1983, with its twin Venera 16. Their side-looking radars mapped the northern hemisphere from the pole to about 30 degrees north, and American and Soviet scientists later turned the data into joint maps."
     },
     "pioneer-venus-multiprobe": {
       "name": "Pioneer Venus Multiprobe",
-      "description": "A carrier that releases one large and three small probes, which fall through Venus's atmosphere at widely spaced points and radio back what they find."
+      "description": "A carrier that releases one large and three small probes, which fall through Venus's atmosphere at widely spaced points and radio back what they find.",
+      "historyNote": "On 9 December 1978 one large and three small probes, named North, Day and Night, fell into Venus's atmosphere. None was built to survive hitting the ground, but the Day probe did, and it kept sending temperatures from the surface for 67 minutes until its batteries ran out."
     },
     "venera-7": {
       "name": "Venera 7",
-      "description": "A heavily armored lander built to survive the heat and pressure at Venus's surface long enough to send data home."
+      "description": "A heavily armored lander built to survive the heat and pressure at Venus's surface long enough to send data home.",
+      "historyNote": "On 15 December 1970 Venera 7's parachute failed and it hit Venus at about 60 km/h, coming to rest on its side. Controllers thought it had died, but weeks later the recordings showed a faint signal: it had reported about 475 degrees Celsius for some 23 minutes, the first data from the surface of another planet."
     },
     "venera-lander": {
       "name": "Venera lander",
-      "description": "A carrier craft and a lander travel together to Venus; the lander dives to the surface while the carrier relays its signal."
+      "description": "A carrier craft and a lander travel together to Venus; the lander dives to the surface while the carrier relays its signal.",
+      "historyNote": "Venera 9 landed on 22 October 1975 and sent back the first picture ever taken on the surface of another planet: jagged rocks on a layer of dust. A lens cap stayed on, so only half the planned view came through. The lander lasted about 53 minutes, and its carrier became the first spacecraft to orbit Venus."
     },
     "mariner-6": {
       "name": "Mariner 6",
@@ -174,67 +193,83 @@
     },
     "mariner-9": {
       "name": "Mariner 9",
-      "description": "The first spacecraft to orbit another planet, mapping Mars from pole to pole."
+      "description": "The first spacecraft to orbit another planet, mapping Mars from pole to pole.",
+      "historyNote": "Mariner 9 reached Mars on 14 November 1971, the first spacecraft to orbit another planet, and found it hidden by a planet-wide dust storm. Only Olympus Mons and three other volcanoes showed above the haze. JPL put the mapping off until the dust settled, and Mariner 9 went on to map most of Mars."
     },
     "viking": {
       "name": "Viking",
-      "description": "An orbiter and a lander: the orbiter surveys Mars and picks the site, the lander searches the soil for signs of life."
+      "description": "An orbiter and a lander: the orbiter surveys Mars and picks the site, the lander searches the soil for signs of life.",
+      "historyNote": "Viking 1 landed on 20 July 1976. Its Labeled Release experiment fed soil samples nutrients laced with radioactive carbon and watched for gas, and the first result looked positive. Other tests found no organic molecules, and most scientists blame reactive chemicals in the soil, but the experiment's designer maintained it had found life."
     },
     "mars-2": {
       "name": "Mars 2",
-      "description": "An orbiter carrying a lander, which carries a small rover on skis to step across the surface."
+      "description": "An orbiter carrying a lander, which carries a small rover on skis to step across the surface.",
+      "historyNote": "After the Mars 2 lander crashed, Mars 3 made the first soft landing on Mars on 2 December 1971, in the middle of a planet-wide dust storm. It began sending a picture and fell silent within seconds. Its small rover, meant to walk on two skis at the end of a 15-meter cable, never left the lander."
     },
     "mars-m69": {
       "name": "Mars M-69",
-      "description": "A heavy Mars orbiter designed for the new Proton rocket, with cameras and instruments to study the planet from orbit."
+      "description": "A heavy Mars orbiter designed for the new Proton rocket, with cameras and instruments to study the planet from orbit.",
+      "historyNote": "Both Mars M-69 orbiters were lost in 1969, on 27 March and 2 April, when their Proton rockets failed. The project was already late and overweight, and its lander had been dropped from the design before launch."
     },
     "pioneer-10": {
       "name": "Pioneer 10",
-      "description": "A probe sent through the asteroid belt to Jupiter, and on out of the Solar System."
+      "description": "A probe sent through the asteroid belt to Jupiter, and on out of the Solar System.",
+      "historyNote": "Pioneer 10, launched on 2 March 1972, was the first spacecraft to cross the asteroid belt and to fly past Jupiter, on 3 December 1973. It carries a plaque showing where the Earth is, in case anyone ever finds it. Its last signal reached Earth in 2003."
     },
     "pioneer-11": {
       "name": "Pioneer 11",
-      "description": "A probe that flies past Jupiter and uses its gravity to swing across to Saturn."
+      "description": "A probe that flies past Jupiter and uses its gravity to swing across to Saturn.",
+      "historyNote": "Pioneer 11 flew past Jupiter in 1974, and Jupiter's gravity swung it onto a path to Saturn, which it reached in 1979, the first spacecraft there. In 1995 its power ran too low to work its instruments."
     },
     "x-15": {
       "name": "X-15",
-      "description": "A rocket plane dropped from under the wing of a bomber, flying faster and higher than any aircraft before it, to the edge of space and back to a dry lakebed."
+      "description": "A rocket plane dropped from under the wing of a bomber, flying faster and higher than any aircraft before it, to the edge of space and back to a dry lakebed.",
+      "historyNote": "Three X-15s made 199 flights between 1959 and 1968, carried aloft under the wing of a B-52. Joe Walker flew one to 354,200 feet, about 108 km, in August 1963, and in 1967 Pete Knight reached Mach 6.7, about 4,520 mph, in the modified X-15A-2."
     },
     "mig-e-154": {
       "name": "OKB-MiG E-154",
-      "description": "A rocket-powered interceptor stretched into a space plane by the MiG design bureau: dropped from a carrier aircraft first, then launched on a rocket into orbit."
+      "description": "A rocket-powered interceptor stretched into a space plane by the MiG design bureau: dropped from a carrier aircraft first, then launched on a rocket into orbit.",
+      "historyNote": "The E-154 is our own invention, in place of a more futuristic space plane in the game that inspired this one. The real Mikoyan bureau did design a Soviet space plane, Spiral, but only its subsonic test craft, the MiG-105, was built. It made eight flights between 1976 and 1978."
     },
     "gemini": {
       "name": "Gemini",
-      "description": "A two-person capsule built to master what a Moon landing needs: long flights, spacewalks, and rendezvous and docking with another craft."
+      "description": "A two-person capsule built to master what a Moon landing needs: long flights, spacewalks, and rendezvous and docking with another craft.",
+      "historyNote": "Gemini 8 made the first docking of two spacecraft, with an Agena, in March 1966. Soon after, a thruster on the capsule stuck and set the pair rolling. Neil Armstrong and David Scott undocked, the capsule spun up to a turn a second, and Armstrong stopped it with the reentry thrusters, which forced an early landing in the Pacific."
     },
     "circumlunar-gemini-earth-orbit": {
       "name": "Circumlunar Gemini: Earth-orbit tests",
-      "description": "Tests close to home for a Gemini sent around the Moon: a heat shield for lunar return speed, and the Transtage that would push it there."
+      "description": "Tests close to home for a Gemini sent around the Moon: a heat shield for lunar return speed, and the Transtage that would push it there.",
+      "historyNote": "McDonnell proposed flying Gemini to the Moon in 1961, before the program even had its name. Its ideas ranged from a capsule pushed around the Moon by a Centaur stage, docking with the gear built for the Agena, to a Gemini modified to land. NASA kept the Moon for Apollo, and none of them flew."
     },
     "lunar-orbital-gemini-earth-orbit": {
       "name": "Lunar-orbit Gemini: Earth-orbit tests",
-      "description": "Tests in Earth orbit for a Gemini that could brake into lunar orbit: its heat shield and the propulsion module behind it."
+      "description": "Tests in Earth orbit for a Gemini that could brake into lunar orbit: its heat shield and the propulsion module behind it.",
+      "historyNote": "McDonnell proposed flying Gemini to the Moon in 1961, before the program even had its name. Its ideas ranged from a capsule pushed around the Moon by a Centaur stage, docking with the gear built for the Agena, to a Gemini modified to land. NASA kept the Moon for Apollo, and none of them flew."
     },
     "gemini-direct-ascent-earth-orbit": {
       "name": "Gemini Direct Ascent: Earth-orbit tests",
-      "description": "Tests in Earth orbit for a Gemini that would land on the Moon in one piece, and its landing and ascent modules."
+      "description": "Tests in Earth orbit for a Gemini that would land on the Moon in one piece, and its landing and ascent modules.",
+      "historyNote": "McDonnell proposed flying Gemini to the Moon in 1961, before the program even had its name. Its ideas ranged from a capsule pushed around the Moon by a Centaur stage, docking with the gear built for the Agena, to a Gemini modified to land. NASA kept the Moon for Apollo, and none of them flew."
     },
     "voskhod": {
       "name": "Voskhod",
-      "description": "The Vostok capsule rebuilt to carry two or three people, and fitted with an inflatable airlock for the first spacewalk."
+      "description": "The Vostok capsule rebuilt to carry two or three people, and fitted with an inflatable airlock for the first spacewalk.",
+      "historyNote": "Voskhod 1 flew three cosmonauts in October 1964, the first crew of more than one, with no spacesuits: there was no room for them. On Voskhod 2 in March 1965 Alexei Leonov made the first spacewalk, 12 minutes on a 5.35 m tether. His suit ballooned in the vacuum, and he had to let air out of it to squeeze back into the airlock."
     },
     "soyuz-7k-l1-earth-orbit": {
       "name": "Soyuz 7K-L1: Earth-orbit tests",
-      "description": "The stripped-down Soyuz meant to carry two cosmonauts around the Moon, first tested in flights close to Earth."
+      "description": "The stripped-down Soyuz meant to carry two cosmonauts around the Moon, first tested in flights close to Earth.",
+      "historyNote": "The 7K-L1 flew without a crew under the name Zond. In September 1968 Zond 5 went around the Moon and came home with two tortoises aboard, and Apollo 8 carried people around it three months later. No 7K-L1 ever flew a crew."
     },
     "soyuz-7k-l3-earth-orbit": {
       "name": "Soyuz 7K-L3: Earth-orbit tests",
-      "description": "The lunar-orbit Soyuz and its one-person LK lander, tested in Earth orbit before any trip to the Moon."
+      "description": "The lunar-orbit Soyuz and its one-person LK lander, tested in Earth orbit before any trip to the Moon.",
+      "historyNote": "The LK lander was tested without a crew in Earth orbit three times, as Kosmos 379, 398 and 434 in 1970 and 1971, firing its engine as if landing on the Moon and lifting off again. The last test qualified it as flightworthy. It never went to the Moon: the N1 rocket meant to carry it never made a successful flight."
     },
     "lk-700-earth-orbit": {
       "name": "LK-700: Earth-orbit tests",
-      "description": "A heavy direct-ascent lunar craft, tested in long flights around the Earth before it heads for the Moon."
+      "description": "A heavy direct-ascent lunar craft, tested in long flights around the Earth before it heads for the Moon.",
+      "historyNote": "Vladimir Chelomei proposed the LK-700 in 1964 as a simpler path than Korolev's: one craft on his giant UR-700, landing directly on the Moon and returning with no rendezvous. The money went to the N1 instead, the UR-700 was never built, and the LK-700 was cancelled in 1974."
     },
     "gemini-eor-earth-orbit": {
       "name": "Gemini EOR: Earth-orbit tests",
@@ -242,19 +277,23 @@
     },
     "circumlunar-gemini": {
       "name": "Circumlunar Gemini",
-      "description": "A Gemini capsule pushed around the Moon by a Transtage stage it docks with in Earth orbit."
+      "description": "A Gemini capsule pushed around the Moon by a Transtage stage it docks with in Earth orbit.",
+      "historyNote": "McDonnell proposed flying Gemini to the Moon in 1961, before the program even had its name. Its ideas ranged from a capsule pushed around the Moon by a Centaur stage, docking with the gear built for the Agena, to a Gemini modified to land. NASA kept the Moon for Apollo, and none of them flew."
     },
     "lunar-orbital-gemini": {
       "name": "Lunar-orbit Gemini",
-      "description": "A Gemini capsule with a propulsion module strong enough to brake into lunar orbit and break out again."
+      "description": "A Gemini capsule with a propulsion module strong enough to brake into lunar orbit and break out again.",
+      "historyNote": "McDonnell proposed flying Gemini to the Moon in 1961, before the program even had its name. Its ideas ranged from a capsule pushed around the Moon by a Centaur stage, docking with the gear built for the Agena, to a Gemini modified to land. NASA kept the Moon for Apollo, and none of them flew."
     },
     "gemini-direct-ascent": {
       "name": "Gemini Direct Ascent",
-      "description": "One large spacecraft built around Gemini that flies straight to the Moon, lands, and lifts off for home."
+      "description": "One large spacecraft built around Gemini that flies straight to the Moon, lands, and lifts off for home.",
+      "historyNote": "McDonnell proposed flying Gemini to the Moon in 1961, before the program even had its name. Its ideas ranged from a capsule pushed around the Moon by a Centaur stage, docking with the gear built for the Agena, to a Gemini modified to land. NASA kept the Moon for Apollo, and none of them flew."
     },
     "apollo": {
       "name": "Apollo",
-      "description": "A command and service module with a separate lunar module: two astronauts land while the third waits in lunar orbit, and they meet again to fly home."
+      "description": "A command and service module with a separate lunar module: two astronauts land while the third waits in lunar orbit, and they meet again to fly home.",
+      "historyNote": "Apollo 11 landed on 20 July 1969, and Neil Armstrong and Buzz Aldrin walked on the Moon while Michael Collins waited in orbit. Six Apollo missions landed in all, and twelve astronauts walked on the Moon."
     },
     "gemini-eor": {
       "name": "Gemini EOR",
@@ -262,23 +301,28 @@
     },
     "soyuz-7k-l1": {
       "name": "Soyuz 7K-L1 circumlunar",
-      "description": "A two-person Soyuz flown once around the Moon and straight back, without stopping in lunar orbit."
+      "description": "A two-person Soyuz flown once around the Moon and straight back, without stopping in lunar orbit.",
+      "historyNote": "The 7K-L1 flew without a crew under the name Zond. In September 1968 Zond 5 went around the Moon and came home with two tortoises aboard, and Apollo 8 carried people around it three months later. No 7K-L1 ever flew a crew."
     },
     "soyuz-7k-l3": {
       "name": "Soyuz 7K-L3 lunar landing",
-      "description": "A lunar-orbit Soyuz and the one-person LK lander: a single cosmonaut goes down while the other stays in orbit."
+      "description": "A lunar-orbit Soyuz and the one-person LK lander: a single cosmonaut goes down while the other stays in orbit.",
+      "historyNote": "The LK lander was tested without a crew in Earth orbit three times, as Kosmos 379, 398 and 434 in 1970 and 1971, firing its engine as if landing on the Moon and lifting off again. The last test qualified it as flightworthy. It never went to the Moon: the N1 rocket meant to carry it never made a successful flight."
     },
     "lk-700": {
       "name": "LK-700 Direct Ascent",
-      "description": "A heavy spacecraft that flies straight to the Moon, lands with its whole crew and returns, launched on the giant UR-700."
+      "description": "A heavy spacecraft that flies straight to the Moon, lands with its whole crew and returns, launched on the giant UR-700.",
+      "historyNote": "Vladimir Chelomei proposed the LK-700 in 1964 as a simpler path than Korolev's: one craft on his giant UR-700, landing directly on the Moon and returning with no rendezvous. The money went to the N1 instead, the UR-700 was never built, and the LK-700 was cancelled in 1974."
     },
     "apollo-earth-orbit": {
       "name": "Apollo: Earth-orbit tests",
-      "description": "The Apollo spacecraft proved close to home: long flights, spacewalks, and the lunar module flown, separated and docked again in Earth orbit."
+      "description": "The Apollo spacecraft proved close to home: long flights, spacewalks, and the lunar module flown, separated and docked again in Earth orbit.",
+      "historyNote": "Apollo 9 tested the lunar module in Earth orbit in March 1969. With two crewed craft flying at once, the crew named them Spider and Gumdrop. James McDivitt and Russell Schweickart flew Spider away from Gumdrop and back, proving the lander before it went to the Moon."
     },
     "soyuz-7k-ok": {
       "name": "Soyuz 7K-OK",
-      "description": "The Earth-orbit Soyuz: long flights, and automatic rendezvous and docking guided by the Igla radar system."
+      "description": "The Earth-orbit Soyuz: long flights, and automatic rendezvous and docking guided by the Igla radar system.",
+      "historyNote": "In October 1967 Kosmos 186 and 188 made the first automatic docking, steered by the Igla system with nobody aboard. In January 1969 Soyuz 4 and 5 made the first docking of two crewed craft, and Aleksei Yeliseyev and Yevgeny Khrunov spacewalked across, since there was no tunnel between the ships."
     }
   },
   "components": {

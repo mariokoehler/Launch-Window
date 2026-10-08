@@ -308,10 +308,14 @@ public final class MissionPlanScreen extends ChromeScreen {
                 }
             }
             for (MissionConfiguration.GoalModifier boost : configuration.goalBoosts()) {
-                if (boost.componentId().equals(id) && state.hasAchievedOrCancelledGoal(boost.goalId())) {
-                    card.add(priceRow(ContentNames.of(boost.goalId()) + " reached", "+" + boost.amount(),
-                        Theme.SUCCESS)).row();
+                if (!boost.componentId().equals(id)) {
+                    continue;
                 }
+                // A boost not reached yet is still worth knowing about: what related work would help.
+                boolean reached = state.hasAchievedOrCancelledGoal(boost.goalId());
+                card.add(priceRow(ContentNames.of(boost.goalId()) + (reached ? " reached" : " not reached yet"),
+                    reached ? "+" + boost.amount() : "(+" + boost.amount() + ")",
+                    reached ? Theme.SUCCESS : Theme.INK_MUTED)).row();
             }
             card.add().height(Theme.SPACE_3).row();
         }
@@ -579,7 +583,7 @@ public final class MissionPlanScreen extends ChromeScreen {
             humanRated ? Theme.NAVY : Theme.INK_MUTED));
         name.add(tag);
         about.add(name).padBottom(2f).row();
-        String place = Missions.launchLabel(spec.launchType()).replace(", human-rated", "").toLowerCase(Locale.ROOT);
+        String place = Missions.destination(spec.launchType());
         about.add(ui.label(choice.lift() > 0 ? String.format(Locale.ROOT, "Lifts %,.0f kg to %s · %,.0f kg spare",
             choice.lift(), place, choice.spare()) : "Can't fly to " + place, Theme.TextStyle.BODY_SM, Theme.INK_MUTED))
             .row();

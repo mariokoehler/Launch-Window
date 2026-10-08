@@ -129,7 +129,7 @@
         "Flying the same mission again pays less: {prestige.second} % the second time, {prestige.later} % after that, counted by completed flights.",
         "## Goals",
         "Mission steps reach goals, such as the first satellite in orbit or the first person in space. A goal pays more to the first agency in the game to reach it than to everyone after; agencies that reach it in the same turn all count as first. Some goals also credit smaller ones, and pay their prestige too.",
-        "Goals open programs, and some missions are harder until a goal is reached, or easier after. The mission screens show it.",
+        "Goals open programs, and they change how missions fly. A mission can name goals that make one of its components fly less reliably until you reach them: a penalty, sometimes a large one. It can also name goals that make a component fly a little more reliably once you have them: a boost, earned by related work such as an earlier probe or another program. Both apply only to that mission, on every step. Each mission's steps screen lists them, and the plan shows the ones in play.",
         "## Elsewhere",
         "Astronauts on PR duty earn prestige, random events can add or take some, and an intelligence operation caught in the act costs some."
       ],

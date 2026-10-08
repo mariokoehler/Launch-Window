@@ -5,7 +5,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.actions.OpenRocketProgramAction;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.Refusals;
@@ -17,7 +16,6 @@ import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.Programs;
 import de.mkoehler.launchwindow.client.view.Rockets;
 import de.mkoehler.launchwindow.client.view.Tips;
-import de.mkoehler.launchwindow.client.view.SetSkills;
 import de.mkoehler.launchwindow.content.MissionComponent;
 import de.mkoehler.launchwindow.model.SetSkill;
 import de.mkoehler.launchwindow.rules.RocketProgramOutcome;
@@ -93,7 +91,7 @@ public final class OpenRocketScreen extends ChromeScreen {
         boolean buildable = Rockets.classAllowed(rocket, session.state());
         Table row = new Table();
         row.pad(Theme.SPACE_3, Theme.SPACE_4, Theme.SPACE_3, Theme.SPACE_4);
-        row.add(rocketIcon(rocket.associatedSkill())).size(40f).padRight(Theme.SPACE_4);
+        addRocketPicture(row, rocket);
 
         Table about = new Table();
         about.left();
@@ -242,11 +240,6 @@ public final class OpenRocketScreen extends ChromeScreen {
         showDialog(card);
     }
 
-    private Image rocketIcon(SetSkill skill) {
-        Image glyph = new Image(ui.icon(SetSkills.icon(skill)), Scaling.fit);
-        glyph.setColor(Theme.NAVY);
-        return glyph;
-    }
 
     private Table chip(String text) {
         Table chip = new Table();

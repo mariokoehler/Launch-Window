@@ -150,6 +150,18 @@ public final class Missions {
     }
 
     /**
+     * Words a launch's destination for the middle of a sentence ("low Earth orbit"): the label
+     * without the rating, with only its first letter lowered, so Earth keeps its capital.
+     *
+     * @param type the launch type
+     * @return the words
+     */
+    public static String destination(LaunchType type) {
+        String place = launchLabel(type).replace(", human-rated", "");
+        return Character.toLowerCase(place.charAt(0)) + place.substring(1);
+    }
+
+    /**
      * Words a launch type briefly, for a tag ("LEO").
      *
      * @param type the launch type
@@ -202,8 +214,7 @@ public final class Missions {
                 reasons.add("Not human-rated.");
             }
             if (rocket.rocket().capacityFor(launch.launchType()) <= 0) {
-                reasons.add("Can't reach " + launchLabel(launch.launchType()).toLowerCase(Locale.ROOT)
-                    .replace(", human-rated", "") + ".");
+                reasons.add("Can't reach " + destination(launch.launchType()) + ".");
             } else if (rocket.rocket().capacityFor(launch.launchType()) < mass) {
                 double payload = MissionLaunch.payloadMass(launch, catalog);
                 reasons.add(mass == payload ? String.format(Locale.ROOT, "Too small for the %,.0f kg payload.", mass)
@@ -233,7 +244,11 @@ public final class Missions {
             // An air drop lifts nothing: the mass would only read "0 kg".
             return String.join(", ", names);
         }
-        return String.join(", ", names) + String.format(Locale.ROOT, ", %,.0f kg",
-            MissionLaunch.payloadMass(launch, catalog));
+        double mass = MissionLaunch.payloadMass(launch, catalog);
+        double lift = MissionLaunch.requiredLift(launch, catalog);
+        // A payload with its own lift (Apollo's service module): say what the rocket really carries,
+        // so the rocket rows' "needs lifting" figure has its source on screen.
+        return String.join(", ", names) + String.format(Locale.ROOT, ", %,.0f kg", mass)
+            + (lift < mass ? String.format(Locale.ROOT, " (its own engines lift all but %,.0f kg)", lift) : "");
     }
 }

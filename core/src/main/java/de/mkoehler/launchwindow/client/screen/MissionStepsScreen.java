@@ -232,7 +232,9 @@ public final class MissionStepsScreen extends ChromeScreen {
                 : "−" + fmt(dependency.amount()), !reached)).row();
         }
         card.add(ui.label("GOAL BOOSTS", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padTop(Theme.SPACE_3)
-            .padBottom(Theme.SPACE_2).row();
+            .padBottom(2f).row();
+        card.add(ui.paragraph("Bonuses on a component's reliability once you reach the goal, from related work.",
+            Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padBottom(Theme.SPACE_2).row();
         if (configuration.goalBoosts().isEmpty()) {
             card.add(ui.label("None for this configuration.", Theme.TextStyle.BODY_SM, Theme.INK)).row();
         }

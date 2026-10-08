@@ -996,6 +996,11 @@ rockets are hidden.
 - **After opening,** a dialog asks whether to assign engineers now; **Assign R&D** goes to Rocket
   R&D with that rocket's assign dialog open.
 
+*Rocket art (built 2026-10-08):* both lists (§4.5.1 and §4.5.2) start each row with the rocket's
+picture at 140 x 90, from `assets/ui/rockets/<id>.jpg` (`make_content_art.py`, from the user's
+`assets-raw/Rocket Programs/`). A rocket without art yet keeps its skill glyph in the same space,
+so the columns line up (`ChromeScreen.addRocketPicture`).
+
 **4.5.2 Manage rocket programs.** The open rockets with reliability bars, which
 in-flight missions use them, upkeep, and links to Rocket R&D. **Close** needs a
 confirmation: "kept with its reliability, no upkeep; reopening costs the creation
@@ -1103,6 +1108,11 @@ configuration gated on a goal (`requiredGoalIds`) carries a navy "Locked" tag, a
 screen (§4.6.6) names the goal ("Needs first: …") beside a disabled "Plan this mission". An
 air-dropped launch (`AIR_DROP`, the X-15 and the MiG E-154) has no rocket picker: the launch card
 says a carrier aircraft drops the craft, and assembly lists it as "air drop, no rocket".
+
+*Goal boosts (2026-10-08):* the steps screen's "Goal boosts" list has a caption like the penalties
+list's; the plan's components card lists every boost on a component, a reached one as "+1" in green
+and one not reached yet as "(+1)" muted; Mission Control's mission view names the boosts in play
+("Pegasus flown is reached, so Mercury capsule flies 1 point higher").
 
 **4.6.6 Mission configuration details and mission steps overview.** The steps,
 season by season. For each step: the components involved (with shares), the
