@@ -1,13 +1,13 @@
-# Art checklist: program categories, programs, mission configurations
+# Art checklist: program categories, programs, mission configurations, rocket programs
 
 Cross-reference of the art in `assets-raw/Program Categories`, `assets-raw/Programs`, and
 `assets-raw/Mission Configuration` against BASPM's full program tree (55 programs, 189 mission
-configurations; `baspm.md` §10). Program names are the real historical programs; BASPM's
+configurations; `baspm.md` §10), and `assets-raw/Rocket Programs` against its 24 rockets. Program names are the real historical programs; BASPM's
 fictional ones are renamed to our own (`design.md` §1.2). The BASPM ids (`00-00` = category
 `00`, program `00`) are only there to cross-reference `baspm.md`. Built 2026-10-03; tick boxes
 as art lands.
 
-**Status:** programs 55/55, mission configurations 189/189.
+**Status:** programs 55/55, mission configurations 189/189, rocket programs 5/24.
 Items marked **(M3 pack)** are flown by the early-era content pack (`assets/content/early-era`).
 
 Notes:
@@ -358,3 +358,38 @@ Notes:
   - [x] Uncrewed automatic docking — `soyuz_7K_OK_uncrewed_automatic_docking`
   - [x] Crewed automatic docking — `soyuz_7K_OK_crewed_automatic_docking`
   - [x] Automated docking with crew transfer — `soyuz_7K_OK_automated_docking_w_crew_transfer`
+
+## Rocket programs
+
+Opened in the VAB; the class sets the VAB level needed (Light 1, Medium 2, Heavy 3). File names
+not drawn yet are proposals in the style of the first ones (2026-10-08).
+
+### SOVIET
+
+- [ ] **R-7 (Sputnik)** (Light) **(M3 pack)** — `r7_sputnik`
+- [ ] **R-7 (Vostok)** (Light) **(M3 pack)** — `r7_vostok`
+- [ ] **R-7 (Luna)** (Light) — `r7_luna`
+- [ ] **R-7 (Voskhod)** (Light) — `r7_voskhod`
+- [ ] **R-7 (Molniya)** (Light) — `r7_molniya`
+- [ ] **R-7 (Soyuz)** (Medium) — `r7_soyuz`
+- [ ] **Proton** (Medium) — `proton`
+- [ ] **Proton-K with Block D** (Medium) — `proton_k_block_d`
+- [ ] **N1** (Heavy) — `n1`
+- [ ] **UR-700** (Heavy) — `ur_700`
+
+### NASA
+
+- [x] **Jupiter-C** (Light) **(M3 pack)** — `jupiter_c`
+- [x] **Redstone** (Light) **(M3 pack)** — `redstone`
+- [ ] **Juno II** (Light) — `juno_ii`
+- [x] **Thor-Able** (Light) — `thor_able`
+- [ ] **Atlas** (Light) **(M3 pack)** — `atlas`
+- [x] **Atlas-Agena** (Light) — `atlas_agena`
+- [x] **Atlas-Centaur** (Medium) — `atlas_centaur`
+- [ ] **Titan II** (Medium) — `titan_ii`
+- [ ] **Titan IIIC** (Medium) — `titan_iiic`
+- [ ] **Titan IIIE-Centaur** (Medium) — `titan_iiie_centaur`
+- [ ] **Saturn I** (Medium) — `saturn_i`
+- [ ] **Saturn IB** (Medium) — `saturn_ib`
+- [ ] **Saturn C-3B** (Medium) — `saturn_c3b`
+- [ ] **Saturn V** (Heavy) — `saturn_v`
