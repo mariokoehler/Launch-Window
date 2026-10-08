@@ -5,6 +5,7 @@ client's assets, named by content id so the client can find an image from the pa
     assets/ui/categories/<category-id>_<AGENCY>.jpg  448 x 288 (shown at 112 x 72)
     assets/ui/solar_system.jpg                       1920 x 832
     assets/ui/configurations/<configuration-id>.jpg  560 x 360 (shown at up to 280 x 180)
+    assets/ui/rockets/<rocket-id>.jpg                448 x 288 (shown at 140 x 90 in the VAB's lists)
 
 Add a line to PROGRAMS, CATEGORIES or CONFIGURATIONS when a content pack gains one. The early-era
 pack's ids are a subset of the standard pack's, so one set of maps serves both.
@@ -286,6 +287,35 @@ CONFIGURATIONS = {
 }
 
 
+# Every rocket in the standard pack; an image not drawn yet is skipped.
+ROCKETS = {
+    "r7-sputnik": "r7_sputnik.png",
+    "r7-vostok": "r7_vostok.png",
+    "r7-luna": "r7_luna.png",
+    "r7-voskhod": "r7_voskhod.png",
+    "r7-molniya": "r7_molnya.png",
+    "r7-soyuz": "r7_soyuz.png",
+    "proton": "proton_k.png",
+    "proton-k-block-d": "proton_kd.png",
+    "n1": "n1.png",
+    "ur-700": "ur_700.png",
+    "jupiter-c": "jupiter_c.png",
+    "redstone": "redstone.png",
+    "juno-2": "juno_ii.png",
+    "thor-able": "thor_able.png",
+    "atlas": "atlas.png",
+    "atlas-agena": "atlas_agena.png",
+    "atlas-centaur": "atlas_centaur.png",
+    "titan-2": "titan_ii.png",
+    "titan-3c": "titan_iiic.png",
+    "titan-3e-centaur": "titan_iiie_centaur.png",
+    "saturn-1": "saturn_i.png",
+    "saturn-1b": "saturn_ib.png",
+    "saturn-c3b": "saturn_c3.png",
+    "saturn-v": "saturn_v.png",
+}
+
+
 def save(src, dst, size):
     image = Image.open(src).convert("RGB")
     if size is not None and image.size != size:
@@ -306,6 +336,13 @@ def main():
     for configuration, file in CONFIGURATIONS.items():
         save(os.path.join(HERE, "Mission Configuration", file), os.path.join(OUT, "configurations", configuration + ".jpg"),
              (560, 360))
+    drawn = 0
+    for rocket, file in ROCKETS.items():
+        src = os.path.join(HERE, "Rocket Programs", file)
+        if os.path.exists(src):
+            save(src, os.path.join(OUT, "rockets", rocket + ".jpg"), (448, 288))
+            drawn += 1
+    print("rockets:", drawn, "of", len(ROCKETS), "drawn")
     print("wrote", len(PROGRAMS), "programs,", len(CATEGORIES), "categories,", len(CONFIGURATIONS),
           "configurations and the solar system to", OUT)
 

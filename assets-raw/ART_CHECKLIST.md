@@ -7,7 +7,7 @@ fictional ones are renamed to our own (`design.md` §1.2). The BASPM ids (`00-00
 `00`, program `00`) are only there to cross-reference `baspm.md`. Built 2026-10-03; tick boxes
 as art lands.
 
-**Status:** programs 55/55, mission configurations 189/189, rocket programs 10/24.
+**Status:** programs 55/55, mission configurations 189/189, rocket programs 22/24.
 Items marked **(M3 pack)** are flown by the early-era content pack (`assets/content/early-era`).
 
 Notes:
@@ -366,16 +366,16 @@ not drawn yet are proposals in the style of the first ones (2026-10-08).
 
 ### SOVIET
 
-- [ ] **R-7 (Sputnik)** (Light) **(M3 pack)** — `r7_sputnik`
-- [ ] **R-7 (Vostok)** (Light) **(M3 pack)** — `r7_vostok`
-- [ ] **R-7 (Luna)** (Light) — `r7_luna`
-- [ ] **R-7 (Voskhod)** (Light) — `r7_voskhod`
-- [ ] **R-7 (Molniya)** (Light) — `r7_molniya`
-- [ ] **R-7 (Soyuz)** (Medium) — `r7_soyuz`
-- [ ] **Proton** (Medium) — `proton`
-- [ ] **Proton-K with Block D** (Medium) — `proton_k_block_d`
-- [ ] **N1** (Heavy) — `n1`
-- [ ] **UR-700** (Heavy) — `ur_700`
+- [x] **R-7 (Sputnik)** (Light) **(M3 pack)** — `r7_sputnik`
+- [x] **R-7 (Vostok)** (Light) **(M3 pack)** — `r7_vostok`
+- [x] **R-7 (Luna)** (Light) — `r7_luna`
+- [x] **R-7 (Voskhod)** (Light) — `r7_voskhod`
+- [x] **R-7 (Molniya)** (Light) — `r7_molnya`
+- [x] **R-7 (Soyuz)** (Medium) — `r7_soyuz`
+- [x] **Proton** (Medium) — `proton_k`
+- [x] **Proton-K with Block D** (Medium) — `proton_kd`
+- [x] **N1** (Heavy) — `n1`
+- [x] **UR-700** (Heavy) — `ur_700`
 
 ### NASA
 
@@ -391,5 +391,5 @@ not drawn yet are proposals in the style of the first ones (2026-10-08).
 - [x] **Titan IIIE-Centaur** (Medium) — `titan_iiie_centaur`
 - [x] **Saturn I** (Medium) — `saturn_i`
 - [x] **Saturn IB** (Medium) — `saturn_ib`
-- [ ] **Saturn C-3B** (Medium) — `saturn_c3b`
-- [ ] **Saturn V** (Heavy) — `saturn_v`
+- [x] **Saturn C-3B** (Medium) — `saturn_c3`
+- [x] **Saturn V** (Heavy) — `saturn_v`
