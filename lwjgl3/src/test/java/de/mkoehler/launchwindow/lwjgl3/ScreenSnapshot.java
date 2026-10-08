@@ -913,6 +913,8 @@ public final class ScreenSnapshot {
             null);
         write(folder, "plan-rnd.png", new MissionPlanScreen(game, "vostok-orbital", MissionPlanScreen.Tab.RND), null);
         write(folder, "plan-assemble.png", new AssembleMissionScreen(game, "vostok-orbital"), null);
+        write(folder, "plan-assemble-capcom-note.png", new AssembleMissionScreen(game, "vostok-orbital"),
+            screen -> pinLastHistoryNote(screen.stage().getRoot()));
         write(folder, "plan-assemble-picker.png", new AssembleMissionScreen(game, "vostok-orbital"),
             screen -> screen.openPicker(false, 3));
         write(folder, "plan-assemble-confirm.png", new AssembleMissionScreen(game, "vostok-orbital"),

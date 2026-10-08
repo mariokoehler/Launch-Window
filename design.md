@@ -371,6 +371,19 @@ leading to satellite navigation.
 - **The R-16 disaster** (Baikonur, 24 October 1960) for a later memorial or news context,
   handled with care; **Apollo-Soyuz's crew breathing nitrogen tetroxide fumes** on the way
   down (1975). Both turned up while writing E-05.
+- **CAPCOM, the capsule communicator** (the user's question, checked 2026-10-08; shown on mission
+  assembly's Mission control card, `HistoryNotes.CAPCOM`): the name comes from Project Mercury,
+  when spacecraft were called capsules. Mercury flights were followed by tracking stations around
+  the world, each with a three-man team led by a CAPCOM who talked to the astronaut overhead; some
+  were astronauts (Glenn, Grissom, Shepard, Carpenter, Schirra, Cooper served; Slayton was CAPCOM at
+  the Cape for Mercury-Atlas 8), many were flight controllers. Later one CAPCOM in Mission Control
+  spoke to the crew for everyone, usually an astronaut, often from the backup crew, as the one best
+  placed to understand the crew's situation; for the ISS, non-astronauts serve too. On Apollo 11,
+  Charlie Duke was CAPCOM for the landing and stumbled over "Tranquility" in his first reply
+  (transcript). Sources: Encyclopedia.com ("Capcom"), NASA's Apollo Lunar Surface Journal
+  ("CapComs and others"), JSC oral history (Gene Roach, 2000), Apollo 11 Spacelog, Space.com
+  (Charles Duke biography). **SET** in the game is BASPM's "scientists, engineers and technicians"
+  (the help spells it out); not a history note.
 
 ### 1.2 Content & asset policy: no copying BASPM's copyrighted content
 

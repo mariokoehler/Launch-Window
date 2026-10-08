@@ -10,6 +10,8 @@ import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.actions.LaunchMissionAction;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.ChemistryIndicator;
+import de.mkoehler.launchwindow.client.ui.HistoryNote;
+import de.mkoehler.launchwindow.client.ui.HistoryNotes;
 import de.mkoehler.launchwindow.client.ui.Refusals;
 import de.mkoehler.launchwindow.client.ui.RelationshipMarker;
 import de.mkoehler.launchwindow.client.ui.SkillBar;
@@ -411,7 +413,11 @@ public final class AssembleMissionScreen extends ChromeScreen {
         card.top();
         card.defaults().growX().left();
         Table head = new Table();
-        head.add(ui.label("Mission control", Theme.TextStyle.HEADING_SM, Theme.INK)).left().padRight(Theme.SPACE_4);
+        head.add(ui.label("Mission control", Theme.TextStyle.HEADING_SM, Theme.INK)).left()
+            .padRight(Missions.capcomCount(configuration) > 0 ? Theme.SPACE_2 : Theme.SPACE_4);
+        if (Missions.capcomCount(configuration) > 0) {
+            head.add(new HistoryNote(ui, HistoryNotes.CAPCOM)).size(HistoryNote.ICON_SIZE).padRight(Theme.SPACE_4);
+        }
         int used = configuration.usedControlSlots().size();
         head.add(ui.label(configuration.controlSlots().size() + " consoles, " + used + " used", Theme.TextStyle.CAPTION,
             Theme.INK_MUTED)).expandX().left();

@@ -187,7 +187,7 @@
       "body": [
         "Every rocket, capsule, satellite and probe has a reliability: the base chance that its part of a mission step goes right. A new component starts low, with a one-time bonus from related components you already own: Atlas, for example, builds on Redstone.",
         "## Engineers on R&D",
-        "Up to {rnd.slots} SET engineers can work on one component at once, and each season they raise its reliability. The first slot gains the most and each further slot a little less, so a fourth engineer still helps, only less than the first.",
+        "Up to {rnd.slots} engineers from the SET Centre (SET: scientists, engineers and technicians) can work on one component at once, and each season they raise its reliability. The first slot gains the most and each further slot a little less, so a fourth engineer still helps, only less than the first.",
         "An engineer's skill for that kind of component matters most; the assign dialog lists the idle engineers best first. The team's chemistry then scales what it gains.",
         "## Two ceilings",
         "R&D alone takes a component only to its R&D ceiling. When it gets there, every engineer on it is released for other work. Only flying takes it further, toward its absolute maximum.",
@@ -271,7 +271,7 @@
       "title": "Flight controllers and CAPCOM",
       "body": [
         "Flight controllers sit at consoles during a mission. Each console reads one controller's skill: Propulsion, Trajectory & guidance, Spacecraft systems, Crew & payload, or Mission operations. Their skills set the saving throw when a step goes wrong.",
-        "CAPCOM is an astronaut on the ground who talks to the crew. For chemistry CAPCOM counts with the crew, and grows the skills used, as a controller does.",
+        "CAPCOM, the capsule communicator, is an astronaut on the ground who talks to the crew. For chemistry CAPCOM counts with the crew, and grows the skills used, as a controller does.",
         "Controllers are never at risk. A console is released after its last season, and while a mission flies Mission Control can swap who sits at each one, at no cost.",
         "Mission Control's level caps the roster: {buildings.controllers} controllers."
       ],
