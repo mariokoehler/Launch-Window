@@ -1653,7 +1653,7 @@ as a band and the ambition the person has said (phase 4; never one still hidden)
 results come from the
 latest turn report when the client has it.
 
-### 4.16 Poaching *(specified 2026-10-08 for `design.md` §2.2(d), phase 5; not mocked up yet)*
+### 4.16 Poaching *(specified 2026-10-08 for `design.md` §2.2(d), phase 5; mocked up the same day)*
 **Purpose:** hiring a rival's engineer or flight controller away, and keeping your own. No new
 building: offers are made from the Intelligence Office's personnel files; the defence lives with
 each department and on the person page. Rules and numbers in `design.md` §2.2(d) (all unconfirmed);
@@ -1706,6 +1706,41 @@ offer used on someone else), the offer dialog at +25 % and +100 % (one with room
 roster full), the Retention card on a personnel overview, the person page's Retention row (default
 and "Keep at any price"), roster rows with both marks, and the turn report lines (received:
 matched and left; made: joined and turned down).
+
+**Mocked up (2026-10-08)** on the canvas `Launch Window — Poaching` (the Artifact tool's list finds
+it), a Soviet player with NASA as the rival: the folder with four file cards, the offer dialog at
++25 % and at +100 % with Mission Control full, Operations with the queued offer, the SET Centre
+with the Retention card and both roster marks, the person page with Retention on the default and
+on "Keep at any price" after a match, the page of an engineer who joined from NASA, the turn
+report's People section, and a sheet of the new pieces. Each artboard's note lists its choices,
+all **unconfirmed**; the main ones:
+- **File cards:** one footer each: the button, a reason (a lock for astronauts, a clock for what
+  passes with time), or the gold "Offer queued: +50 %" badge with the price if accepted and
+  "Cancel the offer". With the season's offer used, the other cards show the button greyed with
+  "Your offer this season goes to …". Cards add "With NASA since …". "Offer: 1 of 1 used" sits in
+  the title row next to the actions, and the footer chip reads "L3 · 2 / 3 · offer 1 / 1".
+- **Offer dialog:** the file on the left (with its date stamp and today's salary, since the offer
+  is priced on it), the offer on the right: raise segments with the new salary under each; cost
+  (new salary, signing bonus, room, "Nothing is paid unless they come"); the answer as a range on a
+  0–90 % scale, worked out from the band's bounds plus what the file shows (+25 % at Middling with
+  Restless gives 19–28 %; Low, disappointed and Steady at +100 % gives 71–90 %); "Make the offer ·
+  +25 %". With the roster full the room line turns red, with the lapse warning, and the button
+  stays enabled.
+- **Operations:** the offer is listed with the queued actions, marked apart (a dollar glyph, a
+  light gold band, the badge) and cancellable.
+- **Retention card:** a full-width strip between the department summary and the filters; four
+  segments; "2 engineers set otherwise", naming them, with a new "Set otherwise" filter.
+- **Roster marks:** after the name: Keep at any price a navy shield with a tick, Let go a muted
+  door with an arrow out, each with a tooltip; none for the default.
+- **Person page:** a Retention row under loyalty in the identity card, three segments with second
+  lines ("matches up to +25 %", "matches any offer", "never matches") and a caption for this
+  person; "Joined from NASA" as a green tag under the age line; career dots green for joined, navy
+  with a gold ring for stayed or turned down; lines from the old agency prefixed "At NASA:".
+- **Turn report:** small subheads in People ("Offers to your people", "Your offer"), tags Matched
+  (navy), Left (red), Joined (green), a "Signing bonus · <name>" budget line.
+- **Reasons beyond the spec's three:** "Approached recently: wait until Summer 1963" (with the
+  date) and "On a mission in flight this season".
+- **New:** no colour tokens; icons `retain_keep`, `retain_go` and `joined` (inline SVG so far).
 
 ---
 
