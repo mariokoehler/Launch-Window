@@ -669,7 +669,8 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       turns, the budget, programs, component R&D, team chemistry, poaching and intelligence. The
       rest (about 30 to 40 in all) follow once the format is confirmed.
     - *As built:* `client.screen.HelpOverlay`, `client.view.Help` and `HelpValues`; the `help` and
-      `search` glyphs in `make_ui_icons.py` (not on the UI Asset Sheet yet). Shots `help-*.png`.
+      `search` glyphs in `make_ui_icons.py`, on the UI Asset Sheet since 2026-10-08 (chrome section,
+      after `settings`, with the header, hub strip and search field in context). Shots `help-*.png`.
 ---
 
 ## 3. Screen flow *(decided)*
