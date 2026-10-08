@@ -1653,6 +1653,60 @@ as a band and the ambition the person has said (phase 4; never one still hidden)
 results come from the
 latest turn report when the client has it.
 
+### 4.16 Poaching *(specified 2026-10-08 for `design.md` §2.2(d), phase 5; not mocked up yet)*
+**Purpose:** hiring a rival's engineer or flight controller away, and keeping your own. No new
+building: offers are made from the Intelligence Office's personnel files; the defence lives with
+each department and on the person page. Rules and numbers in `design.md` §2.2(d) (all unconfirmed);
+the screens read them from the rules' constants (G7). Never for astronauts: an astronaut's file
+shows no offer button and no explanation is needed beyond a tooltip.
+
+**Making an offer** (Intelligence Office, Folders):
+- **The personnel file card** (§4.15) gets a **"Make an offer"** button when the person can be
+  approached, else a short reason instead ("Astronauts can't be approached", "With the agency under
+  4 seasons", "Approached recently"). An old file still works; its date shows. One offer a season: once used, the others say "Your offer this season goes
+  to …".
+- **The offer dialog:** the person as the file knows them (portrait, name, group, skills as
+  ranges, loyalty band, ambition and disappointment, the known trait, the file's date), then the
+  **raise** as three segments (+25 / +50 / +100 %), and for the picked one:
+  - **What it costs if they come:** new salary per season, the signing bonus now, and the roster
+    room it needs ("SET Centre: 7 of 8").
+  - **Their answer, as far as you can tell:** a chance range from the loyalty band and what the
+    file shows ("15–30 %"), with a line that the rival may match it and that you won't know their
+    matching rule. Never an exact number: the loyalty is only a band.
+  - **When the answer comes:** "In the next turn report."
+  - Buttons: **Make the offer** (queues it), Cancel.
+- **Queued offer:** listed on the Operations tab with the season's operations, cancellable until
+  the resolution; the file card shows "Offer queued: +50 %".
+- **Overview and footer chip:** "Offer: 1 of 1 used" next to the actions (it isn't an action).
+
+**Keeping your people:**
+- **Agency default, per group:** on the SET Centre's and Mission Control's personnel overviews
+  (component 11), a small **Retention** card: "Match rival offers up to" with four segments
+  (Never / +25 % / +50 % / +100 %), a line on what a match does (their salary rises to the offer
+  for good) and how many of the group are set otherwise. Astronaut Complex: nothing.
+- **Per person:** on the person page (§4.14), under loyalty, a **Retention** row with three
+  segments: **Agency default** (naming it, "matches up to +25 %"), **Keep at any price**, **Let
+  go**. Engineers and controllers only.
+- **Roster rows** (component 11): a small mark for "Keep at any price" and for "Let go", none for
+  the default.
+
+**What the player learns:**
+- **Turn report**, People section: offers received ("NASA offered Ivan Kozlov +50 %: matched, salary
+  now 54" / "turned it down" / "left for NASA"), and offers made ("Your offer to … :
+  joined you" / "their agency matched" / "turned it down" / "lapsed: no room in the SET Centre" /
+  "lapsed: no longer there"). Each name links to the person page (a person who left links to
+  nothing, or to their page in your roster when they joined you).
+- **Person page career lines:** "Joined from …", "Turned down an offer from …", "Stayed: the agency
+  matched …'s offer".
+- **A newcomer from a rival** shows "Joined from Soviet Space Agency" on the person page and roster,
+  and the one trait the file showed.
+
+**States to mock up:** the file card (can be approached; can't, with the reason; offer queued;
+offer used on someone else), the offer dialog at +25 % and +100 % (one with room, one with the
+roster full), the Retention card on a personnel overview, the person page's Retention row (default
+and "Keep at any price"), roster rows with both marks, and the turn report lines (received:
+matched and left; made: joined and turned down).
+
 ---
 
 ## 5. Refusal reasons (for toasts and inline messages)

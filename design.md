@@ -673,6 +673,48 @@ such as letting a brilliant troublemaker go.
   easy. The target's agency is told in its turn report and can match, and because players log in
   at different times, matching has to work as a standing order ("match offers up to N %") so it
   never punishes whoever logs in less.
+  - **Decided (user, 2026-10-08):** **engineers and flight controllers only, never astronauts** (a
+    Soviet crew flying a NASA astronaut is silly; an engineer changing sides is history: see the
+    note below). **Offers come only from a personnel file** (Intelligence level 3, §2.9): no
+    file, no offer. **Defence is an agency default plus a per-person override.**
+  - **First-pass rules (2026-10-08; every number and detail below is a proposed default,
+    unconfirmed):**
+    - **Who can be approached:** an engineer or flight controller you hold a personnel file on,
+      still with that rival at the resolution, not on a mission in flight that season, with the
+      agency at least 4 seasons, and not approached by anyone in the last 4 seasons.
+    - **The offer:** made from the file, **one a season** per agency (no intelligence action
+      used), queued and cancellable until the resolution like an operation. Its one term is a
+      **raise over the person's current salary: +25, +50 or +100 %**. Nothing is paid unless they
+      come: then the poacher pays the new salary from the next season, and a **signing bonus of one
+      season's new salary** at once. The poacher needs room in that roster (its building's cap) at
+      the resolution, or the offer lapses unanswered. An offer isn't secret: counter-intelligence
+      plays no part.
+    - **The defence**, a standing order:
+      - **Agency default** per group: match offers up to **0 (never), +25, +50 or +100 %**.
+        Default for a new agency: +25 %.
+      - **Per person**: **Agency default**, **Keep at any price** (matches anything), or **Let go**
+        (never matches).
+      - **A matched offer** fails: the person's salary rises to the offered one for good, loyalty
+        +5. Both agencies' reports say so. Matching ignores funds: a raise is a running cost, not a
+        payment, and a game in debt already has its own rules.
+    - **Unmatched, the person chooses.** Chance to accept, clamped to 0–90 %: base by raise (+25 %:
+      15, +50 %: 30, +100 %: 50) × a loyalty factor (100 − loyalty) ÷ 50 (loyalty 50 gives × 1,
+      loyalty 100 gives 0), then +20 if disappointed, +10 if morale is under 40, +10 for Restless,
+      −10 for Steady. Rolled from its own salted seed, settled once a turn with the intelligence
+      (`IntelligenceBoard`), never on the season's stream.
+    - **A person who leaves** moves to the poacher's roster at the resolution. They keep their
+      skills, traits (revealed to the new agency: only the one the file showed; the rest hidden
+      again with fresh reveal points), Expert marks and career record, with a line "Joined X from
+      Y". Their old agency loses their R&D slot or console assignment at once, and their rapport
+      pairs. They start at loyalty 50 and keep any open ambition with its seasons left.
+    - **A person who stays** (matched or turned it down) gets a career line ("Turned down an
+      offer from X", "Stayed: the agency matched X's offer").
+    - **Reports:** the target's turn report always names the poacher and the offer. The poacher's
+      says matched, turned down, joined or lapsed.
+  - **History note to go with it (verify before use, §1.1):** after the war, the US brought
+    German rocket engineers over under Operation Paperclip (von Braun's team), and the Soviets
+    took others to the USSR (Gröttrup's group on Gorodomlya island). Both programs started from
+    poached engineers.
 - **First-pass rules for phases 1 to 3** (2026-10-07; the user accepted the proposed defaults for
   play testing; every number is ours and to be tuned):
   - **A team** is the engineers working on one component's R&D this season, or one of a mission
