@@ -25,7 +25,12 @@ public enum LaunchType {
     /** Trans-planetary injection. */
     TPI(false),
     /** Trans-planetary injection, crewed. */
-    TPI_HR(true);
+    TPI_HR(true),
+    /**
+     * Dropped from a carrier aircraft, with no rocket: the X-15 and the MiG E-154's drop test
+     * (BASPM's {@code NA} launch type, 2026-10-08). Crewed; the craft's own engine does the rest.
+     */
+    AIR_DROP(true);
 
     private final boolean humanRated;
 
@@ -40,5 +45,15 @@ public enum LaunchType {
      */
     public boolean humanRated() {
         return humanRated;
+    }
+
+    /**
+     * Returns whether this launch flies on a rocket the player picks. An {@link #AIR_DROP} doesn't:
+     * its rocket slot holds {@code ""}, costs nothing and no step names it.
+     *
+     * @return {@code false} only for {@link #AIR_DROP}
+     */
+    public boolean needsRocket() {
+        return this != AIR_DROP;
     }
 }

@@ -4,6 +4,8 @@ import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -19,16 +21,26 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Tests the early-era pack's display text ({@link ContentStrings}, gap G4) against the pack itself,
- * both ways, and {@link ContentNames}' lookups over it.
+ * Tests each pack's display text ({@link ContentStrings}, gap G4) against the pack itself, both ways,
+ * and {@link ContentNames}' lookups over the early-era pack's.
  *
  * @author Mario Koehler
  */
 class ContentStringsTest {
 
     private static final Path PACK_DIR = Path.of("..", "assets", "content", "early-era");
-    private static final ContentCatalog PACK = ContentPackLoader.load(PACK_DIR);
-    private static final ContentStrings STRINGS = ContentStrings.load(PACK_DIR);
+    private static final ContentCatalog EARLY_PACK = ContentPackLoader.load(PACK_DIR);
+    private static final ContentStrings EARLY_STRINGS = ContentStrings.load(PACK_DIR);
+    private static final Map<String, ContentCatalog> CATALOGS = new HashMap<>();
+    private static final Map<String, ContentStrings> TEXTS = new HashMap<>();
+
+    private static ContentCatalog catalog(String pack) {
+        return CATALOGS.computeIfAbsent(pack, name -> ContentPackLoader.load(Path.of("..", "assets", "content", name)));
+    }
+
+    private static ContentStrings text(String pack) {
+        return TEXTS.computeIfAbsent(pack, name -> ContentStrings.load(Path.of("..", "assets", "content", name)));
+    }
 
     /** Headings and list rows. */
     private static final int MAX_NAME = 40;
@@ -55,73 +67,85 @@ class ContentStringsTest {
      * Every category, program, component, configuration and goal has a name, and every step of every
      * configuration resolves to a name.
      */
-    @Test
-    void everythingInThePackHasText() {
-        PACK.categories().forEach(c -> assertNamed(STRINGS.categories().get(c.id()), "category " + c.id()));
-        PACK.programs().forEach(p -> assertNamed(STRINGS.programs().get(p.id()), "program " + p.id()));
-        for (MissionComponent component : PACK.missionComponents()) {
-            assertNamed(STRINGS.components().get(component.id()), "component " + component.id());
+    @ParameterizedTest
+    @ValueSource(strings = {"early-era", "standard"})
+    void everythingInThePackHasText(String packName) {
+        ContentCatalog pack = catalog(packName);
+        ContentStrings strings = text(packName);
+        pack.categories().forEach(c -> assertNamed(strings.categories().get(c.id()), "category " + c.id()));
+        pack.programs().forEach(p -> assertNamed(strings.programs().get(p.id()), "program " + p.id()));
+        for (MissionComponent component : pack.missionComponents()) {
+            assertNamed(strings.components().get(component.id()), "component " + component.id());
         }
-        for (MissionConfiguration configuration : PACK.missionConfigurations()) {
-            ContentStrings.ConfigurationText text = STRINGS.configurations().get(configuration.id());
+        for (MissionConfiguration configuration : pack.missionConfigurations()) {
+            ContentStrings.ConfigurationText text = strings.configurations().get(configuration.id());
             assertNotNull(text, "configuration " + configuration.id());
             assertTrue(text.name() != null && !text.name().isBlank(), "configuration " + configuration.id());
             for (MissionSeason season : configuration.seasons()) {
                 for (MissionStep step : season.steps()) {
-                    assertNamed(STRINGS.step(configuration.id(), step.id()),
+                    assertNamed(strings.step(configuration.id(), step.id()),
                         "step " + step.id() + " of " + configuration.id());
                 }
             }
         }
-        for (String goalId : goalIds()) {
-            assertNamed(STRINGS.goals().get(goalId), "goal " + goalId);
+        for (String goalId : goalIds(pack)) {
+            assertNamed(strings.goals().get(goalId), "goal " + goalId);
         }
     }
 
     /**
      * Every entry in the text belongs to something in the pack, so a mistyped key can't hide.
      */
-    @Test
-    void theTextHasNoStrayEntries() {
+    @ParameterizedTest
+    @ValueSource(strings = {"early-era", "standard"})
+    void theTextHasNoStrayEntries(String packName) {
+        ContentCatalog pack = catalog(packName);
+        ContentStrings strings = text(packName);
         Set<String> categories = new HashSet<>();
-        PACK.categories().forEach(c -> categories.add(c.id()));
+        pack.categories().forEach(c -> categories.add(c.id()));
         Set<String> programs = new HashSet<>();
-        PACK.programs().forEach(p -> programs.add(p.id()));
+        pack.programs().forEach(p -> programs.add(p.id()));
         Set<String> configurations = new HashSet<>();
         Set<String> stepTypes = new HashSet<>();
-        for (MissionConfiguration configuration : PACK.missionConfigurations()) {
+        for (MissionConfiguration configuration : pack.missionConfigurations()) {
             configurations.add(configuration.id());
             Set<String> stepIds = new HashSet<>();
             configuration.seasons().forEach(season -> season.steps().forEach(step -> {
                 stepIds.add(step.id());
                 String type = ContentStrings.stepType(step.id());
                 stepTypes.add(type);
-                stepTypes.add(type.replaceFirst("^spc-[ab]-", ""));
+                String[] craft = ContentStrings.craftStep(type);
+                if (craft != null) {
+                    stepTypes.add(craft[1]);
+                }
             }));
-            ContentStrings.ConfigurationText text = STRINGS.configurations().get(configuration.id());
+            ContentStrings.ConfigurationText text = strings.configurations().get(configuration.id());
             if (text != null) {
                 for (String override : text.steps().keySet()) {
                     assertTrue(stepIds.contains(override), configuration.id() + " has no step " + override);
                 }
             }
         }
-        assertKnown(STRINGS.categories().keySet(), categories, "category");
-        assertKnown(STRINGS.programs().keySet(), programs, "program");
-        assertKnown(STRINGS.components().keySet(), componentIds(), "component");
-        assertKnown(STRINGS.configurations().keySet(), configurations, "configuration");
-        assertKnown(STRINGS.steps().keySet(), stepTypes, "step type");
-        assertKnown(STRINGS.goals().keySet(), goalIds(), "goal");
+        assertKnown(strings.categories().keySet(), categories, "category");
+        assertKnown(strings.programs().keySet(), programs, "program");
+        assertKnown(strings.components().keySet(), componentIds(pack), "component");
+        assertKnown(strings.configurations().keySet(), configurations, "configuration");
+        assertKnown(strings.steps().keySet(), stepTypes, "step type");
+        assertKnown(strings.goals().keySet(), goalIds(pack), "goal");
     }
 
     /**
      * Ids are unique across kinds, which {@link ContentNames}' single lookup relies on.
      */
-    @Test
-    void idsAreUniqueAcrossKinds() {
+    @ParameterizedTest
+    @ValueSource(strings = {"early-era", "standard"})
+    void idsAreUniqueAcrossKinds(String packName) {
+        ContentCatalog pack = catalog(packName);
+        ContentStrings strings = text(packName);
         Map<String, String> seen = new HashMap<>();
-        Map<String, Set<String>> kinds = Map.of("category", STRINGS.categories().keySet(), "program",
-            STRINGS.programs().keySet(), "component", STRINGS.components().keySet(), "configuration",
-            STRINGS.configurations().keySet(), "goal", STRINGS.goals().keySet());
+        Map<String, Set<String>> kinds = Map.of("category", strings.categories().keySet(), "program",
+            strings.programs().keySet(), "component", strings.components().keySet(), "configuration",
+            strings.configurations().keySet(), "goal", strings.goals().keySet());
         kinds.forEach((kind, ids) -> {
             for (String id : ids) {
                 String other = seen.put(id, kind);
@@ -133,9 +157,12 @@ class ContentStringsTest {
     /**
      * Every text fits its place on screen, and every letter is one the client's fonts can draw.
      */
-    @Test
-    void everyTextFitsAndCanBeDrawn() {
-        for (ContentStrings.Text text : allTexts()) {
+    @ParameterizedTest
+    @ValueSource(strings = {"early-era", "standard"})
+    void everyTextFitsAndCanBeDrawn(String packName) {
+        ContentCatalog pack = catalog(packName);
+        ContentStrings strings = text(packName);
+        for (ContentStrings.Text text : allTexts(strings)) {
             check(text.name(), MAX_NAME);
             check(text.description(), MAX_DESCRIPTION);
             check(text.historyNote(), MAX_NOTE);
@@ -148,7 +175,7 @@ class ContentStringsTest {
      */
     @Test
     void contentNamesLooksUpThePacksText() {
-        ContentNames.install(STRINGS, PACK);
+        ContentNames.install(EARLY_STRINGS, EARLY_PACK);
         assertEquals("Vostok capsule", ContentNames.of("vostok-capsule"));
         assertEquals("Vostok · Orbital flight", ContentNames.of("vostok-orbital"));
         assertEquals("Orbital flight", ContentNames.configuration("vostok-orbital"));
@@ -186,26 +213,26 @@ class ContentStringsTest {
         }
     }
 
-    private static Set<String> componentIds() {
+    private static Set<String> componentIds(ContentCatalog pack) {
         Set<String> ids = new HashSet<>();
-        PACK.missionComponents().forEach(c -> ids.add(c.id()));
+        pack.missionComponents().forEach(c -> ids.add(c.id()));
         return ids;
     }
 
-    private static Set<String> goalIds() {
+    private static Set<String> goalIds(ContentCatalog pack) {
         Set<String> ids = new HashSet<>();
-        PACK.goals().forEach(g -> ids.add(g.id()));
+        pack.goals().forEach(g -> ids.add(g.id()));
         return ids;
     }
 
-    private static List<ContentStrings.Text> allTexts() {
+    private static List<ContentStrings.Text> allTexts(ContentStrings strings) {
         List<ContentStrings.Text> texts = new java.util.ArrayList<>();
-        texts.addAll(STRINGS.categories().values());
-        texts.addAll(STRINGS.programs().values());
-        texts.addAll(STRINGS.components().values());
-        texts.addAll(STRINGS.steps().values());
-        texts.addAll(STRINGS.goals().values());
-        for (ContentStrings.ConfigurationText configuration : STRINGS.configurations().values()) {
+        texts.addAll(strings.categories().values());
+        texts.addAll(strings.programs().values());
+        texts.addAll(strings.components().values());
+        texts.addAll(strings.steps().values());
+        texts.addAll(strings.goals().values());
+        for (ContentStrings.ConfigurationText configuration : strings.configurations().values()) {
             texts.add(new ContentStrings.Text(configuration.name(), configuration.description(),
                 configuration.historyNote()));
             texts.addAll(configuration.steps().values());

@@ -134,15 +134,42 @@ public record ContentStrings(Map<String, Text> categories, Map<String, Text> pro
                 override.historyNote() != null ? override.historyNote() : shared.historyNote());
         }
         Text text = steps.get(type);
-        if (text == null && (type.startsWith("spc-a-") || type.startsWith("spc-b-"))) {
+        String[] craft = craftStep(type);
+        if (text == null && craft != null) {
             // A joint flight's craft-specific step: the shared step's text, named for its craft.
-            Text shared = steps.get(type.substring(6));
+            Text shared = steps.get(craft[1]);
             if (shared != null) {
-                String craft = type.startsWith("spc-a-") ? "Craft A: " : "Craft B: ";
-                return new Text(craft + shared.name(), shared.description(), shared.historyNote());
+                return new Text(craft[0] + shared.name(), shared.description(), shared.historyNote());
             }
         }
         return text;
+    }
+
+    /**
+     * The step-type prefixes BASPM's data marks one craft of a joint flight with, and how a step is
+     * named for it. The full tree adds Gemini's two capsules, the Agena target and the Transtage.
+     */
+    private static final String[][] CRAFT_PREFIXES = {{"spc-a-", "Craft A: "}, {"spc-b-", "Craft B: "},
+        {"sc-a-", "Craft A: "}, {"sc-b-", "Craft B: "}, {"gemini-a-", "Gemini A: "}, {"gemini-b-", "Gemini B: "},
+        {"atv-", "Target: "}, {"transtage-", "Transtage: "}};
+
+    /**
+     * Splits a craft-specific step type into the label for its craft and the shared step type: by a
+     * prefix ({@code gemini-a-launch}) or a suffix ({@code reentry-b}).
+     *
+     * @param type the step type
+     * @return {@code {label, shared type}}, or {@code null} for a step of no particular craft
+     */
+    public static String[] craftStep(String type) {
+        for (String[] prefix : CRAFT_PREFIXES) {
+            if (type.startsWith(prefix[0])) {
+                return new String[] {prefix[1], type.substring(prefix[0].length())};
+            }
+        }
+        if (type.endsWith("-a") || type.endsWith("-b")) {
+            return new String[] {type.endsWith("-a") ? "Craft A: " : "Craft B: ", type.substring(0, type.length() - 2)};
+        }
+        return null;
     }
 
     /**

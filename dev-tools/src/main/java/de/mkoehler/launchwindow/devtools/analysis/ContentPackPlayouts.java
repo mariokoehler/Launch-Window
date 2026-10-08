@@ -6,6 +6,7 @@ import de.mkoehler.launchwindow.content.BudgetSchedule;
 import de.mkoehler.launchwindow.content.BuildingSchedule;
 import de.mkoehler.launchwindow.content.ContentCatalog;
 import de.mkoehler.launchwindow.content.ContentPackLoader;
+import de.mkoehler.launchwindow.content.LaunchType;
 import de.mkoehler.launchwindow.content.MissionComponent;
 import de.mkoehler.launchwindow.content.MissionConfiguration;
 import de.mkoehler.launchwindow.content.MissionStep;
@@ -628,8 +629,10 @@ public final class ContentPackPlayouts {
                 return;
             }
         }
-        List<String> rockets = target.launches().stream().map(launch -> rocket.id()).toList();
-        long expectedCost = target.cost() + rockets.size() * rocket.unitCost();
+        // An air drop flies without a rocket: its slot holds "" and costs nothing.
+        List<String> rockets = target.launches().stream()
+            .map(launch -> launch.launchType().needsRocket() ? rocket.id() : "").toList();
+        long expectedCost = target.cost() + rockets.stream().filter(id -> !id.isEmpty()).count() * rocket.unitCost();
         if (snapshot.getFunds() < expectedCost) {
             tally.stalls.merge("funds", 1, Integer::sum);
             return;
@@ -733,15 +736,21 @@ public final class ContentPackPlayouts {
             }
             checkSlots(snapshot, mission, configuration);
             for (int i = 0; i < mission.getRocketIds().size(); i++) {
-                MissionComponent rocket = catalog.missionComponent(mission.getRocketIds().get(i)).orElseThrow();
                 MissionConfiguration.Launch launch = configuration.launches().get(i);
-                double mass = launch.payloadComponentIds().stream()
-                    .mapToDouble(id -> catalog.missionComponent(id).orElseThrow().mass()).sum();
+                if (launch.launchType() == LaunchType.AIR_DROP) {
+                    if (!mission.getRocketIds().get(i).isEmpty()) {
+                        throw new IllegalStateException("Mission " + mission.getId() + " puts a rocket on an air drop");
+                    }
+                    continue;
+                }
+                MissionComponent rocket = catalog.missionComponent(mission.getRocketIds().get(i)).orElseThrow();
+                double mass = requiredLift(launch);
                 double capacity = rocket.rocket() == null ? 0 : switch (launch.launchType()) {
                     case SUBORBITAL, SUBORBITAL_HR -> rocket.rocket().payloadToSuborbital();
                     case LEO, LEO_HR -> rocket.rocket().payloadToLeo();
                     case TLI, TLI_HR -> rocket.rocket().payloadToTli();
                     case TPI, TPI_HR -> rocket.rocket().payloadToTpi();
+                    case AIR_DROP -> 0;
                 };
                 if (launch.launchType().humanRated() && rocket.associatedSkill() != SetSkill.HUMAN_RATED_ROCKETS) {
                     capacity = 0;
@@ -779,12 +788,11 @@ public final class ContentPackPlayouts {
             if (!rocket.availableTo(archetype)) {
                 continue;
             }
-            boolean liftsAll = configuration.launches().stream().allMatch(launch -> {
-                double mass = launch.payloadComponentIds().stream()
-                    .mapToDouble(p -> catalog.missionComponent(p).orElseThrow().mass()).sum();
-                double capacity = rocket.payloadCapacity(launch.launchType());
-                return capacity > 0 && capacity >= mass;
-            });
+            boolean liftsAll = configuration.launches().stream().filter(launch -> launch.launchType().needsRocket())
+                .allMatch(launch -> {
+                    double capacity = rocket.payloadCapacity(launch.launchType());
+                    return capacity > 0 && capacity >= requiredLift(launch);
+                });
             if (liftsAll && (best == null || rocket.unitCost() < best.unitCost())) {
                 best = rocket;
             }
@@ -792,14 +800,26 @@ public final class ContentPackPlayouts {
         return best;
     }
 
+    /** Every rocket in the pack, in the pack's order. */
     private List<String> rocketIds() {
-        List<String> ids = new ArrayList<>();
-        for (String id : List.of("r7-sputnik", "r7-vostok", "jupiter-c", "redstone", "atlas")) {
-            if (catalog.missionComponent(id).isPresent()) {
-                ids.add(id);
-            }
+        return catalog.missionComponents().stream().filter(MissionComponent::hasRocketSpec).map(MissionComponent::id)
+            .toList();
+    }
+
+    /** The payloads' mass less their own lift, worked out here rather than trusting MissionLaunch's. */
+    private double requiredLift(MissionConfiguration.Launch launch) {
+        double mass = 0;
+        for (String id : launch.payloadComponentIds()) {
+            MissionComponent payload = catalog.missionComponent(id).orElseThrow();
+            mass += payload.mass() - (payload.ownLift() == null ? 0 : switch (launch.launchType()) {
+                case SUBORBITAL, SUBORBITAL_HR -> payload.ownLift().payloadToSuborbital();
+                case LEO, LEO_HR -> payload.ownLift().payloadToLeo();
+                case TLI, TLI_HR -> payload.ownLift().payloadToTli();
+                case TPI, TPI_HR -> payload.ownLift().payloadToTpi();
+                case AIR_DROP -> 0;
+            });
         }
-        return ids;
+        return Math.max(0, mass);
     }
 
     private int openRockets(PlayerSnapshot snapshot) {
@@ -929,12 +949,13 @@ public final class ContentPackPlayouts {
     }
 
     /**
-     * Plays 200 games of 80 seasons on the early-era pack and prints the report.
+     * Plays 200 games of 80 seasons on a pack and prints the report.
      *
-     * @param args ignored
+     * @param args the pack's folder under {@code assets/content}, {@code early-era} if none is given
      */
     public static void main(String[] args) {
-        ContentCatalog catalog = ContentPackLoader.load(Path.of("assets", "content", "early-era"));
+        ContentCatalog catalog = ContentPackLoader.load(Path.of("assets", "content",
+            args.length > 0 ? args[0] : "early-era"));
         Report report = new ContentPackPlayouts(catalog).run(200, 80, 42L);
         System.out.println(report.games() + " games, " + report.seasons() + " seasons max");
         System.out.println("Completed (all declared goals): " + report.completedByArchetype() + " of "

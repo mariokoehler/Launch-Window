@@ -95,8 +95,10 @@ public final class MissionLaunch {
      * Launches a mission from a full {@link LaunchRequest}: as the shorter overload,
      * plus one rocket per launch and the CAPCOM astronauts ({@code design.md} &sect;5,
      * M3). Each rocket must be a rocket the player owns and has active (its rocket
-     * program open), able to lift its launch's summed payload mass to the launch's
-     * destination, and human-rated for a crewed launch. The launch costs the
+     * program open), able to lift its launch's payload ({@link #requiredLift}) to the launch's
+     * destination, and human-rated for a crewed launch; an air-dropped launch takes {@code ""}
+     * instead. A configuration with {@link MissionConfiguration#requiredGoalIds()} needs them
+     * achieved or cancelled. The launch costs the
      * configuration's {@link MissionConfiguration#cost()} plus every chosen rocket's
      * {@link MissionComponent#unitCost()}. Fails without mutating anything if any check
      * fails.
@@ -131,7 +133,9 @@ public final class MissionLaunch {
             ContentCatalog catalog) {
         long cost = configuration.cost();
         for (String rocketId : rocketIds) {
-            cost += catalog.missionComponent(rocketId).orElseThrow().unitCost();
+            if (!rocketId.isEmpty()) {
+                cost += catalog.missionComponent(rocketId).orElseThrow().unitCost();
+            }
         }
         return cost;
     }
@@ -179,9 +183,26 @@ public final class MissionLaunch {
     }
 
     /**
+     * Returns what the rocket must lift for a launch: the payloads' mass less the lift payloads
+     * such as the Agena or Apollo's service module add themselves (BASPM's
+     * {@code ComputeRequiredPayloadMinusExtraBoostProvidedByPayload}).
+     *
+     * @param launch  the launch
+     * @param catalog the content catalog
+     * @return the mass, in kg, never negative
+     */
+    public static double requiredLift(MissionConfiguration.Launch launch, ContentCatalog catalog) {
+        double ownLift = 0;
+        for (String payloadId : launch.payloadComponentIds()) {
+            ownLift += catalog.missionComponent(payloadId).orElseThrow().ownLiftFor(launch.launchType());
+        }
+        return Math.max(0, payloadMass(launch, catalog) - ownLift);
+    }
+
+    /**
      * Returns whether a rocket can fly a launch: it reaches the launch type (a crewed type needs a
-     * human-rated rocket) and lifts the payload. A rocket with no capacity for the type can't fly
-     * it at all, even an empty payload.
+     * human-rated rocket) and lifts the payload ({@link #requiredLift}). A rocket with no capacity
+     * for the type can't fly it at all, even an empty payload, and no rocket flies an air drop.
      *
      * @param rocket  the rocket
      * @param launch  the launch
@@ -190,7 +211,7 @@ public final class MissionLaunch {
      */
     public static boolean canLift(MissionComponent rocket, MissionConfiguration.Launch launch, ContentCatalog catalog) {
         double capacity = rocket.payloadCapacity(launch.launchType());
-        return capacity > 0 && capacity >= payloadMass(launch, catalog);
+        return launch.launchType().needsRocket() && capacity > 0 && capacity >= requiredLift(launch, catalog);
     }
 
     private static MissionLaunchOutcome validateRockets(PlayerSnapshot snapshot, MissionConfiguration configuration,
@@ -199,6 +220,12 @@ public final class MissionLaunch {
             return MissionLaunchOutcome.WRONG_ROCKET_COUNT;
         }
         for (int i = 0; i < rocketIds.size(); i++) {
+            if (!configuration.launches().get(i).launchType().needsRocket()) {
+                if (!rocketIds.get(i).isEmpty()) {
+                    return MissionLaunchOutcome.ROCKET_CANNOT_LIFT_PAYLOAD;
+                }
+                continue;
+            }
             MissionComponent rocket = catalog.missionComponent(rocketIds.get(i)).orElse(null);
             OwnedMissionComponent owned = snapshot.getMissionComponents().get(rocketIds.get(i));
             if (rocket == null || !rocket.hasRocketSpec() || owned == null || !owned.isActive()) {
@@ -258,6 +285,9 @@ public final class MissionLaunch {
             LaunchRequest request, ContentCatalog catalog) {
         if (!snapshot.getOpenedProgramIds().contains(configuration.programId())) {
             return MissionLaunchOutcome.PROGRAM_NOT_OPEN;
+        }
+        if (!configuration.requiredGoalIds().stream().allMatch(snapshot::hasAchievedOrCancelledGoal)) {
+            return MissionLaunchOutcome.GOAL_NOT_REACHED;
         }
         // Rockets before funds: the price depends on which rockets fly.
         MissionLaunchOutcome rocketProblem = validateRockets(snapshot, configuration, request.rocketIds(), catalog);

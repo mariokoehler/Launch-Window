@@ -406,6 +406,37 @@ public final class ScreenSnapshot {
         poachingShots(folder, game);
         helpShots(folder, game);
         advisorShots(folder, game);
+        standardPackShots(folder, game);
+    }
+
+    /**
+     * The standard pack, BASPM's whole tree (2026-10-08): the Moon's programs, the X-15's air drop
+     * (no rocket picker) and its gated research flight, and Apollo's own lift easing the Saturn IB's
+     * load.
+     */
+    private static void standardPackShots(File folder, LaunchWindowGame game) {
+        String hash = ContentPackHash.ofClasspath("content/standard", ScreenSnapshot.class.getClassLoader());
+        GameInfoResponse info = GameInfoResponse.success("standard", hash, List.of(), 31, true,
+            6 * 3_600_000L + 12 * 60_000L + 30_000L, 0L, null, List.of(), List.of(), 0);
+        PlayerSnapshot nasa = new PlayerSnapshot("Orion Spaceworks", Archetype.NASA, 60_000, 2_140, 3_000, 31);
+        nasa.setDirectorName("A. Reyes");
+        nasa.getBuildingLevels().put(Building.VEHICLE_ASSEMBLY, 2);
+        nasa.getOpenedProgramIds().addAll(List.of("x-15", "apollo-earth-orbit"));
+        nasa.getMissionComponents().put("x-15-aircraft", new OwnedMissionComponent(64.0, 3.0));
+        nasa.getMissionComponents().put("apollo-csm", new OwnedMissionComponent(58.0, 3.0));
+        nasa.getMissionComponents().put("apollo-lunar-module", new OwnedMissionComponent(41.0, 3.0));
+        nasa.getMissionComponents().put("saturn-1b", new OwnedMissionComponent(71.0, 3.0));
+        nasa.getMissionComponents().put("titan-2", new OwnedMissionComponent(66.0, 3.0));
+        startSession(game, nasa, info);
+        write(folder, "standard-body-moon.png", new BodyProgramsScreen(game, CelestialBody.MOON), null);
+        write(folder, "standard-x15-configs.png", new MissionConfigsScreen(game, "x-15"), null);
+        write(folder, "standard-x15-gated.png", new MissionStepsScreen(game, "x-15-research-flight-1"), null);
+        write(folder, "standard-x15-air-drop.png", new MissionPlanScreen(game, "x-15-flight-test",
+            MissionPlanScreen.Tab.ROCKETS), null);
+        write(folder, "standard-x15-assemble.png", new AssembleMissionScreen(game, "x-15-flight-test"), null);
+        write(folder, "standard-apollo-rockets.png", new MissionPlanScreen(game, "apollo-orbital",
+            MissionPlanScreen.Tab.ROCKETS), null);
+        write(folder, "standard-vab-manage.png", new RocketProgramsScreen(game), null);
     }
 
     /**

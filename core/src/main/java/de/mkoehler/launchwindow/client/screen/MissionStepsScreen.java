@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
@@ -104,11 +105,19 @@ public final class MissionStepsScreen extends ChromeScreen {
             Theme.ON_PAGE_MUTED)).expandX().left();
         actions.add(onClick(ui.pageButton("All configurations"),
             () -> game.setScreen(new MissionConfigsScreen(game, configuration.programId())))).padRight(Theme.SPACE_3);
-        actions.add(actionButton("Plan this mission", Theme.ButtonKind.PRIMARY, () -> {
+        List<String> missing = Missions.missingGoals(configuration, session.state());
+        if (!missing.isEmpty()) {
+            // A hard gate (requiredGoalIds): name what it waits for instead of letting the plan fail.
+            actions.add(ui.label("Needs first: " + String.join(", ", missing.stream().map(ContentNames::of).toList()),
+                Theme.TextStyle.CAPTION, Theme.ON_PAGE_MUTED)).padRight(Theme.SPACE_3);
+        }
+        TextButton plan = actionButton("Plan this mission", Theme.ButtonKind.PRIMARY, () -> {
             // Through the program's pages: the plan leads back here, not to Headquarters' list.
             session.setPlanningFromList(false);
             game.setScreen(new MissionPlanScreen(game, configuration.id(), MissionPlanScreen.Tab.ASSESSMENT));
-        }));
+        });
+        plan.setDisabled(!missing.isEmpty());
+        actions.add(plan);
         right.add(actions).growX().padTop(Theme.SPACE_3);
         content.add(right).expand().fill();
     }
@@ -133,8 +142,10 @@ public final class MissionStepsScreen extends ChromeScreen {
             card.add(ui.paragraph(description, Theme.TextStyle.BODY_SM, Theme.INK)).width(SUMMARY_TEXT_WIDTH).colspan(2)
                 .padBottom(Theme.SPACE_3).row();
         }
-        String rockets = configuration.launches().size() == 1 ? "the rocket" : "the rockets";
-        kv(card, "Cost", money(configuration.cost()) + " + " + rockets);
+        long rocketLaunches = configuration.launches().stream().filter(launch -> launch.launchType().needsRocket())
+            .count();
+        String rockets = rocketLaunches == 0 ? "" : rocketLaunches == 1 ? " + the rocket" : " + the rockets";
+        kv(card, "Cost", money(configuration.cost()) + rockets);
         kv(card, "Prestige", String.format(Locale.ROOT, "%,d", Missions.nextPrestige(configuration, session.state()))
             + (flown == 0 ? " on the first flight" : " on the next flight"));
         int steps = configuration.seasons().stream().mapToInt(season -> season.steps().size()).sum();

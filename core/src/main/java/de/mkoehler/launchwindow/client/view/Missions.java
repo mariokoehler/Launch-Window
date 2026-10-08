@@ -119,6 +119,19 @@ public final class Missions {
     }
 
     /**
+     * Returns the goals a configuration still waits for before it can fly
+     * ({@link MissionConfiguration#requiredGoalIds()}), in the pack's order.
+     *
+     * @param configuration the configuration
+     * @param state         the player's state
+     * @return the missing goals, empty when it can fly
+     */
+    public static List<String> missingGoals(MissionConfiguration configuration, PlayerSnapshot state) {
+        return configuration.requiredGoalIds().stream().filter(goal -> !state.hasAchievedOrCancelledGoal(goal))
+            .toList();
+    }
+
+    /**
      * Words a launch type ("Low Earth orbit, human-rated").
      *
      * @param type the launch type
@@ -130,8 +143,10 @@ public final class Missions {
             case LEO, LEO_HR -> "Low Earth orbit";
             case TLI, TLI_HR -> "Trans-lunar injection";
             case TPI, TPI_HR -> "Trans-planetary injection";
+            // No rocket, so nothing to rate: a carrier aircraft drops the craft.
+            case AIR_DROP -> "Air drop from a carrier aircraft";
         };
-        return type.humanRated() ? place + ", human-rated" : place;
+        return type.humanRated() && type.needsRocket() ? place + ", human-rated" : place;
     }
 
     /**
@@ -146,6 +161,7 @@ public final class Missions {
             case LEO, LEO_HR -> "LEO";
             case TLI, TLI_HR -> "TLI";
             case TPI, TPI_HR -> "TPI";
+            case AIR_DROP -> "Air drop";
         };
     }
 
@@ -165,7 +181,7 @@ public final class Missions {
 
     /**
      * Returns the rockets for one launch: every open rocket the player has, eligible or not, in
-     * the pack's order.
+     * the pack's order. None for an air drop, which flies without one.
      *
      * @param launch  the launch
      * @param state   the player's state
@@ -174,8 +190,11 @@ public final class Missions {
      */
     public static List<RocketChoice> rocketChoices(MissionConfiguration.Launch launch, PlayerSnapshot state,
                                                    ContentCatalog catalog) {
-        double mass = MissionLaunch.payloadMass(launch, catalog);
+        double mass = MissionLaunch.requiredLift(launch, catalog);
         List<RocketChoice> choices = new ArrayList<>();
+        if (!launch.launchType().needsRocket()) {
+            return choices;
+        }
         for (MissionComponent rocket : Rockets.open(state, catalog)) {
             double lift = rocket.payloadCapacity(launch.launchType());
             List<String> reasons = new ArrayList<>();
@@ -186,7 +205,10 @@ public final class Missions {
                 reasons.add("Can't reach " + launchLabel(launch.launchType()).toLowerCase(Locale.ROOT)
                     .replace(", human-rated", "") + ".");
             } else if (rocket.rocket().capacityFor(launch.launchType()) < mass) {
-                reasons.add(String.format(Locale.ROOT, "Too small for the %,.0f kg payload.", mass));
+                double payload = MissionLaunch.payloadMass(launch, catalog);
+                reasons.add(mass == payload ? String.format(Locale.ROOT, "Too small for the %,.0f kg payload.", mass)
+                    : String.format(Locale.ROOT, "Too small: of the %,.0f kg payload, %,.0f kg needs lifting.", payload,
+                        mass));
             }
             boolean eligible = MissionLaunch.canLift(rocket, launch, catalog);
             if (!eligible && reasons.isEmpty()) {
@@ -207,6 +229,10 @@ public final class Missions {
      */
     public static String payload(MissionConfiguration.Launch launch, ContentCatalog catalog) {
         List<String> names = launch.payloadComponentIds().stream().map(ContentNames::of).toList();
+        if (!launch.launchType().needsRocket()) {
+            // An air drop lifts nothing: the mass would only read "0 kg".
+            return String.join(", ", names);
+        }
         return String.join(", ", names) + String.format(Locale.ROOT, ", %,.0f kg",
             MissionLaunch.payloadMass(launch, catalog));
     }

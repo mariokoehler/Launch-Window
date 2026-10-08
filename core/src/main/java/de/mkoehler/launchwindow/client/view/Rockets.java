@@ -105,9 +105,15 @@ public final class Rockets {
         for (MissionComponent.ReliabilityTransferSource source : rocket.reliabilityTransferSources()) {
             catalog.missionComponent(source.sourceComponentId())
                 .filter(from -> from.agency() == null || from.agency() == state.getArchetype())
-                .ifPresent(from -> sources.add(ContentNames.of(from.id()) + " " + source.transferPercent() + " %"));
+                .ifPresent(from -> sources.add(ContentNames.of(from.id()) + " " + percent(source.transferPercent())
+                    + " %"));
         }
         return sources;
+    }
+
+    /** A share as "40" or "12.5": BASPM's full tree has halves. */
+    private static String percent(double share) {
+        return share == Math.rint(share) ? String.valueOf((long) share) : String.format(Locale.ROOT, "%.1f", share);
     }
 
     public static boolean kept(MissionComponent rocket, PlayerSnapshot state) {

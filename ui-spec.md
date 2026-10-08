@@ -1098,7 +1098,11 @@ dialog. Shot: `hq-details-offer-rnd.png`.
 art, duration in seasons, prestige (first time, or the repeat tier: 50 % second
 time, 30 % after that), launch types, and crew / controller / CAPCOM counts.
 Viewable even when the program isn't open *(decided)*; then the planning screens
-are read-only, with an "Open program" call to action.
+are read-only, with an "Open program" call to action. *(Built 2026-10-08, for the full tree:)* a
+configuration gated on a goal (`requiredGoalIds`) carries a navy "Locked" tag, and its steps
+screen (§4.6.6) names the goal ("Needs first: …") beside a disabled "Plan this mission". An
+air-dropped launch (`AIR_DROP`, the X-15 and the MiG E-154) has no rocket picker: the launch card
+says a carrier aircraft drops the craft, and assembly lists it as "air drop, no rocket".
 
 **4.6.6 Mission configuration details and mission steps overview.** The steps,
 season by season. For each step: the components involved (with shares), the

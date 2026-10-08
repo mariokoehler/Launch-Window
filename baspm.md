@@ -849,9 +849,11 @@ ComputeProbabilityOfSuccessForMissionStep`/`SimulateMissionStepFirstDiceRoll`/
    but **only feeds a debug UI label, never the actual pass/fail comparison**
    — despite being loaded per-step from XML and looking load-bearing,
    `DifficultyFactor` does not mathematically affect step-outcome odds in
-   this code path (its real use is elsewhere — `MissionsSimulationsManager.
-   GetMissionStepsSumOfDifficultyFactors` — not traced in this pass, low
-   priority since it doesn't change the odds formula).
+   this code path. Its real use, traced 2026-10-08: `MissionsConfigurationsManager`
+   multiplies a configuration's payload cost (`TotalCostForPayloads`) by the
+   average factor over every step of every season (`Mathf.RoundToInt`, a missing
+   factor counting 1). Only Sputnik 1's extended mission has factors (1.75 on its
+   two later steps), which makes its cost 580 rather than 488.
 3. **If the first roll fails, a saving throw follows** — the mechanical
    version of "flight controllers catch/fix the problem in real time"
    (confirms the guess in `baspm.md` §2.1/§7.2). A fresh roll against
@@ -1627,7 +1629,26 @@ Traced from the live install's Data Scripts and from `Player.cs`,
   `HUMAN_RATED_ROCKETS` qualify. Capacities come from each rocket's
   `MassAndCapacity` (`PayloadToSubOrbital`/`LEO`/`TLI`/`TPI`).
   `ComputeExtraBoostProvidedByPayload` subtracts a payload's own capacity (an
-  upper stage); none of the early-era payloads have any.
+  upper stage); none of the early-era payloads have any. In the full tree four
+  do, all to LEO: the Agena target vehicle (2410 kg), the Gemini Transtage and
+  the S-IVB Space Tug (4563 kg each; BASPM's id misspells it `S-IBV`) and
+  Apollo's CSM (11829 kg). A payload's capacity is read through the same
+  `GetMaxPayloadSupported`, whose zero for `_HR` launches only applies to the
+  `ROCKETS` skill, so the boost also counts on crewed launches.
+- **A launch with no rocket:** `LaunchType` `NA` with `HistoricalRocketUsedID`
+  `N/A` (the X-15's three configurations and the PKA's drop test, carried aloft
+  by an aircraft). The rocket slot is skipped by that `N/A` string
+  (`Player.GetDefaultRocketsForMsnCnfg`, `HQMsnCnfgsOverlay`), and those steps
+  never name `ROCKET_1`. Elsewhere `HistoricalRocketUsedID` only picks the clip:
+  12 of the full tree's launches name a rocket that can't lift them.
+- **`StrictGoalDependency`** on a configuration is a hard gate:
+  `PlayerFullfillsStrictGoalsDependencies` needs each goal achieved or cancelled
+  (`HasAchievedOrCancelledGoal`). Only the X-15's two research flights and the
+  PKA's suborbital test have one. (Launch Window replaces the PKA with its own
+  OKB-MiG E-154, `design.md` §1.2.)
+- **Data quirks:** `CrewCanPerish` is set on steps of two uncrewed flights (Soyuz
+  7K-OK's uncrewed docking, the 7K-L3's uncrewed lunar orbit). A step's
+  `Failure` ids (only the X-15's) are parsed but never read.
 - **Staffing layouts are hardcoded in C#** (`MissionAssignmentsManager.Initialize`),
   keyed by `MissionControlLayoutID`/`FlightCrewLayoutID`. Each slot is
   `(SpecialityIndex, EmployeeType, name)`. A step's `FlightControllerInvolved
@@ -1844,6 +1865,13 @@ just a display label:
   attempt only — a real, mechanical risk/reward lever exactly as the manual
   claimed, now with the precise formula behind it. **§8.2 updated with a
   cross-reference to this finding.**
+  **CORRECTED 2026-10-08: boosts never load.** `MissionsConfigurationsManager`'s
+  loader parses `GoalDependency` elements but has no branch for `GoalBoost`, and
+  `MissionConfiguration.AddGoalBoost` is never called anywhere. So the `GoalBoosts`
+  list is always empty in the shipped game and only the penalties apply, although
+  the data declares boosts (2 in our early-era pack, 99 across the full tree; the
+  X-15's research flights even repeat one). Launch Window applies them; whether
+  to keep that is a user decision (`design.md` §5, M3).
 
 ### 11.4 The Public Affairs Office screen: full financial/prestige transparency, and where the multiplayer comparison button actually lives
 

@@ -75,6 +75,11 @@ import java.util.Objects;
  * @param rocket                     the rocket's class and payload capacities, or
  *                                   {@code null} for a component that isn't a rocket;
  *                                   only allowed on a rocket skill
+ * @param ownLift                    for a payload that is partly its own upper stage (the Agena,
+ *                                   Apollo's service module), the lift it adds, which comes off
+ *                                   what the rocket must carry (BASPM's
+ *                                   {@code ComputeExtraBoostProvidedByPayload}, 2026-10-08);
+ *                                   {@code null} for none, never on a rocket
  * @author Mario Koehler
  */
 public record MissionComponent(String id, SetSkill associatedSkill, double baselineReliability,
@@ -82,7 +87,7 @@ public record MissionComponent(String id, SetSkill associatedSkill, double basel
                                 List<Double> rdSlotBandMaxAmounts, double maxReliabilityTransfer,
                                 List<ReliabilityTransferSource> reliabilityTransferSources,
                                 long maintenanceCost, long creationCost, long unitCost, double mass,
-                                Archetype agency, RocketSpec rocket) {
+                                Archetype agency, RocketSpec rocket, Lift ownLift) {
 
     /**
      * A rocket's class and how much payload it lifts to each destination - BASPM's
@@ -122,8 +127,72 @@ public record MissionComponent(String id, SetSkill associatedSkill, double basel
                 case LEO, LEO_HR -> payloadToLeo;
                 case TLI, TLI_HR -> payloadToTli;
                 case TPI, TPI_HR -> payloadToTpi;
+                case AIR_DROP -> 0;
             };
         }
+    }
+
+    /**
+     * The lift a payload adds to its own launch, per destination: BASPM reads it from the same
+     * {@code MassAndCapacity} as a rocket's.
+     *
+     * @param payloadToSuborbital on a suborbital launch
+     * @param payloadToLeo        to low Earth orbit
+     * @param payloadToTli        to trans-lunar injection
+     * @param payloadToTpi        to trans-planetary injection
+     */
+    public record Lift(double payloadToSuborbital, double payloadToLeo, double payloadToTli, double payloadToTpi) {
+
+        /**
+         * Validates the lift.
+         *
+         * @throws IllegalArgumentException if a value is negative
+         */
+        public Lift {
+            if (payloadToSuborbital < 0 || payloadToLeo < 0 || payloadToTli < 0 || payloadToTpi < 0) {
+                throw new IllegalArgumentException("lift must not be negative");
+            }
+        }
+
+        /**
+         * Returns the lift for a launch type's destination.
+         *
+         * @param launchType the launch type
+         * @return the lift
+         */
+        public double capacityFor(LaunchType launchType) {
+            return new RocketSpec(RocketClass.LIGHT, payloadToSuborbital, payloadToLeo, payloadToTli, payloadToTpi)
+                .capacityFor(launchType);
+        }
+    }
+
+    /**
+     * A component with no lift of its own, as every component was before the full tree.
+     *
+     * @param id                         see {@link MissionComponent}
+     * @param associatedSkill            see {@link MissionComponent}
+     * @param baselineReliability        see {@link MissionComponent}
+     * @param maxReliability             see {@link MissionComponent}
+     * @param maxRdReliability           see {@link MissionComponent}
+     * @param rdSlotBandMaxAmounts       see {@link MissionComponent}
+     * @param maxReliabilityTransfer     see {@link MissionComponent}
+     * @param reliabilityTransferSources see {@link MissionComponent}
+     * @param maintenanceCost            see {@link MissionComponent}
+     * @param creationCost               see {@link MissionComponent}
+     * @param unitCost                   see {@link MissionComponent}
+     * @param mass                       see {@link MissionComponent}
+     * @param agency                     see {@link MissionComponent}
+     * @param rocket                     see {@link MissionComponent}
+     */
+    public MissionComponent(String id, SetSkill associatedSkill, double baselineReliability,
+                            double maxReliability, double maxRdReliability,
+                            List<Double> rdSlotBandMaxAmounts, double maxReliabilityTransfer,
+                            List<ReliabilityTransferSource> reliabilityTransferSources,
+                            long maintenanceCost, long creationCost, long unitCost, double mass,
+                            Archetype agency, RocketSpec rocket) {
+        this(id, associatedSkill, baselineReliability, maxReliability, maxRdReliability, rdSlotBandMaxAmounts,
+            maxReliabilityTransfer, reliabilityTransferSources, maintenanceCost, creationCost, unitCost, mass, agency,
+            rocket, null);
     }
 
     /**
@@ -147,7 +216,7 @@ public record MissionComponent(String id, SetSkill associatedSkill, double basel
                             List<Double> rdSlotBandMaxAmounts, double maxReliabilityTransfer,
                             List<ReliabilityTransferSource> reliabilityTransferSources, long maintenanceCost) {
         this(id, associatedSkill, baselineReliability, maxReliability, maxRdReliability, rdSlotBandMaxAmounts,
-            maxReliabilityTransfer, reliabilityTransferSources, maintenanceCost, 0, 0, 0, null, null);
+            maxReliabilityTransfer, reliabilityTransferSources, maintenanceCost, 0, 0, 0, null, null, null);
     }
 
     /**
@@ -233,6 +302,9 @@ public record MissionComponent(String id, SetSkill associatedSkill, double basel
         if (rocket != null && !isRocketSkill(associatedSkill)) {
             throw new IllegalArgumentException("only a rocket may carry a rocket spec: " + id);
         }
+        if (ownLift != null && isRocketSkill(associatedSkill)) {
+            throw new IllegalArgumentException("a rocket's lift is its rocket spec, not ownLift: " + id);
+        }
     }
 
     /**
@@ -272,6 +344,16 @@ public record MissionComponent(String id, SetSkill associatedSkill, double basel
     }
 
     /**
+     * Returns the lift this payload adds to its own launch (zero for most).
+     *
+     * @param launchType the launch type
+     * @return the lift
+     */
+    public double ownLiftFor(LaunchType launchType) {
+        return ownLift == null ? 0 : ownLift.capacityFor(launchType);
+    }
+
+    /**
      * Returns whether a player of an archetype may own this component.
      *
      * @param archetype the player's archetype
@@ -306,9 +388,10 @@ public record MissionComponent(String id, SetSkill associatedSkill, double basel
      * @param sourceComponentId the other component this transfer reads
      *                          from
      * @param transferPercent   the percentage of the source's current
-     *                          reliability transferred, 0-100
+     *                          reliability transferred, 0-100; BASPM's full tree has
+     *                          halves such as 12.5
      */
-    public record ReliabilityTransferSource(String sourceComponentId, int transferPercent) {
+    public record ReliabilityTransferSource(String sourceComponentId, double transferPercent) {
 
         /**
          * Validates both fields.

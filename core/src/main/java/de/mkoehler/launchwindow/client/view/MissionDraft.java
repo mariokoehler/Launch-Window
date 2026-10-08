@@ -78,7 +78,8 @@ public final class MissionDraft {
     }
 
     /**
-     * Returns the chosen rockets, one per launch, {@code null} where none can fly it.
+     * Returns the chosen rockets, one per launch, {@code null} where none can fly it and {@code ""}
+     * for an air drop, which needs none.
      *
      * @return the rockets, unmodifiable
      */
@@ -187,6 +188,10 @@ public final class MissionDraft {
             }
         }
         for (int launch = 0; launch < rocketIds.size(); launch++) {
+            if (!configuration.launches().get(launch).launchType().needsRocket()) {
+                rocketIds.set(launch, "");
+                continue;
+            }
             List<Missions.RocketChoice> choices = Missions.rocketChoices(configuration.launches().get(launch), state,
                 catalog);
             String current = rocketIds.get(launch);

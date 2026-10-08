@@ -306,6 +306,9 @@ public final class AssembleMissionScreen extends ChromeScreen {
             if (rocketId == null) {
                 row.add(ui.label("Launch " + (launch + 1) + " · no rocket can fly it", Theme.TextStyle.BODY_STRONG,
                     Theme.DANGER)).left();
+            } else if (rocketId.isEmpty()) {
+                row.add(ui.label("Launch " + (launch + 1) + " · air drop, no rocket", Theme.TextStyle.BODY_STRONG,
+                    Theme.INK)).left();
             } else {
                 MissionComponent rocket = session.catalog().missionComponent(rocketId).orElseThrow();
                 Image glyph = new Image(ui.icon(SetSkills.icon(rocket.associatedSkill())), Scaling.fit);
@@ -314,7 +317,7 @@ public final class AssembleMissionScreen extends ChromeScreen {
                 row.add(ui.label("Launch " + (launch + 1) + " · " + ContentNames.of(rocketId),
                     Theme.TextStyle.BODY_STRONG, Theme.INK)).expandX().left();
                 double spare = rocket.payloadCapacity(configuration.launches().get(launch).launchType())
-                    - MissionLaunch.payloadMass(configuration.launches().get(launch), session.catalog());
+                    - MissionLaunch.requiredLift(configuration.launches().get(launch), session.catalog());
                 row.add(ui.label(String.format(Locale.ROOT, "%.1f%% · %,.0f kg spare", session.state()
                     .getMissionComponents().get(rocketId).getCurrentReliability(), Math.max(0, spare)),
                     Theme.TextStyle.BODY_SM, Theme.INK_MUTED));
@@ -347,7 +350,7 @@ public final class AssembleMissionScreen extends ChromeScreen {
         long total = configuration.cost();
         for (int launch = 0; launch < draft.rocketIds().size(); launch++) {
             String rocketId = draft.rocketIds().get(launch);
-            if (rocketId != null) {
+            if (rocketId != null && !rocketId.isEmpty()) {
                 long unit = session.catalog().missionComponent(rocketId).orElseThrow().unitCost();
                 lines.add(new Programs.PriceLine(ContentNames.of(rocketId) + ", launch " + (launch + 1)
                     + ", unit cost", unit, null));

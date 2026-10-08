@@ -87,5 +87,11 @@ public enum MissionLaunchOutcome {
      * A CAPCOM slot holds someone who isn't an astronaut on the roster, or who is not
      * idle, is unavailable, is repeated, or is also in the crew.
      */
-    CAPCOM_NOT_AVAILABLE
+    CAPCOM_NOT_AVAILABLE,
+
+    /**
+     * The configuration needs a goal the player hasn't achieved or cancelled yet
+     * ({@link de.mkoehler.launchwindow.content.MissionConfiguration#requiredGoalIds()}).
+     */
+    GOAL_NOT_REACHED
 }

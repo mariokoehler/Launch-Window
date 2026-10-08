@@ -145,7 +145,8 @@ public final class MissionsScreen extends ChromeScreen {
         kv.left();
         for (int i = 0; i < configuration.launches().size(); i++) {
             MissionConfiguration.Launch launch = configuration.launches().get(i);
-            String rocket = i < mission.getRocketIds().size() ? ContentNames.of(mission.getRocketIds().get(i)) : "?";
+            String rocket = i >= mission.getRocketIds().size() ? "?" : mission.getRocketIds().get(i).isEmpty()
+                ? "Carrier aircraft" : ContentNames.of(mission.getRocketIds().get(i));
             kv(kv, "Launch " + (i + 1), rocket + " to " + Missions.launchLabel(launch.launchType()).toLowerCase(Locale.ROOT)
                 + " · payload " + String.join(", ", launch.payloadComponentIds().stream().map(ContentNames::of).toList()));
         }

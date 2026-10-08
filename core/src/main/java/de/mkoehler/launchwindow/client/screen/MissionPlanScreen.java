@@ -199,7 +199,7 @@ public final class MissionPlanScreen extends ChromeScreen {
         String crew = draft.crewSlotIds().stream().filter(java.util.Objects::nonNull)
             .map(id -> session.state().getAstronauts().stream().filter(a -> a.getId().equals(id)).findFirst()
                 .map(a -> a.getName()).orElse(id)).reduce((a, b) -> a + ", " + b).orElse(null);
-        String rockets = draft.rocketIds().stream().filter(java.util.Objects::nonNull).map(ContentNames::of)
+        String rockets = draft.rocketIds().stream().filter(id -> id != null && !id.isEmpty()).map(ContentNames::of)
             .reduce((a, b) -> a + ", " + b).orElse("no rocket");
         card.add(ui.paragraph("With your plan: " + (crew == null ? "" : crew + " aboard, ") + rockets
             + ", and the staff Auto-assign picked unless you changed it in assembly. Expert rescues, changes "
@@ -527,8 +527,14 @@ public final class MissionPlanScreen extends ChromeScreen {
         card.add(ui.label(Missions.launchLabel(spec.launchType()), Theme.TextStyle.HEADING_SM, Theme.INK))
             .padBottom(4f).row();
         card.add(ui.paragraph("Payload: " + Missions.payload(spec, session.catalog()) + "."
-            + (spec.launchType().humanRated() ? " A crewed launch needs a human-rated rocket." : ""),
+            + (spec.launchType().humanRated() && spec.launchType().needsRocket()
+            ? " A crewed launch needs a human-rated rocket." : ""),
             Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).padBottom(Theme.SPACE_3).row();
+        if (!spec.launchType().needsRocket()) {
+            card.add(ui.paragraph("A carrier aircraft drops the craft: there's no rocket to pick or pay for.",
+                Theme.TextStyle.BODY, Theme.INK_MUTED));
+            return card;
+        }
         List<Missions.RocketChoice> choices = Missions.rocketChoices(spec, session.state(), session.catalog());
         if (choices.isEmpty()) {
             card.add(ui.paragraph("No rocket programs open. Open one in the VAB.", Theme.TextStyle.BODY,
