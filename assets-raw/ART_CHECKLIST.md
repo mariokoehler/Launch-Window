@@ -7,21 +7,14 @@ fictional ones are renamed to our own (`design.md` §1.2). The BASPM ids (`00-00
 `00`, program `00`) are only there to cross-reference `baspm.md`. Built 2026-10-03; tick boxes
 as art lands.
 
-**Status:** programs 42/55, mission configurations 59/189.
+**Status:** programs 55/55, mission configurations 189/189.
 Items marked **(M3 pack)** are flown by the early-era content pack (`assets/content/early-era`).
 
 Notes:
-- A `?` after a file name means one image currently stands in for two BASPM programs (the Gemini
-  Earth-orbit test programs and their lunar counterparts, and the two Apollo programs). Fine if
-  intended, otherwise each needs its own.
-- Not matched yet, since the names don't say which mission they are: `okb_mig_e_154_` (trailing
-  underscore), and `image_00270_joint_launch`, `image_00270_orbital`, `image_00270_orbital_extended`.
-  The last three would fit either Mercury's or the OKB-MiG E-154's joint launch, orbital flight
-  and Duration Level I flight. Rename them and re-tick the matching entries.
-- The OKB-MiG E-154 has mission images but no program image yet.
-- `voshkod` should be `voskhod`, and `gemeni_eor` should be `gemini_eor`.
-- `soyuz_7K_LOK_orbital` is matched to the Soyuz 7K-L3 LOK Earth-orbit "orbital flight" as a
-  guess.
+- Every program and mission configuration has its own image (2026-10-08). Gemini EOR's
+  `gemini_eor_langley` is its lunar lander test in Moon orbit.
+- Each list is checked against BASPM's configuration count, and every file on disk against the
+  maps, so a missing or unmatched file fails the run.
 
 ## Program categories
 
@@ -48,20 +41,20 @@ Notes:
   - [x] Sputnik - Extended mission — `sputnik_extended`
 
 - [x] **Explorer I** (NASA, `00-01`) **(M3 pack)** — `explorer_I`
-  - [X] Explorer
-  - [X] Explorer - Extended mission
+  - [x] Explorer — `explorer_i_regular`
+  - [x] Explorer - Extended mission — `explorer_i_extended`
 
 - [x] **Pegasus satellite** (NASA, `00-02`) — `pegasus_satellite`
-  - [X] Pegasus satellite
-  - [X] Pegasus satellite - Extended mission
+  - [x] Pegasus satellite — `pegasus_regular`
+  - [x] Pegasus satellite - Extended mission — `pegasus_extended`
 
 - [x] **Biosatellite** (NASA, `00-03`) — `bio_satellite`
-  - [X] Biosatellite
-  - [X] Biosatellite - Extended mission
+  - [x] Biosatellite — `biosatellite_regular`
+  - [x] Biosatellite - Extended mission — `biosatellite_extended`
 
 - [x] **Orbiting Frog Otolith (OFO)** (NASA, `00-04`) — `ofo_orbiting_frog_otolith`
-  - [X] OFO
-  - [X] OFO - Extended mission
+  - [x] OFO — `orbiting_frog_otolith_regular`
+  - [x] OFO - Extended mission — `orbiting_frog_otolith_extended`
 
 - [x] **Korabl-Sputnik 2** (SOVIET, `00-05`) **(M3 pack)** — `korabl_sputnik_2`
   - [x] Korabl-Sputnik 2 (Sputnik 5) — `korabl_sputnik_2`
@@ -72,25 +65,25 @@ Notes:
 ### `02` Lunar probes
 
 - [x] **Pioneer 4 lunar flyby** (NASA, `02-00`) — `pioneer_4`
-  - [X Pioneer 4 lunar flyby
+  - [x] Pioneer 4 lunar flyby — `pioneer_4`
 
 - [x] **Zond 5 lunar bioscience flyby** (SOVIET, `02-01`) — `zond_5`
   - [x] Zond 5 lunar bioscience flyby — `zond_5`
 
 - [x] **Ranger 3 lunar impactor** (NASA, `02-02`) — `ranger_3`
-  - [X] Ranger 3 lunar impactor
+  - [x] Ranger 3 lunar impactor — `ranger_3`
 
 - [x] **Luna 2 lunar impactor** (SOVIET, `02-03`) — `luna_2`
   - [x] Luna 2 lunar impactor — `luna_2`
 
 - [x] **Pioneer 2 lunar orbiter** (NASA, `02-04`) — `pioneer_2`
-  - [X] Pioneer 2 lunar orbiter
+  - [x] Pioneer 2 lunar orbiter — `pioneer_2`
 
 - [x] **Lunar orbiter program** (NASA, `02-05`) — `lunar_orbiter`
-  - [X] Lunar orbiter program
+  - [x] Lunar orbiter program — `lunar_orbiter`
 
 - [x] **Surveyor lunar lander** (NASA, `02-06`) — `surveyor`
-  - [X] Surveyor lunar lander
+  - [x] Surveyor lunar lander — `surveyor`
 
 - [x] **Luna 15 lunar sample return** (SOVIET, `02-07`) — `luna_15`
   - [x] Luna 15 lunar sample return — `luna_15`
@@ -114,40 +107,40 @@ Notes:
 ### `08` Venus probes
 
 - [x] **Mariner 5 Venus flyby** (NASA, `08-00`) — `mariner_5`
-  - [X] Mariner 5 Venus flyby
+  - [x] Mariner 5 Venus flyby — `mariner_5`
 
 - [x] **Pioneer Venus orbiter** (NASA, `08-01`) — `pioneer_venus_orbiter`
-  - [X] Pioneer Venus orbiter
+  - [x] Pioneer Venus orbiter — `pioneer_12`
 
-- [X] **Venera 15 Venus orbiter** (SOVIET, `08-02`)
-  - [X] Venera 15 Venus orbiter
+- [x] **Venera 15 Venus orbiter** (SOVIET, `08-02`) — `venera_15`
+  - [x] Venera 15 Venus orbiter — `venera_15`
 
 - [x] **Pioneer Venus Multiprobe** (NASA, `08-03`) — `pioneer_venus_multiprobe`
   - [x] Pioneer Venus Multiprobe — `pioneer_13_venus_multiprobe`
 
-- [X] **Venera 7 Venus lander** (SOVIET, `08-04`)
-  - [X] Venera 7 Venus lander
+- [x] **Venera 7 Venus lander** (SOVIET, `08-04`) — `venera_7`
+  - [x] Venera 7 Venus lander — `venera_7`
 
-- [X] **Venera Venus flyby/orbiter probe with a lander** (SOVIET, `08-05`)
-  - [X] Venera Venus flyby and lander
-  - [X] Venera Venus orbiter and lander
+- [x] **Venera Venus flyby/orbiter probe with a lander** (SOVIET, `08-05`) — `venera_venus_orbiter_w_lander`
+  - [x] Venera Venus flyby and lander — `venera_11`
+  - [x] Venera Venus orbiter and lander — `venera_10`
 
 ### `10` Mars probes
 
 - [x] **Mariner 6 Mars flyby** (NASA, `10-00`) — `mariner_6`
   - [x] Mariner 6 Mars flyby — `mariner_6`
 
-- [X] **Mariner 9 Mars orbiter** (NASA, `10-01`)
-  - [X] Mariner 9 Mars orbiter
+- [x] **Mariner 9 Mars orbiter** (NASA, `10-01`) — `mariner_9`
+  - [x] Mariner 9 Mars orbiter — `mariner_9`
 
-- [X] **Mars Viking orbiter and lander** (NASA, `10-02`)
-  - [X] Mars Viking orbiter and lander
+- [x] **Mars Viking orbiter and lander** (NASA, `10-02`) — `mars_viking`
+  - [x] Mars Viking orbiter and lander — `viking_1`
 
-- [X] **Mars 2 orbiter lander and rover** (SOVIET, `10-03`)
-  - [X] Mars 2 orbiter lander and rover
+- [x] **Mars 2 orbiter lander and rover** (SOVIET, `10-03`) — `mars_2_orbiter_and_lander`
+  - [x] Mars 2 orbiter lander and rover — `mars_2_orbiter_and_lander`
 
-- [X] **Mars M69** (SOVIET, `10-04`)
-  - [X] Mars M69 orbiter
+- [x] **Mars M69** (SOVIET, `10-04`) — `mars_m_69`
+  - [x] Mars M69 orbiter — `mars_m_69`
 
 ### `14` Jupiter probes
 
@@ -161,29 +154,29 @@ Notes:
 
 ### `26` Space planes
 
-- [X] **X-15 space plane** (NASA, `26-00`)
-  - [X] Flight test
-  - [X] Experimental flight I
-  - [X] Experimental flight II
+- [x] **X-15 space plane** (NASA, `26-00`) — `x_15`
+  - [x] Flight test — `x_15_flight_test`
+  - [x] Experimental flight I — `x_15_experimental_flight_i`
+  - [x] Experimental flight II — `x_15_experimental_flight_ii`
 
-- [X] **OKB-MiG E-154 space plane (renamed from BASPM's "PKA space plane")** (SOVIET, `26-01`)
+- [x] **OKB-MiG E-154 space plane (renamed from BASPM's "PKA space plane")** (SOVIET, `26-01`) — `okb_mig_e_154`
   - [x] Atmospheric drop test flight — `okb_mig_e_154_drop_test`
   - [x] Suborbital test flight — `okb_mig_e_154_suborbital`
-  - [X] Orbital flight
-  - [X] Orbital flight (Duration Level I)
-  - [X] Joint launch and orbital flight
+  - [x] Orbital flight — `okb_mig_e_154_orbital`
+  - [x] Orbital flight (Duration Level I) — `okb_mig_e_154_orbital_extended`
+  - [x] Joint launch and orbital flight — `okb_mig_e_154_joint_launch`
 
 ### `27` One-crew ballistic capsules
 
-- [X] **Project Mercury** (NASA, `27-00`) **(M3 pack)**
-  - [X] Uncrewed suborbital flight test
-  - [X] Suborbital flight
-  - [X] Uncrewed orbital flight test
-  - [X] Orbital flight
-  - [X] Orbital flight (Duration Level I)
-  - [X] Joint launch and orbital flight (Duration Level I)
+- [x] **Project Mercury** (NASA, `27-00`) **(M3 pack)** — `mercury`
+  - [x] Uncrewed suborbital flight test — `mercury_uncrewed_suborbital`
+  - [x] Suborbital flight — `mercury_suborbital`
+  - [x] Uncrewed orbital flight test — `mercury_uncrewed_orbital`
+  - [x] Orbital flight — `mercury_orbital`
+  - [x] Orbital flight (Duration Level I) — `mercury_orbital_extended`
+  - [x] Joint launch and orbital flight (Duration Level I) — `mercury_joint_launch`
 
-- [X] **Vostok** (SOVIET, `27-01`) **(M3 pack)**
+- [x] **Vostok** (SOVIET, `27-01`) **(M3 pack)** — `vostok`
   - [x] Uncrewed suborbital flight test — `vostok_uncrewed_suborbital`
   - [x] Suborbital flight — `vostok_suborbital`
   - [x] Uncrewed orbital flight test — `vostok_uncrewed_orbital`
@@ -194,119 +187,119 @@ Notes:
 
 ### `28` Two-crew ballistic capsules
 
-- [X] **Project Gemini** (NASA, `28-00`)
-  - [X] Uncrewed suborbital flight test
-  - [X] Suborbital flight
-  - [X] Uncrewed orbital flight test
-  - [X] Orbital flight
-  - [X] Spacewalk (Duration Level I)
-  - [X] Orbital rendezvous with a crewed vehicle
-  - [X] Docking
-  - [X] EVA and orbital rendezvous with a crewed vehicle (Duration Level I)
-  - [X] EVA and docking (Duration Level I)
-  - [X] EVA (Duration Level II)
-  - [X] Orbital rendezvous with a crewed vehicle (Duration Level II)
-  - [X] Docking - Duration Level II
-  - [X] EVA and orbital rendezvous with a crewed vehicle (Duration Level II)
-  - [X] EVA and docking (Duration Level II)
-  - [X] Orbital flight (Duration Level III)
+- [x] **Project Gemini** (NASA, `28-00`) — `gemini`
+  - [x] Uncrewed suborbital flight test — `gemini_uncrewed_suborbital`
+  - [x] Suborbital flight — `gemini_suborbital`
+  - [x] Uncrewed orbital flight test — `gemini_uncrewed_orbital`
+  - [x] Orbital flight — `gemini_orbital`
+  - [x] Spacewalk (Duration Level I) — `gemini_spacewalk`
+  - [x] Orbital rendezvous with a crewed vehicle — `gemini_orbital_rendezvous`
+  - [x] Docking — `gemini_docking`
+  - [x] EVA and orbital rendezvous with a crewed vehicle (Duration Level I) — `gemini_orbital_rendezvous_and_eva`
+  - [x] EVA and docking (Duration Level I) — `gemini_eva_and_docking`
+  - [x] EVA (Duration Level II) — `gemini_spacewalk_extended`
+  - [x] Orbital rendezvous with a crewed vehicle (Duration Level II) — `gemini_orbital_rendezvous_extended`
+  - [x] Docking - Duration Level II — `gemini_docking_extended`
+  - [x] EVA and orbital rendezvous with a crewed vehicle (Duration Level II) — `gemini_orbital_rendezvous_and_eva_extended`
+  - [x] EVA and docking (Duration Level II) — `gemini_eva_and_docking_extended`
+  - [x] Orbital flight (Duration Level III) — `gemini_orbital_extended`
 
-- [x] **Circumlunar Gemini test flights in Earth orbit** (NASA, `28-01`) — `circumlunar_gemini?`
-  - [X] Uncrewed Gemini heat shield test (reentry at near-lunar velocity)
-  - [X] Crewed Gemini Transtage and heat shield test flight in Earth Orbit
+- [x] **Circumlunar Gemini test flights in Earth orbit** (NASA, `28-01`) — `circumlunar_gemini_testflight_leo`
+  - [x] Uncrewed Gemini heat shield test (reentry at near-lunar velocity) — `gemini_heat_shield_test`
+  - [x] Crewed Gemini Transtage and heat shield test flight in Earth Orbit — `gemini_crewed_transtage_and_heat_shield`
 
-- [x] **Lunar orbital Gemini test flights in Earth orbit** (NASA, `28-02`) — `lunar_orbital_gemini?`
-  - [X] Uncrewed Gemini heat shield test (reentry at near-lunar velocity)
-  - [X] Crewed Gemini Lunar Propulsion Module and heat shield test flight in Earth Orbit
+- [x] **Lunar orbital Gemini test flights in Earth orbit** (NASA, `28-02`) — `lunar_orbital_gemini_testflight_leo`
+  - [x] Uncrewed Gemini heat shield test (reentry at near-lunar velocity) — `gemini_uncrewed_lunar_propulsion_module_and_heat_shield`
+  - [x] Crewed Gemini Lunar Propulsion Module and heat shield test flight in Earth Orbit — `gemini_crewed_lunar_propulsion_module_and_heat_shield`
 
-- [x] **Gemini Direct Ascent test flights in Earth orbit** (NASA, `28-03`) — `gemini_direct_ascent?`
-  - [X] Uncrewed Direct Ascent Configuration test flight in Earth Orbit (reentry at near-lunar velocity)
-  - [X] Crewed Direct Ascent Configuration test flight in Earth Orbit (reentry at near-lunar velocity)
+- [x] **Gemini Direct Ascent test flights in Earth orbit** (NASA, `28-03`) — `gemini_direct_ascent_testflight_leo`
+  - [x] Uncrewed Direct Ascent Configuration test flight in Earth Orbit (reentry at near-lunar velocity) — `gemini_direct_ascent_uncrewed`
+  - [x] Crewed Direct Ascent Configuration test flight in Earth Orbit (reentry at near-lunar velocity) — `gemini_direct_ascent_crewed`
 
 - [x] **Voskhod** (SOVIET, `28-04`) — `voskhod`
-  - [X] Uncrewed suborbital flight test
-  - [X] Suborbital flight
-  - [X] Uncrewed orbital flight test
-  - [X] Orbital flight
-  - [X] Orbital flight (Duration Level I)
-  - [X] Orbital flight (Duration Level II)
-  - [X] Orbital flight (Duration Level III)
-  - [X] Orbital flight (Duration Level IV)
-  - [X] Spacewalk (Duration Level I)
-  - [X] Joint launch and orbital flight (Duration Level I)
+  - [x] Uncrewed suborbital flight test — `voskhod_uncrewed_suborbital`
+  - [x] Suborbital flight — `voskhod_suborbital`
+  - [x] Uncrewed orbital flight test — `voskhod_uncrewed_orbital`
+  - [x] Orbital flight — `voskhod_orbital`
+  - [x] Orbital flight (Duration Level I) — `voskhod_orbital_extended_1`
+  - [x] Orbital flight (Duration Level II) — `voskhod_orbital_extended_2`
+  - [x] Orbital flight (Duration Level III) — `voskhod_orbital_extended_3`
+  - [x] Orbital flight (Duration Level IV) — `voskhod_orbital_extended_4`
+  - [x] Spacewalk (Duration Level I) — `voskhod_spacewalk`
+  - [x] Joint launch and orbital flight (Duration Level I) — `voskhod_joint_launch`
 
 - [x] **Soyuz 7K-L1 Earth orbit** (SOVIET, `28-05`) — `soyuz_7K_L1`
-  - [X] Uncrewed suborbital flight test
-  - [X] Suborbital flight
-  - [X] Uncrewed orbital flight test
-  - [X] Orbital flight
-  - [X] Orbital flight (Duration Level I)
-  - [X] Orbital flight (Duration Level II)
+  - [x] Uncrewed suborbital flight test — `soyuz_7K_L1_uncrewed_suborbital`
+  - [x] Suborbital flight — `soyuz_7K_L1_suborbital`
+  - [x] Uncrewed orbital flight test — `soyuz_7K_L1_uncrewed_orbital`
+  - [x] Orbital flight — `soyuz_7K_L1_orbital`
+  - [x] Orbital flight (Duration Level I) — `soyuz_7K_L1_orbital_extended_1`
+  - [x] Orbital flight (Duration Level II) — `soyuz_7K_L1_orbital_extended_2`
 
 - [x] **Soyuz 7K-L3 LOK Earth orbit** (SOVIET, `28-06`) — `soyuz_7K_L3`
-  - [X] Uncrewed suborbital flight test
-  - [X] Suborbital flight
-  - [X] Uncrewed orbital flight test
-  - [x] Orbital flight — `soyuz_7K_LOK_orbital?`
-  - [X] Orbital flight (Duration Level I)
-  - [X] Orbital flight (Duration Level II)
-  - [X] Orbital flight (Duration Level III)
-  - [X] Spacewalk (Duration Level I)
-  - [X] Joint launch and orbital flight (Duration Level I)
-  - [X] Automatic rendezvous
-  - [X] LK lander uncrewed test
-  - [X] LK lander test
+  - [x] Uncrewed suborbital flight test — `soyuz_7K_L3_LOK_uncrewed_suborbital`
+  - [x] Suborbital flight — `soyuz_7K_L3_LOK_suborbital`
+  - [x] Uncrewed orbital flight test — `soyuz_7K_L3_LOK_uncrewed_orbital`
+  - [x] Orbital flight — `soyuz_7K_L3_LOK_orbital`
+  - [x] Orbital flight (Duration Level I) — `soyuz_7K_L3_LOK_orbital_extended_1`
+  - [x] Orbital flight (Duration Level II) — `soyuz_7K_L3_LOK_orbital_extended_2`
+  - [x] Orbital flight (Duration Level III) — `soyuz_7K_L3_LOK_orbital_extended_3`
+  - [x] Spacewalk (Duration Level I) — `soyuz_7K_L3_LOK_LK_spacewalk`
+  - [x] Joint launch and orbital flight (Duration Level I) — `soyuz_7K_L3_LOK_joint_launch`
+  - [x] Automatic rendezvous — `soyuz_7K_L3_LOK_automatic_rendezvous`
+  - [x] LK lander uncrewed test — `soyuz_7K_L3_LOK_LK_uncrewed_lander_test`
+  - [x] LK lander test — `soyuz_7K_L3_LOK_LK_lander_test`
 
-- [x] **LK-700 Earth orbit** (SOVIET, `28-07`) — `lk_700`
+- [x] **LK-700 Earth orbit** (SOVIET, `28-07`) — `lk_700_testflight_leo`
   - [x] Uncrewed suborbital flight test — `lk_700_uncrewed_suborbital`
   - [x] Suborbital flight — `lk_700_suborbital`
   - [x] Uncrewed orbital flight test — `lk_700_uncrewed_orbital`
   - [x] Orbital flight — `lk_700_orbital`
-  - [X] Orbital flight (Duration Level I)
-  - [X] Orbital flight (Duration Level II)
-  - [X] Orbital flight (Duration Level III)
-  - [X] Orbital flight (Duration Level IV)
-  - [X] Orbital flight (Duration Level V)
-  - [X] Orbital flight (Duration Level VI)
+  - [x] Orbital flight (Duration Level I) — `lk_700_orbital_extended_1`
+  - [x] Orbital flight (Duration Level II) — `lk_700_orbital_extended_2`
+  - [x] Orbital flight (Duration Level III) — `lk_700_orbital_extended_3`
+  - [x] Orbital flight (Duration Level IV) — `lk_700_orbital_extended_4`
+  - [x] Orbital flight (Duration Level V) — `lk_700_orbital_extended_5`
+  - [x] Orbital flight (Duration Level VI) — `lk_700_orbital_extended_6`
   - [x] Spacewalk (Duration Level I) — `lk_700_spacewalk`
 
-- [x] **Gemini EOR test flights in Earth orbit** (NASA, `28-08`) — `gemeni_eor?`
-  - [X] Gemini Lander Test in LEO
-  - [X] Gemini Lander  and Heat-Shield Test in MEO
+- [x] **Gemini EOR test flights in Earth orbit** (NASA, `28-08`) — `gemini_eor_testflight_leo`
+  - [x] Gemini Lander Test in LEO — `gemini_eor_lander_test`
+  - [x] Gemini Lander  and Heat-Shield Test in MEO — `gemini_eor_lander_and_heat_shield_test`
 
 ### `29` Short-duration lunar expeditions
 
-- [x] **Circumlunar Gemini** (NASA, `29-00`) — `circumlunar_gemini?`
-  - [X] Transtage lunar flyby test
-  - [X] Lunar flyby (Duration Level II)
+- [x] **Circumlunar Gemini** (NASA, `29-00`) — `circumlunar_gemini`
+  - [x] Transtage lunar flyby test — `circumlunar_gemini_transtage_lunar_flyby`
+  - [x] Lunar flyby (Duration Level II) — `circumlunar_gemini_lunar_flyby`
 
-- [x] **Lunar orbital Gemini** (NASA, `29-01`) — `lunar_orbital_gemini?`
-  - [X] Uncrewed lunar flyby test
-  - [X] Lunar flyby (Duration Level II)
-  - [X] Uncrewed lunar orbital flight test
-  - [X] Lunar orbital flight (Duration Level II)
+- [x] **Lunar orbital Gemini** (NASA, `29-01`) — `lunar_orbital_gemini`
+  - [x] Uncrewed lunar flyby test — `lunar_orbital_gemini_uncrewed_flyby`
+  - [x] Lunar flyby (Duration Level II) — `lunar_orbital_gemini_circumlunar_flight`
+  - [x] Uncrewed lunar orbital flight test — `lunar_orbital_gemini_uncrewed_lunar_orbital`
+  - [x] Lunar orbital flight (Duration Level II) — `lunar_orbital_gemini_lunar_orbital`
 
-- [x] **Gemini Direct ascent** (NASA, `29-02`) — `gemini_direct_ascent?`
-  - [ ] Uncrewed lunar flyby flight test
-  - [ ] Lunar flyby (Duration Level II)
-  - [ ] Uncrewed lunar orbital flight test
-  - [ ] Lunar orbital flight (Duration Level II)
-  - [ ] Direct ascent
+- [x] **Gemini Direct ascent** (NASA, `29-02`) — `gemini_direct_ascent`
+  - [x] Uncrewed lunar flyby flight test — `gemini_direct_ascent_uncrewed_circumlunar`
+  - [x] Lunar flyby (Duration Level II) — `gemini_direct_ascent_circumlunar`
+  - [x] Uncrewed lunar orbital flight test — `gemini_direct_ascent_uncrewed_lunar_orbital`
+  - [x] Lunar orbital flight (Duration Level II) — `gemini_direct_ascent_lunar_orbital`
+  - [x] Direct ascent — `gemini_direct_ascent_lunar_landing`
 
-- [x] **Project Apollo** (NASA, `29-03`) — `apollo?`
-  - [ ] Uncrewed lunar flyby test
-  - [ ] Lunar flyby (Duration Level II)
-  - [ ] Uncrewed lunar orbital flight test
-  - [ ] Lunar orbital flight [Type C'] (Duration Level II)
-  - [ ] Lunar lander test in Moon orbit [Type F]
-  - [ ] Lunar landing [Type G and H]
-  - [ ] Lunar landing with surface rover deployement [Type J]
+- [x] **Project Apollo** (NASA, `29-03`) — `apollo`
+  - [x] Uncrewed lunar flyby test — `apollo_uncrewed_circumlunar`
+  - [x] Lunar flyby (Duration Level II) — `apollo_circumlunar`
+  - [x] Uncrewed lunar orbital flight test — `apollo_uncrewed_lunar_orbit`
+  - [x] Lunar orbital flight [Type C'] (Duration Level II) — `apollo_lunar_orbit`
+  - [x] Lunar lander test in Moon orbit [Type F] — `apollo_lunar_module_test`
+  - [x] Lunar landing [Type G and H] — `apollo_lunar_landing_type_g_h`
+  - [x] Lunar landing with surface rover deployement [Type J] — `apollo_lunar_landing_type_j`
 
-- [x] **Gemini EOR** (NASA, `29-04`) — `gemeni_eor?`
-  - [ ] Lunar flyby (Duration Level II)
-  - [ ] Lunar orbital flight (Duration Level II)
-  - [ ] Lunar lander test in Moon orbit
-  - [ ] Lunar landing
+- [x] **Gemini EOR** (NASA, `29-04`) — `gemini_eor`
+  - [x] Lunar flyby (Duration Level II) — `gemini_eor_circumlunar`
+  - [x] Lunar orbital flight (Duration Level II) — `gemini_eor_lunar_orbital`
+  - [x] Lunar lander test in Moon orbit — `gemini_eor_langley`
+  - [x] Lunar landing — `gemini_eor_lunar_landing`
 
 - [x] **Circumlunar Soyuz (Soyuz 7K-L1)** (SOVIET, `29-05`) — `circumlunar_soyuz_7K_L1`
   - [x] Uncrewed lunar flyby test — `soyuz_7K_L1_uncrewed_circumlunar_flyby`
@@ -320,7 +313,7 @@ Notes:
   - [x] Lunar lander test in Moon orbit (Duration Level II) — `soyuz_7K_LOK_lander_test`
   - [x] Lunar landing — `soyuz_7K_LOK_LOR`
 
-- [ ] **LK-700 Direct Ascent** (SOVIET, `29-07`)
+- [x] **LK-700 Direct Ascent** (SOVIET, `29-07`) — `lk_700`
   - [x] Uncrewed lunar flyby test — `lk_700_uncrewed_circumlunar`
   - [x] Lunar flyby (Duration Level II) — `lk_700_circumlunar`
   - [x] Uncrewed lunar orbital flight test — `lk_700_uncrewed_lunar_orbital`
@@ -329,24 +322,24 @@ Notes:
 
 ### `30` Three-crew ballistic capsules
 
-- [x] **Project Apollo tests flights in Earth orbit** (NASA, `30-00`) — `apollo?`
-  - [ ] Uncrewed suborbital flight test [Type A]
-  - [ ] Suborbital flight [Type C]
-  - [ ] Uncrewed orbital flight test [Type A]
-  - [ ] Orbital flight [Type C]
-  - [ ] Uncrewed Orbital LEM Test [Type B]
-  - [ ] Lunar lander test in Low Earth Orbit with EVA [Type D]
-  - [ ] Lunar lander and CM heat shield test in High Earth Orbit with EVA [Type E]
-  - [ ] Orbital flight (Duration Level I) [Type C]
-  - [ ] Orbital flight (Duration Level II) [Type C]
-  - [ ] Orbital flight (Duration Level III) [Type C]
-  - [ ] Orbital flight (Duration Level IV) [Type C]
-  - [ ] Orbital flight EVA (Duration Level I) [Type C]
-  - [ ] Orbital flight EVA (Duration Level II) [Type C]
-  - [ ] Orbital flight EVA (Duration Level III) [Type C]
-  - [ ] Orbital flight EVA (Duration Level IV) [Type C]
-  - [ ] Orbital Rendezvous with a crewed vehicle
-  - [ ] Docking (Three crew capsule)
+- [x] **Project Apollo tests flights in Earth orbit** (NASA, `30-00`) — `apollo_testflight_leo`
+  - [x] Uncrewed suborbital flight test [Type A] — `apollo_uncrewed_suborbital`
+  - [x] Suborbital flight [Type C] — `apollo_suborbital_type_c`
+  - [x] Uncrewed orbital flight test [Type A] — `apollo_uncrewed_orbital_type_a`
+  - [x] Orbital flight [Type C] — `apollo_orbital_type_c`
+  - [x] Uncrewed Orbital LEM Test [Type B] — `apollo_uncrewed_orbital_lem_type_b`
+  - [x] Lunar lander test in Low Earth Orbit with EVA [Type D] — `apollo_lunar_module_test_with_eva_type_d`
+  - [x] Lunar lander and CM heat shield test in High Earth Orbit with EVA [Type E] — `apollo_lunar_module_and_CM_test_with_eva_type_e`
+  - [x] Orbital flight (Duration Level I) [Type C] — `apollo_orbital_extended_1`
+  - [x] Orbital flight (Duration Level II) [Type C] — `apollo_orbital_extended_2`
+  - [x] Orbital flight (Duration Level III) [Type C] — `apollo_orbital_extended_3`
+  - [x] Orbital flight (Duration Level IV) [Type C] — `apollo_orbital_extended_4`
+  - [x] Orbital flight EVA (Duration Level I) [Type C] — `apollo_orbital_eva_extended_1`
+  - [x] Orbital flight EVA (Duration Level II) [Type C] — `apollo_orbital_eva_extended_2`
+  - [x] Orbital flight EVA (Duration Level III) [Type C] — `apollo_orbital_eva_extended_3`
+  - [x] Orbital flight EVA (Duration Level IV) [Type C] — `apollo_orbital_eva_extended_4`
+  - [x] Orbital Rendezvous with a crewed vehicle — `apollo_orbital_rendezvous`
+  - [x] Docking (Three crew capsule) — `apollo_orbital_docking`
 
 - [x] **Soyuz 7K-OK (Earth orbit)** (SOVIET, `30-01`) — `soyuz_7K_OK`
   - [x] Uncrewed suborbital flight test — `soyuz_7K_OK_uncrewed_suborbital`
