@@ -1752,7 +1752,8 @@ refusal texts. Differences from the mockup: the report's People card has no subh
 say which side), and its poaching lines don't open the person page yet; no "Set otherwise" filter chip; no "No offer made" line in last season's
 results; no "Kept from NASA" on a newcomer's ambition; no "Signing bonus" budget line (the report
 line names the bonus); the dialog's answer caption also says morale and unshown traits aren't
-counted. Not yet on the UI Asset Sheet: the three icons.
+counted. The three icons are on the UI Asset Sheet (2026-10-08, chrome section, with the
+roster marks and the joined tag in context).
 
 ---
 
