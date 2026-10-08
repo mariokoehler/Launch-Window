@@ -7,7 +7,7 @@ fictional ones are renamed to our own (`design.md` §1.2). The BASPM ids (`00-00
 `00`, program `00`) are only there to cross-reference `baspm.md`. Built 2026-10-03; tick boxes
 as art lands.
 
-**Status:** programs 55/55, mission configurations 189/189, rocket programs 5/24.
+**Status:** programs 55/55, mission configurations 189/189, rocket programs 9/24.
 Items marked **(M3 pack)** are flown by the early-era content pack (`assets/content/early-era`).
 
 Notes:
@@ -386,10 +386,10 @@ not drawn yet are proposals in the style of the first ones (2026-10-08).
 - [ ] **Atlas** (Light) **(M3 pack)** — `atlas`
 - [x] **Atlas-Agena** (Light) — `atlas_agena`
 - [x] **Atlas-Centaur** (Medium) — `atlas_centaur`
-- [ ] **Titan II** (Medium) — `titan_ii`
-- [ ] **Titan IIIC** (Medium) — `titan_iiic`
-- [ ] **Titan IIIE-Centaur** (Medium) — `titan_iiie_centaur`
-- [ ] **Saturn I** (Medium) — `saturn_i`
+- [x] **Titan II** (Medium) — `titan_ii`
+- [x] **Titan IIIC** (Medium) — `titan_iiic`
+- [x] **Titan IIIE-Centaur** (Medium) — `titan_iiie_centaur`
+- [x] **Saturn I** (Medium) — `saturn_i`
 - [ ] **Saturn IB** (Medium) — `saturn_ib`
 - [ ] **Saturn C-3B** (Medium) — `saturn_c3b`
 - [ ] **Saturn V** (Heavy) — `saturn_v`
