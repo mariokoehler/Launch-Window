@@ -12,6 +12,7 @@ import de.mkoehler.launchwindow.client.ui.Refusals;
 import de.mkoehler.launchwindow.client.ui.ReliabilityBar;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.view.ContentNames;
+import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.Rockets;
 import de.mkoehler.launchwindow.client.view.SetSkills;
 import de.mkoehler.launchwindow.content.MissionComponent;
@@ -47,6 +48,11 @@ public final class RocketProgramsScreen extends ChromeScreen {
     @Override
     protected void goBack() {
         goVab();
+    }
+
+    @Override
+    protected Help.Context helpContext() {
+        return Help.Context.VAB;
     }
 
     @Override

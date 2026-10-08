@@ -14,6 +14,7 @@ import de.mkoehler.launchwindow.client.ui.SkillBar;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.TraitChip;
 import de.mkoehler.launchwindow.client.view.Department;
+import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.People;
 import de.mkoehler.launchwindow.client.view.Tips;
 import de.mkoehler.launchwindow.model.Astronaut;
@@ -97,6 +98,11 @@ public final class PersonScreen extends ChromeScreen {
 
     private Personnel person() {
         return People.find(session.state(), personId);
+    }
+
+    @Override
+    protected Help.Context helpContext() {
+        return Help.Context.PERSON;
     }
 
     @Override

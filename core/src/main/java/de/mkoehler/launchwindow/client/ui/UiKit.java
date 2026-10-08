@@ -72,6 +72,9 @@ public final class UiKit implements Disposable {
     };
     /** How wide a tooltip's explanation wraps. */
     private static final float TOOLTIP_TEXT_WIDTH = 280f;
+    /** The room a search field leaves on its left for the magnifier ({@link #searchField}). */
+    public static final float SEARCH_ICON_ROOM = 22f;
+    private TextField.TextFieldStyle searchFieldStyle;
     private Slider.SliderStyle sliderStyle;
     private TextButton.TextButtonStyle pageButtonStyle;
     private String backdropPath;
@@ -546,6 +549,34 @@ public final class UiKit implements Disposable {
         TextField field = new TextField(text, fieldStyle);
         field.setMessageText(placeholder);
         return field;
+    }
+
+    /**
+     * Builds a search field: a text field with room on the left for a magnifier, which the caller
+     * stacks over it ({@link #SEARCH_ICON_ROOM}).
+     *
+     * @param placeholder the hint shown while empty
+     * @return the field
+     */
+    public TextField searchField(String placeholder) {
+        if (searchFieldStyle == null) {
+            searchFieldStyle = new TextField.TextFieldStyle(fieldStyle);
+            searchFieldStyle.background = indented(fieldStyle.background);
+            searchFieldStyle.focusedBackground = indented(fieldStyle.focusedBackground);
+            searchFieldStyle.disabledBackground = indented(fieldStyle.disabledBackground);
+        }
+        TextField field = new TextField("", searchFieldStyle);
+        field.setMessageText(placeholder);
+        return field;
+    }
+
+    private static Drawable indented(Drawable drawable) {
+        if (drawable == null) {
+            return null;
+        }
+        NinePatchDrawable box = new NinePatchDrawable((NinePatchDrawable) drawable);
+        box.setLeftWidth(Theme.SPACE_3 + SEARCH_ICON_ROOM);
+        return box;
     }
 
     /**

@@ -184,6 +184,15 @@ public final class Tips {
     }
 
     /**
+     * Returns the help button's tooltip.
+     *
+     * @return the tip
+     */
+    public static Tip help() {
+        return new Tip("Help (F1)", "The game's rules, by topic, starting with the ones for this screen.");
+    }
+
+    /**
      * Returns the header date chip's tooltip.
      *
      * @return the tip

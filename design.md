@@ -1701,7 +1701,8 @@ the outcomes are in each screen's "Implemented" note.
 
 **Chrome (every screen except the hub; `ChromeScreen`):**
 - 30 px page padding, 20 px between header, content and footer.
-- **Header** above a rule: back, home (the hub) and settings buttons, a breadcrumb rooted at
+- **Header** above a rule: back, home (the hub), settings and help (2026-10-08, `ui-spec.md`
+  component 23) buttons, a breadcrumb rooted at
   "Space Complex" (earlier crumbs clickable), and on the right the prestige, game date and
   next-turn chips. The screen's own eyebrow and title sit below the rule and belong to the
   screen.
@@ -1955,6 +1956,15 @@ background check on the hire screen, agency assessments and personnel files. Moc
 canvas `Launch Window — Intelligence Office` and built (2026-10-07), with the user's hotspot
 polygons. The personnel file's loyalty band and ambition wait for phase 4. **Reset the dev data
 root** before the next play test (new fields on the snapshot and on employees).
+
+**Help** (the user's idea, built 2026-10-08, `ui-spec.md` component 23): a help button in every
+header and the hub strip, and F1, open the rules by topic over the current screen, filtered to that
+screen's topics; typing searches them all. Seven topics so far (turns, the budget, programs,
+component R&D, team chemistry, poaching, intelligence) for the user to judge the format. **Next:**
+write the remaining topics once the format is confirmed (about 30 to 40 in all: hiring and
+training, morale and retirement, each building, missions and their steps, goals and prestige,
+random events, PR duty, ambitions and careers, the turn report), each screen's topic list growing
+with them; and put the `help` and `search` glyphs on the UI Asset Sheet.
 
 ### Later
 

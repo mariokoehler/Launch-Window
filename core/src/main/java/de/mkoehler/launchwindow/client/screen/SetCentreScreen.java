@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.view.Department;
+import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.SetDepartment;
 import de.mkoehler.launchwindow.client.view.SetSkills;
 import de.mkoehler.launchwindow.client.view.Tips;
@@ -56,6 +57,11 @@ public final class SetCentreScreen extends ChromeScreen {
         titleActions.add(button("Payload R&D", Theme.ButtonKind.PRIMARY,
             () -> game.setScreen(new RndBoardScreen(game, RndBoardScreen.Board.PAYLOAD))));
         rebuild();
+    }
+
+    @Override
+    protected Help.Context helpContext() {
+        return Help.Context.SET_CENTRE;
     }
 
     @Override

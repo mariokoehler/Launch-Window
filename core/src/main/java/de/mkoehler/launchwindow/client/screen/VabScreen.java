@@ -3,6 +3,7 @@ package de.mkoehler.launchwindow.client.screen;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.Theme;
+import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.Rockets;
 import de.mkoehler.launchwindow.content.RocketClass;
 import de.mkoehler.launchwindow.model.Building;
@@ -32,6 +33,11 @@ public final class VabScreen extends ChromeScreen {
     @Override
     protected void goVab() {
         // Already here.
+    }
+
+    @Override
+    protected Help.Context helpContext() {
+        return Help.Context.VAB;
     }
 
     @Override

@@ -65,10 +65,15 @@ CHROME = {
     "retain_keep": '<path d="M12 2.5 4.5 5.5v6c0 4.6 3.2 8.4 7.5 10 4.3-1.6 7.5-5.4 7.5-10v-6z"/><polyline points="8.5 12 11 14.5 15.5 9.5"/>',
     "retain_go": '<path d="M13 4H5v16h8"/><path d="M15 12h7M19 8.5 22.5 12 19 15.5"/>',
     "joined": '<path d="M11 4h8v16h-8"/><path d="M2 12h11M9.5 8.5 13 12l-3.5 3.5"/>',
+    # Help (ui-spec.md component 23, 2026-10-08): the header's help button (a question mark in a
+    # circle, its dot below) and the search field's magnifier.
+    "help": '<circle cx="12" cy="12" r="9.5"/><path d="M9.2 9.3a2.9 2.9 0 0 1 5.6 1c0 1.9-2.8 2.5-2.8 4.2"/>',
+    "search": '<circle cx="10.5" cy="10.5" r="6.5"/><line x1="15.5" y1="15.5" x2="21" y2="21"/>',
 }
 
 # The astronaut glyph's antenna tip is a filled dot.
 EXTRA_FILL = {"astronauts": '<circle cx="12" cy="1.5" r="0.8" fill="currentColor" stroke="none"/>',
+              "help": '<circle cx="12" cy="17.6" r="1.1" fill="currentColor" stroke="none"/>',
               "trait_team": '<g fill="currentColor" stroke="none"><circle cx="12" cy="5.2" r="4"/>'
                             '<circle cx="4.8" cy="18.4" r="4"/><circle cx="19.2" cy="18.4" r="4"/></g>'}
 

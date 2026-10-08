@@ -296,6 +296,17 @@ public class LaunchWindowGame extends Game {
     }
 
     /**
+     * Switches to a screen for a short visit, keeping the current one as it is (not disposed), so
+     * the visited screen can go back to that very instance: help's explainer links come back to the
+     * screen, help still open. The visited screen must end with {@code setScreen(previous)}.
+     *
+     * @param screen the screen to visit
+     */
+    public void visit(Screen screen) {
+        super.setScreen(screen);
+    }
+
+    /**
      * Switches screens and disposes the previous one once the switch is done.
      *
      * @param screen the next screen

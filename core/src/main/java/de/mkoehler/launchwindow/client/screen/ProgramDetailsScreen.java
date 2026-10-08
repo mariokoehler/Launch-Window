@@ -19,6 +19,7 @@ import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.view.Concepts;
 import de.mkoehler.launchwindow.client.view.BodyMap;
 import de.mkoehler.launchwindow.client.view.ContentNames;
+import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.PayloadRnd;
 import de.mkoehler.launchwindow.client.view.Programs;
 import de.mkoehler.launchwindow.content.CelestialBody;
@@ -83,6 +84,11 @@ public final class ProgramDetailsScreen extends ChromeScreen {
 
     private Program program() {
         return session.catalog().program(programId).orElseThrow();
+    }
+
+    @Override
+    protected Help.Context helpContext() {
+        return Help.Context.PROGRAM;
     }
 
     @Override

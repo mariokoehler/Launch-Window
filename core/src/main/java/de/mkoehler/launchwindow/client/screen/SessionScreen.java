@@ -1,8 +1,10 @@
 package de.mkoehler.launchwindow.client.screen;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -14,6 +16,7 @@ import de.mkoehler.launchwindow.client.connect.ServerResult;
 import de.mkoehler.launchwindow.client.ui.Countdown;
 import de.mkoehler.launchwindow.client.ui.Refusals;
 import de.mkoehler.launchwindow.client.ui.Theme;
+import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.Tips;
 import de.mkoehler.launchwindow.persistence.PlayerAction;
 import de.mkoehler.launchwindow.rules.TurnReport;
@@ -50,6 +53,7 @@ abstract class SessionScreen extends StageScreen {
     protected final ClientSession session;
 
     private Table dialog;
+    private HelpOverlay help;
     private Table toast;
     private Table waiting;
     private final Image[] waitingDots = new Image[3];
@@ -66,6 +70,21 @@ abstract class SessionScreen extends StageScreen {
     protected SessionScreen(LaunchWindowGame game) {
         super(game);
         this.session = game.session();
+        // F1 opens help from anywhere in the game, Esc closes it (ui-spec.md component 23).
+        stage.addListener(new InputListener() {
+            @Override
+            public boolean keyDown(InputEvent event, int keycode) {
+                if (keycode == Input.Keys.F1 && help == null) {
+                    openHelp();
+                    return true;
+                }
+                if (keycode == Input.Keys.ESCAPE && help != null) {
+                    closeHelp();
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     /**
@@ -302,6 +321,65 @@ abstract class SessionScreen extends StageScreen {
      */
     public void openSettings() {
         new SettingsDialog(this).open();
+    }
+
+    @Override
+    public void show() {
+        super.show();
+        if (help != null) {
+            // Back from an explainer visited from help: its chip's unread dot is gone.
+            help.refresh();
+            help.focus();
+        }
+    }
+
+    /**
+     * Returns where help opened from this screen starts: the screen's own topics. {@code null}, the
+     * default, opens help on every topic.
+     *
+     * @return the context, or {@code null}
+     */
+    protected Help.Context helpContext() {
+        return null;
+    }
+
+    /**
+     * Opens help ({@code ui-spec.md} component 23) over this screen, filtered to its topics. Help
+     * sits above any dialog, which stays as it was underneath.
+     *
+     * @return the help, or the one already open
+     */
+    public HelpOverlay openHelp() {
+        return openHelp(helpContext());
+    }
+
+    /**
+     * Opens help over this screen, filtered to a context's topics.
+     *
+     * @param context the context, or {@code null} for every topic
+     * @return the help, or the one already open
+     */
+    public HelpOverlay openHelp(Help.Context context) {
+        if (help == null) {
+            help = new HelpOverlay(this, context);
+            stage.addActor(help.actor());
+            help.focus();
+            if (toast != null) {
+                toast.toFront();
+            }
+        }
+        return help;
+    }
+
+    /**
+     * Closes help, if it's open.
+     */
+    public void closeHelp() {
+        if (help != null) {
+            help.actor().remove();
+            help = null;
+            stage.setKeyboardFocus(null);
+        }
     }
 
     /**

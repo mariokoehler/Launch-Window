@@ -402,6 +402,36 @@ public final class ScreenSnapshot {
         intelligenceShots(folder, game);
         careerShots(folder, game, info);
         poachingShots(folder, game);
+        helpShots(folder, game);
+    }
+
+    /**
+     * Help (ui-spec.md component 23, 2026-10-08): opened from the hub (every topic), from the SET
+     * Centre (filtered, with the chip), a topic with links and concept chips, a search, a search
+     * that finds nothing, and the header's help button with its tooltip.
+     */
+    private static void helpShots(File folder, LaunchWindowGame game) {
+        write(folder, "help-hub.png", new SpaceComplexScreen(game), screen -> screen.openHelp());
+        write(folder, "help-set-centre.png", new SetCentreScreen(game), screen -> screen.openHelp());
+        write(folder, "help-rnd-links.png", new SetCentreScreen(game),
+            screen -> screen.openHelp().select("rnd"));
+        write(folder, "help-poaching.png", new SetCentreScreen(game),
+            screen -> screen.openHelp().select("poaching"));
+        write(folder, "help-search.png", new SetCentreScreen(game), screen -> screen.openHelp().search("loyalty"));
+        write(folder, "help-search-none.png", new SetCentreScreen(game),
+            screen -> screen.openHelp().search("sabotage of the moon"));
+        write(folder, "help-button-tooltip.png", new SetCentreScreen(game),
+            screen -> showTooltip(screen.stage().getRoot(), "Help (F1)"));
+        // The keys: F1 alone opens help (a chrome screen and the hub); Esc closes it while the
+        // search field has the keyboard, leaving the plain screen.
+        write(folder, "help-f1-set-centre.png", new SetCentreScreen(game),
+            screen -> screen.stage().keyDown(com.badlogic.gdx.Input.Keys.F1));
+        write(folder, "help-f1-hub.png", new SpaceComplexScreen(game),
+            screen -> screen.stage().keyDown(com.badlogic.gdx.Input.Keys.F1));
+        write(folder, "help-esc-closed.png", new SetCentreScreen(game), screen -> {
+            screen.openHelp().search("loyalty");
+            screen.stage().keyDown(com.badlogic.gdx.Input.Keys.ESCAPE);
+        });
     }
 
     /**

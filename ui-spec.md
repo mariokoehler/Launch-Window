@@ -92,7 +92,8 @@ missions. Decisions from that review are marked *(decided)*.
 
 Detailed in `design.md` §3.13; summarized here with the data each element shows.
 
-**Header (every screen except the hub):** back, home, and settings icon buttons;
+**Header (every screen except the hub):** back, home, settings and help icon buttons (help
+added 2026-10-08, component 23);
 a breadcrumb trail (earlier crumbs clickable, the current one in upper case).
 On the right:
 - a prestige chip (`prestige`);
@@ -632,6 +633,43 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       a spark in red (`rel_clash`); `kind` for the person page's list, `mark` for pickers (the
       partner's surname, the full name in the tooltip). Both glyphs, and `trait_team`, are on the UI
       Asset Sheet (2026-10-08).
+
+23. **Help** *(the user's idea, 2026-10-08; specified and built the same day without a mockup, the
+    layout being plain; the user confirmed every point below)*. The game's rules and mechanics by
+    topic, where the explainers (component 18) tell how the real thing works.
+    - **Opening:** a `help` icon button (a question mark in a circle) after the settings gear in
+      every header, and after the gear at the end of the hub strip; **F1** anywhere in the game. It
+      opens **over the current screen** (a panel of 1560 by 920 on the navy scrim), not as a new
+      screen, so closing it (the close button or **Esc**) leaves the player exactly where they
+      were, mid-assembly or with a dialog still open underneath. It has its own layer, so it never
+      closes a dialog and a dialog never closes it.
+    - **Layout:** "Help · Rules and mechanics" and the close button on top; a search field (a
+      magnifier inside it) with **Show all topics** beside it; a status line; then the topic list on
+      the left (340 px, grouped under small captions: Basics, Agency, Programs and hardware, People,
+      Rivals) and the selected topic's text on the right (lines at most 860 px wide), each column
+      scrolling on its own.
+    - **Context:** each screen names the topics that matter there (`Help.Context`, overridden in
+      the screen's `helpContext()`), and help opens filtered to them, on the first, with a navy chip
+      in the status line: "3 topics for the SET Centre". A screen without a context opens on every
+      topic ("All 7 topics.").
+    - **Filter:** typing searches **every** topic's title and text (numbers filled in, ignoring
+      case) and drops the screen's filter; the status line says how many topics mention the text,
+      or that none does. **Show all topics** clears both the text and the screen's filter.
+    - **A topic:** its group as an eyebrow, its title, then paragraphs, subheadings and bullets.
+      Below a rule: **See also**, other topics as secondary buttons (a topic the filter hides
+      clears the filter so the list can mark it), and **How the real thing works**, explainers as
+      concept chips (component 19) with their unread dot. An explainer opened from help comes back
+      to the same screen with help still open on the topic (`LaunchWindowGame.visit` keeps the
+      screen instead of disposing it).
+    - **Content:** `assets/content/help.json`, outside the content pack like `strings.json` (never
+      rename or reuse a topic id). Numbers are tokens such as `{poaching.minTenure}`, filled from
+      the rules' constants and the game's budget schedule (`client.view.HelpValues`), never typed
+      into the text. `HelpTest` checks the ids, tokens, links, every screen's topic list and the
+      letters. **The first seven topics** (2026-10-08) are there for the user to judge the format:
+      turns, the budget, programs, component R&D, team chemistry, poaching and intelligence. The
+      rest (about 30 to 40 in all) follow once the format is confirmed.
+    - *As built:* `client.screen.HelpOverlay`, `client.view.Help` and `HelpValues`; the `help` and
+      `search` glyphs in `make_ui_icons.py` (not on the UI Asset Sheet yet). Shots `help-*.png`.
 ---
 
 ## 3. Screen flow *(decided)*
@@ -773,7 +811,8 @@ because the art's top band runs from near-black (night) to near-white (winter no
 See `design.md` §3.13.
 
 **Settings gear (decided, user, 2026-10-04):** a white icon-only gear button at the end
-of the strip opens Settings (§4.12). This replaces "no Log out" below.
+of the strip opens Settings (§4.12). This replaces "no Log out" below. A help button of the same
+kind follows it (2026-10-08, component 23).
 
 **States:** a building that is upgrading shows a subtle "under construction"
 marker; a game result exists (§4.13).

@@ -65,6 +65,10 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   (the Intelligence Office), a level dial with actions and passives, from the canvas
   `Launch Window — Intelligence Office` (`ui-spec.md` §4.15). Reset the dev data root before the
   next play test (new saved fields).
+- **Help is built** (2026-10-08, `ui-spec.md` component 23): a help button and F1 open the rules
+  by topic over the current screen, filtered to the screen's topics. Seven topics so far, to
+  judge the format; the rest follow once it's confirmed. Numbers in `help.json` are tokens filled
+  from the rules (`HelpValues`); a new rule number goes there, never into the text.
 - **PR duty for astronauts is built** (`design.md` §2.2(c)), with 39 press stories
   (`assets/content/pr-press.json`), no repeats, and effects beyond prestige. Next is the next
   play test.

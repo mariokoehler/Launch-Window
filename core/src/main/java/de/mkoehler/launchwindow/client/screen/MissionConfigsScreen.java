@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.view.ContentNames;
+import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.Missions;
 import de.mkoehler.launchwindow.client.view.Programs;
 import de.mkoehler.launchwindow.content.MissionConfiguration;
@@ -105,6 +106,11 @@ public final class MissionConfigsScreen extends ChromeScreen {
     @Override
     protected void goBack() {
         game.setScreen(new ProgramDetailsScreen(game, program.id(), null));
+    }
+
+    @Override
+    protected Help.Context helpContext() {
+        return Help.Context.PROGRAM;
     }
 
     @Override

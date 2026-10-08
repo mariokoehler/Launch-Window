@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.mkoehler.launchwindow.actions.ConvertPrestigeAction;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.Theme;
+import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.TurnReportView;
 import de.mkoehler.launchwindow.content.BudgetSchedule;
 import de.mkoehler.launchwindow.model.GameDate;
@@ -73,6 +74,11 @@ public final class PublicAffairsScreen extends ChromeScreen {
     @Override
     protected void goPublicAffairs() {
         // Already here.
+    }
+
+    @Override
+    protected Help.Context helpContext() {
+        return Help.Context.PUBLIC_AFFAIRS;
     }
 
     @Override

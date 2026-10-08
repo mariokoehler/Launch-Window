@@ -21,6 +21,7 @@ import de.mkoehler.launchwindow.client.connect.ServerResult;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.view.Hub;
+import de.mkoehler.launchwindow.client.view.Tips;
 import de.mkoehler.launchwindow.model.Building;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 
@@ -225,7 +226,17 @@ public final class SpaceComplexScreen extends SessionScreen {
         gear.add(glyph).size(16f);
         gear.setTouchable(Touchable.enabled);
         gear.addListener(clicked(this::openSettings));
-        chips.add(gear).size(CHIP_HEIGHT);
+        chips.add(gear).size(CHIP_HEIGHT).padRight(gap);
+        // Help, beside Settings as in every header (ui-spec.md component 23).
+        Table helpButton = new Table();
+        helpButton.setBackground(ui.rect(Theme.SURFACE_CARD, Theme.ON_PAGE, Theme.BORDER_THIN));
+        Image helpGlyph = new Image(ui.icon("help"), Scaling.fit);
+        helpGlyph.setColor(Theme.NAVY);
+        helpButton.add(helpGlyph).size(16f);
+        helpButton.setTouchable(Touchable.enabled);
+        helpButton.addListener(clicked(this::openHelp));
+        ui.tooltip(helpButton, Tips.help().title(), Tips.help().text());
+        chips.add(helpButton).size(CHIP_HEIGHT);
         strip.add(chips).right().top();
     }
 

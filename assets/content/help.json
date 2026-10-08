@@ -1,0 +1,141 @@
+{
+  "_comment": "The help's topics (ui-spec.md component 23): the game's rules, where explainers.json tells how the real thing works. Outside the content pack, like strings.json. Never rename or reuse an id: screens and links name topics by it. Body lines: '## ' a subheading, '- ' a bullet, anything else a paragraph. Numbers are tokens such as {poaching.minTenure}, filled from the rules (client.view.HelpValues); HelpTest fails on an unknown one.",
+  "topics": [
+    {
+      "id": "turns",
+      "group": "Basics",
+      "title": "Turns and seasons",
+      "body": [
+        "Launch Window is played in turns, and each turn is one season of game time. The date is the same for every agency; the game starts in {game.startDate}.",
+        "## During a turn",
+        "Log in whenever it suits you and give your orders: hire and train people, put engineers on R&D, open programs, plan and launch missions. Each order is saved on the server as you give it, and the screens show its effect at once, such as the funds it cost.",
+        "Nobody waits for anyone. The countdown in the header shows when the next turn resolves.",
+        "## When the turn resolves",
+        "At the game's fixed time the server resolves every agency's season. In order:",
+        "- people retire or resign;",
+        "- missions in flight fly this season's steps, and new launches lift off;",
+        "- building upgrades finish, and astronauts on PR duty make the news;",
+        "- intelligence operations and poaching offers are settled;",
+        "- running costs are paid, a budget review runs if one is due, and the season's funding arrives;",
+        "- random events happen;",
+        "- training and R&D make their progress, and teams build rapport;",
+        "- new candidates arrive in the hiring pool.",
+        "The turn report then tells you what happened. On a day without a resolution (a weekend or a holiday, if the game is set up that way) your orders simply wait for the next one."
+      ],
+      "related": ["budget", "programs"]
+    },
+    {
+      "id": "budget",
+      "group": "Agency",
+      "title": "Money and the budget review",
+      "body": [
+        "Your agency starts with {budget.startFunds} in funds, {budget.startPrestige} prestige and {budget.startFunding} in funding a season.",
+        "## Income",
+        "Funding is the only income. Missions and goals never pay money: they earn prestige, and prestige sets your funding.",
+        "Every {budget.seasonsPerReview} seasons of your agency, a budget review turns your prestige into the funding rate for the next {budget.seasonsPerReview}. The Public Affairs Office shows your bracket and what the next review would pay.",
+        "If your prestige fell short of a review's minimum, the next review's bracket moves down by that shortfall, so one bad stretch isn't counted twice.",
+        "## Running costs",
+        "Every season, before the funding arrives, you pay:",
+        "- every employee's salary;",
+        "- each open program's upkeep, and each active component's;",
+        "- each building's upkeep;",
+        "- the Intelligence Office at its level.",
+        "## Debt",
+        "Funds can go below zero. In debt you can't spend on anything new, and nothing else happens. While in debt, the Public Affairs Office can turn prestige into funds at {budget.fundsPerPrestige} funds a point, enough to clear the debt and leave {budget.coveredSeasons} seasons of running costs in the bank. Prestige spent this way is missing at the next review, so keep it for emergencies."
+      ],
+      "related": ["turns", "intelligence"]
+    },
+    {
+      "id": "programs",
+      "group": "Programs and hardware",
+      "title": "Programs",
+      "body": [
+        "A program opens the missions you can fly: Sputnik 1 its satellite flights, Vostok its crewed ones. Opening it gives you every mission component it needs.",
+        "## Opening a program",
+        "- It needs a free place in Headquarters. Each Headquarters level runs more programs at once.",
+        "- Some programs need goals reached first.",
+        "- The price is the opening cost, less a discount for other programs you have open, plus the creation cost of each component you don't own yet. A component you kept from a closed program costs nothing.",
+        "- From the next turn on, the program costs its upkeep every season, and each of its active components its own.",
+        "After opening, the game offers to put engineers on any of its components that nobody works on yet.",
+        "## Closing a program",
+        "Closing gives no refund. Its components go inactive and their engineers are released, but you keep the components with their reliability, so reopening later costs only the opening cost. A program can't close while one of its missions is in flight.",
+        "## Rockets",
+        "Rockets have their own programs, in the VAB. Opening one costs the rocket's creation cost, and reopening it later charges that cost again."
+      ],
+      "related": ["rnd", "budget"]
+    },
+    {
+      "id": "rnd",
+      "group": "Programs and hardware",
+      "title": "Component R&D",
+      "body": [
+        "Every rocket, capsule, satellite and probe has a reliability: the base chance that its part of a mission step goes right. A new component starts low, with a one-time bonus from related components you already own: Atlas, for example, builds on Redstone.",
+        "## Engineers on R&D",
+        "Up to {rnd.slots} SET engineers can work on one component at once, and each season they raise its reliability. The first slot gains the most and each further slot a little less, so a fourth engineer still helps, only less than the first.",
+        "An engineer's skill for that kind of component matters most; the assign dialog lists the idle engineers best first. The team's chemistry then scales what it gains.",
+        "## Two ceilings",
+        "R&D alone takes a component only to its R&D ceiling. When it gets there, every engineer on it is released for other work. Only flying takes it further, toward its absolute maximum.",
+        "The hardware that flies is the copy built at launch. R&D done while a mission is in the air helps the next mission, not that one."
+      ],
+      "related": ["chemistry", "programs"],
+      "explainers": ["reliability", "human-rating"]
+    },
+    {
+      "id": "chemistry",
+      "group": "People",
+      "title": "Team chemistry",
+      "body": [
+        "The engineers on one component's R&D are a team. A mission in flight has two: the crew with CAPCOM, and the flight controllers. Someone working alone is a team of one.",
+        "A team's chemistry scales its output by up to {chemistry.band} % either way: the reliability its R&D gains, or its contribution to each mission step.",
+        "## Rapport",
+        "Each pair of people who share a team builds rapport, from -{chemistry.rapportMax} to +{chemistry.rapportMax}. Every season together moves it by up to {chemistry.rapportDrift} points, toward liking or toward friction, depending on how the two get along. It never resets, so old colleagues meet again as friends or as enemies, and it's lost only when one of them leaves.",
+        "Past {chemistry.rapportShown} either way, it shows: the two \"work well together\" or \"clash\".",
+        "A team's chemistry is the average rapport of all its pairs, plus what its members' team traits add.",
+        "## Traits",
+        "People have none, one or two hidden traits. A trait shows itself after {chemistry.revealMin} to {chemistry.revealMax} seasons of work in teams, or sooner when it matters. Some change the person's own work, such as Workaholic, Steady or Perfectionist. Others change the team: a Team player lifts it, a Loner works best alone, and someone who Must be the best wants to be its most skilled member.",
+        "So choose teams with care: a slightly weaker engineer who gets on with everyone can beat a brilliant one who clashes."
+      ],
+      "related": ["rnd", "poaching"]
+    },
+    {
+      "id": "poaching",
+      "group": "People",
+      "title": "Poaching",
+      "body": [
+        "Rival agencies can lure away your engineers and flight controllers, and you can lure away theirs. Astronauts are never poached.",
+        "## Making an offer",
+        "You need a personnel file on the person, which takes an Intelligence Office at level {poaching.fileLevel}. From the file, you offer a raise over their salary of {poaching.raises} %. You can make {poaching.offersPerSeason} offer a season; it uses no intelligence action and can be cancelled until the turn resolves.",
+        "When the turn resolves, the person must have been with their agency at least {poaching.minTenure} seasons, not have been approached in the last {poaching.cooldown}, and be neither training nor on a mission. Otherwise the offer lapses, and they never hear of it.",
+        "If they come, you pay the new salary from then on, plus a signing bonus of one season's new salary at once. You also need room in that roster, or the offer lapses.",
+        "## Defending your people",
+        "Offers arrive while you're away, so your defence is a standing order. For each department, set how far you match an offer: {poaching.matches}. A new agency matches up to +{poaching.defaultMatch} %. On a person's page you can override it: Keep at any price, or Let go.",
+        "A matched offer fails. The person's salary rises to the offered one for good, and their loyalty grows by {poaching.matchLoyalty}.",
+        "## Will they go?",
+        "An offer you don't match, the person decides on. The bigger the raise, the likelier they go: a base of {poaching.acceptBase} % for the three raises, multiplied by (100 - loyalty) / {poaching.loyaltyPivot}. Loyalty {poaching.loyaltyPivot} leaves it as it is; loyalty 100 takes it to nothing. Then:",
+        "- disappointed (an ambition ran out): +{poaching.disappointed};",
+        "- morale under {poaching.lowMoraleBelow}: +{poaching.lowMorale};",
+        "- Restless: +{poaching.restless};",
+        "- Steady: -{poaching.steady}.",
+        "The chance never goes above {poaching.acceptMax} %. Loyalty grows with the years, with raises and with ambitions fulfilled, and falls when ambitions are passed over or run out."
+      ],
+      "related": ["intelligence", "chemistry"]
+    },
+    {
+      "id": "intelligence",
+      "group": "Rivals",
+      "title": "Intelligence",
+      "body": [
+        "The Intelligence Office's level, from 0 to {intelligence.maxLevel}, is a budget dial. Set a target, and the level moves one step toward it each turn, so a change always takes time. Levels 0 to {intelligence.maxLevel} cost {intelligence.costs} a season, paid with the running costs.",
+        "## What each level brings",
+        "A level keeps what the levels below it bring, and gives as many actions a season as its number. Unused actions don't carry over.",
+        "- Level {intelligence.checkLevel}: a background check shows one of a candidate's traits at once. Each new candidate also has a {intelligence.passiveCandidate} % chance to show one by itself.",
+        "- Level {intelligence.assessmentLevel}: an agency assessment looks at one area of a rival: their R&D, their programs and plans, or their personnel. Each season there's also a {intelligence.tidbit2} % chance of a tidbit about a rival.",
+        "- Level {intelligence.fileLevel}: a personnel file on one of a rival's people, which a poaching offer needs. Tidbits come {intelligence.tidbit3} % of the time.",
+        "## Odds, and getting caught",
+        "An operation against a rival succeeds {intelligence.successBase} % of the time, less {intelligence.successPerLevel} points for each level of the rival's own Intelligence Office, down to {intelligence.successLowest} %. A failed operation learns nothing, and is caught {intelligence.catchBase} % of the time plus {intelligence.catchPerLevel} % per rival level. Caught, you lose {intelligence.caughtPrestige} prestige and the rival learns who sent it, but you learn their level.",
+        "There is no sabotage: intelligence only ever finds things out."
+      ],
+      "related": ["poaching", "budget"]
+    }
+  ]
+}

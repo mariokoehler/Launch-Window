@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.Align;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.view.BodyMap;
+import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.Programs;
 import de.mkoehler.launchwindow.content.CelestialBody;
 
@@ -47,6 +48,11 @@ public final class SelectBodyScreen extends ChromeScreen {
     @Override
     protected void goBack() {
         goHeadquarters();
+    }
+
+    @Override
+    protected Help.Context helpContext() {
+        return Help.Context.HEADQUARTERS;
     }
 
     @Override

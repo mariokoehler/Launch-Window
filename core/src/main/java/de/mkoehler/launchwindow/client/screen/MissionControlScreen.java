@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.view.CrewSkills;
+import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.Tips;
 import de.mkoehler.launchwindow.client.view.Department;
 import de.mkoehler.launchwindow.client.view.MissionControl;
@@ -57,6 +58,11 @@ public final class MissionControlScreen extends ChromeScreen {
     @Override
     protected void goMissionControl() {
         // Already here.
+    }
+
+    @Override
+    protected Help.Context helpContext() {
+        return Help.Context.MISSION_CONTROL;
     }
 
     @Override

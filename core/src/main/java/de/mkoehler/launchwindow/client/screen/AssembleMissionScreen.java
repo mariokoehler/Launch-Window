@@ -17,6 +17,7 @@ import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.TraitChip;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.CrewSkills;
+import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.MissionDraft;
 import de.mkoehler.launchwindow.client.view.Missions;
 import de.mkoehler.launchwindow.client.view.People;
@@ -101,6 +102,11 @@ public final class AssembleMissionScreen extends ChromeScreen {
 
     private MissionDraft draft() {
         return launched != null ? launched : session.draft(configuration);
+    }
+
+    @Override
+    protected Help.Context helpContext() {
+        return Help.Context.ASSEMBLE_MISSION;
     }
 
     @Override

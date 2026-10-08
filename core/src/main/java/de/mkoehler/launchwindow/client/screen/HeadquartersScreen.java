@@ -3,6 +3,7 @@ package de.mkoehler.launchwindow.client.screen;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.Theme;
+import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.Programs;
 import de.mkoehler.launchwindow.model.Building;
 
@@ -31,6 +32,11 @@ public final class HeadquartersScreen extends ChromeScreen {
     @Override
     protected void goHeadquarters() {
         // Already here.
+    }
+
+    @Override
+    protected Help.Context helpContext() {
+        return Help.Context.HEADQUARTERS;
     }
 
     @Override

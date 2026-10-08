@@ -12,6 +12,7 @@ import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.ReliabilityBar;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.view.ContentNames;
+import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.Programs;
 import de.mkoehler.launchwindow.content.MissionComponent;
 import de.mkoehler.launchwindow.content.Program;
@@ -45,6 +46,11 @@ public final class OpenProgramsScreen extends ChromeScreen {
     @Override
     protected void goBack() {
         goHeadquarters();
+    }
+
+    @Override
+    protected Help.Context helpContext() {
+        return Help.Context.HEADQUARTERS;
     }
 
     @Override

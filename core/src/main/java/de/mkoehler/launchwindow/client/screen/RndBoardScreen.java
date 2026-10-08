@@ -4,6 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.Theme;
+import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.PayloadRnd;
 
 import java.util.List;
@@ -86,6 +87,11 @@ public final class RndBoardScreen extends ChromeScreen {
         } else {
             game.setScreen(new RocketProgramsScreen(game));
         }
+    }
+
+    @Override
+    protected Help.Context helpContext() {
+        return Help.Context.RND;
     }
 
     @Override

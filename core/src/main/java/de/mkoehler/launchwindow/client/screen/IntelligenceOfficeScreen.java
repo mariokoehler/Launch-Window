@@ -16,6 +16,7 @@ import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.ReliabilityBar;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.TraitChip;
+import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.IntelTexts;
 import de.mkoehler.launchwindow.client.view.PoachTexts;
 import de.mkoehler.launchwindow.client.view.Museum;
@@ -160,6 +161,11 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
 
     private IntelligenceState intel() {
         return session.state().getIntelligence();
+    }
+
+    @Override
+    protected Help.Context helpContext() {
+        return Help.Context.INTELLIGENCE;
     }
 
     @Override

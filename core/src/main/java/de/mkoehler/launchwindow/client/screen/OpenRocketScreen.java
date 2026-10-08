@@ -13,6 +13,7 @@ import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.HistoryNote;
 import de.mkoehler.launchwindow.client.view.Concepts;
 import de.mkoehler.launchwindow.client.view.ContentNames;
+import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.Programs;
 import de.mkoehler.launchwindow.client.view.Rockets;
 import de.mkoehler.launchwindow.client.view.Tips;
@@ -52,6 +53,11 @@ public final class OpenRocketScreen extends ChromeScreen {
     @Override
     protected void goBack() {
         goVab();
+    }
+
+    @Override
+    protected Help.Context helpContext() {
+        return Help.Context.VAB;
     }
 
     @Override
