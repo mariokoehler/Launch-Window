@@ -117,10 +117,46 @@ public record Help(List<Topic> topics) {
     }
 
     /**
+     * What help opens filtered to: a place and its topics.
+     */
+    public interface Scope {
+
+        /**
+         * Returns what the topics are for, for the filter chip ("3 topics for the SET Centre").
+         *
+         * @return the place
+         */
+        String place();
+
+        /**
+         * Returns the topics, most important first.
+         *
+         * @return the topic ids
+         */
+        List<String> topicIds();
+    }
+
+    /**
+     * Any list of topics, such as an advisor item's.
+     *
+     * @param place    what they're for, as the chip says it
+     * @param topicIds the topics, most important first
+     */
+    public record Topics(String place, List<String> topicIds) implements Scope {
+
+        /**
+         * Copies the list.
+         */
+        public Topics {
+            topicIds = List.copyOf(topicIds);
+        }
+    }
+
+    /**
      * Where help was opened from, and the topics that matter there: help opens with its list
      * filtered to them. A screen not listed opens help on every topic.
      */
-    public enum Context {
+    public enum Context implements Scope {
         /** The Public Affairs Office. */
         PUBLIC_AFFAIRS("the Public Affairs Office", "budget", "prestige", "pr-duty", "random-events"),
         /** Headquarters and its program lists. */
@@ -166,20 +202,12 @@ public record Help(List<Topic> topics) {
             this.topicIds = List.of(topicIds);
         }
 
-        /**
-         * Returns where this is, for the filter chip ("3 topics for the SET Centre").
-         *
-         * @return the place
-         */
+        @Override
         public String place() {
             return place;
         }
 
-        /**
-         * Returns the topics that matter here, most important first.
-         *
-         * @return the topic ids
-         */
+        @Override
         public List<String> topicIds() {
             return topicIds;
         }
@@ -233,11 +261,11 @@ public record Help(List<Topic> topics) {
      * them all.
      *
      * @param query   the search text, or blank for none
-     * @param context where help was opened from, or {@code null} for nowhere in particular
+     * @param context what help was opened on, or {@code null} for nothing in particular
      * @param values  the token values, so the search finds the numbers the player reads
      * @return the topics, in the list's order
      */
-    public List<Topic> shown(String query, Context context, HelpValues values) {
+    public List<Topic> shown(String query, Scope context, HelpValues values) {
         String needle = query == null ? "" : query.trim().toLowerCase(Locale.ROOT);
         List<Topic> shown = new ArrayList<>();
         for (Topic topic : topics) {

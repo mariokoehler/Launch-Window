@@ -69,6 +69,8 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   by topic over the current screen, filtered to the screen's topics. 28 topics. Numbers in
   `help.json` are tokens filled from the rules (`HelpValues`); a new rule number goes there, never
   into the text, and a changed rule needs its topic's text changed in the same session.
+- **The advisor is built** (2026-10-08, `ui-spec.md` component 24): a hub card with a new agency's
+  first steps, ticked off from the state, until all are done or the player hides it.
 - **PR duty for astronauts is built** (`design.md` §2.2(c)), with 39 press stories
   (`assets/content/pr-press.json`), no repeats, and effects beyond prestige. Next is the next
   play test.

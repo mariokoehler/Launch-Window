@@ -354,13 +354,15 @@ abstract class SessionScreen extends StageScreen {
     }
 
     /**
-     * Opens help over this screen, filtered to a context's topics.
+     * Opens help over this screen, filtered to some topics: a screen's context, or an advisor
+     * item's.
      *
-     * @param context the context, or {@code null} for every topic
+     * @param context the topics, or {@code null} for every topic
      * @return the help, or the one already open
      */
-    public HelpOverlay openHelp(Help.Context context) {
+    public HelpOverlay openHelp(Help.Scope context) {
         if (help == null) {
+            game.markHelpOpened();
             help = new HelpOverlay(this, context);
             stage.addActor(help.actor());
             help.focus();

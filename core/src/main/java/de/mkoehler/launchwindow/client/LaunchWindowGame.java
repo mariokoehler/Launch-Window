@@ -38,6 +38,7 @@ public class LaunchWindowGame extends Game {
     private final Hub.Clock hubClock = new Hub.Clock();
     /** The explainers' read marks when kept in memory (screenshots), else {@code null}. */
     private java.util.Set<String> explainersReadInMemory;
+    private java.util.Set<String> flagsInMemory;
     private float pendingFontScale;
     private long lastResizeMillis;
 
@@ -210,6 +211,83 @@ public class LaunchWindowGame extends Game {
      */
     public void useExplainerReadMarksInMemory(java.util.Set<String> read) {
         explainersReadInMemory = read;
+    }
+
+    /**
+     * Returns whether this player has opened the help on this device, for the advisor
+     * ({@code ui-spec.md} component 24).
+     *
+     * @return whether it was opened
+     */
+    public boolean helpOpened() {
+        return flag("helpOpened");
+    }
+
+    /**
+     * Marks the help as opened.
+     */
+    public void markHelpOpened() {
+        setFlag("helpOpened");
+    }
+
+    /**
+     * Returns whether the advisor is retired for this player on this device: everything done, or
+     * the player said they know the ropes.
+     *
+     * @return whether it's retired
+     */
+    public boolean advisorRetired() {
+        return flag("advisorRetired");
+    }
+
+    /**
+     * Returns whether this player has read a turn report, for the advisor's last item. Under the
+     * in-memory marks it's the mark "reportRead", so screenshots don't depend on this machine.
+     *
+     * @return whether one was read
+     */
+    public boolean advisorReportRead() {
+        if (flagsInMemory != null) {
+            return flagsInMemory.contains("reportRead");
+        }
+        return lastReadReport() >= 1;
+    }
+
+    /**
+     * Retires the advisor for good.
+     */
+    public void retireAdvisor() {
+        setFlag("advisorRetired");
+    }
+
+    /**
+     * Keeps the advisor's marks (help opened, advisor retired) in memory instead of the
+     * preferences, so that screenshots don't depend on this machine.
+     *
+     * @param flags the marks set; the set is changed as more are set
+     */
+    public void useAdvisorMarksInMemory(java.util.Set<String> flags) {
+        flagsInMemory = flags;
+    }
+
+    private boolean flag(String name) {
+        if (flagsInMemory != null) {
+            return flagsInMemory.contains(name);
+        }
+        return session != null && preferences().getBoolean(key(name), false);
+    }
+
+    private void setFlag(String name) {
+        if (flagsInMemory != null) {
+            flagsInMemory.add(name);
+            return;
+        }
+        if (session == null || flag(name)) {
+            return;
+        }
+        com.badlogic.gdx.Preferences preferences = preferences();
+        preferences.putBoolean(key(name), true);
+        preferences.flush();
     }
 
     private String readKey() {

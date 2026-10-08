@@ -234,6 +234,8 @@ public final class ScreenSnapshot {
     private static void renderAll(LaunchWindowGame game, File folder) {
         // Explainers' read marks in memory, never this machine's: every explainer starts unread.
         game.useExplainerReadMarksInMemory(new java.util.HashSet<>());
+        // The advisor's marks too: every run starts with help unopened and the advisor on duty.
+        game.useAdvisorMarksInMemory(new java.util.HashSet<>());
         write(folder, "connect-default.png", new ConnectScreen(game), null);
         write(folder, "connect-connecting.png", filledConnect(game), screen -> screen.setBusy(true));
         write(folder, "connect-wrong-password.png", filledConnect(game), screen -> screen.applyLoginResult(
@@ -403,6 +405,53 @@ public final class ScreenSnapshot {
         careerShots(folder, game, info);
         poachingShots(folder, game);
         helpShots(folder, game);
+        advisorShots(folder, game);
+    }
+
+    /**
+     * The advisor (ui-spec.md component 24, 2026-10-08): a new agency's card, one part-way on the
+     * NASA art (the corner clear of its markers too), the waiting card once everything is done
+     * before the first turn resolves, help opened from an item, and the hub once retired.
+     */
+    private static void advisorShots(File folder, LaunchWindowGame game) {
+        String hash = ContentPackHash.ofClasspath("content/early-era", ScreenSnapshot.class.getClassLoader());
+        GameInfoResponse info = GameInfoResponse.success("early-era", hash, List.of(), 1, true,
+            6 * 3_600_000L + 12 * 60_000L + 30_000L, 0L, null, List.of(), List.of(), 0);
+        java.util.Set<String> marks = new java.util.HashSet<>();
+        game.useAdvisorMarksInMemory(marks);
+        PlayerSnapshot fresh = new PlayerSnapshot("Baltic Star Agency", Archetype.SOVIET, 25_000, 250, 3_000, 1);
+        fresh.setDirectorName("A. Reyes");
+        startSession(game, fresh, info);
+        write(folder, "advisor-new.png", new SpaceComplexScreen(game), null);
+
+        marks.add("helpOpened");
+        PlayerSnapshot nasa = new PlayerSnapshot("Orion Spaceworks", Archetype.NASA, 23_350, 250, 3_000, 1);
+        nasa.setDirectorName("A. Reyes");
+        SetSpecialist engineer = new SetSpecialist("e1", "R. Hale", 34, 70, 50);
+        nasa.getSetSpecialists().add(engineer);
+        nasa.getOpenedProgramIds().add("explorer-1");
+        startSession(game, nasa, info);
+        write(folder, "advisor-nasa-progress.png", new SpaceComplexScreen(game), null);
+        write(folder, "advisor-rules.png", new SpaceComplexScreen(game), screen -> screen.openHelp(
+            SpaceComplexScreen.advisorTopics(de.mkoehler.launchwindow.client.view.Advisor.ITEMS.get(3))));
+
+        nasa.getMissionComponents().put("explorer-1-satellite", new OwnedMissionComponent(41.7, 3));
+        nasa.getMissionComponents().put("jupiter-c", new OwnedMissionComponent(22, 3));
+        engineer.setRdTargetComponentId("explorer-1-satellite");
+        nasa.getMissionControlOfficers().add(new MissionControlOfficer("c1", "J. Ortiz", 31, 70, 50));
+        startSession(game, nasa, info);
+        // Everything set up but the hardware: the mission waits for reliability.
+        write(folder, "advisor-reliability.png", new SpaceComplexScreen(game), null);
+        nasa.getMissionComponents().get("jupiter-c").setCurrentReliability(63);
+        nasa.getMissionComponents().get("explorer-1-satellite").setCurrentReliability(61);
+        startSession(game, nasa, info);
+        write(folder, "advisor-ready.png", new SpaceComplexScreen(game), null);
+        nasa.setLastFlightSeasonTurn(1);
+        startSession(game, nasa, info);
+        write(folder, "advisor-waiting.png", new SpaceComplexScreen(game), null);
+
+        game.retireAdvisor();
+        write(folder, "advisor-retired.png", new SpaceComplexScreen(game), null);
     }
 
     /**

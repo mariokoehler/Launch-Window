@@ -676,6 +676,42 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       and the remaining screens open on every topic.
     - *As built:* `client.screen.HelpOverlay`, `client.view.Help` and `HelpValues`; the `help` and
       `search` glyphs in `make_ui_icons.py` (not on the UI Asset Sheet yet). Shots `help-*.png`.
+    - **Any topic list** (2026-10-08): help also opens on an ad-hoc list (`Help.Topics`, beside the
+      screens' `Help.Context`), as the advisor's items do; the chip names it ("1 topic for "Open a
+      rocket program"").
+24. **Advisor** *(the user's idea, 2026-10-08; built the same day without a mockup, the user having
+    confirmed the plan)*. A new agency's first things to do, on a card at the hub's bottom left, until
+    they're done.
+    - **The items, in order** (`client.view.Advisor.ITEMS`): open the help; hire engineers; open a
+      program (a satellite is the cheapest start); open a rocket program; put engineers on R&D;
+      hire flight controllers (once a program is open: every mission, uncrewed too, needs
+      consoles); hire astronauts (only once a program with a crew or a CAPCOM is open); raise
+      reliability; plan the first mission; read the first turn report (only once a turn has
+      resolved).
+    - **Reliability first** (the user's request, 2026-10-08): "Plan your first mission" is held back
+      until an open program's payload (its least reliable component) and an open rocket both reach
+      `Advisor.READY_RELIABILITY`, 60 %. Until then "Raise reliability to 60 %" stands in for it,
+      with a navy line on where things stand ("Now: payload 41 %, rocket 22 %.") and a Go link to the
+      R&D board of whichever is further behind. A mission already in flight or flown ticks off both.
+    - **Ticked off from the state, never from a click:** someone hired, a program open, an engineer
+      on an R&D slot, a mission in flight or flown before. Only "help opened" and "report read" are
+      this client's own marks (preferences per server and login, like the report's read mark).
+    - **The card:** a navy head ("ADVISOR", "Your first seasons"), then the next **three** open
+      items (each a bold title, a line of why, a **Go** link to the building and a **Rules** link
+      that opens help on the item's topics), "N more things after these", a rule, the line that
+      there's no button to end a turn, and **I know the ropes · hide the advisor**. With nothing open
+      but the report still to come, it says "All set for now" and names it. 380 px wide, touchable as
+      a whole so the hotspots underneath never take a click; at the bottom left it covers no
+      building marker on either agency's art (only the corner of NASA's SET Centre outline).
+    - **Gone for good:** once every item is done (the report included), or the player hides it, the
+      client marks the advisor retired and never shows it again for that login on that server. Not
+      shown once the game is decided. So an agency that flies satellites only until the advisor
+      retires never sees "hire astronauts" when it opens a crewed program later (accepted: mission
+      assembly refuses a crewless mission and says why). A dev data reset deletes the client's
+      preferences, so the advisor comes back.
+    - *As built:* `client.view.Advisor` (`AdvisorTest`), the card in `SpaceComplexScreen`, the marks
+      in `LaunchWindowGame`. Shots `advisor-*.png` (`advisor-reliability.png` and `advisor-ready.png`
+      for the bar); every other hub shot shows the card too.
 ---
 
 ## 3. Screen flow *(decided)*
@@ -818,7 +854,8 @@ See `design.md` §3.13.
 
 **Settings gear (decided, user, 2026-10-04):** a white icon-only gear button at the end
 of the strip opens Settings (§4.12). This replaces "no Log out" below. A help button of the same
-kind follows it (2026-10-08, component 23).
+kind follows it (2026-10-08, component 23). A new agency's advisor card sits at the bottom left
+until its first steps are done (2026-10-08, component 24).
 
 **States:** a building that is upgrading shows a subtle "under construction"
 marker; a game result exists (§4.13).

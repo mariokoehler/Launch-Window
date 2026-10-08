@@ -1977,6 +1977,14 @@ the rules, every number a token. **Next:** keep the topics in step with the rule
 constant updates itself, a changed rule needs its text), and put the `help` and `search` glyphs on
 the UI Asset Sheet (prompt given to the user 2026-10-08).
 
+**Advisor** (the user's idea, built 2026-10-08, `ui-spec.md` component 24): a card on the hub with
+a new agency's first steps (help, engineers, a program, a rocket, R&D, controllers, astronauts
+once crewed, reliability to 60 % for a payload and a rocket, then the first mission, the first
+report), each ticked off from the state, with a link to
+the building and one to the item's help topics. It retires for good once everything is done or the
+player hides it. **Next:** see in the play test whether the order and wording steer a new player
+well, and whether three items at a time is the right number.
+
 ### Later
 
 - **M6 — Deployment: built 2026-10-06, no release cut yet.** The jpackage client zip (built and
