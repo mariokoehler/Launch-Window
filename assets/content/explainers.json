@@ -750,7 +750,7 @@
               "text": "Away from the equator the ground moves more slowly, because it turns in a smaller circle. Cape Canaveral, at 28.5° north, gets about 410 m/s; Baikonur, at about 46° north, only about 320 m/s. A site near the equator, like Europe's in French Guiana, gets almost the full push."
             }
           ],
-          "inGame": "Launch Window doesn't have launch sites yet. The VAB's LEO payloads are what each real rocket lifted from its own site, so this push is already in them."
+          "inGame": "In Launch Window every rocket flies from its own side's site: an R-7 never launches from Florida, an Atlas never from Baikonur. So the VAB's LEO payloads, what each real rocket lifted from home, already include this push."
         },
         {
           "title": "Where the rocket can go",
@@ -770,7 +770,7 @@
               "text": "A rocket drops its empty stages on the way up. Florida launches east over the Atlantic, so the stages fall into the ocean. Baikonur sits in a huge, thinly peopled steppe, and the zones where stages fall are cleared."
             }
           ],
-          "inGame": "Vostok's R-7 and Mercury's Atlas lifted their real payloads from their own sites, and those payloads are what the VAB shows. The game has no rule for latitude itself."
+          "inGame": "Vostok's R-7 and Mercury's Atlas lifted their real payloads from their own sites, and those are the payloads the VAB shows: the site's latitude is already counted in every rocket's lift."
         }
       ]
     },

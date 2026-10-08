@@ -135,9 +135,9 @@ engineering problem or tidbit, note it here the same session.
     candidate in the concept audit below: Weightlessness, Heat shields, Reliability, Launch
     escape, Coming home, Tracking, Space environment, Human rating, Launch latitude, Max Q (one
     sheet), Power, Guidance, Orbital decay and Balloon tanks (one sheet). Sheet titles in
-    `ui-spec.md` component 18. E-14's "In Launch Window" strips say the game has no latitude
-    rule and that the VAB's payloads already include each real site's push (built as mocked;
-    kept as it is, user 2026-10-07, until the latitude mechanic in §5 "Later" exists).
+    `ui-spec.md` component 18. E-14's "In Launch Window" strips say the latitude is already
+    counted in every rocket's lift, since each side's rockets only ever fly from their own site
+    (user, 2026-10-08, when the latitude mechanic was dropped).
   - **E-06 to E-19, checked (2026-10-07).** Corrections to the mockups' text:
     - E-06: Gagarin ate paste from tubes on Vostok 1 (whether he drank isn't sourced, so the
       sheet says only that he ate). Gravity at 300 km is 91 % ((6,371 / 6,671)²). Titov's
@@ -1966,12 +1966,11 @@ root** before the next play test (new fields on the snapshot and on employees).
   first game starts. The first version number is still open.
 - **M7+ (order open):** people worth caring about (chemistry, traits, rapport, ambitions, career
   records, poaching; §2.2(d), in five phases, all built by 2026-10-08); interaction beyond passive competition (§2.9); the rest of the content
-  tree beyond the early era; the rest of the Museum encyclopedia (§1.1; E-01 to E-05 built 2026-10-06/07); a game-host role and UI;
+  tree beyond the early era; more Museum encyclopedia entries once there's content for them (§1.1; all 19 planned explainers,
+  E-01 to E-19, built by 2026-10-07; nothing further is planned yet); a game-host role and UI;
   validating the `WEEKDAYS` profile with the colleagues' group.
-- **Idea to revisit: launch latitude as a mechanic** (user, 2026-10-07). Give the agencies'
-  launch sites their real latitudes (Cape Canaveral about 28.5° N, Baikonur about 46° N) and
-  let that matter: Earth's spin gives an eastward launch a free push of about 410 m/s at the
-  Cape against about 320 m/s at Baikonur, and no orbit can be tilted less than its site's
-  latitude. Possible handles: a site factor on a rocket's LEO and TLI payloads, a site per
-  agency (later perhaps more sites to build), orbit-inclination requirements on some goals.
-  Not designed yet; explainer E-14 (launch latitude) would explain it once it exists.
+- **Dropped: launch latitude as a mechanic** (user's idea 2026-10-07, dropped by the user
+  2026-10-08). Considered: a site factor on payloads, orbit classes on missions (polar,
+  geostationary, the Soviets' Molniya orbit as their answer), and second launch sites as
+  buildings. None was worth its weight: each side's rockets only ever fly from their own site, so
+  the latitude is already in every rocket's lift, and E-14 says so.
