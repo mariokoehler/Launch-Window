@@ -998,7 +998,19 @@ missing goals). Other agencies' programs are hidden entirely.
 aren't met, or funds are short). Close, which needs a confirmation: "no refund;
 its components go inactive and their researchers are released; refused while one
 of its missions flies". After a successful Open the client goes straight to the program's mission
-configuration selection (§4.6.5) with the success toast *(user's play-test request, 2026-10-05)*.
+configuration selection (§4.6.5) with the success toast *(user's play-test request, 2026-10-05)*,
+unless one of its components needs engineers. *(User, 2026-10-08, built the same day, as the VAB does
+for a new rocket, §4.5.1:)* when a component of the program is active with no one on its R&D and
+isn't at its ceiling, a "Program opened" dialog asks "Assign engineers to <component>?" (or "to its
+components?" when there are several), with its starting reliability. Its buttons:
+- **Plan a mission** (primary) goes on to the mission list as before;
+- **Assign R&D** opens Payload R&D (§4.8.3), with that component's assign dialog open when there is
+  one; with several it just opens the board (highlighting the program's components waits for a
+  program with more than one, Gemini on);
+- **Later** stays on Program details with the success toast.
+
+A program sharing a component that already has engineers (Vostok after Korabl-Sputnik 2) skips the
+dialog. Shot: `hq-details-offer-rnd.png`.
 
 **4.6.5 Mission configuration selection.** The program's configurations, each with
 art, duration in seasons, prestige (first time, or the repeat tier: 50 % second

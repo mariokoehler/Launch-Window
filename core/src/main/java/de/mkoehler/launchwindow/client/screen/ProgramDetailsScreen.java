@@ -19,6 +19,7 @@ import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.view.Concepts;
 import de.mkoehler.launchwindow.client.view.BodyMap;
 import de.mkoehler.launchwindow.client.view.ContentNames;
+import de.mkoehler.launchwindow.client.view.PayloadRnd;
 import de.mkoehler.launchwindow.client.view.Programs;
 import de.mkoehler.launchwindow.content.CelestialBody;
 import de.mkoehler.launchwindow.content.MissionComponent;
@@ -30,6 +31,7 @@ import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * Program details ({@code ui-spec.md} &sect;4.6.4): the program's art and upkeep, its required goals
@@ -289,14 +291,60 @@ public final class ProgramDetailsScreen extends ChromeScreen {
         buttons.add(actionButton("Open program", Theme.ButtonKind.PRIMARY, () -> submit(new OpenProgramAction(program.id()),
             result -> {
                 closeDialog();
-                // Straight on to what the player opened it for: its missions (play-test request).
-                MissionConfigsScreen configs = new MissionConfigsScreen(game, program.id());
-                game.setScreen(configs);
-                configs.toast("Opened " + name + " — " + money(price.total()) + ". Pick a mission to plan.",
-                    Theme.NoticeKind.SUCCESS);
+                offerResearch(program, money(price.total()));
             })));
         card.add(buttons).right().fill(false, false);
         showDialog(card);
+    }
+
+    /**
+     * After opening a program: asks whether to staff its new components' R&amp;D, as the VAB does for
+     * a new rocket, beside going on to its missions. Goes straight to the missions when every
+     * component already has engineers or is at its ceiling (a program sharing a component with one
+     * opened before).
+     *
+     * @param program the program just opened
+     * @param paid    what opening it cost, formatted, for the toast
+     */
+    public void offerResearch(Program program, String paid) {
+        String name = ContentNames.of(program.id());
+        List<PayloadRnd.Card> unstaffed = PayloadRnd.cards(session.state(), session.catalog()).stream()
+            .filter(card -> program.requiredMissionComponentIds().contains(card.component().id()))
+            .filter(card -> !card.atCap() && card.slots().stream().allMatch(Objects::isNull))
+            .toList();
+        if (unstaffed.isEmpty()) {
+            planMissions(program, name, paid);
+            return;
+        }
+        String what = unstaffed.size() == 1 ? ContentNames.of(unstaffed.get(0).component().id()) : "its components";
+        Table card = dialogCard("Program opened", "Assign engineers to " + what + "?");
+        String start = unstaffed.size() == 1
+            ? String.format(Locale.ROOT, "%s starts at %.0f %% reliability.", what,
+                unstaffed.get(0).owned().getCurrentReliability())
+            : name + "'s components start at low reliability.";
+        card.add(ui.paragraph(start + " Engineers on its R&D raise it every season; up to " + PayloadRnd.SLOTS
+            + " can work on it at once.", Theme.TextStyle.BODY, Theme.INK_MUTED)).padBottom(Theme.SPACE_4).row();
+        Table buttons = new Table();
+        buttons.add(actionButton("Later", Theme.ButtonKind.SECONDARY, () -> {
+            closeDialog();
+            toast("Opened " + name + " — " + paid + ".", Theme.NoticeKind.SUCCESS);
+        })).padRight(10f);
+        buttons.add(actionButton("Assign R&D", Theme.ButtonKind.SECONDARY, () -> {
+            RndBoardScreen board = new RndBoardScreen(game, RndBoardScreen.Board.PAYLOAD,
+                unstaffed.size() == 1 ? unstaffed.get(0).component().id() : null);
+            game.setScreen(board);
+            board.toast("Opened " + name + ". Plan its missions in Headquarters.", Theme.NoticeKind.SUCCESS);
+        })).padRight(10f);
+        buttons.add(actionButton("Plan a mission", Theme.ButtonKind.PRIMARY, () -> planMissions(program, name, paid)));
+        card.add(buttons).right().fill(false, false);
+        showDialog(card);
+    }
+
+    private void planMissions(Program program, String name, String paid) {
+        // Straight on to what the player opened it for: its missions (play-test request).
+        MissionConfigsScreen configs = new MissionConfigsScreen(game, program.id());
+        game.setScreen(configs);
+        configs.toast("Opened " + name + " — " + paid + ". Pick a mission to plan.", Theme.NoticeKind.SUCCESS);
     }
 
     /**

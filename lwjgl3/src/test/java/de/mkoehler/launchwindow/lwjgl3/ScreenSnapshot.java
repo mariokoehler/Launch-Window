@@ -339,6 +339,14 @@ public final class ScreenSnapshot {
         write(folder, "hq-details-sputnik-1-note.png", new ProgramDetailsScreen(game, "sputnik-1", null),
             screen -> pinLastHistoryNote(screen.stage().getRoot()));
         write(folder, "hq-details-sputnik-2.png", new ProgramDetailsScreen(game, "sputnik-2", CelestialBody.EARTH), null);
+        write(folder, "hq-details-offer-rnd.png", new ProgramDetailsScreen(game, "sputnik-2", CelestialBody.EARTH),
+            screen -> {
+                // As just after opening: its satellite active and unstaffed, only while the dialog is built.
+                var satellite = game.session().state().getMissionComponents().get("sputnik-2-satellite");
+                satellite.setActive(true);
+                screen.offerResearch(game.session().catalog().program("sputnik-2").orElseThrow(), "$316.0");
+                satellite.setActive(false);
+            });
 
         game.setSession(ClientSession.start(CREDENTIALS, fresh, new GameInfo(info, System.currentTimeMillis()),
             ScreenSnapshot.class.getClassLoader()));
