@@ -633,7 +633,8 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
 
     - *As built (2026-10-07):* `client.ui.RelationshipMarker`: linked rings in green (`rel_good`) and
       a spark in red (`rel_clash`); `kind` for the person page's list, `mark` for pickers (the
-      partner's surname, the full name in the tooltip).
+      partner's surname, the full name in the tooltip). Both glyphs, and `trait_team`, are on the UI
+      Asset Sheet (2026-10-08).
 ---
 
 ## 3. Screen flow *(decided)*
@@ -1566,7 +1567,7 @@ Phase 3 needs the top half; the rest arrives with phase 4.
 **Purpose:** the agency's intelligence service: how big it is, what it does this season, and
 everything it has learned about rivals. An **eighth hub building** (polygon `INTELLIGENCE_OFFICE`,
 drawn by the user on both hub images), with a marker and footer icon of its own (proposed:
-binoculars, our own drawing; add it to the UI Asset Sheet). All rules and numbers are in
+binoculars, our own drawing; on the UI Asset Sheet since 2026-10-08). All rules and numbers are in
 `design.md` §2.9; the screens read them from the rules' constants (G7).
 
 **Overview** (the landing screen):
@@ -1752,7 +1753,9 @@ refusal texts. Differences from the mockup: the report's People card has no subh
 say which side), and its poaching lines don't open the person page yet; no "Set otherwise" filter chip; no "No offer made" line in last season's
 results; no "Kept from NASA" on a newcomer's ambition; no "Signing bonus" budget line (the report
 line names the bonus); the dialog's answer caption also says morale and unshown traits aren't
-counted. Not yet on the UI Asset Sheet: the three icons.
+counted. The three icons are on the UI Asset Sheet (2026-10-08, chrome section, with the
+roster marks and the joined tag in context), next to `binoculars`, `rel_good`, `rel_clash` and
+`trait_team`.
 
 ---
 
