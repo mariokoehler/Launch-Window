@@ -73,7 +73,7 @@ class TeamsTest {
 
     @Test
     void aClashShowsAndGivesAnAbrasiveMemberAway() {
-        // Two Abrasive engineers drift down at least 5 x 0.2 a season and clash within a few dozen seasons.
+        // Two Abrasive engineers drift down at least RAPPORT_DRIFT x 0.2 a season and clash within a few dozen seasons.
         SetSpecialist a = engineer("set-1", new TraitState(Trait.ABRASIVE, 99, false));
         SetSpecialist b = engineer("set-2", new TraitState(Trait.ABRASIVE, 99, false));
         PlayerSnapshot snapshot = agency(a, b);
@@ -85,6 +85,24 @@ class TeamsTest {
         assertEquals(2, seen.stream().filter(TraitRevealed.class::isInstance).count());
         assertTrue(snapshot.getRapports().get(0).shown());
         assertTrue(snapshot.getRapports().get(0).rapport() <= -Personality.RAPPORT_SHOWN_AT);
+    }
+
+    @Test
+    void aStrongClashShowsBeforeTheLatestRevealAndGivesTheTraitAwayFirst() {
+        // At the strongest affinity a pair shows in three seasons, ahead of a reveal due in four.
+        SetSpecialist a = engineer("set-1", new TraitState(Trait.ABRASIVE, Personality.REVEAL_MAX_SEASONS, false));
+        SetSpecialist b = engineer("set-2");
+        PlayerSnapshot snapshot = agency(a, b);
+        snapshot.getRapports().add(new Rapport("set-1", "set-2", 0, -1, 0, false));
+        List<ResolutionEvent> events = new ArrayList<>();
+        for (int season = 0; season < 3; season++) {
+            events = Teams.advanceSeason(snapshot, List.of(rd("set-1", "set-2")));
+        }
+        assertEquals(3, a.getWorkSeasons());
+        assertEquals(2, events.size(), events.toString());
+        assertTrue(events.get(0) instanceof RelationshipShown shown && !shown.positive());
+        assertEquals(new TraitRevealed(PersonnelGroup.SET, "set-1", "Engineer set-1", Trait.ABRASIVE, Teams.RD,
+            "r7-sputnik", 3), events.get(1));
     }
 
     @Test
@@ -100,7 +118,7 @@ class TeamsTest {
     }
 
     @Test
-    void aMissionTeamIsItsCrewAndControllers() {
+    void aMissionIsTwoTeamsItsCrewWithCapcomAndItsControllers() {
         PlayerSnapshot snapshot = agency();
         Astronaut pilot = new Astronaut("astro-1", "Pilot", 30, 70, 50);
         snapshot.setAstronauts(new ArrayList<>(List.of(pilot)));
@@ -109,7 +127,7 @@ class TeamsTest {
         snapshot.setInProgressMissions(java.util.Map.of("m0", mission));
         List<Teams.Team> teams = Teams.capture(snapshot, de.mkoehler.launchwindow.content.ContentPackLoader.load(
             java.nio.file.Path.of("..", "assets", "content", "early-era")));
-        assertEquals(List.of(new Teams.Team(Teams.MISSION, "vostok-orbital", List.of("astro-1", "mco-1"))), teams);
-        assertTrue(teams.get(0).memberIds().stream().noneMatch(java.util.Objects::isNull));
+        assertEquals(List.of(new Teams.Team(Teams.MISSION, "vostok-orbital", List.of("astro-1")),
+            new Teams.Team(Teams.MISSION, "vostok-orbital", List.of("mco-1"))), teams);
     }
 }

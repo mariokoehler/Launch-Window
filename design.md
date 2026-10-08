@@ -675,15 +675,17 @@ such as letting a brilliant troublemaker go.
   never punishes whoever logs in less.
 - **First-pass rules for phases 1 to 3** (2026-10-07; the user accepted the proposed defaults for
   play testing; every number is ours and to be tuned):
-  - **A team** is the engineers working on one component's R&D this season, or the crew and
-    controllers of one mission in flight. Someone working alone is a team of one. A **work
+  - **A team** is the engineers working on one component's R&D this season, or one of a mission
+    in flight's two teams: its crew with CAPCOM, or its flight controllers (user, 2026-10-08; it
+    was one team of crew and controllers before). Someone working alone is a team of one. A **work
     season** is a season spent in a team (R&D or a mission in flight); training and PR duty
     don't count.
   - **Rapport** is kept per pair in `PlayerSnapshot` (both ids, the rapport, a hidden affinity,
     the seasons they shared). When two people first share a team, the pair gets an **affinity**:
     a random draw from −1 to +1, plus +0.5 for each Easy-going member, −0.6 for each Abrasive
     one, +0.2 for each Team player, −0.2 for each Loner, and −0.4 if both are Must be the best,
-    clamped to −1..+1. Each work season they share, rapport moves by **5 × affinity**, within
+    clamped to −1..+1. Each work season they share, rapport moves by **10 × affinity** (5 until
+    2026-10-08), within
     −100..+100. It shows once past ±30 ("work well together", "clash").
   - **Chemistry** of a team is a number from −1 to +1: the average rapport / 100 over all its
     pairs (0 for a team of one), plus the team traits below, clamped. It scales the team's output
@@ -765,7 +767,15 @@ such as letting a brilliant troublemaker go.
     the person page in four states, the R&D board and assign dialog, assemble mission and its
     picker, the roster, the hire screen and the turn report (`ui-spec.md`, the note after
     component 22). Their look is unconfirmed. Two findings for the rules, from working out the
-    samples (not changed; for the user to decide):
+    samples. **Decided (user, 2026-10-08) and built the same day:** `RAPPORT_DRIFT` 10, so the
+    most strongly matched pair (affinity ±1) shows in 3 seasons, before a reveal due in 4
+    (`TeamsTest`); and a mission as two teams, the crew with CAPCOM and the controllers. Each
+    team's chemistry scales its own people's share of a step: the crew's the crew sum and
+    CAPCOM's share of the controller sum, the controllers' the rest (`Chemistry.MissionChemistry`,
+    used alike by the resolution and `MissionAssessment`). Rapport drifts only within each team.
+    Trait effects that count heads now count per team: a solo cosmonaut with no CAPCOM is a team
+    of one, so a Loner there gets +0.6 (+9 % output) instead of −0.3 among eleven. Cool under
+    pressure and Mentor still read the whole mission. The findings were:
     - **The Abrasive and Easy-going shortcuts can never fire first.** Rapport moves at most
       `RAPPORT_DRIFT` (5) a shared season and shows past `RAPPORT_SHOWN_AT` (30), so a pair needs at
       least 6 shared work seasons to show (30 ÷ 5 at the largest affinity; the mockup said 7).
@@ -785,9 +795,10 @@ such as letting a brilliant troublemaker go.
     build it with the career record, capturing the id, skills and *revealed* traits at death
     (never hidden ones, so `Personality.forClient` needn't change).
   - **The Background check** stays out until espionage; the hire rows leave room for it.
-- **First-pass rules for phase 4** (2026-10-07, written while the user was away; **every number
-  and every reinterpretation below is a proposed default, unconfirmed**). Ambitions, loyalty, the
-  career record and the memorial's person page.
+- **First-pass rules for phase 4** (2026-10-07, written while the user was away). Ambitions, loyalty, the
+  career record and the memorial's person page. **The numbers and reinterpretations below are
+  confirmed as defaults (user, 2026-10-08)**, to tune after the play test, except the windows,
+  which are doubled (see "Measured" below).
   - **Who gets an ambition:** decided when a candidate is drawn, from the candidate's own seed
     (Ambitious 100 %, Glory seeker 70 %, anyone else 25 %, as above). It stays hidden, and the
     server strips it, until the person **says so after two seasons with the agency, once out of
@@ -799,17 +810,17 @@ such as letting a brilliant troublemaker go.
 
     | Group | Ambition | Fulfilled when | Passed over when | Reachable while | Window |
     |---|---|---|---|---|---|
-    | Astronaut | Fly in space | flew as crew on a crewed mission | another astronaut flew as crew | an open program has a crewed configuration | 5 |
-    | Astronaut | Fly to orbit | flew as crew, crewed orbital launch | another astronaut did | a crewed orbital configuration is open | 6 |
-    | Astronaut | Spend days in orbit | flew as crew in the second season or later of a crewed orbital mission | another astronaut did | a crewed orbital configuration of two seasons or more is open | 7 |
-    | Astronaut | Be first at something | aboard (crew or CAPCOM) a mission that settles a goal first in the game | someone else in the agency was | an open configuration still grants a goal no agency has | 8 |
-    | Astronaut | Fly on a joint flight | flew as crew on a configuration of two launches or more | another astronaut did | such a crewed configuration is open | 7 |
-    | Flight controller | Be on the consoles for a crewed orbital flight | flew on a control slot of a crewed orbital mission | another controller did | a crewed orbital configuration is open | 6 |
-    | Flight controller | Be on the consoles for a first | on a control slot of a mission that settles a goal first in the game | another controller was | as "be first" | 8 |
-    | Flight controller | Become an Expert | earns the Expert trait in their best skill | (never) | not yet Expert in it | 8 |
-    | Engineer | Bring a component to its R&D cap | on the team when *that* component reaches its cap | it reaches the cap without them | the component is owned, active and below its cap | 6 |
-    | Engineer | Build hardware for a first | a component they ever worked on flies on a mission that settles a goal first in the game | (never) | as "be first" | 8 |
-    | Engineer | Be the agency's best | the most skilled engineer in their own best skill (at least three engineers) | (never) | not already the best | 6 |
+    | Astronaut | Fly in space | flew as crew on a crewed mission | another astronaut flew as crew | an open program has a crewed configuration | 10 |
+    | Astronaut | Fly to orbit | flew as crew, crewed orbital launch | another astronaut did | a crewed orbital configuration is open | 12 |
+    | Astronaut | Spend days in orbit | flew as crew in the second season or later of a crewed orbital mission | another astronaut did | a crewed orbital configuration of two seasons or more is open | 14 |
+    | Astronaut | Be first at something | aboard (crew or CAPCOM) a mission that settles a goal first in the game | someone else in the agency was | an open configuration still grants a goal no agency has | 16 |
+    | Astronaut | Fly on a joint flight | flew as crew on a configuration of two launches or more | another astronaut did | such a crewed configuration is open | 14 |
+    | Flight controller | Be on the consoles for a crewed orbital flight | flew on a control slot of a crewed orbital mission | another controller did | a crewed orbital configuration is open | 12 |
+    | Flight controller | Be on the consoles for a first | on a control slot of a mission that settles a goal first in the game | another controller was | as "be first" | 16 |
+    | Flight controller | Become an Expert | earns the Expert trait in their best skill | (never) | not yet Expert in it | 16 |
+    | Engineer | Bring a component to its R&D cap | on the team when *that* component reaches its cap | it reaches the cap without them | the component is owned, active and below its cap | 12 |
+    | Engineer | Build hardware for a first | a component they ever worked on flies on a mission that settles a goal first in the game | (never) | as "be first" | 16 |
+    | Engineer | Be the agency's best | the most skilled engineer in their own best skill (at least three engineers) | (never) | not already the best | 12 |
 
     *Reinterpreted from the list above:* "spend a day in orbit" became days (a second season)
     in orbit, since the game counts seasons, not hours; "be the most skilled engineer on a
@@ -855,7 +866,15 @@ such as letting a brilliant troublemaker go.
     56), but people even in a quick human game will mostly see ambitions run out: crewed flights
     are few, and 5 to 8 seasons of patience is short. Options: longer windows (say 10 to 16), a
     window that only counts down while the ambition can be acted on (a crewed configuration ready
-    to fly, an R&D slot on the component), or milder run-out losses. Not changed yet.
+    to fly, an R&D slot on the component), or milder run-out losses. **Decided (user, 2026-10-08):
+    longer windows, the table's seasons doubled (10 to 16)**, with Ambitious still −1 and Steady
+    still +2. Built the same day, with the faster rapport and the split mission teams; the same
+    200 games of 24 seasons then gave 1,790 ambitions said, **253 fulfilled, 486 run out** and 108
+    no longer possible (about 1 to 2 instead of 1 to 11); the rest were still open at season 24.
+    Astronauts still fulfilled none (104 no longer possible, 22 run out): the bots fly their first
+    crewed mission long after season 24. 8.8 traits revealed and 6.2 relationships shown per game
+    (2.5 friendships); morale at season 24 averages 82 (lowest 36), loyalty 67; the bots finish in
+    56.4 seasons.
   - **Screens as built** (2026-10-07): the person page's story column (ambition, career record)
     and loyalty bar, the memorial's person page from the Museum, ambition lines on the rosters and
     in the turn report, and loyalty and the said ambition in intelligence personnel files
@@ -1609,7 +1628,8 @@ patches (`ui-spec.md` component 8).
 
 ## 4. Open questions
 
-- **Declared goals for the colleagues' game:** decide before it starts (§2.9).
+- **Declared goals for the colleagues' game:** an early-era race (user, 2026-10-08), with goals
+  drawn from the early-era pack. The exact list is still to be drafted (§2.9).
 - **NASA/Soviet prestige balance:** BASPM's Soviet programs pay a little more each (about 4 %)
   but NASA has nine more programs, about 34 % more prestige in total. Decided (user,
   2026-10-01) not to close the gap up front; revisit with play-test and harness data.
@@ -1825,9 +1845,9 @@ root** before the next play test (new fields on the snapshot and on employees).
   launched locally, also under a pinned version as CI will), the server Docker image with a
   bind-mounted data root (`deploy/docker-compose.yml`, unverified until its first CI run), and
   the two tag-triggered workflows. The packaged exe is DPI-unaware by default (Windows scales
-  it); the user is judging the fonts in both modes. Before the first real release: decide
-  whether the repo goes public (a private repo makes `update.cmd` and the NAS's image pull need
-  a GitHub login) and the first version number.
+  it); the user is judging the fonts in both modes. **The repo stays private for now** (user,
+  2026-10-08). The NAS pulls the image with an access token. The repo goes public when a real
+  first game starts. The first version number is still open.
 - **M7+ (order open):** people worth caring about (chemistry, traits, rapport, ambitions, career
   records, poaching; §2.2(d), in five phases); interaction beyond passive competition (§2.9); the rest of the content
   tree beyond the early era; the rest of the Museum encyclopedia (§1.1; E-01 to E-05 built 2026-10-06/07); a game-host role and UI;

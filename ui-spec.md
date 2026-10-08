@@ -1053,6 +1053,11 @@ does (`baspm.md` §10.11), plus the chosen rocket per launch:
   the partner is also on this mission. The picker shows traits, marks, the skill and the chemistry
   with each candidate in that slot instead of its holder. The odds' caption says they include the
   known chemistry.
+  *Changed 2026-10-08 (user's decision, `design.md` §2.2(d)):* a mission is two teams, so the card
+  shows two chemistries, "Team chemistry · Crew and CAPCOM" and "Team chemistry · Flight
+  controllers", each with its head count and "Why" (a team nobody is in yet is left out). Tile
+  marks and the picker's marks and preview are against the slot's own team; the picker's caption
+  names it.
 - Slots no step uses show **"Not required"** and stay empty, as in BASPM. Crewed
   Mercury, for example, has 11 control slots and uses 10 (9 controllers + CAPCOM).
 - Click a slot to pick an available employee of its type: idle, not unavailable, and

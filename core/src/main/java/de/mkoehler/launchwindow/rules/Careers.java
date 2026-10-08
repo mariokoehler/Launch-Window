@@ -37,8 +37,8 @@ import java.util.stream.Stream;
  * People's careers ({@code design.md} &sect;2.2(d), phase 4): ambitions said, met, passed over,
  * made impossible or run out; loyalty; and the career record each person's page shows. Runs as its
  * own phase of the season pass after the teams, reading what the season did. Every random draw
- * comes from the person's own seed, never the season's stream. Every number here is a default,
- * unconfirmed.
+ * comes from the person's own seed, never the season's stream. Every number here is our own,
+ * accepted as a default (user, 2026-10-08), to tune after the play test.
  *
  * @author Mario Koehler
  */

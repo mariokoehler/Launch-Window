@@ -50,7 +50,7 @@ public final class Personality {
     public static final double RAPPORT_SHOWN_AT = 30;
 
     /** How far a pair's rapport moves per shared work season, times their affinity. */
-    public static final double RAPPORT_DRIFT = 5;
+    public static final double RAPPORT_DRIFT = 10;
 
     /** The bounds of a pair's rapport. */
     public static final double RAPPORT_MAX = 100;

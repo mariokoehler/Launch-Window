@@ -130,14 +130,20 @@ class PeopleTest {
         control.set(0, "astro-2");
         control.set(1, "mco-1");
 
-        Chemistry.Result now = People.mission(state, configuration, crew, control);
-        Chemistry.Result swapped = People.missionWith(state, configuration, crew, control, false, 0, "astro-3");
-        // Three people, three pairs: the clash goes, the friendship comes.
-        assertEquals(-0.6 / 3, now.value(), 1e-9);
-        assertEquals(0.6 / 3, swapped.value(), 1e-9);
+        Chemistry.MissionChemistry now = People.mission(state, configuration, crew, control);
+        Chemistry.MissionChemistry swapped = People.missionWith(state, configuration, crew, control, false, 0,
+            "astro-3");
+        // The crew with CAPCOM is a team of two, one pair: the clash goes, the friendship comes.
+        assertEquals(-0.6, now.crew().value(), 1e-9);
+        assertEquals(0.6, swapped.crew().value(), 1e-9);
+        // The controller is a team of their own, untouched by either.
+        assertEquals(0, now.consoles().value(), 1e-9);
+        assertEquals(0, swapped.consoles().value(), 1e-9);
         // The draft itself is untouched.
         assertEquals("astro-2", control.get(0));
         assertEquals(List.of("astro-1", "astro-2", "mco-1"), People.teamIds(crew, control));
+        assertEquals(List.of("astro-1", "astro-2"), People.teamIds(state, crew, control, true));
+        assertEquals(List.of("mco-1"), People.teamIds(state, crew, control, false));
     }
 
     @Test

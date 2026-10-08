@@ -174,15 +174,57 @@ public final class Chemistry {
     }
 
     /**
-     * Returns the chemistry of a mission's crew and controllers.
+     * A mission's two teams' chemistry (user, 2026-10-08): the crew with CAPCOM, and the flight
+     * controllers on the consoles. Each scales what its own people bring to a step.
+     *
+     * @param crew     the astronauts: the crew and anyone at CAPCOM
+     * @param consoles the flight controllers
+     */
+    public record MissionChemistry(Result crew, Result consoles) {
+
+        /**
+         * Returns what a team's chemistry multiplies a person's contribution by.
+         *
+         * @param astronaut whether the person is an astronaut (crew or CAPCOM), else a controller
+         * @return the multiplier
+         */
+        public double multiplier(boolean astronaut) {
+            return (astronaut ? crew : consoles).multiplier();
+        }
+    }
+
+    /**
+     * Returns the chemistry of a mission's two teams: the crew with CAPCOM, and the controllers.
      *
      * @param snapshot  the player
      * @param mission   the mission, flying or planned
      * @param knownOnly whether to count only what the player knows
      * @return the chemistry
      */
-    public static Result mission(PlayerSnapshot snapshot, InProgressMission mission, boolean knownOnly) {
-        return of(snapshot, MissionProgress.missionTeam(snapshot, mission), Chemistry::bestSkill, knownOnly);
+    public static MissionChemistry mission(PlayerSnapshot snapshot, InProgressMission mission, boolean knownOnly) {
+        List<Personnel> team = MissionProgress.missionTeam(snapshot, mission);
+        return new MissionChemistry(of(snapshot, crewTeam(team), Chemistry::bestSkill, knownOnly),
+            of(snapshot, consoleTeam(team), Chemistry::bestSkill, knownOnly));
+    }
+
+    /**
+     * Returns a mission team's astronauts: the crew and CAPCOM, in the team's order.
+     *
+     * @param team the mission's people
+     * @return the crew team
+     */
+    public static List<Personnel> crewTeam(List<? extends Personnel> team) {
+        return team.stream().filter(Astronaut.class::isInstance).map(Personnel.class::cast).toList();
+    }
+
+    /**
+     * Returns a mission team's flight controllers, in the team's order.
+     *
+     * @param team the mission's people
+     * @return the console team
+     */
+    public static List<Personnel> consoleTeam(List<? extends Personnel> team) {
+        return team.stream().filter(person -> !(person instanceof Astronaut)).map(Personnel.class::cast).toList();
     }
 
     /**

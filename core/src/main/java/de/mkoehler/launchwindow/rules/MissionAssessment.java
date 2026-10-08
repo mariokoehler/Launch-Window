@@ -165,12 +165,12 @@ public final class MissionAssessment {
         double componentSum = MissionProgress.componentContributionSum(snapshot, catalog, plan, step, held);
         boolean crewInvolved = !step.crewInvolvements().isEmpty();
         // The team's chemistry as the player knows it: revealed traits and shown relationships only.
-        double chemistry = Chemistry.mission(snapshot, plan, true).multiplier();
+        Chemistry.MissionChemistry chemistry = Chemistry.mission(snapshot, plan, true);
         double crewSum = crewInvolved
-            ? Math.min(100, MissionProgress.crewContributionSum(snapshot, plan, step) * chemistry) : 0;
+            ? Math.min(100, MissionProgress.crewContributionSum(snapshot, plan, step) * chemistry.multiplier(true)) : 0;
         double base = MissionStepResolution.computeBaseProbability(componentSum, crewInvolved, crewSum);
-        double controllerSum = Math.min(100, MissionProgress.controlContributionSum(snapshot, catalog, plan, step)
-            * chemistry);
+        double controllerSum = Math.min(100,
+            MissionProgress.controlContributionSum(snapshot, catalog, plan, step, chemistry));
         double save = Math.min(100, MissionStepResolution.computeSavingThrowProbability(base, controllerSum)
             + TraitEffects.savingThrowBonus(MissionProgress.missionTeam(snapshot, plan), true));
 

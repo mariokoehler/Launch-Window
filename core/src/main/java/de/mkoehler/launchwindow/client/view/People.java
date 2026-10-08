@@ -214,7 +214,8 @@ public final class People {
     }
 
     /**
-     * Returns the chemistry of a mission's crew and controllers as the player knows it.
+     * Returns the chemistry of a mission's two teams, the crew with CAPCOM and the controllers, as
+     * the player knows it.
      *
      * @param state          the player's state
      * @param configuration  the mission
@@ -222,7 +223,7 @@ public final class People {
      * @param controlSlotIds one id per control slot, {@code null} for an empty one
      * @return the chemistry
      */
-    public static Chemistry.Result mission(PlayerSnapshot state, MissionConfiguration configuration,
+    public static Chemistry.MissionChemistry mission(PlayerSnapshot state, MissionConfiguration configuration,
             List<String> crewSlotIds, List<String> controlSlotIds) {
         // A stand-in for the mission as it would fly, as MissionAssessment builds one.
         InProgressMission plan = new InProgressMission("preview", configuration.id(), crewSlotIds, controlSlotIds);
@@ -231,7 +232,7 @@ public final class People {
 
     /**
      * Returns the mission chemistry with one slot's holder swapped for someone else (for the
-     * picker's preview).
+     * picker's preview); the slot's own team is the one that changes.
      *
      * @param state          the player's state
      * @param configuration  the mission
@@ -242,12 +243,33 @@ public final class People {
      * @param candidateId    who would take it
      * @return the chemistry
      */
-    public static Chemistry.Result missionWith(PlayerSnapshot state, MissionConfiguration configuration,
+    public static Chemistry.MissionChemistry missionWith(PlayerSnapshot state, MissionConfiguration configuration,
             List<String> crewSlotIds, List<String> controlSlotIds, boolean crew, int slot, String candidateId) {
         List<String> crewIds = new ArrayList<>(crewSlotIds);
         List<String> controlIds = new ArrayList<>(controlSlotIds);
         (crew ? crewIds : controlIds).set(slot, candidateId);
         return mission(state, configuration, crewIds, controlIds);
+    }
+
+    /**
+     * Returns the ids of one of a mission's two teams, without empty slots: the astronauts (crew
+     * and CAPCOM) or the flight controllers.
+     *
+     * @param state          the player's state
+     * @param crewSlotIds    the crew seats
+     * @param controlSlotIds the control slots
+     * @param astronauts     whether to return the crew team, else the controllers
+     * @return the ids
+     */
+    public static List<String> teamIds(PlayerSnapshot state, List<String> crewSlotIds, List<String> controlSlotIds,
+            boolean astronauts) {
+        List<String> ids = new ArrayList<>();
+        for (String id : teamIds(crewSlotIds, controlSlotIds)) {
+            if (find(state, id) instanceof Astronaut == astronauts) {
+                ids.add(id);
+            }
+        }
+        return ids;
     }
 
     /**

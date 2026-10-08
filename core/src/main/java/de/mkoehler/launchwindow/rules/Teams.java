@@ -21,8 +21,8 @@ import java.util.stream.Stream;
 
 /**
  * Teams and what working together does to people ({@code design.md} &sect;2.2(d)). A team is the
- * engineers on one component's R&amp;D, or the crew and controllers of one mission in flight;
- * someone working alone is a team of one.
+ * engineers on one component's R&amp;D, the crew of one mission in flight with its CAPCOM, or that
+ * mission's flight controllers; someone working alone is a team of one.
  *
  * <p>The season pass captures the teams after departures and before missions resolve (a mission
  * that finishes releases its crew), and {@link #advanceSeason} runs after R&amp;D: everyone in a
@@ -62,7 +62,7 @@ public final class Teams {
 
     /**
      * Returns this season's teams, as the player's state stands: each component with engineers on
-     * its R&amp;D, and each mission in flight with its crew and controllers.
+     * its R&amp;D, and each mission in flight as two teams: its crew with CAPCOM, then its controllers.
      *
      * @param snapshot the player
      * @param catalog  the content pack
@@ -82,12 +82,21 @@ public final class Teams {
             research.computeIfAbsent(target, key -> new ArrayList<>()).add(specialist.getId());
         }
         research.forEach((component, members) -> teams.add(new Team(RD, component, members)));
+        // A mission is two teams: the crew with CAPCOM, and the controllers (user, 2026-10-08).
         for (InProgressMission mission : snapshot.getInProgressMissions().values()) {
             Set<String> members = new LinkedHashSet<>();
             Stream.concat(mission.getCrewSlotIds().stream(), mission.getControlSlotIds().stream())
                 .filter(Objects::nonNull).forEach(members::add);
-            if (!members.isEmpty()) {
-                teams.add(new Team(MISSION, mission.getMissionConfigurationId(), new ArrayList<>(members)));
+            List<String> crew = new ArrayList<>();
+            List<String> consoles = new ArrayList<>();
+            for (String id : members) {
+                Personnel person = find(snapshot, id);
+                (person instanceof de.mkoehler.launchwindow.model.Astronaut ? crew : consoles).add(id);
+            }
+            for (List<String> team : List.of(crew, consoles)) {
+                if (!team.isEmpty()) {
+                    teams.add(new Team(MISSION, mission.getMissionConfigurationId(), team));
+                }
             }
         }
         return teams;

@@ -222,42 +222,50 @@ public final class AssembleMissionScreen extends ChromeScreen {
     }
 
     /**
-     * The crew and consoles' chemistry: one for the whole mission, as the rules compute it, with
-     * its known reasons listed.
+     * The mission's two teams' chemistry, as the rules compute it: the crew with CAPCOM, then the
+     * flight controllers, each with its known reasons listed. A team nobody is in yet is left out.
      */
     private Table chemistryCard(MissionDraft draft) {
         PlayerSnapshot state = session.state();
-        List<String> ids = People.teamIds(draft.crewSlotIds(), draft.controlSlotIds());
-        Chemistry.Result chemistry = People.mission(state, configuration, draft.crewSlotIds(),
+        Chemistry.MissionChemistry chemistry = People.mission(state, configuration, draft.crewSlotIds(),
             draft.controlSlotIds());
         Table card = ui.card();
         card.defaults().growX().left();
-        Table head = new Table();
-        head.add(ui.label("TEAM CHEMISTRY · CREW AND CONSOLES", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).expandX()
-            .left();
-        head.add(ui.label(ids.size() + (ids.size() == 1 ? " person" : " people"), Theme.TextStyle.CAPTION,
-            Theme.INK_MUTED));
-        card.add(head).padBottom(Theme.SPACE_2).row();
-        card.add(ChemistryIndicator.full(ui, chemistry)).padBottom(Theme.SPACE_3).row();
-        List<People.ReasonLine> reasons = People.reasons(state, chemistry);
-        if (!reasons.isEmpty()) {
-            card.add(ui.label("WHY", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padBottom(Theme.SPACE_2).row();
-            card.add(ChemistryIndicator.breakdown(ui, chemistry, reasons, false)).row();
+        boolean first = true;
+        for (boolean astronauts : new boolean[] {true, false}) {
+            List<String> ids = People.teamIds(state, draft.crewSlotIds(), draft.controlSlotIds(), astronauts);
+            if (ids.isEmpty()) {
+                continue;
+            }
+            Chemistry.Result team = astronauts ? chemistry.crew() : chemistry.consoles();
+            Table head = new Table();
+            head.add(ui.label(astronauts ? "TEAM CHEMISTRY · CREW AND CAPCOM" : "TEAM CHEMISTRY · FLIGHT CONTROLLERS",
+                Theme.TextStyle.CAPTION, Theme.INK_MUTED)).expandX().left();
+            head.add(ui.label(ids.size() + (ids.size() == 1 ? " person" : " people"), Theme.TextStyle.CAPTION,
+                Theme.INK_MUTED));
+            card.add(head).padTop(first ? 0 : Theme.SPACE_4).padBottom(Theme.SPACE_2).row();
+            card.add(ChemistryIndicator.full(ui, team)).padBottom(Theme.SPACE_3).row();
+            List<People.ReasonLine> reasons = People.reasons(state, team);
+            if (!reasons.isEmpty()) {
+                card.add(ui.label("WHY", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padBottom(Theme.SPACE_2).row();
+                card.add(ChemistryIndicator.breakdown(ui, team, reasons, false)).row();
+            }
+            first = false;
         }
         return card;
     }
 
     /**
      * What a tile shows about its holder: revealed traits, and a mark for each shown relationship
-     * with someone else on this mission. {@code null} for nothing to show.
+     * with someone else in their team on this mission. {@code null} for nothing to show.
      */
     private Table holderExtras(MissionDraft draft, Personnel person, float width) {
         if (person == null) {
             return null;
         }
         List<Trait> traits = People.traits(person);
-        List<People.Relationship> marks = People.marks(session.state(), person,
-            People.teamIds(draft.crewSlotIds(), draft.controlSlotIds()));
+        List<People.Relationship> marks = People.marks(session.state(), person, People.teamIds(session.state(),
+            draft.crewSlotIds(), draft.controlSlotIds(), person instanceof Astronaut));
         if (traits.isEmpty() && marks.isEmpty()) {
             return null;
         }
@@ -486,15 +494,18 @@ public final class AssembleMissionScreen extends ChromeScreen {
         boolean astronaut = kind == StaffingSlot.Kind.ASTRONAUT;
         Table card = dialogCard(title, astronaut ? "Pick an astronaut" : "Pick a flight controller");
         card.add(ui.paragraph("Free people only: idle, available, and not in another slot of this mission. Sorted by "
-            + skillLabel + ", the value the roll will read. Chemistry is the whole mission's: crew and consoles "
-            + "together.", Theme.TextStyle.BODY, Theme.INK_MUTED)).padBottom(Theme.SPACE_3).row();
+            + skillLabel + ", the value the roll will read. Chemistry is this slot's team's: "
+            + (astronaut ? "the crew with CAPCOM." : "the flight controllers."), Theme.TextStyle.BODY,
+            Theme.INK_MUTED)).padBottom(Theme.SPACE_3).row();
         List<? extends Personnel> people = candidates(kind, value);
-        // Marks and previews are against everyone else on the mission, without this slot's holder.
-        List<String> others = new ArrayList<>(People.teamIds(draft.crewSlotIds(), draft.controlSlotIds()));
+        // Marks and previews are against everyone else in this slot's team, without its holder.
+        List<String> others = new ArrayList<>(People.teamIds(state, draft.crewSlotIds(), draft.controlSlotIds(),
+            astronaut));
         if (holder != null && Collections.frequency(crewAndControl(draft), holder) == 1) {
             others.remove(holder);
         }
-        Chemistry.Result now = People.mission(state, configuration, draft.crewSlotIds(), draft.controlSlotIds());
+        Chemistry.Result now = team(People.mission(state, configuration, draft.crewSlotIds(), draft.controlSlotIds()),
+            astronaut);
         Table list = new Table();
         list.top();
         list.defaults().growX();
@@ -532,8 +543,8 @@ public final class AssembleMissionScreen extends ChromeScreen {
             row.add(new SkillBar(ui, v)).width(80f).height(8f).padRight(Theme.SPACE_2);
             row.add(ui.label(String.valueOf(Math.round(v)), Theme.TextStyle.BODY_STRONG, Theme.NAVY)).width(28f)
                 .padRight(Theme.SPACE_3);
-            Chemistry.Result then = People.missionWith(state, configuration, draft.crewSlotIds(),
-                draft.controlSlotIds(), crew, slot, person.getId());
+            Chemistry.Result then = team(People.missionWith(state, configuration, draft.crewSlotIds(),
+                draft.controlSlotIds(), crew, slot, person.getId()), astronaut);
             row.add(ChemistryIndicator.preview(ui, now, then)).width(200f).left();
             row.setTouchable(Touchable.enabled);
             row.addListener(clicked(() -> {
@@ -568,6 +579,10 @@ public final class AssembleMissionScreen extends ChromeScreen {
         buttons.add(actionButton("Cancel", Theme.ButtonKind.SECONDARY, this::closeDialog));
         card.add(buttons).right().fill(false, false);
         showDialog(card, PICKER_WIDTH);
+    }
+
+    private static Chemistry.Result team(Chemistry.MissionChemistry chemistry, boolean astronauts) {
+        return astronauts ? chemistry.crew() : chemistry.consoles();
     }
 
     private static List<String> crewAndControl(MissionDraft draft) {

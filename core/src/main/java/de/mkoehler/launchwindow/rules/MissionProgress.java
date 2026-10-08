@@ -464,9 +464,11 @@ public final class MissionProgress {
         double componentSum = componentContributionSum(snapshot, catalog, mission, step,
             snapshot::hasAchievedOrCancelledGoal, flown);
         boolean crewInvolved = !step.crewInvolvements().isEmpty();
-        // The crew and controllers' chemistry scales what they bring (design.md 2.2(d)).
-        double chemistry = Chemistry.mission(snapshot, mission, false).multiplier();
-        double crewSum = crewInvolved ? Math.min(100, crewContributionSum(snapshot, mission, step) * chemistry) : 0;
+        // Each team's chemistry scales what its people bring: the crew with CAPCOM, and the
+        // controllers (design.md 2.2(d)).
+        Chemistry.MissionChemistry chemistry = Chemistry.mission(snapshot, mission, false);
+        double crewSum = crewInvolved
+            ? Math.min(100, crewContributionSum(snapshot, mission, step) * chemistry.multiplier(true)) : 0;
         double baseProbability = MissionStepResolution.computeBaseProbability(componentSum, crewInvolved, crewSum);
 
         double firstRoll = MissionStepResolution.drawRoll(random);
@@ -477,7 +479,7 @@ public final class MissionProgress {
         }
 
         // CAPCOM is a control slot, so it sits on the controller side of the saving throw (baspm.md §10.9).
-        double controllerSum = Math.min(100, controlContributionSum(snapshot, catalog, mission, step) * chemistry);
+        double controllerSum = Math.min(100, controlContributionSum(snapshot, catalog, mission, step, chemistry));
         // Cool heads on the mission help save a failing step (design.md 2.2(d)).
         double beforeExperts = Math.min(100, MissionStepResolution.computeSavingThrowProbability(baseProbability,
             controllerSum) + TraitEffects.savingThrowBonus(missionTeam(snapshot, mission), false));
@@ -798,21 +800,25 @@ public final class MissionProgress {
     /**
      * Computes a step's controller contribution sum: each control-slot involvement's
      * percentage times the slot holder's value at the slot's skill
-     * ({@link #slotValue}). An empty or vacated slot reads 0.
+     * ({@link #slotValue}), times the chemistry of the holder's team (CAPCOM's is the crew's).
+     * An empty or vacated slot reads 0.
      *
-     * @param snapshot the player
-     * @param catalog  the content catalog, for the configuration's slots
-     * @param mission  the mission
-     * @param step     the step
-     * @return the controller sum, 0-100
+     * @param snapshot  the player
+     * @param catalog   the content catalog, for the configuration's slots
+     * @param mission   the mission
+     * @param step      the step
+     * @param chemistry the mission's two teams' chemistry
+     * @return the controller sum, before capping at 100
      */
     static double controlContributionSum(PlayerSnapshot snapshot, ContentCatalog catalog,
-            InProgressMission mission, MissionStep step) {
+            InProgressMission mission, MissionStep step, Chemistry.MissionChemistry chemistry) {
         List<StaffingSlot> slots = configurationOf(catalog, mission).controlSlots();
         double sum = 0;
         for (MissionStep.ControllerInvolvement involvement : step.controllerInvolvements()) {
             String holderId = slotHolder(mission.getControlSlotIds(), involvement.slot());
-            sum += involvement.percent() / 100.0 * slotValue(snapshot, slots.get(involvement.slot()), holderId);
+            StaffingSlot slot = slots.get(involvement.slot());
+            sum += involvement.percent() / 100.0 * slotValue(snapshot, slot, holderId)
+                * chemistry.multiplier(slot.kind() == StaffingSlot.Kind.ASTRONAUT);
         }
         return sum;
     }

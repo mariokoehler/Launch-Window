@@ -21,27 +21,27 @@ public record Ambition(Kind kind, String ref, int seasonsLeft, int window, int s
      */
     public enum Kind {
         /** Fly as crew on a crewed mission. */
-        FLY_IN_SPACE("ASTRONAUT", 5),
+        FLY_IN_SPACE("ASTRONAUT", 10),
         /** Fly as crew on a crewed orbital mission. */
-        FLY_TO_ORBIT("ASTRONAUT", 6),
+        FLY_TO_ORBIT("ASTRONAUT", 12),
         /** Fly in the second season or later of a crewed orbital mission. */
-        DAYS_IN_ORBIT("ASTRONAUT", 7),
+        DAYS_IN_ORBIT("ASTRONAUT", 14),
         /** Be aboard a mission that settles a goal first in the game. */
-        BE_FIRST("ASTRONAUT", 8),
+        BE_FIRST("ASTRONAUT", 16),
         /** Fly as crew on a configuration of two launches or more. */
-        JOINT_FLIGHT("ASTRONAUT", 7),
+        JOINT_FLIGHT("ASTRONAUT", 14),
         /** Be on a control slot of a crewed orbital mission. */
-        CONSOLES_ORBITAL("MISSION_CONTROL", 6),
+        CONSOLES_ORBITAL("MISSION_CONTROL", 12),
         /** Be on a control slot of a mission that settles a goal first in the game. */
-        CONSOLES_FIRST("MISSION_CONTROL", 8),
+        CONSOLES_FIRST("MISSION_CONTROL", 16),
         /** Earn the Expert trait in their best skill. */
-        BECOME_EXPERT("MISSION_CONTROL", 8),
+        BECOME_EXPERT("MISSION_CONTROL", 16),
         /** Be on the team when a given component reaches its R&amp;D cap. */
-        COMPONENT_CAP("SET", 6),
+        COMPONENT_CAP("SET", 12),
         /** A component they worked on flies on a mission that settles a goal first in the game. */
-        FIRST_HARDWARE("SET", 8),
+        FIRST_HARDWARE("SET", 16),
         /** Be the agency's most skilled engineer in their own best skill. */
-        TOP_ENGINEER("SET", 6);
+        TOP_ENGINEER("SET", 12);
 
         private final String group;
         private final int window;
