@@ -1,0 +1,6253 @@
+[
+  {
+    "id": "sputnik-1-satellite",
+    "associatedSkill": "SPACE_PROBES",
+    "baselineReliability": 3.0,
+    "maxReliability": 92.25,
+    "maxRdReliability": 89.59,
+    "rdSlotBandMaxAmounts": [
+      9.0,
+      17.0,
+      22.0,
+      33.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "sputnik-2-satellite",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "luna-3-probe",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "zond-5-probe",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "luna-2-probe",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "luna-15-probe",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "luna-17-lander",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "lunokhod-1-rover",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "venera-15-probe",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "venera-7-probe",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "venera-9-probe",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "mars-2-probe",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "mars-m69-probe",
+        "transferPercent": 60.0
+      }
+    ],
+    "maintenanceCost": 75,
+    "creationCost": 750,
+    "unitCost": 488,
+    "mass": 86.0,
+    "agency": "SOVIET",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "sputnik-2-satellite",
+    "associatedSkill": "SPACE_PROBES",
+    "baselineReliability": 3.0,
+    "maxReliability": 93.75,
+    "maxRdReliability": 90.99,
+    "rdSlotBandMaxAmounts": [
+      6.0,
+      11.0,
+      15.0,
+      22.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "sputnik-1-satellite",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "luna-3-probe",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "zond-5-probe",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "luna-2-probe",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "luna-15-probe",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "luna-17-lander",
+        "transferPercent": 22.5
+      },
+      {
+        "sourceComponentId": "lunokhod-1-rover",
+        "transferPercent": 17.5
+      },
+      {
+        "sourceComponentId": "venera-15-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "venera-7-probe",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "venera-9-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "mars-2-probe",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "mars-m69-probe",
+        "transferPercent": 45.0
+      }
+    ],
+    "maintenanceCost": 210,
+    "creationCost": 2100,
+    "unitCost": 1365,
+    "mass": 133.0,
+    "agency": "SOVIET",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "explorer-1-satellite",
+    "associatedSkill": "SPACE_PROBES",
+    "baselineReliability": 3.0,
+    "maxReliability": 92.0,
+    "maxRdReliability": 89.36,
+    "rdSlotBandMaxAmounts": [
+      8.0,
+      15.0,
+      20.0,
+      29.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "pegasus-satellite",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "biosatellite-satellite",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "ofo-satellite",
+        "transferPercent": 45.0
+      },
+      {
+        "sourceComponentId": "pioneer-4-probe",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "ranger-3-probe",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "pioneer-2-probe",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "lunar-orbiter-probe",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "surveyor-lander",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "pioneer-6-probe",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "mariner-10-probe",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "mariner-5-probe",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "pioneer-venus-orbiter-probe",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "pioneer-venus-multiprobe-craft",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "mariner-6-probe",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "mariner-9-probe",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "viking-orbiter",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "viking-lander",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "pioneer-10-probe",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "pioneer-11-probe",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "agena-target-vehicle",
+        "transferPercent": 60.0
+      }
+    ],
+    "maintenanceCost": 90,
+    "creationCost": 900,
+    "unitCost": 585,
+    "mass": 11.0,
+    "agency": "NASA",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "pegasus-satellite",
+    "associatedSkill": "SPACE_PROBES",
+    "baselineReliability": 3.0,
+    "maxReliability": 93.0,
+    "maxRdReliability": 90.29,
+    "rdSlotBandMaxAmounts": [
+      5.0,
+      10.0,
+      13.0,
+      19.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "explorer-1-satellite",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "biosatellite-satellite",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "ofo-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "pioneer-4-probe",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "ranger-3-probe",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "pioneer-2-probe",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "lunar-orbiter-probe",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "surveyor-lander",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "pioneer-6-probe",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "mariner-10-probe",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "mariner-5-probe",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "pioneer-venus-orbiter-probe",
+        "transferPercent": 17.5
+      },
+      {
+        "sourceComponentId": "pioneer-venus-multiprobe-craft",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "mariner-6-probe",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "mariner-9-probe",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "viking-orbiter",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "viking-lander",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "pioneer-10-probe",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "pioneer-11-probe",
+        "transferPercent": 12.5
+      }
+    ],
+    "maintenanceCost": 225,
+    "creationCost": 2250,
+    "unitCost": 1463,
+    "mass": 9000.0,
+    "agency": "NASA",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "biosatellite-satellite",
+    "associatedSkill": "SPACE_PROBES",
+    "baselineReliability": 3.0,
+    "maxReliability": 93.5,
+    "maxRdReliability": 90.76,
+    "rdSlotBandMaxAmounts": [
+      5.0,
+      10.0,
+      13.0,
+      19.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "explorer-1-satellite",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "pegasus-satellite",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "ofo-satellite",
+        "transferPercent": 45.0
+      },
+      {
+        "sourceComponentId": "pioneer-4-probe",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "ranger-3-probe",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "pioneer-2-probe",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "lunar-orbiter-probe",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "surveyor-lander",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "pioneer-6-probe",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "mariner-10-probe",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "mariner-5-probe",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "pioneer-venus-orbiter-probe",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "pioneer-venus-multiprobe-craft",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "mariner-6-probe",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "mariner-9-probe",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "viking-orbiter",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "viking-lander",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "pioneer-10-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "pioneer-11-probe",
+        "transferPercent": 10.0
+      }
+    ],
+    "maintenanceCost": 263,
+    "creationCost": 2625,
+    "unitCost": 1707,
+    "mass": 542.0,
+    "agency": "NASA",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "ofo-satellite",
+    "associatedSkill": "SPACE_PROBES",
+    "baselineReliability": 3.0,
+    "maxReliability": 93.75,
+    "maxRdReliability": 90.99,
+    "rdSlotBandMaxAmounts": [
+      6.0,
+      11.0,
+      15.0,
+      22.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "explorer-1-satellite",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "pegasus-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "biosatellite-satellite",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "pioneer-4-probe",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "ranger-3-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "pioneer-2-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "lunar-orbiter-probe",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "surveyor-lander",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "pioneer-6-probe",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "mariner-10-probe",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "mariner-5-probe",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "pioneer-venus-orbiter-probe",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "pioneer-venus-multiprobe-craft",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "mariner-6-probe",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "mariner-9-probe",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "viking-orbiter",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "viking-lander",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "pioneer-10-probe",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "pioneer-11-probe",
+        "transferPercent": 7.5
+      }
+    ],
+    "maintenanceCost": 210,
+    "creationCost": 2100,
+    "unitCost": 1365,
+    "mass": 133.0,
+    "agency": "NASA",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "pioneer-4-probe",
+    "associatedSkill": "SPACE_PROBES",
+    "baselineReliability": 3.0,
+    "maxReliability": 92.5,
+    "maxRdReliability": 88.66,
+    "rdSlotBandMaxAmounts": [
+      7.0,
+      12.0,
+      16.0,
+      24.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "explorer-1-satellite",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "pegasus-satellite",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "biosatellite-satellite",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "ofo-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "ranger-3-probe",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "pioneer-2-probe",
+        "transferPercent": 55.0
+      },
+      {
+        "sourceComponentId": "lunar-orbiter-probe",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "surveyor-lander",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "pioneer-6-probe",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "mariner-10-probe",
+        "transferPercent": 45.0
+      },
+      {
+        "sourceComponentId": "mariner-5-probe",
+        "transferPercent": 45.0
+      },
+      {
+        "sourceComponentId": "pioneer-venus-orbiter-probe",
+        "transferPercent": 45.0
+      },
+      {
+        "sourceComponentId": "pioneer-venus-multiprobe-craft",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "mariner-6-probe",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "mariner-9-probe",
+        "transferPercent": 42.5
+      },
+      {
+        "sourceComponentId": "viking-orbiter",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "viking-lander",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "pioneer-10-probe",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "pioneer-11-probe",
+        "transferPercent": 60.0
+      }
+    ],
+    "maintenanceCost": 188,
+    "creationCost": 1875,
+    "unitCost": 1219,
+    "mass": 6.0,
+    "agency": "NASA",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "zond-5-probe",
+    "associatedSkill": "SPACE_PROBES",
+    "baselineReliability": 3.0,
+    "maxReliability": 92.38,
+    "maxRdReliability": 89.71,
+    "rdSlotBandMaxAmounts": [
+      4.0,
+      8.0,
+      11.0,
+      16.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "sputnik-1-satellite",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "sputnik-2-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "luna-3-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "luna-2-probe",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "luna-15-probe",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "luna-17-lander",
+        "transferPercent": 17.5
+      },
+      {
+        "sourceComponentId": "lunokhod-1-rover",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "venera-15-probe",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "venera-7-probe",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "venera-9-probe",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "mars-2-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "mars-m69-probe",
+        "transferPercent": 10.0
+      }
+    ],
+    "maintenanceCost": 450,
+    "creationCost": 4500,
+    "unitCost": 2925,
+    "mass": 5680.0,
+    "agency": "SOVIET",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "ranger-3-probe",
+    "associatedSkill": "SPACE_PROBES",
+    "baselineReliability": 3.0,
+    "maxReliability": 92.13,
+    "maxRdReliability": 89.48,
+    "rdSlotBandMaxAmounts": [
+      5.0,
+      10.0,
+      13.0,
+      19.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "explorer-1-satellite",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "pegasus-satellite",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "biosatellite-satellite",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "ofo-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "pioneer-4-probe",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "pioneer-2-probe",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "lunar-orbiter-probe",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "surveyor-lander",
+        "transferPercent": 45.0
+      },
+      {
+        "sourceComponentId": "pioneer-6-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "mariner-10-probe",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "mariner-5-probe",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "pioneer-venus-orbiter-probe",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "pioneer-venus-multiprobe-craft",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "mariner-6-probe",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "mariner-9-probe",
+        "transferPercent": 37.5
+      },
+      {
+        "sourceComponentId": "viking-orbiter",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "viking-lander",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "pioneer-10-probe",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "pioneer-11-probe",
+        "transferPercent": 40.0
+      }
+    ],
+    "maintenanceCost": 225,
+    "creationCost": 2250,
+    "unitCost": 1463,
+    "mass": 331.0,
+    "agency": "NASA",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "luna-2-probe",
+    "associatedSkill": "SPACE_PROBES",
+    "baselineReliability": 3.0,
+    "maxReliability": 92.0,
+    "maxRdReliability": 89.36,
+    "rdSlotBandMaxAmounts": [
+      5.0,
+      10.0,
+      13.0,
+      19.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "sputnik-1-satellite",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "sputnik-2-satellite",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "luna-3-probe",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "zond-5-probe",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "luna-15-probe",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "luna-17-lander",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "lunokhod-1-rover",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "venera-15-probe",
+        "transferPercent": 45.0
+      },
+      {
+        "sourceComponentId": "venera-7-probe",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "venera-9-probe",
+        "transferPercent": 45.0
+      },
+      {
+        "sourceComponentId": "mars-2-probe",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "mars-m69-probe",
+        "transferPercent": 32.5
+      }
+    ],
+    "maintenanceCost": 207,
+    "creationCost": 2063,
+    "unitCost": 1341,
+    "mass": 387.0,
+    "agency": "SOVIET",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "pioneer-2-probe",
+    "associatedSkill": "SPACE_PROBES",
+    "baselineReliability": 3.0,
+    "maxReliability": 91.75,
+    "maxRdReliability": 89.13,
+    "rdSlotBandMaxAmounts": [
+      4.0,
+      8.0,
+      11.0,
+      16.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "explorer-1-satellite",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "pegasus-satellite",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "biosatellite-satellite",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "ofo-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "pioneer-4-probe",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "ranger-3-probe",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "lunar-orbiter-probe",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "surveyor-lander",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "pioneer-6-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "mariner-10-probe",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "mariner-5-probe",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "pioneer-venus-orbiter-probe",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "pioneer-venus-multiprobe-craft",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "mariner-6-probe",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "mariner-9-probe",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "viking-orbiter",
+        "transferPercent": 45.0
+      },
+      {
+        "sourceComponentId": "viking-lander",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "pioneer-10-probe",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "pioneer-11-probe",
+        "transferPercent": 35.0
+      }
+    ],
+    "maintenanceCost": 263,
+    "creationCost": 2625,
+    "unitCost": 1707,
+    "mass": 38.0,
+    "agency": "NASA",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "lunar-orbiter-probe",
+    "associatedSkill": "SPACE_PROBES",
+    "baselineReliability": 3.0,
+    "maxReliability": 91.88,
+    "maxRdReliability": 89.24,
+    "rdSlotBandMaxAmounts": [
+      4.0,
+      7.0,
+      10.0,
+      14.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "explorer-1-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "pegasus-satellite",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "biosatellite-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "ofo-satellite",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "pioneer-4-probe",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "ranger-3-probe",
+        "transferPercent": 17.5
+      },
+      {
+        "sourceComponentId": "pioneer-2-probe",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "surveyor-lander",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "pioneer-6-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "mariner-10-probe",
+        "transferPercent": 27.5
+      },
+      {
+        "sourceComponentId": "mariner-5-probe",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "pioneer-venus-orbiter-probe",
+        "transferPercent": 32.5
+      },
+      {
+        "sourceComponentId": "pioneer-venus-multiprobe-craft",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "mariner-6-probe",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "mariner-9-probe",
+        "transferPercent": 32.5
+      },
+      {
+        "sourceComponentId": "viking-orbiter",
+        "transferPercent": 42.5
+      },
+      {
+        "sourceComponentId": "viking-lander",
+        "transferPercent": 37.5
+      },
+      {
+        "sourceComponentId": "pioneer-10-probe",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "pioneer-11-probe",
+        "transferPercent": 30.0
+      }
+    ],
+    "maintenanceCost": 338,
+    "creationCost": 3375,
+    "unitCost": 2194,
+    "mass": 388.0,
+    "agency": "NASA",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "surveyor-lander",
+    "associatedSkill": "SPACE_PROBES",
+    "baselineReliability": 3.0,
+    "maxReliability": 91.75,
+    "maxRdReliability": 89.13,
+    "rdSlotBandMaxAmounts": [
+      3.0,
+      6.0,
+      8.0,
+      12.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "explorer-1-satellite",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "pegasus-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "biosatellite-satellite",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "ofo-satellite",
+        "transferPercent": 2.5
+      },
+      {
+        "sourceComponentId": "pioneer-4-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "ranger-3-probe",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "pioneer-2-probe",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "lunar-orbiter-probe",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "pioneer-6-probe",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "mariner-10-probe",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "mariner-5-probe",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "pioneer-venus-orbiter-probe",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "pioneer-venus-multiprobe-craft",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "mariner-6-probe",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "mariner-9-probe",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "viking-orbiter",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "viking-lander",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "pioneer-10-probe",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "pioneer-11-probe",
+        "transferPercent": 12.5
+      }
+    ],
+    "maintenanceCost": 375,
+    "creationCost": 3750,
+    "unitCost": 2438,
+    "mass": 1035.0,
+    "agency": "NASA",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "luna-15-probe",
+    "associatedSkill": "SPACE_PROBES",
+    "baselineReliability": 3.0,
+    "maxReliability": 91.63,
+    "maxRdReliability": 89.01,
+    "rdSlotBandMaxAmounts": [
+      2.0,
+      5.0,
+      6.0,
+      9.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "sputnik-1-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "sputnik-2-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "luna-3-probe",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "zond-5-probe",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "luna-2-probe",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "luna-17-lander",
+        "transferPercent": 45.0
+      },
+      {
+        "sourceComponentId": "lunokhod-1-rover",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "venera-15-probe",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "venera-7-probe",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "venera-9-probe",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "mars-2-probe",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "mars-m69-probe",
+        "transferPercent": 20.0
+      }
+    ],
+    "maintenanceCost": 450,
+    "creationCost": 4500,
+    "unitCost": 2925,
+    "mass": 5600.0,
+    "agency": "SOVIET",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "luna-3-probe",
+    "associatedSkill": "SPACE_PROBES",
+    "baselineReliability": 3.0,
+    "maxReliability": 92.75,
+    "maxRdReliability": 88.78,
+    "rdSlotBandMaxAmounts": [
+      6.0,
+      12.0,
+      16.0,
+      23.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "sputnik-1-satellite",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "sputnik-2-satellite",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "zond-5-probe",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "luna-2-probe",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "luna-15-probe",
+        "transferPercent": 45.0
+      },
+      {
+        "sourceComponentId": "luna-17-lander",
+        "transferPercent": 42.5
+      },
+      {
+        "sourceComponentId": "lunokhod-1-rover",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "venera-15-probe",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "venera-7-probe",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "venera-9-probe",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "mars-2-probe",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "mars-m69-probe",
+        "transferPercent": 37.5
+      }
+    ],
+    "maintenanceCost": 225,
+    "creationCost": 2250,
+    "unitCost": 1463,
+    "mass": 38.0,
+    "agency": "SOVIET",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "luna-17-lander",
+    "associatedSkill": "SPACE_PROBES",
+    "baselineReliability": 3.0,
+    "maxReliability": 92.75,
+    "maxRdReliability": 88.78,
+    "rdSlotBandMaxAmounts": [
+      6.0,
+      12.0,
+      16.0,
+      23.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "sputnik-1-satellite",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "sputnik-2-satellite",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "luna-3-probe",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "zond-5-probe",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "luna-2-probe",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "luna-15-probe",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "venera-15-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "venera-7-probe",
+        "transferPercent": 22.5
+      },
+      {
+        "sourceComponentId": "venera-9-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "mars-2-probe",
+        "transferPercent": 32.5
+      },
+      {
+        "sourceComponentId": "mars-m69-probe",
+        "transferPercent": 17.5
+      },
+      {
+        "sourceComponentId": "lk-lander",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "lk-700-spacecraft",
+        "transferPercent": 15.0
+      }
+    ],
+    "maintenanceCost": 225,
+    "creationCost": 2250,
+    "unitCost": 1463,
+    "mass": 38.0,
+    "agency": "SOVIET",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "lunokhod-1-rover",
+    "associatedSkill": "SPACE_PROBES",
+    "baselineReliability": 3.0,
+    "maxReliability": 91.75,
+    "maxRdReliability": 89.13,
+    "rdSlotBandMaxAmounts": [
+      3.0,
+      6.0,
+      8.0,
+      12.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "sputnik-1-satellite",
+        "transferPercent": 2.5
+      },
+      {
+        "sourceComponentId": "sputnik-2-satellite",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "luna-3-probe",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "zond-5-probe",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "luna-2-probe",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "luna-15-probe",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "venera-15-probe",
+        "transferPercent": 2.5
+      },
+      {
+        "sourceComponentId": "venera-7-probe",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "venera-9-probe",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "mars-2-probe",
+        "transferPercent": 37.5
+      },
+      {
+        "sourceComponentId": "mars-m69-probe",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "lk-lander",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "lk-700-spacecraft",
+        "transferPercent": 5.0
+      }
+    ],
+    "maintenanceCost": 375,
+    "creationCost": 3750,
+    "unitCost": 2438,
+    "mass": 1035.0,
+    "agency": "SOVIET",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "pioneer-6-probe",
+    "associatedSkill": "SPACE_PROBES",
+    "baselineReliability": 3.0,
+    "maxReliability": 92.5,
+    "maxRdReliability": 89.83,
+    "rdSlotBandMaxAmounts": [
+      5.0,
+      10.0,
+      13.0,
+      19.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "explorer-1-satellite",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "pegasus-satellite",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "biosatellite-satellite",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "ofo-satellite",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "pioneer-4-probe",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "ranger-3-probe",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "pioneer-2-probe",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "lunar-orbiter-probe",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "surveyor-lander",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "mariner-10-probe",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "mariner-5-probe",
+        "transferPercent": 32.5
+      },
+      {
+        "sourceComponentId": "pioneer-venus-orbiter-probe",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "pioneer-venus-multiprobe-craft",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "mariner-6-probe",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "mariner-9-probe",
+        "transferPercent": 32.5
+      },
+      {
+        "sourceComponentId": "viking-orbiter",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "viking-lander",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "pioneer-10-probe",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "pioneer-11-probe",
+        "transferPercent": 50.0
+      }
+    ],
+    "maintenanceCost": 188,
+    "creationCost": 1875,
+    "unitCost": 1219,
+    "mass": 64.0,
+    "agency": "NASA",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "mariner-10-probe",
+    "associatedSkill": "SPACE_PROBES",
+    "baselineReliability": 3.0,
+    "maxReliability": 92.5,
+    "maxRdReliability": 89.83,
+    "rdSlotBandMaxAmounts": [
+      5.0,
+      10.0,
+      13.0,
+      19.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "explorer-1-satellite",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "pegasus-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "biosatellite-satellite",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "ofo-satellite",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "pioneer-4-probe",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "ranger-3-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "pioneer-2-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "lunar-orbiter-probe",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "surveyor-lander",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "pioneer-6-probe",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "mariner-5-probe",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "pioneer-venus-orbiter-probe",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "pioneer-venus-multiprobe-craft",
+        "transferPercent": 37.5
+      },
+      {
+        "sourceComponentId": "mariner-6-probe",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "mariner-9-probe",
+        "transferPercent": 22.5
+      },
+      {
+        "sourceComponentId": "viking-orbiter",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "viking-lander",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "pioneer-10-probe",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "pioneer-11-probe",
+        "transferPercent": 40.0
+      }
+    ],
+    "maintenanceCost": 210,
+    "creationCost": 2100,
+    "unitCost": 1365,
+    "mass": 526.0,
+    "agency": "NASA",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "mariner-5-probe",
+    "associatedSkill": "SPACE_PROBES",
+    "baselineReliability": 3.0,
+    "maxReliability": 92.0,
+    "maxRdReliability": 89.36,
+    "rdSlotBandMaxAmounts": [
+      5.0,
+      10.0,
+      13.0,
+      19.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "explorer-1-satellite",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "pegasus-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "biosatellite-satellite",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "ofo-satellite",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "pioneer-4-probe",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "ranger-3-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "pioneer-2-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "lunar-orbiter-probe",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "surveyor-lander",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "pioneer-6-probe",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "mariner-10-probe",
+        "transferPercent": 45.0
+      },
+      {
+        "sourceComponentId": "pioneer-venus-orbiter-probe",
+        "transferPercent": 45.0
+      },
+      {
+        "sourceComponentId": "pioneer-venus-multiprobe-craft",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "mariner-6-probe",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "mariner-9-probe",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "viking-orbiter",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "viking-lander",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "pioneer-10-probe",
+        "transferPercent": 45.0
+      },
+      {
+        "sourceComponentId": "pioneer-11-probe",
+        "transferPercent": 45.0
+      }
+    ],
+    "maintenanceCost": 210,
+    "creationCost": 2100,
+    "unitCost": 1365,
+    "mass": 244.0,
+    "agency": "NASA",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "pioneer-venus-orbiter-probe",
+    "associatedSkill": "SPACE_PROBES",
+    "baselineReliability": 3.0,
+    "maxReliability": 91.4,
+    "maxRdReliability": 88.8,
+    "rdSlotBandMaxAmounts": [
+      3.0,
+      7.0,
+      9.0,
+      13.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "explorer-1-satellite",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "pegasus-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "biosatellite-satellite",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "ofo-satellite",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "pioneer-4-probe",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "ranger-3-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "pioneer-2-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "lunar-orbiter-probe",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "surveyor-lander",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "pioneer-6-probe",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "mariner-10-probe",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "mariner-5-probe",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "pioneer-venus-multiprobe-craft",
+        "transferPercent": 47.5
+      },
+      {
+        "sourceComponentId": "mariner-6-probe",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "mariner-9-probe",
+        "transferPercent": 22.5
+      },
+      {
+        "sourceComponentId": "viking-orbiter",
+        "transferPercent": 32.5
+      },
+      {
+        "sourceComponentId": "viking-lander",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "pioneer-10-probe",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "pioneer-11-probe",
+        "transferPercent": 30.0
+      }
+    ],
+    "maintenanceCost": 278,
+    "creationCost": 2775,
+    "unitCost": 1804,
+    "mass": 582.0,
+    "agency": "NASA",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "pioneer-venus-multiprobe-craft",
+    "associatedSkill": "SPACE_PROBES",
+    "baselineReliability": 3.0,
+    "maxReliability": 91.6,
+    "maxRdReliability": 88.99,
+    "rdSlotBandMaxAmounts": [
+      3.0,
+      6.0,
+      8.0,
+      11.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "explorer-1-satellite",
+        "transferPercent": 2.5
+      },
+      {
+        "sourceComponentId": "pegasus-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "biosatellite-satellite",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "ofo-satellite",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "pioneer-4-probe",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "ranger-3-probe",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "pioneer-2-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "lunar-orbiter-probe",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "surveyor-lander",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "pioneer-6-probe",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "mariner-10-probe",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "mariner-5-probe",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "pioneer-venus-orbiter-probe",
+        "transferPercent": 32.5
+      },
+      {
+        "sourceComponentId": "mariner-6-probe",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "mariner-9-probe",
+        "transferPercent": 17.5
+      },
+      {
+        "sourceComponentId": "viking-orbiter",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "viking-lander",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "pioneer-10-probe",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "pioneer-11-probe",
+        "transferPercent": 25.0
+      }
+    ],
+    "maintenanceCost": 368,
+    "creationCost": 3675,
+    "unitCost": 2389,
+    "mass": 875.0,
+    "agency": "NASA",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "venera-15-probe",
+    "associatedSkill": "SPACE_PROBES",
+    "baselineReliability": 3.0,
+    "maxReliability": 91.7,
+    "maxRdReliability": 89.08,
+    "rdSlotBandMaxAmounts": [
+      3.0,
+      7.0,
+      9.0,
+      13.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "sputnik-1-satellite",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "sputnik-2-satellite",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "luna-3-probe",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "zond-5-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "luna-2-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "luna-15-probe",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "luna-17-lander",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "lunokhod-1-rover",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "venera-7-probe",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "venera-9-probe",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "mars-2-probe",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "mars-m69-probe",
+        "transferPercent": 15.0
+      }
+    ],
+    "maintenanceCost": 278,
+    "creationCost": 2775,
+    "unitCost": 1804,
+    "mass": 4000.0,
+    "agency": "SOVIET",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "venera-7-probe",
+    "associatedSkill": "SPACE_PROBES",
+    "baselineReliability": 3.0,
+    "maxReliability": 90.8,
+    "maxRdReliability": 88.24,
+    "rdSlotBandMaxAmounts": [
+      3.0,
+      5.0,
+      7.0,
+      10.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "sputnik-1-satellite",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "sputnik-2-satellite",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "luna-3-probe",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "zond-5-probe",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "luna-2-probe",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "luna-15-probe",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "luna-17-lander",
+        "transferPercent": 22.5
+      },
+      {
+        "sourceComponentId": "lunokhod-1-rover",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "venera-15-probe",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "venera-9-probe",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "mars-2-probe",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "mars-m69-probe",
+        "transferPercent": 12.5
+      }
+    ],
+    "maintenanceCost": 420,
+    "creationCost": 4200,
+    "unitCost": 2730,
+    "mass": 1180.0,
+    "agency": "SOVIET",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "venera-9-probe",
+    "associatedSkill": "SPACE_PROBES",
+    "baselineReliability": 3.0,
+    "maxReliability": 91.4,
+    "maxRdReliability": 88.8,
+    "rdSlotBandMaxAmounts": [
+      2.0,
+      4.0,
+      6.0,
+      8.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "sputnik-1-satellite",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "sputnik-2-satellite",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "luna-3-probe",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "zond-5-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "luna-2-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "luna-15-probe",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "luna-17-lander",
+        "transferPercent": 17.5
+      },
+      {
+        "sourceComponentId": "lunokhod-1-rover",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "venera-15-probe",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "venera-7-probe",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "mars-2-probe",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "mars-m69-probe",
+        "transferPercent": 15.0
+      }
+    ],
+    "maintenanceCost": 675,
+    "creationCost": 6750,
+    "unitCost": 4388,
+    "mass": 5030.0,
+    "agency": "SOVIET",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "mariner-6-probe",
+    "associatedSkill": "SPACE_PROBES",
+    "baselineReliability": 3.0,
+    "maxReliability": 92.5,
+    "maxRdReliability": 89.83,
+    "rdSlotBandMaxAmounts": [
+      5.0,
+      10.0,
+      13.0,
+      19.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "explorer-1-satellite",
+        "transferPercent": 2.5
+      },
+      {
+        "sourceComponentId": "pegasus-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "biosatellite-satellite",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "ofo-satellite",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "pioneer-4-probe",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "ranger-3-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "pioneer-2-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "lunar-orbiter-probe",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "surveyor-lander",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "pioneer-6-probe",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "mariner-10-probe",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "mariner-5-probe",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "pioneer-venus-orbiter-probe",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "pioneer-venus-multiprobe-craft",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "mariner-9-probe",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "viking-orbiter",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "viking-lander",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "pioneer-10-probe",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "pioneer-11-probe",
+        "transferPercent": 40.0
+      }
+    ],
+    "maintenanceCost": 210,
+    "creationCost": 2100,
+    "unitCost": 1365,
+    "mass": 412.0,
+    "agency": "NASA",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "mariner-9-probe",
+    "associatedSkill": "SPACE_PROBES",
+    "baselineReliability": 3.0,
+    "maxReliability": 92.13,
+    "maxRdReliability": 89.48,
+    "rdSlotBandMaxAmounts": [
+      3.0,
+      7.0,
+      9.0,
+      13.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "explorer-1-satellite",
+        "transferPercent": 2.5
+      },
+      {
+        "sourceComponentId": "pegasus-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "biosatellite-satellite",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "ofo-satellite",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "pioneer-4-probe",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "ranger-3-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "pioneer-2-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "lunar-orbiter-probe",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "surveyor-lander",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "pioneer-6-probe",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "mariner-10-probe",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "mariner-5-probe",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "pioneer-venus-orbiter-probe",
+        "transferPercent": 37.5
+      },
+      {
+        "sourceComponentId": "pioneer-venus-multiprobe-craft",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "mariner-6-probe",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "viking-orbiter",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "viking-lander",
+        "transferPercent": 45.0
+      },
+      {
+        "sourceComponentId": "pioneer-10-probe",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "pioneer-11-probe",
+        "transferPercent": 25.0
+      }
+    ],
+    "maintenanceCost": 278,
+    "creationCost": 2775,
+    "unitCost": 1804,
+    "mass": 985.0,
+    "agency": "NASA",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "viking-orbiter",
+    "associatedSkill": "SPACE_PROBES",
+    "baselineReliability": 3.0,
+    "maxReliability": 91.88,
+    "maxRdReliability": 89.24,
+    "rdSlotBandMaxAmounts": [
+      3.0,
+      5.0,
+      7.0,
+      10.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "explorer-1-satellite",
+        "transferPercent": 2.5
+      },
+      {
+        "sourceComponentId": "pegasus-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "biosatellite-satellite",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "ofo-satellite",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "pioneer-4-probe",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "ranger-3-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "pioneer-2-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "lunar-orbiter-probe",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "surveyor-lander",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "pioneer-6-probe",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "mariner-10-probe",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "mariner-5-probe",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "pioneer-venus-orbiter-probe",
+        "transferPercent": 27.5
+      },
+      {
+        "sourceComponentId": "pioneer-venus-multiprobe-craft",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "mariner-6-probe",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "mariner-9-probe",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "pioneer-10-probe",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "pioneer-11-probe",
+        "transferPercent": 20.0
+      }
+    ],
+    "maintenanceCost": 368,
+    "creationCost": 3675,
+    "unitCost": 2389,
+    "mass": 883.0,
+    "agency": "NASA",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "viking-lander",
+    "associatedSkill": "SPACE_PROBES",
+    "baselineReliability": 3.0,
+    "maxReliability": 91.63,
+    "maxRdReliability": 89.01,
+    "rdSlotBandMaxAmounts": [
+      2.0,
+      4.0,
+      6.0,
+      8.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "explorer-1-satellite",
+        "transferPercent": 2.5
+      },
+      {
+        "sourceComponentId": "pegasus-satellite",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "biosatellite-satellite",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "ofo-satellite",
+        "transferPercent": 2.5
+      },
+      {
+        "sourceComponentId": "pioneer-4-probe",
+        "transferPercent": 2.5
+      },
+      {
+        "sourceComponentId": "ranger-3-probe",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "pioneer-2-probe",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "lunar-orbiter-probe",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "surveyor-lander",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "pioneer-6-probe",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "mariner-10-probe",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "mariner-5-probe",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "pioneer-venus-orbiter-probe",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "pioneer-venus-multiprobe-craft",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "mariner-6-probe",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "mariner-9-probe",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "pioneer-10-probe",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "pioneer-11-probe",
+        "transferPercent": 5.0
+      }
+    ],
+    "maintenanceCost": 638,
+    "creationCost": 6375,
+    "unitCost": 4144,
+    "mass": 572.0,
+    "agency": "NASA",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "mars-2-probe",
+    "associatedSkill": "SPACE_PROBES",
+    "baselineReliability": 3.0,
+    "maxReliability": 92.0,
+    "maxRdReliability": 89.36,
+    "rdSlotBandMaxAmounts": [
+      2.0,
+      4.0,
+      6.0,
+      8.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "sputnik-1-satellite",
+        "transferPercent": 2.5
+      },
+      {
+        "sourceComponentId": "sputnik-2-satellite",
+        "transferPercent": 2.5
+      },
+      {
+        "sourceComponentId": "luna-3-probe",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "zond-5-probe",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "luna-2-probe",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "luna-15-probe",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "luna-17-lander",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "lunokhod-1-rover",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "venera-15-probe",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "venera-7-probe",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "venera-9-probe",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "mars-m69-probe",
+        "transferPercent": 20.0
+      }
+    ],
+    "maintenanceCost": 750,
+    "creationCost": 7500,
+    "unitCost": 4875,
+    "mass": 4647.0,
+    "agency": "SOVIET",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "mars-m69-probe",
+    "associatedSkill": "SPACE_PROBES",
+    "baselineReliability": 3.0,
+    "maxReliability": 91.88,
+    "maxRdReliability": 89.24,
+    "rdSlotBandMaxAmounts": [
+      3.0,
+      5.0,
+      7.0,
+      10.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "sputnik-1-satellite",
+        "transferPercent": 2.5
+      },
+      {
+        "sourceComponentId": "sputnik-2-satellite",
+        "transferPercent": 2.5
+      },
+      {
+        "sourceComponentId": "luna-3-probe",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "zond-5-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "luna-2-probe",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "luna-15-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "luna-17-lander",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "lunokhod-1-rover",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "venera-15-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "venera-7-probe",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "venera-9-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "mars-2-probe",
+        "transferPercent": 35.0
+      }
+    ],
+    "maintenanceCost": 368,
+    "creationCost": 3675,
+    "unitCost": 2389,
+    "mass": 4647.0,
+    "agency": "SOVIET",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "pioneer-10-probe",
+    "associatedSkill": "SPACE_PROBES",
+    "baselineReliability": 3.0,
+    "maxReliability": 94.0,
+    "maxRdReliability": 91.22,
+    "rdSlotBandMaxAmounts": [
+      4.0,
+      8.0,
+      11.0,
+      16.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "explorer-1-satellite",
+        "transferPercent": 2.5
+      },
+      {
+        "sourceComponentId": "pegasus-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "biosatellite-satellite",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "ofo-satellite",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "pioneer-4-probe",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "ranger-3-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "pioneer-2-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "lunar-orbiter-probe",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "surveyor-lander",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "pioneer-6-probe",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "mariner-10-probe",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "mariner-5-probe",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "pioneer-venus-orbiter-probe",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "pioneer-venus-multiprobe-craft",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "mariner-6-probe",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "mariner-9-probe",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "viking-orbiter",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "viking-lander",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "pioneer-11-probe",
+        "transferPercent": 50.0
+      }
+    ],
+    "maintenanceCost": 248,
+    "creationCost": 2475,
+    "unitCost": 1609,
+    "mass": 258.0,
+    "agency": "NASA",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "pioneer-11-probe",
+    "associatedSkill": "SPACE_PROBES",
+    "baselineReliability": 3.0,
+    "maxReliability": 94.25,
+    "maxRdReliability": 91.45,
+    "rdSlotBandMaxAmounts": [
+      4.0,
+      8.0,
+      11.0,
+      16.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "explorer-1-satellite",
+        "transferPercent": 2.5
+      },
+      {
+        "sourceComponentId": "pegasus-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "biosatellite-satellite",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "ofo-satellite",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "pioneer-4-probe",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "ranger-3-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "pioneer-2-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "lunar-orbiter-probe",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "surveyor-lander",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "pioneer-6-probe",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "mariner-10-probe",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "mariner-5-probe",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "pioneer-venus-orbiter-probe",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "pioneer-venus-multiprobe-craft",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "mariner-6-probe",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "mariner-9-probe",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "viking-orbiter",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "viking-lander",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "pioneer-10-probe",
+        "transferPercent": 50.0
+      }
+    ],
+    "maintenanceCost": 233,
+    "creationCost": 2325,
+    "unitCost": 1512,
+    "mass": 258.0,
+    "agency": "NASA",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "agena-target-vehicle",
+    "associatedSkill": "SPACE_PROBES",
+    "baselineReliability": 3.0,
+    "maxReliability": 97.4,
+    "maxRdReliability": 90.78,
+    "rdSlotBandMaxAmounts": [
+      5.0,
+      9.0,
+      12.0,
+      17.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "explorer-1-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "pegasus-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "biosatellite-satellite",
+        "transferPercent": 2.5
+      },
+      {
+        "sourceComponentId": "ofo-satellite",
+        "transferPercent": 2.5
+      },
+      {
+        "sourceComponentId": "gemini-transtage",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "s-ivb-space-tug",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "gemini-lunar-propulsion-module",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "gemini-direct-ascent-craft",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "gemini-eor-service-module",
+        "transferPercent": 40.0
+      }
+    ],
+    "maintenanceCost": 158,
+    "creationCost": 1575,
+    "unitCost": 1024,
+    "mass": 3260.0,
+    "agency": "NASA",
+    "rocket": null,
+    "ownLift": {
+      "payloadToSuborbital": 0.0,
+      "payloadToLeo": 2410.0,
+      "payloadToTli": 0.0,
+      "payloadToTpi": 0.0
+    }
+  },
+  {
+    "id": "x-15-aircraft",
+    "associatedSkill": "CREWED_SPACECRAFT",
+    "baselineReliability": 3.0,
+    "maxReliability": 97.4,
+    "maxRdReliability": 92.48,
+    "rdSlotBandMaxAmounts": [
+      10.0,
+      18.0,
+      24.0,
+      35.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "biosatellite-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "ofo-satellite",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "mercury-capsule",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "gemini-capsule",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "apollo-csm",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "apollo-lunar-module",
+        "transferPercent": 2.5
+      },
+      {
+        "sourceComponentId": "langley-lunar-lander",
+        "transferPercent": 2.5
+      }
+    ],
+    "maintenanceCost": 105,
+    "creationCost": 1050,
+    "unitCost": 683,
+    "mass": 0.0,
+    "agency": "NASA",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "mig-e-154-spaceplane",
+    "associatedSkill": "CREWED_SPACECRAFT",
+    "baselineReliability": 3.0,
+    "maxReliability": 96.95,
+    "maxRdReliability": 92.02,
+    "rdSlotBandMaxAmounts": [
+      3.0,
+      6.0,
+      8.0,
+      12.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "sputnik-2-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "vostok-capsule",
+        "transferPercent": 2.5
+      },
+      {
+        "sourceComponentId": "voskhod-capsule",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "soyuz-7k-l1-spacecraft",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "soyuz-7k-lok-spacecraft",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "lk-lander",
+        "transferPercent": 2.5
+      },
+      {
+        "sourceComponentId": "lk-700-spacecraft",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "soyuz-7k-ok-spacecraft",
+        "transferPercent": 40.0
+      }
+    ],
+    "maintenanceCost": 184,
+    "creationCost": 1838,
+    "unitCost": 1195,
+    "mass": 4500.0,
+    "agency": "SOVIET",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "mercury-capsule",
+    "associatedSkill": "CREWED_SPACECRAFT",
+    "baselineReliability": 3.0,
+    "maxReliability": 97.1,
+    "maxRdReliability": 91.24,
+    "rdSlotBandMaxAmounts": [
+      5.0,
+      9.0,
+      12.0,
+      18.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "biosatellite-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "ofo-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "pioneer-4-probe",
+        "transferPercent": 2.5
+      },
+      {
+        "sourceComponentId": "pioneer-6-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "x-15-aircraft",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "gemini-capsule",
+        "transferPercent": 45.0
+      },
+      {
+        "sourceComponentId": "apollo-csm",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "apollo-lunar-module",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "langley-lunar-lander",
+        "transferPercent": 10.0
+      }
+    ],
+    "maintenanceCost": 158,
+    "creationCost": 1575,
+    "unitCost": 1024,
+    "mass": 1355.0,
+    "agency": "NASA",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "vostok-capsule",
+    "associatedSkill": "CREWED_SPACECRAFT",
+    "baselineReliability": 3.0,
+    "maxReliability": 97.25,
+    "maxRdReliability": 91.4,
+    "rdSlotBandMaxAmounts": [
+      5.0,
+      9.0,
+      12.0,
+      17.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "sputnik-2-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "luna-3-probe",
+        "transferPercent": 2.5
+      },
+      {
+        "sourceComponentId": "zond-5-probe",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "mig-e-154-spaceplane",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "voskhod-capsule",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "soyuz-7k-l1-spacecraft",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "soyuz-7k-lok-spacecraft",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "lk-lander",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "lk-700-spacecraft",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "soyuz-7k-ok-spacecraft",
+        "transferPercent": 30.0
+      }
+    ],
+    "maintenanceCost": 147,
+    "creationCost": 1470,
+    "unitCost": 956,
+    "mass": 4700.0,
+    "agency": "SOVIET",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "voskhod-capsule",
+    "associatedSkill": "CREWED_SPACECRAFT",
+    "baselineReliability": 3.0,
+    "maxReliability": 95.3,
+    "maxRdReliability": 90.0,
+    "rdSlotBandMaxAmounts": [
+      4.0,
+      8.0,
+      10.0,
+      15.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "sputnik-2-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "luna-3-probe",
+        "transferPercent": 2.5
+      },
+      {
+        "sourceComponentId": "zond-5-probe",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "mig-e-154-spaceplane",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "vostok-capsule",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "soyuz-7k-l1-spacecraft",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "soyuz-7k-lok-spacecraft",
+        "transferPercent": 27.5
+      },
+      {
+        "sourceComponentId": "lk-lander",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "lk-700-spacecraft",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "soyuz-7k-ok-spacecraft",
+        "transferPercent": 27.5
+      }
+    ],
+    "maintenanceCost": 420,
+    "creationCost": 4200,
+    "unitCost": 2730,
+    "mass": 5682.0,
+    "agency": "SOVIET",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "gemini-capsule",
+    "associatedSkill": "CREWED_SPACECRAFT",
+    "baselineReliability": 3.0,
+    "maxReliability": 97.25,
+    "maxRdReliability": 91.86,
+    "rdSlotBandMaxAmounts": [
+      4.0,
+      7.0,
+      10.0,
+      14.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "biosatellite-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "ofo-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "pioneer-4-probe",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "pioneer-6-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "x-15-aircraft",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "mercury-capsule",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "apollo-csm",
+        "transferPercent": 45.0
+      },
+      {
+        "sourceComponentId": "apollo-lunar-module",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "langley-lunar-lander",
+        "transferPercent": 10.0
+      }
+    ],
+    "maintenanceCost": 578,
+    "creationCost": 5775,
+    "unitCost": 3754,
+    "mass": 3851.0,
+    "agency": "NASA",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "gemini-transtage",
+    "associatedSkill": "CREWED_SPACECRAFT",
+    "baselineReliability": 3.0,
+    "maxReliability": 96.8,
+    "maxRdReliability": 90.16,
+    "rdSlotBandMaxAmounts": [
+      3.0,
+      7.0,
+      9.0,
+      13.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "atlas-centaur",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "titan-3c",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "pioneer-4-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "agena-target-vehicle",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "gemini-lunar-propulsion-module",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "gemini-direct-ascent-craft",
+        "transferPercent": 55.0
+      },
+      {
+        "sourceComponentId": "gemini-eor-service-module",
+        "transferPercent": 60.0
+      }
+    ],
+    "maintenanceCost": 210,
+    "creationCost": 2100,
+    "unitCost": 1365,
+    "mass": 15200.0,
+    "agency": "NASA",
+    "rocket": null,
+    "ownLift": {
+      "payloadToSuborbital": 0.0,
+      "payloadToLeo": 4563.0,
+      "payloadToTli": 0.0,
+      "payloadToTpi": 0.0
+    }
+  },
+  {
+    "id": "gemini-lunar-propulsion-module",
+    "associatedSkill": "CREWED_SPACECRAFT",
+    "baselineReliability": 3.0,
+    "maxReliability": 96.95,
+    "maxRdReliability": 90.23,
+    "rdSlotBandMaxAmounts": [
+      3.0,
+      6.0,
+      8.0,
+      11.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "agena-target-vehicle",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "gemini-transtage",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "s-ivb-space-tug",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "gemini-direct-ascent-craft",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "gemini-eor-service-module",
+        "transferPercent": 35.0
+      }
+    ],
+    "maintenanceCost": 315,
+    "creationCost": 3150,
+    "unitCost": 2048,
+    "mass": 10064.0,
+    "agency": "NASA",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "gemini-direct-ascent-craft",
+    "associatedSkill": "CREWED_SPACECRAFT",
+    "baselineReliability": 3.0,
+    "maxReliability": 97.1,
+    "maxRdReliability": 90.31,
+    "rdSlotBandMaxAmounts": [
+      2.0,
+      4.0,
+      5.0,
+      7.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "surveyor-lander",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "agena-target-vehicle",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "gemini-transtage",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "s-ivb-space-tug",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "gemini-lunar-propulsion-module",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "gemini-eor-service-module",
+        "transferPercent": 30.0
+      }
+    ],
+    "maintenanceCost": 1050,
+    "creationCost": 10500,
+    "unitCost": 6825,
+    "mass": 42000.0,
+    "agency": "NASA",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "gemini-eor-service-module",
+    "associatedSkill": "CREWED_SPACECRAFT",
+    "baselineReliability": 3.0,
+    "maxReliability": 96.95,
+    "maxRdReliability": 90.23,
+    "rdSlotBandMaxAmounts": [
+      3.0,
+      6.0,
+      8.0,
+      11.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "s-ivb-space-tug",
+        "transferPercent": 37.5
+      }
+    ],
+    "maintenanceCost": 315,
+    "creationCost": 3150,
+    "unitCost": 2048,
+    "mass": 10064.0,
+    "agency": "NASA",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "langley-lunar-lander",
+    "associatedSkill": "CREWED_SPACECRAFT",
+    "baselineReliability": 3.0,
+    "maxReliability": 97.85,
+    "maxRdReliability": 92.33,
+    "rdSlotBandMaxAmounts": [
+      2.0,
+      4.0,
+      6.0,
+      8.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "biosatellite-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "ofo-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "pioneer-4-probe",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "ranger-3-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "surveyor-lander",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "pioneer-6-probe",
+        "transferPercent": 10.0
+      }
+    ],
+    "maintenanceCost": 420,
+    "creationCost": 4200,
+    "unitCost": 2730,
+    "mass": 4372.0,
+    "agency": "NASA",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "s-ivb-space-tug",
+    "associatedSkill": "CREWED_SPACECRAFT",
+    "baselineReliability": 3.0,
+    "maxReliability": 96.8,
+    "maxRdReliability": 90.16,
+    "rdSlotBandMaxAmounts": [
+      3.0,
+      5.0,
+      7.0,
+      10.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "saturn-1b",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "saturn-c3b",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "saturn-v",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "pioneer-4-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "agena-target-vehicle",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "gemini-transtage",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "gemini-lunar-propulsion-module",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "gemini-direct-ascent-craft",
+        "transferPercent": 22.5
+      },
+      {
+        "sourceComponentId": "gemini-eor-service-module",
+        "transferPercent": 20.0
+      }
+    ],
+    "maintenanceCost": 210,
+    "creationCost": 2100,
+    "unitCost": 1365,
+    "mass": 15200.0,
+    "agency": "NASA",
+    "rocket": null,
+    "ownLift": {
+      "payloadToSuborbital": 0.0,
+      "payloadToLeo": 4563.0,
+      "payloadToTli": 0.0,
+      "payloadToTpi": 0.0
+    }
+  },
+  {
+    "id": "apollo-csm",
+    "associatedSkill": "CREWED_SPACECRAFT",
+    "baselineReliability": 3.0,
+    "maxReliability": 97.85,
+    "maxRdReliability": 92.79,
+    "rdSlotBandMaxAmounts": [
+      2.0,
+      4.0,
+      5.0,
+      7.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "biosatellite-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "ofo-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "pioneer-4-probe",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "pioneer-6-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "x-15-aircraft",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "mercury-capsule",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "gemini-capsule",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "apollo-lunar-module",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "langley-lunar-lander",
+        "transferPercent": 2.5
+      }
+    ],
+    "maintenanceCost": 945,
+    "creationCost": 9450,
+    "unitCost": 6143,
+    "mass": 30329.0,
+    "agency": "NASA",
+    "rocket": null,
+    "ownLift": {
+      "payloadToSuborbital": 0.0,
+      "payloadToLeo": 11829.0,
+      "payloadToTli": 0.0,
+      "payloadToTpi": 0.0
+    }
+  },
+  {
+    "id": "apollo-lunar-module",
+    "associatedSkill": "CREWED_SPACECRAFT",
+    "baselineReliability": 3.0,
+    "maxReliability": 97.85,
+    "maxRdReliability": 92.33,
+    "rdSlotBandMaxAmounts": [
+      2.0,
+      4.0,
+      6.0,
+      8.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "biosatellite-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "ofo-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "pioneer-4-probe",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "ranger-3-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "surveyor-lander",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "pioneer-6-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "x-15-aircraft",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "mercury-capsule",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "gemini-capsule",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "apollo-csm",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "langley-lunar-lander",
+        "transferPercent": 50.0
+      }
+    ],
+    "maintenanceCost": 630,
+    "creationCost": 6300,
+    "unitCost": 4095,
+    "mass": 14696.0,
+    "agency": "NASA",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "soyuz-7k-l1-spacecraft",
+    "associatedSkill": "CREWED_SPACECRAFT",
+    "baselineReliability": 3.0,
+    "maxReliability": 96.5,
+    "maxRdReliability": 90.93,
+    "rdSlotBandMaxAmounts": [
+      3.0,
+      6.0,
+      8.0,
+      11.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "sputnik-2-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "luna-3-probe",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "zond-5-probe",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "mig-e-154-spaceplane",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "vostok-capsule",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "voskhod-capsule",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "soyuz-7k-lok-spacecraft",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "lk-lander",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "lk-700-spacecraft",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "soyuz-7k-ok-spacecraft",
+        "transferPercent": 55.0
+      }
+    ],
+    "maintenanceCost": 525,
+    "creationCost": 5250,
+    "unitCost": 3413,
+    "mass": 5350.0,
+    "agency": "SOVIET",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "soyuz-7k-lok-spacecraft",
+    "associatedSkill": "CREWED_SPACECRAFT",
+    "baselineReliability": 3.0,
+    "maxReliability": 97.7,
+    "maxRdReliability": 92.02,
+    "rdSlotBandMaxAmounts": [
+      2.0,
+      4.0,
+      5.0,
+      7.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "sputnik-2-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "luna-3-probe",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "zond-5-probe",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "mig-e-154-spaceplane",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "vostok-capsule",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "voskhod-capsule",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "soyuz-7k-l1-spacecraft",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "lk-lander",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "lk-700-spacecraft",
+        "transferPercent": 37.5
+      },
+      {
+        "sourceComponentId": "soyuz-7k-ok-spacecraft",
+        "transferPercent": 45.0
+      }
+    ],
+    "maintenanceCost": 788,
+    "creationCost": 7875,
+    "unitCost": 5119,
+    "mass": 9850.0,
+    "agency": "SOVIET",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "lk-lander",
+    "associatedSkill": "CREWED_SPACECRAFT",
+    "baselineReliability": 3.0,
+    "maxReliability": 97.4,
+    "maxRdReliability": 91.86,
+    "rdSlotBandMaxAmounts": [
+      2.0,
+      4.0,
+      6.0,
+      8.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "sputnik-2-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "luna-3-probe",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "zond-5-probe",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "luna-2-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "luna-15-probe",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "luna-17-lander",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "lunokhod-1-rover",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "mig-e-154-spaceplane",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "vostok-capsule",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "voskhod-capsule",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "soyuz-7k-l1-spacecraft",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "soyuz-7k-lok-spacecraft",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "lk-700-spacecraft",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "soyuz-7k-ok-spacecraft",
+        "transferPercent": 15.0
+      }
+    ],
+    "maintenanceCost": 473,
+    "creationCost": 4725,
+    "unitCost": 3072,
+    "mass": 5560.0,
+    "agency": "SOVIET",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "soyuz-7k-ok-spacecraft",
+    "associatedSkill": "CREWED_SPACECRAFT",
+    "baselineReliability": 3.0,
+    "maxReliability": 97.55,
+    "maxRdReliability": 91.71,
+    "rdSlotBandMaxAmounts": [
+      2.0,
+      4.0,
+      6.0,
+      8.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "sputnik-2-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "luna-3-probe",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "zond-5-probe",
+        "transferPercent": 45.0
+      },
+      {
+        "sourceComponentId": "mig-e-154-spaceplane",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "vostok-capsule",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "voskhod-capsule",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "soyuz-7k-l1-spacecraft",
+        "transferPercent": 45.0
+      },
+      {
+        "sourceComponentId": "soyuz-7k-lok-spacecraft",
+        "transferPercent": 45.0
+      },
+      {
+        "sourceComponentId": "lk-lander",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "lk-700-spacecraft",
+        "transferPercent": 40.0
+      }
+    ],
+    "maintenanceCost": 630,
+    "creationCost": 6300,
+    "unitCost": 4095,
+    "mass": 6560.0,
+    "agency": "SOVIET",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "igla-docking-system",
+    "associatedSkill": "CREWED_SPACECRAFT",
+    "baselineReliability": 3.0,
+    "maxReliability": 96.2,
+    "maxRdReliability": 91.24,
+    "rdSlotBandMaxAmounts": [
+      3.0,
+      6.0,
+      8.0,
+      11.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "sputnik-1-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "sputnik-2-satellite",
+        "transferPercent": 5.0
+      }
+    ],
+    "maintenanceCost": 420,
+    "creationCost": 4200,
+    "unitCost": 2730,
+    "mass": 14.5,
+    "agency": "SOVIET",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "lk-700-spacecraft",
+    "associatedSkill": "CREWED_SPACECRAFT",
+    "baselineReliability": 3.0,
+    "maxReliability": 97.7,
+    "maxRdReliability": 91.86,
+    "rdSlotBandMaxAmounts": [
+      1.0,
+      3.0,
+      4.0,
+      6.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "sputnik-2-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "luna-3-probe",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "zond-5-probe",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "luna-2-probe",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "luna-15-probe",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "luna-17-lander",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "lunokhod-1-rover",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "mig-e-154-spaceplane",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "vostok-capsule",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "voskhod-capsule",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "soyuz-7k-l1-spacecraft",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "soyuz-7k-lok-spacecraft",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "lk-lander",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "soyuz-7k-ok-spacecraft",
+        "transferPercent": 25.0
+      }
+    ],
+    "maintenanceCost": 1050,
+    "creationCost": 10500,
+    "unitCost": 6825,
+    "mass": 154000.0,
+    "agency": "SOVIET",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "gemini-eva-suit",
+    "associatedSkill": "EVA_SUITS",
+    "baselineReliability": 3.0,
+    "maxReliability": 94.0,
+    "maxRdReliability": 87.03,
+    "rdSlotBandMaxAmounts": [
+      5.0,
+      9.0,
+      12.0,
+      18.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "biosatellite-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "ofo-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "pioneer-6-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "apollo-lunar-eva-suit",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "light-lunar-eva-suit",
+        "transferPercent": 60.0
+      }
+    ],
+    "maintenanceCost": 225,
+    "creationCost": 2250,
+    "unitCost": 1463,
+    "mass": 15.4,
+    "agency": "NASA",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "apollo-lunar-eva-suit",
+    "associatedSkill": "EVA_SUITS",
+    "baselineReliability": 3.0,
+    "maxReliability": 97.84,
+    "maxRdReliability": 89.05,
+    "rdSlotBandMaxAmounts": [
+      3.0,
+      5.0,
+      7.0,
+      10.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "biosatellite-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "ofo-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "pioneer-6-probe",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "gemini-eva-suit",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "lunar-roving-vehicle",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "light-lunar-eva-suit",
+        "transferPercent": 35.0
+      }
+    ],
+    "maintenanceCost": 428,
+    "creationCost": 4275,
+    "unitCost": 2779,
+    "mass": 91.0,
+    "agency": "NASA",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "light-lunar-eva-suit",
+    "associatedSkill": "EVA_SUITS",
+    "baselineReliability": 3.0,
+    "maxReliability": 97.84,
+    "maxRdReliability": 89.05,
+    "rdSlotBandMaxAmounts": [
+      3.0,
+      5.0,
+      7.0,
+      10.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "biosatellite-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "ofo-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "pioneer-6-probe",
+        "transferPercent": 10.0
+      }
+    ],
+    "maintenanceCost": 360,
+    "creationCost": 3600,
+    "unitCost": 2340,
+    "mass": 91.0,
+    "agency": "NASA",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "lunar-roving-vehicle",
+    "associatedSkill": "EVA_SUITS",
+    "baselineReliability": 3.0,
+    "maxReliability": 98.0,
+    "maxRdReliability": 93.1,
+    "rdSlotBandMaxAmounts": [
+      2.0,
+      4.0,
+      5.0,
+      7.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "surveyor-lander",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "gemini-eva-suit",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "apollo-lunar-eva-suit",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "apollo-lunar-module",
+        "transferPercent": 15.0
+      }
+    ],
+    "maintenanceCost": 338,
+    "creationCost": 3375,
+    "unitCost": 2194,
+    "mass": 208.0,
+    "agency": "NASA",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "berkut-eva-suit",
+    "associatedSkill": "EVA_SUITS",
+    "baselineReliability": 3.0,
+    "maxReliability": 93.2,
+    "maxRdReliability": 86.62,
+    "rdSlotBandMaxAmounts": [
+      5.0,
+      9.0,
+      12.0,
+      18.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "sputnik-2-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "krechet-eva-suit",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "yastreb-eva-suit",
+        "transferPercent": 40.0
+      }
+    ],
+    "maintenanceCost": 203,
+    "creationCost": 2025,
+    "unitCost": 1317,
+    "mass": 15.0,
+    "agency": "SOVIET",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "yastreb-eva-suit",
+    "associatedSkill": "EVA_SUITS",
+    "baselineReliability": 3.0,
+    "maxReliability": 97.2,
+    "maxRdReliability": 92.29,
+    "rdSlotBandMaxAmounts": [
+      3.0,
+      6.0,
+      8.0,
+      11.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "sputnik-2-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "berkut-eva-suit",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "krechet-eva-suit",
+        "transferPercent": 40.0
+      }
+    ],
+    "maintenanceCost": 293,
+    "creationCost": 2925,
+    "unitCost": 1902,
+    "mass": 41.5,
+    "agency": "SOVIET",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "krechet-eva-suit",
+    "associatedSkill": "EVA_SUITS",
+    "baselineReliability": 3.0,
+    "maxReliability": 96.8,
+    "maxRdReliability": 88.65,
+    "rdSlotBandMaxAmounts": [
+      2.0,
+      4.0,
+      6.0,
+      8.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "sputnik-2-satellite",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "berkut-eva-suit",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "yastreb-eva-suit",
+        "transferPercent": 30.0
+      }
+    ],
+    "maintenanceCost": 417,
+    "creationCost": 4163,
+    "unitCost": 2706,
+    "mass": 106.0,
+    "agency": "SOVIET",
+    "rocket": null,
+    "ownLift": null
+  },
+  {
+    "id": "r7-sputnik",
+    "associatedSkill": "ROCKETS",
+    "baselineReliability": 3.0,
+    "maxReliability": 95.03,
+    "maxRdReliability": 85.16,
+    "rdSlotBandMaxAmounts": [
+      8.0,
+      13.0,
+      18.0,
+      26.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "r7-vostok",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "r7-voskhod",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "r7-luna",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "r7-molniya",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "proton",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "proton-k-block-d",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "r7-soyuz",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "n1",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "ur-700",
+        "transferPercent": 40.0
+      }
+    ],
+    "maintenanceCost": 250,
+    "creationCost": 2500,
+    "unitCost": 1625,
+    "mass": 0.0,
+    "agency": "SOVIET",
+    "rocket": {
+      "rocketClass": "LIGHT",
+      "payloadToSuborbital": 5370.0,
+      "payloadToLeo": 508.0,
+      "payloadToTli": 0.0,
+      "payloadToTpi": 0.0
+    },
+    "ownLift": null
+  },
+  {
+    "id": "r7-vostok",
+    "associatedSkill": "HUMAN_RATED_ROCKETS",
+    "baselineReliability": 3.0,
+    "maxReliability": 97.45,
+    "maxRdReliability": 89.74,
+    "rdSlotBandMaxAmounts": [
+      6.0,
+      9.0,
+      12.0,
+      17.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "r7-sputnik",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "r7-voskhod",
+        "transferPercent": 52.5
+      },
+      {
+        "sourceComponentId": "r7-luna",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "r7-molniya",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "proton",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "proton-k-block-d",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "r7-soyuz",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "n1",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "ur-700",
+        "transferPercent": 30.0
+      }
+    ],
+    "maintenanceCost": 525,
+    "creationCost": 5250,
+    "unitCost": 3413,
+    "mass": 0.0,
+    "agency": "SOVIET",
+    "rocket": {
+      "rocketClass": "LIGHT",
+      "payloadToSuborbital": 11000.0,
+      "payloadToLeo": 4730.0,
+      "payloadToTli": 0.0,
+      "payloadToTpi": 0.0
+    },
+    "ownLift": null
+  },
+  {
+    "id": "r7-voskhod",
+    "associatedSkill": "HUMAN_RATED_ROCKETS",
+    "baselineReliability": 3.0,
+    "maxReliability": 97.45,
+    "maxRdReliability": 89.88,
+    "rdSlotBandMaxAmounts": [
+      4.0,
+      8.0,
+      10.0,
+      15.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "r7-sputnik",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "r7-vostok",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "r7-luna",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "r7-molniya",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "proton",
+        "transferPercent": 22.5
+      },
+      {
+        "sourceComponentId": "proton-k-block-d",
+        "transferPercent": 22.5
+      },
+      {
+        "sourceComponentId": "r7-soyuz",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "n1",
+        "transferPercent": 47.5
+      },
+      {
+        "sourceComponentId": "ur-700",
+        "transferPercent": 30.0
+      }
+    ],
+    "maintenanceCost": 563,
+    "creationCost": 5625,
+    "unitCost": 3657,
+    "mass": 0.0,
+    "agency": "SOVIET",
+    "rocket": {
+      "rocketClass": "LIGHT",
+      "payloadToSuborbital": 15000.0,
+      "payloadToLeo": 5900.0,
+      "payloadToTli": 0.0,
+      "payloadToTpi": 0.0
+    },
+    "ownLift": null
+  },
+  {
+    "id": "r7-luna",
+    "associatedSkill": "ROCKETS",
+    "baselineReliability": 3.0,
+    "maxReliability": 95.06,
+    "maxRdReliability": 85.37,
+    "rdSlotBandMaxAmounts": [
+      4.0,
+      8.0,
+      11.0,
+      16.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "r7-sputnik",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "r7-vostok",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "r7-voskhod",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "r7-molniya",
+        "transferPercent": 45.0
+      },
+      {
+        "sourceComponentId": "proton",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "proton-k-block-d",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "r7-soyuz",
+        "transferPercent": 45.0
+      },
+      {
+        "sourceComponentId": "n1",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "ur-700",
+        "transferPercent": 30.0
+      }
+    ],
+    "maintenanceCost": 300,
+    "creationCost": 3000,
+    "unitCost": 1950,
+    "mass": 0.0,
+    "agency": "SOVIET",
+    "rocket": {
+      "rocketClass": "LIGHT",
+      "payloadToSuborbital": 10000.0,
+      "payloadToLeo": 4000.0,
+      "payloadToTli": 390.0,
+      "payloadToTpi": 250.0
+    },
+    "ownLift": null
+  },
+  {
+    "id": "r7-molniya",
+    "associatedSkill": "ROCKETS",
+    "baselineReliability": 3.0,
+    "maxReliability": 95.07,
+    "maxRdReliability": 85.43,
+    "rdSlotBandMaxAmounts": [
+      3.0,
+      7.0,
+      9.0,
+      13.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "r7-sputnik",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "r7-vostok",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "r7-voskhod",
+        "transferPercent": 27.5
+      },
+      {
+        "sourceComponentId": "r7-luna",
+        "transferPercent": 27.5
+      },
+      {
+        "sourceComponentId": "proton",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "proton-k-block-d",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "r7-soyuz",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "n1",
+        "transferPercent": 45.0
+      },
+      {
+        "sourceComponentId": "ur-700",
+        "transferPercent": 30.0
+      }
+    ],
+    "maintenanceCost": 400,
+    "creationCost": 4000,
+    "unitCost": 2600,
+    "mass": 0.0,
+    "agency": "SOVIET",
+    "rocket": {
+      "rocketClass": "LIGHT",
+      "payloadToSuborbital": 12000.0,
+      "payloadToLeo": 4800.0,
+      "payloadToTli": 1700.0,
+      "payloadToTpi": 1200.0
+    },
+    "ownLift": null
+  },
+  {
+    "id": "r7-soyuz",
+    "associatedSkill": "HUMAN_RATED_ROCKETS",
+    "baselineReliability": 3.0,
+    "maxReliability": 97.85,
+    "maxRdReliability": 90.86,
+    "rdSlotBandMaxAmounts": [
+      2.0,
+      5.0,
+      6.0,
+      9.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "r7-sputnik",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "r7-vostok",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "r7-voskhod",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "r7-luna",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "r7-molniya",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "proton",
+        "transferPercent": 17.5
+      },
+      {
+        "sourceComponentId": "proton-k-block-d",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "n1",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "ur-700",
+        "transferPercent": 25.0
+      }
+    ],
+    "maintenanceCost": 750,
+    "creationCost": 7500,
+    "unitCost": 4875,
+    "mass": 0.0,
+    "agency": "SOVIET",
+    "rocket": {
+      "rocketClass": "MEDIUM",
+      "payloadToSuborbital": 13220.0,
+      "payloadToLeo": 6620.0,
+      "payloadToTli": 0.0,
+      "payloadToTpi": 0.0
+    },
+    "ownLift": null
+  },
+  {
+    "id": "proton",
+    "associatedSkill": "ROCKETS",
+    "baselineReliability": 3.0,
+    "maxReliability": 95.35,
+    "maxRdReliability": 85.0,
+    "rdSlotBandMaxAmounts": [
+      3.0,
+      6.0,
+      8.0,
+      12.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "r7-sputnik",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "r7-vostok",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "r7-voskhod",
+        "transferPercent": 27.5
+      },
+      {
+        "sourceComponentId": "r7-luna",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "r7-molniya",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "proton-k-block-d",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "r7-soyuz",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "n1",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "ur-700",
+        "transferPercent": 60.0
+      }
+    ],
+    "maintenanceCost": 700,
+    "creationCost": 7000,
+    "unitCost": 4550,
+    "mass": 0.0,
+    "agency": "SOVIET",
+    "rocket": {
+      "rocketClass": "MEDIUM",
+      "payloadToSuborbital": 121000.0,
+      "payloadToLeo": 19760.0,
+      "payloadToTli": 5820.0,
+      "payloadToTpi": 5030.0
+    },
+    "ownLift": null
+  },
+  {
+    "id": "proton-k-block-d",
+    "associatedSkill": "HUMAN_RATED_ROCKETS",
+    "baselineReliability": 3.0,
+    "maxReliability": 97.2,
+    "maxRdReliability": 88.34,
+    "rdSlotBandMaxAmounts": [
+      2.0,
+      4.0,
+      5.0,
+      7.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "r7-sputnik",
+        "transferPercent": 17.5
+      },
+      {
+        "sourceComponentId": "r7-vostok",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "r7-voskhod",
+        "transferPercent": 27.5
+      },
+      {
+        "sourceComponentId": "r7-luna",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "r7-molniya",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "proton",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "r7-soyuz",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "n1",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "ur-700",
+        "transferPercent": 55.0
+      }
+    ],
+    "maintenanceCost": 1000,
+    "creationCost": 10000,
+    "unitCost": 6500,
+    "mass": 0.0,
+    "agency": "SOVIET",
+    "rocket": {
+      "rocketClass": "MEDIUM",
+      "payloadToSuborbital": 102500.0,
+      "payloadToLeo": 19760.0,
+      "payloadToTli": 5390.0,
+      "payloadToTpi": 4500.0
+    },
+    "ownLift": null
+  },
+  {
+    "id": "n1",
+    "associatedSkill": "HUMAN_RATED_ROCKETS",
+    "baselineReliability": 3.0,
+    "maxReliability": 97.3,
+    "maxRdReliability": 89.18,
+    "rdSlotBandMaxAmounts": [
+      1.0,
+      3.0,
+      4.0,
+      6.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "r7-sputnik",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "r7-vostok",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "r7-voskhod",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "r7-luna",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "r7-molniya",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "proton",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "proton-k-block-d",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "r7-soyuz",
+        "transferPercent": 17.5
+      },
+      {
+        "sourceComponentId": "ur-700",
+        "transferPercent": 20.0
+      }
+    ],
+    "maintenanceCost": 1157,
+    "creationCost": 11563,
+    "unitCost": 7516,
+    "mass": 0.0,
+    "agency": "SOVIET",
+    "rocket": {
+      "rocketClass": "HEAVY",
+      "payloadToSuborbital": 580000.0,
+      "payloadToLeo": 91500.0,
+      "payloadToTli": 23500.0,
+      "payloadToTpi": 11000.0
+    },
+    "ownLift": null
+  },
+  {
+    "id": "ur-700",
+    "associatedSkill": "HUMAN_RATED_ROCKETS",
+    "baselineReliability": 3.0,
+    "maxReliability": 97.75,
+    "maxRdReliability": 91.7,
+    "rdSlotBandMaxAmounts": [
+      1.0,
+      3.0,
+      4.0,
+      6.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "r7-sputnik",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "r7-vostok",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "r7-voskhod",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "r7-luna",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "r7-molniya",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "proton",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "proton-k-block-d",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "r7-soyuz",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "n1",
+        "transferPercent": 25.0
+      }
+    ],
+    "maintenanceCost": 1250,
+    "creationCost": 12500,
+    "unitCost": 8125,
+    "mass": 0.0,
+    "agency": "SOVIET",
+    "rocket": {
+      "rocketClass": "HEAVY",
+      "payloadToSuborbital": 600000.0,
+      "payloadToLeo": 200000.0,
+      "payloadToTli": 155000.0,
+      "payloadToTpi": 72500.0
+    },
+    "ownLift": null
+  },
+  {
+    "id": "jupiter-c",
+    "associatedSkill": "ROCKETS",
+    "baselineReliability": 3.0,
+    "maxReliability": 95.05,
+    "maxRdReliability": 85.16,
+    "rdSlotBandMaxAmounts": [
+      9.0,
+      14.0,
+      19.0,
+      28.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "redstone",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "juno-2",
+        "transferPercent": 55.0
+      },
+      {
+        "sourceComponentId": "atlas",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "thor-able",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "atlas-agena",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "titan-2",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "saturn-1",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "atlas-centaur",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "titan-3c",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "saturn-1b",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "titan-3e-centaur",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "saturn-c3b",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "saturn-v",
+        "transferPercent": 60.0
+      }
+    ],
+    "maintenanceCost": 180,
+    "creationCost": 1800,
+    "unitCost": 1170,
+    "mass": 0.0,
+    "agency": "NASA",
+    "rocket": {
+      "rocketClass": "LIGHT",
+      "payloadToSuborbital": 50.0,
+      "payloadToLeo": 11.0,
+      "payloadToTli": 0.0,
+      "payloadToTpi": 0.0
+    },
+    "ownLift": null
+  },
+  {
+    "id": "redstone",
+    "associatedSkill": "HUMAN_RATED_ROCKETS",
+    "baselineReliability": 3.0,
+    "maxReliability": 97.4,
+    "maxRdReliability": 89.74,
+    "rdSlotBandMaxAmounts": [
+      7.0,
+      12.0,
+      16.0,
+      23.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "jupiter-c",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "juno-2",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "atlas",
+        "transferPercent": 45.0
+      },
+      {
+        "sourceComponentId": "thor-able",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "atlas-agena",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "titan-2",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "saturn-1",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "atlas-centaur",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "titan-3c",
+        "transferPercent": 45.0
+      },
+      {
+        "sourceComponentId": "saturn-1b",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "titan-3e-centaur",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "saturn-c3b",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "saturn-v",
+        "transferPercent": 60.0
+      }
+    ],
+    "maintenanceCost": 188,
+    "creationCost": 1875,
+    "unitCost": 1219,
+    "mass": 0.0,
+    "agency": "NASA",
+    "rocket": {
+      "rocketClass": "LIGHT",
+      "payloadToSuborbital": 3580.0,
+      "payloadToLeo": 0.0,
+      "payloadToTli": 0.0,
+      "payloadToTpi": 0.0
+    },
+    "ownLift": null
+  },
+  {
+    "id": "juno-2",
+    "associatedSkill": "ROCKETS",
+    "baselineReliability": 3.0,
+    "maxReliability": 95.13,
+    "maxRdReliability": 85.78,
+    "rdSlotBandMaxAmounts": [
+      8.0,
+      12.0,
+      16.0,
+      24.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "jupiter-c",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "redstone",
+        "transferPercent": 37.5
+      },
+      {
+        "sourceComponentId": "atlas",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "thor-able",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "atlas-agena",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "titan-2",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "saturn-1",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "atlas-centaur",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "titan-3c",
+        "transferPercent": 45.0
+      },
+      {
+        "sourceComponentId": "saturn-1b",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "titan-3e-centaur",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "saturn-c3b",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "saturn-v",
+        "transferPercent": 60.0
+      }
+    ],
+    "maintenanceCost": 200,
+    "creationCost": 2000,
+    "unitCost": 1300,
+    "mass": 0.0,
+    "agency": "NASA",
+    "rocket": {
+      "rocketClass": "LIGHT",
+      "payloadToSuborbital": 200.0,
+      "payloadToLeo": 42.0,
+      "payloadToTli": 6.0,
+      "payloadToTpi": 0.0
+    },
+    "ownLift": null
+  },
+  {
+    "id": "atlas",
+    "associatedSkill": "HUMAN_RATED_ROCKETS",
+    "baselineReliability": 3.0,
+    "maxReliability": 97.5,
+    "maxRdReliability": 90.3,
+    "rdSlotBandMaxAmounts": [
+      6.0,
+      10.0,
+      13.0,
+      19.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "jupiter-c",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "redstone",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "juno-2",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "thor-able",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "atlas-agena",
+        "transferPercent": 55.0
+      },
+      {
+        "sourceComponentId": "titan-2",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "saturn-1",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "atlas-centaur",
+        "transferPercent": 55.0
+      },
+      {
+        "sourceComponentId": "titan-3c",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "saturn-1b",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "titan-3e-centaur",
+        "transferPercent": 55.0
+      },
+      {
+        "sourceComponentId": "saturn-c3b",
+        "transferPercent": 55.0
+      },
+      {
+        "sourceComponentId": "saturn-v",
+        "transferPercent": 60.0
+      }
+    ],
+    "maintenanceCost": 500,
+    "creationCost": 5000,
+    "unitCost": 3250,
+    "mass": 0.0,
+    "agency": "NASA",
+    "rocket": {
+      "rocketClass": "LIGHT",
+      "payloadToSuborbital": 4000.0,
+      "payloadToLeo": 1360.0,
+      "payloadToTli": 0.0,
+      "payloadToTpi": 0.0
+    },
+    "ownLift": null
+  },
+  {
+    "id": "thor-able",
+    "associatedSkill": "ROCKETS",
+    "baselineReliability": 3.0,
+    "maxReliability": 95.3,
+    "maxRdReliability": 85.16,
+    "rdSlotBandMaxAmounts": [
+      4.0,
+      7.0,
+      10.0,
+      14.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "jupiter-c",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "redstone",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "juno-2",
+        "transferPercent": 27.5
+      },
+      {
+        "sourceComponentId": "atlas",
+        "transferPercent": 32.5
+      },
+      {
+        "sourceComponentId": "atlas-agena",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "titan-2",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "saturn-1",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "atlas-centaur",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "titan-3c",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "saturn-1b",
+        "transferPercent": 45.0
+      },
+      {
+        "sourceComponentId": "titan-3e-centaur",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "saturn-c3b",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "saturn-v",
+        "transferPercent": 55.0
+      }
+    ],
+    "maintenanceCost": 220,
+    "creationCost": 2200,
+    "unitCost": 1430,
+    "mass": 0.0,
+    "agency": "NASA",
+    "rocket": {
+      "rocketClass": "LIGHT",
+      "payloadToSuborbital": 600.0,
+      "payloadToLeo": 120.0,
+      "payloadToTli": 55.0,
+      "payloadToTpi": 43.0
+    },
+    "ownLift": null
+  },
+  {
+    "id": "atlas-agena",
+    "associatedSkill": "ROCKETS",
+    "baselineReliability": 3.0,
+    "maxReliability": 95.55,
+    "maxRdReliability": 88.41,
+    "rdSlotBandMaxAmounts": [
+      3.0,
+      7.0,
+      9.0,
+      13.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "jupiter-c",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "redstone",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "juno-2",
+        "transferPercent": 17.5
+      },
+      {
+        "sourceComponentId": "atlas",
+        "transferPercent": 55.0
+      },
+      {
+        "sourceComponentId": "thor-able",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "titan-2",
+        "transferPercent": 32.5
+      },
+      {
+        "sourceComponentId": "saturn-1",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "atlas-centaur",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "titan-3c",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "saturn-1b",
+        "transferPercent": 47.5
+      },
+      {
+        "sourceComponentId": "titan-3e-centaur",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "saturn-c3b",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "saturn-v",
+        "transferPercent": 55.0
+      },
+      {
+        "sourceComponentId": "agena-target-vehicle",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "gemini-transtage",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "s-ivb-space-tug",
+        "transferPercent": 30.0
+      }
+    ],
+    "maintenanceCost": 420,
+    "creationCost": 4200,
+    "unitCost": 2730,
+    "mass": 0.0,
+    "agency": "NASA",
+    "rocket": {
+      "rocketClass": "LIGHT",
+      "payloadToSuborbital": 4500.0,
+      "payloadToLeo": 2000.0,
+      "payloadToTli": 390.0,
+      "payloadToTpi": 260.0
+    },
+    "ownLift": null
+  },
+  {
+    "id": "atlas-centaur",
+    "associatedSkill": "ROCKETS",
+    "baselineReliability": 3.0,
+    "maxReliability": 95.88,
+    "maxRdReliability": 90.46,
+    "rdSlotBandMaxAmounts": [
+      3.0,
+      6.0,
+      8.0,
+      11.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "jupiter-c",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "redstone",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "juno-2",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "atlas",
+        "transferPercent": 45.0
+      },
+      {
+        "sourceComponentId": "thor-able",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "atlas-agena",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "titan-2",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "saturn-1",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "titan-3c",
+        "transferPercent": 45.0
+      },
+      {
+        "sourceComponentId": "saturn-1b",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "titan-3e-centaur",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "saturn-c3b",
+        "transferPercent": 47.5
+      },
+      {
+        "sourceComponentId": "saturn-v",
+        "transferPercent": 55.0
+      },
+      {
+        "sourceComponentId": "agena-target-vehicle",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "gemini-transtage",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "s-ivb-space-tug",
+        "transferPercent": 20.0
+      }
+    ],
+    "maintenanceCost": 500,
+    "creationCost": 5000,
+    "unitCost": 3250,
+    "mass": 0.0,
+    "agency": "NASA",
+    "rocket": {
+      "rocketClass": "MEDIUM",
+      "payloadToSuborbital": 7500.0,
+      "payloadToLeo": 4000.0,
+      "payloadToTli": 1100.0,
+      "payloadToTpi": 985.0
+    },
+    "ownLift": null
+  },
+  {
+    "id": "titan-2",
+    "associatedSkill": "HUMAN_RATED_ROCKETS",
+    "baselineReliability": 3.0,
+    "maxReliability": 97.85,
+    "maxRdReliability": 92.26,
+    "rdSlotBandMaxAmounts": [
+      3.0,
+      6.0,
+      8.0,
+      11.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "jupiter-c",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "redstone",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "juno-2",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "atlas",
+        "transferPercent": 17.5
+      },
+      {
+        "sourceComponentId": "thor-able",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "atlas-agena",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "saturn-1",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "atlas-centaur",
+        "transferPercent": 22.5
+      },
+      {
+        "sourceComponentId": "titan-3c",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "saturn-1b",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "titan-3e-centaur",
+        "transferPercent": 60.0
+      },
+      {
+        "sourceComponentId": "saturn-c3b",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "saturn-v",
+        "transferPercent": 50.0
+      }
+    ],
+    "maintenanceCost": 625,
+    "creationCost": 6250,
+    "unitCost": 4063,
+    "mass": 0.0,
+    "agency": "NASA",
+    "rocket": {
+      "rocketClass": "MEDIUM",
+      "payloadToSuborbital": 10000.0,
+      "payloadToLeo": 3900.0,
+      "payloadToTli": 0.0,
+      "payloadToTpi": 0.0
+    },
+    "ownLift": null
+  },
+  {
+    "id": "titan-3c",
+    "associatedSkill": "ROCKETS",
+    "baselineReliability": 3.0,
+    "maxReliability": 95.92,
+    "maxRdReliability": 90.7,
+    "rdSlotBandMaxAmounts": [
+      3.0,
+      5.0,
+      7.0,
+      10.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "jupiter-c",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "redstone",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "juno-2",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "atlas",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "thor-able",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "atlas-agena",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "titan-2",
+        "transferPercent": 45.0
+      },
+      {
+        "sourceComponentId": "saturn-1",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "atlas-centaur",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "saturn-1b",
+        "transferPercent": 17.5
+      },
+      {
+        "sourceComponentId": "titan-3e-centaur",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "saturn-c3b",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "saturn-v",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "agena-target-vehicle",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "gemini-transtage",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "s-ivb-space-tug",
+        "transferPercent": 15.0
+      }
+    ],
+    "maintenanceCost": 650,
+    "creationCost": 6500,
+    "unitCost": 4225,
+    "mass": 0.0,
+    "agency": "NASA",
+    "rocket": {
+      "rocketClass": "MEDIUM",
+      "payloadToSuborbital": 40000.0,
+      "payloadToLeo": 14500.0,
+      "payloadToTli": 1000.0,
+      "payloadToTpi": 600.0
+    },
+    "ownLift": null
+  },
+  {
+    "id": "titan-3e-centaur",
+    "associatedSkill": "ROCKETS",
+    "baselineReliability": 3.0,
+    "maxReliability": 96.0,
+    "maxRdReliability": 91.2,
+    "rdSlotBandMaxAmounts": [
+      1.0,
+      3.0,
+      4.0,
+      6.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "jupiter-c",
+        "transferPercent": 2.5
+      },
+      {
+        "sourceComponentId": "redstone",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "juno-2",
+        "transferPercent": 2.5
+      },
+      {
+        "sourceComponentId": "atlas",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "thor-able",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "atlas-agena",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "titan-2",
+        "transferPercent": 40.0
+      },
+      {
+        "sourceComponentId": "saturn-1",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "atlas-centaur",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "titan-3c",
+        "transferPercent": 45.0
+      },
+      {
+        "sourceComponentId": "saturn-1b",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "saturn-c3b",
+        "transferPercent": 17.5
+      },
+      {
+        "sourceComponentId": "saturn-v",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "agena-target-vehicle",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "gemini-transtage",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "s-ivb-space-tug",
+        "transferPercent": 20.0
+      }
+    ],
+    "maintenanceCost": 1000,
+    "creationCost": 10000,
+    "unitCost": 6500,
+    "mass": 0.0,
+    "agency": "NASA",
+    "rocket": {
+      "rocketClass": "MEDIUM",
+      "payloadToSuborbital": 45000.0,
+      "payloadToLeo": 15400.0,
+      "payloadToTli": 4000.0,
+      "payloadToTpi": 3400.0
+    },
+    "ownLift": null
+  },
+  {
+    "id": "saturn-1",
+    "associatedSkill": "ROCKETS",
+    "baselineReliability": 3.0,
+    "maxReliability": 95.95,
+    "maxRdReliability": 90.89,
+    "rdSlotBandMaxAmounts": [
+      3.0,
+      6.0,
+      8.0,
+      11.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "jupiter-c",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "redstone",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "juno-2",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "atlas",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "thor-able",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "atlas-agena",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "titan-2",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "atlas-centaur",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "titan-3c",
+        "transferPercent": 27.5
+      },
+      {
+        "sourceComponentId": "saturn-1b",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "titan-3e-centaur",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "saturn-c3b",
+        "transferPercent": 55.0
+      },
+      {
+        "sourceComponentId": "saturn-v",
+        "transferPercent": 60.0
+      }
+    ],
+    "maintenanceCost": 600,
+    "creationCost": 6000,
+    "unitCost": 3900,
+    "mass": 0.0,
+    "agency": "NASA",
+    "rocket": {
+      "rocketClass": "MEDIUM",
+      "payloadToSuborbital": 35000.0,
+      "payloadToLeo": 9000.0,
+      "payloadToTli": 0.0,
+      "payloadToTpi": 0.0
+    },
+    "ownLift": null
+  },
+  {
+    "id": "saturn-1b",
+    "associatedSkill": "HUMAN_RATED_ROCKETS",
+    "baselineReliability": 3.0,
+    "maxReliability": 97.95,
+    "maxRdReliability": 92.82,
+    "rdSlotBandMaxAmounts": [
+      2.0,
+      5.0,
+      6.0,
+      9.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "jupiter-c",
+        "transferPercent": 2.5
+      },
+      {
+        "sourceComponentId": "redstone",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "juno-2",
+        "transferPercent": 2.5
+      },
+      {
+        "sourceComponentId": "atlas",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "thor-able",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "atlas-agena",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "titan-2",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "saturn-1",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "atlas-centaur",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "titan-3c",
+        "transferPercent": 17.5
+      },
+      {
+        "sourceComponentId": "titan-3e-centaur",
+        "transferPercent": 20.0
+      },
+      {
+        "sourceComponentId": "saturn-c3b",
+        "transferPercent": 45.0
+      },
+      {
+        "sourceComponentId": "saturn-v",
+        "transferPercent": 55.0
+      },
+      {
+        "sourceComponentId": "agena-target-vehicle",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "gemini-transtage",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "s-ivb-space-tug",
+        "transferPercent": 25.0
+      }
+    ],
+    "maintenanceCost": 938,
+    "creationCost": 9375,
+    "unitCost": 6094,
+    "mass": 0.0,
+    "agency": "NASA",
+    "rocket": {
+      "rocketClass": "MEDIUM",
+      "payloadToSuborbital": 60000.0,
+      "payloadToLeo": 21000.0,
+      "payloadToTli": 0.0,
+      "payloadToTpi": 0.0
+    },
+    "ownLift": null
+  },
+  {
+    "id": "saturn-c3b",
+    "associatedSkill": "HUMAN_RATED_ROCKETS",
+    "baselineReliability": 3.0,
+    "maxReliability": 97.97,
+    "maxRdReliability": 92.93,
+    "rdSlotBandMaxAmounts": [
+      2.0,
+      4.0,
+      5.0,
+      7.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "jupiter-c",
+        "transferPercent": 2.5
+      },
+      {
+        "sourceComponentId": "redstone",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "juno-2",
+        "transferPercent": 2.5
+      },
+      {
+        "sourceComponentId": "atlas",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "thor-able",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "atlas-agena",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "titan-2",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "saturn-1",
+        "transferPercent": 17.5
+      },
+      {
+        "sourceComponentId": "atlas-centaur",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "titan-3c",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "saturn-1b",
+        "transferPercent": 30.0
+      },
+      {
+        "sourceComponentId": "titan-3e-centaur",
+        "transferPercent": 17.5
+      },
+      {
+        "sourceComponentId": "saturn-v",
+        "transferPercent": 50.0
+      },
+      {
+        "sourceComponentId": "agena-target-vehicle",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "gemini-transtage",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "s-ivb-space-tug",
+        "transferPercent": 35.0
+      }
+    ],
+    "maintenanceCost": 1125,
+    "creationCost": 11250,
+    "unitCost": 7313,
+    "mass": 0.0,
+    "agency": "NASA",
+    "rocket": {
+      "rocketClass": "MEDIUM",
+      "payloadToSuborbital": 60000.0,
+      "payloadToLeo": 45000.0,
+      "payloadToTli": 18000.0,
+      "payloadToTpi": 0.0
+    },
+    "ownLift": null
+  },
+  {
+    "id": "saturn-v",
+    "associatedSkill": "HUMAN_RATED_ROCKETS",
+    "baselineReliability": 3.0,
+    "maxReliability": 98.0,
+    "maxRdReliability": 93.1,
+    "rdSlotBandMaxAmounts": [
+      1.0,
+      3.0,
+      4.0,
+      6.0
+    ],
+    "maxReliabilityTransfer": 60.0,
+    "reliabilityTransferSources": [
+      {
+        "sourceComponentId": "jupiter-c",
+        "transferPercent": 2.5
+      },
+      {
+        "sourceComponentId": "redstone",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "juno-2",
+        "transferPercent": 2.5
+      },
+      {
+        "sourceComponentId": "atlas",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "thor-able",
+        "transferPercent": 2.5
+      },
+      {
+        "sourceComponentId": "atlas-agena",
+        "transferPercent": 5.0
+      },
+      {
+        "sourceComponentId": "titan-2",
+        "transferPercent": 10.0
+      },
+      {
+        "sourceComponentId": "saturn-1",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "atlas-centaur",
+        "transferPercent": 7.5
+      },
+      {
+        "sourceComponentId": "titan-3c",
+        "transferPercent": 12.5
+      },
+      {
+        "sourceComponentId": "saturn-1b",
+        "transferPercent": 25.0
+      },
+      {
+        "sourceComponentId": "titan-3e-centaur",
+        "transferPercent": 15.0
+      },
+      {
+        "sourceComponentId": "saturn-c3b",
+        "transferPercent": 35.0
+      },
+      {
+        "sourceComponentId": "agena-target-vehicle",
+        "transferPercent": 2.5
+      },
+      {
+        "sourceComponentId": "gemini-transtage",
+        "transferPercent": 2.5
+      },
+      {
+        "sourceComponentId": "s-ivb-space-tug",
+        "transferPercent": 17.5
+      }
+    ],
+    "maintenanceCost": 1250,
+    "creationCost": 12500,
+    "unitCost": 8125,
+    "mass": 0.0,
+    "agency": "NASA",
+    "rocket": {
+      "rocketClass": "HEAVY",
+      "payloadToSuborbital": 118390.0,
+      "payloadToLeo": 118390.0,
+      "payloadToTli": 47000.0,
+      "payloadToTpi": 40820.0
+    },
+    "ownLift": null
+  }
+]

@@ -403,7 +403,9 @@ committed to it is redistributed.
   they're what makes the game feel right. Tune them from play tests.
 - **Fictional programs get our own names** (user, 2026-10-03): real programs keep their
   historical names; BASPM's invented ones are renamed. BASPM's Soviet "PKA space plane"
-  (`26-01`) is the **OKB-MiG E-154**.
+  (`26-01`) is the **OKB-MiG E-154** (ids `mig-e-154-*`), a rocket plane in the style of its era,
+  as the user's art shows it: only its name and text change, the numbers stay BASPM's (user,
+  2026-10-08).
 
 ## 2. Core gameplay mechanics
 
@@ -1848,6 +1850,57 @@ first (login → action → scheduled resolution → result, end to end) before 
     skills by BASPM's speciality index, not the slot name. Animal passengers, and the animals
     honoured for coming home (`cameHome`), come from the converter's `ANIMAL_PASSENGERS` map, not
     from BASPM's data (backups `.bak-prepassengers`, `.bak-predogs`).
+  - A configuration's `cost` is its payloads' unit cost times the average step `DifficultyFactor`
+    over all its seasons, rounded half to even, as in BASPM (`MissionsConfigurationsManager`; a
+    missing factor is 1). Only Sputnik 1's extended mission has factors (1.75 on its two later
+    steps), so its cost went from 488 to 580 (2026-10-08).
+  - A step only risks the crew when the configuration has crew slots: BASPM flags some steps of
+    two uncrewed Soyuz flights anyway.
+  - A goal modifier BASPM repeats within one list (the X-15's research flights boost on the same
+    goal twice) is merged into one with the summed amount; the engine sums them either way.
+  - **Open (user decision):** BASPM's loader never reads `GoalBoost` elements, so in the shipped
+    game only the penalties apply (`baspm.md` §11.3, found 2026-10-08). Our engine applies the
+    boosts the data declares: 2 in the early-era pack, 99 in the standard pack. Following BASPM
+    would mean dropping them in the converter.
+
+  **The full tree: the `standard` pack (converter scope `full`, 2026-10-08).** The converter writes
+  all of BASPM's tree: 13 categories (with their `body`), 55 programs, 85 components (61 payloads,
+  24 rockets), 189 configurations and all 207 goals. The goals include the umbrella goals no
+  configuration achieves directly, because other goals' cancellations credit them. Our ids are in
+  `full_maps.py` next to the converter; the early-era ids are kept. The ids are confirmed (user,
+  2026-10-08). It is a second pack, `assets/content/standard`, beside `early-era`, which stays the
+  server's default for now. **Its text is written** (2026-10-08): names and descriptions for every
+  category, program, component, configuration, goal and step type, in our own words, with the
+  early-era text carried over unchanged. Only the early-era entries have history notes so far; the
+  new ones need every figure checked first. A joint flight's craft-specific steps take their
+  shared step's text, named for the craft (`ContentStrings.craftStep`: `gemini-a-`, `atv-` for the
+  target, `transtage-`, `-a`/`-b`). **Its art is converted** (`make_content_art.py`: 55 programs,
+  189 configurations, 22 category images), and `ScreenSnapshot` shoots it (`standard-*.png`). The
+  bots play it (`ContentPackPlayouts standard`) with no invariant broken. The text for the
+  MiG E-154's program and missions should fit the user's art, a rocket plane of its era, not
+  BASPM's PKA (user, 2026-10-08). **No animal passengers on the new flights:** Zond 5's tortoises,
+  the Biosatellite and the OFO frogs get no memorial and no honours (user, 2026-10-08), so
+  `ANIMAL_PASSENGERS` stays as it is. In this scope, anything that would be dropped fails the run, and the run checks
+  every launch has a rocket of its agency that lifts it (106 configurations need at least a
+  Medium rocket, 36 a Heavy). BASPM's `HistoricalRocketUsedID` only picks the clip: 12 launches
+  name one that can't lift them. `StandardPackTest` checks the tree: every launch flies on a rocket
+  of its agency at some VAB level, staffing fits, every goal can be earned, and the race goals
+  (through the crewed lunar landing, Venus and Mars) are open to both agencies. Four engine
+  additions came with it (built 2026-10-08, `FullTreeLaunchTest`):
+  - **`ownLift` on a payload** (`MissionLaunch.requiredLift`): the Agena, the Gemini Transtage, the S-IVB tug and Apollo's CSM
+    carry part of their own lift, which BASPM subtracts from what the rocket must lift
+    (`ComputeExtraBoostProvidedByPayload`). Without it, Apollo's CSM needs a Saturn C-3B in
+    Earth orbit instead of BASPM's Saturn IB.
+  - **`AIR_DROP` launches:** the X-15's three configurations and the MiG E-154's drop test fly
+    with no rocket (BASPM's `LaunchType` `NA`, rocket `N/A`). The launch keeps its place in the
+    rocket list with `""`, costs no rocket, and no step may name its rocket slot; the planning
+    screens say a carrier aircraft drops the craft.
+  - **`requiredGoalIds` on a configuration:** a hard gate until the goal is achieved or
+    cancelled (BASPM's `StrictGoalDependency`): the X-15's two research flights and the MiG E-154's
+    suborbital test. A launch refuses with `GOAL_NOT_REACHED`; the configuration card shows
+    "Locked" and its steps screen names the goal and disables "Plan this mission".
+  - **`transferPercent` as a double:** many of the full tree's reliability transfers are .5
+    values (`client.view.Rockets` prints it, so format it there).
 
   `EarlyEraPackTest` checks the pack loads, every configuration has a liftable rocket of its
   agency at VAB level 1, staffing fits a reachable building level, and both agencies can reach

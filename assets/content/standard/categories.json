@@ -1,0 +1,67 @@
+[
+  {
+    "id": "earth-orbit-satellites",
+    "name": "Earth-orbit satellites",
+    "body": "EARTH"
+  },
+  {
+    "id": "lunar-probes",
+    "name": "Lunar probes",
+    "body": "MOON"
+  },
+  {
+    "id": "sun-probes",
+    "name": "Sun probes",
+    "body": "SUN"
+  },
+  {
+    "id": "mercury-probes",
+    "name": "Mercury probes",
+    "body": "MERCURY"
+  },
+  {
+    "id": "venus-probes",
+    "name": "Venus probes",
+    "body": "VENUS"
+  },
+  {
+    "id": "mars-probes",
+    "name": "Mars probes",
+    "body": "MARS"
+  },
+  {
+    "id": "jupiter-probes",
+    "name": "Jupiter probes",
+    "body": "JUPITER"
+  },
+  {
+    "id": "saturn-probes",
+    "name": "Saturn probes",
+    "body": "SATURN"
+  },
+  {
+    "id": "space-planes",
+    "name": "Space planes",
+    "body": "EARTH"
+  },
+  {
+    "id": "one-crew-capsules",
+    "name": "One-crew capsules",
+    "body": "EARTH"
+  },
+  {
+    "id": "two-crew-capsules",
+    "name": "Two-crew capsules",
+    "body": "EARTH"
+  },
+  {
+    "id": "lunar-expeditions",
+    "name": "Lunar expeditions",
+    "body": "MOON"
+  },
+  {
+    "id": "three-crew-capsules",
+    "name": "Three-crew capsules",
+    "body": "EARTH"
+  }
+]

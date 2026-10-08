@@ -71,6 +71,11 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   into the text, and a changed rule needs its topic's text changed in the same session.
 - **The advisor is built** (2026-10-08, `ui-spec.md` component 24): a hub card with a new agency's
   first steps, ticked off from the state, until all are done or the player hides it.
+- **The full content pack is built** (2026-10-08, `design.md` §5, M3): `assets/content/standard`,
+  BASPM's whole tree (55 programs, 189 configurations), with its text and art, beside `early-era`,
+  which stays the server's default. New engine rules came with it: a payload's own lift, air drops
+  with no rocket, configurations gated on a goal. Still open: history notes for the new entries,
+  rocket program art (the user is drawing it), and switching the default pack.
 - **PR duty for astronauts is built** (`design.md` §2.2(c)), with 39 press stories
   (`assets/content/pr-press.json`), no repeats, and effects beyond prestige. Next is the next
   play test.
@@ -120,9 +125,12 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
 - **Content pack converter** (main PC only, because it reads `E:` and holds BASPM's ids):
   `E:\Temp\BASPM\tools\baspm_pack.py`, with its goal-id map `goals.map.json` next to it. Run
   `python baspm_pack.py discover`, then `python baspm_pack.py write <repo>\assets\content\early-era`.
-  To extend the pack, add the scope and our own ids to its `PROGRAMS`/`COMPONENTS`/`CONFIG_NAMES`
-  maps and to `goals.map.json`; mapping rules are in `design.md` §5, M3. `checklist.py` (same
-  folder) regenerates `assets-raw/ART_CHECKLIST.md`; update its file maps when art lands.
+  `write <dir> full` writes BASPM's whole tree with the ids in `full_maps.py` (same folder) and
+  fails on anything it would drop; the early scope must keep reproducing the committed pack.
+  The standard pack's text is generated from scratch modules, so edit `strings.json` directly now.
+  Mapping rules are in `design.md` §5, M3. `checklist.py` (same
+  folder) regenerates `assets-raw/ART_CHECKLIST.md`, rocket programs included; update its file maps
+  when art lands.
 - **ComfyUI** (Qwen Image 2.1) runs locally on port 8188. ComfyUI keeps its own copies of
   everything generated in `E:\Comfy-Desktop\ComfyUI-Shared\output` (`lw_portrait_*`,
   `lw_patch_*`): never delete those.
@@ -168,6 +176,7 @@ mvn -pl dev-tools compile exec:java -DmainClass=de.mkoehler.launchwindow.devtool
 - **Dev mode:** `"devMode": true` in the server's `game-meta.json` (restart the server) shows
   "Dev · Resolve turn now" on the hub and allows `DevClient`'s `funds` cheat.
 - **Bot playouts:** `mvn -pl dev-tools compile exec:java -DmainClass=de.mkoehler.launchwindow.devtools.analysis.ContentPackPlayouts`
+  (`-Dexec.args=standard` for the full pack)
   (also `PersonnelLifecyclePlayouts`, `CareerCurves`, `StateSizes`, `IntelligencePlayouts`; `design.md` §3.10).
 - **Releasing** (ported from Robot-Rampage 2026-10-06; its and StarWars' CLAUDE.md hold the
   gotchas):

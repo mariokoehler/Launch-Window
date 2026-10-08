@@ -1,0 +1,997 @@
+[
+  {
+    "id": "sputnik-1",
+    "categoryId": "earth-orbit-satellites",
+    "openingCost": 126,
+    "maintenanceCost": 13,
+    "requiredMissionComponentIds": [
+      "sputnik-1-satellite"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [],
+    "agency": "SOVIET"
+  },
+  {
+    "id": "explorer-1",
+    "categoryId": "earth-orbit-satellites",
+    "openingCost": 126,
+    "maintenanceCost": 13,
+    "requiredMissionComponentIds": [
+      "explorer-1-satellite"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [],
+    "agency": "NASA"
+  },
+  {
+    "id": "pegasus",
+    "categoryId": "earth-orbit-satellites",
+    "openingCost": 354,
+    "maintenanceCost": 36,
+    "requiredMissionComponentIds": [
+      "pegasus-satellite"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [],
+    "agency": "NASA"
+  },
+  {
+    "id": "biosatellite",
+    "categoryId": "earth-orbit-satellites",
+    "openingCost": 316,
+    "maintenanceCost": 32,
+    "requiredMissionComponentIds": [
+      "biosatellite-satellite"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [],
+    "agency": "NASA"
+  },
+  {
+    "id": "orbiting-frog-otolith",
+    "categoryId": "earth-orbit-satellites",
+    "openingCost": 263,
+    "maintenanceCost": 27,
+    "requiredMissionComponentIds": [
+      "ofo-satellite"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [],
+    "agency": "NASA"
+  },
+  {
+    "id": "korabl-sputnik-2",
+    "categoryId": "earth-orbit-satellites",
+    "openingCost": 449,
+    "maintenanceCost": 45,
+    "requiredMissionComponentIds": [
+      "vostok-capsule"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [],
+    "agency": "SOVIET"
+  },
+  {
+    "id": "sputnik-2",
+    "categoryId": "earth-orbit-satellites",
+    "openingCost": 316,
+    "maintenanceCost": 32,
+    "requiredMissionComponentIds": [
+      "sputnik-2-satellite"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [],
+    "agency": "SOVIET"
+  },
+  {
+    "id": "pioneer-4",
+    "categoryId": "lunar-probes",
+    "openingCost": 240,
+    "maintenanceCost": 24,
+    "requiredMissionComponentIds": [
+      "pioneer-4-probe"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [
+      "earth-orbit-satellite"
+    ],
+    "agency": "NASA"
+  },
+  {
+    "id": "zond-5",
+    "categoryId": "lunar-probes",
+    "openingCost": 335,
+    "maintenanceCost": 34,
+    "requiredMissionComponentIds": [
+      "zond-5-probe"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [
+      "earth-orbit-satellite"
+    ],
+    "agency": "SOVIET"
+  },
+  {
+    "id": "ranger-3",
+    "categoryId": "lunar-probes",
+    "openingCost": 278,
+    "maintenanceCost": 28,
+    "requiredMissionComponentIds": [
+      "ranger-3-probe"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [
+      "earth-orbit-satellite"
+    ],
+    "agency": "NASA"
+  },
+  {
+    "id": "luna-2",
+    "categoryId": "lunar-probes",
+    "openingCost": 278,
+    "maintenanceCost": 28,
+    "requiredMissionComponentIds": [
+      "luna-2-probe"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [
+      "earth-orbit-satellite"
+    ],
+    "agency": "SOVIET"
+  },
+  {
+    "id": "pioneer-2",
+    "categoryId": "lunar-probes",
+    "openingCost": 324,
+    "maintenanceCost": 33,
+    "requiredMissionComponentIds": [
+      "pioneer-2-probe"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [
+      "earth-orbit-satellite"
+    ],
+    "agency": "NASA"
+  },
+  {
+    "id": "lunar-orbiter",
+    "categoryId": "lunar-probes",
+    "openingCost": 351,
+    "maintenanceCost": 36,
+    "requiredMissionComponentIds": [
+      "lunar-orbiter-probe"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [
+      "earth-orbit-satellite"
+    ],
+    "agency": "NASA"
+  },
+  {
+    "id": "surveyor",
+    "categoryId": "lunar-probes",
+    "openingCost": 392,
+    "maintenanceCost": 40,
+    "requiredMissionComponentIds": [
+      "surveyor-lander"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [
+      "earth-orbit-satellite"
+    ],
+    "agency": "NASA"
+  },
+  {
+    "id": "luna-15",
+    "categoryId": "lunar-probes",
+    "openingCost": 478,
+    "maintenanceCost": 48,
+    "requiredMissionComponentIds": [
+      "luna-15-probe"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [
+      "earth-orbit-satellite"
+    ],
+    "agency": "SOVIET"
+  },
+  {
+    "id": "luna-3",
+    "categoryId": "lunar-probes",
+    "openingCost": 240,
+    "maintenanceCost": 24,
+    "requiredMissionComponentIds": [
+      "luna-3-probe"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [
+      "earth-orbit-satellite"
+    ],
+    "agency": "SOVIET"
+  },
+  {
+    "id": "luna-17",
+    "categoryId": "lunar-probes",
+    "openingCost": 240,
+    "maintenanceCost": 24,
+    "requiredMissionComponentIds": [
+      "luna-17-lander",
+      "lunokhod-1-rover"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [
+      "earth-orbit-satellite"
+    ],
+    "agency": "SOVIET"
+  },
+  {
+    "id": "pioneer-sun-orbiter",
+    "categoryId": "sun-probes",
+    "openingCost": 240,
+    "maintenanceCost": 24,
+    "requiredMissionComponentIds": [
+      "pioneer-6-probe"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [
+      "earth-orbit-satellite"
+    ],
+    "agency": "NASA"
+  },
+  {
+    "id": "mariner-10",
+    "categoryId": "mercury-probes",
+    "openingCost": 430,
+    "maintenanceCost": 43,
+    "requiredMissionComponentIds": [
+      "mariner-10-probe"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [
+      "venus-probe",
+      "mars-probe"
+    ],
+    "agency": "NASA"
+  },
+  {
+    "id": "mariner-5",
+    "categoryId": "venus-probes",
+    "openingCost": 430,
+    "maintenanceCost": 43,
+    "requiredMissionComponentIds": [
+      "mariner-5-probe"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [
+      "lunar-probe"
+    ],
+    "agency": "NASA"
+  },
+  {
+    "id": "pioneer-venus-orbiter",
+    "categoryId": "venus-probes",
+    "openingCost": 620,
+    "maintenanceCost": 62,
+    "requiredMissionComponentIds": [
+      "pioneer-venus-orbiter-probe"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [
+      "lunar-probe"
+    ],
+    "agency": "NASA"
+  },
+  {
+    "id": "venera-15",
+    "categoryId": "venus-probes",
+    "openingCost": 620,
+    "maintenanceCost": 62,
+    "requiredMissionComponentIds": [
+      "venera-15-probe"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [
+      "lunar-probe"
+    ],
+    "agency": "SOVIET"
+  },
+  {
+    "id": "pioneer-venus-multiprobe",
+    "categoryId": "venus-probes",
+    "openingCost": 734,
+    "maintenanceCost": 74,
+    "requiredMissionComponentIds": [
+      "pioneer-venus-multiprobe-craft"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [
+      "lunar-probe"
+    ],
+    "agency": "NASA"
+  },
+  {
+    "id": "venera-7",
+    "categoryId": "venus-probes",
+    "openingCost": 820,
+    "maintenanceCost": 82,
+    "requiredMissionComponentIds": [
+      "venera-7-probe"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [
+      "lunar-probe"
+    ],
+    "agency": "SOVIET"
+  },
+  {
+    "id": "venera-lander",
+    "categoryId": "venus-probes",
+    "openingCost": 848,
+    "maintenanceCost": 85,
+    "requiredMissionComponentIds": [
+      "venera-9-probe"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [
+      "lunar-probe"
+    ],
+    "agency": "SOVIET"
+  },
+  {
+    "id": "mariner-6",
+    "categoryId": "mars-probes",
+    "openingCost": 430,
+    "maintenanceCost": 43,
+    "requiredMissionComponentIds": [
+      "mariner-6-probe"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [
+      "lunar-probe"
+    ],
+    "agency": "NASA"
+  },
+  {
+    "id": "mariner-9",
+    "categoryId": "mars-probes",
+    "openingCost": 620,
+    "maintenanceCost": 62,
+    "requiredMissionComponentIds": [
+      "mariner-9-probe"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [
+      "lunar-probe"
+    ],
+    "agency": "NASA"
+  },
+  {
+    "id": "viking",
+    "categoryId": "mars-probes",
+    "openingCost": 820,
+    "maintenanceCost": 82,
+    "requiredMissionComponentIds": [
+      "viking-orbiter",
+      "viking-lander"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [
+      "lunar-probe"
+    ],
+    "agency": "NASA"
+  },
+  {
+    "id": "mars-2",
+    "categoryId": "mars-probes",
+    "openingCost": 1000,
+    "maintenanceCost": 100,
+    "requiredMissionComponentIds": [
+      "mars-2-probe"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [
+      "lunar-probe"
+    ],
+    "agency": "SOVIET"
+  },
+  {
+    "id": "mars-m69",
+    "categoryId": "mars-probes",
+    "openingCost": 620,
+    "maintenanceCost": 62,
+    "requiredMissionComponentIds": [
+      "mars-m69-probe"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [
+      "lunar-probe"
+    ],
+    "agency": "SOVIET"
+  },
+  {
+    "id": "pioneer-10",
+    "categoryId": "jupiter-probes",
+    "openingCost": 506,
+    "maintenanceCost": 51,
+    "requiredMissionComponentIds": [
+      "pioneer-10-probe"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [
+      "mars-probe"
+    ],
+    "agency": "NASA"
+  },
+  {
+    "id": "pioneer-11",
+    "categoryId": "saturn-probes",
+    "openingCost": 506,
+    "maintenanceCost": 51,
+    "requiredMissionComponentIds": [
+      "pioneer-11-probe"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [
+      "mars-probe"
+    ],
+    "agency": "NASA"
+  },
+  {
+    "id": "x-15",
+    "categoryId": "space-planes",
+    "openingCost": 412,
+    "maintenanceCost": 42,
+    "requiredMissionComponentIds": [
+      "x-15-aircraft"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [],
+    "agency": "NASA"
+  },
+  {
+    "id": "mig-e-154",
+    "categoryId": "space-planes",
+    "openingCost": 1034,
+    "maintenanceCost": 104,
+    "requiredMissionComponentIds": [
+      "mig-e-154-spaceplane"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [],
+    "agency": "SOVIET"
+  },
+  {
+    "id": "mercury",
+    "categoryId": "one-crew-capsules",
+    "openingCost": 1345,
+    "maintenanceCost": 135,
+    "requiredMissionComponentIds": [
+      "mercury-capsule"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [],
+    "agency": "NASA"
+  },
+  {
+    "id": "vostok",
+    "categoryId": "one-crew-capsules",
+    "openingCost": 1345,
+    "maintenanceCost": 135,
+    "requiredMissionComponentIds": [
+      "vostok-capsule"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [],
+    "agency": "SOVIET"
+  },
+  {
+    "id": "gemini",
+    "categoryId": "two-crew-capsules",
+    "openingCost": 5080,
+    "maintenanceCost": 508,
+    "requiredMissionComponentIds": [
+      "gemini-capsule",
+      "gemini-eva-suit",
+      "agena-target-vehicle"
+    ],
+    "openingCostDiscounts": [
+      {
+        "otherProgramId": "circumlunar-gemini-earth-orbit",
+        "percent": 100
+      },
+      {
+        "otherProgramId": "lunar-orbital-gemini-earth-orbit",
+        "percent": 100
+      },
+      {
+        "otherProgramId": "gemini-direct-ascent-earth-orbit",
+        "percent": 100
+      },
+      {
+        "otherProgramId": "circumlunar-gemini",
+        "percent": 100
+      },
+      {
+        "otherProgramId": "lunar-orbital-gemini",
+        "percent": 100
+      },
+      {
+        "otherProgramId": "gemini-direct-ascent",
+        "percent": 100
+      }
+    ],
+    "requiredGoalIds": [],
+    "agency": "NASA"
+  },
+  {
+    "id": "circumlunar-gemini-earth-orbit",
+    "categoryId": "two-crew-capsules",
+    "openingCost": 6076,
+    "maintenanceCost": 608,
+    "requiredMissionComponentIds": [
+      "gemini-capsule",
+      "gemini-transtage"
+    ],
+    "openingCostDiscounts": [
+      {
+        "otherProgramId": "gemini",
+        "percent": 100
+      },
+      {
+        "otherProgramId": "lunar-orbital-gemini-earth-orbit",
+        "percent": 100
+      },
+      {
+        "otherProgramId": "gemini-direct-ascent-earth-orbit",
+        "percent": 100
+      },
+      {
+        "otherProgramId": "circumlunar-gemini",
+        "percent": 100
+      },
+      {
+        "otherProgramId": "lunar-orbital-gemini",
+        "percent": 100
+      },
+      {
+        "otherProgramId": "gemini-direct-ascent",
+        "percent": 100
+      }
+    ],
+    "requiredGoalIds": [],
+    "agency": "NASA"
+  },
+  {
+    "id": "lunar-orbital-gemini-earth-orbit",
+    "categoryId": "two-crew-capsules",
+    "openingCost": 7272,
+    "maintenanceCost": 728,
+    "requiredMissionComponentIds": [
+      "gemini-capsule",
+      "gemini-lunar-propulsion-module"
+    ],
+    "openingCostDiscounts": [
+      {
+        "otherProgramId": "gemini",
+        "percent": 100
+      },
+      {
+        "otherProgramId": "circumlunar-gemini-earth-orbit",
+        "percent": 100
+      },
+      {
+        "otherProgramId": "gemini-direct-ascent-earth-orbit",
+        "percent": 100
+      },
+      {
+        "otherProgramId": "circumlunar-gemini",
+        "percent": 100
+      },
+      {
+        "otherProgramId": "lunar-orbital-gemini",
+        "percent": 100
+      },
+      {
+        "otherProgramId": "gemini-direct-ascent",
+        "percent": 100
+      }
+    ],
+    "requiredGoalIds": [],
+    "agency": "NASA"
+  },
+  {
+    "id": "gemini-direct-ascent-earth-orbit",
+    "categoryId": "two-crew-capsules",
+    "openingCost": 8706,
+    "maintenanceCost": 871,
+    "requiredMissionComponentIds": [
+      "gemini-capsule",
+      "gemini-direct-ascent-craft"
+    ],
+    "openingCostDiscounts": [
+      {
+        "otherProgramId": "gemini",
+        "percent": 100
+      },
+      {
+        "otherProgramId": "circumlunar-gemini-earth-orbit",
+        "percent": 100
+      },
+      {
+        "otherProgramId": "lunar-orbital-gemini-earth-orbit",
+        "percent": 100
+      },
+      {
+        "otherProgramId": "circumlunar-gemini",
+        "percent": 100
+      },
+      {
+        "otherProgramId": "lunar-orbital-gemini",
+        "percent": 100
+      },
+      {
+        "otherProgramId": "gemini-direct-ascent",
+        "percent": 100
+      }
+    ],
+    "requiredGoalIds": [],
+    "agency": "NASA"
+  },
+  {
+    "id": "voskhod",
+    "categoryId": "two-crew-capsules",
+    "openingCost": 1408,
+    "maintenanceCost": 141,
+    "requiredMissionComponentIds": [
+      "voskhod-capsule",
+      "berkut-eva-suit"
+    ],
+    "openingCostDiscounts": [
+      {
+        "otherProgramId": "vostok",
+        "percent": 100
+      }
+    ],
+    "requiredGoalIds": [],
+    "agency": "SOVIET"
+  },
+  {
+    "id": "soyuz-7k-l1-earth-orbit",
+    "categoryId": "two-crew-capsules",
+    "openingCost": 6076,
+    "maintenanceCost": 608,
+    "requiredMissionComponentIds": [
+      "soyuz-7k-l1-spacecraft"
+    ],
+    "openingCostDiscounts": [
+      {
+        "otherProgramId": "soyuz-7k-l1",
+        "percent": 100
+      }
+    ],
+    "requiredGoalIds": [],
+    "agency": "SOVIET"
+  },
+  {
+    "id": "soyuz-7k-l3-earth-orbit",
+    "categoryId": "two-crew-capsules",
+    "openingCost": 20020,
+    "maintenanceCost": 2002,
+    "requiredMissionComponentIds": [
+      "soyuz-7k-lok-spacecraft",
+      "igla-docking-system",
+      "krechet-eva-suit",
+      "lk-lander"
+    ],
+    "openingCostDiscounts": [
+      {
+        "otherProgramId": "soyuz-7k-l3",
+        "percent": 100
+      }
+    ],
+    "requiredGoalIds": [],
+    "agency": "SOVIET"
+  },
+  {
+    "id": "lk-700-earth-orbit",
+    "categoryId": "two-crew-capsules",
+    "openingCost": 8706,
+    "maintenanceCost": 871,
+    "requiredMissionComponentIds": [
+      "lk-700-spacecraft",
+      "krechet-eva-suit"
+    ],
+    "openingCostDiscounts": [
+      {
+        "otherProgramId": "lk-700",
+        "percent": 100
+      }
+    ],
+    "requiredGoalIds": [],
+    "agency": "SOVIET"
+  },
+  {
+    "id": "gemini-eor-earth-orbit",
+    "categoryId": "two-crew-capsules",
+    "openingCost": 1408,
+    "maintenanceCost": 141,
+    "requiredMissionComponentIds": [
+      "gemini-capsule",
+      "gemini-eor-service-module",
+      "langley-lunar-lander",
+      "gemini-eva-suit",
+      "light-lunar-eva-suit",
+      "s-ivb-space-tug"
+    ],
+    "openingCostDiscounts": [
+      {
+        "otherProgramId": "gemini",
+        "percent": 100
+      }
+    ],
+    "requiredGoalIds": [],
+    "agency": "NASA"
+  },
+  {
+    "id": "circumlunar-gemini",
+    "categoryId": "lunar-expeditions",
+    "openingCost": 15040,
+    "maintenanceCost": 1504,
+    "requiredMissionComponentIds": [
+      "gemini-capsule",
+      "gemini-transtage"
+    ],
+    "openingCostDiscounts": [
+      {
+        "otherProgramId": "gemini",
+        "percent": 100
+      },
+      {
+        "otherProgramId": "circumlunar-gemini-earth-orbit",
+        "percent": 100
+      },
+      {
+        "otherProgramId": "lunar-orbital-gemini-earth-orbit",
+        "percent": 100
+      },
+      {
+        "otherProgramId": "gemini-direct-ascent-earth-orbit",
+        "percent": 100
+      },
+      {
+        "otherProgramId": "lunar-orbital-gemini",
+        "percent": 100
+      },
+      {
+        "otherProgramId": "gemini-direct-ascent",
+        "percent": 100
+      }
+    ],
+    "requiredGoalIds": [
+      "lunar-probe"
+    ],
+    "agency": "NASA"
+  },
+  {
+    "id": "lunar-orbital-gemini",
+    "categoryId": "lunar-expeditions",
+    "openingCost": 18028,
+    "maintenanceCost": 1803,
+    "requiredMissionComponentIds": [
+      "gemini-capsule",
+      "gemini-lunar-propulsion-module"
+    ],
+    "openingCostDiscounts": [
+      {
+        "otherProgramId": "gemini",
+        "percent": 100
+      },
+      {
+        "otherProgramId": "circumlunar-gemini-earth-orbit",
+        "percent": 100
+      },
+      {
+        "otherProgramId": "lunar-orbital-gemini-earth-orbit",
+        "percent": 100
+      },
+      {
+        "otherProgramId": "gemini-direct-ascent-earth-orbit",
+        "percent": 100
+      },
+      {
+        "otherProgramId": "circumlunar-gemini",
+        "percent": 100
+      },
+      {
+        "otherProgramId": "gemini-direct-ascent",
+        "percent": 100
+      }
+    ],
+    "requiredGoalIds": [
+      "lunar-probe"
+    ],
+    "agency": "NASA"
+  },
+  {
+    "id": "gemini-direct-ascent",
+    "categoryId": "lunar-expeditions",
+    "openingCost": 21614,
+    "maintenanceCost": 2162,
+    "requiredMissionComponentIds": [
+      "gemini-capsule",
+      "gemini-direct-ascent-craft",
+      "apollo-lunar-eva-suit"
+    ],
+    "openingCostDiscounts": [
+      {
+        "otherProgramId": "gemini",
+        "percent": 100
+      },
+      {
+        "otherProgramId": "circumlunar-gemini-earth-orbit",
+        "percent": 100
+      },
+      {
+        "otherProgramId": "lunar-orbital-gemini-earth-orbit",
+        "percent": 100
+      },
+      {
+        "otherProgramId": "gemini-direct-ascent-earth-orbit",
+        "percent": 100
+      },
+      {
+        "otherProgramId": "circumlunar-gemini",
+        "percent": 100
+      },
+      {
+        "otherProgramId": "lunar-orbital-gemini",
+        "percent": 100
+      }
+    ],
+    "requiredGoalIds": [
+      "lunar-probe"
+    ],
+    "agency": "NASA"
+  },
+  {
+    "id": "apollo",
+    "categoryId": "lunar-expeditions",
+    "openingCost": 25000,
+    "maintenanceCost": 2500,
+    "requiredMissionComponentIds": [
+      "apollo-csm",
+      "apollo-lunar-eva-suit",
+      "apollo-lunar-module",
+      "lunar-roving-vehicle"
+    ],
+    "openingCostDiscounts": [
+      {
+        "otherProgramId": "apollo-earth-orbit",
+        "percent": 100
+      }
+    ],
+    "requiredGoalIds": [
+      "lunar-probe"
+    ],
+    "agency": "NASA"
+  },
+  {
+    "id": "gemini-eor",
+    "categoryId": "lunar-expeditions",
+    "openingCost": 10060,
+    "maintenanceCost": 1006,
+    "requiredMissionComponentIds": [
+      "gemini-capsule",
+      "gemini-eor-service-module",
+      "langley-lunar-lander",
+      "gemini-eva-suit",
+      "light-lunar-eva-suit",
+      "s-ivb-space-tug"
+    ],
+    "openingCostDiscounts": [
+      {
+        "otherProgramId": "apollo-earth-orbit",
+        "percent": 100
+      }
+    ],
+    "requiredGoalIds": [
+      "lunar-probe"
+    ],
+    "agency": "NASA"
+  },
+  {
+    "id": "soyuz-7k-l1",
+    "categoryId": "lunar-expeditions",
+    "openingCost": 15040,
+    "maintenanceCost": 1504,
+    "requiredMissionComponentIds": [
+      "soyuz-7k-l1-spacecraft"
+    ],
+    "openingCostDiscounts": [
+      {
+        "otherProgramId": "soyuz-7k-l1-earth-orbit",
+        "percent": 100
+      }
+    ],
+    "requiredGoalIds": [
+      "lunar-probe"
+    ],
+    "agency": "SOVIET"
+  },
+  {
+    "id": "soyuz-7k-l3",
+    "categoryId": "lunar-expeditions",
+    "openingCost": 25000,
+    "maintenanceCost": 2500,
+    "requiredMissionComponentIds": [
+      "soyuz-7k-lok-spacecraft",
+      "lk-lander",
+      "krechet-eva-suit",
+      "igla-docking-system"
+    ],
+    "openingCostDiscounts": [
+      {
+        "otherProgramId": "soyuz-7k-l3-earth-orbit",
+        "percent": 100
+      }
+    ],
+    "requiredGoalIds": [
+      "lunar-probe"
+    ],
+    "agency": "SOVIET"
+  },
+  {
+    "id": "lk-700",
+    "categoryId": "lunar-expeditions",
+    "openingCost": 21614,
+    "maintenanceCost": 2162,
+    "requiredMissionComponentIds": [
+      "lk-700-spacecraft",
+      "krechet-eva-suit"
+    ],
+    "openingCostDiscounts": [
+      {
+        "otherProgramId": "lk-700-earth-orbit",
+        "percent": 100
+      }
+    ],
+    "requiredGoalIds": [
+      "lunar-probe"
+    ],
+    "agency": "SOVIET"
+  },
+  {
+    "id": "apollo-earth-orbit",
+    "categoryId": "three-crew-capsules",
+    "openingCost": 22012,
+    "maintenanceCost": 2202,
+    "requiredMissionComponentIds": [
+      "apollo-csm",
+      "apollo-lunar-eva-suit",
+      "apollo-lunar-module",
+      "agena-target-vehicle"
+    ],
+    "openingCostDiscounts": [
+      {
+        "otherProgramId": "apollo",
+        "percent": 100
+      }
+    ],
+    "requiredGoalIds": [],
+    "agency": "NASA"
+  },
+  {
+    "id": "soyuz-7k-ok",
+    "categoryId": "three-crew-capsules",
+    "openingCost": 6325,
+    "maintenanceCost": 633,
+    "requiredMissionComponentIds": [
+      "soyuz-7k-ok-spacecraft",
+      "igla-docking-system",
+      "yastreb-eva-suit"
+    ],
+    "openingCostDiscounts": [],
+    "requiredGoalIds": [],
+    "agency": "SOVIET"
+  }
+]
