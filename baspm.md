@@ -1286,8 +1286,8 @@ whole group:
 The dialog previews the projected department expenditure
 (`current × (1 + p/100)`) and the projected average morale. It is a one-off
 action, not a standing salary level. Launch Window adopts it as is (user decision,
-2026-10-03, `design.md` §5 M5, `ui-spec.md` G8). Screenshot:
-`assets-raw/baspm/ui/manage_department.png`.
+2026-10-03, `design.md` §5 M5, `ui-spec.md` G8). (A screenshot of the dialog was in the repo
+until 2026-10-08, when the BASPM reference screenshots were removed.)
 
 ## 10. Programs, mission configurations, and reliability (traced 2026-09-27)
 

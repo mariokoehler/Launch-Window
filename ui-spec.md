@@ -23,9 +23,6 @@ missions. Decisions from that review are marked *(decided)*.
   for the chrome and for a roster and candidate table.
 
 **Reference material in this repo:**
-- `assets-raw/baspm/ui/*.png`: screenshots of the original game, named per
-  screen. Use them for layout ideas and to see what information BASPM showed.
-  Never copy their art or text (`design.md` §1.2).
 - `assets-raw/main_menu/`: the hub art, NASA and Soviet, 4 seasons × 4 times of
   day, plus `<faction>.hotspots.json` with the eight building polygons.
 - `assets-raw/backgrounds/solar_system.png`: original art for the celestial-body

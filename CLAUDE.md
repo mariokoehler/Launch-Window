@@ -103,10 +103,11 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
 - **Laptop:** if `COMPUTERNAME` is `S0147359`, there's no `E:` drive. Ask before any task
   that needs it.
 - **Hard rule (`design.md` §1.2):** no BASPM text, art, audio, video or code, verbatim or
-  lightly paraphrased, goes into the repo. The one exception is the reference screenshots in
-  `assets-raw/baspm/ui/`. Five icons once traced from BASPM's UI had to be removed for this, and
-  dense traced path data is the tell. Everything else in `assets-raw/` is the user's own art and
-  needs no provenance check.
+  lightly paraphrased, goes into the repo, with no exceptions. The UI reference screenshots that
+  once sat in `assets-raw/baspm/ui/` were removed on 2026-10-08: our own design had moved past
+  them. They're still in git history. Five icons once traced from BASPM's UI had to be removed for
+  this rule, and dense traced path data is the tell. Everything in `assets-raw/` is the user's own
+  art and needs no provenance check.
 
 ## Tools outside the repo
 

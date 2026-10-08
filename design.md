@@ -380,9 +380,10 @@ committed to it is redistributed.
 - **Text:** never copy BASPM's strings, and never lightly paraphrase them. Write from the
   real-world facts, researched in public sources (NASA history, encyclopedias), not by
   rereading BASPM's text.
-- **Art, audio, video:** nothing extracted from BASPM ever enters the repo or the game. The one
-  exception is the UI reference screenshots in `assets-raw/baspm/ui/`. Flag any task that risks
-  pulling an extracted file into the tree.
+- **Art, audio, video:** nothing extracted from BASPM ever enters the repo or the game. The UI
+  reference screenshots once kept in `assets-raw/baspm/ui/` were removed on 2026-10-08 (user: our
+  own design had moved past them); they remain in git history. Flag any task that risks pulling an
+  extracted file into the tree.
 - **Not restricted:** the real history itself (programs, hardware, dates, people). **Numbers**
   (costs, reliabilities, prestige, budget values, training lengths) follow BASPM's data by the
   user's decision (2026-10-03, confirmed 2026-10-06): they aren't creative expression, and
