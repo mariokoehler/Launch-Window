@@ -149,7 +149,7 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
     `assets-raw/blueprints/make_blueprints.py` (the user's workflow `render_to_blueprint.json`,
     flattened to `blueprints_workflow_api.json`; one description per component in
     `descriptions.json`, 3 seeds each, full-size review sheets in `review/`), the pick per component
-    in `picks.json` (only picked variants are committed, with `git add -f`), then
+    in `picks.json` (only picked variants are kept and committed, with `git add -f`), then
     `make_blueprint_assets.py` for `assets/ui/blueprints/*.jpg`. ComfyUI's own copies are
     `lw_blueprint_*`: never delete those. A new component needs a description, a pick and a
     converter run.

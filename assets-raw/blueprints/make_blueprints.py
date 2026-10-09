@@ -13,7 +13,8 @@ Our component ids map to BASPM's through COMPONENTS in E:\\Temp\\BASPM\\tools\\f
 at run time so BASPM's ids stay out of the repo. This script only runs on the main PC.
 
 Every component gets --variants drawings with their own seeds. Review
-sheets go to review/ (not committed); record the chosen file per component in picks.json.
+sheets go to review/ (not committed); record the chosen file per component in picks.json. Only the
+picked variants are kept and committed (git add -f); manifest.json still lists every seed.
 
 Usage (ComfyUI running locally):
     python make_blueprints.py                              # every described component, 3 variants each
@@ -220,8 +221,9 @@ def main():
                 for variant in range(1, args.variants + 1):
                     name = f'{component}_{style}_{variant}'
                     known = next((e for e in manifest if e['file'] == f'variants/{name}.png'), None)
-                    if (known and not args.force and known['prompt'] == prompt
-                            and os.path.exists(os.path.join(HERE, known['file']))):
+                    # A variant in the manifest is done even when its file is gone: only the picks
+                    # are kept (user, 2026-10-09). --force, or a changed prompt, generates it again.
+                    if known and not args.force and known['prompt'] == prompt:
                         continue
                     if reference_name is None:
                         reference_name = upload(args.host, reference(ids[component]), f'lw_blueprint_ref_{component}.png')
