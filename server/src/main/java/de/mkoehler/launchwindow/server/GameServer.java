@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import de.mkoehler.launchwindow.net.NetworkServer;
+import de.mkoehler.launchwindow.net.messages.TurnResolvedNotice;
 import de.mkoehler.launchwindow.content.BudgetSchedule;
 import de.mkoehler.launchwindow.content.ContentCatalog;
 import de.mkoehler.launchwindow.content.ContentPackLoader;
@@ -113,6 +114,12 @@ public class GameServer extends ApplicationAdapter {
             RandomEventRoster.baspmClose());
         dispatcher.setTurnForcer(scheduler::resolveNow);
         networkServer = new NetworkServer();
+        // Everyone online hears at once that the turn resolved (on this thread, after it's saved).
+        scheduler.setOnResolved(turn -> {
+            for (int connectionId : dispatcher.loggedInConnections()) {
+                networkServer.send(connectionId, new TurnResolvedNotice(turn));
+            }
+        });
         try {
             networkServer.start(tcpPort);
         } catch (IOException e) {

@@ -29,7 +29,12 @@ public record ServerResult(Kind kind, String message, PlayerSnapshot state, Game
         /** No connection could be made. */
         UNREACHABLE,
         /** Connected, but the exchange broke off. */
-        FAILED
+        FAILED,
+        /**
+         * The turn resolved before the action arrived: nothing was applied, and the result carries
+         * the new turn's state when it could be fetched.
+         */
+        TURN_RESOLVED
     }
 
     /**

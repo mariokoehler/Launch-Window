@@ -40,13 +40,26 @@ public interface ServerGateway {
     /**
      * Submits one of today's actions over the session's connection, then fetches the state with it
      * applied and the game info. The submit itself is never retried: if the connection breaks
-     * during it, the server may already have applied it.
+     * during it, the server may already have applied it. If the turn resolved before the action
+     * arrived, nothing is applied and the result is {@link ServerResult.Kind#TURN_RESOLVED}, with the
+     * new state.
      *
      * @param credentials who and where
      * @param action      the action
+     * @param gameTurn    the open game turn the screen's state belongs to
      * @param done        receives the result on the render thread
      */
-    void submit(Credentials credentials, PlayerAction action, Consumer<ServerResult> done);
+    void submit(Credentials credentials, PlayerAction action, long gameTurn, Consumer<ServerResult> done);
+
+    /**
+     * Returns the turn the server last said had resolved, unasked, and forgets it: a screen then
+     * fetches the new state. Stubs keep the default.
+     *
+     * @return the resolved turn, or 0 if no notice came since the last call
+     */
+    default long takeTurnResolvedNotice() {
+        return 0;
+    }
 
     /**
      * Returns whether a call is under way: sent, and its result not yet delivered. Screens show a

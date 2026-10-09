@@ -190,6 +190,16 @@ public final class ClientSession {
     }
 
     /**
+     * Returns the game's open turn as this session last heard it: the turn its state belongs to and
+     * its actions are meant for.
+     *
+     * @return the open turn
+     */
+    public long openTurn() {
+        return gameInfo.response().gameTurn();
+    }
+
+    /**
      * Returns the latest turn that has resolved: the one before the game's open turn.
      *
      * @return the turn, 0 before the first resolution

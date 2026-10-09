@@ -346,7 +346,7 @@ final class RndCards {
                 + ".", Theme.NoticeKind.SUCCESS);
             return;
         }
-        host.game.gateway().submit(host.session.credentials(), queue.poll(), result -> {
+        host.game.gateway().submit(host.session.credentials(), queue.poll(), host.session.openTurn(), result -> {
             if (!host.isShowing()) {
                 autoAssigning = false;
                 return;

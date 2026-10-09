@@ -164,7 +164,8 @@ public final class ScreenSnapshot {
         }
 
         @Override
-        public void submit(Credentials credentials, PlayerAction action, Consumer<ServerResult> done) {
+        public void submit(Credentials credentials, PlayerAction action, long gameTurn,
+                Consumer<ServerResult> done) {
         }
 
         @Override

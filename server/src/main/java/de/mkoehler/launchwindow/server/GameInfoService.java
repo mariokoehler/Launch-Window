@@ -83,6 +83,17 @@ public final class GameInfoService {
     }
 
     /**
+     * Reads the open game turn: the one actions go into.
+     *
+     * @return the open game turn, 1 before the first resolution
+     * @throws IOException if the scheduler state exists but can't be read
+     */
+    public long openGameTurn() throws IOException {
+        return new SchedulerStateStore(dataRoot.resolve("scheduler-state.json"), mapper).load()
+            .map(SchedulerState::getNextGameTurn).orElse(1L);
+    }
+
+    /**
      * Reads the game's current facts.
      *
      * @return the game info

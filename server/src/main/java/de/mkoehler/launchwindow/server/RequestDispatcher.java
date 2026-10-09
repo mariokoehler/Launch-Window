@@ -117,6 +117,15 @@ public class RequestDispatcher {
     }
 
     /**
+     * Returns the connections that have logged in, for notices sent to everyone online.
+     *
+     * @return their ids
+     */
+    public java.util.Set<Integer> loggedInConnections() {
+        return java.util.Set.copyOf(connectionAccountIds.keySet());
+    }
+
+    /**
      * Dispatches one received message by type and reports whether the
      * connection should be closed after the response is sent.
      *
@@ -257,6 +266,11 @@ public class RequestDispatcher {
         try {
             if (!hasSlot(accountId)) {
                 return SubmitActionResponse.failure(ClaimSlotRequest.SLOT_CLAIM_REQUIRED);
+            }
+            // Meant for a turn that resolved while it was on its way: it would land in the next
+            // turn, against a state the player hasn't seen.
+            if (request.gameTurn() > 0 && request.gameTurn() != gameInfo.openGameTurn()) {
+                return SubmitActionResponse.failure(SubmitActionRequest.TURN_RESOLVED);
             }
             action.setSeed(actionSeeds.nextLong());
             ActionResult result = playerStateService(accountId).submitAction(action);

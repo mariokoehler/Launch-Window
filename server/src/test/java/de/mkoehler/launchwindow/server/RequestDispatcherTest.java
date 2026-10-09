@@ -226,6 +226,31 @@ class RequestDispatcherTest {
     }
 
     /**
+     * An action names the open turn its screen showed. Once that turn has resolved the action is
+     * refused and nothing changes; the open turn's own actions, and unchecked ones, go through.
+     */
+    @Test
+    void anActionMeantForAResolvedTurnChangesNothing(@TempDir Path dataRoot) throws java.io.IOException {
+        RequestDispatcher dispatcher = dispatcher(createAccountStore(dataRoot), dataRoot, false);
+        dispatcher.handleHandshake(1, new HandshakeRequest(AppVersion.getVersion(), "mario", "hunter2"));
+        dispatcher.handleClaimSlot(1, new ClaimSlotRequest(Archetype.SOVIET, "OKB-1", "Chief"));
+        de.mkoehler.launchwindow.server.schedule.SchedulerState moved =
+            new de.mkoehler.launchwindow.server.schedule.SchedulerState();
+        moved.setNextGameTurn(2);
+        moved.setLastResolvedDate(java.time.LocalDate.of(2026, 10, 9));
+        new de.mkoehler.launchwindow.server.schedule.SchedulerStateStore(dataRoot.resolve("scheduler-state.json"),
+            GameServer.createMapper()).save(moved);
+
+        assertEquals(SubmitActionResponse.failure(SubmitActionRequest.TURN_RESOLVED), dispatcher.handleSubmitAction(1,
+            new SubmitActionRequest(new OpenProgramAction("sputnik-1"), 1)));
+        assertEquals(List.of(), dispatcher.handleFetchState(1, new FetchStateRequest()).state().getOpenedProgramIds());
+        assertEquals(SubmitActionResponse.success("OPENED"), dispatcher.handleSubmitAction(1,
+            new SubmitActionRequest(new OpenProgramAction("sputnik-1"), 2)));
+        assertEquals(SubmitActionResponse.success("OPENED"), dispatcher.handleSubmitAction(1,
+            new SubmitActionRequest(new OpenProgramAction("vostok"))), "an unchecked request skips the turn check");
+    }
+
+    /**
      * Resolving the turn now needs dev mode; in dev mode it runs the scheduler's resolve-now.
      */
     @Test

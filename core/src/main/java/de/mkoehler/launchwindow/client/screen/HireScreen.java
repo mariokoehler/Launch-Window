@@ -447,7 +447,7 @@ public final class HireScreen extends ChromeScreen {
         }
         String candidateId = queue.poll();
         HireAction action = new HireAction(department.group(), candidateId, bonuses.contains(candidateId));
-        game.gateway().submit(session.credentials(), action, result -> {
+        game.gateway().submit(session.credentials(), action, session.openTurn(), result -> {
             if (!isShowing()) {
                 return;
             }
@@ -457,6 +457,10 @@ public final class HireScreen extends ChromeScreen {
             } else if (result.kind() == ServerResult.Kind.REFUSED) {
                 problems.add(Refusals.text(result.message()));
                 hireNext(queue, hired, problems);
+            } else if (result.kind() == ServerResult.Kind.TURN_RESOLVED) {
+                // The rest would be hired from a pool that's gone: stop, and show the new turn.
+                queue.clear();
+                turnResolvedUnderfoot(result);
             } else {
                 // The connection is gone: stop here rather than piling up failures.
                 problems.add("The connection broke off; try the rest again.");

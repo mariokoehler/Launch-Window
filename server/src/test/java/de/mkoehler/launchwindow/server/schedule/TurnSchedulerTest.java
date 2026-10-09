@@ -280,13 +280,20 @@ class TurnSchedulerTest {
         createPlayer(dataRoot, "acct-1");
         Clock beforeResolutionTime = Clock.fixed(Instant.parse("2026-09-29T06:00:00Z"), ZONE);
 
-        assertEquals(1, scheduler(dataRoot, beforeResolutionTime).resolveNow());
+        List<Long> heard = new java.util.ArrayList<>();
+        TurnScheduler forcing = scheduler(dataRoot, beforeResolutionTime);
+        forcing.setOnResolved(heard::add);
+        assertEquals(1, forcing.resolveNow());
+        assertEquals(List.of(1L), heard, "a forced resolution is announced");
         PlayerSnapshotStore store = new PlayerSnapshotStore(dataRoot.resolve("players/acct-1"), mapper);
         assertTrue(store.load(1).isPresent());
         assertTrue(store.load(2).isEmpty());
 
-        scheduler(dataRoot, Clock.fixed(Instant.parse("2026-09-29T08:00:00Z"), ZONE)).checkAndResolveIfDue();
+        TurnScheduler scheduled = scheduler(dataRoot, Clock.fixed(Instant.parse("2026-09-29T08:00:00Z"), ZONE));
+        scheduled.setOnResolved(heard::add);
+        scheduled.checkAndResolveIfDue();
         assertTrue(store.load(2).isPresent(), "the scheduled resolution still comes, a turn later");
+        assertEquals(List.of(1L, 2L), heard, "and so is a scheduled one");
         assertTrue(store.load(3).isEmpty());
     }
 

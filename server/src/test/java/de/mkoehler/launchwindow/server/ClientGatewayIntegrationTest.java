@@ -35,8 +35,11 @@ import de.mkoehler.launchwindow.net.NetworkServer;
 import de.mkoehler.launchwindow.net.messages.ClaimSlotResponse;
 import de.mkoehler.launchwindow.net.messages.GameInfoResponse;
 import de.mkoehler.launchwindow.net.messages.HandshakeRequest;
+import de.mkoehler.launchwindow.net.messages.TurnResolvedNotice;
 import de.mkoehler.launchwindow.server.accounts.AccountStore;
 import de.mkoehler.launchwindow.server.schedule.GameMeta;
+import de.mkoehler.launchwindow.server.schedule.SchedulerState;
+import de.mkoehler.launchwindow.server.schedule.SchedulerStateStore;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -75,6 +78,7 @@ class ClientGatewayIntegrationTest {
     private HeadlessApplication application;
     private NetworkGateway gateway;
     private AccountStore accountStore;
+    private RequestDispatcher dispatcher;
     private final AtomicInteger handshakes = new AtomicInteger();
 
     @AfterEach
@@ -191,7 +195,63 @@ class ClientGatewayIntegrationTest {
     }
 
     private ServerResult submit(Credentials credentials, PlayerAction action) throws Exception {
-        return await(done -> gateway.submit(credentials, action, done));
+        return submit(credentials, action, 1);
+    }
+
+    private ServerResult submit(Credentials credentials, PlayerAction action, long gameTurn) throws Exception {
+        return await(done -> gateway.submit(credentials, action, gameTurn, done));
+    }
+
+    /**
+     * A player acting on the old turn's screen while it resolves: the action arrives after the turn
+     * moved on, so the server applies nothing and the client gets the new turn's state instead. And
+     * the server's unasked notice that a turn resolved reaches the client without being mistaken for
+     * the reply to its next request.
+     */
+    @Test
+    void anActionMeantForAResolvedTurnIsRefusedAndTheClientHearsOfTheTurn(@TempDir Path dataRoot)
+            throws Exception {
+        int port = startServer(dataRoot);
+        application = new HeadlessApplication(new ApplicationAdapter() {
+        });
+        gateway = new NetworkGateway();
+        Credentials mario = new Credentials(new ServerAddress("localhost", port), "mario", "hunter2");
+        logIn(mario);
+        ClaimResult joined = claim(mario, "Baltic Star Agency", "A. Reyes");
+        assertEquals(ClaimResult.Kind.JOINED, joined.kind());
+        String candidate = joined.state().getSetSpecialistCandidates().get(0).getId();
+
+        // The turn resolves (the scheduler moves the open turn on) while the player still looks at turn 1.
+        SchedulerStateStore schedulerState =
+            new SchedulerStateStore(dataRoot.resolve("scheduler-state.json"), GameServer.createMapper());
+        SchedulerState moved = new SchedulerState();
+        moved.setNextGameTurn(2);
+        moved.setLastResolvedDate(java.time.LocalDate.now());
+        schedulerState.save(moved);
+
+        ServerResult late = submit(mario, new HireAction(PersonnelGroup.SET, candidate), 1);
+        assertEquals(ServerResult.Kind.TURN_RESOLVED, late.kind(), late.message());
+        assertEquals(0, late.state().getSetSpecialists().size(), "nothing was applied");
+        assertEquals(2, late.gameInfo().response().gameTurn(), "the new turn came back with it");
+        ServerResult onTime = submit(mario, new HireAction(PersonnelGroup.SET, candidate), 2);
+        assertEquals(ServerResult.Kind.OK, onTime.kind(), onTime.message());
+        assertEquals(1, onTime.state().getSetSpecialists().size());
+
+        assertEquals(0, gateway.takeTurnResolvedNotice());
+        for (int connectionId : dispatcher.loggedInConnections()) {
+            server.send(connectionId, new TurnResolvedNotice(2));
+        }
+        long deadline = System.currentTimeMillis() + 5_000;
+        long heard = 0;
+        while (heard == 0 && System.currentTimeMillis() < deadline) {
+            heard = gateway.takeTurnResolvedNotice();
+            Thread.sleep(20);
+        }
+        assertEquals(2, heard, "the notice arrived");
+        assertEquals(0, gateway.takeTurnResolvedNotice(), "taking it forgets it");
+        ServerResult refreshed = await(done -> gateway.refresh(mario, done));
+        assertEquals(ServerResult.Kind.OK, refreshed.kind(), "the notice wasn't taken for a reply");
+        assertEquals(1, handshakes.get(), "and the connection stayed up");
     }
 
     /**
@@ -343,8 +403,9 @@ class ClientGatewayIntegrationTest {
     private void startServer(Path dataRoot, int port) throws IOException {
         ObjectMapper mapper = GameServer.createMapper();
         GameMeta meta = ServerTestGames.meta(false);
-        RequestDispatcher dispatcher = new RequestDispatcher(accountStore, dataRoot, mapper, ServerTestGames.CONTEXT,
+        dispatcher = new RequestDispatcher(accountStore, dataRoot, mapper, ServerTestGames.CONTEXT,
             meta, ServerTestGames.gameInfo(dataRoot, mapper, meta));
+        RequestDispatcher capturedDispatcher = dispatcher;
         server = new NetworkServer();
         server.start(port);
         NetworkServer capturedServer = server;
@@ -355,7 +416,7 @@ class ClientGatewayIntegrationTest {
                 if (message instanceof HandshakeRequest) {
                     handshakes.incrementAndGet();
                 }
-                RequestDispatcher.DispatchResult result = dispatcher.handle(connectionId, message);
+                RequestDispatcher.DispatchResult result = capturedDispatcher.handle(connectionId, message);
                 if (result.closeConnection()) {
                     capturedServer.sendThenClose(connectionId, result.response());
                 } else {

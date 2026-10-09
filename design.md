@@ -1642,6 +1642,22 @@ Per game (one per server, §3.9), in the host-edited `game-meta.json`:
   giving about 11 turns before the real Sputnik.
 - **Dev mode:** `"devMode": true` adds "Resolve turn now" for play testing (the scheduled
   resolution still comes) and allows `DevClient`'s funds cheat.
+- **Players online while a turn resolves** (the user's question, built 2026-10-09). Some players
+  wait online to see the turn first. The server handles requests and resolves the turn on one
+  thread, so a request never interleaves with a resolution; it waits in the network queue and
+  is handled after the resolution is saved. Two guards on top:
+  - **An action names its turn.** `SubmitActionRequest.gameTurn` is the open turn the client's
+    state belongs to. If that turn has resolved since (the player acted on the old turn's screen
+    as it resolved), the server refuses with `TURN_RESOLVED` and applies nothing, so an action
+    meant for one turn never lands in the next against a state the player hasn't seen. The
+    client takes in the new turn's state and says the turn resolved and nothing was done; a hire
+    or R&D chain stops there. 0 skips the check (`DevClient`, tests).
+  - **The server says when a turn resolved.** Once a resolution is saved (scheduled or forced),
+    every logged-in connection gets a `TurnResolvedNotice`, and the client fetches the new state
+    at once and shows "The turn resolved", instead of polling 5 s after the deadline and then
+    every 15 s (still the fallback). The notice never goes through the reply queue, so it can't
+    be taken for the answer to a request. It is also the hook for the Firsts' front pages (§5,
+    Backlog).
 
 ### 3.7 Persistence & turn-resolution data model
 

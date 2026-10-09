@@ -287,5 +287,8 @@ public final class MessageRegistry {
         kryo.register(de.mkoehler.launchwindow.actions.SetRetentionDefaultAction.class);
         kryo.register(de.mkoehler.launchwindow.actions.SetRetentionAction.class);
         kryo.register(de.mkoehler.launchwindow.model.Retention.class);
+
+        // The push when a turn resolves (2026-10-09). Never move this line.
+        kryo.register(de.mkoehler.launchwindow.net.messages.TurnResolvedNotice.class);
     }
 }

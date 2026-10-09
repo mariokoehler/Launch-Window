@@ -70,6 +70,7 @@ public class TurnScheduler {
     private final SchedulerStateStore stateStore;
     private final ActionContext context;
     private final RandomEventRoster roster;
+    private java.util.function.LongConsumer onResolved = turn -> { };
 
     /**
      * Creates a new scheduler for the game rooted at the given data
@@ -126,11 +127,13 @@ public class TurnScheduler {
             return;
         }
 
-        resolveAllPlayers(state.getNextGameTurn(), meta);
+        long turn = state.getNextGameTurn();
+        resolveAllPlayers(turn, meta);
 
         state.setLastResolvedDate(today);
-        state.setNextGameTurn(state.getNextGameTurn() + 1);
+        state.setNextGameTurn(turn + 1);
         stateStore.save(state);
+        onResolved.accept(turn);
     }
 
     /**
@@ -150,7 +153,18 @@ public class TurnScheduler {
         resolveAllPlayers(turn, meta);
         state.setNextGameTurn(turn + 1);
         stateStore.save(state);
+        onResolved.accept(turn);
         return turn;
+    }
+
+    /**
+     * Sets who hears that a turn has resolved: called with the turn once its resolution is saved,
+     * scheduled or forced.
+     *
+     * @param listener the listener
+     */
+    public void setOnResolved(java.util.function.LongConsumer listener) {
+        this.onResolved = Objects.requireNonNull(listener, "listener must not be null");
     }
 
     /**

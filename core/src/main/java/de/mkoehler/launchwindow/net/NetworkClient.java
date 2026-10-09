@@ -33,6 +33,7 @@ public final class NetworkClient implements AutoCloseable {
 
     private final Client client;
     private final BlockingQueue<Object> inbox = new LinkedBlockingQueue<>();
+    private volatile java.util.function.Consumer<Object> noticeListener = notice -> { };
 
     /**
      * Creates a client that is not connected yet; call
@@ -44,7 +45,10 @@ public final class NetworkClient implements AutoCloseable {
         client.addListener(new Listener() {
             @Override
             public void received(Connection connection, Object object) {
-                if (MessageRegistry.isProtocolMessage(object)) {
+                if (object instanceof de.mkoehler.launchwindow.net.messages.TurnResolvedNotice) {
+                    // Unasked: never a reply, so it must not be taken for one.
+                    noticeListener.accept(object);
+                } else if (MessageRegistry.isProtocolMessage(object)) {
                     inbox.add(object);
                 }
             }
@@ -116,6 +120,15 @@ public final class NetworkClient implements AutoCloseable {
                 "Expected " + responseType.getSimpleName() + " but got " + response.getClass().getSimpleName());
         }
         return responseType.cast(response);
+    }
+
+    /**
+     * Sets who hears the server's unasked notices. Called on KryoNet's network thread.
+     *
+     * @param listener the listener
+     */
+    public void setNoticeListener(java.util.function.Consumer<Object> listener) {
+        this.noticeListener = Objects.requireNonNull(listener, "listener must not be null");
     }
 
     /**

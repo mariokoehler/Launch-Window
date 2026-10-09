@@ -199,7 +199,7 @@ abstract class SessionScreen extends StageScreen {
             return;
         }
         busy = true;
-        game.gateway().submit(session.credentials(), action, result -> {
+        game.gateway().submit(session.credentials(), action, session.openTurn(), result -> {
             busy = false;
             if (!isShowing()) {
                 return;
@@ -235,7 +235,25 @@ abstract class SessionScreen extends StageScreen {
             case UNREACHABLE -> toast("Can't reach the server. Try again.", Theme.NoticeKind.DANGER);
             case LOGIN_FAILED -> toast("Couldn't log in again: " + result.message(), Theme.NoticeKind.DANGER);
             case FAILED -> toast("The connection broke off. Try again.", Theme.NoticeKind.DANGER);
+            case TURN_RESOLVED -> turnResolvedUnderfoot(result);
         }
+    }
+
+    /**
+     * The turn resolved before an action arrived, so the server applied nothing: take in the new
+     * turn's state and say so, and the player decides again with it in front of them.
+     *
+     * @param result the result, with the new state when it could be fetched
+     */
+    protected void turnResolvedUnderfoot(ServerResult result) {
+        if (result.state() != null) {
+            session.update(result);
+            stateChanged();
+        } else {
+            refresh();
+        }
+        toast("The turn resolved before that reached the server, so nothing was done. Its report is waiting "
+            + "on the Space Complex.", Theme.NoticeKind.INFO);
     }
 
     /**
@@ -558,6 +576,10 @@ abstract class SessionScreen extends StageScreen {
     public void render(float delta) {
         long now = System.currentTimeMillis();
         OptionalLong left = session.gameInfo().millisUntilNextResolution(now);
+        // The server says a turn resolved: fetch it now rather than at the next poll.
+        if (!refreshing && game.gateway().takeTurnResolvedNotice() > 0) {
+            refresh();
+        }
         // Once the turn is due, fetch the resolved state shortly after: new date, new candidates, new countdown.
         if (left.isPresent() && left.getAsLong() == 0 && now - lastRefreshMillis > REFRESH_SPACING_MILLIS
             && now - session.gameInfo().receivedAtMillis() > RESOLUTION_GRACE_MILLIS) {

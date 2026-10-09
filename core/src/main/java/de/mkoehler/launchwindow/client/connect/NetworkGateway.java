@@ -21,6 +21,7 @@ import de.mkoehler.launchwindow.net.messages.RivalsRequest;
 import de.mkoehler.launchwindow.net.messages.RivalsResponse;
 import de.mkoehler.launchwindow.net.messages.TurnReportRequest;
 import de.mkoehler.launchwindow.net.messages.TurnReportResponse;
+import de.mkoehler.launchwindow.net.messages.TurnResolvedNotice;
 import de.mkoehler.launchwindow.persistence.PlayerAction;
 import de.mkoehler.launchwindow.rules.TurnReport;
 
@@ -29,6 +30,7 @@ import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -81,6 +83,8 @@ public final class NetworkGateway implements ServerGateway {
 
     /** The session's connection; only the worker thread touches it. {@code null} when logged out. */
     private NetworkClient client;
+    /** The turn the server last said had resolved, set on KryoNet's thread, taken on the render thread. */
+    private final AtomicLong resolvedNotice = new AtomicLong();
     /** Who the connection is logged in as; only the worker thread touches it. */
     private Credentials session;
 
@@ -148,7 +152,7 @@ public final class NetworkGateway implements ServerGateway {
     }
 
     @Override
-    public void submit(Credentials credentials, PlayerAction action, Consumer<ServerResult> done) {
+    public void submit(Credentials credentials, PlayerAction action, long gameTurn, Consumer<ServerResult> done) {
         run(() -> {
             Optional<LoginResult> refusal = ensureSession(credentials);
             if (refusal.isPresent()) {
@@ -156,10 +160,15 @@ public final class NetworkGateway implements ServerGateway {
             }
             SubmitActionResponse response;
             try {
-                response = client.sendAndReceive(new SubmitActionRequest(action), SubmitActionResponse.class);
+                response = client.sendAndReceive(new SubmitActionRequest(action, gameTurn), SubmitActionResponse.class);
             } catch (IOException | RuntimeException e) {
                 dropConnection();
                 return ServerResult.of(ServerResult.Kind.FAILED, e.getMessage());
+            }
+            if (!response.success() && SubmitActionRequest.TURN_RESOLVED.equals(response.message())) {
+                ServerResult fresh = readWithRetry(credentials);
+                return new ServerResult(ServerResult.Kind.TURN_RESOLVED, response.message(), fresh.state(),
+                    fresh.gameInfo());
             }
             if (!response.success()) {
                 return ServerResult.of(ServerResult.Kind.REFUSED, response.message());
@@ -170,6 +179,11 @@ public final class NetworkGateway implements ServerGateway {
                 ? new ServerResult(ServerResult.Kind.OK, response.message(), fetched.state(), fetched.gameInfo())
                 : ServerResult.of(ServerResult.Kind.OK, response.message());
         }, message -> ServerResult.of(ServerResult.Kind.FAILED, message), done);
+    }
+
+    @Override
+    public long takeTurnResolvedNotice() {
+        return resolvedNotice.getAndSet(0);
     }
 
     @Override
@@ -286,6 +300,11 @@ public final class NetworkGateway implements ServerGateway {
      */
     private Optional<LoginResult> openSession(Credentials credentials) {
         NetworkClient fresh = new NetworkClient();
+        fresh.setNoticeListener(notice -> {
+            if (notice instanceof TurnResolvedNotice resolved) {
+                resolvedNotice.set(resolved.resolvedTurn());
+            }
+        });
         try {
             fresh.connect(credentials.address().host(), credentials.address().port());
         } catch (IOException | RuntimeException e) {
