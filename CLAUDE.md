@@ -48,7 +48,8 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   Museum's Encyclopedia tab, with every figure checked. Players will reach them through concept
   chips on the program, configuration and rocket screens (`ui-spec.md` component 19; the audit
   is in `design.md` §1.1). The chips are mocked up on the same canvas's bottom row and built in
-  libGDX (2026-10-07); their look is confirmed.
+  libGDX (2026-10-07); their look is confirmed. **E-20 to E-30** (the full content pack) are
+  mocked up on the same canvas (2026-10-09), figures unverified (each row's yellow note); not built.
 - **People worth caring about** (`design.md` §2.2(d), the user's idea, 2026-10-07): team chemistry
   from pair rapport and hidden traits, ambitions, career records, later poaching. The rules for
   phases 1 to 3 and the personal traits are built (2026-10-07), and so are their screens, from
@@ -78,7 +79,7 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   configurations gated on a goal. Its components have blueprint drawings in the turn report
   (2026-10-09), and every program, component and real flight has a history note (2026-10-09). Still
   open: rocket program art for Juno II and Atlas (the user is drawing it), concept chips for the new
-  content, explainers E-20 to E-30 (proposed 2026-10-09, `design.md` §1.1), and a new blueprint for
+  content, explainers E-20 to E-30 (mocked up 2026-10-09, figures to verify, not built; `design.md` §1.1), and a new blueprint for
   `mig-e-154-spaceplane` (user, 2026-10-09: it was generated from BASPM's PKA, not the rocket plane
   the user's art shows; redo its description in `assets-raw/blueprints/descriptions.json`).
 - **PR duty for astronauts is built** (`design.md` §2.2(c)), with 39 press stories
