@@ -447,6 +447,32 @@ On the right:
       replaced by "A safer fuel" (fact check).
     - **Thumbnails leave out halo outlines** (fixed 2026-10-07): a card shows the picture without
       its labels, so an outline alone would read as a smudge (E-04, E-10, E-13, E-14, E-19).
+    - **E-20 to E-30** *(mocked up 2026-10-09 from the brief for the full content pack; not
+      checked, not built)*: one canvas row each after E-19, in the same template, each with a
+      yellow note of the figures and claims to verify and of what differs from the brief. The
+      concept-chip rows moved down below them. Sheet titles:
+      - **E-20 "Three ways to the Moon"** (Lunar mission modes): *Three routes to the Moon*; *Why
+        the small lander won*.
+      - **E-21 "Docking"**: *The last hundred metres*; *Turning around, and moving across*.
+      - **E-22 "Spacewalks"**: *A balloon shaped like a person*; *Learning to work outside*.
+      - **E-23 "Launch windows"** (Interplanetary flight): *The cheapest way across* (the transfer
+        ellipse, orbits to scale); *Why you wait* (the windows from 1960 to 1975).
+      - **E-24 "Gravity assists"**: *Borrowing a planet's speed*; *Planet to planet* (Mariner 10,
+        Pioneer 11).
+      - **E-25 "Landing on other worlds"** (Landing): *Rockets all the way down*; *Venus and Mars*.
+      - **E-26 "Far from home"** (Deep space): *Sunlight runs out*; *Talking across the solar
+        system*.
+      - **E-27 "Pictures before digital cameras"** (Space photography), one sheet: *Film,
+        developed in space*.
+      - **E-28 "Moon rock by robot"** (Sample return), one sheet: *A piece of the Moon by robot*.
+      - **E-29 "Rocket planes"**, one sheet: *Rocket planes at the edge of space*.
+      - **E-30 "Around the Moon and back"** (Circumlunar flight): *The free return*; *Coming home
+        fast*.
+    - **Changed from the brief** (each in its row's note): shorter title-block names for E-23,
+      E-25, E-26, E-28 and E-29; E-29 one sheet, E-30 two; the "In Launch Window" strips use the
+      standard pack's step names ("Transposition and docking", "Cruise to Mars", "Venus flyby":
+      the pack has no "Lunar slingshot" or "transit" step); Mars's air "less than 1 %" of Earth's,
+      not "about 1 %"; the X-15's height "about 108 km", not 107.8 (354,200 ft).
 19. **Concept chips** *(user's idea, 2026-10-07; specified, mocked up and built the same day; the
     look confirmed by the user that day)*. A small **Concepts** section listing the
     real-world ideas behind a piece of game content, as clickable chips. A chip opens the
