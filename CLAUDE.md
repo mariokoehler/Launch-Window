@@ -193,7 +193,7 @@ mvn -pl dev-tools compile exec:java -DmainClass=de.mkoehler.launchwindow.devtool
   "Dev · Resolve turn now" on the hub and allows `DevClient`'s `funds` cheat.
 - **Bot playouts:** `mvn -pl dev-tools compile exec:java -DmainClass=de.mkoehler.launchwindow.devtools.analysis.ContentPackPlayouts`
   (`-Dexec.args=standard` for the full pack, which plays the Moon race; add `ahead` for the bot that
-  works ahead, `-Dexec.args="standard ahead"`)
+  works ahead or `side` for the one that also flies side missions, `-Dexec.args="standard side"`)
   (also `PersonnelLifecyclePlayouts`, `CareerCurves`, `StateSizes` (it takes the pack too), `IntelligencePlayouts`, `RaceLulls` (the Moon race's lulls with R&D tuned); `design.md` §3.10).
 - **Releasing** (ported from Robot-Rampage 2026-10-06; its and StarWars' CLAUDE.md hold the
   gotchas):
