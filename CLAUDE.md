@@ -257,6 +257,9 @@ cd assets && java --enable-native-access=ALL-UNNAMED -cp "../lwjgl3/target/class
   `${project.basedir}/../assets` for the shared assets folder.
 
 **Network and saved formats**
+- **A changed message shape** (a field added to an existing message, as `SubmitActionRequest.gameTurn`
+  on 2026-10-09) needs client and server rebuilt together; the handshake's version check refuses
+  the old side, so rebuild the client zip before a play test.
 - **Append-only:** `MessageRegistry` registers new types last. `ResolutionEvent`'s
   `@JsonSubTypes` ids are never renamed or reused, and event and report fields are only added
   (`design.md` §3.7).

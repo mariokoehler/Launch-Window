@@ -458,9 +458,13 @@ public final class HireScreen extends ChromeScreen {
                 problems.add(Refusals.text(result.message()));
                 hireNext(queue, hired, problems);
             } else if (result.kind() == ServerResult.Kind.TURN_RESOLVED) {
-                // The rest would be hired from a pool that's gone: stop, and show the new turn.
+                // The rest would be hired from a pool that's gone: stop, sum up, and show the new turn.
+                if (result.state() != null) {
+                    session.update(result);
+                }
+                problems.add(Refusals.text(result.message()));
                 queue.clear();
-                turnResolvedUnderfoot(result);
+                hireNext(queue, hired, problems);
             } else {
                 // The connection is gone: stop here rather than piling up failures.
                 problems.add("The connection broke off; try the rest again.");
