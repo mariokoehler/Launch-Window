@@ -9,6 +9,7 @@ import de.mkoehler.launchwindow.content.ContentPackLoader;
 import de.mkoehler.launchwindow.content.LaunchType;
 import de.mkoehler.launchwindow.content.MissionComponent;
 import de.mkoehler.launchwindow.content.MissionConfiguration;
+import de.mkoehler.launchwindow.content.MissionSeason;
 import de.mkoehler.launchwindow.content.MissionStep;
 import de.mkoehler.launchwindow.content.Program;
 import de.mkoehler.launchwindow.content.RandomEventRoster;
@@ -84,7 +85,7 @@ import java.util.function.ToDoubleFunction;
  */
 public final class ContentPackPlayouts {
 
-    /** The goals a game declares - the race of the early era. */
+    /** The goals a game declares on the early-era pack, its race (the server's {@code GameMeta.EARLY_ERA_DECLARED_GOALS}). */
     public static final List<String> DECLARED_GOALS =
         List.of("earth-orbit-satellite", "human-in-space", "human-in-orbit");
 
@@ -95,26 +96,84 @@ public final class ContentPackPlayouts {
         Archetype.NASA, List.of("explorer-1-orbit", "mercury-uncrewed-suborbital", "mercury-suborbital",
             "mercury-uncrewed-orbital", "mercury-orbital"));
 
+    /** The Moon race, the standard pack's (the server's {@code GameMeta.STANDARD_DECLARED_GOALS}, design.md 2.6). */
+    public static final List<String> MOON_DECLARED_GOALS =
+        List.of("earth-orbit-satellite", "human-in-orbit", "crewed-lunar-landing");
+
+    /**
+     * The plans to the Moon: the early race, one lunar probe (it gates the lunar programs), the lunar
+     * craft's tests in Earth orbit, then out to the Moon step by step. Each flight clears reliability
+     * penalties of the ones after it, as a careful player would fly them.
+     */
+    static final Map<Archetype, List<String>> MOON_PLANS = Map.of(
+        Archetype.SOVIET, List.of("sputnik-1-orbit", "vostok-uncrewed-suborbital", "vostok-suborbital",
+            "vostok-uncrewed-orbital", "vostok-orbital", "luna-2-impact",
+            "soyuz-7k-l3-uncrewed-suborbital", "soyuz-7k-l3-uncrewed-orbital", "soyuz-7k-l3-orbital-duration-1",
+            "soyuz-7k-l3-spacewalk", "soyuz-7k-l3-uncrewed-lander-test", "soyuz-7k-l3-lander-test",
+            "soyuz-7k-l3-uncrewed-flyby", "soyuz-7k-l3-flyby", "soyuz-7k-l3-uncrewed-lunar-orbit",
+            "soyuz-7k-l3-lunar-orbit", "soyuz-7k-l3-lander-test-lunar-orbit", "soyuz-7k-l3-landing"),
+        Archetype.NASA, List.of("explorer-1-orbit", "mercury-uncrewed-suborbital", "mercury-suborbital",
+            "mercury-uncrewed-orbital", "mercury-orbital", "ranger-3-impact",
+            "apollo-uncrewed-suborbital", "apollo-uncrewed-orbital", "apollo-orbital-duration-1",
+            "apollo-uncrewed-lunar-module-test", "apollo-lunar-module-test-low-orbit",
+            "apollo-uncrewed-flyby", "apollo-flyby", "apollo-uncrewed-lunar-orbit", "apollo-lunar-orbit",
+            "apollo-lander-test", "apollo-landing"));
+
     /** The bot launches once every component it flies is at least this reliable (or at its R&D ceiling). */
     static final double LAUNCH_RELIABILITY = 70;
 
     private static final int STARTING_ASTRONAUTS = 3;
     private static final int STARTING_CONTROLLERS = 5;
     private static final int STARTING_SPECIALISTS = 6;
+    /** The working-ahead bot upgrades its SET Center only with more money than this in hand. */
+    private static final long AHEAD_RESERVE = 10_000;
+    /** The spare controllers and astronauts the working-ahead bot keeps. */
+    private static final int AHEAD_SPARES = 2;
+    /** How close to {@link #LAUNCH_RELIABILITY} the working-ahead bot stops sending its people to training. */
+    private static final double CLOSE_TO_READY = 15;
 
     private final ContentCatalog catalog;
     private final BudgetSchedule schedule = BudgetSchedule.baspmClose();
     private final RandomEventRoster roster = RandomEventRoster.baspmClose();
     private final BuildingSchedule buildings;
+    private final List<String> declaredGoals;
+    private final Map<Archetype, List<String>> plans;
+    private final boolean ahead;
+
+    /**
+     * Creates a harness for one content pack with the plain bot, which works on one flight at a time.
+     * A pack that can fly to the Moon plays the Moon race, any other the early era's.
+     *
+     * @param catalog the pack
+     */
+    public ContentPackPlayouts(ContentCatalog catalog) {
+        this(catalog, false);
+    }
 
     /**
      * Creates a harness for one content pack.
      *
      * @param catalog the pack
+     * @param ahead   whether the bot works ahead as a player would: it fills the SET Center (upgrading
+     *                it with money to spare), and puts specialists the current flight can't use on the
+     *                components of the plan's later flights, wherever their program is already open
      */
-    public ContentPackPlayouts(ContentCatalog catalog) {
+    public ContentPackPlayouts(ContentCatalog catalog, boolean ahead) {
+        this.ahead = ahead;
         this.catalog = catalog;
         this.buildings = catalog.buildings();
+        boolean moon = catalog.goal("crewed-lunar-landing").isPresent();
+        this.declaredGoals = moon ? MOON_DECLARED_GOALS : DECLARED_GOALS;
+        this.plans = moon ? MOON_PLANS : PLANS;
+    }
+
+    /**
+     * Returns the goals this harness's games declare.
+     *
+     * @return the declared goals
+     */
+    public List<String> declaredGoals() {
+        return declaredGoals;
     }
 
     /**
@@ -125,6 +184,7 @@ public final class ContentPackPlayouts {
      * @param completedByArchetype   games that reached every declared goal, per agency
      * @param gamesByArchetype       games played, per agency
      * @param averageCompletionSeason the average season the last declared goal fell, over completed games
+     * @param completionSeasons      the season the last declared goal fell, per completed game, per agency
      * @param goalReachedCounts      per declared goal, in how many games it was reached
      * @param launches               missions launched, per configuration
      * @param stepOutcomes           resolved mission steps, per outcome
@@ -136,13 +196,15 @@ public final class ContentPackPlayouts {
      * @param lowestFunds            the lowest funds any game reached
      * @param astronautsLost         astronauts lost in accidents or perished
      * @param stalls                 seasons the bot could not launch its target, per reason
+     * @param targetSeasons          seasons each configuration was the bot's target, over all games
      */
     public record Report(int games, int seasons, Map<Archetype, Integer> completedByArchetype,
                          Map<Archetype, Integer> gamesByArchetype, double averageCompletionSeason,
+                         Map<Archetype, List<Integer>> completionSeasons,
                          Map<String, Integer> goalReachedCounts, Map<String, Integer> launches,
                          Map<String, Integer> stepOutcomes, int programsOpened, int rocketsOpened, int upgrades,
                          int hires, int debtConversions, long lowestFunds, int astronautsLost,
-                         Map<String, Integer> stalls) {
+                         Map<String, Integer> stalls, Map<String, Integer> targetSeasons) {
     }
 
     /**
@@ -283,8 +345,10 @@ public final class ContentPackPlayouts {
         }
         double averageCompletion = tally.completionSeasons.stream().mapToInt(Integer::intValue).average().orElse(0);
         return new Report(games, seasons, tally.completedByArchetype, tally.gamesByArchetype, averageCompletion,
+            tally.completionSeasonsByArchetype,
             tally.goalReached, tally.launches, tally.stepOutcomes, tally.programsOpened, tally.rocketsOpened,
-            tally.upgrades, tally.hires, tally.debtConversions, tally.lowestFunds, tally.astronautsLost, tally.stalls);
+            tally.upgrades, tally.hires, tally.debtConversions, tally.lowestFunds, tally.astronautsLost, tally.stalls,
+            tally.targetSeasons);
     }
 
     private void playGame(Archetype archetype, int seasons, Random random, Tally tally) {
@@ -345,20 +409,21 @@ public final class ContentPackPlayouts {
                 }
             }
             tally.lowestFunds = Math.min(tally.lowestFunds, snapshot.getFunds());
-            for (String goal : DECLARED_GOALS) {
+            for (String goal : declaredGoals) {
                 if (snapshot.hasAchievedOrCancelledGoal(goal) && reached.add(goal)) {
                     tally.goalReached.merge(goal, 1, Integer::sum);
                 }
             }
             // The harness's own completion check must agree with the win logic M4 will call.
-            WinCondition.Outcome win = WinCondition.evaluate(Map.of("bot", snapshot), DECLARED_GOALS, catalog);
-            boolean complete = reached.size() == DECLARED_GOALS.size();
+            WinCondition.Outcome win = WinCondition.evaluate(Map.of("bot", snapshot), declaredGoals, catalog);
+            boolean complete = reached.size() == declaredGoals.size();
             if (complete != (win.status() == WinCondition.Status.WON && win.winners().equals(List.of("bot")))) {
                 throw new IllegalStateException("Completion " + complete + " disagrees with WinCondition " + win);
             }
             if (complete && !keepPlaying) {
                 tally.completedByArchetype.merge(archetype, 1, Integer::sum);
                 tally.completionSeasons.add(season + 1);
+                tally.completionSeasonsByArchetype.computeIfAbsent(archetype, key -> new ArrayList<>()).add(season + 1);
                 return;
             }
         }
@@ -399,12 +464,15 @@ public final class ContentPackPlayouts {
         if (target == null) {
             return;
         }
+        tally.targetSeasons.merge(target.id(), 1, Integer::sum);
         Program program = catalog.program(target.programId()).orElseThrow();
         if (!snapshot.getOpenedProgramIds().contains(program.id())) {
+            makeRoomForProgram(snapshot, target, tally);
             openProgram(snapshot, program, tally);
         }
         MissionComponent rocket = cheapestRocketFor(snapshot.getArchetype(), target);
         if (rocket != null && !isActive(snapshot, rocket.id())) {
+            makeRoomForRocket(snapshot, rocket, tally);
             openRocket(snapshot, rocket, tally);
         }
         ensureStaff(snapshot, target, random, tally);
@@ -412,7 +480,11 @@ public final class ContentPackPlayouts {
         boolean hardwareReady = rocket != null && hardwareReady(snapshot, target, rocket);
         // Staff train while the hardware is still in R&D, and stay home once it's ready to fly.
         if (!hardwareReady) {
-            trainIdle(snapshot, random);
+            // The working-ahead bot keeps its people home once the hardware is close, so the flight
+            // doesn't wait out a training course.
+            if (!ahead || !hardwareReady(snapshot, target, rocket, LAUNCH_RELIABILITY - CLOSE_TO_READY)) {
+                trainIdle(snapshot, random);
+            }
             tally.stalls.merge("hardware not ready", 1, Integer::sum);
         } else if (snapshot.getInProgressMissions().values().stream()
                 .noneMatch(mission -> mission.getMissionConfigurationId().equals(target.id()))) {
@@ -422,7 +494,7 @@ public final class ContentPackPlayouts {
 
     /** The first configuration in the agency's plan that still has a goal of its own to reach. */
     private MissionConfiguration target(PlayerSnapshot snapshot) {
-        for (String id : PLANS.get(snapshot.getArchetype())) {
+        for (String id : plans.get(snapshot.getArchetype())) {
             MissionConfiguration configuration = catalog.missionConfiguration(id).orElseThrow();
             boolean open = configuration.seasons().stream().flatMap(season -> season.steps().stream())
                 .flatMap(step -> step.goalIdsAchieved().stream())
@@ -445,6 +517,53 @@ public final class ContentPackPlayouts {
         }
         if (outcome == OpenProgramOutcome.OPENED) {
             tally.programsOpened++;
+        } else {
+            tally.stalls.merge("program " + outcome, 1, Integer::sum);
+        }
+    }
+
+    /**
+     * With Headquarters full, closes the open programs the rest of the plan no longer flies, or failing
+     * that starts Headquarters' next level (the early race never fills it).
+     */
+    private void makeRoomForProgram(PlayerSnapshot snapshot, MissionConfiguration target, Tally tally) {
+        if (snapshot.getOpenedProgramIds().size()
+                < BuildingUpgrades.capacity(snapshot, Building.HEADQUARTERS, buildings)) {
+            return;
+        }
+        List<String> plan = plans.get(snapshot.getArchetype());
+        Set<String> stillFlown = new HashSet<>();
+        for (String id : plan.subList(plan.indexOf(target.id()), plan.size())) {
+            stillFlown.add(catalog.missionConfiguration(id).orElseThrow().programId());
+        }
+        for (String programId : List.copyOf(snapshot.getOpenedProgramIds())) {
+            if (!stillFlown.contains(programId)) {
+                ProgramOpening.close(snapshot, programId, catalog);
+            }
+        }
+        if (snapshot.getOpenedProgramIds().size()
+                >= BuildingUpgrades.capacity(snapshot, Building.HEADQUARTERS, buildings)) {
+            upgrade(snapshot, Building.HEADQUARTERS, tally);
+        }
+    }
+
+    /**
+     * Makes the VAB ready for a rocket: starts its next level when the rocket's class needs one, and
+     * with the VAB full, closes the rocket programs no mission in flight uses.
+     */
+    private void makeRoomForRocket(PlayerSnapshot snapshot, MissionComponent rocket, Tally tally) {
+        if (!RocketPrograms.classAllowed(rocket.rocket().rocketClass(),
+                snapshot.buildingLevel(Building.VEHICLE_ASSEMBLY))) {
+            upgrade(snapshot, Building.VEHICLE_ASSEMBLY, tally);
+            return;
+        }
+        if (openRockets(snapshot) < BuildingUpgrades.capacity(snapshot, Building.VEHICLE_ASSEMBLY, buildings)) {
+            return;
+        }
+        for (String id : rocketIds()) {
+            if (isActive(snapshot, id) && !RocketPrograms.inFlight(snapshot, id)) {
+                RocketPrograms.close(snapshot, id, catalog);
+            }
         }
     }
 
@@ -455,6 +574,9 @@ public final class ContentPackPlayouts {
         long charged = before - snapshot.getFunds();
         if (charged != (outcome == RocketProgramOutcome.OPENED ? rocket.creationCost() : 0)) {
             throw new IllegalStateException("Opening rocket " + rocket.id() + " (" + outcome + ") charged " + charged);
+        }
+        if (outcome != RocketProgramOutcome.OPENED) {
+            tally.stalls.merge("rocket " + outcome, 1, Integer::sum);
         }
         if (outcome == RocketProgramOutcome.OPENED) {
             tally.rocketsOpened++;
@@ -468,20 +590,35 @@ public final class ContentPackPlayouts {
 
     /** Upgrades Mission Control or the Astronaut Center when the target needs more, and hires toward it. */
     private void ensureStaff(PlayerSnapshot snapshot, MissionConfiguration target, Random random, Tally tally) {
-        int controllers = target.requiredMissionControlOfficerCount();
-        int astronauts = target.requiredAstronautCount() + target.requiredCapcomCount();
+        // The working-ahead bot keeps spares, so someone back from training or sick doesn't hold a flight.
+        int spares = ahead ? AHEAD_SPARES : 0;
+        int controllers = target.requiredMissionControlOfficerCount() + spares;
+        int astronauts = target.requiredAstronautCount() + target.requiredCapcomCount() + spares;
         maybeUpgrade(snapshot, Building.MISSION_CONTROL, controllers, tally);
         maybeUpgrade(snapshot, Building.ASTRONAUT_CENTER, astronauts + 1, tally);
         hireBest(snapshot, PersonnelGroup.MISSION_CONTROL,
             controllers - snapshot.getMissionControlOfficers().size(), random, tally);
         hireBest(snapshot, PersonnelGroup.ASTRONAUT, astronauts + 1 - snapshot.getAstronauts().size(), random, tally);
-        hireBest(snapshot, PersonnelGroup.SET, STARTING_SPECIALISTS - snapshot.getSetSpecialists().size(), random,
-            tally);
+        int specialists = STARTING_SPECIALISTS;
+        if (ahead) {
+            specialists = BuildingUpgrades.capacity(snapshot, Building.SET_CENTER, buildings);
+            if (snapshot.getSetSpecialists().size() >= specialists && snapshot.getFunds() > AHEAD_RESERVE) {
+                upgrade(snapshot, Building.SET_CENTER, tally);
+            }
+        }
+        hireBest(snapshot, PersonnelGroup.SET, specialists - snapshot.getSetSpecialists().size(), random, tally);
     }
 
     private void maybeUpgrade(PlayerSnapshot snapshot, Building building, int needed, Tally tally) {
-        if (needed <= BuildingUpgrades.capacity(snapshot, building, buildings)
-                || snapshot.getBuildingUpgradeSeasonsRemaining().containsKey(building)) {
+        if (needed <= BuildingUpgrades.capacity(snapshot, building, buildings)) {
+            return;
+        }
+        upgrade(snapshot, building, tally);
+    }
+
+    /** Starts a building's next level, unless one is under way. */
+    private void upgrade(PlayerSnapshot snapshot, Building building, Tally tally) {
+        if (snapshot.getBuildingUpgradeSeasonsRemaining().containsKey(building)) {
             return;
         }
         int level = snapshot.buildingLevel(building);
@@ -532,10 +669,20 @@ public final class ContentPackPlayouts {
 
     /** Points idle SET specialists at the target's components below their R&D ceiling. */
     private void assignResearch(PlayerSnapshot snapshot, MissionConfiguration target, MissionComponent rocket) {
-        List<String> components = new ArrayList<>(catalog.program(target.programId()).orElseThrow()
-            .requiredMissionComponentIds());
+        List<String> components = flownComponents(target);
         if (rocket != null && isActive(snapshot, rocket.id())) {
             components.add(rocket.id());
+        }
+        if (ahead) {
+            List<String> plan = plans.get(snapshot.getArchetype());
+            for (String id : plan.subList(plan.indexOf(target.id()) + 1, plan.size())) {
+                MissionConfiguration later = catalog.missionConfiguration(id).orElseThrow();
+                components.addAll(flownComponents(later));
+                MissionComponent laterRocket = cheapestRocketFor(snapshot.getArchetype(), later);
+                if (laterRocket != null) {
+                    components.add(laterRocket.id());
+                }
+            }
         }
         for (SetSpecialist specialist : snapshot.getSetSpecialists()) {
             if (specialist.getAssignmentState() != AssignmentState.IDLE || specialist.getUnavailableSeasons() > 0) {
@@ -595,17 +742,21 @@ public final class ContentPackPlayouts {
     }
 
     private boolean hardwareReady(PlayerSnapshot snapshot, MissionConfiguration target, MissionComponent rocket) {
-        if (!isActive(snapshot, rocket.id())) {
+        return hardwareReady(snapshot, target, rocket, LAUNCH_RELIABILITY);
+    }
+
+    private boolean hardwareReady(PlayerSnapshot snapshot, MissionConfiguration target, MissionComponent rocket,
+            double threshold) {
+        if (rocket == null || !isActive(snapshot, rocket.id())) {
             return false;
         }
-        List<String> flown = new ArrayList<>(catalog.program(target.programId()).orElseThrow()
-            .requiredMissionComponentIds());
+        List<String> flown = flownComponents(target);
         flown.add(rocket.id());
         for (String componentId : flown) {
             OwnedMissionComponent owned = snapshot.getMissionComponents().get(componentId);
             MissionComponent component = catalog.missionComponent(componentId).orElseThrow();
             if (owned == null || owned.getCurrentReliability()
-                    < Math.min(LAUNCH_RELIABILITY, component.maxRdReliability() - 0.5)) {
+                    < Math.min(threshold, component.maxRdReliability() - 0.5)) {
                 return false;
             }
         }
@@ -800,6 +951,26 @@ public final class ContentPackPlayouts {
         return best;
     }
 
+    /**
+     * The components a configuration flies, from its steps, without its rockets: what its launch
+     * reliability is stamped from. A program's other components (the lander on its Earth-orbit tests,
+     * say) don't hold the flight back.
+     */
+    private static List<String> flownComponents(MissionConfiguration configuration) {
+        List<String> flown = new ArrayList<>();
+        for (MissionSeason season : configuration.seasons()) {
+            for (MissionStep step : season.steps()) {
+                for (MissionStep.ComponentInvolvement involvement : step.componentInvolvements()) {
+                    String id = involvement.componentId();
+                    if (!id.startsWith(MissionConfiguration.ROCKET_SLOT_PREFIX) && !flown.contains(id)) {
+                        flown.add(id);
+                    }
+                }
+            }
+        }
+        return flown;
+    }
+
     /** Every rocket in the pack, in the pack's order. */
     private List<String> rocketIds() {
         return catalog.missionComponents().stream().filter(MissionComponent::hasRocketSpec).map(MissionComponent::id)
@@ -935,10 +1106,12 @@ public final class ContentPackPlayouts {
         final Map<Archetype, Integer> completedByArchetype = new EnumMap<>(Archetype.class);
         final Map<Archetype, Integer> gamesByArchetype = new EnumMap<>(Archetype.class);
         final List<Integer> completionSeasons = new ArrayList<>();
+        final Map<Archetype, List<Integer>> completionSeasonsByArchetype = new EnumMap<>(Archetype.class);
         final Map<String, Integer> goalReached = new LinkedHashMap<>();
         final Map<String, Integer> launches = new LinkedHashMap<>();
         final Map<String, Integer> stepOutcomes = new LinkedHashMap<>();
         final Map<String, Integer> stalls = new LinkedHashMap<>();
+        final Map<String, Integer> targetSeasons = new LinkedHashMap<>();
         int programsOpened;
         int rocketsOpened;
         int upgrades;
@@ -949,18 +1122,30 @@ public final class ContentPackPlayouts {
     }
 
     /**
-     * Plays 200 games of 80 seasons on a pack and prints the report.
+     * Plays 200 games on a pack and prints the report: 80 seasons each for the early race, 240 for the
+     * Moon race.
      *
-     * @param args the pack's folder under {@code assets/content}, {@code early-era} if none is given
+     * @param args the pack's folder under {@code assets/content}, {@code early-era} if none is given, then
+     *             {@code ahead} for the bot that works ahead
      */
     public static void main(String[] args) {
         ContentCatalog catalog = ContentPackLoader.load(Path.of("assets", "content",
             args.length > 0 ? args[0] : "early-era"));
-        Report report = new ContentPackPlayouts(catalog).run(200, 80, 42L);
-        System.out.println(report.games() + " games, " + report.seasons() + " seasons max");
+        boolean ahead = args.length > 1 && args[1].equals("ahead");
+        ContentPackPlayouts harness = new ContentPackPlayouts(catalog, ahead);
+        int seasons = harness.declaredGoals().equals(MOON_DECLARED_GOALS) ? 240 : 80;
+        Report report = harness.run(200, seasons, 42L);
+        System.out.println(report.games() + " games, " + report.seasons() + " seasons max, declared goals "
+            + harness.declaredGoals());
         System.out.println("Completed (all declared goals): " + report.completedByArchetype() + " of "
             + report.gamesByArchetype() + ", average completion season "
             + String.format("%.1f", report.averageCompletionSeason()));
+        report.completionSeasons().forEach((archetype, list) -> {
+            List<Integer> sorted = list.stream().sorted().toList();
+            System.out.printf("  %s completion season: min %d, quartiles %d / %d / %d, max %d%n", archetype,
+                sorted.getFirst(), sorted.get(sorted.size() / 4), sorted.get(sorted.size() / 2),
+                sorted.get(sorted.size() * 3 / 4), sorted.getLast());
+        });
         System.out.println("Declared goals reached: " + report.goalReachedCounts());
         System.out.println("Launches: " + report.launches());
         System.out.println("Step outcomes: " + report.stepOutcomes());
@@ -969,6 +1154,10 @@ public final class ContentPackPlayouts {
             + report.debtConversions() + ", lowest funds " + report.lowestFunds() + ", astronauts lost "
             + report.astronautsLost());
         System.out.println("Stalls: " + report.stalls());
+        System.out.print("Seasons as the target, per game of its agency:");
+        report.targetSeasons().forEach((id, count) -> System.out.printf(java.util.Locale.ROOT, " %s %.1f,", id,
+            count / (report.games() / 2.0)));
+        System.out.println();
         PeopleReport people = new ContentPackPlayouts(catalog).people(200, 24, 42L);
         System.out.printf("People over 24 seasons, per game: %.1f traits revealed, %.1f relationships shown "
                 + "(%.1f friendships), %.1f pairs who shared a team, %.1f employees at the end%n",

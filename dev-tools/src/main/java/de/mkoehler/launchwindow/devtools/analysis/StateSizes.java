@@ -23,7 +23,8 @@ public final class StateSizes {
     }
 
     /**
-     * Plays 200 games of 80 seasons and prints the state's size every eight seasons.
+     * Plays 200 games and prints the state's size every eight seasons: 80 seasons on the early race, 240
+     * with the bot that works ahead on the Moon race, which flies the most.
      *
      * @param args the content pack's name, {@code early-era} if none is given
      */
@@ -31,7 +32,8 @@ public final class StateSizes {
         String pack = args.length > 0 ? args[0] : "early-era";
         ContentCatalog catalog = ContentPackLoader.load(Path.of("assets", "content", pack));
         System.out.println("Pack: " + pack);
-        ContentPackPlayouts.SizeReport report = new ContentPackPlayouts(catalog).sizes(200, 80, 42L);
+        boolean moon = new ContentPackPlayouts(catalog).declaredGoals().equals(ContentPackPlayouts.MOON_DECLARED_GOALS);
+        ContentPackPlayouts.SizeReport report = new ContentPackPlayouts(catalog, moon).sizes(200, moon ? 240 : 80, 42L);
         int buffer = NetworkConstants.OBJECT_BUFFER_SIZE;
         System.out.println(report.games() + " games; the state a client receives, in bytes (Kryo buffer "
             + buffer + "):");

@@ -1394,8 +1394,9 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
       at its top cap, 300 rapport pairs, five full folders) measured 34 KB as an object graph, so
       the state now goes over the wire as gzipped JSON like the turn report: about 17 KB
       (`StateSizeTest`, 2026-10-07). The bots' states stay under 8 KB over 80 seasons
-      (dev-tools `StateSizes`), and under 11.3 KB on the standard pack (2026-10-09, 200 games,
-      17 % of the buffer; `-Dexec.args=standard`).
+      (dev-tools `StateSizes`), and under 22 KB on the standard pack, played to the Moon by
+      the bot that works ahead over 240 seasons (2026-10-09, 200 games, 33 % of the buffer;
+      `-Dexec.args=standard`).
   - **Balance check** (dev-tools `IntelligencePlayouts`, 2026-10-07: four agencies, each spending
     every action every season, 24 seasons, 1,000 games; only the intelligence rules run). Per
     agency over the 24 seasons:
@@ -1429,8 +1430,30 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
   (user, 2026-10-09):** satellite in orbit, human in orbit, and a person landed on the Moon and
   brought home alive (`crewed-lunar-landing`). The early-era pack can't hold that race, so a game on
   it declares `GameMeta.EARLY_ERA_DECLARED_GOALS` instead (satellite in orbit, human in space, human
-  in orbit; the server tests do, since they run on the early-era pack). How long the Moon race runs
-  in turns is still to be measured with the bot playouts.
+  in orbit; the server tests do, since they run on the early-era pack).
+- **How long the Moon race runs** (measured 2026-10-09, `ContentPackPlayouts standard`, 200 bot
+  games of up to 240 seasons, one agency per game, no rivals). The bots fly a fixed plan to the
+  landing, one flight at a time: the early race, one lunar probe (it gates the lunar programs),
+  the lunar craft's tests in Earth orbit, then flyby, lunar orbit, lander test and landing, 17
+  flights for NASA (Mercury, Ranger, Apollo) and 18 for the Soviets (Vostok, Luna, Soyuz 7K-L3).
+  - **The plain bot** (one flight's components at a time, six SET specialists): 36 of 200 games
+    land by season 240, NASA's at a median of 223, the Soviets' 2 at 230 and 239.
+  - **The bot that works ahead** (`standard ahead`: SET Center filled and upgraded, spare
+    specialists on later flights' components, two spare controllers and astronauts, nobody sent
+    to training when the hardware is close): every game lands. **NASA median 135 seasons**
+    (quartiles 122 and 158, fastest 85), **Soviet median 161** (142 and 184, fastest 113). It runs
+    into debt doing it (lowest −150k, 28 conversions).
+  - **What sets the pace:** R&D. Each flight waits 2 to 24 seasons for its hardware to reach the
+    bots' launch bar of 70 % reliability, most at the start of a new craft (Apollo's first
+    suborbital test about 21, Soyuz 7K-L3's 24) or a new rocket (Vostok's first crewed flight 24,
+    on a new human-rated R-7, where Mercury's rides the Redstone it already has: about 3).
+  - **Against history and the schedule:** a season is a quarter of a game year, so 135 seasons is
+    34 game years against the real 47 seasons from Sputnik to Apollo 11. At a turn a day that is
+    about four and a half months for the friends' game; Monday to Friday, about six for
+    the colleagues'. The early race with the same bot takes a median of 32 (NASA) and 34 (Soviet)
+    seasons, the plain bot's 61 and 49. A human player plays better than either bot, flying
+    several things at once, but these are the only numbers so far. **Unconfirmed: whether this
+    length is wanted** (§4).
 - **The game goes on after a winner:** goals, flights and prestige still count.
 
 ### 2.10 Difficulty level
@@ -1665,8 +1688,13 @@ a second. The model is Robot-Rampage's `Playouts` harness (the real resolver, se
 purpose-built report).
 
 **Harnesses** (`dev-tools`, `devtools.analysis`; run commands in `CLAUDE.md`):
-- **`ContentPackPlayouts`:** bots play the real early-era pack through the real season pass
-  and report whether and when they reach the declared goals. With the pool of 10 (2026-10-06):
+- **`ContentPackPlayouts`:** bots play a real pack through the real season pass and report
+  whether and when they reach the declared goals: the early race on `early-era`, the Moon race on
+  `standard` (a pack with the `crewed-lunar-landing` goal), with a plan per agency. `ahead` as the
+  second argument plays the bot that works ahead (§2.6); it also opens Headquarters and the VAB as
+  the plan needs, and closes programs and rockets it no longer flies. Both bots now wait only for
+  the components a configuration's steps fly (before 2026-10-09, every component of its program;
+  the early-era numbers came out the same). With the pool of 10 (2026-10-06):
   198 of 200 games reach all goals (NASA 98, Soviet 100), average season 57.4; before, with 6
   candidates, 177 at 62.2. The bot hires the best of the batch, so a bigger pool means better
   hires.
@@ -1807,6 +1835,11 @@ patches (`ui-spec.md` component 8).
 
 ## 4. Open questions
 
+- **The Moon race's length** (§2.6, measured 2026-10-09): the bots need a median of 135 (NASA) to
+  161 (Soviet) seasons, months of daily turns, and the Soviets take about a fifth longer. Options:
+  accept it; speed up R&D for the whole game (one balance sheet, §2.10); start lunar-era hardware
+  more reliable; or declare a shorter race (a crewed lunar flyby or orbit). A play test will say
+  how much faster people are than the bots.
 - **Declared goals for the colleagues' game:** an early-era race (user, 2026-10-08), with goals
   drawn from the early-era pack. Since then the standard pack became the default with its own race to
   a crewed Moon landing (user, 2026-10-09, §2.6); whether the colleagues' game plays that or a

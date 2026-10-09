@@ -34,4 +34,18 @@ class ContentPackPlayoutsTest {
         assertTrue(report.launches().keySet().containsAll(ContentPackPlayouts.PLANS.get(Archetype.NASA)),
             "every NASA plan step was flown: " + report.launches());
     }
+
+    @Test
+    void botsWorkingAheadReachTheMoonOnTheStandardPack() {
+        ContentPackPlayouts harness = new ContentPackPlayouts(
+            ContentPackLoader.load(Path.of("..", "assets", "content", "standard")), true);
+
+        ContentPackPlayouts.Report report = harness.run(10, 240, 7L);
+
+        assertEquals(ContentPackPlayouts.MOON_DECLARED_GOALS, harness.declaredGoals());
+        assertTrue(report.completedByArchetype().getOrDefault(Archetype.NASA, 0) > 0,
+            "some NASA games land a crew on the Moon: " + report);
+        assertTrue(report.completedByArchetype().getOrDefault(Archetype.SOVIET, 0) > 0,
+            "some Soviet games land a crew on the Moon: " + report);
+    }
 }
