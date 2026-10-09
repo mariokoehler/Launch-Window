@@ -810,6 +810,22 @@ such as letting a brilliant troublemaker go.
       the resolution checks tenure, the cooldown, training (excluded too) and, for controllers,
       being on a mission (any assignment). An offer that fails these lapses, and the target is
       never told.
+    - **One approach per agency per person, and a ceiling on matches** (the user's catch,
+      2026-10-09, built the same day). A rival paid nothing for a matched offer, so one with a file
+      could offer +100 % every 4 seasons to someone kept "at any price" (or under a +100 % default)
+      and double their salary each time, without limit. Now:
+      - **One shot:** once a person has answered an agency's offer, matched or turned down, that
+        agency can never approach them again, wherever they work (`Personnel.approachedBy`, by
+        player id, travels with them). A lapsed offer doesn't count: the target never heard of it.
+        The poacher's file says so (`PersonnelFile.approachedByYou`): the card reads "You made them
+        an offer in [date]. They won't hear another from you", queuing is refused
+        (`ALREADY_APPROACHED`), and an offer from an older file lapses untold.
+      - **Ceiling:** a match never takes a salary past 3 times what it was before the first matched
+        offer (`Poaching.MATCH_CEILING_FACTOR`, `Personnel.salaryBeforeMatches`), and never cuts one
+        raised some other way. With about ten players, nine rivals each taking their one shot at
+        +100 % could otherwise multiply a salary by 512.
+      - The 4-season cooldown stays, so offers can't land back to back. **Reset the dev data root**
+        before the next play test (new fields on employees and files).
     - **Two offers to one person in one turn:** the highest raise settles first (then the
       agency key, then the offer id), the others lapse, whatever order agencies resolve in.
     - **The person who comes over** travels whole in the turn's intelligence file (concrete

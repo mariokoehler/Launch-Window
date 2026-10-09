@@ -60,6 +60,9 @@ public final class PoachTexts {
                 + Museum.date(joinedTurn(file)) + ".";
             case APPROACHED_RECENTLY -> "Approached recently: wait until "
                 + Museum.date(Poaching.approachableAgain(file.lastApproachedTurn())) + ".";
+            case ALREADY_APPROACHED -> "You made them an offer"
+                + (file.lastApproachedTurn() == null ? "" : " in " + Museum.date(file.lastApproachedTurn()))
+                + ". They won't hear another from you.";
         };
     }
 
@@ -260,7 +263,7 @@ public final class PoachTexts {
                 + ".", "", "Lapsed", -1);
             case LAPSED_GONE -> new TurnReportView.Line(opener + "lapsed, no longer there.", "", "Lapsed", 0);
             case LAPSED_NOT_ELIGIBLE -> new TurnReportView.Line(opener + "lapsed: not someone who could be approached this "
-                + "season (too new, approached recently, or busy).", "", "Lapsed", 0);
+                + "season (too new, approached recently, busy, or approached by you before).", "", "Lapsed", 0);
         };
     }
 

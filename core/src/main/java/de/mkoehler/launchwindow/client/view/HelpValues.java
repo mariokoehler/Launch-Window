@@ -201,6 +201,7 @@ public final class HelpValues {
         v.put("poaching.steady", whole(-Poaching.STEADY_POINTS));
         v.put("poaching.acceptMax", whole(Poaching.ACCEPT_MAX_PERCENT));
         v.put("poaching.matchLoyalty", whole(Poaching.MATCH_LOYALTY));
+        v.put("poaching.matchCeiling", whole(Poaching.MATCH_CEILING_FACTOR));
         v.put("poaching.fileLevel", whole(Intelligence.PERSONNEL_FILE_LEVEL));
 
         v.put("intelligence.maxLevel", whole(Intelligence.MAX_LEVEL));

@@ -134,7 +134,7 @@ public final class IntelligenceBoard {
             }
             String key = offer.targetId() + "/" + person.getId();
             OfferResult.Outcome blocked = settled.contains(key) ? OfferResult.Outcome.LAPSED_NOT_ELIGIBLE
-                : Poaching.ineligible(person, group, (int) gameTurn);
+                : Poaching.ineligible(person, group, (int) gameTurn, poacherId);
             String arrivingKey = poacherId + "/" + group.name();
             if (blocked == null && !Poaching.hasRoom(poacher, group, arriving.getOrDefault(arrivingKey, 0), catalog)) {
                 blocked = OfferResult.Outcome.LAPSED_NO_ROOM;
@@ -158,6 +158,9 @@ public final class IntelligenceBoard {
                 outcome = random.nextInt(100) < chance ? OfferResult.Outcome.JOINED : OfferResult.Outcome.TURNED_DOWN;
             }
             boolean joined = outcome == OfferResult.Outcome.JOINED;
+            if (outcome == OfferResult.Outcome.MATCHED) {
+                newSalary = Poaching.matchedSalary(person, newSalary);
+            }
             if (joined) {
                 arriving.merge(arrivingKey, 1, Integer::sum);
             }
@@ -234,7 +237,7 @@ public final class IntelligenceBoard {
         PersonnelFile file = new PersonnelFile(person.getId(), person.getName(), person.getPortraitId(),
             operation.group(), person.getAge(), gameTurn, skills, trait, band, person.getAmbition(),
             person.getDisappointedSeasons() > 0, person.getSalary(), person.getTenureSeasons(),
-            person.getLastApproachedTurn());
+            person.getLastApproachedTurn(), person.getApproachedBy().contains(spyId));
         mine.add(new IntelFinding(IntelFinding.Kind.PERSONNEL_FILE, operation.id(), operation.kind(),
             operation.targetId(), target.getAgencyName(), null, null, file, null, -1));
     }

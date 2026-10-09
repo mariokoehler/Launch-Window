@@ -73,6 +73,11 @@ public final class Poaching {
     public static final int ACCEPT_MAX_PERCENT = 90;
     /** The loyalty a matched offer adds. */
     public static final int MATCH_LOYALTY = 5;
+    /**
+     * Matching never raises a salary past this many times what it was before the first matched offer
+     * (user, 2026-10-09): with one approach per rival, ten agencies could otherwise multiply it by 2^9.
+     */
+    public static final int MATCH_CEILING_FACTOR = 3;
 
     private static final ObjectMapper COPIER = new ObjectMapper();
 
@@ -94,6 +99,8 @@ public final class Poaching {
         INVALID_RAISE,
         /** This season's offer is already made. */
         OFFER_USED,
+        /** The agency already made this person an offer they answered: one approach per person. */
+        ALREADY_APPROACHED,
         /** The percentage isn't one of {@link #MATCH_PERCENTS}, or the group can't be poached. */
         INVALID_RETENTION,
         /** No such employee. */
@@ -109,7 +116,9 @@ public final class Poaching {
         /** With their agency under {@link #MIN_TENURE_SEASONS} seasons. */
         TOO_NEW,
         /** Someone made them an offer within the last {@link #APPROACH_COOLDOWN_SEASONS} seasons. */
-        APPROACHED_RECENTLY
+        APPROACHED_RECENTLY,
+        /** The file's owner already made them an offer they answered: one approach per person. */
+        ALREADY_APPROACHED
     }
 
     private Poaching() {
@@ -143,6 +152,9 @@ public final class Poaching {
         }
         if (!RAISE_PERCENTS.contains(raisePercent)) {
             return Outcome.INVALID_RAISE;
+        }
+        if (file.approachedByYou()) {
+            return Outcome.ALREADY_APPROACHED;
         }
         if (queuedOffers(snapshot).size() >= OFFERS_PER_SEASON) {
             return Outcome.OFFER_USED;
@@ -205,6 +217,9 @@ public final class Poaching {
         if (!canBeApproached(file.group())) {
             return Blocker.ASTRONAUT;
         }
+        if (file.approachedByYou()) {
+            return Blocker.ALREADY_APPROACHED;
+        }
         if (file.tenureSeasons() + Math.max(0, currentTurn - file.turn()) < MIN_TENURE_SEASONS) {
             return Blocker.TOO_NEW;
         }
@@ -233,6 +248,20 @@ public final class Poaching {
      */
     public static long offeredSalary(double salary, int raisePercent) {
         return Math.round(salary * (100 + raisePercent) / 100.0);
+    }
+
+    /**
+     * Returns the salary a matched offer leaves: the offered one, but never past
+     * {@link #MATCH_CEILING_FACTOR} times the salary before the first match, and never less than now.
+     *
+     * @param person  the person
+     * @param offered the offered salary
+     * @return the salary after the match
+     */
+    public static long matchedSalary(Personnel person, long offered) {
+        double before = person.getSalaryBeforeMatches() == null ? person.getSalary() : person.getSalaryBeforeMatches();
+        long ceiling = Math.max(Math.round(before * MATCH_CEILING_FACTOR), Math.round(person.getSalary()));
+        return Math.min(offered, ceiling);
     }
 
     /**
@@ -392,17 +421,19 @@ public final class Poaching {
     /**
      * Returns why a person can't be approached at the resolution, or {@code null} if they can.
      *
-     * @param person   the person
-     * @param group    their group
-     * @param gameTurn the turn being resolved
+     * @param person    the person
+     * @param group     their group
+     * @param gameTurn  the turn being resolved
+     * @param poacherId the agency making the offer, by player id
      * @return the reason, or {@code null}
      */
-    static OfferResult.Outcome ineligible(Personnel person, PersonnelGroup group, int gameTurn) {
+    static OfferResult.Outcome ineligible(Personnel person, PersonnelGroup group, int gameTurn, String poacherId) {
         boolean busy = person.getAssignmentState() == AssignmentState.IN_TRAINING
             || group == PersonnelGroup.MISSION_CONTROL && person.getAssignmentState() == AssignmentState.ASSIGNED;
         boolean recent = person.getLastApproachedTurn() != null
             && gameTurn - person.getLastApproachedTurn() < APPROACH_COOLDOWN_SEASONS;
-        return !GROUPS.contains(group) || busy || recent || person.getTenureSeasons() < MIN_TENURE_SEASONS
+        boolean hadTheirShot = person.getApproachedBy().contains(poacherId);
+        return !GROUPS.contains(group) || busy || recent || hadTheirShot || person.getTenureSeasons() < MIN_TENURE_SEASONS
             ? OfferResult.Outcome.LAPSED_NOT_ELIGIBLE : null;
     }
 
@@ -471,9 +502,10 @@ public final class Poaching {
                 || offer.outcome() == OfferResult.Outcome.TURNED_DOWN)) {
             double salary = offer.outcome() == OfferResult.Outcome.MATCHED ? offer.newSalary() : file.salary();
             int index = folder.getPersonnelFiles().indexOf(file);
+            // The one approach is used, whatever the answer.
             folder.getPersonnelFiles().set(index, new PersonnelFile(file.personId(), file.name(), file.portraitId(),
                 file.group(), file.age(), file.turn(), file.skills(), file.trait(), file.loyalty(), file.ambition(),
-                file.disappointed(), salary, file.tenureSeasons(), gameTurn));
+                file.disappointed(), salary, file.tenureSeasons(), gameTurn, true));
         }
         String name = offer.personName().isBlank() && file != null ? file.name() : offer.personName();
         return new OfferSettled(true, finding.rivalId(), finding.rivalAgency(), personId, name,
@@ -531,6 +563,10 @@ public final class Poaching {
         if (person != null) {
             switch (offer.outcome()) {
                 case MATCHED -> {
+                    if (person.getSalaryBeforeMatches() == null) {
+                        person.setSalaryBeforeMatches(person.getSalary());
+                    }
+                    person.getApproachedBy().add(finding.rivalId());
                     person.setSalary(offer.newSalary());
                     person.setLoyalty(Math.clamp(person.getLoyalty() + MATCH_LOYALTY, 0, 100));
                     person.setLastApproachedTurn(gameTurn);
@@ -538,6 +574,7 @@ public final class Poaching {
                         String.valueOf(Math.round(offer.oldSalary())), OfferResult.Outcome.MATCHED.name(), offer.newSalary(), offer.raisePercent()));
                 }
                 case TURNED_DOWN -> {
+                    person.getApproachedBy().add(finding.rivalId());
                     person.setLastApproachedTurn(gameTurn);
                     person.getCareer().add(new CareerEntry(gameTurn, CareerEntry.Kind.OFFER, finding.rivalAgency(), "",
                         OfferResult.Outcome.TURNED_DOWN.name(), person.getSalary(), offer.raisePercent()));

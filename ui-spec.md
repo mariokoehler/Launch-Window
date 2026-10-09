@@ -1828,6 +1828,10 @@ each department and on the person page. Rules and numbers in `design.md` §2.2(d
 the screens read them from the rules' constants (G7). Never for astronauts: an astronaut's file
 shows no offer button and no explanation is needed beyond a tooltip.
 
+**One approach per person** (2026-10-09, `design.md` §2.2(d)): once someone has answered your
+offer, the file card shows "You made them an offer in [date]. They won't hear another from you." in
+place of the button, like the other reasons someone can't be approached.
+
 **Making an offer** (Intelligence Office, Folders):
 - **The personnel file card** (§4.15) gets a **"Make an offer"** button when the person can be
   approached, else a short reason instead ("Astronauts can't be approached", "With the agency under

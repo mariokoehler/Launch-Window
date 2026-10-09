@@ -23,6 +23,7 @@ public final class Refusals {
         Map.entry("CANT_APPROACH_GROUP", "Astronauts can't be approached."),
         Map.entry("INVALID_RAISE", "Pick one of the raises."),
         Map.entry("OFFER_USED", "This season's offer is already made. Cancel it to make another."),
+        Map.entry("ALREADY_APPROACHED", "You already made them an offer. They won't hear another from you."),
         Map.entry("INVALID_RETENTION", "That standing order isn't one of the choices."),
         Map.entry("INVALID_LEVEL", "Pick a level from 0 to 3."),
         Map.entry("ROSTER_FULL", "No room. Upgrade the building."),

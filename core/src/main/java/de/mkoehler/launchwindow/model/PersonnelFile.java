@@ -23,11 +23,14 @@ import java.util.Objects;
  * @param salary     their salary when filed (poaching prices an offer on it), or 0 in an older file
  * @param tenureSeasons their seasons with the agency when filed
  * @param lastApproachedTurn the turn a rival last made them an offer, or {@code null}
+ * @param approachedByYou whether the file's owner has already made them an offer they answered: its one
+ *                   approach is used (poaching, user 2026-10-09)
  * @author Mario Koehler
  */
 public record PersonnelFile(String personId, String name, String portraitId, String group, int age, int turn,
                             List<IntelFact> skills, Trait trait, String loyalty, Ambition ambition,
-                            boolean disappointed, double salary, int tenureSeasons, Integer lastApproachedTurn) {
+                            boolean disappointed, double salary, int tenureSeasons, Integer lastApproachedTurn,
+                            boolean approachedByYou) {
 
     /**
      * Checks the ids and copies the skills.
@@ -56,6 +59,31 @@ public record PersonnelFile(String personId, String name, String portraitId, Str
     public PersonnelFile(String personId, String name, String portraitId, String group, int age, int turn,
             List<IntelFact> skills, Trait trait) {
         this(personId, name, portraitId, group, age, turn, skills, trait, "", null, false);
+    }
+
+    /**
+     * A file whose owner hasn't approached the person.
+     *
+     * @param personId           the person's id in the rival's agency
+     * @param name               their name
+     * @param portraitId         their portrait
+     * @param group              their group
+     * @param age                their age when filed
+     * @param turn               the game turn the file dates from
+     * @param skills             their skills
+     * @param trait              one of their traits, or {@code null}
+     * @param loyalty            their loyalty band
+     * @param ambition           the ambition they've said, or {@code null}
+     * @param disappointed       whether an ambition of theirs ran out lately
+     * @param salary             their salary when filed
+     * @param tenureSeasons      their seasons with the agency when filed
+     * @param lastApproachedTurn the turn a rival last made them an offer, or {@code null}
+     */
+    public PersonnelFile(String personId, String name, String portraitId, String group, int age, int turn,
+            List<IntelFact> skills, Trait trait, String loyalty, Ambition ambition, boolean disappointed,
+            double salary, int tenureSeasons, Integer lastApproachedTurn) {
+        this(personId, name, portraitId, group, age, turn, skills, trait, loyalty, ambition, disappointed, salary,
+            tenureSeasons, lastApproachedTurn, false);
     }
 
     /**

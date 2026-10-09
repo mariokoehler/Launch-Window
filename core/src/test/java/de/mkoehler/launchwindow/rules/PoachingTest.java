@@ -9,6 +9,7 @@ import de.mkoehler.launchwindow.model.Building;
 import de.mkoehler.launchwindow.model.CareerEntry;
 import de.mkoehler.launchwindow.model.IntelOperation;
 import de.mkoehler.launchwindow.model.PersonnelFile;
+import de.mkoehler.launchwindow.model.RivalFolder;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.model.Retention;
 import de.mkoehler.launchwindow.model.SetSpecialist;
@@ -234,6 +235,67 @@ class PoachingTest {
             return;
         }
         throw new AssertionError("nobody took a 90 % offer in 49 seeds");
+    }
+
+    /**
+     * Each agency gets one shot at a person (user, 2026-10-09): once they've answered, matched or
+     * turned down, that agency's file says so, a new offer can't be queued, and one that slips through
+     * (an older file) lapses untold, while another agency may still try.
+     */
+    @Test
+    void anAgencyGetsOneApproachPerPerson() throws Exception {
+        Map<String, PlayerSnapshot> game = game(10, Retention.KEEP);
+        Poaching.queueOffer(game.get(NASA), SOVIET, "p5", 100);
+        resolve(game, 1);
+        SetSpecialist kozlov = game.get(SOVIET).getSetSpecialists().getFirst();
+        assertEquals(List.of(NASA), kozlov.getApproachedBy());
+        PersonnelFile file = Poaching.file(game.get(NASA), SOVIET, "p5");
+        assertTrue(file.approachedByYou());
+        assertEquals(Poaching.Blocker.ALREADY_APPROACHED, Poaching.blocker(file, TURN + 10));
+        assertEquals(Poaching.Outcome.ALREADY_APPROACHED, Poaching.queueOffer(game.get(NASA), SOVIET, "p5", 100));
+
+        // An older file without the mark: the offer goes, and lapses at the resolution, untold.
+        RivalFolder folder = game.get(NASA).getIntelligence().getFolders().get(SOVIET);
+        folder.getPersonnelFiles().set(0, new PersonnelFile("p5", "Ivan Kozlov", "", "SET", 34, TURN - 1, List.of(),
+            null, "Low", null, true, 72, 5, null));
+        kozlov.setLastApproachedTurn(null);
+        double salary = kozlov.getSalary();
+        Poaching.queueOffer(game.get(NASA), SOVIET, "p5", 100);
+        Map<String, List<ResolutionEvent>> events = resolve(game, 2);
+        assertEquals(OfferResult.Outcome.LAPSED_NOT_ELIGIBLE, line(events.get(NASA)).outcome());
+        assertTrue(events.get(SOVIET).stream().noneMatch(OfferSettled.class::isInstance), "a lapse isn't told");
+        assertEquals(salary, kozlov.getSalary(), 1e-9, "no second raise");
+
+        // A turned-down offer uses the shot too.
+        Map<String, PlayerSnapshot> other = game(100, Retention.LET_GO);
+        other.get(SOVIET).getSetSpecialists().getFirst().setDisappointedSeasons(0);
+        Poaching.queueOffer(other.get(NASA), SOVIET, "p5", 25);
+        assertEquals(OfferResult.Outcome.TURNED_DOWN, line(resolve(other, 1).get(NASA)).outcome());
+        assertEquals(List.of(NASA), other.get(SOVIET).getSetSpecialists().getFirst().getApproachedBy());
+        assertTrue(Poaching.file(other.get(NASA), SOVIET, "p5").approachedByYou());
+    }
+
+    /**
+     * Matching never takes a salary past three times what it was before the first match: with ten
+     * agencies each taking its one shot, that's the most a rival can push someone's pay up.
+     */
+    @Test
+    void matchingStopsAtThreeTimesTheSalaryBeforeTheFirstMatch() throws Exception {
+        Map<String, PlayerSnapshot> game = game(10, Retention.KEEP);
+        SetSpecialist kozlov = game.get(SOVIET).getSetSpecialists().getFirst();
+        Poaching.queueOffer(game.get(NASA), SOVIET, "p5", 100);
+        resolve(game, 1);
+        assertEquals(72, kozlov.getSalary(), 1e-9);
+        assertEquals(36, kozlov.getSalaryBeforeMatches(), 1e-9);
+
+        // Another +100 % from someone else would make 144; the ceiling is 3 x 36.
+        assertEquals(108, Poaching.matchedSalary(kozlov, Poaching.offeredSalary(kozlov.getSalary(), 100)));
+        kozlov.setSalary(108);
+        assertEquals(108, Poaching.matchedSalary(kozlov, Poaching.offeredSalary(kozlov.getSalary(), 25)),
+            "at the ceiling a match holds the salary");
+        kozlov.setSalary(150);
+        assertEquals(150, Poaching.matchedSalary(kozlov, Poaching.offeredSalary(kozlov.getSalary(), 25)),
+            "a match never cuts a salary raised some other way");
     }
 
     @Test

@@ -52,6 +52,8 @@ public abstract class Personnel {
     private String projectId;
     private int projectSeasons;
     private Integer lastApproachedTurn;
+    private List<String> approachedBy = new ArrayList<>();
+    private Double salaryBeforeMatches;
     private Retention retention = Retention.DEFAULT;
 
     /**
@@ -581,6 +583,45 @@ public abstract class Personnel {
      */
     public void setLastApproachedTurn(Integer lastApproachedTurn) {
         this.lastApproachedTurn = lastApproachedTurn;
+    }
+
+    /**
+     * Returns the agencies that have made the person an offer they answered (matched or turned
+     * down), by their player ids: each gets one approach per person for the whole game (user,
+     * 2026-10-09).
+     *
+     * @return the agencies, mutable, never {@code null}
+     */
+    public List<String> getApproachedBy() {
+        return approachedBy;
+    }
+
+    /**
+     * Sets the agencies that have made the person an offer they answered.
+     *
+     * @param approachedBy the agencies; {@code null} is read as none
+     */
+    public void setApproachedBy(List<String> approachedBy) {
+        this.approachedBy = approachedBy == null ? new ArrayList<>() : new ArrayList<>(approachedBy);
+    }
+
+    /**
+     * Returns the person's salary before their agency first matched an offer, which caps what later
+     * matches can raise it to, or {@code null} if no offer was ever matched.
+     *
+     * @return the salary, or {@code null}
+     */
+    public Double getSalaryBeforeMatches() {
+        return salaryBeforeMatches;
+    }
+
+    /**
+     * Sets the person's salary before their agency first matched an offer.
+     *
+     * @param salaryBeforeMatches the salary, or {@code null}
+     */
+    public void setSalaryBeforeMatches(Double salaryBeforeMatches) {
+        this.salaryBeforeMatches = salaryBeforeMatches;
     }
 
     /**
