@@ -12,7 +12,9 @@ crop is scaled to REFERENCE_WIDTH and uploaded to ComfyUI; the output is OUTPUT_
 Our component ids map to BASPM's through COMPONENTS in E:\\Temp\\BASPM\\tools\\full_maps.py, which is read
 at run time so BASPM's ids stay out of the repo. This script only runs on the main PC.
 
-Every component gets --variants drawings with their own seeds. Review
+Every component gets --variants drawings with their own seeds. A description
+with a "reference" uses that image instead of BASPM's render (mig-e-154-spaceplane: BASPM's is a different
+craft, so its reference is composed from the user's own art). Review
 sheets go to review/ (not committed); record the chosen file per component in picks.json. Only the
 picked variants are kept and committed (git add -f); manifest.json still lists every seed.
 
@@ -102,10 +104,15 @@ def source_path(baspm_id):
                         f'MsnCmpRDLrg_{baspm_id}.png')
 
 
-def reference(baspm_id):
-    image = Image.open(source_path(baspm_id)).convert('RGBA').crop(SOURCE_CROP)
-    flat = Image.new('RGB', image.size, (0, 0, 0))
-    flat.paste(image, mask=image.getchannel('A'))
+def reference(entry, baspm_id):
+    """BASPM's render, or the entry's own reference (a path under this folder) where BASPM's render shows
+    something else than our component: references/ holds those, made from the user's art."""
+    if 'reference' in entry:
+        flat = Image.open(os.path.join(HERE, entry['reference'])).convert('RGB')
+    else:
+        image = Image.open(source_path(baspm_id)).convert('RGBA').crop(SOURCE_CROP)
+        flat = Image.new('RGB', image.size, (0, 0, 0))
+        flat.paste(image, mask=image.getchannel('A'))
     height = round(flat.height * REFERENCE_WIDTH / flat.width)
     return flat.resize((REFERENCE_WIDTH, height), Image.LANCZOS)
 
@@ -226,7 +233,7 @@ def main():
                     if known and not args.force and known['prompt'] == prompt:
                         continue
                     if reference_name is None:
-                        reference_name = upload(args.host, reference(ids[component]), f'lw_blueprint_ref_{component}.png')
+                        reference_name = upload(args.host, reference(descriptions[component], ids.get(component)), f'lw_blueprint_ref_{component}.png')
                     seed = seed_for(component, style, variant)
                     data = generate(args.host, workflow, reference_name, prompt, seed, 'lw_blueprint_' + name)
                     os.makedirs(VARIANTS, exist_ok=True)

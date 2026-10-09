@@ -1538,7 +1538,9 @@ components' blueprint drawings (`assets-raw/blueprints/`, 864 x 352 JPEGs for th
 into `assets/` (commands in `CLAUDE.md`). The blueprints share one background wording ("soft": a
 gentle blue gradient with a grid, no frame); paper texture clashed with the UI's own engineering-
 paper background and a stronger gradient lost the pencil feel (user, 2026-10-09). Their slight
-differences in shade are wanted and never normalised.
+differences in shade are wanted and never normalised. Where BASPM's render shows another craft than
+ours, the reference is the user's own art instead: the MiG E-154's four views (2026-10-09; BASPM's
+was its PKA capsule plane).
 Program, category, configuration and hub art is the user's own, converted by
 `make_content_art.py` and `make_hub_art.py`.
 

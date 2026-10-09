@@ -78,9 +78,7 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   `early-era`). New engine rules came with it: a payload's own lift, air drops with no rocket,
   configurations gated on a goal. Its components have blueprint drawings in the turn report
   (2026-10-09), and every program, component and real flight has a history note (2026-10-09). Still
-  open: rocket program art for Juno II and Atlas (the user is drawing it), and a new blueprint for
-  `mig-e-154-spaceplane` (user, 2026-10-09: it was generated from BASPM's PKA, not the rocket plane
-  the user's art shows; redo its description in `assets-raw/blueprints/descriptions.json`).
+  open: rocket program art for Juno II and Atlas (the user is drawing it).
 - **PR duty for astronauts is built** (`design.md` §2.2(c)), with 39 press stories
   (`assets/content/pr-press.json`), no repeats, and effects beyond prestige. Next is the next
   play test.
@@ -153,7 +151,9 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   - **Component blueprints** (main PC only, it reads BASPM's renders from `E:`):
     `assets-raw/blueprints/make_blueprints.py` (the user's workflow `render_to_blueprint.json`,
     flattened to `blueprints_workflow_api.json`; one description per component in
-    `descriptions.json`, 3 seeds each, full-size review sheets in `review/`), the pick per component
+    `descriptions.json`, 3 seeds each, full-size review sheets in `review/`; a description's
+    `"reference"` swaps BASPM's render for an image in `references/`, as `mig-e-154-spaceplane`'s
+    four views from the user's art), the pick per component
     in `picks.json` (only picked variants are kept and committed, with `git add -f`), then
     `make_blueprint_assets.py` for `assets/ui/blueprints/*.jpg`. ComfyUI's own copies are
     `lw_blueprint_*`: never delete those. A new component needs a description, a pick and a

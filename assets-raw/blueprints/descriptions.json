@@ -210,10 +210,11 @@
     "body": "Upper left: a top view of the aircraft pointing right. A long, slim fuselage with a sharp nose, short straight wings near the middle, and swept tail fins at the rear, the rocket nozzle at the tail. The fuselage is shaded in solid deep navy.\n\nLower left: a view from below, the same shape with two long pale cylindrical external tanks slung under the fuselage, with small pointed noses.\n\nRight: a view from the rear, a round rocket nozzle drawn with concentric circles in the middle, a tall wedge-shaped tail fin above, short wings sloping out to both sides, two round tanks below and small landing gear.\n\nFar right: a front view, the same tall tail fin and wings, the nose and canopy in the middle, the two round tanks and landing skids below."
   },
   "mig-e-154-spaceplane": {
-    "subject": "a small 1960s Soviet-style orbital spaceplane",
-    "object": "spaceplane",
-    "layout": "four views of the same spaceplane spread across the sheet",
-    "body": "Upper left: a rear view, a rounded body with a domed canopy, two round engine nozzles at its back, small wings sloping out to both sides with upturned tips, and a tall thin tail fin, standing on short landing legs.\n\nLower left: a front view, the rounded nose with two dark window ports, a wide flat black underside, wings to both sides and four short legs.\n\nCenter: a top view pointing right. A smooth, blunt, rounded body like a flattened bullet, with small swept wings and twin tail fins at the rear, small pivoting fittings on its sides and a short rod at the tail. The wings are shaded with fine hatching.\n\nRight: a side view pointing right, the same rounded body with a flat dark underside, the canopy line along the top and the twin swept tail fins at the rear."
+    "subject": "a 1960s Soviet experimental rocket plane, a slender delta-wing jet",
+    "object": "rocket plane",
+    "layout": "four views of the same rocket plane spread across the sheet",
+    "reference": "references/mig-e-154-spaceplane.png",
+    "body": "Upper left: a side view pointing right. A long, slim, needle-like fuselage tapering to a sharp pointed nose with a thin probe at its tip, a small bubble canopy set well forward, a tall swept tail fin at the rear, a thin wing seen edge-on low along the body, and a cluster of rocket nozzles at the tail.\n\nLower left: a top view pointing right. Large, sharply swept delta wings with straight leading edges, swept horizontal tail surfaces at the rear, the long narrow fuselage with its canopy and the thin nose probe. The wings are shaded with fine hatching.\n\nCenter right: a front view. The round pointed nose and canopy in the middle, the thin wings stretching out flat to both sides, the tall thin tail fin rising above, standing on slender landing gear with small wheels.\n\nFar right: a rear view. Four round rocket nozzles clustered in a square at the back of the fuselage, the wings and tailplanes to both sides, the tall tail fin above and the landing gear below."
   },
   "mercury-capsule": {
     "subject": "a Mercury-style one-man space capsule with its launch escape tower",
