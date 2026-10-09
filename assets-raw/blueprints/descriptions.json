@@ -1,0 +1,512 @@
+{
+  "sputnik-1-satellite": {
+    "subject": "a Sputnik-style first artificial satellite",
+    "object": "satellite",
+    "layout": "three views of the same small satellite spread across the sheet",
+    "body": "Left: a side view. A polished metal sphere with a thin seam running around its middle, the lower half shaded in deep navy, with four long, thin, straight whip antennas trailing from its upper half and splaying down and outward like the legs of a tall tripod, almost reaching the bottom of the sheet.\n\nCenter: the same sphere seen from the front, a neat ring of small rivets along its edge, with the four antennas pointing out diagonally in a large X, two up and two down.\n\nRight: a three-quarter view, the sphere tilted slightly, the four long antennas trailing down and to the sides at different angles. Soft pale-blue highlights and navy shadow give the sphere its roundness."
+  },
+  "sputnik-2-satellite": {
+    "subject": "a Sputnik 2-style conical satellite",
+    "object": "satellite",
+    "layout": "three views of the same satellite spread across the upper half of the sheet",
+    "body": "Left: a side view with the satellite lying on its side, its wide end on the right. A tall cone-shaped open frame of thin straight struts, closed on the right by a wide, smooth, curved white nose fairing shaped like a shallow bowl. Inside the frame, two spheres side by side: a smaller instrument sphere and a larger round one, both shaded with soft navy hatching. On the left, at the narrow tip, a small boxy instrument housing with a short pointed rod.\n\nCenter: the same side view, but with the larger sphere replaced by a ribbed cylindrical cabin, drawn as a cutaway.\n\nRight: an end view looking into the wide end: a thick white circular rim around a dark round interior with a cluster of curved tanks and a three-bladed bracket in the middle."
+  },
+  "explorer-1-satellite": {
+    "subject": "an Explorer 1-style pencil-shaped satellite",
+    "object": "satellite",
+    "layout": "two views of the same slender satellite, one lying horizontally in the middle of the sheet and one standing upright on the right",
+    "body": "Left and center: a long side view lying horizontally. On the far left a small flared rocket nozzle, then a long plain cylindrical motor tube with a thin dark band near its left end. In the middle, a short dark collar from which four long, thin, wavy wire antennas curve outward, two arching up and two down, almost to the top and bottom of the sheet. To the right, the instrument section: a cylinder covered in bold alternating white and deep navy lengthwise stripes, ending in a sharp pointed nose cone.\n\nRight: the same satellite standing upright, nose up: the striped section at the top, four short curling wire antennas spreading out sideways at the collar, the long plain motor tube below with a dark band, and the small nozzle at the bottom."
+  },
+  "pegasus-satellite": {
+    "subject": "a Pegasus-style micrometeoroid detection satellite",
+    "object": "satellite",
+    "layout": "four views of the same satellite in a row along the lower half of the sheet, showing its huge wings folded and then unfolding",
+    "body": "Far left: a small end view from below, a round ring with two folded wing packs stacked on either side like closed accordions, drawn in dense dark hatching.\n\nSecond: a side view standing upright. A tapered, rounded spacecraft body at the bottom with a small cluster of nozzles underneath, and a thin central mast rising from its top, with the wing panels still folded tight against the mast.\n\nThird: the same, the wings half unfolded to both sides, a row of tall rectangular panels with gaps between them, shaded in deep navy.\n\nFar right: the same, the wings fully open as one very long, flat, wide rectangle stretching far to both sides, drawn as a fine grid of panels in deep navy, with the thin mast standing in the middle and the tapered body below."
+  },
+  "biosatellite-satellite": {
+    "subject": "a Biosatellite-style recoverable research capsule",
+    "object": "capsule",
+    "layout": "an exploded side view of the capsule in the left half of the sheet and an assembled view on the right",
+    "body": "Left: an exploded side view, its parts lying horizontally with small gaps between them. On the far left a smooth rounded nose shell like a short bell. Next, a smaller rounded capsule body with a thick ring around its rim and a small nozzle on its right end. Then a large drum-shaped adapter section with a slightly tapered left end, covered in faint vertical panel seams and rivets, with a dark rectangular panel of vertical slats on its lower front.\n\nRight: the assembled spacecraft standing upright: a wide drum-shaped base with a dark rectangular panel of horizontal slats on its front, tapering in at the top to a narrow rounded dome. Soft shading on the curved surfaces."
+  },
+  "ofo-satellite": {
+    "subject": "an Orbiting Frog Otolith-style biology satellite",
+    "object": "satellite",
+    "layout": "three small drawings spread across the middle of the sheet: two views of the satellite and a study of a frog",
+    "body": "Left: a side view of the satellite. A small upright capsule shaped like a rounded dome, covered in bold alternating white and deep navy vertical stripes, sitting on a short boxy base with a small round foot underneath. Two long, thin, slightly wavy wire antennas stretch out horizontally to both sides, far across the sheet.\n\nCenter: a top view, the small round satellite seen from above with dark and white wedge stripes like a pinwheel, with four long thin antennas reaching out diagonally to the corners in a large X, each with small beads along it.\n\nRight: a careful anatomical study drawing of a frog seen from above, legs splayed out, with fine stipple shading on its back."
+  },
+  "pioneer-4-probe": {
+    "subject": "a Pioneer 4-style small conical lunar probe",
+    "object": "probe",
+    "layout": "three views of the same small probe spread across the sheet",
+    "body": "Left: a side view lying horizontally, the wide end on the left. A long cone covered in bold alternating white and deep navy stripes running lengthwise to the tip, which ends in a thin needle-like antenna pointing right. On the left a short ribbed base ring and a small open ring-shaped frame behind it.\n\nCenter: a view from the tip, a circle divided into wedges of alternating white and deep navy stripes radiating like a pinwheel, with a small round hub in the middle.\n\nRight: a view of the base, a round plate with a toothed rim and a couple of small square boxes mounted on it, shaded in navy."
+  },
+  "zond-5-probe": {
+    "subject": "a Zond-style uncrewed circumlunar spacecraft",
+    "object": "spacecraft",
+    "layout": "two views of the same spacecraft in the upper half of the sheet",
+    "body": "Left: a side view lying horizontally. On the far left a flared engine nozzle and a toroidal tank wrapped in a lattice frame, then a short tapered section and a cylindrical instrument module ringed by fine horizontal ribs. Two long rectangular solar panels stick straight up and down from its middle, drawn as dark navy grids. On the right, a bell-shaped descent capsule with a small dish antenna and a short boom on its nose.\n\nRight: the same spacecraft standing upright, seen from the front. A bell-shaped capsule on top with a small dish antenna and rod antennas at its peak, above a ribbed cylindrical instrument module, with two wide rectangular solar panels of three segments each reaching out to both sides, shaded in deep navy."
+  },
+  "ranger-3-probe": {
+    "subject": "a Ranger-style lunar impact probe",
+    "object": "probe",
+    "layout": "two views of the same probe in the middle of the sheet",
+    "body": "Left: a top view. A hexagonal frame in the center around a round engine nozzle drawn with concentric circles. Two long rectangular solar panels stretch out to the left and right, each a fine grid of solar cells shaded in deep navy. Below the hexagon hangs a round dish antenna drawn with radial and circular ribs.\n\nRight: a side view standing upright. A tall tapering conical tower of stacked ring sections rises from a boxy hexagonal base with a small rounded capsule underneath, and the two solar panels seen edge-on reach out as long thin lines angling slightly downward to both sides."
+  },
+  "luna-2-probe": {
+    "subject": "a Luna-style spherical lunar probe",
+    "object": "probe",
+    "layout": "three views of the same small spherical probe spread across the sheet",
+    "body": "Left: a side view. A sphere with a ring of rivets around its seam, small instrument bumps on its left side, and a few thin whip antennas sticking out at angles. To the right, a slender boom with a small cone and a magnetometer probe on its end points to the right.\n\nCenter: the same sphere seen from the front, with two round dark ports and smaller fittings on its face, and four long thin antennas pointing out diagonally in a large X.\n\nRight: the sphere seen from the rear, with two round cup-shaped ports and a small central fitting, and four short antennas angled outward. Soft pale highlights and navy shading give each sphere its roundness."
+  },
+  "pioneer-2-probe": {
+    "subject": "a Pioneer 2-style lunar orbiter probe",
+    "object": "probe",
+    "layout": "three views of the same probe spread across the sheet",
+    "body": "Left: an end view, a large disc with fine radial lines and a dark rim, a round hub of concentric rings with small bolt holes in its middle, and a thin bar crossing it vertically.\n\nCenter: a side view. A wide, flat, diamond-shaped body made of two shallow cones joined at their rims, with a thick ribbed band around the widest point. On its left, a cluster of small cylindrical thruster nozzles and a thin rod antenna pointing left. On its right, a small flared nozzle.\n\nRight: the opposite end view, a large disc shaded in dense dark navy hatching with a small round ring in its center."
+  },
+  "lunar-orbiter-probe": {
+    "subject": "a Lunar Orbiter-style photographic mapping probe",
+    "object": "probe",
+    "layout": "two views of the same probe in the middle of the sheet",
+    "body": "Left: a side view. A squat conical body with a cluster of four rounded tanks on top under a small engine nozzle, sitting on a flat base. Four flat solar panels reach out low on both sides, seen nearly edge-on. On the left, a long thin boom carries a small pale dish antenna shaped like a shallow bowl. On the right, another thin boom ends in a small double-bladed antenna.\n\nRight: a top view. A round central body seen from above with a square fitting in its middle, four square solar panels at the diagonals like a four-leaf clover, each drawn as a faint grid shaded in deep navy, and the two booms reaching out to the left and upper right, one ending in a round pale dish."
+  },
+  "surveyor-lander": {
+    "subject": "a Surveyor-style robotic lunar lander",
+    "object": "lander",
+    "layout": "two views of the same lander standing upright side by side",
+    "body": "Left: a side view. A wide triangular open frame of thin tubular struts stands on three splayed landing legs, each ending in a small round footpad. A central mast rises from the top of the frame and carries a square solar panel drawn as a dark navy grid of cells. Small boxy equipment housings sit inside the frame, with a small pale camera hood and a thin curved arm with a scoop on its end reaching out to the left.\n\nRight: the same lander seen from another side, the solar panel now tilted into a peaked roof shape, the sampling arm reaching to the right, and a round tank inside the frame."
+  },
+  "luna-15-probe": {
+    "subject": "a Luna 15-style lunar sample-return lander",
+    "object": "lander",
+    "layout": "three views of the same lander standing upright, spread across the upper half of the sheet",
+    "body": "Left: a front view. A wide landing stage made of four large rounded tanks clustered around a central body, with two tall cylindrical tanks at the sides, standing on four short splayed legs with round footpads. On top, a narrow stack: a small rocket stage, a ringed cylinder and a small dark sphere on the very top, with thin whip antennas sticking out sideways and a slanted rod antenna.\n\nCenter: a side view of the same lander, the rounded tanks and the legs splayed wider, the narrow stack on top and a long thin drilling arm angling up on the right.\n\nRight: the same lander separating: the narrow upper stack with its dark sphere floating above, and the wide landing stage below with its rounded tanks, its legs and a thin mast."
+  },
+  "luna-3-probe": {
+    "subject": "a Luna 3-style lunar far-side photography probe",
+    "object": "probe",
+    "layout": "four views of the same probe spread across the sheet",
+    "body": "Left: a side view standing upright. A barrel-shaped body with a domed top: a band of small dark solar cells around the dome's edge, a wide middle section of tall vertical slats, and a wide flared skirt of dark solar cells below it. A small round camera port on its lower side, a small dish at the bottom, and four long thin antennas hanging down at angles like legs.\n\nSecond: the same from another side, with small rod antennas on top of the dome and the long thin antennas hanging below.\n\nThird: a view from the top, a round body ringed by small dark cell panels like the teeth of a gear, with a few round ports and a curved slot on its face.\n\nFar right: a view from below, the same toothed ring of dark cells around a face with round ports."
+  },
+  "luna-17-lander": {
+    "subject": "a Luna 17-style lunar rover landing stage",
+    "object": "landing stage",
+    "layout": "three views of the same landing stage in the middle of the sheet",
+    "body": "Left: a front view. A wide, low body of rounded tanks joined side by side, with two tall upright cylindrical tanks at its ends topped by small spheres. Two folding ramp ladders stand upright on top like a pair of rails. It stands on four slanted landing legs with round footpads.\n\nCenter: a top view, a rectangular frame of tanks with a large X-shaped bracket in its middle, and four round spheres with cross marks at its corners.\n\nRight: a rear view, the tall tanks and rounded tanks, the two ramps tilted outward like open gates, and the four landing legs below."
+  },
+  "lunokhod-1-rover": {
+    "subject": "a Lunokhod-style lunar rover",
+    "object": "rover",
+    "layout": "four views of the rover spread across the sheet",
+    "body": "Far left: a top view. A round tub-shaped body seen from above, its lid covered with a grid of small round holes, with a short rod antenna and a hinged arm sticking out to the upper right.\n\nSecond: another top view, the rover's round hinged lid swung open beside the body like a clam shell, the inside of the lid drawn as a fine grid of solar cells in deep navy. A long spiral helical antenna points to the left.\n\nThird: a side view. The tub-shaped body, wider at the top, with a row of small instrument boxes and a dark keyhole-shaped camera port, sits on four large spoked wire-mesh wheels on each side. A tall thin whip antenna, a cone-shaped spiral antenna and a short arm with a helical antenna pointing right.\n\nFar right: a front view of the rover, with its two front wheels at the bottom corners, the camera ports, a small round reflector dish on a short mast at the top right, and the antennas."
+  },
+  "pioneer-6-probe": {
+    "subject": "a Pioneer 6-style spin-stabilized solar probe",
+    "object": "probe",
+    "layout": "two views of the same small probe in the upper half of the sheet",
+    "body": "Left: a side view. A short drum-shaped body whose sides are covered with a grid of dark solar cells, with a thin mast antenna rising from its top and bending slightly. Three long, thin booms with small weights at their tips stick out from its middle at different angles, one to the right, one down and one to the upper left.\n\nRight: a view from the end, a round dark disc with a few concentric rings and a cross in its center, a long thin mast pointing straight up and two long thin booms angling down to the left and right."
+  },
+  "mariner-10-probe": {
+    "subject": "a Mariner 10-style inner-planet flyby probe",
+    "object": "probe",
+    "layout": "three views of the same probe spread across the upper half of the sheet",
+    "body": "Left: a top view. An octagonal body covered in crinkled foil drawn with loose, crumpled hatching, with thin radial struts. Two long rectangular solar panels stretch out to the left and right, shaded in deep navy with a row of small dots. Above the body, a round dish antenna drawn in pale white; below, a thin boom pointing straight down.\n\nCenter: a view from below, the same layout with the foil-wrapped body, the dish above and the boom below, the panels showing their framework.\n\nRight: a side view, the two panels seen edge-on as one long thin line, a boxy body with a pair of round camera lenses on a short tower on top, a tall thin mast, and a shallow cone underneath."
+  },
+  "mariner-5-probe": {
+    "subject": "a Mariner-style interplanetary probe",
+    "object": "probe",
+    "layout": "three views of the same probe spread across the sheet",
+    "body": "Left: a top view. An octagonal central body in the middle, with four rectangular solar panels on short lattice arms pointing diagonally to the four corners, like a big letter X. Each panel is drawn as a fine grid of solar cells, shaded in deep navy.\n\nCenter: the same probe seen from below, the four panels on their lattice arms, the octagonal body showing a dense cluster of instruments, wiring and small boxes, drawn with busy fine line work.\n\nRight: a side view. The flat octagonal equipment box sits near the top, with the four solar panels seen edge-on as a long thin horizontal line reaching far to both sides. A tilted dish antenna hangs below the body, and a long thin mast points straight down from it."
+  },
+  "pioneer-venus-orbiter-probe": {
+    "subject": "a Pioneer Venus-style drum-shaped orbiter",
+    "object": "orbiter",
+    "layout": "two views of the same orbiter in the middle of the sheet",
+    "body": "Left: a side view. A wide, flat drum-shaped body whose sides are made of many narrow vertical solar cell strips, shaded in alternating deep navy and white, with a pale band of small boxes along its top rim and a ring of short ribs underneath. From its top, a tall mast carries a small dish antenna and a thin pointed rod, and a long thin boom reaches out to the right.\n\nRight: a top view, a round disc covered in crinkled foil drawn with loose, crumpled hatching, the dish antenna seen edge-on in its middle, a long thin boom with small joints reaching far to the right."
+  },
+  "pioneer-venus-multiprobe-craft": {
+    "subject": "a Pioneer Venus-style multiprobe carrier with its atmospheric entry probes",
+    "object": "spacecraft",
+    "layout": "three views of the same spacecraft spread across the upper half of the sheet",
+    "body": "Left: a top view, a round disc covered in crinkled foil drawn with loose, crumpled hatching, with four cone-shaped entry probes seen from above, one large and three small, each drawn as a circle of white and navy wedges like an umbrella.\n\nCenter: a side view. A wide, flat drum-shaped carrier, its sides made of narrow vertical cell strips in alternating navy and white, a pale band of small boxes along its top rim and a ring of short ribs underneath. On its top sit one large and three small blunt cone-shaped probes, and a thin mast rises from its middle.\n\nRight: the same carrier with the four probes released, floating above it at different heights, each a blunt cone with white and navy segments, the large one at the top."
+  },
+  "venera-15-probe": {
+    "subject": "a Venera 15-style radar mapping orbiter",
+    "object": "orbiter",
+    "layout": "two views of the same orbiter in the middle of the sheet",
+    "body": "Left: a top view. A long, flat, pale, rounded rectangle, the radar antenna, lying horizontally across the middle, with a thin rod sticking out from each end. Small round dish antennas sit above and below its middle, and a thin forked rod points downward at the bottom.\n\nRight: a front view. A tall cylindrical body with rounded tanks and small fittings, crowned by a long curved radar dish seen edge-on like a wide shallow arc, with a thin triangular support above it. A large round pale dish antenna sits on the front of the body, and two pairs of square solar panels reach out to the left and right, drawn as dark navy grids of cells."
+  },
+  "venera-7-probe": {
+    "subject": "a Venera 7-style Venus probe with its round descent capsule",
+    "object": "probe",
+    "layout": "three views of the same probe spread across the lower half of the sheet",
+    "body": "Left: a side view. A large, shallow, umbrella-shaped dish antenna with ribbed sections sits on top of a round, drum-shaped body with a radiator of radial vanes on its face. Two tall thin masts with spiral antennas on their tips stand at both ends of a long horizontal boom. A small dark round capsule hangs underneath.\n\nCenter: a front view, a large round disc in deep navy with a small star-shaped fitting in its center, flanked by two short rectangular solar panels with a dark grid of cells, a small rounded cap on top and a ribbed housing above it.\n\nRight: the same probe seen from the rear, the two panels, a tall cylindrical body with a large round dark port and smaller fittings, and the ribbed housing on top."
+  },
+  "venera-9-probe": {
+    "subject": "a Venera 9-style Venus orbiter and lander",
+    "object": "spacecraft",
+    "layout": "three views spread across the upper half of the sheet",
+    "body": "Left: the lander standing on its own. A round body with a wide flat disc-shaped brake ring around its top, a ribbed cylindrical antenna housing on its crown, several thin struts below, and a wide flat ring-shaped landing foot at the bottom. A thin rod leans against its side.\n\nCenter: the whole spacecraft from the front. A large dark navy sphere on top, the lander's protective shell, above a white cylindrical body with pale side panels full of small holes, two square solar panels drawn as dark navy grids of cells to the left and right, a pale dish antenna on its front and a cluster of tanks at its base.\n\nRight: an exploded side view, the orbiter body lying sideways with its two panels pointing up and down, and the sphere split open into two dark halves with the round lander floating between them."
+  },
+  "mariner-6-probe": {
+    "subject": "a Mariner 6-style Mars flyby probe",
+    "object": "probe",
+    "layout": "three views of the same probe spread across the sheet",
+    "body": "Left: a top view. An octagonal body covered in crumpled foil with a pale dish in its middle, four long rectangular solar panels reaching out diagonally to the four corners in a large X, each a fine grid of cells shaded in deep navy.\n\nCenter: a side view. A flat octagonal equipment box with dark vented panels and a round port on its face, the solar panels seen edge-on as a long thin line reaching far to both sides. On top, a large dark round dish antenna tilted toward the viewer on a short tripod, and a tall thin mast beside it. A small foil-wrapped platform hangs underneath.\n\nRight: the same from another side, the dish now seen at an angle and the mast to its left."
+  },
+  "mariner-9-probe": {
+    "subject": "a Mariner 9-style Mars orbiter",
+    "object": "orbiter",
+    "layout": "two views of the same orbiter in the middle and lower half of the sheet",
+    "body": "Left: a top view. A pale octagonal body with a small round port and a small dish on a short arm, four long rectangular solar panels reaching out diagonally to the four corners in a large X, drawn with fine pencil texture and shaded in deep navy.\n\nRight: a side view. A pale truncated-cone engine cover on top of a short body, with a tall thin mast antenna rising behind it and a small cone on its top. The solar panels seen edge-on reach out as a thin line to both sides with small fittings at their tips, and a small foil-wrapped platform hangs underneath."
+  },
+  "viking-orbiter": {
+    "subject": "a Viking-style Mars orbiter",
+    "object": "orbiter",
+    "layout": "two views of the same orbiter in the upper half of the sheet",
+    "body": "Left: a top view. A pale octagonal body with a small round port and a small fitting, a small dish antenna on a short arm at its top, and four long rectangular solar panels reaching out diagonally to the four corners in a large X, drawn with fine pencil texture and shaded in deep navy.\n\nRight: a side view. A pale truncated-cone engine cover with a small nozzle on top of a short boxy body, a tall thin mast antenna rising straight up beside it, the solar panels seen edge-on as thin lines reaching to both sides, and a small foil-wrapped platform hanging underneath."
+  },
+  "viking-lander": {
+    "subject": "a Viking-style Mars lander",
+    "object": "lander",
+    "layout": "three views of the same lander spread across the upper half of the sheet",
+    "body": "Left: a top view. A round six-sided body with two long white cylindrical generator housings sticking out to the left and right, a round lattice dish antenna and a cluster of small tanks and fittings on top, small round footpads at the edges, and a long thin sampling arm reaching straight down.\n\nCenter: a side view. A low, wide, six-sided equipment body with sloping pale side panels, standing on three short angled landing legs with round flat footpads. On top, two tall cylindrical tanks, a round lattice dish antenna on a short mast, a thin vertical boom and small boxes. A small cylindrical housing hangs under the front.\n\nRight: the same lander from another side, the lattice dish antenna now in front, with the tanks, small camera turrets and pipes on its top deck."
+  },
+  "mars-2-probe": {
+    "subject": "a Mars 2-style orbiter with its landing capsule and small walking rover",
+    "object": "spacecraft",
+    "layout": "four drawings spread across the sheet",
+    "body": "Far left: the whole spacecraft from the front. A wide, shallow cone-shaped aeroshell on top, a tall cylindrical body below it with a large pale round dish antenna on its front, two square solar panels drawn as dark navy grids of cells to the left and right, and a cluster of tanks at its base.\n\nSecond: an exploded view, stacked top to bottom: the shallow cone of the aeroshell, the egg-shaped landing capsule with a ring around its middle, a flat oval ring, and a wide bowl-shaped heat shield with ribs.\n\nThird: a small boxy rover body with its frame of square legs on both sides, standing on two broad flat skids, with a small tower of instruments on its top.\n\nFar right: the same small rover body seen from the side, with small wheels and a cluster of small fittings."
+  },
+  "mars-m69-probe": {
+    "subject": "a Mars M-69-style heavy Mars orbiter",
+    "object": "orbiter",
+    "layout": "three views of the same orbiter spread across the upper half of the sheet",
+    "body": "Left: a side view standing upright. A tall cone-shaped upper body with a ring of small dark ports, a large round tank below it, and a short cylindrical base on small feet. A large dish antenna seen from behind sits at its left side, shaded in deep navy, and a thin rod runs down its right side.\n\nCenter: a front view. The same tall cone-shaped body with two dark round ports, a large pale round dish antenna in front, two tall rectangular solar panels to the left and right drawn as dark navy grids of cells, two round tanks at its feet and a curving pipe between them.\n\nRight: a top view, a round body with tanks to both sides, a tilted dish on its upper right and a long thin boom reaching to both sides."
+  },
+  "pioneer-10-probe": {
+    "subject": "a Pioneer 10-style deep-space probe",
+    "object": "probe",
+    "layout": "two views of the same probe at either end of the sheet, joined by a long thin boom",
+    "body": "Left: a front view of a very large round pale dish antenna, drawn as a big smooth circle with a small round feed in its center held by three thin struts. Two short trusses with small boxy generators on their ends stick out at its top and bottom. A very long, thin, straight boom reaches out from the dish toward the right, across the middle of the sheet.\n\nRight: a view from behind the dish. The same big pale circle, now with a six-sided equipment box in its center, small instrument boxes and thin radial ribs around it, the two trusses with their generators reaching out diagonally to the upper right and lower right, and the long thin boom reaching back to the left."
+  },
+  "pioneer-11-probe": {
+    "subject": "a Pioneer 11-style deep-space probe",
+    "object": "probe",
+    "layout": "two views of the same probe across the sheet",
+    "body": "Left: a side view. A wide, shallow dish antenna seen edge-on, mounted on top of a boxy equipment body with small vents, held up by a frame of thin legs. A long, thin lattice boom reaches up diagonally to the upper right, far across the sheet. A small truss with a boxy generator reaches to the left, and a second truss with a long cylinder reaches to the lower right.\n\nRight: a view from behind the dish: a big pale circle with a six-sided equipment box in its center, small instrument boxes and thin radial ribs around it, two trusses with their generators reaching to the upper and lower right, and a long thin boom reaching to the left."
+  },
+  "agena-target-vehicle": {
+    "subject": "an Agena-style docking target vehicle",
+    "object": "vehicle",
+    "layout": "two side views of the vehicle lying horizontally, one lower left and one upper right",
+    "body": "Lower left: a long side view inside its launch fairing. On the left a flared engine nozzle with small tanks around a short truss frame, then a slightly tapered cylinder with a band of large dark and white squares like a checkerboard, then a long plain pale cylinder ending in a long rounded nose fairing pointing right.\n\nUpper right: the same vehicle without the fairing. The engine nozzle and truss frame on the left, then a long cylindrical body with fine lengthwise ribs and a row of small dark squares along its top, a short pale band with ladder-like markings, and on the right end a wide, flared docking collar shaded in dark navy. A thin coiled antenna hangs down beneath it."
+  },
+  "x-15-aircraft": {
+    "subject": "an X-15-style rocket-powered research aircraft",
+    "object": "aircraft",
+    "layout": "four views of the same aircraft arranged across the sheet, two plan views on the left and two end views on the right",
+    "body": "Upper left: a top view of the aircraft pointing right. A long, slim fuselage with a sharp nose, short straight wings near the middle, and swept tail fins at the rear, the rocket nozzle at the tail. The fuselage is shaded in solid deep navy.\n\nLower left: a view from below, the same shape with two long pale cylindrical external tanks slung under the fuselage, with small pointed noses.\n\nRight: a view from the rear, a round rocket nozzle drawn with concentric circles in the middle, a tall wedge-shaped tail fin above, short wings sloping out to both sides, two round tanks below and small landing gear.\n\nFar right: a front view, the same tall tail fin and wings, the nose and canopy in the middle, the two round tanks and landing skids below."
+  },
+  "mig-e-154-spaceplane": {
+    "subject": "a small 1960s Soviet-style orbital spaceplane",
+    "object": "spaceplane",
+    "layout": "four views of the same spaceplane spread across the sheet",
+    "body": "Upper left: a rear view, a rounded body with a domed canopy, two round engine nozzles at its back, small wings sloping out to both sides with upturned tips, and a tall thin tail fin, standing on short landing legs.\n\nLower left: a front view, the rounded nose with two dark window ports, a wide flat black underside, wings to both sides and four short legs.\n\nCenter: a top view pointing right. A smooth, blunt, rounded body like a flattened bullet, with small swept wings and twin tail fins at the rear, small pivoting fittings on its sides and a short rod at the tail. The wings are shaded with fine hatching.\n\nRight: a side view pointing right, the same rounded body with a flat dark underside, the canopy line along the top and the twin swept tail fins at the rear."
+  },
+  "mercury-capsule": {
+    "subject": "a Mercury-style one-man space capsule with its launch escape tower",
+    "object": "capsule",
+    "layout": "the capsule and its tower lying horizontally across the middle of the sheet, the blunt heat shield on the left and the escape tower pointing to the right",
+    "body": "A single side view, from left to right: on the far left, three small retro-rocket nozzles clustered on the blunt heat shield, held by thin straps. Then the capsule itself, a wide truncated cone that narrows to the right, its whole surface covered in fine vertical corrugated shingles drawn as dense parallel pencil lines, with a small square window panel near its middle, shaded in deep navy. Then a short cylindrical neck section with a few vertical panel lines, and a small rounded antenna housing.\n\nThen the launch escape tower: a long open lattice truss of thin straight struts with crossed diagonal braces, drawn in crisp white lines. At its far end a cylindrical escape motor with three small flared nozzles angled outward, and a slender pointed rod tipped with a tiny arrowhead, reaching toward the right edge."
+  },
+  "vostok-capsule": {
+    "subject": "a Vostok-style spherical crew capsule with its equipment module",
+    "object": "capsule",
+    "layout": "four upright side views of the capsule in a row, followed by two small end views on the right",
+    "body": "Each upright view: a large sphere covered in a fine pattern of small scale-like panels, with a few round hatches and small round windows, sitting on a ring of small round gas bottles like a necklace. Below the bottles, a short band of instrument boxes, and below that, two cones joined base to base, ending in a point at the bottom. Short rod antennas stick up from the top of the sphere and thin rods hang down along the cones.\n\nThe four views show the capsule turned by a quarter each time: a large round hatch facing front, then a side with a long strap running down the sphere, then a side with two round windows like eyes.\n\nFar right: two small end views, one of the sphere seen from above with a cross-shaped strap and a round hatch, and one from below, a round plate with radial ribs like spokes."
+  },
+  "voskhod-capsule": {
+    "subject": "a Voskhod-style crew capsule with an inflatable airlock tube",
+    "object": "capsule",
+    "layout": "four upright side views of the capsule in a row and a smaller view on the right",
+    "body": "Each upright view: a large sphere covered in a fine pattern of small scale-like panels, sitting on a ring of small round gas bottles, a band of instrument boxes below them and two cones joined base to base ending in a point at the bottom, with a small cylindrical backup rocket pack on top of the sphere.\n\nFrom the sphere's upper side a wide, soft, pale cylindrical airlock tube sticks out at an angle, its outer end closed by a thick ringed hatch. In the first view it points up to the left, in the second it points straight at the viewer showing its round opening, in the third it points up to the right, and in the fourth it is hidden behind the sphere, which shows two round windows.\n\nFar right: the sphere alone seen from below, with the airlock tube pointing straight up from it, its ringed hatch on top."
+  },
+  "gemini-capsule": {
+    "subject": "a Gemini-style two-man spacecraft",
+    "object": "spacecraft",
+    "layout": "an assembled view standing upright on the left and an exploded side view on the right",
+    "body": "Left: the assembled spacecraft standing upright, a tall narrow cone: the crew cabin at the top, shaded in deep navy with fine vertical ribs and a dark nose, and below it a wider, paler, truncated cone, the adapter section, covered in long vertical panel seams and a few small square hatches.\n\nRight: an exploded side view lying horizontally, pointing right. On the left, the wide adapter section, a large truncated cone with long panel seams and small fittings. Next, a short narrow ring section. Then the crew cabin, a cone narrowing to the right, covered in fine ribbed shingles drawn as dense parallel lines, shaded in deep navy, ending in a short cylindrical nose with a thin band."
+  },
+  "gemini-transtage": {
+    "subject": "a Transtage-style restartable upper stage",
+    "object": "stage",
+    "layout": "the stage lying horizontally across the upper half of the sheet, with an end view on each side",
+    "body": "Left: a view from behind, a round body with two large engine nozzles side by side, drawn as deep dark circles with glowing pale rims, and two rounded tank ends above and below them.\n\nCenter: a side view lying horizontally. On the left, two flared engine bells, one above the other, in a short lattice frame of thin struts around a small pointed cone. Then a long cylinder in three sections: a pale band with rows of short horizontal dashes, a darker middle band with a pattern of rectangular panels, and another pale band with dashes. On the right, a cone tapering to a short ribbed cylinder and a small dark ring.\n\nRight: a small end view from the front, a round ring with radial ribs and a dark hole in its middle."
+  },
+  "gemini-lunar-propulsion-module": {
+    "subject": "a Gemini-style lunar propulsion module",
+    "object": "module",
+    "layout": "three views of the same module spread across the sheet",
+    "body": "Left: an end view, a wide ring made of many wedge-shaped panels like the segments of a fan, some pale and some in solid deep navy, around a large round dark center.\n\nCenter: a side view, a short, wide, truncated cone made of long panels running from top to bottom, with two dark striped panels on its sloping sides, and a smaller ribbed cone hanging under it.\n\nRight: the other end, a round opening with a thick dark rim, the inside lined with crinkled foil drawn with loose, crumpled hatching, and a round engine nozzle in its center."
+  },
+  "gemini-direct-ascent-craft": {
+    "subject": "an enlarged Gemini-style lunar landing capsule",
+    "object": "capsule",
+    "layout": "an assembled view standing upright on the left and an exploded side view on the right",
+    "body": "Left: the assembled craft standing upright, a short, wide body: a truncated cone on top over a wide cylindrical section, made of many vertical panels, with dark navy panels in a striped pattern around it and a small nozzle underneath.\n\nRight: an exploded side view lying horizontally, three parts with gaps between them. On the left, a wide drum made of vertical panels with dark bands at both ends and a small nozzle on its left face. In the middle, a short slanted ring section with a framework of small struts and a dark panel. On the right, a truncated cone with dark striped panels, narrowing to the right."
+  },
+  "gemini-eor-service-module": {
+    "subject": "a Gemini-style Earth-orbit rendezvous service module",
+    "object": "module",
+    "layout": "two side views of the same module in the upper half of the sheet",
+    "body": "Left: a side view lying horizontally. On the left, a small ribbed truncated cone, then a large cone made of long straight ribs that widens to the right, shaded in dark navy on its lower half. On the right, a wide, tall, rectangular box made of vertical panels in deep navy, with a narrow pale band at its left edge.\n\nRight: the same module turned, the ribbed cone pointing left and a pale rectangular frame with a smaller cylinder inside it on the right, its legs pointing down."
+  },
+  "langley-lunar-lander": {
+    "subject": "a small open-cockpit one-man lunar lander",
+    "object": "lander",
+    "layout": "four views of the same lander spread across the sheet",
+    "body": "Left: a front view. Two large rounded tanks shaded in deep navy stand to the left and right of a tall, clear, capsule-shaped canopy with a seat inside it. Small thruster quads stick out from the tanks. The whole craft sits on a low platform with a bell-shaped engine nozzle underneath and four long lattice landing legs angling out to small flat footpads.\n\nSecond: a side view, the canopy hinged open as a curved clear shell over the seat, one large tank in front, a small dish antenna on a mast and a round small tank.\n\nThird: a rear view, the two tanks with a tall frame of equipment and a dish antenna between them, the engine nozzle and the legs below.\n\nRight: a top view, the two round tanks, the oval cockpit with its seat, and four lattice legs reaching diagonally to round footpads at the corners."
+  },
+  "s-ivb-space-tug": {
+    "subject": "an S-IVB-style upper stage used as a space tug",
+    "object": "stage",
+    "layout": "the stage lying horizontally across the middle of the sheet, with an end view on each side",
+    "body": "Left: a view from behind, a large round engine bell seen end-on, drawn as concentric circles fading from pale to deep dark in the middle, inside a thick dark outer ring.\n\nCenter: a side view lying horizontally. On the left, a long ribbed engine bell, then a short cone widening to the right, then a long, plain, smooth pale cylinder, the main tank, then a cone narrowing to the right, ending in a short ribbed collar and a small dark ring.\n\nRight: a view from the front, a round face with fine radial ribs around a dark round opening."
+  },
+  "apollo-csm": {
+    "subject": "an Apollo-style command and service module",
+    "object": "spacecraft",
+    "layout": "three views of the same spacecraft in the upper half of the sheet",
+    "body": "Left: a view from behind, a large round body with a big engine bell drawn as a deep dark circle with a pale rim, and a small cluster of four round antenna dishes hanging below.\n\nCenter: a view from the front, the cone-shaped command module seen nose-on as concentric rings with a docking port in the middle and small windows and hatches around it.\n\nRight: a side view lying horizontally, nose pointing right. On the left, a large flared engine bell. Then the service module, a long cylinder with fine panel lines, a few pale bands and small thruster quads on its upper and lower edges. Then the command module, a cone ringed with pale bands that narrows to a small pointed docking probe at the right."
+  },
+  "apollo-lunar-module": {
+    "subject": "an Apollo-style two-stage lunar landing craft",
+    "object": "lander",
+    "layout": "three views of the same lander standing upright side by side, evenly spaced across the sheet",
+    "body": "Left: a front view. The ascent stage on top is an angular, faceted crew cabin with a triangular window, a small hatch below it, round thruster clusters sticking out at the upper corners, and a small dish antenna on top. Below it, the octagonal descent stage, wrapped in crinkled foil drawn with loose, crumpled hatching. A bell-shaped engine nozzle hangs underneath. Four long spindly landing legs angle outward, braced with thin struts, each ending in a round flat footpad. A narrow ladder runs down one front leg.\n\nCenter: the same lander seen from the side, its ladder now on the left leg, with the cabin's bulging sides and the thruster clusters in profile.\n\nRight: the same lander seen from the rear, with the ascent stage's rounded tank bulge and the antennas at its top. Darker navy shading in the recesses between the faceted panels."
+  },
+  "soyuz-7k-l1-spacecraft": {
+    "subject": "a Soyuz 7K-L1-style circumlunar spacecraft",
+    "object": "spacecraft",
+    "layout": "three views of the same spacecraft spread across the sheet",
+    "body": "Left: a front view standing upright. A bell-shaped descent capsule on top with a dark navy surface and a small handrail, sitting on a cylindrical service module ringed with white and dark horizontal bands. Two wide solar panels of three square segments each reach out to the left and right, drawn as dark navy grids of cells, with thin antennas hanging down at their tips.\n\nCenter: a side view, the same capsule on its banded service module, the panels seen edge-on.\n\nRight: two small round views, one above the other: the top seen from above, a dark ring with a round opening, and the base seen from below, a round plate with a central nozzle. Both have a long thin rod reaching to the left and right."
+  },
+  "soyuz-7k-lok-spacecraft": {
+    "subject": "a Soyuz 7K-LOK-style lunar orbital spacecraft",
+    "object": "spacecraft",
+    "layout": "the spacecraft lying horizontally across the middle of the sheet, with an end view on each side",
+    "body": "Center: a side view lying horizontally. On the left a wide, pale, rounded service module with large rounded tank bulges and a thin rod antenna, then a rectangular panelled section and a ribbed band. Next, a bell-shaped descent capsule shaded in deep navy with a small round window, and then a large sphere, the orbital module, also in deep navy, with a cluster of docking equipment and small antennas on its right end.\n\nLeft: a view from the front, the round docking end with its equipment cluster, a small cross-shaped target on a short mast above it.\n\nRight: a view from behind, a pale round plate with two round engine nozzles and small fittings, and the same small cross-shaped target on a mast."
+  },
+  "lk-lander": {
+    "subject": "an LK-style one-man Soviet lunar lander",
+    "object": "lander",
+    "layout": "four views of the same lander spread across the upper half of the sheet",
+    "body": "Left: a front view. A round, egg-shaped crew cabin with a large round porthole, a small tower of thruster clusters and a flat crown on top, sitting on a boxy landing platform of dark grid panels and small spheres. Four long splayed landing legs with flat footpads, and two small dish antennas on short arms reaching out to the sides.\n\nSecond: the same from another side, the cabin showing a large round hatch with a domed window.\n\nThird: a side view, the cabin with a short pointed fitting, two arrow-shaped markers sticking out to the sides, a cluster of cylindrical tanks under the cabin and the legs.\n\nRight: a top view, the round cabin in the middle, four lattice legs reaching diagonally to round dark footpads, and two round dish antennas at opposite corners."
+  },
+  "soyuz-7k-ok-spacecraft": {
+    "subject": "a Soyuz 7K-OK-style crewed spacecraft",
+    "object": "spacecraft",
+    "layout": "four views of the same spacecraft in a row across the sheet",
+    "body": "Far left: a view from the front, a round docking end with concentric rings, two long thin rods reaching out to the sides with small kinks, and a short lattice boom hanging down with a small ball on its end.\n\nSecond: a side view, nose pointing right. A ribbed cylindrical service module on the left with two tall rectangular solar panels sticking straight up and down, drawn as dark navy grids of cells. Then a bell-shaped descent capsule and a round orbital module with a small antenna on its nose.\n\nThird: the same side view mirrored, nose pointing left.\n\nFar right: the front view again, mirrored."
+  },
+  "igla-docking-system": {
+    "subject": "an Igla-style automatic docking radar system on a cylindrical test section",
+    "object": "docking system",
+    "layout": "five small views spread across the sheet",
+    "body": "Far left and second: a plain cylinder lying horizontally, shaded in deep navy, with a small boxy instrument on its side and four thin rods with small dish antennas on their tips sticking out at its corners, two up and two down.\n\nCenter: an end view, a round disc with a ring and a short lattice mast on top, with small dishes on short rods to the left and right.\n\nFourth and far right: the cylinder from another side, with a tall lattice mast rising from its top end that carries a small star-shaped antenna, and small dishes on short rods at both ends."
+  },
+  "lk-700-spacecraft": {
+    "subject": "an LK-700-style direct-ascent lunar landing craft",
+    "object": "craft",
+    "layout": "three views of the same craft spread across the upper half of the sheet",
+    "body": "Left: a side view standing upright. A tall cylindrical body with a few thin horizontal bands, topped by a pointed cone with two small round windows and a small dish antenna on its tip. Two round portholes near its middle and a small hatch below them. Several long thin landing legs slant out to flat skids on the ground, and a steep ladder with railings runs down its left side.\n\nCenter: the same craft from another side, with a small round cap on its tip and the legs and skids spreading to both sides.\n\nRight: a view from below, a round body with a large round dark port in its middle and smaller round ports around it, with six long, thin legs radiating outward like the spokes of a wheel."
+  },
+  "gemini-eva-suit": {
+    "subject": "a 1960s American spacewalk pressure suit",
+    "object": "space suit",
+    "layout": "three views of the same suit standing upright side by side across the sheet",
+    "body": "Left: a front view, the suit standing with its arms stretched straight out to the sides. A rounded helmet with a dark visor and a ribbed neck ring. A rectangular chest pack with two round hose connectors and a small control panel. Dark navy harness straps run down the chest in a V and around the waist. Gloved hands with wrist rings, thick padded legs and heavy boots, with the wrinkles of the fabric drawn in soft folds.\n\nCenter: a side view of the same suit standing straight with its arms at its sides, the visor and the chest connectors in profile, the harness straps crossing over the back.\n\nRight: a rear view with the arms stretched out again, the dark harness straps crossing in a large X across the back."
+  },
+  "apollo-lunar-eva-suit": {
+    "subject": "an Apollo-style lunar surface space suit with its backpack",
+    "object": "space suit",
+    "layout": "three views of the same suit standing upright side by side across the sheet",
+    "body": "Left: a front view, the suit standing with its arms stretched straight out to the sides. A large round bubble helmet with a dark visor, a small rectangular control box on the chest with hoses looping down from it to connectors on the torso, bulky folded fabric on the arms and legs, dark gloves and heavy dark-soled overshoes.\n\nCenter: a side view standing straight, a large boxy backpack on its back reaching above the helmet, with a hose looping from the backpack to the chest.\n\nRight: a rear view with the arms stretched out, the large rectangular backpack covering the whole back, a smaller pack on top of it, and the bulky legs below."
+  },
+  "light-lunar-eva-suit": {
+    "subject": "a light 1960s American lunar surface suit with a separate life-support case",
+    "object": "space suit",
+    "layout": "three views of the same suit standing upright side by side across the sheet",
+    "body": "Left: a front view, the suit standing with its arms stretched straight out to the sides. A round helmet with a dark visor, dark harness straps running down the chest and around the legs, wrist rings and gloves. Two long hoses run from the chest down to a small upright case with a handle standing on the ground beside the right leg.\n\nCenter: a side view standing straight, the arms at its sides, the harness straps crossing on the back, the hoses hanging down to the small case standing behind its heels.\n\nRight: a rear view, the straps crossing in an X on the back and the small case on the ground behind it, its front showing horizontal ribs."
+  },
+  "lunar-roving-vehicle": {
+    "subject": "an Apollo-style lunar roving vehicle",
+    "object": "rover",
+    "layout": "three views of the same rover in the upper half of the sheet",
+    "body": "Left: a side view. A low, flat, open chassis on four large wheels with deep wire-mesh treads, shaded in deep navy, and curved fenders over them. Two folding seats, a small control console with a hand controller, a small camera on a post and a tall mast with an umbrella-like mesh dish antenna angled up on the right.\n\nCenter: a top view, a rectangular chassis frame with two seats side by side, equipment boxes front and back, a wheel at each corner and the round mesh dish to the right.\n\nRight: a front view, the two front wheels at the bottom corners, the console, small boxes and the large round umbrella-like mesh dish antenna rising above it all."
+  },
+  "berkut-eva-suit": {
+    "subject": "a 1960s Soviet spacewalk pressure suit with a backpack",
+    "object": "space suit",
+    "layout": "three views of the same suit standing upright side by side across the sheet",
+    "body": "Left: a front view, the suit standing with its arms stretched straight out to the sides. A round helmet with a clear visor, a dark seam running down the middle of the chest and the legs, a pale strap across the chest and dark cuffs at the wrists and ankles. Smooth fabric with soft folds.\n\nCenter: a side view standing straight, a thin flat rectangular backpack on its back, a small round patch on the upper arm and a dark seam running down the side of the leg.\n\nRight: a rear view with the arms stretched out, the flat rectangular backpack with a round fitting and an X-shaped bracket on its face, and two dark straps over the shoulders."
+  },
+  "yastreb-eva-suit": {
+    "subject": "a late-1960s Soviet spacewalk pressure suit with a backpack",
+    "object": "space suit",
+    "layout": "three views of the same suit standing upright side by side across the sheet",
+    "body": "Left: a front view, the suit standing with its arms stretched straight out to the sides. A round helmet with a clear visor, a dark seam running down the middle of the chest, a pale strap across the chest and ribbed cuffs at the wrists and ankles. Smooth, slightly baggy fabric with soft folds.\n\nCenter: a side view standing straight, a flat rectangular backpack on its back, a small round patch on the upper arm and a long dark seam running down the side of the leg.\n\nRight: a rear view with the arms stretched out, the flat backpack with a round fitting and an X-shaped bracket on its face, and two dark straps over the shoulders."
+  },
+  "krechet-eva-suit": {
+    "subject": "a Soviet lunar surface space suit with a rear-entry backpack",
+    "object": "space suit",
+    "layout": "three views of the same suit standing upright side by side across the upper half of the sheet",
+    "body": "Left: a front view, the suit standing with its arms stretched straight out to the sides. A large rounded helmet with a wide visor, a small rectangular control panel on the chest with a few fittings, bulky ribbed joints at the elbows and knees, and heavy boots.\n\nCenter: a side view standing straight, a thick rigid backpack forming the whole back of the suit, hinged like a door, with a small hand tool held at the chest.\n\nRight: a rear view with the arms stretched out, the large rounded rectangular backpack covering the whole back and the bulky legs below."
+  },
+  "r7-sputnik": {
+    "subject": "an R-7-style first satellite launch rocket",
+    "object": "rocket",
+    "layout": "the rocket lying horizontally across the sheet, tail on the left, nose pointing to the right, with a small end view at each side",
+    "body": "Far left: a view from behind, a cluster of five round engine blocks in a cross pattern, a central one surrounded by four, each with four round nozzles drawn as dark circles, and thin fins sticking out diagonally at the corners.\n\nMain side view, from left to right: four long tapered strap-on boosters bundled around a long central core, each booster wide at the tail and tapering to a sharp point toward the middle, with small triangular fins at their tails. The central core continues on as a long slender body that ends in a long sharp conical nose shroud. The whole rocket is drawn in pale white with only a few dark navy accents near the tails.\n\nFar right: a view from the front, the pale rounded tops of the four boosters around the core like a four-leaf clover, with thin fins at the corners."
+  },
+  "r7-vostok": {
+    "subject": "an R-7-style crew launch rocket with a third stage",
+    "object": "rocket",
+    "layout": "the rocket lying horizontally across the sheet, tail on the left, nose pointing to the right, with a small end view at each side",
+    "body": "Far left: a view from behind, a cluster of five round engine blocks in a cross pattern, a central one surrounded by four, each with four round nozzles drawn as dark circles, and thin fins sticking out diagonally at the corners.\n\nMain side view, from left to right: four long tapered strap-on boosters bundled around a long central core, each booster shaded in solid deep navy on its wide tail half and white toward its pointed front end, with small triangular fins at their tails. The white central core continues past them to an open lattice of crossed struts, then a short dark third stage and a dark, smooth payload shroud with a small round window and a pointed nose.\n\nFar right: a view from the front, the pale rounded tops of the four boosters around a dark round shroud seen nose-on, with thin fins at the corners."
+  },
+  "r7-voskhod": {
+    "subject": "an R-7-style crew launch rocket with a long third stage",
+    "object": "rocket",
+    "layout": "the rocket lying horizontally across the sheet, tail on the left, nose pointing to the right, with a small end view at each side",
+    "body": "Far left: a view from behind, a cluster of five round engine blocks in a cross pattern, each with four round nozzles drawn as dark circles, and thin fins sticking out diagonally at the corners.\n\nMain side view, from left to right: four long tapered strap-on boosters bundled around a long central core, each booster shaded in solid deep navy on its wide tail half and white toward its pointed front end, with small triangular fins at their tails. The white central core continues past them to an open lattice of crossed struts, then a long dark third stage and a dark payload shroud, slightly wider, with a small escape rocket fitting on its side, ending in a long blunt cone.\n\nFar right: a view from the front, the pale rounded tops of the four boosters around a dark round shroud seen nose-on, with thin fins at the corners."
+  },
+  "r7-luna": {
+    "subject": "an R-7-style lunar probe launch rocket",
+    "object": "rocket",
+    "layout": "the rocket lying horizontally across the sheet, tail on the left, nose pointing to the right, with a small end view at each side",
+    "body": "Far left: a view from behind, a cluster of five round engine blocks in a cross pattern, each with four round nozzles drawn as dark circles, and thin fins sticking out diagonally at the corners.\n\nMain side view, from left to right: four long tapered strap-on boosters bundled around a long central core, each booster shaded in solid deep navy on its wide tail half and white toward its pointed front end, with small triangular fins at their tails. The white central core continues past them to a short dark section and an open lattice of crossed struts, then a short dark upper stage ending in a short pointed cone.\n\nFar right: a view from the front, a dark round core in the middle with the pale rounded tops of four boosters around it in a cross, and small fins pointing out between them."
+  },
+  "r7-molniya": {
+    "subject": "an R-7-style four-stage launch rocket",
+    "object": "rocket",
+    "layout": "the rocket lying horizontally across the sheet, tail on the left, nose pointing to the right, with a small end view at each side",
+    "body": "Far left: a view from behind, a cluster of five round engine blocks in a cross pattern, each with four round nozzles drawn as dark circles, and thin fins sticking out diagonally at the corners.\n\nMain side view, from left to right: four long tapered strap-on boosters bundled around a long central core, each booster shaded in solid deep navy on its wide tail half and white toward its pointed front end, with small triangular fins at their tails. The white central core continues past them to an open lattice of crossed struts, then a long dark cylindrical third stage, a slightly wider long dark payload shroud and a pointed nose.\n\nFar right: a view from the front, the pale rounded tops of the four boosters around a dark round shroud seen nose-on, with thin fins at the corners."
+  },
+  "r7-soyuz": {
+    "subject": "an R-7-style crew launch rocket carrying a Soyuz-type spacecraft",
+    "object": "rocket",
+    "layout": "the rocket lying horizontally across the sheet, tail on the left, nose pointing to the right, with a small end view at each side",
+    "body": "Far left: a view from behind, a cluster of five round engine blocks in a cross pattern, each with four round nozzles drawn as dark circles, and thin fins sticking out diagonally at the corners.\n\nMain side view, from left to right: four long tapered strap-on boosters bundled around a long central core, all shaded in deep navy with fine panel lines, each booster wide at its tail with a small triangular fin and tapering to a point toward the middle. The core continues past them to an open lattice of crossed struts, then a dark cylindrical third stage. Then a white payload fairing with small square vents that narrows to a cone, topped by a thin escape tower rod with small rings, pointing right.\n\nFar right: a view from the front, the dark rounded tops of the four boosters around a pale round fairing seen nose-on, with thin fins at the corners."
+  },
+  "proton": {
+    "subject": "a Proton-style heavy launch rocket",
+    "object": "rocket",
+    "layout": "the rocket lying horizontally across the sheet, tail on the left, nose pointing to the right, with a small end view at each side",
+    "body": "Far left: a view from behind, a central round body ringed by six outer tanks like the petals of a flower, each with a dark round engine nozzle.\n\nMain side view, from left to right: small dark engine nozzles at the tail, then a wide first stage of six long outer tanks around a core, with a dark band near their tails, each tank tapering to a pointed tip. Then a short lattice interstage with a fine diamond mesh, a wide cylindrical second stage with faint panel lines and small fittings, a slightly narrower third stage, and a long cylindrical payload section ending in a short dark cone pointing right.\n\nFar right: a view from the front, a large dark round circle with the rounded tips of the six outer tanks peeking out around it."
+  },
+  "proton-k-block-d": {
+    "subject": "a Proton-style heavy launch rocket with a fourth stage, drawn as an exploded view",
+    "object": "rocket",
+    "layout": "an exploded side view of the rocket lying horizontally across the middle of the sheet, its parts spaced out from left to right",
+    "body": "From left to right, with small gaps between the parts: the wide first stage of six long outer tanks around a core, with dark engine nozzles at the tail, two dark bands near the tail and a long dark line along its side, the tanks tapering to points, with a short lattice interstage of fine diamond mesh at its right end. Then a short plain cylinder. Then the second stage, a long plain cylinder with a cluster of four dark engine nozzles on its left end. Then the third stage, a cylinder with a single dark nozzle on its left end and small panels and fittings. Then a short plain cylinder, the fourth stage, and a small capsule with a ring around it. At the far right, a small pointed escape tower rod.\n\nAbove and below the capsule, the two halves of the payload fairing float apart, each a long pale shell with a small dark window."
+  },
+  "n1": {
+    "subject": "an N1-style giant Soviet moon rocket",
+    "object": "rocket",
+    "layout": "the rocket lying horizontally across the sheet, tail on the left, nose pointing to the right, with a small end view at each side",
+    "body": "Far left: a view from behind, a large round base with a ring of many small round engine nozzles around its edge and a smaller ring of nozzles in its center, with four small square fins at the top, bottom, left and right.\n\nMain side view, from left to right: a very wide first stage, a tall cone shaped like a flattened bell, shaded in deep navy, with a flared skirt at its tail and long tubes and fairings running along its sides. Then an open lattice of struts showing a round tank inside, the cone narrowing to a second stage with a few long pale slots, another lattice and a narrower third stage with a dark notch. Then a long pale section with a few small fittings, narrowing to a thin escape tower rod at the right.\n\nFar right: a view from the front, a dark round ring with small square fins, and a pale circle with a ring of small holes inside it."
+  },
+  "ur-700": {
+    "subject": "a UR-700-style clustered super-heavy rocket",
+    "object": "rocket",
+    "layout": "the rocket lying horizontally across the sheet, tail on the left, nose pointing to the right, with a small end view at each side",
+    "body": "Far left: a view from behind, a cluster of nine round engine nozzles drawn as dark circles with pale rims, arranged in a triangle, with three square mesh grid fins sticking out from its three sides.\n\nMain side view, from left to right: a bundle of many long cylinders side by side, all shaded in medium navy with faint panel lines, with a ring of engine nozzles at their tails and thin fins at top and bottom. The outer cylinders end at different lengths in pointed tips, leaving a long central core that narrows step by step to a pointed nose and a thin rod pointing right. A thin dark line runs along the middle of the bundle.\n\nFar right: a view from the front, the rounded tops of the cylinders in a clover-like cluster, with three square mesh grid fins sticking out between them."
+  },
+  "jupiter-c": {
+    "subject": "a Jupiter-C-style long-range research rocket",
+    "object": "rocket",
+    "layout": "one large side view of the rocket lying horizontally across almost the whole sheet, tail on the left, nose pointing to the right",
+    "body": "From left to right: at the tail, two wide flat rectangular fins standing straight up and down, shaded in solid deep navy, with smaller triangular fins between them and a thin rod sticking out from the tail. Then a long white cylindrical body made of many panel sections, each seam marked by a vertical line and rows of tiny rivets, with three thin dark bands spaced along it and a thin dark diagonal line running along its lower side. Toward the right, the body narrows in two steps to a short cone and ends in a pointed nose cone with a dark band near its tip. Soft pale-blue shading along its lower edge shows its roundness."
+  },
+  "redstone": {
+    "subject": "a Redstone-style short-range rocket",
+    "object": "rocket",
+    "layout": "one large side view of the rocket lying horizontally across the upper half of the sheet, tail on the left, flat top end on the right",
+    "body": "From left to right: at the tail, four broad fins, the top and bottom ones shaded in solid deep navy with stepped, notched outlines, and a thin rod crossing the tail. The tail section is dark navy with small square hatches. Then a long, plain, white cylindrical body with faint seams and a single thin dark band about halfway along. On the right end, a section painted in a bold pattern of black and white checkerboard squares, ending in a flat round top with a small rim."
+  },
+  "juno-2": {
+    "subject": "a Juno II-style launch rocket",
+    "object": "rocket",
+    "layout": "one large side view of the rocket lying horizontally across the upper half of the sheet, tail on the left, nose pointing to the right",
+    "body": "From left to right: a ribbed engine bell at the tail, then a short section painted in large black and white squares like a checkerboard, with a small pattern of dark squares beside it. Then a long, wide, white cylindrical body made of panel sections with faint seams. Then a long cone narrowing to the right, with a small fitting on its top edge, a short narrow cylinder, another short cone and a small flat-ended cylinder at the very tip."
+  },
+  "atlas": {
+    "subject": "an Atlas-style stage-and-a-half launch rocket",
+    "object": "rocket",
+    "layout": "one large side view of the rocket lying horizontally across the middle of the sheet, tail on the left, nose pointing to the right",
+    "body": "From left to right: three round engine nozzles at the tail, one above another, then a wide flared booster skirt with two smooth fairings that sweep forward along the top and bottom of the body. Then a long, smooth, plain cylindrical tank with many thin vertical seams and a long thin conduit running along its side, with a small rectangular panel near its tail. On the right, the body narrows in a long smooth taper to a blunt rounded end. The whole rocket is shaded in medium navy with pale highlights."
+  },
+  "thor-able": {
+    "subject": "a Thor-Able-style two-stage launch rocket",
+    "object": "rocket",
+    "layout": "one large side view of the rocket lying horizontally across the upper half of the sheet, tail on the left, nose pointing to the right",
+    "body": "From left to right: a small rounded engine bell at the tail, two large triangular fins pointing up and down, then a wide white cylindrical body made of panel sections with rows of tiny rivets along the seams and a dark navy rectangle on its lower tail. Further along, two thin dark bands with a large dark V-shaped brace between them, like a pair of crossing straps. Then the body tapers in a long cone to a much narrower second stage with a few seams and a thin dark band, ending in a slightly wider, short payload section with a blunt rounded nose."
+  },
+  "atlas-agena": {
+    "subject": "an Atlas-Agena-style two-stage launch rocket",
+    "object": "rocket",
+    "layout": "one large side view of the rocket lying horizontally across the middle of the sheet, tail on the left, nose pointing to the right",
+    "body": "From left to right: three round engine nozzles at the tail, one above another, then a wide flared booster skirt with smooth fairings sweeping forward along the top and bottom. Then a long, smooth cylindrical tank with thin vertical seams and a long thin conduit along its side, shaded in medium navy, narrowing in a long taper. Then a short adapter shaded in solid deep navy, and the narrower upper stage: a band of small black and white checkerboard squares and a long pale cylinder ending in a long rounded nose fairing."
+  },
+  "atlas-centaur": {
+    "subject": "an Atlas-Centaur-style launch rocket, drawn as an exploded view",
+    "object": "rocket",
+    "layout": "an exploded side view of the rocket lying horizontally across the middle of the sheet, its parts spaced out from left to right",
+    "body": "From left to right, with small gaps between the parts: the booster section, a wide flared skirt with two fairings sweeping forward and three short open ends. Then a ribbed engine bell, and the long main tank, a wide plain cylinder with faint seams, then a slightly narrower plain interstage cylinder. Then a small pair of engine nozzles and the upper stage, a short barrel-shaped tank shaded in deep navy with a pale band and a domed lattice cap.\n\nAbove and below the upper stage, the two halves of the nose fairing float apart, each a long pale shell tapering to a point on the right, and two small flat panels float above and below the interstage."
+  },
+  "titan-2": {
+    "subject": "a Titan II-style two-stage launch rocket",
+    "object": "rocket",
+    "layout": "one large side view of the rocket lying horizontally across the upper half of the sheet, tail on the left, flat top end on the right",
+    "body": "From left to right: two ribbed engine bells side by side at the tail in a small frame. Then a long, wide, straight cylinder of even width along its whole length: a first section with a large dark navy rectangle and a pale band inside it, a section with fine horizontal dash markings, a long smooth pale section, then a row of small vent slots and a band with dark rectangles and small H-shaped marks, the second stage. On the right end, a slightly darker section with thin outlined shapes like a small door and a few small square panels, ending in a flat top."
+  },
+  "titan-3c": {
+    "subject": "a Titan IIIC-style launch rocket with two large solid boosters",
+    "object": "rocket",
+    "layout": "one large side view of the rocket lying horizontally across the middle of the sheet, tail on the left, nose pointing to the right",
+    "body": "Three long cylinders side by side. Top and bottom: two large solid rocket boosters, each with a wide flared nozzle at its tail, long segmented bodies with thin dark rings between the segments, a large dark navy rectangular marking, and a pointed cone at the front end. A smaller thin rocket pod with a pointed tip runs along the lower booster.\n\nMiddle: the core rocket, longer than the boosters, shaded in medium navy with fine seams, with a small engine nozzle at its tail and a row of small vent slots, continuing past the boosters through several ring sections and ending in a dark pointed nose cone on the right."
+  },
+  "titan-3e-centaur": {
+    "subject": "a Titan IIIE-Centaur-style heavy launch rocket",
+    "object": "rocket",
+    "layout": "one large side view of the rocket lying horizontally across the sheet, tail on the left, nose pointing to the right",
+    "body": "Three long cylinders side by side. Top and bottom: two large pale solid rocket boosters, each with a rounded nozzle at its tail, long segmented bodies with thin dark rings between the segments, and a pointed cone at the front end. A thin rocket pod with a pointed tip runs along the lower booster.\n\nMiddle: the core rocket with two small engine bells at its tail, sections with dark navy rectangles and pale bands, a row of small vent slots, a darker band with small H-shaped marks and thin outlined shapes. It continues past the boosters into a long, pale, slightly translucent payload shroud made of ribbed sections, ending in a rounded pointed nose."
+  },
+  "saturn-1": {
+    "subject": "a Saturn I-style early heavy rocket",
+    "object": "rocket",
+    "layout": "one large side view of the rocket lying horizontally across the upper half of the sheet, tail on the left, nose pointing to the right",
+    "body": "From left to right: a cluster of small ribbed engine bells at the tail, large dark stepped fins sweeping back at the top and bottom. Then the wide first stage, a bundle of long round tanks side by side, the outer ones shaded in solid deep navy and a pale one in the middle showing between them. Then a short dark ring, a narrower second stage with a few vertical fittings and a pale cone narrowing to the right, a long pale cylinder and a pointed nose cone."
+  },
+  "saturn-1b": {
+    "subject": "a Saturn IB-style heavy rocket",
+    "object": "rocket",
+    "layout": "one large side view of the rocket lying horizontally across the upper half of the sheet, tail on the left, nose pointing to the right",
+    "body": "From left to right: a cluster of small engine bells at the tail and large dark swept fins at the top and bottom. Then the first stage, a bundle of long round tanks side by side, shaded in deep navy with a pale tank showing in the middle. Then a ribbed interstage ring with a dark band, a wide pale second stage with a fine speckled texture, a ribbed band and a thick dark ring. On the right, a long pale cylinder that narrows slightly toward a flat end."
+  },
+  "saturn-c3b": {
+    "subject": "a Saturn V-style rocket",
+    "object": "rocket",
+    "layout": "the rocket lying horizontally across the sheet, tail on the left, nose pointing to the right",
+    "body": "On the far left, a small separate rear view of the rocket seen from directly behind: three circular engine nozzles stacked vertically in a column, each drawn with crisp concentric circles in glowing pale blue. Rounded fin lobes stick out above and below. The dark areas are filled with dense navy cross-hatching.\n\nMain side view, from left to right: three ribbed engine bells stick out from the tail, with two triangular fins pointing up and down, shaded in solid deep navy. Then a wide cylindrical first stage in white with a large rectangle on its lower half shaded in dark navy, like the classic roll-pattern markings. Then a lighter stage-separation ring, a thin dark vertical stripe, a second white cylindrical stage and another ring. Then a conical adapter that tapers to a narrower diameter, with dark triangular markings. Then a slender upper stage with a small panel of dark horizontal stripes. It ends in a long pointed nose cone with a rounded tip."
+  },
+  "saturn-v": {
+    "subject": "a Saturn V-style moon rocket",
+    "object": "rocket",
+    "layout": "the rocket lying horizontally across the sheet, tail on the left, nose pointing to the right, with an end view on the far left",
+    "body": "Far left: a view from behind, a large round base with a ring of alternating dark and pale segments around its edge and a pale round center, with thin crosshair lines through it.\n\nMain side view, from left to right: five engine bells at the tail with four swept fins shaded in deep navy, the first stage with bold black and white blocks like a roll pattern, and a dark V-shaped pattern near its tail. Then a white second stage with a dark rectangle, separated by a short pale ring, and a long white third stage. Then a band of black and white squares like a checkerboard on a short cone, a narrower cylinder with a thin dark ring and a short pale cone at the right end."
+  }
+}

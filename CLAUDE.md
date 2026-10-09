@@ -114,11 +114,13 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
 - **Laptop:** if `COMPUTERNAME` is `S0147359`, there's no `E:` drive. Ask before any task
   that needs it.
 - **Hard rule (`design.md` §1.2):** no BASPM text, art, audio, video or code, verbatim or
-  lightly paraphrased, goes into the repo, with no exceptions. The UI reference screenshots that
+  lightly paraphrased, goes into the repo. Nothing extracted ever does (the blueprints below are
+  generated from renders, never copied). The UI reference screenshots that
   once sat in `assets-raw/baspm/ui/` were removed on 2026-10-08: our own design had moved past
   them. They're still in git history. Five icons once traced from BASPM's UI had to be removed for
   this rule, and dense traced path data is the tell. Everything in `assets-raw/` is the user's own
-  art and needs no provenance check.
+  art and needs no provenance check, except `assets-raw/blueprints/`: generated from BASPM's R&D
+  renders, the one decided exception (`design.md` §1.2). Ask before using BASPM's art that way again.
 
 ## Tools outside the repo
 
@@ -143,6 +145,14 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
     variants are committed, with `git add -f`: `.gitignore` keeps the rest local), then
     `make_patch_assets.py` for the 128 px RGBA PNGs (never JPEG, which drops the alpha). A new goal needs a `GOALS` entry, a pick and
     a converter run.
+  - **Component blueprints** (main PC only, it reads BASPM's renders from `E:`):
+    `assets-raw/blueprints/make_blueprints.py` (the user's workflow `render_to_blueprint.json`,
+    flattened to `blueprints_workflow_api.json`; one description per component in
+    `descriptions.json`, 3 seeds each, full-size review sheets in `review/`), the pick per component
+    in `picks.json` (only picked variants are committed, with `git add -f`), then
+    `make_blueprint_assets.py` for `assets/ui/blueprints/*.jpg`. ComfyUI's own copies are
+    `lw_blueprint_*`: never delete those. A new component needs a description, a pick and a
+    converter run.
 - **Other converters** in `assets-raw/`: `make_hub_art.py`, `make_content_art.py`,
   `svg/ui/make_ui_icons.py` (needs `pip install resvg-py`), and `explainers/make_explainer_art.py`
   (the explainers' drawings: PNG without text plus a labels file, `ui-spec.md` component 18).

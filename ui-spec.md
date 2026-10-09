@@ -964,6 +964,12 @@ while building it, **confirmed by the user (2026-10-06)**:
   only the random events.
 - **A lost passenger (built 2026-10-06):** the People column says "Laika did not come home", with
   "The flight had no way home." or the step that failed (`PassengerLost` event).
+- **Blueprints in the R&D card (built 2026-10-09, user's idea after BASPM's end-of-season R&D
+  screen):** each component's entry opens with its blueprint drawing
+  (`assets/ui/blueprints/<component-id>.jpg`, 864 x 352) across the full card width, at its own
+  aspect (about 576 x 235 at 1920 x 1080), above the name, change, reliability bar and caption. The
+  user chose the full-width banner over a thumbnail beside the text, accepting a long column in
+  seasons with many components (the column scrolls). A component without a drawing shows none.
 
 ### 4.5 VAB: rockets
 **Purpose:** everything about rockets. The VAB's own cap limits the open rocket

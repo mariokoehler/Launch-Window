@@ -67,3 +67,6 @@ client-settings.json
 __pycache__/
 # Patch variants: only the picked one per goal is committed (git add -f); the rest stay local
 assets-raw/patches/variants/*.png
+# Blueprint variants and review sheets: only the picked drawing per component is committed (git add -f)
+assets-raw/blueprints/variants/*.png
+assets-raw/blueprints/review/

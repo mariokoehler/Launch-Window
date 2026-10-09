@@ -1,0 +1,136 @@
+{
+  "_comment": "API form of render_to_blueprint.json (the user's ComfyUI workflow, its subgraph flattened). make_blueprints.py crops and scales the reference itself and uploads it for node 483, and fills in the prompt (474), the seed (458) and the file prefix (461).",
+  "451": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "qwen_image_2.1_int8_convrot.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "453": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "qwen3vl_8b_int8_convrot.safetensors",
+      "type": "qwen_image",
+      "device": "default"
+    }
+  },
+  "454": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "qwen_image_2.1_vae_bf16.safetensors"
+    }
+  },
+  "456": {
+    "class_type": "EmptyLatentImage",
+    "inputs": {
+      "width": 864,
+      "height": 352,
+      "batch_size": 1
+    }
+  },
+  "469": {
+    "class_type": "QwenImage21Cache",
+    "inputs": {
+      "model": [
+        "451",
+        0
+      ],
+      "device": "auto",
+      "dtype": "default"
+    }
+  },
+  "474": {
+    "class_type": "TextEncodeQwenImage21",
+    "inputs": {
+      "clip": [
+        "453",
+        0
+      ],
+      "vae": [
+        "454",
+        0
+      ],
+      "prompt": "__PROMPT__",
+      "negative_prompt": "",
+      "resolution": 0,
+      "images.image_1": [
+        "483",
+        0
+      ]
+    }
+  },
+  "468": {
+    "class_type": "ComfySwitchNode",
+    "inputs": {
+      "switch": true,
+      "on_false": [
+        "474",
+        2
+      ],
+      "on_true": [
+        "456",
+        0
+      ]
+    }
+  },
+  "458": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": [
+        "469",
+        0
+      ],
+      "positive": [
+        "474",
+        0
+      ],
+      "negative": [
+        "474",
+        1
+      ],
+      "latent_image": [
+        "468",
+        0
+      ],
+      "seed": "__SEED__",
+      "steps": 25,
+      "cfg": 1,
+      "sampler_name": "euler",
+      "scheduler": "simple",
+      "denoise": 1.0
+    }
+  },
+  "457": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": [
+        "458",
+        0
+      ],
+      "vae": [
+        "454",
+        0
+      ]
+    }
+  },
+  "461": {
+    "class_type": "SaveImageAdvanced",
+    "inputs": {
+      "images": [
+        "457",
+        0
+      ],
+      "filename_prefix": "__PREFIX__",
+      "format": "png",
+      "format.bit_depth": "8-bit",
+      "format.input_color_space": "sRGB"
+    }
+  },
+  "483": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "__REFERENCE__"
+    }
+  }
+}

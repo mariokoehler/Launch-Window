@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.client.view.Help;
@@ -240,6 +241,10 @@ public final class TurnReportScreen extends ChromeScreen {
         }
         for (TurnReportView.RndLine line : lines) {
             Optional<MissionComponent> component = catalog.missionComponent(line.componentId());
+            TextureRegionDrawable blueprint = ui.picture("blueprints/" + line.componentId() + ".jpg");
+            if (blueprint != null) {
+                card.add(new Blueprint(blueprint)).padBottom(Theme.SPACE_2).row();
+            }
             Table head = new Table();
             head.add(ui.label(ContentNames.of(line.componentId()), Theme.TextStyle.BODY_STRONG, Theme.INK)).expandX()
                 .left();
@@ -258,6 +263,39 @@ public final class TurnReportScreen extends ChromeScreen {
             card.add(ui.notice(Theme.NoticeKind.SUCCESS, capped.title(), capped.text())).padBottom(Theme.SPACE_2).row();
         }
         return card;
+    }
+
+    /**
+     * A component's blueprint drawing ({@code ui-spec.md} &sect;4.4): as wide as the card, as tall as its
+     * aspect then needs. Its preferred height follows the width the card gives it, so the card lays out
+     * a second time once the width is known.
+     */
+    private static final class Blueprint extends Image {
+
+        private final float aspect;
+
+        Blueprint(TextureRegionDrawable drawing) {
+            super(drawing, Scaling.fit);
+            aspect = drawing.getRegion().getRegionHeight() / (float) drawing.getRegion().getRegionWidth();
+        }
+
+        @Override
+        public float getPrefWidth() {
+            return 0f;
+        }
+
+        @Override
+        public float getPrefHeight() {
+            return getWidth() * aspect;
+        }
+
+        @Override
+        protected void sizeChanged() {
+            super.sizeChanged();
+            if (Math.abs(getHeight() - getPrefHeight()) > 0.5f) {
+                invalidateHierarchy();
+            }
+        }
     }
 
     private Table news(ContentCatalog catalog) {

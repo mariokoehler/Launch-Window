@@ -397,6 +397,12 @@ committed to it is redistributed.
   reference screenshots once kept in `assets-raw/baspm/ui/` were removed on 2026-10-08 (user: our
   own design had moved past them); they remain in git history. Flag any task that risks pulling an
   extracted file into the tree.
+- **One exception, generated from a reference (user, 2026-10-09):** the mission components'
+  blueprint drawings (`assets-raw/blueprints/`) are generated image-to-image from BASPM's R&D renders,
+  each with a prompt we wrote from the render in our own words and a hand-drawn blueprint style.
+  The user judged the results different enough to use. The renders themselves are read from `E:` at
+  generation time and never enter the repo; only the generated drawings do. This is not a precedent
+  for other art: ask before using BASPM's art as a reference again.
 - **Not restricted:** the real history itself (programs, hardware, dates, people). **Numbers**
   (costs, reliabilities, prestige, budget values, training lengths) follow BASPM's data by the
   user's decision (2026-10-03, confirmed 2026-10-06): they aren't creative expression, and
@@ -1487,14 +1493,19 @@ precedent: a design-system canvas as the visual source of truth, its tokens carr
 `Theme.java`, scripts converting its output into the PNGs the game loads).
 
 **Built so far:** personnel portraits (`assets-raw/portraits/`, 100 per agency, greyscale 128 px
-JPEGs) and embroidered goal patches (`assets-raw/patches/`, 128 px RGBA PNGs), both with fixed
-seeds, a manifest, a human pick, and a converter into `assets/` (commands in `CLAUDE.md`).
+JPEGs), embroidered goal patches (`assets-raw/patches/`, 128 px RGBA PNGs) and the mission
+components' blueprint drawings (`assets-raw/blueprints/`, 864 x 352 JPEGs for the turn report,
+2026-10-09, the §1.2 exception), all with fixed seeds, a manifest, a human pick, and a converter
+into `assets/` (commands in `CLAUDE.md`). The blueprints share one background wording ("soft": a
+gentle blue gradient with a grid, no frame); paper texture clashed with the UI's own engineering-
+paper background and a stronger gradient lost the pencil feel (user, 2026-10-09). Their slight
+differences in shade are wanted and never normalised.
 Program, category, configuration and hub art is the user's own, converted by
 `make_content_art.py` and `make_hub_art.py`.
 
 **Principles:** automation generates candidates, a human picks (a vision-model pre-check is a
 cheap first filter; the patches' spelling is checked by eye). Never use BASPM's art as a style
-reference or training set (§1.2). For a bigger batch, anchor the style first (a LoRA or
+reference or training set (§1.2), apart from the blueprints' one decided exception. For a bigger batch, anchor the style first (a LoRA or
 reference conditioning trained on our own hand-picked output across varied subjects).
 
 ### 3.6 Turn scheduling & calendar configuration
