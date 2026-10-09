@@ -12,6 +12,7 @@ import de.mkoehler.launchwindow.client.ui.SkillBar;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.TraitChip;
 import de.mkoehler.launchwindow.client.view.Department;
+import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.Museum;
 import de.mkoehler.launchwindow.model.GameDate;
 import de.mkoehler.launchwindow.model.MemorialEntry;
@@ -56,6 +57,11 @@ public final class MemorialPersonScreen extends ChromeScreen {
     @Override
     protected void goBack() {
         game.setScreen(back.get());
+    }
+
+    @Override
+    protected Help.Context helpContext() {
+        return Help.Context.MEMORIAL;
     }
 
     @Override

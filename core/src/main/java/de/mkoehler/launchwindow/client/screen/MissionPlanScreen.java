@@ -13,6 +13,7 @@ import de.mkoehler.launchwindow.client.ui.OutcomeBar;
 import de.mkoehler.launchwindow.client.ui.Refusals;
 import de.mkoehler.launchwindow.client.ui.ReliabilityBar;
 import de.mkoehler.launchwindow.client.ui.Theme;
+import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.Staffing;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.MissionDraft;
@@ -116,6 +117,11 @@ public final class MissionPlanScreen extends ChromeScreen {
     }
 
     @Override
+    protected Help.Context helpContext() {
+        return Help.Context.MISSION_PLAN;
+    }
+
+    @Override
     protected void rebuild() {
         MissionDraft draft = session.draft(configuration);
         content.clearChildren();
@@ -193,7 +199,7 @@ public final class MissionPlanScreen extends ChromeScreen {
         String crew = draft.crewSlotIds().stream().filter(java.util.Objects::nonNull)
             .map(id -> session.state().getAstronauts().stream().filter(a -> a.getId().equals(id)).findFirst()
                 .map(a -> a.getName()).orElse(id)).reduce((a, b) -> a + ", " + b).orElse(null);
-        String rockets = draft.rocketIds().stream().filter(java.util.Objects::nonNull).map(ContentNames::of)
+        String rockets = draft.rocketIds().stream().filter(id -> id != null && !id.isEmpty()).map(ContentNames::of)
             .reduce((a, b) -> a + ", " + b).orElse("no rocket");
         card.add(ui.paragraph("With your plan: " + (crew == null ? "" : crew + " aboard, ") + rockets
             + ", and the staff Auto-assign picked unless you changed it in assembly. Expert rescues, changes "
@@ -302,10 +308,14 @@ public final class MissionPlanScreen extends ChromeScreen {
                 }
             }
             for (MissionConfiguration.GoalModifier boost : configuration.goalBoosts()) {
-                if (boost.componentId().equals(id) && state.hasAchievedOrCancelledGoal(boost.goalId())) {
-                    card.add(priceRow(ContentNames.of(boost.goalId()) + " reached", "+" + boost.amount(),
-                        Theme.SUCCESS)).row();
+                if (!boost.componentId().equals(id)) {
+                    continue;
                 }
+                // A boost not reached yet is still worth knowing about: what related work would help.
+                boolean reached = state.hasAchievedOrCancelledGoal(boost.goalId());
+                card.add(priceRow(ContentNames.of(boost.goalId()) + (reached ? " reached" : " not reached yet"),
+                    reached ? "+" + boost.amount() : "(+" + boost.amount() + ")",
+                    reached ? Theme.SUCCESS : Theme.INK_MUTED)).row();
             }
             card.add().height(Theme.SPACE_3).row();
         }
@@ -521,8 +531,14 @@ public final class MissionPlanScreen extends ChromeScreen {
         card.add(ui.label(Missions.launchLabel(spec.launchType()), Theme.TextStyle.HEADING_SM, Theme.INK))
             .padBottom(4f).row();
         card.add(ui.paragraph("Payload: " + Missions.payload(spec, session.catalog()) + "."
-            + (spec.launchType().humanRated() ? " A crewed launch needs a human-rated rocket." : ""),
+            + (spec.launchType().humanRated() && spec.launchType().needsRocket()
+            ? " A crewed launch needs a human-rated rocket." : ""),
             Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).padBottom(Theme.SPACE_3).row();
+        if (!spec.launchType().needsRocket()) {
+            card.add(ui.paragraph("A carrier aircraft drops the craft: there's no rocket to pick or pay for.",
+                Theme.TextStyle.BODY, Theme.INK_MUTED));
+            return card;
+        }
         List<Missions.RocketChoice> choices = Missions.rocketChoices(spec, session.state(), session.catalog());
         if (choices.isEmpty()) {
             card.add(ui.paragraph("No rocket programs open. Open one in the VAB.", Theme.TextStyle.BODY,
@@ -567,7 +583,7 @@ public final class MissionPlanScreen extends ChromeScreen {
             humanRated ? Theme.NAVY : Theme.INK_MUTED));
         name.add(tag);
         about.add(name).padBottom(2f).row();
-        String place = Missions.launchLabel(spec.launchType()).replace(", human-rated", "").toLowerCase(Locale.ROOT);
+        String place = Missions.destination(spec.launchType());
         about.add(ui.label(choice.lift() > 0 ? String.format(Locale.ROOT, "Lifts %,.0f kg to %s · %,.0f kg spare",
             choice.lift(), place, choice.spare()) : "Can't fly to " + place, Theme.TextStyle.BODY_SM, Theme.INK_MUTED))
             .row();

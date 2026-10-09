@@ -66,9 +66,16 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   `Launch Window — Intelligence Office` (`ui-spec.md` §4.15). Reset the dev data root before the
   next play test (new saved fields).
 - **Help is built** (2026-10-08, `ui-spec.md` component 23): a help button and F1 open the rules
-  by topic over the current screen, filtered to the screen's topics. Seven topics so far, to
-  judge the format; the rest follow once it's confirmed. Numbers in `help.json` are tokens filled
-  from the rules (`HelpValues`); a new rule number goes there, never into the text.
+  by topic over the current screen, filtered to the screen's topics. 28 topics. Numbers in
+  `help.json` are tokens filled from the rules (`HelpValues`); a new rule number goes there, never
+  into the text, and a changed rule needs its topic's text changed in the same session.
+- **The advisor is built** (2026-10-08, `ui-spec.md` component 24): a hub card with a new agency's
+  first steps, ticked off from the state, until all are done or the player hides it.
+- **The full content pack is built** (2026-10-08, `design.md` §5, M3): `assets/content/standard`,
+  BASPM's whole tree (55 programs, 189 configurations), with its text and art, beside `early-era`,
+  which stays the server's default. New engine rules came with it: a payload's own lift, air drops
+  with no rocket, configurations gated on a goal. Still open: history notes for the new entries,
+  rocket program art (the user is drawing it), and switching the default pack.
 - **PR duty for astronauts is built** (`design.md` §2.2(c)), with 39 press stories
   (`assets/content/pr-press.json`), no repeats, and effects beyond prestige. Next is the next
   play test.
@@ -107,20 +114,25 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
 - **Laptop:** if `COMPUTERNAME` is `S0147359`, there's no `E:` drive. Ask before any task
   that needs it.
 - **Hard rule (`design.md` §1.2):** no BASPM text, art, audio, video or code, verbatim or
-  lightly paraphrased, goes into the repo, with no exceptions. The UI reference screenshots that
+  lightly paraphrased, goes into the repo. Nothing extracted ever does (the blueprints below are
+  generated from renders, never copied). The UI reference screenshots that
   once sat in `assets-raw/baspm/ui/` were removed on 2026-10-08: our own design had moved past
   them. They're still in git history. Five icons once traced from BASPM's UI had to be removed for
   this rule, and dense traced path data is the tell. Everything in `assets-raw/` is the user's own
-  art and needs no provenance check.
+  art and needs no provenance check, except `assets-raw/blueprints/`: generated from BASPM's R&D
+  renders, the one decided exception (`design.md` §1.2). Ask before using BASPM's art that way again.
 
 ## Tools outside the repo
 
 - **Content pack converter** (main PC only, because it reads `E:` and holds BASPM's ids):
   `E:\Temp\BASPM\tools\baspm_pack.py`, with its goal-id map `goals.map.json` next to it. Run
   `python baspm_pack.py discover`, then `python baspm_pack.py write <repo>\assets\content\early-era`.
-  To extend the pack, add the scope and our own ids to its `PROGRAMS`/`COMPONENTS`/`CONFIG_NAMES`
-  maps and to `goals.map.json`; mapping rules are in `design.md` §5, M3. `checklist.py` (same
-  folder) regenerates `assets-raw/ART_CHECKLIST.md`; update its file maps when art lands.
+  `write <dir> full` writes BASPM's whole tree with the ids in `full_maps.py` (same folder) and
+  fails on anything it would drop; the early scope must keep reproducing the committed pack.
+  The standard pack's text is generated from scratch modules, so edit `strings.json` directly now.
+  Mapping rules are in `design.md` §5, M3. `checklist.py` (same
+  folder) regenerates `assets-raw/ART_CHECKLIST.md`, rocket programs included; update its file maps
+  when art lands.
 - **ComfyUI** (Qwen Image 2.1) runs locally on port 8188. ComfyUI keeps its own copies of
   everything generated in `E:\Comfy-Desktop\ComfyUI-Shared\output` (`lw_portrait_*`,
   `lw_patch_*`): never delete those.
@@ -129,9 +141,18 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
     JPEGs and the memorial photos. A new ethnicity needs a `names.json` entry and a key in
     `ETHNICITY_KEYS`, or `PersonnelNamesTest` fails.
   - **Goal patches:** `assets-raw/patches/make_patches.py` (3 variants per goal, edge check and
-    reroll), spelling checked by eye in `review/`, the pick per goal in `picks.json`, then
+    reroll), spelling checked by eye in `review/`, the pick per goal in `picks.json` (only picked
+    variants are committed, with `git add -f`: `.gitignore` keeps the rest local), then
     `make_patch_assets.py` for the 128 px RGBA PNGs (never JPEG, which drops the alpha). A new goal needs a `GOALS` entry, a pick and
     a converter run.
+  - **Component blueprints** (main PC only, it reads BASPM's renders from `E:`):
+    `assets-raw/blueprints/make_blueprints.py` (the user's workflow `render_to_blueprint.json`,
+    flattened to `blueprints_workflow_api.json`; one description per component in
+    `descriptions.json`, 3 seeds each, full-size review sheets in `review/`), the pick per component
+    in `picks.json` (only picked variants are kept and committed, with `git add -f`), then
+    `make_blueprint_assets.py` for `assets/ui/blueprints/*.jpg`. ComfyUI's own copies are
+    `lw_blueprint_*`: never delete those. A new component needs a description, a pick and a
+    converter run.
 - **Other converters** in `assets-raw/`: `make_hub_art.py`, `make_content_art.py`,
   `svg/ui/make_ui_icons.py` (needs `pip install resvg-py`), and `explainers/make_explainer_art.py`
   (the explainers' drawings: PNG without text plus a labels file, `ui-spec.md` component 18).
@@ -166,6 +187,7 @@ mvn -pl dev-tools compile exec:java -DmainClass=de.mkoehler.launchwindow.devtool
 - **Dev mode:** `"devMode": true` in the server's `game-meta.json` (restart the server) shows
   "Dev · Resolve turn now" on the hub and allows `DevClient`'s `funds` cheat.
 - **Bot playouts:** `mvn -pl dev-tools compile exec:java -DmainClass=de.mkoehler.launchwindow.devtools.analysis.ContentPackPlayouts`
+  (`-Dexec.args=standard` for the full pack)
   (also `PersonnelLifecyclePlayouts`, `CareerCurves`, `StateSizes`, `IntelligencePlayouts`; `design.md` §3.10).
 - **Releasing** (ported from Robot-Rampage 2026-10-06; its and StarWars' CLAUDE.md hold the
   gotchas):

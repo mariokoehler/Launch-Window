@@ -665,12 +665,54 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       rename or reuse a topic id). Numbers are tokens such as `{poaching.minTenure}`, filled from
       the rules' constants and the game's budget schedule (`client.view.HelpValues`), never typed
       into the text. `HelpTest` checks the ids, tokens, links, every screen's topic list and the
-      letters. **The first seven topics** (2026-10-08) are there for the user to judge the format:
-      turns, the budget, programs, component R&D, team chemistry, poaching and intelligence. The
-      rest (about 30 to 40 in all) follow once the format is confirmed.
+      letters. **28 topics** (2026-10-08) in six groups: Basics (turns, the buildings, the turn
+      report, winning, the Museum), Agency (the budget, prestige and goals, random events),
+      Programs and hardware (programs, component R&D, rockets), Missions (planning and launching,
+      how steps are decided, Experts, flight controllers and CAPCOM), People (hiring, training,
+      morale, salaries, traits, chemistry, ambitions and loyalty, careers, astronauts, PR duty,
+      poaching) and Rivals (the race, intelligence). Every number in them is a token, from the
+      rules, the budget schedule or the pack's buildings. 16 contexts cover the building screens,
+      the hire screen, mission planning, the person pages, the memorial, the turn report and the Museum; the hub
+      and the remaining screens open on every topic.
     - *As built:* `client.screen.HelpOverlay`, `client.view.Help` and `HelpValues`; the `help` and
       `search` glyphs in `make_ui_icons.py`, on the UI Asset Sheet since 2026-10-08 (chrome section,
       after `settings`, with the header, hub strip and search field in context). Shots `help-*.png`.
+    - **Any topic list** (2026-10-08): help also opens on an ad-hoc list (`Help.Topics`, beside the
+      screens' `Help.Context`), as the advisor's items do; the chip names it ("1 topic for "Open a
+      rocket program"").
+24. **Advisor** *(the user's idea, 2026-10-08; built the same day without a mockup, the user having
+    confirmed the plan)*. A new agency's first things to do, on a card at the hub's bottom left, until
+    they're done.
+    - **The items, in order** (`client.view.Advisor.ITEMS`): open the help; hire engineers; open a
+      program (a satellite is the cheapest start); open a rocket program; put engineers on R&D;
+      hire flight controllers (once a program is open: every mission, uncrewed too, needs
+      consoles); hire astronauts (only once a program with a crew or a CAPCOM is open); raise
+      reliability; plan the first mission; read the first turn report (only once a turn has
+      resolved).
+    - **Reliability first** (the user's request, 2026-10-08): "Plan your first mission" is held back
+      until an open program's payload (its least reliable component) and an open rocket both reach
+      `Advisor.READY_RELIABILITY`, 60 %. Until then "Raise reliability to 60 %" stands in for it,
+      with a navy line on where things stand ("Now: payload 41 %, rocket 22 %.") and a Go link to the
+      R&D board of whichever is further behind. A mission already in flight or flown ticks off both.
+    - **Ticked off from the state, never from a click:** someone hired, a program open, an engineer
+      on an R&D slot, a mission in flight or flown before. Only "help opened" and "report read" are
+      this client's own marks (preferences per server and login, like the report's read mark).
+    - **The card:** a navy head ("ADVISOR", "Your first seasons"), then the next **three** open
+      items (each a bold title, a line of why, a **Go** link to the building and a **Rules** link
+      that opens help on the item's topics), "N more things after these", a rule, the line that
+      there's no button to end a turn, and **I know the ropes · hide the advisor**. With nothing open
+      but the report still to come, it says "All set for now" and names it. 380 px wide, touchable as
+      a whole so the hotspots underneath never take a click; at the bottom left it covers no
+      building marker on either agency's art (only the corner of NASA's SET Centre outline).
+    - **Gone for good:** once every item is done (the report included), or the player hides it, the
+      client marks the advisor retired and never shows it again for that login on that server. Not
+      shown once the game is decided. So an agency that flies satellites only until the advisor
+      retires never sees "hire astronauts" when it opens a crewed program later (accepted: mission
+      assembly refuses a crewless mission and says why). A dev data reset deletes the client's
+      preferences, so the advisor comes back.
+    - *As built:* `client.view.Advisor` (`AdvisorTest`), the card in `SpaceComplexScreen`, the marks
+      in `LaunchWindowGame`. Shots `advisor-*.png` (`advisor-reliability.png` and `advisor-ready.png`
+      for the bar); every other hub shot shows the card too.
 ---
 
 ## 3. Screen flow *(decided)*
@@ -813,7 +855,8 @@ See `design.md` §3.13.
 
 **Settings gear (decided, user, 2026-10-04):** a white icon-only gear button at the end
 of the strip opens Settings (§4.12). This replaces "no Log out" below. A help button of the same
-kind follows it (2026-10-08, component 23).
+kind follows it (2026-10-08, component 23). A new agency's advisor card sits at the bottom left
+until its first steps are done (2026-10-08, component 24).
 
 **States:** a building that is upgrading shows a subtle "under construction"
 marker; a game result exists (§4.13).
@@ -922,6 +965,12 @@ while building it, **confirmed by the user (2026-10-06)**:
   only the random events.
 - **A lost passenger (built 2026-10-06):** the People column says "Laika did not come home", with
   "The flight had no way home." or the step that failed (`PassengerLost` event).
+- **Blueprints in the R&D card (built 2026-10-09, user's idea after BASPM's end-of-season R&D
+  screen):** each component's entry opens with its blueprint drawing
+  (`assets/ui/blueprints/<component-id>.jpg`, 864 x 352) across the full card width, at its own
+  aspect (about 576 x 235 at 1920 x 1080), above the name, change, reliability bar and caption. The
+  user chose the full-width banner over a thumbnail beside the text, accepting a long column in
+  seasons with many components (the column scrolls). A component without a drawing shows none.
 
 ### 4.5 VAB: rockets
 **Purpose:** everything about rockets. The VAB's own cap limits the open rocket
@@ -953,6 +1002,11 @@ rockets are hidden.
   (`baspm.md` §10.3), e.g. Atlas takes 35 % of Redstone's reliability and 20 % of Jupiter-C's.
 - **After opening,** a dialog asks whether to assign engineers now; **Assign R&D** goes to Rocket
   R&D with that rocket's assign dialog open.
+
+*Rocket art (built 2026-10-08):* both lists (§4.5.1 and §4.5.2) start each row with the rocket's
+picture at 140 x 90, from `assets/ui/rockets/<id>.jpg` (`make_content_art.py`, from the user's
+`assets-raw/Rocket Programs/`). A rocket without art yet keeps its skill glyph in the same space,
+so the columns line up (`ChromeScreen.addRocketPicture`).
 
 **4.5.2 Manage rocket programs.** The open rockets with reliability bars, which
 in-flight missions use them, upkeep, and links to Rocket R&D. **Close** needs a
@@ -1056,7 +1110,16 @@ dialog. Shot: `hq-details-offer-rnd.png`.
 art, duration in seasons, prestige (first time, or the repeat tier: 50 % second
 time, 30 % after that), launch types, and crew / controller / CAPCOM counts.
 Viewable even when the program isn't open *(decided)*; then the planning screens
-are read-only, with an "Open program" call to action.
+are read-only, with an "Open program" call to action. *(Built 2026-10-08, for the full tree:)* a
+configuration gated on a goal (`requiredGoalIds`) carries a navy "Locked" tag, and its steps
+screen (§4.6.6) names the goal ("Needs first: …") beside a disabled "Plan this mission". An
+air-dropped launch (`AIR_DROP`, the X-15 and the MiG E-154) has no rocket picker: the launch card
+says a carrier aircraft drops the craft, and assembly lists it as "air drop, no rocket".
+
+*Goal boosts (2026-10-08):* the steps screen's "Goal boosts" list has a caption like the penalties
+list's; the plan's components card lists every boost on a component, a reached one as "+1" in green
+and one not reached yet as "(+1)" muted; Mission Control's mission view names the boosts in play
+("Pegasus flown is reached, so Mercury capsule flies 1 point higher").
 
 **4.6.6 Mission configuration details and mission steps overview.** The steps,
 season by season. For each step: the components involved (with shares), the

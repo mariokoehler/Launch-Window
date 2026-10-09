@@ -1,0 +1,1620 @@
+[
+  {
+    "id": "earth-orbit-satellite",
+    "firstTimePrestige": 600,
+    "secondTimePrestige": 300,
+    "cancelsGoalIds": [
+      "radio-signals-from-orbit"
+    ]
+  },
+  {
+    "id": "sputnik-1-flown",
+    "firstTimePrestige": 300,
+    "secondTimePrestige": 150,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "radio-signals-from-orbit",
+    "firstTimePrestige": 250,
+    "secondTimePrestige": 125,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "explorer-1-flown",
+    "firstTimePrestige": 300,
+    "secondTimePrestige": 150,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "magnetic-field-study",
+    "firstTimePrestige": 250,
+    "secondTimePrestige": 125,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "micrometeoroid-satellite-flown",
+    "firstTimePrestige": 800,
+    "secondTimePrestige": 400,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "micrometeoroid-study",
+    "firstTimePrestige": 500,
+    "secondTimePrestige": 250,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "biosatellite-flown",
+    "firstTimePrestige": 600,
+    "secondTimePrestige": 300,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "organisms-in-microgravity",
+    "firstTimePrestige": 800,
+    "secondTimePrestige": 400,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "ofo-flown",
+    "firstTimePrestige": 650,
+    "secondTimePrestige": 325,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "amphibians-in-microgravity",
+    "firstTimePrestige": 600,
+    "secondTimePrestige": 300,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "sputnik-2-flown",
+    "firstTimePrestige": 600,
+    "secondTimePrestige": 300,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "korabl-sputnik-2-flown",
+    "firstTimePrestige": 1000,
+    "secondTimePrestige": 500,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "lunar-probe",
+    "firstTimePrestige": 800,
+    "secondTimePrestige": 400,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "lunar-flyby",
+    "firstTimePrestige": 0,
+    "secondTimePrestige": 0,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "pioneer-4-flown",
+    "firstTimePrestige": 500,
+    "secondTimePrestige": 250,
+    "cancelsGoalIds": [
+      "lunar-flyby"
+    ]
+  },
+  {
+    "id": "luna-3-flown",
+    "firstTimePrestige": 600,
+    "secondTimePrestige": 300,
+    "cancelsGoalIds": [
+      "lunar-flyby"
+    ]
+  },
+  {
+    "id": "lunar-photos",
+    "firstTimePrestige": 400,
+    "secondTimePrestige": 200,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "zond-5-flown",
+    "firstTimePrestige": 750,
+    "secondTimePrestige": 375,
+    "cancelsGoalIds": [
+      "soyuz-uncrewed-lunar-flyby",
+      "lunar-flyby"
+    ]
+  },
+  {
+    "id": "lunar-bioscience",
+    "firstTimePrestige": 500,
+    "secondTimePrestige": 250,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "lunar-impact",
+    "firstTimePrestige": 0,
+    "secondTimePrestige": 0,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "ranger-3-flown",
+    "firstTimePrestige": 550,
+    "secondTimePrestige": 275,
+    "cancelsGoalIds": [
+      "lunar-impact"
+    ]
+  },
+  {
+    "id": "luna-2-flown",
+    "firstTimePrestige": 550,
+    "secondTimePrestige": 275,
+    "cancelsGoalIds": [
+      "lunar-impact"
+    ]
+  },
+  {
+    "id": "lunar-structure-study",
+    "firstTimePrestige": 500,
+    "secondTimePrestige": 250,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "lunar-soil-study",
+    "firstTimePrestige": 550,
+    "secondTimePrestige": 275,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "lunar-close-up-photos",
+    "firstTimePrestige": 600,
+    "secondTimePrestige": 300,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "lunar-orbit",
+    "firstTimePrestige": 0,
+    "secondTimePrestige": 0,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "pioneer-2-flown",
+    "firstTimePrestige": 600,
+    "secondTimePrestige": 300,
+    "cancelsGoalIds": [
+      "lunar-orbit"
+    ]
+  },
+  {
+    "id": "lunar-mapping",
+    "firstTimePrestige": 800,
+    "secondTimePrestige": 400,
+    "cancelsGoalIds": [
+      "lunar-photos"
+    ]
+  },
+  {
+    "id": "lunar-structure-survey",
+    "firstTimePrestige": 800,
+    "secondTimePrestige": 400,
+    "cancelsGoalIds": [
+      "lunar-structure-study"
+    ]
+  },
+  {
+    "id": "lunar-orbiter-flown",
+    "firstTimePrestige": 700,
+    "secondTimePrestige": 350,
+    "cancelsGoalIds": [
+      "lunar-orbit"
+    ]
+  },
+  {
+    "id": "lunar-micrometeoroid-study",
+    "firstTimePrestige": 1000,
+    "secondTimePrestige": 500,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "lunar-lander",
+    "firstTimePrestige": 800,
+    "secondTimePrestige": 400,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "lunar-soil-analysis",
+    "firstTimePrestige": 800,
+    "secondTimePrestige": 400,
+    "cancelsGoalIds": [
+      "lunar-soil-study"
+    ]
+  },
+  {
+    "id": "lunar-soft-landing",
+    "firstTimePrestige": 1000,
+    "secondTimePrestige": 500,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "lunar-surface-photos",
+    "firstTimePrestige": 900,
+    "secondTimePrestige": 450,
+    "cancelsGoalIds": [
+      "lunar-close-up-photos"
+    ]
+  },
+  {
+    "id": "lunar-rover",
+    "firstTimePrestige": 800,
+    "secondTimePrestige": 400,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "lunar-sample-return",
+    "firstTimePrestige": 1000,
+    "secondTimePrestige": 500,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "lunar-soil-survey",
+    "firstTimePrestige": 1100,
+    "secondTimePrestige": 550,
+    "cancelsGoalIds": [
+      "lunar-soil-analysis"
+    ]
+  },
+  {
+    "id": "lunar-sample-retrieved",
+    "firstTimePrestige": 1500,
+    "secondTimePrestige": 750,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "sun-probe",
+    "firstTimePrestige": 500,
+    "secondTimePrestige": 250,
+    "cancelsGoalIds": [
+      "deep-space-probe"
+    ]
+  },
+  {
+    "id": "solar-orbit",
+    "firstTimePrestige": 300,
+    "secondTimePrestige": 150,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "solar-study",
+    "firstTimePrestige": 350,
+    "secondTimePrestige": 175,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "solar-wind-measurements",
+    "firstTimePrestige": 400,
+    "secondTimePrestige": 200,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "interplanetary-magnetic-field",
+    "firstTimePrestige": 450,
+    "secondTimePrestige": 225,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "mercury-probe",
+    "firstTimePrestige": 700,
+    "secondTimePrestige": 350,
+    "cancelsGoalIds": [
+      "deep-space-probe"
+    ]
+  },
+  {
+    "id": "mercury-flyby",
+    "firstTimePrestige": 750,
+    "secondTimePrestige": 375,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "mercury-mapping",
+    "firstTimePrestige": 700,
+    "secondTimePrestige": 350,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "mercury-structure-study",
+    "firstTimePrestige": 800,
+    "secondTimePrestige": 400,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "venus-probe",
+    "firstTimePrestige": 800,
+    "secondTimePrestige": 400,
+    "cancelsGoalIds": [
+      "deep-space-probe"
+    ]
+  },
+  {
+    "id": "venus-flyby",
+    "firstTimePrestige": 700,
+    "secondTimePrestige": 350,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "venus-structure-study",
+    "firstTimePrestige": 600,
+    "secondTimePrestige": 300,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "venus-orbit",
+    "firstTimePrestige": 0,
+    "secondTimePrestige": 0,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "pioneer-venus-orbiter-flown",
+    "firstTimePrestige": 750,
+    "secondTimePrestige": 375,
+    "cancelsGoalIds": [
+      "venus-orbit"
+    ]
+  },
+  {
+    "id": "venera-15-flown",
+    "firstTimePrestige": 750,
+    "secondTimePrestige": 375,
+    "cancelsGoalIds": [
+      "venus-orbit"
+    ]
+  },
+  {
+    "id": "venus-radar-mapping",
+    "firstTimePrestige": 800,
+    "secondTimePrestige": 400,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "venus-structure-survey",
+    "firstTimePrestige": 1000,
+    "secondTimePrestige": 500,
+    "cancelsGoalIds": [
+      "venus-structure-study"
+    ]
+  },
+  {
+    "id": "venus-atmospheric-entry",
+    "firstTimePrestige": 1000,
+    "secondTimePrestige": 500,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "venus-atmosphere-study",
+    "firstTimePrestige": 1000,
+    "secondTimePrestige": 500,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "venus-lander",
+    "firstTimePrestige": 1200,
+    "secondTimePrestige": 600,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "venus-surface-study",
+    "firstTimePrestige": 1500,
+    "secondTimePrestige": 750,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "venus-lander-and-carrier",
+    "firstTimePrestige": 2000,
+    "secondTimePrestige": 1000,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "mars-probe",
+    "firstTimePrestige": 1000,
+    "secondTimePrestige": 500,
+    "cancelsGoalIds": [
+      "deep-space-probe"
+    ]
+  },
+  {
+    "id": "mars-flyby",
+    "firstTimePrestige": 800,
+    "secondTimePrestige": 400,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "mars-photos",
+    "firstTimePrestige": 1000,
+    "secondTimePrestige": 500,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "mars-surface-and-atmosphere-study",
+    "firstTimePrestige": 1000,
+    "secondTimePrestige": 500,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "mars-orbit",
+    "firstTimePrestige": 0,
+    "secondTimePrestige": 0,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "mars-orbiter-science",
+    "firstTimePrestige": 1100,
+    "secondTimePrestige": 550,
+    "cancelsGoalIds": [
+      "mars-orbit"
+    ]
+  },
+  {
+    "id": "mars-m69-flown",
+    "firstTimePrestige": 1100,
+    "secondTimePrestige": 550,
+    "cancelsGoalIds": [
+      "mars-orbit"
+    ]
+  },
+  {
+    "id": "mars-mapping",
+    "firstTimePrestige": 1300,
+    "secondTimePrestige": 650,
+    "cancelsGoalIds": [
+      "mars-photos"
+    ]
+  },
+  {
+    "id": "mars-surface-and-atmosphere-survey",
+    "firstTimePrestige": 1300,
+    "secondTimePrestige": 650,
+    "cancelsGoalIds": [
+      "mars-surface-and-atmosphere-study"
+    ]
+  },
+  {
+    "id": "mars-orbiter-and-lander",
+    "firstTimePrestige": 1800,
+    "secondTimePrestige": 900,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "mars-soil-study",
+    "firstTimePrestige": 1500,
+    "secondTimePrestige": 750,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "mars-orbiter-lander-and-rover",
+    "firstTimePrestige": 2000,
+    "secondTimePrestige": 1000,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "mars-soil-analysis",
+    "firstTimePrestige": 1800,
+    "secondTimePrestige": 900,
+    "cancelsGoalIds": [
+      "mars-soil-study"
+    ]
+  },
+  {
+    "id": "jupiter-probe",
+    "firstTimePrestige": 900,
+    "secondTimePrestige": 450,
+    "cancelsGoalIds": [
+      "deep-space-probe"
+    ]
+  },
+  {
+    "id": "jupiter-flyby",
+    "firstTimePrestige": 850,
+    "secondTimePrestige": 425,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "jupiter-atmosphere-study",
+    "firstTimePrestige": 1000,
+    "secondTimePrestige": 500,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "jupiter-photos",
+    "firstTimePrestige": 1250,
+    "secondTimePrestige": 625,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "jupiter-moon-photos",
+    "firstTimePrestige": 1500,
+    "secondTimePrestige": 750,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "saturn-probe",
+    "firstTimePrestige": 1000,
+    "secondTimePrestige": 500,
+    "cancelsGoalIds": [
+      "deep-space-probe"
+    ]
+  },
+  {
+    "id": "saturn-flyby",
+    "firstTimePrestige": 1000,
+    "secondTimePrestige": 500,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "saturn-structure-study",
+    "firstTimePrestige": 1000,
+    "secondTimePrestige": 500,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "x-15-flight-test-flown",
+    "firstTimePrestige": 100,
+    "secondTimePrestige": 50,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "x-15-research-flight-1-flown",
+    "firstTimePrestige": 400,
+    "secondTimePrestige": 200,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "x-15-research-flight-2-flown",
+    "firstTimePrestige": 400,
+    "secondTimePrestige": 200,
+    "cancelsGoalIds": [
+      "space-plane"
+    ]
+  },
+  {
+    "id": "mig-e-154-drop-test-flown",
+    "firstTimePrestige": 100,
+    "secondTimePrestige": 50,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "mig-e-154-suborbital-flown",
+    "firstTimePrestige": 500,
+    "secondTimePrestige": 250,
+    "cancelsGoalIds": [
+      "human-in-space"
+    ]
+  },
+  {
+    "id": "mig-e-154-orbital-flown",
+    "firstTimePrestige": 1000,
+    "secondTimePrestige": 500,
+    "cancelsGoalIds": [
+      "mig-e-154-suborbital-flown",
+      "human-in-orbit",
+      "space-plane"
+    ]
+  },
+  {
+    "id": "mercury-uncrewed-suborbital-flown",
+    "firstTimePrestige": 120,
+    "secondTimePrestige": 60,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "mercury-suborbital-flown",
+    "firstTimePrestige": 600,
+    "secondTimePrestige": 300,
+    "cancelsGoalIds": [
+      "mercury-uncrewed-suborbital-flown",
+      "human-in-space"
+    ]
+  },
+  {
+    "id": "mercury-uncrewed-orbital-flown",
+    "firstTimePrestige": 150,
+    "secondTimePrestige": 75,
+    "cancelsGoalIds": [
+      "mercury-uncrewed-suborbital-flown"
+    ]
+  },
+  {
+    "id": "mercury-orbital-flown",
+    "firstTimePrestige": 1200,
+    "secondTimePrestige": 600,
+    "cancelsGoalIds": [
+      "mercury-uncrewed-orbital-flown",
+      "mercury-suborbital-flown",
+      "human-in-orbit"
+    ]
+  },
+  {
+    "id": "vostok-uncrewed-suborbital-flown",
+    "firstTimePrestige": 120,
+    "secondTimePrestige": 60,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "vostok-suborbital-flown",
+    "firstTimePrestige": 600,
+    "secondTimePrestige": 300,
+    "cancelsGoalIds": [
+      "vostok-uncrewed-suborbital-flown",
+      "human-in-space"
+    ]
+  },
+  {
+    "id": "vostok-uncrewed-orbital-flown",
+    "firstTimePrestige": 150,
+    "secondTimePrestige": 75,
+    "cancelsGoalIds": [
+      "vostok-uncrewed-suborbital-flown"
+    ]
+  },
+  {
+    "id": "vostok-orbital-flown",
+    "firstTimePrestige": 1200,
+    "secondTimePrestige": 600,
+    "cancelsGoalIds": [
+      "vostok-uncrewed-orbital-flown",
+      "vostok-suborbital-flown",
+      "human-in-orbit"
+    ]
+  },
+  {
+    "id": "gemini-uncrewed-suborbital-flown",
+    "firstTimePrestige": 140,
+    "secondTimePrestige": 70,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "gemini-suborbital-flown",
+    "firstTimePrestige": 1200,
+    "secondTimePrestige": 600,
+    "cancelsGoalIds": [
+      "gemini-uncrewed-suborbital-flown",
+      "human-in-space",
+      "two-crew-spacecraft"
+    ]
+  },
+  {
+    "id": "gemini-uncrewed-orbital-flown",
+    "firstTimePrestige": 200,
+    "secondTimePrestige": 100,
+    "cancelsGoalIds": [
+      "gemini-uncrewed-suborbital-flown"
+    ]
+  },
+  {
+    "id": "gemini-orbital-flown",
+    "firstTimePrestige": 1400,
+    "secondTimePrestige": 700,
+    "cancelsGoalIds": [
+      "gemini-uncrewed-orbital-flown",
+      "gemini-suborbital-flown",
+      "human-in-orbit"
+    ]
+  },
+  {
+    "id": "gemini-spacewalk-flown",
+    "firstTimePrestige": 1500,
+    "secondTimePrestige": 750,
+    "cancelsGoalIds": [
+      "gemini-orbital-flown",
+      "spacewalk"
+    ]
+  },
+  {
+    "id": "gemini-rendezvous-flown",
+    "firstTimePrestige": 2000,
+    "secondTimePrestige": 1000,
+    "cancelsGoalIds": [
+      "gemini-orbital-flown",
+      "joint-crewed-launch",
+      "rendezvous"
+    ]
+  },
+  {
+    "id": "gemini-docking-flown",
+    "firstTimePrestige": 2500,
+    "secondTimePrestige": 1250,
+    "cancelsGoalIds": [
+      "gemini-rendezvous-flown",
+      "docking"
+    ]
+  },
+  {
+    "id": "gemini-lunar-reentry-test-flown",
+    "firstTimePrestige": 1750,
+    "secondTimePrestige": 875,
+    "cancelsGoalIds": [
+      "gemini-uncrewed-orbital-flown"
+    ]
+  },
+  {
+    "id": "gemini-transtage-test-flown",
+    "firstTimePrestige": 200,
+    "secondTimePrestige": 100,
+    "cancelsGoalIds": [
+      "gemini-lunar-reentry-test-flown"
+    ]
+  },
+  {
+    "id": "gemini-lunar-propulsion-module-test-flown",
+    "firstTimePrestige": 1450,
+    "secondTimePrestige": 725,
+    "cancelsGoalIds": [
+      "gemini-lunar-reentry-test-flown"
+    ]
+  },
+  {
+    "id": "gemini-direct-ascent-uncrewed-test-flown",
+    "firstTimePrestige": 220,
+    "secondTimePrestige": 110,
+    "cancelsGoalIds": [
+      "gemini-lunar-reentry-test-flown"
+    ]
+  },
+  {
+    "id": "gemini-direct-ascent-crewed-test-flown",
+    "firstTimePrestige": 1500,
+    "secondTimePrestige": 750,
+    "cancelsGoalIds": [
+      "gemini-direct-ascent-uncrewed-test-flown"
+    ]
+  },
+  {
+    "id": "voskhod-uncrewed-suborbital-flown",
+    "firstTimePrestige": 140,
+    "secondTimePrestige": 70,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "voskhod-suborbital-flown",
+    "firstTimePrestige": 1200,
+    "secondTimePrestige": 600,
+    "cancelsGoalIds": [
+      "voskhod-uncrewed-suborbital-flown",
+      "human-in-space",
+      "two-crew-spacecraft"
+    ]
+  },
+  {
+    "id": "voskhod-uncrewed-orbital-flown",
+    "firstTimePrestige": 200,
+    "secondTimePrestige": 100,
+    "cancelsGoalIds": [
+      "voskhod-uncrewed-suborbital-flown"
+    ]
+  },
+  {
+    "id": "voskhod-orbital-flown",
+    "firstTimePrestige": 1400,
+    "secondTimePrestige": 700,
+    "cancelsGoalIds": [
+      "voskhod-uncrewed-orbital-flown",
+      "voskhod-suborbital-flown",
+      "human-in-orbit"
+    ]
+  },
+  {
+    "id": "voskhod-spacewalk-flown",
+    "firstTimePrestige": 1500,
+    "secondTimePrestige": 750,
+    "cancelsGoalIds": [
+      "voskhod-orbital-flown",
+      "spacewalk"
+    ]
+  },
+  {
+    "id": "soyuz-7k-l1-uncrewed-suborbital-flown",
+    "firstTimePrestige": 150,
+    "secondTimePrestige": 75,
+    "cancelsGoalIds": [
+      "soyuz-uncrewed-suborbital"
+    ]
+  },
+  {
+    "id": "soyuz-7k-l1-suborbital-flown",
+    "firstTimePrestige": 750,
+    "secondTimePrestige": 375,
+    "cancelsGoalIds": [
+      "soyuz-suborbital",
+      "soyuz-7k-l1-uncrewed-suborbital-flown",
+      "human-in-space",
+      "two-crew-spacecraft"
+    ]
+  },
+  {
+    "id": "soyuz-7k-l1-uncrewed-orbital-flown",
+    "firstTimePrestige": 220,
+    "secondTimePrestige": 110,
+    "cancelsGoalIds": [
+      "soyuz-uncrewed-orbital",
+      "soyuz-7k-l1-uncrewed-suborbital-flown"
+    ]
+  },
+  {
+    "id": "soyuz-7k-l1-orbital-flown",
+    "firstTimePrestige": 1500,
+    "secondTimePrestige": 750,
+    "cancelsGoalIds": [
+      "soyuz-orbital",
+      "soyuz-7k-l1-uncrewed-orbital-flown",
+      "soyuz-7k-l1-suborbital-flown",
+      "human-in-orbit"
+    ]
+  },
+  {
+    "id": "soyuz-7k-l3-uncrewed-suborbital-flown",
+    "firstTimePrestige": 225,
+    "secondTimePrestige": 113,
+    "cancelsGoalIds": [
+      "soyuz-uncrewed-suborbital"
+    ]
+  },
+  {
+    "id": "soyuz-7k-l3-suborbital-flown",
+    "firstTimePrestige": 800,
+    "secondTimePrestige": 400,
+    "cancelsGoalIds": [
+      "soyuz-suborbital",
+      "soyuz-7k-l3-uncrewed-suborbital-flown",
+      "human-in-space",
+      "two-crew-spacecraft"
+    ]
+  },
+  {
+    "id": "soyuz-7k-l3-uncrewed-orbital-flown",
+    "firstTimePrestige": 275,
+    "secondTimePrestige": 138,
+    "cancelsGoalIds": [
+      "soyuz-uncrewed-orbital",
+      "soyuz-7k-l3-uncrewed-suborbital-flown"
+    ]
+  },
+  {
+    "id": "soyuz-7k-l3-orbital-flown",
+    "firstTimePrestige": 1600,
+    "secondTimePrestige": 800,
+    "cancelsGoalIds": [
+      "soyuz-orbital",
+      "soyuz-7k-l3-uncrewed-orbital-flown",
+      "soyuz-7k-l3-suborbital-flown",
+      "human-in-orbit"
+    ]
+  },
+  {
+    "id": "soyuz-7k-l3-spacewalk-flown",
+    "firstTimePrestige": 1550,
+    "secondTimePrestige": 775,
+    "cancelsGoalIds": [
+      "soyuz-7k-l3-orbital-flown",
+      "spacewalk"
+    ]
+  },
+  {
+    "id": "lk-lander-uncrewed-test-flown",
+    "firstTimePrestige": 300,
+    "secondTimePrestige": 150,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "lk-lander-test-flown",
+    "firstTimePrestige": 3000,
+    "secondTimePrestige": 1500,
+    "cancelsGoalIds": [
+      "lk-lander-uncrewed-test-flown"
+    ]
+  },
+  {
+    "id": "lk-700-uncrewed-suborbital-flown",
+    "firstTimePrestige": 250,
+    "secondTimePrestige": 125,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "lk-700-suborbital-flown",
+    "firstTimePrestige": 825,
+    "secondTimePrestige": 413,
+    "cancelsGoalIds": [
+      "lk-700-uncrewed-suborbital-flown",
+      "human-in-space",
+      "two-crew-spacecraft"
+    ]
+  },
+  {
+    "id": "lk-700-uncrewed-orbital-flown",
+    "firstTimePrestige": 325,
+    "secondTimePrestige": 163,
+    "cancelsGoalIds": [
+      "lk-700-uncrewed-suborbital-flown"
+    ]
+  },
+  {
+    "id": "lk-700-orbital-flown",
+    "firstTimePrestige": 1650,
+    "secondTimePrestige": 825,
+    "cancelsGoalIds": [
+      "lk-700-uncrewed-orbital-flown",
+      "lk-700-suborbital-flown",
+      "human-in-orbit"
+    ]
+  },
+  {
+    "id": "lk-700-spacewalk-flown",
+    "firstTimePrestige": 1600,
+    "secondTimePrestige": 800,
+    "cancelsGoalIds": [
+      "lk-700-orbital-flown",
+      "spacewalk"
+    ]
+  },
+  {
+    "id": "langley-lander-test-flown",
+    "firstTimePrestige": 3000,
+    "secondTimePrestige": 1500,
+    "cancelsGoalIds": [
+      "docking"
+    ]
+  },
+  {
+    "id": "gemini-eor-service-module-test-flown",
+    "firstTimePrestige": 1450,
+    "secondTimePrestige": 725,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "circumlunar-gemini-transtage-flyby-flown",
+    "firstTimePrestige": 500,
+    "secondTimePrestige": 250,
+    "cancelsGoalIds": [
+      "lunar-flyby"
+    ]
+  },
+  {
+    "id": "circumlunar-gemini-flyby-flown",
+    "firstTimePrestige": 2500,
+    "secondTimePrestige": 1250,
+    "cancelsGoalIds": [
+      "circumlunar-gemini-transtage-flyby-flown",
+      "crewed-lunar-flyby"
+    ]
+  },
+  {
+    "id": "lunar-orbital-gemini-uncrewed-flyby-flown",
+    "firstTimePrestige": 0,
+    "secondTimePrestige": 0,
+    "cancelsGoalIds": [
+      "gemini-lunar-reentry-test-flown",
+      "lunar-flyby"
+    ]
+  },
+  {
+    "id": "lunar-orbital-gemini-flyby-flown",
+    "firstTimePrestige": 0,
+    "secondTimePrestige": 0,
+    "cancelsGoalIds": [
+      "lunar-orbital-gemini-uncrewed-flyby-flown",
+      "gemini-orbital-flown",
+      "crewed-lunar-flyby"
+    ]
+  },
+  {
+    "id": "lunar-orbital-gemini-uncrewed-lunar-orbit-flown",
+    "firstTimePrestige": 600,
+    "secondTimePrestige": 300,
+    "cancelsGoalIds": [
+      "lunar-orbital-gemini-uncrewed-flyby-flown"
+    ]
+  },
+  {
+    "id": "lunar-orbital-gemini-lunar-orbit-flown",
+    "firstTimePrestige": 4000,
+    "secondTimePrestige": 2000,
+    "cancelsGoalIds": [
+      "lunar-orbital-gemini-uncrewed-lunar-orbit-flown",
+      "lunar-orbital-gemini-flyby-flown",
+      "crewed-lunar-orbit"
+    ]
+  },
+  {
+    "id": "gemini-direct-ascent-uncrewed-flyby-flown",
+    "firstTimePrestige": 550,
+    "secondTimePrestige": 275,
+    "cancelsGoalIds": [
+      "gemini-lunar-reentry-test-flown"
+    ]
+  },
+  {
+    "id": "gemini-direct-ascent-flyby-flown",
+    "firstTimePrestige": 2750,
+    "secondTimePrestige": 1375,
+    "cancelsGoalIds": [
+      "gemini-direct-ascent-uncrewed-flyby-flown",
+      "gemini-orbital-flown",
+      "crewed-lunar-flyby"
+    ]
+  },
+  {
+    "id": "gemini-direct-ascent-uncrewed-lunar-orbit-flown",
+    "firstTimePrestige": 650,
+    "secondTimePrestige": 325,
+    "cancelsGoalIds": [
+      "gemini-direct-ascent-uncrewed-flyby-flown"
+    ]
+  },
+  {
+    "id": "gemini-direct-ascent-lunar-orbit-flown",
+    "firstTimePrestige": 4250,
+    "secondTimePrestige": 2125,
+    "cancelsGoalIds": [
+      "gemini-direct-ascent-uncrewed-lunar-orbit-flown",
+      "gemini-direct-ascent-flyby-flown",
+      "crewed-lunar-orbit"
+    ]
+  },
+  {
+    "id": "gemini-direct-ascent-landing-flown",
+    "firstTimePrestige": 10000,
+    "secondTimePrestige": 5000,
+    "cancelsGoalIds": [
+      "gemini-direct-ascent-lunar-orbit-flown",
+      "crewed-lunar-landing",
+      "lunar-samples-returned"
+    ]
+  },
+  {
+    "id": "apollo-uncrewed-flyby-flown",
+    "firstTimePrestige": 700,
+    "secondTimePrestige": 350,
+    "cancelsGoalIds": [
+      "apollo-lunar-reentry-test-flown",
+      "lunar-flyby"
+    ]
+  },
+  {
+    "id": "apollo-flyby-flown",
+    "firstTimePrestige": 3000,
+    "secondTimePrestige": 1500,
+    "cancelsGoalIds": [
+      "apollo-uncrewed-flyby-flown",
+      "apollo-orbital-flown",
+      "crewed-lunar-flyby"
+    ]
+  },
+  {
+    "id": "apollo-uncrewed-lunar-orbit-flown",
+    "firstTimePrestige": 900,
+    "secondTimePrestige": 450,
+    "cancelsGoalIds": [
+      "apollo-uncrewed-flyby-flown"
+    ]
+  },
+  {
+    "id": "apollo-lunar-orbit-flown",
+    "firstTimePrestige": 4500,
+    "secondTimePrestige": 2250,
+    "cancelsGoalIds": [
+      "apollo-uncrewed-lunar-orbit-flown",
+      "apollo-flyby-flown",
+      "crewed-lunar-orbit"
+    ]
+  },
+  {
+    "id": "apollo-lander-test-flown",
+    "firstTimePrestige": 5000,
+    "secondTimePrestige": 2500,
+    "cancelsGoalIds": [
+      "apollo-lunar-module-test-flown",
+      "apollo-lunar-orbit-flown"
+    ]
+  },
+  {
+    "id": "apollo-landing-flown",
+    "firstTimePrestige": 10000,
+    "secondTimePrestige": 5000,
+    "cancelsGoalIds": [
+      "apollo-lander-test-flown",
+      "apollo-lunar-orbit-flown",
+      "crewed-lunar-landing",
+      "lunar-samples-returned"
+    ]
+  },
+  {
+    "id": "apollo-landing-with-rover-flown",
+    "firstTimePrestige": 5000,
+    "secondTimePrestige": 2500,
+    "cancelsGoalIds": [
+      "apollo-landing-flown"
+    ]
+  },
+  {
+    "id": "gemini-eor-flyby-flown",
+    "firstTimePrestige": 800,
+    "secondTimePrestige": 400,
+    "cancelsGoalIds": [
+      "crewed-lunar-flyby"
+    ]
+  },
+  {
+    "id": "gemini-eor-lunar-orbit-flown",
+    "firstTimePrestige": 1000,
+    "secondTimePrestige": 500,
+    "cancelsGoalIds": [
+      "gemini-eor-flyby-flown",
+      "crewed-lunar-orbit"
+    ]
+  },
+  {
+    "id": "gemini-eor-lander-test-flown",
+    "firstTimePrestige": 5000,
+    "secondTimePrestige": 2500,
+    "cancelsGoalIds": [
+      "gemini-eor-lunar-orbit-flown"
+    ]
+  },
+  {
+    "id": "gemini-eor-landing-flown",
+    "firstTimePrestige": 5000,
+    "secondTimePrestige": 2500,
+    "cancelsGoalIds": [
+      "gemini-eor-lander-test-flown",
+      "crewed-lunar-landing",
+      "lunar-samples-returned"
+    ]
+  },
+  {
+    "id": "soyuz-7k-l1-uncrewed-flyby-flown",
+    "firstTimePrestige": 500,
+    "secondTimePrestige": 250,
+    "cancelsGoalIds": [
+      "soyuz-uncrewed-lunar-flyby",
+      "soyuz-7k-l1-uncrewed-orbital-flown",
+      "lunar-flyby"
+    ]
+  },
+  {
+    "id": "soyuz-7k-l1-flyby-flown",
+    "firstTimePrestige": 2500,
+    "secondTimePrestige": 1250,
+    "cancelsGoalIds": [
+      "soyuz-lunar-flyby",
+      "soyuz-7k-l1-uncrewed-flyby-flown"
+    ]
+  },
+  {
+    "id": "soyuz-7k-l3-uncrewed-flyby-flown",
+    "firstTimePrestige": 700,
+    "secondTimePrestige": 350,
+    "cancelsGoalIds": [
+      "soyuz-uncrewed-lunar-flyby",
+      "soyuz-7k-l3-uncrewed-orbital-flown",
+      "lunar-flyby"
+    ]
+  },
+  {
+    "id": "soyuz-7k-l3-flyby-flown",
+    "firstTimePrestige": 3000,
+    "secondTimePrestige": 1500,
+    "cancelsGoalIds": [
+      "soyuz-lunar-flyby",
+      "soyuz-7k-l3-uncrewed-flyby-flown",
+      "soyuz-7k-l3-orbital-flown",
+      "crewed-lunar-flyby"
+    ]
+  },
+  {
+    "id": "soyuz-7k-l3-uncrewed-lunar-orbit-flown",
+    "firstTimePrestige": 900,
+    "secondTimePrestige": 450,
+    "cancelsGoalIds": [
+      "soyuz-7k-l3-uncrewed-flyby-flown"
+    ]
+  },
+  {
+    "id": "soyuz-7k-l3-lunar-orbit-flown",
+    "firstTimePrestige": 4500,
+    "secondTimePrestige": 2250,
+    "cancelsGoalIds": [
+      "soyuz-7k-l3-uncrewed-lunar-orbit-flown",
+      "soyuz-7k-l3-flyby-flown",
+      "crewed-lunar-orbit"
+    ]
+  },
+  {
+    "id": "soyuz-7k-l3-lander-test-flown",
+    "firstTimePrestige": 5000,
+    "secondTimePrestige": 2500,
+    "cancelsGoalIds": [
+      "soyuz-7k-l3-uncrewed-lunar-orbit-flown"
+    ]
+  },
+  {
+    "id": "soyuz-7k-l3-landing-flown",
+    "firstTimePrestige": 10000,
+    "secondTimePrestige": 5000,
+    "cancelsGoalIds": [
+      "soyuz-7k-l3-lander-test-flown",
+      "soyuz-7k-l3-lunar-orbit-flown",
+      "crewed-lunar-landing",
+      "lunar-samples-returned"
+    ]
+  },
+  {
+    "id": "lk-700-uncrewed-flyby-flown",
+    "firstTimePrestige": 725,
+    "secondTimePrestige": 363,
+    "cancelsGoalIds": [
+      "lk-700-uncrewed-orbital-flown",
+      "lunar-flyby"
+    ]
+  },
+  {
+    "id": "lk-700-flyby-flown",
+    "firstTimePrestige": 3250,
+    "secondTimePrestige": 1625,
+    "cancelsGoalIds": [
+      "lk-700-uncrewed-flyby-flown",
+      "lk-700-orbital-flown",
+      "crewed-lunar-flyby"
+    ]
+  },
+  {
+    "id": "lk-700-uncrewed-lunar-orbit-flown",
+    "firstTimePrestige": 930,
+    "secondTimePrestige": 465,
+    "cancelsGoalIds": [
+      "lk-700-uncrewed-flyby-flown"
+    ]
+  },
+  {
+    "id": "lk-700-lunar-orbit-flown",
+    "firstTimePrestige": 4600,
+    "secondTimePrestige": 2300,
+    "cancelsGoalIds": [
+      "lk-700-uncrewed-lunar-orbit-flown",
+      "lk-700-flyby-flown",
+      "crewed-lunar-orbit"
+    ]
+  },
+  {
+    "id": "lk-700-landing-flown",
+    "firstTimePrestige": 12500,
+    "secondTimePrestige": 6250,
+    "cancelsGoalIds": [
+      "lk-700-lunar-orbit-flown",
+      "crewed-lunar-landing",
+      "lunar-samples-returned"
+    ]
+  },
+  {
+    "id": "apollo-uncrewed-suborbital-flown",
+    "firstTimePrestige": 160,
+    "secondTimePrestige": 80,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "apollo-suborbital-flown",
+    "firstTimePrestige": 850,
+    "secondTimePrestige": 425,
+    "cancelsGoalIds": [
+      "apollo-uncrewed-suborbital-flown",
+      "human-in-space",
+      "three-crew-spacecraft"
+    ]
+  },
+  {
+    "id": "apollo-uncrewed-orbital-flown",
+    "firstTimePrestige": 350,
+    "secondTimePrestige": 175,
+    "cancelsGoalIds": [
+      "apollo-uncrewed-suborbital-flown"
+    ]
+  },
+  {
+    "id": "apollo-orbital-flown",
+    "firstTimePrestige": 1600,
+    "secondTimePrestige": 800,
+    "cancelsGoalIds": [
+      "apollo-uncrewed-orbital-flown",
+      "apollo-suborbital-flown",
+      "human-in-orbit"
+    ]
+  },
+  {
+    "id": "apollo-spacewalk-flown",
+    "firstTimePrestige": 1600,
+    "secondTimePrestige": 800,
+    "cancelsGoalIds": [
+      "apollo-orbital-flown",
+      "spacewalk"
+    ]
+  },
+  {
+    "id": "apollo-uncrewed-lunar-module-test-flown",
+    "firstTimePrestige": 400,
+    "secondTimePrestige": 200,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "apollo-lunar-module-test-flown",
+    "firstTimePrestige": 3000,
+    "secondTimePrestige": 1500,
+    "cancelsGoalIds": [
+      "apollo-uncrewed-lunar-module-test-flown",
+      "apollo-orbital-flown",
+      "docking"
+    ]
+  },
+  {
+    "id": "apollo-lunar-reentry-test-flown",
+    "firstTimePrestige": 1300,
+    "secondTimePrestige": 650,
+    "cancelsGoalIds": [
+      "apollo-orbital-flown"
+    ]
+  },
+  {
+    "id": "soyuz-7k-ok-uncrewed-suborbital-flown",
+    "firstTimePrestige": 160,
+    "secondTimePrestige": 80,
+    "cancelsGoalIds": [
+      "soyuz-uncrewed-suborbital"
+    ]
+  },
+  {
+    "id": "soyuz-7k-ok-suborbital-flown",
+    "firstTimePrestige": 850,
+    "secondTimePrestige": 425,
+    "cancelsGoalIds": [
+      "soyuz-suborbital",
+      "soyuz-7k-ok-uncrewed-suborbital-flown",
+      "human-in-space",
+      "three-crew-spacecraft"
+    ]
+  },
+  {
+    "id": "soyuz-7k-ok-uncrewed-orbital-flown",
+    "firstTimePrestige": 350,
+    "secondTimePrestige": 175,
+    "cancelsGoalIds": [
+      "soyuz-uncrewed-orbital",
+      "soyuz-7k-ok-uncrewed-suborbital-flown"
+    ]
+  },
+  {
+    "id": "soyuz-7k-ok-orbital-flown",
+    "firstTimePrestige": 1600,
+    "secondTimePrestige": 800,
+    "cancelsGoalIds": [
+      "soyuz-orbital",
+      "soyuz-7k-ok-uncrewed-orbital-flown",
+      "soyuz-7k-ok-suborbital-flown",
+      "human-in-orbit"
+    ]
+  },
+  {
+    "id": "soyuz-7k-ok-spacewalk-flown",
+    "firstTimePrestige": 1600,
+    "secondTimePrestige": 800,
+    "cancelsGoalIds": [
+      "soyuz-7k-ok-orbital-flown",
+      "spacewalk"
+    ]
+  },
+  {
+    "id": "soyuz-uncrewed-suborbital",
+    "firstTimePrestige": 0,
+    "secondTimePrestige": 0,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "soyuz-suborbital",
+    "firstTimePrestige": 0,
+    "secondTimePrestige": 0,
+    "cancelsGoalIds": [
+      "soyuz-uncrewed-suborbital"
+    ]
+  },
+  {
+    "id": "soyuz-uncrewed-orbital",
+    "firstTimePrestige": 0,
+    "secondTimePrestige": 0,
+    "cancelsGoalIds": [
+      "soyuz-uncrewed-suborbital"
+    ]
+  },
+  {
+    "id": "soyuz-orbital",
+    "firstTimePrestige": 0,
+    "secondTimePrestige": 0,
+    "cancelsGoalIds": [
+      "soyuz-uncrewed-orbital",
+      "soyuz-suborbital"
+    ]
+  },
+  {
+    "id": "soyuz-uncrewed-lunar-flyby",
+    "firstTimePrestige": 0,
+    "secondTimePrestige": 0,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "soyuz-lunar-flyby",
+    "firstTimePrestige": 0,
+    "secondTimePrestige": 0,
+    "cancelsGoalIds": [
+      "soyuz-uncrewed-lunar-flyby",
+      "crewed-lunar-flyby"
+    ]
+  },
+  {
+    "id": "duration-level-1",
+    "firstTimePrestige": 1000,
+    "secondTimePrestige": 500,
+    "cancelsGoalIds": [
+      "human-in-space",
+      "human-in-orbit"
+    ]
+  },
+  {
+    "id": "duration-level-2",
+    "firstTimePrestige": 1250,
+    "secondTimePrestige": 625,
+    "cancelsGoalIds": [
+      "duration-level-1"
+    ]
+  },
+  {
+    "id": "duration-level-3",
+    "firstTimePrestige": 1500,
+    "secondTimePrestige": 750,
+    "cancelsGoalIds": [
+      "duration-level-2"
+    ]
+  },
+  {
+    "id": "duration-level-4",
+    "firstTimePrestige": 2000,
+    "secondTimePrestige": 1000,
+    "cancelsGoalIds": [
+      "duration-level-3"
+    ]
+  },
+  {
+    "id": "duration-level-5",
+    "firstTimePrestige": 2750,
+    "secondTimePrestige": 1375,
+    "cancelsGoalIds": [
+      "duration-level-4"
+    ]
+  },
+  {
+    "id": "duration-level-6",
+    "firstTimePrestige": 3750,
+    "secondTimePrestige": 1875,
+    "cancelsGoalIds": [
+      "duration-level-5"
+    ]
+  },
+  {
+    "id": "human-in-space",
+    "firstTimePrestige": 1750,
+    "secondTimePrestige": 875,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "human-in-orbit",
+    "firstTimePrestige": 3000,
+    "secondTimePrestige": 1500,
+    "cancelsGoalIds": [
+      "human-in-space",
+      "earth-orbit-satellite"
+    ]
+  },
+  {
+    "id": "spacewalk",
+    "firstTimePrestige": 1500,
+    "secondTimePrestige": 750,
+    "cancelsGoalIds": [
+      "human-in-orbit"
+    ]
+  },
+  {
+    "id": "crew-transfer",
+    "firstTimePrestige": 3000,
+    "secondTimePrestige": 1500,
+    "cancelsGoalIds": [
+      "spacewalk"
+    ]
+  },
+  {
+    "id": "joint-crewed-launch",
+    "firstTimePrestige": 1250,
+    "secondTimePrestige": 625,
+    "cancelsGoalIds": [
+      "human-in-orbit"
+    ]
+  },
+  {
+    "id": "rendezvous",
+    "firstTimePrestige": 1800,
+    "secondTimePrestige": 900,
+    "cancelsGoalIds": [
+      "joint-crewed-launch",
+      "human-in-orbit"
+    ]
+  },
+  {
+    "id": "docking",
+    "firstTimePrestige": 2250,
+    "secondTimePrestige": 1125,
+    "cancelsGoalIds": [
+      "rendezvous"
+    ]
+  },
+  {
+    "id": "crewed-lunar-flyby",
+    "firstTimePrestige": 4000,
+    "secondTimePrestige": 2000,
+    "cancelsGoalIds": [
+      "human-in-orbit",
+      "duration-level-2",
+      "lunar-flyby"
+    ]
+  },
+  {
+    "id": "crewed-lunar-orbit",
+    "firstTimePrestige": 6000,
+    "secondTimePrestige": 3000,
+    "cancelsGoalIds": [
+      "crewed-lunar-flyby",
+      "lunar-photos"
+    ]
+  },
+  {
+    "id": "crewed-lunar-landing",
+    "firstTimePrestige": 10000,
+    "secondTimePrestige": 5000,
+    "cancelsGoalIds": [
+      "crewed-lunar-orbit",
+      "duration-level-3"
+    ]
+  },
+  {
+    "id": "lunar-samples-returned",
+    "firstTimePrestige": 2000,
+    "secondTimePrestige": 1000,
+    "cancelsGoalIds": [
+      "crewed-lunar-landing"
+    ]
+  },
+  {
+    "id": "space-plane",
+    "firstTimePrestige": 750,
+    "secondTimePrestige": 375,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "two-crew-spacecraft",
+    "firstTimePrestige": 1500,
+    "secondTimePrestige": 750,
+    "cancelsGoalIds": []
+  },
+  {
+    "id": "three-crew-spacecraft",
+    "firstTimePrestige": 3000,
+    "secondTimePrestige": 1500,
+    "cancelsGoalIds": [
+      "two-crew-spacecraft"
+    ]
+  },
+  {
+    "id": "deep-space-probe",
+    "firstTimePrestige": 0,
+    "secondTimePrestige": 0,
+    "cancelsGoalIds": []
+  }
+]

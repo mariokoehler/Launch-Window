@@ -28,6 +28,13 @@ public final class HistoryNotes {
         + "fatal Soyuz 1 flight in 1967 he was barred from spaceflight as too valuable to lose. He never flew in "
         + "space again, and died in a jet training flight in 1968.";
 
+    /** On mission assembly's Mission control card, when the mission has a CAPCOM (checked 2026-10-08). */
+    public static final String CAPCOM = "CAPCOM stands for capsule communicator, a name from Project Mercury, when "
+        + "spacecraft were called capsules. During Mercury, CAPCOMs at tracking stations around the world, some of "
+        + "them astronauts, talked to each flight as it passed overhead. Later a single CAPCOM in Mission Control "
+        + "spoke to the crew for everyone, usually a fellow astronaut, who knew best what the crew was facing. On "
+        + "Apollo 11 it was Charlie Duke, so relieved at the landing that he stumbled over the name Tranquility.";
+
     /**
      * Not instantiable; this class only holds texts.
      */

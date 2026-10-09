@@ -10,6 +10,7 @@ import de.mkoehler.launchwindow.client.ui.ReliabilityBar;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import de.mkoehler.launchwindow.client.view.ContentNames;
+import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.MissionControl;
 import de.mkoehler.launchwindow.client.view.SetSkills;
 import de.mkoehler.launchwindow.client.view.TurnReportView;
@@ -82,6 +83,11 @@ public final class ReplayScreen extends ChromeScreen {
     public void show(int step) {
         shown = Math.max(0, Math.min(step, steps().size()));
         rebuild();
+    }
+
+    @Override
+    protected Help.Context helpContext() {
+        return Help.Context.TURN_REPORT;
     }
 
     @Override

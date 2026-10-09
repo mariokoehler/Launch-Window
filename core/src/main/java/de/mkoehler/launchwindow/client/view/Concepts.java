@@ -122,7 +122,8 @@ public record Concepts(List<Concept> concepts) {
      */
     public static String stepType(String stepId) {
         String type = ContentStrings.stepType(stepId);
-        return type.startsWith("spc-a-") || type.startsWith("spc-b-") ? type.substring(6) : type;
+        String[] craft = ContentStrings.craftStep(type);
+        return craft == null ? type : craft[1];
     }
 
     /**

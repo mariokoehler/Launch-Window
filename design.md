@@ -371,6 +371,19 @@ leading to satellite navigation.
 - **The R-16 disaster** (Baikonur, 24 October 1960) for a later memorial or news context,
   handled with care; **Apollo-Soyuz's crew breathing nitrogen tetroxide fumes** on the way
   down (1975). Both turned up while writing E-05.
+- **CAPCOM, the capsule communicator** (the user's question, checked 2026-10-08; shown on mission
+  assembly's Mission control card, `HistoryNotes.CAPCOM`): the name comes from Project Mercury,
+  when spacecraft were called capsules. Mercury flights were followed by tracking stations around
+  the world, each with a three-man team led by a CAPCOM who talked to the astronaut overhead; some
+  were astronauts (Glenn, Grissom, Shepard, Carpenter, Schirra, Cooper served; Slayton was CAPCOM at
+  the Cape for Mercury-Atlas 8), many were flight controllers. Later one CAPCOM in Mission Control
+  spoke to the crew for everyone, usually an astronaut, often from the backup crew, as the one best
+  placed to understand the crew's situation; for the ISS, non-astronauts serve too. On Apollo 11,
+  Charlie Duke was CAPCOM for the landing and stumbled over "Tranquility" in his first reply
+  (transcript). Sources: Encyclopedia.com ("Capcom"), NASA's Apollo Lunar Surface Journal
+  ("CapComs and others"), JSC oral history (Gene Roach, 2000), Apollo 11 Spacelog, Space.com
+  (Charles Duke biography). **SET** in the game is BASPM's "scientists, engineers and technicians"
+  (the help spells it out); not a history note.
 
 ### 1.2 Content & asset policy: no copying BASPM's copyrighted content
 
@@ -384,13 +397,21 @@ committed to it is redistributed.
   reference screenshots once kept in `assets-raw/baspm/ui/` were removed on 2026-10-08 (user: our
   own design had moved past them); they remain in git history. Flag any task that risks pulling an
   extracted file into the tree.
+- **One exception, generated from a reference (user, 2026-10-09):** the mission components'
+  blueprint drawings (`assets-raw/blueprints/`) are generated image-to-image from BASPM's R&D renders,
+  each with a prompt we wrote from the render in our own words and a hand-drawn blueprint style.
+  The user judged the results different enough to use. The renders themselves are read from `E:` at
+  generation time and never enter the repo; only the generated drawings do. This is not a precedent
+  for other art: ask before using BASPM's art as a reference again.
 - **Not restricted:** the real history itself (programs, hardware, dates, people). **Numbers**
   (costs, reliabilities, prestige, budget values, training lengths) follow BASPM's data by the
   user's decision (2026-10-03, confirmed 2026-10-06): they aren't creative expression, and
   they're what makes the game feel right. Tune them from play tests.
 - **Fictional programs get our own names** (user, 2026-10-03): real programs keep their
   historical names; BASPM's invented ones are renamed. BASPM's Soviet "PKA space plane"
-  (`26-01`) is the **OKB-MiG E-154**.
+  (`26-01`) is the **OKB-MiG E-154** (ids `mig-e-154-*`), a rocket plane in the style of its era,
+  as the user's art shows it: only its name and text change, the numbers stay BASPM's (user,
+  2026-10-08).
 
 ## 2. Core gameplay mechanics
 
@@ -1472,14 +1493,19 @@ precedent: a design-system canvas as the visual source of truth, its tokens carr
 `Theme.java`, scripts converting its output into the PNGs the game loads).
 
 **Built so far:** personnel portraits (`assets-raw/portraits/`, 100 per agency, greyscale 128 px
-JPEGs) and embroidered goal patches (`assets-raw/patches/`, 128 px RGBA PNGs), both with fixed
-seeds, a manifest, a human pick, and a converter into `assets/` (commands in `CLAUDE.md`).
+JPEGs), embroidered goal patches (`assets-raw/patches/`, 128 px RGBA PNGs) and the mission
+components' blueprint drawings (`assets-raw/blueprints/`, 864 x 352 JPEGs for the turn report,
+2026-10-09, the §1.2 exception), all with fixed seeds, a manifest, a human pick, and a converter
+into `assets/` (commands in `CLAUDE.md`). The blueprints share one background wording ("soft": a
+gentle blue gradient with a grid, no frame); paper texture clashed with the UI's own engineering-
+paper background and a stronger gradient lost the pencil feel (user, 2026-10-09). Their slight
+differences in shade are wanted and never normalised.
 Program, category, configuration and hub art is the user's own, converted by
 `make_content_art.py` and `make_hub_art.py`.
 
 **Principles:** automation generates candidates, a human picks (a vision-model pre-check is a
 cheap first filter; the patches' spelling is checked by eye). Never use BASPM's art as a style
-reference or training set (§1.2). For a bigger batch, anchor the style first (a LoRA or
+reference or training set (§1.2), apart from the blueprints' one decided exception. For a bigger batch, anchor the style first (a LoRA or
 reference conditioning trained on our own hand-picked output across varied subjects).
 
 ### 3.6 Turn scheduling & calendar configuration
@@ -1835,6 +1861,65 @@ first (login → action → scheduled resolution → result, end to end) before 
     skills by BASPM's speciality index, not the slot name. Animal passengers, and the animals
     honoured for coming home (`cameHome`), come from the converter's `ANIMAL_PASSENGERS` map, not
     from BASPM's data (backups `.bak-prepassengers`, `.bak-predogs`).
+  - A configuration's `cost` is its payloads' unit cost times the average step `DifficultyFactor`
+    over all its seasons, rounded half to even, as in BASPM (`MissionsConfigurationsManager`; a
+    missing factor is 1). Only Sputnik 1's extended mission has factors (1.75 on its two later
+    steps), so its cost went from 488 to 580 (2026-10-08).
+  - A step only risks the crew when the configuration has crew slots: BASPM flags some steps of
+    two uncrewed Soyuz flights anyway.
+  - A goal modifier BASPM repeats within one list (the X-15's research flights boost on the same
+    goal twice) is merged into one with the summed amount; the engine sums them either way.
+  - **Goal boosts stay (user, 2026-10-08).** BASPM's loader never reads `GoalBoost` elements, so in
+    the shipped game only the penalties apply (`baspm.md` §11.3). We keep applying the boosts the
+    data declares (2 in the early-era pack, 99 in the standard pack, +1 or +2 each): they reward
+    related work, such as Pegasus and Biosatellite for Mercury, or a robot lander for a crewed
+    one. The plan's components card lists every boost, including those not yet reached, as
+    "(+1)"; Mission Control names the active ones; help explains both kinds.
+
+  **The full tree: the `standard` pack (converter scope `full`, 2026-10-08).** The converter writes
+  all of BASPM's tree: 13 categories (with their `body`), 55 programs, 85 components (61 payloads,
+  24 rockets), 189 configurations and all 207 goals. The goals include the umbrella goals no
+  configuration achieves directly, because other goals' cancellations credit them. Our ids are in
+  `full_maps.py` next to the converter; the early-era ids are kept. The ids are confirmed (user,
+  2026-10-08). It is a second pack, `assets/content/standard`, beside `early-era`, which stays the
+  server's default for now. **Its text is written** (2026-10-08): names and descriptions for every
+  category, program, component, configuration, goal and step type, in our own words, with the
+  early-era text carried over unchanged. History notes: the early-era entries, and 44 of the 49
+  new programs (2026-10-08, every figure checked by web search; Pioneer 2, Mariner 6, the Pioneer
+  Venus Orbiter and both Gemini EOR programs have none yet, as nothing about them was confirmed).
+  The new configurations and components have none yet. A joint flight's craft-specific steps take their
+  shared step's text, named for the craft (`ContentStrings.craftStep`: `gemini-a-`, `atv-` for the
+  target, `transtage-`, `-a`/`-b`). **Its art is converted** (`make_content_art.py`: 55 programs,
+  189 configurations, 22 category images), and `ScreenSnapshot` shoots it (`standard-*.png`). **Its
+  goal patches are generated** (2026-10-08): all 207, the new 186 defined in
+  `assets-raw/patches/patches_full.py` (scene templates per kind of mission, each with its program's
+  craft), three variants each, spelling checked by eye, ten goals rerolled or reworded where no
+  variant was spelled right (the model can't spell "CIRCUMLUNAR", so those patches say "GEMINI"). The
+  bots play it (`ContentPackPlayouts standard`) with no invariant broken. The text for the
+  MiG E-154's program and missions should fit the user's art, a rocket plane of its era, not
+  BASPM's PKA (user, 2026-10-08). **No animal passengers on the new flights:** Zond 5's tortoises,
+  the Biosatellite and the OFO frogs get no memorial and no honours (user, 2026-10-08), so
+  `ANIMAL_PASSENGERS` stays as it is. In this scope, anything that would be dropped fails the run, and the run checks
+  every launch has a rocket of its agency that lifts it (106 configurations need at least a
+  Medium rocket, 36 a Heavy). BASPM's `HistoricalRocketUsedID` only picks the clip: 12 launches
+  name one that can't lift them. `StandardPackTest` checks the tree: every launch flies on a rocket
+  of its agency at some VAB level, staffing fits, every goal can be earned, and the race goals
+  (through the crewed lunar landing, Venus and Mars) are open to both agencies. Four engine
+  additions came with it (built 2026-10-08, `FullTreeLaunchTest`):
+  - **`ownLift` on a payload** (`MissionLaunch.requiredLift`): the Agena, the Gemini Transtage, the S-IVB tug and Apollo's CSM
+    carry part of their own lift, which BASPM subtracts from what the rocket must lift
+    (`ComputeExtraBoostProvidedByPayload`). Without it, Apollo's CSM needs a Saturn C-3B in
+    Earth orbit instead of BASPM's Saturn IB.
+  - **`AIR_DROP` launches:** the X-15's three configurations and the MiG E-154's drop test fly
+    with no rocket (BASPM's `LaunchType` `NA`, rocket `N/A`). The launch keeps its place in the
+    rocket list with `""`, costs no rocket, and no step may name its rocket slot; the planning
+    screens say a carrier aircraft drops the craft.
+  - **`requiredGoalIds` on a configuration:** a hard gate until the goal is achieved or
+    cancelled (BASPM's `StrictGoalDependency`): the X-15's two research flights and the MiG E-154's
+    suborbital test. A launch refuses with `GOAL_NOT_REACHED`; the configuration card shows
+    "Locked" and its steps screen names the goal and disables "Plan this mission".
+  - **`transferPercent` as a double:** many of the full tree's reliability transfers are .5
+    values (`client.view.Rockets` prints it, so format it there).
 
   `EarlyEraPackTest` checks the pack loads, every configuration has a liftable rocket of its
   agency at VAB level 1, staffing fits a reachable building level, and both agencies can reach
@@ -1959,12 +2044,18 @@ root** before the next play test (new fields on the snapshot and on employees).
 
 **Help** (the user's idea, built 2026-10-08, `ui-spec.md` component 23): a help button in every
 header and the hub strip, and F1, open the rules by topic over the current screen, filtered to that
-screen's topics; typing searches them all. Seven topics so far (turns, the budget, programs,
-component R&D, team chemistry, poaching, intelligence) for the user to judge the format. **Next:**
-write the remaining topics once the format is confirmed (about 30 to 40 in all: hiring and
-training, morale and retirement, each building, missions and their steps, goals and prestige,
-random events, PR duty, ambitions and careers, the turn report), each screen's topic list growing
-with them; and put the `help` and `search` glyphs on the UI Asset Sheet.
+screen's topics; typing searches them all. 28 topics, written 2026-10-08 from this document and
+the rules, every number a token. **Next:** keep the topics in step with the rules (a changed
+constant updates itself, a changed rule needs its text), and put the `help` and `search` glyphs on
+the UI Asset Sheet (prompt given to the user 2026-10-08).
+
+**Advisor** (the user's idea, built 2026-10-08, `ui-spec.md` component 24): a card on the hub with
+a new agency's first steps (help, engineers, a program, a rocket, R&D, controllers, astronauts
+once crewed, reliability to 60 % for a payload and a rocket, then the first mission, the first
+report), each ticked off from the state, with a link to
+the building and one to the item's help topics. It retires for good once everything is done or the
+player hides it. **Next:** see in the play test whether the order and wording steer a new player
+well, and whether three items at a time is the right number.
 
 ### Later
 

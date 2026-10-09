@@ -81,12 +81,15 @@ final class ConfigCards {
         for (int i = 0; i < configuration.launches().size(); i++) {
             MissionConfiguration.Launch launch = configuration.launches().get(i);
             tags.add(tag(ui, Missions.launchTag(launch.launchType()), false)).padRight(4f);
-            if (launch.launchType().humanRated()) {
+            if (launch.launchType().humanRated() && launch.launchType().needsRocket()) {
                 tags.add(tag(ui, "Human-rated", true)).padRight(4f);
             }
         }
         if (configuration.launches().size() > 1) {
-            tags.add(tag(ui, configuration.launches().size() + " ×", false));
+            tags.add(tag(ui, configuration.launches().size() + " ×", false)).padRight(4f);
+        }
+        if (!Missions.missingGoals(configuration, host.session.state()).isEmpty()) {
+            tags.add(tag(ui, "Locked", true));
         }
         body.add(tags).padBottom(10f).row();
 

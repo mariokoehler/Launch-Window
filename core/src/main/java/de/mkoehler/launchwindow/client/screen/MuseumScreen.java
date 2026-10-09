@@ -19,6 +19,7 @@ import de.mkoehler.launchwindow.client.ui.HistoryNote;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.Explainers;
+import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.Museum;
 import de.mkoehler.launchwindow.content.ContentCatalog;
 import de.mkoehler.launchwindow.content.Goal;
@@ -119,6 +120,11 @@ public final class MuseumScreen extends ChromeScreen {
      */
     public void showResult() {
         new GameResultDialog(this).open();
+    }
+
+    @Override
+    protected Help.Context helpContext() {
+        return Help.Context.MUSEUM;
     }
 
     @Override

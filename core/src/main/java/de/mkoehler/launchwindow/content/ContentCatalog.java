@@ -358,6 +358,11 @@ public final class ContentCatalog {
                 }
             }
         }
+        for (String goalId : configuration.requiredGoalIds()) {
+            if (!goalsById.containsKey(goalId)) {
+                problems.add(label + " requires unknown Goal " + goalId);
+            }
+        }
         for (MissionConfiguration.GoalModifier modifier : configuration.goalDependencies()) {
             checkModifier(label, "dependency", modifier, problems);
         }
@@ -426,6 +431,9 @@ public final class ContentCatalog {
                         if (launchIndex < 0 || launchIndex >= configuration.launches().size()) {
                             problems.add(stepLabel + " names rocket slot " + componentId + " but the configuration has "
                                 + configuration.launches().size() + " launch(es)");
+                        } else if (!configuration.launches().get(launchIndex).launchType().needsRocket()) {
+                            problems.add(stepLabel + " names rocket slot " + componentId + " of a launch without a "
+                                + "rocket");
                         }
                     } else if (!missionComponentsById.containsKey(componentId)) {
                         problems.add(stepLabel + " references unknown MissionComponent " + componentId);

@@ -71,6 +71,7 @@ public final class Refusals {
         Map.entry("WRONG_ROCKET_COUNT", "Pick a rocket for every launch."),
         Map.entry("ROCKET_NOT_AVAILABLE", "Pick a rocket for every launch."),
         Map.entry("ROCKET_CANNOT_LIFT_PAYLOAD", "That rocket can't fly this launch."),
+        Map.entry("GOAL_NOT_REACHED", "Fly the earlier flight this one builds on first."),
         Map.entry("UNKNOWN_MISSION", "That mission isn't scheduled or in flight any more."),
         Map.entry("CREWED_MISSION_IN_FLIGHT", "A crewed mission in flight can't be abandoned."),
         Map.entry("UNKNOWN_SLOT", "That console doesn't exist on this mission."),

@@ -5,7 +5,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.actions.CloseRocketProgramAction;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.Refusals;
@@ -14,7 +13,6 @@ import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.Rockets;
-import de.mkoehler.launchwindow.client.view.SetSkills;
 import de.mkoehler.launchwindow.content.MissionComponent;
 import de.mkoehler.launchwindow.model.OwnedMissionComponent;
 import de.mkoehler.launchwindow.rules.RocketProgramOutcome;
@@ -83,9 +81,7 @@ public final class RocketProgramsScreen extends ChromeScreen {
         OwnedMissionComponent owned = session.state().getMissionComponents().get(rocket.id());
         Table row = new Table();
         row.pad(Theme.SPACE_3, Theme.SPACE_4, Theme.SPACE_3, Theme.SPACE_4);
-        Image glyph = new Image(ui.icon(SetSkills.icon(rocket.associatedSkill())), Scaling.fit);
-        glyph.setColor(Theme.NAVY);
-        row.add(glyph).size(40f).padRight(Theme.SPACE_4);
+        addRocketPicture(row, rocket);
 
         Table about = new Table();
         about.left();

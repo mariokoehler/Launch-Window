@@ -56,7 +56,7 @@ public final class HelpOverlay {
     private final Table text = new Table();
     private final ScrollPane listScroll;
     private final ScrollPane textScroll;
-    private Help.Context context;
+    private Help.Scope context;
     private String selected;
     /** Set while the reset empties the field, so that doesn't count as the player typing. */
     private boolean resetting;
@@ -67,11 +67,12 @@ public final class HelpOverlay {
      * @param host    the screen it opens over
      * @param context where it was opened from, or {@code null} for every topic
      */
-    HelpOverlay(SessionScreen host, Help.Context context) {
+    HelpOverlay(SessionScreen host, Help.Scope context) {
         this.host = host;
         this.game = host.game;
         this.ui = host.ui;
-        this.values = HelpValues.of(host.session.gameInfo().response().budgetSchedule());
+        this.values = HelpValues.of(host.session.gameInfo().response().budgetSchedule(),
+            host.session.catalog().buildings());
         this.context = context;
         search = ui.searchField("Search the rules");
         search.addListener(new ChangeListener() {
@@ -140,6 +141,15 @@ public final class HelpOverlay {
             refresh();
         }
         textScroll.setScrollY(0f);
+    }
+
+    /**
+     * Scrolls the topic list to its end, for the screenshot tool to show the last groups.
+     */
+    public void scrollListToEnd() {
+        listScroll.layout();
+        listScroll.setScrollPercentY(1f);
+        listScroll.updateVisualScroll();
     }
 
     /**

@@ -444,7 +444,7 @@
         "skill": "TRAJECTORY_AND_GNC"
       }
     ],
-    "cost": 488,
+    "cost": 580,
     "firstTimePrestige": 500,
     "goalDependencies": [],
     "goalBoosts": [

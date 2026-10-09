@@ -10,6 +10,8 @@ import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.actions.LaunchMissionAction;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.ChemistryIndicator;
+import de.mkoehler.launchwindow.client.ui.HistoryNote;
+import de.mkoehler.launchwindow.client.ui.HistoryNotes;
 import de.mkoehler.launchwindow.client.ui.Refusals;
 import de.mkoehler.launchwindow.client.ui.RelationshipMarker;
 import de.mkoehler.launchwindow.client.ui.SkillBar;
@@ -304,6 +306,9 @@ public final class AssembleMissionScreen extends ChromeScreen {
             if (rocketId == null) {
                 row.add(ui.label("Launch " + (launch + 1) + " · no rocket can fly it", Theme.TextStyle.BODY_STRONG,
                     Theme.DANGER)).left();
+            } else if (rocketId.isEmpty()) {
+                row.add(ui.label("Launch " + (launch + 1) + " · air drop, no rocket", Theme.TextStyle.BODY_STRONG,
+                    Theme.INK)).left();
             } else {
                 MissionComponent rocket = session.catalog().missionComponent(rocketId).orElseThrow();
                 Image glyph = new Image(ui.icon(SetSkills.icon(rocket.associatedSkill())), Scaling.fit);
@@ -312,7 +317,7 @@ public final class AssembleMissionScreen extends ChromeScreen {
                 row.add(ui.label("Launch " + (launch + 1) + " · " + ContentNames.of(rocketId),
                     Theme.TextStyle.BODY_STRONG, Theme.INK)).expandX().left();
                 double spare = rocket.payloadCapacity(configuration.launches().get(launch).launchType())
-                    - MissionLaunch.payloadMass(configuration.launches().get(launch), session.catalog());
+                    - MissionLaunch.requiredLift(configuration.launches().get(launch), session.catalog());
                 row.add(ui.label(String.format(Locale.ROOT, "%.1f%% · %,.0f kg spare", session.state()
                     .getMissionComponents().get(rocketId).getCurrentReliability(), Math.max(0, spare)),
                     Theme.TextStyle.BODY_SM, Theme.INK_MUTED));
@@ -345,7 +350,7 @@ public final class AssembleMissionScreen extends ChromeScreen {
         long total = configuration.cost();
         for (int launch = 0; launch < draft.rocketIds().size(); launch++) {
             String rocketId = draft.rocketIds().get(launch);
-            if (rocketId != null) {
+            if (rocketId != null && !rocketId.isEmpty()) {
                 long unit = session.catalog().missionComponent(rocketId).orElseThrow().unitCost();
                 lines.add(new Programs.PriceLine(ContentNames.of(rocketId) + ", launch " + (launch + 1)
                     + ", unit cost", unit, null));
@@ -411,7 +416,11 @@ public final class AssembleMissionScreen extends ChromeScreen {
         card.top();
         card.defaults().growX().left();
         Table head = new Table();
-        head.add(ui.label("Mission control", Theme.TextStyle.HEADING_SM, Theme.INK)).left().padRight(Theme.SPACE_4);
+        head.add(ui.label("Mission control", Theme.TextStyle.HEADING_SM, Theme.INK)).left()
+            .padRight(Missions.capcomCount(configuration) > 0 ? Theme.SPACE_2 : Theme.SPACE_4);
+        if (Missions.capcomCount(configuration) > 0) {
+            head.add(new HistoryNote(ui, HistoryNotes.CAPCOM)).size(HistoryNote.ICON_SIZE).padRight(Theme.SPACE_4);
+        }
         int used = configuration.usedControlSlots().size();
         head.add(ui.label(configuration.controlSlots().size() + " consoles, " + used + " used", Theme.TextStyle.CAPTION,
             Theme.INK_MUTED)).expandX().left();

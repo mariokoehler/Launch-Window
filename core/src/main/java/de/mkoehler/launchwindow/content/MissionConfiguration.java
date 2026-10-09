@@ -53,6 +53,10 @@ import java.util.TreeSet;
  *                           cancellation restores, 0-100
  * @param animalPassengers   the animals the flight carries, remembered on the memorial when
  *                           they're lost; {@code null} for none (2026-10-05)
+ * @param requiredGoalIds    goals the player must have achieved or cancelled before this
+ *                           configuration can fly, a hard gate (BASPM's
+ *                           {@code StrictGoalDependency}, 2026-10-08): the X-15's research flights
+ *                           after its flight test, say. Missing means none
  * @author Mario Koehler
  */
 public record MissionConfiguration(String id, String programId, List<MissionSeason> seasons,
@@ -60,7 +64,33 @@ public record MissionConfiguration(String id, String programId, List<MissionSeas
                                     long firstTimePrestige, List<GoalModifier> goalDependencies,
                                     List<GoalModifier> goalBoosts, List<Launch> launches,
                                     long cancellationPrestigeDeduction, int cancellationRefundPercent,
-                                    AnimalPassengers animalPassengers) {
+                                    AnimalPassengers animalPassengers, List<String> requiredGoalIds) {
+
+    /**
+     * The form without a goal gate, as every configuration had before the full tree.
+     *
+     * @param id                            the id
+     * @param programId                     the program
+     * @param seasons                       the seasons
+     * @param crewSlots                     the flight-crew layout
+     * @param controlSlots                  the mission-control layout
+     * @param cost                          the launch cost
+     * @param firstTimePrestige             the first flight's prestige
+     * @param goalDependencies              reliability penalties
+     * @param goalBoosts                    reliability bonuses
+     * @param launches                      the launches
+     * @param cancellationPrestigeDeduction the prestige lost on an in-flight cancellation
+     * @param cancellationRefundPercent     the refund on an in-flight cancellation
+     * @param animalPassengers              the animals aboard, or {@code null}
+     */
+    public MissionConfiguration(String id, String programId, List<MissionSeason> seasons, List<String> crewSlots,
+                                List<StaffingSlot> controlSlots, long cost, long firstTimePrestige,
+                                List<GoalModifier> goalDependencies, List<GoalModifier> goalBoosts,
+                                List<Launch> launches, long cancellationPrestigeDeduction,
+                                int cancellationRefundPercent, AnimalPassengers animalPassengers) {
+        this(id, programId, seasons, crewSlots, controlSlots, cost, firstTimePrestige, goalDependencies, goalBoosts,
+            launches, cancellationPrestigeDeduction, cancellationRefundPercent, animalPassengers, List.of());
+    }
 
     /**
      * The form without animal passengers, as every configuration had before they existed.
@@ -84,7 +114,7 @@ public record MissionConfiguration(String id, String programId, List<MissionSeas
                                 List<Launch> launches, long cancellationPrestigeDeduction,
                                 int cancellationRefundPercent) {
         this(id, programId, seasons, crewSlots, controlSlots, cost, firstTimePrestige, goalDependencies, goalBoosts,
-            launches, cancellationPrestigeDeduction, cancellationRefundPercent, null);
+            launches, cancellationPrestigeDeduction, cancellationRefundPercent, (AnimalPassengers) null);
     }
 
     /**
@@ -207,7 +237,8 @@ public record MissionConfiguration(String id, String programId, List<MissionSeas
 
     /**
      * One launch: where it goes, and which payloads ride on it. The rocket is the
-     * player's choice at launch time ({@code baspm.md} &sect;10.9).
+     * player's choice at launch time ({@code baspm.md} &sect;10.9), except on an
+     * {@link LaunchType#AIR_DROP}, which has none.
      *
      * @param launchType          the destination, and whether the launch is crewed
      * @param payloadComponentIds the payload components this launch carries; never empty
@@ -399,6 +430,7 @@ public record MissionConfiguration(String id, String programId, List<MissionSeas
         goalDependencies = List.copyOf(goalDependencies);
         goalBoosts = List.copyOf(goalBoosts);
         launches = List.copyOf(launches);
+        requiredGoalIds = requiredGoalIds == null ? List.of() : List.copyOf(requiredGoalIds);
         for (MissionSeason season : seasons) {
             for (MissionStep step : season.steps()) {
                 for (MissionStep.ControllerInvolvement involvement : step.controllerInvolvements()) {

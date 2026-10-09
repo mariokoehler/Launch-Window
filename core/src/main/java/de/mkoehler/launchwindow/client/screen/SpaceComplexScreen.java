@@ -20,6 +20,8 @@ import de.mkoehler.launchwindow.client.ClientSession;
 import de.mkoehler.launchwindow.client.connect.ServerResult;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.Theme;
+import de.mkoehler.launchwindow.client.view.Advisor;
+import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.Hub;
 import de.mkoehler.launchwindow.client.view.Tips;
 import de.mkoehler.launchwindow.model.Building;
@@ -62,12 +64,16 @@ public final class SpaceComplexScreen extends SessionScreen {
     private static final float IDLE_MARKER_ICON = 20f;
     /** The most height a tall, narrow marker icon (the VAB's rocket) may use inside the disc. */
     private static final float TALL_MARKER_ICON = 26f;
+    /** The advisor card's width. */
+    private static final float ADVISOR_WIDTH = 380f;
 
     private final List<Hub.Hotspot> hotspots;
     private final Hub.TimeOfDay timeOfDay;
     private final Image art = new Image();
     private final HotspotLayer layer = new HotspotLayer();
     private final Table strip = new Table();
+    /** The advisor's corner: bottom left, clear of every building's marker on both agencies' art. */
+    private final Table advisorCorner = new Table();
     private boolean resolving;
     private final Label countdown;
     private final ShapeRenderer shapes = new ShapeRenderer();
@@ -103,6 +109,8 @@ public final class SpaceComplexScreen extends SessionScreen {
         stack.add(art);
         stack.add(layer);
         stack.add(overlay);
+        advisorCorner.bottom().left().pad(0f, Theme.SPACE_6, Theme.SPACE_6, 0f);
+        stack.add(advisorCorner);
         root.add(stack).grow();
         rebuild();
         if (unreadReport && game.reportUnread()) {
@@ -164,6 +172,139 @@ public final class SpaceComplexScreen extends SessionScreen {
             timeOfDay));
         art.setDrawable(picture);
         rebuildStrip(state);
+        rebuildAdvisor(state);
+    }
+
+    /**
+     * Builds the advisor's card ({@code ui-spec.md} component 24): the next things a new agency
+     * should do, until there are none left, when it retires for good.
+     */
+    private void rebuildAdvisor(PlayerSnapshot state) {
+        advisorCorner.clearChildren();
+        // Nothing to advise on once the game is decided.
+        if (game.advisorRetired() || session.gameInfo().response().decided()) {
+            return;
+        }
+        Advisor.Marks marks = new Advisor.Marks(game.helpOpened(), session.latestResolvedTurn() >= 1,
+            game.advisorReportRead());
+        if (Advisor.finished(state, session.catalog(), marks)) {
+            game.retireAdvisor();
+            return;
+        }
+        List<Advisor.Item> open = Advisor.open(state, session.catalog(), marks);
+        float inner = ADVISOR_WIDTH - 2 * Theme.SPACE_4;
+
+        Table card = new Table();
+        // Touchable itself, so the hotspots underneath never take a click through its gaps.
+        card.setTouchable(Touchable.enabled);
+        card.setBackground(ui.rect(Theme.SURFACE_CARD, Theme.NAVY, Theme.BORDER_EMPHASIS));
+        card.top().left();
+        Table head = new Table();
+        head.setBackground(ui.solid(Theme.NAVY));
+        head.pad(8f, Theme.SPACE_4, 8f, Theme.SPACE_4);
+        head.add(ui.label("ADVISOR", Theme.TextStyle.EYEBROW, Theme.ON_FILL)).left().expandX();
+        head.add(ui.label("Your first seasons", Theme.TextStyle.CAPTION, DIRECTOR)).right();
+        card.add(head).growX().row();
+
+        Table body = new Table();
+        body.top().left();
+        body.pad(Theme.SPACE_4, Theme.SPACE_4, Theme.SPACE_3, Theme.SPACE_4);
+        if (open.isEmpty()) {
+            Advisor.Item next = Advisor.later(state, session.catalog(), marks).get(0);
+            body.add(ui.label("All set for now", Theme.TextStyle.BODY_STRONG, Theme.INK)).left().row();
+            body.add(ui.paragraph("Once the turn resolves: " + next.title().toLowerCase(java.util.Locale.ROOT)
+                + ".", Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).width(inner).left().padBottom(Theme.SPACE_3).row();
+        } else {
+            for (int i = 0; i < Math.min(Advisor.SHOWN, open.size()); i++) {
+                body.add(advisorItem(open.get(i), inner)).width(inner).left().padBottom(Theme.SPACE_3).row();
+            }
+            if (open.size() > Advisor.SHOWN) {
+                int more = open.size() - Advisor.SHOWN;
+                body.add(ui.label(more + (more == 1 ? " more thing" : " more things") + " after these.",
+                    Theme.TextStyle.CAPTION, Theme.INK_MUTED)).left().padBottom(Theme.SPACE_3).row();
+            }
+        }
+        Table rule = new Table();
+        rule.setBackground(ui.solid(Theme.NAVY_BORDER));
+        body.add(rule).width(inner).height(1f).padBottom(Theme.SPACE_3).row();
+        body.add(ui.paragraph("There's no button to end a turn: your orders stand, and the turn resolves on its own "
+            + "when the countdown runs out.", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).width(inner).left()
+            .padBottom(Theme.SPACE_2).row();
+        Label ropes = ui.label("I KNOW THE ROPES · HIDE THE ADVISOR", Theme.TextStyle.LABEL, Theme.NAVY);
+        ropes.setTouchable(Touchable.enabled);
+        ropes.addListener(clicked(() -> {
+            game.retireAdvisor();
+            rebuildAdvisor(session.state());
+        }));
+        body.add(ropes).right();
+        card.add(body).width(ADVISOR_WIDTH).row();
+        advisorCorner.add(card).width(ADVISOR_WIDTH);
+    }
+
+    private Table advisorItem(Advisor.Item item, float width) {
+        Table row = new Table();
+        row.top().left();
+        Table text = new Table();
+        text.top().left();
+        text.add(ui.label(item.title(), Theme.TextStyle.BODY_STRONG, Theme.INK)).left().row();
+        text.add(ui.paragraph(item.text(), Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).width(width - 4f).left()
+            .padBottom(Theme.SPACE_1).row();
+        String progress = Advisor.progress(item, session.state(), session.catalog());
+        if (progress != null) {
+            text.add(ui.label(progress, Theme.TextStyle.BODY_SM, Theme.NAVY)).left().padBottom(Theme.SPACE_1).row();
+        }
+        Table links = new Table();
+        if (item.destination() != Advisor.Destination.HELP) {
+            Label go = ui.label(item.go().toUpperCase(java.util.Locale.ROOT) + "  ›", Theme.TextStyle.LABEL,
+                Theme.NAVY);
+            go.setTouchable(Touchable.enabled);
+            go.addListener(clicked(() -> go(Advisor.destination(item, session.state(), session.catalog()))));
+            links.add(go).padRight(Theme.SPACE_4);
+        }
+        Table rules = new Table();
+        rules.setTouchable(Touchable.enabled);
+        Image glyph = new Image(ui.icon("help"), Scaling.fit);
+        glyph.setColor(Theme.NAVY);
+        rules.add(glyph).size(12f).padRight(4f);
+        rules.add(ui.label(item.destination() == Advisor.Destination.HELP ? "OPEN HELP" : "RULES",
+            Theme.TextStyle.LABEL, Theme.NAVY));
+        // The item's own topics, the chip naming the item ("2 topics for "Hire engineers"").
+        rules.addListener(clicked(() -> openHelp(advisorTopics(item))));
+        links.add(rules);
+        text.add(links).left();
+        row.add(text).width(width).left();
+        return row;
+    }
+
+    @Override
+    public void closeHelp() {
+        super.closeHelp();
+        // Opening help was one of the advisor's items.
+        rebuildAdvisor(session.state());
+    }
+
+    /**
+     * Returns the help topics an advisor item's "Rules" link opens on.
+     *
+     * @param item the item
+     * @return its topics, named after it
+     */
+    public static Help.Topics advisorTopics(Advisor.Item item) {
+        return new Help.Topics("\"" + item.title() + "\"", item.topicIds());
+    }
+
+    private void go(Advisor.Destination destination) {
+        switch (destination) {
+            case HELP -> openHelp();
+            case SET_CENTRE -> goSetCentre();
+            case HEADQUARTERS -> goHeadquarters();
+            case VAB -> goVab();
+            case RND -> game.setScreen(new RndBoardScreen(game, RndBoardScreen.Board.PAYLOAD));
+            case ROCKET_RND -> game.setScreen(new RndBoardScreen(game, RndBoardScreen.Board.ROCKET));
+            case MISSION_CONTROL -> goMissionControl();
+            case ASTRONAUT_COMPLEX -> goAstronautComplex();
+            case TURN_REPORT -> openLatestReport(null);
+        }
     }
 
     private void rebuildStrip(PlayerSnapshot state) {

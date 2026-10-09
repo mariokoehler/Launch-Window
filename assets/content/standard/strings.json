@@ -1,0 +1,3000 @@
+{
+  "categories": {
+    "earth-orbit-satellites": {
+      "name": "Earth-orbit satellites",
+      "description": "Small uncrewed satellites: the first step into orbit, and the first test of what space does to living things."
+    },
+    "one-crew-capsules": {
+      "name": "One-person capsules",
+      "description": "Capsules for a single pilot: the first flights to carry a person into space and bring them home."
+    },
+    "lunar-probes": {
+      "name": "Lunar probes",
+      "description": "Uncrewed craft sent to the Moon: to fly past it, strike it, circle it, land on it and bring back its soil."
+    },
+    "sun-probes": {
+      "name": "Sun probes",
+      "description": "Spacecraft in their own orbits around the Sun, measuring the solar wind and the magnetic fields it carries."
+    },
+    "mercury-probes": {
+      "name": "Mercury probes",
+      "description": "A probe to the innermost planet, reached by swinging past Venus on the way in."
+    },
+    "venus-probes": {
+      "name": "Venus probes",
+      "description": "Craft for the planet hidden under clouds: flybys, orbiters with radar, and landers built to survive crushing pressure and furnace heat."
+    },
+    "mars-probes": {
+      "name": "Mars probes",
+      "description": "Flybys, orbiters and landers for the red planet, launched when Earth and Mars line up about every two years."
+    },
+    "jupiter-probes": {
+      "name": "Jupiter probes",
+      "description": "The first craft to cross the asteroid belt and fly through the radiation around the largest planet."
+    },
+    "saturn-probes": {
+      "name": "Saturn probes",
+      "description": "A probe bent onto a path to Saturn by Jupiter's gravity, for the first close look at the rings."
+    },
+    "space-planes": {
+      "name": "Space planes",
+      "description": "Winged craft that fly to the edge of space and land on a runway, carried aloft by an aircraft or launched on a rocket."
+    },
+    "two-crew-capsules": {
+      "name": "Two-crew capsules",
+      "description": "Capsules for two or three people, built to learn what a trip to the Moon needs: long flights, spacewalks, rendezvous and docking."
+    },
+    "lunar-expeditions": {
+      "name": "Lunar expeditions",
+      "description": "Crewed flights to the Moon: around it, into orbit about it, and down to its surface and back."
+    },
+    "three-crew-capsules": {
+      "name": "Three-crew capsules",
+      "description": "The lunar spacecraft proved in Earth orbit first: long flights, spacewalks, and their landers flown and docked close to home."
+    }
+  },
+  "programs": {
+    "sputnik-1": {
+      "name": "Sputnik 1",
+      "description": "The simplest satellite that could still make history: a polished sphere with a radio transmitter that anyone with a receiver can hear. Fly it to show the world your agency can reach orbit.",
+      "historyNote": "Sputnik 1 was a stopgap. Korolev's bureau was building a much heavier science satellite, Object D, but it was running late and the R-7 was falling short of its planned performance. Korolev pushed for PS-1 instead, short for 'simplest satellite', and it was built in a few months. Object D flew the following May, as Sputnik 3."
+    },
+    "sputnik-2": {
+      "name": "Sputnik 2",
+      "description": "A heavier satellite with a sealed cabin for a passenger: the first animal in orbit. There is no way to bring the passenger home.",
+      "historyNote": "Sputnik 2 was ordered in time for the 40th anniversary of the October Revolution, which left the engineers about four weeks. Its passenger, a stray dog named Laika, could not come home. For decades the official story was that she lived for days in orbit. In 2002 a Russian scientist revealed that her cabin had overheated and she died within hours of launch."
+    },
+    "korabl-sputnik-2": {
+      "name": "Korabl-Sputnik 2",
+      "description": "A Vostok capsule flown without a pilot, carrying two dogs, mice, rats and plants, and bringing them all back. It proves the capsule can keep living things alive in orbit and return them safely.",
+      "historyNote": "In August 1960 the dogs Belka and Strelka became the first animals to orbit the Earth and come back alive, after about a day in space. Strelka later had puppies. Khrushchev gave one of them, Pushinka, to Caroline Kennedy, and Pushinka went on to raise puppies of her own at the White House."
+    },
+    "vostok": {
+      "name": "Vostok",
+      "description": "A ball-shaped capsule for one cosmonaut, flown mostly by its automatics. It can make short hops or stay in orbit for days, and its pilot leaves by ejection seat before landing.",
+      "historyNote": "On 12 April 1961, Vostok 1 carried Yuri Gagarin once around the Earth in 108 minutes. He did not land in the capsule: he ejected at about 7 km and came down under his own parachute. Soviet officials kept that quiet for years, because the rules for an official flight record required the pilot to land with his craft."
+    },
+    "explorer-1": {
+      "name": "Explorer 1",
+      "description": "A small, light satellite packed with instruments instead of mass: a cosmic-ray counter, temperature sensors and a micrometeorite detector. What it measures matters as much as reaching orbit.",
+      "historyNote": "America's first planned satellite was the Navy's Vanguard, picked because it wasn't a missile program. After Sputnik, the first Vanguard attempt, shown on television in December 1957, rose a little over a meter and exploded. The Army's rocket team under Wernher von Braun, with JPL building the satellite, had Explorer 1 in orbit within two months, on 31 January 1958."
+    },
+    "mercury": {
+      "name": "Project Mercury",
+      "description": "America's first crewed spacecraft: a cone-shaped capsule for one astronaut, flown first on short suborbital hops, then in orbit. Unlike Vostok, the astronaut stays aboard and splashes down at sea.",
+      "historyNote": "During John Glenn's orbital flight in February 1962, a sensor suggested that Friendship 7's heat shield had come loose. Mission Control told him to keep the retrorocket pack strapped on through reentry, in the hope that its straps would hold the shield in place. He came home safely. The warning turned out to come from a faulty switch."
+    },
+    "pegasus": {
+      "name": "Pegasus",
+      "description": "A satellite with huge folding panels that count the specks of dust that hit them, to show how often a spacecraft would be struck by micrometeoroids.",
+      "historyNote": "Three Pegasus satellites flew in 1965 on Saturn I rockets. Their detector wings spanned about 29 meters and rode up folded inside a dummy Apollo service module. Engineers feared micrometeoroids could puncture an Apollo spacecraft's skin; Pegasus counted the hits so designers knew what they were up against."
+    },
+    "biosatellite": {
+      "name": "Biosatellite",
+      "description": "A recoverable capsule carrying plants, insects and other small organisms, to study how living things grow and change in weightlessness.",
+      "historyNote": "Biosatellite II came home in 1967 after 45 hours, about a day early, because a tropical storm threatened the recovery area; an aircraft caught its capsule. Biosatellite III carried a macaque named Bonny on a flight planned for 30 days. After about nine days he stopped eating and drinking, NASA brought him down early, and he died soon after."
+    },
+    "orbiting-frog-otolith": {
+      "name": "Orbiting Frog Otolith",
+      "description": "A small satellite carrying two frogs wired up to record the organs of balance in their inner ears, to learn how weightlessness confuses the sense of up and down.",
+      "historyNote": "NASA launched the Orbiting Frog Otolith on 9 November 1970 on a Scout rocket. Electrodes in the two bullfrogs' balance nerves recorded how the inner ear coped with weightlessness, and with spells of artificial gravity from a small centrifuge, for almost a week. The frogs were never meant to come back."
+    },
+    "pioneer-4": {
+      "name": "Pioneer 4",
+      "description": "A small probe sent past the Moon and on into orbit around the Sun, the first American craft to escape the Earth's gravity.",
+      "historyNote": "Pioneer 4, launched on 3 March 1959 on a Juno II, was the first American spacecraft to escape the Earth's gravity. Its second stage burned too long, so it passed about 60,000 km from the Moon, too far for its sensor to trigger. It sent data for 82 hours and still circles the Sun."
+    },
+    "zond-5": {
+      "name": "Zond 5",
+      "description": "An uncrewed lunar capsule with living passengers aboard, flown around the Moon and brought home through the atmosphere at lunar return speed.",
+      "historyNote": "In September 1968 Zond 5 carried two steppe tortoises, fruit fly eggs and plants around the Moon and splashed down in the Indian Ocean, where Soviet ships recovered it. The tortoises were the first vertebrates to go around the Moon and come home. Apollo 8 took the first people there three months later."
+    },
+    "ranger-3": {
+      "name": "Ranger 3",
+      "description": "A probe aimed straight at the Moon, taking pictures all the way down until it strikes the surface.",
+      "historyNote": "Ranger 3 launched in January 1962. A guidance fault gave it too much speed: it reached the Moon 14 hours early and missed it by about 37,000 km. Its television camera and its seismometer capsule, meant to survive the crash and keep reporting, never got to work."
+    },
+    "luna-2": {
+      "name": "Luna 2",
+      "description": "A probe aimed to hit the Moon: the first human-made object to reach another world.",
+      "historyNote": "On 13 September 1959 Luna 2 struck the Moon east of Mare Imbrium, the first human-made object to reach another world. It carried two balls of small metal pentagons bearing the Soviet coat of arms, built to scatter on impact. Khrushchev gave a copy to President Eisenhower."
+    },
+    "pioneer-2": {
+      "name": "Pioneer 2",
+      "description": "An early lunar orbiter, small enough for the rockets of its day, with a camera and instruments for radiation and magnetism."
+    },
+    "lunar-orbiter": {
+      "name": "Lunar Orbiter",
+      "description": "A camera platform in lunar orbit that develops its own film on board and scans the pictures for radio, to map landing sites.",
+      "historyNote": "Five Lunar Orbiters flew in 1966 and 1967 to photograph possible Apollo landing sites, and all five worked. Each developed its film on board, scanned it and radioed the pictures home. When their work was done, each was deliberately crashed into the Moon."
+    },
+    "surveyor": {
+      "name": "Surveyor",
+      "description": "A three-legged robot lander that brakes with a rocket and settles softly onto the Moon, to prove the ground can carry a spacecraft.",
+      "historyNote": "Surveyor 3 landed in April 1967. In November 1969 Apollo 12 set down less than 200 meters away, and Pete Conrad and Alan Bean walked over and brought back its television camera and other parts, so engineers could see what more than two years on the Moon had done to them."
+    },
+    "luna-15": {
+      "name": "Luna 15",
+      "description": "A robot lander with a drill and a small return rocket, meant to scoop up lunar soil and fly it back to Earth.",
+      "historyNote": "Luna 15 was the last Soviet chance to bring lunar soil home before Apollo 11. It was still in lunar orbit when Armstrong and Aldrin landed, and it crashed in Mare Crisium on 21 July 1969 while they were on the surface. A robot sample return finally succeeded with Luna 16 in 1970."
+    },
+    "luna-3": {
+      "name": "Luna 3",
+      "description": "A probe that swings behind the Moon and photographs the side that never faces the Earth.",
+      "historyNote": "On 7 October 1959 Luna 3 took 29 photographs of the far side of the Moon in about 40 minutes, developed the film on board, and later scanned 17 of them for radio. Rough as they were, they showed mountainous ground quite unlike the side we see."
+    },
+    "luna-17": {
+      "name": "Luna 17",
+      "description": "A lander that lowers ramps and sends a remote-controlled rover out to drive across the Moon.",
+      "historyNote": "Lunokhod 1 rolled down Luna 17's ramps on 17 November 1970. Built to last three lunar days, it worked through eleven and drove about 10.5 km, steered by drivers on Earth through a delay of several seconds. Its operations ended on 4 October 1971, the anniversary of Sputnik 1."
+    },
+    "pioneer-sun-orbiter": {
+      "name": "Pioneer Sun orbiter",
+      "description": "Spin-stabilized probes placed in their own orbits around the Sun, to measure the solar wind and space weather between the planets.",
+      "historyNote": "Pioneer 6 was launched in December 1965 to watch the solar wind from its own orbit around the Sun. It far outlived its design: on 8 December 2000 controllers made contact once more, 35 years after launch, the last time anyone heard from it."
+    },
+    "mariner-10": {
+      "name": "Mariner 10",
+      "description": "A probe that uses Venus's gravity to fall inward to Mercury: the first flight to use one planet to reach another.",
+      "historyNote": "Mariner 10 flew past Venus on 5 February 1974, the first spacecraft to use one planet's gravity to reach another. The flyby bent its path inward, and it passed Mercury three times in 1974 and 1975, the first time at 703 km. The technique had been worked out on paper decades before."
+    },
+    "mariner-5": {
+      "name": "Mariner 5",
+      "description": "A flyby probe passing close to Venus, studying its atmosphere with radio signals that skim through it.",
+      "historyNote": "Mariner 5 flew past Venus on 19 October 1967, a day after the Soviet Venera 4 dropped a capsule into its atmosphere. Scientists from both countries published the two missions' results together, a rare joint effort in the middle of the space race."
+    },
+    "pioneer-venus-orbiter": {
+      "name": "Pioneer Venus Orbiter",
+      "description": "An orbiter that maps Venus's surface through the clouds by radar and watches its upper atmosphere for years."
+    },
+    "venera-15": {
+      "name": "Venera 15",
+      "description": "An orbiter with a large side-looking radar, mapping Venus's northern hemisphere in detail.",
+      "historyNote": "Venera 15 reached Venus in October 1983, with its twin Venera 16. Their side-looking radars mapped the northern hemisphere from the pole to about 30 degrees north, and American and Soviet scientists later turned the data into joint maps."
+    },
+    "pioneer-venus-multiprobe": {
+      "name": "Pioneer Venus Multiprobe",
+      "description": "A carrier that releases one large and three small probes, which fall through Venus's atmosphere at widely spaced points and radio back what they find.",
+      "historyNote": "On 9 December 1978 one large and three small probes, named North, Day and Night, fell into Venus's atmosphere. None was built to survive hitting the ground, but the Day probe did, and it kept sending temperatures from the surface for 67 minutes until its batteries ran out."
+    },
+    "venera-7": {
+      "name": "Venera 7",
+      "description": "A heavily armored lander built to survive the heat and pressure at Venus's surface long enough to send data home.",
+      "historyNote": "On 15 December 1970 Venera 7's parachute failed and it hit Venus at about 60 km/h, coming to rest on its side. Controllers thought it had died, but weeks later the recordings showed a faint signal: it had reported about 475 degrees Celsius for some 23 minutes, the first data from the surface of another planet."
+    },
+    "venera-lander": {
+      "name": "Venera lander",
+      "description": "A carrier craft and a lander travel together to Venus; the lander dives to the surface while the carrier relays its signal.",
+      "historyNote": "Venera 9 landed on 22 October 1975 and sent back the first picture ever taken on the surface of another planet: jagged rocks on a layer of dust. A lens cap stayed on, so only half the planned view came through. The lander lasted about 53 minutes, and its carrier became the first spacecraft to orbit Venus."
+    },
+    "mariner-6": {
+      "name": "Mariner 6",
+      "description": "A flyby probe passing close over Mars and photographing its surface and atmosphere."
+    },
+    "mariner-9": {
+      "name": "Mariner 9",
+      "description": "The first spacecraft to orbit another planet, mapping Mars from pole to pole.",
+      "historyNote": "Mariner 9 reached Mars on 14 November 1971, the first spacecraft to orbit another planet, and found it hidden by a planet-wide dust storm. Only Olympus Mons and three other volcanoes showed above the haze. JPL put the mapping off until the dust settled, and Mariner 9 went on to map most of Mars."
+    },
+    "viking": {
+      "name": "Viking",
+      "description": "An orbiter and a lander: the orbiter surveys Mars and picks the site, the lander searches the soil for signs of life.",
+      "historyNote": "Viking 1 landed on 20 July 1976. Its Labeled Release experiment fed soil samples nutrients laced with radioactive carbon and watched for gas, and the first result looked positive. Other tests found no organic molecules, and most scientists blame reactive chemicals in the soil, but the experiment's designer maintained it had found life."
+    },
+    "mars-2": {
+      "name": "Mars 2",
+      "description": "An orbiter carrying a lander, which carries a small rover on skis to step across the surface.",
+      "historyNote": "After the Mars 2 lander crashed, Mars 3 made the first soft landing on Mars on 2 December 1971, in the middle of a planet-wide dust storm. It began sending a picture and fell silent within seconds. Its small rover, meant to walk on two skis at the end of a 15-meter cable, never left the lander."
+    },
+    "mars-m69": {
+      "name": "Mars M-69",
+      "description": "A heavy Mars orbiter designed for the new Proton rocket, with cameras and instruments to study the planet from orbit.",
+      "historyNote": "Both Mars M-69 orbiters were lost in 1969, on 27 March and 2 April, when their Proton rockets failed. The project was already late and overweight, and its lander had been dropped from the design before launch."
+    },
+    "pioneer-10": {
+      "name": "Pioneer 10",
+      "description": "A probe sent through the asteroid belt to Jupiter, and on out of the Solar System.",
+      "historyNote": "Pioneer 10, launched on 2 March 1972, was the first spacecraft to cross the asteroid belt and to fly past Jupiter, on 3 December 1973. It carries a plaque showing where the Earth is, in case anyone ever finds it. Its last signal reached Earth in 2003."
+    },
+    "pioneer-11": {
+      "name": "Pioneer 11",
+      "description": "A probe that flies past Jupiter and uses its gravity to swing across to Saturn.",
+      "historyNote": "Pioneer 11 flew past Jupiter in 1974, and Jupiter's gravity swung it onto a path to Saturn, which it reached in 1979, the first spacecraft there. In 1995 its power ran too low to work its instruments."
+    },
+    "x-15": {
+      "name": "X-15",
+      "description": "A rocket plane dropped from under the wing of a bomber, flying faster and higher than any aircraft before it, to the edge of space and back to a dry lakebed.",
+      "historyNote": "Three X-15s made 199 flights between 1959 and 1968, carried aloft under the wing of a B-52. Joe Walker flew one to 354,200 feet, about 108 km, in August 1963, and in 1967 Pete Knight reached Mach 6.7, about 4,520 mph, in the modified X-15A-2."
+    },
+    "mig-e-154": {
+      "name": "OKB-MiG E-154",
+      "description": "A rocket-powered interceptor stretched into a space plane by the MiG design bureau: dropped from a carrier aircraft first, then launched on a rocket into orbit.",
+      "historyNote": "The E-154 is our own invention, in place of a more futuristic space plane in the game that inspired this one. The real Mikoyan bureau did design a Soviet space plane, Spiral, but only its subsonic test craft, the MiG-105, was built. It made eight flights between 1976 and 1978."
+    },
+    "gemini": {
+      "name": "Gemini",
+      "description": "A two-person capsule built to master what a Moon landing needs: long flights, spacewalks, and rendezvous and docking with another craft.",
+      "historyNote": "Gemini 8 made the first docking of two spacecraft, with an Agena, in March 1966. Soon after, a thruster on the capsule stuck and set the pair rolling. Neil Armstrong and David Scott undocked, the capsule spun up to a turn a second, and Armstrong stopped it with the reentry thrusters, which forced an early landing in the Pacific."
+    },
+    "circumlunar-gemini-earth-orbit": {
+      "name": "Circumlunar Gemini: Earth-orbit tests",
+      "description": "Tests close to home for a Gemini sent around the Moon: a heat shield for lunar return speed, and the Transtage that would push it there.",
+      "historyNote": "McDonnell proposed flying Gemini to the Moon in 1961, before the program even had its name. Its ideas ranged from a capsule pushed around the Moon by a Centaur stage, docking with the gear built for the Agena, to a Gemini modified to land. NASA kept the Moon for Apollo, and none of them flew."
+    },
+    "lunar-orbital-gemini-earth-orbit": {
+      "name": "Lunar-orbit Gemini: Earth-orbit tests",
+      "description": "Tests in Earth orbit for a Gemini that could brake into lunar orbit: its heat shield and the propulsion module behind it.",
+      "historyNote": "McDonnell proposed flying Gemini to the Moon in 1961, before the program even had its name. Its ideas ranged from a capsule pushed around the Moon by a Centaur stage, docking with the gear built for the Agena, to a Gemini modified to land. NASA kept the Moon for Apollo, and none of them flew."
+    },
+    "gemini-direct-ascent-earth-orbit": {
+      "name": "Gemini Direct Ascent: Earth-orbit tests",
+      "description": "Tests in Earth orbit for a Gemini that would land on the Moon in one piece, and its landing and ascent modules.",
+      "historyNote": "McDonnell proposed flying Gemini to the Moon in 1961, before the program even had its name. Its ideas ranged from a capsule pushed around the Moon by a Centaur stage, docking with the gear built for the Agena, to a Gemini modified to land. NASA kept the Moon for Apollo, and none of them flew."
+    },
+    "voskhod": {
+      "name": "Voskhod",
+      "description": "The Vostok capsule rebuilt to carry two or three people, and fitted with an inflatable airlock for the first spacewalk.",
+      "historyNote": "Voskhod 1 flew three cosmonauts in October 1964, the first crew of more than one, with no spacesuits: there was no room for them. On Voskhod 2 in March 1965 Alexei Leonov made the first spacewalk, 12 minutes on a 5.35 m tether. His suit ballooned in the vacuum, and he had to let air out of it to squeeze back into the airlock."
+    },
+    "soyuz-7k-l1-earth-orbit": {
+      "name": "Soyuz 7K-L1: Earth-orbit tests",
+      "description": "The stripped-down Soyuz meant to carry two cosmonauts around the Moon, first tested in flights close to Earth.",
+      "historyNote": "The 7K-L1 flew without a crew under the name Zond. In September 1968 Zond 5 went around the Moon and came home with two tortoises aboard, and Apollo 8 carried people around it three months later. No 7K-L1 ever flew a crew."
+    },
+    "soyuz-7k-l3-earth-orbit": {
+      "name": "Soyuz 7K-L3: Earth-orbit tests",
+      "description": "The lunar-orbit Soyuz and its one-person LK lander, tested in Earth orbit before any trip to the Moon.",
+      "historyNote": "The LK lander was tested without a crew in Earth orbit three times, as Kosmos 379, 398 and 434 in 1970 and 1971, firing its engine as if landing on the Moon and lifting off again. The last test qualified it as flightworthy. It never went to the Moon: the N1 rocket meant to carry it never made a successful flight."
+    },
+    "lk-700-earth-orbit": {
+      "name": "LK-700: Earth-orbit tests",
+      "description": "A heavy direct-ascent lunar craft, tested in long flights around the Earth before it heads for the Moon.",
+      "historyNote": "Vladimir Chelomei proposed the LK-700 in 1964 as a simpler path than Korolev's: one craft on his giant UR-700, landing directly on the Moon and returning with no rendezvous. The money went to the N1 instead, the UR-700 was never built, and the LK-700 was cancelled in 1974."
+    },
+    "gemini-eor-earth-orbit": {
+      "name": "Gemini EOR: Earth-orbit tests",
+      "description": "A light lunar lander for Gemini, assembled in Earth orbit, put through its paces close to home."
+    },
+    "circumlunar-gemini": {
+      "name": "Circumlunar Gemini",
+      "description": "A Gemini capsule pushed around the Moon by a Transtage stage it docks with in Earth orbit.",
+      "historyNote": "McDonnell proposed flying Gemini to the Moon in 1961, before the program even had its name. Its ideas ranged from a capsule pushed around the Moon by a Centaur stage, docking with the gear built for the Agena, to a Gemini modified to land. NASA kept the Moon for Apollo, and none of them flew."
+    },
+    "lunar-orbital-gemini": {
+      "name": "Lunar-orbit Gemini",
+      "description": "A Gemini capsule with a propulsion module strong enough to brake into lunar orbit and break out again.",
+      "historyNote": "McDonnell proposed flying Gemini to the Moon in 1961, before the program even had its name. Its ideas ranged from a capsule pushed around the Moon by a Centaur stage, docking with the gear built for the Agena, to a Gemini modified to land. NASA kept the Moon for Apollo, and none of them flew."
+    },
+    "gemini-direct-ascent": {
+      "name": "Gemini Direct Ascent",
+      "description": "One large spacecraft built around Gemini that flies straight to the Moon, lands, and lifts off for home.",
+      "historyNote": "McDonnell proposed flying Gemini to the Moon in 1961, before the program even had its name. Its ideas ranged from a capsule pushed around the Moon by a Centaur stage, docking with the gear built for the Agena, to a Gemini modified to land. NASA kept the Moon for Apollo, and none of them flew."
+    },
+    "apollo": {
+      "name": "Apollo",
+      "description": "A command and service module with a separate lunar module: two astronauts land while the third waits in lunar orbit, and they meet again to fly home.",
+      "historyNote": "Apollo 11 landed on 20 July 1969, and Neil Armstrong and Buzz Aldrin walked on the Moon while Michael Collins waited in orbit. Six Apollo missions landed in all, and twelve astronauts walked on the Moon."
+    },
+    "gemini-eor": {
+      "name": "Gemini EOR",
+      "description": "A Moon landing assembled from parts launched separately and joined in Earth orbit, with a light open lander for the final step down."
+    },
+    "soyuz-7k-l1": {
+      "name": "Soyuz 7K-L1 circumlunar",
+      "description": "A two-person Soyuz flown once around the Moon and straight back, without stopping in lunar orbit.",
+      "historyNote": "The 7K-L1 flew without a crew under the name Zond. In September 1968 Zond 5 went around the Moon and came home with two tortoises aboard, and Apollo 8 carried people around it three months later. No 7K-L1 ever flew a crew."
+    },
+    "soyuz-7k-l3": {
+      "name": "Soyuz 7K-L3 lunar landing",
+      "description": "A lunar-orbit Soyuz and the one-person LK lander: a single cosmonaut goes down while the other stays in orbit.",
+      "historyNote": "The LK lander was tested without a crew in Earth orbit three times, as Kosmos 379, 398 and 434 in 1970 and 1971, firing its engine as if landing on the Moon and lifting off again. The last test qualified it as flightworthy. It never went to the Moon: the N1 rocket meant to carry it never made a successful flight."
+    },
+    "lk-700": {
+      "name": "LK-700 Direct Ascent",
+      "description": "A heavy spacecraft that flies straight to the Moon, lands with its whole crew and returns, launched on the giant UR-700.",
+      "historyNote": "Vladimir Chelomei proposed the LK-700 in 1964 as a simpler path than Korolev's: one craft on his giant UR-700, landing directly on the Moon and returning with no rendezvous. The money went to the N1 instead, the UR-700 was never built, and the LK-700 was cancelled in 1974."
+    },
+    "apollo-earth-orbit": {
+      "name": "Apollo: Earth-orbit tests",
+      "description": "The Apollo spacecraft proved close to home: long flights, spacewalks, and the lunar module flown, separated and docked again in Earth orbit.",
+      "historyNote": "Apollo 9 tested the lunar module in Earth orbit in March 1969. With two crewed craft flying at once, the crew named them Spider and Gumdrop. James McDivitt and Russell Schweickart flew Spider away from Gumdrop and back, proving the lander before it went to the Moon."
+    },
+    "soyuz-7k-ok": {
+      "name": "Soyuz 7K-OK",
+      "description": "The Earth-orbit Soyuz: long flights, and automatic rendezvous and docking guided by the Igla radar system.",
+      "historyNote": "In October 1967 Kosmos 186 and 188 made the first automatic docking, steered by the Igla system with nobody aboard. In January 1969 Soyuz 4 and 5 made the first docking of two crewed craft, and Aleksei Yeliseyev and Yevgeny Khrunov spacewalked across, since there was no tunnel between the ships."
+    }
+  },
+  "components": {
+    "sputnik-1-satellite": {
+      "name": "Sputnik 1 satellite",
+      "description": "A polished aluminum sphere about half a meter across, with four long antennas and a battery-powered transmitter.",
+      "historyNote": "Sputnik 1 only sent a simple beep, for about three weeks until its batteries ran down. Two physicists at Johns Hopkins' Applied Physics Laboratory found they could work out its whole orbit from the Doppler shift of that beep. Their lab then turned the idea around: if you know a satellite's orbit, the same shift tells you where you are. That became Transit, the US Navy's satellite navigation system, an ancestor of GPS."
+    },
+    "sputnik-2-satellite": {
+      "name": "Sputnik 2 satellite",
+      "description": "A sealed, air-conditioned cabin for one dog, with instruments for radiation and sunlight. It stays attached to the rocket's core stage in orbit."
+    },
+    "vostok-capsule": {
+      "name": "Vostok capsule",
+      "description": "A steel sphere for the cosmonaut, joined to an equipment module with batteries, oxygen and a single retrorocket that can't be restarted.",
+      "historyNote": "Why a ball? A sphere whose weight sits slightly off-center settles heat-shield-first into the air on its own, like a weighted toy that rights itself. So Vostok needed no thrusters to hold its attitude during reentry. The price was a steep, uncontrolled descent: cosmonauts felt around eight times their own weight on the way down."
+    },
+    "explorer-1-satellite": {
+      "name": "Explorer 1 satellite",
+      "description": "A slim cylinder of about 14 kg carrying a Geiger counter, temperature sensors and a micrometeorite detector.",
+      "historyNote": "Explorer 1 was meant to spin like a bullet around its long axis. After its first orbit it was tumbling end over end instead. Its flexing wire antennas were bleeding off energy, and a spinning body that loses energy drifts toward spinning around its fattest axis. The surprise taught engineers a rule that every spacecraft designer has followed since."
+    },
+    "mercury-capsule": {
+      "name": "Mercury capsule",
+      "description": "A small cone for one astronaut, with an escape tower on top, a heat shield at the base and a pack of retrorockets strapped over it."
+    },
+    "r7-sputnik": {
+      "name": "R-7 (Sputnik)",
+      "description": "The world's first intercontinental missile, adapted to carry a satellite: a core stage ringed by four strap-on boosters, all lit on the launch pad.",
+      "historyNote": "Why light every engine on the ground? In the early 1950s nobody knew whether a large rocket engine could be started reliably high up, in thin air or in vacuum. The R-7's designers sidestepped the question: the core and all four boosters ignite on the pad, and the empty boosters simply fall away. Its descendant, Soyuz, still flies this way."
+    },
+    "r7-vostok": {
+      "name": "R-7 (Vostok)",
+      "description": "The R-7 with a small upper stage on top, enough to put a crewed Vostok capsule into orbit."
+    },
+    "jupiter-c": {
+      "name": "Jupiter-C",
+      "description": "A lengthened Redstone missile topped with a spinning cluster of small solid rockets, just enough to put a very light satellite into orbit.",
+      "historyNote": "In September 1956 this rocket could have put a satellite in orbit, a year before Sputnik. Washington wanted the first American satellite to come from the civilian Vanguard project, so the Army flew with a dummy top stage filled with sand, and the payload only arced 5,300 km downrange. After Sputnik and a Vanguard exploding on its pad, a Jupiter-C finally launched Explorer 1 in January 1958."
+    },
+    "redstone": {
+      "name": "Redstone",
+      "description": "A single-stage missile, made safe enough to carry an astronaut. It can only lob a capsule on a short suborbital hop.",
+      "historyNote": "Mercury-Redstone 1, in November 1960, became known as the \"four-inch flight\": the rocket rose about ten centimeters and shut itself down, because a plug had come out in the wrong order and told it the flight was over. The capsule then fired its escape tower away on its own and released its parachutes, leaving a fully fueled rocket on the pad with parachutes draped down its side."
+    },
+    "atlas": {
+      "name": "Atlas",
+      "description": "A missile built so light that it needs the pressure in its tanks to keep its shape, and powerful enough to put a Mercury capsule into orbit.",
+      "historyNote": "The Atlas's steel skin was thinner than a coin, so the rocket had to stay pressurized even on the ground, or it would buckle under its own weight. Like the R-7, it lit all its engines at liftoff, because nobody was sure an engine would start in space. Partway up it simply dropped its two outer engines and flew on with the one in the middle."
+    },
+    "pegasus-satellite": {
+      "name": "Pegasus satellite",
+      "description": "Two long wings of thin detector panels that unfold in orbit, each panel recording the hits of tiny particles."
+    },
+    "biosatellite-satellite": {
+      "name": "Biosatellite capsule",
+      "description": "A capsule with life support for its small passengers, and a heat shield and parachute to bring them home for study."
+    },
+    "ofo-satellite": {
+      "name": "OFO satellite",
+      "description": "A small satellite with a water-filled centrifuge for two frogs, wired to record their balance organs."
+    },
+    "pioneer-4-probe": {
+      "name": "Pioneer 4 probe",
+      "description": "A light cone carrying radiation counters, spun for stability and fired on a path past the Moon."
+    },
+    "zond-5-probe": {
+      "name": "Zond 5 spacecraft",
+      "description": "An uncrewed Soyuz 7K-L1 with a descent capsule and life support for its animal passengers."
+    },
+    "ranger-3-probe": {
+      "name": "Ranger 3 probe",
+      "description": "A probe with a television camera and a capsule meant to survive the impact and keep reporting."
+    },
+    "luna-2-probe": {
+      "name": "Luna 2 probe",
+      "description": "A sphere of instruments and pennants bearing the Soviet emblem, built to strike the Moon."
+    },
+    "pioneer-2-probe": {
+      "name": "Pioneer 2 probe",
+      "description": "A small probe with a kick motor of its own to brake into lunar orbit."
+    },
+    "lunar-orbiter-probe": {
+      "name": "Lunar Orbiter spacecraft",
+      "description": "A camera with a small film laboratory on board, solar panels, and an engine for lunar orbit."
+    },
+    "surveyor-lander": {
+      "name": "Surveyor lander",
+      "description": "A three-legged lander with a braking rocket, throttleable engines for the last stretch, and a camera."
+    },
+    "luna-15-probe": {
+      "name": "Luna 15 lander",
+      "description": "A landing stage with a drill arm, and a small ascent rocket carrying a sealed capsule for the sample."
+    },
+    "luna-3-probe": {
+      "name": "Luna 3 probe",
+      "description": "A probe with a camera that develops film on board and scans it for radio."
+    },
+    "luna-17-lander": {
+      "name": "Luna 17 lander",
+      "description": "A landing stage with folding ramps at each end, for the rover to roll off."
+    },
+    "lunokhod-1-rover": {
+      "name": "Lunokhod rover",
+      "description": "An eight-wheeled rover under a hinged lid of solar cells, driven from Earth with a few seconds' delay."
+    },
+    "pioneer-6-probe": {
+      "name": "Pioneer Sun probe",
+      "description": "A small drum-shaped probe covered in solar cells, spinning slowly to keep stable."
+    },
+    "mariner-10-probe": {
+      "name": "Mariner 10 probe",
+      "description": "A probe with two television cameras and a sunshade, steered past Venus and on to Mercury."
+    },
+    "mariner-5-probe": {
+      "name": "Mariner 5 probe",
+      "description": "A flyby probe with instruments that read Venus's atmosphere from the way its radio signal bends."
+    },
+    "pioneer-venus-orbiter-probe": {
+      "name": "Pioneer Venus Orbiter",
+      "description": "A drum-shaped orbiter with a radar mapper and instruments for the upper atmosphere."
+    },
+    "pioneer-venus-multiprobe-craft": {
+      "name": "Pioneer Venus Multiprobe",
+      "description": "A carrier bus with one large and three small entry probes, each with its own heat shield."
+    },
+    "venera-15-probe": {
+      "name": "Venera 15 orbiter",
+      "description": "An orbiter carrying a large dish for side-looking radar mapping."
+    },
+    "venera-7-probe": {
+      "name": "Venera 7 lander",
+      "description": "A small, heavily insulated descent capsule built to withstand Venus's pressure and heat."
+    },
+    "venera-9-probe": {
+      "name": "Venera lander and carrier",
+      "description": "A carrier that can fly past or orbit Venus, and a lander protected by a spherical shell."
+    },
+    "mariner-6-probe": {
+      "name": "Mariner 6 probe",
+      "description": "A flyby probe with cameras and spectrometers on a turntable platform."
+    },
+    "mariner-9-probe": {
+      "name": "Mariner 9 orbiter",
+      "description": "An orbiter with a large engine for braking into Mars orbit, and cameras for mapping."
+    },
+    "viking-orbiter": {
+      "name": "Viking orbiter",
+      "description": "An orbiter that carries the lander to Mars, scouts its landing site and relays its signals."
+    },
+    "viking-lander": {
+      "name": "Viking lander",
+      "description": "A lander with a sampling arm and a small onboard laboratory to look for signs of life."
+    },
+    "mars-2-probe": {
+      "name": "Mars 2 spacecraft",
+      "description": "An orbiter with a lander attached, the lander carrying a small rover tethered by a cable."
+    },
+    "mars-m69-probe": {
+      "name": "Mars M-69 orbiter",
+      "description": "A heavy orbiter with cameras, built to make full use of the Proton's lift."
+    },
+    "pioneer-10-probe": {
+      "name": "Pioneer 10 probe",
+      "description": "A probe powered by radioisotope generators, since sunlight is too weak at Jupiter for solar panels."
+    },
+    "pioneer-11-probe": {
+      "name": "Pioneer 11 probe",
+      "description": "A twin of Pioneer 10, steered through Jupiter's gravity onto a path to Saturn."
+    },
+    "agena-target-vehicle": {
+      "name": "Agena target vehicle",
+      "description": "An upper stage with a docking collar and an engine that can restart: a target for docking practice, and once docked, a stage that can push the capsule higher."
+    },
+    "x-15-aircraft": {
+      "name": "X-15 rocket plane",
+      "description": "A black, stubby-winged rocket plane with a single rocket engine and small thrusters for control where the air runs out."
+    },
+    "mig-e-154-spaceplane": {
+      "name": "MiG E-154 rocket plane",
+      "description": "A slender swept-wing rocket plane with a cluster of rocket engines, a pressurized cockpit and small thrusters for control above the air."
+    },
+    "voskhod-capsule": {
+      "name": "Voskhod capsule",
+      "description": "A Vostok sphere with the ejection seat removed to fit more people, a backup retrorocket, and an inflatable airlock."
+    },
+    "gemini-capsule": {
+      "name": "Gemini capsule",
+      "description": "A two-person capsule with thrusters to change orbit, a radar for rendezvous, and a nose that can dock."
+    },
+    "gemini-transtage": {
+      "name": "Gemini Transtage",
+      "description": "The Titan's restartable upper stage, docked to a Gemini in orbit to push it toward the Moon."
+    },
+    "gemini-lunar-propulsion-module": {
+      "name": "Gemini lunar propulsion module",
+      "description": "A propulsion module behind the capsule, with enough engine to brake into lunar orbit and leave again."
+    },
+    "gemini-direct-ascent-craft": {
+      "name": "Gemini Direct Ascent spacecraft",
+      "description": "A Gemini capsule stacked on landing and ascent modules, all landing on the Moon together."
+    },
+    "gemini-eor-service-module": {
+      "name": "Gemini EOR service module",
+      "description": "A service module for the lunar trip, joined to the capsule in Earth orbit."
+    },
+    "langley-lunar-lander": {
+      "name": "Langley light lunar lander",
+      "description": "A minimal open lander for one astronaut in a spacesuit: little more than an engine, tanks and a seat."
+    },
+    "s-ivb-space-tug": {
+      "name": "S-IVB Space Tug",
+      "description": "A Saturn upper stage used as a tug in Earth orbit, pushing the assembled craft out toward the Moon."
+    },
+    "apollo-csm": {
+      "name": "Apollo command and service module",
+      "description": "The three-person command module and the service module behind it, whose engine brakes into lunar orbit and brings the crew home."
+    },
+    "apollo-lunar-module": {
+      "name": "Apollo lunar module",
+      "description": "A two-stage lander: the descent stage stays on the Moon as a launch pad, the ascent stage flies the crew back to orbit."
+    },
+    "soyuz-7k-l1-spacecraft": {
+      "name": "Soyuz 7K-L1 spacecraft",
+      "description": "A Soyuz without its orbital module, to save weight for the trip around the Moon."
+    },
+    "soyuz-7k-lok-spacecraft": {
+      "name": "Soyuz 7K-LOK spacecraft",
+      "description": "A Soyuz built for lunar orbit, with a bigger engine and a docking system for the LK lander."
+    },
+    "lk-lander": {
+      "name": "LK lander",
+      "description": "A one-person lunar lander whose own engine block both finishes the landing and lifts it off again."
+    },
+    "soyuz-7k-ok-spacecraft": {
+      "name": "Soyuz 7K-OK spacecraft",
+      "description": "The Earth-orbit Soyuz: a descent module, an orbital module for living space, and a service module."
+    },
+    "igla-docking-system": {
+      "name": "Igla docking system",
+      "description": "Radar antennas and electronics that let two Soyuz craft find each other and dock with nobody steering."
+    },
+    "lk-700-spacecraft": {
+      "name": "LK-700 spacecraft",
+      "description": "A heavy lunar craft built to land and take off again in one piece, with no rendezvous in lunar orbit."
+    },
+    "gemini-eva-suit": {
+      "name": "Gemini spacesuit",
+      "description": "A pressure suit with an umbilical hose for oxygen and a tether, for work outside the capsule."
+    },
+    "apollo-lunar-eva-suit": {
+      "name": "Apollo lunar surface suit",
+      "description": "A suit with its own backpack for oxygen and cooling, built for hours of walking on the Moon."
+    },
+    "light-lunar-eva-suit": {
+      "name": "Light lunar suit",
+      "description": "A lighter surface suit for the open Langley lander, where the suit is the crew's only cabin."
+    },
+    "lunar-roving-vehicle": {
+      "name": "Lunar Roving Vehicle",
+      "description": "A folding electric car for two astronauts, carried on the lunar module's side."
+    },
+    "berkut-eva-suit": {
+      "name": "Berkut spacesuit",
+      "description": "A Soviet pressure suit with a backpack of oxygen, made for the first walk outside a spacecraft."
+    },
+    "yastreb-eva-suit": {
+      "name": "Yastreb spacesuit",
+      "description": "A suit for spacewalks between two docked Soyuz craft."
+    },
+    "krechet-eva-suit": {
+      "name": "Krechet lunar suit",
+      "description": "A semi-rigid lunar suit entered through a hatch in its back."
+    },
+    "r7-voskhod": {
+      "name": "R-7 (Voskhod)",
+      "description": "The R-7 with a more powerful upper stage, able to lift the heavier Voskhod."
+    },
+    "r7-luna": {
+      "name": "R-7 (Luna)",
+      "description": "The R-7 with a small third stage that sends probes to the Moon."
+    },
+    "r7-molniya": {
+      "name": "R-7 (Molniya)",
+      "description": "The R-7 with a stage that restarts in orbit, for flights to the Moon and the planets."
+    },
+    "r7-soyuz": {
+      "name": "R-7 (Soyuz)",
+      "description": "The R-7 version built for the Soyuz spacecraft, with an escape tower for the crew."
+    },
+    "proton": {
+      "name": "Proton",
+      "description": "A heavy rocket on storable propellants, powerful enough for the largest probes."
+    },
+    "proton-k-block-d": {
+      "name": "Proton-K with Block D",
+      "description": "The Proton with a restartable upper stage, able to send a crewed craft around the Moon."
+    },
+    "n1": {
+      "name": "N1",
+      "description": "The giant Soviet Moon rocket, its first stage driven by a ring of many smaller engines."
+    },
+    "ur-700": {
+      "name": "UR-700",
+      "description": "A proposed giant rocket for a direct flight to the Moon, built from storable-propellant modules."
+    },
+    "juno-2": {
+      "name": "Juno II",
+      "description": "A Jupiter missile with small solid upper stages, for probes to the Moon and beyond."
+    },
+    "thor-able": {
+      "name": "Thor-Able",
+      "description": "A Thor missile with an upper stage on top: an early workhorse for small satellites and probes."
+    },
+    "atlas-agena": {
+      "name": "Atlas-Agena",
+      "description": "An Atlas with the restartable Agena upper stage, for lunar and planetary probes."
+    },
+    "atlas-centaur": {
+      "name": "Atlas-Centaur",
+      "description": "An Atlas with the Centaur, the first upper stage burning liquid hydrogen, for heavier probes."
+    },
+    "titan-2": {
+      "name": "Titan II",
+      "description": "A missile on storable propellants, made human-rated to fly the Gemini capsule."
+    },
+    "titan-3c": {
+      "name": "Titan IIIC",
+      "description": "A Titan with two large solid boosters strapped to its sides and a Transtage on top."
+    },
+    "titan-3e-centaur": {
+      "name": "Titan IIIE-Centaur",
+      "description": "A Titan with solid boosters and a Centaur on top, for the outer planets."
+    },
+    "saturn-1": {
+      "name": "Saturn I",
+      "description": "The first Saturn, its first stage a cluster of eight engines fed from a cluster of tanks."
+    },
+    "saturn-1b": {
+      "name": "Saturn IB",
+      "description": "An improved Saturn I with a hydrogen upper stage, able to put an Apollo into Earth orbit."
+    },
+    "saturn-c3b": {
+      "name": "Saturn C-3B",
+      "description": "A Saturn design between the IB and the V, for lunar missions assembled in Earth orbit."
+    },
+    "saturn-v": {
+      "name": "Saturn V",
+      "description": "The three-stage giant that sends a complete Apollo spacecraft to the Moon."
+    }
+  },
+  "configurations": {
+    "sputnik-1-orbit": {
+      "name": "Orbital flight",
+      "description": "Launch the satellite and keep it transmitting from orbit for a season."
+    },
+    "sputnik-1-extended": {
+      "name": "Extended mission",
+      "description": "A longer flight with more battery capacity, spread over three seasons, for more science and more prestige. Sputnik 1 never flew one: this is what a next step could have looked like."
+    },
+    "sputnik-2-orbit": {
+      "name": "Orbital flight with a dog",
+      "description": "Put the cabin and its passenger into orbit and send back the dog's heartbeat and breathing. There is no return."
+    },
+    "korabl-sputnik-2-orbit": {
+      "name": "Biological flight and recovery",
+      "description": "A day in orbit with a cabin full of animals and plants, then retrofire, reentry and a landing on home territory with everything alive.",
+      "steps": {
+        "11-descent-and-splashdown": {
+          "name": "Descent and landing",
+          "description": "Parachutes bring the capsule down on home territory, where the recovery team gets the animals out and back to the doctors."
+        }
+      }
+    },
+    "vostok-uncrewed-suborbital": {
+      "name": "Uncrewed suborbital test",
+      "description": "Try out the capsule on a short up-and-down flight, with a mannequin in the seat, before risking a pilot. The real program skipped this step: the R-7 was built for orbit.",
+      "steps": {
+        "08-retrofire": {
+          "description": "The retrorockets fire anyway, to test them for the orbital flights to come. On a suborbital arc the craft comes down whether they work or not."
+        },
+        "10-reentry": {
+          "description": "Falling back steeply into the atmosphere: much slower than coming down from orbit, but hard enough to brake at around ten times normal weight."
+        }
+      }
+    },
+    "vostok-suborbital": {
+      "name": "Suborbital flight",
+      "description": "A pilot's first ride: about a quarter of an hour on a ballistic arc with a few minutes of weightlessness, then an ejection and a parachute landing.",
+      "steps": {
+        "07-retrofire": {
+          "description": "The retrorockets fire anyway, to test them for the orbital flights to come. On a suborbital arc the craft comes down whether they work or not."
+        },
+        "10-reentry": {
+          "description": "Falling back steeply into the atmosphere: much slower than coming down from orbit, but hard enough to brake at around ten times normal weight."
+        }
+      }
+    },
+    "vostok-uncrewed-orbital": {
+      "name": "Uncrewed orbital test",
+      "description": "One full orbit with nobody aboard, flown by the automatics and brought down on command from the ground. A mannequin in the seat tests the ejection.",
+      "historyNote": "The 'pilot' of the last two test flights, in March 1961, was a mannequin called Ivan Ivanovich, the Russian 'John Doe'. To test the radio without starting rumors of a secret cosmonaut, his voice channel played a recording of a choir and of a man reading out a recipe for borscht."
+    },
+    "vostok-orbital": {
+      "name": "Orbital flight",
+      "description": "The real thing: a cosmonaut aboard for at least one full orbit, then retrofire, reentry and ejection over home ground.",
+      "historyNote": "Nobody knew whether a person could still think clearly in weightlessness, so Vostok 1's manual controls were locked. The unlock code, 1-2-5, was sealed in an envelope on board, on the theory that anyone able to enter it was fit to fly. Several people simply told Gagarin the code before launch."
+    },
+    "vostok-orbital-duration-1": {
+      "name": "Day-long orbital flight",
+      "description": "Stay up for a full day or more and show that a person can eat, sleep and work in weightlessness.",
+      "historyNote": "In August 1961 Gherman Titov spent just over a day in orbit on Vostok 2. He was the first person to sleep in space, and the first to suffer from space sickness, which worried the doctors enough to shape the following flights."
+    },
+    "vostok-orbital-duration-2": {
+      "name": "Multi-day orbital flight",
+      "description": "Several days in orbit, as long as the capsule's supplies allow, with the cosmonaut's health watched the whole time.",
+      "historyNote": "Valery Bykovsky's Vostok 5, in June 1963, stayed up for almost five days. It is still the longest spaceflight anyone has made alone. Two days into his flight, Valentina Tereshkova launched on Vostok 6 and became the first woman in space."
+    },
+    "vostok-joint-orbital": {
+      "name": "Group flight",
+      "description": "Launch two capsules a day apart into almost the same orbit, so that they pass close enough to talk by radio.",
+      "historyNote": "In August 1962 Vostok 3 and 4 came within about 6.5 km of each other, and the press spoke of a rendezvous. It wasn't one: neither capsule could change its orbit, the second launch was simply timed perfectly, and the two drifted apart. Real rendezvous is counterintuitive: to catch a craft ahead of you, you first slow down, which drops you to a lower, faster orbit.",
+      "steps": {
+        "01-launch-preparations": {
+          "name": "Craft A: Launch preparations"
+        },
+        "02-countdown": {
+          "name": "Craft A: Countdown"
+        },
+        "03-launch": {
+          "name": "Craft A: Launch"
+        },
+        "04-ascent": {
+          "name": "Craft A: Ascent"
+        },
+        "07-launch-preparations": {
+          "name": "Craft B: Launch preparations"
+        },
+        "08-countdown": {
+          "name": "Craft B: Countdown"
+        },
+        "09-launch": {
+          "name": "Craft B: Launch"
+        },
+        "10-ascent": {
+          "name": "Craft B: Ascent"
+        },
+        "20-retrofire": {
+          "name": "Craft B: Retrofire"
+        },
+        "21-modules-separation": {
+          "name": "Craft B: Modules separation"
+        },
+        "22-reentry": {
+          "name": "Craft B: Reentry"
+        },
+        "23-descent-and-landing": {
+          "name": "Craft B: Descent and landing"
+        }
+      }
+    },
+    "explorer-1-orbit": {
+      "name": "Orbital flight",
+      "description": "Launch the satellite and send back what its instruments find, for a season.",
+      "historyNote": "Explorer 1's Geiger counter kept going quiet at high altitude. James Van Allen's team worked out why: the radiation up there was so intense that it overwhelmed the counter. They had found belts of charged particles trapped by the Earth's magnetic field, now named after him: the first great scientific discovery of the space age."
+    },
+    "explorer-1-extended": {
+      "name": "Extended mission",
+      "description": "A longer flight with more battery capacity, spread over three seasons, for more science and more prestige. Explorer 1 never flew one: this is what a next step could have looked like."
+    },
+    "mercury-uncrewed-suborbital": {
+      "name": "Uncrewed suborbital test",
+      "description": "Fly the capsule on a short arc without an astronaut, to prove the rocket, the escape system and the recovery at sea.",
+      "historyNote": "In January 1961, ahead of Alan Shepard, a chimpanzee named Ham rode the capsule. He pulled levers in answer to lights during the flight, showing that work was possible in weightlessness. His capsule came down far off target and began taking on water before the recovery helicopter reached it.",
+      "steps": {
+        "07-retrofire": {
+          "description": "The retrorockets fire anyway, to test them for the orbital flights to come. On a suborbital arc the craft comes down whether they work or not."
+        },
+        "10-reentry": {
+          "description": "Falling back steeply into the atmosphere: much slower than coming down from orbit, but hard enough to brake at around ten times normal weight."
+        }
+      }
+    },
+    "mercury-suborbital": {
+      "name": "Suborbital flight",
+      "description": "About fifteen minutes on a ballistic arc: launch, a few minutes of weightlessness, and a splashdown far downrange.",
+      "historyNote": "In July 1961, moments after splashdown, Liberty Bell 7's hatch blew off. Gus Grissom swam out as the capsule filled and sank. It lay on the floor of the Atlantic, nearly 5 km down, until an expedition raised it in 1999.",
+      "steps": {
+        "07-retrofire": {
+          "description": "The retrorockets fire anyway, to test them for the orbital flights to come. On a suborbital arc the craft comes down whether they work or not."
+        },
+        "10-reentry": {
+          "description": "Falling back steeply into the atmosphere: much slower than coming down from orbit, but hard enough to brake at around ten times normal weight."
+        }
+      }
+    },
+    "mercury-uncrewed-orbital": {
+      "name": "Uncrewed orbital test",
+      "description": "Send the capsule around the Earth with no astronaut aboard, to prove its life support and controls before risking a crew.",
+      "historyNote": "In November 1961 a chimpanzee named Enos flew two orbits in a Mercury capsule. The flight was cut short by a stuck thruster and an overheating suit system, problems that were fixed before John Glenn flew the same mission three months later."
+    },
+    "mercury-orbital": {
+      "name": "Orbital flight",
+      "description": "An astronaut aboard for a few orbits, then retrofire, reentry and splashdown where the recovery ships wait.",
+      "historyNote": "Scott Carpenter's Aurora 7, in May 1962, came down about 400 km past its target. The capsule was misaligned when the retrorockets fired, and they fired a few seconds late. He waited in his life raft for about three hours before a helicopter lifted him out."
+    },
+    "mercury-orbital-duration-1": {
+      "name": "Day-long orbital flight",
+      "description": "A day or more in orbit, to learn how a person copes with weightlessness over a whole day of work and sleep.",
+      "historyNote": "Gordon Cooper's Faith 7, in May 1963, flew 22 orbits in about 34 hours. Near the end, a short circuit knocked out the automatic controls. Cooper lined the capsule up using lines drawn on his window, timed the retrofire with his wristwatch, and flew the reentry by hand, splashing down a few kilometers from the recovery ship."
+    },
+    "mercury-joint-orbital": {
+      "name": "Joint launch",
+      "description": "Two capsules launched close together into neighboring orbits. Mercury never flew this: it points toward the rendezvous flights that came next.",
+      "steps": {
+        "01-launch-preparations": {
+          "name": "Craft A: Launch preparations"
+        },
+        "02-countdown": {
+          "name": "Craft A: Countdown"
+        },
+        "03-launch": {
+          "name": "Craft A: Launch"
+        },
+        "04-ascent": {
+          "name": "Craft A: Ascent"
+        },
+        "07-launch-preparations": {
+          "name": "Craft B: Launch preparations"
+        },
+        "08-countdown": {
+          "name": "Craft B: Countdown"
+        },
+        "09-launch": {
+          "name": "Craft B: Launch"
+        },
+        "10-ascent": {
+          "name": "Craft B: Ascent"
+        },
+        "18-retrofire": {
+          "name": "Craft B: Retrofire"
+        },
+        "19-retrofire-jettison": {
+          "name": "Craft B: Retropack jettison"
+        },
+        "20-reentry": {
+          "name": "Craft B: Reentry"
+        },
+        "21-descent-and-splashdown": {
+          "name": "Craft B: Descent and splashdown"
+        }
+      }
+    },
+    "pegasus-orbit": {
+      "name": "Orbital flight",
+      "description": "Unfold the panels in orbit and count micrometeoroid hits for a season."
+    },
+    "pegasus-extended": {
+      "name": "Extended mission",
+      "description": "Keep counting impacts for several seasons, for a far better estimate of the risk."
+    },
+    "biosatellite-orbit": {
+      "name": "Orbital flight",
+      "description": "Fly the organisms in orbit and recover the capsule with them."
+    },
+    "biosatellite-extended": {
+      "name": "Extended mission",
+      "description": "A longer stay in orbit before recovery, to see how the organisms develop over time."
+    },
+    "orbiting-frog-otolith-orbit": {
+      "name": "Orbital flight",
+      "description": "Record the frogs' balance organs as they adjust to weightlessness."
+    },
+    "orbiting-frog-otolith-extended": {
+      "name": "Extended mission",
+      "description": "Keep recording for longer, to see whether the frogs' sense of balance settles."
+    },
+    "pioneer-4-flyby": {
+      "name": "Lunar flyby",
+      "description": "Fly past the Moon, measuring radiation on the way, and on into orbit around the Sun."
+    },
+    "zond-5-flyby": {
+      "name": "Lunar flyby with animals",
+      "description": "Send the uncrewed capsule around the Moon and bring its passengers home through the atmosphere at lunar return speed."
+    },
+    "ranger-3-impact": {
+      "name": "Lunar impact",
+      "description": "Aim the probe at the Moon and send pictures until it strikes."
+    },
+    "luna-2-impact": {
+      "name": "Lunar impact",
+      "description": "Hit the Moon: reaching another world, even by crashing into it."
+    },
+    "pioneer-2-orbit": {
+      "name": "Lunar orbit",
+      "description": "Fire the probe's own motor to brake into orbit around the Moon."
+    },
+    "lunar-orbiter-mapping": {
+      "name": "Lunar mapping",
+      "description": "Photograph the Moon from orbit to find safe landing sites."
+    },
+    "surveyor-landing": {
+      "name": "Soft landing",
+      "description": "Land gently on the Moon and photograph and probe the ground around the lander."
+    },
+    "luna-15-sample-return": {
+      "name": "Sample return",
+      "description": "Land, drill into the surface, and launch the sample back to Earth in a sealed capsule."
+    },
+    "luna-3-flyby": {
+      "name": "Far side flyby",
+      "description": "Loop around the Moon and photograph the side the Earth never sees."
+    },
+    "luna-17-landing": {
+      "name": "Landing with a rover",
+      "description": "Land and drive the rover off its ramps to explore the surface by remote control."
+    },
+    "pioneer-sun-orbit": {
+      "name": "Solar orbit",
+      "description": "Leave the Earth behind and measure the solar wind from an orbit around the Sun."
+    },
+    "mariner-10-flyby": {
+      "name": "Venus and Mercury flyby",
+      "description": "Swing past Venus and use its gravity to reach Mercury."
+    },
+    "mariner-5-flyby": {
+      "name": "Venus flyby",
+      "description": "Fly close past Venus and measure its atmosphere."
+    },
+    "pioneer-venus-orbit": {
+      "name": "Venus orbit",
+      "description": "Brake into orbit around Venus and map it by radar."
+    },
+    "venera-15-orbit": {
+      "name": "Venus orbit",
+      "description": "Brake into orbit around Venus and map its surface by radar."
+    },
+    "pioneer-venus-multiprobe-entry": {
+      "name": "Atmospheric probes",
+      "description": "Release the probes ahead of arrival and let them fall through Venus's atmosphere at four different points."
+    },
+    "venera-7-landing": {
+      "name": "Venus landing",
+      "description": "Send the capsule down through Venus's atmosphere and keep it talking from the surface."
+    },
+    "venera-flyby-and-lander": {
+      "name": "Flyby and lander",
+      "description": "The carrier flies past Venus and relays the lander's signal while the lander goes down."
+    },
+    "venera-orbiter-and-lander": {
+      "name": "Orbiter and lander",
+      "description": "The carrier brakes into orbit and relays the lander's signal from the surface."
+    },
+    "mariner-6-flyby": {
+      "name": "Mars flyby",
+      "description": "Fly past Mars and photograph its surface."
+    },
+    "mariner-9-orbit": {
+      "name": "Mars orbit",
+      "description": "Brake into orbit around Mars and map the planet."
+    },
+    "viking-orbiter-and-lander": {
+      "name": "Orbiter and lander",
+      "description": "Survey Mars from orbit, then land and test the soil for signs of life."
+    },
+    "mars-2-orbiter-lander-rover": {
+      "name": "Orbiter, lander and rover",
+      "description": "Brake into orbit, send the lander down, and walk the small rover across the surface."
+    },
+    "mars-m69-orbit": {
+      "name": "Mars orbit",
+      "description": "Brake into orbit around Mars and photograph the planet."
+    },
+    "pioneer-10-flyby": {
+      "name": "Jupiter flyby",
+      "description": "Cross the asteroid belt and fly past Jupiter."
+    },
+    "pioneer-11-flyby": {
+      "name": "Jupiter and Saturn flyby",
+      "description": "Fly past Jupiter and use its gravity to reach Saturn."
+    },
+    "x-15-flight-test": {
+      "name": "Flight test",
+      "description": "Drop from the carrier aircraft, light the engine and prove the plane flies, before pushing for speed and height."
+    },
+    "x-15-research-flight-1": {
+      "name": "Research flight: altitude",
+      "description": "Climb steeply to the edge of space, where the thrusters steer and the pilot sees the black sky."
+    },
+    "x-15-research-flight-2": {
+      "name": "Research flight: speed",
+      "description": "Hold a fast, level run at several times the speed of sound, where friction with the air heats the skin to hundreds of degrees."
+    },
+    "mig-e-154-drop-test": {
+      "name": "Atmospheric drop test",
+      "description": "Released from a carrier aircraft, the rocket plane flies and glides down to land, to prove its handling in the air."
+    },
+    "mig-e-154-suborbital-test": {
+      "name": "Suborbital test",
+      "description": "Launched on a rocket, the plane climbs into space, tests its engines and glides home."
+    },
+    "mig-e-154-orbital": {
+      "name": "Orbital flight",
+      "description": "Into orbit on a rocket and back to a runway on wings."
+    },
+    "mig-e-154-orbital-duration-1": {
+      "name": "Orbital flight (duration level I)",
+      "description": "A longer stay in orbit before the glide home."
+    },
+    "mig-e-154-joint-orbital": {
+      "name": "Joint flight",
+      "description": "Two rocket planes launched into nearly the same orbit, flying close together."
+    },
+    "gemini-uncrewed-suborbital": {
+      "name": "Uncrewed suborbital test",
+      "description": "Fly the Gemini capsule without a crew on a short up-and-down hop, to prove the launch, the heat shield and the recovery before anyone rides it."
+    },
+    "gemini-suborbital": {
+      "name": "Suborbital flight",
+      "description": "A crewed hop into space and straight back down: the Gemini capsule's first flight with people aboard."
+    },
+    "gemini-uncrewed-orbital": {
+      "name": "Uncrewed orbital test",
+      "description": "Put an empty Gemini capsule into orbit and bring it home, to prove it can keep a crew alive there."
+    },
+    "gemini-orbital": {
+      "name": "Orbital flight",
+      "description": "A crewed flight around the Earth in the Gemini capsule, and a safe return."
+    },
+    "gemini-spacewalk": {
+      "name": "Spacewalk (duration level I)",
+      "description": "A longer flight in which one astronaut opens the hatch and goes outside on an umbilical."
+    },
+    "gemini-rendezvous": {
+      "name": "Rendezvous",
+      "description": "Launch two Gemini capsules and steer one to within a few meters of the other."
+    },
+    "gemini-docking": {
+      "name": "Docking",
+      "description": "Launch an Agena target, then a Gemini that finds it and docks."
+    },
+    "gemini-spacewalk-and-rendezvous": {
+      "name": "Spacewalk and rendezvous (duration I)",
+      "description": "A rendezvous between two capsules, with a spacewalk as well."
+    },
+    "gemini-spacewalk-and-docking": {
+      "name": "Spacewalk and docking (duration level I)",
+      "description": "Dock with an Agena, then step outside to work on it."
+    },
+    "gemini-spacewalk-duration-2": {
+      "name": "Spacewalk (duration level II)",
+      "description": "A longer spacewalk flight."
+    },
+    "gemini-rendezvous-duration-2": {
+      "name": "Rendezvous (duration level II)",
+      "description": "A longer flight with a rendezvous between two capsules."
+    },
+    "gemini-docking-duration-2": {
+      "name": "Docking (duration level II)",
+      "description": "A longer flight, docked to an Agena and using its engine."
+    },
+    "gemini-spacewalk-and-rendezvous-duration-2": {
+      "name": "Spacewalk and rendezvous (duration II)",
+      "description": "A longer flight with a rendezvous and a spacewalk."
+    },
+    "gemini-spacewalk-and-docking-duration-2": {
+      "name": "Spacewalk and docking (duration II)",
+      "description": "A longer flight, docked to an Agena, with work outside."
+    },
+    "gemini-orbital-duration-3": {
+      "name": "Orbital flight (duration level III)",
+      "description": "A long stay in a cramped cabin, to prove a crew can last as long as a trip to the Moon and back takes."
+    },
+    "circumlunar-gemini-heat-shield-test": {
+      "name": "Heat shield test",
+      "description": "An uncrewed capsule driven back into the atmosphere at close to lunar return speed."
+    },
+    "circumlunar-gemini-transtage-test": {
+      "name": "Transtage test",
+      "description": "A crew docks with a Transtage in Earth orbit and fires it, and the capsule tests its heat shield on the way home."
+    },
+    "lunar-orbital-gemini-heat-shield-test": {
+      "name": "Heat shield test",
+      "description": "An uncrewed capsule driven back into the atmosphere at close to lunar return speed."
+    },
+    "lunar-orbital-gemini-propulsion-module-test": {
+      "name": "Propulsion module test",
+      "description": "A crew fires the lunar propulsion module in Earth orbit before trusting it at the Moon."
+    },
+    "gemini-direct-ascent-uncrewed-test": {
+      "name": "Uncrewed test",
+      "description": "Fly the direct-ascent craft without a crew and fire its landing and ascent modules in Earth orbit."
+    },
+    "gemini-direct-ascent-crewed-test": {
+      "name": "Crewed test",
+      "description": "A crew flies the direct-ascent craft in Earth orbit and puts its modules through their paces."
+    },
+    "voskhod-uncrewed-suborbital": {
+      "name": "Uncrewed suborbital test",
+      "description": "Fly the Voskhod capsule without a crew on a short up-and-down hop, to prove the launch, the heat shield and the recovery before anyone rides it."
+    },
+    "voskhod-suborbital": {
+      "name": "Suborbital flight",
+      "description": "A crewed hop into space and straight back down: the Voskhod capsule's first flight with people aboard."
+    },
+    "voskhod-uncrewed-orbital": {
+      "name": "Uncrewed orbital test",
+      "description": "Put an empty Voskhod capsule into orbit and bring it home, to prove it can keep a crew alive there."
+    },
+    "voskhod-orbital": {
+      "name": "Orbital flight",
+      "description": "A crewed flight around the Earth in the Voskhod capsule, and a safe return."
+    },
+    "voskhod-orbital-duration-1": {
+      "name": "Orbital flight (duration level I)",
+      "description": "A longer stay in orbit in the Voskhod, to learn how people and machines hold up over time."
+    },
+    "voskhod-orbital-duration-2": {
+      "name": "Orbital flight (duration level II)",
+      "description": "A longer stay in orbit in the Voskhod, to learn how people and machines hold up over time."
+    },
+    "voskhod-orbital-duration-3": {
+      "name": "Orbital flight (duration level III)",
+      "description": "A longer stay in orbit in the Voskhod, to learn how people and machines hold up over time."
+    },
+    "voskhod-orbital-duration-4": {
+      "name": "Orbital flight (duration level IV)",
+      "description": "A longer stay in orbit in the Voskhod, to learn how people and machines hold up over time."
+    },
+    "voskhod-spacewalk": {
+      "name": "Spacewalk",
+      "description": "One cosmonaut crawls through the inflatable airlock and floats outside on a tether."
+    },
+    "voskhod-joint-orbital": {
+      "name": "Joint flight",
+      "description": "Two Voskhod craft launched in quick succession into nearly the same orbit, flying close enough to see each other."
+    },
+    "soyuz-7k-l1-uncrewed-suborbital": {
+      "name": "Uncrewed suborbital test",
+      "description": "Fly the Soyuz 7K-L1 without a crew on a short up-and-down hop, to prove the launch, the heat shield and the recovery before anyone rides it."
+    },
+    "soyuz-7k-l1-suborbital": {
+      "name": "Suborbital flight",
+      "description": "A crewed hop into space and straight back down: the Soyuz 7K-L1's first flight with people aboard."
+    },
+    "soyuz-7k-l1-uncrewed-orbital": {
+      "name": "Uncrewed orbital test",
+      "description": "Put an empty Soyuz 7K-L1 into orbit and bring it home, to prove it can keep a crew alive there."
+    },
+    "soyuz-7k-l1-orbital": {
+      "name": "Orbital flight",
+      "description": "A crewed flight around the Earth in the Soyuz 7K-L1, and a safe return."
+    },
+    "soyuz-7k-l1-orbital-duration-1": {
+      "name": "Orbital flight (duration level I)",
+      "description": "A longer stay in orbit in the Soyuz 7K-L1, to learn how people and machines hold up over time."
+    },
+    "soyuz-7k-l1-orbital-duration-2": {
+      "name": "Orbital flight (duration level II)",
+      "description": "A longer stay in orbit in the Soyuz 7K-L1, to learn how people and machines hold up over time."
+    },
+    "soyuz-7k-l3-uncrewed-suborbital": {
+      "name": "Uncrewed suborbital test",
+      "description": "Fly the Soyuz 7K-LOK without a crew on a short up-and-down hop, to prove the launch, the heat shield and the recovery before anyone rides it."
+    },
+    "soyuz-7k-l3-suborbital": {
+      "name": "Suborbital flight",
+      "description": "A crewed hop into space and straight back down: the Soyuz 7K-LOK's first flight with people aboard."
+    },
+    "soyuz-7k-l3-uncrewed-orbital": {
+      "name": "Uncrewed orbital test",
+      "description": "Put an empty Soyuz 7K-LOK into orbit and bring it home, to prove it can keep a crew alive there."
+    },
+    "soyuz-7k-l3-orbital": {
+      "name": "Orbital flight",
+      "description": "A crewed flight around the Earth in the Soyuz 7K-LOK, and a safe return."
+    },
+    "soyuz-7k-l3-orbital-duration-1": {
+      "name": "Orbital flight (duration level I)",
+      "description": "A longer stay in orbit in the Soyuz 7K-LOK, to learn how people and machines hold up over time."
+    },
+    "soyuz-7k-l3-orbital-duration-2": {
+      "name": "Orbital flight (duration level II)",
+      "description": "A longer stay in orbit in the Soyuz 7K-LOK, to learn how people and machines hold up over time."
+    },
+    "soyuz-7k-l3-orbital-duration-3": {
+      "name": "Orbital flight (duration level III)",
+      "description": "A longer stay in orbit in the Soyuz 7K-LOK, to learn how people and machines hold up over time."
+    },
+    "soyuz-7k-l3-spacewalk": {
+      "name": "Spacewalk",
+      "description": "A cosmonaut leaves the craft in a spacesuit, as one would cross to the lander at the Moon."
+    },
+    "soyuz-7k-l3-joint-orbital": {
+      "name": "Joint flight",
+      "description": "Two Soyuz craft launched in quick succession into nearly the same orbit, flying close enough to see each other."
+    },
+    "soyuz-7k-l3-automatic-rendezvous": {
+      "name": "Automatic rendezvous",
+      "description": "Two uncrewed craft find each other in orbit under automatic control."
+    },
+    "soyuz-7k-l3-uncrewed-lander-test": {
+      "name": "Uncrewed LK test",
+      "description": "Put the LK lander into Earth orbit without a crew and fire its engine as it would land and lift off at the Moon."
+    },
+    "soyuz-7k-l3-lander-test": {
+      "name": "LK test",
+      "description": "A cosmonaut flies the LK in Earth orbit and tests the landing and ascent burns."
+    },
+    "lk-700-uncrewed-suborbital": {
+      "name": "Uncrewed suborbital test",
+      "description": "Fly the LK-700 without a crew on a short up-and-down hop, to prove the launch, the heat shield and the recovery before anyone rides it."
+    },
+    "lk-700-suborbital": {
+      "name": "Suborbital flight",
+      "description": "A crewed hop into space and straight back down: the LK-700's first flight with people aboard."
+    },
+    "lk-700-uncrewed-orbital": {
+      "name": "Uncrewed orbital test",
+      "description": "Put an empty LK-700 into orbit and bring it home, to prove it can keep a crew alive there."
+    },
+    "lk-700-orbital": {
+      "name": "Orbital flight",
+      "description": "A crewed flight around the Earth in the LK-700, and a safe return."
+    },
+    "lk-700-orbital-duration-1": {
+      "name": "Orbital flight (duration level I)",
+      "description": "A longer stay in orbit in the LK-700, to learn how people and machines hold up over time."
+    },
+    "lk-700-orbital-duration-2": {
+      "name": "Orbital flight (duration level II)",
+      "description": "A longer stay in orbit in the LK-700, to learn how people and machines hold up over time."
+    },
+    "lk-700-orbital-duration-3": {
+      "name": "Orbital flight (duration level III)",
+      "description": "A longer stay in orbit in the LK-700, to learn how people and machines hold up over time."
+    },
+    "lk-700-orbital-duration-4": {
+      "name": "Orbital flight (duration level IV)",
+      "description": "A longer stay in orbit in the LK-700, to learn how people and machines hold up over time."
+    },
+    "lk-700-orbital-duration-5": {
+      "name": "Orbital flight (duration level V)",
+      "description": "A longer stay in orbit in the LK-700, to learn how people and machines hold up over time."
+    },
+    "lk-700-orbital-duration-6": {
+      "name": "Orbital flight (duration level VI)",
+      "description": "A longer stay in orbit in the LK-700, to learn how people and machines hold up over time."
+    },
+    "lk-700-spacewalk": {
+      "name": "Spacewalk",
+      "description": "A crew member leaves the LK-700 in a pressure suit, on a tether, and works outside."
+    },
+    "gemini-eor-lander-test": {
+      "name": "Lander test in low orbit",
+      "description": "Deploy the light lander in low Earth orbit and test its engine and ascent."
+    },
+    "gemini-eor-lander-and-heat-shield-test": {
+      "name": "Lander and heat shield test",
+      "description": "Test the lander in a higher orbit, then dive back at high speed to test the heat shield."
+    },
+    "circumlunar-gemini-transtage-flyby": {
+      "name": "Uncrewed lunar flyby",
+      "description": "Push an empty capsule around the Moon with the Transtage and bring it home."
+    },
+    "circumlunar-gemini-flyby": {
+      "name": "Lunar flyby (duration level II)",
+      "description": "A crew docks with the Transtage, swings around the Moon and comes home."
+    },
+    "lunar-orbital-gemini-uncrewed-flyby": {
+      "name": "Uncrewed lunar flyby",
+      "description": "Send the empty craft around the Moon and home again."
+    },
+    "lunar-orbital-gemini-flyby": {
+      "name": "Lunar flyby (duration level II)",
+      "description": "A crew flies around the Moon and home."
+    },
+    "lunar-orbital-gemini-uncrewed-lunar-orbit": {
+      "name": "Uncrewed lunar orbit",
+      "description": "Brake an empty craft into lunar orbit and fire it home again."
+    },
+    "lunar-orbital-gemini-lunar-orbit": {
+      "name": "Lunar orbit (duration level II)",
+      "description": "A crew brakes into orbit around the Moon, circles it and returns."
+    },
+    "gemini-direct-ascent-uncrewed-flyby": {
+      "name": "Uncrewed lunar flyby",
+      "description": "Send the empty craft around the Moon and home again."
+    },
+    "gemini-direct-ascent-flyby": {
+      "name": "Lunar flyby (duration level II)",
+      "description": "A crew flies around the Moon and home."
+    },
+    "gemini-direct-ascent-uncrewed-lunar-orbit": {
+      "name": "Uncrewed lunar orbit",
+      "description": "Brake an empty craft into lunar orbit and fire it home again."
+    },
+    "gemini-direct-ascent-lunar-orbit": {
+      "name": "Lunar orbit (duration level II)",
+      "description": "A crew brakes into lunar orbit, circles the Moon and returns."
+    },
+    "gemini-direct-ascent-landing": {
+      "name": "Lunar landing",
+      "description": "The whole craft lands on the Moon, the crew goes out, and it lifts off for home."
+    },
+    "apollo-uncrewed-flyby": {
+      "name": "Uncrewed lunar flyby",
+      "description": "Send an empty Apollo around the Moon and bring it home at lunar return speed."
+    },
+    "apollo-flyby": {
+      "name": "Lunar flyby (duration level II)",
+      "description": "A crew loops around the Moon and returns."
+    },
+    "apollo-uncrewed-lunar-orbit": {
+      "name": "Uncrewed lunar orbit",
+      "description": "Brake an empty Apollo into lunar orbit and fire it home again."
+    },
+    "apollo-lunar-orbit": {
+      "name": "Lunar orbit (duration level II)",
+      "description": "A crew brakes into orbit around the Moon, circles it, and comes home."
+    },
+    "apollo-lander-test": {
+      "name": "Lander test in lunar orbit",
+      "description": "A full rehearsal: the lunar module descends close to the surface, climbs back and docks, but doesn't land."
+    },
+    "apollo-landing": {
+      "name": "Lunar landing",
+      "description": "Two astronauts land, walk on the Moon and collect rocks, then rejoin the command module in orbit."
+    },
+    "apollo-landing-with-rover": {
+      "name": "Lunar landing with rover",
+      "description": "A longer stay on the Moon with the rover, driving far from the lander to explore."
+    },
+    "gemini-eor-flyby": {
+      "name": "Lunar flyby (duration level II)",
+      "description": "Assemble the craft in Earth orbit and send a crew around the Moon."
+    },
+    "gemini-eor-lunar-orbit": {
+      "name": "Lunar orbit (duration level II)",
+      "description": "Assemble the craft in Earth orbit and brake into orbit around the Moon."
+    },
+    "gemini-eor-lander-test-lunar-orbit": {
+      "name": "Lander test in lunar orbit",
+      "description": "Fly the light lander down toward the Moon and back up to the waiting capsule, without landing."
+    },
+    "gemini-eor-landing": {
+      "name": "Lunar landing",
+      "description": "One astronaut rides the open lander down to the Moon and back up to the capsule."
+    },
+    "soyuz-7k-l1-uncrewed-flyby": {
+      "name": "Uncrewed lunar flyby",
+      "description": "Send an empty craft around the Moon and bring it home."
+    },
+    "soyuz-7k-l1-flyby": {
+      "name": "Lunar flyby (duration level II)",
+      "description": "Two cosmonauts loop around the Moon and come straight back."
+    },
+    "soyuz-7k-l3-uncrewed-flyby": {
+      "name": "Uncrewed lunar flyby",
+      "description": "Send an empty craft around the Moon and home."
+    },
+    "soyuz-7k-l3-flyby": {
+      "name": "Lunar flyby (duration level II)",
+      "description": "A crew loops around the Moon and returns."
+    },
+    "soyuz-7k-l3-uncrewed-lunar-orbit": {
+      "name": "Uncrewed lunar orbit",
+      "description": "Brake an empty craft into lunar orbit and fire it home again."
+    },
+    "soyuz-7k-l3-lunar-orbit": {
+      "name": "Lunar orbit (duration level II)",
+      "description": "A crew brakes into lunar orbit and returns."
+    },
+    "soyuz-7k-l3-lander-test-lunar-orbit": {
+      "name": "Lander test in lunar orbit",
+      "description": "A cosmonaut crosses to the LK, flies it in lunar orbit and returns."
+    },
+    "soyuz-7k-l3-landing": {
+      "name": "Lunar landing",
+      "description": "One cosmonaut spacewalks to the LK, lands alone, and flies back up to the waiting Soyuz."
+    },
+    "lk-700-uncrewed-flyby": {
+      "name": "Uncrewed lunar flyby",
+      "description": "Send an empty craft around the Moon and home."
+    },
+    "lk-700-flyby": {
+      "name": "Lunar flyby (duration level II)",
+      "description": "A crew loops around the Moon and returns."
+    },
+    "lk-700-uncrewed-lunar-orbit": {
+      "name": "Uncrewed lunar orbit",
+      "description": "Brake an empty craft into lunar orbit and fire it home again."
+    },
+    "lk-700-lunar-orbit": {
+      "name": "Lunar orbit (duration level II)",
+      "description": "A crew brakes into lunar orbit and returns."
+    },
+    "lk-700-landing": {
+      "name": "Direct-ascent landing",
+      "description": "The whole craft and crew land on the Moon and lift off again for home."
+    },
+    "apollo-uncrewed-suborbital": {
+      "name": "Uncrewed suborbital test",
+      "description": "Fly the Apollo command module without a crew on a short up-and-down hop, to prove the launch, the heat shield and the recovery before anyone rides it."
+    },
+    "apollo-suborbital": {
+      "name": "Suborbital flight",
+      "description": "A crewed hop into space and straight back down: the Apollo command module's first flight with people aboard."
+    },
+    "apollo-uncrewed-orbital": {
+      "name": "Uncrewed orbital test",
+      "description": "Put an empty Apollo spacecraft into orbit and bring it home, to prove it can keep a crew alive there."
+    },
+    "apollo-orbital": {
+      "name": "Orbital flight",
+      "description": "A crewed flight around the Earth in the Apollo spacecraft, and a safe return."
+    },
+    "apollo-uncrewed-lunar-module-test": {
+      "name": "Uncrewed lunar module test",
+      "description": "Fly the lunar module alone in Earth orbit and fire both its stages."
+    },
+    "apollo-lunar-module-test-low-orbit": {
+      "name": "Lunar module test in low orbit",
+      "description": "The crew separates the lunar module, flies it apart, and docks again, with a spacewalk."
+    },
+    "apollo-lunar-module-test-high-orbit": {
+      "name": "Lunar module test in high orbit",
+      "description": "The same rehearsal in a high orbit, ending in a fast reentry to test the heat shield."
+    },
+    "apollo-orbital-duration-1": {
+      "name": "Orbital flight (duration level I)",
+      "description": "A longer stay in orbit in the Apollo, to learn how people and machines hold up over time."
+    },
+    "apollo-orbital-duration-2": {
+      "name": "Orbital flight (duration level II)",
+      "description": "A longer stay in orbit in the Apollo, to learn how people and machines hold up over time."
+    },
+    "apollo-orbital-duration-3": {
+      "name": "Orbital flight (duration level III)",
+      "description": "A longer stay in orbit in the Apollo, to learn how people and machines hold up over time."
+    },
+    "apollo-orbital-duration-4": {
+      "name": "Orbital flight (duration level IV)",
+      "description": "A longer stay in orbit in the Apollo, to learn how people and machines hold up over time."
+    },
+    "apollo-spacewalk-duration-1": {
+      "name": "Spacewalk (duration level I)",
+      "description": "A longer orbital flight with work outside the spacecraft."
+    },
+    "apollo-spacewalk-duration-2": {
+      "name": "Spacewalk (duration level II)",
+      "description": "A longer orbital flight with work outside the spacecraft."
+    },
+    "apollo-spacewalk-duration-3": {
+      "name": "Spacewalk (duration level III)",
+      "description": "A long orbital flight with work outside the spacecraft."
+    },
+    "apollo-spacewalk-duration-4": {
+      "name": "Spacewalk (duration level IV)",
+      "description": "A very long orbital flight with work outside the spacecraft."
+    },
+    "apollo-rendezvous": {
+      "name": "Rendezvous",
+      "description": "Two crewed Apollos launched to meet in orbit."
+    },
+    "apollo-docking": {
+      "name": "Docking",
+      "description": "An Apollo docks with a target launched ahead of it."
+    },
+    "soyuz-7k-ok-uncrewed-suborbital": {
+      "name": "Uncrewed suborbital test",
+      "description": "Fly the Soyuz without a crew on a short up-and-down hop, to prove the launch, the heat shield and the recovery before anyone rides it."
+    },
+    "soyuz-7k-ok-suborbital": {
+      "name": "Suborbital flight",
+      "description": "A crewed hop into space and straight back down: the Soyuz's first flight with people aboard."
+    },
+    "soyuz-7k-ok-uncrewed-orbital": {
+      "name": "Uncrewed orbital test",
+      "description": "Put an empty Soyuz into orbit and bring it home, to prove it can keep a crew alive there."
+    },
+    "soyuz-7k-ok-orbital": {
+      "name": "Orbital flight",
+      "description": "A crewed flight around the Earth in the Soyuz, and a safe return."
+    },
+    "soyuz-7k-ok-orbital-duration-1": {
+      "name": "Orbital flight (duration level I)",
+      "description": "A longer stay in orbit in the Soyuz, to learn how people and machines hold up over time."
+    },
+    "soyuz-7k-ok-orbital-duration-2": {
+      "name": "Orbital flight (duration level II)",
+      "description": "A longer stay in orbit in the Soyuz, to learn how people and machines hold up over time."
+    },
+    "soyuz-7k-ok-orbital-duration-3": {
+      "name": "Orbital flight (duration level III)",
+      "description": "A longer stay in orbit in the Soyuz, to learn how people and machines hold up over time."
+    },
+    "soyuz-7k-ok-orbital-duration-4": {
+      "name": "Orbital flight (duration level IV)",
+      "description": "A longer stay in orbit in the Soyuz, to learn how people and machines hold up over time."
+    },
+    "soyuz-7k-ok-orbital-duration-5": {
+      "name": "Orbital flight (duration level V)",
+      "description": "A longer stay in orbit in the Soyuz, to learn how people and machines hold up over time."
+    },
+    "soyuz-7k-ok-orbital-duration-6": {
+      "name": "Orbital flight (duration level VI)",
+      "description": "A longer stay in orbit in the Soyuz, to learn how people and machines hold up over time."
+    },
+    "soyuz-7k-ok-spacewalk": {
+      "name": "Spacewalk",
+      "description": "A crew member leaves the Soyuz in a pressure suit, on a tether, and works outside."
+    },
+    "soyuz-7k-ok-joint-orbital": {
+      "name": "Joint flight",
+      "description": "Two Soyuz craft launched in quick succession into nearly the same orbit, flying close enough to see each other."
+    },
+    "soyuz-7k-ok-automatic-rendezvous": {
+      "name": "Automatic rendezvous",
+      "description": "Two craft find each other in orbit with the Igla system steering."
+    },
+    "soyuz-7k-ok-uncrewed-docking": {
+      "name": "Uncrewed docking",
+      "description": "Two empty Soyuz craft find each other and dock automatically."
+    },
+    "soyuz-7k-ok-crewed-docking": {
+      "name": "Crewed docking",
+      "description": "A crewed Soyuz docks with a second craft under the Igla system's guidance."
+    },
+    "soyuz-7k-ok-crew-transfer": {
+      "name": "Docking and crew transfer",
+      "description": "Two crewed Soyuz craft dock, and cosmonauts spacewalk from one to the other."
+    }
+  },
+  "steps": {
+    "launch-preparations": {
+      "name": "Launch preparations",
+      "description": "Fueling, checks and loading the payload. Liquid oxygen boils away at minus 183 degrees Celsius, so it goes in last and is topped up until the final minutes."
+    },
+    "countdown": {
+      "name": "Countdown",
+      "description": "The final sequence before ignition. Any reading outside its limits stops the clock, and a long hold can push the launch to another day."
+    },
+    "launch": {
+      "name": "Launch",
+      "description": "Ignition and liftoff. The first seconds are the most dangerous: the rocket is full of propellant and barely moving, and a failing engine can bring it down on the pad."
+    },
+    "ascent": {
+      "name": "Ascent",
+      "description": "Climbing through the thick lower air, past the point of greatest aerodynamic stress, and on to staging. Steering errors here decide whether the payload reaches the planned orbit."
+    },
+    "deployment": {
+      "name": "Deployment",
+      "description": "The payload separates from the last stage. Springs or small rockets push the two apart so they don't collide."
+    },
+    "earth-orbit": {
+      "name": "Earth orbit",
+      "description": "Circling the Earth about every hour and a half, sending what it measures to ground stations as it passes over them."
+    },
+    "earth-orbital": {
+      "name": "Earth orbit",
+      "description": "Circling the Earth about every hour and a half, sending what it measures to ground stations as it passes over them."
+    },
+    "orbital-flight": {
+      "name": "Orbital flight",
+      "description": "Falling around the Earth about once every ninety minutes. Ground stations can only talk to the craft for a few minutes as it passes overhead."
+    },
+    "suborbital-flight": {
+      "name": "Suborbital flight",
+      "description": "Too slow to stay in orbit, the craft coasts on a ballistic arc above the atmosphere: a few minutes of weightlessness before it falls back."
+    },
+    "advanced-experiments-earth-orbit": {
+      "name": "Extended experiments in orbit",
+      "description": "More time in orbit for longer measurements, as long as the batteries and the instruments hold out."
+    },
+    "biometric-data-transmission": {
+      "name": "Biometric data transmission",
+      "description": "Sensors on the passenger send back heartbeat, breathing and movement: the first data on how a living body copes with launch and weightlessness."
+    },
+    "reentry-preparations": {
+      "name": "Reentry preparations",
+      "description": "Turning the craft so its retrorockets point forward along its path, and checking the alignment. Firing at the wrong angle can bring it down far off target."
+    },
+    "retrofire": {
+      "name": "Retrofire",
+      "description": "The retrorockets fire against the direction of travel. Losing only a small fraction of orbital speed is enough to lower the orbit into the atmosphere."
+    },
+    "retrofire-jettison": {
+      "name": "Retropack jettison",
+      "description": "The spent retrorocket pack is cast off, so that it doesn't burn up against the heat shield."
+    },
+    "modules-separation": {
+      "name": "Modules separation",
+      "description": "The capsule separates from its equipment module, which burns up on its own. If the two stay joined, they tumble together in the thickening air."
+    },
+    "reentry": {
+      "name": "Reentry",
+      "description": "Hitting the air at around 28,000 km/h, the craft is slowed by the air piling up ahead of it. That air turns to glowing plasma, which blocks the radio for several minutes."
+    },
+    "descent-and-landing": {
+      "name": "Descent and landing",
+      "description": "Parachutes open a few kilometers up. On a crewed flight the pilot ejects and lands under a separate parachute, because the capsule hits the ground too hard."
+    },
+    "descent-and-splashdown": {
+      "name": "Descent and splashdown",
+      "description": "Parachutes slow the capsule for a landing at sea, where ships and helicopters wait to recover it before it takes on water."
+    },
+    "duration-level-i": {
+      "name": "A day in orbit",
+      "description": "Staying up for a day or more: eating, sleeping and working in weightlessness, while doctors on the ground watch the pilot's health."
+    },
+    "duration-level-ii": {
+      "name": "Several days in orbit",
+      "description": "Days in orbit, near the limit of the capsule's oxygen, power and food."
+    },
+    "joint-orbital-flight": {
+      "name": "Flying together",
+      "description": "Both craft in orbit close to each other, talking by radio. With no engines to change their orbits, they slowly drift apart."
+    },
+    "pre-launch": {
+      "name": "Preflight",
+      "description": "The plane is fueled and checked, the pilot strapped in, and the carrier aircraft readied for takeoff."
+    },
+    "takeoff": {
+      "name": "Carrier takeoff",
+      "description": "The carrier aircraft takes off with the rocket plane hanging beneath it and climbs to the release height."
+    },
+    "launch-from-drop-plane": {
+      "name": "Drop and ignition",
+      "description": "Released from the carrier, the plane falls clear before the pilot lights the rocket engine."
+    },
+    "airdrop": {
+      "name": "Release",
+      "description": "The carrier lets go and the plane drops clear before it is flown on its own."
+    },
+    "wings-deployment": {
+      "name": "Wings out",
+      "description": "The wings are set for flight and the pilot takes control of the falling plane."
+    },
+    "powered-ascent": {
+      "name": "Powered climb",
+      "description": "The engine burns for a minute or two, pushing the plane steeply up or fast along."
+    },
+    "peak-altitude": {
+      "name": "Peak altitude",
+      "description": "At the top of the arc the air is too thin for the wings; small thrusters hold the plane's attitude."
+    },
+    "high-speed-leg": {
+      "name": "High-speed run",
+      "description": "A fast run where friction with the air heats the skin and every control input matters."
+    },
+    "orbital-maneuvering-engine-test": {
+      "name": "Engine test in space",
+      "description": "The engines meant for changing orbit are fired in space for the first time."
+    },
+    "deorbit-burn": {
+      "name": "Deorbit burn",
+      "description": "An engine burn against the direction of flight drops the orbit into the atmosphere."
+    },
+    "de-orbit-burn": {
+      "name": "Deorbit burn",
+      "description": "An engine burn against the direction of flight drops the orbit into the atmosphere."
+    },
+    "descent": {
+      "name": "Descent",
+      "description": "Down through the atmosphere, slowing as the air thickens, to parachutes or a glide."
+    },
+    "landing": {
+      "name": "Landing",
+      "description": "Touchdown, whether on a runway, on land under parachutes or on another world."
+    },
+    "landing-and-recovery": {
+      "name": "Landing and recovery",
+      "description": "Touchdown, and recovery teams reach the craft and its crew."
+    },
+    "splashdown": {
+      "name": "Splashdown",
+      "description": "The capsule hits the sea under its parachutes."
+    },
+    "splashdown-and-recovery": {
+      "name": "Splashdown and recovery",
+      "description": "The capsule lands in the sea and ships and helicopters pick up the crew."
+    },
+    "recovery": {
+      "name": "Recovery",
+      "description": "Ships, aircraft or ground teams reach the craft and bring it and its crew home."
+    },
+    "insertion": {
+      "name": "Orbit insertion",
+      "description": "The last burn of the climb, which leaves the craft in its planned orbit."
+    },
+    "orbit-insertion": {
+      "name": "Orbit insertion",
+      "description": "A burn that puts the craft into the orbit the mission needs."
+    },
+    "parking-orbit": {
+      "name": "Parking orbit",
+      "description": "A low orbit to check the spacecraft over before committing to the next burn."
+    },
+    "duration": {
+      "name": "Long stay in orbit",
+      "description": "Days in orbit while the crew and the systems are watched for wear."
+    },
+    "duration-l5": {
+      "name": "Duration level V",
+      "description": "Weeks in orbit while the crew and the systems are watched for wear."
+    },
+    "duration-l6": {
+      "name": "Duration level VI",
+      "description": "The longest stay yet, testing how long people can live and work in space."
+    },
+    "duration-level-iii": {
+      "name": "Duration level III",
+      "description": "A long stay in orbit while the crew and the systems are watched for wear."
+    },
+    "duration-level-iv": {
+      "name": "Duration level IV",
+      "description": "A very long stay in orbit while the crew and the systems are watched for wear."
+    },
+    "joint-earth-orbital": {
+      "name": "Joint orbit",
+      "description": "Two craft in nearly the same orbit, close enough to meet."
+    },
+    "meo": {
+      "name": "High orbit",
+      "description": "Flying in a high orbit, far out where reentry speeds approach those of a lunar return."
+    },
+    "injection-to-elliptical-meo": {
+      "name": "Burn to high orbit",
+      "description": "A burn that stretches the orbit far out from the Earth."
+    },
+    "btm-earth-orbit": {
+      "name": "Burn to high orbit",
+      "description": "An engine burn that raises the orbit far above the usual height."
+    },
+    "co-apoa": {
+      "name": "Coast to high point",
+      "description": "Coasting up to the highest point of a stretched orbit."
+    },
+    "co-enin": {
+      "name": "Coast to reentry",
+      "description": "Coasting back toward the atmosphere, aimed for the narrow entry corridor."
+    },
+    "ree-cor-adj-apoa": {
+      "name": "Entry corridor trim",
+      "description": "A small burn at the orbit's high point to aim the return into the narrow band between skipping off the air and burning up."
+    },
+    "engine-test": {
+      "name": "Engine test",
+      "description": "The main engine is fired in space and checked against what the ground expects."
+    },
+    "scientific-experiments": {
+      "name": "Spacewalk and experiments",
+      "description": "Work outside the craft, setting up and recovering experiments."
+    },
+    "target-approach": {
+      "name": "Target approach",
+      "description": "Closing on the target with small burns, the last stretch flown by eye or by radar."
+    },
+    "rendezvous-target-approach": {
+      "name": "Closing in",
+      "description": "Burns that bring one craft up to the other, from many kilometers to a few meters."
+    },
+    "rendezvous": {
+      "name": "Rendezvous",
+      "description": "Two craft flying in formation, close enough to touch."
+    },
+    "docking": {
+      "name": "Docking",
+      "description": "Easing together until the latches catch and the two craft are one."
+    },
+    "approach-and-docking": {
+      "name": "Approach and docking",
+      "description": "Closing on the waiting stage and docking with it."
+    },
+    "rendezvous-and-docking": {
+      "name": "Rendezvous and docking",
+      "description": "The ascending craft catches up with the one waiting in orbit and docks."
+    },
+    "at-docking": {
+      "name": "Automatic docking",
+      "description": "The craft dock under the control of their own radar and computers."
+    },
+    "lll-docking": {
+      "name": "Lander docking",
+      "description": "The lander docks with the capsule waiting in orbit."
+    },
+    "undocking": {
+      "name": "Undocking",
+      "description": "The latches open and the craft drift apart."
+    },
+    "crew-transfer": {
+      "name": "Crew transfer",
+      "description": "Crew members cross from one craft to the other."
+    },
+    "egress": {
+      "name": "Egress",
+      "description": "The hatch opens and an astronaut climbs out."
+    },
+    "eva": {
+      "name": "Spacewalk",
+      "description": "Work outside the spacecraft in a pressure suit."
+    },
+    "eva-i": {
+      "name": "First moonwalk",
+      "description": "The first walk on the surface: setting up experiments and collecting samples."
+    },
+    "eva-ii": {
+      "name": "Second moonwalk",
+      "description": "Another walk on the surface, ranging farther from the lander."
+    },
+    "eva-in-meo": {
+      "name": "Spacewalk in high orbit",
+      "description": "Work outside the spacecraft far out from the Earth."
+    },
+    "eva-7k-lok": {
+      "name": "Spacewalk to the lander",
+      "description": "A crew member crosses outside to the lander in a spacesuit."
+    },
+    "eva-7k-ok": {
+      "name": "Spacewalk",
+      "description": "Work outside the spacecraft in a pressure suit."
+    },
+    "eva-gemini-langley": {
+      "name": "Spacewalk to the lander",
+      "description": "The astronaut leaves the capsule and climbs onto the open lander."
+    },
+    "soyuz-7k-ok-deployment": {
+      "name": "Soyuz separation",
+      "description": "The Soyuz separates from the rocket and unfolds its solar panels and antennas."
+    },
+    "soyuz-7k-l3-lok-deployment": {
+      "name": "Soyuz separation",
+      "description": "The lunar Soyuz separates from the rocket and unfolds its panels and antennas."
+    },
+    "lk-700-deployment": {
+      "name": "LK-700 separation",
+      "description": "The LK-700 separates from the rocket and is checked out in orbit."
+    },
+    "lem-tests-earth-orbit": {
+      "name": "Lunar module checkout",
+      "description": "The crew powers up the lunar module and checks every system in Earth orbit."
+    },
+    "lem-ascent-stage-test": {
+      "name": "Ascent stage test",
+      "description": "The ascent stage fires and separates from the descent stage, as it would to leave the Moon."
+    },
+    "lem-jettison": {
+      "name": "Lunar module jettison",
+      "description": "The empty ascent stage is cut loose once the crew is back."
+    },
+    "lk-test": {
+      "name": "LK engine test",
+      "description": "The LK's engine is fired as for the last part of a landing."
+    },
+    "lk-lander-deployment": {
+      "name": "LK separation",
+      "description": "The LK separates from the rocket and is checked out in orbit."
+    },
+    "lpu-jes-eng-res": {
+      "name": "Landing gear jettison and restart",
+      "description": "The LK drops its landing gear and restarts its engine, as it would to lift off from the Moon."
+    },
+    "langley-test-lld": {
+      "name": "Lander deployment",
+      "description": "The light lander is released and checked out."
+    },
+    "langley-test-lllet": {
+      "name": "Lander engine test",
+      "description": "The lander's engine is fired as for a landing."
+    },
+    "langley-test-erat": {
+      "name": "Restart and ascent test",
+      "description": "The lander restarts its engine and climbs as it would from the Moon."
+    },
+    "langley-test": {
+      "name": "Ascent and rendezvous",
+      "description": "The lander climbs back and meets the capsule in lunar orbit."
+    },
+    "lun-prop-mod-test": {
+      "name": "Propulsion module burn",
+      "description": "The lunar propulsion module fires as it would to brake at the Moon."
+    },
+    "dir-asc-lan-mod-test": {
+      "name": "Landing module burn",
+      "description": "The landing module fires as it would for the descent to the Moon."
+    },
+    "dir-asc-mod-test-orb-apoa": {
+      "name": "Ascent module burn",
+      "description": "The ascent module fires at the orbit's high point, as it would to leave the Moon."
+    },
+    "ignition-and-separation": {
+      "name": "Transtage burn",
+      "description": "The Transtage fires to push the capsule toward the Moon, then separates."
+    },
+    "tli": {
+      "name": "Trans-lunar injection",
+      "description": "The burn that breaks out of Earth orbit onto a path to the Moon."
+    },
+    "trans-lunar-coast": {
+      "name": "Coast to the Moon",
+      "description": "Three days or so of coasting, with small course corrections."
+    },
+    "earth-moon-coast": {
+      "name": "Coast to the Moon",
+      "description": "Coasting from the Earth to the Moon, with small course corrections."
+    },
+    "lunar-approach": {
+      "name": "Lunar approach",
+      "description": "Falling toward the Moon, aimed to pass at just the right height."
+    },
+    "lunar-flyby": {
+      "name": "Lunar flyby",
+      "description": "Swinging around the Moon, its gravity bending the path back toward the Earth."
+    },
+    "lunar-slingshot": {
+      "name": "Around the Moon",
+      "description": "Behind the Moon, out of radio contact, the craft swings around for home."
+    },
+    "loi": {
+      "name": "Lunar orbit insertion",
+      "description": "A braking burn behind the Moon that lets its gravity capture the craft."
+    },
+    "lunar-orbit": {
+      "name": "Lunar orbit",
+      "description": "Circling the Moon about every two hours, out of contact on every pass behind it."
+    },
+    "transposition": {
+      "name": "Transposition and docking",
+      "description": "The spacecraft turns around, docks with the lander nose to nose, and pulls it free of the rocket."
+    },
+    "extraction": {
+      "name": "Lander extraction",
+      "description": "The docked spacecraft pulls the lander free of the rocket stage."
+    },
+    "lander-release": {
+      "name": "Lander release",
+      "description": "The lander separates from its carrier."
+    },
+    "powered-descent": {
+      "name": "Powered descent",
+      "description": "The descent engine brakes the lander out of orbit and down to touchdown."
+    },
+    "lunar-landing": {
+      "name": "Lunar landing",
+      "description": "Touchdown on the Moon."
+    },
+    "lk-deployment": {
+      "name": "LK separation",
+      "description": "The LK undocks from the orbiting Soyuz."
+    },
+    "lk-descent": {
+      "name": "LK descent",
+      "description": "The LK brakes out of lunar orbit and lands."
+    },
+    "lunar-surface-activities": {
+      "name": "On the surface",
+      "description": "Hours on the Moon: exploring, collecting rocks, setting up instruments."
+    },
+    "lunar-surface-operations-robotic": {
+      "name": "Surface operations",
+      "description": "Remote-controlled work on the surface: drilling, driving, photographing."
+    },
+    "lunar-liftoff": {
+      "name": "Lunar liftoff",
+      "description": "The engine fires and the craft lifts off from the Moon."
+    },
+    "lunar-ascent": {
+      "name": "Lunar ascent",
+      "description": "Climbing from the surface back into lunar orbit."
+    },
+    "ascent-from-lunar-surface": {
+      "name": "Liftoff from the Moon",
+      "description": "The return stage lifts off with its sample."
+    },
+    "tei": {
+      "name": "Trans-Earth injection",
+      "description": "The burn behind the Moon that sends the craft home."
+    },
+    "trans-earth-coast": {
+      "name": "Coast to the Earth",
+      "description": "Coasting home from the Moon, with small course corrections."
+    },
+    "moon-earth-coast": {
+      "name": "Coast to the Earth",
+      "description": "Coasting home from the Moon, with small course corrections."
+    },
+    "earth-approach": {
+      "name": "Earth approach",
+      "description": "Aiming for the narrow entry corridor at about eleven kilometers a second."
+    },
+    "earth-approach-and-reentry": {
+      "name": "Approach and reentry",
+      "description": "Arrival from the Moon and a fiery reentry at lunar return speed."
+    },
+    "lunar-impact": {
+      "name": "Impact",
+      "description": "The probe strikes the Moon, sending pictures or data until the end."
+    },
+    "tpi": {
+      "name": "Trans-planetary injection",
+      "description": "The burn that sends the probe out of the Earth's grip onto a path to another planet."
+    },
+    "earth-departure": {
+      "name": "Earth departure",
+      "description": "Leaving the Earth behind on the path to another planet."
+    },
+    "earth-venus-transit": {
+      "name": "Cruise to Venus",
+      "description": "Months of cruise to Venus, with course corrections on the way."
+    },
+    "earth-venus-approach": {
+      "name": "Venus approach",
+      "description": "Closing on Venus at the end of the cruise."
+    },
+    "venus-approach": {
+      "name": "Venus approach",
+      "description": "Closing on Venus, aimed for the planned flyby, orbit or entry."
+    },
+    "venus-flyby": {
+      "name": "Venus flyby",
+      "description": "Passing close by Venus and taking measurements."
+    },
+    "venus-orbit": {
+      "name": "Venus orbit",
+      "description": "Circling Venus and mapping or measuring it."
+    },
+    "venus-mercury-transit": {
+      "name": "Cruise to Mercury",
+      "description": "Bent by Venus's gravity, the probe falls inward toward Mercury."
+    },
+    "mercury-flyby": {
+      "name": "Mercury flyby",
+      "description": "Passing close by Mercury and photographing it."
+    },
+    "big-probe-release": {
+      "name": "Large probe release",
+      "description": "The carrier releases the large probe weeks before arrival."
+    },
+    "small-probes-release": {
+      "name": "Small probes release",
+      "description": "The carrier releases the three small probes, aimed at widely spaced points."
+    },
+    "big-probe-approach-and-entry": {
+      "name": "Large probe entry",
+      "description": "The large probe hits the top of the atmosphere behind its heat shield."
+    },
+    "small-probes-approach-and-entry": {
+      "name": "Small probes entry",
+      "description": "The small probes hit the atmosphere at their separate points."
+    },
+    "big-probe-descent-and-landing": {
+      "name": "Large probe descent",
+      "description": "Under a parachute and then free fall, the large probe measures all the way to the ground."
+    },
+    "small-probes-landing": {
+      "name": "Small probes descent",
+      "description": "The small probes fall through the clouds, reporting to the end."
+    },
+    "interplanetary-bus-entry": {
+      "name": "Carrier entry",
+      "description": "The carrier burns up in the atmosphere after letting the lander go."
+    },
+    "lander-entry": {
+      "name": "Lander entry",
+      "description": "The lander hits the atmosphere behind its heat shield."
+    },
+    "lander-descent": {
+      "name": "Lander descent",
+      "description": "Down under parachutes toward the surface."
+    },
+    "lander-descent-and-landing": {
+      "name": "Descent and landing",
+      "description": "Down through the atmosphere to the surface, and the first signal from the ground."
+    },
+    "lander-detachment": {
+      "name": "Lander separation",
+      "description": "The lander separates from the orbiter."
+    },
+    "lander-deployment-and-de-orbit": {
+      "name": "Lander separation and deorbit",
+      "description": "The lander separates and fires its engine to leave orbit."
+    },
+    "landing-and-deployment": {
+      "name": "Landing and deployment",
+      "description": "The lander touches down and sends out its rover."
+    },
+    "earth-mars-transit": {
+      "name": "Cruise to Mars",
+      "description": "Months of cruise to Mars, with course corrections on the way."
+    },
+    "mars-approach": {
+      "name": "Mars approach",
+      "description": "Closing on Mars, aimed for the planned flyby or orbit."
+    },
+    "mars-flyby": {
+      "name": "Mars flyby",
+      "description": "Passing close by Mars and photographing it."
+    },
+    "mars-orbit-injection": {
+      "name": "Mars orbit insertion",
+      "description": "A braking burn that lets Mars's gravity capture the probe."
+    },
+    "mars-orbit": {
+      "name": "Mars orbit",
+      "description": "Circling Mars, mapping and measuring it."
+    },
+    "mars-surface": {
+      "name": "On the surface of Mars",
+      "description": "Working on the Martian surface: photographing, sampling, measuring."
+    },
+    "earth-jupiter-transit": {
+      "name": "Cruise to Jupiter",
+      "description": "Nearly two years of cruise, through the asteroid belt."
+    },
+    "jupiter-approach": {
+      "name": "Jupiter approach",
+      "description": "Closing on Jupiter, into its belts of intense radiation."
+    },
+    "jupiter-flyby": {
+      "name": "Jupiter flyby",
+      "description": "Passing Jupiter and its moons, measuring and photographing."
+    },
+    "jupiter-saturn-transit": {
+      "name": "Cruise to Saturn",
+      "description": "Years of cruise from Jupiter out to Saturn."
+    },
+    "saturn-approach": {
+      "name": "Saturn approach",
+      "description": "Closing on Saturn and its rings."
+    },
+    "saturn-flyby": {
+      "name": "Saturn flyby",
+      "description": "Passing Saturn and its rings, measuring and photographing."
+    },
+    "heliocentric-orbit-insertion": {
+      "name": "Into solar orbit",
+      "description": "The probe leaves the Earth's neighborhood for an orbit of its own around the Sun."
+    },
+    "sun-measurements": {
+      "name": "Solar measurements",
+      "description": "Measuring the solar wind and its magnetic field from solar orbit."
+    }
+  },
+  "goals": {
+    "earth-orbit-satellite": {
+      "name": "Satellite in orbit",
+      "description": "Put any satellite into orbit around the Earth."
+    },
+    "radio-signals-from-orbit": {
+      "name": "Radio from orbit",
+      "description": "Fly a satellite that broadcasts from orbit to the ground."
+    },
+    "sputnik-1-flown": {
+      "name": "Sputnik 1 flown",
+      "description": "Fly the Sputnik 1 satellite successfully."
+    },
+    "explorer-1-flown": {
+      "name": "Explorer 1 flown",
+      "description": "Fly the Explorer 1 satellite successfully."
+    },
+    "magnetic-field-study": {
+      "name": "Space environment measured",
+      "description": "Measure radiation and the magnetic field in orbit: knowledge every later spacecraft design depends on."
+    },
+    "organisms-in-microgravity": {
+      "name": "Life in weightlessness",
+      "description": "Fly living organisms in orbit and study how weightlessness affects them."
+    },
+    "sputnik-2-flown": {
+      "name": "Sputnik 2 flown",
+      "description": "Fly Sputnik 2 and its passenger successfully."
+    },
+    "korabl-sputnik-2-flown": {
+      "name": "Korabl-Sputnik 2 flown",
+      "description": "Fly the biological capsule and bring its passengers home alive."
+    },
+    "vostok-uncrewed-suborbital-flown": {
+      "name": "Vostok uncrewed suborbital test",
+      "description": "Complete an uncrewed suborbital test of the Vostok capsule."
+    },
+    "vostok-suborbital-flown": {
+      "name": "Vostok suborbital flight",
+      "description": "Complete a crewed suborbital flight in a Vostok capsule."
+    },
+    "vostok-uncrewed-orbital-flown": {
+      "name": "Vostok uncrewed orbital test",
+      "description": "Complete an uncrewed orbital test of the Vostok capsule."
+    },
+    "vostok-orbital-flown": {
+      "name": "Vostok orbital flight",
+      "description": "Complete a crewed orbital flight in a Vostok capsule."
+    },
+    "mercury-uncrewed-suborbital-flown": {
+      "name": "Mercury uncrewed suborbital test",
+      "description": "Complete an uncrewed suborbital test of the Mercury capsule."
+    },
+    "mercury-suborbital-flown": {
+      "name": "Mercury suborbital flight",
+      "description": "Complete a crewed suborbital flight in a Mercury capsule."
+    },
+    "mercury-uncrewed-orbital-flown": {
+      "name": "Mercury uncrewed orbital test",
+      "description": "Complete an uncrewed orbital test of the Mercury capsule."
+    },
+    "mercury-orbital-flown": {
+      "name": "Mercury orbital flight",
+      "description": "Complete a crewed orbital flight in a Mercury capsule."
+    },
+    "duration-level-1": {
+      "name": "A day in space",
+      "description": "Keep a crew in space for between 6 and 36 hours."
+    },
+    "duration-level-2": {
+      "name": "Days in space",
+      "description": "Keep a crew in space for between 36 hours and a week."
+    },
+    "joint-crewed-launch": {
+      "name": "Two crews together",
+      "description": "Launch two crewed craft so that they fly within a few kilometers of each other."
+    },
+    "human-in-space": {
+      "name": "Human in space",
+      "description": "Send a person above 100 km and bring them back safely."
+    },
+    "human-in-orbit": {
+      "name": "Human in orbit",
+      "description": "Put a person into orbit, once around the Earth or more, and bring them back safely."
+    },
+    "micrometeoroid-satellite-flown": {
+      "name": "Pegasus flown",
+      "description": "Complete a Pegasus micrometeoroid flight successfully."
+    },
+    "micrometeoroid-study": {
+      "name": "Micrometeoroid risk measured",
+      "description": "Measure how often small particles strike a spacecraft in orbit."
+    },
+    "biosatellite-flown": {
+      "name": "Biosatellite flown",
+      "description": "Complete a Biosatellite flight successfully."
+    },
+    "ofo-flown": {
+      "name": "Orbiting Frog Otolith flown",
+      "description": "Complete an Orbiting Frog Otolith flight successfully."
+    },
+    "amphibians-in-microgravity": {
+      "name": "Frogs in weightlessness",
+      "description": "Study how weightlessness affects the balance organs of frogs."
+    },
+    "lunar-probe": {
+      "name": "Probe to the Moon",
+      "description": "Send any probe to the Moon."
+    },
+    "lunar-flyby": {
+      "name": "Lunar flyby",
+      "description": "Fly a probe past the Moon."
+    },
+    "pioneer-4-flown": {
+      "name": "Pioneer 4 flown",
+      "description": "Complete the Pioneer 4 flyby successfully."
+    },
+    "luna-3-flown": {
+      "name": "Luna 3 flown",
+      "description": "Complete the Luna 3 flight around the Moon successfully."
+    },
+    "lunar-photos": {
+      "name": "Pictures of the Moon",
+      "description": "Photograph or scan the Moon from a passing probe."
+    },
+    "zond-5-flown": {
+      "name": "Zond 5 flown",
+      "description": "Complete the Zond 5 flight around the Moon successfully."
+    },
+    "lunar-bioscience": {
+      "name": "Life around the Moon",
+      "description": "Bring living things back from a trip around the Moon."
+    },
+    "lunar-impact": {
+      "name": "Probe on the Moon",
+      "description": "Strike the Moon with a probe."
+    },
+    "ranger-3-flown": {
+      "name": "Ranger 3 flown",
+      "description": "Complete the Ranger 3 impact successfully."
+    },
+    "luna-2-flown": {
+      "name": "Luna 2 flown",
+      "description": "Complete the Luna 2 impact successfully."
+    },
+    "lunar-structure-study": {
+      "name": "Moon's makeup studied",
+      "description": "Learn about the Moon's structure from a probe."
+    },
+    "lunar-soil-study": {
+      "name": "Lunar surface studied",
+      "description": "Learn what the Moon's surface is made of."
+    },
+    "lunar-close-up-photos": {
+      "name": "Close-ups of the Moon",
+      "description": "Send back close-up pictures of the lunar surface."
+    },
+    "lunar-orbit": {
+      "name": "Probe in lunar orbit",
+      "description": "Put a probe into orbit around the Moon."
+    },
+    "pioneer-2-flown": {
+      "name": "Pioneer 2 flown",
+      "description": "Complete the Pioneer 2 lunar orbit successfully."
+    },
+    "lunar-mapping": {
+      "name": "Moon mapped",
+      "description": "Map the Moon from orbit."
+    },
+    "lunar-structure-survey": {
+      "name": "Moon's makeup surveyed",
+      "description": "Survey the Moon's structure from orbit."
+    },
+    "lunar-orbiter-flown": {
+      "name": "Lunar Orbiter flown",
+      "description": "Complete a Lunar Orbiter mapping flight successfully."
+    },
+    "lunar-micrometeoroid-study": {
+      "name": "Lunar micrometeoroids measured",
+      "description": "Measure small particle hits near the Moon."
+    },
+    "lunar-lander": {
+      "name": "Probe landed on the Moon",
+      "description": "Land a probe on the Moon."
+    },
+    "lunar-soil-analysis": {
+      "name": "Lunar soil analyzed",
+      "description": "Analyze the lunar soil where a lander stands."
+    },
+    "lunar-soft-landing": {
+      "name": "Soft landing on the Moon",
+      "description": "Land on the Moon gently enough to keep working."
+    },
+    "lunar-surface-photos": {
+      "name": "Pictures from the Moon",
+      "description": "Send back pictures taken on the lunar surface."
+    },
+    "lunar-rover": {
+      "name": "Rover on the Moon",
+      "description": "Drive a robot rover across the Moon."
+    },
+    "lunar-sample-return": {
+      "name": "Robot sample return",
+      "description": "Bring lunar soil back to Earth with a robot."
+    },
+    "lunar-soil-survey": {
+      "name": "Lunar soil surveyed",
+      "description": "Study lunar soil in an Earth laboratory."
+    },
+    "lunar-sample-retrieved": {
+      "name": "Lunar sample in hand",
+      "description": "Recover a capsule of lunar soil on Earth."
+    },
+    "sun-probe": {
+      "name": "Probe to the Sun",
+      "description": "Send a probe into orbit around the Sun."
+    },
+    "solar-orbit": {
+      "name": "Solar orbit",
+      "description": "Put a probe in its own orbit around the Sun."
+    },
+    "solar-study": {
+      "name": "Sun studied",
+      "description": "Study the Sun from interplanetary space."
+    },
+    "solar-wind-measurements": {
+      "name": "Solar wind measured",
+      "description": "Measure the stream of particles flowing from the Sun."
+    },
+    "interplanetary-magnetic-field": {
+      "name": "Sun's magnetic field traced",
+      "description": "Map the magnetic field the solar wind carries between the planets."
+    },
+    "mercury-probe": {
+      "name": "Probe to Mercury",
+      "description": "Send a probe to Mercury."
+    },
+    "mercury-flyby": {
+      "name": "Mercury flyby",
+      "description": "Fly a probe past Mercury."
+    },
+    "mercury-mapping": {
+      "name": "Mercury photographed",
+      "description": "Photograph Mercury's surface."
+    },
+    "mercury-structure-study": {
+      "name": "Mercury's makeup studied",
+      "description": "Learn about Mercury's structure and magnetic field."
+    },
+    "venus-probe": {
+      "name": "Probe to Venus",
+      "description": "Send any probe to Venus."
+    },
+    "venus-flyby": {
+      "name": "Venus flyby",
+      "description": "Fly a probe past Venus."
+    },
+    "venus-structure-study": {
+      "name": "Venus studied",
+      "description": "Learn about Venus from a passing probe."
+    },
+    "venus-orbit": {
+      "name": "Probe in Venus orbit",
+      "description": "Put a probe into orbit around Venus."
+    },
+    "pioneer-venus-orbiter-flown": {
+      "name": "Pioneer Venus Orbiter flown",
+      "description": "Complete the Pioneer Venus Orbiter flight successfully."
+    },
+    "venera-15-flown": {
+      "name": "Venera 15 flown",
+      "description": "Complete the Venera 15 orbit successfully."
+    },
+    "venus-radar-mapping": {
+      "name": "Venus mapped by radar",
+      "description": "Map Venus's surface through its clouds by radar."
+    },
+    "venus-structure-survey": {
+      "name": "Venus surveyed",
+      "description": "Survey Venus from orbit."
+    },
+    "venus-atmospheric-entry": {
+      "name": "Probes into Venus's air",
+      "description": "Drop probes through the atmosphere of Venus."
+    },
+    "venus-atmosphere-study": {
+      "name": "Venus's atmosphere studied",
+      "description": "Measure the atmosphere of Venus from top to bottom."
+    },
+    "venus-lander": {
+      "name": "Lander on Venus",
+      "description": "Land a probe on Venus and hear from it."
+    },
+    "venus-surface-study": {
+      "name": "Venus's surface studied",
+      "description": "Measure conditions on Venus's surface."
+    },
+    "venus-lander-and-carrier": {
+      "name": "Venus lander with a carrier",
+      "description": "Land on Venus while a carrier craft relays the signal."
+    },
+    "mars-probe": {
+      "name": "Probe to Mars",
+      "description": "Send any probe to Mars."
+    },
+    "mars-flyby": {
+      "name": "Mars flyby",
+      "description": "Fly a probe past Mars."
+    },
+    "mars-photos": {
+      "name": "Pictures of Mars",
+      "description": "Photograph Mars from a passing probe."
+    },
+    "mars-surface-and-atmosphere-study": {
+      "name": "Mars studied",
+      "description": "Study Mars's surface and atmosphere from a passing probe."
+    },
+    "mars-orbit": {
+      "name": "Probe in Mars orbit",
+      "description": "Put a probe into orbit around Mars."
+    },
+    "mars-orbiter-science": {
+      "name": "Mars studied from orbit",
+      "description": "Study Mars from an orbiter."
+    },
+    "mars-m69-flown": {
+      "name": "Mars M-69 flown",
+      "description": "Complete the Mars M-69 orbit successfully."
+    },
+    "mars-mapping": {
+      "name": "Mars mapped",
+      "description": "Map Mars from orbit."
+    },
+    "mars-surface-and-atmosphere-survey": {
+      "name": "Mars surveyed",
+      "description": "Survey Mars's surface and atmosphere from orbit."
+    },
+    "mars-orbiter-and-lander": {
+      "name": "Mars orbiter and lander",
+      "description": "Put an orbiter around Mars and a lander on it."
+    },
+    "mars-soil-study": {
+      "name": "Martian soil studied",
+      "description": "Study the soil of Mars from a lander."
+    },
+    "mars-orbiter-lander-and-rover": {
+      "name": "Mars orbiter, lander, rover",
+      "description": "Put an orbiter around Mars, a lander on it and a rover on the move."
+    },
+    "mars-soil-analysis": {
+      "name": "Martian soil analyzed",
+      "description": "Analyze Martian soil from a lander and rover."
+    },
+    "jupiter-probe": {
+      "name": "Probe to Jupiter",
+      "description": "Send a probe to Jupiter."
+    },
+    "jupiter-flyby": {
+      "name": "Jupiter flyby",
+      "description": "Fly a probe past Jupiter."
+    },
+    "jupiter-atmosphere-study": {
+      "name": "Jupiter's atmosphere studied",
+      "description": "Measure Jupiter's atmosphere from a passing probe."
+    },
+    "jupiter-photos": {
+      "name": "Pictures of Jupiter",
+      "description": "Photograph Jupiter up close."
+    },
+    "jupiter-moon-photos": {
+      "name": "Jupiter's moons seen",
+      "description": "Photograph Jupiter's large moons."
+    },
+    "saturn-probe": {
+      "name": "Probe to Saturn",
+      "description": "Send a probe to Saturn."
+    },
+    "saturn-flyby": {
+      "name": "Saturn flyby",
+      "description": "Fly a probe past Saturn."
+    },
+    "saturn-structure-study": {
+      "name": "Saturn studied",
+      "description": "Study Saturn and its rings up close."
+    },
+    "x-15-flight-test-flown": {
+      "name": "X-15 flight test",
+      "description": "Complete the X-15's flight test successfully."
+    },
+    "x-15-research-flight-1-flown": {
+      "name": "X-15 altitude flight",
+      "description": "Complete the X-15's altitude research flight successfully."
+    },
+    "x-15-research-flight-2-flown": {
+      "name": "X-15 speed flight",
+      "description": "Complete the X-15's speed research flight successfully."
+    },
+    "mig-e-154-drop-test-flown": {
+      "name": "MiG E-154 drop test",
+      "description": "Complete the MiG E-154's atmospheric drop test successfully."
+    },
+    "mig-e-154-suborbital-flown": {
+      "name": "MiG E-154 suborbital test",
+      "description": "Complete the MiG E-154's suborbital test successfully."
+    },
+    "mig-e-154-orbital-flown": {
+      "name": "MiG E-154 orbital flight",
+      "description": "Complete an orbital flight in the MiG E-154 successfully."
+    },
+    "gemini-uncrewed-suborbital-flown": {
+      "name": "Gemini uncrewed suborbital test",
+      "description": "Complete an uncrewed suborbital test of the Gemini capsule successfully."
+    },
+    "gemini-suborbital-flown": {
+      "name": "Gemini suborbital flight",
+      "description": "Complete a crewed suborbital flight in Gemini successfully."
+    },
+    "gemini-uncrewed-orbital-flown": {
+      "name": "Gemini uncrewed orbital test",
+      "description": "Complete an uncrewed orbital test of Gemini successfully."
+    },
+    "gemini-orbital-flown": {
+      "name": "Gemini orbital flight",
+      "description": "Complete a crewed orbital flight in Gemini successfully."
+    },
+    "gemini-spacewalk-flown": {
+      "name": "Gemini spacewalk",
+      "description": "Complete a spacewalk from a Gemini capsule successfully."
+    },
+    "gemini-rendezvous-flown": {
+      "name": "Gemini rendezvous",
+      "description": "Complete a rendezvous between Gemini capsules successfully."
+    },
+    "gemini-docking-flown": {
+      "name": "Gemini docking",
+      "description": "Complete a docking by a Gemini capsule successfully."
+    },
+    "gemini-lunar-reentry-test-flown": {
+      "name": "Gemini lunar-speed reentry",
+      "description": "Complete a Gemini reentry at lunar return speed successfully."
+    },
+    "gemini-transtage-test-flown": {
+      "name": "Gemini Transtage test",
+      "description": "Complete a Transtage test in Earth orbit successfully."
+    },
+    "gemini-lunar-propulsion-module-test-flown": {
+      "name": "Gemini propulsion module test",
+      "description": "Complete a lunar propulsion module test in Earth orbit successfully."
+    },
+    "gemini-direct-ascent-uncrewed-test-flown": {
+      "name": "Direct Ascent uncrewed test",
+      "description": "Complete an uncrewed test of Gemini Direct Ascent in Earth orbit successfully."
+    },
+    "gemini-direct-ascent-crewed-test-flown": {
+      "name": "Direct Ascent crewed test",
+      "description": "Complete a crewed test of Gemini Direct Ascent in Earth orbit successfully."
+    },
+    "voskhod-uncrewed-suborbital-flown": {
+      "name": "Voskhod uncrewed suborbital test",
+      "description": "Complete an uncrewed suborbital test of Voskhod successfully."
+    },
+    "voskhod-suborbital-flown": {
+      "name": "Voskhod suborbital flight",
+      "description": "Complete a crewed suborbital flight in Voskhod successfully."
+    },
+    "voskhod-uncrewed-orbital-flown": {
+      "name": "Voskhod uncrewed orbital test",
+      "description": "Complete an uncrewed orbital test of Voskhod successfully."
+    },
+    "voskhod-orbital-flown": {
+      "name": "Voskhod orbital flight",
+      "description": "Complete a crewed orbital flight in Voskhod successfully."
+    },
+    "voskhod-spacewalk-flown": {
+      "name": "Voskhod spacewalk",
+      "description": "Complete a spacewalk from Voskhod successfully."
+    },
+    "soyuz-7k-l1-uncrewed-suborbital-flown": {
+      "name": "7K-L1 uncrewed suborbital test",
+      "description": "Complete an uncrewed suborbital test of the Soyuz 7K-L1 successfully."
+    },
+    "soyuz-7k-l1-suborbital-flown": {
+      "name": "7K-L1 suborbital flight",
+      "description": "Complete a crewed suborbital flight in the Soyuz 7K-L1 successfully."
+    },
+    "soyuz-7k-l1-uncrewed-orbital-flown": {
+      "name": "7K-L1 uncrewed orbital test",
+      "description": "Complete an uncrewed orbital test of the Soyuz 7K-L1 successfully."
+    },
+    "soyuz-7k-l1-orbital-flown": {
+      "name": "7K-L1 orbital flight",
+      "description": "Complete a crewed orbital flight in the Soyuz 7K-L1 successfully."
+    },
+    "soyuz-7k-l3-uncrewed-suborbital-flown": {
+      "name": "7K-LOK uncrewed suborbital test",
+      "description": "Complete an uncrewed suborbital test of the Soyuz 7K-LOK successfully."
+    },
+    "soyuz-7k-l3-suborbital-flown": {
+      "name": "7K-LOK suborbital flight",
+      "description": "Complete a crewed suborbital flight in the Soyuz 7K-LOK successfully."
+    },
+    "soyuz-7k-l3-uncrewed-orbital-flown": {
+      "name": "7K-LOK uncrewed orbital test",
+      "description": "Complete an uncrewed orbital test of the Soyuz 7K-LOK successfully."
+    },
+    "soyuz-7k-l3-orbital-flown": {
+      "name": "7K-LOK orbital flight",
+      "description": "Complete a crewed orbital flight in the Soyuz 7K-LOK successfully."
+    },
+    "soyuz-7k-l3-spacewalk-flown": {
+      "name": "7K-LOK spacewalk",
+      "description": "Complete a spacewalk from the Soyuz 7K-LOK successfully."
+    },
+    "lk-lander-uncrewed-test-flown": {
+      "name": "LK uncrewed test",
+      "description": "Complete an uncrewed LK lander test in Earth orbit successfully."
+    },
+    "lk-lander-test-flown": {
+      "name": "LK crewed test",
+      "description": "Complete a crewed LK lander test in Earth orbit successfully."
+    },
+    "lk-700-uncrewed-suborbital-flown": {
+      "name": "LK-700 uncrewed suborbital test",
+      "description": "Complete an uncrewed suborbital test of the LK-700 successfully."
+    },
+    "lk-700-suborbital-flown": {
+      "name": "LK-700 suborbital flight",
+      "description": "Complete a crewed suborbital flight in the LK-700 successfully."
+    },
+    "lk-700-uncrewed-orbital-flown": {
+      "name": "LK-700 uncrewed orbital test",
+      "description": "Complete an uncrewed orbital test of the LK-700 successfully."
+    },
+    "lk-700-orbital-flown": {
+      "name": "LK-700 orbital flight",
+      "description": "Complete a crewed orbital flight in the LK-700 successfully."
+    },
+    "lk-700-spacewalk-flown": {
+      "name": "LK-700 spacewalk",
+      "description": "Complete a spacewalk from the LK-700 successfully."
+    },
+    "langley-lander-test-flown": {
+      "name": "Langley lander test",
+      "description": "Complete a Langley lander test in Earth orbit successfully."
+    },
+    "gemini-eor-service-module-test-flown": {
+      "name": "Gemini EOR module test",
+      "description": "Complete a Gemini EOR service module test in Earth orbit successfully."
+    },
+    "circumlunar-gemini-transtage-flyby-flown": {
+      "name": "Gemini Transtage lunar flyby",
+      "description": "Complete an uncrewed Transtage flight around the Moon successfully."
+    },
+    "circumlunar-gemini-flyby-flown": {
+      "name": "Circumlunar Gemini flyby",
+      "description": "Complete a crewed Gemini flight around the Moon successfully."
+    },
+    "lunar-orbital-gemini-uncrewed-flyby-flown": {
+      "name": "Lunar-orbit Gemini uncrewed flyby",
+      "description": "Complete an uncrewed lunar-orbit Gemini flight around the Moon successfully."
+    },
+    "lunar-orbital-gemini-flyby-flown": {
+      "name": "Lunar-orbit Gemini flyby",
+      "description": "Complete a crewed lunar-orbit Gemini flight around the Moon successfully."
+    },
+    "lunar-orbital-gemini-uncrewed-lunar-orbit-flown": {
+      "name": "Lunar-orbit Gemini uncrewed orbit",
+      "description": "Complete an uncrewed lunar-orbit Gemini flight into lunar orbit successfully."
+    },
+    "lunar-orbital-gemini-lunar-orbit-flown": {
+      "name": "Lunar-orbit Gemini in lunar orbit",
+      "description": "Complete a crewed Gemini flight into lunar orbit successfully."
+    },
+    "gemini-direct-ascent-uncrewed-flyby-flown": {
+      "name": "Direct Ascent uncrewed flyby",
+      "description": "Complete an uncrewed Direct Ascent flight around the Moon successfully."
+    },
+    "gemini-direct-ascent-flyby-flown": {
+      "name": "Direct Ascent lunar flyby",
+      "description": "Complete a crewed Direct Ascent flight around the Moon successfully."
+    },
+    "gemini-direct-ascent-uncrewed-lunar-orbit-flown": {
+      "name": "Direct Ascent uncrewed orbit",
+      "description": "Complete an uncrewed Direct Ascent flight into lunar orbit successfully."
+    },
+    "gemini-direct-ascent-lunar-orbit-flown": {
+      "name": "Direct Ascent in lunar orbit",
+      "description": "Complete a crewed Direct Ascent flight into lunar orbit successfully."
+    },
+    "gemini-direct-ascent-landing-flown": {
+      "name": "Direct Ascent Moon landing",
+      "description": "Complete a Gemini Direct Ascent landing on the Moon successfully."
+    },
+    "apollo-uncrewed-flyby-flown": {
+      "name": "Apollo uncrewed lunar flyby",
+      "description": "Complete an uncrewed Apollo flight around the Moon successfully."
+    },
+    "apollo-flyby-flown": {
+      "name": "Apollo lunar flyby",
+      "description": "Complete a crewed Apollo flight around the Moon successfully."
+    },
+    "apollo-uncrewed-lunar-orbit-flown": {
+      "name": "Apollo uncrewed lunar orbit",
+      "description": "Complete an uncrewed Apollo flight into lunar orbit successfully."
+    },
+    "apollo-lunar-orbit-flown": {
+      "name": "Apollo in lunar orbit",
+      "description": "Complete a crewed Apollo flight into lunar orbit successfully."
+    },
+    "apollo-lander-test-flown": {
+      "name": "Apollo lander rehearsal",
+      "description": "Complete a lunar module rehearsal in lunar orbit successfully."
+    },
+    "apollo-landing-flown": {
+      "name": "Apollo Moon landing",
+      "description": "Complete an Apollo landing on the Moon successfully."
+    },
+    "apollo-landing-with-rover-flown": {
+      "name": "Apollo landing with rover",
+      "description": "Complete an Apollo landing with the lunar rover successfully."
+    },
+    "gemini-eor-flyby-flown": {
+      "name": "Gemini EOR lunar flyby",
+      "description": "Complete a Gemini EOR flight around the Moon successfully."
+    },
+    "gemini-eor-lunar-orbit-flown": {
+      "name": "Gemini EOR in lunar orbit",
+      "description": "Complete a Gemini EOR flight into lunar orbit successfully."
+    },
+    "gemini-eor-lander-test-flown": {
+      "name": "Gemini EOR lander rehearsal",
+      "description": "Complete a Langley lander rehearsal in lunar orbit successfully."
+    },
+    "gemini-eor-landing-flown": {
+      "name": "Gemini EOR Moon landing",
+      "description": "Complete a Gemini EOR landing on the Moon successfully."
+    },
+    "soyuz-7k-l1-uncrewed-flyby-flown": {
+      "name": "7K-L1 uncrewed lunar flyby",
+      "description": "Complete an uncrewed Soyuz 7K-L1 flight around the Moon successfully."
+    },
+    "soyuz-7k-l1-flyby-flown": {
+      "name": "7K-L1 lunar flyby",
+      "description": "Complete a crewed Soyuz 7K-L1 flight around the Moon successfully."
+    },
+    "soyuz-7k-l3-uncrewed-flyby-flown": {
+      "name": "7K-LOK uncrewed lunar flyby",
+      "description": "Complete an uncrewed Soyuz 7K-LOK flight around the Moon successfully."
+    },
+    "soyuz-7k-l3-flyby-flown": {
+      "name": "7K-LOK lunar flyby",
+      "description": "Complete a crewed Soyuz 7K-LOK flight around the Moon successfully."
+    },
+    "soyuz-7k-l3-uncrewed-lunar-orbit-flown": {
+      "name": "7K-LOK uncrewed lunar orbit",
+      "description": "Complete an uncrewed Soyuz 7K-LOK flight into lunar orbit successfully."
+    },
+    "soyuz-7k-l3-lunar-orbit-flown": {
+      "name": "7K-LOK in lunar orbit",
+      "description": "Complete a crewed Soyuz 7K-LOK flight into lunar orbit successfully."
+    },
+    "soyuz-7k-l3-lander-test-flown": {
+      "name": "LK rehearsal in lunar orbit",
+      "description": "Complete an LK test in lunar orbit successfully."
+    },
+    "soyuz-7k-l3-landing-flown": {
+      "name": "LK Moon landing",
+      "description": "Complete an LK landing on the Moon successfully."
+    },
+    "lk-700-uncrewed-flyby-flown": {
+      "name": "LK-700 uncrewed lunar flyby",
+      "description": "Complete an uncrewed LK-700 flight around the Moon successfully."
+    },
+    "lk-700-flyby-flown": {
+      "name": "LK-700 lunar flyby",
+      "description": "Complete a crewed LK-700 flight around the Moon successfully."
+    },
+    "lk-700-uncrewed-lunar-orbit-flown": {
+      "name": "LK-700 uncrewed lunar orbit",
+      "description": "Complete an uncrewed LK-700 flight into lunar orbit successfully."
+    },
+    "lk-700-lunar-orbit-flown": {
+      "name": "LK-700 in lunar orbit",
+      "description": "Complete a crewed LK-700 flight into lunar orbit successfully."
+    },
+    "lk-700-landing-flown": {
+      "name": "LK-700 Moon landing",
+      "description": "Complete an LK-700 landing on the Moon successfully."
+    },
+    "apollo-uncrewed-suborbital-flown": {
+      "name": "Apollo uncrewed suborbital test",
+      "description": "Complete an uncrewed suborbital test of Apollo successfully."
+    },
+    "apollo-suborbital-flown": {
+      "name": "Apollo suborbital flight",
+      "description": "Complete a crewed suborbital flight in Apollo successfully."
+    },
+    "apollo-uncrewed-orbital-flown": {
+      "name": "Apollo uncrewed orbital test",
+      "description": "Complete an uncrewed orbital test of Apollo successfully."
+    },
+    "apollo-orbital-flown": {
+      "name": "Apollo orbital flight",
+      "description": "Complete a crewed orbital flight in Apollo successfully."
+    },
+    "apollo-spacewalk-flown": {
+      "name": "Apollo spacewalk",
+      "description": "Complete a spacewalk from Apollo successfully."
+    },
+    "apollo-uncrewed-lunar-module-test-flown": {
+      "name": "Lunar module uncrewed test",
+      "description": "Complete an uncrewed lunar module test in Earth orbit successfully."
+    },
+    "apollo-lunar-module-test-flown": {
+      "name": "Lunar module crewed test",
+      "description": "Complete a crewed lunar module test in Earth orbit successfully."
+    },
+    "apollo-lunar-reentry-test-flown": {
+      "name": "Apollo lunar-speed reentry",
+      "description": "Complete an Apollo reentry at lunar return speed successfully."
+    },
+    "soyuz-7k-ok-uncrewed-suborbital-flown": {
+      "name": "Soyuz uncrewed suborbital test",
+      "description": "Complete an uncrewed suborbital test of the Soyuz 7K-OK successfully."
+    },
+    "soyuz-7k-ok-suborbital-flown": {
+      "name": "Soyuz suborbital flight",
+      "description": "Complete a crewed suborbital flight in the Soyuz 7K-OK successfully."
+    },
+    "soyuz-7k-ok-uncrewed-orbital-flown": {
+      "name": "Soyuz uncrewed orbital test",
+      "description": "Complete an uncrewed orbital test of the Soyuz 7K-OK successfully."
+    },
+    "soyuz-7k-ok-orbital-flown": {
+      "name": "Soyuz orbital flight",
+      "description": "Complete a crewed orbital flight in the Soyuz 7K-OK successfully."
+    },
+    "soyuz-7k-ok-spacewalk-flown": {
+      "name": "Soyuz spacewalk",
+      "description": "Complete a spacewalk from the Soyuz 7K-OK successfully."
+    },
+    "soyuz-uncrewed-suborbital": {
+      "name": "Any Soyuz: uncrewed suborbital",
+      "description": "Fly any Soyuz on an uncrewed suborbital test."
+    },
+    "soyuz-suborbital": {
+      "name": "Any Soyuz: suborbital",
+      "description": "Fly any Soyuz on a crewed suborbital flight."
+    },
+    "soyuz-uncrewed-orbital": {
+      "name": "Any Soyuz: uncrewed orbital",
+      "description": "Fly any Soyuz on an uncrewed orbital test."
+    },
+    "soyuz-orbital": {
+      "name": "Any Soyuz: orbital",
+      "description": "Fly any Soyuz on a crewed orbital flight."
+    },
+    "soyuz-uncrewed-lunar-flyby": {
+      "name": "Any Soyuz: uncrewed lunar flyby",
+      "description": "Send any lunar Soyuz around the Moon without a crew."
+    },
+    "soyuz-lunar-flyby": {
+      "name": "Any Soyuz: lunar flyby",
+      "description": "Send any lunar Soyuz around the Moon with a crew."
+    },
+    "duration-level-3": {
+      "name": "Duration level III",
+      "description": "Keep a crew in space for a duration level III flight."
+    },
+    "duration-level-4": {
+      "name": "Duration level IV",
+      "description": "Keep a crew in space for a duration level IV flight."
+    },
+    "duration-level-5": {
+      "name": "Duration level V",
+      "description": "Keep a crew in space for a duration level V flight."
+    },
+    "duration-level-6": {
+      "name": "Duration level VI",
+      "description": "Keep a crew in space for a duration level VI flight."
+    },
+    "spacewalk": {
+      "name": "Spacewalk",
+      "description": "Send a person outside a spacecraft in orbit and bring them back in."
+    },
+    "crew-transfer": {
+      "name": "Crew transfer",
+      "description": "Move people from one spacecraft to another in orbit."
+    },
+    "rendezvous": {
+      "name": "Rendezvous",
+      "description": "Bring two crewed spacecraft close together in orbit by steering one to the other."
+    },
+    "docking": {
+      "name": "Docking",
+      "description": "Join two spacecraft together in orbit."
+    },
+    "crewed-lunar-flyby": {
+      "name": "People around the Moon",
+      "description": "Fly a crew around the Moon and bring them home."
+    },
+    "crewed-lunar-orbit": {
+      "name": "People in lunar orbit",
+      "description": "Put a crew into orbit around the Moon and bring them home."
+    },
+    "crewed-lunar-landing": {
+      "name": "People on the Moon",
+      "description": "Land a person on the Moon and return them safely to the Earth."
+    },
+    "lunar-samples-returned": {
+      "name": "Moon rocks on Earth",
+      "description": "Bring lunar samples home with a crew."
+    },
+    "space-plane": {
+      "name": "Space plane",
+      "description": "Fly a winged craft to the edge of space and land it on a runway."
+    },
+    "two-crew-spacecraft": {
+      "name": "Two-crew spacecraft",
+      "description": "Fly a spacecraft carrying more than one person."
+    },
+    "three-crew-spacecraft": {
+      "name": "Three-crew spacecraft",
+      "description": "Fly a spacecraft built for a crew of three."
+    },
+    "deep-space-probe": {
+      "name": "Deep space probe",
+      "description": "Send a probe beyond the Moon to another planet or the Sun."
+    }
+  }
+}

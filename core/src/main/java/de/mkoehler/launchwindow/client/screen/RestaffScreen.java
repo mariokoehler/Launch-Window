@@ -8,6 +8,7 @@ import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.SkillBar;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.view.CrewSkills;
+import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.MissionControl;
 import de.mkoehler.launchwindow.content.MissionConfiguration;
 import de.mkoehler.launchwindow.content.StaffingSlot;
@@ -62,6 +63,11 @@ public final class RestaffScreen extends ChromeScreen {
     protected void goBack() {
         InProgressMission mission = session.state().getInProgressMissions().get(missionId);
         game.setScreen(new MissionsScreen(game, mission == null || mission.getCurrentSeasonIndex() == 0));
+    }
+
+    @Override
+    protected Help.Context helpContext() {
+        return Help.Context.MISSION_CONTROL;
     }
 
     @Override
