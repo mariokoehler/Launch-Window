@@ -1443,10 +1443,13 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
     to training when the hardware is close): every game lands. **NASA median 135 seasons**
     (quartiles 122 and 158, fastest 85), **Soviet median 161** (142 and 184, fastest 113). It runs
     into debt doing it (lowest −150k, 28 conversions).
-  - **What sets the pace:** R&D. Each flight waits 2 to 24 seasons for its hardware to reach the
-    bots' launch bar of 70 % reliability, most at the start of a new craft (Apollo's first
-    suborbital test about 21, Soyuz 7K-L3's 24) or a new rocket (Vostok's first crewed flight 24,
-    on a new human-rated R-7, where Mercury's rides the Redstone it already has: about 3).
+  - **What sets the pace:** R&D. The bot spends 2 to 24 seasons on each flight, mostly waiting
+    for its hardware to reach its launch bar of 70 % reliability (about 84 of 152 seasons per
+    game; the rest is funds, staffing and building upgrades). The long waits come with a new craft
+    (Apollo's first suborbital test about 21, Soyuz 7K-L3's 24) or a new rocket: Vostok's
+    uncrewed suborbital test rides the cheaper R-7 of Sputnik, so its first crewed flight waits
+    about 24 seasons for the human-rated R-7, where Mercury's crewed flight rides the Redstone its
+    uncrewed test already used (about 3).
   - **Against history and the schedule:** a season is a quarter of a game year, so 135 seasons is
     34 game years against the real 47 seasons from Sputnik to Apollo 11. At a turn a day that is
     about four and a half months for the friends' game; Monday to Friday, about six for
