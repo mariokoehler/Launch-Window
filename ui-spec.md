@@ -460,7 +460,8 @@ On the right:
         names the pack's Around the Moon step. Visual check: halos on E-25 sheet 1's braking label,
         E-28's Return capsule, E-29's thrusters note and E-30 sheet 2's corridor label; E-26 sheet 2's
         Jupiter bar shortened to stay inside the frame; E-28's "Ascent stage" on two lines to fit
-        its box.
+        its box. E-23 sheet 1 and both E-26 sheets draw their bars in the picture, as the mockups
+        do, rather than as client-drawn bars.
       - The brief as given to the mockup session:
       - **E-20 "Three ways to the Moon"** (2): *Direct ascent, Earth-orbit and lunar-orbit
         rendezvous* side by side, what each lands and what each needs at launch; *Why the small
@@ -548,8 +549,8 @@ On the right:
     - **The standard pack's chips** *(built 2026-10-09 with E-20 to E-30)*: 18 new concepts link the
       new explainers to the full tree (lunar mission modes on the Moon programs, docking and
       spacewalk on their steps, suits and power sources on components, launch windows on the
-      planetary programs, and so on). To keep every configuration at six chips or fewer, the
-      basics that every later orbital flight shares, Orbit, Retrofire and Tracking, now sit on the
+      planetary programs, and so on; the assignments are in `concepts.json`). To keep every
+      configuration at six chips or fewer *(proposed, unconfirmed)*, the basics that every later orbital flight shares, Orbit, Retrofire and Tracking, now sit on the
       early flights where they are new (listed by configuration) instead of on the shared steps;
       the early era's chips are unchanged. `ConceptsTest` checks against the standard pack. The
       existing 19 explainers are not yet linked to the standard pack's new programs and rockets.

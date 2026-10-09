@@ -447,6 +447,12 @@ public final class ScreenSnapshot {
         write(folder, "standard-boosts-steps.png", new MissionStepsScreen(game, "mercury-orbital"), null);
         write(folder, "standard-boosts-plan.png", new MissionPlanScreen(game, "mercury-orbital",
             MissionPlanScreen.Tab.ASSESSMENT), null);
+
+        // The standard pack's concept chips (2026-10-09): the longest row, Apollo's landing, and
+        // Apollo's program with its components' chips.
+        write(folder, "standard-concepts-apollo-landing.png", new MissionStepsScreen(game, "apollo-landing"), null);
+        write(folder, "standard-concepts-apollo.png", new ProgramDetailsScreen(game, "apollo", CelestialBody.MOON),
+            null);
     }
 
     /**
