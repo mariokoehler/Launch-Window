@@ -211,7 +211,7 @@
               "text": "The way home is the cheap part. Earth's atmosphere does the braking that would otherwise need another big rocket; a returning crew pays for it with a heat shield and parachutes instead of fuel."
             }
           ],
-          "inGame": "In the VAB every rocket lists its payload to TLI, trans-lunar injection: what it can send toward the Moon. Every rocket of the early era reads 0 kg there."
+          "inGame": "In the VAB every rocket lists its payload to TLI, trans-lunar injection: what it can send toward the Moon. The first rockets, from the R-7 to the Atlas, read 0 kg there. An extra upper stage changes that: the R-7 built for the Luna probes sends 390 kg, the Saturn V 47 tonnes."
         },
         {
           "title": "Why the Moon rocket is so big",
@@ -231,7 +231,7 @@
               "text": "A Saturn V weighed about 2,900 t at liftoff, some 24 times the Atlas that flew America's first orbital missions. The Soviet N1, almost as big, flew four times between 1969 and 1972 and failed every time."
             }
           ],
-          "inGame": "Rockets come in classes, and a bigger class needs a higher VAB level before you can open it. Every rocket of the early era is Light."
+          "inGame": "Rockets come in classes, and a bigger class needs a higher VAB level before you can open it. The first rockets are all Light; the Moon rockets, the Saturn V and the N1, are Heavy."
         }
       ]
     },
@@ -308,7 +308,7 @@
               "text": "The usual pair, a hydrazine fuel with nitrogen tetroxide, is toxic and eats through seals, so ground crews load it in sealed suits. In October 1960 an R-16 missile, fuelled with a similar self-igniting pair, exploded on its pad at Baikonur and killed at least 78 people."
             }
           ],
-          "inGame": "Every rocket of the early era burns liquid oxygen in its main stages, so each one is fuelled on launch day, and the Countdown step can still hold. Self-lighting propellants arrive with later rockets and spacecraft."
+          "inGame": "The first rockets all burn liquid oxygen in their main stages, so each one is fuelled on launch day, and the Countdown step can still hold. Self-lighting propellants arrive with the Titan II and the Proton, both built as missiles that had to stand fuelled and ready."
         },
         {
           "title": "Steering with small jets",

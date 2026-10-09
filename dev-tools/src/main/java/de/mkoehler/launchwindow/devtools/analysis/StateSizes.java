@@ -12,7 +12,8 @@ import java.nio.file.Path;
  * through Kryo each season, against Kryo's 64 KB object buffer. The state isn't gzipped (the turn
  * report is), so this is the margin left.
  *
- * <p>Run: {@code mvn -pl dev-tools compile exec:java -DmainClass=de.mkoehler.launchwindow.devtools.analysis.StateSizes}</p>
+ * <p>Run: {@code mvn -pl dev-tools compile exec:java -DmainClass=de.mkoehler.launchwindow.devtools.analysis.StateSizes}
+ * ({@code -Dexec.args=standard} for the full pack)</p>
  *
  * @author Mario Koehler
  */
@@ -24,10 +25,12 @@ public final class StateSizes {
     /**
      * Plays 200 games of 80 seasons and prints the state's size every eight seasons.
      *
-     * @param args ignored
+     * @param args the content pack's name, {@code early-era} if none is given
      */
     public static void main(String[] args) {
-        ContentCatalog catalog = ContentPackLoader.load(Path.of("assets", "content", "early-era"));
+        String pack = args.length > 0 ? args[0] : "early-era";
+        ContentCatalog catalog = ContentPackLoader.load(Path.of("assets", "content", pack));
+        System.out.println("Pack: " + pack);
         ContentPackPlayouts.SizeReport report = new ContentPackPlayouts(catalog).sizes(200, 80, 42L);
         int buffer = NetworkConstants.OBJECT_BUFFER_SIZE;
         System.out.println(report.games() + " games; the state a client receives, in bytes (Kryo buffer "

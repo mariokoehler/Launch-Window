@@ -37,11 +37,21 @@ public class GameMeta {
     public static final String DEFAULT_CONTENT_PACK = "standard";
 
     /**
-     * The early era's race: a satellite in orbit, a human in space, a human in orbit. Every one is
-     * in both packs, so the default race ends at the first crewed orbit on the standard pack too.
+     * The standard pack's race (user, 2026-10-09): a satellite in orbit, a human in orbit, and a
+     * person landed on the Moon and brought home alive. The last goal is only in the standard pack.
      */
-    public static final List<String> DEFAULT_DECLARED_GOALS =
+    public static final List<String> STANDARD_DECLARED_GOALS =
+        List.of("earth-orbit-satellite", "human-in-orbit", "crewed-lunar-landing");
+
+    /**
+     * The early era's race, for a game on the early-era pack: a satellite in orbit, a human in
+     * space, a human in orbit.
+     */
+    public static final List<String> EARLY_ERA_DECLARED_GOALS =
         List.of("earth-orbit-satellite", "human-in-space", "human-in-orbit");
+
+    /** The race a new game declares: the default pack's. */
+    public static final List<String> DEFAULT_DECLARED_GOALS = STANDARD_DECLARED_GOALS;
 
     /**
      * Creates an uninitialized instance, for Jackson.

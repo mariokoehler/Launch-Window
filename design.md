@@ -1381,7 +1381,8 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
       at its top cap, 300 rapport pairs, five full folders) measured 34 KB as an object graph, so
       the state now goes over the wire as gzipped JSON like the turn report: about 17 KB
       (`StateSizeTest`, 2026-10-07). The bots' states stay under 8 KB over 80 seasons
-      (dev-tools `StateSizes`).
+      (dev-tools `StateSizes`), and under 11.3 KB on the standard pack (2026-10-09, 200 games,
+      17 % of the buffer; `-Dexec.args=standard`).
   - **Balance check** (dev-tools `IntelligencePlayouts`, 2026-10-07: four agencies, each spending
     every action every season, 24 seasons, 1,000 games; only the intelligence rules run). Per
     agency over the 24 seasons:
@@ -1411,10 +1412,12 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
   declared goal by who reached it first, then compare like an Olympic medal table (most firsts,
   then most seconds…). Placement ties use **standard competition ranking** (1, 1, 3), confirmed
   2026-10-06. `WinCondition` is a headless function; the result goes to `game-result.json`.
-- **Default declared goals** (`GameMeta.DEFAULT_DECLARED_GOALS`): satellite in orbit, human in
-  space, human in orbit, which ends the race at the first crewed orbital flight, around turn 24
-  (about six real weeks). Kept for the first play test; **decide again before the colleagues'
-  game** (user, 2026-10-06); "A day in space" and "Two crews together" would lengthen it.
+- **Default declared goals** (`GameMeta.DEFAULT_DECLARED_GOALS`), **decided for the standard pack
+  (user, 2026-10-09):** satellite in orbit, human in orbit, and a person landed on the Moon and
+  brought home alive (`crewed-lunar-landing`). The early-era pack can't hold that race, so a game on
+  it declares `GameMeta.EARLY_ERA_DECLARED_GOALS` instead (satellite in orbit, human in space, human
+  in orbit; the server tests do, since they run on the early-era pack). How long the Moon race runs
+  in turns is still to be measured with the bot playouts.
 - **The game goes on after a winner:** goals, flights and prestige still count.
 
 ### 2.10 Difficulty level
@@ -1790,7 +1793,9 @@ patches (`ui-spec.md` component 8).
 ## 4. Open questions
 
 - **Declared goals for the colleagues' game:** an early-era race (user, 2026-10-08), with goals
-  drawn from the early-era pack. The exact list is still to be drafted (§2.9).
+  drawn from the early-era pack. Since then the standard pack became the default with its own race to
+  a crewed Moon landing (user, 2026-10-09, §2.6); whether the colleagues' game plays that or a
+  shorter early-era race is open.
 - **NASA/Soviet prestige balance:** BASPM's Soviet programs pay a little more each (about 4 %)
   but NASA has nine more programs, about 34 % more prestige in total. Decided (user,
   2026-10-01) not to close the gap up front; revisit with play-test and harness data.
@@ -1905,9 +1910,8 @@ first (login → action → scheduled resolution → result, end to end) before 
   configuration achieves directly, because other goals' cancellations credit them. Our ids are in
   `full_maps.py` next to the converter; the early-era ids are kept. The ids are confirmed (user,
   2026-10-08). It is a second pack, `assets/content/standard`, beside `early-era`, and **the server's
-  default since 2026-10-09** (user; `GameMeta.DEFAULT_CONTENT_PACK`). The default declared goals are
-  in both packs, so the default race still ends at the first crewed orbit; the early-era pack stays
-  for the tests and short scenarios. **Its text is written** (2026-10-08): names and descriptions for every
+  default since 2026-10-09** (user; `GameMeta.DEFAULT_CONTENT_PACK`), with its own race ending at a
+  crewed Moon landing (§2.6); the early-era pack stays for the tests and short scenarios. **Its text is written** (2026-10-08): names and descriptions for every
   category, program, component, configuration, goal and step type, in our own words, with the
   early-era text carried over unchanged. **History notes are complete** (2026-10-09, every figure
   checked by web search): every program and every component, and the 38 new configurations that

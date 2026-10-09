@@ -105,6 +105,7 @@ class TurnSchedulerTest {
      * @return the scheduler
      */
     private TurnScheduler scheduler(Path dataRoot, Clock clock) {
+        earlyEraRace(dataRoot);
         return new TurnScheduler(dataRoot, mapper, clock, ServerTestGames.CONTEXT,
             new RandomEventRoster(0, 0, RandomEventRoster.baspmClose().events()));
     }
@@ -176,6 +177,26 @@ class TurnSchedulerTest {
         assertEquals(1, mapper.readValue(dataRoot.resolve(GameResult.FILE_NAME).toFile(), GameResult.class)
             .decidedOnTurn(), "the recorded result is never overwritten");
         assertTrue(new PlayerSnapshotStore(winnerRoot, mapper).load(2).isPresent(), "play continues");
+    }
+
+    /**
+     * Makes the game's {@code game-meta.json}, the default one if there is none yet, declare the
+     * early era's race: the scheduler runs on the early-era pack, which lacks the default race's
+     * lunar landing.
+     *
+     * @param dataRoot the server data root
+     */
+    private void earlyEraRace(Path dataRoot) {
+        try {
+            Path file = dataRoot.resolve("game-meta.json");
+            GameMeta meta = GameMetaStore.loadOrCreateDefault(file, mapper).meta();
+            if (!meta.getDeclaredGoalIds().equals(GameMeta.EARLY_ERA_DECLARED_GOALS)) {
+                meta.setDeclaredGoalIds(GameMeta.EARLY_ERA_DECLARED_GOALS);
+                writeGameMeta(dataRoot, meta);
+            }
+        } catch (IOException e) {
+            throw new java.io.UncheckedIOException(e);
+        }
     }
 
     /**

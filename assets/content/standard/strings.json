@@ -669,7 +669,7 @@
     "r7-luna": {
       "name": "R-7 (Luna)",
       "description": "The R-7 with a small third stage that sends probes to the Moon.",
-      "historyNote": "Luna 1 left on 2 January 1959 on the first R-7 with a third stage. The next day, about 113,000 km out, it released a kilogram of sodium vapor, a glowing artificial comet that observers photographed from the ground to check its path. It was aimed at the Moon, missed by about 6,000 km because of an error in the engine's cutoff, and became the first spacecraft to orbit the Sun."
+      "historyNote": "Luna 1 left on 2 January 1959, on the first R-7 with a third stage that worked. The next day, about 113,000 km out, it released a kilogram of sodium vapor, a glowing artificial comet that observers photographed from the ground to check its path. It was aimed at the Moon, missed by about 6,000 km because of an error in the engine's cutoff, and became the first spacecraft to orbit the Sun."
     },
     "r7-molniya": {
       "name": "R-7 (Molniya)",
@@ -1160,7 +1160,7 @@
     "gemini-spacewalk-and-rendezvous": {
       "name": "Spacewalk and rendezvous (duration I)",
       "description": "A rendezvous between two capsules, with a spacewalk as well.",
-      "historyNote": "In June 1966 Gemini 9A's crew caught up with their target and found its nose cover still hanging open in two halves: it had failed to come off. Tom Stafford said it looked like an angry alligator. Docking was impossible, so they flew rendezvous practice around it instead. Gene Cernan's exhausting spacewalk on the same flight is told on the Gemini suit."
+      "historyNote": "In June 1966 Gemini 9A's crew caught up with their target and found its nose cover still hanging open in two halves: it had failed to come off. Tom Stafford said it looked like an angry alligator. Docking was impossible, so they flew rendezvous practice around it instead."
     },
     "gemini-spacewalk-and-docking": {
       "name": "Spacewalk and docking (duration level I)",

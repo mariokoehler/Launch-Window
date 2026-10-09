@@ -348,7 +348,7 @@ class RequestDispatcherTest {
         assertTrue(fresh.success(), fresh.message());
         assertEquals("early-era", fresh.contentPackId());
         assertEquals(ServerTestGames.PACK_HASH, fresh.contentPackHash());
-        assertEquals(GameMeta.DEFAULT_DECLARED_GOALS, fresh.declaredGoalIds());
+        assertEquals(GameMeta.EARLY_ERA_DECLARED_GOALS, fresh.declaredGoalIds());
         assertEquals(1, fresh.gameTurn());
         assertEquals(new GameDate(1955, Season.WINTER), fresh.date());
         assertFalse(fresh.started());

@@ -56,6 +56,7 @@ public final class ServerTestGames {
         GameMeta meta = new GameMeta(ScheduleProfile.daily(LocalTime.of(9, 0), ZoneId.of("Europe/Berlin")), List.of());
         meta.setGameSeed(42);
         meta.setDevMode(devMode);
+        meta.setDeclaredGoalIds(GameMeta.EARLY_ERA_DECLARED_GOALS);
         return meta;
     }
 }

@@ -191,7 +191,7 @@ mvn -pl dev-tools compile exec:java -DmainClass=de.mkoehler.launchwindow.devtool
   "Dev · Resolve turn now" on the hub and allows `DevClient`'s `funds` cheat.
 - **Bot playouts:** `mvn -pl dev-tools compile exec:java -DmainClass=de.mkoehler.launchwindow.devtools.analysis.ContentPackPlayouts`
   (`-Dexec.args=standard` for the full pack)
-  (also `PersonnelLifecyclePlayouts`, `CareerCurves`, `StateSizes`, `IntelligencePlayouts`; `design.md` §3.10).
+  (also `PersonnelLifecyclePlayouts`, `CareerCurves`, `StateSizes` (it takes the pack too), `IntelligencePlayouts`; `design.md` §3.10).
 - **Releasing** (ported from Robot-Rampage 2026-10-06; its and StarWars' CLAUDE.md hold the
   gotchas):
   - **Client zip, locally:** `mvn -pl lwjgl3 -am -Prelease-client -DskipTests verify` gives
