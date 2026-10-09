@@ -72,10 +72,13 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
 - **The advisor is built** (2026-10-08, `ui-spec.md` component 24): a hub card with a new agency's
   first steps, ticked off from the state, until all are done or the player hides it.
 - **The full content pack is built** (2026-10-08, `design.md` §5, M3): `assets/content/standard`,
-  BASPM's whole tree (55 programs, 189 configurations), with its text and art, beside `early-era`,
-  which stays the server's default. New engine rules came with it: a payload's own lift, air drops
-  with no rocket, configurations gated on a goal. Still open: history notes for the new entries,
-  rocket program art (the user is drawing it), and switching the default pack.
+  BASPM's whole tree (55 programs, 189 configurations), with its text and art, beside `early-era`.
+  **It is the server's default since 2026-10-09** (`GameMeta.DEFAULT_CONTENT_PACK`; tests still pin
+  `early-era`). New engine rules came with it: a payload's own lift, air drops with no rocket,
+  configurations gated on a goal. Its components have blueprint drawings in the turn report
+  (2026-10-09). Still open: history notes for the new entries, rocket program art for Juno II and
+  Atlas (the user is drawing it), concept chips for the new content, and explainers E-20 to E-30
+  (proposed 2026-10-09, `design.md` §1.1).
 - **PR duty for astronauts is built** (`design.md` §2.2(c)), with 39 press stories
   (`assets/content/pr-press.json`), no repeats, and effects beyond prestige. Next is the next
   play test.

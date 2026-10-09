@@ -185,6 +185,15 @@ engineering problem or tidbit, note it here the same session.
     - "In Launch Window" lines checked against the pack: the steps named, Explorer 1 reaching
       Space environment measured (its plain flight in Earth orbit, its extended one in the
       experiments step, hence "Explorer 1's flights"), the Launch step's crew risk.
+- **Explainers for the standard pack (proposed 2026-10-09, unconfirmed; to be mocked up on the
+  Explainers canvas):** the full tree brings ideas no explainer covers yet. E-20 Three ways to the
+  Moon (direct ascent, Earth-orbit and lunar-orbit rendezvous), E-21 Docking, E-22 Spacewalks, E-23
+  Launch windows to the planets, E-24 Gravity assists, E-25 Landing without air, or with too much
+  (Moon, Venus, Mars), E-26 Far from home (power and signals), E-27 Pictures before digital cameras,
+  E-28 A piece of the Moon by robot, E-29 Rocket planes at the edge of space, E-30 Around the Moon
+  and back. Every figure in the prompt is a draft to verify before the build. The concept chips
+  don't reach the standard pack's new programs and components yet either; the existing 19
+  explainers already cover many of them (staging, delta-v, cryogenics, rocket classes).
 - **Concepts: linking game content to the explainers** (user's idea, 2026-10-07; specified in
   `ui-spec.md` component 19, mocked up the same day). Programs, configurations, steps, rockets and
   capsules each list the real-world concepts behind them; a Concepts section on their screens
@@ -1881,8 +1890,10 @@ first (login → action → scheduled resolution → result, end to end) before 
   24 rockets), 189 configurations and all 207 goals. The goals include the umbrella goals no
   configuration achieves directly, because other goals' cancellations credit them. Our ids are in
   `full_maps.py` next to the converter; the early-era ids are kept. The ids are confirmed (user,
-  2026-10-08). It is a second pack, `assets/content/standard`, beside `early-era`, which stays the
-  server's default for now. **Its text is written** (2026-10-08): names and descriptions for every
+  2026-10-08). It is a second pack, `assets/content/standard`, beside `early-era`, and **the server's
+  default since 2026-10-09** (user; `GameMeta.DEFAULT_CONTENT_PACK`). The default declared goals are
+  in both packs, so the default race still ends at the first crewed orbit; the early-era pack stays
+  for the tests and short scenarios. **Its text is written** (2026-10-08): names and descriptions for every
   category, program, component, configuration, goal and step type, in our own words, with the
   early-era text carried over unchanged. History notes: the early-era entries, and 44 of the 49
   new programs (2026-10-08, every figure checked by web search; Pioneer 2, Mariner 6, the Pioneer

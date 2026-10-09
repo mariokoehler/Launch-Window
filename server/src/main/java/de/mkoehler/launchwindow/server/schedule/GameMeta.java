@@ -30,10 +30,16 @@ public class GameMeta {
     private long gameSeed;
     private boolean devMode;
 
-    /** The content pack a new game plays, under {@code assets/content/}. */
-    public static final String DEFAULT_CONTENT_PACK = "early-era";
+    /**
+     * The content pack a new game plays, under {@code assets/content/}: BASPM's whole tree (user,
+     * 2026-10-09). The early-era pack stays for tests and short scenarios.
+     */
+    public static final String DEFAULT_CONTENT_PACK = "standard";
 
-    /** The early era's race: a satellite in orbit, a human in space, a human in orbit. */
+    /**
+     * The early era's race: a satellite in orbit, a human in space, a human in orbit. Every one is
+     * in both packs, so the default race ends at the first crewed orbit on the standard pack too.
+     */
     public static final List<String> DEFAULT_DECLARED_GOALS =
         List.of("earth-orbit-satellite", "human-in-space", "human-in-orbit");
 
