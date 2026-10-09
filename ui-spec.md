@@ -550,10 +550,19 @@ On the right:
       new explainers to the full tree (lunar mission modes on the Moon programs, docking and
       spacewalk on their steps, suits and power sources on components, launch windows on the
       planetary programs, and so on; the assignments are in `concepts.json`). To keep every
-      configuration at six chips or fewer *(proposed, unconfirmed)*, the basics that every later orbital flight shares, Orbit, Retrofire and Tracking, now sit on the
+      configuration at six chips or fewer *(confirmed by the user, 2026-10-09)*, the basics that every later orbital flight shares, Orbit, Retrofire and Tracking, now sit on the
       early flights where they are new (listed by configuration) instead of on the shared steps;
-      the early era's chips are unchanged. `ConceptsTest` checks against the standard pack. The
-      existing 19 explainers are not yet linked to the standard pack's new programs and rockets.
+      the early era's chips are unchanged. `ConceptsTest` checks against the standard pack.
+    - **The first 19 explainers on the full tree** *(built 2026-10-09)*: rocket ideas (staging,
+      rocket classes, delta-v, cryogenic propellant, engine restarts, human rating, launch latitude,
+      guidance, max Q, balloon tanks) on the new rockets, capsule ideas (retrofire, launch escape,
+      steering jets, the one-shot retrorocket) on the new capsules, and flight ideas on the new
+      steps (weightlessness on the longer duration levels, land or sea on splashdowns, rendezvous on
+      the rendezvous flights by name). A new concept, "Self-lighting propellants" (E-05 sheet 1),
+      sits on the Titans, the Proton, the UR-700, the Transtage and Apollo's two craft. Trimmed to
+      the caps: no engine restarts or self-lighting chip on the Agena (its programs would pass six),
+      no land or sea on Apollo's recovery step, no launch latitude on the Saturn V (nine rocket
+      chips already).
     - **Mocked up (2026-10-07)** on the `Launch Window — Explainers` canvas, bottom row: the chip
       on its own (`ConceptChips`), Program details for Vostok (`ProgramDetailsConcepts`), Vostok
       Orbital's steps and goals (`ConfigDetailsConcepts`), the VAB's Open rocket program with

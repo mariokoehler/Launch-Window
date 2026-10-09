@@ -77,9 +77,7 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   `early-era`). New engine rules came with it: a payload's own lift, air drops with no rocket,
   configurations gated on a goal. Its components have blueprint drawings in the turn report
   (2026-10-09), and every program, component and real flight has a history note (2026-10-09). Still
-  open: rocket program art for Juno II and Atlas (the user is drawing it), linking the first 19
-  explainers' concepts to the new programs and rockets (E-20 to E-30 are built and linked,
-  2026-10-09), and a new blueprint for
+  open: rocket program art for Juno II and Atlas (the user is drawing it), and a new blueprint for
   `mig-e-154-spaceplane` (user, 2026-10-09: it was generated from BASPM's PKA, not the rocket plane
   the user's art shows; redo its description in `assets-raw/blueprints/descriptions.json`).
 - **PR duty for astronauts is built** (`design.md` §2.2(c)), with 39 press stories
