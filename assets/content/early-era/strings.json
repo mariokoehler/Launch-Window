@@ -49,7 +49,8 @@
     },
     "sputnik-2-satellite": {
       "name": "Sputnik 2 satellite",
-      "description": "A sealed, air-conditioned cabin for one dog, with instruments for radiation and sunlight. It stays attached to the rocket's core stage in orbit."
+      "description": "A sealed, air-conditioned cabin for one dog, with instruments for radiation and sunlight. It stays attached to the rocket's core stage in orbit.",
+      "historyNote": "Sputnik 2's Geiger counter, built by Sergei Vernov's team in Moscow, recorded strange swings in its counts. The team blamed a small solar flare. In fact the satellite had been dipping in and out of the radiation belts, months before Explorer 1. Its highest point was over the southern hemisphere, and an Australian team picked up its signals but had no code to read them."
     },
     "vostok-capsule": {
       "name": "Vostok capsule",
@@ -63,7 +64,8 @@
     },
     "mercury-capsule": {
       "name": "Mercury capsule",
-      "description": "A small cone for one astronaut, with an escape tower on top, a heat shield at the base and a pack of retrorockets strapped over it."
+      "description": "A small cone for one astronaut, with an escape tower on top, a heat shield at the base and a pack of retrorockets strapped over it.",
+      "historyNote": "The first Mercury capsules had two small portholes and a side hatch held by 70 bolts, and the astronaut was meant to climb out through the nose. The astronauts pushed for a real window above their heads and a hatch they could blow off with explosive charges. Both arrived with Liberty Bell 7, the second crewed capsule."
     },
     "r7-sputnik": {
       "name": "R-7 (Sputnik)",
@@ -72,7 +74,8 @@
     },
     "r7-vostok": {
       "name": "R-7 (Vostok)",
-      "description": "The R-7 with a small upper stage on top, enough to put a crewed Vostok capsule into orbit."
+      "description": "The R-7 with a small upper stage on top, enough to put a crewed Vostok capsule into orbit.",
+      "historyNote": "Gagarin's rocket was the R-7 with a third stage, the Block E. Semyon Kosberg's bureau, which had built engines for aircraft, developed its engine in about nine months for the first Moon probes. Three of the first lunar launches failed, and on 2 January 1959 the stage worked for the first time, sending Luna 1 past the Moon. Gagarin rode an improved version of it."
     },
     "jupiter-c": {
       "name": "Jupiter-C",

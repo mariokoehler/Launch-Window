@@ -335,6 +335,20 @@ leading to satellite navigation.
     hurt his inner ear, and withdrew from the Ohio Senate race.
   - `station-patrol`: on 27 March 1963 cosmonaut Grigory Nelyubov argued with a military patrol at
     Chkalovsky station and refused to apologise; he and two others were dropped from the corps.
+- **Checked for the standard pack's history notes** (2026-10-09; the notes in `strings.json` are the
+  record, these are the corrections the checking found):
+  - Apollo 13's distance record (about 400,000 km) was broken by Artemis II in April 2026; the note
+    says so.
+  - Luna 3 was the first *Soviet* craft stabilized on three axes, not the first of all (Discoverer 1,
+    February 1959); its path around the Moon was set by the launch, not a gravity assist.
+  - Sputnik 2's counter did record the radiation belts, but the team blamed a solar flare; Explorer 1
+    gets the discovery.
+  - Kosmos 110's dogs (22 days) were outlasted by Soyuz 11 in 1971, not first in 1973.
+  - Zond 5's reentry g-load has no reliable figure, so the note says "much higher than planned".
+  - Mariner 7's reprogramming came from Mariner 6's polar-cap pictures; "first close-up of the pole"
+    isn't sourced and isn't claimed.
+  - The Venera 15 and 16 buses came from the Venera orbiters, not the landers; Luna 17 had ramps on
+    two sides, not two pairs at each end.
 - **Whole-crew losses:** Apollo 1, Soyuz 1, Soyuz 11, Challenger and Columbia lost everyone
   aboard, the real basis of §2.5(f). A sober note the first time it happens.
 - **Spying on the Moon race** (checked 2026-10-07, for the Intelligence Office's history notes):
@@ -1895,10 +1909,12 @@ first (login → action → scheduled resolution → result, end to end) before 
   in both packs, so the default race still ends at the first crewed orbit; the early-era pack stays
   for the tests and short scenarios. **Its text is written** (2026-10-08): names and descriptions for every
   category, program, component, configuration, goal and step type, in our own words, with the
-  early-era text carried over unchanged. History notes: the early-era entries, and 44 of the 49
-  new programs (2026-10-08, every figure checked by web search; Pioneer 2, Mariner 6, the Pioneer
-  Venus Orbiter and both Gemini EOR programs have none yet, as nothing about them was confirmed).
-  The new configurations and components have none yet. A joint flight's craft-specific steps take their
+  early-era text carried over unchanged. **History notes are complete** (2026-10-09, every figure
+  checked by web search): every program and every component, and the 38 new configurations that
+  match a real flight (Gemini 1 to 12, Voskhod, Soyuz 1 to 9, Zond 7, Apollo 4 to 15, Apollo-Soyuz,
+  Skylab, the X-15, Venera 13). Configurations with no real counterpart (the lunar Gemini plans,
+  the LK-700, the E-154, the extended missions) stay without, as in the early era. The two Gemini
+  EOR programs share one note, the Langley lander, like the other lunar Gemini programs. A joint flight's craft-specific steps take their
   shared step's text, named for the craft (`ContentStrings.craftStep`: `gemini-a-`, `atv-` for the
   target, `transtage-`, `-a`/`-b`). **Its art is converted** (`make_content_art.py`: 55 programs,
   189 configurations, 22 category images), and `ScreenSnapshot` shoots it (`standard-*.png`). **Its
