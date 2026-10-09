@@ -1455,8 +1455,29 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
     about four and a half months for the friends' game; Monday to Friday, about six for
     the colleagues'. The early race with the same bot takes a median of 32 (NASA) and 34 (Soviet)
     seasons, the plain bot's 61 and 49. A human player plays better than either bot, flying
-    several things at once, but these are the only numbers so far. **Unconfirmed: whether this
-    length is wanted** (§4).
+    several things at once, but these are the only numbers so far.
+  - **The length is fine, the lulls are the risk** (user, 2026-10-09): the colleagues played a
+    racing-team manager for about nine months. A shorter race is ruled out: the Moon landing is
+    the point. What matters is how many turns in a row a player has nothing to do.
+  - **Lulls, measured** (dev-tools `RaceLulls`, 2026-10-09: the bot that works ahead, 200 games per
+    cell, components' R&D bands times a factor and their start moved part of the way from
+    baseline to R&D ceiling). A gap is the run of seasons without a launch before a launch.
+
+    | R&D, start | Landing median NASA / Soviet | Launches | Gaps of 5+ / 10+ | Longest gap (median game) |
+    |---|---|---|---|---|
+    | ×1, as is | 135 / 161 | 39 | 22 % / 6 % | 18 |
+    | ×1, 50 % | 95 / 115 | 30 | 18 % / 6 % | 15 |
+    | ×2, as is | 104 / 120 | 31 | 19 % / 6 % | 15 |
+    | ×2, 50 % | 80 / 117 | 27 | 16 % / 7 % | 14 |
+    | ×3, 50 % | 80 / 116 | 26 | 14 % / 7 % | 17 |
+
+    Faster R&D shortens the race but hardly the lulls: about three turns in four have no launch
+    in every cell, and the median game still has a stretch of two to three weeks of daily turns
+    without one. Once R&D is quick the bot waits for money instead (about 50 of its seasons
+    stalled on funds at ×3 and 50 %, against 25 as is): saving for a 20,000 program or a new
+    rocket is the same lull. The Soviet race gains least past ×2, for the same reason. The bot
+    flies only its plan, though; a player can fill a wait with the pack's other flights (probes,
+    satellites, records), and whether those fill it is not measured yet.
 - **The game goes on after a winner:** goals, flights and prestige still count.
 
 ### 2.10 Difficulty level
@@ -1838,11 +1859,11 @@ patches (`ui-spec.md` component 8).
 
 ## 4. Open questions
 
-- **The Moon race's length** (§2.6, measured 2026-10-09): the bots need a median of 135 (NASA) to
-  161 (Soviet) seasons, months of daily turns, and the Soviets take about a fifth longer. Options:
-  accept it; speed up R&D for the whole game (one balance sheet, §2.10); start lunar-era hardware
-  more reliable; or declare a shorter race (a crewed lunar flyby or orbit). A play test will say
-  how much faster people are than the bots.
+- **Lulls in the Moon race** (§2.6, measured 2026-10-09). The length is accepted and the race stays
+  (user, 2026-10-09); the open question is how to keep players busy between flights. Faster R&D
+  and more reliable starts shorten the race but leave the lulls, which turn into waiting for
+  money. Next: measure whether the pack's other flights fill them, then decide on new things to
+  do between flights. The Soviets take about a fifth longer.
 - **Declared goals for the colleagues' game:** an early-era race (user, 2026-10-08), with goals
   drawn from the early-era pack. Since then the standard pack became the default with its own race to
   a crewed Moon landing (user, 2026-10-09, §2.6); whether the colleagues' game plays that or a

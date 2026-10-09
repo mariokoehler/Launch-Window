@@ -197,6 +197,8 @@ public final class ContentPackPlayouts {
      * @param astronautsLost         astronauts lost in accidents or perished
      * @param stalls                 seasons the bot could not launch its target, per reason
      * @param targetSeasons          seasons each configuration was the bot's target, over all games
+     * @param launchGaps             in completed games, the seasons without a launch before each launch
+     * @param longestGaps            in completed games, each game's longest run of seasons without a launch
      */
     public record Report(int games, int seasons, Map<Archetype, Integer> completedByArchetype,
                          Map<Archetype, Integer> gamesByArchetype, double averageCompletionSeason,
@@ -204,7 +206,8 @@ public final class ContentPackPlayouts {
                          Map<String, Integer> goalReachedCounts, Map<String, Integer> launches,
                          Map<String, Integer> stepOutcomes, int programsOpened, int rocketsOpened, int upgrades,
                          int hires, int debtConversions, long lowestFunds, int astronautsLost,
-                         Map<String, Integer> stalls, Map<String, Integer> targetSeasons) {
+                         Map<String, Integer> stalls, Map<String, Integer> targetSeasons,
+                         List<Integer> launchGaps, List<Integer> longestGaps) {
     }
 
     /**
@@ -348,7 +351,7 @@ public final class ContentPackPlayouts {
             tally.completionSeasonsByArchetype,
             tally.goalReached, tally.launches, tally.stepOutcomes, tally.programsOpened, tally.rocketsOpened,
             tally.upgrades, tally.hires, tally.debtConversions, tally.lowestFunds, tally.astronautsLost, tally.stalls,
-            tally.targetSeasons);
+            tally.targetSeasons, tally.launchGaps, tally.longestGaps);
     }
 
     private void playGame(Archetype archetype, int seasons, Random random, Tally tally) {
@@ -360,10 +363,19 @@ public final class ContentPackPlayouts {
         hireBest(snapshot, PersonnelGroup.SET, STARTING_SPECIALISTS, random, tally);
         GoalTally goalTally = new GoalTally();
         Set<String> reached = new HashSet<>();
+        List<Integer> gaps = new ArrayList<>();
+        int sinceLaunch = 0;
 
         for (int season = 0; season < seasons; season++) {
             // Journaled player actions first.
+            tally.launchedThisSeason = 0;
             act(snapshot, random, tally);
+            if (tally.launchedThisSeason > 0) {
+                gaps.add(sinceLaunch);
+                sinceLaunch = 0;
+            } else {
+                sinceLaunch++;
+            }
             checkState(snapshot);
 
             // One player per game, so the game turn and the player's own seasons coincide here.
@@ -424,6 +436,8 @@ public final class ContentPackPlayouts {
                 tally.completedByArchetype.merge(archetype, 1, Integer::sum);
                 tally.completionSeasons.add(season + 1);
                 tally.completionSeasonsByArchetype.computeIfAbsent(archetype, key -> new ArrayList<>()).add(season + 1);
+                tally.launchGaps.addAll(gaps);
+                tally.longestGaps.add(gaps.stream().mapToInt(Integer::intValue).max().orElse(season + 1));
                 return;
             }
         }
@@ -798,6 +812,7 @@ public final class ContentPackPlayouts {
         }
         if (outcome == MissionLaunchOutcome.LAUNCHED) {
             tally.launches.merge(target.id(), 1, Integer::sum);
+            tally.launchedThisSeason++;
         } else {
             tally.stalls.merge(outcome.name(), 1, Integer::sum);
         }
@@ -1119,6 +1134,9 @@ public final class ContentPackPlayouts {
         int debtConversions;
         long lowestFunds = Long.MAX_VALUE;
         int astronautsLost;
+        final List<Integer> launchGaps = new ArrayList<>();
+        final List<Integer> longestGaps = new ArrayList<>();
+        int launchedThisSeason;
     }
 
     /**
