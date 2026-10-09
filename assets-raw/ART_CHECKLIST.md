@@ -7,7 +7,7 @@ fictional ones are renamed to our own (`design.md` §1.2). The BASPM ids (`00-00
 `00`, program `00`) are only there to cross-reference `baspm.md`. Built 2026-10-03; tick boxes
 as art lands.
 
-**Status:** programs 55/55, mission configurations 189/189, rocket programs 22/24.
+**Status:** programs 55/55, mission configurations 189/189, rocket programs 24/24.
 Items marked **(M3 pack)** are flown by the early-era content pack (`assets/content/early-era`).
 
 Notes:
@@ -381,9 +381,9 @@ not drawn yet are proposals in the style of the first ones (2026-10-08).
 
 - [x] **Jupiter-C** (Light) **(M3 pack)** — `jupiter_c`
 - [x] **Redstone** (Light) **(M3 pack)** — `redstone`
-- [ ] **Juno II** (Light) — `juno_ii`
+- [x] **Juno II** (Light) — `juno_ii`
 - [x] **Thor-Able** (Light) — `thor_able`
-- [ ] **Atlas** (Light) **(M3 pack)** — `atlas`
+- [x] **Atlas** (Light) **(M3 pack)** — `atlas`
 - [x] **Atlas-Agena** (Light) — `atlas_agena`
 - [x] **Atlas-Centaur** (Medium) — `atlas_centaur`
 - [x] **Titan II** (Medium) — `titan_ii`
