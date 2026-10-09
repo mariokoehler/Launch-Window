@@ -1,0 +1,303 @@
+{
+ "width": 1060,
+ "height": 660,
+ "labels": [
+  {
+   "x": 24.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "A · Earth laps Mars"
+  },
+  {
+   "x": 96.0,
+   "y": 236.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Earth"
+  },
+  {
+   "x": 78.0,
+   "y": 124.0,
+   "anchor": "middle",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "Mars"
+  },
+  {
+   "x": 310.0,
+   "y": 150.0,
+   "anchor": "start",
+   "kind": "d-body",
+   "size": 14.0,
+   "color": "#1c1c1a",
+   "text": "The inside lane is shorter and faster."
+  },
+  {
+   "x": 310.0,
+   "y": 172.0,
+   "anchor": "start",
+   "kind": "d-body",
+   "size": 14.0,
+   "color": "#1c1c1a",
+   "text": "The same line-up comes round about"
+  },
+  {
+   "x": 310.0,
+   "y": 194.0,
+   "anchor": "start",
+   "kind": "d-body",
+   "size": 14.0,
+   "color": "#1c1c1a",
+   "text": "every 26 months for Mars,"
+  },
+  {
+   "x": 310.0,
+   "y": 216.0,
+   "anchor": "start",
+   "kind": "d-body",
+   "size": 14.0,
+   "color": "#1c1c1a",
+   "text": "every 19 months for Venus."
+  },
+  {
+   "x": 684.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "Missed it?"
+  },
+  {
+   "x": 684.0,
+   "y": 90.0,
+   "anchor": "start",
+   "kind": "d-body",
+   "size": 14.0,
+   "color": "#1c1c1a",
+   "text": "Outside the window the same"
+  },
+  {
+   "x": 684.0,
+   "y": 112.0,
+   "anchor": "start",
+   "kind": "d-body",
+   "size": 14.0,
+   "color": "#1c1c1a",
+   "text": "trip needs far more fuel than"
+  },
+  {
+   "x": 684.0,
+   "y": 134.0,
+   "anchor": "start",
+   "kind": "d-body",
+   "size": 14.0,
+   "color": "#1c1c1a",
+   "text": "a rocket can carry. You wait"
+  },
+  {
+   "x": 684.0,
+   "y": 156.0,
+   "anchor": "start",
+   "kind": "d-body",
+   "size": 14.0,
+   "color": "#1c1c1a",
+   "text": "for the next window."
+  },
+  {
+   "x": 24.0,
+   "y": 360.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "B · The windows, 1960 to 1975"
+  },
+  {
+   "x": 60.0,
+   "y": 434.0,
+   "anchor": "end",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Venus"
+  },
+  {
+   "x": 60.0,
+   "y": 524.0,
+   "anchor": "end",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Mars"
+  },
+  {
+   "x": 70.0,
+   "y": 602.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "1960"
+  },
+  {
+   "x": 190.0,
+   "y": 602.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "1962"
+  },
+  {
+   "x": 310.0,
+   "y": 602.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "1964"
+  },
+  {
+   "x": 430.0,
+   "y": 602.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "1966"
+  },
+  {
+   "x": 550.0,
+   "y": 602.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "1968"
+  },
+  {
+   "x": 670.0,
+   "y": 602.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "1970"
+  },
+  {
+   "x": 790.0,
+   "y": 602.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "1972"
+  },
+  {
+   "x": 910.0,
+   "y": 602.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "1974"
+  },
+  {
+   "x": 1030.0,
+   "y": 602.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "1976"
+  },
+  {
+   "x": 226.0,
+   "y": 412.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Mariner 2"
+  },
+  {
+   "x": 707.8,
+   "y": 412.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Venera 7"
+  },
+  {
+   "x": 901.0,
+   "y": 412.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Mariner 10"
+  },
+  {
+   "x": 364.0,
+   "y": 502.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Mariner 4"
+  },
+  {
+   "x": 1009.0,
+   "y": 502.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Vikings"
+  },
+  {
+   "x": 752.8,
+   "y": 550.0,
+   "anchor": "middle",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "May 1971: five craft"
+  },
+  {
+   "x": 427.0,
+   "y": 560.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "about 26 months"
+  },
+  {
+   "x": 469.6,
+   "y": 470.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "about 19 months"
+  },
+  {
+   "x": 24.0,
+   "y": 640.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Each mark: one window, to the month"
+  }
+ ]
+}

@@ -1,0 +1,132 @@
+{
+ "width": 1060,
+ "height": 660,
+ "labels": [
+  {
+   "x": 24.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "A · Seen from the planet"
+  },
+  {
+   "x": 290.0,
+   "y": 335.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Planet"
+  },
+  {
+   "x": 150.0,
+   "y": 180.0,
+   "anchor": "start",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "In: speed 10"
+  },
+  {
+   "x": 160.0,
+   "y": 486.0,
+   "anchor": "start",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "Out: speed 10"
+  },
+  {
+   "x": 250.0,
+   "y": 580.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "The same speed out as in:"
+  },
+  {
+   "x": 250.0,
+   "y": 596.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "only the direction turns"
+  },
+  {
+   "x": 524.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "B · Seen from the Sun"
+  },
+  {
+   "x": 696.0,
+   "y": 504.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "The planet's own motion"
+  },
+  {
+   "x": 701.0,
+   "y": 286.0,
+   "anchor": "end",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Out, as the planet sees it"
+  },
+  {
+   "x": 787.0,
+   "y": 244.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "+ the planet's motion"
+  },
+  {
+   "x": 841.0,
+   "y": 326.0,
+   "anchor": "start",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "= out, as the Sun sees it:"
+  },
+  {
+   "x": 841.0,
+   "y": 342.0,
+   "anchor": "start",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "much faster"
+  },
+  {
+   "x": 524.0,
+   "y": 590.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "The planet slows by an amount far too small to measure."
+  },
+  {
+   "x": 24.0,
+   "y": 640.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Speeds for illustration only · not to scale"
+  }
+ ]
+}

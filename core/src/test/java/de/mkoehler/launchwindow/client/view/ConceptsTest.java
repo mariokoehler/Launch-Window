@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class ConceptsTest {
 
     private static final Path ASSETS = Path.of("..", "assets");
-    private static final ContentCatalog PACK = ContentPackLoader.load(ASSETS.resolve("content").resolve("early-era"));
+    private static final ContentCatalog PACK = ContentPackLoader.load(ASSETS.resolve("content").resolve("standard"));
 
     private static Concepts concepts() throws IOException {
         return Concepts.parse(Files.readString(ASSETS.resolve("content").resolve(Concepts.FILE)));

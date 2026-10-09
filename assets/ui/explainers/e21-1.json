@@ -1,0 +1,132 @@
+{
+ "width": 1060,
+ "height": 660,
+ "labels": [
+  {
+   "x": 24.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "A · The last hundred metres"
+  },
+  {
+   "x": 930.0,
+   "y": 226.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Target"
+  },
+  {
+   "x": 144.0,
+   "y": 226.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Station-keeping"
+  },
+  {
+   "x": 444.0,
+   "y": 226.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Closing in"
+  },
+  {
+   "x": 335.0,
+   "y": 114.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Match speed, wait"
+  },
+  {
+   "x": 655.0,
+   "y": 114.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Creep in, slower than walking pace"
+  },
+  {
+   "x": 555.0,
+   "y": 278.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Along the line of sight, small puffs of the thrusters"
+  },
+  {
+   "x": 24.0,
+   "y": 334.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "B · Probe and drogue"
+  },
+  {
+   "x": 180.0,
+   "y": 574.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "1 · The probe meets the cone"
+  },
+  {
+   "x": 510.0,
+   "y": 574.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "2 · It slides to the tip"
+  },
+  {
+   "x": 840.0,
+   "y": 574.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "3 · Latches close, then pull tight"
+  },
+  {
+   "x": 890.0,
+   "y": 388.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Drogue: a cone"
+  },
+  {
+   "x": 232.0,
+   "y": 388.0,
+   "anchor": "end",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Probe"
+  },
+  {
+   "x": 24.0,
+   "y": 640.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Not to scale"
+  }
+ ]
+}

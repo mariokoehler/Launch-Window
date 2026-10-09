@@ -1,0 +1,168 @@
+{
+ "width": 1060,
+ "height": 660,
+ "labels": [
+  {
+   "x": 24.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "Luna 3's photo lab, October 1959"
+  },
+  {
+   "x": 115.0,
+   "y": 286.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "1 · Camera"
+  },
+  {
+   "x": 115.0,
+   "y": 304.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "two lenses, onto film"
+  },
+  {
+   "x": 305.0,
+   "y": 286.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "2 · Develop"
+  },
+  {
+   "x": 305.0,
+   "y": 304.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "chemicals, on board"
+  },
+  {
+   "x": 495.0,
+   "y": 286.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "3 · Fix and dry"
+  },
+  {
+   "x": 685.0,
+   "y": 286.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "4 · Scan"
+  },
+  {
+   "x": 685.0,
+   "y": 304.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "a spot of light, line by line"
+  },
+  {
+   "x": 875.0,
+   "y": 286.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "5 · Radio home"
+  },
+  {
+   "x": 875.0,
+   "y": 304.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "brightness as a signal"
+  },
+  {
+   "x": 24.0,
+   "y": 360.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "Back on Earth: the picture builds up a line at a time"
+  },
+  {
+   "x": 240.0,
+   "y": 544.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "still arriving"
+  },
+  {
+   "x": 460.0,
+   "y": 430.0,
+   "anchor": "start",
+   "kind": "d-body",
+   "size": 14.0,
+   "color": "#1c1c1a",
+   "text": "The far side of the Moon, never seen before:"
+  },
+  {
+   "x": 460.0,
+   "y": 452.0,
+   "anchor": "start",
+   "kind": "d-body",
+   "size": 14.0,
+   "color": "#1c1c1a",
+   "text": "blurry and grey, but the first look at the"
+  },
+  {
+   "x": 460.0,
+   "y": 474.0,
+   "anchor": "start",
+   "kind": "d-body",
+   "size": 14.0,
+   "color": "#1c1c1a",
+   "text": "half that always faces away from Earth."
+  },
+  {
+   "x": 460.0,
+   "y": 520.0,
+   "anchor": "start",
+   "kind": "d-body",
+   "size": 14.0,
+   "color": "#1c1c1a",
+   "text": "Lunar Orbiter used the same idea in 1966 and"
+  },
+  {
+   "x": 460.0,
+   "y": 542.0,
+   "anchor": "start",
+   "kind": "d-body",
+   "size": 14.0,
+   "color": "#1c1c1a",
+   "text": "1967, with far finer film, to map Apollo's landing sites."
+  },
+  {
+   "x": 24.0,
+   "y": 640.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Not to scale"
+  }
+ ]
+}

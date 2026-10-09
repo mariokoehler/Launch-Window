@@ -1,0 +1,186 @@
+{
+ "width": 1060,
+ "height": 660,
+ "labels": [
+  {
+   "x": 176.0,
+   "y": 44.0,
+   "anchor": "middle",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "A · Direct ascent"
+  },
+  {
+   "x": 530.0,
+   "y": 44.0,
+   "anchor": "middle",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "B · Earth-orbit rendezvous"
+  },
+  {
+   "x": 884.0,
+   "y": 44.0,
+   "anchor": "middle",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "C · Lunar-orbit rendezvous"
+  },
+  {
+   "x": 24.0,
+   "y": 82.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "The route"
+  },
+  {
+   "x": 170.0,
+   "y": 292.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Whole ship there and back"
+  },
+  {
+   "x": 482.0,
+   "y": 212.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Two parts meet,"
+  },
+  {
+   "x": 482.0,
+   "y": 227.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "dock, then go"
+  },
+  {
+   "x": 524.0,
+   "y": 292.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Whole ship there and back"
+  },
+  {
+   "x": 950.0,
+   "y": 72.0,
+   "anchor": "end",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Mothership waits"
+  },
+  {
+   "x": 984.0,
+   "y": 172.0,
+   "anchor": "middle",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "Lander"
+  },
+  {
+   "x": 878.0,
+   "y": 292.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Only the lander goes down"
+  },
+  {
+   "x": 24.0,
+   "y": 326.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "At launch"
+  },
+  {
+   "x": 176.0,
+   "y": 508.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "One giant rocket,"
+  },
+  {
+   "x": 176.0,
+   "y": 526.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "bigger than any ever built"
+  },
+  {
+   "x": 530.0,
+   "y": 508.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Two big rockets"
+  },
+  {
+   "x": 530.0,
+   "y": 526.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "launched separately"
+  },
+  {
+   "x": 884.0,
+   "y": 508.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "One big rocket"
+  },
+  {
+   "x": 884.0,
+   "y": 526.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "(the Saturn V)"
+  },
+  {
+   "x": 24.0,
+   "y": 556.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "What lands on the Moon"
+  },
+  {
+   "x": 24.0,
+   "y": 640.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Not to scale · the landed craft are drawn to the same scale as each other"
+  }
+ ]
+}

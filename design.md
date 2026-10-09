@@ -185,13 +185,21 @@ engineering problem or tidbit, note it here the same session.
     - "In Launch Window" lines checked against the pack: the steps named, Explorer 1 reaching
       Space environment measured (its plain flight in Earth orbit, its extended one in the
       experiments step, hence "Explorer 1's flights"), the Launch step's crew risk.
-- **Explainers for the standard pack (proposed 2026-10-09, unconfirmed; to be mocked up on the
-  Explainers canvas):** the full tree brings ideas no explainer covers yet. E-20 Three ways to the
+- **Explainers for the standard pack (proposed, mocked up and built 2026-10-09; `ui-spec.md`
+  component 18):** the full tree brings ideas no explainer covers yet. E-20 Three ways to the
   Moon (direct ascent, Earth-orbit and lunar-orbit rendezvous), E-21 Docking, E-22 Spacewalks, E-23
   Launch windows to the planets, E-24 Gravity assists, E-25 Landing without air, or with too much
   (Moon, Venus, Mars), E-26 Far from home (power and signals), E-27 Pictures before digital cameras,
   E-28 A piece of the Moon by robot, E-29 Rocket planes at the edge of space, E-30 Around the Moon
-  and back. Every figure in the prompt is a draft to verify before the build. The concept chips
+  and back. Checked before the build (2026-10-09): Gemini 12's three outings total 5 h 30 min;
+  Apollo's powered descent starts about 15 km up (50,000 ft), and Apollo 11 landed with well under
+  a minute of fuel; Luna 16 drilled 35 cm in the Sea of Fertility and returned about 101 g; Luna 15
+  crashed at 15:50 UT on 21 July 1969, about two hours before Eagle lifted off (the mockup said "a
+  few hours"); the X-15 dropped at about 45,000 ft, burned about 80 s and flew about 10 minutes;
+  Luna 3's camera had 200 and 500 mm lenses, and a spot of light from a cathode-ray tube scanned the
+  developed film; Venus's 90 bar is about 900 m of sea; the planetary window marks on E-23 sheet 2
+  match the launches (Venera 1 February 1961, Mariner 4 November 1964, Mars 4 July 1973). The
+  sunlight shares, signal delays and "twice the energy" are arithmetic. The concept chips
   don't reach the standard pack's new programs and components yet either; the existing 19
   explainers already cover many of them (staging, delta-v, cryogenics, rocket classes).
 - **Concepts: linking game content to the explainers** (user's idea, 2026-10-07; specified in

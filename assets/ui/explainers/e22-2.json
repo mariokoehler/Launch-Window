@@ -1,0 +1,177 @@
+{
+ "width": 1060,
+ "height": 660,
+ "labels": [
+  {
+   "x": 24.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "Four steps, 1965 to 1969"
+  },
+  {
+   "x": 130.0,
+   "y": 116.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Gemini 4"
+  },
+  {
+   "x": 130.0,
+   "y": 132.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "June 1965"
+  },
+  {
+   "x": 130.0,
+   "y": 430.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "White: a hand-held gas gun"
+  },
+  {
+   "x": 130.0,
+   "y": 446.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "and a hose to the capsule"
+  },
+  {
+   "x": 390.0,
+   "y": 116.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Gemini 9"
+  },
+  {
+   "x": 390.0,
+   "y": 132.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "June 1966"
+  },
+  {
+   "x": 390.0,
+   "y": 430.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Cernan: nothing to hold on to;"
+  },
+  {
+   "x": 390.0,
+   "y": 446.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "he overheated, his visor fogged"
+  },
+  {
+   "x": 650.0,
+   "y": 116.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Gemini 12"
+  },
+  {
+   "x": 650.0,
+   "y": 132.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "November 1966"
+  },
+  {
+   "x": 650.0,
+   "y": 430.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Aldrin: handholds, foot"
+  },
+  {
+   "x": 650.0,
+   "y": 446.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "restraints, rests; trained underwater"
+  },
+  {
+   "x": 910.0,
+   "y": 116.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Lunar suits"
+  },
+  {
+   "x": 910.0,
+   "y": 132.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "1969 onward"
+  },
+  {
+   "x": 910.0,
+   "y": 430.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "A backpack with its own air."
+  },
+  {
+   "x": 910.0,
+   "y": 446.0,
+   "anchor": "middle",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "The Krechet: a door at the back"
+  },
+  {
+   "x": 530.0,
+   "y": 520.0,
+   "anchor": "middle",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "From floating on a hose to working outside for hours"
+  },
+  {
+   "x": 24.0,
+   "y": 640.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Not to scale · gold marks what changed"
+  }
+ ]
+}

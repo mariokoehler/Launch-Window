@@ -43,8 +43,8 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
 - **The decisions checklist came back on 2026-10-06,** was merged into the docs, and its code
   work is built (`design.md` §5, Backlog). Reset the dev data root before the next play test: the
   pack hash changed.
-- **Explainers** (`ui-spec.md` component 18, `design.md` §1.1): E-01 to E-19 are mocked up on
-  the canvas `Launch Window — Explainers` (the Artifact tool's list finds it). All 19 are built, in the
+- **Explainers** (`ui-spec.md` component 18, `design.md` §1.1): E-01 to E-30 are mocked up on
+  the canvas `Launch Window — Explainers` (the Artifact tool's list finds it). All 30 are built, in the
   Museum's Encyclopedia tab, with every figure checked. Players will reach them through concept
   chips on the program, configuration and rocket screens (`ui-spec.md` component 19; the audit
   is in `design.md` §1.1). The chips are mocked up on the same canvas's bottom row and built in
@@ -77,8 +77,9 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   `early-era`). New engine rules came with it: a payload's own lift, air drops with no rocket,
   configurations gated on a goal. Its components have blueprint drawings in the turn report
   (2026-10-09), and every program, component and real flight has a history note (2026-10-09). Still
-  open: rocket program art for Juno II and Atlas (the user is drawing it), concept chips for the new
-  content, explainers E-20 to E-30 (proposed 2026-10-09, `design.md` §1.1), and a new blueprint for
+  open: rocket program art for Juno II and Atlas (the user is drawing it), linking the first 19
+  explainers' concepts to the new programs and rockets (E-20 to E-30 are built and linked,
+  2026-10-09), and a new blueprint for
   `mig-e-154-spaceplane` (user, 2026-10-09: it was generated from BASPM's PKA, not the rocket plane
   the user's art shows; redo its description in `assets-raw/blueprints/descriptions.json`).
 - **PR duty for astronauts is built** (`design.md` §2.2(c)), with 39 press stories

@@ -449,9 +449,19 @@ On the right:
       replaced by "A safer fuel" (fact check).
     - **Thumbnails leave out halo outlines** (fixed 2026-10-07): a card shows the picture without
       its labels, so an outline alone would read as a smudge (E-04, E-10, E-13, E-14, E-19).
-    - **E-20 to E-30, for the standard pack** *(proposed 2026-10-09, unconfirmed; the brief for
-      the mockup session, `design.md` §1.1)*. Same look as E-01 to E-19, one canvas row each, a
-      yellow note per row listing every figure still to check: the figures here are drafts.
+    - **E-20 to E-30, for the standard pack** *(proposed 2026-10-09 and mocked up from this brief;
+      built the same day, every figure checked, `design.md` §1.1)*. Same look as E-01 to E-19, one
+      canvas row each. As built, each explainer's title is the title block's (short) name, so E-23 is
+      "Launch windows", E-25 "Landing on other worlds", E-26 "Far from home", E-28 "Moon rock by
+      robot", E-29 "Rocket planes"; the sheet titles keep the mockups' longer ones.
+      - **Changed from the mockups:** E-28's Luna 15 crashed "about two hours", not "a few hours",
+        before Eagle lifted off; E-22's drawing says "about a third of an atmosphere" (the fonts have
+        no ⅓); apostrophes are straight, as in the other explainers; E-30's "In Launch Window" line
+        names the pack's Around the Moon step. Visual check: halos on E-25 sheet 1's braking label,
+        E-28's Return capsule, E-29's thrusters note and E-30 sheet 2's corridor label; E-26 sheet 2's
+        Jupiter bar shortened to stay inside the frame; E-28's "Ascent stage" on two lines to fit
+        its box.
+      - The brief as given to the mockup session:
       - **E-20 "Three ways to the Moon"** (2): *Direct ascent, Earth-orbit and lunar-orbit
         rendezvous* side by side, what each lands and what each needs at launch; *Why the small
         lander won*: Houbolt's case, NASA's choice in 1962, the Soviet N1-L3 (one cosmonaut, a
@@ -535,6 +545,14 @@ On the right:
       the base ids, without the season number or the `spc-a-`/`spc-b-` prefix of a joint flight.
       A test checks that every id exists in the pack, every target explainer and sheet exists,
       and every label uses only letters the fonts can draw.
+    - **The standard pack's chips** *(built 2026-10-09 with E-20 to E-30)*: 18 new concepts link the
+      new explainers to the full tree (lunar mission modes on the Moon programs, docking and
+      spacewalk on their steps, suits and power sources on components, launch windows on the
+      planetary programs, and so on). To keep every configuration at six chips or fewer, the
+      basics that every later orbital flight shares, Orbit, Retrofire and Tracking, now sit on the
+      early flights where they are new (listed by configuration) instead of on the shared steps;
+      the early era's chips are unchanged. `ConceptsTest` checks against the standard pack. The
+      existing 19 explainers are not yet linked to the standard pack's new programs and rockets.
     - **Mocked up (2026-10-07)** on the `Launch Window — Explainers` canvas, bottom row: the chip
       on its own (`ConceptChips`), Program details for Vostok (`ProgramDetailsConcepts`), Vostok
       Orbital's steps and goals (`ConfigDetailsConcepts`), the VAB's Open rocket program with

@@ -1,0 +1,159 @@
+{
+ "width": 1060,
+ "height": 660,
+ "labels": [
+  {
+   "x": 24.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "An X-15 flight, about ten minutes from drop to landing"
+  },
+  {
+   "x": 98.0,
+   "y": 594.0,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "0 km"
+  },
+  {
+   "x": 98.0,
+   "y": 502.0,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "20 km"
+  },
+  {
+   "x": 98.0,
+   "y": 410.0,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "40 km"
+  },
+  {
+   "x": 98.0,
+   "y": 318.0,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "60 km"
+  },
+  {
+   "x": 98.0,
+   "y": 226.0,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "80 km"
+  },
+  {
+   "x": 98.0,
+   "y": 134.0,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "100 km"
+  },
+  {
+   "x": 1036.0,
+   "y": 211.7,
+   "anchor": "end",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "50 miles: astronaut wings for US pilots"
+  },
+  {
+   "x": 1036.0,
+   "y": 124.0,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "100 km"
+  },
+  {
+   "x": 1036.0,
+   "y": 468.0,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Air thick enough for fins and flaps"
+  },
+  {
+   "x": 130.0,
+   "y": 491.6,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Dropped from a B-52"
+  },
+  {
+   "x": 350.0,
+   "y": 364.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Rocket burns about 80 s"
+  },
+  {
+   "x": 480.0,
+   "y": 75.2,
+   "anchor": "middle",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "About 108 km"
+  },
+  {
+   "x": 560.0,
+   "y": 148.4,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Above the air: small jets in the"
+  },
+  {
+   "x": 560.0,
+   "y": 164.4,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "nose and wings turn it"
+  },
+  {
+   "x": 1000.0,
+   "y": 612.0,
+   "anchor": "end",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Glides to a dry lake bed"
+  },
+  {
+   "x": 24.0,
+   "y": 640.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Heights to scale · distance compressed"
+  }
+ ]
+}

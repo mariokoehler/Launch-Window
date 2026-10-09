@@ -978,6 +978,485 @@
           "inGame": "Atlas is in the VAB, and its history note tells the story of its thin steel skin."
         }
       ]
+    },
+    {
+      "id": "lunar-mission-modes",
+      "code": "E-20",
+      "title": "Three ways to the Moon",
+      "topic": "Lunar mission modes",
+      "summary": "Direct ascent, Earth-orbit rendezvous or lunar-orbit rendezvous: three ways to land on the Moon, and why the small lander won.",
+      "sheets": [
+        {
+          "title": "Three routes to the Moon",
+          "drawing": "e20-1",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "One giant rocket",
+              "text": "Direct ascent is the simplest plan. One rocket sends the whole ship to the Moon, where it lands tail first, with enough fuel to take off again and fly home. Simple, but the rocket it needs would have been far bigger than anything ever built."
+            },
+            {
+              "title": "Two launches, one ship",
+              "text": "Earth-orbit rendezvous splits the load. Two smaller rockets put the parts into Earth orbit, where they dock, and the assembled ship goes on to the Moon. Smaller rockets, but it needed a docking in orbit, which nobody had yet done."
+            },
+            {
+              "title": "Leave the ship in lunar orbit",
+              "text": "Lunar-orbit rendezvous sends one ship and leaves most of it circling the Moon. A small lander goes down, comes back up and docks with the mothership, which brings the crew home. One rocket is enough, but the docking happens 380,000 km from home."
+            }
+          ],
+          "inGame": "The Gemini Direct Ascent, Gemini EOR and Apollo programs fly these three routes."
+        },
+        {
+          "title": "Why the small lander won",
+          "drawing": "e20-2",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "Every kilogram is paid for twice",
+              "text": "Whatever lands needs fuel to brake on the way down and more fuel to climb back up. Leaving the heat shield, the return engine and their fuel in lunar orbit made the landed craft a fraction of the weight, and one rocket could launch the lot."
+            },
+            {
+              "title": "Houbolt's campaign",
+              "text": "John Houbolt, an engineer at NASA's Langley centre, pushed for lunar-orbit rendezvous when most of NASA thought a docking so far from home too risky. He wrote over his managers' heads to make the case. NASA chose it in July 1962."
+            },
+            {
+              "title": "Two Soviet answers",
+              "text": "Korolev's N1-L3 also used lunar-orbit rendezvous, with a lander for one cosmonaut, the LK, who would have crossed to it from the orbiter by spacewalk. Chelomey's rival plan, the UR-700 rocket and the LK-700, would have landed directly. Neither ever carried a cosmonaut to the Moon."
+            }
+          ],
+          "inGame": "The Soyuz 7K-L3 lunar landing program flies the LK, the LK-700 Direct Ascent program the LK-700. Whatever lands has to come back up: the Lunar ascent step."
+        }
+      ]
+    },
+    {
+      "id": "docking",
+      "code": "E-21",
+      "title": "Docking",
+      "topic": "Docking",
+      "summary": "How two craft join in orbit, by hand or by radar, and how crews move across: through a tunnel or outside.",
+      "sheets": [
+        {
+          "title": "The last hundred metres",
+          "drawing": "e21-1",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "Park, then creep",
+              "text": "After a rendezvous the two craft fly side by side, a few dozen metres apart, matching speed. Then the chaser creeps in along a straight line, slower than walking pace, with small puffs of its thrusters. Too fast, and the bump bounces them apart or damages both."
+            },
+            {
+              "title": "A probe and a cone",
+              "text": "Apollo and Soyuz docked with a probe on one craft and a cone, the drogue, on the other. The cone guides the probe to its centre even if the aim is a little off. Small latches catch it, then the craft are pulled together and locked tight."
+            },
+            {
+              "title": "By hand or by machine",
+              "text": "Neil Armstrong and David Scott docked Gemini 8 by hand with an Agena target in March 1966, the first docking ever. In October 1967 two uncrewed Soviet craft, Kosmos 186 and 188, docked on their own, steered by the Igla radar system."
+            }
+          ],
+          "inGame": "The Igla docking system lets a craft dock with no crew on board. Dockings happen in steps such as Approach and docking and Automatic docking."
+        },
+        {
+          "title": "Turning around, and moving across",
+          "drawing": "e21-2",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "Transposition",
+              "text": "Apollo's lunar module rode to space inside the top of the rocket's third stage, below the command ship. On the way to the Moon the command ship separated, turned around, docked nose to nose with the lander and pulled it out of the stage."
+            },
+            {
+              "title": "Through the tunnel",
+              "text": "Once two craft are docked, the crew can take out the probe and the drogue. That opens a tunnel between the hatches, and the crew float from one craft to the other without suits."
+            },
+            {
+              "title": "Or outside",
+              "text": "Soyuz 4 and 5 docked in January 1969, but their docking gear had no tunnel. So two cosmonauts put on suits and climbed across outside, and landed in a different craft from the one they had launched in."
+            }
+          ],
+          "inGame": "Apollo's Transposition and docking step, and the Crew transfer step that moves people between docked craft."
+        }
+      ]
+    },
+    {
+      "id": "spacewalks",
+      "code": "E-22",
+      "title": "Spacewalks",
+      "topic": "Spacewalks",
+      "summary": "Why a pressurised suit fights every move, how Leonov nearly couldn't get back in, and how Gemini learned to work outside.",
+      "sheets": [
+        {
+          "title": "A balloon shaped like a person",
+          "drawing": "e22-1",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "Pressure makes a suit stiff",
+              "text": "In a vacuum a suit has to hold air around the body, at about a third of normal air pressure, in pure oxygen. The whole suit swells like a balloon, and every bend of an arm or grip of a glove is a fight against it."
+            },
+            {
+              "title": "Leonov's walk",
+              "text": "On 18 March 1965 Alexei Leonov left Voskhod 2 through an inflatable airlock, the first person outside a spacecraft. After about 12 minutes his suit had swollen so much that he could not get back in. He let air out of it, against the rules, and squeezed in head first."
+            },
+            {
+              "title": "Why not more pressure?",
+              "text": "A suit at full air pressure would be too stiff to move in. A suit at low pressure means breathing pure oxygen beforehand to flush nitrogen from the blood, or bubbles form, as in a diver's bends."
+            }
+          ],
+          "inGame": "The Voskhod capsule carries an airlock for the Spacewalk step. The Berkut and Yastreb spacesuits are the Soviet suits for it."
+        },
+        {
+          "title": "Learning to work outside",
+          "drawing": "e22-2",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "Harder than it looked",
+              "text": "Ed White's walk on Gemini 4 in June 1965 looked easy. A year later, on Gemini 9, Gene Cernan had nothing to hold on to: every push sent him drifting. His heart raced, sweat fogged his visor, and he came back in exhausted."
+            },
+            {
+              "title": "Handholds and practice",
+              "text": "For Gemini 12 in November 1966, Buzz Aldrin had handholds and foot restraints, rested often, and had rehearsed underwater, where floating feels much like weightlessness. He worked outside for more than five hours over three outings."
+            },
+            {
+              "title": "Suits that carry their own air",
+              "text": "Gemini suits hung on a hose to the capsule. Lunar suits carried a backpack with oxygen and cooling water. The Soviet Krechet opened at the back: the cosmonaut climbed in through a door that the backpack closed."
+            }
+          ],
+          "inGame": "Each spacesuit, such as the Gemini spacesuit, Apollo lunar surface suit and Krechet lunar suit, is a component with its own R&D before a spacewalk."
+        }
+      ]
+    },
+    {
+      "id": "launch-windows",
+      "code": "E-23",
+      "title": "Launch windows",
+      "topic": "Interplanetary flight",
+      "summary": "The cheapest path to Mars and Venus, and why it opens only every two years or so.",
+      "sheets": [
+        {
+          "title": "The cheapest way across",
+          "drawing": "e23-1",
+          "scale": "Orbits to scale",
+          "points": [
+            {
+              "title": "Coast, don't drive",
+              "text": "No rocket can burn all the way to Mars. It burns for a few minutes to leave Earth, and then the probe coasts for months on a path around the Sun, falling freely like a thrown ball."
+            },
+            {
+              "title": "Touch both orbits",
+              "text": "The cheapest path is half an ellipse around the Sun that just touches Earth's orbit where you leave and the target's orbit where you arrive. Walter Hohmann worked it out in 1925. It takes about 259 days to Mars and about 146 to Venus."
+            },
+            {
+              "title": "Aim where it will be",
+              "text": "You don't aim at Mars but at where Mars will be when you get there. So at launch Mars has to be about 44° ahead of Earth, and that happens only once in a while."
+            }
+          ],
+          "inGame": "The Earth departure step is the burn, and the Cruise to Mars and Cruise to Venus steps are the long coast."
+        },
+        {
+          "title": "Why you wait",
+          "drawing": "e23-2",
+          "scale": "Dates to the month",
+          "points": [
+            {
+              "title": "The line-up comes round again",
+              "text": "Earth goes round the Sun faster than Mars, like a runner on the inside lane, and laps it about every 26 months. Venus, on the inside of Earth, laps it about every 19 months. Only then are the planets lined up for the cheap path."
+            },
+            {
+              "title": "A window, then a wait",
+              "text": "For a few weeks around each line-up a launch costs little extra. Outside it the trip needs far more fuel than any rocket could give. That stretch of weeks is a launch window: miss it, and you wait two years for the next."
+            },
+            {
+              "title": "Everyone goes at once",
+              "text": "So everyone launches in the same weeks. In May 1971 five craft left for Mars. Mariner 8 was lost at launch and Kosmos 419 never left Earth orbit, but Mariner 9, Mars 2 and Mars 3 all arrived that winter."
+            }
+          ],
+          "inGame": "Planetary missions take several seasons: the launch, then the cruise, then the approach. And a launch window gives the game its name."
+        }
+      ]
+    },
+    {
+      "id": "gravity-assists",
+      "code": "E-24",
+      "title": "Gravity assists",
+      "topic": "Gravity assists",
+      "summary": "How a probe borrows a planet's speed for free, and how Mariner 10 and Pioneer 11 used it.",
+      "sheets": [
+        {
+          "title": "Borrowing a planet's speed",
+          "drawing": "e24-1",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "From the planet, nothing gained",
+              "text": "A probe falls toward a planet, swings round it and climbs away again. Seen from the planet, it leaves exactly as fast as it came. Only its direction has changed."
+            },
+            {
+              "title": "From the Sun, a free push",
+              "text": "But the planet itself is racing round the Sun. Seen from the Sun, its motion adds to the probe's, so the probe can leave much faster than it came, or slower if it passes in front. It costs no fuel at all."
+            },
+            {
+              "title": "A ball off a train",
+              "text": "Throw a ball at the front of an oncoming train and it bounces back faster than you threw it, because it picks up the train's speed. A flyby does the same with gravity instead of a bounce."
+            }
+          ],
+          "inGame": "Flyby steps such as the Venus flyby and Jupiter flyby swing a probe on toward its next target."
+        },
+        {
+          "title": "Planet to planet",
+          "drawing": "e24-2",
+          "scale": "Orbits to scale",
+          "points": [
+            {
+              "title": "Venus first, then Mercury",
+              "text": "Mariner 10 left Earth in November 1973 and swung past Venus in February 1974. Venus bent its path inward to Mercury: the first probe to use one planet to reach another."
+            },
+            {
+              "title": "Three passes for one",
+              "text": "Its new orbit around the Sun took exactly two of Mercury's years, so it met Mercury again and again: in March 1974, September 1974 and March 1975, until its steering gas ran out."
+            },
+            {
+              "title": "Jupiter to Saturn",
+              "text": "Pioneer 11 passed closer to Jupiter than any probe before, in December 1974. Jupiter's gravity flung it right across the solar system, and it reached Saturn in September 1979."
+            }
+          ],
+          "inGame": "The Mariner 10 and Pioneer 11 programs fly these routes, with a Venus flyby or Jupiter flyby on the way."
+        }
+      ]
+    },
+    {
+      "id": "landing-on-other-worlds",
+      "code": "E-25",
+      "title": "Landing on other worlds",
+      "topic": "Landing",
+      "summary": "Landing on the Moon with rockets alone, on Venus through crushing air, and on Mars with a bit of everything.",
+      "sheets": [
+        {
+          "title": "Rockets all the way down",
+          "drawing": "e25-1",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "Nothing to brake against",
+              "text": "The Moon has no air, so a heat shield or a parachute would be no use at all. All the speed a lander carries has to be taken away by its engine, and every bit of it costs fuel."
+            },
+            {
+              "title": "Hard, then soft",
+              "text": "Ranger probes were simply aimed at the Moon and sent pictures until they hit it at full speed. Luna 9 on 3 February 1966 and Surveyor 1 on 2 June 1966 braked with rockets and landed softly, which showed the ground would hold a lander up."
+            },
+            {
+              "title": "Fuel for the last metres",
+              "text": "A crewed lander also needs fuel to hover while the pilot looks for a clear spot. On Apollo 11 Neil Armstrong flew on past a field of boulders, and the lander touched down with less than a minute of fuel to spare."
+            }
+          ],
+          "inGame": "The Powered descent and Lunar landing steps bring a lander down, and the Lunar ascent step takes it back up."
+        },
+        {
+          "title": "Venus and Mars",
+          "drawing": "e25-2",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "Venus: far too much air",
+              "text": "At the surface of Venus the air presses about 90 times harder than on Earth, as deep as 900 metres under the sea, at about 465 °C. Early probes were crushed on the way down. Venera 7 landed on 15 December 1970 and sent the first signal ever from another planet's surface."
+            },
+            {
+              "title": "Mars: not quite enough",
+              "text": "The air on Mars is less than 1 % as thick as Earth's. That is enough to make a probe glow hot, so it still needs a heat shield, but too thin for a parachute alone to slow it to a safe landing."
+            },
+            {
+              "title": "Parachute, then rockets",
+              "text": "So Mars landers use all three: a heat shield, then a parachute, then rockets for the last part. Mars 3 landed on 2 December 1971 and fell silent within seconds. Viking 1 landed on 20 July 1976 and worked for years."
+            }
+          ],
+          "inGame": "The Large probe entry, Lander entry and Descent and landing steps bring probes down on Venus and Mars."
+        }
+      ]
+    },
+    {
+      "id": "far-from-home",
+      "code": "E-26",
+      "title": "Far from home",
+      "topic": "Deep space",
+      "summary": "Why sunlight runs out for the outer probes, and how radio reaches them across the solar system.",
+      "sheets": [
+        {
+          "title": "Sunlight runs out",
+          "drawing": "e26-1",
+          "scale": "Squares to scale",
+          "points": [
+            {
+              "title": "Sunlight thins with distance",
+              "text": "Twice as far from the Sun, a solar panel catches a quarter of the light. At Jupiter it gets about 4 % of what it would at Earth, so a probe would need enormous panels to run at all."
+            },
+            {
+              "title": "Power from heat",
+              "text": "So the outer probes carried radioisotope generators. A lump of plutonium stays hot for decades as it decays, and the generator turns that heat straight into electricity, with no moving parts. Pioneer 10 and 11 carried them, and so did the Viking landers on Mars."
+            },
+            {
+              "title": "Keeping warm through the night",
+              "text": "A lunar night lasts about two weeks. The Lunokhod rover ran on solar panels by day, and at night it closed its lid and kept its insides warm with a small radioactive heater."
+            }
+          ],
+          "inGame": "The Pioneer 10 and Pioneer 11 probes and the Viking lander carry their own power source."
+        },
+        {
+          "title": "Talking across the solar system",
+          "drawing": "e26-2",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "Light takes time",
+              "text": "Radio travels at the speed of light. A signal from the Moon takes about 1.3 seconds, and one from Mars between about 3 and 22 minutes, depending on where the planets are. Nobody can steer a probe out there by hand as it happens."
+            },
+            {
+              "title": "A whisper and a big ear",
+              "text": "A probe's radio is about as strong as a light bulb, and by the time it reaches Earth the signal is unimaginably faint. Dishes tens of metres across collect it. Three stations, in California, Spain and Australia, keep one in view as the Earth turns."
+            },
+            {
+              "title": "Driving with a delay",
+              "text": "Lunokhod 1 landed in November 1970 and was driven from a control room on Earth by a crew of five, watching slow TV pictures. Each order reached the rover seconds after it was given, so they drove carefully."
+            }
+          ],
+          "inGame": "The Lunokhod rover is driven from Earth, and probe missions still need flight controllers in Mission Control."
+        }
+      ]
+    },
+    {
+      "id": "space-photography",
+      "code": "E-27",
+      "title": "Pictures before digital cameras",
+      "topic": "Space photography",
+      "summary": "How Luna 3 developed its film in space and radioed the far side of the Moon home.",
+      "sheets": [
+        {
+          "title": "Film, developed in space",
+          "drawing": "e27-1",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "No way to bring the film home",
+              "text": "In 1959 there were no electronic cameras good enough to take a sharp picture. A probe could carry a film camera, but the film could never come back. So Luna 3 carried a tiny photo lab as well."
+            },
+            {
+              "title": "Develop, scan, transmit",
+              "text": "On 7 October 1959 Luna 3 photographed the far side of the Moon. It developed, fixed and dried the film on board, then a small spot of light scanned each frame and the brightness was radioed home, line by line, like a fax."
+            },
+            {
+              "title": "Mapping for Apollo",
+              "text": "Lunar Orbiter used the same idea in 1966 and 1967, with much finer film, to photograph the Moon in great detail from orbit. Its pictures helped choose where Apollo would land."
+            }
+          ],
+          "inGame": "The Luna 3 and Lunar Orbiter programs photograph the Moon."
+        }
+      ]
+    },
+    {
+      "id": "sample-return",
+      "code": "E-28",
+      "title": "Moon rock by robot",
+      "topic": "Sample return",
+      "summary": "How Luna 16 drilled the Moon and flew a sample straight home, with no crew.",
+      "sheets": [
+        {
+          "title": "A piece of the Moon by robot",
+          "drawing": "e28-1",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "A drill on an arm",
+              "text": "Luna 16 landed in the Sea of Fertility in September 1970. Its arm drilled about 35 cm into the ground, then swung round and dropped the core into a small sealed capsule on top of the lander."
+            },
+            {
+              "title": "Straight home",
+              "text": "The top stage lifted off and flew straight back to Earth, with no rendezvous in lunar orbit. The capsule came down by parachute in Kazakhstan with about 100 grams of Moon soil, the first brought back without a crew."
+            },
+            {
+              "title": "The race that wasn't",
+              "text": "Luna 15 tried first, in July 1969, while Apollo 11 was at the Moon. It crashed while coming down on 21 July, about two hours before Armstrong and Aldrin lifted off with their own samples."
+            }
+          ],
+          "inGame": "The Luna 15 program tries for a sample return."
+        }
+      ]
+    },
+    {
+      "id": "rocket-planes",
+      "code": "E-29",
+      "title": "Rocket planes",
+      "topic": "Rocket planes",
+      "summary": "The X-15's flights to the edge of space, and the spaceplanes that lost to the capsules.",
+      "sheets": [
+        {
+          "title": "Rocket planes at the edge of space",
+          "drawing": "e29-1",
+          "scale": "Heights to scale",
+          "points": [
+            {
+              "title": "Launched from a bomber",
+              "text": "The X-15 rode under the wing of a B-52 bomber, dropped, lit its rocket and climbed almost straight up. It reached Mach 6.7, about 7,300 km/h, in 1967, and in 1963 Joe Walker flew it to about 108 km."
+            },
+            {
+              "title": "Steering where there's no air",
+              "text": "Fins and flaps need air to push against. High up the air is too thin, so the X-15 had small thrusters in its nose and wings, the same trick capsules use. Its pilots learned to fly in space with them."
+            },
+            {
+              "title": "Wings or capsules",
+              "text": "US pilots who flew above 50 miles, about 80 km, earned astronaut wings. Spaceplanes promised to land on a runway and fly again, and the Soviet Spiral project tested a small MiG spaceplane in the air. But in the 1960s the capsules won."
+            }
+          ],
+          "inGame": "The X-15 and OKB-MiG E-154 programs launch from a carrier plane, in the Carrier takeoff and Drop and ignition steps: no rocket needed."
+        }
+      ]
+    },
+    {
+      "id": "free-return",
+      "code": "E-30",
+      "title": "Around the Moon and back",
+      "topic": "Circumlunar flight",
+      "summary": "The figure-of-eight path that brings a crew home from the Moon with no burn, and the fast, narrow way back in.",
+      "sheets": [
+        {
+          "title": "The free return",
+          "drawing": "e30-1",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "A figure of eight",
+              "text": "Aim just right when you leave Earth, and the Moon's gravity swings the craft round its far side and throws it back towards Earth. No more burns are needed to come home."
+            },
+            {
+              "title": "A way back built in",
+              "text": "So if the engine fails after leaving Earth, the crew still comes home. Zond 5 flew this path in September 1968, with tortoises on board, the first living things to go round the Moon and come back. Apollo 8 set out on it too, before braking into lunar orbit."
+            },
+            {
+              "title": "Apollo 13",
+              "text": "In April 1970 an oxygen tank exploded on Apollo 13's way to the Moon. The crew used the lunar module's engine to put the ship back on a free-return path, swung round the Moon and came home."
+            }
+          ],
+          "inGame": "The Zond 5, Soyuz 7K-L1 circumlunar and Circumlunar Gemini programs fly around the Moon and home, and Apollo's lunar flybys swing round in the Around the Moon step."
+        },
+        {
+          "title": "Coming home fast",
+          "drawing": "e30-2",
+          "scale": "Not to scale",
+          "points": [
+            {
+              "title": "About 11 km/s",
+              "text": "A craft coming back from the Moon hits the air at about 11 km/s, much faster than from Earth orbit. It has about twice as much energy to get rid of, so its heat shield has to be much tougher."
+            },
+            {
+              "title": "A narrow corridor",
+              "text": "Come in too steeply and the braking and the heat are deadly. Come in too shallowly and the craft skims off the top of the air, back into space. The safe corridor is only a few degrees wide."
+            },
+            {
+              "title": "Skipping like a stone",
+              "text": "Soviet Zond capsules dipped into the air, skipped back out, and came in a second time to land in the Soviet Union, more gently. Zond 7 in August 1969 was the first to do it all the way to a safe landing."
+            }
+          ],
+          "inGame": "Lunar missions come home in the Approach and reentry step, and the Gemini lunar-speed reentry and Apollo lunar-speed reentry goals test the heat shield at that speed."
+        }
+      ]
     }
   ]
 }

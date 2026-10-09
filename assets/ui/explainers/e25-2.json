@@ -1,0 +1,114 @@
+{
+ "width": 1060,
+ "height": 660,
+ "labels": [
+  {
+   "x": 24.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "A · Venus: far too much air"
+  },
+  {
+   "x": 310.0,
+   "y": 246.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "The thick air does the braking"
+  },
+  {
+   "x": 40.0,
+   "y": 580.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "At the surface: about 90 times Earth's"
+  },
+  {
+   "x": 40.0,
+   "y": 598.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "air pressure, and about 465 °C"
+  },
+  {
+   "x": 554.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "B · Mars: not quite enough"
+  },
+  {
+   "x": 654.0,
+   "y": 114.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "1 · Heat shield"
+  },
+  {
+   "x": 764.0,
+   "y": 190.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "2 · Parachute"
+  },
+  {
+   "x": 870.0,
+   "y": 350.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "3 · Rockets"
+  },
+  {
+   "x": 1000.0,
+   "y": 486.0,
+   "anchor": "end",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "4 · Touchdown"
+  },
+  {
+   "x": 560.0,
+   "y": 580.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "At the surface: less than 1 % of"
+  },
+  {
+   "x": 560.0,
+   "y": 598.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Earth's air pressure"
+  },
+  {
+   "x": 24.0,
+   "y": 640.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Not to scale · shading: how thick the air is"
+  }
+ ]
+}
