@@ -8,6 +8,7 @@ import de.mkoehler.launchwindow.model.MissionControlOfficer;
 import de.mkoehler.launchwindow.model.OwnedMissionComponent;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.model.SetSpecialist;
+import de.mkoehler.launchwindow.model.TrainingKind;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -40,14 +41,26 @@ class AdvisorTest {
     }
 
     /**
-     * A new agency sees the first steps in order, with nothing about crews or the report yet, and
-     * reliability to raise before any mission.
+     * A new agency sees the first steps in order, with nothing about crews or the report yet. A
+     * program, a rocket and R&D wait until an engineer is out of basic training (play test,
+     * 2026-10-09), and reliability until someone is on R&D.
      */
     @Test
     void newAgency() {
-        assertEquals(List.of("help", "hire-engineers", "open-program", "open-rocket", "assign-rnd",
-            "raise-reliability"), open(soviet(), NEW));
+        assertEquals(List.of("help", "hire-engineers"), open(soviet(), NEW));
         assertFalse(Advisor.finished(soviet(), PACK, NEW));
+
+        PlayerSnapshot hired = soviet();
+        SetSpecialist recruit = new SetSpecialist("e1", "A. Engineer", 30, 70, 50);
+        recruit.setTrainingKind(TrainingKind.BASIC);
+        hired.getSetSpecialists().add(recruit);
+        assertEquals(List.of("help"), open(hired, NEW), "nothing to open while the engineer trains");
+        Advisor.Item next = Advisor.later(hired, PACK, NEW).get(0);
+        assertEquals("open-program", next.id());
+        assertEquals("Once your first engineers finish basic training", Advisor.waitingFor(next, hired));
+
+        recruit.setTrainingKind(TrainingKind.NONE);
+        assertEquals(List.of("help", "open-program", "open-rocket", "assign-rnd"), open(hired, NEW));
     }
 
     /**
@@ -61,8 +74,7 @@ class AdvisorTest {
         SetSpecialist engineer = new SetSpecialist("e1", "A. Engineer", 30, 70, 50);
         state.getSetSpecialists().add(engineer);
         state.getOpenedProgramIds().add("sputnik-1");
-        assertEquals(List.of("open-rocket", "assign-rnd", "hire-controllers", "raise-reliability"),
-            open(state, helped));
+        assertEquals(List.of("open-rocket", "assign-rnd", "hire-controllers"), open(state, helped));
 
         state.getMissionComponents().put("sputnik-1-satellite", new OwnedMissionComponent(3, 3));
         state.getMissionComponents().put("r7-sputnik", new OwnedMissionComponent(3, 3));

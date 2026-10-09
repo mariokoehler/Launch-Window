@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.UiKit;
+import de.mkoehler.launchwindow.client.view.GoalModifiers;
 import de.mkoehler.launchwindow.client.view.Missions;
 import de.mkoehler.launchwindow.client.view.Staffing;
 import de.mkoehler.launchwindow.content.MissionConfiguration;
@@ -117,6 +118,8 @@ final class ConfigCards {
                 + "not on R&D. Assembly needs this many free at once. The planning screen shows who's coming.");
             body.add(line).padBottom(4f).row();
         }
+        BodyProgramsScreen.goalLines(host, body, GoalModifiers.of(configuration,
+            host.session.state()::hasAchievedOrCancelledGoal), false);
         body.add(ui.label(tierNote(flown), Theme.TextStyle.CAPTION, Theme.INK_MUTED));
         card.add(body).growX().pad(14f, 16f, 16f, 16f);
         card.setTouchable(Touchable.enabled);

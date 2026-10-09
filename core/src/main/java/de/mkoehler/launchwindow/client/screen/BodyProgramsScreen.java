@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.Theme;
+import de.mkoehler.launchwindow.client.view.GoalModifiers;
 import de.mkoehler.launchwindow.client.view.BodyMap;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.Help;
@@ -135,6 +136,38 @@ public final class BodyProgramsScreen extends ChromeScreen {
         return button;
     }
 
+    /**
+     * Adds a card's goal lines, what goals not reached cost and what reached ones give, each with the
+     * goals in a tooltip. Nothing when neither applies.
+     *
+     * @param host    the screen
+     * @param body    the card's body
+     * @param goals   the effects
+     * @param program whether it's a program's card
+     */
+    static void goalLines(ChromeScreen host, Table body, GoalModifiers.Summary goals, boolean program) {
+        if (goals.isEmpty()) {
+            return;
+        }
+        Table lines = new Table();
+        lines.left();
+        String missing = goals.missingText(program);
+        if (missing != null) {
+            lines.add(host.ui.label(missing, Theme.TextStyle.CAPTION, Theme.DANGER)).left().padRight(Theme.SPACE_3);
+        }
+        String reached = goals.reachedText(program);
+        if (reached != null) {
+            lines.add(host.ui.label(reached, Theme.TextStyle.CAPTION, Theme.SUCCESS)).left();
+        }
+        host.ui.tooltip(lines, program ? "Goals and reliability" : "Goals and this mission's reliability",
+            goals.detail(program));
+        body.add(lines).left().padBottom(Theme.SPACE_2).row();
+    }
+
+    private void goalLines(Table body, GoalModifiers.Summary goals, boolean program) {
+        goalLines(this, body, goals, program);
+    }
+
     private Table programCard(Program program, float width) {
         Programs.State state = Programs.state(program, session.state());
         Table card = new Table();
@@ -164,6 +197,10 @@ public final class BodyProgramsScreen extends ChromeScreen {
             body.add(ui.paragraph("Needs: " + String.join(", ", Programs.missingGoals(program, session.state()).stream()
                 .map(ContentNames::of).toList()), Theme.TextStyle.BODY_SM, Theme.INK)).padBottom(Theme.SPACE_2).row();
         }
+        // What skipping ahead costs, and what earlier goals give (play test, 2026-10-09).
+        GoalModifiers.Summary goals = GoalModifiers.ofProgram(program, session.catalog(),
+            session.state()::hasAchievedOrCancelledGoal);
+        goalLines(body, goals, true);
         body.add(actionButton("Details", Theme.ButtonKind.SECONDARY, () -> game.setScreen(
             new ProgramDetailsScreen(game, program.id(), this.body)))).left().fill(false, false);
         card.add(body).width(inner);

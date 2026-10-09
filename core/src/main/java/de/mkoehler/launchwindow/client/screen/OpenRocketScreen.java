@@ -36,6 +36,8 @@ public final class OpenRocketScreen extends ChromeScreen {
 
     /** A greyed-out row's opacity, as in the mockup. */
     private static final float DISABLED_ALPHA = 0.55f;
+    /** The "Starts at" column's width. */
+    private static final float RELIABILITY_WIDTH = 250f;
 
     /**
      * Builds the screen from the session.
@@ -136,7 +138,7 @@ public final class OpenRocketScreen extends ChromeScreen {
         }
         row.add(payload).expandX().left().padRight(Theme.SPACE_4);
 
-        row.add(reliability(rocket)).width(250f).left().padRight(Theme.SPACE_4);
+        row.add(reliability(rocket)).width(RELIABILITY_WIDTH).left().padRight(Theme.SPACE_4);
 
         Table costs = new Table();
         costs.left();
@@ -205,7 +207,9 @@ public final class OpenRocketScreen extends ChromeScreen {
         } else {
             from = "Shares with no other rocket";
         }
-        column.add(ui.label(from, Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padBottom(2f).row();
+        // A long list of related rockets wraps inside the column rather than running into the next.
+        column.add(ui.paragraph(from, Theme.TextStyle.CAPTION, Theme.INK_MUTED)).width(RELIABILITY_WIDTH)
+            .padBottom(2f).row();
         column.add(ui.label("R&D pace: " + Rockets.rdPace(rocket), Theme.TextStyle.CAPTION, Theme.INK_MUTED));
         String detail = sources.isEmpty() ? "No other rocket passes reliability to this one."
             : "When it opens, it gets a share of each related rocket's reliability at that moment: "

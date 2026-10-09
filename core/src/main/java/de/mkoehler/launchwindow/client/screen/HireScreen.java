@@ -194,7 +194,8 @@ public final class HireScreen extends ChromeScreen {
             list.add(candidateRow(candidate)).row();
             list.add(new Image(ui.solid(Theme.NAVY_BORDER))).height(Theme.BORDER_THIN).row();
         }
-        ScrollPane scroll = scrollPane(list);
+        // Picking a candidate rebuilds the screen; the list stays where the player scrolled it.
+        ScrollPane scroll = keptScrollPane(list, "candidates");
         card.add(scroll).expand().fill();
         panel.add(card).expand().fill();
         return panel;

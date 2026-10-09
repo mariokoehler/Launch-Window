@@ -749,6 +749,11 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       `Advisor.READY_RELIABILITY`, 60 %. Until then "Raise reliability to 60 %" stands in for it,
       with a navy line on where things stand ("Now: payload 41 %, rocket 22 %.") and a Go link to the
       R&D board of whichever is further behind. A mission already in flight or flown ticks off both.
+    - **Nothing to open while the engineers train** (play test, 2026-10-09): opening a program or a
+      rocket costs money every season, so "Open a program", "Open a rocket program" and "Put
+      engineers on R&D" wait until an engineer is out of basic training, and "Raise reliability"
+      until someone is on R&D. Meanwhile the card says "All set for now" and "Once your first
+      engineers finish basic training: open a program." (`Advisor.waitingFor`).
     - **Ticked off from the state, never from a click:** someone hired, a program open, an engineer
       on an R&D slot, a mission in flight or flown before. Only "help opened" and "report read" are
       this client's own marks (preferences per server and login, like the report's read mark).
@@ -1097,6 +1102,15 @@ Headquarters' cap limits open payload programs (3/7/10/16). **Ref:**
 `headquarters*.png`, `program_categories.png`, `program_category_details.png`,
 `program_details.png`, `goals_open_up_new_programs.png`, `mission_selection.png`,
 `assemble_mission*.png`, `schedule_mission.png`.
+
+**Goals and reliability on the cards** *(play-test request, built 2026-10-09 without a mockup)*. A
+goal not reached lowers the reliability some of a mission's components fly with; some reached goals
+raise it (the configuration's goal dependencies and boosts). Every configuration card shows a red
+"Goals not reached: −20 reliability" and a green "Goals reached: +5 reliability" when they apply,
+above the prestige note; every program card in Headquarters' lists a red "Skipped goals: up to −30
+reliability", counting only goals from outside the program (its own first flights are the way in)
+at the most any one of its missions loses, so skipping ahead shows before a program is opened. A
+tooltip names each goal and what it does (`client.view.GoalModifiers`).
 
 **Staffing ahead of assembly** *(play-test request, built 2026-10-07 without a mockup)*. Every
 configuration card adds "Free now: 5 of 2 astronauts · 10 of 9 controllers" under its stats, red

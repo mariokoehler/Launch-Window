@@ -212,7 +212,7 @@ public final class SpaceComplexScreen extends SessionScreen {
         if (open.isEmpty()) {
             Advisor.Item next = Advisor.later(state, session.catalog(), marks).get(0);
             body.add(ui.label("All set for now", Theme.TextStyle.BODY_STRONG, Theme.INK)).left().row();
-            body.add(ui.paragraph("Once the turn resolves: " + next.title().toLowerCase(java.util.Locale.ROOT)
+            body.add(ui.paragraph(Advisor.waitingFor(next, state) + ": " + next.title().toLowerCase(java.util.Locale.ROOT)
                 + ".", Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).width(inner).left().padBottom(Theme.SPACE_3).row();
         } else {
             for (int i = 0; i < Math.min(Advisor.SHOWN, open.size()); i++) {

@@ -88,6 +88,8 @@ abstract class ChromeScreen extends SessionScreen {
     private final Label gameDate;
     private final Label countdown;
     private final Table footer = new Table();
+    /** The last pane built under each key, for {@link #keptScrollPane}. */
+    private final java.util.Map<String, ScrollPane> keptScrolls = new java.util.HashMap<>();
     private final Label eyebrowLabel;
     private final Label titleLabel;
 
@@ -562,7 +564,40 @@ abstract class ChromeScreen extends SessionScreen {
      * @return the scroll pane
      */
     protected ScrollPane scrollPane(Table list) {
-        ScrollPane scroll = new ScrollPane(list, new ScrollPane.ScrollPaneStyle());
+        return scrollPane(list, 0f);
+    }
+
+    /**
+     * As {@link #scrollPane(Table)}, but keeping its scroll position across rebuilds: the pane built
+     * under the same key last time hands its position on, so picking a row doesn't jump the list back
+     * to the top.
+     *
+     * @param list the content
+     * @param key  names the list on this screen
+     * @return the pane
+     */
+    protected ScrollPane keptScrollPane(Table list, String key) {
+        ScrollPane previous = keptScrolls.get(key);
+        ScrollPane scroll = scrollPane(list, previous == null ? 0f : previous.getScrollY());
+        keptScrolls.put(key, scroll);
+        return scroll;
+    }
+
+    private ScrollPane scrollPane(Table list, float startY) {
+        ScrollPane scroll = new ScrollPane(list, new ScrollPane.ScrollPaneStyle()) {
+            private boolean placed = startY <= 0f;
+
+            @Override
+            public void layout() {
+                super.layout();
+                // Only once laid out does the pane know how far it can scroll.
+                if (!placed) {
+                    placed = true;
+                    setScrollY(startY);
+                    updateVisualScroll();
+                }
+            }
+        };
         scroll.setFadeScrollBars(false);
         scroll.setOverscroll(false, false);
         scroll.setScrollingDisabled(true, false);

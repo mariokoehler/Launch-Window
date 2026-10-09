@@ -7,6 +7,7 @@ import de.mkoehler.launchwindow.content.Program;
 import de.mkoehler.launchwindow.model.OwnedMissionComponent;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.model.SetSpecialist;
+import de.mkoehler.launchwindow.model.TrainingKind;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -139,23 +140,57 @@ public final class Advisor {
         return switch (item.id()) {
             case "help" -> done(marks.helpOpened());
             case "hire-engineers" -> done(!state.getSetSpecialists().isEmpty());
-            case "open-program" -> done(!Programs.open(state, catalog).isEmpty());
-            case "open-rocket" -> done(!Rockets.open(state, catalog).isEmpty());
-            case "assign-rnd" -> done(state.getSetSpecialists().stream()
-                .map(SetSpecialist::getRdTargetComponentId).anyMatch(id -> id != null));
+            // A program, a rocket and R&D cost money or need an engineer who can work: they wait until
+            // the first engineer is out of basic training (play test, 2026-10-09).
+            case "open-program" -> !Programs.open(state, catalog).isEmpty() ? Status.DONE
+                : engineerAvailable(state) ? Status.OPEN : Status.LATER;
+            case "open-rocket" -> !Rockets.open(state, catalog).isEmpty() ? Status.DONE
+                : engineerAvailable(state) ? Status.OPEN : Status.LATER;
+            case "assign-rnd" -> state.getSetSpecialists().stream().map(SetSpecialist::getRdTargetComponentId)
+                .anyMatch(id -> id != null) ? Status.DONE : engineerAvailable(state) ? Status.OPEN : Status.LATER;
             case "hire-controllers" -> !state.getMissionControlOfficers().isEmpty() ? Status.DONE
                 : openProgramNeeds(state, catalog, configuration -> Missions.controllerCount(configuration) > 0)
                 ? Status.OPEN : Status.NOT_NEEDED;
             case "hire-astronauts" -> !state.getAstronauts().isEmpty() ? Status.DONE
                 : openProgramNeeds(state, catalog, configuration -> Missions.crewCount(configuration) > 0
                     || Missions.capcomCount(configuration) > 0) ? Status.OPEN : Status.NOT_NEEDED;
-            case "raise-reliability" -> flown(state) || ready(state, catalog) ? Status.DONE : Status.OPEN;
+            // Only once someone is on R&D is there reliability to raise.
+            case "raise-reliability" -> flown(state) || ready(state, catalog) ? Status.DONE
+                : state.getSetSpecialists().stream().map(SetSpecialist::getRdTargetComponentId).anyMatch(id -> id != null)
+                ? Status.OPEN : Status.LATER;
             // Held back until the hardware is ready; "raise reliability" stands in for it meanwhile.
             case "plan-mission" -> flown(state) ? Status.DONE : ready(state, catalog) ? Status.OPEN
                 : Status.NOT_NEEDED;
             case "read-report" -> marks.reportRead() ? Status.DONE : marks.reportResolved() ? Status.OPEN
                 : Status.LATER;
             default -> throw new IllegalArgumentException("Unknown advisor item: " + item.id());
+        };
+    }
+
+    /**
+     * Returns whether an engineer is on the books and out of basic training, so a program or rocket
+     * opened now could be worked on at once.
+     *
+     * @param state the player's state
+     * @return whether one is
+     */
+    static boolean engineerAvailable(PlayerSnapshot state) {
+        return state.getSetSpecialists().stream().anyMatch(engineer -> engineer.getTrainingKind() != TrainingKind.BASIC);
+    }
+
+    /**
+     * Returns when a waiting item can be done, for the card: "Once the turn resolves", or once the
+     * first engineers finish basic training.
+     *
+     * @param item  the item
+     * @param state the player's state
+     * @return the phrase, starting with "Once"
+     */
+    public static String waitingFor(Item item, PlayerSnapshot state) {
+        return switch (item.id()) {
+            case "open-program", "open-rocket", "assign-rnd" -> "Once your first engineers finish basic training";
+            case "raise-reliability" -> "Once engineers are on R&D";
+            default -> "Once the turn resolves";
         };
     }
 
