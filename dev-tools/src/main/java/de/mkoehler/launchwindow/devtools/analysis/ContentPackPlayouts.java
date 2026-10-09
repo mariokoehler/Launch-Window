@@ -131,6 +131,20 @@ public final class ContentPackPlayouts {
     private static final int AHEAD_SPARES = 2;
     /** How close to {@link #LAUNCH_RELIABILITY} the working-ahead bot stops sending its people to training. */
     private static final double CLOSE_TO_READY = 15;
+    /** Seasons of running costs the side-missions bot keeps in hand on top of what its plan needs next. */
+    private static final int SIDE_CUSHION_SEASONS = 4;
+    /** Seasons the side-missions bot gives a side flight before it tries another. */
+    private static final int SIDE_GIVE_UP = 16;
+    /** What a point of reliability still to research weighs against a unit of money, choosing a side flight. */
+    private static final double SIDE_RESEARCH_WEIGHT = 100;
+
+    /** The side flight the bot is working on in the current game, its rocket, and since when. */
+    private String sideId;
+    private String sideRocketId;
+    private int sideSince;
+    private boolean sideFiller;
+    private int seasonNow;
+    private final Set<String> sideGivenUp = new HashSet<>();
 
     private final ContentCatalog catalog;
     private final BudgetSchedule schedule = BudgetSchedule.baspmClose();
@@ -138,7 +152,27 @@ public final class ContentPackPlayouts {
     private final BuildingSchedule buildings;
     private final List<String> declaredGoals;
     private final Map<Archetype, List<String>> plans;
+    private final Bot bot;
     private final boolean ahead;
+
+    /** How the bot plays. */
+    public enum Bot {
+        /** One flight at a time, six SET specialists, nothing else. */
+        PLAIN,
+        /**
+         * Works ahead as a player would: fills the SET Center (upgrading it with money to spare), puts
+         * specialists the current flight can't use on the plan's later flights' components wherever
+         * their program is open, keeps spare controllers and astronauts, and keeps its people home
+         * when the hardware is close.
+         */
+        AHEAD,
+        /**
+         * Works ahead and flies side missions: one flight at a time off its plan, the best prestige for
+         * the money and research it needs, from money above a reserve the plan needs next, while the
+         * plan's own flight isn't close.
+         */
+        SIDE_MISSIONS
+    }
 
     /**
      * Creates a harness for one content pack with the plain bot, which works on one flight at a time.
@@ -147,19 +181,18 @@ public final class ContentPackPlayouts {
      * @param catalog the pack
      */
     public ContentPackPlayouts(ContentCatalog catalog) {
-        this(catalog, false);
+        this(catalog, Bot.PLAIN);
     }
 
     /**
      * Creates a harness for one content pack.
      *
      * @param catalog the pack
-     * @param ahead   whether the bot works ahead as a player would: it fills the SET Center (upgrading
-     *                it with money to spare), and puts specialists the current flight can't use on the
-     *                components of the plan's later flights, wherever their program is already open
+     * @param bot     how the bot plays
      */
-    public ContentPackPlayouts(ContentCatalog catalog, boolean ahead) {
-        this.ahead = ahead;
+    public ContentPackPlayouts(ContentCatalog catalog, Bot bot) {
+        this.bot = bot;
+        this.ahead = bot != Bot.PLAIN;
         this.catalog = catalog;
         this.buildings = catalog.buildings();
         boolean moon = catalog.goal("crewed-lunar-landing").isPresent();
@@ -199,6 +232,9 @@ public final class ContentPackPlayouts {
      * @param targetSeasons          seasons each configuration was the bot's target, over all games
      * @param launchGaps             in completed games, the seasons without a launch before each launch
      * @param longestGaps            in completed games, each game's longest run of seasons without a launch
+     * @param sideLaunches           side flights launched, per configuration, over all games
+     * @param sideKinds              side flights launched, fillers and ventures
+     * @param sideRejections         side flights passed over in a season, per kind and reason, over all games
      */
     public record Report(int games, int seasons, Map<Archetype, Integer> completedByArchetype,
                          Map<Archetype, Integer> gamesByArchetype, double averageCompletionSeason,
@@ -207,7 +243,9 @@ public final class ContentPackPlayouts {
                          Map<String, Integer> stepOutcomes, int programsOpened, int rocketsOpened, int upgrades,
                          int hires, int debtConversions, long lowestFunds, int astronautsLost,
                          Map<String, Integer> stalls, Map<String, Integer> targetSeasons,
-                         List<Integer> launchGaps, List<Integer> longestGaps) {
+                         List<Integer> launchGaps, List<Integer> longestGaps,
+                         Map<String, Integer> sideLaunches, Map<String, Integer> sideKinds,
+                         Map<String, Integer> sideRejections) {
     }
 
     /**
@@ -351,7 +389,8 @@ public final class ContentPackPlayouts {
             tally.completionSeasonsByArchetype,
             tally.goalReached, tally.launches, tally.stepOutcomes, tally.programsOpened, tally.rocketsOpened,
             tally.upgrades, tally.hires, tally.debtConversions, tally.lowestFunds, tally.astronautsLost, tally.stalls,
-            tally.targetSeasons, tally.launchGaps, tally.longestGaps);
+            tally.targetSeasons, tally.launchGaps, tally.longestGaps, tally.sideLaunches,
+            tally.sideKinds, tally.sideRejections);
     }
 
     private void playGame(Archetype archetype, int seasons, Random random, Tally tally) {
@@ -363,12 +402,16 @@ public final class ContentPackPlayouts {
         hireBest(snapshot, PersonnelGroup.SET, STARTING_SPECIALISTS, random, tally);
         GoalTally goalTally = new GoalTally();
         Set<String> reached = new HashSet<>();
+        sideId = null;
+        sideRocketId = null;
+        sideGivenUp.clear();
         List<Integer> gaps = new ArrayList<>();
         int sinceLaunch = 0;
 
         for (int season = 0; season < seasons; season++) {
             // Journaled player actions first.
             tally.launchedThisSeason = 0;
+            seasonNow = season;
             act(snapshot, random, tally);
             if (tally.launchedThisSeason > 0) {
                 gaps.add(sinceLaunch);
@@ -490,7 +533,8 @@ public final class ContentPackPlayouts {
             openRocket(snapshot, rocket, tally);
         }
         ensureStaff(snapshot, target, random, tally);
-        assignResearch(snapshot, target, rocket);
+        MissionConfiguration side = bot == Bot.SIDE_MISSIONS ? sideTarget(snapshot, target, rocket, tally) : null;
+        assignResearch(snapshot, target, rocket, side);
         boolean hardwareReady = rocket != null && hardwareReady(snapshot, target, rocket);
         // Staff train while the hardware is still in R&D, and stay home once it's ready to fly.
         if (!hardwareReady) {
@@ -502,8 +546,323 @@ public final class ContentPackPlayouts {
             tally.stalls.merge("hardware not ready", 1, Integer::sum);
         } else if (snapshot.getInProgressMissions().values().stream()
                 .noneMatch(mission -> mission.getMissionConfigurationId().equals(target.id()))) {
-            launch(snapshot, target, rocket, tally);
+            launch(snapshot, target, rocket, tally, "");
         }
+        if (side != null) {
+            flySide(snapshot, target, rocket, side, random, tally);
+        }
+    }
+
+    // ------------------------------------------------------------------ side missions
+
+    /**
+     * The side flight to work on: the current one while it's still worth it, otherwise the best new one,
+     * or none. A filler (a flight in an open program, on an open rocket, with its hardware at the bar)
+     * beats a venture (anything that needs a program, a rocket or research first). A venture gets
+     * {@link #SIDE_GIVE_UP} seasons; one that didn't fly is left alone until the next funding review.
+     * A finished or abandoned side flight's program closes unless the plan flies it.
+     */
+    private MissionConfiguration sideTarget(PlayerSnapshot snapshot, MissionConfiguration target,
+            MissionComponent mainRocket, Tally tally) {
+        if (seasonNow % de.mkoehler.launchwindow.rules.BudgetProgress.SEASONS_PER_REVIEW == 0) {
+            sideGivenUp.clear();
+        }
+        if (sideId != null) {
+            MissionConfiguration current = catalog.missionConfiguration(sideId).orElseThrow();
+            boolean flying = snapshot.getInProgressMissions().values().stream()
+                .anyMatch(mission -> mission.getMissionConfigurationId().equals(current.id()));
+            boolean keep = flying || hasOpenGoal(snapshot, current)
+                && (sideFiller ? isFiller(snapshot, current) : seasonNow - sideSince < SIDE_GIVE_UP);
+            if (keep) {
+                return current;
+            }
+            if (hasOpenGoal(snapshot, current) && !sideFiller) {
+                sideGivenUp.add(current.id());
+            }
+            if (!remainingPlanPrograms(snapshot, target).contains(current.programId())) {
+                ProgramOpening.close(snapshot, current.programId(), catalog);
+            }
+            sideId = null;
+            sideRocketId = null;
+        }
+        long spendable = snapshot.getFunds() - reserve(snapshot, target, mainRocket);
+        // A new program's upkeep must fit inside the season's funding, or the agency slides into debt
+        // that stalls the plan.
+        long headroom = snapshot.getFundingRatePerSeason() - independentRunningCosts(snapshot);
+        Set<String> plan = new HashSet<>(plans.get(snapshot.getArchetype()));
+        MissionConfiguration best = null;
+        MissionComponent bestRocket = null;
+        boolean bestFiller = false;
+        double bestScore = 0;
+        for (MissionConfiguration candidate : catalog.missionConfigurations()) {
+            if (plan.contains(candidate.id())) {
+                continue;
+            }
+            Program program = catalog.program(candidate.programId()).orElseThrow();
+            if (!program.availableTo(snapshot.getArchetype())
+                    || !program.requiredGoalIds().stream().allMatch(snapshot::hasAchievedOrCancelledGoal)
+                    || !candidate.requiredGoalIds().stream().allMatch(snapshot::hasAchievedOrCancelledGoal)) {
+                continue;
+            }
+            // A flight pays only for goals the agency doesn't hold yet, with everything they cancel.
+            long gain = 0;
+            for (String goal : goalsOf(candidate)) {
+                gain += de.mkoehler.launchwindow.rules.GoalCascade.maxPrestige(goal, snapshot, catalog);
+            }
+            if (gain <= 0) {
+                continue;
+            }
+            boolean filler = isFiller(snapshot, candidate);
+            String rejected = sideRejection(snapshot, candidate, program, filler, spendable, headroom, mainRocket,
+                target);
+            if (rejected != null) {
+                tally.sideRejections.merge((filler ? "filler: " : "venture: ") + rejected, 1, Integer::sum);
+                continue;
+            }
+            MissionComponent rocket = sideRocketFor(snapshot, candidate, filler);
+            long cost = launchCost(candidate, rocket)
+                + (snapshot.getOpenedProgramIds().contains(program.id()) ? 0
+                    : ProgramOpening.openingPrice(snapshot, program, catalog))
+                + (rocket == null || isActive(snapshot, rocket.id()) ? 0 : rocket.creationCost());
+            double score = gain / (cost + SIDE_RESEARCH_WEIGHT * toResearch(snapshot, candidate, rocket));
+            if (filler && !bestFiller || filler == bestFiller && score > bestScore) {
+                best = candidate;
+                bestRocket = rocket;
+                bestFiller = filler;
+                bestScore = score;
+            }
+        }
+        if (best != null) {
+            sideId = best.id();
+            sideRocketId = bestRocket == null ? null : bestRocket.id();
+            sideFiller = bestFiller;
+            sideSince = seasonNow;
+        }
+        return best;
+    }
+
+    /** Why a side flight can't be taken on now, or {@code null} if it can. */
+    private String sideRejection(PlayerSnapshot snapshot, MissionConfiguration candidate, Program program,
+            boolean filler, long spendable, long headroom, MissionComponent mainRocket, MissionConfiguration target) {
+        if (!filler && sideGivenUp.contains(candidate.id())) {
+            return "given up";
+        }
+        if (candidate.requiredAstronautCount() + candidate.requiredCapcomCount()
+                    > BuildingUpgrades.capacity(snapshot, Building.ASTRONAUT_CENTER, buildings)
+                || candidate.requiredMissionControlOfficerCount()
+                    > BuildingUpgrades.capacity(snapshot, Building.MISSION_CONTROL, buildings)) {
+            return "crew over the building caps";
+        }
+        boolean needsRocket = candidate.launches().stream().anyMatch(launch -> launch.launchType().needsRocket());
+        MissionComponent rocket = needsRocket ? sideRocketFor(snapshot, candidate, filler) : null;
+        if (needsRocket && rocket == null) {
+            return "no rocket";
+        }
+        if (filler) {
+            return fillerAffordable(snapshot, candidate, rocket, target, mainRocket) ? null : "funds";
+        }
+        boolean programOpen = snapshot.getOpenedProgramIds().contains(program.id());
+        if (!programOpen && snapshot.getOpenedProgramIds().size()
+                >= BuildingUpgrades.capacity(snapshot, Building.HEADQUARTERS, buildings)) {
+            return "Headquarters full";
+        }
+        if (!programOpen && program.maintenanceCost() > headroom) {
+            return "upkeep over the funding";
+        }
+        long cost = launchCost(candidate, rocket)
+            + (programOpen ? 0 : ProgramOpening.openingPrice(snapshot, program, catalog))
+            + (rocket == null || isActive(snapshot, rocket.id()) ? 0 : rocket.creationCost());
+        return cost > spendable ? "funds" : null;
+    }
+
+    /** A filler is flown from what the agency has: its program open, a rocket open, its hardware at the bar. */
+    private boolean isFiller(PlayerSnapshot snapshot, MissionConfiguration configuration) {
+        if (!snapshot.getOpenedProgramIds().contains(configuration.programId())) {
+            return false;
+        }
+        boolean needsRocket = configuration.launches().stream().anyMatch(launch -> launch.launchType().needsRocket());
+        MissionComponent rocket = needsRocket ? sideRocketFor(snapshot, configuration, true) : null;
+        return (!needsRocket || rocket != null) && toResearch(snapshot, configuration, rocket) == 0;
+    }
+
+    /** A filler costs only its launch: the agency stays solvent and keeps the plan's own launch in hand. */
+    private boolean fillerAffordable(PlayerSnapshot snapshot, MissionConfiguration side, MissionComponent rocket,
+            MissionConfiguration target, MissionComponent mainRocket) {
+        long cost = launchCost(side, rocket);
+        return snapshot.getFunds() > 0 && snapshot.getFunds() - cost >= launchCost(target, mainRocket);
+    }
+
+    /** The reliability still to research before a flight reaches the bar, summed over what it flies. */
+    private double toResearch(PlayerSnapshot snapshot, MissionConfiguration configuration, MissionComponent rocket) {
+        List<String> flown = flownComponents(configuration);
+        if (rocket != null) {
+            flown.add(rocket.id());
+        }
+        double total = 0;
+        for (String componentId : flown) {
+            MissionComponent component = catalog.missionComponent(componentId).orElseThrow();
+            OwnedMissionComponent owned = snapshot.getMissionComponents().get(componentId);
+            double now = owned == null ? component.baselineReliability() : owned.getCurrentReliability();
+            total += Math.max(0, Math.min(LAUNCH_RELIABILITY, component.maxRdReliability() - 0.5) - now);
+        }
+        return total;
+    }
+
+    /**
+     * A rocket for a side flight: the cheapest already open that lifts it, so side flights don't churn
+     * rocket programs; for a venture, failing that, the cheapest the VAB can open now.
+     */
+    private MissionComponent sideRocketFor(PlayerSnapshot snapshot, MissionConfiguration configuration,
+            boolean openOnly) {
+        MissionComponent bestOpen = null;
+        MissionComponent bestNew = null;
+        boolean vabRoom = openRockets(snapshot)
+            < BuildingUpgrades.capacity(snapshot, Building.VEHICLE_ASSEMBLY, buildings);
+        for (String id : rocketIds()) {
+            MissionComponent rocket = catalog.missionComponent(id).orElseThrow();
+            if (!rocket.availableTo(snapshot.getArchetype()) || !lifts(rocket, configuration)) {
+                continue;
+            }
+            if (isActive(snapshot, id)) {
+                if (bestOpen == null || rocket.unitCost() < bestOpen.unitCost()) {
+                    bestOpen = rocket;
+                }
+            } else if (!openOnly && vabRoom && RocketPrograms.classAllowed(rocket.rocket().rocketClass(),
+                    snapshot.buildingLevel(Building.VEHICLE_ASSEMBLY))
+                    && (bestNew == null || rocket.unitCost() < bestNew.unitCost())) {
+                bestNew = rocket;
+            }
+        }
+        return bestOpen != null ? bestOpen : bestNew;
+    }
+
+    /**
+     * Opens what a venture needs, then, once the hardware is ready, hires the crew within the buildings'
+     * caps and launches. Nothing permanent is bought for a side flight before it can fly: no building
+     * levels, and no hires while it waits on R&amp;D.
+     */
+    private void flySide(PlayerSnapshot snapshot, MissionConfiguration target, MissionComponent mainRocket,
+            MissionConfiguration side, Random random, Tally tally) {
+        if (snapshot.getInProgressMissions().values().stream()
+                .anyMatch(mission -> mission.getMissionConfigurationId().equals(side.id()))) {
+            return;
+        }
+        Program program = catalog.program(side.programId()).orElseThrow();
+        MissionComponent rocket = sideRocketId == null ? null : catalog.missionComponent(sideRocketId).orElseThrow();
+        if (!sideFiller) {
+            long spendable = snapshot.getFunds() - reserve(snapshot, target, mainRocket);
+            if (!snapshot.getOpenedProgramIds().contains(program.id())) {
+                if (ProgramOpening.openingPrice(snapshot, program, catalog) > spendable) {
+                    return;
+                }
+                openProgram(snapshot, program, tally);
+                spendable = snapshot.getFunds() - reserve(snapshot, target, mainRocket);
+            }
+            if (rocket != null && !isActive(snapshot, rocket.id())) {
+                if (rocket.creationCost() > spendable) {
+                    return;
+                }
+                openRocket(snapshot, rocket, tally);
+            }
+        }
+        boolean ready = rocket == null ? hardwareReadyWithoutRocket(snapshot, side)
+            : hardwareReady(snapshot, side, rocket);
+        boolean affordable = sideFiller ? fillerAffordable(snapshot, side, rocket, target, mainRocket)
+            : launchCost(side, rocket) <= snapshot.getFunds() - reserve(snapshot, target, mainRocket);
+        if (!ready || !affordable) {
+            return;
+        }
+        // The side flight's people come on top of what the plan's flight needs, so it never takes theirs.
+        boolean mainFlying = snapshot.getInProgressMissions().values().stream()
+            .anyMatch(mission -> mission.getMissionConfigurationId().equals(target.id()));
+        int astronauts = side.requiredAstronautCount() + side.requiredCapcomCount()
+            + (mainFlying ? 0 : target.requiredAstronautCount() + target.requiredCapcomCount());
+        int controllers = side.requiredMissionControlOfficerCount()
+            + (mainFlying ? 0 : target.requiredMissionControlOfficerCount());
+        hireBest(snapshot, PersonnelGroup.ASTRONAUT, astronauts - idleCount(snapshot.getAstronauts()), random, tally);
+        hireBest(snapshot, PersonnelGroup.MISSION_CONTROL,
+            controllers - idleCount(snapshot.getMissionControlOfficers()), random, tally);
+        if (idleCount(snapshot.getAstronauts()) < astronauts
+                || idleCount(snapshot.getMissionControlOfficers()) < controllers) {
+            tally.stalls.merge("side: the plan's people", 1, Integer::sum);
+            return;
+        }
+        int before = tally.launchedThisSeason;
+        launch(snapshot, side, rocket, tally, "side: ");
+        if (tally.launchedThisSeason > before) {
+            tally.sideLaunches.merge(side.id(), 1, Integer::sum);
+            tally.sideKinds.merge(sideFiller ? "filler" : "venture", 1, Integer::sum);
+        }
+    }
+
+    /**
+     * The money the plan needs next, which a venture leaves alone: the plan's current launch, its rocket
+     * if it isn't open, the next program it hasn't opened, and a few seasons' running costs.
+     */
+    private long reserve(PlayerSnapshot snapshot, MissionConfiguration target, MissionComponent mainRocket) {
+        long reserve = launchCost(target, mainRocket) + SIDE_CUSHION_SEASONS * independentRunningCosts(snapshot);
+        if (mainRocket != null && !isActive(snapshot, mainRocket.id())) {
+            reserve += mainRocket.creationCost();
+        }
+        List<String> plan = plans.get(snapshot.getArchetype());
+        for (String id : plan.subList(plan.indexOf(target.id()), plan.size())) {
+            Program program = catalog.program(catalog.missionConfiguration(id).orElseThrow().programId())
+                .orElseThrow();
+            if (!snapshot.getOpenedProgramIds().contains(program.id())) {
+                reserve += ProgramOpening.openingPrice(snapshot, program, catalog);
+                break;
+            }
+        }
+        return reserve;
+    }
+
+    /** The programs the plan still flies, from its current flight on. */
+    private Set<String> remainingPlanPrograms(PlayerSnapshot snapshot, MissionConfiguration target) {
+        List<String> plan = plans.get(snapshot.getArchetype());
+        Set<String> programs = new HashSet<>();
+        for (String id : plan.subList(plan.indexOf(target.id()), plan.size())) {
+            programs.add(catalog.missionConfiguration(id).orElseThrow().programId());
+        }
+        return programs;
+    }
+
+    private static long launchCost(MissionConfiguration configuration, MissionComponent rocket) {
+        long rockets = configuration.launches().stream().filter(launch -> launch.launchType().needsRocket()).count();
+        return configuration.cost() + (rocket == null ? 0 : rockets * rocket.unitCost());
+    }
+
+    private boolean lifts(MissionComponent rocket, MissionConfiguration configuration) {
+        return configuration.launches().stream().filter(launch -> launch.launchType().needsRocket())
+            .allMatch(launch -> {
+                double capacity = rocket.payloadCapacity(launch.launchType());
+                return capacity > 0 && capacity >= requiredLift(launch);
+            });
+    }
+
+    private boolean hardwareReadyWithoutRocket(PlayerSnapshot snapshot, MissionConfiguration configuration) {
+        for (String componentId : flownComponents(configuration)) {
+            OwnedMissionComponent owned = snapshot.getMissionComponents().get(componentId);
+            MissionComponent component = catalog.missionComponent(componentId).orElseThrow();
+            if (owned == null || owned.getCurrentReliability()
+                    < Math.min(LAUNCH_RELIABILITY, component.maxRdReliability() - 0.5)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static int idleCount(List<? extends Personnel> roster) {
+        return (int) roster.stream().filter(ContentPackPlayouts::available).count();
+    }
+
+    private static Set<String> goalsOf(MissionConfiguration configuration) {
+        Set<String> goals = new java.util.LinkedHashSet<>();
+        configuration.seasons().forEach(season -> season.steps().forEach(step -> goals.addAll(step.goalIdsAchieved())));
+        return goals;
+    }
+
+    private static boolean hasOpenGoal(PlayerSnapshot snapshot, MissionConfiguration configuration) {
+        return goalsOf(configuration).stream().anyMatch(goal -> !snapshot.hasAchievedOrCancelledGoal(goal));
     }
 
     /** The first configuration in the agency's plan that still has a goal of its own to reach. */
@@ -549,6 +908,9 @@ public final class ContentPackPlayouts {
         Set<String> stillFlown = new HashSet<>();
         for (String id : plan.subList(plan.indexOf(target.id()), plan.size())) {
             stillFlown.add(catalog.missionConfiguration(id).orElseThrow().programId());
+        }
+        if (sideId != null) {
+            stillFlown.add(catalog.missionConfiguration(sideId).orElseThrow().programId());
         }
         for (String programId : List.copyOf(snapshot.getOpenedProgramIds())) {
             if (!stillFlown.contains(programId)) {
@@ -682,10 +1044,18 @@ public final class ContentPackPlayouts {
     }
 
     /** Points idle SET specialists at the target's components below their R&D ceiling. */
-    private void assignResearch(PlayerSnapshot snapshot, MissionConfiguration target, MissionComponent rocket) {
+    private void assignResearch(PlayerSnapshot snapshot, MissionConfiguration target, MissionComponent rocket,
+            MissionConfiguration side) {
         List<String> components = flownComponents(target);
         if (rocket != null && isActive(snapshot, rocket.id())) {
             components.add(rocket.id());
+        }
+        // A side flight comes after the plan's current flight and before its later ones.
+        if (side != null) {
+            components.addAll(flownComponents(side));
+            if (sideRocketId != null) {
+                components.add(sideRocketId);
+            }
         }
         if (ahead) {
             List<String> plan = plans.get(snapshot.getArchetype());
@@ -777,29 +1147,30 @@ public final class ContentPackPlayouts {
         return true;
     }
 
-    private void launch(PlayerSnapshot snapshot, MissionConfiguration target, MissionComponent rocket, Tally tally) {
+    private void launch(PlayerSnapshot snapshot, MissionConfiguration target, MissionComponent rocket, Tally tally,
+            String label) {
         // Staffed the way a player's "auto-assign" would: the best idle person per slot (baspm.md §10.11).
         MissionStaffing.Staffing staffing = MissionStaffing.autoAssign(snapshot, target);
         for (int slot : target.usedCrewSlots()) {
             if (staffing.crewSlotIds().get(slot) == null) {
-                tally.stalls.merge("too few idle astronauts", 1, Integer::sum);
+                tally.stalls.merge(label + "too few idle astronauts", 1, Integer::sum);
                 return;
             }
         }
         for (int slot : target.usedControlSlots()) {
             if (staffing.controlSlotIds().get(slot) == null) {
                 boolean astronautSlot = target.controlSlots().get(slot).kind() == StaffingSlot.Kind.ASTRONAUT;
-                tally.stalls.merge(astronautSlot ? "too few idle astronauts" : "too few idle controllers", 1,
-                    Integer::sum);
+                tally.stalls.merge(label + (astronautSlot ? "too few idle astronauts" : "too few idle controllers"),
+                    1, Integer::sum);
                 return;
             }
         }
         // An air drop flies without a rocket: its slot holds "" and costs nothing.
         List<String> rockets = target.launches().stream()
             .map(launch -> launch.launchType().needsRocket() ? rocket.id() : "").toList();
-        long expectedCost = target.cost() + rockets.stream().filter(id -> !id.isEmpty()).count() * rocket.unitCost();
+        long expectedCost = launchCost(target, rocket);
         if (snapshot.getFunds() < expectedCost) {
-            tally.stalls.merge("funds", 1, Integer::sum);
+            tally.stalls.merge(label + "funds", 1, Integer::sum);
             return;
         }
         long before = snapshot.getFunds();
@@ -814,7 +1185,7 @@ public final class ContentPackPlayouts {
             tally.launches.merge(target.id(), 1, Integer::sum);
             tally.launchedThisSeason++;
         } else {
-            tally.stalls.merge(outcome.name(), 1, Integer::sum);
+            tally.stalls.merge(label + outcome.name(), 1, Integer::sum);
         }
     }
 
@@ -1137,6 +1508,9 @@ public final class ContentPackPlayouts {
         final List<Integer> launchGaps = new ArrayList<>();
         final List<Integer> longestGaps = new ArrayList<>();
         int launchedThisSeason;
+        final Map<String, Integer> sideLaunches = new LinkedHashMap<>();
+        final Map<String, Integer> sideKinds = new LinkedHashMap<>();
+        final Map<String, Integer> sideRejections = new java.util.TreeMap<>();
     }
 
     /**
@@ -1144,13 +1518,18 @@ public final class ContentPackPlayouts {
      * Moon race.
      *
      * @param args the pack's folder under {@code assets/content}, {@code early-era} if none is given, then
-     *             {@code ahead} for the bot that works ahead
+     *             {@code ahead} for the bot that works ahead or {@code side} for the one that also flies
+     *             side missions
      */
     public static void main(String[] args) {
         ContentCatalog catalog = ContentPackLoader.load(Path.of("assets", "content",
             args.length > 0 ? args[0] : "early-era"));
-        boolean ahead = args.length > 1 && args[1].equals("ahead");
-        ContentPackPlayouts harness = new ContentPackPlayouts(catalog, ahead);
+        Bot bot = args.length < 2 ? Bot.PLAIN : switch (args[1]) {
+            case "ahead" -> Bot.AHEAD;
+            case "side" -> Bot.SIDE_MISSIONS;
+            default -> throw new IllegalArgumentException("Unknown bot " + args[1]);
+        };
+        ContentPackPlayouts harness = new ContentPackPlayouts(catalog, bot);
         int seasons = harness.declaredGoals().equals(MOON_DECLARED_GOALS) ? 240 : 80;
         Report report = harness.run(200, seasons, 42L);
         System.out.println(report.games() + " games, " + report.seasons() + " seasons max, declared goals "

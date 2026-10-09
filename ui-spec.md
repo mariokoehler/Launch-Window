@@ -2099,6 +2099,9 @@ current state alone. Each is an M5 task.
 4. **The rest:** Astronaut Complex (§4.9), Public Affairs Office (§4.10), Museum
    (§4.11), settings (§4.12), game result (§4.13).
 
+**Next new screen (user, 2026-10-09):** a newspaper front page for the great Firsts, shown on
+login before the turn report (`design.md` §5, Backlog). Not specified yet.
+
 Mockups don't need to be pixel-final. Layout, components, and states are what
 implementation needs. Flag any new color, component variant, or icon so
 `Theme.java` and the UI Asset Sheet stay in sync.

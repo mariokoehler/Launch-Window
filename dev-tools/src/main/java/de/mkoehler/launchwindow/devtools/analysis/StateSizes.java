@@ -33,7 +33,7 @@ public final class StateSizes {
         ContentCatalog catalog = ContentPackLoader.load(Path.of("assets", "content", pack));
         System.out.println("Pack: " + pack);
         boolean moon = new ContentPackPlayouts(catalog).declaredGoals().equals(ContentPackPlayouts.MOON_DECLARED_GOALS);
-        ContentPackPlayouts.SizeReport report = new ContentPackPlayouts(catalog, moon).sizes(200, moon ? 240 : 80, 42L);
+        ContentPackPlayouts.SizeReport report = new ContentPackPlayouts(catalog, moon ? ContentPackPlayouts.Bot.AHEAD : ContentPackPlayouts.Bot.PLAIN).sizes(200, moon ? 240 : 80, 42L);
         int buffer = NetworkConstants.OBJECT_BUFFER_SIZE;
         System.out.println(report.games() + " games; the state a client receives, in bytes (Kryo buffer "
             + buffer + "):");

@@ -1477,7 +1477,30 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
     stalled on funds at ×3 and 50 %, against 25 as is): saving for a 20,000 program or a new
     rocket is the same lull. The Soviet race gains least past ×2, for the same reason. The bot
     flies only its plan, though; a player can fill a wait with the pack's other flights (probes,
-    satellites, records), and whether those fill it is not measured yet.
+    satellites, records).
+  - **Do the pack's other flights fill the lulls?** Hardly (measured 2026-10-09, `RaceLulls standard
+    side`, the side-missions bot, two seeds). It flies about four side flights per game besides its
+    plan, half of them fillers (a flight in a program already open, on a rocket already open, with
+    its hardware at the bar: Vostok's and Soyuz's longer flights, Explorer 1's extended mission, the
+    X-15's) and half ventures (a new program, rocket or research first: Mariner 9, Mars 2, Luna 15,
+    Lunar Orbiter). The landing stays where it was (NASA 134 to 135, Soviet 166 to 168), and so do
+    the lulls: gaps of 5+ turns 19 % of all gaps against 22 %, the median game's longest gap 20 to
+    22 turns against 17 to 18. Why:
+    - **Fillers are few.** A flight pays only for goals the agency doesn't hold yet (repeats pay
+      nothing, `MissionProgress`), and most flights in an open program are the plan's own steps or
+      already flown. Where a filler exists, the bot flies it.
+    - **Ventures cost what the plan needs.** The middle of the race is a saving game: Apollo's or
+      Soyuz 7K-L3's 20,000 to 25,000 to open against 20,000 to 60,000 in hand, a funding rate that
+      grows from 3,000 to about 47,000 a season over the race, and money piling up only after about
+      season 140. A venture's opening price, new rocket and upkeep come out of that, and the
+      Headquarters and VAB caps leave little room for a second line of work.
+    - **Earlier versions of this bot made the lulls longer** (up to 36 turns) by buying permanent
+      costs (building levels, hires, reopened rockets) for passing side flights, which sank the
+      agency into debt before its first satellite.
+
+    So under these numbers a waiting player has little worth flying. The fix is new things to do,
+    not more of the same: the interactive events (§5, Backlog), and perhaps flights that pay for a
+    repeat or cheaper ways to keep a program open.
 - **The game goes on after a winner:** goals, flights and prestige still count.
 
 ### 2.10 Difficulty level
@@ -1715,7 +1738,8 @@ purpose-built report).
 - **`ContentPackPlayouts`:** bots play a real pack through the real season pass and report
   whether and when they reach the declared goals: the early race on `early-era`, the Moon race on
   `standard` (a pack with the `crewed-lunar-landing` goal), with a plan per agency. `ahead` as the
-  second argument plays the bot that works ahead (§2.6); it also opens Headquarters and the VAB as
+  second argument plays the bot that works ahead (§2.6), `side` the one that also flies side
+  missions; it also opens Headquarters and the VAB as
   the plan needs, and closes programs and rockets it no longer flies. Both bots now wait only for
   the components a configuration's steps fly (before 2026-10-09, every component of its program;
   the early-era numbers came out the same). With the pool of 10 (2026-10-06):
@@ -1862,8 +1886,8 @@ patches (`ui-spec.md` component 8).
 - **Lulls in the Moon race** (§2.6, measured 2026-10-09). The length is accepted and the race stays
   (user, 2026-10-09); the open question is how to keep players busy between flights. Faster R&D
   and more reliable starts shorten the race but leave the lulls, which turn into waiting for
-  money. Next: measure whether the pack's other flights fill them, then decide on new things to
-  do between flights. The Soviets take about a fifth longer.
+  money, and the pack's other flights barely fill them. Next: the interactive events (§5, Backlog),
+  then the R&D tuning with the side-missions bot. The Soviets take about a fifth longer.
 - **Declared goals for the colleagues' game:** an early-era race (user, 2026-10-08), with goals
   drawn from the early-era pack. Since then the standard pack became the default with its own race to
   a crewed Moon landing (user, 2026-10-09, §2.6); whether the colleagues' game plays that or a
@@ -2159,6 +2183,26 @@ report), each ticked off from the state, with a link to
 the building and one to the item's help topics. It retires for good once everything is done or the
 player hides it. **Next:** see in the play test whether the order and wording steer a new player
 well, and whether three items at a time is the right number.
+
+**A smarter bot** (user, 2026-10-09): worth real effort, for better analysis now and maybe an NPC
+rival later. Built in dev-tools the same day: `ContentPackPlayouts.Bot`, plain, working ahead,
+and flying side missions (§2.6). Lessons for an NPC: buy nothing permanent (building levels,
+hires, rocket programs) for a passing goal, and stay solvent before staying busy; debt stalls the
+plan for longer than any side flight fills. Next for the bot: several flights of the plan at once,
+and the R&D tuning (§2.6) rerun with it.
+
+**Interactive events** (the user's idea, 2026-10-09, not designed yet): decisions between
+flights, so a wait for R&D isn't empty. R&D events with choices (a supplier delay, a trade of
+cost against reliability, paying for a ground test or test firing whose result shows), and
+decisions in the turn report. Some should draw on what the explainers teach (§1.1, `ui-spec.md`
+component 18), so a player uses that knowledge to improve a design. To be fleshed out after the
+bot.
+
+**Front pages for the Firsts** (the user's idea, 2026-10-09, not designed yet): when an agency
+makes one of the great Firsts (satellite in orbit, human in space, human in orbit, crewed lunar
+flyby, the Moon landing), every player sees a fictional newspaper's front page with the headline
+and an article on who made it first. It pops up on login before the turn report, the first thing
+they see. A new screen: spec, then a mockup session (`ui-spec.md` §7).
 
 ### Later
 

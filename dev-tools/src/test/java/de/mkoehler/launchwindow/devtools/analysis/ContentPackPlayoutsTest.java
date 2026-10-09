@@ -38,7 +38,7 @@ class ContentPackPlayoutsTest {
     @Test
     void botsWorkingAheadReachTheMoonOnTheStandardPack() {
         ContentPackPlayouts harness = new ContentPackPlayouts(
-            ContentPackLoader.load(Path.of("..", "assets", "content", "standard")), true);
+            ContentPackLoader.load(Path.of("..", "assets", "content", "standard")), ContentPackPlayouts.Bot.AHEAD);
 
         ContentPackPlayouts.Report report = harness.run(10, 240, 7L);
 
@@ -47,5 +47,18 @@ class ContentPackPlayoutsTest {
             "some NASA games land a crew on the Moon: " + report);
         assertTrue(report.completedByArchetype().getOrDefault(Archetype.SOVIET, 0) > 0,
             "some Soviet games land a crew on the Moon: " + report);
+    }
+
+    @Test
+    void theSideMissionsBotFliesSideFlightsAndStillReachesTheMoon() {
+        ContentPackPlayouts harness = new ContentPackPlayouts(
+            ContentPackLoader.load(Path.of("..", "assets", "content", "standard")),
+            ContentPackPlayouts.Bot.SIDE_MISSIONS);
+
+        ContentPackPlayouts.Report report = harness.run(10, 240, 7L);
+
+        assertTrue(report.completedByArchetype().values().stream().mapToInt(Integer::intValue).sum() > 0,
+            "some games land a crew on the Moon: " + report);
+        assertTrue(report.sideKinds().getOrDefault("filler", 0) > 0, "some fillers fly: " + report.sideKinds());
     }
 }
