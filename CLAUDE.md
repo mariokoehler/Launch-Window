@@ -48,7 +48,8 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   Museum's Encyclopedia tab, with every figure checked. Players will reach them through concept
   chips on the program, configuration and rocket screens (`ui-spec.md` component 19; the audit
   is in `design.md` §1.1). The chips are mocked up on the same canvas's bottom row and built in
-  libGDX (2026-10-07); their look is confirmed.
+  libGDX (2026-10-07); their look is confirmed. E-20 to E-30, for the full content pack, are
+  built and linked too (2026-10-09).
 - **People worth caring about** (`design.md` §2.2(d), the user's idea, 2026-10-07): team chemistry
   from pair rapport and hidden traits, ambitions, career records, later poaching. The rules for
   phases 1 to 3 and the personal traits are built (2026-10-07), and so are their screens, from

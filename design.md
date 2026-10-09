@@ -138,6 +138,11 @@ engineering problem or tidbit, note it here the same session.
     `ui-spec.md` component 18. E-14's "In Launch Window" strips say the latitude is already
     counted in every rocket's lift, since each side's rockets only ever fly from their own site
     (user, 2026-10-08, when the latitude mechanic was dropped).
+  - **E-20 to E-30 were mocked up and then checked and built (2026-10-09)**, for the full content
+    pack: Three ways to the Moon, Docking, Spacewalks, Launch windows, Gravity assists, Landing on
+    other worlds, Far from home, Pictures before digital cameras, Moon rock by robot, Rocket planes,
+    Around the Moon and back. The checks are in the "Explainers for the standard pack" item below
+    (sheet titles and the changes from the brief and the mockups in `ui-spec.md` component 18).
   - **E-06 to E-19, checked (2026-10-07).** Corrections to the mockups' text:
     - E-06: Gagarin ate paste from tubes on Vostok 1 (whether he drank isn't sourced, so the
       sheet says only that he ate). Gravity at 300 km is 91 % ((6,371 / 6,671)²). Titov's
@@ -2107,8 +2112,8 @@ well, and whether three items at a time is the right number.
   first game starts. The first version number is still open.
 - **M7+ (order open):** people worth caring about (chemistry, traits, rapport, ambitions, career
   records, poaching; §2.2(d), in five phases, all built by 2026-10-08); interaction beyond passive competition (§2.9); the rest of the content
-  tree beyond the early era; more Museum encyclopedia entries once there's content for them (§1.1; all 19 planned explainers,
-  E-01 to E-19, built by 2026-10-07; nothing further is planned yet); a game-host role and UI;
+  tree beyond the early era; more Museum encyclopedia entries once there's content for them (§1.1; E-01 to E-19
+  built by 2026-10-07; E-20 to E-30, for the full content pack, built 2026-10-09); a game-host role and UI;
   validating the `WEEKDAYS` profile with the colleagues' group.
 - **Dropped: launch latitude as a mechanic** (user's idea 2026-10-07, dropped by the user
   2026-10-08). Considered: a site factor on payloads, orbit classes on missions (polar,

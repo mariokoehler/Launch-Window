@@ -462,47 +462,29 @@ On the right:
         Jupiter bar shortened to stay inside the frame; E-28's "Ascent stage" on two lines to fit
         its box. E-23 sheet 1 and both E-26 sheets draw their bars in the picture, as the mockups
         do, rather than as client-drawn bars.
-      - The brief as given to the mockup session:
-      - **E-20 "Three ways to the Moon"** (2): *Direct ascent, Earth-orbit and lunar-orbit
-        rendezvous* side by side, what each lands and what each needs at launch; *Why the small
-        lander won*: Houbolt's case, NASA's choice in 1962, the Soviet N1-L3 (one cosmonaut, a
-        spacewalk to the LK) against Chelomei's UR-700 and LK-700. In the game: the Gemini direct
-        ascent, Gemini EOR and Apollo programs; the Lunar ascent step.
-      - **E-21 "Docking"** (2): *The last hundred meters*: station-keeping, a slow approach on
-        the line of sight, probe and drogue; Gemini 8 by hand against Kosmos 186 and 188 by
-        Igla (October 1967). *Turning around and moving across*: Apollo's transposition, the
-        tunnel, Soyuz 4 and 5's crossing outside. In the game: the Igla component; Approach and
-        docking, Transposition and Crew transfer steps.
-      - **E-22 "Spacewalks"** (2): *A balloon shaped like a person*: a suit at about a third of an
-        atmosphere goes stiff; Leonov, 18 March 1965, and Voskhod 2's inflatable airlock.
-        *Learning to work outside*: Gemini 4, 9 and 12; backpacks on the Moon; the Krechet's back
-        door. In the game: the suits, the EVA steps.
-      - **E-23 "Launch windows to the planets"** (2, the game's namesake): *The cheapest way
-        across*: the Hohmann ellipse, about 259 days to Mars and 146 to Venus. *Why you wait*:
-        windows about every 26 months for Mars and 19 for Venus; the crowded 1971 Mars window. In
-        the game: the departure and transit steps; planetary missions take several seasons.
-      - **E-24 "Gravity assists"** (2): *Borrowing a planet's speed*, from the planet's view and
-        the Sun's (a ball bounced off a moving train); *Planet to planet*: Mariner 10 via Venus to
-        Mercury, Pioneer 11 via Jupiter to Saturn. In the game: the Lunar slingshot step; Mariner
-        10 and Pioneer 11.
-      - **E-25 "Landing without air, or with too much"** (2): *The Moon: rockets all the way
-        down* (Ranger, Luna 9, Surveyor 1, Apollo 11); *Venus and Mars*: about 90 atmospheres
-        and 465 °C against about 1 % of Earth's air (Venera 7, Mars 3, Viking 1). In the game:
-        Powered descent, Lunar landing and the probe entry steps.
-      - **E-26 "Far from home"** (2): *Sunlight runs out*: inverse square, about 4 % at Jupiter,
-        nuclear generators on Pioneer 10 and 11 and Viking, Lunokhod's heater; *Talking across
-        the solar system*: light delay, big dishes, three stations about 120° apart, Lunokhod
-        driven from Earth. In the game: Pioneer 10 and 11, Viking, Lunokhod.
-      - **E-27 "Pictures before digital cameras"** (1): film developed on board, scanned and
-        radioed (Luna 3, Lunar Orbiter). In the game: those two programs.
-      - **E-28 "A piece of the Moon by robot"** (1): drill, capsule, an ascent stage straight
-        home with no rendezvous (Luna 16; Luna 15's crash during Apollo 11). In the game: Luna 15.
-      - **E-29 "Rocket planes at the edge of space"** (1 or 2): dropped from a bomber, the X-15's
-        Mach 6.7 and 107.8 km, steering jets above the air, astronaut wings above 50 miles;
-        Spiral and its test craft. In the game: air drops; the X-15 and MiG E-154.
-      - **E-30 "Around the Moon and back"** (1 or 2): the free-return figure eight (Zond 5,
-        Apollo 8, Apollo 13), reentry at about 11 km/s, Zond 7's skip. In the game: the
-        circumlunar programs.
+      - **Sheet titles** (the topic in brackets):
+        - **E-20 "Three ways to the Moon"** (Lunar mission modes): *Three routes to the Moon*; *Why
+          the small lander won*.
+        - **E-21 "Docking"**: *The last hundred metres*; *Turning around, and moving across*.
+        - **E-22 "Spacewalks"**: *A balloon shaped like a person*; *Learning to work outside*.
+        - **E-23 "Launch windows"** (Interplanetary flight): *The cheapest way across* (the transfer
+          ellipse, orbits to scale); *Why you wait* (the windows from 1960 to 1975).
+        - **E-24 "Gravity assists"**: *Borrowing a planet's speed*; *Planet to planet* (Mariner 10,
+          Pioneer 11).
+        - **E-25 "Landing on other worlds"** (Landing): *Rockets all the way down*; *Venus and Mars*.
+        - **E-26 "Far from home"** (Deep space): *Sunlight runs out*; *Talking across the solar
+          system*.
+        - **E-27 "Pictures before digital cameras"** (Space photography), one sheet: *Film,
+          developed in space*.
+        - **E-28 "Moon rock by robot"** (Sample return), one sheet: *A piece of the Moon by robot*.
+        - **E-29 "Rocket planes"**, one sheet: *Rocket planes at the edge of space*.
+        - **E-30 "Around the Moon and back"** (Circumlunar flight): *The free return*; *Coming home
+          fast*.
+      - **Changed from the brief** (by the mockup session, each in its row's note): shorter
+        title-block names for E-23, E-25, E-26, E-28 and E-29; E-29 one sheet, E-30 two; the "In Launch Window" strips use the
+        standard pack's step names ("Transposition and docking", "Cruise to Mars", "Venus flyby":
+        the pack has no "Lunar slingshot" or "transit" step); Mars's air "less than 1 %" of Earth's,
+        not "about 1 %"; the X-15's height "about 108 km", not 107.8 (354,200 ft).
 19. **Concept chips** *(user's idea, 2026-10-07; specified, mocked up and built the same day; the
     look confirmed by the user that day)*. A small **Concepts** section listing the
     real-world ideas behind a piece of game content, as clickable chips. A chip opens the
@@ -748,7 +730,8 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       the hire screen, mission planning, the person pages, the memorial, the turn report and the Museum; the hub
       and the remaining screens open on every topic.
     - *As built:* `client.screen.HelpOverlay`, `client.view.Help` and `HelpValues`; the `help` and
-      `search` glyphs in `make_ui_icons.py` (not on the UI Asset Sheet yet). Shots `help-*.png`.
+      `search` glyphs in `make_ui_icons.py`, on the UI Asset Sheet since 2026-10-08 (chrome section,
+      after `settings`, with the header, hub strip and search field in context). Shots `help-*.png`.
     - **Any topic list** (2026-10-08): help also opens on an ad-hoc list (`Help.Topics`, beside the
       screens' `Help.Context`), as the advisor's items do; the chip names it ("1 topic for "Open a
       rocket program"").
