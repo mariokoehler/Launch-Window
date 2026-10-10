@@ -1,7 +1,11 @@
 package de.mkoehler.launchwindow.client.view;
 
 import de.mkoehler.launchwindow.model.Archetype;
+import de.mkoehler.launchwindow.model.AssignmentState;
+import de.mkoehler.launchwindow.model.Astronaut;
+import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.model.Season;
+import de.mkoehler.launchwindow.model.SetSpecialist;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -15,6 +19,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -98,5 +103,29 @@ class HubTest {
         assertEquals(Hub.TimeOfDay.NIGHT, clock.enter(30 * minute), "one step, however long it was");
         assertEquals(Hub.TimeOfDay.DAWN, clock.enter(34 * minute), "night wraps to dawn");
         assertEquals(Hub.TimeOfDay.DAWN, clock.current());
+    }
+
+    /**
+     * A personnel building counts its idle people, not those working, training or away; the other
+     * places have none, and the hover line names the group.
+     */
+    @Test
+    void idlePeoplePerBuilding() {
+        PlayerSnapshot state = new PlayerSnapshot("Vega", Archetype.SOVIET, 25_000, 250, 3_000, 1);
+        state.getSetSpecialists().add(new SetSpecialist("e1", "A", 30, 70, 50));
+        SetSpecialist away = new SetSpecialist("e2", "B", 30, 70, 50);
+        away.setUnavailableSeasons(2);
+        state.getSetSpecialists().add(away);
+        SetSpecialist working = new SetSpecialist("e3", "C", 30, 70, 50);
+        working.setAssignmentState(AssignmentState.ASSIGNED);
+        state.getSetSpecialists().add(working);
+        state.getAstronauts().add(new Astronaut("a1", "D", 30, 70, 50));
+        state.getAstronauts().add(new Astronaut("a2", "E", 30, 70, 50));
+
+        assertEquals(1, Hub.idle(Hub.Place.SET_CENTRE, state));
+        assertEquals("1 engineer idle", Hub.idleLine(Hub.Place.SET_CENTRE, state));
+        assertEquals("2 cosmonauts idle", Hub.idleLine(Hub.Place.ASTRONAUT_COMPLEX, state));
+        assertNull(Hub.idleLine(Hub.Place.MISSION_CONTROL, state));
+        assertEquals(0, Hub.idle(Hub.Place.MUSEUM, state));
     }
 }

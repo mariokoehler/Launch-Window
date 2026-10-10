@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.content.SpaceRaceNews;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
+import de.mkoehler.launchwindow.client.ui.MilestoneLabels;
 import de.mkoehler.launchwindow.client.ui.OutcomeBar;
 import de.mkoehler.launchwindow.client.ui.RelationshipMarker;
 import de.mkoehler.launchwindow.client.ui.ReliabilityBar;
@@ -25,6 +26,7 @@ import de.mkoehler.launchwindow.content.MissionComponent;
 import de.mkoehler.launchwindow.model.GameDate;
 import de.mkoehler.launchwindow.model.Personnel;
 import de.mkoehler.launchwindow.rules.MissionStepOutcome;
+import de.mkoehler.launchwindow.rules.ResearchPlanning;
 import de.mkoehler.launchwindow.rules.TurnReport;
 
 import java.util.List;
@@ -253,8 +255,20 @@ public final class TurnReportScreen extends ChromeScreen {
                 Theme.TextStyle.BODY_STRONG, delta < 0 ? Theme.DANGER : Theme.SUCCESS));
             card.add(head).padBottom(4f).row();
             if (component.isPresent()) {
-                card.add(new ReliabilityBar(ui, line.after(), component.get().maxRdReliability(),
-                    component.get().maxReliability(), 0)).height(12f).padBottom(4f).row();
+                ReliabilityBar bar = new ReliabilityBar(ui, line.after(), component.get().maxRdReliability(),
+                    component.get().maxReliability(), 0);
+                // The seasons to each mark from here (component 25), on the latest report only: an older
+                // one's bar shows a reliability the component has since moved on from.
+                boolean latest = report.gameTurn() >= session.latestResolvedTurn();
+                var owned = session.state().getMissionComponents().get(line.componentId());
+                if (latest && owned != null && Math.abs(owned.getCurrentReliability() - line.after()) < 0.05) {
+                    MilestoneLabels labels = RndCards.milestones(this, component.get(),
+                        ResearchPlanning.project(session.state(), catalog, line.componentId()), bar);
+                    if (labels != null) {
+                        card.add(labels).padBottom(2f).row();
+                    }
+                }
+                card.add(bar).height(12f).padBottom(4f).row();
             }
             card.add(ui.paragraph(String.format(Locale.ROOT, "%.1f → %.1f. %s", line.before(), line.after(),
                 line.who()), Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padBottom(Theme.SPACE_3).row();

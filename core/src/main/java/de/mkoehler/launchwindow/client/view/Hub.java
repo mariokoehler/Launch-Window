@@ -6,7 +6,10 @@ import com.badlogic.gdx.utils.ShortArray;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.model.Building;
+import de.mkoehler.launchwindow.model.Personnel;
+import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.model.Season;
+import de.mkoehler.launchwindow.rules.MissionLaunch;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,6 +36,46 @@ public final class Hub {
     private static final ObjectMapper JSON = new ObjectMapper();
 
     private Hub() {
+    }
+
+    /**
+     * Returns how many of a building's people are idle (the user's idea, 2026-10-10): free for
+     * work, as mission assembly counts them, so idle and not away. Only the three personnel
+     * buildings have people; every other place has none.
+     *
+     * @param place the building
+     * @param state the player's state
+     * @return the count
+     */
+    public static int idle(Place place, PlayerSnapshot state) {
+        List<? extends Personnel> roster = switch (place) {
+            case ASTRONAUT_COMPLEX -> state.getAstronauts();
+            case MISSION_CONTROL -> state.getMissionControlOfficers();
+            case SET_CENTRE -> state.getSetSpecialists();
+            default -> List.of();
+        };
+        return (int) roster.stream().filter(MissionLaunch::isAvailable).count();
+    }
+
+    /**
+     * Words a building's idle people for its hover, such as "3 engineers idle", or {@code null}
+     * when nobody is.
+     *
+     * @param place the building
+     * @param state the player's state
+     * @return the line
+     */
+    public static String idleLine(Place place, PlayerSnapshot state) {
+        int idle = idle(place, state);
+        if (idle == 0) {
+            return null;
+        }
+        String noun = switch (place) {
+            case ASTRONAUT_COMPLEX -> state.getArchetype() == Archetype.SOVIET ? "cosmonaut" : "astronaut";
+            case MISSION_CONTROL -> "flight controller";
+            default -> "engineer";
+        };
+        return idle + " " + noun + (idle == 1 ? "" : "s") + " idle";
     }
 
     /**

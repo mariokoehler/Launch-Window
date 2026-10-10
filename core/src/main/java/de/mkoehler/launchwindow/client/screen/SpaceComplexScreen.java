@@ -60,6 +60,8 @@ public final class SpaceComplexScreen extends SessionScreen {
     private static final float MARKER_RADIUS = 22f;
     /** The plain marker's radius: a little smaller, so an upgrade still stands out. */
     private static final float IDLE_MARKER_RADIUS = 18f;
+    /** The idle-people dot on a marker's upper right, in art pixels. */
+    private static final float IDLE_DOT_RADIUS = 6f;
     /** The plain marker's icon size, in art pixels. */
     private static final float IDLE_MARKER_ICON = 20f;
     /** The most height a tall, narrow marker icon (the VAB's rocket) may use inside the disc. */
@@ -459,6 +461,8 @@ public final class SpaceComplexScreen extends SessionScreen {
     private final class HotspotLayer extends Actor {
         private final Label name = ui.label("", Theme.TextStyle.HEADING_SM, Theme.ON_FILL);
         private final Label shadow = ui.label("", Theme.TextStyle.HEADING_SM, LABEL_SHADOW);
+        private final Label idleName = ui.label("", Theme.TextStyle.BODY_STRONG, Theme.ON_FILL);
+        private final Label idleShadow = ui.label("", Theme.TextStyle.BODY_STRONG, LABEL_SHADOW);
         private final Drawable gear = ui.icon("settings");
         private final java.util.Map<Hub.Place, Drawable> markerIcons = new java.util.EnumMap<>(Hub.Place.class);
         private Hub.Place hovered;
@@ -572,6 +576,21 @@ public final class SpaceComplexScreen extends SessionScreen {
                 }
                 shapes.end();
             }
+            // Idle people (the user's idea, 2026-10-10): a red dot on the marker's upper right.
+            shapes.begin(ShapeRenderer.ShapeType.Filled);
+            for (Hub.Hotspot spot : hotspots) {
+                if (Hub.idle(spot.place(), session.state()) == 0) {
+                    continue;
+                }
+                float radius = isUpgrading(spot.place()) ? MARKER_RADIUS : IDLE_MARKER_RADIUS;
+                float dotX = spot.labelX() + radius * 0.72f;
+                float dotY = spot.labelY() + MARKER_RISE + radius * 0.72f;
+                shapes.setColor(Color.WHITE);
+                shapes.circle(dotX, dotY, IDLE_DOT_RADIUS + 1.5f, 24);
+                shapes.setColor(Theme.DANGER);
+                shapes.circle(dotX, dotY, IDLE_DOT_RADIUS, 24);
+            }
+            shapes.end();
             shapes.identity();
             batch.begin();
             for (Hub.Hotspot spot : plain) {
@@ -596,6 +615,12 @@ public final class SpaceComplexScreen extends SessionScreen {
                 drawCentered(batch, shadow, text, hover.labelX() * scaleX + 1.5f, hover.labelY() * scaleY - 1.5f,
                     parentAlpha);
                 drawCentered(batch, name, text, hover.labelX() * scaleX, hover.labelY() * scaleY, parentAlpha);
+                String idle = Hub.idleLine(hover.place(), session.state());
+                if (idle != null) {
+                    float below = hover.labelY() * scaleY - name.getHeight() - 4f;
+                    drawCentered(batch, idleShadow, idle, hover.labelX() * scaleX + 1.5f, below - 1.5f, parentAlpha);
+                    drawCentered(batch, idleName, idle, hover.labelX() * scaleX, below, parentAlpha);
+                }
             }
         }
 

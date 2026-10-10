@@ -110,15 +110,8 @@ final class RndCards {
         ReliabilityBar bar = new ReliabilityBar(ui, current, component.maxRdReliability(), component.maxReliability(),
             card.owned().getFloorReliability()).projected(current + gain).raisedCap(cap);
         // Milestones ahead with the seasons to each (the user's request, 2026-10-10).
-        List<Outlook.Marker> markers = projection.moving() ? Outlook.markers(projection) : List.of();
-        bar.milestones(markers.stream().filter(marker -> !marker.cap()).mapToDouble(Outlook.Marker::value).toArray());
-        if (!markers.isEmpty()) {
-            MilestoneLabels labels = new MilestoneLabels(bar.max());
-            for (Outlook.Marker marker : markers) {
-                labels.add(ui, marker.value(), Outlook.approx(marker.seasons()), marker.cap() ? Theme.GOLD_TEXT
-                    : Theme.NAVY, marker.cap());
-            }
-            ui.tooltip(labels, "Seasons to each mark", outlook(component, projection, markers));
+        MilestoneLabels labels = milestones(host, component, projection, bar);
+        if (labels != null) {
             box.add(labels).padBottom(2f).row();
         }
         box.add(bar).height(14f).padBottom(Theme.SPACE_1).row();
@@ -170,8 +163,34 @@ final class RndCards {
      * The milestone tooltip: each mark with its average seasons, the season it lands by and the
      * spread of the rules' random draws.
      */
-    private String outlook(MissionComponent component, ResearchPlanning.Projection projection,
-                           List<Outlook.Marker> markers) {
+    /**
+     * Marks a component's bar with the milestones still ahead (component 25) and returns the row of
+     * season counts to sit above it, with its tooltip; {@code null} when nobody works on it or the
+     * cap is reached. Shared by the R&amp;D cards and the turn report's R&amp;D section.
+     *
+     * @param host       the screen
+     * @param component  the component
+     * @param projection its projection with the team on it now
+     * @param bar        its bar, which gets the ticks
+     * @return the labels, or {@code null}
+     */
+    static MilestoneLabels milestones(ChromeScreen host, MissionComponent component,
+                                      ResearchPlanning.Projection projection, ReliabilityBar bar) {
+        List<Outlook.Marker> markers = projection.moving() ? Outlook.markers(projection) : List.of();
+        bar.milestones(markers.stream().filter(marker -> !marker.cap()).mapToDouble(Outlook.Marker::value).toArray());
+        if (markers.isEmpty()) {
+            return null;
+        }
+        MilestoneLabels labels = new MilestoneLabels(bar.max());
+        for (Outlook.Marker marker : markers) {
+            labels.add(host.ui, marker.value(), Outlook.approx(marker.seasons()), marker.cap() ? Theme.GOLD_TEXT
+                : Theme.NAVY, marker.cap());
+        }
+        host.ui.tooltip(labels, "Seasons to each mark", outlook(host, component, markers));
+        return labels;
+    }
+
+    private static String outlook(ChromeScreen host, MissionComponent component, List<Outlook.Marker> markers) {
         double[] targets = markers.stream().mapToDouble(Outlook.Marker::value).toArray();
         ResearchPlanning.Range[] ranges = ResearchPlanning.ranges(host.session.state(), host.session.catalog(),
             component.id(), targets);

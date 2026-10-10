@@ -804,6 +804,15 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       checks it against 2,000 real eight-season runs (within 3 %). The caption's "about +X next
       season" now reads the projection's first season; `expectedSeasonGain` itself is unchanged,
       since `PressEffects` uses it on the server.
+    - **In the turn report** (the user's request, 2026-10-10): the R&D section's component bars get
+      the same ticks, counts and tooltip (`RndCards.milestones`), but only while the bar shows
+      today's reliability, so an older report never marks a bar the component has moved on from.
+    - **Idle people on the hub** (the user's idea, 2026-10-10, §4.3): a small red dot with a white
+      ring on the upper right of the Astronaut Complex's, Mission Control's or the SET Centre's
+      marker while any of its people are idle (free for work, as assembly counts them:
+      `Hub.idle`). Hovering the building adds a line under its name: "3 engineers idle", "1
+      flight controller idle", "2 cosmonauts idle" (astronauts for NASA). Shot
+      `outlook-hub-idle.png`; every hub shot with idle people shows the dots.
     - **Retirement before the cap** (idea 7). A gold line under the caption: "Arkhipov retires in 7
       seasons, before the cap. The projection counts the team without them from then on." Morale
       resignations aren't predicted.

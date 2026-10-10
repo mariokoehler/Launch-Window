@@ -510,6 +510,9 @@ public final class ScreenSnapshot {
             showTooltip(screen.stage().getRoot(), "People its missions need");
         });
         write(folder, "outlook-pao.png", new PublicAffairsScreen(game), null);
+        // Idle people (2026-10-10): red dots on the markers, and the count under the hovered name.
+        write(folder, "outlook-hub-idle.png", new SpaceComplexScreen(game),
+            screen -> screen.hover(Hub.Place.MISSION_CONTROL));
     }
 
     /**
