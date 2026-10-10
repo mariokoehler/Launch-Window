@@ -510,6 +510,15 @@ public final class ScreenSnapshot {
             showTooltip(screen.stage().getRoot(), "People its missions need");
         });
         write(folder, "outlook-pao.png", new PublicAffairsScreen(game), null);
+        // Ambitions at stake (2026-10-10): every free controller wants an orbital console, so the one the
+        // draft leaves out is passed over; the picker marks who would get their wish.
+        for (MissionControlOfficer officer : game.session().state().getMissionControlOfficers()) {
+            officer.setAmbition(new de.mkoehler.launchwindow.model.Ambition(
+                de.mkoehler.launchwindow.model.Ambition.Kind.CONSOLES_ORBITAL, "", 6, 12, 1));
+        }
+        write(folder, "assemble-passed-over.png", new AssembleMissionScreen(game, "vostok-orbital"), null);
+        write(folder, "assemble-wants-this.png", new AssembleMissionScreen(game, "vostok-orbital"),
+            screen -> screen.openPicker(false, 0));
         // Idle people (2026-10-10): red dots on the markers, and the count under the hovered name.
         write(folder, "outlook-hub-idle.png", new SpaceComplexScreen(game),
             screen -> screen.hover(Hub.Place.MISSION_CONTROL));

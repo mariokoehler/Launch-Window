@@ -7,6 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Scaling;
+import de.mkoehler.launchwindow.client.view.CareerTexts;
+import de.mkoehler.launchwindow.rules.Careers;
 import de.mkoehler.launchwindow.actions.LaunchMissionAction;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.ChemistryIndicator;
@@ -143,6 +145,12 @@ public final class AssembleMissionScreen extends ChromeScreen {
             content.add(ui.notice(Theme.NoticeKind.WARNING, "Short of staff.", shortage)).padBottom(Theme.SPACE_3)
                 .row();
         }
+        // Someone free whose ambition this team would pass over (the user's request, 2026-10-10).
+        String passedOver = passedOver(draft);
+        if (passedOver != null && launched == null) {
+            content.add(ui.notice(Theme.NoticeKind.WARNING, "Passing someone over.", passedOver))
+                .padBottom(Theme.SPACE_3).row();
+        }
 
         Table columns = new Table();
         Table left = new Table();
@@ -157,6 +165,32 @@ public final class AssembleMissionScreen extends ChromeScreen {
         columns.add(scrollPane(left)).width(560f).top().fillY().padRight(Theme.SPACE_5);
         columns.add(scrollPane(controlCard(draft))).expand().fill();
         content.add(columns).expand().fill();
+    }
+
+    /**
+     * Words the people this team would pass over: free, with an ambition the mission would meet,
+     * while someone else of their group takes the role. {@code null} when nobody is.
+     */
+    private String passedOver(MissionDraft draft) {
+        List<String> lines = new ArrayList<>();
+        for (Careers.AmbitionAtStake stake : Careers.ambitionsAtStake(session.state(), configuration,
+                present(draft.crewSlotIds()), present(draft.controlSlotIds()))) {
+            if (stake.met()) {
+                continue;
+            }
+            String wants = CareerTexts.ambition(stake.kind(), "");
+            lines.add(stake.person().getName() + " is free and wants to " + Character.toLowerCase(wants.charAt(0))
+                + wants.substring(1) + (stake.ifFirst() ? " (if this flight reaches a goal first)" : "") + ".");
+        }
+        if (lines.isEmpty()) {
+            return null;
+        }
+        return String.join(" ", lines) + String.format(java.util.Locale.ROOT, " If the flight goes well without them, that's a pass-over: %d morale, %d loyalty, and less patience.",
+            Careers.PASSED_OVER_MORALE, Careers.PASSED_OVER_LOYALTY);
+    }
+
+    private static List<String> present(List<String> ids) {
+        return ids.stream().filter(java.util.Objects::nonNull).filter(id -> !id.isEmpty()).toList();
     }
 
     /**
@@ -540,7 +574,11 @@ public final class AssembleMissionScreen extends ChromeScreen {
             }
             if (People.gettingToKnow(person)) {
                 who.add(ui.label("Still getting to know each other", Theme.TextStyle.CAPTION_ITALIC, Theme.INK_MUTED))
-                    .padTop(2f);
+                    .padTop(2f).row();
+            }
+            String wants = wantsThis(draft, crew, slot, person);
+            if (wants != null) {
+                who.add(ui.label(wants, Theme.TextStyle.CAPTION, Theme.GOLD_TEXT)).padTop(2f);
             }
             row.add(who).width(250f).left().padRight(Theme.SPACE_3);
             Table marks = new Table();
@@ -594,6 +632,24 @@ public final class AssembleMissionScreen extends ChromeScreen {
         buttons.add(actionButton("Cancel", Theme.ButtonKind.SECONDARY, this::closeDialog));
         card.add(buttons).right().fill(false, false);
         showDialog(card, PICKER_WIDTH);
+    }
+
+    /**
+     * A picker row's note when this seat would give the candidate their ambition: "Wants this: Fly
+     * to orbit". {@code null} otherwise.
+     */
+    private String wantsThis(MissionDraft draft, boolean crew, int slot, Personnel person) {
+        List<String> crewIds = new ArrayList<>(draft.crewSlotIds());
+        List<String> controlIds = new ArrayList<>(draft.controlSlotIds());
+        (crew ? crewIds : controlIds).set(slot, person.getId());
+        for (Careers.AmbitionAtStake stake : Careers.ambitionsAtStake(session.state(), configuration,
+                present(crewIds), present(controlIds))) {
+            if (stake.met() && stake.person().getId().equals(person.getId())) {
+                return "Wants this: " + CareerTexts.ambition(stake.kind(), "") + (stake.ifFirst() ? ", if it's a first"
+                    : "");
+            }
+        }
+        return null;
     }
 
     private static Chemistry.Result team(Chemistry.MissionChemistry chemistry, boolean astronauts) {

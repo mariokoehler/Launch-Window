@@ -1,5 +1,6 @@
 package de.mkoehler.launchwindow.rules;
 
+import de.mkoehler.launchwindow.content.MissionConfiguration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.mkoehler.launchwindow.content.ContentCatalog;
 import de.mkoehler.launchwindow.content.ContentPackLoader;
@@ -262,5 +263,35 @@ class CareersTest {
         assertEquals(3, entry.joinedTurn());
         assertEquals("p9", entry.personnelId());
         assertEquals(1, entry.career().size());
+    }
+
+    /**
+     * A planned crewed orbital flight meets the ambition of a controller on its consoles and passes
+     * over a free one who wanted it; a busy one isn't counted, and an uncrewed flight settles nothing.
+     */
+    @Test
+    void ambitionsAtStakeForAPlannedMission() {
+        PlayerSnapshot snapshot = agency();
+        de.mkoehler.launchwindow.model.MissionControlOfficer seated =
+            new de.mkoehler.launchwindow.model.MissionControlOfficer("c1", "Seated", 40, 70, 50);
+        de.mkoehler.launchwindow.model.MissionControlOfficer free =
+            new de.mkoehler.launchwindow.model.MissionControlOfficer("c2", "Free", 40, 70, 50);
+        de.mkoehler.launchwindow.model.MissionControlOfficer busy =
+            new de.mkoehler.launchwindow.model.MissionControlOfficer("c3", "Busy", 40, 70, 50);
+        busy.setAssignmentState(AssignmentState.IN_TRAINING);
+        for (de.mkoehler.launchwindow.model.MissionControlOfficer officer : List.of(seated, free, busy)) {
+            officer.setAmbition(new Ambition(Ambition.Kind.CONSOLES_ORBITAL, "", 6, 12, 1));
+            snapshot.getMissionControlOfficers().add(officer);
+        }
+        MissionConfiguration orbital = CATALOG.missionConfiguration("vostok-orbital").orElseThrow();
+        List<Careers.AmbitionAtStake> stakes = Careers.ambitionsAtStake(snapshot, orbital, List.of(), List.of("c1"));
+        assertEquals(2, stakes.size());
+        assertEquals("c1", stakes.get(0).person().getId());
+        assertTrue(stakes.get(0).met());
+        assertEquals("c2", stakes.get(1).person().getId());
+        assertFalse(stakes.get(1).met(), "free and left off: passed over");
+
+        MissionConfiguration uncrewed = CATALOG.missionConfiguration("vostok-uncrewed-orbital").orElseThrow();
+        assertTrue(Careers.ambitionsAtStake(snapshot, uncrewed, List.of(), List.of("c1")).isEmpty());
     }
 }

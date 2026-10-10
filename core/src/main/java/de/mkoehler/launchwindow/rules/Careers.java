@@ -434,6 +434,121 @@ public final class Careers {
 
     // ---- Ambitions
 
+    /**
+     * One person's stated ambition that a planned mission would settle if it flies well.
+     *
+     * @param person    the person
+     * @param kind      the ambition
+     * @param met       {@code true} when they're on the team and it would come true; {@code false}
+     *                  when they're free to be picked but someone else of their group fills the role,
+     *                  which passes them over
+     * @param ifFirst   whether it only counts if the flight reaches a goal first in the game
+     */
+    public record AmbitionAtStake(Personnel person, Ambition.Kind kind, boolean met, boolean ifFirst) {
+    }
+
+    /**
+     * Returns whose stated ambitions a planned mission would meet or pass over if it flies well
+     * (the user's request, 2026-10-10), the way the season pass settles them: crew ambitions by who
+     * is in the crew, console ambitions by who is on the ground team (CAPCOM counts as aboard for
+     * {@link Ambition.Kind#BE_FIRST}). Only people free to be put on it count as passed over: anyone
+     * busy elsewhere couldn't have been picked. The two "first" ambitions only matter while the
+     * mission has a goal the agency hasn't reached yet, and then only if nobody gets there first.
+     *
+     * @param snapshot      the player
+     * @param configuration the mission
+     * @param crewIds       the planned crew, by id
+     * @param groundIds     the planned controllers and CAPCOM astronauts, by id
+     * @return the ambitions at stake, people in roster order
+     * @throws NullPointerException if an argument is {@code null}
+     */
+    public static List<AmbitionAtStake> ambitionsAtStake(PlayerSnapshot snapshot, MissionConfiguration configuration,
+            java.util.Collection<String> crewIds, java.util.Collection<String> groundIds) {
+        Objects.requireNonNull(snapshot, "snapshot must not be null");
+        Objects.requireNonNull(configuration, "configuration must not be null");
+        boolean crewed = crewed(configuration);
+        boolean orbital = crewed && orbital(configuration);
+        boolean mayBeFirst = false;
+        for (MissionSeason season : configuration.seasons()) {
+            for (MissionStep step : season.steps()) {
+                mayBeFirst |= step.goalIdsAchieved().stream().anyMatch(goal -> !snapshot.hasAchievedOrCancelledGoal(goal));
+            }
+        }
+        Set<String> astronauts = new HashSet<>();
+        snapshot.getAstronauts().forEach(astronaut -> astronauts.add(astronaut.getId()));
+        Set<String> controllers = new HashSet<>();
+        snapshot.getMissionControlOfficers().forEach(officer -> controllers.add(officer.getId()));
+        Set<String> aboard = new HashSet<>(crewIds);
+        aboard.addAll(groundIds);
+        List<AmbitionAtStake> stakes = new ArrayList<>();
+        List<Personnel> people = new ArrayList<>(snapshot.getAstronauts());
+        people.addAll(snapshot.getMissionControlOfficers());
+        for (Personnel person : people) {
+            Ambition ambition = person.getAmbition();
+            if (ambition == null) {
+                continue;
+            }
+            String id = person.getId();
+            boolean applies;
+            boolean mine;
+            Set<String> role;
+            Set<String> group;
+            switch (ambition.kind()) {
+                case FLY_IN_SPACE -> {
+                    applies = crewed;
+                    role = new HashSet<>(crewIds);
+                    group = astronauts;
+                }
+                case FLY_TO_ORBIT -> {
+                    applies = orbital;
+                    role = new HashSet<>(crewIds);
+                    group = astronauts;
+                }
+                case DAYS_IN_ORBIT -> {
+                    applies = orbital && configuration.durationInSeasons() >= 2;
+                    role = new HashSet<>(crewIds);
+                    group = astronauts;
+                }
+                case JOINT_FLIGHT -> {
+                    applies = crewed && configuration.launches().size() >= 2;
+                    role = new HashSet<>(crewIds);
+                    group = astronauts;
+                }
+                case BE_FIRST -> {
+                    applies = mayBeFirst;
+                    role = aboard;
+                    group = astronauts;
+                }
+                case CONSOLES_ORBITAL -> {
+                    applies = orbital;
+                    role = new HashSet<>(groundIds);
+                    group = controllers;
+                }
+                case CONSOLES_FIRST -> {
+                    applies = mayBeFirst;
+                    role = new HashSet<>(groundIds);
+                    group = controllers;
+                }
+                default -> {
+                    applies = false;
+                    role = Set.of();
+                    group = Set.of();
+                }
+            }
+            if (!applies) {
+                continue;
+            }
+            mine = role.contains(id);
+            boolean ifFirst = ambition.kind() == Ambition.Kind.BE_FIRST || ambition.kind() == Ambition.Kind.CONSOLES_FIRST;
+            if (mine) {
+                stakes.add(new AmbitionAtStake(person, ambition.kind(), true, ifFirst));
+            } else if (MissionLaunch.isAvailable(person) && others(role, id, group)) {
+                stakes.add(new AmbitionAtStake(person, ambition.kind(), false, ifFirst));
+            }
+        }
+        return stakes;
+    }
+
     private static void ambition(PlayerSnapshot snapshot, ContentCatalog catalog, GoalTally tally, Season season,
             Personnel person, int gameTurn, List<ResolutionEvent> out) {
         if (person.getDisappointedSeasons() > 0) {
