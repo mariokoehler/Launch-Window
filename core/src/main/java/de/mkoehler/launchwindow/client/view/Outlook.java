@@ -2,6 +2,7 @@ package de.mkoehler.launchwindow.client.view;
 
 import de.mkoehler.launchwindow.content.BudgetSchedule;
 import de.mkoehler.launchwindow.content.ContentCatalog;
+import de.mkoehler.launchwindow.content.MissionComponent;
 import de.mkoehler.launchwindow.content.MissionConfiguration;
 import de.mkoehler.launchwindow.content.MissionSeason;
 import de.mkoehler.launchwindow.content.MissionStep;
@@ -478,8 +479,11 @@ public final class Outlook {
             }
         }
         if (best == null) {
+            MissionComponent least = leastRocket(launch, state, catalog);
             return new RocketPick(new Check("Rocket", Status.BLOCKED, -1, "None of your open rockets can fly "
-                + Missions.launchTag(launch.launchType()).toLowerCase(Locale.ROOT) + " with this payload."), 0);
+                + Missions.launchTag(launch.launchType()).toLowerCase(Locale.ROOT) + " with this payload"
+                + (least == null ? "." : "; it needs at least " + ContentNames.of(least.id()) + " ("
+                    + whyNotYet(least, state) + ").")), 0);
         }
         return best;
     }
@@ -540,6 +544,172 @@ public final class Outlook {
      * @param readiness     its readiness
      */
     public record Planned(MissionConfiguration configuration, Readiness readiness) {
+    }
+
+    // ---- Rockets a mission needs
+
+    /** Smaller first: the size class the VAB gates, then the price of a launch. */
+    private static final Comparator<MissionComponent> PROGRESSION = Comparator
+        .comparing((MissionComponent rocket) -> rocket.rocket().rocketClass())
+        .thenComparingLong(MissionComponent::unitCost);
+
+    /**
+     * Returns the smallest of the agency's rockets that can fly a launch (the user's request,
+     * 2026-10-10): the lowest size class, then the cheapest launch, so the first one the agency
+     * would come to. Open or not.
+     *
+     * @param launch  the launch
+     * @param state   the agency
+     * @param catalog the content pack
+     * @return the rocket, or {@code null} when none of the agency's can (or the launch needs none)
+     */
+    public static MissionComponent leastRocket(MissionConfiguration.Launch launch, PlayerSnapshot state,
+                                               ContentCatalog catalog) {
+        return catalog.missionComponents().stream()
+            .filter(MissionComponent::hasRocketSpec)
+            .filter(rocket -> rocket.availableTo(state.getArchetype()))
+            .filter(rocket -> MissionLaunch.canLift(rocket, launch, catalog))
+            .min(PROGRESSION).orElse(null);
+    }
+
+    /**
+     * Returns the smallest open rocket that can fly a launch.
+     *
+     * @param launch  the launch
+     * @param state   the agency
+     * @param catalog the content pack
+     * @return the rocket, or {@code null} when no open one can
+     */
+    public static MissionComponent openRocket(MissionConfiguration.Launch launch, PlayerSnapshot state,
+                                              ContentCatalog catalog) {
+        return Rockets.open(state, catalog).stream()
+            .filter(rocket -> MissionLaunch.canLift(rocket, launch, catalog))
+            .min(PROGRESSION).orElse(null);
+    }
+
+    /**
+     * Words what a mission asks of its rockets, launch by launch: "1,200 kg to low Earth orbit:
+     * Jupiter-C can fly it." or "...: needs at least Atlas (not open yet)." Air drops are left out.
+     *
+     * @param configuration the configuration
+     * @param state         the agency
+     * @param catalog       the content pack
+     * @return the line, or {@code null} for a mission with no rocket
+     */
+    public static RocketLine rocketLine(MissionConfiguration configuration, PlayerSnapshot state,
+                                        ContentCatalog catalog) {
+        List<String> parts = new ArrayList<>();
+        boolean fits = true;
+        for (MissionConfiguration.Launch launch : configuration.launches()) {
+            if (!launch.launchType().needsRocket()) {
+                continue;
+            }
+            String need = String.format(Locale.ROOT, "%,.0f kg to %s%s", MissionLaunch.requiredLift(launch, catalog),
+                Missions.destination(launch.launchType()), launch.launchType().humanRated() ? ", human-rated" : "");
+            MissionComponent open = openRocket(launch, state, catalog);
+            if (open != null) {
+                parts.add(need + ": " + ContentNames.of(open.id()) + " can fly it");
+                continue;
+            }
+            fits = false;
+            MissionComponent least = leastRocket(launch, state, catalog);
+            parts.add(need + ": " + (least == null ? "none of your agency's rockets can"
+                : "needs at least " + ContentNames.of(least.id()) + " (" + whyNotYet(least, state) + ")"));
+        }
+        if (parts.isEmpty()) {
+            return null;
+        }
+        // Launches alike say it once: "...can fly it (both launches)".
+        java.util.Map<String, Integer> counted = new java.util.LinkedHashMap<>();
+        parts.forEach(part -> counted.merge(part, 1, Integer::sum));
+        List<String> words = new ArrayList<>();
+        counted.forEach((part, count) -> words.add(count == 1 ? part
+            : part + (count == 2 ? " (both launches)" : " (all " + count + " launches)")));
+        return new RocketLine(String.join("; ", words) + ".", fits);
+    }
+
+    /**
+     * A mission's rocket line.
+     *
+     * @param text what its launches need, and which rocket flies them
+     * @param fits whether an open rocket flies every launch
+     */
+    public record RocketLine(String text, boolean fits) {
+    }
+
+    /** Why a rocket that fits isn't flying yet: its program is shut, or the VAB is too small. */
+    private static String whyNotYet(MissionComponent rocket, PlayerSnapshot state) {
+        if (!Rockets.classAllowed(rocket, state)) {
+            return "needs a bigger VAB for " + Rockets.className(rocket.rocket().rocketClass()).toLowerCase(Locale.ROOT)
+                + " rockets";
+        }
+        return "not open yet";
+    }
+
+    /**
+     * A program's rockets, across its missions open to the agency: the smallest rocket for its
+     * easiest mission and for its hardest one, and how the open rockets compare.
+     *
+     * @param easiest the least rocket its easiest mission needs
+     * @param hardest the least rocket its hardest mission needs
+     * @param supply  {@link Supply#READY} when open rockets fly every mission, {@link Supply#COMING}
+     *                when they fly some, {@link Supply#SHORT} when none
+     * @param lines   each mission's name and rocket line, for the tooltip
+     */
+    public record ProgramRockets(MissionComponent easiest, MissionComponent hardest, Supply supply,
+                                 List<String> lines) {
+
+        /**
+         * Returns the range as the card shows it: "Jupiter-C" or "Jupiter-C to Atlas".
+         *
+         * @return the text
+         */
+        public String range() {
+            return easiest.id().equals(hardest.id()) ? ContentNames.of(easiest.id())
+                : ContentNames.of(easiest.id()) + " to " + ContentNames.of(hardest.id());
+        }
+    }
+
+    /**
+     * Returns a program's rockets (the user's request, 2026-10-10), or {@code null} when none of its
+     * missions flies on a rocket the agency has.
+     *
+     * @param program the program
+     * @param state   the agency
+     * @param catalog the content pack
+     * @return the summary
+     */
+    public static ProgramRockets programRockets(Program program, PlayerSnapshot state, ContentCatalog catalog) {
+        MissionComponent easiest = null;
+        MissionComponent hardest = null;
+        int flown = 0;
+        int missions = 0;
+        List<String> lines = new ArrayList<>();
+        for (MissionConfiguration configuration : Missions.of(program, catalog)) {
+            MissionComponent least = null;
+            for (MissionConfiguration.Launch launch : configuration.launches()) {
+                MissionComponent rocket = launch.launchType().needsRocket() ? leastRocket(launch, state, catalog) : null;
+                if (rocket != null && (least == null || PROGRESSION.compare(rocket, least) > 0)) {
+                    least = rocket;
+                }
+            }
+            RocketLine line = rocketLine(configuration, state, catalog);
+            if (least == null || line == null) {
+                continue;
+            }
+            missions++;
+            if (line.fits()) {
+                flown++;
+            }
+            lines.add(Missions.name(configuration) + ": " + line.text());
+            easiest = easiest == null || PROGRESSION.compare(least, easiest) < 0 ? least : easiest;
+            hardest = hardest == null || PROGRESSION.compare(least, hardest) > 0 ? least : hardest;
+        }
+        if (missions == 0) {
+            return null;
+        }
+        Supply supply = flown == missions ? Supply.READY : flown > 0 ? Supply.COMING : Supply.SHORT;
+        return new ProgramRockets(easiest, hardest, supply, List.copyOf(lines));
     }
 
     // ---- Funds

@@ -820,6 +820,16 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       `Hub.idle`). Hovering the building adds a line under its name: "3 engineers idle", "1
       flight controller idle", "2 cosmonauts idle" (astronauts for NASA). Shot
       `outlook-hub-idle.png`; every hub shot with idle people shows the dots.
+    - **Rocket requirements** (the user's request, 2026-10-10). A mission card says what its rockets must
+      lift and which one does it: "Rocket: 4,700 kg to low Earth orbit, human-rated: R-7 (Vostok) can
+      fly it." in green, or "...: needs at least Atlas (not open yet)." in red ("needs a bigger VAB for
+      medium rockets" when the class isn't built yet; launches alike are said once, "(both launches)").
+      A program card adds "Rockets Redstone to Atlas": the smallest rocket its easiest and hardest
+      missions need, green when open rockets fly every mission, amber some, red none, with each
+      mission's line in the tooltip. *Unconfirmed default:* "the smallest rocket" is the agency's
+      rocket that can fly it in the lowest size class, then the cheapest launch (`Outlook.leastRocket`),
+      which follows the rocket progression closely where the pack's own order doesn't. The readiness
+      row's red Rocket check names it too.
     - **Random-event stories** (the user's request, 2026-10-10, `design.md` §2.7(d)): the turn
       report's news shows each event's story headline, its sentences, then the event's own line in
       green or red ("R&D results are 16 % higher for a while.", the struck person named). The Public

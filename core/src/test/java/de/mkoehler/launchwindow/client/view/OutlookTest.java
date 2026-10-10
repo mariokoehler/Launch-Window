@@ -130,4 +130,28 @@ class OutlookTest {
         assertEquals(Outlook.Status.WAITING, cutShort.status());
         assertEquals(0, cutShort.seasons());
     }
+
+    /**
+     * A mission's rocket is the smallest of the agency's that can fly it: Redstone for Mercury's
+     * crewed hop, Atlas for its orbit. With Redstone open, the hop fits and the orbit names Atlas;
+     * the program's line spans both and reads "some".
+     */
+    @Test
+    void rocketRequirementsNameTheSmallestRocket() {
+        PlayerSnapshot nasa = new PlayerSnapshot("Orion", Archetype.NASA, 25_000, 250, 3_000, 1);
+        MissionConfiguration hop = EARLY.missionConfiguration("mercury-suborbital").orElseThrow();
+        MissionConfiguration orbit = EARLY.missionConfiguration("mercury-orbital").orElseThrow();
+        assertEquals("redstone", Outlook.leastRocket(hop.launches().get(0), nasa, EARLY).id());
+        assertEquals("atlas", Outlook.leastRocket(orbit.launches().get(0), nasa, EARLY).id());
+
+        nasa.getMissionComponents().put("redstone", new OwnedMissionComponent(50, 30));
+        assertTrue(Outlook.rocketLine(hop, nasa, EARLY).fits());
+        Outlook.RocketLine line = Outlook.rocketLine(orbit, nasa, EARLY);
+        assertFalse(line.fits());
+        assertTrue(line.text().contains("needs at least Atlas"), line.text());
+
+        Outlook.ProgramRockets rockets = Outlook.programRockets(EARLY.program("mercury").orElseThrow(), nasa, EARLY);
+        assertEquals(Outlook.Supply.COMING, rockets.supply());
+        assertEquals("atlas", rockets.hardest().id());
+    }
 }

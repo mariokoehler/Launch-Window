@@ -199,6 +199,20 @@ public final class BodyProgramsScreen extends ChromeScreen {
         if (staffing != null) {
             body.add(staffing).padBottom(Theme.SPACE_2).row();
         }
+        // The rockets its missions need, against the open ones (the user's request, 2026-10-10).
+        Outlook.ProgramRockets rockets = Outlook.programRockets(program, session.state(), session.catalog());
+        if (rockets != null) {
+            Label line = ui.label((rockets.easiest() == rockets.hardest() ? "Rocket " : "Rockets ") + rockets.range(),
+                Theme.TextStyle.CAPTION, switch (rockets.supply()) {
+                    case READY -> Theme.SUCCESS;
+                    case COMING -> Theme.GOLD_TEXT;
+                    case SHORT -> Theme.DANGER;
+                });
+            ui.tooltip(line, "Rockets its missions need", "The smallest rocket each mission needs, from its easiest "
+                + "to its hardest. Green: your open rockets fly all of them; amber: some; red: none yet.\n"
+                + String.join("\n", rockets.lines()));
+            body.add(line).padBottom(Theme.SPACE_2).row();
+        }
         if (state == Programs.State.LOCKED) {
             Label needs = ui.paragraph("Needs: " + String.join(", ", Programs.missingGoals(program, session.state())
                 .stream().map(ContentNames::of).toList()), Theme.TextStyle.BODY_SM, Theme.INK);

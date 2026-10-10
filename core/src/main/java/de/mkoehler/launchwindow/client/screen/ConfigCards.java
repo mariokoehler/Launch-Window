@@ -122,6 +122,13 @@ final class ConfigCards {
                 + "not on R&D. Assembly needs this many free at once. The planning screen shows who's coming.");
             body.add(line).padBottom(4f).row();
         }
+        // What its rockets must lift, and which one does it (the user's request, 2026-10-10).
+        Outlook.RocketLine rocket = Outlook.rocketLine(configuration, host.session.state(), host.session.catalog());
+        if (rocket != null) {
+            Label line = ui.paragraph("Rocket: " + rocket.text(), Theme.TextStyle.CAPTION, rocket.fits()
+                ? Theme.SUCCESS : Theme.DANGER);
+            body.add(line).padBottom(4f).row();
+        }
         // What the mission still waits on, and the earliest season it could fly (2026-10-10).
         if (open) {
             body.add(readiness(host, configuration)).padTop(4f).padBottom(Theme.SPACE_2).row();
