@@ -185,8 +185,9 @@ public final class AssembleMissionScreen extends ChromeScreen {
         if (lines.isEmpty()) {
             return null;
         }
-        return String.join(" ", lines) + String.format(java.util.Locale.ROOT, " If the flight goes well without them, that's a pass-over: %d morale, %d loyalty, and less patience.",
-            Careers.PASSED_OVER_MORALE, Careers.PASSED_OVER_LOYALTY);
+        return String.join(" ", lines) + String.format(java.util.Locale.ROOT, " If the flight goes well without "
+            + "them, that's a pass-over: \u2212%d morale, \u2212%d loyalty, and less patience.",
+            Math.abs(Careers.PASSED_OVER_MORALE), Math.abs(Careers.PASSED_OVER_LOYALTY));
     }
 
     private static List<String> present(List<String> ids) {

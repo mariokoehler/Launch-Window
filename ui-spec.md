@@ -830,6 +830,15 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       rocket that can fly it in the lowest size class, then the cheapest launch (`Outlook.leastRocket`),
       which follows the rocket progression closely where the pack's own order doesn't. The readiness
       row's red Rocket check names it too.
+    - **Ambitions at stake when assembling** (the user's request, 2026-10-10). A warning on the assembly
+      screen names anyone free whose stated ambition this team would pass over ("Fyodor Gusev is free and
+      wants to be on the consoles for a crewed orbital flight. If the flight goes well without them,
+      that's a pass-over: -5 morale, -5 loyalty, and less patience."), and the slot picker marks a
+      candidate this seat would give their ambition ("Wants this: ..."). `Careers.ambitionsAtStake`
+      follows the season pass: crew ambitions by the crew, console ambitions by the ground team, CAPCOM
+      aboard for "Be part of a first"; people busy elsewhere aren't counted; the two "first" ambitions
+      only while the mission has a goal the agency lacks, worded "if this flight reaches a goal first".
+      Shots `assemble-passed-over.png`, `assemble-wants-this.png`.
     - **Random-event stories** (the user's request, 2026-10-10, `design.md` §2.7(d)): the turn
       report's news shows each event's story headline, its sentences, then the event's own line in
       green or red ("R&D results are 16 % higher for a while.", the struck person named). The Public
