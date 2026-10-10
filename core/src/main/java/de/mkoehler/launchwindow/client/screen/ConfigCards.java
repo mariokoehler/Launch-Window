@@ -162,7 +162,8 @@ final class ConfigCards {
             }), Scaling.fit);
             glyph.setColor(color);
             row.add(glyph).size(12f).padRight(4f);
-            String text = check.label() + (check.status() == Outlook.Status.WAITING ? " ~" + check.seasons() : "");
+            String text = check.label() + (check.status() == Outlook.Status.WAITING && check.seasons() > 0
+                ? " ~" + check.seasons() : "");
             row.add(ui.label(text, Theme.TextStyle.CAPTION, color)).padRight(Theme.SPACE_3);
             if (detail.length() > 0) {
                 detail.append("\n");
@@ -188,6 +189,10 @@ final class ConfigCards {
         UiKit ui = host.ui;
         if (readiness.readyNow()) {
             return ui.label("Ready to launch now.", Theme.TextStyle.CAPTION, Theme.SUCCESS);
+        }
+        if (readiness.earliest().isPresent() && readiness.earliest().getAsInt() == 0) {
+            return host.ui.label("Could launch now, if you cut someone's training short.", Theme.TextStyle.CAPTION,
+                Theme.GOLD_TEXT);
         }
         if (readiness.earliest().isPresent()) {
             int seasons = readiness.earliest().getAsInt();

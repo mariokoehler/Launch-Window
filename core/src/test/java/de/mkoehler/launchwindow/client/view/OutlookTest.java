@@ -106,5 +106,28 @@ class OutlookTest {
         assertTrue(payload.detail().contains("nobody works on its R&D"), payload.detail());
         assertTrue(readiness.checks().stream().anyMatch(check -> check.label().equals("Astronauts")
             && check.status() == Outlook.Status.BLOCKED));
+
+        // Astronauts away on a mission come back: never "hire more" for them.
+        for (int i = 0; i < 3; i++) {
+            Astronaut flying = new Astronaut("f" + i, "A. Cosmonaut", 28, 70, 50);
+            flying.setAssignmentState(AssignmentState.ASSIGNED);
+            soviet.getAstronauts().add(flying);
+        }
+        Outlook.Check astronauts = Outlook.of(mission, soviet, EARLY).checks().stream()
+            .filter(check -> check.label().equals("Astronauts")).findFirst().orElseThrow();
+        assertEquals(Outlook.Status.BLOCKED, astronauts.status());
+        assertFalse(astronauts.detail().contains("hire"), astronauts.detail());
+
+        // One free and one in training that can be cut short: amber, not a tick.
+        soviet.getAstronauts().clear();
+        Astronaut idle = new Astronaut("i", "A. Cosmonaut", 28, 70, 50);
+        Astronaut training = new Astronaut("t", "B. Cosmonaut", 28, 70, 50);
+        training.setAssignmentState(AssignmentState.IN_TRAINING);
+        training.setTrainingKind(TrainingKind.ADVANCED);
+        soviet.getAstronauts().addAll(List.of(idle, training));
+        Outlook.Check cutShort = Outlook.of(mission, soviet, EARLY).checks().stream()
+            .filter(check -> check.label().equals("Astronauts")).findFirst().orElseThrow();
+        assertEquals(Outlook.Status.WAITING, cutShort.status());
+        assertEquals(0, cutShort.seasons());
     }
 }

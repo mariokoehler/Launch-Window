@@ -340,7 +340,7 @@ public final class Outlook {
          * @return whether it could
          */
         public boolean readyNow() {
-            return earliest.isPresent() && earliest.getAsInt() == 0;
+            return earliest.isPresent() && checks.stream().allMatch(check -> check.status() == Status.READY);
         }
     }
 
@@ -403,7 +403,7 @@ public final class Outlook {
             if (check.status() == Status.BLOCKED) {
                 return new Readiness(checks, OptionalInt.empty(), check);
             }
-            if (check.seasons() > earliest) {
+            if (check.seasons() > earliest || limiter == null && check.status() == Status.WAITING) {
                 earliest = check.seasons();
                 limiter = check;
             }
@@ -486,19 +486,31 @@ public final class Outlook {
 
     private static Check peopleCheck(String label, String group, int needed, List<? extends Personnel> roster,
                                      int basicSeasons) {
+        int free = (int) roster.stream().filter(MissionLaunch::isAvailable).count();
+        if (free >= needed) {
+            return new Check(label, Status.READY, 0, needed + " " + group + " needed; " + free + " are free.");
+        }
         List<Integer> waits = waits(roster);
         if (waits.size() >= needed) {
             int wait = waits.get(needed - 1);
             if (wait == 0) {
-                return new Check(label, Status.READY, 0, needed + " " + group + " needed; enough are free or in "
-                    + "training you can cut short.");
+                // Ready only by pulling someone out of training: amber, with no seasons to wait.
+                return new Check(label, Status.WAITING, 0, needed + " " + group + " needed; " + free + " are free, "
+                    + "the rest only if you cut someone's training short.");
             }
             return new Check(label, Status.WAITING, wait, needed + " " + group + " needed; the last of them is free "
                 + "in " + seasons(wait) + ".");
         }
         int gap = needed - waits.size();
-        return new Check(label, Status.BLOCKED, -1, needed + " " + group + " needed; hire " + gap + " more. A new "
-            + "hire spends " + seasons(basicSeasons) + " in basic training.");
+        // On a mission or PR duty: back when that ends, which no count here can tell.
+        int busy = roster.size() - waits.size();
+        if (busy >= gap) {
+            return new Check(label, Status.BLOCKED, -1, needed + " " + group + " needed; " + busy + " of yours "
+                + (busy == 1 ? "is" : "are") + " on a mission or PR duty, free again when that ends.");
+        }
+        return new Check(label, Status.BLOCKED, -1, needed + " " + group + " needed; hire " + (gap - busy)
+            + " more" + (busy > 0 ? " (" + busy + " more are on a mission or PR duty)" : "") + ". A new hire spends "
+            + seasons(basicSeasons) + " in basic training.");
     }
 
     /**

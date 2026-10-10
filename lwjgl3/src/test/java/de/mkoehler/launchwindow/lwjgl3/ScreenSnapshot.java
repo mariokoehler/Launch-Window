@@ -506,6 +506,7 @@ public final class ScreenSnapshot {
         write(folder, "outlook-ac.png", new AstronautComplexScreen(game), null);
         write(folder, "outlook-body-staffing.png", new BodyProgramsScreen(game, CelestialBody.EARTH), screen -> {
             screen.select("one-crew-capsules");
+            screen.stage().draw();
             showTooltip(screen.stage().getRoot(), "People its missions need");
         });
         write(folder, "outlook-pao.png", new PublicAffairsScreen(game), null);

@@ -819,11 +819,14 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       Goals (only when one is missing), Payload, Rocket, Astronauts, Controllers, Funds, each a green
       tick, an amber clock with "~N", or a red cross. Payload and rocket count as ready at 60 %
       (the advisor's mark); the rocket is the soonest-ready open rocket that can fly the launch, then
-      the cheapest. People: idle now, training that can be cut short, or basic training's seasons
-      left (anyone on a mission or PR duty isn't counted). Funds: the mission plus the chosen
-      rockets. Below it: "Ready to launch now.", "Earliest launch: Winter 1961, in 2 seasons,
-      waiting on payload R&D." (amber), or "Can't tell when yet: …" (red) with the first blocking
-      check. The row's tooltip "Ready to fly?" has a sentence per check.
+      the cheapest. People: a tick when enough are free now; an amber clock with no number when
+      enough only by cutting someone's training short (*unconfirmed default*); "~N" for basic
+      training's seasons left; a cross when too few, saying how many to hire, or, when people on a
+      mission or PR duty would cover the gap, that they're free again when that ends (no wait
+      can be told for them). Funds: the mission plus the chosen rockets. Below it: "Ready to launch
+      now.", "Could launch now, if you cut someone's training short.", "Earliest launch: Winter
+      1961, in 2 seasons, waiting on payload R&D." (both amber), or "Can't tell when yet: …" (red)
+      with the first blocking check. The row's tooltip "Ready to fly?" has a sentence per check.
     - **Earliest launch on program details** (§4.6.4, open programs). A section after the components:
       the soonest of the program's missions open to the agency, its name and its checks, and how
       many missions there are.
