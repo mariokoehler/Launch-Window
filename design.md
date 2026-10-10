@@ -2285,7 +2285,8 @@ bot.
     9. *Intelligence tip:* adopt a rival's approach, right more often the higher the Intelligence
        Office's level.
     10. *Story arcs:* a good outcome opens a follow-up in a later quiet season, with higher stakes.
-  - **Specified** as `ui-spec.md` component 26 (2026-10-10), with G11 for the server; next a mockup.
+  - **Specified** as `ui-spec.md` component 26 (2026-10-10), with G11 for the server, and **mocked up** the same
+    day on the canvas `Launch Window — R&D decisions` (look unconfirmed; the choices are in component 26).
   - **Build:** the type a field in a content file (story, options, what shows in advance, effect,
     default), one resolver per type. Variety isn't a worry: other lull ideas will join it (user).
 
