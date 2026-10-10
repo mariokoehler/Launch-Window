@@ -892,7 +892,7 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       Pioneer 4 page), and the changed `payload-rnd*.png`, `plan-configs.png`, `pao.png` and
       `hq-details-vostok-open.png` (the confirmation's runway).
 26. **R&D decision** *(the user's idea, 2026-10-10, talked through the same day: `design.md` §5,
-    Backlog, "R&D decisions"; specified 2026-10-10, not mocked up yet).* A choice the game puts to the
+    Backlog, "R&D decisions"; specified and mocked up 2026-10-10, look unconfirmed).* A choice the game puts to the
     player about one component under R&D, rocket or payload, to fill the lulls between flights. Every
     decision has the same shape whatever its type: a story, two to four options, what each option
     shows in advance, a default, and an outcome the server works out the moment the player decides.
@@ -994,6 +994,38 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
 
     **Help:** a "Decisions" topic, linked from the banner's eyebrow.
 
+    *Mocked up (2026-10-10, canvas `Launch Window — R&D decisions`, unconfirmed):* the board with
+    the type 1 banner open, the other nine types as close-ups, the confirmation, outcomes good, bad
+    and folded, the report and the hub dot. Choices the spec left open, each in a canvas note:
+    - **The banner:** eyebrow row (type label, a help mark for the "Decisions" topic, the countdown
+      right-aligned), headline, story, the type's panel, a muted stakes line where all options share
+      the stakes, then option rows (white, full width, a chevron; hover: a navy border and a navy bar
+      on the left; the default's outlined "If you don't decide" tag before the chevron), then "How it
+      works:" with concept chips. A follow-up's eyebrow is "FOLLOW-UP · ATLAS" with no type label,
+      and a recall row shows the first outcome and "Step 2 of up to 3".
+    - **Per type:** Ambiguous defaults to "Back the foreman" (the spec named none). In "Who oversees
+      it" the people are the options (radio rows: name, state, skill, chance); picking one opens the
+      confirmation, and the default stays an option row below. Opportunity: the catch in bold, "If
+      you accept, who goes?" with each person's R&D lost a season, the Accept row naming who, and a
+      gold "This turn only" tag. Pairing: the first picker holds a team member; the second opens a
+      dropdown (the team, then idle engineers) with each one's relationship to the first. Trade-offs:
+      hovering an option outlines the bar in dashed gold, shows the new counts with the old struck
+      through and the old cap as a dashed gold marker, and adds a gold "Preview" tag to the caption.
+      Diagnosis: a clue list, each line with an icon and a small kind label.
+    - **The confirmation:** the chances as rows, the cost, funds before and after, "Decided at once".
+    - **The outcome:** "DECIDED · <option>", headline, sentence, effect lines in green and red, and
+      "Stays here until the turn resolves."; the bar shows a green gained (or red hatched lost)
+      segment until then. The close mark folds it to one line with a Show link.
+    - **Report:** a seventh glance cell, "Decision · 1 waiting" with the component, since the Events
+      cell becomes "Funding review" in a review season; the card's button with the countdown under it;
+      news lines for a lapsed and a decided decision.
+    - **Hub:** the decision dot copies the idle dot (6 art px, 1.5 px white ring) in gold, upper left;
+      its hover line stays white like the idle line, after a small gold dot (gold text read poorly on
+      the bright art), and comes after the idle line.
+    - **New for `Theme.java` and the UI Asset Sheet:** no colour tokens (tints of gold, success and
+      danger); icons `clue_trace`, `clue_note` and `clue_inspect` (24 px grid, 2 px round strokes);
+      component variants DecisionBanner (open, decided, folded), OptionRow, PersonPicker, ClueList,
+      the bar's preview and gained/lost segments, and a gold glance cell.
     **Shots:** one banner per type open, the confirmation, an outcome good and bad, the report card,
     the hub dot, a lapsed decision's report line.
 
@@ -2364,7 +2396,7 @@ current state alone. Each is an M5 task.
 **Next new screen (user, 2026-10-09):** a newspaper front page for the great Firsts, shown on
 login before the turn report (`design.md` §5, Backlog). Not specified yet.
 
-**Next mockup (specified 2026-10-10):** the R&D decision (component 26): the banner on an R&D card
+**Mocked up (2026-10-10, canvas `Launch Window — R&D decisions`, look unconfirmed):** the R&D decision (component 26): the banner on an R&D card
 open, one per type (ten), the confirmation, an outcome good and bad, the turn report's Decision card
 and strip cell, and the hub marker's decision dot beside the idle-staff dot. A new component with a
 gold accent; flag any new token for `Theme.java`.
