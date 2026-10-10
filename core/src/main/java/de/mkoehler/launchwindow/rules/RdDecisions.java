@@ -80,6 +80,8 @@ public final class RdDecisions {
         COMPONENT_GONE,
         /** The person isn't free for this option, or the pair isn't two people who could work on it. */
         PERSON_NOT_FREE,
+        /** Nobody works on the component any more, so there's no R&amp;D for the decision to act on. */
+        NO_TEAM,
         /** The funds don't cover the option's cost. */
         INSUFFICIENT_FUNDS
     }
@@ -184,7 +186,8 @@ public final class RdDecisions {
             case SKILL -> {
                 SetSpecialist overseer = engineer(snapshot, person);
                 MissionComponent component = catalog.missionComponent(pending.componentId()).orElse(null);
-                double skill = overseer == null || component == null ? 0 : overseer.getSkill(component.associatedSkill());
+                double skill = overseer == null || component == null ? 0
+                    : overseer.getSkill(component.associatedSkill());
                 yield clamp(0.25 + 0.007 * skill, 0.3, 0.95);
             }
             case RAPPORT -> {
@@ -247,6 +250,10 @@ public final class RdDecisions {
         MissionComponent component = catalog.missionComponent(pending.componentId()).orElse(null);
         if (owned == null || !owned.isActive() || component == null) {
             return Outcome.COMPONENT_GONE;
+        }
+        // Effects are sized from the team's R&D; with nobody on it there's nothing to size from.
+        if (!option.id().equals(decision.defaultOption()) && team(snapshot, component.id()).isEmpty()) {
+            return Outcome.NO_TEAM;
         }
         if (!takesFit(snapshot, component, option.takes(), person, second)) {
             return Outcome.PERSON_NOT_FREE;
@@ -386,7 +393,8 @@ public final class RdDecisions {
                     return null;
                 }
                 double before = engineer.getSkill(component.associatedSkill());
-                engineer.setSkill(component.associatedSkill(), clamp(before + effect.amount(), 0, SkillGrowth.SKILL_CAP));
+                engineer.setSkill(component.associatedSkill(),
+                    clamp(before + effect.amount(), 0, SkillGrowth.SKILL_CAP));
                 return new DecisionEffect(DecisionEffect.Kind.SKILL, engineer.getSkill(component.associatedSkill())
                     - before, 0, person);
             }
@@ -467,6 +475,12 @@ public final class RdDecisions {
         if (pending == null) {
             return;
         }
+        OwnedMissionComponent owned = snapshot.getMissionComponents().get(pending.componentId());
+        if (!pending.decided() && (owned == null || !owned.isActive())) {
+            // Its program closed during the turn: the decision goes with it, nothing applies.
+            snapshot.setPendingDecision(null);
+            return;
+        }
         Decisions.Decision decision = decisions.byId(pending.decisionId()).orElse(null);
         boolean lapsed = !pending.decided();
         if (lapsed && decision != null) {
@@ -495,7 +509,8 @@ public final class RdDecisions {
             MissionComponent component = catalog.missionComponent(entry.getKey()).orElse(null);
             OwnedMissionComponent owned = entry.getValue();
             if (component == null || !owned.isActive() || team(snapshot, component.id()).isEmpty()
-                    || owned.getCurrentReliability() >= TraitEffects.effectiveCap(snapshot, component, List.of(), false)) {
+                    || owned.getCurrentReliability()
+                        >= TraitEffects.effectiveCap(snapshot, component, List.of(), false)) {
                 continue;
             }
             candidates.add(component.id());

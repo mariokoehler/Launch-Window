@@ -20,6 +20,8 @@ import de.mkoehler.launchwindow.client.ClientSession;
 import de.mkoehler.launchwindow.client.connect.ServerResult;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.Theme;
+import de.mkoehler.launchwindow.client.view.ContentNames;
+import de.mkoehler.launchwindow.client.view.DecisionView;
 import de.mkoehler.launchwindow.client.view.Advisor;
 import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.Hub;
@@ -590,6 +592,20 @@ public final class SpaceComplexScreen extends SessionScreen {
                 shapes.setColor(Theme.DANGER);
                 shapes.circle(dotX, dotY, IDLE_DOT_RADIUS, 24);
             }
+            // A decision waiting (ui-spec.md component 26): the same dot in gold, upper left.
+            Hub.Place deciding = decisionPlace();
+            for (Hub.Hotspot spot : hotspots) {
+                if (spot.place() != deciding) {
+                    continue;
+                }
+                float radius = isUpgrading(spot.place()) ? MARKER_RADIUS : IDLE_MARKER_RADIUS;
+                float dotX = spot.labelX() - radius * 0.72f;
+                float dotY = spot.labelY() + MARKER_RISE + radius * 0.72f;
+                shapes.setColor(Color.WHITE);
+                shapes.circle(dotX, dotY, IDLE_DOT_RADIUS + 1.5f, 24);
+                shapes.setColor(Theme.GOLD);
+                shapes.circle(dotX, dotY, IDLE_DOT_RADIUS, 24);
+            }
             shapes.end();
             shapes.identity();
             batch.begin();
@@ -615,11 +631,19 @@ public final class SpaceComplexScreen extends SessionScreen {
                 drawCentered(batch, shadow, text, hover.labelX() * scaleX + 1.5f, hover.labelY() * scaleY - 1.5f,
                     parentAlpha);
                 drawCentered(batch, name, text, hover.labelX() * scaleX, hover.labelY() * scaleY, parentAlpha);
+                float below = hover.labelY() * scaleY - name.getHeight() - 4f;
                 String idle = Hub.idleLine(hover.place(), session.state());
                 if (idle != null) {
-                    float below = hover.labelY() * scaleY - name.getHeight() - 4f;
                     drawCentered(batch, idleShadow, idle, hover.labelX() * scaleX + 1.5f, below - 1.5f, parentAlpha);
                     drawCentered(batch, idleName, idle, hover.labelX() * scaleX, below, parentAlpha);
+                    below -= idleName.getHeight() + 2f;
+                }
+                if (hover.place() == decisionPlace()) {
+                    String waiting = "A decision waiting: " + ContentNames.of(session.state().getPendingDecision()
+                        .componentId());
+                    drawCentered(batch, idleShadow, waiting, hover.labelX() * scaleX + 1.5f, below - 1.5f,
+                        parentAlpha);
+                    drawCentered(batch, idleName, waiting, hover.labelX() * scaleX, below, parentAlpha);
                 }
             }
         }
@@ -630,6 +654,15 @@ public final class SpaceComplexScreen extends SessionScreen {
             label.pack();
             label.setPosition(getX() + x - label.getWidth() / 2f, getY() + y - label.getHeight() / 2f);
             label.draw(batch, parentAlpha);
+        }
+
+        /** The building whose board holds a waiting decision: the VAB for a rocket, else the SET Centre. */
+        private Hub.Place decisionPlace() {
+            if (!DecisionView.waiting(session.state())) {
+                return null;
+            }
+            return DecisionView.rocket(session.state().getPendingDecision()
+                .componentId(), session.catalog()) ? Hub.Place.VAB : Hub.Place.SET_CENTRE;
         }
 
         private boolean isUpgrading(Hub.Place place) {

@@ -127,7 +127,12 @@ public final class RndBoardScreen extends ChromeScreen {
      * @return the cards
      */
     public List<PayloadRnd.Card> cards() {
-        return PayloadRnd.cards(session.state(), session.catalog(), board == Board.ROCKET);
+        List<PayloadRnd.Card> cards = new java.util.ArrayList<>(PayloadRnd.cards(session.state(), session.catalog(),
+            board == Board.ROCKET));
+        // The card with a decision on it comes first, where the player arriving for it sees it.
+        cards.sort(java.util.Comparator.comparing(card -> session.state().getPendingDecision() == null
+            || !session.state().getPendingDecision().componentId().equals(card.component().id())));
+        return cards;
     }
 
     private Table card(PayloadRnd.Card card) {
@@ -141,5 +146,15 @@ public final class RndBoardScreen extends ChromeScreen {
      */
     public void openAssign(PayloadRnd.Card card) {
         cards.openAssign(card);
+    }
+
+    /**
+     * Opens the confirmation for an option of the waiting R&amp;D decision, as clicking it does.
+     *
+     * @param optionId the option
+     * @param person   the person it takes, or {@code null}
+     */
+    public void openDecision(String optionId, String person) {
+        cards.confirmDecision(optionId, person);
     }
 }

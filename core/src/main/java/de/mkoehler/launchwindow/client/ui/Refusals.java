@@ -13,6 +13,12 @@ public final class Refusals {
 
     private static final Map<String, String> WORDING = Map.ofEntries(
         Map.entry("INSUFFICIENT_FUNDS", "Not enough funds."),
+        Map.entry("NO_DECISION", "No decision is waiting."),
+        Map.entry("ALREADY_DECIDED", "That's decided already."),
+        Map.entry("UNKNOWN_OPTION", "That choice isn't there any more."),
+        Map.entry("COMPONENT_GONE", "That component isn't active any more."),
+        Map.entry("PERSON_NOT_FREE", "That engineer isn't free for this."),
+        Map.entry("NO_TEAM", "Nobody works on that component now. Assign engineers first."),
         Map.entry("TURN_RESOLVED", "The turn resolved before that reached the server, so nothing was done."),
         Map.entry("LEVEL_TOO_LOW", "The Intelligence Office's level is too low for that."),
         Map.entry("NO_ACTION_LEFT", "No intelligence action left this season."),

@@ -326,10 +326,48 @@ public final class ResearchPlanning {
     }
 
     /**
+     * Projects a component's R&amp;D as if a decision's effect applied now: the reliability shifted, and
+     * an R&amp;D factor for some seasons in place of any running one ({@code ui-spec.md} component 26,
+     * for a trade-off's preview).
+     *
+     * @param snapshot      the player
+     * @param catalog       the content
+     * @param componentId   the component
+     * @param shift         the change in reliability now, in points
+     * @param factor        the factor on the component's gains
+     * @param factorSeasons the seasons it lasts, 0 for none
+     * @return the projection with the team on it now
+     * @throws NullPointerException if an argument is {@code null}
+     */
+    public static Projection projectWith(PlayerSnapshot snapshot, ContentCatalog catalog, String componentId,
+                                         double shift, double factor, int factorSeasons) {
+        Objects.requireNonNull(snapshot, "snapshot must not be null");
+        Objects.requireNonNull(catalog, "catalog must not be null");
+        MissionComponent component = catalog.missionComponent(componentId).orElseThrow();
+        OwnedMissionComponent owned = snapshot.getMissionComponents().get(componentId);
+        SetSpecialist[] team = team(snapshot, componentId);
+        double current = Math.max(owned == null ? 0 : owned.getFloorReliability(),
+            (owned == null ? 0 : owned.getCurrentReliability()) + shift);
+        double[] average = run(snapshot, component, current, team, null, factor, factorSeasons);
+        Projection plain = project(snapshot, component, current, team);
+        return new Projection(current, plain.cap(), average, plain.departures());
+    }
+
+    /**
      * Runs one projection: the reliability after each season, until progress stops or the horizon.
      */
     private static double[] run(PlayerSnapshot snapshot, MissionComponent component, double current,
                                 SetSpecialist[] planned, RandomGenerator random) {
+        OwnedMissionComponent own = snapshot.getMissionComponents().get(component.id());
+        return run(snapshot, component, current, planned, random, own == null ? 1 : own.getRdFactor(),
+            own == null ? 0 : own.getRdFactorSeasons());
+    }
+
+    /**
+     * Runs one projection with a given R&amp;D factor on the component for its first seasons.
+     */
+    private static double[] run(PlayerSnapshot snapshot, MissionComponent component, double current,
+                                SetSpecialist[] planned, RandomGenerator random, double factor, int factorSeasons) {
         SetSpecialist[] team = planned.clone();
         double[] skills = new double[team.length];
         int[] retiresIn = new int[team.length];
@@ -358,12 +396,11 @@ public final class ResearchPlanning {
             }
             // Random events tick before R&D: N seasons left now leaves N - 1 for that season's R&D.
             double event = snapshot.getRdResultsSeasonsRemaining() - season > 0 ? snapshot.getRdResultsMultiplier() : 1;
-            // An R&D decision's factor on this component, while its seasons last (ui-spec.md component 26).
-            OwnedMissionComponent own = snapshot.getMissionComponents().get(component.id());
-            if (own != null && season <= own.getRdFactorSeasons()) {
-                event *= own.getRdFactor();
-            }
-            double gain = seasonGain(component, reliability, team, skills, event * chemistry, season - 1, random);
+            // An R&D decision's factor on this component, while its seasons last (ui-spec.md component 26);
+            // like the season pass, it scales the component's gain, not the engineers' learning.
+            double decided = season <= factorSeasons ? factor : 1;
+            double gain = seasonGain(component, reliability, team, skills, event * decided * chemistry, season - 1,
+                random);
             if (gain <= EPSILON) {
                 break;
             }
@@ -382,9 +419,9 @@ public final class ResearchPlanning {
                         mentored = TraitEffects.MENTORED;
                     }
                 }
-                double factor = random == null ? averageFactor : SkillGrowth.drawRdGainFactor(random);
+                double draw = random == null ? averageFactor : SkillGrowth.drawRdGainFactor(random);
                 skills[slot] = Math.min(SkillGrowth.SKILL_CAP,
-                    before[slot] + SkillGrowth.flatRdGain(before[slot], factor) * event * mentored);
+                    before[slot] + SkillGrowth.flatRdGain(before[slot], draw) * event * mentored);
             }
         }
         return Arrays.copyOf(path, length);

@@ -9,6 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
+import de.mkoehler.launchwindow.model.PendingDecision;
+import de.mkoehler.launchwindow.content.Decisions;
+import de.mkoehler.launchwindow.client.view.DecisionView;
 import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.content.SpaceRaceNews;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
@@ -80,6 +83,10 @@ public final class TurnReportScreen extends ChromeScreen {
         content.top();
         content.defaults().growX();
         content.add(glance(catalog)).padBottom(Theme.SPACE_4).row();
+        Table decision = decisionCard();
+        if (decision != null) {
+            content.add(decision).padBottom(Theme.SPACE_4).row();
+        }
 
         Table columns = new Table();
         columns.top();
@@ -136,7 +143,70 @@ public final class TurnReportScreen extends ChromeScreen {
                 strip.add(new Image(ui.solid(Theme.NAVY_BORDER))).width(Theme.BORDER_THIN).fillY();
             }
         }
+        // A seventh cell while a decision waits (ui-spec.md component 26): gold-tinted, a gold top line.
+        PendingDecision pending = waitingDecision();
+        if (pending != null) {
+            strip.add(new Image(ui.solid(Theme.NAVY_BORDER))).width(Theme.BORDER_THIN).fillY();
+            Table cell = new Table();
+            cell.setBackground(ui.rect(new Color(Theme.SURFACE_CARD).lerp(Theme.GOLD, 0.10f), Theme.GOLD,
+                Theme.BORDER_THIN));
+            cell.left();
+            cell.pad(Theme.SPACE_3, Theme.SPACE_4, Theme.SPACE_3, Theme.SPACE_4);
+            cell.defaults().left();
+            cell.add(ui.label("DECISION", Theme.TextStyle.CAPTION, Theme.GOLD_TEXT)).padBottom(2f).row();
+            cell.add(ui.label("1 waiting", Theme.TextStyle.HEADING_SM, Theme.INK)).row();
+            cell.add(ui.label(ContentNames.of(pending.componentId()), Theme.TextStyle.CAPTION, Theme.INK_MUTED));
+            strip.add(cell).expandX().fillX().uniformX().fillY().top();
+        }
         return strip;
+    }
+
+    /**
+     * The decision waiting now, shown on the latest report only: an older report's decision is long
+     * settled.
+     */
+    private PendingDecision waitingDecision() {
+        if (report.gameTurn() < session.latestResolvedTurn() || !DecisionView.waiting(session.state())) {
+            return null;
+        }
+        PendingDecision pending = session.state().getPendingDecision();
+        return DecisionView.content(pending).isPresent() ? pending : null;
+    }
+
+    /**
+     * The Decision card above the columns ({@code ui-spec.md} component 26): the decision waiting, the
+     * story's first sentence, what applies if the player doesn't decide, and the way to the board.
+     */
+    private Table decisionCard() {
+        PendingDecision pending = waitingDecision();
+        if (pending == null) {
+            return null;
+        }
+        Decisions.Decision decision = DecisionView.content(pending).orElseThrow();
+        Table card = new Table();
+        card.setBackground(ui.cardAccent(Theme.GOLD));
+        card.pad(Theme.SPACE_4, Theme.SPACE_4 + Theme.BORDER_ACCENT, Theme.SPACE_4, Theme.SPACE_4);
+        Table words = new Table();
+        words.left();
+        words.defaults().left().growX();
+        words.add(ui.label(("Decision \u00b7 " + ContentNames.of(pending.componentId())).toUpperCase(Locale.ROOT),
+            Theme.TextStyle.EYEBROW, Theme.GOLD_TEXT)).padBottom(4f).row();
+        words.add(ui.paragraph(decision.headline(), Theme.TextStyle.HEADING_SM, Theme.INK)).padBottom(4f).row();
+        String text = decision.text();
+        int stop = text.indexOf(". ");
+        words.add(ui.paragraph(stop > 0 ? text.substring(0, stop + 1) : text, Theme.TextStyle.BODY, Theme.INK))
+            .padBottom(4f).row();
+        String fallback = decision.defaultChoice().label();
+        words.add(ui.paragraph("If you don't decide: " + fallback + ".", Theme.TextStyle.CAPTION, Theme.INK_MUTED));
+        card.add(words).expandX().fillX().left().padRight(Theme.SPACE_5);
+        Table right = new Table();
+        right.add(actionButton("Decide on the R&D board", Theme.ButtonKind.PRIMARY, () -> game.setScreen(
+            new RndBoardScreen(game, DecisionView.rocket(pending.componentId(), session.catalog())
+                ? RndBoardScreen.Board.ROCKET : RndBoardScreen.Board.PAYLOAD)))).row();
+        right.add(ui.label(DecisionView.untilResolved(nextTurnText()), Theme.TextStyle.CAPTION, Theme.INK_MUTED))
+            .padTop(4f);
+        card.add(right).right();
+        return card;
     }
 
     private static Color tone(int tone) {
@@ -338,14 +408,24 @@ public final class TurnReportScreen extends ChromeScreen {
             }
             card.add(real).padBottom(Theme.SPACE_4).row();
         });
-        List<TurnReportView.Line> lines = TurnReportView.news(report, catalog, session.state().getArchetype());
+        List<TurnReportView.Line> lines = new java.util.ArrayList<>(TurnReportView.news(report, catalog,
+            session.state().getArchetype()));
+        // Last turn's R&D decision, decided or lapsed (ui-spec.md component 26).
+        for (var event : report.events()) {
+            if (event instanceof de.mkoehler.launchwindow.rules.DecisionSettled settled) {
+                DecisionView.reportLine(settled, session.state()).ifPresent(line ->
+                    lines.add(new TurnReportView.Line(line[0], line[1], "", DecisionView.tone(settled))));
+            }
+        }
         if (lines.isEmpty()) {
             card.add(ui.paragraph("A quiet season: no random events.", Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).row();
         }
         for (TurnReportView.Line line : lines) {
             Table row = new Table();
-            Image arrow = new Image(ui.icon(line.tone() > 0 ? "sort_asc" : "sort_desc"), Scaling.fit);
-            arrow.setColor(line.tone() > 0 ? Theme.SUCCESS : Theme.DANGER);
+            // Neutral news (a decision that changed nothing) gets a navy chevron, not a red arrow.
+            Image arrow = new Image(ui.icon(line.tone() > 0 ? "sort_asc" : line.tone() < 0 ? "sort_desc" : "chevron"),
+                Scaling.fit);
+            arrow.setColor(line.tone() > 0 ? Theme.SUCCESS : line.tone() < 0 ? Theme.DANGER : Theme.NAVY);
             row.add(arrow).size(14f).top().padRight(Theme.SPACE_2);
             Table text = new Table();
             text.left();

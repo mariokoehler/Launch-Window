@@ -92,7 +92,8 @@ class RdDecisionsTest {
             PlayerSnapshot snapshot = agency();
             offer(snapshot, "static-firing");
             snapshot.getMissionComponents().put(CAPSULE, new OwnedMissionComponent(30, 30));
-            assertEquals(RdDecisions.Outcome.DECIDED, RdDecisions.decide(snapshot, PACK, DECISIONS, "full", null, null));
+            assertEquals(RdDecisions.Outcome.DECIDED,
+                RdDecisions.decide(snapshot, PACK, DECISIONS, "full", null, null));
             String outcome = snapshot.getPendingDecision().outcomeId();
             assertNotNull(outcome);
             if (first == null) {
@@ -202,5 +203,31 @@ class RdDecisionsTest {
             }
         }
         throw new AssertionError("no seed");
+    }
+
+    /** A decision whose component went inactive during the turn just goes, with no effect or report line. */
+    @Test
+    void closedComponentTakesItsDecisionAlong() {
+        PlayerSnapshot snapshot = agency();
+        offer(snapshot, "static-firing");
+        snapshot.getMissionComponents().get(CAPSULE).setActive(false);
+        List<ResolutionEvent> events = RdDecisions.advanceSeason(snapshot, PACK, DECISIONS, 6);
+        assertTrue(events.stream().noneMatch(DecisionSettled.class::isInstance));
+        assertNull(snapshot.getPendingDecision());
+        assertFalse(snapshot.isDecisionPaused());
+    }
+
+    /** With nobody on the component, only the default can be chosen. */
+    @Test
+    void noTeamNoDecision() {
+        PlayerSnapshot snapshot = agency();
+        offer(snapshot, "extra-inspections");
+        for (SetSpecialist engineer : snapshot.getSetSpecialists()) {
+            engineer.setAssignmentState(AssignmentState.IDLE);
+            engineer.setRdTargetComponentId(null);
+            engineer.setRdSlot(null);
+        }
+        assertEquals(RdDecisions.Outcome.NO_TEAM, RdDecisions.decide(snapshot, PACK, DECISIONS, "inspect", null, null));
+        assertEquals(RdDecisions.Outcome.DECIDED, RdDecisions.decide(snapshot, PACK, DECISIONS, "trust", null, null));
     }
 }

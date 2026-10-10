@@ -409,6 +409,7 @@ public final class ScreenSnapshot {
         advisorShots(folder, game);
         standardPackShots(folder, game);
         outlookShots(folder, game);
+        decisionShots(folder, game);
     }
 
     /**
@@ -460,6 +461,97 @@ public final class ScreenSnapshot {
         write(folder, "outlook-locked-goal.png", new ProgramDetailsScreen(game, "pioneer-4", CelestialBody.MOON), null);
         write(folder, "outlook-locked-card.png", new BodyProgramsScreen(game, CelestialBody.MOON),
             screen -> showTooltip(screen.stage().getRoot(), "Where to earn them"));
+    }
+
+    /**
+     * R&D decisions (ui-spec.md component 26, 2026-10-10): one banner per type on its board, the
+     * confirmation with and without a picker, a good and a bad outcome, the turn report's card and
+     * strip cell, and the hub's decision dot. Each decision is put on the state directly, not rolled.
+     */
+    private static void decisionShots(File folder, LaunchWindowGame game) {
+        String hash = ContentPackHash.ofClasspath("content/early-era", ScreenSnapshot.class.getClassLoader());
+        GameInfoResponse info = GameInfoResponse.success("early-era", hash, List.of(), 23, true,
+            6 * 3_600_000L + 12 * 60_000L + 30_000L, 0L, null, List.of(), List.of(), 0);
+        PlayerSnapshot state = planningState(11, 25_000);
+        state.getMissionComponents().put("vostok-capsule", new OwnedMissionComponent(48.5, 8.7));
+        state.getMissionComponents().put("r7-vostok", new OwnedMissionComponent(57.0, 3.0));
+        SetSpecialist second = state.getSetSpecialists().get(1);
+        second.setAssignmentState(AssignmentState.ASSIGNED);
+        second.setRdTargetComponentId("vostok-capsule");
+        second.setRdSlot(1);
+        SetSpecialist rocketeer = specialist("s3", "Gleb Arkhipov", 41, 70, 52, 74, 20, 77, 30, 12);
+        rocketeer.setAssignmentState(AssignmentState.ASSIGNED);
+        rocketeer.setRdTargetComponentId("r7-vostok");
+        rocketeer.setRdSlot(0);
+        state.getSetSpecialists().add(rocketeer);
+        state.getSetSpecialists().add(specialist("s4", "Irina Lebedeva", 36, 70, 48, 55, 61, 48, 71, 30));
+        state.getSetSpecialists().add(specialist("s5", "Pyotr Kuznetsov", 47, 70, 50, 62, 40, 58, 52, 22));
+        SetSpecialist training = specialist("s6", "Anna Sokolova", 33, 70, 46, 44, 52, 39, 66, 28);
+        training.setAssignmentState(AssignmentState.IN_TRAINING);
+        training.setTrainingKind(TrainingKind.ADVANCED);
+        training.setTrainingSeasonsTotal(3);
+        training.setTrainingSeasonsCompleted(1);
+        state.getSetSpecialists().add(training);
+        state.getIntelligence().setLevel(2);
+        startSession(game, state, info);
+        PlayerSnapshot live = game.session().state();
+
+        String[][] banners = {
+            {"static-firing", "r7-vostok", "decision-resource.png"},
+            {"balloon-tanks-pad", "r7-vostok", "decision-knowledge.png"},
+            {"night-shift", "vostok-capsule", "decision-ambiguous.png"},
+            {"who-signs-vibration", "vostok-capsule", "decision-oversee.png"},
+            {"freeze-design", "vostok-capsule", "decision-tradeoff.png"},
+            {"battery-in-vacuum", "vostok-capsule", "decision-diagnosis.png"},
+            {"altitude-chamber", "vostok-capsule", "decision-opportunity.png"},
+            {"pair-up", "vostok-capsule", "decision-pairing.png"},
+            {"rival-insulation", "vostok-capsule", "decision-intel.png"},
+            {"long-soak", "vostok-capsule", "decision-followup.png"}};
+        for (String[] banner : banners) {
+            live.setPendingDecision(de.mkoehler.launchwindow.model.PendingDecision.offered(banner[0], banner[1], 22,
+                7L));
+            RndBoardScreen.Board board = banner[1].equals("r7-vostok") ? RndBoardScreen.Board.ROCKET
+                : RndBoardScreen.Board.PAYLOAD;
+            write(folder, banner[2], new RndBoardScreen(game, board), null);
+        }
+        // The confirmations: a cost, a picker for who goes, two pickers for a pair.
+        live.setPendingDecision(de.mkoehler.launchwindow.model.PendingDecision.offered("static-firing", "r7-vostok",
+            22, 7L));
+        write(folder, "decision-confirm.png", new RndBoardScreen(game, RndBoardScreen.Board.ROCKET),
+            screen -> screen.openDecision("full", null));
+        live.setPendingDecision(de.mkoehler.launchwindow.model.PendingDecision.offered("altitude-chamber",
+            "vostok-capsule", 22, 7L));
+        write(folder, "decision-confirm-seconded.png", new RndBoardScreen(game, RndBoardScreen.Board.PAYLOAD),
+            screen -> screen.openDecision("accept", null));
+        live.setPendingDecision(de.mkoehler.launchwindow.model.PendingDecision.offered("pair-up", "vostok-capsule",
+            22, 7L));
+        write(folder, "decision-confirm-pair.png", new RndBoardScreen(game, RndBoardScreen.Board.PAYLOAD),
+            screen -> screen.openDecision("pair", null));
+
+        // The outcomes: the test firing's clean run and its rough one, by the seed's roll.
+        de.mkoehler.launchwindow.content.Decisions decisions = de.mkoehler.launchwindow.content.Decisions.standard();
+        for (boolean good : new boolean[] {true, false}) {
+            long seed = 1;
+            while ((new java.util.SplittableRandom(seed).nextDouble() < 0.7) != good) {
+                seed++;
+            }
+            live.getMissionComponents().put("r7-vostok", new OwnedMissionComponent(57.0, 3.0));
+            live.setPendingDecision(de.mkoehler.launchwindow.model.PendingDecision.offered("static-firing",
+                "r7-vostok", 22, seed));
+            de.mkoehler.launchwindow.rules.RdDecisions.decide(live, game.session().catalog(), decisions, "full", null,
+                null);
+            write(folder, good ? "decision-decided-good.png" : "decision-decided-bad.png",
+                new RndBoardScreen(game, RndBoardScreen.Board.ROCKET), null);
+        }
+
+        // Where the player meets it: the report's card and strip cell, the hub's dot.
+        live.getMissionComponents().put("r7-vostok", new OwnedMissionComponent(57.0, 3.0));
+        live.setPendingDecision(de.mkoehler.launchwindow.model.PendingDecision.offered("static-firing", "r7-vostok",
+            22, 7L));
+        TurnReport report = TurnReport.build(live, live, List.of(), 22, game.session().catalog());
+        game.session().keepReport(report);
+        write(folder, "decision-report.png", new TurnReportScreen(game, report), null);
+        write(folder, "decision-hub.png", new SpaceComplexScreen(game), screen -> screen.hover(Hub.Place.VAB));
     }
 
     /**

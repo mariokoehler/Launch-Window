@@ -37,6 +37,10 @@ CHROME = {
     "chevron": '<path d="M9 18l6-6-6-6"/>',
     # The explainer's close button (ui-spec.md component 18), 2026-10-06.
     "close": '<path d="M6 6l12 12M18 6 6 18"/>',
+    # A diagnosis's clue icons (ui-spec.md component 26, the R&D decisions canvas), 2026-10-10.
+    "clue_trace": '<path d="M3 4v16h18"/><path d="M6 14l3-3 3 2 3-7 3 9 2-2"/>',
+    "clue_inspect": '<circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l6 6"/><path d="M8 10.5h5M10.5 8v5"/>',
+    "clue_note": '<path d="M5 3h10l4 4v14H5z"/><path d="M8 11h8M8 15h8M8 7h4"/><path d="M14 3v4h4"/>',
     "morale": '<path d="M12 21C12 21 4 15.5 4 9.5A4.5 4.5 0 0 1 12 6.5 4.5 4.5 0 0 1 20 9.5C20 15.5 12 21 12 21Z"/>',
     # A mortarboard: a flat board, the cap under it, and the tassel off the right corner (redrawn 2026-10-06).
     "learning_potential": '<path d="M2 9.5 12 5l10 4.5L12 14z"/><path d="M6 11.3V16c0 1.7 2.7 3 6 3s6-1.3 6-3v-4.7"/><path d="M22 9.5V15"/>',

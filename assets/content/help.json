@@ -201,6 +201,22 @@
       "explainers": ["reliability", "human-rating"]
     },
     {
+      "id": "decisions",
+      "group": "Programs and hardware",
+      "title": "R&D decisions",
+      "body": [
+        "Now and then, mostly while you wait between flights, the game puts a decision to you about one component under R&D: a test to pay for, a question only one answer fits, a problem to diagnose, people to pair up. It shows on the component's card on its R&D board, on the turn report and as a gold dot on the VAB or the SET Centre on the hub.",
+        "## Deciding",
+        "Each option says what it shows in advance; some show nothing. Choose one and the outcome is worked out at once: the card shows what happened, and the reliability bar moves with it. The outcome is fixed when the decision comes, so choosing again can't change it.",
+        "Effects are measured in seasons of the component's R&D, so a decision weighs the same on a small satellite as on a big rocket. Some options take an engineer: an idle one to oversee a test, two to pair up, one to send away for a while.",
+        "## If you don't decide",
+        "When the turn resolves, an open decision takes the option marked “If you don't decide”. After that no new decision comes until you do something again, so a decision never piles up while you're away.",
+        "## Story arcs",
+        "A good outcome can lead somewhere: a later quiet season may bring a follow-up about the same component, with more at stake."
+      ],
+      "related": ["rnd", "random-events"]
+    },
+    {
       "id": "rockets",
       "group": "Programs and hardware",
       "title": "Rockets",

@@ -59,6 +59,7 @@ final class RndCards {
     private final String title;
     private final boolean editable;
     private boolean autoAssigning;
+    private final DecisionBanner decisions;
 
     /**
      * Creates the cards for a screen.
@@ -72,6 +73,7 @@ final class RndCards {
         this.ui = host.ui;
         this.title = title;
         this.editable = editable;
+        this.decisions = new DecisionBanner(host, editable);
     }
 
     /**
@@ -144,6 +146,11 @@ final class RndCards {
         if (card.atCap() && team.isEmpty()) {
             box.add(ui.paragraph("Released automatically when the R&D ceiling was reached.", Theme.TextStyle.BODY_SM,
                 Theme.INK_MUTED)).padBottom(Theme.SPACE_3).row();
+        }
+        // An R&D decision about this component (ui-spec.md component 26), above the team.
+        Table decision = decisions.build(component);
+        if (decision != null) {
+            box.add(decision).padBottom(Theme.SPACE_3).row();
         }
         if (!team.isEmpty()) {
             box.add(chemistryRow(component, team)).padBottom(Theme.SPACE_3).row();
@@ -247,6 +254,16 @@ final class RndCards {
             + People.surname(candidate.getName()) + " in slot " + (card.nextFreeSlot() + 1) + ". ")
             + "The rules' average: skills grow, retirements leave, nobody else joins.");
         return label;
+    }
+
+    /**
+     * Opens the confirmation for an option of the waiting decision, as clicking it does.
+     *
+     * @param optionId the option
+     * @param person   the person it takes, or {@code null}
+     */
+    void confirmDecision(String optionId, String person) {
+        decisions.confirm(optionId, person);
     }
 
     private static List<SetSpecialist> team(PayloadRnd.Card card) {

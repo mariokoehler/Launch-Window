@@ -172,7 +172,7 @@ public record Help(List<Topic> topics) {
         SET_CENTRE("the SET Centre", "rnd", "hiring", "training", "chemistry", "traits", "morale", "salaries",
             "poaching"),
         /** A Payload or Rocket R&amp;D board. */
-        RND("R&D", "rnd", "chemistry", "traits"),
+        RND("R&D", "rnd", "decisions", "chemistry", "traits"),
         /** The VAB and its rocket programs. */
         VAB("the VAB", "rockets", "rnd", "programs"),
         /** Mission Control and its missions. */
