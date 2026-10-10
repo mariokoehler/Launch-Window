@@ -2249,6 +2249,44 @@ cost against reliability, paying for a ground test or test firing whose result s
 decisions in the turn report. Some should draw on what the explainers teach (§1.1, `ui-spec.md`
 component 18), so a player uses that knowledge to improve a design. To be fleshed out after the
 bot.
+- **R&D decisions, the first step** (talked through with the user, 2026-10-10; not specified yet):
+  - **Shape:** an event arises at a turn's resolution, attached to one component under R&D (rocket or
+    payload), and waits for the player. Choosing is an ordinary action that the server resolves on the
+    spot (outcome drawn from a seed fixed to the event, so no rerolls and the journal replays it), with
+    the result shown at once. Unanswered when the turn resolves, its default applies. One open decision
+    at a time.
+  - **Where:** a gold Decision card at the top of the turn report and a "Decisions" cell in its strip,
+    linking to the R&D board; a gold dot on the VAB's or SET Centre's hub marker (hover "A decision
+    waiting: Atlas"); the decision itself as a banner on the component's R&D card (story, choices with
+    what each shows in advance, the default marked, concept chips), a confirmation, then the outcome in
+    place with the bar and season marks updating; a line in the next report's news.
+  - **When (aimed at the lulls):** near certain (about 85-90 %) when the agency has no mission in flight
+    and the component is more than a season from 60 % (`ResearchPlanning.project`), on the component the
+    soonest mission waits on, else the one furthest from 60 %. Raised by seasons since the last launch,
+    nothing becoming ready next season (no launch, training, upgrade or milestone), waiting for money,
+    and a quiet last turn; lowered by a mission in flight or a launch this turn, and by a decision last
+    season. Paused after an unanswered decision until the player acts again, so absent players don't
+    collect defaults. Measured with the playout bots before tuning.
+  - **Types** (the user's three, then six more; the user wants all of them, story arcs especially):
+    1. *Resource for a chance:* spend X for a stated chance of Y (pay for a ground test).
+    2. *Knowledge:* a right and a wrong answer, a large boost or a penalty, and "I don't know" as the
+       default; drawing on the explainers.
+    3. *Ambiguous:* several choices whose outcomes can't be told in advance, social and personnel themes,
+       traits shaping the result.
+    4. *Who oversees it:* assign an idle engineer, their skill setting the odds; pulling someone out of
+       training makes them available.
+    5. *Trade-offs over time:* an effect over several seasons (freeze the design: faster R&D, lower cap;
+       redesign: a drop now, a higher cap), the season marks previewing each option.
+    6. *Diagnosis:* clues (telemetry, a technician's note), pick the cause; a wrong pick costs a season.
+    7. *Opportunity with strings:* an offer for this turn only (a borrowed test stand for a seconded
+       engineer, an untested cheaper part).
+    8. *Pairing:* pick two engineers to work together; rapport and traits decide, and the pairing builds
+       rapport or starts a clash.
+    9. *Intelligence tip:* adopt a rival's approach, right more often the higher the Intelligence
+       Office's level.
+    10. *Story arcs:* a good outcome opens a follow-up in a later quiet season, with higher stakes.
+  - **Build:** the type a field in a content file (story, options, what shows in advance, effect,
+    default), one resolver per type. Variety isn't a worry: other lull ideas will join it (user).
 
 **Front pages for the Firsts** (the user's idea, 2026-10-09, not designed yet): when an agency
 makes one of the great Firsts (satellite in orbit, human in space, human in orbit, crewed lunar
