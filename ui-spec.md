@@ -1062,6 +1062,10 @@ Choices made while building it, **confirmed by the user (2026-10-04)**:
 **Purpose:** "what happened overnight", the async equivalent of BASPM's
 end-of-season news screen. **Ref:** `bulletin_news_*.png`,
 `end_of_season_rnd_results.png`, `mission_assessment.png`.
+*News placement (the user's request, 2026-10-10):* the blueprint drawings make the R&D section tall,
+so when it shows more than one component the News card (with the real-timeline story and the random
+events) and the Intelligence card move to the left column, right under Missions flown, ahead of Goals
+and Buildings. With one component or none they stay under R&D. Shot `report.png`.
 
 **Shows, grouped:**
 - missions flown this season, with step outcomes (success, glitch solved, minor

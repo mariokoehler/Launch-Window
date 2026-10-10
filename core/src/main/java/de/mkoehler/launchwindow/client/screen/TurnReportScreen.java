@@ -36,7 +36,8 @@ import java.util.Optional;
 /**
  * The turn report ({@code ui-spec.md} &sect;4.4): "what happened overnight". An at-a-glance strip,
  * then three columns: missions flown (each with its steps' outcomes and a replay), goals and
- * buildings; R&amp;D and news; people and the budget. Built from one {@link TurnReport}.
+ * buildings; R&amp;D and news; people and the budget. When R&amp;D shows more than one component, the
+ * news and intelligence move to the left column, under the missions. Built from one {@link TurnReport}.
  *
  * @author Mario Koehler
  */
@@ -82,17 +83,21 @@ public final class TurnReportScreen extends ChromeScreen {
 
         Table columns = new Table();
         columns.top();
+        // With more than one component's drawing, R&D fills the middle column, so the news and the
+        // intelligence findings move up the left one, under the missions (the user's request, 2026-10-10).
+        boolean newsLeft = TurnReportView.rnd(report).size() > NEWS_MOVES_AFTER_COMPONENTS;
+        List<TurnReportView.Line> intelligence = TurnReportView.intelligence(report);
         Table first = column();
         first.add(missions(catalog)).row();
-        first.add(goals()).row();
-        first.add(buildings()).row();
         Table second = column();
         second.add(rnd(catalog)).row();
-        second.add(news(catalog)).row();
-        List<TurnReportView.Line> intelligence = TurnReportView.intelligence(report);
+        Table newsColumn = newsLeft ? first : second;
+        newsColumn.add(news(catalog)).row();
         if (!intelligence.isEmpty()) {
-            second.add(intelligence(intelligence)).row();
+            newsColumn.add(intelligence(intelligence)).row();
         }
+        first.add(goals()).row();
+        first.add(buildings()).row();
         Table third = column();
         third.add(people(catalog)).row();
         third.add(budget()).row();
@@ -101,6 +106,9 @@ public final class TurnReportScreen extends ChromeScreen {
         columns.add(third).expandX().fillX().uniformX().top();
         content.add(scrollPane(columns)).expand().fill();
     }
+
+    /** More components than this in the R&amp;D section move the news to the left column. */
+    private static final int NEWS_MOVES_AFTER_COMPONENTS = 1;
 
     private Table column() {
         Table column = new Table();
