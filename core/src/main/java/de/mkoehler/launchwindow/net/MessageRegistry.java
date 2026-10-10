@@ -290,5 +290,8 @@ public final class MessageRegistry {
 
         // The push when a turn resolves (2026-10-09). Never move this line.
         kryo.register(de.mkoehler.launchwindow.net.messages.TurnResolvedNotice.class);
+
+        // R&D decisions (ui-spec.md component 26, 2026-10-10). Never move this line.
+        kryo.register(de.mkoehler.launchwindow.actions.DecideAction.class);
     }
 }

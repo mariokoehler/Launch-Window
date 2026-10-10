@@ -240,6 +240,9 @@ public final class Personality {
         copy.setRapports(copy.getRapports().stream().filter(Rapport::shown)
             .map(pair -> new Rapport(pair.first(), pair.second(), pair.rapport(), 0, pair.seasonsTogether(), true))
             .toList());
+        if (copy.getPendingDecision() != null) {
+            copy.setPendingDecision(copy.getPendingDecision().withoutSeed());
+        }
         return copy;
     }
 

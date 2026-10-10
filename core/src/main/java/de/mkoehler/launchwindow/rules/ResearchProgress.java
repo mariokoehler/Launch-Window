@@ -288,7 +288,7 @@ public final class ResearchProgress {
             double rawAmount = SkillGrowth.drawRdSlotRawAmount(component.rdSlotBandMaxAmounts(), slot, random);
             double skillBefore = skillBeforeGain.get(specialist);
             double nominalGain = SkillGrowth.rdReliabilityGain(rawAmount, startReliability,
-                cap, skillBefore) * snapshot.getRdResultsMultiplier() * chemistry
+                cap, skillBefore) * snapshot.getRdResultsMultiplier() * owned.getRdFactor() * chemistry
                 * TraitEffects.rdGain(specialist, componentId, false);
             nominalGains[slot] = nominalGain;
             nominalTotal += nominalGain;

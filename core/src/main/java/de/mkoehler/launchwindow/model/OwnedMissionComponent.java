@@ -30,6 +30,8 @@ public class OwnedMissionComponent {
     private double currentReliability;
     private double floorReliability;
     private boolean active = true;
+    private double rdFactor = 1.0;
+    private int rdFactorSeasons;
 
     /**
      * No-argument constructor required for Jackson/Kryo deserialization.
@@ -103,5 +105,42 @@ public class OwnedMissionComponent {
      */
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    /**
+     * Returns the factor on this component's own R&amp;D gains, set by an R&amp;D decision for some
+     * seasons ({@code ui-spec.md} component 26); 1 when none runs.
+     *
+     * @return the factor
+     */
+    public double getRdFactor() {
+        return rdFactorSeasons > 0 ? rdFactor : 1.0;
+    }
+
+    /**
+     * Sets the factor on this component's own R&amp;D gains.
+     *
+     * @param rdFactor the factor, positive
+     */
+    public void setRdFactor(double rdFactor) {
+        this.rdFactor = rdFactor;
+    }
+
+    /**
+     * Returns how many more seasons' R&amp;D the factor applies to.
+     *
+     * @return the seasons, 0 when none runs
+     */
+    public int getRdFactorSeasons() {
+        return rdFactorSeasons;
+    }
+
+    /**
+     * Sets how many more seasons' R&amp;D the factor applies to.
+     *
+     * @param rdFactorSeasons the seasons
+     */
+    public void setRdFactorSeasons(int rdFactorSeasons) {
+        this.rdFactorSeasons = Math.max(0, rdFactorSeasons);
     }
 }

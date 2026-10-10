@@ -410,11 +410,14 @@ public final class ContentPackPlayouts {
         int sinceLaunch = 0;
         // Random events seen this game, good then bad (2026-10-10, sizing the news stories).
         int[] randomEvents = new int[2];
+        // R&D decisions this game (2026-10-10): per season, whether one was offered and whether it flew.
+        List<boolean[]> decisionSeasons = new ArrayList<>();
 
         for (int season = 0; season < seasons; season++) {
             // Journaled player actions first.
             tally.launchedThisSeason = 0;
             seasonNow = season;
+            decideWaiting(snapshot, random);
             act(snapshot, random, tally);
             if (tally.launchedThisSeason > 0) {
                 gaps.add(sinceLaunch);
@@ -435,6 +438,8 @@ public final class ContentPackPlayouts {
                 measure(snapshot, season);
             }
 
+            decisionSeasons.add(new boolean[] {seasonEvents.stream()
+                .anyMatch(de.mkoehler.launchwindow.rules.DecisionOffered.class::isInstance), tally.launchedThisSeason > 0});
             for (ResolutionEvent event : seasonEvents) {
                 if (event instanceof de.mkoehler.launchwindow.rules.RandomEventOccurred occurred) {
                     randomEvents[occurred.kind().isPositive() ? 0 : 1]++;
@@ -489,10 +494,52 @@ public final class ContentPackPlayouts {
                 tally.launchGaps.addAll(gaps);
                 tally.longestGaps.add(gaps.stream().mapToInt(Integer::intValue).max().orElse(season + 1));
                 tally.randomEventsPerGame.add(new int[] {randomEvents[0], randomEvents[1], season + 1});
+                tally.decisionSeasons.add(decisionSeasons);
                 return;
             }
         }
         tally.randomEventsPerGame.add(new int[] {randomEvents[0], randomEvents[1], seasons});
+        tally.decisionSeasons.add(decisionSeasons);
+    }
+
+    /**
+     * Answers a waiting R&amp;D decision the way a player might: a random option, with the first
+     * engineers who fit when it takes someone. Draws from its own seed, so the season's draws stay.
+     */
+    private void decideWaiting(PlayerSnapshot snapshot, Random random) {
+        var pending = snapshot.getPendingDecision();
+        if (pending == null || pending.decided()) {
+            return;
+        }
+        var decision = de.mkoehler.launchwindow.content.Decisions.standard().byId(pending.decisionId()).orElse(null);
+        var component = catalog.missionComponent(pending.componentId()).orElse(null);
+        if (decision == null || component == null) {
+            return;
+        }
+        java.util.SplittableRandom pick = new java.util.SplittableRandom(pending.offeredTurn() * 31L + 7);
+        var option = decision.options().get(pick.nextInt(decision.options().size()));
+        String person = null;
+        String second = null;
+        switch (option.takes()) {
+            case OVERSEER -> person = first(de.mkoehler.launchwindow.rules.RdDecisions.overseers(snapshot, component), 0);
+            case SECONDED -> person = first(de.mkoehler.launchwindow.rules.RdDecisions.team(snapshot, component.id()), 0);
+            case PAIR -> {
+                var people = de.mkoehler.launchwindow.rules.RdDecisions.pairable(snapshot, component);
+                person = first(people, 0);
+                second = first(people, 1);
+            }
+            default -> { }
+        }
+        var outcome = de.mkoehler.launchwindow.rules.RdDecisions.decide(snapshot, catalog,
+            de.mkoehler.launchwindow.content.Decisions.standard(), option.id(), person, second);
+        if (outcome != de.mkoehler.launchwindow.rules.RdDecisions.Outcome.DECIDED) {
+            de.mkoehler.launchwindow.rules.RdDecisions.decide(snapshot, catalog,
+                de.mkoehler.launchwindow.content.Decisions.standard(), decision.defaultOption(), null, null);
+        }
+    }
+
+    private static String first(List<? extends Personnel> people, int index) {
+        return people.size() > index ? people.get(index).getId() : null;
     }
 
     /** Checks the budget phase against an independent recomputation taken just before it runs. */
@@ -1497,6 +1544,52 @@ public final class ContentPackPlayouts {
     }
 
     /** Mutable totals across a batch. */
+    /**
+     * Prints how often R&amp;D decisions came: per game, in seasons with nothing launched (the quiet
+     * ones) against the others, and how much of each game's longest quiet stretch they covered.
+     */
+    private static void decisionReport(List<List<boolean[]>> games) {
+        double offers = 0;
+        int quiet = 0;
+        int quietOffered = 0;
+        int busy = 0;
+        int busyOffered = 0;
+        List<Double> covered = new ArrayList<>();
+        for (List<boolean[]> game : games) {
+            int longestStart = 0;
+            int longest = 0;
+            int run = 0;
+            for (int i = 0; i < game.size(); i++) {
+                boolean offered = game.get(i)[0];
+                boolean launched = game.get(i)[1];
+                offers += offered ? 1 : 0;
+                if (launched) {
+                    busy++;
+                    busyOffered += offered ? 1 : 0;
+                    run = 0;
+                } else {
+                    quiet++;
+                    quietOffered += offered ? 1 : 0;
+                    run++;
+                    if (run > longest) {
+                        longest = run;
+                        longestStart = i - run + 1;
+                    }
+                }
+            }
+            int inLongest = 0;
+            for (int i = longestStart; i < longestStart + longest; i++) {
+                inLongest += game.get(i)[0] ? 1 : 0;
+            }
+            covered.add(longest == 0 ? 0 : inLongest / (double) longest);
+        }
+        covered.sort(null);
+        System.out.printf(java.util.Locale.ROOT, "R&D decisions per game: %.1f; offered in %.0f %% of quiet seasons "
+                + "and %.0f %% of seasons with a launch; median game's longest quiet stretch covered %.0f %%%n",
+            offers / games.size(), 100.0 * quietOffered / Math.max(1, quiet), 100.0 * busyOffered / Math.max(1, busy),
+            100 * covered.get(covered.size() / 2));
+    }
+
     /** The last run's tally, for {@link #main}'s random-event lines. */
     private Tally lastTally;
 
@@ -1505,6 +1598,8 @@ public final class ContentPackPlayouts {
         final Map<String, Integer> randomEventKinds = new java.util.TreeMap<>();
         /** Per game: good events, bad events, and the seasons it ran (to completion or the cap). */
         final List<int[]> randomEventsPerGame = new ArrayList<>();
+        /** Per game, per season: whether an R&D decision was offered, and whether something launched. */
+        final List<List<boolean[]>> decisionSeasons = new ArrayList<>();
         final Map<Archetype, Integer> completedByArchetype = new EnumMap<>(Archetype.class);
         final Map<Archetype, Integer> gamesByArchetype = new EnumMap<>(Archetype.class);
         final List<Integer> completionSeasons = new ArrayList<>();
@@ -1545,6 +1640,13 @@ public final class ContentPackPlayouts {
             case "side" -> Bot.SIDE_MISSIONS;
             default -> throw new IllegalArgumentException("Unknown bot " + args[1]);
         };
+        // "decisions" as a third argument plays with the R&D decisions (ui-spec.md component 26); without
+        // it there are none, so the earlier numbers stay comparable.
+        boolean withDecisions = args.length > 2 && args[2].equals("decisions");
+        if (withDecisions) {
+            de.mkoehler.launchwindow.content.Decisions.setStandard(de.mkoehler.launchwindow.content.Decisions.load(
+                Path.of("assets", "content", de.mkoehler.launchwindow.content.Decisions.FILE)));
+        }
         ContentPackPlayouts harness = new ContentPackPlayouts(catalog, bot);
         int seasons = harness.declaredGoals().equals(MOON_DECLARED_GOALS) ? 240 : 80;
         Report report = harness.run(200, seasons, 42L);
@@ -1576,6 +1678,9 @@ public final class ContentPackPlayouts {
             perGame.stream().mapToInt(game -> game[0]).max().orElse(0),
             perGame.stream().mapToInt(game -> game[1]).max().orElse(0));
         System.out.println("Random events by kind: " + harness.lastTally.randomEventKinds);
+        if (withDecisions) {
+            decisionReport(harness.lastTally.decisionSeasons);
+        }
         System.out.print("Seasons as the target, per game of its agency:");
         report.targetSeasons().forEach((id, count) -> System.out.printf(java.util.Locale.ROOT, " %s %.1f,", id,
             count / (report.games() / 2.0)));

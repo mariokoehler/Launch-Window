@@ -80,7 +80,12 @@ public class SnapshotReplay {
      */
     public static ActionResult applySafely(PlayerAction action, PlayerSnapshot snapshot, ActionContext context) {
         try {
-            return action.apply(snapshot, context);
+            ActionResult result = action.apply(snapshot, context);
+            if (result.applied()) {
+                // The player acted: decisions may come again after a lapse (ui-spec.md component 26).
+                snapshot.setDecisionPaused(false);
+            }
+            return result;
         } catch (NullPointerException | IllegalArgumentException e) {
             return new ActionResult(false, "INVALID_ACTION");
         }

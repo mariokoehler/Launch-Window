@@ -29,7 +29,7 @@ public final class Advisor {
      * advisor suggests the first mission (the user's number, 2026-10-08): fresh hardware starts
      * at a few percent and would most likely fail.
      */
-    public static final double READY_RELIABILITY = 60;
+    public static final double READY_RELIABILITY = de.mkoehler.launchwindow.rules.RdDecisions.READY_RELIABILITY;
 
     private Advisor() {
     }

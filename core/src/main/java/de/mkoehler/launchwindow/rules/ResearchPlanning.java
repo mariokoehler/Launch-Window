@@ -56,7 +56,7 @@ public final class ResearchPlanning {
         double chemistry = Chemistry.research(snapshot, members(team), component.associatedSkill(), true)
             .multiplier();
         return expectedSeasonGain(component, owned.getCurrentReliability(), team,
-            snapshot.getRdResultsMultiplier() * chemistry);
+            snapshot.getRdResultsMultiplier() * owned.getRdFactor() * chemistry);
     }
 
     /**
@@ -358,6 +358,11 @@ public final class ResearchPlanning {
             }
             // Random events tick before R&D: N seasons left now leaves N - 1 for that season's R&D.
             double event = snapshot.getRdResultsSeasonsRemaining() - season > 0 ? snapshot.getRdResultsMultiplier() : 1;
+            // An R&D decision's factor on this component, while its seasons last (ui-spec.md component 26).
+            OwnedMissionComponent own = snapshot.getMissionComponents().get(component.id());
+            if (own != null && season <= own.getRdFactorSeasons()) {
+                event *= own.getRdFactor();
+            }
             double gain = seasonGain(component, reliability, team, skills, event * chemistry, season - 1, random);
             if (gain <= EPSILON) {
                 break;

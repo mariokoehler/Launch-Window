@@ -63,6 +63,8 @@ public final class SeasonResolver {
         TEAMS,
         /** Careers: tenure, loyalty, the career record and ambitions (design.md 2.2(d), phase 4). */
         CAREERS,
+        /** R&D decisions: last turn's settled, a new one perhaps offered (ui-spec.md component 26). */
+        DECISIONS,
         /** Fresh candidate pools. */
         HIRING_POOL
     }
@@ -216,6 +218,8 @@ public final class SeasonResolver {
                 context.seasonsElapsed());
             case TRAINING -> TrainingProgress.advanceSeason(snapshot, random);
             case RESEARCH -> ResearchProgress.advanceSeason(snapshot, context.catalog(), random);
+            case DECISIONS -> RdDecisions.advanceSeason(snapshot, context.catalog(),
+                de.mkoehler.launchwindow.content.Decisions.standard(), context.gameTurn());
             case TEAMS -> throw new IllegalStateException("teams run with their captured teams");
             case CAREERS -> throw new IllegalStateException("careers run with the season's flights and events");
             case HIRING_POOL -> {

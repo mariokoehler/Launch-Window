@@ -1,0 +1,419 @@
+{
+  "_comment": "R&D decisions (ui-spec.md component 26, user's idea 2026-10-10). Ids are kept in saved state and turn reports: never rename or reuse one. Sizes are relative: RELIABILITY in seasons of the component's R&D gain, FUNDS and an option's cost as a share of a season's funding. Text fits both agencies; {name} and {second} are the people an option took. The first build has two or three per type; the pools grow after the play test (design.md 5).",
+  "decisions": [
+    {
+      "id": "static-firing", "type": "RESOURCE", "fits": "ROCKET", "step": 1, "followUp": "full-thrust-firing",
+      "headline": "Pay for a static test firing?",
+      "text": "The engine team wants to bolt the stage to the test stand and fire it, held down, before anything else is built around it. A clean run would settle a lot of arguments.",
+      "options": [
+        {"id": "full", "label": "Pay for the full firing", "shows": "70 % chance of about two seasons' gain, else about half a season's.", "cost": 0.3,
+         "outcomes": [
+           {"id": "clean", "weight": 70, "tone": "GOOD", "continues": true, "headline": "The firing went clean", "text": "The stage ran its full time without a flicker in the gauges. The engineers want to push it harder next time.", "effects": [{"kind": "RELIABILITY", "amount": 2}]},
+           {"id": "rough", "weight": 30, "tone": "BAD", "headline": "A rough run", "text": "The engine shut down early on a sensor fault. The data is thin, but something was learned.", "effects": [{"kind": "RELIABILITY", "amount": 0.5}]}
+         ]},
+        {"id": "half", "label": "Fire it at half power", "shows": "Sure to give about half a season's gain.", "cost": 0.12,
+         "outcomes": [
+           {"id": "half-done", "weight": 1, "tone": "NEUTRAL", "headline": "A careful half-power run", "text": "Nothing dramatic, nothing broken, and a little more known about the engine.", "effects": [{"kind": "RELIABILITY", "amount": 0.5}]}
+         ]},
+        {"id": "skip", "label": "Skip it", "shows": "Nothing changes.",
+         "outcomes": [
+           {"id": "skipped", "weight": 1, "tone": "NEUTRAL", "headline": "No firing this time", "text": "The stage goes back to the assembly hall untested.", "effects": []}
+         ]}
+      ],
+      "defaultOption": "skip"
+    },
+    {
+      "id": "full-thrust-firing", "type": "RESOURCE", "fits": "ROCKET", "step": 2, "followUp": "endurance-run",
+      "recall": "Last time the held-down firing went clean.",
+      "headline": "Fire it at full thrust",
+      "text": "Encouraged by the clean firing, the engine team wants to run the stage at full thrust for its whole burn time. If it holds, the design is proven; if it doesn't, the test stand may need rebuilding.",
+      "options": [
+        {"id": "go", "label": "Run it at full thrust", "shows": "60 % chance of about three seasons' gain; a failure costs about a season's.", "cost": 0.45,
+         "outcomes": [
+           {"id": "proven", "weight": 60, "tone": "GOOD", "continues": true, "headline": "Full thrust, full time", "text": "The stage roared for its whole burn and shut down on command. The crew on the stand cheered.", "effects": [{"kind": "RELIABILITY", "amount": 3}]},
+           {"id": "burst", "weight": 40, "tone": "BAD", "headline": "A turbine let go", "text": "A turbine blade failed at full speed and took the pump with it. The engineers will spend weeks on what is left.", "effects": [{"kind": "RELIABILITY", "amount": -1}]}
+         ]},
+        {"id": "wait", "label": "Wait until it's further along", "shows": "Nothing changes.",
+         "outcomes": [
+           {"id": "waited", "weight": 1, "tone": "NEUTRAL", "headline": "Not yet", "text": "The full-thrust run is put off.", "effects": []}
+         ]}
+      ],
+      "defaultOption": "wait"
+    },
+    {
+      "id": "endurance-run", "type": "RESOURCE", "fits": "ROCKET", "step": 3,
+      "recall": "The full-thrust firing held all the way.",
+      "headline": "One last endurance run",
+      "text": "The engine has passed every firing so far. One long run, twice the burn time, would show where it wears out first.",
+      "options": [
+        {"id": "run", "label": "Run it twice as long", "shows": "50 % chance of about four seasons' gain; a failure costs about a season and a half's.", "cost": 0.5,
+         "outcomes": [
+           {"id": "endured", "weight": 50, "tone": "GOOD", "headline": "It just kept going", "text": "The engine ran twice its burn time and came off the stand scorched but whole. The design is settled.", "effects": [{"kind": "RELIABILITY", "amount": 4}]},
+           {"id": "worn", "weight": 50, "tone": "BAD", "headline": "The chamber burned through", "text": "Late in the run the chamber wall burned through. Now everyone knows where it wears out, and it cost an engine.", "effects": [{"kind": "RELIABILITY", "amount": -1.5}]}
+         ]},
+        {"id": "enough", "label": "It's proven enough", "shows": "Nothing changes.",
+         "outcomes": [
+           {"id": "rested", "weight": 1, "tone": "NEUTRAL", "headline": "Enough testing", "text": "The engine goes into production as it is.", "effects": []}
+         ]}
+      ],
+      "defaultOption": "enough"
+    },
+    {
+      "id": "vacuum-chamber", "type": "RESOURCE", "fits": "PAYLOAD", "step": 1, "followUp": "long-soak",
+      "headline": "A week in the vacuum chamber?",
+      "text": "The test lab has a free slot in its vacuum chamber. A week of airless cold and heat would show how the craft copes in space before it ever goes there.",
+      "options": [
+        {"id": "book", "label": "Book the chamber", "shows": "75 % chance of about two seasons' gain, else about half a season's.", "cost": 0.25,
+         "outcomes": [
+           {"id": "passed", "weight": 75, "tone": "GOOD", "continues": true, "headline": "A week in space, on the ground", "text": "Every system worked through the cold nights and hot days. The lab offers a longer run.", "effects": [{"kind": "RELIABILITY", "amount": 2}]},
+           {"id": "leaked", "weight": 25, "tone": "BAD", "headline": "The chamber leaked", "text": "A seal in the chamber failed on the second day and the test was stopped. Half a week of data is better than none.", "effects": [{"kind": "RELIABILITY", "amount": 0.5}]}
+         ]},
+        {"id": "pass", "label": "Let another team have the slot", "shows": "Nothing changes.",
+         "outcomes": [
+           {"id": "passed-on", "weight": 1, "tone": "NEUTRAL", "headline": "The slot goes elsewhere", "text": "Another team takes the chamber.", "effects": []}
+         ]}
+      ],
+      "defaultOption": "pass"
+    },
+    {
+      "id": "long-soak", "type": "RESOURCE", "fits": "PAYLOAD", "step": 2,
+      "recall": "Last time the craft came through a week in the vacuum chamber.",
+      "headline": "A month in the chamber",
+      "text": "The lab can keep the craft in vacuum for a month: as long as a real mission. It would find the slow faults a week can't.",
+      "options": [
+        {"id": "month", "label": "Keep it in for a month", "shows": "65 % chance of about three seasons' gain; a failure costs about a season's.", "cost": 0.4,
+         "outcomes": [
+           {"id": "month-done", "weight": 65, "tone": "GOOD", "headline": "A month without a fault", "text": "Thirty days of vacuum and the craft is still talking to the ground station.", "effects": [{"kind": "RELIABILITY", "amount": 3}]},
+           {"id": "cooked", "weight": 35, "tone": "BAD", "headline": "A slow leak cooked the electronics", "text": "In the third week a coolant leak ruined the electronics box. It will have to be rebuilt.", "effects": [{"kind": "RELIABILITY", "amount": -1}]}
+         ]},
+        {"id": "stop", "label": "A week was enough", "shows": "Nothing changes.",
+         "outcomes": [
+           {"id": "stopped", "weight": 1, "tone": "NEUTRAL", "headline": "Enough of the chamber", "text": "The craft goes back to the assembly room.", "effects": []}
+         ]}
+      ],
+      "defaultOption": "stop"
+    },
+    {
+      "id": "extra-inspections", "type": "RESOURCE", "fits": "ANY", "step": 1,
+      "headline": "Pay for a second round of inspections?",
+      "text": "The quality office wants every weld and wire checked twice. It would slow nobody down, but the inspectors have to be paid.",
+      "options": [
+        {"id": "inspect", "label": "Pay for the inspections", "shows": "Sure to give about a season's gain.", "cost": 0.2,
+         "outcomes": [
+           {"id": "found-faults", "weight": 1, "tone": "GOOD", "headline": "Faults found before they flew", "text": "The inspectors find a cracked bracket and two loose connectors. Nobody likes being checked, but everyone is glad.", "effects": [{"kind": "RELIABILITY", "amount": 1}]}
+         ]},
+        {"id": "trust", "label": "Trust the first round", "shows": "Nothing changes.",
+         "outcomes": [
+           {"id": "trusted", "weight": 1, "tone": "NEUTRAL", "headline": "One round of checks", "text": "The work goes on as it was.", "effects": []}
+         ]}
+      ],
+      "defaultOption": "trust"
+    },
+
+    {
+      "id": "balloon-tanks-pad", "type": "KNOWLEDGE", "fits": "ROCKET", "step": 1,
+      "headline": "Balloon tanks on the pad",
+      "text": "The night crew let the pressure drop in the rocket's thin-walled tanks while it stood empty on the pad. The chief engineer storms in and asks the room what would have happened.",
+      "stakes": "The answers show nothing in advance. A right answer is worth about three seasons' gain, a wrong one costs about a season's.",
+      "explainers": ["balloon-tanks"],
+      "options": [
+        {"id": "crumple", "label": "It would crumple under its own weight",
+         "outcomes": [{"id": "right", "weight": 1, "tone": "GOOD", "headline": "Exactly right", "text": "The tanks are held up by their own pressure, like a balloon. The chief engineer nods and puts a pressure alarm on every pad.", "effects": [{"kind": "RELIABILITY", "amount": 3}]}]},
+        {"id": "holds", "label": "Nothing: the steel holds it up",
+         "outcomes": [{"id": "wrong-holds", "weight": 1, "tone": "BAD", "headline": "Wrong, and costly", "text": "The steel is thinner than paper in places. The engineers lose a week convincing the night crew to take the pressure seriously.", "effects": [{"kind": "RELIABILITY", "amount": -1}]}]},
+        {"id": "boils", "label": "The fuel would boil away",
+         "outcomes": [{"id": "wrong-boils", "weight": 1, "tone": "BAD", "headline": "Wrong", "text": "The tanks were empty. The real danger goes unaddressed, and a second scare follows the next week.", "effects": [{"kind": "RELIABILITY", "amount": -1}]}]},
+        {"id": "unsure", "label": "I don't know",
+         "outcomes": [{"id": "unsure", "weight": 1, "tone": "NEUTRAL", "headline": "Better ask than guess", "text": "The chief engineer explains it and moves on.", "effects": []}]}
+      ],
+      "defaultOption": "unsure"
+    },
+    {
+      "id": "odds-multiply", "type": "KNOWLEDGE", "fits": "ANY", "step": 1,
+      "headline": "Three valves in a row",
+      "text": "A design review stops at a part with three valves that all have to work, each tested at 95 % reliable. The reviewer asks how reliable the three are together.",
+      "stakes": "The answers show nothing in advance. A right answer is worth about three seasons' gain, a wrong one costs about a season's.",
+      "explainers": ["reliability"],
+      "options": [
+        {"id": "ninety-five", "label": "Still 95 %: each one is",
+         "outcomes": [{"id": "wrong-95", "weight": 1, "tone": "BAD", "headline": "Wrong", "text": "The team signs off a part far weaker than it thinks. It shows up in testing a month later.", "effects": [{"kind": "RELIABILITY", "amount": -1}]}]},
+        {"id": "eighty-six", "label": "About 86 %",
+         "outcomes": [{"id": "right", "weight": 1, "tone": "GOOD", "headline": "Right: the odds multiply", "text": "Three parts that must all work are only as good as the product of their odds. The team redesigns it with two valves in parallel.", "effects": [{"kind": "RELIABILITY", "amount": 3}]}]},
+        {"id": "ninety-nine", "label": "Over 99 %: three are safer than one",
+         "outcomes": [{"id": "wrong-99", "weight": 1, "tone": "BAD", "headline": "Wrong", "text": "That's true of spares that back each other up, not of parts that must all work. The weak spot stays in the design.", "effects": [{"kind": "RELIABILITY", "amount": -1}]}]},
+        {"id": "unsure", "label": "I don't know",
+         "outcomes": [{"id": "unsure", "weight": 1, "tone": "NEUTRAL", "headline": "Better ask than guess", "text": "The reviewer works it through on the blackboard.", "effects": []}]}
+      ],
+      "defaultOption": "unsure"
+    },
+    {
+      "id": "blunt-capsule", "type": "KNOWLEDGE", "fits": "PAYLOAD", "step": 1,
+      "headline": "Why so blunt?",
+      "text": "A visiting official asks why the craft's heat shield is round and blunt instead of pointed like a bullet. The engineers look to you for the answer.",
+      "stakes": "The answers show nothing in advance. A right answer is worth about three seasons' gain, a wrong one costs about a season's.",
+      "explainers": ["heat-shields"],
+      "options": [
+        {"id": "pointed", "label": "Pointed would cut through the air and heat up less",
+         "outcomes": [{"id": "wrong-pointed", "weight": 1, "tone": "BAD", "headline": "Wrong", "text": "A pointed shape keeps the hot shock wave right against the skin. The official leaves with the wrong idea and asks for a redesign study.", "effects": [{"kind": "RELIABILITY", "amount": -1}]}]},
+        {"id": "shock", "label": "The blunt shape pushes a shock wave out ahead and keeps the heat off",
+         "outcomes": [{"id": "right", "weight": 1, "tone": "GOOD", "headline": "Right", "text": "Most of the heat stays in the air the shock wave pushes aside. The official is impressed, and so are the engineers.", "effects": [{"kind": "RELIABILITY", "amount": 3}]}]},
+        {"id": "room", "label": "It leaves more room inside",
+         "outcomes": [{"id": "wrong-room", "weight": 1, "tone": "BAD", "headline": "Not the reason", "text": "Room is a side effect. The engineers spend an afternoon setting the record straight.", "effects": [{"kind": "RELIABILITY", "amount": -1}]}]},
+        {"id": "unsure", "label": "I don't know",
+         "outcomes": [{"id": "unsure", "weight": 1, "tone": "NEUTRAL", "headline": "The engineers explain", "text": "The chief designer gives the official a short talk on shock waves.", "effects": []}]}
+      ],
+      "defaultOption": "unsure"
+    },
+
+    {
+      "id": "night-shift", "type": "AMBIGUOUS", "fits": "ANY", "step": 1,
+      "headline": "The night shift wants a say",
+      "text": "The technicians on the night shift say nobody asks them anything, though they build most of the hardware. They want a meeting with the design team. The foreman says they should mind their benches.",
+      "stakes": "What each answer leads to can't be told in advance.",
+      "options": [
+        {"id": "hear", "label": "Hear them out",
+         "outcomes": [
+           {"id": "good-ideas", "weight": 60, "tone": "GOOD", "favouredBy": "EASY_GOING", "headline": "They had good ideas", "text": "The technicians bring a list of small fixes that make the hardware easier to build right. The design team takes most of them.", "effects": [{"kind": "RELIABILITY", "amount": 1.5}, {"kind": "MORALE", "amount": 6}]},
+           {"id": "grievances", "weight": 40, "tone": "BAD", "headline": "A night of grievances", "text": "The meeting turns into a list of complaints about pay and canteen food. Nothing useful comes of it, and the foreman feels undermined.", "effects": [{"kind": "MORALE", "amount": -4}]}
+         ]},
+        {"id": "foreman", "label": "Back the foreman",
+         "outcomes": [
+           {"id": "order", "weight": 60, "tone": "NEUTRAL", "headline": "Order kept", "text": "The night shift goes back to work. It's quieter than before.", "effects": []},
+           {"id": "sulk", "weight": 40, "tone": "BAD", "favouredBy": "ABRASIVE", "headline": "A sullen night shift", "text": "The technicians do exactly what they are told and nothing more. Small mistakes creep in.", "effects": [{"kind": "RELIABILITY", "amount": -0.5}, {"kind": "MORALE", "amount": -5}]}
+         ]},
+        {"id": "bonus", "label": "Promise a bonus", "shows": "Costs a little.", "cost": 0.1,
+         "outcomes": [
+           {"id": "pleased", "weight": 70, "tone": "GOOD", "headline": "A bonus goes a long way", "text": "The night shift takes the money and the hint. The hardware coming off the benches is tidier.", "effects": [{"kind": "RELIABILITY", "amount": 0.5}, {"kind": "MORALE", "amount": 4}]},
+           {"id": "insulted", "weight": 30, "tone": "BAD", "favouredBy": "PERFECTIONIST", "headline": "They wanted to be heard, not paid", "text": "The technicians feel bought off. The design team hears about it for weeks.", "effects": [{"kind": "MORALE", "amount": -3}]}
+         ]}
+      ],
+      "defaultOption": "foreman"
+    },
+    {
+      "id": "credit", "type": "AMBIGUOUS", "fits": "ANY", "step": 1,
+      "headline": "Who gets the credit?",
+      "text": "A fix that solved a stubborn problem came out of a late-night argument between two engineers. The agency magazine wants a name for its cover story.",
+      "stakes": "What each answer leads to can't be told in advance.",
+      "options": [
+        {"id": "both", "label": "Name the whole team",
+         "outcomes": [
+           {"id": "team-proud", "weight": 65, "tone": "GOOD", "favouredBy": "EASY_GOING", "headline": "The whole team on the cover", "text": "The photo of the team hangs in every office. People talk about the next fix already.", "effects": [{"kind": "MORALE", "amount": 6}]},
+           {"id": "diluted", "weight": 35, "tone": "BAD", "favouredBy": "AMBITIOUS", "headline": "Credit spread thin", "text": "The one who really cracked it feels passed over. The mood on the team sours.", "effects": [{"kind": "MORALE", "amount": -4}]}
+         ]},
+        {"id": "nobody", "label": "Keep it out of the magazine",
+         "outcomes": [
+           {"id": "quiet", "weight": 1, "tone": "NEUTRAL", "headline": "No story", "text": "The fix goes into the drawings and nobody's name goes into print.", "effects": []}
+         ]},
+        {"id": "lead", "label": "Name the team's lead engineer",
+         "outcomes": [
+           {"id": "lead-proud", "weight": 50, "tone": "GOOD", "headline": "A star is made", "text": "The lead engineer is fired up by the attention and drives the team hard.", "effects": [{"kind": "RELIABILITY", "amount": 1}]},
+           {"id": "resentment", "weight": 50, "tone": "BAD", "favouredBy": "ABRASIVE", "headline": "Resentment", "text": "The others know who really did it. The team stops talking at lunch.", "effects": [{"kind": "MORALE", "amount": -6}]}
+         ]}
+      ],
+      "defaultOption": "nobody"
+    },
+
+    {
+      "id": "who-oversees-firing", "type": "OVERSEE", "fits": "ROCKET", "step": 1,
+      "headline": "Who will oversee the test firing?",
+      "text": "The test stand is booked for a firing of the stage, but its usual test conductor is ill. Somebody has to run the countdown, read the gauges and call the abort if it comes to that.",
+      "stakes": "The better the engineer in this component's skill, the better the chance of a clean run.",
+      "options": [
+        {"id": "assign", "label": "Put an engineer in charge", "takes": "OVERSEER", "odds": "SKILL",
+         "outcomes": [
+           {"id": "clean", "weight": 1, "tone": "GOOD", "headline": "{name} ran a clean test", "text": "{name} called every step on time and caught a sticking valve before ignition. The firing told the team what it needed.", "effects": [{"kind": "RELIABILITY", "amount": 2}, {"kind": "SKILL", "amount": 2}]},
+           {"id": "aborted", "weight": 1, "tone": "BAD", "headline": "{name} aborted too late", "text": "{name} hesitated over a warning light, and the engine ran rough for two seconds too long. Parts of the stand need replacing.", "effects": [{"kind": "RELIABILITY", "amount": -0.5}]}
+         ]},
+        {"id": "postpone", "label": "Nobody, the test is put off", "shows": "Nothing changes.",
+         "outcomes": [{"id": "postponed", "weight": 1, "tone": "NEUTRAL", "headline": "The firing is put off", "text": "The stand stays booked for later.", "effects": []}]}
+      ],
+      "defaultOption": "postpone"
+    },
+    {
+      "id": "who-signs-vibration", "type": "OVERSEE", "fits": "ANY", "step": 1,
+      "headline": "Who signs off the vibration test?",
+      "text": "The shake table is ready to rattle the hardware the way a launch would. Somebody experienced has to decide how hard to shake it and what counts as a pass.",
+      "stakes": "The better the engineer in this component's skill, the better the chance the test finds the weak spots.",
+      "options": [
+        {"id": "assign", "label": "Put an engineer in charge", "takes": "OVERSEER", "odds": "SKILL",
+         "outcomes": [
+           {"id": "found", "weight": 1, "tone": "GOOD", "headline": "{name} found the weak spot", "text": "{name} ran the table hard enough to shake a bracket loose on the ground instead of in flight.", "effects": [{"kind": "RELIABILITY", "amount": 1.5}, {"kind": "SKILL", "amount": 2}]},
+           {"id": "broken", "weight": 1, "tone": "BAD", "headline": "{name} shook it to pieces", "text": "{name} set the table too hard and broke a test unit that was fine.", "effects": [{"kind": "RELIABILITY", "amount": -0.5}]}
+         ]},
+        {"id": "standard", "label": "Run the standard test", "shows": "Sure to give about half a season's gain.",
+         "outcomes": [{"id": "standard", "weight": 1, "tone": "NEUTRAL", "headline": "A standard shake", "text": "The book test passes without surprises.", "effects": [{"kind": "RELIABILITY", "amount": 0.5}]}]}
+      ],
+      "defaultOption": "standard"
+    },
+
+    {
+      "id": "freeze-design", "type": "TRADEOFF", "fits": "ANY", "step": 1,
+      "headline": "Freeze the design?",
+      "text": "The chief designer wants to stop changing the drawings and build what's there. The engineers say the open issues will cost something now, but the work would go faster after.",
+      "options": [
+        {"id": "freeze", "label": "Freeze the design", "shows": "About a season's gain lost now, then R&D 30 % faster for four seasons.",
+         "outcomes": [{"id": "frozen", "weight": 1, "tone": "NEUTRAL", "headline": "The design is frozen", "text": "The open issues are written up and set aside. The workshops start building to one set of drawings.", "effects": [{"kind": "RELIABILITY", "amount": -1}, {"kind": "RD_FACTOR", "amount": 1.3, "seasons": 4}]}]},
+        {"id": "redesign", "label": "Start a redesign", "shows": "About a season and a half's gain lost now, then R&D 40 % faster for six seasons.",
+         "outcomes": [{"id": "redesigned", "weight": 1, "tone": "NEUTRAL", "headline": "Back to the drawing board", "text": "The team throws out the weak parts of the design and starts them again, properly.", "effects": [{"kind": "RELIABILITY", "amount": -1.5}, {"kind": "RD_FACTOR", "amount": 1.4, "seasons": 6}]}]},
+        {"id": "keep", "label": "Keep refining", "shows": "Nothing changes.",
+         "outcomes": [{"id": "kept", "weight": 1, "tone": "NEUTRAL", "headline": "Refining as before", "text": "The drawings keep changing week by week.", "effects": []}]}
+      ],
+      "defaultOption": "keep"
+    },
+    {
+      "id": "overtime-sprint", "type": "TRADEOFF", "fits": "ANY", "step": 1,
+      "headline": "A sprint on overtime?",
+      "text": "The team could work evenings and weekends for a while. The hardware would move faster; the people would get tired.",
+      "options": [
+        {"id": "sprint", "label": "Go on overtime", "shows": "R&D 50 % faster for two seasons; the team's morale drops.",
+         "outcomes": [{"id": "sprinted", "weight": 1, "tone": "NEUTRAL", "headline": "Lights on all night", "text": "The workshop never closes. The work races ahead, and the coffee runs out by Thursday.", "effects": [{"kind": "RD_FACTOR", "amount": 1.5, "seasons": 2}, {"kind": "MORALE", "amount": -8}]}]},
+        {"id": "normal", "label": "Keep normal hours", "shows": "Nothing changes.",
+         "outcomes": [{"id": "normal", "weight": 1, "tone": "NEUTRAL", "headline": "Normal hours", "text": "The team goes home on time.", "effects": []}]}
+      ],
+      "defaultOption": "normal"
+    },
+
+    {
+      "id": "shutdown-second-41", "type": "DIAGNOSIS", "fits": "ROCKET", "step": 1,
+      "headline": "Shutdown at second 41",
+      "text": "On the last test firing the engine shut itself down 41 seconds into a 60-second run. The engineers have three clues and three suspects.",
+      "clues": [
+        {"kind": "Telemetry", "icon": "clue_trace", "text": "Chamber pressure fell steadily for two seconds before the shutdown."},
+        {"kind": "Telemetry", "icon": "clue_trace", "text": "Turbopump vibration stayed normal the whole run."},
+        {"kind": "Technician's note", "icon": "clue_note", "text": "The igniter fired twice at the start before the engine lit."}
+      ],
+      "stakes": "The right cause is worth about two seasons' gain; chasing the wrong one costs a season's.",
+      "options": [
+        {"id": "bearing", "label": "A failing turbopump bearing",
+         "outcomes": [{"id": "wrong-bearing", "weight": 1, "tone": "BAD", "headline": "Not the bearing", "text": "The pump comes apart in perfect shape. The vibration data said so all along.", "effects": [{"kind": "RELIABILITY", "amount": -1}]}]},
+        {"id": "valve", "label": "The fuel valve closing early",
+         "outcomes": [{"id": "right", "weight": 1, "tone": "GOOD", "headline": "The valve it was", "text": "A spring in the fuel valve was too weak and let it drift shut. Falling pressure, then shutdown: it fits. A stiffer spring fixes it.", "effects": [{"kind": "RELIABILITY", "amount": 2}]}]},
+        {"id": "igniter", "label": "Damage from the double ignition",
+         "outcomes": [{"id": "wrong-igniter", "weight": 1, "tone": "BAD", "headline": "A red herring", "text": "The double ignition was harmless; the engine lit fine. The team loses a season rebuilding an igniter that worked.", "effects": [{"kind": "RELIABILITY", "amount": -1}]}]},
+        {"id": "wait", "label": "Wait for more data",
+         "outcomes": [{"id": "waited", "weight": 1, "tone": "NEUTRAL", "headline": "More data first", "text": "The fault stays open until the next firing.", "effects": []}]}
+      ],
+      "defaultOption": "wait"
+    },
+    {
+      "id": "battery-in-vacuum", "type": "DIAGNOSIS", "fits": "PAYLOAD", "step": 1,
+      "headline": "The battery dies in the chamber",
+      "text": "In the vacuum chamber the craft's power fails after a few hours. On the bench it runs for days. The engineers have four clues.",
+      "clues": [
+        {"kind": "Bench test", "icon": "clue_note", "text": "The battery holds its voltage for days at room temperature."},
+        {"kind": "Telemetry", "icon": "clue_trace", "text": "In the chamber the voltage sags after the third hour, as the craft cools."},
+        {"kind": "Inspection", "icon": "clue_inspect", "text": "The heater's thermostat is mounted right beside the warm transmitter."},
+        {"kind": "Telemetry", "icon": "clue_trace", "text": "The transmitter draws its normal current throughout."}
+      ],
+      "stakes": "The right cause is worth about two seasons' gain; chasing the wrong one costs a season's.",
+      "explainers": ["power"],
+      "options": [
+        {"id": "cells", "label": "Faulty battery cells",
+         "outcomes": [{"id": "wrong-cells", "weight": 1, "tone": "BAD", "headline": "The cells were fine", "text": "New cells fail the same way. The bench test had already cleared them.", "effects": [{"kind": "RELIABILITY", "amount": -1}]}]},
+        {"id": "cold", "label": "The battery gets too cold",
+         "outcomes": [{"id": "right", "weight": 1, "tone": "GOOD", "headline": "It was freezing", "text": "The thermostat sat by the warm transmitter, so it never switched the heater on, and the cold battery gave out. Moving it fixes the craft.", "effects": [{"kind": "RELIABILITY", "amount": 2}]}]},
+        {"id": "radio", "label": "The radio drains it",
+         "outcomes": [{"id": "wrong-radio", "weight": 1, "tone": "BAD", "headline": "Not the radio", "text": "The radio's current was normal all along. A redesigned transmitter changes nothing.", "effects": [{"kind": "RELIABILITY", "amount": -1}]}]},
+        {"id": "wait", "label": "Wait for more data",
+         "outcomes": [{"id": "waited", "weight": 1, "tone": "NEUTRAL", "headline": "More data first", "text": "The fault stays open until the next chamber run.", "effects": []}]}
+      ],
+      "defaultOption": "wait"
+    },
+
+    {
+      "id": "altitude-chamber", "type": "OPPORTUNITY", "fits": "ANY", "step": 1,
+      "headline": "The air force lends its altitude chamber",
+      "text": "The air force offers its high-altitude test chamber for a month. The catch: it wants one of the team's engineers on loan for two seasons in return.",
+      "stakes": "This turn only.",
+      "options": [
+        {"id": "accept", "label": "Accept, and send an engineer", "takes": "SECONDED", "shows": "About three seasons' gain at once; the engineer is away for two seasons.",
+         "outcomes": [{"id": "accepted", "weight": 1, "tone": "GOOD", "headline": "A month at altitude", "text": "The chamber shows what a month of tests at home never could. {name} packs a bag for the air base.", "effects": [{"kind": "RELIABILITY", "amount": 3}, {"kind": "UNAVAILABLE", "seasons": 2}]}]},
+        {"id": "decline", "label": "Decline", "shows": "Nothing changes.",
+         "outcomes": [{"id": "declined", "weight": 1, "tone": "NEUTRAL", "headline": "Thanks, but no", "text": "The chamber goes to someone else.", "effects": []}]}
+      ],
+      "defaultOption": "decline"
+    },
+    {
+      "id": "untested-part", "type": "OPPORTUNITY", "fits": "ANY", "step": 1,
+      "headline": "A cheaper part, untested",
+      "text": "A new supplier offers a part at a third of the usual price, available now. Nobody has flown it yet.",
+      "stakes": "This turn only.",
+      "options": [
+        {"id": "take", "label": "Take the cheaper part", "shows": "Saves money; 60 % chance it works out, else about a season and a half's gain lost.",
+         "outcomes": [
+           {"id": "fine", "weight": 60, "tone": "GOOD", "headline": "It works as well as the old one", "text": "The new part passes every test, and the savings go back into the budget.", "effects": [{"kind": "FUNDS", "amount": 0.3}]},
+           {"id": "dud", "weight": 40, "tone": "BAD", "headline": "You get what you pay for", "text": "The part fails its third test. The old supplier has to be called back, at the old price and with a delay.", "effects": [{"kind": "FUNDS", "amount": 0.3}, {"kind": "RELIABILITY", "amount": -1.5}]}
+         ]},
+        {"id": "stay", "label": "Stay with the usual supplier", "shows": "Nothing changes.",
+         "outcomes": [{"id": "stayed", "weight": 1, "tone": "NEUTRAL", "headline": "The usual supplier", "text": "The usual parts arrive at the usual price.", "effects": []}]}
+      ],
+      "defaultOption": "stay"
+    },
+
+    {
+      "id": "pair-up", "type": "PAIRING", "fits": "ANY", "step": 1,
+      "headline": "Who works with whom?",
+      "text": "A tricky interface between two subsystems needs two engineers who will talk to each other. Pick a pair; how well they get on decides how it goes.",
+      "stakes": "A good pair is worth about two seasons' gain and grows closer; a bad one clashes.",
+      "options": [
+        {"id": "pair", "label": "Put two engineers on it", "takes": "PAIR", "odds": "RAPPORT",
+         "outcomes": [
+           {"id": "clicked", "weight": 1, "tone": "GOOD", "headline": "{name} and {second} cracked it", "text": "{name} and {second} worked it out over two long evenings and came out friends.", "effects": [{"kind": "RELIABILITY", "amount": 2}, {"kind": "RAPPORT", "amount": 15}]},
+           {"id": "clashed", "weight": 1, "tone": "BAD", "headline": "{name} and {second} clashed", "text": "{name} and {second} argued over every drawing. The interface is still a mess, and so is their working relationship.", "effects": [{"kind": "RELIABILITY", "amount": -0.5}, {"kind": "RAPPORT", "amount": -15}]}
+         ]},
+        {"id": "leave", "label": "Leave the team as it is", "shows": "Nothing changes.",
+         "outcomes": [{"id": "left", "weight": 1, "tone": "NEUTRAL", "headline": "As it was", "text": "The interface is worked on in the usual way.", "effects": []}]}
+      ],
+      "defaultOption": "leave"
+    },
+    {
+      "id": "mentor-pair", "type": "PAIRING", "fits": "ANY", "step": 1,
+      "headline": "An old hand and a new one",
+      "text": "The training office suggests pairing two engineers for a season so one can learn from the other. It only works if they get along.",
+      "stakes": "A good pair is worth about a season's gain and grows closer; a bad one clashes.",
+      "options": [
+        {"id": "pair", "label": "Pair two engineers", "takes": "PAIR", "odds": "RAPPORT",
+         "outcomes": [
+           {"id": "learned", "weight": 1, "tone": "GOOD", "headline": "{second} learned a lot from {name}", "text": "The two spend the season side by side, and the questions get better every week.", "effects": [{"kind": "RELIABILITY", "amount": 1}, {"kind": "RAPPORT", "amount": 20}]},
+           {"id": "stifled", "weight": 1, "tone": "BAD", "headline": "{name} and {second} didn't get on", "text": "One lectured, the other stopped listening. They ask to be split up.", "effects": [{"kind": "RAPPORT", "amount": -15}]}
+         ]},
+        {"id": "leave", "label": "No pairing", "shows": "Nothing changes.",
+         "outcomes": [{"id": "left", "weight": 1, "tone": "NEUTRAL", "headline": "No pairing", "text": "Everyone works as before.", "effects": []}]}
+      ],
+      "defaultOption": "leave"
+    },
+
+    {
+      "id": "rival-engine", "type": "INTEL", "fits": "ROCKET", "step": 1,
+      "headline": "The rival's engine runs cooler",
+      "text": "The Intelligence Office reports that the rival agency cools its engine by running fuel through the chamber walls before burning it. Our engineers could try the same.",
+      "stakes": "If the tip is right, about three seasons' gain; if it's wrong, about a season's lost.",
+      "options": [
+        {"id": "adopt", "label": "Adopt their approach", "odds": "INTEL",
+         "outcomes": [
+           {"id": "worked", "weight": 1, "tone": "GOOD", "headline": "The tip was good", "text": "Fuel through the walls keeps the chamber cool enough to run longer and harder. The engineers wonder why they didn't think of it.", "effects": [{"kind": "RELIABILITY", "amount": 3}]},
+           {"id": "misread", "weight": 1, "tone": "BAD", "headline": "The tip was garbled", "text": "The report mixed up two different engines. The team loses a season on a design that was never going to work.", "effects": [{"kind": "RELIABILITY", "amount": -1}]}
+         ]},
+        {"id": "ignore", "label": "Ignore it", "shows": "Nothing changes.",
+         "outcomes": [{"id": "ignored", "weight": 1, "tone": "NEUTRAL", "headline": "Our own way", "text": "The report goes in a drawer.", "effects": []}]}
+      ],
+      "defaultOption": "ignore"
+    },
+    {
+      "id": "rival-insulation", "type": "INTEL", "fits": "PAYLOAD", "step": 1,
+      "headline": "The rival's craft stays warm",
+      "text": "The Intelligence Office says the rival wraps its craft in layers of thin metallised film to keep its warmth in. Our engineers could copy it.",
+      "stakes": "If the tip is right, about three seasons' gain; if it's wrong, about a season's lost.",
+      "options": [
+        {"id": "adopt", "label": "Adopt their approach", "odds": "INTEL",
+         "outcomes": [
+           {"id": "worked", "weight": 1, "tone": "GOOD", "headline": "Wrapped up warm", "text": "Layers of film keep the craft's temperature steady through the night side. The tip was right.", "effects": [{"kind": "RELIABILITY", "amount": 3}]},
+           {"id": "misread", "weight": 1, "tone": "BAD", "headline": "Wrong film, wrong place", "text": "The film the report described traps heat where it shouldn't. The electronics overheat in testing.", "effects": [{"kind": "RELIABILITY", "amount": -1}]}
+         ]},
+        {"id": "ignore", "label": "Ignore it", "shows": "Nothing changes.",
+         "outcomes": [{"id": "ignored", "weight": 1, "tone": "NEUTRAL", "headline": "Our own way", "text": "The report goes in a drawer.", "effects": []}]}
+      ],
+      "defaultOption": "ignore"
+    }
+  ]
+}

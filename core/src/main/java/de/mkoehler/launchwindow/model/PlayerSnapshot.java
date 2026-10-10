@@ -64,6 +64,12 @@ public class PlayerSnapshot {
     private List<String> salaryAdjustedGroups = new ArrayList<>();
     private List<String> usedPressStoryIds = new ArrayList<>();
     private List<String> usedEventStoryIds = new ArrayList<>();
+    private PendingDecision pendingDecision;
+    private boolean decisionPaused;
+    private int lastDecisionTurn = -1;
+    private List<String> usedDecisionIds = new ArrayList<>();
+    private String followUpDecisionId;
+    private String followUpComponentId;
     private List<HiringPoolBonus> hiringPoolBonuses = new ArrayList<>();
     private List<Rapport> rapports = new ArrayList<>();
     private Map<Building, Integer> buildingLevels = new LinkedHashMap<>();
@@ -663,6 +669,119 @@ public class PlayerSnapshot {
     public void setUsedEventStoryIds(List<String> usedEventStoryIds) {
         Objects.requireNonNull(usedEventStoryIds, "usedEventStoryIds must not be null");
         this.usedEventStoryIds = new ArrayList<>(usedEventStoryIds);
+    }
+
+    /**
+     * Returns the R&amp;D decision offered at the last resolution, open or decided this turn
+     * ({@code ui-spec.md} component 26).
+     *
+     * @return the decision, or {@code null} for none
+     */
+    public PendingDecision getPendingDecision() {
+        return pendingDecision;
+    }
+
+    /**
+     * Sets the R&amp;D decision.
+     *
+     * @param pendingDecision the decision, or {@code null} for none
+     */
+    public void setPendingDecision(PendingDecision pendingDecision) {
+        this.pendingDecision = pendingDecision;
+    }
+
+    /**
+     * Returns whether new decisions wait for the player to act: set when a decision lapsed, cleared by
+     * any action that takes effect, so an absent player doesn't collect defaults.
+     *
+     * @return whether paused
+     */
+    public boolean isDecisionPaused() {
+        return decisionPaused;
+    }
+
+    /**
+     * Sets whether new decisions wait for the player to act.
+     *
+     * @param decisionPaused whether paused
+     */
+    public void setDecisionPaused(boolean decisionPaused) {
+        this.decisionPaused = decisionPaused;
+    }
+
+    /**
+     * Returns the turn the last decision was offered on.
+     *
+     * @return the turn, -1 for never
+     */
+    public int getLastDecisionTurn() {
+        return lastDecisionTurn;
+    }
+
+    /**
+     * Sets the turn the last decision was offered on.
+     *
+     * @param lastDecisionTurn the turn, -1 for never
+     */
+    public void setLastDecisionTurn(int lastDecisionTurn) {
+        this.lastDecisionTurn = lastDecisionTurn;
+    }
+
+    /**
+     * Returns the decisions this player has been offered, by id, so none repeats until every one of
+     * its kind has come. The live list is returned.
+     *
+     * @return the ids, oldest first, never {@code null}
+     */
+    public List<String> getUsedDecisionIds() {
+        return usedDecisionIds;
+    }
+
+    /**
+     * Sets the decisions this player has been offered.
+     *
+     * @param usedDecisionIds the ids
+     * @throws NullPointerException if {@code usedDecisionIds} is {@code null}
+     */
+    public void setUsedDecisionIds(List<String> usedDecisionIds) {
+        Objects.requireNonNull(usedDecisionIds, "usedDecisionIds must not be null");
+        this.usedDecisionIds = new ArrayList<>(usedDecisionIds);
+    }
+
+    /**
+     * Returns the story arc's next step, waiting for a quiet season: the decision's id.
+     *
+     * @return the id, or {@code null} for none
+     */
+    public String getFollowUpDecisionId() {
+        return followUpDecisionId;
+    }
+
+    /**
+     * Sets the story arc's next step.
+     *
+     * @param followUpDecisionId the id, or {@code null} for none
+     */
+    public void setFollowUpDecisionId(String followUpDecisionId) {
+        this.followUpDecisionId = followUpDecisionId;
+    }
+
+    /**
+     * Returns the component the story arc's next step is about.
+     *
+     * @return the component, or {@code null}
+     */
+    public String getFollowUpComponentId() {
+        return followUpComponentId;
+    }
+
+    /**
+     * Sets the component the story arc's next step is about.
+     *
+     * @param followUpComponentId the component, or {@code null}
+     */
+    public void setFollowUpComponentId(String followUpComponentId) {
+        this.followUpComponentId = followUpComponentId;
     }
 
     /**
