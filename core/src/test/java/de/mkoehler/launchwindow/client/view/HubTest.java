@@ -55,15 +55,15 @@ class HubTest {
     }
 
     /**
-     * The y axis flips against the cropped height (1080), not the file's 1088: NASA's VAB label
-     * sits where the mockup puts it, about 347 px from the top.
+     * The y axis flips against the art's height (1080): NASA's VAB label sits on the VAB of the
+     * 2026-10-10 art, at the left, about 348 px from the top.
      */
     @Test
     void yFlipsAgainstTheCroppedHeight() throws IOException {
         Hub.Hotspot vab = hotspots(Archetype.NASA).stream().filter(s -> s.place() == Hub.Place.VAB).findFirst()
             .orElseThrow();
-        assertEquals(1035, vab.labelX(), 10);
-        assertEquals(Hub.ART_HEIGHT - 355, vab.labelY(), 10);
+        assertEquals(312, vab.labelX(), 10);
+        assertEquals(Hub.ART_HEIGHT - 348, vab.labelY(), 10);
         assertFalse(vab.contains(10, 10));
     }
 
