@@ -80,6 +80,9 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   configurations gated on a goal. Its components have blueprint drawings in the turn report
   (2026-10-09), and every program, component and real flight has a history note (2026-10-09). All
   its art is in, the last rocket programs (Juno II, Atlas) on 2026-10-09.
+- **R&D decisions are built** (2026-10-10, `ui-spec.md` component 26, `design.md` §5): choices about a
+  component under R&D, offered mostly in lulls, decided at once (`DecideAction`, `rules.RdDecisions`), ten
+  types in `assets/content/decisions.json`. Rebuild client and server together before the play test.
 - **Random events tell stories** (2026-10-10, `design.md` §2.7(d)): 105 in `event-stories.json`, sized per
   event from the playouts, no repeats until an event's stories have all run.
 - **Looking ahead is built** (the user's idea, 2026-10-10, `ui-spec.md` component 25): R&D milestones with
@@ -200,6 +203,7 @@ mvn -pl dev-tools compile exec:java -DmainClass=de.mkoehler.launchwindow.devtool
 - **Bot playouts:** `mvn -pl dev-tools compile exec:java -DmainClass=de.mkoehler.launchwindow.devtools.analysis.ContentPackPlayouts`
   (`-Dexec.args=standard` for the full pack, which plays the Moon race; add `ahead` for the bot that
   works ahead or `side` for the one that also flies side missions, `-Dexec.args="standard side"`)
+  (`-Dexec.args="standard side decisions"` plays with the R&D decisions and reports how often they come)
   (also `PersonnelLifecyclePlayouts`, `CareerCurves`, `StateSizes` (it takes the pack too), `IntelligencePlayouts`, `RaceLulls` (the Moon race's lulls with R&D tuned); `design.md` §3.10).
 - **Releasing** (ported from Robot-Rampage 2026-10-06; its and StarWars' CLAUDE.md hold the
   gotchas):
@@ -282,7 +286,10 @@ cd assets && java --enable-native-access=ALL-UNNAMED -cp "../lwjgl3/target/class
 - `strings.json` is deliberately outside `ContentPackLoader.FILES` (not hashed, not frozen).
   Never add it there. `ContentStringsTest` fails until every new id has text. The same goes for
   `assets/content/space-race-news.json` (`SpaceRaceNewsTest`), `pr-press.json` (`PrDutyTest`) and
-  `event-stories.json` (`EventStoriesTest`, which holds each event to its sized count);
+  `event-stories.json` (`EventStoriesTest`, which holds each event to its sized count), and
+  `decisions.json` (`DecisionsTest`; saved state keeps its ids too). Core's tests have no assets on the
+  classpath, so `Decisions.standard()` is empty there: tests and tools set it with `Decisions.setStandard`
+  (and put `EMPTY` back after);
   turn reports store their story ids, so never rename or reuse one.
 - `cancelsGoalIds` means "also credits, with prestige" (`rules.GoalCascade`), not "makes
   unearnable".

@@ -2285,7 +2285,10 @@ bot.
     9. *Intelligence tip:* adopt a rival's approach, right more often the higher the Intelligence
        Office's level.
     10. *Story arcs:* a good outcome opens a follow-up in a later quiet season, with higher stakes.
-  - **Specified** as `ui-spec.md` component 26 (2026-10-10), with G11 for the server; next a mockup.
+  - **Specified** as `ui-spec.md` component 26 (2026-10-10), with G11 for the server; mocked up the same
+    day (canvas `Launch Window — R&D decisions`) and **built** the same day: all ten types, 23 decisions,
+    the rules, the client and the bots ("as built" in component 26). Next: the play test, then the pools
+    grown by type, and the balance (decisions shorten the bots' Moon race by about 13 seasons).
   - **Build:** the type a field in a content file (story, options, what shows in advance, effect,
     default), one resolver per type. Variety isn't a worry: other lull ideas will join it (user).
 

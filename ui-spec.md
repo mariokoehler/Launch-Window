@@ -1001,6 +1001,45 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
     90 % in a lull, low otherwise), effect sizes in seasons of R&D, costs as a share of a season's
     funding, two or three events per type for the first build.
 
+    *As built (2026-10-10, from the canvas `Launch Window — R&D decisions`; the mockup's choices adopted):*
+    - **Rules** (`rules.RdDecisions`, `RdDecisionsTest`): a new `DECISIONS` phase after Careers settles last
+      turn's decision (the default if still open, which sets `decisionPaused` until any action takes
+      effect) and may offer one. A lull is nothing in flight and either a component with engineers more
+      than a season from 60 % or `WAITING_SEASONS` (2) seasons and more since the last flight; then the
+      chance is `LULL_CHANCE` (0.85), else 0.05 plus 0.02 a quiet season up to 0.35, halved while a mission
+      flies or right after a decision. The decision goes on the component furthest from 60 %; a story
+      arc's next step waits for a lull. Offer and outcome draw from their own salted seeds: the playouts
+      without decisions are unchanged to the digit. The seed never reaches the client
+      (`Personality.forClient`). `DecideAction` (Kryo-registered last) refuses `NO_TEAM` when nobody works
+      on the component (effects are sized from the team), and a decision whose component goes inactive
+      during the turn is dropped silently.
+    - **Odds:** an overseer's chance is 0.25 + 0.007 x skill (0.3 to 0.95); a pair's 0.5 + rapport / 200
+      (0.15 to 0.9); an intelligence tip's 0.35 + 0.15 x the office's level (to 0.9); a trait an outcome
+      names (`favouredBy`) doubles its weight when anyone involved has it, revealed or not. Reliability
+      effects are seasons of `ResearchPlanning.expectedSeasonGain`, at least 1 point a season.
+    - **Deferred:** the trade-off's lower cap (the mockup's "cap 3 points lower"): the trade-offs use an
+      R&D factor on the component for some seasons (`OwnedMissionComponent.rdFactor`, read by the season
+      pass and the projection) and a reliability change now instead.
+    - **Content:** `assets/content/decisions.json`, 23 decisions: 6 resource (two arcs, the test firings of
+      three steps and the vacuum chamber of two), 3 knowledge (balloon tanks, the odds multiply, blunt heat
+      shields, each linking its explainer), 2 of every other type. Outside the hashed pack; ids are kept
+      in saved state and reports, never reused. `DecisionsTest` holds it to its rules.
+    - **Client:** `DecisionBanner` in the card (`RndCards`), the board putting that card first; the
+      trade-off preview is a gold line under each option ("With this: 60 % in ~3 seasons (now ~2) · the cap
+      in ~25 (now ~32)") rather than a hover state on the bar; who-oversees-it lists the idle engineers as
+      the options with their chance, engineers in advanced or expert training muted with a pull-out link;
+      the seconded and pair pickers sit in the confirmation (900 px wide for a pair). The fold is
+      client-only and forgotten on restart. The report's seventh glance cell and Decision card show on the
+      latest report only; its news gets a line for last turn's decision (neutral when nothing changed).
+      Hub: the gold dot upper left on the VAB (rocket) or the SET Centre (payload). Icons `clue_trace`,
+      `clue_note`, `clue_inspect` (the canvas's own drawings) in `make_ui_icons.py`. Help topic
+      "decisions" on the R&D boards.
+    - **Playouts** (`ContentPackPlayouts standard side decisions`, the bot taking a random option): about
+      80 decisions a game, offered in 65 % of the seasons without a launch and 38 % of those with one,
+      covering 60 % of the median game's longest quiet stretch. Being mostly net positive, they shorten
+      the Moon race from 151 to 138 seasons: a balance signal for the play test.
+    - Shots `decision-*.png`.
+
 ---
 
 ## 3. Screen flow *(decided)*
