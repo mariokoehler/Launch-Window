@@ -20,6 +20,8 @@ import de.mkoehler.launchwindow.client.view.Concepts;
 import de.mkoehler.launchwindow.client.view.BodyMap;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.Help;
+import de.mkoehler.launchwindow.client.view.Missions;
+import de.mkoehler.launchwindow.client.view.Outlook;
 import de.mkoehler.launchwindow.client.view.PayloadRnd;
 import de.mkoehler.launchwindow.client.view.Programs;
 import de.mkoehler.launchwindow.content.CelestialBody;
@@ -146,7 +148,15 @@ public final class ProgramDetailsScreen extends ChromeScreen {
             for (String goal : program.requiredGoalIds()) {
                 badges.add(goalBadge(goal, state)).width(110f).top().padRight(Theme.SPACE_5);
             }
-            card.add(badges).padBottom(22f).row();
+            List<String> missing = Programs.missingGoals(program, state);
+            card.add(badges).padBottom(missing.isEmpty() ? 22f : Theme.SPACE_3).row();
+            // Where each missing goal can be earned (the user's request, 2026-10-10).
+            for (int i = 0; i < missing.size(); i++) {
+                String goal = missing.get(i);
+                card.add(ui.paragraph(ContentNames.of(goal) + ": " + Outlook.sourceLine(goal, state, session.catalog()),
+                    Theme.TextStyle.BODY_SM, Theme.INK)).width(760f).padBottom(i == missing.size() - 1 ? 22f : 4f)
+                    .row();
+            }
         }
 
         Programs.Price price = Programs.price(program, state, session.catalog());
@@ -162,6 +172,9 @@ public final class ProgramDetailsScreen extends ChromeScreen {
         card.add(caption("Components it grants")).padBottom(Theme.SPACE_2).row();
         for (String componentId : program.requiredMissionComponentIds()) {
             card.add(componentBlock(componentId, programState, state)).width(760f).padBottom(Theme.SPACE_3).row();
+        }
+        if (programState == Programs.State.OPEN) {
+            card.add(earliestLaunch(program)).width(760f).padTop(Theme.SPACE_2).padBottom(Theme.SPACE_3).row();
         }
         List<Concepts.Concept> concepts = Concepts.standard().forProgram(program);
         if (!concepts.isEmpty()) {
@@ -242,6 +255,36 @@ public final class ProgramDetailsScreen extends ChromeScreen {
         return block;
     }
 
+    /**
+     * The earliest launch among the program's missions open to the agency, with that mission's
+     * checks (the user's request, 2026-10-10).
+     */
+    private Table earliestLaunch(Program program) {
+        Table block = new Table();
+        block.left();
+        block.defaults().left().growX();
+        block.add(caption("Earliest launch")).padBottom(Theme.SPACE_2).row();
+        List<Outlook.Planned> planned = Outlook.soonest(program, session.state(), session.catalog());
+        if (planned.isEmpty()) {
+            block.add(ui.label("Every mission of this program needs a goal first.", Theme.TextStyle.BODY_SM,
+                Theme.INK_MUTED));
+            return block;
+        }
+        Outlook.Planned first = planned.get(0);
+        block.add(ui.label(Missions.name(first.configuration()), Theme.TextStyle.BODY_STRONG, Theme.INK))
+            .padBottom(4f).row();
+        block.add(ConfigCards.readiness(this, first.configuration())).growX().padBottom(4f).row();
+        if (planned.size() > 1) {
+            block.add(ui.label("The soonest of its " + planned.size() + " missions open to you. Each mission's card "
+                + "under Mission configurations has its own checks.", Theme.TextStyle.CAPTION, Theme.INK_MUTED));
+        }
+        return block;
+    }
+
+    private static String lowerFirst(String text) {
+        return text.isEmpty() ? text : Character.toLowerCase(text.charAt(0)) + text.substring(1);
+    }
+
     private Table goalBadge(String goalId, PlayerSnapshot state) {
         boolean achieved = state.getAchievedGoals().containsKey(goalId);
         boolean cancelled = state.getCancelledGoalIds().contains(goalId);
@@ -292,6 +335,13 @@ public final class ProgramDetailsScreen extends ChromeScreen {
         card.add(ui.paragraph("Its upkeep of " + money(program.maintenanceCost()) + " is charged every season from the "
             + "next turn on.", Theme.TextStyle.BODY, Theme.INK_MUTED)).padBottom(Theme.SPACE_4).row();
         card.add(priceBreakdown(price.lines(), price.total())).padBottom(Theme.SPACE_4).row();
+        // How long the funds last with its upkeep added (the user's request, 2026-10-10).
+        long upkeep = Outlook.openingUpkeep(program, session.state(), session.catalog());
+        PlayerSnapshot after = session.state();
+        card.add(ui.notice(Theme.NoticeKind.INFO, "With its upkeep of " + money(upkeep) + " a season.",
+            "After its price, " + lowerFirst(Outlook.runwayLine(after, session.catalog(),
+                session.gameInfo().response().budgetSchedule(), upkeep, price.total(), session.openTurn()))))
+            .growX().padBottom(Theme.SPACE_4).row();
         Table buttons = new Table();
         buttons.add(actionButton("Cancel", Theme.ButtonKind.SECONDARY, this::closeDialog)).padRight(10f);
         buttons.add(actionButton("Open program", Theme.ButtonKind.PRIMARY, () -> submit(new OpenProgramAction(program.id()),

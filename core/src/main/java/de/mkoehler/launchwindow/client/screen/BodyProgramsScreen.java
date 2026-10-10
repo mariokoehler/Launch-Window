@@ -3,6 +3,7 @@ package de.mkoehler.launchwindow.client.screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -13,6 +14,7 @@ import de.mkoehler.launchwindow.client.view.GoalModifiers;
 import de.mkoehler.launchwindow.client.view.BodyMap;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.Help;
+import de.mkoehler.launchwindow.client.view.Outlook;
 import de.mkoehler.launchwindow.client.view.Programs;
 import de.mkoehler.launchwindow.content.CelestialBody;
 import de.mkoehler.launchwindow.content.Program;
@@ -193,9 +195,17 @@ public final class BodyProgramsScreen extends ChromeScreen {
             + money(Programs.price(program, session.state(), session.catalog()).total());
         body.add(ui.label(price + " · Upkeep " + money(program.maintenanceCost()) + " / season",
             Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padBottom(Theme.SPACE_2).row();
+        Table staffing = staffingLine(program);
+        if (staffing != null) {
+            body.add(staffing).padBottom(Theme.SPACE_2).row();
+        }
         if (state == Programs.State.LOCKED) {
-            body.add(ui.paragraph("Needs: " + String.join(", ", Programs.missingGoals(program, session.state()).stream()
-                .map(ContentNames::of).toList()), Theme.TextStyle.BODY_SM, Theme.INK)).padBottom(Theme.SPACE_2).row();
+            Label needs = ui.paragraph("Needs: " + String.join(", ", Programs.missingGoals(program, session.state())
+                .stream().map(ContentNames::of).toList()), Theme.TextStyle.BODY_SM, Theme.INK);
+            ui.tooltip(needs, "Where to earn them", String.join("\n", Programs.missingGoals(program, session.state())
+                .stream().map(goal -> ContentNames.of(goal) + ": " + Outlook.sourceLine(goal, session.state(),
+                    session.catalog())).toList()));
+            body.add(needs).padBottom(Theme.SPACE_2).row();
         }
         // What skipping ahead costs, and what earlier goals give (play test, 2026-10-09).
         GoalModifiers.Summary goals = GoalModifiers.ofProgram(program, session.catalog(),
@@ -205,5 +215,49 @@ public final class BodyProgramsScreen extends ChromeScreen {
             new ProgramDetailsScreen(game, program.id(), this.body)))).left().fill(false, false);
         card.add(body).width(inner);
         return card;
+    }
+
+    /**
+     * A program card's staffing line (the user's request, 2026-10-10): the astronauts and
+     * controllers its missions need, smallest to largest, each green when enough are free now, amber
+     * when the roster has enough but some are busy or training, red when it's too small.
+     *
+     * @param program the program
+     * @return the line, or {@code null} for a program that needs nobody
+     */
+    private Table staffingLine(Program program) {
+        List<Outlook.Need> needs = Outlook.needs(program, session.state(), session.catalog());
+        if (needs.isEmpty()) {
+            return null;
+        }
+        Table line = new Table();
+        line.left();
+        StringBuilder detail = new StringBuilder();
+        for (int i = 0; i < needs.size(); i++) {
+            Outlook.Need need = needs.get(i);
+            if (i > 0) {
+                line.add(ui.label(" · ", Theme.TextStyle.CAPTION, Theme.INK_MUTED));
+                detail.append("\n");
+            }
+            Color color = switch (need.supply()) {
+                case READY -> Theme.SUCCESS;
+                case COMING -> Theme.GOLD_TEXT;
+                case SHORT -> Theme.DANGER;
+            };
+            String name = need.group().substring(0, 1).toUpperCase(java.util.Locale.ROOT) + need.group().substring(1);
+            line.add(ui.label(name + " " + need.range(), Theme.TextStyle.CAPTION, color));
+            detail.append(name).append(": its missions need ").append(need.min() == need.max() ? need.min()
+                : need.min() + " to " + need.max()).append(need.group().equals("astronauts") ? " (crew and CAPCOM)" : "")
+                .append(need.min() == 0 ? "; some fly without any, the colour is for the smallest that needs them"
+                    : "")
+                .append(". You have ").append(need.free()).append(" free of ").append(need.roster()).append(". ")
+                .append(switch (need.supply()) {
+                    case READY -> "Enough for the smallest mission now.";
+                    case COMING -> "Enough on the roster, but not all free: some are training or busy.";
+                    case SHORT -> "Too few even on the roster: hire first. Basic training comes after hiring.";
+                });
+        }
+        ui.tooltip(line, "People its missions need", detail.toString());
+        return line;
     }
 }

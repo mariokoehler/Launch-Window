@@ -1,14 +1,18 @@
 package de.mkoehler.launchwindow.client.screen;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.UiKit;
+import de.mkoehler.launchwindow.client.view.Advisor;
 import de.mkoehler.launchwindow.client.view.GoalModifiers;
 import de.mkoehler.launchwindow.client.view.Missions;
+import de.mkoehler.launchwindow.client.view.Outlook;
 import de.mkoehler.launchwindow.client.view.Staffing;
 import de.mkoehler.launchwindow.content.MissionConfiguration;
 import de.mkoehler.launchwindow.rules.MissionPrestige;
@@ -118,6 +122,10 @@ final class ConfigCards {
                 + "not on R&D. Assembly needs this many free at once. The planning screen shows who's coming.");
             body.add(line).padBottom(4f).row();
         }
+        // What the mission still waits on, and the earliest season it could fly (2026-10-10).
+        if (open) {
+            body.add(readiness(host, configuration)).padTop(4f).padBottom(Theme.SPACE_2).row();
+        }
         BodyProgramsScreen.goalLines(host, body, GoalModifiers.of(configuration,
             host.session.state()::hasAchievedOrCancelledGoal), false);
         body.add(ui.label(tierNote(flown), Theme.TextStyle.CAPTION, Theme.INK_MUTED));
@@ -125,6 +133,90 @@ final class ConfigCards {
         card.setTouchable(Touchable.enabled);
         card.addListener(ChromeScreen.clicked(onClick));
         return card;
+    }
+
+    /**
+     * Builds a mission's readiness (the user's request, 2026-10-10): a row of checks, each a tick,
+     * a clock with the seasons to wait or a cross, and below it the earliest season it could fly
+     * and what holds it back. The row's tooltip has a sentence per check.
+     *
+     * @param host          the screen
+     * @param configuration the configuration
+     * @return the block
+     */
+    static Table readiness(ChromeScreen host, MissionConfiguration configuration) {
+        UiKit ui = host.ui;
+        Outlook.Readiness readiness = Outlook.of(configuration, host.session.state(), host.session.catalog());
+        Table block = new Table();
+        block.left();
+        block.defaults().left();
+        Table row = new Table();
+        row.left();
+        StringBuilder detail = new StringBuilder();
+        for (Outlook.Check check : readiness.checks()) {
+            Color color = color(check.status());
+            Image glyph = new Image(ui.icon(switch (check.status()) {
+                case READY -> "check";
+                case WAITING -> "clock";
+                case BLOCKED -> "close";
+            }), Scaling.fit);
+            glyph.setColor(color);
+            row.add(glyph).size(12f).padRight(4f);
+            String text = check.label() + (check.status() == Outlook.Status.WAITING ? " ~" + check.seasons() : "");
+            row.add(ui.label(text, Theme.TextStyle.CAPTION, color)).padRight(Theme.SPACE_3);
+            if (detail.length() > 0) {
+                detail.append("\n");
+            }
+            detail.append(check.label()).append(": ").append(check.detail());
+        }
+        ui.tooltip(row, "Ready to fly?", detail + "\nSeasons are the rules' average with today's teams; "
+            + "reliability counts as ready at " + (int) Advisor.READY_RELIABILITY + " %.");
+        block.add(row).padBottom(4f).row();
+        block.add(earliestLabel(host, readiness)).growX();
+        return block;
+    }
+
+    /**
+     * Words a mission's earliest launch: "Ready to launch now", "Earliest launch: Fall 1956, waiting on
+     * the rocket", or what blocks it.
+     *
+     * @param host      the screen
+     * @param readiness the mission's readiness
+     * @return the label
+     */
+    static Label earliestLabel(ChromeScreen host, Outlook.Readiness readiness) {
+        UiKit ui = host.ui;
+        if (readiness.readyNow()) {
+            return ui.label("Ready to launch now.", Theme.TextStyle.CAPTION, Theme.SUCCESS);
+        }
+        if (readiness.earliest().isPresent()) {
+            int seasons = readiness.earliest().getAsInt();
+            return ui.label("Earliest launch: " + Outlook.by(host.session.openTurn(), seasons) + ", in "
+                + Outlook.seasons(seasons) + ", waiting on " + waitingOn(readiness.limiter()) + ".",
+                Theme.TextStyle.CAPTION, Theme.GOLD_TEXT);
+        }
+        Label blocked = ui.label("Can't tell when yet: " + readiness.limiter().detail(), Theme.TextStyle.CAPTION,
+            Theme.DANGER);
+        blocked.setWrap(true);
+        return blocked;
+    }
+
+    private static String waitingOn(Outlook.Check check) {
+        return switch (check.label()) {
+            case "Payload" -> "payload R&D";
+            case "Rocket" -> "rocket R&D";
+            case "Astronauts" -> "astronauts in training";
+            case "Controllers" -> "controllers in training";
+            default -> check.label().toLowerCase(Locale.ROOT);
+        };
+    }
+
+    private static Color color(Outlook.Status status) {
+        return switch (status) {
+            case READY -> Theme.SUCCESS;
+            case WAITING -> Theme.GOLD_TEXT;
+            case BLOCKED -> Theme.DANGER;
+        };
     }
 
     private static String tierNote(int flown) {

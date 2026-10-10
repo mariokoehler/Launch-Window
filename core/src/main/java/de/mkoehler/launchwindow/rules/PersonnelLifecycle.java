@@ -175,6 +175,21 @@ public final class PersonnelLifecycle {
     }
 
     /**
+     * Returns in how many season resolutions someone reaches their group's retirement age: the
+     * resolution that ages them to it retires them, before that season's R&amp;D, training or
+     * missions. An astronaut or controller on a mission then that season is protected and retires
+     * when the flight releases them instead. Morale resignations aren't predicted.
+     *
+     * @param person the employee
+     * @param group  their personnel group
+     * @return the resolutions until retirement, at least 1 (1 means the next one)
+     */
+    public static int seasonsUntilRetirement(Personnel person, PersonnelGroup group) {
+        int seasons = (retirementAgeFor(group) - person.getAge()) * SEASONS_PER_YEAR - person.getAgingProgressSeasons();
+        return Math.max(1, seasons);
+    }
+
+    /**
      * Runs one season-advance pass over every employee in all three of the
      * given snapshot's rosters, mutating it in place: updates age and
      * morale, and removes anyone who automatically resigned or retired this

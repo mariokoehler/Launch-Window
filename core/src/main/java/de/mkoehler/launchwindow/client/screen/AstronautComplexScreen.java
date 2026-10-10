@@ -24,6 +24,7 @@ import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.AstronautSkill;
 import de.mkoehler.launchwindow.model.Building;
 import de.mkoehler.launchwindow.rules.SkillGrowth;
+import de.mkoehler.launchwindow.rules.PersonnelGroup;
 
 import java.util.List;
 import java.util.Locale;
@@ -182,8 +183,9 @@ public final class AstronautComplexScreen extends ChromeScreen {
         stateHolder.add(active ? ui.badge(Theme.BadgeKind.ACTIVE, text) : RosterCells.pill(ui, text)).row();
         String hint = AstronautCorps.expertHint(astronaut);
         if (hint != null) {
-            stateHolder.add(ui.label(hint, Theme.TextStyle.CAPTION, Theme.GOLD_TEXT)).padTop(4f);
+            stateHolder.add(ui.label(hint, Theme.TextStyle.CAPTION, Theme.GOLD_TEXT)).padTop(4f).row();
         }
+        RosterCells.outlookNote(ui, stateHolder, astronaut, PersonnelGroup.ASTRONAUT, session.openTurn());
         row.add(stateHolder).width(330f).left().padRight(Theme.SPACE_4);
         row.add(RosterCells.traits(ui, astronaut)).width(RosterCells.TRAITS_WIDTH).left().padRight(Theme.SPACE_4);
 

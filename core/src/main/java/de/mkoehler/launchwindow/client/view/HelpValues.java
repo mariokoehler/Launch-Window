@@ -72,6 +72,14 @@ public final class HelpValues {
         v.put("budget.coveredSeasons", whole(PrestigeConversion.COVERED_SEASONS));
 
         v.put("rnd.slots", whole(MissionComponent.RD_SLOT_COUNT));
+        v.put("outlook.ready", whole(Math.round(Advisor.READY_RELIABILITY)));
+        List<String> milestones = new java.util.ArrayList<>();
+        for (double milestone : Outlook.MILESTONES) {
+            milestones.add(whole(Math.round(milestone)));
+        }
+        v.put("outlook.milestones", milestones.size() == 1 ? milestones.get(0)
+            : String.join(", ", milestones.subList(0, milestones.size() - 1)) + " and "
+                + milestones.get(milestones.size() - 1));
 
         v.put("buildings.astronauts", caps(buildings, Building.ASTRONAUT_CENTER));
         v.put("buildings.controllers", caps(buildings, Building.MISSION_CONTROL));

@@ -193,6 +193,9 @@ On the right:
     look broken. The assign dialog is a table (traits, "With this team" marks, skill, "Chemistry
     with them" preview), 1080 px wide. The same cards sit on the VAB's rocket board and the mission
     plan's read-only tab.
+    *Looking ahead (2026-10-10, component 25):* milestone ticks and the seasons to each above the bar,
+    a retirement warning under the caption, and a "Seasons to cap" column in the assign dialog (now
+    1220 px wide).
 11. **Personnel overview** (the landing screen of each personnel building,
     *(decided)*, as in BASPM). The roster as personnel rows with row actions;
     filter and sort by state and by skill (skill icons); a **department summary**
@@ -781,6 +784,70 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
     - *As built:* `client.view.Advisor` (`AdvisorTest`), the card in `SpaceComplexScreen`, the marks
       in `LaunchWindowGame`. Shots `advisor-*.png` (`advisor-reliability.png` and `advisor-ready.png`
       for the bar); every other hub shot shows the card too.
+25. **Looking ahead** *(the user's idea, 2026-10-10: "thinking ahead gives you a big advantage in this
+    game"; the user liked all seven proposals and asked for them built at once, without a mockup,
+    since each extends a component that exists).* Every season count comes from the rules, never the
+    client: `ResearchPlanning.project` and `ranges` for R&D, `PersonnelLifecycle.seasonsUntilRetirement`,
+    the training seasons left, and `BudgetProgress.runway`; `client.view.Outlook` words them
+    (`OutlookTest`). "By <season>" means the open turn plus that many seasons: the season you have it in.
+    - **R&D milestones** (component 10). Thin navy ticks on the bar at 60, 70 and 80 % still ahead
+      (`Outlook.MILESTONES`; 60 is `Advisor.READY_RELIABILITY`), a milestone within 3 points below
+      the cap left out, and above each tick and the cap's marker a small "~3": the average seasons
+      to get there with the team on it now (`MilestoneLabels`, which hides the lower of two labels
+      that would overlap; the cap's is gold). "—" means not within ten years (`HORIZON_SEASONS` 40).
+      No numbers without a team. The tooltip "Seasons to each mark" lists each mark with its season
+      and the spread of 300 runs with random draws ("2 to 3 seasons in 8 runs of 10", fixed seed).
+      The projection repeats the season pass's average: each slot's band midpoint, the engineers'
+      skill growing by its average draw (a revealed Mentor counts), a revealed Restless engineer
+      going stale, an engineer reaching retirement age leaving the team, an event's R&D multiplier
+      ending when its seasons run out, chemistry as the player knows it. Nobody new joins. A test
+      checks it against 2,000 real eight-season runs (within 3 %). The caption's "about +X next
+      season" now reads the projection's first season; `expectedSeasonGain` itself is unchanged,
+      since `PressEffects` uses it on the server.
+    - **Retirement before the cap** (idea 7). A gold line under the caption: "Arkhipov retires in 7
+      seasons, before the cap. The projection counts the team without them from then on." Morale
+      resignations aren't predicted.
+    - **Assign dialog.** A "Seasons to cap" column: the team now, then with the candidate in the
+      next free slot ("~12 → ~8", green when faster), from the same projection.
+    - **Program card staffing** (§4.6.3). Under the price: "Astronauts 0–3 · Controllers 8–9", as
+      `Staffing` counts a single mission (astronauts are crew and CAPCOM). Each part is green when
+      enough are free now for the smallest mission that needs the group, amber when the roster has
+      enough but some are training or busy, red when the roster is too small. *Unconfirmed default:*
+      the colour ignores missions that need nobody from the group, while the range still starts at 0
+      for them; the tooltip says so.
+    - **Mission readiness** (§4.6.5, open programs only). A row of checks under the "Free now" line:
+      Goals (only when one is missing), Payload, Rocket, Astronauts, Controllers, Funds, each a green
+      tick, an amber clock with "~N", or a red cross. Payload and rocket count as ready at 60 %
+      (the advisor's mark); the rocket is the soonest-ready open rocket that can fly the launch, then
+      the cheapest. People: idle now, training that can be cut short, or basic training's seasons
+      left (anyone on a mission or PR duty isn't counted). Funds: the mission plus the chosen
+      rockets. Below it: "Ready to launch now.", "Earliest launch: Winter 1961, in 2 seasons,
+      waiting on payload R&D." (amber), or "Can't tell when yet: …" (red) with the first blocking
+      check. The row's tooltip "Ready to fly?" has a sentence per check.
+    - **Earliest launch on program details** (§4.6.4, open programs). A section after the components:
+      the soonest of the program's missions open to the agency, its name and its checks, and how
+      many missions there are.
+    - **Training dates** (§4.7, §4.8, §4.9 rosters). Under the state badge: "Ready by Fall 1960" for
+      basic and advanced training (expert and permanent training have no fixed end), and, in gold,
+      "Retires in 2 seasons" within a year (`RETIREMENT_NOTICE_SEASONS` 4; astronauts and controllers
+      add "(or when a flight ends)", since a flight protects them).
+    - **Funds runway** (§4.10, and the open-program confirmation in §4.6.4). Under "Net per season":
+      "At today's costs and prestige, funds run out in 9 seasons, in Spring 1962, the next funding
+      review counted." or "…last at least ten years…", red within 4 seasons. Each season pays today's
+      running costs and funding; the next review pays what today's prestige earns. The confirmation
+      adds the program's upkeep and its new components' upkeep and pays the price first ("After its
+      price, at today's costs…").
+    - **Where to earn a goal** (§4.6.3, §4.6.4, idea 6). On a locked program's details, a line per
+      missing goal: "Satellite in orbit: Earned by Project Mercury (open), Apollo (open), Explorer 1
+      (available) and 8 more programs." Open programs first, then available; the agency's own
+      programs only; a goal counts when a step achieves it or credits it through a cascade. When only
+      locked programs earn it: "Only locked programs earn it: X needs Y first." The card's "Needs:"
+      line has the same text in its tooltip.
+    - **Help:** the R&D topic has a "Looking ahead" part (tokens `outlook.milestones`, `outlook.ready`).
+    - Shots: `outlook-*.png` (R&D tooltip, the rocket board's retirement line, Vostok's program
+      page and mission cards, the cosmonauts' roster, the program card's staffing, the locked
+      Pioneer 4 page), and the changed `payload-rnd*.png`, `plan-configs.png`, `pao.png` and
+      `hq-details-vostok-open.png` (the confirmation's runway).
 ---
 
 ## 3. Screen flow *(decided)*
@@ -1152,7 +1219,9 @@ two- and three-crew capsules; the Moon holds lunar probes and lunar expeditions.
 **4.6.3 Program categories and programs** (for one body). The categories at that
 body (category art); then the programs in a category (program art), each with its
 state: open, closed (components kept, inactive), available, or locked (with the
-missing goals). Other agencies' programs are hidden entirely.
+missing goals). Other agencies' programs are hidden entirely. *Looking ahead (2026-10-10,
+component 25):* each card shows the astronauts and controllers its missions need, coloured against
+the roster, and a locked card's "Needs:" line says in its tooltip where each goal is earned.
 
 **4.6.4 Program details.** Shows:
 - state, upkeep per season;
@@ -1185,7 +1254,8 @@ dialog. Shot: `hq-details-offer-rnd.png`.
 
 **4.6.5 Mission configuration selection.** The program's configurations, each with
 art, duration in seasons, prestige (first time, or the repeat tier: 50 % second
-time, 30 % after that), launch types, and crew / controller / CAPCOM counts.
+time, 30 % after that), launch types, and crew / controller / CAPCOM counts. *Looking ahead
+(2026-10-10, component 25):* an open program's cards add a readiness row and the earliest launch.
 Viewable even when the program isn't open *(decided)*; then the planning screens
 are read-only, with an "Open program" call to action. *(Built 2026-10-08, for the full tree:)* a
 configuration gated on a goal (`requiredGoalIds`) carries a navy "Locked" tag, and its steps

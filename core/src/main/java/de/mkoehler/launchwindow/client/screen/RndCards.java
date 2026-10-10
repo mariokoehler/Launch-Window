@@ -13,12 +13,14 @@ import de.mkoehler.launchwindow.actions.AssignResearchAction;
 import de.mkoehler.launchwindow.actions.ReleaseResearchAction;
 import de.mkoehler.launchwindow.client.connect.ServerResult;
 import de.mkoehler.launchwindow.client.ui.ChemistryIndicator;
+import de.mkoehler.launchwindow.client.ui.MilestoneLabels;
 import de.mkoehler.launchwindow.client.ui.RelationshipMarker;
 import de.mkoehler.launchwindow.client.ui.ReliabilityBar;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.TraitChip;
 import de.mkoehler.launchwindow.client.ui.UiKit;
 import de.mkoehler.launchwindow.client.view.ContentNames;
+import de.mkoehler.launchwindow.client.view.Outlook;
 import de.mkoehler.launchwindow.client.view.PayloadRnd;
 import de.mkoehler.launchwindow.client.view.People;
 import de.mkoehler.launchwindow.client.view.SetDepartment;
@@ -50,7 +52,7 @@ import java.util.Locale;
 final class RndCards {
 
     /** The assign dialog's width: wide enough for traits, marks and the chemistry preview. */
-    private static final float ASSIGN_DIALOG_WIDTH = 1080f;
+    private static final float ASSIGN_DIALOG_WIDTH = 1220f;
 
     private final ChromeScreen host;
     private final UiKit ui;
@@ -100,13 +102,26 @@ final class RndCards {
         box.add(head).padBottom(Theme.SPACE_3).row();
 
         double current = card.owned().getCurrentReliability();
-        double gain = ResearchPlanning.expectedSeasonGain(host.session.state(), host.session.catalog(),
-            component.id());
+        ResearchPlanning.Projection projection = ResearchPlanning.project(host.session.state(),
+            host.session.catalog(), component.id());
+        double gain = projection.moving() ? projection.reliability()[0] - current : 0;
         // The cap the player is told: raised while a revealed Perfectionist is on the team.
         double cap = TraitEffects.effectiveCap(host.session.state(), component, List.of(), true);
-        box.add(new ReliabilityBar(ui, current, component.maxRdReliability(), component.maxReliability(),
-            card.owned().getFloorReliability()).projected(current + gain).raisedCap(cap)).height(14f)
-            .padBottom(Theme.SPACE_1).row();
+        ReliabilityBar bar = new ReliabilityBar(ui, current, component.maxRdReliability(), component.maxReliability(),
+            card.owned().getFloorReliability()).projected(current + gain).raisedCap(cap);
+        // Milestones ahead with the seasons to each (the user's request, 2026-10-10).
+        List<Outlook.Marker> markers = projection.moving() ? Outlook.markers(projection) : List.of();
+        bar.milestones(markers.stream().filter(marker -> !marker.cap()).mapToDouble(Outlook.Marker::value).toArray());
+        if (!markers.isEmpty()) {
+            MilestoneLabels labels = new MilestoneLabels(bar.max());
+            for (Outlook.Marker marker : markers) {
+                labels.add(ui, marker.value(), Outlook.approx(marker.seasons()), marker.cap() ? Theme.GOLD_TEXT
+                    : Theme.NAVY, marker.cap());
+            }
+            ui.tooltip(labels, "Seasons to each mark", outlook(component, projection, markers));
+            box.add(labels).padBottom(2f).row();
+        }
+        box.add(bar).height(14f).padBottom(Theme.SPACE_1).row();
         String caption = String.format(Locale.ROOT, "%.1f%% (R&D cap %.1f)", current, component.maxRdReliability());
         if (cap > component.maxRdReliability()) {
             List<String> perfectionists = team(card).stream()
@@ -123,9 +138,14 @@ final class RndCards {
         Label captionLabel = ui.label(caption, Theme.TextStyle.CAPTION, Theme.INK_MUTED);
         if (gain >= 0.05) {
             ui.tooltip(captionLabel, "Expected R&D gain", "The lighter part of the bar: what this team adds in an "
-                + "average season. Each slot's draw is random, and gains shrink as reliability nears the R&D cap.");
+                + "average season. Each slot's draw is random, and gains shrink as reliability nears the R&D cap. "
+                + "The numbers above the bar are the seasons to each mark.");
         }
-        box.add(captionLabel).padBottom(Theme.SPACE_3).row();
+        String leaving = Outlook.departureLine(projection);
+        box.add(captionLabel).padBottom(leaving == null ? Theme.SPACE_3 : 2f).row();
+        if (leaving != null) {
+            box.add(ui.paragraph(leaving, Theme.TextStyle.CAPTION, Theme.GOLD_TEXT)).padBottom(Theme.SPACE_3).row();
+        }
         List<SetSpecialist> team = team(card);
         // Past the cap the player knows of while people still sit there: a hidden Perfectionist's doing.
         if (card.atCap() && team.isEmpty()) {
@@ -144,6 +164,70 @@ final class RndCards {
         }
         box.add(slots);
         return box;
+    }
+
+    /**
+     * The milestone tooltip: each mark with its average seasons, the season it lands by and the
+     * spread of the rules' random draws.
+     */
+    private String outlook(MissionComponent component, ResearchPlanning.Projection projection,
+                           List<Outlook.Marker> markers) {
+        double[] targets = markers.stream().mapToDouble(Outlook.Marker::value).toArray();
+        ResearchPlanning.Range[] ranges = ResearchPlanning.ranges(host.session.state(), host.session.catalog(),
+            component.id(), targets);
+        StringBuilder text = new StringBuilder();
+        for (int i = 0; i < markers.size(); i++) {
+            Outlook.Marker marker = markers.get(i);
+            String mark = marker.cap() ? String.format(Locale.ROOT, "R&D cap %.1f %%", marker.value())
+                : String.format(Locale.ROOT, "%.0f %%", marker.value());
+            if (marker.seasons().isEmpty()) {
+                text.append(mark).append(": not within ten years with this team.\n");
+                continue;
+            }
+            int seasons = marker.seasons().getAsInt();
+            text.append(mark).append(": about ").append(Outlook.seasons(seasons)).append(", by ")
+                .append(Outlook.by(host.session.openTurn(), seasons)).append(" (")
+                .append(Outlook.range(ranges[i])).append(" in 8 runs of 10).\n");
+        }
+        text.append("With the team on it now, as the rules average it: skills grow, retirements leave, nobody "
+            + "joins. A random event's R&D boost or cut counts while it lasts.");
+        return text.toString();
+    }
+
+    /**
+     * Who sits in each slot, with a candidate in the next free one.
+     */
+    private static SetSpecialist[] seats(PayloadRnd.Card card, SetSpecialist candidate) {
+        SetSpecialist[] seats = card.slots().toArray(new SetSpecialist[0]);
+        if (candidate != null && card.nextFreeSlot() >= 0) {
+            seats[card.nextFreeSlot()] = candidate;
+        }
+        return seats;
+    }
+
+    /** The cap a team works towards: raised by a revealed Perfectionist on it. */
+    private double cap(MissionComponent component, PayloadRnd.Card card, SetSpecialist candidate) {
+        List<SetSpecialist> members = java.util.Arrays.stream(seats(card, candidate))
+            .filter(java.util.Objects::nonNull).toList();
+        return Math.min(component.maxReliability(), component.maxRdReliability() + TraitEffects.capBonus(members,
+            true));
+    }
+
+    /**
+     * The assign dialog's projection cell: seasons to the cap with the team now, then with the
+     * candidate seated, "~6 \u2192 ~4".
+     */
+    private Label toCap(PayloadRnd.Card card, SetSpecialist candidate, java.util.OptionalInt now) {
+        MissionComponent component = card.component();
+        java.util.OptionalInt then = ResearchPlanning.project(host.session.state(), component,
+            card.owned().getCurrentReliability(), seats(card, candidate)).seasonsTo(cap(component, card, candidate));
+        String text = team(card).isEmpty() ? Outlook.approx(then) : Outlook.approx(now) + " \u2192 " + Outlook.approx(then);
+        boolean faster = then.isPresent() && (now.isEmpty() || then.getAsInt() < now.getAsInt());
+        Label label = ui.label(text, Theme.TextStyle.BODY_SM, faster ? Theme.SUCCESS : Theme.INK);
+        ui.tooltip(label, "Seasons to the R&D cap", (team(card).isEmpty() ? "" : "With the team now, then with "
+            + People.surname(candidate.getName()) + " in slot " + (card.nextFreeSlot() + 1) + ". ")
+            + "The rules' average: skills grow, retirements leave, nobody else joins.");
+        return label;
     }
 
     private static List<SetSpecialist> team(PayloadRnd.Card card) {
@@ -248,10 +332,13 @@ final class RndCards {
         list.add(header("With this team")).left();
         list.add(header("Skill")).left();
         list.add(header(team.isEmpty() ? "Chemistry" : "Chemistry with them")).left();
+        list.add(header("Seasons to cap")).left();
         list.add().row();
-        list.add(new com.badlogic.gdx.scenes.scene2d.ui.Image(ui.solid(Theme.NAVY))).colspan(6).growX()
+        list.add(new com.badlogic.gdx.scenes.scene2d.ui.Image(ui.solid(Theme.NAVY))).colspan(7).growX()
             .height(Theme.BORDER_THIN).padTop(4f).row();
         List<String> teamIds = team.stream().map(Personnel::getId).toList();
+        java.util.OptionalInt nowToCap = ResearchPlanning.project(host.session.state(), component,
+            card.owned().getCurrentReliability(), seats(card, null)).seasonsTo(cap(component, card, null));
         for (SetSpecialist specialist : candidates.subList(0, Math.min(6, candidates.size()))) {
             list.add(RosterCells.avatar(ui, specialist)).size(36f).padRight(Theme.SPACE_3).padTop(Theme.SPACE_2)
                 .padBottom(Theme.SPACE_2);
@@ -291,13 +378,14 @@ final class RndCards {
             Chemistry.Result then = People.research(host.session.state(), component, team, specialist);
             list.add(team.isEmpty() ? ChemistryIndicator.compact(ui, then) : ChemistryIndicator.preview(ui, now, then))
                 .width(210f).padRight(Theme.SPACE_3);
+            list.add(toCap(card, specialist, nowToCap)).width(120f).padRight(Theme.SPACE_3);
             list.add(button("Assign", Theme.ButtonKind.PRIMARY, () -> host.submit(
                 new AssignResearchAction(specialist.getId(), component.id()), result -> {
                     host.closeDialog();
                     host.toast("Assigned " + specialist.getName() + " to " + ContentNames.of(component.id()) + ".",
                         Theme.NoticeKind.SUCCESS);
                 }))).right().row();
-            list.add(new com.badlogic.gdx.scenes.scene2d.ui.Image(ui.solid(Theme.NAVY_BORDER))).colspan(6).growX()
+            list.add(new com.badlogic.gdx.scenes.scene2d.ui.Image(ui.solid(Theme.NAVY_BORDER))).colspan(7).growX()
                 .height(Theme.BORDER_THIN).row();
         }
         dialogCard.add(list).growX().padBottom(Theme.SPACE_3).row();

@@ -76,6 +76,31 @@ class BudgetProgressTest {
     }
 
     /**
+     * The runway names the season the real season pass first leaves the funds below zero, the next
+     * review included, and is empty while funding covers the costs.
+     */
+    @Test
+    void theRunwayMatchesTheSeasonPass() {
+        for (int start : new int[] {1, 9, 16}) {
+            for (long extra : new long[] {0, 40}) {
+                PlayerSnapshot snapshot = player(2_000, 2_500, 150, 200, 150);
+                snapshot.setSeason(start);
+                snapshot.setPrestigeAtLastReview(400);
+                int predicted = BudgetProgress.runway(snapshot, EMPTY, SCHEDULE, extra).orElseThrow();
+                int season = 0;
+                while (snapshot.getFunds() >= 0) {
+                    season++;
+                    BudgetProgress.advanceSeason(snapshot, EMPTY, SCHEDULE, snapshot.getSeason());
+                    snapshot.setFunds(snapshot.getFunds() - extra);
+                    snapshot.setSeason(snapshot.getSeason() + 1);
+                }
+                assertEquals(season, predicted, "from season " + start + " with " + extra + " more");
+            }
+        }
+        assertTrue(BudgetProgress.runway(player(2_000, 2_500, 500, 200), EMPTY, SCHEDULE, 0).isEmpty());
+    }
+
+    /**
      * The prestige that keeps today's funding is the least that pays it at the next review.
      */
     @Test

@@ -14,7 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
  * the team (People canvas, 2026-10-07). As a <em>range</em> (Intelligence Office canvas, 2026-10-07)
  * it shows what intelligence learned about a rival's component: a navy band at 42 % between the
  * bounds with a solid 2 px end at each, no fill from zero, the gold cap kept (the cap is the content
- * pack's, not a secret).
+ * pack's, not a secret). An R&amp;D board can also mark milestones (2026-10-10): thin navy ticks at
+ * reliabilities still ahead, with {@link MilestoneLabels} above the bar naming the seasons to each.
  *
  * @author Mario Koehler
  */
@@ -39,6 +40,8 @@ public final class ReliabilityBar extends Widget {
     private float rangeLow = Float.NaN;
     private float rangeHigh;
     private Drawable band;
+    private final Drawable milestoneTick;
+    private float[] milestones = new float[0];
 
     /**
      * Builds the bar.
@@ -61,6 +64,30 @@ public final class ReliabilityBar extends Widget {
         this.floor = (float) floor;
         this.projectedFill = ui.solid(new Color(Theme.NAVY.r, Theme.NAVY.g, Theme.NAVY.b, 0.3f));
         this.projected = this.current;
+        this.milestoneTick = ui.solid(new Color(Theme.NAVY.r, Theme.NAVY.g, Theme.NAVY.b, 0.55f));
+    }
+
+    /**
+     * Marks milestones with thin ticks across the track.
+     *
+     * @param values the reliabilities to mark; the cap needs none, it has its own marker
+     * @return this bar
+     */
+    public ReliabilityBar milestones(double... values) {
+        this.milestones = new float[values.length];
+        for (int i = 0; i < values.length; i++) {
+            this.milestones[i] = (float) values[i];
+        }
+        return this;
+    }
+
+    /**
+     * Returns the reliability at the bar's end, for widgets lined up with it.
+     *
+     * @return the maximum
+     */
+    public float max() {
+        return max;
     }
 
     /**
@@ -134,6 +161,11 @@ public final class ReliabilityBar extends Widget {
             projectedFill.draw(batch, getX(), trackY, width * Math.min(1f, projected / max), TRACK_HEIGHT);
         }
         (capped ? cappedFill : fill).draw(batch, getX(), trackY, width * Math.min(1f, current / max), TRACK_HEIGHT);
+        for (float milestone : milestones) {
+            float x = getX() + width * Math.min(1f, milestone / max);
+            milestoneTick.draw(batch, x - 0.5f, getY() + (getHeight() - FLOOR_MARKER_HEIGHT) / 2f, 1f,
+                FLOOR_MARKER_HEIGHT);
+        }
         float floorX = getX() + width * Math.min(1f, floor / max);
         floorMarker.draw(batch, floorX, getY() + (getHeight() - FLOOR_MARKER_HEIGHT) / 2f, 1f, FLOOR_MARKER_HEIGHT);
         float capX = getX() + width * Math.min(1f, rdCap / max);

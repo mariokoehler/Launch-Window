@@ -84,6 +84,20 @@ public final class TraitEffects {
      * @return the factor
      */
     public static double rdGain(SetSpecialist engineer, String componentId, boolean knownOnly) {
+        return rdGain(engineer, componentId, knownOnly, 0);
+    }
+
+    /**
+     * Returns what an engineer's traits do to their R&amp;D gain a number of seasons from now, for
+     * projections: a Restless engineer's freshness wears off as the seasons on the project add up.
+     *
+     * @param engineer     the engineer
+     * @param componentId  the component they're working on
+     * @param knownOnly    whether to count only revealed traits
+     * @param seasonsAhead how many more seasons they will have worked on it by then, 0 for this one
+     * @return the factor
+     */
+    public static double rdGain(SetSpecialist engineer, String componentId, boolean knownOnly, int seasonsAhead) {
         double factor = 1;
         if (counts(engineer, Trait.WORKAHOLIC, knownOnly)) {
             factor *= WORKAHOLIC_RD;
@@ -92,7 +106,7 @@ public final class TraitEffects {
             factor *= PERFECTIONIST_RD;
         }
         if (counts(engineer, Trait.RESTLESS, knownOnly)) {
-            int done = componentId.equals(engineer.getProjectId()) ? engineer.getProjectSeasons() : 0;
+            int done = (componentId.equals(engineer.getProjectId()) ? engineer.getProjectSeasons() : 0) + seasonsAhead;
             if (done < RESTLESS_FRESH_SEASONS) {
                 factor *= RESTLESS_FRESH;
             } else if (done >= RESTLESS_STALE_AFTER) {

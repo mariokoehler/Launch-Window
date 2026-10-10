@@ -232,6 +232,61 @@ public final class BudgetProgress {
         return forecast(snapshot, schedule, snapshot.getPrestige());
     }
 
+    /** How far {@link #runway} looks ahead: ten years. */
+    public static final int RUNWAY_HORIZON_SEASONS = 40;
+
+    /**
+     * Returns in how many seasons the player's funds would go below zero at today's running costs
+     * plus an extra amount, such as a program about to be opened: each season pays the costs, then
+     * the funding, and the next review pays what {@link #forecast} says it would at today's
+     * prestige, from then on. A temporary cost multiplier is held as it is; later reviews, prestige
+     * earned, launches and hiring aren't predicted.
+     *
+     * @param snapshot the player
+     * @param catalog  the content catalog
+     * @param schedule the bracket table
+     * @param extra    extra running costs per season, 0 for none
+     * @return the season the funds go negative in, 1 for the next one; empty if they last
+     *     {@link #RUNWAY_HORIZON_SEASONS} seasons
+     * @throws NullPointerException if an argument is {@code null}
+     */
+    public static java.util.OptionalInt runway(PlayerSnapshot snapshot, ContentCatalog catalog,
+            BudgetSchedule schedule, long extra) {
+        return runway(snapshot, catalog, schedule, extra, 0);
+    }
+
+    /**
+     * As {@link #runway(PlayerSnapshot, ContentCatalog, BudgetSchedule, long)}, after paying an
+     * amount now, such as a program's opening price.
+     *
+     * @param snapshot the player
+     * @param catalog  the content catalog
+     * @param schedule the bracket table
+     * @param extra    extra running costs per season, 0 for none
+     * @param spendNow paid before the first season, 0 for nothing
+     * @return the season the funds go negative in, 1 for the next one; empty if they last
+     *     {@link #RUNWAY_HORIZON_SEASONS} seasons
+     * @throws NullPointerException if an argument is {@code null}
+     */
+    public static java.util.OptionalInt runway(PlayerSnapshot snapshot, ContentCatalog catalog,
+            BudgetSchedule schedule, long extra, long spendNow) {
+        Objects.requireNonNull(catalog, "catalog must not be null");
+        ReviewForecast review = forecast(snapshot, schedule);
+        long running = runningCosts(snapshot, catalog) + extra;
+        long funds = snapshot.getFunds() - spendNow;
+        long rate = snapshot.getFundingRatePerSeason();
+        for (int season = 1; season <= RUNWAY_HORIZON_SEASONS; season++) {
+            if (season == review.seasonsUntil()) {
+                rate = review.payToday();
+            }
+            funds += rate - running;
+            if (funds < 0) {
+                return java.util.OptionalInt.of(season);
+            }
+        }
+        return java.util.OptionalInt.empty();
+    }
+
     /**
      * Forecasts the next funding review as if the player held a given prestige, such as after a
      * conversion.

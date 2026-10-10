@@ -12,10 +12,12 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.TraitChip;
 import de.mkoehler.launchwindow.client.ui.UiKit;
+import de.mkoehler.launchwindow.client.view.Outlook;
 import de.mkoehler.launchwindow.client.view.People;
 import de.mkoehler.launchwindow.client.view.Tips;
 import de.mkoehler.launchwindow.model.Personnel;
 import de.mkoehler.launchwindow.model.Trait;
+import de.mkoehler.launchwindow.rules.PersonnelGroup;
 
 import java.util.List;
 
@@ -144,6 +146,24 @@ final class RosterCells {
      * @param text the state
      * @return the pill
      */
+    /**
+     * Adds a roster row's look-ahead note under its state badge (2026-10-10): when training ends and
+     * a retirement within a year. Nothing when neither applies.
+     *
+     * @param ui       the widget kit
+     * @param holder   the state cell
+     * @param person   the employee
+     * @param group    their group
+     * @param openTurn the open turn
+     */
+    static void outlookNote(UiKit ui, Table holder, Personnel person, PersonnelGroup group, long openTurn) {
+        String note = Outlook.rosterNote(person, group, openTurn);
+        if (note != null) {
+            holder.add(ui.label(note, Theme.TextStyle.CAPTION, note.contains("etires") ? Theme.GOLD_TEXT
+                : Theme.INK_MUTED)).left().padTop(4f).row();
+        }
+    }
+
     static Container<Label> pill(UiKit ui, String text) {
         Container<Label> pill = new Container<>(ui.label(text, Theme.TextStyle.CAPTION, Theme.INK_MUTED));
         pill.setBackground(ui.rect(new Color(0f, 0f, 0f, 0f), Theme.NAVY_BORDER, Theme.BORDER_THIN));

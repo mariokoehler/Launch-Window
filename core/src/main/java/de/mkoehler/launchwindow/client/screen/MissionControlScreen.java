@@ -25,6 +25,7 @@ import de.mkoehler.launchwindow.model.InProgressMission;
 import de.mkoehler.launchwindow.model.MissionControlOfficer;
 import de.mkoehler.launchwindow.model.MissionControlSkill;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
+import de.mkoehler.launchwindow.rules.PersonnelGroup;
 
 import java.util.List;
 import java.util.Locale;
@@ -285,7 +286,8 @@ public final class MissionControlScreen extends ChromeScreen {
         boolean active = officer.getUnavailableSeasons() == 0 && officer.getAssignmentState() != AssignmentState.IDLE;
         Table stateHolder = new Table();
         stateHolder.left();
-        stateHolder.add(active ? ui.badge(Theme.BadgeKind.ACTIVE, text) : RosterCells.pill(ui, text));
+        stateHolder.add(active ? ui.badge(Theme.BadgeKind.ACTIVE, text) : RosterCells.pill(ui, text)).left().row();
+        RosterCells.outlookNote(ui, stateHolder, officer, PersonnelGroup.MISSION_CONTROL, session.openTurn());
         row.add(stateHolder).width(300f).left().padRight(Theme.SPACE_4);
         row.add(RosterCells.traits(ui, officer)).width(RosterCells.TRAITS_WIDTH).left().padRight(Theme.SPACE_4);
 

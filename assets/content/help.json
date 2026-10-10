@@ -191,7 +191,10 @@
         "An engineer's skill for that kind of component matters most; the assign dialog lists the idle engineers best first. The team's chemistry then scales what it gains.",
         "## Two ceilings",
         "R&D alone takes a component only to its R&D ceiling. When it gets there, every engineer on it is released for other work. Only flying takes it further, toward its absolute maximum.",
-        "The hardware that flies is the copy built at launch. R&D done while a mission is in the air helps the next mission, not that one."
+        "The hardware that flies is the copy built at launch. R&D done while a mission is in the air helps the next mission, not that one.",
+        "## Looking ahead",
+        "The small numbers above a component's bar are the seasons its team needs, on average, to reach the marks ahead: {outlook.milestones} % and its R&D ceiling. They count the engineers' skills growing and anyone retiring on the way; nobody new joins. Hover over them for the season each lands in and how far the luck of the draws can move it. The assign dialog shows how each candidate would change the seasons to the ceiling.",
+        "A mission's card ticks off what it still waits on (payload, rocket, people and funds) and names the earliest season it could fly. A component counts as ready at {outlook.ready} %."
       ],
       "related": ["chemistry", "programs", "rockets"],
       "explainers": ["reliability", "human-rating"]

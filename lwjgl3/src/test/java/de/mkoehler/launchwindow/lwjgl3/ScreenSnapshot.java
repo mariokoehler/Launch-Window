@@ -408,6 +408,7 @@ public final class ScreenSnapshot {
         helpShots(folder, game);
         advisorShots(folder, game);
         standardPackShots(folder, game);
+        outlookShots(folder, game);
     }
 
     /**
@@ -454,6 +455,60 @@ public final class ScreenSnapshot {
         write(folder, "standard-concepts-apollo-landing.png", new MissionStepsScreen(game, "apollo-landing"), null);
         write(folder, "standard-concepts-apollo.png", new ProgramDetailsScreen(game, "apollo", CelestialBody.MOON),
             null);
+
+        // Looking ahead (2026-10-10): where a locked program's goal is earned, on its card and its page.
+        write(folder, "outlook-locked-goal.png", new ProgramDetailsScreen(game, "pioneer-4", CelestialBody.MOON), null);
+        write(folder, "outlook-locked-card.png", new BodyProgramsScreen(game, CelestialBody.MOON),
+            screen -> showTooltip(screen.stage().getRoot(), "Where to earn them"));
+    }
+
+    /**
+     * Looking ahead (the user's request, 2026-10-10): an R&D board's milestones and their tooltip, a
+     * rocket engineer who retires before the cap, Vostok's earliest launch and its missions' checks
+     * while cosmonauts finish basic training, the roster's ready-by and retirement notes, and the
+     * program cards' staffing.
+     */
+    private static void outlookShots(File folder, LaunchWindowGame game) {
+        String hash = ContentPackHash.ofClasspath("content/early-era", ScreenSnapshot.class.getClassLoader());
+        GameInfoResponse info = GameInfoResponse.success("early-era", hash, List.of(), 23, true,
+            6 * 3_600_000L + 12 * 60_000L + 30_000L, 0L, null, List.of(), List.of(), 0);
+        PlayerSnapshot state = planningState(11, 25_000);
+        state.getMissionComponents().put("vostok-capsule", new OwnedMissionComponent(48.5, 8.7));
+        state.getMissionComponents().put("r7-vostok", new OwnedMissionComponent(57.0, 3.0));
+        SetSpecialist second = state.getSetSpecialists().get(1);
+        second.setAssignmentState(AssignmentState.ASSIGNED);
+        second.setRdTargetComponentId("vostok-capsule");
+        second.setRdSlot(1);
+        SetSpecialist veteranEngineer = specialist("s3", "Gleb Arkhipov", 63, 70, 52, 40, 20, 77, 30, 12);
+        veteranEngineer.setAgingProgressSeasons(1);
+        veteranEngineer.setAssignmentState(AssignmentState.ASSIGNED);
+        veteranEngineer.setRdTargetComponentId("r7-vostok");
+        veteranEngineer.setRdSlot(0);
+        state.getSetSpecialists().add(veteranEngineer);
+        // Four cosmonauts in basic training, finishing at different times; one near retirement.
+        for (int i = 0; i < 4; i++) {
+            Astronaut recruit = state.getAstronauts().get(i);
+            recruit.setAssignmentState(AssignmentState.IN_TRAINING);
+            recruit.setTrainingKind(TrainingKind.BASIC);
+            recruit.setTrainingSeasonsTotal(4);
+            recruit.setTrainingSeasonsCompleted(1 + i % 3);
+        }
+        Astronaut veteran = state.getAstronauts().get(5);
+        veteran.setAge(49);
+        veteran.setAgingProgressSeasons(2);
+        startSession(game, state, info);
+        write(folder, "outlook-rnd.png", new RndBoardScreen(game, RndBoardScreen.Board.PAYLOAD),
+            screen -> showTooltip(screen.stage().getRoot(), "Seasons to each mark"));
+        write(folder, "outlook-rocket-rnd.png", new RndBoardScreen(game, RndBoardScreen.Board.ROCKET), null);
+        write(folder, "outlook-program.png", new ProgramDetailsScreen(game, "vostok", CelestialBody.EARTH), null);
+        write(folder, "outlook-configs.png", new MissionConfigsScreen(game, "vostok"),
+            screen -> showTooltip(screen.stage().getRoot(), "Ready to fly?"));
+        write(folder, "outlook-ac.png", new AstronautComplexScreen(game), null);
+        write(folder, "outlook-body-staffing.png", new BodyProgramsScreen(game, CelestialBody.EARTH), screen -> {
+            screen.select("one-crew-capsules");
+            showTooltip(screen.stage().getRoot(), "People its missions need");
+        });
+        write(folder, "outlook-pao.png", new PublicAffairsScreen(game), null);
     }
 
     /**

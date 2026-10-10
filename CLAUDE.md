@@ -80,6 +80,9 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   configurations gated on a goal. Its components have blueprint drawings in the turn report
   (2026-10-09), and every program, component and real flight has a history note (2026-10-09). All
   its art is in, the last rocket programs (Juno II, Atlas) on 2026-10-09.
+- **Looking ahead is built** (the user's idea, 2026-10-10, `ui-spec.md` component 25): R&D milestones with
+  the seasons to each (`ResearchPlanning.project`), mission readiness and earliest launch, program staffing,
+  training and retirement dates, the funds runway (`BudgetProgress.runway`), where a locked goal is earned.
 - **PR duty for astronauts is built** (`design.md` §2.2(c)), with 39 press stories
   (`assets/content/pr-press.json`), no repeats, and effects beyond prestige. Next is the next
   play test.

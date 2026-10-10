@@ -24,6 +24,7 @@ import de.mkoehler.launchwindow.model.Building;
 import de.mkoehler.launchwindow.model.SetSkill;
 import de.mkoehler.launchwindow.model.SetSpecialist;
 import de.mkoehler.launchwindow.model.TrainingKind;
+import de.mkoehler.launchwindow.rules.PersonnelGroup;
 
 import java.util.List;
 import java.util.Locale;
@@ -201,7 +202,8 @@ public final class SetCentreScreen extends ChromeScreen {
             : pill(SetDepartment.stateText(specialist));
         Table stateHolder = new Table();
         stateHolder.left();
-        stateHolder.add(state);
+        stateHolder.add(state).left().row();
+        RosterCells.outlookNote(ui, stateHolder, specialist, PersonnelGroup.SET, session.openTurn());
         row.add(stateHolder).width(280f).left().padRight(Theme.SPACE_4);
         row.add(RosterCells.traits(ui, specialist)).width(RosterCells.TRAITS_WIDTH).left().padRight(Theme.SPACE_4);
 

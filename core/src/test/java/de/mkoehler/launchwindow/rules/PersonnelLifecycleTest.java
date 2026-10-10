@@ -425,6 +425,29 @@ class PersonnelLifecycleTest {
         assertThrows(NullPointerException.class, () -> PersonnelLifecycle.advanceSeason(null));
     }
 
+    /**
+     * Verifies the retirement countdown names the resolution that really retires someone: an SET
+     * engineer, never protected, run through real season passes from every point in the year.
+     */
+    @Test
+    void seasonsUntilRetirementMatchesTheSeasonPass() {
+        for (int progress = 0; progress < PersonnelLifecycle.SEASONS_PER_YEAR; progress++) {
+            SetSpecialist engineer = new SetSpecialist("e1", "Name e1", PersonnelLifecycle.SET_RETIREMENT_AGE - 2,
+                PersonnelLifecycle.MORALE_MAX, 50);
+            engineer.setAssignmentState(AssignmentState.ASSIGNED);
+            engineer.setAgingProgressSeasons(progress);
+            int predicted = PersonnelLifecycle.seasonsUntilRetirement(engineer, PersonnelGroup.SET);
+            PlayerSnapshot snapshot = new PlayerSnapshot("Agency", Archetype.NASA, 0, 0, 0, 1);
+            snapshot.setSetSpecialists(new java.util.ArrayList<>(List.of(engineer)));
+            int season = 0;
+            while (!snapshot.getSetSpecialists().isEmpty()) {
+                season++;
+                PersonnelLifecycle.advanceSeason(snapshot);
+            }
+            assertEquals(predicted, season, "aging progress " + progress);
+        }
+    }
+
     private static PlayerSnapshot snapshotWithAstronaut(Astronaut astronaut) {
         PlayerSnapshot snapshot = new PlayerSnapshot("Agency", Archetype.NASA, 0, 0, 0, 1);
         snapshot.setAstronauts(List.of(astronaut));

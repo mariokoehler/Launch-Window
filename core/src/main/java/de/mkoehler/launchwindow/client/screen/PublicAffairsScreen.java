@@ -16,6 +16,7 @@ import de.mkoehler.launchwindow.actions.ConvertPrestigeAction;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.view.Help;
+import de.mkoehler.launchwindow.client.view.Outlook;
 import de.mkoehler.launchwindow.client.view.TurnReportView;
 import de.mkoehler.launchwindow.content.BudgetSchedule;
 import de.mkoehler.launchwindow.model.GameDate;
@@ -46,6 +47,9 @@ public final class PublicAffairsScreen extends ChromeScreen {
     private TurnReport lastReport;
 
     /** The game's budget schedule, from the game info. */
+    /** A runway this short or shorter is shown in red. */
+    private static final int RUNWAY_WARNING_SEASONS = 4;
+
     private BudgetSchedule schedule() {
         return session.gameInfo().response().budgetSchedule();
     }
@@ -137,6 +141,17 @@ public final class PublicAffairsScreen extends ChromeScreen {
         }
         card.add(head).padBottom(Theme.SPACE_3).row();
         card.add(netLines(funding, costs.total(), net)).row();
+        // How long the funds last (the user's request, 2026-10-10); in debt, the notice above says it.
+        if (!debt) {
+            java.util.OptionalInt runway = BudgetProgress.runway(state, session.catalog(), schedule(), 0);
+            Label line = ui.paragraph(Outlook.runwayLine(state, session.catalog(), schedule(), 0, 0,
+                session.openTurn()), Theme.TextStyle.CAPTION, runway.isPresent() && runway.getAsInt()
+                <= RUNWAY_WARNING_SEASONS ? Theme.DANGER : Theme.INK_MUTED);
+            ui.tooltip(line, "How long the funds last", "Each season pays today's running costs and today's "
+                + "funding; the next review pays what today's prestige earns, from then on. Launches, hiring, "
+                + "prestige earned and later reviews aren't predicted.");
+            card.add(line).padTop(Theme.SPACE_2).row();
+        }
         column.add(card).padBottom(Theme.SPACE_4).row();
 
         Table costCard = ui.card();
