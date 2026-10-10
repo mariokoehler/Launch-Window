@@ -1,5 +1,6 @@
 package de.mkoehler.launchwindow.client.screen;
 
+import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.rules.PrDuty;
 import de.mkoehler.launchwindow.model.Archetype;
@@ -26,6 +27,7 @@ import de.mkoehler.launchwindow.model.Building;
 import de.mkoehler.launchwindow.rules.SkillGrowth;
 import de.mkoehler.launchwindow.rules.PersonnelGroup;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -45,6 +47,8 @@ public final class AstronautComplexScreen extends ChromeScreen {
 
     private final PersonnelDialogs dialogs = new PersonnelDialogs(this, Department.ASTRONAUT);
     private MissionControl.Filter filter = MissionControl.Filter.ALL;
+    /** The skill the roster is sorted by, best first, or {@code null} for roster order. */
+    private AstronautSkill sortBy;
 
     /**
      * Builds the screen from the session.
@@ -81,7 +85,8 @@ public final class AstronautComplexScreen extends ChromeScreen {
         bar.add(filterChips()).left();
         bar.add(ui.label("A gold star marks an Expert skill. At " + (int) SkillGrowth.EXPERT_TRAINING_SKILL_THRESHOLD
             + " or more, a skill can be trained toward Expert.", Theme.TextStyle.CAPTION, Theme.ON_PAGE_STRONG))
-            .expandX().right();
+            .expandX().right().padRight(Theme.SPACE_4);
+        bar.add(sortButtons()).right();
         content.add(bar).padBottom(Theme.SPACE_4).row();
         content.add(roster()).expand().fill();
     }
@@ -121,6 +126,44 @@ public final class AstronautComplexScreen extends ChromeScreen {
         return strip;
     }
 
+    /**
+     * The sort buttons (the user's request, 2026-10-10), as Mission Control's: one per skill, best
+     * first. Clicking the active one goes back to roster order.
+     */
+    private Table sortButtons() {
+        Table buttons = new Table();
+        buttons.add(ui.label("SORT", Theme.TextStyle.LABEL, Theme.ON_PAGE_STRONG)).padRight(Theme.SPACE_2);
+        for (AstronautSkill skill : AstronautSkill.values()) {
+            boolean active = skill == sortBy;
+            String icon = CrewSkills.icon(skill.name());
+            Table button = new Table();
+            button.setBackground(active ? ui.solid(Theme.NAVY)
+                : ui.rect(Theme.SURFACE_CARD, Theme.ON_PAGE, Theme.BORDER_THIN));
+            Image glyph = new Image(ui.icon(icon), Scaling.fit);
+            glyph.setColor(active ? Theme.ON_FILL : Theme.NAVY);
+            button.add(glyph).height(16f).width(16f * Math.min(1f, ui.iconAspect(icon)));
+            button.setTouchable(Touchable.enabled);
+            button.addListener(clicked(() -> {
+                sortBy = active ? null : skill;
+                rebuild();
+            }));
+            ui.tooltip(button, "Sort by " + CrewSkills.label(skill.name()), active ? "Best first. Click again for "
+                + "roster order." : "Best first.");
+            buttons.add(button).size(30f).padLeft(4f);
+        }
+        return buttons;
+    }
+
+    /**
+     * Sorts the roster by a skill, as clicking its button does.
+     *
+     * @param skill the skill, or {@code null} for roster order
+     */
+    public void sortBy(AstronautSkill skill) {
+        sortBy = skill;
+        rebuild();
+    }
+
     private Table filterChips() {
         Table chips = new Table();
         for (MissionControl.Filter option : MissionControl.Filter.values()) {
@@ -148,7 +191,10 @@ public final class AstronautComplexScreen extends ChromeScreen {
         card.pad(Theme.BORDER_EMPHASIS);
         card.top();
         List<Astronaut> rows = session.state().getAstronauts().stream()
-            .filter(astronaut -> AstronautCorps.matches(astronaut, filter)).toList();
+            .filter(astronaut -> AstronautCorps.matches(astronaut, filter))
+            .sorted(sortBy == null ? (a, b) -> 0
+                : Comparator.comparingDouble((Astronaut a) -> a.getSkill(sortBy)).reversed())
+            .toList();
         Table list = new Table();
         list.top();
         list.defaults().growX();

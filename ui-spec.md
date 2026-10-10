@@ -226,6 +226,13 @@ On the right:
     the target level for Permanent. Nobody in basic training has a Pull out button:
     it can't be cut short. **Ref:**
     `SET_centre_advanced_training_assignment*.png`.
+    *Estimate (the user's request, 2026-10-10, component 25):* under Permanent's target slider, updated
+    as it moves: "About 12 seasons (4 rounds of 3), done by Winter 1958; 9 to 12 seasons in 8 runs of
+    10." (`rules.TrainingPlanning`: the season pass's rounds with the training factor's midpoint,
+    revealed traits only, and 300 random runs for the spread; `TrainingPlanningTest` checks it against
+    1,000 real trainings). A target the gains can't reach says where training stops ("Gains shrink
+    toward 100, so training stops at about 99.6 after 60 seasons."), and a retirement that comes first
+    is named. Shot `set-training-permanent.png`.
 13. **Manage department dialog** *(decided: BASPM's one-off adjustment)*. A slider
     from −50 % to +50 % that changes **every salary in the group once** by that
     percentage. Morale changes immediately: by +p for a raise of p %, by −3×p for
@@ -1575,6 +1582,9 @@ toast and dialogs). Decisions made while building them, **all confirmed by the u
 ### 4.9 Astronaut Complex
 **Purpose:** the astronaut department. Astronaut cap 7/14/24/35. **Ref:**
 `astronaut_centre_*.png`, `hire_recruits.png`.
+*Sort (the user's request, 2026-10-10; it had never been built here):* Mission Control's sort buttons
+right of the filter chips, one per skill, best first; clicking the active one goes back to roster
+order. Shot `ac-sorted.png`.
 
 **4.9.1 Personnel overview** (component 11) for astronauts, showing who is on a
 mission (crew or CAPCOM) and Expert stars, with sub-screens Hire and Manage

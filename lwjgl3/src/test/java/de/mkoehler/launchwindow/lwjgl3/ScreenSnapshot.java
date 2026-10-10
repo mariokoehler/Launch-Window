@@ -513,6 +513,9 @@ public final class ScreenSnapshot {
         // Idle people (2026-10-10): red dots on the markers, and the count under the hovered name.
         write(folder, "outlook-hub-idle.png", new SpaceComplexScreen(game),
             screen -> screen.hover(Hub.Place.MISSION_CONTROL));
+        // The astronauts' roster sorted by a skill (2026-10-10).
+        write(folder, "ac-sorted.png", new AstronautComplexScreen(game),
+            screen -> screen.sortBy(de.mkoehler.launchwindow.model.AstronautSkill.PILOTING));
     }
 
     /**

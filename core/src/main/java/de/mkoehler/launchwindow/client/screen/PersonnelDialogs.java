@@ -21,6 +21,8 @@ import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.UiKit;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.Department;
+import de.mkoehler.launchwindow.client.view.Outlook;
+import de.mkoehler.launchwindow.client.view.People;
 import de.mkoehler.launchwindow.client.view.Tips;
 import de.mkoehler.launchwindow.client.view.SetDepartment;
 import de.mkoehler.launchwindow.model.AssignmentState;
@@ -28,7 +30,9 @@ import de.mkoehler.launchwindow.model.Personnel;
 import de.mkoehler.launchwindow.model.SetSpecialist;
 import de.mkoehler.launchwindow.model.TrainingKind;
 import de.mkoehler.launchwindow.rules.DepartmentSalaries;
+import de.mkoehler.launchwindow.rules.PersonnelLifecycle;
 import de.mkoehler.launchwindow.rules.SkillGrowth;
+import de.mkoehler.launchwindow.rules.TrainingPlanning;
 import de.mkoehler.launchwindow.rules.TrainingProgress;
 
 import java.util.List;
@@ -183,14 +187,18 @@ final class PersonnelDialogs {
                 Slider slider = new Slider(minimumTarget(), (float) SkillGrowth.SKILL_CAP, 1f, false, ui.slider());
                 slider.setValue(target);
                 slider.setDisabled(skill == null);
+                // How long it takes, from the rules (the user's request, 2026-10-10).
+                Label estimate = ui.paragraph(estimate(), Theme.TextStyle.BODY_SM, Theme.INK_MUTED);
                 slider.addListener(new ChangeListener() {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
                         target = Math.round(slider.getValue());
                         value.setText(String.valueOf(target));
+                        estimate.setText(estimate());
                     }
                 });
-                card.add(slider).padBottom(Theme.SPACE_4).row();
+                card.add(slider).padBottom(Theme.SPACE_2).row();
+                card.add(estimate).growX().padBottom(Theme.SPACE_4).row();
             }
 
             Table buttons = new Table();
@@ -205,6 +213,37 @@ final class PersonnelDialogs {
 
         private String seasons(int count) {
             return count + (count == 1 ? " season" : " seasons");
+        }
+
+        /**
+         * Words how long permanent training to the target takes ({@link TrainingPlanning}): the
+         * average seasons, the season it's done by and the spread of the draws, or where it stalls,
+         * and a retirement that comes first.
+         */
+        private String estimate() {
+            if (skill == null) {
+                return "Pick a skill to see how long it takes.";
+            }
+            double current = department.skill(specialist, skill);
+            TrainingPlanning.Estimate estimate = TrainingPlanning.permanent(specialist, current, target);
+            String text;
+            if (estimate.reaches()) {
+                TrainingPlanning.Range range = TrainingPlanning.range(specialist, current, target);
+                String spread = range.high() == Integer.MAX_VALUE ? "; in some runs it stalls short of it"
+                    : range.low() == range.high() ? "" : "; " + range.low() + " to " + seasons(range.high())
+                    + " in 8 runs of 10";
+                text = "About " + seasons(estimate.seasons()) + " (" + estimate.rounds() + " "
+                    + (estimate.rounds() == 1 ? "round" : "rounds") + " of " + TrainingProgress.ADVANCED_TRAINING_SEASONS
+                    + "), done by " + Outlook.by(host.session.openTurn(), estimate.seasons()) + spread + ".";
+            } else {
+                text = String.format(Locale.ROOT, "Gains shrink toward %d, so training stops at about %.1f after %s.",
+                    (int) SkillGrowth.SKILL_CAP, estimate.finalSkill(), seasons(estimate.seasons()));
+            }
+            int retires = PersonnelLifecycle.seasonsUntilRetirement(specialist, department.group());
+            if (retires < estimate.seasons()) {
+                text += " " + People.surname(specialist.getName()) + " retires in " + seasons(retires) + ", before that.";
+            }
+            return text;
         }
 
         private Table segment(String text, TrainingKind segmentKind) {
