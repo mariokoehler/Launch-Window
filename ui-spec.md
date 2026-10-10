@@ -891,6 +891,116 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       page and mission cards, the cosmonauts' roster, the program card's staffing, the locked
       Pioneer 4 page), and the changed `payload-rnd*.png`, `plan-configs.png`, `pao.png` and
       `hq-details-vostok-open.png` (the confirmation's runway).
+26. **R&D decision** *(the user's idea, 2026-10-10, talked through the same day: `design.md` §5,
+    Backlog, "R&D decisions"; specified 2026-10-10, not mocked up yet).* A choice the game puts to the
+    player about one component under R&D, rocket or payload, to fill the lulls between flights. Every
+    decision has the same shape whatever its type: a story, two to four options, what each option
+    shows in advance, a default, and an outcome the server works out the moment the player decides.
+
+    **Life cycle.**
+    - *Offered* when a turn resolves (rules in `design.md`; aimed at the lulls: near certain while no
+      mission flies and the component is more than a season from 60 %). It belongs to one component,
+      the one the player's soonest mission waits on where there is one. One open decision at a time.
+    - *Open* until the next turn resolves. The player decides whenever they like during the turn.
+    - *Decided:* an ordinary action, resolved by the server at once from a seed fixed to the decision
+      (reopening can't reroll, and the action journal replays it). The answer comes back with the new
+      state: the outcome shows in place and the bar and season marks update.
+    - *Lapsed:* not decided when the turn resolves, so the default applies then, and the next report
+      says so. After a lapse no new decision comes until the player acts again.
+    - *Recorded:* the next turn report's news carries one line for it, decided or lapsed.
+
+    **Where the player meets it.**
+    - **Turn report:** a full-width Decision card above the columns, gold left accent: eyebrow
+      "DECISION · <COMPONENT>", the headline, the story's first sentence, "If you don't decide: <the
+      default>." and a primary button "Decide on the R&D board". The at-a-glance strip's Events cell
+      becomes "Events · decision" when one waits (or a sixth cell "Decision: 1 waiting", whichever the
+      mockup prefers).
+    - **Hub:** a gold dot with a white ring on the upper left of the VAB's (rocket) or SET Centre's
+      (payload) marker, opposite the red idle-staff dot. Hover adds a line under the building's name:
+      "A decision waiting: Atlas".
+    - **R&D board (component 10), where the player decides:** a banner inside the component's card,
+      between the reliability bar's caption and the team chemistry row. The board scrolls to that card
+      when opened from the report or the hub. The mission plan's read-only R&D tab shows the banner
+      without its buttons, with a link to the board.
+
+    **The banner, open.** Gold-tinted background, gold border.
+    - Eyebrow: "DECISION · <TYPE LABEL>" and, right-aligned, "Until the turn resolves · <countdown>".
+    - Headline (heading small) and the story (body small, one to three sentences).
+    - Type-specific panel where the type has one (clues, a person picker; see the types).
+    - The options as a vertical list of option rows: a label, and under it what it shows in advance in
+      caption text ("$ 1,200 · 70 % chance of about +4 reliability"), or nothing for an option that
+      shows nothing. The default row carries a small "If you don't decide" tag.
+    - Concept chips (component 19) for the explainers the decision draws on, under the options.
+    - Clicking an option opens the confirmation. Hovering an option with a preview (trade-offs over
+      time) shows it on the bar above while hovered.
+
+    **The confirmation.** A small dialog: the option's label, everything it shows in advance, its cost
+    if any against the funds, any person it takes, and the buttons "Decide" (primary) and "Back". The
+    default option can be chosen too; it then applies at once instead of waiting.
+
+    **The banner, decided.** It turns into the outcome: a tone mark (green, red, or navy for neutral),
+    the outcome's headline and sentence, and the effects in the event lines' style ("Reliability +4.2",
+    "Funds - $ 1,200", "Kozlov: rapport with Orlova grew"). The bar shows the change with the projected
+    segment and marks redrawn. A story arc's outcome adds a navy "To be continued" tag. The outcome stays
+    on the card until the turn resolves, with a close mark that folds it to one line.
+
+    **Effects are sized in seasons of R&D, not raw points** (*unconfirmed default*): a boost or a setback
+    is the component's expected gain over a number of seasons (`ResearchPlanning`), so a decision weighs
+    the same on an early satellite and on Saturn V. Costs are a share of a season's funding.
+
+    **The ten types**, each with an example. The type is a field in the content file; one resolver per
+    type.
+    1. **Resource for a chance.** Options with their costs and chances shown. *"Pay for a static test
+       firing?"* Pay $ 1,200: 70 % chance of about two seasons' R&D gain, 30 % about half a season's.
+       Skip it (default): nothing.
+    2. **Knowledge.** One right answer, the rest wrong, and "I don't know" as the default; nothing
+       shown in advance. A right answer gives a large boost (about three seasons' gain), a wrong one a
+       setback (about one season's), "I don't know" nothing. *"Balloon tanks on the pad"*: the night
+       crew let the tank pressure of the rocket drop. What happens? It crumples under its own weight
+       (right) / Nothing, the steel holds / The fuel boils off / I don't know. Concept chip: Balloon tanks.
+       Reading the explainer is allowed; that's the point.
+    3. **Ambiguous.** Two to four options whose outcomes can't be told from their words; people themes;
+       the team's traits (revealed or not) shape the result. *"The night shift wants a say"*: Hear them
+       out / Back the foreman / Promise a bonus ($ 300). Outcomes range from a morale lift and a small
+       boost to a resignation threat.
+    4. **Who oversees it.** A person picker in the banner: the idle engineers, best first in the
+       component's skill, each with the chance of success their skill gives ("Kozlov · Rockets 72 · 78 %
+       clean run"); engineers in training are listed muted with "Pull out of training to choose"
+       (a link that opens the pull-out confirmation, partial credit applies). Default: "Nobody, the
+       test is put off". *"Who will oversee the test firing?"*
+    5. **Trade-offs over time.** Options that change R&D for several seasons; hovering one previews its
+       season marks on the bar. *"Freeze the design?"* Freeze: R&D 30 % faster for four seasons, cap
+       3 points lower. Keep refining (default): nothing changes.
+    6. **Diagnosis.** A clue panel above the options: two to four short clues, each a line with a small
+       icon (a telemetry trace, a note, an inspection photo caption). Options are the suspected causes;
+       one is right. Right: a fair boost; wrong: a season of R&D lost chasing it; "Wait for more data"
+       (default): nothing. *"Shutdown at second 41"*: pressure fell two seconds before cut-off;
+       turbopump vibration normal; the igniter fired twice. Concept chips where they help.
+    7. **Opportunity with strings.** An offer for this turn only, its catch stated. *"The air force
+       lends its altitude chamber"*: Accept: about three seasons' gain at once, one engineer from the
+       team seconded for two seasons (the player picks who, with the person picker). Decline (default).
+    8. **Pairing.** Two person pickers ("Who works with whom?") over the component's team and the idle
+       engineers, with relationship marks (component 22) between the picked pair. Outcome scaled by
+       their rapport and traits; the pairing builds rapport or starts a clash, shown in the outcome.
+       Default: "Leave the team as it is".
+    9. **Intelligence tip.** Only while the Intelligence Office has a level. Shows the tip's
+       reliability in words from that level ("Our sources are usually right about this"). *"The
+       rival's engine runs cooler"*: Adopt their approach: a large boost if the tip is right, a setback
+       if not. Ignore it (default).
+    10. **Story arc.** Any type's outcome can open a follow-up in a later quiet season. The follow-up's
+        eyebrow reads "FOLLOW-UP · <COMPONENT>" and its story recalls the first decision ("The test
+        firing in Spring went clean. The engineers want to try it at full thrust."). Higher stakes both
+        ways. An arc ends after two or three steps, or when a step goes badly.
+
+    **Help:** a "Decisions" topic, linked from the banner's eyebrow.
+
+    **Shots:** one banner per type open, the confirmation, an outcome good and bad, the report card,
+    the hub dot, a lapsed decision's report line.
+
+    **Unconfirmed defaults, to tune with the playout bots and the play test:** the chances (about 85 to
+    90 % in a lull, low otherwise), effect sizes in seasons of R&D, costs as a share of a season's
+    funding, two or three events per type for the first build.
+
 ---
 
 ## 3. Screen flow *(decided)*
@@ -2231,6 +2341,12 @@ current state alone. Each is an M5 task.
   mission and the step.
 
 ---
+- **G11. R&D decisions (component 26, 2026-10-10).** Server and rules: a pending decision on the
+  player's state (one at a time, with its seed, its component and any arc it continues); the offer
+  rule at resolution (`design.md` §5, the lull signals); a decide action resolved at once and
+  journaled; the default applied when the turn resolves; report events for an offered, decided and
+  lapsed decision (fields only added); a content file of decisions by type, outside the hashed pack
+  like the stories; and the playout bots taught to decide, to measure how often decisions come.
 
 ## 7. Suggested mockup order
 
@@ -2247,6 +2363,11 @@ current state alone. Each is an M5 task.
 
 **Next new screen (user, 2026-10-09):** a newspaper front page for the great Firsts, shown on
 login before the turn report (`design.md` §5, Backlog). Not specified yet.
+
+**Next mockup (specified 2026-10-10):** the R&D decision (component 26): the banner on an R&D card
+open, one per type (ten), the confirmation, an outcome good and bad, the turn report's Decision card
+and strip cell, and the hub marker's decision dot beside the idle-staff dot. A new component with a
+gold accent; flag any new token for `Theme.java`.
 
 Mockups don't need to be pixel-final. Layout, components, and states are what
 implementation needs. Flag any new color, component variant, or icon so
