@@ -480,6 +480,10 @@ public final class ScreenSnapshot {
         nasa.getOpenedProgramIds().add("explorer-1");
         startSession(game, nasa, info);
         write(folder, "advisor-nasa-progress.png", new SpaceComplexScreen(game), null);
+        // Minimized to its head, which counts what's left; every later shot has it open again.
+        game.setAdvisorMinimized(true);
+        write(folder, "advisor-minimized.png", new SpaceComplexScreen(game), null);
+        game.setAdvisorMinimized(false);
         write(folder, "advisor-rules.png", new SpaceComplexScreen(game), screen -> screen.openHelp(
             SpaceComplexScreen.advisorTopics(de.mkoehler.launchwindow.client.view.Advisor.ITEMS.get(3))));
 

@@ -764,6 +764,14 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       but the report still to come, it says "All set for now" and names it. 380 px wide, touchable as
       a whole so the hotspots underneath never take a click; at the bottom left it covers no
       building marker on either agency's art (only the corner of NASA's SET Centre outline).
+    - **Minimize** (the user's idea, 2026-10-10, for the new NASA art, candidate 125, where the card
+      covers part of the SET Centre): a white chevron at the end of the head, pointing down. A click
+      anywhere on the head shrinks the card to the head alone, which drops to the bottom left, with
+      the chevron pointing up and the caption counting what's left ("4 things to do", "1 thing to
+      do", or "All set for now") instead of "Your first seasons". Another click opens it again.
+      *Unconfirmed default:* the state lasts for the client run (`LaunchWindowGame.advisorMinimized`),
+      across hub visits, and a fresh start shows the whole card again, so the advisor is never lost
+      by accident. Shot `advisor-minimized.png`.
     - **Gone for good:** once every item is done (the report included), or the player hides it, the
       client marks the advisor retired and never shows it again for that login on that server. Not
       shown once the game is decided. So an agency that flies satellites only until the advisor

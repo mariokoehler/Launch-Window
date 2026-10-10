@@ -199,12 +199,32 @@ public final class SpaceComplexScreen extends SessionScreen {
         card.setTouchable(Touchable.enabled);
         card.setBackground(ui.rect(Theme.SURFACE_CARD, Theme.NAVY, Theme.BORDER_EMPHASIS));
         card.top().left();
+        boolean minimized = game.advisorMinimized();
         Table head = new Table();
         head.setBackground(ui.solid(Theme.NAVY));
         head.pad(8f, Theme.SPACE_4, 8f, Theme.SPACE_4);
         head.add(ui.label("ADVISOR", Theme.TextStyle.EYEBROW, Theme.ON_FILL)).left().expandX();
-        head.add(ui.label("Your first seasons", Theme.TextStyle.CAPTION, DIRECTOR)).right();
+        // Minimized, the head still says how much is left.
+        String caption = !minimized ? "Your first seasons" : open.isEmpty() ? "All set for now"
+            : open.size() + (open.size() == 1 ? " thing to do" : " things to do");
+        head.add(ui.label(caption, Theme.TextStyle.CAPTION, DIRECTOR)).right().padRight(Theme.SPACE_2);
+        // The chevron points the way the card goes: down to minimize, up to open again. The whole
+        // head toggles it, the chevron being only the hint.
+        Image chevron = new Image(ui.icon("chevron"), Scaling.fit);
+        chevron.setColor(Theme.ON_FILL);
+        chevron.setOrigin(6f, 6f);
+        chevron.setRotation(minimized ? 90f : -90f);
+        head.add(chevron).size(12f);
+        head.setTouchable(Touchable.enabled);
+        head.addListener(clicked(() -> {
+            game.setAdvisorMinimized(!game.advisorMinimized());
+            rebuildAdvisor(session.state());
+        }));
         card.add(head).growX().row();
+        if (minimized) {
+            advisorCorner.add(card).width(ADVISOR_WIDTH);
+            return;
+        }
 
         Table body = new Table();
         body.top().left();

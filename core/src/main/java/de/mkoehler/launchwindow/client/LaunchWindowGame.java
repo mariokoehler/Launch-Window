@@ -36,6 +36,8 @@ public class LaunchWindowGame extends Game {
     private ClientSettings settings = ClientSettings.defaults();
     private ClientSession session;
     private final Hub.Clock hubClock = new Hub.Clock();
+    /** Whether the hub's advisor card is minimized to its head; for this client run only. */
+    private boolean advisorMinimized;
     /** The explainers' read marks when kept in memory (screenshots), else {@code null}. */
     private java.util.Set<String> explainersReadInMemory;
     private java.util.Set<String> flagsInMemory;
@@ -258,6 +260,25 @@ public class LaunchWindowGame extends Game {
      */
     public void retireAdvisor() {
         setFlag("advisorRetired");
+    }
+
+    /**
+     * Returns whether the advisor's card is minimized to its head. Kept for this client run only,
+     * so a fresh start shows the whole card again.
+     *
+     * @return whether it's minimized
+     */
+    public boolean advisorMinimized() {
+        return advisorMinimized;
+    }
+
+    /**
+     * Minimizes the advisor's card to its head, or opens it again.
+     *
+     * @param minimized whether to minimize it
+     */
+    public void setAdvisorMinimized(boolean minimized) {
+        advisorMinimized = minimized;
     }
 
     /**
