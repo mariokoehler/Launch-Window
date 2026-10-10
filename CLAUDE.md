@@ -309,7 +309,8 @@ cd assets && java --enable-native-access=ALL-UNNAMED -cp "../lwjgl3/target/class
 - libGDX loads a one-channel image as alpha: save greyscale art as RGB.
 - An image with transparency needs colour bled into its fully transparent pixels, or mipmaps
   fringe its edge (`make_patch_assets.py`).
-- Hotspot files say `imageHeight` 1088; flip y against 1080, the cropped art.
+- Raw hotspot files (`assets-raw/main_menu`) are in the raw art's pixels; `make_hub_art.py` scales them to
+  1920 × 1080. The client reads points with a top-left origin and flips y against 1080.
 - The client calls `core`'s rules against its preview state and never ports them (`ui-spec.md`
   G7). Tooltip text lives in `client.view.Tips`: read numbers from the rules' constants, never
   hard-code them.

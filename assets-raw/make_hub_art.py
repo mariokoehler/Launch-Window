@@ -2,14 +2,16 @@
 assets: 2 agencies x 4 seasons x 4 times of day, plus each agency's hotspot polygons.
 
     assets/ui/hub/<AGENCY>_<season>_<time>.jpg   1920 x 1080
-    assets/ui/hub/<AGENCY>.hotspots.json         copied as is
+    assets/ui/hub/<AGENCY>.hotspots.json         scaled to 1920 x 1080
 
-The raw images are 1920 x 1088. Only the bottom 8 rows are cropped (design.md 3.13): the
-hotspots use a top-left origin and sit clear of that strip, so their coordinates stay valid.
+The raw images can be any size a little taller than 16:9 (since 2026-10-10 they are 2720 x 1536;
+the first set was 1920 x 1088). The bottom rows past 16:9 are cropped (design.md 3.13), then the
+image is scaled to 1920 x 1080. The hotspots, drawn on the raw image with a top-left origin, are
+scaled by the same factor; the client reads their points as 1920 x 1080 pixels.
 Run from the repo root:  python assets-raw/make_hub_art.py   (needs Pillow)
 """
+import json
 import os
-import shutil
 
 from PIL import Image
 
@@ -27,15 +29,32 @@ WIDTH, HEIGHT = 1920, 1080
 def main():
     os.makedirs(OUT, exist_ok=True)
     for agency in AGENCIES:
-        shutil.copyfile(os.path.join(RAW, f"LW_main_menu_{agency}.hotspots.json"),
-                        os.path.join(OUT, f"{agency}.hotspots.json"))
+        scale = None
         for season in SEASONS:
             for time in TIMES:
                 image = Image.open(os.path.join(RAW, f"LW_main_menu_{agency}_{season}_{time}.png")).convert("RGB")
-                if image.width != WIDTH or image.height < HEIGHT:
-                    raise SystemExit(f"unexpected size {image.size} for {agency} {season} {time}")
-                image.crop((0, 0, WIDTH, HEIGHT)).save(os.path.join(OUT, f"{agency}_{season}_{time}.jpg"),
-                                                       quality=80, optimize=True)
+                height = round(image.width * HEIGHT / WIDTH)
+                if image.height < height:
+                    raise SystemExit(f"{agency} {season} {time} is wider than 16:9: {image.size}")
+                if scale is not None and image.width / WIDTH != scale:
+                    raise SystemExit(f"{agency} {season} {time} differs in size from the others: {image.size}")
+                scale = image.width / WIDTH
+                image = image.crop((0, 0, image.width, height))
+                if image.size != (WIDTH, HEIGHT):
+                    image = image.resize((WIDTH, HEIGHT), Image.LANCZOS)
+                image.save(os.path.join(OUT, f"{agency}_{season}_{time}.jpg"), quality=80, optimize=True)
+        with open(os.path.join(RAW, f"LW_main_menu_{agency}.hotspots.json"), encoding="utf-8") as f:
+            hotspots = json.load(f)
+        if hotspots["imageWidth"] / WIDTH != scale:
+            raise SystemExit(f"{agency} hotspots were drawn on a {hotspots['imageWidth']} px wide image")
+        for polygon in hotspots["polygons"]:
+            for point in polygon["points"]:
+                point["x"] = round(point["x"] / scale, 1)
+                point["y"] = round(point["y"] / scale, 1)
+        hotspots["imageWidth"], hotspots["imageHeight"] = WIDTH, HEIGHT
+        with open(os.path.join(OUT, f"{agency}.hotspots.json"), "w", encoding="utf-8", newline="\n") as f:
+            json.dump(hotspots, f, indent=2)
+            f.write("\n")
     print("ok")
 
 

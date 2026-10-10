@@ -1889,8 +1889,10 @@ the outcomes are in each screen's "Implemented" note.
 
 **The hub** (`SpaceComplexScreen`, `client.view.Hub`) is BASPM's Space Complex screen:
 - **Full-bleed art, no chrome** (user, 2026-10-04, after comparing both mockups). 32 images:
-  NASA and Soviet, 4 seasons × 4 times of day (`make_hub_art.py`, cropped from 1088 to 1080 rows
-  off the bottom).
+  NASA and Soviet, 4 seasons × 4 times of day (`make_hub_art.py`, cropped to 16:9 off the bottom and scaled to
+  1920 × 1080). The art was redone on 2026-10-10: the user's own renders at 2720 × 1536, NASA from
+  seed 125 of a ComfyUI batch (picked because the VAB's crawlerway runs off the left edge) and a
+  Baikonur set from the same prompt adapted.
 - **Eight buildings** with one hotspot polygon set per archetype (`*.hotspots.json`, authored
   with `HotspotEditor`; one set fits every variant): VAB, Mission Control, Astronaut Complex,
   SET Centre, Public Affairs Office, Headquarters, Museum, and the Intelligence Office (2026-10-07,
