@@ -80,6 +80,8 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   configurations gated on a goal. Its components have blueprint drawings in the turn report
   (2026-10-09), and every program, component and real flight has a history note (2026-10-09). All
   its art is in, the last rocket programs (Juno II, Atlas) on 2026-10-09.
+- **Random events tell stories** (2026-10-10, `design.md` §2.7(d)): 105 in `event-stories.json`, sized per
+  event from the playouts, no repeats until an event's stories have all run.
 - **Looking ahead is built** (the user's idea, 2026-10-10, `ui-spec.md` component 25): R&D milestones with
   the seasons to each (`ResearchPlanning.project`), mission readiness and earliest launch, program staffing,
   training and retirement dates, the funds runway (`BudgetProgress.runway`), where a locked goal is earned.
@@ -279,7 +281,8 @@ cd assets && java --enable-native-access=ALL-UNNAMED -cp "../lwjgl3/target/class
 **Content and rules**
 - `strings.json` is deliberately outside `ContentPackLoader.FILES` (not hashed, not frozen).
   Never add it there. `ContentStringsTest` fails until every new id has text. The same goes for
-  `assets/content/space-race-news.json` (`SpaceRaceNewsTest`) and `pr-press.json` (`PrDutyTest`);
+  `assets/content/space-race-news.json` (`SpaceRaceNewsTest`), `pr-press.json` (`PrDutyTest`) and
+  `event-stories.json` (`EventStoriesTest`, which holds each event to its sized count);
   turn reports store their story ids, so never rename or reuse one.
 - `cancelsGoalIds` means "also credits, with prestige" (`rules.GoalCascade`), not "makes
   unearnable".

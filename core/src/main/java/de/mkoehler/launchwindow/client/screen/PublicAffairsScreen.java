@@ -400,7 +400,7 @@ public final class PublicAffairsScreen extends ChromeScreen {
         for (int i = 0; i < log.size(); i++) {
             NewsEntry entry = log.get(i);
             TurnReportView.Line line = TurnReportView.newsLine(entry.kind(), entry.subjectId(), entry.magnitude(),
-                session.catalog(), false);
+                entry.storyId(), entry.subjectName(), session.catalog(), state.getArchetype(), false);
             Table item = new Table();
             item.top().left();
             item.add(ui.label(GameDate.ofTurn(entry.turn()).label(), Theme.TextStyle.CAPTION, Theme.INK_MUTED))
@@ -413,8 +413,13 @@ public final class PublicAffairsScreen extends ChromeScreen {
             Table text = new Table();
             text.left();
             text.defaults().left().growX();
-            text.add(ui.label(line.title(), Theme.TextStyle.BODY_STRONG, Theme.INK)).row();
-            text.add(ui.paragraph(line.text(), Theme.TextStyle.BODY_SM, Theme.INK_MUTED));
+            text.add(ui.paragraph(line.title(), Theme.TextStyle.BODY_STRONG, Theme.INK)).row();
+            // The narrow column shows what happened; a story's sentences sit in the tooltip (2026-10-10).
+            text.add(ui.paragraph(line.tag().isEmpty() ? line.text() : line.tag(), Theme.TextStyle.BODY_SM,
+                Theme.INK_MUTED));
+            if (!line.tag().isEmpty()) {
+                ui.tooltip(text, line.title(), line.text());
+            }
             item.add(text).expandX().fillX();
             news.add(item).padTop(8f).padBottom(8f).row();
             if (i < log.size() - 1) {

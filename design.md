@@ -1267,6 +1267,24 @@ BASPM's magnitudes (confirmed 2026-10-06); don't port decision events. Results g
 per-player **news log** (`NewsEntry`, last 50), read in the turn report; never a shared feed,
 which would reveal a rival's setbacks.
 
+**(d) Stories** (the user's request, 2026-10-10: the events "give you no context at all"). Each
+applied event carries a little story: a headline and a sentence or two that say what happened, then
+the event's own line with the figures. 105 stories in `assets/content/event-stories.json`
+(`EventStories`), our own text, fictional, and neutral between the agencies. Sized per event from the
+bot playouts (`ContentPackPlayouts`, which now counts random events): a Moon race with side missions
+runs about 150 seasons and sees about 30 good and 8 bad events, the plain bot's 237 seasons 47 and
+12; prestige and R&D boosts come 10 to 17 times a game each, reduced expenditures 6 to 10, every
+other event at most about 3. So: 18 stories each for prestige and R&D boosts, 12 for reduced
+expenditures, 6 for morale boosts, 5 for extra funding, 4 for reliability setbacks and 3 for every
+other bad event (`EventStories.SIZED`). No player sees a story twice until every story of its event
+has run; then that event starts over (`PlayerSnapshot.usedEventStoryIds`). The pick uses its own
+salted seed (agency, turn, event), so the season's draws, and the playouts, are unchanged. The
+event (`RandomEventOccurred`) and the news log entry store the story's id and the struck person's
+name, since the person may be gone when the report is read; the text stays in the client. Placeholders:
+`{name}`, `{component}` (reliability setbacks), `{group}` (morale). The same pass fixed the event
+lines' figures: prestige, cost and funding magnitudes are percentages, and were worded as points
+and dollars.
+
 **As built** (`RandomEvents`, `RandomEventRoster.baspmClose()`): rolled after the budget pass; in
 each roll the first event of a shuffled pool whose gate passes is applied. Timed effects age at
 the start of the pass, so an N-season effect covers N seasons.

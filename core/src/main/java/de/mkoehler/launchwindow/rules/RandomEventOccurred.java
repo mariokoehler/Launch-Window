@@ -10,9 +10,25 @@ import de.mkoehler.launchwindow.model.RandomEventKind;
  * @param kind      which event applied
  * @param subjectId the affected personnel, component, or group name, or {@code null}
  * @param magnitude the rolled magnitude, as recorded in the news entry
- * @param turn      the game turn it applied on
+ * @param turn        the game turn it applied on
+ * @param storyId     the story told about it ({@link de.mkoehler.launchwindow.content.EventStories}), or
+ *                    {@code null} for none (reports from before 2026-10-10)
+ * @param subjectName the affected person's name as it was then, or {@code null} when the subject isn't
+ *                    a person: the person may be gone by the time the report is read
  * @author Mario Koehler
  */
-public record RandomEventOccurred(RandomEventKind kind, String subjectId, double magnitude, int turn)
-    implements ResolutionEvent {
+public record RandomEventOccurred(RandomEventKind kind, String subjectId, double magnitude, int turn,
+                                  String storyId, String subjectName) implements ResolutionEvent {
+
+    /**
+     * An event with no story, as recorded before stories existed.
+     *
+     * @param kind      which event applied
+     * @param subjectId the affected personnel, component, or group name, or {@code null}
+     * @param magnitude the rolled magnitude
+     * @param turn      the game turn it applied on
+     */
+    public RandomEventOccurred(RandomEventKind kind, String subjectId, double magnitude, int turn) {
+        this(kind, subjectId, magnitude, turn, null, null);
+    }
 }

@@ -330,7 +330,7 @@ public final class TurnReportScreen extends ChromeScreen {
             }
             card.add(real).padBottom(Theme.SPACE_4).row();
         });
-        List<TurnReportView.Line> lines = TurnReportView.news(report, catalog);
+        List<TurnReportView.Line> lines = TurnReportView.news(report, catalog, session.state().getArchetype());
         if (lines.isEmpty()) {
             card.add(ui.paragraph("A quiet season: no random events.", Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).row();
         }
@@ -342,8 +342,14 @@ public final class TurnReportScreen extends ChromeScreen {
             Table text = new Table();
             text.left();
             text.defaults().left().growX();
-            text.add(ui.label(line.title(), Theme.TextStyle.BODY_STRONG, Theme.INK)).row();
-            text.add(ui.paragraph(line.text(), Theme.TextStyle.BODY_SM, Theme.INK_MUTED));
+            text.add(ui.paragraph(line.title(), Theme.TextStyle.BODY_STRONG, Theme.INK)).row();
+            // A story's text, then what the event did (2026-10-10); without a story, the effect alone.
+            text.add(ui.paragraph(line.text(), Theme.TextStyle.BODY_SM, line.tag().isEmpty() ? Theme.INK_MUTED
+                : Theme.INK)).row();
+            if (!line.tag().isEmpty()) {
+                text.add(ui.paragraph(line.tag(), Theme.TextStyle.BODY_SM, line.tone() > 0 ? Theme.SUCCESS
+                    : Theme.DANGER)).padTop(2f);
+            }
             row.add(text).expandX().fillX();
             card.add(row).padBottom(Theme.SPACE_3).row();
         }

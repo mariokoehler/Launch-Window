@@ -1,5 +1,6 @@
 package de.mkoehler.launchwindow.rules;
 
+import de.mkoehler.launchwindow.content.EventStories;
 import de.mkoehler.launchwindow.content.RandomEventRoster;
 import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.AssignmentState;
@@ -18,6 +19,7 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.SplittableRandom;
 import java.util.random.RandomGenerator;
 
 /**
@@ -248,7 +250,8 @@ public final class RandomEvents {
                 RandomEventRoster.EventSpec spec = roster.spec(RandomEventKind.EMPLOYEE_UNAVAILABLE);
                 int windows = drawInt(random, spec.durationMin(), spec.durationMax());
                 chosen.setUnavailableSeasons(windows);
-                occurred(snapshot, events, RandomEventKind.EMPLOYEE_UNAVAILABLE, chosen.getId(), windows, turn);
+                occurred(snapshot, events, RandomEventKind.EMPLOYEE_UNAVAILABLE, chosen.getId(), windows, turn,
+                    chosen.getName());
                 return true;
             }
         }
@@ -299,7 +302,8 @@ public final class RandomEvents {
         }
         Personnel trainee = trainees.get(random.nextInt(trainees.size()));
         trainee.setTrainingSeasonsTotal(trainee.getTrainingSeasonsTotal() + 1);
-        occurred(snapshot, events, RandomEventKind.BASIC_TRAINING_EXTENSION, trainee.getId(), 1, turn);
+        occurred(snapshot, events, RandomEventKind.BASIC_TRAINING_EXTENSION, trainee.getId(), 1, turn,
+            trainee.getName());
         return true;
     }
 
@@ -490,7 +494,7 @@ public final class RandomEvents {
             case MISSION_CONTROL -> removeAndReport(snapshot.getMissionControlOfficers(),
                 (MissionControlOfficer) person, group, reason, events);
         }
-        occurred(snapshot, events, kind, person.getId(), 1, turn);
+        occurred(snapshot, events, kind, person.getId(), 1, turn, person.getName());
     }
 
     private static <T extends Personnel> void removeAndReport(List<T> roster, T person, PersonnelGroup group,
@@ -506,9 +510,24 @@ public final class RandomEvents {
      */
     private static void occurred(PlayerSnapshot snapshot, List<ResolutionEvent> events, RandomEventKind kind,
             String subjectId, double magnitude, int turn) {
-        events.add(new RandomEventOccurred(kind, subjectId, magnitude, turn));
-        snapshot.getNewsLog().add(new NewsEntry(turn, kind, subjectId, magnitude));
+        occurred(snapshot, events, kind, subjectId, magnitude, turn, null);
     }
+
+    /**
+     * Records one applied event with the person it struck, and picks its story (2026-10-10): one the
+     * player hasn't seen, from its own salted random so the season's draws stay as they were.
+     */
+    private static void occurred(PlayerSnapshot snapshot, List<ResolutionEvent> events, RandomEventKind kind,
+            String subjectId, double magnitude, int turn, String subjectName) {
+        SplittableRandom storyRandom = new SplittableRandom(Intelligence.seed(snapshot.getAgencyName(),
+            "event-story/" + turn + "/" + kind.name()) ^ STORY_SALT);
+        String storyId = EventStories.standard().pick(kind, storyRandom, snapshot.getUsedEventStoryIds());
+        events.add(new RandomEventOccurred(kind, subjectId, magnitude, turn, storyId, subjectName));
+        snapshot.getNewsLog().add(new NewsEntry(turn, kind, subjectId, magnitude, storyId, subjectName));
+    }
+
+    /** Keeps the story pick's seed apart from every other salted seed. */
+    private static final long STORY_SALT = 0x5703_1E5L;
 
     /** Employees of one group who may be removed by a random event: idle, or in training for the non-astronaut groups. */
     private static List<Personnel> eligibleEmployees(PlayerSnapshot snapshot, PersonnelGroup group) {

@@ -379,6 +379,7 @@ public final class ContentPackPlayouts {
     public Report run(int games, int seasons, long seed) {
         Random random = new Random(seed);
         Tally tally = new Tally();
+        lastTally = tally;
         for (int game = 0; game < games; game++) {
             Archetype archetype = game % 2 == 0 ? Archetype.NASA : Archetype.SOVIET;
             tally.gamesByArchetype.merge(archetype, 1, Integer::sum);
@@ -407,6 +408,8 @@ public final class ContentPackPlayouts {
         sideGivenUp.clear();
         List<Integer> gaps = new ArrayList<>();
         int sinceLaunch = 0;
+        // Random events seen this game, good then bad (2026-10-10, sizing the news stories).
+        int[] randomEvents = new int[2];
 
         for (int season = 0; season < seasons; season++) {
             // Journaled player actions first.
@@ -433,6 +436,10 @@ public final class ContentPackPlayouts {
             }
 
             for (ResolutionEvent event : seasonEvents) {
+                if (event instanceof de.mkoehler.launchwindow.rules.RandomEventOccurred occurred) {
+                    randomEvents[occurred.kind().isPositive() ? 0 : 1]++;
+                    tally.randomEventKinds.merge(occurred.kind().name(), 1, Integer::sum);
+                }
                 if (event instanceof MissionStepResolved resolved) {
                     tally.stepOutcomes.merge(resolved.outcome().name(), 1, Integer::sum);
                 } else if (event instanceof de.mkoehler.launchwindow.rules.AmbitionSettled ambition && keepPlaying) {
@@ -481,9 +488,11 @@ public final class ContentPackPlayouts {
                 tally.completionSeasonsByArchetype.computeIfAbsent(archetype, key -> new ArrayList<>()).add(season + 1);
                 tally.launchGaps.addAll(gaps);
                 tally.longestGaps.add(gaps.stream().mapToInt(Integer::intValue).max().orElse(season + 1));
+                tally.randomEventsPerGame.add(new int[] {randomEvents[0], randomEvents[1], season + 1});
                 return;
             }
         }
+        tally.randomEventsPerGame.add(new int[] {randomEvents[0], randomEvents[1], seasons});
     }
 
     /** Checks the budget phase against an independent recomputation taken just before it runs. */
@@ -1488,7 +1497,14 @@ public final class ContentPackPlayouts {
     }
 
     /** Mutable totals across a batch. */
+    /** The last run's tally, for {@link #main}'s random-event lines. */
+    private Tally lastTally;
+
     private static final class Tally {
+        /** Random events by kind, over every game. */
+        final Map<String, Integer> randomEventKinds = new java.util.TreeMap<>();
+        /** Per game: good events, bad events, and the seasons it ran (to completion or the cap). */
+        final List<int[]> randomEventsPerGame = new ArrayList<>();
         final Map<Archetype, Integer> completedByArchetype = new EnumMap<>(Archetype.class);
         final Map<Archetype, Integer> gamesByArchetype = new EnumMap<>(Archetype.class);
         final List<Integer> completionSeasons = new ArrayList<>();
@@ -1551,6 +1567,15 @@ public final class ContentPackPlayouts {
             + report.debtConversions() + ", lowest funds " + report.lowestFunds() + ", astronauts lost "
             + report.astronautsLost());
         System.out.println("Stalls: " + report.stalls());
+        List<int[]> perGame = harness.lastTally.randomEventsPerGame;
+        System.out.printf(java.util.Locale.ROOT, "Random events per game: %.1f good, %.1f bad over %.1f seasons; "
+                + "most in one game %d good, %d bad%n",
+            perGame.stream().mapToInt(game -> game[0]).average().orElse(0),
+            perGame.stream().mapToInt(game -> game[1]).average().orElse(0),
+            perGame.stream().mapToInt(game -> game[2]).average().orElse(0),
+            perGame.stream().mapToInt(game -> game[0]).max().orElse(0),
+            perGame.stream().mapToInt(game -> game[1]).max().orElse(0));
+        System.out.println("Random events by kind: " + harness.lastTally.randomEventKinds);
         System.out.print("Seasons as the target, per game of its agency:");
         report.targetSeasons().forEach((id, count) -> System.out.printf(java.util.Locale.ROOT, " %s %.1f,", id,
             count / (report.games() / 2.0)));

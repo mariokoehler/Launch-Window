@@ -1,5 +1,6 @@
 package de.mkoehler.launchwindow.client.view;
 
+import de.mkoehler.launchwindow.content.EventStories;
 import de.mkoehler.launchwindow.content.PrPress;
 import de.mkoehler.launchwindow.rules.PrDutyPerformed;
 import de.mkoehler.launchwindow.content.SpaceRaceNews;
@@ -429,9 +430,70 @@ public final class TurnReportView {
     }
 
     public static List<Line> news(TurnReport report, ContentCatalog catalog) {
+        return news(report, catalog, Archetype.NASA);
+    }
+
+    /**
+     * Returns the season's random events as news, each with its story (2026-10-10).
+     *
+     * @param report    the report
+     * @param catalog   the content pack
+     * @param archetype the player's agency, for how a department is named
+     * @return the lines, in the order they applied
+     */
+    public static List<Line> news(TurnReport report, ContentCatalog catalog, Archetype archetype) {
         return events(report, RandomEventOccurred.class).stream()
-            .map(event -> newsLine(event.kind(), event.subjectId(), event.magnitude(), catalog, true))
+            .map(event -> newsLine(event.kind(), event.subjectId(), event.magnitude(), event.storyId(),
+                event.subjectName(), catalog, archetype, true))
             .toList();
+    }
+
+    /**
+     * Words one random event with its story (the user's request, 2026-10-10): the story's headline
+     * as the title, its sentences as the text, and what the event did as the tag. Without a story
+     * (one recorded before stories existed, or gone from the file) the event's own name and effect,
+     * as before.
+     *
+     * @param kind        the event
+     * @param subjectId   what it struck, or {@code null}
+     * @param magnitude   its size
+     * @param storyId     its story, or {@code null}
+     * @param subjectName the person it struck, as named then, or {@code null}
+     * @param catalog     the content pack
+     * @param archetype   the player's agency
+     * @param inReport    whether it's on the turn report
+     * @return the line
+     */
+    public static Line newsLine(RandomEventKind kind, String subjectId, double magnitude, String storyId,
+                                String subjectName, ContentCatalog catalog, Archetype archetype, boolean inReport) {
+        Line plain = newsLine(kind, subjectId, magnitude, catalog, inReport);
+        if (subjectName != null) {
+            // The effect line names whom it struck: "Someone resigned" reads "Anna Kral resigned".
+            String named = plain.text().replaceFirst("^(Someone|A trainee|An astronaut)", subjectName);
+            plain = new Line(plain.title(), named, plain.tag(), plain.tone());
+        }
+        Optional<EventStories.Story> story = EventStories.standard().byId(storyId);
+        if (story.isEmpty()) {
+            return plain;
+        }
+        String component = catalog.missionComponent(Optional.ofNullable(subjectId).orElse(""))
+            .map(found -> ContentNames.of(found.id())).orElse(null);
+        String group = groupNoun(subjectId, archetype);
+        return new Line(story.get().headlineFor(subjectName, component, group),
+            story.get().textFor(subjectName, component, group), plain.text(), plain.tone());
+    }
+
+    /** A department as a story names it, from a morale event's subject. */
+    private static String groupNoun(String subjectId, Archetype archetype) {
+        if (subjectId == null) {
+            return null;
+        }
+        return switch (subjectId) {
+            case "ASTRONAUT" -> archetype == Archetype.SOVIET ? "cosmonauts" : "astronauts";
+            case "SET" -> "engineers";
+            case "MISSION_CONTROL" -> "flight controllers";
+            default -> null;
+        };
     }
 
     /**
@@ -455,7 +517,8 @@ public final class TurnReportView {
             case EMPLOYEE_DISMISSED -> "Someone was let go" + people;
             case EMPLOYEE_FAILED_BASIC_TRAINING -> "A trainee failed basic training and left.";
             case EMPLOYEE_RESIGNING -> "Someone resigned" + people;
-            case EMPLOYEE_UNAVAILABLE -> "Someone is unavailable for a while.";
+            case EMPLOYEE_UNAVAILABLE -> String.format(Locale.ROOT, "Someone is unavailable for %.0f %s.", magnitude,
+                magnitude == 1 ? "season" : "seasons");
             case MAX_LAUNCHES_ALLOWED -> "Only one launch is allowed this turn.";
             case NO_LAUNCHES_ALLOWED -> "No launches are allowed this turn.";
             case MISSION_COMPONENTS_UNAVAILABLE -> (subject.isEmpty() ? "A component" : subject)
@@ -463,17 +526,21 @@ public final class TurnReportView {
             case MORALE_DROP -> String.format(Locale.ROOT, "Morale fell by %.0f.", magnitude);
             case MORALE_BOOST -> String.format(Locale.ROOT, "Morale rose by %.0f.", magnitude);
             case PERISHED_ASTRONAUT -> "An astronaut died in an accident" + people;
-            case PRESTIGE_DROP -> String.format(Locale.ROOT, "Prestige fell by %,.0f.", magnitude);
-            case PRESTIGE_POINTS_BOOST -> String.format(Locale.ROOT, "Prestige rose by %,.0f.", magnitude);
-            case RD_RESULTS_SETBACK -> "R&D results are down for a while.";
-            case RD_RESULTS_BOOST -> "R&D results are up for a while.";
+            case PRESTIGE_DROP -> String.format(Locale.ROOT, "Prestige fell by %.0f %%.", magnitude);
+            case PRESTIGE_POINTS_BOOST -> String.format(Locale.ROOT, "Prestige rose by %.0f %%.", magnitude);
+            case RD_RESULTS_SETBACK -> String.format(Locale.ROOT, "R&D results are %.0f %% lower for a while.",
+                (1 - magnitude) * 100);
+            case RD_RESULTS_BOOST -> String.format(Locale.ROOT, "R&D results are %.0f %% higher for a while.",
+                (magnitude - 1) * 100);
             case RELIABILITY_SETBACK -> (subject.isEmpty() ? "A component" : subject) + String.format(Locale.ROOT,
                 " lost %.1f reliability.", magnitude);
-            case UNEXPECTED_COST -> "An unexpected cost of " + money(Math.round(magnitude)) + ", already paid.";
-            case UNEXPECTED_COST_AND_NO_LAUNCHES -> "An unexpected cost of " + money(Math.round(magnitude))
-                + ", and no launches this turn.";
-            case EXTRA_FUNDING -> "Extra funding of " + money(Math.round(magnitude)) + ".";
-            case REDUCED_EXPENDITURES -> "Running costs are down for a while.";
+            case UNEXPECTED_COST -> String.format(Locale.ROOT, "An unexpected cost took %.0f %% of the funds.",
+                magnitude);
+            case UNEXPECTED_COST_AND_NO_LAUNCHES -> String.format(Locale.ROOT, "An unexpected cost took %.0f %% of "
+                + "the funds, and no launches this turn.", magnitude);
+            case EXTRA_FUNDING -> String.format(Locale.ROOT, "Funding rose by %.0f %% a season.", magnitude);
+            case REDUCED_EXPENDITURES -> String.format(Locale.ROOT, "Running costs are %.0f %% lower for a while.",
+                (1 - magnitude) * 100);
         };
         return new Line(title(kind), text, "", tone);
     }

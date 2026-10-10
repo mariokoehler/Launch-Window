@@ -1213,6 +1213,9 @@ public final class ScreenSnapshot {
         startSession(game, after, next);
         game.session().keepReport(report);
         write(folder, "report.png", new TurnReportScreen(game, report), null);
+        // The news, with each random event's story (2026-10-10): every column scrolled to its end.
+        write(folder, "report-news.png", new TurnReportScreen(game, report), screen -> scrollToEnd(screen.stage()
+            .getRoot()));
         String vostok = report.missions().stream().filter(flown -> flown.missionConfigurationId()
             .equals("vostok-orbital")).findFirst().orElseThrow().missionInstanceId();
         write(folder, "replay-step.png", new ReplayScreen(game, report, vostok), screen -> screen.show(
@@ -1336,9 +1339,10 @@ public final class ScreenSnapshot {
             screen -> screen.confirmDismiss(onMission));
 
         // The Public Affairs Office: a news log, then a debt with the convert dialog, then both timed effects.
-        state.setNewsLog(List.of(new NewsEntry(17, RandomEventKind.MORALE_BOOST, null, 12),
+        // With stories (2026-10-10); the unavailable one has none, as an entry from before them.
+        state.setNewsLog(List.of(new NewsEntry(17, RandomEventKind.MORALE_BOOST, "SET", 12, "mb-families-visit", null),
             new NewsEntry(20, RandomEventKind.EMPLOYEE_UNAVAILABLE, null, 1),
-            new NewsEntry(22, RandomEventKind.UNEXPECTED_COST, null, 1_249)));
+            new NewsEntry(22, RandomEventKind.UNEXPECTED_COST, null, 9.3, "uc-lawsuit", null)));
         write(folder, "pao.png", new PublicAffairsScreen(game), null);
         PlayerSnapshot debt = missionControlState();
         debt.setFunds(-1_200);
@@ -1799,6 +1803,24 @@ public final class ScreenSnapshot {
                 }
             }
             chip.act(0f);
+        }
+    }
+
+    /** Scrolls every scroll pane under a group to its end, as a player scrolling down would. */
+    private static void scrollToEnd(com.badlogic.gdx.scenes.scene2d.Group root) {
+        root.getStage().draw();
+        java.util.ArrayDeque<com.badlogic.gdx.scenes.scene2d.Actor> todo = new java.util.ArrayDeque<>();
+        todo.add(root);
+        while (!todo.isEmpty()) {
+            com.badlogic.gdx.scenes.scene2d.Actor actor = todo.removeFirst();
+            if (actor instanceof com.badlogic.gdx.scenes.scene2d.ui.ScrollPane pane) {
+                pane.layout();
+                pane.setScrollPercentY(1f);
+                pane.updateVisualScroll();
+            }
+            if (actor instanceof com.badlogic.gdx.scenes.scene2d.Group group) {
+                todo.addAll(java.util.Arrays.asList(group.getChildren().toArray()));
+            }
         }
     }
 

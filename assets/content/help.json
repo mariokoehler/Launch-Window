@@ -157,7 +157,8 @@
         "- a prestige boost;",
         "- faster R&D for a few seasons;",
         "- lower running costs for several seasons.",
-        "Events never touch anyone on a mission. Two effects of the same kind multiply, and the longer one lasts."
+        "Events never touch anyone on a mission. Two effects of the same kind multiply, and the longer one lasts.",
+        "Each event comes with a short story of what happened. You won't read the same story twice until you've seen all of that event's stories."
       ],
       "related": ["turn-report", "budget"]
     },

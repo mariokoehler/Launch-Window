@@ -820,6 +820,11 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       `Hub.idle`). Hovering the building adds a line under its name: "3 engineers idle", "1
       flight controller idle", "2 cosmonauts idle" (astronauts for NASA). Shot
       `outlook-hub-idle.png`; every hub shot with idle people shows the dots.
+    - **Random-event stories** (the user's request, 2026-10-10, `design.md` §2.7(d)): the turn
+      report's news shows each event's story headline, its sentences, then the event's own line in
+      green or red ("R&D results are 16 % higher for a while.", the struck person named). The Public
+      Affairs Office's narrow news log shows the headline and the event's line, the story in a
+      tooltip. An event without a story (from before) reads as before. Shot `report-news.png`.
     - **Retirement before the cap** (idea 7). A gold line under the caption: "Arkhipov retires in 7
       seasons, before the cap. The projection counts the team without them from then on." Morale
       resignations aren't predicted.

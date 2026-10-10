@@ -63,6 +63,7 @@ public class PlayerSnapshot {
     private Map<String, Integer> unavailableComponents = new LinkedHashMap<>();
     private List<String> salaryAdjustedGroups = new ArrayList<>();
     private List<String> usedPressStoryIds = new ArrayList<>();
+    private List<String> usedEventStoryIds = new ArrayList<>();
     private List<HiringPoolBonus> hiringPoolBonuses = new ArrayList<>();
     private List<Rapport> rapports = new ArrayList<>();
     private Map<Building, Integer> buildingLevels = new LinkedHashMap<>();
@@ -640,6 +641,28 @@ public class PlayerSnapshot {
     public void setUsedPressStoryIds(List<String> usedPressStoryIds) {
         Objects.requireNonNull(usedPressStoryIds, "usedPressStoryIds must not be null");
         this.usedPressStoryIds = new ArrayList<>(usedPressStoryIds);
+    }
+
+    /**
+     * Returns the random-event stories this player has already been shown, by id, so no story
+     * repeats until every story of its event has run once (the user's request, 2026-10-10). The
+     * live list is returned.
+     *
+     * @return the story ids, oldest first, never {@code null}
+     */
+    public List<String> getUsedEventStoryIds() {
+        return usedEventStoryIds;
+    }
+
+    /**
+     * Sets the random-event stories this player has already been shown, by id.
+     *
+     * @param usedEventStoryIds the story ids
+     * @throws NullPointerException if {@code usedEventStoryIds} is {@code null}
+     */
+    public void setUsedEventStoryIds(List<String> usedEventStoryIds) {
+        Objects.requireNonNull(usedEventStoryIds, "usedEventStoryIds must not be null");
+        this.usedEventStoryIds = new ArrayList<>(usedEventStoryIds);
     }
 
     /**
