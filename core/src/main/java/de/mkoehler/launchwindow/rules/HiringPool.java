@@ -197,15 +197,38 @@ public final class HiringPool {
      * @param group       the candidate's personnel group
      * @param taken       portraits to avoid: the roster, the memorial and the batch so far
      * @param recent      portraits to avoid if possible: the pool being replaced
+     * @param names       names to avoid: every roster, the memorial and every group's batch so far
      * @return the identity
      */
     private static PersonnelNames.Identity candidateIdentity(PlayerSnapshot snapshot, String candidateId,
-            PersonnelGroup group, Set<String> taken, Set<String> recent) {
+            PersonnelGroup group, Set<String> taken, Set<String> recent, Set<String> names) {
         Archetype archetype = snapshot.getArchetype() == null ? Archetype.NASA : snapshot.getArchetype();
         PersonnelNames.Identity identity = PersonnelNames.forCandidate(candidateId, archetype,
-            snapshot.getAgencyName(), group, taken, recent);
+            snapshot.getAgencyName(), group, taken, recent, names);
         taken.add(identity.portraitId());
+        names.add(identity.name());
         return identity;
+    }
+
+    /**
+     * Returns the names a new candidate should not get: everyone on any of the player's rosters and
+     * everyone on the memorial, so no agency ever has two people of one name.
+     *
+     * @param snapshot the hiring player's state
+     * @return the names, a new mutable set
+     */
+    static Set<String> takenNames(PlayerSnapshot snapshot) {
+        Set<String> names = new HashSet<>();
+        List<Personnel> everyone = new ArrayList<>(snapshot.getAstronauts());
+        everyone.addAll(snapshot.getSetSpecialists());
+        everyone.addAll(snapshot.getMissionControlOfficers());
+        for (Personnel person : everyone) {
+            names.add(person.getName());
+        }
+        for (MemorialEntry entry : snapshot.getMemorial()) {
+            names.add(entry.name());
+        }
+        return names;
     }
 
     /**
@@ -254,6 +277,7 @@ public final class HiringPool {
         Objects.requireNonNull(snapshot, "snapshot must not be null");
         Objects.requireNonNull(random, "random must not be null");
 
+        Set<String> names = takenNames(snapshot);
         SkillBand astronautBand = bandFor(averageMorale(snapshot.getAstronauts()));
         List<Astronaut> astronautBatch = new ArrayList<>(HIRING_BATCH_SIZE);
         Set<String> astronautTaken = takenPortraits(snapshot, snapshot.getAstronauts());
@@ -263,7 +287,7 @@ public final class HiringPool {
         for (int i = 0; i < astronautSize; i++) {
             String id = snapshot.allocatePersonnelId();
             PersonnelNames.Identity who = candidateIdentity(snapshot, id, PersonnelGroup.ASTRONAUT, astronautTaken,
-                astronautRecent);
+                astronautRecent, names);
             double experience = experience(who.age(), PersonnelGroup.ASTRONAUT);
             double bonus = experienceBonus(who.age(), PersonnelGroup.ASTRONAUT);
             Astronaut candidate = new Astronaut(id, who.name(), who.age(),
@@ -289,7 +313,7 @@ public final class HiringPool {
         for (int i = 0; i < setSize; i++) {
             String id = snapshot.allocatePersonnelId();
             PersonnelNames.Identity who = candidateIdentity(snapshot, id, PersonnelGroup.SET, setTaken,
-                setRecent);
+                setRecent, names);
             double experience = experience(who.age(), PersonnelGroup.SET);
             double bonus = experienceBonus(who.age(), PersonnelGroup.SET);
             SetSpecialist candidate = new SetSpecialist(id, who.name(), who.age(),
@@ -315,7 +339,7 @@ public final class HiringPool {
         for (int i = 0; i < missionControlSize; i++) {
             String id = snapshot.allocatePersonnelId();
             PersonnelNames.Identity who = candidateIdentity(snapshot, id, PersonnelGroup.MISSION_CONTROL,
-                missionControlTaken, missionControlRecent);
+                missionControlTaken, missionControlRecent, names);
             double experience = experience(who.age(), PersonnelGroup.MISSION_CONTROL);
             double bonus = experienceBonus(who.age(), PersonnelGroup.MISSION_CONTROL);
             MissionControlOfficer candidate = new MissionControlOfficer(id, who.name(), who.age(),

@@ -44,6 +44,12 @@ public final class PersonnelNames {
     /** The classpath resource the name lists are read from. */
     public static final String RESOURCE = "personnel/names.json";
 
+    /**
+     * How often a name that's already taken is drawn again before one is kept anyway. The lists are long
+     * enough that this only runs out when every name in an ethnicity's lists is in use.
+     */
+    public static final int NAME_DRAWS = 50;
+
     private static final Map<String, NameLists> NAMES = load();
 
     /**
@@ -71,6 +77,27 @@ public final class PersonnelNames {
      */
     public static Identity forCandidate(String candidateId, Archetype archetype, String agencyName,
             PersonnelGroup group, Set<String> taken, Set<String> recent) {
+        return forCandidate(candidateId, archetype, agencyName, group, taken, recent, Set.of());
+    }
+
+    /**
+     * Returns a new candidate's portrait, name and starting age, with a name nobody in {@code takenNames}
+     * has (the player's whole roster, the memorial and the batch so far), so an agency never has two
+     * Joseph Sobczaks. A taken name is drawn again from the same stream, up to {@link #NAME_DRAWS} times,
+     * so a candidate whose first name is free gets exactly the name it always would.
+     *
+     * @param candidateId the candidate's id
+     * @param archetype   the hiring agency's archetype
+     * @param agencyName  the hiring agency's name, so two agencies' candidate number 12 differ
+     * @param group       the candidate's personnel group
+     * @param taken       portrait ids to avoid if at all possible
+     * @param recent      portrait ids to avoid if there are enough others
+     * @param takenNames  full names to avoid
+     * @return the candidate's identity
+     * @throws IllegalStateException if the catalog has no portrait for the agency and group
+     */
+    public static Identity forCandidate(String candidateId, Archetype archetype, String agencyName,
+            PersonnelGroup group, Set<String> taken, Set<String> recent, Set<String> takenNames) {
         Objects.requireNonNull(candidateId, "candidateId must not be null");
         Objects.requireNonNull(archetype, "archetype must not be null");
         Objects.requireNonNull(group, "group must not be null");
@@ -92,9 +119,12 @@ public final class PersonnelNames {
         Portrait portrait = choices.get(random.nextInt(choices.size()));
         int age = portrait.minAge() + random.nextInt(portrait.maxAge() - portrait.minAge() + 1);
         NameLists names = namesFor(portrait.ethnicity());
-        String first = pick(random, portrait.sex() == Sex.FEMALE ? names.female() : names.male());
-        String last = surname(pick(random, names.surnames()), portrait.sex());
-        return new Identity(portrait.id(), first + " " + last, age);
+        String name = null;
+        for (int draw = 0; draw < NAME_DRAWS && (name == null || takenNames.contains(name)); draw++) {
+            String first = pick(random, portrait.sex() == Sex.FEMALE ? names.female() : names.male());
+            name = first + " " + surname(pick(random, names.surnames()), portrait.sex());
+        }
+        return new Identity(portrait.id(), name, age);
     }
 
     /**

@@ -226,6 +226,24 @@ class PersonnelNamesTest {
         }
     }
 
+    /**
+     * A name that's taken is drawn again: the candidate keeps the portrait and age, and gets another name.
+     * With nothing taken, the name is the one the candidate always got.
+     */
+    @Test
+    void aTakenNameIsDrawnAgain() {
+        for (int i = 0; i < 50; i++) {
+            Identity free = identity("p" + i, Archetype.NASA, "Orion");
+            assertEquals(free, PersonnelNames.forCandidate("p" + i, Archetype.NASA, "Orion", PersonnelGroup.SET,
+                Set.of(), Set.of(), Set.of("Someone Else")));
+            Identity again = PersonnelNames.forCandidate("p" + i, Archetype.NASA, "Orion", PersonnelGroup.SET,
+                Set.of(), Set.of(), Set.of(free.name()));
+            assertEquals(free.portraitId(), again.portraitId());
+            assertEquals(free.age(), again.age());
+            assertNotEquals(free.name(), again.name());
+        }
+    }
+
     private static Identity identity(String id, Archetype archetype, String agency) {
         return PersonnelNames.forCandidate(id, archetype, agency, PersonnelGroup.SET, Set.of(), Set.of());
     }

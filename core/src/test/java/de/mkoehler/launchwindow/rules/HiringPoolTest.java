@@ -67,6 +67,26 @@ class HiringPoolTest {
     }
 
     /**
+     * No candidate gets a name someone at the agency already has, in any group, nor another candidate's:
+     * hiring every candidate for 40 refreshes leaves a roster of 1,200, all named differently.
+     */
+    @Test
+    void noCandidateSharesANameWithTheAgency() {
+        PlayerSnapshot snapshot = newSnapshot();
+        Random random = new Random(3L);
+        for (int round = 0; round < 40; round++) {
+            HiringPool.refreshCandidates(snapshot, random);
+            snapshot.getAstronauts().addAll(snapshot.getAstronautCandidates());
+            snapshot.getSetSpecialists().addAll(snapshot.getSetSpecialistCandidates());
+            snapshot.getMissionControlOfficers().addAll(snapshot.getMissionControlCandidates());
+        }
+        Set<String> names = new HashSet<>(HiringPool.takenNames(snapshot));
+        int people = snapshot.getAstronauts().size() + snapshot.getSetSpecialists().size()
+            + snapshot.getMissionControlOfficers().size();
+        assertEquals(people, names.size(), "two people share a name");
+    }
+
+    /**
      * Verifies every generated candidate's skills, age (within their portrait's range), and learning
      * potential all fall within their documented ranges.
      */

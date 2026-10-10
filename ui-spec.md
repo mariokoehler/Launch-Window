@@ -2374,7 +2374,10 @@ current state alone. Each is an M5 task.
   skill roll changes. Since 2026-10-05 each candidate gets a portrait first, from
   `rules.PortraitCatalog`, and a name and starting age that match it: name lists per
   ethnicity and sex in `core`'s `personnel/names.json`, the age from the portrait's age
-  range. `Personnel.portraitId` says which portrait; the screens don't show it yet.)*
+  range. `Personnel.portraitId` says which portrait; the screens don't show it yet.
+  Since 2026-10-10 no candidate gets a name anyone at the agency has (any roster, the
+  memorial, the batch so far): the name is drawn again from the candidate's own stream,
+  after a play test turned up two engineers called Joseph Sobczak.)*
   Candidates are all called "Candidate". Generate
   plausible names per archetype (our own name lists).
 - **G6. Today's queue.** Today's pending actions and their results, for the queue
