@@ -264,6 +264,7 @@ public final class MissionLaunch {
         mission.setLaunchCost(cost);
         mission.setLaunchReliability(launchReliability(snapshot, configuration, request.rocketIds()));
         snapshot.getInProgressMissions().put(instanceId, mission);
+        Contracts.launched(snapshot, mission);
 
         snapshot.setFunds(snapshot.getFunds() - cost);
         snapshot.setLaunchesThisWindow(snapshot.getLaunchesThisWindow() + 1);

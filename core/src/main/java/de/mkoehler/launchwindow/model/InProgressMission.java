@@ -27,6 +27,7 @@ public class InProgressMission {
     private long launchCost;
     private boolean firstInGame;
     private Map<String, Double> launchReliability = new LinkedHashMap<>();
+    private boolean contract;
 
     /**
      * No-argument constructor required for Jackson/Kryo deserialization.
@@ -221,6 +222,25 @@ public class InProgressMission {
      */
     public boolean isFirstInGame() {
         return firstInGame;
+    }
+
+    /**
+     * Marks this mission as the contract flight, or not.
+     *
+     * @param contract whether it flies the agency's active contract
+     */
+    public void setContract(boolean contract) {
+        this.contract = contract;
+    }
+
+    /**
+     * Returns whether this mission flies the agency's active contract ({@code design.md} &sect;2.11):
+     * it pays the client's fee, not prestige, and doesn't count toward the repeat tier.
+     *
+     * @return whether it is the contract flight
+     */
+    public boolean isContract() {
+        return contract;
     }
 
     /**

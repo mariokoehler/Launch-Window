@@ -15,6 +15,10 @@ public final class Refusals {
         Map.entry("INSUFFICIENT_FUNDS", "Not enough funds."),
         Map.entry("NO_DECISION", "No decision is waiting."),
         Map.entry("ALREADY_DECIDED", "That's decided already."),
+        // Contracts (design.md section 2.11); PROGRAM_NOT_OPEN is shared with launches.
+        Map.entry("CONTRACT_ACTIVE", "You have an active contract: one at a time."),
+        Map.entry("NOT_QUALIFIED", "You can't fly this one: unlock its line first."),
+        Map.entry("UNKNOWN_LISTING", "That listing isn't on the board any more."),
         Map.entry("UNKNOWN_OPTION", "That choice isn't there any more."),
         Map.entry("COMPONENT_GONE", "That component isn't active any more."),
         Map.entry("PERSON_NOT_FREE", "That engineer isn't free for this."),

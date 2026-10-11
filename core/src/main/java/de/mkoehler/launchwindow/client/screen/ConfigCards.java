@@ -75,7 +75,13 @@ final class ConfigCards {
         body.top().left();
         body.defaults().left().growX();
         Table head = new Table();
-        head.add(ui.label(Missions.name(configuration), Theme.TextStyle.HEADING_SM, Theme.INK)).expandX().left();
+        head.add(ui.label(Missions.name(configuration), Theme.TextStyle.HEADING_SM, Theme.INK)).left();
+        // The contract marker (ui-spec.md component 27), right of the name.
+        Table marker = ContractMarker.of(host, configuration.id());
+        if (marker != null) {
+            head.add(marker).padLeft(Theme.SPACE_2);
+        }
+        head.add().expandX();
         int flown = Missions.flown(configuration, host.session.state());
         head.add(ui.label(flown == 0 ? "Not flown" : "Flown " + flown + " ×", Theme.TextStyle.CAPTION,
             Theme.INK_MUTED)).right();

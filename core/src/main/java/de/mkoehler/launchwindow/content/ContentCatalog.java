@@ -34,6 +34,7 @@ public final class ContentCatalog {
     private final Map<String, MissionComponent> missionComponentsById;
     private final Map<String, Goal> goalsById;
     private final BuildingSchedule buildings;
+    private final Map<String, Commercial> commercialsByProgramId;
 
     /**
      * Builds and validates a catalog from the given content definitions.
@@ -91,7 +92,29 @@ public final class ContentCatalog {
     public ContentCatalog(List<ProgramCategory> categories, List<Program> programs,
             List<MissionConfiguration> missionConfigurations, List<MissionComponent> missionComponents,
             List<Goal> goals, BuildingSchedule buildings) {
+        this(categories, programs, missionConfigurations, missionComponents, goals, buildings, List.of());
+    }
+
+    /**
+     * Builds and validates a catalog with goals, a building table and the programs' commercial
+     * blocks ({@code design.md} &sect;2.11).
+     *
+     * @param categories            every program category
+     * @param programs              every program
+     * @param missionConfigurations every mission configuration
+     * @param missionComponents     every mission component
+     * @param goals                 every goal a step or modifier can reference
+     * @param buildings             the building table
+     * @param commercials           every program's commercial block, at most one per program
+     * @throws NullPointerException     if any argument is {@code null}
+     * @throws IllegalArgumentException if any list contains a duplicate id, or
+     *                                   any reference doesn't resolve
+     */
+    public ContentCatalog(List<ProgramCategory> categories, List<Program> programs,
+            List<MissionConfiguration> missionConfigurations, List<MissionComponent> missionComponents,
+            List<Goal> goals, BuildingSchedule buildings, List<Commercial> commercials) {
         this.buildings = Objects.requireNonNull(buildings, "buildings must not be null");
+        Objects.requireNonNull(commercials, "commercials must not be null");
         Objects.requireNonNull(categories, "categories must not be null");
         Objects.requireNonNull(programs, "programs must not be null");
         Objects.requireNonNull(missionConfigurations, "missionConfigurations must not be null");
@@ -104,6 +127,7 @@ public final class ContentCatalog {
             indexById(missionConfigurations, MissionConfiguration::id, "MissionConfiguration");
         this.missionComponentsById = indexById(missionComponents, MissionComponent::id, "MissionComponent");
         this.goalsById = indexById(goals, Goal::id, "Goal");
+        this.commercialsByProgramId = indexById(commercials, Commercial::programId, "Commercial");
 
         validateReferences();
     }
@@ -208,6 +232,25 @@ public final class ContentCatalog {
     }
 
     /**
+     * Returns a program's commercial block ({@code design.md} &sect;2.11).
+     *
+     * @param programId the program
+     * @return its block, or empty when the program has no contracts
+     */
+    public Optional<Commercial> commercial(String programId) {
+        return Optional.ofNullable(commercialsByProgramId.get(programId));
+    }
+
+    /**
+     * Returns every program's commercial block, in the pack's order.
+     *
+     * @return the blocks, unmodifiable
+     */
+    public java.util.Collection<Commercial> commercials() {
+        return java.util.Collections.unmodifiableCollection(commercialsByProgramId.values());
+    }
+
+    /**
      * Returns every mission component, in the pack's order.
      *
      * @return the components, unmodifiable
@@ -301,6 +344,19 @@ public final class ContentCatalog {
             }
             validatePrestigeShares(configuration, problems);
             validateGoalReferences(configuration, problems);
+        }
+
+        for (Commercial commercial : commercialsByProgramId.values()) {
+            if (!programsById.containsKey(commercial.programId())) {
+                problems.add("Commercial block for unknown Program " + commercial.programId());
+            }
+            for (String configurationId : commercial.unlockConfigurationIds()) {
+                MissionConfiguration configuration = missionConfigurationsById.get(configurationId);
+                if (configuration == null || !configuration.programId().equals(commercial.programId())) {
+                    problems.add("Program " + commercial.programId() + "'s unlock set names " + configurationId
+                        + ", not one of its configurations");
+                }
+            }
         }
 
         for (Goal goal : goalsById.values()) {

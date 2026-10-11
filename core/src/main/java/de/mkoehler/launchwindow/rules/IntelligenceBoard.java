@@ -294,6 +294,13 @@ public final class IntelligenceBoard {
                 for (InProgressMission mission : agency.getInProgressMissions().values()) {
                     facts.add(new IntelFact(IntelFact.Kind.IN_FLIGHT, mission.getMissionConfigurationId(), 0, 0, 0));
                 }
+                if (agency.getActiveContract() != null) {
+                    facts.add(new IntelFact(IntelFact.Kind.CONTRACT, agency.getActiveContract().lineId(), 0, 0,
+                        agency.getActiveContract().tier()));
+                }
+                agency.getContractRecords().forEach((line, record) -> facts.add(new IntelFact(
+                    IntelFact.Kind.CONTRACT_RECORD, line, record.flown(), record.failed() + record.lapsed(),
+                    Contracts.recordPoints(record))));
                 Map<String, Integer> focus = new LinkedHashMap<>();
                 for (SetSpecialist engineer : agency.getSetSpecialists()) {
                     if (engineer.getRdTargetComponentId() != null) {

@@ -2,12 +2,14 @@ package de.mkoehler.launchwindow.server.schedule;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.mkoehler.launchwindow.content.CommercialClients;
 import de.mkoehler.launchwindow.content.RandomEventRoster;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.persistence.ActionContext;
 import de.mkoehler.launchwindow.persistence.AtomicFiles;
 import de.mkoehler.launchwindow.persistence.PlayerSnapshotStore;
 import de.mkoehler.launchwindow.persistence.PlayerStateService;
+import de.mkoehler.launchwindow.rules.ContractMarket;
 import de.mkoehler.launchwindow.rules.GoalTally;
 import de.mkoehler.launchwindow.rules.IntelFinding;
 import de.mkoehler.launchwindow.rules.IntelligenceBoard;
@@ -218,6 +220,7 @@ public class TurnScheduler {
         TurnBackups.beforeTurn(dataRoot, gameTurn);
         Map<String, PlayerStateService> services = new LinkedHashMap<>();
         List<PlayerSnapshot> startOfTurn = new ArrayList<>();
+        Map<String, PlayerSnapshot> startByKey = new LinkedHashMap<>();
         Map<String, PlayerSnapshot> withActions = new LinkedHashMap<>();
         try (Stream<Path> listing = Files.list(playersDir)) {
             for (Path playerDir : listing.filter(Files::isDirectory).sorted().toList()) {
@@ -226,17 +229,22 @@ public class TurnScheduler {
                 }
                 PlayerStateService service = new PlayerStateService(playerDir, mapper, context);
                 services.put(playerDir.getFileName().toString(), service);
-                service.stateBefore(gameTurn).ifPresent(startOfTurn::add);
-                withActions.put(GameSeeds.rivalKey(meta.getGameSeed(), playerDir.getFileName().toString()),
-                    service.currentState());
+                String key = GameSeeds.rivalKey(meta.getGameSeed(), playerDir.getFileName().toString());
+                service.stateBefore(gameTurn).ifPresent(state -> {
+                    startOfTurn.add(state);
+                    startByKey.put(key, state);
+                });
+                withActions.put(key, service.currentState());
             }
         }
         GoalTally tally = GoalTally.fromPlayers(startOfTurn);
         Map<String, List<IntelFinding>> intelligence = intelligence(gameTurn, meta, withActions);
+        ContractMarket.Settlement market = market(gameTurn, meta, withActions, startByKey);
         for (Map.Entry<String, PlayerStateService> player : services.entrySet()) {
+            String key = GameSeeds.rivalKey(meta.getGameSeed(), player.getKey());
             player.getValue().resolveTurn(gameTurn, tally, roster,
                 GameSeeds.forSeason(meta.getGameSeed(), gameTurn, player.getKey()),
-                intelligence.getOrDefault(GameSeeds.rivalKey(meta.getGameSeed(), player.getKey()), List.of()));
+                intelligence.getOrDefault(key, List.of()), market.turnFor(key));
         }
         recordResultIfDecided(gameTurn, meta, services);
     }
@@ -267,6 +275,49 @@ public class TurnScheduler {
         mapper.writerWithDefaultPrettyPrinter().writeValue(temp.toFile(), findings);
         AtomicFiles.moveReplacingWithRetry(temp, file);
         return findings;
+    }
+
+    /**
+     * Settles the turn's contract market once for every player ({@code design.md} &sect;2.11) and
+     * keeps it in {@code market/turn-N.json}, like the intelligence: the awards from the turn's
+     * applications and the board for the coming turn, against the board the previous turn's file
+     * left. A retry after a crash halfway through re-reads the file, so every player gets the same.
+     *
+     * @param gameTurn    the turn
+     * @param meta        the game's configuration, for its seed
+     * @param withActions every player's state with the turn's actions applied, by key
+     * @param startOfTurn every player's state at the start of the turn, by key, for the scores
+     * @return the settlement
+     * @throws IOException if a file can't be read or written
+     */
+    private ContractMarket.Settlement market(long gameTurn, GameMeta meta, Map<String, PlayerSnapshot> withActions,
+            Map<String, PlayerSnapshot> startOfTurn) throws IOException {
+        Path file = marketFile(dataRoot, gameTurn);
+        if (Files.exists(file)) {
+            return mapper.readValue(file.toFile(), ContractMarket.Settlement.class);
+        }
+        Path previous = marketFile(dataRoot, gameTurn - 1);
+        ContractMarket.Settlement last = Files.exists(previous)
+            ? mapper.readValue(previous.toFile(), ContractMarket.Settlement.class) : null;
+        ContractMarket.Settlement settlement = ContractMarket.settle(withActions, startOfTurn,
+            last == null ? List.of() : last.board(), last == null ? List.of() : last.usedClientIds(),
+            context.catalog(), CommercialClients.standard(), meta.getGameSeed(), Math.toIntExact(gameTurn));
+        Files.createDirectories(file.getParent());
+        Path temp = Files.createTempFile(file.getParent(), "turn-", ".json.tmp");
+        mapper.writerWithDefaultPrettyPrinter().writeValue(temp.toFile(), settlement);
+        AtomicFiles.moveReplacingWithRetry(temp, file);
+        return settlement;
+    }
+
+    /**
+     * Returns the file a turn's contract market is kept in.
+     *
+     * @param dataRoot the data root
+     * @param gameTurn the turn
+     * @return the file
+     */
+    static Path marketFile(Path dataRoot, long gameTurn) {
+        return dataRoot.resolve("market").resolve("turn-" + gameTurn + ".json");
     }
 
     private void recordResultIfDecided(long gameTurn, GameMeta meta, Map<String, PlayerStateService> services)

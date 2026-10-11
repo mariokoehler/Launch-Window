@@ -160,7 +160,9 @@ public record Help(List<Topic> topics) {
         /** The Public Affairs Office. */
         PUBLIC_AFFAIRS("the Public Affairs Office", "budget", "prestige", "pr-duty", "random-events"),
         /** Headquarters and its program lists. */
-        HEADQUARTERS("Headquarters", "programs", "planning-missions", "buildings"),
+        HEADQUARTERS("Headquarters", "programs", "planning-missions", "buildings", "contracts"),
+        /** Headquarters' contract board. */
+        CONTRACTS("Contracts", "contracts", "budget", "programs", "planning-missions"),
         /** A program's details and its mission configurations. */
         PROGRAM("this program", "programs", "planning-missions", "rnd"),
         /** Planning a mission: the plan, its steps and its odds. */
@@ -188,7 +190,7 @@ public record Help(List<Topic> topics) {
         /** Someone's page on the memorial. */
         MEMORIAL("the memorial", "careers", "museum", "traits"),
         /** The turn report and a mission's replay. */
-        TURN_REPORT("the turn report", "turn-report", "mission-steps", "random-events", "budget"),
+        TURN_REPORT("the turn report", "turn-report", "mission-steps", "random-events", "budget", "contracts"),
         /** The Museum. */
         MUSEUM("the Museum", "museum", "winning", "the-race", "prestige", "careers"),
         /** The Intelligence Office. */

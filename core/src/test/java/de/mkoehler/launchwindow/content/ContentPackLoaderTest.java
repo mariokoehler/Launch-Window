@@ -115,6 +115,21 @@ class ContentPackLoaderTest {
     }
 
     @Test
+    void commercialBlockLoadsAndChecksItsSet() throws IOException {
+        writePack(List.of(CATEGORY), List.of(PROGRAM), List.of(CAPSULE, BOOSTER), List.of(CONFIG),
+            List.of(FIRST_FLIGHT, FIRST_TEST));
+        write(ContentPackLoader.COMMERCIAL_FILE,
+            List.of(new Commercial("capsule-program", List.of("capsule-flight"), "capsule-flight")));
+
+        assertEquals(List.of("capsule-flight"),
+            ContentPackLoader.load(packDirectory).commercial("capsule-program").orElseThrow().unlockConfigurationIds());
+
+        write(ContentPackLoader.COMMERCIAL_FILE,
+            List.of(new Commercial("capsule-program", List.of("no-such-flight"), "no-such-flight")));
+        assertThrows(IllegalArgumentException.class, () -> ContentPackLoader.load(packDirectory));
+    }
+
+    @Test
     void missingFileIsAnIoError() {
         assertThrows(UncheckedIOException.class, () -> ContentPackLoader.load(packDirectory));
     }
@@ -127,6 +142,7 @@ class ContentPackLoaderTest {
         write(ContentPackLoader.MISSION_COMPONENTS_FILE, components);
         write(ContentPackLoader.MISSION_CONFIGURATIONS_FILE, configurations);
         write(ContentPackLoader.GOALS_FILE, goals);
+        write(ContentPackLoader.COMMERCIAL_FILE, List.of());
     }
 
     private void write(String fileName, Object value) throws IOException {

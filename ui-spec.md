@@ -1104,6 +1104,13 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       badge is gold with navy text and icon. On Assemble the badge sits right of the title, the fee
       box (gold-tinted) takes the prestige's place under "Instead of prestige" with the window under
       it, and the gold line "This launch flies your contract for [client]" sits above the launch row.
+    - **Built (2026-10-11)** in `screen.ContractMarker` (cards: `ConfigCards`, `BodyProgramsScreen`,
+      `ProgramDetailsScreen`) and `AssembleMissionScreen`. Icons `contract_unlock` and `contract_flight`
+      in `make_ui_icons.py` (the filled one as its own SVG with the mask). The unlock tooltip lists the
+      set as "Flown · ..." and "To fly · ..." (the font has no tick or circle glyphs). Assemble shows the
+      gold box above the launch row, after the price, and the confirmation repeats the line. The
+      mission lists in Mission Control don't wear the badge yet. Shots `contracts-configs-*.png`,
+      `contracts-program.png`, `contracts-assemble.png`.
 
 ---
 
@@ -2383,6 +2390,28 @@ component 27 (below). Numbers are the brief's placeholders. Choices, all **uncon
 - **Worth a look in `design.md` §2.11:** the fee follows the launch cost, so of two programs in a line
   the dearer one pays more profit at the same margin.
 
+**Built (2026-10-11)** in `screen.ContractsScreen` with `view.ContractsView`, Headquarters' fourth card
+(`HeadquartersScreen`, "Open the board"), the hub's gold dot on Headquarters with "New contracts on
+offer" on hover (`SpaceComplexScreen`), the report's Contracts card, strip cell and news lines
+(`TurnReportScreen`), and the help topic "Contracts" (`help.json`, its numbers as `contracts.*`
+tokens). As built, against the mockup:
+- The board shows four cards a row in a scroll pane; the art is the line's category art, cropped to
+  the card. A listing the agency can't fly is dimmed whatever else holds; one it can fly but not
+  apply for (an active contract) keeps its look with the reason (`Contracts.check` asks about
+  flying before the active contract).
+- "Only what I can fly" is remembered while the client runs; its track is square (no rounded track
+  in the kit). The contract card's button follows the state: Plan the flight (the plan's assessment
+  tab), Open the mission plan (Mission Control's scheduled missions) and Follow it in flight (the
+  active missions).
+- The score's tooltip is the kit's tooltip with the breakdown as lines; the record table has no
+  dotted underline but a thin rule under the score.
+- The report's strip gets an eighth cell beside a waiting decision's seventh; the budget card has no
+  Contracts line yet (the fee is in the Contracts card and the funds). The sixth state, an
+  application whose program closed, reads "Came to nothing".
+- No new tokens and no new `Theme` components: the badge, listing card, switch and stepper are built
+  in `ContractsScreen` and `ContractMarker` from the existing tokens.
+- Shots `contracts-*.png` (`ScreenSnapshot -Dshots=contracts` renders just these).
+
 ---
 
 ## 5. Refusal reasons (for toasts and inline messages)
@@ -2425,7 +2454,7 @@ for the mockups.
 | Rocket programs: VAB_FULL / ROCKET_CLASS_TOO_LARGE / UNKNOWN_ROCKET (added 2026-10-04) | The VAB can't hold more rocket programs. Upgrade it or close one. / Upgrade the VAB to build this rocket class. / That rocket doesn't exist in this game. |
 | Building upgrade: MAX_LEVEL / ALREADY_UPGRADING; program opening also UNKNOWN_PROGRAM | Already at the top level. / Already upgrading. / That program doesn't exist in this game. |
 | Manage department (`AdjustSalariesAction`, added 2026-10-04): INVALID_PERCENT / EMPTY_DEPARTMENT | Pick a change between −50 % and +50 %. / There's nobody in the department yet. |
-| Contracts (added 2026-10-11, §4.17, unconfirmed codes): CONTRACT_ACTIVE / NOT_QUALIFIED / PROGRAM_NOT_OPEN / UNKNOWN_LISTING / CONTRACT_IN_FLIGHT (closing a program) | You have an active contract: one at a time. / You can't fly this one: unlock its line first. / Open the program it flies first. / That listing isn't on the board any more. / Can't close while your contract flies on it. |
+| Contracts (added 2026-10-11, §4.17; built as `ContractOutcome`): CONTRACT_ACTIVE / NOT_QUALIFIED / PROGRAM_NOT_OPEN / UNKNOWN_LISTING; closing a program while its contract flies is the existing MISSIONS_IN_FLIGHT | You have an active contract: one at a time. / You can't fly this one: unlock its line first. / Open the program first. / That listing isn't on the board any more. / Can't close while a mission uses it. |
 | Join game (`ClaimSlotResponse.Reason`, added 2026-10-04): AGENCY_NAME_TAKEN / DIRECTOR_NAME_TAKEN / MISSING_FIELDS / ALREADY_CLAIMED / NOT_AUTHENTICATED / SERVER_ERROR | Already taken by another agency. (under the field) / the same / Required. / (client logs in again and opens the agency) / (danger notice with the server's words) |
 
 ---
@@ -2550,7 +2579,10 @@ current state alone. Each is an M5 task.
   lapsed decision (fields only added); a content file of decisions by type, outside the hashed pack
   like the stories; and the playout bots taught to decide, to measure how often decisions come.
 
-- **G12. Commercial contracts (§4.17, component 27, 2026-10-11).** Content: per program a
+- **G12. Commercial contracts (§4.17, component 27, 2026-10-11). Built the same day**, with two
+  changes: the board is settled before the season passes and saved in each agency's state, so there
+  is no board message (`design.md` §2.11, Storage), and the unlock sets are their own hashed file,
+  `commercial.json`. As specified: Content: per program a
   `commercial` block (unlock set, contract configuration) in the hashed pack; clients and stories in
   `commercial-clients.json` outside it. Rules: unlocking lines, the score, the award, the fee and the
   insurer, the window and lapses, the board's seating and extras; the contract flight's own payout

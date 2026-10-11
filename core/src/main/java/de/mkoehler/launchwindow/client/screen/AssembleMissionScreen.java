@@ -20,6 +20,7 @@ import de.mkoehler.launchwindow.client.ui.SkillBar;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.TraitChip;
 import de.mkoehler.launchwindow.client.view.ContentNames;
+import de.mkoehler.launchwindow.client.view.ContractsView;
 import de.mkoehler.launchwindow.client.view.CrewSkills;
 import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.MissionDraft;
@@ -33,12 +34,14 @@ import de.mkoehler.launchwindow.content.MissionSeason;
 import de.mkoehler.launchwindow.content.MissionStep;
 import de.mkoehler.launchwindow.content.Program;
 import de.mkoehler.launchwindow.content.StaffingSlot;
+import de.mkoehler.launchwindow.model.ActiveContract;
 import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.AstronautSkill;
 import de.mkoehler.launchwindow.model.Personnel;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.model.Trait;
 import de.mkoehler.launchwindow.rules.Chemistry;
+import de.mkoehler.launchwindow.rules.Contracts;
 import de.mkoehler.launchwindow.rules.LaunchRequest;
 import de.mkoehler.launchwindow.rules.MissionAssessment;
 import de.mkoehler.launchwindow.rules.MissionLaunch;
@@ -411,6 +414,10 @@ public final class AssembleMissionScreen extends ChromeScreen {
         }
         LaunchRequest request = draft.request();
         MissionLaunchOutcome check = MissionLaunch.check(state, request, session.catalog());
+        Table contract = contractNotice();
+        if (contract != null) {
+            card.add(contract).padBottom(Theme.SPACE_3).row();
+        }
         Table launchRow = new Table();
         launchRow.add(ui.paragraph(blockReason(check, total), Theme.TextStyle.CAPTION, Theme.INK_MUTED)).expandX()
             .fillX().left().padRight(Theme.SPACE_3);
@@ -421,6 +428,43 @@ public final class AssembleMissionScreen extends ChromeScreen {
         launchRow.add(launch);
         card.add(launchRow);
         return card;
+    }
+
+    /**
+     * The contract flight's box ({@code ui-spec.md} component 27): while a contract is active, the first
+     * launch of its configuration is the contract flight, with no choice about it; it pays the fee
+     * instead of prestige.
+     *
+     * @return the box, or {@code null} when this launch isn't the contract flight
+     */
+    private Table contractNotice() {
+        PlayerSnapshot state = session.state();
+        if (!Contracts.wouldFlyContract(state, configuration.id())) {
+            return null;
+        }
+        ActiveContract contract = state.getActiveContract();
+        String client = ContractsView.client(contract.clientId());
+        Table box = new Table();
+        box.setBackground(ui.rect(new Color(Theme.SURFACE_CARD).lerp(Theme.GOLD, 0.10f), Theme.GOLD,
+            Theme.BORDER_EMPHASIS));
+        box.pad(Theme.SPACE_3);
+        box.defaults().left().growX();
+        Table badge = new Table();
+        badge.setBackground(ui.solid(Theme.GOLD));
+        badge.pad(3f, 6f, 3f, 8f);
+        Image icon = new Image(ui.icon("contract_flight"), Scaling.fit);
+        icon.setColor(Theme.NAVY);
+        badge.add(icon).size(12f).padRight(5f);
+        badge.add(ui.label(("Contract · " + client).toUpperCase(Locale.ROOT), Theme.TextStyle.LABEL, Theme.NAVY));
+        box.add(badge).left().fill(false, false).padBottom(Theme.SPACE_2).row();
+        box.add(ui.label("INSTEAD OF PRESTIGE", Theme.TextStyle.CAPTION, Theme.GOLD_TEXT)).padBottom(2f).row();
+        box.add(ui.paragraph("Fee " + ContractsView.money(contract.fee()) + " on success · insurer refunds the "
+            + "launch cost on failure", Theme.TextStyle.BODY_STRONG, Theme.INK)).padBottom(2f).row();
+        box.add(ui.label("Launch by " + de.mkoehler.launchwindow.model.GameDate.ofTurn(contract.launchByTurn()).label(),
+            Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padBottom(Theme.SPACE_2).row();
+        box.add(ui.paragraph("This launch flies your contract for " + client + ".", Theme.TextStyle.BODY_STRONG,
+            Theme.GOLD_TEXT));
+        return box;
     }
 
     private String blockReason(MissionLaunchOutcome check, long total) {
@@ -679,6 +723,11 @@ public final class AssembleMissionScreen extends ChromeScreen {
         card.add(ui.paragraph("It flies at the next turn. Scrubbing before then refunds in full."
             + (crew.isEmpty() ? "" : " Aboard: " + String.join(", ", crew) + "."), Theme.TextStyle.BODY,
             Theme.INK_MUTED)).padBottom(Theme.SPACE_4).row();
+        if (Contracts.wouldFlyContract(session.state(), configuration.id())) {
+            card.add(ui.paragraph("This launch flies your contract for "
+                + ContractsView.client(session.state().getActiveContract().clientId()) + ": it pays the fee, not "
+                + "prestige.", Theme.TextStyle.BODY_STRONG, Theme.GOLD_TEXT)).padBottom(Theme.SPACE_4).row();
+        }
         Table buttons = new Table();
         buttons.add(actionButton("Cancel", Theme.ButtonKind.SECONDARY, this::closeDialog)).padRight(10f);
         MissionDraft sent = draft.copy();

@@ -76,6 +76,10 @@ public class PlayerSnapshot {
     private Map<Building, Integer> buildingUpgradeSeasonsRemaining = new LinkedHashMap<>();
     private IntelligenceState intelligence = new IntelligenceState();
     private Map<String, Integer> retentionMatchPercent = new LinkedHashMap<>();
+    private List<ContractListing> contractBoard = new ArrayList<>();
+    private ContractApplication contractApplication;
+    private ActiveContract activeContract;
+    private Map<String, ContractRecord> contractRecords = new LinkedHashMap<>();
 
     /**
      * No-argument constructor required for Jackson deserialization.
@@ -1166,5 +1170,79 @@ public class PlayerSnapshot {
     public void setRetentionMatchPercent(Map<String, Integer> retentionMatchPercent) {
         this.retentionMatchPercent = retentionMatchPercent == null ? new LinkedHashMap<>()
             : new LinkedHashMap<>(retentionMatchPercent);
+    }
+
+    /**
+     * Returns the contract board as it stood when this turn opened ({@code design.md} &sect;2.11):
+     * the same listings for every agency, kept here so the client and the actions read it with the
+     * agency's own state.
+     *
+     * @return the listings, live
+     */
+    public List<ContractListing> getContractBoard() {
+        return contractBoard;
+    }
+
+    /**
+     * Sets the contract board.
+     *
+     * @param contractBoard the listings, or {@code null} for none
+     */
+    public void setContractBoard(List<ContractListing> contractBoard) {
+        this.contractBoard = contractBoard == null ? new ArrayList<>() : new ArrayList<>(contractBoard);
+    }
+
+    /**
+     * Returns the agency's sealed application this turn.
+     *
+     * @return the application, or {@code null} for none
+     */
+    public ContractApplication getContractApplication() {
+        return contractApplication;
+    }
+
+    /**
+     * Sets the application this turn.
+     *
+     * @param contractApplication the application, or {@code null} for none
+     */
+    public void setContractApplication(ContractApplication contractApplication) {
+        this.contractApplication = contractApplication;
+    }
+
+    /**
+     * Returns the agency's active contract: awarded and not yet flown to its end.
+     *
+     * @return the contract, or {@code null} for none
+     */
+    public ActiveContract getActiveContract() {
+        return activeContract;
+    }
+
+    /**
+     * Sets the active contract.
+     *
+     * @param activeContract the contract, or {@code null} for none
+     */
+    public void setActiveContract(ActiveContract activeContract) {
+        this.activeContract = activeContract;
+    }
+
+    /**
+     * Returns the agency's record per contract line.
+     *
+     * @return the records, by line, live
+     */
+    public Map<String, ContractRecord> getContractRecords() {
+        return contractRecords;
+    }
+
+    /**
+     * Sets the records per contract line.
+     *
+     * @param contractRecords the records, or {@code null} for none
+     */
+    public void setContractRecords(Map<String, ContractRecord> contractRecords) {
+        this.contractRecords = contractRecords == null ? new LinkedHashMap<>() : new LinkedHashMap<>(contractRecords);
     }
 }

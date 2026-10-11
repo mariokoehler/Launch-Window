@@ -1,0 +1,188 @@
+[
+  {
+    "programId": "sputnik-1",
+    "unlockConfigurationIds": [
+      "sputnik-1-orbit"
+    ],
+    "contractConfigurationId": "sputnik-1-orbit"
+  },
+  {
+    "programId": "explorer-1",
+    "unlockConfigurationIds": [
+      "explorer-1-orbit"
+    ],
+    "contractConfigurationId": "explorer-1-orbit"
+  },
+  {
+    "programId": "pegasus",
+    "unlockConfigurationIds": [
+      "pegasus-orbit"
+    ],
+    "contractConfigurationId": "pegasus-orbit"
+  },
+  {
+    "programId": "biosatellite",
+    "unlockConfigurationIds": [
+      "biosatellite-orbit"
+    ],
+    "contractConfigurationId": "biosatellite-orbit"
+  },
+  {
+    "programId": "orbiting-frog-otolith",
+    "unlockConfigurationIds": [
+      "orbiting-frog-otolith-orbit"
+    ],
+    "contractConfigurationId": "orbiting-frog-otolith-orbit"
+  },
+  {
+    "programId": "korabl-sputnik-2",
+    "unlockConfigurationIds": [
+      "korabl-sputnik-2-orbit"
+    ],
+    "contractConfigurationId": "korabl-sputnik-2-orbit"
+  },
+  {
+    "programId": "sputnik-2",
+    "unlockConfigurationIds": [
+      "sputnik-2-orbit"
+    ],
+    "contractConfigurationId": "sputnik-2-orbit"
+  },
+  {
+    "programId": "pioneer-4",
+    "unlockConfigurationIds": [
+      "pioneer-4-flyby"
+    ],
+    "contractConfigurationId": "pioneer-4-flyby"
+  },
+  {
+    "programId": "zond-5",
+    "unlockConfigurationIds": [
+      "zond-5-flyby"
+    ],
+    "contractConfigurationId": "zond-5-flyby"
+  },
+  {
+    "programId": "ranger-3",
+    "unlockConfigurationIds": [
+      "ranger-3-impact"
+    ],
+    "contractConfigurationId": "ranger-3-impact"
+  },
+  {
+    "programId": "luna-2",
+    "unlockConfigurationIds": [
+      "luna-2-impact"
+    ],
+    "contractConfigurationId": "luna-2-impact"
+  },
+  {
+    "programId": "pioneer-2",
+    "unlockConfigurationIds": [
+      "pioneer-2-orbit"
+    ],
+    "contractConfigurationId": "pioneer-2-orbit"
+  },
+  {
+    "programId": "lunar-orbiter",
+    "unlockConfigurationIds": [
+      "lunar-orbiter-mapping"
+    ],
+    "contractConfigurationId": "lunar-orbiter-mapping"
+  },
+  {
+    "programId": "surveyor",
+    "unlockConfigurationIds": [
+      "surveyor-landing"
+    ],
+    "contractConfigurationId": "surveyor-landing"
+  },
+  {
+    "programId": "luna-3",
+    "unlockConfigurationIds": [
+      "luna-3-flyby"
+    ],
+    "contractConfigurationId": "luna-3-flyby"
+  },
+  {
+    "programId": "luna-17",
+    "unlockConfigurationIds": [
+      "luna-17-landing"
+    ],
+    "contractConfigurationId": "luna-17-landing"
+  },
+  {
+    "programId": "luna-15",
+    "unlockConfigurationIds": [
+      "luna-15-sample-return"
+    ],
+    "contractConfigurationId": "luna-15-sample-return"
+  },
+  {
+    "programId": "x-15",
+    "unlockConfigurationIds": [
+      "x-15-flight-test",
+      "x-15-research-flight-1",
+      "x-15-research-flight-2"
+    ],
+    "contractConfigurationId": "x-15-research-flight-1"
+  },
+  {
+    "programId": "mig-e-154",
+    "unlockConfigurationIds": [
+      "mig-e-154-drop-test",
+      "mig-e-154-suborbital-test",
+      "mig-e-154-orbital"
+    ],
+    "contractConfigurationId": "mig-e-154-suborbital-test"
+  },
+  {
+    "programId": "mercury",
+    "unlockConfigurationIds": [
+      "mercury-uncrewed-orbital",
+      "mercury-orbital"
+    ],
+    "contractConfigurationId": "mercury-orbital"
+  },
+  {
+    "programId": "vostok",
+    "unlockConfigurationIds": [
+      "vostok-uncrewed-orbital",
+      "vostok-orbital"
+    ],
+    "contractConfigurationId": "vostok-orbital"
+  },
+  {
+    "programId": "gemini",
+    "unlockConfigurationIds": [
+      "gemini-orbital",
+      "gemini-rendezvous",
+      "gemini-docking"
+    ],
+    "contractConfigurationId": "gemini-orbital"
+  },
+  {
+    "programId": "voskhod",
+    "unlockConfigurationIds": [
+      "voskhod-orbital",
+      "voskhod-spacewalk"
+    ],
+    "contractConfigurationId": "voskhod-orbital"
+  },
+  {
+    "programId": "apollo-earth-orbit",
+    "unlockConfigurationIds": [
+      "apollo-orbital",
+      "apollo-docking"
+    ],
+    "contractConfigurationId": "apollo-orbital"
+  },
+  {
+    "programId": "soyuz-7k-ok",
+    "unlockConfigurationIds": [
+      "soyuz-7k-ok-orbital",
+      "soyuz-7k-ok-crewed-docking"
+    ],
+    "contractConfigurationId": "soyuz-7k-ok-orbital"
+  }
+]

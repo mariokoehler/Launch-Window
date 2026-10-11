@@ -302,6 +302,9 @@ public final class IntelTexts {
             case HEADCOUNT -> new String[] {groupName(fact.ref()), String.valueOf(fact.count())};
             case AVERAGE_SKILL -> new String[] {groupName(fact.ref()) + ", average skill", range(fact)};
             case SKILL -> new String[] {TurnReportView.skillLabel(fact.ref()), range(fact)};
+            case CONTRACT -> new String[] {"Contract", name(fact.ref()) + " · tier " + fact.count()};
+            case CONTRACT_RECORD -> new String[] {"Contract record, " + name(fact.ref()),
+                fact.low() + " flown · " + fact.high() + " failed · " + signed(fact.count())};
         };
     }
 
@@ -324,7 +327,14 @@ public final class IntelTexts {
                 + range(fact) + " in skill.";
             case SKILL -> "One of their people rates " + range(fact) + " in "
                 + TurnReportView.skillLabel(fact.ref()) + ".";
+            case CONTRACT -> "They hold a tier " + fact.count() + " contract for " + name(fact.ref()) + ".";
+            case CONTRACT_RECORD -> "They have flown " + fact.low() + " contracts for " + name(fact.ref())
+                + " and failed " + fact.high() + ".";
         };
+    }
+
+    private static String signed(int points) {
+        return (points > 0 ? "+" : points < 0 ? "−" : "") + Math.abs(points);
     }
 
     private static String range(IntelFact fact) {

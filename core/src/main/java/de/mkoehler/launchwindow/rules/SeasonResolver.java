@@ -51,6 +51,8 @@ public final class SeasonResolver {
         PR_DUTY,
         /** The intelligence service's findings, then its level steps (it sets the budget's cost). */
         INTELLIGENCE,
+        /** Contracts: a lapse, the turn's award, the board for the coming turn (design.md 2.11). */
+        CONTRACTS,
         /** Running costs, the review if due, and funding. */
         BUDGET,
         /** Random events and their timed state. */
@@ -79,9 +81,27 @@ public final class SeasonResolver {
      * @param gameTurn       the shared game turn being resolved
      * @param seasonsElapsed the player's own seasons elapsed, counting this one
      * @param intelligence   this player's intelligence findings for the turn ({@link IntelligenceBoard})
+     * @param contracts      this player's part of the turn's contract market ({@link ContractMarket})
      */
     public record Context(ContentCatalog catalog, BudgetSchedule schedule, RandomEventRoster roster,
-                          GoalTally goalTally, int gameTurn, int seasonsElapsed, List<IntelFinding> intelligence) {
+                          GoalTally goalTally, int gameTurn, int seasonsElapsed, List<IntelFinding> intelligence,
+                          Contracts.Turn contracts) {
+
+        /**
+         * A context with intelligence findings and no contract market.
+         *
+         * @param catalog        the content catalog
+         * @param schedule       the budget schedule
+         * @param roster         the random events
+         * @param goalTally      the game-wide goal counts
+         * @param gameTurn       the turn being resolved
+         * @param seasonsElapsed the player's seasons elapsed, counting this one
+         * @param intelligence   the player's intelligence findings
+         */
+        public Context(ContentCatalog catalog, BudgetSchedule schedule, RandomEventRoster roster, GoalTally goalTally,
+                int gameTurn, int seasonsElapsed, List<IntelFinding> intelligence) {
+            this(catalog, schedule, roster, goalTally, gameTurn, seasonsElapsed, intelligence, Contracts.Turn.NONE);
+        }
 
         /**
          * A context with no intelligence findings, for bot playouts and tests.
@@ -95,7 +115,7 @@ public final class SeasonResolver {
          */
         public Context(ContentCatalog catalog, BudgetSchedule schedule, RandomEventRoster roster, GoalTally goalTally,
                 int gameTurn, int seasonsElapsed) {
-            this(catalog, schedule, roster, goalTally, gameTurn, seasonsElapsed, List.of());
+            this(catalog, schedule, roster, goalTally, gameTurn, seasonsElapsed, List.of(), Contracts.Turn.NONE);
         }
 
         /**
@@ -110,6 +130,7 @@ public final class SeasonResolver {
             Objects.requireNonNull(roster, "roster must not be null");
             Objects.requireNonNull(goalTally, "goalTally must not be null");
             intelligence = intelligence == null ? List.of() : List.copyOf(intelligence);
+            contracts = contracts == null ? Contracts.Turn.NONE : contracts;
             if (seasonsElapsed < 1) {
                 throw new IllegalArgumentException("seasonsElapsed must be at least 1: " + seasonsElapsed);
             }
@@ -212,6 +233,7 @@ public final class SeasonResolver {
             case PR_DUTY -> PrDuty.advanceSeason(snapshot, PrPress.standard(), random, context.catalog(),
                 context.seasonsElapsed());
             case INTELLIGENCE -> Intelligence.advanceSeason(snapshot, context.intelligence(), context.gameTurn());
+            case CONTRACTS -> Contracts.advanceSeason(snapshot, context.contracts(), context.gameTurn());
             case BUDGET -> BudgetProgress.advanceSeason(snapshot, context.catalog(), context.schedule(),
                 context.seasonsElapsed());
             case RANDOM_EVENTS -> RandomEvents.advanceSeason(snapshot, context.roster(), random, context.gameTurn(),

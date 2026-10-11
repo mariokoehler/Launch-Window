@@ -163,6 +163,25 @@
       "related": ["turn-report", "budget"]
     },
     {
+      "id": "contracts",
+      "group": "Agency",
+      "title": "Contracts",
+      "body": [
+        "Once you have shown you can fly something, clients pay you to fly it again. Contracts pay money, never prestige, and they fly hardware you already have, so they need no new R&D. Rival agencies compete for the same contracts.",
+        "## Unlocking a line",
+        "Some of a program's flights carry the contract icon. Once every marked flight of the program has succeeded, its category becomes a contract line for you, for good. You qualify for a line's contracts while a program you unlocked it with is open, so a program's upkeep now buys a chance at contracts too.",
+        "## The board",
+        "Headquarters' Contracts screen shows every listing on offer, the same for every agency. Only lines some agency can fly are listed. A listing stays {contracts.listingTurns} turns unless it is awarded first, and new ones are posted when a turn resolves.",
+        "## Applying",
+        "You can apply for one listing a turn, and only while you have no active contract. Applications are sealed: nobody sees who applied, and you can change or withdraw yours until the turn resolves.",
+        "When it resolves, the applicants are ranked by their score: the reliability of the weakest component the contract flight would use, plus their record in the line, {contracts.flownPoints} for each contract flown and {contracts.failedPoints} for each one that failed or lapsed, within {contracts.recordCap} either way. Crew and controllers don't count: clients judge the hardware. The best {contracts.tiers} win tiers 1 to {contracts.tiers}, which pay {contracts.margins} % over the launch cost. A fourth applicant and later get nothing. The news names the winners, but never the ranking.",
+        "## Flying it",
+        "The fee is fixed when the contract is awarded, from the launch cost with the cheapest rocket you could fly it on then. You pay the launch cost as usual, and the first launch of the contract's flight is the contract flight. It must launch within {contracts.window} turns, or it lapses: {contracts.lapsePrestige} prestige, and it counts as a failure.",
+        "On success the client pays the fee. On failure the insurer refunds the launch cost, and the failure costs its prestige as any flight's would. A crew lost on a contract flight costs another {contracts.crewLossPrestige} prestige. A contract flight pays no prestige and doesn't count as a repeat, so it never lowers what a later flight of the same mission pays. A scrub keeps the contract while its window lasts."
+      ],
+      "related": ["budget", "programs", "planning-missions"]
+    },
+    {
       "id": "programs",
       "group": "Programs and hardware",
       "title": "Programs",

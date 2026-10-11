@@ -73,6 +73,26 @@ CHROME = {
     # circle, its dot below) and the search field's magnifier.
     "help": '<circle cx="12" cy="12" r="9.5"/><path d="M9.2 9.3a2.9 2.9 0 0 1 5.6 1c0 1.9-2.8 2.5-2.8 4.2"/>',
     "search": '<circle cx="10.5" cy="10.5" r="6.5"/><line x1="15.5" y1="15.5" x2="21" y2="21"/>',
+    # The contract marker (ui-spec.md component 27, Contracts canvas, 2026-10-11): a page with a folded
+    # corner, two lines, a signature, and a round seal with two ribbons. The outline marks a flight
+    # that unlocks a contract line; the filled one (FILLED below) the flight contracts fly.
+    "contract_unlock": '<path d="M12.2 21H5V2.5h8l4.5 4.5v5"/><path d="M13 2.5V7h4.5"/><path d="M8 8h3.5M8 11.5h5.5"/>'
+                       '<path d="M7.8 16.4c.8-1.7 1.6-1.7 2 0s1.2 1.2 2-.4"/><circle cx="16.5" cy="16" r="3.4"/>'
+                       '<path d="M15 19.3l-1 3.2M18 19.3l1 3.2"/>',
+}
+
+# Icons drawn as filled shapes rather than strokes; the contract flight's page knocks its lines out
+# with a mask.
+FILLED = {
+    "contract_flight": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><defs><mask id="lwcm" '
+                       'maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24"><rect width="24" height="24" '
+                       'fill="#fff"/><path d="M13 1.5V7h5.5" fill="none" stroke="#000" stroke-width="1.6"/>'
+                       '<path d="M7.5 8h4M7.5 11.5h6" stroke="#000" stroke-width="1.8" stroke-linecap="round"/>'
+                       '<path d="M7.4 16.4c.8-1.7 1.6-1.7 2 0s1.2 1.2 2-.4" fill="none" stroke="#000" '
+                       'stroke-width="1.6" stroke-linecap="round"/><circle cx="16.5" cy="16" r="5.4" fill="#000"/>'
+                       '</mask></defs><path d="M4 1.5h9.6l5 5V21.5H4z" fill="currentColor" mask="url(#lwcm)"/>'
+                       '<circle cx="16.5" cy="16" r="4" fill="currentColor"/><path d="M15 19.5l-1 3M18 19.5l1 3" '
+                       'stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
 }
 
 # The astronaut glyph's antenna tip is a filled dot.
@@ -104,6 +124,12 @@ def main():
         png = resvg_py.svg_to_bytes(svg_string=white(svg), width=CHROME_PX, height=CHROME_PX)
         with open(os.path.join(OUT, name + ".png"), "wb") as f:
             f.write(bytes(png))
+    for name, svg in FILLED.items():
+        with open(os.path.join(HERE, name + ".svg"), "w", encoding="utf-8", newline="\n") as f:
+            f.write(svg + "\n")
+        png = resvg_py.svg_to_bytes(svg_string=white(svg), width=CHROME_PX, height=CHROME_PX)
+        with open(os.path.join(OUT, name + ".png"), "wb") as f:
+            f.write(bytes(png))
     for skill in SKILLS:
         with open(os.path.join(REPO, "assets-raw", "svg", "icon_" + skill + ".svg"), encoding="utf-8") as f:
             svg = f.read()
@@ -112,7 +138,7 @@ def main():
         png = resvg_py.svg_to_bytes(svg_string=svg, width=width, height=SKILL_HEIGHT_PX)
         with open(os.path.join(OUT, "skill_" + skill + ".png"), "wb") as f:
             f.write(bytes(png))
-    print("wrote", len(CHROME), "chrome icons and", len(SKILLS), "skill icons to", OUT)
+    print("wrote", len(CHROME) + len(FILLED), "chrome icons and", len(SKILLS), "skill icons to", OUT)
 
 
 if __name__ == "__main__":

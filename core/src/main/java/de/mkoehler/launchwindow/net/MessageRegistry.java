@@ -293,5 +293,8 @@ public final class MessageRegistry {
 
         // R&D decisions (ui-spec.md component 26, 2026-10-10). Never move this line.
         kryo.register(de.mkoehler.launchwindow.actions.DecideAction.class);
+
+        // Commercial contracts (design.md section 2.11, 2026-10-11). Never move this line.
+        kryo.register(de.mkoehler.launchwindow.actions.ApplyContractAction.class);
     }
 }

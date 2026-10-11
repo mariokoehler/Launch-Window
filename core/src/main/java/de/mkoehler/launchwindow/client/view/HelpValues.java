@@ -19,6 +19,7 @@ import de.mkoehler.launchwindow.rules.SkillGrowth;
 import de.mkoehler.launchwindow.rules.TraitEffects;
 import de.mkoehler.launchwindow.rules.TrainingProgress;
 import de.mkoehler.launchwindow.rules.Chemistry;
+import de.mkoehler.launchwindow.rules.Contracts;
 import de.mkoehler.launchwindow.rules.Intelligence;
 import de.mkoehler.launchwindow.rules.Personality;
 import de.mkoehler.launchwindow.rules.Poaching;
@@ -228,6 +229,16 @@ public final class HelpValues {
         v.put("intelligence.catchBase", whole(Intelligence.CATCH_BASE_PERCENT));
         v.put("intelligence.catchPerLevel", whole(Intelligence.CATCH_PER_LEVEL));
         v.put("intelligence.caughtPrestige", whole(Intelligence.CAUGHT_PRESTIGE));
+
+        v.put("contracts.listingTurns", whole(Contracts.LISTING_TURNS));
+        v.put("contracts.flownPoints", "+" + whole(Contracts.RECORD_FLOWN_POINTS));
+        v.put("contracts.failedPoints", "\u2212" + whole(-Contracts.RECORD_FAILED_POINTS));
+        v.put("contracts.recordCap", whole(Contracts.RECORD_CAP));
+        v.put("contracts.tiers", whole(Contracts.TIERS));
+        v.put("contracts.margins", and(Contracts.MARGIN_PERCENTS.stream().map(HelpValues::whole).toList()));
+        v.put("contracts.window", whole(Contracts.LAUNCH_WINDOW_TURNS));
+        v.put("contracts.lapsePrestige", whole(Contracts.LAPSE_PRESTIGE));
+        v.put("contracts.crewLossPrestige", whole(Contracts.CREW_LOSS_PRESTIGE));
         return new HelpValues(v);
     }
 

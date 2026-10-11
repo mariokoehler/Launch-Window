@@ -11,7 +11,9 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.model.PendingDecision;
 import de.mkoehler.launchwindow.content.Decisions;
+import de.mkoehler.launchwindow.client.view.ContractsView;
 import de.mkoehler.launchwindow.client.view.DecisionView;
+import de.mkoehler.launchwindow.rules.ContractSettled;
 import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.content.SpaceRaceNews;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
@@ -87,6 +89,9 @@ public final class TurnReportScreen extends ChromeScreen {
         if (decision != null) {
             content.add(decision).padBottom(Theme.SPACE_4).row();
         }
+        for (ContractsView.ReportCard contract : ContractsView.reportCards(report)) {
+            content.add(contractCard(contract)).padBottom(Theme.SPACE_4).row();
+        }
 
         Table columns = new Table();
         columns.top();
@@ -158,7 +163,78 @@ public final class TurnReportScreen extends ChromeScreen {
             cell.add(ui.label(ContentNames.of(pending.componentId()), Theme.TextStyle.CAPTION, Theme.INK_MUTED));
             strip.add(cell).expandX().fillX().uniformX().fillY().top();
         }
+        // A cell for the agency's own contract news (ui-spec.md section 4.17), its top line in the card's tone.
+        List<ContractsView.ReportCard> contracts = ContractsView.reportCards(report);
+        if (!contracts.isEmpty()) {
+            ContractsView.ReportCard first = contracts.getFirst();
+            strip.add(new Image(ui.solid(Theme.NAVY_BORDER))).width(Theme.BORDER_THIN).fillY();
+            Table cell = new Table();
+            cell.setBackground(ui.solid(Theme.SURFACE_CARD));
+            cell.top().left();
+            cell.add(new Image(ui.solid(contractTone(first.kind())))).height(Theme.BORDER_ACCENT).growX().colspan(1)
+                .row();
+            Table words = new Table();
+            words.left();
+            words.pad(Theme.SPACE_3, Theme.SPACE_4, Theme.SPACE_3, Theme.SPACE_4);
+            words.defaults().left();
+            words.add(ui.label("CONTRACTS", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padBottom(2f).row();
+            words.add(ui.label(contractCell(first), Theme.TextStyle.HEADING_SM, Theme.INK)).row();
+            words.add(ui.label(first.title(), Theme.TextStyle.CAPTION, Theme.INK_MUTED));
+            cell.add(words).growX();
+            strip.add(cell).expandX().fillX().uniformX().fillY().top();
+        }
         return strip;
+    }
+
+    /** A contract outcome's accent: gold awarded, green paid, navy refunded, red lapsed, muted otherwise. */
+    private static Color contractTone(ContractSettled.Kind kind) {
+        return switch (kind) {
+            case AWARDED -> Theme.GOLD;
+            case PAID -> Theme.SUCCESS;
+            case REFUNDED -> Theme.NAVY;
+            case LAPSED -> Theme.DANGER;
+            case MISSED, VOIDED -> Theme.NAVY_BORDER;
+        };
+    }
+
+    private static String contractCell(ContractsView.ReportCard card) {
+        return switch (card.kind()) {
+            case AWARDED -> "Awarded";
+            case MISSED -> "Missed out";
+            case VOIDED -> "Came to nothing";
+            case PAID -> "Paid";
+            case REFUNDED -> "Insured";
+            case LAPSED -> "Lapsed";
+        };
+    }
+
+    /**
+     * A Contracts card above the columns ({@code ui-spec.md} &sect;4.17): what happened to the agency's
+     * application or contract, with a left accent in its tone.
+     */
+    private Table contractCard(ContractsView.ReportCard contract) {
+        Table card = new Table();
+        card.setBackground(ui.cardAccent(contractTone(contract.kind())));
+        card.pad(Theme.SPACE_4, Theme.SPACE_4 + Theme.BORDER_ACCENT + 4f, Theme.SPACE_4, Theme.SPACE_5);
+        Table words = new Table();
+        words.left();
+        words.defaults().left().growX();
+        words.add(ui.label(("Contract · " + contractCell(contract)).toUpperCase(Locale.ROOT),
+            Theme.TextStyle.EYEBROW, contract.kind() == ContractSettled.Kind.AWARDED ? Theme.GOLD_TEXT : Theme.NAVY))
+            .padBottom(4f).row();
+        words.add(ui.paragraph(contract.title(), Theme.TextStyle.HEADING_SM, Theme.INK)).padBottom(4f).row();
+        for (String line : contract.lines()) {
+            words.add(ui.paragraph(line, Theme.TextStyle.BODY_SM, Theme.INK)).padBottom(2f).row();
+        }
+        card.add(words).expandX().fillX().left().padRight(Theme.SPACE_5);
+        Table right = new Table();
+        if (!contract.value().isEmpty()) {
+            right.add(ui.label(contract.value(), Theme.TextStyle.HEADING_SM, tone(contract.tone()))).right().row();
+        }
+        right.add(actionButton("See the board", Theme.ButtonKind.SECONDARY,
+            () -> game.setScreen(new ContractsScreen(game)))).right().padTop(Theme.SPACE_2);
+        card.add(right).right();
+        return card;
     }
 
     /**
@@ -410,6 +486,8 @@ public final class TurnReportScreen extends ChromeScreen {
         });
         List<TurnReportView.Line> lines = new java.util.ArrayList<>(TurnReportView.news(report, catalog,
             session.state().getArchetype()));
+        // The contract board's public news (ui-spec.md section 4.17).
+        lines.addAll(ContractsView.news(report));
         // Last turn's R&D decision, decided or lapsed (ui-spec.md component 26).
         for (var event : report.events()) {
             if (event instanceof de.mkoehler.launchwindow.rules.DecisionSettled settled) {

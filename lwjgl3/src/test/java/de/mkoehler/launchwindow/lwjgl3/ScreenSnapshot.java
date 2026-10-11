@@ -237,6 +237,11 @@ public final class ScreenSnapshot {
         game.useExplainerReadMarksInMemory(new java.util.HashSet<>());
         // The advisor's marks too: every run starts with help unopened and the advisor on duty.
         game.useAdvisorMarksInMemory(new java.util.HashSet<>());
+        // -Dshots=contracts renders only one group, for a quick look at the screens being worked on.
+        if ("contracts".equals(System.getProperty("shots"))) {
+            contractShots(folder, game);
+            return;
+        }
         write(folder, "connect-default.png", new ConnectScreen(game), null);
         write(folder, "connect-connecting.png", filledConnect(game), screen -> screen.setBusy(true));
         write(folder, "connect-wrong-password.png", filledConnect(game), screen -> screen.applyLoginResult(
@@ -410,6 +415,83 @@ public final class ScreenSnapshot {
         standardPackShots(folder, game);
         outlookShots(folder, game);
         decisionShots(folder, game);
+        contractShots(folder, game);
+    }
+
+    /**
+     * Commercial contracts (ui-spec.md section 4.17 and component 27, 2026-10-11): the board with an
+     * application out and with an active contract, the apply and move confirmations, the score's
+     * tooltip, the empty board, Headquarters' card and the hub's dot, the markers on configuration
+     * cards and a program's page, Assemble's contract box, and the report's card and news.
+     */
+    private static void contractShots(File folder, LaunchWindowGame game) {
+        String hash = ContentPackHash.ofClasspath("content/early-era", ScreenSnapshot.class.getClassLoader());
+        GameInfoResponse info = GameInfoResponse.success("early-era", hash, List.of(), 23, true,
+            6 * 3_600_000L + 12 * 60_000L + 30_000L, 0L, null, List.of(), List.of(), 0);
+        String line = "earth-orbit-satellites";
+        de.mkoehler.launchwindow.model.ContractListing relay = new de.mkoehler.launchwindow.model.ContractListing(
+            "c22-1", line, "sat-n-relay", "sat-s-relay", 23, 25);
+        de.mkoehler.launchwindow.model.ContractListing weather = new de.mkoehler.launchwindow.model.ContractListing(
+            "c22-2", line, "sat-n-weather", "sat-s-weather", 23, 25);
+        de.mkoehler.launchwindow.model.ContractListing physics = new de.mkoehler.launchwindow.model.ContractListing(
+            "c21-1", line, "sat-n-radiation", "sat-s-physics", 22, 23);
+        de.mkoehler.launchwindow.model.ContractListing medicine = new de.mkoehler.launchwindow.model.ContractListing(
+            "c22-3", "one-crew-capsules", "one-n-medicine", "one-s-medicine", 23, 25);
+
+        PlayerSnapshot state = planningState(11, 25_000);
+        state.getSuccessfulFlightCounts().put("sputnik-1-orbit", 3);
+        state.setContractBoard(List.of(relay, weather, physics, medicine));
+        state.getContractRecords().put(line, new de.mkoehler.launchwindow.model.ContractRecord(2, 0, 0));
+        state.setContractApplication(new de.mkoehler.launchwindow.model.ContractApplication(weather.id(), "sputnik-1"));
+        startSession(game, state, info);
+        PlayerSnapshot live = game.session().state();
+        write(folder, "contracts-applied.png", new de.mkoehler.launchwindow.client.screen.ContractsScreen(game), null);
+        write(folder, "contracts-score.png", new de.mkoehler.launchwindow.client.screen.ContractsScreen(game),
+            screen -> showTooltip(screen.stage().getRoot(), "Your score in"));
+        write(folder, "contracts-move.png", new de.mkoehler.launchwindow.client.screen.ContractsScreen(game),
+            screen -> screen.openApply(relay.id()));
+        live.setContractApplication(null);
+        write(folder, "contracts-confirm.png", new de.mkoehler.launchwindow.client.screen.ContractsScreen(game),
+            screen -> screen.openApply(relay.id()));
+        write(folder, "contracts-hq.png", new HeadquartersScreen(game), null);
+        write(folder, "contracts-hub.png", new SpaceComplexScreen(game), screen -> screen.hover(Hub.Place.HEADQUARTERS));
+
+        live.setActiveContract(new de.mkoehler.launchwindow.model.ActiveContract(physics.id(), line, "sat-s-physics",
+            "sputnik-1", "sputnik-1-orbit", 1, 3_390, 22, 25, null));
+        live.setContractBoard(List.of(relay, weather, medicine));
+        write(folder, "contracts-active.png", new de.mkoehler.launchwindow.client.screen.ContractsScreen(game), null);
+        write(folder, "contracts-hq-active.png", new HeadquartersScreen(game), null);
+        write(folder, "contracts-assemble.png",
+            new de.mkoehler.launchwindow.client.screen.AssembleMissionScreen(game, "sputnik-1-orbit"), null);
+        write(folder, "contracts-configs-sputnik.png",
+            new de.mkoehler.launchwindow.client.screen.MissionConfigsScreen(game, "sputnik-1"), null);
+        write(folder, "contracts-configs-vostok.png",
+            new de.mkoehler.launchwindow.client.screen.MissionConfigsScreen(game, "vostok"),
+            screen -> showTooltip(screen.stage().getRoot(), "Unlock flight"));
+        write(folder, "contracts-program.png", new ProgramDetailsScreen(game, "vostok",
+            de.mkoehler.launchwindow.content.CelestialBody.EARTH), null);
+
+        de.mkoehler.launchwindow.rules.ContractSettled awarded = new de.mkoehler.launchwindow.rules.ContractSettled(
+            de.mkoehler.launchwindow.rules.ContractSettled.Kind.AWARDED, physics.id(), line, "sat-s-physics",
+            "sputnik-1", "sputnik-1-orbit", 1, 3_390, 0, 0, null, 0, 0);
+        TurnReport report = TurnReport.build(live, live, List.of(awarded,
+            new de.mkoehler.launchwindow.rules.ContractNews(de.mkoehler.launchwindow.rules.ContractNews.Kind.AWARDED,
+                physics.id(), line, "sat-s-physics", List.of("Baltic Star Agency", "Orbital Corp."), 0),
+            new de.mkoehler.launchwindow.rules.ContractNews(de.mkoehler.launchwindow.rules.ContractNews.Kind.POSTED,
+                null, null, null, List.of(), 2),
+            new de.mkoehler.launchwindow.rules.ContractLineUnlocked(line, "sputnik-1", true)), 22,
+            game.session().catalog());
+        game.session().keepReport(report);
+        write(folder, "contracts-report.png", new TurnReportScreen(game, report), null);
+        de.mkoehler.launchwindow.rules.ContractSettled paid = new de.mkoehler.launchwindow.rules.ContractSettled(
+            de.mkoehler.launchwindow.rules.ContractSettled.Kind.PAID, physics.id(), line, "sat-s-physics",
+            "sputnik-1", "sputnik-1-orbit", 1, 3_390, 3_390, 0, "m7", 2_113, 3);
+        TurnReport paidReport = TurnReport.build(live, live, List.of(paid), 22, game.session().catalog());
+        write(folder, "contracts-report-paid.png", new TurnReportScreen(game, paidReport), null);
+
+        PlayerSnapshot fresh = planningState(11, 25_000);
+        startSession(game, fresh, info);
+        write(folder, "contracts-empty.png", new de.mkoehler.launchwindow.client.screen.ContractsScreen(game), null);
     }
 
     /**

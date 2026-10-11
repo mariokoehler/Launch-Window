@@ -93,9 +93,14 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   play test.
 - **Undoing a bad turn is built** (the user's idea, 2026-10-11, `design.md` §3.7): a zip of the data
   root before every turn, and `TurnRollback` to undo turns and redo them with a fixed build.
-- **Commercial contracts are designed** (the user's idea, 2026-10-11, `design.md` §2.11, `ui-spec.md`
-  §4.17 and component 27): a shared marketplace, tiers by track record, money instead of prestige.
-  Mocked up on the canvas `Launch Window — Contracts` (2026-10-11); every number is unconfirmed.
+- **Commercial contracts are built** (the user's idea, 2026-10-11, `design.md` §2.11, `ui-spec.md`
+  §4.17 and component 27, from the canvas `Launch Window — Contracts`): a shared marketplace settled
+  once a turn (`rules.ContractMarket`, `market/turn-N.json`), tiers by track record, money instead of
+  prestige. Unlock sets in each pack's own hashed `commercial.json`, clients in
+  `assets/content/commercial-clients.json` (`CommercialClientsTest`). Every number is unconfirmed; the
+  first measurement says they fill the lulls but don't speed the race. The pack hash changed and
+  saved classes gained fields: reset the dev data root, and rebuild client and server together (a new
+  action).
 
 ## How we work
 
@@ -214,7 +219,7 @@ mvn -pl dev-tools compile exec:java -DmainClass=de.mkoehler.launchwindow.devtool
   (`-Dexec.args=standard` for the full pack, which plays the Moon race; add `ahead` for the bot that
   works ahead or `side` for the one that also flies side missions, `-Dexec.args="standard side"`)
   (`-Dexec.args="standard side decisions"` plays with the R&D decisions and reports how often they come)
-  (also `PersonnelLifecyclePlayouts`, `CareerCurves`, `StateSizes` (it takes the pack too), `IntelligencePlayouts`, `RaceLulls` (the Moon race's lulls with R&D tuned); `design.md` §3.10).
+  (also `PersonnelLifecyclePlayouts`, `CareerCurves`, `StateSizes` (it takes the pack too), `IntelligencePlayouts`, `RaceLulls` (the Moon race's lulls with R&D tuned; `-Dexec.args="standard ahead+contracts 1.0 0.0"` plays with contracts against three simulated rivals); `design.md` §3.10).
 - **Releasing** (ported from Robot-Rampage 2026-10-06; its and StarWars' CLAUDE.md hold the
   gotchas):
   - **Client zip, locally:** `mvn -pl lwjgl3 -am -Prelease-client -DskipTests verify` gives
@@ -246,6 +251,8 @@ mvn -q -pl lwjgl3 test-compile
 mvn -q -pl lwjgl3 dependency:build-classpath -Dmdep.outputFile=target/test-cp.txt -Dmdep.includeScope=test
 cd assets && java --enable-native-access=ALL-UNNAMED -cp "../lwjgl3/target/classes;../lwjgl3/target/test-classes;$(cat ../lwjgl3/target/test-cp.txt)" de.mkoehler.launchwindow.lwjgl3.ScreenSnapshot <out-dir>
 ```
+- **`-Dshots=contracts`** (before `-cp`) renders only the contract shots; add a group the same way
+  when iterating on one screen.
 - **Regression check for shared UI changes:** shoot before and after into fresh folders, then
   diff every PNG with PIL's `ImageChops.difference(...).getbbox()`. A run killed part-way leaves
   missing or stale PNGs, which make a diff look clean.
@@ -264,6 +271,8 @@ cd assets && java --enable-native-access=ALL-UNNAMED -cp "../lwjgl3/target/class
   `[IO.File]::WriteAllText(path, text, (New-Object Text.UTF8Encoding $false))`.
 - PowerShell's pipe to a native process also prepends a BOM, which breaks `DevClient`'s login
   line: pipe its input from the Bash tool.
+- Don't inline Python edit scripts in a Bash heredoc: the tool mangles `\n` and some apostrophes
+  ("unexpected EOF"). Write the script to the scratchpad with the Write tool and run it.
 - Many repo files are CRLF on disk: normalize before replacing multi-line blocks, and keep each
   file's line endings.
 - Stopping a background client or server task can leave the forked `java.exe` running. Check

@@ -207,7 +207,10 @@ public final class MissionProgress {
         // GetMissionRunCount during resolution (baspm.md §11.7), so a copy of this configuration that
         // completed earlier in the same pass already counts. Missions run in launch order.
         FlightTier tier = MissionPrestige.tierFor(snapshot.getSuccessfulFlightCounts().getOrDefault(configuration.id(), 0));
-        long tierTotal = MissionPrestige.tierTotal(configuration, tier);
+        // A contract flight pays the client's fee instead of prestige; a failing step still costs its
+        // prestige (design.md §2.11).
+        long tierTotal = mission.isContract() ? 0 : MissionPrestige.tierTotal(configuration, tier);
+        boolean crewLost = false;
         long seasonPrestige = 0;
         for (MissionStep step : season.steps()) {
             MissionStepResolved resolved = resolveStep(snapshot, catalog, random, mission, step, expertUseCounts,
@@ -218,8 +221,9 @@ public final class MissionProgress {
             executedSteps.add(step);
             executedOutcomes.add(outcome);
             // A step that ends or fails the mission awards no goals - BASPM's ProcessStepFailed has none
-            // (baspm.md §11.7). The other outcomes award theirs right after the step itself.
-            long goalPrestige = awardsGoals(outcome)
+            // (baspm.md §11.7). The other outcomes award theirs right after the step itself. A contract
+            // flight settles none: its configuration's goals are already the agency's (design.md §2.11).
+            long goalPrestige = awardsGoals(outcome) && !mission.isContract()
                 ? settleStepGoals(snapshot, catalog, mission, step, goalTally, gameTurn, events)
                 : 0;
             seasonPrestige = stepPrestige(seasonPrestige, outcome, step, tierTotal, goalPrestige);
@@ -228,6 +232,7 @@ public final class MissionProgress {
             if (outcome == MissionStepOutcome.FAILURE || outcome == MissionStepOutcome.CATASTROPHIC) {
                 missionEndedThisSeason = true;
                 if (outcome == MissionStepOutcome.CATASTROPHIC) {
+                    crewLost = !mission.crewIds().isEmpty();
                     loseCrew(snapshot, mission, step, gameTurn, events);
                 }
                 break;
@@ -255,6 +260,7 @@ public final class MissionProgress {
         if (missionEndedThisSeason) {
             rememberPassengers(snapshot, configuration, mission, executedSteps.get(executedSteps.size() - 1), gameTurn,
                 events);
+            Contracts.flightEnded(snapshot, mission, false, crewLost, events);
             releaseSurvivors(snapshot, mission, events);
             endedMissionIds.add(mission.getId());
             return;
@@ -266,8 +272,15 @@ public final class MissionProgress {
             creditCrew(snapshot, mission);
             releaseSurvivors(snapshot, mission, events);
             // Only a completed, non-failed flight counts toward the repeat tier - design.md §2.6(d).
-            // A failing season returned above, so reaching this branch means no step failed.
-            snapshot.getSuccessfulFlightCounts().merge(configuration.id(), 1, Integer::sum);
+            // A failing season returned above, so reaching this branch means no step failed. A
+            // contract flight never counts, so it never lowers a later flight's prestige (§2.11).
+            if (mission.isContract()) {
+                Contracts.flightEnded(snapshot, mission, true, false, events);
+            } else {
+                java.util.Set<String> unlockedBefore = Contracts.unlockedPrograms(snapshot, catalog);
+                snapshot.getSuccessfulFlightCounts().merge(configuration.id(), 1, Integer::sum);
+                Contracts.reportUnlocks(unlockedBefore, snapshot, catalog, events);
+            }
             endedMissionIds.add(mission.getId());
         } else {
             mission.setCurrentSeasonIndex(nextSeasonIndex);

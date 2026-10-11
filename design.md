@@ -1563,7 +1563,8 @@ balance sheet if needed rather than adding levels.
 
 ### 2.11 Commercial contracts
 
-**The user's idea (2026-10-11), designed with the user the same day; not built.** Aimed at the
+**The user's idea (2026-10-11), designed with the user the same day, mocked up and built the same day**
+(`rules.Contracts`, `rules.ContractMarket`; `ui-spec.md` §4.17 and component 27). Aimed at the
 mid-race lulls, which are mostly a wait for money (§2.9, `RaceLulls`). Once an agency has shown a
 capability, clients pay it to fly that capability again: contracts pay **money, not prestige**,
 with hardware the agency already has, so they add no R&D wait. Players compete for them on a shared
@@ -1577,6 +1578,15 @@ ours, a default and **unconfirmed** unless a line says otherwise.
   unlocked programs in that line is open, so a program's upkeep now buys a chance at contracts. The
   unlock set's configuration cards carry a contract icon with a tooltip (`ui-spec.md` component 27).
   Programs with nothing a client would buy (the late Moon programs, say) have no unlock set.
+  **As authored (2026-10-11, unconfirmed):** 25 programs in six lines. Earth-orbit satellites: every
+  satellite program, its one-season orbital flight (the three-season extended flights left out).
+  Lunar probes: every lunar probe, its one flight. Space planes: the X-15 (its test and both research
+  flights; contracts fly the first research flight) and the OKB-MiG E-154 (drop test, suborbital, orbital;
+  contracts fly the suborbital test). One-crew capsules: Mercury and Vostok (the uncrewed and the
+  crewed orbital flight; contracts fly the crewed one). Two-crew: Gemini (orbital, rendezvous,
+  docking) and Voskhod (orbital, spacewalk), contracts flying the orbital flight. Three-crew: Apollo
+  in Earth orbit and Soyuz 7K-OK (orbital and docking), the orbital flight. The planetary probes, the
+  lunar expeditions and the lunar programs' Earth-orbit tests have none.
 - **A contract flies an existing configuration** (decided): each program with an unlock set names
   the configuration its contracts fly (Explorer 1's orbital flight, say), **always one of its unlock
   set**, so its goals are already achieved and a contract can never earn a goal or open a program. Steps, staffing, rockets,
@@ -1588,18 +1598,24 @@ ours, a default and **unconfirmed** unless a line says otherwise.
   configuration** is the contract flight (no toggle); Assemble says so before the launch. Flying that
   configuration for prestige waits until the contract has flown.
 - **Closing a program** is refused while an active contract flies on it, as while any of its
-  missions flies. An application whose program was closed before the turn resolves comes to nothing
-  and the report says so.
+  missions flies (the existing `MISSIONS_IN_FLIGHT` refusal covers it). An application whose program
+  was closed before the turn resolves comes to nothing and the report says so.
+- **Calling a contract flight off** (built default, unconfirmed): a scrub before it flies puts the
+  contract back on the ground while its window lasts; cancelling it in flight ends the contract as a
+  failure in the record, with neither fee nor the insurer's refund (the cancellation's own refund
+  share applies).
 - **Money** (user): the agency pays the launch cost up front as usual. **On success** the client
   pays the **fee**: the launch cost times (1 + the tier's margin), **+60 / +40 / +25 %** for tiers
-  1 to 3. The fee is fixed at the award, from the contract configuration with the cheapest rocket
-  the agency could fly it on then; a dearer rocket only lowers the profit. **On failure** the
+  1 to 3. The fee is fixed at the award, from the contract configuration with the cheapest of the
+  agency's open rockets that can fly it, or the cheapest of its side's when none of its open ones can
+  (built default); a dearer rocket only lowers the profit. **On failure** the
   insurer pays back the launch cost actually paid (break even), and the agency loses the prestige
   that flight's failure costs anyway. A crew lost on a contract flight costs an extra 50 prestige on
   top of the normal rules.
 - **Tiers go by track record** (user, 2026-10-11, over prestige, which would hand the leader the
   money too). An applicant's **score** is the reliability of the weakest component the contract
-  flight would use (the agency's hardware at the start of the turn, its best rocket for it) plus
+  flight would use (the agency's hardware at the start of the turn, its most reliable open rocket
+  that can fly it) plus
   its **record in that line**: +3 per contract flown successfully, −6 per failed or lapsed one,
   within ±15. The highest score gets tier 1, the next tier 2, the third tier 3; a fourth applicant
   and later get nothing (user). Ties go to a seeded draw. Scores read start-of-turn snapshots
@@ -1638,20 +1654,40 @@ ours, a default and **unconfirmed** unless a line says otherwise.
   of Sciences' instruments). Same rules, own texts.
 - **Intelligence:** an agency assessment's Programs and plans area also shows the rival's active
   contract and its record per line.
-- **Content:** in the pack (hashed), per program, `commercial`: the unlock set and the contract
-  configuration. The margins and record weights are rules constants (read by `Tips` and help, never
-  written into text). Clients and their stories by line and agency go in
-  `assets/content/commercial-clients.json`, outside `ContentPackLoader.FILES` like the press
-  stories, no repeats until a line's have all run. The unlock sets are authored in batches, the
-  early-era categories first, so a bot can measure the effect early.
-- **Storage:** `market/turn-N.json`, written once at the resolution: the awards settled from the
-  turn's applications (before the season pass, like intelligence) and the board for the next turn
-  (after every player has resolved). Per player: the unlocked lines, the record per line, the active
-  contract with its fee and window, and the application. **`TurnRollback` must delete the turns'
-  market files** (build it with the feature).
-- **Measure before tuning:** a playout bot that applies for and flies contracts, through `RaceLulls`,
-  for how much shorter the race gets and how much the lulls shrink. Money is the bottleneck, so the
-  race will get shorter; how much is the question.
+- **Content:** in the pack (hashed), a file of its own, `commercial.json` (in `ContentPackLoader.FILES`;
+  its own file so the BASPM converter, which writes `programs.json`, never touches it): per program,
+  the unlock set and the contract configuration. The margins and record weights are rules constants
+  (read by help's tokens, never written into text). Clients and their stories by line and side go in
+  `assets/content/commercial-clients.json` (31, at least two per line a side flies), outside
+  `ContentPackLoader.FILES` like the press stories, no repeats until a line's have all run. A listing
+  names one client per side, so each side reads its own.
+- **Storage** (as built): `market/turn-N.json`, written once at the resolution before the season
+  passes, like intelligence, and re-read on a retry: the awards from the turn's applications, the
+  board for the coming turn, the clients used. **The board is settled before the passes too**, since
+  each agency's copy is saved in its own state (`PlayerSnapshot.contractBoard`) and a snapshot is
+  written once; so no new message is needed and the client reads the board with the state. The cost
+  is a one-turn lag: a line unlocked by a flight this turn, or an agency freed by a contract ending
+  this turn, is seated at the next resolution. Scores read each agency's state at the start of the
+  turn (an R&D decision taken during the turn can move a reliability); applications and open
+  programs read the state with the turn's actions applied. One edge: a rocket program reopened this
+  turn has no open rocket yet at the turn's start, so the applicant scores on its record alone;
+  reopen the rocket a turn before applying. Per player: the record per line, the
+  active contract with its fee and window, the application, the board; unlocked lines are worked
+  out from the flights flown, not stored. `TurnRollback` deletes the turns' market files.
+- **Measured (2026-10-11):** `RaceLulls standard ahead+contracts 1.0 0.0` against `ahead`, 200 Moon
+  races. A playout has one agency, so the market is simulated: every listing the bot applies for draws
+  three rivals as strong as it, its rank among them random (a fourth of applications miss out). The
+  bot applies whenever it has no contract and flies the contract as soon as its hardware is ready.
+  Per game: 15.6 applications, 11.5 awards, 7.3 paid, 1.4 refunded, **2.8 lapsed** (a quarter of
+  awards: short of money or staff with its own flight going), about **6,000 profit** over the race.
+  Launches per game rise from 39.1 to 44.6; gaps of 5 seasons or more fall from 22 % to 14 % of
+  launches, the 90th percentile gap from 8 to 6 seasons; seasons without a launch from 74 % to 70 %.
+  The race itself barely moves: NASA's median **slower** (135 to 142 seasons), the Soviet one faster
+  (161 to 153), 197 of 200 finished against 200, and debt conversions up from 28 to 49. So contracts
+  fill the lulls, as meant, but at these margins they don't pay for the race: a fee on an early
+  flight is small beside a season's funding, and the lapses and failures cost prestige that the
+  budget reviews then miss. For the play test: higher margins, a fee that scales with the era, or
+  a bot that only applies when it can fly the contract soon (§4).
 
 ## 3. Architecture
 
@@ -2091,7 +2127,8 @@ patches (`ui-spec.md` component 8).
   then the R&D tuning with the side-missions bot. The Soviets take about a fifth longer.
 - **Commercial contracts** (§2.11, 2026-10-11): every number is unconfirmed (margins, the record's
   weights, the launch window, the expiry, the extras), and so are the unlock sets, authored per
-  program. Measure with a contract bot first.
+  program. The first measurement (§2.11) says they fill the lulls but don't speed the race, and a
+  quarter of awards lapse: the margins, or a fee scaled to the era, are the first thing to look at.
 - **Declared goals for the colleagues' game:** an early-era race (user, 2026-10-08), with goals
   drawn from the early-era pack. Since then the standard pack became the default with its own race to
   a crewed Moon landing (user, 2026-10-09, §2.6); whether the colleagues' game plays that or a
@@ -2451,11 +2488,12 @@ flyby, the Moon landing), every player sees a fictional newspaper's front page w
 and an article on who made it first. It pops up on login before the turn report, the first thing
 they see. A new screen: spec, then a mockup session (`ui-spec.md` §7).
 
-**Commercial contracts** (the user's idea, designed 2026-10-11, §2.11, `ui-spec.md` §4.17 and
-component 27): contract lines unlocked per program, a shared marketplace with sealed applications,
-tiers by track record, money instead of prestige. Mocked up 2026-10-11 (canvas
-`Launch Window — Contracts`, choices in `ui-spec.md` §4.17 and component 27). Next: the rules, the
-content (unlock sets, clients), the contract bot and `TurnRollback`'s market files.
+**Commercial contracts** (the user's idea, designed, mocked up and **built** 2026-10-11, §2.11,
+`ui-spec.md` §4.17 and component 27): contract lines unlocked per program, a shared marketplace with
+sealed applications, tiers by track record, money instead of prestige. Rules, market, content (25
+unlock sets, 31 clients), screens, help topic, a contract bot (`RaceLulls ... ahead+contracts`) and
+`TurnRollback`'s market files are in. Next: the play test, then tuning from the measurement in
+§2.11.
 
 ### Later
 

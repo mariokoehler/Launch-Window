@@ -86,12 +86,15 @@ public final class RaceLulls {
      */
     public static void main(String[] args) {
         Path pack = Path.of("assets", "content", args.length > 0 ? args[0] : "standard");
-        ContentPackPlayouts.Bot bot = args.length > 1 && args[1].equals("side")
+        ContentPackPlayouts.Bot bot = args.length > 1 && args[1].startsWith("side")
             ? ContentPackPlayouts.Bot.SIDE_MISSIONS : ContentPackPlayouts.Bot.AHEAD;
+        // "ahead+contracts" or "side+contracts" plays with commercial contracts (design.md 2.11), three
+        // equally strong rivals on every listing.
+        int rivals = args.length > 1 && args[1].endsWith("+contracts") ? 3 : -1;
         if (args.length >= 4) {
             // One cell in full: where its seasons go.
             ContentPackPlayouts harness = new ContentPackPlayouts(
-                tuned(pack, Double.parseDouble(args[2]), Double.parseDouble(args[3])), bot);
+                tuned(pack, Double.parseDouble(args[2]), Double.parseDouble(args[3])), bot).withContracts(rivals);
             ContentPackPlayouts.Report report = harness.run(200, 240, args.length > 4 ? Long.parseLong(args[4]) : 42L);
             System.out.println("Stalls per game: " + report.stalls().entrySet().stream()
                 .map(e -> e.getKey() + " " + String.format(Locale.ROOT, "%.1f", e.getValue() / 200.0)).toList());
@@ -104,6 +107,8 @@ public final class RaceLulls {
             System.out.println("Side flights passed over, per game: " + report.sideRejections().entrySet().stream()
                 .map(e -> e.getKey() + " " + String.format(Locale.ROOT, "%.1f", e.getValue() / 200.0)).toList());
             print(report, Double.parseDouble(args[2]), Double.parseDouble(args[3]));
+            System.out.println("Contracts over 200 games: " + harness.contracts() + ", profit per game "
+                + harness.contractProfit() / 200);
             return;
         }
         System.out.println("R&D x, start: completion median NASA / Soviet (done of 200) | launches per game | "
@@ -111,7 +116,8 @@ public final class RaceLulls {
             + "seasons without a launch | side launches per game");
         for (double rdFactor : RD_FACTORS) {
             for (double startShare : START_SHARES) {
-                ContentPackPlayouts harness = new ContentPackPlayouts(tuned(pack, rdFactor, startShare), bot);
+                ContentPackPlayouts harness = new ContentPackPlayouts(tuned(pack, rdFactor, startShare), bot)
+                    .withContracts(rivals);
                 int seasons = harness.declaredGoals().equals(ContentPackPlayouts.MOON_DECLARED_GOALS) ? 240 : 80;
                 ContentPackPlayouts.Report report = harness.run(200, seasons, 42L);
                 print(report, rdFactor, startShare);

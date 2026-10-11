@@ -112,6 +112,8 @@ class TurnRollbackTest {
         assertEquals(secondTurn, names(spyRoot.resolve("journal-rolled-back").resolve("1")));
         assertEquals(List.of("0.json"), names(spyRoot.resolve("snapshots")));
         assertFalse(Files.exists(dataRoot.resolve("intelligence").resolve("turn-1.json")));
+        assertFalse(Files.exists(TurnScheduler.marketFile(dataRoot, 1)));
+        assertFalse(Files.exists(TurnScheduler.marketFile(dataRoot, 2)));
         assertFalse(Files.exists(dataRoot.resolve(TurnBackups.DIR).resolve(TurnBackups.turnZipName(2))),
             "the abandoned timeline's zip can't stand in for the redone turn's");
         assertTrue(Files.exists(dataRoot.resolve(TurnBackups.DIR).resolve(TurnBackups.turnZipName(1))));
@@ -252,6 +254,8 @@ class TurnRollbackTest {
         }
         Path intelligence = dataRoot.resolve("intelligence").resolve("turn-" + turn + ".json");
         files.put(dataRoot.relativize(intelligence).toString(), Files.readAllBytes(intelligence));
+        Path market = TurnScheduler.marketFile(dataRoot, turn);
+        files.put(dataRoot.relativize(market).toString(), Files.readAllBytes(market));
         return files;
     }
 

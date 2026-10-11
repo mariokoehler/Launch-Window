@@ -1,0 +1,252 @@
+{
+  "clients": [
+    {
+      "id": "sat-n-relay",
+      "lineId": "earth-orbit-satellites",
+      "side": "NASA",
+      "name": "Transatlantic Telephone Company",
+      "title": "Transatlantic relay",
+      "story": "The cable under the Atlantic carries a few dozen calls at a time, and the waiting list is weeks long. The company wants a satellite to relay calls and television between the continents, and will pay for the launch."
+    },
+    {
+      "id": "sat-n-weather",
+      "lineId": "earth-orbit-satellites",
+      "side": "NASA",
+      "name": "National Weather Bureau",
+      "title": "Weather picture service",
+      "story": "Forecasters still learn of a hurricane from the ships in its path. The Bureau wants a satellite that photographs the clouds from orbit, so a storm is seen days before it makes landfall."
+    },
+    {
+      "id": "sat-n-geodesy",
+      "lineId": "earth-orbit-satellites",
+      "side": "NASA",
+      "name": "Coast and Geodetic Survey",
+      "title": "Measuring the Earth",
+      "story": "Maps on either side of an ocean disagree by hundreds of metres. The Survey wants a bright satellite to track from stations around the world, to tie the continents' maps together."
+    },
+    {
+      "id": "sat-n-radiation",
+      "lineId": "earth-orbit-satellites",
+      "side": "NASA",
+      "name": "University Physics Consortium",
+      "title": "Radiation belt survey",
+      "story": "A group of university laboratories has built counters to map the radiation belts around the Earth. They have the instruments and the money; they need a ride to orbit."
+    },
+    {
+      "id": "sat-n-navigation",
+      "lineId": "earth-orbit-satellites",
+      "side": "NASA",
+      "name": "Naval Research Office",
+      "title": "Navigation beacon",
+      "story": "A ship that hears a satellite's radio note change pitch as it passes overhead can work out where it is. The Navy wants a beacon in orbit to test the idea."
+    },
+    {
+      "id": "sat-s-relay",
+      "lineId": "earth-orbit-satellites",
+      "side": "SOVIET",
+      "name": "Ministry of Communications",
+      "title": "Relay to the Far East",
+      "story": "Moscow's television reaches neither Siberia nor the Far East: the country is too wide for cables and towers. The Ministry orders a relay satellite to carry programmes across eleven time zones."
+    },
+    {
+      "id": "sat-s-weather",
+      "lineId": "earth-orbit-satellites",
+      "side": "SOVIET",
+      "name": "Hydrometeorological Service",
+      "title": "Cloud cover for the harvest",
+      "story": "The harvest depends on the weather, and the forecasters have no eyes over the oceans. The Service orders a satellite to photograph the clouds from orbit."
+    },
+    {
+      "id": "sat-s-physics",
+      "lineId": "earth-orbit-satellites",
+      "side": "SOVIET",
+      "name": "Academy of Sciences",
+      "title": "Cosmic ray instruments",
+      "story": "The Academy's physicists have built instruments to count cosmic rays above the atmosphere. The Presidium has approved the flight, and the agency is asked to fly it."
+    },
+    {
+      "id": "sat-s-geodesy",
+      "lineId": "earth-orbit-satellites",
+      "side": "SOVIET",
+      "name": "Main Directorate of Geodesy",
+      "title": "Mapping the Union",
+      "story": "A country this size is mapped piece by piece, and the pieces don't quite fit. The Directorate orders a satellite to track from stations across the Union."
+    },
+    {
+      "id": "moon-n-photo",
+      "lineId": "lunar-probes",
+      "side": "NASA",
+      "name": "Lunar Science Institute",
+      "title": "Photographs of the near side",
+      "story": "No telescope on Earth can see a boulder on the Moon, and nobody knows whether its dust would bear a lander. The Institute wants close photographs and will pay for the flight."
+    },
+    {
+      "id": "moon-n-survey",
+      "lineId": "lunar-probes",
+      "side": "NASA",
+      "name": "Army Map Service",
+      "title": "A map of the Moon",
+      "story": "Whoever lands first will need a map. The Army Map Service orders a probe to photograph the Moon's surface for its charts."
+    },
+    {
+      "id": "moon-n-fields",
+      "lineId": "lunar-probes",
+      "side": "NASA",
+      "name": "Observatory Consortium",
+      "title": "Fields around the Moon",
+      "story": "Does the Moon have a magnetic field? A group of observatories has built the instruments to find out, and asks the agency to carry them there."
+    },
+    {
+      "id": "moon-s-photo",
+      "lineId": "lunar-probes",
+      "side": "SOVIET",
+      "name": "Academy of Sciences",
+      "title": "The Moon up close",
+      "story": "The Academy's astronomers want pictures of the Moon that no telescope can take. The Presidium orders a probe."
+    },
+    {
+      "id": "moon-s-soil",
+      "lineId": "lunar-probes",
+      "side": "SOVIET",
+      "name": "Vernadsky Institute of Geochemistry",
+      "title": "What the Moon is made of",
+      "story": "The Institute's geochemists have built instruments to study the Moon's rock. They need a probe to carry them there."
+    },
+    {
+      "id": "plane-n-materials",
+      "lineId": "space-planes",
+      "side": "NASA",
+      "name": "Heat Shield Laboratory",
+      "title": "Samples at the edge of space",
+      "story": "Every capsule coming home must survive the heat of re-entry. The Laboratory wants its heat-shield samples flown fast and high, then brought back to study."
+    },
+    {
+      "id": "plane-n-air",
+      "lineId": "space-planes",
+      "side": "NASA",
+      "name": "High Altitude Research Group",
+      "title": "Air at the edge of space",
+      "story": "How thin is the air at the edge of space, and what is in it? The Group wants its samplers flown higher than any balloon can go."
+    },
+    {
+      "id": "plane-n-dust",
+      "lineId": "space-planes",
+      "side": "NASA",
+      "name": "Meteoritics Institute",
+      "title": "Catching micrometeorites",
+      "story": "The Institute has built traps for the dust that falls into the upper atmosphere from space. It needs a flight high enough to open them."
+    },
+    {
+      "id": "plane-s-materials",
+      "lineId": "space-planes",
+      "side": "SOVIET",
+      "name": "Ministry of Aviation Industry",
+      "title": "Materials for fast aircraft",
+      "story": "The Ministry's design bureaus need to know how skins and joints behave at speed and height. It orders test flights carrying their samples."
+    },
+    {
+      "id": "plane-s-air",
+      "lineId": "space-planes",
+      "side": "SOVIET",
+      "name": "Central Aerological Observatory",
+      "title": "The upper atmosphere",
+      "story": "The Observatory's samplers have flown on balloons and sounding rockets. It orders a piloted flight to carry them higher."
+    },
+    {
+      "id": "one-n-medicine",
+      "lineId": "one-crew-capsules",
+      "side": "NASA",
+      "name": "Aerospace Medicine Institute",
+      "title": "How the body copes",
+      "story": "Doctors still argue about what weightlessness does to the heart and the inner ear. The Institute wants an astronaut in orbit, wearing its instruments."
+    },
+    {
+      "id": "one-n-photo",
+      "lineId": "one-crew-capsules",
+      "side": "NASA",
+      "name": "Geological Survey",
+      "title": "Photographs from orbit",
+      "story": "A photograph taken from orbit shows a whole mountain range at once. The Survey wants a trained eye and a good camera in orbit."
+    },
+    {
+      "id": "one-s-medicine",
+      "lineId": "one-crew-capsules",
+      "side": "SOVIET",
+      "name": "Institute of Biomedical Problems",
+      "title": "Medicine in orbit",
+      "story": "The Institute's doctors want a cosmonaut in orbit with their instruments, to see what weightlessness does to the body."
+    },
+    {
+      "id": "one-s-photo",
+      "lineId": "one-crew-capsules",
+      "side": "SOVIET",
+      "name": "Ministry of Geology",
+      "title": "The Union from orbit",
+      "story": "Photographs from orbit could show where to look for oil and ore. The Ministry orders a flight with a cosmonaut and a camera."
+    },
+    {
+      "id": "two-n-experiments",
+      "lineId": "two-crew-capsules",
+      "side": "NASA",
+      "name": "Universities Space Research Association",
+      "title": "A day of experiments",
+      "story": "Two crew can work and watch at once. A group of universities has a list of experiments for a flight long enough to run them all."
+    },
+    {
+      "id": "two-n-defence",
+      "lineId": "two-crew-capsules",
+      "side": "NASA",
+      "name": "Air Force Research Office",
+      "title": "Watching from orbit",
+      "story": "Can a crew in orbit spot and photograph ships and airfields? The Air Force wants to know before it builds a station of its own."
+    },
+    {
+      "id": "two-s-experiments",
+      "lineId": "two-crew-capsules",
+      "side": "SOVIET",
+      "name": "Academy of Sciences",
+      "title": "A laboratory in orbit",
+      "story": "The Academy wants a crew in orbit to run its experiments by hand, from growing plants to the way liquids behave."
+    },
+    {
+      "id": "two-s-defence",
+      "lineId": "two-crew-capsules",
+      "side": "SOVIET",
+      "name": "Ministry of Defence",
+      "title": "Reconnaissance from orbit",
+      "story": "The Ministry orders a crewed flight to test whether cosmonauts can observe and photograph from orbit."
+    },
+    {
+      "id": "three-n-station",
+      "lineId": "three-crew-capsules",
+      "side": "NASA",
+      "name": "Orbital Laboratory Office",
+      "title": "Rehearsing a station",
+      "story": "Before anyone builds a station, someone must show that a crew can live and work in orbit for days. The Office pays for the rehearsal."
+    },
+    {
+      "id": "three-n-earth",
+      "lineId": "three-crew-capsules",
+      "side": "NASA",
+      "name": "Earth Resources Program",
+      "title": "Crops and coastlines",
+      "story": "Photographs from orbit in several colours could show diseased crops and polluted coasts. The Program wants a crew to take them."
+    },
+    {
+      "id": "three-s-station",
+      "lineId": "three-crew-capsules",
+      "side": "SOVIET",
+      "name": "Ministry of General Machine Building",
+      "title": "Practice for a station",
+      "story": "The Ministry plans an orbital station, and orders a crewed flight to practise the work of living aboard one."
+    },
+    {
+      "id": "three-s-earth",
+      "lineId": "three-crew-capsules",
+      "side": "SOVIET",
+      "name": "State Committee for Science and Technology",
+      "title": "Resources from orbit",
+      "story": "The Committee wants a crew to survey forests, fields and ice from orbit, for the planners in Moscow."
+    }
+  ]
+}

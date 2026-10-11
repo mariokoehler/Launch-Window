@@ -117,6 +117,7 @@ public final class MissionCancellation {
         for (String id : everyone) {
             MissionProgress.releaseOrRetire(snapshot, id);
         }
+        Contracts.calledOff(snapshot, mission, unflown);
         snapshot.getInProgressMissions().remove(missionInstanceId);
         return unflown ? Outcome.SCRUBBED : Outcome.CANCELLED;
     }

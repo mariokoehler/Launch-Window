@@ -195,6 +195,10 @@ public final class BodyProgramsScreen extends ChromeScreen {
             + money(Programs.price(program, session.state(), session.catalog()).total());
         body.add(ui.label(price + " · Upkeep " + money(program.maintenanceCost()) + " / season",
             Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padBottom(Theme.SPACE_2).row();
+        Table contractLine = ContractMarker.programLine(this, program.id());
+        if (contractLine != null) {
+            body.add(contractLine).padBottom(Theme.SPACE_2).row();
+        }
         Table staffing = staffingLine(program);
         if (staffing != null) {
             body.add(staffing).padBottom(Theme.SPACE_2).row();

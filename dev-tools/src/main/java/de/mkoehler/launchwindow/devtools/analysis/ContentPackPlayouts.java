@@ -154,6 +154,12 @@ public final class ContentPackPlayouts {
     private final Map<Archetype, List<String>> plans;
     private final Bot bot;
     private final boolean ahead;
+    /**
+     * With contracts (design.md 2.11): the rivals that apply for every listing the bot applies for, as
+     * strong as the bot, so its rank among them is drawn at random; -1 plays without contracts.
+     */
+    private int contractRivals = -1;
+    private int gameNumber;
 
     /** How the bot plays. */
     public enum Bot {
@@ -207,6 +213,20 @@ public final class ContentPackPlayouts {
      */
     public List<String> declaredGoals() {
         return declaredGoals;
+    }
+
+    /**
+     * Plays with commercial contracts (design.md 2.11): the bot applies for a listing whenever it has no
+     * contract, and flies an awarded one as soon as its hardware is ready. A playout has one agency, so
+     * the market is simulated: every listing the bot applies for draws {@code rivals} rival applicants
+     * as strong as the bot, and the bot's rank among them is random.
+     *
+     * @param rivals the rivals per listing; 3 makes a fourth of applications miss out
+     * @return this harness
+     */
+    public ContentPackPlayouts withContracts(int rivals) {
+        this.contractRivals = rivals;
+        return this;
     }
 
     /**
@@ -412,6 +432,10 @@ public final class ContentPackPlayouts {
         int[] randomEvents = new int[2];
         // R&D decisions this game (2026-10-10): per season, whether one was offered and whether it flew.
         List<boolean[]> decisionSeasons = new ArrayList<>();
+        // The contract market's board and clients used, with contracts (design.md 2.11).
+        List<de.mkoehler.launchwindow.model.ContractListing> board = new ArrayList<>();
+        List<String> usedClients = new ArrayList<>();
+        gameNumber++;
 
         for (int season = 0; season < seasons; season++) {
             // Journaled player actions first.
@@ -419,6 +443,9 @@ public final class ContentPackPlayouts {
             seasonNow = season;
             decideWaiting(snapshot, random);
             act(snapshot, random, tally);
+            if (contractRivals >= 0) {
+                actContracts(snapshot, tally);
+            }
             if (tally.launchedThisSeason > 0) {
                 gaps.add(sinceLaunch);
                 sinceLaunch = 0;
@@ -427,9 +454,14 @@ public final class ContentPackPlayouts {
             }
             checkState(snapshot);
 
+            de.mkoehler.launchwindow.rules.Contracts.Turn contracts = de.mkoehler.launchwindow.rules.Contracts.Turn.NONE;
+            if (contractRivals >= 0) {
+                contracts = market(snapshot, board, usedClients, season);
+                board = contracts.board();
+            }
             // One player per game, so the game turn and the player's own seasons coincide here.
-            SeasonResolver.Context context =
-                new SeasonResolver.Context(catalog, schedule, roster, goalTally, season, season + 1);
+            SeasonResolver.Context context = new SeasonResolver.Context(catalog, schedule, roster, goalTally, season,
+                season + 1, List.of(), contracts);
             BudgetWatch watch = new BudgetWatch();
             List<ResolutionEvent> seasonEvents = SeasonResolver.advanceSeason(snapshot, context, random, watch);
             goalTally.commit(seasonEvents);
@@ -444,6 +476,12 @@ public final class ContentPackPlayouts {
                 if (event instanceof de.mkoehler.launchwindow.rules.RandomEventOccurred occurred) {
                     randomEvents[occurred.kind().isPositive() ? 0 : 1]++;
                     tally.randomEventKinds.merge(occurred.kind().name(), 1, Integer::sum);
+                }
+                if (event instanceof de.mkoehler.launchwindow.rules.ContractSettled settled) {
+                    tally.contracts.merge(settled.kind().name(), 1, Integer::sum);
+                    if (settled.kind() == de.mkoehler.launchwindow.rules.ContractSettled.Kind.PAID) {
+                        tally.contractProfit += settled.fee() - settled.launchCost();
+                    }
                 }
                 if (event instanceof MissionStepResolved resolved) {
                     tally.stepOutcomes.merge(resolved.outcome().name(), 1, Integer::sum);
@@ -607,6 +645,71 @@ public final class ContentPackPlayouts {
         if (side != null) {
             flySide(snapshot, target, rocket, side, random, tally);
         }
+    }
+
+    // ------------------------------------------------------------------ contracts
+
+    /**
+     * The bot's contract actions: fly the awarded contract once its hardware is ready, else apply for
+     * the first listing it can.
+     */
+    private void actContracts(PlayerSnapshot snapshot, Tally tally) {
+        var contract = snapshot.getActiveContract();
+        if (contract != null) {
+            if (contract.missionId() != null || !snapshot.getOpenedProgramIds().contains(contract.programId())) {
+                return;
+            }
+            MissionConfiguration configuration = catalog.missionConfiguration(contract.configurationId()).orElseThrow();
+            MissionComponent rocket = configuration.launches().stream().anyMatch(launch -> launch.launchType()
+                .needsRocket()) ? cheapestRocketFor(snapshot.getArchetype(), configuration) : null;
+            boolean ready = rocket == null ? hardwareReadyWithoutRocket(snapshot, configuration)
+                : hardwareReady(snapshot, configuration, rocket);
+            if (ready) {
+                launch(snapshot, configuration, rocket, tally, "contract: ");
+            } else {
+                tally.stalls.merge("contract: hardware not ready", 1, Integer::sum);
+            }
+            return;
+        }
+        if (snapshot.getContractApplication() == null) {
+            for (var listing : snapshot.getContractBoard()) {
+                if (de.mkoehler.launchwindow.rules.Contracts.apply(snapshot, listing.id(), null, catalog)
+                        == de.mkoehler.launchwindow.rules.ContractOutcome.APPLIED) {
+                    tally.contracts.merge("APPLIED", 1, Integer::sum);
+                    return;
+                }
+            }
+        }
+    }
+
+    /**
+     * Settles the simulated market for the bot: the board from its own lines, and its award at the rank
+     * drawn among its rivals. Draws from its own seed, so the season's draws stay as without contracts.
+     */
+    private de.mkoehler.launchwindow.rules.Contracts.Turn market(PlayerSnapshot snapshot,
+            List<de.mkoehler.launchwindow.model.ContractListing> board, List<String> usedClients, int season) {
+        var settlement = de.mkoehler.launchwindow.rules.ContractMarket.settle(Map.of("bot", snapshot), Map.of(), board,
+            usedClients, catalog, de.mkoehler.launchwindow.content.CommercialClients.EMPTY, gameNumber, season);
+        usedClients.clear();
+        usedClients.addAll(settlement.usedClientIds());
+        java.util.SplittableRandom draw = new java.util.SplittableRandom(gameNumber * 104_729L + season);
+        List<de.mkoehler.launchwindow.rules.ContractFinding> findings = new ArrayList<>();
+        for (var finding : settlement.findings().getOrDefault("bot", List.of())) {
+            if (finding.kind() != de.mkoehler.launchwindow.rules.ContractFinding.Kind.AWARDED) {
+                findings.add(finding);
+                continue;
+            }
+            int rank = draw.nextInt(contractRivals + 1) + 1;
+            findings.add(rank > de.mkoehler.launchwindow.rules.Contracts.TIERS
+                ? new de.mkoehler.launchwindow.rules.ContractFinding(
+                    de.mkoehler.launchwindow.rules.ContractFinding.Kind.MISSED, finding.listing(), 0, 0,
+                    finding.programId(), finding.configurationId(), List.of())
+                : new de.mkoehler.launchwindow.rules.ContractFinding(finding.kind(), finding.listing(), rank,
+                    de.mkoehler.launchwindow.rules.Contracts.fee(de.mkoehler.launchwindow.rules.Contracts.launchCost(
+                        snapshot, finding.configurationId(), catalog), rank), finding.programId(),
+                    finding.configurationId(), List.of()));
+        }
+        return new de.mkoehler.launchwindow.rules.Contracts.Turn(findings, settlement.board(), settlement.posted());
     }
 
     // ------------------------------------------------------------------ side missions
@@ -1593,7 +1696,29 @@ public final class ContentPackPlayouts {
     /** The last run's tally, for {@link #main}'s random-event lines. */
     private Tally lastTally;
 
+    /**
+     * Returns the last run's contract outcomes by kind, with "APPLIED" for applications.
+     *
+     * @return the counts
+     */
+    public Map<String, Integer> contracts() {
+        return lastTally.contracts;
+    }
+
+    /**
+     * Returns the last run's contract profit, the fees less the launch costs, over every game.
+     *
+     * @return the profit
+     */
+    public long contractProfit() {
+        return lastTally.contractProfit;
+    }
+
     private static final class Tally {
+        /** Contract outcomes by kind, and applications, over every game (design.md 2.11). */
+        final Map<String, Integer> contracts = new java.util.TreeMap<>();
+        /** The fees less the launch costs of every contract paid, over every game. */
+        long contractProfit;
         /** Random events by kind, over every game. */
         final Map<String, Integer> randomEventKinds = new java.util.TreeMap<>();
         /** Per game: good events, bad events, and the seasons it ran (to completion or the cap). */

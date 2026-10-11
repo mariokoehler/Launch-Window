@@ -176,6 +176,12 @@ public final class ProgramDetailsScreen extends ChromeScreen {
         if (programState == Programs.State.OPEN) {
             card.add(earliestLaunch(program)).width(760f).padTop(Theme.SPACE_2).padBottom(Theme.SPACE_3).row();
         }
+        Table contractLine = ContractMarker.programLine(this, programId);
+        if (contractLine != null) {
+            card.add(new Image(ui.solid(Theme.NAVY_BORDER))).width(760f).height(Theme.BORDER_THIN)
+                .padBottom(Theme.SPACE_2).row();
+            card.add(contractLine).width(760f).padBottom(Theme.SPACE_3).row();
+        }
         List<Concepts.Concept> concepts = Concepts.standard().forProgram(program);
         if (!concepts.isEmpty()) {
             card.add(conceptsSection(concepts, "How the real thing works: each opens an explainer sheet", 760f,

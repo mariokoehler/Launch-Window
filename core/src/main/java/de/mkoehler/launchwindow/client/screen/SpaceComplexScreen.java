@@ -21,6 +21,7 @@ import de.mkoehler.launchwindow.client.connect.ServerResult;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.view.ContentNames;
+import de.mkoehler.launchwindow.client.view.ContractsView;
 import de.mkoehler.launchwindow.client.view.DecisionView;
 import de.mkoehler.launchwindow.client.view.Advisor;
 import de.mkoehler.launchwindow.client.view.Help;
@@ -592,10 +593,12 @@ public final class SpaceComplexScreen extends SessionScreen {
                 shapes.setColor(Theme.DANGER);
                 shapes.circle(dotX, dotY, IDLE_DOT_RADIUS, 24);
             }
-            // A decision waiting (ui-spec.md component 26): the same dot in gold, upper left.
+            // A decision waiting (ui-spec.md component 26): the same dot in gold, upper left. Headquarters
+            // gets it for new contracts on offer (ui-spec.md section 4.17).
             Hub.Place deciding = decisionPlace();
+            boolean offers = newContracts();
             for (Hub.Hotspot spot : hotspots) {
-                if (spot.place() != deciding) {
+                if (spot.place() != deciding && !(offers && spot.place() == Hub.Place.HEADQUARTERS)) {
                     continue;
                 }
                 float radius = isUpgrading(spot.place()) ? MARKER_RADIUS : IDLE_MARKER_RADIUS;
@@ -644,6 +647,13 @@ public final class SpaceComplexScreen extends SessionScreen {
                     drawCentered(batch, idleShadow, waiting, hover.labelX() * scaleX + 1.5f, below - 1.5f,
                         parentAlpha);
                     drawCentered(batch, idleName, waiting, hover.labelX() * scaleX, below, parentAlpha);
+                    below -= idleName.getHeight() + 2f;
+                }
+                if (hover.place() == Hub.Place.HEADQUARTERS && newContracts()) {
+                    String offered = "New contracts on offer";
+                    drawCentered(batch, idleShadow, offered, hover.labelX() * scaleX + 1.5f, below - 1.5f,
+                        parentAlpha);
+                    drawCentered(batch, idleName, offered, hover.labelX() * scaleX, below, parentAlpha);
                 }
             }
         }
@@ -654,6 +664,11 @@ public final class SpaceComplexScreen extends SessionScreen {
             label.pack();
             label.setPosition(getX() + x - label.getWidth() / 2f, getY() + y - label.getHeight() / 2f);
             label.draw(batch, parentAlpha);
+        }
+
+        /** Whether a contract the agency can apply for is new this turn, and it hasn't applied anywhere. */
+        private boolean newContracts() {
+            return ContractsView.newOffers(session.state(), session.catalog(), session.openTurn());
         }
 
         /** The building whose board holds a waiting decision: the VAB for a rocket, else the SET Centre. */

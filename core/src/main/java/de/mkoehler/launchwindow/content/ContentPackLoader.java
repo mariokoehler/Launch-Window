@@ -46,6 +46,8 @@ public final class ContentPackLoader {
     public static final String MISSION_CONFIGURATIONS_FILE = "mission-configurations.json";
     /** The goals file. */
     public static final String GOALS_FILE = "goals.json";
+    /** The programs' commercial blocks ({@code design.md} &sect;2.11). */
+    public static final String COMMERCIAL_FILE = "commercial.json";
     /**
      * Every rules file a pack consists of, in a fixed order. The one list the loader, the server's
      * freezing step and {@link ContentPackHash} all go by, so a rules file added to packs later
@@ -55,7 +57,7 @@ public final class ContentPackLoader {
      * bundled pack's hash.
      */
     public static final List<String> FILES = List.of(CATEGORIES_FILE, PROGRAMS_FILE, MISSION_COMPONENTS_FILE,
-        MISSION_CONFIGURATIONS_FILE, GOALS_FILE);
+        MISSION_CONFIGURATIONS_FILE, GOALS_FILE, COMMERCIAL_FILE);
 
     private static final ObjectMapper MAPPER = createMapper();
 
@@ -124,7 +126,9 @@ public final class ContentPackLoader {
         List<MissionConfiguration> configurations =
             read(source, label, MISSION_CONFIGURATIONS_FILE, new TypeReference<>() { });
         List<Goal> goals = read(source, label, GOALS_FILE, new TypeReference<>() { });
-        return new ContentCatalog(categories, programs, configurations, components, goals);
+        List<Commercial> commercials = read(source, label, COMMERCIAL_FILE, new TypeReference<>() { });
+        return new ContentCatalog(categories, programs, configurations, components, goals,
+            BuildingSchedule.baspmClose(), commercials);
     }
 
     private static <T> List<T> read(Source source, String label, String fileName, TypeReference<List<T>> type) {
