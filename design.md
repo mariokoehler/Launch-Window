@@ -2453,9 +2453,9 @@ they see. A new screen: spec, then a mockup session (`ui-spec.md` §7).
 
 **Commercial contracts** (the user's idea, designed 2026-10-11, §2.11, `ui-spec.md` §4.17 and
 component 27): contract lines unlocked per program, a shared marketplace with sealed applications,
-tiers by track record, money instead of prestige. Next: a mockup session (canvas
-`Launch Window — Contracts`), then the rules, the content (unlock sets, clients), the contract bot
-and `TurnRollback`'s market files.
+tiers by track record, money instead of prestige. Mocked up 2026-10-11 (canvas
+`Launch Window — Contracts`, choices in `ui-spec.md` §4.17 and component 27). Next: the rules, the
+content (unlock sets, clients), the contract bot and `TurnRollback`'s market files.
 
 ### Later
 
