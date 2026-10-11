@@ -324,6 +324,23 @@ leading to satellite navigation.
   objectives. For wherever a mission's extended phase is explained.
 - **Astronauts as PR:** the Mercury Seven's *Life* magazine deal and tours were a deliberate
   strategy to build support. Fits the PR-duty idea (§2.2).
+- **Commercial launches began with Telstar** (for the contracts, §2.11): AT&T built Telstar 1 and
+  paid NASA about $3 million a launch, the first commercial payload, launched on a Thor-Delta on
+  10 July 1962; with Telstar 2 in 1963 that was about $6 million for both. Sources: EBSCO's
+  research starter "First Commercial Communications Satellite Is Launched", IEEE Spectrum
+  ("Happy Birthday, Telstar"), Space.com ("Telstar: Satellites Beamed 1st TV Signals Across the
+  Sea", the $6 million): ebsco.com/research-starters/communication-and-mass-media/first-commercial-communications-satellite-launched,
+  spectrum.ieee.org/happy-birthday-telstar, www.space.com/19756-telstar.html. Fits the first contract line's history note.
+- **Space insurance is as old as commercial satellites:** Lloyd's of London wrote the first
+  satellite policy in 1965, pre-launch cover for Intelsat I "Early Bird", the first commercial
+  satellite in geostationary orbit; COMSAT never claimed on it. Cover for the launch itself came
+  later, so the contracts' insurer is a small liberty. Sources: Wikipedia ("Satellite
+  insurance", en.wikipedia.org/wiki/Satellite_insurance), H. Yoshida, IISL 1993 ("first insurance
+  policy for satellite was written in 1965 to provide prelaunch coverage").
+- **Flying other people's experiments:** the X-15 carried micrometeorite collection pods and
+  ablative heat-shield samples for Apollo (NASA, www.nasa.gov/specials/60th/x-15). The supersonic
+  airliner's flight data came from the XB-70, not the X-15 (NASA's image archive, "Fleet aircraft"), so the X-15's contract clients are
+  research labs and Apollo's contractors, not airliner makers.
 - **Press stories that really happened** (easter eggs in `pr-press.json`, §2.2(c), the player's
   astronaut in the real person's place; no history-note icon):
   - `do-good-work`: Gus Grissom, asked for a pep talk at Convair's Atlas plant in 1959, said
@@ -1534,7 +1551,8 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
 
     So under these numbers a waiting player has little worth flying. The fix is new things to do,
     not more of the same: the interactive events (§5, Backlog), and perhaps flights that pay for a
-    repeat or cheaper ways to keep a program open.
+    repeat or cheaper ways to keep a program open. Both became the commercial contracts (§2.11,
+    2026-10-11).
 - **The game goes on after a winner:** goals, flights and prestige still count.
 
 ### 2.10 Difficulty level
@@ -1542,6 +1560,98 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
 **Decided (user, 2026-09-27): none.** One shared difficulty, based on BASPM's **Normal**
 values only (`Value1` in its constants files); no difficulty field anywhere. Retune that one
 balance sheet if needed rather than adding levels.
+
+### 2.11 Commercial contracts
+
+**The user's idea (2026-10-11), designed with the user the same day; not built.** Aimed at the
+mid-race lulls, which are mostly a wait for money (§2.9, `RaceLulls`). Once an agency has shown a
+capability, clients pay it to fly that capability again: contracts pay **money, not prestige**,
+with hardware the agency already has, so they add no R&D wait. Players compete for them on a shared
+marketplace, another interaction beside intelligence and poaching. No BASPM precedent; every number is
+ours, a default and **unconfirmed** unless a line says otherwise.
+
+- **Unlocking** (user): each program can carry an **unlock set**, the configurations an agency must
+  each have flown successfully, chosen per program (rarely all of them; long extended flights are
+  usually left out). Completing it unlocks the program's **category as a contract line** for that
+  agency, for good. The agency **qualifies** for the line's listings while at least one of its
+  unlocked programs in that line is open, so a program's upkeep now buys a chance at contracts. The
+  unlock set's configuration cards carry a contract icon with a tooltip (`ui-spec.md` component 27).
+  Programs with nothing a client would buy (the late Moon programs, say) have no unlock set.
+- **A contract flies an existing configuration** (decided): each program with an unlock set names
+  the configuration its contracts fly (Explorer 1's orbital flight, say), **always one of its unlock
+  set**, so its goals are already achieved and a contract can never earn a goal or open a program. Steps, staffing, rockets,
+  reliability and the replay are the normal ones. What changes: steps and goals pay **no prestige**;
+  the flight raises reliability like any other; it **doesn't count toward the configuration's repeat
+  count**, so a contract never lowers a later flight's prestige; cards and the turn report label it.
+  An agency qualifying through two programs of a line picks one when it applies.
+- **Which launch is the contract:** while a contract is active, the **first launch of its
+  configuration** is the contract flight (no toggle); Assemble says so before the launch. Flying that
+  configuration for prestige waits until the contract has flown.
+- **Closing a program** is refused while an active contract flies on it, as while any of its
+  missions flies. An application whose program was closed before the turn resolves comes to nothing
+  and the report says so.
+- **Money** (user): the agency pays the launch cost up front as usual. **On success** the client
+  pays the **fee**: the launch cost times (1 + the tier's margin), **+60 / +40 / +25 %** for tiers
+  1 to 3. The fee is fixed at the award, from the contract configuration with the cheapest rocket
+  the agency could fly it on then; a dearer rocket only lowers the profit. **On failure** the
+  insurer pays back the launch cost actually paid (break even), and the agency loses the prestige
+  that flight's failure costs anyway. A crew lost on a contract flight costs an extra 50 prestige on
+  top of the normal rules.
+- **Tiers go by track record** (user, 2026-10-11, over prestige, which would hand the leader the
+  money too). An applicant's **score** is the reliability of the weakest component the contract
+  flight would use (the agency's hardware at the start of the turn, its best rocket for it) plus
+  its **record in that line**: +3 per contract flown successfully, −6 per failed or lapsed one,
+  within ±15. The highest score gets tier 1, the next tier 2, the third tier 3; a fourth applicant
+  and later get nothing (user). Ties go to a seeded draw. Scores read start-of-turn snapshots
+  (§3.7's rule for contended resources). Clients choosing the most dependable launcher is what real
+  customers do, and it rewards R&D past the bar. **Crew and controllers don't count**: clients judge
+  the hardware, not who flies it, so the score differs from the assessment tab's odds on purpose.
+- **Applying** (user): **one application per turn**, refused while the agency has an **active
+  contract** (awarded and not yet flown to its end), so one contract at a time. Applications are
+  **sealed** until the turn resolves. An application restates intent ("my application this turn is
+  X"), so it can be changed or withdrawn until then.
+- **The award**, at the resolution: each applicant learns its tier and fee, or that it missed out,
+  in the turn report. A listing leaves the board once awarded. Everyone's report gets a news line
+  naming the agencies that won it, in alphabetical order: who ranked where stays sealed.
+- **A launch window:** an awarded contract must **launch within 3 seasons**. One that doesn't
+  **lapses**: it counts as a failure in the record and costs 10 prestige. A scrub before the flight
+  refunds the launch cost as usual and keeps the contract while its window lasts.
+- **The board** (the user's design, 2026-10-11, refined the same day): settled once a turn, at the
+  resolution, for everyone (game-level, like intelligence), from its own salted seed.
+  - **A listing** is a line, a client with a story (flavour content), the three tiers' margins, the
+    turn it was posted and **its expiry, 3 turns later**. Listings stay until awarded or expired.
+    **Only lines at least one agency qualifies for are listed** (user: no aspirational listings); a
+    listing nobody qualifies for any more is withdrawn. Everyone sees the whole board, with whether
+    they qualify.
+  - **Seating** (the user's queueing idea): every listing has three seats, one per tier. The
+    eligible agencies (claimed, no active contract) are seated in turn, **the most constrained
+    first** (fewest qualifying lines; ties by seeded draw): each takes a free seat in the fullest
+    listing it qualifies for. Only when none has a free seat is a new listing posted, in the line
+    **most of the still-unseated agencies qualify for** (ties by seeded draw). Seats are only how the
+    board is sized; nobody sees them, and players apply wherever they qualify. Packing the narrowest
+    agencies first gives the most overlap, so the most competition.
+  - **Extras** to ease the competition: one listing, plus one per four eligible agencies, from the
+    lines they qualify for (seeded), added only while the board holds fewer listings than the
+    seating needed plus the extras, so expiring listings don't pile up.
+- **The Soviet side** has no commercial market, so it is reskinned, not shortened: its clients are
+  ministries and institutes ordering a service (the Ministry of Communications' relays, the Academy
+  of Sciences' instruments). Same rules, own texts.
+- **Intelligence:** an agency assessment's Programs and plans area also shows the rival's active
+  contract and its record per line.
+- **Content:** in the pack (hashed), per program, `commercial`: the unlock set and the contract
+  configuration. The margins and record weights are rules constants (read by `Tips` and help, never
+  written into text). Clients and their stories by line and agency go in
+  `assets/content/commercial-clients.json`, outside `ContentPackLoader.FILES` like the press
+  stories, no repeats until a line's have all run. The unlock sets are authored in batches, the
+  early-era categories first, so a bot can measure the effect early.
+- **Storage:** `market/turn-N.json`, written once at the resolution: the awards settled from the
+  turn's applications (before the season pass, like intelligence) and the board for the next turn
+  (after every player has resolved). Per player: the unlocked lines, the record per line, the active
+  contract with its fee and window, and the application. **`TurnRollback` must delete the turns'
+  market files** (build it with the feature).
+- **Measure before tuning:** a playout bot that applies for and flies contracts, through `RaceLulls`,
+  for how much shorter the race gets and how much the lulls shrink. Money is the bottleneck, so the
+  race will get shorter; how much is the question.
 
 ## 3. Architecture
 
@@ -1979,6 +2089,9 @@ patches (`ui-spec.md` component 8).
   and more reliable starts shorten the race but leave the lulls, which turn into waiting for
   money, and the pack's other flights barely fill them. Next: the interactive events (§5, Backlog),
   then the R&D tuning with the side-missions bot. The Soviets take about a fifth longer.
+- **Commercial contracts** (§2.11, 2026-10-11): every number is unconfirmed (margins, the record's
+  weights, the launch window, the expiry, the extras), and so are the unlock sets, authored per
+  program. Measure with a contract bot first.
 - **Declared goals for the colleagues' game:** an early-era race (user, 2026-10-08), with goals
   drawn from the early-era pack. Since then the standard pack became the default with its own race to
   a crewed Moon landing (user, 2026-10-09, §2.6); whether the colleagues' game plays that or a
@@ -2337,6 +2450,12 @@ makes one of the great Firsts (satellite in orbit, human in space, human in orbi
 flyby, the Moon landing), every player sees a fictional newspaper's front page with the headline
 and an article on who made it first. It pops up on login before the turn report, the first thing
 they see. A new screen: spec, then a mockup session (`ui-spec.md` §7).
+
+**Commercial contracts** (the user's idea, designed 2026-10-11, §2.11, `ui-spec.md` §4.17 and
+component 27): contract lines unlocked per program, a shared marketplace with sealed applications,
+tiers by track record, money instead of prestige. Next: a mockup session (canvas
+`Launch Window — Contracts`), then the rules, the content (unlock sets, clients), the contract bot
+and `TurnRollback`'s market files.
 
 ### Later
 

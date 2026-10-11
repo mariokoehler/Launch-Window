@@ -1072,6 +1072,28 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       the Moon race from 151 to 138 seasons: a balance signal for the play test.
     - Shots `decision-*.png`.
 
+27. **Contract marker** *(the user's idea, 2026-10-11, for `design.md` §2.11; specified, not mocked
+    up)*. Shows where commercial contracts come from: which flights open a contract line, and which
+    flight a contract flies. One small icon of our own (a signed document with a seal; new, for the
+    UI Asset Sheet), in two states:
+    - **Unlock flight** (outline icon) on every configuration card in a program's unlock set, until
+      the line is unlocked. Tooltip: "Opens commercial contracts for Earth-orbit satellites once every
+      marked flight has succeeded: 1 of 2 flown", listing the marked flights with a tick on those
+      flown. A flown one shows its tick on the icon too.
+    - **Contract flight** (filled icon, gold) on the configuration contracts fly, once the line is
+      unlocked. Tooltip: "Contracts in Earth-orbit satellites fly this configuration. Open contracts
+      are on the board in Headquarters."
+    - **Program cards and program details** (§4.6.3, §4.6.4) get a line under the components:
+      "Commercial line: Earth-orbit satellites · 1 of 2 marked flights flown", or "· unlocked", or
+      nothing for a program without an unlock set.
+    - **A contract's own mission** wears a "Contract · [client]" badge (filled icon) on its plan, its
+      Assemble screen, Mission Control's lists and the replay. Where a mission shows prestige, it shows
+      the fee instead: "Fee 2,340 on success · insurer refunds the launch cost on failure", plus the
+      launch window ("Launch by Autumn 1963"). The first launch of the contract configuration while a
+      contract is active *is* the contract flight: Assemble shows the badge and "This launch flies
+      your contract for [client]" above the confirm button, with no toggle.
+    - The numbers in every tooltip come from the rules' constants (G7), never typed in.
+
 ---
 
 ## 3. Screen flow *(decided)*
@@ -1110,6 +1132,7 @@ Space Complex hub
 │   │                           ├─ Rocket assignment
 │   │                           ├─ Payload R&D (same screen as the SET Centre's)
 │   │                           └─ Assemble mission ─► confirm & pay ─► (Mission Control: scheduled)
+│   ├─ Contracts (§4.17) ─► Mission configuration (the contract flight)
 │   └─ (building panel)
 ├─ Public Affairs Office
 ├─ Intelligence Office (§4.15)
@@ -2256,6 +2279,64 @@ left, and never the rival's person, whose id means nothing here; `PoachTexts.pag
 and Mission Control get the mockup's **"Set otherwise"** filter chip, shown once someone is set
 otherwise, and the Retention strip's **"Show them"** link switches to it.
 
+### 4.17 Contracts *(specified 2026-10-11 for `design.md` §2.11; not mocked up)*
+**Purpose:** the commercial marketplace: see what clients offer, apply for one contract a turn,
+follow the active contract. Contracts pay money, not prestige. Rules and every number in `design.md`
+§2.11 (all unconfirmed); the screen reads them from the rules' constants (G7). One name for both
+archetypes; the Soviet clients are ministries and institutes, which only changes the text.
+
+**Where:** a fourth card on Headquarters' landing screen (§4.6), **Contracts**: "4 on offer · 2 you
+can fly · Applied: Transatlantic relay", or "Active: Transatlantic relay · launch by Autumn 1963". The
+breadcrumb is "Space Complex › Headquarters › Contracts". Headquarters' hub marker gets the gold
+dot (as component 26's) when a listing the agency qualifies for is new this turn and it hasn't
+applied anywhere, hover "New contracts on offer". A help topic "Contracts" (component 23).
+
+**Layout, top to bottom:**
+- **Your contract** card. With an active contract: client and line, the tier won ("Tier 1 of 3"),
+  the fee, the launch cost now, the window ("Launch by Autumn 1963 · 2 seasons left", red in the
+  last), and its state (awarded, scheduled, flying, with the flight's season). Button **Plan the
+  flight**, to the contract configuration's mission plan on its assessment tab (§4.6.7), badged
+  (component 27). Without one: "No active contract. Apply for one below; it's awarded when the turn
+  resolves."
+- **Your record**: one row per unlocked line: successes, failures and lapses, the record's points
+  (+3 / −6, within ±15) and **your score now** (weakest component's reliability plus the record),
+  with a tooltip breaking it down ("Weakest: Jupiter-C, 72 % · Record +6 · Score 78"). Locked lines
+  aren't listed; a line with no record yet reads "No contracts flown yet".
+- **On offer** (the board): one card per listing, the ones the agency can fly first, then the rest
+  dimmed. A toggle **"Only what I can fly"** (off by default, remembered per viewer). Each card:
+  - the line's category art, the client's name, the story (two or three lines);
+  - the terms: three tier chips "+60 % · +40 % · +25 %" with **your fee at each** ("2,340 · 2,048 ·
+    1,829") for the contract configuration with the cheapest rocket you could use, and the launch
+    cost under them;
+  - the flight it takes ("Flies: Explorer 1 · Orbital flight"), with the component 27 icon;
+  - "Posted Spring 1962 · expires in 2 turns";
+  - **Apply**, or the reason you can't, in place of the button: "Needs the Earth-orbit satellites
+    line: fly Explorer 1's marked flights", "Open Explorer 1 to fly it", "You have an active
+    contract". Never how many have applied: applications are sealed.
+- **Applied:** the card shows "Your application · decided when the turn resolves" and **Withdraw**.
+  Applying elsewhere moves it, after a confirmation ("Move your application from Transatlantic relay
+  to Weather picture service?").
+- **Two programs in a line:** Apply first asks which, each with its contract flight and its launch
+  cost now.
+
+**The apply confirmation** (component 5) states the terms once: the fee by tier, "Tiers go to the
+best record; a fourth applicant gets nothing", "If the flight fails, the insurer refunds the launch
+cost and you lose the prestige that failure costs", "Launch within 3 seasons or it lapses: −10
+prestige, and it counts as a failure".
+
+**Turn report** (§4.4): a **Contracts** card and strip cell: awarded (client, tier, fee, window,
+link to the board), missed out ("Agencies with a better record won it", never how many applied), a contract flight's payout
+or the insurer's refund, a lapse. The news gets the public line for every award: "Transatlantic
+relay goes to Pan-Am Space and Orbital Corp."
+
+**Empty board:** "No contracts on offer. Clients come once an agency has flown every marked flight
+of a program: look for the contract icon on its flights." With a line unlocked but no listing
+(rare): "No contracts in your lines this turn. New ones are posted when a turn resolves."
+
+**For the mockup:** active contract in flight; one listing applied for; a dimmed listing with each
+reason; the move confirmation; the turn report's card in its four states; the Headquarters card in
+its three states; component 27 on a configuration card (both states) and on a program card.
+
 ---
 
 ## 5. Refusal reasons (for toasts and inline messages)
@@ -2298,6 +2379,7 @@ for the mockups.
 | Rocket programs: VAB_FULL / ROCKET_CLASS_TOO_LARGE / UNKNOWN_ROCKET (added 2026-10-04) | The VAB can't hold more rocket programs. Upgrade it or close one. / Upgrade the VAB to build this rocket class. / That rocket doesn't exist in this game. |
 | Building upgrade: MAX_LEVEL / ALREADY_UPGRADING; program opening also UNKNOWN_PROGRAM | Already at the top level. / Already upgrading. / That program doesn't exist in this game. |
 | Manage department (`AdjustSalariesAction`, added 2026-10-04): INVALID_PERCENT / EMPTY_DEPARTMENT | Pick a change between −50 % and +50 %. / There's nobody in the department yet. |
+| Contracts (added 2026-10-11, §4.17, unconfirmed codes): CONTRACT_ACTIVE / NOT_QUALIFIED / PROGRAM_NOT_OPEN / UNKNOWN_LISTING / CONTRACT_IN_FLIGHT (closing a program) | You have an active contract: one at a time. / You can't fly this one: unlock its line first. / Open the program it flies first. / That listing isn't on the board any more. / Can't close while your contract flies on it. |
 | Join game (`ClaimSlotResponse.Reason`, added 2026-10-04): AGENCY_NAME_TAKEN / DIRECTOR_NAME_TAKEN / MISSING_FIELDS / ALREADY_CLAIMED / NOT_AUTHENTICATED / SERVER_ERROR | Already taken by another agency. (under the field) / the same / Required. / (client logs in again and opens the agency) / (danger notice with the server's words) |
 
 ---
@@ -2422,6 +2504,16 @@ current state alone. Each is an M5 task.
   lapsed decision (fields only added); a content file of decisions by type, outside the hashed pack
   like the stories; and the playout bots taught to decide, to measure how often decisions come.
 
+- **G12. Commercial contracts (§4.17, component 27, 2026-10-11).** Content: per program a
+  `commercial` block (unlock set, contract configuration) in the hashed pack; clients and stories in
+  `commercial-clients.json` outside it. Rules: unlocking lines, the score, the award, the fee and the
+  insurer, the window and lapses, the board's seating and extras; the contract flight's own payout
+  path in `MissionProgress` (no prestige, no repeat count). State: unlocked lines, records, the
+  active contract, the application. Server: the market settled once a turn in `market/turn-N.json`
+  (awards before the pass, the board after), applications sealed, a board message pair appended to
+  `MessageRegistry`, report events (fields only added), and `TurnRollback` deleting market files. A
+  playout bot that takes contracts.
+
 ## 7. Suggested mockup order
 
 1. **Shared chrome and components (§2):** header, footer, personnel row and
@@ -2434,6 +2526,9 @@ current state alone. Each is an M5 task.
    mission (§4.6.5 to §4.6.8), Mission Control (§4.7), the turn report (§4.4).
 4. **The rest:** Astronaut Complex (§4.9), Public Affairs Office (§4.10), Museum
    (§4.11), settings (§4.12), game result (§4.13).
+
+**Next mockup (2026-10-11):** Contracts (§4.17) and the contract marker (component 27), on a new
+canvas `Launch Window — Contracts`. One new icon (component 27) for the UI Asset Sheet.
 
 **Next new screen (user, 2026-10-09):** a newspaper front page for the great Firsts, shown on
 login before the turn report (`design.md` §5, Backlog). Not specified yet.
