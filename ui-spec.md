@@ -1064,7 +1064,8 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       client-only and forgotten on restart. The report's seventh glance cell and Decision card show on the
       latest report only; its news gets a line for last turn's decision (neutral when nothing changed).
       Hub: the gold dot upper left on the VAB (rocket) or the SET Centre (payload). Icons `clue_trace`,
-      `clue_note`, `clue_inspect` (the canvas's own drawings) in `make_ui_icons.py`. Help topic
+      `clue_note`, `clue_inspect` (the canvas's own drawings) in `make_ui_icons.py`, on the UI Asset Sheet
+      with a clue list and the hub's decision dot in context (2026-10-10). Help topic
       "decisions" on the R&D boards.
     - **Playouts** (`ContentPackPlayouts standard side decisions`, the bot taking a random option): about
       80 decisions a game, offered in 65 % of the seasons without a launch and 38 % of those with one,
