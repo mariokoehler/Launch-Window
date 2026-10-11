@@ -92,6 +92,7 @@ public final class DecisionView {
             case OPPORTUNITY -> "Opportunity with strings";
             case PAIRING -> "Pairing";
             case INTEL -> "Intelligence tip";
+            case HANDS_ON -> "Hands-on";
         };
     }
 

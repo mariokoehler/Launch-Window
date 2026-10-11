@@ -2,9 +2,11 @@ package de.mkoehler.launchwindow.rules;
 
 import de.mkoehler.launchwindow.content.ContentCatalog;
 import de.mkoehler.launchwindow.content.Decisions;
+import de.mkoehler.launchwindow.content.HandsOnLevel;
 import de.mkoehler.launchwindow.content.MissionComponent;
 import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.DecisionEffect;
+import de.mkoehler.launchwindow.model.HandsOnState;
 import de.mkoehler.launchwindow.model.OwnedMissionComponent;
 import de.mkoehler.launchwindow.model.PendingDecision;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
@@ -83,7 +85,11 @@ public final class RdDecisions {
         /** Nobody works on the component any more, so there's no R&amp;D for the decision to act on. */
         NO_TEAM,
         /** The funds don't cover the option's cost. */
-        INSUFFICIENT_FUNDS
+        INSUFFICIENT_FUNDS,
+        /** A hands-on decision's puzzle started; it settles when it ends or the turn resolves. */
+        STARTED,
+        /** No hands-on puzzle is in progress. */
+        NO_PUZZLE
     }
 
     // ---- Who an option can take
@@ -241,6 +247,10 @@ public final class RdDecisions {
         if (pending.decided()) {
             return Outcome.ALREADY_DECIDED;
         }
+        if (pending.handsOn() != null) {
+            // Started: the puzzle decides it now.
+            return Outcome.ALREADY_DECIDED;
+        }
         Decisions.Decision decision = decisions.byId(pending.decisionId()).orElse(null);
         Decisions.Option option = decision == null ? null : decision.option(optionId).orElse(null);
         if (option == null) {
@@ -262,8 +272,105 @@ public final class RdDecisions {
         if (cost > 0 && snapshot.getFunds() < cost) {
             return Outcome.INSUFFICIENT_FUNDS;
         }
+        if (decision.playOption().filter(play -> play.id().equals(option.id())).isPresent()) {
+            double[] odds = handsOnOdds(snapshot, component);
+            snapshot.setPendingDecision(pending.withHandsOn(HandsOn.start(decision.handsOn(), odds[0], odds[1])));
+            return Outcome.STARTED;
+        }
         settle(snapshot, catalog, decision, option, pending, person, second, cost);
         return Outcome.DECIDED;
+    }
+
+    // ---- Hands-on
+
+    /**
+     * Returns a hands-on puzzle's odds for a component: the fail chance from the team's best skill in
+     * the component's skill, the exceptional chance higher with good chemistry on the team (as the
+     * player sees it). Fixed when the puzzle starts.
+     *
+     * @param snapshot  the player
+     * @param component the component
+     * @return the fail and the exceptional chance
+     */
+    public static double[] handsOnOdds(PlayerSnapshot snapshot, MissionComponent component) {
+        List<SetSpecialist> team = team(snapshot, component.id());
+        double skill = team.stream().mapToDouble(e -> e.getSkill(component.associatedSkill())).max().orElse(0);
+        boolean good = team.size() >= 2 && Chemistry.research(snapshot, team, component.associatedSkill(), true)
+            .value() > GOOD_CHEMISTRY;
+        return new double[] {HandsOn.failChance(skill), good ? HandsOn.EXCEPTIONAL_GOOD_CHEMISTRY : HandsOn.EXCEPTIONAL};
+    }
+
+    /** Chemistry above this counts as good (the indicator's "Good"). */
+    static final double GOOD_CHEMISTRY = 0.15;
+
+    /** The steps of a hands-on puzzle. */
+    public enum HandsOnStep {
+        /** Queue a command. */
+        QUEUE,
+        /** Take the last command off. */
+        UNDO,
+        /** Clear the queue. */
+        RESET,
+        /** Run the round. */
+        CONFIRM,
+        /** Call in an expert on a fail. */
+        RESIST,
+        /** Accept a fail. */
+        ACCEPT
+    }
+
+    /**
+     * Takes one step of the hands-on puzzle in progress; when it ends the puzzle, the decision settles
+     * at once with the playing option's outcome for the result.
+     *
+     * @param snapshot  the player; mutated only when the step goes through
+     * @param catalog   the content
+     * @param decisions the decisions
+     * @param step      the step
+     * @param commandId the command, for {@link HandsOnStep#QUEUE}
+     * @return the puzzle's outcome name, or this class's {@link Outcome} name when there's no puzzle
+     */
+    public static String handsOn(PlayerSnapshot snapshot, ContentCatalog catalog, Decisions decisions,
+                                 HandsOnStep step, String commandId) {
+        Objects.requireNonNull(step, "step must not be null");
+        PendingDecision pending = snapshot.getPendingDecision();
+        Decisions.Decision decision = pending == null ? null : decisions.byId(pending.decisionId()).orElse(null);
+        if (pending == null || !pending.handsOnInProgress() || decision == null || decision.handsOn() == null) {
+            return Outcome.NO_PUZZLE.name();
+        }
+        HandsOnLevel level = decision.handsOn();
+        HandsOnState state = pending.handsOn();
+        java.util.function.IntToDoubleFunction roll = rolls(pending);
+        HandsOn.Step done = switch (step) {
+            case QUEUE -> HandsOn.queue(level, state, commandId);
+            case UNDO -> HandsOn.undo(level, state);
+            case RESET -> HandsOn.reset(level, state);
+            case CONFIRM -> HandsOn.confirm(level, state, roll);
+            case RESIST -> HandsOn.resist(level, state, roll);
+            case ACCEPT -> HandsOn.accept(level, state, roll);
+        };
+        if (done.outcome() != HandsOn.Outcome.DONE) {
+            return done.outcome().name();
+        }
+        snapshot.setPendingDecision(pending.withHandsOn(done.state()));
+        if (done.state().phase() == HandsOnState.Phase.FINISHED) {
+            settleHandsOn(snapshot, catalog, decision);
+        }
+        return HandsOn.Outcome.DONE.name();
+    }
+
+    /** A puzzle's rolls: the decision's seed and the roll's index, so a replay draws the same. */
+    private static java.util.function.IntToDoubleFunction rolls(PendingDecision pending) {
+        return index -> new SplittableRandom(pending.seed() + (index + 1) * 0x9E3779B97F4A7C15L).nextDouble();
+    }
+
+    /** Settles a finished puzzle with its playing option's outcome for the result. */
+    private static void settleHandsOn(PlayerSnapshot snapshot, ContentCatalog catalog, Decisions.Decision decision) {
+        PendingDecision pending = snapshot.getPendingDecision();
+        Decisions.Option play = decision.playOption().orElseThrow();
+        String id = pending.handsOn().result().name().toLowerCase(java.util.Locale.ROOT);
+        Decisions.Outcome outcome = play.outcomes().stream().filter(o -> o.id().equals(id)).findFirst().orElse(null);
+        settle(snapshot, catalog, decision, play, pending, null, null, 0, outcome);
     }
 
     private static boolean takesFit(PlayerSnapshot snapshot, MissionComponent component, Decisions.Takes takes,
@@ -282,12 +389,20 @@ public final class RdDecisions {
     private static Decisions.Outcome settle(PlayerSnapshot snapshot, ContentCatalog catalog,
                                             Decisions.Decision decision, Decisions.Option option,
                                             PendingDecision pending, String person, String second, long cost) {
+        return settle(snapshot, catalog, decision, option, pending, person, second, cost,
+            draw(snapshot, catalog, pending, option, person, second));
+    }
+
+    /** Pays, applies and records a given outcome on the pending decision. */
+    private static Decisions.Outcome settle(PlayerSnapshot snapshot, ContentCatalog catalog,
+                                            Decisions.Decision decision, Decisions.Option option,
+                                            PendingDecision pending, String person, String second, long cost,
+                                            Decisions.Outcome outcome) {
         List<DecisionEffect> applied = new ArrayList<>();
         if (cost > 0) {
             snapshot.setFunds(snapshot.getFunds() - cost);
             applied.add(new DecisionEffect(DecisionEffect.Kind.FUNDS, -cost, 0, null));
         }
-        Decisions.Outcome outcome = draw(snapshot, catalog, pending, option, person, second);
         if (outcome != null) {
             for (Decisions.Effect effect : outcome.effects()) {
                 DecisionEffect done = apply(snapshot, catalog, pending.componentId(), effect, person, second);
@@ -482,6 +597,13 @@ public final class RdDecisions {
             return;
         }
         Decisions.Decision decision = decisions.byId(pending.decisionId()).orElse(null);
+        if (pending.handsOnInProgress() && decision != null && decision.handsOn() != null) {
+            // Started, so it counts: it settles as it stands, and the player did act.
+            snapshot.setPendingDecision(pending.withHandsOn(HandsOn.finishAsItStands(decision.handsOn(),
+                pending.handsOn(), rolls(pending))));
+            settleHandsOn(snapshot, catalog, decision);
+            pending = snapshot.getPendingDecision();
+        }
         boolean lapsed = !pending.decided();
         if (lapsed && decision != null) {
             Decisions.Option fallback = decision.defaultChoice();

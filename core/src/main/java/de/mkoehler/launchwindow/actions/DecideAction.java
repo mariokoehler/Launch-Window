@@ -97,7 +97,10 @@ public class DecideAction extends PlayerAction {
 
     @Override
     public ActionResult apply(PlayerSnapshot snapshot, ActionContext context) {
-        return ActionResult.of(RdDecisions.decide(snapshot, context.catalog(), Decisions.standard(), optionId, personId,
-            secondPersonId), RdDecisions.Outcome.DECIDED);
+        RdDecisions.Outcome outcome = RdDecisions.decide(snapshot, context.catalog(), Decisions.standard(), optionId,
+            personId, secondPersonId);
+        // Starting a hands-on puzzle is a decision taken too.
+        return new de.mkoehler.launchwindow.persistence.ActionResult(outcome == RdDecisions.Outcome.DECIDED
+            || outcome == RdDecisions.Outcome.STARTED, outcome.name());
     }
 }

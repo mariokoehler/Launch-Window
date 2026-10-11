@@ -14,6 +14,8 @@ import de.mkoehler.launchwindow.actions.PullOutOfTrainingAction;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.UiKit;
 import de.mkoehler.launchwindow.client.view.Concepts;
+import de.mkoehler.launchwindow.client.view.ContentNames;
+import de.mkoehler.launchwindow.client.view.HandsOnView;
 import de.mkoehler.launchwindow.client.view.DecisionView;
 import de.mkoehler.launchwindow.client.view.Explainers;
 import de.mkoehler.launchwindow.client.view.Outlook;
@@ -23,6 +25,7 @@ import de.mkoehler.launchwindow.content.Decisions;
 import de.mkoehler.launchwindow.content.MissionComponent;
 import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.DecisionEffect;
+import de.mkoehler.launchwindow.model.HandsOnState;
 import de.mkoehler.launchwindow.model.PendingDecision;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.model.SetSpecialist;
@@ -79,6 +82,9 @@ final class DecisionBanner {
         if (decision == null) {
             return null;
         }
+        if (pending.handsOnInProgress()) {
+            return inProgress(pending, decision);
+        }
         if (!pending.decided()) {
             return open(pending, decision, component);
         }
@@ -127,6 +133,9 @@ final class DecisionBanner {
         if (decision.type() == Decisions.Type.INTEL) {
             banner.add(intelLine(pending, decision)).padBottom(10f).row();
         }
+        if (decision.handsOn() != null) {
+            banner.add(handsOnCaption(decision, component)).padBottom(10f).row();
+        }
         if (!decision.stakes().isEmpty()) {
             banner.add(ui.paragraph(decision.stakes(), Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padBottom(6f).row();
         }
@@ -163,6 +172,51 @@ final class DecisionBanner {
                     : RndBoardScreen.Board.PAYLOAD))));
             banner.add(link).padTop(6f).row();
         }
+        return banner;
+    }
+
+    /** A hands-on decision's caption: the campaign's shape and the team's odds, in a white panel. */
+    private Table handsOnCaption(Decisions.Decision decision, MissionComponent component) {
+        Table caption = new Table();
+        caption.setBackground(ui.rect(Theme.SURFACE_CARD, Theme.NAVY_BORDER, Theme.BORDER_THIN));
+        caption.pad(8f, 10f, 8f, 10f);
+        caption.defaults().left().growX();
+        caption.add(ui.paragraph(HandsOnView.caption(decision.handsOn()), Theme.TextStyle.BODY_SM, Theme.INK)).row();
+        caption.add(ui.paragraph(HandsOnView.oddsLine(host.session.state(), host.session.catalog(), component),
+            Theme.TextStyle.CAPTION, Theme.INK_MUTED));
+        return caption;
+    }
+
+    /** A hands-on campaign started and not finished: where it stands, and Continue. */
+    private Table inProgress(PendingDecision pending, Decisions.Decision decision) {
+        Table banner = new Table();
+        banner.setBackground(ui.rect(new Color(Theme.SURFACE_CARD).lerp(Theme.GOLD, 0.10f), Theme.GOLD,
+            Theme.BORDER_EMPHASIS));
+        banner.pad(14f, 16f, 14f, 16f);
+        banner.defaults().growX().left();
+        Table top = new Table();
+        top.add(ui.label(DecisionView.eyebrow(decision, pending.componentId()), Theme.TextStyle.EYEBROW,
+            Theme.GOLD_TEXT)).expandX().left();
+        top.add(ui.label(DecisionView.untilResolved(host.nextTurnText()), Theme.TextStyle.CAPTION, Theme.INK_MUTED));
+        banner.add(top).padBottom(10f).row();
+        banner.add(ui.paragraph(decision.headline(), Theme.TextStyle.HEADING_SM, Theme.INK)).padBottom(8f).row();
+        Table row = new Table();
+        row.setBackground(ui.rect(new Color(Theme.SURFACE_CARD).lerp(Theme.GOLD, 0.10f), Theme.GOLD,
+            Theme.BORDER_EMPHASIS));
+        row.pad(8f, 12f, 8f, 12f);
+        Table words = new Table();
+        words.defaults().left();
+        words.add(ui.label("Hands-on in progress", Theme.TextStyle.BODY_STRONG, Theme.INK)).row();
+        words.add(ui.label(HandsOnView.progress(decision.handsOn(), pending.handsOn()), Theme.TextStyle.CAPTION,
+            Theme.INK_MUTED));
+        row.add(words).expandX().left();
+        if (editable) {
+            row.add(host.actionButton("Continue", Theme.ButtonKind.PRIMARY,
+                () -> host.game.setScreen(new HandsOnScreen(host.game)))).right();
+        }
+        banner.add(row).padBottom(8f).row();
+        banner.add(ui.paragraph("Started, so it counts. If you don't finish it, it settles as it stands when the turn "
+            + "resolves: the rounds left run empty.", Theme.TextStyle.CAPTION, Theme.INK_MUTED));
         return banner;
     }
 
@@ -439,6 +493,37 @@ final class DecisionBanner {
      * @param optionId the option
      * @param person   the person it takes, or {@code null}
      */
+    private static String lowerFirst(String text) {
+        return text.isEmpty() ? text : Character.toLowerCase(text.charAt(0)) + text.substring(1);
+    }
+
+    /** Starting a hands-on campaign: once started, it counts. */
+    private void confirmCampaign(PendingDecision pending, Decisions.Decision decision, Decisions.Option option) {
+        MissionComponent component = host.session.catalog().missionComponent(pending.componentId()).orElseThrow();
+        Table card = host.dialogCard("Decision · " + ContentNames.of(pending.componentId()) + " · Hands-on",
+            "Run the campaign yourself?");
+        card.add(ui.paragraph("Once started, the result counts, finished or not.", Theme.TextStyle.BODY,
+            Theme.INK)).growX().padBottom(Theme.SPACE_3).row();
+        for (String line : List.of(
+            "You can leave the screen between steps: the campaign waits, and the banner says where you are.",
+            "Unfinished when the turn resolves, it settles as it stands: the rounds left run empty.",
+            "Objective " + lowerFirst(HandsOnView.worth(decision, HandsOnState.Result.SUCCESS))
+                + ", bonus " + lowerFirst(HandsOnView.worth(decision, HandsOnState.Result.BONUS))
+                + ", short of it nothing. Never a loss.")) {
+            card.add(ui.paragraph("\u00b7 " + line, Theme.TextStyle.BODY_SM, Theme.INK)).growX().padBottom(4f).row();
+        }
+        card.add(handsOnCaption(decision, component)).growX().padTop(Theme.SPACE_2).padBottom(Theme.SPACE_4).row();
+        Table buttons = new Table();
+        buttons.add(host.actionButton("Back", Theme.ButtonKind.SECONDARY, host::closeDialog)).padRight(10f);
+        buttons.add(host.actionButton("Start the campaign", Theme.ButtonKind.PRIMARY, () -> host.submit(
+            new DecideAction(option.id(), null, null), result -> {
+                host.closeDialog();
+                host.game.setScreen(new HandsOnScreen(host.game));
+            })));
+        card.add(buttons).right().fill(false, false);
+        host.showDialog(card, 580f);
+    }
+
     void confirm(String optionId, String person) {
         PendingDecision pending = host.session.state().getPendingDecision();
         Decisions.Decision decision = pending == null ? null : DecisionView.content(pending).orElse(null);
@@ -456,6 +541,10 @@ final class DecisionBanner {
     }
 
     private void showConfirm(PendingDecision pending, Decisions.Decision decision, Decisions.Option option) {
+        if (decision.playOption().filter(play -> play.id().equals(option.id())).isPresent()) {
+            confirmCampaign(pending, decision, option);
+            return;
+        }
         PlayerSnapshot state = host.session.state();
         MissionComponent component = host.session.catalog().missionComponent(pending.componentId()).orElseThrow();
         Table card = host.dialogCard("Decision", option.label());

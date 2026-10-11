@@ -93,11 +93,13 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   play test.
 - **Undoing a bad turn is built** (the user's idea, 2026-10-11, `design.md` §3.7): a zip of the data
   root before every turn, and `TurnRollback` to undo turns and redo them with a fixed build.
-- **The hands-on decision is specified** (the user's idea, 2026-10-11, from their "Probe Command
-  Minigame" spec doc; `design.md` §5, Backlog; `ui-spec.md` component 26, type 11, and G13): an
-  eleventh R&D decision type, a resource puzzle the player can play or leave to the team, played
-  step by step against the server. Mocked up on the canvas `Launch Window — Hands-on` (2026-10-11);
-  every number is unconfirmed.
+- **The hands-on decision is built** (the user's idea, 2026-10-11, from their "Probe Command
+  Minigame" spec doc; `design.md` §5, Backlog; `ui-spec.md` component 26, type 11, and G13; from the
+  canvas `Launch Window — Hands-on`): an eleventh R&D decision type, a resource puzzle the player can
+  play or leave to the team, played step by step against the server (`rules.HandsOn`,
+  `HandsOnAction`). Every number is unconfirmed; the bot gets the bonus 92 % of the time. Saved
+  classes gained fields and there's a new action: reset the dev data root, rebuild client and server
+  together.
 - **Commercial contracts are built** (the user's idea, 2026-10-11, `design.md` §2.11, `ui-spec.md`
   §4.17 and component 27, from the canvas `Launch Window — Contracts`): a shared marketplace settled
   once a turn (`rules.ContractMarket`, `market/turn-N.json`), tiers by track record, money instead of
@@ -315,6 +317,8 @@ cd assets && java --enable-native-access=ALL-UNNAMED -cp "../lwjgl3/target/class
   classpath, so `Decisions.standard()` is empty there: tests and tools set it with `Decisions.setStandard`
   (and put `EMPTY` back after);
   turn reports store their story ids, so never rename or reuse one.
+- Help's `handsOn.*` tokens quote the first hands-on level in `decisions.json` (rounds, slots, the
+  expert's cost): a later level with a different shape needs the help text reworded.
 - `cancelsGoalIds` means "also credits, with prestige" (`rules.GoalCascade`), not "makes
   unearnable".
 - A seat titled "FLIGHT DIRECTOR" doesn't always read the average skill; go by the seat's skill

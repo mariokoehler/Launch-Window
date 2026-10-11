@@ -76,7 +76,16 @@ CHROME = {
     # The contract marker (ui-spec.md component 27, Contracts canvas, 2026-10-11): a page with a folded
     # corner, two lines, a signature, and a round seal with two ribbons. The outline marks a flight
     # that unlocks a contract line; the filled one (FILLED below) the flight contracts fly.
-    "contract_unlock": '<path d="M12.2 21H5V2.5h8l4.5 4.5v5"/><path d="M13 2.5V7h4.5"/><path d="M8 8h3.5M8 11.5h5.5"/>'
+    # The hands-on campaign's resources (ui-spec.md component 26, type 11, Hands-on canvas, 2026-10-11): a
+    # shift (a hard hat), a firing (a nozzle and its plume), a measurement (a gauge) and a spare part (a nut).
+    "res_shift": '<path d="M1.8 19.5h20.4"/><path d="M3.5 19.5V17a8.5 8.5 0 0 1 17 0v2.5"/><path d="M10 8.7V5.5h4v3.2"/>'
+                 '<path d="M8 19.5V16M16 19.5V16"/>',
+    "res_firing": '<path d="M9 2.5h6"/><path d="M10.2 2.5v2.8L6.2 11h11.6l-4-5.7V2.5"/>'
+                  '<path d="M7.6 14c.4 2.9 2 5.1 4.4 7.4 2.4-2.3 4-4.5 4.4-7.4"/><path d="M12 14v3"/>',
+    "res_measurement": '<path d="M3.5 17.5a8.5 8.5 0 1 1 17 0"/><path d="M12 17.5l4.2-5.3"/><circle cx="12" cy="17.5" r="1.3"/>'
+                       '<path d="M6.3 11.6l1.1 1M12 9v1.6M17.7 11.6l-1.1 1"/>',
+    "res_spare_part": '<path d="M12 2.8l8 4.6v9.2l-8 4.6-8-4.6V7.4z"/><circle cx="12" cy="12" r="3.2"/>',
+    "contract_unlock":'<path d="M12.2 21H5V2.5h8l4.5 4.5v5"/><path d="M13 2.5V7h4.5"/><path d="M8 8h3.5M8 11.5h5.5"/>'
                        '<path d="M7.8 16.4c.8-1.7 1.6-1.7 2 0s1.2 1.2 2-.4"/><circle cx="16.5" cy="16" r="3.4"/>'
                        '<path d="M15 19.3l-1 3.2M18 19.3l1 3.2"/>',
 }

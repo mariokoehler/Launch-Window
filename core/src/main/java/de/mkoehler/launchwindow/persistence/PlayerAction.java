@@ -77,7 +77,8 @@ import de.mkoehler.launchwindow.model.PlayerSnapshot;
     @JsonSubTypes.Type(value = SetRetentionDefaultAction.class, name = "setRetentionDefault"),
     @JsonSubTypes.Type(value = SetRetentionAction.class, name = "setRetention"),
     @JsonSubTypes.Type(value = de.mkoehler.launchwindow.actions.DecideAction.class, name = "decide"),
-    @JsonSubTypes.Type(value = de.mkoehler.launchwindow.actions.ApplyContractAction.class, name = "applyContract")
+    @JsonSubTypes.Type(value = de.mkoehler.launchwindow.actions.ApplyContractAction.class, name = "applyContract"),
+    @JsonSubTypes.Type(value = de.mkoehler.launchwindow.actions.HandsOnAction.class, name = "handsOn")
 })
 public abstract class PlayerAction {
 

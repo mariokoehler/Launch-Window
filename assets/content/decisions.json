@@ -414,6 +414,500 @@
          "outcomes": [{"id": "ignored", "weight": 1, "tone": "NEUTRAL", "headline": "Our own way", "text": "The report goes in a drawer.", "effects": []}]}
       ],
       "defaultOption": "ignore"
+    },
+    {
+      "id": "big-test-stand",
+      "type": "HANDS_ON",
+      "fits": "ROCKET",
+      "step": 1,
+      "headline": "A week on the big test stand",
+      "text": "The engine test centre has its largest stand free for a week. The engineers want a short campaign on the engines: firings, then the measurements that make sense of them, planned shift by shift. You can plan it yourself, or let the team run it their way.",
+      "options": [
+        {
+          "id": "run",
+          "label": "Run it yourself",
+          "shows": "Opens the campaign. The objective is worth about a season and a half of R&D, the bonus about three; falling short costs nothing but the chance.",
+          "outcomes": [
+            {
+              "id": "bonus",
+              "weight": 1,
+              "tone": "GOOD",
+              "headline": "A week to remember on the big stand",
+              "text": "Six firings and the measurements to match. The engines' start-up is better understood than it has ever been.",
+              "effects": [
+                {
+                  "kind": "RELIABILITY",
+                  "amount": 3
+                }
+              ]
+            },
+            {
+              "id": "success",
+              "weight": 1,
+              "tone": "GOOD",
+              "headline": "A good week on the big stand",
+              "text": "Enough firings and enough data to settle the questions the engineers came with.",
+              "effects": [
+                {
+                  "kind": "RELIABILITY",
+                  "amount": 1.5
+                }
+              ]
+            },
+            {
+              "id": "failure",
+              "weight": 1,
+              "tone": "NEUTRAL",
+              "headline": "Not enough on the big stand",
+              "text": "Too few firings to tell the engineers what they wanted to know. The week was not wasted, but it changed nothing.",
+              "effects": []
+            }
+          ]
+        },
+        {
+          "id": "team",
+          "label": "Leave it to the team",
+          "shows": "Nothing changes.",
+          "outcomes": [
+            {
+              "id": "team-ran-it",
+              "weight": 1,
+              "tone": "NEUTRAL",
+              "headline": "The team's own way",
+              "text": "The team ran a quiet week of routine firings. Nothing new came of it.",
+              "effects": []
+            }
+          ]
+        }
+      ],
+      "defaultOption": "team",
+      "handsOn": {
+        "resources": [
+          {
+            "id": "shift",
+            "name": "Shifts",
+            "one": "shift",
+            "icon": "res_shift",
+            "color": "gold"
+          },
+          {
+            "id": "firing",
+            "name": "Firings",
+            "one": "firing",
+            "icon": "res_firing",
+            "color": "danger"
+          },
+          {
+            "id": "measurement",
+            "name": "Measurements",
+            "one": "measurement",
+            "icon": "res_measurement",
+            "color": "navy"
+          },
+          {
+            "id": "part",
+            "name": "Spare parts",
+            "one": "spare part",
+            "icon": "res_spare_part",
+            "color": "success"
+          }
+        ],
+        "commands": [
+          {
+            "id": "make-firing",
+            "name": "Static firing",
+            "group": "firing",
+            "input": {
+              "shift": 2
+            },
+            "output": {
+              "firing": 2
+            },
+            "primary": "firing",
+            "rolls": true
+          },
+          {
+            "id": "retest",
+            "name": "Data-driven retest",
+            "group": "firing",
+            "input": {
+              "measurement": 1
+            },
+            "output": {
+              "firing": 2,
+              "part": 1
+            },
+            "primary": "firing",
+            "rolls": true
+          },
+          {
+            "id": "rebuilt",
+            "name": "Rebuilt-part firing",
+            "group": "firing",
+            "input": {
+              "part": 1
+            },
+            "output": {
+              "firing": 2,
+              "measurement": 1
+            },
+            "primary": "firing",
+            "rolls": true
+          },
+          {
+            "id": "sensor-sweep",
+            "name": "Sensor sweep",
+            "group": "measurement",
+            "input": {
+              "shift": 1
+            },
+            "output": {
+              "measurement": 2
+            },
+            "primary": "measurement",
+            "rolls": true
+          },
+          {
+            "id": "teardown",
+            "name": "Post-firing teardown",
+            "group": "measurement",
+            "input": {
+              "shift": 1,
+              "firing": 1
+            },
+            "output": {
+              "measurement": 3
+            },
+            "primary": "measurement",
+            "rolls": true
+          },
+          {
+            "id": "parts-inspection",
+            "name": "Parts inspection",
+            "group": "measurement",
+            "input": {
+              "part": 2
+            },
+            "output": {
+              "measurement": 3
+            },
+            "primary": "measurement",
+            "rolls": true
+          },
+          {
+            "id": "order-stores",
+            "name": "Order from stores",
+            "group": "part",
+            "input": {
+              "shift": 1
+            },
+            "output": {
+              "part": 1
+            },
+            "primary": "part",
+            "rolls": true
+          },
+          {
+            "id": "machine",
+            "name": "Machine from drawings",
+            "group": "part",
+            "input": {
+              "measurement": 1
+            },
+            "output": {
+              "part": 2
+            },
+            "primary": "part",
+            "rolls": true
+          },
+          {
+            "id": "salvage",
+            "name": "Salvage the test article",
+            "group": "part",
+            "input": {
+              "firing": 1
+            },
+            "output": {
+              "part": 1,
+              "measurement": 1
+            },
+            "primary": "part",
+            "rolls": true
+          },
+          {
+            "id": "overtime",
+            "name": "Overtime",
+            "group": "shift",
+            "input": {},
+            "output": {
+              "shift": 1
+            },
+            "primary": "shift",
+            "rolls": false
+          }
+        ],
+        "rounds": 4,
+        "slots": 3,
+        "start": {
+          "shift": 6
+        },
+        "objective": {
+          "firing": 3,
+          "measurement": 4
+        },
+        "bonus": {
+          "firing": 6,
+          "measurement": 7
+        },
+        "resist": 1
+      }
+    },
+    {
+      "id": "vacuum-chamber-week",
+      "type": "HANDS_ON",
+      "fits": "PAYLOAD",
+      "step": 1,
+      "headline": "A week in the vacuum chamber",
+      "text": "The big vacuum chamber is free for a week. The engineers want to run the craft through it as it will fly: runs in the cold and the vacuum, then the measurements that make sense of them, planned shift by shift. You can plan it yourself, or let the team run it their way.",
+      "options": [
+        {
+          "id": "run",
+          "label": "Run it yourself",
+          "shows": "Opens the campaign. The objective is worth about a season and a half of R&D, the bonus about three; falling short costs nothing but the chance.",
+          "outcomes": [
+            {
+              "id": "bonus",
+              "weight": 1,
+              "tone": "GOOD",
+              "headline": "A week to remember in the chamber",
+              "text": "Six runs and the measurements to match. The craft's systems are better understood than they have ever been.",
+              "effects": [
+                {
+                  "kind": "RELIABILITY",
+                  "amount": 3
+                }
+              ]
+            },
+            {
+              "id": "success",
+              "weight": 1,
+              "tone": "GOOD",
+              "headline": "A good week in the chamber",
+              "text": "Enough runs and enough data to settle the questions the engineers came with.",
+              "effects": [
+                {
+                  "kind": "RELIABILITY",
+                  "amount": 1.5
+                }
+              ]
+            },
+            {
+              "id": "failure",
+              "weight": 1,
+              "tone": "NEUTRAL",
+              "headline": "Not enough in the chamber",
+              "text": "Too few runs to tell the engineers what they wanted to know. The week was not wasted, but it changed nothing.",
+              "effects": []
+            }
+          ]
+        },
+        {
+          "id": "team",
+          "label": "Leave it to the team",
+          "shows": "Nothing changes.",
+          "outcomes": [
+            {
+              "id": "team-ran-it",
+              "weight": 1,
+              "tone": "NEUTRAL",
+              "headline": "The team's own way",
+              "text": "The team ran a quiet week of routine checks in the chamber. Nothing new came of it.",
+              "effects": []
+            }
+          ]
+        }
+      ],
+      "defaultOption": "team",
+      "handsOn": {
+        "resources": [
+          {
+            "id": "shift",
+            "name": "Shifts",
+            "one": "shift",
+            "icon": "res_shift",
+            "color": "gold"
+          },
+          {
+            "id": "run",
+            "name": "Chamber runs",
+            "one": "chamber run",
+            "icon": "res_firing",
+            "color": "danger"
+          },
+          {
+            "id": "measurement",
+            "name": "Measurements",
+            "one": "measurement",
+            "icon": "res_measurement",
+            "color": "navy"
+          },
+          {
+            "id": "part",
+            "name": "Spare parts",
+            "one": "spare part",
+            "icon": "res_spare_part",
+            "color": "success"
+          }
+        ],
+        "commands": [
+          {
+            "id": "make-run",
+            "name": "Chamber run",
+            "group": "run",
+            "input": {
+              "shift": 2
+            },
+            "output": {
+              "run": 2
+            },
+            "primary": "run",
+            "rolls": true
+          },
+          {
+            "id": "retest",
+            "name": "Rerun from the data",
+            "group": "run",
+            "input": {
+              "measurement": 1
+            },
+            "output": {
+              "run": 2,
+              "part": 1
+            },
+            "primary": "run",
+            "rolls": true
+          },
+          {
+            "id": "rebuilt",
+            "name": "Run with a rebuilt part",
+            "group": "run",
+            "input": {
+              "part": 1
+            },
+            "output": {
+              "run": 2,
+              "measurement": 1
+            },
+            "primary": "run",
+            "rolls": true
+          },
+          {
+            "id": "sensor-sweep",
+            "name": "Sensor sweep",
+            "group": "measurement",
+            "input": {
+              "shift": 1
+            },
+            "output": {
+              "measurement": 2
+            },
+            "primary": "measurement",
+            "rolls": true
+          },
+          {
+            "id": "teardown",
+            "name": "Strip-down after a run",
+            "group": "measurement",
+            "input": {
+              "shift": 1,
+              "run": 1
+            },
+            "output": {
+              "measurement": 3
+            },
+            "primary": "measurement",
+            "rolls": true
+          },
+          {
+            "id": "parts-inspection",
+            "name": "Parts inspection",
+            "group": "measurement",
+            "input": {
+              "part": 2
+            },
+            "output": {
+              "measurement": 3
+            },
+            "primary": "measurement",
+            "rolls": true
+          },
+          {
+            "id": "order-stores",
+            "name": "Order from stores",
+            "group": "part",
+            "input": {
+              "shift": 1
+            },
+            "output": {
+              "part": 1
+            },
+            "primary": "part",
+            "rolls": true
+          },
+          {
+            "id": "machine",
+            "name": "Machine from drawings",
+            "group": "part",
+            "input": {
+              "measurement": 1
+            },
+            "output": {
+              "part": 2
+            },
+            "primary": "part",
+            "rolls": true
+          },
+          {
+            "id": "salvage",
+            "name": "Salvage the test unit",
+            "group": "part",
+            "input": {
+              "run": 1
+            },
+            "output": {
+              "part": 1,
+              "measurement": 1
+            },
+            "primary": "part",
+            "rolls": true
+          },
+          {
+            "id": "overtime",
+            "name": "Overtime",
+            "group": "shift",
+            "input": {},
+            "output": {
+              "shift": 1
+            },
+            "primary": "shift",
+            "rolls": false
+          }
+        ],
+        "rounds": 4,
+        "slots": 3,
+        "start": {
+          "shift": 6
+        },
+        "objective": {
+          "run": 3,
+          "measurement": 4
+        },
+        "bonus": {
+          "run": 6,
+          "measurement": 7
+        },
+        "resist": 1
+      }
     }
   ]
 }

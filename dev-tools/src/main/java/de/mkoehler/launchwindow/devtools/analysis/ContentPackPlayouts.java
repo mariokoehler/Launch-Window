@@ -570,10 +570,58 @@ public final class ContentPackPlayouts {
         }
         var outcome = de.mkoehler.launchwindow.rules.RdDecisions.decide(snapshot, catalog,
             de.mkoehler.launchwindow.content.Decisions.standard(), option.id(), person, second);
+        if (outcome == de.mkoehler.launchwindow.rules.RdDecisions.Outcome.STARTED) {
+            playHandsOn(snapshot, decision);
+            return;
+        }
         if (outcome != de.mkoehler.launchwindow.rules.RdDecisions.Outcome.DECIDED) {
             de.mkoehler.launchwindow.rules.RdDecisions.decide(snapshot, catalog,
                 de.mkoehler.launchwindow.content.Decisions.standard(), decision.defaultOption(), null, null);
         }
+    }
+
+    /**
+     * Plays a hands-on campaign to its end the way a careful player might: each round the solver's
+     * plan from where it stands (as if every roll went as written), an expert on every fail while
+     * shifts last. Counts the results in {@link #handsOnResults}.
+     */
+    private void playHandsOn(PlayerSnapshot snapshot, de.mkoehler.launchwindow.content.Decisions.Decision decision) {
+        var decisions = de.mkoehler.launchwindow.content.Decisions.standard();
+        for (int guard = 0; guard < 100 && snapshot.getPendingDecision().handsOnInProgress(); guard++) {
+            var state = snapshot.getPendingDecision().handsOn();
+            if (state.phase() == de.mkoehler.launchwindow.model.HandsOnState.Phase.AWAITING_RESIST) {
+                String resisted = de.mkoehler.launchwindow.rules.RdDecisions.handsOn(snapshot, catalog, decisions,
+                    de.mkoehler.launchwindow.rules.RdDecisions.HandsOnStep.RESIST, null);
+                if (!resisted.equals("DONE")) {
+                    de.mkoehler.launchwindow.rules.RdDecisions.handsOn(snapshot, catalog, decisions,
+                        de.mkoehler.launchwindow.rules.RdDecisions.HandsOnStep.ACCEPT, null);
+                }
+                continue;
+            }
+            List<List<String>> plan = de.mkoehler.launchwindow.rules.HandsOn.solve(decision.handsOn(), state);
+            for (String command : plan == null || plan.isEmpty() ? List.<String>of() : plan.getFirst()) {
+                de.mkoehler.launchwindow.rules.RdDecisions.handsOn(snapshot, catalog, decisions,
+                    de.mkoehler.launchwindow.rules.RdDecisions.HandsOnStep.QUEUE, command);
+            }
+            de.mkoehler.launchwindow.rules.RdDecisions.handsOn(snapshot, catalog, decisions,
+                de.mkoehler.launchwindow.rules.RdDecisions.HandsOnStep.CONFIRM, null);
+        }
+        var finished = snapshot.getPendingDecision().handsOn();
+        if (finished != null && finished.result() != null) {
+            handsOnResults.merge(finished.result().name(), 1, Integer::sum);
+        }
+    }
+
+    /** The hands-on campaigns the bot played, by result, over every run of this harness. */
+    private final Map<String, Integer> handsOnResults = new java.util.TreeMap<>();
+
+    /**
+     * Returns the hands-on campaigns the bot played, by result.
+     *
+     * @return the counts
+     */
+    public Map<String, Integer> handsOnResults() {
+        return handsOnResults;
     }
 
     private static String first(List<? extends Personnel> people, int index) {
@@ -1805,6 +1853,7 @@ public final class ContentPackPlayouts {
         System.out.println("Random events by kind: " + harness.lastTally.randomEventKinds);
         if (withDecisions) {
             decisionReport(harness.lastTally.decisionSeasons);
+            System.out.println("Hands-on campaigns played, by result: " + harness.handsOnResults());
         }
         System.out.print("Seasons as the target, per game of its agency:");
         report.targetSeasons().forEach((id, count) -> System.out.printf(java.util.Locale.ROOT, " %s %.1f,", id,

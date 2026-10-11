@@ -231,7 +231,11 @@
         "## If you don't decide",
         "When the turn resolves, an open decision takes the option marked “If you don't decide”. After that no new decision comes until you do something again, so a decision never piles up while you're away.",
         "## Story arcs",
-        "A good outcome can lead somewhere: a later quiet season may bring a follow-up about the same component, with more at stake."
+        "A good outcome can lead somewhere: a later quiet season may bring a follow-up about the same component, with more at stake.",
+        "## Hands-on",
+        "Some decisions are a short campaign you can run yourself, or leave to the team. Run it, and you plan up to {handsOn.rounds} rounds of {handsOn.slots} commands. Each command spends some of what you hold and makes something else; what it costs is paid when you queue it, what it makes comes only when the round runs, so it can't pay for another command the same round.",
+        "When the round runs, each command can fail (one less of what it mainly makes), go as planned, or go exceptionally well (one more). The team sets the odds: a fail is less likely the more skilled its best engineer, {handsOn.failLow} % at best, and good chemistry makes an exceptional result likelier ({handsOn.exceptionalGood} % instead of {handsOn.exceptional} %). On a fail you may call in an expert for {handsOn.resist} shift to make it a normal result. Overtime never fails and gives a shift.",
+        "Meet the objective by the last round for about a season and a half of R&D; meet the bonus, which ends the campaign at once, for about three. Falling short costs nothing. Once started, the campaign counts: unfinished when the turn resolves, it settles as it stands."
       ],
       "related": ["rnd", "random-events"]
     },

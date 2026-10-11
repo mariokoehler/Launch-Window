@@ -2530,6 +2530,19 @@ bot.
     with the component's era later.
   - **How often:** one type among the eleven, drawn like the others, so a few times a game; four rounds
     of three commands take a few minutes, fine now and then, tiring every turn.
+  - **Built (2026-10-11):** `rules.HandsOn` (the state machine and an all-normal solver, the spec's
+    acceptance tests in `HandsOnTest`), `RdDecisions.handsOn` (rolls from the decision's seed and the
+    roll's index, the expert's answer never changing the next roll), `HandsOnAction`, and two levels in
+    `decisions.json`: *A week on the big test stand* (rockets) and *A week in the vacuum chamber*
+    (payloads), both checked winnable to the bonus by the solver. An unfinished campaign at the
+    resolution accepts a waiting fail, refunds an unconfirmed queue and runs the rounds left empty.
+    The odds use the team's chemistry as the player sees it.
+  - **Measured (2026-10-11):** `ContentPackPlayouts standard side decisions`, 200 Moon races. The bot
+    picks "Run it yourself" at random like any option, then plays the solver's plan each round and
+    calls in an expert on every fail while shifts last: 522 campaigns, **480 bonus, 42 success, no
+    failure**. A perfect planner with four rounds for a three-round bonus almost always gets it, so
+    the bonus is too easy at these numbers, at least for a careful player: a harder bonus, three
+    rounds, or a dearer expert are the levers (unconfirmed, for the user to choose).
 
 **Front pages for the Firsts** (the user's idea, 2026-10-09, not designed yet): when an agency
 makes one of the great Firsts (satellite in orbit, human in space, human in orbit, crewed lunar

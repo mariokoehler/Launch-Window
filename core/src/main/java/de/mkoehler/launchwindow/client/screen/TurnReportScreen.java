@@ -272,12 +272,21 @@ public final class TurnReportScreen extends ChromeScreen {
         int stop = text.indexOf(". ");
         words.add(ui.paragraph(stop > 0 ? text.substring(0, stop + 1) : text, Theme.TextStyle.BODY, Theme.INK))
             .padBottom(4f).row();
-        String fallback = decision.defaultChoice().label();
-        words.add(ui.paragraph("If you don't decide: " + fallback + ".", Theme.TextStyle.CAPTION, Theme.INK_MUTED));
+        if (pending.handsOnInProgress()) {
+            // Started: it settles as it stands, there's no default any more.
+            words.add(ui.paragraph("Hands-on in progress: " + de.mkoehler.launchwindow.client.view.HandsOnView
+                .progress(decision.handsOn(), pending.handsOn()) + ". Unfinished, it settles as it stands.",
+                Theme.TextStyle.CAPTION, Theme.INK_MUTED));
+        } else {
+            String fallback = decision.defaultChoice().label();
+            words.add(ui.paragraph("If you don't decide: " + fallback + ".", Theme.TextStyle.CAPTION,
+                Theme.INK_MUTED));
+        }
         card.add(words).expandX().fillX().left().padRight(Theme.SPACE_5);
         Table right = new Table();
-        right.add(actionButton("Decide on the R&D board", Theme.ButtonKind.PRIMARY, () -> game.setScreen(
-            new RndBoardScreen(game, DecisionView.rocket(pending.componentId(), session.catalog())
+        right.add(actionButton(pending.handsOnInProgress() ? "Continue the campaign" : "Decide on the R&D board",
+            Theme.ButtonKind.PRIMARY, () -> game.setScreen(pending.handsOnInProgress() ? new HandsOnScreen(game)
+            : new RndBoardScreen(game, DecisionView.rocket(pending.componentId(), session.catalog())
                 ? RndBoardScreen.Board.ROCKET : RndBoardScreen.Board.PAYLOAD)))).row();
         right.add(ui.label(DecisionView.untilResolved(nextTurnText()), Theme.TextStyle.CAPTION, Theme.INK_MUTED))
             .padTop(4f);

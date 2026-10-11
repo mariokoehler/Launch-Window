@@ -60,7 +60,13 @@ public record Decisions(List<Decision> decisions) {
         /** Two engineers work together; their rapport sets the odds. */
         PAIRING,
         /** A rival's approach from the Intelligence Office; right more often at a higher level. */
-        INTEL
+        INTEL,
+        /**
+         * A short resource puzzle the player can play, or leave to the team ({@code ui-spec.md}
+         * component 26, type 11): its level is {@link Decision#handsOn()}, its playing option's outcomes
+         * are {@code bonus}, {@code success} and {@code failure}.
+         */
+        HANDS_ON
     }
 
     /** Which components a decision fits. */
@@ -212,10 +218,11 @@ public record Decisions(List<Decision> decisions) {
      * @param followUp      the decision a continuing outcome opens later, or {@code null}
      * @param step          its step in a story arc: 1 for a decision that starts one or stands alone
      * @param recall        for a follow-up, the line recalling the step before, else {@code ""}
+     * @param handsOn       a hands-on decision's puzzle, else {@code null}
      */
     public record Decision(String id, Type type, Fits fits, String headline, String text, List<Clue> clues,
                            String stakes, List<Option> options, String defaultOption, List<String> explainers,
-                           String followUp, int step, String recall) {
+                           String followUp, int step, String recall, HandsOnLevel handsOn) {
 
         /**
          * Fills defaults and copies the lists.
@@ -235,6 +242,19 @@ public record Decisions(List<Decision> decisions) {
             explainers = explainers == null ? List.of() : List.copyOf(explainers);
             step = Math.max(1, step);
             recall = recall == null ? "" : recall;
+            if (type == Type.HANDS_ON && handsOn == null) {
+                throw new IllegalArgumentException("hands-on decision " + id + " has no puzzle");
+            }
+        }
+
+        /**
+         * Returns the option that plays a hands-on decision's puzzle: its one option besides the default.
+         *
+         * @return the option, or empty when this isn't a hands-on decision
+         */
+        public Optional<Option> playOption() {
+            return handsOn == null ? Optional.empty()
+                : options.stream().filter(option -> !option.id().equals(defaultOption)).findFirst();
         }
 
         /**

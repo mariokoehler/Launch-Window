@@ -1044,6 +1044,15 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
           round, the objective so far and Continue. Icons `res_shift` (a hard hat), `res_firing` (a nozzle and
           plume), `res_measurement` (a gauge), `res_spare_part` (a hex nut), on the UI Asset Sheet; small icons
           on white use gold-text for shifts. No new colour tokens.
+        - **Built (2026-10-11)** in `screen.HandsOnScreen` with `view.HandsOnView`, the banner's caption,
+          confirmation and in-progress state in `DecisionBanner`, the report's Decision card ("Hands-on in
+          progress ... Continue the campaign") and the hub hover ("Hands-on in progress: R-7 (Vostok)").
+          Icons in `make_ui_icons.py`. As built, against the mockup: the objective chip reads "2 › 3" (the
+          font has no "▸"); a round's results stay up with "Round 1 done" and **Plan round 2** until the
+          player moves on, and the outcome shows at once (no animation yet); during execution Undo and
+          Reset grey out; the payload's campaign (*A week in the vacuum chamber*, *Chamber runs*) reuses the
+          firing icon for its runs until it has its own. Shots `handson-*.png` (`ScreenSnapshot
+          -Dshots=handson`).
 
     **Help:** a "Decisions" topic, linked from the banner's eyebrow.
 
@@ -2507,6 +2516,7 @@ for the mockups.
 | Rocket programs: VAB_FULL / ROCKET_CLASS_TOO_LARGE / UNKNOWN_ROCKET (added 2026-10-04) | The VAB can't hold more rocket programs. Upgrade it or close one. / Upgrade the VAB to build this rocket class. / That rocket doesn't exist in this game. |
 | Building upgrade: MAX_LEVEL / ALREADY_UPGRADING; program opening also UNKNOWN_PROGRAM | Already at the top level. / Already upgrading. / That program doesn't exist in this game. |
 | Manage department (`AdjustSalariesAction`, added 2026-10-04): INVALID_PERCENT / EMPTY_DEPARTMENT | Pick a change between −50 % and +50 %. / There's nobody in the department yet. |
+| Hands-on campaign (added 2026-10-11, component 26, type 11; `HandsOn.Outcome`, `RdDecisions.Outcome.NO_PUZZLE`): WRONG_PHASE / NO_SLOT / CANT_PAY / UNKNOWN_COMMAND / NOTHING_QUEUED / CANT_RESIST / NO_PUZZLE | Not now: the campaign is somewhere else. / The round's slots are full. / You can't pay for that command. / That command isn't in this campaign. / Nothing is queued. / Not enough shifts to call in an expert. / No campaign is in progress. |
 | Contracts (added 2026-10-11, §4.17; built as `ContractOutcome`): CONTRACT_ACTIVE / NOT_QUALIFIED / PROGRAM_NOT_OPEN / UNKNOWN_LISTING; closing a program while its contract flies is the existing MISSIONS_IN_FLIGHT | You have an active contract: one at a time. / You can't fly this one: unlock its line first. / Open the program first. / That listing isn't on the board any more. / Can't close while a mission uses it. |
 | Join game (`ClaimSlotResponse.Reason`, added 2026-10-04): AGENCY_NAME_TAKEN / DIRECTOR_NAME_TAKEN / MISSING_FIELDS / ALREADY_CLAIMED / NOT_AUTHENTICATED / SERVER_ERROR | Already taken by another agency. (under the field) / the same / Required. / (client logs in again and opens the agency) / (danger notice with the server's words) |
 
@@ -2632,7 +2642,8 @@ current state alone. Each is an M5 task.
   lapsed decision (fields only added); a content file of decisions by type, outside the hashed pack
   like the stories; and the playout bots taught to decide, to measure how often decisions come.
 
-- **G13. The hands-on decision (component 26, type 11, 2026-10-11).** Content: a hands-on decision's
+- **G13. The hands-on decision (component 26, type 11, 2026-10-11). Built the same day** as specified
+  (`rules.HandsOn`, `RdDecisions.handsOn`, `HandsOnAction`, two levels in `decisions.json`). Content: a hands-on decision's
   level in `decisions.json` (resources and their names, commands with inputs, outputs and primary
   output, rounds, slots, objective, bonus, start); a test searching each level's all-normal play.
   Rules: `rules.HandsOn`, a pure state machine (plan, execute, awaiting a resist, finished) over the

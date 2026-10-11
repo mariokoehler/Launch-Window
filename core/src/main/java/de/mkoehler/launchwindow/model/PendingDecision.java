@@ -19,11 +19,12 @@ import java.util.Objects;
  * @param personId       the person the option took (overseer, seconded, first of a pair), or {@code null}
  * @param secondPersonId the second of a pair, or {@code null}
  * @param effects        what the outcome did, empty while open
+ * @param handsOn        a hands-on decision's puzzle once the player started it, else {@code null}
  * @author Mario Koehler
  */
 public record PendingDecision(String decisionId, String componentId, int offeredTurn, long seed, boolean decided,
                               String optionId, String outcomeId, String personId, String secondPersonId,
-                              List<DecisionEffect> effects) {
+                              List<DecisionEffect> effects, HandsOnState handsOn) {
 
     /**
      * Checks the ids and copies the effects.
@@ -46,7 +47,7 @@ public record PendingDecision(String decisionId, String componentId, int offered
      * @return the open decision
      */
     public static PendingDecision offered(String decisionId, String componentId, int turn, long seed) {
-        return new PendingDecision(decisionId, componentId, turn, seed, false, null, null, null, null, List.of());
+        return new PendingDecision(decisionId, componentId, turn, seed, false, null, null, null, null, List.of(), null);
     }
 
     /**
@@ -62,7 +63,7 @@ public record PendingDecision(String decisionId, String componentId, int offered
     public PendingDecision decide(String option, String outcome, String person, String second,
                                   List<DecisionEffect> applied) {
         return new PendingDecision(decisionId, componentId, offeredTurn, seed, true, option, outcome, person, second,
-            applied);
+            applied, handsOn);
     }
 
     /**
@@ -72,6 +73,26 @@ public record PendingDecision(String decisionId, String componentId, int offered
      */
     public PendingDecision withoutSeed() {
         return new PendingDecision(decisionId, componentId, offeredTurn, 0, decided, optionId, outcomeId, personId,
-            secondPersonId, effects);
+            secondPersonId, effects, handsOn);
+    }
+
+    /**
+     * Returns this decision with its puzzle as it now stands.
+     *
+     * @param state the puzzle
+     * @return the copy
+     */
+    public PendingDecision withHandsOn(HandsOnState state) {
+        return new PendingDecision(decisionId, componentId, offeredTurn, seed, decided, optionId, outcomeId, personId,
+            secondPersonId, effects, state);
+    }
+
+    /**
+     * Returns whether the player has started this decision's puzzle and not finished it.
+     *
+     * @return whether a hands-on campaign is in progress
+     */
+    public boolean handsOnInProgress() {
+        return handsOn != null && !decided;
     }
 }

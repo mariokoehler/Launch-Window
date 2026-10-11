@@ -15,6 +15,14 @@ public final class Refusals {
         Map.entry("INSUFFICIENT_FUNDS", "Not enough funds."),
         Map.entry("NO_DECISION", "No decision is waiting."),
         Map.entry("ALREADY_DECIDED", "That's decided already."),
+        // The hands-on decision (ui-spec.md component 26, type 11).
+        Map.entry("WRONG_PHASE", "Not now: the campaign is somewhere else."),
+        Map.entry("NO_SLOT", "The round's slots are full."),
+        Map.entry("CANT_PAY", "You can't pay for that command."),
+        Map.entry("UNKNOWN_COMMAND", "That command isn't in this campaign."),
+        Map.entry("NOTHING_QUEUED", "Nothing is queued."),
+        Map.entry("CANT_RESIST", "Not enough shifts to call in an expert."),
+        Map.entry("NO_PUZZLE", "No campaign is in progress."),
         // Contracts (design.md section 2.11); PROGRAM_NOT_OPEN is shared with launches.
         Map.entry("CONTRACT_ACTIVE", "You have an active contract: one at a time."),
         Map.entry("NOT_QUALIFIED", "You can't fly this one: unlock its line first."),

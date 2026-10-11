@@ -20,6 +20,7 @@ import de.mkoehler.launchwindow.rules.TraitEffects;
 import de.mkoehler.launchwindow.rules.TrainingProgress;
 import de.mkoehler.launchwindow.rules.Chemistry;
 import de.mkoehler.launchwindow.rules.Contracts;
+import de.mkoehler.launchwindow.rules.HandsOn;
 import de.mkoehler.launchwindow.rules.Intelligence;
 import de.mkoehler.launchwindow.rules.Personality;
 import de.mkoehler.launchwindow.rules.Poaching;
@@ -229,6 +230,17 @@ public final class HelpValues {
         v.put("intelligence.catchBase", whole(Intelligence.CATCH_BASE_PERCENT));
         v.put("intelligence.catchPerLevel", whole(Intelligence.CATCH_PER_LEVEL));
         v.put("intelligence.caughtPrestige", whole(Intelligence.CAUGHT_PRESTIGE));
+
+        // A campaign's shape is its level's; help quotes the first one shipped.
+        de.mkoehler.launchwindow.content.HandsOnLevel campaign = de.mkoehler.launchwindow.content.Decisions.standard()
+            .decisions().stream().map(de.mkoehler.launchwindow.content.Decisions.Decision::handsOn)
+            .filter(java.util.Objects::nonNull).findFirst().orElse(null);
+        v.put("handsOn.rounds", campaign == null ? "4" : whole(campaign.rounds()));
+        v.put("handsOn.slots", campaign == null ? "3" : whole(campaign.slots()));
+        v.put("handsOn.resist", campaign == null ? "1" : whole(campaign.resist()));
+        v.put("handsOn.failLow", whole(Math.round(HandsOn.MIN_FAIL * 100)));
+        v.put("handsOn.exceptional", whole(Math.round(HandsOn.EXCEPTIONAL * 100)));
+        v.put("handsOn.exceptionalGood", whole(Math.round(HandsOn.EXCEPTIONAL_GOOD_CHEMISTRY * 100)));
 
         v.put("contracts.listingTurns", whole(Contracts.LISTING_TURNS));
         v.put("contracts.flownPoints", "+" + whole(Contracts.RECORD_FLOWN_POINTS));

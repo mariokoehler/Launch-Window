@@ -242,6 +242,10 @@ public final class ScreenSnapshot {
             contractShots(folder, game);
             return;
         }
+        if ("handson".equals(System.getProperty("shots"))) {
+            handsOnShots(folder, game);
+            return;
+        }
         write(folder, "connect-default.png", new ConnectScreen(game), null);
         write(folder, "connect-connecting.png", filledConnect(game), screen -> screen.setBusy(true));
         write(folder, "connect-wrong-password.png", filledConnect(game), screen -> screen.applyLoginResult(
@@ -416,6 +420,103 @@ public final class ScreenSnapshot {
         outlookShots(folder, game);
         decisionShots(folder, game);
         contractShots(folder, game);
+        handsOnShots(folder, game);
+    }
+
+    /**
+     * The hands-on decision (ui-spec.md component 26, type 11, 2026-10-11): the banner and its
+     * confirmation, the campaign planning, a round's results, a fail waiting for an answer, the three
+     * result panels, the banner afterwards and in progress, the report's card and the hub.
+     */
+    private static void handsOnShots(File folder, LaunchWindowGame game) {
+        String hash = ContentPackHash.ofClasspath("content/early-era", ScreenSnapshot.class.getClassLoader());
+        GameInfoResponse info = GameInfoResponse.success("early-era", hash, List.of(), 23, true,
+            6 * 3_600_000L + 12 * 60_000L + 30_000L, 0L, null, List.of(), List.of(), 0);
+        PlayerSnapshot state = planningState(11, 25_000);
+        state.getMissionComponents().put("r7-vostok", new OwnedMissionComponent(57.2, 3.0));
+        SetSpecialist lead = specialist("s3", "Gleb Arkhipov", 41, 70, 52, 74, 20, 74, 30, 12);
+        lead.setAssignmentState(AssignmentState.ASSIGNED);
+        lead.setRdTargetComponentId("r7-vostok");
+        lead.setRdSlot(0);
+        state.getSetSpecialists().add(lead);
+        startSession(game, state, info);
+        PlayerSnapshot live = game.session().state();
+        de.mkoehler.launchwindow.content.ContentCatalog catalog = game.session().catalog();
+        de.mkoehler.launchwindow.content.Decisions decisions = de.mkoehler.launchwindow.content.Decisions.standard();
+        java.util.function.LongFunction<de.mkoehler.launchwindow.model.PendingDecision> offer = seed -> {
+            de.mkoehler.launchwindow.model.PendingDecision pending = de.mkoehler.launchwindow.model.PendingDecision
+                .offered("big-test-stand", "r7-vostok", 22, seed);
+            live.setPendingDecision(pending);
+            return pending;
+        };
+        offer.apply(7L);
+        write(folder, "handson-banner.png", new RndBoardScreen(game, RndBoardScreen.Board.ROCKET), null);
+        write(folder, "handson-confirm.png", new RndBoardScreen(game, RndBoardScreen.Board.ROCKET),
+            screen -> screen.openDecision("run", null));
+
+        de.mkoehler.launchwindow.rules.RdDecisions.decide(live, catalog, decisions, "run", null, null);
+        de.mkoehler.launchwindow.rules.RdDecisions.handsOn(live, catalog, decisions,
+            de.mkoehler.launchwindow.rules.RdDecisions.HandsOnStep.QUEUE, "make-firing");
+        write(folder, "handson-planning.png", new de.mkoehler.launchwindow.client.screen.HandsOnScreen(game), null);
+
+        // A seed whose round 1 leaves a fail waiting for an answer, and one with an exceptional result.
+        for (long seed = 1; seed < 500; seed++) {
+            offer.apply(seed);
+            de.mkoehler.launchwindow.rules.RdDecisions.decide(live, catalog, decisions, "run", null, null);
+            for (String command : List.of("make-firing", "sensor-sweep", "overtime")) {
+                de.mkoehler.launchwindow.rules.RdDecisions.handsOn(live, catalog, decisions,
+                    de.mkoehler.launchwindow.rules.RdDecisions.HandsOnStep.QUEUE, command);
+            }
+            de.mkoehler.launchwindow.rules.RdDecisions.handsOn(live, catalog, decisions,
+                de.mkoehler.launchwindow.rules.RdDecisions.HandsOnStep.CONFIRM, null);
+            if (live.getPendingDecision().handsOn().phase()
+                    == de.mkoehler.launchwindow.model.HandsOnState.Phase.AWAITING_RESIST) {
+                write(folder, "handson-fail.png", new de.mkoehler.launchwindow.client.screen.HandsOnScreen(game), null);
+                break;
+            }
+        }
+        for (long seed = 1; seed < 500; seed++) {
+            offer.apply(seed);
+            de.mkoehler.launchwindow.rules.RdDecisions.decide(live, catalog, decisions, "run", null, null);
+            for (String command : List.of("make-firing", "sensor-sweep", "overtime")) {
+                de.mkoehler.launchwindow.rules.RdDecisions.handsOn(live, catalog, decisions,
+                    de.mkoehler.launchwindow.rules.RdDecisions.HandsOnStep.QUEUE, command);
+            }
+            de.mkoehler.launchwindow.rules.RdDecisions.handsOn(live, catalog, decisions,
+                de.mkoehler.launchwindow.rules.RdDecisions.HandsOnStep.CONFIRM, null);
+            var puzzle = live.getPendingDecision().handsOn();
+            if (puzzle.phase() == de.mkoehler.launchwindow.model.HandsOnState.Phase.PLANNING && puzzle.results()
+                    .stream().anyMatch(slot -> slot.rolled() == de.mkoehler.launchwindow.model.HandsOnState.Roll
+                    .EXCEPTIONAL)) {
+                write(folder, "handson-round-done.png", new de.mkoehler.launchwindow.client.screen.HandsOnScreen(game),
+                    screen -> screen.showRound(1));
+                break;
+            }
+        }
+        write(folder, "handson-in-progress.png", new RndBoardScreen(game, RndBoardScreen.Board.ROCKET), null);
+        TurnReport report = TurnReport.build(live, live, List.of(), 22, catalog);
+        game.session().keepReport(report);
+        write(folder, "handson-report.png", new TurnReportScreen(game, report), null);
+        write(folder, "handson-hub.png", new SpaceComplexScreen(game), screen -> screen.hover(Hub.Place.VAB));
+
+        // The three endings.
+        String[][] endings = {{"BONUS", "bonus", "6", "8", "3", "12.3"}, {"SUCCESS", "success", "4", "5", "4", "6.2"},
+            {"FAILURE", "failure", "2", "5", "4", "0"}};
+        for (String[] ending : endings) {
+            de.mkoehler.launchwindow.model.HandsOnState finished = new de.mkoehler.launchwindow.model.HandsOnState(
+                java.util.Map.of("shift", 1, "firing", Integer.parseInt(ending[2]), "measurement",
+                    Integer.parseInt(ending[3]), "part", 0), 4, List.of(), List.of(), Integer.parseInt(ending[4]),
+                de.mkoehler.launchwindow.model.HandsOnState.Phase.FINISHED, 0, 9, 0.165, 0.15,
+                de.mkoehler.launchwindow.model.HandsOnState.Result.valueOf(ending[0]));
+            double gain = Double.parseDouble(ending[5]);
+            live.setPendingDecision(new de.mkoehler.launchwindow.model.PendingDecision("big-test-stand", "r7-vostok",
+                22, 7L, true, "run", ending[1], null, null, gain == 0 ? List.of()
+                : List.of(new de.mkoehler.launchwindow.model.DecisionEffect(
+                    de.mkoehler.launchwindow.model.DecisionEffect.Kind.RELIABILITY, gain, 0, null)), finished));
+            write(folder, "handson-result-" + ending[1] + ".png",
+                new de.mkoehler.launchwindow.client.screen.HandsOnScreen(game), null);
+        }
+        write(folder, "handson-banner-after.png", new RndBoardScreen(game, RndBoardScreen.Board.ROCKET), null);
     }
 
     /**

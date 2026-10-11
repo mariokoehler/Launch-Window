@@ -642,8 +642,9 @@ public final class SpaceComplexScreen extends SessionScreen {
                     below -= idleName.getHeight() + 2f;
                 }
                 if (hover.place() == decisionPlace()) {
-                    String waiting = "A decision waiting: " + ContentNames.of(session.state().getPendingDecision()
-                        .componentId());
+                    String waiting = (session.state().getPendingDecision().handsOnInProgress()
+                        ? "Hands-on in progress: " : "A decision waiting: ")
+                        + ContentNames.of(session.state().getPendingDecision().componentId());
                     drawCentered(batch, idleShadow, waiting, hover.labelX() * scaleX + 1.5f, below - 1.5f,
                         parentAlpha);
                     drawCentered(batch, idleName, waiting, hover.labelX() * scaleX, below, parentAlpha);
