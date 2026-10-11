@@ -2474,6 +2474,9 @@ bot.
     9. *Intelligence tip:* adopt a rival's approach, right more often the higher the Intelligence
        Office's level.
     10. *Story arcs:* a good outcome opens a follow-up in a later quiet season, with higher stakes.
+    11. *Hands-on* (the user's idea, 2026-10-11, from the "Probe Command Minigame" spec doc; specified,
+        not built): instead of options, a short resource puzzle the player can play, or leave to the
+        team. Specified below and in `ui-spec.md` component 26, type 11.
   - **Specified** as `ui-spec.md` component 26 (2026-10-10), with G11 for the server; **mocked up** the same
     day on the canvas `Launch Window — R&D decisions` (the choices are in component 26; the look confirmed by
     the user the same day) and **built** the same day: all ten types, 23 decisions, the rules, the client and
@@ -2481,6 +2484,51 @@ bot.
     (decisions shorten the bots' Moon race by about 13 seasons).
   - **Build:** the type a field in a content file (story, options, what shows in advance, effect,
     default), one resolver per type. Variety isn't a worry: other lull ideas will join it (user).
+- **The hands-on decision** (type 11; the user's idea, 2026-10-11; every number unconfirmed): a
+  turn-based resource puzzle with a push-your-luck step, adapted from the user's "Probe Command
+  Minigame" spec (the Claude Docs page of that name) from a probe in orbit to a ground test campaign.
+  The mechanics come from another game's minigame; mechanics are free to borrow, but every name,
+  number, text and drawing here is our own (the spirit of §1.2's rule).
+  - **The choice:** the banner offers "Run it yourself" (opens the puzzle) and "Leave it to the team"
+    (the default: nothing happens). Starting commits: from then on the decision settles from the
+    puzzle, and an unfinished puzzle settles as it stands when the turn resolves (its remaining rounds
+    spent empty), so quitting after bad rolls never falls back to the default.
+  - **The puzzle** (the spec's rules, kept): four resources, a fixed command list, a few rounds of up to
+    three commands each. **Plan:** queue commands; their inputs are paid at once, their outputs only
+    at execution, so outputs can't pay for another command the same round; undo and reset refund.
+    **Execute:** commands resolve in slot order, each rolling fail (primary output -1, never below
+    0), normal, or exceptional (+1); on a fail the player may pay 1 of the first resource to turn it
+    normal. Secondary outputs always pay. The recharge command (no input, +1 of the first resource)
+    never rolls and uses a slot. Meeting the objective when the rounds run out is a success, the bonus
+    objective a bonus success (ending the puzzle early), anything less a failure. Held amounts count,
+    not totals produced.
+  - **Ground theme for a rocket's test campaign** (reference level, unconfirmed): *Shifts* (the
+    spec's power: pays the basic commands and for resisting a failure), *Firings* and *Measurements*
+    (the objective), *Spare parts* (the intermediate). Three groups of three commands, each group's
+    first costing only shifts, the others costing the other groups' resources; plus *Overtime* (+1
+    shift). Start 6 shifts; 4 rounds of 3; objective 3 firings and 4 measurements, bonus 6 and 7, as
+    in the spec's reference level. A payload's campaign is the same structure with its own words
+    (*Bench runs*, *Measurements*, *Spare parts*). Command names are our own and live in
+    `decisions.json` with the level.
+  - **The team sets the odds** (unconfirmed): the fail chance is 35 % less a quarter of the best
+    team member's skill in the component's skill, never under 10 %; the exceptional chance is 15 %,
+    20 % with good chemistry on the team; the rest normal. Resisting reads as "call in an expert". A
+    component with nobody on it can't offer the type.
+  - **Rewards in seasons of R&D gain** (as the other types): bonus success about three seasons' gain,
+    success about one and a half, failure nothing. Close to a right knowledge answer at best, so the
+    puzzle is a choice, not a duty: a player who never plays it isn't behind.
+  - **Server-authoritative:** the puzzle's state lives in the open decision (`PendingDecision`), and
+    each step (queue, undo, reset, confirm, resist, accept) is a journaled action the server applies at
+    once and answers with the new state. The rolls come from the decision's own seed and the step's
+    index, never sent to the client (`withoutSeed`), so a player can't preview the rolls offline, and
+    a redone turn replays the same puzzle. A confirm runs its round up to the first fail that waits on
+    a resist choice. The rules are a pure state machine in `core` (`rules.HandsOn`), the client's
+    screen only draws it (G7).
+  - **Levels are authored, not generated:** a handful per component kind, each checked in a test by a
+    search over all-normal play (the objective must be reachable, the bonus too); difficulty may rise
+    with the component's era later.
+  - **How often:** one type among the eleven, drawn like the others, so a few times a game; four rounds
+    of three commands take a few minutes, fine now and then, tiring every turn.
 
 **Front pages for the Firsts** (the user's idea, 2026-10-09, not designed yet): when an agency
 makes one of the great Firsts (satellite in orbit, human in space, human in orbit, crewed lunar

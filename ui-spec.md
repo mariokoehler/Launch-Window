@@ -992,6 +992,40 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
         firing in Spring went clean. The engineers want to try it at full thrust."). Higher stakes both
         ways. An arc ends after two or three steps, or when a step goes badly.
 
+    11. **Hands-on** *(the user's idea, 2026-10-11, `design.md` §5, Backlog; specified, not mocked up)*.
+        The banner's options are **Run it yourself** and **Leave it to the team** (the default,
+        nothing happens); its eyebrow reads "DECISION · HANDS-ON". Under the story, one caption line:
+        "Up to 4 rounds of 3 commands · objective 3 firings, 4 measurements · bonus 6 and 7", and the
+        odds the team gives ("Kozlov leads: 17 % of steps fail, 15 % go exceptionally well"). Run it
+        yourself asks once ("Once started, the result counts, finished or not") and opens the
+        **Hands-on screen**:
+        - **Header:** breadcrumb "... › R&D › <component> › Hands-on", eyebrow "HANDS-ON · <COMPONENT>",
+          the title (the decision's headline), and right of it "Round 2 of 4".
+        - **Objective bar** across the top, in a card: the objective as chips (checkbox, the resource's
+          icon, held amount ▸ target), the bonus as a second row ("Bonus: about 3 seasons' R&D"), and
+          the other resources' counters (shifts, spare parts). The checkboxes tick live.
+        - **Command table** on the left: rows grouped by the resource each group makes, a group tile at
+          each group's left (the resource's icon on its colour), columns Command, In, ›, Out; amounts as
+          the resource's icon with a number above 1. A row the player can't pay for now is muted with a
+          red left edge and doesn't click; a click queues it. Overtime sits last, alone.
+        - **Queue panel** on the right: "Commands 1 / 3" with Undo and Reset, three numbered slots (a
+          queued command's name and group tile), the odds line, and the footer "Round 2 of 4" with the
+          commit-coloured **Confirm commands** button (the screen's one big action). Confirming with
+          empty slots is allowed.
+        - **Execution:** the slots resolve in order, each turning to its outcome: a red "Failed −1", a
+          navy "Done", a green "Exceptional +1", the amounts then counted into the bar. On a fail with
+          shifts left, the slot asks: **Call in an expert (1 shift)** or **Accept**; execution waits.
+          With no shifts the fail just applies.
+        - **Result panel** when the rounds run out or the bonus is met: "Bonus success", "Success" or
+          "Not enough", the final amounts against the targets, the effect in seasons of R&D, and
+          "Back to the R&D board", where the banner shows the outcome as the other types do.
+        - **Colours:** each resource gets a colour from the existing tokens (shifts gold, firings
+          danger-red, measurements navy, spare parts success-green), no new tokens; four new icons
+          (shift, firing, measurement, spare part) for the UI Asset Sheet.
+        - Leaving the screen mid-puzzle is allowed: the state is the server's, the banner reads
+          "Hands-on in progress · round 2 of 4 · Continue", and an unfinished puzzle settles as it
+          stands when the turn resolves.
+
     **Help:** a "Decisions" topic, linked from the banner's eyebrow.
 
     *Mocked up (2026-10-10, canvas `Launch Window — R&D decisions`; confirmed by the user the same day):* the board with
@@ -2579,6 +2613,17 @@ current state alone. Each is an M5 task.
   lapsed decision (fields only added); a content file of decisions by type, outside the hashed pack
   like the stories; and the playout bots taught to decide, to measure how often decisions come.
 
+- **G13. The hands-on decision (component 26, type 11, 2026-10-11).** Content: a hands-on decision's
+  level in `decisions.json` (resources and their names, commands with inputs, outputs and primary
+  output, rounds, slots, objective, bonus, start); a test searching each level's all-normal play.
+  Rules: `rules.HandsOn`, a pure state machine (plan, execute, awaiting a resist, finished) over the
+  puzzle state kept in `PendingDecision`, rolls from the decision's seed and the step index, odds from
+  the team, rewards in seasons of R&D gain; settling an unfinished puzzle at the resolution. Server: a
+  `HandsOnAction` (one action per step: queue, undo, reset, confirm, resist, accept), registered last in
+  `MessageRegistry` and the journal's subtypes, refused out of phase. Client: the Hands-on screen, the
+  banner's "in progress" state, four icons. Bots: a playout bot that plays it (greedy on all-normal
+  play) to size the rewards.
+
 - **G12. Commercial contracts (§4.17, component 27, 2026-10-11). Built the same day**, with two
   changes: the board is settled before the season passes and saved in each agency's state, so there
   is no board message (`design.md` §2.11, Storage), and the unlock sets are their own hashed file,
@@ -2609,6 +2654,11 @@ current state alone. Each is an M5 task.
 marker (component 27): 12 artboards, choices listed under each. New for `Theme.java`: the contract
 icon (two files, on the UI Asset Sheet), the contract badge, the listing card and its variants, the
 switch, the contract stepper, the report's Contracts card and cell. No new colour tokens.
+
+**Next mockup (2026-10-11):** the hands-on decision (component 26, type 11): the banner with its two
+options, the Hands-on screen planning (one command queued, rows the player can't pay for), executing
+(a fail asking for an expert, an exceptional), the three result panels, and the banner's "in progress"
+state. A new canvas `Launch Window — Hands-on`; four new icons for the UI Asset Sheet.
 
 **Next new screen (user, 2026-10-09):** a newspaper front page for the great Firsts, shown on
 login before the turn report (`design.md` §5, Backlog). Not specified yet.
