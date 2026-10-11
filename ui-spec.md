@@ -2519,7 +2519,10 @@ credited through the cascade alike.
 **Layout** (1920 x 1080). *Decided while specifying (unconfirmed):* a full portrait page would put the
 body text near 10 px; the page is the top half of a broadsheet, "above the fold", landscape:
 - **Backdrop:** the hub, dimmed by a navy scrim (mock: `#0d1b33` at 80 %), so the player knows where
-  they are.
+  they are. On login the page comes before the hub screen: draw the hub's art for the current season
+  and time of day under it, or, if that isn't loaded yet, the page frame's blueprint texture. Only
+  checked on Spring noon so far; check the brightest (Soviet winter noon) and darkest (winter night)
+  variants as §1 asks.
 - **The page:** 1440 x 900 at (240, 40), the paper art (`paper.jpg`) with a soft drop shadow (mock:
   black, 60 %, 8 px down, 28 px blur). Content inside a 40 px margin (x 280 to 1640). All type on the
   page is `Theme.INK`.
@@ -2528,10 +2531,15 @@ body text near 10 px; the page is the top half of a broadsheet, "above the fold"
   page's seed). Right: "EXTRA", letter-spaced, and "Special edition" in italics. The masthead
   (`masthead.png`, drawn at 761 x 108) centered between them.
 - **Folio line:** a 4 px rule and a 1 px rule under it, then "VOL. <n> · No. <turn>" left (the volume
-  is the game year counted from the start year, the number is the game turn), the season letter-spaced
+  is the game year counted from the start year, the number is the game turn; the mock's "VOL. IV" is a
+  placeholder, Spring 1961 from a Winter 1955 start is VOL. VII), the season letter-spaced
   in the middle ("SPRING 1961"), "FIVE CENTS" right, a 1 px rule under it.
 - **Headline:** the story's headline in capitals, bold, 80 px, centered, one line. If it's wider than
-  1360 px, two lines; if two lines still don't fit, the story's short form (`headlineShort`).
+  1360 px, two lines; if two lines still don't fit, the story's short form (`headlineShort`). The mock's
+  one line relies on Times Bold squeezed to 88 %; Old Standard TT unsqueezed is wider, so expect two
+  lines to be the usual case, pushing the deck and the lower half down about 90 px (the lower half
+  then loses that height: the photo shrinks with it, keeping its aspect). *Unconfirmed:* a condensed
+  OFL face instead would keep one line.
 - **Deck:** the subheadline, italic 25 px, centered, then a 1 px rule across.
 - **Lower half, three columns:** the photo (640 x 440, `ui/frontpage/<first-id>.jpg`) at the left with
   its caption under it (italic 14 px, two lines at most); then two text columns of 336 px, 24 px apart,
@@ -2540,8 +2548,8 @@ body text near 10 px; the page is the top half of a broadsheet, "above the fold"
   teaser lines in italics). Column two: the rest of the article and, at its foot, the race box.
 - **Body type:** 16 px on 22 px, justified, a 14 px first-line indent, 4 px between paragraphs. The
   article flows from column one to column two (paragraphs move whole; a paragraph that doesn't fit in
-  column one starts column two). A story's paragraphs must fit both columns at the narrowest agency
-  names; `FrontPagesTest` checks the length (below).
+  column one starts column two). A story's paragraphs must fit both columns at the longest agency,
+  director and crew names allowed; `FrontPagesTest` checks the length (below).
 - **The race box** ("THE RACE SO FAR"): a 1 px box, one row per First in the pack: the First's name
   (from `strings.json`) left, who made it and when right in italics ("Kestrel Space Directorate ·
   Fall 1957"; ties "A and B · Spring 1961"), "still open" for the rest. It shows the race as of this
@@ -2795,7 +2803,10 @@ current state alone. Each is an M5 task.
   of the game (a few KB; gzipped JSON like the report if it ever grows), fetched after login and after
   a `TurnResolvedNotice`. Client and server are rebuilt together. Content: `front-pages.json` and a
   `FrontPagesTest` in the `EventStoriesTest` mould: an entry for every First, two stories each, every
-  token known, every paragraph set fits the two columns at the longest test names.
+  token known, every paragraph set fits the two columns at the longest names allowed. **There is no
+  name length limit today** (`RequestDispatcher` only refuses blank names): add one when claiming a
+  slot (*unconfirmed:* agency 32 characters, director and astronaut names as `PersonnelNames` makes
+  them), or the test has nothing to measure against.
   *Unconfirmed:* printing the crew's names tells rivals who flew. That's public news, but it names
   astronauts the Intelligence Office's personnel file would otherwise have to find.
 
