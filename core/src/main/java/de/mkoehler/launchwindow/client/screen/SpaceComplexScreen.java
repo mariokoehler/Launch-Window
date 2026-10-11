@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.Timer;
 import de.mkoehler.launchwindow.client.ClientSession;
 import de.mkoehler.launchwindow.client.connect.ServerResult;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
@@ -49,6 +50,8 @@ import java.util.Locale;
 public final class SpaceComplexScreen extends SessionScreen {
 
     /** The hover highlight: white at 18% for fill and outline alike, hard-edged (decided). */
+    /** How long entering the game waits for the front pages before opening the report without them. */
+    private static final float PAGES_WAIT_SECONDS = 4f;
     private static final Color HIGHLIGHT = new Color(1f, 1f, 1f, 0.18f);
     private static final Color LABEL_SHADOW = new Color(0f, 0f, 0f, 0.65f);
     private static final Color DIRECTOR = new Color(1f, 1f, 1f, 0.8f);
@@ -132,7 +135,23 @@ public final class SpaceComplexScreen extends SessionScreen {
         root.add(stack).grow();
         rebuild();
         if (unreadReport && !pagesShown) {
+            // The pages come first, but a slow server mustn't hold up the report: after a few
+            // seconds without an answer the report opens, and a late answer is dropped.
+            boolean[] settled = {false};
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    if (!settled[0] && isShowing()) {
+                        settled[0] = true;
+                        afterPages(true);
+                    }
+                }
+            }, PAGES_WAIT_SECONDS);
             fetchFrontPages(() -> {
+                if (settled[0]) {
+                    return;
+                }
+                settled[0] = true;
                 List<FrontPage> unseen = FrontPageScreen.unseen(game);
                 if (unseen.isEmpty()) {
                     afterPages(true);
@@ -179,7 +198,7 @@ public final class SpaceComplexScreen extends SessionScreen {
                 session.update(result);
             }
             stateChanged();
-            openLatestReport(null);
+            withFrontPages(() -> openLatestReport(null));
         });
     }
 

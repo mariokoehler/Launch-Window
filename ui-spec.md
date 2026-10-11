@@ -2520,9 +2520,9 @@ credited through the cascade alike.
 body text near 10 px; the page is the top half of a broadsheet, "above the fold", landscape:
 - **Backdrop:** the hub, dimmed by a navy scrim (mock: `#0d1b33` at 80 %), so the player knows where
   they are. On login the page comes before the hub screen: draw the hub's art for the current season
-  and time of day under it, or, if that isn't loaded yet, the page frame's blueprint texture. Only
-  checked on Spring noon so far; check the brightest (Soviet winter noon) and darkest (winter night)
-  variants as §1 asks.
+  and time of day under it, or, if that isn't loaded yet, the page frame's blueprint texture. Checked
+  on the brightest (Soviet winter noon) and darkest (winter night) variants as §1 asks (shots
+  `frontpage-winter-noon.png`, `frontpage-winter-night.png`, 2026-10-11).
 - **The page:** 1440 x 900 at (240, 40), the paper art (`paper.jpg`) with a soft drop shadow (mock:
   black, 60 %, 8 px down, 28 px blur). Content inside a 40 px margin (x 280 to 1640). All type on the
   page is `Theme.INK`.
@@ -2622,8 +2622,12 @@ from `assets/content/front-pages.json` (`content.FrontPages`). Shots `frontpage-
 - **Joining late:** pages printed before the turn the player joined in count as seen, from their own
   season count (`ClientSession.joinedTurn`).
 - **When it shows:** on login the hub fetches the pages; unseen ones replace it, then a fresh hub opens
-  the unread report as before. While playing, a resolved turn's refresh shows the new pages over the
-  current screen and comes back to it, then toasts as before. A failed fetch shows nothing.
+  the unread report as before. If the server hasn't answered after 4 seconds the report opens without
+  them (a late answer is dropped; the pages wait for the next login), and a player who leaves the hub
+  before the answer gets neither until then. While playing, a resolved turn's refresh shows the new
+  pages over the current screen and comes back to it, then toasts as before; dev mode's "Resolve turn
+  now" shows them before the report. The page screen never refreshes itself. A failed fetch shows
+  nothing.
 - **Reopening:** the race tab's First tags (declared goals only), the Achievements tab's "First in the
   game" tag and the turn report's "First in the game!" chip open the page, with a tooltip saying so.
 - **New in `Theme`:** `FontFile` Old Standard Bold and Libre Caslon Regular and Italic (static
@@ -2871,8 +2875,8 @@ switch, the contract stepper, the report's Contracts card and cell. No new colou
 Asset Sheet), the objective chip, the bonus row, the muted command row, the queue slot and its badges,
 the odds bar, the result panel. No new colour tokens.
 
-**Mocked up (2026-10-11, in Photocraft, `assets-raw/frontpage/mockup/`):** the front page for the
-great Firsts (§4.18), shown on login before the turn report. The first screen mocked up outside Claude
+**Mocked up and built (2026-10-11, in Photocraft, `assets-raw/frontpage/mockup/`):** the front page for
+the great Firsts (§4.18), shown on login before the turn report. The first screen mocked up outside Claude
 Design: the art is generated with ComfyUI and the page laid out in Photocraft over the hub. New for
 `Theme.java`: two fonts (Old Standard TT, Libre Caslon Text) and perhaps a scrim token; no new colours.
 

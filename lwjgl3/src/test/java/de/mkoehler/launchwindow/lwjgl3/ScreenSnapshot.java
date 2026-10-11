@@ -484,6 +484,22 @@ public final class ScreenSnapshot {
             List.of("Consolidated Rocket Works Bureau", "Northern Lights Space Directorate"));
         game.session().keepFrontPages(List.of(folded));
         write(folder, "frontpage-long-names.png", new FrontPageScreen(game, List.of(folded), () -> { }, false), null);
+
+        // The scrim over the brightest hub art (Soviet winter noon) and the darkest (winter night).
+        startSession(game, me, GameInfoResponse.success("standard", hash, List.of(), 25, true, 6 * 3_600_000L, 0L,
+            null, List.of(), List.of(), 0));
+        game.session().keepFrontPages(all);
+        write(folder, "frontpage-winter-noon.png", new FrontPageScreen(game, List.of(space), () -> { }, true), null);
+        long later = System.currentTimeMillis();
+        while (game.hubClock().current() != Hub.TimeOfDay.NIGHT) {
+            later += 24 * 3_600_000L;
+            game.hubClock().enter(later);
+        }
+        write(folder, "frontpage-winter-night.png", new FrontPageScreen(game, List.of(space), () -> { }, true), null);
+        while (game.hubClock().current() != Hub.TimeOfDay.NOON) {
+            later += 24 * 3_600_000L;
+            game.hubClock().enter(later);
+        }
     }
 
     /**

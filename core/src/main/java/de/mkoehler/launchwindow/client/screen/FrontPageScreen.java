@@ -74,6 +74,7 @@ public class FrontPageScreen extends SessionScreen {
     private final Runnable done;
     private final boolean reopened;
     private int index;
+    private int fontGeneration;
 
     /**
      * Shows pages one after another.
@@ -90,6 +91,23 @@ public class FrontPageScreen extends SessionScreen {
         this.reopened = reopened;
         root.setBackground(ui.solid(Theme.NAVY));
         rebuild();
+    }
+
+    /**
+     * Never refreshes on its own: the screen that showed the pages refreshes once they're done, so a
+     * turn resolving meanwhile can't open more pages over these.
+     */
+    @Override
+    protected void refresh() {
+    }
+
+    @Override
+    public void render(float delta) {
+        if (fontGeneration != ui.fonts().generation()) {
+            // The columns and the headline's size were measured with the old metrics: lay out again.
+            rebuild();
+        }
+        super.render(delta);
     }
 
     /**
@@ -131,6 +149,7 @@ public class FrontPageScreen extends SessionScreen {
 
     @Override
     protected void rebuild() {
+        fontGeneration = ui.fonts().generation();
         root.clearChildren();
         FrontPage page = pages.get(index);
         Image art = new Image();
