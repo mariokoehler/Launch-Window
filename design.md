@@ -2484,7 +2484,8 @@ bot.
     (decisions shorten the bots' Moon race by about 13 seasons).
   - **Build:** the type a field in a content file (story, options, what shows in advance, effect,
     default), one resolver per type. Variety isn't a worry: other lull ideas will join it (user).
-- **The hands-on decision** (type 11; the user's idea, 2026-10-11; every number unconfirmed): a
+- **The hands-on decision** (type 11; the user's idea, 2026-10-11; mocked up the same day, canvas
+  `Launch Window — Hands-on`; every number unconfirmed): a
   turn-based resource puzzle with a push-your-luck step, adapted from the user's "Probe Command
   Minigame" spec (the Claude Docs page of that name) from a probe in orbit to a ground test campaign.
   The mechanics come from another game's minigame; mechanics are free to borrow, but every name,

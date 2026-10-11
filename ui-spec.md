@@ -992,7 +992,7 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
         firing in Spring went clean. The engineers want to try it at full thrust."). Higher stakes both
         ways. An arc ends after two or three steps, or when a step goes badly.
 
-    11. **Hands-on** *(the user's idea, 2026-10-11, `design.md` §5, Backlog; specified, not mocked up)*.
+    11. **Hands-on** *(the user's idea, 2026-10-11, `design.md` §5, Backlog; mocked up 2026-10-11)*.
         The banner's options are **Run it yourself** and **Leave it to the team** (the default,
         nothing happens); its eyebrow reads "DECISION · HANDS-ON". Under the story, one caption line:
         "Up to 4 rounds of 3 commands · objective 3 firings, 4 measurements · bonus 6 and 7", and the
@@ -1025,6 +1025,25 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
         - Leaving the screen mid-puzzle is allowed: the state is the server's, the banner reads
           "Hands-on in progress · round 2 of 4 · Continue", and an unfinished puzzle settles as it
           stands when the turn resolves.
+        - **Mocked up (2026-10-11)** on the canvas `Launch Window — Hands-on` (the Artifact tool's list finds
+          it), a Soviet agency in 1960 with the R-7 (Vostok) and Gleb Arkhipov leading: the banner open, the
+          confirmation, planning in round 1, executing in round 2 (a fail asking for an expert, and an
+          exceptional result), the three result panels, the banner afterwards and in progress, and the four
+          icons. Choices, all **unconfirmed**: the caption line sits in a white panel under the story; "Run it
+          yourself" says what the objective and bonus are worth. The confirmation adds "never a loss". The
+          header's right side is a "Round 1 of 4" chip. The objective chips show a "+2 on execution" line for
+          queued outputs; the counters show held amounts after queued inputs ("6 at the start · 2 paid"). A
+          row the player can't pay for says what it is short of ("Short of 1 measurement"). The counter reads
+          "Commands 1 / 3" with one queued. Slot badges: Queued, Done, Failed −1, Exceptional +1, Waiting, and
+          "Done · no roll" for Overtime; a failed slot says what it makes instead and holds Accept and "Call in
+          an expert (1 shift)". During execution the table greys and Confirm reads "Executing…"; after a round,
+          "Round 2 done" and "Plan round 3" (no stop button: leaving is the back button). The odds line has a
+          three-segment bar. The result panel has a 4 px top accent (gold, success, danger), a table of held
+          against objective and bonus, the effect with its reliability, and "Back to the R&D board". Afterwards
+          the banner uses the decision outcome ("Decided · Run it yourself"); in progress, a gold row with the
+          round, the objective so far and Continue. Icons `res_shift` (a hard hat), `res_firing` (a nozzle and
+          plume), `res_measurement` (a gauge), `res_spare_part` (a hex nut), on the UI Asset Sheet; small icons
+          on white use gold-text for shifts. No new colour tokens.
 
     **Help:** a "Decisions" topic, linked from the banner's eyebrow.
 
@@ -2655,10 +2674,10 @@ marker (component 27): 12 artboards, choices listed under each. New for `Theme.j
 icon (two files, on the UI Asset Sheet), the contract badge, the listing card and its variants, the
 switch, the contract stepper, the report's Contracts card and cell. No new colour tokens.
 
-**Next mockup (2026-10-11):** the hands-on decision (component 26, type 11): the banner with its two
-options, the Hands-on screen planning (one command queued, rows the player can't pay for), executing
-(a fail asking for an expert, an exceptional), the three result panels, and the banner's "in progress"
-state. A new canvas `Launch Window — Hands-on`; four new icons for the UI Asset Sheet.
+**Mocked up (2026-10-11, canvas `Launch Window — Hands-on`):** the hands-on decision (component 26, type
+11): 8 artboards, choices listed under type 11. New for `Theme.java`: four resource icons (on the UI
+Asset Sheet), the objective chip, the bonus row, the muted command row, the queue slot and its badges,
+the odds bar, the result panel. No new colour tokens.
 
 **Next new screen (user, 2026-10-09):** a newspaper front page for the great Firsts, shown on
 login before the turn report (`design.md` §5, Backlog). Not specified yet.

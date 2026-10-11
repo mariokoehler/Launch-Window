@@ -96,7 +96,8 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
 - **The hands-on decision is specified** (the user's idea, 2026-10-11, from their "Probe Command
   Minigame" spec doc; `design.md` §5, Backlog; `ui-spec.md` component 26, type 11, and G13): an
   eleventh R&D decision type, a resource puzzle the player can play or leave to the team, played
-  step by step against the server. Next is the mockup session; every number is unconfirmed.
+  step by step against the server. Mocked up on the canvas `Launch Window — Hands-on` (2026-10-11);
+  every number is unconfirmed.
 - **Commercial contracts are built** (the user's idea, 2026-10-11, `design.md` §2.11, `ui-spec.md`
   §4.17 and component 27, from the canvas `Launch Window — Contracts`): a shared marketplace settled
   once a turn (`rules.ContractMarket`, `market/turn-N.json`), tiers by track record, money instead of
