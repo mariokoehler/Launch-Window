@@ -95,7 +95,7 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   root before every turn, and `TurnRollback` to undo turns and redo them with a fixed build.
 - **Commercial contracts are designed** (the user's idea, 2026-10-11, `design.md` §2.11, `ui-spec.md`
   §4.17 and component 27): a shared marketplace, tiers by track record, money instead of prestige.
-  Next is the mockup session; every number is unconfirmed.
+  Mocked up on the canvas `Launch Window — Contracts` (2026-10-11); every number is unconfirmed.
 
 ## How we work
 

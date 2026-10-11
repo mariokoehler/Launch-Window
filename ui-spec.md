@@ -1073,8 +1073,7 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       the Moon race from 151 to 138 seasons: a balance signal for the play test.
     - Shots `decision-*.png`.
 
-27. **Contract marker** *(the user's idea, 2026-10-11, for `design.md` §2.11; specified, not mocked
-    up)*. Shows where commercial contracts come from: which flights open a contract line, and which
+27. **Contract marker** *(the user's idea, 2026-10-11, for `design.md` §2.11; mocked up 2026-10-11)*. Shows where commercial contracts come from: which flights open a contract line, and which
     flight a contract flies. One small icon of our own (a signed document with a seal; new, for the
     UI Asset Sheet), in two states:
     - **Unlock flight** (outline icon) on every configuration card in a program's unlock set, until
@@ -1094,6 +1093,17 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       contract is active *is* the contract flight: Assemble shows the badge and "This launch flies
       your contract for [client]" above the confirm button, with no toggle.
     - The numbers in every tooltip come from the rules' constants (G7), never typed in.
+    - **Mocked up (2026-10-11)** on the canvas `Launch Window — Contracts` (artboards 8 and 8b), all
+      **unconfirmed**: the icon is ours (24 px grid, 2 px round strokes: a page with a folded corner,
+      two lines, a signature, a round seal with two ribbons), as `contract_unlock` (outline, navy) and
+      `contract_flight` (filled, used in gold); both are on the UI Asset Sheet, whose SVG source goes into
+      `make_ui_icons.py` (the filled one knocks its lines out with a mask). It sits right of the
+      configuration's name at 20 px; a flown unlock flight adds an 11 px green tick badge, bottom
+      right. The unlock tooltip lists the set with a tick or an empty circle per flight. The program
+      card line uses the outline icon until unlocked, then the gold one with "unlocked" in green. The
+      badge is gold with navy text and icon. On Assemble the badge sits right of the title, the fee
+      box (gold-tinted) takes the prestige's place under "Instead of prestige" with the window under
+      it, and the gold line "This launch flies your contract for [client]" sits above the launch row.
 
 ---
 
@@ -2280,7 +2290,7 @@ left, and never the rival's person, whose id means nothing here; `PoachTexts.pag
 and Mission Control get the mockup's **"Set otherwise"** filter chip, shown once someone is set
 otherwise, and the Retention strip's **"Show them"** link switches to it.
 
-### 4.17 Contracts *(specified 2026-10-11 for `design.md` §2.11; not mocked up)*
+### 4.17 Contracts *(specified 2026-10-11 for `design.md` §2.11; mocked up 2026-10-11)*
 **Purpose:** the commercial marketplace: see what clients offer, apply for one contract a turn,
 follow the active contract. Contracts pay money, not prestige. Rules and every number in `design.md`
 §2.11 (all unconfirmed); the screen reads them from the rules' constants (G7). One name for both
@@ -2337,6 +2347,41 @@ of a program: look for the contract icon on its flights." With a line unlocked b
 **For the mockup:** active contract in flight; one listing applied for; a dimmed listing with each
 reason; the move confirmation; the turn report's card in its four states; the Headquarters card in
 its three states; component 27 on a configuration card (both states) and on a program card.
+
+**Mocked up (2026-10-11)** on the canvas `Launch Window — Contracts` (the Artifact tool's list finds
+it), a NASA agency in Summer 1963 with the contract awarded and not yet flown, and in Winter 1962 with
+an application out: the screen in both, the contract card's other states, dimmed listings (one per
+reason) beside a Soviet listing, the three dialogs, both empty states, the turn report with its card
+and strip cell in six states, Headquarters with the fourth card in three states and the hub dot, and
+component 27 (below). Numbers are the brief's placeholders. Choices, all **unconfirmed**:
+- **Your contract:** the category art, "Tier 1 of 3" as a gold badge, the client and line, the fee,
+  the launch cost now and the window as three figures, then a stepper (awarded, scheduled, flying,
+  paid). The button follows the state: Plan the flight, Open the mission plan, Follow it in Mission
+  Control. Only the window's last season turns red. With none, three short rules and "Help: Contracts".
+- **Your record:** a table (line, flown, failed, lapsed, record, score now); the score has a dotted
+  underline and a navy tooltip (weakest component, record, score, "Crew and controllers don't
+  count"). A line whose program is closed shows "Open Mercury" as its score.
+- **The board:** four cards a row, "On offer · 4 · 3 you can fly" over it with "Only what I can fly" on
+  the right (a new switch). Cards: the line as a navy chip on the art, the client as an eyebrow, the
+  title, the story, three tier boxes, "Your fee at each tier · launch cost now", the Flies and Posted
+  lines, and a foot with "Applications are sealed" and Apply. **Dimmed** (greyscale art, muted text)
+  means you can't fly it; a listing blocked only by the active contract keeps its look and swaps the
+  button for the reason. Reason icons: lock, open_programs, document. **Applied:** a 1.5 px navy
+  border, a 3 px gold top accent, a gold "Applied" badge, "Your application · decided when the turn
+  resolves" and a red Withdraw.
+- **Dialogs:** the apply confirmation adds the score now and "Pays money only: no prestige, not a
+  repeat"; the move confirmation's buttons are "Keep Transatlantic relay" and "Move it"; the
+  two-programs picker shows each flight's rocket, launch cost, fees and score, then "Next: the terms".
+- **Report:** a seventh strip cell, "Contracts", and a card with a 3 px left accent per outcome (gold
+  awarded, green paid, navy refunded, red lapsed, muted missed out); a sixth state for an application
+  whose program closed. Paid shows the profit and the record's change. The news line lists winners
+  alphabetically ("Orbital Corp. and Pan-Am Space"), plus a line for new listings. The budget gains a
+  Contracts line. With a decision waiting too, the strip needs a rule (an eighth cell, or one shared).
+- **Headquarters:** the card's eyebrow counts the board; a state row above its button (gold-tinted
+  with a dot for new offers, plain for applied and active). The hub dot is component 26's, one dot for
+  both reasons with both lines on hover.
+- **Worth a look in `design.md` §2.11:** the fee follows the launch cost, so of two programs in a line
+  the dearer one pays more profit at the same margin.
 
 ---
 
@@ -2528,8 +2573,10 @@ current state alone. Each is an M5 task.
 4. **The rest:** Astronaut Complex (§4.9), Public Affairs Office (§4.10), Museum
    (§4.11), settings (§4.12), game result (§4.13).
 
-**Next mockup (2026-10-11):** Contracts (§4.17) and the contract marker (component 27), on a new
-canvas `Launch Window — Contracts`. One new icon (component 27) for the UI Asset Sheet.
+**Mocked up (2026-10-11, canvas `Launch Window — Contracts`):** Contracts (§4.17) and the contract
+marker (component 27): 12 artboards, choices listed under each. New for `Theme.java`: the contract
+icon (two files, on the UI Asset Sheet), the contract badge, the listing card and its variants, the
+switch, the contract stepper, the report's Contracts card and cell. No new colour tokens.
 
 **Next new screen (user, 2026-10-09):** a newspaper front page for the great Firsts, shown on
 login before the turn report (`design.md` §5, Backlog). Not specified yet.
