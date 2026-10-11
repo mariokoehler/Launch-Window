@@ -40,6 +40,7 @@ public class LaunchWindowGame extends Game {
     private boolean advisorMinimized;
     /** The explainers' read marks when kept in memory (screenshots), else {@code null}. */
     private java.util.Set<String> explainersReadInMemory;
+    private java.util.Set<String> frontPagesSeenInMemory;
     private java.util.Set<String> flagsInMemory;
     private float pendingFontScale;
     private long lastResizeMillis;
@@ -213,6 +214,47 @@ public class LaunchWindowGame extends Game {
      */
     public void useExplainerReadMarksInMemory(java.util.Set<String> read) {
         explainersReadInMemory = read;
+    }
+
+    /**
+     * Returns whether this player has seen a front page on this device ({@code ui-spec.md}
+     * &sect;4.18). Kept like the report's read mark, per page.
+     *
+     * @param pageId the page
+     * @return whether it was seen
+     */
+    public boolean frontPageSeen(String pageId) {
+        if (frontPagesSeenInMemory != null) {
+            return frontPagesSeenInMemory.contains(pageId);
+        }
+        return session != null && preferences().getBoolean(key("frontPageSeen." + pageId), false);
+    }
+
+    /**
+     * Marks a front page as seen, once the player moved on from it.
+     *
+     * @param pageId the page
+     */
+    public void markFrontPageSeen(String pageId) {
+        if (frontPagesSeenInMemory != null) {
+            frontPagesSeenInMemory.add(pageId);
+            return;
+        }
+        if (session == null || frontPageSeen(pageId)) {
+            return;
+        }
+        com.badlogic.gdx.Preferences preferences = preferences();
+        preferences.putBoolean(key("frontPageSeen." + pageId), true);
+        preferences.flush();
+    }
+
+    /**
+     * Keeps the front pages' seen marks in memory instead of the preferences, for screenshots.
+     *
+     * @param seen the pages to treat as seen; the set is changed as more are seen
+     */
+    public void useFrontPageMarksInMemory(java.util.Set<String> seen) {
+        frontPagesSeenInMemory = seen;
     }
 
     /**

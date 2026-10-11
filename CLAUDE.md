@@ -108,10 +108,12 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   first measurement says they fill the lulls but don't speed the race. The pack hash changed and
   saved classes gained fields: reset the dev data root, and rebuild client and server together (a new
   action).
-- **Front pages for the Firsts are specified and mocked up** (the user's idea, 2026-10-11,
-  `ui-spec.md` §4.18 and G14): a fictional newspaper's page on login, before the turn report. The
-  mockup is in Photocraft (`assets-raw/frontpage/mockup/`), not Claude Design; the art is generated
-  (`assets/ui/frontpage/`). Waiting for the user's look before the stories, the server and the screen.
+- **Front pages for the Firsts are built** (the user's idea, 2026-10-11, `ui-spec.md` §4.18 and G14):
+  a fictional newspaper's page on login, before the turn report, printed by the server
+  (`rules.FrontPagePrinter`, `frontpages.json`), the words in `assets/content/front-pages.json`
+  (outside the pack, `FrontPagesTest`). Mocked up in Photocraft (`assets-raw/frontpage/mockup/`), not
+  Claude Design. A new message pair and a new refusal reason: rebuild client and server together (no
+  reset needed). Names are now capped at 32 characters.
 
 ## How we work
 
@@ -327,7 +329,8 @@ cd assets && java --enable-native-access=ALL-UNNAMED -cp "../lwjgl3/target/class
   Never add it there. `ContentStringsTest` fails until every new id has text. The same goes for
   `assets/content/space-race-news.json` (`SpaceRaceNewsTest`), `pr-press.json` (`PrDutyTest`) and
   `event-stories.json` (`EventStoriesTest`, which holds each event to its sized count), and
-  `decisions.json` (`DecisionsTest`; saved state keeps its ids too). Core's tests have no assets on the
+  `decisions.json` (`DecisionsTest`; saved state keeps its ids too), and `front-pages.json`
+  (`FrontPagesTest`, which also holds every article to its columns; printed pages store story ids). Core's tests have no assets on the
   classpath, so `Decisions.standard()` is empty there: tests and tools set it with `Decisions.setStandard`
   (and put `EMPTY` back after);
   turn reports store their story ids, so never rename or reuse one.

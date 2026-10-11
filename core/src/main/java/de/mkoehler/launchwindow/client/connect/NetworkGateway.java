@@ -8,6 +8,8 @@ import de.mkoehler.launchwindow.net.NetworkClient;
 import de.mkoehler.launchwindow.net.messages.ClaimSlotRequest;
 import de.mkoehler.launchwindow.net.messages.ClaimSlotResponse;
 import de.mkoehler.launchwindow.net.messages.FetchStateRequest;
+import de.mkoehler.launchwindow.net.messages.FrontPagesRequest;
+import de.mkoehler.launchwindow.net.messages.FrontPagesResponse;
 import de.mkoehler.launchwindow.net.messages.FetchStateResponse;
 import de.mkoehler.launchwindow.net.messages.GameInfoRequest;
 import de.mkoehler.launchwindow.net.messages.GameInfoResponse;
@@ -242,6 +244,29 @@ public final class NetworkGateway implements ServerGateway {
         } catch (IOException | RuntimeException e) {
             dropConnection();
             return new RivalsResult(false, e.getMessage(), null);
+        }
+    }
+
+    @Override
+    public void fetchFrontPages(Credentials credentials, Consumer<FrontPagesResult> done) {
+        run(() -> {
+            FrontPagesResult first = fetchFrontPagesOnce(credentials);
+            return !first.ok() && client == null ? fetchFrontPagesOnce(credentials) : first;
+        }, message -> new FrontPagesResult(false, message, null), done);
+    }
+
+    private FrontPagesResult fetchFrontPagesOnce(Credentials credentials) {
+        Optional<LoginResult> refusal = ensureSession(credentials);
+        if (refusal.isPresent()) {
+            return new FrontPagesResult(false, refusal.get().message(), null);
+        }
+        try {
+            FrontPagesResponse response = client.sendAndReceive(new FrontPagesRequest(), FrontPagesResponse.class);
+            return response.success() ? new FrontPagesResult(true, "", response.pages())
+                : new FrontPagesResult(false, response.message(), null);
+        } catch (IOException | RuntimeException e) {
+            dropConnection();
+            return new FrontPagesResult(false, e.getMessage(), null);
         }
     }
 

@@ -100,6 +100,17 @@ public interface ServerGateway {
     void fetchRivals(Credentials credentials, Consumer<RivalsResult> done);
 
     /**
+     * Fetches every front page printed in the game so far ({@code ui-spec.md} &sect;4.18, G14). A
+     * read: retried once if the connection broke. By default it never answers, like a gateway with
+     * no server.
+     *
+     * @param credentials who and where
+     * @param done        called on the render thread with the result
+     */
+    default void fetchFrontPages(Credentials credentials, Consumer<FrontPagesResult> done) {
+    }
+
+    /**
      * Asks a dev-mode server to resolve the open turn now, then fetches the new state and game
      * info. Never repeated if the connection breaks mid-exchange.
      *

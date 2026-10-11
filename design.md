@@ -2561,8 +2561,9 @@ front page, *The Daily Zenith*, with the headline and an article on who made it 
 login before the turn report, the first thing they see. The page is the top half of a broadsheet,
 landscape, so its text is readable at 1920 x 1080. Its art (paper, masthead, a press photo per First)
 is generated with ComfyUI (`assets-raw/frontpage/`), and the mockup was laid out in Photocraft, the
-first screen mocked up outside Claude Design. Next: the user's look at the mockup and the unconfirmed
-choices in §4.18, then the stories (`front-pages.json`), G14 and the screen.
+first screen mocked up outside Claude Design. **Built 2026-10-11:** the stories (two per First and a
+tie story, `assets/content/front-pages.json`), the server's printing (G14) and the screen
+(`ui-spec.md` §4.18, "Built in libGDX"). Every choice there is unconfirmed. Next: the play test.
 
 **Commercial contracts** (the user's idea, designed, mocked up and **built** 2026-10-11, §2.11,
 `ui-spec.md` §4.17 and component 27): contract lines unlocked per program, a shared marketplace with

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.mkoehler.launchwindow.actions.QueueIntelOperationAction;
 import de.mkoehler.launchwindow.content.RandomEventRoster;
 import de.mkoehler.launchwindow.model.Archetype;
+import de.mkoehler.launchwindow.model.FrontPage;
 import de.mkoehler.launchwindow.model.IntelArea;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.persistence.PlayerSnapshotStore;
@@ -105,6 +106,11 @@ class TurnRollbackTest {
         queueOperations(dataRoot, spyRoot);
         resolveOn(dataRoot, "2026-09-30");
         List<String> secondTurn = names(spyRoot.resolve("journal-archive").resolve("2"));
+        FrontPage earlier = new FrontPage("0-earth-orbit-satellite", "earth-orbit-satellite", 0, "sat-signal", "",
+            List.of(), List.of(), List.of());
+        FrontPageStore.keep(dataRoot, mapper, 0, List.of(earlier));
+        FrontPageStore.keep(dataRoot, mapper, 2, List.of(new FrontPage("2-human-in-space", "human-in-space", 2,
+            "space-first-flight", "", List.of(), List.of(), List.of())));
 
         TurnRollback.rollBackTo(dataRoot, mapper, ServerTestGames.CONTEXT, 1, NOW);
 
@@ -114,6 +120,7 @@ class TurnRollbackTest {
         assertFalse(Files.exists(dataRoot.resolve("intelligence").resolve("turn-1.json")));
         assertFalse(Files.exists(TurnScheduler.marketFile(dataRoot, 1)));
         assertFalse(Files.exists(TurnScheduler.marketFile(dataRoot, 2)));
+        assertEquals(List.of(earlier), FrontPageStore.load(dataRoot, mapper), "the undone turns' front pages go");
         assertFalse(Files.exists(dataRoot.resolve(TurnBackups.DIR).resolve(TurnBackups.turnZipName(2))),
             "the abandoned timeline's zip can't stand in for the redone turn's");
         assertTrue(Files.exists(dataRoot.resolve(TurnBackups.DIR).resolve(TurnBackups.turnZipName(1))));

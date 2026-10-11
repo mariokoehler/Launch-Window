@@ -26,7 +26,9 @@ public record ClaimSlotResponse(boolean success, Reason reason, String message) 
         /** Another player's director already has this name (ignoring case). */
         DIRECTOR_NAME_TAKEN,
         /** The server could not write the new slot. */
-        SERVER_ERROR
+        SERVER_ERROR,
+        /** The agency or director name is longer than {@link ClaimSlotRequest#MAX_NAME_LENGTH} (2026-10-11). */
+        NAME_TOO_LONG
     }
 
     /**

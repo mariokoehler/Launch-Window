@@ -192,7 +192,7 @@ public final class MuseumScreen extends ChromeScreen {
                 : "Fetching the race…", Theme.TextStyle.BODY, rivalsFailed ? Theme.DANGER : Theme.INK_MUTED))
                 .padBottom(Theme.SPACE_3).row();
         } else {
-            raceCard.add(RaceTable.build(ui, Museum.race(rivals, declared), declared, true)).padBottom(Theme.SPACE_3)
+            raceCard.add(RaceTable.build(ui, Museum.race(rivals, declared), declared, true, this::openFrontPage)).padBottom(Theme.SPACE_3)
                 .row();
         }
         raceCard.add(ui.paragraph("First to finish all " + declared.size() + " wins. If several agencies finish at "
@@ -343,7 +343,8 @@ public final class MuseumScreen extends ChromeScreen {
         Table name = new Table();
         name.add(ui.label(row.name(), Theme.TextStyle.BODY_STRONG, Theme.INK));
         if (row.first()) {
-            name.add(RaceTable.firstTag(ui, "First in the game")).padLeft(Theme.SPACE_2);
+            name.add(RaceTable.pageLink(ui, RaceTable.firstTag(ui, "First in the game"), row.goalId(),
+                this::openFrontPage)).padLeft(Theme.SPACE_2);
         }
         text.add(name).row();
         text.add(ui.label(row.how(), Theme.TextStyle.CAPTION, Theme.INK_MUTED));

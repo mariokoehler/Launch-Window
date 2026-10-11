@@ -184,6 +184,13 @@ public final class Theme {
     public static final Color NAVY_BORDER = Color.valueOf("#16305c4d");
 
     /**
+     * The deep navy scrim behind a front page, over the dimmed hub ({@code ui-spec.md} &sect;4.18,
+     * 2026-10-11): darker than a dialog's, since the page is the whole screen. Not a design-system
+     * token yet.
+     */
+    public static final Color SCRIM_DEEP = Color.valueOf("#0d1b33cc");
+
+    /**
      * Fill for an active / in-progress / caution state (a status badge, the
      * current step in a sequence, a "steady" rating). <b>Never danger</b>
      * &mdash; the one status a mission actually has while it's running gets
@@ -343,7 +350,13 @@ public final class Theme {
         /** Work Sans SemiBold, weight 600. */
         WORK_SANS_SEMIBOLD("WorkSans-SemiBold.ttf"),
         /** Work Sans SemiBold Italic, weight 600 &mdash; the one italic style this system uses. */
-        WORK_SANS_SEMIBOLD_ITALIC("WorkSans-SemiBoldItalic.ttf");
+        WORK_SANS_SEMIBOLD_ITALIC("WorkSans-SemiBoldItalic.ttf"),
+        /** Old Standard TT Bold: the front page's headlines and box titles (ui-spec.md &sect;4.18, 2026-10-11). */
+        OLD_STANDARD_BOLD("OldStandard-Bold.ttf"),
+        /** Libre Caslon Text Regular, weight 400: the front page's body text. */
+        LIBRE_CASLON_REGULAR("LibreCaslonText-Regular.ttf"),
+        /** Libre Caslon Text Italic, weight 400: the front page's deck and captions. */
+        LIBRE_CASLON_ITALIC("LibreCaslonText-Italic.ttf");
 
         private final String fileName;
 
@@ -439,7 +452,31 @@ public final class Theme {
         /** A drawing's small upper-case note: Archivo SemiBold 11, letter-spaced 0.5px. */
         DRAWING_SMALL(FontFile.ARCHIVO_SEMIBOLD, 11, 13, 0.5f / 11f),
         /** A drawing's explanatory text: Work Sans Medium 13. */
-        DRAWING_TEXT(FontFile.WORK_SANS_MEDIUM, 13, 16, 0f);
+        DRAWING_TEXT(FontFile.WORK_SANS_MEDIUM, 13, 16, 0f),
+        /*
+         * The front page's styles (ui-spec.md section 4.18, 2026-10-11), a newspaper's type rather
+         * than the design system's: Old Standard TT and Libre Caslon Text. Not design-system tokens.
+         */
+        /** A front page's headline, capitals only (generated with capitals alone): Old Standard Bold 80. */
+        NEWS_HEADLINE(FontFile.OLD_STANDARD_BOLD, 80, 84, 0f),
+        /** A front page's headline when it needs a smaller size to fit two lines: Old Standard Bold 64. */
+        NEWS_HEADLINE_SM(FontFile.OLD_STANDARD_BOLD, 64, 68, 0f),
+        /** The ear's "EXTRA": Old Standard Bold 34, letter-spaced. */
+        NEWS_EXTRA(FontFile.OLD_STANDARD_BOLD, 34, 38, 0.12f),
+        /** A box's title, such as "THE RACE SO FAR": Old Standard Bold 16, letter-spaced. */
+        NEWS_LABEL(FontFile.OLD_STANDARD_BOLD, 16, 20, 0.08f),
+        /** The deck under the headline: Libre Caslon Italic 25. */
+        NEWS_DECK(FontFile.LIBRE_CASLON_ITALIC, 25, 30, 0f),
+        /** The article: Libre Caslon Regular 16, line-height 22. */
+        NEWS_BODY(FontFile.LIBRE_CASLON_REGULAR, 16, 22, 0f),
+        /** The folio line and the ear's first line: Libre Caslon Regular 15. */
+        NEWS_FOLIO(FontFile.LIBRE_CASLON_REGULAR, 15, 20, 0.04f),
+        /** The byline: Libre Caslon Regular 12, letter-spaced. */
+        NEWS_BYLINE(FontFile.LIBRE_CASLON_REGULAR, 12, 16, 0.06f),
+        /** Captions, the race box's values, the briefs: Libre Caslon Italic 14. */
+        NEWS_CAPTION(FontFile.LIBRE_CASLON_ITALIC, 14, 19, 0f),
+        /** The race box's First names: Libre Caslon Regular 14. */
+        NEWS_SMALL(FontFile.LIBRE_CASLON_REGULAR, 14, 19, 0f);
 
         private final FontFile file;
         private final int size;
@@ -513,6 +550,15 @@ public final class Theme {
         + "İıŁłŒœŚśŠšŤťŪūŮů"
         + "ŰűŲųŸŹźŻżŽž"
         + "€×÷°–—…‘’“”·−•→↑↓‹›";
+
+    /**
+     * The characters of the front page's headline styles: {@link #CHARACTERS} without lower-case
+     * letters, since a headline is set in capitals and its 80 px glyphs are large at a 3x window
+     * scale.
+     */
+    public static final String CAPITALS = CHARACTERS.codePoints()
+        .filter(c -> !Character.isLowerCase(c) || Character.toUpperCase(c) == c)
+        .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append).toString();
 
     /**
      * One {@link BitmapFont} per {@link TextStyle}, owned by this object.
@@ -690,7 +736,8 @@ public final class Theme {
             // every button by a tenth.
             parameter.spaceX = (int) Math.ceil(parameter.size * style.letterSpacingEm() - 0.5f);
             parameter.color = Color.WHITE;
-            parameter.characters = CHARACTERS;
+            parameter.characters = style == TextStyle.NEWS_HEADLINE || style == TextStyle.NEWS_HEADLINE_SM
+                ? CAPITALS : CHARACTERS;
             // Linear, not mipmapped: mipmaps were tried (2026-10-04) and made the text greyer and
             // softer. Glyphs are drawn at about one texel per pixel, so neither filter kicks in much.
             parameter.minFilter = Texture.TextureFilter.Linear;

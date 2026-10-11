@@ -19,6 +19,7 @@ import de.mkoehler.launchwindow.client.ui.OptionCard;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
+import de.mkoehler.launchwindow.net.messages.ClaimSlotRequest;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -70,6 +71,7 @@ public final class JoinScreen extends StageScreen {
             .withHistoryNote(HistoryNotes.DIRECTOR);
         for (FormField field : new FormField[] {agencyName, directorName}) {
             field.input().setTextFieldListener(this::submitOnEnter);
+            field.input().setMaxLength(ClaimSlotRequest.MAX_NAME_LENGTH);
         }
         Table names = new Table();
         names.add(agencyName).width(half).top().padRight(Theme.SPACE_4);
@@ -207,6 +209,11 @@ public final class JoinScreen extends StageScreen {
                 directorName.setError(directorName.text().isEmpty() ? "Required." : null);
             }
             case ALREADY_CLAIMED -> enterExistingSlot();
+            case NAME_TOO_LONG -> {
+                String tooLong = "At most " + ClaimSlotRequest.MAX_NAME_LENGTH + " characters.";
+                agencyName.setError(agencyName.text().strip().length() > ClaimSlotRequest.MAX_NAME_LENGTH ? tooLong : null);
+                directorName.setError(directorName.text().strip().length() > ClaimSlotRequest.MAX_NAME_LENGTH ? tooLong : null);
+            }
             default -> showBanner("The server couldn't create your agency.", result.message());
         }
     }

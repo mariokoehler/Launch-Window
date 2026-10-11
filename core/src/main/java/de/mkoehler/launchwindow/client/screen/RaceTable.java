@@ -1,17 +1,22 @@
 package de.mkoehler.launchwindow.client.screen;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.UiKit;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.Museum;
+import de.mkoehler.launchwindow.content.FrontPages;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Consumer;
 
 /**
  * The race table ({@code ui-spec.md} &sect;4.11 and &sect;4.13): one row per agency, one column
@@ -47,6 +52,22 @@ final class RaceTable {
      * @return the table
      */
     static Table build(UiKit ui, List<Museum.RaceRow> rows, List<String> goalIds, boolean museum) {
+        return build(ui, rows, goalIds, museum, null);
+    }
+
+    /**
+     * Builds the table, with each First tag of a First that has a front page opening it
+     * ({@code ui-spec.md} &sect;4.18).
+     *
+     * @param ui        the UI kit
+     * @param rows      the rows, in order
+     * @param goalIds   the declared goals' ids, in order
+     * @param museum    {@code true} for the Museum's version
+     * @param openPage  opens a First's front page by its goal, or {@code null} for plain tags
+     * @return the table
+     */
+    static Table build(UiKit ui, List<Museum.RaceRow> rows, List<String> goalIds, boolean museum,
+                       Consumer<String> openPage) {
         // Rows sit a hairline apart on a light navy ground: the mockup's row dividers.
         Table table = new Table();
         table.setBackground(ui.solid(new Color(Theme.SURFACE_CARD).lerp(Theme.NAVY, 0.18f)));
@@ -97,7 +118,7 @@ final class RaceTable {
                 text.add(ui.label(goal.when(), Theme.TextStyle.BODY_SM, goal.done() ? Theme.INK : Theme.INK_MUTED))
                     .row();
                 if (goal.first()) {
-                    text.add(firstTag(ui, "First")).padTop(2f);
+                    text.add(pageLink(ui, firstTag(ui, "First"), goalIds.get(i), openPage)).padTop(2f);
                 }
                 cell.add(text).expandX().left();
                 table.add(cell).height(height);
@@ -140,6 +161,31 @@ final class RaceTable {
         glyph.setColor(done ? Theme.SUCCESS : Theme.NAVY);
         patch.add(glyph).size(size * 0.45f);
         return patch;
+    }
+
+    /**
+     * Makes a First tag open the First's front page, when the First has one ({@code ui-spec.md}
+     * &sect;4.18).
+     *
+     * @param ui       the UI kit
+     * @param tag      the tag
+     * @param goalId   the goal it marks
+     * @param openPage opens a front page by its goal, or {@code null} to leave the tag plain
+     * @return the tag
+     */
+    static Table pageLink(UiKit ui, Table tag, String goalId, Consumer<String> openPage) {
+        if (openPage == null || FrontPages.standard().first(goalId).isEmpty()) {
+            return tag;
+        }
+        tag.setTouchable(Touchable.enabled);
+        tag.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                openPage.accept(goalId);
+            }
+        });
+        ui.tooltip(tag, "Front page", "Read the newspaper's front page for this First.");
+        return tag;
     }
 
     /**

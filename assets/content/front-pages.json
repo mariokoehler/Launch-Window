@@ -1,0 +1,332 @@
+{
+  "_comment": "The Firsts' front pages (ui-spec.md 4.18, G14). One entry per First, in race order; a pack shows the ones whose goals it has. Our own text, written from the real Firsts' facts, never from a real paper's page. A page's story is drawn with the game seed salted by the goal id, so every player reads the same page. Story ids are stored in printed pages: never rename or reuse one. Tokens: {agency}, {director}, {season}, {crew}, {commander}, {rival1}, {rival2}, {also} (the Firsts folded into the page, by name in quotes). A tie story serves two or more agencies at once: there {agency}, {director}, {crew} and {commander} are lists ('A and B'). The page never names hardware (design.md 2.9). Order of an article: lead, also (only when another First is folded in), rivals2 or rivals1 (only with that many rivals), close. FrontPagesTest holds the lengths.",
+  "weather": {
+    "WINTER": [
+      "Snow flurries, bitter cold",
+      "Clear and cold tonight",
+      "Sleet by morning"
+    ],
+    "SPRING": [
+      "Fair and cool tonight",
+      "Showers clearing by noon",
+      "Mild, light winds"
+    ],
+    "SUMMER": [
+      "Hot and humid",
+      "Thunderstorms likely late",
+      "Clear skies, warm night"
+    ],
+    "FALL": [
+      "Crisp, clear evening",
+      "Windy with rain at times",
+      "First frost possible"
+    ]
+  },
+  "firsts": [
+    {
+      "goal": "earth-orbit-satellite",
+      "caption": "WATCHING THE SKY. Neighbours gather on a rooftop at dusk to see the new moon pass overhead, a radio held up for its signal.",
+      "brief": [
+        "How to see it from your garden. Page 2.",
+        "Radio amateurs hear the beeps. Page 5."
+      ],
+      "stories": [
+        {
+          "id": "sat-new-moon",
+          "headline": "{agency} puts a moon in the sky",
+          "headlineShort": "A man-made moon circles Earth",
+          "deck": "First artificial satellite circles the globe every hour and a half; its radio heard around the world",
+          "lead": [
+            "{season} \u2014 For the first time, something made by human hands is circling the Earth. {agency} announced last night that its satellite had reached orbit and was sending signals home.",
+            "Tracking stations followed it across the sky within the hour. It passes overhead about every ninety minutes, and on clear evenings it can be seen with the naked eye as a slow, steady point of light.",
+            "{director}, the agency's director, called it \u201ca small object and a very large step.\u201d"
+          ],
+          "also": "",
+          "rivals2": "Officials at {rival1} and {rival2} offered their congratulations, and promised satellites of their own.",
+          "rivals1": "At {rival1}, officials offered their congratulations and promised a satellite of their own before long.",
+          "close": [
+            "To stay up, a satellite must travel at nearly eight kilometres a second, so fast that it keeps falling around the Earth instead of back to it."
+          ]
+        },
+        {
+          "id": "sat-signal",
+          "headline": "{agency} satellite in orbit",
+          "headlineShort": "Satellite circles the globe",
+          "deck": "A steady radio signal from space; crowds gather to watch it cross the evening sky",
+          "lead": [
+            "{season} \u2014 The space age began last night. {agency} has placed a satellite in orbit around the Earth, the first ever, and its radio can be heard by anyone with a good receiver.",
+            "In towns and cities, people climbed onto rooftops and into fields to watch for it. Radio amateurs recorded its signal and played it down the telephone to friends.",
+            "Scientists say the signal alone will teach them much: how it fades and returns tells them about the air high above our heads."
+          ],
+          "also": "",
+          "rivals2": "{rival1} and {rival2} both said their own satellites were \u201cwell advanced.\u201d",
+          "rivals1": "{rival1} said its own satellite was \u201cwell advanced.\u201d",
+          "close": [
+            "{director}, the agency's director, thanked the engineers who had \u201cworked every night for a year.\u201d"
+          ]
+        }
+      ],
+      "tie": {
+        "id": "sat-tie",
+        "headline": "Two satellites, one season",
+        "headlineShort": "Satellites in orbit",
+        "deck": "{agency} reach orbit in the same season, and the race to space begins",
+        "lead": [
+          "{season} \u2014 Not one but two artificial moons now circle the Earth. {agency} each placed a satellite in orbit within days of each other, and the world's first space race is on.",
+          "Tracking stations followed both across the sky. Each passes overhead about every ninety minutes."
+        ],
+        "also": "",
+        "rivals2": "Officials at {rival1} and {rival2} said they would not be far behind.",
+        "rivals1": "At {rival1}, officials said they would not be far behind.",
+        "close": [
+          "To stay up, a satellite must travel at nearly eight kilometres a second, so fast that it keeps falling around the Earth instead of back to it.",
+          "{director} each thanked their engineers, and each claimed, politely, to have been first by a few hours."
+        ]
+      }
+    },
+    {
+      "goal": "human-in-space",
+      "caption": "INTO SPACE. The rocket climbs from its pad at dawn, carrying the first human being beyond the atmosphere.",
+      "brief": [
+        "What weightlessness feels like. Page 3.",
+        "The pilot's home town celebrates. Page 7."
+      ],
+      "stories": [
+        {
+          "id": "space-first-flight",
+          "headline": "{agency} pilot rides a rocket into space",
+          "headlineShort": "A human being in space",
+          "deck": "{commander} flies above the atmosphere and returns safely, the first person ever to reach space",
+          "lead": [
+            "{season} \u2014 A human being has been to space and come back. {commander}, a pilot of {agency}, rode a rocket above the atmosphere yesterday and landed safely minutes later.",
+            "For a few minutes at the top of the climb the pilot was weightless, and could see the curve of the Earth against a black sky. Doctors who examined the pilot afterwards found no harm done.",
+            "The flight was too short to go around the world: the capsule rose and fell back, like a ball thrown very high."
+          ],
+          "also": "",
+          "rivals2": "Officials at {rival1} and {rival2} congratulated the crew. Both say their own pilots are training hard.",
+          "rivals1": "Officials at {rival1} congratulated the crew and said their own pilots were \u201cready when we are.\u201d",
+          "close": [
+            "{director}, the agency's director, said the next step was to stay up: to fly all the way around the world."
+          ]
+        },
+        {
+          "id": "space-up-and-down",
+          "headline": "Up and back: {agency} reaches space",
+          "headlineShort": "Pilot reaches space",
+          "deck": "A short flight above the atmosphere, a safe landing, and a hero's welcome for {commander}",
+          "lead": [
+            "{season} \u2014 It was over in minutes, but the world will remember it for centuries. {commander} of {agency} became the first person to fly into space yesterday, climbing far above the air before falling safely back to Earth.",
+            "The pilot reported by radio throughout, calm and precise. At the top of the arc the sky was black, the pilot said, even in daylight.",
+            "Engineers were most worried about the return: the capsule hit the thick lower air at high speed and was slowed by it, pressing the pilot hard into the seat."
+          ],
+          "also": "",
+          "rivals2": "At {rival1} and {rival2} the mood was grim. Both are said to have pilots in training.",
+          "rivals1": "At {rival1} the mood was grim. Its own pilots are said to be months away.",
+          "close": [
+            "Asked what came next, {director} smiled: \u201cAll the way around.\u201d"
+          ]
+        }
+      ],
+      "tie": {
+        "id": "space-tie",
+        "headline": "Two pilots reach space",
+        "headlineShort": "Pilots reach space",
+        "deck": "{agency} each fly a pilot above the atmosphere in the same season",
+        "lead": [
+          "{season} \u2014 Two agencies sent people into space this season, and both came home safely. {crew} flew far above the air on short flights and landed minutes later.",
+          "Each reported a few minutes of weightlessness and a black sky at the top of the climb."
+        ],
+        "also": "",
+        "rivals2": "Officials at {rival1} and {rival2} said their own pilots would follow.",
+        "rivals1": "Officials at {rival1} said their own pilots would follow.",
+        "close": [
+          "The next prize, all agree, is orbit: flying all the way around the world.",
+          "Doctors found every pilot in good health. Weightlessness, for a few minutes at least, did no harm."
+        ]
+      }
+    },
+    {
+      "goal": "human-in-orbit",
+      "caption": "THE FIRST HUMAN IN ORBIT. {commander} waves to the crowd at the recovery field, hours after the capsule came down.",
+      "brief": [
+        "Tracking ship crew to be honoured. Page 3.",
+        "What a pilot eats in orbit. Page 6."
+      ],
+      "stories": [
+        {
+          "id": "orbit-circles",
+          "headline": "{agency} pilot circles the Earth",
+          "headlineShort": "Pilot circles the Earth",
+          "deck": "First human being in orbit lands safely; rival agencies vow to follow",
+          "lead": [
+            "{season} \u2014 A pilot of {agency} has flown all the way around the Earth and come home safely, the first human being ever to orbit the planet.",
+            "{commander} rode a capsule into orbit, circled the globe and landed to a hero's welcome, the agency announced last night. Its director, {director}, called it \u201cthe day the sky became a road.\u201d"
+          ],
+          "also": "The same flight also takes {also}, another first for {agency}.",
+          "rivals2": "At {rival1}, officials said their own pilots were \u201cnot far behind.\u201d {rival2} said its plans were unchanged.",
+          "rivals1": "Rivals were quick with their congratulations. At {rival1}, officials said their own pilots were \u201cnot far behind.\u201d",
+          "close": [
+            "To stay up, a craft must travel at nearly eight kilometres a second. Coming home, it must shed all of that speed as heat.",
+            "Doctors found the pilot tired, hungry and in excellent health. Weightlessness, which some had feared, troubled the pilot little."
+          ]
+        },
+        {
+          "id": "orbit-around-the-world",
+          "headline": "Around the world in ninety minutes",
+          "headlineShort": "Around the world",
+          "deck": "{commander} of {agency} becomes the first person to orbit the Earth",
+          "lead": [
+            "{season} \u2014 Breakfast over one ocean, sunset over another, and home before lunch. {commander}, a pilot of {agency}, orbited the Earth yesterday, the first person ever to do so.",
+            "An orbit takes about an hour and a half. In that time the pilot saw a sunrise and a sunset, crossed every time zone and reported by radio from above each continent."
+          ],
+          "also": "The same flight also takes {also}, another first for {agency}.",
+          "rivals2": "At {rival1} and {rival2}, officials offered congratulations through gritted teeth.",
+          "rivals1": "At {rival1}, officials offered congratulations through gritted teeth.",
+          "close": [
+            "The most dangerous minutes were the last: the capsule's heat shield glowed white-hot as it slowed from orbital speed, and radio contact was lost, as engineers had expected.",
+            "{director}, the agency's director, said longer flights would come next."
+          ]
+        }
+      ],
+      "tie": {
+        "id": "orbit-tie",
+        "headline": "Two pilots orbit the Earth",
+        "headlineShort": "Two in orbit",
+        "deck": "{agency} each send a pilot around the world in the same season",
+        "lead": [
+          "{season} \u2014 The race to orbit has ended in a dead heat. {crew} each flew all the way around the Earth this season, and all came home safely.",
+          "Each orbit takes about an hour and a half, at nearly eight kilometres a second."
+        ],
+        "also": "The flights also take {also}.",
+        "rivals2": "At {rival1} and {rival2}, officials said they would catch up.",
+        "rivals1": "At {rival1}, officials said they would catch up.",
+        "close": [
+          "Longer flights come next: a full day in orbit, then several.",
+          "{director} each called the flight a beginning, not an end."
+        ]
+      }
+    },
+    {
+      "goal": "crewed-lunar-flyby",
+      "caption": "THE EARTH FROM THE MOON. A view through the spacecraft's window, the Moon's grey horizon close below and home a small half-lit ball above.",
+      "brief": [
+        "Silence behind the Moon: the long wait. Page 2.",
+        "Your questions about the Moon. Page 8."
+      ],
+      "stories": [
+        {
+          "id": "flyby-around-the-moon",
+          "headline": "{agency} crew rounds the Moon",
+          "headlineShort": "Crew rounds the Moon",
+          "deck": "First people to leave the Earth behind fly around the Moon and return safely",
+          "lead": [
+            "{season} \u2014 For the first time, human beings have travelled to another world. {crew} of {agency} flew around the Moon and splashed down safely yesterday.",
+            "The trip there took about three days. Behind the Moon, cut off from every radio on Earth, the crew saw its far side, which no human eye had seen before."
+          ],
+          "also": "The same flight also takes {also}, another first for {agency}.",
+          "rivals2": "At {rival1} and {rival2}, the news was received in silence. Both are known to be aiming for the Moon.",
+          "rivals1": "At {rival1}, the news was received in silence. It is known to be aiming for the Moon.",
+          "close": [
+            "Coming home, the capsule hit the air at about eleven kilometres a second, faster than any craft returning from orbit.",
+            "{director}, the agency's director, said only: \u201cNext time, we land.\u201d"
+          ]
+        },
+        {
+          "id": "flyby-earthrise",
+          "headline": "Earth seen from the Moon",
+          "headlineShort": "Around the Moon",
+          "deck": "{agency} crew flies around the Moon and brings home pictures of a small blue Earth",
+          "lead": [
+            "{season} \u2014 The Earth looks small from the Moon. {crew}, flying for {agency}, came back yesterday from the first journey around another world.",
+            "Nearly four hundred thousand kilometres from home, the crew watched the Earth rise over the Moon's grey horizon."
+          ],
+          "also": "The same flight also takes {also}, another first for {agency}.",
+          "rivals2": "{rival1} and {rival2} both said they would land where others had only looked.",
+          "rivals1": "{rival1} said it would land where others had only looked.",
+          "close": [
+            "The return was the hardest part: the capsule had to meet the air at just the right angle, too steep to survive or too shallow to stay.",
+            "{director} called the flight \u201cthe longest trip any of us will ever take, so far.\u201d"
+          ]
+        }
+      ],
+      "tie": {
+        "id": "flyby-tie",
+        "headline": "Two crews fly around the Moon",
+        "headlineShort": "Two crews round the Moon",
+        "deck": "{agency} each send a crew around the Moon in the same season",
+        "lead": [
+          "{season} \u2014 Two crews flew around the Moon this season, and all came home. {crew} each saw the Moon's far side and the Earth rising over its horizon.",
+          "Each trip took about a week, there and back."
+        ],
+        "also": "The flights also take {also}.",
+        "rivals2": "{rival1} and {rival2} said they meant to land.",
+        "rivals1": "{rival1} said it meant to land.",
+        "close": [
+          "Coming home, each capsule met the air at about eleven kilometres a second, faster than any craft returning from orbit.",
+          "The only prize left in the race, all agree, is a landing."
+        ]
+      }
+    },
+    {
+      "goal": "crewed-lunar-landing",
+      "caption": "ON THE MOON. The first pictures sent home from the lunar surface: an astronaut beside the landing craft, long shadows across the dust.",
+      "brief": [
+        "A night of television: the world watched. Page 2.",
+        "What the Moon rocks may tell us. Page 9."
+      ],
+      "stories": [
+        {
+          "id": "landing-footprints",
+          "headline": "{agency} lands on the Moon",
+          "headlineShort": "People on the Moon",
+          "deck": "{crew} walk on another world and return safely; the race to the Moon is won",
+          "lead": [
+            "{season} \u2014 Human beings have walked on the Moon. {crew} of {agency} landed on its surface, stepped out onto the grey dust and came home safely, ending the greatest race in history.",
+            "Millions watched the first steps on television, grainy and ghostly, sent across nearly four hundred thousand kilometres.",
+            "On the Moon everything weighs a sixth of what it does on Earth. The crew moved in long, bounding steps, collected rocks and dust, and set up instruments that will keep working after they have gone."
+          ],
+          "also": "The same flight also takes {also}, another first for {agency}.",
+          "rivals2": "Even at {rival1} and {rival2}, where the defeat stings, engineers stopped work to watch.",
+          "rivals1": "Even at {rival1}, where the defeat stings, engineers stopped work to watch.",
+          "close": [
+            "{director}, the agency's director, could barely speak: \u201cWe went. We came back. That is all of it.\u201d"
+          ]
+        },
+        {
+          "id": "landing-another-world",
+          "headline": "Footprints on the Moon",
+          "headlineShort": "Footprints on the Moon",
+          "deck": "{agency} crew lands, walks the surface and returns: humanity's first visit to another world",
+          "lead": [
+            "{season} \u2014 There are footprints on the Moon, and with no wind or rain there they may last a million years. {crew} of {agency} landed yesterday and walked on its surface before flying home.",
+            "The landing was the most dangerous part: the craft came down on its engine alone, steered by hand over a field of boulders, with fuel for only seconds more.",
+            "Back in orbit, the lander met the ship waiting for it, and the crew began the three-day trip home."
+          ],
+          "also": "The same flight also takes {also}, another first for {agency}.",
+          "rivals2": "At {rival1} and {rival2}, the race is over. What comes next is not yet clear.",
+          "rivals1": "At {rival1}, the race is over. What comes next is not yet clear.",
+          "close": [
+            "{director} thanked \u201cevery person who built, tested, tracked and hoped.\u201d"
+          ]
+        }
+      ],
+      "tie": {
+        "id": "landing-tie",
+        "headline": "Two crews land on the Moon",
+        "headlineShort": "Two Moon landings",
+        "deck": "{agency} each land a crew on the Moon in the same season",
+        "lead": [
+          "{season} \u2014 The race to the Moon has ended in a tie. {crew} each landed on the Moon this season, walked on its surface and came home.",
+          "On the Moon everything weighs a sixth of what it does on Earth. Both crews brought back rocks and dust."
+        ],
+        "also": "The flights also take {also}.",
+        "rivals2": "At {rival1} and {rival2}, engineers stopped work to watch.",
+        "rivals1": "At {rival1}, engineers stopped work to watch.",
+        "close": [
+          "Millions watched the first steps on television, grainy and ghostly, sent across nearly four hundred thousand kilometres.",
+          "Where the explorers go next, nobody has yet said."
+        ]
+      }
+    }
+  ]
+}

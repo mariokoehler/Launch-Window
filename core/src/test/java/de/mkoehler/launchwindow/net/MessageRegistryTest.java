@@ -10,6 +10,7 @@ import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.Astronaut;
 import de.mkoehler.launchwindow.model.AstronautSkill;
 import de.mkoehler.launchwindow.model.Building;
+import de.mkoehler.launchwindow.model.FrontPage;
 import de.mkoehler.launchwindow.model.InProgressMission;
 import de.mkoehler.launchwindow.model.GoalRecord;
 import de.mkoehler.launchwindow.model.MemorialEntry;
@@ -29,6 +30,8 @@ import de.mkoehler.launchwindow.net.messages.ClaimSlotRequest;
 import de.mkoehler.launchwindow.net.messages.ClaimSlotResponse;
 import de.mkoehler.launchwindow.net.messages.FetchStateRequest;
 import de.mkoehler.launchwindow.net.messages.FetchStateResponse;
+import de.mkoehler.launchwindow.net.messages.FrontPagesRequest;
+import de.mkoehler.launchwindow.net.messages.FrontPagesResponse;
 import de.mkoehler.launchwindow.net.messages.GameInfoRequest;
 import de.mkoehler.launchwindow.net.messages.GameInfoResponse;
 import de.mkoehler.launchwindow.net.messages.ResolveTurnNowRequest;
@@ -255,6 +258,19 @@ class MessageRegistryTest {
             RivalSummary.of("Orion Spaceworks", "Ana Reyes", Archetype.NASA, false, Map.of())));
         assertEquals(rivals, roundTrip(rivals, RivalsResponse.class));
         assertEquals(RivalsResponse.failure("nope"), roundTrip(RivalsResponse.failure("nope"), RivalsResponse.class));
+    }
+
+    @Test
+    void frontPageMessagesSurviveRoundTrip() {
+        assertEquals(new FrontPagesRequest(), roundTrip(new FrontPagesRequest(), FrontPagesRequest.class));
+        // Built from immutable inputs, as the server does: the records copy into registered collections.
+        FrontPagesResponse pages = FrontPagesResponse.of(List.of(new FrontPage("26-human-in-orbit", "human-in-orbit",
+            26, "orbit-circles", "Fair and cool tonight", List.of("human-in-space"),
+            List.of(new FrontPage.Achiever("Orion Spaceworks", "Ana Reyes", List.of("Daniel Hale"))),
+            List.of("Kestrel Aerospace"))));
+        assertEquals(pages, roundTrip(pages, FrontPagesResponse.class));
+        assertEquals(FrontPagesResponse.failure("nope"), roundTrip(FrontPagesResponse.failure("nope"),
+            FrontPagesResponse.class));
     }
 
     @Test

@@ -7,6 +7,10 @@ Assets in this folder that weren't made for Launch Window, with the credit their
 Archivo and Work Sans, under the SIL Open Font License; see `fonts/OFL-Archivo.txt` and
 `fonts/OFL-WorkSans.txt`.
 
+Old Standard TT (Bold) and Libre Caslon Text (Regular and Italic, static instances at weight 400
+cut from the variable fonts), for the Firsts' front pages, under the SIL Open Font License; see
+`fonts/OFL-OldStandard.txt` and `fonts/OFL-LibreCaslonText.txt`.
+
 ## Photos
 
 - `ui/portraits/laika.jpg`: "Laika in 1957", Laika before her orbital flight. Photo: Museum of

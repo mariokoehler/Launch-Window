@@ -76,6 +76,7 @@ public final class TurnRollback {
             Files.deleteIfExists(dataRoot.resolve("intelligence").resolve("turn-" + turn + ".json"));
             Files.deleteIfExists(TurnScheduler.marketFile(dataRoot, turn));
         }
+        FrontPageStore.dropFrom(dataRoot, mapper, gameTurn);
         Path resultFile = dataRoot.resolve(GameResult.FILE_NAME);
         if (Files.exists(resultFile) && mapper.readValue(resultFile.toFile(), GameResult.class).decidedOnTurn() >= gameTurn) {
             Files.delete(resultFile);

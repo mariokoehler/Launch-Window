@@ -41,8 +41,10 @@ import de.mkoehler.launchwindow.client.screen.OpenRocketScreen;
 import de.mkoehler.launchwindow.client.screen.RocketProgramsScreen;
 import de.mkoehler.launchwindow.client.screen.VabScreen;
 import de.mkoehler.launchwindow.client.screen.MuseumScreen;
+import de.mkoehler.launchwindow.client.screen.FrontPageScreen;
 import de.mkoehler.launchwindow.client.screen.AstronautComplexScreen;
 import de.mkoehler.launchwindow.client.screen.PublicAffairsScreen;
+import de.mkoehler.launchwindow.model.FrontPage;
 import de.mkoehler.launchwindow.model.NewsEntry;
 import de.mkoehler.launchwindow.model.RandomEventKind;
 import de.mkoehler.launchwindow.model.GoalRecord;
@@ -246,6 +248,10 @@ public final class ScreenSnapshot {
             handsOnShots(folder, game);
             return;
         }
+        if ("frontpage".equals(System.getProperty("shots"))) {
+            frontPageShots(folder, game);
+            return;
+        }
         write(folder, "connect-default.png", new ConnectScreen(game), null);
         write(folder, "connect-connecting.png", filledConnect(game), screen -> screen.setBusy(true));
         write(folder, "connect-wrong-password.png", filledConnect(game), screen -> screen.applyLoginResult(
@@ -421,6 +427,63 @@ public final class ScreenSnapshot {
         decisionShots(folder, game);
         contractShots(folder, game);
         handsOnShots(folder, game);
+        frontPageShots(folder, game);
+    }
+
+    /**
+     * The Firsts' front pages (ui-spec.md section 4.18, 2026-10-11) in the standard pack: one per First,
+     * a rival's page and this player's, a tie, a page with an earlier First folded in, the first of
+     * two, and the longest names allowed.
+     */
+    private static void frontPageShots(File folder, LaunchWindowGame game) {
+        game.useFrontPageMarksInMemory(new java.util.HashSet<>());
+        String hash = ContentPackHash.ofClasspath("content/standard", ScreenSnapshot.class.getClassLoader());
+        GameInfoResponse info = GameInfoResponse.success("standard", hash, List.of(), 27, true,
+            6 * 3_600_000L, 0L, null, List.of(), List.of(), 0);
+        PlayerSnapshot me = new PlayerSnapshot("Baltic Star Agency", Archetype.SOVIET, 60_000, 2_140, 3_000, 27);
+        me.setDirectorName("A. Reyes");
+        startSession(game, me, info);
+        FrontPage.Achiever orion = new FrontPage.Achiever("Orion Spaceworks", "Ana Reyes", List.of("Daniel Hale"));
+        FrontPage.Achiever kestrel = new FrontPage.Achiever("Kestrel Aerospace", "Moses Okafor", List.of());
+        FrontPage.Achiever baltic = new FrontPage.Achiever("Baltic Star Agency", "A. Reyes", List.of("Pavel Brandt"));
+        FrontPage satellite = new FrontPage("11-earth-orbit-satellite", "earth-orbit-satellite", 11, "sat-new-moon",
+            "Crisp, clear evening", List.of(), List.of(kestrel), List.of("Orion Spaceworks", "Baltic Star Agency"));
+        FrontPage space = new FrontPage("25-human-in-space", "human-in-space", 25, "space-first-flight",
+            "Snow flurries, bitter cold", List.of(), List.of(baltic), List.of("Orion Spaceworks", "Kestrel Aerospace"));
+        FrontPage orbit = new FrontPage("26-human-in-orbit", "human-in-orbit", 26, "orbit-circles",
+            "Fair and cool tonight", List.of(), List.of(orion), List.of("Kestrel Aerospace", "Baltic Star Agency"));
+        List<FrontPage> all = List.of(satellite, space, orbit);
+        game.session().keepFrontPages(all);
+        write(folder, "frontpage-orbit-rival.png", new FrontPageScreen(game, List.of(orbit), () -> { }, false), null);
+        write(folder, "frontpage-two.png", new FrontPageScreen(game, List.of(space, orbit), () -> { }, false), null);
+        write(folder, "frontpage-space-you.png", new FrontPageScreen(game, List.of(space), () -> { }, true), null);
+        write(folder, "frontpage-satellite.png", new FrontPageScreen(game, List.of(satellite), () -> { }, true), null);
+
+        // Later Firsts: a flyby with human in orbit folded in, then the landing as a tie.
+        FrontPage flyby = new FrontPage("40-crewed-lunar-flyby", "crewed-lunar-flyby", 40, "flyby-earthrise",
+            "Windy with rain at times", List.of(), new java.util.ArrayList<>(List.of(new FrontPage.Achiever(
+                "Kestrel Aerospace", "Moses Okafor", List.of("Ruth Lindqvist", "Tomas Ortiz", "Grace Mbeki")))),
+            List.of("Orion Spaceworks"));
+        FrontPage landing = new FrontPage("52-crewed-lunar-landing", "crewed-lunar-landing", 52, "landing-tie",
+            "Hot and humid", List.of(), List.of(new FrontPage.Achiever("Orion Spaceworks", "Ana Reyes",
+                List.of("Daniel Hale", "Lena Fischer")), new FrontPage.Achiever("Baltic Star Agency", "A. Reyes",
+                List.of("Pavel Brandt", "Irina Sokolova"))), List.of("Kestrel Aerospace"));
+        game.session().keepFrontPages(List.of(satellite, space, orbit, flyby, landing));
+        write(folder, "frontpage-flyby.png", new FrontPageScreen(game, List.of(flyby), () -> { }, true), null);
+        write(folder, "frontpage-landing-tie.png", new FrontPageScreen(game, List.of(landing), () -> { }, true), null);
+        FrontPage landingAlone = new FrontPage("52-crewed-lunar-landing", "crewed-lunar-landing", 52,
+            "landing-footprints", "Hot and humid", List.of(), List.of(new FrontPage.Achiever("Orion Spaceworks",
+                "Ana Reyes", List.of("Daniel Hale", "Lena Fischer"))), List.of("Kestrel Aerospace", "Baltic Star Agency"));
+        write(folder, "frontpage-landing.png", new FrontPageScreen(game, List.of(landingAlone), () -> { }, true), null);
+
+        // A first orbit that also took human in space, and the longest names allowed (32 characters).
+        FrontPage folded = new FrontPage("26-human-in-orbit", "human-in-orbit", 26, "orbit-around-the-world",
+            "Fair and cool tonight", List.of("earth-orbit-satellite", "human-in-space"), List.of(
+                new FrontPage.Achiever("Interplanetary Research Agency X", "Alexandra Konstantinopoulou-Sims",
+                    List.of("Bartholomew Fairweather-Hughes"))),
+            List.of("Consolidated Rocket Works Bureau", "Northern Lights Space Directorate"));
+        game.session().keepFrontPages(List.of(folded));
+        write(folder, "frontpage-long-names.png", new FrontPageScreen(game, List.of(folded), () -> { }, false), null);
     }
 
     /**

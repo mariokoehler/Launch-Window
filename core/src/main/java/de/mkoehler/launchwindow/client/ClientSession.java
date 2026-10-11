@@ -10,6 +10,7 @@ import de.mkoehler.launchwindow.content.ContentPackHash;
 import de.mkoehler.launchwindow.content.ContentPackLoader;
 import de.mkoehler.launchwindow.content.ContentStrings;
 import de.mkoehler.launchwindow.content.MissionConfiguration;
+import de.mkoehler.launchwindow.model.FrontPage;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.net.messages.RivalSummary;
 import de.mkoehler.launchwindow.rules.TurnReport;
@@ -53,6 +54,7 @@ public final class ClientSession {
     private final Map<Long, TurnReport> reports = new HashMap<>();
     private long lastTurnWithoutReport;
     private List<RivalSummary> rivals;
+    private List<FrontPage> frontPages;
 
     private ClientSession(Credentials credentials, ContentCatalog catalog, PackStatus packStatus, PlayerSnapshot state,
                           GameInfo gameInfo) {
@@ -243,6 +245,35 @@ public final class ClientSession {
      */
     public void keepRivals(List<RivalSummary> rivals) {
         this.rivals = List.copyOf(rivals);
+    }
+
+    /**
+     * Returns the front pages fetched last in this session ({@code ui-spec.md} &sect;4.18).
+     *
+     * @return every page printed so far, oldest first, or {@code null} if none were fetched yet
+     */
+    public List<FrontPage> frontPages() {
+        return frontPages;
+    }
+
+    /**
+     * Keeps freshly fetched front pages.
+     *
+     * @param pages every page printed so far
+     */
+    public void keepFrontPages(List<FrontPage> pages) {
+        this.frontPages = List.copyOf(pages);
+    }
+
+    /**
+     * Returns the game turn this player's agency joined in: its first resolved turn, from its own
+     * season count (1 at the start, one more per resolved turn). Front pages printed before it
+     * count as seen.
+     *
+     * @return the turn joined in
+     */
+    public long joinedTurn() {
+        return openTurn() - Math.max(0, state().getSeason() - 1);
     }
 
     /**

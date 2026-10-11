@@ -1,0 +1,239 @@
+package de.mkoehler.launchwindow.client.view;
+
+import de.mkoehler.launchwindow.content.ContentCatalog;
+import de.mkoehler.launchwindow.content.FrontPages;
+import de.mkoehler.launchwindow.content.Goal;
+import de.mkoehler.launchwindow.model.FrontPage;
+import de.mkoehler.launchwindow.model.GameDate;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
+
+/**
+ * The words on a front page ({@code ui-spec.md} &sect;4.18): its story with the tokens filled in,
+ * the folio line, the race box and the game line under the page. No drawing here, so it can be
+ * tested without a window.
+ *
+ * @author Mario Koehler
+ */
+public final class FrontPageView {
+
+    private FrontPageView() {
+    }
+
+    /**
+     * Everything a page shows.
+     *
+     * @param headline the headline, in capitals
+     * @param shortHeadline the short headline, in capitals
+     * @param deck     the subheadline
+     * @param caption  the photo's caption
+     * @param brief    the "In brief" lines
+     * @param paragraphs the article, in order; the last {@code droppable} may be left out to fit
+     * @param droppable how many of the last paragraphs may be left out
+     * @param folio    the folio's left part, "VOL. VII · No. 26"
+     * @param season   the folio's middle, "SPRING 1961"
+     * @param weather  the ear's weather line
+     * @param race     the race box's rows
+     * @param photo    the photo's path under {@code assets/ui/}
+     */
+    public record Page(String headline, String shortHeadline, String deck, String caption, List<String> brief,
+                       List<String> paragraphs, int droppable, String folio, String season, String weather,
+                       List<RaceRow> race, String photo) {
+    }
+
+    /**
+     * One row of the race box.
+     *
+     * @param first the First's name
+     * @param who   who made it and when, or "still open"
+     * @param done  whether it's made
+     */
+    public record RaceRow(String first, String who, boolean done) {
+    }
+
+    /**
+     * Builds a page's words.
+     *
+     * @param page    the printed page
+     * @param all     every page printed in the game, for the race box
+     * @param words   the pages' words
+     * @param inPack  whether the game's pack has a goal
+     * @param names   a goal's display name
+     * @return the words, or empty if the words file doesn't know the page's First
+     */
+    public static Optional<Page> of(FrontPage page, List<FrontPage> all, FrontPages words,
+                                    java.util.function.Predicate<String> inPack, Function<String, String> names) {
+        Optional<FrontPages.First> first = words.first(page.goalId());
+        if (first.isEmpty()) {
+            return Optional.empty();
+        }
+        Optional<FrontPages.Story> found = first.get().story(page.storyId());
+        Map<String, String> tokens = tokens(page, names);
+        String headline = found.map(s -> fill(s.headline(), tokens)).orElse(names.apply(page.goalId()));
+        String shortHeadline = found.map(s -> fill(s.headlineShort(), tokens)).orElse(headline);
+        List<String> paragraphs = new ArrayList<>();
+        int droppable = 0;
+        if (found.isPresent()) {
+            FrontPages.Story story = found.get();
+            for (String paragraph : story.paragraphs(!page.foldedGoalIds().isEmpty(), page.rivals().size())) {
+                paragraphs.add(fill(paragraph, tokens));
+            }
+            droppable = story.close().size();
+        }
+        GameDate date = GameDate.ofTurn(page.gameTurn());
+        String folio = "VOL. " + roman(date.year() - GameDate.START_YEAR + 1) + " · No. " + page.gameTurn();
+        return Optional.of(new Page(headline.toUpperCase(Locale.ROOT), shortHeadline.toUpperCase(Locale.ROOT),
+            found.map(s -> fill(s.deck(), tokens)).orElse(""), fill(first.get().caption(), tokens), first.get().brief(),
+            paragraphs, droppable, folio, date.label().toUpperCase(Locale.ROOT), page.weather(),
+            race(page, all, words, inPack, names), "frontpage/" + page.goalId() + ".jpg"));
+    }
+
+    /**
+     * Returns the race box as it stood when a page was printed: every First the pack has, who made
+     * it and when, from the pages printed up to that one.
+     *
+     * @param page   the page
+     * @param all    every page printed in the game
+     * @param words  the pages' words, for the Firsts' order
+     * @param inPack whether the game's pack has a goal
+     * @param names  a goal's display name
+     * @return one row per First
+     */
+    public static List<RaceRow> race(FrontPage page, List<FrontPage> all, FrontPages words,
+                                     java.util.function.Predicate<String> inPack, Function<String, String> names) {
+        List<RaceRow> rows = new ArrayList<>();
+        for (FrontPages.First first : words.firsts()) {
+            if (!inPack.test(first.goal())) {
+                continue;
+            }
+            Optional<FrontPage> made = all.stream()
+                .filter(p -> p.gameTurn() <= page.gameTurn() && p.tells(first.goal()))
+                .min(Comparator.comparingInt(FrontPage::gameTurn));
+            rows.add(made.map(p -> new RaceRow(names.apply(first.goal()),
+                    join(p.achievers().stream().map(FrontPage.Achiever::agencyName).toList()) + " · "
+                        + GameDate.ofTurn(p.gameTurn()).label(), true))
+                .orElse(new RaceRow(names.apply(first.goal()), "still open", false)));
+        }
+        return rows;
+    }
+
+    /**
+     * Returns the game line under the page: who got there first and what the First pays now.
+     *
+     * @param page    the page
+     * @param you     this player's agency name
+     * @param catalog the game's content, for the prestige
+     * @param names   a goal's display name
+     * @return the line
+     */
+    public static String gameLine(FrontPage page, String you, ContentCatalog catalog, Function<String, String> names) {
+        Optional<Goal> goal = catalog.goal(page.goalId());
+        String name = names.apply(page.goalId());
+        long first = goal.map(Goal::firstTimePrestige).orElse(0L);
+        long later = goal.map(Goal::secondTimePrestige).orElse(0L);
+        if (page.madeBy(you)) {
+            List<String> others = page.achievers().stream().map(FrontPage.Achiever::agencyName)
+                .filter(n -> !n.equals(you)).toList();
+            if (others.isEmpty()) {
+                return "Your agency got there first: " + name + " paid " + whole(first) + " prestige.";
+            }
+            return "You share this First with " + join(others) + ": each of you got " + whole(first)
+                + " prestige.";
+        }
+        String who = join(page.achievers().stream().map(FrontPage.Achiever::agencyName).toList());
+        return who + (page.achievers().size() > 1 ? " got there first together. " : " got there first. ")
+            + name + " now pays " + whole(later) + " prestige to whoever follows.";
+    }
+
+    /**
+     * Fills a text's tokens.
+     *
+     * @param text   the text
+     * @param tokens the tokens' values, by name
+     * @return the text
+     */
+    static String fill(String text, Map<String, String> tokens) {
+        if (text == null) {
+            return "";
+        }
+        String filled = text;
+        for (Map.Entry<String, String> token : tokens.entrySet()) {
+            filled = filled.replace("{" + token.getKey() + "}", token.getValue());
+        }
+        return filled;
+    }
+
+    /**
+     * Returns a page's token values.
+     *
+     * @param page  the page
+     * @param names a goal's display name
+     * @return the values, by token name
+     */
+    static Map<String, String> tokens(FrontPage page, Function<String, String> names) {
+        List<String> crew = new ArrayList<>();
+        List<String> commanders = new ArrayList<>();
+        for (FrontPage.Achiever achiever : page.achievers()) {
+            crew.addAll(achiever.crewNames());
+            if (!achiever.crewNames().isEmpty()) {
+                commanders.add(achiever.crewNames().get(0));
+            }
+        }
+        List<String> folded = page.foldedGoalIds().stream().map(g -> "“" + names.apply(g) + "”").toList();
+        return Map.of(
+            "agency", join(page.achievers().stream().map(FrontPage.Achiever::agencyName).toList()),
+            "director", join(page.achievers().stream().map(FrontPage.Achiever::directorName).toList()),
+            "season", GameDate.ofTurn(page.gameTurn()).label().toUpperCase(Locale.ROOT),
+            "crew", crew.isEmpty() ? "the crew" : join(crew),
+            "commander", commanders.isEmpty() ? "the pilot" : join(commanders),
+            "rival1", page.rivals().isEmpty() ? "" : page.rivals().get(0),
+            "rival2", page.rivals().size() < 2 ? "" : page.rivals().get(1),
+            "also", join(folded));
+    }
+
+    /**
+     * Joins names as a sentence does: "A", "A and B", "A, B and C".
+     *
+     * @param names the names
+     * @return the list
+     */
+    static String join(List<String> names) {
+        if (names.isEmpty()) {
+            return "";
+        }
+        if (names.size() == 1) {
+            return names.get(0);
+        }
+        return String.join(", ", names.subList(0, names.size() - 1)) + " and " + names.get(names.size() - 1);
+    }
+
+    private static String whole(long value) {
+        return String.format(Locale.ROOT, "%,d", value);
+    }
+
+    /**
+     * Returns a number in Roman numerals, for the volume.
+     *
+     * @param number a positive number
+     * @return the numerals
+     */
+    static String roman(int number) {
+        int[] values = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
+        String[] numerals = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
+        StringBuilder out = new StringBuilder();
+        int rest = Math.max(1, number);
+        for (int i = 0; i < values.length; i++) {
+            while (rest >= values[i]) {
+                out.append(numerals[i]);
+                rest -= values[i];
+            }
+        }
+        return out.toString();
+    }
+}

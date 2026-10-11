@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.mkoehler.launchwindow.actions.HireAction;
 import de.mkoehler.launchwindow.actions.OpenProgramAction;
 import de.mkoehler.launchwindow.model.Archetype;
+import de.mkoehler.launchwindow.model.FrontPage;
 import de.mkoehler.launchwindow.model.GameDate;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.model.Season;
@@ -12,6 +13,7 @@ import de.mkoehler.launchwindow.net.messages.ClaimSlotRequest;
 import de.mkoehler.launchwindow.net.messages.ClaimSlotResponse;
 import de.mkoehler.launchwindow.net.messages.FetchStateRequest;
 import de.mkoehler.launchwindow.net.messages.FetchStateResponse;
+import de.mkoehler.launchwindow.net.messages.FrontPagesRequest;
 import de.mkoehler.launchwindow.net.messages.GameInfoRequest;
 import de.mkoehler.launchwindow.net.messages.GameInfoResponse;
 import de.mkoehler.launchwindow.net.messages.HandshakeRequest;
@@ -25,6 +27,7 @@ import de.mkoehler.launchwindow.persistence.SetFundsAction;
 import de.mkoehler.launchwindow.rules.HiringPool;
 import de.mkoehler.launchwindow.rules.PersonnelGroup;
 import de.mkoehler.launchwindow.server.accounts.AccountStore;
+import de.mkoehler.launchwindow.server.schedule.FrontPageStore;
 import de.mkoehler.launchwindow.server.schedule.GameMeta;
 import de.mkoehler.launchwindow.server.schedule.GameResult;
 import de.mkoehler.launchwindow.server.schedule.SchedulerState;
@@ -199,8 +202,27 @@ class RequestDispatcherTest {
             dispatcher.handleClaimSlot(2, new ClaimSlotRequest(Archetype.NASA, "Bavaria", "MARIO")).reason());
         assertEquals(ClaimSlotResponse.Reason.MISSING_FIELDS,
             dispatcher.handleClaimSlot(2, new ClaimSlotRequest(Archetype.NASA, "Bavaria", " ")).reason());
+        assertEquals(ClaimSlotResponse.Reason.NAME_TOO_LONG, dispatcher.handleClaimSlot(2,
+            new ClaimSlotRequest(Archetype.NASA, "B".repeat(ClaimSlotRequest.MAX_NAME_LENGTH + 1), "Anna")).reason(),
+            "a front page's columns hold 32 characters (ui-spec.md 4.18)");
         assertTrue(dispatcher.handleClaimSlot(2, new ClaimSlotRequest(Archetype.NASA, "Bavaria", "Anna")).success(),
             "the same archetype is fine");
+    }
+
+    /**
+     * Verifies the front pages go to a player with a slot, and only to one (ui-spec.md 4.18, G14).
+     */
+    @Test
+    void frontPagesNeedASlot(@TempDir Path dataRoot) throws Exception {
+        RequestDispatcher dispatcher = dispatcher(createAccountStore(dataRoot), dataRoot, false);
+        dispatcher.handleHandshake(1, new HandshakeRequest(AppVersion.getVersion(), "mario", "hunter2"));
+        assertFalse(dispatcher.handleFrontPages(1, new FrontPagesRequest()).success());
+        dispatcher.handleClaimSlot(1, new ClaimSlotRequest(Archetype.SOVIET, "OKB-1", "Chief"));
+        assertTrue(dispatcher.handleFrontPages(1, new FrontPagesRequest()).pages().isEmpty());
+        FrontPage page = new FrontPage("3-earth-orbit-satellite", "earth-orbit-satellite", 3, "sat-signal", "",
+            List.of(), List.of(new FrontPage.Achiever("OKB-1", "Chief", List.of())), List.of());
+        FrontPageStore.keep(dataRoot, GameServer.createMapper(), 3, List.of(page));
+        assertEquals(List.of(page), dispatcher.handleFrontPages(1, new FrontPagesRequest()).pages());
     }
 
     /**

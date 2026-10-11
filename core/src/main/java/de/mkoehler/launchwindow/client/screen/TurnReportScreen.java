@@ -358,8 +358,9 @@ public final class TurnReportScreen extends ChromeScreen {
             chips.add(chip(ContentNames.of(line.goalId()), Theme.SUCCESS, new Color(Theme.SURFACE_CARD)
                 .lerp(Theme.SUCCESS, 0.08f)));
             if (line.first()) {
-                chips.add(chip("First in the game!", Theme.GOLD_TEXT, new Color(Theme.SURFACE_CARD).lerp(Theme.GOLD,
-                    0.15f))).padLeft(4f);
+                chips.add(RaceTable.pageLink(ui, chip("First in the game!", Theme.GOLD_TEXT,
+                    new Color(Theme.SURFACE_CARD).lerp(Theme.GOLD, 0.15f)), line.goalId(), this::openFrontPage))
+                    .padLeft(4f);
             }
             left.add(chips).padBottom(2f).row();
             left.add(ui.label(line.how(), Theme.TextStyle.CAPTION, Theme.INK_MUTED));

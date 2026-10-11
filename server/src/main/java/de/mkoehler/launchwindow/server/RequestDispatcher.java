@@ -9,6 +9,8 @@ import de.mkoehler.launchwindow.net.messages.ClaimSlotRequest;
 import de.mkoehler.launchwindow.net.messages.ClaimSlotResponse;
 import de.mkoehler.launchwindow.net.messages.FetchStateRequest;
 import de.mkoehler.launchwindow.net.messages.FetchStateResponse;
+import de.mkoehler.launchwindow.net.messages.FrontPagesRequest;
+import de.mkoehler.launchwindow.net.messages.FrontPagesResponse;
 import de.mkoehler.launchwindow.net.messages.GameInfoRequest;
 import de.mkoehler.launchwindow.net.messages.TurnReportRequest;
 import de.mkoehler.launchwindow.net.messages.TurnReportResponse;
@@ -34,6 +36,7 @@ import de.mkoehler.launchwindow.rules.TurnReport;
 import de.mkoehler.launchwindow.rules.WinCondition;
 import de.mkoehler.launchwindow.server.accounts.AccountStore;
 import de.mkoehler.launchwindow.server.accounts.AuthResult;
+import de.mkoehler.launchwindow.server.schedule.FrontPageStore;
 import de.mkoehler.launchwindow.server.schedule.GameMeta;
 
 import java.io.IOException;
@@ -164,6 +167,9 @@ public class RequestDispatcher {
         if (message instanceof GameInfoRequest request) {
             return new DispatchResult(handleGameInfo(connectionId, request), false);
         }
+        if (message instanceof FrontPagesRequest request) {
+            return new DispatchResult(handleFrontPages(connectionId, request), false);
+        }
         throw new IllegalArgumentException("Unexpected message type: " + message.getClass().getName());
     }
 
@@ -212,6 +218,11 @@ public class RequestDispatcher {
         }
         if (request.archetype() == null || isBlank(request.agencyName()) || isBlank(request.directorName())) {
             return ClaimSlotResponse.failure(ClaimSlotResponse.Reason.MISSING_FIELDS, "An archetype, an agency name and a director name are all required.");
+        }
+        if (request.agencyName().strip().length() > ClaimSlotRequest.MAX_NAME_LENGTH
+            || request.directorName().strip().length() > ClaimSlotRequest.MAX_NAME_LENGTH) {
+            return ClaimSlotResponse.failure(ClaimSlotResponse.Reason.NAME_TOO_LONG,
+                "Names can be at most " + ClaimSlotRequest.MAX_NAME_LENGTH + " characters long.");
         }
         try {
             PlayerSnapshotStore store = new PlayerSnapshotStore(playerRoot(accountId), mapper);
@@ -385,6 +396,29 @@ public class RequestDispatcher {
             return ResolveTurnNowResponse.resolved(turnForcer.resolveNow());
         } catch (IOException | RuntimeException e) {
             return ResolveTurnNowResponse.failure("Failed to resolve the turn: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Handles a {@link FrontPagesRequest}: every front page printed in the game so far
+     * ({@code ui-spec.md} &sect;4.18, G14). The pages carry agency names only.
+     *
+     * @param connectionId the connection the request arrived on
+     * @param request      the request
+     * @return the response
+     */
+    public FrontPagesResponse handleFrontPages(int connectionId, FrontPagesRequest request) {
+        String accountId = connectionAccountIds.get(connectionId);
+        if (accountId == null) {
+            return FrontPagesResponse.failure("Not authenticated - send a HandshakeRequest first.");
+        }
+        try {
+            if (!hasSlot(accountId)) {
+                return FrontPagesResponse.failure(ClaimSlotRequest.SLOT_CLAIM_REQUIRED);
+            }
+            return FrontPagesResponse.of(FrontPageStore.load(dataRoot, mapper));
+        } catch (IOException | RuntimeException e) {
+            return FrontPagesResponse.failure("Failed to read the front pages: " + e.getMessage());
         }
     }
 

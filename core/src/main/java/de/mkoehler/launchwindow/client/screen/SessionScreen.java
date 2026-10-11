@@ -18,9 +18,11 @@ import de.mkoehler.launchwindow.client.ui.Refusals;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.Tips;
+import de.mkoehler.launchwindow.model.FrontPage;
 import de.mkoehler.launchwindow.persistence.PlayerAction;
 import de.mkoehler.launchwindow.rules.TurnReport;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.OptionalLong;
 import java.util.function.Consumer;
@@ -180,8 +182,10 @@ abstract class SessionScreen extends StageScreen {
                 session.update(result);
                 stateChanged();
                 if (session.latestResolvedTurn() > resolvedBefore) {
-                    // A turn resolved while the player was here: say so rather than take over the screen.
-                    toast("The turn resolved. Its report is waiting on the Space Complex.", Theme.NoticeKind.INFO);
+                    // A turn resolved while the player was here: a new front page comes first
+                    // (ui-spec.md section 4.18), then say so rather than take over the screen.
+                    withFrontPages(() -> toast("The turn resolved. Its report is waiting on the Space Complex.",
+                        Theme.NoticeKind.INFO));
                 }
             }
         });
@@ -551,6 +555,63 @@ abstract class SessionScreen extends StageScreen {
             game.setScreen(new ReplayScreen(game, report, missionId));
         } else {
             toast("That mission didn't fly in the last turn.", Theme.NoticeKind.INFO);
+        }
+    }
+
+    /**
+     * Fetches the front pages and shows the unseen ones over this screen, coming back to it
+     * afterwards ({@code ui-spec.md} &sect;4.18); then runs {@code after} here. With none unseen,
+     * or if the fetch fails, it just runs {@code after}.
+     *
+     * @param after what to do once the pages are out of the way
+     */
+    protected void withFrontPages(Runnable after) {
+        fetchFrontPages(() -> {
+            List<FrontPage> unseen = FrontPageScreen.unseen(game);
+            if (unseen.isEmpty()) {
+                after.run();
+                return;
+            }
+            SessionScreen self = this;
+            game.visit(new FrontPageScreen(game, unseen, () -> {
+                game.setScreen(self);
+                after.run();
+            }, false));
+        });
+    }
+
+    /**
+     * Fetches every front page into the session, then runs {@code after} if this screen still
+     * shows, whether the fetch worked or not.
+     *
+     * @param after what to do next
+     */
+    protected void fetchFrontPages(Runnable after) {
+        game.gateway().fetchFrontPages(session.credentials(), result -> {
+            if (result.ok()) {
+                session.keepFrontPages(result.pages());
+            }
+            if (isShowing()) {
+                after.run();
+            }
+        });
+    }
+
+    /**
+     * Reopens the page that tells a First over this screen, coming back to it afterwards
+     * ({@code ui-spec.md} &sect;4.18): from the Museum's race and the turn report's goal line.
+     *
+     * @param goalId the First's goal
+     */
+    protected void openFrontPage(String goalId) {
+        Runnable open = () -> FrontPageScreen.pageFor(game, goalId).ifPresentOrElse(page -> {
+            SessionScreen self = this;
+            game.visit(new FrontPageScreen(game, List.of(page), () -> game.setScreen(self), true));
+        }, () -> toast("That front page isn't here.", Theme.NoticeKind.INFO));
+        if (session.frontPages() == null || FrontPageScreen.pageFor(game, goalId).isEmpty()) {
+            fetchFrontPages(open);
+        } else {
+            open.run();
         }
     }
 

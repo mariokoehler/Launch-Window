@@ -2598,6 +2598,38 @@ the fetch failed (no page, straight to the report: a page is never worth blockin
 **Server work:** G14. **New for `Theme.java`:** the two fonts, the scrim (if no existing token
 matches), no new colours (the ink is `Theme.INK`).
 
+**Built in libGDX (2026-10-11)** as `client.screen.FrontPageScreen`, its words in `client.view.FrontPageView`,
+from `assets/content/front-pages.json` (`content.FrontPages`). Shots `frontpage-*.png`
+(`ScreenSnapshot -Dshots=frontpage`). Choices made while building it, **unconfirmed**:
+- **The words file's shape:** per First a caption, two brief lines, two stories and a separate `tie`
+  story (not `headlineTie`/`deckTie` fields); a story is `headline`, `headlineShort`, `deck`, `lead`,
+  `also`, `rivals2`, `rivals1` and `close`, read in that order. `{also}` is the folded Firsts' names in
+  quotes. Tie stories are their own text, since "A and B" breaks the verbs of a one-agency story; in a
+  tie `{crew}`, `{director}` and `{commander}` list everyone's.
+- **The headline:** one line at 80 px, else one line at 64, else two lines at 64, then the short
+  headline the same way. Old Standard is wide, so a headline with an agency's name in it usually takes
+  two lines at 64; the lower half gives up that height, and the photo is cropped about its middle to
+  keep its width.
+- **Body text is ragged-right,** not justified (a libGDX label can't justify), with a four-space
+  first-line indent (the fonts have no em space).
+- **The columns:** the first fills before the second, paragraphs whole; while the second overflows,
+  closing paragraphs are dropped from the end (`FrontPagesTest` holds every article to 26 lines at the
+  longest names allowed, measured with the page's font). The "In brief" box sits at the foot of the
+  first column, the race box at the foot of the second; a race row whose who-and-when doesn't fit beside
+  the First's name goes on a second line, right-aligned.
+- **The strip's button** is the white page button, not the mock's gold one: the design system has no
+  gold button.
+- **Joining late:** pages printed before the turn the player joined in count as seen, from their own
+  season count (`ClientSession.joinedTurn`).
+- **When it shows:** on login the hub fetches the pages; unseen ones replace it, then a fresh hub opens
+  the unread report as before. While playing, a resolved turn's refresh shows the new pages over the
+  current screen and comes back to it, then toasts as before. A failed fetch shows nothing.
+- **Reopening:** the race tab's First tags (declared goals only), the Achievements tab's "First in the
+  game" tag and the turn report's "First in the game!" chip open the page, with a tooltip saying so.
+- **New in `Theme`:** `FontFile` Old Standard Bold and Libre Caslon Regular and Italic (static
+  instances at weight 400, cut from the variable fonts), the `NEWS_*` text styles (the headline styles
+  generated with capitals only, `Theme.CAPITALS`), and `SCRIM_DEEP` (`#0d1b33` at 80 %).
+
 ---
 
 ## 5. Refusal reasons (for toasts and inline messages)
@@ -2791,7 +2823,13 @@ current state alone. Each is an M5 task.
   `MessageRegistry`, report events (fields only added), and `TurnRollback` deleting market files. A
   playout bot that takes contracts.
 
-- **G14. Front pages (§4.18, 2026-10-11).** Rules: after the goal race is settled in a resolution,
+- **G14. Front pages (§4.18, 2026-10-11). Built the same day** as specified, with the name limit at
+  32 characters (refused as `NAME_TOO_LONG`, appended to `ClaimSlotResponse.Reason`, and the join
+  screen's fields stop there). Classes: `rules.FrontPagePrinter` (from each player's turn report, so a
+  retried resolution prints the same), `model.FrontPage`, `server.schedule.FrontPageStore`
+  (`frontpages.json`), the hook in `TurnScheduler.printFrontPages`, `TurnRollback` dropping the undone
+  turns' pages, `RequestDispatcher.handleFrontPages`. As specified: Rules: after the goal race is
+  settled in a resolution,
   find each First (the goal ids in `front-pages.json`'s keys that the pack has) that nobody held at the
   start of the turn and somebody holds now; fold the ones reached by the same flight into the latest;
   draw the story with the game seed salted by the goal id. Server: print a `FrontPage` per First into a

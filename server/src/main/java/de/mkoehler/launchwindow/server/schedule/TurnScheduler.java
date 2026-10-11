@@ -3,13 +3,16 @@ package de.mkoehler.launchwindow.server.schedule;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.mkoehler.launchwindow.content.CommercialClients;
+import de.mkoehler.launchwindow.content.FrontPages;
 import de.mkoehler.launchwindow.content.RandomEventRoster;
+import de.mkoehler.launchwindow.model.FrontPage;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.persistence.ActionContext;
 import de.mkoehler.launchwindow.persistence.AtomicFiles;
 import de.mkoehler.launchwindow.persistence.PlayerSnapshotStore;
 import de.mkoehler.launchwindow.persistence.PlayerStateService;
 import de.mkoehler.launchwindow.rules.ContractMarket;
+import de.mkoehler.launchwindow.rules.FrontPagePrinter;
 import de.mkoehler.launchwindow.rules.GoalTally;
 import de.mkoehler.launchwindow.rules.IntelFinding;
 import de.mkoehler.launchwindow.rules.IntelligenceBoard;
@@ -246,7 +249,36 @@ public class TurnScheduler {
                 GameSeeds.forSeason(meta.getGameSeed(), gameTurn, player.getKey()),
                 intelligence.getOrDefault(key, List.of()), market.turnFor(key));
         }
+        printFrontPages(gameTurn, meta, services);
         recordResultIfDecided(gameTurn, meta, services);
+    }
+
+    /**
+     * Prints the turn's front pages for the great Firsts ({@code ui-spec.md} &sect;4.18, G14) from
+     * every player's turn report, which survives a retry after a crash halfway through (a player
+     * already resolved returns no events, but their report is on disk), and keeps them in
+     * {@code frontpages.json}.
+     *
+     * @param gameTurn the turn just resolved
+     * @param meta     the game's configuration, for its seed
+     * @param services every player's state service
+     * @throws IOException if a report or the pages file can't be read or written
+     */
+    private void printFrontPages(long gameTurn, GameMeta meta, Map<String, PlayerStateService> services)
+            throws IOException {
+        FrontPages words = FrontPages.standard();
+        if (words.firsts().isEmpty()) {
+            return;
+        }
+        List<FrontPagePrinter.Agency> agencies = new ArrayList<>();
+        for (PlayerStateService service : services.values()) {
+            PlayerSnapshot state = service.stateBefore(gameTurn + 1).orElseThrow();
+            agencies.add(new FrontPagePrinter.Agency(state.getAgencyName(), state.getDirectorName(),
+                service.turnReport(gameTurn).orElse(null)));
+        }
+        List<FrontPage> pages = FrontPagePrinter.print(Math.toIntExact(gameTurn), meta.getGameSeed(), agencies, words,
+            goal -> context.catalog().goal(goal).isPresent());
+        FrontPageStore.keep(dataRoot, mapper, gameTurn, pages);
     }
 
     /**

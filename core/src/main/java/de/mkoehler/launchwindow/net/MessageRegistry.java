@@ -300,5 +300,11 @@ public final class MessageRegistry {
         // The hands-on decision (ui-spec.md component 26, type 11, 2026-10-11). Never move these lines.
         kryo.register(de.mkoehler.launchwindow.actions.HandsOnAction.class);
         kryo.register(de.mkoehler.launchwindow.rules.RdDecisions.HandsOnStep.class);
+
+        // The Firsts' front pages (ui-spec.md section 4.18, G14, 2026-10-11). Never move these lines.
+        kryo.register(de.mkoehler.launchwindow.net.messages.FrontPagesRequest.class);
+        kryo.register(de.mkoehler.launchwindow.net.messages.FrontPagesResponse.class);
+        kryo.register(de.mkoehler.launchwindow.model.FrontPage.class);
+        kryo.register(de.mkoehler.launchwindow.model.FrontPage.Achiever.class);
     }
 }

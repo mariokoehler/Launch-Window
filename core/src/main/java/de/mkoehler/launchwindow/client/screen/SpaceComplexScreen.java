@@ -28,6 +28,7 @@ import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.Hub;
 import de.mkoehler.launchwindow.client.view.Tips;
 import de.mkoehler.launchwindow.model.Building;
+import de.mkoehler.launchwindow.model.FrontPage;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 
 import java.io.IOException;
@@ -100,6 +101,18 @@ public final class SpaceComplexScreen extends SessionScreen {
      * @param unreadReport whether to open an unread report
      */
     public SpaceComplexScreen(LaunchWindowGame game, boolean unreadReport) {
+        this(game, unreadReport, false);
+    }
+
+    /**
+     * Builds the hub; on entering the game, the unseen front pages come before the unread report
+     * ({@code ui-spec.md} &sect;4.18).
+     *
+     * @param game         the game, in a session
+     * @param unreadReport whether to open an unread report
+     * @param pagesShown   whether the front pages were just shown, so they aren't fetched again
+     */
+    public SpaceComplexScreen(LaunchWindowGame game, boolean unreadReport, boolean pagesShown) {
         super(game);
         this.timeOfDay = game.hubClock().enter(System.currentTimeMillis());
         this.hotspots = loadHotspots();
@@ -118,6 +131,22 @@ public final class SpaceComplexScreen extends SessionScreen {
         stack.add(advisorCorner);
         root.add(stack).grow();
         rebuild();
+        if (unreadReport && !pagesShown) {
+            fetchFrontPages(() -> {
+                List<FrontPage> unseen = FrontPageScreen.unseen(game);
+                if (unseen.isEmpty()) {
+                    afterPages(true);
+                } else {
+                    game.setScreen(new FrontPageScreen(game, unseen,
+                        () -> game.setScreen(new SpaceComplexScreen(game, true, true)), false));
+                }
+            });
+        } else {
+            afterPages(unreadReport);
+        }
+    }
+
+    private void afterPages(boolean unreadReport) {
         if (unreadReport && game.reportUnread()) {
             openUnreadReport();
         } else if (game.resultUnseen()) {
