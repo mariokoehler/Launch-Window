@@ -144,6 +144,56 @@ public class PlayerActionJournal {
     }
 
     /**
+     * Moves the given pending actions out of the journal into
+     * {@code journal-rolled-back/<turn>/}, when a turn is rolled back: they were queued after it
+     * resolved, against results that are about to change ({@code design.md} &sect;3.7). They stay
+     * on disk but never resolve. A file already gone is skipped, so this is safe to retry.
+     *
+     * @param pending    the pending actions to set aside, as returned by {@link #readPending()}
+     * @param turnNumber the turn being rolled back
+     * @throws IOException if the folder can't be created or a file can't be moved
+     */
+    public void setAside(List<PendingAction> pending, long turnNumber) throws IOException {
+        Objects.requireNonNull(pending, "pending must not be null");
+        if (pending.isEmpty()) {
+            return;
+        }
+        Path asideDir = journalDir.resolveSibling("journal-rolled-back").resolve(String.valueOf(turnNumber));
+        Files.createDirectories(asideDir);
+        for (PendingAction action : pending) {
+            try {
+                Files.move(action.file(), asideDir.resolve(action.file().getFileName()));
+            } catch (NoSuchFileException e) {
+                // already set aside by an earlier attempt at the same rollback - fine.
+            }
+        }
+    }
+
+    /**
+     * Moves a turn's archived actions back into the journal, when the turn is rolled back, so the
+     * turn's next resolution applies them again. Their names are unchanged, so they sort before
+     * anything queued later. Removes the turn's archive folder; a no-op if there is none.
+     *
+     * @param turnNumber the turn being rolled back
+     * @throws IOException if a file can't be moved
+     */
+    public void unarchive(long turnNumber) throws IOException {
+        Path archiveDir = archiveRoot.resolve(String.valueOf(turnNumber));
+        if (!Files.exists(archiveDir)) {
+            return;
+        }
+        Files.createDirectories(journalDir);
+        List<Path> files;
+        try (Stream<Path> listing = Files.list(archiveDir)) {
+            files = listing.toList();
+        }
+        for (Path file : files) {
+            Files.move(file, journalDir.resolve(file.getFileName()));
+        }
+        Files.delete(archiveDir);
+    }
+
+    /**
      * Reads the last sequence number handed out, or {@code 0} if no action
      * has ever been appended for this player.
      *

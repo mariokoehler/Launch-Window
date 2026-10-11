@@ -214,6 +214,8 @@ public class TurnScheduler {
         if (!Files.exists(playersDir)) {
             return;
         }
+        // Before anything is written, so a bad resolution can be undone (design.md section 3.7).
+        TurnBackups.beforeTurn(dataRoot, gameTurn);
         Map<String, PlayerStateService> services = new LinkedHashMap<>();
         List<PlayerSnapshot> startOfTurn = new ArrayList<>();
         Map<String, PlayerSnapshot> withActions = new LinkedHashMap<>();

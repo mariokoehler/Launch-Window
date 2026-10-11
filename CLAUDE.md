@@ -91,6 +91,8 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
 - **PR duty for astronauts is built** (`design.md` §2.2(c)), with 39 press stories
   (`assets/content/pr-press.json`), no repeats, and effects beyond prestige. Next is the next
   play test.
+- **Undoing a bad turn is built** (the user's idea, 2026-10-11, `design.md` §3.7): a zip of the data
+  root before every turn, and `TurnRollback` to undo turns and redo them with a fixed build.
 
 ## How we work
 
@@ -198,6 +200,11 @@ mvn -pl dev-tools compile exec:java -DmainClass=de.mkoehler.launchwindow.devtool
 - **Reset the dev data root** whenever saved state stops loading: after a field change on a
   saved class (Jackson is strict on unknown fields) or a content-pack change (the pack hash
   changes).
+- **Undoing a bad turn** (`design.md` §3.7): with the server stopped,
+  `mvn -pl server compile exec:java -DmainClass=de.mkoehler.launchwindow.server.schedule.TurnRollback -Dexec.args="data <turn> --redo --yes"`
+  (without `--yes` it only says what it would do; on the NAS, run the class from the fixed image,
+  as in `deploy/docker-compose.yml`). The server zips the data root into `data/backups/` before
+  every turn.
 - **Dev mode:** `"devMode": true` in the server's `game-meta.json` (restart the server) shows
   "Dev · Resolve turn now" on the hub and allows `DevClient`'s `funds` cheat.
 - **Bot playouts:** `mvn -pl dev-tools compile exec:java -DmainClass=de.mkoehler.launchwindow.devtools.analysis.ContentPackPlayouts`

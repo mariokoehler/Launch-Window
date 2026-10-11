@@ -161,6 +161,37 @@ public class PlayerStateService {
     }
 
     /**
+     * Rolls this player back to the start of a turn, undoing its resolution ({@code design.md}
+     * &sect;3.7): sets aside the actions queued since it resolved, puts the turn's own actions
+     * back in the journal, and deletes its report and snapshot, so the next resolution of the
+     * turn starts from the same inputs. Run with the server stopped. Safe to retry: the actions
+     * queued later are told apart by the turn's cutoff, not by where they sit.
+     *
+     * @param gameTurn the turn to undo; it must be this player's latest
+     * @return whether this player had the turn resolved; {@code false} for a player who joined later
+     * @throws IOException           if the player's files can't be read or moved
+     * @throws IllegalStateException if the player has a later turn, which must be rolled back first
+     */
+    public boolean rollBack(long gameTurn) throws IOException {
+        OptionalLong latest = snapshotStore.latestTurnNumber();
+        if (latest.isEmpty() || latest.getAsLong() < gameTurn || gameTurn < 1) {
+            return false;
+        }
+        if (latest.getAsLong() > gameTurn) {
+            throw new IllegalStateException("turn " + latest.getAsLong() + " must be rolled back before turn "
+                + gameTurn);
+        }
+        Optional<String> cutoff = snapshotStore.lastAppliedActionFile(gameTurn);
+        journal.setAside(journal.readPending().stream()
+            .filter(pending -> cutoff.isEmpty() || pending.file().getFileName().toString().compareTo(cutoff.get()) > 0)
+            .toList(), gameTurn);
+        journal.unarchive(gameTurn);
+        reportStore.delete(gameTurn);
+        snapshotStore.delete(gameTurn);
+        return true;
+    }
+
+    /**
      * Loads a turn's report.
      *
      * @param turn the turn, or a negative number for the latest

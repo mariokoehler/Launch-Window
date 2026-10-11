@@ -1724,7 +1724,10 @@ projects and BASPM's own XML save, which maps almost 1:1 onto its object graph.
     journal-sequence.txt       the last sequence number, never reused or reset
     journal-archive/<turn>/    journal files a resolved turn applied
     reports/<turn>.json        the turn report (below)
+    journal-rolled-back/<turn>/ actions set aside by a rollback of that turn (below)
   content/<packId>/            the game's frozen content pack (§5, M5)
+  intelligence/turn-<N>.json   the turn's intelligence, settled once (§2.9)
+  backups/                     zips of the data root (below)
   ```
   **Invariants:** journal names stay fixed-width and sequence-first (crash recovery compares
   them as strings), and the sequence never resets. Writes are atomic (temp file, then rename).
@@ -1743,6 +1746,42 @@ projects and BASPM's own XML save, which maps almost 1:1 onto its object graph.
   unknown fields, so a removed or renamed field means resetting the dev data root.
 - **Museum records** (2026-10-04, additive): `PlayerSnapshot.memorial` (`MemorialEntry`) and
   `goalRecords` (`GoalRecord`), both append-only.
+- **Rolling back a bad turn** (the user's idea, 2026-10-11): when a bug makes a turn come out
+  wrong, the game goes back to the start of the turn, the server gets the fix, and the turn
+  resolves again. Each player's season is seeded from the game seed and the turn, so the redone
+  turn rolls the same dice and only what the bug touched changes (`TurnRollbackTest` holds a
+  redo to byte-identical files; on the dev game, redoing turn 19 with a later build changed only
+  the two duplicate candidate names that build's fix was for).
+  - **`server.schedule.TurnRollback`**, run with the server stopped:
+    `java -cp LaunchWindow-Server-<version>.jar de.mkoehler.launchwindow.server.schedule.TurnRollback <dataRoot> <turn> [--redo] [--yes]`.
+    It undoes `<turn>` and every turn after it. Without `--yes` it only says what it would do.
+    `--redo` resolves the turn again at once with the build it runs from, before anyone
+    reconnects and changes their queued actions; it leaves the schedule alone, so the next turn
+    resolves on its usual day. Without it the server redoes the turn at its next scheduled time
+    (or by dev mode's "Resolve turn now").
+  - **Per player** (`PlayerStateService.rollBack`): the actions queued after the turn resolved
+    are set aside in `journal-rolled-back/<turn>/` (told apart by the snapshot's cutoff, so a
+    retry is safe): they were planned against the wrong results, and players queue again. The
+    turn's own actions go back from `journal-archive/<turn>/` into the journal, and the turn's
+    report and snapshot are deleted. Several turns roll back one at a time from the latest, so
+    each later turn's actions land under that turn and none resolve a turn early.
+  - **Game-wide:** the turns' `intelligence/turn-N.json` are deleted (re-settled from the same
+    inputs), `game-result.json` only if a rolled-back turn decided it, the abandoned timeline's
+    `backups/before-turn-N.zip` after the turn, and `scheduler-state.json`'s next turn becomes
+    the turn.
+  - **Backups** (`TurnBackups`): the data root is zipped before every turn resolves
+    (`backups/before-turn-N.zip`, written once so a retried resolution keeps the first attempt's,
+    the last 10 turns kept) and before every rollback (`before-rollback-to-turn-N-<time>.zip`,
+    never pruned). They leave out `accounts.json`, `content/` and `backups/`. They are the net
+    under the rollback, for a bug that damages files it relies on: stop the server, delete
+    everything in the data root but those three, *then* unzip, and start it again. Never unzip over
+    the folder: newer journal files would stay beside an older `journal-sequence.txt`, and a reused
+    sequence number breaks crash recovery. Each zip holds the
+    whole history, so it grows with the game (unconfirmed: fine for a hobby server's few players).
+  - **Known limits:** a player who joined after the turn resolved is resolved into the redone
+    turn too, one extra season for them. A fix to the content pack also needs the frozen copy
+    in `content/<packId>/` replaced, or the server keeps the old one. Clients keep the highest
+    report they read, so a redone turn's report doesn't show as new: tell the players.
 
 ### 3.8 Player accounts & authentication
 

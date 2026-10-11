@@ -20,5 +20,10 @@ services:
     volumes:
       # The game's data root. On the first start the server creates game-meta.json here with
       # defaults; edit it (schedule, blackouts, declared goals; devMode stays false) and
-      # restart the container. Back this folder up: it is the whole game.
+      # restart the container. Back this folder up: it is the whole game. The server zips it
+      # into backups/ before every turn. To undo a bad turn (design.md 3.7), stop the
+      # application, then run the rollback from the image with the fix (it redoes the turn):
+      #   docker run --rm -v /share/Container/launchwindow/data:/app/data --entrypoint java
+      #     ghcr.io/mariokoehler/launchwindow-server:<tag> -cp /app/server.jar
+      #     de.mkoehler.launchwindow.server.schedule.TurnRollback /app/data <turn> --redo --yes
       - /share/Container/launchwindow/data:/app/data

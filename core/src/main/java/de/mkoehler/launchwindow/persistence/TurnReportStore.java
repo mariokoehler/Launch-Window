@@ -73,6 +73,16 @@ public class TurnReportStore {
     }
 
     /**
+     * Deletes a turn's report, when the turn is rolled back ({@code design.md} &sect;3.7).
+     *
+     * @param turn the turn
+     * @throws IOException if the file exists but can't be deleted
+     */
+    public void delete(long turn) throws IOException {
+        Files.deleteIfExists(reportsDir.resolve(turn + SUFFIX));
+    }
+
+    /**
      * Returns the latest turn with a report.
      *
      * @return the turn, or empty if there's no report yet

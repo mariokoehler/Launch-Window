@@ -144,6 +144,17 @@ public class PlayerSnapshotStore {
     }
 
     /**
+     * Deletes a turn's snapshot, when the turn is rolled back ({@code design.md} &sect;3.7): the
+     * one exception to "written once, never replaced".
+     *
+     * @param turn the turn
+     * @throws IOException if the file exists but can't be deleted
+     */
+    public void delete(long turn) throws IOException {
+        Files.deleteIfExists(snapshotsDir.resolve(turn + SUFFIX));
+    }
+
+    /**
      * Returns the highest turn number this player has a saved snapshot for.
      *
      * @return the latest resolved turn number, or an empty result if this
