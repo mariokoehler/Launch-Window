@@ -379,6 +379,16 @@ leading to satellite navigation.
     isn't sourced and isn't claimed.
   - The Venera 15 and 16 buses came from the Venera orbiters, not the landers; Luna 17 had ramps on
     two sides, not two pairs at each end.
+- **How the Firsts reached the papers** (checked 2026-10-11, for the front pages, `ui-spec.md`
+  §4.18): Pravda printed Sputnik 1 on 5 October 1957 as a plain TASS report on page one, given no
+  more room than a report on Marshal Zhukov's visit to Yugoslavia, and without naming the satellite;
+  the world's reaction made it a sensation, and later issues gave it far more room (a single source
+  says the next day's whole front page; unchecked). Moscow radio announced Gagarin's flight at 10:02
+  Moscow time on 12 April 1961, while he was still in orbit: he landed at about 10:55. Whether
+  Levitan read that first bulletin isn't confirmed; leave it out. Sources: Smithsonian Air and Space
+  ("We Shocked the World"), The Moscow Times ("Space race started with a cosmic blunder"), NASA
+  History, RussianSpaceWeb ("Vostok 1"). Our papers' headlines and articles are our own, never a real
+  paper's.
 - **Whole-crew losses:** Apollo 1, Soyuz 1, Soyuz 11, Challenger and Columbia lost everyone
   aboard, the real basis of §2.5(f). A sober note the first time it happens.
 - **Spying on the Moon race** (checked 2026-10-07, for the Intelligence Office's history notes):
@@ -2544,11 +2554,15 @@ bot.
     the bonus is too easy at these numbers, at least for a careful player: a harder bonus, three
     rounds, or a dearer expert are the levers (unconfirmed, for the user to choose).
 
-**Front pages for the Firsts** (the user's idea, 2026-10-09, not designed yet): when an agency
-makes one of the great Firsts (satellite in orbit, human in space, human in orbit, crewed lunar
-flyby, the Moon landing), every player sees a fictional newspaper's front page with the headline
-and an article on who made it first. It pops up on login before the turn report, the first thing
-they see. A new screen: spec, then a mockup session (`ui-spec.md` §7).
+**Front pages for the Firsts** (the user's idea, 2026-10-09; **specified and mocked up 2026-10-11**,
+`ui-spec.md` §4.18 and G14): when an agency makes one of the great Firsts (satellite in orbit, human in
+space, human in orbit, crewed lunar flyby, the Moon landing), every player sees a fictional newspaper's
+front page, *The Daily Zenith*, with the headline and an article on who made it first. It pops up on
+login before the turn report, the first thing they see. The page is the top half of a broadsheet,
+landscape, so its text is readable at 1920 x 1080. Its art (paper, masthead, a press photo per First)
+is generated with ComfyUI (`assets-raw/frontpage/`), and the mockup was laid out in Photocraft, the
+first screen mocked up outside Claude Design. Next: the user's look at the mockup and the unconfirmed
+choices in §4.18, then the stories (`front-pages.json`), G14 and the screen.
 
 **Commercial contracts** (the user's idea, designed, mocked up and **built** 2026-10-11, §2.11,
 `ui-spec.md` §4.17 and component 27): contract lines unlocked per program, a shared marketplace with

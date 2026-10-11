@@ -108,6 +108,10 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   first measurement says they fill the lulls but don't speed the race. The pack hash changed and
   saved classes gained fields: reset the dev data root, and rebuild client and server together (a new
   action).
+- **Front pages for the Firsts are specified and mocked up** (the user's idea, 2026-10-11,
+  `ui-spec.md` §4.18 and G14): a fictional newspaper's page on login, before the turn report. The
+  mockup is in Photocraft (`assets-raw/frontpage/mockup/`), not Claude Design; the art is generated
+  (`assets/ui/frontpage/`). Waiting for the user's look before the stories, the server and the screen.
 
 ## How we work
 
@@ -184,6 +188,16 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
     `make_blueprint_assets.py` for `assets/ui/blueprints/*.jpg`. ComfyUI's own copies are
     `lw_blueprint_*`: never delete those. A new component needs a description, a pick and a
     converter run.
+  - **Front-page art:** `assets-raw/frontpage/make_frontpage_art.py` (the newsprint, the masthead
+    with its name written by the model, a press photo per First; 3 seeds each, review sheets in
+    `review/`, spelling and stray insignia checked by eye), the pick per job in `picks.json` (only
+    picked variants are committed, with `git add -f`), then `make_frontpage_assets.py` for
+    `assets/ui/frontpage/`. ComfyUI's own copies are `lw_frontpage_*`: never delete those.
+- **Photocraft** (an open-source Photoshop, as the `photocraft` MCP server): reads and writes only
+  under `E:\Temp\automation` (copy files there first; file placing is disabled, so open the image and
+  copy its layer across with `layer.copyToDocument`). New layers land above the active one, so check
+  the stack after adding a fill layer. Centered type with a horizontal scale comes out off-centre:
+  read the bounds and move it. Tabs draw as boxes: use two aligned text layers instead.
 - **Other converters** in `assets-raw/`: `make_hub_art.py`, `make_content_art.py`,
   `svg/ui/make_ui_icons.py` (needs `pip install resvg-py`), and `explainers/make_explainer_art.py`
   (the explainers' drawings: PNG without text plus a labels file, `ui-spec.md` component 18).

@@ -2477,6 +2477,119 @@ tokens). As built, against the mockup:
   in `ContractsScreen` and `ContractMarker` from the existing tokens.
 - Shots `contracts-*.png` (`ScreenSnapshot -Dshots=contracts` renders just these).
 
+### 4.18 Front page *(the user's idea, 2026-10-09; specified and mocked up 2026-10-11)*
+**Purpose:** when an agency makes one of the great Firsts, every player in the game sees it the way
+the world did in the 1960s: on the front page of a newspaper. It's the first thing they see on their
+next login, before the turn report. It's news, not a rules screen: the game facts go in one line
+under the page.
+
+**Mocked up (2026-10-11) in Photocraft, not Claude Design:** `assets-raw/frontpage/mockup/`
+(`frontpage_mockup.pcraft` with every layer named, `frontpage_mockup.png` at 1920 x 1080), from the
+generated art (component art below). It stands in for the Claude Design step for this screen. Its
+fonts are stand-ins (Times New Roman, Georgia, Segoe UI); the build uses the faces under **Type**.
+
+**The Firsts** are listed in content, not code (`front-pages.json`, below), in race order. The standard
+pack's five: `earth-orbit-satellite`, `human-in-space`, `human-in-orbit`, `crewed-lunar-flyby`,
+`crewed-lunar-landing`. A pack shows the ones whose goals it has (early-era: the first three).
+*Unconfirmed:* spacewalk, docking and a two-crew flight aren't Firsts with a front page; they're in the
+turn report as usual.
+
+**When a page is printed:** in the resolution where a First's goal is reached for the first time in the
+game (the cross-player goal race, `design.md` §2.6: nobody held it at the start of the turn), reached or
+credited through the cascade alike.
+- **Ties:** several agencies reaching the same First in one resolution all get the first-time prestige,
+  so they share one page: the headline uses the story's tie form (both names), the race box lists both.
+- **Several Firsts in one resolution:** one page per First. When one flight earns two Firsts (a landing
+  credits the flyby through the cascade; a first orbit credits human in space and the satellite), the
+  latest First's page is printed and the others are folded into it: their lines in the race box carry
+  the same season, and the article's `also` paragraph mentions it. *(Unconfirmed: one page is the better
+  morning; two pages for one flight would read as a repeat.)*
+
+**When it shows:**
+- **On login,** after Join game and before the turn report: every page this player hasn't seen, oldest
+  first, one at a time ("1 of 2").
+- **While logged in,** when the server's `TurnResolvedNotice` arrives: the new pages show before the
+  "The turn resolved" flow, the same way.
+- **Seen** is remembered per device (preferences per server and login, like the report's read mark),
+  per page id. A player who joins a game after a page was printed never gets it on login (it's in
+  the Museum): pages printed before their join turn count as seen.
+- **Reopen:** a First tag on the Museum's race table opens that page, alone, with "Close" in the strip;
+  so does the turn report's "first in the game!" goal line when the First was this player's.
+
+**Layout** (1920 x 1080). *Decided while specifying (unconfirmed):* a full portrait page would put the
+body text near 10 px; the page is the top half of a broadsheet, "above the fold", landscape:
+- **Backdrop:** the hub, dimmed by a navy scrim (mock: `#0d1b33` at 80 %), so the player knows where
+  they are.
+- **The page:** 1440 x 900 at (240, 40), the paper art (`paper.jpg`) with a soft drop shadow (mock:
+  black, 60 %, 8 px down, 28 px blur). Content inside a 40 px margin (x 280 to 1640). All type on the
+  page is `Theme.INK`.
+- **Top band:** two ear boxes (230 x 84, 1 px rule) left and right of the masthead. Left: "LATE CITY
+  EDITION" and a weather line ("Fair and cool tonight"; a short list per season, picked with the
+  page's seed). Right: "EXTRA", letter-spaced, and "Special edition" in italics. The masthead
+  (`masthead.png`, drawn at 761 x 108) centered between them.
+- **Folio line:** a 4 px rule and a 1 px rule under it, then "VOL. <n> · No. <turn>" left (the volume
+  is the game year counted from the start year, the number is the game turn), the season letter-spaced
+  in the middle ("SPRING 1961"), "FIVE CENTS" right, a 1 px rule under it.
+- **Headline:** the story's headline in capitals, bold, 80 px, centered, one line. If it's wider than
+  1360 px, two lines; if two lines still don't fit, the story's short form (`headlineShort`).
+- **Deck:** the subheadline, italic 25 px, centered, then a 1 px rule across.
+- **Lower half, three columns:** the photo (640 x 440, `ui/frontpage/<first-id>.jpg`) at the left with
+  its caption under it (italic 14 px, two lines at most); then two text columns of 336 px, 24 px apart,
+  each with a 1 px column rule on its left. Column one: the byline ("FROM OUR SPACE CORRESPONDENT",
+  12 px, letter-spaced), the article's opening paragraphs, and an "IN BRIEF" box at its foot (two
+  teaser lines in italics). Column two: the rest of the article and, at its foot, the race box.
+- **Body type:** 16 px on 22 px, justified, a 14 px first-line indent, 4 px between paragraphs. The
+  article flows from column one to column two (paragraphs move whole; a paragraph that doesn't fit in
+  column one starts column two). A story's paragraphs must fit both columns at the narrowest agency
+  names; `FrontPagesTest` checks the length (below).
+- **The race box** ("THE RACE SO FAR"): a 1 px box, one row per First in the pack: the First's name
+  (from `strings.json`) left, who made it and when right in italics ("Kestrel Space Directorate ·
+  Fall 1957"; ties "A and B · Spring 1961"), "still open" for the rest. It shows the race as of this
+  page's edition, never later Firsts, also when reopened.
+- **The strip** under the page (y 960 to 1040, on the dimmed hub, `Theme.ON_PAGE` text): the game line
+  left, then "1 of 2" (muted) and the primary button right: "Next front page", or on the last page
+  "Continue" (to the turn report if one is unread, else the hub). Reopened: "Close".
+- **The game line:**
+  - the First was this player's: "Your agency got there first: <goal> paid <n> prestige.";
+  - a tie with this player: "You share this First with <agency>: both got <n> prestige.";
+  - a rival's: "<agency> got there first. <goal> now pays <n> prestige to whoever follows." (the
+    second-time value).
+
+**Words** (`assets/content/front-pages.json`, outside the frozen pack like `event-stories.json`, so
+corrections reach running games; our own text, written from the real Firsts' facts, never from a real
+paper's page):
+- One entry per First, keyed by goal id: its photo file, its caption, the two "In brief" lines, and at
+  least **two stories**. A story has `headline`, `headlineShort`, `headlineTie`, `deck`, `deckTie`,
+  `paragraphs` (in order), `rivals` (a paragraph needing one or two rivals, dropped in a game with
+  fewer), and `also` (the folded-First paragraph, used only when one is folded in).
+- **Tokens,** only what the server prints (G14): `{agency}`, `{director}`, `{season}`, `{crew}` (the
+  flight's crew by name, "Daniel Hale" or "Daniel Hale, Rosa Ortiz and Pavel Brandt"), `{commander}`
+  (the first of them), `{rival1}`, `{rival2}`, `{also}` (the folded Firsts' names: a first orbit can fold in human in space and even the
+  satellite). No hardware: the
+  page never names the rocket, the capsule or the program, which the Intelligence Office sells
+  (`design.md` §2.9). Fixed facts about the First itself (orbital speed, the distance to the Moon) are
+  plain text, checked like a history note.
+- **The pick:** a page's story is drawn with the game's seed salted by the goal id, so every player
+  reads the same page, and it never touches the season's random stream.
+- Ids (story ids, the First keys) are stored in printed pages: never rename or reuse one.
+
+**Type** (to bundle, SIL Open Font License, credited in `assets/CREDITS.md`, generated in
+`Theme.Fonts` like the others): **Old Standard TT** Bold for the headline, ears and box titles (a
+19th-century newspaper face), **Libre Caslon Text** Regular and Italic for the deck, body, caption and
+race box. *Unconfirmed.* The masthead is art, so it needs no font.
+
+**Component art** (`assets/ui/frontpage/`, from `assets-raw/frontpage/`, CLAUDE.md "Tools outside the
+repo"): `paper.jpg` (1440 x 900), `masthead.png` (ink on transparent, 1269 x 180, drawn at 60 %), one
+press photo per First (1024 x 704, printed in ink on the paper's colour, drawn at 640 x 440). All
+generated with Qwen Image (ComfyUI), fixed seeds; the picks are in `picks.json`.
+
+**States:** one page; several ("1 of 3"); a tie; a solo game (no rival paragraph, no rivals in the race
+box beyond this player); the early-era pack (three rows in the race box); reopened from the Museum;
+the fetch failed (no page, straight to the report: a page is never worth blocking the login).
+
+**Server work:** G14. **New for `Theme.java`:** the two fonts, the scrim (if no existing token
+matches), no new colours (the ink is `Theme.INK`).
+
 ---
 
 ## 5. Refusal reasons (for toasts and inline messages)
@@ -2670,6 +2783,22 @@ current state alone. Each is an M5 task.
   `MessageRegistry`, report events (fields only added), and `TurnRollback` deleting market files. A
   playout bot that takes contracts.
 
+- **G14. Front pages (§4.18, 2026-10-11).** Rules: after the goal race is settled in a resolution,
+  find each First (the goal ids in `front-pages.json`'s keys that the pack has) that nobody held at the
+  start of the turn and somebody holds now; fold the ones reached by the same flight into the latest;
+  draw the story with the game seed salted by the goal id. Server: print a `FrontPage` per First into a
+  shared, append-only `data/frontpages.json` (rewritten whole, like the game meta, and covered by
+  `TurnRollback`): id (`<turn>-<goal-id>`), `goalId`, `gameTurn`, `storyId`, `foldedGoalIds`, and per
+  achieving agency its agency name, director name and, for a crewed First, the crew's names. Agency
+  names only, never account ids (as G3); the race box is rebuilt from the pages themselves. A
+  `FrontPagesRequest`/`FrontPagesResponse` pair appended last to `MessageRegistry` returns every page
+  of the game (a few KB; gzipped JSON like the report if it ever grows), fetched after login and after
+  a `TurnResolvedNotice`. Client and server are rebuilt together. Content: `front-pages.json` and a
+  `FrontPagesTest` in the `EventStoriesTest` mould: an entry for every First, two stories each, every
+  token known, every paragraph set fits the two columns at the longest test names.
+  *Unconfirmed:* printing the crew's names tells rivals who flew. That's public news, but it names
+  astronauts the Intelligence Office's personnel file would otherwise have to find.
+
 ## 7. Suggested mockup order
 
 1. **Shared chrome and components (§2):** header, footer, personnel row and
@@ -2693,8 +2822,10 @@ switch, the contract stepper, the report's Contracts card and cell. No new colou
 Asset Sheet), the objective chip, the bonus row, the muted command row, the queue slot and its badges,
 the odds bar, the result panel. No new colour tokens.
 
-**Next new screen (user, 2026-10-09):** a newspaper front page for the great Firsts, shown on
-login before the turn report (`design.md` §5, Backlog). Not specified yet.
+**Mocked up (2026-10-11, in Photocraft, `assets-raw/frontpage/mockup/`):** the front page for the
+great Firsts (§4.18), shown on login before the turn report. The first screen mocked up outside Claude
+Design: the art is generated with ComfyUI and the page laid out in Photocraft over the hub. New for
+`Theme.java`: two fonts (Old Standard TT, Libre Caslon Text) and perhaps a scrim token; no new colours.
 
 **Mocked up and built (2026-10-10, canvas `Launch Window — R&D decisions`):** the R&D decision (component 26): the banner on an R&D card
 open, one per type (ten), the confirmation, an outcome good and bad, the turn report's Decision card

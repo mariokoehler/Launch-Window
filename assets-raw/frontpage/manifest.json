@@ -1,0 +1,218 @@
+[
+  {
+    "file": "variants/paper_1.png",
+    "job": "paper",
+    "variant": 1,
+    "width": 1344,
+    "height": 832,
+    "seed": 119612437905152,
+    "prompt": "A flat, evenly lit scan of the top half of a single blank sheet of old 1960s newsprint paper, landscape, filling the whole image edge to edge. Slightly yellowed off-white cream paper with fine fibrous grain, very faint mottled age toning, a little darker toward the edges and corners. Completely blank: no text, no print, no letters, no images, no lines, no folds, no stains. Top-down orthographic view, no shadows, no background, no table, no perspective."
+  },
+  {
+    "file": "variants/paper_2.png",
+    "job": "paper",
+    "variant": 2,
+    "width": 1344,
+    "height": 832,
+    "seed": 198334945418971,
+    "prompt": "A flat, evenly lit scan of the top half of a single blank sheet of old 1960s newsprint paper, landscape, filling the whole image edge to edge. Slightly yellowed off-white cream paper with fine fibrous grain, very faint mottled age toning, a little darker toward the edges and corners. Completely blank: no text, no print, no letters, no images, no lines, no folds, no stains. Top-down orthographic view, no shadows, no background, no table, no perspective."
+  },
+  {
+    "file": "variants/paper_3.png",
+    "job": "paper",
+    "variant": 3,
+    "width": 1344,
+    "height": 832,
+    "seed": 95901902327924,
+    "prompt": "A flat, evenly lit scan of the top half of a single blank sheet of old 1960s newsprint paper, landscape, filling the whole image edge to edge. Slightly yellowed off-white cream paper with fine fibrous grain, very faint mottled age toning, a little darker toward the edges and corners. Completely blank: no text, no print, no letters, no images, no lines, no folds, no stains. Top-down orthographic view, no shadows, no background, no table, no perspective."
+  },
+  {
+    "file": "variants/masthead_1.png",
+    "job": "masthead",
+    "variant": 1,
+    "width": 1344,
+    "height": 256,
+    "seed": 22348164673212,
+    "prompt": "A newspaper masthead nameplate on a plain flat white background, printed in solid black ink: the exact words \"The Daily Zenith\" in a large, elegant, traditional blackletter (Old English gothic) typeface, centered, correctly spelled, with a small engraved emblem between \"Daily\" and \"Zenith\" of a rising sun with rays over a horizon. Nothing else: no other text, no date, no lines, no border. Crisp vector-sharp edges, high contrast, flat, 1960s newspaper style."
+  },
+  {
+    "file": "variants/masthead_2.png",
+    "job": "masthead",
+    "variant": 2,
+    "width": 1344,
+    "height": 256,
+    "seed": 169203904658876,
+    "prompt": "A newspaper masthead nameplate on a plain flat white background, printed in solid black ink: the exact words \"The Daily Zenith\" in a large, elegant, traditional blackletter (Old English gothic) typeface, centered, correctly spelled, with a small engraved emblem between \"Daily\" and \"Zenith\" of a rising sun with rays over a horizon. Nothing else: no other text, no date, no lines, no border. Crisp vector-sharp edges, high contrast, flat, 1960s newspaper style."
+  },
+  {
+    "file": "variants/masthead_3.png",
+    "job": "masthead",
+    "variant": 3,
+    "width": 1344,
+    "height": 256,
+    "seed": 121667889945924,
+    "prompt": "A newspaper masthead nameplate on a plain flat white background, printed in solid black ink: the exact words \"The Daily Zenith\" in a large, elegant, traditional blackletter (Old English gothic) typeface, centered, correctly spelled, with a small engraved emblem between \"Daily\" and \"Zenith\" of a rising sun with rays over a horizon. Nothing else: no other text, no date, no lines, no border. Crisp vector-sharp edges, high contrast, flat, 1960s newspaper style."
+  },
+  {
+    "file": "variants/photo-earth-orbit-satellite_1.png",
+    "job": "photo-earth-orbit-satellite",
+    "variant": 1,
+    "width": 1024,
+    "height": 704,
+    "seed": 162741123430083,
+    "prompt": "A grainy black-and-white 1960s press photograph. At dusk, a small crowd of ordinary people on a city rooftop looks up at the sky; a man in a hat points at a tiny bright moving point of light among the first stars, and a woman beside him holds a portable transistor radio to her ear. Chimneys and television aerials in silhouette. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-earth-orbit-satellite_2.png",
+    "job": "photo-earth-orbit-satellite",
+    "variant": 2,
+    "width": 1024,
+    "height": 704,
+    "seed": 229707159950992,
+    "prompt": "A grainy black-and-white 1960s press photograph. At dusk, a small crowd of ordinary people on a city rooftop looks up at the sky; a man in a hat points at a tiny bright moving point of light among the first stars, and a woman beside him holds a portable transistor radio to her ear. Chimneys and television aerials in silhouette. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-earth-orbit-satellite_3.png",
+    "job": "photo-earth-orbit-satellite",
+    "variant": 3,
+    "width": 1024,
+    "height": 704,
+    "seed": 58777262953047,
+    "prompt": "A grainy black-and-white 1960s press photograph. At dusk, a small crowd of ordinary people on a city rooftop looks up at the sky; a man in a hat points at a tiny bright moving point of light among the first stars, and a woman beside him holds a portable transistor radio to her ear. Chimneys and television aerials in silhouette. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-space_1.png",
+    "job": "photo-human-in-space",
+    "variant": 1,
+    "width": 1024,
+    "height": 704,
+    "seed": 132252477799886,
+    "prompt": "A grainy black-and-white 1960s press photograph. A slim single-stage rocket lifts off from a launch pad at dawn, a tall column of bright exhaust and billowing white smoke spreading across the pad, the steel launch gantry to one side, seen from a distance across flat coastal scrubland. The rocket has no markings. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-space_2.png",
+    "job": "photo-human-in-space",
+    "variant": 2,
+    "width": 1024,
+    "height": 704,
+    "seed": 7002720046035,
+    "prompt": "A grainy black-and-white 1960s press photograph. A slim single-stage rocket lifts off from a launch pad at dawn, a tall column of bright exhaust and billowing white smoke spreading across the pad, the steel launch gantry to one side, seen from a distance across flat coastal scrubland. The rocket has no markings. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-space_3.png",
+    "job": "photo-human-in-space",
+    "variant": 3,
+    "width": 1024,
+    "height": 704,
+    "seed": 87160137773629,
+    "prompt": "A grainy black-and-white 1960s press photograph. A slim single-stage rocket lifts off from a launch pad at dawn, a tall column of bright exhaust and billowing white smoke spreading across the pad, the steel launch gantry to one side, seen from a distance across flat coastal scrubland. The rocket has no markings. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit_1.png",
+    "job": "photo-human-in-orbit",
+    "variant": 1,
+    "width": 1024,
+    "height": 704,
+    "seed": 62268975634974,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young test pilot in a bulky silver pressure suit, holding his round white helmet under one arm, smiles and waves to a crowd as he walks across an airfield tarmac, flanked by two technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit_2.png",
+    "job": "photo-human-in-orbit",
+    "variant": 2,
+    "width": 1024,
+    "height": 704,
+    "seed": 112061146788508,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young test pilot in a bulky silver pressure suit, holding his round white helmet under one arm, smiles and waves to a crowd as he walks across an airfield tarmac, flanked by two technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit_3.png",
+    "job": "photo-human-in-orbit",
+    "variant": 3,
+    "width": 1024,
+    "height": 704,
+    "seed": 129997225401209,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young test pilot in a bulky silver pressure suit, holding his round white helmet under one arm, smiles and waves to a crowd as he walks across an airfield tarmac, flanked by two technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit_4.png",
+    "job": "photo-human-in-orbit",
+    "variant": 4,
+    "width": 1024,
+    "height": 704,
+    "seed": 276192180409217,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young test pilot in a bulky silver pressure suit, holding his round white helmet under one arm, smiles and waves to a crowd as he walks across an airfield tarmac, flanked by two technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit_5.png",
+    "job": "photo-human-in-orbit",
+    "variant": 5,
+    "width": 1024,
+    "height": 704,
+    "seed": 170811675845093,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young test pilot in a bulky silver pressure suit, holding his round white helmet under one arm, smiles and waves to a crowd as he walks across an airfield tarmac, flanked by two technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-human-in-orbit_6.png",
+    "job": "photo-human-in-orbit",
+    "variant": 6,
+    "width": 1024,
+    "height": 704,
+    "seed": 238304346265393,
+    "prompt": "A grainy black-and-white 1960s press photograph. A young test pilot in a bulky silver pressure suit, holding his round white helmet under one arm, smiles and waves to a crowd as he walks across an airfield tarmac, flanked by two technicians in white coveralls. Behind them, the open hatch of a small scorched space capsule on a recovery truck. Slight motion blur. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-crewed-lunar-flyby_1.png",
+    "job": "photo-crewed-lunar-flyby",
+    "variant": 1,
+    "width": 1024,
+    "height": 704,
+    "seed": 275250101430619,
+    "prompt": "A grainy black-and-white 1960s press photograph. A photograph taken from inside a spacecraft through a small round window: the grey cratered surface of the Moon fills the lower part of the frame, close and rugged, and above its horizon a small half-lit Earth hangs in the black sky. The dark window frame and its bolts surround the view. Slightly soft focus, coarse grain, like a print from a returned film magazine. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-crewed-lunar-flyby_2.png",
+    "job": "photo-crewed-lunar-flyby",
+    "variant": 2,
+    "width": 1024,
+    "height": 704,
+    "seed": 148092981725295,
+    "prompt": "A grainy black-and-white 1960s press photograph. A photograph taken from inside a spacecraft through a small round window: the grey cratered surface of the Moon fills the lower part of the frame, close and rugged, and above its horizon a small half-lit Earth hangs in the black sky. The dark window frame and its bolts surround the view. Slightly soft focus, coarse grain, like a print from a returned film magazine. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-crewed-lunar-flyby_3.png",
+    "job": "photo-crewed-lunar-flyby",
+    "variant": 3,
+    "width": 1024,
+    "height": 704,
+    "seed": 73739184933236,
+    "prompt": "A grainy black-and-white 1960s press photograph. A photograph taken from inside a spacecraft through a small round window: the grey cratered surface of the Moon fills the lower part of the frame, close and rugged, and above its horizon a small half-lit Earth hangs in the black sky. The dark window frame and its bolts surround the view. Slightly soft focus, coarse grain, like a print from a returned film magazine. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-crewed-lunar-landing_1.png",
+    "job": "photo-crewed-lunar-landing",
+    "variant": 1,
+    "width": 1024,
+    "height": 704,
+    "seed": 180243160829823,
+    "prompt": "A grainy black-and-white 1960s press photograph. A ghostly, low-resolution image as received by television from the Moon: an astronaut in a bulky white spacesuit and backpack stands on grey powdery lunar ground beside the spindly foil-wrapped leg of a landing craft, long black shadows across the dust, black sky. Visible television scan lines, high contrast, blurred highlights. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-crewed-lunar-landing_2.png",
+    "job": "photo-crewed-lunar-landing",
+    "variant": 2,
+    "width": 1024,
+    "height": 704,
+    "seed": 34731359771140,
+    "prompt": "A grainy black-and-white 1960s press photograph. A ghostly, low-resolution image as received by television from the Moon: an astronaut in a bulky white spacesuit and backpack stands on grey powdery lunar ground beside the spindly foil-wrapped leg of a landing craft, long black shadows across the dust, black sky. Visible television scan lines, high contrast, blurred highlights. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  },
+  {
+    "file": "variants/photo-crewed-lunar-landing_3.png",
+    "job": "photo-crewed-lunar-landing",
+    "variant": 3,
+    "width": 1024,
+    "height": 704,
+    "seed": 159242699749686,
+    "prompt": "A grainy black-and-white 1960s press photograph. A ghostly, low-resolution image as received by television from the Moon: an astronaut in a bulky white spacesuit and backpack stands on grey powdery lunar ground beside the spindly foil-wrapped leg of a landing craft, long black shadows across the dust, black sky. Visible television scan lines, high contrast, blurred highlights. Shot on a press camera, strong contrast, deep blacks, film grain, documentary photojournalism, monochrome. No text, no captions, no logos, no flags, no insignia, no badges or emblems on clothing, no lettering anywhere."
+  }
+]
