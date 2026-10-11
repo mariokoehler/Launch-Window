@@ -5,8 +5,8 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Scaling;
+import de.mkoehler.launchwindow.client.ui.FullWidthPicture;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.UiKit;
 import de.mkoehler.launchwindow.client.view.Advisor;
@@ -28,8 +28,8 @@ import java.util.Locale;
  */
 final class ConfigCards {
 
-    private static final float ART_ASPECT = 2.4f;
-    private static final float ART_HEIGHT = 178f;
+    /** The art's height when a configuration has no picture yet. */
+    private static final float NO_ART_HEIGHT = 178f;
 
     private ConfigCards() {
     }
@@ -44,32 +44,21 @@ final class ConfigCards {
      * @return the card
      */
     static Table card(ChromeScreen host, MissionConfiguration configuration, boolean open, Runnable onClick) {
-        return card(host, configuration, open, onClick, ART_HEIGHT);
-    }
-
-    /**
-     * Builds a configuration's card with shorter or taller art.
-     *
-     * @param host          the screen it sits on
-     * @param configuration the configuration
-     * @param open          whether its program is open (the art dims when not)
-     * @param onClick       what a click does
-     * @param artHeight     the art's height
-     * @return the card
-     */
-    static Table card(ChromeScreen host, MissionConfiguration configuration, boolean open, Runnable onClick,
-            float artHeight) {
         UiKit ui = host.ui;
         Table card = new Table();
         card.setBackground(ui.rect(Theme.SURFACE_CARD, Theme.NAVY_BORDER, Theme.BORDER_THIN));
         card.top();
-        Drawable art = ui.croppedPicture("configurations/" + configuration.id() + ".jpg",
-            ART_ASPECT * ART_HEIGHT / artHeight);
-        Image image = new Image(art == null ? ui.solid(Theme.NAVY) : art);
+        // The whole picture at the card's width: never cropped or stretched (the user's report, 2026-10-11).
+        var art = ui.picture("configurations/" + configuration.id() + ".jpg");
+        Image image = art == null ? new Image(ui.solid(Theme.NAVY)) : new FullWidthPicture(art);
         if (!open) {
             image.setColor(1f, 1f, 1f, 0.6f);
         }
-        card.add(image).growX().height(artHeight).pad(Theme.BORDER_THIN).row();
+        var cell = card.add(image).growX().pad(Theme.BORDER_THIN);
+        if (art == null) {
+            cell.height(NO_ART_HEIGHT);
+        }
+        cell.row();
 
         Table body = new Table();
         body.top().left();

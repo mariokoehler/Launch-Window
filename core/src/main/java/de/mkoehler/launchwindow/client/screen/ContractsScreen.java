@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.actions.ApplyContractAction;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
+import de.mkoehler.launchwindow.client.ui.FullWidthPicture;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.ContractsView;
@@ -36,10 +37,10 @@ public final class ContractsScreen extends ChromeScreen {
 
     /** Board cards a row. */
     private static final int PER_ROW = 4;
-    /** A listing card's art height. */
-    private static final float ART_HEIGHT = 140f;
-    /** The art's width over its height at the board's usual card width; the art stretches to the card. */
-    private static final float ART_ASPECT = 3.2f;
+    /** A listing card's art height when its line has no picture. */
+    private static final float NO_ART_HEIGHT = 140f;
+    /** The active contract's picture's width; its height follows the picture. */
+    private static final float CONTRACT_ART_WIDTH = 220f;
 
     /** "Only what I can fly", remembered while the client runs. */
     private static boolean onlyFlyable;
@@ -136,9 +137,10 @@ public final class ContractsScreen extends ChromeScreen {
                 .fill(false, false).padTop(Theme.SPACE_3);
             return card;
         }
-        Drawable art = ui.croppedPicture("categories/" + contract.lineId() + "_" + state.getArchetype().name() + ".jpg",
-            150f / 170f);
-        card.add(new Image(art == null ? ui.solid(Theme.NAVY) : art, Scaling.stretch)).size(150f, 170f).top()
+        // The whole picture, never cropped (the user's report, 2026-10-11).
+        var art = ui.picture("categories/" + contract.lineId() + "_" + state.getArchetype().name() + ".jpg");
+        card.add(art == null ? new Image(ui.solid(Theme.NAVY)) : new FullWidthPicture(art)).width(CONTRACT_ART_WIDTH)
+            .top()
             .padRight(Theme.SPACE_5);
         Table middle = new Table();
         middle.top().left();
@@ -178,8 +180,10 @@ public final class ContractsScreen extends ChromeScreen {
         flies.add(ui.label("Flies: " + ContentNames.of(contract.configurationId()), Theme.TextStyle.BODY_SM, Theme.INK));
         right.add(flies).right().row();
         right.add().expandY().row();
-        right.add(ui.label("On failure the insurer refunds the launch cost.", Theme.TextStyle.CAPTION,
-            Theme.INK_MUTED)).right().padBottom(Theme.SPACE_2).row();
+        com.badlogic.gdx.scenes.scene2d.ui.Label insurer = ui.paragraph("On failure the insurer refunds the launch "
+            + "cost.", Theme.TextStyle.CAPTION, Theme.INK_MUTED);
+        insurer.setAlignment(com.badlogic.gdx.utils.Align.right);
+        right.add(insurer).width(170f).right().padBottom(Theme.SPACE_2).row();
         int step = ContractsView.step(contract, state);
         String action = step == 1 ? "Plan the flight" : step == 2 ? "Open the mission plan" : "Follow it in flight";
         right.add(actionButton(action, Theme.ButtonKind.PRIMARY, () -> {
@@ -353,9 +357,9 @@ public final class ContractsScreen extends ChromeScreen {
         }
 
         Stack art = new Stack();
-        Drawable picture = ui.croppedPicture("categories/" + listing.lineId() + "_" + state.getArchetype().name()
-            + ".jpg", ART_ASPECT);
-        Image image = new Image(picture == null ? ui.solid(Theme.NAVY) : picture, Scaling.stretch);
+        // The whole picture at the card's width, never cropped or stretched (the user's report, 2026-10-11).
+        var picture = ui.picture("categories/" + listing.lineId() + "_" + state.getArchetype().name() + ".jpg");
+        Image image = picture == null ? new Image(ui.solid(Theme.NAVY)) : new FullWidthPicture(picture);
         if (dim) {
             image.setColor(0.55f, 0.55f, 0.55f, 0.45f);
         }
@@ -374,7 +378,11 @@ public final class ContractsScreen extends ChromeScreen {
             overlay.add(ui.badge(Theme.BadgeKind.ACTIVE, "Applied")).right().top();
         }
         art.add(overlay);
-        card.add(art).height(ART_HEIGHT).row();
+        var artCell = card.add(art);
+        if (picture == null) {
+            artCell.height(NO_ART_HEIGHT);
+        }
+        artCell.row();
 
         Table body = new Table();
         body.top().left();

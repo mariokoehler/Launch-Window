@@ -129,15 +129,16 @@ public final class MissionConfigsScreen extends ChromeScreen {
         int index = 0;
         for (MissionConfiguration configuration : configurations) {
             grid.add(ConfigCards.card(this, configuration, open,
-                () -> game.setScreen(new MissionStepsScreen(game, configuration.id())))).expandX().fillX().uniformX().top()
+                () -> game.setScreen(new MissionStepsScreen(game, configuration.id())))).width(0f).expandX().fillX().top()
                 .padRight(index % COLUMNS < COLUMNS - 1 ? Theme.SPACE_4 : 0f).padBottom(Theme.SPACE_4);
             if (++index % COLUMNS == 0) {
                 grid.row();
             }
         }
-        grid.add(legend()).expandX().fillX().uniformX().top();
+        grid.add(legend()).width(0f).expandX().fillX().top()
+            .padRight(index % COLUMNS < COLUMNS - 1 ? Theme.SPACE_4 : 0f);
         for (int i = (index + 1) % COLUMNS; i != 0 && i < COLUMNS; i++) {
-            grid.add().expandX().fillX().uniformX();
+            grid.add().width(0f).expandX().padRight(i < COLUMNS - 1 ? Theme.SPACE_4 : 0f);
         }
         ScrollPane scroll = scrollPane(grid);
         content.add(scroll).expand().fill();

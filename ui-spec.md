@@ -1530,7 +1530,9 @@ uses with the skill it reads most (`client.view.Staffing`).
 cards of §4.6.5)*. Headquarters' landing screen has three cards: Plan a mission ("Ready to plan · N
 missions"), Manage open programs, Browse programs. Plan a mission lists every configuration of
 the open programs, one section per program (its name in gold above its cards), with the §4.6.5
-card at a shorter art height (`ConfigCards`). A card opens the mission plan on its assessment
+card (`ConfigCards`). Since 2026-10-11 (the user's report) both lists show each configuration's whole
+picture at the card's width and its own proportions (`ui.FullWidthPicture`), never cropped or stretched,
+four columns a row (empty cells keep the columns equal). A card opens the mission plan on its assessment
 tab (§4.6.7), which isn't skipped. Back and the breadcrumb from the plan and from Assemble lead
 back to this list ("Space Complex › Headquarters › Plan a mission › Vostok · Orbital flight ›
 Plan"); the path through a program's pages works as before (`ClientSession.planningFromList`).
@@ -2457,8 +2459,9 @@ component 27 (below). Numbers are the brief's placeholders. Choices, all **uncon
 offer" on hover (`SpaceComplexScreen`), the report's Contracts card, strip cell and news lines
 (`TurnReportScreen`), and the help topic "Contracts" (`help.json`, its numbers as `contracts.*`
 tokens). As built, against the mockup:
-- The board shows four cards a row in a scroll pane; the art is the line's category art, cropped to
-  the card. A listing the agency can't fly is dimmed whatever else holds; one it can fly but not
+- The board shows four cards a row in a scroll pane; the art is the line's category art, whole at the
+  card's width (2026-10-11, the user's report: the mockup's cropped banner cut the spacecraft off), as is
+  the active contract's, 220 px wide. A listing the agency can't fly is dimmed whatever else holds; one it can fly but not
   apply for (an active contract) keeps its look with the reason (`Contracts.check` asks about
   flying before the active contract).
 - "Only what I can fly" is remembered while the client runs; its track is square (no rounded track

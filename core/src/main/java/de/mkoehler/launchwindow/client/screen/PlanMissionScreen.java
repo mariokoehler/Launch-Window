@@ -24,7 +24,6 @@ public final class PlanMissionScreen extends ChromeScreen {
 
     private static final int COLUMNS = 4;
     /** Shorter art than a program's own list, so more missions fit on screen. */
-    private static final float ART_HEIGHT = 96f;
 
     /**
      * Builds the screen from the session.
@@ -88,14 +87,16 @@ public final class PlanMissionScreen extends ChromeScreen {
                 grid.add(ConfigCards.card(this, configuration, true, () -> {
                     session.setPlanningFromList(true);
                     game.setScreen(new MissionPlanScreen(game, configuration.id(), MissionPlanScreen.Tab.ASSESSMENT));
-                }, ART_HEIGHT)).expandX().fillX().uniformX().top()
+                })).width(0f).expandX().fillX().top()
                     .padRight(index % COLUMNS < COLUMNS - 1 ? Theme.SPACE_4 : 0f).padBottom(Theme.SPACE_4);
                 if (++index % COLUMNS == 0) {
                     grid.row();
                 }
             }
+            // Empty cells keep the row at four equal columns; width 0 and expand share the space evenly,
+            // where uniform let a wide card push them to nothing.
             for (int i = index % COLUMNS; i != 0 && i < COLUMNS; i++) {
-                grid.add().expandX().fillX().uniformX();
+                grid.add().width(0f).expandX().padRight(i < COLUMNS - 1 ? Theme.SPACE_4 : 0f);
             }
             list.add(grid).padBottom(Theme.SPACE_3).row();
         }
