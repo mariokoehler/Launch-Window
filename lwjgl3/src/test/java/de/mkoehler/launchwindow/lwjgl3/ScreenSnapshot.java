@@ -261,6 +261,10 @@ public final class ScreenSnapshot {
             rivalFirstsShots(folder, game);
             return;
         }
+        if ("raise".equals(System.getProperty("shots"))) {
+            raiseShots(folder, game);
+            return;
+        }
         write(folder, "connect-default.png", new ConnectScreen(game), null);
         write(folder, "connect-connecting.png", filledConnect(game), screen -> screen.setBusy(true));
         write(folder, "connect-wrong-password.png", filledConnect(game), screen -> screen.applyLoginResult(
@@ -439,6 +443,30 @@ public final class ScreenSnapshot {
         frontPageShots(folder, game);
         groundingShots(folder, game);
         rivalFirstsShots(folder, game);
+        raiseShots(folder, game);
+    }
+
+    /**
+     * Funding raised between reviews (design.md 2.1(f), 2026-10-12): the turn report's budget card,
+     * and the Public Affairs Office after a raise, with its line on what more prestige would add.
+     */
+    private static void raiseShots(File folder, LaunchWindowGame game) {
+        String hash = ContentPackHash.ofClasspath("content/early-era", ScreenSnapshot.class.getClassLoader());
+        GameInfoResponse info = GameInfoResponse.success("early-era", hash, List.of(), 1, true,
+            6 * 3_600_000L + 12 * 60_000L + 30_000L, 0L, null, List.of(), List.of(), 0);
+        PlayerSnapshot raised = planningState(11, 25_000);
+        raised.setSeason(21);
+        raised.setPrestigeAtLastReview(1_400);
+        raised.setFundedPrestige(2_140);
+        raised.setFundingRatePerSeason(6_020);
+        startSession(game, raised, info);
+        write(folder, "raise-pao.png", new PublicAffairsScreen(game), null);
+        TurnReport report = TurnReport.build(raised, raised, List.of(
+            new de.mkoehler.launchwindow.rules.FundingRaised(1, 2_140, 4_620, 6_020),
+            new de.mkoehler.launchwindow.rules.SeasonFundsSettled(5_100, 6_020, 25_000, null)), 21,
+            game.session().catalog());
+        game.session().keepReport(report);
+        write(folder, "raise-report.png", new TurnReportScreen(game, report), null);
     }
 
     /**
@@ -1645,7 +1673,11 @@ public final class ScreenSnapshot {
             ContentCatalog catalog = ContentPackLoader.loadFromClasspath("content/early-era",
                 ScreenSnapshot.class.getClassLoader());
             ActionContext context = new ActionContext(catalog, BudgetSchedule.baspmClose());
-            new PlayerSnapshotStore(playerRoot, mapper).save(0, missionControlState(), null);
+            PlayerSnapshot before = missionControlState();
+            // The fixture never had a review: pay for more prestige than this turn reaches, so no raise
+            // between reviews (design.md 2.1(f)) comes into this report; raise-report.png shows one.
+            before.setFundedPrestige(1_000_000);
+            new PlayerSnapshotStore(playerRoot, mapper).save(0, before, null);
             PlayerStateService service = new PlayerStateService(playerRoot, mapper, context);
             service.resolveTurn(23, new GoalTally(), new RandomEventRoster(100, 100,
                 RandomEventRoster.baspmClose().events()), REPORT_SEED);

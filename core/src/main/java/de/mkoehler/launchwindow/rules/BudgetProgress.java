@@ -35,6 +35,14 @@ public final class BudgetProgress {
     public static final int SEASONS_PER_REVIEW = 16;
 
     /**
+     * How much of a raise between reviews is paid ({@code design.md} &sect;2.1(f)): 1 pays all of what
+     * the review in force would add for the prestige gained since; unconfirmed.
+     */
+    public static final double RAISE_SHARE = 1.0;
+
+    private static double raiseShare = RAISE_SHARE;
+
+    /**
      * Not instantiable; this class only exposes static methods.
      */
     private BudgetProgress() {
@@ -142,6 +150,8 @@ public final class BudgetProgress {
 
         if (seasonsElapsed > 0 && seasonsElapsed % SEASONS_PER_REVIEW == 0) {
             events.add(review(snapshot, schedule, seasonsElapsed / SEASONS_PER_REVIEW));
+        } else if (seasonsElapsed > SEASONS_PER_REVIEW) {
+            raiseBetweenReviews(snapshot, schedule, seasonsElapsed / SEASONS_PER_REVIEW, events);
         }
 
         long income = snapshot.getFundingRatePerSeason();
@@ -170,7 +180,89 @@ public final class BudgetProgress {
         snapshot.setFundingRatePerSeason(rate);
         snapshot.setPrestigeAtLastReview(prestige);
         snapshot.setRivalFirstsCredit(0);
+        snapshot.setLastReviewShift(catchUpShift + credit);
+        snapshot.setFundedPrestige(prestige);
         return new BudgetReviewed(reviewNumber, prestige, catchUpShift, rate, credit);
+    }
+
+    /**
+     * Returns the share of a raise between reviews in force, {@link #RAISE_SHARE} unless a playout
+     * changed it.
+     *
+     * @return the share
+     */
+    public static double raiseShare() {
+        return raiseShare;
+    }
+
+    /**
+     * Sets the share of a raise between reviews, for playouts that measure the rule (0 turns it off);
+     * put {@link #RAISE_SHARE} back after.
+     *
+     * @param value the share, from 0
+     * @throws IllegalArgumentException if {@code value} is negative
+     */
+    public static void setRaiseShare(double value) {
+        if (value < 0) {
+            throw new IllegalArgumentException("raise share must not be negative: " + value);
+        }
+        raiseShare = value;
+    }
+
+    /**
+     * Raises the funding between reviews when prestige has grown ({@code design.md} &sect;2.1(f)): the
+     * review in force, with its own shift, prices today's prestige and the highest prestige the rate
+     * already pays for, and the rate gains the difference. It never falls between reviews, and a
+     * random event's raise stays on top. Runs only once a review has set the rate, so the opening
+     * seasons keep the starting rate.
+     *
+     * @param snapshot     the player; their rate and funded prestige may rise
+     * @param schedule     the bracket table
+     * @param reviewNumber the review in force
+     * @param events       the list to add a {@link FundingRaised} to
+     */
+    private static void raiseBetweenReviews(PlayerSnapshot snapshot, BudgetSchedule schedule, int reviewNumber,
+            List<ResolutionEvent> events) {
+        long prestige = snapshot.getPrestige();
+        long funded = snapshot.getFundedPrestige();
+        if (raiseShare == 0 || prestige <= funded) {
+            return;
+        }
+        BudgetSchedule.Review bracket = schedule.reviewFor(reviewNumber);
+        long shift = snapshot.getLastReviewShift();
+        long gain = reviewRate(bracket, shift, prestige) - reviewRate(bracket, shift, funded);
+        snapshot.setFundedPrestige(prestige);
+        long raise = (long) Math.ceil(gain * raiseShare);
+        if (raise <= 0) {
+            return;
+        }
+        long before = snapshot.getFundingRatePerSeason();
+        snapshot.setFundingRatePerSeason(before + raise);
+        events.add(new FundingRaised(reviewNumber, prestige, before, before + raise));
+    }
+
+    /**
+     * What a raise between reviews would add at a prestige ({@code design.md} &sect;2.1(f)), for the
+     * Public Affairs Office.
+     *
+     * @param snapshot the player
+     * @param schedule the bracket table
+     * @param prestige the prestige to price
+     * @return the raise per season, 0 when none would come (before the first review, at or below the
+     *     prestige already paid for, or at the bracket's top)
+     */
+    public static long raiseAt(PlayerSnapshot snapshot, BudgetSchedule schedule, long prestige) {
+        // The next season pass counts the player's season as its seasons elapsed; a review season raises nothing.
+        int next = snapshot.getSeason();
+        if (next <= SEASONS_PER_REVIEW || next % SEASONS_PER_REVIEW == 0 || prestige <= snapshot.getFundedPrestige()
+                || raiseShare == 0) {
+            return 0;
+        }
+        int reviewNumber = next / SEASONS_PER_REVIEW;
+        BudgetSchedule.Review bracket = schedule.reviewFor(reviewNumber);
+        long shift = snapshot.getLastReviewShift();
+        return (long) Math.ceil((reviewRate(bracket, shift, prestige)
+            - reviewRate(bracket, shift, snapshot.getFundedPrestige())) * raiseShare);
     }
 
     /**

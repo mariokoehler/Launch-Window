@@ -58,6 +58,10 @@ public class PlayerSnapshot {
     private int crewedGroundingSeasons;
     /** Prestige the next funding review adds for rivals' Firsts ({@code RivalFirsts}); cleared by the review. */
     private long rivalFirstsCredit;
+    /** How far the last review shifted its bracket down (catch-up plus rivals' Firsts), for raises until the next. */
+    private long lastReviewShift;
+    /** The highest prestige the funding rate already pays for since the last review ({@code BudgetProgress}). */
+    private long fundedPrestige;
     private double rdResultsMultiplier = 1.0;
     private int rdResultsSeasonsRemaining;
     private double costMultiplier = 1.0;
@@ -1051,6 +1055,49 @@ public class PlayerSnapshot {
             throw new IllegalArgumentException("rivalFirstsCredit must not be negative: " + rivalFirstsCredit);
         }
         this.rivalFirstsCredit = rivalFirstsCredit;
+    }
+
+    /**
+     * Returns how far the last funding review shifted its bracket down: its catch-up shift plus the
+     * credit for rivals' Firsts it counted. Raises between reviews read the same bracket
+     * ({@code design.md} &sect;2.1(f)).
+     *
+     * @return the shift, 0 before the first review
+     */
+    public long getLastReviewShift() {
+        return lastReviewShift;
+    }
+
+    /**
+     * Sets how far the last funding review shifted its bracket down.
+     *
+     * @param lastReviewShift the shift, 0 or more
+     * @throws IllegalArgumentException if negative
+     */
+    public void setLastReviewShift(long lastReviewShift) {
+        if (lastReviewShift < 0) {
+            throw new IllegalArgumentException("lastReviewShift must not be negative: " + lastReviewShift);
+        }
+        this.lastReviewShift = lastReviewShift;
+    }
+
+    /**
+     * Returns the highest prestige the funding rate already pays for since the last review: the
+     * review's own, then the prestige of each raise between reviews ({@code design.md} &sect;2.1(f)).
+     *
+     * @return the prestige, 0 before the first review
+     */
+    public long getFundedPrestige() {
+        return fundedPrestige;
+    }
+
+    /**
+     * Sets the highest prestige the funding rate already pays for.
+     *
+     * @param fundedPrestige the prestige
+     */
+    public void setFundedPrestige(long fundedPrestige) {
+        this.fundedPrestige = fundedPrestige;
     }
 
     /**

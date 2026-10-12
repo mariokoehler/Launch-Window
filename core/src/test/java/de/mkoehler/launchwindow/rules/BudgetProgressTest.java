@@ -283,4 +283,107 @@ class BudgetProgressTest {
         assertFalse(SCHEDULE.reviews().isEmpty());
         assertTrue(SCHEDULE.reviewFor(9).equals(SCHEDULE.reviews().get(1)), "past the table repeats the last bracket");
     }
+
+    /** A player reviewed at season 16 with 400 prestige: bracket 1 pays 140. */
+    private static PlayerSnapshot reviewed(long prestige) {
+        PlayerSnapshot snapshot = player(0, 400, 50);
+        BudgetProgress.advanceSeason(snapshot, EMPTY, SCHEDULE, 16);
+        assertEquals(140, snapshot.getFundingRatePerSeason());
+        snapshot.setPrestige(prestige);
+        return snapshot;
+    }
+
+    /**
+     * Between reviews, prestige gained raises the funding by what the review in force pays for it,
+     * the same season, and records the prestige paid for (design.md 2.1(f)).
+     */
+    @Test
+    void prestigeGainedBetweenReviewsRaisesTheFundingAtOnce() {
+        PlayerSnapshot snapshot = reviewed(700);
+
+        List<ResolutionEvent> events = BudgetProgress.advanceSeason(snapshot, EMPTY, SCHEDULE, 17);
+
+        assertEquals(new FundingRaised(1, 700, 140, 170), events.get(0));
+        assertEquals(170, snapshot.getFundingRatePerSeason());
+        assertEquals(170, ((SeasonFundsSettled) events.get(1)).income(), "the season pays the raised rate");
+        assertEquals(700, snapshot.getFundedPrestige());
+        assertEquals(400, snapshot.getPrestigeAtLastReview(), "the catch-up baseline is the review's own");
+    }
+
+    /** It never cuts, and prestige lost then regained pays nothing twice. */
+    @Test
+    void theFundingNeverFallsBetweenReviewsAndIsNeverPaidTwice() {
+        PlayerSnapshot snapshot = reviewed(700);
+        BudgetProgress.advanceSeason(snapshot, EMPTY, SCHEDULE, 17);
+        snapshot.setPrestige(100);
+
+        assertEquals(1, BudgetProgress.advanceSeason(snapshot, EMPTY, SCHEDULE, 18).size(), "no raise, no cut");
+        assertEquals(170, snapshot.getFundingRatePerSeason());
+
+        snapshot.setPrestige(700);
+        BudgetProgress.advanceSeason(snapshot, EMPTY, SCHEDULE, 19);
+        assertEquals(170, snapshot.getFundingRatePerSeason());
+        snapshot.setPrestige(800);
+        BudgetProgress.advanceSeason(snapshot, EMPTY, SCHEDULE, 20);
+        assertEquals(180, snapshot.getFundingRatePerSeason());
+    }
+
+    /** A random event's raise stays on top: the raise adds, it doesn't reset to the bracket. */
+    @Test
+    void aRaiseAddsToAnExtraFundingEvent() {
+        PlayerSnapshot snapshot = reviewed(700);
+        snapshot.setFundingRatePerSeason(160);
+
+        BudgetProgress.advanceSeason(snapshot, EMPTY, SCHEDULE, 17);
+
+        assertEquals(190, snapshot.getFundingRatePerSeason());
+    }
+
+    /** Before the first review the starting rate holds, and a review season leaves it to the review. */
+    @Test
+    void noRaiseBeforeTheFirstReviewNorInAReviewSeason() {
+        PlayerSnapshot fresh = player(0, 900, 50);
+        assertEquals(1, BudgetProgress.advanceSeason(fresh, EMPTY, SCHEDULE, 5).size());
+        assertEquals(50, fresh.getFundingRatePerSeason());
+
+        PlayerSnapshot snapshot = reviewed(3_000);
+        List<ResolutionEvent> events = BudgetProgress.advanceSeason(snapshot, EMPTY, SCHEDULE, 32);
+        assertEquals(new BudgetReviewed(2, 3_000, 0, 450), events.get(0));
+        assertEquals(3_000, snapshot.getFundedPrestige());
+    }
+
+    /** The raise reads the bracket the review in force used, shifted as it was. */
+    @Test
+    void aRaiseReadsTheReviewsShiftedBracket() {
+        PlayerSnapshot snapshot = player(0, 400, 50);
+        snapshot.setRivalFirstsCredit(200);
+        BudgetProgress.advanceSeason(snapshot, EMPTY, SCHEDULE, 16);
+        assertEquals(160, snapshot.getFundingRatePerSeason(), "400 plus 200 of credit");
+        assertEquals(200, snapshot.getLastReviewShift());
+        snapshot.setPrestige(700);
+
+        BudgetProgress.advanceSeason(snapshot, EMPTY, SCHEDULE, 17);
+
+        assertEquals(190, snapshot.getFundingRatePerSeason(), "700 reads as 900 in the shifted bracket");
+        snapshot.setSeason(18);
+        assertEquals(10, BudgetProgress.raiseAt(snapshot, SCHEDULE, 1_000), "1,000 reads as 1,200: capped at 200");
+    }
+
+    /** Half a share pays half of each raise, rounded up; 0 turns raises off. */
+    @Test
+    void theRaiseShareScalesEachRaise() {
+        try {
+            BudgetProgress.setRaiseShare(0.5);
+            PlayerSnapshot half = reviewed(710);
+            BudgetProgress.advanceSeason(half, EMPTY, SCHEDULE, 17);
+            assertEquals(140 + 16, half.getFundingRatePerSeason());
+
+            BudgetProgress.setRaiseShare(0);
+            PlayerSnapshot off = reviewed(900);
+            BudgetProgress.advanceSeason(off, EMPTY, SCHEDULE, 17);
+            assertEquals(140, off.getFundingRatePerSeason());
+        } finally {
+            BudgetProgress.setRaiseShare(BudgetProgress.RAISE_SHARE);
+        }
+    }
 }

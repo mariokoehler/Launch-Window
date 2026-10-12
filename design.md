@@ -579,6 +579,29 @@ next review. The answer acts on the review, where the snowball turns, not on tod
   Soviet Moon landing program was approved in 1964, three years after Kennedy's challenge.
 - **Measured:** see §2.9, "The Sputnik shock, measured".
 
+**(f) Raises between reviews** (the user's decision, 2026-10-12, the "gentler review", option 1 of
+four laid out that day; built the same day in `BudgetProgress`). A review's rate used to hold for 16
+seasons, so an agency that recovered from a bad start waited for the next review to be paid for it.
+Now funding follows prestige up between reviews, never down.
+- **Rule:** in every season that isn't a review season, once the first review has set the rate, if the
+  player's prestige is above the highest prestige the rate already pays for
+  (`PlayerSnapshot.fundedPrestige`, set by each review and each raise), the rate gains what the review
+  in force pays for the difference: its bracket, with the shift it used (`lastReviewShift`: catch-up
+  plus rivals' Firsts), at today's prestige less at the funded prestige. The raise is added, so an
+  extra-funding event's raise stays on top. It runs inside the budget phase before the funding is
+  granted, so the season pays the new rate. The next review sets the rate as before, and can cut it
+  (the next bracket asks for more prestige).
+- **Before the first review** the starting 3,000 holds (decided: bracket 1 pays 3,800 at its bottom,
+  so raises from season 1 would hand every agency +800 on its first turn).
+- **Share:** `BudgetProgress.RAISE_SHARE` = 1, all of the difference (*unconfirmed*; 0.5 measured
+  nearly as well, see §2.9).
+- **The catch-up baseline** (`prestigeAtLastReview`) stays the review's own prestige.
+- **Shown:** the turn report's budget card ("Funding raised", the `FundingRaised` event, and the
+  funding line reads "new rate"); the Public Affairs Office ("set by review #n, raised since", and a
+  caption: what 1,000 more prestige would add, and a raise due next season); the help topic "Money
+  and the budget review". `BudgetProgress.runway` still assumes a flat rate until the next review:
+  with raises only upward it's merely cautious.
+
 ### 2.2 Personnel
 
 **(a) BASPM** (`baspm.md` §9): three groups (Astronauts, Mission Control, SET), five skills each;
@@ -1706,8 +1729,35 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
       stays the favourite, as it is alone (median 87 against 96). The bot doesn't play around the
       rule, and `RaceShock` stops the winner at its landing; in a real game the winner keeps making
       Firsts, so the loser's credit is if anything larger. The rule does nothing for a slow start
-      without a rival ahead (a solo game, or the leader's own bad luck): the gentler review is still
-      the lever for that, unpulled. 0.5 is the default,
+      without a rival ahead (a solo game, or the leader's own bad luck): raises between reviews
+      (§2.1(f)) are the lever for that.
+    - **Raises between reviews, measured** (2026-10-12, §2.1(f); `-Drules.raiseShare` switches them).
+      Solo, `ContentPackPlayouts standard smart decisions -Dbot.slowGames=true`, 200 games, seed 42
+      (seed 7 in brackets):
+
+      | Raise share | Median landing NASA / Soviet | Average | Slowest quarter, NASA / Soviet | Stalled on funds, slowest quarter | Longest quiet stretch, median |
+      |---|---|---|---|---|---|
+      | 0 (off) | 87 / 88 (84 / 97) | 96.9 (98.0) | 135 / 133 (131 / 142) | 41-44 seasons (39-47) | 10 |
+      | 0.5 | 78 / 81 (79 / 79) | 84.7 (83.4) | 111 / 101 (108 / 99) | 13-22 (12-21) | 9 |
+      | **1 (built)** | 78 / 79 (77 / 79) | 80.5 (80.5) | 97 / 92 (99 / 93) | 6-12 (7-14) | 9 |
+
+      The fastest quarter barely moves (71 to 76 seasons); the slow tail shrinks by about 40 seasons and
+      games stall on money a fifth as often. **The cost: a typical game is about 9 seasons shorter**
+      (median about 78 against 87, two years of game time), because the median game was short of
+      money too. Gaps of 10+ seasons between launches fall from 3 % to 1 %.
+
+      Race (`RaceShock`, the Sputnik shock at 0.5, seed 42):
+
+      | Raise share | NASA / Soviet median | Lands first, NASA : Soviets | Margin, median (quartiles) | First landing, median |
+      |---|---|---|---|---|
+      | 0 | 88 / 105 | 129 : 70 | 26 (12-49) | 83 |
+      | 0.5 | 80 / 85 | 123 : 72 | 10 (4-18) | 78 |
+      | **1** | 80 / 81 | 104 : 88 | 8 (3-13) | 77 |
+
+      With both rules the race is close: the second agency lands a median of 8 seasons after the
+      first, and the side behind on funding at season 32 lands first in 73 of 200 races (34 with the
+      shock alone). If the shorter games matter, a slightly stingier bracket table would lengthen them
+      again without bringing back the snowball; the user's call. 0.5 is the default,
       a "bit of a boost" as the user asked; 0.75 closes the race further, and 1.0 makes the side
       behind at season 32 win nearly a third of the time. The share is the user's call.
     - **Worth knowing for balance, not verdicts:** a failed flight is cheap enough that launching

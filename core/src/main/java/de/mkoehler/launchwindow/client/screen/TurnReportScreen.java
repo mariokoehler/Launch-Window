@@ -641,6 +641,8 @@ public final class TurnReportScreen extends ChromeScreen {
         card.add(now).padBottom(Theme.SPACE_3).row();
         TurnReportView.rivalFirsts(report).ifPresent(answer -> card.add(ui.notice(Theme.NoticeKind.SUCCESS,
             answer.title(), answer.text())).padBottom(Theme.SPACE_2).row());
+        TurnReportView.raise(report).ifPresent(raise -> card.add(ui.notice(Theme.NoticeKind.SUCCESS,
+            raise.title(), raise.text())).padBottom(Theme.SPACE_2).row());
         TurnReportView.review(report).ifPresent(review -> card.add(ui.notice(Theme.NoticeKind.INFO, review.title(),
             review.text())).row());
         return card;

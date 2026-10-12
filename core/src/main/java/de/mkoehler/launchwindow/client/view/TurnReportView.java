@@ -824,7 +824,8 @@ public final class TurnReportView {
         if (settled.isEmpty()) {
             return List.of();
         }
-        boolean reviewed = !events(report, BudgetReviewed.class).isEmpty();
+        boolean reviewed = !events(report, BudgetReviewed.class).isEmpty()
+            || !events(report, de.mkoehler.launchwindow.rules.FundingRaised.class).isEmpty();
         List<BudgetLine> lines = new ArrayList<>();
         lines.add(new BudgetLine(reviewed ? "Funding (new rate)" : "Funding", settled.get().income()));
         if (settled.get().costs() != null) {
@@ -867,6 +868,20 @@ public final class TurnReportView {
                 review.prestige(), review.rivalCredit() > 0 ? String.format(Locale.ROOT,
                     " and %,d more for rivals' Firsts", review.rivalCredit()) : "", money(review.fundingRate()),
                 de.mkoehler.launchwindow.rules.BudgetProgress.SEASONS_PER_REVIEW), "", 0));
+    }
+
+    /**
+     * Words a raise of the funding between reviews ({@code design.md} &sect;2.1(f)), if one happened.
+     *
+     * @param report the report
+     * @return the title and text, or empty
+     */
+    public static Optional<Line> raise(TurnReport report) {
+        return events(report, de.mkoehler.launchwindow.rules.FundingRaised.class).stream().findFirst()
+            .map(raised -> new Line("Funding raised: " + signedMoney(raised.after() - raised.before()) + " a season.",
+                String.format(Locale.ROOT, "Your prestige grew to %,d, and review #%d's bracket pays for it now: "
+                    + "funding rises from %s to %s a season. It won't fall before the next review.",
+                    raised.prestige(), raised.reviewNumber(), money(raised.before()), money(raised.after())), "", 1));
     }
 
     /**

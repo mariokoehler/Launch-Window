@@ -106,7 +106,7 @@
         "## Income",
         "Funding is the only income. Missions and goals never pay money: they earn prestige, and prestige sets your funding.",
         "Every {budget.seasonsPerReview} seasons of your agency, a budget review turns your prestige into the funding rate for the next {budget.seasonsPerReview}. The Public Affairs Office shows your bracket and what the next review would pay.",
-        "If your prestige fell short of a review's minimum, the next review's bracket moves down by that shortfall, so one bad stretch isn't counted twice.", "When another agency is first to a goal you could have reached, the government wants an answer: the next review counts {budget.rivalShare} % of that goal's first-time prestige on top of yours. It counts once, at that review, and only for goals your agency's programs can reach.",
+        "If your prestige fell short of a review's minimum, the next review's bracket moves down by that shortfall, so one bad stretch isn't counted twice.", "Between reviews, funding follows your prestige up but never down: once the first review has set your rate, each season your prestige is higher than ever since the last review, the review in force pays for the difference straight away. Extra funding from events stays on top.", "When another agency is first to a goal you could have reached, the government wants an answer: the next review counts {budget.rivalShare} % of that goal's first-time prestige on top of yours. It counts once, at that review, and only for goals your agency's programs can reach.",
         "## Running costs",
         "Every season, before the funding arrives, you pay:",
         "- every employee's salary;",

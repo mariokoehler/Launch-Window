@@ -61,6 +61,11 @@ public final class RaceShock {
     public static void main(String[] args) {
         ContentCatalog catalog = ContentPackLoader.load(Path.of("assets", "content",
             args.length > 0 ? args[0] : "standard"));
+        // -Drules.raiseShare=0 turns off raises between reviews (design.md 2.1(f)), for measuring them.
+        String raise = System.getProperty("rules.raiseShare");
+        if (raise != null) {
+            de.mkoehler.launchwindow.rules.BudgetProgress.setRaiseShare(Double.parseDouble(raise));
+        }
         if (args.length > 1 && args[1].equals("decisions")) {
             de.mkoehler.launchwindow.content.Decisions.setStandard(de.mkoehler.launchwindow.content.Decisions.load(
                 Path.of("assets", "content", de.mkoehler.launchwindow.content.Decisions.FILE)));

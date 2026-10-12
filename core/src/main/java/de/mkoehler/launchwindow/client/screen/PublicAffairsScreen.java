@@ -199,7 +199,32 @@ public final class PublicAffairsScreen extends ChromeScreen {
     /** Names what set today's funding: the last review, or the starting rate. */
     private String reviewSource() {
         int last = lastReviewNumber();
-        return last == 0 ? ", the starting rate" : ", set by review #" + last;
+        if (last == 0) {
+            return ", the starting rate";
+        }
+        // Raised between reviews when prestige has grown past the review's own (design.md 2.1(f)).
+        return ", set by review #" + last
+            + (session.state().getFundedPrestige() > session.state().getPrestigeAtLastReview() ? ", raised since" : "");
+    }
+
+    /** Says how funding follows prestige between reviews (design.md 2.1(f)). */
+    private String raiseText() {
+        PlayerSnapshot state = session.state();
+        if (lastReviewNumber() == 0) {
+            return "From the first review on, funding also rises between reviews as prestige does.";
+        }
+        long due = BudgetProgress.raiseAt(state, schedule(), state.getPrestige());
+        String pending = due > 0 ? String.format(Locale.ROOT, " Your prestige has grown since the rate was set: "
+            + "next season it rises by %s.", money(due)) : "";
+        long from = Math.max(state.getPrestige(), state.getFundedPrestige());
+        long more = BudgetProgress.raiseAt(state, schedule(), from + 1_000)
+            - BudgetProgress.raiseAt(state, schedule(), from);
+        if (more <= 0) {
+            return "Funding is at the top of review #" + lastReviewNumber() + "'s bracket: more prestige counts at "
+                + "the next review." + pending;
+        }
+        return String.format(Locale.ROOT, "Between reviews, funding rises as prestige does and never falls: "
+            + "1,000 more prestige would add %s a season.%s", money(more), pending);
     }
 
     private int lastReviewNumber() {
@@ -289,6 +314,7 @@ public final class PublicAffairsScreen extends ChromeScreen {
                 + "answer: this review counts %,d more prestige. The bracket above already shows it.",
                 forecast.rivalCredit()), Theme.TextStyle.CAPTION, Theme.SUCCESS)).padBottom(Theme.SPACE_2).row();
         }
+        card.add(ui.paragraph(raiseText(), Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padBottom(Theme.SPACE_2).row();
         card.add(ui.paragraph(lastReviewText() + " Converting prestige to funds lowers what the next review sees.",
             Theme.TextStyle.CAPTION, Theme.INK_MUTED)).row();
         column.add(card).padBottom(Theme.SPACE_4).row();

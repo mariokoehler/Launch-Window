@@ -2437,6 +2437,11 @@ public final class ContentPackPlayouts {
     public static void main(String[] args) {
         ContentCatalog catalog = ContentPackLoader.load(Path.of("assets", "content",
             args.length > 0 ? args[0] : "early-era"));
+        // -Drules.raiseShare=0 turns off raises between reviews (design.md 2.1(f)), for measuring them.
+        String raise = System.getProperty("rules.raiseShare");
+        if (raise != null) {
+            de.mkoehler.launchwindow.rules.BudgetProgress.setRaiseShare(Double.parseDouble(raise));
+        }
         Bot bot = args.length < 2 ? Bot.PLAIN : switch (args[1]) {
             case "ahead" -> Bot.AHEAD;
             case "side" -> Bot.SIDE_MISSIONS;

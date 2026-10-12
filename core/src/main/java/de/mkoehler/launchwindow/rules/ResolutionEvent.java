@@ -48,7 +48,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
     @JsonSubTypes.Type(value = ContractNews.class, name = "contractNews"),
     @JsonSubTypes.Type(value = ContractLineUnlocked.class, name = "contractLineUnlocked"),
     @JsonSubTypes.Type(value = CrewedFlightsGrounded.class, name = "crewedFlightsGrounded"),
-    @JsonSubTypes.Type(value = RivalFirstsAnswered.class, name = "rivalFirstsAnswered")
+    @JsonSubTypes.Type(value = RivalFirstsAnswered.class, name = "rivalFirstsAnswered"),
+    @JsonSubTypes.Type(value = FundingRaised.class, name = "fundingRaised")
 })
 public interface ResolutionEvent {
 }

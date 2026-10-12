@@ -1453,6 +1453,10 @@ while building it, **confirmed by the user (2026-10-06)**:
   and the prestige the next review adds (`RivalFirstsAnswered`). When a review falls in the same season,
   the notice says the review counted it, and the review's notice adds "and N more for rivals' Firsts".
   Shots `rival-firsts-report.png`, `rival-firsts-review.png` (`-Dshots=rival`).
+- **A raise between reviews (built 2026-10-12, `design.md` §2.1(f)):** the Budget card gets a success
+  notice, "Funding raised: + $X a season.", with the prestige, the review whose bracket priced it and the
+  rate before and after (`FundingRaised`); the funding line reads "Funding (new rate)". Shot
+  `raise-report.png` (`-Dshots=raise`).
 - **Blueprints in the R&D card (built 2026-10-09, user's idea after BASPM's end-of-season R&D
   screen):** each component's entry opens with its blueprint drawing
   (`assets/ui/blueprints/<component-id>.jpg`, 864 x 352) across the full card width, at its own
@@ -2022,6 +2026,10 @@ review: when, what it pays, what keeps today's funding) and `PrestigeConversion`
   pay and the gold mark already include it (`ReviewForecast` shifts the bracket by it, as by the catch-up
   shift); a green caption above the last-review line says how much the review adds. Shots
   `rival-firsts-pao.png`, and `rival-firsts-help.png` for the help topic's new paragraph.
+- **Raises between reviews (built 2026-10-12, `design.md` §2.1(f)):** the funding line reads "set by
+  review #n, raised since" after a raise, and a caption above the last-review line says what 1,000 more
+  prestige would add now (or that the bracket's top is reached, or, before the first review, that raises
+  start then), and the raise due next season when prestige has already grown. Shot `raise-pao.png`.
 
 ### 4.11 Museum: goals, history, rivals
 **Purpose:** the scoreboard and the archive. **Ref:** `museum*.png`.
