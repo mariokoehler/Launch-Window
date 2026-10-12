@@ -1563,6 +1563,37 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
     not more of the same: the interactive events (§5, Backlog), and perhaps flights that pay for a
     repeat or cheaper ways to keep a program open. Both became the commercial contracts (§2.11,
     2026-10-11).
+  - **A smarter bot, and what it says about the game** (measured 2026-10-12, `ContentPackPlayouts
+    standard smart`, 200 games, seeds 42 and 7). Diagnosed from the side-missions bot first: it
+    launched at a median chance to complete of 0.41 crewed and 0.48 uncrewed (`MissionAssessment`;
+    70 % per component multiplies down over a flight's steps), lost about 4 astronauts a game, and
+    hired about 265 people a game: 54 specialists a game resigned (the SET Center filled to capacity
+    with only four R&D slots per component, so the rest sat idle at −2 morale a season to the floor
+    of 35) and 79 retired (hiring the best average skill picks the oldest). The smart bot (`Bot.SMART`)
+    adds the fixes one by one, each kept only if it moved the median:
+
+    | Step | Landing median NASA / Soviet | Note |
+    |---|---|---|
+    | Side-missions bot | 135 / 168 | 199 of 200 land |
+    | Strict odds gate alone (0.6 crewed, 0.5 uncrewed) | 209 / 215 | 32 land: waiting idles people, who quit |
+    | Nobody idle, slot-sized SET, hires for years left, skill-matched slots | 114 / 125 | 82 hires a game, 1.5 astronauts lost |
+    | + launch early at odds 0.5 crewed / 0.3 uncrewed | 101 / 115 | the flat bar still applies otherwise |
+    | + open the plan's later rockets with spare money | **92 / 98** (seed 7: 96 / 99) | every game lands, about season 101 on average |
+    | With R&D decisions (`smart decisions`) | 88 / 87 | the side-missions bot with decisions: 113 / 152 |
+
+    Tried and dropped (each slower on both seeds): opening later *programs* early too (money
+    is the binding constraint: anything bought early for a later flight is taken from the current
+    one), upgrading the VAB ahead for a bigger rocket class (Soviet 98 to 112), flying the plan's
+    later flights alongside the current one (about one a game, mostly the uncrewed lander tests;
+    the extra crews and building levels cost more than the overlap saves), and side flights
+    (without them about two seasons faster; kept on, as a player fills lulls). Each part stays
+    behind a system property for measuring (`ContentPackPlayouts.Bot.SMART`).
+    - **Worth knowing for balance, not verdicts:** a failed flight is cheap enough that launching
+      earlier is faster at every bar tried (odds 0.6/0.5, 0.5/0.4, 0.4/0.3: averages 115, 111, 107),
+      with astronaut losses about flat; a careful player is not rewarded for waiting. And an idle
+      employee quits within about ten seasons (from a new hire's 55 morale), so a player who staffs a building to capacity
+      without the work for them churns people the way the old bots did: the morale rules may be
+      harsher than a player expects, or the hire screen should say so.
 - **The game goes on after a winner:** goals, flights and prestige still count.
 
 ### 2.10 Difficulty level
@@ -1984,7 +2015,7 @@ purpose-built report).
   whether and when they reach the declared goals: the early race on `early-era`, the Moon race on
   `standard` (a pack with the `crewed-lunar-landing` goal), with a plan per agency. `ahead` as the
   second argument plays the bot that works ahead (§2.6), `side` the one that also flies side
-  missions; it also opens Headquarters and the VAB as
+  missions, `smart` the one that plays like a careful player (§2.9, "A smarter bot"); it also opens Headquarters and the VAB as
   the plan needs, and closes programs and rockets it no longer flies. Both bots now wait only for
   the components a configuration's steps fly (before 2026-10-09, every component of its program;
   the early-era numbers came out the same). With the pool of 10 (2026-10-06):
@@ -2439,8 +2470,14 @@ well, and whether three items at a time is the right number.
 rival later. Built in dev-tools the same day: `ContentPackPlayouts.Bot`, plain, working ahead,
 and flying side missions (§2.6). Lessons for an NPC: buy nothing permanent (building levels,
 hires, rocket programs) for a passing goal, and stay solvent before staying busy; debt stalls the
-plan for longer than any side flight fills. Next for the bot: several flights of the plan at once,
-and the R&D tuning (§2.6) rerun with it.
+plan for longer than any side flight fills. **The smart bot** (2026-10-12, `standard smart`, §2.9
+"A smarter bot"): nobody idle, hires for years left, skill-matched R&D, early launches on the
+flight's odds, the plan's later rockets opened with spare money. It lands every game, at a median of
+92 (NASA) and 98 (Soviet) seasons against the side-missions bot's 135 and 168. Several flights of the
+plan at once was tried and made it slower (kept behind `bot.parallel`). Next: the R&D tuning (§2.9,
+"Lulls") and the hands-on and contract measurements rerun with it, a choice of R&D decision options
+by expected value (it still picks at random), and the two balance points it raised: cheap failures
+reward launching early, and idle staff quit fast.
 
 **Interactive events** (the user's idea, 2026-10-09, not designed yet): decisions between
 flights, so a wait for R&D isn't empty. R&D events with choices (a supplier delay, a trade of

@@ -39,6 +39,7 @@ import de.mkoehler.launchwindow.rules.MissionStepResolved;
 import de.mkoehler.launchwindow.rules.OpenProgramOutcome;
 import de.mkoehler.launchwindow.rules.PersonnelDeparture;
 import de.mkoehler.launchwindow.rules.PersonnelGroup;
+import de.mkoehler.launchwindow.rules.PersonnelActions;
 import de.mkoehler.launchwindow.rules.PrestigeConversion;
 import de.mkoehler.launchwindow.rules.ProgramOpening;
 import de.mkoehler.launchwindow.rules.ResolutionEvent;
@@ -154,6 +155,8 @@ public final class ContentPackPlayouts {
     private final Map<Archetype, List<String>> plans;
     private final Bot bot;
     private final boolean ahead;
+    private final boolean sides;
+    private final boolean smart;
     /**
      * With contracts (design.md 2.11): the rivals that apply for every listing the bot applies for, as
      * strong as the bot, so its rank among them is drawn at random; -1 plays without contracts.
@@ -177,8 +180,41 @@ public final class ContentPackPlayouts {
          * the money and research it needs, from money above a reserve the plan needs next, while the
          * plan's own flight isn't close.
          */
-        SIDE_MISSIONS
+        SIDE_MISSIONS,
+        /**
+         * Flies side missions as {@link #SIDE_MISSIONS} does, and plays more like a careful player
+         * (design.md 2.9, measured 2026-10-12): it keeps nobody idle (spare people train, the SET
+         * Center is staffed to the R&amp;D slots there are, not to its capacity), hires for skill and
+         * years left before retirement, puts each R&amp;D slot's best specialist in the component's own
+         * skill, launches early once the flight's odds ({@code MissionAssessment}) reach a bar, and opens
+         * the plan's later rockets while money is spare. System properties switch each part, for
+         * measuring: {@code bot.oddsGate} (early, strict, off), {@code bot.crewedOdds},
+         * {@code bot.uncrewedOdds}, {@code bot.openAhead} (rockets, programs, both, false),
+         * {@code bot.parallel}, {@code bot.sides}, and {@code bot.seed} for the run.
+         */
+        SMART
     }
+
+    /** Whether the smart bot opens the plan's later programs and rockets early, for measuring. */
+    static final String SMART_OPEN_AHEAD_WHAT = System.getProperty("bot.openAhead", "rockets");
+    static final boolean SMART_OPEN_AHEAD = !SMART_OPEN_AHEAD_WHAT.equals("false");
+
+    /** Whether the smart bot flies the plan's later flights alongside the current one, for measuring. */
+    static final boolean SMART_PARALLEL = Boolean.parseBoolean(System.getProperty("bot.parallel", "false"));
+
+    /** The smart bot weighs a candidate's skill down when they retire within this many seasons. */
+    private static final int SMART_CAREER_SEASONS = 40;
+    /** Specialists the smart bot keeps beyond its R&amp;D slots, for new hires still in basic training. */
+    private static final int SMART_SPARE_SPECIALISTS = 2;
+    /** Whether the smart bot launches on the flight's odds; false keeps the flat bar, for measuring. */
+    static final boolean SMART_ODDS_GATE = !System.getProperty("bot.oddsGate", "early").equals("off");
+    /** Whether the odds only let the smart bot launch before the flat bar ("early"), not hold it back ("strict"). */
+    static final boolean SMART_ODDS_EARLY = System.getProperty("bot.oddsGate", "early").equals("early");
+
+    /** The smart bot launches a crewed flight once its chance to complete reaches this. */
+    static final double SMART_CREWED_ODDS = Double.parseDouble(System.getProperty("bot.crewedOdds", "0.5"));
+    /** The smart bot launches an uncrewed flight once its chance to complete reaches this. */
+    static final double SMART_UNCREWED_ODDS = Double.parseDouble(System.getProperty("bot.uncrewedOdds", "0.3"));
 
     /**
      * Creates a harness for one content pack with the plain bot, which works on one flight at a time.
@@ -199,6 +235,8 @@ public final class ContentPackPlayouts {
     public ContentPackPlayouts(ContentCatalog catalog, Bot bot) {
         this.bot = bot;
         this.ahead = bot != Bot.PLAIN;
+        this.sides = bot == Bot.SIDE_MISSIONS || bot == Bot.SMART && Boolean.parseBoolean(System.getProperty("bot.sides", "true"));
+        this.smart = bot == Bot.SMART;
         this.catalog = catalog;
         this.buildings = catalog.buildings();
         boolean moon = catalog.goal("crewed-lunar-landing").isPresent();
@@ -506,6 +544,9 @@ public final class ContentPackPlayouts {
             }
             for (List<ResolutionEvent> list : List.of(seasonEvents)) {
                 for (ResolutionEvent event : list) {
+                    if (event instanceof PersonnelDeparture any) {
+                        tally.departures.merge(any.group() + " " + any.reason(), 1, Integer::sum);
+                    }
                     if (event instanceof PersonnelDeparture departure && departure.group() == PersonnelGroup.ASTRONAUT
                             && (departure.reason().name().equals("LOST_IN_ACCIDENT")
                                 || departure.reason().name().equals("PERISHED"))) {
@@ -675,14 +716,20 @@ public final class ContentPackPlayouts {
             openRocket(snapshot, rocket, tally);
         }
         ensureStaff(snapshot, target, random, tally);
-        MissionConfiguration side = bot == Bot.SIDE_MISSIONS ? sideTarget(snapshot, target, rocket, tally) : null;
+        if (smart && SMART_OPEN_AHEAD) {
+            openAhead(snapshot, target, rocket, tally);
+        }
+        MissionConfiguration side = sides ? sideTarget(snapshot, target, rocket, tally) : null;
         assignResearch(snapshot, target, rocket, side);
         boolean hardwareReady = rocket != null && hardwareReady(snapshot, target, rocket);
         // Staff train while the hardware is still in R&D, and stay home once it's ready to fly.
+        if (smart) {
+            trainSpare(snapshot, target, rocket, hardwareReady);
+        }
         if (!hardwareReady) {
             // The working-ahead bot keeps its people home once the hardware is close, so the flight
             // doesn't wait out a training course.
-            if (!ahead || !hardwareReady(snapshot, target, rocket, LAUNCH_RELIABILITY - CLOSE_TO_READY)) {
+            if (!smart && (!ahead || !hardwareReady(snapshot, target, rocket, LAUNCH_RELIABILITY - CLOSE_TO_READY))) {
                 trainIdle(snapshot, random);
             }
             tally.stalls.merge("hardware not ready", 1, Integer::sum);
@@ -690,8 +737,99 @@ public final class ContentPackPlayouts {
                 .noneMatch(mission -> mission.getMissionConfigurationId().equals(target.id()))) {
             launch(snapshot, target, rocket, tally, "");
         }
+        if (smart && SMART_PARALLEL) {
+            flyAhead(snapshot, target, rocket, tally);
+        }
         if (side != null) {
             flySide(snapshot, target, rocket, side, random, tally);
+        }
+    }
+
+    /** The first of the plan's later flights still to fly whose program and rocket are open and hardware close. */
+    private MissionConfiguration nextCloseLater(PlayerSnapshot snapshot, MissionConfiguration target) {
+        List<String> plan = plans.get(snapshot.getArchetype());
+        for (String id : plan.subList(plan.indexOf(target.id()) + 1, plan.size())) {
+            MissionConfiguration later = catalog.missionConfiguration(id).orElseThrow();
+            if (!hasOpenGoal(snapshot, later) || !snapshot.getOpenedProgramIds().contains(later.programId())
+                    || snapshot.getInProgressMissions().values().stream()
+                        .anyMatch(mission -> mission.getMissionConfigurationId().equals(id))) {
+                continue;
+            }
+            boolean needsRocket = later.launches().stream().anyMatch(launch -> launch.launchType().needsRocket());
+            MissionComponent laterRocket = needsRocket ? cheapestRocketFor(snapshot.getArchetype(), later) : null;
+            boolean close = needsRocket ? hardwareReady(snapshot, later, laterRocket, LAUNCH_RELIABILITY - CLOSE_TO_READY)
+                : flownComponents(later).stream().allMatch(componentId -> {
+                    OwnedMissionComponent owned = snapshot.getMissionComponents().get(componentId);
+                    return owned != null && owned.getCurrentReliability() >= LAUNCH_RELIABILITY - CLOSE_TO_READY;
+                });
+            if (close) {
+                return later;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * The smart bot flies one of the plan's later flights alongside the current one when it can: a
+     * flight missing an earlier one's goals only flies with lower reliability (none is a hard
+     * prerequisite), so it goes once its odds with those penalties reach the bar, the people it
+     * needs are idle on top of the current flight's, and its launch fits above the plan's reserve.
+     */
+    private void flyAhead(PlayerSnapshot snapshot, MissionConfiguration target, MissionComponent rocket, Tally tally) {
+        boolean mainFlying = snapshot.getInProgressMissions().values().stream()
+            .anyMatch(mission -> mission.getMissionConfigurationId().equals(target.id()));
+        List<String> plan = plans.get(snapshot.getArchetype());
+        for (String id : plan.subList(plan.indexOf(target.id()) + 1, plan.size())) {
+            MissionConfiguration later = catalog.missionConfiguration(id).orElseThrow();
+            boolean flying = snapshot.getInProgressMissions().values().stream()
+                .anyMatch(mission -> mission.getMissionConfigurationId().equals(id));
+            if (flying || !hasOpenGoal(snapshot, later)) {
+                continue;
+            }
+            if (!snapshot.getOpenedProgramIds().contains(later.programId())) {
+                tally.aheadRejections.merge("program closed", 1, Integer::sum);
+                continue;
+            }
+            boolean needsRocket = later.launches().stream().anyMatch(launch -> launch.launchType().needsRocket());
+            MissionComponent laterRocket = needsRocket ? cheapestRocketFor(snapshot.getArchetype(), later) : null;
+            if (needsRocket && (laterRocket == null || !isActive(snapshot, laterRocket.id()))) {
+                tally.aheadRejections.merge("rocket closed", 1, Integer::sum);
+                continue;
+            }
+            int astronauts = later.requiredAstronautCount() + later.requiredCapcomCount()
+                + (mainFlying ? 0 : target.requiredAstronautCount() + target.requiredCapcomCount());
+            int controllers = later.requiredMissionControlOfficerCount()
+                + (mainFlying ? 0 : target.requiredMissionControlOfficerCount());
+            if (idleCount(snapshot.getAstronauts()) < astronauts
+                    || idleCount(snapshot.getMissionControlOfficers()) < controllers) {
+                tally.aheadRejections.merge("people", 1, Integer::sum);
+                continue;
+            }
+            if (launchCost(later, laterRocket) > snapshot.getFunds() - reserve(snapshot, target, rocket)) {
+                tally.aheadRejections.merge("funds", 1, Integer::sum);
+                continue;
+            }
+            MissionStaffing.Staffing staffing = MissionStaffing.autoAssign(snapshot, later);
+            boolean seated = later.usedCrewSlots().stream().allMatch(slot -> staffing.crewSlotIds().get(slot) != null)
+                && later.usedControlSlots().stream().allMatch(slot -> staffing.controlSlotIds().get(slot) != null);
+            if (!seated) {
+                tally.aheadRejections.merge("not seated", 1, Integer::sum);
+                continue;
+            }
+            List<String> rockets = later.launches().stream()
+                .map(launch -> launch.launchType().needsRocket() ? laterRocket.id() : "").toList();
+            double completion = de.mkoehler.launchwindow.rules.MissionAssessment.assess(snapshot, catalog, later,
+                staffing.crewSlotIds(), staffing.controlSlotIds(), rockets).completion();
+            if (completion < (later.requiredAstronautCount() > 0 ? SMART_CREWED_ODDS : SMART_UNCREWED_ODDS)) {
+                tally.aheadRejections.merge("odds", 1, Integer::sum);
+                continue;
+            }
+            int before = tally.launchedThisSeason;
+            launch(snapshot, later, laterRocket, tally, "ahead: ");
+            if (tally.launchedThisSeason > before) {
+                tally.aheadLaunches.merge(id, 1, Integer::sum);
+                return;
+            }
         }
     }
 
@@ -1023,6 +1161,47 @@ public final class ContentPackPlayouts {
         return reserve;
     }
 
+    /**
+     * The smart bot opens what the plan's later flights need, one purchase a season, while the money
+     * above the current flight's reserve covers it: their R&amp;D can only start once they're open. A
+     * program also needs room at Headquarters and its upkeep inside the season's funding; a rocket,
+     * room in the VAB and a class the VAB can build.
+     */
+    private void openAhead(PlayerSnapshot snapshot, MissionConfiguration target, MissionComponent rocket, Tally tally) {
+        if (snapshot.getFunds() <= 0) {
+            return;
+        }
+        long spendable = snapshot.getFunds() - reserve(snapshot, target, rocket);
+        long headroom = snapshot.getFundingRatePerSeason() - independentRunningCosts(snapshot);
+        List<String> plan = plans.get(snapshot.getArchetype());
+        for (String id : plan.subList(plan.indexOf(target.id()) + 1, plan.size())) {
+            MissionConfiguration later = catalog.missionConfiguration(id).orElseThrow();
+            Program program = catalog.program(later.programId()).orElseThrow();
+            if (!snapshot.getOpenedProgramIds().contains(program.id())) {
+                boolean room = snapshot.getOpenedProgramIds().size()
+                    < BuildingUpgrades.capacity(snapshot, Building.HEADQUARTERS, buildings);
+                if (room && !SMART_OPEN_AHEAD_WHAT.equals("rockets") && program.requiredGoalIds().stream().allMatch(snapshot::hasAchievedOrCancelledGoal)
+                        && ProgramOpening.openingPrice(snapshot, program, catalog) <= spendable
+                        && program.maintenanceCost() <= headroom) {
+                    openProgram(snapshot, program, tally);
+                }
+                return;
+            }
+            MissionComponent laterRocket = cheapestRocketFor(snapshot.getArchetype(), later);
+            if (laterRocket != null && !isActive(snapshot, laterRocket.id())) {
+                boolean room = openRockets(snapshot)
+                    < BuildingUpgrades.capacity(snapshot, Building.VEHICLE_ASSEMBLY, buildings);
+                if (room && !SMART_OPEN_AHEAD_WHAT.equals("programs") && RocketPrograms.classAllowed(
+                        laterRocket.rocket().rocketClass(), snapshot.buildingLevel(Building.VEHICLE_ASSEMBLY))
+                        && laterRocket.creationCost() <= spendable
+                        && laterRocket.maintenanceCost() <= headroom) {
+                    openRocket(snapshot, laterRocket, tally);
+                }
+                return;
+            }
+        }
+    }
+
     /** The programs the plan still flies, from its current flight on. */
     private Set<String> remainingPlanPrograms(PlayerSnapshot snapshot, MissionConfiguration target) {
         List<String> plan = plans.get(snapshot.getArchetype());
@@ -1047,6 +1226,9 @@ public final class ContentPackPlayouts {
     }
 
     private boolean hardwareReadyWithoutRocket(PlayerSnapshot snapshot, MissionConfiguration configuration) {
+        if (smart && SMART_ODDS_GATE) {
+            return oddsReady(snapshot, configuration, null);
+        }
         for (String componentId : flownComponents(configuration)) {
             OwnedMissionComponent owned = snapshot.getMissionComponents().get(componentId);
             MissionComponent component = catalog.missionComponent(componentId).orElseThrow();
@@ -1143,8 +1325,21 @@ public final class ContentPackPlayouts {
         if (openRockets(snapshot) < BuildingUpgrades.capacity(snapshot, Building.VEHICLE_ASSEMBLY, buildings)) {
             return;
         }
+        // The smart bot keeps the rockets its plan still flies: it opened them early for their R&D.
+        Set<String> kept = new HashSet<>();
+        if (smart) {
+            List<String> plan = plans.get(snapshot.getArchetype());
+            MissionConfiguration target = target(snapshot);
+            for (String id : plan.subList(target == null ? plan.size() : plan.indexOf(target.id()), plan.size())) {
+                MissionComponent planned = cheapestRocketFor(snapshot.getArchetype(),
+                    catalog.missionConfiguration(id).orElseThrow());
+                if (planned != null && !planned.id().equals(rocket.id())) {
+                    kept.add(planned.id());
+                }
+            }
+        }
         for (String id : rocketIds()) {
-            if (isActive(snapshot, id) && !RocketPrograms.inFlight(snapshot, id)) {
+            if (isActive(snapshot, id) && !RocketPrograms.inFlight(snapshot, id) && !kept.contains(id)) {
                 RocketPrograms.close(snapshot, id, catalog);
             }
         }
@@ -1177,13 +1372,26 @@ public final class ContentPackPlayouts {
         int spares = ahead ? AHEAD_SPARES : 0;
         int controllers = target.requiredMissionControlOfficerCount() + spares;
         int astronauts = target.requiredAstronautCount() + target.requiredCapcomCount() + spares;
+        // Flying ahead, the smart bot staffs the next later flight close to ready as well.
+        MissionConfiguration next = smart && SMART_PARALLEL ? nextCloseLater(snapshot, target) : null;
+        if (next != null) {
+            controllers += next.requiredMissionControlOfficerCount();
+            astronauts += next.requiredAstronautCount() + next.requiredCapcomCount();
+        }
         maybeUpgrade(snapshot, Building.MISSION_CONTROL, controllers, tally);
         maybeUpgrade(snapshot, Building.ASTRONAUT_CENTER, astronauts + 1, tally);
         hireBest(snapshot, PersonnelGroup.MISSION_CONTROL,
             controllers - snapshot.getMissionControlOfficers().size(), random, tally);
         hireBest(snapshot, PersonnelGroup.ASTRONAUT, astronauts + 1 - snapshot.getAstronauts().size(), random, tally);
         int specialists = STARTING_SPECIALISTS;
-        if (ahead) {
+        if (smart) {
+            int wanted = usefulSlots(snapshot, target, null) + SMART_SPARE_SPECIALISTS;
+            specialists = Math.min(wanted, BuildingUpgrades.capacity(snapshot, Building.SET_CENTER, buildings));
+            if (wanted > specialists && snapshot.getSetSpecialists().size() >= specialists
+                    && snapshot.getFunds() > AHEAD_RESERVE) {
+                upgrade(snapshot, Building.SET_CENTER, tally);
+            }
+        } else if (ahead) {
             specialists = BuildingUpgrades.capacity(snapshot, Building.SET_CENTER, buildings);
             if (snapshot.getSetSpecialists().size() >= specialists && snapshot.getFunds() > AHEAD_RESERVE) {
                 upgrade(snapshot, Building.SET_CENTER, tally);
@@ -1227,7 +1435,7 @@ public final class ContentPackPlayouts {
             if (pool.isEmpty()) {
                 return;
             }
-            Personnel best = pool.stream().max(Comparator.comparingDouble(ContentPackPlayouts::averageSkill))
+            Personnel best = pool.stream().max(Comparator.comparingDouble(candidate -> hireScore(candidate, group)))
                 .orElseThrow();
             int sizeBefore = rosterSize(snapshot, group);
             HireOutcome outcome = HiringPool.hire(snapshot, group, best.getId(), random, buildings);
@@ -1250,9 +1458,129 @@ public final class ContentPackPlayouts {
         }
     }
 
+    /**
+     * How the bot ranks a candidate: their average skill; the smart bot weighs it down for someone who
+     * retires soon, so a veteran's few seasons don't cost a hire's signing bonus and basic training.
+     */
+    private double hireScore(Personnel candidate, PersonnelGroup group) {
+        double skill = averageSkill(candidate);
+        if (!smart) {
+            return skill;
+        }
+        int seasonsLeft = de.mkoehler.launchwindow.rules.PersonnelLifecycle.seasonsUntilRetirement(candidate, group);
+        return skill * Math.min(1.0, seasonsLeft / (double) SMART_CAREER_SEASONS);
+    }
+
+    /** The R&amp;D slots, free or taken, on the components the bot researches now: what specialists can do. */
+    private int usefulSlots(PlayerSnapshot snapshot, MissionConfiguration target, MissionConfiguration side) {
+        int slots = 0;
+        for (String componentId : researchQueue(snapshot, target, cheapestRocketFor(snapshot.getArchetype(), target),
+                side)) {
+            OwnedMissionComponent owned = snapshot.getMissionComponents().get(componentId);
+            MissionComponent component = catalog.missionComponent(componentId).orElseThrow();
+            if (owned != null && owned.isActive() && owned.getCurrentReliability() < component.maxRdReliability()) {
+                slots += MissionComponent.RD_SLOT_COUNT;
+            }
+        }
+        return slots;
+    }
+
+    /**
+     * The smart bot keeps nobody idle (idle people lose morale and quit): specialists without a slot
+     * train in the skill the plan's next component needs, and astronauts and controllers train unless
+     * the flight is close, when only the people it needs and the spares stay home.
+     */
+    private void trainSpare(PlayerSnapshot snapshot, MissionConfiguration target, MissionComponent rocket,
+            boolean hardwareReady) {
+        SetSkill needed = null;
+        for (String componentId : researchQueue(snapshot, target, rocket, null)) {
+            OwnedMissionComponent owned = snapshot.getMissionComponents().get(componentId);
+            MissionComponent component = catalog.missionComponent(componentId).orElseThrow();
+            if (owned == null || owned.getCurrentReliability() < component.maxRdReliability()) {
+                needed = component.associatedSkill();
+                break;
+            }
+        }
+        for (SetSpecialist specialist : snapshot.getSetSpecialists()) {
+            if (needed != null && available(specialist)) {
+                PersonnelActions.startTraining(snapshot, PersonnelGroup.SET, specialist.getId(), TrainingKind.ADVANCED,
+                    needed.name(), 0);
+            }
+        }
+        boolean close = hardwareReady || hardwareReady(snapshot, target, rocket, LAUNCH_RELIABILITY - CLOSE_TO_READY);
+        int astronautsHome = close ? target.requiredAstronautCount() + target.requiredCapcomCount() + AHEAD_SPARES : 0;
+        int controllersHome = close ? target.requiredMissionControlOfficerCount() + AHEAD_SPARES : 0;
+        // Flying ahead, the next later flight whose hardware is close keeps its people home too.
+        MissionConfiguration next = SMART_PARALLEL ? nextCloseLater(snapshot, target) : null;
+        if (next != null) {
+            astronautsHome += next.requiredAstronautCount() + next.requiredCapcomCount();
+            controllersHome += next.requiredMissionControlOfficerCount();
+        }
+        List<Astronaut> astronauts = snapshot.getAstronauts().stream().filter(ContentPackPlayouts::available)
+            .sorted(Comparator.comparingDouble(ContentPackPlayouts::averageSkill).reversed()).toList();
+        for (Astronaut astronaut : astronauts.subList(Math.min(astronautsHome, astronauts.size()), astronauts.size())) {
+            AstronautSkill weakest = AstronautSkill.values()[0];
+            for (AstronautSkill skill : AstronautSkill.values()) {
+                if (astronaut.getSkill(skill) < astronaut.getSkill(weakest)) {
+                    weakest = skill;
+                }
+            }
+            PersonnelActions.startTraining(snapshot, PersonnelGroup.ASTRONAUT, astronaut.getId(), TrainingKind.ADVANCED,
+                weakest.name(), 0);
+        }
+        List<MissionControlOfficer> officers = snapshot.getMissionControlOfficers().stream()
+            .filter(ContentPackPlayouts::available)
+            .sorted(Comparator.comparingDouble(ContentPackPlayouts::averageSkill).reversed()).toList();
+        for (MissionControlOfficer officer : officers.subList(Math.min(controllersHome, officers.size()),
+                officers.size())) {
+            MissionControlSkill weakest = MissionControlSkill.values()[0];
+            for (MissionControlSkill skill : MissionControlSkill.values()) {
+                if (officer.getSkill(skill) < officer.getSkill(weakest)) {
+                    weakest = skill;
+                }
+            }
+            PersonnelActions.startTraining(snapshot, PersonnelGroup.MISSION_CONTROL, officer.getId(),
+                TrainingKind.ADVANCED, weakest.name(), 0);
+        }
+    }
+
+    /**
+     * The components the bot researches, in order: the current flight's, its rocket, a side flight's, then
+     * (working ahead) the plan's later flights' and their rockets. Owned or not.
+     */
+    private List<String> researchQueue(PlayerSnapshot snapshot, MissionConfiguration target, MissionComponent rocket,
+            MissionConfiguration side) {
+        List<String> components = flownComponents(target);
+        if (rocket != null) {
+            components.add(rocket.id());
+        }
+        if (side != null) {
+            components.addAll(flownComponents(side));
+            if (sideRocketId != null) {
+                components.add(sideRocketId);
+            }
+        }
+        if (ahead) {
+            List<String> plan = plans.get(snapshot.getArchetype());
+            for (String id : plan.subList(plan.indexOf(target.id()) + 1, plan.size())) {
+                MissionConfiguration later = catalog.missionConfiguration(id).orElseThrow();
+                components.addAll(flownComponents(later));
+                MissionComponent laterRocket = cheapestRocketFor(snapshot.getArchetype(), later);
+                if (laterRocket != null) {
+                    components.add(laterRocket.id());
+                }
+            }
+        }
+        return components.stream().distinct().toList();
+    }
+
     /** Points idle SET specialists at the target's components below their R&D ceiling. */
     private void assignResearch(PlayerSnapshot snapshot, MissionConfiguration target, MissionComponent rocket,
             MissionConfiguration side) {
+        if (smart) {
+            assignResearchBySkill(snapshot, researchQueue(snapshot, target, rocket, side));
+            return;
+        }
         List<String> components = flownComponents(target);
         if (rocket != null && isActive(snapshot, rocket.id())) {
             components.add(rocket.id());
@@ -1297,6 +1625,33 @@ public final class ContentPackPlayouts {
         }
     }
 
+    /**
+     * The smart bot's R&amp;D: component by component in the queue's order, each free slot (slot 0 earns
+     * most) to the idle specialist best in the component's skill.
+     */
+    private void assignResearchBySkill(PlayerSnapshot snapshot, List<String> queue) {
+        for (String componentId : queue) {
+            OwnedMissionComponent owned = snapshot.getMissionComponents().get(componentId);
+            MissionComponent component = catalog.missionComponent(componentId).orElseThrow();
+            if (owned == null || !owned.isActive() || owned.getCurrentReliability() >= component.maxRdReliability()) {
+                continue;
+            }
+            for (Integer slot = freeSlot(snapshot, componentId); slot != null; slot = freeSlot(snapshot, componentId)) {
+                SetSpecialist best = snapshot.getSetSpecialists().stream()
+                    .filter(specialist -> specialist.getAssignmentState() == AssignmentState.IDLE
+                        && specialist.getUnavailableSeasons() == 0)
+                    .max(Comparator.comparingDouble(specialist -> specialist.getSkill(component.associatedSkill())))
+                    .orElse(null);
+                if (best == null) {
+                    return;
+                }
+                best.setRdTargetComponentId(componentId);
+                best.setRdSlot(slot);
+                best.setAssignmentState(AssignmentState.ASSIGNED);
+            }
+        }
+    }
+
     /** Sends idle astronauts and controllers into advanced training on their weakest skill, to keep morale up. */
     private void trainIdle(PlayerSnapshot snapshot, Random random) {
         for (Astronaut astronaut : snapshot.getAstronauts()) {
@@ -1333,7 +1688,49 @@ public final class ContentPackPlayouts {
     }
 
     private boolean hardwareReady(PlayerSnapshot snapshot, MissionConfiguration target, MissionComponent rocket) {
-        return hardwareReady(snapshot, target, rocket, LAUNCH_RELIABILITY);
+        return smart && SMART_ODDS_GATE ? oddsReady(snapshot, target, rocket) : hardwareReady(snapshot, target, rocket, LAUNCH_RELIABILITY);
+    }
+
+    /**
+     * The smart bot's launch gate: the flight's chance to complete, with the people auto-assign would
+     * seat, reaches its bar, or nothing it flies can be researched further. Without the people to seat
+     * it falls back to the flat bar, so the launch reports what it waits for.
+     */
+    private boolean oddsReady(PlayerSnapshot snapshot, MissionConfiguration configuration, MissionComponent rocket) {
+        boolean needsRocket = configuration.launches().stream().anyMatch(launch -> launch.launchType().needsRocket());
+        if (needsRocket && (rocket == null || !isActive(snapshot, rocket.id()))) {
+            return false;
+        }
+        List<String> flown = flownComponents(configuration);
+        if (needsRocket) {
+            flown.add(rocket.id());
+        }
+        boolean atCeiling = true;
+        double lowest = Double.MAX_VALUE;
+        for (String componentId : flown) {
+            OwnedMissionComponent owned = snapshot.getMissionComponents().get(componentId);
+            if (owned == null) {
+                return false;
+            }
+            MissionComponent component = catalog.missionComponent(componentId).orElseThrow();
+            atCeiling &= owned.getCurrentReliability() >= component.maxRdReliability() - 0.5;
+            lowest = Math.min(lowest, owned.getCurrentReliability() - Math.min(LAUNCH_RELIABILITY,
+                component.maxRdReliability() - 0.5));
+        }
+        if (atCeiling) {
+            return true;
+        }
+        MissionStaffing.Staffing staffing = MissionStaffing.autoAssign(snapshot, configuration);
+        boolean seated = configuration.usedCrewSlots().stream().allMatch(slot -> staffing.crewSlotIds().get(slot) != null)
+            && configuration.usedControlSlots().stream().allMatch(slot -> staffing.controlSlotIds().get(slot) != null);
+        if (!seated || lowest >= 0 && SMART_ODDS_EARLY) {
+            return lowest >= 0;
+        }
+        List<String> rockets = configuration.launches().stream()
+            .map(launch -> launch.launchType().needsRocket() ? rocket.id() : "").toList();
+        double completion = de.mkoehler.launchwindow.rules.MissionAssessment.assess(snapshot, catalog, configuration,
+            staffing.crewSlotIds(), staffing.controlSlotIds(), rockets).completion();
+        return completion >= (configuration.requiredAstronautCount() > 0 ? SMART_CREWED_ODDS : SMART_UNCREWED_ODDS);
     }
 
     private boolean hardwareReady(PlayerSnapshot snapshot, MissionConfiguration target, MissionComponent rocket,
@@ -1380,6 +1777,8 @@ public final class ContentPackPlayouts {
             tally.stalls.merge(label + "funds", 1, Integer::sum);
             return;
         }
+        var odds = de.mkoehler.launchwindow.rules.MissionAssessment.assess(snapshot, catalog, target,
+            staffing.crewSlotIds(), staffing.controlSlotIds(), rockets);
         long before = snapshot.getFunds();
         MissionLaunchOutcome outcome = MissionLaunch.launch(snapshot,
             new LaunchRequest(target.id(), staffing.crewSlotIds(), staffing.controlSlotIds(), rockets), catalog);
@@ -1391,6 +1790,8 @@ public final class ContentPackPlayouts {
         if (outcome == MissionLaunchOutcome.LAUNCHED) {
             tally.launches.merge(target.id(), 1, Integer::sum);
             tally.launchedThisSeason++;
+            tally.launchOdds.computeIfAbsent(target.requiredAstronautCount() > 0 ? "crewed" : "uncrewed",
+                key -> new ArrayList<>()).add(odds.completion());
         } else {
             tally.stalls.merge(label + outcome.name(), 1, Integer::sum);
         }
@@ -1795,6 +2196,14 @@ public final class ContentPackPlayouts {
         final Map<String, Integer> sideLaunches = new LinkedHashMap<>();
         final Map<String, Integer> sideKinds = new LinkedHashMap<>();
         final Map<String, Integer> sideRejections = new java.util.TreeMap<>();
+        /** The plan's later flights the smart bot flew alongside the current one, per configuration. */
+        final Map<String, Integer> aheadLaunches = new java.util.TreeMap<>();
+        /** Why the plan's later flights were passed over in a season, over every game. */
+        final Map<String, Integer> aheadRejections = new java.util.TreeMap<>();
+        /** People who left, by group and reason, over every game. */
+        final Map<String, Integer> departures = new java.util.TreeMap<>();
+        /** Per launch, by crewed or not: the flight's chance to complete, from {@code MissionAssessment}. */
+        final Map<String, List<Double>> launchOdds = new java.util.TreeMap<>();
     }
 
     /**
@@ -1811,6 +2220,7 @@ public final class ContentPackPlayouts {
         Bot bot = args.length < 2 ? Bot.PLAIN : switch (args[1]) {
             case "ahead" -> Bot.AHEAD;
             case "side" -> Bot.SIDE_MISSIONS;
+            case "smart" -> Bot.SMART;
             default -> throw new IllegalArgumentException("Unknown bot " + args[1]);
         };
         // "decisions" as a third argument plays with the R&D decisions (ui-spec.md component 26); without
@@ -1822,7 +2232,7 @@ public final class ContentPackPlayouts {
         }
         ContentPackPlayouts harness = new ContentPackPlayouts(catalog, bot);
         int seasons = harness.declaredGoals().equals(MOON_DECLARED_GOALS) ? 240 : 80;
-        Report report = harness.run(200, seasons, 42L);
+        Report report = harness.run(200, seasons, Long.getLong("bot.seed", 42L));
         System.out.println(report.games() + " games, " + report.seasons() + " seasons max, declared goals "
             + harness.declaredGoals());
         System.out.println("Completed (all declared goals): " + report.completedByArchetype() + " of "
@@ -1842,6 +2252,17 @@ public final class ContentPackPlayouts {
             + report.debtConversions() + ", lowest funds " + report.lowestFunds() + ", astronauts lost "
             + report.astronautsLost());
         System.out.println("Stalls: " + report.stalls());
+        System.out.println("Departures: " + harness.lastTally.departures);
+        if (!harness.lastTally.aheadRejections.isEmpty()) {
+            System.out.println("Later plan flights flown alongside: " + harness.lastTally.aheadLaunches
+                + ", passed over: " + harness.lastTally.aheadRejections);
+        }
+        harness.lastTally.launchOdds.forEach((kind, list) -> {
+            List<Double> sorted = list.stream().sorted().toList();
+            System.out.printf(java.util.Locale.ROOT, "Chance to complete at launch, %s (%d): quartiles %.2f / %.2f / %.2f%n",
+                kind, sorted.size(), sorted.get(sorted.size() / 4), sorted.get(sorted.size() / 2),
+                sorted.get(sorted.size() * 3 / 4));
+        });
         List<int[]> perGame = harness.lastTally.randomEventsPerGame;
         System.out.printf(java.util.Locale.ROOT, "Random events per game: %.1f good, %.1f bad over %.1f seasons; "
                 + "most in one game %d good, %d bad%n",

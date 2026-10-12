@@ -61,4 +61,17 @@ class ContentPackPlayoutsTest {
             "some games land a crew on the Moon: " + report);
         assertTrue(report.sideKinds().getOrDefault("filler", 0) > 0, "some fillers fly: " + report.sideKinds());
     }
+
+    @Test
+    void theSmartBotLandsEveryGameSoonerThanTheSideMissionsBot() {
+        ContentPackPlayouts harness = new ContentPackPlayouts(
+            ContentPackLoader.load(Path.of("..", "assets", "content", "standard")), ContentPackPlayouts.Bot.SMART);
+
+        ContentPackPlayouts.Report report = harness.run(10, 240, 7L);
+
+        assertEquals(10, report.completedByArchetype().values().stream().mapToInt(Integer::intValue).sum(),
+            "every game lands a crew on the Moon: " + report);
+        assertTrue(report.averageCompletionSeason() < 130,
+            "the side-missions bot's average is about 150: " + report.averageCompletionSeason());
+    }
 }
