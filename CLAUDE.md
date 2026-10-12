@@ -228,6 +228,14 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   checks a frame, `render --format webm` makes a clip. No vector export, and an SVG imports flat:
   split it into layers first (`assets-raw/splash/split_logo.py`). A null used as a parent needs its
   anchor and position at the comp centre, or its children land offset.
+- **VectorCraft** (an open-source Illustrator, `C:\Program Files\VectorCraft\vectorcraft-cli.exe`):
+  `run --cmd ID --params JSON ... --export X.svg` works headless (selection is `select.all` /
+  `select.set`); `commands` lists the 732 commands. Worth it for what hand-written SVG can't do:
+  Pathfinder (`object.pathfinder.unite` turns overlapping circles into one smoke outline),
+  `path.knife` (cut a drawing into debris that fits back together), `object.path.offsetPath`,
+  `outlineStroke`, and `convert IN OUT --outline-text`. The logo's fonts are in its own Fonts folder
+  (2026-10-12); for another font, `text.findFontFiles` then `text.addFontFiles`, in one MCP session
+  (`mcp --headless`): the add takes only files a finished search found, and `run` ends first.
 - **Other converters** in `assets-raw/`: `make_hub_art.py`, `make_content_art.py`,
   `svg/ui/make_ui_icons.py` (needs `pip install resvg-py`), and `explainers/make_explainer_art.py`
   (the explainers' drawings: PNG without text plus a labels file, `ui-spec.md` component 18).

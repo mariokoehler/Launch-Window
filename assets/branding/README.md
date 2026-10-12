@@ -15,12 +15,14 @@ user-generated reference image, refining the arc, rocket silhouette, star
 placement, and ribbon spacing against specific feedback each round.
 
 **Known follow-up work, not yet done:**
-- The wordmark/tagline are still live `<text>` elements set in Archivo/
-  Work Sans, not outlined paths — correct for editing, but a production
-  export (rasterized icon, or an outlined vector for print/merch) needs
-  the real font files (now in `assets/fonts/`) or the text converted to outlines in a vector
-  editor so rendering doesn't depend on the viewer having those fonts
-  installed.
+- The wordmark/tagline are live `<text>` elements set in Archivo/
+  Work Sans in `logo.svg`, correct for editing. **`logo-outlined.svg`
+  (2026-10-12)** is the same logo with the text as paths, for any use
+  where the viewer may not have the fonts (print, merch, other tools). It
+  was made with VectorCraft, `convert logo.svg logo-outlined.svg
+  --outline-text`, with the fonts from `assets/fonts/` added to VectorCraft
+  first (CLAUDE.md, "Tools outside the repo"); it renders the same as
+  `logo.svg` with the real fonts. Make it again whenever `logo.svg` changes.
 - **`logo.png` (300×300) now exists (2026-10-04)** for the Connect screen's
   150 px logo, at 2×. It was rasterized with `resvg-py` from this SVG, loading
   the real font files from `assets/fonts/` (`skip_system_fonts`), so the

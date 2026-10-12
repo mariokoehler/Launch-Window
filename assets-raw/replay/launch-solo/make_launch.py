@@ -10,6 +10,7 @@ resvg-py, and EffectCraft at its default install path). Writes build/launch-succ
 """
 import json
 import os
+import re
 import subprocess
 
 import resvg_py
@@ -19,6 +20,8 @@ BUILD = os.path.join(HERE, "build")
 LAYERS = os.path.join(BUILD, "layers")
 FONTS = os.path.normpath(os.path.join(HERE, "..", "..", "..", "assets", "fonts"))
 CLI = r"C:\Program Files\EffectCraft\effectcraft-cli.exe"
+VECTORCRAFT = r"C:\Program Files\VectorCraft\vectorcraft-cli.exe"
+SHIFT = 500  # VectorCraft draws on an artboard from (0, 0)
 
 NAVY = "#16305c"
 GOLD = "#e0a72e"
@@ -126,11 +129,28 @@ def trail():
     layer("trail", (950, top, 20, bottom - top + 4), body)
 
 
+def united(circles):
+    """One outline around overlapping circles [(cx, cy, r), ...], merged by VectorCraft's
+    Pathfinder: SVG path data in the same coordinates."""
+    out = os.path.join(BUILD, "united.svg")
+    args = [VECTORCRAFT, "run"]
+    for cx, cy, r in circles:
+        # Shifted into positive space for the artboard, and back below.
+        args += ["--cmd", "shape.ellipse", "--params",
+                 json.dumps({"x": cx - r + SHIFT, "y": cy - r + SHIFT, "width": 2 * r, "height": 2 * r})]
+    args += ["--cmd", "select.all", "--cmd", "object.pathfinder.unite", "--export", out]
+    subprocess.run(args, check=True, capture_output=True)
+    d = re.search(r'<path[^>]* d="([^"]+)"', open(out, encoding="utf-8").read()).group(1)
+    return re.sub(r"-?\d+(?:\.\d+)?", lambda m: str(round(float(m.group(0)) - SHIFT, 3)), d)
+
+
 def puffs():
+    # A puff of smoke: three circles, the middle one higher, drawn as one outline.
     for r in (42, 58, 76):
-        body = (f'<circle cx="0" cy="0" r="{r}" fill="#ffffff" stroke="{NAVY}" stroke-width="2.5"/>'
-                f'<circle cx="0" cy="0" r="{r}" fill="rgba(22,48,92,0.05)"/>')
-        layer(f"puff{r}", (-r - 3, -r - 3, 2 * r + 6, 2 * r + 6), body, pivot=(0, 0))
+        d = united([(-0.55 * r, 0.12 * r, 0.62 * r), (0, -0.12 * r, 0.82 * r), (0.55 * r, 0.12 * r, 0.62 * r)])
+        body = (f'<path d="{d}" fill="#ffffff" stroke="{NAVY}" stroke-width="2.5" stroke-linejoin="round"/>'
+                f'<path d="{d}" fill="rgba(22,48,92,0.05)"/>')
+        layer(f"puff{r}", (int(-1.25 * r), int(-r - 3), int(2.5 * r), int(1.9 * r)), body, pivot=(0, 0))
 
 
 def wisp():
