@@ -1191,7 +1191,7 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
 ## 3. Screen flow *(decided)*
 
 ```
-Splash ─► Connect ─► Join game (skipped if already in the game) ─► Turn report (if a turn resolved since last visit) ─► Space Complex hub
+Splash ─► Connect ─► Join game (skipped if already in the game) ─► [missions flown: "Watch them first?" ─► each mission's replay] ─► front pages ─► Turn report (if a turn resolved since last visit) ─► Space Complex hub
 
 Space Complex hub
 ├─ VAB
@@ -1405,6 +1405,12 @@ Choices made while building it, **confirmed by the user (2026-10-04)**:
   program details' "Open programs" or body crumb go to their screens.
 
 ### 4.4 Turn report (automatic after a resolution, reopenable from the hub)
+*Spoiler-free replays first (the user's idea, 2026-10-12):* when an unread report has missions
+flown, a dialog over the hub asks before the report opens: "Last night's missions are in. Watch
+them first, spoiler-free?" [Watch the missions] [Show the report], with "Don't ask again". Watching
+plays each mission's replay in turn (§4.7.3, the film), then the unseen front pages, then this
+report, which itself is unchanged: once the player has seen it, spoilers are fair. Settings keeps
+the choice: Ask (the default), Always watch first, Never.
 **Purpose:** "what happened overnight", the async equivalent of BASPM's
 end-of-season news screen. **Ref:** `bulletin_news_*.png`,
 `end_of_season_rnd_results.png`, `mission_assessment.png`.
@@ -1868,6 +1874,42 @@ Control mockup:
   The player steps through by hand (2026-10-06): back to start, previous, a primary "Next step"
   ("Season summary" on the last step), "Skip to summary", or a click on any step in the list.
   There's no timer and no play/pause. "Replay season N" opens it for the latest turn.
+
+**The replay as a film (the user's idea, 2026-10-12; built directly, no mockup).** Each step plays
+an animated clip (`design.md` §5, Backlog, "Animated mission steps"), and the replay plays the steps
+by itself again. **This reverses the 2026-10-06 decision** against automatic playback: with the
+clips, the replay is meant to be watched like a short film, and the player can still pause and step.
+- **Layout:** the step card keeps its head (step n of m, name, text, components); the result (the
+  roll line and the outcome box) moves up beside the success chance and the saving roll, and a
+  monitor fills the rest of the card: a 16:9 picture in a navy bezel drawn by the game (sharp at
+  any size), with a small label in the bezel ("Cam 1 · Launch", or "No signal").
+- **Clips:** `assets/ui/replay/<clip>-<variant>.webm`, rendered at 960 × 540 (about the picture's
+  size at 1080p), each with a sidecar `<clip>-<variant>.json`: `duration` and `revealAt`, the second
+  from which the variant can't turn into another one any more (set by hand per clip). Variants:
+  `success` (the first roll passed), `glitch` (a glitch, solved or not: the mission goes on) and
+  `failure` (failure; also catastrophic, until a step has its own `catastrophic` clip).
+  `assets/content/replay-clips.json` maps step ids to clips: a step id loses its number (`03-`),
+  then the first rule whose pattern matches the rest names the clip (`launch` matches `launch`,
+  `atv-launch`, `gemini-b-launch`). It's outside the content pack (not hashed), like the stories.
+- **No clip yet:** a step with no clip, or a variant missing, plays `no-signal.webm` on a loop (an
+  antenna searching, outcome-neutral) with "No signal" in the bezel; its result shows after a
+  1.5 s pause, and playback moves on at 3 s. If no video can play at all (no file, no native
+  decoder), the monitor shows a still drawing with the same label and the same timing.
+- **The result shows at `revealAt`:** until then the roll line, the outcome box, the saving roll's
+  figure, the step's word in the list, and "Prestige so far" and the season counts stay as before
+  the step. A step reached before shows at once.
+- **The step list is the plan:** every step the configuration plans for that season, so the count
+  ("Step 2 of 6") gives nothing away; after a failure the steps not flown read "Not flown" in the
+  summary.
+- **Playback:** a Play/Pause button joins the title buttons (restart, previous, Play/Pause, Next
+  step, Skip to summary). Playing, the next step starts when a clip ends. Paused, the step's clip
+  still plays through once and shows its result; only the move on waits. Next step, a click in the
+  list and Skip to summary reveal what they pass. A replay opens playing.
+- **The queue:** opened from the dialog (§4.4), the replay plays every mission flown that turn, in
+  the report's order. The season summary then offers "Next mission" or, after the last,
+  "To the turn report" (the front pages first, if any). Back leaves the queue for the report.
+- **Proposed defaults (unconfirmed):** the 1.5 s and 3 s timings; the bezel's look and label;
+  that the dialog offers only the newest turn's missions when several reports are unread.
 
 Choices made while building them, **confirmed by the user (2026-10-06)**:
 - **Building panel (changed 2026-10-04, user):** the mockup had none, which left Mission Control
@@ -2545,7 +2587,8 @@ tokens). As built, against the mockup:
 ### 4.18 Front page *(the user's idea, 2026-10-09; specified and mocked up 2026-10-11)*
 **Purpose:** when an agency makes one of the great Firsts, every player in the game sees it the way
 the world did in the 1960s: on the front page of a newspaper. It's the first thing they see on their
-next login, before the turn report. It's news, not a rules screen: the game facts go in one line
+next login, before the turn report. *Changed 2026-10-12 (user):* when the player watches the
+missions first (§4.4), the pages come after the replays, so a First isn't printed before its film. It's news, not a rules screen: the game facts go in one line
 under the page.
 
 **Mocked up (2026-10-11) in Photocraft, not Claude Design:** `assets-raw/frontpage/mockup/`

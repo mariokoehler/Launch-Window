@@ -31,6 +31,7 @@ import de.mkoehler.launchwindow.client.view.Tips;
 import de.mkoehler.launchwindow.model.Building;
 import de.mkoehler.launchwindow.model.FrontPage;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
+import de.mkoehler.launchwindow.rules.TurnReport;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -134,35 +135,116 @@ public final class SpaceComplexScreen extends SessionScreen {
         stack.add(advisorCorner);
         root.add(stack).grow();
         rebuild();
-        if (unreadReport && !pagesShown) {
-            // The pages come first, but a slow server mustn't hold up the report: after a few
-            // seconds without an answer the report opens, and a late answer is dropped.
-            boolean[] settled = {false};
-            Timer.schedule(new Timer.Task() {
-                @Override
-                public void run() {
-                    if (!settled[0] && isShowing()) {
-                        settled[0] = true;
-                        afterPages(true);
-                    }
-                }
-            }, PAGES_WAIT_SECONDS);
-            fetchFrontPages(() -> {
-                if (settled[0]) {
-                    return;
-                }
-                settled[0] = true;
-                List<FrontPage> unseen = FrontPageScreen.unseen(game);
-                if (unseen.isEmpty()) {
-                    afterPages(true);
+        if (unreadReport && !pagesShown && game.reportUnread()
+            && game.replaysFirst() != LaunchWindowGame.ReplaysFirst.NEVER) {
+            // Missions flown? Offer to watch them first, before the pages and the report give the
+            // endings away (ui-spec.md 4.4).
+            fetchLatestReport(report -> {
+                if (report.missions().isEmpty()) {
+                    pagesThenReport();
+                } else if (game.replaysFirst() == LaunchWindowGame.ReplaysFirst.ALWAYS) {
+                    watchReplays(report);
                 } else {
-                    game.setScreen(new FrontPageScreen(game, unseen,
-                        () -> game.setScreen(new SpaceComplexScreen(game, true, true)), false));
+                    offerReplays(report);
                 }
-            });
+            }, this::pagesThenReport);
+        } else if (unreadReport && !pagesShown) {
+            pagesThenReport();
         } else {
             afterPages(unreadReport);
         }
+    }
+
+    /**
+     * Shows the unseen front pages, then the unread report, as entering the game did before the
+     * replays came first.
+     */
+    private void pagesThenReport() {
+        // The pages come first, but a slow server mustn't hold up the report: after a few
+        // seconds without an answer the report opens, and a late answer is dropped.
+        boolean[] settled = {false};
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                if (!settled[0] && isShowing()) {
+                    settled[0] = true;
+                    afterPages(true);
+                }
+            }
+        }, PAGES_WAIT_SECONDS);
+        fetchFrontPages(() -> {
+            if (settled[0]) {
+                return;
+            }
+            settled[0] = true;
+            List<FrontPage> unseen = FrontPageScreen.unseen(game);
+            if (unseen.isEmpty()) {
+                afterPages(true);
+            } else {
+                game.setScreen(new FrontPageScreen(game, unseen,
+                    () -> game.setScreen(new SpaceComplexScreen(game, true, true)), false));
+            }
+        });
+    }
+
+    /**
+     * Asks whether to watch a new turn's missions before its report ({@code ui-spec.md} &sect;4.4).
+     *
+     * @param report the unread report, with missions flown
+     */
+    public void offerReplays(TurnReport report) {
+        int count = report.missions().size();
+        Table card = dialogCard("Last night", count == 1 ? "Your mission has flown. Watch it first, spoiler-free?"
+            : "Your " + count + " missions have flown. Watch them first, spoiler-free?");
+        card.add(ui.paragraph("The turn report tells how " + (count == 1 ? "it" : "they") + " went. The replay shows "
+            + "it as it happened, step by step, and the report comes after.", Theme.TextStyle.BODY, Theme.INK_MUTED))
+            .padBottom(Theme.SPACE_4).row();
+        boolean[] dontAsk = {false};
+        Table box = new Table();
+        Table toggle = new Table();
+        toggle.left();
+        Runnable draw = () -> {
+            box.clearChildren();
+            box.setBackground(dontAsk[0] ? ui.solid(Theme.NAVY) : ui.rect(Theme.SURFACE_CARD, Theme.NAVY,
+                Theme.BORDER_EMPHASIS));
+            if (dontAsk[0]) {
+                Image check = new Image(ui.icon("check"), Scaling.fit);
+                check.setColor(Theme.ON_FILL);
+                box.add(check).size(12f);
+            }
+        };
+        draw.run();
+        toggle.add(box).size(18f).padRight(Theme.SPACE_2);
+        toggle.add(ui.label("Don't ask again (Settings can change it)", Theme.TextStyle.BODY_SM, Theme.INK));
+        toggle.setTouchable(Touchable.enabled);
+        toggle.addListener(clicked(() -> {
+            dontAsk[0] = !dontAsk[0];
+            draw.run();
+        }));
+        card.add(toggle).left().padBottom(Theme.SPACE_4).row();
+        Table buttons = new Table();
+        buttons.add(ChromeScreen.onClick(ui.button("Show the report", Theme.ButtonKind.SECONDARY), () -> {
+            closeDialog();
+            if (dontAsk[0]) {
+                game.setReplaysFirst(LaunchWindowGame.ReplaysFirst.NEVER);
+            }
+            pagesThenReport();
+        })).padRight(10f);
+        buttons.add(ChromeScreen.onClick(ui.button(count == 1 ? "Watch the mission" : "Watch the missions",
+            Theme.ButtonKind.PRIMARY), () -> {
+                closeDialog();
+                if (dontAsk[0]) {
+                    game.setReplaysFirst(LaunchWindowGame.ReplaysFirst.ALWAYS);
+                }
+                watchReplays(report);
+            }));
+        card.add(buttons).right().fill(false, false);
+        showDialog(card);
+    }
+
+    private void watchReplays(TurnReport report) {
+        List<String> missions = report.missions().stream().map(TurnReport.MissionFlown::missionInstanceId).toList();
+        game.setScreen(new ReplayScreen(game, report, missions.get(0), missions));
     }
 
     private void afterPages(boolean unreadReport) {

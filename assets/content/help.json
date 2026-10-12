@@ -66,7 +66,7 @@
         "- intelligence: findings, catches, poaching offers;",
         "- random events;",
         "- and, to open it, a real event from the same season of the real space race.",
-        "Each mission flown can be replayed step by step. A person's name opens their page."
+        "Each mission flown can be replayed: it plays like a short film, step by step, each step's result showing once its film makes it clear. Pause it, or step through by hand. When a turn has missions flown, the game offers to play them before the report, so their endings stay a surprise (Settings: ask, always or never). A person's name opens their page."
       ],
       "related": ["turns", "mission-steps", "the-race"]
     },

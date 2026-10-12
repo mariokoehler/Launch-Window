@@ -484,6 +484,38 @@ abstract class SessionScreen extends StageScreen {
         openLatestReport(null, true);
     }
 
+    /**
+     * Gets the latest turn's report, from the session or the server, without opening it.
+     *
+     * @param found     what to do with it, if this screen still shows
+     * @param otherwise what to do when there's none or the fetch failed
+     */
+    protected void fetchLatestReport(java.util.function.Consumer<TurnReport> found, Runnable otherwise) {
+        long turn = session.latestResolvedTurn();
+        TurnReport cached = session.report(turn);
+        if (cached != null) {
+            found.accept(cached);
+            return;
+        }
+        game.gateway().fetchTurnReport(session.credentials(), -1, result -> {
+            if (!isShowing()) {
+                return;
+            }
+            switch (result.kind()) {
+                case FOUND -> {
+                    session.keepReport(result.report());
+                    found.accept(result.report());
+                }
+                case NONE -> {
+                    game.markReportRead(turn);
+                    session.noReportAt(turn);
+                    otherwise.run();
+                }
+                case FAILED -> otherwise.run();
+            }
+        });
+    }
+
     private void openLatestReport(String missionId, boolean quiet) {
         long turn = session.latestResolvedTurn();
         TurnReport cached = session.report(turn);
@@ -547,7 +579,13 @@ abstract class SessionScreen extends StageScreen {
         });
     }
 
-    private void openReport(TurnReport report, String missionId) {
+    /**
+     * Opens a report, marking it read, or one of its missions' replays.
+     *
+     * @param report    the report
+     * @param missionId the mission to replay, or {@code null} for the report
+     */
+    protected void openReport(TurnReport report, String missionId) {
         game.markReportRead(report.gameTurn());
         if (missionId == null) {
             game.setScreen(new TurnReportScreen(game, report));

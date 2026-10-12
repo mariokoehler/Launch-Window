@@ -2668,6 +2668,12 @@ the join is seamless. A load blocks the render thread for about 12 ms, and the f
 about 70 ms from load to picture. For it to read as one film, each clip should end where the next
 begins (the launch ends with the rocket gone off the top and the trail left).
 
+**Built (2026-10-12, `ui-spec.md` §4.7.3 and §4.4):** the replay plays each step's clip on a monitor, shows
+the step's result at the clip's `revealAt`, and moves on by itself; steps without a clip play the
+no-signal loop (`assets-raw/replay/no-signal/`). A turn with missions flown first offers to play them
+spoiler-free. The launch is the only step with clips (the storyboard's three, 960 × 540, 650–790 KB each,
+800 kbps). Next: more steps, in the order a typical early mission meets them.
+
 **Advisor** (the user's idea, built 2026-10-08, `ui-spec.md` component 24): a card on the hub with
 a new agency's first steps (help, engineers, a program, a rocket, R&D, controllers, astronauts
 once crewed, reliability to 60 % for a payload and a rocket, then the first mission, the first

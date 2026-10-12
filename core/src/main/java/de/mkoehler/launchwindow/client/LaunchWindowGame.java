@@ -68,6 +68,22 @@ public class LaunchWindowGame extends Game {
     }
 
     /**
+     * Creates a video player for the replay's clips ({@code ui-spec.md} &sect;4.7.3), or returns
+     * {@code null} when none can play here (no decoder, no natives): the replay then shows stills.
+     * The offscreen screenshot tool returns {@code null}, so its shots don't depend on timing.
+     *
+     * @return the player, or {@code null}
+     */
+    public com.badlogic.gdx.video.VideoPlayer createVideoPlayer() {
+        try {
+            return com.badlogic.gdx.video.VideoPlayerCreator.createVideoPlayer();
+        } catch (RuntimeException | LinkageError e) {
+            Gdx.app.error("Video", "no video player", e);
+            return null;
+        }
+    }
+
+    /**
      * Creates the server gateway. The offscreen screenshot tool overrides this with a stub.
      *
      * @return the gateway
@@ -272,6 +288,63 @@ public class LaunchWindowGame extends Game {
      */
     public void markHelpOpened() {
         setFlag("helpOpened");
+    }
+
+    /**
+     * Whether a new turn's missions play before its report ({@code ui-spec.md} &sect;4.4).
+     */
+    public enum ReplaysFirst {
+        /** Ask each time (the default). */
+        ASK,
+        /** Always play them first. */
+        ALWAYS,
+        /** Never: the report opens as before. */
+        NEVER
+    }
+
+    /**
+     * Returns this player's choice on this device about watching a turn's missions before its report.
+     * Under the in-memory marks it's the marks "replaysAlways" and "replaysNever".
+     *
+     * @return the choice
+     */
+    public ReplaysFirst replaysFirst() {
+        if (flagsInMemory != null) {
+            return flagsInMemory.contains("replaysAlways") ? ReplaysFirst.ALWAYS
+                : flagsInMemory.contains("replaysNever") ? ReplaysFirst.NEVER : ReplaysFirst.ASK;
+        }
+        if (session == null) {
+            return ReplaysFirst.ASK;
+        }
+        try {
+            return ReplaysFirst.valueOf(preferences().getString(key("replaysFirst"), ReplaysFirst.ASK.name()));
+        } catch (IllegalArgumentException e) {
+            return ReplaysFirst.ASK;
+        }
+    }
+
+    /**
+     * Keeps this player's choice about watching a turn's missions first.
+     *
+     * @param choice the choice
+     */
+    public void setReplaysFirst(ReplaysFirst choice) {
+        if (flagsInMemory != null) {
+            flagsInMemory.remove("replaysAlways");
+            flagsInMemory.remove("replaysNever");
+            if (choice == ReplaysFirst.ALWAYS) {
+                flagsInMemory.add("replaysAlways");
+            } else if (choice == ReplaysFirst.NEVER) {
+                flagsInMemory.add("replaysNever");
+            }
+            return;
+        }
+        if (session == null) {
+            return;
+        }
+        com.badlogic.gdx.Preferences preferences = preferences();
+        preferences.putString(key("replaysFirst"), choice.name());
+        preferences.flush();
     }
 
     /**

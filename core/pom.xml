@@ -28,6 +28,13 @@
       <version>${gdxVersion}</version>
     </dependency>
     <dependency>
+      <!-- The replay's clips (ui-spec.md 4.7.3): the player API only; the desktop decoder and its
+           natives come with gdx-video-lwjgl3 in lwjgl3/pom.xml. -->
+      <groupId>com.badlogicgames.gdx-video</groupId>
+      <artifactId>gdx-video</artifactId>
+      <version>1.3.4</version>
+    </dependency>
+    <dependency>
       <groupId>com.github.crykn</groupId>
       <artifactId>kryonet</artifactId>
     </dependency>

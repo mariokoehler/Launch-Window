@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -101,6 +102,13 @@ final class SettingsDialog {
             .expandX().left();
         card.add(sound).padBottom(Theme.SPACE_4).row();
 
+        card.add(section("Replays")).padBottom(Theme.SPACE_2).row();
+        Table replays = new Table();
+        replays.add(replaysControl()).width(360f).height(32f).padRight(Theme.SPACE_3);
+        replays.add(ui.label("Watch a turn's missions before its report.", Theme.TextStyle.CAPTION, Theme.INK_MUTED))
+            .expandX().left();
+        card.add(replays).padBottom(Theme.SPACE_4).row();
+
         GameInfoResponse info = session.gameInfo().response();
         card.add(section("About")).padBottom(Theme.SPACE_2).row();
         card.add(ui.label("Launch Window " + AppVersion.getVersion(), Theme.TextStyle.BODY_STRONG, Theme.INK))
@@ -177,6 +185,33 @@ final class SettingsDialog {
             segment.setBackground(ui.solid(selected ? new Color(Theme.SURFACE_CARD).lerp(Theme.NAVY, 0.15f)
                 : Theme.SURFACE_CARD));
             segment.add(ui.label(option, Theme.TextStyle.LABEL, Theme.INK_MUTED));
+            segments.add(segment).expand().fill().uniformX();
+        }
+        return segments;
+    }
+
+    /**
+     * The choice about watching a turn's missions before its report ({@code ui-spec.md} &sect;4.4):
+     * ask, always or never.
+     */
+    private Table replaysControl() {
+        Table segments = new Table();
+        segments.setBackground(ui.rect(new Color(0f, 0f, 0f, 0f), Theme.NAVY_BORDER, Theme.BORDER_THIN));
+        segments.pad(Theme.BORDER_THIN);
+        String[] names = {"Ask", "Always", "Never"};
+        LaunchWindowGame.ReplaysFirst[] choices = LaunchWindowGame.ReplaysFirst.values();
+        for (int i = 0; i < choices.length; i++) {
+            LaunchWindowGame.ReplaysFirst choice = choices[i];
+            boolean selected = game.replaysFirst() == choice;
+            Table segment = new Table();
+            segment.setBackground(ui.solid(selected ? Theme.NAVY : Theme.SURFACE_CARD));
+            segment.add(ui.label(names[i], Theme.TextStyle.LABEL, selected ? Theme.ON_FILL : Theme.NAVY));
+            segment.setTouchable(Touchable.enabled);
+            segment.addListener(ChromeScreen.clicked(() -> {
+                game.setReplaysFirst(choice);
+                host.closeDialog();
+                open();
+            }));
             segments.add(segment).expand().fill().uniformX();
         }
         return segments;

@@ -220,6 +220,12 @@ public final class ScreenSnapshot {
             }
 
             @Override
+            public com.badlogic.gdx.video.VideoPlayer createVideoPlayer() {
+                // No video in the shots: the replay's monitor shows its still, the same every run.
+                return null;
+            }
+
+            @Override
             protected SettingsStore createSettingsStore() {
                 // Never the player's real file: the shots always start from the defaults.
                 return new SettingsStore(folder.toPath().resolve("no-such-folder").resolve("client-settings.json"));
@@ -267,6 +273,12 @@ public final class ScreenSnapshot {
         }
         if ("join".equals(System.getProperty("shots"))) {
             joinNameShots(folder, game);
+            return;
+        }
+        if ("replay".equals(System.getProperty("shots"))) {
+            String hash = ContentPackHash.ofClasspath("content/early-era", ScreenSnapshot.class.getClassLoader());
+            reportShots(folder, game, GameInfoResponse.success("early-era", hash, List.of(), 1, true,
+                6 * 3_600_000L + 12 * 60_000L + 30_000L, 0L, null, List.of(), List.of(), 0));
             return;
         }
         write(folder, "connect-default.png", new ConnectScreen(game), null);
@@ -1714,10 +1726,21 @@ public final class ScreenSnapshot {
             .getRoot()));
         String vostok = report.missions().stream().filter(flown -> flown.missionConfigurationId()
             .equals("vostok-orbital")).findFirst().orElseThrow().missionInstanceId();
-        write(folder, "replay-step.png", new ReplayScreen(game, report, vostok), screen -> screen.show(
+        // A step while its clip plays (the result not shown yet), then once the clip has made it clear.
+        write(folder, "replay-step-watching.png", new ReplayScreen(game, report, vostok), screen -> screen.show(
             firstInteresting(report, vostok)));
+        write(folder, "replay-step.png", new ReplayScreen(game, report, vostok), screen -> {
+            screen.show(firstInteresting(report, vostok));
+            screen.watchPaused(10f);
+        });
         write(folder, "replay-summary.png", new ReplayScreen(game, report, vostok), screen -> screen.show(99));
         write(folder, "replay-sputnik.png", new ReplayScreen(game, report, "m-sputnik"), screen -> screen.show(0));
+        // Watching the turn's missions first (ui-spec.md 4.4, 2026-10-12): the offer over the hub, and the
+        // end of a mission in the queue, with the next one offered.
+        write(folder, "replays-offer.png", new SpaceComplexScreen(game), screen -> screen.offerReplays(report));
+        List<String> queue = report.missions().stream().map(TurnReport.MissionFlown::missionInstanceId).toList();
+        write(folder, "replay-queue-summary.png", new ReplayScreen(game, report, queue.get(0), queue),
+            screen -> screen.show(99));
         // The same report a turn later: an earlier report, with Next offered and no morale warnings.
         GameInfoResponse later = GameInfoResponse.success("early-era", info.contentPackHash(), List.of(), 25, true,
             6 * 3_600_000L + 12 * 60_000L + 30_000L, 0L, null, List.of(), List.of(), 0);

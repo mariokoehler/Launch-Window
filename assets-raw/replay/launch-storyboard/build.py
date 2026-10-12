@@ -22,6 +22,10 @@ CLI = r"C:\Program Files\EffectCraft\effectcraft-cli.exe"
 VARIANTS = {"success": ("Success", 6.3, [0.0, 1.2, 2.0, 2.8, 4.2, 6.0]),
             "glitch": ("Glitch", 6.7, [0.0, 1.4, 2.2, 3.0, 4.0, 6.4]),
             "failure": ("Failure", 7.6, [0.0, 1.4, 2.2, 3.4, 4.6, 7.0])}
+# When each variant can't turn into another any more (ui-spec.md 4.7.3), by hand: the glitch stutters
+# from 2.6 and the failure flickers from 3.0, so a success is certain once 3.0 has passed clean; the
+# glitch only once the engine catches (3.4); the failure once the engine cuts (3.2).
+REVEAL = {"success": 3.2, "glitch": 3.5, "failure": 3.3}
 
 
 def kink():
@@ -68,6 +72,17 @@ def main():
         sheet.paste(a, (0, r * 365))
         sheet.paste(b, (650, r * 365))
     sheet.save(os.path.join(BUILD, f"compare_{key}.png"))
+    if "publish" in sys.argv:
+        # The game's copy: 960 x 540 (about the replay monitor's size at 1080p) and its sidecar.
+        out = os.path.join(HERE, "..", "..", "..", "assets", "ui", "replay")
+        os.makedirs(out, exist_ok=True)
+        subprocess.run([CLI, "render", "--project", project, "--comp", "Launch " + board,
+                        "--out", os.path.join(out, f"launch-{key}.webm"), "--format", "webm",
+                        "--webm-codec", "vp9", "--audio", "off", "--bitrate", "800",
+                        "--resolution", "half"], check=True)
+        with open(os.path.join(out, f"launch-{key}.json"), "w") as f:
+            json.dump({"duration": dur, "revealAt": REVEAL[key]}, f, indent=1)
+            f.write("\n")
     if "render" in sys.argv:
         subprocess.run([CLI, "render", "--project", project, "--comp", "Launch " + board,
                         "--out", os.path.join(BUILD, f"launch-{key}.webm"), "--format", "webm",
