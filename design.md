@@ -448,6 +448,15 @@ leading to satellite navigation.
   docking in October 1967, Soyuz 2). After Soyuz 11 (30 June 1971) the next crew flew on Soyuz 12
   (27 September 1973), about 27 months, with the crew now in pressure suits. The game's 4 turns are a
   year: shorter than history, on purpose.
+- **Rocket pioneers in the suggested agency names** (2026-10-12, `assets/content/agency-names.json`,
+  `ui-spec.md` §4.2): three names honour pioneers. Konstantin Tsiolkovsky published the rocket equation
+  in 1903, in "Exploration of Outer Space by Means of Reaction Devices". Nikolai Kibalchich, sentenced
+  to death in 1881 for making the bombs that killed Tsar Alexander II, spent his last days in a cell
+  drawing a rocket-propelled flying machine; the police filed the paper away, and it was published only
+  in 1918. Robert Goddard flew the first liquid-fuelled rocket on 16 March 1926 at Auburn,
+  Massachusetts. A fourth, the "Baikal Jet Propulsion Group", echoes GIRD, Moscow's Group for the Study
+  of Reactive Motion (1931), where Sergei Korolev worked and whose GIRD-09 flew on 17 August 1933.
+  Candidates for history notes if the names ever get one.
 - **CAPCOM, the capsule communicator** (the user's question, checked 2026-10-08; shown on mission
   assembly's Mission control card, `HistoryNotes.CAPCOM`): the name comes from Project Mercury,
   when spacecraft were called capsules. Mercury flights were followed by tracking stations around

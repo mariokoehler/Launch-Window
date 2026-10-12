@@ -1,5 +1,6 @@
 package de.mkoehler.launchwindow.client.ui;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -18,6 +19,7 @@ public final class FormField extends Table {
 
     private final UiKit ui;
     private final TextField input;
+    private final Cell<Actor> inputCell;
     private final Label error;
     private final Cell<Label> errorCell;
     private final Table labelRow;
@@ -41,7 +43,8 @@ public final class FormField extends Table {
         labelRowCell = add(labelRow).padBottom(Theme.SPACE_1);
         row();
         input = ui.textField(text, placeholder);
-        add(input).row();
+        inputCell = add((Actor) input);
+        row();
         error = ui.paragraph("", Theme.TextStyle.CAPTION, Theme.DANGER);
         errorCell = add((Label) null).padTop(Theme.SPACE_1);
     }
@@ -55,6 +58,20 @@ public final class FormField extends Table {
     public FormField withHistoryNote(String text) {
         historyNote = new HistoryNote(ui, text);
         labelRow.add(historyNote).size(HistoryNote.ICON_SIZE).padLeft(Theme.SPACE_1);
+        return this;
+    }
+
+    /**
+     * Puts a control, such as a button, beside the text box, as tall as the box.
+     *
+     * @param action the control
+     * @return this field
+     */
+    public FormField withAction(Actor action) {
+        Table box = new Table();
+        box.add(input).growX();
+        box.add(action).fillY().padLeft(Theme.SPACE_2);
+        inputCell.setActor(box);
         return this;
     }
 

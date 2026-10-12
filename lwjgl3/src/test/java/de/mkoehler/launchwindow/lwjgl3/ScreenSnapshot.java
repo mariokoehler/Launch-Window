@@ -265,6 +265,10 @@ public final class ScreenSnapshot {
             raiseShots(folder, game);
             return;
         }
+        if ("join".equals(System.getProperty("shots"))) {
+            joinNameShots(folder, game);
+            return;
+        }
         write(folder, "connect-default.png", new ConnectScreen(game), null);
         write(folder, "connect-connecting.png", filledConnect(game), screen -> screen.setBusy(true));
         write(folder, "connect-wrong-password.png", filledConnect(game), screen -> screen.applyLoginResult(
@@ -292,6 +296,7 @@ public final class ScreenSnapshot {
         write(folder, "join-joining.png", filledJoin(game), screen -> screen.setBusy(true));
         write(folder, "join-history-pinned.png", new JoinScreen(game, CREDENTIALS),
             screen -> screen.directorNameField().historyNote().setPinned(true));
+        joinNameShots(folder, game);
 
         PlayerSnapshot state = new PlayerSnapshot("Baltic Star Agency", Archetype.SOVIET, 25_000, 250, 3_000, 1);
         state.setDirectorName("A. Reyes");
@@ -450,6 +455,19 @@ public final class ScreenSnapshot {
      * Funding raised between reviews (design.md 2.1(f), 2026-10-12): the turn report's budget card,
      * and the Public Affairs Office after a raise, with its line on what more prestige would add.
      */
+    /**
+     * The Join screen's Randomize button (ui-spec.md 4.2): a suggested name filled in (set directly,
+     * since the button deals at random), and the button's tooltip.
+     */
+    private static void joinNameShots(File folder, LaunchWindowGame game) {
+        write(folder, "join-randomized.png", new JoinScreen(game, CREDENTIALS), screen -> {
+            screen.selectArchetype(Archetype.SOVIET);
+            screen.agencyNameField().input().setText("Kibalchich Design Bureau");
+        });
+        write(folder, "join-randomize-tooltip.png", new JoinScreen(game, CREDENTIALS),
+            screen -> showTooltip(screen.stage().getRoot(), "Suggest a name"));
+    }
+
     private static void raiseShots(File folder, LaunchWindowGame game) {
         String hash = ContentPackHash.ofClasspath("content/early-era", ScreenSnapshot.class.getClassLoader());
         GameInfoResponse info = GameInfoResponse.success("early-era", hash, List.of(), 1, true,

@@ -1305,6 +1305,20 @@ to hire staff (SET Centre first).
 - **After joining** there's a stand-in agency screen (name, director, funds,
   Log out) until the hub (§4.3) has a mockup.
 
+**A suggested agency name (the user's idea, built 2026-10-12, no mockup):** players put on the spot
+pick weak names, so a secondary **Randomize** button beside the Agency name box fills in a name that
+fits the game. It deals from `assets/content/agency-names.json` (20 NASA-style and 20 Soviet-style
+names, our own; outside the frozen pack, held by `AgencyNamesTest`) like cards: a deck per style, no
+name twice until the whole deck has come up, and a fresh shuffle never starts with the last name
+(`client.view.NameSuggestions`). The picked card's style decides the deck; **with no style picked it
+deals from both** (*unconfirmed default*). A suggestion replaces the box's text and clears its error;
+the player can edit it. The server still checks uniqueness, so a suggestion can come back "Already
+taken". The button is disabled while joining. Tooltip: "Suggest a name": "Fills in a name in the
+style of the agency you picked, or either style if you haven't picked one. Press again for another:
+none comes up twice until all 20 of a style have. Change it as you like." (the count read from the
+file). `FormField.withAction` puts a control beside a field's box. Shots `join-randomized.png`,
+`join-randomize-tooltip.png` (`-Dshots=join`).
+
 ### 4.3 Space Complex hub (main menu)
 **Purpose:** navigation, and the game's front page. **Shows:** full-screen art for
 the player's archetype, picked by the game season, with the time of day advancing

@@ -129,6 +129,9 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   share unconfirmed): funding follows prestige up, never down, after the first review. It shrinks the slow
   tail by about 40 seasons and shortens the median game by about 9 (to about 78). Two saved fields and a
   new event: reset the dev data root, rebuild client and server together.
+- **A Randomize button for the agency name** (the user's idea, 2026-10-12, `ui-spec.md` §4.2): 20 names a
+  style in `assets/content/agency-names.json`, dealt without repeats. Client only: no reset, no rebuild
+  of the server.
 
 ## How we work
 
@@ -347,7 +350,7 @@ cd assets && java --enable-native-access=ALL-UNNAMED -cp "../lwjgl3/target/class
   Never add it there. `ContentStringsTest` fails until every new id has text. The same goes for
   `assets/content/space-race-news.json` (`SpaceRaceNewsTest`), `pr-press.json` (`PrDutyTest`) and
   `event-stories.json` (`EventStoriesTest`, which holds each event to its sized count), and
-  `decisions.json` (`DecisionsTest`; saved state keeps its ids too), and `front-pages.json`
+  `decisions.json` (`DecisionsTest`; saved state keeps its ids too), `agency-names.json` (`AgencyNamesTest`), and `front-pages.json`
   (`FrontPagesTest`, which also holds every article to its columns; printed pages store story ids). Core's tests have no assets on the
   classpath, so `Decisions.standard()` is empty there: tests and tools set it with `Decisions.setStandard`
   (and put `EMPTY` back after);

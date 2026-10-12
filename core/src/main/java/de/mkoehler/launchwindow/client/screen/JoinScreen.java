@@ -17,12 +17,15 @@ import de.mkoehler.launchwindow.client.ui.FormField;
 import de.mkoehler.launchwindow.client.ui.HistoryNotes;
 import de.mkoehler.launchwindow.client.ui.OptionCard;
 import de.mkoehler.launchwindow.client.ui.Theme;
+import de.mkoehler.launchwindow.client.view.NameSuggestions;
+import de.mkoehler.launchwindow.content.AgencyNames;
 import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.net.messages.ClaimSlotRequest;
 
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * The Join Game screen ({@code ui-spec.md} &sect;4.2), shown the first time an account
@@ -43,6 +46,8 @@ public final class JoinScreen extends StageScreen {
     private final FormField agencyName;
     private final FormField directorName;
     private final TextButton join;
+    private final TextButton randomize;
+    private final NameSuggestions suggestions = new NameSuggestions(AgencyNames.standard(), new Random());
     private final Cell<Actor> bannerCell;
     private Archetype archetype;
 
@@ -66,7 +71,18 @@ public final class JoinScreen extends StageScreen {
             .width(half).top();
         archetypeError = ui.paragraph("", Theme.TextStyle.CAPTION, Theme.DANGER);
 
-        agencyName = new FormField(ui, "Agency name", "", "e.g. Orion Spaceworks").reserveHistoryNoteSpace();
+        randomize = ui.button("Randomize", Theme.ButtonKind.SECONDARY);
+        randomize.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                suggestName();
+            }
+        });
+        ui.tooltip(randomize, "Suggest a name", "Fills in a name in the style of the agency you picked, or "
+            + "either style if you haven't picked one. Press again for another: none comes up twice until all "
+            + suggestions.size(Archetype.NASA) + " of a style have. Change it as you like.");
+        agencyName = new FormField(ui, "Agency name", "", "e.g. Orion Spaceworks").reserveHistoryNoteSpace()
+            .withAction(randomize);
         directorName = new FormField(ui, "Director's name", "", "e.g. A. Reyes")
             .withHistoryNote(HistoryNotes.DIRECTOR);
         for (FormField field : new FormField[] {agencyName, directorName}) {
@@ -135,6 +151,27 @@ public final class JoinScreen extends StageScreen {
     }
 
     /**
+     * Fills the agency name with the next suggestion for the archetype picked, as the Randomize
+     * button does.
+     */
+    public void suggestName() {
+        suggestions.next(archetype).ifPresent(name -> {
+            agencyName.input().setText(name);
+            agencyName.input().setCursorPosition(name.length());
+            agencyName.setError(null);
+        });
+    }
+
+    /**
+     * Returns the Randomize button.
+     *
+     * @return the button
+     */
+    public TextButton randomizeButton() {
+        return randomize;
+    }
+
+    /**
      * Selects an archetype, as clicking its card does.
      *
      * @param chosen the archetype
@@ -197,6 +234,7 @@ public final class JoinScreen extends StageScreen {
      */
     public void setBusy(boolean busy) {
         join.setDisabled(busy);
+        randomize.setDisabled(busy);
         join.setText(busy ? "Joining…" : "Join game");
     }
 
