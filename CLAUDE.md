@@ -309,7 +309,9 @@ cd assets && java --enable-native-access=ALL-UNNAMED -cp "../lwjgl3/target/class
 - Don't inline Python edit scripts in a Bash heredoc: the tool mangles `\n` and some apostrophes
   ("unexpected EOF"). Write the script to the scratchpad with the Write tool and run it.
 - Many repo files are CRLF on disk: normalize before replacing multi-line blocks, and keep each
-  file's line endings.
+  file's line endings. Git normally stores LF, but a bulk-edited `ui-spec.md` once reached the repo
+  with CRLF (9fb3091), and `git add --renormalize` didn't fix it. Check with
+  `git cat-file -p :<file> | tr -cd '\r' | wc -c` before committing; staging an LF copy fixes it.
 - Stopping a background client or server task can leave the forked `java.exe` running. Check
   with `tasklist` and kill with `taskkill /F /PID`.
 

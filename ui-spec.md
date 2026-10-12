@@ -2020,8 +2020,8 @@ review: when, what it pays, what keeps today's funding) and `PrestigeConversion`
 - **The footer's funds** show the danger tag when negative.
 - **A credit for rivals' Firsts (built 2026-10-12, `design.md` §2.1(e)):** the review's bracket ends, its
   pay and the gold mark already include it (`ReviewForecast` shifts the bracket by it, as by the catch-up
-  shift); a green caption above the last-review line says how much the review adds. Shot
-  `rival-firsts-pao.png`.
+  shift); a green caption above the last-review line says how much the review adds. Shots
+  `rival-firsts-pao.png`, and `rival-firsts-help.png` for the help topic's new paragraph.
 
 ### 4.11 Museum: goals, history, rivals
 **Purpose:** the scoreboard and the archive. **Ref:** `museum*.png`.

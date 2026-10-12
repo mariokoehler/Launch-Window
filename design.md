@@ -1700,10 +1700,14 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
       | 0.75 | 86 / 95 | 128 : 70 | 15 (8-33) | 50 | 16,500 / 19,700 |
       | 1.0 | 86 / 90 | 108 : 89 | 14 (7-23) | 61 | 17,100 / 19,500 |
 
-      At 0.5 the margin halves, the Soviets land about 40 seasons sooner, and the first landing comes
-      about 5 seasons sooner too (the race is closer, so both keep their funding). NASA stays the
-      favourite, as it is alone (median 87 against 96). The leader's credit is small (NASA about 6,900
-      prestige a game, the Soviets 15,300). The bot doesn't play around the rule. 0.5 is the default,
+      At 0.5 the margin halves and the Soviets land about 40 seasons sooner. The first landing comes
+      about 5 seasons sooner too: NASA also collects credit for the Soviets' early Firsts (about 6,900
+      prestige a game, the Soviets 15,300), and the earlier of two closer landings is earlier. NASA
+      stays the favourite, as it is alone (median 87 against 96). The bot doesn't play around the
+      rule, and `RaceShock` stops the winner at its landing; in a real game the winner keeps making
+      Firsts, so the loser's credit is if anything larger. The rule does nothing for a slow start
+      without a rival ahead (a solo game, or the leader's own bad luck): the gentler review is still
+      the lever for that, unpulled. 0.5 is the default,
       a "bit of a boost" as the user asked; 0.75 closes the race further, and 1.0 makes the side
       behind at season 32 win nearly a third of the time. The share is the user's call.
     - **Worth knowing for balance, not verdicts:** a failed flight is cheap enough that launching

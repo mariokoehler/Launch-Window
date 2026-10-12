@@ -454,6 +454,8 @@ public final class ScreenSnapshot {
         behind.setRivalFirstsCredit(2_375);
         startSession(game, behind, info);
         write(folder, "rival-firsts-pao.png", new PublicAffairsScreen(game), null);
+        write(folder, "rival-firsts-help.png", new PublicAffairsScreen(game),
+            screen -> screen.openHelp().select("budget"));
         TurnReport report = TurnReport.build(behind, behind, List.of(
             new de.mkoehler.launchwindow.rules.RivalFirstsAnswered(List.of("human-in-orbit", "human-in-space"), 1_500,
                 2_375),
