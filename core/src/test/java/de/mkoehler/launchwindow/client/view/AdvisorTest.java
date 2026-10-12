@@ -171,7 +171,10 @@ class AdvisorTest {
         assertEquals(Advisor.Destination.SET_CENTRE, Advisor.destination(Advisor.IDLE_TIP, state, PACK));
         assertFalse(Advisor.ITEMS.contains(Advisor.IDLE_TIP), "never one of the first steps");
 
+        Astronaut waiting = new Astronaut("a1", "C. Idle", 30, 70, 50);
+        state.getAstronauts().add(waiting);
         spare.setAssignmentState(de.mkoehler.launchwindow.model.AssignmentState.IN_TRAINING);
-        assertFalse(Advisor.idleTipDue(state));
+        spare.setTrainingKind(TrainingKind.ADVANCED);
+        assertFalse(Advisor.idleTipDue(state), "someone in training: the player knows, though an astronaut waits");
     }
 }

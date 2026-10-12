@@ -238,7 +238,8 @@ public final class ScreenSnapshot {
         // Explainers' read marks in memory, never this machine's: every explainer starts unread.
         game.useExplainerReadMarksInMemory(new java.util.HashSet<>());
         // The advisor's marks too: every run starts with help unopened and the advisor on duty.
-        game.useAdvisorMarksInMemory(new java.util.HashSet<>());
+        // The idle tip done: only its own shots show it (groundingShots).
+        game.useAdvisorMarksInMemory(new java.util.HashSet<>(java.util.Set.of("idleTipDone")));
         // -Dshots=contracts renders only one group, for a quick look at the screens being worked on.
         if ("contracts".equals(System.getProperty("shots"))) {
             contractShots(folder, game);
@@ -473,7 +474,7 @@ public final class ScreenSnapshot {
         marks.add("helpOpened");
         startSession(game, idle, info);
         write(folder, "advisor-idle-tip-first-steps.png", new SpaceComplexScreen(game), null);
-        game.useAdvisorMarksInMemory(new java.util.HashSet<>());
+        game.useAdvisorMarksInMemory(new java.util.HashSet<>(java.util.Set.of("idleTipDone")));
     }
 
     /**
@@ -936,7 +937,7 @@ public final class ScreenSnapshot {
         String hash = ContentPackHash.ofClasspath("content/early-era", ScreenSnapshot.class.getClassLoader());
         GameInfoResponse info = GameInfoResponse.success("early-era", hash, List.of(), 1, true,
             6 * 3_600_000L + 12 * 60_000L + 30_000L, 0L, null, List.of(), List.of(), 0);
-        java.util.Set<String> marks = new java.util.HashSet<>();
+        java.util.Set<String> marks = new java.util.HashSet<>(java.util.Set.of("idleTipDone"));
         game.useAdvisorMarksInMemory(marks);
         PlayerSnapshot fresh = new PlayerSnapshot("Baltic Star Agency", Archetype.SOVIET, 25_000, 250, 3_000, 1);
         fresh.setDirectorName("A. Reyes");

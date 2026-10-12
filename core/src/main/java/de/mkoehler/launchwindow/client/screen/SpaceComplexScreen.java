@@ -310,13 +310,6 @@ public final class SpaceComplexScreen extends SessionScreen {
             }
         }
         if (tipOnly) {
-            Label gotIt = ui.label("GOT IT", Theme.TextStyle.LABEL, Theme.NAVY);
-            gotIt.setTouchable(Touchable.enabled);
-            gotIt.addListener(clicked(() -> {
-                game.markIdleTipDone();
-                rebuildAdvisor(session.state());
-            }));
-            body.add(gotIt).right();
             card.add(body).width(ADVISOR_WIDTH).row();
             advisorCorner.add(card).width(ADVISOR_WIDTH);
             return;
@@ -341,7 +334,8 @@ public final class SpaceComplexScreen extends SessionScreen {
 
     /**
      * Whether the advisor's idle tip shows now: the first time someone sits idle after the first
-     * steps, until nobody is idle any more or the player dismisses it; then never again.
+     * steps, until the player sends someone to training, nobody is idle any more, or they dismiss
+     * it; then never again.
      */
     private boolean idleTip(PlayerSnapshot state) {
         if (game.idleTipDone()) {
@@ -387,6 +381,16 @@ public final class SpaceComplexScreen extends SessionScreen {
         // The item's own topics, the chip naming the item ("2 topics for "Hire engineers"").
         rules.addListener(clicked(() -> openHelp(advisorTopics(item))));
         links.add(rules);
+        // The idle tip is a one-off: it can be put away without acting on it.
+        if (item == Advisor.IDLE_TIP) {
+            Label gotIt = ui.label("GOT IT", Theme.TextStyle.LABEL, Theme.NAVY);
+            gotIt.setTouchable(Touchable.enabled);
+            gotIt.addListener(clicked(() -> {
+                game.markIdleTipDone();
+                rebuildAdvisor(session.state());
+            }));
+            links.add(gotIt).padLeft(Theme.SPACE_4);
+        }
         text.add(links).left();
         row.add(text).width(width).left();
         return row;

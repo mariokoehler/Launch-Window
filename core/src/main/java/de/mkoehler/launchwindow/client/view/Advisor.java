@@ -141,7 +141,8 @@ public final class Advisor {
 
     /**
      * Returns whether the idle tip is due now: the agency is past its first steps (someone is on R&amp;D
-     * or a mission has flown) and someone out of basic training is idle.
+     * or a mission has flown), someone out of basic training is idle, and nobody is in advanced or
+     * permanent training yet (a player who trains people already knows; one who starts has acted on it).
      *
      * @param state the player's state
      * @return whether it's due
@@ -149,7 +150,11 @@ public final class Advisor {
     public static boolean idleTipDue(PlayerSnapshot state) {
         boolean setUp = flown(state) || state.getSetSpecialists().stream()
             .map(SetSpecialist::getRdTargetComponentId).anyMatch(id -> id != null);
-        return setUp && idleDestination(state) != null;
+        boolean training = java.util.stream.Stream.of(state.getAstronauts(), state.getSetSpecialists(),
+                state.getMissionControlOfficers()).flatMap(List::stream)
+            .anyMatch(person -> person.getTrainingKind() == TrainingKind.ADVANCED
+                || person.getTrainingKind() == TrainingKind.PERMANENT);
+        return setUp && !training && idleDestination(state) != null;
     }
 
     /** The building of the first group with someone idle, engineers first, or {@code null} if nobody is. */

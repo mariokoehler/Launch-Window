@@ -796,11 +796,12 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       resigns at 35) and that training is free. It's a one-off apart from the first steps
       (`Advisor.IDLE_TIP`, never in `ITEMS`, never counted toward retiring): due once the agency is set
       up (someone on R&D or a mission flown) and someone out of basic training is idle and available
-      (`Advisor.idleTipDue`). It goes first on the card; its Go link ("Their building") opens the
-      building of the first group with someone idle, engineers first. On a retired advisor the card
-      comes back for it alone, captioned "A tip", with **Got it** instead of the footer. It goes for
-      good once nobody is idle after it was shown, or on Got it, or when the player hides the advisor
-      (client marks `idleTipShown`, `idleTipDone`). *Unconfirmed defaults.* Shots
+      and nobody in advanced or permanent training yet (`Advisor.idleTipDue`). It goes first on the
+      card; its Go link ("Their building") opens the building of the first group with someone idle,
+      engineers first, and a **Got it** link puts it away. On a retired advisor the card comes back
+      for it alone, captioned "A tip", without the footer. It goes for good once it stops being due
+      after it was shown (someone sent to training, or nobody idle), on Got it, or when the player
+      hides the advisor (client marks `idleTipShown`, `idleTipDone`). *Unconfirmed defaults.* Shots
       `advisor-idle-tip.png` (retired) and `advisor-idle-tip-first-steps.png`.
 25. **Looking ahead** *(the user's idea, 2026-10-10: "thinking ahead gives you a big advantage in this
     game"; the user liked all seven proposals and asked for them built at once, without a mockup,

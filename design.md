@@ -437,7 +437,7 @@ leading to satellite navigation.
 - **Stand-downs after a lost crew** (checked 2026-10-12, for the grounding, §2.5(j)): after the Apollo 1
   fire (27 January 1967, a ground test) no crew flew until Apollo 7 (11 October 1968), about 20 months,
   while Apollo 4 (November 1967), Apollo 5 (January 1968) and Apollo 6 (April 1968) flew uncrewed and
-  the command module was redesigned. After Soyuz 1 (24 April 1967) the next crew flew on Soyuz 3
+  the command module was redesigned. After Soyuz 1 (launched 23 April 1967, lost on landing the next day) the next crew flew on Soyuz 3
   (26 October 1968), about 18 months, after uncrewed Soyuz tests (Kosmos 186 and 188's automatic
   docking in October 1967, Soyuz 2). After Soyuz 11 (30 June 1971) the next crew flew on Soyuz 12
   (27 September 1973), about 27 months, with the crew now in pressure suits. The game's 4 turns are a
@@ -1275,7 +1275,7 @@ failure would steer players into longer R&D waits, which lengthens the lulls aga
   steps are decided" (token `missions.grounding`).
 - **History** (§1.1): the real stand-downs ran 18 to 27 months (6 to 9 seasons). 4 is short of that on
   purpose; it's the first, small step.
-- **Measured** (the smart bot, 200 games, seed 42; about 1.5 crew losses a game, 1.6 crewed launches
+- **Measured** (the smart bot, 200 games, seed 42; about 1.5 astronauts lost a game, 1.6 crewed launches
   refused a game): at 4 turns the average landing moves from 98.8 to 100.5 seasons (with R&D decisions
   93.7 to 96.9) and the lulls don't change (longest gap a median of 10). At 6 turns, 104.2 (97.2), and
   the longest gap's upper quartile goes from 13 to 15. The bot doesn't play around it (it would fly
