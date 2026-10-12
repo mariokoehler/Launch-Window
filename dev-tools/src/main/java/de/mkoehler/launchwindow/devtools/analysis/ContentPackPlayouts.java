@@ -2303,6 +2303,15 @@ public final class ContentPackPlayouts {
             + report.debtConversions() + ", lowest funds " + report.lowestFunds() + ", astronauts lost "
             + report.astronautsLost());
         System.out.println("Stalls: " + report.stalls());
+        if (!report.launchGaps().isEmpty()) {
+            List<Integer> gaps = report.launchGaps();
+            List<Integer> longest = report.longestGaps().stream().sorted().toList();
+            System.out.printf(java.util.Locale.ROOT, "Seasons without a launch before each launch (completed games): "
+                    + "%d launches, gaps of 5+ %.0f %%, 10+ %.0f %%; each game's longest: quartiles %d / %d / %d, max %d%n",
+                gaps.size(), 100.0 * gaps.stream().filter(gap -> gap >= 5).count() / gaps.size(),
+                100.0 * gaps.stream().filter(gap -> gap >= 10).count() / gaps.size(), longest.get(longest.size() / 4),
+                longest.get(longest.size() / 2), longest.get(longest.size() * 3 / 4), longest.getLast());
+        }
         System.out.println("Departures: " + harness.lastTally.departures);
         if (!harness.lastTally.aheadRejections.isEmpty()) {
             System.out.println("Later plan flights flown alongside: " + harness.lastTally.aheadLaunches

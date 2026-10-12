@@ -1595,6 +1595,11 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
       salaries); hires rise from 75 to 88 a game. Hiring only who stays to season 100 leaves the
       speed where it was (99.0 and 102.1 on average) and cuts retirements by about a fifth (hires 71
       a game). Together they give the best average on both seeds, so both are the defaults.
+    - **Lulls with the smart bot** (2026-10-12, seed 42, `ContentPackPlayouts` now prints them): about 33
+      launches a game; 18 % of gaps 5+ seasons, 3 % 10+; each game's longest gap a median of 10 seasons
+      (quartiles 8 and 12) against the side-missions bot's 22 (14 and 41). With R&D decisions: about 50
+      decisions a game, offered in 61 % of quiet seasons, covering 70 % of the median game's longest
+      quiet stretch. Spread: NASA's quartiles 79 to 110, the Soviets' 82 to 114, slowest games near 170.
     - **Worth knowing for balance, not verdicts:** a failed flight is cheap enough that launching
       earlier is faster at every bar tried (odds 0.6/0.5, 0.5/0.4, 0.4/0.3: averages 115, 111, 107),
       with astronaut losses about flat; a careful player is not rewarded for waiting. And an idle
