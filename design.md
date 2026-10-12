@@ -2648,6 +2648,17 @@ gdx-video as WebM, the way the splash is (`ui-spec.md` §4.0, its proof of conce
 of steps and variants, the clip size (the splash is 800 px square and about 650 KB for 4 s), and
 where they play in the replay viewer (`ui-spec.md` §4.7.3).
 
+The launch was tried two ways on 2026-10-12, both judged usable by the user. Claude alone wrote the
+layers as SVG and the motion as formulas: 8 minutes, the smoother motion. The other way was a Claude
+Design storyboard of success, glitch and failure, rebuilt part by part: about 28 minutes, with
+choppier motion from hitting fixed key frames, but its glitch and failure ideas were good: a
+stutter with a lean and a kink left in the trail, and a cut-out with the dashed planned path,
+a break-up and pieces falling along arcs. **Decided (user, 2026-10-12):** Claude animates the steps
+alone, and Claude Design is brought in only for inspiration where a step has no good idea yet.
+Proofs of concept stay at 1920 × 1080 and 1500 kbps (indistinguishable from the default bitrate at
+the sizes they'll play), so they compare; the real size and aspect wait for the replay viewer's
+redesign. Both pipelines are in `assets-raw/replay/` (its README).
+
 **Advisor** (the user's idea, built 2026-10-08, `ui-spec.md` component 24): a card on the hub with
 a new agency's first steps (help, engineers, a program, a rocket, R&D, controllers, astronauts
 once crewed, reliability to 60 % for a payload and a rocket, then the first mission, the first

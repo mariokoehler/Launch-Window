@@ -1,0 +1,394 @@
+{
+  "v": 3,
+  "createdOnFiles": {
+    "v": 1,
+    "at": "2026-10-12T10:00:00Z"
+  },
+  "title": "Launch Window — Mission Steps: Launch",
+  "launch": {
+    "view": "canvas"
+  },
+  "pages": [],
+  "boards": {
+    "Success1.dc.html": {
+      "x": 0,
+      "y": 0,
+      "w": 1920,
+      "h": 1080,
+      "title": "Success 1 · t = 0.0 s"
+    },
+    "Success2.dc.html": {
+      "x": 2000,
+      "y": 0,
+      "w": 1920,
+      "h": 1080,
+      "title": "Success 2 · t = 1.2 s"
+    },
+    "Success3.dc.html": {
+      "x": 4000,
+      "y": 0,
+      "w": 1920,
+      "h": 1080,
+      "title": "Success 3 · t = 2.0 s"
+    },
+    "Success4.dc.html": {
+      "x": 6000,
+      "y": 0,
+      "w": 1920,
+      "h": 1080,
+      "title": "Success 4 · t = 2.8 s"
+    },
+    "Success5.dc.html": {
+      "x": 8000,
+      "y": 0,
+      "w": 1920,
+      "h": 1080,
+      "title": "Success 5 · t = 4.2 s"
+    },
+    "Success6.dc.html": {
+      "x": 10000,
+      "y": 0,
+      "w": 1920,
+      "h": 1080,
+      "title": "Success 6 · t = 6.0 s"
+    },
+    "Glitch1.dc.html": {
+      "x": 0,
+      "y": 1960,
+      "w": 1920,
+      "h": 1080,
+      "title": "Glitch 1 · t = 0.0 s"
+    },
+    "Glitch2.dc.html": {
+      "x": 2000,
+      "y": 1960,
+      "w": 1920,
+      "h": 1080,
+      "title": "Glitch 2 · t = 1.4 s"
+    },
+    "Glitch3.dc.html": {
+      "x": 4000,
+      "y": 1960,
+      "w": 1920,
+      "h": 1080,
+      "title": "Glitch 3 · t = 2.2 s"
+    },
+    "Glitch4.dc.html": {
+      "x": 6000,
+      "y": 1960,
+      "w": 1920,
+      "h": 1080,
+      "title": "Glitch 4 · t = 3.0 s"
+    },
+    "Glitch5.dc.html": {
+      "x": 8000,
+      "y": 1960,
+      "w": 1920,
+      "h": 1080,
+      "title": "Glitch 5 · t = 4.0 s"
+    },
+    "Glitch6.dc.html": {
+      "x": 10000,
+      "y": 1960,
+      "w": 1920,
+      "h": 1080,
+      "title": "Glitch 6 · t = 6.4 s"
+    },
+    "Failure1.dc.html": {
+      "x": 0,
+      "y": 3920,
+      "w": 1920,
+      "h": 1080,
+      "title": "Failure 1 · t = 0.0 s"
+    },
+    "Failure2.dc.html": {
+      "x": 2000,
+      "y": 3920,
+      "w": 1920,
+      "h": 1080,
+      "title": "Failure 2 · t = 1.4 s"
+    },
+    "Failure3.dc.html": {
+      "x": 4000,
+      "y": 3920,
+      "w": 1920,
+      "h": 1080,
+      "title": "Failure 3 · t = 2.2 s"
+    },
+    "Failure4.dc.html": {
+      "x": 6000,
+      "y": 3920,
+      "w": 1920,
+      "h": 1080,
+      "title": "Failure 4 · t = 3.4 s"
+    },
+    "Failure5.dc.html": {
+      "x": 8000,
+      "y": 3920,
+      "w": 1920,
+      "h": 1080,
+      "title": "Failure 5 · t = 4.6 s"
+    },
+    "Failure6.dc.html": {
+      "x": 10000,
+      "y": 3920,
+      "w": 1920,
+      "h": 1080,
+      "title": "Failure 6 · t = 7.0 s"
+    },
+    "PartsSheet.dc.html": {
+      "x": 0,
+      "y": 6100,
+      "w": 2400,
+      "h": 1460,
+      "title": "Parts sheet: every part once, with its id and pivot"
+    }
+  },
+  "order": [
+    "Success1.dc.html",
+    "Success2.dc.html",
+    "Success3.dc.html",
+    "Success4.dc.html",
+    "Success5.dc.html",
+    "Success6.dc.html",
+    "Glitch1.dc.html",
+    "Glitch2.dc.html",
+    "Glitch3.dc.html",
+    "Glitch4.dc.html",
+    "Glitch5.dc.html",
+    "Glitch6.dc.html",
+    "Failure1.dc.html",
+    "Failure2.dc.html",
+    "Failure3.dc.html",
+    "Failure4.dc.html",
+    "Failure5.dc.html",
+    "Failure6.dc.html",
+    "PartsSheet.dc.html"
+  ],
+  "notes": {
+    "title-success": {
+      "kind": "title1",
+      "text": "1 · Success: vents, ignition, arms clear, liftoff, the climb, gone off the top (6.0 s)",
+      "x": 0,
+      "y": -260,
+      "maxW": 11920
+    },
+    "feel-success": {
+      "x": -1180,
+      "y": 0,
+      "w": 1080,
+      "maxH": 600,
+      "fill": "blue",
+      "size": "l",
+      "text": "What the player should feel: relief and lift. Everything works, the rocket climbs out of the picture and leaves a clean gold line behind."
+    },
+    "note-success-1": {
+      "x": 0,
+      "y": 1110,
+      "w": 1920,
+      "maxH": 460,
+      "size": "s",
+      "text": "t = 0.0 s · camera offset: world shifted down 0 px\n\nOn the pad, fuelled and venting. Wisps drift off the vent ports (wisp-1 and wisp-2 right, wisp-3 left).\n\nTo next: each wisp travels 40 px along its own curl, fading 0.7 → 0 over 0.8 s, then restarts (loop). At 1.0 s flame-ignite snaps on.\n\nCamera: still."
+    },
+    "note-success-2": {
+      "x": 2000,
+      "y": 1110,
+      "w": 1920,
+      "maxH": 460,
+      "size": "s",
+      "text": "t = 1.2 s · camera offset: world shifted down 0 px\n\nIgnition. flame-ignite under the bell; the first smoke (smoke-1, smoke-2) at half size where the trench vents.\n\nTo next: at 1.6 s the flame switches to flame-full (snap), then flickers: its length ±6 px at about 12 Hz, to the end. smoke-1 and smoke-2 grow 0.5 → 1.0 and slide out 60 px each (ease-out); smoke-3 and smoke-4 appear (scale 0.4 → 1, fade in). Wisps fade out. At 1.7 s the arms swing clear in 0.4 s, ease-out with a 3° overshoot: armUpper 0 → +80° about (1046, 520), up; armLower 0 → −80° about (1046, 700), down.\n\nCamera: shake starts at 1.6 s, 2 px, random each frame."
+    },
+    "note-success-3": {
+      "x": 4000,
+      "y": 1110,
+      "w": 1920,
+      "maxH": 460,
+      "size": "s",
+      "text": "t = 2.0 s · camera offset: world shifted down 0 px\n\nFull thrust, arms clear. The rocket is still held down.\n\nTo next: at 2.2 s the rocket lifts: 60 px up by 2.8 s, easing in (slow start). The trail starts at the pad and its end follows the bell (trim 0 → 60). All smoke grows 1.0 → 1.4 and spreads out a further 80 px; smoke-5 and smoke-6 appear on the outside.\n\nCamera: shake 3 px, fading to 1 px by 2.8 s."
+    },
+    "note-success-4": {
+      "x": 6000,
+      "y": 1110,
+      "w": 1920,
+      "maxH": 460,
+      "size": "s",
+      "text": "t = 2.8 s · camera offset: world shifted down 0 px\n\nLiftoff: clear of the pad by 60 px.\n\nTo next: the rocket accelerates (quadratic ease-in): 280 px more by 4.2 s. Trail trim follows the bell. Smoke drifts out a further 40 px and fades to 50 %.\n\nCamera: from 3.2 s it starts to follow: world shifted down 0 → 120 px by 4.2 s, ease-in. Shake gone."
+    },
+    "note-success-5": {
+      "x": 8000,
+      "y": 1110,
+      "w": 1920,
+      "maxH": 460,
+      "size": "s",
+      "text": "t = 4.2 s · camera offset: world shifted down 120 px\n\nClimbing past the tower, camera following. The dashed box is the camera’s view in world space.\n\nTo next: the rocket keeps accelerating: 880 px more by 6.0 s. Trail trim follows the bell (to 1220). Smoke fades to 20 %. Clouds are world-fixed, so they pass down the screen as the camera rises.\n\nCamera: world shifted down 120 → 300 px, ease-out: it lags behind, so the rocket leaves the top edge at about 5.6 s, its flame last."
+    },
+    "note-success-6": {
+      "x": 10000,
+      "y": 1110,
+      "w": 1920,
+      "maxH": 460,
+      "size": "s",
+      "text": "t = 6.0 s · camera offset: world shifted down 300 px\n\nGone off the top: only the trail is left on screen. The rocket is at world y −380 (bell), outside the frame.\n\nEnd: hold 0.3 s on the trail and the clouds, then the replay moves to the next step.\n\nCamera: world shifted down 300 px, still."
+    },
+    "title-glitch": {
+      "kind": "title1",
+      "text": "2 · Glitch, then saved: the engine stutters just after liftoff, then catches (6.4 s)",
+      "x": 0,
+      "y": 1700,
+      "maxW": 11920
+    },
+    "feel-glitch": {
+      "x": -1180,
+      "y": 1960,
+      "w": 1080,
+      "maxH": 600,
+      "fill": "blue",
+      "size": "l",
+      "text": "What the player should feel: a second with the heart in the mouth, then relief. The flame falters and the rocket hangs and leans, then it catches and climbs on; the kink in the trail is the souvenir."
+    },
+    "note-glitch-1": {
+      "x": 0,
+      "y": 3070,
+      "w": 1920,
+      "maxH": 460,
+      "size": "s",
+      "text": "t = 0.0 s · camera offset: world shifted down 0 px\n\nOn the pad, venting (as variant 1, frame 1).\n\nTo next: wisps loop as in variant 1. flame-ignite at 0.8 s, flame-full at 1.0 s (snap); smoke-1 to smoke-4 grow in as in variant 1; arms swing clear from 1.1 s in 0.3 s (+80°, −80°, ease-out).\n\nCamera: still; 2 px shake from 1.0 s."
+    },
+    "note-glitch-2": {
+      "x": 2000,
+      "y": 3070,
+      "w": 1920,
+      "maxH": 460,
+      "size": "s",
+      "text": "t = 1.4 s · camera offset: world shifted down 0 px\n\nFull thrust, arms clear, all normal.\n\nTo next: liftoff at 1.6 s: 80 px up by 2.2 s, ease-in. Trail trim follows the bell. Smoke grows to 1.4 and spreads 80 px; smoke-5 and smoke-6 appear.\n\nCamera: shake 3 px, fading."
+    },
+    "note-glitch-3": {
+      "x": 4000,
+      "y": 3070,
+      "w": 1920,
+      "maxH": 460,
+      "size": "s",
+      "text": "t = 2.2 s · camera offset: world shifted down 0 px\n\nLiftoff, clean so far.\n\nTo next: at 2.6 s the engine stutters: the flame switches to flame-sputter (snap) and flickers between flame-sputter and flame-ignite every 0.1 s. The rocket slows (ease-out), climbing only 90 px by 3.0 s, and tips −7° (left, away from the tower) about its pivot (960, 600), drifting left with the trail’s kink (bell at x 941). smoke-7 puffs out of the bell: scale 0.3 → 1.2 over 0.3 s, then stays where it was born.\n\nCamera: a sharp 6 px shake at 2.6 s, decaying over 0.4 s."
+    },
+    "note-glitch-4": {
+      "x": 6000,
+      "y": 3070,
+      "w": 1920,
+      "maxH": 460,
+      "size": "s",
+      "text": "t = 3.0 s · camera offset: world shifted down 0 px\n\nThe stutter: short, ragged flame, the rocket hanging and tilting. The close call.\n\nTo next: at 3.4 s the flame snaps back to flame-full (one bright frame: flame-full scaled 1.15 about the bell (960, 840), then 1.0). The rocket wobbles back: −7° → +3° by 4.0 s (overshoot), then settles to 0° by 4.6 s (a damped second swing of −1°). It climbs again, accelerating: 190 px by 4.0 s, along the trail’s kink back to x 960. smoke-7 stays in place and fades to 0 by 4.2 s.\n\nCamera: still until 3.6 s, then starts to follow: world shifted down 0 → 60 px by 4.0 s, ease-in."
+    },
+    "note-glitch-5": {
+      "x": 8000,
+      "y": 3070,
+      "w": 1920,
+      "maxH": 460,
+      "size": "s",
+      "text": "t = 4.0 s · camera offset: world shifted down 60 px\n\nSaved: full flame, the rocket swinging back upright and climbing. The kink stays in the trail as the record of the scare.\n\nTo next: as variant 1 frames 5 to 6: the rocket accelerates 900 px by 6.4 s and leaves the top at about 6.0 s; trail trim follows the bell.\n\nCamera: world shifted down 60 → 320 px, ease-out (lagging)."
+    },
+    "note-glitch-6": {
+      "x": 10000,
+      "y": 3070,
+      "w": 1920,
+      "maxH": 460,
+      "size": "s",
+      "text": "t = 6.4 s · camera offset: world shifted down 320 px\n\nGone off the top, the kinked trail left behind.\n\nEnd: hold 0.3 s.\n\nCamera: world shifted down 320 px, still."
+    },
+    "title-failure": {
+      "kind": "title1",
+      "text": "3 · Failure: the engine cuts out, the rocket pitches over and breaks up (7.0 s)",
+      "x": 0,
+      "y": 3660,
+      "maxW": 11920
+    },
+    "feel-failure": {
+      "x": -1180,
+      "y": 3920,
+      "w": 1080,
+      "maxH": 600,
+      "fill": "blue",
+      "size": "l",
+      "text": "What the player should feel: a sinking feeling, not horror. The engine goes quiet, the rocket tips and comes apart, the pieces fall, and the dashed gold line shows the path it should have flown."
+    },
+    "note-failure-1": {
+      "x": 0,
+      "y": 5030,
+      "w": 1920,
+      "maxH": 460,
+      "size": "s",
+      "text": "t = 0.0 s · camera offset: world shifted down 0 px\n\nOn the pad, venting (as variant 1, frame 1).\n\nTo next: as variant 2 to its frame 2: ignition at 0.8 s, full at 1.0 s, arms clear from 1.1 s.\n\nCamera: still; 2 px shake from 1.0 s."
+    },
+    "note-failure-2": {
+      "x": 2000,
+      "y": 5030,
+      "w": 1920,
+      "maxH": 460,
+      "size": "s",
+      "text": "t = 1.4 s · camera offset: world shifted down 0 px\n\nFull thrust, arms clear, all normal.\n\nTo next: liftoff at 1.6 s: 80 px up by 2.2 s, ease-in. Trail trim follows the bell. Smoke grows to 1.4 and spreads; smoke-5 and smoke-6 appear.\n\nCamera: shake 3 px, fading."
+    },
+    "note-failure-3": {
+      "x": 4000,
+      "y": 5030,
+      "w": 1920,
+      "maxH": 460,
+      "size": "s",
+      "text": "t = 2.2 s · camera offset: world shifted down 0 px\n\nLiftoff, clean so far.\n\nTo next: the rocket climbs 240 px by 3.4 s (ease-in). At 3.0 s the flame flickers (flame-full / flame-ignite every 0.08 s); at 3.2 s it cuts out (snap, no flame). smoke-7 puffs from the bell at the cut (scale 0.3 → 1.5 in 0.3 s) and stays where it was born. The trail stops growing at the cut (trim 320) and trailPlanned fades in, dashed, from there on up: the path it should have flown. The rocket starts to pitch left, away from the tower: 0 → −6° about (960, 600), ease-in.\n\nCamera: a 4 px jolt at 3.2 s; otherwise still."
+    },
+    "note-failure-4": {
+      "x": 6000,
+      "y": 5030,
+      "w": 1920,
+      "maxH": 460,
+      "size": "s",
+      "text": "t = 3.4 s · camera offset: world shifted down 0 px\n\nEngine out. No flame, a puff from the bell, the trail ends and the dashed planned path goes on without it.\n\nTo next: the rocket coasts 50 px higher, slowing (ease-out), drifts about 180 px left, still pitching faster: −6° → −32° by 4.5 s (ease-in), so its tail swings clear of the tower. At 4.5 s it breaks up: rocket hides (snap) and debris-1 to debris-6 appear in its place, pushed apart 10 to 40 px along the body; burst appears at the centre, scale 0.4 → 1.0 in 0.15 s (snap-in); smoke-8 and smoke-9 pop at the centre (scale 0.3 → 1.2).\n\nCamera: still until 4.5 s."
+    },
+    "note-failure-5": {
+      "x": 8000,
+      "y": 5030,
+      "w": 1920,
+      "maxH": 460,
+      "size": "s",
+      "text": "t = 4.6 s · camera offset: world shifted down 0 px\n\nBreak-up, 0.1 s after it starts: the pieces just apart, the burst at full size. Diagrammatic: a ring of gold strokes, no fireball.\n\nTo next: the burst fades out by 4.9 s (scale 1.0 → 1.3). Each piece falls along its dashed fallPath (fallPath-1 to fallPath-6, shown in frame 6) to the ground left of the pad, gravity ease-in, and spins: debris-1 −118°, debris-2 −50°, debris-3 −66°, debris-4 −160°, small panels −1 turn. They land between 6.2 and 6.8 s with a 6 px bounce; at each landing a puff (smoke-10 to smoke-12) pops and rises 30 px. smoke-8, smoke-9 drift up 40 px and fade by 6.0 s.\n\nCamera: strong shake at 4.5 s, 14 px, decaying over 0.6 s; then still."
+    },
+    "note-failure-6": {
+      "x": 10000,
+      "y": 5030,
+      "w": 1920,
+      "maxH": 460,
+      "size": "s",
+      "text": "t = 7.0 s · camera offset: world shifted down 0 px\n\nLost: the pieces on the ground left of the pad, puffs rising, the trail stopped short of the dashed planned path.\n\nEnd: hold 0.6 s; the puffs keep rising 20 px and fade to 40 %.\n\nCamera: still."
+    },
+    "title-parts": {
+      "kind": "title1",
+      "text": "Parts sheet and conventions",
+      "x": 0,
+      "y": 5840,
+      "maxW": 4200
+    },
+    "about": {
+      "x": -1180,
+      "y": -260,
+      "w": 1080,
+      "maxH": 220,
+      "fill": "gray",
+      "text": "Launch Window — mission step storyboard: LAUNCH. Key frames for the replay’s launch clip, to be rebuilt as layers in EffectCraft. Style from the Explainers canvas. Drawn 2026-10-12; every timing and distance is a proposal."
+    },
+    "conventions": {
+      "x": 2500,
+      "y": 6100,
+      "w": 1700,
+      "maxH": 1460,
+      "size": "s",
+      "text": "How the frames are built (for the rebuild):\n\n· One world: every frame’s SVG is viewBox 0 0 1920 1080 in world coordinates. Ground line y = 880, pad centre x = 960, the rocket’s bell exit at (960, 840) at rest. The camera never moves the drawing: each note gives its offset as “world shifted down N px” (the camera has risen N px). Where the camera has moved, a dashed box (cameraGuide, a guide only) shows its view in world space.\n\n· Every part is a <g> with an id, in every frame of every variant, in the same back-to-front order: ruler, cloud-1–4, trailPlanned, trail, wisp-1–3, tower, armUpper, armLower, flame (children flame-ignite, flame-full, flame-sputter), rocket, debris-1–6, ground, pad, smoke-1–12, burst, fallPath-1–6, cameraGuide. A page layer, paper (white with the 24 px grid), sits behind and never moves.\n\n· A part’s state is its transform, always written translate(tx ty) rotate(a px py), then translate(px py) scale(s) translate(−px −py) when scaled, about the pivot on the parts sheet; plus opacity. Hidden parts are present at opacity 0.\n\n· flame takes the rocket’s transform (parent it to the rocket). One child state shows at a time (opacity 1).\n\n· trail is one path drawn once per variant; a frame shows the first N px of it (stroke-dasharray “N 6000”): animate it as a trim path whose end follows the bell.\n\n· Colours from the design system only: navy #16305c lines, white fills, gold #e0a72e for fire and flight paths (flame fill gold at 35 %), the Explainers’ hatch (8 px at 45°, navy) for propellant, navy at 45 % for guides. Lines: 3 px hardware, 2 px details, smoke and clouds, 3 px trail. Red on the parts sheet marks pivots only.\n\n· Generic hardware: a two-tank rocket with fins, a lattice tower with two swing arms. No text in the frames.\n\n· Smoke puffs are three overlapping circles drawn as one outline; smoke-7 to smoke-12 are placed per frame (they are born where the note says and stay there)."
+    }
+  },
+  "designSystems": [
+    {
+      "title": "Launch Window",
+      "namespace": "launchwindow",
+      "artifact": "https://claude.ai/artifact/4M4n1iSuaCqXSeCLrMoMeN",
+      "version": "1791286635-44fb",
+      "copiedAt": "2026-10-12T10:00:00Z"
+    }
+  ]
+}

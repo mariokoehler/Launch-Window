@@ -75,3 +75,5 @@ assets-raw/frontpage/variants/*.png
 assets-raw/frontpage/review/
 # The splash video's intermediate layers, EffectCraft project and GIF preview (make_splash.py)
 assets-raw/splash/build/
+# Mission step clips: layers, EffectCraft projects and renders (assets-raw/replay/README.md)
+assets-raw/replay/*/build/
