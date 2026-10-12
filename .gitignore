@@ -73,3 +73,5 @@ assets-raw/blueprints/review/
 # Front-page art variants and review sheets: only the picked image per job is committed (git add -f)
 assets-raw/frontpage/variants/*.png
 assets-raw/frontpage/review/
+# The splash video's intermediate layers, EffectCraft project and GIF preview (make_splash.py)
+assets-raw/splash/build/

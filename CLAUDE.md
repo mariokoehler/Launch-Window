@@ -132,6 +132,11 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
 - **A Randomize button for the agency name** (the user's idea, 2026-10-12, `ui-spec.md` §4.2): 20 names a
   style in `assets/content/agency-names.json`, dealt without repeats. Client only: no reset, no rebuild
   of the server.
+- **An animated splash** (the user's idea, 2026-10-12, `ui-spec.md` §4.0): a borderless square window
+  plays the logo assembling itself (`assets/ui/splash/splash.webm`, made in EffectCraft by
+  `assets-raw/splash/make_splash.py`), then opens the game's window. gdx-video is a new client
+  dependency (WebM and AV1 only on desktop; its FFmpeg natives add about 15 MB to the jar). It tests
+  the user's idea of animated mission steps (`design.md` §5, Backlog). Client only.
 
 ## How we work
 
@@ -218,6 +223,11 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   copy its layer across with `layer.copyToDocument`). New layers land above the active one, so check
   the stack after adding a fill layer. Centered type with a horizontal scale comes out off-centre:
   read the bounds and move it. Tabs draw as boxes: use two aligned text layers instead.
+- **EffectCraft** (an open-source After Effects, `C:\Program Files\EffectCraft\effectcraft-cli.exe`):
+  `script X.jsx --empty --save-as X.ecproj` runs After Effects-style JSX headless, `render-frame`
+  checks a frame, `render --format webm` makes a clip. No vector export, and an SVG imports flat:
+  split it into layers first (`assets-raw/splash/split_logo.py`). A null used as a parent needs its
+  anchor and position at the comp centre, or its children land offset.
 - **Other converters** in `assets-raw/`: `make_hub_art.py`, `make_content_art.py`,
   `svg/ui/make_ui_icons.py` (needs `pip install resvg-py`), and `explainers/make_explainer_art.py`
   (the explainers' drawings: PNG without text plus a labels file, `ui-spec.md` component 18).

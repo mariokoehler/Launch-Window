@@ -44,6 +44,13 @@
       <classifier>natives-desktop</classifier>
     </dependency>
     <dependency>
+      <!-- The splash video (ui-spec.md 4.0). Pulls gdx-video (the API) and gdx-video-desktop,
+           whose jar carries its own FFmpeg natives (WebM and AV1 only on desktop, no MP4). -->
+      <groupId>com.badlogicgames.gdx-video</groupId>
+      <artifactId>gdx-video-lwjgl3</artifactId>
+      <version>1.3.4</version>
+    </dependency>
+    <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
       <scope>test</scope>

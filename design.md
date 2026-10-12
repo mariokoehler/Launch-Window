@@ -2639,6 +2639,15 @@ the rules, every number a token. **Next:** keep the topics in step with the rule
 constant updates itself, a changed rule needs its text), and put the `help` and `search` glyphs on
 the UI Asset Sheet (prompt given to the user 2026-10-08).
 
+**Animated mission steps** (the user's idea, 2026-10-12, unconfirmed): BASPM animates a mission's
+replay with hundreds of rendered clips, specific to each component. Ours could have short generic
+clips per mission step (launch, staging, orbit, docking, landing, reentry...), each with a success,
+a glitch and a failure variant, drawn in the explainers' style rather than 3D. They'd be made in
+EffectCraft (an open-source After Effects clone with a headless, scriptable CLI) and played with
+gdx-video as WebM, the way the splash is (`ui-spec.md` §4.0, its proof of concept). Open: the list
+of steps and variants, the clip size (the splash is 800 px square and about 650 KB for 4 s), and
+where they play in the replay viewer (`ui-spec.md` §4.7.3).
+
 **Advisor** (the user's idea, built 2026-10-08, `ui-spec.md` component 24): a card on the hub with
 a new agency's first steps (help, engineers, a program, a rocket, R&D, controllers, astronauts
 once crewed, reliability to 60 % for a payload and a rocket, then the first mission, the first

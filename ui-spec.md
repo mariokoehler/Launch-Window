@@ -1191,7 +1191,7 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
 ## 3. Screen flow *(decided)*
 
 ```
-Connect ─► Join game (skipped if already in the game) ─► Turn report (if a turn resolved since last visit) ─► Space Complex hub
+Splash ─► Connect ─► Join game (skipped if already in the game) ─► Turn report (if a turn resolved since last visit) ─► Space Complex hub
 
 Space Complex hub
 ├─ VAB
@@ -1245,6 +1245,22 @@ breadcrumb differs.
 Each screen lists its purpose, the state it shows (real field names in
 `code style`), its actions, and the states it must handle. Where a BASPM
 screenshot shows the equivalent screen, it's listed as **Ref**.
+
+### 4.0 Splash
+**Purpose:** the animated logo, once, at every start of the client (the user's idea, 2026-10-12).
+A borderless, non-resizable square window, 30 % of the monitor's height (confirmed, user, 2026-10-12), centred, plays
+`assets/ui/splash/splash.webm` (4 s, 800 × 800, no sound) over `navy`, scaled to fit with linear
+filtering. When it ends, the game's own window opens (title, icon and size as before) and the
+splash window closes. **Actions:** any key or click skips it. **States:** a video that can't
+play (a missing native, a missing file) or never reports its end (after 8 s) goes straight to
+the game's window, logged as `[Splash]`.
+
+**Implemented (2026-10-12)** in the launcher, not in core: `lwjgl3.SplashListener` is the first
+window of the `Lwjgl3Application`, and opens the game with `newWindow(new LaunchWindowGame(), ...)`,
+so the game's fonts are made at its own window's size from the first frame. It plays through
+gdx-video 1.3.4, which on desktop plays WebM and AV1, never MP4. The clip is made in EffectCraft
+from `logo.svg`'s own shapes: `python assets-raw/splash/make_splash.py` (the steps are in its
+docstring). `ScreenSnapshot` builds `LaunchWindowGame` directly and never shows the splash.
 
 ### 4.1 Connect
 **Purpose:** connect and authenticate. One form: server (host:port), login,
