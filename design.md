@@ -2659,6 +2659,15 @@ Proofs of concept stay at 1920 × 1080 and 1500 kbps (indistinguishable from the
 the sizes they'll play), so they compare; the real size and aspect wait for the replay viewer's
 redesign. Both pipelines are in `assets-raw/replay/` (its README).
 
+**A whole mission as one film** (the user's idea, 2026-10-12, assumed doable): the replay plays each
+step's clip back to back, chosen by the step's outcome, so each mission puts together its own film.
+Measured with the three 1080p launch clips: one player loading the next clip when the current one
+ends leaves a 37 ms gap (just over one 30 fps frame); two alternating players, the next clip
+preloaded during the current one, start it 17–22 ms after the end, within one screen refresh, so
+the join is seamless. A load blocks the render thread for about 12 ms, and the first clip needs
+about 70 ms from load to picture. For it to read as one film, each clip should end where the next
+begins (the launch ends with the rocket gone off the top and the trail left).
+
 **Advisor** (the user's idea, built 2026-10-08, `ui-spec.md` component 24): a card on the hub with
 a new agency's first steps (help, engineers, a program, a rocket, R&D, controllers, astronauts
 once crewed, reliability to 60 % for a payload and a rocket, then the first mission, the first
