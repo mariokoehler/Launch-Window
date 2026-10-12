@@ -1311,7 +1311,8 @@ fits the game. It deals from `assets/content/agency-names.json` (20 NASA-style a
 names, our own; outside the frozen pack, held by `AgencyNamesTest`) like cards: a deck per style, no
 name twice until the whole deck has come up, and a fresh shuffle never starts with the last name
 (`client.view.NameSuggestions`). The picked card's style decides the deck; **with no style picked it
-deals from both** (*unconfirmed default*). A suggestion replaces the box's text and clears its error;
+deals from both** (confirmed by the user, 2026-10-12, as is the rare early repeat when a player
+deals before and after picking a style: "it's just something to guide the players"). A suggestion replaces the box's text and clears its error;
 the player can edit it. The server still checks uniqueness, so a suggestion can come back "Already
 taken". The button is disabled while joining. Tooltip: "Suggest a name": "Fills in a name in the
 style of the agency you picked, or either style if you haven't picked one. Press again for another:
