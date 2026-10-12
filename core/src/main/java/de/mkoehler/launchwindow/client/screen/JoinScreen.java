@@ -159,6 +159,8 @@ public final class JoinScreen extends StageScreen {
             agencyName.input().setText(name);
             agencyName.input().setCursorPosition(name.length());
             agencyName.setError(null);
+            // Back to the box, so the name can be edited, or Enter joins, straight away.
+            stage.setKeyboardFocus(agencyName.input());
         });
     }
 
