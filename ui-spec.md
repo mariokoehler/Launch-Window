@@ -1249,7 +1249,9 @@ screenshot shows the equivalent screen, it's listed as **Ref**.
 ### 4.0 Splash
 **Purpose:** the animated logo, once, at every start of the client (the user's idea, 2026-10-12).
 A borderless, non-resizable square window, 30 % of the monitor's height (confirmed, user, 2026-10-12), centred, plays
-`assets/ui/splash/splash.webm` (4 s, 800 × 800, no sound) over `navy`, scaled to fit with linear
+`assets/ui/splash/splash.webm` (4 s, 800 × 800) over `navy`, with Armstrong's "one small step"
+(`assets/audio/small-step.mp3`, NASA, 2.7 s) from 0.8 s, as the rocket starts to climb (the user's idea,
+2026-10-12), when sound is on, scaled to fit with linear
 filtering. When it ends, the game's own window opens (title, icon and size as before) and the
 splash window closes. **Actions:** any key or click skips it. **States:** a video that can't
 play (a missing native, a missing file) or never reports its end (after 8 s) goes straight to
@@ -1281,7 +1283,9 @@ in Settings keep the login and password and save the server chosen there.
 Soviet-style, with the two hub artworks as large cards (several players may pick
 the same one); an agency name; the **director's name** (the player's persona,
 the head of the agency, fixed for the whole game); a short line saying the game
-is in progress and you start fresh. **Actions:** Join. **States:** agency name
+is in progress and you start fresh. *Sound (the user's idea, 2026-10-12):* Kennedy's "We choose to go
+to the Moon" (`assets/audio/moon-speech.mp3`, NASA, 8.6 s) plays once when the screen opens, when
+sound is on; leaving the screen stops it. **Actions:** Join. **States:** agency name
 taken; director name taken (both checked ignoring case); empty fields.
 
 **History note on the Director field** (component 15, the first one a player
@@ -2160,7 +2164,7 @@ Reached from the hub's Museum building. Choices made while building it, **confir
   The note was corrected to match.
 
 ### 4.12 Settings (header gear)
-Log out; server address; sound on or off (later); about and version.
+Log out; server address; sound on or off; replays (§4.4); about and version.
 
 **Mocked up (2026-10-04)** as `Settings` on the Museum canvas, as a `Dialog` over the hub.
 Choices still **unconfirmed**:
@@ -2175,8 +2179,10 @@ Choices still **unconfirmed**:
 **Implemented in libGDX (2026-10-04)** as `client.screen.SettingsDialog`, opened by the
 header gear on every screen and by a white gear button at the end of the hub strip. Log out
 and Switch server close the connection and open Connect, Switch server with the new address
-filled in (a bad address shows the Connect screen's own error under the field). Sound is
-two disabled segments. **Confirmed by the user (2026-10-04):** the hash is shortened to 8 characters; the
+filled in (a bad address shows the Connect screen's own error under the field). Sound was
+two disabled segments until the game had sound; *since 2026-10-12* it's On (the default) or Off, for
+everyone on the device, since the splash plays before anyone logs in. Replays: Ask, Always or Never,
+per account (§4.4). **Confirmed by the user (2026-10-04):** the hash is shortened to 8 characters; the
 "connected" label is fixed text; and the account note says an unlaunched mission plan is
 dropped (plans live on the client session), instead of the mockup's "logging out loses nothing".
 **Credits (built 2026-10-06, user decision):** About has a "Credits" button that shows

@@ -23,7 +23,7 @@ import java.util.List;
 
 /**
  * Settings ({@code ui-spec.md} &sect;4.12), a dialog over any session screen: the account and
- * Log out, the server and Switch server, sound (later), and About. Opened by the header gear and
+ * Log out, the server and Switch server, sound, replays, and About. Opened by the header gear and
  * the hub strip's gear.
  *
  * @author Mario Koehler
@@ -98,7 +98,8 @@ final class SettingsDialog {
         card.add(section("Sound")).padBottom(Theme.SPACE_2).row();
         Table sound = new Table();
         sound.add(soundControl()).width(220f).height(32f).padRight(Theme.SPACE_3);
-        sound.add(ui.label("Coming later: the game has no sound yet.", Theme.TextStyle.CAPTION, Theme.INK_MUTED))
+        sound.add(ui.label("The voices at the start and on joining. For everyone on this device.",
+            Theme.TextStyle.CAPTION, Theme.INK_MUTED))
             .expandX().left();
         card.add(sound).padBottom(Theme.SPACE_4).row();
 
@@ -173,18 +174,22 @@ final class SettingsDialog {
         return ui.label(title.toUpperCase(java.util.Locale.ROOT), Theme.TextStyle.LABEL, Theme.INK_MUTED);
     }
 
-    /** Sound's On/Off control, both segments disabled until the game has sound. */
+    /** Sound on or off, for this device (the splash reads it before anyone logs in). */
     private Table soundControl() {
         Table segments = new Table();
         segments.setBackground(ui.rect(new Color(0f, 0f, 0f, 0f), Theme.NAVY_BORDER, Theme.BORDER_THIN));
         segments.pad(Theme.BORDER_THIN);
-        for (String option : new String[] {"On", "Off"}) {
-            boolean selected = option.equals("Off");
+        for (boolean on : new boolean[] {true, false}) {
+            boolean selected = LaunchWindowGame.soundOn() == on;
             Table segment = new Table();
-            // Disabled: the selected segment is only a light navy tint, not the solid navy of a live one.
-            segment.setBackground(ui.solid(selected ? new Color(Theme.SURFACE_CARD).lerp(Theme.NAVY, 0.15f)
-                : Theme.SURFACE_CARD));
-            segment.add(ui.label(option, Theme.TextStyle.LABEL, Theme.INK_MUTED));
+            segment.setBackground(ui.solid(selected ? Theme.NAVY : Theme.SURFACE_CARD));
+            segment.add(ui.label(on ? "On" : "Off", Theme.TextStyle.LABEL, selected ? Theme.ON_FILL : Theme.NAVY));
+            segment.setTouchable(Touchable.enabled);
+            segment.addListener(ChromeScreen.clicked(() -> {
+                LaunchWindowGame.setSoundOn(on);
+                host.closeDialog();
+                open();
+            }));
             segments.add(segment).expand().fill().uniformX();
         }
         return segments;

@@ -37,6 +37,8 @@ import java.util.Random;
 public final class JoinScreen extends StageScreen {
 
     private static final float COLUMN_WIDTH = 920f;
+    /** The speech, from NASA's historical sounds (assets/CREDITS.md). */
+    static final String SPEECH = "audio/moon-speech.mp3";
     private static final String TAKEN = "Already taken by another agency.";
 
     private final Credentials credentials;
@@ -50,6 +52,9 @@ public final class JoinScreen extends StageScreen {
     private final NameSuggestions suggestions = new NameSuggestions(AgencyNames.standard(), new Random());
     private final Cell<Actor> bannerCell;
     private Archetype archetype;
+    /** Kennedy's "We choose to go to the Moon", once, when the screen first shows (ui-spec.md 4.2). */
+    private com.badlogic.gdx.audio.Music speech;
+    private boolean spoken;
 
     /**
      * Builds the screen.
@@ -130,6 +135,18 @@ public final class JoinScreen extends StageScreen {
     public void show() {
         super.show();
         stage.setKeyboardFocus(agencyName.input());
+        if (!spoken) {
+            spoken = true;
+            speech = LaunchWindowGame.playOnce(SPEECH);
+        }
+    }
+
+    @Override
+    public void dispose() {
+        if (speech != null) {
+            speech.dispose();
+        }
+        super.dispose();
     }
 
     /**

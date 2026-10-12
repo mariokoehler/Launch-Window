@@ -11,6 +11,15 @@ Old Standard TT (Bold) and Libre Caslon Text (Regular and Italic, static instanc
 cut from the variable fonts), for the Firsts' front pages, under the SIL Open Font License; see
 `fonts/OFL-OldStandard.txt` and `fonts/OFL-LibreCaslonText.txt`.
 
+## Audio
+
+- `audio/small-step.mp3`: Neil Armstrong on the Moon, 20 July 1969, "That's one small step for
+  (a) man, one giant leap for mankind". NASA, https://www.nasa.gov/historical-sounds/. Public
+  domain (NASA). Plays with the splash.
+- `audio/moon-speech.mp3`: President John F. Kennedy at Rice University, Houston, 12 September
+  1962, "We choose to go to the Moon". NASA, https://www.nasa.gov/historical-sounds/. Public domain.
+  Plays when the Join screen opens.
+
 ## Photos
 
 - `ui/portraits/laika.jpg`: "Laika in 1957", Laika before her orbital flight. Photo: Museum of

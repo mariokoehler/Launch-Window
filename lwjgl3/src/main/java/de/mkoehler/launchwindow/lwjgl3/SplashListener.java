@@ -3,6 +3,7 @@ package de.mkoehler.launchwindow.lwjgl3;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Graphics;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window;
 import com.badlogic.gdx.graphics.Texture;
@@ -10,11 +11,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.video.VideoPlayer;
 import com.badlogic.gdx.video.VideoPlayerCreator;
+import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.Theme;
 
 /**
  * The splash window ({@code ui-spec.md} &sect;4.0): a borderless square that plays the animated
- * logo once, then opens the game's own window and closes itself. A key or a click skips it, and a
+ * logo once, with Armstrong's "one small step" when sound is on, then opens the game's own window
+ * and closes itself. A key or a click skips it, and a
  * video that can't play (a missing native, a missing file) goes straight on.
  *
  * @author Mario Koehler
@@ -23,6 +26,10 @@ final class SplashListener extends ApplicationAdapter {
 
     /** The logo animation, made in EffectCraft ({@code assets-raw/splash/}). */
     static final String VIDEO = "ui/splash/splash.webm";
+    /** Armstrong's "one small step", from NASA's historical sounds (assets/CREDITS.md). */
+    static final String VOICE = "audio/small-step.mp3";
+    /** When the voice starts: as the rocket starts to climb in the logo, so it ends before the clip. */
+    private static final float VOICE_AT = 0.8f;
     /** Goes on even if the player never reports the end; the clip runs 4 s. */
     private static final float MAX_SECONDS = 8f;
 
@@ -32,6 +39,8 @@ final class SplashListener extends ApplicationAdapter {
     private VideoPlayer player;
     private float elapsed;
     private boolean finished;
+    private Music voice;
+    private boolean voiced;
 
     /**
      * @param openMainWindow opens the game's window; called once, on the render thread
@@ -85,6 +94,10 @@ final class SplashListener extends ApplicationAdapter {
             return;
         }
         elapsed += Gdx.graphics.getDeltaTime();
+        if (!voiced && elapsed >= VOICE_AT) {
+            voiced = true;
+            voice = LaunchWindowGame.playOnce(VOICE);
+        }
         if (elapsed > MAX_SECONDS) {
             finish("timed out");
             return;
@@ -124,6 +137,9 @@ final class SplashListener extends ApplicationAdapter {
 
     @Override
     public void dispose() {
+        if (voice != null) {
+            voice.dispose();
+        }
         if (player != null) {
             player.dispose();
         }

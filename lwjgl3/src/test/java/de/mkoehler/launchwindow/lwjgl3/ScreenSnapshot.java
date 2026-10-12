@@ -213,6 +213,9 @@ public final class ScreenSnapshot {
         Lwjgl3ApplicationConfiguration configuration = new Lwjgl3ApplicationConfiguration();
         configuration.setInitialVisible(false);
         configuration.setWindowedMode(width, height);
+        // Silent, and the sound setting never this machine's: the Join screen would speak otherwise.
+        configuration.disableAudio(true);
+        LaunchWindowGame.useSoundInMemory(true);
         new Lwjgl3Application(new LaunchWindowGame() {
             @Override
             protected ServerGateway createGateway() {

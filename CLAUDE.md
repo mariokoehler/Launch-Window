@@ -144,6 +144,10 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   spoils nothing. A new turn with missions flown asks first to watch them spoiler-free, then the front
   pages, then the report (Settings: ask, always, never). Only the launch has clips. Client only: no reset,
   no server rebuild.
+- **The game's first sound** (the user's idea, 2026-10-12, NASA recordings in `assets/audio/`, credited):
+  Armstrong's "one small step" with the splash, Kennedy's "We choose to go to the Moon" when the Join
+  screen opens. Settings' Sound On/Off now works, for the whole device (`LaunchWindowGame.soundOn`).
+  `ScreenSnapshot` runs silent. Client only.
 
 ## How we work
 

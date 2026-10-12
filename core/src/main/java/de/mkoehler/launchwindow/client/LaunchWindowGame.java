@@ -30,6 +30,8 @@ public class LaunchWindowGame extends Game {
     /** How long the window's size has to stay put before the fonts are rebuilt for it. */
     private static final long FONT_REBUILD_DELAY_MS = 250;
 
+    /** The sound setting when kept in memory (screenshots), else {@code null}. */
+    private static Boolean soundInMemory;
     private UiKit ui;
     private ServerGateway gateway;
     private SettingsStore settingsStore;
@@ -288,6 +290,60 @@ public class LaunchWindowGame extends Game {
      */
     public void markHelpOpened() {
         setFlag("helpOpened");
+    }
+
+    /**
+     * Returns whether the game plays sound, on this device for everyone (Settings, {@code ui-spec.md}
+     * &sect;4.12): read before anyone logs in, by the splash.
+     *
+     * @return whether sound is on (the default)
+     */
+    public static boolean soundOn() {
+        return soundInMemory != null ? soundInMemory : preferences().getBoolean("sound", true);
+    }
+
+    /**
+     * Keeps the sound setting in memory from now on (screenshots), so it doesn't depend on this machine.
+     *
+     * @param on whether sound is on
+     */
+    public static void useSoundInMemory(boolean on) {
+        soundInMemory = on;
+    }
+
+    /**
+     * Turns the game's sound on or off on this device.
+     *
+     * @param on whether to play sound
+     */
+    public static void setSoundOn(boolean on) {
+        if (soundInMemory != null) {
+            soundInMemory = on;
+            return;
+        }
+        com.badlogic.gdx.Preferences preferences = preferences();
+        preferences.putBoolean("sound", on);
+        preferences.flush();
+    }
+
+    /**
+     * Plays an audio clip once, if sound is on.
+     *
+     * @param path the clip, under {@code assets/}
+     * @return the playing clip, for its owner to dispose; {@code null} when silent or it won't load
+     */
+    public static com.badlogic.gdx.audio.Music playOnce(String path) {
+        if (!soundOn()) {
+            return null;
+        }
+        try {
+            com.badlogic.gdx.audio.Music music = Gdx.audio.newMusic(Gdx.files.internal(path));
+            music.play();
+            return music;
+        } catch (RuntimeException e) {
+            Gdx.app.error("Audio", "can't play " + path, e);
+            return null;
+        }
     }
 
     /**
