@@ -493,6 +493,10 @@ public final class ContentPackPlayouts {
         List<de.mkoehler.launchwindow.model.ContractListing> board = new ArrayList<>();
         List<String> usedClients = new ArrayList<>();
         gameNumber++;
+        // A profile of this game, from the tally's counts before and after it (the slow-game analysis).
+        GameProfile profile = new GameProfile(archetype, new java.util.HashMap<>(tally.stalls), new java.util.HashMap<>(tally.launches),
+            new java.util.HashMap<>(tally.targetSeasons), new java.util.HashMap<>(tally.randomEventKinds), new java.util.HashMap<>(tally.stepOutcomes),
+            tally.astronautsLost, new java.util.HashMap<>(tally.spending));
 
         for (int season = 0; season < seasons; season++) {
             // Journaled player actions first.
@@ -574,6 +578,16 @@ public final class ContentPackPlayouts {
                 }
             }
             tally.lowestFunds = Math.min(tally.lowestFunds, snapshot.getFunds());
+            if (snapshot.getFunds() < 0) {
+                profile.debtSeasons++;
+            }
+            if ((season + 1) % de.mkoehler.launchwindow.rules.BudgetProgress.SEASONS_PER_REVIEW == 0
+                    && season < 100) {
+                String review = String.format("review %03d: ", season + 1);
+                profile.values.put(review + "funding rate", (int) snapshot.getFundingRatePerSeason());
+                profile.values.put(review + "running costs", (int) independentRunningCosts(snapshot));
+                profile.values.put(review + "prestige", (int) snapshot.getPrestige());
+            }
             for (String goal : declaredGoals) {
                 if (snapshot.hasAchievedOrCancelledGoal(goal) && reached.add(goal)) {
                     tally.goalReached.merge(goal, 1, Integer::sum);
@@ -593,6 +607,7 @@ public final class ContentPackPlayouts {
                 tally.longestGaps.add(gaps.stream().mapToInt(Integer::intValue).max().orElse(season + 1));
                 tally.randomEventsPerGame.add(new int[] {randomEvents[0], randomEvents[1], season + 1});
                 tally.decisionSeasons.add(decisionSeasons);
+                tally.profiles.add(profile.finish(tally, season + 1));
                 return;
             }
         }
@@ -1298,6 +1313,7 @@ public final class ContentPackPlayouts {
         }
         if (outcome == OpenProgramOutcome.OPENED) {
             tally.programsOpened++;
+            tally.spending.merge("program openings", (int) (charged / 1000), Integer::sum);
         } else {
             tally.stalls.merge("program " + outcome, 1, Integer::sum);
         }
@@ -1377,6 +1393,7 @@ public final class ContentPackPlayouts {
         }
         if (outcome == RocketProgramOutcome.OPENED) {
             tally.rocketsOpened++;
+            tally.spending.merge("rocket openings", (int) (charged / 1000), Integer::sum);
             int vabLevel = snapshot.getBuildingLevels().getOrDefault(Building.VEHICLE_ASSEMBLY, 1);
             if (openBefore >= tableCap(Building.VEHICLE_ASSEMBLY, vabLevel)
                     || rocket.rocket().rocketClass().ordinal() >= vabLevel) {
@@ -1441,6 +1458,7 @@ public final class ContentPackPlayouts {
         }
         if (outcome == BuildingUpgradeOutcome.STARTED) {
             tally.upgrades++;
+            tally.spending.merge("upgrades", (int) (expected / 1000), Integer::sum);
         }
     }
 
@@ -1839,6 +1857,8 @@ public final class ContentPackPlayouts {
                 + ", expected " + expectedCost);
         }
         if (outcome == MissionLaunchOutcome.LAUNCHED) {
+            tally.spending.merge(label.isEmpty() ? "plan launches" : label + "launches", (int) (charged / 1000),
+                Integer::sum);
             tally.launches.merge(target.id(), 1, Integer::sum);
             tally.launchedThisSeason++;
             tally.launchOdds.computeIfAbsent(target.requiredAstronautCount() > 0 ? "crewed" : "uncrewed",
@@ -2214,7 +2234,96 @@ public final class ContentPackPlayouts {
         return lastTally.contractProfit;
     }
 
+    /**
+     * What one completed game spent its seasons on, for comparing the slowest games with the fastest:
+     * each count is this game's share of the tally's.
+     */
+    private static final class GameProfile {
+        final Archetype archetype;
+        final Map<String, Integer> stallsBefore;
+        final Map<String, Integer> launchesBefore;
+        final Map<String, Integer> targetBefore;
+        final Map<String, Integer> eventsBefore;
+        final Map<String, Integer> stepsBefore;
+        final int lostBefore;
+        final Map<String, Integer> spendingBefore;
+        int debtSeasons;
+        int seasons;
+        final Map<String, Integer> values = new java.util.TreeMap<>();
+
+        GameProfile(Archetype archetype, Map<String, Integer> stalls, Map<String, Integer> launches,
+                Map<String, Integer> target, Map<String, Integer> events, Map<String, Integer> steps, int lost,
+                Map<String, Integer> spending) {
+            this.archetype = archetype;
+            this.stallsBefore = stalls;
+            this.launchesBefore = launches;
+            this.targetBefore = target;
+            this.eventsBefore = events;
+            this.stepsBefore = steps;
+            this.lostBefore = lost;
+            this.spendingBefore = spending;
+        }
+
+        GameProfile finish(Tally tally, int completion) {
+            seasons = completion;
+            diff("stall: ", stallsBefore, tally.stalls);
+            diff("launches: ", launchesBefore, tally.launches);
+            diff("target: ", targetBefore, tally.targetSeasons);
+            diff("event: ", eventsBefore, tally.randomEventKinds);
+            diff("step: ", stepsBefore, tally.stepOutcomes);
+            diff("spent: ", spendingBefore, tally.spending);
+            values.put("astronauts lost", tally.astronautsLost - lostBefore);
+            values.put("seasons in debt", debtSeasons);
+            return this;
+        }
+
+        private void diff(String prefix, Map<String, Integer> before, Map<String, Integer> after) {
+            after.forEach((key, count) -> {
+                int delta = count - before.getOrDefault(key, 0);
+                if (delta != 0) {
+                    values.put(prefix + key, delta);
+                }
+            });
+        }
+    }
+
+    /**
+     * Compares each agency's slowest quarter of completed games with its fastest quarter: the average
+     * of every profile value, sorted by how much more of it the slow games had.
+     */
+    private static void slowGameReport(List<GameProfile> profiles) {
+        for (Archetype archetype : List.of(Archetype.NASA, Archetype.SOVIET)) {
+            List<GameProfile> games = profiles.stream().filter(profile -> profile.archetype == archetype)
+                .sorted(Comparator.comparingInt(profile -> profile.seasons)).toList();
+            if (games.size() < 8) {
+                continue;
+            }
+            List<GameProfile> fast = games.subList(0, games.size() / 4);
+            List<GameProfile> slow = games.subList(games.size() - games.size() / 4, games.size());
+            Set<String> keys = new java.util.TreeSet<>();
+            games.forEach(game -> keys.addAll(game.values.keySet()));
+            System.out.printf(java.util.Locale.ROOT, "Slowest quarter of %s games (%.0f seasons on average) against the "
+                    + "fastest (%.0f), per game, by the difference:%n", archetype,
+                slow.stream().mapToInt(game -> game.seasons).average().orElse(0),
+                fast.stream().mapToInt(game -> game.seasons).average().orElse(0));
+            keys.stream()
+                .map(key -> new Object[] {key, average(slow, key), average(fast, key)})
+                .filter(row -> Math.abs((double) row[1] - (double) row[2]) >= 0.5)
+                .sorted(Comparator.comparingDouble(row -> -((double) row[1] - (double) row[2])))
+                .forEach(row -> System.out.printf(java.util.Locale.ROOT, "  %-55s slow %6.1f  fast %6.1f%n",
+                    row[0], row[1], row[2]));
+        }
+    }
+
+    private static double average(List<GameProfile> games, String key) {
+        return games.stream().mapToInt(game -> game.values.getOrDefault(key, 0)).average().orElse(0);
+    }
+
     private static final class Tally {
+        /** Every completed game's profile, for the slow-game analysis. */
+        final List<GameProfile> profiles = new ArrayList<>();
+        /** Money spent, by kind (launches by label, openings, upgrades), over every game, in thousands. */
+        final Map<String, Integer> spending = new java.util.TreeMap<>();
         /** Contract outcomes by kind, and applications, over every game (design.md 2.11). */
         final Map<String, Integer> contracts = new java.util.TreeMap<>();
         /** The fees less the launch costs of every contract paid, over every game. */
@@ -2313,6 +2422,9 @@ public final class ContentPackPlayouts {
                 longest.get(longest.size() / 2), longest.get(longest.size() * 3 / 4), longest.getLast());
         }
         System.out.println("Departures: " + harness.lastTally.departures);
+        if (Boolean.getBoolean("bot.slowGames")) {
+            slowGameReport(harness.lastTally.profiles);
+        }
         if (!harness.lastTally.aheadRejections.isEmpty()) {
             System.out.println("Later plan flights flown alongside: " + harness.lastTally.aheadLaunches
                 + ", passed over: " + harness.lastTally.aheadRejections);

@@ -1600,6 +1600,17 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
       (quartiles 8 and 12) against the side-missions bot's 22 (14 and 41). With R&D decisions: about 50
       decisions a game, offered in 61 % of quiet seasons, covering 70 % of the median game's longest
       quiet stretch. Spread: NASA's quartiles 79 to 110, the Soviets' 82 to 114, slowest games near 170.
+    - **What makes the slow games slow: a budget snowball** (2026-10-12, `-Dbot.slowGames=true`, the
+      smart bot with decisions, each agency's slowest quarter against its fastest). Slow games stall
+      on funds about 40 seasons a game against 2 to 4, sit in debt 11 seasons against under 1, and spend
+      about 100,000 more on launches (retries after failures). Underneath: prestige at the review of
+      season 32 is half (Soviet 5,900 against 11,900; NASA 9,300 against 14,000), so the funding rate
+      is too (10,800 against 19,500 a season), and the gap widens: at season 64, 13,000 to 16,000 against
+      32,000 to 35,000. Early failures delay the first goals, a lower review follows, then less money
+      for 16 seasons delays the next goals: positive feedback that turns early luck into a lasting
+      lead. R&D waits barely differ (about 45 seasons against 40). Levers, for the user: a dampened
+      or catch-up review, or funding that answers a rival's First (the Sputnik shock raised NASA's
+      budget in 1958), which also keeps a multiplayer race close.
     - **Worth knowing for balance, not verdicts:** a failed flight is cheap enough that launching
       earlier is faster at every bar tried (odds 0.6/0.5, 0.5/0.4, 0.4/0.3: averages 115, 111, 107),
       with astronaut losses about flat; a careful player is not rewarded for waiting. And an idle
