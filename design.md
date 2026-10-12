@@ -1295,7 +1295,7 @@ on purpose: the user wants calculated risk to stay part of the game ("the right 
 failure would steer players into longer R&D waits, which lengthens the lulls again.
 - **Trigger:** a catastrophic step that loses a mission's crew (`MissionProgress`, the same moment as
   `loseCrew`). Not an astronaut perishing in a random event, nor an animal passenger.
-- **Effect:** for the next **4 turns** (`CrewedGrounding.GROUNDING_SEASONS`, *unconfirmed*) no
+- **Effect:** for the next **4 turns** (`CrewedGrounding.GROUNDING_SEASONS`, confirmed by the user 2026-10-12) no
   configuration with crew seats may launch (`MissionLaunchOutcome.CREWED_FLIGHTS_GROUNDED`). A CAPCOM
   on the ground or an animal aboard doesn't make a flight crewed. Uncrewed flights go on, and so do
   flights already launched, including a crewed one launched the same turn as the accident (its launch

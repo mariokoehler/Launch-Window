@@ -801,7 +801,7 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       engineers first, and a **Got it** link puts it away. On a retired advisor the card comes back
       for it alone, captioned "A tip", without the footer. It goes for good once it stops being due
       after it was shown (someone sent to training, or nobody idle), on Got it, or when the player
-      hides the advisor (client marks `idleTipShown`, `idleTipDone`). *Unconfirmed defaults.* Shots
+      hides the advisor (client marks `idleTipShown`, `idleTipDone`). Its timing (as soon as someone out of basic training sits idle, even during the first steps) is confirmed by the user (2026-10-12). Shots
       `advisor-idle-tip.png` (retired) and `advisor-idle-tip-first-steps.png`.
 25. **Looking ahead** *(the user's idea, 2026-10-10: "thinking ahead gives you a big advantage in this
     game"; the user liked all seven proposals and asked for them built at once, without a mockup,

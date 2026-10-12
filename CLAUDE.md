@@ -118,7 +118,7 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   lands the Moon race at a median of 87 (NASA) and 96 (Soviet) seasons; `-Dbot.slowGames=true` compares
   the slowest games with the fastest (a budget snowball, unresolved: the user's call).
 - **A lost crew grounds crewed flights for 4 turns** (the user's decision, 2026-10-12, `design.md`
-  §2.5(j), `rules.CrewedGrounding`; the length unconfirmed), and the advisor has a one-off idle-staff tip
+  §2.5(j), `rules.CrewedGrounding`; 4 turns confirmed), and the advisor has a one-off idle-staff tip
   (`ui-spec.md` component 24). A saved field, a new event and a new refusal reason: reset the dev data
   root, rebuild client and server together.
 - **The answer to a rival's First, the "Sputnik shock"** (the user's decision, 2026-10-12, `design.md`
