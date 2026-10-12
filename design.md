@@ -434,6 +434,14 @@ leading to satellite navigation.
 - **The R-16 disaster** (Baikonur, 24 October 1960) for a later memorial or news context,
   handled with care; **Apollo-Soyuz's crew breathing nitrogen tetroxide fumes** on the way
   down (1975). Both turned up while writing E-05.
+- **Stand-downs after a lost crew** (checked 2026-10-12, for the grounding, §2.5(j)): after the Apollo 1
+  fire (27 January 1967, a ground test) no crew flew until Apollo 7 (11 October 1968), about 20 months,
+  while Apollo 4 (November 1967), Apollo 5 (January 1968) and Apollo 6 (April 1968) flew uncrewed and
+  the command module was redesigned. After Soyuz 1 (24 April 1967) the next crew flew on Soyuz 3
+  (26 October 1968), about 18 months, after uncrewed Soyuz tests (Kosmos 186 and 188's automatic
+  docking in October 1967, Soyuz 2). After Soyuz 11 (30 June 1971) the next crew flew on Soyuz 12
+  (27 September 1973), about 27 months, with the crew now in pressure suits. The game's 4 turns are a
+  year: shorter than history, on purpose.
 - **CAPCOM, the capsule communicator** (the user's question, checked 2026-10-08; shown on mission
   assembly's Mission control card, `HistoryNotes.CAPCOM`): the name comes from Project Mercury,
   when spacecraft were called capsules. Mercury flights were followed by tracking stations around
@@ -1246,6 +1254,33 @@ layouts.
 - No extra randomness. `ExpertRescueApplied` reports each consultation; its "after" value doesn't
   reflect the cap.
 
+**(j) A lost crew grounds crewed flights** (the user's decision, 2026-10-12: "gambling with the lives of
+the astronauts should be where the line is drawn"; built the same day, `rules.CrewedGrounding`). The
+first of the "failures should be a bit more punishing" adjustments (§2.9, "A smarter bot"), kept small
+on purpose: the user wants calculated risk to stay part of the game ("the right stuff"), and a harsher
+failure would steer players into longer R&D waits, which lengthens the lulls again.
+- **Trigger:** a catastrophic step that loses a mission's crew (`MissionProgress`, the same moment as
+  `loseCrew`). Not an astronaut perishing in a random event, nor an animal passenger.
+- **Effect:** for the next **4 turns** (`CrewedGrounding.GROUNDING_SEASONS`, *unconfirmed*) no
+  configuration with crew seats may launch (`MissionLaunchOutcome.CREWED_FLIGHTS_GROUNDED`). A CAPCOM
+  on the ground or an animal aboard doesn't make a flight crewed. Uncrewed flights go on, and so do
+  flights already launched, including a crewed one launched the same turn as the accident (its launch
+  came first). A second loss while grounded starts the count again at 4, never adds.
+- **Counting:** a number of turns on the player's state (`PlayerSnapshot.crewedGroundingSeasons`),
+  counted down at the start of the missions pass, before any flight resolves, so a loss in turn T's
+  resolution refuses crewed launches in exactly turns T+1 to T+4 (`CrewedGroundingTest`).
+- **Shown:** the turn report's People card ("Crewed flights grounded", `CrewedFlightsGrounded`), mission
+  assembly's refusal under the disabled launch button, every crewed mission card's Astronauts check
+  and earliest launch ("waiting on the grounding", component 25), and the help topic "How mission
+  steps are decided" (token `missions.grounding`).
+- **History** (§1.1): the real stand-downs ran 18 to 27 months (6 to 9 seasons). 4 is short of that on
+  purpose; it's the first, small step.
+- **Measured** (the smart bot, 200 games, seed 42; about 1.5 crew losses a game, 1.6 crewed launches
+  refused a game): at 4 turns the average landing moves from 98.8 to 100.5 seasons (with R&D decisions
+  93.7 to 96.9) and the lulls don't change (longest gap a median of 10). At 6 turns, 104.2 (97.2), and
+  the longest gap's upper quartile goes from 13 to 15. The bot doesn't play around it (it would fly
+  uncrewed work meanwhile only by its plan); a player can.
+
 ### 2.6 Prestige, goals & scoring
 
 **(a) BASPM** (`baspm.md` §11): goals are granted by mission steps. Achieving a goal can
@@ -1611,6 +1646,10 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
       lead. R&D waits barely differ (about 45 seasons against 40). Levers, for the user: a dampened
       or catch-up review, or funding that answers a rival's First (the Sputnik shock raised NASA's
       budget in 1958), which also keeps a multiplayer race close.
+    - **The user's answers** (2026-10-12): about 90 turns to win is fine. Failures should punish a
+      little more, but only in small steps: calculated risk fits the theme, and pushing players into
+      R&D lengthens the lulls. The first step is the grounding after a lost crew (§2.5(j)). The idle
+      staff point became an advisor tip (`ui-spec.md` component 24).
     - **Worth knowing for balance, not verdicts:** a failed flight is cheap enough that launching
       earlier is faster at every bar tried (odds 0.6/0.5, 0.5/0.4, 0.4/0.3: averages 115, 111, 107),
       with astronaut losses about flat; a careful player is not rewarded for waiting. And an idle

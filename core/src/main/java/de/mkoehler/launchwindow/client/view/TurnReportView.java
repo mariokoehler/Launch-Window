@@ -654,6 +654,11 @@ public final class TurnReportView {
             } else if (event instanceof de.mkoehler.launchwindow.rules.AmbitionSettled ambition) {
                 String[] text = CareerTexts.report(ambition);
                 lines.add(new Line(text[0], text[1], "Ambition", CareerTexts.tone(ambition)));
+            } else if (event instanceof de.mkoehler.launchwindow.rules.CrewedFlightsGrounded grounded) {
+                lines.add(new Line("Crewed flights grounded", "After the loss of the crew of "
+                    + ContentNames.of(grounded.missionConfigurationId()) + ", no crewed flight may launch for the next "
+                    + grounded.seasons() + " turns while the accident is investigated. Uncrewed flights go on.",
+                    "Grounded", -1));
             } else if (event instanceof PassengerLost lost) {
                 lines.add(new Line(lost.name() + " did not come home", lost.failedStepId() == null
                     ? "The flight had no way home."

@@ -302,6 +302,9 @@ public final class MissionLaunch {
         if (snapshot.getLaunchCap() >= 0 && snapshot.getLaunchesThisWindow() >= snapshot.getLaunchCap()) {
             return MissionLaunchOutcome.LAUNCH_CAP_REACHED;
         }
+        if (CrewedGrounding.grounded(snapshot) && CrewedGrounding.crewed(configuration)) {
+            return MissionLaunchOutcome.CREWED_FLIGHTS_GROUNDED;
+        }
         for (MissionSeason season : configuration.seasons()) {
             for (MissionStep step : season.steps()) {
                 for (MissionStep.ComponentInvolvement involvement : step.componentInvolvements()) {

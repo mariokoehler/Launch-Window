@@ -235,16 +235,28 @@ public final class SpaceComplexScreen extends SessionScreen {
     private void rebuildAdvisor(PlayerSnapshot state) {
         advisorCorner.clearChildren();
         // Nothing to advise on once the game is decided.
-        if (game.advisorRetired() || session.gameInfo().response().decided()) {
+        if (session.gameInfo().response().decided()) {
+            return;
+        }
+        boolean tip = idleTip(state);
+        if (game.advisorRetired() && !tip) {
             return;
         }
         Advisor.Marks marks = new Advisor.Marks(game.helpOpened(), session.latestResolvedTurn() >= 1,
             game.advisorReportRead());
-        if (Advisor.finished(state, session.catalog(), marks)) {
+        if (!game.advisorRetired() && Advisor.finished(state, session.catalog(), marks)) {
             game.retireAdvisor();
-            return;
+            if (!tip) {
+                return;
+            }
         }
-        List<Advisor.Item> open = Advisor.open(state, session.catalog(), marks);
+        // Retired, the card comes back for the idle tip alone.
+        boolean tipOnly = game.advisorRetired();
+        List<Advisor.Item> open = new java.util.ArrayList<>(tipOnly ? List.of()
+            : Advisor.open(state, session.catalog(), marks));
+        if (tip) {
+            open.add(0, Advisor.IDLE_TIP);
+        }
         float inner = ADVISOR_WIDTH - 2 * Theme.SPACE_4;
 
         Table card = new Table();
@@ -258,7 +270,7 @@ public final class SpaceComplexScreen extends SessionScreen {
         head.pad(8f, Theme.SPACE_4, 8f, Theme.SPACE_4);
         head.add(ui.label("ADVISOR", Theme.TextStyle.EYEBROW, Theme.ON_FILL)).left().expandX();
         // Minimized, the head still says how much is left.
-        String caption = !minimized ? "Your first seasons" : open.isEmpty() ? "All set for now"
+        String caption = tipOnly ? "A tip" : !minimized ? "Your first seasons" : open.isEmpty() ? "All set for now"
             : open.size() + (open.size() == 1 ? " thing to do" : " things to do");
         head.add(ui.label(caption, Theme.TextStyle.CAPTION, DIRECTOR)).right().padRight(Theme.SPACE_2);
         // The chevron points the way the card goes: down to minimize, up to open again. The whole
@@ -297,6 +309,18 @@ public final class SpaceComplexScreen extends SessionScreen {
                     Theme.TextStyle.CAPTION, Theme.INK_MUTED)).left().padBottom(Theme.SPACE_3).row();
             }
         }
+        if (tipOnly) {
+            Label gotIt = ui.label("GOT IT", Theme.TextStyle.LABEL, Theme.NAVY);
+            gotIt.setTouchable(Touchable.enabled);
+            gotIt.addListener(clicked(() -> {
+                game.markIdleTipDone();
+                rebuildAdvisor(session.state());
+            }));
+            body.add(gotIt).right();
+            card.add(body).width(ADVISOR_WIDTH).row();
+            advisorCorner.add(card).width(ADVISOR_WIDTH);
+            return;
+        }
         Table rule = new Table();
         rule.setBackground(ui.solid(Theme.NAVY_BORDER));
         body.add(rule).width(inner).height(1f).padBottom(Theme.SPACE_3).row();
@@ -307,11 +331,30 @@ public final class SpaceComplexScreen extends SessionScreen {
         ropes.setTouchable(Touchable.enabled);
         ropes.addListener(clicked(() -> {
             game.retireAdvisor();
+            game.markIdleTipDone();
             rebuildAdvisor(session.state());
         }));
         body.add(ropes).right();
         card.add(body).width(ADVISOR_WIDTH).row();
         advisorCorner.add(card).width(ADVISOR_WIDTH);
+    }
+
+    /**
+     * Whether the advisor's idle tip shows now: the first time someone sits idle after the first
+     * steps, until nobody is idle any more or the player dismisses it; then never again.
+     */
+    private boolean idleTip(PlayerSnapshot state) {
+        if (game.idleTipDone()) {
+            return false;
+        }
+        if (Advisor.idleTipDue(state)) {
+            game.markIdleTipShown();
+            return true;
+        }
+        if (game.idleTipShown()) {
+            game.markIdleTipDone();
+        }
+        return false;
     }
 
     private Table advisorItem(Advisor.Item item, float width) {

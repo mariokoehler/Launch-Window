@@ -151,4 +151,27 @@ class AdvisorTest {
             }
         }
     }
+
+    /**
+     * The idle tip (2026-10-12) waits for the first steps, then comes when someone is idle, points at
+     * their building, and goes once nobody is.
+     */
+    @Test
+    void idleTipComesOnceTheAgencyIsSetUpAndSomeoneIsIdle() {
+        PlayerSnapshot state = soviet();
+        SetSpecialist working = new SetSpecialist("e1", "A. Engineer", 30, 70, 50);
+        SetSpecialist spare = new SetSpecialist("e2", "B. Engineer", 30, 70, 50);
+        state.getSetSpecialists().addAll(List.of(working, spare));
+        assertFalse(Advisor.idleTipDue(state), "not during the first steps");
+
+        working.setRdTargetComponentId("sputnik-1-satellite");
+        working.setRdSlot(0);
+        working.setAssignmentState(de.mkoehler.launchwindow.model.AssignmentState.ASSIGNED);
+        assertTrue(Advisor.idleTipDue(state));
+        assertEquals(Advisor.Destination.SET_CENTRE, Advisor.destination(Advisor.IDLE_TIP, state, PACK));
+        assertFalse(Advisor.ITEMS.contains(Advisor.IDLE_TIP), "never one of the first steps");
+
+        spare.setAssignmentState(de.mkoehler.launchwindow.model.AssignmentState.IN_TRAINING);
+        assertFalse(Advisor.idleTipDue(state));
+    }
 }

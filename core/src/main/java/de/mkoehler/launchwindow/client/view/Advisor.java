@@ -128,6 +128,50 @@ public final class Advisor {
             "Turn report", Destination.TURN_REPORT, List.of("turn-report")));
 
     /**
+     * A one-off tip apart from the first steps (the user's idea, 2026-10-12): the first time someone
+     * out of basic training sits idle once the agency is set up, the card says so, even after the
+     * first steps are done. Idle people lose morale every season and resign at the floor, and new
+     * players don't know that training is free. It never counts toward {@link #finished}.
+     */
+    public static final Item IDLE_TIP = new Item("idle-staff", "Keep idle people busy",
+        "Anyone idle loses " + de.mkoehler.launchwindow.rules.PersonnelLifecycle.IDLE_MORALE_LOSS_PER_SEASON
+            + " morale a season and resigns at " + de.mkoehler.launchwindow.rules.PersonnelLifecycle.RESIGNATION_MORALE_FLOOR
+            + ". Training is free and raises skills: send whoever waits for work to training, or put engineers on R&D.",
+        "Their building", Destination.SET_CENTRE, List.of("morale", "training"));
+
+    /**
+     * Returns whether the idle tip is due now: the agency is past its first steps (someone is on R&amp;D
+     * or a mission has flown) and someone out of basic training is idle.
+     *
+     * @param state the player's state
+     * @return whether it's due
+     */
+    public static boolean idleTipDue(PlayerSnapshot state) {
+        boolean setUp = flown(state) || state.getSetSpecialists().stream()
+            .map(SetSpecialist::getRdTargetComponentId).anyMatch(id -> id != null);
+        return setUp && idleDestination(state) != null;
+    }
+
+    /** The building of the first group with someone idle, engineers first, or {@code null} if nobody is. */
+    private static Destination idleDestination(PlayerSnapshot state) {
+        if (state.getSetSpecialists().stream().anyMatch(Advisor::idle)) {
+            return Destination.SET_CENTRE;
+        }
+        if (state.getAstronauts().stream().anyMatch(Advisor::idle)) {
+            return Destination.ASTRONAUT_COMPLEX;
+        }
+        if (state.getMissionControlOfficers().stream().anyMatch(Advisor::idle)) {
+            return Destination.MISSION_CONTROL;
+        }
+        return null;
+    }
+
+    private static boolean idle(de.mkoehler.launchwindow.model.Personnel person) {
+        return person.getAssignmentState() == de.mkoehler.launchwindow.model.AssignmentState.IDLE
+            && person.getUnavailableSeasons() == 0;
+    }
+
+    /**
      * Returns where an item stands.
      *
      * @param item    the item
@@ -261,6 +305,10 @@ public final class Advisor {
      * @return the destination
      */
     public static Destination destination(Item item, PlayerSnapshot state, ContentCatalog catalog) {
+        if (item == IDLE_TIP) {
+            Destination idle = idleDestination(state);
+            return idle == null ? item.destination() : idle;
+        }
         if (item.id().equals("raise-reliability")) {
             double payload = bestPayload(state, catalog);
             double rocket = bestRocket(state, catalog);

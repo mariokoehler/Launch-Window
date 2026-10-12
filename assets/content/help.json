@@ -286,7 +286,7 @@
         "If the first roll fails, the flight controllers get a saving throw: the step's chance, scaled by the skills of the consoles it involves. If it works, the glitch is solved and the step counts as a success. If not, it's one of:",
         "- a minor glitch ({missions.minor} % of the time): half the step's prestige, and the mission goes on;",
         "- a failure ({missions.failure} %): the mission ends;",
-        "- a catastrophe ({missions.catastrophic} %): on a step that puts the crew at risk, the mission ends and the whole crew is lost. On other steps it counts as a failure.",
+        "- a catastrophe ({missions.catastrophic} %): on a step that puts the crew at risk, the mission ends and the whole crew is lost. On other steps it counts as a failure. Losing a crew grounds your crewed flights for the next {missions.grounding} turns while the accident is investigated; uncrewed flights go on, as Apollo 4, 5 and 6 did after the Apollo 1 fire.",
         "Experts can improve the saving throw, and each team's chemistry scales its contribution.",
         "## After each season",
         "Each component's reliability moves with how it did: success and minor glitches raise it toward its maximum, a failure lowers it, never below where it started. Every astronaut aboard grows all their skills, and each controller the skills their console used."

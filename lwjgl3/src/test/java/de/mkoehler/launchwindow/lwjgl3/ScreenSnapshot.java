@@ -252,6 +252,10 @@ public final class ScreenSnapshot {
             frontPageShots(folder, game);
             return;
         }
+        if ("grounding".equals(System.getProperty("shots"))) {
+            groundingShots(folder, game);
+            return;
+        }
         write(folder, "connect-default.png", new ConnectScreen(game), null);
         write(folder, "connect-connecting.png", filledConnect(game), screen -> screen.setBusy(true));
         write(folder, "connect-wrong-password.png", filledConnect(game), screen -> screen.applyLoginResult(
@@ -428,6 +432,48 @@ public final class ScreenSnapshot {
         contractShots(folder, game);
         handsOnShots(folder, game);
         frontPageShots(folder, game);
+        groundingShots(folder, game);
+    }
+
+    /**
+     * Crewed flights grounded after a crew was lost (design.md 2.5(j), 2026-10-12): the launch screen's
+     * refusal, the mission cards' readiness, and the turn report's line; then the advisor's idle tip
+     * (2026-10-12), on the retired advisor and on top of the first steps.
+     */
+    private static void groundingShots(File folder, LaunchWindowGame game) {
+        String hash = ContentPackHash.ofClasspath("content/early-era", ScreenSnapshot.class.getClassLoader());
+        GameInfoResponse info = GameInfoResponse.success("early-era", hash, List.of(), 1, true,
+            6 * 3_600_000L + 12 * 60_000L + 30_000L, 0L, null, List.of(), List.of(), 0);
+        PlayerSnapshot grounded = planningState(11, 25_000);
+        grounded.setCrewedGroundingSeasons(3);
+        startSession(game, grounded, info);
+        write(folder, "grounding-assemble.png", new AssembleMissionScreen(game, "vostok-orbital"), null);
+        write(folder, "grounding-configs.png", new MissionConfigsScreen(game, "vostok"), null);
+        TurnReport report = TurnReport.build(grounded, grounded, List.of(
+            new de.mkoehler.launchwindow.rules.CrewedFlightsGrounded("m3", "vostok-orbital", 4)), 22,
+            game.session().catalog());
+        game.session().keepReport(report);
+        write(folder, "grounding-report.png", new TurnReportScreen(game, report), null);
+
+        java.util.Set<String> marks = new java.util.HashSet<>(java.util.Set.of("helpOpened", "advisorRetired"));
+        game.useAdvisorMarksInMemory(marks);
+        PlayerSnapshot idle = new PlayerSnapshot("Orion Spaceworks", Archetype.NASA, 23_350, 250, 3_000, 1);
+        idle.setDirectorName("A. Reyes");
+        SetSpecialist working = new SetSpecialist("e1", "R. Hale", 34, 70, 50);
+        working.setRdTargetComponentId("explorer-1-satellite");
+        working.setRdSlot(0);
+        working.setAssignmentState(de.mkoehler.launchwindow.model.AssignmentState.ASSIGNED);
+        idle.getSetSpecialists().add(working);
+        idle.getSetSpecialists().add(new SetSpecialist("e2", "M. Brandt", 29, 70, 50));
+        idle.getOpenedProgramIds().add("explorer-1");
+        idle.getMissionComponents().put("explorer-1-satellite", new OwnedMissionComponent(41.7, 3));
+        startSession(game, idle, info);
+        write(folder, "advisor-idle-tip.png", new SpaceComplexScreen(game), null);
+        marks.clear();
+        marks.add("helpOpened");
+        startSession(game, idle, info);
+        write(folder, "advisor-idle-tip-first-steps.png", new SpaceComplexScreen(game), null);
+        game.useAdvisorMarksInMemory(new java.util.HashSet<>());
     }
 
     /**

@@ -383,8 +383,17 @@ public final class Outlook {
         }
         int astronauts = Missions.crewCount(configuration) + Missions.capcomCount(configuration);
         if (astronauts > 0) {
-            checks.add(peopleCheck("Astronauts", "astronauts", astronauts, state.getAstronauts(),
-                TrainingProgress.ASTRONAUT_BASIC_TRAINING_SEASONS));
+            Check crew = peopleCheck("Astronauts", "astronauts", astronauts, state.getAstronauts(),
+                TrainingProgress.ASTRONAUT_BASIC_TRAINING_SEASONS);
+            // After a crew is lost, the crew waits out the grounding (design.md 2.5(j)): part of this
+            // check, so a crewed card keeps its row of checks.
+            int grounding = state.getCrewedGroundingSeasons();
+            if (de.mkoehler.launchwindow.rules.CrewedGrounding.crewed(configuration)
+                    && de.mkoehler.launchwindow.rules.CrewedGrounding.grounded(state)
+                    && crew.status() != Status.BLOCKED && grounding > crew.seasons()) {
+                crew = new Check("Astronauts", Status.WAITING, grounding, groundingText(grounding));
+            }
+            checks.add(crew);
         }
         int controllers = Missions.controllerCount(configuration);
         if (controllers > 0) {
@@ -410,6 +419,18 @@ public final class Outlook {
             }
         }
         return new Readiness(checks, OptionalInt.of(earliest), limiter);
+    }
+
+    /**
+     * Says how long crewed flights stay grounded after a crew was lost, for a refusal or a check.
+     *
+     * @param seasons the turns left, this one included
+     * @return the sentence
+     */
+    public static String groundingText(int seasons) {
+        return "Crewed flights are grounded after the loss of a crew: "
+            + (seasons == 1 ? "they may fly again next turn." : "they may fly again in " + seasons + " turns.")
+            + " Uncrewed flights go on.";
     }
 
     private static boolean worse(Check a, Check b) {

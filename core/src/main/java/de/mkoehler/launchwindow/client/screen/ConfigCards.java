@@ -209,6 +209,10 @@ final class ConfigCards {
     }
 
     private static String waitingOn(Outlook.Check check) {
+        // The astronauts' check also carries a grounding after a lost crew (design.md 2.5(j)).
+        if (check.detail().equals(Outlook.groundingText(check.seasons()))) {
+            return "the grounding";
+        }
         return switch (check.label()) {
             case "Payload" -> "payload R&D";
             case "Rocket" -> "rocket R&D";

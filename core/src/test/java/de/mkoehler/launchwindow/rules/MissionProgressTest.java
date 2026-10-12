@@ -675,6 +675,9 @@ class MissionProgressTest {
         assertTrue(snapshot.getAstronauts().isEmpty());
         assertTrue(snapshot.getInProgressMissions().isEmpty());
         assertEquals(2, snapshot.getMemorial().size(), "both are remembered");
+        assertEquals(CrewedGrounding.GROUNDING_SEASONS, snapshot.getCrewedGroundingSeasons(),
+            "losing a crew grounds crewed flights");
+        assertEquals(1, events.stream().filter(CrewedFlightsGrounded.class::isInstance).count());
         for (MemorialEntry remembered : snapshot.getMemorial()) {
             assertEquals(MemorialEntry.Cause.MISSION, remembered.cause());
             assertEquals("catastrophic-std", remembered.missionConfigurationId());

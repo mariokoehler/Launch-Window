@@ -791,6 +791,17 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
     - *As built:* `client.view.Advisor` (`AdvisorTest`), the card in `SpaceComplexScreen`, the marks
       in `LaunchWindowGame`. Shots `advisor-*.png` (`advisor-reliability.png` and `advisor-ready.png`
       for the bar); every other hub shot shows the card too.
+    - **The idle tip** (the user's idea, 2026-10-12; built without a mockup, it's one more item on the
+      card): "Keep idle people busy", with the morale numbers from the rules (idle loses 2 a season,
+      resigns at 35) and that training is free. It's a one-off apart from the first steps
+      (`Advisor.IDLE_TIP`, never in `ITEMS`, never counted toward retiring): due once the agency is set
+      up (someone on R&D or a mission flown) and someone out of basic training is idle and available
+      (`Advisor.idleTipDue`). It goes first on the card; its Go link ("Their building") opens the
+      building of the first group with someone idle, engineers first. On a retired advisor the card
+      comes back for it alone, captioned "A tip", with **Got it** instead of the footer. It goes for
+      good once nobody is idle after it was shown, or on Got it, or when the player hides the advisor
+      (client marks `idleTipShown`, `idleTipDone`). *Unconfirmed defaults.* Shots
+      `advisor-idle-tip.png` (retired) and `advisor-idle-tip-first-steps.png`.
 25. **Looking ahead** *(the user's idea, 2026-10-10: "thinking ahead gives you a big advantage in this
     game"; the user liked all seven proposals and asked for them built at once, without a mockup,
     since each extends a component that exists).* Every season count comes from the rules, never the
@@ -1430,7 +1441,12 @@ while building it, **confirmed by the user (2026-10-06)**:
   where the story has one. The card's caption is now "This season". A season without stories shows
   only the random events.
 - **A lost passenger (built 2026-10-06):** the People column says "Laika did not come home", with
-  "The flight had no way home." or the step that failed (`PassengerLost` event).
+  "The flight had no way home." or the step that failed (`PassengerLost` event).
+- **A grounding (built 2026-10-12, `design.md` §2.5(j)):** after a crew is lost, the People column says
+  "Crewed flights grounded" (tag GROUNDED, red): no crewed flight may launch for the next N turns while the
+  accident is investigated; uncrewed flights go on (`CrewedFlightsGrounded` event). Mission assembly gives
+  the turns left under its disabled launch button, and every crewed mission card waits on the grounding in
+  its Astronauts check and earliest launch (component 25). Shots `grounding-*.png` (`-Dshots=grounding`).
 - **Blueprints in the R&D card (built 2026-10-09, user's idea after BASPM's end-of-season R&D
   screen):** each component's entry opens with its blueprint drawing
   (`assets/ui/blueprints/<component-id>.jpg`, 864 x 352) across the full card width, at its own

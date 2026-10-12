@@ -477,6 +477,10 @@ public final class AssembleMissionScreen extends ChromeScreen {
         if (check == MissionLaunchOutcome.INSUFFICIENT_FUNDS) {
             return "Not enough funds: " + money(total - session.state().getFunds()) + " short.";
         }
+        if (check == MissionLaunchOutcome.CREWED_FLIGHTS_GROUNDED) {
+            return de.mkoehler.launchwindow.client.view.Outlook.groundingText(
+                session.state().getCrewedGroundingSeasons());
+        }
         return Refusals.text(check.name());
     }
 

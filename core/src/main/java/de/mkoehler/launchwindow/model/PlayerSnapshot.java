@@ -54,6 +54,8 @@ public class PlayerSnapshot {
     private List<GoalRecord> goalRecords = new ArrayList<>();
     private int lastFlightSeasonTurn = -1;
     private int lastFailureTurn = -1;
+    /** Turns crewed launches stay grounded after a crew was lost ({@code CrewedGrounding}); 0 when they may fly. */
+    private int crewedGroundingSeasons;
     private double rdResultsMultiplier = 1.0;
     private int rdResultsSeasonsRemaining;
     private double costMultiplier = 1.0;
@@ -1001,6 +1003,29 @@ public class PlayerSnapshot {
      */
     public void setLastFailureTurn(int lastFailureTurn) {
         this.lastFailureTurn = lastFailureTurn;
+    }
+
+    /**
+     * Returns how many more turns crewed launches stay grounded after a crew was lost
+     * ({@code design.md} &sect;2.5(j)).
+     *
+     * @return the turns, 0 when crewed flights may launch
+     */
+    public int getCrewedGroundingSeasons() {
+        return crewedGroundingSeasons;
+    }
+
+    /**
+     * Sets how many more turns crewed launches stay grounded.
+     *
+     * @param crewedGroundingSeasons the turns, 0 or more
+     * @throws IllegalArgumentException if negative
+     */
+    public void setCrewedGroundingSeasons(int crewedGroundingSeasons) {
+        if (crewedGroundingSeasons < 0) {
+            throw new IllegalArgumentException("crewedGroundingSeasons must not be negative: " + crewedGroundingSeasons);
+        }
+        this.crewedGroundingSeasons = crewedGroundingSeasons;
     }
 
     /**

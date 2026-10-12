@@ -93,5 +93,11 @@ public enum MissionLaunchOutcome {
      * The configuration needs a goal the player hasn't achieved or cancelled yet
      * ({@link de.mkoehler.launchwindow.content.MissionConfiguration#requiredGoalIds()}).
      */
-    GOAL_NOT_REACHED
+    GOAL_NOT_REACHED,
+
+    /**
+     * A crewed flight while the agency's crewed flights are grounded after a crew was lost
+     * ({@link CrewedGrounding}). Appended last: Kryo sends enums by ordinal.
+     */
+    CREWED_FLIGHTS_GROUNDED
 }

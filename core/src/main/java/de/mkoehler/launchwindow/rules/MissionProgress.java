@@ -160,6 +160,8 @@ public final class MissionProgress {
         // ("the same turn evaluation"), never persisted on the snapshot; shared across every
         // mission/step this call processes, since the Expert pool is roster-wide, not mission-scoped.
         Map<String, Integer> expertUseCounts = new LinkedHashMap<>();
+        // Before any flight resolves, so a loss this pass grounds exactly the next N turns.
+        CrewedGrounding.countDown(snapshot);
 
         for (InProgressMission mission : snapshot.getInProgressMissions().values()) {
             advanceOne(snapshot, catalog, random, mission, events, endedMissionIds, expertUseCounts, goalTally,
@@ -234,6 +236,9 @@ public final class MissionProgress {
                 if (outcome == MissionStepOutcome.CATASTROPHIC) {
                     crewLost = !mission.crewIds().isEmpty();
                     loseCrew(snapshot, mission, step, gameTurn, events);
+                    if (crewLost) {
+                        CrewedGrounding.ground(snapshot, mission, events);
+                    }
                 }
                 break;
             }

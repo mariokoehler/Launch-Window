@@ -173,6 +173,7 @@ public final class HelpValues {
         v.put("missions.blendAbove", whole(Math.round(MissionStepResolution.CREW_BLEND_HARDWARE_THRESHOLD)));
         v.put("missions.crewWeight", whole(Math.round(MissionStepResolution.CREW_BLEND_WEIGHT * 100)));
         v.put("missions.catastrophic", whole(Math.round(MissionStepResolution.CATASTROPHIC_BAND_FRACTION * 100)));
+        v.put("missions.grounding", whole(de.mkoehler.launchwindow.rules.CrewedGrounding.GROUNDING_SEASONS));
         v.put("missions.failure", whole(Math.round(MissionStepResolution.FAILURE_BAND_FRACTION * 100)));
         v.put("missions.minor", whole(Math.round((1 - MissionStepResolution.CATASTROPHIC_BAND_FRACTION
             - MissionStepResolution.FAILURE_BAND_FRACTION) * 100)));

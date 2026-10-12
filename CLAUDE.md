@@ -114,6 +114,13 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   (outside the pack, `FrontPagesTest`). Mocked up in Photocraft (`assets-raw/frontpage/mockup/`), not
   Claude Design. A new message pair and a new refusal reason: rebuild client and server together (no
   reset needed). Names are now capped at 32 characters.
+- **The smart bot** (2026-10-12, `design.md` §2.9 "A smarter bot"): `ContentPackPlayouts standard smart`
+  lands the Moon race at a median of 87 (NASA) and 96 (Soviet) seasons; `-Dbot.slowGames=true` compares
+  the slowest games with the fastest (a budget snowball, unresolved: the user's call).
+- **A lost crew grounds crewed flights for 4 turns** (the user's decision, 2026-10-12, `design.md`
+  §2.5(j), `rules.CrewedGrounding`; the length unconfirmed), and the advisor has a one-off idle-staff tip
+  (`ui-spec.md` component 24). A saved field, a new event and a new refusal reason: reset the dev data
+  root, rebuild client and server together.
 
 ## How we work
 

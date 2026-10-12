@@ -305,6 +305,39 @@ public class LaunchWindowGame extends Game {
     }
 
     /**
+     * Returns whether the advisor's idle tip is done for this player on this device: shown and acted
+     * on, dismissed, or the advisor hidden ({@code Advisor.IDLE_TIP}).
+     *
+     * @return whether it's done
+     */
+    public boolean idleTipDone() {
+        return flag("idleTipDone");
+    }
+
+    /**
+     * Returns whether the advisor's idle tip has been shown.
+     *
+     * @return whether it has
+     */
+    public boolean idleTipShown() {
+        return flag("idleTipShown");
+    }
+
+    /**
+     * Marks the advisor's idle tip as shown.
+     */
+    public void markIdleTipShown() {
+        setFlag("idleTipShown");
+    }
+
+    /**
+     * Marks the advisor's idle tip as done: it never shows again.
+     */
+    public void markIdleTipDone() {
+        setFlag("idleTipDone");
+    }
+
+    /**
      * Returns whether the advisor's card is minimized to its head. Kept for this client run only,
      * so a fresh start shows the whole card again.
      *

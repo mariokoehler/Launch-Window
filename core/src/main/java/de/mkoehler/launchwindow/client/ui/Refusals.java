@@ -87,6 +87,7 @@ public final class Refusals {
         Map.entry("WRONG_CAPCOM_COUNT", "Fill every slot the mission uses."),
         Map.entry("CAPCOM_NOT_AVAILABLE", "CAPCOM needs a free astronaut who isn't in the crew."),
         Map.entry("LAUNCH_CAP_REACHED", "No more launches this turn: the launch window is full."),
+        Map.entry("CREWED_FLIGHTS_GROUNDED", "Crewed flights are grounded after the loss of a crew."),
         Map.entry("MISSION_COMPONENT_UNAVAILABLE", "A component is grounded this turn."),
         Map.entry("WRONG_ROCKET_COUNT", "Pick a rocket for every launch."),
         Map.entry("ROCKET_NOT_AVAILABLE", "Pick a rocket for every launch."),
