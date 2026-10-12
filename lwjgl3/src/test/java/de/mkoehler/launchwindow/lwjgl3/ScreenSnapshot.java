@@ -257,6 +257,10 @@ public final class ScreenSnapshot {
             groundingShots(folder, game);
             return;
         }
+        if ("rival".equals(System.getProperty("shots"))) {
+            rivalFirstsShots(folder, game);
+            return;
+        }
         write(folder, "connect-default.png", new ConnectScreen(game), null);
         write(folder, "connect-connecting.png", filledConnect(game), screen -> screen.setBusy(true));
         write(folder, "connect-wrong-password.png", filledConnect(game), screen -> screen.applyLoginResult(
@@ -434,6 +438,36 @@ public final class ScreenSnapshot {
         handsOnShots(folder, game);
         frontPageShots(folder, game);
         groundingShots(folder, game);
+        rivalFirstsShots(folder, game);
+    }
+
+    /**
+     * The answer to rivals' Firsts (design.md 2.1(e), 2026-10-12): the turn report's budget card with
+     * the government's answer, one where the same season's review counted it, and the Public Affairs
+     * Office's review card with a credit waiting.
+     */
+    private static void rivalFirstsShots(File folder, LaunchWindowGame game) {
+        String hash = ContentPackHash.ofClasspath("content/early-era", ScreenSnapshot.class.getClassLoader());
+        GameInfoResponse info = GameInfoResponse.success("early-era", hash, List.of(), 1, true,
+            6 * 3_600_000L + 12 * 60_000L + 30_000L, 0L, null, List.of(), List.of(), 0);
+        PlayerSnapshot behind = planningState(11, 25_000);
+        behind.setRivalFirstsCredit(2_375);
+        startSession(game, behind, info);
+        write(folder, "rival-firsts-pao.png", new PublicAffairsScreen(game), null);
+        TurnReport report = TurnReport.build(behind, behind, List.of(
+            new de.mkoehler.launchwindow.rules.RivalFirstsAnswered(List.of("human-in-orbit", "human-in-space"), 1_500,
+                2_375),
+            new de.mkoehler.launchwindow.rules.SeasonFundsSettled(9_800, 10_800, 25_000, null)), 22,
+            game.session().catalog());
+        game.session().keepReport(report);
+        write(folder, "rival-firsts-report.png", new TurnReportScreen(game, report), null);
+        TurnReport reviewed = TurnReport.build(behind, behind, List.of(
+            new de.mkoehler.launchwindow.rules.RivalFirstsAnswered(List.of("human-in-orbit"), 1_500, 2_375),
+            new de.mkoehler.launchwindow.rules.BudgetReviewed(2, 5_900, 0, 12_700, 2_375),
+            new de.mkoehler.launchwindow.rules.SeasonFundsSettled(9_800, 12_700, 25_000, null)), 32,
+            game.session().catalog());
+        game.session().keepReport(reviewed);
+        write(folder, "rival-firsts-review.png", new TurnReportScreen(game, reviewed), null);
     }
 
     /**

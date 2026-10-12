@@ -471,34 +471,86 @@ public final class ContentPackPlayouts {
     }
 
     private void playGame(Archetype archetype, int seasons, Random random, Tally tally) {
-        PlayerSnapshot snapshot = new PlayerSnapshot("Bot " + archetype, archetype, schedule.initialFunds(),
-            schedule.initialPrestige(), schedule.initialFundingRate(), 1);
-        HiringPool.refreshCandidates(snapshot, random);
-        hireBest(snapshot, PersonnelGroup.ASTRONAUT, STARTING_ASTRONAUTS, random, tally);
-        hireBest(snapshot, PersonnelGroup.MISSION_CONTROL, STARTING_CONTROLLERS, random, tally);
-        hireBest(snapshot, PersonnelGroup.SET, STARTING_SPECIALISTS, random, tally);
+        Game game = new Game(archetype, seasons, random, tally);
         GoalTally goalTally = new GoalTally();
-        Set<String> reached = new HashSet<>();
-        sideId = null;
-        sideRocketId = null;
-        sideGivenUp.clear();
-        researchSince.clear();
-        List<Integer> gaps = new ArrayList<>();
-        int sinceLaunch = 0;
-        // Random events seen this game, good then bad (2026-10-10, sizing the news stories).
-        int[] randomEvents = new int[2];
-        // R&D decisions this game (2026-10-10): per season, whether one was offered and whether it flew.
-        List<boolean[]> decisionSeasons = new ArrayList<>();
-        // The contract market's board and clients used, with contracts (design.md 2.11).
-        List<de.mkoehler.launchwindow.model.ContractListing> board = new ArrayList<>();
-        List<String> usedClients = new ArrayList<>();
-        gameNumber++;
-        // A profile of this game, from the tally's counts before and after it (the slow-game analysis).
-        GameProfile profile = new GameProfile(archetype, new java.util.HashMap<>(tally.stalls), new java.util.HashMap<>(tally.launches),
-            new java.util.HashMap<>(tally.targetSeasons), new java.util.HashMap<>(tally.randomEventKinds), new java.util.HashMap<>(tally.stepOutcomes),
-            tally.astronautsLost, new java.util.HashMap<>(tally.spending));
-
         for (int season = 0; season < seasons; season++) {
+            goalTally.commit(game.season(season, goalTally, List.of()));
+            if (game.completedSeason > 0) {
+                return;
+            }
+        }
+        game.unfinished(seasons);
+    }
+
+    /**
+     * Starts a game for a race between harnesses ({@link RaceShock}): each agency plays on its own
+     * harness, which keeps its bot's state, and the race shares the goal tally between them.
+     *
+     * @param archetype the agency
+     * @param seasons   the most seasons it runs
+     * @param random    the agency's own random source
+     * @return the game, to play a season at a time
+     */
+    Game startRaceGame(Archetype archetype, int seasons, Random random) {
+        if (lastTally == null) {
+            lastTally = new Tally();
+        }
+        lastTally.gamesByArchetype.merge(archetype, 1, Integer::sum);
+        return new Game(archetype, seasons, random, lastTally);
+    }
+
+    /** One agency's game, played a season at a time. */
+    final class Game {
+        final PlayerSnapshot snapshot;
+        private final Archetype archetype;
+        private final int seasons;
+        private final Random random;
+        private final Tally tally;
+        private final Set<String> reached = new HashSet<>();
+        private final List<Integer> gaps = new ArrayList<>();
+        private int sinceLaunch;
+        // Random events seen this game, good then bad (2026-10-10, sizing the news stories).
+        private final int[] randomEvents = new int[2];
+        // R&D decisions this game (2026-10-10): per season, whether one was offered and whether it flew.
+        private final List<boolean[]> decisionSeasons = new ArrayList<>();
+        // The contract market's board and clients used, with contracts (design.md 2.11).
+        private List<de.mkoehler.launchwindow.model.ContractListing> board = new ArrayList<>();
+        private final List<String> usedClients = new ArrayList<>();
+        // A profile of this game, from the tally's counts before and after it (the slow-game analysis).
+        private final GameProfile profile;
+        /** The season every declared goal was reached in, 0 while some aren't. */
+        int completedSeason;
+
+        Game(Archetype archetype, int seasons, Random random, Tally tally) {
+            this.seasons = seasons;
+            this.archetype = archetype;
+            this.random = random;
+            this.tally = tally;
+            snapshot = new PlayerSnapshot("Bot " + archetype, archetype, schedule.initialFunds(),
+                schedule.initialPrestige(), schedule.initialFundingRate(), 1);
+            HiringPool.refreshCandidates(snapshot, random);
+            hireBest(snapshot, PersonnelGroup.ASTRONAUT, STARTING_ASTRONAUTS, random, tally);
+            hireBest(snapshot, PersonnelGroup.MISSION_CONTROL, STARTING_CONTROLLERS, random, tally);
+            hireBest(snapshot, PersonnelGroup.SET, STARTING_SPECIALISTS, random, tally);
+            sideId = null;
+            sideRocketId = null;
+            sideGivenUp.clear();
+            researchSince.clear();
+            gameNumber++;
+            profile = new GameProfile(archetype, new java.util.HashMap<>(tally.stalls), new java.util.HashMap<>(tally.launches),
+                new java.util.HashMap<>(tally.targetSeasons), new java.util.HashMap<>(tally.randomEventKinds), new java.util.HashMap<>(tally.stepOutcomes),
+                tally.astronautsLost, new java.util.HashMap<>(tally.spending));
+        }
+
+        /**
+         * Plays one season: the bot's actions, then the season pass.
+         *
+         * @param season      the season, from 0; it's also the game turn
+         * @param goalTally   the game-wide goal counts; the caller commits the season's events to it
+         * @param rivalFirsts the goals other agencies settled first last season
+         * @return the season's events
+         */
+        List<ResolutionEvent> season(int season, GoalTally goalTally, List<String> rivalFirsts) {
             // Journaled player actions first.
             tally.launchedThisSeason = 0;
             seasonNow = season;
@@ -522,10 +574,9 @@ public final class ContentPackPlayouts {
             }
             // One player per game, so the game turn and the player's own seasons coincide here.
             SeasonResolver.Context context = new SeasonResolver.Context(catalog, schedule, roster, goalTally, season,
-                season + 1, List.of(), contracts);
+                season + 1, List.of(), contracts, rivalFirsts);
             BudgetWatch watch = new BudgetWatch();
             List<ResolutionEvent> seasonEvents = SeasonResolver.advanceSeason(snapshot, context, random, watch);
-            goalTally.commit(seasonEvents);
             checkState(snapshot);
             if (sizeLargest != null) {
                 measure(snapshot, season);
@@ -608,11 +659,20 @@ public final class ContentPackPlayouts {
                 tally.randomEventsPerGame.add(new int[] {randomEvents[0], randomEvents[1], season + 1});
                 tally.decisionSeasons.add(decisionSeasons);
                 tally.profiles.add(profile.finish(tally, season + 1));
-                return;
+                completedSeason = season + 1;
             }
+            return seasonEvents;
         }
-        tally.randomEventsPerGame.add(new int[] {randomEvents[0], randomEvents[1], seasons});
-        tally.decisionSeasons.add(decisionSeasons);
+
+        /**
+         * Records a game that ran out of seasons.
+         *
+         * @param seasons the seasons played
+         */
+        void unfinished(int seasons) {
+            tally.randomEventsPerGame.add(new int[] {randomEvents[0], randomEvents[1], seasons});
+            tally.decisionSeasons.add(decisionSeasons);
+        }
     }
 
     /**

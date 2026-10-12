@@ -1,5 +1,7 @@
 package de.mkoehler.launchwindow.content;
 
+import de.mkoehler.launchwindow.model.Archetype;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -35,6 +37,8 @@ public final class ContentCatalog {
     private final Map<String, Goal> goalsById;
     private final BuildingSchedule buildings;
     private final Map<String, Commercial> commercialsByProgramId;
+    private final Map<Archetype, java.util.Set<String>> reachableGoals =
+        new java.util.concurrent.ConcurrentHashMap<>();
 
     /**
      * Builds and validates a catalog from the given content definitions.
@@ -149,6 +153,42 @@ public final class ContentCatalog {
      */
     public Optional<Goal> goal(String id) {
         return Optional.ofNullable(goalsById.get(id));
+    }
+
+    /**
+     * Returns every goal a player of an archetype can earn: those a step of a configuration achieves
+     * whose program is open to them, and every goal those credit through their cascades. Worked out
+     * once per archetype.
+     *
+     * @param archetype the player's archetype
+     * @return the goal ids, unmodifiable
+     * @throws NullPointerException if {@code archetype} is {@code null}
+     */
+    public java.util.Set<String> reachableGoals(Archetype archetype) {
+        Objects.requireNonNull(archetype, "archetype must not be null");
+        return reachableGoals.computeIfAbsent(archetype, key -> {
+            java.util.Set<String> goals = new java.util.LinkedHashSet<>();
+            java.util.Deque<String> open = new java.util.ArrayDeque<>();
+            for (MissionConfiguration configuration : missionConfigurationsById.values()) {
+                Program program = programsById.get(configuration.programId());
+                if (program == null || !program.availableTo(key)) {
+                    continue;
+                }
+                for (MissionSeason season : configuration.seasons()) {
+                    for (MissionStep step : season.steps()) {
+                        open.addAll(step.goalIdsAchieved());
+                    }
+                }
+            }
+            while (!open.isEmpty()) {
+                String goalId = open.pop();
+                Goal goal = goalsById.get(goalId);
+                if (goal != null && goals.add(goalId)) {
+                    open.addAll(goal.cancelsGoalIds());
+                }
+            }
+            return java.util.Collections.unmodifiableSet(goals);
+        });
     }
 
     /**

@@ -16,6 +16,7 @@ import de.mkoehler.launchwindow.rules.FrontPagePrinter;
 import de.mkoehler.launchwindow.rules.GoalTally;
 import de.mkoehler.launchwindow.rules.IntelFinding;
 import de.mkoehler.launchwindow.rules.IntelligenceBoard;
+import de.mkoehler.launchwindow.rules.RivalFirsts;
 import de.mkoehler.launchwindow.rules.WinCondition;
 import de.mkoehler.launchwindow.server.GameSeeds;
 
@@ -241,13 +242,15 @@ public class TurnScheduler {
             }
         }
         GoalTally tally = GoalTally.fromPlayers(startOfTurn);
+        // Last turn's Firsts, read from the start of this turn, so a retry answers the same ones (design.md 2.1(e)).
+        List<String> rivalFirsts = RivalFirsts.settledFirstOn(startOfTurn, Math.toIntExact(gameTurn - 1));
         Map<String, List<IntelFinding>> intelligence = intelligence(gameTurn, meta, withActions);
         ContractMarket.Settlement market = market(gameTurn, meta, withActions, startByKey);
         for (Map.Entry<String, PlayerStateService> player : services.entrySet()) {
             String key = GameSeeds.rivalKey(meta.getGameSeed(), player.getKey());
             player.getValue().resolveTurn(gameTurn, tally, roster,
                 GameSeeds.forSeason(meta.getGameSeed(), gameTurn, player.getKey()),
-                intelligence.getOrDefault(key, List.of()), market.turnFor(key));
+                intelligence.getOrDefault(key, List.of()), market.turnFor(key), rivalFirsts);
         }
         printFrontPages(gameTurn, meta, services);
         recordResultIfDecided(gameTurn, meta, services);

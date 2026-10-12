@@ -56,6 +56,8 @@ public class PlayerSnapshot {
     private int lastFailureTurn = -1;
     /** Turns crewed launches stay grounded after a crew was lost ({@code CrewedGrounding}); 0 when they may fly. */
     private int crewedGroundingSeasons;
+    /** Prestige the next funding review adds for rivals' Firsts ({@code RivalFirsts}); cleared by the review. */
+    private long rivalFirstsCredit;
     private double rdResultsMultiplier = 1.0;
     private int rdResultsSeasonsRemaining;
     private double costMultiplier = 1.0;
@@ -1026,6 +1028,29 @@ public class PlayerSnapshot {
             throw new IllegalArgumentException("crewedGroundingSeasons must not be negative: " + crewedGroundingSeasons);
         }
         this.crewedGroundingSeasons = crewedGroundingSeasons;
+    }
+
+    /**
+     * Returns the prestige the next funding review adds for rivals' Firsts ({@code design.md}
+     * &sect;2.1(e)): the government's answer to being beaten.
+     *
+     * @return the credit, 0 or more
+     */
+    public long getRivalFirstsCredit() {
+        return rivalFirstsCredit;
+    }
+
+    /**
+     * Sets the prestige the next funding review adds for rivals' Firsts.
+     *
+     * @param rivalFirstsCredit the credit, 0 or more
+     * @throws IllegalArgumentException if negative
+     */
+    public void setRivalFirstsCredit(long rivalFirstsCredit) {
+        if (rivalFirstsCredit < 0) {
+            throw new IllegalArgumentException("rivalFirstsCredit must not be negative: " + rivalFirstsCredit);
+        }
+        this.rivalFirstsCredit = rivalFirstsCredit;
     }
 
     /**

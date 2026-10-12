@@ -284,6 +284,11 @@ public final class PublicAffairsScreen extends ChromeScreen {
                 money(forecast.currentRate())) : "");
         card.add(ui.notice(diff >= 0 ? Theme.NoticeKind.SUCCESS : Theme.NoticeKind.WARNING, title, text))
             .padBottom(Theme.SPACE_3).row();
+        if (forecast.rivalCredit() > 0) {
+            card.add(ui.paragraph(String.format(Locale.ROOT, "Rivals beat you to a First, and the government wants an "
+                + "answer: this review counts %,d more prestige. The bracket above already shows it.",
+                forecast.rivalCredit()), Theme.TextStyle.CAPTION, Theme.SUCCESS)).padBottom(Theme.SPACE_2).row();
+        }
         card.add(ui.paragraph(lastReviewText() + " Converting prestige to funds lowers what the next review sees.",
             Theme.TextStyle.CAPTION, Theme.INK_MUTED)).row();
         column.add(card).padBottom(Theme.SPACE_4).row();

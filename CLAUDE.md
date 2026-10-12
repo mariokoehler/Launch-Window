@@ -121,6 +121,10 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   §2.5(j), `rules.CrewedGrounding`; the length unconfirmed), and the advisor has a one-off idle-staff tip
   (`ui-spec.md` component 24). A saved field, a new event and a new refusal reason: reset the dev data
   root, rebuild client and server together.
+- **The answer to a rival's First, the "Sputnik shock"** (the user's decision, 2026-10-12, `design.md`
+  §2.1(e), `rules.RivalFirsts`; the share unconfirmed): half a missed First's prestige counts at the next
+  review. `RaceShock` (dev-tools) measures it with two smart bots in one game. A saved field and a new
+  event: reset the dev data root, rebuild client and server together.
 
 ## How we work
 
@@ -249,6 +253,7 @@ mvn -pl dev-tools compile exec:java -DmainClass=de.mkoehler.launchwindow.devtool
   (`-Dexec.args=standard` for the full pack, which plays the Moon race; add `ahead` for the bot that
   works ahead, `side` for the one that also flies side missions, or `smart` for the best player, whose parts switch with `-Dbot.*` properties (`Bot.SMART`'s Javadoc), `-Dexec.args="standard side"`)
   (`-Dexec.args="standard side decisions"` plays with the R&D decisions and reports how often they come)
+  (`RaceShock` plays NASA against the Soviets in one game, the answer to rivals' Firsts off and on, `-Drace.shares=0,0.5`)
   (also `PersonnelLifecyclePlayouts`, `CareerCurves`, `StateSizes` (it takes the pack too), `IntelligencePlayouts`, `RaceLulls` (the Moon race's lulls with R&D tuned; `-Dexec.args="standard ahead+contracts 1.0 0.0"` plays with contracts against three simulated rivals); `design.md` §3.10).
 - **Releasing** (ported from Robot-Rampage 2026-10-06; its and StarWars' CLAUDE.md hold the
   gotchas):

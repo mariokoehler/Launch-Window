@@ -1442,12 +1442,17 @@ while building it, **confirmed by the user (2026-10-06)**:
   where the story has one. The card's caption is now "This season". A season without stories shows
   only the random events.
 - **A lost passenger (built 2026-10-06):** the People column says "Laika did not come home", with
-  "The flight had no way home." or the step that failed (`PassengerLost` event).
+  "The flight had no way home." or the step that failed (`PassengerLost` event).
 - **A grounding (built 2026-10-12, `design.md` §2.5(j)):** after a crew is lost, the People column says
   "Crewed flights grounded" (tag GROUNDED, red): no crewed flight may launch for the next N turns while the
   accident is investigated; uncrewed flights go on (`CrewedFlightsGrounded` event). Mission assembly gives
   the turns left under its disabled launch button, and every crewed mission card waits on the grounding in
   its Astronauts check and earliest launch (component 25). Shots `grounding-*.png` (`-Dshots=grounding`).
+- **The answer to a rival's First (built 2026-10-12, `design.md` §2.1(e)):** the Budget card opens with a
+  success notice, "Beaten to it: the government answers.", naming the Firsts another agency took last turn
+  and the prestige the next review adds (`RivalFirstsAnswered`). When a review falls in the same season,
+  the notice says the review counted it, and the review's notice adds "and N more for rivals' Firsts".
+  Shots `rival-firsts-report.png`, `rival-firsts-review.png` (`-Dshots=rival`).
 - **Blueprints in the R&D card (built 2026-10-09, user's idea after BASPM's end-of-season R&D
   screen):** each component's entry opens with its blueprint drawing
   (`assets/ui/blueprints/<component-id>.jpg`, 864 x 352) across the full card width, at its own
@@ -2013,6 +2018,10 @@ review: when, what it pays, what keeps today's funding) and `PrestigeConversion`
   quietly; it's left out when there's no report. The footer delta stays deferred.
 - **The review scale** has no tag above the gold mark; the legend names both marks.
 - **The footer's funds** show the danger tag when negative.
+- **A credit for rivals' Firsts (built 2026-10-12, `design.md` §2.1(e)):** the review's bracket ends, its
+  pay and the gold mark already include it (`ReviewForecast` shifts the bracket by it, as by the catch-up
+  shift); a green caption above the last-review line says how much the review adds. Shot
+  `rival-firsts-pao.png`.
 
 ### 4.11 Museum: goals, history, rivals
 **Purpose:** the scoreboard and the archive. **Ref:** `museum*.png`.

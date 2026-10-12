@@ -434,6 +434,12 @@ leading to satellite navigation.
 - **The R-16 disaster** (Baikonur, 24 October 1960) for a later memorial or news context,
   handled with care; **Apollo-Soyuz's crew breathing nitrogen tetroxide fumes** on the way
   down (1975). Both turned up while writing E-05.
+- **The Sputnik shock** (checked 2026-10-12, for the answer to a rival's First, §2.1(e)): Sputnik 1
+  (4 October 1957) set off a year of American answers: ARPA was founded in February 1958, the National
+  Aeronautics and Space Act was signed on 29 July 1958, the National Defense Education Act on
+  2 September 1958, and NASA opened on 1 October 1958. On the other side, Kennedy's call to land on the
+  Moon (25 May 1961) went unanswered for three years: the Soviet decree committing to a crewed Moon
+  landing came on 3 August 1964.
 - **Stand-downs after a lost crew** (checked 2026-10-12, for the grounding, §2.5(j)): after the Apollo 1
   fire (27 January 1967, a ground test) no crew flew until Apollo 7 (11 October 1968), about 20 months,
   while Apollo 4 (November 1967), Apollo 5 (January 1968) and Apollo 6 (April 1968) flew uncrewed and
@@ -544,6 +550,34 @@ reaches its first review later in real time, which is fine.
   `GameInfoResponse`, 2026-10-06), so the client prices reviews and conversions with the game's
   own numbers. Today every game uses `BudgetSchedule.baspmClose()`; a configurable schedule would
   only need the server to load it.
+
+**(e) The answer to a rival's First, the "Sputnik shock"** (the user's decision, 2026-10-12: "give
+other players a bit of a boost once they miss out on a first"; built the same day,
+`rules.RivalFirsts`). The slow-game analysis (§2.9, "A smarter bot") found a budget snowball: a bad
+start means a low review, which pays less for 16 seasons, which delays the next goals and lowers the
+next review. The answer acts on the review, where the snowball turns, not on today's funds.
+- **What counts:** a goal another agency settled first in the game last turn (achieved, or credited
+  through its cascade), that pays first-time prestige, that this player doesn't hold, and that a
+  program open to their agency can reach (`ContentCatalog.reachableGoals`: an Apollo-only goal never
+  counts for the Soviets; the generic goal its cascade credits does). Agencies that reach a goal in
+  the same turn are all first, so none of them is answered.
+- **The credit:** **50 %** of each counted First's first-time prestige (`RivalFirsts.SHARE`,
+  *unconfirmed*) goes onto `PlayerSnapshot.rivalFirstsCredit`. The next review reads the player's
+  prestige plus the credit (the bracket shifted down, like the catch-up shift), then clears it. It
+  counts once, never carries past that review (*unconfirmed*: keeping it longer is the next knob if
+  it's too weak), and the catch-up baseline stays the player's own prestige, so it doesn't eat the
+  catch-up shift.
+- **When:** a phase of its own just before the budget (`SeasonResolver.Phase.RIVAL_FIRSTS`), so a
+  First in the turn before a review counts at that review. The server reads last turn's Firsts from
+  every player's goal records at the start of the turn (`RivalFirsts.settledFirstOn`), so a retry
+  after a crash answers the same ones and a late joiner isn't paid for Firsts from before they joined.
+- **Shown:** the turn report's budget card ("Beaten to it: the government answers.", the
+  `RivalFirstsAnswered` event), the review notice when a review counted it ("and N more for rivals'
+  Firsts"), the Public Affairs Office's review card (the bracket's ends already include it, and a
+  line says so), and the help topic "Money and the budget review" (token `budget.rivalShare`).
+- **History** (§1.1): Sputnik 1 brought NASA, ARPA and a science-education act within a year; the
+  Soviet Moon landing program was approved in 1964, three years after Kennedy's challenge.
+- **Measured:** see §2.9, "The Sputnik shock, measured".
 
 ### 2.2 Personnel
 
@@ -1649,7 +1683,29 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
     - **The user's answers** (2026-10-12): about 90 turns to win is fine. Failures should punish a
       little more, but only in small steps: calculated risk fits the theme, and pushing players into
       R&D lengthens the lulls. The first step is the grounding after a lost crew (§2.5(j)). The idle
-      staff point became an advisor tip (`ui-spec.md` component 24).
+      staff point became an advisor tip (`ui-spec.md` component 24). Of the two levers, the user
+      picked the Sputnik shock (§2.1(e)).
+    - **The Sputnik shock, measured** (2026-10-12, dev-tools `RaceShock`: the smart bot as NASA against
+      the smart bot as the Soviets in one game, sharing the goal tally as the server does, each on its
+      own random source; 200 races, seed 42, seed 7 in brackets). **Racing changes everything the solo
+      playouts showed:** without the rule the Soviets, who land at a median of 96 alone, land at 146
+      (145), because every First NASA takes pays them only half (second-time prestige) and the reviews
+      snowball from there: after season 32's review the side behind gets 9,000 a season against
+      18,000. NASA lands first in 150 (151) of 200 races.
+
+      | Share | NASA / Soviet median landing | Lands first, NASA : Soviets | Margin, median (quartiles) | Behind at 32, lands first | Rate after 32, behind / ahead |
+      |---|---|---|---|---|---|
+      | 0 (off) | 92 / 146 (91 / 145) | 150 : 50 (151 : 48) | 57 (29-71) (62) | 29 (15) | 9,000 / 17,800 |
+      | **0.5 (built)** | 88 / 105 (87 / 104) | 129 : 70 (137 : 61) | 26 (12-49) (27) | 34 (32) | 14,100 / 18,900 |
+      | 0.75 | 86 / 95 | 128 : 70 | 15 (8-33) | 50 | 16,500 / 19,700 |
+      | 1.0 | 86 / 90 | 108 : 89 | 14 (7-23) | 61 | 17,100 / 19,500 |
+
+      At 0.5 the margin halves, the Soviets land about 40 seasons sooner, and the first landing comes
+      about 5 seasons sooner too (the race is closer, so both keep their funding). NASA stays the
+      favourite, as it is alone (median 87 against 96). The leader's credit is small (NASA about 6,900
+      prestige a game, the Soviets 15,300). The bot doesn't play around the rule. 0.5 is the default,
+      a "bit of a boost" as the user asked; 0.75 closes the race further, and 1.0 makes the side
+      behind at season 32 win nearly a third of the time. The share is the user's call.
     - **Worth knowing for balance, not verdicts:** a failed flight is cheap enough that launching
       earlier is faster at every bar tried (odds 0.6/0.5, 0.5/0.4, 0.4/0.3: averages 115, 111, 107),
       with astronaut losses about flat; a careful player is not rewarded for waiting. And an idle

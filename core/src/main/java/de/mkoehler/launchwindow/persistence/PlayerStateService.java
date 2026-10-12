@@ -154,6 +154,26 @@ public class PlayerStateService {
      */
     public List<ResolutionEvent> resolveTurn(long gameTurn, GoalTally goalTally, RandomEventRoster roster,
             long seasonSeed, List<IntelFinding> intelligence, Contracts.Turn contracts) throws IOException {
+        return resolveTurn(gameTurn, goalTally, roster, seasonSeed, intelligence, contracts, List.of());
+    }
+
+    /**
+     * As {@link #resolveTurn(long, GoalTally, RandomEventRoster, long, List, Contracts.Turn)}, also
+     * answering the Firsts other agencies settled last turn ({@code RivalFirsts}).
+     *
+     * @param gameTurn     the turn to resolve
+     * @param goalTally    the game-wide goal counts as of the start of the turn
+     * @param roster       the random events
+     * @param seasonSeed   the seed of this player's season pass
+     * @param intelligence this player's intelligence findings
+     * @param contracts    this player's part of the contract market
+     * @param rivalFirsts  the goals settled first in the game last turn, by anyone
+     * @return the season's events, or none if the turn was already resolved
+     * @throws IOException if the player's files can't be read or written
+     */
+    public List<ResolutionEvent> resolveTurn(long gameTurn, GoalTally goalTally, RandomEventRoster roster,
+            long seasonSeed, List<IntelFinding> intelligence, Contracts.Turn contracts, List<String> rivalFirsts)
+            throws IOException {
         OptionalLong latestTurn = snapshotStore.latestTurnNumber();
         if (latestTurn.isPresent() && latestTurn.getAsLong() >= gameTurn) {
             finishArchivingUpToCutoff(gameTurn);
@@ -164,7 +184,7 @@ public class PlayerStateService {
         PlayerSnapshot resolved = replay.replay(base,
             pending.stream().map(PlayerActionJournal.PendingAction::action).toList(), context).state();
         SeasonResolver.Context season = new SeasonResolver.Context(context.catalog(), context.schedule(), roster,
-            goalTally, Math.toIntExact(gameTurn), resolved.getSeason(), intelligence, contracts);
+            goalTally, Math.toIntExact(gameTurn), resolved.getSeason(), intelligence, contracts, rivalFirsts);
         // The report's "before" is today's state, actions applied, not the stored previous snapshot.
         PlayerSnapshot before = replay.copy(resolved);
         List<ResolutionEvent> events = SeasonResolver.advanceSeason(resolved, season, new SplittableRandom(seasonSeed));

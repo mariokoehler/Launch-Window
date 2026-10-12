@@ -163,10 +163,14 @@ public final class BudgetProgress {
     private static BudgetReviewed review(PlayerSnapshot snapshot, BudgetSchedule schedule, int reviewNumber) {
         long catchUpShift = catchUpShift(snapshot, schedule, reviewNumber);
         long prestige = snapshot.getPrestige();
-        long rate = reviewRate(schedule.reviewFor(reviewNumber), catchUpShift, prestige);
+        // Rivals' Firsts count as prestige here, the bracket shifted down like the catch-up shift
+        // (RivalFirsts); the baseline the next review's catch-up reads stays the player's own.
+        long credit = snapshot.getRivalFirstsCredit();
+        long rate = reviewRate(schedule.reviewFor(reviewNumber), catchUpShift + credit, prestige);
         snapshot.setFundingRatePerSeason(rate);
         snapshot.setPrestigeAtLastReview(prestige);
-        return new BudgetReviewed(reviewNumber, prestige, catchUpShift, rate);
+        snapshot.setRivalFirstsCredit(0);
+        return new BudgetReviewed(reviewNumber, prestige, catchUpShift, rate, credit);
     }
 
     /**
@@ -202,10 +206,12 @@ public final class BudgetProgress {
      * @param payToday       what it would pay at today's prestige
      * @param currentRate    today's funding per season
      * @param keepPrestige   the least prestige that keeps today's funding, or -1 if none can
+     * @param rivalCredit    the prestige it adds for rivals' Firsts so far ({@link RivalFirsts}), already
+     *                       taken off the bracket's ends with the catch-up shift
      */
     public record ReviewForecast(int reviewNumber, int seasonsUntil, long catchUpShift, long minPrestige,
                                  long minFunding, long maxPrestige, long maxFunding, long payToday, long currentRate,
-                                 long keepPrestige) {
+                                 long keepPrestige, long rivalCredit) {
 
         /**
          * Returns what the review would pay at a given prestige.
@@ -302,7 +308,9 @@ public final class BudgetProgress {
         int season = Math.max(1, snapshot.getSeason());
         int seasonsUntil = (SEASONS_PER_REVIEW - season % SEASONS_PER_REVIEW) % SEASONS_PER_REVIEW + 1;
         int reviewNumber = (season + seasonsUntil - 1) / SEASONS_PER_REVIEW;
-        long shift = catchUpShift(snapshot, schedule, reviewNumber);
+        long catchUp = catchUpShift(snapshot, schedule, reviewNumber);
+        long credit = snapshot.getRivalFirstsCredit();
+        long shift = catchUp + credit;
         BudgetSchedule.Review bracket = schedule.reviewFor(reviewNumber);
         long min = bracket.minPrestige() - shift;
         long max = bracket.maxPrestige() - shift;
@@ -326,8 +334,8 @@ public final class BudgetProgress {
                 keep = high;
             }
         }
-        return new ReviewForecast(reviewNumber, seasonsUntil, shift, min, bracket.minFunding(), max,
-            bracket.maxFunding(), reviewRate(bracket, shift, prestige), current, keep);
+        return new ReviewForecast(reviewNumber, seasonsUntil, catchUp, min, bracket.minFunding(), max,
+            bracket.maxFunding(), reviewRate(bracket, shift, prestige), current, keep, credit);
     }
 
     /**

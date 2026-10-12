@@ -863,8 +863,36 @@ public final class TurnReportView {
     public static Optional<Line> review(TurnReport report) {
         return events(report, BudgetReviewed.class).stream().findFirst()
             .map(review -> new Line("Funding review #" + review.reviewNumber() + ".", String.format(Locale.ROOT,
-                "At %,d prestige, funding is now %s a season until the next review, 16 seasons from now.",
-                review.prestige(), money(review.fundingRate())), "", 0));
+                "At %,d prestige%s, funding is now %s a season until the next review, %d seasons from now.",
+                review.prestige(), review.rivalCredit() > 0 ? String.format(Locale.ROOT,
+                    " and %,d more for rivals' Firsts", review.rivalCredit()) : "", money(review.fundingRate()),
+                de.mkoehler.launchwindow.rules.BudgetProgress.SEASONS_PER_REVIEW), "", 0));
+    }
+
+    /**
+     * Words the government's answer to rivals' Firsts last season ({@code design.md} &sect;2.1(e)), if
+     * any counted.
+     *
+     * @param report the report
+     * @return the title and text, or empty
+     */
+    public static Optional<Line> rivalFirsts(TurnReport report) {
+        return events(report, de.mkoehler.launchwindow.rules.RivalFirstsAnswered.class).stream().findFirst()
+            .map(answered -> {
+                boolean reviewed = events(report, BudgetReviewed.class).stream()
+                    .anyMatch(review -> review.rivalCredit() > 0);
+                String firsts = join(answered.goalIds().stream().map(ContentNames::of).toList());
+                String counted = reviewed
+                    ? String.format(Locale.ROOT, "This season's review counted %,d more prestige for rivals' Firsts.",
+                        answered.creditTotal())
+                    : answered.credit() == answered.creditTotal()
+                    ? String.format(Locale.ROOT, "Your next funding review counts %,d more prestige.",
+                        answered.credit())
+                    : String.format(Locale.ROOT, "Your next funding review counts %,d more prestige, %,d in all.",
+                        answered.credit(), answered.creditTotal());
+                return new Line("Beaten to it: the government answers.", "Another agency was first: "
+                    + firsts + ". " + counted, "", 1);
+            });
     }
 
     private static String join(List<String> names) {
