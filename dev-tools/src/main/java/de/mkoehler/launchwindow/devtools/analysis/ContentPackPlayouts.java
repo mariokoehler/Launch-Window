@@ -183,14 +183,15 @@ public final class ContentPackPlayouts {
         SIDE_MISSIONS,
         /**
          * Flies side missions as {@link #SIDE_MISSIONS} does, and plays more like a careful player
-         * (design.md 2.9, measured 2026-10-12): it keeps nobody idle (spare people train, the SET
-         * Center is staffed to the R&amp;D slots there are, not to its capacity), hires for skill and
-         * years left before retirement, puts each R&amp;D slot's best specialist in the component's own
+         * (design.md 2.9, measured 2026-10-12): it keeps nobody idle (spare people train; two teams
+         * of engineers per R&amp;D slot, one researching while the other trains, swapping after each
+         * course), hires the best of those who stay until about the game's end, puts each R&amp;D slot's best specialist in the component's own
          * skill, launches early once the flight's odds ({@code MissionAssessment}) reach a bar, and opens
          * the plan's later rockets while money is spare. System properties switch each part, for
          * measuring: {@code bot.oddsGate} (early, strict, off), {@code bot.crewedOdds},
          * {@code bot.uncrewedOdds}, {@code bot.openAhead} (rockets, programs, both, false),
-         * {@code bot.parallel}, {@code bot.sides}, and {@code bot.seed} for the run.
+         * {@code bot.parallel}, {@code bot.sides}, {@code bot.teams} (1 or 2), {@code bot.hire} (lasting,
+         * weighted), and {@code bot.seed} for the run.
          */
         SMART
     }
@@ -201,6 +202,23 @@ public final class ContentPackPlayouts {
 
     /** Whether the smart bot flies the plan's later flights alongside the current one, for measuring. */
     static final boolean SMART_PARALLEL = Boolean.parseBoolean(System.getProperty("bot.parallel", "false"));
+
+    /**
+     * Engineer teams per R&amp;D slot: 1 keeps two spares, 2 hires a second team that trains while the
+     * first researches, the two swapping after each course ({@code bot.teams}).
+     */
+    static final int SMART_TEAMS = Integer.getInteger("bot.teams", 2);
+    /**
+     * How the smart bot hires: "weighted" weighs skill down for someone retiring within
+     * {@link #SMART_CAREER_SEASONS}; "lasting" takes the best of those who stay until
+     * {@link #SMART_GAME_SEASONS}, else whoever stays longest ({@code bot.hire}).
+     */
+    static final String SMART_HIRE = System.getProperty("bot.hire", "lasting");
+    /** The season the "lasting" hiring expects the game to end by: about the smart bot's average landing. */
+    private static final int SMART_GAME_SEASONS = 100;
+
+    /** With two teams: the season each specialist on R&amp;D started there, by id. */
+    private final Map<String, Integer> researchSince = new java.util.HashMap<>();
 
     /** The smart bot weighs a candidate's skill down when they retire within this many seasons. */
     private static final int SMART_CAREER_SEASONS = 40;
@@ -464,6 +482,7 @@ public final class ContentPackPlayouts {
         sideId = null;
         sideRocketId = null;
         sideGivenUp.clear();
+        researchSince.clear();
         List<Integer> gaps = new ArrayList<>();
         int sinceLaunch = 0;
         // Random events seen this game, good then bad (2026-10-10, sizing the news stories).
@@ -1385,7 +1404,7 @@ public final class ContentPackPlayouts {
         hireBest(snapshot, PersonnelGroup.ASTRONAUT, astronauts + 1 - snapshot.getAstronauts().size(), random, tally);
         int specialists = STARTING_SPECIALISTS;
         if (smart) {
-            int wanted = usefulSlots(snapshot, target, null) + SMART_SPARE_SPECIALISTS;
+            int wanted = SMART_TEAMS * usefulSlots(snapshot, target, null) + SMART_SPARE_SPECIALISTS;
             specialists = Math.min(wanted, BuildingUpgrades.capacity(snapshot, Building.SET_CENTER, buildings));
             if (wanted > specialists && snapshot.getSetSpecialists().size() >= specialists
                     && snapshot.getFunds() > AHEAD_RESERVE) {
@@ -1468,6 +1487,10 @@ public final class ContentPackPlayouts {
             return skill;
         }
         int seasonsLeft = de.mkoehler.launchwindow.rules.PersonnelLifecycle.seasonsUntilRetirement(candidate, group);
+        if (SMART_HIRE.equals("lasting")) {
+            // Everyone who stays to the expected end ranks above everyone who doesn't.
+            return seasonsLeft >= SMART_GAME_SEASONS - seasonNow ? 1000 + skill : seasonsLeft;
+        }
         return skill * Math.min(1.0, seasonsLeft / (double) SMART_CAREER_SEASONS);
     }
 
@@ -1630,6 +1653,7 @@ public final class ContentPackPlayouts {
      * most) to the idle specialist best in the component's skill.
      */
     private void assignResearchBySkill(PlayerSnapshot snapshot, List<String> queue) {
+        Set<String> rotatedOut = SMART_TEAMS > 1 ? rotate(snapshot) : Set.of();
         for (String componentId : queue) {
             OwnedMissionComponent owned = snapshot.getMissionComponents().get(componentId);
             MissionComponent component = catalog.missionComponent(componentId).orElseThrow();
@@ -1639,7 +1663,7 @@ public final class ContentPackPlayouts {
             for (Integer slot = freeSlot(snapshot, componentId); slot != null; slot = freeSlot(snapshot, componentId)) {
                 SetSpecialist best = snapshot.getSetSpecialists().stream()
                     .filter(specialist -> specialist.getAssignmentState() == AssignmentState.IDLE
-                        && specialist.getUnavailableSeasons() == 0)
+                        && specialist.getUnavailableSeasons() == 0 && !rotatedOut.contains(specialist.getId()))
                     .max(Comparator.comparingDouble(specialist -> specialist.getSkill(component.associatedSkill())))
                     .orElse(null);
                 if (best == null) {
@@ -1648,8 +1672,35 @@ public final class ContentPackPlayouts {
                 best.setRdTargetComponentId(componentId);
                 best.setRdSlot(slot);
                 best.setAssignmentState(AssignmentState.ASSIGNED);
+                researchSince.put(best.getId(), seasonNow);
             }
         }
+    }
+
+    /**
+     * Two teams: for every specialist back from training and idle, the one who has researched longest
+     * (at least a course's length) comes off R&amp;D to train, and the one back takes the slot.
+     *
+     * @return the specialists taken off this season, who train rather than go straight back
+     */
+    private Set<String> rotate(PlayerSnapshot snapshot) {
+        long back = snapshot.getSetSpecialists().stream().filter(ContentPackPlayouts::available).count();
+        List<SetSpecialist> longest = snapshot.getSetSpecialists().stream()
+            .filter(specialist -> specialist.getAssignmentState() == AssignmentState.ASSIGNED
+                && specialist.getRdTargetComponentId() != null
+                && seasonNow - researchSince.getOrDefault(specialist.getId(), seasonNow)
+                    >= TrainingProgress.ADVANCED_TRAINING_SEASONS)
+            .sorted(Comparator.comparingInt(specialist -> researchSince.getOrDefault(specialist.getId(), seasonNow)))
+            .limit(back).toList();
+        Set<String> out = new HashSet<>();
+        for (SetSpecialist specialist : longest) {
+            if (PersonnelActions.releaseResearch(snapshot, specialist.getId())
+                    == PersonnelActions.ResearchOutcome.RELEASED) {
+                researchSince.remove(specialist.getId());
+                out.add(specialist.getId());
+            }
+        }
+        return out;
     }
 
     /** Sends idle astronauts and controllers into advanced training on their weakest skill, to keep morale up. */

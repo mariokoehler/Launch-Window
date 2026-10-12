@@ -1579,7 +1579,8 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
     | Nobody idle, slot-sized SET, hires for years left, skill-matched slots | 114 / 125 | 82 hires a game, 1.5 astronauts lost |
     | + launch early at odds 0.5 crewed / 0.3 uncrewed | 101 / 115 | the flat bar still applies otherwise |
     | + open the plan's later rockets with spare money | **92 / 98** (seed 7: 96 / 99) | every game lands, about season 101 on average |
-    | With R&D decisions (`smart decisions`) | 88 / 87 | the side-missions bot with decisions: 113 / 152 |
+    | + two teams of engineers per slot, swapping research and training every course (3 seasons); hires only who stays to season 100 (the user's ideas) | **87 / 96** (seed 7: 84 / 97) | average 98.8 and 99.5 against 101.1 and 102.8 |
+    | With R&D decisions (`smart decisions`) | 82 / 85 | the side-missions bot with decisions: 113 / 152 |
 
     Tried and dropped (each slower on both seeds): opening later *programs* early too (money
     is the binding constraint: anything bought early for a later flight is taken from the current
@@ -1588,6 +1589,12 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
     the extra crews and building levels cost more than the overlap saves), and side flights
     (without them about two seasons faster; kept on, as a player fills lulls). Each part stays
     behind a system property for measuring (`ContentPackPlayouts.Bot.SMART`).
+    - **The two last steps, alone** (2026-10-12, both seeds): two rotating teams take NASA's median
+      from 92-96 to 84 (training and research both grow skill, and the team coming back from a course
+      is the stronger one), the Soviets' unchanged with a longer slow tail (the second team's
+      salaries); hires rise from 75 to 88 a game. Hiring only who stays to season 100 leaves the
+      speed where it was (99.0 and 102.1 on average) and cuts retirements by about a fifth (hires 71
+      a game). Together they give the best average on both seeds, so both are the defaults.
     - **Worth knowing for balance, not verdicts:** a failed flight is cheap enough that launching
       earlier is faster at every bar tried (odds 0.6/0.5, 0.5/0.4, 0.4/0.3: averages 115, 111, 107),
       with astronaut losses about flat; a careful player is not rewarded for waiting. And an idle
@@ -2473,7 +2480,8 @@ hires, rocket programs) for a passing goal, and stay solvent before staying busy
 plan for longer than any side flight fills. **The smart bot** (2026-10-12, `standard smart`, §2.9
 "A smarter bot"): nobody idle, hires for years left, skill-matched R&D, early launches on the
 flight's odds, the plan's later rockets opened with spare money. It lands every game, at a median of
-92 (NASA) and 98 (Soviet) seasons against the side-missions bot's 135 and 168. Several flights of the
+87 (NASA) and 96 (Soviet) seasons against the side-missions bot's 135 and 168, with two rotating
+teams of engineers and hires who stay to the game's end (the user's ideas). Several flights of the
 plan at once was tried and made it slower (kept behind `bot.parallel`). Next: the R&D tuning (§2.9,
 "Lulls") and the hands-on and contract measurements rerun with it, a choice of R&D decision options
 by expected value (it still picks at random), and the two balance points it raised: cheap failures
