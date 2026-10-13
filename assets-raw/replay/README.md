@@ -18,5 +18,10 @@ Each folder's `build/` is regenerated on every run and stays out of git.
   `python extract.py`, then `python build.py success|glitch|failure [render]`, from its folder;
   `build/compare_<variant>.png` puts the storyboard beside the render at each frame's time.
 
+**The checklist:** `CLIP_CHECKLIST.md` lists every distinct mission step in the standard pack, one
+entry per clip, with what is on screen and how often it flies, and ticks each variant as its clip
+lands. `python assets-raw/replay/make_clip_checklist.py` regenerates it (2026-10-13; never edit it
+by hand).
+
 **The workflow decided (user, 2026-10-12):** Claude animates the steps alone, as in
 `launch-solo/`; Claude Design comes in only for ideas where a step has none yet.
