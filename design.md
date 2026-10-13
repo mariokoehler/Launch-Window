@@ -2674,6 +2674,13 @@ no-signal loop (`assets-raw/replay/no-signal/`). A turn with missions flown firs
 spoiler-free. The launch is the only step with clips (the storyboard's three, 960 × 540, 650–790 KB each,
 800 kbps). Next: more steps, in the order a typical early mission meets them.
 
+**The replay console (built 2026-10-13, `ui-spec.md` §4.7.3, "The console"):** the monitor became a
+mission-control console, from a Claude Design mockup: the picture on the left, a mission clock, a
+status gauge whose needle tells the outcome at the reveal, and telemetry bars. **Next (user,
+2026-10-13):** a pass over the mission steps' configuration gives each step a mission time to start
+from (T+ at liftoff, at orbit insertion, ...), so the clock advances from there during each step;
+until then it's a show clock counting the clips played.
+
 **Advisor** (the user's idea, built 2026-10-08, `ui-spec.md` component 24): a card on the hub with
 a new agency's first steps (help, engineers, a program, a rocket, R&D, controllers, astronauts
 once crewed, reliability to 60 % for a payload and a rocket, then the first mission, the first

@@ -144,6 +144,10 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   spoils nothing. A new turn with missions flown asks first to watch them spoiler-free, then the front
   pages, then the report (Settings: ask, always, never). Only the launch has clips. Client only: no reset,
   no server rebuild.
+- **The replay console** (the user's idea, 2026-10-13, `ui-spec.md` §4.7.3, from the canvas
+  `Launch Window — Replay Console`): the monitor is a console with a mission clock, a status gauge and
+  telemetry, whose motion (`client.view.ReplayConsole`) tells nothing before the reveal. The clock is a
+  show clock until steps get mission times. `-Dshots=console` renders its states. Client only.
 - **The game's first sound** (the user's idea, 2026-10-12, NASA recordings in `assets/audio/`, credited):
   Armstrong's "one small step" with the splash, Kennedy's "We choose to go to the Moon" when the Join
   screen opens. Settings' Sound On/Off now works, for the whole device (`LaunchWindowGame.soundOn`).

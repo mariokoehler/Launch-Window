@@ -1121,6 +1121,30 @@ public final class Theme {
         }
 
         /**
+         * A brush for anti-aliased lines at any angle (the replay console's dial, 2026-10-13): one
+         * texel wide, {@code texels} tall, opaque but for a transparent texel at each end, linearly
+         * filtered. Stretched across a line {@code texels} pixels thick and rotated, the end texels
+         * fade its edges over about a pixel, which a rotated {@link #solid} can't.
+         *
+         * @param texels the brush's height in texels, at least 3
+         * @return the region; its texture is owned by this object
+         */
+        public TextureRegion brush(int texels) {
+            int size = Math.max(3, texels);
+            Pixmap pixmap = new Pixmap(1, size, Pixmap.Format.RGBA8888);
+            pixmap.setBlending(Pixmap.Blending.None);
+            pixmap.setColor(1f, 1f, 1f, 0f);
+            pixmap.fill();
+            pixmap.setColor(Color.WHITE);
+            pixmap.fillRectangle(0, 1, 1, size - 2);
+            Texture texture = new Texture(pixmap);
+            texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+            pixmap.dispose();
+            textures.add(texture);
+            return new TextureRegion(texture);
+        }
+
+        /**
          * A goal badge's patch ({@code ui-spec.md} component 8, as the Headquarters mockup first
          * built it): achieved is a solid {@link #SUCCESS} ring over a pale green fill; not yet is
          * a dashed {@link #NAVY} ring on white. The {@code logo.svg} patch frame the spec mentions

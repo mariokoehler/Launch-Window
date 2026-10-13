@@ -50,6 +50,10 @@ import de.mkoehler.launchwindow.model.RandomEventKind;
 import de.mkoehler.launchwindow.model.GoalRecord;
 import de.mkoehler.launchwindow.model.MemorialEntry;
 import de.mkoehler.launchwindow.net.messages.RivalSummary;
+import de.mkoehler.launchwindow.client.screen.ReplayMonitor;
+import de.mkoehler.launchwindow.rules.MissionStepOutcome;
+import de.mkoehler.launchwindow.client.view.ReplayConsole;
+import de.mkoehler.launchwindow.client.view.ReplayClips;
 import de.mkoehler.launchwindow.client.screen.ReplayScreen;
 import de.mkoehler.launchwindow.client.screen.TurnReportScreen;
 import de.mkoehler.launchwindow.client.view.TurnReportView;
@@ -224,8 +228,9 @@ public final class ScreenSnapshot {
 
             @Override
             public com.badlogic.gdx.video.VideoPlayer createVideoPlayer() {
-                // No video in the shots: the replay's monitor shows its still, the same every run.
-                return null;
+                // No video in the shots: the replay's monitor shows its still, the same every run;
+                // the console's shots use a stand-in that shows one frame of the launch clip.
+                return fakeVideo ? fakeVideoPlayer() : null;
             }
 
             @Override
@@ -276,6 +281,10 @@ public final class ScreenSnapshot {
         }
         if ("join".equals(System.getProperty("shots"))) {
             joinNameShots(folder, game);
+            return;
+        }
+        if ("console".equals(System.getProperty("shots"))) {
+            consoleShots(folder, game);
             return;
         }
         if ("replay".equals(System.getProperty("shots"))) {
@@ -464,6 +473,130 @@ public final class ScreenSnapshot {
         groundingShots(folder, game);
         rivalFirstsShots(folder, game);
         raiseShots(folder, game);
+        consoleShots(folder, game);
+    }
+
+    /** Whether new replay screens get the stand-in video player ({@link #fakeVideoPlayer}). */
+    private static boolean fakeVideo;
+
+    /**
+     * A video player that plays nothing but always shows one frame of the launch clip, so the
+     * replay console reads as live in the shots.
+     */
+    private static com.badlogic.gdx.video.VideoPlayer fakeVideoPlayer() {
+        com.badlogic.gdx.graphics.Texture[] frame = new com.badlogic.gdx.graphics.Texture[1];
+        return (com.badlogic.gdx.video.VideoPlayer) java.lang.reflect.Proxy.newProxyInstance(
+            ScreenSnapshot.class.getClassLoader(), new Class<?>[]{com.badlogic.gdx.video.VideoPlayer.class},
+            (proxy, method, args) -> switch (method.getName()) {
+                case "load", "play", "update", "isBuffered", "isPlaying" ->
+                    method.getReturnType() == boolean.class ? true : null;
+                case "getTexture" -> {
+                    if (frame[0] == null) {
+                        frame[0] = new com.badlogic.gdx.graphics.Texture(Gdx.files.classpath("replay-frame.png"));
+                        frame[0].setFilter(com.badlogic.gdx.graphics.Texture.TextureFilter.Linear,
+                            com.badlogic.gdx.graphics.Texture.TextureFilter.Linear);
+                    }
+                    yield frame[0];
+                }
+                case "getVideoWidth" -> 960;
+                case "getVideoHeight" -> 540;
+                case "dispose" -> {
+                    if (frame[0] != null) {
+                        frame[0].dispose();
+                    }
+                    yield null;
+                }
+                default -> nothing(method.getReturnType());
+            });
+    }
+
+    /** A stand-in's answer for a method it doesn't play: false, zero or nothing, by the return type. */
+    private static Object nothing(Class<?> type) {
+        if (type == boolean.class) {
+            return Boolean.FALSE;
+        }
+        if (type == int.class) {
+            return 0;
+        }
+        if (type == float.class) {
+            return 0f;
+        }
+        return null;
+    }
+
+    /**
+     * The replay console (ui-spec.md 4.7.3, "The console", 2026-10-13) alone at the size of the
+     * mockup's boards, one shot per state: watching, each outcome after its reveal, a saved glitch
+     * mid-swing, a step reached with its result shown, no signal, paused; then the tallest and the
+     * shortest console.
+     */
+    private static void consoleShots(File folder, LaunchWindowGame game) {
+        record Shot(String name, MissionStepOutcome outcome, float time, boolean playing, boolean arrived,
+                    boolean live, float height) {
+        }
+        float reveal = 3.2f;
+        List<Shot> shots = List.of(
+            new Shot("console-watching.png", MissionStepOutcome.SUCCESSFUL, 2f, true, false, true, 486f),
+            new Shot("console-success.png", MissionStepOutcome.SUCCESSFUL, reveal + 2f, true, false, true, 486f),
+            new Shot("console-glitch-saved-swing.png", MissionStepOutcome.MINOR_GLITCH_SOLVED, reveal + 0.6f, true,
+                false, true, 486f),
+            new Shot("console-glitch-saved.png", MissionStepOutcome.MINOR_GLITCH_SOLVED, reveal + 3f, true, false,
+                true, 486f),
+            new Shot("console-glitch.png", MissionStepOutcome.MINOR_GLITCH, reveal + 2f, true, false, true, 486f),
+            new Shot("console-failure.png", MissionStepOutcome.FAILURE, reveal + 2f, true, false, true, 486f),
+            new Shot("console-catastrophic.png", MissionStepOutcome.CATASTROPHIC, reveal + 2.1f, true, false, true,
+                486f),
+            new Shot("console-arrived-failure.png", MissionStepOutcome.FAILURE, 0f, true, true, true, 486f),
+            new Shot("console-no-signal.png", MissionStepOutcome.SUCCESSFUL, 2f, true, false, false, 486f),
+            new Shot("console-paused.png", MissionStepOutcome.SUCCESSFUL, reveal + 2f, false, false, true, 486f),
+            new Shot("console-tallest.png", MissionStepOutcome.SUCCESSFUL, 2f, true, false, true, 520f),
+            new Shot("console-shortest.png", MissionStepOutcome.SUCCESSFUL, 2f, true, false, true, 430f));
+        ReplayClips.Clip launch = new ReplayClips.Clip("ui/replay/launch-success.webm", null, 6.3f, reveal, false,
+            true);
+        for (Shot shot : shots) {
+            // No signal: no player, so the still shows, as on a step with no clip of its own.
+            ReplayMonitor monitor = new ReplayMonitor(game.ui(), shot.live() ? fakeVideoPlayer() : null);
+            monitor.play(shot.live() ? launch : ReplayClips.noSignal(), "Launch",
+                ReplayConsole.live(ReplayConsole.seed("m-vostok", 2), shot.outcome(), reveal, shot.arrived()));
+            monitor.setPlan(2, 11, "Vostok · Orbital flight");
+            monitor.setTime(shot.time(), shot.playing(), 120f + shot.time());
+            write(folder, shot.name(), new ConsoleShot(monitor, shot.height()), null);
+            monitor.dispose();
+        }
+    }
+
+    /**
+     * A bare stage holding one replay console at a fixed size, on the page's blue.
+     */
+    private static final class ConsoleShot extends com.badlogic.gdx.ScreenAdapter {
+
+        private final com.badlogic.gdx.scenes.scene2d.Stage stage = new com.badlogic.gdx.scenes.scene2d.Stage(
+            new com.badlogic.gdx.utils.viewport.FitViewport(Theme.VIEW_WIDTH, Theme.VIEW_HEIGHT));
+
+        ConsoleShot(ReplayMonitor monitor, float height) {
+            com.badlogic.gdx.scenes.scene2d.ui.Table root = new com.badlogic.gdx.scenes.scene2d.ui.Table();
+            root.setFillParent(true);
+            root.add(monitor).size(1086f, height);
+            stage.addActor(root);
+        }
+
+        @Override
+        public void render(float delta) {
+            Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            stage.act(delta);
+            stage.draw();
+        }
+
+        @Override
+        public void resize(int width, int height) {
+            stage.getViewport().update(width, height, true);
+        }
+
+        @Override
+        public void dispose() {
+            stage.dispose();
+        }
     }
 
     /**
@@ -1738,6 +1871,20 @@ public final class ScreenSnapshot {
         });
         write(folder, "replay-summary.png", new ReplayScreen(game, report, vostok), screen -> screen.show(99));
         write(folder, "replay-sputnik.png", new ReplayScreen(game, report, "m-sputnik"), screen -> screen.show(0));
+        // The console live (2026-10-13): Vostok's launch with a stand-in video, while it plays and after.
+        fakeVideo = true;
+        List<MissionStepResolved> vostokSteps = TurnReportView.steps(report, vostok);
+        int launch = java.util.stream.IntStream.range(0, vostokSteps.size())
+            .filter(i -> vostokSteps.get(i).stepId().endsWith("launch")).findFirst().orElse(0);
+        write(folder, "replay-launch-watching.png", new ReplayScreen(game, report, vostok), screen -> {
+            screen.show(launch);
+            screen.render(1.5f);
+        });
+        write(folder, "replay-launch.png", new ReplayScreen(game, report, vostok), screen -> {
+            screen.show(launch);
+            screen.watchPaused(5f);
+        });
+        fakeVideo = false;
         // Watching the turn's missions first (ui-spec.md 4.4, 2026-10-12): the offer over the hub, and the
         // end of a mission in the queue, with the next one offered.
         write(folder, "replays-offer.png", new SpaceComplexScreen(game), screen -> screen.offerReplays(report));

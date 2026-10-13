@@ -13,6 +13,7 @@ import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.MissionControl;
 import de.mkoehler.launchwindow.client.view.ReplayClips;
+import de.mkoehler.launchwindow.client.view.ReplayConsole;
 import de.mkoehler.launchwindow.client.view.ReplayPlayback;
 import de.mkoehler.launchwindow.client.view.SetSkills;
 import de.mkoehler.launchwindow.client.view.TurnReportView;
@@ -59,6 +60,9 @@ public final class ReplayScreen extends ChromeScreen {
     private final ReplayMonitor monitor;
     private String missionId;
     private ReplayPlayback playback;
+    /** The mission clock at the step's start, and the step's length. */
+    private float clockBase;
+    private float clockStep;
 
     /**
      * Builds the replay of one mission's season, playing.
@@ -183,13 +187,29 @@ public final class ReplayScreen extends ChromeScreen {
             monitor.stop();
             return;
         }
-        MissionStepResolved step = steps().get(playback.step());
-        monitor.play(clip(step), TurnReportView.stepName(step.missionConfigurationId(), step.stepId()));
+        int index = playback.step();
+        List<MissionStepResolved> steps = steps();
+        MissionStepResolved step = steps.get(index);
+        ReplayClips.Clip clip = clip(step);
+        // The mission clock: the clips played so far this season. A show clock until each step has
+        // a mission time of its own.
+        clockBase = 0f;
+        for (int i = 0; i < index; i++) {
+            clockBase += clip(steps.get(i)).duration();
+        }
+        clockStep = clip.duration();
+        // The seed is the step's place, never its outcome: before the reveal the console tells nothing.
+        monitor.play(clip, TurnReportView.stepName(step.missionConfigurationId(), step.stepId()),
+            ReplayConsole.live(ReplayConsole.seed(missionId, index), step.outcome(), clip.revealAt(),
+                playback.revealed(index)));
     }
 
     @Override
     public void render(float delta) {
         monitor.update();
+        if (!playback.atSummary()) {
+            monitor.setTime(playback.time(), playback.playing(), clockBase + Math.min(playback.time(), clockStep));
+        }
         switch (playback.update(delta)) {
             case REVEALED -> rebuild();
             case MOVED -> {
@@ -409,6 +429,10 @@ public final class ReplayScreen extends ChromeScreen {
         // As tall as a result with an Expert's rescue, so the monitor doesn't jump at the reveal.
         chances.add(revealed ? result(step) : pending()).expandX().fillX().top().minHeight(RESULT_HEIGHT);
         card.add(chances).padBottom(Theme.SPACE_4).row();
+        TurnReport.MissionFlown flown = flown();
+        monitor.setPlan(index, plannedCount, flown == null ? "" : session.catalog()
+            .missionConfiguration(flown.missionConfigurationId()).map(MissionControl::missionName)
+            .orElse(ContentNames.of(flown.missionConfigurationId())));
         card.add(monitor).expand().fill().minHeight(240f);
         return card;
     }

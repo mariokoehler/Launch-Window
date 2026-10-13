@@ -3,6 +3,7 @@ package de.mkoehler.launchwindow.client.ui;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -57,6 +58,7 @@ public final class UiKit implements Disposable {
     private final Map<String, Texture> icons = new HashMap<>();
     private final Map<String, Texture> pictures = new HashMap<>();
     private final Map<String, Drawable> rects = new HashMap<>();
+    private final Map<Integer, TextureRegion> brushes = new HashMap<>();
     private final Map<Theme.BadgeKind, Drawable> badgeFills = new EnumMap<>(Theme.BadgeKind.class);
     /**
      * The tooltips' timing: quicker than Scene2D's default two seconds, and no grow animation. A
@@ -273,6 +275,16 @@ public final class UiKit implements Disposable {
     public Drawable circle(Color fill, Color border, float borderWidth, int diameter) {
         return rects.computeIfAbsent("circle:" + fill + "/" + border + "/" + borderWidth + "/" + diameter,
             key -> shapes.circle(fill, border, borderWidth, diameter));
+    }
+
+    /**
+     * Returns a brush for anti-aliased lines ({@link Theme.Shapes#brush}), built once per height.
+     *
+     * @param texels the brush's height in texels
+     * @return the region
+     */
+    public TextureRegion brush(int texels) {
+        return brushes.computeIfAbsent(texels, shapes::brush);
     }
 
     /**

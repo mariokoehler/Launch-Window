@@ -1915,68 +1915,51 @@ clips, the replay is meant to be watched like a short film, and the player can s
 - **The queue:** opened from the dialog (§4.4), the replay plays every mission flown that turn, in
   the report's order. The season summary then offers "Next mission" or, after the last,
   "To the turn report" (the front pages first, if any). Back leaves the queue for the report.
-- **Proposed defaults (unconfirmed):** the 1.5 s and 3 s timings; the bezel's look and label;
+- **Proposed defaults (unconfirmed):** the 1.5 s and 3 s timings; the console's label;
   that the dialog offers only the newest turn's missions when several reports are unread.
-- **The console (the user's idea, 2026-10-13; to be mocked up in Claude Design, canvas
-  `Launch Window — Replay Console`):** the monitor becomes a mission-control console. The picture
-  moves to one side of it (left by default: it sits next to the step list, and the eye starts
-  there), and the room beside it holds instruments:
-  - **Size:** at 1920 × 1080 the console is about 1086 px wide; its height is what the step card
-    leaves, about 430 to 520 px (it shrinks with a second component bar or an Expert's rescue
-    row). At full height the 16:9 picture is about 770 × 433, which leaves a column of about
-    280 px; the picture may shrink for a wider column. Clips are 960 × 540. The picture may still
-    be scaled, never cropped or stretched.
-  - **Mission clock:** "T+ 0d 0h 2m 23s", ticking with the clip. *Proposed default (unconfirmed):*
-    no step has a real flight time in the data, so the clock is a show clock: it starts at 0 with
-    the season's first step and runs on with each clip's playback, frozen while paused. It
-    continues across steps, and jumps when the player skips.
-  - **The status gauge:** a dial with three coloured ranges, "Nominal", "Warning" and
-    "Critical". Before the step's `revealAt` the needle wanders a little inside Nominal. **That
-    wander must not depend on the outcome** (same seed and distribution for every outcome), or
-    the gauge spoils the step. At `revealAt` it moves to the result: success settles mid-Nominal;
-    a glitch the controllers saved swings into Warning and back to Nominal; an unsaved glitch
-    stays in Warning; a failure goes into Critical; a catastrophic failure pins at the end of
-    Critical. *Proposed default (unconfirmed):* a "No signal" step's needle rests at zero, dead.
-  - **Other instruments, to propose in the mockup:** a signal lamp (lit with a live camera, dark
-    on "No signal"), the step's progress as lamps (the plan's count, so nothing is given away),
-    perhaps telemetry bars that drift like the needle. Nothing may reveal the outcome before
-    `revealAt`.
-  - **Drawn by the game:** flat shapes (rects, arcs, lines, ticks) and the design system's fonts
-    and colours, sharp at any size, so the game can draw it at any window size. No raster
-    textures beyond the clip.
-  - **States to mock up:** watching (before the reveal), success, glitch saved, glitch, failure,
-    catastrophic, no signal, paused; the tallest and the shortest console.
-  - **Mocked up (2026-10-13)** on the canvas `Launch Window — Replay Console` (the Artifact tool's list
-    finds it): the replay in context (step 5 of 11, Vostok · Orbital flight), the console alone in the
-    eight states, the tallest and the shortest, the picture on the right, and a timeline of the needle
-    per outcome. Choices, all **unconfirmed**:
-    - **Layout:** the picture left (next to the step list), in its lighter lip; under it a row of step
-      lamps (the plan's count: flown cream, current gold, the rest dark) and the mission's name. The
-      label strip keeps its label at the left edge, led by a round **signal lamp** (gold-on-page with
-      a faint ring when live, dark on "No signal"). The picture takes all but a 280 px column, capped
-      by the height: at 520 px it is 770 × 433 and the instruments stack; at 430 px it is 629 × 354,
-      the column is 421 px, and the instruments go side by side (clock across the top, the dial and
-      three upright meters below). The switch is at a 380 px column.
-    - **Panels:** white at 5 % with a 1 px white-at-18 % line, a small label. **Mission clock**:
-      Archivo 700 24 px, cream, tabular figures, with a **HOLD** lamp lit gold while paused (the clock
-      then dims to 55 %, and the strip's right end says "Paused · next step waits").
-    - **Status gauge:** a 180° dial, ranges Nominal (success-on-page, as the success green is too dark
-      on navy), Warning (gold) and Critical (danger); the active range at full strength and 2 px
-      thicker, the others at 55 %, all at 25 % on "No signal". A cream needle, and a thin gold
-      **peak-hold pointer** at the highest value of the step (outcome-blind before the reveal, then
-      the trace of a saved glitch). Under it two lamps: **CAUTION** (gold) and **MASTER ALARM**
-      (danger, white text). Before the reveal both are dark.
-    - **Telemetry:** three bars, PRS, TMP and PWR, with the normal band (35 to 75 %) as two ticks;
-      they drift between 0.45 and 0.65 before the reveal. Success settles them; a glitch takes TMP
-      to 0.84 in gold (back again if saved); a failure drops PRS and lifts TMP, both red; a
-      catastrophic one empties all three, red. Empty with dashed tracks on "No signal".
-    - **The needle's motion** (the timeline board has the curves): before `revealAt` two sine waves
-      (2.3 s and 0.9 s, phase from the step's seed) between 0.22 and 0.38. At the reveal: success to
-      0.30 in 0.6 s, wandering on at half the swing; a saved glitch to 0.68 in 0.4 s, held 0.8 s, back
-      in 0.8 s, CAUTION flashing three times; an unsaved glitch to 0.66 and wandering there, CAUTION
-      steady; a failure to 0.88 in 0.5 s, quivering, MASTER ALARM steady; a catastrophic one to the
-      end stop in 0.3 s, two bounces, pinned, MASTER ALARM flashing and CAUTION steady. "No signal":
-      at 0, dead, the whole step.
+- **The console (the user's idea, 2026-10-13; mocked up on the canvas `Launch Window — Replay
+  Console` and built the same day, `client.screen.ReplayMonitor`, the instruments' motion in
+  `client.view.ReplayConsole`):** the monitor is a mission-control console. The user chose the
+  layout most boards show (picture left, instruments stacked in a column on the right) and set
+  aside the canvas's two other variants (side-by-side instruments on the shortest console, the
+  picture on the right).
+  - **Layout:** a 26 px label strip on top: a signal lamp (gold with a ring while the camera is live,
+    dark on "No signal"), the label, and "PAUSED · NEXT STEP WAITS" on the right while paused. The
+    16:9 picture takes the width but a 280 px column, capped by the height above a 53 px row of step
+    lamps (the plan's steps: flown cream, current gold with a ring, the rest dark outlines; "3 OF 11";
+    the mission's name on the right). The column takes the rest and always stacks three panels: the
+    mission clock (with a HOLD lamp), the status gauge (with CAUTION and MASTER ALARM lamps under it)
+    and the telemetry bars (PRS, TMP, PWR), the last filling the height left. At 1920 × 1080 the
+    console is about 1086 × 430 to 520; the picture is never cropped or stretched. On a console too
+    short for all three bars the ones that don't fit are left out.
+  - **Mission clock:** "T+ 0d 0h 2m 23s", the clips played so far this season (frozen, dimmed and HOLD
+    lit while paused; it jumps on a skip). *A show clock for now (user, 2026-10-13):* a later pass over
+    the mission steps gives each step a mission time to start from (`design.md` §5, Backlog).
+  - **Status gauge:** a 180° dial, Nominal to 0.55, Warning to 0.80, Critical to the end, 20 ticks,
+    a cream needle and a gold peak-hold pointer (the highest reading this step). Before `revealAt` the
+    needle wanders 0.22 to 0.38 (two waves, 2.3 s and 0.9 s, phases from the mission and the step's
+    place, **never the outcome**; `ReplayConsoleTest` holds every instrument to that). At `revealAt`:
+    success eases to 0.30 in 0.6 s and wanders at half the swing; a glitch swings to 0.66 in 0.4 s,
+    CAUTION lit; a saved glitch swings to 0.68, CAUTION flashes three times, holds 0.8 s and falls
+    back into Nominal in 0.8 s, the peak-hold left in Warning; a failure runs into Critical (0.88) in
+    0.5 s and quivers, MASTER ALARM lit; a catastrophic failure hits the end stop in 0.3 s, bounces
+    twice and stays pinned, MASTER ALARM flashing and CAUTION lit. The outcome's range brightens. No
+    signal: the needle rests at 0, dimmed, no peak-hold, the ranges at 25 %. A step reached with its
+    result shown starts settled, with the swing's trace on the peak-hold.
+  - **Telemetry:** bars drift between 0.45 and 0.65 before the reveal, with marks at 0.35 and 0.75.
+    Success settles them on 0.55; a glitch takes TMP to 0.84 in gold (and back, if saved); a failure
+    drops PRS to 0.06 and raises TMP to 0.90, both red; a catastrophic failure empties all three, their
+    tracks outlined red; no signal leaves them empty with dashed tracks.
+  - **Drawn by the game:** flat rects, circles from `Theme.Shapes.circle` (built at twice their size,
+    so thin rings stay round), and lines and arcs drawn with `Theme.Shapes.brush`, a texture that
+    anti-aliases a rotated line. The console's colours are the design system's, premixed on the navy
+    (constants in `ReplayMonitor`); no new tokens. Live means a clip of the step's own is playing: a
+    client with no video decoder shows the dead console, as it shows "No signal".
+  - **Unconfirmed:** every timing and reading above (from the canvas's notes), the wander's split
+    between its two waves, the bars' periods (3.1, 2.7 and 3.7 s), and the clock.
+  - **Shots:** `-Dshots=console` renders the console alone in every state; the replay group has
+    Vostok's launch live, while it plays and after (both with a stand-in video player that shows one
+    frame of the launch clip).
 
 Choices made while building them, **confirmed by the user (2026-10-06)**:
 - **Building panel (changed 2026-10-04, user):** the mockup had none, which left Mission Control
