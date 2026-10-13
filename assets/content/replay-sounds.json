@@ -5,11 +5,11 @@
       "kind": "EFFECT",
       "volume": 0.3,
       "files": [
-        "audio/replay/placeholder-telemetry-blip-1.wav",
-        "audio/replay/placeholder-telemetry-blip-2.wav",
-        "audio/replay/placeholder-telemetry-blip-3.wav"
+        "audio/replay/telemetry-blip-1.ogg",
+        "audio/replay/telemetry-blip-2.ogg",
+        "audio/replay/telemetry-blip-3.ogg"
       ],
-      "credit": false,
+      "credit": true,
       "description": "Console. A short, soft electronic blip (80 to 120 ms), like a 1960s telemetry readout updating: mid-high pitch, clean, no reverb. 3 or 4 takes, slightly different in pitch, so the repetition doesn't show. Plays every 2 s while a camera is live, and stops once telemetry is lost."
     },
     {
@@ -17,29 +17,29 @@
       "kind": "EFFECT",
       "volume": 0.5,
       "files": [
-        "audio/replay/placeholder-caution-tone.wav"
+        "audio/replay/caution-tone.ogg"
       ],
-      "credit": false,
-      "description": "Console. An attention tone, not an alarm (at most 0.25 s): two quick alternating notes, a soft warble. Plays when the CAUTION lamp lights: once after a glitch, three times with the lamp's flashes when the controllers save one."
+      "credit": true,
+      "description": "Console. An attention tone, not an alarm, short enough to sound three times in 1.5 s (under 0.4 s): a quick rising sweep. Plays when the CAUTION lamp lights: once after a glitch, three times with the lamp's flashes when the controllers save one."
     },
     {
       "id": "master-alarm",
       "kind": "LOOP",
       "volume": 0.45,
       "files": [
-        "audio/replay/placeholder-master-alarm.ogg"
+        "audio/replay/master-alarm.ogg"
       ],
-      "credit": false,
-      "description": "Console. A harsh, urgent alarm pulse in the manner of Apollo's master alarm, cut as a seamless loop of about 0.6 s. Plays from the reveal of a failure or a catastrophic failure for 3 s, then stops while the lamp stays lit. OGG, for a seamless loop."
+      "credit": true,
+      "description": "Console. A harsh, urgent alarm pulse in the manner of Apollo's master alarm, cut as a seamless loop of half a second or so, one buzz and its gap. Plays from the reveal of a failure or a catastrophic failure for 3 s, then stops while the lamp stays lit. OGG, for a seamless loop."
     },
     {
       "id": "no-signal-static",
       "kind": "LOOP",
       "volume": 0.08,
       "files": [
-        "audio/replay/placeholder-no-signal-static.ogg"
+        "audio/replay/no-signal-static.ogg"
       ],
-      "credit": false,
+      "credit": true,
       "description": "Console. Soft radio static with a faint crackle, a seamless loop of 3 to 5 s. Very quiet: it plays under every step without a clip of its own, which is most steps for now. OGG, for a seamless loop."
     },
     {
@@ -47,10 +47,11 @@
       "kind": "EFFECT",
       "volume": 0.4,
       "files": [
-        "audio/replay/placeholder-hold-click.wav"
+        "audio/replay/hold-click-1.ogg",
+        "audio/replay/hold-click-2.ogg"
       ],
-      "credit": false,
-      "description": "Console. A dry mechanical click (about 50 ms): a relay or a toggle switch. Plays on Play and Pause, as the HOLD lamp goes on or off."
+      "credit": true,
+      "description": "Console. A dry mechanical click (about 50 to 100 ms): a relay or a toggle switch. Two takes, a press and a release, which the no-repeat deal alternates. Plays on Play and Pause, as the HOLD lamp goes on or off."
     },
     {
       "id": "music",
