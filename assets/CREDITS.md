@@ -22,6 +22,9 @@ cut from the variable fonts), for the Firsts' front pages, under the SIL Open Fo
 - `audio/replay/`: the replay's sounds (`content/replay-sounds.json`). Sounds made for Launch Window
   need no credit here; any that weren't are credited below, one bullet per file, and marked
   `"credit": true` in the catalog. Generated music names its model and the model's terms here.
+- `audio/replay/mission-control-room.ogg`: mission control's room tone, a 4-minute loop mixed for
+  Launch Window by its author from several NASA recordings of mission radio chatter. NASA,
+  public domain.
 - `audio/replay/placeholder-music.ogg`: a placeholder drone until the real tracks come, synthesized
   for Launch Window by `assets-raw/replay/sounds/make_placeholder_sounds.py`; no third-party material.
 

@@ -65,12 +65,12 @@
     {
       "id": "room-tone",
       "kind": "ROOM",
-      "volume": 0.2,
+      "volume": 0.4,
       "files": [
-        "audio/replay/placeholder-room-tone.ogg"
+        "audio/replay/mission-control-room.ogg"
       ],
-      "credit": false,
-      "description": "Mission control's room: air-conditioning hum, distant indistinct voices, now and then a chair or paper; no words anyone could make out. A seamless loop of 30 to 60 s under the music, the whole replay long. OGG, for a seamless loop."
+      "credit": true,
+      "description": "Mission control's room: distant radio chatter and the room's own noise, under the music the whole replay long, never loud enough to follow. A seamless loop of 30 s or more. OGG, for a seamless loop."
     }
   ]
 }

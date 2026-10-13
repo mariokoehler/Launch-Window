@@ -49,6 +49,10 @@ def save(name, signal, ogg=False):
 
 def main():
     os.makedirs(FOLDER, exist_ok=True)
+    with open(CATALOG, encoding='utf-8') as f:
+        catalog = json.load(f)
+    real = {sound['id'] for sound in catalog['sounds']
+            if any(not os.path.basename(file).startswith(PREFIX) for file in sound['files'])}
     rng = np.random.default_rng(7)
     takes = {}
     # Soft sine blips, three pitches.
@@ -79,11 +83,12 @@ def main():
     takes['room-tone'] = [save('room-tone', rng.normal(0, 0.03, len(x)) + 0.03 * np.sin(2 * np.pi * 60 * x),
                                ogg=True)]
 
-    with open(CATALOG, encoding='utf-8') as f:
-        catalog = json.load(f)
+    # A sound with real takes keeps them, and its placeholder files go.
+    for sound_id in real & takes.keys():
+        for file in takes.pop(sound_id):
+            os.remove(os.path.join('assets', file))
     for sound in catalog['sounds']:
-        real = [file for file in sound['files'] if not os.path.basename(file).startswith(PREFIX)]
-        if sound['id'] in takes and not real:
+        if sound['id'] in takes:
             sound['files'] = takes[sound['id']]
     with open(CATALOG, 'w', encoding='utf-8', newline='\n') as f:
         json.dump(catalog, f, indent=2, ensure_ascii=False)
