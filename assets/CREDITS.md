@@ -46,8 +46,12 @@ cut from the variable fonts), for the Firsts' front pages, under the SIL Open Fo
   https://pixabay.com/sound-effects/film-special-effects-button-click-vintage-sound-fx-541135/. Pixabay
   Content License, https://pixabay.com/service/license-summary/. Split into its press and its
   release, each level raised to a peak of about -1 dBFS.
-- `audio/replay/placeholder-music.ogg`: a placeholder drone until the real tracks come, synthesized
-  for Launch Window by `assets-raw/replay/sounds/make_placeholder_sounds.py`; no third-party material.
+- `audio/replay/fanfare-success.mp3`, `audio/replay/fanfare-failure.mp3`: made for Launch Window by its
+  author with Stable Audio 3 (Stability AI; the ComfyUI repackaging,
+  https://huggingface.co/Comfy-Org/stable-audio-3/). The model is under the Stability AI Community
+  License (https://huggingface.co/stabilityai/stable-audio-open-1.0/blob/main/LICENSE.md), which
+  leaves the outputs to whoever generates them and allows non-commercial use free of charge; its
+  attribution terms cover distributing the model, not its outputs.
 
 ## Photos
 

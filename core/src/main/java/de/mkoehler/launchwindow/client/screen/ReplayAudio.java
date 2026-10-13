@@ -15,14 +15,14 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The replay's sound ({@code ui-spec.md} &sect;4.7.3, "Sound"), in layers: the music and the room tone
- * under the whole replay; the console's blips, tones and alarm, from its {@link ReplayConsole}; and
- * each clip's cues from its sidecar, in step with the clip's time. Nothing is baked into the videos.
+ * The replay's sound ({@code ui-spec.md} &sect;4.7.3, "Sound"), in layers: the room tone under the
+ * whole replay; the console's blips, tones and alarm, from its {@link ReplayConsole}; each clip's cues
+ * from its sidecar, in step with the clip's time; and a fanfare at the season summary, one for a
+ * mission that failed and one for any other. Nothing is baked into the videos.
  * <ul>
  *   <li>A step that follows on by itself lets the last one's loops fade as their cues say, and a loop
- *   the new clip carries on keeps playing; a skip or a step back fades everything but the music and
- *   the room within a tenth of a second.</li>
- *   <li>The music dips while a voice is on the radio.</li>
+ *   the new clip carries on keeps playing; a skip or a step back fades everything but the room within
+ *   a tenth of a second, and the fanfare a little slower.</li>
  *   <li>Silent when the game's sound is off (checked every frame); a sound with no takes yet plays
  *   nothing.</li>
  * </ul>
@@ -33,10 +33,8 @@ final class ReplayAudio {
 
     /** How fast a skip silences the step's sounds, in seconds. */
     private static final float SKIP_FADE = 0.1f;
-    /** The music's level while a voice is on the radio (unconfirmed). */
-    private static final float DUCKED = 0.4f;
-    /** How fast the music dips and comes back, in level per second. */
-    private static final float DUCK_SPEED = 2f;
+    /** How fast leaving the summary silences its fanfare, in seconds. */
+    private static final float FANFARE_FADE = 0.3f;
 
     private final ReplaySounds sounds;
     private final Map<String, Sound> loaded = new HashMap<>();
@@ -46,11 +44,11 @@ final class ReplayAudio {
     private ReplayConsole console;
     private float previous;
     private Boolean held;
-    private Music music;
+    private Music fanfare;
+    private boolean fanfareFailed;
+    private boolean fanfareFading;
+    private float fanfareFadeLeft;
     private Music room;
-    private boolean trackEnded;
-    private boolean bedsStarted;
-    private float duck = 1f;
 
     /** A looping sound playing. */
     private static final class Loop {
@@ -96,13 +94,17 @@ final class ReplayAudio {
     }
 
     /**
-     * Starts a step, or the season summary.
+     * Starts a step.
      *
-     * @param next    the step's clip, or {@code null} for the summary
-     * @param machine the step's console, or {@code null} for the summary
+     * @param next    the step's clip
+     * @param machine the step's console
      * @param natural whether the step follows the one before by itself ({@code false}: a skip)
      */
     void step(ReplayClips.Clip next, ReplayConsole machine, boolean natural) {
+        if (fanfare != null && !fanfareFading) {
+            fanfareFading = true;
+            fanfareFadeLeft = FANFARE_FADE;
+        }
         for (Loop loop : loops) {
             if (natural && next != null && carried(loop, next)) {
                 continue;
@@ -120,6 +122,32 @@ final class ReplayAudio {
         clip = next;
         console = machine;
         previous = -0.001f;
+    }
+
+    /**
+     * Shows the season summary: the step's sounds end, and the fanfare plays, once.
+     *
+     * @param failed  whether the mission failed (a glitch, solved or not, isn't a failure)
+     * @param natural whether the summary follows the last step by itself ({@code false}: a skip)
+     */
+    void summary(boolean failed, boolean natural) {
+        step(null, null, natural);
+        if (fanfare != null) {
+            fanfare.dispose();
+        }
+        fanfareFading = false;
+        fanfareFailed = failed;
+        fanfare = LaunchWindowGame.soundOn()
+            ? stream(sounds.take(failed ? ReplaySounds.FANFARE_FAILURE : ReplaySounds.FANFARE_SUCCESS)) : null;
+        if (fanfare != null) {
+            fanfare.setVolume(fanfareVolume(failed));
+            fanfare.play();
+        }
+    }
+
+    private float fanfareVolume(boolean failed) {
+        return volume(failed ? ReplaySounds.FANFARE_FAILURE : ReplaySounds.FANFARE_SUCCESS)
+            * LaunchWindowGame.musicVolume();
     }
 
     /** Whether the next clip carries a running loop on, rather than starting it again. */
@@ -149,7 +177,7 @@ final class ReplayAudio {
             previous = t;
             return;
         }
-        startBeds();
+        startRoom();
         if (held != null && held == playing) {
             effect(ReplayConsole.HOLD_CLICK, null);
         }
@@ -181,14 +209,19 @@ final class ReplayAudio {
             voice.dispose();
             return true;
         });
-        duck += Math.signum((radio.isEmpty() ? 1f : DUCKED) - duck) * Math.min(DUCK_SPEED * delta,
-            Math.abs((radio.isEmpty() ? 1f : DUCKED) - duck));
-        if (trackEnded) {
-            trackEnded = false;
-            nextTrack();
-        }
-        if (music != null) {
-            music.setVolume(volume(ReplaySounds.MUSIC) * LaunchWindowGame.musicVolume() * duck);
+        if (fanfare != null) {
+            float level = 1f;
+            if (fanfareFading) {
+                fanfareFadeLeft -= delta;
+                level = Math.max(fanfareFadeLeft, 0f) / FANFARE_FADE;
+            }
+            if (!fanfare.isPlaying() || level <= 0f) {
+                fanfare.dispose();
+                fanfare = null;
+                fanfareFading = false;
+            } else {
+                fanfare.setVolume(fanfareVolume(fanfareFailed) * level);
+            }
         }
         if (room != null) {
             room.setVolume(volume(ReplaySounds.ROOM_TONE) * LaunchWindowGame.effectsVolume());
@@ -270,31 +303,15 @@ final class ReplayAudio {
         }
     }
 
-    private void startBeds() {
-        if (bedsStarted) {
+    private void startRoom() {
+        if (room != null) {
             return;
         }
-        bedsStarted = true;
-        nextTrack();
         room = stream(sounds.take(ReplaySounds.ROOM_TONE));
         if (room != null) {
             room.setLooping(true);
             room.setVolume(volume(ReplaySounds.ROOM_TONE) * LaunchWindowGame.effectsVolume());
             room.play();
-        }
-    }
-
-    /** Plays the next track, shuffled with no repeats; the next one follows when it ends. */
-    private void nextTrack() {
-        if (music != null) {
-            music.dispose();
-        }
-        music = stream(sounds.take(ReplaySounds.MUSIC));
-        if (music != null) {
-            // Not from inside the listener: the track is disposed when the next one starts.
-            music.setOnCompletionListener(ended -> trackEnded = true);
-            music.setVolume(volume(ReplaySounds.MUSIC) * LaunchWindowGame.musicVolume() * duck);
-            music.play();
         }
     }
 
@@ -331,8 +348,8 @@ final class ReplayAudio {
     }
 
     /**
-     * Stops everything, the music too: the screen is hidden or the sound turned off. The music starts
-     * again with the next frame that has sound.
+     * Stops everything, the fanfare and the room too: the screen is hidden or the sound turned off. The
+     * room starts again with the next frame that has sound; the fanfare doesn't.
      */
     void stop() {
         for (Loop loop : loops) {
@@ -341,16 +358,15 @@ final class ReplayAudio {
         loops.clear();
         radio.forEach(Music::dispose);
         radio.clear();
-        if (music != null) {
-            music.dispose();
-            music = null;
+        if (fanfare != null) {
+            fanfare.dispose();
+            fanfare = null;
         }
+        fanfareFading = false;
         if (room != null) {
             room.dispose();
             room = null;
         }
-        bedsStarted = false;
-        trackEnded = false;
         held = null;
     }
 

@@ -193,7 +193,7 @@ public final class ReplayScreen extends ChromeScreen {
     private void playClip(boolean natural) {
         if (playback.atSummary()) {
             monitor.stop();
-            audio.step(null, null, natural);
+            audio.summary(failed(steps()), natural);
             return;
         }
         int index = playback.step();
@@ -575,13 +575,18 @@ public final class ReplayScreen extends ChromeScreen {
         return side;
     }
 
+    /** Whether the mission failed this season: its last step did. A glitch, solved or not, isn't a failure. */
+    private static boolean failed(List<MissionStepResolved> steps) {
+        MissionStepOutcome last = steps.isEmpty() ? MissionStepOutcome.SUCCESSFUL : steps.get(steps.size() - 1).outcome();
+        return last == MissionStepOutcome.FAILURE || last == MissionStepOutcome.CATASTROPHIC;
+    }
+
     private Table summary(List<MissionStepResolved> steps) {
         TurnReport.MissionFlown flown = flown();
         Table card = ui.card();
         card.top();
         card.defaults().growX().left();
-        MissionStepOutcome last = steps.isEmpty() ? MissionStepOutcome.SUCCESSFUL : steps.get(steps.size() - 1).outcome();
-        boolean failed = last == MissionStepOutcome.FAILURE || last == MissionStepOutcome.CATASTROPHIC;
+        boolean failed = failed(steps);
         String headline = failed ? "Ended on step " + steps.size()
             : flown != null && flown.ended() ? "Mission complete"
             : flown == null ? "Season done" : "Season " + (flown.seasonIndex() + 1) + " of " + flown.seasonsTotal()

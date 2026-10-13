@@ -33,8 +33,10 @@ public final class ReplaySounds {
     public static final String FILE = "replay-sounds.json";
     /** Where the sounds are, under {@code assets/}. */
     public static final String FOLDER = "audio/replay/";
-    /** The background music's id: its takes are the tracks. */
-    public static final String MUSIC = "music";
+    /** The fanfare at the end of a mission's replay that didn't fail, glitches or not. */
+    public static final String FANFARE_SUCCESS = "fanfare-success";
+    /** The fanfare at the end of a mission's replay that failed. */
+    public static final String FANFARE_FAILURE = "fanfare-failure";
     /** Mission control's room tone. */
     public static final String ROOM_TONE = "room-tone";
 
@@ -50,9 +52,9 @@ public final class ReplaySounds {
         EFFECT,
         /** Over and over until stopped, from memory. */
         LOOP,
-        /** A voice on the radio, streamed; the music dips under it. */
+        /** A voice on the radio, streamed. */
         RADIO,
-        /** A background track, streamed. */
+        /** A fanfare, streamed, once, at the player's music volume. */
         MUSIC,
         /** The room's sound, streamed, looping. */
         ROOM

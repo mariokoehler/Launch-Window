@@ -37,10 +37,12 @@ class ReplaySoundsTest {
             assertTrue(sound.volume() > 0f && sound.volume() <= 1f, sound.id());
         }
         for (String id : List.of(ReplayConsole.BLIP, ReplayConsole.CAUTION_TONE, ReplayConsole.MASTER_ALARM,
-            ReplayConsole.STATIC, ReplayConsole.HOLD_CLICK, ReplaySounds.MUSIC, ReplaySounds.ROOM_TONE)) {
+            ReplayConsole.STATIC, ReplayConsole.HOLD_CLICK, ReplaySounds.FANFARE_SUCCESS, ReplaySounds.FANFARE_FAILURE,
+            ReplaySounds.ROOM_TONE)) {
             assertTrue(ids.contains(id), id);
         }
-        assertEquals(ReplaySounds.Kind.MUSIC, SOUNDS.sound(ReplaySounds.MUSIC).orElseThrow().kind());
+        assertEquals(ReplaySounds.Kind.MUSIC, SOUNDS.sound(ReplaySounds.FANFARE_SUCCESS).orElseThrow().kind());
+        assertEquals(ReplaySounds.Kind.MUSIC, SOUNDS.sound(ReplaySounds.FANFARE_FAILURE).orElseThrow().kind());
         assertEquals(ReplaySounds.Kind.ROOM, SOUNDS.sound(ReplaySounds.ROOM_TONE).orElseThrow().kind());
         assertEquals(ReplaySounds.Kind.LOOP, SOUNDS.sound(ReplayConsole.MASTER_ALARM).orElseThrow().kind());
         assertEquals(ReplaySounds.Kind.LOOP, SOUNDS.sound(ReplayConsole.STATIC).orElseThrow().kind());

@@ -150,9 +150,10 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   show clock until steps get mission times. `-Dshots=console` renders its states. Client only.
 - **Sound for the replay** (the user's idea, 2026-10-13, `ui-spec.md` §4.7.3 "Sound"): a pool of named
   sounds in `assets/content/replay-sounds.json` (each one's description is the brief; no takes yet means
-  silent), cues in the clips' sidecars, the console's own sounds, music and room tone, music and effects
-  volumes in Settings. All English, music generic (user). Synthesized `placeholder-*` takes play until the
-  user brings real ones (`assets-raw/replay/sounds/make_placeholder_sounds.py`); the console's come first.
+  silent), cues in the clips' sidecars, the console's own sounds, room tone, a fanfare at the season
+  summary (success or failure; no background music, user), music and effects volumes in Settings. All
+  English (user). Every sound is real (Pixabay, NASA, Stable Audio 3, credited); a new one plays a
+  synthesized `placeholder-*` take until it has its own (`assets-raw/replay/sounds/make_placeholder_sounds.py`).
 - **The game's first sound** (the user's idea, 2026-10-12, NASA recordings in `assets/audio/`, credited):
   Armstrong's "one small step" with the splash, Kennedy's "We choose to go to the Moon" when the Join
   screen opens. Settings' Sound On/Off now works, for the whole device (`LaunchWindowGame.soundOn`).

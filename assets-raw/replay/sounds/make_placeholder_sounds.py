@@ -34,6 +34,17 @@ def envelope(n, attack=0.005, release=0.02):
     return e
 
 
+def fanfare(notes, bright=0.8):
+    """Brassy notes in sequence: (frequency, seconds) each, the last one held and fading."""
+    parts = []
+    for i, (f, seconds) in enumerate(notes):
+        x = t(seconds)
+        tone = sum(bright ** k * np.sin(2 * np.pi * f * (k + 1) * x) for k in range(8)) * 0.12
+        last = i == len(notes) - 1
+        parts.append(tone * envelope(len(x), 0.02, seconds * 0.8 if last else 0.03))
+    return np.concatenate(parts)
+
+
 def save(name, signal, ogg=False):
     """Writes a placeholder take and returns its path under assets/."""
     signal = np.clip(signal, -1, 1)
@@ -73,11 +84,11 @@ def main():
     # A decaying noise burst.
     x = t(0.04)
     takes['hold-click'] = [save('hold-click', rng.normal(0, 0.6, len(x)) * np.exp(-x * 150))]
-    # A slow open-fifth drone, faded in and out.
-    x = t(30.0)
-    drone = 0.15 * (np.sin(2 * np.pi * 110 * x) + np.sin(2 * np.pi * 164.8 * x)
-                    + np.sin(2 * np.pi * 220 * x * (1 + 0.002 * np.sin(x))))
-    takes['music'] = [save('music', drone * envelope(len(x), 2.0, 2.0), ogg=True)]
+    # Fanfares: brassy notes (decaying harmonics), a rising major arpeggio and a falling minor one.
+    takes['fanfare-success'] = [save('fanfare-success', fanfare([(261.6, 0.25), (329.6, 0.25), (392.0, 0.25),
+                                                                   (523.3, 2.5)]), ogg=True)]
+    takes['fanfare-failure'] = [save('fanfare-failure', fanfare([(196.0, 0.5), (155.6, 0.5), (130.8, 3.0)],
+                                                                bright=0.5), ogg=True)]
     # Quiet noise with a mains hum, whole hum periods so the loop is seamless.
     x = t(10.0)
     takes['room-tone'] = [save('room-tone', rng.normal(0, 0.03, len(x)) + 0.03 * np.sin(2 * np.pi * 60 * x),

@@ -2721,18 +2721,21 @@ mission behind the photo, show the Pale Blue Dot and honour Sagan's essay, perha
 **Sound for the replay (the user's idea, 2026-10-13; the groundwork built the same day, `ui-spec.md`
 §4.7.3, "Sound"):** no audio baked into the videos, so ambience can cross from one step to the next.
 A pool of named sounds (`assets/content/replay-sounds.json`), the clips' sidecars cueing them like
-`revealAt`, the console making its own sounds, and music with room tone under everything.
+`revealAt`, the console making its own sounds, room tone under everything, and a fanfare at the end.
 **Decided (user, 2026-10-13):**
 - **English for both sides.** Soviet recordings are hard to find online without Russian, and none of
   the players speaks Russian: Russian callouts would cost a lot and make the replay harder to follow.
   NASA's recordings serve both agencies, unrealistic as that is.
-- **The music doesn't react to events.** A few generic tracks of a minute or two, made with a
-  text-to-music model in ComfyUI, shuffled under every replay.
+- **No background music, a fanfare at the end instead** (user, 2026-10-13, walking back the earlier
+  plan of a few generic tracks shuffled under every replay: hard to get right without it grating).
+  One fanfare when the season summary shows a mission that didn't fail (glitches, solved or not,
+  included), another when it failed; a catastrophe shares the failure's.
 - **Accepted from Claude's proposal:** the pool as data, not an enum; cues with loops, fades and a
   loop carried into the next clip; the spoiler rule for sound (`ReplayClipsTest`); the console's sounds
-  from `ReplayConsole`; several takes per sound, no repeats; music dipping under radio voices; a
+  from `ReplayConsole`; several takes per sound, no repeats; a
   room-tone layer; skips fading everything within 0.1 s; separate music and effects volumes; the music
-  model's terms recorded in `assets/CREDITS.md`.
+  model's terms recorded in `assets/CREDITS.md`. (Music dipping under radio voices went with the
+  background music.)
 - **First up:** the console's sounds (the pool's descriptions are the brief). Then the radio voices
   and the clips' cues, as the pass over the mission steps lists the animations.
 - **Placeholders until the real sounds come (user, 2026-10-13):** every sound in the pool has a

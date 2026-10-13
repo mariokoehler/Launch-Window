@@ -1961,11 +1961,16 @@ clips, the replay is meant to be watched like a short film, and the player can s
     Vostok's launch live, while it plays and after (both with a stand-in video player that shows one
     frame of the launch clip).
 - **Sound (the user's idea, 2026-10-13; built the same day, `client.screen.ReplayAudio`):** nothing is
-  baked into the videos, so sound can run on across steps. Three layers:
-  - **Beds, the whole replay long:** music, several generic tracks shuffled with no repeats (the
-    user's own, from a text-to-music model in ComfyUI; they don't react to events), and mission
-    control's room tone, a quiet loop under it. Both run on across steps and missions in the queue,
-    and through the season summary; leaving the screen stops them.
+  baked into the videos, so sound can run on across steps. Four layers:
+  - **The room, the whole replay long:** mission control's room tone, a quiet loop of radio chatter
+    (the user's own mix of NASA recordings). It runs on across steps and missions in the queue, and
+    through the season summary; leaving the screen stops it.
+  - **A fanfare at the season summary** (the user's decision, 2026-10-13, instead of background
+    music, which was hard to get right without it grating): `fanfare-failure` when the mission failed
+    (its last step a failure or a catastrophe), `fanfare-success` for anything else, glitches, solved
+    or not, included, and for a season that ends with the crew still aboard. It plays once, whichever
+    way the summary is reached (played on, skipped to, clicked), again if the player comes back to
+    it; going back to a step fades it within 0.3 s. A catastrophe shares the failure's fanfare.
   - **The console's sounds, from `ReplayConsole`:** a telemetry blip every 2 s while a camera is live
     (none once telemetry is lost), the CAUTION tone each time its lamp lights (three for a saved
     glitch), the MASTER ALARM for 3 s after a failure's reveal (the lamp stays lit), quiet static under
@@ -1978,20 +1983,22 @@ clips, the replay is meant to be watched like a short film, and the player can s
     a loop at 0 keeps the same sound running from the clip before instead of starting it again. A
     clip's variants have the same cues before the earliest reveal (`ReplayClipsTest`).
   - **The pool:** `assets/content/replay-sounds.json` (outside the pack, like the clips), each sound an
-    id, a kind (effect, loop, radio, music, room), a volume, its takes (several, dealt with no repeats)
+    id, a kind (effect, loop, radio, music for the fanfares, room), a volume, its takes (several, dealt with no repeats)
     and a description that is the brief for making it. A sound with no takes yet plays nothing.
     Files go under `assets/audio/replay/`; loops must be OGG or WAV (MP3 pads its ends, so it can't
     loop seamlessly). `ReplaySoundsTest` holds every take to being there, in the catalog and, where
     it isn't the project's own, credited.
-  - **Radio voices** (a kind for later: NASA's callouts and chatter) are streamed, and the music dips
-    to 40 % under them. English for both sides (user, 2026-10-13).
+  - **Radio voices** (a kind for later: NASA's callouts and chatter) are streamed. English for both
+    sides (user, 2026-10-13).
   - **Playback:** a step that follows by itself lets the last one's loops end as their cues say; a
-    skip or a step back fades everything but the beds within 0.1 s. Silent when sound is off, checked
+    skip or a step back fades everything but the room within 0.1 s. Silent when sound is off, checked
     every frame. Volumes: the sound's own, times the player's setting (§4.12).
-  - **Unconfirmed:** the 2 s blip, the 3 s alarm, the static's level, the 40 % dip, the default
-    volumes (0.7).
-  - **Placeholders (user, 2026-10-13):** every sound plays a synthesized `placeholder-*` take until
-    the real ones come (`assets-raw/replay/sounds/make_placeholder_sounds.py`).
+  - **Unconfirmed:** the 2 s blip, the 3 s alarm, the static's level, the default volumes (0.7), the
+    fanfares' volume (0.8) and their 0.3 s fade.
+  - **Placeholders (user, 2026-10-13):** a sound plays a synthesized `placeholder-*` take until its
+    real one comes (`assets-raw/replay/sounds/make_placeholder_sounds.py`). Every sound is real since
+    2026-10-13: the console's from Pixabay, the room tone the user's mix of NASA recordings, the
+    fanfares the user's, made with Stable Audio 3 (all credited). The script stays for any new sound.
 
 Choices made while building them, **confirmed by the user (2026-10-06)**:
 - **Building panel (changed 2026-10-04, user):** the mockup had none, which left Mission Control
@@ -2260,7 +2267,7 @@ and Switch server close the connection and open Connect, Switch server with the 
 filled in (a bad address shows the Connect screen's own error under the field). Sound was
 two disabled segments until the game had sound; *since 2026-10-12* it's On (the default) or Off, for
 everyone on the device, since the splash plays before anyone logs in. *Since 2026-10-13* two sliders
-under it set the replay's music and sounds (§4.7.3, "Sound"), 70 % by default, for the device; the
+under it set the replay's music (its fanfares) and sounds (§4.7.3, "Sound"), 70 % by default, for the device; the
 voices at the start and on joining play at full volume. Replays: Ask, Always or Never,
 per account (§4.4). **Confirmed by the user (2026-10-04):** the hash is shortened to 8 characters; the
 "connected" label is fixed text; and the account note says an unlaunched mission plan is

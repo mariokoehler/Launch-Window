@@ -54,14 +54,24 @@
       "description": "Console. A dry mechanical click (about 50 to 100 ms): a relay or a toggle switch. Two takes, a press and a release, which the no-repeat deal alternates. Plays on Play and Pause, as the HOLD lamp goes on or off."
     },
     {
-      "id": "music",
+      "id": "fanfare-success",
       "kind": "MUSIC",
-      "volume": 0.35,
+      "volume": 0.8,
       "files": [
-        "audio/replay/placeholder-music.ogg"
+        "audio/replay/fanfare-success.mp3"
       ],
       "credit": true,
-      "description": "Background music, several tracks of 1 to 2 minutes, played shuffled with no repeats while a replay is open. Space opera, but generic enough for any step: no big climax, nothing triumphant or tragic that could hint at a result, an ending that doesn't jar when the next track starts. OGG or MP3."
+      "description": "Music. A short fanfare, about 5 to 10 s, once, when a mission's replay reaches its season summary and the mission didn't fail (glitches, solved or not, don't count). Classic space-age orchestral: bright brass, soaring strings, rising to a confident major-key finish and a clean, decisive ending, no fade. Instrumental. OGG or MP3."
+    },
+    {
+      "id": "fanfare-failure",
+      "kind": "MUSIC",
+      "volume": 0.8,
+      "files": [
+        "audio/replay/fanfare-failure.mp3"
+      ],
+      "credit": true,
+      "description": "Music. A short sting, about 5 to 10 s, once, when a mission's replay reaches its season summary and the mission failed or ended in catastrophe. Classic space-age orchestral: dark low brass and strings over a held low note, a grinding dissonance that swells to one bitter accent, then a quick collapse into silence. Grave, not horrifying; no triumph. Instrumental. OGG or MP3."
     },
     {
       "id": "room-tone",
