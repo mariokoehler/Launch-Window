@@ -17,11 +17,13 @@ import java.util.function.Function;
 
 /**
  * Which clip the replay's monitor plays for a step ({@code ui-spec.md} &sect;4.7.3). A step id loses
- * its number ({@code 03-launch} is {@code launch}), then the first rule in
- * {@code assets/content/replay-clips.json} whose step is the rest, or the rest's last words after a
- * dash ({@code atv-launch}), names the clip. The step's outcome picks the variant, and each variant's
- * sidecar ({@code assets/ui/replay/<clip>-<variant>.json}) gives its length and the second its result
- * may show. A step with no clip, or a variant missing, gets the no-signal clip.
+ * its number ({@code 03-launch} is {@code launch}) and any vehicle in front ({@code atv-launch}: the
+ * vehicles are listed in {@code assets/content/replay-clips.json}), then the first rule there whose
+ * step is the rest, or the rest less a craft's letter ({@code reentry-a}), names the clip. Nothing
+ * else borrows a clip: {@code lunar-ascent} isn't {@code ascent}. The step's outcome picks the
+ * variant, and each variant's sidecar ({@code assets/ui/replay/<clip>-<variant>.json}) gives its length
+ * and the second its result may show. A step with no clip, or a variant missing, gets the no-signal
+ * clip.
  *
  * @author Mario Koehler
  */
@@ -54,9 +56,11 @@ public final class ReplayClips {
     /**
      * The rules' file.
      *
-     * @param rules the rules, first match wins
+     * @param rules    the rules, first match wins
+     * @param vehicles the prefixes that name a vehicle ({@code gemini-a}, {@code atv}): a step behind
+     *                 one plays the step's clip
      */
-    public record Rules(List<Rule> rules) {
+    public record Rules(List<Rule> rules, List<String> vehicles) {
     }
 
     /**
@@ -121,11 +125,13 @@ public final class ReplayClips {
     }
 
     private final List<Rule> rules;
+    private final List<String> vehicles;
     private final Function<String, Optional<Sidecar>> sidecars;
     private final Map<String, Optional<Sidecar>> cache = new HashMap<>();
 
-    private ReplayClips(List<Rule> rules, Function<String, Optional<Sidecar>> sidecars) {
-        this.rules = List.copyOf(rules);
+    private ReplayClips(Rules file, Function<String, Optional<Sidecar>> sidecars) {
+        this.rules = file.rules() == null ? List.of() : List.copyOf(file.rules());
+        this.vehicles = file.vehicles() == null ? List.of() : List.copyOf(file.vehicles());
         this.sidecars = sidecars;
     }
 
@@ -138,15 +144,15 @@ public final class ReplayClips {
     public static synchronized ReplayClips standard() {
         if (standard == null) {
             ClassLoader loader = ReplayClips.class.getClassLoader();
-            List<Rule> rules = List.of();
+            Rules file = new Rules(List.of(), List.of());
             try (InputStream in = loader.getResourceAsStream("content/" + FILE)) {
                 if (in != null) {
-                    rules = JSON.readValue(in, Rules.class).rules();
+                    file = JSON.readValue(in, Rules.class);
                 }
             } catch (IOException e) {
                 throw new UncheckedIOException(e);
             }
-            standard = new ReplayClips(rules, name -> {
+            standard = new ReplayClips(file, name -> {
                 try (InputStream in = loader.getResourceAsStream(FOLDER + name + ".json")) {
                     return in == null ? Optional.empty() : Optional.of(JSON.readValue(in, Sidecar.class));
                 } catch (IOException e) {
@@ -165,9 +171,8 @@ public final class ReplayClips {
      */
     public static ReplayClips load(Path assets) {
         try {
-            List<Rule> rules = JSON.readValue(Files.readString(assets.resolve("content").resolve(FILE)), Rules.class)
-                .rules();
-            return new ReplayClips(rules, name -> {
+            Rules file = JSON.readValue(Files.readString(assets.resolve("content").resolve(FILE)), Rules.class);
+            return new ReplayClips(file, name -> {
                 Path sidecar = assets.resolve(FOLDER + name + ".json");
                 try {
                     return Files.exists(sidecar) ? Optional.of(JSON.readValue(Files.readString(sidecar), Sidecar.class))
@@ -191,6 +196,15 @@ public final class ReplayClips {
     }
 
     /**
+     * Returns the prefixes that name a vehicle.
+     *
+     * @return the vehicles
+     */
+    public List<String> vehicles() {
+        return vehicles;
+    }
+
+    /**
      * Returns a step's kind: its id without the number ({@code 09-gemini-b-launch} is
      * {@code gemini-b-launch}).
      *
@@ -209,7 +223,16 @@ public final class ReplayClips {
      */
     public Optional<String> clipName(String stepId) {
         String kind = kind(stepId);
-        return rules.stream().filter(rule -> kind.equals(rule.step()) || kind.endsWith("-" + rule.step()))
+        // The longest vehicle in front goes (soyuz-7k-ok before a shorter one that also fits).
+        String vehicle = "";
+        for (String v : vehicles) {
+            if (kind.startsWith(v + "-") && v.length() > vehicle.length()) {
+                vehicle = v;
+            }
+        }
+        String step = vehicle.isEmpty() ? kind : kind.substring(vehicle.length() + 1);
+        return rules.stream()
+            .filter(rule -> step.equals(rule.step()) || step.equals(rule.step() + "-a") || step.equals(rule.step() + "-b"))
             .map(Rule::clip).findFirst();
     }
 

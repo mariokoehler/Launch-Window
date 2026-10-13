@@ -1,5 +1,12 @@
 {
   "rules": [
-    {"step": "launch", "clip": "launch"}
-  ]
+    {"step": "launch-preparations", "clip": "launch-preparations"},
+    {"step": "countdown", "clip": "countdown"},
+    {"step": "launch", "clip": "launch"},
+    {"step": "ascent", "clip": "ascent"},
+    {"step": "deployment", "clip": "deployment"},
+    {"step": "earth-orbit", "clip": "earth-orbit"}
+  ],
+  "vehicles": ["atv", "gemini-a", "gemini-b", "lk-700", "sc-a", "sc-b", "soyuz-7k-l3-lok", "soyuz-7k-ok",
+               "spc-a", "spc-b", "transtage"]
 }

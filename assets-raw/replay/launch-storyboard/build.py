@@ -57,6 +57,8 @@ def main():
         f.write(f"var VARIANT = {json.dumps(board)}, DUR = {dur};\n")
         f.write("var KINK = " + json.dumps(kink()) + ";\n")
         f.write("var FALL = " + json.dumps(falls()) + ";\n")
+        f.write(open(os.path.join(HERE, "..", "motion.jsx"), encoding="utf-8").read() + "\n")
+        f.write('setup("Launch " + VARIANT, DUR);\n')
         for part in ("lib.jsx", f"{key}.jsx"):
             f.write(open(os.path.join(HERE, part), encoding="utf-8").read() + "\n")
     project = os.path.join(BUILD, f"launch-{key}.ecproj")

@@ -1897,7 +1897,16 @@ clips, the replay is meant to be watched like a short film, and the player can s
   `failure` (failure; also catastrophic, until a step has its own `catastrophic` clip).
   `assets/content/replay-clips.json` maps step ids to clips: a step id loses its number (`03-`),
   then the first rule whose pattern matches the rest names the clip (`launch` matches `launch`,
-  `atv-launch`, `gemini-b-launch`). It's outside the content pack (not hashed), like the stories.
+  `atv-launch`, `gemini-b-launch`). A step matches only by its own name, behind a vehicle the file
+  lists (`atv`, `gemini-a`, `soyuz-7k-ok`) or with a craft's letter after it (`reentry-a`), never by
+  how its name ends: `lunar-ascent` plays no signal until it has its own clip (2026-10-13; a test
+  holds the list to the pack's vehicles). It's outside the content pack (not hashed), like the stories.
+- **Which steps have clips (2026-10-13):** a first satellite's whole mission (Sputnik 1, Explorer 1):
+  launch preparations, countdown, launch, ascent, deployment, Earth orbit. The rest are listed in
+  `assets-raw/replay/CLIP_CHECKLIST.md`. Every clip is generic (it plays for every program that flies
+  the step: the payload is the launch rocket's own nose section) and has no lettering (digits only; unconfirmed).
+  Steps cut straight into each other, so a step's success and glitch end on the same frame, and a
+  step on the pad ends on the next one's first.
 - **No clip yet:** a step with no clip, or a variant missing, plays `no-signal.webm` on a loop (an
   antenna searching, outcome-neutral) with "No signal" in the bezel; its result shows after a
   1.5 s pause, and playback moves on at 3 s. If no video can play at all (no file, no native

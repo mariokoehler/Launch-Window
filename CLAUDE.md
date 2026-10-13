@@ -142,8 +142,9 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   loop for a step without one), its result shown at the clip's `revealAt`, the steps playing on by
   themselves again (Play/Pause; the 2026-10-06 decision reversed). The step list is the plan, so its length
   spoils nothing. A new turn with missions flown asks first to watch them spoiler-free, then the front
-  pages, then the report (Settings: ask, always, never). Only the launch has clips. Client only: no reset,
-  no server rebuild.
+  pages, then the report (Settings: ask, always, never). A first satellite's six steps have clips
+  (2026-10-13, `assets-raw/replay/steps/`), the rest play no signal. Client only: no reset, no server
+  rebuild.
 - **The replay console** (the user's idea, 2026-10-13, `ui-spec.md` §4.7.3, from the canvas
   `Launch Window — Replay Console`): the monitor is a console with a mission clock, a status gauge and
   telemetry, whose motion (`client.view.ReplayConsole`) tells nothing before the reveal. The clock is a

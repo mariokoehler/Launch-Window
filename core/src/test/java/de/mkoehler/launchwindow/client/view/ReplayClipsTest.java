@@ -1,10 +1,18 @@
 package de.mkoehler.launchwindow.client.view;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.mkoehler.launchwindow.rules.MissionStepOutcome;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -40,15 +48,60 @@ class ReplayClipsTest {
     }
 
     /**
-     * A step matches by its kind, its number and any vehicle in front dropped; nothing else matches.
+     * A step matches by its kind, its number, any vehicle in front and a craft's letter dropped;
+     * nothing else matches, so a step that only ends like another doesn't borrow its clip.
      */
     @Test
     void matchesStepsByKind() {
         assertEquals("launch", CLIPS.clipName("03-launch").orElseThrow());
         assertEquals("launch", CLIPS.clipName("09-gemini-b-launch").orElseThrow());
         assertEquals("launch", CLIPS.clipName("03-atv-launch").orElseThrow());
-        assertTrue(CLIPS.clipName("01-launch-preparations").isEmpty());
+        assertEquals("launch-preparations", CLIPS.clipName("01-launch-preparations").orElseThrow());
+        assertEquals("launch-preparations", CLIPS.clipName("01-atv-launch-preparations").orElseThrow());
+        assertEquals("deployment", CLIPS.clipName("05-soyuz-7k-ok-deployment").orElseThrow());
+        assertEquals("deployment", CLIPS.clipName("05-spc-b-deployment").orElseThrow());
+        assertEquals("earth-orbit", CLIPS.clipName("06-earth-orbit-a").orElseThrow());
         assertTrue(CLIPS.clipName("03-launch-from-drop-plane").isEmpty());
+        assertTrue(CLIPS.clipName("02-pre-launch").isEmpty());
+        assertTrue(CLIPS.clipName("12-lunar-ascent").isEmpty());
+        assertTrue(CLIPS.clipName("04-powered-ascent").isEmpty());
+        assertTrue(CLIPS.clipName("07-lk-deployment").isEmpty());
+        assertTrue(CLIPS.clipName("03-wings-deployment").isEmpty());
+        assertTrue(CLIPS.clipName("05-lem-tests-earth-orbit").isEmpty());
+    }
+
+    /**
+     * The vehicles cover the standard pack: every prefix in front of two of a launch's or a
+     * return's steps, or one with a digit (a craft's name), is listed, and every listed one flies.
+     */
+    @Test
+    void vehiclesCoverThePack() throws IOException {
+        Set<String> kinds = new TreeSet<>();
+        JsonNode configurations = new ObjectMapper().readTree(
+            Files.readString(ASSETS.resolve("content/standard/mission-configurations.json")));
+        for (JsonNode configuration : configurations) {
+            for (JsonNode season : configuration.get("seasons")) {
+                for (JsonNode step : season.get("steps")) {
+                    kinds.add(ReplayClips.kind(step.get("id").asText()));
+                }
+            }
+        }
+        Map<String, Integer> seen = new TreeMap<>();
+        for (String kind : kinds) {
+            for (String marker : List.of("launch-preparations", "countdown", "launch", "deployment", "retrofire", "reentry")) {
+                if (kind.endsWith("-" + marker)) {
+                    seen.merge(kind.substring(0, kind.length() - marker.length() - 1), 1, Integer::sum);
+                }
+            }
+        }
+        seen.forEach((prefix, count) -> {
+            if (count >= 2 || prefix.matches(".*\\d.*")) {
+                assertTrue(CLIPS.vehicles().contains(prefix), prefix + " is a vehicle");
+            }
+        });
+        for (String vehicle : CLIPS.vehicles()) {
+            assertTrue(kinds.stream().anyMatch(kind -> kind.startsWith(vehicle + "-")), vehicle + " flies no step");
+        }
     }
 
     /**
@@ -59,7 +112,7 @@ class ReplayClipsTest {
     void picksTheVariant() {
         assertTrue(CLIPS.clipFor("03-launch", MissionStepOutcome.MINOR_GLITCH_SOLVED).video().endsWith("launch-glitch.webm"));
         assertTrue(CLIPS.clipFor("03-launch", MissionStepOutcome.CATASTROPHIC).video().endsWith("launch-failure.webm"));
-        ReplayClips.Clip none = CLIPS.clipFor("04-ascent", MissionStepOutcome.SUCCESSFUL);
+        ReplayClips.Clip none = CLIPS.clipFor("07-docking", MissionStepOutcome.SUCCESSFUL);
         assertFalse(none.signal());
         assertTrue(none.loop());
         assertEquals(ReplayClips.NO_SIGNAL_REVEAL, none.revealAt());
