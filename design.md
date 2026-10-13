@@ -2686,6 +2686,38 @@ status gauge whose needle tells the outcome at the reveal, and telemetry bars. *
 from (T+ at liftoff, at orbit insertion, ...), so the clock advances from there during each step;
 until then it's a show clock counting the clips played.
 
+**A tribute to Carl Sagan and the Pale Blue Dot** (the user's idea, 2026-10-13, for later): after the
+mission behind the photo, show the Pale Blue Dot and honour Sagan's essay, perhaps with his speech.
+- **The mission isn't in the game:** Voyager 1 took the photo on 14 February 1990, from about 6
+  billion km, at Sagan's urging; neither pack has a Voyager program (BASPM's tree doesn't either; the
+  pack mentions Voyager only in two history notes). The choices: a Voyager program of our own (new
+  content beyond BASPM's, the user's call), or the tribute on the furthest outer-planet flight there is
+  (Pioneer 10 or 11, or a goal like `saturn-flyby`).
+- **Rights:** the image is NASA/JPL's, public domain. Sagan's text and his reading of it are from
+  his book *Pale Blue Dot* (1994) and belong to his estate: not usable without permission, even in a
+  non-commercial project. Without it, the tribute says it in our own words and points to the essay.
+- **The estate's stance (researched 2026-10-13):** no published policy on fan or non-commercial use.
+  Druyan-Sagan Associates (Ann Druyan) licenses Sagan's voice commercially (Apple 2017, Fiat
+  Chrysler 2019, Netflix 2025) and sued Luma AI on 25 August 2026 over eight seconds of it in an ad,
+  after a cease-and-desist in February was ignored. No takedowns of fan videos were found, and one
+  well-known Pale Blue Dot fan video says it's posted "with the kind permission of Cosmos Studios":
+  asking has worked. The passage is "© 1994 Carl Sagan, © 2006 Democritus Properties, LLC"; the
+  Library of Congress refers permission requests for its Sagan collection to Ann Druyan or her
+  designee. No public permissions contact was found; Cosmos Studios is the likely first address.
+  Germany's quotation right (§ 51 UrhG) is narrower than US fair use and probably doesn't cover a
+  tribute screen.
+- **Decided (user, 2026-10-13): use Sagan's recording without asking.** The user accepts the risk as
+  very low for a private, non-commercial game among friends, and doesn't want to draw the estate's
+  attention to the project by asking. The clip comes from the Library of Congress: item
+  `cosmos000110`, https://www.loc.gov/item/cosmos000110/, a short recording of Sagan explaining the
+  Pale Blue Dot, in the Seth MacFarlane Collection of the Carl Sagan and Ann Druyan Archive (Motion
+  Picture, Broadcasting and Recorded Sound Division). When it's built:
+  - `assets/CREDITS.md` credits it as it is: Carl Sagan, the LoC item and its collection, the URL, and
+    "© Druyan-Sagan Associates"; it claims no licence and no public domain.
+  - **If the estate ever objects, take the clip out at once.** Revisit this before the repo goes
+    public (`CLAUDE.md`: ask before making it public).
+  - The Voyager 1 image (NASA/JPL, public domain) and the tribute's own text need nothing more.
+
 **Sound for the replay (the user's idea, 2026-10-13; the groundwork built the same day, `ui-spec.md`
 §4.7.3, "Sound"):** no audio baked into the videos, so ambience can cross from one step to the next.
 A pool of named sounds (`assets/content/replay-sounds.json`), the clips' sidecars cueing them like
