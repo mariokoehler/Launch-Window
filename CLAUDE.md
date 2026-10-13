@@ -148,6 +148,11 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   `Launch Window — Replay Console`): the monitor is a console with a mission clock, a status gauge and
   telemetry, whose motion (`client.view.ReplayConsole`) tells nothing before the reveal. The clock is a
   show clock until steps get mission times. `-Dshots=console` renders its states. Client only.
+- **Sound for the replay** (the user's idea, 2026-10-13, `ui-spec.md` §4.7.3 "Sound"): a pool of named
+  sounds in `assets/content/replay-sounds.json` (each one's description is the brief; no takes yet means
+  silent), cues in the clips' sidecars, the console's own sounds, music and room tone, music and effects
+  volumes in Settings. All English, music generic (user). Synthesized `placeholder-*` takes play until the
+  user brings real ones (`assets-raw/replay/sounds/make_placeholder_sounds.py`); the console's come first.
 - **The game's first sound** (the user's idea, 2026-10-12, NASA recordings in `assets/audio/`, credited):
   Armstrong's "one small step" with the splash, Kennedy's "We choose to go to the Moon" when the Join
   screen opens. Settings' Sound On/Off now works, for the whole device (`LaunchWindowGame.soundOn`).
@@ -383,7 +388,8 @@ cd assets && java --enable-native-access=ALL-UNNAMED -cp "../lwjgl3/target/class
   Never add it there. `ContentStringsTest` fails until every new id has text. The same goes for
   `assets/content/space-race-news.json` (`SpaceRaceNewsTest`), `pr-press.json` (`PrDutyTest`) and
   `event-stories.json` (`EventStoriesTest`, which holds each event to its sized count), and
-  `decisions.json` (`DecisionsTest`; saved state keeps its ids too), `agency-names.json` (`AgencyNamesTest`), `replay-clips.json`
+  `decisions.json` (`DecisionsTest`; saved state keeps its ids too), `agency-names.json` (`AgencyNamesTest`), `replay-sounds.json`
+  (`ReplaySoundsTest`: every take there, listed and credited; loops OGG or WAV, never MP3), `replay-clips.json`
   (`ReplayClipsTest`, which holds every rule to its three clips and sidecars), and `front-pages.json`
   (`FrontPagesTest`, which also holds every article to its columns; printed pages store story ids). Core's tests have no assets on the
   classpath, so `Decisions.standard()` is empty there: tests and tools set it with `Decisions.setStandard`

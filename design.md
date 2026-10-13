@@ -429,6 +429,11 @@ leading to satellite navigation.
   July 1960, 19 seconds in: a strap-on broke away and the capsule's parachutes opened too low.
   They're the dogs remembered on a failed Korabl-Sputnik 2 flight (§2.5(f)), as "Chaika". Sources
   differ on the first dog's name.
+- **The Quindar tones** (found 2026-10-13, for the replay's radio voices, §5 Backlog; verify the
+  figures before a note uses them): the beep in Apollo's air-to-ground audio. When CAPCOM keyed the
+  microphone, mission control's equipment sent a 250 ms tone at 2525 Hz, and one at 2475 Hz on
+  release, to switch the remote tracking stations' transmitters on and off; listeners heard them
+  because the air-to-ground loop was recorded and broadcast as it was.
 - **Rendezvous is counterintuitive** and **restarting an engine in zero-g is hard:** both now
   explainers (E-02, E-04 above).
 - **The R-16 disaster** (Baikonur, 24 October 1960) for a later memorial or news context,
@@ -2680,6 +2685,34 @@ status gauge whose needle tells the outcome at the reveal, and telemetry bars. *
 2026-10-13):** a pass over the mission steps' configuration gives each step a mission time to start
 from (T+ at liftoff, at orbit insertion, ...), so the clock advances from there during each step;
 until then it's a show clock counting the clips played.
+
+**Sound for the replay (the user's idea, 2026-10-13; the groundwork built the same day, `ui-spec.md`
+§4.7.3, "Sound"):** no audio baked into the videos, so ambience can cross from one step to the next.
+A pool of named sounds (`assets/content/replay-sounds.json`), the clips' sidecars cueing them like
+`revealAt`, the console making its own sounds, and music with room tone under everything.
+**Decided (user, 2026-10-13):**
+- **English for both sides.** Soviet recordings are hard to find online without Russian, and none of
+  the players speaks Russian: Russian callouts would cost a lot and make the replay harder to follow.
+  NASA's recordings serve both agencies, unrealistic as that is.
+- **The music doesn't react to events.** A few generic tracks of a minute or two, made with a
+  text-to-music model in ComfyUI, shuffled under every replay.
+- **Accepted from Claude's proposal:** the pool as data, not an enum; cues with loops, fades and a
+  loop carried into the next clip; the spoiler rule for sound (`ReplayClipsTest`); the console's sounds
+  from `ReplayConsole`; several takes per sound, no repeats; music dipping under radio voices; a
+  room-tone layer; skips fading everything within 0.1 s; separate music and effects volumes; the music
+  model's terms recorded in `assets/CREDITS.md`.
+- **First up:** the console's sounds (the pool's descriptions are the brief). Then the radio voices
+  and the clips' cues, as the pass over the mission steps lists the animations.
+- **Placeholders until the real sounds come (user, 2026-10-13):** every sound in the pool has a
+  synthesized take, `placeholder-*` under `assets/audio/replay/`, made by
+  `assets-raw/replay/sounds/make_placeholder_sounds.py` (which leaves a sound with real takes alone).
+  Replace a placeholder by putting the real files in its entry's `files`.
+- **The Quindar tones** (flagged 2026-10-13, history for §1.1): the beep heard every few seconds in
+  Apollo's air-to-ground audio. Mission control's equipment sent a 250 ms tone, 2525 Hz, when CAPCOM
+  keyed the microphone and 2475 Hz when the key was released; inaudible to the crew in theory, they
+  switched the remote tracking stations' transmitters on and off over the phone lines. They belong
+  with the radio voices, a cue before and after each CAPCOM line, and can be generated exactly (pure
+  tones, nothing to license). The telemetry blip stays a separate, softer console sound.
 
 **Advisor** (the user's idea, built 2026-10-08, `ui-spec.md` component 24): a card on the hub with
 a new agency's first steps (help, engineers, a program, a rocket, R&D, controllers, astronauts

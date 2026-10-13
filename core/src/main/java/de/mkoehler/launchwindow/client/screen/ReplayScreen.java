@@ -15,6 +15,7 @@ import de.mkoehler.launchwindow.client.view.MissionControl;
 import de.mkoehler.launchwindow.client.view.ReplayClips;
 import de.mkoehler.launchwindow.client.view.ReplayConsole;
 import de.mkoehler.launchwindow.client.view.ReplayPlayback;
+import de.mkoehler.launchwindow.client.view.ReplaySounds;
 import de.mkoehler.launchwindow.client.view.SetSkills;
 import de.mkoehler.launchwindow.client.view.TurnReportView;
 import de.mkoehler.launchwindow.content.MissionComponent;
@@ -58,6 +59,7 @@ public final class ReplayScreen extends ChromeScreen {
     private final List<String> queue;
     private final ReplayClips clips = ReplayClips.standard();
     private final ReplayMonitor monitor;
+    private final ReplayAudio audio = new ReplayAudio(ReplaySounds.standard());
     private String missionId;
     private ReplayPlayback playback;
     /** The mission clock at the step's start, and the step's length. */
@@ -108,6 +110,7 @@ public final class ReplayScreen extends ChromeScreen {
 
     private void toReport() {
         monitor.stop();
+        audio.stop();
         withFrontPages(() -> openReport(report, null));
     }
 
@@ -126,7 +129,7 @@ public final class ReplayScreen extends ChromeScreen {
             }
         }, true);
         rebuild();
-        playClip();
+        playClip(false);
     }
 
     private ReplayClips.Clip clip(MissionStepResolved step) {
@@ -165,7 +168,7 @@ public final class ReplayScreen extends ChromeScreen {
     public void show(int step) {
         playback.show(step);
         rebuild();
-        playClip();
+        playClip(false);
     }
 
     /**
@@ -182,9 +185,15 @@ public final class ReplayScreen extends ChromeScreen {
         rebuild();
     }
 
-    private void playClip() {
+    /**
+     * Starts the step showing, or the summary.
+     *
+     * @param natural whether it follows the step before by itself ({@code false}: the player skipped)
+     */
+    private void playClip(boolean natural) {
         if (playback.atSummary()) {
             monitor.stop();
+            audio.step(null, null, natural);
             return;
         }
         int index = playback.step();
@@ -202,11 +211,13 @@ public final class ReplayScreen extends ChromeScreen {
         monitor.play(clip, TurnReportView.stepName(step.missionConfigurationId(), step.stepId()),
             ReplayConsole.live(ReplayConsole.seed(missionId, index), step.outcome(), clip.revealAt(),
                 playback.revealed(index)));
+        audio.step(clip, monitor.console(), natural);
     }
 
     @Override
     public void render(float delta) {
         monitor.update();
+        audio.update(playback.time(), playback.playing(), delta);
         if (!playback.atSummary()) {
             monitor.setTime(playback.time(), playback.playing(), clockBase + Math.min(playback.time(), clockStep));
         }
@@ -214,7 +225,7 @@ public final class ReplayScreen extends ChromeScreen {
             case REVEALED -> rebuild();
             case MOVED -> {
                 rebuild();
-                playClip();
+                playClip(true);
             }
             case NONE -> {
             }
@@ -223,8 +234,15 @@ public final class ReplayScreen extends ChromeScreen {
     }
 
     @Override
+    public void hide() {
+        audio.stop();
+        super.hide();
+    }
+
+    @Override
     public void dispose() {
         monitor.dispose();
+        audio.dispose();
         super.dispose();
     }
 

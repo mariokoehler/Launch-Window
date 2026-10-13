@@ -64,4 +64,33 @@ class ReplayClipsTest {
         assertTrue(none.loop());
         assertEquals(ReplayClips.NO_SIGNAL_REVEAL, none.revealAt());
     }
+
+    /**
+     * Every cue names a sound in the pool and fits its clip, and a clip's variants sound the same
+     * until the earliest of their reveals: the sound tells nothing the picture doesn't.
+     */
+    @Test
+    void cuesNameKnownSoundsAndSpoilNothing() {
+        ReplaySounds sounds = ReplaySounds.load(ASSETS);
+        for (ReplayClips.Rule rule : CLIPS.rules()) {
+            java.util.List<ReplayClips.Clip> variants = java.util.stream.Stream.of(MissionStepOutcome.SUCCESSFUL,
+                MissionStepOutcome.MINOR_GLITCH, MissionStepOutcome.FAILURE, MissionStepOutcome.CATASTROPHIC)
+                .map(outcome -> CLIPS.clipFor("03-" + rule.step(), outcome)).toList();
+            float reveal = (float) variants.stream().mapToDouble(ReplayClips.Clip::revealAt).min().orElse(0);
+            java.util.List<ReplayClips.Cue> before = null;
+            for (ReplayClips.Clip clip : variants) {
+                for (ReplayClips.Cue cue : clip.cues()) {
+                    assertTrue(sounds.sound(cue.sound()).isPresent(), clip.video() + ": " + cue.sound());
+                    assertTrue(cue.at() >= 0 && cue.at() < clip.duration(), clip.video() + ": " + cue);
+                    assertTrue(cue.until() == null || cue.until() > cue.at(), clip.video() + ": " + cue);
+                    assertTrue(!cue.carries() || cue.at() == 0, clip.video() + ": " + cue);
+                }
+                java.util.List<ReplayClips.Cue> early = clip.cues().stream().filter(cue -> cue.at() < reveal).toList();
+                if (before != null) {
+                    assertEquals(before, early, clip.video() + " sounds different before the reveal");
+                }
+                before = early;
+            }
+        }
+    }
 }

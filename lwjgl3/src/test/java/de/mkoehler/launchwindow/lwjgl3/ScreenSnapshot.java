@@ -552,7 +552,7 @@ public final class ScreenSnapshot {
             new Shot("console-tallest.png", MissionStepOutcome.SUCCESSFUL, 2f, true, false, true, 520f),
             new Shot("console-shortest.png", MissionStepOutcome.SUCCESSFUL, 2f, true, false, true, 430f));
         ReplayClips.Clip launch = new ReplayClips.Clip("ui/replay/launch-success.webm", null, 6.3f, reveal, false,
-            true);
+            true, List.of());
         for (Shot shot : shots) {
             // No signal: no player, so the still shows, as on a step with no clip of its own.
             ReplayMonitor monitor = new ReplayMonitor(game.ui(), shot.live() ? fakeVideoPlayer() : null);

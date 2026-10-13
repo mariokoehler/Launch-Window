@@ -2,6 +2,8 @@ package de.mkoehler.launchwindow.client.view;
 
 import de.mkoehler.launchwindow.rules.MissionStepOutcome;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
@@ -31,6 +33,21 @@ public final class ReplayConsole {
     /** The telemetry bars, top to bottom. */
     public static final String[] BARS = {"PRS", "TMP", "PWR"};
 
+    /** The telemetry's blip, in {@link ReplaySounds}. */
+    public static final String BLIP = "telemetry-blip";
+    /** The CAUTION lamp's tone. */
+    public static final String CAUTION_TONE = "caution-tone";
+    /** The MASTER ALARM's loop. */
+    public static final String MASTER_ALARM = "master-alarm";
+    /** The static under a step with no signal. */
+    public static final String STATIC = "no-signal-static";
+    /** The click of Play and Pause. */
+    public static final String HOLD_CLICK = "hold-click";
+
+    /** The blips' period, in seconds (unconfirmed). */
+    private static final float BLIP_PERIOD = 2f;
+    /** How long the alarm sounds after the reveal; the lamp stays lit (unconfirmed). */
+    private static final float ALARM_SOUNDS = 3f;
     /** The needle's rest before the reveal and after a success. */
     private static final float NOMINAL_REST = 0.30f;
     /** The wander's two waves (unconfirmed split of the mockup's 0.22 to 0.38). */
@@ -81,6 +98,7 @@ public final class ReplayConsole {
     private final float slowPhase;
     private final float fastPhase;
     private final float[] barPhases = new float[BARS.length];
+    private final float blipPhase;
 
     private ReplayConsole(long seed, MissionStepOutcome outcome, float revealAt, boolean revealedOnArrival) {
         this.outcome = outcome;
@@ -92,6 +110,7 @@ public final class ReplayConsole {
         for (int i = 0; i < barPhases.length; i++) {
             barPhases[i] = random.nextFloat() * TAU;
         }
+        blipPhase = random.nextFloat() * BLIP_PERIOD;
     }
 
     /**
@@ -333,6 +352,45 @@ public final class ReplayConsole {
             case CATASTROPHIC -> sinceReveal(t) % 0.6f < 0.3f;
             case SUCCESSFUL, MINOR_GLITCH, MINOR_GLITCH_SOLVED -> false;
         };
+    }
+
+    /**
+     * Returns the sounds the console starts between two times: the telemetry's blips while a camera
+     * is live (until telemetry is lost), and the CAUTION tone each time its lamp lights. A lamp
+     * already lit when the step was reached stays quiet. The same rule as the lamps: nothing here
+     * depends on the outcome before the reveal.
+     *
+     * @param from the time before, seconds into the step (excluded)
+     * @param to   the time now (included)
+     * @return the sounds' ids, in order
+     */
+    public List<String> sounds(float from, float to) {
+        List<String> started = new ArrayList<>();
+        if (!live() || to <= from) {
+            return started;
+        }
+        for (float at = blipPhase + BLIP_PERIOD * (float) Math.floor((from - blipPhase) / BLIP_PERIOD + 1f);
+             at <= to; at += BLIP_PERIOD) {
+            if (at > from && at >= 0f && !(outcome == MissionStepOutcome.CATASTROPHIC && revealed(at))) {
+                started.add(BLIP);
+            }
+        }
+        if (!revealedOnArrival && caution(to) && !caution(from)) {
+            started.add(CAUTION_TONE);
+        }
+        return started;
+    }
+
+    /**
+     * Returns whether the MASTER ALARM sounds: for a while after a failure's reveal, while its lamp
+     * stays lit; not on a step reached with its result shown.
+     *
+     * @param t seconds into the step
+     * @return whether it does
+     */
+    public boolean alarmSounding(float t) {
+        return revealed(t) && (outcome == MissionStepOutcome.FAILURE || outcome == MissionStepOutcome.CATASTROPHIC)
+            && sinceReveal(t) < ALARM_SOUNDS;
     }
 
     /**

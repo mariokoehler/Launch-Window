@@ -1,0 +1,76 @@
+{
+  "sounds": [
+    {
+      "id": "telemetry-blip",
+      "kind": "EFFECT",
+      "volume": 0.3,
+      "files": [
+        "audio/replay/placeholder-telemetry-blip-1.wav",
+        "audio/replay/placeholder-telemetry-blip-2.wav",
+        "audio/replay/placeholder-telemetry-blip-3.wav"
+      ],
+      "credit": false,
+      "description": "Console. A short, soft electronic blip (80 to 120 ms), like a 1960s telemetry readout updating: mid-high pitch, clean, no reverb. 3 or 4 takes, slightly different in pitch, so the repetition doesn't show. Plays every 2 s while a camera is live, and stops once telemetry is lost."
+    },
+    {
+      "id": "caution-tone",
+      "kind": "EFFECT",
+      "volume": 0.5,
+      "files": [
+        "audio/replay/placeholder-caution-tone.wav"
+      ],
+      "credit": false,
+      "description": "Console. An attention tone, not an alarm (at most 0.25 s): two quick alternating notes, a soft warble. Plays when the CAUTION lamp lights: once after a glitch, three times with the lamp's flashes when the controllers save one."
+    },
+    {
+      "id": "master-alarm",
+      "kind": "LOOP",
+      "volume": 0.45,
+      "files": [
+        "audio/replay/placeholder-master-alarm.ogg"
+      ],
+      "credit": false,
+      "description": "Console. A harsh, urgent alarm pulse in the manner of Apollo's master alarm, cut as a seamless loop of about 0.6 s. Plays from the reveal of a failure or a catastrophic failure for 3 s, then stops while the lamp stays lit. OGG, for a seamless loop."
+    },
+    {
+      "id": "no-signal-static",
+      "kind": "LOOP",
+      "volume": 0.08,
+      "files": [
+        "audio/replay/placeholder-no-signal-static.ogg"
+      ],
+      "credit": false,
+      "description": "Console. Soft radio static with a faint crackle, a seamless loop of 3 to 5 s. Very quiet: it plays under every step without a clip of its own, which is most steps for now. OGG, for a seamless loop."
+    },
+    {
+      "id": "hold-click",
+      "kind": "EFFECT",
+      "volume": 0.4,
+      "files": [
+        "audio/replay/placeholder-hold-click.wav"
+      ],
+      "credit": false,
+      "description": "Console. A dry mechanical click (about 50 ms): a relay or a toggle switch. Plays on Play and Pause, as the HOLD lamp goes on or off."
+    },
+    {
+      "id": "music",
+      "kind": "MUSIC",
+      "volume": 0.35,
+      "files": [
+        "audio/replay/placeholder-music.ogg"
+      ],
+      "credit": true,
+      "description": "Background music, several tracks of 1 to 2 minutes, played shuffled with no repeats while a replay is open. Space opera, but generic enough for any step: no big climax, nothing triumphant or tragic that could hint at a result, an ending that doesn't jar when the next track starts. OGG or MP3."
+    },
+    {
+      "id": "room-tone",
+      "kind": "ROOM",
+      "volume": 0.2,
+      "files": [
+        "audio/replay/placeholder-room-tone.ogg"
+      ],
+      "credit": false,
+      "description": "Mission control's room: air-conditioning hum, distant indistinct voices, now and then a chair or paper; no words anyone could make out. A seamless loop of 30 to 60 s under the music, the whole replay long. OGG, for a seamless loop."
+    }
+  ]
+}

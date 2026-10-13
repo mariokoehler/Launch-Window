@@ -98,10 +98,14 @@ final class SettingsDialog {
         card.add(section("Sound")).padBottom(Theme.SPACE_2).row();
         Table sound = new Table();
         sound.add(soundControl()).width(220f).height(32f).padRight(Theme.SPACE_3);
-        sound.add(ui.label("The voices at the start and on joining. For everyone on this device.",
+        sound.add(ui.label("All the game's sound. For everyone on this device.",
             Theme.TextStyle.CAPTION, Theme.INK_MUTED))
             .expandX().left();
-        card.add(sound).padBottom(Theme.SPACE_4).row();
+        card.add(sound).padBottom(Theme.SPACE_3).row();
+        card.add(volume("Replay music", LaunchWindowGame.musicVolume(), LaunchWindowGame::setMusicVolume))
+            .padBottom(Theme.SPACE_2).row();
+        card.add(volume("Replay sounds", LaunchWindowGame.effectsVolume(), LaunchWindowGame::setEffectsVolume))
+            .padBottom(Theme.SPACE_4).row();
 
         card.add(section("Replays")).padBottom(Theme.SPACE_2).row();
         Table replays = new Table();
@@ -193,6 +197,28 @@ final class SettingsDialog {
             segments.add(segment).expand().fill().uniformX();
         }
         return segments;
+    }
+
+    /**
+     * A volume slider for the replay's sound, saved as it moves (2026-10-13).
+     */
+    private Table volume(String name, float value, java.util.function.Consumer<Float> save) {
+        Table row = new Table();
+        row.add(ui.label(name, Theme.TextStyle.BODY_SM, Theme.INK)).width(120f).left();
+        com.badlogic.gdx.scenes.scene2d.ui.Slider slider =
+            new com.badlogic.gdx.scenes.scene2d.ui.Slider(0f, 1f, 0.05f, false, ui.slider());
+        slider.setValue(value);
+        Label percent = ui.label(Math.round(value * 100) + " %", Theme.TextStyle.CAPTION, Theme.INK_MUTED);
+        slider.addListener(new com.badlogic.gdx.scenes.scene2d.utils.ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, com.badlogic.gdx.scenes.scene2d.Actor actor) {
+                save.accept(slider.getValue());
+                percent.setText(Math.round(slider.getValue() * 100) + " %");
+            }
+        });
+        row.add(slider).width(220f).padRight(Theme.SPACE_3);
+        row.add(percent).expandX().left();
+        return row;
     }
 
     /**

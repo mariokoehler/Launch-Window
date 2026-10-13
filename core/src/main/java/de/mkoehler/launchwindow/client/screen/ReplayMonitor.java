@@ -191,6 +191,15 @@ public final class ReplayMonitor extends WidgetGroup {
     }
 
     /**
+     * Returns the step's instruments as the console shows them: dead while there's no signal.
+     *
+     * @return the instruments
+     */
+    public ReplayConsole console() {
+        return console;
+    }
+
+    /**
      * Sets the step's place in the plan and the mission, for the lamps under the picture.
      *
      * @param index   the step, from 0

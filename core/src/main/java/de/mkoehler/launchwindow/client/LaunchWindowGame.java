@@ -32,6 +32,10 @@ public class LaunchWindowGame extends Game {
 
     /** The sound setting when kept in memory (screenshots), else {@code null}. */
     private static Boolean soundInMemory;
+    /** The volumes when the sound setting is kept in memory. */
+    private static final java.util.Map<String, Float> volumesInMemory = new java.util.HashMap<>();
+    /** The replay's music and effects volume until the player sets them (unconfirmed). */
+    private static final float DEFAULT_VOLUME = 0.7f;
     private UiKit ui;
     private ServerGateway gateway;
     private SettingsStore settingsStore;
@@ -323,6 +327,61 @@ public class LaunchWindowGame extends Game {
         }
         com.badlogic.gdx.Preferences preferences = preferences();
         preferences.putBoolean("sound", on);
+        preferences.flush();
+    }
+
+    /**
+     * Returns the replay's music volume on this device (Settings).
+     *
+     * @return 0 to 1; 0.7 by default
+     */
+    public static float musicVolume() {
+        return volume("musicVolume");
+    }
+
+    /**
+     * Returns the replay's sound-effects volume on this device (Settings): the console, the clips'
+     * cues and the room. The voices at the start and on joining play at full volume.
+     *
+     * @return 0 to 1; 0.7 by default
+     */
+    public static float effectsVolume() {
+        return volume("effectsVolume");
+    }
+
+    /**
+     * Sets the replay's music volume on this device.
+     *
+     * @param volume 0 to 1
+     */
+    public static void setMusicVolume(float volume) {
+        setVolume("musicVolume", volume);
+    }
+
+    /**
+     * Sets the replay's sound-effects volume on this device.
+     *
+     * @param volume 0 to 1
+     */
+    public static void setEffectsVolume(float volume) {
+        setVolume("effectsVolume", volume);
+    }
+
+    private static float volume(String key) {
+        if (soundInMemory != null) {
+            return volumesInMemory.getOrDefault(key, DEFAULT_VOLUME);
+        }
+        return Math.max(0f, Math.min(1f, preferences().getFloat(key, DEFAULT_VOLUME)));
+    }
+
+    private static void setVolume(String key, float volume) {
+        float clamped = Math.max(0f, Math.min(1f, volume));
+        if (soundInMemory != null) {
+            volumesInMemory.put(key, clamped);
+            return;
+        }
+        com.badlogic.gdx.Preferences preferences = preferences();
+        preferences.putFloat(key, clamped);
         preferences.flush();
     }
 

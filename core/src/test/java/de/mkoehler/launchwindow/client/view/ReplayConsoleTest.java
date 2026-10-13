@@ -86,6 +86,50 @@ class ReplayConsoleTest {
     }
 
     @Test
+    void theSoundsTellNothingBeforeTheReveal() {
+        ReplayConsole reference = ReplayConsole.live(SEED, MissionStepOutcome.SUCCESSFUL, REVEAL, false);
+        for (MissionStepOutcome outcome : MissionStepOutcome.values()) {
+            ReplayConsole console = ReplayConsole.live(SEED, outcome, REVEAL, false);
+            for (float t = 0f; t + 1f / 60f < REVEAL; t += 1f / 60f) {
+                assertEquals(reference.sounds(t, t + 1f / 60f), console.sounds(t, t + 1f / 60f), outcome + " at " + t);
+                assertFalse(console.alarmSounding(t));
+            }
+        }
+    }
+
+    @Test
+    void theConsoleSoundsItsLamps() {
+        // A blip every 2 s, frame by frame or in one go.
+        ReplayConsole success = ReplayConsole.live(SEED, MissionStepOutcome.SUCCESSFUL, REVEAL, false);
+        assertEquals(java.util.Collections.nCopies(5, ReplayConsole.BLIP), success.sounds(-0.001f, 9.999f));
+        assertEquals(5, frames(success, 10f, ReplayConsole.BLIP));
+        assertEquals(1, frames(ReplayConsole.live(SEED, MissionStepOutcome.MINOR_GLITCH, REVEAL, false), 10f,
+            ReplayConsole.CAUTION_TONE));
+        assertEquals(3, frames(ReplayConsole.live(SEED, MissionStepOutcome.MINOR_GLITCH_SOLVED, REVEAL, false), 10f,
+            ReplayConsole.CAUTION_TONE));
+        ReplayConsole failure = ReplayConsole.live(SEED, MissionStepOutcome.FAILURE, REVEAL, false);
+        assertTrue(failure.alarmSounding(REVEAL + 1f));
+        assertFalse(failure.alarmSounding(REVEAL + 3.5f));
+        assertTrue(failure.alarm(REVEAL + 3.5f));
+        // Telemetry lost: no blips after a catastrophe's reveal.
+        ReplayConsole lost = ReplayConsole.live(SEED, MissionStepOutcome.CATASTROPHIC, REVEAL, false);
+        assertTrue(lost.sounds(REVEAL, REVEAL + 10f).isEmpty());
+        // Reached with the result shown: the lamps are lit already, and quiet.
+        ReplayConsole arrived = ReplayConsole.live(SEED, MissionStepOutcome.MINOR_GLITCH, REVEAL, true);
+        assertEquals(0, frames(arrived, 10f, ReplayConsole.CAUTION_TONE));
+        assertFalse(ReplayConsole.live(SEED, MissionStepOutcome.FAILURE, REVEAL, true).alarmSounding(0f));
+        assertTrue(ReplayConsole.noSignal().sounds(-0.001f, 10f).isEmpty());
+    }
+
+    private static int frames(ReplayConsole console, float until, String sound) {
+        int count = 0;
+        for (float t = -0.001f; t < until; t += 1f / 60f) {
+            count += (int) console.sounds(t, t + 1f / 60f).stream().filter(sound::equals).count();
+        }
+        return count;
+    }
+
+    @Test
     void theClockReadsLikeAMissionClock() {
         assertEquals("T+ 0d 0h 0m 08s", ReplayConsole.clock(8.7f));
         assertEquals("T+ 1d 2h 3m 04s", ReplayConsole.clock(86_400 + 7_200 + 180 + 4));

@@ -60,13 +60,49 @@ public final class ReplayClips {
     }
 
     /**
+     * A sound the clip plays at a moment ({@code ui-spec.md} &sect;4.7.3, "Sound"): sound isn't baked
+     * into the video, so the replay's music and room tone run on across steps.
+     *
+     * @param at     the second it starts, into the clip
+     * @param sound  the sound's id in {@link ReplaySounds}
+     * @param volume its volume, 0 to 1, or {@code null} for the sound's own
+     * @param loop   whether it loops until {@code until} (or the clip's end)
+     * @param until  the second a loop stops, or {@code null} for the clip's end
+     * @param fade   how long a loop fades out, in seconds, or {@code null} for none
+     * @param carry  whether a loop of the same sound still running from the clip before goes on
+     *               instead of starting again (a cue at 0 only)
+     */
+    public record Cue(double at, String sound, Double volume, Boolean loop, Double until, Double fade,
+                      Boolean carry) {
+
+        /**
+         * Returns whether it loops.
+         *
+         * @return whether it does
+         */
+        public boolean loops() {
+            return Boolean.TRUE.equals(loop);
+        }
+
+        /**
+         * Returns whether it carries a running loop on.
+         *
+         * @return whether it does
+         */
+        public boolean carries() {
+            return Boolean.TRUE.equals(carry);
+        }
+    }
+
+    /**
      * A clip's sidecar.
      *
      * @param duration its length in seconds
      * @param revealAt the second from which its variant can't turn into another, or {@code null}
      * @param loop     whether it loops
+     * @param cues     the sounds it plays, or {@code null} for none
      */
-    public record Sidecar(double duration, Double revealAt, Boolean loop) {
+    public record Sidecar(double duration, Double revealAt, Boolean loop, List<Cue> cues) {
     }
 
     /**
@@ -78,8 +114,10 @@ public final class ReplayClips {
      * @param revealAt when its result shows, in seconds
      * @param loop     whether the clip loops
      * @param signal   whether it's the step's own clip ({@code false}: no signal)
+     * @param cues     the sounds it plays, in order of their start
      */
-    public record Clip(String video, String still, float duration, float revealAt, boolean loop, boolean signal) {
+    public record Clip(String video, String still, float duration, float revealAt, boolean loop, boolean signal,
+                       List<Cue> cues) {
     }
 
     private final List<Rule> rules;
@@ -215,8 +253,10 @@ public final class ReplayClips {
         Sidecar s = sidecar.get();
         float duration = (float) s.duration();
         float reveal = s.revealAt() == null ? duration : (float) Math.min(s.revealAt(), s.duration());
+        List<Cue> cues = s.cues() == null ? List.of() : s.cues().stream()
+            .sorted(java.util.Comparator.comparingDouble(Cue::at)).toList();
         return new Clip(FOLDER + name.get() + "-" + variant + ".webm", null, duration, reveal,
-            Boolean.TRUE.equals(s.loop()), true);
+            Boolean.TRUE.equals(s.loop()), true, cues);
     }
 
     private Optional<Sidecar> sidecar(String name) {
@@ -230,6 +270,6 @@ public final class ReplayClips {
      */
     public static Clip noSignal() {
         return new Clip(FOLDER + NO_SIGNAL + ".webm", FOLDER + NO_SIGNAL + ".png", NO_SIGNAL_LENGTH,
-            NO_SIGNAL_REVEAL, true, false);
+            NO_SIGNAL_REVEAL, true, false, List.of());
     }
 }

@@ -19,6 +19,11 @@ cut from the variable fonts), for the Firsts' front pages, under the SIL Open Fo
 - `audio/moon-speech.mp3`: President John F. Kennedy at Rice University, Houston, 12 September
   1962, "We choose to go to the Moon". NASA, https://www.nasa.gov/historical-sounds/. Public domain.
   Plays when the Join screen opens.
+- `audio/replay/`: the replay's sounds (`content/replay-sounds.json`). Sounds made for Launch Window
+  need no credit here; any that weren't are credited below, one bullet per file, and marked
+  `"credit": true` in the catalog. Generated music names its model and the model's terms here.
+- `audio/replay/placeholder-music.ogg`: a placeholder drone until the real tracks come, synthesized
+  for Launch Window by `assets-raw/replay/sounds/make_placeholder_sounds.py`; no third-party material.
 
 ## Photos
 
