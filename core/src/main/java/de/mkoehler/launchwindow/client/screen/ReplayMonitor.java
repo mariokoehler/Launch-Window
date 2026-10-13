@@ -14,8 +14,8 @@ import de.mkoehler.launchwindow.client.view.ReplayClips;
 import java.util.Locale;
 
 /**
- * The replay's monitor ({@code ui-spec.md} &sect;4.7.3): a 16:9 picture as large as its space allows,
- * centred, in a navy bezel with a label strip on top, playing the step's clip. With no video
+ * The replay's monitor ({@code ui-spec.md} &sect;4.7.3): a navy console filling its space, with a label
+ * strip on top and a 16:9 picture as large as the rest allows, centred, playing the step's clip. With no video
  * player, or a clip that won't load, it shows the clip's still (the no-signal picture) and says "No
  * signal". Lives as long as its screen, which calls {@link #update()} every frame and
  * {@link #dispose()} at the end.
@@ -30,6 +30,9 @@ final class ReplayMonitor extends WidgetGroup {
     private static final float BEZEL = 12f;
     /** The bezel on top, holding the label. */
     private static final float STRIP = 28f;
+    /** The lighter lip around the picture, so the console's wings read as its surface. */
+    private static final Color LIP = new Color(Theme.NAVY).lerp(Theme.SURFACE_CARD, 0.12f);
+    private static final float LIP_WIDTH = 2f;
 
     private final UiKit ui;
     private final VideoPlayer player;
@@ -111,7 +114,7 @@ final class ReplayMonitor extends WidgetGroup {
         px = (getWidth() - pw) / 2f;
         py = (getHeight() - STRIP - BEZEL - ph) / 2f + BEZEL;
         label.pack();
-        label.setPosition(px, py + ph + (STRIP - label.getHeight()) / 2f);
+        label.setPosition(BEZEL, getHeight() - STRIP + (STRIP - label.getHeight()) / 2f);
     }
 
     @Override
@@ -131,7 +134,8 @@ final class ReplayMonitor extends WidgetGroup {
         batch.setColor(1f, 1f, 1f, parentAlpha);
         float x = getX() + px;
         float y = getY() + py;
-        ui.solid(Theme.NAVY).draw(batch, x - BEZEL, y - BEZEL, pw + 2 * BEZEL, ph + STRIP + BEZEL);
+        ui.solid(Theme.NAVY).draw(batch, getX(), getY(), getWidth(), getHeight());
+        ui.solid(LIP).draw(batch, x - LIP_WIDTH, y - LIP_WIDTH, pw + 2 * LIP_WIDTH, ph + 2 * LIP_WIDTH);
         ui.solid(Theme.SURFACE_CARD).draw(batch, x, y, pw, ph);
         Texture frame = video && player != null ? player.getTexture() : null;
         if (frame != null && player.getVideoWidth() > 0) {

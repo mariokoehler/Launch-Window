@@ -1885,8 +1885,11 @@ by itself again. **This reverses the 2026-10-06 decision** against automatic pla
 clips, the replay is meant to be watched like a short film, and the player can still pause and step.
 - **Layout:** the step card keeps its head (step n of m, name, text, components); the result (the
   roll line and the outcome box) moves up beside the success chance and the saving roll, and a
-  monitor fills the rest of the card: a 16:9 picture in a navy bezel drawn by the game (sharp at
-  any size), with a small label in the bezel ("Cam 1 · Launch", or "No signal").
+  monitor fills the rest of the card: a navy console drawn by the game (sharp at any size) across
+  the card's full width and remaining height, with a small label in its top strip ("Cam 1 · Launch",
+  or "No signal") at the console's left edge, and a 16:9 picture as large as the console allows,
+  centred, in a thin lighter lip; the console's wings fill the width the picture's ratio leaves
+  (2026-10-13).
 - **Clips:** `assets/ui/replay/<clip>-<variant>.webm`, rendered at 960 × 540 (about the picture's
   size at 1080p), each with a sidecar `<clip>-<variant>.json`: `duration` and `revealAt`, the second
   from which the variant can't turn into another one any more (set by hand per clip). Variants:
@@ -1914,6 +1917,35 @@ clips, the replay is meant to be watched like a short film, and the player can s
   "To the turn report" (the front pages first, if any). Back leaves the queue for the report.
 - **Proposed defaults (unconfirmed):** the 1.5 s and 3 s timings; the bezel's look and label;
   that the dialog offers only the newest turn's missions when several reports are unread.
+- **The console (the user's idea, 2026-10-13; to be mocked up in Claude Design, canvas
+  `Launch Window — Replay Console`):** the monitor becomes a mission-control console. The picture
+  moves to one side of it (left by default: it sits next to the step list, and the eye starts
+  there), and the room beside it holds instruments:
+  - **Size:** at 1920 × 1080 the console is about 1086 px wide; its height is what the step card
+    leaves, about 430 to 520 px (it shrinks with a second component bar or an Expert's rescue
+    row). At full height the 16:9 picture is about 770 × 433, which leaves a column of about
+    280 px; the picture may shrink for a wider column. Clips are 960 × 540. The picture may still
+    be scaled, never cropped or stretched.
+  - **Mission clock:** "T+ 0d 0h 2m 23s", ticking with the clip. *Proposed default (unconfirmed):*
+    no step has a real flight time in the data, so the clock is a show clock: it starts at 0 with
+    the season's first step and runs on with each clip's playback, frozen while paused. It
+    continues across steps, and jumps when the player skips.
+  - **The status gauge:** a dial with three coloured ranges, "Nominal", "Warning" and
+    "Critical". Before the step's `revealAt` the needle wanders a little inside Nominal. **That
+    wander must not depend on the outcome** (same seed and distribution for every outcome), or
+    the gauge spoils the step. At `revealAt` it moves to the result: success settles mid-Nominal;
+    a glitch the controllers saved swings into Warning and back to Nominal; an unsaved glitch
+    stays in Warning; a failure goes into Critical; a catastrophic failure pins at the end of
+    Critical. *Proposed default (unconfirmed):* a "No signal" step's needle rests at zero, dead.
+  - **Other instruments, to propose in the mockup:** a signal lamp (lit with a live camera, dark
+    on "No signal"), the step's progress as lamps (the plan's count, so nothing is given away),
+    perhaps telemetry bars that drift like the needle. Nothing may reveal the outcome before
+    `revealAt`.
+  - **Drawn by the game:** flat shapes (rects, arcs, lines, ticks) and the design system's fonts
+    and colours, sharp at any size, so the game can draw it at any window size. No raster
+    textures beyond the clip.
+  - **States to mock up:** watching (before the reveal), success, glitch saved, glitch, failure,
+    catastrophic, no signal, paused; the tallest and the shortest console.
 
 Choices made while building them, **confirmed by the user (2026-10-06)**:
 - **Building panel (changed 2026-10-04, user):** the mockup had none, which left Mission Control
