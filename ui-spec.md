@@ -1946,6 +1946,37 @@ clips, the replay is meant to be watched like a short film, and the player can s
     textures beyond the clip.
   - **States to mock up:** watching (before the reveal), success, glitch saved, glitch, failure,
     catastrophic, no signal, paused; the tallest and the shortest console.
+  - **Mocked up (2026-10-13)** on the canvas `Launch Window — Replay Console` (the Artifact tool's list
+    finds it): the replay in context (step 5 of 11, Vostok · Orbital flight), the console alone in the
+    eight states, the tallest and the shortest, the picture on the right, and a timeline of the needle
+    per outcome. Choices, all **unconfirmed**:
+    - **Layout:** the picture left (next to the step list), in its lighter lip; under it a row of step
+      lamps (the plan's count: flown cream, current gold, the rest dark) and the mission's name. The
+      label strip keeps its label at the left edge, led by a round **signal lamp** (gold-on-page with
+      a faint ring when live, dark on "No signal"). The picture takes all but a 280 px column, capped
+      by the height: at 520 px it is 770 × 433 and the instruments stack; at 430 px it is 629 × 354,
+      the column is 421 px, and the instruments go side by side (clock across the top, the dial and
+      three upright meters below). The switch is at a 380 px column.
+    - **Panels:** white at 5 % with a 1 px white-at-18 % line, a small label. **Mission clock**:
+      Archivo 700 24 px, cream, tabular figures, with a **HOLD** lamp lit gold while paused (the clock
+      then dims to 55 %, and the strip's right end says "Paused · next step waits").
+    - **Status gauge:** a 180° dial, ranges Nominal (success-on-page, as the success green is too dark
+      on navy), Warning (gold) and Critical (danger); the active range at full strength and 2 px
+      thicker, the others at 55 %, all at 25 % on "No signal". A cream needle, and a thin gold
+      **peak-hold pointer** at the highest value of the step (outcome-blind before the reveal, then
+      the trace of a saved glitch). Under it two lamps: **CAUTION** (gold) and **MASTER ALARM**
+      (danger, white text). Before the reveal both are dark.
+    - **Telemetry:** three bars, PRS, TMP and PWR, with the normal band (35 to 75 %) as two ticks;
+      they drift between 0.45 and 0.65 before the reveal. Success settles them; a glitch takes TMP
+      to 0.84 in gold (back again if saved); a failure drops PRS and lifts TMP, both red; a
+      catastrophic one empties all three, red. Empty with dashed tracks on "No signal".
+    - **The needle's motion** (the timeline board has the curves): before `revealAt` two sine waves
+      (2.3 s and 0.9 s, phase from the step's seed) between 0.22 and 0.38. At the reveal: success to
+      0.30 in 0.6 s, wandering on at half the swing; a saved glitch to 0.68 in 0.4 s, held 0.8 s, back
+      in 0.8 s, CAUTION flashing three times; an unsaved glitch to 0.66 and wandering there, CAUTION
+      steady; a failure to 0.88 in 0.5 s, quivering, MASTER ALARM steady; a catastrophic one to the
+      end stop in 0.3 s, two bounces, pinned, MASTER ALARM flashing and CAUTION steady. "No signal":
+      at 0, dead, the whole step.
 
 Choices made while building them, **confirmed by the user (2026-10-06)**:
 - **Building panel (changed 2026-10-04, user):** the mockup had none, which left Mission Control
