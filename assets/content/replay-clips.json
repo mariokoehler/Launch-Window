@@ -68,7 +68,10 @@
     {"step": "egress", "clip": "eva"},
     {"step": "crew-transfer", "clip": "crew-transfer"},
     {"step": "eva-7k-lok", "clip": "crew-transfer"},
-    {"step": "eva-gemini-langley", "clip": "crew-transfer"}
+    {"step": "eva-gemini-langley", "clip": "crew-transfer"},
+    {"step": "powered-descent", "clip": "powered-descent"},
+    {"step": "landing", "after": "powered-descent", "clip": "lunar-landing"},
+    {"step": "landing", "after": "lunar-approach", "clip": "lunar-landing"}
   ],
   "vehicles": ["atv", "gemini-a", "gemini-b", "lk-700", "sc-a", "sc-b", "soyuz-7k-l3-lok", "soyuz-7k-ok",
                "spc-a", "spc-b", "transtage"]

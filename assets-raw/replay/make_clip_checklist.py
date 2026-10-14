@@ -89,10 +89,10 @@ def vehicle(component_id, components):
     return "probe"
 
 
-def rule_clip(key, rules):
-    """The clip a rule names for this key itself."""
+def rule_clip(key, rules, before=None):
+    """The clip the first rule names for this key, after the step before (a rule's "after", if any)."""
     for rule in rules:
-        if key == rule["step"]:
+        if key == rule["step"] and rule.get("after") in (None, before):
             return rule["clip"]
     return None
 
@@ -102,7 +102,8 @@ def plural(n, word):
 
 
 def top(counter, n, names=None):
-    items = counter.most_common(n)
+    # Ties by name, so a rerun writes the same file.
+    items = sorted(counter.items(), key=lambda kv: (-kv[1], str(kv[0])))[:n]
     return ", ".join(f"{names(k) if names else k} {v}" for k, v in items)
 
 
@@ -118,19 +119,22 @@ def main():
     clips = load(CONTENT / "replay-clips.json")
     rules = clips["rules"]
 
-    uses = []  # (kind, config, season index, step)
+    uses = []  # (kind, config, season index, step, the kind before it in the season or None)
     for m in configs:
         for i, season in enumerate(m["seasons"]):
+            prev = None
             for st in season["steps"]:
-                uses.append((kind(st["id"]), m, i, st))
+                uses.append((kind(st["id"]), m, i, st, prev))
+                prev = kind(st["id"])
     keys = fold({u[0] for u in uses}, clips.get("vehicles", []))
 
     entries = collections.defaultdict(lambda: {
         "kinds": collections.Counter(), "configs": set(), "programs": collections.Counter(),
         "agencies": set(), "bodies": collections.Counter(), "vehicles": collections.Counter(),
-        "crewed": 0, "risk": 0, "later": 0, "uses": 0, "early": False})
-    for k, m, i, st in uses:
+        "crewed": 0, "risk": 0, "later": 0, "uses": 0, "early": False, "befores": collections.Counter()})
+    for k, m, i, st, prev in uses:
         e = entries[keys[k]]
+        e["befores"][keys[prev] if prev else None] += 1
         program = programs[m["programId"]]
         e["kinds"][k] += 1
         e["uses"] += 1
@@ -174,17 +178,24 @@ def main():
             continue
         lines += ["", f"## {family} ({len(items)})", ""]
         for key, e in items:
-            clip = rule_clip(key, rules)
+            # A step's clip can depend on the step before it: a variant is done when every use has it.
+            by_before = {b: rule_clip(key, rules, b) for b in e["befores"]}
+            named = set(by_before.values())
+            clip = next(iter(named)) if len(named) == 1 else None
             ticks = []
             have = 0
             cues = None
             for v in VARIANTS:
-                ok = clip is not None and (REPLAY / f"{clip}-{v}.webm").exists() \
-                    and (REPLAY / f"{clip}-{v}.json").exists()
+                ok = all(c is not None and (REPLAY / f"{c}-{v}.webm").exists() and (REPLAY / f"{c}-{v}.json").exists()
+                         for c in named)
+                if clip is None:
+                    clip_v = next((c for c in named if c), None)
+                else:
+                    clip_v = clip
                 have += ok
                 ticks.append(f"[{'x' if ok else ' '}] {v}")
                 if ok and cues is None:
-                    cues = bool(load(REPLAY / f"{clip}-{v}.json").get("cues"))
+                    cues = bool(load(REPLAY / f"{clip_v}-{v}.json").get("cues"))
             done_variants += have
             done_keys += have == len(VARIANTS)
             n = len(e["configs"])
@@ -203,7 +214,13 @@ def main():
                          f"{plural(e['uses'], 'use')} in {plural(n, 'configuration')}, "
                          f"{plural(len(e['programs']), 'program')} "
                          f"({'/'.join(sorted(e['agencies']))}) " + ", ".join(flags))
-            lines.append(f"  - Clip: {('`' + clip + '`') if clip else 'none yet'}; " + ", ".join(ticks)
+            if len(named) > 1:
+                shown = "by the step before: " + ", ".join(
+                    f"{('`' + c + '`') if c else 'none yet'} after `{b}` {e['befores'][b]}"
+                    for b, c in sorted(by_before.items(), key=lambda bc: -e["befores"][bc[0]]))
+            else:
+                shown = ('`' + clip + '`') if clip else 'none yet'
+            lines.append(f"  - Clip: {shown}; " + ", ".join(ticks)
                          + ("" if cues is None else f"; cues {'yes' if cues else 'no'}"))
             others = {k: c for k, c in e["kinds"].items() if k != key}
             if others:

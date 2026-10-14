@@ -37,7 +37,7 @@ class ReplayClipsTest {
         for (ReplayClips.Rule rule : CLIPS.rules()) {
             for (MissionStepOutcome outcome : new MissionStepOutcome[]{MissionStepOutcome.SUCCESSFUL,
                 MissionStepOutcome.MINOR_GLITCH, MissionStepOutcome.FAILURE}) {
-                ReplayClips.Clip clip = CLIPS.clipFor("03-" + rule.step(), outcome);
+                ReplayClips.Clip clip = CLIPS.clipFor("03-" + rule.step(), rule.after() == null ? null : "02-" + rule.after(), outcome);
                 assertTrue(clip.signal(), rule.clip() + " has no " + ReplayClips.variant(outcome));
                 assertTrue(Files.exists(ASSETS.resolve(clip.video())), clip.video());
                 assertTrue(clip.revealAt() > 0 && clip.revealAt() <= clip.duration(), clip.video());
@@ -63,6 +63,12 @@ class ReplayClipsTest {
         assertEquals("earth-orbit", CLIPS.clipName("06-earth-orbit-a").orElseThrow());
         assertTrue(CLIPS.clipName("03-launch-from-drop-plane").isEmpty());
         assertTrue(CLIPS.clipName("02-pre-launch").isEmpty());
+        // The step before picks among a step's rules: a landing after the powered descent is on the
+        // Moon (a robot's after its approach too); with no rule for what came before, no clip.
+        assertEquals("lunar-landing", CLIPS.clipName("12-landing", "11-powered-descent").orElseThrow());
+        assertEquals("lunar-landing", CLIPS.clipName("09-landing", "08-lunar-approach").orElseThrow());
+        assertTrue(CLIPS.clipName("06-landing", "05-descent").isEmpty());
+        assertTrue(CLIPS.clipName("12-landing").isEmpty());
         assertTrue(CLIPS.clipName("12-lunar-ascent").isEmpty());
         assertTrue(CLIPS.clipName("04-powered-ascent").isEmpty());
         assertTrue(CLIPS.clipName("07-lk-deployment").isEmpty());
@@ -112,7 +118,7 @@ class ReplayClipsTest {
     void picksTheVariant() {
         assertTrue(CLIPS.clipFor("03-launch", MissionStepOutcome.MINOR_GLITCH_SOLVED).video().endsWith("launch-glitch.webm"));
         assertTrue(CLIPS.clipFor("03-launch", MissionStepOutcome.CATASTROPHIC).video().endsWith("launch-failure.webm"));
-        ReplayClips.Clip none = CLIPS.clipFor("07-powered-descent", MissionStepOutcome.SUCCESSFUL);
+        ReplayClips.Clip none = CLIPS.clipFor("07-no-such-step", MissionStepOutcome.SUCCESSFUL);
         assertFalse(none.signal());
         assertTrue(none.loop());
         assertEquals(ReplayClips.NO_SIGNAL_REVEAL, none.revealAt());
@@ -128,7 +134,7 @@ class ReplayClipsTest {
         for (ReplayClips.Rule rule : CLIPS.rules()) {
             java.util.List<ReplayClips.Clip> variants = java.util.stream.Stream.of(MissionStepOutcome.SUCCESSFUL,
                 MissionStepOutcome.MINOR_GLITCH, MissionStepOutcome.FAILURE, MissionStepOutcome.CATASTROPHIC)
-                .map(outcome -> CLIPS.clipFor("03-" + rule.step(), outcome)).toList();
+                .map(outcome -> CLIPS.clipFor("03-" + rule.step(), rule.after() == null ? null : "02-" + rule.after(), outcome)).toList();
             float reveal = (float) variants.stream().mapToDouble(ReplayClips.Clip::revealAt).min().orElse(0);
             java.util.List<ReplayClips.Cue> before = null;
             for (ReplayClips.Clip clip : variants) {

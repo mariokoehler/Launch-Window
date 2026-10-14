@@ -711,6 +711,66 @@ def eva_parts():
                    f'<rect x="958" y="356" width="34" height="24" rx="3" fill="{GOLD_FILL}"/>', (975, 360))
 
 
+# --- On the Moon: the lander (two stages), the surface close up, the limb seen from low orbit ----------
+
+# The lander at rest stands on the surface (y 880) with its engine's centre on x 960; its pivot (and its
+# carrier's) is at LC, the middle of the descent stage. Never a particular one: two stages, two legs.
+LC = (960, 760)
+GROUND_Y = 880
+
+
+def lander_parts():
+    layer("n-carrier", "", LC)
+    legs = (f'<path d="M906 770 L820 876 M1014 770 L1100 876 M914 790 L850 852 M1006 790 L1070 852" fill="none" '
+            f'{LINE} stroke-width="4"/>'
+            f'<ellipse cx="818" cy="878" rx="18" ry="5" fill="#ffffff" {LINE} stroke-width="3"/>'
+            f'<ellipse cx="1102" cy="878" rx="18" ry="5" fill="#ffffff" {LINE} stroke-width="3"/>')
+    descent = (f'<path d="M946 792 L974 792 L984 822 L936 822 Z" fill="#ffffff" {LINE} stroke-width="3"/>'
+               f'<path d="M912 722 L1008 722 L1022 738 L1022 778 L1008 794 L912 794 L898 778 L898 738 Z" fill="url(#hatch)" '
+               f'{LINE} stroke-width="3"/>')
+    layer("n-descent", legs + descent, LC)
+    ascent = (f'<path d="M916 722 L916 684 L936 652 L986 652 L1006 674 L1006 722 Z" fill="#ffffff" {LINE} stroke-width="3"/>'
+              f'<path d="M930 676 L946 662 L946 686 Z" fill="#ffffff" {LINE} stroke-width="2.4"/>'
+              f'<rect x="950" y="640" width="22" height="12" rx="2" fill="#ffffff" {LINE} stroke-width="2.4"/>'
+              f'<path d="M996 652 L1012 630" fill="none" {LINE} stroke-width="2.4"/>'
+              f'<circle cx="1014" cy="626" r="6" fill="#ffffff" {LINE} stroke-width="2.4"/>')
+    layer("n-ascent", ascent, LC)
+    # The descent engine's plume, from the bell's mouth down, and the ascent engine's, from between the
+    # stages (both pivot where they leave the engine, so they flicker and grow from there).
+    layer("n-plume", f'<path d="M940 824 C944 850 952 880 960 910 C968 880 976 850 980 824 Z" fill="{GOLD_FILL}" '
+                     f'stroke="{GOLD}" stroke-width="3" stroke-linejoin="round"/>', (960, 824))
+    layer("n-flame-up", f'<path d="M948 724 C950 744 955 762 960 780 C965 762 970 744 972 724 Z" fill="{GOLD_FILL}" '
+                        f'stroke="{GOLD}" stroke-width="3" stroke-linejoin="round"/>', (960, 724))
+    # The dust the plume blows off the surface, either side.
+    layer("n-dust", puff(860, 872, 20) + puff(800, 876, 14) + puff(1060, 872, 20) + puff(1120, 876, 14), (960, 880))
+
+
+def lunar_parts():
+    lander_parts()
+    # The surface close up: a horizon of low rises, craters seen flat, a boulder field right of the
+    # landing spot and a crater rim further on.
+    rises = " ".join(f"Q{x + 160} {GROUND_Y - (10 if (x // 320) % 2 else 4)} {x + 320} {GROUND_Y}" for x in range(-900, 2900, 320))
+    craters = "".join(f'<ellipse cx="{x}" cy="{y}" rx="{rx}" ry="{rx * 0.22:.1f}" fill="#ffffff" {LINE} stroke-width="2.4"/>'
+                      for x, y, rx in ((420, 930, 60), (760, 990, 40), (1500, 960, 80), (240, 1030, 50), (1180, 1040, 46)))
+    layer("n-ground", f'<rect x="-900" y="{GROUND_Y}" width="3800" height="900" fill="url(#earth)"/>'
+                      f'<path d="M-900 {GROUND_Y} {rises}" fill="none" {LINE} stroke-width="3"/>{craters}', (960, GROUND_Y))
+    rocks = "".join(f'<path d="M{x - w} {GROUND_Y + 4} Q{x - w} {GROUND_Y - h} {x} {GROUND_Y - h} Q{x + w} {GROUND_Y - h} {x + w} {GROUND_Y + 4} Z" '
+                    f'fill="#ffffff" {LINE} stroke-width="3"/>'
+                    for x, w, h in ((1240, 22, 26), (1300, 30, 40), (1372, 18, 22), (1430, 26, 34), (1200, 14, 14), (1490, 16, 18)))
+    layer("n-rocks", rocks, (1340, GROUND_Y))
+    # A lamp panel, top right, fixed to the screen: a label and a lamp; the lamp's gold fill is its own part.
+    for name, label in (("alarm", "ALARM"), ("fuel", "FUEL")):
+        layer(f"n-panel-{name}", f'<rect x="1580" y="50" width="290" height="70" rx="8" fill="#ffffff" {LINE} stroke-width="3"/>'
+                                 f'<text x="1606" y="96" {LABEL}>{label}</text>'
+                                 f'<circle cx="1826" cy="85" r="18" fill="#ffffff" {LINE} stroke-width="3"/>', (1725, 85))
+    layer("n-lamp", f'<circle cx="1826" cy="85" r="14" fill="{GOLD}"/>', (1826, 85))
+    # The Moon's limb seen from low orbit, for the descent from it.
+    cx, cy, r = 960, 3000, 2200
+    marks = "".join(f'<ellipse cx="{x}" cy="{y}" rx="{rx}" ry="{rx * 0.3:.1f}" fill="#ffffff" {LINE} stroke-width="2.4"/>'
+                    for x, y, rx in ((300, 960, 50), (700, 880, 34), (1180, 900, 60), (1600, 990, 44), (1000, 1020, 30)))
+    layer("n-limb", f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="url(#earth)" {LINE} stroke-width="3"/>{marks}', (cx, cy))
+
+
 def copy_board_layers():
     src = os.path.join(BOARD, "build")
     if not os.path.exists(os.path.join(src, "layers.json")):
@@ -737,6 +797,7 @@ def main():
     way_parts()
     dock_parts()
     eva_parts()
+    lunar_parts()
     if ONLY:
         # Keep the parts not redrawn.
         old = json.load(open(os.path.join(BUILD, "layers.json")))

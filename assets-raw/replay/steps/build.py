@@ -251,6 +251,17 @@ STEPS = {
         "success": (5.6, 2.6), "glitch": (6.6, 3.2), "failure": (6.0, 3.2),
         "times": [1.2, 2.0, 2.6, 3.0, 4.0, 5.5],
     },
+    # On the Moon (2026-10-14): the descent from low orbit and the landing (moon.jsx).
+    "powered-descent": {
+        "pad": False, "before": ["moon.jsx"],
+        "success": (6.4, 2.4), "glitch": (6.4, 3.4), "failure": (6.4, 3.2),
+        "times": [0.5, 2.0, 2.6, 3.4, 4.6, 6.3],
+    },
+    "lunar-landing": {
+        "pad": False, "before": ["moon.jsx"],
+        "success": (6.0, 2.6), "glitch": (6.0, 3.6), "failure": (6.0, 3.2),
+        "times": [0.5, 1.6, 2.4, 3.0, 3.6, 5.9],
+    },
     "reentry": {
         "pad": False,
         "success": (6.4, 4.0), "glitch": (6.4, 4.4), "failure": (6.4, 3.4),

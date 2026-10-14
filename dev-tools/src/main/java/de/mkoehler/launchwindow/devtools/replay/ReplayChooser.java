@@ -128,7 +128,11 @@ final class ReplayChooser extends ScreenAdapter {
         for (MissionConfiguration config : catalog.missionConfigurations()) {
             for (int season = 0; season < config.seasons().size(); season++) {
                 List<MissionStep> steps = config.seasons().get(season).steps();
-                int withClips = (int) steps.stream().filter(step -> clips.clipName(step.id()).isPresent()).count();
+                int withClips = 0;
+                for (int i = 0; i < steps.size(); i++) {
+                    // The step before picks the clip too (a landing on the Moon or on a runway).
+                    withClips += clips.clipName(steps.get(i).id(), i == 0 ? null : steps.get(i - 1).id()).isPresent() ? 1 : 0;
+                }
                 String name = MissionControl.missionName(config) + (config.seasons().size() > 1
                     ? " · season " + (season + 1) + " of " + config.seasons().size() : "");
                 entries.add(new Entry(config, season, name, steps.size(), withClips));
@@ -302,13 +306,15 @@ final class ReplayChooser extends ScreenAdapter {
         Table steps = new Table();
         steps.top();
         steps.defaults().growX();
-        steps.add(stepRow(-1, "Every step", "the outcome on all of them; a failure doesn't end the season", null))
+        steps.add(stepRow(-1, "Every step", "the outcome on all of them; a failure doesn't end the season", null, null))
             .padBottom(2f).row();
         List<MissionStep> plan = picked.config().seasons().get(picked.season()).steps();
         for (int i = 0; i < plan.size(); i++) {
             String id = plan.get(i).id();
+            String before = i == 0 ? null : plan.get(i - 1).id();
             steps.add(stepRow(i, (i + 1) + "  " + TurnReportView.stepName(picked.config().id(), id),
-                clips.clipName(id).map(name -> "clip " + name).orElse("no clip: no signal"), id)).padBottom(2f).row();
+                clips.clipName(id, before).map(name -> "clip " + name).orElse("no clip: no signal"), id, before))
+                .padBottom(2f).row();
         }
         card.add(scroll(steps)).grow().padBottom(Theme.SPACE_4).row();
 
@@ -322,7 +328,7 @@ final class ReplayChooser extends ScreenAdapter {
         return card;
     }
 
-    private Table stepRow(int index, String name, String note, String stepId) {
+    private Table stepRow(int index, String name, String note, String stepId, String before) {
         Table row = new Table();
         boolean active = index == target;
         row.setBackground(active ? ui.rect(new Color(Theme.SURFACE_CARD).lerp(Theme.NAVY, 0.08f), Theme.NAVY,
@@ -331,11 +337,11 @@ final class ReplayChooser extends ScreenAdapter {
         row.pad(5f, 10f, 5f, 10f);
         row.add(ui.label(name, Theme.TextStyle.BODY_SM, Theme.INK)).left();
         row.add(ui.label(note, Theme.TextStyle.CAPTION, Theme.INK_MUTED)).expandX().left().padLeft(Theme.SPACE_3);
-        if (stepId != null && clips.clipName(stepId).isPresent()) {
-            String name0 = clips.clipName(stepId).get();
+        if (stepId != null && clips.clipName(stepId, before).isPresent()) {
+            String name0 = clips.clipName(stepId, before).get();
             for (int v = 0; v < VARIANT_LETTERS.length; v++) {
                 MissionStepOutcome each = MissionReplayer.OUTCOMES.get(v);
-                boolean own = clips.clipFor(stepId, each).video()
+                boolean own = clips.clipFor(stepId, before, each).video()
                     .endsWith(name0 + "-" + ReplayClips.variant(each) + ".webm");
                 row.add(ui.label(VARIANT_LETTERS[v], Theme.TextStyle.LABEL, own ? Theme.SUCCESS
                     : new Color(Theme.INK_MUTED).mul(1f, 1f, 1f, 0.35f))).width(14f).padLeft(4f);

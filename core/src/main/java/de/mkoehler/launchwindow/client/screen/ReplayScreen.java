@@ -152,20 +152,22 @@ public final class ReplayScreen extends ChromeScreen {
         playback = new ReplayPlayback(steps.size(), new ReplayPlayback.Timing() {
             @Override
             public float revealAt(int step) {
-                return clip(steps.get(step)).revealAt();
+                return clip(steps, step).revealAt();
             }
 
             @Override
             public float duration(int step) {
-                return clip(steps.get(step)).duration();
+                return clip(steps, step).duration();
             }
         }, true);
         rebuild();
         playClip(false);
     }
 
-    private ReplayClips.Clip clip(MissionStepResolved step) {
-        return clips.clipFor(step.stepId(), step.outcome());
+    // The step before picks the clip too (a landing on the Moon or on a runway).
+    private ReplayClips.Clip clip(List<MissionStepResolved> steps, int index) {
+        MissionStepResolved step = steps.get(index);
+        return clips.clipFor(step.stepId(), index == 0 ? null : steps.get(index - 1).stepId(), step.outcome());
     }
 
     private List<MissionStepResolved> steps() {
@@ -231,12 +233,12 @@ public final class ReplayScreen extends ChromeScreen {
         int index = playback.step();
         List<MissionStepResolved> steps = steps();
         MissionStepResolved step = steps.get(index);
-        ReplayClips.Clip clip = clip(step);
+        ReplayClips.Clip clip = clip(steps, index);
         // The mission clock: the clips played so far this season. A show clock until each step has
         // a mission time of its own.
         clockBase = 0f;
         for (int i = 0; i < index; i++) {
-            clockBase += clip(steps.get(i)).duration();
+            clockBase += clip(steps, i).duration();
         }
         clockStep = clip.duration();
         // The seed is the step's place, never its outcome: before the reveal the console tells nothing.

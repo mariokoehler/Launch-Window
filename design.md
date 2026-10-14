@@ -2709,7 +2709,17 @@ on Gemini 4; the failure's visor fogs, as on Gemini 9A, and it's hauled back wit
 `crew-transfer` (two craft docked nose to nose, across on a handrail; the glitch's hand slips and the
 gun brings it back, the failure is hauled back to where it started). `scientific-experiments`,
 `eva-7k-ok`, `eva-in-meo` and `egress` borrow the spacewalk, and `eva-7k-lok` and `eva-gemini-langley`
-(to a lander) the transfer, between two capsules (unconfirmed). 185 of 249 seasons play whole.
+(to a lander) the transfer, between two capsules (unconfirmed). 185 of 249 seasons play whole. Then
+the Moon landing's first two steps: `powered-descent` (from low orbit over the limb, engine first,
+pitching upright; the glitch is an alarm lamp, as Apollo 11's computer alarms; the failure an abort,
+the ascent stage climbing off the falling descent stage) and the landing (close over the surface; the
+glitch hovers on a blinking fuel lamp, as Apollo 11 landed with seconds of fuel left; the failure's engine
+dies just up and it tips over on a buckled leg). `landing` flies after four steps that mean four places,
+so a clip rule can now name the step before (`ui-spec.md` §4.7.3, unconfirmed): after `powered-descent`
+and Luna's `lunar-approach` it plays `lunar-landing`; after `lander-descent` (Venera, Viking) and `descent`
+(the X-15's and the MiG's runway) it still plays no signal. The MiG's runway landing will follow a
+parachute descent, since `descent` can't tell a spaceplane from a capsule: the user's call. No new
+season plays whole yet: the Moon's surface, liftoff and ascent come next.
 
 The launch was tried two ways on 2026-10-12, both judged usable by the user. Claude alone wrote the
 layers as SVG and the motion as formulas: 8 minutes, the smoother motion. The other way was a Claude

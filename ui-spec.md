@@ -1900,7 +1900,11 @@ clips, the replay is meant to be watched like a short film, and the player can s
   `atv-launch`, `gemini-b-launch`). A step matches only by its own name, behind a vehicle the file
   lists (`atv`, `gemini-a`, `soyuz-7k-ok`) or with a craft's letter after it (`reentry-a`), never by
   how its name ends: `lunar-ascent` plays no signal until it has its own clip (2026-10-13; a test
-  holds the list to the pack's vehicles). It's outside the content pack (not hashed), like the stories.
+  holds the list to the pack's vehicles). A rule can also name the step before (`"after"`, matched the
+  same way; 2026-10-14, unconfirmed): `landing` is on the Moon after `powered-descent` or a robot's
+  `lunar-approach`, a probe's after `lander-descent` and a spaceplane's after `descent`, so a rule with
+  `after` goes before one for the same step without it. It's outside the content pack (not hashed), like
+  the stories.
 - **Which steps have clips (2026-10-13):** a first satellite's whole mission (Sputnik 1, Explorer 1):
   launch preparations, countdown, launch, ascent, deployment, Earth orbit. The rest are listed in
   `assets-raw/replay/CLIP_CHECKLIST.md`. Every clip is generic (it plays for every program that flies
