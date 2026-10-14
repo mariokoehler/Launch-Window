@@ -74,6 +74,32 @@ STEPS = {
         "success": (6.4, 2.4), "glitch": (6.4, 3.4), "failure": (6.4, 2.6),
         "times": [0.5, 1.4, 2.2, 3.0, 4.2, 6.3],
     },
+    # Time in orbit, and the suborbital hop (2026-10-14).
+    "advanced-experiments-earth-orbit": {
+        "pad": False, "before": ["orbit.jsx"],
+        "success": (6.0, 2.4), "glitch": (6.0, 3.6), "failure": (6.0, 3.6),
+        "times": [0.5, 1.8, 2.4, 3.2, 4.0, 5.9],
+    },
+    "biometric-data-transmission": {
+        "pad": False, "before": ["orbit.jsx"],
+        "success": (6.0, 2.6), "glitch": (6.0, 3.8), "failure": (6.0, 3.8),
+        "times": [0.5, 1.8, 2.6, 3.2, 4.4, 5.9],
+    },
+    "duration-level-i": {
+        "pad": False, "before": ["orbit.jsx"], "after": ["duration.jsx"],
+        "success": (6.4, 2.6), "glitch": (6.4, 3.8), "failure": (6.4, 3.6),
+        "times": [0.5, 2.0, 2.6, 3.4, 4.4, 6.3],
+    },
+    "duration-level-ii": {
+        "pad": False, "before": ["orbit.jsx"], "after": ["duration.jsx"],
+        "success": (6.4, 2.6), "glitch": (6.4, 3.8), "failure": (6.4, 3.6),
+        "times": [0.5, 2.0, 2.6, 3.4, 4.4, 6.3],
+    },
+    "suborbital-flight": {
+        "pad": False,
+        "success": (6.4, 3.4), "glitch": (6.4, 4.0), "failure": (6.4, 3.6),
+        "times": [0.5, 1.8, 2.8, 3.4, 4.4, 6.3],
+    },
     "reentry": {
         "pad": False,
         "success": (6.4, 4.0), "glitch": (6.4, 4.4), "failure": (6.4, 3.4),
@@ -103,6 +129,9 @@ def project(step, variant):
         if STEPS[step]["pad"]:
             f.write(read("..", "launch-storyboard", "lib.jsx"))
             f.write(read("pad.jsx"))
+        # A scene shared by several steps, before the step's own file uses it.
+        for extra in STEPS[step].get("before", []):
+            f.write(read(extra))
         f.write(read(f"{step}.jsx"))
         # A timeline shared by several steps, after the step's own file has set its switches.
         for extra in STEPS[step].get("after", []):

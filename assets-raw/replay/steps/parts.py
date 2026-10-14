@@ -351,6 +351,58 @@ def return_parts():
         layer(f"r-cloud-{i}", cloud(x, y, k), (x, y))
 
 
+# --- Time in orbit: experiments, a day or days in orbit, biometric data; and the suborbital hop -----
+
+LABEL = f'font-family="Archivo" font-weight="600" font-size="24" fill="{NAVY}" letter-spacing="2"'
+SMALL = LABEL.replace('font-size="24"', 'font-size="20"')
+
+
+def gauge_panel(name, labels, x0=1470, y0=40):
+    """A panel of gauges, top right: a label and an empty bar per row; each bar's fill is its own part."""
+    h = 40 + 52 * len(labels)
+    body = f'<rect x="{x0}" y="{y0}" width="400" height="{h}" rx="6" fill="#ffffff" {LINE} stroke-width="3"/>'
+    for i, label in enumerate(labels):
+        y = y0 + 42 + 52 * i
+        body += (f'<text x="{x0 + 22}" y="{y + 8}" {LABEL}>{label}</text>'
+                 f'<rect x="{x0 + 170}" y="{y - 12}" width="204" height="24" rx="3" fill="none" {LINE} stroke-width="2.4"/>')
+    layer(name, body, (x0, y0))
+    return [(x0 + 172, y0 + 42 + 52 * i) for i in range(len(labels))]
+
+
+def time_parts():
+    # Night: the Earth's far half shaded, turning about its centre (the orbit scene's Earth).
+    layer("x-night", f'<path d="M960 310 A250 250 0 0 1 960 810 Z" fill="rgba(22,48,92,0.16)"/>', (960, 560))
+    # The crew's supplies, and a satellite's power: each fill a gold bar from its left end.
+    for i, (x, y) in enumerate(gauge_panel("x-supplies", ["OXYGEN", "POWER", "FOOD"]), 1):
+        layer(f"x-bar-{i}", f'<rect x="{x}" y="{y - 10}" width="200" height="20" rx="2" fill="{GOLD}" opacity="0.85"/>', (x, y))
+    for x, y in gauge_panel("x-power", ["POWER"]):
+        layer("x-bar-p", f'<rect x="{x}" y="{y - 10}" width="200" height="20" rx="2" fill="{GOLD}" opacity="0.85"/>', (x, y))
+    # The heartbeat strip, top left (clear of the orbit), drawn as a sweep monitor: four slots of
+    # one beat each, rewritten left to right by a moving head; static for a dropout.
+    X0, X1, Y0, Y1, BASE = 60, 700, 30, 140, 96
+    beat = "l40 0 q8 -10 16 0 l16 0 l6 6 l8 -52 l9 64 l7 -18 l20 0 q10 -16 22 0 l16 0"
+    import random
+    rnd = random.Random(7)
+    for k in range(4):
+        x = X0 + 160 * k
+        layer(f"x-beat-{k + 1}", f'<path d="M{x} {BASE} {beat}" fill="none" stroke="{NAVY}" stroke-width="3.5" '
+                                 f'stroke-linejoin="round"/>', (x, BASE))
+        zig = f"M{x} {BASE} " + " ".join(f"L{x + d} {BASE + rnd.randint(-26, 26)}" for d in range(10, 161, 10))
+        layer(f"x-static-{k + 1}", f'<path d="{zig}" fill="none" stroke="{GOLD}" stroke-width="2.5" stroke-linejoin="round"/>',
+              (x, BASE))
+    layer("x-ecg-head", f'<circle cx="{X0}" cy="{BASE}" r="6" fill="{GOLD}"/>', (X0, BASE))
+    layer("x-ecg-frame", f'<rect x="{X0 - 10}" y="{Y0}" width="{X1 - X0 + 20}" height="{Y1 - Y0}" rx="6" fill="#ffffff" '
+                         f'{LINE} stroke-width="3"/><text x="{X0 + 6}" y="{Y0 + 30}" {SMALL}>HEARTBEAT</text>', (X0, Y0))
+    # The suborbital arc: a parabola with its top at the capsule (RC), drawn in the world.
+    pts = " ".join(f"L{x} {RC[1] + SUB_K * (x - RC[0]) ** 2:.1f}" for x in range(-900, 2901, 20))
+    layer("x-arc", f'<path d="M-900 {RC[1] + SUB_K * (-900 - RC[0]) ** 2:.1f} {pts}" fill="none" stroke="{GOLD}" '
+                   f'stroke-width="3" stroke-dasharray="14 12" opacity="0.8"/>', RC)
+
+
+# The suborbital arc's shape: y = RC's y + SUB_K * (x - RC's x)^2 (the timeline uses the same).
+SUB_K = 0.00015
+
+
 def copy_board_layers():
     src = os.path.join(BOARD, "build")
     if not os.path.exists(os.path.join(src, "layers.json")):
@@ -369,6 +421,7 @@ def main():
     deployment_parts()
     orbit_parts()
     return_parts()
+    time_parts()
     if ONLY:
         # Keep the parts not redrawn.
         old = json.load(open(os.path.join(BUILD, "layers.json")))

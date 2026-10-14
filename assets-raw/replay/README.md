@@ -42,6 +42,15 @@ Each folder's `build/` is regenerated on every run and stays out of git.
     frame; its glitch is Vostok 1's) and `descent-and-landing`. The two descents share `descent.jsx`,
     which `build.py` appends after the step's own file (`"after"`), where `GROUND` picks the sea or
     the ground.
+  - **Time in orbit and the suborbital hop** (2026-10-14, `parts.py`'s `x-` parts):
+    `advanced-experiments-earth-orbit`, `biometric-data-transmission`, `duration-level-i` and `-ii`
+    (one timeline, `duration.jsx`, at two levels; several days begin where a day ends), and
+    `suborbital-flight` (the capsule rides a dashed parabola up to its top, turning base first, and
+    ends level as the retrofire begins; only the dashed line changes at that cut). The orbit steps
+    share `orbit.jsx` (`"before"`): the Earth-orbit scene, starting where its success ends, with the
+    radio rings, gauges, and `intro(true)` to fade a step's own overlays in when it cuts in from the
+    Earth orbit. The heartbeat strip is a sweep monitor (a head rewrites one beat a slot), so it needs
+    no mask.
   - **Checks** (`check.py`, after `build.py`): `python check.py spoilers <step> ...` says where the
     variants first differ before their reveals (glitch and failure share their first sign of trouble,
     so every pair should part only at the moment that decides it), and `python check.py handoffs

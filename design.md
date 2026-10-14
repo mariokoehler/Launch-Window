@@ -2664,9 +2664,13 @@ retrofire, retropack jettison, reentry, descent and splashdown), so Mercury's or
 Korabl-Sputnik 2 play whole too. `orbital-flight` and `earth-orbital` borrow the satellite's
 `earth-orbit` clip (**decided**, user, 2026-10-14: reusing it is fine).
 Every timing in them is unconfirmed. Vostok's two steps followed the same day (`modules-separation`,
-whose glitch is Vostok 1's cable, and `descent-and-landing`), so 16 mission seasons play whole. The
-steps most often one short of a whole season are time in orbit (`advanced-experiments-earth-orbit`,
-`duration-level-i`), the suborbital hop and the planetary transits.
+whose glitch is Vostok 1's cable, and `descent-and-landing`), so 16 mission seasons play whole. Time in orbit
+and the suborbital hop followed (`advanced-experiments-earth-orbit`, `biometric-data-transmission`,
+`duration-level-i` and `-ii`, `suborbital-flight`): 31 of 249 seasons now. A gauge panel (a crew's
+oxygen, power and food; a satellite's power) and a heartbeat monitor are the first clips with labels.
+Laika's lost signal is shown as a lost signal, never a flatline. The steps most often one short of a
+whole season are now the planetary transits and orbits (`jupiter-saturn-transit`, `venus-orbit`,
+`earth-jupiter-transit`), `sun-measurements` and `recovery`.
 
 The launch was tried two ways on 2026-10-12, both judged usable by the user. Claude alone wrote the
 layers as SVG and the motion as formulas: 8 minutes, the smoother motion. The other way was a Claude
