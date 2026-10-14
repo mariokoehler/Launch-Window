@@ -2691,7 +2691,18 @@ down split in two, for the missions that fly it as two steps (Voskhod, Soyuz, Ge
 chutes only) and `landing-and-recovery` or `splashdown-and-recovery` (the touchdown under a full main,
 a recovery helicopter flying in; the failure is the main tearing loose), and `insertion` (the last burn
 up onto the planned orbit). `duration` borrows a day in orbit, `de-orbit-burn` the retrofire and
-`earth-departure` the burn out to the planets (unconfirmed). 160 of 249 seasons play whole.
+`earth-departure` the burn out to the planets (unconfirmed). 160 of 249 seasons play whole. Then
+rendezvous and docking: `rendezvous-target-approach` (closing in, two craft on the orbit map: the chaser
+climbs from a lower orbit to just behind the other; the failure's burn cuts out and it runs on ahead),
+and four close-ups over the Earth's limb with the capsule and a docking target with a funnel collar and
+a blinking light: `target-approach` (the failure can't brake and slides under the target),
+`rendezvous` (two capsules holding station; the failure's fuel is spent, as Gemini 4's was),
+`docking` (the glitch bounces off once, the failure twice and never latches) and `undocking` (the
+failure frees itself with a jet stuck open and tumbles away, as Gemini 8 did). `rendezvous-and-docking`,
+`approach-and-docking`, `at-docking` and `lll-docking` borrow the docking, and `joint-earth-orbital` and
+`joint-orbital-flight` (Vostok 3/4's group flight) the closing in (unconfirmed). The close-up always
+shows the Earth, even for an undocking in lunar orbit, and the target is always the docking target,
+even where it's a lander. 173 of 249 seasons play whole.
 
 The launch was tried two ways on 2026-10-12, both judged usable by the user. Claude alone wrote the
 layers as SVG and the motion as formulas: 8 minutes, the smoother motion. The other way was a Claude

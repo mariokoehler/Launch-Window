@@ -597,6 +597,71 @@ def way_parts():
     layer("l-corridor", f'<path d="{band}" fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="2.5" stroke-dasharray="8 6"/>', (cx, cy))
 
 
+# --- Rendezvous and docking: closing in on the orbit, then the close-up over the Earth's limb ----
+
+# The docking target, nose up as the payload is drawn (centre 960 426): a long body with its engine
+# at the top and the funnel-shaped docking collar at the bottom, the wide end facing whoever docks.
+def target_units(w=2.4):
+    return (f'<path d="M950 336 L940 312 L980 312 L970 336 Z" fill="#ffffff" {LINE} stroke-width="{w}"/>'
+            f'<rect x="930" y="336" width="60" height="180" fill="#ffffff" {LINE} stroke-width="{w}"/>'
+            f'<path d="M930 380 L990 380 M930 470 L990 470" fill="none" {LINE} stroke-width="{w * 0.7:.2f}"/>'
+            f'<path d="M930 516 L990 516 L1000 540 L920 540 Z" fill="#ffffff" {LINE} stroke-width="{w}"/>'
+            f'<ellipse cx="960" cy="540" rx="40" ry="7" fill="#ffffff" {LINE} stroke-width="{w * 0.8:.2f}"/>')
+
+
+# The close-up: craft KK times the launch's size. The chaser (the capsule, nose right: its way) is
+# centred on KC; the target lies ahead of it with its collar's mouth at KM, where the capsule's nose
+# meets it docked. Every part's pivot is at rest where the docked stack has it.
+KK, KC = 1.3, (800, 470)
+KM = (880, 470)
+
+
+def K_AT(c, x, y, rot):
+    """Where a point of a nose-up drawing (centre 960 426) lands drawn KK times at c, turned rot (90: nose right)."""
+    dx, dy = KK * (x - 960), KK * (y - 426)
+    if rot == 90:
+        return (c[0] - dy, c[1] + dx)
+    return (c[0] + dy, c[1] - dx)
+
+
+def KT(c, rot, body):
+    return f'<g transform="translate({c[0]} {c[1]}) scale({KK}) rotate({rot}) translate(-960 -426)">{body}</g>'
+
+
+def dock_parts():
+    # A second payload in the orbit scene, for two craft closing in (the same drawing as o-sat).
+    sat = re.sub(r'stroke-width="[\d.]+"', 'stroke-width="5"', board_group("debris-1"))
+    layer("o-sat-b", f'<g transform="translate(960 560) scale(0.6) translate(-960 -426)">{sat}</g>', (960, 560))
+    # The close-up.
+    layer("k-carrier", "", KC)
+    layer("k-chaser", KT(KC, 90, capsule()), KC)
+    # The target's centre lands so its collar's mouth (960 540 nose up) is at KM.
+    tc = (KM[0] + KK * (540 - 426), KM[1])
+    layer("k-target", KT(tc, 90, target_units()), KM)
+    # The other capsule of a rendezvous, nose left, facing the chaser.
+    oc = (1150, 470)
+    layer("k-other", KT(oc, -90, capsule()), oc)
+    # The target's blinking light, on its collar.
+    lp = K_AT(tc, 922, 512, 90)
+    layer("k-light", f'<circle cx="{lp[0]:.1f}" cy="{lp[1]:.1f}" r="7" fill="{GOLD}" {LINE} stroke-width="2"/>', lp)
+    # The latches catching: a flash at the top and bottom of the collar's mouth.
+    top, bot = K_AT(tc, 920, 540, 90), K_AT(tc, 1000, 540, 90)
+    layer("k-latch", "".join(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="9" fill="{GOLD}"/>' for x, y in (top, bot)), KM)
+    # The chaser's jets: a puff ahead of each shoulder (braking, or backing away), behind the base
+    # (closing), on its top (pushing it down, out of the way), and one stuck open, a long plume.
+    sh_t, sh_b = K_AT(KC, 915, 440, 90), K_AT(KC, 1005, 440, 90)
+    layer("k-brake", puff(sh_t[0] + 18, sh_t[1] - 6, 9) + puff(sh_b[0] + 18, sh_b[1] + 6, 9), KC)
+    b_t, b_b = K_AT(KC, 920, 500, 90), K_AT(KC, 1000, 500, 90)
+    layer("k-push", puff(b_t[0] - 16, b_t[1], 9) + puff(b_b[0] - 16, b_b[1], 9), KC)
+    side = K_AT(KC, 915, 470, 90)
+    layer("k-side", puff(side[0], side[1] - 16, 10), side)
+    root = K_AT(KC, 915, 490, 90)
+    layer("k-stuck", f'<path d="M{root[0] - 6:.1f} {root[1]:.1f} C{root[0] - 14:.1f} {root[1] - 40:.1f} {root[0] - 20:.1f} '
+                     f'{root[1] - 80:.1f} {root[0] - 28:.1f} {root[1] - 120:.1f} L{root[0] - 12:.1f} {root[1] - 122:.1f} '
+                     f'C{root[0] - 6:.1f} {root[1] - 80:.1f} {root[0] + 2:.1f} {root[1] - 40:.1f} {root[0] + 6:.1f} {root[1]:.1f} Z" '
+                     f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>', KC)
+
+
 def copy_board_layers():
     src = os.path.join(BOARD, "build")
     if not os.path.exists(os.path.join(src, "layers.json")):
@@ -621,6 +686,7 @@ def main():
     planet_parts()
     moon_parts()
     way_parts()
+    dock_parts()
     if ONLY:
         # Keep the parts not redrawn.
         old = json.load(open(os.path.join(BUILD, "layers.json")))

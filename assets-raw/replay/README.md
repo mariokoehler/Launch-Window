@@ -79,6 +79,12 @@ Each folder's `build/` is regenerated on every run and stays out of git.
     maps it) is `descent.jsx` with `CHUTES`, ending under the main as the clouds clear;
     `touchdown.jsx` (`GROUND`) carries on from that frame exactly, for `landing-and-recovery` and
     `splashdown-and-recovery`. `insertion` is in the Earth-orbit scene.
+  - **Rendezvous and docking** (2026-10-14): `rendezvous-target-approach` is in the Earth-orbit
+    scene with a second payload (`o-sat-b`). The rest share `dock.jsx`, a close-up over the way home's
+    limb: the chaser (`k-carrier` with the capsule and its jets) is placed by offsets from docked, the
+    target (`k-target`, its light and latches) or another capsule (`k-other`) ahead of it.
+    `dockScene(other, t0)`: a step that carries on from another passes that one's length as `t0`, so
+    the Earth's turn and the light's blinking carry on (`docking` from `target-approach`).
   - **Checks** (`check.py`, after `build.py`): `python check.py spoilers <step> ...` says where the
     variants first differ before their reveals (glitch and failure share their first sign of trouble,
     so every pair should part only at the moment that decides it), and `python check.py handoffs

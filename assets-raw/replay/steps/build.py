@@ -214,6 +214,32 @@ STEPS = {
         "success": (6.0, 2.0), "glitch": (6.0, 3.0), "failure": (6.0, 3.0),
         "times": [0.5, 1.4, 2.0, 2.8, 4.0, 5.9],
     },
+    # Rendezvous and docking (2026-10-14): closing in on the orbit, then the close-up (dock.jsx).
+    "rendezvous-target-approach": {
+        "pad": False, "before": ["orbit.jsx"],
+        "success": (6.0, 2.6), "glitch": (6.0, 3.0), "failure": (6.0, 3.0),
+        "times": [0.5, 1.8, 2.4, 2.8, 4.0, 5.9],
+    },
+    "rendezvous": {
+        "pad": False, "before": ["dock.jsx"],
+        "success": (6.0, 2.4), "glitch": (6.0, 3.4), "failure": (6.0, 3.4),
+        "times": [0.5, 1.6, 2.4, 3.2, 4.2, 5.9],
+    },
+    "target-approach": {
+        "pad": False, "before": ["dock.jsx"],
+        "success": (6.4, 2.4), "glitch": (6.4, 2.6), "failure": (6.4, 2.6),
+        "times": [0.5, 1.9, 2.3, 2.7, 3.6, 6.3],
+    },
+    "docking": {
+        "pad": False, "before": ["dock.jsx"],
+        "success": (6.4, 2.0), "glitch": (6.4, 3.4), "failure": (6.4, 3.4),
+        "times": [0.5, 1.7, 2.3, 3.1, 4.2, 6.3],
+    },
+    "undocking": {
+        "pad": False, "before": ["dock.jsx"],
+        "success": (6.4, 1.2), "glitch": (6.4, 2.8), "failure": (6.4, 2.8),
+        "times": [0.5, 1.2, 2.0, 2.6, 3.8, 6.3],
+    },
     "reentry": {
         "pad": False,
         "success": (6.4, 4.0), "glitch": (6.4, 4.4), "failure": (6.4, 3.4),

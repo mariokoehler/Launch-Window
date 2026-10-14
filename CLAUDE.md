@@ -147,7 +147,7 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   preparations, retrofire, retropack jettison or modules separation, reentry, descent to the sea or the
   ground; a crewed orbit borrows the satellite's `earth-orbit`, user), so Mercury's and Vostok's orbital
   flights play whole; and time in orbit, the suborbital hop, recovery, the cruises to the planets and their orbits,
-  the way to the Moon and back, the way down in two steps (2026-10-14; 160 of 249 seasons whole); the rest play no signal. Client only: no reset, no server
+  the way to the Moon and back, the way down in two steps, rendezvous and docking (2026-10-14; 173 of 249 seasons whole); the rest play no signal. Client only: no reset, no server
   rebuild.
 - **The replay console** (the user's idea, 2026-10-13, `ui-spec.md` §4.7.3, from the canvas
   `Launch Window — Replay Console`): the monitor is a console with a mission clock, a status gauge and

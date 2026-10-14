@@ -49,7 +49,18 @@
     {"step": "insertion", "clip": "insertion"},
     {"step": "duration", "clip": "duration-level-i"},
     {"step": "de-orbit-burn", "clip": "retrofire"},
-    {"step": "earth-departure", "clip": "tpi"}
+    {"step": "earth-departure", "clip": "tpi"},
+    {"step": "rendezvous-target-approach", "clip": "rendezvous-target-approach"},
+    {"step": "joint-earth-orbital", "clip": "rendezvous-target-approach"},
+    {"step": "joint-orbital-flight", "clip": "rendezvous-target-approach"},
+    {"step": "rendezvous", "clip": "rendezvous"},
+    {"step": "target-approach", "clip": "target-approach"},
+    {"step": "docking", "clip": "docking"},
+    {"step": "rendezvous-and-docking", "clip": "docking"},
+    {"step": "approach-and-docking", "clip": "docking"},
+    {"step": "at-docking", "clip": "docking"},
+    {"step": "lll-docking", "clip": "docking"},
+    {"step": "undocking", "clip": "undocking"}
   ],
   "vehicles": ["atv", "gemini-a", "gemini-b", "lk-700", "sc-a", "sc-b", "soyuz-7k-l3-lok", "soyuz-7k-ok",
                "spc-a", "spc-b", "transtage"]
