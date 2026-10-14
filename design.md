@@ -445,7 +445,8 @@ leading to satellite navigation.
   figures before a note uses them): the beep in Apollo's air-to-ground audio. When CAPCOM keyed the
   microphone, mission control's equipment sent a 250 ms tone at 2525 Hz, and one at 2475 Hz on
   release, to switch the remote tracking stations' transmitters on and off; listeners heard them
-  because the air-to-ground loop was recorded and broadcast as it was.
+  because the air-to-ground loop was recorded and broadcast as it was. The name is a maker's: Quindar
+  Electronics built the tone equipment. Generated for the game in `assets-raw/audio/quindar/` (2026-10-14).
 - **Rendezvous is counterintuitive** and **restarting an engine in zero-g is hard:** both now
   explainers (E-02, E-04 above).
 - **The R-16 disaster** (Baikonur, 24 October 1960) for a later memorial or news context,
