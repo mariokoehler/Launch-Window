@@ -100,6 +100,11 @@ STEPS = {
         "success": (6.4, 3.4), "glitch": (6.4, 4.0), "failure": (6.4, 3.6),
         "times": [0.5, 1.8, 2.8, 3.4, 4.4, 6.3],
     },
+    "recovery": {
+        "pad": False,
+        "success": (6.4, 2.0), "glitch": (6.4, 3.0), "failure": (6.4, 3.4),
+        "times": [0.5, 1.6, 2.6, 3.4, 4.4, 6.3],
+    },
     "reentry": {
         "pad": False,
         "success": (6.4, 4.0), "glitch": (6.4, 4.4), "failure": (6.4, 3.4),

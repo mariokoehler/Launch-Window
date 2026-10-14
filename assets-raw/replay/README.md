@@ -51,6 +51,10 @@ Each folder's `build/` is regenerated on every run and stays out of git.
     radio rings, gauges, and `intro(true)` to fade a step's own overlays in when it cuts in from the
     Earth orbit. The heartbeat strip is a sweep monitor (a head rewrites one beat a slot), so it needs
     no mask.
+  - **Recovery** (2026-10-14, `parts.py`'s `y-` parts): on from the splashdown's last frame (its
+    camera 200 px down), a helicopter hoists the capsule out of the sea. Its sea is in front of the
+    capsule (`y-sea-front`), so a capsule that floods and goes under (the failure, Liberty Bell 7)
+    shows through the water.
   - **Checks** (`check.py`, after `build.py`): `python check.py spoilers <step> ...` says where the
     variants first differ before their reveals (glitch and failure share their first sign of trouble,
     so every pair should part only at the moment that decides it), and `python check.py handoffs

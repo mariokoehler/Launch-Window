@@ -19,7 +19,8 @@
     {"step": "duration-level-i", "clip": "duration-level-i"},
     {"step": "duration-level-ii", "clip": "duration-level-ii"},
     {"step": "advanced-experiments-earth-orbit", "clip": "advanced-experiments-earth-orbit"},
-    {"step": "biometric-data-transmission", "clip": "biometric-data-transmission"}
+    {"step": "biometric-data-transmission", "clip": "biometric-data-transmission"},
+    {"step": "recovery", "clip": "recovery"}
   ],
   "vehicles": ["atv", "gemini-a", "gemini-b", "lk-700", "sc-a", "sc-b", "soyuz-7k-l3-lok", "soyuz-7k-ok",
                "spc-a", "spc-b", "transtage"]

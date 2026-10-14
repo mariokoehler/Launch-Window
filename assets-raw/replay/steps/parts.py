@@ -403,6 +403,35 @@ def time_parts():
 SUB_K = 0.00015
 
 
+# --- Recovery: a helicopter picks the capsule out of the sea --------------------------------------
+
+def recovery_parts():
+    # The helicopter, side on, facing left, its hoist under the cabin at (960, 230).
+    heli = (f'<path d="M820 170 C820 128 860 112 920 112 L1010 112 C1050 112 1070 130 1072 158 L1072 196 '
+            f'C1072 214 1056 224 1036 224 L860 224 C836 224 820 206 820 186 Z" fill="#ffffff" {LINE} stroke-width="4"/>'
+            f'<path d="M836 160 C840 136 864 126 896 126 L920 126 L920 168 L836 168 Z" fill="url(#hatch)" {LINE} stroke-width="3"/>'
+            f'<path d="M1072 150 L1250 140 L1250 156 L1072 186" fill="#ffffff" {LINE} stroke-width="4"/>'
+            f'<circle cx="1258" cy="146" r="24" fill="none" {LINE} stroke-width="3"/>'
+            f'<path d="M950 112 L950 92 M930 92 L970 92" fill="none" {LINE} stroke-width="4"/>'
+            f'<path d="M860 224 L850 252 M1030 224 L1040 252 M820 252 L1070 252" fill="none" {LINE} stroke-width="4"/>'
+            f'<rect x="948" y="224" width="24" height="10" fill="#ffffff" {LINE} stroke-width="3"/>')
+    layer("y-heli", heli, (960, 230))
+    layer("y-rotor", f'<path d="M760 90 L1140 90" fill="none" {LINE} stroke-width="5"/>', (950, 90))
+    # The hoist cable, along +y from the winch, 100 px long (stretched by the timeline), with its hook.
+    layer("y-cable", f'<path d="M960 234 L960 334" fill="none" {LINE} stroke-width="3"/>', (960, 234))
+    layer("y-hook", f'<path d="M960 0 L960 10 C960 22 972 22 972 12" transform="translate(0 334)" fill="none" {LINE} '
+                    f'stroke-width="4"/>', (960, 334))
+    # The flotation collar round the capsule's base, at the sea line (the descent's camera: base at 618).
+    base = RC[1] + RK * (500 - 426)
+    layer("y-collar", f'<ellipse cx="960" cy="{base - 6}" rx="120" ry="24" fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="4"/>',
+          (960, base))
+    # The sea in front of the capsule (the same as r-sea), so what's under the water line shows
+    # through its hatching, as the descent's sea looks.
+    layer("y-sea-front", f'<rect x="-900" y="1100" width="3800" height="900" fill="url(#earth)"/>'
+                         + "".join(f'<path d="M{x} 1100 q20 -10 40 0 q20 10 40 0" fill="none" {LINE} stroke-width="3"/>'
+                                   for x in range(-900, 2900, 80)), (960, 1100))
+
+
 def copy_board_layers():
     src = os.path.join(BOARD, "build")
     if not os.path.exists(os.path.join(src, "layers.json")):
@@ -422,6 +451,7 @@ def main():
     orbit_parts()
     return_parts()
     time_parts()
+    recovery_parts()
     if ONLY:
         # Keep the parts not redrawn.
         old = json.load(open(os.path.join(BUILD, "layers.json")))

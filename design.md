@@ -2670,7 +2670,9 @@ and the suborbital hop followed (`advanced-experiments-earth-orbit`, `biometric-
 oxygen, power and food; a satellite's power) and a heartbeat monitor are the first clips with labels.
 Laika's lost signal is shown as a lost signal, never a flatline. The steps most often one short of a
 whole season are now the planetary transits and orbits (`jupiter-saturn-transit`, `venus-orbit`,
-`earth-jupiter-transit`), `sun-measurements` and `recovery`.
+`earth-jupiter-transit`), `sun-measurements` and `recovery`. `recovery` followed (a helicopter hoists
+the capsule out; its failure is Liberty Bell 7's, flooding and let go), so Gemini's flights play whole;
+the splashdown's sky now clears after touchdown, so the recovery cuts on.
 
 The launch was tried two ways on 2026-10-12, both judged usable by the user. Claude alone wrote the
 layers as SVG and the motion as formulas: 8 minutes, the smoother motion. The other way was a Claude

@@ -30,6 +30,8 @@ for (var f = 0; f <= NFRAMES + 1; f++) { fallen.push(y); y += speed(f / FPS) / F
 function fall(t) { return fallen[clamp(Math.round(t * FPS), 0, fallen.length - 1)]; }
 // The clouds go on up from where the reentry left them (500 - 900 px).
 for (i = 1; i <= 6; i++) move("r-cloud-" + i, function (t) { return [0, -400 - fall(t)]; });
+// Down, the sky clears: the clouds fade, so what follows (a recovery) starts on an empty sky.
+for (i = 1; i <= 6; i++) fade("r-cloud-" + i, track([[SPLASH + 0.4, 1], [SPLASH + 1.4, 0, "lin"]]));
 
 // The camera drops to keep the main in the frame once it's open (not for a streamer).
 var drop = failure ? function () { return 0; } : glitch ? track([[HALF, 0], [3.0, 200]]) : track([[MAIN - 0.2, 0], [2.6, 200]]);
@@ -118,10 +120,11 @@ if (GROUND) {
     fade("r-splash", track([[SPLASH, 0, "snap"], [SPLASH + 0.02, 1, "snap"], [SPLASH + 0.4, 1], [SPLASH + 0.9, 0, "lin"]]));
     for (i = 1; i <= 3; i++) {
         (function (n, k) {
-            var t0 = SPLASH + 0.1 + 0.45 * k;
+            // Three rings, done before the clip ends (the latest splash is at 4.7).
+            var t0 = SPLASH + 0.1 + 0.3 * k;
             move(n, function (t) { return [0, seaAt(SPLASH) - drop(t) - 1100]; });
-            grow(n, function (t) { return t < t0 ? 0.2 : 0.2 + big * 1.4 * clamp((t - t0) / 1.6, 0, 1); });
-            fade(n, function (t) { return t < t0 ? 0 : 1 - clamp((t - t0) / 1.6, 0, 1); });
+            grow(n, function (t) { return t < t0 ? 0.2 : 0.2 + big * 1.4 * clamp((t - t0) / 1.0, 0, 1); });
+            fade(n, function (t) { return t < t0 ? 0 : 1 - clamp((t - t0) / 1.0, 0, 1); });
         })("r-ring-" + i, i - 1);
     }
 }
