@@ -662,6 +662,55 @@ def dock_parts():
                      f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>', KC)
 
 
+# --- Spacewalks: the way home's capsule (2x, nose right), a hatch on its top, a suited figure -------
+
+# The figure stands at rest in the open hatch, facing the nose: its centre (and pivot) at EP, the
+# tether's end at its backpack (EW), the hand that holds things and the gun at EH.
+EP, EW, EH = (870, 300), (850, 300), (916, 296)
+HATCH = (836, 926, 380)
+
+
+def suit():
+    return (f'<path d="M858 318 L852 360 L862 366 M882 318 L890 360 L900 364" fill="none" {LINE} stroke-width="9"/>'
+            f'<path d="M858 318 L852 360 L862 366 M882 318 L890 360 L900 364" fill="none" stroke="#ffffff" stroke-width="4" '
+            f'stroke-linecap="round" stroke-linejoin="round"/>'
+            f'<rect x="838" y="262" width="16" height="44" rx="3" fill="#ffffff" {LINE} stroke-width="3"/>'
+            f'<rect x="852" y="262" width="38" height="58" rx="9" fill="#ffffff" {LINE} stroke-width="3"/>'
+            f'<path d="M858 272 L846 302 M884 272 L914 294" fill="none" {LINE} stroke-width="9"/>'
+            f'<path d="M858 272 L846 302 M884 272 L914 294" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>'
+            f'<circle cx="870" cy="242" r="21" fill="#ffffff" {LINE} stroke-width="3"/>'
+            f'<path d="M874 230 Q892 232 890 246 Q888 258 874 256 Z" fill="#ffffff" {LINE} stroke-width="2.4"/>')
+
+
+def eva_parts():
+    layer("e-suit", suit(), EP)
+    # The visor fogging over, and a puff from the hand-held gun ahead of the hand.
+    layer("e-fog", f'<path d="M874 230 Q892 232 890 246 Q888 258 874 256 Z" fill="{GOLD}" opacity="0.85" {LINE} stroke-width="2.4"/>', EP)
+    layer("e-gun", f'<path d="M912 292 L926 292" fill="none" {LINE} stroke-width="4"/>' + puff(940, 290, 9), EP)
+    # The tether, drawn along +x from its pivot so the timeline can stretch and aim it.
+    layer("e-tether", f'<path d="M0 0 C30 -10 70 10 100 0" transform="translate(850 300)" fill="none" {LINE} stroke-width="3"/>',
+          EW)
+    # The hatch, hinged at its front edge, and the dark opening under it.
+    x0, x1, y = HATCH
+    layer("e-hole", f'<rect x="{x0 + 4}" y="{y - 2}" width="{x1 - x0 - 8}" height="10" fill="{NAVY}"/>', (x1, y))
+    layer("e-hatch", f'<rect x="{x0}" y="{y - 8}" width="{x1 - x0}" height="10" rx="3" fill="#ffffff" {LINE} stroke-width="3"/>',
+          (x1, y))
+    # A crew transfer: a second capsule docked nose to nose, a collar between the noses (1108 and
+    # 1148), its hatch mirrored about the collar's middle, and a handrail between the two hatches.
+    layer("e-capsule-b", f'<g transform="translate(1296 470) scale(2) rotate(-90) translate(-960 -426)">{capsule()}</g>', (1296, 470))
+    layer("e-collar", f'<rect x="1090" y="452" width="76" height="36" rx="4" fill="#ffffff" {LINE} stroke-width="3"/>'
+                      f'<path d="M1128 452 L1128 488" fill="none" {LINE} stroke-width="2"/>', (1128, 470))
+    m0, m1 = 2256 - x1, 2256 - x0
+    layer("e-hole-b", f'<rect x="{m0 + 4}" y="{y - 2}" width="{m1 - m0 - 8}" height="10" fill="{NAVY}"/>', (m0, y))
+    layer("e-hatch-b", f'<rect x="{m0}" y="{y - 8}" width="{m1 - m0}" height="10" rx="3" fill="#ffffff" {LINE} stroke-width="3"/>',
+          (m0, y))
+    layer("e-rail", f'<path d="M944 352 L1312 352 M960 352 L960 378 M1296 352 L1296 378" fill="none" {LINE} stroke-width="4"/>',
+          (1128, 352))
+    # The experiment package on the hull, ahead of the hatch; its pivot is where the hand takes it.
+    layer("e-box", f'<rect x="958" y="356" width="34" height="24" rx="3" fill="url(#hatch)" {LINE} stroke-width="3"/>'
+                   f'<rect x="958" y="356" width="34" height="24" rx="3" fill="{GOLD_FILL}"/>', (975, 360))
+
+
 def copy_board_layers():
     src = os.path.join(BOARD, "build")
     if not os.path.exists(os.path.join(src, "layers.json")):
@@ -687,6 +736,7 @@ def main():
     moon_parts()
     way_parts()
     dock_parts()
+    eva_parts()
     if ONLY:
         # Keep the parts not redrawn.
         old = json.load(open(os.path.join(BUILD, "layers.json")))

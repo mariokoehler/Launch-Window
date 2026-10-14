@@ -85,6 +85,11 @@ Each folder's `build/` is regenerated on every run and stays out of git.
     target (`k-target`, its light and latches) or another capsule (`k-other`) ahead of it.
     `dockScene(other, t0)`: a step that carries on from another passes that one's length as `t0`, so
     the Earth's turn and the light's blinking carry on (`docking` from `target-approach`).
+  - **Spacewalks** (2026-10-14): `spacewalk.jsx`, the way home's capsule (`r-capsule`) with a hatch,
+    the figure (`e-suit`, with its fogged visor and gun) placed by a pose `[dx, dy, turn]` from where
+    it stands in the hatch (`handOn` puts its hand on a point), its tether aimed and stretched from
+    the hatch every frame. The camera zooms in on the world null (1.35, or 1.2 for the transfer's two
+    craft). `eva` and `crew-transfer` (`spacewalkScene(true)`: a second capsule, a collar, a rail).
   - **Checks** (`check.py`, after `build.py`): `python check.py spoilers <step> ...` says where the
     variants first differ before their reveals (glitch and failure share their first sign of trouble,
     so every pair should part only at the moment that decides it), and `python check.py handoffs

@@ -240,6 +240,17 @@ STEPS = {
         "success": (6.4, 1.2), "glitch": (6.4, 2.8), "failure": (6.4, 2.8),
         "times": [0.5, 1.2, 2.0, 2.6, 3.8, 6.3],
     },
+    # Spacewalks (2026-10-14): the way home's capsule with a hatch, and a figure on a tether (spacewalk.jsx).
+    "eva": {
+        "pad": False, "before": ["spacewalk.jsx"],
+        "success": (6.0, 2.4), "glitch": (6.8, 3.0), "failure": (6.4, 3.0),
+        "times": [1.2, 2.0, 2.4, 2.8, 3.9, 5.9],
+    },
+    "crew-transfer": {
+        "pad": False, "before": ["spacewalk.jsx"],
+        "success": (5.6, 2.6), "glitch": (6.6, 3.2), "failure": (6.0, 3.2),
+        "times": [1.2, 2.0, 2.6, 3.0, 4.0, 5.5],
+    },
     "reentry": {
         "pad": False,
         "success": (6.4, 4.0), "glitch": (6.4, 4.4), "failure": (6.4, 3.4),

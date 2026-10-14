@@ -2702,7 +2702,14 @@ failure frees itself with a jet stuck open and tumbles away, as Gemini 8 did). `
 `approach-and-docking`, `at-docking` and `lll-docking` borrow the docking, and `joint-earth-orbital` and
 `joint-orbital-flight` (Vostok 3/4's group flight) the closing in (unconfirmed). The close-up always
 shows the Earth, even for an undocking in lunar orbit, and the target is always the docking target,
-even where it's a lander. 173 of 249 seasons play whole.
+even where it's a lander. 173 of 249 seasons play whole. Then the spacewalks, close up on the way
+home's capsule with a hatch on its top and a suited figure on a tether: `eva` (out to an experiment
+package on the hull and back with it; the glitch tumbles and steadies itself with a hand-held gun, as
+on Gemini 4; the failure's visor fogs, as on Gemini 9A, and it's hauled back without the package) and
+`crew-transfer` (two craft docked nose to nose, across on a handrail; the glitch's hand slips and the
+gun brings it back, the failure is hauled back to where it started). `scientific-experiments`,
+`eva-7k-ok`, `eva-in-meo` and `egress` borrow the spacewalk, and `eva-7k-lok` and `eva-gemini-langley`
+(to a lander) the transfer, between two capsules (unconfirmed). 185 of 249 seasons play whole.
 
 The launch was tried two ways on 2026-10-12, both judged usable by the user. Claude alone wrote the
 layers as SVG and the motion as formulas: 8 minutes, the smoother motion. The other way was a Claude

@@ -60,7 +60,15 @@
     {"step": "approach-and-docking", "clip": "docking"},
     {"step": "at-docking", "clip": "docking"},
     {"step": "lll-docking", "clip": "docking"},
-    {"step": "undocking", "clip": "undocking"}
+    {"step": "undocking", "clip": "undocking"},
+    {"step": "eva", "clip": "eva"},
+    {"step": "scientific-experiments", "clip": "eva"},
+    {"step": "eva-7k-ok", "clip": "eva"},
+    {"step": "eva-in-meo", "clip": "eva"},
+    {"step": "egress", "clip": "eva"},
+    {"step": "crew-transfer", "clip": "crew-transfer"},
+    {"step": "eva-7k-lok", "clip": "crew-transfer"},
+    {"step": "eva-gemini-langley", "clip": "crew-transfer"}
   ],
   "vehicles": ["atv", "gemini-a", "gemini-b", "lk-700", "sc-a", "sc-b", "soyuz-7k-l3-lok", "soyuz-7k-ok",
                "spc-a", "spc-b", "transtage"]

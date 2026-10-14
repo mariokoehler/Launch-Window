@@ -112,7 +112,7 @@ class ReplayClipsTest {
     void picksTheVariant() {
         assertTrue(CLIPS.clipFor("03-launch", MissionStepOutcome.MINOR_GLITCH_SOLVED).video().endsWith("launch-glitch.webm"));
         assertTrue(CLIPS.clipFor("03-launch", MissionStepOutcome.CATASTROPHIC).video().endsWith("launch-failure.webm"));
-        ReplayClips.Clip none = CLIPS.clipFor("07-eva", MissionStepOutcome.SUCCESSFUL);
+        ReplayClips.Clip none = CLIPS.clipFor("07-powered-descent", MissionStepOutcome.SUCCESSFUL);
         assertFalse(none.signal());
         assertTrue(none.loop());
         assertEquals(ReplayClips.NO_SIGNAL_REVEAL, none.revealAt());
