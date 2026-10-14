@@ -2682,7 +2682,11 @@ most often one short are now `earth-departure`, `de-orbit-burn`, `mars-surface` 
 `joint-orbital-flight`. The Moon followed: `lunar-orbit` (mapping, the radio lost on every pass behind
 the Moon), `loi` (the braking burn behind the Moon, out of contact, as on Apollo 8), `tei` and
 `lunar-impact` (its failure is Ranger 3's miss); `parking-orbit` borrows `earth-orbit` and `tli`
-borrows `tpi` (unconfirmed, as the crewed orbit's borrowing was).
+borrows `tpi` (unconfirmed, as the crewed orbit's borrowing was). Then the rest of the way there and
+back: `lunar-approach` (the view closing in on the Moon, ending where the insertion starts),
+`lunar-flyby`, the coasts out and home on an Earth-Moon map (`earth-moon-coast` and `moon-earth-coast`
+borrow them) and `earth-approach`, aiming for the narrow entry corridor; its failure skips off the air
+(`earth-approach-and-reentry` borrows it, unconfirmed). 104 of 249 seasons play whole.
 
 The launch was tried two ways on 2026-10-12, both judged usable by the user. Claude alone wrote the
 layers as SVG and the motion as formulas: 8 minutes, the smoother motion. The other way was a Claude

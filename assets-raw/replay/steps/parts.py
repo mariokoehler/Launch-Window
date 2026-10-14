@@ -551,6 +551,52 @@ def moon_parts():
           (cx, cy))
 
 
+# --- The way to the Moon and back: the open path past the Moon, the Earth-Moon map, the corridor -------
+
+def bezier(p0, c1, c2, p1, n=60):
+    pts = []
+    for i in range(n + 1):
+        u = i / n
+        a, b, c, d = (1 - u) ** 3, 3 * u * (1 - u) ** 2, 3 * u * u * (1 - u), u ** 3
+        pts.append((a * p0[0] + b * c1[0] + c * c2[0] + d * p1[0], a * p0[1] + b * c1[1] + c * c2[1] + d * p1[1]))
+    return pts
+
+
+def way_parts():
+    cx, cy = 960, 560
+    # The open path past the Moon (as loi.jsx's: low point 390 behind it, e 1.6), dashed.
+    pts = []
+    for th in range(-112, 113, 2):
+        r = 390 * 2.6 / (1 + 1.6 * math.cos(math.radians(th)))
+        pts.append(f"{cx + r * math.cos(math.radians(th)):.1f} {cy + r * math.sin(math.radians(th)):.1f}")
+    layer("l-open", f'<path d="M{" L".join(pts)}" fill="none" stroke="{GOLD}" stroke-width="3" stroke-dasharray="14 12" '
+                    f'opacity="0.8"/>', (cx, cy))
+    # The Earth-Moon map: the Earth at the left, the Moon at the right on its orbit (dashed, round the
+    # Earth), the way out below and the way home above, both dashed, looping round the Moon's far side.
+    E, M = (330, 560), (1590, 560)
+    layer("l-map-earth", f'<circle cx="{E[0]}" cy="{E[1]}" r="62" fill="url(#earth)" {LINE} stroke-width="3"/>'
+                         f'<circle cx="{E[0]}" cy="{E[1]}" r="96" fill="none" {LINE} stroke-width="1.5" stroke-dasharray="5 8" '
+                         f'opacity="0.5"/>', E)
+    layer("l-map-moon", f'<circle cx="{M[0]}" cy="{M[1]}" r="28" fill="#ffffff" {LINE} stroke-width="3"/>'
+                        f'<circle cx="{M[0] - 8}" cy="{M[1] - 6}" r="7" fill="url(#hatch)"/>', M)
+    layer("l-map-orbit", f'<circle cx="{E[0]}" cy="{E[1]}" r="{M[0] - E[0]}" fill="none" {LINE} stroke-width="2" '
+                         f'stroke-dasharray="6 10" opacity="0.4"/>', E)
+    out = bezier((E[0] + 70, E[1] + 66), (700, 860), (1350, 800), (M[0], M[1] + 92)) + \
+          bezier((M[0], M[1] + 92), (M[0] + 110, M[1] + 92), (M[0] + 110, M[1] - 92), (M[0], M[1] - 92))[1:]
+    home = bezier((M[0], M[1] - 92), (1350, 300), (700, 260), (E[0] + 70, E[1] - 66))
+    for name, path in (("out", out), ("home", home)):
+        d = "M" + " L".join(f"{x:.1f} {y:.1f}" for x, y in path)
+        layer(f"l-path-{name}", f'<path d="{d}" fill="none" stroke="{GOLD}" stroke-width="3.5" stroke-dasharray="14 10" '
+                                f'opacity="0.85"/>', E)
+        layers.setdefault("_paths", {})[name] = [[round(x, 1), round(y, 1)] for x, y in path]
+    # The entry corridor: a narrow band at the top of the Earth's air (the orbit scene's Earth).
+    a0, a1, r0, r1 = math.radians(228), math.radians(292), 262, 290
+    band = (f'M{cx + r1 * math.cos(a0):.1f} {cy + r1 * math.sin(a0):.1f} A{r1} {r1} 0 0 1 {cx + r1 * math.cos(a1):.1f} '
+            f'{cy + r1 * math.sin(a1):.1f} L{cx + r0 * math.cos(a1):.1f} {cy + r0 * math.sin(a1):.1f} A{r0} {r0} 0 0 0 '
+            f'{cx + r0 * math.cos(a0):.1f} {cy + r0 * math.sin(a0):.1f} Z')
+    layer("l-corridor", f'<path d="{band}" fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="2.5" stroke-dasharray="8 6"/>', (cx, cy))
+
+
 def copy_board_layers():
     src = os.path.join(BOARD, "build")
     if not os.path.exists(os.path.join(src, "layers.json")):
@@ -574,6 +620,7 @@ def main():
     map_parts()
     planet_parts()
     moon_parts()
+    way_parts()
     if ONLY:
         # Keep the parts not redrawn.
         old = json.load(open(os.path.join(BUILD, "layers.json")))

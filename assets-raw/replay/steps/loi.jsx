@@ -21,7 +21,8 @@ var open = conic(390, 1.6), wide = conic(390, 0.25), round = conic(390, 0);
 // The angle, going round anticlockwise (falling), at a speed that keeps equal areas: on the open path
 // up to the burn (its low point at 1.6), then on whichever path the burn left it.
 var after = failure ? open : glitch ? wide : round;
-var H_OPEN = 88 * 390 * 390, H_AFTER = failure ? H_OPEN : glitch ? 61.5 * 390 * 390 : 55 * 390 * 390;
+// The open path's pace puts the craft at 60 degrees (low on the right, in view) at the start.
+var H_OPEN = 50 * 390 * 390, H_AFTER = failure ? H_OPEN : glitch ? 61.5 * 390 * 390 : 55 * 390 * 390;
 var angle = (function () {
     var a = [], th = 0, f, n = NFRAMES + 2, k = Math.round(FIRE * FPS);
     a[k] = 0;

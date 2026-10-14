@@ -168,6 +168,31 @@ STEPS = {
         "success": (6.0, 2.2), "glitch": (6.0, 3.0), "failure": (6.0, 3.2),
         "times": [0.5, 1.6, 2.4, 3.2, 4.1, 5.9],
     },
+    "lunar-approach": {
+        "pad": False, "before": ["orbit.jsx"],
+        "success": (6.0, 2.4), "glitch": (6.0, 3.6), "failure": (6.0, 3.4),
+        "times": [0.5, 1.8, 2.4, 3.2, 4.2, 5.9],
+    },
+    "lunar-flyby": {
+        "pad": False, "before": ["orbit.jsx"],
+        "success": (6.4, 3.6), "glitch": (6.4, 4.4), "failure": (6.4, 4.4),
+        "times": [0.5, 2.0, 3.0, 3.6, 4.4, 6.3],
+    },
+    "trans-lunar-coast": {
+        "pad": False, "after": ["moon-coast.jsx"],
+        "success": (6.4, 2.4), "glitch": (6.4, 3.6), "failure": (6.4, 3.4),
+        "times": [0.5, 1.8, 2.4, 3.2, 4.4, 6.3],
+    },
+    "trans-earth-coast": {
+        "pad": False, "after": ["moon-coast.jsx"],
+        "success": (6.4, 2.4), "glitch": (6.4, 3.6), "failure": (6.4, 3.4),
+        "times": [0.5, 1.8, 2.4, 3.2, 4.4, 6.3],
+    },
+    "earth-approach": {
+        "pad": False, "before": ["orbit.jsx"],
+        "success": (6.0, 2.4), "glitch": (6.0, 3.4), "failure": (6.0, 3.4),
+        "times": [0.5, 1.8, 2.6, 3.4, 4.4, 5.9],
+    },
     "reentry": {
         "pad": False,
         "success": (6.4, 4.0), "glitch": (6.4, 4.4), "failure": (6.4, 3.4),

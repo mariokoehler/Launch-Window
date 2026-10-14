@@ -34,7 +34,15 @@
     {"step": "lunar-orbit", "clip": "lunar-orbit"},
     {"step": "loi", "clip": "loi"},
     {"step": "tei", "clip": "tei"},
-    {"step": "lunar-impact", "clip": "lunar-impact"}
+    {"step": "lunar-impact", "clip": "lunar-impact"},
+    {"step": "lunar-approach", "clip": "lunar-approach"},
+    {"step": "lunar-flyby", "clip": "lunar-flyby"},
+    {"step": "trans-lunar-coast", "clip": "trans-lunar-coast"},
+    {"step": "earth-moon-coast", "clip": "trans-lunar-coast"},
+    {"step": "trans-earth-coast", "clip": "trans-earth-coast"},
+    {"step": "moon-earth-coast", "clip": "trans-earth-coast"},
+    {"step": "earth-approach", "clip": "earth-approach"},
+    {"step": "earth-approach-and-reentry", "clip": "earth-approach"}
   ],
   "vehicles": ["atv", "gemini-a", "gemini-b", "lk-700", "sc-a", "sc-b", "soyuz-7k-l3-lok", "soyuz-7k-ok",
                "spc-a", "spc-b", "transtage"]
