@@ -18,6 +18,7 @@
 
   <properties>
     <mainClass>de.mkoehler.launchwindow.devtools.DevClient</mainClass>
+    <replayer.pack>standard</replayer.pack>
   </properties>
 
   <dependencies>
@@ -42,6 +43,18 @@
       <classifier>natives-desktop</classifier>
     </dependency>
     <dependency>
+      <!-- The MissionReplayer runs the client's own screens, which need its fonts and video. -->
+      <groupId>com.badlogicgames.gdx</groupId>
+      <artifactId>gdx-freetype-platform</artifactId>
+      <version>${gdxVersion}</version>
+      <classifier>natives-desktop</classifier>
+    </dependency>
+    <dependency>
+      <groupId>com.badlogicgames.gdx-video</groupId>
+      <artifactId>gdx-video-lwjgl3</artifactId>
+      <version>1.3.4</version>
+    </dependency>
+    <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
       <scope>test</scope>
@@ -64,6 +77,28 @@
         <configuration>
           <mainClass>${mainClass}</mainClass>
         </configuration>
+        <executions>
+          <execution>
+            <!-- The MissionReplayer in its own JVM, run from assets/ as the client is, so the clips,
+                 sidecars and sounds are read fresh from disk. It puts assets/ on its own class loader:
+                 never on this module's classpath, where the bots would pick up the decisions and
+                 stories (Decisions.standard()):
+                 mvn -pl dev-tools compile exec:exec@replayer (-Dreplayer.pack=early-era for the
+                 small pack). -->
+            <id>replayer</id>
+            <configuration>
+              <executable>java</executable>
+              <workingDirectory>${project.basedir}/../assets</workingDirectory>
+              <arguments>
+                <argument>--enable-native-access=ALL-UNNAMED</argument>
+                <argument>-classpath</argument>
+                <classpath/>
+                <argument>de.mkoehler.launchwindow.devtools.replay.MissionReplayer</argument>
+                <argument>${replayer.pack}</argument>
+              </arguments>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

@@ -274,13 +274,14 @@ mvn -pl server compile exec:java
 mvn -pl lwjgl3 compile exec:exec
 mvn -pl dev-tools compile exec:java -Dexec.args="localhost 45825"
 mvn -pl dev-tools compile exec:java -DmainClass=de.mkoehler.launchwindow.devtools.HotspotEditor
+mvn -pl dev-tools compile exec:exec@replayer        # any mission's replay, any outcome (start_replayer.cmd [pack])
 ```
 
 - **`lwjgl3`/`server`/`dev-tools` resolve `core` from `~/.m2`.** `mvn clean package` doesn't
   install it, so a stale install runs old code. A new git tag also shifts the jgitver version.
 - **No `-am` on an exec step** (it walks the reactor into the parent pom). Pick a `dev-tools`
   main class with `-DmainClass=...`, not `-Dexec.mainClass`.
-- **`start_client.cmd`/`start_server.cmd`/`reset_dev_data.cmd` end in `pause`;** don't run them
+- **`start_client.cmd`/`start_server.cmd`/`start_replayer.cmd`/`reset_dev_data.cmd` end in `pause`;** don't run them
   from an automated shell. The reset works from the Bash tool as
   `cmd //c ".\reset_dev_data.cmd /y < nul"` (`/y` skips the question, `< nul` the pause; the
   `.\` is needed because this sandbox sets `NoDefaultCurrentDirectoryInExePath`). The reset deletes

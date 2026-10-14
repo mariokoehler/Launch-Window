@@ -164,6 +164,16 @@ public final class ReplayClips {
     }
 
     /**
+     * Replaces the clips {@link #standard()} returns: the dev tools' replayer reads them fresh from
+     * the repository's folders before every replay, so a clip rendered a minute ago plays.
+     *
+     * @param clips the clips
+     */
+    public static synchronized void setStandard(ReplayClips clips) {
+        standard = java.util.Objects.requireNonNull(clips, "clips must not be null");
+    }
+
+    /**
      * Reads the clips from the repository's folders (tests and tools).
      *
      * @param assets the {@code assets} folder

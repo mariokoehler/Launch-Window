@@ -1969,6 +1969,7 @@ clips, the replay is meant to be watched like a short film, and the player can s
   - **Shots:** `-Dshots=console` renders the console alone in every state; the replay group has
     Vostok's launch live, while it plays and after (both with a stand-in video player that shows one
     frame of the launch clip).
+- **Reviewing the clips (the user's idea, 2026-10-14):** dev-tools' `MissionReplayer` (`mvn -pl dev-tools compile exec:exec@replayer`) plays any mission season in this screen without a game: a list of every season with how many of its steps have a clip, then a step (or every step) and an outcome. It plays a made-up report (`ReviewReport`), so nothing is rolled; keys 1 to 4 switch the outcome at the step showing, R plays it again, Esc goes back to the list. The clips, sidecars and sounds are read from `assets/` before every replay, so a new render plays without a restart.
 - **Sound (the user's idea, 2026-10-13; built the same day, `client.screen.ReplayAudio`):** nothing is
   baked into the videos, so sound can run on across steps. Four layers:
   - **The room, the whole replay long:** mission control's room tone, a quiet loop of radio chatter

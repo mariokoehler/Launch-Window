@@ -111,6 +111,16 @@ public final class ReplaySounds {
     }
 
     /**
+     * Replaces the sounds {@link #standard()} returns: the dev tools' replayer reads them fresh from
+     * the repository's folders before every replay, so a clip rendered a minute ago plays.
+     *
+     * @param sounds the sounds
+     */
+    public static synchronized void setStandard(ReplaySounds sounds) {
+        standard = java.util.Objects.requireNonNull(sounds, "sounds must not be null");
+    }
+
+    /**
      * Reads the sounds from the repository's folders (tests and tools).
      *
      * @param assets the {@code assets} folder

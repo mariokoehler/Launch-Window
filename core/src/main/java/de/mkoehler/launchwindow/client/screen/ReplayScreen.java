@@ -62,6 +62,8 @@ public final class ReplayScreen extends ChromeScreen {
     private final ReplayAudio audio = new ReplayAudio(ReplaySounds.standard());
     private String missionId;
     private ReplayPlayback playback;
+    /** Where leaving goes instead of the report or the hub, or {@code null}: the dev tools' replayer. */
+    private Runnable leave;
     /** The mission clock at the step's start, and the step's length. */
     private float clockBase;
     private float clockStep;
@@ -87,7 +89,8 @@ public final class ReplayScreen extends ChromeScreen {
      * @param queue     the missions after this one, in order; {@code null} outside the queue
      */
     public ReplayScreen(LaunchWindowGame game, TurnReport report, String missionId, List<String> queue) {
-        super(game, List.of(Crumb.SPACE_COMPLEX, new Crumb("Turn report", screen -> ((ReplayScreen) screen).goBack()),
+        super(game, List.of(new Crumb("Space Complex", screen -> ((ReplayScreen) screen).goHomeOrLeave()),
+            new Crumb("Turn report", screen -> ((ReplayScreen) screen).goBack()),
             new Crumb("Replay", null)), "Mission Control", "Mission replay");
         this.report = report;
         this.queue = queue == null ? null : List.copyOf(queue);
@@ -101,11 +104,40 @@ public final class ReplayScreen extends ChromeScreen {
      */
     @Override
     protected void goBack() {
-        if (queue != null) {
+        if (leave != null) {
+            leave.run();
+        } else if (queue != null) {
             toReport();
         } else {
             game.setScreen(new TurnReportScreen(game, report));
         }
+    }
+
+    private void goHomeOrLeave() {
+        if (leave != null) {
+            leave.run();
+        } else {
+            goHome();
+        }
+    }
+
+    /**
+     * Sends the back button and the breadcrumbs somewhere else than the report and the hub: the dev
+     * tools' replayer, whose made-up report has no game behind it.
+     *
+     * @param leave where leaving goes
+     */
+    public void onLeave(Runnable leave) {
+        this.leave = leave;
+    }
+
+    /**
+     * Returns the step showing, or the step count at the summary.
+     *
+     * @return the step, from 0
+     */
+    public int step() {
+        return playback.step();
     }
 
     private void toReport() {
