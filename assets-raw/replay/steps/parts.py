@@ -1,5 +1,5 @@
 """Draws the layers of the step clips (launch preparations, countdown, ascent, deployment, Earth
-orbit) in the launch's style, and copies in the launch storyboard's own layers, so the steps on the
+orbit, and the way home: reentry preparations to descent and splashdown) in the launch's style, and copies in the launch storyboard's own layers, so the steps on the
 pad match the launch pixel for pixel and the rocket in flight is the same rocket, cut at its stages.
 
 python parts.py [name prefix ...] redraws only the parts whose names start so (it's slow).
@@ -229,6 +229,113 @@ def orbit_parts():
         layer(f"ring-{i}", f'<circle cx="960" cy="560" r="40" fill="none" stroke="{GOLD}" stroke-width="4"/>', (960, 560))
 
 
+# --- Coming home: reentry preparations, retrofire, retrofire jettison, reentry, descent and splashdown
+
+# The capsule (the payload, the rocket's nose section) drawn RK times the launch's size with its
+# centre on RC. In orbit it hangs off a carrier turned 0 = nose right (its way), base and retro pack
+# behind it; parts drawn in that frame use RT. For the descent, RU draws it nose up, which is the
+# carrier turned 270, so the two cut into each other.
+RC, RK = (960, 470), 2.0
+
+
+def RT(body):
+    return f'<g transform="translate({RC[0]} {RC[1]}) scale({RK}) rotate(90) translate(-960 -426)">{body}</g>'
+
+
+def RT_AT(x, y):
+    """Where a point of the capsule's own drawing lands in RT (nose right)."""
+    return (RC[0] - RK * (y - 426), RC[1] + RK * (x - 960))
+
+
+def RU(body):
+    return f'<g transform="translate({RC[0]} {RC[1]}) scale({RK}) translate(-960 -426)">{body}</g>'
+
+
+def capsule():
+    # Thinner lines before the scale, so they land a little heavier than the launch's (it plays small).
+    return re.sub(r'stroke-width="([\d.]+)"', lambda m: f'stroke-width="{float(m.group(1)) * 0.8:.2f}"',
+                  board_group("debris-1"))
+
+
+def return_parts():
+    # The orbit the craft is on, through its centre, round the deployment's Earth.
+    layer("r-orbit", f'<circle cx="960" cy="3100" r="{3100 - RC[1]}" fill="none" stroke="{GOLD}" stroke-width="3" '
+                     f'stroke-dasharray="14 12" opacity="0.8"/>', (960, 3100))
+    layer("r-carrier", "", RC)
+    layer("r-capsule", RT(capsule()), RC)
+    layer("r-capsule-up", RU(capsule()), RC)
+    # The retro pack on the base: a box of three motors, held by two straps.
+    pack = (f'<rect x="928" y="500" width="64" height="20" rx="3" fill="#ffffff" {LINE} stroke-width="2.4"/>'
+            + "".join(f'<path d="M{x - 5} 520 L{x + 5} 520 L{x + 7} 529 L{x - 7} 529 Z" fill="#ffffff" {LINE} stroke-width="2"/>'
+                      for x in (942, 960, 978)))
+    # It turns about the second strap's hinge, which is what a pack left hanging on it swings from.
+    layer("r-pack", RT(pack), RT_AT(1003, 482))
+    layer("r-strap-a", RT(f'<path d="M930 506 L917 482" fill="none" {LINE} stroke-width="2.4"/>'), RT_AT(917, 482))
+    layer("r-strap-b", RT(f'<path d="M990 506 L1003 482" fill="none" {LINE} stroke-width="2.4"/>'), RT_AT(1003, 482))
+    # A strap lets go: a short gold flash where it meets the capsule.
+    layer("r-cut-a", RT(f'<circle cx="917" cy="484" r="6" fill="{GOLD}"/>'), RT_AT(917, 484))
+    layer("r-cut-b", RT(f'<circle cx="1003" cy="484" r="6" fill="{GOLD}"/>'), RT_AT(1003, 484))
+    # One flame per retro motor.
+    for i, x in enumerate((942, 960, 978), 1):
+        layer(f"r-flame-{i}", RT(f'<path d="M{x - 6} 530 C{x - 7} 548 {x - 3} 566 {x} 584 C{x + 3} 566 {x + 7} 548 {x + 6} 530 Z" '
+                                 f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>'), RT_AT(x, 530))
+    # The attitude jets at the nose, a puff each side, and one jet stuck open (a long plume).
+    layer("r-jet-l", RT(puff(912, 378, 10)), RT_AT(926, 378))
+    layer("r-jet-r", RT(puff(1008, 378, 10)), RT_AT(994, 378))
+    layer("r-jet-stuck", RT(f'<path d="M986 376 C1016 368 1050 358 1086 350 L1090 366 C1054 372 1018 384 988 392 Z" '
+                            f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>'), RC)
+    # Reentry: the glow at the base (a bow of hot air, two shells), the air streaming past, and the
+    # pieces of a break-up.
+    glow = (f'<path d="M906 516 C920 560 1000 560 1014 516" fill="none" stroke="{GOLD}" stroke-width="4" stroke-linecap="round"/>'
+            f'<path d="M896 520 C912 584 1008 584 1024 520 C1000 548 920 548 896 520 Z" fill="{GOLD_FILL}" stroke="{GOLD}" '
+            f'stroke-width="2" stroke-linejoin="round"/>')
+    layer("r-glow", RT(glow), RC)
+    layer("r-glow-side", RT(f'<path d="M1008 380 C1030 420 1034 470 1020 512 C1040 470 1040 420 1008 380 Z" fill="{GOLD_FILL}" '
+                            f'stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>'), RC)
+    # The break-up's two halves: the nose cone and the body below it (nose right, as the carrier at 0).
+    nose = f'<path d="M915 440 Q915 384 960 352 Q1005 384 1005 440 Z" fill="#ffffff" {LINE} stroke-width="2.4"/>'
+    body = (f'<path d="M915 444 L1005 444 L1005 500 L915 500 Z" fill="#ffffff" {LINE} stroke-width="2.4"/>'
+            f'<path d="M915 470 L1005 470" fill="none" {LINE} stroke-width="1.6"/>')
+    layer("r-half-nose", RT(nose), RT_AT(960, 410))
+    layer("r-half-body", RT(body), RT_AT(960, 472))
+    for i in range(1, 9):
+        layer(f"r-streak-{i}", f'<path d="M960 470 L1050 470" fill="none" stroke="{GOLD}" stroke-width="3" stroke-linecap="round"/>',
+              (960, 470))
+    for i, pts in enumerate(("0 0 26 -4 30 16 4 20", "0 0 18 -8 24 10 6 14", "0 0 30 2 22 18 2 14", "0 0 14 -6 20 8"), 1):
+        layer(f"r-chip-{i}", f'<polygon points="{pts}" transform="translate(950 460)" fill="#ffffff" {LINE} stroke-width="3"/>',
+              (962, 466))
+    # Descent: the drogue, the main chute (open, half open), a main that streams unopened, the sea,
+    # the splash and its rings. The chutes hang from the nose, which is at the top in RU.
+    top = RC[1] - RK * (426 - 352)
+    def chute(w, h, lines_from, name):
+        cx = RC[0]
+        dome_y = top - lines_from
+        d = (f'<path d="M{cx - w / 2} {dome_y} C{cx - w / 2} {dome_y - h} {cx + w / 2} {dome_y - h} {cx + w / 2} {dome_y} '
+             f'C{cx + w / 4} {dome_y - h * 0.18} {cx - w / 4} {dome_y - h * 0.18} {cx - w / 2} {dome_y} Z" fill="#ffffff" {LINE} stroke-width="4"/>'
+             f'<path d="M{cx} {dome_y - h * 0.75} L{cx} {dome_y - h * 0.15}" fill="none" {LINE} stroke-width="2"/>')
+        lines = "".join(f'<path d="M{cx + k * w / 2} {dome_y} L{cx} {top}" fill="none" {LINE} stroke-width="2"/>'
+                        for k in (-1, -0.45, 0.45, 1))
+        layer(name, lines + d, (cx, top))
+    chute(110, 70, 120, "r-drogue")
+    chute(400, 190, 210, "r-main")
+    chute(170, 230, 210, "r-main-half")
+    # The streamer: the main out of its bag but never filling, a long flapping strip.
+    layer("r-streamer", f'<path d="M960 {top} L960 {top - 70} C946 {top - 130} 974 {top - 190} 958 {top - 260} '
+                        f'C970 {top - 300} 950 {top - 330} 962 {top - 360}" fill="none" {LINE} stroke-width="5"/>'
+                        f'<path d="M960 {top} L960 {top - 70}" fill="none" {LINE} stroke-width="2"/>', (960, top))
+    layer("r-sea", f'<rect x="-900" y="1100" width="3800" height="900" fill="url(#earth)"/>'
+                   + "".join(f'<path d="M{x} 1100 q20 -10 40 0 q20 10 40 0" fill="none" {LINE} stroke-width="3"/>'
+                             for x in range(-900, 2900, 80)), (960, 1100))
+    layer("r-splash", "".join(f'<path d="M{960 + dx} 1100 Q{960 + dx * 1.6} {1100 - h} {960 + dx * 2.3} {1100 - h * 0.4}" '
+                              f'fill="none" stroke="{GOLD}" stroke-width="4" stroke-linecap="round"/>'
+                              for dx, h in ((-60, 110), (-34, 170), (-12, 200), (12, 200), (34, 170), (60, 110))), (960, 1100))
+    for i in range(1, 4):
+        layer(f"r-ring-{i}", f'<ellipse cx="960" cy="1100" rx="150" ry="22" fill="none" {LINE} stroke-width="3"/>', (960, 1100))
+    for i, (x, y, k) in enumerate(((560, 700, 1.3), (1420, 880, 1.1), (700, 1060, 1.4), (1300, 1240, 1.2),
+                                   (520, 1400, 1.0), (1480, 1540, 1.3)), 1):
+        layer(f"r-cloud-{i}", cloud(x, y, k), (x, y))
+
+
 def copy_board_layers():
     src = os.path.join(BOARD, "build")
     if not os.path.exists(os.path.join(src, "layers.json")):
@@ -246,6 +353,7 @@ def main():
     ascent_parts()
     deployment_parts()
     orbit_parts()
+    return_parts()
     if ONLY:
         # Keep the parts not redrawn.
         old = json.load(open(os.path.join(BUILD, "layers.json")))

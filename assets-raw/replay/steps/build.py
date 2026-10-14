@@ -47,6 +47,32 @@ STEPS = {
         "success": (6.0, 2.1), "glitch": (6.0, 3.4), "failure": (6.5, 3.0),
         "times": [0.5, 2.0, 2.8, 3.6, 4.6, 5.9],
     },
+    # Coming home (2026-10-14): the orbital order, the capsule centred in all of them.
+    "reentry-preparations": {
+        "pad": False,
+        "success": (6.0, 3.0), "glitch": (6.0, 3.6), "failure": (6.5, 3.4),
+        "times": [0.5, 1.6, 2.4, 3.2, 4.4, 5.9],
+    },
+    "retrofire": {
+        "pad": False,
+        "success": (6.4, 2.6), "glitch": (6.4, 3.0), "failure": (6.4, 3.0),
+        "times": [0.5, 1.4, 2.0, 2.8, 3.8, 6.3],
+    },
+    "retrofire-jettison": {
+        "pad": False,
+        "success": (5.6, 1.6), "glitch": (5.6, 3.4), "failure": (6.4, 3.2),
+        "times": [0.5, 1.1, 1.8, 2.6, 3.8, 5.5],
+    },
+    "reentry": {
+        "pad": False,
+        "success": (6.4, 4.0), "glitch": (6.4, 4.4), "failure": (6.4, 3.4),
+        "times": [0.4, 1.6, 2.6, 3.4, 4.6, 6.3],
+    },
+    "descent-and-splashdown": {
+        "pad": False,
+        "success": (6.4, 2.4), "glitch": (6.4, 3.4), "failure": (6.4, 2.6),
+        "times": [0.5, 1.4, 2.2, 3.0, 4.2, 6.3],
+    },
 }
 
 

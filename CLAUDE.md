@@ -143,7 +143,9 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   themselves again (Play/Pause; the 2026-10-06 decision reversed). The step list is the plan, so its length
   spoils nothing. A new turn with missions flown asks first to watch them spoiler-free, then the front
   pages, then the report (Settings: ask, always, never). A first satellite's six steps have clips
-  (2026-10-13, `assets-raw/replay/steps/`), the rest play no signal. Client only: no reset, no server
+  (2026-10-13, `assets-raw/replay/steps/`), and so does a capsule's way home (2026-10-14: reentry
+  preparations, retrofire, retropack jettison, reentry, descent and splashdown; a crewed orbit borrows the
+  satellite's `earth-orbit`, unconfirmed), so Mercury's orbital flight plays whole; the rest play no signal. Client only: no reset, no server
   rebuild.
 - **The replay console** (the user's idea, 2026-10-13, `ui-spec.md` §4.7.3, from the canvas
   `Launch Window — Replay Console`): the monitor is a console with a mission clock, a status gauge and

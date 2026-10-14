@@ -2655,7 +2655,11 @@ where they play in the replay viewer (`ui-spec.md` §4.7.3).
 
 The list of steps is `assets-raw/replay/CLIP_CHECKLIST.md` (2026-10-13: 153 clips, three variants
 each). A first satellite's six steps were built on 2026-10-13 (`assets-raw/replay/steps/`), so its
-whole replay plays as a film.
+whole replay plays as a film. A capsule's way home followed on 2026-10-14 (reentry preparations,
+retrofire, retropack jettison, reentry, descent and splashdown), so Mercury's orbital flight and
+Korabl-Sputnik 2 play whole too. `orbital-flight` and `earth-orbital` borrow the satellite's
+`earth-orbit` clip (**unconfirmed**: a crewed orbit may want its own, whose failure isn't a burn-up).
+Every timing in them is unconfirmed. Next for Vostok: `modules-separation` and `descent-and-landing`.
 
 The launch was tried two ways on 2026-10-12, both judged usable by the user. Claude alone wrote the
 layers as SVG and the motion as formulas: 8 minutes, the smoother motion. The other way was a Claude

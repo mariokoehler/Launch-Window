@@ -5,7 +5,14 @@
     {"step": "launch", "clip": "launch"},
     {"step": "ascent", "clip": "ascent"},
     {"step": "deployment", "clip": "deployment"},
-    {"step": "earth-orbit", "clip": "earth-orbit"}
+    {"step": "earth-orbit", "clip": "earth-orbit"},
+    {"step": "orbital-flight", "clip": "earth-orbit"},
+    {"step": "earth-orbital", "clip": "earth-orbit"},
+    {"step": "reentry-preparations", "clip": "reentry-preparations"},
+    {"step": "retrofire", "clip": "retrofire"},
+    {"step": "retrofire-jettison", "clip": "retrofire-jettison"},
+    {"step": "reentry", "clip": "reentry"},
+    {"step": "descent-and-splashdown", "clip": "descent-and-splashdown"}
   ],
   "vehicles": ["atv", "gemini-a", "gemini-b", "lk-700", "sc-a", "sc-b", "soyuz-7k-l3-lok", "soyuz-7k-ok",
                "spc-a", "spc-b", "transtage"]

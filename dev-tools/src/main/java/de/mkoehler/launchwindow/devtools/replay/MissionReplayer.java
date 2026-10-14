@@ -154,17 +154,21 @@ public final class MissionReplayer extends LaunchWindowGame {
 
     /**
      * A check that the replay plays, for {@code -Dreplayer.smoke=<folder>}: the chooser, then the first
-     * mission with clips at its success and failure, a frame of each saved there, then exit.
+     * mission with clips (or {@code -Dreplayer.smoke.mission=<id>}), a success from step 0 (or
+     * {@code -Dreplayer.smoke.step=<n>}) and a failure two steps on, a frame of each saved there, then exit.
      */
     private void smokeTest(Path folder) {
-        MissionConfiguration config = session().catalog().missionConfigurations().stream()
+        String wanted = System.getProperty("replayer.smoke.mission");
+        MissionConfiguration config = wanted != null ? session().catalog().missionConfiguration(wanted).orElseThrow()
+            : session().catalog().missionConfigurations().stream()
             .filter(c -> c.seasons().get(0).steps().stream().anyMatch(s -> ReplayClips.standard().clipName(s.id())
                 .isPresent())).findFirst().orElseThrow();
+        int at = Integer.getInteger("replayer.smoke.step", 0);
         Runnable[] shots = {
             () -> grab(folder.resolve("smoke-chooser.png")),
-            () -> play(new Choice(config, 0, MissionStepOutcome.SUCCESSFUL, -1), 0),
+            () -> play(new Choice(config, 0, MissionStepOutcome.SUCCESSFUL, -1), at),
             () -> grab(folder.resolve("smoke-success.png")),
-            () -> play(new Choice(config, 0, MissionStepOutcome.FAILURE, 2), 2),
+            () -> play(new Choice(config, 0, MissionStepOutcome.FAILURE, at + 2), at + 2),
             () -> grab(folder.resolve("smoke-failure.png")),
             () -> play(new Choice(config, 0, MissionStepOutcome.FAILURE, 1), 5),
             () -> grab(folder.resolve("smoke-past-end.png")),

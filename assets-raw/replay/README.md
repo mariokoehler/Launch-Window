@@ -27,6 +27,21 @@ Each folder's `build/` is regenerated on every run and stays out of git.
   `python build.py <step>` writes `build/sheet_<step>.png` (the variants side by side, a row per
   moment), and `publish` writes the game's copies and sidecars. Every step is generic: it plays
   for every program, so the payload is the rocket's own nose section.
+  - **The way home** (2026-10-14): `reentry-preparations`, `retrofire`, `retrofire-jettison`, `reentry`
+    and `descent-and-splashdown`, for a capsule (`parts.py`'s `r-` parts, `python parts.py r-`). The
+    capsule is the same nose section, twice the launch's size, centred in every clip: the world moves
+    instead (the Earth's limb comes up as it sinks, the clouds and then the sea as it falls). In orbit it
+    hangs off `r-carrier` (0 = nose right, its way; 180 = base first, for the burn), and it's nose up
+    for the descent (`r-capsule-up`, the carrier at 270, which is how reentry ends). The retro pack sits
+    on its base until the jettison. They're built for the orbital order; Mercury's suborbital flight
+    fires its retros *before* the preparations, so its cuts don't match there, and Vostok has
+    `modules-separation` instead of the jettison. The Earth's turn carries on from clip to clip (the
+    constants at the top of each `d-earth` turn).
+  - **Checks** (`check.py`, after `build.py`): `python check.py spoilers <step> ...` says where the
+    variants first differ before their reveals (glitch and failure share their first sign of trouble,
+    so every pair should part only at the moment that decides it), and `python check.py handoffs
+    <step> <next step> ...` compares each success and glitch's last frame with the next step's first
+    (what's left should be one frame's motion).
   - **Continuity:** the steps cut straight into each other, so a step's success and glitch end on
     the same frame, and the pad steps end on the next one's first (launch preparations on the
     countdown's, the countdown on the launch's). The venting loops every 0.8 s, so a pad step's
