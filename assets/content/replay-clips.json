@@ -20,7 +20,12 @@
     {"step": "duration-level-ii", "clip": "duration-level-ii"},
     {"step": "advanced-experiments-earth-orbit", "clip": "advanced-experiments-earth-orbit"},
     {"step": "biometric-data-transmission", "clip": "biometric-data-transmission"},
-    {"step": "recovery", "clip": "recovery"}
+    {"step": "recovery", "clip": "recovery"},
+    {"step": "tpi", "clip": "tpi"},
+    {"step": "earth-mars-transit", "clip": "earth-mars-transit"},
+    {"step": "earth-venus-transit", "clip": "earth-venus-transit"},
+    {"step": "earth-jupiter-transit", "clip": "earth-jupiter-transit"},
+    {"step": "jupiter-saturn-transit", "clip": "jupiter-saturn-transit"}
   ],
   "vehicles": ["atv", "gemini-a", "gemini-b", "lk-700", "sc-a", "sc-b", "soyuz-7k-l3-lok", "soyuz-7k-ok",
                "spc-a", "spc-b", "transtage"]

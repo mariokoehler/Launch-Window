@@ -8,7 +8,7 @@ number, and a step folds into another the way `ReplayClips` matches it: behind a
 Nothing else shares a clip: `lunar-ascent` isn't `ascent`. Variants are ticked when the clip
 and its sidecar are in `assets/ui/replay/` and a rule in `replay-clips.json` names it.
 
-**Status:** 21/150 steps complete, 63/450 variants. 233 step ids in 189 configurations.
+**Status:** 26/150 steps complete, 78/450 variants. 233 step ids in 189 configurations.
 
 How to read an entry (all counted automatically, a first pass):
 - **Uses**: step occurrences across all configurations; sorted by it within each family.
@@ -209,8 +209,8 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: crewed craft 16, crewed lander 14, launcher 1
   - Destinations: MOON 9, EARTH 7
   - Programs: Apollo 3, Gemini EOR: Earth-orbit tests 2, Gemini EOR 2, Soyuz 7K-L3 lunar landing 2
-- [ ] **Trans-planetary injection** `tpi`: 15 uses in 15 configurations, 14 programs (NASA/SOVIET) uncrewed
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Trans-planetary injection** `tpi`: 15 uses in 15 configurations, 14 programs (NASA/SOVIET) uncrewed
+  - Clip: `tpi`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 13, launcher 13, orbiter 2
   - Destinations: VENUS 7, MARS 5, MERCURY 1, JUPITER 1
   - Programs: Venera lander 2, Mariner 10 1, Mariner 5 1, Pioneer Venus Orbiter 1
@@ -227,7 +227,7 @@ How to read an entry (all counted automatically, a first pass):
   - Programs: Gemini 4, Soyuz 7K-OK 2, Circumlunar Gemini: Earth-orbit tests 1, Gemini EOR: Earth-orbit tests 1
 - [ ] **Lander extraction** `extraction`: 5 uses in 5 configurations, 2 programs (NASA) crew risk in 5 of 5
   - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
-  - On screen: crewed lander 5, launcher 5, crewed craft 5
+  - On screen: launcher 5, crewed lander 5, crewed craft 5
   - Destinations: MOON 3, EARTH 2
   - Programs: Apollo 3, Apollo: Earth-orbit tests 2
 - [ ] **Joint orbit** `joint-earth-orbital`: 5 uses in 5 configurations, 2 programs (SOVIET) crew risk in 4 of 5
@@ -237,7 +237,7 @@ How to read an entry (all counted automatically, a first pass):
   - Programs: Soyuz 7K-OK 3, Soyuz 7K-L3: Earth-orbit tests 2
 - [ ] **Transposition and docking** `transposition`: 5 uses in 5 configurations, 2 programs (NASA) crewed in 5 of 5
   - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
-  - On screen: crewed lander 5, launcher 5, crewed craft 5
+  - On screen: launcher 5, crewed lander 5, crewed craft 5
   - Destinations: MOON 3, EARTH 2
   - Programs: Apollo 3, Apollo: Earth-orbit tests 2
 - [ ] **Coast to high point** `co-apoa`: 4 uses in 4 configurations, 2 programs (NASA) crewed in 2 of 4
@@ -331,17 +331,17 @@ How to read an entry (all counted automatically, a first pass):
   - Programs: LK-700: Earth-orbit tests 1, Soyuz 7K-OK 1
 - [ ] **Spacewalk to the lander** `eva-gemini-langley`: 4 uses in 3 configurations, 2 programs (NASA) crew risk in 4 of 4
   - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
-  - On screen: crewed lander 4, EVA suit 4, crewed craft 4
+  - On screen: EVA suit 4, crewed lander 4, crewed craft 4
   - Destinations: MOON 3, EARTH 1
   - Programs: Gemini EOR 2, Gemini EOR: Earth-orbit tests 1
 - [ ] **First moonwalk** `eva-i`: 4 uses in 2 configurations, 1 program (NASA) crewed in 4 of 4
   - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
-  - On screen: crewed lander 4, EVA suit 4, crewed craft 4
+  - On screen: EVA suit 4, crewed lander 4, crewed craft 4
   - Destinations: MOON 4
   - Programs: Apollo 2
 - [ ] **Second moonwalk** `eva-ii`: 3 uses in 2 configurations, 1 program (NASA) crewed in 3 of 3
   - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
-  - On screen: crewed lander 3, EVA suit 3, crewed craft 3
+  - On screen: EVA suit 3, crewed lander 3, crewed craft 3
   - Destinations: MOON 3
   - Programs: Apollo 2
 - [ ] **Duration level V** `duration-l5`: 2 uses in 2 configurations, 1 program (SOVIET) crew risk in 2 of 2
@@ -356,7 +356,7 @@ How to read an entry (all counted automatically, a first pass):
   - Programs: Apollo: Earth-orbit tests 2
 - [ ] **Egress** `egress`: 2 uses in 2 configurations, 1 program (NASA) crew risk in 2 of 2
   - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
-  - On screen: stage or target 2, EVA suit 2, crewed craft 2
+  - On screen: EVA suit 2, crewed craft 2, stage or target 2
   - Destinations: EARTH 2
   - Programs: Gemini 2
 - [x] **Biometric data transmission** `biometric-data-transmission`: 1 use in 1 configuration, 1 program (SOVIET) **(early-era)**, uncrewed
@@ -376,7 +376,7 @@ How to read an entry (all counted automatically, a first pass):
   - Programs: Apollo: Earth-orbit tests 1
 - [ ] **Spacewalk in high orbit** `eva-in-meo`: 1 use in 1 configuration, 1 program (NASA) crew risk in 1 of 1
   - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
-  - On screen: crewed lander 1, EVA suit 1, crewed craft 1
+  - On screen: EVA suit 1, crewed lander 1, crewed craft 1
   - Destinations: EARTH 1
   - Programs: Apollo: Earth-orbit tests 1
 
@@ -429,7 +429,7 @@ How to read an entry (all counted automatically, a first pass):
   - Programs: Circumlunar Gemini 2, Soyuz 7K-L1 circumlunar 2, Pioneer 4 1, Zond 5 1
 - [ ] **Ascent and rendezvous** `langley-test`: 8 uses in 2 configurations, 1 program (NASA) crew risk in 8 of 8
   - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
-  - On screen: crewed lander 8, EVA suit 8, crewed craft 8
+  - On screen: EVA suit 8, crewed lander 8, crewed craft 8
   - Destinations: MOON 8
   - Programs: Gemini EOR 2
 - [ ] **LK engine test** `lk-test`: 6 uses in 4 configurations, 2 programs (SOVIET) crew risk in 5 of 6
@@ -469,7 +469,7 @@ How to read an entry (all counted automatically, a first pass):
   - Programs: Apollo 3
 - [ ] **Surface operations** `lunar-surface-operations-robotic`: 3 uses in 2 configurations, 2 programs (SOVIET) uncrewed
   - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
-  - On screen: probe lander 2, rover 2, probe 1
+  - On screen: rover 2, probe lander 2, probe 1
   - Destinations: MOON 3
   - Programs: Luna 15 1, Luna 17 1
 - [ ] **Landing module burn** `dir-asc-lan-mod-test`: 2 uses in 2 configurations, 1 program (NASA) crewed in 1 of 2
@@ -484,17 +484,17 @@ How to read an entry (all counted automatically, a first pass):
   - Programs: Gemini Direct Ascent: Earth-orbit tests 2
 - [ ] **Restart and ascent test** `langley-test-erat`: 2 uses in 2 configurations, 1 program (NASA) crew risk in 2 of 2
   - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
-  - On screen: crewed lander 2, EVA suit 2, crewed craft 2
+  - On screen: EVA suit 2, crewed lander 2, crewed craft 2
   - Destinations: EARTH 2
   - Programs: Gemini EOR: Earth-orbit tests 2
 - [ ] **Lander deployment** `langley-test-lld`: 2 uses in 2 configurations, 1 program (NASA) crew risk in 2 of 2
   - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
-  - On screen: crewed lander 2, EVA suit 2, crewed craft 2
+  - On screen: EVA suit 2, crewed lander 2, crewed craft 2
   - Destinations: EARTH 2
   - Programs: Gemini EOR: Earth-orbit tests 2
 - [ ] **Lander engine test** `langley-test-lllet`: 2 uses in 2 configurations, 1 program (NASA) crew risk in 2 of 2
   - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
-  - On screen: crewed lander 2, EVA suit 2, crewed craft 2
+  - On screen: EVA suit 2, crewed lander 2, crewed craft 2
   - Destinations: EARTH 2
   - Programs: Gemini EOR: Earth-orbit tests 2
 - [ ] **Ascent stage test** `lem-ascent-stage-test`: 2 uses in 2 configurations, 1 program (NASA) crew risk in 2 of 2
@@ -534,17 +534,17 @@ How to read an entry (all counted automatically, a first pass):
   - Programs: Luna 15 1
 - [ ] **LK separation** `lk-deployment`: 1 use in 1 configuration, 1 program (SOVIET) crew risk in 1 of 1
   - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
-  - On screen: crewed lander 1, launcher 1, crewed craft 1
+  - On screen: launcher 1, crewed lander 1, crewed craft 1
   - Destinations: MOON 1
   - Programs: Soyuz 7K-L3 lunar landing 1
 - [ ] **LK descent** `lk-descent`: 1 use in 1 configuration, 1 program (SOVIET) crew risk in 1 of 1
   - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
-  - On screen: crewed lander 1, launcher 1, crewed craft 1
+  - On screen: launcher 1, crewed lander 1, crewed craft 1
   - Destinations: MOON 1
   - Programs: Soyuz 7K-L3 lunar landing 1
 - [ ] **LK separation** `lk-lander-deployment`: 1 use in 1 configuration, 1 program (SOVIET) uncrewed
   - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
-  - On screen: crewed lander 1, launcher 1
+  - On screen: launcher 1, crewed lander 1
   - Destinations: EARTH 1
   - Programs: Soyuz 7K-L3: Earth-orbit tests 1
 - [ ] **Lunar landing** `lunar-landing`: 1 use in 1 configuration, 1 program (NASA) uncrewed
@@ -555,13 +555,13 @@ How to read an entry (all counted automatically, a first pass):
 
 ## Planets and deep space (35)
 
-- [ ] **Cruise to Saturn** `jupiter-saturn-transit`: 14 uses in 1 configuration, 1 program (NASA) uncrewed, later seasons in 14 of 14
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Cruise to Saturn** `jupiter-saturn-transit`: 14 uses in 1 configuration, 1 program (NASA) uncrewed, later seasons in 14 of 14
+  - Clip: `jupiter-saturn-transit`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 14
   - Destinations: SATURN 14
   - Programs: Pioneer 11 1
-- [ ] **Cruise to Jupiter** `earth-jupiter-transit`: 11 uses in 2 configurations, 2 programs (NASA) uncrewed, later seasons in 9 of 11
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Cruise to Jupiter** `earth-jupiter-transit`: 11 uses in 2 configurations, 2 programs (NASA) uncrewed, later seasons in 9 of 11
+  - Clip: `earth-jupiter-transit`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 11
   - Destinations: JUPITER 6, SATURN 5
   - Programs: Pioneer 10 1, Pioneer 11 1
@@ -570,13 +570,13 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: probe 6, orbiter 5
   - Destinations: VENUS 11
   - Programs: Pioneer Venus Orbiter 1, Venera 15 1, Venera lander 1
-- [ ] **Cruise to Mars** `earth-mars-transit`: 10 uses in 5 configurations, 5 programs (NASA/SOVIET) uncrewed, later seasons in 5 of 10
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Cruise to Mars** `earth-mars-transit`: 10 uses in 5 configurations, 5 programs (NASA/SOVIET) uncrewed, later seasons in 5 of 10
+  - Clip: `earth-mars-transit`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 8, orbiter 2
   - Destinations: MARS 10
   - Programs: Mariner 6 1, Mariner 9 1, Viking 1, Mars 2 1
-- [ ] **Cruise to Venus** `earth-venus-transit`: 9 uses in 7 configurations, 6 programs (NASA/SOVIET) uncrewed, later seasons in 2 of 9
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Cruise to Venus** `earth-venus-transit`: 9 uses in 7 configurations, 6 programs (NASA/SOVIET) uncrewed, later seasons in 2 of 9
+  - Clip: `earth-venus-transit`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 7, orbiter 2
   - Destinations: VENUS 8, MERCURY 1
   - Programs: Venera lander 2, Mariner 10 1, Mariner 5 1, Pioneer Venus Orbiter 1
@@ -682,7 +682,7 @@ How to read an entry (all counted automatically, a first pass):
   - Programs: Venera 7 1
 - [ ] **Lander separation and deorbit** `lander-deployment-and-de-orbit`: 1 use in 1 configuration, 1 program (NASA) uncrewed, later seasons in 1 of 1
   - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
-  - On screen: probe lander 1, orbiter 1
+  - On screen: orbiter 1, probe lander 1
   - Destinations: MARS 1
   - Programs: Viking 1
 - [ ] **Descent and landing** `lander-descent-and-landing`: 1 use in 1 configuration, 1 program (SOVIET) uncrewed
@@ -799,7 +799,7 @@ How to read an entry (all counted automatically, a first pass):
   - Programs: Gemini EOR: Earth-orbit tests 1
 - [ ] **Burn to high orbit** `injection-to-elliptical-meo`: 1 use in 1 configuration, 1 program (NASA) crew risk in 1 of 1
   - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
-  - On screen: crewed lander 1, launcher 1, crewed craft 1
+  - On screen: launcher 1, crewed lander 1, crewed craft 1
   - Destinations: EARTH 1
   - Programs: Apollo: Earth-orbit tests 1
 - [ ] **High orbit** `meo`: 1 use in 1 configuration, 1 program (NASA) crew risk in 1 of 1

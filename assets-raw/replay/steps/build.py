@@ -105,6 +105,32 @@ STEPS = {
         "success": (6.4, 2.0), "glitch": (6.4, 3.0), "failure": (6.4, 3.4),
         "times": [0.5, 1.6, 2.6, 3.4, 4.4, 6.3],
     },
+    # The way to the planets (2026-10-14): the burn out of Earth orbit, and the cruises on the map.
+    "tpi": {
+        "pad": False, "before": ["orbit.jsx"],
+        "success": (6.0, 2.0), "glitch": (6.0, 3.2), "failure": (6.0, 3.0),
+        "times": [0.5, 1.4, 2.0, 2.8, 3.8, 5.9],
+    },
+    "earth-mars-transit": {
+        "pad": False, "after": ["cruise.jsx"],
+        "success": (6.4, 2.4), "glitch": (6.4, 3.6), "failure": (6.4, 3.4),
+        "times": [0.5, 1.8, 2.4, 3.2, 4.4, 6.3],
+    },
+    "earth-venus-transit": {
+        "pad": False, "after": ["cruise.jsx"],
+        "success": (6.4, 2.4), "glitch": (6.4, 3.6), "failure": (6.4, 3.4),
+        "times": [0.5, 1.8, 2.4, 3.2, 4.4, 6.3],
+    },
+    "earth-jupiter-transit": {
+        "pad": False, "after": ["cruise.jsx"],
+        "success": (6.4, 2.4), "glitch": (6.4, 3.6), "failure": (6.4, 3.4),
+        "times": [0.5, 1.8, 2.4, 3.2, 4.4, 6.3],
+    },
+    "jupiter-saturn-transit": {
+        "pad": False, "after": ["cruise.jsx"],
+        "success": (6.4, 2.4), "glitch": (6.4, 3.6), "failure": (6.4, 3.4),
+        "times": [0.5, 1.8, 2.4, 3.2, 4.4, 6.3],
+    },
     "reentry": {
         "pad": False,
         "success": (6.4, 4.0), "glitch": (6.4, 4.4), "failure": (6.4, 3.4),

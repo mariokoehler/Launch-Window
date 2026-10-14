@@ -432,6 +432,73 @@ def recovery_parts():
                                    for x in range(-900, 2900, 80)), (960, 1100))
 
 
+# --- The planets: a map of the inner and outer planets, for the cruises -----------------------------
+
+# The Sun at the map's centre, and each planet's orbit radius on the map (not to scale: spread so they
+# all fit), with the asteroid belt between Mars and Jupiter. The transfer arcs are half ellipses with the
+# Sun at a focus, from one orbit at START_ANGLE to the other opposite it (going anticlockwise, angles
+# falling, as the orbit clips): cruise.jsx computes the same curve.
+SUN = (960, 540)
+PLANET_R = {"venus": 150, "earth": 215, "mars": 290, "jupiter": 440, "saturn": 525}
+BELT = (345, 385)
+START_ANGLE = 180
+TRANSITS = {"em": ("earth", "mars"), "ev": ("earth", "venus"), "ej": ("earth", "jupiter"), "js": ("jupiter", "saturn")}
+
+
+def transfer(r1, r2, nu):
+    """The transfer orbit's distance from the Sun, nu degrees of travel from its start."""
+    a, b = min(r1, r2), max(r1, r2)
+    e, p = (b - a) / (b + a), 2 * a * b / (a + b)
+    c = math.cos(math.radians(nu))
+    return p / (1 + e * c) if r1 < r2 else p / (1 - e * c)
+
+
+def map_parts():
+    cx, cy = SUN
+    rays = "".join(f'<path d="M{cx + 30 * math.cos(math.radians(a))} {cy + 30 * math.sin(math.radians(a))} '
+                   f'L{cx + 44 * math.cos(math.radians(a))} {cy + 44 * math.sin(math.radians(a))}" fill="none" '
+                   f'stroke="{GOLD}" stroke-width="4" stroke-linecap="round"/>' for a in range(0, 360, 30))
+    layer("m-sun", f'<circle cx="{cx}" cy="{cy}" r="22" fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="4"/>{rays}', SUN)
+    orbits = "".join(f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="none" {LINE} stroke-width="2" stroke-dasharray="6 10" '
+                     f'opacity="0.45"/>' for r in PLANET_R.values())
+    import random
+    rnd = random.Random(11)
+    dots = "".join(f'<circle cx="{cx + rr * math.cos(a):.1f}" cy="{cy + rr * math.sin(a):.1f}" r="2.2" fill="{NAVY}" '
+                   f'opacity="0.35"/>' for rr, a in ((rnd.uniform(*BELT), rnd.uniform(0, 2 * math.pi)) for _ in range(260)))
+    layer("m-orbits", orbits + dots, SUN)
+    # The planets, drawn on the right of the Sun (angle 0), each pivoting on its own centre: the
+    # timeline moves them round their orbits upright.
+    x = lambda name: cx + PLANET_R[name]
+    layer("m-venus", f'<circle cx="{x("venus")}" cy="{cy}" r="13" fill="#ffffff" {LINE} stroke-width="3"/>'
+                     f'<path d="M{x("venus") - 9} {cy - 4} L{x("venus") + 9} {cy - 4} M{x("venus") - 10} {cy + 4} L{x("venus") + 10} {cy + 4}" '
+                     f'fill="none" {LINE} stroke-width="1.5" opacity="0.6"/>', (x("venus"), cy))
+    layer("m-earth", f'<circle cx="{x("earth")}" cy="{cy}" r="14" fill="url(#earth)" {LINE} stroke-width="3"/>', (x("earth"), cy))
+    layer("m-mars", f'<circle cx="{x("mars")}" cy="{cy}" r="11" fill="url(#hatch)" {LINE} stroke-width="3"/>', (x("mars"), cy))
+    layer("m-jupiter", f'<circle cx="{x("jupiter")}" cy="{cy}" r="28" fill="#ffffff" {LINE} stroke-width="3"/>'
+                       + "".join(f'<path d="M{x("jupiter") - w} {cy + dy} L{x("jupiter") + w} {cy + dy}" fill="none" {LINE} stroke-width="2" opacity="0.6"/>'
+                                 for dy, w in ((-14, 22), (-5, 27), (6, 27), (15, 21))), (x("jupiter"), cy))
+    layer("m-saturn", f'<circle cx="{x("saturn")}" cy="{cy}" r="19" fill="#ffffff" {LINE} stroke-width="3"/>'
+                      f'<ellipse cx="{x("saturn")}" cy="{cy}" rx="38" ry="10" fill="none" {LINE} stroke-width="3" '
+                      f'transform="rotate(-18 {x("saturn")} {cy})"/>', (x("saturn"), cy))
+    # The transfer arcs, dashed gold.
+    for key, (a, b) in TRANSITS.items():
+        r1, r2 = PLANET_R[a], PLANET_R[b]
+        pts = []
+        for i in range(0, 181, 3):
+            r = transfer(r1, r2, i)
+            ang = math.radians(START_ANGLE - i)
+            pts.append(f"{cx + r * math.cos(ang):.1f} {cy + r * math.sin(ang):.1f}")
+        layer(f"m-arc-{key}", f'<path d="M{" L".join(pts)}" fill="none" stroke="{GOLD}" stroke-width="3.5" stroke-dasharray="14 10" '
+                              f'opacity="0.85"/>', SUN)
+    # The probe: a small body with a dish, drawn at the Sun's place (the timeline moves it), and its puff.
+    layer("m-probe", f'<rect x="{cx - 9}" y="{cy - 7}" width="18" height="14" rx="2" fill="#ffffff" {LINE} stroke-width="3"/>'
+                     f'<path d="M{cx - 14} {cy - 14} Q{cx} {cy - 4} {cx + 14} {cy - 14}" fill="none" {LINE} stroke-width="3"/>'
+                     f'<path d="M{cx} {cy - 7} L{cx} {cy - 10}" fill="none" {LINE} stroke-width="2"/>', SUN)
+    layer("m-puff", puff(cx, cy, 10), SUN)
+    for i in range(1, 4):
+        layer(f"m-ring-{i}", f'<circle cx="{cx}" cy="{cy}" r="16" fill="none" stroke="{GOLD}" stroke-width="3"/>', SUN)
+
+
 def copy_board_layers():
     src = os.path.join(BOARD, "build")
     if not os.path.exists(os.path.join(src, "layers.json")):
@@ -452,6 +519,7 @@ def main():
     return_parts()
     time_parts()
     recovery_parts()
+    map_parts()
     if ONLY:
         # Keep the parts not redrawn.
         old = json.load(open(os.path.join(BUILD, "layers.json")))

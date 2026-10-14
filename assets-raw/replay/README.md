@@ -55,6 +55,12 @@ Each folder's `build/` is regenerated on every run and stays out of git.
     camera 200 px down), a helicopter hoists the capsule out of the sea. Its sea is in front of the
     capsule (`y-sea-front`), so a capsule that floods and goes under (the failure, Liberty Bell 7)
     shows through the water.
+  - **The way to the planets** (2026-10-14, `parts.py`'s `m-` parts): `tpi` (in the Earth-orbit
+    scene, the camera up and left so the probe can leave to the right) and the cruises, which share
+    `cruise.jsx` (`FROM`, `TO`, `ARC` set by each step's file): a map of the planets round the Sun
+    (orbit radii spread to fit, not to scale; the asteroid belt dotted), the transfer orbit a half
+    ellipse from `START_ANGLE` (parts.py and cruise.jsx compute the same curve), the probe sweeping
+    equal areas. The planets pivot on their own centres and move round, so they stay upright.
   - **Checks** (`check.py`, after `build.py`): `python check.py spoilers <step> ...` says where the
     variants first differ before their reveals (glitch and failure share their first sign of trouble,
     so every pair should part only at the moment that decides it), and `python check.py handoffs
