@@ -61,6 +61,10 @@ Each folder's `build/` is regenerated on every run and stays out of git.
     (orbit radii spread to fit, not to scale; the asteroid belt dotted), the transfer orbit a half
     ellipse from `START_ANGLE` (parts.py and cruise.jsx compute the same curve), the probe sweeping
     equal areas. The planets pivot on their own centres and move round, so they stay upright.
+  - **At the planets and the Sun** (2026-10-14, `p-` and `s-` parts): `venus-orbit` and `mars-orbit`
+    share `planet-orbit.jsx` (`PLANET`), the orbit scene with `orbitScene("p-venus")` and a mapping
+    beam; `sun-measurements` has its own scene, the Sun big at the left and the wind sent out along
+    its rays.
   - **Checks** (`check.py`, after `build.py`): `python check.py spoilers <step> ...` says where the
     variants first differ before their reveals (glitch and failure share their first sign of trouble,
     so every pair should part only at the moment that decides it), and `python check.py handoffs

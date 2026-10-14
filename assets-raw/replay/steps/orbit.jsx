@@ -3,10 +3,11 @@
 // radio rings. They start where the Earth orbit's success ends (-125), so they cut straight on.
 var OCX = 960, OCY = 560, OR = 390, OSTART = -125;
 
-function orbitScene() {
+// The planet is the Earth unless named (p-venus, p-mars).
+function orbitScene(planet) {
     put("paper", "screen");
     put("o-orbit");
-    put("o-earth");
+    put(planet || "o-earth");
     put("o-sat");
     for (var i = 1; i <= 4; i++) put("ring-" + i);
 }

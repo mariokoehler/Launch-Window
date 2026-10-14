@@ -499,6 +499,41 @@ def map_parts():
         layer(f"m-ring-{i}", f'<circle cx="{cx}" cy="{cy}" r="16" fill="none" stroke="{GOLD}" stroke-width="3"/>', SUN)
 
 
+# --- At the planets and the Sun: Venus and Mars orbits, solar measurements ----------------------------
+
+def planet_parts():
+    cx, cy = 960, 560
+    # Venus under its clouds: bands that curve with the globe.
+    bands = "".join(f'<path d="M{cx - w} {cy + dy} Q{cx} {cy + dy + bend} {cx + w} {cy + dy}" fill="none" {LINE} '
+                    f'stroke-width="2" opacity="0.5"/>'
+                    for dy, w, bend in ((-170, 182, 26), (-100, 230, 34), (-30, 248, 38), (40, 246, 38), (110, 226, 32), (175, 176, 24)))
+    layer("p-venus", f'<circle cx="{cx}" cy="{cy}" r="250" fill="#ffffff" {LINE} stroke-width="3"/>{bands}'
+                     f'<circle cx="{cx}" cy="{cy}" r="268" fill="none" {LINE} stroke-width="1.5" stroke-dasharray="6 8" opacity="0.6"/>',
+          (cx, cy))
+    # Mars: rusty hatching, craters, a polar cap.
+    craters = "".join(f'<circle cx="{cx + x}" cy="{cy + y}" r="{r}" fill="#ffffff" {LINE} stroke-width="2" opacity="0.8"/>'
+                      for x, y, r in ((-90, -40, 26), (60, 50, 18), (110, -90, 14), (-30, 120, 20), (-150, 70, 12), (20, -130, 10)))
+    layer("p-mars", f'<circle cx="{cx}" cy="{cy}" r="250" fill="url(#hatch)" {LINE} stroke-width="3"/>{craters}'
+                    f'<path d="M{cx - 90} {cy - 233} Q{cx} {cy - 200} {cx + 90} {cy - 233} A250 250 0 0 0 {cx - 90} {cy - 233} Z" '
+                    f'fill="#ffffff" {LINE} stroke-width="2"/>', (cx, cy))
+    # The mapping beam: a gold wedge from the probe (at the scene's centre at rest) towards the planet
+    # (left, at rest; the timeline turns it with the probe).
+    layer("p-beam", f'<path d="M{cx} {cy} L{cx - 130} {cy - 22} L{cx - 130} {cy + 22} Z" fill="{GOLD_FILL}" stroke="{GOLD}" '
+                    f'stroke-width="2" stroke-linejoin="round"/>', (cx, cy))
+    # The Sun, big at the left, its rays; the probe's orbit round it, through the screen's middle.
+    sx, sy = 240, 540
+    rays = "".join(f'<path d="M{sx + 140 * math.cos(math.radians(a)):.1f} {sy + 140 * math.sin(math.radians(a)):.1f} '
+                   f'L{sx + 178 * math.cos(math.radians(a)):.1f} {sy + 178 * math.sin(math.radians(a)):.1f}" fill="none" '
+                   f'stroke="{GOLD}" stroke-width="5" stroke-linecap="round"/>' for a in range(0, 360, 20))
+    layer("s-sun", f'<circle cx="{sx}" cy="{sy}" r="120" fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="5"/>{rays}', (sx, sy))
+    layer("s-orbit", f'<circle cx="{sx}" cy="{sy}" r="760" fill="none" {LINE} stroke-width="2.5" stroke-dasharray="14 12" opacity="0.6"/>',
+          (sx, sy))
+    # The solar wind: short gold dashes the timeline sends out from the Sun along its rays.
+    for i in range(1, 15):
+        layer(f"s-wind-{i}", f'<path d="M{sx} {sy} L{sx + 60} {sy}" fill="none" stroke="{GOLD}" stroke-width="4" '
+                             f'stroke-linecap="round" opacity="0.8"/>', (sx, sy))
+
+
 def copy_board_layers():
     src = os.path.join(BOARD, "build")
     if not os.path.exists(os.path.join(src, "layers.json")):
@@ -520,6 +555,7 @@ def main():
     time_parts()
     recovery_parts()
     map_parts()
+    planet_parts()
     if ONLY:
         # Keep the parts not redrawn.
         old = json.load(open(os.path.join(BUILD, "layers.json")))

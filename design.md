@@ -2675,7 +2675,11 @@ the capsule out; its failure is Liberty Bell 7's, flooding and let go), so Gemin
 the splashdown's sky now clears after touchdown, so the recovery cuts on. Then the way to the planets:
 `tpi` (the burn out of Earth orbit, leaving on a nearly straight line) and the cruises Earth–Mars,
 Earth–Venus, Earth–Jupiter and Jupiter–Saturn, on a map of the planets (not to scale) with the probe
-on its transfer orbit; a cruise clip is the same every season of a long cruise.
+on its transfer orbit; a cruise clip is the same every season of a long cruise. Then Venus and Mars
+orbits (the orbit scene round another planet, a mapping beam on the surface) and solar measurements
+(the solar wind streaming past a probe in orbit round the Sun): 80 of 249 seasons play whole. The steps
+most often one short are now `earth-departure`, `de-orbit-burn`, `mars-surface` and
+`joint-orbital-flight`.
 
 The launch was tried two ways on 2026-10-12, both judged usable by the user. Claude alone wrote the
 layers as SVG and the motion as formulas: 8 minutes, the smoother motion. The other way was a Claude

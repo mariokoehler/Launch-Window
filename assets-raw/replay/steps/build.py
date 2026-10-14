@@ -131,6 +131,22 @@ STEPS = {
         "success": (6.4, 2.4), "glitch": (6.4, 3.6), "failure": (6.4, 3.4),
         "times": [0.5, 1.8, 2.4, 3.2, 4.4, 6.3],
     },
+    # At the planets and the Sun (2026-10-14).
+    "venus-orbit": {
+        "pad": False, "before": ["orbit.jsx"], "after": ["planet-orbit.jsx"],
+        "success": (6.0, 2.4), "glitch": (6.0, 3.6), "failure": (6.0, 3.6),
+        "times": [0.5, 1.8, 2.4, 3.2, 4.2, 5.9],
+    },
+    "mars-orbit": {
+        "pad": False, "before": ["orbit.jsx"], "after": ["planet-orbit.jsx"],
+        "success": (6.0, 2.4), "glitch": (6.0, 3.6), "failure": (6.0, 3.6),
+        "times": [0.5, 1.8, 2.4, 3.2, 4.2, 5.9],
+    },
+    "sun-measurements": {
+        "pad": False,
+        "success": (6.0, 2.4), "glitch": (6.0, 3.6), "failure": (6.0, 3.6),
+        "times": [0.5, 1.8, 2.4, 3.2, 4.2, 5.9],
+    },
     "reentry": {
         "pad": False,
         "success": (6.4, 4.0), "glitch": (6.4, 4.4), "failure": (6.4, 3.4),
