@@ -77,9 +77,9 @@ class ReplayClipsTest {
         assertEquals("lunar-ascent", CLIPS.clipName("15-ascent", "14-lunar-liftoff").orElseThrow());
         assertEquals("ascent", CLIPS.clipName("04-ascent", "03-launch").orElseThrow());
         assertTrue(CLIPS.clipName("04-powered-ascent").isEmpty());
-        assertTrue(CLIPS.clipName("07-lk-deployment").isEmpty());
+        assertEquals("undocking", CLIPS.clipName("07-lk-deployment").orElseThrow());
         assertTrue(CLIPS.clipName("03-wings-deployment").isEmpty());
-        assertTrue(CLIPS.clipName("05-lem-tests-earth-orbit").isEmpty());
+        assertEquals("lander-engine-test", CLIPS.clipName("05-lem-tests-earth-orbit").orElseThrow());
     }
 
     /**

@@ -361,6 +361,17 @@ STEPS = {
         "success": (5.6, 1.2), "glitch": (5.6, 2.2), "failure": (5.6, 2.4),
         "times": [0.5, 1.2, 1.9, 2.6, 3.6, 5.5],
     },
+    # The landers' tests in Earth orbit (2026-10-14): lander-orbit.jsx.
+    "lander-engine-test": {
+        "pad": False, "before": ["moon.jsx", "lander-orbit.jsx"],
+        "success": (6.0, 1.4), "glitch": (6.0, 2.0), "failure": (6.0, 2.0),
+        "times": [0.6, 1.2, 1.8, 2.4, 3.6, 5.9],
+    },
+    "lander-staging": {
+        "pad": False, "before": ["moon.jsx", "lander-orbit.jsx"],
+        "success": (6.0, 1.4), "glitch": (6.0, 2.0), "failure": (6.0, 2.0),
+        "times": [0.6, 1.2, 1.8, 2.4, 3.6, 5.9],
+    },
     "reentry": {
         "pad": False,
         "success": (6.4, 4.0), "glitch": (6.4, 4.4), "failure": (6.4, 3.4),

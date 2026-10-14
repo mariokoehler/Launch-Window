@@ -2759,7 +2759,16 @@ its mast up and sending; the glitch tips onto its side and sends weakly, as Vene
 and is silent) and `probe-surface` (its sampler arm scoops the soil; the glitch stalls, as Viking 1's did; the
 failure falls silent, as Mars 3). The landers' entries borrow the reentry, their descents the chutes, and
 Luna's surface work the probe's, its return stage the lunar liftoff (unconfirmed). `landing` after
-`lander-descent` plays the probe's. 229 of 249 seasons play whole.
+`lander-descent` plays the probe's. 229 of 249 seasons play whole. Then the landers' tests in Earth
+orbit, the Moon's lander over the Earth's limb with an alarm lamp: `lander-engine-test` (the descent
+engine burns; the glitch sputters first, the failure goes out) for the LK, lunar module, Langley and
+direct-ascent landing module tests, and `lander-staging` (the ascent stage fires off the descent stage; the
+failure's stages don't part and the stack tumbles) for the ascent stage tests and the LK's landing gear
+jettison. Borrowed (unconfirmed): the LK and Langley lander separations the undocking, the LK's descent the
+powered descent, the Langley lander's ascent and rendezvous the lunar ascent, the Gemini propulsion and
+ascent module burns the retrofire (they aren't landers), the burns to a high orbit the insertion, the coasts
+and the high orbit the Earth orbit, the entry corridor trim the Earth approach. 243 of 249 seasons play
+whole; left are the X-15's and the MiG's air launches and Mariner 10's cruise to Mercury.
 
 The launch was tried two ways on 2026-10-12, both judged usable by the user. Claude alone wrote the
 layers as SVG and the motion as formulas: 8 minutes, the smoother motion. The other way was a Claude
