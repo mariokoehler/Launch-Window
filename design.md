@@ -2745,7 +2745,11 @@ chutes) the splashdown and recovery, `lunar-slingshot` the flyby, `heliocentric-
 spaceplane's runway landing, `landing` after `descent` (`runway-landing`: a rocket plane glides in over a dry
 lake, flares and puts its skid down; the glitch bounces, the failure's skid gives way, as on an X-15 in
 1962). The `descent` before it still plays the capsule's chutes: the user's call. 211 of 249 seasons play
-whole.
+whole. Then the planets: the Moon's approach, flyby and orbit insertion take a planet (`PLANET`; no radio
+shadow, no Earth in view), so Venus, Mars, Jupiter and Saturn have approaches, those and Mercury flybys,
+and Mars an orbit insertion, with Jupiter (belts, the spot), Saturn (its ring) and Mercury drawn new.
+Mariner 10 still lacks its cruise from Venus to Mercury (no Mercury on the planets' map). 219 of 249
+seasons play whole.
 
 The launch was tried two ways on 2026-10-12, both judged usable by the user. Claude alone wrote the
 layers as SVG and the motion as formulas: 8 minutes, the smoother motion. The other way was a Claude

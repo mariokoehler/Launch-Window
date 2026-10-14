@@ -5,12 +5,17 @@
 // wider ellipse.
 // Failure: the same stutter, but no relight: it comes out still on its open path, and leaves.
 var glitch = VARIANT === "glitch", failure = VARIANT === "failure";
+// Round the Moon unless a planet's step names one first (PLANET: "venus", "mars", ...): no radio
+// shadow there, and no Earth in view.
+var BODY = typeof PLANET === "undefined" ? "moon" : PLANET, MOON = BODY === "moon";
 var FIRE = 1.6, STUTTER = 1.9, RELIGHT = 2.0, DONE = glitch ? 2.15 : failure ? STUTTER : 2.2;
 
-orbitScene("p-moon");
-put("l-shadow");
-layers["l-shadow"].moveAfter(layers["p-moon"]);
-put("l-earth-far", "screen");
+orbitScene("p-" + BODY);
+if (MOON) {
+    put("l-shadow");
+    layers["l-shadow"].moveAfter(layers["p-moon"]);
+}
+if (MOON) put("l-earth-far", "screen");
 put("o-streak");
 layers["o-streak"].parent = layers["o-sat"];
 fade("o-orbit", function () { return 0.6; });
@@ -56,4 +61,4 @@ fade("o-streak", function (t) { return burning(t) ? 1 : 0; });
 grow("o-streak", function (t) { return [1, 0.9 + 0.12 * Math.sin(2 * Math.PI * 11 * t)]; });
 
 // Home: a ring every 0.75 s, none from behind the Moon.
-radioRingsAt(sendTimes(function (t) { return inShadow(where(t)); }), where);
+radioRingsAt(sendTimes(function (t) { return MOON && inShadow(where(t)); }), where);

@@ -94,7 +94,17 @@
     {"step": "engine-test", "clip": "retrofire"},
     {"step": "landing", "after": "descent", "clip": "runway-landing"},
     {"step": "deorbit-burn", "clip": "retrofire"},
-    {"step": "orbital-maneuvering-engine-test", "clip": "retrofire"}
+    {"step": "orbital-maneuvering-engine-test", "clip": "retrofire"},
+    {"step": "venus-approach", "clip": "venus-approach"},
+    {"step": "mars-approach", "clip": "mars-approach"},
+    {"step": "jupiter-approach", "clip": "jupiter-approach"},
+    {"step": "saturn-approach", "clip": "saturn-approach"},
+    {"step": "venus-flyby", "clip": "venus-flyby"},
+    {"step": "mars-flyby", "clip": "mars-flyby"},
+    {"step": "jupiter-flyby", "clip": "jupiter-flyby"},
+    {"step": "saturn-flyby", "clip": "saturn-flyby"},
+    {"step": "mercury-flyby", "clip": "mercury-flyby"},
+    {"step": "mars-orbit-injection", "clip": "mars-orbit-injection"}
   ],
   "vehicles": ["atv", "gemini-a", "gemini-b", "lk-700", "sc-a", "sc-b", "soyuz-7k-l3-lok", "soyuz-7k-ok",
                "spc-a", "spc-b", "transtage"]

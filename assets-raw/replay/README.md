@@ -106,6 +106,10 @@ Each folder's `build/` is regenerated on every run and stays out of git.
   - **The runway landing** (2026-10-14): `runway-landing.jsx` (after `moon.jsx`, for the dust), the
     rocket plane (`w-plane`, its skid `w-skid` folding up in the failure) placed by where its skid
     touches, on a dry lake (`w-ground`), the camera at 1.35.
+  - **The planets** (2026-10-14): `lunar-approach.jsx`, `lunar-flyby.jsx` and `loi.jsx` read `PLANET`
+    (the Moon if unset; only the Moon has the radio shadow and the far Earth), so a planet's step is a
+    one-line file (`var PLANET = "saturn";`) with the Moon's file after it. `p-jupiter`, `p-saturn`
+    (its ring drawn in two halves round the globe) and `p-mercury` are new.
   - **Checks** (`check.py`, after `build.py`): `python check.py spoilers <step> ...` says where the
     variants first differ before their reveals (glitch and failure share their first sign of trouble,
     so every pair should part only at the moment that decides it), and `python check.py handoffs

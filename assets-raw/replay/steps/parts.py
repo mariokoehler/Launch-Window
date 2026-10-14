@@ -516,6 +516,20 @@ def planet_parts():
     layer("p-mars", f'<circle cx="{cx}" cy="{cy}" r="250" fill="url(#hatch)" {LINE} stroke-width="3"/>{craters}'
                     f'<path d="M{cx - 90} {cy - 233} Q{cx} {cy - 200} {cx + 90} {cy - 233} A250 250 0 0 0 {cx - 90} {cy - 233} Z" '
                     f'fill="#ffffff" {LINE} stroke-width="2"/>', (cx, cy))
+    # Jupiter: belts across the globe and the great spot; Saturn: belts and its ring, seen a little from
+    # above (the ring's far side behind the globe, drawn in two parts); Mercury: craters on bare rock.
+    belts = lambda spec: "".join(f'<path d="M{cx - w} {cy + dy} Q{cx} {cy + dy + bend} {cx + w} {cy + dy}" fill="none" {LINE} '
+                                 f'stroke-width="{sw}" opacity="0.55"/>' for dy, w, bend, sw in spec)
+    layer("p-jupiter", f'<circle cx="{cx}" cy="{cy}" r="250" fill="#ffffff" {LINE} stroke-width="3"/>'
+                       + belts(((-150, 200, 22, 3), (-80, 236, 28, 5), (-20, 249, 30, 3), (50, 244, 30, 5), (120, 220, 26, 3), (180, 172, 20, 2)))
+                       + f'<ellipse cx="{cx + 70}" cy="{cy + 82}" rx="44" ry="22" fill="url(#hatch)" {LINE} stroke-width="2.4"/>', (cx, cy))
+    ring = lambda half: (f'<path d="M{cx - 430} {cy} A430 96 0 0 {0 if half == "front" else 1} {cx + 430} {cy}" fill="none" {LINE} stroke-width="5"/>'
+                         f'<path d="M{cx - 340} {cy} A340 70 0 0 {0 if half == "front" else 1} {cx + 340} {cy}" fill="none" {LINE} stroke-width="2.4"/>')
+    layer("p-saturn", ring("back") + f'<circle cx="{cx}" cy="{cy}" r="250" fill="#ffffff" {LINE} stroke-width="3"/>'
+                      + belts(((-140, 208, 22, 3), (-60, 242, 28, 4), (70, 240, 28, 3), (150, 196, 22, 4))) + ring("front"), (cx, cy))
+    pits = "".join(f'<circle cx="{cx + x}" cy="{cy + y}" r="{r}" fill="#ffffff" {LINE} stroke-width="2" opacity="0.85"/>'
+                   for x, y, r in ((-110, -80, 30), (90, -120, 16), (130, 40, 24), (-40, 70, 14), (30, 150, 20), (-160, 110, 12), (40, -30, 10), (-60, -170, 9)))
+    layer("p-mercury", f'<circle cx="{cx}" cy="{cy}" r="250" fill="url(#earth)" {LINE} stroke-width="3"/>{pits}', (cx, cy))
     # The mapping beam: a gold wedge from the probe (at the scene's centre at rest) towards the planet
     # (left, at rest; the timeline turns it with the probe).
     layer("p-beam", f'<path d="M{cx} {cy} L{cx - 130} {cy - 22} L{cx - 130} {cy + 22} Z" fill="{GOLD_FILL}" stroke="{GOLD}" '

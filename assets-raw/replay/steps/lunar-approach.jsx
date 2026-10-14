@@ -4,14 +4,19 @@
 // Glitch: from 1.6 it drifts off its aim; a correction at 3.0 brings it back by 3.8.
 // Failure: the same drift, but the correction at 3.0 misfires: it's aimed wide, and will miss.
 var glitch = VARIANT === "glitch", failure = VARIANT === "failure";
+// Round the Moon unless a planet's step names one first (PLANET: "venus", "mars", ...): no radio
+// shadow there, and no Earth in view.
+var BODY = typeof PLANET === "undefined" ? "moon" : PLANET, MOON = BODY === "moon";
 var DRIFT = 1.6, FIX = glitch || failure ? 3.0 : 2.0;
 
-orbitScene("p-moon");
-put("l-shadow");
-layers["l-shadow"].moveAfter(layers["p-moon"]);
+orbitScene("p-" + BODY);
+if (MOON) {
+    put("l-shadow");
+    layers["l-shadow"].moveAfter(layers["p-moon"]);
+}
 put("l-open");
 layers["l-open"].moveAfter(layers["o-sat"]);
-put("l-earth-far", "screen");
+if (MOON) put("l-earth-far", "screen");
 put("m-puff");
 fade("o-orbit", function () { return 0.6; });
 
@@ -46,4 +51,4 @@ move("m-puff", function (t) { var p = where(Math.max(t, FIX)); return [p[0] - 96
 grow("m-puff", track([[FIX, 0.6], [FIX + 0.5, 2.4, "out"], [FIX + 1.1, 3.0, "lin"]]));
 fade("m-puff", track([[FIX, 0, "snap"], [FIX + 0.02, 1, "snap"], [FIX + 0.5, 1], [FIX + 1.1, 0, "lin"]]));
 
-radioRingsAt(sendTimes(function (t) { return inShadow(where(t)); }), where);
+radioRingsAt(sendTimes(function (t) { return MOON && inShadow(where(t)); }), where);

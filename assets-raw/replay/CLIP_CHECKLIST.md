@@ -8,7 +8,7 @@ number, and a step folds into another the way `ReplayClips` matches it: behind a
 Nothing else shares a clip: `lunar-ascent` isn't `ascent`. Variants are ticked when the clip
 and its sidecar are in `assets/ui/replay/` and a rule in `replay-clips.json` names it.
 
-**Status:** 90/150 steps complete, 270/450 variants. 233 step ids in 189 configurations.
+**Status:** 100/150 steps complete, 300/450 variants. 233 step ids in 189 configurations.
 
 How to read an entry (all counted automatically, a first pass):
 - **Uses**: step occurrences across all configurations; sorted by it within each family.
@@ -600,13 +600,13 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: probe 4, probe lander 1
   - Destinations: VENUS 3, MARS 2
   - Programs: Venera lander 2, Mars 2 1, Venera 7 1, Viking 1
-- [ ] **Mars approach** `mars-approach`: 5 uses in 5 configurations, 5 programs (NASA/SOVIET) uncrewed, later seasons in 5 of 5
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Mars approach** `mars-approach`: 5 uses in 5 configurations, 5 programs (NASA/SOVIET) uncrewed, later seasons in 5 of 5
+  - Clip: `mars-approach`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 4, orbiter 1
   - Destinations: MARS 5
   - Programs: Mariner 6 1, Mariner 9 1, Mars 2 1, Mars M-69 1
-- [ ] **Venus approach** `venus-approach`: 5 uses in 5 configurations, 4 programs (NASA/SOVIET) uncrewed, later seasons in 1 of 5
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Venus approach** `venus-approach`: 5 uses in 5 configurations, 4 programs (NASA/SOVIET) uncrewed, later seasons in 1 of 5
+  - Clip: `venus-approach`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 4, orbiter 1
   - Destinations: VENUS 5
   - Programs: Venera lander 2, Mariner 5 1, Pioneer Venus Orbiter 1, Venera 7 1
@@ -625,23 +625,23 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: probe 3
   - Destinations: VENUS 3
   - Programs: Venera lander 2, Venera 7 1
-- [ ] **Venus flyby** `venus-flyby`: 3 uses in 3 configurations, 3 programs (NASA/SOVIET) uncrewed
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Venus flyby** `venus-flyby`: 3 uses in 3 configurations, 3 programs (NASA/SOVIET) uncrewed
+  - Clip: `venus-flyby`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 3
   - Destinations: VENUS 2, MERCURY 1
   - Programs: Mariner 10 1, Mariner 5 1, Venera lander 1
-- [ ] **Jupiter approach** `jupiter-approach`: 2 uses in 2 configurations, 2 programs (NASA) uncrewed, later seasons in 2 of 2
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Jupiter approach** `jupiter-approach`: 2 uses in 2 configurations, 2 programs (NASA) uncrewed, later seasons in 2 of 2
+  - Clip: `jupiter-approach`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 2
   - Destinations: JUPITER 1, SATURN 1
   - Programs: Pioneer 10 1, Pioneer 11 1
-- [ ] **Jupiter flyby** `jupiter-flyby`: 2 uses in 2 configurations, 2 programs (NASA) uncrewed, later seasons in 2 of 2
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Jupiter flyby** `jupiter-flyby`: 2 uses in 2 configurations, 2 programs (NASA) uncrewed, later seasons in 2 of 2
+  - Clip: `jupiter-flyby`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 2
   - Destinations: JUPITER 1, SATURN 1
   - Programs: Pioneer 10 1, Pioneer 11 1
-- [ ] **Mars orbit insertion** `mars-orbit-injection`: 2 uses in 2 configurations, 2 programs (NASA/SOVIET) uncrewed, later seasons in 2 of 2
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Mars orbit insertion** `mars-orbit-injection`: 2 uses in 2 configurations, 2 programs (NASA/SOVIET) uncrewed, later seasons in 2 of 2
+  - Clip: `mars-orbit-injection`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 2
   - Destinations: MARS 2
   - Programs: Mariner 9 1, Mars M-69 1
@@ -695,23 +695,23 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: probe 1
   - Destinations: MARS 1
   - Programs: Mars 2 1
-- [ ] **Mars flyby** `mars-flyby`: 1 use in 1 configuration, 1 program (NASA) uncrewed, later seasons in 1 of 1
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Mars flyby** `mars-flyby`: 1 use in 1 configuration, 1 program (NASA) uncrewed, later seasons in 1 of 1
+  - Clip: `mars-flyby`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 1
   - Destinations: MARS 1
   - Programs: Mariner 6 1
-- [ ] **Mercury flyby** `mercury-flyby`: 1 use in 1 configuration, 1 program (NASA) uncrewed, later seasons in 1 of 1
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Mercury flyby** `mercury-flyby`: 1 use in 1 configuration, 1 program (NASA) uncrewed, later seasons in 1 of 1
+  - Clip: `mercury-flyby`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 1
   - Destinations: MERCURY 1
   - Programs: Mariner 10 1
-- [ ] **Saturn approach** `saturn-approach`: 1 use in 1 configuration, 1 program (NASA) uncrewed, later seasons in 1 of 1
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Saturn approach** `saturn-approach`: 1 use in 1 configuration, 1 program (NASA) uncrewed, later seasons in 1 of 1
+  - Clip: `saturn-approach`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 1
   - Destinations: SATURN 1
   - Programs: Pioneer 11 1
-- [ ] **Saturn flyby** `saturn-flyby`: 1 use in 1 configuration, 1 program (NASA) uncrewed, later seasons in 1 of 1
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Saturn flyby** `saturn-flyby`: 1 use in 1 configuration, 1 program (NASA) uncrewed, later seasons in 1 of 1
+  - Clip: `saturn-flyby`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 1
   - Destinations: SATURN 1
   - Programs: Pioneer 11 1

@@ -294,6 +294,57 @@ STEPS = {
         "success": (6.0, 2.6), "glitch": (6.4, 3.2), "failure": (6.0, 3.2),
         "times": [0.8, 2.0, 2.6, 3.2, 4.0, 5.9],
     },
+    # The planets' approaches, flybys and orbit insertion (2026-10-14): the Moon's, round the planet.
+    "venus-approach": {
+        "pad": False, "before": ["orbit.jsx"], "after": ["lunar-approach.jsx"],
+        "success": (6.0, 2.4), "glitch": (6.0, 3.6), "failure": (6.0, 3.4),
+        "times": [0.5, 1.8, 2.4, 3.2, 4.2, 5.9],
+    },
+    "mars-approach": {
+        "pad": False, "before": ["orbit.jsx"], "after": ["lunar-approach.jsx"],
+        "success": (6.0, 2.4), "glitch": (6.0, 3.6), "failure": (6.0, 3.4),
+        "times": [0.5, 1.8, 2.4, 3.2, 4.2, 5.9],
+    },
+    "jupiter-approach": {
+        "pad": False, "before": ["orbit.jsx"], "after": ["lunar-approach.jsx"],
+        "success": (6.0, 2.4), "glitch": (6.0, 3.6), "failure": (6.0, 3.4),
+        "times": [0.5, 1.8, 2.4, 3.2, 4.2, 5.9],
+    },
+    "saturn-approach": {
+        "pad": False, "before": ["orbit.jsx"], "after": ["lunar-approach.jsx"],
+        "success": (6.0, 2.4), "glitch": (6.0, 3.6), "failure": (6.0, 3.4),
+        "times": [0.5, 1.8, 2.4, 3.2, 4.2, 5.9],
+    },
+    "venus-flyby": {
+        "pad": False, "before": ["orbit.jsx"], "after": ["lunar-flyby.jsx"],
+        "success": (6.4, 3.6), "glitch": (6.4, 4.4), "failure": (6.4, 4.4),
+        "times": [0.5, 2.0, 3.0, 3.6, 4.4, 6.3],
+    },
+    "mars-flyby": {
+        "pad": False, "before": ["orbit.jsx"], "after": ["lunar-flyby.jsx"],
+        "success": (6.4, 3.6), "glitch": (6.4, 4.4), "failure": (6.4, 4.4),
+        "times": [0.5, 2.0, 3.0, 3.6, 4.4, 6.3],
+    },
+    "jupiter-flyby": {
+        "pad": False, "before": ["orbit.jsx"], "after": ["lunar-flyby.jsx"],
+        "success": (6.4, 3.6), "glitch": (6.4, 4.4), "failure": (6.4, 4.4),
+        "times": [0.5, 2.0, 3.0, 3.6, 4.4, 6.3],
+    },
+    "saturn-flyby": {
+        "pad": False, "before": ["orbit.jsx"], "after": ["lunar-flyby.jsx"],
+        "success": (6.4, 3.6), "glitch": (6.4, 4.4), "failure": (6.4, 4.4),
+        "times": [0.5, 2.0, 3.0, 3.6, 4.4, 6.3],
+    },
+    "mercury-flyby": {
+        "pad": False, "before": ["orbit.jsx"], "after": ["lunar-flyby.jsx"],
+        "success": (6.4, 3.6), "glitch": (6.4, 4.4), "failure": (6.4, 4.4),
+        "times": [0.5, 2.0, 3.0, 3.6, 4.4, 6.3],
+    },
+    "mars-orbit-injection": {
+        "pad": False, "before": ["orbit.jsx"], "after": ["loi.jsx"],
+        "success": (6.4, 2.5), "glitch": (6.4, 2.8), "failure": (6.4, 2.8),
+        "times": [0.6, 1.2, 1.8, 2.5, 3.6, 6.3],
+    },
     "reentry": {
         "pad": False,
         "success": (6.4, 4.0), "glitch": (6.4, 4.4), "failure": (6.4, 3.4),
