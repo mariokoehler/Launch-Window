@@ -69,7 +69,8 @@ class ReplayClipsTest {
         assertEquals("lunar-landing", CLIPS.clipName("12-landing", "11-powered-descent").orElseThrow());
         assertEquals("lunar-landing", CLIPS.clipName("09-landing", "08-lunar-approach").orElseThrow());
         assertEquals("runway-landing", CLIPS.clipName("06-landing", "05-descent").orElseThrow());
-        assertTrue(CLIPS.clipName("14-landing", "13-lander-descent").isEmpty());
+        assertEquals("probe-landing", CLIPS.clipName("14-landing", "13-lander-descent").orElseThrow());
+        assertTrue(CLIPS.clipName("14-landing", "13-no-such-step").isEmpty());
         assertTrue(CLIPS.clipName("12-landing").isEmpty());
         // lunar-ascent plays its own clip, never ascent's; ascent plays it only after a lunar liftoff.
         assertEquals("lunar-ascent", CLIPS.clipName("12-lunar-ascent").orElseThrow());

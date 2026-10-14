@@ -110,6 +110,11 @@ Each folder's `build/` is regenerated on every run and stays out of git.
     (the Moon if unset; only the Moon has the radio shadow and the far Earth), so a planet's step is a
     one-line file (`var PLANET = "saturn";`) with the Moon's file after it. `p-jupiter`, `p-saturn`
     (its ring drawn in two halves round the globe) and `p-mercury` are new.
+  - **Probe landers** (2026-10-14): `probe.jsx` (after `orbit.jsx` for the rings, `moon.jsx` for the
+    ground): the lander (`v-lander`, its mast and arm) placed by offsets from where it stands;
+    `probeCamera()` zooms in, and must come after every `put()`: `put` parents a part to the world after
+    placing it, so a part put once the world is scaled lands in the scaled space, off where it belongs.
+    `probe-release` is the bus (`v-bus`) and its lander (`v-pod`) alone.
   - **Checks** (`check.py`, after `build.py`): `python check.py spoilers <step> ...` says where the
     variants first differ before their reveals (glitch and failure share their first sign of trouble,
     so every pair should part only at the moment that decides it), and `python check.py handoffs

@@ -8,7 +8,7 @@ number, and a step folds into another the way `ReplayClips` matches it: behind a
 Nothing else shares a clip: `lunar-ascent` isn't `ascent`. Variants are ticked when the clip
 and its sidecar are in `assets/ui/replay/` and a rule in `replay-clips.json` names it.
 
-**Status:** 100/150 steps complete, 300/450 variants. 233 step ids in 189 configurations.
+**Status:** 119/150 steps complete, 357/450 variants. 233 step ids in 189 configurations.
 
 How to read an entry (all counted automatically, a first pass):
 - **Uses**: step occurrences across all configurations; sorted by it within each family.
@@ -154,8 +154,8 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: crewed craft 27
   - Destinations: EARTH 16, MOON 11
   - Programs: Apollo: Earth-orbit tests 14, Apollo 7, Gemini EOR 4, Gemini EOR: Earth-orbit tests 2
-- [ ] **Landing** `landing`: 18 uses in 17 configurations, 9 programs (NASA/SOVIET) crew risk in 13 of 18, later seasons in 1 of 18
-  - Clip: by the step before: `runway-landing` after `descent` 9, `lunar-landing` after `powered-descent` 4, none yet after `lander-descent` 3, `lunar-landing` after `lunar-approach` 2; [ ] success, [ ] glitch, [ ] failure
+- [x] **Landing** `landing`: 18 uses in 17 configurations, 9 programs (NASA/SOVIET) crew risk in 13 of 18, later seasons in 1 of 18
+  - Clip: by the step before: `runway-landing` after `descent` 9, `lunar-landing` after `powered-descent` 4, `probe-landing` after `lander-descent` 3, `lunar-landing` after `lunar-approach` 2; [x] success, [x] glitch, [x] failure; cues no
   - Also covers: `sc-a-landing` 1, `sc-b-landing` 1
   - On screen: spaceplane 9, crewed craft 3, crewed lander 3, probe 3, probe lander 2, rover 1
   - Destinations: EARTH 9, MOON 6, VENUS 2, MARS 1
@@ -181,8 +181,8 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: crewed craft 2
   - Destinations: EARTH 2
   - Programs: Apollo: Earth-orbit tests 2
-- [ ] **Landing and deployment** `landing-and-deployment`: 1 use in 1 configuration, 1 program (SOVIET) uncrewed, later seasons in 1 of 1
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Landing and deployment** `landing-and-deployment`: 1 use in 1 configuration, 1 program (SOVIET) uncrewed, later seasons in 1 of 1
+  - Clip: `probe-landing`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 1
   - Destinations: MARS 1
   - Programs: Mars 2 1
@@ -467,8 +467,8 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: crewed craft 3, crewed lander 3
   - Destinations: MOON 3
   - Programs: Apollo 3
-- [ ] **Surface operations** `lunar-surface-operations-robotic`: 3 uses in 2 configurations, 2 programs (SOVIET) uncrewed
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Surface operations** `lunar-surface-operations-robotic`: 3 uses in 2 configurations, 2 programs (SOVIET) uncrewed
+  - Clip: `probe-surface`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe lander 2, rover 2, probe 1
   - Destinations: MOON 3
   - Programs: Luna 15 1, Luna 17 1
@@ -527,8 +527,8 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: crewed craft 2
   - Destinations: MOON 2
   - Programs: Apollo 2
-- [ ] **Liftoff from the Moon** `ascent-from-lunar-surface`: 1 use in 1 configuration, 1 program (SOVIET) uncrewed
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Liftoff from the Moon** `ascent-from-lunar-surface`: 1 use in 1 configuration, 1 program (SOVIET) uncrewed
+  - Clip: `lunar-liftoff`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 1
   - Destinations: MOON 1
   - Programs: Luna 15 1
@@ -595,8 +595,8 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: probe 6
   - Destinations: SUN 6
   - Programs: Pioneer Sun orbiter 1
-- [ ] **Lander entry** `lander-entry`: 5 uses in 5 configurations, 4 programs (NASA/SOVIET) uncrewed, later seasons in 2 of 5
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Lander entry** `lander-entry`: 5 uses in 5 configurations, 4 programs (NASA/SOVIET) uncrewed, later seasons in 2 of 5
+  - Clip: `reentry`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 4, probe lander 1
   - Destinations: VENUS 3, MARS 2
   - Programs: Venera lander 2, Mars 2 1, Venera 7 1, Viking 1
@@ -610,18 +610,18 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: probe 4, orbiter 1
   - Destinations: VENUS 5
   - Programs: Venera lander 2, Mariner 5 1, Pioneer Venus Orbiter 1, Venera 7 1
-- [ ] **Lander descent** `lander-descent`: 4 uses in 4 configurations, 3 programs (NASA/SOVIET) uncrewed, later seasons in 2 of 4
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Lander descent** `lander-descent`: 4 uses in 4 configurations, 3 programs (NASA/SOVIET) uncrewed, later seasons in 2 of 4
+  - Clip: `descent-chutes`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 3, probe lander 1
   - Destinations: MARS 2, VENUS 2
   - Programs: Venera lander 2, Mars 2 1, Viking 1
-- [ ] **On the surface of Mars** `mars-surface`: 4 uses in 2 configurations, 2 programs (NASA/SOVIET) uncrewed, later seasons in 4 of 4
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **On the surface of Mars** `mars-surface`: 4 uses in 2 configurations, 2 programs (NASA/SOVIET) uncrewed, later seasons in 4 of 4
+  - Clip: `probe-surface`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 2, probe lander 2
   - Destinations: MARS 4
   - Programs: Mars 2 1, Viking 1
-- [ ] **Lander release** `lander-release`: 3 uses in 3 configurations, 2 programs (SOVIET) uncrewed
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Lander release** `lander-release`: 3 uses in 3 configurations, 2 programs (SOVIET) uncrewed
+  - Clip: `probe-release`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 3
   - Destinations: VENUS 3
   - Programs: Venera lander 2, Venera 7 1
@@ -650,23 +650,23 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: probe 2
   - Destinations: MERCURY 2
   - Programs: Mariner 10 1
-- [ ] **Large probe entry** `big-probe-approach-and-entry`: 1 use in 1 configuration, 1 program (NASA) uncrewed
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Large probe entry** `big-probe-approach-and-entry`: 1 use in 1 configuration, 1 program (NASA) uncrewed
+  - Clip: `reentry`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 1
   - Destinations: VENUS 1
   - Programs: Pioneer Venus Multiprobe 1
-- [ ] **Large probe descent** `big-probe-descent-and-landing`: 1 use in 1 configuration, 1 program (NASA) uncrewed
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Large probe descent** `big-probe-descent-and-landing`: 1 use in 1 configuration, 1 program (NASA) uncrewed
+  - Clip: `probe-landing`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 1
   - Destinations: VENUS 1
   - Programs: Pioneer Venus Multiprobe 1
-- [ ] **Large probe release** `big-probe-release`: 1 use in 1 configuration, 1 program (NASA) uncrewed
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Large probe release** `big-probe-release`: 1 use in 1 configuration, 1 program (NASA) uncrewed
+  - Clip: `probe-release`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 1
   - Destinations: VENUS 1
   - Programs: Pioneer Venus Multiprobe 1
-- [ ] **Venus approach** `earth-venus-approach`: 1 use in 1 configuration, 1 program (NASA) uncrewed
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Venus approach** `earth-venus-approach`: 1 use in 1 configuration, 1 program (NASA) uncrewed
+  - Clip: `venus-approach`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 1
   - Destinations: VENUS 1
   - Programs: Pioneer Venus Multiprobe 1
@@ -675,23 +675,23 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: probe 1
   - Destinations: SUN 1
   - Programs: Pioneer Sun orbiter 1
-- [ ] **Carrier entry** `interplanetary-bus-entry`: 1 use in 1 configuration, 1 program (SOVIET) uncrewed
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Carrier entry** `interplanetary-bus-entry`: 1 use in 1 configuration, 1 program (SOVIET) uncrewed
+  - Clip: `reentry`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 1
   - Destinations: VENUS 1
   - Programs: Venera 7 1
-- [ ] **Lander separation and deorbit** `lander-deployment-and-de-orbit`: 1 use in 1 configuration, 1 program (NASA) uncrewed, later seasons in 1 of 1
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Lander separation and deorbit** `lander-deployment-and-de-orbit`: 1 use in 1 configuration, 1 program (NASA) uncrewed, later seasons in 1 of 1
+  - Clip: `probe-release`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: orbiter 1, probe lander 1
   - Destinations: MARS 1
   - Programs: Viking 1
-- [ ] **Descent and landing** `lander-descent-and-landing`: 1 use in 1 configuration, 1 program (SOVIET) uncrewed
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Descent and landing** `lander-descent-and-landing`: 1 use in 1 configuration, 1 program (SOVIET) uncrewed
+  - Clip: `probe-landing`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 1
   - Destinations: VENUS 1
   - Programs: Venera 7 1
-- [ ] **Lander separation** `lander-detachment`: 1 use in 1 configuration, 1 program (SOVIET) uncrewed, later seasons in 1 of 1
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Lander separation** `lander-detachment`: 1 use in 1 configuration, 1 program (SOVIET) uncrewed, later seasons in 1 of 1
+  - Clip: `probe-release`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 1
   - Destinations: MARS 1
   - Programs: Mars 2 1
@@ -715,18 +715,18 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: probe 1
   - Destinations: SATURN 1
   - Programs: Pioneer 11 1
-- [ ] **Small probes entry** `small-probes-approach-and-entry`: 1 use in 1 configuration, 1 program (NASA) uncrewed
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Small probes entry** `small-probes-approach-and-entry`: 1 use in 1 configuration, 1 program (NASA) uncrewed
+  - Clip: `reentry`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 1
   - Destinations: VENUS 1
   - Programs: Pioneer Venus Multiprobe 1
-- [ ] **Small probes descent** `small-probes-landing`: 1 use in 1 configuration, 1 program (NASA) uncrewed
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Small probes descent** `small-probes-landing`: 1 use in 1 configuration, 1 program (NASA) uncrewed
+  - Clip: `probe-landing`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 1
   - Destinations: VENUS 1
   - Programs: Pioneer Venus Multiprobe 1
-- [ ] **Small probes release** `small-probes-release`: 1 use in 1 configuration, 1 program (NASA) uncrewed
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Small probes release** `small-probes-release`: 1 use in 1 configuration, 1 program (NASA) uncrewed
+  - Clip: `probe-release`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 1
   - Destinations: VENUS 1
   - Programs: Pioneer Venus Multiprobe 1

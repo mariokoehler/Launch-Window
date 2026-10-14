@@ -842,6 +842,47 @@ def plane_parts():
                       f'stroke-width="3" stroke-linecap="round"/>', (760, 878))
 
 
+# --- Probe landers on the planets: the bus that carries one, the lander, its mast and arm ----------------
+
+# The lander at rest stands on the surface (y 880) centred on x 760: a sphere on a landing ring, a mast
+# on top (its own part, raised once down) and a sampler arm (its own part, swung out from the side).
+VL = (760, 812)
+
+
+def probe_parts():
+    x, y = VL
+    lander = (f'<path d="M{x - 40} {y + 30} L{x - 62} {y + 62} M{x + 40} {y + 30} L{x + 62} {y + 62}" fill="none" {LINE} stroke-width="4"/>'
+              f'<ellipse cx="{x}" cy="{y + 62}" rx="74" ry="8" fill="#ffffff" {LINE} stroke-width="3"/>'
+              f'<circle cx="{x}" cy="{y}" r="48" fill="#ffffff" {LINE} stroke-width="3"/>'
+              f'<path d="M{x - 48} {y} Q{x} {y + 16} {x + 48} {y}" fill="none" {LINE} stroke-width="2"/>'
+              f'<ellipse cx="{x}" cy="{y - 6}" rx="22" ry="10" fill="url(#hatch)" {LINE} stroke-width="2"/>')
+    layer("v-lander", lander, (x, y))
+    # The mast with its dish, pivoting at the sphere's top so it can be raised from lying flat.
+    layer("v-mast", f'<path d="M{x} {y - 48} L{x} {y - 120}" fill="none" {LINE} stroke-width="4"/>'
+                    f'<path d="M{x - 22} {y - 132} Q{x} {y - 112} {x + 22} {y - 132}" fill="#ffffff" {LINE} stroke-width="3"/>',
+          (x, y - 48))
+    # The sampler arm, drawn out to the right along the ground, pivoting where it leaves the sphere.
+    layer("v-arm", f'<path d="M{x + 40} {y + 20} L{x + 150} {y + 30} L{x + 210} {y + 50}" fill="none" {LINE} stroke-width="5"/>'
+                   f'<path d="M{x + 202} {y + 44} L{x + 226} {y + 60} L{x + 210} {y + 66} Z" fill="#ffffff" {LINE} stroke-width="3"/>',
+          (x + 40, y + 20))
+    # A puff of soil the scoop lifts.
+    layer("v-soil", puff(x + 230, y + 62, 10), (x + 230, y + 66))
+    # The bus that carries a lander to its planet: a body, two solar panels, a dish; the lander rides
+    # under its body (at rest there, pivot at the joint).
+    bx, by = 960, 380
+    bus = (f'<path d="M{bx - 300} {by - 14} L{bx - 90} {by - 14} L{bx - 90} {by + 14} L{bx - 300} {by + 14} Z" fill="url(#hatch)" {LINE} stroke-width="3"/>'
+           f'<path d="M{bx + 90} {by - 14} L{bx + 300} {by - 14} L{bx + 300} {by + 14} L{bx + 90} {by + 14} Z" fill="url(#hatch)" {LINE} stroke-width="3"/>'
+           f'<rect x="{bx - 70}" y="{by - 60}" width="140" height="120" rx="8" fill="#ffffff" {LINE} stroke-width="3"/>'
+           f'<path d="M{bx - 70} {by - 70} L{bx - 90} {by} L{bx - 70} {by + 70} M{bx + 70} {by - 70} L{bx + 90} {by} L{bx + 70} {by + 70}" fill="none" {LINE} stroke-width="2"/>'
+           f'<path d="M{bx - 50} {by - 60} Q{bx} {by - 120} {bx + 50} {by - 60} Z" fill="#ffffff" {LINE} stroke-width="3"/>'
+           f'<path d="M{bx - 40} {by + 60} L{bx - 30} {by + 76} L{bx + 30} {by + 76} L{bx + 40} {by + 60}" fill="none" {LINE} stroke-width="3"/>')
+    layer("v-bus", bus, (bx, by))
+    layer("v-pod", f'<circle cx="{bx}" cy="{by + 126}" r="48" fill="#ffffff" {LINE} stroke-width="3"/>'
+                   f'<path d="M{bx - 48} {by + 126} Q{bx} {by + 142} {bx + 48} {by + 126}" fill="none" {LINE} stroke-width="2"/>'
+                   f'<ellipse cx="{bx}" cy="{by + 120}" rx="22" ry="10" fill="url(#hatch)" {LINE} stroke-width="2"/>', (bx, by + 126))
+    layer("v-latch", "".join(f'<circle cx="{bx + dx}" cy="{by + 78}" r="8" fill="{GOLD}"/>' for dx in (-26, 26)), (bx, by + 78))
+
+
 def copy_board_layers():
     src = os.path.join(BOARD, "build")
     if not os.path.exists(os.path.join(src, "layers.json")):
@@ -871,6 +912,7 @@ def main():
     lunar_parts()
     stage_parts()
     plane_parts()
+    probe_parts()
     if ONLY:
         # Keep the parts not redrawn.
         old = json.load(open(os.path.join(BUILD, "layers.json")))

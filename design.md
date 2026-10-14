@@ -205,7 +205,11 @@ engineering problem or tidbit, note it here the same session.
   landing at Mud Lake and the second X-15 flipped over (Jack McKay was hurt and flew again; the
   replay's runway-landing failure);
   Luna 3's camera had 200 and 500 mm lenses, and a spot of light from a cathode-ray tube scanned the
-  developed film; Venus's 90 bar is about 900 m of sea; the planetary window marks on E-23 sheet 2
+  developed film; Venus's 90 bar is about 900 m of sea; Venera 7 (15 December 1970), the first
+  landing on another planet, came down on its side and its faint signal was only found in the
+  recordings afterwards; Mars 3 (December 1971) fell silent seconds after landing; Viking 1's sampler
+  arm stuck on a locking pin that should have dropped out, and commands from Earth freed it (the
+  replay's probe landing and surface work); the planetary window marks on E-23 sheet 2
   match the launches (Venera 1 February 1961, Mariner 4 November 1964, Mars 4 July 1973). The
   sunlight shares, signal delays and "twice the energy" are arithmetic. The concept chips
   don't reach the standard pack's new programs and components yet either; the existing 19
@@ -2749,7 +2753,13 @@ whole. Then the planets: the Moon's approach, flyby and orbit insertion take a p
 shadow, no Earth in view), so Venus, Mars, Jupiter and Saturn have approaches, those and Mercury flybys,
 and Mars an orbit insertion, with Jupiter (belts, the spot), Saturn (its ring) and Mercury drawn new.
 Mariner 10 still lacks its cruise from Venus to Mercury (no Mercury on the planets' map). 219 of 249
-seasons play whole.
+seasons play whole. Then the probe landers: `probe-release` (the bus lets its lander go; the glitch holds at
+the first try, the failure at both), `probe-landing` (a sphere lander under its chute onto a rocky plain,
+its mast up and sending; the glitch tips onto its side and sends weakly, as Venera 7; the failure lands hard
+and is silent) and `probe-surface` (its sampler arm scoops the soil; the glitch stalls, as Viking 1's did; the
+failure falls silent, as Mars 3). The landers' entries borrow the reentry, their descents the chutes, and
+Luna's surface work the probe's, its return stage the lunar liftoff (unconfirmed). `landing` after
+`lander-descent` plays the probe's. 229 of 249 seasons play whole.
 
 The launch was tried two ways on 2026-10-12, both judged usable by the user. Claude alone wrote the
 layers as SVG and the motion as formulas: 8 minutes, the smoother motion. The other way was a Claude
