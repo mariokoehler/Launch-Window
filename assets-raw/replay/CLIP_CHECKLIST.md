@@ -8,7 +8,7 @@ number, and a step folds into another the way `ReplayClips` matches it: behind a
 Nothing else shares a clip: `lunar-ascent` isn't `ascent`. Variants are ticked when the clip
 and its sidecar are in `assets/ui/replay/` and a rule in `replay-clips.json` names it.
 
-**Status:** 139/150 steps complete, 417/450 variants. 233 step ids in 189 configurations.
+**Status:** 149/149 steps complete, 447/447 variants. 233 step ids in 189 configurations.
 
 How to read an entry (all counted automatically, a first pass):
 - **Uses**: step occurrences across all configurations; sorted by it within each family.
@@ -53,48 +53,48 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: crewed craft 14, crewed lander 2, spaceplane 1
   - Destinations: EARTH 17
   - Programs: Gemini 2, LK-700: Earth-orbit tests 2, Project Mercury 2, Soyuz 7K-L1: Earth-orbit tests 2
-- [ ] **Preflight** `pre-launch`: 4 uses in 4 configurations, 2 programs (NASA/SOVIET) crew risk in 4 of 4
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Preflight** `pre-launch`: 4 uses in 4 configurations, 2 programs (NASA/SOVIET) crew risk in 4 of 4
+  - Clip: `air-cruise`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: spaceplane 4
   - Destinations: EARTH 4
   - Programs: X-15 3, OKB-MiG E-154 1
-- [ ] **Carrier takeoff** `takeoff`: 4 uses in 4 configurations, 2 programs (NASA/SOVIET) crew risk in 4 of 4
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Carrier takeoff** `takeoff`: 4 uses in 4 configurations, 2 programs (NASA/SOVIET) crew risk in 4 of 4
+  - Clip: `air-takeoff`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: spaceplane 4
   - Destinations: EARTH 4
   - Programs: X-15 3, OKB-MiG E-154 1
-- [ ] **Drop and ignition** `launch-from-drop-plane`: 3 uses in 3 configurations, 1 program (NASA) crew risk in 3 of 3
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Drop and ignition** `launch-from-drop-plane`: 3 uses in 3 configurations, 1 program (NASA) crew risk in 3 of 3
+  - Clip: `air-drop`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: spaceplane 3
   - Destinations: EARTH 3
   - Programs: X-15 3
-- [ ] **Powered climb** `powered-ascent`: 3 uses in 3 configurations, 1 program (NASA) crew risk in 3 of 3
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Powered climb** `powered-ascent`: 3 uses in 3 configurations, 1 program (NASA) crew risk in 3 of 3
+  - Clip: `rocket-climb`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: spaceplane 3
   - Destinations: EARTH 3
   - Programs: X-15 3
-- [ ] **Release** `airdrop`: 1 use in 1 configuration, 1 program (SOVIET) crew risk in 1 of 1
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Release** `airdrop`: 1 use in 1 configuration, 1 program (SOVIET) crew risk in 1 of 1
+  - Clip: `air-drop`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: spaceplane 1
   - Destinations: EARTH 1
   - Programs: OKB-MiG E-154 1
-- [ ] **High-speed run** `high-speed-leg`: 1 use in 1 configuration, 1 program (NASA) crew risk in 1 of 1
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **High-speed run** `high-speed-leg`: 1 use in 1 configuration, 1 program (NASA) crew risk in 1 of 1
+  - Clip: `rocket-flight`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: spaceplane 1
   - Destinations: EARTH 1
   - Programs: X-15 1
-- [ ] **Peak altitude** `peak-altitude`: 1 use in 1 configuration, 1 program (NASA) crew risk in 1 of 1
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Peak altitude** `peak-altitude`: 1 use in 1 configuration, 1 program (NASA) crew risk in 1 of 1
+  - Clip: `rocket-flight`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: spaceplane 1
   - Destinations: EARTH 1
   - Programs: X-15 1
-- [ ] **Wings out** `wings-deployment`: 1 use in 1 configuration, 1 program (SOVIET) crew risk in 1 of 1
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Wings out** `wings-deployment`: 1 use in 1 configuration, 1 program (SOVIET) crew risk in 1 of 1
+  - Clip: `rocket-flight`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: spaceplane 1
   - Destinations: EARTH 1
   - Programs: OKB-MiG E-154 1
 
-## Return to Earth (18)
+## Return to Earth (17)
 
 - [x] **Reentry** `reentry`: 163 uses in 148 configurations, 25 programs (NASA/SOVIET) **(early-era)**, crew risk in 120 of 163, later seasons in 1 of 163
   - Clip: `reentry`; [x] success, [x] glitch, [x] failure; cues no
@@ -176,6 +176,12 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: crewed craft 4, probe 1
   - Destinations: MOON 5
   - Programs: Lunar-orbit Gemini 4, Luna 15 1
+- [x] **Deorbit burn** `deorbit-burn`: 2 uses in 1 configuration, 1 program (SOVIET) crew risk in 2 of 2
+  - Clip: `retrofire`; [x] success, [x] glitch, [x] failure; cues yes
+  - Also covers: `sc-a-deorbit-burn` 1, `sc-b-deorbit-burn` 1
+  - On screen: spaceplane 2
+  - Destinations: EARTH 2
+  - Programs: OKB-MiG E-154 1
 - [x] **Splashdown** `splashdown`: 2 uses in 2 configurations, 1 program (NASA) crew risk in 2 of 2
   - Clip: `splashdown-and-recovery`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: crewed craft 2
@@ -186,16 +192,6 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: probe 1
   - Destinations: MARS 1
   - Programs: Mars 2 1
-- [ ] **sc-a-deorbit-burn** `sc-a-deorbit-burn`: 1 use in 1 configuration, 1 program (SOVIET) crew risk in 1 of 1
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
-  - On screen: spaceplane 1
-  - Destinations: EARTH 1
-  - Programs: OKB-MiG E-154 1
-- [ ] **sc-b-deorbit-burn** `sc-b-deorbit-burn`: 1 use in 1 configuration, 1 program (SOVIET) crew risk in 1 of 1
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
-  - On screen: spaceplane 1
-  - Destinations: EARTH 1
-  - Programs: OKB-MiG E-154 1
 
 ## Rendezvous and docking (17)
 
@@ -645,8 +641,8 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: probe 2
   - Destinations: MARS 2
   - Programs: Mariner 9 1, Mars M-69 1
-- [ ] **Cruise to Mercury** `venus-mercury-transit`: 2 uses in 1 configuration, 1 program (NASA) uncrewed, later seasons in 1 of 2
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Cruise to Mercury** `venus-mercury-transit`: 2 uses in 1 configuration, 1 program (NASA) uncrewed, later seasons in 1 of 2
+  - Clip: `venus-mercury-transit`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 2
   - Destinations: MERCURY 2
   - Programs: Mariner 10 1

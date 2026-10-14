@@ -372,6 +372,37 @@ STEPS = {
         "success": (6.0, 1.4), "glitch": (6.0, 2.0), "failure": (6.0, 2.0),
         "times": [0.6, 1.2, 1.8, 2.4, 3.6, 5.9],
     },
+    # The air launch (2026-10-14): the carrier plane and the rocket plane (air.jsx), and the rocket plane alone.
+    "air-takeoff": {
+        "pad": False, "before": ["moon.jsx", "air.jsx"],
+        "success": (6.0, 2.0), "glitch": (6.0, 3.2), "failure": (6.0, 2.8),
+        "times": [0.5, 1.6, 2.2, 2.8, 3.6, 5.9],
+    },
+    "air-cruise": {
+        "pad": False, "before": ["moon.jsx", "air.jsx"],
+        "success": (5.6, 1.8), "glitch": (5.6, 2.8), "failure": (5.6, 2.8),
+        "times": [0.5, 1.6, 2.2, 2.8, 3.6, 5.5],
+    },
+    "air-drop": {
+        "pad": False, "before": ["moon.jsx", "air.jsx"],
+        "success": (6.0, 1.6), "glitch": (6.0, 2.6), "failure": (6.0, 2.6),
+        "times": [0.5, 1.0, 1.6, 2.4, 3.4, 5.9],
+    },
+    "rocket-climb": {
+        "pad": False, "before": ["moon.jsx", "air.jsx"],
+        "success": (6.0, 2.4), "glitch": (6.0, 3.2), "failure": (6.0, 3.2),
+        "times": [0.5, 1.8, 2.4, 3.0, 4.0, 5.9],
+    },
+    "rocket-flight": {
+        "pad": False, "before": ["moon.jsx", "air.jsx"],
+        "success": (6.0, 1.8), "glitch": (6.0, 2.8), "failure": (6.0, 2.8),
+        "times": [0.5, 1.6, 2.2, 2.8, 3.6, 5.9],
+    },
+    "venus-mercury-transit": {
+        "pad": False, "after": ["cruise.jsx"],
+        "success": (6.4, 2.4), "glitch": (6.4, 3.6), "failure": (6.4, 3.4),
+        "times": [0.5, 1.8, 2.4, 3.2, 4.4, 6.3],
+    },
     "reentry": {
         "pad": False,
         "success": (6.4, 4.0), "glitch": (6.4, 4.4), "failure": (6.4, 3.4),

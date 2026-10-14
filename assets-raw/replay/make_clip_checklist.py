@@ -49,8 +49,9 @@ def kind(step_id):
     return re.sub(r"^\d+-", "", step_id)
 
 
-def fold(kinds, vehicles):
-    """Maps each kind to its clip key, as ReplayClips.clipName matches a step to a rule."""
+def fold(kinds, vehicles, ruled=()):
+    """Maps each kind to its clip key, as ReplayClips.clipName matches a step to a rule: behind a vehicle,
+    the step it names, if another kind is that step or a rule names it."""
     keys = {}
     for k in kinds:
         vehicle = max((v for v in vehicles if k.startswith(v + "-")), key=len, default="")
@@ -59,7 +60,7 @@ def fold(kinds, vehicles):
         lettered = re.fullmatch(r"(.+)-[ab]", step)
         if lettered and lettered.group(1) in kinds:
             step = lettered.group(1)
-        keys[k] = step if step in kinds else k
+        keys[k] = step if step in kinds or step in ruled else k
     return keys
 
 
@@ -126,7 +127,7 @@ def main():
             for st in season["steps"]:
                 uses.append((kind(st["id"]), m, i, st, prev))
                 prev = kind(st["id"])
-    keys = fold({u[0] for u in uses}, clips.get("vehicles", []))
+    keys = fold({u[0] for u in uses}, clips.get("vehicles", []), {r["step"] for r in rules})
 
     entries = collections.defaultdict(lambda: {
         "kinds": collections.Counter(), "configs": set(), "programs": collections.Counter(),

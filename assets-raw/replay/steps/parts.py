@@ -490,6 +490,19 @@ def map_parts():
             pts.append(f"{cx + r * math.cos(ang):.1f} {cy + r * math.sin(ang):.1f}")
         layer(f"m-arc-{key}", f'<path d="M{" L".join(pts)}" fill="none" stroke="{GOLD}" stroke-width="3.5" stroke-dasharray="14 10" '
                               f'opacity="0.85"/>', SUN)
+    # Mercury, its own parts (added for Mariner 10, 2026-10-14, so the other cruises' map stays as it was):
+    # its orbit, the planet, and the arc from Venus.
+    rm = 95
+    layer("m-orbit-mercury", f'<circle cx="{cx}" cy="{cy}" r="{rm}" fill="none" {LINE} stroke-width="2" stroke-dasharray="6 10" '
+                             f'opacity="0.45"/>', SUN)
+    layer("m-mercury", f'<circle cx="{cx + rm}" cy="{cy}" r="8" fill="url(#earth)" {LINE} stroke-width="3"/>', (cx + rm, cy))
+    pts = []
+    for i in range(0, 181, 3):
+        r = transfer(PLANET_R["venus"], rm, i)
+        ang = math.radians(START_ANGLE - i)
+        pts.append(f"{cx + r * math.cos(ang):.1f} {cy + r * math.sin(ang):.1f}")
+    layer("m-arc-vm", f'<path d="M{" L".join(pts)}" fill="none" stroke="{GOLD}" stroke-width="3.5" stroke-dasharray="14 10" '
+                      f'opacity="0.85"/>', SUN)
     # The probe: a small body with a dish, drawn at the Sun's place (the timeline moves it), and its puff.
     layer("m-probe", f'<rect x="{cx - 9}" y="{cy - 7}" width="18" height="14" rx="2" fill="#ffffff" {LINE} stroke-width="3"/>'
                      f'<path d="M{cx - 14} {cy - 14} Q{cx} {cy - 4} {cx + 14} {cy - 14}" fill="none" {LINE} stroke-width="3"/>'
@@ -883,6 +896,45 @@ def probe_parts():
     layer("v-latch", "".join(f'<circle cx="{bx + dx}" cy="{by + 78}" r="8" fill="{GOLD}"/>' for dx in (-26, 26)), (bx, by + 78))
 
 
+# --- The air launch: a carrier plane with the rocket plane under its wing --------------------------------
+
+# The carrier, nose right, standing on the runway (y 772), its pivot at its main wheels (AC). The rocket
+# plane (w-plane at 0.6) hangs on a pylon under the wing, its body's middle at (940 690).
+AC = (700, 772)
+
+
+def air_parts():
+    grey = "rgba(22,48,92,0.22)"
+    body = (f'<path d="M330 380 L400 380 L470 525 L330 525 Z" fill="#ffffff" {LINE} stroke-width="3"/>'
+            f'<path d="M300 525 L1420 525 Q1500 530 1520 560 Q1500 590 1420 595 L300 595 Q280 560 300 525 Z" fill="#ffffff" {LINE} stroke-width="3"/>'
+            + "".join(f'<rect x="{x}" y="538" width="16" height="12" rx="2" fill="#ffffff" {LINE} stroke-width="2"/>' for x in (1420, 1444, 1468))
+            + f'<path d="M640 586 L1080 600 L1100 612 L660 600 Z" fill="url(#hatch)" {LINE} stroke-width="2.4"/>'
+            + "".join(f'<path d="M{x} 604 L{x} 624" fill="none" {LINE} stroke-width="3"/>'
+                      f'<ellipse cx="{x}" cy="636" rx="44" ry="14" fill="#ffffff" {LINE} stroke-width="3"/>' for x in (760, 1000))
+            + f'<path d="M940 604 L940 664" fill="none" {LINE} stroke-width="4"/>')
+    layer("a-carrier", body, AC)
+    # Its landing gear, its own part so it can be put away once it's flying.
+    layer("a-gear", "".join(f'<path d="M{x} 595 L{x} 754" fill="none" {LINE} stroke-width="4"/>'
+                            f'<circle cx="{x - 12}" cy="760" r="12" fill="#ffffff" {LINE} stroke-width="3"/>'
+                            f'<circle cx="{x + 12}" cy="760" r="12" fill="#ffffff" {LINE} stroke-width="3"/>' for x in (700, 1220)), AC)
+    # A long runway for the takeoff (the camera rides along): flat to the horizon, its marks, low hills.
+    g = AC[1]
+    hills = " ".join(f"Q{x + 90} {g - (10 + (x * 7) % 23)} {x + 180} {g}" for x in range(-2000, 9000, 180))
+    layer("a-ground", f'<path d="M-2000 {g} {hills}" fill="none" {LINE} stroke-width="2" opacity="0.5"/>'
+                      f'<rect x="-2000" y="{g}" width="11000" height="500" fill="url(#earth)"/>'
+                      f'<path d="M-2000 {g} L9000 {g}" fill="none" {LINE} stroke-width="3"/>'
+                      + "".join(f'<path d="M{x} {g + 32} L{x + 90} {g + 32}" fill="none" {LINE} stroke-width="4" opacity="0.6"/>'
+                                for x in range(-2000, 9000, 220)), (960, g))
+    # Smoke from the inboard engine, and the speed lines of the air going by.
+    layer("a-smoke", "".join(f'<circle cx="{x}" cy="{y}" r="{r}" fill="{grey}" {LINE} stroke-width="2"/>'
+                             for x, y, r in ((700, 636, 18), (670, 628, 14), (640, 640, 12))), (716, 636))
+    for i in range(1, 9):
+        layer(f"a-flow-{i}", f'<path d="M960 540 L1080 540" fill="none" {LINE} stroke-width="2.4" opacity="0.5"/>', (960, 540))
+    # The rocket plane's engine flame, back from its nozzle (in the rocket plane's own drawing).
+    layer("w-flame", f'<path d="M748 808 C700 812 650 816 600 820 C650 824 700 828 748 832 Z" fill="{GOLD_FILL}" '
+                     f'stroke="{GOLD}" stroke-width="3" stroke-linejoin="round"/>', (748, 820))
+
+
 def copy_board_layers():
     src = os.path.join(BOARD, "build")
     if not os.path.exists(os.path.join(src, "layers.json")):
@@ -913,6 +965,7 @@ def main():
     stage_parts()
     plane_parts()
     probe_parts()
+    air_parts()
     if ONLY:
         # Keep the parts not redrawn.
         old = json.load(open(os.path.join(BUILD, "layers.json")))

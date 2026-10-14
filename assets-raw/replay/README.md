@@ -117,6 +117,12 @@ Each folder's `build/` is regenerated on every run and stays out of git.
     `probe-release` is the bus (`v-bus`) and its lander (`v-pod`) alone.
   - **The landers' tests in Earth orbit** (2026-10-14): `lander-orbit.jsx` (after `moon.jsx`): the
     lander at 0.8 over the way home's limb, the alarm lamp; `lander-engine-test`, `lander-staging`.
+  - **The air launch** (2026-10-14): `air.jsx` (after `moon.jsx`, for the lamp): the carrier
+    (`a-carrier`, its gear `a-gear` put away in flight) with the rocket plane (`w-plane` at 0.6) placed
+    from the carrier's pose, the camera at 0.7 riding along; `air-takeoff` (on `a-ground`, a long
+    runway), `air-cruise`, `air-drop`. `rocket-climb` and `rocket-flight` are the rocket plane alone
+    over the limb. Mercury's parts (`m-orbit-mercury`, `m-mercury`, `m-arc-vm`) come in only for a
+    cruise that names it.
   - **Checks** (`check.py`, after `build.py`): `python check.py spoilers <step> ...` says where the
     variants first differ before their reveals (glitch and failure share their first sign of trouble,
     so every pair should part only at the moment that decides it), and `python check.py handoffs

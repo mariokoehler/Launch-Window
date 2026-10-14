@@ -203,7 +203,8 @@ engineering problem or tidbit, note it here the same session.
   few hours"); the X-15 dropped at about 45,000 ft, burned about 80 s and flew about 10 minutes;
   it landed on two skids at the back and a nose wheel, and on 9 November 1962 a skid gave way on a
   landing at Mud Lake and the second X-15 flipped over (Jack McKay was hurt and flew again; the
-  replay's runway-landing failure);
+  replay's runway-landing failure); on 15 November 1967 the third X-15 went into a spin near its peak
+  and broke up, killing Michael Adams (the replay's rocket-plane flight failure);
   Luna 3's camera had 200 and 500 mm lenses, and a spot of light from a cathode-ray tube scanned the
   developed film; Venus's 90 bar is about 900 m of sea; Venera 7 (15 December 1970), the first
   landing on another planet, came down on its side and its faint signal was only found in the
@@ -2768,7 +2769,17 @@ jettison. Borrowed (unconfirmed): the LK and Langley lander separations the undo
 powered descent, the Langley lander's ascent and rendezvous the lunar ascent, the Gemini propulsion and
 ascent module burns the retrofire (they aren't landers), the burns to a high orbit the insertion, the coasts
 and the high orbit the Earth orbit, the entry corridor trim the Earth approach. 243 of 249 seasons play
-whole; left are the X-15's and the MiG's air launches and Mariner 10's cruise to Mercury.
+whole; left are the X-15's and the MiG's air launches and Mariner 10's cruise to Mercury. They're done:
+the carrier plane with the rocket plane under its wing, `air-takeoff` (the glitch's engine smokes and it
+lifts off late, the failure abandons the takeoff), `air-cruise` for the preflight (in flight, as the pack's
+seasons order it after the takeoff, though its text reads as before it; an alarm lamp; the failure turns
+for home), `air-drop` (the glitch lights late, the failure never), then the rocket plane alone,
+`rocket-climb` (the engine runs rough; the failure's stops and it falls through) and `rocket-flight` for
+its peak, its fast run and the MiG's wing test (it rocks; the failure departs into a spin, as the X-15
+lost in 1967). Mercury is on the planets' map for Mariner 10's `venus-mercury-transit` (its own parts, so
+the other cruises are unchanged). Every one of the 249 seasons plays whole, and every step in the
+checklist has its clips (a step behind a vehicle now folds onto a rule's step there too, as the game
+matches it). Most borrowings are unconfirmed.
 
 The launch was tried two ways on 2026-10-12, both judged usable by the user. Claude alone wrote the
 layers as SVG and the motion as formulas: 8 minutes, the smoother motion. The other way was a Claude

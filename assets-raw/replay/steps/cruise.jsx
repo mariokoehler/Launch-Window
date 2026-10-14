@@ -7,7 +7,7 @@
 // Failure: the same drift, but the correction at 3.0 misfires: it veers away and goes quiet.
 var glitch = VARIANT === "glitch", failure = VARIANT === "failure";
 var SX = 960, SY = 540, START = 180;
-var R = {venus: 150, earth: 215, mars: 290, jupiter: 440, saturn: 525};
+var R = {mercury: 95, venus: 150, earth: 215, mars: 290, jupiter: 440, saturn: 525};
 var DRIFT = 1.6, FIX = glitch || failure ? 3.0 : 2.0;
 
 put("paper", "screen");
@@ -15,6 +15,8 @@ put("m-orbits");
 put("m-arc-" + ARC);
 put("m-sun");
 var names = ["venus", "earth", "mars", "jupiter", "saturn"];
+// Mercury only where a cruise goes there (Mariner 10), with its own orbit.
+if (FROM === "mercury" || TO === "mercury") { put("m-orbit-mercury"); names.unshift("mercury"); }
 for (var i = 0; i < names.length; i++) put("m-" + names[i]);
 for (i = 1; i <= 3; i++) put("m-ring-" + i);
 put("m-puff");

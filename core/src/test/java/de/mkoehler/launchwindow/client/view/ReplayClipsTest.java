@@ -61,8 +61,8 @@ class ReplayClipsTest {
         assertEquals("deployment", CLIPS.clipName("05-soyuz-7k-ok-deployment").orElseThrow());
         assertEquals("deployment", CLIPS.clipName("05-spc-b-deployment").orElseThrow());
         assertEquals("earth-orbit", CLIPS.clipName("06-earth-orbit-a").orElseThrow());
-        assertTrue(CLIPS.clipName("03-launch-from-drop-plane").isEmpty());
-        assertTrue(CLIPS.clipName("02-pre-launch").isEmpty());
+        assertEquals("air-drop", CLIPS.clipName("03-launch-from-drop-plane").orElseThrow());
+        assertEquals("air-cruise", CLIPS.clipName("02-pre-launch").orElseThrow());
         // The step before picks among a step's rules: a landing after the powered descent is on the
         // Moon (a robot's after its approach too), after a descent on a runway; with no rule for what came
         // before, no clip.
@@ -76,9 +76,9 @@ class ReplayClipsTest {
         assertEquals("lunar-ascent", CLIPS.clipName("12-lunar-ascent").orElseThrow());
         assertEquals("lunar-ascent", CLIPS.clipName("15-ascent", "14-lunar-liftoff").orElseThrow());
         assertEquals("ascent", CLIPS.clipName("04-ascent", "03-launch").orElseThrow());
-        assertTrue(CLIPS.clipName("04-powered-ascent").isEmpty());
+        assertEquals("rocket-climb", CLIPS.clipName("04-powered-ascent").orElseThrow());
         assertEquals("undocking", CLIPS.clipName("07-lk-deployment").orElseThrow());
-        assertTrue(CLIPS.clipName("03-wings-deployment").isEmpty());
+        assertEquals("rocket-flight", CLIPS.clipName("03-wings-deployment").orElseThrow());
         assertEquals("lander-engine-test", CLIPS.clipName("05-lem-tests-earth-orbit").orElseThrow());
     }
 
