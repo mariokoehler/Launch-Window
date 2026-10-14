@@ -262,6 +262,21 @@ STEPS = {
         "success": (6.0, 2.6), "glitch": (6.0, 3.6), "failure": (6.0, 3.2),
         "times": [0.5, 1.6, 2.4, 3.0, 3.6, 5.9],
     },
+    "lunar-ascent": {
+        "pad": False, "before": ["orbit.jsx"],
+        "success": (6.0, 1.8), "glitch": (6.0, 2.6), "failure": (6.0, 2.8),
+        "times": [0.5, 1.2, 1.8, 2.6, 3.4, 5.9],
+    },
+    "lunar-liftoff": {
+        "pad": False, "before": ["moon.jsx"],
+        "success": (5.6, 1.0), "glitch": (5.6, 2.0), "failure": (5.6, 2.8),
+        "times": [0.7, 1.2, 1.8, 2.6, 3.4, 5.5],
+    },
+    "moonwalk": {
+        "pad": False, "before": ["moon.jsx"],
+        "success": (5.4, 2.6), "glitch": (5.8, 3.2), "failure": (5.8, 3.0),
+        "times": [0.6, 1.2, 2.2, 2.6, 3.4, 5.3],
+    },
     "reentry": {
         "pad": False,
         "success": (6.4, 4.0), "glitch": (6.4, 4.4), "failure": (6.4, 3.4),

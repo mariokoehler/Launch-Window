@@ -96,7 +96,9 @@ Each folder's `build/` is regenerated on every run and stays out of git.
     (`n-limb`, the lander at 0.7), `lunar-landing` close over the surface (`n-ground`, `n-rocks`).
     `lunar-landing` is the clip of `landing` after `powered-descent` or `lunar-approach`: a rule's
     `"after"` (the checklist lists such a step's clips by the step before, and ticks it only when all
-    have them).
+    have them). `moonwalk` zooms in twice on the ladder (the figure at 0.45, placed by where its feet
+    are), `lunar-liftoff` moves the ascent stage off its carrier, and `lunar-ascent` is in the orbit
+    scene round the Moon (`orbitScene("p-moon")`), from the surface up.
   - **Checks** (`check.py`, after `build.py`): `python check.py spoilers <step> ...` says where the
     variants first differ before their reveals (glitch and failure share their first sign of trouble,
     so every pair should part only at the moment that decides it), and `python check.py handoffs

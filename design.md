@@ -2719,7 +2719,16 @@ so a clip rule can now name the step before (`ui-spec.md` §4.7.3, unconfirmed):
 and Luna's `lunar-approach` it plays `lunar-landing`; after `lander-descent` (Venera, Viking) and `descent`
 (the X-15's and the MiG's runway) it still plays no signal. The MiG's runway landing will follow a
 parachute descent, since `descent` can't tell a spaceplane from a capsule: the user's call. No new
-season plays whole yet: the Moon's surface, liftoff and ascent come next.
+season plays whole yet: the Moon's surface, liftoff and ascent come next. They did: `moonwalk` (down the
+ladder with an experiment package, out among the boulders and back; the glitch trips and falls flat, as
+Apollo 16's crew did, and gets up; the failure falls, its visor fogs and it goes back in with the package
+left lying), `lunar-liftoff` (the ascent stage off its descent stage, foil flying; the glitch's engine
+sputters before it lights; the failure's dies low and the stage falls back beside the lander) and
+`lunar-ascent` (on the Moon's map, up from the surface to the orbit where the other craft waits; the glitch
+cuts out and relights, the failure falls back and hits). `eva-i`, `eva-ii` and `lunar-surface-activities`
+play the moonwalk, and `ascent` after `lunar-liftoff` the climb (unconfirmed). The Gemini and LK-700 landings
+play whole (187 of 249 seasons); Apollo's still need its transposition, extraction and lander jettison. The
+step's text for an `ascent` after a lunar liftoff is still the rocket's (the pack's strings).
 
 The launch was tried two ways on 2026-10-12, both judged usable by the user. Claude alone wrote the
 layers as SVG and the motion as formulas: 8 minutes, the smoother motion. The other way was a Claude

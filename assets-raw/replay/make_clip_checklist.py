@@ -188,10 +188,9 @@ def main():
             for v in VARIANTS:
                 ok = all(c is not None and (REPLAY / f"{c}-{v}.webm").exists() and (REPLAY / f"{c}-{v}.json").exists()
                          for c in named)
-                if clip is None:
-                    clip_v = next((c for c in named if c), None)
-                else:
-                    clip_v = clip
+                # The cues reported are the most used context's clip's.
+                clip_v = clip if clip is not None else next(
+                    (by_before[b] for b in sorted(by_before, key=lambda b: -e["befores"][b]) if by_before[b]), None)
                 have += ok
                 ticks.append(f"[{'x' if ok else ' '}] {v}")
                 if ok and cues is None:

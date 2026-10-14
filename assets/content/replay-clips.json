@@ -3,6 +3,7 @@
     {"step": "launch-preparations", "clip": "launch-preparations"},
     {"step": "countdown", "clip": "countdown"},
     {"step": "launch", "clip": "launch"},
+    {"step": "ascent", "after": "lunar-liftoff", "clip": "lunar-ascent"},
     {"step": "ascent", "clip": "ascent"},
     {"step": "deployment", "clip": "deployment"},
     {"step": "earth-orbit", "clip": "earth-orbit"},
@@ -71,7 +72,12 @@
     {"step": "eva-gemini-langley", "clip": "crew-transfer"},
     {"step": "powered-descent", "clip": "powered-descent"},
     {"step": "landing", "after": "powered-descent", "clip": "lunar-landing"},
-    {"step": "landing", "after": "lunar-approach", "clip": "lunar-landing"}
+    {"step": "landing", "after": "lunar-approach", "clip": "lunar-landing"},
+    {"step": "eva-i", "clip": "moonwalk"},
+    {"step": "eva-ii", "clip": "moonwalk"},
+    {"step": "lunar-surface-activities", "clip": "moonwalk"},
+    {"step": "lunar-liftoff", "clip": "lunar-liftoff"},
+    {"step": "lunar-ascent", "clip": "lunar-ascent"}
   ],
   "vehicles": ["atv", "gemini-a", "gemini-b", "lk-700", "sc-a", "sc-b", "soyuz-7k-l3-lok", "soyuz-7k-ok",
                "spc-a", "spc-b", "transtage"]

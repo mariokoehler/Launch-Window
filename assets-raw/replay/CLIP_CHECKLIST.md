@@ -8,7 +8,7 @@ number, and a step folds into another the way `ReplayClips` matches it: behind a
 Nothing else shares a clip: `lunar-ascent` isn't `ascent`. Variants are ticked when the clip
 and its sidecar are in `assets/ui/replay/` and a rule in `replay-clips.json` names it.
 
-**Status:** 70/150 steps complete, 210/450 variants. 233 step ids in 189 configurations.
+**Status:** 75/150 steps complete, 225/450 variants. 233 step ids in 189 configurations.
 
 How to read an entry (all counted automatically, a first pass):
 - **Uses**: step occurrences across all configurations; sorted by it within each family.
@@ -25,7 +25,7 @@ How to read an entry (all counted automatically, a first pass):
 ## Launch (13)
 
 - [x] **Ascent** `ascent`: 241 uses in 185 configurations, 54 programs (NASA/SOVIET) **(early-era)**, crew risk in 136 of 241
-  - Clip: `ascent`; [x] success, [x] glitch, [x] failure; cues yes
+  - Clip: by the step before: `ascent` after `launch` 213, `ascent` after `ascent` 26, `lunar-ascent` after `lunar-liftoff` 2; [x] success, [x] glitch, [x] failure; cues yes
   - Also covers: `atv-ascent` 10, `gemini-a-ascent` 4, `gemini-b-ascent` 4, `sc-a-ascent` 1, `sc-b-ascent` 1, `transtage-ascent` 2
   - On screen: launcher 239, crewed craft 165, crewed lander 42, probe 19, satellite 11, spaceplane 5
   - Destinations: EARTH 173, MOON 52, VENUS 7, MARS 5
@@ -334,13 +334,13 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: EVA suit 4, crewed craft 4, crewed lander 4
   - Destinations: MOON 3, EARTH 1
   - Programs: Gemini EOR 2, Gemini EOR: Earth-orbit tests 1
-- [ ] **First moonwalk** `eva-i`: 4 uses in 2 configurations, 1 program (NASA) crewed in 4 of 4
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **First moonwalk** `eva-i`: 4 uses in 2 configurations, 1 program (NASA) crewed in 4 of 4
+  - Clip: `moonwalk`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: EVA suit 4, crewed craft 4, crewed lander 4
   - Destinations: MOON 4
   - Programs: Apollo 2
-- [ ] **Second moonwalk** `eva-ii`: 3 uses in 2 configurations, 1 program (NASA) crewed in 3 of 3
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Second moonwalk** `eva-ii`: 3 uses in 2 configurations, 1 program (NASA) crewed in 3 of 3
+  - Clip: `moonwalk`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: EVA suit 3, crewed craft 3, crewed lander 3
   - Destinations: MOON 3
   - Programs: Apollo 2
@@ -452,18 +452,18 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: crewed craft 4, crewed lander 4
   - Destinations: MOON 5
   - Programs: Apollo 3, Gemini Direct Ascent 1, LK-700 Direct Ascent 1
-- [ ] **Lunar liftoff** `lunar-liftoff`: 4 uses in 4 configurations, 3 programs (NASA/SOVIET) crew risk in 4 of 4
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Lunar liftoff** `lunar-liftoff`: 4 uses in 4 configurations, 3 programs (NASA/SOVIET) crew risk in 4 of 4
+  - Clip: `lunar-liftoff`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: crewed craft 3, crewed lander 3
   - Destinations: MOON 4
   - Programs: Apollo 2, Gemini Direct Ascent 1, LK-700 Direct Ascent 1
-- [ ] **On the surface** `lunar-surface-activities`: 4 uses in 2 configurations, 2 programs (NASA/SOVIET) crew risk in 4 of 4
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **On the surface** `lunar-surface-activities`: 4 uses in 2 configurations, 2 programs (NASA/SOVIET) crew risk in 4 of 4
+  - Clip: `moonwalk`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: EVA suit 4, crewed lander 3, crewed craft 1
   - Destinations: MOON 4
   - Programs: Gemini Direct Ascent 1, LK-700 Direct Ascent 1
-- [ ] **Lunar ascent** `lunar-ascent`: 3 uses in 3 configurations, 1 program (NASA) crew risk in 3 of 3
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Lunar ascent** `lunar-ascent`: 3 uses in 3 configurations, 1 program (NASA) crew risk in 3 of 3
+  - Clip: `lunar-ascent`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: crewed craft 3, crewed lander 3
   - Destinations: MOON 3
   - Programs: Apollo 3

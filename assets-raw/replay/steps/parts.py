@@ -741,6 +741,16 @@ def lander_parts():
                      f'stroke="{GOLD}" stroke-width="3" stroke-linejoin="round"/>', (960, 824))
     layer("n-flame-up", f'<path d="M948 724 C950 744 955 762 960 780 C965 762 970 744 972 724 Z" fill="{GOLD_FILL}" '
                         f'stroke="{GOLD}" stroke-width="3" stroke-linejoin="round"/>', (960, 724))
+    # A ladder down the right leg, from the porch at the descent stage's top to the footpad.
+    import math as _m
+    (x0, y0), (x1, y1) = (1022, 726), (1098, 870)
+    nx, ny = (y1 - y0), -(x1 - x0)
+    n = _m.hypot(nx, ny)
+    nx, ny = 9 * nx / n, 9 * ny / n
+    rungs = "".join(f"M{x0 + (x1 - x0) * k / 6 - nx:.1f} {y0 + (y1 - y0) * k / 6 - ny:.1f} "
+                    f"L{x0 + (x1 - x0) * k / 6 + nx:.1f} {y0 + (y1 - y0) * k / 6 + ny:.1f} " for k in range(1, 6))
+    layer("n-ladder", f'<path d="M{x0 + nx:.1f} {y0 + ny:.1f} L{x1 + nx:.1f} {y1 + ny:.1f} {rungs}" fill="none" {LINE} '
+                      f'stroke-width="2.4"/>', LC)
     # The dust the plume blows off the surface, either side.
     layer("n-dust", puff(860, 872, 20) + puff(800, 876, 14) + puff(1060, 872, 20) + puff(1120, 876, 14), (960, 880))
 
