@@ -193,6 +193,27 @@ STEPS = {
         "success": (6.0, 2.4), "glitch": (6.0, 3.4), "failure": (6.0, 3.4),
         "times": [0.5, 1.8, 2.6, 3.4, 4.4, 5.9],
     },
+    # The way down, split (2026-10-14): the chutes, then the touchdown and the recovery.
+    "descent-chutes": {
+        "pad": False, "after": ["descent.jsx"],
+        "success": (6.0, 2.4), "glitch": (6.0, 3.4), "failure": (6.0, 2.6),
+        "times": [0.5, 1.4, 2.2, 3.0, 4.2, 5.9],
+    },
+    "landing-and-recovery": {
+        "pad": False, "after": ["touchdown.jsx"],
+        "success": (6.0, 1.2), "glitch": (6.0, 1.8), "failure": (6.0, 1.8),
+        "times": [0.5, 1.2, 1.8, 2.6, 3.6, 5.9],
+    },
+    "splashdown-and-recovery": {
+        "pad": False, "after": ["touchdown.jsx"],
+        "success": (6.0, 1.2), "glitch": (6.0, 1.8), "failure": (6.0, 1.8),
+        "times": [0.5, 1.2, 1.8, 2.6, 3.6, 5.9],
+    },
+    "insertion": {
+        "pad": False, "before": ["orbit.jsx"],
+        "success": (6.0, 2.0), "glitch": (6.0, 3.0), "failure": (6.0, 3.0),
+        "times": [0.5, 1.4, 2.0, 2.8, 4.0, 5.9],
+    },
     "reentry": {
         "pad": False,
         "success": (6.4, 4.0), "glitch": (6.4, 4.4), "failure": (6.4, 3.4),

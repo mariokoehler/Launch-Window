@@ -75,6 +75,10 @@ Each folder's `build/` is regenerated on every run and stays out of git.
     The coasts share `moon-coast.jsx` (`LEG`), whose paths `parts.py` stores in `layers.json`
     (`_paths`) so the timeline follows the drawn line; `earth-approach` has the entry corridor
     (`l-corridor`).
+  - **The way down in two steps** (2026-10-14): `descent-chutes` (the `descent` step's clip, a rule
+    maps it) is `descent.jsx` with `CHUTES`, ending under the main as the clouds clear;
+    `touchdown.jsx` (`GROUND`) carries on from that frame exactly, for `landing-and-recovery` and
+    `splashdown-and-recovery`. `insertion` is in the Earth-orbit scene.
   - **Checks** (`check.py`, after `build.py`): `python check.py spoilers <step> ...` says where the
     variants first differ before their reveals (glitch and failure share their first sign of trouble,
     so every pair should part only at the moment that decides it), and `python check.py handoffs

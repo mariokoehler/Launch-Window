@@ -42,7 +42,14 @@
     {"step": "trans-earth-coast", "clip": "trans-earth-coast"},
     {"step": "moon-earth-coast", "clip": "trans-earth-coast"},
     {"step": "earth-approach", "clip": "earth-approach"},
-    {"step": "earth-approach-and-reentry", "clip": "earth-approach"}
+    {"step": "earth-approach-and-reentry", "clip": "earth-approach"},
+    {"step": "descent", "clip": "descent-chutes"},
+    {"step": "landing-and-recovery", "clip": "landing-and-recovery"},
+    {"step": "splashdown-and-recovery", "clip": "splashdown-and-recovery"},
+    {"step": "insertion", "clip": "insertion"},
+    {"step": "duration", "clip": "duration-level-i"},
+    {"step": "de-orbit-burn", "clip": "retrofire"},
+    {"step": "earth-departure", "clip": "tpi"}
   ],
   "vehicles": ["atv", "gemini-a", "gemini-b", "lk-700", "sc-a", "sc-b", "soyuz-7k-l3-lok", "soyuz-7k-ok",
                "spc-a", "spc-b", "transtage"]

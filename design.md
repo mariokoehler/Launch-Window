@@ -2686,7 +2686,12 @@ borrows `tpi` (unconfirmed, as the crewed orbit's borrowing was). Then the rest 
 back: `lunar-approach` (the view closing in on the Moon, ending where the insertion starts),
 `lunar-flyby`, the coasts out and home on an Earth-Moon map (`earth-moon-coast` and `moon-earth-coast`
 borrow them) and `earth-approach`, aiming for the narrow entry corridor; its failure skips off the air
-(`earth-approach-and-reentry` borrows it, unconfirmed). 104 of 249 seasons play whole.
+(`earth-approach-and-reentry` borrows it, unconfirmed). 104 of 249 seasons play whole. Then the way
+down split in two, for the missions that fly it as two steps (Voskhod, Soyuz, Gemini): `descent` (the
+chutes only) and `landing-and-recovery` or `splashdown-and-recovery` (the touchdown under a full main,
+a recovery helicopter flying in; the failure is the main tearing loose), and `insertion` (the last burn
+up onto the planned orbit). `duration` borrows a day in orbit, `de-orbit-burn` the retrofire and
+`earth-departure` the burn out to the planets (unconfirmed). 160 of 249 seasons play whole.
 
 The launch was tried two ways on 2026-10-12, both judged usable by the user. Claude alone wrote the
 layers as SVG and the motion as formulas: 8 minutes, the smoother motion. The other way was a Claude

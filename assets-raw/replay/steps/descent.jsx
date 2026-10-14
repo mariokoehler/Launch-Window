@@ -2,7 +2,10 @@
 // first, with the variants' story). Shared, so the two only differ where they touch down.
 var glitch = VARIANT === "glitch", failure = VARIANT === "failure";
 var DROGUE = 0.8, MAIN = 1.6, HALF = 2.0, FULL = glitch ? 3.0 : MAIN;
-var SPLASH = failure ? 3.6 : glitch ? 4.7 : 4.4;
+// CHUTES (set by the step's own file, the descent): the chutes only, ending under the main among
+// clearing clouds; the touchdown is the next step's (touchdown.jsx).
+var CHUTES = typeof CHUTES !== "undefined" && CHUTES;
+var SPLASH = CHUTES ? 99 : failure ? 3.6 : glitch ? 4.7 : 4.4;
 
 put("paper", "screen");
 for (var i = 1; i <= 6; i++) put("r-cloud-" + i);
@@ -31,7 +34,8 @@ function fall(t) { return fallen[clamp(Math.round(t * FPS), 0, fallen.length - 1
 // The clouds go on up from where the reentry left them (500 - 900 px).
 for (i = 1; i <= 6; i++) move("r-cloud-" + i, function (t) { return [0, -400 - fall(t)]; });
 // Down, the sky clears: the clouds fade, so what follows (a recovery) starts on an empty sky.
-for (i = 1; i <= 6; i++) fade("r-cloud-" + i, track([[SPLASH + 0.4, 1], [SPLASH + 1.4, 0, "lin"]]));
+for (i = 1; i <= 6; i++) fade("r-cloud-" + i, CHUTES ? track([[4.4, 1], [5.6, 0, "lin"]]) : track([[SPLASH + 0.4, 1], [SPLASH + 1.4, 0, "lin"]]));
+if (CHUTES) hide(GROUND ? "r-ground" : "r-sea");
 
 // The camera drops to keep the main in the frame once it's open (not for a streamer).
 var drop = failure ? function () { return 0; } : glitch ? track([[HALF, 0], [3.0, 200]]) : track([[MAIN - 0.2, 0], [2.6, 200]]);
