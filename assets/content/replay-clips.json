@@ -77,7 +77,10 @@
     {"step": "eva-ii", "clip": "moonwalk"},
     {"step": "lunar-surface-activities", "clip": "moonwalk"},
     {"step": "lunar-liftoff", "clip": "lunar-liftoff"},
-    {"step": "lunar-ascent", "clip": "lunar-ascent"}
+    {"step": "lunar-ascent", "clip": "lunar-ascent"},
+    {"step": "transposition", "clip": "transposition"},
+    {"step": "extraction", "clip": "extraction"},
+    {"step": "lem-jettison", "clip": "undocking"}
   ],
   "vehicles": ["atv", "gemini-a", "gemini-b", "lk-700", "sc-a", "sc-b", "soyuz-7k-l3-lok", "soyuz-7k-ok",
                "spc-a", "spc-b", "transtage"]

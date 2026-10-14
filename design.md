@@ -2728,7 +2728,12 @@ sputters before it lights; the failure's dies low and the stage falls back besid
 cuts out and relights, the failure falls back and hits). `eva-i`, `eva-ii` and `lunar-surface-activities`
 play the moonwalk, and `ascent` after `lunar-liftoff` the climb (unconfirmed). The Gemini and LK-700 landings
 play whole (187 of 249 seasons); Apollo's still need its transposition, extraction and lander jettison. The
-step's text for an `ascent` after a lunar liftoff is still the rocket's (the pack's strings).
+step's text for an `ascent` after a lunar liftoff is still the rocket's (the pack's strings). Then Apollo's
+own: `transposition` (the capsule leaves the adapter, its panels fly off, it turns round and docks with the
+lander's hatch; the glitch bounces off twice before it holds, as Apollo 14 needed six tries; the failure
+never holds) and `extraction` (the lander pulled out of the stage; the glitch holds fast at first, the failure
+for good, the capsule backing off alone), the third stage with the lander in its adapter; `lem-jettison`
+borrows the undocking (unconfirmed). Apollo's landings play whole: 190 of 249 seasons.
 
 The launch was tried two ways on 2026-10-12, both judged usable by the user. Claude alone wrote the
 layers as SVG and the motion as formulas: 8 minutes, the smoother motion. The other way was a Claude

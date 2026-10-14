@@ -277,6 +277,17 @@ STEPS = {
         "success": (5.4, 2.6), "glitch": (5.8, 3.2), "failure": (5.8, 3.0),
         "times": [0.6, 1.2, 2.2, 2.6, 3.4, 5.3],
     },
+    # Apollo's transposition and extraction (2026-10-14): the third stage and its adapter (apollo.jsx).
+    "transposition": {
+        "pad": False, "before": ["dock.jsx", "moon.jsx", "apollo.jsx"],
+        "success": (6.0, 3.0), "glitch": (6.4, 4.6), "failure": (6.4, 4.6),
+        "times": [0.6, 1.6, 2.6, 3.4, 4.6, 5.9],
+    },
+    "extraction": {
+        "pad": False, "before": ["dock.jsx", "moon.jsx", "apollo.jsx"],
+        "success": (5.6, 1.2), "glitch": (5.6, 2.2), "failure": (5.6, 2.6),
+        "times": [0.5, 1.2, 1.9, 2.6, 3.6, 5.5],
+    },
     "reentry": {
         "pad": False,
         "success": (6.4, 4.0), "glitch": (6.4, 4.4), "failure": (6.4, 3.4),

@@ -8,7 +8,7 @@ number, and a step folds into another the way `ReplayClips` matches it: behind a
 Nothing else shares a clip: `lunar-ascent` isn't `ascent`. Variants are ticked when the clip
 and its sidecar are in `assets/ui/replay/` and a rule in `replay-clips.json` names it.
 
-**Status:** 75/150 steps complete, 225/450 variants. 233 step ids in 189 configurations.
+**Status:** 78/150 steps complete, 234/450 variants. 233 step ids in 189 configurations.
 
 How to read an entry (all counted automatically, a first pass):
 - **Uses**: step occurrences across all configurations; sorted by it within each family.
@@ -225,8 +225,8 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: crewed craft 8, stage or target 4, crewed lander 1
   - Destinations: EARTH 8
   - Programs: Gemini 4, Soyuz 7K-OK 2, Circumlunar Gemini: Earth-orbit tests 1, Gemini EOR: Earth-orbit tests 1
-- [ ] **Lander extraction** `extraction`: 5 uses in 5 configurations, 2 programs (NASA) crew risk in 5 of 5
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Lander extraction** `extraction`: 5 uses in 5 configurations, 2 programs (NASA) crew risk in 5 of 5
+  - Clip: `extraction`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: crewed craft 5, crewed lander 5, launcher 5
   - Destinations: MOON 3, EARTH 2
   - Programs: Apollo 3, Apollo: Earth-orbit tests 2
@@ -235,8 +235,8 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: crewed craft 5
   - Destinations: EARTH 5
   - Programs: Soyuz 7K-OK 3, Soyuz 7K-L3: Earth-orbit tests 2
-- [ ] **Transposition and docking** `transposition`: 5 uses in 5 configurations, 2 programs (NASA) crewed in 5 of 5
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Transposition and docking** `transposition`: 5 uses in 5 configurations, 2 programs (NASA) crewed in 5 of 5
+  - Clip: `transposition`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: crewed craft 5, crewed lander 5, launcher 5
   - Destinations: MOON 3, EARTH 2
   - Programs: Apollo 3, Apollo: Earth-orbit tests 2
@@ -437,8 +437,8 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: crewed lander 6, crewed craft 5, launcher 3
   - Destinations: EARTH 3, MOON 3
   - Programs: Soyuz 7K-L3 lunar landing 2, Soyuz 7K-L3: Earth-orbit tests 2
-- [ ] **Lunar module jettison** `lem-jettison`: 5 uses in 5 configurations, 2 programs (NASA) crew risk in 5 of 5
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Lunar module jettison** `lem-jettison`: 5 uses in 5 configurations, 2 programs (NASA) crew risk in 5 of 5
+  - Clip: `undocking`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: crewed craft 5, crewed lander 5
   - Destinations: MOON 3, EARTH 2
   - Programs: Apollo 3, Apollo: Earth-orbit tests 2

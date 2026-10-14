@@ -781,6 +781,23 @@ def lunar_parts():
     layer("n-limb", f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="url(#earth)" {LINE} stroke-width="3"/>{marks}', (cx, cy))
 
 
+# --- Transposition and extraction: the third stage with the lander in its adapter -------------------
+
+def stage_parts():
+    # The third stage, lying along the way (engine right), its front at x 1080; the lander rides in the
+    # adapter ahead of it, which the capsule's base closes at x 940 at launch.
+    layer("t-stage", f'<rect x="1080" y="400" width="420" height="140" fill="#ffffff" {LINE} stroke-width="3"/>'
+                     f'<path d="M1180 400 L1180 540 M1420 400 L1420 540" fill="none" {LINE} stroke-width="2"/>'
+                     f'<path d="M1500 440 L1544 420 L1544 520 L1500 500 Z" fill="#ffffff" {LINE} stroke-width="3"/>',
+          (1290, 470))
+    # The adapter's two panels seen side on, hinged at the stage's front edge; open, they swing out.
+    layer("t-panel-top", f'<path d="M1080 400 L940 422 L940 430 L1080 410 Z" fill="#ffffff" {LINE} stroke-width="3"/>', (1080, 405))
+    layer("t-panel-bottom", f'<path d="M1080 540 L940 518 L940 510 L1080 530 Z" fill="#ffffff" {LINE} stroke-width="3"/>', (1080, 535))
+    # The flashes: the capsule letting go of the adapter, and the lander letting go of the stage.
+    layer("t-flash-sep", "".join(f'<circle cx="940" cy="{y}" r="9" fill="{GOLD}"/>' for y in (424, 516)), (940, 470))
+    layer("t-flash-lm", "".join(f'<circle cx="1078" cy="{y}" r="9" fill="{GOLD}"/>' for y in (414, 526)), (1078, 470))
+
+
 def copy_board_layers():
     src = os.path.join(BOARD, "build")
     if not os.path.exists(os.path.join(src, "layers.json")):
@@ -808,6 +825,7 @@ def main():
     dock_parts()
     eva_parts()
     lunar_parts()
+    stage_parts()
     if ONLY:
         # Keep the parts not redrawn.
         old = json.load(open(os.path.join(BUILD, "layers.json")))

@@ -99,6 +99,10 @@ Each folder's `build/` is regenerated on every run and stays out of git.
     have them). `moonwalk` zooms in twice on the ladder (the figure at 0.45, placed by where its feet
     are), `lunar-liftoff` moves the ascent stage off its carrier, and `lunar-ascent` is in the orbit
     scene round the Moon (`orbitScene("p-moon")`), from the surface up.
+  - **Apollo's transposition and extraction** (2026-10-14): `apollo.jsx` (after `dock.jsx` and
+    `moon.jsx`, whose chaser and lander it uses): the third stage (`t-stage`), the lander in its adapter
+    (the lander's carrier turned -90 and at 0.42), the adapter's panels, the capsule placed by offsets
+    from docked with the lander's hatch (`DOCKED`).
   - **Checks** (`check.py`, after `build.py`): `python check.py spoilers <step> ...` says where the
     variants first differ before their reveals (glitch and failure share their first sign of trouble,
     so every pair should part only at the moment that decides it), and `python check.py handoffs
