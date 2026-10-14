@@ -302,6 +302,10 @@ leading to satellite navigation.
 - **Vostok's natural-decay backup:** one retrorocket, no backup, so the orbit was planned low
   enough for drag to bring the capsule down within about ten days, with supplies for that long.
   Vostok 1's stage burned long and put it higher. Fits Vostok Orbital's retrofire step.
+- **Vostok 1's modules didn't part** (12 April 1961): after the retrofire the instrument module
+  should have let go of Gagarin's descent sphere, but a bundle of cables held them together, and
+  the pair tumbled until the cables burned through as they hit the air, about ten minutes later.
+  It's the glitch of the modules-separation clip. Fits that step, or Vostok's history note.
 - **Saving throws are real:** Apollo 11's 1202/1201 alarms (a controller's call not to abort)
   and Apollo 13's improvised survival plan. Fits a step rescued by its saving throw.
 - **Expert rescue:** Apollo 13's command-module power-up procedure, devised by EECOM John Aaron
@@ -2658,8 +2662,11 @@ each). A first satellite's six steps were built on 2026-10-13 (`assets-raw/repla
 whole replay plays as a film. A capsule's way home followed on 2026-10-14 (reentry preparations,
 retrofire, retropack jettison, reentry, descent and splashdown), so Mercury's orbital flight and
 Korabl-Sputnik 2 play whole too. `orbital-flight` and `earth-orbital` borrow the satellite's
-`earth-orbit` clip (**unconfirmed**: a crewed orbit may want its own, whose failure isn't a burn-up).
-Every timing in them is unconfirmed. Next for Vostok: `modules-separation` and `descent-and-landing`.
+`earth-orbit` clip (**decided**, user, 2026-10-14: reusing it is fine).
+Every timing in them is unconfirmed. Vostok's two steps followed the same day (`modules-separation`,
+whose glitch is Vostok 1's cable, and `descent-and-landing`), so 16 mission seasons play whole. The
+steps most often one short of a whole season are time in orbit (`advanced-experiments-earth-orbit`,
+`duration-level-i`), the suborbital hop and the planetary transits.
 
 The launch was tried two ways on 2026-10-12, both judged usable by the user. Claude alone wrote the
 layers as SVG and the motion as formulas: 8 minutes, the smoother motion. The other way was a Claude

@@ -37,6 +37,11 @@ Each folder's `build/` is regenerated on every run and stays out of git.
     fires its retros *before* the preparations, so its cuts don't match there, and Vostok has
     `modules-separation` instead of the jettison. The Earth's turn carries on from clip to clip (the
     constants at the top of each `d-earth` turn).
+  - **Vostok's way** (2026-10-14): `modules-separation` (the module is the same pack, `r-module`,
+    turning about its own centre; the cable between them, `r-cable`, is aimed and stretched every
+    frame; its glitch is Vostok 1's) and `descent-and-landing`. The two descents share `descent.jsx`,
+    which `build.py` appends after the step's own file (`"after"`), where `GROUND` picks the sea or
+    the ground.
   - **Checks** (`check.py`, after `build.py`): `python check.py spoilers <step> ...` says where the
     variants first differ before their reveals (glitch and failure share their first sign of trouble,
     so every pair should part only at the moment that decides it), and `python check.py handoffs

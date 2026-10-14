@@ -12,7 +12,9 @@
     {"step": "retrofire", "clip": "retrofire"},
     {"step": "retrofire-jettison", "clip": "retrofire-jettison"},
     {"step": "reentry", "clip": "reentry"},
-    {"step": "descent-and-splashdown", "clip": "descent-and-splashdown"}
+    {"step": "descent-and-splashdown", "clip": "descent-and-splashdown"},
+    {"step": "modules-separation", "clip": "modules-separation"},
+    {"step": "descent-and-landing", "clip": "descent-and-landing"}
   ],
   "vehicles": ["atv", "gemini-a", "gemini-b", "lk-700", "sc-a", "sc-b", "soyuz-7k-l3-lok", "soyuz-7k-ok",
                "spc-a", "spc-b", "transtage"]

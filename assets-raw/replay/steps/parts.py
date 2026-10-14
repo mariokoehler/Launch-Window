@@ -331,6 +331,21 @@ def return_parts():
                               for dx, h in ((-60, 110), (-34, 170), (-12, 200), (12, 200), (34, 170), (60, 110))), (960, 1100))
     for i in range(1, 4):
         layer(f"r-ring-{i}", f'<ellipse cx="960" cy="1100" rx="150" ry="22" fill="none" {LINE} stroke-width="3"/>', (960, 1100))
+    # Modules separation: the same pack as the module behind the capsule (Vostok's retro engine is in
+    # its instrument module), turning about its own centre, and the cable that can hold the two
+    # together (Vostok 1), drawn along +x from its pivot so the timeline can stretch and aim it.
+    layer("r-module", RT(pack), RT_AT(960, 512))
+    layer("r-pyro", RT("".join(f'<circle cx="{x}" cy="502" r="6" fill="{GOLD}"/>' for x in (934, 960, 986))), RT_AT(960, 502))
+    layer("r-cable", f'<path d="M0 0 C25 -6 75 6 100 0" transform="translate(960 470)" fill="none" {LINE} stroke-width="3"/>',
+          (960, 470))
+    # Landing: the ground (a horizon line with gentle rises and tufts), and the dust a touchdown kicks up.
+    ground = (f'<rect x="-900" y="1100" width="3800" height="900" fill="url(#earth)"/>'
+              f'<path d="M-900 1100 ' + " ".join(f"Q{x + 120} {1100 - (14 if (x // 240) % 2 else 6)} {x + 240} 1100"
+                                                for x in range(-900, 2900, 240)) + f'" fill="none" {LINE} stroke-width="3"/>'
+              + "".join(f'<path d="M{x} 1100 l4 -14 M{x + 8} 1100 l0 -18 M{x + 16} 1100 l-4 -14" fill="none" {LINE} stroke-width="2"/>'
+                        for x in range(-860, 2900, 310)))
+    layer("r-ground", ground, (960, 1100))
+    layer("r-dust", puff(880, 1088, 22) + puff(1040, 1088, 22) + puff(960, 1080, 16), (960, 1100))
     for i, (x, y, k) in enumerate(((560, 700, 1.3), (1420, 880, 1.1), (700, 1060, 1.4), (1300, 1240, 1.2),
                                    (520, 1400, 1.0), (1480, 1540, 1.3)), 1):
         layer(f"r-cloud-{i}", cloud(x, y, k), (x, y))
