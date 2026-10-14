@@ -534,6 +534,23 @@ def planet_parts():
                              f'stroke-linecap="round" opacity="0.8"/>', (sx, sy))
 
 
+# --- The Moon: its globe for the orbit scene, and the Earth-Moon map for the coasts --------------------
+
+def moon_parts():
+    cx, cy = 960, 560
+    # The Moon: grey maria (darker hatch) and craters, no air (no dashed line round it).
+    maria = "".join(f'<ellipse cx="{cx + x}" cy="{cy + y}" rx="{rx}" ry="{ry}" fill="url(#hatch)" opacity="0.7"/>'
+                    for x, y, rx, ry in ((-70, -60, 80, 55), (50, 20, 60, 70), (-20, 110, 70, 40)))
+    craters = "".join(f'<circle cx="{cx + x}" cy="{cy + y}" r="{r}" fill="#ffffff" {LINE} stroke-width="2" opacity="0.85"/>'
+                      for x, y, r in ((120, -110, 22), (150, 60, 16), (-150, 30, 18), (-60, -170, 12), (90, 160, 14), (-120, 150, 10)))
+    layer("p-moon", f'<circle cx="{cx}" cy="{cy}" r="250" fill="#ffffff" {LINE} stroke-width="3"/>{maria}{craters}', (cx, cy))
+    # The Earth, small and far off to the left (where the radio is), for the Moon scenes.
+    layer("l-earth-far", f'<circle cx="90" cy="560" r="34" fill="url(#earth)" {LINE} stroke-width="3"/>', (90, 560))
+    # The radio's line to the Earth: the shadow behind the Moon where it can't reach (a faint wedge).
+    layer("l-shadow", f'<path d="M{cx} {cy - 250} L2400 {cy - 250} L2400 {cy + 250} L{cx} {cy + 250} Z" fill="rgba(22,48,92,0.05)"/>',
+          (cx, cy))
+
+
 def copy_board_layers():
     src = os.path.join(BOARD, "build")
     if not os.path.exists(os.path.join(src, "layers.json")):
@@ -556,6 +573,7 @@ def main():
     recovery_parts()
     map_parts()
     planet_parts()
+    moon_parts()
     if ONLY:
         # Keep the parts not redrawn.
         old = json.load(open(os.path.join(BUILD, "layers.json")))

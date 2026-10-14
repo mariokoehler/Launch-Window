@@ -65,6 +65,11 @@ Each folder's `build/` is regenerated on every run and stays out of git.
     share `planet-orbit.jsx` (`PLANET`), the orbit scene with `orbitScene("p-venus")` and a mapping
     beam; `sun-measurements` has its own scene, the Sun big at the left and the wind sent out along
     its rays.
+  - **The Moon** (2026-10-14, `p-moon`, `l-` parts): the orbit scene round the Moon, the Earth small
+    at the left and the Moon's radio shadow (`l-shadow`, `inShadow` in `orbit.jsx`) where no rings
+    are sent. `lunar-orbit` is `planet-orbit.jsx` with `PLANET = "moon"`; `loi` integrates its open
+    and closed paths (conics with their low point behind the Moon) so the burn falls in the shadow;
+    `tei` leaves straight, as `tpi` does; `lunar-impact` dives at the near edge.
   - **Checks** (`check.py`, after `build.py`): `python check.py spoilers <step> ...` says where the
     variants first differ before their reveals (glitch and failure share their first sign of trouble,
     so every pair should part only at the moment that decides it), and `python check.py handoffs

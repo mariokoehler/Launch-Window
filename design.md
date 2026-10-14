@@ -2679,7 +2679,10 @@ on its transfer orbit; a cruise clip is the same every season of a long cruise. 
 orbits (the orbit scene round another planet, a mapping beam on the surface) and solar measurements
 (the solar wind streaming past a probe in orbit round the Sun): 80 of 249 seasons play whole. The steps
 most often one short are now `earth-departure`, `de-orbit-burn`, `mars-surface` and
-`joint-orbital-flight`.
+`joint-orbital-flight`. The Moon followed: `lunar-orbit` (mapping, the radio lost on every pass behind
+the Moon), `loi` (the braking burn behind the Moon, out of contact, as on Apollo 8), `tei` and
+`lunar-impact` (its failure is Ranger 3's miss); `parking-orbit` borrows `earth-orbit` and `tli`
+borrows `tpi` (unconfirmed, as the crewed orbit's borrowing was).
 
 The launch was tried two ways on 2026-10-12, both judged usable by the user. Claude alone wrote the
 layers as SVG and the motion as formulas: 8 minutes, the smoother motion. The other way was a Claude

@@ -28,7 +28,13 @@
     {"step": "jupiter-saturn-transit", "clip": "jupiter-saturn-transit"},
     {"step": "venus-orbit", "clip": "venus-orbit"},
     {"step": "mars-orbit", "clip": "mars-orbit"},
-    {"step": "sun-measurements", "clip": "sun-measurements"}
+    {"step": "sun-measurements", "clip": "sun-measurements"},
+    {"step": "parking-orbit", "clip": "earth-orbit"},
+    {"step": "tli", "clip": "tpi"},
+    {"step": "lunar-orbit", "clip": "lunar-orbit"},
+    {"step": "loi", "clip": "loi"},
+    {"step": "tei", "clip": "tei"},
+    {"step": "lunar-impact", "clip": "lunar-impact"}
   ],
   "vehicles": ["atv", "gemini-a", "gemini-b", "lk-700", "sc-a", "sc-b", "soyuz-7k-l3-lok", "soyuz-7k-ok",
                "spc-a", "spc-b", "transtage"]

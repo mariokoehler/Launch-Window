@@ -1,12 +1,19 @@
-// In orbit round another planet (PLANET, set by the step's own file first: "venus" or "mars"), in the
-// Earth orbit's scene with that planet instead: the probe goes round mapping it, a gold beam on the
-// surface below it, sending home a ring every 0.75 s.
+// In orbit round another planet (PLANET, set by the step's own file first: "venus", "mars" or "moon"),
+// in the Earth orbit's scene with that planet instead: the probe goes round mapping it, a gold beam on
+// the surface below it, sending home a ring every 0.75 s. Round the Moon the Earth is off to the left
+// and the radio can't reach it from behind the Moon (its shadow, faint): no rings there.
 // Glitch: at 2.0 it drops into safe mode, beam off, quiet, tumbling a little; it's back at 3.2.
 // Failure: the same, but it never comes back: from 3.0 it goes dark, lost.
 var glitch = VARIANT === "glitch", failure = VARIANT === "failure";
 var SAFE = 2.0, BACK = 3.2, LOST = 3.0;
 
 orbitScene("p-" + PLANET);
+var MOON = PLANET === "moon";
+if (MOON) {
+    put("l-shadow");
+    layers["l-shadow"].moveAfter(layers["p-moon"]);
+    put("l-earth-far", "screen");
+}
 put("p-beam");
 layers["p-beam"].moveAfter(layers["o-sat"]);
 
@@ -26,5 +33,5 @@ move("p-beam", function (t) { var p = orbitWhere(phi, null, t); return [p[0] - O
 turn("p-beam", function (t) { return phi(t); });
 fade("p-beam", function (t) { return working(t) ? 0.85 + 0.15 * Math.sin(2 * Math.PI * 3 * t) : 0; });
 
-radioRings(sendTimes(function (t) { return !working(t); }), phi);
+radioRings(sendTimes(function (t) { return !working(t) || (MOON && inShadow(orbitWhere(phi, null, t))); }), phi);
 fade("o-sat", failure ? track([[LOST + 0.4, 1], [LOST + 1.0, 0.35, "lin"]]) : function () { return 1; });

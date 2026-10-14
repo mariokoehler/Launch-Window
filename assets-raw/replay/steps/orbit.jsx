@@ -30,6 +30,10 @@ function orbitFly(phi, radius) {
 }
 // The radio rings, sent at the given times from where the payload is, growing and fading over 0.9 s.
 function radioRings(sends, phi) {
+    radioRingsAt(sends, function (t) { return orbitWhere(phi, null, t); });
+}
+// The same, from where(t) on any path.
+function radioRingsAt(sends, where) {
     for (var i = 1; i <= 4; i++) {
         (function (n, k) {
             var mine = function (t) {
@@ -37,12 +41,14 @@ function radioRings(sends, phi) {
                 for (var j = k; j < sends.length; j += 4) if (sends[j] <= t) last = sends[j];
                 return last;
             };
-            move(n, function (t) { var te = mine(t); var p = orbitWhere(phi, null, te < 0 ? 0 : te); return [p[0] - OCX, p[1] - OCY]; });
+            move(n, function (t) { var te = mine(t); var p = where(te < 0 ? 0 : te); return [p[0] - OCX, p[1] - OCY]; });
             grow(n, function (t) { var te = mine(t); return te < 0 ? 0.3 : 0.3 + 1.6 * clamp((t - te) / 0.9, 0, 1); });
             fade(n, function (t) { var te = mine(t); return te < 0 ? 0 : (1 - clamp((t - te) / 0.9, 0, 1)); });
         })("ring-" + i, i - 1);
     }
 }
+// Whether a point is in the Moon's radio shadow, behind it as seen from the Earth (far to the left).
+function inShadow(p) { return p[0] > OCX && Math.abs(p[1] - OCY) < 250; }
 // Every 0.75 s from 0.5, except while quiet(t).
 function sendTimes(quiet) {
     var s = [];
