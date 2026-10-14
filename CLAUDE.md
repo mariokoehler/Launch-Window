@@ -153,7 +153,8 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   show clock until steps get mission times. `-Dshots=console` renders its states. Client only.
 - **Sound for the replay** (the user's idea, 2026-10-13, `ui-spec.md` §4.7.3 "Sound"): a pool of named
   sounds in `assets/content/replay-sounds.json` (each one's description is the brief; no takes yet means
-  silent), cues in the clips' sidecars, the console's own sounds, room tone, a fanfare at the season
+  silent), cues in the clips' sidecars (kept in `assets-raw/replay/cues.json`, written by its `cues.py`;
+  the first, a rocket roar under the burns, 2026-10-14), the console's own sounds, room tone, a fanfare at the season
   summary (success or failure; no background music, user), music and effects volumes in Settings. All
   English (user). Every sound is real (Pixabay, NASA, Stable Audio 3, credited); a new one plays a
   synthesized `placeholder-*` take until it has its own (`assets-raw/replay/sounds/make_placeholder_sounds.py`).

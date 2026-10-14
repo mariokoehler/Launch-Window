@@ -85,6 +85,10 @@ def main():
         with open(os.path.join(out, f"launch-{key}.json"), "w") as f:
             json.dump({"duration": dur, "revealAt": REVEAL[key]}, f, indent=1)
             f.write("\n")
+        # The sound cues aren't the render's: put them back in the sidecar just written.
+        sys.path.insert(0, os.path.join(HERE, ".."))
+        import cues
+        cues.apply()
     if "render" in sys.argv:
         subprocess.run([CLI, "render", "--project", project, "--comp", "Launch " + board,
                         "--out", os.path.join(BUILD, f"launch-{key}.webm"), "--format", "webm",

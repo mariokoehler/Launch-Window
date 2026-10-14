@@ -138,6 +138,11 @@ def main():
             with open(os.path.join(GAME, f"{step}-{v}.json"), "w") as f:
                 json.dump({"duration": spec[v][0], "revealAt": spec[v][1]}, f, indent=1)
                 f.write("\n")
+    if "publish" in sys.argv:
+        # The sound cues aren't the render's: put them back in the sidecars just written.
+        sys.path.insert(0, os.path.join(HERE, ".."))
+        import cues
+        cues.apply()
     print(os.path.join(BUILD, f"sheet_{step}.png"))
 
 

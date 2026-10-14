@@ -54,6 +54,16 @@
       "description": "Console. A dry mechanical click (about 50 to 100 ms): a relay or a toggle switch. Two takes, a press and a release, which the no-repeat deal alternates. Plays on Play and Pause, as the HOLD lamp goes on or off."
     },
     {
+      "id": "rocket-roar",
+      "kind": "LOOP",
+      "volume": 0.5,
+      "files": [
+        "audio/replay/rocket-roar.ogg"
+      ],
+      "credit": true,
+      "description": "Clips. A rocket engine's roar at full thrust, steady in level and pitch, a seamless loop (16 s). Plays while an engine burns on screen: the launch from ignition, the ascent's first and upper stages (the upper one quieter, further off), the retro motors. It carries on from the launch into the ascent without a break. OGG, for a seamless loop."
+    },
+    {
       "id": "fanfare-success",
       "kind": "MUSIC",
       "volume": 0.8,

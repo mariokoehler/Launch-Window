@@ -1,4 +1,11 @@
 {
  "duration": 6.3,
- "revealAt": 3.2
+ "revealAt": 3.2,
+ "cues": [
+  {
+   "at": 0.9,
+   "sound": "rocket-roar",
+   "loop": true
+  }
+ ]
 }

@@ -1991,7 +1991,13 @@ clips, the replay is meant to be watched like a short film, and the player can s
     "engine-roar", "volume": 0.8, "loop": true, "until": 5.8, "fade": 0.8, "carry": true}]` (all but
     `at` and `sound` optional). A loop stops at `until` (or the clip's end) after its fade; `carry` on
     a loop at 0 keeps the same sound running from the clip before instead of starting it again. A
-    clip's variants have the same cues before the earliest reveal (`ReplayClipsTest`).
+    clip's variants have the same cues before the earliest reveal (`ReplayClipsTest`); what counts is
+    what's heard, so a loop whose `until` is at or after the reveal is the same as one that plays on
+    (2026-10-14). The cues are kept in `assets-raw/replay/cues.json` and written into the sidecars by
+    `cues.py` beside it, which the clip builders run on publish. The first is `rocket-roar`
+    (2026-10-14, the user's find): under the launch from ignition, the ascent's two stages (carried on
+    from the launch, the upper stage quieter) and the retrofire, each cut with its engine in a failure.
+    **Unconfirmed:** its volumes and fades.
   - **The pool:** `assets/content/replay-sounds.json` (outside the pack, like the clips), each sound an
     id, a kind (effect, loop, radio, music for the fanfares, room), a volume, its takes (several, dealt with no repeats)
     and a description that is the brief for making it. A sound with no takes yet plays nothing.

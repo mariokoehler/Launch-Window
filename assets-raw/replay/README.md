@@ -47,6 +47,11 @@ Each folder's `build/` is regenerated on every run and stays out of git.
     countdown's, the countdown on the launch's). The venting loops every 0.8 s, so a pad step's
     success and glitch last a multiple of 0.8 s.
 
+**Sound cues:** `cues.json` holds every clip's cues (the sounds are `assets/content/replay-sounds.json`'s),
+and `python assets-raw/replay/cues.py` writes them into the sidecars; both builders run it on publish,
+so a cue changes without a render. Before a clip's earliest reveal its variants must sound the same
+(`ReplayClipsTest`).
+
 **The checklist:** `CLIP_CHECKLIST.md` lists every distinct mission step in the standard pack, one
 entry per clip, with what is on screen and how often it flies, and ticks each variant as its clip
 lands. `python assets-raw/replay/make_clip_checklist.py` regenerates it (2026-10-13; never edit it
