@@ -288,6 +288,12 @@ STEPS = {
         "success": (5.6, 1.2), "glitch": (5.6, 2.2), "failure": (5.6, 2.6),
         "times": [0.5, 1.2, 1.9, 2.6, 3.6, 5.5],
     },
+    # A spaceplane's runway landing (2026-10-14).
+    "runway-landing": {
+        "pad": False, "before": ["moon.jsx"],
+        "success": (6.0, 2.6), "glitch": (6.4, 3.2), "failure": (6.0, 3.2),
+        "times": [0.8, 2.0, 2.6, 3.2, 4.0, 5.9],
+    },
     "reentry": {
         "pad": False,
         "success": (6.4, 4.0), "glitch": (6.4, 4.4), "failure": (6.4, 3.4),

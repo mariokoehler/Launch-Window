@@ -201,6 +201,9 @@ engineering problem or tidbit, note it here the same session.
   a minute of fuel; Luna 16 drilled 35 cm in the Sea of Fertility and returned about 101 g; Luna 15
   crashed at 15:50 UT on 21 July 1969, about two hours before Eagle lifted off (the mockup said "a
   few hours"); the X-15 dropped at about 45,000 ft, burned about 80 s and flew about 10 minutes;
+  it landed on two skids at the back and a nose wheel, and on 9 November 1962 a skid gave way on a
+  landing at Mud Lake and the second X-15 flipped over (Jack McKay was hurt and flew again; the
+  replay's runway-landing failure);
   Luna 3's camera had 200 and 500 mm lenses, and a spot of light from a cathode-ray tube scanned the
   developed film; Venus's 90 bar is about 900 m of sea; the planetary window marks on E-23 sheet 2
   match the launches (Venera 1 February 1961, Mariner 4 November 1964, Mars 4 July 1973). The
@@ -2733,7 +2736,16 @@ own: `transposition` (the capsule leaves the adapter, its panels fly off, it tur
 lander's hatch; the glitch bounces off twice before it holds, as Apollo 14 needed six tries; the failure
 never holds) and `extraction` (the lander pulled out of the stage; the glitch holds fast at first, the failure
 for good, the capsule backing off alone), the third stage with the lander in its adapter; `lem-jettison`
-borrows the undocking (unconfirmed). Apollo's landings play whole: 190 of 249 seasons.
+borrows the undocking (unconfirmed). Apollo's landings play whole: 190 of 249 seasons. Then borrowings
+for steps an existing clip shows (unconfirmed): Surveyor's `lunar-landing` the Moon landing,
+`orbit-insertion` the insertion, the third to sixth duration levels the second's, `splashdown` (after the
+chutes) the splashdown and recovery, `lunar-slingshot` the flyby, `heliocentric-orbit-insertion` and
+`ignition-and-separation` the burn out (`tpi`), and `engine-test`, the MiG's `deorbit-burn` and
+`orbital-maneuvering-engine-test` the retrofire (a capsule's: the MiG has no burn of its own yet). And the
+spaceplane's runway landing, `landing` after `descent` (`runway-landing`: a rocket plane glides in over a dry
+lake, flares and puts its skid down; the glitch bounces, the failure's skid gives way, as on an X-15 in
+1962). The `descent` before it still plays the capsule's chutes: the user's call. 211 of 249 seasons play
+whole.
 
 The launch was tried two ways on 2026-10-12, both judged usable by the user. Claude alone wrote the
 layers as SVG and the motion as formulas: 8 minutes, the smoother motion. The other way was a Claude

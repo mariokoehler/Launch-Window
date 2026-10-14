@@ -8,7 +8,7 @@ number, and a step folds into another the way `ReplayClips` matches it: behind a
 Nothing else shares a clip: `lunar-ascent` isn't `ascent`. Variants are ticked when the clip
 and its sidecar are in `assets/ui/replay/` and a rule in `replay-clips.json` names it.
 
-**Status:** 78/150 steps complete, 234/450 variants. 233 step ids in 189 configurations.
+**Status:** 90/150 steps complete, 270/450 variants. 233 step ids in 189 configurations.
 
 How to read an entry (all counted automatically, a first pass):
 - **Uses**: step occurrences across all configurations; sorted by it within each family.
@@ -155,7 +155,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: EARTH 16, MOON 11
   - Programs: Apollo: Earth-orbit tests 14, Apollo 7, Gemini EOR 4, Gemini EOR: Earth-orbit tests 2
 - [ ] **Landing** `landing`: 18 uses in 17 configurations, 9 programs (NASA/SOVIET) crew risk in 13 of 18, later seasons in 1 of 18
-  - Clip: by the step before: none yet after `descent` 9, `lunar-landing` after `powered-descent` 4, none yet after `lander-descent` 3, `lunar-landing` after `lunar-approach` 2; [ ] success, [ ] glitch, [ ] failure
+  - Clip: by the step before: `runway-landing` after `descent` 9, `lunar-landing` after `powered-descent` 4, none yet after `lander-descent` 3, `lunar-landing` after `lunar-approach` 2; [ ] success, [ ] glitch, [ ] failure
   - Also covers: `sc-a-landing` 1, `sc-b-landing` 1
   - On screen: spaceplane 9, crewed craft 3, crewed lander 3, probe 3, probe lander 2, rover 1
   - Destinations: EARTH 9, MOON 6, VENUS 2, MARS 1
@@ -176,8 +176,8 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: crewed craft 4, probe 1
   - Destinations: MOON 5
   - Programs: Lunar-orbit Gemini 4, Luna 15 1
-- [ ] **Splashdown** `splashdown`: 2 uses in 2 configurations, 1 program (NASA) crew risk in 2 of 2
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Splashdown** `splashdown`: 2 uses in 2 configurations, 1 program (NASA) crew risk in 2 of 2
+  - Clip: `splashdown-and-recovery`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: crewed craft 2
   - Destinations: EARTH 2
   - Programs: Apollo: Earth-orbit tests 2
@@ -344,13 +344,13 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: EVA suit 3, crewed craft 3, crewed lander 3
   - Destinations: MOON 3
   - Programs: Apollo 2
-- [ ] **Duration level V** `duration-l5`: 2 uses in 2 configurations, 1 program (SOVIET) crew risk in 2 of 2
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Duration level V** `duration-l5`: 2 uses in 2 configurations, 1 program (SOVIET) crew risk in 2 of 2
+  - Clip: `duration-level-ii`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: crewed lander 2
   - Destinations: EARTH 2
   - Programs: LK-700: Earth-orbit tests 2
-- [ ] **Duration level III** `duration-level-iii`: 2 uses in 2 configurations, 1 program (NASA) crew risk in 2 of 2
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Duration level III** `duration-level-iii`: 2 uses in 2 configurations, 1 program (NASA) crew risk in 2 of 2
+  - Clip: `duration-level-ii`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: crewed craft 2
   - Destinations: EARTH 2
   - Programs: Apollo: Earth-orbit tests 2
@@ -364,13 +364,13 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: satellite 1
   - Destinations: EARTH 1
   - Programs: Sputnik 2 1
-- [ ] **Duration level VI** `duration-l6`: 1 use in 1 configuration, 1 program (SOVIET) crew risk in 1 of 1
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Duration level VI** `duration-l6`: 1 use in 1 configuration, 1 program (SOVIET) crew risk in 1 of 1
+  - Clip: `duration-level-ii`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: crewed lander 1
   - Destinations: EARTH 1
   - Programs: LK-700: Earth-orbit tests 1
-- [ ] **Duration level IV** `duration-level-iv`: 1 use in 1 configuration, 1 program (NASA) crew risk in 1 of 1
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Duration level IV** `duration-level-iv`: 1 use in 1 configuration, 1 program (NASA) crew risk in 1 of 1
+  - Clip: `duration-level-ii`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: crewed craft 1
   - Destinations: EARTH 1
   - Programs: Apollo: Earth-orbit tests 1
@@ -522,8 +522,8 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: probe 2
   - Destinations: MOON 2
   - Programs: Luna 2 1, Ranger 3 1
-- [ ] **Around the Moon** `lunar-slingshot`: 2 uses in 2 configurations, 1 program (NASA) crewed in 1 of 2
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Around the Moon** `lunar-slingshot`: 2 uses in 2 configurations, 1 program (NASA) crewed in 1 of 2
+  - Clip: `lunar-flyby`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: crewed craft 2
   - Destinations: MOON 2
   - Programs: Apollo 2
@@ -547,8 +547,8 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: crewed lander 1, launcher 1
   - Destinations: EARTH 1
   - Programs: Soyuz 7K-L3: Earth-orbit tests 1
-- [ ] **Lunar landing** `lunar-landing`: 1 use in 1 configuration, 1 program (NASA) uncrewed
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Lunar landing** `lunar-landing`: 1 use in 1 configuration, 1 program (NASA) uncrewed
+  - Clip: `lunar-landing`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe lander 1
   - Destinations: MOON 1
   - Programs: Surveyor 1
@@ -670,8 +670,8 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: probe 1
   - Destinations: VENUS 1
   - Programs: Pioneer Venus Multiprobe 1
-- [ ] **Into solar orbit** `heliocentric-orbit-insertion`: 1 use in 1 configuration, 1 program (NASA) uncrewed
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Into solar orbit** `heliocentric-orbit-insertion`: 1 use in 1 configuration, 1 program (NASA) uncrewed
+  - Clip: `tpi`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 1
   - Destinations: SUN 1
   - Programs: Pioneer Sun orbiter 1
@@ -772,18 +772,18 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: crewed craft 11, spaceplane 1
   - Destinations: EARTH 12
   - Programs: Vostok 5, Project Mercury 4, OKB-MiG E-154 1
-- [ ] **Engine test** `engine-test`: 4 uses in 4 configurations, 2 programs (SOVIET) crew risk in 2 of 4
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Engine test** `engine-test`: 4 uses in 4 configurations, 2 programs (SOVIET) crew risk in 2 of 4
+  - Clip: `retrofire`; [x] success, [x] glitch, [x] failure; cues yes
   - On screen: crewed craft 2, crewed lander 2
   - Destinations: EARTH 4
   - Programs: LK-700: Earth-orbit tests 2, Soyuz 7K-L1: Earth-orbit tests 2
-- [ ] **Transtage burn** `ignition-and-separation`: 2 uses in 2 configurations, 1 program (NASA) crew risk in 1 of 2
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Transtage burn** `ignition-and-separation`: 2 uses in 2 configurations, 1 program (NASA) crew risk in 1 of 2
+  - Clip: `tpi`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: crewed craft 2
   - Destinations: MOON 2
   - Programs: Circumlunar Gemini 2
-- [ ] **Orbit insertion** `orbit-insertion`: 2 uses in 2 configurations, 2 programs (NASA) crew risk in 1 of 2
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Orbit insertion** `orbit-insertion`: 2 uses in 2 configurations, 2 programs (NASA) crew risk in 1 of 2
+  - Clip: `insertion`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: crewed craft 2, launcher 2
   - Destinations: EARTH 2
   - Programs: Gemini 1, Lunar-orbit Gemini: Earth-orbit tests 1
@@ -807,8 +807,8 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: crewed craft 1
   - Destinations: EARTH 1
   - Programs: Apollo: Earth-orbit tests 1
-- [ ] **Engine test in space** `orbital-maneuvering-engine-test`: 1 use in 1 configuration, 1 program (SOVIET) crew risk in 1 of 1
-  - Clip: none yet; [ ] success, [ ] glitch, [ ] failure
+- [x] **Engine test in space** `orbital-maneuvering-engine-test`: 1 use in 1 configuration, 1 program (SOVIET) crew risk in 1 of 1
+  - Clip: `retrofire`; [x] success, [x] glitch, [x] failure; cues yes
   - On screen: spaceplane 1
   - Destinations: EARTH 1
   - Programs: OKB-MiG E-154 1

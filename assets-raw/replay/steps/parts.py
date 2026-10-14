@@ -798,6 +798,36 @@ def stage_parts():
     layer("t-flash-lm", "".join(f'<circle cx="1078" cy="{y}" r="9" fill="{GOLD}"/>' for y in (414, 526)), (1078, 470))
 
 
+# --- The spaceplane: a rocket plane landing on a dry lake ----------------------------------------------
+
+# Never a particular one: a long body, a canopy, a wedge tail, a stub wing, a skid at the back and a nose
+# wheel. It stands on the ground (y 880), its pivot where the skid touches (WS).
+WS = (830, 880)
+
+
+def plane_parts():
+    body = (f'<path d="M748 806 L760 806 L760 834 L748 834 Z" fill="#ffffff" {LINE} stroke-width="3"/>'
+            f'<path d="M760 742 L796 742 L846 800 L760 800 Z" fill="#ffffff" {LINE} stroke-width="3"/>'
+            f'<path d="M760 800 L1100 800 Q1172 812 1196 820 Q1172 828 1100 840 L760 840 Z" fill="#ffffff" {LINE} stroke-width="3"/>'
+            f'<path d="M1052 800 Q1080 778 1112 800" fill="#ffffff" {LINE} stroke-width="3"/>'
+            f'<path d="M880 830 L998 822 L1018 828 L900 836 Z" fill="url(#hatch)" {LINE} stroke-width="2.4"/>'
+            f'<path d="M1100 840 L1100 872" fill="none" {LINE} stroke-width="3"/>'
+            f'<circle cx="1100" cy="875" r="5" fill="#ffffff" {LINE} stroke-width="2.4"/>')
+    layer("w-plane", body, WS)
+    # The main skid on its strut, hinged at the body, so it can fold up when it gives way.
+    layer("w-skid", f'<path d="M842 840 L830 878 M806 880 L856 880" fill="none" {LINE} stroke-width="4"/>', (842, 840))
+    # The dry lake: flat to the horizon, hills along it, a runway's marks.
+    hills = " ".join(f"Q{x + 70} {880 - h} {x + 140} 880" for x, h in zip(range(-200, 2100, 140), [15, 26, 11, 32, 20, 9, 23, 35, 17, 13, 29, 19, 10, 24, 31, 15, 21]))
+    layer("w-ground", f'<path d="M-200 880 {hills}" fill="none" {LINE} stroke-width="2" opacity="0.5"/>'
+                      f'<rect x="-200" y="880" width="2400" height="400" fill="url(#earth)"/>'
+                      f'<path d="M-200 880 L2200 880" fill="none" {LINE} stroke-width="3"/>'
+                      + "".join(f'<path d="M{x} 912 L{x + 70} 912" fill="none" {LINE} stroke-width="3" opacity="0.6"/>'
+                                for x in range(-160, 2200, 160)), (960, 880))
+    # Sparks off the tail scraping along, streaming back (left) from its pivot.
+    layer("w-sparks", f'<path d="M760 878 L640 870 M760 878 L660 884 M760 878 L700 862" fill="none" stroke="{GOLD}" '
+                      f'stroke-width="3" stroke-linecap="round"/>', (760, 878))
+
+
 def copy_board_layers():
     src = os.path.join(BOARD, "build")
     if not os.path.exists(os.path.join(src, "layers.json")):
@@ -826,6 +856,7 @@ def main():
     eva_parts()
     lunar_parts()
     stage_parts()
+    plane_parts()
     if ONLY:
         # Keep the parts not redrawn.
         old = json.load(open(os.path.join(BUILD, "layers.json")))

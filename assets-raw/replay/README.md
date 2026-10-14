@@ -103,6 +103,9 @@ Each folder's `build/` is regenerated on every run and stays out of git.
     `moon.jsx`, whose chaser and lander it uses): the third stage (`t-stage`), the lander in its adapter
     (the lander's carrier turned -90 and at 0.42), the adapter's panels, the capsule placed by offsets
     from docked with the lander's hatch (`DOCKED`).
+  - **The runway landing** (2026-10-14): `runway-landing.jsx` (after `moon.jsx`, for the dust), the
+    rocket plane (`w-plane`, its skid `w-skid` folding up in the failure) placed by where its skid
+    touches, on a dry lake (`w-ground`), the camera at 1.35.
   - **Checks** (`check.py`, after `build.py`): `python check.py spoilers <step> ...` says where the
     variants first differ before their reveals (glitch and failure share their first sign of trouble,
     so every pair should part only at the moment that decides it), and `python check.py handoffs

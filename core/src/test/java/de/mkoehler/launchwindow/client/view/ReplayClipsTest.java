@@ -64,10 +64,12 @@ class ReplayClipsTest {
         assertTrue(CLIPS.clipName("03-launch-from-drop-plane").isEmpty());
         assertTrue(CLIPS.clipName("02-pre-launch").isEmpty());
         // The step before picks among a step's rules: a landing after the powered descent is on the
-        // Moon (a robot's after its approach too); with no rule for what came before, no clip.
+        // Moon (a robot's after its approach too), after a descent on a runway; with no rule for what came
+        // before, no clip.
         assertEquals("lunar-landing", CLIPS.clipName("12-landing", "11-powered-descent").orElseThrow());
         assertEquals("lunar-landing", CLIPS.clipName("09-landing", "08-lunar-approach").orElseThrow());
-        assertTrue(CLIPS.clipName("06-landing", "05-descent").isEmpty());
+        assertEquals("runway-landing", CLIPS.clipName("06-landing", "05-descent").orElseThrow());
+        assertTrue(CLIPS.clipName("14-landing", "13-lander-descent").isEmpty());
         assertTrue(CLIPS.clipName("12-landing").isEmpty());
         // lunar-ascent plays its own clip, never ascent's; ascent plays it only after a lunar liftoff.
         assertEquals("lunar-ascent", CLIPS.clipName("12-lunar-ascent").orElseThrow());

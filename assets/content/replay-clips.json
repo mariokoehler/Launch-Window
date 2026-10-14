@@ -80,7 +80,21 @@
     {"step": "lunar-ascent", "clip": "lunar-ascent"},
     {"step": "transposition", "clip": "transposition"},
     {"step": "extraction", "clip": "extraction"},
-    {"step": "lem-jettison", "clip": "undocking"}
+    {"step": "lem-jettison", "clip": "undocking"},
+    {"step": "lunar-landing", "clip": "lunar-landing"},
+    {"step": "orbit-insertion", "clip": "insertion"},
+    {"step": "duration-level-iii", "clip": "duration-level-ii"},
+    {"step": "duration-level-iv", "clip": "duration-level-ii"},
+    {"step": "duration-l5", "clip": "duration-level-ii"},
+    {"step": "duration-l6", "clip": "duration-level-ii"},
+    {"step": "splashdown", "clip": "splashdown-and-recovery"},
+    {"step": "lunar-slingshot", "clip": "lunar-flyby"},
+    {"step": "heliocentric-orbit-insertion", "clip": "tpi"},
+    {"step": "ignition-and-separation", "clip": "tpi"},
+    {"step": "engine-test", "clip": "retrofire"},
+    {"step": "landing", "after": "descent", "clip": "runway-landing"},
+    {"step": "deorbit-burn", "clip": "retrofire"},
+    {"step": "orbital-maneuvering-engine-test", "clip": "retrofire"}
   ],
   "vehicles": ["atv", "gemini-a", "gemini-b", "lk-700", "sc-a", "sc-b", "soyuz-7k-l3-lok", "soyuz-7k-ok",
                "spc-a", "spc-b", "transtage"]
