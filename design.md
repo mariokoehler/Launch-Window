@@ -1960,6 +1960,66 @@ ours, a default and **unconfirmed** unless a line says otherwise.
   budget reviews then miss. For the play test: higher margins, a fee that scales with the era, or
   a bot that only applies when it can fly the contract soon (§4).
 
+### 2.12 The archive
+
+**The user's idea (2026-10-15), specified the same day** (`ui-spec.md` §4.19; the pages, their images and
+the rights in `assets-raw/archive/PAGES.md`). NASA's imagery is public domain and barely used yet. An
+archive of pages, one per real mission that sent back something memorable, written like a short
+encyclopedia article: the mission's story, a fact box, its pictures and, where there is one, its sound. A
+page stays locked until its goal is reached in the game, so flying the mission feels like getting its
+pictures back. No BASPM precedent.
+- **What unlocks a page:** the goal it names (`lunar-photos` for Luna 3's far side), the first time any
+  agency in the game holds it, achieved or credited through a cascade. A page tells the real mission that
+  first did it, whatever program earned the goal in the game (the standard pack's Pioneer 4 can earn
+  `lunar-photos`; the page is still Luna 3's). Goals pay only for success, so a failed flight never
+  delivers the pictures.
+- **For everyone in the game:** a page unlocked by a rival opens for every player too (user,
+  2026-10-15). That tells nothing intelligence keeps secret (§2.9): it needs a success on a goal, and a
+  First the player could reach is already in the turn report (§2.1(e)). It does tell a player about a
+  First on a goal their agency can't reach (a Soviet player learns of `saturn-flyby`), which the game
+  doesn't report today. That's how it was: both sides announced their successes and hid their failures.
+- **Settled from the goal records:** a page's unlock turn is the earliest turn any player's goal records
+  hold its goal. Nothing new is saved, and a late joiner finds the pages unlocked before they joined
+  (*proposed*). The server reads it at the start of each turn, as it reads rivals' Firsts
+  (`RivalFirsts.settledFirstOn`).
+- **Shown:**
+  - **Turn report:** a "New in the archive" card on every player's report the turn after, linking to
+    each new page. It says whether the player or a rival flew it, without naming the rival (*proposed*).
+  - **Museum:** an Archive tab. Locked pages are greyed out with a hint, "Unlocks with: Pictures of the
+    Moon", the goal's name (user, 2026-10-15).
+- **The text is our own,** written from the facts (Wikipedia, NASA and others as sources, listed on the
+  page), not Wikipedia's text: that keeps one voice and avoids CC BY-SA's share-alike on adapted text. A
+  sentence quoted with attribution stays possible. Every figure is checked as for the history notes.
+- **Images:**
+  - **Only originals:** NASA's, JPL's, Ames's, Langley's or NSSDC's, credited as their captions say, and
+    never a third party's reprocessing. The NASA insignia stays out of the game's own art.
+  - **Soviet images:** not public domain by default. Under German law (§72(3) UrhG, 50 years for a photo
+    without creative input) the 1959 to 1975 ones are free here; Russia's longer term matters only if
+    the repo goes public. The checks per image are in `PAGES.md`.
+  - **Leonov's spacewalk film** is still protected in Russia, so his part is told in words.
+  - **Venera 9's** known pictures are Don P. Mitchell's processing; use them only with his permission.
+    He says he generally grants it for free, and asking him is the user's call.
+- **Sound:** NASA's air-to-ground recordings are public domain (the Genesis reading, "The Eagle has
+  landed"). The Pale Blue Dot page carries Carl Sagan's recording (§1.1, the 2026-10-13 decision).
+- **The first pages** (user, 2026-10-15), each with the goal that unlocks it:
+
+  | Page | Unlocked by |
+  |---|---|
+  | Luna 3 | `lunar-photos` |
+  | Ranger 7 | `lunar-close-up-photos` |
+  | the first spacewalks (Leonov, White) | `spacewalk` |
+  | Lunar Orbiter 1 | `lunar-mapping` |
+  | Apollo 8 | `crewed-lunar-orbit` |
+  | Apollo 11 | `crewed-lunar-landing` |
+  | Mariner 4 | `mars-photos` |
+  | Mariner 9 | `mars-mapping` |
+  | Viking 1 | `mars-orbiter-and-lander` |
+  | Pioneer 10 | `jupiter-photos` |
+  | Venera 9 and 13 | `venus-surface-study` |
+  | Voyager 1's Pale Blue Dot | `saturn-flyby`, the furthest flight in the game; Voyager isn't in either pack |
+- **Size:** images at about 1600 px on the long edge as JPEG, 150 to 300 KB each. About 45 images add
+  about 10 MB to the client.
+
 ## 3. Architecture
 
 ### 3.1 High-level shape
@@ -2876,6 +2936,8 @@ mission behind the photo, show the Pale Blue Dot and honour Sagan's essay, perha
     "© Druyan-Sagan Associates"; it claims no licence and no public domain.
   - **If the estate ever objects, take the clip out at once.** Revisit this before the repo goes
     public (`CLAUDE.md`: ask before making it public).
+- **Where it goes (user, 2026-10-15):** the archive's Pale Blue Dot page (§2.12), unlocked by
+  `saturn-flyby`, the furthest flight in the game.
   - The Voyager 1 image (NASA/JPL, public domain) and the tribute's own text need nothing more.
 
 **Sound for the replay (the user's idea, 2026-10-13; the groundwork built the same day, `ui-spec.md`

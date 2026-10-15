@@ -167,6 +167,10 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   Armstrong's "one small step" with the splash, Kennedy's "We choose to go to the Moon" when the Join
   screen opens. Settings' Sound On/Off now works, for the whole device (`LaunchWindowGame.soundOn`).
   `ScreenSnapshot` runs silent. Client only.
+- **The archive** (the user's idea, 2026-10-15, `design.md` §2.12, `ui-spec.md` §4.19): pages about real
+  missions (NASA's public-domain pictures, sound, our own text), unlocked for everyone in a game when a
+  goal is first reached there, linked from the turn report, in a Museum tab. Specified, not mocked up;
+  the first 12 pages, their images and rights are in `assets-raw/archive/PAGES.md`.
 
 ## How we work
 

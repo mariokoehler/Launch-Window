@@ -2266,6 +2266,7 @@ review: when, what it pays, what keeps today's funding) and `PrestigeConversion`
   sheet's drawing, the drawing number and sheet count, the title, a one-line summary and "Read
   it". An explainer opened here closes back to this tab. *(Specified 2026-10-07:)* a card whose
   explainer the player hasn't opened yet carries the gold "new" dot of component 19.
+- **Archive** *(specified 2026-10-15, §4.19)*: the real missions' pages, unlocked by goals.
 
 **Mocked up (2026-10-04)** on the `Launch Window — Museum, Settings & Game Result mockup`
 canvas, one artboard per tab (`Museum`, `MuseumAchievements`, `MuseumFlights`,
@@ -2888,6 +2889,48 @@ from `assets/content/front-pages.json` (`content.FrontPages`). Shots `frontpage-
 
 ---
 
+### 4.19 Archive *(the user's idea, 2026-10-15; specified the same day for `design.md` §2.12, not mocked up yet)*
+**Purpose:** pages about the real missions that sent back something memorable, unlocked when a goal is
+first reached in the game, so a flight feels like getting its pictures back. The pages, images and
+rights are in `assets-raw/archive/PAGES.md`.
+
+**The Museum's Archive tab** (§4.11):
+- **The list:** one card per page, in the order of the real missions' dates (1959 to 1990), so it reads
+  like a timeline.
+- **An unlocked card:** a cropped thumbnail of its first image, the title ("Apollo 8: Earthrise"), the
+  real date and agency, a one-line summary, and the gold "new" dot (component 19) until it's opened.
+- **A locked card:** greyed out, with no image (a blank frame in the faint navy tint, like the Flights
+  tab's missing photos), the title, and "Unlocks with: People in lunar orbit", the goal's name (user,
+  2026-10-15).
+- **A count in the header:** "5 of 12 in the archive".
+
+**The page** (opened from the tab or the turn report; it closes back to where it was opened), laid out
+like an encyclopedia article:
+- **Header:** the title, an eyebrow with the agency and date ("NASA · December 1968"), and when it
+  unlocked in this game ("In the archive since Spring 1967, flown by you" / "by a rival").
+- **Left column, the text:** three to five short sections with headings: the mission, what it found, why
+  it mattered. At the end: Sources, a short list.
+- **Right column, the fact box:** craft, launch vehicle, launch and end dates, crew or none, the
+  mission's firsts. Under it, the audio player, if the page has a sound: play/pause, a progress line,
+  the length, and the caption with its credit ("Genesis reading, 24 December 1968. NASA.").
+- **The gallery,** under the text or beside it: three to five images, each with a caption and its
+  credit line under it in caption style. Clicking an image opens the viewer.
+- **The viewer:** the image as large as the screen allows over a scrim, caption and credit under it,
+  arrows or the arrow keys to move through the page's images, Escape or a click outside to close.
+- **Audio:** plays on the music volume (Settings) and stops when the page closes. Any replay sound
+  stops while it plays (*proposed*).
+
+**Turn report** (§4.4): a "New in the archive" card the turn a page unlocks, on every player's report:
+- each new page's thumbnail and title, "Flown by you" or "Flown by a rival" (the rival unnamed), and
+  "Open";
+- it sits with the Museum-like cards, after the Firsts.
+
+**Server work:** G15.
+
+**Mockup notes:** new for Claude Design are the archive card (unlocked, locked, new), the page (text
+column, fact box, gallery, audio player), the image viewer, and the report card. The text, images and
+captions in the mockup can be Apollo 8's from `PAGES.md`.
+
 ## 5. Refusal reasons (for toasts and inline messages)
 
 The server replies with these codes. Suggested wording below; final wording is
@@ -3103,6 +3146,19 @@ current state alone. Each is an M5 task.
   them), or the test has nothing to measure against.
   *Unconfirmed:* printing the crew's names tells rivals who flew. That's public news, but it names
   astronauts the Intelligence Office's personnel file would otherwise have to find.
+
+- **G15. The archive (§4.19, `design.md` §2.12, 2026-10-15).** Content: `assets/content/archive.json`,
+  outside the pack like the stories, each page with its id, `goalId`, title, agency, date, fact box,
+  sections, sources, images (file, caption, credit) and an optional sound (file, caption, credit);
+  images in `assets/ui/archive/`, sounds in `assets/audio/archive/`. A test holds every page to its
+  goal in the standard pack, its files and its credits, as `ReplayClipsTest` does. Rules: a page's
+  unlock turn is the earliest turn any player's goal records hold its goal; the turn report's new
+  pages are those whose goal nobody held at the start of the turn and somebody holds now (the front
+  pages' rule, `FrontPagePrinter`). Server: a new event on every player's report
+  (`ArchivePagesUnlocked`: page ids, and per page whether the player flew it), appended to the
+  registry, and the unlocked pages with their turns and flyers in the Museum's fetch, or a message of
+  its own. A new message or a changed one means rebuilding client and server together; nothing new is
+  saved, so no reset (*proposed*).
 
 ## 7. Suggested mockup order
 
