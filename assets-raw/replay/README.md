@@ -115,6 +115,10 @@ Each folder's `build/` is regenerated on every run and stays out of git.
     `probeCamera()` zooms in, and must come after every `put()`: `put` parents a part to the world after
     placing it, so a part put once the world is scaled lands in the scaled space, off where it belongs.
     `probe-release` is the bus (`v-bus`) and its lander (`v-pod`) alone.
+  - **The carrier's entry** (2026-10-15, `parts.py`'s `b-` parts): `bus-entry`, Venera 7's carrier
+    after its lander has gone, falling into Venus's air (`b-limb`, settling just under it) under a bow
+    of hot air (`b-glow`); its panels tear off at 3.3 and the body bursts at 3.9 in every variant (the
+    carrier was meant to burn up). The variants differ in its radio rings, as the Earth orbit's do.
   - **The landers' tests in Earth orbit** (2026-10-14): `lander-orbit.jsx` (after `moon.jsx`): the
     lander at 0.8 over the way home's limb, the alarm lamp; `lander-engine-test`, `lander-staging`.
   - **The air launch** (2026-10-14): `air.jsx` (after `moon.jsx`, for the lamp): the carrier

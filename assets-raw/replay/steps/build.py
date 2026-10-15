@@ -361,6 +361,12 @@ STEPS = {
         "success": (5.6, 1.2), "glitch": (5.6, 2.2), "failure": (5.6, 2.4),
         "times": [0.5, 1.2, 1.9, 2.6, 3.6, 5.5],
     },
+    # The carrier's entry at Venus (2026-10-15): it burns up in every variant; the data it sends differs.
+    "bus-entry": {
+        "pad": False, "before": ["orbit.jsx"],
+        "success": (6.0, 2.1), "glitch": (6.0, 2.85), "failure": (6.0, 2.85),
+        "times": [0.5, 1.4, 2.2, 3.0, 3.5, 4.1],
+    },
     # The landers' tests in Earth orbit (2026-10-14): lander-orbit.jsx.
     "lander-engine-test": {
         "pad": False, "before": ["moon.jsx", "lander-orbit.jsx"],

@@ -147,7 +147,7 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   preparations, retrofire, retropack jettison or modules separation, reentry, descent to the sea or the
   ground; a crewed orbit borrows the satellite's `earth-orbit`, user), so Mercury's and Vostok's orbital
   flights play whole. By 2026-10-14 every step has a clip, many borrowed (unconfirmed), and all 249 seasons
-  play whole; a clip rule can name the step before (`landing` on the Moon, a runway or a planet). Client only: no reset, no server
+  play whole (Venera 7's carrier entry got its own, `bus-entry`, 2026-10-15: it burns up); a clip rule can name the step before (`landing` on the Moon, a runway or a planet). Client only: no reset, no server
   rebuild.
 - **The replay console** (the user's idea, 2026-10-13, `ui-spec.md` §4.7.3, from the canvas
   `Launch Window — Replay Console`): the monitor is a console with a mission clock, a status gauge and

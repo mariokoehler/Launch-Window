@@ -1910,7 +1910,11 @@ clips, the replay is meant to be watched like a short film, and the player can s
   `assets-raw/replay/CLIP_CHECKLIST.md`. Every clip is generic (it plays for every program that flies
   the step: the payload is the launch rocket's own nose section) and has no lettering (digits only; unconfirmed).
   Steps cut straight into each other, so a step's success and glitch end on the same frame, and a
-  step on the pad ends on the next one's first.
+  step on the pad ends on the next one's first. Where history differs from a borrowed clip, the step
+  gets its own: Venera 7's carrier entry (`interplanetary-bus-entry`) played the capsule's `reentry`
+  right after the lander's, but the carrier burned up (`design.md` §1.1), so it has `bus-entry`
+  (user, 2026-10-15): the carrier burns up in every variant, and only the data it sends home before
+  differs (unconfirmed).
 - **No clip yet:** a step with no clip, or a variant missing, plays `no-signal.webm` on a loop (an
   antenna searching, outcome-neutral) with "No signal" in the bezel; its result shows after a
   1.5 s pause, and playback moves on at 3 s. If no video can play at all (no file, no native
@@ -2025,7 +2029,7 @@ clips, the replay is meant to be watched like a short film, and the player can s
   - **Playback:** a step that follows by itself lets the last one's loops end as their cues say; a
     skip or a step back fades everything but the room within 0.1 s. After the last step, the summary
     and its fanfare wait until the radio is done (a call talking or waiting for its turn), the clip
-    holding its last frame, at most 8 s (user, 2026-10-16); skipping to the summary still cuts it off. Silent when sound is off, checked
+    holding its last frame, at most 8 s (user, 2026-10-15); skipping to the summary still cuts it off. Silent when sound is off, checked
     every frame. Volumes: the sound's own, times the player's setting (§4.12).
   - **Unconfirmed:** the 2 s blip, the 3 s alarm, the static's level, the default volumes (0.7), the
     fanfares' volume (0.8) and their 0.3 s fade.

@@ -324,6 +324,13 @@ leading to satellite navigation.
   problems here. We're tumbling end over end." Apollo 11's landing ran on fuel calls, "sixty
   seconds", "thirty seconds", to "contact light". Ideas for the replay's radio lines are in
   `assets-raw/audio/chatter/CALLOUTS.md`.
+- **The carrier that burns up** (2026-10-15, checked): the early Venera carriers were never meant to
+  survive Venus. Venera 4's station (1967) was built to release its capsule and disintegrate at entry,
+  its own instruments working until then (Wikipedia, "Venera 4"). Venera 7's lander stayed attached
+  into the upper atmosphere, so the carrier could keep it chilled as long as possible; when buffeting
+  broke the carrier's lock on the Earth, it let the lander go (04:58:44 GMT, 15 December 1970), and
+  "while the carrier burned up, the lander experienced peak braking loads of 350 g" (Wikipedia,
+  "Venera 7"; A. LePage, Drew Ex Machina, 2020). It's the carrier-entry step's clip (`bus-entry`).
 - **Expert rescue:** Apollo 13's command-module power-up procedure, devised by EECOM John Aaron
   and the ground team and tested in the simulator by Ken Mattingly, grounded by measles
   exposure. A controller and a non-flying astronaut rescuing a mission together is exactly the

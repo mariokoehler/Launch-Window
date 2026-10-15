@@ -31,7 +31,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: EARTH 173, MOON 52, VENUS 7, MARS 5
   - Programs: Apollo: Earth-orbit tests 17, Soyuz 7K-OK 16, Gemini 15, Soyuz 7K-L3: Earth-orbit tests 12
 - [x] **Countdown** `countdown`: 213 uses in 185 configurations, 54 programs (NASA/SOVIET) **(early-era)**, crew risk in 88 of 213
-  - Clip: `countdown`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `countdown`; [x] success, [x] glitch, [x] failure; cues yes
   - Also covers: `atv-countdown` 10, `gemini-a-countdown` 4, `gemini-b-countdown` 4, `sc-a-countdown` 1, `sc-b-countdown` 1, `transtage-countdown` 2
   - On screen: launcher 213, crewed craft 148, crewed lander 30, probe 19, satellite 11, spaceplane 5
   - Destinations: EARTH 147, MOON 50, VENUS 7, MARS 5
@@ -43,7 +43,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: EARTH 147, MOON 50, VENUS 7, MARS 5
   - Programs: Apollo: Earth-orbit tests 17, Soyuz 7K-OK 16, Gemini 15, Soyuz 7K-L3: Earth-orbit tests 12
 - [x] **Launch preparations** `launch-preparations`: 213 uses in 185 configurations, 54 programs (NASA/SOVIET) **(early-era)**, crew risk in 2 of 213
-  - Clip: `launch-preparations`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `launch-preparations`; [x] success, [x] glitch, [x] failure; cues yes
   - Also covers: `atv-launch-preparations` 10, `gemini-a-launch-preparations` 4, `gemini-b-launch-preparations` 4, `sc-a-launch-preparations` 1, `sc-b-launch-preparations` 1, `transtage-launch-preparations` 2
   - On screen: launcher 213, crewed craft 148, crewed lander 30, probe 19, satellite 11, spaceplane 5
   - Destinations: EARTH 147, MOON 50, VENUS 7, MARS 5
@@ -97,7 +97,7 @@ How to read an entry (all counted automatically, a first pass):
 ## Return to Earth (17)
 
 - [x] **Reentry** `reentry`: 163 uses in 148 configurations, 25 programs (NASA/SOVIET) **(early-era)**, crew risk in 120 of 163, later seasons in 1 of 163
-  - Clip: `reentry`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `reentry`; [x] success, [x] glitch, [x] failure; cues yes
   - Also covers: `gemini-a-reentry` 4, `gemini-b-reentry` 4, `reentry-a` 1, `reentry-b` 1, `sc-a-reentry` 1, `sc-b-reentry` 1, `spc-a-reentry` 2
   - On screen: crewed craft 139, crewed lander 16, spaceplane 5, satellite 2, probe 1
   - Destinations: EARTH 128, MOON 35
@@ -109,7 +109,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: EARTH 89, MOON 14
   - Programs: Apollo: Earth-orbit tests 16, Soyuz 7K-OK 16, LK-700: Earth-orbit tests 11, Soyuz 7K-L3: Earth-orbit tests 11
 - [x] **Reentry preparations** `reentry-preparations`: 102 uses in 91 configurations, 14 programs (NASA/SOVIET) **(early-era)**, crew risk in 73 of 102
-  - Clip: `reentry-preparations`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `reentry-preparations`; [x] success, [x] glitch, [x] failure; cues yes
   - Also covers: `gemini-a-reentry-preparations` 4, `gemini-b-reentry-preparations` 4, `reentry-preparations-a` 1, `reentry-preparations-b` 1, `spc-a-reentry-preparations` 1, `spc-b-reentry-preparations` 1
   - On screen: crewed craft 102
   - Destinations: EARTH 93, MOON 9
@@ -237,12 +237,12 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: MOON 3, EARTH 2
   - Programs: Apollo 3, Apollo: Earth-orbit tests 2
 - [x] **Coast to high point** `co-apoa`: 4 uses in 4 configurations, 2 programs (NASA) crewed in 2 of 4
-  - Clip: `earth-orbit`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `earth-orbit`; [x] success, [x] glitch, [x] failure; cues yes
   - On screen: crewed craft 4
   - Destinations: EARTH 4
   - Programs: Gemini Direct Ascent: Earth-orbit tests 2, Lunar-orbit Gemini: Earth-orbit tests 2
 - [x] **Coast to reentry** `co-enin`: 4 uses in 4 configurations, 2 programs (NASA) crewed in 2 of 4
-  - Clip: `earth-orbit`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `earth-orbit`; [x] success, [x] glitch, [x] failure; cues yes
   - On screen: crewed craft 4
   - Destinations: EARTH 4
   - Programs: Gemini Direct Ascent: Earth-orbit tests 2, Lunar-orbit Gemini: Earth-orbit tests 2
@@ -592,7 +592,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: SUN 6
   - Programs: Pioneer Sun orbiter 1
 - [x] **Lander entry** `lander-entry`: 5 uses in 5 configurations, 4 programs (NASA/SOVIET) uncrewed, later seasons in 2 of 5
-  - Clip: `reentry`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `reentry`; [x] success, [x] glitch, [x] failure; cues yes
   - On screen: probe 4, probe lander 1
   - Destinations: VENUS 3, MARS 2
   - Programs: Venera lander 2, Mars 2 1, Venera 7 1, Viking 1
@@ -647,7 +647,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: MERCURY 2
   - Programs: Mariner 10 1
 - [x] **Large probe entry** `big-probe-approach-and-entry`: 1 use in 1 configuration, 1 program (NASA) uncrewed
-  - Clip: `reentry`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `reentry`; [x] success, [x] glitch, [x] failure; cues yes
   - On screen: probe 1
   - Destinations: VENUS 1
   - Programs: Pioneer Venus Multiprobe 1
@@ -672,7 +672,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: SUN 1
   - Programs: Pioneer Sun orbiter 1
 - [x] **Carrier entry** `interplanetary-bus-entry`: 1 use in 1 configuration, 1 program (SOVIET) uncrewed
-  - Clip: `reentry`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `bus-entry`; [x] success, [x] glitch, [x] failure; cues yes
   - On screen: probe 1
   - Destinations: VENUS 1
   - Programs: Venera 7 1
@@ -712,7 +712,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: SATURN 1
   - Programs: Pioneer 11 1
 - [x] **Small probes entry** `small-probes-approach-and-entry`: 1 use in 1 configuration, 1 program (NASA) uncrewed
-  - Clip: `reentry`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `reentry`; [x] success, [x] glitch, [x] failure; cues yes
   - On screen: probe 1
   - Destinations: VENUS 1
   - Programs: Pioneer Venus Multiprobe 1
@@ -730,13 +730,13 @@ How to read an entry (all counted automatically, a first pass):
 ## Earth orbit (15)
 
 - [x] **Deployment** `deployment`: 229 uses in 183 configurations, 54 programs (NASA/SOVIET) **(early-era)**, crew risk in 123 of 229
-  - Clip: `deployment`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `deployment`; [x] success, [x] glitch, [x] failure; cues yes
   - Also covers: `atv-deployment` 14, `deployment-a` 1, `deployment-b` 1, `gemini-a-deployment` 4, `gemini-b-deployment` 4, `lk-700-deployment` 9, `sc-a-deployment` 1, `sc-b-deployment` 1, `soyuz-7k-l3-lok-deployment` 11, `soyuz-7k-ok-deployment` 19, `spc-a-deployment` 2, `spc-b-deployment` 2, `transtage-deployment` 2
   - On screen: launcher 227, crewed craft 165, crewed lander 29, probe 21, satellite 11, spaceplane 5
   - Destinations: EARTH 157, MOON 56, VENUS 7, MARS 5
   - Programs: Apollo: Earth-orbit tests 17, Soyuz 7K-OK 16, Gemini 15, LK-700: Earth-orbit tests 11
 - [x] **Earth orbit** `earth-orbit`: 164 uses in 86 configurations, 20 programs (NASA/SOVIET) **(early-era)**, crew risk in 125 of 164, later seasons in 2 of 164
-  - Clip: `earth-orbit`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `earth-orbit`; [x] success, [x] glitch, [x] failure; cues yes
   - Also covers: `earth-orbit-a` 2, `gemini-a-earth-orbit` 4, `gemini-b-earth-orbit` 4, `sc-a-earth-orbit` 1, `sc-b-earth-orbit` 1, `transtage-earth-orbit` 2
   - On screen: crewed craft 140, crewed lander 25, satellite 13, launcher 7, spaceplane 3, stage or target 3
   - Destinations: EARTH 123, MOON 41
@@ -748,22 +748,22 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: EARTH 77, MOON 6
   - Programs: Soyuz 7K-OK 16, Apollo: Earth-orbit tests 14, LK-700: Earth-orbit tests 11, Soyuz 7K-L3: Earth-orbit tests 11
 - [x] **Earth orbit** `earth-orbital`: 43 uses in 28 configurations, 6 programs (SOVIET) **(early-era)**, crew risk in 38 of 43
-  - Clip: `earth-orbit`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `earth-orbit`; [x] success, [x] glitch, [x] failure; cues yes
   - On screen: crewed craft 35, crewed lander 8
   - Destinations: EARTH 43
   - Programs: LK-700: Earth-orbit tests 8, Soyuz 7K-OK 8, Soyuz 7K-L3: Earth-orbit tests 6, Soyuz 7K-L1: Earth-orbit tests 4
 - [x] **Parking orbit** `parking-orbit`: 23 uses in 23 configurations, 5 programs (NASA/SOVIET) crew risk in 13 of 23
-  - Clip: `earth-orbit`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `earth-orbit`; [x] success, [x] glitch, [x] failure; cues yes
   - On screen: crewed craft 18, launcher 12, crewed lander 10
   - Destinations: MOON 23
   - Programs: Soyuz 7K-L3 lunar landing 6, Gemini Direct Ascent 5, LK-700 Direct Ascent 5, Lunar-orbit Gemini 4
 - [x] **Orbit insertion** `insertion`: 21 uses in 20 configurations, 4 programs (NASA/SOVIET) crew risk in 16 of 21
-  - Clip: `insertion`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `insertion`; [x] success, [x] glitch, [x] failure; cues yes
   - On screen: launcher 21, crewed craft 20, crewed lander 5
   - Destinations: EARTH 17, MOON 4
   - Programs: Apollo: Earth-orbit tests 10, Gemini EOR 4, Soyuz 7K-OK 4, Gemini EOR: Earth-orbit tests 2
 - [x] **Orbital flight** `orbital-flight`: 12 uses in 10 configurations, 3 programs (NASA/SOVIET) **(early-era)**, crew risk in 9 of 12
-  - Clip: `earth-orbit`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `earth-orbit`; [x] success, [x] glitch, [x] failure; cues yes
   - Also covers: `spc-a-orbital-flight` 2, `spc-b-orbital-flight` 2
   - On screen: crewed craft 11, spaceplane 1
   - Destinations: EARTH 12
@@ -779,7 +779,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: MOON 2
   - Programs: Circumlunar Gemini 2
 - [x] **Orbit insertion** `orbit-insertion`: 2 uses in 2 configurations, 2 programs (NASA) crew risk in 1 of 2
-  - Clip: `insertion`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `insertion`; [x] success, [x] glitch, [x] failure; cues yes
   - On screen: crewed craft 2, launcher 2
   - Destinations: EARTH 2
   - Programs: Gemini 1, Lunar-orbit Gemini: Earth-orbit tests 1
@@ -789,17 +789,17 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: EARTH 2
   - Programs: Lunar-orbit Gemini: Earth-orbit tests 2
 - [x] **Burn to high orbit** `btm-earth-orbit`: 1 use in 1 configuration, 1 program (NASA) crew risk in 1 of 1
-  - Clip: `insertion`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `insertion`; [x] success, [x] glitch, [x] failure; cues yes
   - On screen: crewed craft 1, crewed lander 1
   - Destinations: EARTH 1
   - Programs: Gemini EOR: Earth-orbit tests 1
 - [x] **Burn to high orbit** `injection-to-elliptical-meo`: 1 use in 1 configuration, 1 program (NASA) crew risk in 1 of 1
-  - Clip: `insertion`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `insertion`; [x] success, [x] glitch, [x] failure; cues yes
   - On screen: crewed craft 1, crewed lander 1, launcher 1
   - Destinations: EARTH 1
   - Programs: Apollo: Earth-orbit tests 1
 - [x] **High orbit** `meo`: 1 use in 1 configuration, 1 program (NASA) crew risk in 1 of 1
-  - Clip: `earth-orbit`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `earth-orbit`; [x] success, [x] glitch, [x] failure; cues yes
   - On screen: crewed craft 1
   - Destinations: EARTH 1
   - Programs: Apollo: Earth-orbit tests 1

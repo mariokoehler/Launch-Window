@@ -111,7 +111,7 @@
     {"step": "big-probe-release", "clip": "probe-release"},
     {"step": "small-probes-release", "clip": "probe-release"},
     {"step": "lander-entry", "clip": "reentry"},
-    {"step": "interplanetary-bus-entry", "clip": "reentry"},
+    {"step": "interplanetary-bus-entry", "clip": "bus-entry"},
     {"step": "big-probe-approach-and-entry", "clip": "reentry"},
     {"step": "small-probes-approach-and-entry", "clip": "reentry"},
     {"step": "lander-descent", "clip": "descent-chutes"},

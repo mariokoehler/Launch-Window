@@ -896,6 +896,38 @@ def probe_parts():
     layer("v-latch", "".join(f'<circle cx="{bx + dx}" cy="{by + 78}" r="8" fill="{GOLD}"/>' for dx in (-26, 26)), (bx, by + 78))
 
 
+def carrier_entry_parts():
+    # The carrier's entry (2026-10-15): Venus's limb under its clouds, as the Earth's (d-earth) with
+    # Venus's bands, and its air in two dashed shells; the carrier (v-bus) in three pieces that come
+    # apart (its panels, then its body), the bow of hot air under it, and the body glowing.
+    cx, cy, r = 960, 3100, 2280
+    bands = "".join(f'<circle cx="{cx}" cy="{cy}" r="{r - d}" fill="none" {LINE} stroke-width="2" opacity="0.5"/>'
+                    for d in (70, 160, 270, 400))
+    layer("b-limb", f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="#ffffff" {LINE} stroke-width="3"/>{bands}'
+                    f'<circle cx="{cx}" cy="{cy}" r="{r + 22}" fill="none" {LINE} stroke-width="1.5" stroke-dasharray="6 8" opacity="0.6"/>'
+                    f'<circle cx="{cx}" cy="{cy}" r="{r + 60}" fill="none" {LINE} stroke-width="1.5" stroke-dasharray="6 12" opacity="0.4"/>',
+          (cx, cy))
+    bx, by = 960, 380
+    panel = (lambda x0, x1: f'<path d="M{x0} {by - 14} L{x1} {by - 14} L{x1} {by + 14} L{x0} {by + 14} Z" '
+                            f'fill="url(#hatch)" {LINE} stroke-width="3"/>')
+    layer("b-panel-l", panel(bx - 300, bx - 90), (bx - 195, by))
+    layer("b-panel-r", panel(bx + 90, bx + 300), (bx + 195, by))
+    body = (f'<rect x="{bx - 70}" y="{by - 60}" width="140" height="120" rx="8" fill="#ffffff" {LINE} stroke-width="3"/>'
+            f'<path d="M{bx - 70} {by - 70} L{bx - 90} {by} L{bx - 70} {by + 70} M{bx + 70} {by - 70} L{bx + 90} {by} L{bx + 70} {by + 70}" fill="none" {LINE} stroke-width="2"/>'
+            f'<path d="M{bx - 50} {by - 60} Q{bx} {by - 120} {bx + 50} {by - 60} Z" fill="#ffffff" {LINE} stroke-width="3"/>'
+            f'<path d="M{bx - 40} {by + 60} L{bx - 30} {by + 76} L{bx + 30} {by + 76} L{bx + 40} {by + 60}" fill="none" {LINE} stroke-width="3"/>')
+    layer("b-body", body, (bx, by))
+    layer("b-hot", f'<rect x="{bx - 70}" y="{by - 60}" width="140" height="120" rx="8" fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="3"/>',
+          (bx, by))
+    # The bow of hot air ahead of it (it falls base first, so under it), as wide as the panels.
+    bow = (f'<path d="M{bx - 330} {by + 20} C{bx - 220} {by + 190} {bx + 220} {by + 190} {bx + 330} {by + 20} '
+           f'C{bx + 200} {by + 120} {bx - 200} {by + 120} {bx - 330} {by + 20} Z" fill="{GOLD_FILL}" stroke="{GOLD}" '
+           f'stroke-width="2" stroke-linejoin="round"/>'
+           f'<path d="M{bx - 300} {by + 40} C{bx - 190} {by + 170} {bx + 190} {by + 170} {bx + 300} {by + 40}" fill="none" '
+           f'stroke="{GOLD}" stroke-width="4" stroke-linecap="round"/>')
+    layer("b-glow", bow, (bx, by + 100))
+
+
 # --- The air launch: a carrier plane with the rocket plane under its wing --------------------------------
 
 # The carrier, nose right, standing on the runway (y 772), its pivot at its main wheels (AC). The rocket
@@ -965,6 +997,7 @@ def main():
     stage_parts()
     plane_parts()
     probe_parts()
+    carrier_entry_parts()
     air_parts()
     if ONLY:
         # Keep the parts not redrawn.

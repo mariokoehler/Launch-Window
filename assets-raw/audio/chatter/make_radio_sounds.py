@@ -43,7 +43,7 @@ SOUNDS = {
     "radio-signal-good": (["power_and_telemetry_nominal", "data_coming_in_now (1)", "data_coming_in_now (2)",
                            "data_coming_in_now (3)"],
         "\"Power and telemetry nominal.\" / \"Data coming in now.\" A satellite in orbit calling home, its "
-        "success, at the reveal."),
+        "success, at the reveal; the carrier entry's success (its data home before it burns up)."),
     "radio-watching": (["watching_it", "we_are_looking_at_it", "standby"],
         "\"Watching it.\" / \"We're looking at it.\" / \"Stand by.\" Before a reveal, in every variant: the "
         "deployment's opening."),
@@ -71,7 +71,7 @@ SOUNDS = {
                               "loss_of_signal_acquisition_of_signal_data_looks_good (2)"],
         "\"Flight, we've lost telemetry. … We have it back. Signal is good.\" / \"Loss of signal. … "
         "Acquisition of signal. Data looks good.\" A satellite's or a crew's signal dropping out and coming "
-        "back: the Earth orbit's and the biometric data's glitches."),
+        "back: the glitches of the Earth orbit, the biometric data and the carrier entry."),
     "radio-undervolt": (["flight_main_bus_undervolt_switching_to_backup_voltage_is_coming_back (1)",
                          "flight_main_bus_undervolt_switching_to_backup_voltage_is_coming_back (2)",
                          "flight_main_bus_undervolt_switching_to_backup_voltage_is_coming_back (3)"]
@@ -115,7 +115,7 @@ SOUNDS = {
                         + takes("loss_of_signal_still_no_signal_no_acquisition", 6),
         "\"Flight, we've lost all data.\" / \"We have no downlink.\" / \"No signal. We've lost the spacecraft.\" / "
         "\"Loss of signal. … Still no signal. … No acquisition.\" A craft in orbit falling silent: the failures "
-        "of the Earth orbit, the experiments and the biometric data."),
+        "of the Earth orbit, the experiments, the biometric data and the carrier entry."),
     "radio-pressure": (takes("pressure_is_dropping_fast", 4),
         "\"Pressure is dropping fast.\" The long flights' failures (the crew comes home early)."),
     "radio-problem": (takes("flight_we_have_had_a_problem_here", 2),
