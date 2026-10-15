@@ -341,7 +341,11 @@ leading to satellite navigation.
   2.4 m/s (Wikipedia, "Viking 1"). Mars 3 used a heat shield, a parachute and retrorockets the same
   way. Mars 2's lander, five days earlier, hit the atmosphere too steeply and its chute never opened
   (Wikipedia, "Mars 2"). They're the lander-descent step's clips (`venus-descent`: the glitch is Venera
-  7's torn chute; `mars-descent`).
+  7's torn chute; `mars-descent`). Viking 2's lander came down with one footpad on a rock and stood tilted
+  about 8 degrees, which tilted the horizon in its pictures (Malin Space Science Systems, "Views from the
+  Viking Landers"; NSSDC's caption of its first colour picture); Mars 3, down safely in a dust storm, sent
+  for a few seconds and then nothing more (Wikipedia, "Mars 3"). They're the Mars landing's glitch and
+  failure (`mars-landing`).
 - **Expert rescue:** Apollo 13's command-module power-up procedure, devised by EECOM John Aaron
   and the ground team and tested in the simulator by Ken Mattingly, grounded by measles
   exposure. A controller and a non-flying astronaut rescuing a mission together is exactly the

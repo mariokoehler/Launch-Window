@@ -44,7 +44,7 @@ SOUNDS = {
                            "data_coming_in_now (3)"],
         "\"Power and telemetry nominal.\" / \"Data coming in now.\" A satellite in orbit calling home, its "
         "success, at the reveal; the carrier entry's success (its data home before it burns up); the "
-        "landers' descents at Venus and Mars, their successes."),
+        "landers' descents at Venus and Mars, their successes; the Mars landing's (the dish sending home)."),
     "radio-watching": (["watching_it", "we_are_looking_at_it", "standby"],
         "\"Watching it.\" / \"We're looking at it.\" / \"Stand by.\" Before a reveal, in every variant: the "
         "deployment's opening."),

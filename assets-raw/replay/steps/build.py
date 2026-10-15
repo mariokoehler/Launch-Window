@@ -383,6 +383,12 @@ STEPS = {
         "success": (6.0, 3.2), "glitch": (6.0, 3.5), "failure": (6.0, 3.3),
         "times": [0.3, 1.2, 2.2, 3.2, 4.2, 5.4],
     },
+    # A lander's landing on Mars (2026-10-15): on from mars-descent, Viking 2's tilt, Mars 3's silence.
+    "mars-landing": {
+        "pad": False, "before": ["orbit.jsx"],
+        "success": (6.0, 3.8), "glitch": (6.0, 2.8), "failure": (6.0, 3.8),
+        "times": [0.0, 1.4, 2.4, 3.0, 3.9, 5.9],
+    },
     # The carrier's entry at Venus (2026-10-15): it burns up in every variant; the data it sends differs.
     "bus-entry": {
         "pad": False, "before": ["orbit.jsx"],

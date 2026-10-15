@@ -155,7 +155,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: EARTH 16, MOON 11
   - Programs: Apollo: Earth-orbit tests 14, Apollo 7, Gemini EOR 4, Gemini EOR: Earth-orbit tests 2
 - [x] **Landing** `landing`: 18 uses in 17 configurations, 9 programs (NASA/SOVIET) crew risk in 13 of 18, later seasons in 1 of 18
-  - Clip: by the steps before: `runway-landing` after `descent` 9, `lunar-landing` after `powered-descent` 4, `probe-landing` after `lander-descent` 3, `lunar-landing` after `lunar-approach` 2; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: by the steps before: `runway-landing` after `descent` 9, `lunar-landing` after `powered-descent` 4, `lunar-landing` after `lunar-approach` 2, `probe-landing` after `lander-descent` 2, `mars-landing` `mars-approach` earlier 1; [x] success, [x] glitch, [x] failure; cues no
   - Also covers: `sc-a-landing` 1, `sc-b-landing` 1
   - On screen: spaceplane 9, crewed craft 3, crewed lander 3, probe 3, probe lander 2, rover 1
   - Destinations: EARTH 9, MOON 6, VENUS 2, MARS 1
@@ -188,7 +188,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: EARTH 2
   - Programs: Apollo: Earth-orbit tests 2
 - [x] **Landing and deployment** `landing-and-deployment`: 1 use in 1 configuration, 1 program (SOVIET) uncrewed, later seasons in 1 of 1
-  - Clip: `probe-landing`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `mars-landing`; [x] success, [x] glitch, [x] failure; cues yes
   - On screen: probe 1
   - Destinations: MARS 1
   - Programs: Mars 2 1

@@ -988,6 +988,14 @@ def planet_descent_parts():
                       f'<path d="M-900 1100 ' + " ".join(f"Q{gx + 160} {1100 - (18 if (gx // 320) % 2 else 8)} {gx + 320} 1100"
                                                         for gx in range(-900, 2900, 320)) + f'" fill="none" {LINE} stroke-width="3"/>'
                       + craters, (960, 1100))
+    # The landing (mars-landing): stones on m-ground's line, clear of where the feet come down (x 840 and
+    # 1080), and the rock one foot lands on (Viking 2's), under the right foot.
+    stones = "".join(f'<path d="M{sx - w} 1102 L{sx - w * 0.6} {1102 - h} L{sx + w * 0.4} {1100 - h * 1.1} L{sx + w} 1102 Z" '
+                     f'fill="#ffffff" {LINE} stroke-width="2.4"/>'
+                     for sx, w, h in ((180, 26, 18), (420, 14, 10), (640, 20, 14), (1290, 16, 12), (1500, 30, 20), (1760, 18, 12)))
+    layer("m-stones", stones, (960, 1100))
+    layer("m-rock", f'<path d="M1056 1104 L1066 1080 L1090 1072 L1104 1084 L1108 1104 Z" fill="#ffffff" {LINE} stroke-width="2.4"/>',
+          (1080, 1100))
 
 
 # --- The air launch: a carrier plane with the rocket plane under its wing --------------------------------

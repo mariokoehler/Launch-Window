@@ -78,6 +78,11 @@ class ReplayClipsTest {
         assertEquals("venus-descent", CLIPS.clipName("12-lander-descent",
             java.util.List.of("09-venus-approach", "10-lander-release", "11-lander-entry")).orElseThrow());
         assertEquals("venus-descent", CLIPS.clipName("12-lander-descent", "11-lander-entry").orElseThrow());
+        // So does its landing: Viking's at Mars, Venera's at Venus.
+        assertEquals("mars-landing", CLIPS.clipName("06-landing", java.util.List.of("01-earth-mars-transit",
+            "02-mars-approach", "03-lander-deployment-and-de-orbit", "04-lander-entry", "05-lander-descent")).orElseThrow());
+        assertEquals("probe-landing", CLIPS.clipName("13-landing",
+            java.util.List.of("10-venus-approach", "11-lander-entry", "12-lander-descent")).orElseThrow());
         assertTrue(CLIPS.clipName("12-landing").isEmpty());
         // lunar-ascent plays its own clip, never ascent's; ascent plays it only after a lunar liftoff.
         assertEquals("lunar-ascent", CLIPS.clipName("12-lunar-ascent").orElseThrow());

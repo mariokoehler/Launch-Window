@@ -178,7 +178,7 @@
         "audio/replay/radio-signal-good-4.mp3"
       ],
       "credit": true,
-      "description": "\"Power and telemetry nominal.\" / \"Data coming in now.\" A satellite in orbit calling home, its success, at the reveal; the carrier entry's success (its data home before it burns up); the landers' descents at Venus and Mars, their successes. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"Power and telemetry nominal.\" / \"Data coming in now.\" A satellite in orbit calling home, its success, at the reveal; the carrier entry's success (its data home before it burns up); the landers' descents at Venus and Mars, their successes; the Mars landing's (the dish sending home). Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
     },
     {
       "id": "radio-watching",

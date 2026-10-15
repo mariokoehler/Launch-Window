@@ -123,6 +123,10 @@
     "glitch": [{"at": 3.55, "sound": "radio-attitude-drift"}],
     "failure": [{"at": 3.35, "sound": "radio-burn-failed"}]
   },
+  "mars-landing": {
+    "success": [{"at": 3.85, "sound": "radio-signal-good"}],
+    "failure": [{"at": 3.85, "sound": "radio-lander-lost"}]
+  },
   "bus-entry": {
     "success": [{"at": 2.15, "sound": "radio-signal-good"}],
     "glitch": [{"at": 2.9, "sound": "radio-telemetry-lost"}],

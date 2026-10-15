@@ -1922,8 +1922,11 @@ clips, the replay is meant to be watched like a short film, and the player can s
   (user, 2026-10-15). Their descents had the capsule's chutes; they have `venus-descent` (Venera's
   reefed chute opening; the glitch tears it, as Venera 7's did, the failure tears it away) and
   `mars-descent` (Viking's chute, heat shield, legs and three engines; the glitch lights one late, the
-  failure none), Mars picked by an earlier step (user, 2026-10-15; the stories unconfirmed). The landing
-  that follows still shows Venera's sphere at Mars too.
+  failure none), Mars picked by an earlier step (user, 2026-10-15; the stories unconfirmed). At Mars the
+  landing follows on in `mars-landing` (Viking's lander on its engines; the glitch stands on a rock,
+  tilted, as Viking 2 did; the failure sends once and falls silent, as Mars 3 did), for `landing` and
+  `landing-and-deployment` (user, 2026-10-15; unconfirmed). The work on the surface after it
+  (`mars-surface`) still shows Venera's sphere.
 - **No clip yet:** a step with no clip, or a variant missing, plays `no-signal.webm` on a loop (an
   antenna searching, outcome-neutral) with "No signal" in the bezel; its result shows after a
   1.5 s pause, and playback moves on at 3 s. If no video can play at all (no file, no native

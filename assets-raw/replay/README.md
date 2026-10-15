@@ -129,6 +129,9 @@ Each folder's `build/` is regenerated on every run and stays out of git.
     `r-main`, through the cloud bands; the glitch tears it back to half at 3.2, the failure tears it away.
     Mars: Viking's sequence, the speed lines (`a-flow`) stood on end as dust; the glitch's third engine
     lights late, the failure's never do. The rule picks Mars by `mars-approach` earlier in the season.
+  - **The landing on Mars** (2026-10-15, `m-stones`, `m-rock`): `mars-landing.jsx` (after `orbit.jsx`,
+    for the rings), on from the descent's last frame (`m-ground`'s line at 900): down on the engines, cut at
+    2.4, the dish sending from 3.0; the glitch's right foot on `m-rock` (Viking 2), the failure sends once.
   - **The landers' tests in Earth orbit** (2026-10-14): `lander-orbit.jsx` (after `moon.jsx`): the
     lander at 0.8 over the way home's limb, the alarm lamp; `lander-engine-test`, `lander-staging`.
   - **The air launch** (2026-10-14): `air.jsx` (after `moon.jsx`, for the lamp): the carrier
