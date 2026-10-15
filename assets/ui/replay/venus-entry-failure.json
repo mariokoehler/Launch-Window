@@ -1,0 +1,10 @@
+{
+ "duration": 6.4,
+ "revealAt": 3.4,
+ "cues": [
+  {
+   "at": 3.45,
+   "sound": "radio-lander-lost"
+  }
+ ]
+}

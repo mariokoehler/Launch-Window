@@ -928,6 +928,26 @@ def carrier_entry_parts():
     layer("b-glow", bow, (bx, by + 100))
 
 
+def planet_entry_parts():
+    # A lander's entry at another planet (2026-10-15): Mars's limb (Venus's is b-limb), hatched as
+    # p-mars, with one thin shell of air; the Mars landers' aeroshell (Viking's and Mars 3's blunt cone,
+    # heat shield down; Venera's is a sphere, v-pod); and a bow of hot air the lander's width.
+    cx, cy, r = 960, 3100, 2280
+    layer("e-limb-mars", f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="url(#hatch)" {LINE} stroke-width="3"/>'
+                         f'<circle cx="{cx}" cy="{cy}" r="{r + 22}" fill="none" {LINE} stroke-width="1.5" stroke-dasharray="6 8" opacity="0.6"/>',
+          (cx, cy))
+    x, y = 960, 440
+    layer("e-shell", f'<path d="M{x - 100} {y + 20} L{x - 34} {y - 40} L{x + 34} {y - 40} L{x + 100} {y + 20} Z" fill="#ffffff" {LINE} stroke-width="3"/>'
+                     f'<path d="M{x - 108} {y + 20} Q{x} {y + 66} {x + 108} {y + 20} Z" fill="url(#hatch)" {LINE} stroke-width="3"/>',
+          (x, y))
+    bow = (f'<path d="M{x - 150} {y + 30} C{x - 100} {y + 170} {x + 100} {y + 170} {x + 150} {y + 30} '
+           f'C{x + 90} {y + 110} {x - 90} {y + 110} {x - 150} {y + 30} Z" fill="{GOLD_FILL}" stroke="{GOLD}" '
+           f'stroke-width="2" stroke-linejoin="round"/>'
+           f'<path d="M{x - 130} {y + 50} C{x - 80} {y + 150} {x + 80} {y + 150} {x + 130} {y + 50}" fill="none" '
+           f'stroke="{GOLD}" stroke-width="4" stroke-linecap="round"/>')
+    layer("e-glow", bow, (x, y))
+
+
 # --- The air launch: a carrier plane with the rocket plane under its wing --------------------------------
 
 # The carrier, nose right, standing on the runway (y 772), its pivot at its main wheels (AC). The rocket
@@ -998,6 +1018,7 @@ def main():
     plane_parts()
     probe_parts()
     carrier_entry_parts()
+    planet_entry_parts()
     air_parts()
     if ONLY:
         # Keep the parts not redrawn.

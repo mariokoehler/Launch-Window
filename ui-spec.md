@@ -1914,7 +1914,10 @@ clips, the replay is meant to be watched like a short film, and the player can s
   gets its own: Venera 7's carrier entry (`interplanetary-bus-entry`) played the capsule's `reentry`
   right after the lander's, but the carrier burned up (`design.md` §1.1), so it has `bus-entry`
   (user, 2026-10-15): the carrier burns up in every variant, and only the data it sends home before
-  differs (unconfirmed).
+  differs (unconfirmed). The landers' entries had the Earth capsule's `reentry` too, Earth's limb and
+  all; they have `venus-entry` (Venera's sphere, the Pioneer Venus probes) and `mars-entry` (Viking's
+  and Mars 3's aeroshell), the reentry's story at their planet, Mars picked by the step before
+  (user, 2026-10-15).
 - **No clip yet:** a step with no clip, or a variant missing, plays `no-signal.webm` on a loop (an
   antenna searching, outcome-neutral) with "No signal" in the bezel; its result shows after a
   1.5 s pause, and playback moves on at 3 s. If no video can play at all (no file, no native

@@ -119,6 +119,10 @@ Each folder's `build/` is regenerated on every run and stays out of git.
     after its lander has gone, falling into Venus's air (`b-limb`, settling just under it) under a bow
     of hot air (`b-glow`); its panels tear off at 3.3 and the body bursts at 3.9 in every variant (the
     carrier was meant to burn up). The variants differ in its radio rings, as the Earth orbit's do.
+  - **A lander's entry** (2026-10-15, `e-` parts): `planet-entry.jsx` (`PLANET`, set by the one-line
+    `venus-entry.jsx` or `mars-entry.jsx` first), the reentry's story at Venus (`b-limb`, Venera's
+    sphere `v-pod` at twice its size) or Mars (`e-limb-mars`, the aeroshell `e-shell`), with a bow of
+    hot air (`e-glow`) that turns with the lander.
   - **The landers' tests in Earth orbit** (2026-10-14): `lander-orbit.jsx` (after `moon.jsx`): the
     lander at 0.8 over the way home's limb, the alarm lamp; `lander-engine-test`, `lander-staging`.
   - **The air launch** (2026-10-14): `air.jsx` (after `moon.jsx`, for the lamp): the carrier

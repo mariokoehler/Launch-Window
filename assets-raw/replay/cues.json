@@ -105,6 +105,14 @@
     "glitch": [{"at": 3.45, "sound": "radio-program-alarm"}],
     "failure": [{"at": 3.25, "sound": "radio-abort-landing"}]
   },
+  "venus-entry": {
+    "glitch": [{"at": 4.45, "sound": "radio-oscillations"}],
+    "failure": [{"at": 3.45, "sound": "radio-lander-lost"}]
+  },
+  "mars-entry": {
+    "glitch": [{"at": 4.45, "sound": "radio-oscillations"}],
+    "failure": [{"at": 3.45, "sound": "radio-lander-lost"}]
+  },
   "bus-entry": {
     "success": [{"at": 2.15, "sound": "radio-signal-good"}],
     "glitch": [{"at": 2.9, "sound": "radio-telemetry-lost"}],

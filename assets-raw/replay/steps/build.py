@@ -361,6 +361,17 @@ STEPS = {
         "success": (5.6, 1.2), "glitch": (5.6, 2.2), "failure": (5.6, 2.4),
         "times": [0.5, 1.2, 1.9, 2.6, 3.6, 5.5],
     },
+    # A lander's entry at Venus or Mars (2026-10-15): planet-entry.jsx, the reentry's story there.
+    "venus-entry": {
+        "pad": False, "after": ["planet-entry.jsx"],
+        "success": (6.4, 4.0), "glitch": (6.4, 4.4), "failure": (6.4, 3.4),
+        "times": [0.4, 1.6, 2.6, 3.4, 4.6, 6.3],
+    },
+    "mars-entry": {
+        "pad": False, "after": ["planet-entry.jsx"],
+        "success": (6.4, 4.0), "glitch": (6.4, 4.4), "failure": (6.4, 3.4),
+        "times": [0.4, 1.6, 2.6, 3.4, 4.6, 6.3],
+    },
     # The carrier's entry at Venus (2026-10-15): it burns up in every variant; the data it sends differs.
     "bus-entry": {
         "pad": False, "before": ["orbit.jsx"],
