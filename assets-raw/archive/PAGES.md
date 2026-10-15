@@ -148,9 +148,24 @@ Orbiter's two frames are Langley's scans of NSSDC's `lo1_h102_123` and `lo2_h162
   2026-10-13, `design.md` §1.1: credited as © Druyan-Sagan Associates, claiming no licence; taken out at
   once if the estate objects).
 
+## Added 2026-10-15: eight more pages
+
+Their pictures, sources and rights are in `make_archive_assets.py` (`PICTURES`) and `assets/CREDITS.md`; the
+figures' sources in `CHECKS.md`.
+- **NASA:** Surveyor 1 (its footpad and mosaic are small pictures from a 2021 NASA article, with no catalog
+  number; PIA02976, S66-32144), Apollo 15 (AS15-86-11603, AS15-85-11425, AS15-88-11866, S71-42955, S71-43788,
+  and the hammer and feather cut from NSSDC's video), Mariner 10 (PIA03103, whose library caption is wrong;
+  PIA23791, JPL's own 2020 reprocessing; PIA02961; PIA02962), Pioneer 11 (two NASA Science pictures with no
+  catalog number, credited NASA/Ames; ARC-1979-AC79-9114-57, the mission control room).
+- **Soviet:** Luna 9 (NSSDC's `luna9close_big`, 1966, out of German protection), Lunokhod 1 (LRO frame
+  M175502049RC from NASA's PDS archive, public domain under LROC's terms, cropped and mirrored; NSSDC's
+  `lunokhod` photo, publication date unverified), Luna 16 (PIA12984, an LROC product NASA republishes: LROC's
+  terms reserve such products, a low to medium risk; NSSDC's small `luna16`), Venera 15 and 16 (the PDS
+  Geosciences Node's `venera-maxwell` and PIA00465: 1983 Soviet radar data, a medium risk).
+- **LROC's terms** (https://www.lroc.asu.edu/about/terms): what its PDS archive delivers is public domain; its
+  website's featured images and products are ASU's, free for education with the credit
+  "NASA/GSFC/Arizona State University".
+
 ## Later candidates
-- **Luna 9** (February 1966), the first picture from the Moon's surface, for `lunar-surface-photos`.
-  Commons `File:First_Photo_from_the_Surface_of_the_Moon.jpg` (its NASA source link has gone; low to medium
-  risk).
-- **Surveyor 1, Mariner 10** (Mercury), **Pioneer 11** (Saturn), **Venera 15/16** radar maps, **Apollo 15 to
-  17** with their rovers.
+- **Venera 9's first picture,** with Don P. Mitchell's permission (the user's call; left out for now).
+- **Apollo 16 and 17,** Luna 17's sister rover Lunokhod 2, Mars 3's one picture.

@@ -322,6 +322,170 @@
       ]
     },
     {
+      "id": "luna-9",
+      "goalId": "lunar-surface-photos",
+      "title": "Luna 9: the first pictures from the Moon",
+      "agency": "USSR",
+      "date": "February 1966",
+      "when": "1966-02",
+      "summary": "The first soft landing on the Moon, and the first look around from its surface.",
+      "facts": [
+        {
+          "label": "Craft",
+          "value": "Luna 9, with a 99 kg ball-shaped lander"
+        },
+        {
+          "label": "Launch vehicle",
+          "value": "Molniya-M"
+        },
+        {
+          "label": "Launched",
+          "value": "31 January 1966, Baikonur"
+        },
+        {
+          "label": "Landed",
+          "value": "3 February 1966, Ocean of Storms"
+        },
+        {
+          "label": "Pictures",
+          "value": "Nine, five of them panoramas"
+        },
+        {
+          "label": "Last contact",
+          "value": "6 February 1966"
+        },
+        {
+          "label": "Agency",
+          "value": "USSR (Lavochkin)"
+        }
+      ],
+      "firsts": [
+        "First soft landing on the Moon",
+        "First pictures from the surface of another world"
+      ],
+      "sections": [
+        {
+          "heading": "The landing",
+          "text": "Luna 9 left Baikonur on 31 January 1966 on a Molniya-M rocket. Eleven Soviet attempts to land gently on the Moon had already failed, and this was the twelfth. About 75 km above the Ocean of Storms its engine fired to kill most of its speed. Just above the ground a probe touched the surface and the craft threw off its lander, a ball 58 cm across wrapped in inflated bags. On 3 February 1966 the ball came to rest a few meters away on the lunar plain, shed its bags and opened its petals, which set it upright and steady."
+        },
+        {
+          "heading": "The pictures",
+          "text": "Telemetry began a few minutes after touchdown, but the team waited about seven hours for the Sun to climb higher over the landing site. Early on 4 February the first panorama started to arrive, built up slowly by a television camera on top of the lander. Over three days Luna 9 sent nine pictures, five of them panoramas, showing pitted ground scattered with small stones right up to the horizon. The lander tilted a little between pictures, possibly as its cooling water ran low, and the shift was enough to view some of them in stereo."
+        },
+        {
+          "heading": "Seen first in Britain",
+          "text": "At Jodrell Bank in England, the radio observatory led by Bernard Lovell was listening to Luna 9 as well. Its staff noticed that the picture signal used the standard format newspapers relied on to send photos by radio, so the Daily Express rushed a suitable receiver to the observatory. The pictures were decoded there and printed in Britain before the Soviet press had released them. In Moscow, the official whose approval was needed was asleep, and nobody wanted to wake him. Some wondered whether the designers had chosen that format on purpose."
+        },
+        {
+          "heading": "Why it mattered",
+          "text": "Some scientists had feared that the Moon was covered in deep, loose dust that would swallow any craft that landed on it. Luna 9 settled the question: it sat firmly on the surface, which could carry a heavy lander, an answer that mattered for the crews to come. Its last contact came on 6 February 1966, after seven radio sessions totaling about eight hours. Four months later the American Surveyor 1 made the second soft landing, in the same Ocean of Storms. In 1970 the place where Luna 9 came down was named Planitia Descensus, the Plain of Descent."
+        }
+      ],
+      "sources": [
+        "NASA SP-2018-4041, Siddiqi, Beyond Earth (Luna 9)",
+        "NSSDC: Soviet Missions to the Moon",
+        "NASA Science: Surveyor 1",
+        "Wikipedia: Luna 9"
+      ],
+      "images": [
+        {
+          "file": "archive/luna9close_big.jpg",
+          "caption": "A close-up of the ground beside Luna 9 in the Ocean of Storms, February 1966: small stones and pitted soil.",
+          "credit": "Luna 9 (USSR, 1966). Image via NASA/NSSDC · luna9close_big"
+        }
+      ]
+    },
+    {
+      "id": "surveyor-1",
+      "goalId": "lunar-soft-landing",
+      "title": "Surveyor 1: the first soft landing",
+      "agency": "NASA",
+      "date": "June 1966",
+      "when": "1966-06",
+      "summary": "America's first lander on the Moon shows that the ground will hold a spacecraft.",
+      "facts": [
+        {
+          "label": "Craft",
+          "value": "Surveyor 1, built by Hughes for JPL"
+        },
+        {
+          "label": "Launch vehicle",
+          "value": "Atlas-Centaur"
+        },
+        {
+          "label": "Launched",
+          "value": "30 May 1966, Cape Kennedy"
+        },
+        {
+          "label": "Landed",
+          "value": "2 June 1966, 06:17 UT (1 June in California), Ocean of Storms"
+        },
+        {
+          "label": "Pictures sent",
+          "value": "11,240 over two lunar days"
+        },
+        {
+          "label": "Last contact",
+          "value": "7 January 1967"
+        },
+        {
+          "label": "Crew",
+          "value": "None"
+        }
+      ],
+      "firsts": [
+        "First American spacecraft to land softly on the Moon",
+        "First American pictures from the Moon's surface"
+      ],
+      "sections": [
+        {
+          "heading": "The way down",
+          "text": "Surveyor 1 left Cape Kennedy on 30 May 1966 on an Atlas-Centaur and flew straight at the Moon without first entering orbit. About 63 hours later, some 75 km up, its radar fired a solid-fuel retrorocket that did most of the braking in 40 seconds and then fell away. Three small engines, throttled by the radar's readings, did the rest. They shut off a few meters above the ground, and the lander dropped onto the Ocean of Storms at 06:17 UT on 2 June. In California it was still the evening of 1 June, and the scene at JPL went out live on television. Surveyor 1 was about 14 km from its target."
+        },
+        {
+          "heading": "Pictures from the surface",
+          "text": "Thirty-six minutes after touchdown, once engineers knew the lander had survived, its first picture came in: part of the spacecraft, one of its footpads and the dark soil it stood on. Over the next twelve days the camera built up mosaics of a level plain scattered with small craters and rocks, some more than a meter across, with low mountains on the horizon. Red, green and blue filters let the team put together color views. When night fell on 14 June the lander went quiet, but in July it answered again and sent hundreds more. In all, Surveyor 1 returned 11,240 pictures."
+        },
+        {
+          "heading": "What Apollo needed to know",
+          "text": "Nobody yet knew for certain how firm the lunar plains were, or whether a heavy spacecraft would sink into them. Surveyor 1 answered with its own body. Strain gauges in its three legs recorded the jolt of landing, and its pictures showed the footpads pressed only slightly into the soil. Together they told engineers that the surface could bear a spacecraft's weight. The lander also measured how the ground reflected radar and how hot and cold it became. This was the kind of evidence, from Surveyor 1 and the landers that followed, that let Apollo's planners trust the ground at the sites they chose."
+        },
+        {
+          "heading": "Why it mattered",
+          "text": "The Soviet Luna 9 had reached the surface four months earlier, cushioned by air bags. Surveyor 1 was the first to land the way Apollo would, steering and braking with its engines almost to the ground, and it did so on the first try. Of the six Surveyors launched after it, four more landed safely. In 1969 the crew of Apollo 12 set down beside Surveyor 3 and brought parts of it home to see how more than two years on the Moon had changed them. Surveyor 1 still stands where it landed, inside the crater Flamsteed P, and an orbiting camera found it there in 2009."
+        }
+      ],
+      "sources": [
+        "NASA NSSDCA: Surveyor 1",
+        "NASA, John Uri: 55 Years Ago: Surveyor 1 Makes a Soft Landing on the Moon",
+        "NASA Science: Surveyor 1",
+        "NASA NSSDCA: Surveyor (1966 to 1968)",
+        "Smithsonian Air and Space Museum: The First Pictures From the Moon's Surface"
+      ],
+      "images": [
+        {
+          "file": "archive/surveyor_1_4_foot_pad.jpg",
+          "caption": "One of Surveyor 1's footpads resting on the lunar soil, among its first pictures from the surface.",
+          "credit": "NASA · Surveyor 1"
+        },
+        {
+          "file": "archive/surveyor_1_7_mosaic_image.jpg",
+          "caption": "Surveyor 1's TV frames pieced together into a view of its landing site inside the crater Flamsteed P.",
+          "credit": "NASA · Surveyor 1"
+        },
+        {
+          "file": "archive/pia02976.jpg",
+          "caption": "Surveyor 1's own shadow stretched across the ground in the late lunar afternoon, with the horizon at upper right.",
+          "credit": "NASA/JPL · PIA02976"
+        },
+        {
+          "file": "archive/s66-32144.jpg",
+          "caption": "On landing day, astronauts Tom Stafford (right) and Gene Cernan look over pictures from Surveyor 1.",
+          "credit": "NASA · S66-32144"
+        }
+      ]
+    },
+    {
       "id": "lunar-orbiter-1",
       "goalId": "lunar-mapping",
       "title": "Lunar Orbiter 1: the Earth from the Moon",
@@ -595,6 +759,267 @@
       }
     },
     {
+      "id": "luna-16",
+      "goalId": "lunar-sample-return",
+      "title": "Luna 16: Moon soil by robot",
+      "agency": "USSR",
+      "date": "September 1970",
+      "when": "1970-09",
+      "summary": "A robot lands, drills into the Moon and sends 101 grams of soil back to Earth.",
+      "facts": [
+        {
+          "label": "Craft",
+          "value": "Luna 16, a lander with a return rocket"
+        },
+        {
+          "label": "Launch vehicle",
+          "value": "Proton-K"
+        },
+        {
+          "label": "Launched",
+          "value": "12 September 1970, Baikonur"
+        },
+        {
+          "label": "Landed",
+          "value": "20 September 1970, Sea of Fertility"
+        },
+        {
+          "label": "Sample",
+          "value": "101 g, drilled from about 35 cm deep"
+        },
+        {
+          "label": "Back on Earth",
+          "value": "24 September 1970, Kazakhstan"
+        },
+        {
+          "label": "Crew",
+          "value": "None"
+        }
+      ],
+      "firsts": [
+        "First robotic return of a sample from the Moon",
+        "First landing on the Moon during the lunar night"
+      ],
+      "sections": [
+        {
+          "heading": "The flight",
+          "text": "Luna 16 left Baikonur on 12 September 1970 on a Proton rocket. Soviet engineers had been trying to bring back Moon soil by robot, and five attempts in a row had failed. The best known was Luna 15, which crashed into the Sea of Crises on 21 July 1969, about two hours before Apollo 11’s crew lifted off from the Moon with their own samples. Luna 16 went into orbit around the Moon on 17 September and landed in the Sea of Fertility on 20 September 1970, some 60 hours after sunset there."
+        },
+        {
+          "heading": "Drilling in the dark",
+          "text": "Less than an hour after touchdown, an arm lowered a drill to the ground. It bored for seven minutes and stopped about 35 cm down, then swung its core up in an arc and dropped it into a small round capsule at the top of the spacecraft, where it was sealed in. A little of the soil seems to have spilled on the way. The cameras had tried to show the site, but in the dark the pictures were of little use. On 21 September the upper stage fired its engine and lifted off, leaving the lander behind."
+        },
+        {
+          "heading": "Coming home",
+          "text": "The return rocket made no course corrections at all. Its path back had been worked out in advance, and three days later, on 24 September 1970, the capsule hit the atmosphere at nearly 11 km per second, braking at up to 350 times the force of gravity. It weighed about 34 kg and came down under a parachute about 80 km southeast of Dzhezkazgan in Kazakhstan. Inside were 101 grams of dark lunar soil: fine, well-worn rock from the lava plains, full of glass, with fragments billions of years old."
+        },
+        {
+          "heading": "Why it mattered",
+          "text": "Luna 16 did with machines what Apollo had done with astronauts: it landed, gathered soil and brought it home. No one had to leave Earth to do it. Its soil looked much like Apollo 12’s, and samples went to scientists abroad. On 10 June 1971 Soviet and American scientists met in Moscow and exchanged samples, Luna 16 soil for some from Apollo 11 and 12. Luna 20 and Luna 24 followed in 1972 and 1976, and NASA’s Lunar Reconnaissance Orbiter later found the landing stages of all three."
+        }
+      ],
+      "sources": [
+        "NASA SP-2018-4041, Siddiqi, Beyond Earth (Luna 16, Luna 15)",
+        "NSSDC: Soviet Missions to the Moon",
+        "ASU News: LRO Camera snaps images of Soviet robotic samplers",
+        "NASA Image Library: PIA12984, Luna 16",
+        "Wikipedia: Luna 16"
+      ],
+      "images": [
+        {
+          "file": "archive/pia12984.jpg",
+          "caption": "Luna 16’s landing stage, still standing in the Sea of Fertility, seen by NASA’s Lunar Reconnaissance Orbiter (inset enlarged).",
+          "credit": "NASA/GSFC/Arizona State University · PIA12984"
+        },
+        {
+          "file": "archive/luna16.jpg",
+          "caption": "A Luna 16-type spacecraft on Earth: the landing stage with its round tanks below, the return rocket above.",
+          "credit": "Luna 16 (USSR, c. 1970). Image via NASA/NSSDC · luna16"
+        }
+      ]
+    },
+    {
+      "id": "lunokhod-1",
+      "goalId": "lunar-rover",
+      "title": "Lunokhod 1: a rover on the Moon",
+      "agency": "USSR",
+      "date": "November 1970",
+      "when": "1970-11",
+      "summary": "The first rover on another world, driven across the Moon from Earth for ten months.",
+      "facts": [
+        {
+          "label": "Craft",
+          "value": "Luna 17 lander with the Lunokhod 1 rover"
+        },
+        {
+          "label": "Launch vehicle",
+          "value": "Proton-K"
+        },
+        {
+          "label": "Launched",
+          "value": "10 November 1970, Baikonur"
+        },
+        {
+          "label": "Landed",
+          "value": "17 November 1970, Mare Imbrium"
+        },
+        {
+          "label": "Driven",
+          "value": "About 10 km over 11 lunar days"
+        },
+        {
+          "label": "Last contact",
+          "value": "14 September 1971"
+        },
+        {
+          "label": "Crew",
+          "value": "None (driven from Earth)"
+        }
+      ],
+      "firsts": [
+        "First rover to drive on another world"
+      ],
+      "sections": [
+        {
+          "heading": "The landing",
+          "text": "Luna 17 left Baikonur on a Proton rocket on 10 November 1970 and landed on Mare Imbrium, the Sea of Rains, on 17 November. It was the second try: the first rover had been destroyed in February 1969, when its rocket broke apart less than a minute after launch. Luna 17’s landing stage carried ramps on both sides, so the rover had two ways off. Nearly three hours after touchdown, on a command from Earth, Lunokhod 1 rolled down a ramp and onto the Moon."
+        },
+        {
+          "heading": "The rover",
+          "text": "Lunokhod 1 looked like a large tub on eight wheels, each with its own motor. It weighed 756 kg and stood about 1.35 m tall. The inside of its hinged lid was covered with solar cells that charged the batteries in daylight. Through the long lunar nights, each about two weeks, a heater warmed by radioactive polonium-210 kept the instruments from freezing. It carried television cameras for driving, cameras for panoramas, an X-ray instrument that analyzed the soil, a probe that pressed into the ground to test how firm it was, and a laser reflector supplied by France."
+        },
+        {
+          "heading": "Driving from Earth",
+          "text": "With nobody on board, the rover was driven from a control room on Earth. Two crews of five took turns at the controls: a commander, a driver, a flight engineer, a navigator and an operator who kept the narrow-beam antenna pointed at Earth. Every command took at least four seconds to show its result, counting the signal’s round trip and the time to work the levers, so the drivers steered by pictures that were always a little out of date. The top speed was about 100 m an hour. They were nicknamed the sedentary cosmonauts."
+        },
+        {
+          "heading": "Why it mattered",
+          "text": "Lunokhod 1 was designed to last three lunar days and kept going for eleven, until the last contact on 14 September 1971. In that time it drove about 10 km, sent back more than 20,000 television pictures and 206 panoramas, and tested the soil at hundreds of places. It showed that a robot could be driven on another world for months, the path later rovers on Mars would follow. In 2010 NASA’s Lunar Reconnaissance Orbiter photographed it where it had stopped, and an American team bounced laser light off its French reflector once more."
+        }
+      ],
+      "sources": [
+        "NASA SP-2018-4041, Siddiqi, Beyond Earth (Luna 17 and Lunokhod 1)",
+        "NSSDC: Soviet Missions to the Moon",
+        "LROC: Lunokhod 1 Revisited",
+        "Wikipedia: Lunokhod 1"
+      ],
+      "images": [
+        {
+          "file": "archive/m175502049rc.jpg",
+          "caption": "Luna 17’s landing stage on Mare Imbrium in 2011, with Lunokhod 1’s dark wheel tracks still looping around it.",
+          "credit": "NASA/GSFC/Arizona State University · M175502049RC"
+        },
+        {
+          "file": "archive/lunokhod.jpg",
+          "caption": "A Lunokhod rover on Earth: the tub-shaped body, the lid that held its solar cells, and eight wheels.",
+          "credit": "Lunokhod (USSR, c. 1970). Image via NASA/NSSDC · lunokhod"
+        }
+      ]
+    },
+    {
+      "id": "apollo-15",
+      "goalId": "apollo-landing-with-rover-flown",
+      "title": "Apollo 15: driving on the Moon",
+      "agency": "NASA",
+      "date": "July 1971",
+      "when": "1971-07",
+      "summary": "Scott and Irwin drive a car on the Moon, beside Hadley Rille and the Apennines.",
+      "facts": [
+        {
+          "label": "Craft",
+          "value": "Endeavour (command module), Falcon (lunar module), the Lunar Roving Vehicle"
+        },
+        {
+          "label": "Launch vehicle",
+          "value": "Saturn V"
+        },
+        {
+          "label": "Launched",
+          "value": "26 July 1971"
+        },
+        {
+          "label": "Landed",
+          "value": "30 July 1971, Hadley-Apennine"
+        },
+        {
+          "label": "On the Moon",
+          "value": "66 hours 55 minutes, three moonwalks, 27.8 km driven"
+        },
+        {
+          "label": "Home",
+          "value": "7 August 1971, Pacific Ocean"
+        },
+        {
+          "label": "Crew",
+          "value": "David Scott, James Irwin, Alfred Worden"
+        }
+      ],
+      "firsts": [
+        "First people to drive on the Moon",
+        "First spacewalk in deep space",
+        "First liftoff from the Moon seen live on Earth"
+      ],
+      "sections": [
+        {
+          "heading": "Over the Apennines",
+          "text": "Apollo 15 left Florida on 26 July 1971 with David Scott, James Irwin and Alfred Worden. It was the first of a new kind of Apollo flight, built for longer stays and wider travel. On 30 July Scott and Irwin brought the lunar module Falcon down a steeper path than any crew before, to clear the Apennine Mountains, and landed on a plain between the peaks and a winding canyon called Hadley Rille, nearly a kilometer wide. Worden stayed in orbit in Endeavour, mapping and photographing the Moon with cameras and instruments in a bay of the service module. Below him, his crewmates would stay almost three days."
+        },
+        {
+          "heading": "A car for the Moon",
+          "text": "Folded against the side of Falcon was the Lunar Roving Vehicle, an electric car with four wheels of woven steel wire, each turned by its own motor. A dish antenna on its front sent color television straight home, from a camera that controllers in Houston could aim. On 31 July Scott took it for its first drive. Over three moonwalks the two men drove 27.8 km, along the rim of Hadley Rille and up the slopes of the mountain called Hadley Delta, going as far as 5 km from the lander. Earlier crews had gone on foot. With the rover, Apollo's geologists could send them where they most wanted to look."
+        },
+        {
+          "heading": "The Genesis Rock",
+          "text": "On 1 August, on the slope of Hadley Delta near a small crater called Spur, Scott and Irwin spotted a pale fragment resting on a darker clod, as if set out for them. It was almost pure plagioclase, the light mineral thought to make up the Moon's first crust, and Scott sealed it in a bag of its own. By the flight home it was being called the Genesis Rock. In the laboratory, sample 15415, a 269-gram piece of anorthosite, proved to be about 4 billion years old. That is younger than the Moon itself, but it is still one of the purest pieces of the ancient highland crust ever brought to Earth."
+        },
+        {
+          "heading": "A hammer and a feather",
+          "text": "At the end of the last moonwalk on 2 August, with the rover's camera watching, Scott held a geologist's hammer in his right hand and a falcon feather in his left, a nod to his lander's name. He recalled Galileo, who had argued that without air all things fall at the same rate, and let both go. They landed in the dust together. Hours later Falcon lifted off, and for the first time people on Earth watched a launch from the Moon live, through the rover's camera. On the way home, about 320,000 km from Earth, Worden climbed outside to fetch film from the cameras. They splashed down on 7 August."
+        }
+      ],
+      "sources": [
+        "NASA NSSDCA: Apollo 15 Lunar Module",
+        "NASA: Apollo 15 Mission Details",
+        "NASA, John Uri: 50 Years Ago: Apollo 15 Heads Home to Earth",
+        "NASA NSSDCA: The Apollo Lunar Roving Vehicle",
+        "NASA Lunar Sample Compendium (C. Meyer): 15415",
+        "NASA NSSDCA: The Apollo 15 Hammer-Feather Drop"
+      ],
+      "images": [
+        {
+          "file": "archive/as15-86-11603.jpg",
+          "caption": "James Irwin at the rover on the first moonwalk, with Mount Hadley behind and Falcon's shadow in front.",
+          "credit": "NASA · AS15-86-11603"
+        },
+        {
+          "file": "archive/as15-85-11425.jpg",
+          "caption": "Hadley Rille, looking northwest from near St. George crater, with layers in its wall and boulders on its floor.",
+          "credit": "NASA · AS15-85-11425"
+        },
+        {
+          "file": "archive/as15-88-11866.jpg",
+          "caption": "Irwin salutes beside the flag, with Falcon, the rover and the 4,000-meter bulk of Hadley Delta behind.",
+          "credit": "NASA · AS15-88-11866"
+        },
+        {
+          "file": "archive/s71-42955.jpg",
+          "caption": "The Genesis Rock, sample 15415, in the Lunar Receiving Laboratory in Houston, August 1971.",
+          "credit": "NASA · S71-42955"
+        },
+        {
+          "file": "archive/s71-43788.jpg",
+          "caption": "From the rover's TV camera: Scott watches a hammer and a falcon feather strike the ground together.",
+          "credit": "NASA · S71-43788"
+        }
+      ],
+      "sound": {
+        "file": "audio/archive/apollo-15-hammer-and-feather.ogg",
+        "caption": "David Scott on 2 August 1971 drops a hammer and a feather for the TV camera: \"How about that?\"",
+        "credit": "NASA",
+        "seconds": 48
+      }
+    },
+    {
       "id": "mariner-9",
       "goalId": "mars-mapping",
       "title": "Mariner 9: the first orbiter of another planet",
@@ -773,6 +1198,98 @@
       ]
     },
     {
+      "id": "mariner-10",
+      "goalId": "mercury-mapping",
+      "title": "Mariner 10: Mercury up close",
+      "agency": "NASA",
+      "date": "1974 to 1975",
+      "when": "1974-03",
+      "summary": "Venus bends its path, then three passes show Mercury's cratered face.",
+      "facts": [
+        {
+          "label": "Craft",
+          "value": "Mariner 10"
+        },
+        {
+          "label": "Launch vehicle",
+          "value": "Atlas-Centaur"
+        },
+        {
+          "label": "Launched",
+          "value": "3 November 1973"
+        },
+        {
+          "label": "At Venus",
+          "value": "5 February 1974, 5,768 km from the planet"
+        },
+        {
+          "label": "At Mercury",
+          "value": "29 March 1974, 21 September 1974 and 16 March 1975"
+        },
+        {
+          "label": "Contact ended",
+          "value": "24 March 1975"
+        },
+        {
+          "label": "Crew",
+          "value": "None"
+        }
+      ],
+      "firsts": [
+        "First spacecraft to visit two planets",
+        "First to use one planet's gravity to reach another",
+        "First spacecraft to study Mercury"
+      ],
+      "sections": [
+        {
+          "heading": "By way of Venus",
+          "text": "Mariner 10 left Cape Canaveral on an Atlas-Centaur on 3 November 1973, bound for Mercury by way of Venus. No spacecraft had yet used one planet's gravity to reach another. Instead of a bigger rocket and more fuel, the plan used Venus: the craft passed 5,768 km from the planet on 5 February 1974, and the encounter bent its course inward toward the Sun. On the way past it took more than 4,000 pictures. Through an ultraviolet filter, the bland clouds of Venus showed bands and spirals, and the cloud tops turned out to race around the planet in about four and a half days."
+        },
+        {
+          "heading": "Three passes",
+          "text": "Giuseppe Colombo, a scientist at the University of Padua in Italy, noticed that after the first flyby Mariner 10 would circle the Sun every 176 days, twice the length of Mercury's year. With small course corrections, the craft could meet the planet again and again. It passed about 700 km from Mercury on 29 March 1974, some 48,000 km away on 21 September, and just 327 km from the surface on 16 March 1975. No spacecraft had come back to its target before. Then its attitude-control gas ran out, and contact ended on 24 March 1975."
+        },
+        {
+          "heading": "A face like the Moon's",
+          "text": "Mariner 10 sent back the first close views of Mercury, and at first glance they looked like the Moon: craters of every age crowded together, with smooth plains between them. Long cliffs, some hundreds of kilometers long, cut across craters and plains alike. Scientists now think they rose as the planet's interior cooled and shrank. One quirk limited the map. Mercury turns three times for every two trips around the Sun, so on each pass the same side was lit. Only about 40 to 45 percent of the planet was photographed, some of it in detail as fine as about 100 meters."
+        },
+        {
+          "heading": "A basin and a magnetic field",
+          "text": "On the first pass, half of a vast ringed basin lay along the line between day and night, more than 1,300 km across. It was named Caloris, from the word for heat, because it lies where Mercury faces the Sun at its closest. The bigger surprise came from the magnetometer. Few expected small, slowly turning Mercury to have a magnetic field, but Mariner 10 found a weak one, around a hundredth as strong as Earth's at the surface. The third and lowest pass, in March 1975, confirmed that the field was the planet's own. No spacecraft saw Mercury again until MESSENGER flew past in 2008."
+        }
+      ],
+      "sources": [
+        "NASA Science: Mariner 10",
+        "NSSDC: Mariner 10",
+        "NASA History: 45 Years Ago, Mariner 10 First to Explore Mercury",
+        "NASA Science: Mercury facts",
+        "NASA Photojournal: Mariner 10 at Venus and Mercury",
+        "Ness et al., The magnetic field of Mercury confirmed (Nature, 1975)"
+      ],
+      "images": [
+        {
+          "file": "archive/pia03103.jpg",
+          "caption": "Mercury on the approach, 29 March 1974: 18 frames taken about six hours before the first flyby.",
+          "credit": "NASA/JPL · PIA03103"
+        },
+        {
+          "file": "archive/pia23791.jpg",
+          "caption": "Venus a few days after the flyby, from images in orange and ultraviolet light, shown as taken and with contrast enhanced.",
+          "credit": "NASA/JPL-Caltech · PIA23791"
+        },
+        {
+          "file": "archive/pia02961.jpg",
+          "caption": "Old and fresh craters, taken minutes after Mariner 10's closest approach to Mercury on 29 March 1974.",
+          "credit": "NASA/JPL · PIA02961"
+        },
+        {
+          "file": "archive/pia02962.jpg",
+          "caption": "Half of the Caloris basin, about 1,300 km across; the other half lay in darkness beyond the line of sunset.",
+          "credit": "NASA/JPL · PIA02962"
+        }
+      ]
+    },
+    {
       "id": "venera-surface",
       "goalId": "venus-surface-study",
       "title": "Venus's surface: Venera 9 and Venera 13",
@@ -921,6 +1438,170 @@
           "file": "archive/pia00563.jpg",
           "caption": "The first color picture from the surface, taken on 21 July 1976 and balanced against a test chart on the lander.",
           "credit": "NASA/JPL · PIA00563"
+        }
+      ]
+    },
+    {
+      "id": "pioneer-11",
+      "goalId": "saturn-structure-study",
+      "title": "Pioneer 11: the first to Saturn",
+      "agency": "NASA",
+      "date": "September 1979",
+      "when": "1979-09",
+      "summary": "A backup craft skims Jupiter, then scouts Saturn's rings for the Voyagers.",
+      "facts": [
+        {
+          "label": "Craft",
+          "value": "Pioneer 11 (renamed Pioneer Saturn after Jupiter)"
+        },
+        {
+          "label": "Launch vehicle",
+          "value": "Atlas-Centaur, three stages"
+        },
+        {
+          "label": "Launched",
+          "value": "6 April 1973 (UT; 5 April in Florida)"
+        },
+        {
+          "label": "At Jupiter",
+          "value": "3 December 1974 (UT; 2 December in California)"
+        },
+        {
+          "label": "At Saturn",
+          "value": "1 September 1979"
+        },
+        {
+          "label": "Contact ended",
+          "value": "30 September 1995"
+        },
+        {
+          "label": "Crew",
+          "value": "None"
+        }
+      ],
+      "firsts": [
+        "First spacecraft to fly past Saturn",
+        "First pictures of Jupiter's polar regions"
+      ],
+      "sections": [
+        {
+          "heading": "The backup goes closer",
+          "text": "Pioneer 11 was built as the twin and backup of Pioneer 10. It was launched on an Atlas-Centaur on the evening of 5 April 1973, Florida time. Once Pioneer 10 had survived Jupiter's radiation, the team aimed its sister much closer, about 43,000 km above the cloud tops, less than a third of Pioneer 10's distance. On 3 December 1974 (UT) it swept past at more than 170,000 km/h, climbing steeply from south to north through the worst of the radiation. It returned the best pictures yet of the Great Red Spot and the first ever of Jupiter's poles."
+        },
+        {
+          "heading": "Across the solar system",
+          "text": "The close pass was also a slingshot. Jupiter's gravity flung Pioneer 11 back across the solar system toward Saturn, some 2.4 billion km away, on a long loop high above the plane in which the planets orbit. The crossing took nearly five years. After Jupiter the craft was officially renamed Pioneer Saturn, though most people kept calling it Pioneer 11. From its high vantage point it also measured the Sun's magnetic field and found it simpler than expected: a northern half and a southern half, divided by a warped sheet that sweeps up and down as the Sun turns."
+        },
+        {
+          "heading": "Through the ring plane",
+          "text": "By the time Pioneer 11 neared Saturn, Voyager 1 and 2 were on their way there too. NASA had to choose its path: a riskier run inside the rings, which most of the mission's scientists wanted, or one just outside them, the route Voyager 2 would have to take to swing on toward Uranus. NASA chose the outside route, making Pioneer the scout. On 1 September 1979 at 14:36 UT, it crossed the ring plane about 35,000 km beyond the bright rings. Nobody knew whether unseen ring particles would wreck it. The answer took 86 minutes to reach Earth: it had come through."
+        },
+        {
+          "heading": "What it found",
+          "text": "Pioneer 11 passed about 21,000 km above Saturn's clouds and sent back 440 images of the planet and its moons. They showed a narrow new ring just outside the bright A ring, now called the F ring, and a small moon nobody had seen before. Its particle detectors hinted at more. It found that Saturn gives off more heat than it gets from the Sun, and that its magnetic field lines up almost exactly with its spin axis, unlike Earth's or Jupiter's. The next day it passed Titan, an orange, cloud-wrapped ball, and then headed out of the solar system."
+        }
+      ],
+      "sources": [
+        "NASA SP-446, Pioneer: First to Jupiter, Saturn, and Beyond (1980)",
+        "NASA Science: Pioneer 11",
+        "NSSDC: Pioneer 11",
+        "NASA History: 40 Years Ago, Pioneer 11 First to Explore Saturn",
+        "NASA History: 45 Years Ago, Pioneer 11 Explores Jupiter"
+      ],
+      "images": [
+        {
+          "file": "archive/p11-saturn-titan.jpg",
+          "caption": "Saturn, its rings and Titan, the dot below the planet, from about 2.8 million km on the approach.",
+          "credit": "NASA Ames Research Center · Pioneer 11, 1979"
+        },
+        {
+          "file": "archive/p11-jupiter-north.jpg",
+          "caption": "Jupiter seen from above its north pole as Pioneer 11 climbed away in December 1974, a view no telescope on Earth can have.",
+          "credit": "NASA · Pioneer 11, 1974"
+        },
+        {
+          "file": "archive/arc-1979-ac79-9114-57.jpg",
+          "caption": "Pioneer's mission control at NASA Ames in August 1979, a month before the spacecraft reached Saturn.",
+          "credit": "NASA Ames Research Center · ARC-1979-AC79-9114-57"
+        }
+      ]
+    },
+    {
+      "id": "venera-15-16",
+      "goalId": "venus-radar-mapping",
+      "title": "Venera 15 and 16: radar maps of Venus",
+      "agency": "USSR",
+      "date": "1983 to 1984",
+      "when": "1983-10",
+      "summary": "Two orbiters look through Venus’s clouds by radar and map its northern lands.",
+      "facts": [
+        {
+          "label": "Craft",
+          "value": "Venera 15 and Venera 16, radar orbiters"
+        },
+        {
+          "label": "Launch vehicle",
+          "value": "Proton-K"
+        },
+        {
+          "label": "Launched",
+          "value": "2 and 7 June 1983, Baikonur"
+        },
+        {
+          "label": "In orbit",
+          "value": "10 and 14 October 1983"
+        },
+        {
+          "label": "Mapped",
+          "value": "North of about 30° N, a quarter of Venus"
+        },
+        {
+          "label": "Detail",
+          "value": "About 1 to 2 km"
+        },
+        {
+          "label": "Crew",
+          "value": "None"
+        }
+      ],
+      "firsts": [
+        "First detailed radar images of Venus’s surface from orbit"
+      ],
+      "sections": [
+        {
+          "heading": "The flight",
+          "text": "Venera 15 and Venera 16 left Baikonur five days apart, on 2 and 7 June 1983, each on a Proton rocket. They were built on the design of the earlier Veneras, but where a lander had been they carried a large radar antenna, with bigger solar panels to power it. They went into orbit around Venus on 10 and 14 October 1983. Each orbit was a long loop that took about a day, passed over the north pole and swung down to under 1,000 km above the planet, then out to about 65,000 km."
+        },
+        {
+          "heading": "Seeing through clouds",
+          "text": "Venus is covered by clouds that no camera can see through, but radio waves pass through them. Each orbiter’s radar looked down and to one side as it swept low over the north, building up a long strip of surface image on every pass. A second radar measured the height of the ground below, so the strips could be turned into maps of mountains and plains. Venera 16 usually followed its twin over the same area a few days later. The pictures showed features about 1 to 2 km across, as sharp as the best Earth-based radar."
+        },
+        {
+          "heading": "The northern map",
+          "text": "Mapping began in October 1983, and the main survey ended on 10 July 1984. By then the two craft had covered Venus from the north pole down to about 30 degrees north, some 115 million square kilometers, about a quarter of the planet. That was ground the giant Arecibo radar on Earth could hardly see. Soviet teams assembled the strips into 27 large mosaics. They showed mountains such as Maxwell Montes, lava plains and impact craters, as well as ringed features later called coronae and crumpled, tile-like ground the Soviet scientists called parquet."
+        },
+        {
+          "heading": "Why it mattered",
+          "text": "The American Pioneer Venus orbiter had measured the heights of Venus’s surface from 1978 onward, but its radar saw only coarse detail. Venera 15 and 16 gave the first sharp pictures of a large part of the planet, and scientists began to see Venus as a world shaped by volcanoes and buckled crust. In the early 1990s NASA’s Magellan mapped almost all of Venus in far finer detail and confirmed that small hills seen in the Venera images were volcanoes. Venera 15 fell silent in January 1985, and Venera 16 was lost that June."
+        }
+      ],
+      "sources": [
+        "NASA SP-2018-4041, Siddiqi, Beyond Earth (Venera 15, Venera 16)",
+        "NASA PDS Geosciences Node: Venera 15/16 radar products",
+        "NTRS: Akim, Zakharov, Krivtsov, Venus radar mapping from Venera 15 and 16 (1992)",
+        "NASA Photojournal: PIA00465, Venera and Magellan resolutions",
+        "Wikipedia: Venera 15"
+      ],
+      "images": [
+        {
+          "file": "archive/venera-maxwell.jpg",
+          "caption": "Maxwell Montes in Venera 15 and 16 radar, 1983: steep slopes drop west to the high plateau of Lakshmi Planum.",
+          "credit": "Venera 15/16 (USSR, 1983). Image via NASA PDS Geosciences Node · venera-maxwell"
+        },
+        {
+          "file": "archive/pia00465.jpg",
+          "caption": "One patch of Venus by Magellan in 1991 (left) and by Venera 15/16 in the 1980s (right): the hills are small volcanoes.",
+          "credit": "NASA/JPL · PIA00465"
         }
       ]
     },

@@ -2023,8 +2023,14 @@ pictures back. No BASPM precedent.
   | Pioneer 10 | `jupiter-photos` |
   | Venera 9 and 13 | `venus-surface-study` |
   | Voyager 1's Pale Blue Dot | `saturn-flyby`, the furthest flight in the game; Voyager isn't in either pack |
-- **Size:** images at about 1600 px on the long edge as JPEG, 150 to 300 KB each. The 35 pictures and 12
-  thumbnails add 8.6 MB to the client, the three sounds 3.7 MB.
+- **Eight more pages** (user, 2026-10-15): Surveyor 1 (`lunar-soft-landing`), Apollo 15 (`apollo-landing-with-rover-flown`,
+  "driving on the Moon": Lunokhod 1 was first), Mariner 10 (`mercury-mapping`), Pioneer 11 (`saturn-structure-study`),
+  and four Soviet ones with usable pictures: Luna 9 (`lunar-surface-photos`), Lunokhod 1 (`lunar-rover`, an LRO frame
+  from NASA's PDS archive and a Soviet photo), Luna 16 (`lunar-sample-return`) and Venera 15 and 16
+  (`venus-radar-mapping`; their 1983 radar images a medium risk, like Venera 13's). Twenty pages in all; the
+  Apollo 15 page carries Scott's hammer and feather.
+- **Size:** images at about 1600 px on the long edge as JPEG, 150 to 300 KB each. The 58 pictures and 20
+  thumbnails add 15 MB to the client, the four sounds 4.1 MB.
 - **Built (2026-10-15)** from the canvas `Launch Window — Archive`: the twelve pages
   (`assets/content/archive.json`; their sources and every figure's check in `assets-raw/archive/CHECKS.md`,
   where the sources disagreed the pages say less), the pictures and sounds

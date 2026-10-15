@@ -517,7 +517,8 @@ public final class ScreenSnapshot {
             new de.mkoehler.launchwindow.client.view.Archive.Entry(apollo8.page(), 51, false), () -> null), null);
         write(folder, "archive-viewer.png", new ArchivePageScreen(game, apollo8, () -> null),
             screen -> screen.openViewer(1));
-        for (String id : List.of("mariner-4", "pale-blue-dot", "venera-surface", "luna-3", "apollo-11")) {
+        for (String id : List.of("mariner-4", "pale-blue-dot", "venera-surface", "luna-3", "apollo-11", "apollo-15", "lunokhod-1",
+            "venera-15-16", "pioneer-11", "surveyor-1", "luna-9")) {
             write(folder, "archive-page-" + id + ".png", new ArchivePageScreen(game,
                 new de.mkoehler.launchwindow.client.view.Archive.Entry(archive.page(id), 60, true), () -> null), null);
         }

@@ -188,10 +188,12 @@ public final class ArchivePageScreen extends ChromeScreen {
         // An odd count: the first spans both columns, wide; the rest sit in pairs.
         int start = 0;
         if (pictures.size() % 2 == 1) {
-            // The wide one keeps its own shape, between square and 3:1, so a whole disc (Luna 3) isn't cut.
+            // A page's only picture keeps its own shape, between square and 3:1, so a whole disc (Luna 3) isn't
+            // cut; the first of several is 16:9, as in the mockup, so the rest stay in view.
             TextureRegionDrawable whole = ui.picture(pictures.get(0).file());
-            float aspect = whole == null ? WIDE_ASPECT : Math.max(MIN_WIDE_ASPECT, Math.min(MAX_WIDE_ASPECT,
-                whole.getRegion().getRegionWidth() / (float) whole.getRegion().getRegionHeight()));
+            float aspect = whole == null || pictures.size() > 1 ? WIDE_ASPECT
+                : Math.max(MIN_WIDE_ASPECT, Math.min(MAX_WIDE_ASPECT,
+                    whole.getRegion().getRegionWidth() / (float) whole.getRegion().getRegionHeight()));
             grid.add(figure(pictures.get(0), 0, aspect)).colspan(2).growX().padBottom(Theme.SPACE_4).row();
             start = 1;
         }

@@ -170,7 +170,7 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
 - **The archive** (the user's idea, 2026-10-15, `design.md` §2.12, `ui-spec.md` §4.19): pages about real
   missions (NASA's public-domain pictures, sound, our own text), unlocked for everyone in a game when a
   goal is first reached there, linked from the turn report, in a Museum tab. Mocked up and built the same
-  day: 12 pages (`assets/content/archive.json`, sources per figure in `assets-raw/archive/CHECKS.md`), their
+  day: 20 pages (`assets/content/archive.json`, sources per figure in `assets-raw/archive/CHECKS.md`), their
   pictures and sounds (`assets-raw/archive/make_archive_assets.py`; rights in `PAGES.md`), a new message pair
   (`ArchiveRequest`, derived from goal records, nothing saved). Once the race is decided, every page still
   closed opens for everyone (user, 2026-10-15). Rebuild client and server together; no reset.

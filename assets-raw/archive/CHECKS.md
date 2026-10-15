@@ -336,3 +336,223 @@ the pages say less; these rest on one weaker source, or on none fetched, and are
 - **Apollo 8:** the Earthrise photographer: the Apollo Flight Journal (NASA's Scientific Visualization
   Studio) credits all three frames to Anders, Borman's *Countdown* says he took the color one; the page says
   both.
+
+## Surveyor 1: the first soft landing (`surveyor-1`)
+
+- Source: NASA NSSDCA: Surveyor 1: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1966-045A
+- Source: NASA, John Uri: 55 Years Ago: Surveyor 1 Makes a Soft Landing on the Moon: https://www.nasa.gov/feature/55-years-ago-surveyor-1-makes-a-soft-landing-on-the-moon
+- Source: NASA Science: Surveyor 1: https://science.nasa.gov/mission/surveyor-1/
+- Source: NASA NSSDCA: Surveyor (1966 to 1968): https://nssdc.gsfc.nasa.gov/planetary/lunar/surveyor.html
+- Source: Smithsonian Air and Space Museum: The First Pictures From the Moon's Surface: https://airandspace.si.edu/stories/editorial/first-pictures-moons-surface
+- Launched 30 May 1966, Atlas-Centaur, Complex 36-A: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1966-045A
+- Directly on an impact trajectory, about 63 hours to the Moon: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1966-045A
+- Retrorocket at 75.3 km, 40-second burn, jettisoned near 11 km: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1966-045A
+- Three throttleable vernier engines guided by altimeter and doppler radars, cut off at 3.4 m: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1966-045A
+- Landed 2 June 1966, 06:17:36 UT, Ocean of Storms (Pasadena 23:17 PDT, 1 June): https://nssdc.gsfc.nasa.gov/planetary/lunar/surveyor.html
+- Landing shown live on TV from JPL: https://airandspace.si.edu/stories/editorial/first-pictures-moons-surface
+- 9 miles (14 km) from its target: https://science.nasa.gov/mission/surveyor-1/
+- Inside the crater Flamsteed P, about 100 km across: https://www.nasa.gov/feature/55-years-ago-surveyor-1-makes-a-soft-landing-on-the-moon
+- First image 36 minutes after landing, showing a footpad: https://www.nasa.gov/feature/55-years-ago-surveyor-1-makes-a-soft-landing-on-the-moon
+- Boulders over 1 m, low mountains on the horizon: https://science.nasa.gov/mission/surveyor-1/
+- Red, green and blue filters, color images: https://www.nasa.gov/feature/55-years-ago-surveyor-1-makes-a-soft-landing-on-the-moon
+- Nightfall 14 June; answered 6 July, 618 more images: https://www.nasa.gov/feature/55-years-ago-surveyor-1-makes-a-soft-landing-on-the-moon
+- 11,240 pictures in all: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1966-045A
+- Last contact 7 January 1967: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1966-045A
+- Strain gauges in the legs, footpad pictures and bearing strength: https://airandspace.si.edu/stories/editorial/first-pictures-moons-surface
+- Radar reflectivity, bearing strength and temperatures measured: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1966-045A
+- Built by Hughes under JPL's direction: https://science.nasa.gov/mission/surveyor-1/
+- Luna 9 landed 3 February 1966 with air bags: https://airandspace.si.edu/stories/editorial/first-pictures-moons-surface
+- Six more Surveyors, four landed: https://www.nasa.gov/feature/55-years-ago-surveyor-1-makes-a-soft-landing-on-the-moon
+- Apollo 12 visited Surveyor 3 and brought parts home: https://www.nasa.gov/feature/55-years-ago-surveyor-1-makes-a-soft-landing-on-the-moon
+- LRO imaged Surveyor 1 in 2009: https://images.nasa.gov/details/PIA12910
+- Stafford and Cernan with Surveyor I pictures, 2 June 1966: https://images.nasa.gov/details/s66-32144
+
+## Apollo 15: driving on the Moon (`apollo-15`)
+
+- Source: NASA NSSDCA: Apollo 15 Lunar Module: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1971-063C
+- Source: NASA: Apollo 15 Mission Details: https://www.nasa.gov/missions/apollo/apollo-15-mission-details/
+- Source: NASA, John Uri: 50 Years Ago: Apollo 15 Heads Home to Earth: https://www.nasa.gov/history/50-years-ago-apollo-15-heads-home-to-earth/
+- Source: NASA NSSDCA: The Apollo Lunar Roving Vehicle: https://nssdc.gsfc.nasa.gov/planetary/lunar/apollo_lrv.html
+- Source: NASA Lunar Sample Compendium (C. Meyer): 15415: https://curator.jsc.nasa.gov/lunar/lsc/15415.pdf
+- Source: NASA NSSDCA: The Apollo 15 Hammer-Feather Drop: https://nssdc.gsfc.nasa.gov/planetary/lunar/apollo_15_feather_drop.html
+- Launched 26 July 1971, 13:34 UT (09:34 EDT, same date): https://nssdc.gsfc.nasa.gov/planetary/lunar/apollo15info.html
+- Landed 30 July 1971, 22:16:29 UT (18:16 EDT, same date): https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1971-063C
+- First J mission, longer stay and mobility: https://www.nasa.gov/missions/apollo/apollo-15-mission-details/
+- Steepest approach yet, 26 degrees, over the Apennines: https://www.nasa.gov/missions/apollo/apollo-15-mission-details/
+- Hadley Rille averages 900 m wide and 370 m deep (Greeley 1971): https://ntrs.nasa.gov/api/citations/19710005212/downloads/19710005212.pdf
+- Worden's SIM bay cameras and instruments in orbit: https://www.nasa.gov/history/50-years-ago-apollo-15-heads-home-to-earth/
+- 66 hours 55 minutes on the surface: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1971-063C
+- Woven steel-strand tires, a motor per wheel, dish antenna: https://nssdc.gsfc.nasa.gov/planetary/lunar/apollo_lrv.html
+- TV camera on the rover commanded from Mission Control (Ed Fendell): https://www.nasa.gov/history/50-years-ago-apollo-15-on-the-moon-at-hadley-apennine/
+- Rover first driven 31 July, by Scott: https://www.nasa.gov/history/50-years-ago-apollo-15-on-the-moon-at-hadley-apennine/
+- Rover driven 27.8 km, at most 5.0 km from the LM: https://nssdc.gsfc.nasa.gov/planetary/lunar/apollo_lrv.html
+- Three EVAs on 31 July, 1 and 2 August; rille rim and Hadley Delta traverses: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1971-063C
+- Genesis Rock: rim of Spur Crater, on a clod, special bag 196, 98 percent plagioclase, about 4 billion years, named at the transearth press conference: https://curator.jsc.nasa.gov/lunar/lsc/15415.pdf
+- 15415 weighs 269.4 g, ferroan anorthosite: https://curator.jsc.nasa.gov/lunar/lsc/15415.pdf
+- Collected on EVA 2 (1 August): https://images.nasa.gov/details/S71-42955
+- Hammer in right hand, feather in left, end of EVA 3, rover's TV camera: https://images.nasa.gov/details/S71-43788
+- Falcon feather, 1.32 kg hammer, Galileo: https://nssdc.gsfc.nasa.gov/planetary/lunar/apollo_15_feather_drop.html
+- EVA 3 ended 13:42 UT, liftoff 17:11 UT on 2 August: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1971-063C
+- First lunar liftoff seen on Earth via the rover's camera: https://www.nasa.gov/missions/apollo/apollo-15-mission-details/
+- Worden's spacewalk 200,000 miles (about 320,000 km) from Earth, first in cislunar space: https://www.nasa.gov/history/50-years-ago-apollo-15-heads-home-to-earth/
+- Splashdown 7 August 1971, 20:45:53 UT: https://nssdc.gsfc.nasa.gov/planetary/lunar/apollo15info.html
+- Hadley Delta rises about 4,000 m above the plain: https://images.nasa.gov/details/as15-88-11866
+- Sound: NSSDC MP4 with its broadcast audio; Scott's words checked by transcript (Whisper), the drop at about 0:22 to 1:07: https://nssdc.gsfc.nasa.gov/planetary/image/AS15_Ham_feath_drop.mp4
+
+## Mariner 10: Mercury up close (`mariner-10`)
+
+- Source: NASA Science: Mariner 10: https://science.nasa.gov/mission/mariner-10/
+- Source: NSSDC: Mariner 10: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1973-085A
+- Source: NASA History: 45 Years Ago, Mariner 10 First to Explore Mercury: https://www.nasa.gov/?p=168390
+- Source: NASA Science: Mercury facts: https://science.nasa.gov/mercury/facts/
+- Source: NASA Photojournal: Mariner 10 at Venus and Mercury: https://science.nasa.gov/photojournal/venus-from-mariner-10
+- Source: Ness et al., The magnetic field of Mercury confirmed (Nature, 1975): https://www.nature.com/articles/255204a0
+- Launched 3 November 1973, 05:45 UT (00:45 EST, same date in Florida), Atlas-Centaur: https://science.nasa.gov/mission/mariner-10/; https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1973-085A
+- Venus flyby 5 February 1974, 5,768 km, 17:01 UT: https://science.nasa.gov/mission/mariner-10/; https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1973-085A
+- First to use one planet's gravity to reach another; first to explore two planets; first to study Mercury; first to return to its target: https://science.nasa.gov/mission/mariner-10/ ('Firsts' list)
+- Gravity assist saved the cost of extra fuel and a larger rocket: https://www.nasa.gov/?p=168390
+- More than 4,000 Venus pictures: https://www.nasa.gov/?p=168390 (NASA Science gives 4,165, https://science.nasa.gov/mission/mariner-10/)
+- Ultraviolet filter shows cloud features; cloud tops circle Venus in about four and a half days; images of 7 and 8 February 1974: https://science.nasa.gov/photojournal/venus-from-mariner-10
+- Colombo, University of Padua, re-encounter every 176 days: https://www.nasa.gov/?p=168390 (Mercury's year 88 days, twice = 176)
+- First Mercury pass 29 March 1974 about 700 km: 703 km at 20:47 UT (https://science.nasa.gov/mission/mariner-10/), 704 km at 20:46 UT (https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1973-085A), 438 mi = 705 km (https://www.nasa.gov/?p=168390), 690 km (https://science.nasa.gov/photojournal/large-circular-basin-1300-km-diameter). Rounded to 'about 700 km' because the sources disagree
+- Second pass 21 September 1974, 48,069 km: https://science.nasa.gov/mission/mariner-10/; https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1973-085A
+- Third pass 16 March 1975, 327 km, the closest: https://science.nasa.gov/mission/mariner-10/; https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1973-085A
+- Attitude-control gas ran out; last contact 24 March 1975 (12:21 UT): https://science.nasa.gov/mission/mariner-10/; https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1973-085A
+- Moon-like cratered surface with smooth plains: https://www.nasa.gov/?p=168390; PIA02438 (https://images.nasa.gov/details/PIA02438)
+- Cliffs hundreds of miles long, rose as the interior cooled and contracted: https://science.nasa.gov/mercury/facts/
+- 3:2 spin-orbit resonance, same side lit on every pass, 40 to 45 percent imaged: https://www.nasa.gov/?p=168390; NASA Science says 'nearly half' (https://science.nasa.gov/mission/mariner-10/)
+- Detail as small as 100 meters: https://science.nasa.gov/mission/mariner-10/
+- Caloris about 1,300 km, seen on the first flyby, half beyond the terminator: https://science.nasa.gov/photojournal/large-circular-basin-1300-km-diameter; https://science.nasa.gov/photojournal/mercurys-caloris-basin. Today's figure is 1,550 km (https://science.nasa.gov/mercury/facts/), hence 'more than 1,300 km'
+- Caloris named for heat, faces the Sun at perihelion: https://science.nasa.gov/photojournal/mercurys-caloris-basin (it says 'Greek'; the word is Latin, so the page says only 'from the word for heat')
+- Weak magnetic field, surprising: https://www.nasa.gov/?p=168390 (it gives 1/60th of Earth's); 1 percent at the surface: https://science.nasa.gov/mercury/facts/. Written as 'around a hundredth'
+- Field confirmed as the planet's own on the third pass: https://www.nature.com/articles/255204a0
+- MESSENGER flybys 14 January 2008, 6 October 2008, 29 September 2009, orbit from 18 March 2011: https://science.nasa.gov/mission/messenger/
+- Image PIA03103 is NSSDC's 'Mercury Mosaic #1' (18 frames at 42 s intervals from 200,000 km, about 6 hours before closest approach, 29 March 1974): https://nssdc.gsfc.nasa.gov/photo_gallery/photogallery-mercury.html. Compared by eye with NSSDC's mercuryglobe1.jpg. The Photojournal and NASA library caption for PIA03103 wrongly repeats the Shakespeare quadrangle text of PIA00067
+- Image PIA02961, minutes after closest approach: https://images.nasa.gov/details/PIA02961
+- Not used: number of Mercury pictures (over 2,700 in https://science.nasa.gov/mission/mariner-10/; about 2,000 + 500 + 450 in https://www.nasa.gov/?p=168390)
+
+## Pioneer 11: the first to Saturn (`pioneer-11`)
+
+- Source: NASA SP-446, Pioneer: First to Jupiter, Saturn, and Beyond (1980): https://atmos.nmsu.edu/data_and_services/atmospheres_data/Galileo/nasa-sp-446-Pioneer-First-to-Jupiter-Saturn-and-Beyond.pdf
+- Source: NASA Science: Pioneer 11: https://science.nasa.gov/mission/pioneer-11/
+- Source: NSSDC: Pioneer 11: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1973-019A
+- Source: NASA History: 40 Years Ago, Pioneer 11 First to Explore Saturn: https://www.nasa.gov/history/40-years-ago-pioneer-11-first-to-explore-saturn/
+- Source: NASA History: 45 Years Ago, Pioneer 11 Explores Jupiter: https://www.nasa.gov/?p=307762
+- Launched 6 April 1973 02:11 UT, Launch Complex 36B: https://science.nasa.gov/mission/pioneer-11/; 9:11 p.m. EST on 5 April 1973: https://atmos.nmsu.edu/data_and_services/atmospheres_data/Galileo/nasa-sp-446-Pioneer-First-to-Jupiter-Saturn-and-Beyond.pdf ('liftoff at 9:11 p.m. EST on April 5, 1973')
+- Built as backup to Pioneer 10, retargeted after Pioneer 10's Jupiter pass: https://www.nasa.gov/history/40-years-ago-pioneer-11-first-to-explore-saturn/; https://www.nasa.gov/?p=307762
+- Atlas-Centaur with an added upper stage: https://www.nasa.gov/?p=307762; https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1973-019A
+- Jupiter closest approach 3 December 1974 UT (9:22 p.m. PST on 2 December): https://atmos.nmsu.edu/data_and_services/atmospheres_data/Galileo/nasa-sp-446-Pioneer-First-to-Jupiter-Saturn-and-Beyond.pdf (Pioneer 11 went behind Jupiter at 9:01 p.m. PST, 21 minutes before closest approach); https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1973-019A; https://www.nasa.gov/?p=307762
+- Jupiter distance about 43,000 km: 43,000 km (https://atmos.nmsu.edu/data_and_services/atmospheres_data/Galileo/nasa-sp-446-Pioneer-First-to-Jupiter-Saturn-and-Beyond.pdf; https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1973-019A), 42,500 km (https://science.nasa.gov/mission/pioneer-11/), 26,618 mi = 42,840 km (https://www.nasa.gov/?p=307762)
+- Less than a third of Pioneer 10's distance: https://atmos.nmsu.edu/data_and_services/atmospheres_data/Galileo/nasa-sp-446-Pioneer-First-to-Jupiter-Saturn-and-Beyond.pdf (Pioneer 10 at 132,252 km)
+- Speed more than 170,000 km/h at Jupiter: 173,000 km/h (https://atmos.nmsu.edu/data_and_services/atmospheres_data/Galileo/nasa-sp-446-Pioneer-First-to-Jupiter-Saturn-and-Beyond.pdf), 171,000 km/h (https://science.nasa.gov/mission/pioneer-11/)
+- South-to-north path, almost straight up through the radiation belts: https://atmos.nmsu.edu/data_and_services/atmospheres_data/Galileo/nasa-sp-446-Pioneer-First-to-Jupiter-Saturn-and-Beyond.pdf; https://www.nasa.gov/?p=307762
+- Best Great Red Spot images to date, first images of the polar regions: https://www.nasa.gov/?p=307762; https://atmos.nmsu.edu/data_and_services/atmospheres_data/Galileo/nasa-sp-446-Pioneer-First-to-Jupiter-Saturn-and-Beyond.pdf (Figure 5-21); https://science.nasa.gov/image-detail/amf-40d16944-3a46-4ddd-8f0c-e369db2cd3c1
+- Carried across the solar system about 2.4 billion km to Saturn: https://atmos.nmsu.edu/data_and_services/atmospheres_data/Galileo/nasa-sp-446-Pioneer-First-to-Jupiter-Saturn-and-Beyond.pdf (elsewhere 'roughly 2.5 billion km' for the leg between the planets)
+- Looped high above the ecliptic, more than 1 AU above it by May 1976: https://atmos.nmsu.edu/data_and_services/atmospheres_data/Galileo/nasa-sp-446-Pioneer-First-to-Jupiter-Saturn-and-Beyond.pdf
+- Renamed Pioneer Saturn after Jupiter, still called Pioneer 11: https://atmos.nmsu.edu/data_and_services/atmospheres_data/Galileo/nasa-sp-446-Pioneer-First-to-Jupiter-Saturn-and-Beyond.pdf (p. 84)
+- Sun's magnetic field: simple north/south configuration with a warped current sheet: https://atmos.nmsu.edu/data_and_services/atmospheres_data/Galileo/nasa-sp-446-Pioneer-First-to-Jupiter-Saturn-and-Beyond.pdf (p. 84-85)
+- Inside-the-rings versus outside route, the outside one a pathfinder for Voyager 2 to Uranus and Neptune; managers chose Voyager: https://www.nasa.gov/history/40-years-ago-pioneer-11-first-to-explore-saturn/; 11 of 12 principal investigators favored the inside route, NASA Headquarters chose outside: https://atmos.nmsu.edu/data_and_services/atmospheres_data/Galileo/nasa-sp-446-Pioneer-First-to-Jupiter-Saturn-and-Beyond.pdf (p. 85-87)
+- Ring-plane crossing 1 September 1979, 14:36 UT: https://science.nasa.gov/mission/pioneer-11/; 7:36 a.m. PDT = 14:36 UT: https://atmos.nmsu.edu/data_and_services/atmospheres_data/Galileo/nasa-sp-446-Pioneer-First-to-Jupiter-Saturn-and-Beyond.pdf (p. 90)
+- About 35,000 km beyond the A ring's outer edge: 35,400 km, https://atmos.nmsu.edu/data_and_services/atmospheres_data/Galileo/nasa-sp-446-Pioneer-First-to-Jupiter-Saturn-and-Beyond.pdf; https://atmos.nmsu.edu/data_and_services/atmospheres_data/SATURN/pioneer_flyby.html
+- 86 minutes for the signal to reach Earth; fear that ring particles could destroy it: https://atmos.nmsu.edu/data_and_services/atmospheres_data/Galileo/nasa-sp-446-Pioneer-First-to-Jupiter-Saturn-and-Beyond.pdf (p. 8 and 90)
+- Saturn closest approach about 21,000 km: 20,930 km at 9:31 a.m. PDT (https://atmos.nmsu.edu/data_and_services/atmospheres_data/Galileo/nasa-sp-446-Pioneer-First-to-Jupiter-Saturn-and-Beyond.pdf), 20,900 km (https://science.nasa.gov/mission/pioneer-11/), 21,000 km (https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1973-019A), 21,400 km planned (https://atmos.nmsu.edu/data_and_services/atmospheres_data/Galileo/nasa-sp-446-Pioneer-First-to-Jupiter-Saturn-and-Beyond.pdf)
+- 440 images: https://science.nasa.gov/mission/pioneer-11/; https://www.nasa.gov/history/40-years-ago-pioneer-11-first-to-explore-saturn/
+- F ring, narrow, outside the A ring; new satellite 1979 S1 in the images; others hinted by particle absorptions: https://atmos.nmsu.edu/data_and_services/atmospheres_data/Galileo/nasa-sp-446-Pioneer-First-to-Jupiter-Saturn-and-Beyond.pdf (p. 91, Figures 6-34, 6-40); https://science.nasa.gov/mission/pioneer-11/. NASA History says 'two new moons' (https://www.nasa.gov/history/40-years-ago-pioneer-11-first-to-explore-saturn/); SP-446 says 1979 S1 and S2 may be one body, so the page says 'a small moon' and 'hinted at more'
+- Saturn emits more heat than it absorbs; field almost exactly aligned with the rotation axis, unlike Earth's and Jupiter's: https://atmos.nmsu.edu/data_and_services/atmospheres_data/Galileo/nasa-sp-446-Pioneer-First-to-Jupiter-Saturn-and-Beyond.pdf (p. 91)
+- Titan passed the next day, 2 September, almost 354,000 km: https://atmos.nmsu.edu/data_and_services/atmospheres_data/Galileo/nasa-sp-446-Pioneer-First-to-Jupiter-Saturn-and-Beyond.pdf (p. 8; 355,600 km planned, 355,000 km on the NMSU page); featureless orange: https://science.nasa.gov/mission/pioneer-11/; https://www.nasa.gov/history/40-years-ago-pioneer-11-first-to-explore-saturn/
+- Last contact 30 September 1995 (Ames), science and daily telemetry ended then: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1973-019A; https://science.nasa.gov/mission/pioneer-11/ (last engineering data 24 November 1995)
+- Image p11-saturn-titan: about 2.8 million km (2,846,000 km): https://science.nasa.gov/image-detail/amf-cf2ae57d-b5f0-42ea-b5e3-c955208bc278/. Its date there (1 September 1979) can't be right at that distance, so the caption gives none
+- Image p11-jupiter-north: 'Jupiter as seen from above its north pole by Pioneer 11 in 1974': https://science.nasa.gov/mission/pioneer-11/
+- Image ARC-1979-AC79-9114-57: 'Pioneer Saturn PMOC (Mission Control Center)', dated 2 August 1979: https://images.nasa.gov/details/ARC-1979-AC79-9114-57
+- Not used: the retargeting date (19 April 1974 burn in https://atmos.nmsu.edu/data_and_services/atmospheres_data/Galileo/nasa-sp-446-Pioneer-First-to-Jupiter-Saturn-and-Beyond.pdf; 'May 1974' in https://www.nasa.gov/history/40-years-ago-pioneer-11-first-to-explore-saturn/) and the moon's size (200 km in https://science.nasa.gov/mission/pioneer-11/)
+
+## Luna 9: the first pictures from the Moon (`luna-9`)
+
+- Source: NASA SP-2018-4041, Siddiqi, Beyond Earth (Luna 9): https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf
+- Source: NSSDC: Soviet Missions to the Moon: https://nssdc.gsfc.nasa.gov/planetary/lunar/lunarussr.html
+- Source: NASA Science: Surveyor 1: https://science.nasa.gov/mission/surveyor-1/
+- Source: Wikipedia: Luna 9: https://en.wikipedia.org/wiki/Luna_9
+- Launched 31 January 1966, 11:41:37 UT, Molniya-M, Baikonur (NIIP-5): https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf
+- Twelfth Soviet soft-landing attempt: https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf
+- Engine fired at 74.885 km for 48 s; boom sensor touched surface, capsule ejected: https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf
+- Lander capsule 58 cm, 99.8 kg (Wikipedia 99 kg), airbags, petals (no count given), came to rest a few meters away: https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf and https://en.wikipedia.org/wiki/Luna_9
+- Landed 3 February 1966, Ocean of Storms, west of Reiner and Marius (Siddiqi 18:45:30 UT; NSSDC 18:44:52 UT; page gives the day only): https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf and https://nssdc.gsfc.nasa.gov/planetary/lunar/lunarussr.html
+- Telemetry 4 min 10 s after touchdown; pictures waited about 7 hours, first at 01:50 UT 4 February as the Sun rose from 3 to 7 degrees: https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf
+- Nine images, five panoramas: https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf and https://en.wikipedia.org/wiki/Luna_9
+- Shift in viewpoint (about 100 mm), possibly from dwindling thermal-control water, allowed stereo: https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf
+- Jodrell Bank intercepted the data, pictures published in British media via Lovell before Soviet media (Ustinov asleep): https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf
+- Signal matched the Radiofax newspaper standard; Daily Express rushed a receiver; BBC speculated it was deliberate: https://en.wikipedia.org/wiki/Luna_9
+- Surface could support a heavy lander, did not sink into dust: https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf
+- Last contact 6 February 1966 (20:37 to 22:55 UT session); seven sessions, 8 h 5 min: https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf
+- Surveyor 1 landed 2 June 1966 in the Ocean of Storms: https://science.nasa.gov/mission/surveyor-1/
+- Site named Planitia Descensus by the IAU in 1970: https://en.wikipedia.org/wiki/Luna_9
+
+## Lunokhod 1: a rover on the Moon (`lunokhod-1`)
+
+- Source: NASA SP-2018-4041, Siddiqi, Beyond Earth (Luna 17 and Lunokhod 1): https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf
+- Source: NSSDC: Soviet Missions to the Moon: https://nssdc.gsfc.nasa.gov/planetary/lunar/lunarussr.html
+- Source: LROC: Lunokhod 1 Revisited: https://lroc.im-ldi.com/posts/402
+- Source: Wikipedia: Lunokhod 1: https://en.wikipedia.org/wiki/Lunokhod_1
+- Launched 10 November 1970, 14:44:01 UT, Proton-K, Baikonur: https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf
+- Landed 17 November 1970, Mare Imbrium (Siddiqi 03:46:50 UT; NSSDC 03:47 UT): https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf and https://nssdc.gsfc.nasa.gov/planetary/lunar/lunarussr.html
+- Rolled off at 06:27:07 UT (Wikipedia 06:28), so about 2 h 40 min after touchdown: https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf and https://en.wikipedia.org/wiki/Lunokhod_1
+- First rover lost 19 February 1969, payload shroud tore off, booster exploded at T+54 s: https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf
+- Two landing ramps on two sides (LROC: ramps on two sides, rover used the east side): https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf and https://lroc.im-ldi.com/posts/402
+- Rover 756 kg, 1.35 m high, 2.15 m across, eight independently controlled wheels: https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf
+- Solar cells on the inside of the hinged lid; chemical batteries: https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf
+- Polonium-210 heater for the lunar nights: https://en.wikipedia.org/wiki/Lunokhod_1
+- Instruments: TV cameras, photometer panoramic cameras, RIF-MA X-ray spectrometer, PrOP penetrometer, French TL-1 laser reflector: https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf
+- Two five-man crews (commander, driver, flight engineer, navigator, narrow-beam antenna operator); minimum 4.1 s delay incl. 2.6 s signal round trip; top speed about 100 m/h; 'sedentary cosmonauts': https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf
+- Design life 3 lunar days, worked 11; last session 13:05 UT 14 September 1971; contact attempts ended 4 October 1971: https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf
+- Distance: Siddiqi 10.47 km, revised in 2013 to 9.93 km; Wikipedia 10.54 km; LROC 10.5 km; page says about 10 km: https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf and https://en.wikipedia.org/wiki/Lunokhod_1 and https://lroc.im-ldi.com/posts/402
+- More than 20,000 TV images and 206 panoramas; 25 soil analyses; penetrometer at 537 (Wikipedia 500) places, page says hundreds: https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf and https://en.wikipedia.org/wiki/Lunokhod_1
+- Sojourner, first Mars rover, 5 July 1997: https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf
+- Found in LRO images in March 2010 (M114185541RC); APOLLO laser ranging from 22 April 2010 (UC San Diego team): https://en.wikipedia.org/wiki/Lunokhod_1
+- Siddiqi says laser ranging resumed in March 2010, Wikipedia 22 April 2010; page says 2010 only: https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf
+
+## Luna 16: Moon soil by robot (`luna-16`)
+
+- Source: NASA SP-2018-4041, Siddiqi, Beyond Earth (Luna 16, Luna 15): https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf
+- Source: NSSDC: Soviet Missions to the Moon: https://nssdc.gsfc.nasa.gov/planetary/lunar/lunarussr.html
+- Source: ASU News: LRO Camera snaps images of Soviet robotic samplers: https://news.asu.edu/20201228-lro-camera-snaps-images-soviet-robotic-samplers
+- Source: NASA Image Library: PIA12984, Luna 16: https://images.nasa.gov/details/PIA12984
+- Source: Wikipedia: Luna 16: https://en.wikipedia.org/wiki/Luna_16
+- Launched 12 September 1970, 13:25:52 UT, Proton-K, Baikonur: https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf and https://en.wikipedia.org/wiki/Luna_16
+- Success came after five consecutive failures: https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf
+- Luna 15 lost at 15:50:40 UT on 21 July 1969, crashed in Mare Crisium, a little over 2 hours before Apollo 11's liftoff: https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf
+- Lunar orbit 17 September 1970: https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf
+- Landed 05:18 UT 20 September 1970, northeast Sea of Fertility: https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf and https://nssdc.gsfc.nasa.gov/planetary/lunar/lunarussr.html
+- First landing in lunar night, Sun had set about 60 hours earlier: https://en.wikipedia.org/wiki/Luna_16
+- Drill started at 06:03 UT, under an hour after landing; 7 minutes; stopped at 35 cm; sample lifted in an arc to a spherical capsule; some soil apparently fell out: https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf
+- Site photography unsuccessful due to poor lighting; sampling in the dark (ASU): https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf and https://news.asu.edu/20201228-lro-camera-snaps-images-soviet-robotic-samplers
+- Upper stage lifted off 07:43:21 UT 21 September 1970; no mid-course corrections on return: https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf
+- Capsule reentered at 10.95 km/s, up to 350 g, 34 kg, landed 80 km SE of Dzhezkazgan at 05:26 UT 24 September 1970: https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf
+- 101 grams; mature mare regolith with fused soil and glass; ages 4.25 to 4.85 billion years quoted; resembled Apollo 12 soil: https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf
+- Samples shared with France, East Germany, Iraq and others: https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf
+- Sample exchange with NASA in Moscow on 10 June 1971 (Apollo 11 and 12 samples): https://en.wikipedia.org/wiki/Luna_16
+- Luna 20 (1972) and Luna 24 (1976) sample returns; LROC located descent stages of Luna 16, 20, 24: https://news.asu.edu/20201228-lro-camera-snaps-images-soviet-robotic-samplers
+
+## Venera 15 and 16: radar maps of Venus (`venera-15-16`)
+
+- Source: NASA SP-2018-4041, Siddiqi, Beyond Earth (Venera 15, Venera 16): https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf
+- Source: NASA PDS Geosciences Node: Venera 15/16 radar products: https://pds-geosciences.wustl.edu/missions/venera/index.htm
+- Source: NTRS: Akim, Zakharov, Krivtsov, Venus radar mapping from Venera 15 and 16 (1992): https://ntrs.nasa.gov/citations/19930005101
+- Source: NASA Photojournal: PIA00465, Venera and Magellan resolutions: https://science.nasa.gov/photojournal/venus-comparison-of-venera-and-magellan-resolutions/
+- Source: Wikipedia: Venera 15: https://en.wikipedia.org/wiki/Venera_15
+- Venera 15 launched 2 June 1983 02:38:39 UT, Venera 16 7 June 1983 02:32 UT, Proton-K + Blok D-1, Baikonur: https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf and https://en.wikipedia.org/wiki/Venera_15
+- Bus lengthened 1 m, larger solar panels, side-looking radar antenna in place of the lander: https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf
+- Orbit insertion 10 October 1983 (Venera 15) and 14 October 1983 (Venera 16): https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf
+- Near-polar orbits about 24 h; working orbits 873 x 65,000 km and 944 x 65,336 km (Wikipedia infobox gives other figures): https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf and https://en.wikipedia.org/wiki/Venera_15
+- Polyus-V side-looking SAR plus Omega radar altimeter: https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf and https://en.wikipedia.org/wiki/Venera_15
+- Venera 16 typically followed Venera 15 over the same area after a three-day gap: https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf
+- Resolution 1 to 2 km, comparable to Arecibo; Venera covered latitudes above 30 N, too far north for Earth-based radar: https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf
+- Mapping began six days after orbit insertion; main mission ended 10 July 1984: https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf
+- About 115 million square km from 30 N to the pole: https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf
+- 27 mosaics covering 25 percent of the surface at 1 to 2 km: https://ntrs.nasa.gov/citations/19930005101
+- Maxwell Montes and Lakshmi Planum in the SAR image: https://pds-geosciences.wustl.edu/venera/maxwell.txt
+- Coronae first identified in 1983 in Venera 15/16 radar: https://en.wikipedia.org/wiki/Corona_(planetary_geology)
+- Venera 15/16 SAR showed 'chaotically tiled terrain'; Soviet name 'parquet', later tesserae: https://en.wikipedia.org/wiki/Tessera_(Venus)
+- Pioneer Venus Orbiter radar altimetry, first global topographic map: https://en.wikipedia.org/wiki/Pioneer_Venus_Orbiter
+- Small hills in Venera images predicted as shield volcanoes, confirmed by Magellan: https://science.nasa.gov/photojournal/venus-comparison-of-venera-and-magellan-resolutions/
+- Venera 15 last contact 5 January 1985; Venera 16 lost 13 June 1985 after a Vega 1 command: https://www.nasa.gov/wp-content/uploads/2018/09/beyond-earth-tagged.pdf
+- Siddiqi's 'Atlas of Venus ... Venera 14 and 15' (1988) looks like a slip for 15 and 16; not used
