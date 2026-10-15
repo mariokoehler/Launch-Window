@@ -313,3 +313,26 @@ Written 2026-10-15 from these sources (design.md 2.12); the pages are assets/con
 - Lander contact ended November 1982 (NASA Science says 11 Nov, NSSDC 13 Nov; page says only November): https://science.nasa.gov/mission/viking-1/ and https://nssdc.gsfc.nasa.gov/planetary/viking.html
 - Over 1,400 images from the two landers; orbiters imaged the whole planet: https://nssdc.gsfc.nasa.gov/planetary/viking.html
 - Renamed Thomas Mutch Memorial Station in 1982, imaging team leader: https://science.nasa.gov/mission/viking-1/
+
+## Weaker sources and open points (the writers' notes, 2026-10-15)
+
+Dates are UT, as NSSDC gives them (a fact box adds the local date where it differs). Where sources disagreed,
+the pages say less; these rest on one weaker source, or on none fetched, and are the ones to recheck:
+
+- **Luna 3:** the far-side atlas published in 1960 (Wikipedia only).
+- **Lunar Orbiter 1:** Boeing building the Lunar Orbiters (Wikipedia only); who first called Lunar Orbiter 2's
+  Copernicus view "the picture of the century" is disputed, so the page says only that the press did.
+- **The first spacewalks:** Leonov's landing far off target, the two nights in the forest and the rescue on
+  skis (RussianSpaceWeb and Wikipedia; no NASA or ESA page found); whether he entered the airlock head or
+  feet first (his account and the film disagree; the page gives both); White's "saddest moment" (NASA's
+  Astronomy Picture of the Day and Wikipedia; the transcript wasn't found on nasa.gov); the photo
+  S65-30431 over the Pacific (APOD and Wikipedia, not NASA's caption).
+- **Apollo 11:** "Contact light" as the probes under the footpads touching the surface, and Kennedy's May
+  1961 goal (the JFK Library's page, not fetched): both common knowledge, unfetched here.
+- **Pioneer 10:** Jupiter's radiation "about ten times stronger than predicted" (Wikipedia only; NASA Science
+  says only that it was intense).
+- **Venera:** Venera 13 and 14's pictures as the only color views from Venus's surface (Wikipedia only);
+  NSSDC's Venera entries were read from web.archive.org copies (its catalogue page errored that day).
+- **Apollo 8:** the Earthrise photographer: the Apollo Flight Journal (NASA's Scientific Visualization
+  Studio) credits all three frames to Anders, Borman's *Countdown* says he took the color one; the page says
+  both.

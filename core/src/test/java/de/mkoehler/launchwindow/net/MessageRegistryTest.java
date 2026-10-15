@@ -32,6 +32,9 @@ import de.mkoehler.launchwindow.net.messages.FetchStateRequest;
 import de.mkoehler.launchwindow.net.messages.FetchStateResponse;
 import de.mkoehler.launchwindow.net.messages.FrontPagesRequest;
 import de.mkoehler.launchwindow.net.messages.FrontPagesResponse;
+import de.mkoehler.launchwindow.net.messages.ArchiveRequest;
+import de.mkoehler.launchwindow.net.messages.ArchiveResponse;
+import de.mkoehler.launchwindow.net.messages.ArchiveUnlock;
 import de.mkoehler.launchwindow.net.messages.GameInfoRequest;
 import de.mkoehler.launchwindow.net.messages.GameInfoResponse;
 import de.mkoehler.launchwindow.net.messages.ResolveTurnNowRequest;
@@ -271,6 +274,17 @@ class MessageRegistryTest {
         assertEquals(pages, roundTrip(pages, FrontPagesResponse.class));
         assertEquals(FrontPagesResponse.failure("nope"), roundTrip(FrontPagesResponse.failure("nope"),
             FrontPagesResponse.class));
+    }
+
+    @Test
+    void archiveMessagesSurviveRoundTrip() {
+        // Built from immutable inputs, as the client and server do: the records copy into registered lists.
+        ArchiveRequest request = ArchiveRequest.of(List.of("lunar-photos", "crewed-lunar-orbit"));
+        assertEquals(request, roundTrip(request, ArchiveRequest.class));
+        ArchiveResponse answer = ArchiveResponse.of(List.of(new ArchiveUnlock("lunar-photos", 12, false),
+            new ArchiveUnlock("crewed-lunar-orbit", 51, true)));
+        assertEquals(answer, roundTrip(answer, ArchiveResponse.class));
+        assertEquals(ArchiveResponse.failure("nope"), roundTrip(ArchiveResponse.failure("nope"), ArchiveResponse.class));
     }
 
     @Test

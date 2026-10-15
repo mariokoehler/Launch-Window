@@ -68,7 +68,8 @@ missions. Decisions from that review are marked *(decided)*.
 - **Local screenshots of an artboard:** save the canvas's `artifact-type/dc-runtime.js` next to
   the `.dc.html` files as `support.js`, copy the `/_blob/` assets into a local `_blob/` folder,
   serve the folder over HTTP (SVGs as `image/svg+xml`) and screenshot with headless Chromium,
-  giving the window about 87 px of extra height.
+  giving the window about 87 px of extra height. `assets-raw/tools/shoot_canvas.py` does it (2026-10-15;
+  `pip install playwright` and `python -m playwright install chromium` first).
 
 ---
 
