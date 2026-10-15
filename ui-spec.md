@@ -2928,17 +2928,33 @@ like an encyclopedia article:
 
 **Server work:** G15.
 
-**Mocked up (2026-10-15, canvas `Launch Window — Archive`, 7 artboards; every choice unconfirmed):**
-- **The tab:** a 6 × 2 grid in date order under a timeline rail (the year, a dot per card: white open, gold new,
-  hollow locked). An unlocked card is the Encyclopedia card's frame with a cropped thumbnail, the eyebrow,
-  the title and the summary, "With sound" for a page with one; the whole card opens it. A locked card keeps
-  its eyebrow and title, muted, with a lock in a blank frame and "Unlocks with:" at its foot.
-- **The page:** three columns, the text (676 px), the gallery and the fact box (440 px) with the sound under
-  it. The gallery is a 2 × 2 grid of 5:4 crops; with an odd count the first spans both.
-- **The viewer:** a near-opaque scrim, the whole picture, "2 OF 4 · TITLE", Esc, the arrows (hidden at
-  the ends) and the arrow keys.
-- **The report card:** in the left column after Goals, a row per page with "Flown by you" (green, a check)
-  or "Flown by a rival", and "Open".
+**Mocked up (2026-10-15)** on the canvas `Launch Window — Archive` (the Artifact tool's list finds it): the
+Museum's Archive tab, Apollo 8's page (flown by you; flown by a rival with the sound playing), Mariner 4's
+page without a sound, the image viewer, and the report card with two pages and with one. The pictures are
+placeholders tagged with their real ids. Choices, all **unconfirmed**:
+- **The tab:** the sixth, after Encyclopedia. The header line reads "5 of 12 in the archive · 2 new". The 12
+  cards form a 6 × 2 grid under a timeline rail: the year and a dot per card (white in the archive, gold new,
+  hollow locked), dashed across the jump from 1976 to 1990. An unlocked card is the Encyclopedia card's frame
+  with a 158 px thumbnail, the eyebrow, the title, the summary and "With sound" where there is one; the whole
+  card opens the page. A locked card keeps its eyebrow and title, muted, on a blue-grey card, with the lock icon
+  in the faint navy frame and "Unlocks with:" and the goal at the foot. *Open:* a gold dot on the Archive tab
+  itself would need a new NavTabs property.
+- **The page:** three columns at 1920: the text (676 px), the gallery beside it, and the fact box (440 px). The
+  unlock line sits under the title. The article text is a new style (Work Sans 14/22, headings Archivo 700
+  17 px navy), with numbered Sources. The gallery uses 5:4 crops in two columns; with an odd count the first
+  spans both at 16:9. The fact box has a navy head, label and value rows, and Firsts with gold squares, and a
+  footer line names the goal that unlocked the page.
+- **The audio player:** a 40 px navy square button (the play and pause icons), a 4 px track with a knob, the
+  time and the caption with its credit. Playing shows "PLAYING" in gold-text with a small four-bar glyph,
+  which is optional.
+- **The viewer:** a near-opaque navy scrim (`rgba(12, 22, 42, 0.93)`, a new token), the whole picture as large
+  as fits (uncropped, so Apollo's frames show square), and the caption and credit under it. "2 OF 4" sits top
+  left and the close button with "ESC" top right. 48 px square arrow buttons have the arrow keys hinted under
+  them. At either end that side's arrow is hidden.
+- **The report:** "New in the archive" sits in the left column right after Goals. Each row has a 112 × 72
+  thumbnail, the eyebrow, the title, "Flown by you" (success, with the check) or "Flown by a rival" (muted),
+  the goal and a primary Open. The card has a navy line, and no cell in the summary strip.
+- **No new icons:** play, pause, close, lock, chevron, check and document exist already.
 
 **Built (2026-10-15)** as mocked up (`client.screen.ArchivePageScreen`, the Museum's `Tab.ARCHIVE`,
 `TurnReportScreen.archive`, `client.view.Archive`), with these differences:
