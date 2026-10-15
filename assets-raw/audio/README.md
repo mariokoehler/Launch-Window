@@ -36,16 +36,9 @@ best; the kept takes are renamed into this folder ("(n)" for a second take of a 
 voice runs to its last sample). A line that opens with "Flight," needs more seeds: the word is often
 swallowed.
 
-## Sound effects (`sfx/`)
+## Sound effects: not generated
 
-From 2026-10-15, with the user's workflow (`Sound_Effects.json` in ComfyUI: Stable Audio 3 Medium, the
-prompt first expanded by Qwen with its SFX template). `sfx/make_sfx.py` queues every sound the replay's
-audio plan (`assets-raw/replay/sounds/audio_cues.py`) still lacks, with four seeds, and copies each take
-into ComfyUI's `output/lw_sfx/review/` named for what it should be ("pyro - one-shot 0.2-0.4 s - a
-sharp, metallic crack-bang with a short ring, no boom (s1101).flac"), beside the prompts it was given
-(`sfx-prompts.json`) and the levels (`qc.txt`; a "silent" or "clipped" prefix marks a take to doubt). Takes run
-longer than the plan's length, leaving room to cut: a one-shot is followed by silence, a loop runs 8 s or
-more to find a seamless stretch in. The user listens there, keeps the best and cuts the loops in
-Audacity; kept takes then go into `replay-sounds.json` (credited) and their cues into `cues.json`.
-`--variant=neg` adds a negative prompt against music (the workflow's is empty), `--variant=raw` also
-skips Qwen; their takes go to `output/lw_sfx/<variant>/review/` to compare seed for seed.
+Tried on 2026-10-15 with the user's Stable Audio 3 workflow (`Sound_Effects.json` in ComfyUI): 59 sounds of
+the replay's audio plan, four seeds each. Almost none were usable (the user's verdict), so the takes and the
+script were deleted (it's in git, b0680d2). The user picks curated clips (Pixabay) for a few impactful moments
+instead of a sound under every action.
