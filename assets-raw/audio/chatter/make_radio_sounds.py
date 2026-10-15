@@ -170,7 +170,8 @@ SOUNDS = {
         "\"We've lost contact with the lander.\" The landings' failures, on the Moon and the planets; the "
         "landers' entries' at Venus and Mars, and Venera's descent's (its chute torn away)."),
     "radio-probe-silent": (takes("the_probe_has_stopped_transmitting", 2),
-        "\"The probe has stopped transmitting.\" The failure of the work on the surface (Mars 3)."),
+        "\"The probe has stopped transmitting.\" The failure of the work on the surface (Mars 3), the probe's "
+        "and Viking's lander's at Mars."),
     "radio-drogue-late": (takes("drogue_is_late_drogue_deployed_main_chute_is_out", 3),
         "\"Drogue is late. … Drogue deployed. Main chute is out.\" Not placed yet: no clip shows a late drogue."),
     "radio-pad-shutdown": (takes("engine_shutdown_vehicle_is_safe_on_the_pad", 3),

@@ -612,7 +612,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: MARS 2, VENUS 2
   - Programs: Venera lander 2, Mars 2 1, Viking 1
 - [x] **On the surface of Mars** `mars-surface`: 4 uses in 2 configurations, 2 programs (NASA/SOVIET) uncrewed, later seasons in 4 of 4
-  - Clip: `probe-surface`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `mars-surface`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 2, probe lander 2
   - Destinations: MARS 4
   - Programs: Mars 2 1, Viking 1

@@ -127,6 +127,9 @@
     "success": [{"at": 3.85, "sound": "radio-signal-good"}],
     "failure": [{"at": 3.85, "sound": "radio-lander-lost"}]
   },
+  "mars-surface": {
+    "failure": [{"at": 2.65, "sound": "radio-probe-silent"}]
+  },
   "bus-entry": {
     "success": [{"at": 2.15, "sound": "radio-signal-good"}],
     "glitch": [{"at": 2.9, "sound": "radio-telemetry-lost"}],

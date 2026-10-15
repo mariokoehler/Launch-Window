@@ -389,6 +389,12 @@ STEPS = {
         "success": (6.0, 3.8), "glitch": (6.0, 2.8), "failure": (6.0, 3.8),
         "times": [0.0, 1.4, 2.4, 3.0, 3.9, 5.9],
     },
+    # Work on the surface of Mars (2026-10-15): probe-surface's story with Viking's lander.
+    "mars-surface": {
+        "pad": False, "before": ["orbit.jsx"],
+        "success": (6.0, 2.2), "glitch": (6.0, 2.8), "failure": (6.0, 2.6),
+        "times": [0.8, 1.6, 2.2, 2.8, 3.6, 5.9],
+    },
     # The carrier's entry at Venus (2026-10-15): it burns up in every variant; the data it sends differs.
     "bus-entry": {
         "pad": False, "before": ["orbit.jsx"],

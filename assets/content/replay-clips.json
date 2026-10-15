@@ -124,7 +124,7 @@
     {"step": "landing-and-deployment", "clip": "mars-landing"},
     {"step": "lander-descent-and-landing", "clip": "probe-landing"},
     {"step": "big-probe-descent-and-landing", "clip": "probe-landing"},
-    {"step": "mars-surface", "clip": "probe-surface"},
+    {"step": "mars-surface", "clip": "mars-surface"},
     {"step": "lunar-surface-operations-robotic", "clip": "probe-surface"},
     {"step": "ascent-from-lunar-surface", "clip": "lunar-liftoff"},
     {"step": "earth-venus-approach", "clip": "venus-approach"},

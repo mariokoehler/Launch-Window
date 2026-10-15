@@ -345,7 +345,8 @@ leading to satellite navigation.
   about 8 degrees, which tilted the horizon in its pictures (Malin Space Science Systems, "Views from the
   Viking Landers"; NSSDC's caption of its first colour picture); Mars 3, down safely in a dust storm, sent
   for a few seconds and then nothing more (Wikipedia, "Mars 3"). They're the Mars landing's glitch and
-  failure (`mars-landing`).
+  failure (`mars-landing`); Viking 1's stuck sampler arm and Mars 3's silence are its surface work's
+  (`mars-surface`).
 - **Expert rescue:** Apollo 13's command-module power-up procedure, devised by EECOM John Aaron
   and the ground team and tested in the simulator by Ken Mattingly, grounded by measles
   exposure. A controller and a non-flying astronaut rescuing a mission together is exactly the
