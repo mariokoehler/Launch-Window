@@ -318,7 +318,8 @@ mvn -pl dev-tools compile exec:exec@replayer        # any mission's replay, any 
   as in `deploy/docker-compose.yml`). The server zips the data root into `data/backups/` before
   every turn.
 - **Dev mode:** `"devMode": true` in the server's `game-meta.json` (restart the server) shows
-  "Dev · Resolve turn now" on the hub and allows `DevClient`'s `funds` cheat.
+  "Dev · Resolve turn now" on the hub and allows `DevClient`'s `funds` cheat. `"devArchiveOpen": true`
+  beside it opens every archive page, saving nothing (for reviewing them).
 - **Bot playouts:** `mvn -pl dev-tools compile exec:java -DmainClass=de.mkoehler.launchwindow.devtools.analysis.ContentPackPlayouts`
   (`-Dexec.args=standard` for the full pack, which plays the Moon race; add `ahead` for the bot that
   works ahead, `side` for the one that also flies side missions, or `smart` for the best player, whose parts switch with `-Dbot.*` properties (`Bot.SMART`'s Javadoc), `-Dexec.args="standard side"`)

@@ -29,6 +29,7 @@ public class GameMeta {
     private List<String> declaredGoalIds = new ArrayList<>(DEFAULT_DECLARED_GOALS);
     private long gameSeed;
     private boolean devMode;
+    private boolean devArchiveOpen;
 
     /**
      * The content pack a new game plays, under {@code assets/content/}: BASPM's whole tree (user,
@@ -201,6 +202,25 @@ public class GameMeta {
      */
     public void setDevMode(boolean devMode) {
         this.devMode = devMode;
+    }
+
+    /**
+     * Returns whether every archive page is open, for reviewing them (design.md 2.12): honoured in dev
+     * mode only, and it changes nothing saved.
+     *
+     * @return `true` to open every page
+     */
+    public boolean isDevArchiveOpen() {
+        return devArchiveOpen;
+    }
+
+    /**
+     * Opens every archive page, in dev mode.
+     *
+     * @param devArchiveOpen `true` to open every page
+     */
+    public void setDevArchiveOpen(boolean devArchiveOpen) {
+        this.devArchiveOpen = devArchiveOpen;
     }
 
     void validate() {

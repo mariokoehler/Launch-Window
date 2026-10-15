@@ -449,6 +449,10 @@ public class RequestDispatcher {
                 return ArchiveResponse.failure(ClaimSlotRequest.SLOT_CLAIM_REQUIRED);
             }
             List<String> goals = request.goalIds() == null ? List.of() : List.copyOf(request.goalIds());
+            if (meta.isDevMode() && meta.isDevArchiveOpen()) {
+                // Every page open, for reviewing them (game-meta.json's devArchiveOpen): nothing saved changes.
+                return ArchiveResponse.of(goals.stream().map(goal -> new ArchiveUnlock(goal, 1, true)).toList());
+            }
             Map<String, Integer> first = new LinkedHashMap<>();
             Map<String, Integer> mine = Map.of();
             try (Stream<Path> listing = Files.list(dataRoot.resolve("players"))) {

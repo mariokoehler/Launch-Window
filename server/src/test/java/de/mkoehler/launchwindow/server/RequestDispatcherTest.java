@@ -266,6 +266,24 @@ class RequestDispatcherTest {
     }
 
     /**
+     * Verifies that game-meta.json's devArchiveOpen opens every page asked about, in dev mode only.
+     */
+    @Test
+    void devArchiveOpenOpensEveryPageInDevModeOnly(@TempDir Path dataRoot) {
+        for (boolean dev : new boolean[]{true, false}) {
+            GameMeta meta = ServerTestGames.meta(dev);
+            meta.setDevArchiveOpen(true);
+            Path root = dataRoot.resolve(String.valueOf(dev));
+            RequestDispatcher dispatcher = new RequestDispatcher(createAccountStore(root), root, mapper,
+                ServerTestGames.CONTEXT, meta, ServerTestGames.gameInfo(root, mapper, meta));
+            dispatcher.handleHandshake(1, new HandshakeRequest(AppVersion.getVersion(), "mario", "hunter2"));
+            dispatcher.handleClaimSlot(1, new ClaimSlotRequest(Archetype.SOVIET, "OKB-1", "Chief"));
+            List<ArchiveUnlock> unlocks = dispatcher.handleArchive(1, ArchiveRequest.of(List.of("lunar-flyby"))).unlocks();
+            assertEquals(dev ? List.of(new ArchiveUnlock("lunar-flyby", 1, true)) : List.of(), unlocks);
+        }
+    }
+
+    /**
      * Verifies the whole authenticated flow with a real action: the response names the
      * rules outcome, the preview reflects it, and a rejected action changes nothing.
      */
