@@ -111,6 +111,18 @@ public interface ServerGateway {
     }
 
     /**
+     * Fetches when the archive's goals were first reached in the game ({@code design.md} &sect;2.12,
+     * G15). A read: retried once if the connection broke. By default it never answers, like a gateway
+     * with no server.
+     *
+     * @param credentials who and where
+     * @param goalIds     the goals of the client's archive pages
+     * @param done        called on the render thread with the result
+     */
+    default void fetchArchive(Credentials credentials, java.util.List<String> goalIds, Consumer<ArchiveResult> done) {
+    }
+
+    /**
      * Asks a dev-mode server to resolve the open turn now, then fetches the new state and game
      * info. Never repeated if the connection breaks mid-exchange.
      *

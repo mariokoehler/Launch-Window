@@ -41,6 +41,7 @@ import de.mkoehler.launchwindow.client.screen.OpenRocketScreen;
 import de.mkoehler.launchwindow.client.screen.RocketProgramsScreen;
 import de.mkoehler.launchwindow.client.screen.VabScreen;
 import de.mkoehler.launchwindow.client.screen.MuseumScreen;
+import de.mkoehler.launchwindow.client.screen.ArchivePageScreen;
 import de.mkoehler.launchwindow.client.screen.FrontPageScreen;
 import de.mkoehler.launchwindow.client.screen.AstronautComplexScreen;
 import de.mkoehler.launchwindow.client.screen.PublicAffairsScreen;
@@ -283,6 +284,10 @@ public final class ScreenSnapshot {
             joinNameShots(folder, game);
             return;
         }
+        if ("archive".equals(System.getProperty("shots"))) {
+            archiveShots(folder, game);
+            return;
+        }
         if ("console".equals(System.getProperty("shots"))) {
             consoleShots(folder, game);
             return;
@@ -474,6 +479,53 @@ public final class ScreenSnapshot {
         rivalFirstsShots(folder, game);
         raiseShots(folder, game);
         consoleShots(folder, game);
+        archiveShots(folder, game);
+    }
+
+    /**
+     * The archive (ui-spec.md 4.19): the Museum's tab with pages open, new and locked; a page with its
+     * sound, flown by a rival; a page without one; the viewer; and the turn report's card with two new
+     * pages and with one.
+     */
+    private static void archiveShots(File folder, LaunchWindowGame game) {
+        String hash = ContentPackHash.ofClasspath("content/standard", ScreenSnapshot.class.getClassLoader());
+        GameInfoResponse info = GameInfoResponse.success("standard", hash, List.of(), 52, true,
+            6 * 3_600_000L + 12 * 60_000L, 0L, null, List.of(), List.of(), 0);
+        PlayerSnapshot me = new PlayerSnapshot("Baltic Star Agency", Archetype.NASA, 24_310, 14_280, 3_400, 52);
+        me.setDirectorName("A. Reyes");
+        startSession(game, me, info);
+        // Luna 3, Ranger 7 and the spacewalks opened and read; Lunar Orbiter 1 (a rival) and Apollo 8 (you) new
+        // this turn, 51; Mariner 4 too, later, for its own shot.
+        game.useArchiveReadMarksInMemory(new java.util.HashSet<>(java.util.Set.of("luna-3", "ranger-7",
+            "first-spacewalks")));
+        List<de.mkoehler.launchwindow.net.messages.ArchiveUnlock> unlocks = List.of(
+            new de.mkoehler.launchwindow.net.messages.ArchiveUnlock("lunar-photos", 12, false),
+            new de.mkoehler.launchwindow.net.messages.ArchiveUnlock("lunar-close-up-photos", 30, true),
+            new de.mkoehler.launchwindow.net.messages.ArchiveUnlock("spacewalk", 38, false),
+            new de.mkoehler.launchwindow.net.messages.ArchiveUnlock("lunar-mapping", 51, false),
+            new de.mkoehler.launchwindow.net.messages.ArchiveUnlock("crewed-lunar-orbit", 51, true));
+        game.session().keepArchive(unlocks);
+        write(folder, "archive-museum.png", new MuseumScreen(game, MuseumScreen.Tab.ARCHIVE), null);
+        de.mkoehler.launchwindow.client.view.Archive archive = de.mkoehler.launchwindow.client.view.Archive.standard();
+        List<de.mkoehler.launchwindow.client.view.Archive.Entry> entries = archive.entries(game.session().catalog(),
+            unlocks);
+        de.mkoehler.launchwindow.client.view.Archive.Entry apollo8 =
+            de.mkoehler.launchwindow.client.view.Archive.entry(entries, "apollo-8");
+        write(folder, "archive-page-apollo-8.png", new ArchivePageScreen(game, apollo8, () -> new MuseumScreen(game,
+            MuseumScreen.Tab.ARCHIVE)), null);
+        write(folder, "archive-page-rival.png", new ArchivePageScreen(game,
+            new de.mkoehler.launchwindow.client.view.Archive.Entry(apollo8.page(), 51, false), () -> null), null);
+        write(folder, "archive-viewer.png", new ArchivePageScreen(game, apollo8, () -> null),
+            screen -> screen.openViewer(1));
+        for (String id : List.of("mariner-4", "pale-blue-dot", "venera-surface", "luna-3", "apollo-11")) {
+            write(folder, "archive-page-" + id + ".png", new ArchivePageScreen(game,
+                new de.mkoehler.launchwindow.client.view.Archive.Entry(archive.page(id), 60, true), () -> null), null);
+        }
+        TurnReport report = TurnReport.build(me, me, List.of(), 51, game.session().catalog());
+        game.session().keepReport(report);
+        write(folder, "archive-report.png", new TurnReportScreen(game, report), null);
+        game.session().keepArchive(unlocks.subList(0, 4));
+        write(folder, "archive-report-single.png", new TurnReportScreen(game, report), null);
     }
 
     /** Whether new replay screens get the stand-in video player ({@link #fakeVideoPlayer}). */

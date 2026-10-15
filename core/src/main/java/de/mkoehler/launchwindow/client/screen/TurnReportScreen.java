@@ -23,6 +23,7 @@ import de.mkoehler.launchwindow.client.ui.RelationshipMarker;
 import de.mkoehler.launchwindow.client.ui.ReliabilityBar;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.TraitChip;
+import de.mkoehler.launchwindow.client.view.Archive;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.People;
 import de.mkoehler.launchwindow.client.view.TurnReportView;
@@ -69,6 +70,21 @@ public final class TurnReportScreen extends ChromeScreen {
         titleActions.add(next).padRight(Theme.SPACE_4);
         titleActions.add(actionButton("Continue to Space Complex", Theme.ButtonKind.PRIMARY, this::goHome));
         rebuild();
+        fetchArchive();
+    }
+
+    /** Asks which archive pages this game has opened, for the "New in the archive" card (ui-spec.md 4.19). */
+    private void fetchArchive() {
+        List<String> goals = Archive.standard().goalIds(session.catalog());
+        if (goals.isEmpty()) {
+            return;
+        }
+        game.gateway().fetchArchive(session.credentials(), goals, result -> {
+            if (isShowing() && result.ok()) {
+                session.keepArchive(result.unlocks());
+                rebuild();
+            }
+        });
     }
 
     @Override
@@ -109,6 +125,10 @@ public final class TurnReportScreen extends ChromeScreen {
             newsColumn.add(intelligence(intelligence)).row();
         }
         first.add(goals()).row();
+        Table archive = archive(catalog);
+        if (archive != null) {
+            first.add(archive).row();
+        }
         first.add(buildings()).row();
         Table third = column();
         third.add(people(catalog)).row();
@@ -308,6 +328,52 @@ public final class TurnReportScreen extends ChromeScreen {
             head.add(ui.label(note, Theme.TextStyle.CAPTION, Theme.INK_MUTED)).right();
         }
         card.add(head).padBottom(Theme.SPACE_3).row();
+        return card;
+    }
+
+    /**
+     * The pages this turn opened in the archive (ui-spec.md 4.19), or {@code null} on a turn with none:
+     * a row per page with its picture, who flew it (the rival unnamed) and "Open".
+     */
+    private Table archive(ContentCatalog catalog) {
+        List<Archive.Entry> opened = Archive.standard().openedIn(catalog, session.archive(), report.gameTurn());
+        if (opened.isEmpty()) {
+            return null;
+        }
+        Table card = section("New in the archive", opened.size() == 1 ? "A new page in the Museum"
+            : opened.size() + " new pages in the Museum");
+        card.setBackground(ui.rect(Theme.SURFACE_CARD, Theme.NAVY, Theme.BORDER_EMPHASIS));
+        for (int i = 0; i < opened.size(); i++) {
+            Archive.Entry entry = opened.get(i);
+            Archive.Page page = entry.page();
+            Table row = new Table();
+            Drawable art = ui.croppedPicture(page.thumbnail(), 112f / 72f);
+            row.add(art == null ? new Image(ui.solid(Theme.SKILL_TRACK)) : new Image(art)).size(112f, 72f)
+                .padRight(Theme.SPACE_3);
+            Table text = new Table();
+            text.left();
+            text.defaults().left();
+            text.add(ui.label((page.agency() + " · " + page.date()).toUpperCase(Locale.ROOT), Theme.TextStyle.LABEL,
+                Theme.NAVY)).padBottom(3f).row();
+            text.add(ui.label(page.title(), Theme.TextStyle.BODY_STRONG, Theme.INK)).padBottom(2f).row();
+            Table who = new Table();
+            if (entry.byYou()) {
+                Image check = new Image(ui.icon("check"), Scaling.fit);
+                check.setColor(Theme.SUCCESS);
+                who.add(check).size(12f).padRight(4f);
+            }
+            who.add(ui.label(entry.byYou() ? "Flown by you" : "Flown by a rival", Theme.TextStyle.CAPTION,
+                entry.byYou() ? Theme.SUCCESS : Theme.INK_MUTED));
+            who.add(ui.label("  ·  " + ContentNames.of(page.goalId()), Theme.TextStyle.CAPTION, Theme.INK_MUTED));
+            text.add(who);
+            row.add(text).expandX().fillX().left();
+            row.add(onClick(ui.button("Open", Theme.ButtonKind.PRIMARY), () -> game.setScreen(
+                new ArchivePageScreen(game, entry, () -> new TurnReportScreen(game, report)))));
+            card.add(row).padTop(i == 0 ? 0f : Theme.SPACE_3).row();
+            if (i < opened.size() - 1) {
+                card.add(new Image(ui.solid(Theme.NAVY_BORDER))).height(Theme.BORDER_THIN).padTop(Theme.SPACE_3).row();
+            }
+        }
         return card;
     }
 

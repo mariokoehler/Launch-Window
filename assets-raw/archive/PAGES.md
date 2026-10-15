@@ -1,8 +1,10 @@
 # The archive's first pages: images, audio and rights
 
 The candidates for the archive (`design.md` §2.12, `ui-spec.md` §4.19), researched 2026-10-15. Each page
-is a real mission's story and what it sent back, unlocked in a game by the goal it names. Nothing here is
-downloaded or committed yet; every file goes into `assets/CREDITS.md` with its source when it is.
+is a real mission's story and what it sent back, unlocked in a game by the goal it names. Downloaded and
+built on 2026-10-15 (`make_archive_assets.py`; the originals stay local in `originals/`), credited in
+`assets/CREDITS.md`. Left out: Venera 9's pictures (Mitchell's), the Leonov stamp, the Face on Mars. Lunar
+Orbiter's two frames are Langley's scans of NSSDC's `lo1_h102_123` and `lo2_h162_123`.
 
 **Where the files are:**
 - **NASA's library:** `https://images.nasa.gov/details/<id>`, original at

@@ -9,6 +9,9 @@ import de.mkoehler.launchwindow.model.GameDate;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.model.Season;
 import de.mkoehler.launchwindow.net.AppVersion;
+import de.mkoehler.launchwindow.net.messages.ArchiveRequest;
+import de.mkoehler.launchwindow.net.messages.ArchiveResponse;
+import de.mkoehler.launchwindow.net.messages.ArchiveUnlock;
 import de.mkoehler.launchwindow.net.messages.ClaimSlotRequest;
 import de.mkoehler.launchwindow.net.messages.ClaimSlotResponse;
 import de.mkoehler.launchwindow.net.messages.FetchStateRequest;
@@ -223,6 +226,43 @@ class RequestDispatcherTest {
             List.of(), List.of(new FrontPage.Achiever("OKB-1", "Chief", List.of())), List.of());
         FrontPageStore.keep(dataRoot, GameServer.createMapper(), 3, List.of(page));
         assertEquals(List.of(page), dispatcher.handleFrontPages(1, new FrontPagesRequest()).pages());
+    }
+
+    /**
+     * Verifies the archive's answer (design.md 2.12, G15): per goal asked about, the first turn any
+     * player held it and whether the asker was among the first; a goal nobody holds isn't listed.
+     */
+    @Test
+    void archiveAnswersTheFirstTurnAnyoneHeldEachGoal(@TempDir Path dataRoot) throws Exception {
+        RequestDispatcher dispatcher = dispatcher(createAccountStore(dataRoot), dataRoot, false);
+        dispatcher.handleHandshake(1, new HandshakeRequest(AppVersion.getVersion(), "mario", "hunter2"));
+        dispatcher.handleHandshake(2, new HandshakeRequest(AppVersion.getVersion(), "anna", "secret"));
+        assertFalse(dispatcher.handleArchive(1, ArchiveRequest.of(List.of("earth-orbit-satellite"))).success(),
+            "a slot is needed");
+        dispatcher.handleClaimSlot(1, new ClaimSlotRequest(Archetype.SOVIET, "OKB-1", "Chief"));
+        dispatcher.handleClaimSlot(2, new ClaimSlotRequest(Archetype.NASA, "NACA", "Anna"));
+        List<Path> players;
+        try (java.util.stream.Stream<Path> listing = Files.list(dataRoot.resolve("players"))) {
+            players = listing.filter(Files::isDirectory).toList();
+        }
+        for (Path player : players) {
+            de.mkoehler.launchwindow.persistence.PlayerSnapshotStore store =
+                new de.mkoehler.launchwindow.persistence.PlayerSnapshotStore(player, mapper);
+            PlayerSnapshot snapshot = store.load().orElseThrow();
+            boolean soviet = snapshot.getArchetype() == Archetype.SOVIET;
+            // The Soviets reach the satellite in turn 3, NASA in turn 5; both reach radio from orbit in turn 6.
+            snapshot.getAchievedGoals().put("earth-orbit-satellite", soviet ? 3 : 5);
+            snapshot.getAchievedGoals().put("radio-signals-from-orbit", 6);
+            store.save(store.latestTurnNumber().orElse(0) + 1, snapshot, null);
+        }
+
+        ArchiveResponse response = dispatcher.handleArchive(2,
+            ArchiveRequest.of(List.of("earth-orbit-satellite", "radio-signals-from-orbit", "lunar-flyby")));
+
+        assertTrue(response.success());
+        assertEquals(List.of(new ArchiveUnlock("earth-orbit-satellite", 3, false),
+            new ArchiveUnlock("radio-signals-from-orbit", 6, true)), response.unlocks(),
+            "NASA was second to the satellite, tied first to radio from orbit; nobody flew past the Moon");
     }
 
     /**

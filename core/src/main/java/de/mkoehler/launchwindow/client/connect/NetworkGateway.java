@@ -8,6 +8,8 @@ import de.mkoehler.launchwindow.net.NetworkClient;
 import de.mkoehler.launchwindow.net.messages.ClaimSlotRequest;
 import de.mkoehler.launchwindow.net.messages.ClaimSlotResponse;
 import de.mkoehler.launchwindow.net.messages.FetchStateRequest;
+import de.mkoehler.launchwindow.net.messages.ArchiveRequest;
+import de.mkoehler.launchwindow.net.messages.ArchiveResponse;
 import de.mkoehler.launchwindow.net.messages.FrontPagesRequest;
 import de.mkoehler.launchwindow.net.messages.FrontPagesResponse;
 import de.mkoehler.launchwindow.net.messages.FetchStateResponse;
@@ -28,6 +30,7 @@ import de.mkoehler.launchwindow.persistence.PlayerAction;
 import de.mkoehler.launchwindow.rules.TurnReport;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -267,6 +270,29 @@ public final class NetworkGateway implements ServerGateway {
         } catch (IOException | RuntimeException e) {
             dropConnection();
             return new FrontPagesResult(false, e.getMessage(), null);
+        }
+    }
+
+    @Override
+    public void fetchArchive(Credentials credentials, List<String> goalIds, Consumer<ArchiveResult> done) {
+        run(() -> {
+            ArchiveResult first = fetchArchiveOnce(credentials, goalIds);
+            return !first.ok() && client == null ? fetchArchiveOnce(credentials, goalIds) : first;
+        }, message -> new ArchiveResult(false, message, null), done);
+    }
+
+    private ArchiveResult fetchArchiveOnce(Credentials credentials, List<String> goalIds) {
+        Optional<LoginResult> refusal = ensureSession(credentials);
+        if (refusal.isPresent()) {
+            return new ArchiveResult(false, refusal.get().message(), null);
+        }
+        try {
+            ArchiveResponse response = client.sendAndReceive(ArchiveRequest.of(goalIds), ArchiveResponse.class);
+            return response.success() ? new ArchiveResult(true, "", response.unlocks())
+                : new ArchiveResult(false, response.message(), null);
+        } catch (IOException | RuntimeException e) {
+            dropConnection();
+            return new ArchiveResult(false, e.getMessage(), null);
         }
     }
 

@@ -46,6 +46,7 @@ public class LaunchWindowGame extends Game {
     private boolean advisorMinimized;
     /** The explainers' read marks when kept in memory (screenshots), else {@code null}. */
     private java.util.Set<String> explainersReadInMemory;
+    private java.util.Set<String> archiveReadInMemory;
     private java.util.Set<String> frontPagesSeenInMemory;
     private java.util.Set<String> flagsInMemory;
     private float pendingFontScale;
@@ -236,6 +237,47 @@ public class LaunchWindowGame extends Game {
      */
     public void useExplainerReadMarksInMemory(java.util.Set<String> read) {
         explainersReadInMemory = read;
+    }
+
+    /**
+     * Returns whether this player has opened an archive page on this device, for the Museum's "new"
+     * dot ({@code ui-spec.md} &sect;4.19). Kept like the explainers' read marks.
+     *
+     * @param pageId the page
+     * @return whether it was opened
+     */
+    public boolean archiveRead(String pageId) {
+        if (archiveReadInMemory != null) {
+            return archiveReadInMemory.contains(pageId);
+        }
+        return session != null && preferences().getBoolean(key("archiveRead." + pageId), false);
+    }
+
+    /**
+     * Marks an archive page as opened.
+     *
+     * @param pageId the page
+     */
+    public void markArchiveRead(String pageId) {
+        if (archiveReadInMemory != null) {
+            archiveReadInMemory.add(pageId);
+            return;
+        }
+        if (session == null || archiveRead(pageId)) {
+            return;
+        }
+        com.badlogic.gdx.Preferences preferences = preferences();
+        preferences.putBoolean(key("archiveRead." + pageId), true);
+        preferences.flush();
+    }
+
+    /**
+     * Keeps the archive's read marks in memory instead of the preferences (screenshots).
+     *
+     * @param read the pages to treat as opened; the set is changed as more are opened
+     */
+    public void useArchiveReadMarksInMemory(java.util.Set<String> read) {
+        archiveReadInMemory = read;
     }
 
     /**

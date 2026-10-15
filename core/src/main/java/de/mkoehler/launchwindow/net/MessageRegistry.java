@@ -306,5 +306,10 @@ public final class MessageRegistry {
         kryo.register(de.mkoehler.launchwindow.net.messages.FrontPagesResponse.class);
         kryo.register(de.mkoehler.launchwindow.model.FrontPage.class);
         kryo.register(de.mkoehler.launchwindow.model.FrontPage.Achiever.class);
+
+        // The archive (design.md section 2.12, G15, 2026-10-15). Never move these lines.
+        kryo.register(de.mkoehler.launchwindow.net.messages.ArchiveRequest.class);
+        kryo.register(de.mkoehler.launchwindow.net.messages.ArchiveResponse.class);
+        kryo.register(de.mkoehler.launchwindow.net.messages.ArchiveUnlock.class);
     }
 }

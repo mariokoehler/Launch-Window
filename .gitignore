@@ -77,3 +77,6 @@ assets-raw/frontpage/review/
 assets-raw/splash/build/
 # Mission step clips: layers, EffectCraft projects and renders (assets-raw/replay/README.md)
 assets-raw/replay/*/build/
+
+# The archive's downloaded originals (some are 30 MB TIFFs): make_archive_assets.py fetches them again.
+assets-raw/archive/originals/

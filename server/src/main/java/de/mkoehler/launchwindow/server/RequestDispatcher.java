@@ -9,6 +9,9 @@ import de.mkoehler.launchwindow.net.messages.ClaimSlotRequest;
 import de.mkoehler.launchwindow.net.messages.ClaimSlotResponse;
 import de.mkoehler.launchwindow.net.messages.FetchStateRequest;
 import de.mkoehler.launchwindow.net.messages.FetchStateResponse;
+import de.mkoehler.launchwindow.net.messages.ArchiveRequest;
+import de.mkoehler.launchwindow.net.messages.ArchiveResponse;
+import de.mkoehler.launchwindow.net.messages.ArchiveUnlock;
 import de.mkoehler.launchwindow.net.messages.FrontPagesRequest;
 import de.mkoehler.launchwindow.net.messages.FrontPagesResponse;
 import de.mkoehler.launchwindow.net.messages.GameInfoRequest;
@@ -45,6 +48,7 @@ import java.nio.file.Path;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -169,6 +173,9 @@ public class RequestDispatcher {
         }
         if (message instanceof FrontPagesRequest request) {
             return new DispatchResult(handleFrontPages(connectionId, request), false);
+        }
+        if (message instanceof ArchiveRequest request) {
+            return new DispatchResult(handleArchive(connectionId, request), false);
         }
         throw new IllegalArgumentException("Unexpected message type: " + message.getClass().getName());
     }
@@ -419,6 +426,54 @@ public class RequestDispatcher {
             return FrontPagesResponse.of(FrontPageStore.load(dataRoot, mapper));
         } catch (IOException | RuntimeException e) {
             return FrontPagesResponse.failure("Failed to read the front pages: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Handles an {@link ArchiveRequest} ({@code design.md} &sect;2.12, G15): for each goal asked about,
+     * the first turn any player held it (achieved or credited through a cascade), read from every
+     * player's latest resolved snapshot, and whether the asking player was among the first. Only the
+     * goals and turns leave the server, never who reached them.
+     *
+     * @param connectionId the connection the request arrived on
+     * @param request      the request
+     * @return the response
+     */
+    public ArchiveResponse handleArchive(int connectionId, ArchiveRequest request) {
+        String accountId = connectionAccountIds.get(connectionId);
+        if (accountId == null) {
+            return ArchiveResponse.failure("Not authenticated - send a HandshakeRequest first.");
+        }
+        try {
+            if (!hasSlot(accountId)) {
+                return ArchiveResponse.failure(ClaimSlotRequest.SLOT_CLAIM_REQUIRED);
+            }
+            List<String> goals = request.goalIds() == null ? List.of() : List.copyOf(request.goalIds());
+            Map<String, Integer> first = new LinkedHashMap<>();
+            Map<String, Integer> mine = Map.of();
+            try (Stream<Path> listing = Files.list(dataRoot.resolve("players"))) {
+                for (Path playerDir : listing.filter(Files::isDirectory).sorted().toList()) {
+                    Optional<PlayerSnapshot> snapshot = new PlayerSnapshotStore(playerDir, mapper).load();
+                    if (snapshot.isEmpty()) {
+                        continue;
+                    }
+                    Map<String, Integer> times = WinCondition.goalTimes(snapshot.get(), goals, context.catalog());
+                    times.forEach((goal, turn) -> first.merge(goal, turn, Math::min));
+                    if (playerDir.getFileName().toString().equals(accountId)) {
+                        mine = times;
+                    }
+                }
+            }
+            List<ArchiveUnlock> unlocks = new ArrayList<>();
+            for (String goal : goals) {
+                Integer turn = first.get(goal);
+                if (turn != null) {
+                    unlocks.add(new ArchiveUnlock(goal, turn, turn.equals(mine.get(goal))));
+                }
+            }
+            return ArchiveResponse.of(unlocks);
+        } catch (IOException | RuntimeException e) {
+            return ArchiveResponse.failure("Failed to read the archive: " + e.getMessage());
         }
     }
 

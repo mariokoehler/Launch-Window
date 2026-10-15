@@ -1,0 +1,1018 @@
+{
+  "pages": [
+    {
+      "id": "luna-3",
+      "goalId": "lunar-photos",
+      "title": "Luna 3: the far side of the Moon",
+      "agency": "USSR",
+      "date": "October 1959",
+      "when": "1959-10",
+      "summary": "The first look at the side of the Moon that never faces the Earth.",
+      "facts": [
+        {
+          "label": "Craft",
+          "value": "Luna 3 (then the “Automatic Interplanetary Station”)"
+        },
+        {
+          "label": "Launch vehicle",
+          "value": "8K72 (Luna)"
+        },
+        {
+          "label": "Launched",
+          "value": "4 October 1959, Baikonur"
+        },
+        {
+          "label": "At the Moon",
+          "value": "6 October 1959, past the south pole"
+        },
+        {
+          "label": "Pictures taken",
+          "value": "7 October 1959, 29 frames in about 40 minutes"
+        },
+        {
+          "label": "Crew",
+          "value": "None"
+        },
+        {
+          "label": "Agency",
+          "value": "USSR (OKB-1)"
+        }
+      ],
+      "firsts": [
+        "First pictures of the Moon’s far side",
+        "First spacecraft to fly past the Moon"
+      ],
+      "sections": [
+        {
+          "heading": "The flight",
+          "text": "Luna 3 left Baikonur on 4 October 1959, two years to the day after Sputnik. The Soviet press called it the Automatic Interplanetary Station; the name Luna 3 came later. It was not aimed at the Moon itself but at a long loop around the Earth that swung it past the Moon’s south pole on 6 October and then up and behind it. Seen from there, the far side was in full sunlight, and the probe’s orbit would bring it back toward Earth to send what it saw."
+        },
+        {
+          "heading": "The pictures",
+          "text": "On 7 October 1959, with the Moon filling its view, Luna 3 took 29 photographs in about 40 minutes. They covered roughly 70 percent of the far side. The images that reached Earth were faint and full of noise, and only 17 were usable, but they showed something nobody expected: hardly any of the dark, smooth plains that mark the near side. The far side was rough, bright and crowded with craters. Two dark patches stood out, later named Mare Moscoviense and the crater Tsiolkovskiy."
+        },
+        {
+          "heading": "A darkroom in space",
+          "text": "Television cameras were not yet good enough, so Luna 3 carried a twin-lens film camera with its own darkroom. After the last exposure the film was developed, fixed and dried on board, then scanned by a fine beam of light and sent home line by line as a radio signal, like a fax. The film itself had a strange past: it came from American reconnaissance balloons that had drifted over the Soviet Union, whose unexposed rolls turned out to stand heat and radiation well."
+        },
+        {
+          "heading": "Why it mattered",
+          "text": "For all of human history half of the Moon had been out of sight. Luna 3 settled what was there in a single morning, and its pictures went around the world as proof of how far ahead the Soviet program was. Scientists had to explain why the two halves of the Moon are so different, a question that is still studied. A Soviet atlas of the far side followed in 1960, and the names chosen then, for Soviet places and for scientists and writers, are still on the map."
+        }
+      ],
+      "sources": [
+        "NASA SP-2018-4041, Siddiqi, Beyond Earth (Luna 3)",
+        "NASA NSSDC, Luna 3 image lu3_1",
+        "NASA Science, First Close-up of the Far Side of Moon",
+        "NASA SVS, Lunar Far Side: From Luna 3 to LRO",
+        "Wikipedia, Luna 3"
+      ],
+      "images": [
+        {
+          "file": "archive/lu3_1.jpg",
+          "caption": "The first view of the Moon’s far side, 7 October 1959, with Mare Moscoviense and the crater Tsiolkovskiy.",
+          "credit": "Luna 3 (USSR, 1959). Image via NASA/NSSDC · lu3_1"
+        }
+      ]
+    },
+    {
+      "id": "ranger-7",
+      "goalId": "lunar-close-up-photos",
+      "title": "Ranger 7: the Moon up close",
+      "agency": "NASA",
+      "date": "July 1964",
+      "when": "1964-07",
+      "summary": "After six failures, a probe that filmed the Moon until the moment it hit.",
+      "facts": [
+        {
+          "label": "Craft",
+          "value": "Ranger 7"
+        },
+        {
+          "label": "Launch vehicle",
+          "value": "Atlas-Agena B"
+        },
+        {
+          "label": "Launched",
+          "value": "28 July 1964, Cape Kennedy"
+        },
+        {
+          "label": "Impact",
+          "value": "31 July 1964, later named Mare Cognitum"
+        },
+        {
+          "label": "Pictures",
+          "value": "More than 4,300 in the last 17 minutes"
+        },
+        {
+          "label": "Crew",
+          "value": "None"
+        },
+        {
+          "label": "Agency",
+          "value": "NASA (JPL)"
+        }
+      ],
+      "firsts": [
+        "First pictures of the Moon taken by a US spacecraft",
+        "First close-up pictures of the lunar surface"
+      ],
+      "sections": [
+        {
+          "heading": "The flight",
+          "text": "Ranger 7 left Cape Kennedy on an Atlas-Agena B on 28 July 1964. Its job was simple to state: fly straight into the Moon and send back television pictures all the way down. After one course correction on 29 July it arrived precisely on target two days later. On 31 July 1964 it struck a plain between Mare Nubium and Oceanus Procellarum at about 2.6 kilometers per second. The spot was later named Mare Cognitum, the Known Sea, as the first place on the Moon seen up close."
+        },
+        {
+          "heading": "The pictures",
+          "text": "About 17 minutes before impact, at an altitude of some 2,100 kilometers, the first picture came in. Six television cameras then sent more than 4,300 images to the Goldstone station in California, each one closer than the last. The final frames were taken less than a second before impact and were cut off when the spacecraft hit. They showed craters inside craters, down to pits about half a meter across, even on plains that looked smooth from Earth. In many places the detail was a thousand times finer than any telescope could give."
+        },
+        {
+          "heading": "Six failures first",
+          "text": "Ranger 7 came after a hard run. Rangers 1 and 2 never left Earth orbit. Ranger 3 missed the Moon by tens of thousands of kilometers, Ranger 4 hit the far side with its computer dead, and Ranger 5 missed after a power failure. Ranger 6 reached its target in January 1964 but a short circuit had disabled its cameras, and it returned no pictures at all. The program came under heavy criticism, and its future depended on the next flight."
+        },
+        {
+          "heading": "Why it mattered",
+          "text": "Before Ranger 7 no one could rule out a Moon too rough, or too deep in dust, for a landing. Its pictures showed a surface battered by impacts at every scale but with level ground in the maria, and scientists concluded that a crewed landing there was possible. Rangers 8 and 9 followed in 1965, then the Surveyor landers. Ranger 7 also ended a long losing streak for American lunar probes, and the successes that followed made it a turning point for the whole program."
+        }
+      ],
+      "sources": [
+        "NASA NSSDC, Ranger 7",
+        "NASA History, 60 Years Ago: Ranger 7 Photographs the Moon",
+        "NASA Science, Ranger 7, first successful US Moon mission",
+        "NASA SP-2018-4041, Siddiqi, Beyond Earth (Ranger VII)",
+        "NASA/JPL Photojournal, PIA02975",
+        "Wikipedia, Ranger 7"
+      ],
+      "images": [
+        {
+          "file": "archive/pia02975.jpg",
+          "caption": "The first picture of the Moon by a US spacecraft, about 17 minutes before impact, with the crater Alphonsus at center right.",
+          "credit": "NASA/JPL · PIA02975"
+        },
+        {
+          "file": "archive/pia02974.jpg",
+          "caption": "The crater Guericke on the edge of Mare Nubium, taken 8.5 minutes before impact.",
+          "credit": "NASA/JPL · PIA02974"
+        },
+        {
+          "file": "archive/ra7_p200.jpg",
+          "caption": "Ranger 7’s last frames, cut off when the spacecraft struck the Moon on 31 July 1964.",
+          "credit": "NASA/JPL · ra7_p200"
+        }
+      ]
+    },
+    {
+      "id": "first-spacewalks",
+      "goalId": "spacewalk",
+      "title": "The first spacewalks: Leonov and White",
+      "agency": "USSR and NASA",
+      "date": "March and June 1965",
+      "when": "1965-03",
+      "summary": "Two men leave their spacecraft within three months, and both struggle to get back in.",
+      "facts": [
+        {
+          "label": "Craft",
+          "value": "Voskhod 2; Gemini 4"
+        },
+        {
+          "label": "Launched",
+          "value": "18 March 1965; 3 June 1965"
+        },
+        {
+          "label": "Crew",
+          "value": "Pavel Belyayev, Alexei Leonov; James McDivitt, Edward White"
+        },
+        {
+          "label": "Time outside",
+          "value": "About 12 minutes (Leonov); about 23 minutes (White)"
+        },
+        {
+          "label": "Home",
+          "value": "19 March 1965, Perm region; 7 June 1965, Atlantic"
+        },
+        {
+          "label": "Agency",
+          "value": "USSR; NASA"
+        }
+      ],
+      "firsts": [
+        "First spacewalk (Leonov)",
+        "First American spacewalk (White)",
+        "First use of a hand-held maneuvering gun in space"
+      ],
+      "sections": [
+        {
+          "heading": "Leonov goes out",
+          "text": "On 18 March 1965 Voskhod 2 carried Pavel Belyayev and Alexei Leonov into orbit. Their cabin could not be emptied of air, so it had an inflatable airlock, Volga, fixed to the hatch. On the second orbit Leonov climbed through it and pushed off on a tether, the first person to float free in space. He spent about 12 minutes outside the spacecraft, turning slowly at the end of his line, while cameras filmed him with the Earth below. Belyayev followed him from inside and watched over the airlock."
+        },
+        {
+          "heading": "The hard way back",
+          "text": "In the vacuum Leonov’s suit swelled until it was stiff, and he could no longer bend it enough to get into the airlock. Without asking the ground, he let out air to bring the pressure down, a risk of the bends. He later remembered diving in head first and turning around inside the narrow tube to close the hatch, though film of the moment seems to show him entering feet first. He was drenched in sweat. Then the automatic landing failed, the crew fired the engine by hand, and they came down in snowy forest north of Perm, where they spent two nights before rescuers reached them on skis."
+        },
+        {
+          "heading": "White and the gun",
+          "text": "On 3 June 1965 Gemini 4 launched with James McDivitt and Edward White. Gemini had no airlock: the whole cabin was emptied and White stood up through his hatch over the Pacific. He carried a small gun that fired jets of oxygen, the first try at steering a person in space. Its gas ran out after about three minutes, and after that he moved by pulling on his gold-wrapped tether and twisting his body. McDivitt photographed him from his window, the blue Earth below and the sky black."
+        },
+        {
+          "heading": "Not wanting to come in",
+          "text": "White enjoyed it so much that he stayed out longer than planned, about 23 minutes in all. With the spacecraft heading into darkness, the ground ordered them to end it, and McDivitt had to coax him back. White called it the saddest moment of his life. Getting the hatch shut was a struggle for both of them. These two short walks showed that people could live and work outside a spacecraft, and that doing it well would take far better suits, handholds and training, which Gemini spent the next year learning."
+        }
+      ],
+      "sources": [
+        "RussianSpaceWeb, Voskhod-2 spacewalk",
+        "RussianSpaceWeb, Voskhod-2 landing",
+        "NASA NSSDC, Gemini 4",
+        "NASA APOD, Into the Void (6 June 2015)",
+        "Wikipedia, Voskhod 2",
+        "Wikipedia, Gemini 4"
+      ],
+      "images": [
+        {
+          "file": "archive/s65-30431.jpg",
+          "caption": "Ed White floats outside Gemini 4 on 3 June 1965, holding the oxygen gun he steered with, photographed by McDivitt.",
+          "credit": "NASA · S65-30431"
+        },
+        {
+          "file": "archive/s65-30433.jpg",
+          "caption": "White on his tether, his gold-coated visor shielding him from the unfiltered Sun.",
+          "credit": "NASA · S65-30433"
+        }
+      ]
+    },
+    {
+      "id": "mariner-4",
+      "goalId": "mars-photos",
+      "title": "Mariner 4: the first pictures of Mars",
+      "agency": "NASA",
+      "date": "July 1965",
+      "when": "1965-07",
+      "summary": "The first close-up pictures of another planet show Mars cratered like the Moon.",
+      "facts": [
+        {
+          "label": "Craft",
+          "value": "Mariner 4"
+        },
+        {
+          "label": "Launch vehicle",
+          "value": "Atlas-Agena D"
+        },
+        {
+          "label": "Launched",
+          "value": "28 November 1964"
+        },
+        {
+          "label": "At Mars",
+          "value": "Flew past on 14 July 1965, 9,846 km above the surface"
+        },
+        {
+          "label": "Contact ended",
+          "value": "December 1967"
+        },
+        {
+          "label": "Crew",
+          "value": "None"
+        }
+      ],
+      "firsts": [
+        "First spacecraft to fly past Mars",
+        "First close-up pictures of another planet"
+      ],
+      "sections": [
+        {
+          "heading": "The flight",
+          "text": "Mariner 4 left Cape Canaveral on 28 November 1964 on an Atlas-Agena rocket. Its twin, Mariner 3, had been lost three weeks earlier when the shroud over its nose failed to come off, so the second craft carried the whole hope of the mission. After 228 days in space it swept past Mars on the evening of 14 July 1965, American time, at a closest distance of 9,846 km. It never stopped: everything it learned had to be gathered in that one pass, the camera starting about 42 minutes before the closest approach, and sent home afterwards."
+        },
+        {
+          "heading": "Twenty-one pictures",
+          "text": "During the pass the television camera took 21 full pictures and part of a 22nd, a strip running from the northern lands toward the southern night, about one percent of the planet. They went onto a tape recorder, and once the craft was clear of Mars the slow work of sending them home began. The radio sent 8.33 bits each second, so a single small picture took many hours, and every one was sent twice. The playback ran until 3 August. In all the mission returned about 5.2 million bits, less than a single photograph from a modern phone."
+        },
+        {
+          "heading": "What it found",
+          "text": "The pictures showed craters, old and battered, much like the Moon. One frame caught a crater 151 km across, now named Mariner. There were no canals and no sign of life. As the craft passed behind Mars, its radio signal shone through the edge of the atmosphere, and the way it faded showed the air to be very thin, with a surface pressure of only 4 to 7 millibars, about one percent of Earth's. Daytime temperatures were near minus 100 degrees Celsius, and the instruments found no magnetic field. Landers would need more than parachutes to slow down."
+        },
+        {
+          "heading": "Why it mattered",
+          "text": "When the first numbers came in, the engineers at JPL could not wait for the official picture. A machine printed the values as digits on paper strips; staff pinned the strips side by side and colored them by hand, like painting by numbers, then framed the result for the laboratory's director, William Pickering. It was the first look at another world from close by. The pictures ended the old dream of a Mars much like the Earth and shaped every mission that followed. Mariner 4 kept working long after, and contact ended in December 1967, after its control gas ran out."
+        }
+      ],
+      "sources": [
+        "NSSDC: Mariner 4",
+        "NASA Science: Mariner 4",
+        "JPL: PIA14033, First TV Image of Mars (Hand Colored)",
+        "NASA Photojournal: PIA02979, Mariner Crater",
+        "NASA: Goldstone's 64-meter antenna receives first signals from Mars",
+        "NASA History: 55 years ago, Mariner 4 first to explore Mars"
+      ],
+      "images": [
+        {
+          "file": "archive/pia14033.jpg",
+          "caption": "The first picture of Mars, colored by hand at JPL from strips of printed numbers before the processed image was ready.",
+          "credit": "NASA/JPL-Caltech/Dan Goods · PIA14033"
+        },
+        {
+          "file": "archive/pia14032.jpg",
+          "caption": "The first television picture of Mars, released on 15 July 1965, with its contrast enhanced.",
+          "credit": "NASA/JPL · PIA14032"
+        },
+        {
+          "file": "archive/pia02979.jpg",
+          "caption": "Frame 11E: Mariner crater, 151 km across, with a long ridge running across its floor.",
+          "credit": "NASA/JPL · PIA02979"
+        }
+      ]
+    },
+    {
+      "id": "lunar-orbiter-1",
+      "goalId": "lunar-mapping",
+      "title": "Lunar Orbiter 1: the Earth from the Moon",
+      "agency": "NASA",
+      "date": "August 1966",
+      "when": "1966-08",
+      "summary": "Scouting landing sites for Apollo, and turning around for the first view of Earth.",
+      "facts": [
+        {
+          "label": "Craft",
+          "value": "Lunar Orbiter 1"
+        },
+        {
+          "label": "Launch vehicle",
+          "value": "Atlas-Agena D"
+        },
+        {
+          "label": "Launched",
+          "value": "10 August 1966, Cape Kennedy"
+        },
+        {
+          "label": "At the Moon",
+          "value": "14 August 1966, into lunar orbit"
+        },
+        {
+          "label": "Earth picture",
+          "value": "23 August 1966"
+        },
+        {
+          "label": "Crew",
+          "value": "None"
+        },
+        {
+          "label": "Agency",
+          "value": "NASA (Langley)"
+        }
+      ],
+      "firsts": [
+        "First US spacecraft to orbit the Moon",
+        "First picture of the Earth from the Moon’s vicinity"
+      ],
+      "sections": [
+        {
+          "heading": "The flight",
+          "text": "Lunar Orbiter 1 left Cape Kennedy on an Atlas-Agena D on 10 August 1966 and went into orbit around the Moon on 14 August, the first American spacecraft to do so. The Soviet Luna 10 had got there that April. NASA’s Langley center ran the program, with Boeing building the spacecraft. The goal was practical: Apollo needed safe, smooth places to land, and someone had to look at them closely first. Controllers lowered the orbit step by step to bring the camera nearer the ground."
+        },
+        {
+          "heading": "The pictures",
+          "text": "Over two weeks the orbiter photographed all nine candidate Apollo landing sites, more sites on the far side and the place where Surveyor 1 had touched down in June. Its pictures covered about five million square kilometers. A fault blurred many of the sharpest frames, but the medium-resolution ones were the best views of the lunar surface yet. On 23 August 1966, in a shot that was not in the plan, the spacecraft turned its camera from the Moon to catch a crescent Earth above the lunar horizon."
+        },
+        {
+          "heading": "A spy camera at the Moon",
+          "text": "Lunar Orbiter carried no television camera in the usual sense. It exposed real film, developed it on board, then scanned each frame with a spot of light and radioed the result to Earth in strips, which were pieced together into prints on the ground. The camera, built by Eastman Kodak, came from a system made for an American reconnaissance satellite, a link kept secret until after the Cold War. The method was slow, but it gave far more detail than any television camera of the day."
+        },
+        {
+          "heading": "Why it mattered",
+          "text": "Lunar Orbiter 1 was the first of five. Its successors photographed more candidate sites and, by the end of 1967, nearly the whole Moon, the maps Apollo crews trained and landed with. In November 1966 Lunar Orbiter 2 looked sideways across the crater Copernicus instead of straight down, a view of cliffs and peaks that the press called a picture of the century. The orbiter itself was crashed into the far side on 29 October 1966, so its radio would not interfere with the next one."
+        }
+      ],
+      "sources": [
+        "NASA NSSDC, Lunar Orbiter 1",
+        "NASA Science, Lunar Orbiter 1",
+        "NASA SP-2018-4041, Siddiqi, Beyond Earth (Lunar Orbiter I)",
+        "NASA NSSDC, frame 102 H",
+        "NASA SVS, Copernicus Crater",
+        "Wikipedia, Lunar Orbiter 1"
+      ],
+      "images": [
+        {
+          "file": "archive/lrc-1966-b701_p-07825.jpg",
+          "caption": "The first picture of the Earth from the Moon’s vicinity, 23 August 1966, a crescent Earth above the far side.",
+          "credit": "NASA/Langley · lo1_h102_123"
+        },
+        {
+          "file": "archive/lrc-1967-b701_p-01194.jpg",
+          "caption": "Lunar Orbiter 2 looks north across the crater Copernicus on 24 November 1966, the “picture of the century.”",
+          "credit": "NASA/Langley · lo2_h162_123"
+        }
+      ]
+    },
+    {
+      "id": "apollo-8",
+      "goalId": "crewed-lunar-orbit",
+      "title": "Apollo 8: Earthrise",
+      "agency": "NASA",
+      "date": "December 1968",
+      "when": "1968-12",
+      "summary": "The first people to leave Earth orbit circle the Moon ten times at Christmas.",
+      "facts": [
+        {
+          "label": "Craft",
+          "value": "Apollo command and service module"
+        },
+        {
+          "label": "Launch vehicle",
+          "value": "Saturn V"
+        },
+        {
+          "label": "Launched",
+          "value": "21 December 1968"
+        },
+        {
+          "label": "At the Moon",
+          "value": "24 to 25 December 1968, ten orbits in about 20 hours"
+        },
+        {
+          "label": "Home",
+          "value": "27 December 1968, Pacific Ocean"
+        },
+        {
+          "label": "Crew",
+          "value": "Frank Borman, Jim Lovell, Bill Anders"
+        }
+      ],
+      "firsts": [
+        "First people to leave Earth orbit and circle the Moon",
+        "First crewed flight of the Saturn V",
+        "First people to see the Earth rise over the Moon"
+      ],
+      "sections": [
+        {
+          "heading": "The flight",
+          "text": "Apollo 8 was meant to test the lunar module close to Earth. When the lander ran late in the summer of 1968, NASA chose a bolder plan: send the command ship alone to the Moon. Frank Borman, Jim Lovell and Bill Anders left Florida on 21 December 1968, riding the first Saturn V ever to carry a crew. Three days later they fired their engine behind the Moon, out of radio contact, and slipped into orbit. For about twenty hours they circled ten times, mapping and photographing the surface from about 110 km up, before firing the engine again for home."
+        },
+        {
+          "heading": "Earthrise",
+          "text": "On their fourth time around, the crew rolled the spacecraft and saw the Earth coming up over the gray lunar horizon. Nobody had planned for it. Anders took a black-and-white frame, then asked for a magazine of color film and took two more through a side window. The flight journal's reconstruction credits all three to Anders, though Borman later remembered taking one himself. The second of them, a small blue and white Earth over a barren foreground, became one of the most reproduced photographs ever taken, and many people credit it with helping to change how we see our own planet."
+        },
+        {
+          "heading": "Christmas Eve",
+          "text": "That evening, on the ninth orbit, the crew went on live television. They showed the lunar surface sliding past below and described what they saw. Then, as the spacecraft crossed into lunar night, Borman had planned a closing: each man read in turn from the opening verses of the Book of Genesis, Anders first, then Lovell, then Borman. Borman ended with good night, good luck and a Merry Christmas to everyone on the good Earth. Before the broadcast he had told the others that more people might be listening than had ever listened to anyone."
+        },
+        {
+          "heading": "Why it mattered",
+          "text": "Apollo 8 proved that the Saturn V could carry people, that the navigation could find the Moon and that a crew could fire into lunar orbit and back out again with nobody to help them on the far side. Every later Apollo flight built on what it learned. It came at the end of a hard year, and the pictures of a small, whole Earth gave many people something to share. The crew splashed down in the Pacific on 27 December, and seven months later Apollo 11 followed their path to land."
+        }
+      ],
+      "sources": [
+        "NSSDC: Apollo 8",
+        "Apollo Flight Journal: Lunar Orbit 4 (Earthrise)",
+        "Apollo Flight Journal: Lunar Orbit 9 (Christmas Eve)",
+        "NSSDC: Apollo 8 Christmas Eve broadcast",
+        "NASA: Apollo 8",
+        "NASA History: changes considered to Apollo 8"
+      ],
+      "images": [
+        {
+          "file": "archive/as08-14-2383.jpg",
+          "caption": "The color Earthrise, taken by Bill Anders on the fourth orbit, 24 December 1968.",
+          "credit": "NASA · AS08-14-2383"
+        },
+        {
+          "file": "archive/as08-13-2329.jpg",
+          "caption": "The first Earthrise ever photographed, on black-and-white film, moments before the color frames.",
+          "credit": "NASA · AS08-13-2329"
+        },
+        {
+          "file": "archive/as08-14-2453.jpg",
+          "caption": "Craters on craters: the far side of the Moon, seen soon after Apollo 8 entered lunar orbit.",
+          "credit": "NASA · AS08-14-2453"
+        },
+        {
+          "file": "archive/as08-17-2670.jpg",
+          "caption": "Looking almost straight down on the far side, near 162 degrees west and 6 degrees south.",
+          "credit": "NASA · AS08-17-2670"
+        }
+      ],
+      "sound": {
+        "file": "audio/archive/apollo-8-genesis.ogg",
+        "caption": "The Genesis reading, 24 December 1968.",
+        "credit": "NASA",
+        "seconds": 188
+      }
+    },
+    {
+      "id": "apollo-11",
+      "goalId": "crewed-lunar-landing",
+      "title": "Apollo 11: Tranquility Base",
+      "agency": "NASA",
+      "date": "July 1969",
+      "when": "1969-07",
+      "summary": "Armstrong and Aldrin land on the Moon and walk on it while Collins waits in orbit.",
+      "facts": [
+        {
+          "label": "Craft",
+          "value": "Columbia (command module) and Eagle (lunar module)"
+        },
+        {
+          "label": "Launch vehicle",
+          "value": "Saturn V"
+        },
+        {
+          "label": "Launched",
+          "value": "16 July 1969"
+        },
+        {
+          "label": "Landed",
+          "value": "20 July 1969, Sea of Tranquility"
+        },
+        {
+          "label": "Home",
+          "value": "24 July 1969, Pacific Ocean"
+        },
+        {
+          "label": "Crew",
+          "value": "Neil Armstrong, Buzz Aldrin, Michael Collins"
+        }
+      ],
+      "firsts": [
+        "First people to land on the Moon",
+        "First steps on another world",
+        "First samples of the Moon brought to Earth"
+      ],
+      "sections": [
+        {
+          "heading": "The descent",
+          "text": "Apollo 11 left Florida on 16 July 1969 and reached lunar orbit three days later. On 20 July Neil Armstrong and Buzz Aldrin undocked in the lunar module Eagle and started down, leaving Michael Collins alone in Columbia. The way down was not smooth. The guidance computer flashed alarms, 1202 and then 1201, because it was being asked to do more than it had time for, and Mission Control judged it safe to carry on. Near the bottom Armstrong saw that the computer was taking them into a crater ringed with boulders, took over by hand and flew on, looking for a clear patch."
+        },
+        {
+          "heading": "The Eagle has landed",
+          "text": "Fuel was running low. A warning light came on, and Houston began counting down the seconds left before the crew would have to land or abort. Then Aldrin called \"Contact light\": a probe under a footpad had touched the surface. It was 20:17 UT on 20 July 1969, a summer afternoon in America, and Eagle had less than a minute of usable fuel to spare. Armstrong reported: \"Houston, Tranquility Base here. The Eagle has landed.\" Charlie Duke, the capsule communicator, tripped over the new name before answering that they had a bunch of guys about to turn blue, and were breathing again."
+        },
+        {
+          "heading": "On the surface",
+          "text": "Armstrong stepped down from the ladder at 02:56 UT on 21 July, still the evening of 20 July in America, and said, \"That's one small step for man, one giant leap for mankind.\" He later said he had meant \"for a man\". Aldrin followed him. In a little over two hours outside they planted a flag, took photographs, collected 21.55 kg of rock and soil, and set out a seismometer, a laser reflector and a sheet of foil to catch particles from the Sun. Together they spent about 21 and a half hours on the Moon before Eagle's upper stage lifted off to rejoin Columbia."
+        },
+        {
+          "heading": "Why it mattered",
+          "text": "In May 1961 President Kennedy had asked for a landing on the Moon, and a safe return, before the decade was out. Apollo 11 met that goal with five months to spare, and its crew splashed down in the Pacific on 24 July 1969. The flight was followed live on radio and television around the world. The rocks it brought home began the science of lunar samples, and the questions they raised, about how the Moon formed and how old its surface is, sent the later Apollo crews to very different places."
+        }
+      ],
+      "sources": [
+        "NSSDC: Apollo 11",
+        "Apollo Lunar Surface Journal: The landing",
+        "Apollo Lunar Surface Journal: One small step",
+        "NSSDC: Apollo 11 mission information",
+        "JFK Library: Address to Congress, 25 May 1961"
+      ],
+      "images": [
+        {
+          "file": "archive/as11-40-5903.jpg",
+          "caption": "Buzz Aldrin walks beside a leg of the lunar module Eagle, photographed by Neil Armstrong.",
+          "credit": "NASA · AS11-40-5903"
+        },
+        {
+          "file": "archive/as11-40-5878.jpg",
+          "caption": "A bootprint pressed into the fine lunar soil at Tranquility Base.",
+          "credit": "NASA · AS11-40-5878"
+        },
+        {
+          "file": "archive/as11-40-5875.jpg",
+          "caption": "Aldrin stands beside the flag, with Eagle at the left and the crew's footprints all around.",
+          "credit": "NASA · AS11-40-5875"
+        },
+        {
+          "file": "archive/as11-44-6581.jpg",
+          "caption": "Eagle, legs out for landing, seen from Columbia in lunar orbit before the descent.",
+          "credit": "NASA · AS11-44-6581"
+        },
+        {
+          "file": "archive/as11-44-6642.jpg",
+          "caption": "Eagle's ascent stage comes back to Columbia on 21 July, with the Earth rising behind it.",
+          "credit": "NASA · AS11-44-6642"
+        }
+      ],
+      "sound": {
+        "file": "audio/archive/apollo-11-eagle-has-landed.ogg",
+        "caption": "Neil Armstrong on 20 July 1969: \"Tranquility Base here. The Eagle has landed.\"",
+        "credit": "NASA",
+        "seconds": 4
+      }
+    },
+    {
+      "id": "mariner-9",
+      "goalId": "mars-mapping",
+      "title": "Mariner 9: the first orbiter of another planet",
+      "agency": "NASA",
+      "date": "1971 to 1972",
+      "when": "1971-11",
+      "summary": "The first craft to orbit another planet waits out a dust storm, then maps Mars.",
+      "facts": [
+        {
+          "label": "Craft",
+          "value": "Mariner 9"
+        },
+        {
+          "label": "Launch vehicle",
+          "value": "Atlas-Centaur"
+        },
+        {
+          "label": "Launched",
+          "value": "30 May 1971"
+        },
+        {
+          "label": "At Mars",
+          "value": "In orbit from 14 November 1971"
+        },
+        {
+          "label": "Contact ended",
+          "value": "27 October 1972"
+        },
+        {
+          "label": "Pictures",
+          "value": "7,329"
+        },
+        {
+          "label": "Crew",
+          "value": "None"
+        }
+      ],
+      "firsts": [
+        "First spacecraft to orbit another planet",
+        "First detailed views of Phobos and Deimos"
+      ],
+      "sections": [
+        {
+          "heading": "First into orbit",
+          "text": "Two Mariners were built for Mars in 1971. Mariner 8 was lost when its rocket failed on 9 May, so Mariner 9 left Cape Canaveral alone on 30 May with the work of both. After a flight of 167 days it fired its engine for a little over 15 minutes on 14 November 1971 and became the first spacecraft to orbit another planet. It beat the Soviet Mars 2, which had left Earth eleven days earlier. Its orbit swung it as close as about 1,400 km above the surface and around the planet roughly twice a day."
+        },
+        {
+          "heading": "Waiting out the storm",
+          "text": "Mars was not ready to be seen. In September 1971 a dust storm had started in the southern highlands and grown until it wrapped the whole planet. As Mariner 9 approached, its camera found a featureless orange disk with a few dark spots. Unlike a flyby, an orbiter could wait, so the team held back the mapping and watched the dust from orbit. Through December the dust slowly settled, the dark spots turned out to be mountaintops, and in the first weeks of 1972 the real mapping began."
+        },
+        {
+          "heading": "Volcanoes and a canyon",
+          "text": "The dark spots were the summits of giant volcanoes standing above the dust: the three of Tharsis in a row, and the largest of all, Olympus Mons, about 600 km across at its base. In all, the team identified about 20 volcanoes. As the air cleared, a system of canyons appeared that runs more than 4,000 km along the equator, nearly as long as the United States is wide. It was named Valles Marineris after the spacecraft. The pictures showed a planet far more varied than Mariner 4 had suggested, with volcanoes, canyons and old craters side by side."
+        },
+        {
+          "heading": "Phobos and Deimos",
+          "text": "Mariner 9 also took at least 80 pictures of the two small moons of Mars, the first detailed views of either. Phobos, photographed from 5,760 km, turned out to be a lumpy, cratered rock about 26 km across at its longest, more like an asteroid than a moon. Deimos is smaller still. The spacecraft kept working until its control gas ran out, and it was switched off on 27 October 1972 after sending back 7,329 pictures, enough to map about 85 percent of Mars. It was left in an orbit expected to last at least fifty years."
+        }
+      ],
+      "sources": [
+        "NSSDC: Mariner 9",
+        "NASA Science: Mariner 9",
+        "Photojournal: PIA02999 (Ascraeus Mons)",
+        "Photojournal: PIA02995 (Nix Olympica)",
+        "NSSDC: Phobos, MTVS 4109-9"
+      ],
+      "images": [
+        {
+          "file": "archive/pia02995.jpg",
+          "caption": "On the approach, 11 November 1971: a dark spot above the dust, later known as Olympus Mons.",
+          "credit": "NASA/JPL · PIA02995"
+        },
+        {
+          "file": "archive/pia02999.jpg",
+          "caption": "The summit crater of Ascraeus Mons stands above the dust storm, 17 December 1971.",
+          "credit": "NASA/JPL · PIA02999"
+        },
+        {
+          "file": "archive/pia02998.jpg",
+          "caption": "The great canyon system appears as the dust storm clears.",
+          "credit": "NASA/JPL · PIA02998"
+        },
+        {
+          "file": "archive/m09_mtvs4109_09.jpg",
+          "caption": "Phobos from 5,760 km: a cratered rock about 26 km long.",
+          "credit": "NASA/JPL · MTVS 4109-9"
+        }
+      ]
+    },
+    {
+      "id": "pioneer-10",
+      "goalId": "jupiter-photos",
+      "title": "Pioneer 10: the first to Jupiter",
+      "agency": "NASA",
+      "date": "December 1973",
+      "when": "1973-12",
+      "summary": "First through the asteroid belt, first past Jupiter, and a plaque for whoever finds it.",
+      "facts": [
+        {
+          "label": "Craft",
+          "value": "Pioneer 10"
+        },
+        {
+          "label": "Launch vehicle",
+          "value": "Atlas-Centaur, three stages"
+        },
+        {
+          "label": "Launched",
+          "value": "3 March 1972 (UT; 2 March in Florida)"
+        },
+        {
+          "label": "At Jupiter",
+          "value": "4 December 1973"
+        },
+        {
+          "label": "Contact ended",
+          "value": "23 January 2003"
+        },
+        {
+          "label": "Crew",
+          "value": "None"
+        }
+      ],
+      "firsts": [
+        "First spacecraft through the asteroid belt",
+        "First to fly past Jupiter",
+        "First on a path out of the solar system"
+      ],
+      "sections": [
+        {
+          "heading": "Through the asteroid belt",
+          "text": "Pioneer 10 was launched from Cape Canaveral on a three-stage Atlas-Centaur on the evening of 2 March 1972, Florida time. Leaving Earth at about 51,700 km/h, it was the fastest object people had made at the time and passed the Moon's orbit in about 11 hours. Its first test was the asteroid belt between Mars and Jupiter. Nobody knew how much grit was out there, and some feared a craft could be worn away or wrecked. Pioneer 10 entered the belt on 15 July 1972 and came out in February 1973 unharmed, having met far fewer particles than expected. The way to the outer planets was open."
+        },
+        {
+          "heading": "Jupiter's radiation",
+          "text": "Pioneer 10 flew past Jupiter on 4 December 1973, about 130,000 km above the cloud tops. Its instruments found the planet wrapped in belts of trapped radiation, roughly ten times stronger than its planners had predicted. From 3 December, charged particles set off false commands on board, and some planned pictures were lost, among them close views of the moon Io. Ground controllers sent corrections that saved most of the sequence, and the craft came through. It also showed how far Jupiter's magnetic field reaches: its tail stretches some 800 million km behind the planet, about as far as the orbit of Saturn."
+        },
+        {
+          "heading": "The pictures",
+          "text": "Pioneer 10 carried no camera. Its pictures came from an imaging photopolarimeter, a small telescope 2.5 cm across with one detector for red light and one for blue. The spacecraft spun as it flew, and each turn swept the telescope across the planet in a thin strip; a motor then tipped it a little for the next strip. Computers on the ground put the strips together into images, with green worked out from the red and blue. Between 6 November and 31 December 1973 it took about 500 pictures of Jupiter, the sharpest showing details about 320 km across."
+        },
+        {
+          "heading": "The plaque",
+          "text": "Fixed to the antenna struts, where passing dust would wear it least, is a gold-anodized aluminum plate about 15 by 23 cm. Carl Sagan and Frank Drake designed it and Linda Salzman Sagan drew it. It shows a man and a woman in front of an outline of the spacecraft, the Sun and its planets with Pioneer's path leading out past Jupiter, and the Sun's place marked against 14 pulsars, with a hydrogen atom as the key to the units. The last faint signal from Pioneer 10 reached Earth on 23 January 2003, from about 12 billion km away. The plaque travels on in silence."
+        }
+      ],
+      "sources": [
+        "NASA Science: Pioneer 10",
+        "NSSDC: Pioneer 10",
+        "University of Iowa: the Pioneer plaque",
+        "NASA Image Library: Pioneer 10 at Jupiter",
+        "Wikipedia: Pioneer 10",
+        "Wikipedia: Pioneer plaque"
+      ],
+      "images": [
+        {
+          "file": "archive/arc-1973-ac73-9253.jpg",
+          "caption": "Jupiter on 2 December 1973, from about 2.58 million km, with one of its moons at upper right.",
+          "credit": "NASA Ames Research Center · ARC-1973-AC73-9253"
+        },
+        {
+          "file": "archive/arc-1973-ac73-9278.jpg",
+          "caption": "Jupiter partly in shadow, from about 354,000 km on 3 December 1973, the day before closest approach.",
+          "credit": "NASA Ames Research Center · ARC-1973-AC73-9278"
+        },
+        {
+          "file": "archive/arc-1973-ac73-9279.jpg",
+          "caption": "Ganymede, Jupiter's largest moon, as Pioneer 10's photopolarimeter saw it.",
+          "credit": "NASA Ames Research Center · ARC-1973-AC73-9279"
+        },
+        {
+          "file": "archive/arc-1972-ac72-1338.jpg",
+          "caption": "The plaque Pioneer 10 carries, designed by Carl Sagan and Frank Drake and drawn by Linda Salzman Sagan.",
+          "credit": "NASA Ames Research Center · ARC-1972-AC72-1338"
+        }
+      ]
+    },
+    {
+      "id": "venera-surface",
+      "goalId": "venus-surface-study",
+      "title": "Venus's surface: Venera 9 and Venera 13",
+      "agency": "USSR",
+      "date": "1975 and 1982",
+      "when": "1975-10",
+      "summary": "The first pictures from another planet's surface, then the first in color from Venus.",
+      "facts": [
+        {
+          "label": "Craft",
+          "value": "Venera 9 and Venera 13, each a carrier with a lander"
+        },
+        {
+          "label": "Launch vehicle",
+          "value": "Proton"
+        },
+        {
+          "label": "Launched",
+          "value": "8 June 1975; 30 October 1981"
+        },
+        {
+          "label": "Landed",
+          "value": "22 October 1975; 1 March 1982"
+        },
+        {
+          "label": "Time on the surface",
+          "value": "53 minutes; 127 minutes"
+        },
+        {
+          "label": "Crew",
+          "value": "None"
+        }
+      ],
+      "firsts": [
+        "First pictures from the surface of another planet (Venera 9)",
+        "First color pictures from the surface of Venus (Venera 13)"
+      ],
+      "sections": [
+        {
+          "heading": "Venera 9",
+          "text": "Venera 9 was launched on a Proton rocket from Baikonur on 8 June 1975. Two days out, its lander separated from the craft that would orbit Venus and relay its signal. A heat shield, three parachutes, a drag disk and a crushable landing ring brought it down near the highland of Beta Regio on 22 October 1975. A camera cover stuck, so it saw only half the planned circle, but it sent back the first pictures ever taken on the surface of another planet: flat, sharp-edged rocks 30 to 40 cm across, clear shadows and no dust in the air. It kept working for 53 minutes, until the orbiter passed out of range."
+        },
+        {
+          "heading": "The conditions",
+          "text": "Venus's surface is a brutal place for a machine. Venera 9 measured about 485 °C, hot enough to melt lead, and a pressure about 90 times that at sea level on Earth. Above it, a deep layer of cloud still let through about as much light as a cloudy summer day at Earth's middle latitudes. To last even an hour, the lander was cooled to −10 °C before entry by a circulating fluid that also spread the heat around, and its instruments sat inside a sealed body that the heat slowly worked its way into. Venera 13, landing further south, measured 457 °C and 89 atmospheres."
+        },
+        {
+          "heading": "Venera 13 in color",
+          "text": "Venera 13 left Baikonur on 30 October 1981 and landed on 1 March 1982, east of the highland called Phoebe Regio. Built to last 32 minutes, it worked for 127. Its cameras could look through red, green and blue filters, so its panoramas could be put together in color: flat slabs of rock and dark soil under an orange light, with a cast-off lens cover lying on the ground. A drill took a soil sample into a sealed chamber, where an X-ray instrument found it close to a basalt rich in potassium. A sound detector picked up the noises of the lander at work and of a light wind."
+        },
+        {
+          "heading": "Why it mattered",
+          "text": "Venus hides under clouds no telescope can see through, so until 1975 its surface was known only from radar and from instruments that had measured its heat and pressure. Venera 9 turned it into a place with rocks, shadows and a horizon. Venera 13 and its twin, Venera 14, which landed four days later, added color and the chemistry of the rocks. Their pictures are still the only color views from the surface of Venus, and Venera 13's 127 minutes is still the longest any lander has lasted there. Soviet engineers had built machines that could survive there, if only for an hour or two."
+        }
+      ],
+      "sources": [
+        "NSSDC: Venera 9 Descent Craft",
+        "NSSDC: Venera 13 Descent Craft",
+        "NSSDC: Venera 13 color image",
+        "Guinness World Records: longest time survived on Venus",
+        "Wikipedia: Venera 13"
+      ],
+      "images": [
+        {
+          "file": "archive/v13_vg261_262.jpg",
+          "caption": "Venera 13's color panorama: flat rock slabs and soil, with part of the lander and its cast-off lens cover in front.",
+          "credit": "Venera 13 (USSR, 1982). Image via NASA/NSSDC · v13_vg261_262"
+        }
+      ]
+    },
+    {
+      "id": "viking-1",
+      "goalId": "mars-orbiter-and-lander",
+      "title": "Viking 1: on the surface of Mars",
+      "agency": "NASA",
+      "date": "July 1976",
+      "when": "1976-07",
+      "summary": "The first lander to work on Mars, and the first pictures from its surface.",
+      "facts": [
+        {
+          "label": "Craft",
+          "value": "Viking 1 orbiter and lander"
+        },
+        {
+          "label": "Launch vehicle",
+          "value": "Titan IIIE-Centaur"
+        },
+        {
+          "label": "Launched",
+          "value": "20 August 1975"
+        },
+        {
+          "label": "Landed",
+          "value": "20 July 1976, Chryse Planitia"
+        },
+        {
+          "label": "Contact ended",
+          "value": "November 1982 (lander)"
+        },
+        {
+          "label": "Crew",
+          "value": "None"
+        }
+      ],
+      "firsts": [
+        "First spacecraft to land on Mars and keep working",
+        "First photographs from the surface of Mars"
+      ],
+      "sections": [
+        {
+          "heading": "The landing",
+          "text": "Viking 1 left Cape Canaveral on 20 August 1975 on a Titan IIIE-Centaur and reached Mars on 19 June 1976. The orbiter's pictures showed the planned landing site was rougher than expected, so the team picked a safer spot. On 20 July 1976, seven years to the day after Apollo 11 landed on the Moon, the lander separated from the orbiter and came down on the western slopes of Chryse Planitia, a wide plain north of the Martian equator. The Soviet Mars 3 had touched down in 1971 but fell silent within seconds. Viking 1 was the first to land on Mars and keep working."
+        },
+        {
+          "heading": "The first pictures",
+          "text": "Minutes after touchdown the lander's camera started on its first picture. It did not take a snapshot but scanned the scene strip by strip. The first frame showed the ground close beside the lander: rocks, sand and dust next to footpad 2, with a little fine material thrown onto the pad by the landing. A panorama of the site followed, taken in the late Martian afternoon, showing a rock-strewn plain out to a horizon about 3 km away. The next day, 21 July, the camera scanned a view three times through color filters to make the first color picture from the surface."
+        },
+        {
+          "heading": "The search for life",
+          "text": "From 28 July 1976 the lander's arm scooped soil into a small biology laboratory on board. Three experiments looked for living things in different ways: one fed the soil water and nutrients and watched the gases above it, one fed it nutrients marked with radioactive carbon and watched for that carbon to come back out as gas, and one checked whether soil kept under light took up carbon from a marked atmosphere. Some readings looked like life at first. But another instrument found no organic compounds in the soil, and most scientists came to explain the results by reactive chemistry in the soil. A few, among them the leader of the labeled release experiment, Gilbert Levin, never agreed."
+        },
+        {
+          "heading": "Why it mattered",
+          "text": "Viking 1's lander kept working until November 1982, more than six years on the surface, sending back weather readings and pictures of the same patch of ground through the Martian seasons. With its twin, Viking 2, it returned over 1,400 images of the two landing sites, while the orbiters mapped the whole planet. The answer on life stayed open. In 2008 the Phoenix lander found perchlorate salts in Martian soil, which can destroy organic compounds when heated, as Viking's instrument heated its samples. In 1982 the lander was named the Thomas Mutch Memorial Station, after the leader of its imaging team."
+        }
+      ],
+      "sources": [
+        "NASA Science: Viking 1",
+        "NSSDC: Viking 1 Lander",
+        "NSSDC: Viking Mission to Mars",
+        "PDS Rings Node (mirror of JPL's caption): PIA00381",
+        "Wikipedia: Viking lander biological experiments"
+      ],
+      "images": [
+        {
+          "file": "archive/pia00381.jpg",
+          "caption": "The first picture taken on Mars, minutes after landing: rocks, sand and dust beside footpad 2.",
+          "credit": "NASA/JPL · PIA00381"
+        },
+        {
+          "file": "archive/pia00382.jpg",
+          "caption": "Viking 1's first panorama, with lander hardware in front and a horizon about 3 km away.",
+          "credit": "NASA/JPL · PIA00382"
+        },
+        {
+          "file": "archive/pia00563.jpg",
+          "caption": "The first color picture from the surface, taken on 21 July 1976 and balanced against a test chart on the lander.",
+          "credit": "NASA/JPL · PIA00563"
+        }
+      ]
+    },
+    {
+      "id": "pale-blue-dot",
+      "goalId": "saturn-flyby",
+      "title": "Voyager 1: the Pale Blue Dot",
+      "agency": "NASA",
+      "date": "February 1990",
+      "when": "1990-02",
+      "summary": "Voyager 1 looks back from 6 billion km, and the Earth is less than a pixel of light.",
+      "facts": [
+        {
+          "label": "Craft",
+          "value": "Voyager 1"
+        },
+        {
+          "label": "Launch vehicle",
+          "value": "Titan IIIE-Centaur"
+        },
+        {
+          "label": "Launched",
+          "value": "5 September 1977"
+        },
+        {
+          "label": "Past Saturn",
+          "value": "12 November 1980"
+        },
+        {
+          "label": "Picture taken",
+          "value": "14 February 1990"
+        },
+        {
+          "label": "Distance",
+          "value": "About 6 billion km"
+        },
+        {
+          "label": "Crew",
+          "value": "None"
+        }
+      ],
+      "firsts": [
+        "First portrait of the solar system from outside"
+      ],
+      "sections": [
+        {
+          "heading": "The family portrait",
+          "text": "By 1990 Voyager 1 had passed Jupiter and Saturn and was heading out of the solar system, with no more worlds to fly by. Its cameras were to be switched off to save power for the long journey. Carl Sagan, a member of the Voyager imaging team, had proposed one last use for them: turn around and photograph the planets from outside. Earlier in the mission the Sun had been too close and bright to point the cameras near it safely. On 14 February 1990 Voyager 1 took a series of frames covering the Sun and six of its planets, a family portrait of the solar system. They were its last pictures."
+        },
+        {
+          "heading": "How far",
+          "text": "When it took the portrait, Voyager 1 was about 6 billion km from home, roughly 40 times as far from the Sun as the Earth is, and well above the plane in which the planets travel, about 32 degrees. Light from the Sun needed more than five hours to reach it. It had been traveling for more than twelve years, since its launch on 5 September 1977, and had flown past Saturn on 12 November 1980. From there the inner planets sat only a few degrees from the Sun, so close to its glare that the pictures could not be taken earlier."
+        },
+        {
+          "heading": "Less than a pixel",
+          "text": "In the frame that holds the Earth, taken with the narrow-angle camera through violet, blue and green filters, the whole planet covers about an eighth of a single pixel. It shows as a faint, bluish point of light. By chance it sits inside one of the bands of scattered sunlight that cross the frame, reflections inside the camera from pointing it so near the Sun. Jupiter and Saturn, much larger, filled at least a full pixel in their frames. For the picture's 30th anniversary in 2020, JPL processed the original data again with modern software, trying to stay true to what the planners intended."
+        },
+        {
+          "heading": "Sagan's idea",
+          "text": "Sagan built his 1994 book, Pale Blue Dot: A Vision of the Human Future in Space, around this picture. The idea he drew from it is easy to state. Everything people have ever done has happened on that one faint point, and from far enough away our borders, rivalries and sense of importance shrink to nothing. What remains is a small world that all of us share. For Sagan the picture argued for humility, and for taking better care of the Earth and of each other, because nothing within reach could take its place. The voice on this page is Sagan's own, explaining what the picture meant to him."
+        }
+      ],
+      "sources": [
+        "NASA/JPL Photojournal: PIA00452",
+        "NASA/JPL Photojournal: PIA23645, Pale Blue Dot Revisited",
+        "NASA/JPL Photojournal: PIA00451",
+        "NASA Science: Voyager 1",
+        "Library of Congress: The pale blue dot, short recording"
+      ],
+      "images": [
+        {
+          "file": "archive/pia00452.jpg",
+          "caption": "The Pale Blue Dot: the Earth, less than a pixel across, inside a band of scattered sunlight.",
+          "credit": "NASA/JPL-Caltech · PIA00452"
+        },
+        {
+          "file": "archive/pia23645.jpg",
+          "caption": "Pale Blue Dot Revisited: JPL's 2020 processing of the same data for the picture's 30th anniversary.",
+          "credit": "NASA/JPL-Caltech · PIA23645"
+        },
+        {
+          "file": "archive/pia00451.jpg",
+          "caption": "The family portrait: the frames Voyager 1 took on 14 February 1990, with the Sun at the center.",
+          "credit": "NASA/JPL-Caltech · PIA00451"
+        }
+      ],
+      "sound": {
+        "file": "audio/archive/pale-blue-dot-sagan.ogg",
+        "caption": "Carl Sagan on the Pale Blue Dot.",
+        "credit": "Carl Sagan. Library of Congress, Seth MacFarlane Collection of the Carl Sagan and Ann Druyan Archive (cosmos000110). © Druyan-Sagan Associates",
+        "seconds": 276
+      }
+    }
+  ]
+}

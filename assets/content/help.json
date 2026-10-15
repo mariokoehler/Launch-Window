@@ -37,7 +37,7 @@
         "- Astronaut Complex: the astronauts, their training and PR duty.",
         "- SET Centre: the engineers, and Payload R&D.",
         "- Public Affairs Office: the budget, prestige and the news.",
-        "- Museum: the race, your achievements, flights, the memorial and the encyclopedia.",
+        "- Museum: the race, your achievements, flights, the memorial, the encyclopedia and the archive.",
         "- Intelligence Office: its level and its operations against rivals.",
         "## Levels",
         "Five buildings have levels, and each level raises a cap:",
@@ -93,7 +93,8 @@
         "- Achievements: every goal you reached, with the turn and the prestige.",
         "- Flights: how often you've flown each mission, and the animals that came home from them.",
         "- Memorial: the astronauts, and the animals, lost in your program.",
-        "- Encyclopedia: explainers on how the real thing works, from orbits to heat shields. A gold dot marks one you haven't opened; the concept chips on the program and rocket screens open them too."
+        "- Encyclopedia: explainers on how the real thing works, from orbits to heat shields. A gold dot marks one you haven't opened; the concept chips on the program and rocket screens open them too.",
+        "- Archive: pages about the real missions that sent back memorable pictures, with their photos and, for some, their sound. A page opens for every agency in the game when any agency first reaches its goal, and the turn report says so; until then its card says which goal opens it."
       ],
       "related": ["winning", "careers"]
     },

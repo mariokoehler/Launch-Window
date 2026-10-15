@@ -2889,7 +2889,7 @@ from `assets/content/front-pages.json` (`content.FrontPages`). Shots `frontpage-
 
 ---
 
-### 4.19 Archive *(the user's idea, 2026-10-15; specified the same day for `design.md` §2.12, not mocked up yet)*
+### 4.19 Archive *(the user's idea, 2026-10-15; specified, mocked up and built the same day for `design.md` §2.12)*
 **Purpose:** pages about the real missions that sent back something memorable, unlocked when a goal is
 first reached in the game, so a flight feels like getting its pictures back. The pages, images and
 rights are in `assets-raw/archive/PAGES.md`.
@@ -2927,9 +2927,32 @@ like an encyclopedia article:
 
 **Server work:** G15.
 
-**Mockup notes:** new for Claude Design are the archive card (unlocked, locked, new), the page (text
-column, fact box, gallery, audio player), the image viewer, and the report card. The text, images and
-captions in the mockup can be Apollo 8's from `PAGES.md`.
+**Mocked up (2026-10-15, canvas `Launch Window — Archive`, 7 artboards; every choice unconfirmed):**
+- **The tab:** a 6 × 2 grid in date order under a timeline rail (the year, a dot per card: white open, gold new,
+  hollow locked). An unlocked card is the Encyclopedia card's frame with a cropped thumbnail, the eyebrow,
+  the title and the summary, "With sound" for a page with one; the whole card opens it. A locked card keeps
+  its eyebrow and title, muted, with a lock in a blank frame and "Unlocks with:" at its foot.
+- **The page:** three columns, the text (676 px), the gallery and the fact box (440 px) with the sound under
+  it. The gallery is a 2 × 2 grid of 5:4 crops; with an odd count the first spans both.
+- **The viewer:** a near-opaque scrim, the whole picture, "2 OF 4 · TITLE", Esc, the arrows (hidden at
+  the ends) and the arrow keys.
+- **The report card:** in the left column after Goals, a row per page with "Flown by you" (green, a check)
+  or "Flown by a rival", and "Open".
+
+**Built (2026-10-15)** as mocked up (`client.screen.ArchivePageScreen`, the Museum's `Tab.ARCHIVE`,
+`TurnReportScreen.archive`, `client.view.Archive`), with these differences:
+- **The wide picture** keeps its own shape, between square and 3:1, instead of 16:9, so a whole disc (Luna
+  3) isn't cut.
+- **No arrow hints** under the viewer's buttons: the fonts have no arrow glyphs (the keys still work).
+- **Left out:** the playing state's four-bar glyph (the word "PLAYING" alone) and the dashed rail across
+  the 1976 to 1990 gap.
+- **No gold dot on the Archive tab** (*proposed*; NavTabs has none).
+- **Line height:** the article's 14/22 sets as Work Sans 14 with its own line spacing, since the client
+  applies no style's line height anywhere.
+- **Picking the page from the report** returns to the report; from the tab, to the tab.
+- **Sound:** plays on the music volume, needs Sound On, and stops when the page closes.
+- **New in `Theme.java`:** `SCRIM_VIEWER`, and the text styles `ARTICLE`, `ARTICLE_HEADING` and
+  `ARCHIVE_CARD_TITLE`. No new icons. `ScreenSnapshot -Dshots=archive` renders it all.
 
 ## 5. Refusal reasons (for toasts and inline messages)
 
@@ -3147,18 +3170,22 @@ current state alone. Each is an M5 task.
   *Unconfirmed:* printing the crew's names tells rivals who flew. That's public news, but it names
   astronauts the Intelligence Office's personnel file would otherwise have to find.
 
-- **G15. The archive (§4.19, `design.md` §2.12, 2026-10-15).** Content: `assets/content/archive.json`,
-  outside the pack like the stories, each page with its id, `goalId`, title, agency, date, fact box,
-  sections, sources, images (file, caption, credit) and an optional sound (file, caption, credit);
-  images in `assets/ui/archive/`, sounds in `assets/audio/archive/`. A test holds every page to its
-  goal in the standard pack, its files and its credits, as `ReplayClipsTest` does. Rules: a page's
-  unlock turn is the earliest turn any player's goal records hold its goal; the turn report's new
-  pages are those whose goal nobody held at the start of the turn and somebody holds now (the front
-  pages' rule, `FrontPagePrinter`). Server: a new event on every player's report
-  (`ArchivePagesUnlocked`: page ids, and per page whether the player flew it), appended to the
-  registry, and the unlocked pages with their turns and flyers in the Museum's fetch, or a message of
-  its own. A new message or a changed one means rebuilding client and server together; nothing new is
-  saved, so no reset (*proposed*).
+- **G15. The archive (§4.19, `design.md` §2.12, 2026-10-15). Built the same day,** simpler than first
+  specified: no event and no saved field.
+  - **Content:** `assets/content/archive.json`, outside the pack like the stories, each page with its id,
+    `goalId`, title, agency, date, `when` (its order), summary, facts, firsts, sections, sources, images
+    (file under `ui/`, caption, credit) and an optional sound (file, caption, credit, seconds). Pictures
+    and thumbnails are in `assets/ui/archive/`, sounds in `assets/audio/archive/`. `ArchiveTest` holds every
+    page to a goal of the standard pack, its files to being there and credited, and the folders to
+    nothing unused.
+  - **Server:** `ArchiveRequest` (the client's pages' goals) and `ArchiveResponse` with `ArchiveUnlock`
+    (goal, the first turn any player held it, whether the asker was among the first), appended to the
+    registry. `RequestDispatcher.handleArchive` reads every player's latest snapshot through
+    `WinCondition.goalTimes`, so a cascade credit counts from the turn of the goal that credited it.
+  - **Client:** the Museum and the report fetch it, the session keeps it (`ClientSession.archive`), and a
+    report shows the pages whose unlock turn is its turn (`Archive.openedIn`). A page whose goal the game's
+    pack doesn't have isn't shown.
+  - **Rebuild client and server together** (a new message); no reset.
 
 ## 7. Suggested mockup order
 

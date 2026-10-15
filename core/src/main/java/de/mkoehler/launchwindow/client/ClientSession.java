@@ -11,6 +11,7 @@ import de.mkoehler.launchwindow.content.ContentPackLoader;
 import de.mkoehler.launchwindow.content.ContentStrings;
 import de.mkoehler.launchwindow.content.MissionConfiguration;
 import de.mkoehler.launchwindow.model.FrontPage;
+import de.mkoehler.launchwindow.net.messages.ArchiveUnlock;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.net.messages.RivalSummary;
 import de.mkoehler.launchwindow.rules.TurnReport;
@@ -55,6 +56,7 @@ public final class ClientSession {
     private long lastTurnWithoutReport;
     private List<RivalSummary> rivals;
     private List<FrontPage> frontPages;
+    private List<ArchiveUnlock> archive;
 
     private ClientSession(Credentials credentials, ContentCatalog catalog, PackStatus packStatus, PlayerSnapshot state,
                           GameInfo gameInfo) {
@@ -263,6 +265,25 @@ public final class ClientSession {
      */
     public void keepFrontPages(List<FrontPage> pages) {
         this.frontPages = List.copyOf(pages);
+    }
+
+    /**
+     * Returns the archive's goals reached in the game, fetched last in this session
+     * ({@code design.md} &sect;2.12).
+     *
+     * @return the goals reached, or {@code null} if none were fetched yet
+     */
+    public List<ArchiveUnlock> archive() {
+        return archive;
+    }
+
+    /**
+     * Keeps a freshly fetched answer about the archive's goals.
+     *
+     * @param unlocks the goals reached
+     */
+    public void keepArchive(List<ArchiveUnlock> unlocks) {
+        this.archive = List.copyOf(unlocks);
     }
 
     /**

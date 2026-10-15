@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.Align;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.HistoryNote;
 import de.mkoehler.launchwindow.client.ui.Theme;
+import de.mkoehler.launchwindow.client.view.Archive;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.Explainers;
 import de.mkoehler.launchwindow.client.view.Help;
@@ -50,7 +51,9 @@ public final class MuseumScreen extends ChromeScreen {
         /** Astronauts lost. */
         MEMORIAL("Memorial"),
         /** How things work: the explainers (ui-spec.md component 18). */
-        ENCYCLOPEDIA("Encyclopedia");
+        ENCYCLOPEDIA("Encyclopedia"),
+        /** The real missions' pages, opened by goals (ui-spec.md section 4.19). */
+        ARCHIVE("Archive");
 
         private final String label;
 
@@ -74,9 +77,18 @@ public final class MuseumScreen extends ChromeScreen {
         + "fifteen-day endurance test. His death was kept secret until 1986. A fire in a pure-oxygen cabin also "
         + "killed the Apollo 1 crew on the launch pad in 1967.";
 
+    /** An archive card's width: six to a row (ui-spec.md 4.19). */
+    private static final float ARCHIVE_CARD_WIDTH = 296f;
+    /** An archive card's picture height. */
+    private static final float ARCHIVE_THUMB_HEIGHT = 158f;
+    /** An archive card's height, so a row's cards line up. */
+    private static final float ARCHIVE_CARD_HEIGHT = 352f;
+    private static final int ARCHIVE_COLUMNS = 6;
+
     private Tab tab;
     private Filter filter = Filter.ALL;
     private boolean rivalsFailed;
+    private boolean archiveFailed;
 
     /**
      * Builds the Museum on a tab, fetching the race's rival summaries.
@@ -90,6 +102,26 @@ public final class MuseumScreen extends ChromeScreen {
         this.tab = tab;
         rebuild();
         fetchRivals();
+        fetchArchive();
+    }
+
+    private void fetchArchive() {
+        List<String> goals = Archive.standard().goalIds(session.catalog());
+        if (goals.isEmpty()) {
+            return;
+        }
+        game.gateway().fetchArchive(session.credentials(), goals, result -> {
+            if (!isShowing()) {
+                return;
+            }
+            archiveFailed = !result.ok();
+            if (result.ok()) {
+                session.keepArchive(result.unlocks());
+            }
+            if (tab == Tab.ARCHIVE) {
+                rebuild();
+            }
+        });
     }
 
     private void fetchRivals() {
@@ -142,6 +174,7 @@ public final class MuseumScreen extends ChromeScreen {
             case FLIGHTS -> flights();
             case MEMORIAL -> memorial();
             case ENCYCLOPEDIA -> encyclopedia();
+            case ARCHIVE -> archive();
         }
     }
 
@@ -505,6 +538,140 @@ public final class MuseumScreen extends ChromeScreen {
      */
     public void openExplainer(Explainers.Explainer explainer) {
         game.setScreen(new ExplainerScreen(game, explainer, 0, () -> new MuseumScreen(game, Tab.ENCYCLOPEDIA)));
+    }
+
+    // ---- Archive
+
+    private void archive() {
+        List<Archive.Entry> entries = Archive.standard().entries(session.catalog(), session.archive());
+        long open = entries.stream().filter(Archive.Entry::open).count();
+        long fresh = entries.stream().filter(e -> e.open() && !game.archiveRead(e.page().id())).count();
+        Table head = new Table();
+        head.add(ui.label(open + " of " + entries.size() + " in the archive", Theme.TextStyle.HEADING_SM,
+            Theme.ON_PAGE_STRONG)).left();
+        if (fresh > 0) {
+            head.add(new Image(ui.circle(Theme.GOLD, Theme.GOLD, 0f, 8))).size(8f).padLeft(Theme.SPACE_4).padRight(6f);
+            head.add(ui.label(fresh + " new", Theme.TextStyle.LABEL, Theme.GOLD_ON_PAGE));
+        }
+        head.add().expandX();
+        head.add(ui.label(session.archive() == null ? (archiveFailed
+                ? "Couldn't fetch the archive. Open the Museum again to retry." : "Fetching the archive…")
+                : "The real missions behind the goals, in the order they flew. A page opens for everyone in this game "
+                + "when any agency first reaches its goal.", Theme.TextStyle.CAPTION, Theme.ON_PAGE_STRONG));
+        content.add(head).padBottom(Theme.SPACE_4).row();
+        Table grid = new Table();
+        grid.top().left();
+        // Room for the "new" dots that stick out over the cards' corners (the scroll pane clips).
+        grid.padTop(4f).padRight(8f);
+        for (int start = 0; start < entries.size(); start += ARCHIVE_COLUMNS) {
+            List<Archive.Entry> row = entries.subList(start, Math.min(entries.size(), start + ARCHIVE_COLUMNS));
+            for (int i = 0; i < row.size(); i++) {
+                grid.add(railStop(row.get(i))).width(ARCHIVE_CARD_WIDTH).left().padRight(i == row.size() - 1 ? 0f : 16f)
+                    .padBottom(14f);
+            }
+            grid.row();
+            for (int i = 0; i < row.size(); i++) {
+                grid.add(archiveCard(row.get(i))).width(ARCHIVE_CARD_WIDTH).height(ARCHIVE_CARD_HEIGHT).top()
+                    .padRight(i == row.size() - 1 ? 0f : 16f).padBottom(22f);
+            }
+            grid.row();
+        }
+        content.add(scrollPane(grid)).expand().fill();
+    }
+
+    /** A stop on the timeline over a card: its year, and a dot (white open, gold new, hollow locked). */
+    private Table railStop(Archive.Entry entry) {
+        Table stop = new Table();
+        stop.left();
+        stop.add(ui.label(String.valueOf(entry.page().year()), Theme.TextStyle.EYEBROW, Theme.ON_PAGE_STRONG))
+            .left().padBottom(6f).row();
+        Table line = new Table();
+        line.left();
+        boolean fresh = entry.open() && !game.archiveRead(entry.page().id());
+        Drawable dot = !entry.open() ? ui.circle(Theme.SURFACE_PAGE, Theme.ON_PAGE, 1.5f, 10)
+            : ui.circle(fresh ? Theme.GOLD : Theme.ON_PAGE_STRONG, fresh ? Theme.GOLD : Theme.ON_PAGE_STRONG, 0f, 10);
+        line.add(new Image(dot)).size(10f);
+        Image rail = new Image(ui.solid(new Color(Theme.ON_PAGE).mul(1f, 1f, 1f, 0.55f)));
+        line.add(rail).height(1f).expandX().fillX().padRight(-16f);
+        stop.add(line).growX();
+        return stop;
+    }
+
+    private Actor archiveCard(Archive.Entry entry) {
+        Archive.Page page = entry.page();
+        Table card = new Table();
+        card.top();
+        card.defaults().growX().left();
+        if (!entry.open()) {
+            card.setBackground(ui.rect(new Color(Theme.SURFACE_CARD).lerp(Theme.SURFACE_PAGE, 0.16f), Theme.NAVY_BORDER,
+                Theme.BORDER_THIN));
+            card.pad(Theme.BORDER_THIN);
+            Table frame = new Table();
+            frame.setBackground(ui.solid(Theme.SKILL_TRACK));
+            Image lock = new Image(ui.icon("lock"), Scaling.fit);
+            lock.setColor(new Color(Theme.NAVY).mul(1f, 1f, 1f, 0.38f));
+            frame.add(lock).size(26f);
+            card.add(frame).height(ARCHIVE_THUMB_HEIGHT).row();
+            Table text = new Table();
+            text.top().left();
+            text.pad(14f, 14f, 14f, 14f);
+            text.defaults().left().growX();
+            text.add(ui.label((page.agency() + " · " + page.date()).toUpperCase(Locale.ROOT), Theme.TextStyle.EYEBROW,
+                Theme.INK_MUTED)).padBottom(4f).row();
+            text.add(ui.paragraph(page.title(), Theme.TextStyle.ARCHIVE_CARD_TITLE, Theme.INK_MUTED)).row();
+            text.add().expandY().row();
+            text.add(new Image(ui.solid(Theme.NAVY_BORDER))).height(Theme.BORDER_THIN).padBottom(10f).row();
+            text.add(ui.label("Unlocks with:", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padBottom(2f).row();
+            text.add(ui.paragraph(ContentNames.of(page.goalId()), Theme.TextStyle.BODY_STRONG, Theme.INK));
+            card.add(text).expandY().fill();
+            return card;
+        }
+        card.setBackground(ui.rect(Theme.SURFACE_CARD, Theme.NAVY, Theme.BORDER_EMPHASIS));
+        card.pad(Theme.BORDER_EMPHASIS);
+        Drawable art = ui.croppedPicture(page.thumbnail(), ARCHIVE_CARD_WIDTH / ARCHIVE_THUMB_HEIGHT);
+        card.add(art == null ? new Image(ui.solid(Theme.SKILL_TRACK)) : new Image(art)).height(ARCHIVE_THUMB_HEIGHT)
+            .row();
+        Table text = new Table();
+        text.top().left();
+        text.pad(14f, 14f, 14f, 14f);
+        text.defaults().left().growX();
+        text.add(ui.label((page.agency() + " · " + page.date()).toUpperCase(Locale.ROOT), Theme.TextStyle.EYEBROW,
+            Theme.NAVY)).padBottom(4f).row();
+        text.add(ui.paragraph(page.title(), Theme.TextStyle.ARCHIVE_CARD_TITLE, Theme.INK)).padBottom(6f).row();
+        text.add(ui.paragraph(page.summary(), Theme.TextStyle.BODY_SM, Theme.INK_MUTED)).row();
+        text.add().expandY().row();
+        if (page.sound() != null) {
+            Table sound = new Table();
+            sound.left();
+            Image play = new Image(ui.icon("play"), Scaling.fit);
+            play.setColor(Theme.NAVY);
+            sound.add(play).size(10f).padRight(6f);
+            sound.add(ui.label("With sound", Theme.TextStyle.CAPTION, Theme.INK_MUTED));
+            text.add(sound);
+        }
+        card.add(text).expandY().fill();
+        card.setTouchable(Touchable.enabled);
+        card.addListener(clicked(() -> openArchivePage(entry)));
+        if (game.archiveRead(page.id())) {
+            return card;
+        }
+        Table overlay = new Table();
+        overlay.top().right();
+        overlay.setTouchable(Touchable.disabled);
+        overlay.add(new Image(ui.circle(Theme.GOLD, Theme.SURFACE_CARD, 2f, 14))).size(14f).padTop(-7f).padRight(-7f);
+        Stack marked = new Stack();
+        marked.add(card);
+        marked.add(overlay);
+        return marked;
+    }
+
+    /**
+     * Opens an archive page, coming back to the Archive tab when it closes.
+     *
+     * @param entry the page in this game
+     */
+    public void openArchivePage(Archive.Entry entry) {
+        game.setScreen(new ArchivePageScreen(game, entry, () -> new MuseumScreen(game, Tab.ARCHIVE)));
     }
 
     private void memorial() {

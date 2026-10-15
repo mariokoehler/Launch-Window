@@ -191,6 +191,13 @@ public final class Theme {
     public static final Color SCRIM_DEEP = Color.valueOf("#0d1b33cc");
 
     /**
+     * The near-opaque scrim behind the archive's image viewer ({@code ui-spec.md} &sect;4.19,
+     * 2026-10-15): a picture needs the page almost gone behind it. The mockup's {@code scrim-viewer},
+     * rgba(12, 22, 42, 0.93). Not a design-system token yet.
+     */
+    public static final Color SCRIM_VIEWER = new Color(12 / 255f, 22 / 255f, 42 / 255f, 0.93f);
+
+    /**
      * Fill for an active / in-progress / caution state (a status badge, the
      * current step in a sequence, a "steady" rating). <b>Never danger</b>
      * &mdash; the one status a mission actually has while it's running gets
@@ -476,7 +483,17 @@ public final class Theme {
         /** Captions, the race box's values, the briefs: Libre Caslon Italic 14. */
         NEWS_CAPTION(FontFile.LIBRE_CASLON_ITALIC, 14, 19, 0f),
         /** The race box's First names: Libre Caslon Regular 14. */
-        NEWS_SMALL(FontFile.LIBRE_CASLON_REGULAR, 14, 19, 0f);
+        NEWS_SMALL(FontFile.LIBRE_CASLON_REGULAR, 14, 19, 0f),
+        /*
+         * The archive's page (ui-spec.md section 4.19, from the Archive canvas, 2026-10-15): an
+         * encyclopedia article's type, a step larger than the working screens'. Not design-system tokens yet.
+         */
+        /** An archive page's text: Work Sans Regular 14, line-height 22. */
+        ARTICLE(FontFile.WORK_SANS_REGULAR, 14, 22, 0f),
+        /** An archive page's section heading: Archivo Bold 17, line-height 22. */
+        ARTICLE_HEADING(FontFile.ARCHIVO_BOLD, 17, 22, 0f),
+        /** An archive card's title: Archivo Bold 16, line-height 20. */
+        ARCHIVE_CARD_TITLE(FontFile.ARCHIVO_BOLD, 16, 20, 0f);
 
         private final FontFile file;
         private final int size;

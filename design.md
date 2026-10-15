@@ -1980,11 +1980,12 @@ pictures back. No BASPM precedent.
   doesn't report today. That's how it was: both sides announced their successes and hid their failures.
 - **Settled from the goal records:** a page's unlock turn is the earliest turn any player's goal records
   hold its goal. Nothing new is saved, and a late joiner finds the pages unlocked before they joined
-  (*proposed*). The server reads it at the start of each turn, as it reads rivals' Firsts
-  (`RivalFirsts.settledFirstOn`).
+  (*proposed*). The server answers when asked (`ArchiveRequest`, with the client's pages' goals, through
+  `WinCondition.goalTimes`, cascade credits included), so no event and no saved field: a turn report
+  shows the pages whose unlock turn is its own turn (built 2026-10-15).
 - **Shown:**
-  - **Turn report:** a "New in the archive" card on every player's report the turn after, linking to
-    each new page. It says whether the player or a rival flew it, without naming the rival (*proposed*).
+  - **Turn report:** a "New in the archive" card on every player's report of the turn it opens, linking
+    to each new page. It says whether the player or a rival flew it, without naming the rival (*proposed*).
   - **Museum:** an Archive tab. Locked pages are greyed out with a hint, "Unlocks with: Pictures of the
     Moon", the goal's name (user, 2026-10-15).
 - **The text is our own,** written from the facts (Wikipedia, NASA and others as sources, listed on the
@@ -2017,8 +2018,14 @@ pictures back. No BASPM precedent.
   | Pioneer 10 | `jupiter-photos` |
   | Venera 9 and 13 | `venus-surface-study` |
   | Voyager 1's Pale Blue Dot | `saturn-flyby`, the furthest flight in the game; Voyager isn't in either pack |
-- **Size:** images at about 1600 px on the long edge as JPEG, 150 to 300 KB each. About 45 images add
-  about 10 MB to the client.
+- **Size:** images at about 1600 px on the long edge as JPEG, 150 to 300 KB each. The 35 pictures and 12
+  thumbnails add 8.6 MB to the client, the three sounds 3.7 MB.
+- **Built (2026-10-15)** from the canvas `Launch Window — Archive`: the twelve pages
+  (`assets/content/archive.json`; their sources and every figure's check in `assets-raw/archive/CHECKS.md`,
+  where the sources disagreed the pages say less), the pictures and sounds
+  (`assets-raw/archive/make_archive_assets.py`), and the screens (`ui-spec.md` §4.19). Venera 9's pictures
+  aren't in (Mitchell's permission, the user's call); Leonov's part is told in words. The Sagan recording is
+  the whole reading of his passage, 4:36.
 
 ## 3. Architecture
 
