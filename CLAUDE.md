@@ -254,6 +254,10 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
     `output/lw_callout/review/` for the user's ear). Run the check only with ComfyUI idle: VibeVoice-Large
     and Whisper don't fit on the GPU together, and the clash hung ComfyUI once. Kept takes are renamed
     into `chatter/`, then `make_radio_sounds.py` and `assets-raw/replay/cues.py`.
+  - **Sound effects:** `assets-raw/audio/sfx/make_sfx.py` (the user's Stable Audio 3 workflow,
+    `Sound_Effects.json`, flattened; every sound `audio_cues.py`'s plan lacks, 4 seeds, FLAC), takes copied
+    to `output/lw_sfx/review/` named for what they should sound like, for the user's ear (loops cut in
+    Audacity). Needs `pip install soundfile` for its level check. ComfyUI's own copies are `lw_sfx/*`.
 - **Photocraft** (an open-source Photoshop, as the `photocraft` MCP server): reads and writes only
   under `E:\Temp\automation` (copy files there first; file placing is disabled, so open the image and
   copy its layer across with `layer.copyToDocument`). New layers land above the active one, so check
