@@ -105,6 +105,10 @@ public final class TurnReportScreen extends ChromeScreen {
         if (decision != null) {
             content.add(decision).padBottom(Theme.SPACE_4).row();
         }
+        Table archiveComplete = archiveComplete(catalog);
+        if (archiveComplete != null) {
+            content.add(archiveComplete).padBottom(Theme.SPACE_4).row();
+        }
         for (ContractsView.ReportCard contract : ContractsView.reportCards(report)) {
             content.add(contractCard(contract)).padBottom(Theme.SPACE_4).row();
         }
@@ -336,7 +340,8 @@ public final class TurnReportScreen extends ChromeScreen {
      * a row per page with its picture, who flew it (the rival unnamed) and "Open".
      */
     private Table archive(ContentCatalog catalog) {
-        List<Archive.Entry> opened = Archive.standard().openedIn(catalog, session.archive(), report.gameTurn());
+        List<Archive.Entry> opened = Archive.standard().openedIn(catalog, session.archive(), report.gameTurn())
+            .stream().filter(entry -> !entry.atTheEnd()).toList();
         if (opened.isEmpty()) {
             return null;
         }
@@ -374,6 +379,37 @@ public final class TurnReportScreen extends ChromeScreen {
                 card.add(new Image(ui.solid(Theme.NAVY_BORDER))).height(Theme.BORDER_THIN).padTop(Theme.SPACE_3).row();
             }
         }
+        return card;
+    }
+
+    /**
+     * On the turn the race was decided, the notice that the rest of the archive opened for everyone
+     * (design.md 2.12), with the way there; {@code null} on any other turn.
+     */
+    private Table archiveComplete(ContentCatalog catalog) {
+        List<Archive.Entry> atTheEnd = Archive.standard().openedIn(catalog, session.archive(), report.gameTurn())
+            .stream().filter(Archive.Entry::atTheEnd).toList();
+        if (atTheEnd.isEmpty()) {
+            return null;
+        }
+        int all = Archive.standard().pages(catalog).size();
+        Table card = new Table();
+        card.setBackground(ui.cardAccent(Theme.GOLD));
+        card.pad(Theme.SPACE_4, Theme.SPACE_4 + Theme.BORDER_ACCENT, Theme.SPACE_4, Theme.SPACE_4);
+        Table words = new Table();
+        words.left();
+        words.defaults().left().growX();
+        words.add(ui.label("THE ARCHIVE · ALL " + all + " PAGES OPEN", Theme.TextStyle.EYEBROW, Theme.GOLD_TEXT))
+            .padBottom(4f).row();
+        words.add(ui.paragraph("The race is decided, and the whole archive is open", Theme.TextStyle.HEADING_SM,
+            Theme.INK)).padBottom(4f).row();
+        words.add(ui.paragraph((atTheEnd.size() == 1 ? "The last page nobody had reached opened today"
+            : "The " + atTheEnd.size() + " pages nobody had reached opened today") + ", for every agency: the real "
+            + "missions' stories, their pictures and their sounds, from Luna 3 to the Pale Blue Dot.",
+            Theme.TextStyle.BODY, Theme.INK));
+        card.add(words).expandX().fillX().left().padRight(Theme.SPACE_5);
+        card.add(actionButton("Open the archive", Theme.ButtonKind.PRIMARY,
+            () -> game.setScreen(new MuseumScreen(game, MuseumScreen.Tab.ARCHIVE)))).right();
         return card;
     }
 

@@ -526,6 +526,18 @@ public final class ScreenSnapshot {
         write(folder, "archive-report.png", new TurnReportScreen(game, report), null);
         game.session().keepArchive(unlocks.subList(0, 4));
         write(folder, "archive-report-single.png", new TurnReportScreen(game, report), null);
+
+        // The race decided in turn 51: the pages nobody reached open for everyone, and the report says so.
+        List<de.mkoehler.launchwindow.net.messages.ArchiveUnlock> ended = new java.util.ArrayList<>(unlocks);
+        for (String goal : List.of("mars-photos", "crewed-lunar-landing", "mars-mapping", "jupiter-photos",
+            "venus-surface-study", "mars-orbiter-and-lander", "saturn-flyby")) {
+            ended.add(new de.mkoehler.launchwindow.net.messages.ArchiveUnlock(goal, 51, false, true));
+        }
+        game.session().keepArchive(ended);
+        write(folder, "archive-report-race-decided.png", new TurnReportScreen(game, report), null);
+        write(folder, "archive-museum-race-decided.png", new MuseumScreen(game, MuseumScreen.Tab.ARCHIVE), null);
+        write(folder, "archive-page-race-decided.png", new ArchivePageScreen(game, de.mkoehler.launchwindow.client.view
+            .Archive.entry(archive.entries(game.session().catalog(), ended), "pale-blue-dot"), () -> null), null);
     }
 
     /** Whether new replay screens get the stand-in video player ({@link #fakeVideoPlayer}). */

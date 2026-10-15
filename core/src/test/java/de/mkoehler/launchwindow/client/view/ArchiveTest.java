@@ -116,5 +116,10 @@ class ArchiveTest {
         assertEquals(List.of(second.id()), ARCHIVE.openedIn(STANDARD, unlocks, 9).stream().map(e -> e.page().id()).toList());
         assertTrue(ARCHIVE.openedIn(STANDARD, null, 9).isEmpty(), "nothing before the server answers");
         assertTrue(ARCHIVE.entries(STANDARD, null).stream().noneMatch(Archive.Entry::open));
+
+        // Opened when the race was decided: open, nobody's flight.
+        Archive.Entry end = Archive.entry(ARCHIVE.entries(STANDARD, List.of(new ArchiveUnlock(last.page().goalId(), 60,
+            false, true))), last.page().id());
+        assertTrue(end.open() && end.atTheEnd() && !end.byYou());
     }
 }

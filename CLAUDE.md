@@ -172,7 +172,8 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   goal is first reached there, linked from the turn report, in a Museum tab. Mocked up and built the same
   day: 12 pages (`assets/content/archive.json`, sources per figure in `assets-raw/archive/CHECKS.md`), their
   pictures and sounds (`assets-raw/archive/make_archive_assets.py`; rights in `PAGES.md`), a new message pair
-  (`ArchiveRequest`, derived from goal records, nothing saved). Rebuild client and server together; no reset.
+  (`ArchiveRequest`, derived from goal records, nothing saved). Once the race is decided, every page still
+  closed opens for everyone (user, 2026-10-15). Rebuild client and server together; no reset.
 
 ## How we work
 

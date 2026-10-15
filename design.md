@@ -1983,6 +1983,11 @@ pictures back. No BASPM precedent.
   (*proposed*). The server answers when asked (`ArchiveRequest`, with the client's pages' goals, through
   `WinCondition.goalTimes`, cascade credits included), so no event and no saved field: a turn report
   shows the pages whose unlock turn is its own turn (built 2026-10-15).
+- **When the race is decided** (the user's idea, 2026-10-15): every page nobody has reached by then opens for
+  every agency, on the deciding turn (`game-result.json`), so everyone gets to see the whole archive. Such a
+  page says "opened when the race was decided" instead of who flew it, and that turn's report opens with a
+  notice across the top, "The race is decided, and the whole archive is open", with the way to the Archive
+  tab (the flown pages keep their own card). A goal reached later than that keeps nothing of its own.
 - **Shown:**
   - **Turn report:** a "New in the archive" card on every player's report of the turn it opens, linking
     to each new page. It says whether the player or a rival flew it, without naming the rival (*proposed*).
@@ -2945,6 +2950,9 @@ mission behind the photo, show the Pale Blue Dot and honour Sagan's essay, perha
     public (`CLAUDE.md`: ask before making it public).
 - **Where it goes (user, 2026-10-15):** the archive's Pale Blue Dot page (§2.12), unlocked by
   `saturn-flyby`, the furthest flight in the game.
+- **The whole reading (user, 2026-10-15):** the Library of Congress item turned out to be Sagan reading the
+  entire passage, 4:36, not a short clip; the user keeps all of it ("it could be an hour long and I would
+  keep all of it").
   - The Voyager 1 image (NASA/JPL, public domain) and the tribute's own text need nothing more.
 
 **Sound for the replay (the user's idea, 2026-10-13; the groundwork built the same day, `ui-spec.md`

@@ -128,7 +128,8 @@ public final class ArchivePageScreen extends ChromeScreen {
         Archive.Page page = entry.page();
         content.clearChildren();
         content.top().left();
-        String flown = entry.byYou() ? "flown by you" : "flown by a rival";
+        String flown = entry.atTheEnd() ? "opened when the race was decided" : entry.byYou() ? "flown by you"
+            : "flown by a rival";
         content.add(ui.label("In the archive since " + Museum.date(entry.turn()) + " · " + flown, Theme.TextStyle.BODY,
             Theme.ON_PAGE_STRONG)).left().padBottom(Theme.SPACE_4).row();
         Table columns = new Table();

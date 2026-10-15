@@ -124,11 +124,24 @@ public final class Archive {
     /**
      * A page in this game: open or not, since when, and whether this player's agency flew it.
      *
-     * @param page  the page
-     * @param turn  the turn its goal was first reached in the game, or {@code null} while it's locked
-     * @param byYou whether this player's agency was among the first to reach it
+     * @param page     the page
+     * @param turn     the turn its goal was first reached in the game, or the race decided; {@code null}
+     *                 while it's locked
+     * @param byYou    whether this player's agency was among the first to reach it
+     * @param atTheEnd whether it opened because the race was decided, with nobody having reached it
      */
-    public record Entry(Page page, Integer turn, boolean byYou) {
+    public record Entry(Page page, Integer turn, boolean byYou, boolean atTheEnd) {
+
+        /**
+         * An entry opened by its goal, or locked.
+         *
+         * @param page  the page
+         * @param turn  the turn its goal was first reached, or {@code null}
+         * @param byYou whether this player's agency was among the first
+         */
+        public Entry(Page page, Integer turn, boolean byYou) {
+            this(page, turn, byYou, false);
+        }
 
         /**
          * Returns whether the page is open.
@@ -245,7 +258,8 @@ public final class Archive {
         List<Entry> entries = new ArrayList<>();
         for (Page page : pages(catalog)) {
             ArchiveUnlock unlock = byGoal.get(page.goalId());
-            entries.add(unlock == null ? new Entry(page, null, false) : new Entry(page, unlock.turn(), unlock.byYou()));
+            entries.add(unlock == null ? new Entry(page, null, false)
+                : new Entry(page, unlock.turn(), unlock.byYou(), unlock.atTheEnd()));
         }
         return entries;
     }

@@ -10,6 +10,7 @@ import de.mkoehler.launchwindow.net.messages.ClaimSlotResponse;
 import de.mkoehler.launchwindow.net.messages.FetchStateRequest;
 import de.mkoehler.launchwindow.net.messages.FetchStateResponse;
 import de.mkoehler.launchwindow.net.messages.ArchiveRequest;
+import de.mkoehler.launchwindow.server.schedule.GameResult;
 import de.mkoehler.launchwindow.net.messages.ArchiveResponse;
 import de.mkoehler.launchwindow.net.messages.ArchiveUnlock;
 import de.mkoehler.launchwindow.net.messages.FrontPagesRequest;
@@ -432,8 +433,9 @@ public class RequestDispatcher {
     /**
      * Handles an {@link ArchiveRequest} ({@code design.md} &sect;2.12, G15): for each goal asked about,
      * the first turn any player held it (achieved or credited through a cascade), read from every
-     * player's latest resolved snapshot, and whether the asking player was among the first. Only the
-     * goals and turns leave the server, never who reached them.
+     * player's latest resolved snapshot, and whether the asking player was among the first. Once the race
+     * is decided ({@code game-result.json}), every goal nobody reached by then opens on the deciding turn,
+     * marked {@code atTheEnd}. Only the goals and turns leave the server, never who reached them.
      *
      * @param connectionId the connection the request arrived on
      * @param request      the request
@@ -468,10 +470,17 @@ public class RequestDispatcher {
                     }
                 }
             }
+            // Once the race is decided, every page nobody had reached opens for everyone, on that turn
+            // (the user's idea, 2026-10-15): so everyone gets to see the whole archive.
+            Path resultFile = dataRoot.resolve(GameResult.FILE_NAME);
+            Integer decided = Files.exists(resultFile)
+                ? (int) mapper.readValue(resultFile.toFile(), GameResult.class).decidedOnTurn() : null;
             List<ArchiveUnlock> unlocks = new ArrayList<>();
             for (String goal : goals) {
                 Integer turn = first.get(goal);
-                if (turn != null) {
+                if (decided != null && (turn == null || turn > decided)) {
+                    unlocks.add(new ArchiveUnlock(goal, decided, false, true));
+                } else if (turn != null) {
                     unlocks.add(new ArchiveUnlock(goal, turn, turn.equals(mine.get(goal))));
                 }
             }

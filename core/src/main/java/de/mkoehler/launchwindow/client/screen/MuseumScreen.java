@@ -556,6 +556,8 @@ public final class MuseumScreen extends ChromeScreen {
         head.add().expandX();
         head.add(ui.label(session.archive() == null ? (archiveFailed
                 ? "Couldn't fetch the archive. Open the Museum again to retry." : "Fetching the archive…")
+                : entries.stream().anyMatch(Archive.Entry::atTheEnd)
+                ? "The real missions behind the goals, in the order they flew. The race is decided: every page is open."
                 : "The real missions behind the goals, in the order they flew. A page opens for everyone in this game "
                 + "when any agency first reaches its goal.", Theme.TextStyle.CAPTION, Theme.ON_PAGE_STRONG));
         content.add(head).padBottom(Theme.SPACE_4).row();

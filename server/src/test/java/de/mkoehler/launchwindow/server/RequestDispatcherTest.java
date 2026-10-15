@@ -263,6 +263,14 @@ class RequestDispatcherTest {
         assertEquals(List.of(new ArchiveUnlock("earth-orbit-satellite", 3, false),
             new ArchiveUnlock("radio-signals-from-orbit", 6, true)), response.unlocks(),
             "NASA was second to the satellite, tied first to radio from orbit; nobody flew past the Moon");
+
+        // The race decided in turn 8: what nobody reached opens then, for everyone; what was reached keeps its turn.
+        java.nio.file.Files.writeString(dataRoot.resolve(GameResult.FILE_NAME), mapper.writeValueAsString(
+            new GameResult("WON", List.of("x"), List.of("OKB-1"), 8)));
+        assertEquals(List.of(new ArchiveUnlock("earth-orbit-satellite", 3, false),
+            new ArchiveUnlock("radio-signals-from-orbit", 6, true), new ArchiveUnlock("lunar-flyby", 8, false, true)),
+            dispatcher.handleArchive(2, ArchiveRequest.of(
+                List.of("earth-orbit-satellite", "radio-signals-from-orbit", "lunar-flyby"))).unlocks());
     }
 
     /**

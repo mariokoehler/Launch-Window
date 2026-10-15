@@ -2968,6 +2968,11 @@ placeholders tagged with their real ids. Choices, all **unconfirmed**:
   applies no style's line height anywhere.
 - **Picking the page from the report** returns to the report; from the tab, to the tab.
 - **Sound:** plays on the music volume, needs Sound On, and stops when the page closes.
+- **When the race is decided** (2026-10-15, `design.md` §2.12, not mocked up): that turn's report opens with
+  a full-width card with the gold accent, like the Decision card: "THE ARCHIVE · ALL 12 PAGES OPEN", "The race
+  is decided, and the whole archive is open", how many pages opened, and "Open the archive" (to the tab). The
+  pages opened that way don't get rows in the "New in the archive" card; their header says "opened when the
+  race was decided", and the tab's line says every page is open.
 - **New in `Theme.java`:** `SCRIM_VIEWER`, and the text styles `ARTICLE`, `ARTICLE_HEADING` and
   `ARCHIVE_CARD_TITLE`. No new icons. `ScreenSnapshot -Dshots=archive` renders it all.
 
@@ -3199,6 +3204,8 @@ current state alone. Each is an M5 task.
     (goal, the first turn any player held it, whether the asker was among the first), appended to the
     registry. `RequestDispatcher.handleArchive` reads every player's latest snapshot through
     `WinCondition.goalTimes`, so a cascade credit counts from the turn of the goal that credited it.
+  - **The race decided:** with `game-result.json` written, every goal asked about that nobody held by its
+    `decidedOnTurn` answers with that turn and `atTheEnd` (a fourth field on `ArchiveUnlock`).
   - **Client:** the Museum and the report fetch it, the session keeps it (`ClientSession.archive`), and a
     report shows the pages whose unlock turn is its turn (`Archive.openedIn`). A page whose goal the game's
     pack doesn't have isn't shown.

@@ -282,7 +282,7 @@ class MessageRegistryTest {
         ArchiveRequest request = ArchiveRequest.of(List.of("lunar-photos", "crewed-lunar-orbit"));
         assertEquals(request, roundTrip(request, ArchiveRequest.class));
         ArchiveResponse answer = ArchiveResponse.of(List.of(new ArchiveUnlock("lunar-photos", 12, false),
-            new ArchiveUnlock("crewed-lunar-orbit", 51, true)));
+            new ArchiveUnlock("crewed-lunar-orbit", 51, true), new ArchiveUnlock("saturn-flyby", 60, false, true)));
         assertEquals(answer, roundTrip(answer, ArchiveResponse.class));
         assertEquals(ArchiveResponse.failure("nope"), roundTrip(ArchiveResponse.failure("nope"), ArchiveResponse.class));
     }
