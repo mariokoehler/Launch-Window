@@ -2023,7 +2023,9 @@ clips, the replay is meant to be watched like a short film, and the player can s
     drogue, a safe shutdown on the pad, the escape tower, which needs to know a crew flies) are in the
     pool, unplaced. **Unconfirmed:** the placements, the 0.7 volume, the 1.5 s wait.
   - **Playback:** a step that follows by itself lets the last one's loops end as their cues say; a
-    skip or a step back fades everything but the room within 0.1 s. Silent when sound is off, checked
+    skip or a step back fades everything but the room within 0.1 s. After the last step, the summary
+    and its fanfare wait until the radio is done (a call talking or waiting for its turn), the clip
+    holding its last frame, at most 8 s (user, 2026-10-16); skipping to the summary still cuts it off. Silent when sound is off, checked
     every frame. Volumes: the sound's own, times the player's setting (§4.12).
   - **Unconfirmed:** the 2 s blip, the 3 s alarm, the static's level, the default volumes (0.7), the
     fanfares' volume (0.8) and their 0.3 s fade.

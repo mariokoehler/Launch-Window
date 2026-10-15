@@ -6,8 +6,9 @@ package de.mkoehler.launchwindow.client.view;
  * <ul>
  *   <li>A step's result shows once its clip reaches {@code revealAt}; a step reached before shows
  *   at once. Results show in order, so they're a count from the first step.</li>
- *   <li>Playing, the next step starts when a step's time is up; after the last, the season summary.
- *   Paused, the step's clip still plays through and its result shows; only the move on waits.</li>
+ *   <li>Playing, the next step starts when a step's time is up; after the last, the season summary,
+ *   once the last step's sound has finished (a call mid-sentence isn't cut off by the fanfare). Paused,
+ *   the step's clip still plays through and its result shows; only the move on waits.</li>
  *   <li>Going forward by hand (next step, a later step in the list, the summary) shows the results
  *   of the steps passed.</li>
  * </ul>
@@ -49,6 +50,12 @@ public final class ReplayPlayback {
         /** Another step, or the summary, now shows. */
         MOVED
     }
+
+    /**
+     * How long, at most, the summary waits for the last step's sound once its clip is over, in seconds:
+     * a stream that never reports its end can't hold the replay.
+     */
+    public static final float SOUND_WAIT = 8f;
 
     private final int steps;
     private final Timing timing;
@@ -137,12 +144,24 @@ public final class ReplayPlayback {
     }
 
     /**
-     * Moves the clock on.
+     * Moves the clock on, with no sound to wait for.
      *
      * @param delta seconds since the last call
      * @return what changed
      */
     public Change update(float delta) {
+        return update(delta, false);
+    }
+
+    /**
+     * Moves the clock on.
+     *
+     * @param delta    seconds since the last call
+     * @param sounding whether the step's sound is still going (a radio call mid-sentence): after the
+     *                 last step the summary, and its fanfare, wait for it, up to {@link #SOUND_WAIT}
+     * @return what changed
+     */
+    public Change update(float delta, boolean sounding) {
         if (atSummary()) {
             return Change.NONE;
         }
@@ -152,7 +171,9 @@ public final class ReplayPlayback {
             revealed = step + 1;
             change = Change.REVEALED;
         }
-        if (playing && time >= timing.duration(step)) {
+        float end = timing.duration(step);
+        boolean waiting = step == steps - 1 && sounding && time < end + SOUND_WAIT;
+        if (playing && time >= end && !waiting) {
             show(step + 1);
             return Change.MOVED;
         }

@@ -255,7 +255,7 @@ public final class ReplayScreen extends ChromeScreen {
         if (!playback.atSummary()) {
             monitor.setTime(playback.time(), playback.playing(), clockBase + Math.min(playback.time(), clockStep));
         }
-        switch (playback.update(delta)) {
+        switch (playback.update(delta, audio.talking())) {
             case REVEALED -> rebuild();
             case MOVED -> {
                 rebuild();

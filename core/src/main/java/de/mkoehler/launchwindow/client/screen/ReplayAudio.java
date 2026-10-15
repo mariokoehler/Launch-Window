@@ -24,7 +24,8 @@ import java.util.Map;
  *   the new clip carries on keeps playing; a skip or a step back fades everything but the room within
  *   a tenth of a second, and the fanfare a little slower.</li>
  *   <li>One voice on the radio at a time: a call due while another is still talking waits for it, up to
- *   {@link #RADIO_WAIT}, and is dropped if it can't start by then or its step ends first.</li>
+ *   {@link #RADIO_WAIT}, and is dropped if it can't start by then or its step ends first. After the last
+ *   step the summary waits until the radio is done ({@link #talking()}), so the fanfare cuts nothing off.</li>
  *   <li>Silent when the game's sound is off (checked every frame); a sound with no takes yet plays
  *   nothing.</li>
  * </ul>
@@ -244,6 +245,16 @@ final class ReplayAudio {
         if (room != null) {
             room.setVolume(volume(ReplaySounds.ROOM_TONE) * LaunchWindowGame.effectsVolume());
         }
+    }
+
+    /**
+     * Returns whether the radio is still going: a call talking, or one waiting for its turn. The season
+     * summary waits for it, so the fanfare never cuts a call off.
+     *
+     * @return whether it is
+     */
+    boolean talking() {
+        return waitingVoice != null || radio.stream().anyMatch(Music::isPlaying);
     }
 
     private boolean running(String sound, boolean console) {

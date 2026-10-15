@@ -62,6 +62,33 @@ class ReplayPlaybackTest {
     }
 
     /**
+     * After the last step, the summary waits while the step's sound goes on, and comes once it's done;
+     * between steps nothing waits (a call runs on into the next step).
+     */
+    @Test
+    void theSummaryWaitsForTheSound() {
+        ReplayPlayback playback = new ReplayPlayback(2, TIMING, true);
+        assertEquals(ReplayPlayback.Change.MOVED, playback.update(3f, true), "a step doesn't wait for sound");
+        playback.update(3f, true);
+        assertEquals(1, playback.step(), "the last step holds while a call talks");
+        assertEquals(ReplayPlayback.Change.NONE, playback.update(2f, true));
+        assertEquals(ReplayPlayback.Change.MOVED, playback.update(0.01f, false));
+        assertTrue(playback.atSummary());
+    }
+
+    /**
+     * A sound that never ends holds the summary back no longer than {@link ReplayPlayback#SOUND_WAIT}.
+     */
+    @Test
+    void theWaitForSoundEnds() {
+        ReplayPlayback playback = new ReplayPlayback(1, TIMING, true);
+        playback.update(3f + ReplayPlayback.SOUND_WAIT - 0.1f, true);
+        assertFalse(playback.atSummary());
+        assertEquals(ReplayPlayback.Change.MOVED, playback.update(0.2f, true));
+        assertTrue(playback.atSummary());
+    }
+
+    /**
      * Next step, a later step and the summary show the results passed; going back keeps them, and
      * the step shown again starts from its beginning.
      */
