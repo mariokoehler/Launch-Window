@@ -17,3 +17,21 @@ the voice) and 2475 Hz as it keyed off (after it). Generated from scratch by `qu
 (2026-10-14, nothing recorded, nothing to credit): a clean pair (`quindar_intro`, `quindar_outro`) and a
 pair as heard on the air-to-ground loop (`_radio`: 300-3000 Hz, slightly saturated, a faint hiss), each
 as WAV (48 kHz, 16-bit, mono, -6 dBFS) and OGG.
+
+## Radio call-outs (`chatter/`)
+
+The user's (2026-10-14): flight-loop calls generated in ComfyUI with the VibeVoice model, brownian noise
+(`brownian_noise.ogg`) mixed under each for the radio and the Quindar tones at both ends. Each file's
+name is exactly what's said. Lines that fit the same moment ("go for launch", "all systems go for
+launch") are one sound's takes: `chatter/make_radio_sounds.py` publishes them into the replay
+(`assets/audio/replay/radio-*`, `replay-sounds.json`), and `assets-raw/replay/cues.json` places them.
+`chatter/CALLOUTS.md` has ideas for the lines still missing, the failures above all.
+
+From 2026-10-15 Claude makes takes too, with the user's workflow (`Radio_Callouts.json` in ComfyUI):
+`chatter/make_callouts.py` queues every line in `chatter/callouts.json` with four seeds, and
+`chatter/check_callouts.py` transcribes each take with Whisper, measures it, and copies those whose
+words all came through into ComfyUI's `output/lw_callout/review/`. The user listens there and keeps the
+best; the kept takes are renamed into this folder ("(n)" for a second take of a line). End a line with
+" …" in `callouts.json`: without the pause VibeVoice often stops mid-word (the check fails a take whose
+voice runs to its last sample). A line that opens with "Flight," needs more seeds: the word is often
+swallowed.

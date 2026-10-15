@@ -151,9 +151,10 @@ class ReplayClipsTest {
                     assertTrue(!cue.carries() || cue.at() == 0, clip.video() + ": " + cue);
                 }
                 // What's heard before the reveal: a loop that stops (its fade starts) at or after it
-                // sounds there as one that plays on, so an engine may cut later in one variant.
-                java.util.List<ReplayClips.Cue> early = clip.cues().stream().filter(cue -> cue.at() < reveal)
-                    .map(cue -> cue.until() != null && cue.until() >= reveal
+                // sounds there as one that plays on, so an engine may cut later in one variant. Times are
+                // compared as the reveal is, in float: a cue at exactly the reveal is after it.
+                java.util.List<ReplayClips.Cue> early = clip.cues().stream().filter(cue -> (float) cue.at() < reveal)
+                    .map(cue -> cue.until() != null && (float) cue.until().doubleValue() >= reveal
                         ? new ReplayClips.Cue(cue.at(), cue.sound(), cue.volume(), cue.loop(), null, null, cue.carry())
                         : cue)
                     .toList();

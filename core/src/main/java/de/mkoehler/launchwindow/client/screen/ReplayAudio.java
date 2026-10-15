@@ -23,6 +23,8 @@ import java.util.Map;
  *   <li>A step that follows on by itself lets the last one's loops fade as their cues say, and a loop
  *   the new clip carries on keeps playing; a skip or a step back fades everything but the room within
  *   a tenth of a second, and the fanfare a little slower.</li>
+ *   <li>One voice on the radio at a time: a call due while another is still talking waits for it, up to
+ *   {@link #RADIO_WAIT}, and is dropped if it can't start by then or its step ends first.</li>
  *   <li>Silent when the game's sound is off (checked every frame); a sound with no takes yet plays
  *   nothing.</li>
  * </ul>
@@ -35,11 +37,16 @@ final class ReplayAudio {
     private static final float SKIP_FADE = 0.1f;
     /** How fast leaving the summary silences its fanfare, in seconds. */
     private static final float FANFARE_FADE = 0.3f;
+    /** How long a radio call waits for the one still talking, in seconds. */
+    private static final float RADIO_WAIT = 1.5f;
 
     private final ReplaySounds sounds;
     private final Map<String, Sound> loaded = new HashMap<>();
     private final List<Loop> loops = new ArrayList<>();
     private final List<Music> radio = new ArrayList<>();
+    private String waitingVoice;
+    private Float waitingLevel;
+    private float waitingFor;
     private ReplayClips.Clip clip;
     private ReplayConsole console;
     private float previous;
@@ -119,6 +126,7 @@ final class ReplayAudio {
         if (!natural || next == null) {
             radio.forEach(Music::stop);
         }
+        waitingVoice = null;
         clip = next;
         console = machine;
         previous = -0.001f;
@@ -209,6 +217,16 @@ final class ReplayAudio {
             voice.dispose();
             return true;
         });
+        if (waitingVoice != null) {
+            waitingFor += delta;
+            if (radio.isEmpty()) {
+                String id = waitingVoice;
+                waitingVoice = null;
+                voice(id, waitingLevel);
+            } else if (waitingFor > RADIO_WAIT) {
+                waitingVoice = null;
+            }
+        }
         if (fanfare != null) {
             float level = 1f;
             if (fanfareFading) {
@@ -276,6 +294,12 @@ final class ReplayAudio {
     }
 
     private void voice(String id, Float level) {
+        if (!radio.isEmpty()) {
+            waitingVoice = id;
+            waitingLevel = level;
+            waitingFor = 0f;
+            return;
+        }
         Music voice = stream(sounds.take(id));
         if (voice != null) {
             voice.setVolume((level != null ? level : volume(id)) * LaunchWindowGame.effectsVolume());
@@ -358,6 +382,7 @@ final class ReplayAudio {
         loops.clear();
         radio.forEach(Music::dispose);
         radio.clear();
+        waitingVoice = null;
         if (fanfare != null) {
             fanfare.dispose();
             fanfare = null;

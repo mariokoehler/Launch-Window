@@ -1,4 +1,10 @@
 {
  "duration": 6.4,
- "revealAt": 3.2
+ "revealAt": 3.2,
+ "cues": [
+  {
+   "at": 3.25,
+   "sound": "radio-separation-failed"
+  }
+ ]
 }

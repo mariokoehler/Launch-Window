@@ -2008,8 +2008,20 @@ clips, the replay is meant to be watched like a short film, and the player can s
     Files go under `assets/audio/replay/`; loops must be OGG or WAV (MP3 pads its ends, so it can't
     loop seamlessly). `ReplaySoundsTest` holds every take to being there, in the catalog and, where
     it isn't the project's own, credited.
-  - **Radio voices** (a kind for later: NASA's callouts and chatter) are streamed. English for both
-    sides (user, 2026-10-13).
+  - **Radio voices** are streamed. English for both sides (user, 2026-10-13). The first are the user's
+    (2026-10-14): flight-controller calls made with VibeVoice, the radio's noise and the Quindar tones
+    already in them (`assets-raw/audio/chatter/`), `radio-*` sounds whose takes are one line's
+    variations or lines for the same moment. More from 2026-10-15, made by Claude with the user's
+    workflow, screened by a transcript (Whisper) and picked by the user's ear: 51 sounds in all.
+    Placed in `cues.json`: a call 0.05 s after its own variant's reveal (the line confirms what was
+    just seen), on the glitches and, from 2026-10-15, the failures of most steps (a later start where
+    an opening call would hold it up past the wait); a few calls that tell nothing before the earliest
+    reveal in every variant ("Guidance is internal", "Max-Q", "Watching it", the reentry's "We're in
+    blackout"). A call may run on into the next step. **One voice at a
+    time:** a call due while another talks waits up to 1.5 s, and is dropped if it can't start by then
+    or its step ends. Lines that fit no clip yet ("engine out", "second stage ignition late", a late
+    drogue, a safe shutdown on the pad, the escape tower, which needs to know a crew flies) are in the
+    pool, unplaced. **Unconfirmed:** the placements, the 0.7 volume, the 1.5 s wait.
   - **Playback:** a step that follows by itself lets the last one's loops end as their cues say; a
     skip or a step back fades everything but the room within 0.1 s. Silent when sound is off, checked
     every frame. Volumes: the sound's own, times the player's setting (§4.12).

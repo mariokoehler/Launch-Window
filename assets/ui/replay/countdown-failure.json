@@ -1,4 +1,14 @@
 {
  "duration": 7.0,
- "revealAt": 4.7
+ "revealAt": 4.7,
+ "cues": [
+  {
+   "at": 0.1,
+   "sound": "radio-guidance-internal"
+  },
+  {
+   "at": 4.75,
+   "sound": "radio-cutoff"
+  }
+ ]
 }

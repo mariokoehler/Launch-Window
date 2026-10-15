@@ -8,6 +8,10 @@
    "loop": true,
    "until": 3.25,
    "fade": 0.2
+  },
+  {
+   "at": 3.35,
+   "sound": "radio-launch-failure"
   }
  ]
 }

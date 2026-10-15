@@ -9,6 +9,10 @@
    "loop": true,
    "until": 2.6,
    "fade": 0.15
+  },
+  {
+   "at": 3.05,
+   "sound": "radio-burn-failed"
   }
  ]
 }

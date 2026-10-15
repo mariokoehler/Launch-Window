@@ -1,20 +1,191 @@
 {
   "launch": {
-    "success": [{"at": 0.9, "sound": "rocket-roar", "loop": true}],
+    "success": [{"at": 0.9, "sound": "rocket-roar", "loop": true},
+                {"at": 3.25, "sound": "radio-pitching-downrange"}],
     "glitch": [{"at": 0.9, "sound": "rocket-roar", "loop": true}],
-    "failure": [{"at": 0.9, "sound": "rocket-roar", "loop": true, "until": 3.25, "fade": 0.2}]
+    "failure": [{"at": 0.9, "sound": "rocket-roar", "loop": true, "until": 3.25, "fade": 0.2},
+                {"at": 3.35, "sound": "radio-launch-failure"}]
   },
   "ascent": {
     "success": [{"at": 0, "sound": "rocket-roar", "loop": true, "carry": true, "until": 2.8, "fade": 0.1},
-                {"at": 3.2, "sound": "rocket-roar", "volume": 0.3, "loop": true, "until": 6.1, "fade": 0.4}],
+                {"at": 0.2, "sound": "radio-max-q"},
+                {"at": 3.2, "sound": "rocket-roar", "volume": 0.3, "loop": true, "until": 6.1, "fade": 0.4},
+                {"at": 4.25, "sound": "radio-staging"}],
     "glitch": [{"at": 0, "sound": "rocket-roar", "loop": true, "carry": true, "until": 2.8, "fade": 0.1},
-               {"at": 3.2, "sound": "rocket-roar", "volume": 0.3, "loop": true, "until": 6.1, "fade": 0.4}],
+               {"at": 0.2, "sound": "radio-max-q"},
+               {"at": 3.2, "sound": "rocket-roar", "volume": 0.3, "loop": true, "until": 6.1, "fade": 0.4},
+               {"at": 4.25, "sound": "radio-trajectory-low"}],
     "failure": [{"at": 0, "sound": "rocket-roar", "loop": true, "carry": true, "until": 2.8, "fade": 0.1},
-                {"at": 3.2, "sound": "rocket-roar", "volume": 0.3, "loop": true, "until": 3.45, "fade": 0.1}]
+                {"at": 0.2, "sound": "radio-max-q"},
+                {"at": 3.2, "sound": "rocket-roar", "volume": 0.3, "loop": true, "until": 3.45, "fade": 0.1},
+                {"at": 3.45, "sound": "radio-breakup"}]
   },
   "retrofire": {
     "success": [{"at": 1.0, "sound": "rocket-roar", "volume": 0.35, "loop": true, "until": 3.6, "fade": 0.3}],
     "glitch": [{"at": 1.0, "sound": "rocket-roar", "volume": 0.35, "loop": true, "until": 4.2, "fade": 0.3}],
-    "failure": [{"at": 1.0, "sound": "rocket-roar", "volume": 0.35, "loop": true, "until": 2.6, "fade": 0.15}]
+    "failure": [{"at": 1.0, "sound": "rocket-roar", "volume": 0.35, "loop": true, "until": 2.6, "fade": 0.15},
+                {"at": 3.05, "sound": "radio-burn-failed"}]
+  },
+  "launch-preparations": {
+    "success": [{"at": 2.65, "sound": "radio-go-for-launch"}]
+  },
+  "countdown": {
+    "success": [{"at": 0.1, "sound": "radio-guidance-internal"}],
+    "glitch": [{"at": 0.1, "sound": "radio-guidance-internal"},
+               {"at": 3.65, "sound": "radio-countdown-hold"}],
+    "failure": [{"at": 0.1, "sound": "radio-guidance-internal"},
+                {"at": 4.75, "sound": "radio-cutoff"}]
+  },
+  "deployment": {
+    "success": [{"at": 0.2, "sound": "radio-watching"},
+                {"at": 2.65, "sound": "radio-payload-separation"}],
+    "glitch": [{"at": 0.2, "sound": "radio-watching"},
+               {"at": 2.65, "sound": "radio-separation-late"}],
+    "failure": [{"at": 0.2, "sound": "radio-watching"},
+                {"at": 2.35, "sound": "radio-collision"}]
+  },
+  "earth-orbit": {
+    "success": [{"at": 2.15, "sound": "radio-signal-good"}],
+    "glitch": [{"at": 3.45, "sound": "radio-telemetry-lost"}],
+    "failure": [{"at": 3.05, "sound": "radio-data-lost"}]
+  },
+  "insertion": {
+    "success": [{"at": 2.05, "sound": "radio-orbit-insertion"}],
+    "glitch": [{"at": 3.05, "sound": "radio-burn-short"}]
+  },
+  "advanced-experiments-earth-orbit": {
+    "glitch": [{"at": 3.65, "sound": "radio-undervolt"}],
+    "failure": [{"at": 3.65, "sound": "radio-data-lost"}]
+  },
+  "duration-level-i": {
+    "glitch": [{"at": 3.85, "sound": "radio-undervolt"}],
+    "failure": [{"at": 3.65, "sound": "radio-pressure"}]
+  },
+  "duration-level-ii": {
+    "glitch": [{"at": 3.85, "sound": "radio-undervolt"}],
+    "failure": [{"at": 3.65, "sound": "radio-pressure"}]
+  },
+  "biometric-data-transmission": {
+    "glitch": [{"at": 3.85, "sound": "radio-telemetry-lost"}],
+    "failure": [{"at": 3.85, "sound": "radio-data-lost"}]
+  },
+  "suborbital-flight": {
+    "glitch": [{"at": 4.05, "sound": "radio-attitude-drift"}],
+    "failure": [{"at": 3.65, "sound": "radio-tumbling"}]
+  },
+  "reentry-preparations": {
+    "success": [{"at": 3.05, "sound": "radio-roger"}],
+    "glitch": [{"at": 3.65, "sound": "radio-attitude-drift"}],
+    "failure": [{"at": 3.45, "sound": "radio-tumbling"}]
+  },
+  "retrofire-jettison": {
+    "glitch": [{"at": 3.45, "sound": "radio-separation-late"}],
+    "failure": [{"at": 3.25, "sound": "radio-separation-failed"}]
+  },
+  "modules-separation": {
+    "glitch": [{"at": 3.65, "sound": "radio-separation-late"}],
+    "failure": [{"at": 3.85, "sound": "radio-separation-failed"}]
+  },
+  "reentry": {
+    "success": [{"at": 0.4, "sound": "radio-blackout"}],
+    "glitch": [{"at": 0.4, "sound": "radio-blackout"},
+               {"at": 4.45, "sound": "radio-oscillations"}],
+    "failure": [{"at": 0.4, "sound": "radio-blackout"},
+                {"at": 4.0, "sound": "radio-no-acquisition"}]
+  },
+  "descent-chutes": {
+    "glitch": [{"at": 3.45, "sound": "radio-chute-partial"}],
+    "failure": [{"at": 2.65, "sound": "radio-main-chute-failed"}]
+  },
+  "descent-and-landing": {
+    "glitch": [{"at": 4.85, "sound": "radio-hard-landing"}],
+    "failure": [{"at": 2.65, "sound": "radio-main-chute-failed"}]
+  },
+  "powered-descent": {
+    "glitch": [{"at": 3.45, "sound": "radio-program-alarm"}],
+    "failure": [{"at": 3.25, "sound": "radio-abort-landing"}]
+  },
+  "landing-and-recovery": {
+    "glitch": [{"at": 2.75, "sound": "radio-hard-landing"}],
+    "failure": [{"at": 1.85, "sound": "radio-recovery-no-contact"}]
+  },
+  "trans-lunar-coast": {
+    "glitch": [{"at": 3.65, "sound": "radio-problem"}],
+    "failure": [{"at": 3.45, "sound": "radio-off-trajectory"}]
+  },
+  "trans-earth-coast": {
+    "glitch": [{"at": 3.65, "sound": "radio-problem"}],
+    "failure": [{"at": 3.45, "sound": "radio-off-trajectory"}]
+  },
+  "lunar-approach": {
+    "failure": [{"at": 3.45, "sound": "radio-off-trajectory"}]
+  },
+  "lunar-impact": {
+    "failure": [{"at": 3.25, "sound": "radio-off-trajectory"}]
+  },
+  "earth-mars-transit": {
+    "failure": [{"at": 3.45, "sound": "radio-off-trajectory"}]
+  },
+  "earth-venus-transit": {
+    "failure": [{"at": 3.45, "sound": "radio-off-trajectory"}]
+  },
+  "earth-jupiter-transit": {
+    "failure": [{"at": 3.45, "sound": "radio-off-trajectory"}]
+  },
+  "jupiter-saturn-transit": {
+    "failure": [{"at": 3.45, "sound": "radio-off-trajectory"}]
+  },
+  "venus-mercury-transit": {
+    "failure": [{"at": 3.45, "sound": "radio-off-trajectory"}]
+  },
+  "target-approach": {
+    "glitch": [{"at": 2.65, "sound": "radio-closing-fast"}]
+  },
+  "docking": {
+    "glitch": [{"at": 3.45, "sound": "radio-latches"}],
+    "failure": [{"at": 3.45, "sound": "radio-abort-docking"}]
+  },
+  "probe-release": {
+    "failure": [{"at": 2.45, "sound": "radio-separation-failed"}]
+  },
+  "extraction": {
+    "failure": [{"at": 2.65, "sound": "radio-separation-failed"}]
+  },
+  "loi": {
+    "failure": [{"at": 2.85, "sound": "radio-burn-failed"}]
+  },
+  "tei": {
+    "failure": [{"at": 3.05, "sound": "radio-burn-failed"}]
+  },
+  "undocking": {
+    "failure": [{"at": 2.85, "sound": "radio-tumbling"}]
+  },
+  "descent-and-splashdown": {
+    "failure": [{"at": 2.65, "sound": "radio-main-chute-failed"}]
+  },
+  "splashdown-and-recovery": {
+    "failure": [{"at": 1.85, "sound": "radio-recovery-no-contact"}]
+  },
+  "recovery": {
+    "failure": [{"at": 3.45, "sound": "radio-capsule-sinking"}]
+  },
+  "eva": {
+    "failure": [{"at": 3.05, "sound": "radio-crew-back-in"}]
+  },
+  "moonwalk": {
+    "failure": [{"at": 3.05, "sound": "radio-crew-back-in"}]
+  },
+  "crew-transfer": {
+    "failure": [{"at": 3.25, "sound": "radio-crew-back-in"}]
+  },
+  "lunar-landing": {
+    "glitch": [{"at": 3.65, "sound": "radio-contact-light"}],
+    "failure": [{"at": 3.25, "sound": "radio-lander-lost"}]
+  },
+  "probe-landing": {
+    "failure": [{"at": 3.25, "sound": "radio-lander-lost"}]
+  },
+  "probe-surface": {
+    "failure": [{"at": 2.65, "sound": "radio-probe-silent"}]
   }
 }

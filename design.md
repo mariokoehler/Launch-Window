@@ -316,6 +316,14 @@ leading to satellite navigation.
   It's the glitch of the modules-separation clip. Fits that step, or Vostok's history note.
 - **Saving throws are real:** Apollo 11's 1202/1201 alarms (a controller's call not to abort)
   and Apollo 13's improvised survival plan. Fits a step rescued by its saving throw.
+- **The flight loop in trouble** (2026-10-14, as usually quoted; verify before a note uses them):
+  calls stayed flat and clipped. Apollo 12 (14 November 1969): lightning struck the Saturn V twice
+  after liftoff, the telemetry turned to nonsense, and EECOM John Aaron, who had seen the pattern once
+  in a test, called "try SCE to Aux", a switch few knew; the data came back and the mission flew on.
+  Apollo 13: "Houston, we've had a problem", said almost casually. Gemini 8: "We have serious
+  problems here. We're tumbling end over end." Apollo 11's landing ran on fuel calls, "sixty
+  seconds", "thirty seconds", to "contact light". Ideas for the replay's radio lines are in
+  `assets-raw/audio/chatter/CALLOUTS.md`.
 - **Expert rescue:** Apollo 13's command-module power-up procedure, devised by EECOM John Aaron
   and the ground team and tested in the simulator by Ken Mattingly, grounded by measles
   exposure. A controller and a non-flying astronaut rescuing a mission together is exactly the

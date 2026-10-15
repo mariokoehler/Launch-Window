@@ -156,7 +156,9 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
 - **Sound for the replay** (the user's idea, 2026-10-13, `ui-spec.md` §4.7.3 "Sound"): a pool of named
   sounds in `assets/content/replay-sounds.json` (each one's description is the brief; no takes yet means
   silent), cues in the clips' sidecars (kept in `assets-raw/replay/cues.json`, written by its `cues.py`;
-  the first, a rocket roar under the burns, 2026-10-14), the console's own sounds, room tone, a fanfare at the season
+  the first, a rocket roar under the burns, 2026-10-14; radio calls on the early steps, the user's
+  VibeVoice takes, one voice at a time, 2026-10-14; on most steps' glitches and failures, Claude's takes
+  from the user's workflow, 2026-10-15), the console's own sounds, room tone, a fanfare at the season
   summary (success or failure; no background music, user), music and effects volumes in Settings. All
   English (user). Every sound is real (Pixabay, NASA, Stable Audio 3, credited); a new one plays a
   synthesized `placeholder-*` take until it has its own (`assets-raw/replay/sounds/make_placeholder_sounds.py`).
@@ -245,6 +247,12 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
     `review/`, spelling and stray insignia checked by eye), the pick per job in `picks.json` (only
     picked variants are committed, with `git add -f`), then `make_frontpage_assets.py` for
     `assets/ui/frontpage/`. ComfyUI's own copies are `lw_frontpage_*`: never delete those.
+  - **Radio call-outs:** `assets-raw/audio/chatter/make_callouts.py` (the user's VibeVoice workflow,
+    the lines in `callouts.json`, 4 seeds each), then `check_callouts.py` (Whisper large-v3 via
+    `faster-whisper`: a transcript against the line, plus levels; passing takes go to
+    `output/lw_callout/review/` for the user's ear). Run the check only with ComfyUI idle: VibeVoice-Large
+    and Whisper don't fit on the GPU together, and the clash hung ComfyUI once. Kept takes are renamed
+    into `chatter/`, then `make_radio_sounds.py` and `assets-raw/replay/cues.py`.
 - **Photocraft** (an open-source Photoshop, as the `photocraft` MCP server): reads and writes only
   under `E:\Temp\automation` (copy files there first; file placing is disabled, so open the image and
   copy its layer across with `layer.copyToDocument`). New layers land above the active one, so check
