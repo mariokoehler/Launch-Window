@@ -90,12 +90,15 @@ def vehicle(component_id, components):
     return "probe"
 
 
-def rule_clip(key, rules, before=None):
-    """The clip the first rule names for this key, after the step before (a rule's "after", if any)."""
+def rule_clip(key, rules, earlier=()):
+    """The clip the first rule names for this key, and what picked it: the step before (a rule's "after"),
+    or a step anywhere earlier in the season (its "earlier"). earlier: the keys before it, in order."""
+    before = earlier[-1] if earlier else None
     for rule in rules:
-        if key == rule["step"] and rule.get("after") in (None, before):
-            return rule["clip"]
-    return None
+        if (key == rule["step"] and rule.get("after") in (None, before)
+                and rule.get("earlier") in (None, *earlier)):
+            return rule["clip"], (f"`{rule['earlier']}` earlier" if rule.get("earlier") else f"after `{before}`")
+    return None, f"after `{before}`"
 
 
 def plural(n, word):
@@ -120,22 +123,25 @@ def main():
     clips = load(CONTENT / "replay-clips.json")
     rules = clips["rules"]
 
-    uses = []  # (kind, config, season index, step, the kind before it in the season or None)
+    uses = []  # (kind, config, season index, step, the kinds before it in the season)
     for m in configs:
         for i, season in enumerate(m["seasons"]):
-            prev = None
+            prev = []
             for st in season["steps"]:
-                uses.append((kind(st["id"]), m, i, st, prev))
-                prev = kind(st["id"])
+                uses.append((kind(st["id"]), m, i, st, list(prev)))
+                prev.append(kind(st["id"]))
     keys = fold({u[0] for u in uses}, clips.get("vehicles", []), {r["step"] for r in rules})
 
     entries = collections.defaultdict(lambda: {
         "kinds": collections.Counter(), "configs": set(), "programs": collections.Counter(),
         "agencies": set(), "bodies": collections.Counter(), "vehicles": collections.Counter(),
-        "crewed": 0, "risk": 0, "later": 0, "uses": 0, "early": False, "befores": collections.Counter()})
+        "crewed": 0, "risk": 0, "later": 0, "uses": 0, "early": False, "befores": collections.Counter(),
+        "picks": {}})
     for k, m, i, st, prev in uses:
         e = entries[keys[k]]
-        e["befores"][keys[prev] if prev else None] += 1
+        clip, why = rule_clip(keys[k], rules, [keys[p] for p in prev])
+        e["befores"][why] += 1
+        e["picks"][why] = clip
         program = programs[m["programId"]]
         e["kinds"][k] += 1
         e["uses"] += 1
@@ -180,7 +186,7 @@ def main():
         lines += ["", f"## {family} ({len(items)})", ""]
         for key, e in items:
             # A step's clip can depend on the step before it: a variant is done when every use has it.
-            by_before = {b: rule_clip(key, rules, b) for b in e["befores"]}
+            by_before = e["picks"]
             named = set(by_before.values())
             clip = next(iter(named)) if len(named) == 1 else None
             ticks = []
@@ -215,8 +221,8 @@ def main():
                          f"{plural(len(e['programs']), 'program')} "
                          f"({'/'.join(sorted(e['agencies']))}) " + ", ".join(flags))
             if len(named) > 1:
-                shown = "by the step before: " + ", ".join(
-                    f"{('`' + c + '`') if c else 'none yet'} after `{b}` {e['befores'][b]}"
+                shown = "by the steps before: " + ", ".join(
+                    f"{('`' + c + '`') if c else 'none yet'} {b} {e['befores'][b]}"
                     for b, c in sorted(by_before.items(), key=lambda bc: -e["befores"][bc[0]]))
             else:
                 shown = ('`' + clip + '`') if clip else 'none yet'

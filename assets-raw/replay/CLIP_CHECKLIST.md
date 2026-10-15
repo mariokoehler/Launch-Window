@@ -25,7 +25,7 @@ How to read an entry (all counted automatically, a first pass):
 ## Launch (13)
 
 - [x] **Ascent** `ascent`: 241 uses in 185 configurations, 54 programs (NASA/SOVIET) **(early-era)**, crew risk in 136 of 241
-  - Clip: by the step before: `ascent` after `launch` 213, `ascent` after `ascent` 26, `lunar-ascent` after `lunar-liftoff` 2; [x] success, [x] glitch, [x] failure; cues yes
+  - Clip: by the steps before: `ascent` after `launch` 213, `ascent` after `ascent` 26, `lunar-ascent` after `lunar-liftoff` 2; [x] success, [x] glitch, [x] failure; cues yes
   - Also covers: `atv-ascent` 10, `gemini-a-ascent` 4, `gemini-b-ascent` 4, `sc-a-ascent` 1, `sc-b-ascent` 1, `transtage-ascent` 2
   - On screen: launcher 239, crewed craft 165, crewed lander 42, probe 19, satellite 11, spaceplane 5
   - Destinations: EARTH 173, MOON 52, VENUS 7, MARS 5
@@ -155,7 +155,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: EARTH 16, MOON 11
   - Programs: Apollo: Earth-orbit tests 14, Apollo 7, Gemini EOR 4, Gemini EOR: Earth-orbit tests 2
 - [x] **Landing** `landing`: 18 uses in 17 configurations, 9 programs (NASA/SOVIET) crew risk in 13 of 18, later seasons in 1 of 18
-  - Clip: by the step before: `runway-landing` after `descent` 9, `lunar-landing` after `powered-descent` 4, `probe-landing` after `lander-descent` 3, `lunar-landing` after `lunar-approach` 2; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: by the steps before: `runway-landing` after `descent` 9, `lunar-landing` after `powered-descent` 4, `probe-landing` after `lander-descent` 3, `lunar-landing` after `lunar-approach` 2; [x] success, [x] glitch, [x] failure; cues no
   - Also covers: `sc-a-landing` 1, `sc-b-landing` 1
   - On screen: spaceplane 9, crewed craft 3, crewed lander 3, probe 3, probe lander 2, rover 1
   - Destinations: EARTH 9, MOON 6, VENUS 2, MARS 1
@@ -592,7 +592,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: SUN 6
   - Programs: Pioneer Sun orbiter 1
 - [x] **Lander entry** `lander-entry`: 5 uses in 5 configurations, 4 programs (NASA/SOVIET) uncrewed, later seasons in 2 of 5
-  - Clip: by the step before: `venus-entry` after `venus-approach` 2, `venus-entry` after `lander-release` 1, `mars-entry` after `lander-deployment-and-de-orbit` 1, `mars-entry` after `lander-detachment` 1; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: by the steps before: `venus-entry` after `venus-approach` 2, `venus-entry` after `lander-release` 1, `mars-entry` after `lander-deployment-and-de-orbit` 1, `mars-entry` after `lander-detachment` 1; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 4, probe lander 1
   - Destinations: VENUS 3, MARS 2
   - Programs: Venera lander 2, Mars 2 1, Venera 7 1, Viking 1
@@ -607,7 +607,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: VENUS 5
   - Programs: Venera lander 2, Mariner 5 1, Pioneer Venus Orbiter 1, Venera 7 1
 - [x] **Lander descent** `lander-descent`: 4 uses in 4 configurations, 3 programs (NASA/SOVIET) uncrewed, later seasons in 2 of 4
-  - Clip: `descent-chutes`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: by the steps before: `venus-descent` after `lander-entry` 2, `mars-descent` `mars-approach` earlier 2; [x] success, [x] glitch, [x] failure; cues yes
   - On screen: probe 3, probe lander 1
   - Destinations: MARS 2, VENUS 2
   - Programs: Venera lander 2, Mars 2 1, Viking 1

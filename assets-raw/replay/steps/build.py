@@ -372,6 +372,17 @@ STEPS = {
         "success": (6.4, 4.0), "glitch": (6.4, 4.4), "failure": (6.4, 3.4),
         "times": [0.4, 1.6, 2.6, 3.4, 4.6, 6.3],
     },
+    # A lander's descent at Venus or Mars (2026-10-15): planet-descent.jsx, Venera's chute or Viking's way down.
+    "venus-descent": {
+        "pad": False, "after": ["planet-descent.jsx"],
+        "success": (6.0, 3.4), "glitch": (6.0, 3.5), "failure": (6.0, 3.5),
+        "times": [0.4, 1.4, 2.6, 3.4, 4.4, 5.9],
+    },
+    "mars-descent": {
+        "pad": False, "after": ["planet-descent.jsx"],
+        "success": (6.0, 3.2), "glitch": (6.0, 3.5), "failure": (6.0, 3.3),
+        "times": [0.3, 1.2, 2.2, 3.2, 4.2, 5.4],
+    },
     # The carrier's entry at Venus (2026-10-15): it burns up in every variant; the data it sends differs.
     "bus-entry": {
         "pad": False, "before": ["orbit.jsx"],

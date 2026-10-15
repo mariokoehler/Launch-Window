@@ -123,6 +123,12 @@ Each folder's `build/` is regenerated on every run and stays out of git.
     `venus-entry.jsx` or `mars-entry.jsx` first), the reentry's story at Venus (`b-limb`, Venera's
     sphere `v-pod` at twice its size) or Mars (`e-limb-mars`, the aeroshell `e-shell`), with a bow of
     hot air (`e-glow`) that turns with the lander.
+  - **A lander's descent** (2026-10-15, `y-band`, `y-rip` and the `m-back`/`m-heat`/`m-lander`/`m-leg`/
+    `m-flame`/`m-ground` parts): `planet-descent.jsx` (`PLANET`, set by `venus-descent.jsx` or
+    `mars-descent.jsx`). Venus: the sphere at 1.6 (the landing's size) under `r-main-half` (reefed), then
+    `r-main`, through the cloud bands; the glitch tears it back to half at 3.2, the failure tears it away.
+    Mars: Viking's sequence, the speed lines (`a-flow`) stood on end as dust; the glitch's third engine
+    lights late, the failure's never do. The rule picks Mars by `mars-approach` earlier in the season.
   - **The landers' tests in Earth orbit** (2026-10-14): `lander-orbit.jsx` (after `moon.jsx`): the
     lander at 0.8 over the way home's limb, the alarm lamp; `lander-engine-test`, `lander-staging`.
   - **The air launch** (2026-10-14): `air.jsx` (after `moon.jsx`, for the lamp): the carrier

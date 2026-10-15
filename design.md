@@ -331,6 +331,17 @@ leading to satellite navigation.
   broke the carrier's lock on the Earth, it let the lander go (04:58:44 GMT, 15 December 1970), and
   "while the carrier burned up, the lander experienced peak braking loads of 350 g" (Wikipedia,
   "Venera 7"; A. LePage, Drew Ex Machina, 2020). It's the carrier-entry step's clip (`bus-entry`).
+- **The landers' way down** (2026-10-15, checked): Venera 7's parachute opened reefed; the reefing line
+  melted as designed about 13 minutes later, and some six minutes after that the chute began to fail. The
+  lander fell faster than planned, hit at about 17 m/s, toppled over and still sent a faint signal for 23
+  minutes, the first data from another planet's surface (Wikipedia, "Venera 7"). Viking's lander came
+  down in stages: its 16 m chute opened at about 6 km and 250 m/s, the aeroshell's heat shield dropped
+  7 seconds later and the legs came out 8 seconds after that; at about 1.5 km the lander left the
+  backshell and chute, lit its three descent engines and touched down about 40 seconds later at
+  2.4 m/s (Wikipedia, "Viking 1"). Mars 3 used a heat shield, a parachute and retrorockets the same
+  way. Mars 2's lander, five days earlier, hit the atmosphere too steeply and its chute never opened
+  (Wikipedia, "Mars 2"). They're the lander-descent step's clips (`venus-descent`: the glitch is Venera
+  7's torn chute; `mars-descent`).
 - **Expert rescue:** Apollo 13's command-module power-up procedure, devised by EECOM John Aaron
   and the ground team and tested in the simulator by Ken Mattingly, grounded by measles
   exposure. A controller and a non-flying astronaut rescuing a mission together is exactly the

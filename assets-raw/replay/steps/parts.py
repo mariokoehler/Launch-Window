@@ -948,6 +948,48 @@ def planet_entry_parts():
     layer("e-glow", bow, (x, y))
 
 
+def planet_descent_parts():
+    # A lander's descent at another planet (2026-10-15). Venus: its cloud deck as long wavy bands to fall
+    # through, and a rip across the canopy (a gold tear). Mars: the aeroshell in its pieces, Viking's
+    # way down (the backshell the chute hangs from, the heat shield, the lander inside with its legs
+    # folded, its three descent engines' flames), and the ground, hatched as Mars and cratered.
+    for i in range(1, 7):
+        wave = " ".join(f"Q{x + 60} {(-12 if (x // 120) % 2 else 12)} {x + 120} 0" for x in range(-400, 2320, 120))
+        layer(f"y-band-{i}", f'<g transform="translate(0 600)"><path d="M-400 0 {wave} L2320 34 L-400 34 Z" '
+                             f'fill="url(#earth)" stroke="none"/><path d="M-400 0 {wave}" fill="none" {LINE} '
+                             f'stroke-width="2.4" opacity="0.6"/></g>', (960, 600))
+    # On the main chute's canopy (r-main at rest: the canopy is from y -35 to 112).
+    layer("y-rip", f'<path d="M880 6 L904 30 L894 46 L922 66 L912 84 L940 102" fill="none" stroke="{GOLD}" '
+                   f'stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>', (910, 54))
+    x, y = 960, 440
+    layer("m-back", f'<path d="M{x - 100} {y + 20} L{x - 34} {y - 40} L{x + 34} {y - 40} L{x + 100} {y + 20} Z" '
+                    f'fill="#ffffff" {LINE} stroke-width="3"/>', (x, y - 40))
+    layer("m-heat", f'<path d="M{x - 108} {y + 20} Q{x} {y + 66} {x + 108} {y + 20} Z" fill="url(#hatch)" {LINE} stroke-width="3"/>',
+          (x, y + 32))
+    # The lander: a six-sided body (seen side on, a flat box with bevelled ends), a dish on a short mast.
+    layer("m-lander", f'<path d="M{x - 80} {y - 6} L{x - 64} {y - 24} L{x + 64} {y - 24} L{x + 80} {y - 6} L{x + 80} {y + 12} '
+                      f'L{x - 80} {y + 12} Z" fill="#ffffff" {LINE} stroke-width="3"/>'
+                      f'<path d="M{x + 30} {y - 24} L{x + 30} {y - 50}" fill="none" {LINE} stroke-width="3"/>'
+                      f'<path d="M{x + 10} {y - 58} Q{x + 30} {y - 40} {x + 50} {y - 58}" fill="#ffffff" {LINE} stroke-width="3"/>',
+          (x, y))
+    # A leg each side, drawn out (down and out to its foot pad), pivoting at the body's lower corner.
+    layer("m-leg-l", f'<path d="M{x - 74} {y + 10} L{x - 116} {y + 64}" fill="none" {LINE} stroke-width="4"/>'
+                     f'<ellipse cx="{x - 120}" cy="{y + 68}" rx="16" ry="5" fill="#ffffff" {LINE} stroke-width="3"/>', (x - 74, y + 10))
+    layer("m-leg-r", f'<path d="M{x + 74} {y + 10} L{x + 116} {y + 64}" fill="none" {LINE} stroke-width="4"/>'
+                     f'<ellipse cx="{x + 120}" cy="{y + 68}" rx="16" ry="5" fill="#ffffff" {LINE} stroke-width="3"/>', (x + 74, y + 10))
+    for i, fx in enumerate((x - 44, x, x + 44), 1):
+        layer(f"m-flame-{i}", f'<path d="M{fx - 8} {y + 14} C{fx - 9} {y + 40} {fx - 4} {y + 66} {fx} {y + 90} '
+                              f'C{fx + 4} {y + 66} {fx + 9} {y + 40} {fx + 8} {y + 14} Z" fill="{GOLD_FILL}" stroke="{GOLD}" '
+                              f'stroke-width="2" stroke-linejoin="round"/>', (fx, y + 14))
+    craters = "".join(f'<ellipse cx="{cx}" cy="{cy}" rx="{rx}" ry="{rx * 0.22:.1f}" fill="#ffffff" {LINE} stroke-width="2.4"/>'
+                      for cx, cy, rx in ((-300, 1180, 90), (420, 1260, 60), (980, 1160, 120), (1500, 1300, 80), (2100, 1190, 70),
+                                         (200, 1420, 140), (1300, 1500, 110)))
+    layer("m-ground", f'<rect x="-900" y="1100" width="3800" height="900" fill="url(#hatch)"/>'
+                      f'<path d="M-900 1100 ' + " ".join(f"Q{gx + 160} {1100 - (18 if (gx // 320) % 2 else 8)} {gx + 320} 1100"
+                                                        for gx in range(-900, 2900, 320)) + f'" fill="none" {LINE} stroke-width="3"/>'
+                      + craters, (960, 1100))
+
+
 # --- The air launch: a carrier plane with the rocket plane under its wing --------------------------------
 
 # The carrier, nose right, standing on the runway (y 772), its pivot at its main wheels (AC). The rocket
@@ -1019,6 +1061,7 @@ def main():
     probe_parts()
     carrier_entry_parts()
     planet_entry_parts()
+    planet_descent_parts()
     air_parts()
     if ONLY:
         # Keep the parts not redrawn.

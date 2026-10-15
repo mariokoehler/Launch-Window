@@ -1,0 +1,10 @@
+{
+ "duration": 6.0,
+ "revealAt": 3.5,
+ "cues": [
+  {
+   "at": 3.55,
+   "sound": "radio-attitude-drift"
+  }
+ ]
+}

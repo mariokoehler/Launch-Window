@@ -130,8 +130,8 @@ final class ReplayChooser extends ScreenAdapter {
                 List<MissionStep> steps = config.seasons().get(season).steps();
                 int withClips = 0;
                 for (int i = 0; i < steps.size(); i++) {
-                    // The step before picks the clip too (a landing on the Moon or on a runway).
-                    withClips += clips.clipName(steps.get(i).id(), i == 0 ? null : steps.get(i - 1).id()).isPresent() ? 1 : 0;
+                    // The steps before pick the clip too (a landing on the Moon or on a runway, a descent at Mars).
+                    withClips += clips.clipName(steps.get(i).id(), ids(steps, i)).isPresent() ? 1 : 0;
                 }
                 String name = MissionControl.missionName(config) + (config.seasons().size() > 1
                     ? " · season " + (season + 1) + " of " + config.seasons().size() : "");
@@ -311,7 +311,7 @@ final class ReplayChooser extends ScreenAdapter {
         List<MissionStep> plan = picked.config().seasons().get(picked.season()).steps();
         for (int i = 0; i < plan.size(); i++) {
             String id = plan.get(i).id();
-            String before = i == 0 ? null : plan.get(i - 1).id();
+            List<String> before = ids(plan, i);
             steps.add(stepRow(i, (i + 1) + "  " + TurnReportView.stepName(picked.config().id(), id),
                 clips.clipName(id, before).map(name -> "clip " + name).orElse("no clip: no signal"), id, before))
                 .padBottom(2f).row();
@@ -328,7 +328,12 @@ final class ReplayChooser extends ScreenAdapter {
         return card;
     }
 
-    private Table stepRow(int index, String name, String note, String stepId, String before) {
+    /** The ids of a season's steps before the index-th. */
+    private static List<String> ids(List<MissionStep> steps, int index) {
+        return steps.subList(0, index).stream().map(MissionStep::id).toList();
+    }
+
+    private Table stepRow(int index, String name, String note, String stepId, List<String> before) {
         Table row = new Table();
         boolean active = index == target;
         row.setBackground(active ? ui.rect(new Color(Theme.SURFACE_CARD).lerp(Theme.NAVY, 0.08f), Theme.NAVY,

@@ -164,10 +164,11 @@ public final class ReplayScreen extends ChromeScreen {
         playClip(false);
     }
 
-    // The step before picks the clip too (a landing on the Moon or on a runway).
+    // The steps before pick the clip too (a landing on the Moon or on a runway, a descent at Mars).
     private ReplayClips.Clip clip(List<MissionStepResolved> steps, int index) {
         MissionStepResolved step = steps.get(index);
-        return clips.clipFor(step.stepId(), index == 0 ? null : steps.get(index - 1).stepId(), step.outcome());
+        return clips.clipFor(step.stepId(), steps.subList(0, index).stream().map(MissionStepResolved::stepId).toList(),
+            step.outcome());
     }
 
     private List<MissionStepResolved> steps() {

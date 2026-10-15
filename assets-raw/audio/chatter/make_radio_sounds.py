@@ -43,7 +43,8 @@ SOUNDS = {
     "radio-signal-good": (["power_and_telemetry_nominal", "data_coming_in_now (1)", "data_coming_in_now (2)",
                            "data_coming_in_now (3)"],
         "\"Power and telemetry nominal.\" / \"Data coming in now.\" A satellite in orbit calling home, its "
-        "success, at the reveal; the carrier entry's success (its data home before it burns up)."),
+        "success, at the reveal; the carrier entry's success (its data home before it burns up); the "
+        "landers' descents at Venus and Mars, their successes."),
     "radio-watching": (["watching_it", "we_are_looking_at_it", "standby"],
         "\"Watching it.\" / \"We're looking at it.\" / \"Stand by.\" Before a reveal, in every variant: the "
         "deployment's opening."),
@@ -65,7 +66,8 @@ SOUNDS = {
         "\"Trajectory is a little low. Guidance is correcting.\" The ascent's glitch (the upper stage swings "
         "off its path and is steered back)."),
     "radio-oscillations": (["we_are_seeing_some_oscillations_within_limits"],
-        "\"We're seeing some oscillations. Within limits.\" The reentry's glitch."),
+        "\"We're seeing some oscillations. Within limits.\" The reentry's glitch, and the landers' entries' "
+        "at Venus and Mars; Venera's descent's (its chute torn, swinging)."),
     "radio-telemetry-lost": (["flight_we_have_lost_telemetry_we_have_it_back_signal_is_good",
                               "loss_of_signal_acquisition_of_signal_data_looks_good (1)",
                               "loss_of_signal_acquisition_of_signal_data_looks_good (2)"],
@@ -81,7 +83,8 @@ SOUNDS = {
         "glitches."),
     "radio-attitude-drift": (["attitude_control_is_drifting_switching_to_backup_rates_are_damping"],
         "\"Attitude control is drifting. Switching to backup. Rates are damping.\" A turn stopped late: the "
-        "suborbital flight's and the reentry preparations' glitches."),
+        "suborbital flight's and the reentry preparations' glitches; the Mars lander's descent's (an engine "
+        "late, the lander tipping)."),
     "radio-burn-short": (["flight_the_burn_was_short_we_can_trim_it_on_the_next_pass"],
         "\"Flight, the burn was short. We can trim it on the next pass.\" The orbit insertion's glitch (the "
         "burn cuts out and relights)."),
@@ -139,7 +142,7 @@ SOUNDS = {
         "the retropack's jettison, the modules' separation, the probe's release and the lander's extraction."),
     "radio-burn-failed": (takes("flight_the_burn_did_not_take_place", 3),
         "\"Flight, the burn did not take place.\" A burn that dies: the failures of the retrofire and of the "
-        "burns into and out of lunar orbit."),
+        "burns into and out of lunar orbit; the Mars lander's descent's (its engines never light)."),
     "radio-tumbling": (takes("flight_we_are_tumbling_we_cannot_stop_it", 2),
         "\"Flight, we're tumbling. We cannot stop it.\" (Gemini 8.) A jet stuck open: the failures of the "
         "suborbital flight, the reentry preparations and the undocking."),
@@ -164,7 +167,8 @@ SOUNDS = {
         "\"Sixty seconds. … Thirty seconds. … Contact light.\" (Apollo 11's fuel calls.) The lunar landing's "
         "glitch (a hover low on fuel)."),
     "radio-lander-lost": (takes("we_have_lost_contact_with_the_lander", 4),
-        "\"We've lost contact with the lander.\" The landings' failures, on the Moon and the planets."),
+        "\"We've lost contact with the lander.\" The landings' failures, on the Moon and the planets; the "
+        "landers' entries' at Venus and Mars, and Venera's descent's (its chute torn away)."),
     "radio-probe-silent": (takes("the_probe_has_stopped_transmitting", 2),
         "\"The probe has stopped transmitting.\" The failure of the work on the surface (Mars 3)."),
     "radio-drogue-late": (takes("drogue_is_late_drogue_deployed_main_chute_is_out", 3),

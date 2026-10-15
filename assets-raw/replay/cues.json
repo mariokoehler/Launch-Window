@@ -113,6 +113,16 @@
     "glitch": [{"at": 4.45, "sound": "radio-oscillations"}],
     "failure": [{"at": 3.45, "sound": "radio-lander-lost"}]
   },
+  "venus-descent": {
+    "success": [{"at": 3.45, "sound": "radio-signal-good"}],
+    "glitch": [{"at": 3.55, "sound": "radio-oscillations"}],
+    "failure": [{"at": 3.55, "sound": "radio-lander-lost"}]
+  },
+  "mars-descent": {
+    "success": [{"at": 3.25, "sound": "radio-signal-good"}],
+    "glitch": [{"at": 3.55, "sound": "radio-attitude-drift"}],
+    "failure": [{"at": 3.35, "sound": "radio-burn-failed"}]
+  },
   "bus-entry": {
     "success": [{"at": 2.15, "sound": "radio-signal-good"}],
     "glitch": [{"at": 2.9, "sound": "radio-telemetry-lost"}],

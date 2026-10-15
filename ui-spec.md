@@ -1903,7 +1903,9 @@ clips, the replay is meant to be watched like a short film, and the player can s
   holds the list to the pack's vehicles). A rule can also name the step before (`"after"`, matched the
   same way; 2026-10-14, unconfirmed): `landing` is on the Moon after `powered-descent` or a robot's
   `lunar-approach`, a probe's after `lander-descent` and a spaceplane's after `descent`, so a rule with
-  `after` goes before one for the same step without it. It's outside the content pack (not hashed), like
+  `after` goes before one for the same step without it. A rule can name a step anywhere before it in the
+  season instead (`"earlier"`, 2026-10-15): `lander-descent` follows `lander-entry` at both planets, so
+  Mars is told by `mars-approach` earlier in the season. It's outside the content pack (not hashed), like
   the stories.
 - **Which steps have clips (2026-10-13):** a first satellite's whole mission (Sputnik 1, Explorer 1):
   launch preparations, countdown, launch, ascent, deployment, Earth orbit. The rest are listed in
@@ -1917,7 +1919,11 @@ clips, the replay is meant to be watched like a short film, and the player can s
   differs (unconfirmed). The landers' entries had the Earth capsule's `reentry` too, Earth's limb and
   all; they have `venus-entry` (Venera's sphere, the Pioneer Venus probes) and `mars-entry` (Viking's
   and Mars 3's aeroshell), the reentry's story at their planet, Mars picked by the step before
-  (user, 2026-10-15).
+  (user, 2026-10-15). Their descents had the capsule's chutes; they have `venus-descent` (Venera's
+  reefed chute opening; the glitch tears it, as Venera 7's did, the failure tears it away) and
+  `mars-descent` (Viking's chute, heat shield, legs and three engines; the glitch lights one late, the
+  failure none), Mars picked by an earlier step (user, 2026-10-15; the stories unconfirmed). The landing
+  that follows still shows Venera's sphere at Mars too.
 - **No clip yet:** a step with no clip, or a variant missing, plays `no-signal.webm` on a loop (an
   antenna searching, outcome-neutral) with "No signal" in the bezel; its result shows after a
   1.5 s pause, and playback moves on at 3 s. If no video can play at all (no file, no native

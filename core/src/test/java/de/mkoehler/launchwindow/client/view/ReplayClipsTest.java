@@ -37,7 +37,7 @@ class ReplayClipsTest {
         for (ReplayClips.Rule rule : CLIPS.rules()) {
             for (MissionStepOutcome outcome : new MissionStepOutcome[]{MissionStepOutcome.SUCCESSFUL,
                 MissionStepOutcome.MINOR_GLITCH, MissionStepOutcome.FAILURE}) {
-                ReplayClips.Clip clip = CLIPS.clipFor("03-" + rule.step(), rule.after() == null ? null : "02-" + rule.after(), outcome);
+                ReplayClips.Clip clip = CLIPS.clipFor("03-" + rule.step(), before(rule), outcome);
                 assertTrue(clip.signal(), rule.clip() + " has no " + ReplayClips.variant(outcome));
                 assertTrue(Files.exists(ASSETS.resolve(clip.video())), clip.video());
                 assertTrue(clip.revealAt() > 0 && clip.revealAt() <= clip.duration(), clip.video());
@@ -71,6 +71,13 @@ class ReplayClipsTest {
         assertEquals("runway-landing", CLIPS.clipName("06-landing", "05-descent").orElseThrow());
         assertEquals("probe-landing", CLIPS.clipName("14-landing", "13-lander-descent").orElseThrow());
         assertTrue(CLIPS.clipName("14-landing", "13-no-such-step").isEmpty());
+        // A step further back can pick too: the step before a lander's descent is its entry at either
+        // planet, but only at Mars did the season start with the approach to Mars.
+        assertEquals("mars-descent", CLIPS.clipName("05-lander-descent",
+            java.util.List.of("01-earth-mars-transit", "02-mars-approach", "03-lander-detachment", "04-lander-entry")).orElseThrow());
+        assertEquals("venus-descent", CLIPS.clipName("12-lander-descent",
+            java.util.List.of("09-venus-approach", "10-lander-release", "11-lander-entry")).orElseThrow());
+        assertEquals("venus-descent", CLIPS.clipName("12-lander-descent", "11-lander-entry").orElseThrow());
         assertTrue(CLIPS.clipName("12-landing").isEmpty());
         // lunar-ascent plays its own clip, never ascent's; ascent plays it only after a lunar liftoff.
         assertEquals("lunar-ascent", CLIPS.clipName("12-lunar-ascent").orElseThrow());
@@ -140,7 +147,7 @@ class ReplayClipsTest {
         for (ReplayClips.Rule rule : CLIPS.rules()) {
             java.util.List<ReplayClips.Clip> variants = java.util.stream.Stream.of(MissionStepOutcome.SUCCESSFUL,
                 MissionStepOutcome.MINOR_GLITCH, MissionStepOutcome.FAILURE, MissionStepOutcome.CATASTROPHIC)
-                .map(outcome -> CLIPS.clipFor("03-" + rule.step(), rule.after() == null ? null : "02-" + rule.after(), outcome)).toList();
+                .map(outcome -> CLIPS.clipFor("03-" + rule.step(), before(rule), outcome)).toList();
             float reveal = (float) variants.stream().mapToDouble(ReplayClips.Clip::revealAt).min().orElse(0);
             java.util.List<ReplayClips.Cue> before = null;
             for (ReplayClips.Clip clip : variants) {
@@ -164,5 +171,17 @@ class ReplayClipsTest {
                 before = early;
             }
         }
+    }
+
+    /** The steps a rule needs before its own: its earlier step, then the one right before. */
+    private static java.util.List<String> before(ReplayClips.Rule rule) {
+        java.util.List<String> ids = new java.util.ArrayList<>();
+        if (rule.earlier() != null) {
+            ids.add("01-" + rule.earlier());
+        }
+        if (rule.after() != null) {
+            ids.add("02-" + rule.after());
+        }
+        return ids;
     }
 }
