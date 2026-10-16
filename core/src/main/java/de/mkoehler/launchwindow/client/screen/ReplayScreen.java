@@ -19,6 +19,7 @@ import de.mkoehler.launchwindow.client.view.ReplaySounds;
 import de.mkoehler.launchwindow.client.view.SetSkills;
 import de.mkoehler.launchwindow.client.view.TurnReportView;
 import de.mkoehler.launchwindow.content.MissionComponent;
+import de.mkoehler.launchwindow.content.MissionConfiguration;
 import de.mkoehler.launchwindow.content.MissionStep;
 import de.mkoehler.launchwindow.model.GameDate;
 import de.mkoehler.launchwindow.rules.ExpertRescueApplied;
@@ -164,11 +165,17 @@ public final class ReplayScreen extends ChromeScreen {
         playClip(false);
     }
 
-    // The steps before pick the clip too (a landing on the Moon or on a runway, a descent at Mars).
+    // The steps before pick the clip too (a landing on the Moon or on a runway, a descent at Mars), and
+    // so do the craft and the steps planned after (a Soyuz-type craft's orbital module, shown only when
+    // a step that drops it is coming). The plan is what the player sees, so it spoils nothing.
     private ReplayClips.Clip clip(List<MissionStepResolved> steps, int index) {
         MissionStepResolved step = steps.get(index);
+        String program = session.catalog().missionConfiguration(step.missionConfigurationId())
+            .map(MissionConfiguration::programId).orElse(null);
+        List<String> planned = plannedSteps(steps);
+        List<String> later = index + 1 <= planned.size() ? planned.subList(index + 1, planned.size()) : List.of();
         return clips.clipFor(step.stepId(), steps.subList(0, index).stream().map(MissionStepResolved::stepId).toList(),
-            step.outcome());
+            later, program, step.outcome());
     }
 
     private List<MissionStepResolved> steps() {

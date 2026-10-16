@@ -321,6 +321,11 @@ leading to satellite navigation.
   the struts burned through and it swung round; a hard landing broke his teeth. The replay's
   `orbital-module-separation` drops the front module (the pack, standing for the back one, went in
   the jettison before). Fits the 7K-OK's history note, or that clip's failure.
+- **Gemini's adapter came off in two pieces** (2026-10-16, from memory; verify before a note uses it):
+  the white adapter behind the capsule held an equipment section (fuel cells, oxygen, the manoeuvring
+  thrusters' propellant) and a retrograde section with four solid retro motors. Coming home, the
+  equipment section went first, then the four retros fired one after another, then the retro section
+  was dropped. The replay's `equipment-section-separation` plays the first of these for Gemini EOR.
 - **Saving throws are real:** Apollo 11's 1202/1201 alarms (a controller's call not to abort)
   and Apollo 13's improvised survival plan. Fits a step rescued by its saving throw.
 - **The flight loop in trouble** (2026-10-14, as usually quoted; verify before a note uses them):
@@ -2596,6 +2601,11 @@ first (login → action → scheduled resolution → result, end to end) before 
     converter swaps the pair back, each step keeping its own data and its number in the order
     (`20-retrofire-jettison, 21-retrofire` becomes `20-retrofire, 21-retrofire-jettison`; backup
     `.bak-preswap`). The order is BASPM's only here.
+  - **Gemini EOR comes home Gemini's way (user, 2026-10-16).** BASPM gives its six configurations with
+    a way home the Soyuz order (retrofire, jettison, modules separation, or the last two alone). Gemini
+    dropped its adapter's equipment section first, then fired the retros and dropped the retro section,
+    so the converter moves the modules separation in front, each position keeping its number (backup
+    `.bak-pregemini`). Four of them have no retrofire step in BASPM's data; that's left as it is.
   - **Goal boosts stay (user, 2026-10-08).** BASPM's loader never reads `GoalBoost` elements, so in
     the shipped game only the penalties apply (`baspm.md` §11.3). We keep applying the boosts the
     data declares (2 in the early-era pack, 99 in the standard pack, +1 or +2 each): they reward

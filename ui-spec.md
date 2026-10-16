@@ -1945,6 +1945,13 @@ clips, the replay is meant to be watched like a short film, and the player can s
   an orbital module on the nose through the burn and the jettison; their modules separation drops it, where
   Vostok's drops the pack. The glitch hangs it on one latch until a second try; the failure never frees it
   (unconfirmed).
+- **Rules by craft and by what's planned (2026-10-16):** a rule may name `programs` (it matches only a
+  configuration of one of them) and `later` (a step anywhere after it in the season's plan, which the player
+  sees, so it spoils nothing). The Soyuz-type programs show their orbital module from their first close-up
+  (the LK-700's and the 7K-OK's hop only when a jettison is coming); Gemini EOR comes home Gemini's way:
+  `equipment-section-separation` (the adapter's back section drops, the capsule turns base first), then the
+  retrofire and the retro section's jettison. Vostok's suborbital flight still drops the pack twice
+  (BASPM's data: a jettison, then the modules separation).
 - **No clip yet:** a step with no clip, or a variant missing, plays `no-signal.webm` on a loop (an
   antenna searching, outcome-neutral) with "No signal" in the bezel; its result shows after a
   1.5 s pause, and playback moves on at 3 s. If no video can play at all (no file, no native

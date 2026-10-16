@@ -54,7 +54,12 @@ Each folder's `build/` is regenerated on every run and stays out of git.
     shows there, the map before it a dot) and `retrofire-jettison-om` (`OM`, `EARTH0`), and goes in
     `orbital-module-separation`, the step after the jettison, leaving the bare capsule the reentry shows.
     Rules pick them by the step before the burn (only these flights' burns follow those steps) and by
-    `earlier`. Gemini EOR's lander tests fly the same steps, so they get the module too (unconfirmed).
+    `programs` (the Soyuz-type programs) and, for a hop, `later` (a jettison coming); `suborbital-flight-om`
+    and `retrofire-om` carry it on the LK-700's and the 7K-OK's hop.
+  - **Gemini** (2026-10-16): `equipment-section-separation` drops the adapter's back section (`r-trunk`, in
+    the world so it doesn't turn with the capsule once free, drawn over the pack it hides), then turns the
+    capsule base first for the plain retrofire and jettison after it (Gemini EOR's steps, reordered by the
+    converter).
   - **Vostok's way** (2026-10-14): `modules-separation` (the module is the same pack, `r-module`,
     turning about its own centre; the cable between them, `r-cable`, is aimed and stretched every
     frame; its glitch is Vostok 1's) and `descent-and-landing`. The two descents share `descent.jsx`,

@@ -131,7 +131,8 @@ final class ReplayChooser extends ScreenAdapter {
                 int withClips = 0;
                 for (int i = 0; i < steps.size(); i++) {
                     // The steps before pick the clip too (a landing on the Moon or on a runway, a descent at Mars).
-                    withClips += clips.clipName(steps.get(i).id(), ids(steps, i)).isPresent() ? 1 : 0;
+                    withClips += clips.clipName(steps.get(i).id(), ids(steps, i), later(steps, i), config.programId())
+                        .isPresent() ? 1 : 0;
                 }
                 String name = MissionControl.missionName(config) + (config.seasons().size() > 1
                     ? " · season " + (season + 1) + " of " + config.seasons().size() : "");
@@ -306,14 +307,16 @@ final class ReplayChooser extends ScreenAdapter {
         Table steps = new Table();
         steps.top();
         steps.defaults().growX();
-        steps.add(stepRow(-1, "Every step", "the outcome on all of them; a failure doesn't end the season", null, null))
+        steps.add(stepRow(-1, "Every step", "the outcome on all of them; a failure doesn't end the season", null, null, null))
             .padBottom(2f).row();
         List<MissionStep> plan = picked.config().seasons().get(picked.season()).steps();
         for (int i = 0; i < plan.size(); i++) {
             String id = plan.get(i).id();
             List<String> before = ids(plan, i);
+            List<String> after = later(plan, i);
             steps.add(stepRow(i, (i + 1) + "  " + TurnReportView.stepName(picked.config().id(), id),
-                clips.clipName(id, before).map(name -> "clip " + name).orElse("no clip: no signal"), id, before))
+                clips.clipName(id, before, after, picked.config().programId()).map(name -> "clip " + name)
+                    .orElse("no clip: no signal"), id, before, after))
                 .padBottom(2f).row();
         }
         card.add(scroll(steps)).grow().padBottom(Theme.SPACE_4).row();
@@ -333,7 +336,13 @@ final class ReplayChooser extends ScreenAdapter {
         return steps.subList(0, index).stream().map(MissionStep::id).toList();
     }
 
-    private Table stepRow(int index, String name, String note, String stepId, List<String> before) {
+    /** The ids of a season's steps after the index-th. */
+    private static List<String> later(List<MissionStep> steps, int index) {
+        return steps.subList(index + 1, steps.size()).stream().map(MissionStep::id).toList();
+    }
+
+    private Table stepRow(int index, String name, String note, String stepId, List<String> before,
+                          List<String> after) {
         Table row = new Table();
         boolean active = index == target;
         row.setBackground(active ? ui.rect(new Color(Theme.SURFACE_CARD).lerp(Theme.NAVY, 0.08f), Theme.NAVY,
@@ -342,11 +351,12 @@ final class ReplayChooser extends ScreenAdapter {
         row.pad(5f, 10f, 5f, 10f);
         row.add(ui.label(name, Theme.TextStyle.BODY_SM, Theme.INK)).left();
         row.add(ui.label(note, Theme.TextStyle.CAPTION, Theme.INK_MUTED)).expandX().left().padLeft(Theme.SPACE_3);
-        if (stepId != null && clips.clipName(stepId, before).isPresent()) {
-            String name0 = clips.clipName(stepId, before).get();
+        String program = picked == null ? null : picked.config().programId();
+        if (stepId != null && clips.clipName(stepId, before, after, program).isPresent()) {
+            String name0 = clips.clipName(stepId, before, after, program).get();
             for (int v = 0; v < VARIANT_LETTERS.length; v++) {
                 MissionStepOutcome each = MissionReplayer.OUTCOMES.get(v);
-                boolean own = clips.clipFor(stepId, before, each).video()
+                boolean own = clips.clipFor(stepId, before, after, program, each).video()
                     .endsWith(name0 + "-" + ReplayClips.variant(each) + ".webm");
                 row.add(ui.label(VARIANT_LETTERS[v], Theme.TextStyle.LABEL, own ? Theme.SUCCESS
                     : new Color(Theme.INK_MUTED).mul(1f, 1f, 1f, 0.35f))).width(14f).padLeft(4f);

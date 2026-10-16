@@ -348,6 +348,13 @@ def return_parts():
     layer("r-om", RT(om), RT_AT(980, 348))
     layer("r-om-cut-a", RT(f'<circle cx="940" cy="348" r="6" fill="{GOLD}"/>'), RT_AT(940, 348))
     layer("r-om-cut-b", RT(f'<circle cx="980" cy="348" r="6" fill="{GOLD}"/>'), RT_AT(980, 348))
+    # Gemini's adapter (2026-10-16): the equipment section, a truncated cone behind the base that hides
+    # the retro pack (its retro section) until it goes; it turns about latch b, as the pack does.
+    trunk = (f'<path d="M915 502 L1005 502 L1040 600 L880 600 Z" fill="#ffffff" {LINE} stroke-width="2.4"/>'
+             f'<path d="M898 552 L1022 552" fill="none" {LINE} stroke-width="1.6"/>')
+    layer("r-trunk", RT(trunk), RT_AT(1002, 504))
+    layer("r-trunk-cut-a", RT(f'<circle cx="918" cy="504" r="6" fill="{GOLD}"/>'), RT_AT(918, 504))
+    layer("r-trunk-cut-b", RT(f'<circle cx="1002" cy="504" r="6" fill="{GOLD}"/>'), RT_AT(1002, 504))
     layer("r-pyro", RT("".join(f'<circle cx="{x}" cy="502" r="6" fill="{GOLD}"/>' for x in (934, 960, 986))), RT_AT(960, 502))
     layer("r-cable", f'<path d="M0 0 C25 -6 75 6 100 0" transform="translate(960 470)" fill="none" {LINE} stroke-width="3"/>',
           (960, 470))

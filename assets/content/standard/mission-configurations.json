@@ -104287,7 +104287,85 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "15-retrofire",
+            "id": "15-modules-separation",
+            "componentInvolvements": [
+              {
+                "componentId": "gemini-capsule",
+                "percent": 60
+              },
+              {
+                "componentId": "gemini-eor-service-module",
+                "percent": 40
+              }
+            ],
+            "controllerInvolvements": [
+              {
+                "slot": 1,
+                "percent": 20
+              },
+              {
+                "slot": 2,
+                "percent": 5
+              },
+              {
+                "slot": 3,
+                "percent": 15
+              },
+              {
+                "slot": 4,
+                "percent": 5
+              },
+              {
+                "slot": 5,
+                "percent": 30
+              },
+              {
+                "slot": 6,
+                "percent": 10
+              },
+              {
+                "slot": 7,
+                "percent": 10
+              },
+              {
+                "slot": 8,
+                "percent": 5
+              }
+            ],
+            "crewInvolvements": [
+              {
+                "slot": 0,
+                "skill": "LEADERSHIP",
+                "percent": 20.0
+              },
+              {
+                "slot": 0,
+                "skill": "PILOTING",
+                "percent": 40.0
+              },
+              {
+                "slot": 0,
+                "skill": "FITNESS",
+                "percent": 5.0
+              },
+              {
+                "slot": 1,
+                "skill": "PILOTING",
+                "percent": 30.0
+              },
+              {
+                "slot": 1,
+                "skill": "FITNESS",
+                "percent": 5.0
+              }
+            ],
+            "crewRisk": false,
+            "prestigeSharePercent": 0,
+            "failurePrestigeDeduction": 5,
+            "goalIdsAchieved": []
+          },
+          {
+            "id": "16-retrofire",
             "componentInvolvements": [
               {
                 "componentId": "gemini-capsule",
@@ -104365,7 +104443,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "16-retrofire-jettison",
+            "id": "17-retrofire-jettison",
             "componentInvolvements": [
               {
                 "componentId": "gemini-capsule",
@@ -104438,84 +104516,6 @@
               }
             ],
             "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 5,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "17-modules-separation",
-            "componentInvolvements": [
-              {
-                "componentId": "gemini-capsule",
-                "percent": 60
-              },
-              {
-                "componentId": "gemini-eor-service-module",
-                "percent": 40
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 20
-              },
-              {
-                "slot": 2,
-                "percent": 5
-              },
-              {
-                "slot": 3,
-                "percent": 15
-              },
-              {
-                "slot": 4,
-                "percent": 5
-              },
-              {
-                "slot": 5,
-                "percent": 30
-              },
-              {
-                "slot": 6,
-                "percent": 10
-              },
-              {
-                "slot": 7,
-                "percent": 10
-              },
-              {
-                "slot": 8,
-                "percent": 5
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 20.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 40.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 5.0
-              },
-              {
-                "slot": 1,
-                "skill": "PILOTING",
-                "percent": 30.0
-              },
-              {
-                "slot": 1,
-                "skill": "FITNESS",
-                "percent": 5.0
-              }
-            ],
-            "crewRisk": false,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 5,
             "goalIdsAchieved": []
@@ -106555,7 +106555,85 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "24-retrofire",
+            "id": "24-modules-separation",
+            "componentInvolvements": [
+              {
+                "componentId": "gemini-capsule",
+                "percent": 60
+              },
+              {
+                "componentId": "gemini-eor-service-module",
+                "percent": 40
+              }
+            ],
+            "controllerInvolvements": [
+              {
+                "slot": 1,
+                "percent": 20
+              },
+              {
+                "slot": 2,
+                "percent": 5
+              },
+              {
+                "slot": 3,
+                "percent": 15
+              },
+              {
+                "slot": 4,
+                "percent": 5
+              },
+              {
+                "slot": 5,
+                "percent": 30
+              },
+              {
+                "slot": 6,
+                "percent": 10
+              },
+              {
+                "slot": 7,
+                "percent": 10
+              },
+              {
+                "slot": 8,
+                "percent": 5
+              }
+            ],
+            "crewInvolvements": [
+              {
+                "slot": 0,
+                "skill": "LEADERSHIP",
+                "percent": 20.0
+              },
+              {
+                "slot": 0,
+                "skill": "PILOTING",
+                "percent": 40.0
+              },
+              {
+                "slot": 0,
+                "skill": "FITNESS",
+                "percent": 5.0
+              },
+              {
+                "slot": 1,
+                "skill": "PILOTING",
+                "percent": 30.0
+              },
+              {
+                "slot": 1,
+                "skill": "FITNESS",
+                "percent": 5.0
+              }
+            ],
+            "crewRisk": false,
+            "prestigeSharePercent": 0,
+            "failurePrestigeDeduction": 33,
+            "goalIdsAchieved": []
+          },
+          {
+            "id": "25-retrofire",
             "componentInvolvements": [
               {
                 "componentId": "gemini-capsule",
@@ -106633,7 +106711,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "25-retrofire-jettison",
+            "id": "26-retrofire-jettison",
             "componentInvolvements": [
               {
                 "componentId": "gemini-capsule",
@@ -106706,84 +106784,6 @@
               }
             ],
             "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 33,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "26-modules-separation",
-            "componentInvolvements": [
-              {
-                "componentId": "gemini-capsule",
-                "percent": 60
-              },
-              {
-                "componentId": "gemini-eor-service-module",
-                "percent": 40
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 20
-              },
-              {
-                "slot": 2,
-                "percent": 5
-              },
-              {
-                "slot": 3,
-                "percent": 15
-              },
-              {
-                "slot": 4,
-                "percent": 5
-              },
-              {
-                "slot": 5,
-                "percent": 30
-              },
-              {
-                "slot": 6,
-                "percent": 10
-              },
-              {
-                "slot": 7,
-                "percent": 10
-              },
-              {
-                "slot": 8,
-                "percent": 5
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 20.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 40.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 5.0
-              },
-              {
-                "slot": 1,
-                "skill": "PILOTING",
-                "percent": 30.0
-              },
-              {
-                "slot": 1,
-                "skill": "FITNESS",
-                "percent": 5.0
-              }
-            ],
-            "crewRisk": false,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 33,
             "goalIdsAchieved": []
@@ -133676,7 +133676,81 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "22-retrofire-jettison",
+            "id": "22-modules-separation",
+            "componentInvolvements": [
+              {
+                "componentId": "gemini-capsule",
+                "percent": 100
+              }
+            ],
+            "controllerInvolvements": [
+              {
+                "slot": 1,
+                "percent": 18
+              },
+              {
+                "slot": 3,
+                "percent": 15
+              },
+              {
+                "slot": 4,
+                "percent": 10
+              },
+              {
+                "slot": 5,
+                "percent": 20
+              },
+              {
+                "slot": 6,
+                "percent": 12
+              },
+              {
+                "slot": 7,
+                "percent": 10
+              },
+              {
+                "slot": 8,
+                "percent": 5
+              },
+              {
+                "slot": 9,
+                "percent": 10
+              }
+            ],
+            "crewInvolvements": [
+              {
+                "slot": 0,
+                "skill": "LEADERSHIP",
+                "percent": 20.0
+              },
+              {
+                "slot": 0,
+                "skill": "PILOTING",
+                "percent": 30.0
+              },
+              {
+                "slot": 0,
+                "skill": "FITNESS",
+                "percent": 15.0
+              },
+              {
+                "slot": 1,
+                "skill": "PILOTING",
+                "percent": 20.0
+              },
+              {
+                "slot": 1,
+                "skill": "FITNESS",
+                "percent": 15.0
+              }
+            ],
+            "crewRisk": false,
+            "prestigeSharePercent": 0,
+            "failurePrestigeDeduction": 34,
+            "goalIdsAchieved": []
+          },
+          {
+            "id": "23-retrofire-jettison",
             "componentInvolvements": [
               {
                 "componentId": "gemini-capsule",
@@ -133749,80 +133823,6 @@
               }
             ],
             "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 34,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "23-modules-separation",
-            "componentInvolvements": [
-              {
-                "componentId": "gemini-capsule",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 18
-              },
-              {
-                "slot": 3,
-                "percent": 15
-              },
-              {
-                "slot": 4,
-                "percent": 10
-              },
-              {
-                "slot": 5,
-                "percent": 20
-              },
-              {
-                "slot": 6,
-                "percent": 12
-              },
-              {
-                "slot": 7,
-                "percent": 10
-              },
-              {
-                "slot": 8,
-                "percent": 5
-              },
-              {
-                "slot": 9,
-                "percent": 10
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 20.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 30.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 15.0
-              },
-              {
-                "slot": 1,
-                "skill": "PILOTING",
-                "percent": 20.0
-              },
-              {
-                "slot": 1,
-                "skill": "FITNESS",
-                "percent": 15.0
-              }
-            ],
-            "crewRisk": false,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
@@ -135584,7 +135584,81 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "22-retrofire-jettison",
+            "id": "22-modules-separation",
+            "componentInvolvements": [
+              {
+                "componentId": "gemini-capsule",
+                "percent": 100
+              }
+            ],
+            "controllerInvolvements": [
+              {
+                "slot": 1,
+                "percent": 18
+              },
+              {
+                "slot": 3,
+                "percent": 15
+              },
+              {
+                "slot": 4,
+                "percent": 10
+              },
+              {
+                "slot": 5,
+                "percent": 20
+              },
+              {
+                "slot": 6,
+                "percent": 12
+              },
+              {
+                "slot": 7,
+                "percent": 10
+              },
+              {
+                "slot": 8,
+                "percent": 5
+              },
+              {
+                "slot": 9,
+                "percent": 10
+              }
+            ],
+            "crewInvolvements": [
+              {
+                "slot": 0,
+                "skill": "LEADERSHIP",
+                "percent": 20.0
+              },
+              {
+                "slot": 0,
+                "skill": "PILOTING",
+                "percent": 30.0
+              },
+              {
+                "slot": 0,
+                "skill": "FITNESS",
+                "percent": 15.0
+              },
+              {
+                "slot": 1,
+                "skill": "PILOTING",
+                "percent": 20.0
+              },
+              {
+                "slot": 1,
+                "skill": "FITNESS",
+                "percent": 15.0
+              }
+            ],
+            "crewRisk": false,
+            "prestigeSharePercent": 0,
+            "failurePrestigeDeduction": 41,
+            "goalIdsAchieved": []
+          },
+          {
+            "id": "23-retrofire-jettison",
             "componentInvolvements": [
               {
                 "componentId": "gemini-capsule",
@@ -135657,80 +135731,6 @@
               }
             ],
             "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 41,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "23-modules-separation",
-            "componentInvolvements": [
-              {
-                "componentId": "gemini-capsule",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 18
-              },
-              {
-                "slot": 3,
-                "percent": 15
-              },
-              {
-                "slot": 4,
-                "percent": 10
-              },
-              {
-                "slot": 5,
-                "percent": 20
-              },
-              {
-                "slot": 6,
-                "percent": 12
-              },
-              {
-                "slot": 7,
-                "percent": 10
-              },
-              {
-                "slot": 8,
-                "percent": 5
-              },
-              {
-                "slot": 9,
-                "percent": 10
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 20.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 30.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 15.0
-              },
-              {
-                "slot": 1,
-                "skill": "PILOTING",
-                "percent": 20.0
-              },
-              {
-                "slot": 1,
-                "skill": "FITNESS",
-                "percent": 15.0
-              }
-            ],
-            "crewRisk": false,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 41,
             "goalIdsAchieved": []
@@ -138224,7 +138224,81 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "29-retrofire-jettison",
+            "id": "29-modules-separation",
+            "componentInvolvements": [
+              {
+                "componentId": "gemini-capsule",
+                "percent": 100
+              }
+            ],
+            "controllerInvolvements": [
+              {
+                "slot": 1,
+                "percent": 18
+              },
+              {
+                "slot": 3,
+                "percent": 15
+              },
+              {
+                "slot": 4,
+                "percent": 10
+              },
+              {
+                "slot": 5,
+                "percent": 20
+              },
+              {
+                "slot": 6,
+                "percent": 12
+              },
+              {
+                "slot": 7,
+                "percent": 10
+              },
+              {
+                "slot": 8,
+                "percent": 5
+              },
+              {
+                "slot": 9,
+                "percent": 10
+              }
+            ],
+            "crewInvolvements": [
+              {
+                "slot": 0,
+                "skill": "LEADERSHIP",
+                "percent": 20.0
+              },
+              {
+                "slot": 0,
+                "skill": "PILOTING",
+                "percent": 30.0
+              },
+              {
+                "slot": 0,
+                "skill": "FITNESS",
+                "percent": 15.0
+              },
+              {
+                "slot": 1,
+                "skill": "PILOTING",
+                "percent": 20.0
+              },
+              {
+                "slot": 1,
+                "skill": "FITNESS",
+                "percent": 15.0
+              }
+            ],
+            "crewRisk": false,
+            "prestigeSharePercent": 0,
+            "failurePrestigeDeduction": 45,
+            "goalIdsAchieved": []
+          },
+          {
+            "id": "30-retrofire-jettison",
             "componentInvolvements": [
               {
                 "componentId": "gemini-capsule",
@@ -138297,80 +138371,6 @@
               }
             ],
             "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 45,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "30-modules-separation",
-            "componentInvolvements": [
-              {
-                "componentId": "gemini-capsule",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 18
-              },
-              {
-                "slot": 3,
-                "percent": 15
-              },
-              {
-                "slot": 4,
-                "percent": 10
-              },
-              {
-                "slot": 5,
-                "percent": 20
-              },
-              {
-                "slot": 6,
-                "percent": 12
-              },
-              {
-                "slot": 7,
-                "percent": 10
-              },
-              {
-                "slot": 8,
-                "percent": 5
-              },
-              {
-                "slot": 9,
-                "percent": 10
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 20.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 30.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 15.0
-              },
-              {
-                "slot": 1,
-                "skill": "PILOTING",
-                "percent": 20.0
-              },
-              {
-                "slot": 1,
-                "skill": "FITNESS",
-                "percent": 15.0
-              }
-            ],
-            "crewRisk": false,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 45,
             "goalIdsAchieved": []
@@ -141188,7 +141188,81 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "32-retrofire-jettison",
+            "id": "32-modules-separation",
+            "componentInvolvements": [
+              {
+                "componentId": "gemini-capsule",
+                "percent": 100
+              }
+            ],
+            "controllerInvolvements": [
+              {
+                "slot": 1,
+                "percent": 18
+              },
+              {
+                "slot": 3,
+                "percent": 15
+              },
+              {
+                "slot": 4,
+                "percent": 10
+              },
+              {
+                "slot": 5,
+                "percent": 20
+              },
+              {
+                "slot": 6,
+                "percent": 12
+              },
+              {
+                "slot": 7,
+                "percent": 10
+              },
+              {
+                "slot": 8,
+                "percent": 5
+              },
+              {
+                "slot": 9,
+                "percent": 10
+              }
+            ],
+            "crewInvolvements": [
+              {
+                "slot": 0,
+                "skill": "LEADERSHIP",
+                "percent": 20.0
+              },
+              {
+                "slot": 0,
+                "skill": "PILOTING",
+                "percent": 30.0
+              },
+              {
+                "slot": 0,
+                "skill": "FITNESS",
+                "percent": 15.0
+              },
+              {
+                "slot": 1,
+                "skill": "PILOTING",
+                "percent": 20.0
+              },
+              {
+                "slot": 1,
+                "skill": "FITNESS",
+                "percent": 15.0
+              }
+            ],
+            "crewRisk": false,
+            "prestigeSharePercent": 0,
+            "failurePrestigeDeduction": 50,
+            "goalIdsAchieved": []
+          },
+          {
+            "id": "33-retrofire-jettison",
             "componentInvolvements": [
               {
                 "componentId": "gemini-capsule",
@@ -141261,80 +141335,6 @@
               }
             ],
             "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 50,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "33-modules-separation",
-            "componentInvolvements": [
-              {
-                "componentId": "gemini-capsule",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 18
-              },
-              {
-                "slot": 3,
-                "percent": 15
-              },
-              {
-                "slot": 4,
-                "percent": 10
-              },
-              {
-                "slot": 5,
-                "percent": 20
-              },
-              {
-                "slot": 6,
-                "percent": 12
-              },
-              {
-                "slot": 7,
-                "percent": 10
-              },
-              {
-                "slot": 8,
-                "percent": 5
-              },
-              {
-                "slot": 9,
-                "percent": 10
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 20.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 30.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 15.0
-              },
-              {
-                "slot": 1,
-                "skill": "PILOTING",
-                "percent": 20.0
-              },
-              {
-                "slot": 1,
-                "skill": "FITNESS",
-                "percent": 15.0
-              }
-            ],
-            "crewRisk": false,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 50,
             "goalIdsAchieved": []

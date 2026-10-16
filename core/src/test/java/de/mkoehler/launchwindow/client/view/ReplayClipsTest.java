@@ -37,7 +37,7 @@ class ReplayClipsTest {
         for (ReplayClips.Rule rule : CLIPS.rules()) {
             for (MissionStepOutcome outcome : new MissionStepOutcome[]{MissionStepOutcome.SUCCESSFUL,
                 MissionStepOutcome.MINOR_GLITCH, MissionStepOutcome.FAILURE}) {
-                ReplayClips.Clip clip = CLIPS.clipFor("03-" + rule.step(), before(rule), outcome);
+                ReplayClips.Clip clip = CLIPS.clipFor("03-" + rule.step(), before(rule), later(rule), program(rule), outcome);
                 assertTrue(clip.signal(), rule.clip() + " has no " + ReplayClips.variant(outcome));
                 assertTrue(Files.exists(ASSETS.resolve(clip.video())), clip.video());
                 assertTrue(clip.revealAt() > 0 && clip.revealAt() <= clip.duration(), clip.video());
@@ -153,7 +153,7 @@ class ReplayClipsTest {
         for (ReplayClips.Rule rule : CLIPS.rules()) {
             java.util.List<ReplayClips.Clip> variants = java.util.stream.Stream.of(MissionStepOutcome.SUCCESSFUL,
                 MissionStepOutcome.MINOR_GLITCH, MissionStepOutcome.FAILURE, MissionStepOutcome.CATASTROPHIC)
-                .map(outcome -> CLIPS.clipFor("03-" + rule.step(), before(rule), outcome)).toList();
+                .map(outcome -> CLIPS.clipFor("03-" + rule.step(), before(rule), later(rule), program(rule), outcome)).toList();
             float reveal = (float) variants.stream().mapToDouble(ReplayClips.Clip::revealAt).min().orElse(0);
             java.util.List<ReplayClips.Cue> before = null;
             for (ReplayClips.Clip clip : variants) {
@@ -180,6 +180,16 @@ class ReplayClipsTest {
     }
 
     /** The steps a rule needs before its own: its earlier step, then the one right before. */
+    /** The steps a rule needs after it, as a season planned after the step. */
+    private static java.util.List<String> later(ReplayClips.Rule rule) {
+        return rule.later() == null ? java.util.List.of() : java.util.List.of("09-" + rule.later());
+    }
+
+    /** A program a rule matches, or null for any. */
+    private static String program(ReplayClips.Rule rule) {
+        return rule.programs() == null ? null : rule.programs().get(0);
+    }
+
     private static java.util.List<String> before(ReplayClips.Rule rule) {
         java.util.List<String> ids = new java.util.ArrayList<>();
         if (rule.earlier() != null) {

@@ -23,7 +23,10 @@ import java.util.function.Function;
  * with an {@code after} also needs the step before to be that one, the same way ({@code landing} after
  * {@code powered-descent} is on the Moon, after {@code descent} on a runway), and one with an
  * {@code earlier} needs that step anywhere before it in the season ({@code lander-descent} at Mars), so
- * either goes before a rule for the same step without one. Nothing else borrows a clip: {@code lunar-ascent} isn't {@code ascent}. The step's outcome picks the
+ * either goes before a rule for the same step without one. A rule with {@code programs} only matches a
+ * step of a configuration in one of them, the craft's own way (a Soyuz-type craft's orbital module), and
+ * one with a {@code later} needs that step anywhere after it in the season's plan (which the player sees, so
+ * it spoils nothing); each goes first the same way. Nothing else borrows a clip: {@code lunar-ascent} isn't {@code ascent}. The step's outcome picks the
  * variant, and each variant's sidecar ({@code assets/ui/replay/<clip>-<variant>.json}) gives its length
  * and the second its result may show. A step with no clip, or a variant missing, gets the no-signal
  * clip.
@@ -56,8 +59,11 @@ public final class ReplayClips {
      * @param earlier a step anywhere before it in the season, or {@code null} for any ({@code lander-descent}
      *                after {@code mars-approach} is at Mars: the step before is {@code lander-entry} at
      *                Venus too)
+     * @param programs the programs whose configurations it matches, or {@code null} for any
+     * @param later   a step anywhere after it in the season's plan, or {@code null} for any (the LK-700's hop
+     *                shows its orbital module only when a jettison is coming that drops it)
      */
-    public record Rule(String step, String clip, String after, String earlier) {
+    public record Rule(String step, String clip, String after, String earlier, List<String> programs, String later) {
     }
 
     /**
@@ -261,12 +267,42 @@ public final class ReplayClips {
      * @return the clip's name
      */
     public Optional<String> clipName(String stepId, List<String> earlier) {
+        return clipName(stepId, earlier, null);
+    }
+
+    /**
+     * Returns the clip a step plays, if a rule names one.
+     *
+     * @param stepId    the step's id
+     * @param earlier   the ids of the steps before it in the season, in order (the step before last)
+     * @param programId the program of the step's configuration, or {@code null} if unknown (no rule with
+     *                  programs matches)
+     * @return the clip's name
+     */
+    public Optional<String> clipName(String stepId, List<String> earlier, String programId) {
+        return clipName(stepId, earlier, List.of(), programId);
+    }
+
+    /**
+     * Returns the clip a step plays, if a rule names one.
+     *
+     * @param stepId    the step's id
+     * @param earlier   the ids of the steps before it in the season, in order (the step before last)
+     * @param later     the ids of the steps planned after it in the season, in order
+     * @param programId the program of the step's configuration, or {@code null} if unknown (no rule with
+     *                  programs matches)
+     * @return the clip's name
+     */
+    public Optional<String> clipName(String stepId, List<String> earlier, List<String> later, String programId) {
         String step = step(stepId);
+        List<String> after = later.stream().map(this::step).toList();
         List<String> before = earlier.stream().map(this::step).toList();
         String previous = before.isEmpty() ? null : before.get(before.size() - 1);
         return rules.stream()
             .filter(rule -> is(step, rule.step()) && (rule.after() == null || previous != null && is(previous, rule.after()))
-                && (rule.earlier() == null || before.stream().anyMatch(b -> is(b, rule.earlier()))))
+                && (rule.earlier() == null || before.stream().anyMatch(b -> is(b, rule.earlier())))
+                && (rule.programs() == null || programId != null && rule.programs().contains(programId))
+                && (rule.later() == null || after.stream().anyMatch(a -> is(a, rule.later()))))
             .map(Rule::clip).findFirst();
     }
 
@@ -336,7 +372,37 @@ public final class ReplayClips {
      * @return the clip
      */
     public Clip clipFor(String stepId, List<String> earlier, MissionStepOutcome outcome) {
-        Optional<String> name = clipName(stepId, earlier);
+        return clipFor(stepId, earlier, null, outcome);
+    }
+
+    /**
+     * Returns what the monitor plays for a step and its outcome: its own clip, or no signal. A
+     * catastrophe plays the failure until the step has a catastrophic clip of its own.
+     *
+     * @param stepId    the step's id
+     * @param earlier   the ids of the steps before it in the season, in order (the step before last)
+     * @param programId the program of the step's configuration, or {@code null} if unknown
+     * @param outcome   its outcome
+     * @return the clip
+     */
+    public Clip clipFor(String stepId, List<String> earlier, String programId, MissionStepOutcome outcome) {
+        return clipFor(stepId, earlier, List.of(), programId, outcome);
+    }
+
+    /**
+     * Returns what the monitor plays for a step and its outcome: its own clip, or no signal. A
+     * catastrophe plays the failure until the step has a catastrophic clip of its own.
+     *
+     * @param stepId    the step's id
+     * @param earlier   the ids of the steps before it in the season, in order (the step before last)
+     * @param later     the ids of the steps planned after it in the season, in order
+     * @param programId the program of the step's configuration, or {@code null} if unknown
+     * @param outcome   its outcome
+     * @return the clip
+     */
+    public Clip clipFor(String stepId, List<String> earlier, List<String> later, String programId,
+                        MissionStepOutcome outcome) {
+        Optional<String> name = clipName(stepId, earlier, later, programId);
         if (name.isEmpty()) {
             return noSignal();
         }

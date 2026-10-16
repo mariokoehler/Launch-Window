@@ -4,6 +4,8 @@
 // 3.0 stops it. It ends at the top, level, as the retrofire begins.
 // Glitch: the stop comes late; it swings past, rocks, and settles by 4.8.
 // Failure: a jet sticks open at 3.0, and it spins on out of control.
+// OM (suborbital-flight-om.jsx): a Soyuz-type craft (the LK-700), its orbital module on the nose.
+var OM = typeof OM !== "undefined" && OM;
 var glitch = VARIANT === "glitch", failure = VARIANT === "failure";
 var START = 1.2, STOP = 3.0, K = 0.00015;
 
@@ -12,6 +14,7 @@ put("d-earth");
 put("x-arc");
 put("r-carrier");
 var parts = ["r-strap-a", "r-strap-b", "r-pack", "r-capsule", "r-jet-l", "r-jet-r", "r-jet-stuck"];
+if (OM) parts.splice(4, 0, "r-om");
 for (var i = 0; i < parts.length; i++) put(parts[i], "r-carrier");
 
 // Where on the arc the capsule is: s px from its top, at a steady 172 px a second, the top at the end.

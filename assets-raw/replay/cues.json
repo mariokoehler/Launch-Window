@@ -1,4 +1,7 @@
 {
+  "suborbital-flight-om": {"glitch": [{"at": 4.05, "sound": "radio-attitude-drift"}], "failure": [{"at": 3.65, "sound": "radio-tumbling"}]},
+  "retrofire-om": {"success": [{"at": 1.0, "sound": "rocket-roar", "volume": 0.35, "loop": true, "until": 3.6, "fade": 0.3}], "glitch": [{"at": 1.0, "sound": "rocket-roar", "volume": 0.35, "loop": true, "until": 4.2, "fade": 0.3}], "failure": [{"at": 1.0, "sound": "rocket-roar", "volume": 0.35, "loop": true, "until": 2.6, "fade": 0.15}, {"at": 3.05, "sound": "radio-burn-failed"}]},
+  "equipment-section-separation": {"glitch": [{"at": 3.45, "sound": "radio-separation-late"}], "failure": [{"at": 3.25, "sound": "radio-separation-failed"}]},
   "deorbit-burn-om": {"success": [{"at": 2.2, "sound": "rocket-roar", "volume": 0.35, "loop": true, "until": 4.8, "fade": 0.3}], "glitch": [{"at": 2.2, "sound": "rocket-roar", "volume": 0.35, "loop": true, "until": 5.4, "fade": 0.3}], "failure": [{"at": 2.2, "sound": "rocket-roar", "volume": 0.35, "loop": true, "until": 3.8, "fade": 0.15}, {"at": 4.25, "sound": "radio-burn-failed"}]},
   "retrofire-jettison-om": {"glitch": [{"at": 3.45, "sound": "radio-separation-late"}], "failure": [{"at": 3.25, "sound": "radio-separation-failed"}]},
   "orbital-module-separation": {"glitch": [{"at": 3.45, "sound": "radio-separation-late"}], "failure": [{"at": 3.25, "sound": "radio-separation-failed"}]},

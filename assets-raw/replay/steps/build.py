@@ -84,6 +84,23 @@ STEPS = {
         "success": (5.6, 1.6), "glitch": (5.6, 3.4), "failure": (6.4, 3.2),
         "times": [0.5, 1.1, 1.8, 2.6, 3.8, 5.5],
     },
+    # The LK-700's hop and the engine test after it, the orbital module on the nose.
+    "suborbital-flight-om": {
+        "pad": False, "mirror": True, "after": ["suborbital-flight.jsx"],
+        "success": (6.4, 3.4), "glitch": (6.4, 4.0), "failure": (6.4, 3.6),
+        "times": [0.5, 1.8, 2.8, 3.4, 4.4, 6.3],
+    },
+    "retrofire-om": {
+        "pad": False, "mirror": True, "before": ["motes.jsx"], "after": ["retrofire.jsx"],
+        "success": (6.4, 2.6), "glitch": (6.4, 3.0), "failure": (6.4, 3.0),
+        "times": [0.5, 1.4, 2.0, 2.8, 3.8, 6.3],
+    },
+    # Gemini (2026-10-16): the equipment section goes first, then the retrofire and the retro section.
+    "equipment-section-separation": {
+        "pad": False, "mirror": True, "before": ["motes.jsx"],
+        "success": (6.0, 1.6), "glitch": (6.0, 3.4), "failure": (6.4, 3.2),
+        "times": [0.5, 1.0, 1.8, 2.8, 4.0, 5.9],
+    },
     "orbital-module-separation": {
         "pad": False, "mirror": True, "before": ["motes.jsx"],
         "success": (5.6, 1.6), "glitch": (5.6, 3.4), "failure": (6.4, 3.2),

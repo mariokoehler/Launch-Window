@@ -178,6 +178,8 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   configurations had them the other way round, as BASPM does; the converter now swaps them. The pack hash
   changed: reset the dev data root. The way-home clips play mirrored (the orbit's way), with a turn before a
   lone burn and an insertion that coasts to the top first (`ui-spec.md` §4.7.3).
+  Gemini EOR's way home is reordered too (equipment section first), and replay rules can name `programs`
+  and a `later` step: rebuild the client (the replay's clip choice changed in `core`).
 
 ## How we work
 
