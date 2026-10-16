@@ -65,11 +65,12 @@ move("m-puff", function (t) { var p = where(Math.max(t, FIX)); return [p[0] - SX
 grow("m-puff", track([[FIX, 0.4], [FIX + 0.5, 1.6, "out"], [FIX + 1.1, 2.0, "lin"]]));
 fade("m-puff", track([[FIX, 0, "snap"], [FIX + 0.02, 1, "snap"], [FIX + 0.5, 1], [FIX + 1.1, 0, "lin"]]));
 
-// The planets go round, the inner ones faster (r^-1.5): from where they'd be for this transfer.
+// The planets go round, the inner ones faster (r^-1.5): from where they'd be for this transfer. The
+// target is timed to meet the probe where the clip leaves it (2026-10-16, user).
 for (i = 0; i < names.length; i++) {
     (function (n) {
         var rate = 9 * Math.pow(215 / R[n], 1.5);
-        var at = n === FROM ? START - 20 : n === TO ? START - 175 : START - 60 - 47 * names.indexOf(n);
+        var at = n === FROM ? START - 20 : n === TO ? START - NU1 + rate * 6.4 : START - 60 - 47 * names.indexOf(n);
         move("m-" + n, function (t) {
             var a = (at - rate * t) * RAD;
             return [R[n] * Math.cos(a) - R[n], R[n] * Math.sin(a)];
