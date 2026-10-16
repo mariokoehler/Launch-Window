@@ -24,6 +24,7 @@ hide("burst");
 var sink = function (t) { return 140 + 14 * t + 0.4 * t * t; };
 move("d-earth", function (t) { return [0, -sink(t)]; });
 move("r-orbit", function (t) { return [0, -sink(t)]; });
+motesBelow(sink);
 turn("d-earth", function (t) { return -2.776 - 0.25 * t; });
 
 // The tumble of the joined pair: the same in glitch and failure until the cable burns at 3.4; the

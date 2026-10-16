@@ -115,13 +115,13 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: EARTH 93, MOON 9
   - Programs: Gemini 15, Apollo: Earth-orbit tests 14, Soyuz 7K-OK 14, Voskhod 10
 - [x] **Retrofire** `retrofire`: 99 uses in 85 configurations, 12 programs (NASA/SOVIET) **(early-era)**, crew risk in 80 of 99
-  - Clip: by the steps before: `retrofire` after `reentry-preparations` 68, `retrofire` after `retrofire-jettison` 20, `retrofire` after `suborbital-flight` 7, `deorbit-burn` after `orbital-flight` 1, `deorbit-burn` after `duration-level-i` 1, `deorbit-burn` after `joint-orbital-flight` 1, `deorbit-burn` after `descent-and-splashdown` 1; [x] success, [x] glitch, [x] failure; cues yes
+  - Clip: by the steps before: `retrofire` after `reentry-preparations` 68, `retrofire` after `suborbital-flight` 7, `deorbit-burn-om` after `duration` 6, `deorbit-burn-om` after `undocking` 3, `deorbit-burn-om` after `earth-orbital` 3, `deorbit-burn-om` after `landing-and-recovery` 2, `deorbit-burn` after `orbital-flight` 1, `deorbit-burn` after `duration-level-i` 1, `deorbit-burn` after `joint-orbital-flight` 1, `deorbit-burn` after `descent-and-splashdown` 1, `deorbit-burn-om` after `eva-7k-lok` 1, `deorbit-burn-om` after `joint-earth-orbital` 1, `deorbit-burn-om` after `rendezvous` 1, `deorbit-burn-om` after `duration-l5` 1, `deorbit-burn-om` after `duration-l6` 1, `deorbit-burn-om` after `eva-7k-ok` 1; [x] success, [x] glitch, [x] failure; cues yes
   - Also covers: `gemini-a-retrofire` 4, `gemini-b-retrofire` 4, `spc-a-retrofire` 2
   - On screen: crewed craft 88, crewed lander 9, spaceplane 2
   - Destinations: EARTH 99
   - Programs: Soyuz 7K-OK 16, Gemini 15, Soyuz 7K-L3: Earth-orbit tests 11, Voskhod 10
 - [x] **Retropack jettison** `retrofire-jettison`: 67 uses in 59 configurations, 11 programs (NASA/SOVIET) **(early-era)**, crew risk in 57 of 67
-  - Clip: `retrofire-jettison`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: by the steps before: `retrofire-jettison` `reentry-preparations` earlier 37, `retrofire-jettison-om` after `retrofire` 22, `retrofire-jettison` `suborbital-flight` earlier 4, `retrofire-jettison` after `earth-orbit` 4; [x] success, [x] glitch, [x] failure; cues no
   - Also covers: `gemini-a-retrofire-jettison` 4, `gemini-b-retrofire-jettison` 4, `retrofire-jettison-a` 1, `retrofire-jettison-b` 1, `spc-a-retrofire-jettison` 1
   - On screen: crewed craft 56, crewed lander 11
   - Destinations: EARTH 63, MOON 4
@@ -742,7 +742,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: EARTH 123, MOON 41
   - Programs: Apollo: Earth-orbit tests 17, Gemini 13, Soyuz 7K-OK 12, Voskhod 8
 - [x] **Modules separation** `modules-separation`: 83 uses in 74 configurations, 10 programs (NASA/SOVIET) **(early-era)**, crew risk in 21 of 83
-  - Clip: `modules-separation`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: by the steps before: `modules-separation` after `retrofire` 33, `orbital-module-separation` after `retrofire-jettison` 28, `modules-separation` after `de-orbit-burn` 10, `modules-separation` after `reentry-preparations` 7, `modules-separation` after `earth-orbit` 5; [x] success, [x] glitch, [x] failure; cues no
   - Also covers: `spc-a-modules-separation` 1
   - On screen: crewed craft 72, crewed lander 11
   - Destinations: EARTH 77, MOON 6

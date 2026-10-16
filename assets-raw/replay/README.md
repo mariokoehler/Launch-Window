@@ -49,6 +49,12 @@ Each folder's `build/` is regenerated on every run and stays out of git.
     way in the orbit clips, and slow with the retrofire. `deorbit-burn` is the retrofire with the turn
     first (`TURN` in `retrofire.jsx`, everything 1.2 s later), for a burn no reentry preparations came
     before (Biosatellite's): rules in `replay-clips.json` pick it.
+  - **A Soyuz-type craft** (2026-10-16): its orbital module (`r-om`, a sphere with a docking probe,
+    latched at two points) rides on the nose through `deorbit-burn-om` (`OM` in `retrofire.jsx`; it first
+    shows there, the map before it a dot) and `retrofire-jettison-om` (`OM`, `EARTH0`), and goes in
+    `orbital-module-separation`, the step after the jettison, leaving the bare capsule the reentry shows.
+    Rules pick them by the step before the burn (only these flights' burns follow those steps) and by
+    `earlier`. Gemini EOR's lander tests fly the same steps, so they get the module too (unconfirmed).
   - **Vostok's way** (2026-10-14): `modules-separation` (the module is the same pack, `r-module`,
     turning about its own centre; the cable between them, `r-cable`, is aimed and stretched every
     frame; its glitch is Vostok 1's) and `descent-and-landing`. The two descents share `descent.jsx`,

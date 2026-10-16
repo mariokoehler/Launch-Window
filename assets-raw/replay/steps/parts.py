@@ -339,6 +339,15 @@ def return_parts():
     # its instrument module), turning about its own centre, and the cable that can hold the two
     # together (Vostok 1), drawn along +x from its pivot so the timeline can stretch and aim it.
     layer("r-module", RT(pack), RT_AT(960, 512))
+    # A Soyuz-type craft's orbital module (2026-10-16): a sphere on the nose with its docking probe,
+    # latched at two points; it turns about latch b, which is what a module left hanging swings from.
+    om = (f'<circle cx="960" cy="312" r="38" fill="#ffffff" {LINE} stroke-width="2.4"/>'
+          f'<path d="M924 300 Q960 314 996 300" fill="none" {LINE} stroke-width="1.6"/>'
+          f'<path d="M960 274 L960 256" fill="none" {LINE} stroke-width="3"/>'
+          f'<circle cx="960" cy="254" r="4" fill="#ffffff" {LINE} stroke-width="2"/>')
+    layer("r-om", RT(om), RT_AT(980, 348))
+    layer("r-om-cut-a", RT(f'<circle cx="940" cy="348" r="6" fill="{GOLD}"/>'), RT_AT(940, 348))
+    layer("r-om-cut-b", RT(f'<circle cx="980" cy="348" r="6" fill="{GOLD}"/>'), RT_AT(980, 348))
     layer("r-pyro", RT("".join(f'<circle cx="{x}" cy="502" r="6" fill="{GOLD}"/>' for x in (934, 960, 986))), RT_AT(960, 502))
     layer("r-cable", f'<path d="M0 0 C25 -6 75 6 100 0" transform="translate(960 470)" fill="none" {LINE} stroke-width="3"/>',
           (960, 470))

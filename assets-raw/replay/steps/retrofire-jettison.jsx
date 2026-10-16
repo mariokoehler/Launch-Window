@@ -5,6 +5,10 @@
 // at 2.8 frees it.
 // Failure: the same until the second try at 2.8, which frees nothing: the pack hangs on, and as
 // the capsule reaches the air it starts to rock (from 3.2).
+// OM (retrofire-jettison-om.jsx): a Soyuz-type craft, its orbital module still on the nose (it goes in
+// orbital-module-separation), after deorbit-burn-om (the Earth turned on from EARTH0).
+var OM = typeof OM !== "undefined" && OM;
+var EARTH0 = typeof EARTH0 !== "undefined" ? EARTH0 : -2.776;
 var glitch = VARIANT === "glitch", failure = VARIANT === "failure";
 var CUT = 1.0, CUT2 = 2.8;
 
@@ -15,14 +19,16 @@ put("d-earth");
 put("r-orbit");
 put("r-carrier");
 var parts = ["r-strap-a", "r-strap-b", "r-pack", "r-capsule", "r-cut-a", "r-cut-b"];
+if (OM) parts.push("r-om");
 for (var i = 0; i < parts.length; i++) put(parts[i], "r-carrier");
 
 // Sinking on from where the retrofire left it (140 px), until the air is close below.
 var sink = function (t) { return 140 + 14 * t + 0.4 * t * t; };
 move("d-earth", function (t) { return [0, -sink(t)]; });
 move("r-orbit", function (t) { return [0, -sink(t)]; });
+motesBelow(sink);
 // Turned on from where the retrofire left it.
-turn("d-earth", function (t) { return -2.776 - 0.25 * t; });
+turn("d-earth", function (t) { return EARTH0 - 0.25 * t; });
 
 var rock = failure ? function (t) { return t < 3.2 ? 0 : 14 * Math.min(1, (t - 3.2) / 1.5) * Math.sin(2 * Math.PI * 0.9 * (t - 3.2)); }
                    : function () { return 0; };

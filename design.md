@@ -314,6 +314,13 @@ leading to satellite navigation.
   should have let go of Gagarin's descent sphere, but a bundle of cables held them together, and
   the pair tumbled until the cables burned through as they hit the air, about ten minutes later.
   It's the glitch of the modules-separation clip. Fits that step, or Vostok's history note.
+- **Soyuz comes home in one piece of three** (2026-10-16, from memory; verify before a note uses it):
+  after the deorbit burn the orbital module at the front and the instrument module at the back let go
+  of the descent module, which alone has a heat shield. Soyuz 5 (January 1969, Boris Volynov): the
+  instrument module stayed on, the craft hit the air nose first with its hatch taking the heat, until
+  the struts burned through and it swung round; a hard landing broke his teeth. The replay's
+  `orbital-module-separation` drops the front module (the pack, standing for the back one, went in
+  the jettison before). Fits the 7K-OK's history note, or that clip's failure.
 - **Saving throws are real:** Apollo 11's 1202/1201 alarms (a controller's call not to abort)
   and Apollo 13's improvised survival plan. Fits a step rescued by its saving throw.
 - **The flight loop in trouble** (2026-10-14, as usually quoted; verify before a note uses them):

@@ -72,6 +72,23 @@ STEPS = {
         "success": (5.6, 1.6), "glitch": (5.6, 3.4), "failure": (6.4, 3.2),
         "times": [0.5, 1.1, 1.8, 2.6, 3.8, 5.5],
     },
+    # A Soyuz-type craft (2026-10-16): its orbital module on the nose through the burn and the jettison,
+    # then dropped in the modules separation.
+    "deorbit-burn-om": {
+        "pad": False, "mirror": True, "before": ["motes.jsx"], "after": ["retrofire.jsx"],
+        "success": (7.6, 3.8), "glitch": (7.6, 4.2), "failure": (7.6, 4.2),
+        "times": [0.3, 1.0, 1.8, 2.6, 4.0, 7.5],
+    },
+    "retrofire-jettison-om": {
+        "pad": False, "mirror": True, "before": ["motes.jsx"], "after": ["retrofire-jettison.jsx"],
+        "success": (5.6, 1.6), "glitch": (5.6, 3.4), "failure": (6.4, 3.2),
+        "times": [0.5, 1.1, 1.8, 2.6, 3.8, 5.5],
+    },
+    "orbital-module-separation": {
+        "pad": False, "mirror": True, "before": ["motes.jsx"],
+        "success": (5.6, 1.6), "glitch": (5.6, 3.4), "failure": (6.4, 3.2),
+        "times": [0.5, 1.0, 1.8, 2.8, 3.8, 5.5],
+    },
     # Vostok's way (2026-10-14): the module instead of the jettison, and a landing instead of the sea.
     "modules-separation": {
         "pad": False, "mirror": True, "before": ["motes.jsx"],

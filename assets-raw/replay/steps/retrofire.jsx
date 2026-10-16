@@ -9,7 +9,9 @@
 // TURN (deorbit-burn.jsx, for a burn with no preparations before it): it starts nose first and the
 // attitude jets turn it round first (a puff at 0.3, one at 1.6 to stop it), and everything after
 // comes T0 later.
+// OM (deorbit-burn-om.jsx): a Soyuz-type craft, its orbital module on the nose.
 var TURN = typeof TURN !== "undefined" && TURN;
+var OM = typeof OM !== "undefined" && OM;
 var T0 = TURN ? 1.2 : 0;
 var glitch = VARIANT === "glitch", failure = VARIANT === "failure";
 var FIRE = 1.0 + T0, CUT = 1.6 + T0, OUT = 2.5 + T0, END = (glitch ? 4.2 : 3.6) + T0;
@@ -26,6 +28,7 @@ put("d-earth");
 put("r-orbit");
 put("r-carrier");
 var parts = ["r-flame-1", "r-flame-2", "r-flame-3", "r-strap-a", "r-strap-b", "r-pack", "r-capsule"];
+if (OM) parts.push("r-om");
 if (TURN) parts.push("r-jet-l", "r-jet-r");
 for (var i = 0; i < parts.length; i++) put(parts[i], "r-carrier");
 
@@ -56,6 +59,7 @@ var burning = smooth([[FIRE, 0], [2.4 + T0, 30], [3.6 + T0, 80], [6.4 + T0, 140]
 var sink = failure ? function (t) { return burning(Math.min(t, OUT)); } : burning;
 move("d-earth", function (t) { return [0, -sink(t)]; });
 move("r-orbit", function (t) { return [0, -sink(t)]; });
+motesBelow(sink);
 // The Earth turns below; a little slower once the burn has taken speed off.
 // Turned on from where the preparations left it (-1.5).
 turn("d-earth", function (t) { return -1.5 - 0.25 * t + 0.06 * Math.max(0, (failure ? Math.min(t, OUT) : t) - FIRE); });
