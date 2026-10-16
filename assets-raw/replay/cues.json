@@ -1,4 +1,7 @@
 {
+  "luna-landing-rover": {"success": [{"at": 2.85, "sound": "radio-signal-good"}], "glitch": [{"at": 3.25, "sound": "radio-hard-landing"}], "failure": [{"at": 2.25, "sound": "radio-lander-lost"}]},
+  "luna-landing-sampler": {"success": [{"at": 2.85, "sound": "radio-signal-good"}], "glitch": [{"at": 3.25, "sound": "radio-hard-landing"}], "failure": [{"at": 2.25, "sound": "radio-lander-lost"}]},
+  "luna-sampler": {"success": [{"at": 4.65, "sound": "radio-signal-good"}], "glitch": [{"at": 5.25, "sound": "radio-roger"}], "failure": [{"at": 3.45, "sound": "radio-probe-silent"}]},
   "lunokhod-deploy": {"success": [{"at": 3.65, "sound": "radio-signal-good"}], "glitch": [{"at": 4.85, "sound": "radio-roger"}], "failure": [{"at": 3.45, "sound": "radio-probe-silent"}]},
   "lunokhod-drive": {"success": [{"at": 4.45, "sound": "radio-signal-good"}], "glitch": [{"at": 4.45, "sound": "radio-roger"}], "failure": [{"at": 3.65, "sound": "radio-problem"}, {"at": 5.85, "sound": "radio-probe-silent"}]},
   "retro-shutdown": {"glitch": [{"at": 2.85, "sound": "radio-attitude-drift"}], "failure": [{"at": 3.05, "sound": "radio-tumbling"}]},

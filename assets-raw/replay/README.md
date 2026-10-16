@@ -69,6 +69,11 @@ Each folder's `build/` is regenerated on every run and stays out of git.
     its path by `x` (`pose`: the deck, the ramp, the ground, a crater's rim, `u-rim`), its wheels rolling with the
     distance. Luna 17 flies two surface operations: the first plays `lunokhod-deploy` (down the ramps), the second
     `lunokhod-drive` (a rule on `luna-17` with `after`), on from the first's last frame.
+  - **The Luna landers** (2026-10-16, `luna.jsx`, `s-` parts): the same Ye-8 stage on a carrier (`u-lander`)
+    with its payload, `PAYLOAD` "rover" (Lunokhod, ramps folded up) or "sampler" (Luna 15's return rocket and
+    capsule, and the drill arm). `luna-landing-rover` and `luna-landing-sampler` are `luna-landing.jsx` with each
+    (the failure is Luna 15's crash), and `luna-sampler` drills a core and lifts it into the capsule. They end on
+    the framing the surface clips start from.
   - **Vostok's way** (2026-10-14): `modules-separation` (the module is the same pack, `r-module`,
     turning about its own centre; the cable between them, `r-cable`, is aimed and stretched every
     frame; its glitch is Vostok 1's) and `descent-and-landing`. The two descents share `descent.jsx`,

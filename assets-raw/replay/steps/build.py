@@ -406,6 +406,23 @@ STEPS = {
         "success": (6.4, 3.6), "glitch": (6.4, 4.8), "failure": (6.4, 3.4),
         "times": [0.6, 1.6, 2.8, 3.4, 4.2, 6.3],
     },
+    # The Luna landers (2026-10-16): the Ye-8 stage's landing with Luna 17's rover or Luna 15's sampler on
+    # its deck, and the sampler's drilling.
+    "luna-landing-rover": {
+        "pad": False, "before": ["orbit.jsx", "lunokhod.jsx", "luna.jsx"], "after": ["luna-landing.jsx"],
+        "success": (6.0, 2.8), "glitch": (6.0, 3.2), "failure": (6.0, 2.2),
+        "times": [0.4, 1.4, 2.2, 2.7, 3.4, 5.9],
+    },
+    "luna-landing-sampler": {
+        "pad": False, "before": ["orbit.jsx", "lunokhod.jsx", "luna.jsx"], "after": ["luna-landing.jsx"],
+        "success": (6.0, 2.8), "glitch": (6.0, 3.2), "failure": (6.0, 2.2),
+        "times": [0.4, 1.4, 2.2, 2.7, 3.4, 5.9],
+    },
+    "luna-sampler": {
+        "pad": False, "before": ["orbit.jsx", "lunokhod.jsx", "luna.jsx"],
+        "success": (6.4, 4.6), "glitch": (6.4, 5.2), "failure": (6.4, 3.4),
+        "times": [0.8, 1.6, 2.4, 3.2, 4.5, 6.3],
+    },
     "lunokhod-drive": {
         "pad": False, "before": ["orbit.jsx", "lunokhod.jsx"],
         "success": (6.4, 4.4), "glitch": (6.4, 4.4), "failure": (6.4, 3.6),

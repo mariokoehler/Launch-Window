@@ -862,6 +862,29 @@ def lunokhod_parts():
                    f'<path d="M1820 {GROUND_Y + 2} Q1990 {GROUND_Y - 96} 2160 {GROUND_Y + 2} Z" fill="url(#earth)" {LINE} '
                    f'stroke-width="3"/><path d="M1840 {GROUND_Y + 2} L2140 {GROUND_Y + 2}" fill="none" stroke="#ffffff" '
                    f'stroke-width="4"/>', (1990, GROUND_Y))
+    # The whole lander on a carrier for the landing (2026-10-16), the stage's engine plume, and Luna 15's
+    # payload: the return rocket (a stack of tanks) with the return capsule (a sphere) on top, and the drill
+    # arm at the deck's front edge, drawn along +x from its hinge (the timeline swings it).
+    layer("u-lander", "", (960, deck))
+    layer("u-plume", f'<path d="M940 852 C944 878 952 908 960 938 C968 908 976 878 980 852 Z" fill="{GOLD_FILL}" '
+                     f'stroke="{GOLD}" stroke-width="3" stroke-linejoin="round"/>', (960, 852))
+    rocket = (f'<rect x="924" y="716" width="72" height="60" rx="6" fill="#ffffff" {LINE} stroke-width="3"/>'
+              f'<path d="M924 736 L996 736 M924 756 L996 756" fill="none" {LINE} stroke-width="1.6"/>'
+              f'<rect x="924" y="736" width="72" height="20" fill="url(#hatch)" {LINE} stroke-width="1.6"/>'
+              f'<path d="M960 716 L960 776" fill="none" {LINE} stroke-width="1.6"/>'
+              f'<path d="M940 716 L948 700 L972 700 L980 716 Z" fill="#ffffff" {LINE} stroke-width="2.4"/>'
+              f'<path d="M996 724 L1012 700" fill="none" {LINE} stroke-width="2.4"/>')
+    layer("s-rocket", rocket, (960, deck))
+    layer("s-capsule", f'<circle cx="960" cy="678" r="22" fill="#ffffff" {LINE} stroke-width="3"/>'
+                       f'<path d="M938 678 L982 678" fill="none" {LINE} stroke-width="1.6"/>', (960, 678))
+    arm = (f'<path d="M0 0 L132 0" fill="none" {LINE} stroke-width="4"/>'
+           f'<circle cx="0" cy="0" r="6" fill="#ffffff" {LINE} stroke-width="2.4"/>'
+           f'<rect x="126" y="-7" width="16" height="14" rx="2" fill="#ffffff" {LINE} stroke-width="2.4"/>'
+           f'<path d="M142 0 L154 0 M144 -4 L152 4 M144 4 L152 -4" fill="none" {LINE} stroke-width="2"/>')
+    layer("s-arm", f'<g transform="translate(1060 {deck - 6})">{arm}</g>', (1060, deck - 6))
+    layer("s-core", f'<rect x="1196" y="{deck - 10}" width="14" height="8" rx="2" fill="url(#earth)" {LINE} '
+                    f'stroke-width="2"/>', (1203, deck - 6))
+    layer("s-flash", f'<circle cx="960" cy="678" r="30" fill="none" stroke="{GOLD}" stroke-width="4"/>', (960, 678))
     # A laser from Earth (up right), bouncing off the reflector: a gold line drawn from its foot up.
     layer("u-laser", f'<path d="M0 0 L700 -700" fill="none" stroke="{GOLD}" stroke-width="3" stroke-dasharray="18 10"/>',
           (0, 0))

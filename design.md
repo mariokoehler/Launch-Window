@@ -344,6 +344,11 @@ leading to satellite navigation.
   the soil fell on the radiator, and it overheated and fell silent. Lunokhod 1's laser reflector was lost for
   decades until a Lunar Reconnaissance Orbiter picture placed it in 2010, and lasers on Earth hit it again.
   The replay's `lunokhod-drive` plays both. Fits Luna 17's history note, or a later Lunokhod 2 program.
+- **One stage, three missions** (2026-10-16, from memory; verify before a note uses it): the Ye-8 descent stage
+  (KT) landed Luna 16's and Luna 20's sample returns and Luna 17's and Luna 21's rovers; Luna 15 was the first
+  sample-return try, and crashed into Mare Crisium on 21 July 1969 while Armstrong and Aldrin were on the
+  surface. Luna 16 (September 1970) drilled about 35 cm with an arm, swung the core up into the return capsule
+  on top and flew 101 g of soil home. The replay draws the one stage for all of them.
 - **Saving throws are real:** Apollo 11's 1202/1201 alarms (a controller's call not to abort)
   and Apollo 13's improvised survival plan. Fits a step rescued by its saving throw.
 - **The flight loop in trouble** (2026-10-14, as usually quoted; verify before a note uses them):
