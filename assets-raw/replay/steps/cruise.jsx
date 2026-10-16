@@ -14,9 +14,10 @@ put("paper", "screen");
 put("m-orbits");
 put("m-arc-" + ARC);
 put("m-sun");
-var names = ["venus", "earth", "mars", "jupiter", "saturn"];
-// Mercury only where a cruise goes there (Mariner 10), with its own orbit.
-if (FROM === "mercury" || TO === "mercury") { put("m-orbit-mercury"); names.unshift("mercury"); }
+// Every cruise shows the same planets, Mercury too (2026-10-16, user): Mariner 10's two cruises play one
+// after the other, and a map without Mercury reads Venus as the innermost planet.
+put("m-orbit-mercury");
+var names = ["mercury", "venus", "earth", "mars", "jupiter", "saturn"];
 for (var i = 0; i < names.length; i++) put("m-" + names[i]);
 for (i = 1; i <= 3; i++) put("m-ring-" + i);
 put("m-puff");

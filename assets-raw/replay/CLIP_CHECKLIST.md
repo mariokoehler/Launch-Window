@@ -524,7 +524,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: MOON 2
   - Programs: Apollo 2
 - [x] **Liftoff from the Moon** `ascent-from-lunar-surface`: 1 use in 1 configuration, 1 program (SOVIET) uncrewed
-  - Clip: `luna-liftoff`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `luna-liftoff`; [x] success, [x] glitch, [x] failure; cues yes
   - On screen: probe 1
   - Destinations: MOON 1
   - Programs: Luna 15 1

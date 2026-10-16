@@ -181,8 +181,8 @@ Each folder's `build/` is regenerated on every run and stays out of git.
     (`a-carrier`, its gear `a-gear` put away in flight) with the rocket plane (`w-plane` at 0.6) placed
     from the carrier's pose, the camera at 0.7 riding along; `air-takeoff` (on `a-ground`, a long
     runway), `air-cruise`, `air-drop`. `rocket-climb` and `rocket-flight` are the rocket plane alone
-    over the limb. Mercury's parts (`m-orbit-mercury`, `m-mercury`, `m-arc-vm`) come in only for a
-    cruise that names it.
+    over the limb. Every cruise shows Mercury and its orbit (2026-10-16: Mariner 10's two cruises play
+    back to back, and a map without Mercury read Venus as the innermost planet).
   - **Checks** (`check.py`, after `build.py`): `python check.py spoilers <step> ...` says where the
     variants first differ before their reveals (glitch and failure share their first sign of trouble,
     so every pair should part only at the moment that decides it), and `python check.py handoffs
