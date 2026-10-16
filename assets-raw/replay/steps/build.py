@@ -160,6 +160,12 @@ STEPS = {
         "success": (6.0, 2.0), "glitch": (6.0, 3.2), "failure": (6.0, 3.0),
         "times": [0.5, 1.4, 2.0, 2.8, 3.8, 5.9],
     },
+    # The probe alone after the burn, coming alive (2026-10-16).
+    "earth-departure": {
+        "pad": False, "before": ["orbit.jsx"],
+        "success": (6.4, 2.2), "glitch": (6.4, 2.8), "failure": (6.4, 3.0),
+        "times": [0.5, 1.6, 2.4, 3.4, 4.4, 6.3],
+    },
     "earth-mars-transit": {
         "pad": False, "after": ["cruise.jsx"],
         "success": (6.4, 2.4), "glitch": (6.4, 3.6), "failure": (6.4, 3.4),

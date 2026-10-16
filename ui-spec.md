@@ -1966,6 +1966,11 @@ clips, the replay is meant to be watched like a short film, and the player can s
   into the return capsule; the glitch hits rock and drills again; the failure jams), and `luna-liftoff` (the
   return rocket lifts off the stage and climbs away; the glitch's engine sputters first; the failure leans, loses
   its engine and falls back). Every story unconfirmed.
+- **Earth departure (user, 2026-10-16):** it borrowed `tpi`, so the injection's burn played twice; BASPM gives the
+  step to the probe alone. `earth-departure` is the probe close up after the burn, the Earth shrinking behind
+  it: puffs spin it up, its boom unfolds, its dish turns home, and a tracking pulse goes out and comes back. The
+  glitch's boom sticks and a jolt frees it; in the failure it stays stuck, the probe wobbles, the dish hunts
+  and the Earth's pulses get no answer. Every story unconfirmed.
 - **No clip yet:** a step with no clip, or a variant missing, plays `no-signal.webm` on a loop (an
   antenna searching, outcome-neutral) with "No signal" in the bezel; its result shows after a
   1.5 s pause, and playback moves on at 3 s. If no video can play at all (no file, no native

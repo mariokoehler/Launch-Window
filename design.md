@@ -349,6 +349,12 @@ leading to satellite navigation.
   sample-return try, and crashed into Mare Crisium on 21 July 1969 while Armstrong and Aldrin were on the
   surface. Luna 16 (September 1970) drilled about 35 cm with an arm, swung the core up into the return capsule
   on top and flew 101 g of soil home. The replay draws the one stage for all of them.
+- **Injection, then departure** (2026-10-16, from memory; verify before a note uses it): BASPM splits a planetary
+  probe's start into a trans-planetary injection (the rocket's, with the booster seat) and an Earth departure
+  (the probe's alone: spacecraft systems, navigation, experiments). Pioneer Venus Orbiter (May 1978) went
+  straight from its Atlas-Centaur onto the path to Venus; once separated it was spun up, unfolded its
+  magnetometer boom, turned its despun antenna to the Earth, and the first tracking set up the course
+  corrections. The replay's `earth-departure` plays that coming alive.
 - **Saving throws are real:** Apollo 11's 1202/1201 alarms (a controller's call not to abort)
   and Apollo 13's improvised survival plan. Fits a step rescued by its saving throw.
 - **The flight loop in trouble** (2026-10-14, as usually quoted; verify before a note uses them):

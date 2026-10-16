@@ -1,4 +1,5 @@
 {
+  "earth-departure": {"success": [{"at": 4.35, "sound": "radio-signal-good"}], "glitch": [{"at": 5.05, "sound": "radio-roger"}], "failure": [{"at": 5.5, "sound": "radio-probe-silent"}]},
   "luna-liftoff": {"success": [{"at": 1.85, "sound": "radio-signal-good"}], "glitch": [{"at": 2.65, "sound": "radio-roger"}], "failure": [{"at": 2.25, "sound": "radio-lander-lost"}]},
   "luna-landing-rover": {"success": [{"at": 2.85, "sound": "radio-signal-good"}], "glitch": [{"at": 3.25, "sound": "radio-hard-landing"}], "failure": [{"at": 2.25, "sound": "radio-lander-lost"}]},
   "luna-landing-sampler": {"success": [{"at": 2.85, "sound": "radio-signal-good"}], "glitch": [{"at": 3.25, "sound": "radio-hard-landing"}], "failure": [{"at": 2.25, "sound": "radio-lander-lost"}]},

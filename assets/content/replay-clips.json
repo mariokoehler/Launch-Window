@@ -66,7 +66,7 @@
     {"step": "de-orbit-burn", "after": "reentry-preparations", "clip": "retrofire"},
     {"step": "de-orbit-burn", "after": "de-orbit-burn", "clip": "retrofire"},
     {"step": "de-orbit-burn", "clip": "deorbit-burn"},
-    {"step": "earth-departure", "clip": "tpi"},
+    {"step": "earth-departure", "clip": "earth-departure"},
     {"step": "rendezvous-target-approach", "clip": "rendezvous-target-approach"},
     {"step": "joint-earth-orbital", "clip": "rendezvous-target-approach"},
     {"step": "joint-orbital-flight", "clip": "rendezvous-target-approach"},

@@ -582,7 +582,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: MARS 8
   - Programs: Mariner 9 1, Mars 2 1, Mars M-69 1, Viking 1
 - [x] **Earth departure** `earth-departure`: 7 uses in 7 configurations, 6 programs (NASA/SOVIET) uncrewed
-  - Clip: `tpi`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `earth-departure`; [x] success, [x] glitch, [x] failure; cues yes
   - On screen: probe 6, orbiter 1
   - Destinations: VENUS 6, MARS 1
   - Programs: Venera lander 2, Mars 2 1, Pioneer Venus Multiprobe 1, Pioneer Venus Orbiter 1

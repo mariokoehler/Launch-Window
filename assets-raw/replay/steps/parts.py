@@ -1147,6 +1147,39 @@ def air_parts():
                      f'stroke="{GOLD}" stroke-width="3" stroke-linejoin="round"/>', (748, 820))
 
 
+def departure_parts():
+    # Earth departure (2026-10-16): the payload alone after the injection burn, close up and nose right,
+    # coming alive. Drawn GK times o-sat's size, its centre on G; the boom, the dish and the lamps hang
+    # off it (pivots in place), the boom drawn upright and the dish's mast hanging down.
+    gx, gy = G
+    sat = re.sub(r'stroke-width="[\d.]+"', 'stroke-width="3"', board_group("debris-1"))
+    layer("g-probe", f'<g transform="translate({gx} {gy}) scale({GK}) rotate(90) translate(-960 -426)">{sat}</g>', G)
+    bx, by = gx - 95, gy - 74
+    layer("g-boom", f'<path d="M{bx} {by} L{bx} {by - 190}" fill="none" {LINE} stroke-width="4"/>'
+                    f'<rect x="{bx - 9}" y="{by - 212}" width="18" height="24" rx="3" fill="#ffffff" {LINE} stroke-width="3"/>',
+          (bx, by))
+    dx, dy = gx - 95, gy + 74
+    layer("g-dish", f'<path d="M{dx} {dy} L{dx} {dy + 62}" fill="none" {LINE} stroke-width="4"/>'
+                    f'<path d="M{dx - 34} {dy + 58} Q{dx} {dy + 92} {dx + 34} {dy + 58} Z" fill="#ffffff" {LINE} stroke-width="3"/>'
+                    f'<path d="M{dx} {dy + 74} L{dx} {dy + 94}" fill="none" {LINE} stroke-width="2"/>',
+          (dx, dy))
+    # The instruments' lamps, on when they're switched on.
+    layer("g-lamps", "".join(f'<circle cx="{gx + x}" cy="{gy + y}" r="7" fill="{GOLD}" {LINE} stroke-width="2"/>'
+                             for x, y in ((20, -30), (50, -30), (80, -30))), G)
+    # Spin-up puffs, fore and aft on opposite sides.
+    layer("g-puff-1", puff(gx + 60, gy - 92, 12), (gx + 60, gy - 92))
+    layer("g-puff-2", puff(gx - 60, gy + 92, 12), (gx - 60, gy + 92))
+    # The tracking pulse, a wavefront ")" centred on the pivot, turned to where it goes (out and back).
+    arcs = lambda k: "".join(f'<path d="M{960 + k * (dx - 12)} {560 - h} Q{960 + k * (dx + 16)} 560 {960 + k * (dx - 12)} {560 + h}" '
+                             f'fill="none" stroke="{GOLD}" stroke-width="4" stroke-linecap="round"/>' for h, dx in ((22, 0), (40, 18)))
+    layer("g-pulse-out", arcs(1), (960, 560))
+    layer("g-pulse-back", arcs(1), (960, 560))
+
+
+# Where earth departure's probe sits, and its size against o-sat's drawing.
+G, GK = (1120, 500), 1.7
+
+
 def copy_board_layers():
     src = os.path.join(BOARD, "build")
     if not os.path.exists(os.path.join(src, "layers.json")):
@@ -1182,6 +1215,7 @@ def main():
     planet_entry_parts()
     planet_descent_parts()
     air_parts()
+    departure_parts()
     if ONLY:
         # Keep the parts not redrawn.
         old = json.load(open(os.path.join(BUILD, "layers.json")))

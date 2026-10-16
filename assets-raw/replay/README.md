@@ -99,6 +99,9 @@ Each folder's `build/` is regenerated on every run and stays out of git.
     (orbit radii spread to fit, not to scale; the asteroid belt dotted), the transfer orbit a half
     ellipse from `START_ANGLE` (parts.py and cruise.jsx compute the same curve), the probe sweeping
     equal areas. The planets pivot on their own centres and move round, so they stay upright.
+    `earth-departure` (2026-10-16, `g-` parts) is the probe close up after the burn, its boom, dish, lamps and
+    spin-up puffs parented to it, the Earth (`o-earth`) shrinking towards a vanishing point, and a tracking
+    pulse (`g-pulse-out`/`-back`, one wavefront turned to where it goes) between the Earth and the dish.
   - **At the planets and the Sun** (2026-10-14, `p-` and `s-` parts): `venus-orbit` and `mars-orbit`
     share `planet-orbit.jsx` (`PLANET`), the orbit scene with `orbitScene("p-venus")` and a mapping
     beam; `sun-measurements` has its own scene, the Sun big at the left and the wind sent out along
