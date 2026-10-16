@@ -13,7 +13,6 @@
     {"step": "retrofire", "after": "reentry-preparations", "clip": "retrofire"},
     {"step": "retrofire", "after": "spc-b-reentry-preparations", "clip": "retrofire"},
     {"step": "retrofire", "after": "suborbital-flight", "clip": "retrofire"},
-    {"step": "retrofire", "after": "retrofire-jettison", "clip": "retrofire"},
     {"step": "retrofire", "clip": "deorbit-burn"},
     {"step": "retrofire-jettison", "clip": "retrofire-jettison"},
     {"step": "reentry", "after": "earth-approach", "clip": "reentry-from-moon"},

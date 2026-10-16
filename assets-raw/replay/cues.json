@@ -56,8 +56,8 @@
     "failure": [{"at": 3.05, "sound": "radio-data-lost"}]
   },
   "insertion": {
-    "success": [{"at": 2.05, "sound": "radio-orbit-insertion"}],
-    "glitch": [{"at": 3.05, "sound": "radio-burn-short"}]
+    "success": [{"at": 2.45, "sound": "radio-orbit-insertion"}],
+    "glitch": [{"at": 3.25, "sound": "radio-burn-short"}]
   },
   "advanced-experiments-earth-orbit": {
     "glitch": [{"at": 3.65, "sound": "radio-undervolt"}],

@@ -1,9 +1,9 @@
 {
  "duration": 6.0,
- "revealAt": 2.0,
+ "revealAt": 2.4,
  "cues": [
   {
-   "at": 2.05,
+   "at": 2.45,
    "sound": "radio-orbit-insertion"
   }
  ]

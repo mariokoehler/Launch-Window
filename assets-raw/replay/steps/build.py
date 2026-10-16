@@ -220,8 +220,8 @@ STEPS = {
     },
     "insertion": {
         "pad": False, "before": ["orbit.jsx"],
-        "success": (6.0, 2.0), "glitch": (6.0, 3.0), "failure": (6.0, 3.0),
-        "times": [0.5, 1.4, 2.0, 2.8, 4.0, 5.9],
+        "success": (6.0, 2.4), "glitch": (6.0, 3.2), "failure": (6.0, 3.0),
+        "times": [0.4, 1.2, 1.8, 2.4, 3.2, 5.9],
     },
     # Rendezvous and docking (2026-10-14): closing in on the orbit, then the close-up (dock.jsx).
     "rendezvous-target-approach": {

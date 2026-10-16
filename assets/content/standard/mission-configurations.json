@@ -76553,7 +76553,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "10-retrofire-jettison",
+            "id": "10-retrofire",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -76563,7 +76563,7 @@
             "controllerInvolvements": [
               {
                 "slot": 1,
-                "percent": 15
+                "percent": 20
               },
               {
                 "slot": 2,
@@ -76579,7 +76579,7 @@
               },
               {
                 "slot": 6,
-                "percent": 20
+                "percent": 15
               },
               {
                 "slot": 7,
@@ -76636,7 +76636,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "11-retrofire",
+            "id": "11-retrofire-jettison",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -76646,7 +76646,7 @@
             "controllerInvolvements": [
               {
                 "slot": 1,
-                "percent": 20
+                "percent": 15
               },
               {
                 "slot": 2,
@@ -76662,7 +76662,7 @@
               },
               {
                 "slot": 6,
-                "percent": 15
+                "percent": 20
               },
               {
                 "slot": 7,
@@ -77982,7 +77982,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "11-retrofire-jettison",
+            "id": "11-retrofire",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -77992,7 +77992,7 @@
             "controllerInvolvements": [
               {
                 "slot": 1,
-                "percent": 15
+                "percent": 20
               },
               {
                 "slot": 2,
@@ -78008,7 +78008,7 @@
               },
               {
                 "slot": 6,
-                "percent": 20
+                "percent": 15
               },
               {
                 "slot": 7,
@@ -78065,7 +78065,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "12-retrofire",
+            "id": "12-retrofire-jettison",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -78075,7 +78075,7 @@
             "controllerInvolvements": [
               {
                 "slot": 1,
-                "percent": 20
+                "percent": 15
               },
               {
                 "slot": 2,
@@ -78091,7 +78091,7 @@
               },
               {
                 "slot": 6,
-                "percent": 15
+                "percent": 20
               },
               {
                 "slot": 7,
@@ -79428,7 +79428,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "11-retrofire-jettison",
+            "id": "11-retrofire",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -79438,7 +79438,7 @@
             "controllerInvolvements": [
               {
                 "slot": 1,
-                "percent": 15
+                "percent": 20
               },
               {
                 "slot": 2,
@@ -79454,7 +79454,7 @@
               },
               {
                 "slot": 6,
-                "percent": 20
+                "percent": 15
               },
               {
                 "slot": 7,
@@ -79511,7 +79511,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "12-retrofire",
+            "id": "12-retrofire-jettison",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -79521,7 +79521,7 @@
             "controllerInvolvements": [
               {
                 "slot": 1,
-                "percent": 20
+                "percent": 15
               },
               {
                 "slot": 2,
@@ -79537,7 +79537,7 @@
               },
               {
                 "slot": 6,
-                "percent": 15
+                "percent": 20
               },
               {
                 "slot": 7,
@@ -81290,7 +81290,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "16-retrofire-jettison",
+            "id": "16-retrofire",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -81300,7 +81300,7 @@
             "controllerInvolvements": [
               {
                 "slot": 1,
-                "percent": 15
+                "percent": 20
               },
               {
                 "slot": 2,
@@ -81316,7 +81316,7 @@
               },
               {
                 "slot": 6,
-                "percent": 20
+                "percent": 15
               },
               {
                 "slot": 7,
@@ -81373,7 +81373,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "17-retrofire",
+            "id": "17-retrofire-jettison",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -81383,7 +81383,7 @@
             "controllerInvolvements": [
               {
                 "slot": 1,
-                "percent": 20
+                "percent": 15
               },
               {
                 "slot": 2,
@@ -81399,7 +81399,7 @@
               },
               {
                 "slot": 6,
-                "percent": 15
+                "percent": 20
               },
               {
                 "slot": 7,
@@ -81746,7 +81746,7 @@
             ]
           },
           {
-            "id": "22-retrofire-jettison",
+            "id": "22-retrofire",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -81756,7 +81756,7 @@
             "controllerInvolvements": [
               {
                 "slot": 1,
-                "percent": 15
+                "percent": 20
               },
               {
                 "slot": 2,
@@ -81772,7 +81772,7 @@
               },
               {
                 "slot": 6,
-                "percent": 20
+                "percent": 15
               },
               {
                 "slot": 7,
@@ -81829,7 +81829,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "23-retrofire",
+            "id": "23-retrofire-jettison",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -81839,7 +81839,7 @@
             "controllerInvolvements": [
               {
                 "slot": 1,
-                "percent": 20
+                "percent": 15
               },
               {
                 "slot": 2,
@@ -81855,7 +81855,7 @@
               },
               {
                 "slot": 6,
-                "percent": 15
+                "percent": 20
               },
               {
                 "slot": 7,
@@ -83702,7 +83702,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "17-retrofire-jettison",
+            "id": "17-retrofire",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -83712,7 +83712,7 @@
             "controllerInvolvements": [
               {
                 "slot": 1,
-                "percent": 15
+                "percent": 20
               },
               {
                 "slot": 2,
@@ -83728,7 +83728,7 @@
               },
               {
                 "slot": 6,
-                "percent": 20
+                "percent": 15
               },
               {
                 "slot": 7,
@@ -83785,7 +83785,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "18-retrofire",
+            "id": "18-retrofire-jettison",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -83795,7 +83795,7 @@
             "controllerInvolvements": [
               {
                 "slot": 1,
-                "percent": 20
+                "percent": 15
               },
               {
                 "slot": 2,
@@ -83811,7 +83811,7 @@
               },
               {
                 "slot": 6,
-                "percent": 15
+                "percent": 20
               },
               {
                 "slot": 7,
@@ -84158,7 +84158,7 @@
             ]
           },
           {
-            "id": "23-retrofire-jettison",
+            "id": "23-retrofire",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -84168,7 +84168,7 @@
             "controllerInvolvements": [
               {
                 "slot": 1,
-                "percent": 15
+                "percent": 20
               },
               {
                 "slot": 2,
@@ -84184,7 +84184,7 @@
               },
               {
                 "slot": 6,
-                "percent": 20
+                "percent": 15
               },
               {
                 "slot": 7,
@@ -84241,7 +84241,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "24-retrofire",
+            "id": "24-retrofire-jettison",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -84251,7 +84251,7 @@
             "controllerInvolvements": [
               {
                 "slot": 1,
-                "percent": 20
+                "percent": 15
               },
               {
                 "slot": 2,
@@ -84267,7 +84267,7 @@
               },
               {
                 "slot": 6,
-                "percent": 15
+                "percent": 20
               },
               {
                 "slot": 7,
@@ -86577,7 +86577,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "15-retrofire-jettison",
+            "id": "15-retrofire",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -86660,7 +86660,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "16-retrofire",
+            "id": "16-retrofire-jettison",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -89240,7 +89240,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "08-retrofire-jettison",
+            "id": "08-retrofire",
             "componentInvolvements": [
               {
                 "componentId": "lk-700-spacecraft",
@@ -89292,7 +89292,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "09-retrofire",
+            "id": "09-retrofire-jettison",
             "componentInvolvements": [
               {
                 "componentId": "lk-700-spacecraft",
@@ -90332,7 +90332,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "08-retrofire-jettison",
+            "id": "08-retrofire",
             "componentInvolvements": [
               {
                 "componentId": "lk-700-spacecraft",
@@ -90427,7 +90427,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "09-retrofire",
+            "id": "09-retrofire-jettison",
             "componentInvolvements": [
               {
                 "componentId": "lk-700-spacecraft",
@@ -91800,7 +91800,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "09-retrofire-jettison",
+            "id": "09-retrofire",
             "componentInvolvements": [
               {
                 "componentId": "lk-700-spacecraft",
@@ -91895,7 +91895,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "10-retrofire",
+            "id": "10-retrofire-jettison",
             "componentInvolvements": [
               {
                 "componentId": "lk-700-spacecraft",
@@ -93369,7 +93369,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "10-retrofire-jettison",
+            "id": "10-retrofire",
             "componentInvolvements": [
               {
                 "componentId": "lk-700-spacecraft",
@@ -93464,7 +93464,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "11-retrofire",
+            "id": "11-retrofire-jettison",
             "componentInvolvements": [
               {
                 "componentId": "lk-700-spacecraft",
@@ -95038,7 +95038,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "11-retrofire-jettison",
+            "id": "11-retrofire",
             "componentInvolvements": [
               {
                 "componentId": "lk-700-spacecraft",
@@ -95133,7 +95133,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "12-retrofire",
+            "id": "12-retrofire-jettison",
             "componentInvolvements": [
               {
                 "componentId": "lk-700-spacecraft",
@@ -96807,7 +96807,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "12-retrofire-jettison",
+            "id": "12-retrofire",
             "componentInvolvements": [
               {
                 "componentId": "lk-700-spacecraft",
@@ -96902,7 +96902,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "13-retrofire",
+            "id": "13-retrofire-jettison",
             "componentInvolvements": [
               {
                 "componentId": "lk-700-spacecraft",
@@ -98676,7 +98676,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "13-retrofire-jettison",
+            "id": "13-retrofire",
             "componentInvolvements": [
               {
                 "componentId": "lk-700-spacecraft",
@@ -98771,7 +98771,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "14-retrofire",
+            "id": "14-retrofire-jettison",
             "componentInvolvements": [
               {
                 "componentId": "lk-700-spacecraft",
@@ -100645,7 +100645,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "14-retrofire-jettison",
+            "id": "14-retrofire",
             "componentInvolvements": [
               {
                 "componentId": "lk-700-spacecraft",
@@ -100740,7 +100740,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "15-retrofire",
+            "id": "15-retrofire-jettison",
             "componentInvolvements": [
               {
                 "componentId": "lk-700-spacecraft",
@@ -102346,7 +102346,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "11-retrofire-jettison",
+            "id": "11-retrofire",
             "componentInvolvements": [
               {
                 "componentId": "lk-700-spacecraft",
@@ -102441,7 +102441,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "12-retrofire",
+            "id": "12-retrofire-jettison",
             "componentInvolvements": [
               {
                 "componentId": "lk-700-spacecraft",
@@ -104287,85 +104287,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "15-retrofire-jettison",
-            "componentInvolvements": [
-              {
-                "componentId": "gemini-capsule",
-                "percent": 50
-              },
-              {
-                "componentId": "gemini-eor-service-module",
-                "percent": 50
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 10
-              },
-              {
-                "slot": 2,
-                "percent": 20
-              },
-              {
-                "slot": 3,
-                "percent": 15
-              },
-              {
-                "slot": 4,
-                "percent": 5
-              },
-              {
-                "slot": 5,
-                "percent": 20
-              },
-              {
-                "slot": 6,
-                "percent": 10
-              },
-              {
-                "slot": 7,
-                "percent": 10
-              },
-              {
-                "slot": 8,
-                "percent": 10
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 20.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 30.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 10.0
-              },
-              {
-                "slot": 1,
-                "skill": "PILOTING",
-                "percent": 30.0
-              },
-              {
-                "slot": 1,
-                "skill": "FITNESS",
-                "percent": 10.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 5,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "16-retrofire",
+            "id": "15-retrofire",
             "componentInvolvements": [
               {
                 "componentId": "gemini-capsule",
@@ -104430,6 +104352,84 @@
                 "slot": 1,
                 "skill": "PILOTING",
                 "percent": 20.0
+              },
+              {
+                "slot": 1,
+                "skill": "FITNESS",
+                "percent": 10.0
+              }
+            ],
+            "crewRisk": true,
+            "prestigeSharePercent": 0,
+            "failurePrestigeDeduction": 5,
+            "goalIdsAchieved": []
+          },
+          {
+            "id": "16-retrofire-jettison",
+            "componentInvolvements": [
+              {
+                "componentId": "gemini-capsule",
+                "percent": 50
+              },
+              {
+                "componentId": "gemini-eor-service-module",
+                "percent": 50
+              }
+            ],
+            "controllerInvolvements": [
+              {
+                "slot": 1,
+                "percent": 10
+              },
+              {
+                "slot": 2,
+                "percent": 20
+              },
+              {
+                "slot": 3,
+                "percent": 15
+              },
+              {
+                "slot": 4,
+                "percent": 5
+              },
+              {
+                "slot": 5,
+                "percent": 20
+              },
+              {
+                "slot": 6,
+                "percent": 10
+              },
+              {
+                "slot": 7,
+                "percent": 10
+              },
+              {
+                "slot": 8,
+                "percent": 10
+              }
+            ],
+            "crewInvolvements": [
+              {
+                "slot": 0,
+                "skill": "LEADERSHIP",
+                "percent": 20.0
+              },
+              {
+                "slot": 0,
+                "skill": "PILOTING",
+                "percent": 30.0
+              },
+              {
+                "slot": 0,
+                "skill": "FITNESS",
+                "percent": 10.0
+              },
+              {
+                "slot": 1,
+                "skill": "PILOTING",
+                "percent": 30.0
               },
               {
                 "slot": 1,
@@ -106555,85 +106555,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "24-retrofire-jettison",
-            "componentInvolvements": [
-              {
-                "componentId": "gemini-capsule",
-                "percent": 50
-              },
-              {
-                "componentId": "gemini-eor-service-module",
-                "percent": 50
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 10
-              },
-              {
-                "slot": 2,
-                "percent": 20
-              },
-              {
-                "slot": 3,
-                "percent": 15
-              },
-              {
-                "slot": 4,
-                "percent": 5
-              },
-              {
-                "slot": 5,
-                "percent": 20
-              },
-              {
-                "slot": 6,
-                "percent": 10
-              },
-              {
-                "slot": 7,
-                "percent": 10
-              },
-              {
-                "slot": 8,
-                "percent": 10
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 20.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 30.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 10.0
-              },
-              {
-                "slot": 1,
-                "skill": "PILOTING",
-                "percent": 30.0
-              },
-              {
-                "slot": 1,
-                "skill": "FITNESS",
-                "percent": 10.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 33,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "25-retrofire",
+            "id": "24-retrofire",
             "componentInvolvements": [
               {
                 "componentId": "gemini-capsule",
@@ -106698,6 +106620,84 @@
                 "slot": 1,
                 "skill": "PILOTING",
                 "percent": 20.0
+              },
+              {
+                "slot": 1,
+                "skill": "FITNESS",
+                "percent": 10.0
+              }
+            ],
+            "crewRisk": true,
+            "prestigeSharePercent": 0,
+            "failurePrestigeDeduction": 33,
+            "goalIdsAchieved": []
+          },
+          {
+            "id": "25-retrofire-jettison",
+            "componentInvolvements": [
+              {
+                "componentId": "gemini-capsule",
+                "percent": 50
+              },
+              {
+                "componentId": "gemini-eor-service-module",
+                "percent": 50
+              }
+            ],
+            "controllerInvolvements": [
+              {
+                "slot": 1,
+                "percent": 10
+              },
+              {
+                "slot": 2,
+                "percent": 20
+              },
+              {
+                "slot": 3,
+                "percent": 15
+              },
+              {
+                "slot": 4,
+                "percent": 5
+              },
+              {
+                "slot": 5,
+                "percent": 20
+              },
+              {
+                "slot": 6,
+                "percent": 10
+              },
+              {
+                "slot": 7,
+                "percent": 10
+              },
+              {
+                "slot": 8,
+                "percent": 10
+              }
+            ],
+            "crewInvolvements": [
+              {
+                "slot": 0,
+                "skill": "LEADERSHIP",
+                "percent": 20.0
+              },
+              {
+                "slot": 0,
+                "skill": "PILOTING",
+                "percent": 30.0
+              },
+              {
+                "slot": 0,
+                "skill": "FITNESS",
+                "percent": 10.0
+              },
+              {
+                "slot": 1,
+                "skill": "PILOTING",
+                "percent": 30.0
               },
               {
                 "slot": 1,
@@ -188426,95 +188426,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "08-retrofire-jettison",
-            "componentInvolvements": [
-              {
-                "componentId": "soyuz-7k-ok-spacecraft",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 15
-              },
-              {
-                "slot": 2,
-                "percent": 15
-              },
-              {
-                "slot": 4,
-                "percent": 5
-              },
-              {
-                "slot": 5,
-                "percent": 7
-              },
-              {
-                "slot": 6,
-                "percent": 20
-              },
-              {
-                "slot": 7,
-                "percent": 13
-              },
-              {
-                "slot": 8,
-                "percent": 10
-              },
-              {
-                "slot": 9,
-                "percent": 5
-              },
-              {
-                "slot": 13,
-                "percent": 10
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 15.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 12.5
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 15.0
-              },
-              {
-                "slot": 1,
-                "skill": "PILOTING",
-                "percent": 17.5
-              },
-              {
-                "slot": 1,
-                "skill": "FITNESS",
-                "percent": 15.0
-              },
-              {
-                "slot": 2,
-                "skill": "PILOTING",
-                "percent": 10.0
-              },
-              {
-                "slot": 2,
-                "skill": "FITNESS",
-                "percent": 15.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 20,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "09-retrofire",
+            "id": "08-retrofire",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-ok-spacecraft",
@@ -188589,6 +188501,94 @@
                 "slot": 2,
                 "skill": "PILOTING",
                 "percent": 5.0
+              },
+              {
+                "slot": 2,
+                "skill": "FITNESS",
+                "percent": 15.0
+              }
+            ],
+            "crewRisk": true,
+            "prestigeSharePercent": 0,
+            "failurePrestigeDeduction": 20,
+            "goalIdsAchieved": []
+          },
+          {
+            "id": "09-retrofire-jettison",
+            "componentInvolvements": [
+              {
+                "componentId": "soyuz-7k-ok-spacecraft",
+                "percent": 100
+              }
+            ],
+            "controllerInvolvements": [
+              {
+                "slot": 1,
+                "percent": 15
+              },
+              {
+                "slot": 2,
+                "percent": 15
+              },
+              {
+                "slot": 4,
+                "percent": 5
+              },
+              {
+                "slot": 5,
+                "percent": 7
+              },
+              {
+                "slot": 6,
+                "percent": 20
+              },
+              {
+                "slot": 7,
+                "percent": 13
+              },
+              {
+                "slot": 8,
+                "percent": 10
+              },
+              {
+                "slot": 9,
+                "percent": 5
+              },
+              {
+                "slot": 13,
+                "percent": 10
+              }
+            ],
+            "crewInvolvements": [
+              {
+                "slot": 0,
+                "skill": "LEADERSHIP",
+                "percent": 15.0
+              },
+              {
+                "slot": 0,
+                "skill": "PILOTING",
+                "percent": 12.5
+              },
+              {
+                "slot": 0,
+                "skill": "FITNESS",
+                "percent": 15.0
+              },
+              {
+                "slot": 1,
+                "skill": "PILOTING",
+                "percent": 17.5
+              },
+              {
+                "slot": 1,
+                "skill": "FITNESS",
+                "percent": 15.0
+              },
+              {
+                "slot": 2,
+                "skill": "PILOTING",
+                "percent": 10.0
               },
               {
                 "slot": 2,

@@ -174,6 +174,10 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   pictures and sounds (`assets-raw/archive/make_archive_assets.py`; rights in `PAGES.md`), a new message pair
   (`ArchiveRequest`, derived from goal records, nothing saved). Once the race is decided, every page still
   closed opens for everyone (user, 2026-10-15). Rebuild client and server together; no reset.
+- **The retrofire before the pack's jettison** (user, 2026-10-16, `design.md` §5, M3): 20 standard
+  configurations had them the other way round, as BASPM does; the converter now swaps them. The pack hash
+  changed: reset the dev data root. The way-home clips play mirrored (the orbit's way), with a turn before a
+  lone burn and an insertion that coasts to the top first (`ui-spec.md` §4.7.3).
 
 ## How we work
 

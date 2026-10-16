@@ -90,7 +90,10 @@ Each folder's `build/` is regenerated on every run and stays out of git.
   - **The way down in two steps** (2026-10-14): `descent-chutes` (the `descent` step's clip, a rule
     maps it) is `descent.jsx` with `CHUTES`, ending under the main as the clouds clear;
     `touchdown.jsx` (`GROUND`) carries on from that frame exactly, for `landing-and-recovery` and
-    `splashdown-and-recovery`. `insertion` is in the Earth-orbit scene.
+    `splashdown-and-recovery`. `insertion` is in the Earth-orbit scene: since 2026-10-16 the craft
+    coasts up its arc to the top on the planned orbit, slowing (its pace from angular momentum kept),
+    and burns there to circularize; the glitch sags below the orbit until the relight, the failure falls
+    back and burns up.
   - **Rendezvous and docking** (2026-10-14): `rendezvous-target-approach` is in the Earth-orbit
     scene with a second payload (`o-sat-b`). The rest share `dock.jsx`, a close-up over the way home's
     limb: the chaser (`k-carrier` with the capsule and its jets) is placed by offsets from docked, the

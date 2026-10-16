@@ -1937,6 +1937,9 @@ clips, the replay is meant to be watched like a short film, and the player can s
   the capsule turning round first. `reentry` after `earth-approach` (from the Moon, coming in from the
   left) plays `reentry-from-moon`, unmirrored. The cut from `deployment` (going right) to
   `suborbital-flight` (now going left) flips: unconfirmed.
+- **Orbit insertion coasts to the top, then burns (user, 2026-10-16):** the craft rises from the ascent on
+  its arc, slowing, to the top on the planned orbit, and fires there to circularize. The glitch cuts out
+  and sags below the orbit until a relight brings it back; the failure falls back and burns up.
 - **No clip yet:** a step with no clip, or a variant missing, plays `no-signal.webm` on a loop (an
   antenna searching, outcome-neutral) with "No signal" in the bezel; its result shows after a
   1.5 s pause, and playback moves on at 3 s. If no video can play at all (no file, no native

@@ -1,9 +1,9 @@
 {
  "duration": 6.0,
- "revealAt": 3.0,
+ "revealAt": 3.2,
  "cues": [
   {
-   "at": 3.05,
+   "at": 3.25,
    "sound": "radio-burn-short"
   }
  ]

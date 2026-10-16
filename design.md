@@ -2583,6 +2583,12 @@ first (login → action → scheduled resolution → result, end to end) before 
     two uncrewed Soyuz flights anyway.
   - A goal modifier BASPM repeats within one list (the X-15's research flights boost on the same
     goal twice) is merged into one with the summed amount; the engine sums them either way.
+  - **The retrofire comes before the retro pack's jettison (user, 2026-10-16).** BASPM drops the pack
+    first on 20 standard configurations (every Soyuz 7K-L3 and LK-700 flight, Soyuz 7K-OK's orbital
+    flight, Gemini EOR's two lander tests), so the replay burned with a pack it had just dropped. The
+    converter swaps the pair back, each step keeping its own data and its number in the order
+    (`20-retrofire-jettison, 21-retrofire` becomes `20-retrofire, 21-retrofire-jettison`; backup
+    `.bak-preswap`). The order is BASPM's only here.
   - **Goal boosts stay (user, 2026-10-08).** BASPM's loader never reads `GoalBoost` elements, so in
     the shipped game only the penalties apply (`baspm.md` §11.3). We keep applying the boosts the
     data declares (2 in the early-era pack, 99 in the standard pack, +1 or +2 each): they reward
