@@ -337,6 +337,13 @@ leading to satellite navigation.
   thrusters' propellant) and a retrograde section with four solid retro motors. Coming home, the
   equipment section went first, then the four retros fired one after another, then the retro section
   was dropped. The replay's `equipment-section-separation` plays the first of these for Gemini EOR.
+- **Lunokhod's lid and how Lunokhod 2 died** (2026-10-16, from memory; verify before a note uses it): the
+  rovers' lids opened in the lunar day to charge the solar cells on their underside, and closed at night over
+  the radiator to keep the heat in (a polonium-210 heater kept the instruments warm). In May 1973 Lunokhod 2
+  drove into a crater and, climbing out, its open lid touched the wall and picked up soil; when the lid closed,
+  the soil fell on the radiator, and it overheated and fell silent. Lunokhod 1's laser reflector was lost for
+  decades until a Lunar Reconnaissance Orbiter picture placed it in 2010, and lasers on Earth hit it again.
+  The replay's `lunokhod-drive` plays both. Fits Luna 17's history note, or a later Lunokhod 2 program.
 - **Saving throws are real:** Apollo 11's 1202/1201 alarms (a controller's call not to abort)
   and Apollo 13's improvised survival plan. Fits a step rescued by its saving throw.
 - **The flight loop in trouble** (2026-10-14, as usually quoted; verify before a note uses them):

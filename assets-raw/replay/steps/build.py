@@ -400,6 +400,17 @@ STEPS = {
         "success": (6.0, 2.6), "glitch": (6.0, 3.2), "failure": (6.0, 3.2),
         "times": [0.8, 1.8, 2.4, 3.0, 3.8, 5.9],
     },
+    # Luna 17's rover (2026-10-16): down the ramps first, then a drive (the second surface operations).
+    "lunokhod-deploy": {
+        "pad": False, "before": ["orbit.jsx", "lunokhod.jsx"],
+        "success": (6.4, 3.6), "glitch": (6.4, 4.8), "failure": (6.4, 3.4),
+        "times": [0.6, 1.6, 2.8, 3.4, 4.2, 6.3],
+    },
+    "lunokhod-drive": {
+        "pad": False, "before": ["orbit.jsx", "lunokhod.jsx"],
+        "success": (6.4, 4.4), "glitch": (6.4, 4.4), "failure": (6.4, 3.6),
+        "times": [0.5, 2.0, 2.8, 3.4, 4.6, 6.3],
+    },
     "probe-surface": {
         "pad": False, "before": ["orbit.jsx", "moon.jsx", "probe.jsx"],
         "success": (6.0, 2.2), "glitch": (6.0, 2.8), "failure": (6.0, 2.6),

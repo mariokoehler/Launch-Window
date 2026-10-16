@@ -464,7 +464,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: MOON 3
   - Programs: Apollo 3
 - [x] **Surface operations** `lunar-surface-operations-robotic`: 3 uses in 2 configurations, 2 programs (SOVIET) uncrewed
-  - Clip: `probe-surface`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: by the steps before: `lunokhod-deploy` after `landing` 2, `lunokhod-drive` after `lunar-surface-operations-robotic` 1; [x] success, [x] glitch, [x] failure; cues yes
   - On screen: probe lander 2, rover 2, probe 1
   - Destinations: MOON 3
   - Programs: Luna 15 1, Luna 17 1

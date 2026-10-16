@@ -144,6 +144,8 @@
     {"step": "lander-descent-and-landing", "clip": "probe-landing"},
     {"step": "big-probe-descent-and-landing", "clip": "probe-landing"},
     {"step": "mars-surface", "clip": "mars-surface"},
+    {"step": "lunar-surface-operations-robotic", "programs": ["luna-17"], "after": "lunar-surface-operations-robotic", "clip": "lunokhod-drive"},
+    {"step": "lunar-surface-operations-robotic", "programs": ["luna-17"], "clip": "lunokhod-deploy"},
     {"step": "lunar-surface-operations-robotic", "clip": "probe-surface"},
     {"step": "ascent-from-lunar-surface", "clip": "lunar-liftoff"},
     {"step": "earth-venus-approach", "clip": "venus-approach"},

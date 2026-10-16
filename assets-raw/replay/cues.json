@@ -1,4 +1,6 @@
 {
+  "lunokhod-deploy": {"success": [{"at": 3.65, "sound": "radio-signal-good"}], "glitch": [{"at": 4.85, "sound": "radio-roger"}], "failure": [{"at": 3.45, "sound": "radio-probe-silent"}]},
+  "lunokhod-drive": {"success": [{"at": 4.45, "sound": "radio-signal-good"}], "glitch": [{"at": 4.45, "sound": "radio-roger"}], "failure": [{"at": 3.65, "sound": "radio-problem"}, {"at": 5.85, "sound": "radio-probe-silent"}]},
   "retro-shutdown": {"glitch": [{"at": 2.85, "sound": "radio-attitude-drift"}], "failure": [{"at": 3.05, "sound": "radio-tumbling"}]},
   "suborbital-flight-om": {"glitch": [{"at": 4.05, "sound": "radio-attitude-drift"}], "failure": [{"at": 3.65, "sound": "radio-tumbling"}]},
   "retrofire-om": {"success": [{"at": 1.0, "sound": "rocket-roar", "volume": 0.35, "loop": true, "until": 3.6, "fade": 0.3}], "glitch": [{"at": 1.0, "sound": "rocket-roar", "volume": 0.35, "loop": true, "until": 4.2, "fade": 0.3}], "failure": [{"at": 1.0, "sound": "rocket-roar", "volume": 0.35, "loop": true, "until": 2.6, "fade": 0.15}, {"at": 3.05, "sound": "radio-burn-failed"}]},

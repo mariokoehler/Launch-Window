@@ -63,6 +63,12 @@ Each folder's `build/` is regenerated on every run and stays out of git.
   - **Vostok** (2026-10-16): no pack to drop, so its `retrofire-jettison` (a rule on the `vostok` program)
     plays `retro-shutdown`, the burn's end, the pack (its instrument module) staying on for the modules
     separation.
+  - **Lunokhod** (2026-10-16, `parts.py`'s `u-` parts, `lunokhod.jsx`): Luna 17's descent stage with its two
+    ramps, and the rover (a tub on eight wheels, four seen, spoked so they're seen to roll; a lid hinged at the
+    back with solar cells underneath; a pencil and a cone antenna; the laser reflector on its nose). It's posed on
+    its path by `x` (`pose`: the deck, the ramp, the ground, a crater's rim, `u-rim`), its wheels rolling with the
+    distance. Luna 17 flies two surface operations: the first plays `lunokhod-deploy` (down the ramps), the second
+    `lunokhod-drive` (a rule on `luna-17` with `after`), on from the first's last frame.
   - **Vostok's way** (2026-10-14): `modules-separation` (the module is the same pack, `r-module`,
     turning about its own centre; the cable between them, `r-cable`, is aimed and stretched every
     frame; its glitch is Vostok 1's) and `descent-and-landing`. The two descents share `descent.jsx`,

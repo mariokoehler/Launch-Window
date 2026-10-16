@@ -802,6 +802,71 @@ def lander_parts():
     layer("n-dust", puff(860, 872, 20) + puff(800, 876, 14) + puff(1060, 872, 20) + puff(1120, 876, 14), (960, 880))
 
 
+def lunokhod_parts():
+    """Luna 17 and Lunokhod 1 (2026-10-16): the descent stage with its ramps, and the rover, in the Moon's
+    close-up (the surface at GROUND_Y). The rover faces right; it's drawn on the stage's deck (its wheels'
+    foot at (960, 776)), where its carrier stands, and its wheels and lid turn about their own pivots."""
+    deck = 776
+    # The stage: a deck on four spherical tanks (two seen), four legs, an engine bell below.
+    stage = (f'<path d="M868 790 L800 876 M1052 790 L1120 876 M884 800 L836 860 M1036 800 L1084 860" fill="none" '
+             f'{LINE} stroke-width="4"/>'
+             f'<ellipse cx="798" cy="878" rx="18" ry="5" fill="#ffffff" {LINE} stroke-width="3"/>'
+             f'<ellipse cx="1122" cy="878" rx="18" ry="5" fill="#ffffff" {LINE} stroke-width="3"/>'
+             f'<path d="M944 820 L976 820 L986 850 L934 850 Z" fill="#ffffff" {LINE} stroke-width="3"/>'
+             f'<circle cx="912" cy="816" r="30" fill="#ffffff" {LINE} stroke-width="3"/>'
+             f'<circle cx="1008" cy="816" r="30" fill="#ffffff" {LINE} stroke-width="3"/>'
+             f'<rect x="860" y="{deck}" width="200" height="16" fill="url(#hatch)" {LINE} stroke-width="3"/>')
+    layer("u-stage", stage, (960, deck))
+    # A ramp: two rails and their rungs, drawn along +x from its hinge at the deck's edge (the timeline
+    # turns it down to the ground, from folded up).
+    rails = (f'<path d="M0 -3 L208 -3 M0 5 L208 5" fill="none" {LINE} stroke-width="3"/>'
+             + "".join(f'<path d="M{x} -3 L{x} 5" fill="none" {LINE} stroke-width="2"/>' for x in range(20, 208, 26)))
+    layer("u-ramp-f", f'<g transform="translate(1060 {deck})">{rails}</g>', (1060, deck))
+    layer("u-ramp-r", f'<g transform="translate(860 {deck}) scale(-1 1)">{rails}</g>', (860, deck))
+    # The rover, its wheels' foot at (960, deck): a tub wider at the top, the lid on it (solar cells on its
+    # underside, seen once it's open), the cameras and the laser reflector at the front (right), a pencil
+    # antenna and a cone antenna behind the lid.
+    o = (960, deck)
+
+    def at(d):
+        return f'<g transform="translate({o[0]} {o[1]})">{d}</g>'
+    layer("u-rover", "", o)
+    tub = (f'<path d="M-62 -26 L62 -26 L74 -70 L-74 -70 Z" fill="#ffffff" {LINE} stroke-width="3"/>'
+           f'<path d="M-66 -48 L66 -48" fill="none" {LINE} stroke-width="1.6"/>'
+           f'<circle cx="64" cy="-58" r="5" fill="#ffffff" {LINE} stroke-width="2"/>'
+           f'<circle cx="60" cy="-38" r="5" fill="#ffffff" {LINE} stroke-width="2"/>'
+           f'<rect x="72" y="-68" width="10" height="12" fill="url(#hatch)" {LINE} stroke-width="2"/>')
+    layer("u-tub", at(tub), o)
+    ant = (f'<path d="M-44 -70 L-44 -150" fill="none" {LINE} stroke-width="2.4"/>'
+           f'<circle cx="-44" cy="-152" r="4" fill="#ffffff" {LINE} stroke-width="2"/>'
+           f'<path d="M24 -70 L24 -96 M14 -96 L34 -96 L24 -118 Z" fill="#ffffff" {LINE} stroke-width="2.4"/>')
+    layer("u-ant", at(ant), o)
+    lid = (f'<path d="M-76 -70 L76 -70 L76 -64 L-76 -64 Z" fill="url(#hatch)" {LINE} stroke-width="2"/>'
+           f'<path d="M-76 -70 Q-72 -98 0 -100 Q72 -98 76 -70 Z" fill="#ffffff" {LINE} stroke-width="3"/>')
+    layer("u-lid", at(lid), (o[0] - 76, o[1] - 70))
+    # A soil heap on the lid (the failure), and the lid glowing as the rover overheats.
+    layer("u-soil", at(f'<path d="M-40 -100 Q-20 -116 4 -104 Q22 -114 40 -98 Z" fill="url(#earth)" {LINE} stroke-width="2"/>'),
+          (o[0] - 76, o[1] - 70))
+    layer("u-glow", at(f'<path d="M-82 -68 Q-78 -108 0 -110 Q78 -108 82 -68" fill="{GOLD_FILL}" stroke="{GOLD}" '
+                       f'stroke-width="3"/>'), (o[0] - 76, o[1] - 70))
+    for i, x in enumerate((-54, -18, 18, 54), 1):
+        spokes = "".join(f'<path d="M{x + 4 * math.cos(a):.1f} {-15 + 4 * math.sin(a):.1f} L{x + 15 * math.cos(a):.1f} '
+                         f'{-15 + 15 * math.sin(a):.1f}" fill="none" {LINE} stroke-width="1.6"/>'
+                         for a in (k * math.pi / 4 for k in range(8)))
+        layer(f"u-wheel-{i}", at(f'<circle cx="{x}" cy="-15" r="15" fill="#ffffff" {LINE} stroke-width="3"/>{spokes}'
+                                 f'<circle cx="{x}" cy="-15" r="4" fill="#ffffff" {LINE} stroke-width="2"/>'),
+              (o[0] + x, o[1] - 15))
+    # The dust its wheels kick up (behind it), and a crater's rim further on: a low mound on the way.
+    layer("u-kick", puff(880, 870, 12) + puff(860, 874, 8), (870, 874))
+    layer("u-rim", f'<path d="M1820 {GROUND_Y + 2} Q1990 {GROUND_Y - 96} 2160 {GROUND_Y + 2} Z" fill="#ffffff"/>'
+                   f'<path d="M1820 {GROUND_Y + 2} Q1990 {GROUND_Y - 96} 2160 {GROUND_Y + 2} Z" fill="url(#earth)" {LINE} '
+                   f'stroke-width="3"/><path d="M1840 {GROUND_Y + 2} L2140 {GROUND_Y + 2}" fill="none" stroke="#ffffff" '
+                   f'stroke-width="4"/>', (1990, GROUND_Y))
+    # A laser from Earth (up right), bouncing off the reflector: a gold line drawn from its foot up.
+    layer("u-laser", f'<path d="M0 0 L700 -700" fill="none" stroke="{GOLD}" stroke-width="3" stroke-dasharray="18 10"/>',
+          (0, 0))
+
+
 def lunar_parts():
     lander_parts()
     # The surface close up: a horizon of low rises, craters seen flat, a boulder field right of the
@@ -1084,6 +1149,7 @@ def main():
     dock_parts()
     eva_parts()
     lunar_parts()
+    lunokhod_parts()
     stage_parts()
     plane_parts()
     probe_parts()

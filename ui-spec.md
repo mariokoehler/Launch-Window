@@ -1953,6 +1953,12 @@ clips, the replay is meant to be watched like a short film, and the player can s
   retrofire and the retro section's jettison. Vostok had no pack to drop, so its "retrofire jettison" (BASPM's
   Vostok suborbital, a what-if) plays `retro-shutdown`: the burn tails off and the jets steady it; the glitch's
   valve sticks and the engine sputters on, the failure's won't stop and pitches the capsule away (unconfirmed).
+- **Lunokhod (user, 2026-10-16):** Luna 17's two surface operations had the Mars lander's clip; they play the
+  rover's own: `lunokhod-deploy` (the ramps unfold, it rolls down onto the surface, opens its lid to the Sun and
+  calls home; the glitch slips halfway down the ramp and tries again; the failure noses in at the ramp's foot and
+  pitches over) and then `lunokhod-drive` (on over a crater's rim, a laser from Earth finding its reflector; the
+  glitch slips on the slope; the failure is Lunokhod 2's end, its open lid scooping soil that overheats it once
+  shut). Every story unconfirmed.
 - **No clip yet:** a step with no clip, or a variant missing, plays `no-signal.webm` on a loop (an
   antenna searching, outcome-neutral) with "No signal" in the bezel; its result shows after a
   1.5 s pause, and playback moves on at 3 s. If no video can play at all (no file, no native
