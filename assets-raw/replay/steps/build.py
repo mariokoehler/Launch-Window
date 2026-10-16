@@ -423,6 +423,11 @@ STEPS = {
         "success": (6.4, 4.6), "glitch": (6.4, 5.2), "failure": (6.4, 3.4),
         "times": [0.8, 1.6, 2.4, 3.2, 4.5, 6.3],
     },
+    "luna-liftoff": {
+        "pad": False, "before": ["orbit.jsx", "lunokhod.jsx", "luna.jsx"],
+        "success": (6.0, 1.8), "glitch": (6.0, 2.6), "failure": (6.0, 2.2),
+        "times": [0.5, 1.2, 1.8, 2.2, 3.0, 5.9],
+    },
     "lunokhod-drive": {
         "pad": False, "before": ["orbit.jsx", "lunokhod.jsx"],
         "success": (6.4, 4.4), "glitch": (6.4, 4.4), "failure": (6.4, 3.6),

@@ -150,6 +150,7 @@
     {"step": "lunar-surface-operations-robotic", "programs": ["luna-17"], "clip": "lunokhod-deploy"},
     {"step": "lunar-surface-operations-robotic", "programs": ["luna-15"], "clip": "luna-sampler"},
     {"step": "lunar-surface-operations-robotic", "clip": "probe-surface"},
+    {"step": "ascent-from-lunar-surface", "programs": ["luna-15"], "clip": "luna-liftoff"},
     {"step": "ascent-from-lunar-surface", "clip": "lunar-liftoff"},
     {"step": "earth-venus-approach", "clip": "venus-approach"},
     {"step": "lk-test", "clip": "lander-engine-test"},

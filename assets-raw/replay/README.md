@@ -72,7 +72,8 @@ Each folder's `build/` is regenerated on every run and stays out of git.
   - **The Luna landers** (2026-10-16, `luna.jsx`, `s-` parts): the same Ye-8 stage on a carrier (`u-lander`)
     with its payload, `PAYLOAD` "rover" (Lunokhod, ramps folded up) or "sampler" (Luna 15's return rocket and
     capsule, and the drill arm). `luna-landing-rover` and `luna-landing-sampler` are `luna-landing.jsx` with each
-    (the failure is Luna 15's crash), and `luna-sampler` drills a core and lifts it into the capsule. They end on
+    (the failure is Luna 15's crash), `luna-sampler` drills a core and lifts it into the capsule, and `luna-liftoff`
+    launches the return rocket off the stage (its flame behind the deck until it's clear). They end on
     the framing the surface clips start from.
   - **Vostok's way** (2026-10-14): `modules-separation` (the module is the same pack, `r-module`,
     turning about its own centre; the cable between them, `r-cable`, is aimed and stretched every

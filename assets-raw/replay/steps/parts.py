@@ -884,6 +884,8 @@ def lunokhod_parts():
     layer("s-arm", f'<g transform="translate(1060 {deck - 6})">{arm}</g>', (1060, deck - 6))
     layer("s-core", f'<rect x="1196" y="{deck - 10}" width="14" height="8" rx="2" fill="url(#earth)" {LINE} '
                     f'stroke-width="2"/>', (1203, deck - 6))
+    layer("s-flame", f'<path d="M946 778 C948 800 954 822 960 846 C966 822 972 800 974 778 Z" fill="{GOLD_FILL}" '
+                     f'stroke="{GOLD}" stroke-width="3" stroke-linejoin="round"/>', (960, deck))
     layer("s-flash", f'<circle cx="960" cy="678" r="30" fill="none" stroke="{GOLD}" stroke-width="4"/>', (960, 678))
     # A laser from Earth (up right), bouncing off the reflector: a gold line drawn from its foot up.
     layer("u-laser", f'<path d="M0 0 L700 -700" fill="none" stroke="{GOLD}" stroke-width="3" stroke-dasharray="18 10"/>',
