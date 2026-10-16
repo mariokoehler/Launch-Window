@@ -97,7 +97,7 @@ How to read an entry (all counted automatically, a first pass):
 ## Return to Earth (17)
 
 - [x] **Reentry** `reentry`: 163 uses in 148 configurations, 25 programs (NASA/SOVIET) **(early-era)**, crew risk in 120 of 163, later seasons in 1 of 163
-  - Clip: `reentry`; [x] success, [x] glitch, [x] failure; cues yes
+  - Clip: by the steps before: `reentry` after `modules-separation` 82, `reentry` after `retrofire-jettison` 39, `reentry-from-moon` after `earth-approach` 17, `reentry` after `reentry-preparations` 11, `reentry` after `de-orbit-burn` 4, `reentry-from-moon` after `earth-approach-and-reentry` 4, `reentry` after `retrofire` 2, `reentry` after `deorbit-burn` 2, `reentry-from-moon` after `moon-earth-coast` 1, `reentry` after `orbital-maneuvering-engine-test` 1; [x] success, [x] glitch, [x] failure; cues yes
   - Also covers: `gemini-a-reentry` 4, `gemini-b-reentry` 4, `reentry-a` 1, `reentry-b` 1, `sc-a-reentry` 1, `sc-b-reentry` 1, `spc-a-reentry` 2
   - On screen: crewed craft 139, crewed lander 16, spaceplane 5, satellite 2, probe 1
   - Destinations: EARTH 128, MOON 35
@@ -115,7 +115,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: EARTH 93, MOON 9
   - Programs: Gemini 15, Apollo: Earth-orbit tests 14, Soyuz 7K-OK 14, Voskhod 10
 - [x] **Retrofire** `retrofire`: 99 uses in 85 configurations, 12 programs (NASA/SOVIET) **(early-era)**, crew risk in 80 of 99
-  - Clip: `retrofire`; [x] success, [x] glitch, [x] failure; cues yes
+  - Clip: by the steps before: `retrofire` after `reentry-preparations` 68, `retrofire` after `retrofire-jettison` 20, `retrofire` after `suborbital-flight` 7, `deorbit-burn` after `orbital-flight` 1, `deorbit-burn` after `duration-level-i` 1, `deorbit-burn` after `joint-orbital-flight` 1, `deorbit-burn` after `descent-and-splashdown` 1; [x] success, [x] glitch, [x] failure; cues yes
   - Also covers: `gemini-a-retrofire` 4, `gemini-b-retrofire` 4, `spc-a-retrofire` 2
   - On screen: crewed craft 88, crewed lander 9, spaceplane 2
   - Destinations: EARTH 99
@@ -161,7 +161,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: EARTH 9, MOON 6, VENUS 2, MARS 1
   - Programs: OKB-MiG E-154 5, X-15 3, Apollo 2, Venera lander 2
 - [x] **Deorbit burn** `de-orbit-burn`: 16 uses in 14 configurations, 2 programs (NASA) crew risk in 13 of 16, later seasons in 1 of 16
-  - Clip: `retrofire`; [x] success, [x] glitch, [x] failure; cues yes
+  - Clip: by the steps before: `retrofire` after `reentry-preparations` 12, `retrofire` after `de-orbit-burn` 2, `deorbit-burn` after `earth-orbit` 1, `deorbit-burn` after `advanced-experiments-earth-orbit` 1; [x] success, [x] glitch, [x] failure; cues yes
   - On screen: crewed craft 14, satellite 2
   - Destinations: EARTH 16
   - Programs: Apollo: Earth-orbit tests 12, Biosatellite 2
@@ -177,7 +177,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: MOON 5
   - Programs: Lunar-orbit Gemini 4, Luna 15 1
 - [x] **Deorbit burn** `deorbit-burn`: 2 uses in 1 configuration, 1 program (SOVIET) crew risk in 2 of 2
-  - Clip: `retrofire`; [x] success, [x] glitch, [x] failure; cues yes
+  - Clip: `deorbit-burn`; [x] success, [x] glitch, [x] failure; cues yes
   - Also covers: `sc-a-deorbit-burn` 1, `sc-b-deorbit-burn` 1
   - On screen: spaceplane 2
   - Destinations: EARTH 2

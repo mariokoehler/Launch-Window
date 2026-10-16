@@ -1,0 +1,25 @@
+// Motes (2026-10-16): faint dashes hanging in space round a craft in orbit, streaming past against
+// its way, so which way it's going shows before a burn (drawn going right: they stream left). Their
+// speed is speed(t) px a second, integrated frame by frame, and their length follows it, so a burn
+// that slows the craft slows them. They wrap round off-screen. Put them before the Earth, which hides
+// those below its limb.
+var MOTE_SPEED = 760;
+function motes(speed) {
+    var xs = [], x = 0;
+    for (var f = 0; f <= NFRAMES + 1; f++) { xs.push(x); x -= speed(f / FPS) / FPS; }
+    var seed = 7;
+    function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+    for (var i = 1; i <= 14; i++) {
+        // Spread across the width (a slot each, jittered), at any height above the Earth's limb.
+        var x0 = -150 + (i - 1 + 0.8 * rnd()) * 2220 / 14, y = 60 + 700 * rnd(), k = 0.6 + 0.8 * rnd();
+        put("r-mote-" + i);
+        (function (n, x0, y, k) {
+            move(n, function (t) {
+                var d = xs[clamp(Math.round(t * FPS), 0, xs.length - 1)];
+                var X = ((x0 + d + 150) % 2220 + 2220) % 2220 - 150;
+                return [X - 960, y - 470];
+            });
+            grow(n, function (t) { return [Math.max(0.05, k * speed(t) / MOTE_SPEED), 1]; });
+        })("r-mote-" + i, x0, y, k);
+    }
+}

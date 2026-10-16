@@ -9,6 +9,8 @@ var glitch = VARIANT === "glitch", failure = VARIANT === "failure";
 var BOLTS = 0.8, SNAP = 1.25, TUMBLE = 1.6, BURN = 3.4;
 
 put("paper", "screen");
+// The motes stream past at the speed the retrofire left (it took 260 px/s off).
+motes(function () { return MOTE_SPEED - 260; });
 put("d-earth");
 put("r-orbit");
 put("r-cable");

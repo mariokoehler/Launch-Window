@@ -301,6 +301,10 @@ def return_parts():
     for i in range(1, 9):
         layer(f"r-streak-{i}", f'<path d="M960 470 L1050 470" fill="none" stroke="{GOLD}" stroke-width="3" stroke-linecap="round"/>',
               (960, 470))
+    # Motes in orbit (2026-10-16): faint dashes that stream past against the craft's way (motes.jsx).
+    for i in range(1, 15):
+        layer(f"r-mote-{i}", f'<path d="M930 470 L990 470" fill="none" stroke="rgba(22,48,92,0.40)" stroke-width="4" '
+              'stroke-linecap="round"/>', (960, 470))
     for i, pts in enumerate(("0 0 26 -4 30 16 4 20", "0 0 18 -8 24 10 6 14", "0 0 30 2 22 18 2 14", "0 0 14 -6 20 8"), 1):
         layer(f"r-chip-{i}", f'<polygon points="{pts}" transform="translate(950 460)" fill="#ffffff" {LINE} stroke-width="3"/>',
               (962, 466))

@@ -8,6 +8,8 @@ var glitch = VARIANT === "glitch", failure = VARIANT === "failure";
 var START = 0.8, STOP = 2.6;
 
 put("paper", "screen");
+// The motes stream past at the orbit's speed: its way, before the turn.
+motes(function () { return MOTE_SPEED; });
 put("d-earth");
 put("r-orbit");
 put("r-carrier");

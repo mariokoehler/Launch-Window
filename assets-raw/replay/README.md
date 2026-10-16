@@ -37,6 +37,18 @@ Each folder's `build/` is regenerated on every run and stays out of git.
     fires its retros *before* the preparations, so its cuts don't match there, and Vostok has
     `modules-separation` instead of the jettison. The Earth's turn carries on from clip to clip (the
     constants at the top of each `d-earth` turn).
+  - **Which way it goes** (2026-10-16): the Earth orbit's map goes round anticlockwise, so over the top
+    of the Earth the craft travels left. The way-home clips are drawn travelling right and published
+    mirrored (`"mirror"` in `build.py`: the render goes through ffmpeg's `hflip`, the sheet through
+    PIL's flip, since EffectCraft drops the turning Earth under a parent scaled by -100; a screen layer
+    that must stay unflipped calls `unflip`, as `reentry`'s clouds do, for the unmirrored descents). Mirrored:
+    `reentry-preparations`, `retrofire`, `deorbit-burn`, `retrofire-jettison`, `modules-separation`,
+    `reentry` and `suborbital-flight` (so the cut from `deployment`, which goes right, flips: unconfirmed).
+    `reentry-from-moon` is `reentry` unmirrored (`"source"`), for the step after `earth-approach`, which
+    comes in from the left. Faint motes (`motes.jsx`, `r-mote-` parts) stream past against the craft's
+    way in the orbit clips, and slow with the retrofire. `deorbit-burn` is the retrofire with the turn
+    first (`TURN` in `retrofire.jsx`, everything 1.2 s later), for a burn no reentry preparations came
+    before (Biosatellite's): rules in `replay-clips.json` pick it.
   - **Vostok's way** (2026-10-14): `modules-separation` (the module is the same pack, `r-module`,
     turning about its own centre; the cable between them, `r-cable`, is aimed and stretched every
     frame; its glitch is Vostok 1's) and `descent-and-landing`. The two descents share `descent.jsx`,

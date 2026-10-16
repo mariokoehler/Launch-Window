@@ -10,7 +10,8 @@ var BREAK = 3.4;
 
 put("paper", "screen");
 put("d-earth");
-for (var i = 1; i <= 6; i++) put("r-cloud-" + i);
+// The descents (unmirrored) carry on with them where they are: on the screen, flipped back.
+for (var i = 1; i <= 6; i++) { put("r-cloud-" + i, "screen"); unflip("r-cloud-" + i); }
 for (i = 1; i <= 8; i++) put("r-streak-" + i);
 put("r-carrier");
 var parts = ["r-glow-side", "r-glow", "r-capsule"];

@@ -1,0 +1,14 @@
+{
+ "duration": 6.4,
+ "revealAt": 4.4,
+ "cues": [
+  {
+   "at": 0.4,
+   "sound": "radio-blackout"
+  },
+  {
+   "at": 4.45,
+   "sound": "radio-oscillations"
+  }
+ ]
+}

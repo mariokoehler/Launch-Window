@@ -26,6 +26,12 @@
     "failure": [{"at": 1.0, "sound": "rocket-roar", "volume": 0.35, "loop": true, "until": 2.6, "fade": 0.15},
                 {"at": 3.05, "sound": "radio-burn-failed"}]
   },
+  "deorbit-burn": {
+    "success": [{"at": 2.2, "sound": "rocket-roar", "volume": 0.35, "loop": true, "until": 4.8, "fade": 0.3}],
+    "glitch": [{"at": 2.2, "sound": "rocket-roar", "volume": 0.35, "loop": true, "until": 5.4, "fade": 0.3}],
+    "failure": [{"at": 2.2, "sound": "rocket-roar", "volume": 0.35, "loop": true, "until": 3.8, "fade": 0.15},
+                {"at": 4.25, "sound": "radio-burn-failed"}]
+  },
   "launch-preparations": {
     "success": [{"at": 2.65, "sound": "radio-go-for-launch"}]
   },
@@ -87,6 +93,13 @@
     "failure": [{"at": 3.85, "sound": "radio-separation-failed"}]
   },
   "reentry": {
+    "success": [{"at": 0.4, "sound": "radio-blackout"}],
+    "glitch": [{"at": 0.4, "sound": "radio-blackout"},
+               {"at": 4.45, "sound": "radio-oscillations"}],
+    "failure": [{"at": 0.4, "sound": "radio-blackout"},
+                {"at": 4.0, "sound": "radio-no-acquisition"}]
+  },
+  "reentry-from-moon": {
     "success": [{"at": 0.4, "sound": "radio-blackout"}],
     "glitch": [{"at": 0.4, "sound": "radio-blackout"},
                {"at": 4.45, "sound": "radio-oscillations"}],

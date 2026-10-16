@@ -1929,6 +1929,14 @@ clips, the replay is meant to be watched like a short film, and the player can s
   `landing-and-deployment` (user, 2026-10-15; unconfirmed), and the work on the surface after it in
   `mars-surface` (the probe's story, its arm stalling as Viking 1's did, with Viking's lander; user,
   2026-10-15).
+- **The way home goes the orbit's way (user, 2026-10-16):** the Earth orbit's map goes round
+  anticlockwise, so over the Earth the craft travels left; the way-home clips (reentry preparations to
+  reentry, and the suborbital flight) now play mirrored, nose left in orbit and nose right for the burn.
+  Faint motes stream past against its way in orbit, and slow with the retrofire. A burn with no reentry
+  preparations before it (Biosatellite's `de-orbit-burn`, straight from the orbit) plays `deorbit-burn`,
+  the capsule turning round first. `reentry` after `earth-approach` (from the Moon, coming in from the
+  left) plays `reentry-from-moon`, unmirrored. The cut from `deployment` (going right) to
+  `suborbital-flight` (now going left) flips: unconfirmed.
 - **No clip yet:** a step with no clip, or a variant missing, plays `no-signal.webm` on a loop (an
   antenna searching, outcome-neutral) with "No signal" in the bezel; its result shows after a
   1.5 s pause, and playback moves on at 3 s. If no video can play at all (no file, no native

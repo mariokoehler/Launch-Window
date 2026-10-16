@@ -15,6 +15,18 @@ function setup(name, dur) {
     tf(world, "Anchor Point").setValue([0, 0]);
     tf(world, "Position").setValue([0, 0]);
 }
+// MIRROR (set by the builder): the render is flipped left for right afterwards (build.py), not in
+// the comp: EffectCraft drops a large turning layer (the Earth) under a parent scaled by -100.
+// A layer that has to come out unflipped is flipped here first (unflip).
+var MIRROR = typeof MIRROR !== "undefined" && MIRROR;
+function unflip(name) {
+    var l = layers[name];
+    if (!MIRROR) return;
+    var p = tf(l, "Position").value;
+    tf(l, "Position").setValue([W - p[0], p[1]]);
+    tf(l, "Scale").setValue([-100, 100]);
+    l.rest = tf(l, "Position").value;
+}
 
 function tf(l, n) { return l.property("Transform").property(n); }
 

@@ -1,34 +1,58 @@
 // Retrofire: in orbit over the Earth's limb, the capsule flies base first (turned round by the
 // reentry preparations), its retro pack facing its way. The three motors fire at 1.0 and slow it:
-// it sinks below its orbit (dashed), and the Earth comes up, until the burn ends at 3.6.
+// it sinks below its orbit (dashed), and the Earth comes up, until the burn ends at 3.6. The motes
+// streaming past show its way, and slow with the burn.
 // Glitch: the middle motor dies at 1.6 and the capsule yaws; the other two hold it, the middle one
 // lights again at 2.5, and the burn runs on to 4.2.
 // Failure: the same until 2.5, when the other two die as well; a try at 2.9 only sputters, and the
 // capsule stays in orbit.
+// TURN (deorbit-burn.jsx, for a burn with no preparations before it): it starts nose first and the
+// attitude jets turn it round first (a puff at 0.3, one at 1.6 to stop it), and everything after
+// comes T0 later.
+var TURN = typeof TURN !== "undefined" && TURN;
+var T0 = TURN ? 1.2 : 0;
 var glitch = VARIANT === "glitch", failure = VARIANT === "failure";
-var FIRE = 1.0, CUT = 1.6, OUT = 2.5, END = glitch ? 4.2 : 3.6;
+var FIRE = 1.0 + T0, CUT = 1.6 + T0, OUT = 2.5 + T0, END = (glitch ? 4.2 : 3.6) + T0;
 
 put("paper", "screen");
+// The motes' speed: down by 100 px/s for every second on all three motors.
+var moteSpeed = [], v = MOTE_SPEED;
+for (var f = 0; f <= NFRAMES + 1; f++) {
+    moteSpeed.push(v);
+    v -= 100 / FPS * (lit(1)(f / FPS) + lit(2)(f / FPS) + lit(3)(f / FPS)) / 3;
+}
+motes(function (t) { return moteSpeed[clamp(Math.round(t * FPS), 0, moteSpeed.length - 1)]; });
 put("d-earth");
 put("r-orbit");
 put("r-carrier");
 var parts = ["r-flame-1", "r-flame-2", "r-flame-3", "r-strap-a", "r-strap-b", "r-pack", "r-capsule"];
+if (TURN) parts.push("r-jet-l", "r-jet-r");
 for (var i = 0; i < parts.length; i++) put(parts[i], "r-carrier");
 
-// Base first: the carrier turned 180 (the preparations' last frame).
+// Base first: the carrier turned 180 (the preparations' last frame), or turning there first.
 // The yaw on two motors, the same in glitch and failure; the failure's dies away once nothing burns.
 var yaw = glitch || failure ? function (t) {
-    if (t < CUT || t > 3.4) return 0;
-    var k = failure ? clamp((3.2 - t) / 0.7, 0, 1) : Math.min(1, (3.4 - t) / 0.5);
+    if (t < CUT || t > 3.4 + T0) return 0;
+    var k = failure ? clamp((3.2 + T0 - t) / 0.7, 0, 1) : Math.min(1, (3.4 + T0 - t) / 0.5);
     return 7 * Math.sin(2 * Math.PI * 1.1 * (t - CUT)) * k;
 } : function () { return 0; };
-turn("r-carrier", function (t) { return 180 + yaw(t); });
+var facing = TURN ? track([[0.3, 0], [1.6, 165, "in"], [1.9, 180, "out"]]) : function () { return 180; };
+turn("r-carrier", function (t) { return facing(t) + yaw(t); });
+if (TURN) {
+    // The jets: a puff at the start of the turn (one side), and at its stop (the other).
+    var puff = function (name, at) {
+        grow(name, function (t) { return t >= at && t < at + 0.6 ? 0.5 + (t - at) / 0.6 : 0.5; });
+        fade(name, function (t) { return t >= at && t < at + 0.6 ? 1 - (t - at) / 0.6 : 0; });
+    };
+    puff("r-jet-l", 0.3);
+    puff("r-jet-r", 1.6);
+}
 
 // How far the capsule has sunk below its orbit (px): the Earth and the orbit come up by as much.
 // It keeps sinking after the burn, at the speed the burn left it.
 // The same in every variant until the failure's motors die at 2.5: it keeps what it had sunk by
 // then; the glitch, on two motors, keeps up by burning longer.
-var burning = smooth([[FIRE, 0], [2.4, 30], [3.6, 80], [6.4, 140]]);
+var burning = smooth([[FIRE, 0], [2.4 + T0, 30], [3.6 + T0, 80], [6.4 + T0, 140]]);
 var sink = failure ? function (t) { return burning(Math.min(t, OUT)); } : burning;
 move("d-earth", function (t) { return [0, -sink(t)]; });
 move("r-orbit", function (t) { return [0, -sink(t)]; });
@@ -44,7 +68,7 @@ function lit(n) {
         if ((glitch || failure) && n === 2 && t >= CUT && t < OUT) return t < CUT + 0.15 && jitter(t, 4) > 0 ? 1 : 0;
         if (failure) {
             // The other two die at 2.5; a try at 2.9 only sputters, a few frames on, a few off.
-            if (t >= 2.9 && t < 3.3) return jitter(t, 7 + n) > 0.2 ? 1 : 0;
+            if (t >= 2.9 + T0 && t < 3.3 + T0) return jitter(t, 7 + n) > 0.2 ? 1 : 0;
             return t < OUT ? 1 : 0;
         }
         return t < END ? 1 : 0;

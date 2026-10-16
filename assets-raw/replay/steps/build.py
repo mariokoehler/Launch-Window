@@ -47,25 +47,34 @@ STEPS = {
         "success": (6.0, 2.1), "glitch": (6.0, 3.4), "failure": (6.5, 3.0),
         "times": [0.5, 2.0, 2.8, 3.6, 4.6, 5.9],
     },
-    # Coming home (2026-10-14): the orbital order, the capsule centred in all of them.
+    # Coming home (2026-10-14): the orbital order, the capsule centred in all of them. Mirrored
+    # (2026-10-16): drawn travelling right, they play travelling left, as the payload does over the top
+    # of the Earth orbit's map (anticlockwise).
     "reentry-preparations": {
-        "pad": False,
+        "pad": False, "mirror": True, "before": ["motes.jsx"],
         "success": (6.0, 3.0), "glitch": (6.0, 3.6), "failure": (6.5, 3.4),
         "times": [0.5, 1.6, 2.4, 3.2, 4.4, 5.9],
     },
     "retrofire": {
-        "pad": False,
+        "pad": False, "mirror": True, "before": ["motes.jsx"],
         "success": (6.4, 2.6), "glitch": (6.4, 3.0), "failure": (6.4, 3.0),
         "times": [0.5, 1.4, 2.0, 2.8, 3.8, 6.3],
     },
+    # A burn with no reentry preparations before it (2026-10-16): the turn first, then the retrofire,
+    # 1.2 s later (deorbit-burn.jsx sets TURN for retrofire.jsx).
+    "deorbit-burn": {
+        "pad": False, "mirror": True, "before": ["motes.jsx"], "after": ["retrofire.jsx"],
+        "success": (7.6, 3.8), "glitch": (7.6, 4.2), "failure": (7.6, 4.2),
+        "times": [0.3, 1.0, 1.8, 2.6, 4.0, 7.5],
+    },
     "retrofire-jettison": {
-        "pad": False,
+        "pad": False, "mirror": True, "before": ["motes.jsx"],
         "success": (5.6, 1.6), "glitch": (5.6, 3.4), "failure": (6.4, 3.2),
         "times": [0.5, 1.1, 1.8, 2.6, 3.8, 5.5],
     },
     # Vostok's way (2026-10-14): the module instead of the jettison, and a landing instead of the sea.
     "modules-separation": {
-        "pad": False,
+        "pad": False, "mirror": True, "before": ["motes.jsx"],
         "success": (5.6, 1.8), "glitch": (5.6, 3.6), "failure": (6.4, 3.8),
         "times": [0.5, 1.0, 1.6, 2.6, 3.6, 5.5],
     },
@@ -96,7 +105,7 @@ STEPS = {
         "times": [0.5, 2.0, 2.6, 3.4, 4.4, 6.3],
     },
     "suborbital-flight": {
-        "pad": False,
+        "pad": False, "mirror": True,
         "success": (6.4, 3.4), "glitch": (6.4, 4.0), "failure": (6.4, 3.6),
         "times": [0.5, 1.8, 2.8, 3.4, 4.4, 6.3],
     },
@@ -444,7 +453,13 @@ STEPS = {
         "times": [0.5, 1.8, 2.4, 3.2, 4.4, 6.3],
     },
     "reentry": {
-        "pad": False,
+        "pad": False, "mirror": True,
+        "success": (6.4, 4.0), "glitch": (6.4, 4.4), "failure": (6.4, 3.4),
+        "times": [0.4, 1.6, 2.6, 3.4, 4.6, 6.3],
+    },
+    # Home from the Moon, the craft comes in from the left (earth-approach): the same reentry, unmirrored.
+    "reentry-from-moon": {
+        "pad": False, "source": "reentry",
         "success": (6.4, 4.0), "glitch": (6.4, 4.4), "failure": (6.4, 3.4),
         "times": [0.4, 1.6, 2.6, 3.4, 4.6, 6.3],
     },
@@ -467,6 +482,8 @@ def project(step, variant):
         f.write("var DIR = " + json.dumps(os.path.join(BUILD, "layers").replace("\\", "/") + "/") + ";\n")
         f.write("var L = " + open(os.path.join(BUILD, "layers.json")).read() + ";\n")
         f.write(f"var VARIANT = {json.dumps(variant)}, DUR = {dur};\n")
+        # "mirror": the world drawn left for right (motion.jsx's setup), so the craft travels left.
+        f.write(f"var MIRROR = {json.dumps(bool(STEPS[step].get('mirror')))};\n")
         f.write(read("..", "motion.jsx"))
         f.write(f"setup({json.dumps(step + ' ' + variant)}, DUR);\n")
         if STEPS[step]["pad"]:
@@ -475,13 +492,30 @@ def project(step, variant):
         # A scene shared by several steps, before the step's own file uses it.
         for extra in STEPS[step].get("before", []):
             f.write(read(extra))
-        f.write(read(f"{step}.jsx"))
+        # "source": another step's timeline, published under this name.
+        f.write(read(f"{STEPS[step].get('source', step)}.jsx"))
         # A timeline shared by several steps, after the step's own file has set its switches.
         for extra in STEPS[step].get("after", []):
             f.write(read(extra))
     out = os.path.join(BUILD, f"{step}-{variant}.ecproj")
     subprocess.run([CLI, "script", script, "--empty", "--save-as", out], check=True, capture_output=True)
     return out
+
+
+def render(step, variant, project_, out, kbps, extra):
+    """Renders a variant to a WebM; a mirrored step's goes through ffmpeg's hflip, from a sharper render."""
+    if not STEPS[step].get("mirror"):
+        subprocess.run([CLI, "render", "--project", project_, "--comp", f"{step} {variant}", "--out", out,
+                        "--format", "webm", "--webm-codec", "vp9", "--audio", "off", "--bitrate", str(kbps)] + extra,
+                       check=True, capture_output=True)
+        return
+    raw = os.path.join(BUILD, f"{step}-{variant}.unflipped.webm")
+    subprocess.run([CLI, "render", "--project", project_, "--comp", f"{step} {variant}", "--out", raw,
+                    "--format", "webm", "--webm-codec", "vp9", "--audio", "off", "--bitrate", str(kbps * 6)] + extra,
+                   check=True, capture_output=True)
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", raw, "-vf", "hflip", "-an", "-c:v", "libvpx-vp9",
+                    "-b:v", f"{kbps}k", "-pix_fmt", "yuv420p", out], check=True)
+    os.remove(raw)
 
 
 def main():
@@ -497,7 +531,8 @@ def main():
                 # The last frame starts one frame before the end.
                 subprocess.run([CLI, "render-frame", "--project", projects[v], "--comp", f"{step} {v}",
                                 "--time", str(min(t, round(spec[v][0] - 1 / 30, 3))), "--max-side", "640", "--out", out], check=True, capture_output=True)
-                row.append(Image.open(out).convert("RGB"))
+                im = Image.open(out).convert("RGB")
+                row.append(im.transpose(Image.Transpose.FLIP_LEFT_RIGHT) if spec.get("mirror") else im)
             else:
                 row.append(Image.new("RGB", (640, 360), "#dddddd"))
         rows.append((t, row))
@@ -512,15 +547,10 @@ def main():
     sheet.save(os.path.join(BUILD, f"sheet_{step}.png"))
     for v in VARIANTS:
         if "render" in sys.argv:
-            subprocess.run([CLI, "render", "--project", projects[v], "--comp", f"{step} {v}",
-                            "--out", os.path.join(BUILD, f"{step}-{v}.webm"), "--format", "webm",
-                            "--webm-codec", "vp9", "--audio", "off", "--bitrate", "1500"], check=True)
+            render(step, v, projects[v], os.path.join(BUILD, f"{step}-{v}.webm"), 1500, [])
         if "publish" in sys.argv:
             # The game's copy: 960 x 540 (about the replay monitor's size at 1080p) and its sidecar.
-            subprocess.run([CLI, "render", "--project", projects[v], "--comp", f"{step} {v}",
-                            "--out", os.path.join(GAME, f"{step}-{v}.webm"), "--format", "webm",
-                            "--webm-codec", "vp9", "--audio", "off", "--bitrate", "800",
-                            "--resolution", "half"], check=True, capture_output=True)
+            render(step, v, projects[v], os.path.join(GAME, f"{step}-{v}.webm"), 800, ["--resolution", "half"])
             with open(os.path.join(GAME, f"{step}-{v}.json"), "w") as f:
                 json.dump({"duration": spec[v][0], "revealAt": spec[v][1]}, f, indent=1)
                 f.write("\n")
