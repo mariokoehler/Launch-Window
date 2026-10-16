@@ -20,6 +20,8 @@ hide("burst");
 // The drop starts at 2.4, steady at first so it shows by the reveal (3.0), then faster.
 var radius = failure ? track([[2.4, 390], [3.0, 370, "lin"], [4.4, 262, "in"]]) : function () { return 390; };
 var BURN = 4.4;
+// Only the failure stops there; the others go round to the end (-125, where orbit.jsx starts).
+var STOP = failure ? BURN : DUR;
 var angle = [], a = 205;
 for (var f = 0; f <= NFRAMES + 1; f++) {
     angle.push(a);
@@ -30,9 +32,9 @@ function where(t) { var p = phi(t) * RAD, r = radius(t); return [CX + r * Math.c
 
 var wobble = glitch ? function (t) { return t >= 2.0 && t < 3.4 ? 18 * Math.sin(2 * Math.PI * 1.6 * (t - 2.0)) * Math.min(1, (3.4 - t) / 0.4) : 0; }
                     : function () { return 0; };
-move("o-sat", function (t) { var p = where(Math.min(t, BURN)); return [p[0] - CX, p[1] - CY]; });
+move("o-sat", function (t) { var p = where(Math.min(t, STOP)); return [p[0] - CX, p[1] - CY]; });
 // Nose along its way: the tangent, turned in a little as it falls.
-turn("o-sat", function (t) { return phi(Math.min(t, BURN)) + wobble(t) + (failure ? -18 * clamp((t - 2.4) / 2.0, 0, 1) : 0); });
+turn("o-sat", function (t) { return phi(Math.min(t, STOP)) + wobble(t) + (failure ? -18 * clamp((t - 2.4) / 2.0, 0, 1) : 0); });
 if (failure) {
     grow("o-streak", function (t) { return [1, 1 + 0.08 * Math.sin(2 * Math.PI * 10 * t)]; });
     // Parenting doesn't pass on opacity: the glow fades with the payload.
