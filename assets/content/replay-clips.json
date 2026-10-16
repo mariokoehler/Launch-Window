@@ -17,6 +17,7 @@
     {"step": "retrofire", "programs": ["gemini-eor", "gemini-eor-earth-orbit"], "after": "modules-separation", "clip": "retrofire"},
     {"step": "retrofire", "programs": ["soyuz-7k-ok", "soyuz-7k-l3", "soyuz-7k-l3-earth-orbit", "lk-700", "lk-700-earth-orbit"], "clip": "deorbit-burn-om"},
     {"step": "retrofire", "clip": "deorbit-burn"},
+    {"step": "retrofire-jettison", "programs": ["vostok"], "clip": "retro-shutdown"},
     {"step": "retrofire-jettison", "programs": ["soyuz-7k-ok", "soyuz-7k-l3", "soyuz-7k-l3-earth-orbit", "lk-700", "lk-700-earth-orbit"], "clip": "retrofire-jettison-om"},
     {"step": "retrofire-jettison", "clip": "retrofire-jettison"},
     {"step": "reentry", "after": "earth-approach", "clip": "reentry-from-moon"},

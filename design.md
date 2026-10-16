@@ -314,6 +314,17 @@ leading to satellite navigation.
   should have let go of Gagarin's descent sphere, but a bundle of cables held them together, and
   the pair tumbled until the cables burned through as they hit the air, about ten minutes later.
   It's the glitch of the modules-separation clip. Fits that step, or Vostok's history note.
+- **Mercury fired its retros on a ballistic hop** (2026-10-16, from memory; verify before a note uses it):
+  Freedom 7 (5 May 1961) and Liberty Bell 7 (21 July 1961) would have come down without them, but near
+  the top of the arc both fired the three retrorockets anyway and then dropped the pack: a test of the
+  rockets and of the pilot holding attitude through a burn, before orbit depended on it. The burn barely
+  changed the path. It's why BASPM's suborbital flights have a retrofire. Fits Mercury's suborbital
+  history note, or the `retrofire` step's.
+- **Vostok never flew a hop** (2026-10-16, from memory; verify before a note uses it): the Soviet crewed
+  program went straight to orbit; its suborbital flights were the dogs' on R-2A and R-5 rockets, whose
+  capsules came down on parachutes without a burn. BASPM's Vostok suborbital is a what-if. Vostok had no
+  pack to drop either (its one retro engine, the TDU-1, was in the instrument module), so the replay plays
+  its "retrofire jettison" as `retro-shutdown`, the burn's end.
 - **Soyuz comes home in one piece of three** (2026-10-16, from memory; verify before a note uses it):
   after the deorbit burn the orbital module at the front and the instrument module at the back let go
   of the descent module, which alone has a heat shield. Soyuz 5 (January 1969, Boris Volynov): the

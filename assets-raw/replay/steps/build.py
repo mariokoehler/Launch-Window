@@ -95,6 +95,12 @@ STEPS = {
         "success": (6.4, 2.6), "glitch": (6.4, 3.0), "failure": (6.4, 3.0),
         "times": [0.5, 1.4, 2.0, 2.8, 3.8, 6.3],
     },
+    # Vostok's "retrofire jettison" (2026-10-16): it had no pack to drop, so the burn's end instead.
+    "retro-shutdown": {
+        "pad": False, "mirror": True, "before": ["motes.jsx"],
+        "success": (4.4, 1.4), "glitch": (4.4, 2.8), "failure": (5.2, 3.0),
+        "times": [0.2, 0.8, 1.6, 2.4, 3.4, 4.3],
+    },
     # Gemini (2026-10-16): the equipment section goes first, then the retrofire and the retro section.
     "equipment-section-separation": {
         "pad": False, "mirror": True, "before": ["motes.jsx"],

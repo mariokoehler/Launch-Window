@@ -60,6 +60,9 @@ Each folder's `build/` is regenerated on every run and stays out of git.
     the world so it doesn't turn with the capsule once free, drawn over the pack it hides), then turns the
     capsule base first for the plain retrofire and jettison after it (Gemini EOR's steps, reordered by the
     converter).
+  - **Vostok** (2026-10-16): no pack to drop, so its `retrofire-jettison` (a rule on the `vostok` program)
+    plays `retro-shutdown`, the burn's end, the pack (its instrument module) staying on for the modules
+    separation.
   - **Vostok's way** (2026-10-14): `modules-separation` (the module is the same pack, `r-module`,
     turning about its own centre; the cable between them, `r-cable`, is aimed and stretched every
     frame; its glitch is Vostok 1's) and `descent-and-landing`. The two descents share `descent.jsx`,

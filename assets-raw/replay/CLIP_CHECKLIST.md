@@ -121,7 +121,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: EARTH 99
   - Programs: Soyuz 7K-OK 16, Gemini 15, Soyuz 7K-L3: Earth-orbit tests 11, Voskhod 10
 - [x] **Retropack jettison** `retrofire-jettison`: 67 uses in 59 configurations, 11 programs (NASA/SOVIET) **(early-era)**, crew risk in 57 of 67
-  - Clip: `retrofire-jettison-om`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `retro-shutdown`; [x] success, [x] glitch, [x] failure; cues no
   - Also covers: `gemini-a-retrofire-jettison` 4, `gemini-b-retrofire-jettison` 4, `retrofire-jettison-a` 1, `retrofire-jettison-b` 1, `spc-a-retrofire-jettison` 1
   - On screen: crewed craft 56, crewed lander 11
   - Destinations: EARTH 63, MOON 4

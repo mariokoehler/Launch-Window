@@ -1950,8 +1950,9 @@ clips, the replay is meant to be watched like a short film, and the player can s
   sees, so it spoils nothing). The Soyuz-type programs show their orbital module from their first close-up
   (the LK-700's and the 7K-OK's hop only when a jettison is coming); Gemini EOR comes home Gemini's way:
   `equipment-section-separation` (the adapter's back section drops, the capsule turns base first), then the
-  retrofire and the retro section's jettison. Vostok's suborbital flight still drops the pack twice
-  (BASPM's data: a jettison, then the modules separation).
+  retrofire and the retro section's jettison. Vostok had no pack to drop, so its "retrofire jettison" (BASPM's
+  Vostok suborbital, a what-if) plays `retro-shutdown`: the burn tails off and the jets steady it; the glitch's
+  valve sticks and the engine sputters on, the failure's won't stop and pitches the capsule away (unconfirmed).
 - **No clip yet:** a step with no clip, or a variant missing, plays `no-signal.webm` on a loop (an
   antenna searching, outcome-neutral) with "No signal" in the bezel; its result shows after a
   1.5 s pause, and playback moves on at 3 s. If no video can play at all (no file, no native
