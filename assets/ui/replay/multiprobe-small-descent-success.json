@@ -1,0 +1,10 @@
+{
+ "duration": 6.6,
+ "revealAt": 3.2,
+ "cues": [
+  {
+   "at": 3.3,
+   "sound": "radio-signal-good"
+  }
+ ]
+}

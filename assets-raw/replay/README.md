@@ -79,6 +79,12 @@ Each folder's `build/` is regenerated on every run and stays out of git.
     lander, its pads on the ground: legs (the near one in front), two compartments, the camera and its mirror hood,
     the mast with the planar antenna and the solar panel (`sv-panel`, turned about the mast's top), and three
     vernier plumes. The failure topples it over its right footpad (`PAD`), which stays where it landed.
+  - **Pioneer Venus Multiprobe** (2026-10-17, `pv-` parts, `multiprobe.jsx`): the bus (`pv-bus`, a drum seen a little
+    from its forward end, the cells, `pv-cell-*`, going round its side) with the large probe (`pv-big`, a carrier with
+    its shield, aft cover and pressure vessel as children) and three small ones, each in two copies (`pv-small-N` in
+    front of the large probe, `pv-small-Nb` behind it, the one shown by which half of the turn it's in). The step files
+    set `BIG` for `multiprobe-release.jsx`, `multiprobe-entry.jsx` and `multiprobe-descent.jsx`. The small probes'
+    places in the entry and the descent are `SMALLS` (North, Day, Night; North is the one the trouble comes to).
   - **Vostok's way** (2026-10-14): `modules-separation` (the module is the same pack, `r-module`,
     turning about its own centre; the cable between them, `r-cable`, is aimed and stretched every
     frame; its glitch is Vostok 1's) and `descent-and-landing`. The two descents share `descent.jsx`,

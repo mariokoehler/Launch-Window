@@ -1047,6 +1047,83 @@ def probe_parts():
     layer("v-latch", "".join(f'<circle cx="{bx + dx}" cy="{by + 78}" r="8" fill="{GOLD}"/>' for dx in (-26, 26)), (bx, by + 78))
 
 
+def multiprobe_parts():
+    """Pioneer Venus Multiprobe (2026-10-17, NSSDCA): the bus, a drum 2.5 m across with solar cells round its side, spun
+    about its axis (here lying left to right, its forward end right, seen a little from the right so that end shows as
+    an ellipse), an omni antenna and a horn at its aft end; the large probe in the middle of its forward end and three
+    small probes 120 degrees apart round it. A probe is a blunt 45-degree cone (the heat shield, forward) on an
+    afterbody, a sphere inside; the large one's shield and aft cover come off for its descent (pv-big-*, children of
+    the carrier pv-big at its shield's base), the small ones keep theirs. About 140 px to the metre."""
+    cx, cy, R = 720, 540, 175
+    x0, x1 = 635, 805
+    drum = (f'<path d="M{x1} {cy - R} L{x0} {cy - R} A26 {R} 0 0 0 {x0} {cy + R} L{x1} {cy + R}" fill="url(#hatch)" '
+            f'{LINE} stroke-width="3"/>'
+            f'<ellipse cx="{x1}" cy="{cy}" rx="26" ry="{R}" fill="#ffffff" {LINE} stroke-width="3"/>'
+            f'<ellipse cx="{x1 + 2}" cy="{cy}" rx="10" ry="64" fill="#ffffff" {LINE} stroke-width="2"/>'
+            f'<path d="M{x0 - 26} {cy} L{x0 - 84} {cy}" fill="none" {LINE} stroke-width="4"/>'
+            f'<path d="M{x0 - 84} {cy - 14} L{x0 - 100} {cy} L{x0 - 84} {cy + 14} L{x0 - 68} {cy} Z" fill="#ffffff" {LINE} '
+            f'stroke-width="2.4"/>'
+            f'<path d="M{x0 - 20} {cy + 70} L{x0 - 62} {cy + 56} L{x0 - 62} {cy + 120} L{x0 - 18} {cy + 104} Z" fill="#ffffff" '
+            f'{LINE} stroke-width="2.4"/>')
+    layer("pv-bus", drum, (cx, cy))
+    # A row of cells across the drum's side, moved round by the timeline to show the spin.
+    for i in range(1, 9):
+        layer(f"pv-cell-{i}", f'<path d="M{x0 + 6} {cy} L{x1 - 6} {cy}" fill="none" {LINE} stroke-width="2.4"/>', (cx, cy))
+    # The latches' flash: the large probe's spring release on the axis, a small probe's clamp at its base.
+    layer("pv-latch", "".join(f'<circle cx="812" cy="{cy + dy}" r="8" fill="{GOLD}"/>' for dy in (-60, 60)), (812, cy))
+    # The large probe, nose right, its shield's base at (870, 540).
+    bx = 870
+    layer("pv-big", "", (bx, cy))
+    layer("pv-big-shield", f'<path d="M{bx} {cy - 105} L{bx + 70} {cy - 35} Q{bx + 92} {cy} {bx + 70} {cy + 35} L{bx} {cy + 105} Z" '
+                           f'fill="url(#hatch)" {LINE} stroke-width="3"/>'
+                           f'<path d="M{bx + 6} {cy - 99} L{bx + 6} {cy + 99}" fill="none" {LINE} stroke-width="2"/>', (bx, cy))
+    layer("pv-big-aft", f'<path d="M{bx} {cy - 95} C{bx - 38} {cy - 90} {bx - 56} {cy - 40} {bx - 56} {cy} C{bx - 56} {cy + 40} '
+                        f'{bx - 38} {cy + 90} {bx} {cy + 95} Z" fill="#ffffff" {LINE} stroke-width="3"/>', (bx, cy))
+    # Its pressure vessel: a titanium sphere with a flat ring at its middle, the antenna on its aft end, three
+    # towers for the chute's lines, and outside arms (a prism on two, the temperature sensor on the third).
+    sx = bx - 6
+    sphere = (f'<path d="M{sx - 50} {cy} L{sx - 76} {cy} M{sx - 40} {cy - 30} L{sx - 58} {cy - 44} M{sx - 40} {cy + 30} '
+              f'L{sx - 58} {cy + 44} M{sx + 18} {cy - 46} L{sx + 34} {cy - 76} M{sx + 18} {cy + 46} L{sx + 34} {cy + 76} '
+              f'M{sx - 10} {cy + 49} L{sx - 18} {cy + 84}" fill="none" {LINE} stroke-width="3"/>'
+              f'<circle cx="{sx - 80}" cy="{cy}" r="6" fill="#ffffff" {LINE} stroke-width="2.4"/>'
+              f'<rect x="{sx + 28}" y="{cy - 88}" width="14" height="14" fill="#ffffff" {LINE} stroke-width="2.4"/>'
+              f'<rect x="{sx + 28}" y="{cy + 74}" width="14" height="14" fill="#ffffff" {LINE} stroke-width="2.4"/>'
+              f'<circle cx="{sx}" cy="{cy}" r="50" fill="#ffffff" {LINE} stroke-width="3"/>'
+              f'<path d="M{sx - 6} {cy - 50} L{sx - 6} {cy + 50} M{sx + 6} {cy - 50} L{sx + 6} {cy + 50}" fill="none" {LINE} '
+              f'stroke-width="2"/>')
+    layer("pv-big-sphere", sphere, (bx, cy))
+    # The temperature sensor's spark (the anomaly near 12.5 km), at the third arm's tip.
+    layer("pv-spark", f'<path d="M{sx - 18} {cy + 84} m-14 0 l28 0 m-14 -14 l0 28 m-10 -10 l20 20 m0 -20 l-20 20" fill="none" '
+                      f'stroke="{GOLD}" stroke-width="4" stroke-linecap="round"/>', (sx - 18, cy + 84))
+    # A small probe, nose right, its shield's base at (960, 540), for copies 1 to 3 and their copies behind the
+    # large probe (b); its pivot is its middle.
+    small = (f'<path d="M960 486 C942 490 932 512 932 540 C932 568 942 590 960 594 Z" fill="#ffffff" {LINE} stroke-width="3"/>'
+             f'<path d="M960 484 L997 521 Q1009 540 997 559 L960 596 Z" fill="url(#hatch)" {LINE} stroke-width="3"/>'
+             f'<path d="M932 540 L920 540" fill="none" {LINE} stroke-width="3"/>')
+    for n in ("1", "2", "3", "1b", "2b", "3b"):
+        layer(f"pv-small-{n}", small, (968, 540))
+    for i in (1, 2, 3):
+        layer(f"pv-clamp-{i}", f'<circle cx="934" cy="540" r="7" fill="{GOLD}"/>', (968, 540))
+        # The bow of hot air ahead of a probe falling nose down, its pivot at the nose.
+        layer(f"pv-glow-{i}", f'<path d="M810 470 C860 610 1060 610 1110 470 C1050 550 870 550 810 470 Z" fill="{GOLD_FILL}" '
+                              f'stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>'
+                              f'<path d="M830 488 C880 590 1040 590 1090 488" fill="none" stroke="{GOLD}" stroke-width="4" '
+                              f'stroke-linecap="round"/>', (960, 500))
+        layer(f"pv-dust-{i}", puff(930, 872, 18) + puff(970, 866, 24) + puff(1010, 874, 16), (970, 880))
+    # Radio rings for the small probes: two each.
+    for i in range(1, 7):
+        layer(f"pv-ring-{i}", f'<circle cx="960" cy="560" r="40" fill="none" stroke="{GOLD}" stroke-width="4"/>', (960, 560))
+    # Venus's ground under the clouds: a flat plain of slabs (as Venera 9 and 10 saw it), in the dim light below.
+    slabs = "".join(f'<path d="M{x} {GROUND_Y + 4} L{x + 10} {GROUND_Y - h} L{x + w} {GROUND_Y - h - 3} L{x + w + 8} {GROUND_Y + 4} Z" '
+                    f'fill="#ffffff" {LINE} stroke-width="2.4"/>'
+                    for x, w, h in ((180, 60, 10), (520, 40, 8), (1260, 70, 12), (1580, 46, 9), (1820, 30, 7)))
+    cracks = "".join(f'<path d="M{x} {y} L{x + 70} {y + 6} L{x + 150} {y - 2}" fill="none" {LINE} stroke-width="2" opacity="0.6"/>'
+                     for x, y in ((200, 940), (760, 990), (1300, 930), (1600, 1020), (420, 1050)))
+    layer("pv-ground", f'<rect x="-900" y="{GROUND_Y}" width="3800" height="900" fill="url(#hatch)"/>'
+                       f'<path d="M-900 {GROUND_Y} L2900 {GROUND_Y}" fill="none" {LINE} stroke-width="3"/>{slabs}{cracks}',
+          (960, GROUND_Y))
+
+
 def carrier_entry_parts():
     # The carrier's entry (2026-10-15): Venus's limb under its clouds, as the Earth's (d-earth) with
     # Venus's bands, and its air in two dashed shells; the carrier (v-bus) in three pieces that come
@@ -1253,6 +1330,7 @@ def main():
     stage_parts()
     plane_parts()
     probe_parts()
+    multiprobe_parts()
     carrier_entry_parts()
     planet_entry_parts()
     planet_descent_parts()

@@ -1918,7 +1918,7 @@ clips, the replay is meant to be watched like a short film, and the player can s
   right after the lander's, but the carrier burned up (`design.md` §1.1), so it has `bus-entry`
   (user, 2026-10-15): the carrier burns up in every variant, and only the data it sends home before
   differs (unconfirmed). The landers' entries had the Earth capsule's `reentry` too, Earth's limb and
-  all; they have `venus-entry` (Venera's sphere, the Pioneer Venus probes) and `mars-entry` (Viking's
+  all; they have `venus-entry` (Venera's sphere; the Pioneer Venus probes have their own since 2026-10-17) and `mars-entry` (Viking's
   and Mars 3's aeroshell), the reentry's story at their planet, Mars picked by the step before
   (user, 2026-10-15). Their descents had the capsule's chutes; they have `venus-descent` (Venera's
   reefed chute opening; the glitch tears it, as Venera 7's did, the failure tears it away) and
@@ -1971,6 +1971,19 @@ clips, the replay is meant to be watched like a short film, and the player can s
   onto its pads, calls home and turns its solar panel to the Sun. The glitch is Surveyor 3's: the verniers don't
   cut, and it hops twice before they're shut off from Earth. The failure hops the same way, comes off it leaning,
   lands on one foot and topples onto its antenna. Every story unconfirmed.
+- **Pioneer Venus Multiprobe (user, 2026-10-17):** its six probe steps borrowed Venera's release, entry and
+  descent and a Moon landing; they play the Multiprobe now, a large and a small clip each. The releases show the
+  bus, a spinning drum with the large probe on its forward end and three small ones round it:
+  `multiprobe-large-release` (its springs push it off along the axis; the glitch holds at the first try, the
+  failure at both) and `multiprobe-small-release` (the bus spins up and flings the three off at a tangent; the
+  glitch's North probe holds a turn longer, the failure's for good). The entries, `multiprobe-large-entry` and
+  `multiprobe-small-entry` (North, Day and Night side by side), are cone-first, the radio silent in the heat and
+  back after; the glitch wobbles and steadies, and the failure breaks up (the large probe, or North). The descents:
+  `multiprobe-large-descent` (the chute pulls the aft cover off, the heat shield drops away, the chute is cut
+  loose and the sphere falls free to the ground) and `multiprobe-small-descent` (the three keep their heat shields,
+  no chute, and hit one after another; the Day probe goes on sending from the ground). None was built to land, so
+  a success ends at the impact; the glitch is a spark at the temperature sensor (all four lost theirs near
+  12.5 km) and a weaker signal after, and the failure's signal stops there. Every story unconfirmed.
 - **Earth departure (user, 2026-10-16):** it borrowed `tpi`, so the injection's burn played twice; BASPM gives the
   step to the probe alone. `earth-departure` is the probe close up after the burn, the Earth shrinking behind
   it: puffs spin it up, its boom unfolds, its dish turns home, and a tracking pulse goes out and comes back. The

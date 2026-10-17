@@ -356,6 +356,18 @@ leading to satellite navigation.
   pictures. On Surveyor 3 (April 1967) bright rocks confused the radar, the verniers didn't cut, and it bounced
   twice before they were shut off by command. Surveyor 2 tumbled when a vernier failed to light, and Surveyor 4
   fell silent seconds before its retro burned out. The replay's `surveyor-landing` plays the drop and the bounces.
+- **Pioneer Venus Multiprobe** (2026-10-17, checked against NSSDCA's catalogue pages for the bus, the large probe and
+  the Day probe, and a NASA technical report for the anomaly): the bus was a drum 2.5 m across with solar cells round
+  its side, no heat shield and no parachute; the large probe sat in the middle of its forward end and the three small
+  ones 120 degrees apart round it. The large probe left on 16 November 1978 on pyrotechnic springs; on 20 November the
+  small probes' clamps were released by explosive nuts and they flew off at a tangent, the bus spinning at 48 rpm.
+  Every probe was a sphere inside a blunt 45-degree cone. The large one (1.5 m, about 315 kg) put out its chute just
+  after entry on 9 December, dropped its heat shield at 67 km, cut the chute loose at about 45 km and fell free to the
+  ground (spacecraft time 19:39:55 UT). The small ones (0.8 m, about 90 kg) kept their heat shields and had no chute.
+  The Day probe hit at 19:47:59 after a 56-minute fall and sent for 67 minutes 37 seconds more. Every probe's
+  temperature sensors failed at about 12.5 km (near 640 K); a 1993 workshop traced it to the external harness's
+  insulation. The bus followed the probes in and sent for about a minute before it burned up near 110 km. The
+  replay's `multiprobe-*` clips play them.
 - **Injection, then departure** (2026-10-16, from memory; verify before a note uses it): BASPM splits a planetary
   probe's start into a trans-planetary injection (the rocket's, with the booster seat) and an Earth departure
   (the probe's alone: spacecraft systems, navigation, experiments). Pioneer Venus Orbiter (May 1978) went

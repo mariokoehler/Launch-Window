@@ -647,17 +647,17 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: MERCURY 2
   - Programs: Mariner 10 1
 - [x] **Large probe entry** `big-probe-approach-and-entry`: 1 use in 1 configuration, 1 program (NASA) uncrewed
-  - Clip: `venus-entry`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `multiprobe-large-entry`; [x] success, [x] glitch, [x] failure; cues yes
   - On screen: probe 1
   - Destinations: VENUS 1
   - Programs: Pioneer Venus Multiprobe 1
 - [x] **Large probe descent** `big-probe-descent-and-landing`: 1 use in 1 configuration, 1 program (NASA) uncrewed
-  - Clip: `probe-landing`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `multiprobe-large-descent`; [x] success, [x] glitch, [x] failure; cues yes
   - On screen: probe 1
   - Destinations: VENUS 1
   - Programs: Pioneer Venus Multiprobe 1
 - [x] **Large probe release** `big-probe-release`: 1 use in 1 configuration, 1 program (NASA) uncrewed
-  - Clip: `probe-release`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `multiprobe-large-release`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 1
   - Destinations: VENUS 1
   - Programs: Pioneer Venus Multiprobe 1
@@ -712,17 +712,17 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: SATURN 1
   - Programs: Pioneer 11 1
 - [x] **Small probes entry** `small-probes-approach-and-entry`: 1 use in 1 configuration, 1 program (NASA) uncrewed
-  - Clip: `venus-entry`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `multiprobe-small-entry`; [x] success, [x] glitch, [x] failure; cues yes
   - On screen: probe 1
   - Destinations: VENUS 1
   - Programs: Pioneer Venus Multiprobe 1
 - [x] **Small probes descent** `small-probes-landing`: 1 use in 1 configuration, 1 program (NASA) uncrewed
-  - Clip: `probe-landing`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `multiprobe-small-descent`; [x] success, [x] glitch, [x] failure; cues yes
   - On screen: probe 1
   - Destinations: VENUS 1
   - Programs: Pioneer Venus Multiprobe 1
 - [x] **Small probes release** `small-probes-release`: 1 use in 1 configuration, 1 program (NASA) uncrewed
-  - Clip: `probe-release`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `multiprobe-small-release`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 1
   - Destinations: VENUS 1
   - Programs: Pioneer Venus Multiprobe 1

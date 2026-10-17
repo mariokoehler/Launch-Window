@@ -455,6 +455,37 @@ STEPS = {
         "success": (5.6, 1.2), "glitch": (5.6, 2.2), "failure": (5.6, 2.4),
         "times": [0.5, 1.2, 1.9, 2.6, 3.6, 5.5],
     },
+    # Pioneer Venus Multiprobe's own (2026-10-17): multiprobe.jsx's bus and probes.
+    "multiprobe-large-release": {
+        "pad": False, "before": ["orbit.jsx", "multiprobe.jsx"], "after": ["multiprobe-release.jsx"],
+        "success": (6.0, 1.2), "glitch": (6.0, 2.4), "failure": (6.0, 2.4),
+        "times": [0.5, 1.2, 2.2, 2.8, 4.0, 5.9],
+    },
+    "multiprobe-small-release": {
+        "pad": False, "before": ["orbit.jsx", "multiprobe.jsx"], "after": ["multiprobe-release.jsx"],
+        "success": (6.0, 1.9), "glitch": (6.0, 2.5), "failure": (6.0, 2.6),
+        "times": [0.5, 1.5, 2.0, 2.6, 3.4, 5.9],
+    },
+    "multiprobe-large-entry": {
+        "pad": False, "before": ["orbit.jsx", "multiprobe.jsx"], "after": ["multiprobe-entry.jsx"],
+        "success": (6.0, 3.7), "glitch": (6.0, 3.7), "failure": (6.0, 3.2),
+        "times": [0.5, 1.6, 2.6, 3.2, 3.8, 5.9],
+    },
+    "multiprobe-small-entry": {
+        "pad": False, "before": ["orbit.jsx", "multiprobe.jsx"], "after": ["multiprobe-entry.jsx"],
+        "success": (6.0, 3.7), "glitch": (6.0, 3.7), "failure": (6.0, 3.2),
+        "times": [0.5, 1.6, 2.6, 3.2, 3.8, 5.9],
+    },
+    "multiprobe-large-descent": {
+        "pad": False, "before": ["orbit.jsx", "multiprobe.jsx"], "after": ["multiprobe-descent.jsx"],
+        "success": (6.0, 3.2), "glitch": (6.0, 3.35), "failure": (6.0, 3.35),
+        "times": [0.4, 0.9, 1.8, 3.2, 4.6, 5.9],
+    },
+    "multiprobe-small-descent": {
+        "pad": False, "before": ["orbit.jsx", "multiprobe.jsx"], "after": ["multiprobe-descent.jsx"],
+        "success": (6.6, 3.2), "glitch": (6.6, 3.35), "failure": (6.6, 3.35),
+        "times": [0.5, 2.0, 3.2, 4.6, 5.4, 6.5],
+    },
     # A lander's entry at Venus or Mars (2026-10-15): planet-entry.jsx, the reentry's story there.
     "venus-entry": {
         "pad": False, "after": ["planet-entry.jsx"],

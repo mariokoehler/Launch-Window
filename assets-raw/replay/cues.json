@@ -1,4 +1,10 @@
 {
+  "multiprobe-large-release": {"failure": [{"at": 2.45, "sound": "radio-separation-failed"}]},
+  "multiprobe-small-release": {"failure": [{"at": 2.65, "sound": "radio-separation-failed"}]},
+  "multiprobe-large-entry": {"success": [{"at": 3.75, "sound": "radio-signal-good"}], "glitch": [{"at": 3.75, "sound": "radio-oscillations"}], "failure": [{"at": 3.25, "sound": "radio-lander-lost"}]},
+  "multiprobe-small-entry": {"success": [{"at": 3.75, "sound": "radio-signal-good"}], "glitch": [{"at": 3.75, "sound": "radio-oscillations"}], "failure": [{"at": 3.25, "sound": "radio-lander-lost"}]},
+  "multiprobe-large-descent": {"success": [{"at": 3.3, "sound": "radio-signal-good"}], "glitch": [{"at": 3.4, "sound": "radio-telemetry-lost"}], "failure": [{"at": 3.4, "sound": "radio-data-lost"}]},
+  "multiprobe-small-descent": {"success": [{"at": 3.3, "sound": "radio-signal-good"}], "glitch": [{"at": 3.4, "sound": "radio-telemetry-lost"}], "failure": [{"at": 3.4, "sound": "radio-data-lost"}]},
   "surveyor-landing": {"success": [{"at": 2.95, "sound": "radio-signal-good"}], "glitch": [{"at": 4.15, "sound": "radio-signal-good"}], "failure": [{"at": 3.5, "sound": "radio-lander-lost"}]},
   "earth-departure": {"success": [{"at": 4.35, "sound": "radio-signal-good"}], "glitch": [{"at": 5.05, "sound": "radio-roger"}], "failure": [{"at": 5.5, "sound": "radio-probe-silent"}]},
   "luna-liftoff": {"success": [{"at": 1.85, "sound": "radio-signal-good"}], "glitch": [{"at": 2.65, "sound": "radio-roger"}], "failure": [{"at": 2.25, "sound": "radio-lander-lost"}]},

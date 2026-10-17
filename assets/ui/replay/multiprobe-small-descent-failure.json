@@ -1,0 +1,10 @@
+{
+ "duration": 6.6,
+ "revealAt": 3.35,
+ "cues": [
+  {
+   "at": 3.4,
+   "sound": "radio-data-lost"
+  }
+ ]
+}
