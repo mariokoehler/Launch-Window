@@ -13,7 +13,7 @@ motes(function () { return MOTE_SPEED; });
 put("d-earth");
 put("r-orbit");
 put("r-carrier");
-var parts = ["r-strap-a", "r-strap-b", "r-pack", "r-capsule", "r-jet-l", "r-jet-r", "r-jet-stuck"];
+var parts = ["r-strap-a", "r-strap-b", "r-pack", "r-periscope", "r-capsule", "r-jet-l", "r-jet-r", "r-jet-stuck"];
 for (var i = 0; i < parts.length; i++) put(parts[i], "r-carrier");
 
 turn("d-earth", function (t) { return -0.25 * t; });

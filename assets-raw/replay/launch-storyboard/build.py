@@ -1,7 +1,9 @@
-"""Builds one launch variant from the storyboard: python build.py success|glitch|failure [render]
+"""Builds one launch variant from the storyboard: python build.py success|glitch|failure [render] [mercury]
 
 Compares it with the storyboard frames (build/compare_<variant>.png: storyboard left, ours right,
 at each frame's time) and, with "render", renders build/launch-<variant>.webm at 1500 kbps.
+"mercury" (2026-10-17): Project Mercury's launch, its capsule and escape tower on the rocket (the replay
+steps' mc- parts, ../steps/parts.py), published as mercury-launch-<variant>.
 """
 import io
 import json
@@ -49,11 +51,17 @@ def falls():
 def main():
     key = sys.argv[1]
     board, dur, times = VARIANTS[key]
-    layers = json.load(open(os.path.join(BUILD, "layers.json")))
-    script = os.path.join(BUILD, f"launch-{key}.gen.jsx")
+    # Mercury's draws from the steps' layers (the storyboard's are among them), each part as its mc- one.
+    skin = "mercury" in sys.argv
+    src = os.path.join(HERE, "..", "steps", "build") if skin else BUILD
+    name = "mercury-launch" if skin else "launch"
+    layers = json.load(open(os.path.join(src, "layers.json")))
+    script = os.path.join(BUILD, f"{name}-{key}.gen.jsx")
     with open(script, "w", encoding="utf-8") as f:
-        f.write("var DIR = " + json.dumps(os.path.join(BUILD, "layers").replace("\\", "/") + "/") + ";\n")
+        f.write("var DIR = " + json.dumps(os.path.join(src, "layers").replace("\\", "/") + "/") + ";\n")
         f.write("var L = " + json.dumps(layers) + ";\n")
+        if skin:
+            f.write("var ALIAS = " + json.dumps({n[3:]: n for n in layers if n.startswith("mc-")}) + ";\n")
         f.write(f"var VARIANT = {json.dumps(board)}, DUR = {dur};\n")
         f.write("var KINK = " + json.dumps(kink()) + ";\n")
         f.write("var FALL = " + json.dumps(falls()) + ";\n")
@@ -61,7 +69,7 @@ def main():
         f.write('setup("Launch " + VARIANT, DUR);\n')
         for part in ("lib.jsx", f"{key}.jsx"):
             f.write(open(os.path.join(HERE, part), encoding="utf-8").read() + "\n")
-    project = os.path.join(BUILD, f"launch-{key}.ecproj")
+    project = os.path.join(BUILD, f"{name}-{key}.ecproj")
     subprocess.run([CLI, "script", script, "--empty", "--save-as", project], check=True)
     rows = []
     for i, t in enumerate(times, 1):
@@ -73,16 +81,16 @@ def main():
     for r, (a, b) in enumerate(rows):
         sheet.paste(a, (0, r * 365))
         sheet.paste(b, (650, r * 365))
-    sheet.save(os.path.join(BUILD, f"compare_{key}.png"))
+    sheet.save(os.path.join(BUILD, f"compare_{name}-{key}.png" if skin else f"compare_{key}.png"))
     if "publish" in sys.argv:
         # The game's copy: 960 x 540 (about the replay monitor's size at 1080p) and its sidecar.
         out = os.path.join(HERE, "..", "..", "..", "assets", "ui", "replay")
         os.makedirs(out, exist_ok=True)
         subprocess.run([CLI, "render", "--project", project, "--comp", "Launch " + board,
-                        "--out", os.path.join(out, f"launch-{key}.webm"), "--format", "webm",
+                        "--out", os.path.join(out, f"{name}-{key}.webm"), "--format", "webm",
                         "--webm-codec", "vp9", "--audio", "off", "--bitrate", "800",
                         "--resolution", "half"], check=True)
-        with open(os.path.join(out, f"launch-{key}.json"), "w") as f:
+        with open(os.path.join(out, f"{name}-{key}.json"), "w") as f:
             json.dump({"duration": dur, "revealAt": REVEAL[key]}, f, indent=1)
             f.write("\n")
         # The sound cues aren't the render's: put them back in the sidecar just written.
@@ -91,7 +99,7 @@ def main():
         cues.apply()
     if "render" in sys.argv:
         subprocess.run([CLI, "render", "--project", project, "--comp", "Launch " + board,
-                        "--out", os.path.join(BUILD, f"launch-{key}.webm"), "--format", "webm",
+                        "--out", os.path.join(BUILD, f"{name}-{key}.webm"), "--format", "webm",
                         "--webm-codec", "vp9", "--audio", "off", "--bitrate", "1500"], check=True)
 
 

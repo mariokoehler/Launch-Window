@@ -247,6 +247,16 @@ def RT_AT(x, y):
     return (RC[0] - RK * (y - 426), RC[1] + RK * (x - 960))
 
 
+def RU_AT(x, y):
+    """Where a point of the capsule's own drawing lands in RU (nose up)."""
+    return (RC[0] + RK * (x - 960), RC[1] + RK * (y - 426))
+
+
+def D_AT(x, y):
+    """Where a point of the launch's drawing lands in the deployment (DX, DY, DK)."""
+    return (DX + DK * (x - 850), DY + DK * (y - 520))
+
+
 def RU(body):
     return f'<g transform="translate({RC[0]} {RC[1]}) scale({RK}) translate(-960 -426)">{body}</g>'
 
@@ -1448,6 +1458,119 @@ def copy_board_layers():
         layers[name] = info
 
 
+# --- Project Mercury (2026-10-17): its capsule for the steps it flies ---------------------------------
+# Drawn as the storyboard's capsule (debris-1) is, nose up, centred on x 960, its base at y 500 and 90
+# wide, its top at 352, so everything placed against that one (RT, RU, the chutes' top, the straps'
+# hinges, the break-up's seam) fits it too. A step's "skin" (build.py) draws mc-<part> for <part>.
+# From the photographs: a blunt heat shield, bulging a little; a cone, shingled, with the window up
+# near its top; the recovery compartment, a short cylinder; the antenna canister on it, narrower; the
+# retropack strapped to the shield's middle (three straps; two seen side on), three motors.
+
+
+def mercury_body(k=1.0):
+    """The capsule's outline, its stroke widths times k."""
+    w = lambda x: f'stroke-width="{x * k:.2f}"'
+    shield = f'<path d="M915 500 Q960 515 1005 500 Z" fill="#ffffff" {LINE} {w(3)}/>'
+    cone = f'<path d="M915 500 L941 418 L979 418 L1005 500 Z" fill="#ffffff" {LINE} {w(3)}/>'
+    # The shingles: lines along the cone, clear of the window.
+    shingles = "".join(f'<path d="M{915 + 90 * f:.1f} 500 L{941 + 38 * f:.1f} 418" fill="none" {LINE} {w(1.6)} opacity="0.6"/>'
+                       for f in (0.17, 0.83))
+    window = f'<path d="M952 432 L968 432 L971 452 L949 452 Z" fill="rgba(22,48,92,0.10)" {LINE} {w(2)}/>'
+    neck = f'<rect x="941" y="388" width="38" height="30" fill="#ffffff" {LINE} {w(3)}/>'
+    canister = (f'<rect x="946" y="360" width="28" height="28" fill="#ffffff" {LINE} {w(3)}/>'
+                f'<rect x="950" y="352" width="20" height="8" fill="#ffffff" {LINE} {w(2.4)}/>'
+                f'<path d="M946 372 L974 372" fill="none" {LINE} {w(1.6)} opacity="0.6"/>')
+    return shield + cone + shingles + window + neck + canister
+
+
+def mercury_tower(k=1.0):
+    """The escape tower on the canister's top: a truss, its motor and the nose above (Redstone and
+    Atlas alike)."""
+    w = lambda x: f'stroke-width="{x * k:.2f}"'
+    truss = (f'<path d="M948 352 L954 290 L966 290 L972 352" fill="none" {LINE} {w(2.4)}/>'
+             + "".join(f'<path d="M{948 + 6 * (352 - y) / 62:.1f} {y} L{972 - 6 * (352 - y2) / 62:.1f} {y2}" fill="none" {LINE} {w(1.6)}/>'
+                       for y, y2 in ((352, 331), (331, 311), (311, 290)))
+             + "".join(f'<path d="M{972 - 6 * (352 - y) / 62:.1f} {y} L{948 + 6 * (352 - y2) / 62:.1f} {y2}" fill="none" {LINE} {w(1.6)}/>'
+                       for y, y2 in ((331, 311),)))
+    motor = (f'<rect x="952" y="248" width="16" height="42" fill="#ffffff" {LINE} {w(2.4)}/>'
+             f'<path d="M952 248 L960 232 L968 248 Z" fill="#ffffff" {LINE} {w(2.4)}/>'
+             f'<path d="M952 290 L948 296 M968 290 L972 296" fill="none" {LINE} {w(2)}/>')
+    return truss + motor
+
+
+def mercury_pack(k=1.0):
+    w = lambda x: f'stroke-width="{x * k:.2f}"'
+    return (f'<rect x="940" y="506" width="40" height="14" rx="3" fill="#ffffff" {LINE} {w(2.4)}/>'
+            + "".join(f'<path d="M{x - 4} 520 L{x + 4} 520 L{x + 6} 528 L{x - 6} 528 Z" fill="#ffffff" {LINE} {w(2)}/>'
+                      for x in (948, 960, 972)))
+
+
+def mercury_parts():
+    # The parts no other craft draws, empty for them: the escape tower (the ascent jettisons it) and the
+    # landing bag (the descent lets the shield down on it).
+    layer("a-les", "", (960, 300))
+    layer("r-bag", "", RU_AT(960, 506))
+    small = lambda body: re.sub(r'stroke-width="([\d.]+)"', lambda m: f'stroke-width="{float(m.group(1)) * 0.8:.2f}"', body)
+    cap = small(mercury_body())
+    # On the pad and in the launch's break-up, the tower on; on the way up, the tower is its own part.
+    rocket = board_group("rocket")
+    nose = rocket.index('<path xmlns="http://www.w3.org/2000/svg" d="M915 440')
+    layer("mc-rocket", rocket[:nose] + mercury_body() + mercury_tower(), (960, 600))
+    layer("mc-debris-1", mercury_body() + mercury_tower(), (960, 420))
+    layer("mc-debris-1-bare", mercury_body(), (960, 420))
+    layer("mc-a-les", mercury_tower(), (960, 300))
+    # Deployment: the capsule with its pack on, as d-payload (turned, 1.5 times the launch).
+    big = f"translate({DX} {DY}) scale({DK}) translate(-850 -520)"
+    turn = "translate(-120 20) rotate(90 960 500)"
+    layer("mc-d-payload", f'<g transform="{big}"><g transform="{turn}">{mercury_body()}{mercury_pack()}</g></g>', D_AT(914, 520))
+    # In orbit, small, nose up, thick lines (as o-sat), and the second craft of a joint flight.
+    thick = re.sub(r'stroke-width="[\d.]+"', 'stroke-width="5"', mercury_body() + mercury_pack())
+    for name in ("mc-o-sat", "mc-o-sat-b"):
+        layer(name, f'<g transform="translate(960 560) scale(0.6) translate(-960 -426)">{thick}</g>', (960, 560))
+    # Coming home: the capsule nose right (RT) and nose up (RU).
+    layer("mc-r-capsule", RT(cap), RC)
+    layer("mc-r-capsule-up", RU(cap), RC)
+    # The pack, its straps from its corners to the shield's rim, hinged there; the pack turns about
+    # strap b's hinge, as the generic one does.
+    layer("mc-r-pack", RT(small(mercury_pack())), RT_AT(1003, 501))
+    layer("mc-r-strap-a", RT(f'<path d="M942 508 L917 501" fill="none" {LINE} stroke-width="2"/>'), RT_AT(917, 501))
+    layer("mc-r-strap-b", RT(f'<path d="M978 508 L1003 501" fill="none" {LINE} stroke-width="2"/>'), RT_AT(1003, 501))
+    layer("mc-r-cut-a", RT(f'<circle cx="917" cy="502" r="6" fill="{GOLD}"/>'), RT_AT(917, 502))
+    layer("mc-r-cut-b", RT(f'<circle cx="1003" cy="502" r="6" fill="{GOLD}"/>'), RT_AT(1003, 502))
+    for i, x in enumerate((948, 960, 972), 1):
+        layer(f"mc-r-flame-{i}", RT(f'<path d="M{x - 5} 529 C{x - 6} 547 {x - 3} 565 {x} 583 C{x + 3} 565 {x + 6} 547 {x + 5} 529 Z" '
+                                    f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>'), RT_AT(x, 529))
+    # The attitude jets, on the recovery compartment.
+    layer("mc-r-jet-l", RT(puff(927, 400, 9)), RT_AT(936, 400))
+    layer("mc-r-jet-r", RT(puff(993, 400, 9)), RT_AT(984, 400))
+    layer("mc-r-jet-stuck", RT(f'<path d="M980 398 C1010 390 1044 380 1080 372 L1084 388 C1048 394 1012 406 982 414 Z" '
+                               f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>'), RC)
+    # The periscope: out from the cone's side near the shield, its head turned forward; it slides in
+    # along its own length (reentry-trim.jsx), its pivot at its root.
+    layer("mc-r-periscope", RT(f'<path d="M921 480 L903 480 L903 470" fill="none" {LINE} stroke-width="3.2"/>'
+                               f'<rect x="899" y="462" width="8" height="9" fill="#ffffff" {LINE} stroke-width="2"/>'), RT_AT(921, 480))
+    # Reentry: the glow along the cone's windward side.
+    layer("mc-r-glow-side", RT(f'<path d="M982 420 C998 448 1010 476 1014 504 C1020 474 1004 444 982 420 Z" fill="{GOLD_FILL}" '
+                               f'stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>'), RC)
+    # The break-up: the top (canister and recovery compartment) from the cone, at the generic seam's
+    # pivots (reentry.jsx throws them from there).
+    top = small(f'<rect x="941" y="388" width="38" height="30" fill="#ffffff" {LINE} stroke-width="3"/>'
+                f'<rect x="946" y="360" width="28" height="28" fill="#ffffff" {LINE} stroke-width="3"/>'
+                f'<rect x="950" y="352" width="20" height="8" fill="#ffffff" {LINE} stroke-width="2.4"/>')
+    body = small(f'<path d="M915 500 Q960 515 1005 500 Z" fill="#ffffff" {LINE} stroke-width="3"/>'
+                 f'<path d="M915 500 L941 418 L979 418 L1005 500 Z" fill="#ffffff" {LINE} stroke-width="3"/>'
+                 f'<path d="M952 432 L968 432 L971 452 L949 452 Z" fill="rgba(22,48,92,0.10)" {LINE} stroke-width="2"/>')
+    layer("mc-r-half-nose", RT(top), RT_AT(960, 410))
+    layer("mc-r-half-body", RT(body), RT_AT(960, 472))
+    # The landing bag: the shield let down 34 px on a pleated skirt (nose up, RU), its pivot at the base
+    # so it grows down from there.
+    skirt = "".join(f'<path d="M{917 + 2 * j} {502 + 8 * j} L{1003 - 2 * j} {502 + 8 * j}" fill="none" {LINE} stroke-width="1.6" opacity="0.7"/>'
+                    for j in range(1, 4))
+    bag = (f'<path d="M917 502 L921 534 L999 534 L1003 502" fill="#ffffff" {LINE} stroke-width="2"/>{skirt}'
+           f'<path d="M915 534 Q960 549 1005 534 Z" fill="#ffffff" {LINE} stroke-width="3"/>')
+    layer("mc-r-bag", RU(small(bag)), RU_AT(960, 506))
+
+
 def main():
     os.makedirs(OUT, exist_ok=True)
     copy_board_layers()
@@ -1480,6 +1603,7 @@ def main():
     planet_descent_parts()
     air_parts()
     departure_parts()
+    mercury_parts()
     if ONLY:
         # Keep the parts not redrawn.
         old = json.load(open(os.path.join(BUILD, "layers.json")))

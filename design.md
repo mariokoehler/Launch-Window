@@ -596,6 +596,21 @@ leading to satellite navigation.
   ("CapComs and others"), JSC oral history (Gene Roach, 2000), Apollo 11 Spacelog, Space.com
   (Charles Duke biography). **SET** in the game is BASPM's "scientists, engineers and technicians"
   (the help spells it out); not a history note.
+- **How a Mercury capsule came home** (checked 2026-10-17, for Mercury's replay clips, `ui-spec.md` §4.7.3):
+  after it left the rocket (the posigrade rockets in the retropack pushed it off), the capsule turned
+  round, heat shield first; in orbit it flew that way, its nose 14.5° down. The periscope came out at
+  the turnaround (Freedom 7, 5 May 1961: separation at 2:32, turnaround at 2:35). For retrofire it
+  pitched to 34° nose down; its three solid retrorockets fired 10 seconds each, started 5 seconds
+  apart, so they overlapped. The periscope retracted about half a minute later, and the retropack was
+  jettisoned about a minute after retrofire, its straps cut, leaving the shield clear. At 0.05 g the
+  capsule began a slow roll, 10° a second, to even out its lift through the reentry. A drogue opened at
+  about 21,000 ft and the main at 10,000 ft, and before the splash the heat shield dropped about 4 ft
+  on the landing bag, a skirt that cushioned the impact. On Friendship 7 (MA-6) the pack was kept on
+  through reentry, because a signal said the landing bag might have deployed. The capsule itself: a
+  blunt shield, a shingled cone, the recovery compartment with the parachutes, the antenna section on
+  top, and for launch the escape tower, jettisoned once the climb was safe. The clips leave out the
+  pitch angles (they fly level) and the roll. Sources: Wikipedia ("Project Mercury",
+  "Mercury-Redstone 1A" flight profile), the MR-3 air-to-ground transcript (NASA JSC; Spacelog).
 
 ### 1.2 Content & asset policy: no copying BASPM's copyrighted content
 

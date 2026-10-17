@@ -189,6 +189,10 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   over, its speed flight's patch made (2026-10-17). Its clips are the X-15's timelines with its own craft
   and a Soviet carrier (`e154.jsx`, `craft.jsx`). The pack hash changed: reset the dev data root, rebuild client and
   server together.
+- **Spacecraft as themselves, from Mercury on** (user, 2026-10-17, `ui-spec.md` §4.7.3): the programs from Mercury
+  to the Moon landings get their own spacecraft in the replay, a package a program, the rocket staying generic.
+  Mercury's is done: a step's `"skin"` in `build.py` draws `mc-<part>` for `<part>` (`motion.jsx`'s `ALIAS`), so
+  the generic timelines play unchanged (`launch-storyboard/build.py <variant> mercury` for the launch). Client only.
 
 ## How we work
 

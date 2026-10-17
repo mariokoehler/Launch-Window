@@ -31,9 +31,14 @@ function unflip(name) {
 function tf(l, n) { return l.property("Transform").property(n); }
 
 // Adds a part at its world position, pivot as anchor. parent: a part name, "screen" or none (world).
+// A step can draw a part as another (2026-10-17): ALIAS maps a part's name to the drawing it uses (build.py
+// writes it from a step's "skin", as Mercury's capsule for the generic one). The layer keeps its own name.
+function drawn(name) {
+    return typeof ALIAS !== "undefined" && ALIAS.hasOwnProperty(name) ? ALIAS[name] : name;
+}
 function put(name, parent) {
-    var d = L[name];
-    var item = app.project.importFile(new ImportOptions(new File(DIR + name + ".png")));
+    var d = L[drawn(name)];
+    var item = app.project.importFile(new ImportOptions(new File(DIR + drawn(name) + ".png")));
     var l = comp.layers.add(item);
     l.name = name;
     tf(l, "Anchor Point").setValue([d.px - d.x, d.py - d.y]);
@@ -42,7 +47,7 @@ function put(name, parent) {
     } else if (parent) {
         // Parent first: parenting keeps a layer where it is, and then the position is in the
         // parent's layer space.
-        var p = L[parent];
+        var p = L[drawn(parent)];
         l.parent = layers[parent];
         tf(l, "Position").setValue([d.px - p.x, d.py - p.y]);
     } else {

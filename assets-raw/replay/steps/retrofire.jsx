@@ -10,7 +10,12 @@
 // attitude jets turn it round first (a puff at 0.3, one at 1.6 to stop it), and everything after
 // comes T0 later.
 // OM (deorbit-burn-om.jsx): a Soyuz-type craft, its orbital module on the nose.
+// STAGGER (2026-10-17, Mercury's): its three motors lit one after another, STAGGER s apart, and each
+// burning as long (Mercury's fired 5 s apart, 10 s each). STOW: the periscope goes in once the burn is
+// done (Mercury's, when no reentry preparations follow to show it).
 var TURN = typeof TURN !== "undefined" && TURN;
+var STAGGER = typeof STAGGER !== "undefined" ? STAGGER : 0;
+var STOW = typeof STOW !== "undefined" && STOW;
 var OM = typeof OM !== "undefined" && OM;
 var T0 = TURN ? 1.2 : 0;
 var glitch = VARIANT === "glitch", failure = VARIANT === "failure";
@@ -27,7 +32,7 @@ motes(function (t) { return moteSpeed[clamp(Math.round(t * FPS), 0, moteSpeed.le
 put("d-earth");
 put("r-orbit");
 put("r-carrier");
-var parts = ["r-flame-1", "r-flame-2", "r-flame-3", "r-strap-a", "r-strap-b", "r-pack", "r-capsule"];
+var parts = ["r-flame-1", "r-flame-2", "r-flame-3", "r-strap-a", "r-strap-b", "r-pack", "r-periscope", "r-capsule"];
 if (OM) parts.push("r-om");
 if (TURN) parts.push("r-jet-l", "r-jet-r");
 for (var i = 0; i < parts.length; i++) put(parts[i], "r-carrier");
@@ -66,8 +71,9 @@ turn("d-earth", function (t) { return -1.5 - 0.25 * t + 0.06 * Math.max(0, (fail
 
 // The flames: each lit from FIRE to its own end, flickering.
 function lit(n) {
+    var lag = (n - 1) * STAGGER;
     return function (t) {
-        if (t < FIRE) return 0;
+        if (t < FIRE + lag) return 0;
         // The middle motor dies at 1.6 (a flicker first), in the glitch and the failure alike.
         if ((glitch || failure) && n === 2 && t >= CUT && t < OUT) return t < CUT + 0.15 && jitter(t, 4) > 0 ? 1 : 0;
         if (failure) {
@@ -75,7 +81,7 @@ function lit(n) {
             if (t >= 2.9 + T0 && t < 3.3 + T0) return jitter(t, 7 + n) > 0.2 ? 1 : 0;
             return t < OUT ? 1 : 0;
         }
-        return t < END ? 1 : 0;
+        return t < END + lag ? 1 : 0;
     };
 }
 for (i = 1; i <= 3; i++) {
@@ -83,7 +89,7 @@ for (i = 1; i <= 3; i++) {
         fade("r-flame-" + n, lit(n));
         grow("r-flame-" + n, function (t) {
             // Out along the capsule's axis (the carrier's frame: its x), flickering.
-            var k = t < FIRE + 0.2 ? 0.4 + 3 * (t - FIRE) : 1;
+            var f0 = FIRE + (n - 1) * STAGGER, k = t < f0 + 0.2 ? 0.4 + 3 * (t - f0) : 1;
             return [k * (1 + 0.06 * Math.sin(2 * Math.PI * 12 * t + n)), 1];
         });
     })(i);
@@ -93,3 +99,10 @@ camera(function () { return 0; }, function (t) {
     var on = lit(1)(t) + lit(2)(t) + lit(3)(t);
     return on > 0 ? 1.5 : 0;
 });
+
+// STOW: the periscope goes in just after the last motor (not in the failure, still in orbit).
+if (STOW && !failure) {
+    var stowAt = END + 2 * STAGGER + 0.4;
+    grow("r-periscope", function (t) { return [1, 1 - 0.95 * clamp((t - stowAt) / 0.8, 0, 1)]; });
+    fade("r-periscope", function (t) { return t < stowAt + 0.8 ? 1 : 0; });
+}

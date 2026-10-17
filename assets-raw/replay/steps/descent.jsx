@@ -16,6 +16,9 @@ put("r-main-half");
 put("r-streamer");
 put("r-carrier");
 put("r-capsule-up", "r-carrier");
+// Mercury's landing bag (2026-10-17; drawn only in its parts, r-bag): the heat shield let down on its
+// skirt once the main is open, to soften the splash. Not in the failure, whose main never opens.
+put("r-bag", "r-carrier");
 if (GROUND) {
     put("r-dust");
     for (i = 1; i <= 3; i++) put("r-chip-" + i);
@@ -66,6 +69,12 @@ move("r-carrier", function (t) { var c = corner(t); return [c[0], bob(t) + sink(
 turn("r-carrier", function (t) { return swing(t) + tip(t); });
 fade("r-carrier", function () { return 1; });
 fade("r-capsule-up", failure && !GROUND ? track([[SPLASH + 0.3, 1], [SPLASH + 0.9, 0, "lin"]]) : function () { return 1; });
+if (failure) {
+    hide("r-bag");
+} else {
+    fade("r-bag", function (t) { return t >= FULL + 0.5 ? 1 : 0; });
+    grow("r-bag", function (t) { return [1, 0.1 + 0.9 * clamp((t - FULL - 0.5) / 0.4, 0, 1)]; });
+}
 
 // The chutes hang from the nose; they follow the capsule's bob, and sway with its swing.
 function hangs(n) {

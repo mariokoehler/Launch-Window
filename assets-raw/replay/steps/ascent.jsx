@@ -16,6 +16,15 @@ put("carrier");
 var parts = ["flame-upper", "upper-bell", "debris-1", "debris-2", "flame-full", "debris-4", "debris-3", "debris-5", "debris-6", "burst"];
 for (i = 0; i < parts.length; i++) put(parts[i], "carrier");
 hide("debris-5"); hide("debris-6"); hide("burst");
+// The escape tower on the capsule (2026-10-17; drawn only in Mercury's parts, a-les): jettisoned once the
+// climb is safe, at LES, its motor carrying it off ahead and aside. The failure breaks up first, and it
+// goes with the capsule.
+var LES = 3.7;
+put("a-les", "debris-1");
+if (!failure) {
+    move("a-les", function (t) { var u = Math.max(0, t - LES); return [40 * u + 60 * u * u, -(120 * u + 700 * u * u)]; });
+    turn("a-les", function (t) { return 25 * Math.max(0, t - LES); });
+}
 
 // The planned path (parts.py draws the same arc): 8° off vertical, turning right on a 5200 px radius.
 var P0 = [860, 200], TH0 = 8, R = 5200;

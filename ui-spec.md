@@ -1971,6 +1971,14 @@ clips, the replay is meant to be watched like a short film, and the player can s
   onto its pads, calls home and turns its solar panel to the Sun. The glitch is Surveyor 3's: the verniers don't
   cut, and it hops twice before they're shut off from Earth. The failure hops the same way, comes off it leaning,
   lands on one foot and topples onto its antenna. Every story unconfirmed.
+- **Project Mercury as itself (user, 2026-10-17):** the first of the programs from Mercury on to get their own
+  spacecraft in every clip (the rocket stays generic: any rocket can fly them). Mercury's 17 clips (`mercury-*`) are the
+  generic timelines drawn with its capsule (a step's `"skin"`, `mc-` parts: the blunt shield, the shingled cone with
+  its window, the recovery compartment, the antenna canister), and a few of its own touches, invisible on other craft:
+  the escape tower on the pad and jettisoned in the ascent after staging, the periscope out after the turnaround and in
+  after the retrofire, the three retros lit one after another, the shield let down on the landing bag before the
+  splash. Its orbital flights keep the generic turn before the retrofire, though Mercury flew heat shield first all
+  orbit (`design.md` §1.1): a follow-up if wanted. Unconfirmed.
 - **The way home in one piece (user, 2026-10-17):** the suborbital flight had no motes, so they popped in at the
   retrofire; now they stream past along its arc (`motes()` takes the craft's way, and can settle where the next clip's
   begin). Reentry preparations played the reentry preparations' turn even where the craft was already base first,

@@ -79,6 +79,12 @@ Each folder's `build/` is regenerated on every run and stays out of git.
     lander, its pads on the ground: legs (the near one in front), two compartments, the camera and its mirror hood,
     the mast with the planar antenna and the solar panel (`sv-panel`, turned about the mast's top), and three
     vernier plumes. The failure topples it over its right footpad (`PAD`), which stays where it landed.
+  - **Skins** (2026-10-17, Project Mercury first): a step's `"skin"` in `build.py` (a prefix, `"mc-"`) makes
+    `put("r-capsule")` draw `mc-r-capsule` where one exists (`motion.jsx`'s `ALIAS`; the layer keeps its generic
+    name, so the timeline doesn't change), and `"alias"` names more for one step (the ascent's capsule without its
+    tower). The craft's own parts are drawn in the generic capsule's frame (`parts.py`'s `mercury_parts`: base at
+    y 500, 90 wide, top at 352), so pivots, chutes and the break-up's seam fit. Parts only one craft draws are empty
+    for the rest (`a-les`, `r-periscope`, `r-bag`). The launch: `launch-storyboard/build.py <variant> mercury`.
   - **The E-154** (2026-10-17, `e154-` and `su-` parts): the air-launch timelines name their craft through `K`
     (`craft.jsx`: the X-15 and the B-52 unless a step's file sets `CRAFT` first, as `e154.jsx` does: parts, where it
     hangs, and whether it's the X-15, which drops its lower fin and lands on skids). The E-154's eight steps are the

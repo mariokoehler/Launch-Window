@@ -19,7 +19,7 @@ motes(function () { return MOTE_SPEED; }, function (t) { return path(t); }, true
 put("d-earth");
 put("x-arc");
 put("r-carrier");
-var parts = ["r-strap-a", "r-strap-b", "r-pack", "r-capsule", "r-jet-l", "r-jet-r", "r-jet-stuck"];
+var parts = ["r-strap-a", "r-strap-b", "r-pack", "r-periscope", "r-capsule", "r-jet-l", "r-jet-r", "r-jet-stuck"];
 if (OM) parts.splice(4, 0, "r-om");
 for (var i = 0; i < parts.length; i++) put(parts[i], "r-carrier");
 
@@ -63,3 +63,7 @@ if (failure) {
 } else {
     hide("r-jet-stuck");
 }
+
+// Mercury's periscope (r-periscope, drawn only in its parts) comes out as the turn begins, as Freedom 7's
+// did just after separation.
+grow("r-periscope", function (t) { return [1, 0.05 + 0.95 * clamp((t - 0.4) / 0.8, 0, 1)]; });

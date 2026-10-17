@@ -467,6 +467,88 @@ STEPS = {
         "success": (5.6, 1.2), "glitch": (5.6, 2.2), "failure": (5.6, 2.4),
         "times": [0.5, 1.2, 1.9, 2.6, 3.6, 5.5],
     },
+    # Project Mercury's own (2026-10-17): the generic timelines ("source") with its capsule ("skin": the mc- parts),
+    # its retros lit one after another and its periscope stowed after the burn (project-mercury.jsx, stow.jsx).
+    "mercury-launch-preparations": {
+        "pad": True, "source": "launch-preparations", "skin": "mc-",
+        "success": (6.4, 2.6), "glitch": (6.4, 3.5), "failure": (7.0, 3.1),
+        "times": [0.5, 2.0, 2.8, 3.4, 4.6, 6.4],
+    },
+    "mercury-countdown": {
+        "pad": True, "source": "countdown", "skin": "mc-",
+        "success": (6.4, 4.8), "glitch": (7.2, 3.6), "failure": (7.0, 4.7),
+        "times": [0.0, 2.2, 3.0, 4.4, 4.8, 6.4],
+    },
+    "mercury-ascent": {
+        "pad": False, "source": "ascent", "skin": "mc-", "alias": {"debris-1": "mc-debris-1-bare"},
+        "success": (6.5, 3.6), "glitch": (6.5, 4.0), "failure": (7.0, 3.4),
+        "times": [0.0, 1.5, 2.9, 3.4, 4.2, 6.4],
+    },
+    "mercury-deployment": {
+        "pad": False, "source": "deployment", "skin": "mc-",
+        "success": (6.0, 2.6), "glitch": (6.0, 2.6), "failure": (6.5, 2.3),
+        "times": [0.5, 1.2, 1.9, 2.4, 3.6, 5.9],
+    },
+    "mercury-suborbital-flight": {
+        "pad": False, "mirror": True, "source": "suborbital-flight", "skin": "mc-", "before": ["motes.jsx"],
+        "success": (6.4, 3.4), "glitch": (6.4, 4.0), "failure": (6.4, 3.6),
+        "times": [0.5, 1.8, 2.8, 3.4, 4.4, 6.3],
+    },
+    "mercury-earth-orbit": {
+        "pad": False, "source": "earth-orbit", "skin": "mc-",
+        "success": (6.0, 2.1), "glitch": (6.0, 3.4), "failure": (6.5, 3.0),
+        "times": [0.5, 2.0, 2.8, 3.6, 4.6, 5.9],
+    },
+    "mercury-duration": {
+        "pad": False, "source": "duration-level-i", "skin": "mc-", "before": ["orbit.jsx"], "after": ["duration.jsx"],
+        "success": (6.4, 2.6), "glitch": (6.4, 3.8), "failure": (6.4, 3.6),
+        "times": [0.5, 2.0, 2.6, 3.4, 4.4, 6.3],
+    },
+    "mercury-rendezvous": {
+        "pad": False, "source": "rendezvous-target-approach", "skin": "mc-", "before": ["orbit.jsx"],
+        "success": (6.0, 2.6), "glitch": (6.0, 3.0), "failure": (6.0, 3.0),
+        "times": [0.5, 1.8, 2.4, 2.8, 4.0, 5.9],
+    },
+    "mercury-reentry-preparations": {
+        "pad": False, "mirror": True, "source": "reentry-preparations", "skin": "mc-", "before": ["motes.jsx"],
+        "success": (6.0, 3.0), "glitch": (6.0, 3.6), "failure": (6.5, 3.4),
+        "times": [0.5, 1.6, 2.4, 3.2, 4.4, 5.9],
+    },
+    "mercury-retrofire": {
+        "pad": False, "mirror": True, "source": "retrofire", "skin": "mc-", "before": ["motes.jsx", "project-mercury.jsx", "stow.jsx"],
+        "success": (6.4, 2.6), "glitch": (6.4, 3.0), "failure": (6.4, 3.0),
+        "times": [0.5, 1.4, 2.0, 2.8, 3.8, 6.3],
+    },
+    "mercury-retrofire-hop": {
+        "pad": False, "mirror": True, "source": "retrofire", "skin": "mc-", "before": ["motes.jsx", "project-mercury.jsx"],
+        "success": (6.4, 2.6), "glitch": (6.4, 3.0), "failure": (6.4, 3.0),
+        "times": [0.5, 1.4, 2.0, 2.8, 3.8, 6.3],
+    },
+    "mercury-deorbit-burn": {
+        "pad": False, "mirror": True, "source": "deorbit-burn", "skin": "mc-", "before": ["motes.jsx", "project-mercury.jsx", "stow.jsx"], "after": ["retrofire.jsx"],
+        "success": (7.6, 3.8), "glitch": (7.6, 4.2), "failure": (7.6, 4.2),
+        "times": [0.3, 1.0, 1.8, 2.6, 4.0, 7.5],
+    },
+    "mercury-reentry-trim": {
+        "pad": False, "mirror": True, "source": "reentry-trim-burn", "skin": "mc-", "before": ["motes.jsx"], "after": ["reentry-trim.jsx"],
+        "success": (6.0, 3.0), "glitch": (6.0, 3.4), "failure": (6.0, 3.0),
+        "times": [0.5, 1.6, 2.4, 3.0, 4.0, 5.9],
+    },
+    "mercury-retrofire-jettison": {
+        "pad": False, "mirror": True, "source": "retrofire-jettison", "skin": "mc-", "before": ["motes.jsx"],
+        "success": (5.6, 1.6), "glitch": (5.6, 3.4), "failure": (6.4, 3.2),
+        "times": [0.5, 1.1, 1.8, 2.6, 3.8, 5.5],
+    },
+    "mercury-reentry": {
+        "pad": False, "mirror": True, "source": "reentry", "skin": "mc-",
+        "success": (6.4, 4.0), "glitch": (6.4, 4.4), "failure": (6.4, 3.4),
+        "times": [0.4, 1.6, 2.6, 3.4, 4.6, 6.3],
+    },
+    "mercury-descent-and-splashdown": {
+        "pad": False, "source": "descent-and-splashdown", "skin": "mc-", "after": ["descent.jsx"],
+        "success": (6.4, 2.4), "glitch": (6.4, 3.4), "failure": (6.4, 2.6),
+        "times": [0.5, 1.4, 2.2, 3.0, 4.2, 6.3],
+    },
     # The OKB-MiG E-154's own (2026-10-17): the X-15's timelines ("source") with its craft (e154.jsx, read by craft.jsx).
     "e154-takeoff": {
         "pad": False, "source": "air-takeoff", "before": ["moon.jsx", "e154.jsx", "craft.jsx", "air.jsx"],
@@ -673,6 +755,13 @@ def project(step, variant):
     with open(script, "w", encoding="utf-8") as f:
         f.write("var DIR = " + json.dumps(os.path.join(BUILD, "layers").replace("\\", "/") + "/") + ";\n")
         f.write("var L = " + open(os.path.join(BUILD, "layers.json")).read() + ";\n")
+        # "skin" (2026-10-17): a craft's own drawings, mc-<part> for <part> (motion.jsx's ALIAS); "alias"
+        # names more, or other ones, for a step of its own.
+        if STEPS[step].get("skin"):
+            prefix = STEPS[step]["skin"]
+            alias = {n[len(prefix):]: n for n in json.load(open(os.path.join(BUILD, "layers.json"))) if n.startswith(prefix)}
+            alias.update(STEPS[step].get("alias", {}))
+            f.write("var ALIAS = " + json.dumps(alias) + ";\n")
         f.write(f"var VARIANT = {json.dumps(variant)}, DUR = {dur};\n")
         # "mirror": the world drawn left for right (motion.jsx's setup), so the craft travels left.
         f.write(f"var MIRROR = {json.dumps(bool(STEPS[step].get('mirror')))};\n")
