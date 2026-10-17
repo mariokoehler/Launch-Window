@@ -3333,6 +3333,39 @@
     "prompt": "A 1960s embroidered space mission patch, circular, isolated on a fully transparent background (PNG with alpha channel, no backdrop, no shadow, no surface beneath it). The whole patch is fully visible and centered, with an even transparent margin of about one twentieth of the image width on every side, never touching or cut off by the image edges.\n\nCenter artwork: a slender silver swept-wing rocket plane with a red star on its tail fin, at the top of a high arc above the curved Earth, in flat vintage 1960s vector-illustration style. The background of the patch is deep black space with a scattering of small white four-pointed stars.\n\nBorder: a wide outer ring in deep scarlet red with a thick gold embroidered merrowed edge and a thin inner gold ring. Inside the ring, curved along the top of the border in bold gold uppercase sans-serif embroidered lettering, is the exact text \"MIG E-154\", evenly spaced and correctly spelled. At the bottom of the ring, between three small gold stars on each side, is the smaller text \"SUBORBITAL FLIGHT\", curved along the border.\n\nStyle: authentic stitched-thread texture, satin embroidery sheen, clean bold shapes, limited palette of scarlet red, gold, white, black and silver, symmetrical badge composition, centered, front-facing view, sharp detail, high resolution, 1:1 aspect ratio. No extra text, no dates, no agency logos or emblems, no flags, no watermark, no misspelled letters."
   },
   {
+    "file": "variants/mig-e-154-research-flight-2-flown_1.png",
+    "goal": "mig-e-154-research-flight-2-flown",
+    "variant": 1,
+    "top": "MIG E-154",
+    "bottom": "SPEED FLIGHT",
+    "seed": 87282269896540,
+    "attempts": 3,
+    "check": "ok",
+    "prompt": "A 1960s embroidered space mission patch, circular, isolated on a fully transparent background (PNG with alpha channel, no backdrop, no shadow, no surface beneath it). The whole patch is fully visible and centered, with an even transparent margin of about one twentieth of the image width on every side, never touching or cut off by the image edges.\n\nCenter artwork: a slender silver swept-wing rocket plane with a red star on its tail fin, streaking level and fast, glowing hot at its needle nose, with speed lines trailing behind it above the clouds, in flat vintage 1960s vector-illustration style. The background of the patch is deep black space with a scattering of small white four-pointed stars.\n\nBorder: a wide outer ring in deep scarlet red with a thick gold embroidered merrowed edge and a thin inner gold ring. Inside the ring, curved along the top of the border in bold gold uppercase sans-serif embroidered lettering, is the exact text \"MIG E-154\", evenly spaced and correctly spelled. At the bottom of the ring, between three small gold stars on each side, is the smaller text \"SPEED FLIGHT\", curved along the border.\n\nStyle: authentic stitched-thread texture, satin embroidery sheen, clean bold shapes, limited palette of scarlet red, gold, white, black and silver, symmetrical badge composition, centered, front-facing view, sharp detail, high resolution, 1:1 aspect ratio. No extra text, no dates, no agency logos or emblems, no flags, no watermark, no misspelled letters."
+  },
+  {
+    "file": "variants/mig-e-154-research-flight-2-flown_2.png",
+    "goal": "mig-e-154-research-flight-2-flown",
+    "variant": 2,
+    "top": "MIG E-154",
+    "bottom": "SPEED FLIGHT",
+    "seed": 175489784276598,
+    "attempts": 1,
+    "check": "ok",
+    "prompt": "A 1960s embroidered space mission patch, circular, isolated on a fully transparent background (PNG with alpha channel, no backdrop, no shadow, no surface beneath it). The whole patch is fully visible and centered, with an even transparent margin of about one twentieth of the image width on every side, never touching or cut off by the image edges.\n\nCenter artwork: a slender silver swept-wing rocket plane with a red star on its tail fin, streaking level and fast, glowing hot at its needle nose, with speed lines trailing behind it above the clouds, in flat vintage 1960s vector-illustration style. The background of the patch is deep black space with a scattering of small white four-pointed stars.\n\nBorder: a wide outer ring in deep scarlet red with a thick gold embroidered merrowed edge and a thin inner gold ring. Inside the ring, curved along the top of the border in bold gold uppercase sans-serif embroidered lettering, is the exact text \"MIG E-154\", evenly spaced and correctly spelled. At the bottom of the ring, between three small gold stars on each side, is the smaller text \"SPEED FLIGHT\", curved along the border.\n\nStyle: authentic stitched-thread texture, satin embroidery sheen, clean bold shapes, limited palette of scarlet red, gold, white, black and silver, symmetrical badge composition, centered, front-facing view, sharp detail, high resolution, 1:1 aspect ratio. No extra text, no dates, no agency logos or emblems, no flags, no watermark, no misspelled letters."
+  },
+  {
+    "file": "variants/mig-e-154-research-flight-2-flown_3.png",
+    "goal": "mig-e-154-research-flight-2-flown",
+    "variant": 3,
+    "top": "MIG E-154",
+    "bottom": "SPEED FLIGHT",
+    "seed": 90930397963315,
+    "attempts": 1,
+    "check": "ok",
+    "prompt": "A 1960s embroidered space mission patch, circular, isolated on a fully transparent background (PNG with alpha channel, no backdrop, no shadow, no surface beneath it). The whole patch is fully visible and centered, with an even transparent margin of about one twentieth of the image width on every side, never touching or cut off by the image edges.\n\nCenter artwork: a slender silver swept-wing rocket plane with a red star on its tail fin, streaking level and fast, glowing hot at its needle nose, with speed lines trailing behind it above the clouds, in flat vintage 1960s vector-illustration style. The background of the patch is deep black space with a scattering of small white four-pointed stars.\n\nBorder: a wide outer ring in deep scarlet red with a thick gold embroidered merrowed edge and a thin inner gold ring. Inside the ring, curved along the top of the border in bold gold uppercase sans-serif embroidered lettering, is the exact text \"MIG E-154\", evenly spaced and correctly spelled. At the bottom of the ring, between three small gold stars on each side, is the smaller text \"SPEED FLIGHT\", curved along the border.\n\nStyle: authentic stitched-thread texture, satin embroidery sheen, clean bold shapes, limited palette of scarlet red, gold, white, black and silver, symmetrical badge composition, centered, front-facing view, sharp detail, high resolution, 1:1 aspect ratio. No extra text, no dates, no agency logos or emblems, no flags, no watermark, no misspelled letters."
+  },
+  {
     "file": "variants/gemini-uncrewed-suborbital-flown_1.png",
     "goal": "gemini-uncrewed-suborbital-flown",
     "variant": 1,

@@ -186,7 +186,7 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   arrives at the insertion's speed). Client only.
 - **The OKB-MiG E-154 is the Soviet X-15** (user, 2026-10-17, `design.md` §1): the converter rebuilds it from the X-15
   (`baspm_pack.py`'s `e154_from_x15`), three configurations where it had five (187 in the pack), its own art carried
-  over, its speed flight's patch still to make (needs ComfyUI). Its clips are the X-15's timelines with its own craft
+  over, its speed flight's patch made (2026-10-17). Its clips are the X-15's timelines with its own craft
   and a Soviet carrier (`e154.jsx`, `craft.jsx`). The pack hash changed: reset the dev data root, rebuild client and
   server together.
 
