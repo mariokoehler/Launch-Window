@@ -622,8 +622,14 @@ committed to it is redistributed.
 - **Fictional programs get our own names** (user, 2026-10-03): real programs keep their
   historical names; BASPM's invented ones are renamed. BASPM's Soviet "PKA space plane"
   (`26-01`) is the **OKB-MiG E-154** (ids `mig-e-154-*`), a rocket plane in the style of its era,
-  as the user's art shows it: only its name and text change, the numbers stay BASPM's (user,
-  2026-10-08).
+  as the user's art shows it (user, 2026-10-08). **Since 2026-10-17 it's the Soviet X-15** (user): BASPM's PKA went
+  up on a rocket and unfolded its wings in orbit, which broke with history too far. The converter rebuilds its
+  program, craft, configurations and goals from the X-15's (`baspm_pack.py`'s `e154_from_x15`): the same three
+  configurations (`mig-e-154-drop-test`, `-research-flight-1` for altitude, `-research-flight-2` for speed), the same
+  numbers (costs, reliability, prestige, goals, and the research flights crediting `space-plane`), its own Soviet
+  reliability transfers, and the X-15's boost on the Biosatellite goal read as BASPM's PKA read it, on OFO's. The ids
+  and the X-15's numbers for the Soviet side are unconfirmed. Its suborbital, orbital, extended and joint flights are
+  gone, and with them its own path to `human-in-orbit`.
 
 ## 2. Core gameplay mechanics
 
@@ -1929,8 +1935,8 @@ ours, a default and **unconfirmed** unless a line says otherwise.
   **As authored (2026-10-11, unconfirmed):** 25 programs in six lines. Earth-orbit satellites: every
   satellite program, its one-season orbital flight (the three-season extended flights left out).
   Lunar probes: every lunar probe, its one flight. Space planes: the X-15 (its test and both research
-  flights; contracts fly the first research flight) and the OKB-MiG E-154 (drop test, suborbital, orbital;
-  contracts fly the suborbital test). One-crew capsules: Mercury and Vostok (the uncrewed and the
+  flights; contracts fly the first research flight) and the OKB-MiG E-154 (the same three since 2026-10-17;
+  contracts fly its first research flight). One-crew capsules: Mercury and Vostok (the uncrewed and the
   crewed orbital flight; contracts fly the crewed one). Two-crew: Gemini (orbital, rendezvous,
   docking) and Voskhod (orbital, spacewalk), contracts flying the orbital flight. Three-crew: Apollo
   in Earth orbit and Soyuz 7K-OK (orbital and docking), the orbital flight. The planetary probes, the
@@ -2715,13 +2721,13 @@ first (login → action → scheduled resolution → result, end to end) before 
     carry part of their own lift, which BASPM subtracts from what the rocket must lift
     (`ComputeExtraBoostProvidedByPayload`). Without it, Apollo's CSM needs a Saturn C-3B in
     Earth orbit instead of BASPM's Saturn IB.
-  - **`AIR_DROP` launches:** the X-15's three configurations and the MiG E-154's drop test fly
-    with no rocket (BASPM's `LaunchType` `NA`, rocket `N/A`). The launch keeps its place in the
+  - **`AIR_DROP` launches:** the X-15's three configurations and the MiG E-154's three (its drop test
+    alone until 2026-10-17) fly with no rocket (BASPM's `LaunchType` `NA`, rocket `N/A`). The launch keeps its place in the
     rocket list with `""`, costs no rocket, and no step may name its rocket slot; the planning
     screens say a carrier aircraft drops the craft.
   - **`requiredGoalIds` on a configuration:** a hard gate until the goal is achieved or
     cancelled (BASPM's `StrictGoalDependency`): the X-15's two research flights and the MiG E-154's
-    suborbital test. A launch refuses with `GOAL_NOT_REACHED`; the configuration card shows
+    (its suborbital test until 2026-10-17). A launch refuses with `GOAL_NOT_REACHED`; the configuration card shows
     "Locked" and its steps screen names the goal and disables "Plan this mission".
   - **`transferPercent` as a double:** many of the full tree's reliability transfers are .5
     values (`client.view.Rockets` prints it, so format it there).

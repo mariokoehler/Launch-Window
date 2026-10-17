@@ -3025,13 +3025,13 @@
     "id": "mig-e-154-spaceplane",
     "associatedSkill": "CREWED_SPACECRAFT",
     "baselineReliability": 3.0,
-    "maxReliability": 96.95,
-    "maxRdReliability": 92.02,
+    "maxReliability": 97.4,
+    "maxRdReliability": 92.48,
     "rdSlotBandMaxAmounts": [
-      3.0,
-      6.0,
-      8.0,
-      12.0
+      10.0,
+      18.0,
+      24.0,
+      35.0
     ],
     "maxReliabilityTransfer": 60.0,
     "reliabilityTransferSources": [
@@ -3068,10 +3068,10 @@
         "transferPercent": 40.0
       }
     ],
-    "maintenanceCost": 184,
-    "creationCost": 1838,
-    "unitCost": 1195,
-    "mass": 4500.0,
+    "maintenanceCost": 105,
+    "creationCost": 1050,
+    "unitCost": 683,
+    "mass": 0.0,
     "agency": "SOVIET",
     "rocket": null,
     "ownLift": null

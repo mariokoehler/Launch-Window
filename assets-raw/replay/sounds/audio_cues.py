@@ -598,10 +598,9 @@ clip("The air launch", "rocket-climb",
      c(A, 0, "wind", loop=True, vol=0.6),
      c("gf", 2.0, "engine-sputter", note="the engine runs rough until 2.8"),
      c("f", 2.8, "engine-cutoff", note="it shuts down for good"))
-clip("The air launch", "rocket-flight",
-     c(A, 0, "wind", loop=True),
-     c("gf", 1.4, "airframe-buffet", loop=True, until={"g": 3.0, "f": 6.0}, fade=0.4, note="it rocks"),
-     c("f", 2.4, "wind-gust", vol=1.3, note="it departs into a spin"))
+clip("The air launch", "x15-peak",
+     c("gf", 2.0, "airframe-buffet", loop=True, until={"g": 3.2, "f": 6.0}, fade=0.4, note="its nose wanders off"),
+     c("f", 3.0, "wind-gust", vol=1.3, note="it departs into a spin"))
 clip("The air launch", "runway-landing",
      c(A, 0, "wind", loop=True, until=2.4, fade=0.3, note="gliding in"),
      c(A, 2.4, "ground-thud", note="the skid touches (the glitch's bounces)"),

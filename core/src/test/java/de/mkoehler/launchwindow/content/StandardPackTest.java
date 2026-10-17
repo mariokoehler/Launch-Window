@@ -41,7 +41,8 @@ class StandardPackTest {
         assertEquals(13, catalog.categories().size());
         assertEquals(55, catalog.programs().size());
         assertEquals(85, catalog.missionComponents().size());
-        assertEquals(189, catalog.missionConfigurations().size());
+        // 189 from BASPM, less two: the E-154 flies the X-15's three where it had five (2026-10-17).
+        assertEquals(187, catalog.missionConfigurations().size());
         assertEquals(207, catalog.goals().size());
     }
 
@@ -80,8 +81,9 @@ class StandardPackTest {
             .filter(configuration -> configuration.launches().stream()
                 .anyMatch(launch -> launch.launchType() == LaunchType.AIR_DROP))
             .map(MissionConfiguration::id).collect(Collectors.toSet());
+        // The E-154 is the Soviet X-15 (2026-10-17): all three of its configurations are drops too.
         assertEquals(Set.of("x-15-flight-test", "x-15-research-flight-1", "x-15-research-flight-2",
-            "mig-e-154-drop-test"), drops);
+            "mig-e-154-drop-test", "mig-e-154-research-flight-1", "mig-e-154-research-flight-2"), drops);
     }
 
     @Test

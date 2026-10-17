@@ -231,8 +231,8 @@
     },
     "mig-e-154": {
       "name": "OKB-MiG E-154",
-      "description": "A rocket-powered interceptor stretched into a space plane by the MiG design bureau: dropped from a carrier aircraft first, then launched on a rocket into orbit.",
-      "historyNote": "The E-154 is our own invention, in place of a more futuristic space plane in the game that inspired this one. The real Mikoyan bureau did design a Soviet space plane, Spiral, but only its subsonic test craft, the MiG-105, was built. It made eight flights between 1976 and 1978."
+      "description": "A rocket plane from the MiG design bureau, carried up under the belly of a bomber and dropped, to fly faster and higher than any Soviet aircraft before it, to the edge of space and back to a runway.",
+      "historyNote": "The E-154 is our own invention, the Soviet answer to the X-15, in place of a rocket-launched space plane in the game that inspired this one. The real Mikoyan bureau did design a Soviet space plane, Spiral, but only its subsonic test craft, the MiG-105, was built. It made eight flights between 1976 and 1978."
     },
     "gemini": {
       "name": "Gemini",
@@ -543,7 +543,7 @@
     },
     "mig-e-154-spaceplane": {
       "name": "MiG E-154 rocket plane",
-      "description": "A slender swept-wing rocket plane with a cluster of rocket engines, a pressurized cockpit and small thrusters for control above the air.",
+      "description": "A slender swept-wing rocket plane with a cluster of four rocket engines, a pressurized cockpit, wheels to land on and small thrusters for control above the air.",
       "historyNote": "The real Soviet space plane project, Spiral, planned to launch its orbiter from the back of a hypersonic carrier aircraft: a 52-tonne jet that would climb to almost 30 km at up to six times the speed of sound before releasing it. The carrier was never built, but a subsonic test version of the orbiter flew eight times after being dropped from a Tu-95 bomber."
     },
     "voskhod-capsule": {
@@ -1104,24 +1104,8 @@
       "historyNote": "For its speed record of Mach 6.7 in October 1967, the X-15A-2 was coated in a pink layer meant to char away and carried a dummy ramjet engine under its tail. Shock waves from the dummy heated the structure beside it beyond what the coating could take, burned holes in the skin, and tore the dummy away. The real ramjet never flew."
     },
     "mig-e-154-drop-test": {
-      "name": "Atmospheric drop test",
-      "description": "Released from a carrier aircraft, the rocket plane flies and glides down to land, to prove its handling in the air."
-    },
-    "mig-e-154-suborbital-test": {
-      "name": "Suborbital test",
-      "description": "Launched on a rocket, the plane climbs into space, tests its engines and glides home."
-    },
-    "mig-e-154-orbital": {
-      "name": "Orbital flight",
-      "description": "Into orbit on a rocket and back to a runway on wings."
-    },
-    "mig-e-154-orbital-duration-1": {
-      "name": "Orbital flight (duration level I)",
-      "description": "A longer stay in orbit before the glide home."
-    },
-    "mig-e-154-joint-orbital": {
-      "name": "Joint flight",
-      "description": "Two rocket planes launched into nearly the same orbit, flying close together."
+      "name": "Drop test",
+      "description": "Dropped from under the carrier's belly, light the engines and prove the plane flies, before pushing for height and speed."
     },
     "gemini-uncrewed-suborbital": {
       "name": "Uncrewed suborbital test",
@@ -1676,6 +1660,14 @@
     "soyuz-7k-ok-crew-transfer": {
       "name": "Docking and crew transfer",
       "description": "Two crewed Soyuz craft dock, and cosmonauts spacewalk from one to the other."
+    },
+    "mig-e-154-research-flight-1": {
+      "name": "Research flight: altitude",
+      "description": "Climb steeply out of the air to the edge of space, steering with thrusters where the wings have nothing to grip."
+    },
+    "mig-e-154-research-flight-2": {
+      "name": "Research flight: speed",
+      "description": "A fast, level run at several times the speed of sound, the skin heating as the air rushes past."
     }
   },
   "steps": {
@@ -1775,14 +1767,6 @@
       "name": "Drop and ignition",
       "description": "Released from the carrier, the plane falls clear before the pilot lights the rocket engine."
     },
-    "airdrop": {
-      "name": "Release",
-      "description": "The carrier lets go and the plane drops clear before it is flown on its own."
-    },
-    "wings-deployment": {
-      "name": "Wings out",
-      "description": "The wings are set for flight and the pilot takes control of the falling plane."
-    },
     "powered-ascent": {
       "name": "Powered climb",
       "description": "The engine burns for a minute or two, pushing the plane steeply up or fast along."
@@ -1794,14 +1778,6 @@
     "high-speed-leg": {
       "name": "High-speed run",
       "description": "A fast run where friction with the air heats the skin and every control input matters."
-    },
-    "orbital-maneuvering-engine-test": {
-      "name": "Engine test in space",
-      "description": "The engines meant for changing orbit are fired in space for the first time."
-    },
-    "deorbit-burn": {
-      "name": "Deorbit burn",
-      "description": "An engine burn against the direction of flight drops the orbit into the atmosphere."
     },
     "de-orbit-burn": {
       "name": "Deorbit burn",
@@ -2687,15 +2663,7 @@
     },
     "mig-e-154-drop-test-flown": {
       "name": "MiG E-154 drop test",
-      "description": "Complete the MiG E-154's atmospheric drop test successfully."
-    },
-    "mig-e-154-suborbital-flown": {
-      "name": "MiG E-154 suborbital test",
-      "description": "Complete the MiG E-154's suborbital test successfully."
-    },
-    "mig-e-154-orbital-flown": {
-      "name": "MiG E-154 orbital flight",
-      "description": "Complete an orbital flight in the MiG E-154 successfully."
+      "description": "Complete the MiG E-154's drop test successfully."
     },
     "gemini-uncrewed-suborbital-flown": {
       "name": "Gemini uncrewed suborbital test",
@@ -3116,6 +3084,14 @@
     "deep-space-probe": {
       "name": "Deep space probe",
       "description": "Send a probe beyond the Moon to another planet or the Sun."
+    },
+    "mig-e-154-research-flight-1-flown": {
+      "name": "MiG E-154 altitude flight",
+      "description": "Complete the MiG E-154's altitude research flight successfully."
+    },
+    "mig-e-154-research-flight-2-flown": {
+      "name": "MiG E-154 speed flight",
+      "description": "Complete the MiG E-154's speed research flight successfully."
     }
   }
 }

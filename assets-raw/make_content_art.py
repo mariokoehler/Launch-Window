@@ -137,10 +137,10 @@ CONFIGURATIONS = {
     "x-15-research-flight-1": "x_15_experimental_flight_i.png",
     "x-15-research-flight-2": "x_15_experimental_flight_ii.png",
     "mig-e-154-drop-test": "okb_mig_e_154_drop_test.png",
-    "mig-e-154-suborbital-test": "okb_mig_e_154_suborbital.png",
-    "mig-e-154-orbital": "okb_mig_e_154_orbital.png",
-    "mig-e-154-orbital-duration-1": "okb_mig_e_154_orbital_extended.png",
-    "mig-e-154-joint-orbital": "okb_mig_e_154_joint_launch.png",
+    # The E-154 is the Soviet X-15 (2026-10-17): its altitude flight has the picture at the edge of space, its speed
+    # flight the one streaking hot.
+    "mig-e-154-research-flight-1": "okb_mig_e_154_orbital.png",
+    "mig-e-154-research-flight-2": "okb_mig_e_154_suborbital.png",
     "mercury-uncrewed-suborbital": "mercury_uncrewed_suborbital.png",
     "mercury-suborbital": "mercury_suborbital.png",
     "mercury-uncrewed-orbital": "mercury_uncrewed_orbital.png",

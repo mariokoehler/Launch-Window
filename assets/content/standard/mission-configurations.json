@@ -15977,7 +15977,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "03-airdrop",
+            "id": "03-launch-from-drop-plane",
             "componentInvolvements": [
               {
                 "componentId": "mig-e-154-spaceplane",
@@ -15986,12 +15986,16 @@
             ],
             "controllerInvolvements": [
               {
+                "slot": 0,
+                "percent": 40
+              },
+              {
                 "slot": 1,
-                "percent": 25
+                "percent": 40
               },
               {
                 "slot": 2,
-                "percent": 75
+                "percent": 20
               }
             ],
             "crewInvolvements": [
@@ -16017,7 +16021,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "04-wings-deployment",
+            "id": "04-powered-ascent",
             "componentInvolvements": [
               {
                 "componentId": "mig-e-154-spaceplane",
@@ -16026,12 +16030,16 @@
             ],
             "controllerInvolvements": [
               {
+                "slot": 0,
+                "percent": 40
+              },
+              {
                 "slot": 1,
-                "percent": 30
+                "percent": 40
               },
               {
                 "slot": 2,
-                "percent": 70
+                "percent": 20
               }
             ],
             "crewInvolvements": [
@@ -16107,11 +16115,11 @@
             "controllerInvolvements": [
               {
                 "slot": 1,
-                "percent": 50
+                "percent": 30
               },
               {
                 "slot": 2,
-                "percent": 50
+                "percent": 70
               }
             ],
             "crewInvolvements": [
@@ -16142,7 +16150,7 @@
       }
     ],
     "crewSlots": [
-      "COSMONAUT"
+      "PILOT"
     ],
     "controlSlots": [
       {
@@ -16166,7 +16174,7 @@
         "skill": "FLIGHT_DIRECTOR"
       }
     ],
-    "cost": 1195,
+    "cost": 683,
     "firstTimePrestige": 150,
     "goalDependencies": [],
     "goalBoosts": [
@@ -16184,26 +16192,22 @@
         ]
       }
     ],
-    "cancellationPrestigeDeduction": 825,
+    "cancellationPrestigeDeduction": 263,
     "cancellationRefundPercent": 0,
     "requiredGoalIds": []
   },
   {
-    "id": "mig-e-154-suborbital-test",
+    "id": "mig-e-154-research-flight-1",
     "programId": "mig-e-154",
     "seasons": [
       {
         "steps": [
           {
-            "id": "01-launch-preparations",
+            "id": "01-takeoff",
             "componentInvolvements": [
               {
-                "componentId": "@rocket-1",
-                "percent": 50
-              },
-              {
                 "componentId": "mig-e-154-spaceplane",
-                "percent": 50
+                "percent": 100
               }
             ],
             "controllerInvolvements": [
@@ -16214,50 +16218,6 @@
               {
                 "slot": 1,
                 "percent": 50
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 40.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 40.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 20.0
-              }
-            ],
-            "crewRisk": false,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 10,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "02-countdown",
-            "componentInvolvements": [
-              {
-                "componentId": "@rocket-1",
-                "percent": 70
-              },
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 30
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 0,
-                "percent": 60
-              },
-              {
-                "slot": 1,
-                "percent": 40
               }
             ],
             "crewInvolvements": [
@@ -16279,19 +16239,15 @@
             ],
             "crewRisk": true,
             "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 10,
+            "failurePrestigeDeduction": 0,
             "goalIdsAchieved": []
           },
           {
-            "id": "03-launch",
+            "id": "02-pre-launch",
             "componentInvolvements": [
               {
-                "componentId": "@rocket-1",
-                "percent": 80
-              },
-              {
                 "componentId": "mig-e-154-spaceplane",
-                "percent": 20
+                "percent": 100
               }
             ],
             "controllerInvolvements": [
@@ -16301,7 +16257,47 @@
               },
               {
                 "slot": 1,
-                "percent": 10
+                "percent": 30
+              }
+            ],
+            "crewInvolvements": [
+              {
+                "slot": 0,
+                "skill": "LEADERSHIP",
+                "percent": 55.0
+              },
+              {
+                "slot": 0,
+                "skill": "PILOTING",
+                "percent": 25.0
+              },
+              {
+                "slot": 0,
+                "skill": "FITNESS",
+                "percent": 20.0
+              }
+            ],
+            "crewRisk": true,
+            "prestigeSharePercent": 0,
+            "failurePrestigeDeduction": 0,
+            "goalIdsAchieved": []
+          },
+          {
+            "id": "03-launch-from-drop-plane",
+            "componentInvolvements": [
+              {
+                "componentId": "mig-e-154-spaceplane",
+                "percent": 100
+              }
+            ],
+            "controllerInvolvements": [
+              {
+                "slot": 0,
+                "percent": 40
+              },
+              {
+                "slot": 1,
+                "percent": 40
               },
               {
                 "slot": 2,
@@ -16317,103 +16313,7 @@
               {
                 "slot": 0,
                 "skill": "PILOTING",
-                "percent": 10.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 55.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 10,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "04-ascent",
-            "componentInvolvements": [
-              {
-                "componentId": "@rocket-1",
-                "percent": 80
-              },
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 20
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 0,
-                "percent": 70
-              },
-              {
-                "slot": 1,
-                "percent": 10
-              },
-              {
-                "slot": 2,
-                "percent": 20
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 30.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 10.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 60.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 10,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "05-deployment",
-            "componentInvolvements": [
-              {
-                "componentId": "@rocket-1",
-                "percent": 20
-              },
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 80
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 0,
-                "percent": 50
-              },
-              {
-                "slot": 1,
-                "percent": 30
-              },
-              {
-                "slot": 2,
-                "percent": 20
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 40.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 45.0
+                "percent": 50.0
               },
               {
                 "slot": 0,
@@ -16423,11 +16323,139 @@
             ],
             "crewRisk": true,
             "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 10,
+            "failurePrestigeDeduction": 0,
             "goalIdsAchieved": []
           },
           {
-            "id": "06-suborbital-flight",
+            "id": "04-powered-ascent",
+            "componentInvolvements": [
+              {
+                "componentId": "mig-e-154-spaceplane",
+                "percent": 100
+              }
+            ],
+            "controllerInvolvements": [
+              {
+                "slot": 0,
+                "percent": 40
+              },
+              {
+                "slot": 1,
+                "percent": 40
+              },
+              {
+                "slot": 2,
+                "percent": 20
+              }
+            ],
+            "crewInvolvements": [
+              {
+                "slot": 0,
+                "skill": "LEADERSHIP",
+                "percent": 20.0
+              },
+              {
+                "slot": 0,
+                "skill": "PILOTING",
+                "percent": 50.0
+              },
+              {
+                "slot": 0,
+                "skill": "FITNESS",
+                "percent": 30.0
+              }
+            ],
+            "crewRisk": true,
+            "prestigeSharePercent": 0,
+            "failurePrestigeDeduction": 0,
+            "goalIdsAchieved": []
+          },
+          {
+            "id": "05-peak-altitude",
+            "componentInvolvements": [
+              {
+                "componentId": "mig-e-154-spaceplane",
+                "percent": 100
+              }
+            ],
+            "controllerInvolvements": [
+              {
+                "slot": 0,
+                "percent": 20
+              },
+              {
+                "slot": 1,
+                "percent": 40
+              },
+              {
+                "slot": 2,
+                "percent": 40
+              }
+            ],
+            "crewInvolvements": [
+              {
+                "slot": 0,
+                "skill": "LEADERSHIP",
+                "percent": 35.0
+              },
+              {
+                "slot": 0,
+                "skill": "PILOTING",
+                "percent": 55.0
+              },
+              {
+                "slot": 0,
+                "skill": "FITNESS",
+                "percent": 10.0
+              }
+            ],
+            "crewRisk": true,
+            "prestigeSharePercent": 0,
+            "failurePrestigeDeduction": 0,
+            "goalIdsAchieved": []
+          },
+          {
+            "id": "06-descent",
+            "componentInvolvements": [
+              {
+                "componentId": "mig-e-154-spaceplane",
+                "percent": 100
+              }
+            ],
+            "controllerInvolvements": [
+              {
+                "slot": 1,
+                "percent": 60
+              },
+              {
+                "slot": 2,
+                "percent": 40
+              }
+            ],
+            "crewInvolvements": [
+              {
+                "slot": 0,
+                "skill": "LEADERSHIP",
+                "percent": 20.0
+              },
+              {
+                "slot": 0,
+                "skill": "PILOTING",
+                "percent": 50.0
+              },
+              {
+                "slot": 0,
+                "skill": "FITNESS",
+                "percent": 30.0
+              }
+            ],
+            "crewRisk": true,
+            "prestigeSharePercent": 0,
+            "failurePrestigeDeduction": 0,
+            "goalIdsAchieved": []
+          },
+          {
+            "id": "07-landing",
             "componentInvolvements": [
               {
                 "componentId": "mig-e-154-spaceplane",
@@ -16462,177 +16490,17 @@
               }
             ],
             "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 10,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "07-orbital-maneuvering-engine-test",
-            "componentInvolvements": [
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 40
-              },
-              {
-                "slot": 2,
-                "percent": 60
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 25.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 55.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 20.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 10,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "08-reentry",
-            "componentInvolvements": [
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 20
-              },
-              {
-                "slot": 2,
-                "percent": 80
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 20.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 55.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 25.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 10,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "09-descent",
-            "componentInvolvements": [
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 40
-              },
-              {
-                "slot": 2,
-                "percent": 60
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 30.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 60.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 10.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 10,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "10-landing",
-            "componentInvolvements": [
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 50
-              },
-              {
-                "slot": 2,
-                "percent": 50
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 20.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 70.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 10.0
-              }
-            ],
-            "crewRisk": true,
             "prestigeSharePercent": 100,
-            "failurePrestigeDeduction": 10,
+            "failurePrestigeDeduction": 0,
             "goalIdsAchieved": [
-              "mig-e-154-suborbital-flown"
+              "mig-e-154-research-flight-1-flown"
             ]
           }
         ]
       }
     ],
     "crewSlots": [
-      "COSMONAUT"
+      "PILOT"
     ],
     "controlSlots": [
       {
@@ -16656,56 +16524,52 @@
         "skill": "FLIGHT_DIRECTOR"
       }
     ],
-    "cost": 1195,
-    "firstTimePrestige": 1000,
+    "cost": 683,
+    "firstTimePrestige": 200,
     "goalDependencies": [],
     "goalBoosts": [
-      {
-        "goalId": "space-plane",
-        "componentId": "mig-e-154-spaceplane",
-        "amount": 1
-      },
       {
         "goalId": "human-in-space",
         "componentId": "mig-e-154-spaceplane",
         "amount": 1
       },
       {
-        "goalId": "ofo-flown",
+        "goalId": "space-plane",
         "componentId": "mig-e-154-spaceplane",
         "amount": 1
+      },
+      {
+        "goalId": "ofo-flown",
+        "componentId": "mig-e-154-spaceplane",
+        "amount": 2
       }
     ],
     "launches": [
       {
-        "launchType": "SUBORBITAL_HR",
+        "launchType": "AIR_DROP",
         "payloadComponentIds": [
           "mig-e-154-spaceplane"
         ]
       }
     ],
-    "cancellationPrestigeDeduction": 1250,
-    "cancellationRefundPercent": 10,
+    "cancellationPrestigeDeduction": 288,
+    "cancellationRefundPercent": 0,
     "requiredGoalIds": [
       "mig-e-154-drop-test-flown"
     ]
   },
   {
-    "id": "mig-e-154-orbital",
+    "id": "mig-e-154-research-flight-2",
     "programId": "mig-e-154",
     "seasons": [
       {
         "steps": [
           {
-            "id": "01-launch-preparations",
+            "id": "01-takeoff",
             "componentInvolvements": [
               {
-                "componentId": "@rocket-1",
-                "percent": 50
-              },
-              {
                 "componentId": "mig-e-154-spaceplane",
-                "percent": 50
+                "percent": 100
               }
             ],
             "controllerInvolvements": [
@@ -16716,50 +16580,6 @@
               {
                 "slot": 1,
                 "percent": 50
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 40.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 40.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 20.0
-              }
-            ],
-            "crewRisk": false,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 12,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "02-countdown",
-            "componentInvolvements": [
-              {
-                "componentId": "@rocket-1",
-                "percent": 70
-              },
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 30
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 0,
-                "percent": 60
-              },
-              {
-                "slot": 1,
-                "percent": 40
               }
             ],
             "crewInvolvements": [
@@ -16781,19 +16601,15 @@
             ],
             "crewRisk": true,
             "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 12,
+            "failurePrestigeDeduction": 0,
             "goalIdsAchieved": []
           },
           {
-            "id": "03-launch",
+            "id": "02-pre-launch",
             "componentInvolvements": [
               {
-                "componentId": "@rocket-1",
-                "percent": 80
-              },
-              {
                 "componentId": "mig-e-154-spaceplane",
-                "percent": 20
+                "percent": 100
               }
             ],
             "controllerInvolvements": [
@@ -16803,7 +16619,47 @@
               },
               {
                 "slot": 1,
-                "percent": 10
+                "percent": 30
+              }
+            ],
+            "crewInvolvements": [
+              {
+                "slot": 0,
+                "skill": "LEADERSHIP",
+                "percent": 55.0
+              },
+              {
+                "slot": 0,
+                "skill": "PILOTING",
+                "percent": 25.0
+              },
+              {
+                "slot": 0,
+                "skill": "FITNESS",
+                "percent": 20.0
+              }
+            ],
+            "crewRisk": true,
+            "prestigeSharePercent": 0,
+            "failurePrestigeDeduction": 0,
+            "goalIdsAchieved": []
+          },
+          {
+            "id": "03-launch-from-drop-plane",
+            "componentInvolvements": [
+              {
+                "componentId": "mig-e-154-spaceplane",
+                "percent": 100
+              }
+            ],
+            "controllerInvolvements": [
+              {
+                "slot": 0,
+                "percent": 40
+              },
+              {
+                "slot": 1,
+                "percent": 40
               },
               {
                 "slot": 2,
@@ -16819,103 +16675,7 @@
               {
                 "slot": 0,
                 "skill": "PILOTING",
-                "percent": 10.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 55.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 12,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "04-ascent",
-            "componentInvolvements": [
-              {
-                "componentId": "@rocket-1",
-                "percent": 80
-              },
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 20
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 0,
-                "percent": 70
-              },
-              {
-                "slot": 1,
-                "percent": 10
-              },
-              {
-                "slot": 2,
-                "percent": 20
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 30.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 10.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 60.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 12,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "05-deployment",
-            "componentInvolvements": [
-              {
-                "componentId": "@rocket-1",
-                "percent": 20
-              },
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 80
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 0,
-                "percent": 50
-              },
-              {
-                "slot": 1,
-                "percent": 30
-              },
-              {
-                "slot": 2,
-                "percent": 20
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 40.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 45.0
+                "percent": 50.0
               },
               {
                 "slot": 0,
@@ -16925,11 +16685,11 @@
             ],
             "crewRisk": true,
             "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 12,
+            "failurePrestigeDeduction": 0,
             "goalIdsAchieved": []
           },
           {
-            "id": "06-orbital-flight",
+            "id": "04-powered-ascent",
             "componentInvolvements": [
               {
                 "componentId": "mig-e-154-spaceplane",
@@ -16938,78 +16698,42 @@
             ],
             "controllerInvolvements": [
               {
-                "slot": 1,
-                "percent": 65
-              },
-              {
-                "slot": 2,
-                "percent": 35
-              }
-            ],
-            "crewInvolvements": [
-              {
                 "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 35.0
+                "percent": 40
               },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 45.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 20.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 12,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "07-retrofire",
-            "componentInvolvements": [
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
               {
                 "slot": 1,
                 "percent": 40
               },
               {
                 "slot": 2,
-                "percent": 60
+                "percent": 20
               }
             ],
             "crewInvolvements": [
               {
                 "slot": 0,
                 "skill": "LEADERSHIP",
-                "percent": 25.0
+                "percent": 20.0
               },
               {
                 "slot": 0,
                 "skill": "PILOTING",
-                "percent": 55.0
+                "percent": 50.0
               },
               {
                 "slot": 0,
                 "skill": "FITNESS",
-                "percent": 20.0
+                "percent": 30.0
               }
             ],
             "crewRisk": true,
             "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 12,
+            "failurePrestigeDeduction": 0,
             "goalIdsAchieved": []
           },
           {
-            "id": "08-reentry",
+            "id": "05-high-speed-leg",
             "componentInvolvements": [
               {
                 "componentId": "mig-e-154-spaceplane",
@@ -17018,12 +16742,56 @@
             ],
             "controllerInvolvements": [
               {
-                "slot": 1,
+                "slot": 0,
                 "percent": 20
               },
               {
+                "slot": 1,
+                "percent": 50
+              },
+              {
                 "slot": 2,
-                "percent": 80
+                "percent": 30
+              }
+            ],
+            "crewInvolvements": [
+              {
+                "slot": 0,
+                "skill": "LEADERSHIP",
+                "percent": 15.0
+              },
+              {
+                "slot": 0,
+                "skill": "PILOTING",
+                "percent": 60.0
+              },
+              {
+                "slot": 0,
+                "skill": "FITNESS",
+                "percent": 25.0
+              }
+            ],
+            "crewRisk": true,
+            "prestigeSharePercent": 0,
+            "failurePrestigeDeduction": 0,
+            "goalIdsAchieved": []
+          },
+          {
+            "id": "06-descent",
+            "componentInvolvements": [
+              {
+                "componentId": "mig-e-154-spaceplane",
+                "percent": 100
+              }
+            ],
+            "controllerInvolvements": [
+              {
+                "slot": 1,
+                "percent": 60
+              },
+              {
+                "slot": 2,
+                "percent": 40
               }
             ],
             "crewInvolvements": [
@@ -17035,21 +16803,21 @@
               {
                 "slot": 0,
                 "skill": "PILOTING",
-                "percent": 55.0
+                "percent": 50.0
               },
               {
                 "slot": 0,
                 "skill": "FITNESS",
-                "percent": 25.0
+                "percent": 30.0
               }
             ],
             "crewRisk": true,
             "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 12,
+            "failurePrestigeDeduction": 0,
             "goalIdsAchieved": []
           },
           {
-            "id": "09-descent",
+            "id": "07-landing",
             "componentInvolvements": [
               {
                 "componentId": "mig-e-154-spaceplane",
@@ -17059,11 +16827,11 @@
             "controllerInvolvements": [
               {
                 "slot": 1,
-                "percent": 40
+                "percent": 70
               },
               {
                 "slot": 2,
-                "percent": 60
+                "percent": 30
               }
             ],
             "crewInvolvements": [
@@ -17076,46 +16844,6 @@
                 "slot": 0,
                 "skill": "PILOTING",
                 "percent": 60.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 10.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 12,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "10-landing",
-            "componentInvolvements": [
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 50
-              },
-              {
-                "slot": 2,
-                "percent": 50
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 20.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 70.0
               },
               {
                 "slot": 0,
@@ -17125,16 +16853,16 @@
             ],
             "crewRisk": true,
             "prestigeSharePercent": 100,
-            "failurePrestigeDeduction": 12,
+            "failurePrestigeDeduction": 0,
             "goalIdsAchieved": [
-              "mig-e-154-orbital-flown"
+              "mig-e-154-research-flight-2-flown"
             ]
           }
         ]
       }
     ],
     "crewSlots": [
-      "COSMONAUT"
+      "PILOT"
     ],
     "controlSlots": [
       {
@@ -17158,1601 +16886,39 @@
         "skill": "FLIGHT_DIRECTOR"
       }
     ],
-    "cost": 1195,
-    "firstTimePrestige": 1250,
-    "goalDependencies": [
+    "cost": 683,
+    "firstTimePrestige": 200,
+    "goalDependencies": [],
+    "goalBoosts": [
       {
         "goalId": "human-in-space",
         "componentId": "mig-e-154-spaceplane",
-        "amount": 10
-      }
-    ],
-    "goalBoosts": [
+        "amount": 1
+      },
       {
         "goalId": "space-plane",
         "componentId": "mig-e-154-spaceplane",
         "amount": 1
       },
       {
-        "goalId": "human-in-orbit",
-        "componentId": "mig-e-154-spaceplane",
-        "amount": 1
-      },
-      {
         "goalId": "ofo-flown",
         "componentId": "mig-e-154-spaceplane",
-        "amount": 1
+        "amount": 2
       }
     ],
     "launches": [
       {
-        "launchType": "LEO_HR",
+        "launchType": "AIR_DROP",
         "payloadComponentIds": [
           "mig-e-154-spaceplane"
         ]
       }
     ],
-    "cancellationPrestigeDeduction": 1375,
-    "cancellationRefundPercent": 10,
-    "requiredGoalIds": []
-  },
-  {
-    "id": "mig-e-154-orbital-duration-1",
-    "programId": "mig-e-154",
-    "seasons": [
-      {
-        "steps": [
-          {
-            "id": "01-launch-preparations",
-            "componentInvolvements": [
-              {
-                "componentId": "@rocket-1",
-                "percent": 50
-              },
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 50
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 0,
-                "percent": 50
-              },
-              {
-                "slot": 1,
-                "percent": 50
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 40.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 40.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 20.0
-              }
-            ],
-            "crewRisk": false,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 15,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "02-countdown",
-            "componentInvolvements": [
-              {
-                "componentId": "@rocket-1",
-                "percent": 70
-              },
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 30
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 0,
-                "percent": 60
-              },
-              {
-                "slot": 1,
-                "percent": 40
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 60.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 15.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 25.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 15,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "03-launch",
-            "componentInvolvements": [
-              {
-                "componentId": "@rocket-1",
-                "percent": 80
-              },
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 20
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 0,
-                "percent": 70
-              },
-              {
-                "slot": 1,
-                "percent": 10
-              },
-              {
-                "slot": 2,
-                "percent": 20
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 35.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 10.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 55.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 15,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "04-ascent",
-            "componentInvolvements": [
-              {
-                "componentId": "@rocket-1",
-                "percent": 80
-              },
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 20
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 0,
-                "percent": 70
-              },
-              {
-                "slot": 1,
-                "percent": 10
-              },
-              {
-                "slot": 2,
-                "percent": 20
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 30.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 10.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 60.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 15,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "05-deployment",
-            "componentInvolvements": [
-              {
-                "componentId": "@rocket-1",
-                "percent": 20
-              },
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 80
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 0,
-                "percent": 50
-              },
-              {
-                "slot": 1,
-                "percent": 30
-              },
-              {
-                "slot": 2,
-                "percent": 20
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 40.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 45.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 15.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 15,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "06-earth-orbit",
-            "componentInvolvements": [
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 65
-              },
-              {
-                "slot": 2,
-                "percent": 35
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 35.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 45.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 20.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 15,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "07-duration-level-i",
-            "componentInvolvements": [
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 75
-              },
-              {
-                "slot": 2,
-                "percent": 25
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 40.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 20.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 40.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 15,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "08-retrofire",
-            "componentInvolvements": [
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 40
-              },
-              {
-                "slot": 2,
-                "percent": 60
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 25.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 55.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 20.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 15,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "09-reentry",
-            "componentInvolvements": [
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 20
-              },
-              {
-                "slot": 2,
-                "percent": 80
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 20.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 55.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 25.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 15,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "10-descent",
-            "componentInvolvements": [
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 40
-              },
-              {
-                "slot": 2,
-                "percent": 60
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 30.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 60.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 10.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 15,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "11-landing",
-            "componentInvolvements": [
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 50
-              },
-              {
-                "slot": 2,
-                "percent": 50
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 20.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 70.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 10.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 100,
-            "failurePrestigeDeduction": 15,
-            "goalIdsAchieved": [
-              "mig-e-154-orbital-flown",
-              "duration-level-1"
-            ]
-          }
-        ]
-      }
-    ],
-    "crewSlots": [
-      "COSMONAUT"
-    ],
-    "controlSlots": [
-      {
-        "title": "BOOSTER",
-        "kind": "MISSION_CONTROL",
-        "skill": "PROPULSION"
-      },
-      {
-        "title": "TRAJECTORY",
-        "kind": "MISSION_CONTROL",
-        "skill": "TRAJECTORY_AND_GNC"
-      },
-      {
-        "title": "SPACE PLANE SYSTEMS",
-        "kind": "MISSION_CONTROL",
-        "skill": "CREW_SYSTEMS_AND_PAYLOADS"
-      },
-      {
-        "title": "FLIGHT DIRECTOR",
-        "kind": "MISSION_CONTROL",
-        "skill": "FLIGHT_DIRECTOR"
-      }
-    ],
-    "cost": 1195,
-    "firstTimePrestige": 1500,
-    "goalDependencies": [
-      {
-        "goalId": "human-in-orbit",
-        "componentId": "mig-e-154-spaceplane",
-        "amount": 15
-      },
-      {
-        "goalId": "mig-e-154-orbital-flown",
-        "componentId": "mig-e-154-spaceplane",
-        "amount": 10
-      }
-    ],
-    "goalBoosts": [
-      {
-        "goalId": "space-plane",
-        "componentId": "mig-e-154-spaceplane",
-        "amount": 1
-      },
-      {
-        "goalId": "human-in-orbit",
-        "componentId": "mig-e-154-spaceplane",
-        "amount": 1
-      },
-      {
-        "goalId": "ofo-flown",
-        "componentId": "mig-e-154-spaceplane",
-        "amount": 1
-      }
-    ],
-    "launches": [
-      {
-        "launchType": "LEO_HR",
-        "payloadComponentIds": [
-          "mig-e-154-spaceplane"
-        ]
-      }
-    ],
-    "cancellationPrestigeDeduction": 1500,
-    "cancellationRefundPercent": 10,
-    "requiredGoalIds": []
-  },
-  {
-    "id": "mig-e-154-joint-orbital",
-    "programId": "mig-e-154",
-    "seasons": [
-      {
-        "steps": [
-          {
-            "id": "01-sc-a-launch-preparations",
-            "componentInvolvements": [
-              {
-                "componentId": "@rocket-1",
-                "percent": 50
-              },
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 50
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 0,
-                "percent": 50
-              },
-              {
-                "slot": 1,
-                "percent": 50
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 40.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 40.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 20.0
-              }
-            ],
-            "crewRisk": false,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 20,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "02-sc-a-countdown",
-            "componentInvolvements": [
-              {
-                "componentId": "@rocket-1",
-                "percent": 70
-              },
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 30
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 0,
-                "percent": 60
-              },
-              {
-                "slot": 1,
-                "percent": 40
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 60.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 15.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 25.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 20,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "03-sc-a-launch",
-            "componentInvolvements": [
-              {
-                "componentId": "@rocket-1",
-                "percent": 80
-              },
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 20
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 0,
-                "percent": 70
-              },
-              {
-                "slot": 1,
-                "percent": 10
-              },
-              {
-                "slot": 2,
-                "percent": 20
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 35.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 10.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 55.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 20,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "04-sc-a-ascent",
-            "componentInvolvements": [
-              {
-                "componentId": "@rocket-1",
-                "percent": 80
-              },
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 20
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 0,
-                "percent": 70
-              },
-              {
-                "slot": 1,
-                "percent": 10
-              },
-              {
-                "slot": 2,
-                "percent": 20
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 30.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 10.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 60.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 20,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "05-sc-a-deployment",
-            "componentInvolvements": [
-              {
-                "componentId": "@rocket-1",
-                "percent": 20
-              },
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 80
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 0,
-                "percent": 50
-              },
-              {
-                "slot": 1,
-                "percent": 30
-              },
-              {
-                "slot": 2,
-                "percent": 20
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 40.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 45.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 15.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 20,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "06-sc-a-earth-orbit",
-            "componentInvolvements": [
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 65
-              },
-              {
-                "slot": 2,
-                "percent": 35
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 35.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 45.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 20.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 20,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "07-sc-b-launch-preparations",
-            "componentInvolvements": [
-              {
-                "componentId": "@rocket-2",
-                "percent": 50
-              },
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 50
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 0,
-                "percent": 50
-              },
-              {
-                "slot": 1,
-                "percent": 50
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 40.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 40.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 20.0
-              }
-            ],
-            "crewRisk": false,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 20,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "08-sc-b-countdown",
-            "componentInvolvements": [
-              {
-                "componentId": "@rocket-2",
-                "percent": 70
-              },
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 30
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 0,
-                "percent": 60
-              },
-              {
-                "slot": 1,
-                "percent": 40
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 60.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 15.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 25.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 20,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "09-sc-b-launch",
-            "componentInvolvements": [
-              {
-                "componentId": "@rocket-2",
-                "percent": 80
-              },
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 20
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 0,
-                "percent": 70
-              },
-              {
-                "slot": 1,
-                "percent": 10
-              },
-              {
-                "slot": 2,
-                "percent": 20
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 35.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 10.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 55.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 20,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "10-sc-b-ascent",
-            "componentInvolvements": [
-              {
-                "componentId": "@rocket-2",
-                "percent": 80
-              },
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 20
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 0,
-                "percent": 70
-              },
-              {
-                "slot": 1,
-                "percent": 10
-              },
-              {
-                "slot": 2,
-                "percent": 20
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 30.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 10.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 60.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 20,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "11-sc-b-deployment",
-            "componentInvolvements": [
-              {
-                "componentId": "@rocket-2",
-                "percent": 20
-              },
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 80
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 0,
-                "percent": 50
-              },
-              {
-                "slot": 1,
-                "percent": 30
-              },
-              {
-                "slot": 2,
-                "percent": 20
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 40.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 45.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 15.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 20,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "12-sc-b-earth-orbit",
-            "componentInvolvements": [
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 65
-              },
-              {
-                "slot": 2,
-                "percent": 35
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 35.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 45.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 20.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 20,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "13-joint-orbital-flight",
-            "componentInvolvements": [
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 65
-              },
-              {
-                "slot": 2,
-                "percent": 35
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 17.5
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 22.5
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 10.0
-              },
-              {
-                "slot": 1,
-                "skill": "LEADERSHIP",
-                "percent": 17.5
-              },
-              {
-                "slot": 1,
-                "skill": "PILOTING",
-                "percent": 22.5
-              },
-              {
-                "slot": 1,
-                "skill": "FITNESS",
-                "percent": 10.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 20,
-            "failurePrestigeDeduction": 20,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "14-sc-a-deorbit-burn",
-            "componentInvolvements": [
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 40
-              },
-              {
-                "slot": 2,
-                "percent": 60
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 25.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 55.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 20.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 20,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "15-sc-a-reentry",
-            "componentInvolvements": [
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 20
-              },
-              {
-                "slot": 2,
-                "percent": 80
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 20.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 55.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 25.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 20,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "16-sc-a-descent",
-            "componentInvolvements": [
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 40
-              },
-              {
-                "slot": 2,
-                "percent": 60
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 30.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 60.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 10.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 20,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "17-sc-a-landing",
-            "componentInvolvements": [
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 50
-              },
-              {
-                "slot": 2,
-                "percent": 50
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 20.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 70.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 10.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 40,
-            "failurePrestigeDeduction": 20,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "18-sc-b-deorbit-burn",
-            "componentInvolvements": [
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 40
-              },
-              {
-                "slot": 2,
-                "percent": 60
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 1,
-                "skill": "LEADERSHIP",
-                "percent": 25.0
-              },
-              {
-                "slot": 1,
-                "skill": "PILOTING",
-                "percent": 55.0
-              },
-              {
-                "slot": 1,
-                "skill": "FITNESS",
-                "percent": 20.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 20,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "19-sc-b-reentry",
-            "componentInvolvements": [
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 20
-              },
-              {
-                "slot": 2,
-                "percent": 80
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 1,
-                "skill": "LEADERSHIP",
-                "percent": 20.0
-              },
-              {
-                "slot": 1,
-                "skill": "PILOTING",
-                "percent": 55.0
-              },
-              {
-                "slot": 1,
-                "skill": "FITNESS",
-                "percent": 25.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 20,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "20-sc-b-descent",
-            "componentInvolvements": [
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 40
-              },
-              {
-                "slot": 2,
-                "percent": 60
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 1,
-                "skill": "LEADERSHIP",
-                "percent": 30.0
-              },
-              {
-                "slot": 1,
-                "skill": "PILOTING",
-                "percent": 60.0
-              },
-              {
-                "slot": 1,
-                "skill": "FITNESS",
-                "percent": 10.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 20,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "21-sc-b-landing",
-            "componentInvolvements": [
-              {
-                "componentId": "mig-e-154-spaceplane",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 50
-              },
-              {
-                "slot": 2,
-                "percent": 50
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 1,
-                "skill": "LEADERSHIP",
-                "percent": 20.0
-              },
-              {
-                "slot": 1,
-                "skill": "PILOTING",
-                "percent": 70.0
-              },
-              {
-                "slot": 1,
-                "skill": "FITNESS",
-                "percent": 10.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 40,
-            "failurePrestigeDeduction": 20,
-            "goalIdsAchieved": [
-              "joint-crewed-launch",
-              "mig-e-154-orbital-flown"
-            ]
-          }
-        ]
-      }
-    ],
-    "crewSlots": [
-      "COSMONAUT A",
-      "COSMONAUT B"
-    ],
-    "controlSlots": [
-      {
-        "title": "BOOSTER",
-        "kind": "MISSION_CONTROL",
-        "skill": "PROPULSION"
-      },
-      {
-        "title": "TRAJECTORY",
-        "kind": "MISSION_CONTROL",
-        "skill": "TRAJECTORY_AND_GNC"
-      },
-      {
-        "title": "SPACE PLANE SYSTEMS",
-        "kind": "MISSION_CONTROL",
-        "skill": "CREW_SYSTEMS_AND_PAYLOADS"
-      },
-      {
-        "title": "FLIGHT DIRECTOR",
-        "kind": "MISSION_CONTROL",
-        "skill": "FLIGHT_DIRECTOR"
-      }
-    ],
-    "cost": 2390,
-    "firstTimePrestige": 2000,
-    "goalDependencies": [
-      {
-        "goalId": "human-in-orbit",
-        "componentId": "mig-e-154-spaceplane",
-        "amount": 15
-      },
-      {
-        "goalId": "mig-e-154-orbital-flown",
-        "componentId": "mig-e-154-spaceplane",
-        "amount": 10
-      }
-    ],
-    "goalBoosts": [
-      {
-        "goalId": "space-plane",
-        "componentId": "mig-e-154-spaceplane",
-        "amount": 1
-      },
-      {
-        "goalId": "human-in-orbit",
-        "componentId": "mig-e-154-spaceplane",
-        "amount": 1
-      },
-      {
-        "goalId": "ofo-flown",
-        "componentId": "mig-e-154-spaceplane",
-        "amount": 1
-      }
-    ],
-    "launches": [
-      {
-        "launchType": "LEO_HR",
-        "payloadComponentIds": [
-          "mig-e-154-spaceplane"
-        ]
-      },
-      {
-        "launchType": "LEO_HR",
-        "payloadComponentIds": [
-          "mig-e-154-spaceplane"
-        ]
-      }
-    ],
-    "cancellationPrestigeDeduction": 1750,
-    "cancellationRefundPercent": 10,
-    "requiredGoalIds": []
+    "cancellationPrestigeDeduction": 288,
+    "cancellationRefundPercent": 0,
+    "requiredGoalIds": [
+      "mig-e-154-research-flight-1-flown"
+    ]
   },
   {
     "id": "mercury-uncrewed-suborbital",

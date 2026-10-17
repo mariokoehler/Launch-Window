@@ -579,20 +579,16 @@
     "cancelsGoalIds": []
   },
   {
-    "id": "mig-e-154-suborbital-flown",
-    "firstTimePrestige": 500,
-    "secondTimePrestige": 250,
-    "cancelsGoalIds": [
-      "human-in-space"
-    ]
+    "id": "mig-e-154-research-flight-1-flown",
+    "firstTimePrestige": 400,
+    "secondTimePrestige": 200,
+    "cancelsGoalIds": []
   },
   {
-    "id": "mig-e-154-orbital-flown",
-    "firstTimePrestige": 1000,
-    "secondTimePrestige": 500,
+    "id": "mig-e-154-research-flight-2-flown",
+    "firstTimePrestige": 400,
+    "secondTimePrestige": 200,
     "cancelsGoalIds": [
-      "mig-e-154-suborbital-flown",
-      "human-in-orbit",
       "space-plane"
     ]
   },

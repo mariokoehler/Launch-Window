@@ -91,7 +91,7 @@ class ReplayClipsTest {
         assertEquals("ascent", CLIPS.clipName("04-ascent", "03-launch").orElseThrow());
         assertEquals("rocket-climb", CLIPS.clipName("04-powered-ascent").orElseThrow());
         assertEquals("undocking", CLIPS.clipName("07-lk-deployment").orElseThrow());
-        assertEquals("rocket-flight", CLIPS.clipName("03-wings-deployment").orElseThrow());
+        assertEquals("x15-peak", CLIPS.clipName("05-peak-altitude").orElseThrow());
         assertEquals("lander-engine-test", CLIPS.clipName("05-lem-tests-earth-orbit").orElseThrow());
     }
 

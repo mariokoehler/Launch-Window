@@ -408,12 +408,14 @@ FULL_GOALS = [
     flown('mig-e-154-drop-test-flown', 'MIG E-154', 'DROP TEST', SOVIET,
           'a slender silver swept-wing rocket plane with a red star on its tail fin, falling away from under a '
           'large carrier aircraft'),
-    flown('mig-e-154-suborbital-flown', 'MIG E-154', 'SUBORBITAL FLIGHT', SOVIET,
+    # The E-154 is the Soviet X-15 (2026-10-17): its altitude flight keeps the suborbital patch (it goes to the edge
+    # of space), and its speed flight's is still to be made.
+    flown('mig-e-154-research-flight-1-flown', 'MIG E-154', 'SUBORBITAL FLIGHT', SOVIET,
           'a slender silver swept-wing rocket plane with a red star on its tail fin, at the top of a high arc '
           'above the curved Earth'),
-    flown('mig-e-154-orbital-flown', 'MIG E-154', 'ORBITAL FLIGHT', SOVIET,
-          'a slender silver swept-wing rocket plane with a red star on its tail fin, circling the Earth on a full '
-          'orbit line'),
+    flown('mig-e-154-research-flight-2-flown', 'MIG E-154', 'SPEED FLIGHT', SOVIET,
+          'a slender silver swept-wing rocket plane with a red star on its tail fin, streaking level and fast, '
+          'glowing hot at its needle nose, with speed lines trailing behind it above the clouds'),
     # ---- Two-crew capsules
     uncrewed_suborbital('gemini-uncrewed-suborbital-flown', 'GEMINI', NASA, GEMINI),
     suborbital('gemini-suborbital-flown', 'GEMINI', NASA, GEMINI),

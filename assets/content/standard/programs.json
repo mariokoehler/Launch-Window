@@ -451,8 +451,8 @@
   {
     "id": "mig-e-154",
     "categoryId": "space-planes",
-    "openingCost": 1034,
-    "maintenanceCost": 104,
+    "openingCost": 412,
+    "maintenanceCost": 42,
     "requiredMissionComponentIds": [
       "mig-e-154-spaceplane"
     ],

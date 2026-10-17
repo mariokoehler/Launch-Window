@@ -131,10 +131,10 @@
     "programId": "mig-e-154",
     "unlockConfigurationIds": [
       "mig-e-154-drop-test",
-      "mig-e-154-suborbital-test",
-      "mig-e-154-orbital"
+      "mig-e-154-research-flight-1",
+      "mig-e-154-research-flight-2"
     ],
-    "contractConfigurationId": "mig-e-154-suborbital-test"
+    "contractConfigurationId": "mig-e-154-research-flight-1"
   },
   {
     "programId": "mercury",

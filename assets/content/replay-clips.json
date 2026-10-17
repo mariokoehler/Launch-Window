@@ -180,13 +180,11 @@
     {"step": "takeoff", "clip": "air-takeoff"},
     {"step": "pre-launch", "clip": "air-cruise"},
     {"step": "launch-from-drop-plane", "clip": "air-drop"},
-    {"step": "airdrop", "clip": "air-drop"},
     {"step": "powered-ascent", "clip": "rocket-climb"},
     {"step": "peak-altitude", "clip": "x15-peak"},
     {"step": "high-speed-leg", "clip": "x15-fast"},
-    {"step": "wings-deployment", "clip": "rocket-flight"},
     {"step": "venus-mercury-transit", "clip": "venus-mercury-transit"}
   ],
-  "vehicles": ["atv", "gemini-a", "gemini-b", "lk-700", "sc-a", "sc-b", "soyuz-7k-l3-lok", "soyuz-7k-ok",
+  "vehicles": ["atv", "gemini-a", "gemini-b", "lk-700", "soyuz-7k-l3-lok", "soyuz-7k-ok",
                "spc-a", "spc-b", "transtage"]
 }
