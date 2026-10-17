@@ -356,6 +356,12 @@ leading to satellite navigation.
   pictures. On Surveyor 3 (April 1967) bright rocks confused the radar, the verniers didn't cut, and it bounced
   twice before they were shut off by command. Surveyor 2 tumbled when a vernier failed to light, and Surveyor 4
   fell silent seconds before its retro burned out. The replay's `surveyor-landing` plays the drop and the bounces.
+- **The first rover sent to Mars** (2026-10-17, from Wikipedia and IEEE Spectrum; verify before a note uses it): Mars 2
+  and Mars 3 each carried PrOP-M, a 4.5 kg box on two wide skis, tethered to its lander by a 15 m cable. The lander's
+  arm was to set it down in view of the cameras; it would walk on its skis at up to a metre an hour, stopping every
+  1.5 m to measure the soil, and two bars on its front would tell it of a rock, so it could back off and walk round.
+  Neither ran: Mars 2 crashed on 27 November 1971, and Mars 3, down on 2 December, fell silent seconds after landing
+  (sources give 14 to 20). The rovers stayed secret for about 20 years. The replay's `mars-rover`.
 - **Viking's lander leaves its orbiter** (2026-10-17, NSSDCA's pages for Viking 1's orbiter and lander): the orbiter was
   an octagon about 2.5 m across with four wings of solar panels (two opposite ones 9.75 m tip to tip), a 1.5 m dish on
   one edge of its base and its main engine above; the lander's attachment points were on its bottom. Viking 1's lander

@@ -90,14 +90,20 @@ def vehicle(component_id, components):
     return "probe"
 
 
-def rule_clip(key, rules, earlier=()):
+def rule_clip(key, rules, earlier=(), program=None, later=()):
     """The clip the first rule names for this key, and what picked it: the step before (a rule's "after"),
-    or a step anywhere earlier in the season (its "earlier"). earlier: the keys before it, in order."""
+    a step anywhere earlier in the season (its "earlier"), the program (its "programs") or a step planned later
+    (its "later"), as ReplayClips matches them. earlier and later: the keys before and after it, in order."""
     before = earlier[-1] if earlier else None
     for rule in rules:
         if (key == rule["step"] and rule.get("after") in (None, before)
-                and rule.get("earlier") in (None, *earlier)):
-            return rule["clip"], (f"`{rule['earlier']}` earlier" if rule.get("earlier") else f"after `{before}`")
+                and rule.get("earlier") in (None, *earlier)
+                and (rule.get("programs") is None or program in rule["programs"])
+                and rule.get("later") in (None, *later)):
+            why = f"`{rule['earlier']}` earlier" if rule.get("earlier") else f"after `{before}`"
+            if rule.get("programs"):
+                why += f" in {', '.join(rule['programs'])}"
+            return rule["clip"], why
     return None, f"after `{before}`"
 
 
@@ -123,13 +129,12 @@ def main():
     clips = load(CONTENT / "replay-clips.json")
     rules = clips["rules"]
 
-    uses = []  # (kind, config, season index, step, the kinds before it in the season)
+    uses = []  # (kind, config, season index, step, the kinds before it in the season, the kinds after it)
     for m in configs:
         for i, season in enumerate(m["seasons"]):
-            prev = []
-            for st in season["steps"]:
-                uses.append((kind(st["id"]), m, i, st, list(prev)))
-                prev.append(kind(st["id"]))
+            all_ = [kind(st["id"]) for st in season["steps"]]
+            for j, st in enumerate(season["steps"]):
+                uses.append((kind(st["id"]), m, i, st, all_[:j], all_[j + 1:]))
     keys = fold({u[0] for u in uses}, clips.get("vehicles", []), {r["step"] for r in rules})
 
     entries = collections.defaultdict(lambda: {
@@ -137,9 +142,9 @@ def main():
         "agencies": set(), "bodies": collections.Counter(), "vehicles": collections.Counter(),
         "crewed": 0, "risk": 0, "later": 0, "uses": 0, "early": False, "befores": collections.Counter(),
         "picks": {}})
-    for k, m, i, st, prev in uses:
+    for k, m, i, st, prev, nxt in uses:
         e = entries[keys[k]]
-        clip, why = rule_clip(keys[k], rules, [keys[p] for p in prev])
+        clip, why = rule_clip(keys[k], rules, [keys[p] for p in prev], m["programId"], [keys[p] for p in nxt])
         e["befores"][why] += 1
         e["picks"][why] = clip
         program = programs[m["programId"]]

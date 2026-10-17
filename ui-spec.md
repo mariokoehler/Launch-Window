@@ -1971,6 +1971,11 @@ clips, the replay is meant to be watched like a short film, and the player can s
   onto its pads, calls home and turns its solar panel to the Sun. The glitch is Surveyor 3's: the verniers don't
   cut, and it hops twice before they're shut off from Earth. The failure hops the same way, comes off it leaning,
   lands on one foot and topples onto its antenna. Every story unconfirmed.
+- **A rover at Mars (user, 2026-10-17):** Mars 2's third season replayed its second's surface work; its surface step
+  there plays `mars-rover` now (season 2 keeps `mars-surface`: a `mars-2` rule after `landing-and-deployment` first, then
+  one with no step before). On the lander Mars 2 lands as (Viking's, in the replay), the arm sets PrOP-M down, and it
+  walks off on its skis, its tether paying out. The glitch's front bar meets a rock: it steps back, sidesteps and walks
+  round it; the failure stops at the rock and the lander falls silent. Unconfirmed.
 - **Viking's separation (user, 2026-10-17):** its `lander-deployment-and-de-orbit` borrowed Venera's release; it plays
   `viking-separation` now: the Viking orbiter (an octagonal body, four wings of panels, the dish on a boom, tanks and
   engine above) lets the lander capsule go from under it, over Mars; the capsule turns side on, fires its deorbit jets,

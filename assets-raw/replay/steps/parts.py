@@ -1190,6 +1190,26 @@ def viking_parts():
     layer("vk-jets", jet(930) + jet(990), (960, 400))
 
 
+def prop_m_parts():
+    """PrOP-M (2026-10-17), the little rover Mars 2 and Mars 3 carried: a flat box with a bump in the middle on two wide
+    skis (one seen), two short bars out of its front that a rock would push in, and its tether. Drawn on the ground
+    (y 900) with its pivot under its middle, a few times larger than it was (215 mm) so it reads beside the lander."""
+    x, y = 960, 900
+    body = (f'<rect x="{x - 24}" y="{y - 24}" width="48" height="14" rx="3" fill="#ffffff" {LINE} stroke-width="3"/>'
+            f'<path d="M{x - 9} {y - 24} Q{x} {y - 36} {x + 9} {y - 24}" fill="url(#hatch)" {LINE} stroke-width="2.4"/>'
+            f'<path d="M{x + 24} {y - 16} L{x + 38} {y - 10} M{x + 24} {y - 12} L{x + 36} {y - 4}" fill="none" {LINE} '
+            f'stroke-width="2.4"/>')
+    layer("pr-rover", body, (x, y))
+    # The ski: a flat runner, its front turned up, hinged under the body (the timeline lifts and slides it).
+    layer("pr-ski", f'<path d="M{x - 30} {y - 2} L{x + 22} {y - 2} Q{x + 30} {y - 2} {x + 32} {y - 9}" fill="none" {LINE} '
+                    f'stroke-width="3.5"/><path d="M{x - 12} {y - 10} L{x - 12} {y - 2} M{x + 10} {y - 10} L{x + 10} {y - 2}" '
+                    f'fill="none" {LINE} stroke-width="2.4"/>', (x, y))
+    # The tether, 100 px along +x from its pivot (the timeline aims and stretches it).
+    layer("pr-cable", f'<path d="M{x} {y} L{x + 100} {y}" fill="none" {LINE} stroke-width="2"/>', (x, y))
+    # The bars' flash when they meet a rock.
+    layer("pr-bump", f'<circle cx="{x + 40}" cy="{y - 8}" r="9" fill="none" stroke="{GOLD}" stroke-width="3.5"/>', (x + 40, y - 8))
+
+
 def planet_entry_parts():
     # A lander's entry at another planet (2026-10-15): Mars's limb (Venus's is b-limb), hatched as
     # p-mars, with one thin shell of air; the Mars landers' aeroshell (Viking's and Mars 3's blunt cone,
@@ -1368,6 +1388,7 @@ def main():
     carrier_entry_parts()
     planet_entry_parts()
     viking_parts()
+    prop_m_parts()
     planet_descent_parts()
     air_parts()
     departure_parts()

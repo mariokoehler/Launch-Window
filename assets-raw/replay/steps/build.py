@@ -455,6 +455,12 @@ STEPS = {
         "success": (5.6, 1.2), "glitch": (5.6, 2.2), "failure": (5.6, 2.4),
         "times": [0.5, 1.2, 1.9, 2.6, 3.6, 5.5],
     },
+    # PrOP-M on Mars (2026-10-17): Mars 2's third season on the surface.
+    "mars-rover": {
+        "pad": False, "before": ["orbit.jsx"],
+        "success": (6.4, 3.4), "glitch": (6.4, 3.6), "failure": (6.4, 3.6),
+        "times": [0.8, 1.6, 2.6, 3.3, 4.2, 6.3],
+    },
     # Viking's own (2026-10-17): the orbiter lets the lander capsule go, and it burns out of orbit.
     "viking-separation": {
         "pad": False,

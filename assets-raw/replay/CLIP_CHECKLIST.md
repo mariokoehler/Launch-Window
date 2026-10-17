@@ -49,7 +49,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: EARTH 147, MOON 50, VENUS 7, MARS 5
   - Programs: Apollo: Earth-orbit tests 17, Soyuz 7K-OK 16, Gemini 15, Soyuz 7K-L3: Earth-orbit tests 12
 - [x] **Suborbital flight** `suborbital-flight`: 17 uses in 17 configurations, 9 programs (NASA/SOVIET) **(early-era)**, crew risk in 8 of 17
-  - Clip: `suborbital-flight-om`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: by the steps before: `suborbital-flight` after `deployment` 14, `suborbital-flight-om` after `deployment` in soyuz-7k-ok, soyuz-7k-l3, soyuz-7k-l3-earth-orbit, lk-700, lk-700-earth-orbit 3; [x] success, [x] glitch, [x] failure; cues no
   - On screen: crewed craft 14, crewed lander 2, spaceplane 1
   - Destinations: EARTH 17
   - Programs: Gemini 2, LK-700: Earth-orbit tests 2, Project Mercury 2, Soyuz 7K-L1: Earth-orbit tests 2
@@ -115,13 +115,13 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: EARTH 93, MOON 9
   - Programs: Gemini 15, Apollo: Earth-orbit tests 14, Soyuz 7K-OK 14, Voskhod 10
 - [x] **Retrofire** `retrofire`: 99 uses in 85 configurations, 12 programs (NASA/SOVIET) **(early-era)**, crew risk in 80 of 99
-  - Clip: by the steps before: `retrofire` after `reentry-preparations` 68, `retrofire-om` after `suborbital-flight` 7, `deorbit-burn-om` after `duration` 6, `deorbit-burn-om` after `earth-orbital` 3, `deorbit-burn-om` after `landing-and-recovery` 2, `retrofire` after `modules-separation` 2, `deorbit-burn-om` after `orbital-flight` 1, `deorbit-burn-om` after `duration-level-i` 1, `deorbit-burn-om` after `joint-orbital-flight` 1, `deorbit-burn-om` after `descent-and-splashdown` 1, `deorbit-burn-om` after `eva-7k-lok` 1, `deorbit-burn-om` after `joint-earth-orbital` 1, `deorbit-burn-om` after `rendezvous` 1, `deorbit-burn-om` after `undocking` 1, `deorbit-burn-om` after `duration-l5` 1, `deorbit-burn-om` after `duration-l6` 1, `deorbit-burn-om` after `eva-7k-ok` 1; [x] success, [x] glitch, [x] failure; cues yes
+  - Clip: by the steps before: `retrofire` after `reentry-preparations` 68, `retrofire` after `suborbital-flight` 6, `deorbit-burn-om` after `duration` in soyuz-7k-ok, soyuz-7k-l3, soyuz-7k-l3-earth-orbit, lk-700, lk-700-earth-orbit 6, `deorbit-burn-om` after `earth-orbital` in soyuz-7k-ok, soyuz-7k-l3, soyuz-7k-l3-earth-orbit, lk-700, lk-700-earth-orbit 3, `deorbit-burn-om` after `landing-and-recovery` in soyuz-7k-ok, soyuz-7k-l3, soyuz-7k-l3-earth-orbit, lk-700, lk-700-earth-orbit 2, `retrofire` after `modules-separation` in gemini-eor, gemini-eor-earth-orbit 2, `deorbit-burn` after `orbital-flight` 1, `deorbit-burn` after `duration-level-i` 1, `deorbit-burn` after `joint-orbital-flight` 1, `deorbit-burn` after `descent-and-splashdown` 1, `deorbit-burn-om` after `eva-7k-lok` in soyuz-7k-ok, soyuz-7k-l3, soyuz-7k-l3-earth-orbit, lk-700, lk-700-earth-orbit 1, `deorbit-burn-om` after `joint-earth-orbital` in soyuz-7k-ok, soyuz-7k-l3, soyuz-7k-l3-earth-orbit, lk-700, lk-700-earth-orbit 1, `deorbit-burn-om` after `rendezvous` in soyuz-7k-ok, soyuz-7k-l3, soyuz-7k-l3-earth-orbit, lk-700, lk-700-earth-orbit 1, `deorbit-burn-om` after `undocking` in soyuz-7k-ok, soyuz-7k-l3, soyuz-7k-l3-earth-orbit, lk-700, lk-700-earth-orbit 1, `deorbit-burn-om` after `duration-l5` in soyuz-7k-ok, soyuz-7k-l3, soyuz-7k-l3-earth-orbit, lk-700, lk-700-earth-orbit 1, `deorbit-burn-om` after `duration-l6` in soyuz-7k-ok, soyuz-7k-l3, soyuz-7k-l3-earth-orbit, lk-700, lk-700-earth-orbit 1, `deorbit-burn-om` after `eva-7k-ok` in soyuz-7k-ok, soyuz-7k-l3, soyuz-7k-l3-earth-orbit, lk-700, lk-700-earth-orbit 1, `retrofire-om` after `suborbital-flight` in soyuz-7k-ok, soyuz-7k-l3, soyuz-7k-l3-earth-orbit, lk-700, lk-700-earth-orbit 1; [x] success, [x] glitch, [x] failure; cues yes
   - Also covers: `gemini-a-retrofire` 4, `gemini-b-retrofire` 4, `spc-a-retrofire` 2
   - On screen: crewed craft 88, crewed lander 9, spaceplane 2
   - Destinations: EARTH 99
   - Programs: Soyuz 7K-OK 16, Gemini 15, Soyuz 7K-L3: Earth-orbit tests 11, Voskhod 10
 - [x] **Retropack jettison** `retrofire-jettison`: 67 uses in 59 configurations, 11 programs (NASA/SOVIET) **(early-era)**, crew risk in 57 of 67
-  - Clip: `retro-shutdown`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: by the steps before: `retrofire-jettison` after `retrofire` 38, `retrofire-jettison-om` after `retrofire` in soyuz-7k-ok, soyuz-7k-l3, soyuz-7k-l3-earth-orbit, lk-700, lk-700-earth-orbit 19, `retrofire-jettison` after `modules-separation` 4, `retrofire-jettison` after `reentry-preparations` 2, `retrofire-jettison-om` after `engine-test` in soyuz-7k-ok, soyuz-7k-l3, soyuz-7k-l3-earth-orbit, lk-700, lk-700-earth-orbit 2, `retro-shutdown` after `retrofire` in vostok 1, `retrofire-jettison` after `earth-orbit` 1; [x] success, [x] glitch, [x] failure; cues no
   - Also covers: `gemini-a-retrofire-jettison` 4, `gemini-b-retrofire-jettison` 4, `retrofire-jettison-a` 1, `retrofire-jettison-b` 1, `spc-a-retrofire-jettison` 1
   - On screen: crewed craft 56, crewed lander 11
   - Destinations: EARTH 63, MOON 4
@@ -155,7 +155,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: EARTH 16, MOON 11
   - Programs: Apollo: Earth-orbit tests 14, Apollo 7, Gemini EOR 4, Gemini EOR: Earth-orbit tests 2
 - [x] **Landing** `landing`: 18 uses in 17 configurations, 9 programs (NASA/SOVIET) crew risk in 13 of 18, later seasons in 1 of 18
-  - Clip: `luna-landing-rover`; [x] success, [x] glitch, [x] failure; cues yes
+  - Clip: by the steps before: `runway-landing` after `descent` 9, `lunar-landing` after `powered-descent` 4, `probe-landing` after `lander-descent` 2, `luna-landing-sampler` after `lunar-approach` in luna-15 1, `luna-landing-rover` after `lunar-approach` in luna-17 1, `mars-landing` `mars-approach` earlier 1; [x] success, [x] glitch, [x] failure; cues no
   - Also covers: `sc-a-landing` 1, `sc-b-landing` 1
   - On screen: spaceplane 9, crewed craft 3, crewed lander 3, probe 3, probe lander 2, rover 1
   - Destinations: EARTH 9, MOON 6, VENUS 2, MARS 1
@@ -464,7 +464,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: MOON 3
   - Programs: Apollo 3
 - [x] **Surface operations** `lunar-surface-operations-robotic`: 3 uses in 2 configurations, 2 programs (SOVIET) uncrewed
-  - Clip: by the steps before: `lunokhod-deploy` after `landing` 2, `lunokhod-drive` after `lunar-surface-operations-robotic` 1; [x] success, [x] glitch, [x] failure; cues yes
+  - Clip: by the steps before: `luna-sampler` after `landing` in luna-15 1, `lunokhod-deploy` after `landing` in luna-17 1, `lunokhod-drive` after `lunar-surface-operations-robotic` in luna-17 1; [x] success, [x] glitch, [x] failure; cues yes
   - On screen: probe lander 2, rover 2, probe 1
   - Destinations: MOON 3
   - Programs: Luna 15 1, Luna 17 1
@@ -612,7 +612,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: MARS 2, VENUS 2
   - Programs: Venera lander 2, Mars 2 1, Viking 1
 - [x] **On the surface of Mars** `mars-surface`: 4 uses in 2 configurations, 2 programs (NASA/SOVIET) uncrewed, later seasons in 4 of 4
-  - Clip: `mars-surface`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: by the steps before: `mars-surface` after `landing` 1, `mars-surface` after `None` 1, `mars-surface` after `landing-and-deployment` in mars-2 1, `mars-rover` after `None` in mars-2 1; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 2, probe lander 2
   - Destinations: MARS 4
   - Programs: Mars 2 1, Viking 1
@@ -742,7 +742,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: EARTH 123, MOON 41
   - Programs: Apollo: Earth-orbit tests 17, Gemini 13, Soyuz 7K-OK 12, Voskhod 8
 - [x] **Modules separation** `modules-separation`: 83 uses in 74 configurations, 10 programs (NASA/SOVIET) **(early-era)**, crew risk in 21 of 83
-  - Clip: by the steps before: `equipment-section-separation` after `retrofire` 33, `orbital-module-separation` after `retrofire-jettison` 22, `equipment-section-separation` after `de-orbit-burn` 10, `equipment-section-separation` after `earth-orbit` 9, `equipment-section-separation` after `reentry-preparations` 7, `equipment-section-separation` after `undocking` 2; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: by the steps before: `modules-separation` after `retrofire` 33, `orbital-module-separation` after `retrofire-jettison` in soyuz-7k-ok, soyuz-7k-l3, soyuz-7k-l3-earth-orbit, lk-700, lk-700-earth-orbit 21, `modules-separation` after `de-orbit-burn` 10, `modules-separation` after `reentry-preparations` 7, `modules-separation` after `earth-orbit` 5, `equipment-section-separation` after `earth-orbit` in gemini-eor, gemini-eor-earth-orbit 4, `equipment-section-separation` after `undocking` in gemini-eor, gemini-eor-earth-orbit 2, `modules-separation` after `retrofire-jettison` 1; [x] success, [x] glitch, [x] failure; cues no
   - Also covers: `spc-a-modules-separation` 1
   - On screen: crewed craft 72, crewed lander 11
   - Destinations: EARTH 77, MOON 6
@@ -769,7 +769,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: EARTH 12
   - Programs: Vostok 5, Project Mercury 4, OKB-MiG E-154 1
 - [x] **Engine test** `engine-test`: 4 uses in 4 configurations, 2 programs (SOVIET) crew risk in 2 of 4
-  - Clip: `retrofire-om`; [x] success, [x] glitch, [x] failure; cues yes
+  - Clip: by the steps before: `retrofire` after `suborbital-flight` 2, `retrofire-om` after `suborbital-flight` in soyuz-7k-ok, soyuz-7k-l3, soyuz-7k-l3-earth-orbit, lk-700, lk-700-earth-orbit 2; [x] success, [x] glitch, [x] failure; cues yes
   - On screen: crewed craft 2, crewed lander 2
   - Destinations: EARTH 4
   - Programs: LK-700: Earth-orbit tests 2, Soyuz 7K-L1: Earth-orbit tests 2

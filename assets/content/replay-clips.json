@@ -146,6 +146,8 @@
     {"step": "landing-and-deployment", "clip": "mars-landing"},
     {"step": "lander-descent-and-landing", "clip": "probe-landing"},
     {"step": "big-probe-descent-and-landing", "clip": "multiprobe-large-descent"},
+    {"step": "mars-surface", "programs": ["mars-2"], "after": "landing-and-deployment", "clip": "mars-surface"},
+    {"step": "mars-surface", "programs": ["mars-2"], "clip": "mars-rover"},
     {"step": "mars-surface", "clip": "mars-surface"},
     {"step": "lunar-surface-operations-robotic", "programs": ["luna-17"], "after": "lunar-surface-operations-robotic", "clip": "lunokhod-drive"},
     {"step": "lunar-surface-operations-robotic", "programs": ["luna-17"], "clip": "lunokhod-deploy"},
