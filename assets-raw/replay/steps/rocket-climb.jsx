@@ -11,6 +11,7 @@ put("d-earth");
 for (var i = 1; i <= 8; i++) put("a-flow-" + i);
 put("w-plane");
 put("w-skid", "w-plane");
+put("x15-ventral", "w-plane");
 put("w-flame", "w-plane");
 hide("w-skid");
 // Both rough alike from 2.0; at 2.8 the glitch's steadies, the failure's stops.

@@ -1210,6 +1210,25 @@ def prop_m_parts():
     layer("pr-bump", f'<circle cx="{x + 40}" cy="{y - 8}" r="9" fill="none" stroke="{GOLD}" stroke-width="3.5"/>', (x + 40, y - 8))
 
 
+def x15_parts():
+    """The X-15's own bits (2026-10-17), on w-plane's drawing (nose right at 1196 820, tail at 760), children of it: the
+    lower ventral fin under the tail (dropped on a small chute before landing, or torn off at speed), the nose's
+    attitude jets (puffs up and down, for steering where the air is too thin for its fins), the shock cone off the
+    nose, the nose and leading edges glowing hot, and a hot spot on the belly."""
+    layer("x15-ventral", f'<path d="M762 840 L800 840 L816 878 L768 878 Z" fill="#ffffff" {LINE} stroke-width="3"/>', (788, 858))
+    jet = lambda y0, y1: (f'<path d="M1146 {y0} C1144 {(2 * y0 + y1) / 3:.0f} 1148 {(y0 + 2 * y1) / 3:.0f} 1152 {y1} '
+                          f'C1156 {(y0 + 2 * y1) / 3:.0f} 1160 {(2 * y0 + y1) / 3:.0f} 1158 {y0} Z" fill="{GOLD_FILL}" '
+                          f'stroke="{GOLD}" stroke-width="2.4" stroke-linejoin="round"/>')
+    layer("x15-rcs-up", jet(804, 770), (1152, 804))
+    layer("x15-rcs-down", jet(836, 870), (1152, 836))
+    layer("x15-shock", f'<path d="M1196 820 L900 690 M1196 820 L900 950" fill="none" {LINE} stroke-width="2.4" '
+                       f'stroke-dasharray="14 10" opacity="0.6"/>', (1196, 820))
+    layer("x15-heat", f'<path d="M1100 800 Q1172 812 1196 820 Q1172 828 1100 840 Z" fill="{GOLD_FILL}" stroke="{GOLD}" '
+                      f'stroke-width="3"/><path d="M880 830 L998 822 L1018 828" fill="none" stroke="{GOLD}" stroke-width="4"/>',
+          (1150, 820))
+    layer("x15-hot", f'<circle cx="980" cy="840" r="16" fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="3"/>', (980, 840))
+
+
 def planet_entry_parts():
     # A lander's entry at another planet (2026-10-15): Mars's limb (Venus's is b-limb), hatched as
     # p-mars, with one thin shell of air; the Mars landers' aeroshell (Viking's and Mars 3's blunt cone,
@@ -1389,6 +1408,7 @@ def main():
     planet_entry_parts()
     viking_parts()
     prop_m_parts()
+    x15_parts()
     planet_descent_parts()
     air_parts()
     departure_parts()

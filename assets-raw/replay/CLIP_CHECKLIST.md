@@ -79,12 +79,12 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: EARTH 1
   - Programs: OKB-MiG E-154 1
 - [x] **High-speed run** `high-speed-leg`: 1 use in 1 configuration, 1 program (NASA) crew risk in 1 of 1
-  - Clip: `rocket-flight`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `x15-fast`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: spaceplane 1
   - Destinations: EARTH 1
   - Programs: X-15 1
 - [x] **Peak altitude** `peak-altitude`: 1 use in 1 configuration, 1 program (NASA) crew risk in 1 of 1
-  - Clip: `rocket-flight`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `x15-peak`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: spaceplane 1
   - Destinations: EARTH 1
   - Programs: X-15 1
@@ -103,7 +103,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: EARTH 128, MOON 35
   - Programs: Apollo: Earth-orbit tests 16, Soyuz 7K-OK 16, Gemini 15, LK-700: Earth-orbit tests 11
 - [x] **Descent** `descent`: 103 uses in 93 configurations, 12 programs (NASA/SOVIET) crew risk in 84 of 103
-  - Clip: `descent-chutes`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: by the steps before: `descent-chutes` after `reentry` 98, `x15-descent` after `powered-ascent` in x-15 1, `x15-descent` after `peak-altitude` in x-15 1, `x15-descent` after `high-speed-leg` in x-15 1, `descent-chutes` after `wings-deployment` 1, `descent-chutes` after `descent` 1; [x] success, [x] glitch, [x] failure; cues no
   - Also covers: `descent-a` 1, `descent-b` 1, `sc-a-descent` 1, `sc-b-descent` 1
   - On screen: crewed craft 83, crewed lander 11, spaceplane 9
   - Destinations: EARTH 89, MOON 14

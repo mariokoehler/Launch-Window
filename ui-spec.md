@@ -1971,6 +1971,15 @@ clips, the replay is meant to be watched like a short film, and the player can s
   onto its pads, calls home and turns its solar panel to the Sun. The glitch is Surveyor 3's: the verniers don't
   cut, and it hops twice before they're shut off from Earth. The failure hops the same way, comes off it leaning,
   lands on one foot and topples onto its antenna. Every story unconfirmed.
+- **The X-15 (user, 2026-10-17):** the drop had the X-15 climb straight through its carrier; now it runs on ahead, level,
+  until its tail is past the carrier's nose, and pulls up there, while the carrier falls behind and the camera eases
+  ahead. Its descent had a capsule's chutes, and its peak and its fast run shared one clip; each has its own now:
+  `x15-peak` (above the air, no streaks, coasting over the top nose up to nose down, steering with its nose jets; the
+  glitch's nose wanders and the jets bring it back, the failure departs into a spin), `x15-fast` (low and level over the
+  clouds, fast streaks, a shock cone, its nose glowing; the glitch's belly gets a hot spot and it throttles back, the
+  failure tears off its lower fin) and `x15-descent` (nose down through the clouds, pulling out, dropping its lower fin
+  on a little chute; the glitch's nose bobs and is damped, the failure breaks up). The lower fin rides under its tail
+  from the takeoff on. Every story unconfirmed.
 - **A rover at Mars (user, 2026-10-17):** Mars 2's third season replayed its second's surface work; its surface step
   there plays `mars-rover` now (season 2 keeps `mars-surface`: a `mars-2` rule after `landing-and-deployment` first, then
   one with no step before). On the lander Mars 2 lands as (Viking's, in the replay), the arm sets PrOP-M down, and it

@@ -79,6 +79,10 @@ Each folder's `build/` is regenerated on every run and stays out of git.
     lander, its pads on the ground: legs (the near one in front), two compartments, the camera and its mirror hood,
     the mast with the planar antenna and the solar panel (`sv-panel`, turned about the mast's top), and three
     vernier plumes. The failure topples it over its right footpad (`PAD`), which stays where it landed.
+  - **The X-15 on its own** (2026-10-17, `x15-` parts, `x15.jsx`): the plane at full size (`PLANE`), its lower fin
+    (`x15-ventral`, placed from the plane's pose by `onPlane` so it can leave it; a child of `w-plane` in `air.jsx`'s
+    scenes and `rocket-climb`), its nose jets, shock cone and heat glows (children of `w-plane`). `x15-peak`,
+    `x15-fast` and `x15-descent` build on it; `air-drop`'s rocket plane runs ahead of the carrier before it pulls up.
   - **PrOP-M** (2026-10-17, `pr-` parts, `mars-rover.jsx`): the rover (`pr-rover`, its ski `pr-ski` and the bars' flash
     `pr-bump` children of it), its tether (`pr-cable`, aimed and stretched every frame), on `mars-surface`'s lander,
     2.2 times in. `make_clip_checklist.py` now matches rules by `programs` and `later` as `ReplayClips` does.

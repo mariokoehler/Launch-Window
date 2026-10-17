@@ -1,4 +1,7 @@
 {
+  "x15-peak": {"glitch": [{"at": 3.25, "sound": "radio-attitude-drift"}], "failure": [{"at": 3.25, "sound": "radio-tumbling"}]},
+  "x15-fast": {"failure": [{"at": 2.95, "sound": "radio-problem"}]},
+  "x15-descent": {"glitch": [{"at": 2.75, "sound": "radio-oscillations"}], "failure": [{"at": 3.05, "sound": "radio-data-lost"}]},
   "mars-rover": {"success": [{"at": 3.45, "sound": "radio-signal-good"}], "glitch": [{"at": 3.65, "sound": "radio-roger"}], "failure": [{"at": 3.65, "sound": "radio-probe-silent"}]},
   "viking-separation": {"failure": [{"at": 3.05, "sound": "radio-burn-failed"}]},
   "multiprobe-large-release": {"failure": [{"at": 2.45, "sound": "radio-separation-failed"}]},

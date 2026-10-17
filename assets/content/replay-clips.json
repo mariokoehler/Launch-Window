@@ -58,6 +58,7 @@
     {"step": "moon-earth-coast", "clip": "trans-earth-coast"},
     {"step": "earth-approach", "clip": "earth-approach"},
     {"step": "earth-approach-and-reentry", "clip": "earth-approach"},
+    {"step": "descent", "programs": ["x-15"], "clip": "x15-descent"},
     {"step": "descent", "clip": "descent-chutes"},
     {"step": "landing-and-recovery", "clip": "landing-and-recovery"},
     {"step": "splashdown-and-recovery", "clip": "splashdown-and-recovery"},
@@ -181,8 +182,8 @@
     {"step": "launch-from-drop-plane", "clip": "air-drop"},
     {"step": "airdrop", "clip": "air-drop"},
     {"step": "powered-ascent", "clip": "rocket-climb"},
-    {"step": "peak-altitude", "clip": "rocket-flight"},
-    {"step": "high-speed-leg", "clip": "rocket-flight"},
+    {"step": "peak-altitude", "clip": "x15-peak"},
+    {"step": "high-speed-leg", "clip": "x15-fast"},
     {"step": "wings-deployment", "clip": "rocket-flight"},
     {"step": "venus-mercury-transit", "clip": "venus-mercury-transit"}
   ],

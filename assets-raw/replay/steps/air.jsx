@@ -20,6 +20,8 @@ function airScene(ground) {
     if (!ground) hide("a-gear");
     put("w-plane");
     put("w-skid", "w-plane");
+    // The X-15's lower fin under its tail (2026-10-17), dropped before landing (x15-descent).
+    put("x15-ventral", "w-plane");
     put("w-flame", "w-plane");
     hide("a-smoke");
     hide("w-flame");

@@ -455,6 +455,22 @@ STEPS = {
         "success": (5.6, 1.2), "glitch": (5.6, 2.2), "failure": (5.6, 2.4),
         "times": [0.5, 1.2, 1.9, 2.6, 3.6, 5.5],
     },
+    # The X-15's own (2026-10-17): x15.jsx's plane on its own, the peak, the fast run and the way down.
+    "x15-peak": {
+        "pad": False, "before": ["moon.jsx", "air.jsx", "x15.jsx"],
+        "success": (6.0, 2.2), "glitch": (6.0, 3.2), "failure": (6.0, 3.2),
+        "times": [0.5, 1.3, 2.4, 3.0, 3.6, 5.9],
+    },
+    "x15-fast": {
+        "pad": False, "before": ["moon.jsx", "air.jsx", "x15.jsx"],
+        "success": (6.0, 2.4), "glitch": (6.0, 2.8), "failure": (6.0, 2.9),
+        "times": [0.5, 1.8, 2.4, 3.0, 3.8, 5.9],
+    },
+    "x15-descent": {
+        "pad": False, "before": ["moon.jsx", "air.jsx", "x15.jsx"],
+        "success": (6.0, 2.0), "glitch": (6.0, 2.7), "failure": (6.0, 3.0),
+        "times": [0.5, 2.0, 2.6, 3.2, 4.2, 5.9],
+    },
     # PrOP-M on Mars (2026-10-17): Mars 2's third season on the surface.
     "mars-rover": {
         "pad": False, "before": ["orbit.jsx"],

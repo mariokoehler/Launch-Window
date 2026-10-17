@@ -356,6 +356,12 @@ leading to satellite navigation.
   pictures. On Surveyor 3 (April 1967) bright rocks confused the radar, the verniers didn't cut, and it bounced
   twice before they were shut off by command. Surveyor 2 tumbled when a vernier failed to light, and Surveyor 4
   fell silent seconds before its retro burned out. The replay's `surveyor-landing` plays the drop and the bounces.
+- **The X-15's high points** (2026-10-17, from memory; verify before a note uses it): above the air its fins had nothing to
+  bite on, so it steered with small hydrogen-peroxide jets in its nose and wings; Joe Walker took it to 107.8 km on
+  22 August 1963. William Knight flew the X-15A-2 to Mach 6.7 on 3 October 1967, and the heat burned through the dummy
+  ramjet under its tail. On 15 November 1967 Mike Adams's X-15 drifted off heading at its peak, spun, and broke up in
+  the pull-out on the way down. Before landing the pilot dropped the lower half of the ventral fin, which came down on
+  its own parachute, so the skids could reach the lakebed. The replay's `x15-peak`, `x15-fast` and `x15-descent`.
 - **The first rover sent to Mars** (2026-10-17, from Wikipedia and IEEE Spectrum; verify before a note uses it): Mars 2
   and Mars 3 each carried PrOP-M, a 4.5 kg box on two wide skis, tethered to its lander by a 15 m cable. The lander's
   arm was to set it down in view of the cameras; it would walk on its skis at up to a metre an hour, stopping every
