@@ -20,21 +20,21 @@ var off = function () { return [0, 0]; };
 x15Fly(pitch, off);
 ventral(pitch, off, failure ? TEAR : 99, function (u) { return [-420 * u - 200 * u * u, 120 * u + 300 * u * u, -260 * u]; });
 var burning = function (t) { return failure ? t < TEAR + 0.1 : true; };
-fade("w-flame", function (t) { return burning(t) ? 1 : 0; });
-grow("w-flame", function (t) { var k = glitch && t > BACK ? 1.1 : 1.8; return [k, 1 + 0.1 * Math.sin(2 * Math.PI * 11 * t)]; });
-fade("x15-shock", function () { return 1; });
-fade("x15-heat", function (t) {
+fade(K.flame, function (t) { return burning(t) ? 1 : 0; });
+grow(K.flame, function (t) { var k = glitch && t > BACK ? 1.1 : 1.8; return [k, 1 + 0.1 * Math.sin(2 * Math.PI * 11 * t)]; });
+fade(K.shock, function () { return 1; });
+fade(K.heat, function (t) {
     var h = clamp((t - 0.3) / 2.0, 0, 1);
     if (failure && t > TEAR) h *= Math.max(0.3, 1 - (t - TEAR) / 1.5);
     return h * (0.85 + 0.15 * Math.sin(2 * Math.PI * 7 * t));
 });
 if (glitch || failure) {
-    fade("x15-hot", function (t) {
+    fade(K.hot, function (t) {
         if (t < HOT) return 0;
         var h = clamp((t - HOT) / 0.3, 0, 1);
         if (glitch) h *= 1 - clamp((t - 3.0) / 0.6, 0, 1);
         if (failure && t > TEAR) h *= Math.max(0, 1 - (t - TEAR) / 0.4);
         return h;
     });
-    grow("x15-hot", function (t) { return 0.6 + 0.8 * clamp((t - HOT) / 0.5, 0, 1); });
+    grow(K.hot, function (t) { return 0.6 + 0.8 * clamp((t - HOT) / 0.5, 0, 1); });
 }

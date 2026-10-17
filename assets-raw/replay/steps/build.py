@@ -351,7 +351,7 @@ STEPS = {
     },
     # A spaceplane's runway landing (2026-10-14).
     "runway-landing": {
-        "pad": False, "before": ["moon.jsx"],
+        "pad": False, "before": ["moon.jsx", "craft.jsx"],
         "success": (6.0, 2.6), "glitch": (6.4, 3.2), "failure": (6.0, 3.2),
         "times": [0.8, 2.0, 2.6, 3.2, 4.0, 5.9],
     },
@@ -455,19 +455,60 @@ STEPS = {
         "success": (5.6, 1.2), "glitch": (5.6, 2.2), "failure": (5.6, 2.4),
         "times": [0.5, 1.2, 1.9, 2.6, 3.6, 5.5],
     },
+    # The OKB-MiG E-154's own (2026-10-17): the X-15's timelines ("source") with its craft (e154.jsx, read by craft.jsx).
+    "e154-takeoff": {
+        "pad": False, "source": "air-takeoff", "before": ["moon.jsx", "e154.jsx", "craft.jsx", "air.jsx"],
+        "success": (6.0, 2.0), "glitch": (6.0, 3.2), "failure": (6.0, 2.8),
+        "times": [0.5, 1.6, 2.2, 2.8, 3.6, 5.9],
+    },
+    "e154-cruise": {
+        "pad": False, "source": "air-cruise", "before": ["moon.jsx", "e154.jsx", "craft.jsx", "air.jsx"],
+        "success": (5.6, 1.8), "glitch": (5.6, 2.8), "failure": (5.6, 2.8),
+        "times": [0.5, 1.6, 2.2, 2.8, 3.6, 5.5],
+    },
+    "e154-drop": {
+        "pad": False, "source": "air-drop", "before": ["moon.jsx", "e154.jsx", "craft.jsx", "air.jsx"],
+        "success": (6.0, 1.6), "glitch": (6.0, 2.6), "failure": (6.0, 2.6),
+        "times": [0.5, 1.0, 1.6, 2.4, 3.4, 5.9],
+    },
+    "e154-climb": {
+        "pad": False, "source": "rocket-climb", "before": ["moon.jsx", "e154.jsx", "craft.jsx", "air.jsx"],
+        "success": (6.0, 2.4), "glitch": (6.0, 3.2), "failure": (6.0, 3.2),
+        "times": [0.5, 1.8, 2.4, 3.0, 4.0, 5.9],
+    },
+    "e154-peak": {
+        "pad": False, "source": "x15-peak", "before": ["moon.jsx", "e154.jsx", "craft.jsx", "air.jsx", "x15.jsx"],
+        "success": (6.0, 2.2), "glitch": (6.0, 3.2), "failure": (6.0, 3.2),
+        "times": [0.5, 1.3, 2.4, 3.0, 3.6, 5.9],
+    },
+    "e154-fast": {
+        "pad": False, "source": "x15-fast", "before": ["moon.jsx", "e154.jsx", "craft.jsx", "air.jsx", "x15.jsx"],
+        "success": (6.0, 2.4), "glitch": (6.0, 2.8), "failure": (6.0, 2.9),
+        "times": [0.5, 1.8, 2.4, 3.0, 3.8, 5.9],
+    },
+    "e154-descent": {
+        "pad": False, "source": "x15-descent", "before": ["moon.jsx", "e154.jsx", "craft.jsx", "air.jsx", "x15.jsx"],
+        "success": (6.0, 2.0), "glitch": (6.0, 2.7), "failure": (6.0, 3.0),
+        "times": [0.5, 2.0, 2.6, 3.2, 4.2, 5.9],
+    },
+    "e154-landing": {
+        "pad": False, "source": "runway-landing", "before": ["moon.jsx", "e154.jsx", "craft.jsx"],
+        "success": (6.0, 2.6), "glitch": (6.4, 3.2), "failure": (6.0, 3.2),
+        "times": [0.8, 2.0, 2.6, 3.2, 4.0, 5.9],
+    },
     # The X-15's own (2026-10-17): x15.jsx's plane on its own, the peak, the fast run and the way down.
     "x15-peak": {
-        "pad": False, "before": ["moon.jsx", "air.jsx", "x15.jsx"],
+        "pad": False, "before": ["moon.jsx", "craft.jsx", "air.jsx", "x15.jsx"],
         "success": (6.0, 2.2), "glitch": (6.0, 3.2), "failure": (6.0, 3.2),
         "times": [0.5, 1.3, 2.4, 3.0, 3.6, 5.9],
     },
     "x15-fast": {
-        "pad": False, "before": ["moon.jsx", "air.jsx", "x15.jsx"],
+        "pad": False, "before": ["moon.jsx", "craft.jsx", "air.jsx", "x15.jsx"],
         "success": (6.0, 2.4), "glitch": (6.0, 2.8), "failure": (6.0, 2.9),
         "times": [0.5, 1.8, 2.4, 3.0, 3.8, 5.9],
     },
     "x15-descent": {
-        "pad": False, "before": ["moon.jsx", "air.jsx", "x15.jsx"],
+        "pad": False, "before": ["moon.jsx", "craft.jsx", "air.jsx", "x15.jsx"],
         "success": (6.0, 2.0), "glitch": (6.0, 2.7), "failure": (6.0, 3.0),
         "times": [0.5, 2.0, 2.6, 3.2, 4.2, 5.9],
     },
@@ -567,22 +608,22 @@ STEPS = {
     },
     # The air launch (2026-10-14): the carrier plane and the rocket plane (air.jsx), and the rocket plane alone.
     "air-takeoff": {
-        "pad": False, "before": ["moon.jsx", "air.jsx"],
+        "pad": False, "before": ["moon.jsx", "craft.jsx", "air.jsx"],
         "success": (6.0, 2.0), "glitch": (6.0, 3.2), "failure": (6.0, 2.8),
         "times": [0.5, 1.6, 2.2, 2.8, 3.6, 5.9],
     },
     "air-cruise": {
-        "pad": False, "before": ["moon.jsx", "air.jsx"],
+        "pad": False, "before": ["moon.jsx", "craft.jsx", "air.jsx"],
         "success": (5.6, 1.8), "glitch": (5.6, 2.8), "failure": (5.6, 2.8),
         "times": [0.5, 1.6, 2.2, 2.8, 3.6, 5.5],
     },
     "air-drop": {
-        "pad": False, "before": ["moon.jsx", "air.jsx"],
+        "pad": False, "before": ["moon.jsx", "craft.jsx", "air.jsx"],
         "success": (6.0, 1.6), "glitch": (6.0, 2.6), "failure": (6.0, 2.6),
         "times": [0.5, 1.0, 1.6, 2.4, 3.4, 5.9],
     },
     "rocket-climb": {
-        "pad": False, "before": ["moon.jsx", "air.jsx"],
+        "pad": False, "before": ["moon.jsx", "craft.jsx", "air.jsx"],
         "success": (6.0, 2.4), "glitch": (6.0, 3.2), "failure": (6.0, 3.2),
         "times": [0.5, 1.8, 2.4, 3.0, 4.0, 5.9],
     },

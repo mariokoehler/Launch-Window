@@ -25,5 +25,5 @@ var pitch = function (t) {
 var off = function (t) { var u = failure ? Math.max(0, t - SPIN) : 0; return [40 * u, arc(t) + 220 * u * u]; };
 x15Fly(pitch, off);
 ventral(pitch, off, 99, null);
-puffs("x15-rcs-down", glitch || failure ? [1.2, 2.5, 2.9] : [1.2, 3.8]);
-puffs("x15-rcs-up", glitch || failure ? [2.7, 3.1] : []);
+puffs(K.rcsDown, glitch || failure ? [1.2, 2.5, 2.9] : [1.2, 3.8]);
+puffs(K.rcsUp, glitch || failure ? [2.7, 3.1] : []);

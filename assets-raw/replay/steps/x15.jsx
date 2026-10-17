@@ -7,14 +7,14 @@ function x15Scene() {
     put("d-earth");
     for (var i = 1; i <= 6; i++) put("r-cloud-" + i);
     for (i = 1; i <= 8; i++) put("a-flow-" + i);
-    put("x15-ventral");
-    put("w-plane");
-    put("w-skid", "w-plane");
-    put("w-flame", "w-plane");
-    var kids = ["x15-shock", "x15-heat", "x15-hot", "x15-rcs-up", "x15-rcs-down"];
-    for (i = 0; i < kids.length; i++) { put(kids[i], "w-plane"); hide(kids[i]); }
-    hide("w-skid");
-    hide("w-flame");
+    put(K.ventral);
+    put(K.plane);
+    put(K.skid, K.plane);
+    put(K.flame, K.plane);
+    var kids = [K.shock, K.heat, K.hot, K.rcsUp, K.rcsDown];
+    for (i = 0; i < kids.length; i++) { put(kids[i], K.plane); hide(kids[i]); }
+    hide(K.skid);
+    hide(K.flame);
     for (i = 1; i <= 6; i++) hide("r-cloud-" + i);
     for (i = 1; i <= 8; i++) hide("a-flow-" + i);
 }
@@ -24,16 +24,16 @@ function onPlane(pitch, o, p) {
     return [PLANE[0] + o[0] + dx * Math.cos(a) - dy * Math.sin(a), PLANE[1] + o[1] + dx * Math.sin(a) + dy * Math.cos(a)];
 }
 function x15Fly(pitch, off) {
-    move("w-plane", function (t) { var o = off(t); return [PLANE[0] - WS[0] + o[0], PLANE[1] - WS[1] + o[1]]; });
-    turn("w-plane", pitch);
+    move(K.plane, function (t) { var o = off(t); return [PLANE[0] - WS[0] + o[0], PLANE[1] - WS[1] + o[1]]; });
+    turn(K.plane, pitch);
 }
 // The ventral on the plane until `free` (99: never), then moved by away(u) ([dx, dy, turn]) from where it left.
 function ventral(pitch, off, free, away) {
-    var V = [788, 858];
+    var V = K.V;
     var at = function (t) { var u = Math.min(t, free); return onPlane(pitch(u), off(u), V); };
     var by = function (t) { return t > free ? away(t - free) : [0, 0, 0]; };
-    move("x15-ventral", function (t) { var p = at(t), a = by(t); return [p[0] - V[0] + a[0], p[1] - V[1] + a[1]]; });
-    turn("x15-ventral", function (t) { return pitch(Math.min(t, free)) + by(t)[2]; });
+    move(K.ventral, function (t) { var p = at(t), a = by(t); return [p[0] - V[0] + a[0], p[1] - V[1] + a[1]]; });
+    turn(K.ventral, function (t) { return pitch(Math.min(t, free)) + by(t)[2]; });
     return function (t) { var p = at(t), a = by(t); return [p[0] + a[0], p[1] + a[1]]; };
 }
 // A puff from an attitude jet: on for 0.25 s from each time in `times`.

@@ -39,12 +39,13 @@ var gone = function (t) { return failure && t >= BREAK; };
 var pitch = function (t) { return 18 - 14 * EASE.inout(clamp((t - 0.6) / 3.0, 0, 1)) + bob(Math.min(t, failure ? BREAK : 99)); };
 var off = function () { return [0, 0]; };
 x15Fly(pitch, off);
-var vat = ventral(pitch, off, failure ? 99 : DROP, function (u) {
+// The X-15 drops its lower fin; the E-154 keeps its strake and lowers its wheels there instead.
+var vat = ventral(pitch, off, failure || !K.x15 ? 99 : DROP, function (u) {
     return [-260 * u - 60 * u * u, 70 * u + 160 * u * u * Math.max(0, 1 - u / 1.2), 40 * Math.min(u, 0.6)];
 });
 if (failure) {
     // Parenting doesn't pass on opacity: every part goes.
-    var parts = ["w-plane", "x15-ventral", "x15-shock", "x15-heat", "x15-hot", "x15-rcs-up", "x15-rcs-down"];
+    var parts = [K.plane, K.ventral, K.shock, K.heat, K.hot, K.rcsUp, K.rcsDown];
     for (i = 0; i < 2; i++) fade(parts[i], function (t) { return gone(t) ? 0 : 1; });
     var c = onPlane(pitch(BREAK), [0, 0], [980, 820]);
     move("burst", function () { return [c[0] - 960, c[1] - 600]; });
@@ -59,6 +60,10 @@ if (failure) {
             grow(n, function () { return 1.6; });
         })("r-chip-" + i, flings[i - 1]);
     }
+} else if (!K.x15) {
+    fade(K.skid, function (t) { return t >= DROP ? 1 : 0; });
+    turn(K.skid, track([[DROP, -80], [DROP + 0.6, 0, "out"]]));
+    hide("r-main");
 } else {
     // The ventral's chute opens above it 0.4 s after it drops (r-main's lines meet at its pivot, 960 322).
     move("r-main", function (t) { var p = vat(t); return [p[0] - 960, p[1] - 322 - 24]; });

@@ -54,32 +54,32 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: EARTH 16
   - Programs: Gemini 2, LK-700: Earth-orbit tests 2, Project Mercury 2, Soyuz 7K-L1: Earth-orbit tests 2
 - [x] **Drop and ignition** `launch-from-drop-plane`: 6 uses in 6 configurations, 2 programs (NASA/SOVIET) crew risk in 6 of 6
-  - Clip: `air-drop`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: by the steps before: `air-drop` after `pre-launch` 3, `e154-drop` after `pre-launch` in mig-e-154 3; [x] success, [x] glitch, [x] failure; cues no
   - On screen: spaceplane 6
   - Destinations: EARTH 6
   - Programs: OKB-MiG E-154 3, X-15 3
 - [x] **Powered climb** `powered-ascent`: 6 uses in 6 configurations, 2 programs (NASA/SOVIET) crew risk in 6 of 6
-  - Clip: `rocket-climb`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: by the steps before: `rocket-climb` after `launch-from-drop-plane` 3, `e154-climb` after `launch-from-drop-plane` in mig-e-154 3; [x] success, [x] glitch, [x] failure; cues no
   - On screen: spaceplane 6
   - Destinations: EARTH 6
   - Programs: OKB-MiG E-154 3, X-15 3
 - [x] **Preflight** `pre-launch`: 6 uses in 6 configurations, 2 programs (NASA/SOVIET) crew risk in 6 of 6
-  - Clip: `air-cruise`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: by the steps before: `air-cruise` after `takeoff` 3, `e154-cruise` after `takeoff` in mig-e-154 3; [x] success, [x] glitch, [x] failure; cues no
   - On screen: spaceplane 6
   - Destinations: EARTH 6
   - Programs: OKB-MiG E-154 3, X-15 3
 - [x] **Carrier takeoff** `takeoff`: 6 uses in 6 configurations, 2 programs (NASA/SOVIET) crew risk in 6 of 6
-  - Clip: `air-takeoff`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: by the steps before: `air-takeoff` after `None` 3, `e154-takeoff` after `None` in mig-e-154 3; [x] success, [x] glitch, [x] failure; cues no
   - On screen: spaceplane 6
   - Destinations: EARTH 6
   - Programs: OKB-MiG E-154 3, X-15 3
 - [x] **High-speed run** `high-speed-leg`: 2 uses in 2 configurations, 2 programs (NASA/SOVIET) crew risk in 2 of 2
-  - Clip: `x15-fast`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: by the steps before: `x15-fast` after `powered-ascent` 1, `e154-fast` after `powered-ascent` in mig-e-154 1; [x] success, [x] glitch, [x] failure; cues no
   - On screen: spaceplane 2
   - Destinations: EARTH 2
   - Programs: OKB-MiG E-154 1, X-15 1
 - [x] **Peak altitude** `peak-altitude`: 2 uses in 2 configurations, 2 programs (NASA/SOVIET) crew risk in 2 of 2
-  - Clip: `x15-peak`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: by the steps before: `x15-peak` after `powered-ascent` 1, `e154-peak` after `powered-ascent` in mig-e-154 1; [x] success, [x] glitch, [x] failure; cues no
   - On screen: spaceplane 2
   - Destinations: EARTH 2
   - Programs: OKB-MiG E-154 1, X-15 1
@@ -99,7 +99,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: EARTH 93, MOON 9
   - Programs: Gemini 15, Apollo: Earth-orbit tests 14, Soyuz 7K-OK 14, Voskhod 10
 - [x] **Descent** `descent`: 100 uses in 91 configurations, 12 programs (NASA/SOVIET) crew risk in 81 of 100
-  - Clip: by the steps before: `descent-chutes` after `reentry` 93, `x15-descent` after `powered-ascent` in x-15 1, `x15-descent` after `peak-altitude` in x-15 1, `x15-descent` after `high-speed-leg` in x-15 1, `descent-chutes` after `powered-ascent` 1, `descent-chutes` after `peak-altitude` 1, `descent-chutes` after `high-speed-leg` 1, `descent-chutes` after `descent` 1; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: by the steps before: `descent-chutes` after `reentry` 93, `x15-descent` after `powered-ascent` in x-15 1, `x15-descent` after `peak-altitude` in x-15 1, `x15-descent` after `high-speed-leg` in x-15 1, `e154-descent` after `powered-ascent` in mig-e-154 1, `e154-descent` after `peak-altitude` in mig-e-154 1, `e154-descent` after `high-speed-leg` in mig-e-154 1, `descent-chutes` after `descent` 1; [x] success, [x] glitch, [x] failure; cues no
   - Also covers: `descent-a` 1, `descent-b` 1
   - On screen: crewed craft 83, crewed lander 11, spaceplane 6
   - Destinations: EARTH 86, MOON 14
@@ -156,7 +156,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: EARTH 8, MOON 8
   - Programs: Vostok 7, Soyuz 7K-L3 lunar landing 6, Luna 15 1, Zond 5 1
 - [x] **Landing** `landing`: 15 uses in 15 configurations, 9 programs (NASA/SOVIET) crew risk in 10 of 15, later seasons in 1 of 15
-  - Clip: by the steps before: `runway-landing` after `descent` 6, `lunar-landing` after `powered-descent` 4, `probe-landing` after `lander-descent` 2, `luna-landing-sampler` after `lunar-approach` in luna-15 1, `luna-landing-rover` after `lunar-approach` in luna-17 1, `mars-landing` `mars-approach` earlier 1; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: by the steps before: `lunar-landing` after `powered-descent` 4, `runway-landing` after `descent` 3, `e154-landing` after `descent` in mig-e-154 3, `probe-landing` after `lander-descent` 2, `luna-landing-sampler` after `lunar-approach` in luna-15 1, `luna-landing-rover` after `lunar-approach` in luna-17 1, `mars-landing` `mars-approach` earlier 1; [x] success, [x] glitch, [x] failure; cues no
   - On screen: spaceplane 6, crewed craft 3, crewed lander 3, probe 3, probe lander 2, rover 1
   - Destinations: EARTH 6, MOON 6, VENUS 2, MARS 1
   - Programs: OKB-MiG E-154 3, X-15 3, Apollo 2, Venera lander 2

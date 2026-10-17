@@ -74,7 +74,7 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
 - **The advisor is built** (2026-10-08, `ui-spec.md` component 24): a hub card with a new agency's
   first steps, ticked off from the state, until all are done or the player hides it.
 - **The full content pack is built** (2026-10-08, `design.md` §5, M3): `assets/content/standard`,
-  BASPM's whole tree (55 programs, 189 configurations), with its text and art, beside `early-era`.
+  BASPM's whole tree (55 programs, 189 configurations; 187 since the E-154 became the Soviet X-15), with its text and art, beside `early-era`.
   **It is the server's default since 2026-10-09** (`GameMeta.DEFAULT_CONTENT_PACK`; tests still pin
   `early-era`). New engine rules came with it: a payload's own lift, air drops with no rocket,
   configurations gated on a goal. Its components have blueprint drawings in the turn report
@@ -180,6 +180,15 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   lone burn and an insertion that coasts to the top first (`ui-spec.md` §4.7.3).
   Gemini EOR's way home is reordered too (equipment section first), and replay rules can name `programs`
   and a `later` step: rebuild the client (the replay's clip choice changed in `core`).
+- **Vehicles as themselves in the replay** (user, 2026-10-17, `ui-spec.md` §4.7.3): Surveyor, Pioneer Venus
+  Multiprobe (its own six clips), Viking's separation, PrOP-M on Mars 2's third season, the X-15's peak, fast run and
+  descent (and a drop that clears the carrier), and a slower Mars orbit insertion (`loi.jsx`'s `SLOW`; every approach now
+  arrives at the insertion's speed). Client only.
+- **The OKB-MiG E-154 is the Soviet X-15** (user, 2026-10-17, `design.md` §1): the converter rebuilds it from the X-15
+  (`baspm_pack.py`'s `e154_from_x15`), three configurations where it had five (187 in the pack), its own art carried
+  over, its speed flight's patch still to make (needs ComfyUI). Its clips are the X-15's timelines with its own craft
+  and a Soviet carrier (`e154.jsx`, `craft.jsx`). The pack hash changed: reset the dev data root, rebuild client and
+  server together.
 
 ## How we work
 

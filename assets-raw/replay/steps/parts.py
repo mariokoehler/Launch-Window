@@ -1338,6 +1338,70 @@ def air_parts():
                      f'stroke="{GOLD}" stroke-width="3" stroke-linejoin="round"/>', (748, 820))
 
 
+def e154_parts():
+    """The OKB-MiG E-154 (2026-10-17), the Soviet X-15, from the user's own four views: a needle nose with a long probe, the
+    canopy well forward, a tall swept fin, swept wings set low, a low tailplane, a strake under its tail and four nozzles
+    in a cluster (two seen). It lands on wheels. Drawn as w-plane is, nose right, its pivot WS (830 880) on the ground
+    line, so the air-launch timelines place it the same way. And its carrier, a Soviet bomber with four turboprops
+    (two seen, their propellers as discs), the E-154 slung under its belly behind the wing; the same pivot as a-carrier."""
+    body = (f'<path d="M760 806 L1040 802 Q1130 806 1190 816 L1214 820 L1190 824 Q1130 834 1040 838 L760 836 Z" '
+            f'fill="#ffffff" {LINE} stroke-width="3"/>'
+            f'<path d="M1214 820 L1240 820" fill="none" {LINE} stroke-width="2.4"/>'
+            f'<path d="M1046 803 Q1074 784 1114 807" fill="#ffffff" {LINE} stroke-width="3"/>'
+            f'<path d="M880 804 L842 740 L814 740 L792 806 Z" fill="#ffffff" {LINE} stroke-width="3"/>'
+            f'<path d="M896 830 L1004 824 L1016 830 L884 838 Z" fill="url(#hatch)" {LINE} stroke-width="2.4"/>'
+            f'<path d="M772 830 L824 828 L830 834 L766 836 Z" fill="url(#hatch)" {LINE} stroke-width="2.4"/>'
+            f'<ellipse cx="757" cy="813" rx="5" ry="7" fill="#ffffff" {LINE} stroke-width="2.4"/>'
+            f'<ellipse cx="757" cy="829" rx="5" ry="7" fill="#ffffff" {LINE} stroke-width="2.4"/>'
+            f'<path d="M1150 806 L1150 834" fill="none" {LINE} stroke-width="1.6" opacity="0.6"/>')
+    layer("e154-plane", body, WS)
+    # The strake under its tail: the piece that tears away at speed (its own part, as x15-ventral).
+    layer("e154-strake", f'<path d="M800 836 L852 838 L842 858 L808 854 Z" fill="#ffffff" {LINE} stroke-width="3"/>', (826, 847))
+    # Its wheels (main and nose), hinged under the body so they fold up; it lands on them.
+    layer("e154-gear", f'<path d="M930 838 L930 868 M1120 834 L1120 868" fill="none" {LINE} stroke-width="4"/>'
+                       f'<circle cx="930" cy="872" r="8" fill="#ffffff" {LINE} stroke-width="3"/>'
+                       f'<circle cx="1120" cy="873" r="7" fill="#ffffff" {LINE} stroke-width="3"/>', (930, 838))
+    # Four nozzles' flames, back from the tail (the two seen), pivoting where w-flame does.
+    flame = "".join(f'<path d="M752 {y - 8} C704 {y - 5} 654 {y - 2} 604 {y} C654 {y + 2} 704 {y + 5} 752 {y + 8} Z" '
+                    f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="3" stroke-linejoin="round"/>' for y in (813, 829))
+    layer("e154-flame", flame, (748, 820))
+    jet = lambda y0, y1: (f'<path d="M1146 {y0} C1144 {(2 * y0 + y1) / 3:.0f} 1148 {(y0 + 2 * y1) / 3:.0f} 1152 {y1} '
+                          f'C1156 {(y0 + 2 * y1) / 3:.0f} 1160 {(2 * y0 + y1) / 3:.0f} 1158 {y0} Z" fill="{GOLD_FILL}" '
+                          f'stroke="{GOLD}" stroke-width="2.4" stroke-linejoin="round"/>')
+    layer("e154-rcs-up", jet(808, 774), (1152, 808))
+    layer("e154-rcs-down", jet(832, 866), (1152, 832))
+    layer("e154-shock", f'<path d="M1214 820 L918 690 M1214 820 L918 950" fill="none" {LINE} stroke-width="2.4" '
+                        f'stroke-dasharray="14 10" opacity="0.6"/>', (1214, 820))
+    layer("e154-heat", f'<path d="M1130 806 Q1190 814 1214 820 Q1190 826 1130 834 Z" fill="{GOLD_FILL}" stroke="{GOLD}" '
+                       f'stroke-width="3"/><path d="M896 830 L1004 824 L1016 830" fill="none" stroke="{GOLD}" stroke-width="4"/>',
+          (1170, 820))
+    layer("e154-hot", f'<circle cx="980" cy="838" r="16" fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="3"/>', (980, 838))
+
+    # The carrier, a Soviet four-turboprop bomber (fictional, as the E-154 is), standing on its main wheels at AC.
+    disc = lambda x, y, r: (f'<ellipse cx="{x}" cy="{y}" rx="7" ry="{r}" fill="rgba(22,48,92,0.08)" {LINE} stroke-width="2"/>'
+                            f'<path d="M{x - 6} {y - 5} L{x + 12} {y} L{x - 6} {y + 5} Z" fill="#ffffff" {LINE} stroke-width="2"/>')
+    carrier = (f'<path d="M500 525 L420 392 L370 392 L410 525 Z" fill="#ffffff" {LINE} stroke-width="3"/>'
+               f'<path d="M300 540 Q290 528 330 525 L1400 525 Q1470 530 1500 556 Q1470 588 1400 592 L330 592 Q290 588 300 540 Z" '
+               f'fill="#ffffff" {LINE} stroke-width="3"/>'
+               f'<path d="M1430 540 Q1470 546 1488 558 M1440 572 Q1468 566 1488 558" fill="none" {LINE} stroke-width="2"/>'
+               + "".join(f'<rect x="{x}" y="534" width="14" height="10" rx="2" fill="#ffffff" {LINE} stroke-width="2"/>'
+                         for x in (1360, 1382))
+               + f'<path d="M332 566 L430 562 L442 574 L320 576 Z" fill="url(#hatch)" {LINE} stroke-width="2.4"/>'
+               f'<path d="M780 572 L1080 580 L1100 592 L800 594 Z" fill="url(#hatch)" {LINE} stroke-width="2.4"/>'
+               f'<rect x="900" y="590" width="108" height="24" rx="10" fill="#ffffff" {LINE} stroke-width="3"/>'
+               f'<rect x="1040" y="584" width="92" height="20" rx="9" fill="#ffffff" {LINE} stroke-width="3"/>'
+               + disc(1014, 602, 34) + disc(1138, 594, 30)
+               + f'<path d="M862 592 L862 636" fill="none" {LINE} stroke-width="4"/>')
+    layer("su-carrier", carrier, AC)
+    layer("su-gear", "".join(f'<path d="M{x} {y0} L{x} 754" fill="none" {LINE} stroke-width="4"/>'
+                             f'<circle cx="{x - 12}" cy="760" r="12" fill="#ffffff" {LINE} stroke-width="3"/>'
+                             f'<circle cx="{x + 12}" cy="760" r="12" fill="#ffffff" {LINE} stroke-width="3"/>'
+                             for x, y0 in ((1086, 604), (1420, 592))), AC)
+    grey = "rgba(22,48,92,0.22)"
+    layer("su-smoke", "".join(f'<circle cx="{x}" cy="{y}" r="{r}" fill="{grey}" {LINE} stroke-width="2"/>'
+                    for x, y, r in ((890, 604, 18), (860, 596, 14), (830, 608, 12))), (906, 604))
+
+
 def departure_parts():
     # Earth departure (2026-10-16): the payload alone after the injection burn, close up and nose right,
     # coming alive. Drawn GK times o-sat's size, its centre on G; the boom, the dish and the lamps hang
@@ -1409,6 +1473,7 @@ def main():
     viking_parts()
     prop_m_parts()
     x15_parts()
+    e154_parts()
     planet_descent_parts()
     air_parts()
     departure_parts()

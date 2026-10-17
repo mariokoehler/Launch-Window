@@ -26,10 +26,10 @@ fly(carrier, drop);
 flow(function (t) { return [220 * EASE.inout(clamp((t - 1.2) / 2.0, 0, 1)), 0]; }, function () { return 900; });
 clouds(function () { return [0, 0]; }, 260);
 // The flame: on from the light; the failure's sputter dies.
-fade("w-flame", function (t) {
+fade(K.flame, function (t) {
     if (failure) return t >= LIGHT && t < LIGHT + 0.3 && Math.floor(t * 12) % 2 === 0 ? 1 : 0;
     return t >= LIGHT ? 1 : 0;
 });
-grow("w-flame", function (t) { return [1 + clamp((t - LIGHT) * 2, 0, 1.2), 1 + 0.1 * Math.sin(2 * Math.PI * 11 * t)]; });
+grow(K.flame, function (t) { return [1 + clamp((t - LIGHT) * 2, 0, 1.2), 1 + 0.1 * Math.sin(2 * Math.PI * 11 * t)]; });
 // The camera eases ahead, to give the climb room.
 airCamera(function (t) { return [220 * EASE.inout(clamp((t - 1.2) / 2.0, 0, 1)), 0]; });

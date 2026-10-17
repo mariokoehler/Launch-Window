@@ -79,6 +79,10 @@ Each folder's `build/` is regenerated on every run and stays out of git.
     lander, its pads on the ground: legs (the near one in front), two compartments, the camera and its mirror hood,
     the mast with the planar antenna and the solar panel (`sv-panel`, turned about the mast's top), and three
     vernier plumes. The failure topples it over its right footpad (`PAD`), which stays where it landed.
+  - **The E-154** (2026-10-17, `e154-` and `su-` parts): the air-launch timelines name their craft through `K`
+    (`craft.jsx`: the X-15 and the B-52 unless a step's file sets `CRAFT` first, as `e154.jsx` does: parts, where it
+    hangs, and whether it's the X-15, which drops its lower fin and lands on skids). The E-154's eight steps are the
+    X-15's timelines published under their own names (`build.py`'s `"source"`).
   - **The X-15 on its own** (2026-10-17, `x15-` parts, `x15.jsx`): the plane at full size (`PLANE`), its lower fin
     (`x15-ventral`, placed from the plane's pose by `onPlane` so it can leave it; a child of `w-plane` in `air.jsx`'s
     scenes and `rocket-climb`), its nose jets, shock cone and heat glows (children of `w-plane`). `x15-peak`,

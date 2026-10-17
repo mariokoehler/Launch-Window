@@ -1971,6 +1971,12 @@ clips, the replay is meant to be watched like a short film, and the player can s
   onto its pads, calls home and turns its solar panel to the Sun. The glitch is Surveyor 3's: the verniers don't
   cut, and it hops twice before they're shut off from Earth. The failure hops the same way, comes off it leaning,
   lands on one foot and topples onto its antenna. Every story unconfirmed.
+- **The OKB-MiG E-154 (user, 2026-10-17):** it's the Soviet X-15 now (`design.md` §1), and flies the X-15's steps with
+  its own clips (`e154-takeoff`, `-cruise`, `-drop`, `-climb`, `-peak`, `-fast`, `-descent`, `-landing`): the X-15's
+  timelines and stories, with the E-154 from the user's art (a needle nose, a tall swept fin, four nozzles, wheels)
+  slung under the belly of a Soviet four-turboprop bomber. Its strake tears away where the X-15 loses its lower fin; it
+  lowers its wheels on the way down instead of dropping a fin, and in the landing's failure they fold up and it slides
+  on its belly. Unconfirmed.
 - **The X-15 (user, 2026-10-17):** the drop had the X-15 climb straight through its carrier; now it runs on ahead, level,
   until its tail is past the carrier's nose, and pulls up there, while the carrier falls behind and the camera eases
   ahead. Its descent had a capsule's chutes, and its peak and its fast run shared one clip; each has its own now:
