@@ -361,7 +361,7 @@ leading to satellite navigation.
   its side, no heat shield and no parachute; the large probe sat in the middle of its forward end and the three small
   ones 120 degrees apart round it. The large probe left on 16 November 1978 on pyrotechnic springs; on 20 November the
   small probes' clamps were released by explosive nuts and they flew off at a tangent, the bus spinning at 48 rpm.
-  Every probe was a sphere inside a blunt 45-degree cone. The large one (1.5 m, about 315 kg) put out its chute just
+  Every probe was a sphere inside a blunt cone (the small ones' a 45-degree one). The large one (1.5 m, about 315 kg) put out its chute just
   after entry on 9 December, dropped its heat shield at 67 km, cut the chute loose at about 45 km and fell free to the
   ground (spacecraft time 19:39:55 UT). The small ones (0.8 m, about 90 kg) kept their heat shields and had no chute.
   The Day probe hit at 19:47:59 after a 56-minute fall and sent for 67 minutes 37 seconds more. Every probe's
