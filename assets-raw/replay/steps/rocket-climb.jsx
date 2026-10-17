@@ -10,10 +10,10 @@ put("paper", "screen");
 put("d-earth");
 for (var i = 1; i <= 8; i++) put("a-flow-" + i);
 put(K.plane);
-put(K.skid, K.plane);
+eachGear(function (g) { put(g, K.plane); });
 put(K.ventral, K.plane);
 put(K.flame, K.plane);
-hide(K.skid);
+eachGear(function (g) { hide(g); });
 // Both rough alike from 2.0; at 2.8 the glitch's steadies, the failure's stops.
 var on = function (t) {
     if ((glitch || failure) && t >= ROUGH && t < STEADY) return Math.floor(t * 10) % 3 !== 0;

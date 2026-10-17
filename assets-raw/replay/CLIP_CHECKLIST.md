@@ -670,7 +670,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: VENUS 1
   - Programs: Venera 7 1
 - [x] **Lander separation** `lander-detachment`: 1 use in 1 configuration, 1 program (SOVIET) uncrewed, later seasons in 1 of 1
-  - Clip: `probe-release`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `viking-separation`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 1
   - Destinations: MARS 1
   - Programs: Mars 2 1

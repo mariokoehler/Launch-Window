@@ -11,7 +11,7 @@ put("w-ground");
 put("n-dust");
 put("w-sparks");
 put(K.plane);
-put(K.skid, K.plane);
+eachGear(function (g) { put(g, K.plane); });
 hide("w-sparks");
 // The camera in on the touchdown, 1.35 times, (800 800) at (960 640).
 tf(world, "Scale").setValue([135, 135]);
@@ -45,7 +45,7 @@ turn(K.plane, pitch);
 // The failure's skid folds up under the body.
 // The X-15's skid swings up as it gives way; the E-154's wheels fold up into it (2026-10-17), leaving it on its belly.
 if (K.x15) turn(K.skid, function (t) { return failure && t > AGAIN ? 60 * clamp((t - AGAIN) / 0.2, 0, 1) : 0; });
-else grow(K.skid, function (t) { return [1, failure && t > AGAIN ? Math.max(0.05, 1 - clamp((t - AGAIN) / 0.2, 0, 1)) : 1]; });
+else eachGear(function (g) { grow(g, function (t) { return [1, failure && t > AGAIN ? Math.max(0.05, 1 - clamp((t - AGAIN) / 0.2, 0, 1)) : 1]; }); });
 // Dust where the skid (or the tail) meets the ground while it's moving fast on it, and at each touch.
 var speed = function (t) { return (x(t + 0.05) - x(t)) / 0.05; };
 move("n-dust", function (t) { return [x(t) + WSX() - 960 - 40, 0]; });

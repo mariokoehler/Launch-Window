@@ -1357,10 +1357,11 @@ def e154_parts():
     layer("e154-plane", body, WS)
     # The strake under its tail: the piece that tears away at speed (its own part, as x15-ventral).
     layer("e154-strake", f'<path d="M800 836 L852 838 L842 858 L808 854 Z" fill="#ffffff" {LINE} stroke-width="3"/>', (826, 847))
-    # Its wheels (main and nose), hinged under the body so they fold up; it lands on them.
-    layer("e154-gear", f'<path d="M930 838 L930 868 M1120 834 L1120 868" fill="none" {LINE} stroke-width="4"/>'
-                       f'<circle cx="930" cy="872" r="8" fill="#ffffff" {LINE} stroke-width="3"/>'
-                       f'<circle cx="1120" cy="873" r="7" fill="#ffffff" {LINE} stroke-width="3"/>', (930, 838))
+    # Its wheels, each leg hinged under the body where it meets it, so each folds up about its own hinge; it lands on them.
+    layer("e154-gear", f'<path d="M930 838 L930 868" fill="none" {LINE} stroke-width="4"/>'
+                       f'<circle cx="930" cy="872" r="8" fill="#ffffff" {LINE} stroke-width="3"/>', (930, 838))
+    layer("e154-nose", f'<path d="M1120 834 L1120 868" fill="none" {LINE} stroke-width="4"/>'
+                       f'<circle cx="1120" cy="873" r="7" fill="#ffffff" {LINE} stroke-width="3"/>', (1120, 834))
     # Four nozzles' flames, back from the tail (the two seen), pivoting where w-flame does.
     flame = "".join(f'<path d="M752 {y - 8} C704 {y - 5} 654 {y - 2} 604 {y} C654 {y + 2} 704 {y + 5} 752 {y + 8} Z" '
                     f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="3" stroke-linejoin="round"/>' for y in (813, 829))

@@ -131,7 +131,7 @@
     {"step": "mercury-flyby", "clip": "mercury-flyby"},
     {"step": "mars-orbit-injection", "clip": "mars-orbit-injection"},
     {"step": "lander-release", "clip": "probe-release"},
-    {"step": "lander-detachment", "clip": "probe-release"},
+    {"step": "lander-detachment", "clip": "viking-separation"},
     {"step": "lander-deployment-and-de-orbit", "clip": "viking-separation"},
     {"step": "big-probe-release", "clip": "multiprobe-large-release"},
     {"step": "small-probes-release", "clip": "multiprobe-small-release"},

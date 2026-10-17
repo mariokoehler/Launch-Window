@@ -61,8 +61,10 @@ if (failure) {
         })("r-chip-" + i, flings[i - 1]);
     }
 } else if (!K.x15) {
-    fade(K.skid, function (t) { return t >= DROP ? 1 : 0; });
-    turn(K.skid, track([[DROP, -80], [DROP + 0.6, 0, "out"]]));
+    eachGear(function (g) {
+        fade(g, function (t) { return t >= DROP ? 1 : 0; });
+        turn(g, track([[DROP, -80], [DROP + 0.6, 0, "out"]]));
+    });
     hide("r-main");
 } else {
     // The ventral's chute opens above it 0.4 s after it drops (r-main's lines meet at its pivot, 960 322).

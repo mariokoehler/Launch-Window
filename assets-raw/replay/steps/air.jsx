@@ -19,11 +19,11 @@ function airScene(ground) {
     // The gear is down on the runway, put away in flight.
     if (!ground) hide(K.gear);
     put(K.plane);
-    put(K.skid, K.plane);
+    eachGear(function (g) { put(g, K.plane); });
     // The X-15's lower fin under its tail (2026-10-17), dropped before landing (x15-descent); the E-154's strake. The
     // E-154's wheels are folded while it hangs.
     put(K.ventral, K.plane);
-    if (!K.x15) hide(K.skid);
+    if (!K.x15) eachGear(function (g) { hide(g); });
     put(K.flame, K.plane);
     hide(K.smoke);
     hide(K.flame);

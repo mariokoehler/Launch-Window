@@ -9,3 +9,8 @@ var K = typeof CRAFT !== "undefined" ? CRAFT : {
     // The X-15 drops its lower fin before landing and lands on skids; the E-154 lowers its wheels instead.
     x15: true
 };
+// What it lands on, for each part: the X-15's skid; the E-154's main wheels, then its nose wheel (K.nose, its own hinge).
+function eachGear(f) {
+    f(K.skid);
+    if (K.nose) f(K.nose);
+}

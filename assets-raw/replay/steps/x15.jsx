@@ -9,11 +9,11 @@ function x15Scene() {
     for (i = 1; i <= 8; i++) put("a-flow-" + i);
     put(K.ventral);
     put(K.plane);
-    put(K.skid, K.plane);
+    eachGear(function (g) { put(g, K.plane); });
     put(K.flame, K.plane);
     var kids = [K.shock, K.heat, K.hot, K.rcsUp, K.rcsDown];
     for (i = 0; i < kids.length; i++) { put(kids[i], K.plane); hide(kids[i]); }
-    hide(K.skid);
+    eachGear(function (g) { hide(g); });
     hide(K.flame);
     for (i = 1; i <= 6; i++) hide("r-cloud-" + i);
     for (i = 1; i <= 8; i++) hide("a-flow-" + i);

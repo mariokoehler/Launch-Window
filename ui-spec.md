@@ -1975,7 +1975,8 @@ clips, the replay is meant to be watched like a short film, and the player can s
   its own clips (`e154-takeoff`, `-cruise`, `-drop`, `-climb`, `-peak`, `-fast`, `-descent`, `-landing`): the X-15's
   timelines and stories, with the E-154 from the user's art (a needle nose, a tall swept fin, four nozzles, wheels)
   slung under the belly of a Soviet four-turboprop bomber. Its strake tears away where the X-15 loses its lower fin; it
-  lowers its wheels on the way down instead of dropping a fin, and in the landing's failure they fold up and it slides
+  lowers its wheels on the way down instead of dropping a fin (each leg on its own hinge, `e154-gear` and `e154-nose`:
+  the nose wheel once swung down from the main gear's, user), and in the landing's failure they fold up and it slides
   on its belly. Unconfirmed.
 - **The X-15 (user, 2026-10-17):** the drop had the X-15 climb straight through its carrier; now it runs on ahead, level,
   until its tail is past the carrier's nose, and pulls up there, while the carrier falls behind and the camera eases
@@ -1995,7 +1996,8 @@ clips, the replay is meant to be watched like a short film, and the player can s
   `viking-separation` now: the Viking orbiter (an octagonal body, four wings of panels, the dish on a boom, tanks and
   engine above) lets the lander capsule go from under it, over Mars; the capsule turns side on, fires its deorbit jets,
   falls behind and below, and turns heat shield down for its entry. The glitch's jets cut out and relight; the
-  failure's never relight, and it stays in orbit. Unconfirmed.
+  failure's never relight, and it stays in orbit. Mars 2's `lander-detachment` plays it too (user, 2026-10-17): it
+  leads into the same Mars entry, descent and landing. Unconfirmed.
 - **The Mars orbit insertion, slower (user, 2026-10-17):** it felt rushed, and the probe jumped where the approach
   handed over. Every approach (`lunar-approach.jsx`, shared by the Moon, Venus, Mars, Jupiter and Saturn) now moves
   along its path as an orbit does, slow far out and faster as it falls in, the view closing in to keep it in frame,
