@@ -317,6 +317,12 @@ STEPS = {
         "success": (6.0, 2.6), "glitch": (6.0, 3.6), "failure": (6.0, 3.2),
         "times": [0.5, 1.6, 2.4, 3.0, 3.6, 5.9],
     },
+    # Surveyor's own (2026-10-17): the tripod on its three verniers.
+    "surveyor-landing": {
+        "pad": False, "before": ["orbit.jsx", "moon.jsx"],
+        "success": (6.0, 2.6), "glitch": (6.0, 3.9), "failure": (6.0, 3.4),
+        "times": [0.5, 1.6, 2.4, 3.0, 3.6, 5.9],
+    },
     "lunar-ascent": {
         "pad": False, "before": ["orbit.jsx"],
         "success": (6.0, 1.8), "glitch": (6.0, 2.6), "failure": (6.0, 2.8),

@@ -544,7 +544,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: EARTH 1
   - Programs: Soyuz 7K-L3: Earth-orbit tests 1
 - [x] **Lunar landing** `lunar-landing`: 1 use in 1 configuration, 1 program (NASA) uncrewed
-  - Clip: `lunar-landing`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `surveyor-landing`; [x] success, [x] glitch, [x] failure; cues yes
   - On screen: probe lander 1
   - Destinations: MOON 1
   - Programs: Surveyor 1

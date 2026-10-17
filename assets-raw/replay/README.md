@@ -75,6 +75,10 @@ Each folder's `build/` is regenerated on every run and stays out of git.
     (the failure is Luna 15's crash), `luna-sampler` drills a core and lifts it into the capsule, and `luna-liftoff`
     launches the return rocket off the stage (its flame behind the deck until it's clear). They end on
     the framing the surface clips start from.
+  - **Surveyor** (2026-10-17, `sv-` parts, `surveyor-landing.jsx`): the tripod on a carrier at `LC`, like the crewed
+    lander, its pads on the ground: legs (the near one in front), two compartments, the camera and its mirror hood,
+    the mast with the planar antenna and the solar panel (`sv-panel`, turned about the mast's top), and three
+    vernier plumes. The failure topples it over its right footpad (`PAD`), which stays where it landed.
   - **Vostok's way** (2026-10-14): `modules-separation` (the module is the same pack, `r-module`,
     turning about its own centre; the cable between them, `r-cable`, is aimed and stretched every
     frame; its glitch is Vostok 1's) and `descent-and-landing`. The two descents share `descent.jsx`,

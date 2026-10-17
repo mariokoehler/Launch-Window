@@ -349,6 +349,13 @@ leading to satellite navigation.
   sample-return try, and crashed into Mare Crisium on 21 July 1969 while Armstrong and Aldrin were on the
   surface. Luna 16 (September 1970) drilled about 35 cm with an arm, swung the core up into the return capsule
   on top and flew 101 g of soil home. The replay draws the one stage for all of them.
+- **Surveyor's last few metres** (2026-10-17, from memory; verify before a note uses it): a big solid retro
+  rocket braked Surveyor from about 2.6 km/s and was dropped kilometres up; three small throttleable vernier
+  engines flew the rest, steered by radar, and cut at about 4 m (14 ft), so it fell the last stretch onto its
+  crushable footpads. Surveyor 1 landed so on 2 June 1966, four months after Luna 9, and sent over 11,000
+  pictures. On Surveyor 3 (April 1967) bright rocks confused the radar, the verniers didn't cut, and it bounced
+  twice before they were shut off by command. Surveyor 2 tumbled when a vernier failed to light, and Surveyor 4
+  fell silent seconds before its retro burned out. The replay's `surveyor-landing` plays the drop and the bounces.
 - **Injection, then departure** (2026-10-16, from memory; verify before a note uses it): BASPM splits a planetary
   probe's start into a trans-planetary injection (the rocket's, with the booster seat) and an Earth departure
   (the probe's alone: spacecraft systems, navigation, experiments). Pioneer Venus Orbiter (May 1978) went
@@ -2904,7 +2911,8 @@ lander's hatch; the glitch bounces off twice before it holds, as Apollo 14 neede
 never holds) and `extraction` (the lander pulled out of the stage; the glitch holds fast at first, the failure
 for good, the capsule backing off alone), the third stage with the lander in its adapter; `lem-jettison`
 borrows the undocking (unconfirmed). Apollo's landings play whole: 190 of 249 seasons. Then borrowings
-for steps an existing clip shows (unconfirmed): Surveyor's `lunar-landing` the Moon landing,
+for steps an existing clip shows (unconfirmed): Surveyor's `lunar-landing` the Moon landing (its own
+`surveyor-landing` since 2026-10-17),
 `orbit-insertion` the insertion, the third to sixth duration levels the second's, `splashdown` (after the
 chutes) the splashdown and recovery, `lunar-slingshot` the flyby, `heliocentric-orbit-insertion` and
 `ignition-and-separation` the burn out (`tpi`), and `engine-test`, the MiG's `deorbit-burn` and

@@ -918,6 +918,47 @@ def lunar_parts():
     layer("n-limb", f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="url(#earth)" {LINE} stroke-width="3"/>{marks}', (cx, cy))
 
 
+def surveyor_parts():
+    """Surveyor (2026-10-17) in the Moon's close-up, on a carrier at LC like the crewed lander, its footpads on
+    GROUND_Y: an open tripod frame with three legs (the near one in front), two boxed compartments, the TV
+    camera with its mirror hood, a mast with the planar antenna and the solar panel (its own part, turned
+    about the mast's top to find the Sun), and three small vernier engines underneath, a plume each. The big
+    solid retro rocket is gone by then: it burned out and fell away kilometres up."""
+    layer("sv-carrier", "", LC)
+    legs = (f'<path d="M884 804 L816 870 M920 772 L830 858 M1036 804 L1104 870 M1000 772 L1090 858 '
+            f'M948 806 L928 884" fill="none" {LINE} stroke-width="4"/>'
+            f'<ellipse cx="812" cy="874" rx="20" ry="6" fill="#ffffff" {LINE} stroke-width="3"/>'
+            f'<ellipse cx="1108" cy="874" rx="20" ry="6" fill="#ffffff" {LINE} stroke-width="3"/>'
+            f'<ellipse cx="926" cy="887" rx="22" ry="6" fill="#ffffff" {LINE} stroke-width="3"/>')
+    layer("sv-legs", legs, LC)
+    bells = "".join(f'<path d="M{x - 6} {y} L{x + 6} {y} L{x + 10} {y + 16} L{x - 10} {y + 16} Z" fill="#ffffff" '
+                    f'{LINE} stroke-width="2.4"/>' for x, y in ((900, 804), (1020, 804), (968, 810)))
+    frame = (f'<path d="M880 804 L1040 804 L960 724 Z M908 776 L1012 776 M960 804 L960 596" fill="none" {LINE} '
+             f'stroke-width="3"/>')
+    boxes = (f'<rect x="886" y="770" width="50" height="30" fill="#ffffff" {LINE} stroke-width="3"/>'
+             f'<rect x="886" y="770" width="50" height="9" fill="url(#hatch)" {LINE} stroke-width="2"/>'
+             f'<rect x="984" y="774" width="40" height="26" fill="#ffffff" {LINE} stroke-width="3"/>'
+             f'<rect x="984" y="774" width="40" height="8" fill="url(#hatch)" {LINE} stroke-width="2"/>')
+    camera = (f'<rect x="1030" y="742" width="16" height="50" rx="3" fill="#ffffff" {LINE} stroke-width="3"/>'
+              f'<path d="M1028 742 L1048 742 L1056 722 L1034 726 Z" fill="url(#hatch)" {LINE} stroke-width="2.4"/>')
+    grid = "".join(f'M{980 + 16 * k} 572 L{980 + 16 * k} 620 M980 {572 + 16 * k} L1028 {572 + 16 * k} ' for k in (1, 2))
+    antenna = (f'<path d="M960 604 L980 598" fill="none" {LINE} stroke-width="3"/>'
+               f'<rect x="980" y="572" width="48" height="48" fill="#ffffff" {LINE} stroke-width="3"/>'
+               f'<path d="{grid}" fill="none" {LINE} stroke-width="1.6"/>')
+    layer("sv-body", bells + frame + boxes + camera + antenna, LC)
+    cells = "".join(f'M{846 + 24 * k} 568 L{846 + 24 * k} 620 ' for k in (1, 2, 3)) + 'M846 594 L942 594'
+    layer("sv-panel", f'<path d="M960 600 L942 596" fill="none" {LINE} stroke-width="3"/>'
+                      f'<rect x="846" y="568" width="96" height="52" fill="url(#hatch)" {LINE} stroke-width="3"/>'
+                      f'<path d="{cells}" fill="none" {LINE} stroke-width="1.6"/>', (960, 600))
+    # The verniers' plumes, from each bell's mouth down (left, right, the near one in the middle).
+    for i, (x, y) in enumerate(((900, 820), (1020, 820), (968, 826)), 1):
+        layer(f"sv-plume-{i}", f'<path d="M{x - 10} {y} C{x - 8} {y + 18} {x - 4} {y + 38} {x} {y + 56} C{x + 4} '
+                               f'{y + 38} {x + 8} {y + 18} {x + 10} {y} Z" fill="{GOLD_FILL}" stroke="{GOLD}" '
+                               f'stroke-width="3" stroke-linejoin="round"/>', (x, y))
+    # The dust thrown up where something hits the ground (the failure's antenna), centred on its pivot.
+    layer("sv-thud", puff(940, 872, 16) + puff(980, 868, 22) + puff(1020, 874, 14), (980, 880))
+
+
 # --- Transposition and extraction: the third stage with the lander in its adapter -------------------
 
 def stage_parts():
@@ -1207,6 +1248,7 @@ def main():
     dock_parts()
     eva_parts()
     lunar_parts()
+    surveyor_parts()
     lunokhod_parts()
     stage_parts()
     plane_parts()

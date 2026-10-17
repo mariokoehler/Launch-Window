@@ -99,6 +99,7 @@
     {"step": "transposition", "clip": "transposition"},
     {"step": "extraction", "clip": "extraction"},
     {"step": "lem-jettison", "clip": "undocking"},
+    {"step": "lunar-landing", "programs": ["surveyor"], "clip": "surveyor-landing"},
     {"step": "lunar-landing", "clip": "lunar-landing"},
     {"step": "orbit-insertion", "clip": "insertion"},
     {"step": "duration-level-iii", "clip": "duration-level-ii"},

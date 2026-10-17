@@ -1966,6 +1966,11 @@ clips, the replay is meant to be watched like a short film, and the player can s
   into the return capsule; the glitch hits rock and drills again; the failure jams), and `luna-liftoff` (the
   return rocket lifts off the stage and climbs away; the glitch's engine sputters first; the failure leans, loses
   its engine and falls back). Every story unconfirmed.
+- **Surveyor (user, 2026-10-17):** its `lunar-landing` played the crewed lander's clip; it plays
+  `surveyor-landing` now: the tripod comes down on its three verniers, which cut a few metres up, and it drops
+  onto its pads, calls home and turns its solar panel to the Sun. The glitch is Surveyor 3's: the verniers don't
+  cut, and it hops twice before they're shut off from Earth. The failure hops the same way, comes off it leaning,
+  lands on one foot and topples onto its antenna. Every story unconfirmed.
 - **Earth departure (user, 2026-10-16):** it borrowed `tpi`, so the injection's burn played twice; BASPM gives the
   step to the probe alone. `earth-departure` is the probe close up after the burn, the Earth shrinking behind
   it: puffs spin it up, its boom unfolds, its dish turns home, and a tracking pulse goes out and comes back. The
