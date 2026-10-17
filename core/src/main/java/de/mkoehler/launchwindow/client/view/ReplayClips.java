@@ -26,7 +26,8 @@ import java.util.function.Function;
  * either goes before a rule for the same step without one. A rule with {@code programs} only matches a
  * step of a configuration in one of them, the craft's own way (a Soyuz-type craft's orbital module), and
  * one with a {@code later} needs that step anywhere after it in the season's plan (which the player sees, so
- * it spoils nothing); each goes first the same way. Nothing else borrows a clip: {@code lunar-ascent} isn't {@code ascent}. The step's outcome picks the
+ * it spoils nothing), and one with a {@code vehicle} only a step behind that vehicle; each goes first the same
+ * way. Nothing else borrows a clip: {@code lunar-ascent} isn't {@code ascent}. The step's outcome picks the
  * variant, and each variant's sidecar ({@code assets/ui/replay/<clip>-<variant>.json}) gives its length
  * and the second its result may show. A step with no clip, or a variant missing, gets the no-signal
  * clip.
@@ -62,8 +63,11 @@ public final class ReplayClips {
      * @param programs the programs whose configurations it matches, or {@code null} for any
      * @param later   a step anywhere after it in the season's plan, or {@code null} for any (the LK-700's hop
      *                shows its orbital module only when a jettison is coming that drops it)
+     * @param vehicle the vehicle in front of the step's id ({@code atv} for {@code atv-launch}: a Gemini docking
+     *                flight's Agena launches as itself), or {@code null} for any, with a vehicle or without
      */
-    public record Rule(String step, String clip, String after, String earlier, List<String> programs, String later) {
+    public record Rule(String step, String clip, String after, String earlier, List<String> programs, String later,
+                       String vehicle) {
     }
 
     /**
@@ -295,6 +299,7 @@ public final class ReplayClips {
      */
     public Optional<String> clipName(String stepId, List<String> earlier, List<String> later, String programId) {
         String step = step(stepId);
+        String vehicle = vehicle(stepId);
         List<String> after = later.stream().map(this::step).toList();
         List<String> before = earlier.stream().map(this::step).toList();
         String previous = before.isEmpty() ? null : before.get(before.size() - 1);
@@ -302,12 +307,20 @@ public final class ReplayClips {
             .filter(rule -> is(step, rule.step()) && (rule.after() == null || previous != null && is(previous, rule.after()))
                 && (rule.earlier() == null || before.stream().anyMatch(b -> is(b, rule.earlier())))
                 && (rule.programs() == null || programId != null && rule.programs().contains(programId))
-                && (rule.later() == null || after.stream().anyMatch(a -> is(a, rule.later()))))
+                && (rule.later() == null || after.stream().anyMatch(a -> is(a, rule.later())))
+                && (rule.vehicle() == null || rule.vehicle().equals(vehicle)))
             .map(Rule::clip).findFirst();
     }
 
     /** A step's kind less the vehicle in front: the longest that fits (soyuz-7k-ok before a shorter one). */
     private String step(String stepId) {
+        String kind = kind(stepId);
+        String vehicle = vehicle(stepId);
+        return vehicle.isEmpty() ? kind : kind.substring(vehicle.length() + 1);
+    }
+
+    /** The vehicle in front of a step's kind, the longest that fits, or "" for none. */
+    private String vehicle(String stepId) {
         String kind = kind(stepId);
         String vehicle = "";
         for (String v : vehicles) {
@@ -315,7 +328,7 @@ public final class ReplayClips {
                 vehicle = v;
             }
         }
-        return vehicle.isEmpty() ? kind : kind.substring(vehicle.length() + 1);
+        return vehicle;
     }
 
     /** Whether a step is a rule's, or it with a craft's letter. */

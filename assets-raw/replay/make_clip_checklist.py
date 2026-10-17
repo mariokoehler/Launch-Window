@@ -90,19 +90,28 @@ def vehicle(component_id, components):
     return "probe"
 
 
-def rule_clip(key, rules, earlier=(), program=None, later=()):
+def vehicle_of(k, vehicles):
+    """The vehicle in front of a kind (atv for atv-launch), the longest that fits, or "" for none."""
+    return max((v for v in vehicles if k.startswith(v + "-")), key=len, default="")
+
+
+def rule_clip(key, rules, earlier=(), program=None, later=(), vehicle=""):
     """The clip the first rule names for this key, and what picked it: the step before (a rule's "after"),
-    a step anywhere earlier in the season (its "earlier"), the program (its "programs") or a step planned later
-    (its "later"), as ReplayClips matches them. earlier and later: the keys before and after it, in order."""
+    a step anywhere earlier in the season (its "earlier"), the program (its "programs"), a step planned later
+    (its "later") or the vehicle in front of the step (its "vehicle"), as ReplayClips matches them. earlier and
+    later: the keys before and after it, in order."""
     before = earlier[-1] if earlier else None
     for rule in rules:
         if (key == rule["step"] and rule.get("after") in (None, before)
                 and rule.get("earlier") in (None, *earlier)
                 and (rule.get("programs") is None or program in rule["programs"])
-                and rule.get("later") in (None, *later)):
+                and rule.get("later") in (None, *later)
+                and rule.get("vehicle") in (None, vehicle)):
             why = f"`{rule['earlier']}` earlier" if rule.get("earlier") else f"after `{before}`"
             if rule.get("programs"):
                 why += f" in {', '.join(rule['programs'])}"
+            if rule.get("vehicle"):
+                why += f" behind `{rule['vehicle']}`"
             return rule["clip"], why
     return None, f"after `{before}`"
 
@@ -144,7 +153,8 @@ def main():
         "picks": {}})
     for k, m, i, st, prev, nxt in uses:
         e = entries[keys[k]]
-        clip, why = rule_clip(keys[k], rules, [keys[p] for p in prev], m["programId"], [keys[p] for p in nxt])
+        clip, why = rule_clip(keys[k], rules, [keys[p] for p in prev], m["programId"], [keys[p] for p in nxt],
+                              vehicle_of(k, clips.get("vehicles", [])))
         e["befores"][why] += 1
         e["picks"][why] = clip
         program = programs[m["programId"]]

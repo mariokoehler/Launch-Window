@@ -193,6 +193,8 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   to the Moon landings get their own spacecraft in the replay, a package a program, the rocket staying generic.
   Mercury's is done: a step's `"skin"` in `build.py` draws `mc-<part>` for `<part>` (`motion.jsx`'s `ALIAS`), so
   the generic timelines play unchanged (`launch-storyboard/build.py <variant> mercury` for the launch). Client only.
+  Gemini's is done too (`gm-`, and the Agena's own launch, `ag-`, picked by a rule's `"vehicle"`): rebuild the client
+  (`core`'s rule matching changed).
 
 ## How we work
 

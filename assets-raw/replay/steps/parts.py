@@ -1571,6 +1571,229 @@ def mercury_parts():
     layer("mc-r-bag", RU(small(bag)), RU_AT(960, 506))
 
 
+# --- Project Gemini (2026-10-17): its spacecraft, and the Agena it docked with --------------------------
+# The reentry module seen from its back (the side with the hatches): the heat shield, the cabin's cone
+# with the two hatches, a window in each, the reentry control (RCS) section, a short cylinder, and the
+# rendezvous and recovery (R&R) section, a little tapered, its nose flat (the radar). Dark, as it flew.
+# Behind the shield, the white adapter: the retrograde section (the four retros, three seen side on)
+# and the equipment section, widening to the rocket's width. Drawn in metres from the shield's centre
+# (x out, y up), sx px/m across and sy along; the way home's frame stretches it 9 % along so that the
+# module fills the generic capsule's box (base 90 at y 500, top 352): the chutes, the hinges and the
+# break-up's seam fit it.
+GM_SHIELD, GM_RETRO, GM_EQUIP = 1.145, 1.236, 1.525          # half-widths: the shield, the seam, the base
+GM_RETRO_Y, GM_EQUIP_Y = -0.55, -2.29
+GM_DARK = "#aab4c6"
+GM_R = (960, 500, 90 / 2.29, 148 / 3.45)                     # the way home's frame: cx, base, sx, sy
+GM_L = (960, 500, 90 / 3.05, 90 / 3.05 * 1.09)               # on the rocket: the adapter as wide as it
+
+
+def gm_pt(f, x, y):
+    cx, base, sx, sy = f
+    return f"{cx + x * sx:.1f} {base - y * sy:.1f}"
+
+
+def gm_poly(f, pts, fill, w, extra=""):
+    return f'<path d="M{" L".join(gm_pt(f, x, y) for x, y in pts)} Z" fill="{fill}" {LINE} stroke-width="{w}"{extra}/>'
+
+
+def gemini_module(f, k=1.0):
+    """The reentry module, stroke widths times k."""
+    w = lambda x: f"{x * k:.2f}"
+    cx, base, sx, sy = f
+    shield = (f'<path d="M{gm_pt(f, -GM_SHIELD, 0)} Q{gm_pt(f, 0, -0.26)} {gm_pt(f, GM_SHIELD, 0)} Z" fill="{GM_DARK}" '
+              f'{LINE} stroke-width="{w(3)}"/>')
+    cone = gm_poly(f, [(-GM_SHIELD, 0), (-0.49, 1.77), (0.49, 1.77), (GM_SHIELD, 0)], GM_DARK, w(3))
+    rcs = gm_poly(f, [(-0.49, 1.77), (-0.49, 2.2), (0.49, 2.2), (0.49, 1.77)], GM_DARK, w(3))
+    rr = gm_poly(f, [(-0.49, 2.2), (-0.42, 3.3), (-0.3, 3.45), (0.3, 3.45), (0.42, 3.3), (0.49, 2.2)], GM_DARK, w(3))
+    nose = f'<path d="M{gm_pt(f, -0.42, 3.3)} L{gm_pt(f, 0.42, 3.3)}" fill="none" {LINE} stroke-width="{w(1.6)}"/>'
+    # The RCS section's thrusters, two seen.
+    jets = "".join(f'<circle cx="{cx + x * sx:.1f}" cy="{base - 1.98 * sy:.1f}" r="{2.2 * k:.1f}" fill="#ffffff" {LINE} '
+                   f'stroke-width="{w(1.4)}"/>' for x in (-0.25, 0.25))
+    hatches = "".join(gm_poly(f, [(s * 0.07, 0.3), (s * 0.8, 0.3), (s * 0.5, 1.58), (s * 0.07, 1.58)], "none", w(1.6),
+                              ' opacity="0.8"') for s in (-1, 1))
+    windows = "".join(gm_poly(f, [(s * 0.16, 1.0), (s * 0.58, 1.0), (s * 0.47, 1.45), (s * 0.19, 1.45)], "#eef2f7", w(2))
+                      for s in (-1, 1))
+    return shield + cone + rcs + rr + nose + jets + hatches + windows
+
+
+def gemini_retro(f, k=1.0, nozzles=False):
+    """The adapter's retrograde section; with its retros' nozzles, once the equipment section is gone."""
+    w = lambda x: f"{x * k:.2f}"
+    cx, base, sx, sy = f
+    out = ""
+    if nozzles:
+        out = "".join(gm_poly(f, [(x - 0.13, GM_RETRO_Y + 0.05), (x - 0.2, GM_RETRO_Y - 0.2), (x + 0.2, GM_RETRO_Y - 0.2),
+                                  (x + 0.13, GM_RETRO_Y + 0.05)], "#ffffff", w(2)) for x in (-0.55, 0, 0.55))
+    out += gm_poly(f, [(-GM_SHIELD, 0), (-GM_RETRO, GM_RETRO_Y), (GM_RETRO, GM_RETRO_Y), (GM_SHIELD, 0)], "#ffffff", w(2.4))
+    out += "".join(f'<path d="M{gm_pt(f, s * GM_SHIELD * u, 0)} L{gm_pt(f, s * GM_RETRO * u, GM_RETRO_Y)}" fill="none" {LINE} '
+                   f'stroke-width="{w(1.2)}" opacity="0.5"/>' for s in (-1, 1) for u in (0.35, 0.7))
+    return out
+
+
+def gemini_equip(f, k=1.0):
+    """The adapter's equipment section, from the seam to the base."""
+    w = lambda x: f"{x * k:.2f}"
+    out = gm_poly(f, [(-GM_RETRO, GM_RETRO_Y), (-GM_EQUIP, GM_EQUIP_Y), (GM_EQUIP, GM_EQUIP_Y), (GM_RETRO, GM_RETRO_Y)],
+                  "#ffffff", w(2.4))
+    out += "".join(f'<path d="M{gm_pt(f, s * GM_RETRO * u, GM_RETRO_Y)} L{gm_pt(f, s * GM_EQUIP * u, GM_EQUIP_Y)}" fill="none" '
+                   f'{LINE} stroke-width="{w(1.2)}" opacity="0.5"/>' for s in (-1, 1) for u in (0.35, 0.7))
+    return out
+
+
+def gemini_whole(f, k=1.0):
+    return gemini_equip(f, k) + gemini_retro(f, k) + gemini_module(f, k)
+
+
+# The Agena target vehicle, nose up: the docking adapter (TDA) at the top with its cone, the long body,
+# the engine at the bottom. On the rocket (L) under its shroud, on an adapter cone from the rocket's
+# width. In the docking close-up it's drawn the other way up, as target_units is.
+def agena_launch(shroud=True, k=1.0):
+    w = lambda x: f'stroke-width="{x * k:.2f}"'
+    adapter = f'<path d="M915 500 L937 470 L983 470 L1005 500 Z" fill="#ffffff" {LINE} {w(3)}/>'
+    body = (f'<rect x="937" y="318" width="46" height="152" fill="#ffffff" {LINE} {w(3)}/>'
+            + "".join(f'<path d="M937 {y} L983 {y}" fill="none" {LINE} {w(1.6)} opacity="0.7"/>' for y in (440, 392, 340)))
+    tda = f'<rect x="941" y="300" width="38" height="18" fill="#ffffff" {LINE} {w(2.4)}/>'
+    if shroud:
+        top = f'<path d="M939 300 Q939 264 960 246 Q981 264 981 300 Z" fill="#ffffff" {LINE} {w(3)}/>'
+    else:
+        top = (f'<path d="M941 300 L928 282 L992 282 L979 300 Z" fill="#ffffff" {LINE} {w(2.4)}/>'
+               f'<path d="M956 282 L960 292 L964 282" fill="none" {LINE} {w(1.6)}/>')
+    return adapter + body + tda + top
+
+
+def agena_target(w=2.4):
+    """Engine at the top, the docking cone's mouth at the bottom (y 540, x 920 to 1000), as target_units."""
+    return (f'<path d="M948 262 L940 238 L980 238 L972 262 Z" fill="#ffffff" {LINE} stroke-width="{w}"/>'
+            f'<rect x="930" y="262" width="60" height="232" fill="#ffffff" {LINE} stroke-width="{w}"/>'
+            + "".join(f'<path d="M930 {y} L990 {y}" fill="none" {LINE} stroke-width="{w * 0.7:.2f}" opacity="0.8"/>'
+                      for y in (300, 380, 460))
+            + f'<rect x="936" y="494" width="48" height="26" fill="#ffffff" {LINE} stroke-width="{w}"/>'
+            f'<path d="M936 520 L984 520 L1000 540 L920 540 Z" fill="#ffffff" {LINE} stroke-width="{w}"/>'
+            f'<path d="M954 540 L960 528 L966 540" fill="none" {LINE} stroke-width="{w * 0.7:.2f}"/>')
+
+
+def gemini_parts():
+    # Empty for everyone else: the main hung from two points (descent.jsx's TILT draws it).
+    layer("r-main-2pt", "", (960, RC[1] - RK * (426 - 352)))
+    small = lambda body: re.sub(r'stroke-width="([\d.]+)"', lambda m: f'stroke-width="{float(m.group(1)) * 0.8:.2f}"', body)
+    rocket = board_group("rocket")
+    nose = rocket.index('<path xmlns="http://www.w3.org/2000/svg" d="M915 440')
+    # On the pad and the way up: no escape tower (the crew had ejection seats).
+    layer("gm-rocket", rocket[:nose] + gemini_whole(GM_L), (960, 600))
+    layer("gm-debris-1", gemini_whole(GM_L), (960, 410))
+    big = f"translate({DX} {DY}) scale({DK}) translate(-850 -520)"
+    turn = "translate(-120 20) rotate(90 960 500)"
+    layer("gm-d-payload", f'<g transform="{big}"><g transform="{turn}">{gemini_whole(GM_L)}</g></g>', D_AT(914, 520))
+    thick = re.sub(r'stroke-width="[\d.]+"', 'stroke-width="5"', gemini_whole(GM_L))
+    for name in ("gm-o-sat", "gm-o-sat-b"):
+        layer(name, f'<g transform="translate(960 560) scale(0.6) translate(-960 -426)">{thick}</g>', (960, 560))
+    # Coming home: the module nose right (RT) and nose up (RU), its retrograde section the pack (turning
+    # about its rim at the shield, which a section left hanging swings from), no straps, the latches at
+    # the rim; the equipment section the trunk, from the seam on (adapter.jsx drops it).
+    mod = small(gemini_module(GM_R))
+    layer("gm-r-capsule", RT(mod), RC)
+    layer("gm-r-capsule-up", RU(mod), RC)
+    layer("gm-r-pack", RT(small(gemini_retro(GM_R, nozzles=True))), RT_AT(1005, 500))
+    layer("gm-r-strap-a", "", RT_AT(915, 500))
+    layer("gm-r-strap-b", "", RT_AT(1005, 500))
+    layer("gm-r-cut-a", RT(f'<circle cx="915" cy="501" r="6" fill="{GOLD}"/>'), RT_AT(915, 501))
+    layer("gm-r-cut-b", RT(f'<circle cx="1005" cy="501" r="6" fill="{GOLD}"/>'), RT_AT(1005, 501))
+    seam = 500 - GM_RETRO_Y * GM_R[3]
+    rim = 960 + GM_RETRO * GM_R[2]
+    layer("gm-r-trunk", RT(small(gemini_equip(GM_R))), RT_AT(rim, seam))
+    layer("gm-r-trunk-cut-a", RT(f'<circle cx="{1920 - rim:.1f}" cy="{seam:.1f}" r="6" fill="{GOLD}"/>'), RT_AT(1920 - rim, seam))
+    layer("gm-r-trunk-cut-b", RT(f'<circle cx="{rim:.1f}" cy="{seam:.1f}" r="6" fill="{GOLD}"/>'), RT_AT(rim, seam))
+    noz = seam + 0.2 * GM_R[3]
+    for i, x in enumerate((-0.55, 0, 0.55), 1):
+        px = 960 + x * GM_R[2]
+        layer(f"gm-r-flame-{i}", RT(f'<path d="M{px - 6:.1f} {noz:.1f} C{px - 7:.1f} {noz + 18:.1f} {px - 3:.1f} {noz + 36:.1f} {px:.1f} '
+                                    f'{noz + 54:.1f} C{px + 3:.1f} {noz + 36:.1f} {px + 7:.1f} {noz + 18:.1f} {px + 6:.1f} {noz:.1f} Z" '
+                                    f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>'), RT_AT(px, noz))
+    # The attitude jets, on the RCS section.
+    jy = 500 - 1.98 * GM_R[3]
+    layer("gm-r-jet-l", RT(puff(930, jy, 9)), RT_AT(939, jy))
+    layer("gm-r-jet-r", RT(puff(990, jy, 9)), RT_AT(981, jy))
+    layer("gm-r-jet-stuck", RT(f'<path d="M981 {jy - 4:.1f} C1010 {jy - 12:.1f} 1044 {jy - 22:.1f} 1080 {jy - 30:.1f} L1084 {jy - 14:.1f} '
+                               f'C1048 {jy - 8:.1f} 1012 {jy + 4:.1f} 983 {jy + 12:.1f} Z" fill="{GOLD_FILL}" stroke="{GOLD}" '
+                               f'stroke-width="2" stroke-linejoin="round"/>'), RC)
+    layer("gm-r-glow-side", RT(f'<path d="M984 430 C1000 456 1012 480 1016 504 C1022 476 1006 450 984 430 Z" fill="{GOLD_FILL}" '
+                               f'stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>'), RC)
+    # The break-up: the nose (R&R and RCS sections) from the cabin, at the generic seam's pivots.
+    top = small(gm_poly(GM_R, [(-0.49, 1.77), (-0.49, 2.2), (0.49, 2.2), (0.49, 1.77)], GM_DARK, 3)
+                + gm_poly(GM_R, [(-0.49, 2.2), (-0.42, 3.3), (-0.3, 3.45), (0.3, 3.45), (0.42, 3.3), (0.49, 2.2)], GM_DARK, 3))
+    body = small(f'<path d="M{gm_pt(GM_R, -GM_SHIELD, 0)} Q{gm_pt(GM_R, 0, -0.26)} {gm_pt(GM_R, GM_SHIELD, 0)} Z" fill="{GM_DARK}" '
+                 f'{LINE} stroke-width="3"/>'
+                 + gm_poly(GM_R, [(-GM_SHIELD, 0), (-0.49, 1.77), (0.49, 1.77), (GM_SHIELD, 0)], GM_DARK, 3)
+                 + "".join(gm_poly(GM_R, [(s * 0.16, 1.0), (s * 0.58, 1.0), (s * 0.47, 1.45), (s * 0.19, 1.45)], "#eef2f7", 2)
+                           for s in (-1, 1)))
+    layer("gm-r-half-nose", RT(top), RT_AT(960, 410))
+    layer("gm-r-half-body", RT(body), RT_AT(960, 472))
+    # The main on two points (descent.jsx's TILT): the same canopy, its lines to a ring, and from there
+    # two legs to the nose and the shield's upper rim with the module turned TILT_DEG off upright about
+    # its centre (35 degrees nose up over the water).
+    a = math.radians(55)
+    ring = (960, RC[1] - RK * (426 - 352))
+    def at(x, y):
+        dx, dy = RK * (x - 960), RK * (y - 426)
+        return (RC[0] + dx * math.cos(a) - dy * math.sin(a), RC[1] + dx * math.sin(a) + dy * math.cos(a))
+    legs = "".join(f'<path d="M{ring[0]} {ring[1]} L{p[0]:.1f} {p[1]:.1f}" fill="none" {LINE} stroke-width="2.4"/>'
+                   for p in (at(960, 352), at(915, 500)))
+    cx, w_, h = 960, 400, 190
+    dome_y = ring[1] - 210
+    canopy = (f'<path d="M{cx - w_ / 2} {dome_y} C{cx - w_ / 2} {dome_y - h} {cx + w_ / 2} {dome_y - h} {cx + w_ / 2} {dome_y} '
+              f'C{cx + w_ / 4} {dome_y - h * 0.18} {cx - w_ / 4} {dome_y - h * 0.18} {cx - w_ / 2} {dome_y} Z" fill="#ffffff" {LINE} stroke-width="4"/>'
+              f'<path d="M{cx} {dome_y - h * 0.75} L{cx} {dome_y - h * 0.15}" fill="none" {LINE} stroke-width="2"/>'
+              + "".join(f'<path d="M{cx + kk * w_ / 2} {dome_y} L{cx} {ring[1]}" fill="none" {LINE} stroke-width="2"/>'
+                        for kk in (-1, -0.45, 0.45, 1)))
+    layer("gm-r-main-2pt", legs + canopy, ring)
+    # The docking close-up: Gemini whole, nose right (the chaser) or left (the other of a rendezvous),
+    # and the Agena, its cone's mouth where the generic target's collar is.
+    whole = small(gemini_whole(GM_R))
+    layer("gm-k-chaser", KT(KC, 90, whole), KC)
+    tc = (KM[0] + KK * (540 - 426), KM[1])
+    layer("gm-k-target", KT(tc, 90, agena_target()), KM)
+    oc = (1150, 470)
+    layer("gm-k-other", KT(oc, -90, whole), oc)
+    lp = K_AT(tc, 938, 508, 90)
+    layer("gm-k-light", f'<circle cx="{lp[0]:.1f}" cy="{lp[1]:.1f}" r="7" fill="{GOLD}" {LINE} stroke-width="2"/>', lp)
+    # Its thrusters: braking ahead of the cabin's shoulders, pushing from the adapter's base, one on top.
+    sh_t, sh_b = K_AT(KC, 926, 470, 90), K_AT(KC, 994, 470, 90)
+    layer("gm-k-brake", puff(sh_t[0] + 18, sh_t[1] - 6, 9) + puff(sh_b[0] + 18, sh_b[1] + 6, 9), KC)
+    base_y = 500 - GM_EQUIP_Y * GM_R[3]
+    b_t, b_b = K_AT(KC, 908, base_y, 90), K_AT(KC, 1012, base_y, 90)
+    layer("gm-k-push", puff(b_t[0] - 16, b_t[1], 9) + puff(b_b[0] - 16, b_b[1], 9), KC)
+    side = K_AT(KC, 912, 520, 90)
+    layer("gm-k-side", puff(side[0], side[1] - 16, 10), side)
+    root = K_AT(KC, 910, 530, 90)
+    layer("gm-k-stuck", f'<path d="M{root[0] - 6:.1f} {root[1]:.1f} C{root[0] - 14:.1f} {root[1] - 40:.1f} {root[0] - 20:.1f} '
+                        f'{root[1] - 80:.1f} {root[0] - 28:.1f} {root[1] - 120:.1f} L{root[0] - 12:.1f} {root[1] - 122:.1f} '
+                        f'C{root[0] - 6:.1f} {root[1] - 80:.1f} {root[0] + 2:.1f} {root[1] - 40:.1f} {root[0] + 6:.1f} {root[1]:.1f} Z" '
+                        f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>', KC)
+    # The spacewalk: Gemini whole as the way home's capsule, raised EV_UP so the open hatch is where the
+    # figure stands (the cone's top edge at y 380 under it), the hatch on that slope, and the experiment
+    # package on a short mount down to the RCS section.
+    EV_UP = 23
+    layer("gm-e-capsule", f'<g transform="translate(0 {-EV_UP})">{RT(whole)}</g>', RC)
+    slope = math.degrees(math.atan2(2 * (0.655 * GM_R[2]), 2 * (1.77 * GM_R[3])))
+    edge = lambda x: 380 + (x - 881) * math.tan(math.radians(slope))
+    x0, x1 = HATCH[0], HATCH[1]
+    hy = edge(x1)
+    layer("gm-e-hole", f'<g transform="rotate({slope:.2f} {x1} {hy:.1f})"><rect x="{x0 + 4}" y="{hy - 2:.1f}" width="{x1 - x0 - 8}" '
+                       f'height="10" fill="{NAVY}"/></g>', (x1, hy))
+    layer("gm-e-hatch", f'<g transform="rotate({slope:.2f} {x1} {hy:.1f})"><rect x="{x0}" y="{hy - 8:.1f}" width="{x1 - x0}" '
+                        f'height="10" rx="3" fill="{GM_DARK}" {LINE} stroke-width="3"/></g>', (x1, hy))
+    rcs_top = RC[1] - EV_UP - RK * (0.49 * GM_R[2])
+    layer("gm-e-box", f'<path d="M966 380 L966 {rcs_top:.1f} M984 380 L984 {rcs_top:.1f}" fill="none" '
+                      f'{LINE} stroke-width="3"/>'
+                      f'<rect x="958" y="356" width="34" height="24" rx="3" fill="url(#hatch)" {LINE} stroke-width="3"/>'
+                      f'<rect x="958" y="356" width="34" height="24" rx="3" fill="{GOLD_FILL}"/>', (975, 360))
+    # The Agena's own launch (its steps, "atv-", in a Gemini docking flight): on the rocket under its
+    # shroud, and in the deployment with its docking cone bare.
+    layer("ag-rocket", rocket[:nose] + agena_launch(), (960, 600))
+    layer("ag-debris-1", agena_launch(), (960, 380))
+    layer("ag-d-payload", f'<g transform="{big}"><g transform="{turn}">{agena_launch(shroud=False)}</g></g>', D_AT(914, 520))
+
+
 def main():
     os.makedirs(OUT, exist_ok=True)
     copy_board_layers()
@@ -1604,6 +1827,7 @@ def main():
     air_parts()
     departure_parts()
     mercury_parts()
+    gemini_parts()
     if ONLY:
         # Keep the parts not redrawn.
         old = json.load(open(os.path.join(BUILD, "layers.json")))

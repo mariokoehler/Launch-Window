@@ -6,12 +6,20 @@ var DROGUE = 0.8, MAIN = 1.6, HALF = 2.0, FULL = glitch ? 3.0 : MAIN;
 // clearing clouds; the touchdown is the next step's (touchdown.jsx).
 var CHUTES = typeof CHUTES !== "undefined" && CHUTES;
 var SPLASH = CHUTES ? 99 : failure ? 3.6 : glitch ? 4.7 : 4.4;
+// TILT (two-point.jsx, Gemini's, 2026-10-17): once the main is full, the capsule turns TILT degrees off
+// upright about its middle onto two-point suspension (Gemini came down 35 degrees nose up, a rim of its
+// shield first), while the main crossfades to r-main-2pt, the same canopy on two legs to the nose and
+// the rim. Not in the failure, whose main never opens.
+var TILT = typeof TILT !== "undefined" && !failure ? TILT : 0;
+var TILT0 = FULL + 0.8, TILT1 = FULL + 1.4;
+function tilted(t) { return TILT ? clamp((t - TILT0) / (TILT1 - TILT0), 0, 1) : 0; }
 
 put("paper", "screen");
 for (var i = 1; i <= 6; i++) put("r-cloud-" + i);
 put(GROUND ? "r-ground" : "r-sea");
 put("r-drogue");
 put("r-main");
+put("r-main-2pt");
 put("r-main-half");
 put("r-streamer");
 put("r-carrier");
@@ -66,7 +74,10 @@ function corner(t) {
     return [90 - 90 * Math.cos(a) + 148 * Math.sin(a), 148 - 148 * Math.cos(a) - 90 * Math.sin(a)];
 }
 move("r-carrier", function (t) { var c = corner(t); return [c[0], bob(t) + sink(t) + c[1]]; });
-turn("r-carrier", function (t) { return swing(t) + tip(t); });
+// It rights itself in the water once the main is let go, nose up as a recovery finds it.
+var lean = TILT ? track([[TILT0, 0], [TILT1, TILT, "inout"], [SPLASH + 0.6, TILT], [SPLASH + 1.6, 0, "inout"]])
+                : function () { return 0; };
+turn("r-carrier", function (t) { return swing(t) + tip(t) + lean(t); });
 fade("r-carrier", function () { return 1; });
 fade("r-capsule-up", failure && !GROUND ? track([[SPLASH + 0.3, 1], [SPLASH + 0.9, 0, "lin"]]) : function () { return 1; });
 if (failure) {
@@ -81,7 +92,7 @@ function hangs(n) {
     move(n, function (t) { return [0, bob(t)]; });
     turn(n, function (t) { return swing(t) * 0.5; });
 }
-hangs("r-drogue"); hangs("r-main"); hangs("r-main-half"); hangs("r-streamer");
+hangs("r-drogue"); hangs("r-main"); hangs("r-main-half"); hangs("r-streamer"); hangs("r-main-2pt");
 // The drogue: out at DROGUE, cut away when the main comes out.
 grow("r-drogue", track([[DROGUE, 0.2], [DROGUE + 0.25, 1.05, "out"], [DROGUE + 0.4, 1]]));
 fade("r-drogue", function (t) { return t >= DROGUE && t < MAIN ? 1 : 0; });
@@ -94,7 +105,7 @@ if (glitch || failure) {
     hide("r-streamer");
 }
 if (failure) {
-    hide("r-main"); hide("r-main-half");
+    hide("r-main"); hide("r-main-half"); hide("r-main-2pt");
 } else {
     if (glitch) {
         fade("r-main-half", function (t) { return t >= HALF && t < FULL ? 1 : 0; });
@@ -103,9 +114,19 @@ if (failure) {
         hide("r-main-half");
     }
     // After the splash the main sags down beside the capsule.
-    fade("r-main", function (t) { return t < FULL ? 0 : t < SPLASH + 0.6 ? 1 : 1 - clamp((t - SPLASH - 0.6) / 0.8, 0, 1); });
-    grow("r-main", track([[FULL, 0.15], [FULL + 0.35, 1.08, "out"], [FULL + 0.6, 1], [SPLASH, 1], [SPLASH + 1.2, 0.7, "in"]]));
-    turn("r-main", function (t) { return swing(t) * 0.5 + (t > SPLASH ? 50 * clamp((t - SPLASH) / 1.4, 0, 1) : 0); });
+    var mainFade = function (t) { return t < FULL ? 0 : t < SPLASH + 0.6 ? 1 : 1 - clamp((t - SPLASH - 0.6) / 0.8, 0, 1); };
+    var mainGrow = track([[FULL, 0.15], [FULL + 0.35, 1.08, "out"], [FULL + 0.6, 1], [SPLASH, 1], [SPLASH + 1.2, 0.7, "in"]]);
+    var mainTurn = function (t) { return swing(t) * 0.5 + (t > SPLASH ? 50 * clamp((t - SPLASH) / 1.4, 0, 1) : 0); };
+    fade("r-main", function (t) { return mainFade(t) * (1 - tilted(t)); });
+    grow("r-main", mainGrow);
+    turn("r-main", mainTurn);
+    if (TILT) {
+        fade("r-main-2pt", function (t) { return mainFade(t) * tilted(t); });
+        grow("r-main-2pt", mainGrow);
+        turn("r-main-2pt", mainTurn);
+    } else {
+        hide("r-main-2pt");
+    }
 }
 
 if (GROUND) {

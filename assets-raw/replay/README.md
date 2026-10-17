@@ -85,6 +85,11 @@ Each folder's `build/` is regenerated on every run and stays out of git.
     tower). The craft's own parts are drawn in the generic capsule's frame (`parts.py`'s `mercury_parts`: base at
     y 500, 90 wide, top at 352), so pivots, chutes and the break-up's seam fit. Parts only one craft draws are empty
     for the rest (`a-les`, `r-periscope`, `r-bag`). The launch: `launch-storyboard/build.py <variant> mercury`.
+  - **Gemini** (2026-10-17): `gm-` parts drawn in metres (`parts.py`'s `gemini_*`, the way home's frame stretched to
+    the generic box), hooks only its build entries load (`adapter.jsx` keeps the equipment section on the carrier and
+    drops it at `ESEP`, `project-gemini.jsx`, `two-point.jsx` for descent.jsx's `TILT`), and the Agena (`ag-`), whose
+    rules name `"vehicle": "atv"`. A part put on a carrier its timeline has already turned needs a turn of its own
+    (`adapter.jsx`), or it keeps one against the carrier's.
   - **The E-154** (2026-10-17, `e154-` and `su-` parts): the air-launch timelines name their craft through `K`
     (`craft.jsx`: the X-15 and the B-52 unless a step's file sets `CRAFT` first, as `e154.jsx` does: parts, where it
     hangs, and whether it's the X-15, which drops its lower fin and lands on skids). The E-154's eight steps are the

@@ -37,7 +37,7 @@ class ReplayClipsTest {
         for (ReplayClips.Rule rule : CLIPS.rules()) {
             for (MissionStepOutcome outcome : new MissionStepOutcome[]{MissionStepOutcome.SUCCESSFUL,
                 MissionStepOutcome.MINOR_GLITCH, MissionStepOutcome.FAILURE}) {
-                ReplayClips.Clip clip = CLIPS.clipFor("03-" + rule.step(), before(rule), later(rule), program(rule), outcome);
+                ReplayClips.Clip clip = CLIPS.clipFor(stepId(rule), before(rule), later(rule), program(rule), outcome);
                 assertTrue(clip.signal(), rule.clip() + " has no " + ReplayClips.variant(outcome));
                 assertTrue(Files.exists(ASSETS.resolve(clip.video())), clip.video());
                 assertTrue(clip.revealAt() > 0 && clip.revealAt() <= clip.duration(), clip.video());
@@ -93,6 +93,13 @@ class ReplayClipsTest {
         assertEquals("undocking", CLIPS.clipName("07-lk-deployment").orElseThrow());
         assertEquals("x15-peak", CLIPS.clipName("05-peak-altitude").orElseThrow());
         assertEquals("lander-engine-test", CLIPS.clipName("05-lem-tests-earth-orbit").orElseThrow());
+        // A rule can name the vehicle in front: a Gemini docking flight's Agena launches as itself, its Gemini as
+        // Gemini; with no rule for the vehicle, a step behind one plays the step's clip.
+        java.util.List<String> none = java.util.List.of();
+        assertEquals("agena-launch", CLIPS.clipName("03-atv-launch", none, none, "gemini").orElseThrow());
+        assertEquals("gemini-launch", CLIPS.clipName("08-launch", none, none, "gemini").orElseThrow());
+        assertEquals("gemini-launch", CLIPS.clipName("09-gemini-b-launch", none, none, "gemini").orElseThrow());
+        assertEquals("launch", CLIPS.clipName("03-atv-launch", none, none, "gemini-eor").orElseThrow());
     }
 
     /**
@@ -153,7 +160,7 @@ class ReplayClipsTest {
         for (ReplayClips.Rule rule : CLIPS.rules()) {
             java.util.List<ReplayClips.Clip> variants = java.util.stream.Stream.of(MissionStepOutcome.SUCCESSFUL,
                 MissionStepOutcome.MINOR_GLITCH, MissionStepOutcome.FAILURE, MissionStepOutcome.CATASTROPHIC)
-                .map(outcome -> CLIPS.clipFor("03-" + rule.step(), before(rule), later(rule), program(rule), outcome)).toList();
+                .map(outcome -> CLIPS.clipFor(stepId(rule), before(rule), later(rule), program(rule), outcome)).toList();
             float reveal = (float) variants.stream().mapToDouble(ReplayClips.Clip::revealAt).min().orElse(0);
             java.util.List<ReplayClips.Cue> before = null;
             for (ReplayClips.Clip clip : variants) {
@@ -183,6 +190,11 @@ class ReplayClipsTest {
     /** The steps a rule needs after it, as a season planned after the step. */
     private static java.util.List<String> later(ReplayClips.Rule rule) {
         return rule.later() == null ? java.util.List.of() : java.util.List.of("09-" + rule.later());
+    }
+
+    /** A step a rule matches: behind its vehicle, if it names one. */
+    private static String stepId(ReplayClips.Rule rule) {
+        return "03-" + (rule.vehicle() == null ? "" : rule.vehicle() + "-") + rule.step();
     }
 
     /** A program a rule matches, or null for any. */

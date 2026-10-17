@@ -1979,6 +1979,17 @@ clips, the replay is meant to be watched like a short film, and the player can s
   after the retrofire, the three retros lit one after another, the shield let down on the landing bag before the
   splash. Its orbital flights keep the generic turn before the retrofire, though Mercury flew heat shield first all
   orbit (`design.md` §1.1): kept so (user, 2026-10-17). Unconfirmed.
+- **Project Gemini as itself (user, 2026-10-17):** the second package: Gemini in every clip of the `gemini` program
+  (`gemini-*`, `gm-` parts: the dark reentry module seen from the hatches' side, two windows, the RCS and R&R
+  sections; the white adapter), and the Agena target vehicle as itself: in the docking close-up, its cone taking
+  Gemini's nose, and in its own launch (`agena-*`, `ag-` parts), picked by a rule's new `"vehicle"` (`atv`, the
+  steps in front of it). Gemini's touches: no escape tower; the reentry preparations' turn, then the equipment section
+  dropped (`adapter.jsx`; after the suborbital flight, which turns already, the trim then the drop); the retros lit
+  one after another; the retrograde section jettisoned without straps; the main crossfading onto two points as the
+  module tilts to 35 degrees nose up for the splash, upright again after it; the spacewalk's hatch on the cone and
+  the experiment on a mount. The lunar Gemini programs (direct ascent, EOR, circumlunar, lunar orbital) are a later
+  package; Gemini EOR's equipment-section separation drops the section before the turn, the wrong way round, to be
+  fixed with them. Unconfirmed.
 - **The way home in one piece (user, 2026-10-17):** the suborbital flight had no motes, so they popped in at the
   retrofire; now they stream past along its arc (`motes()` takes the craft's way, and can settle where the next clip's
   begin). Reentry preparations played the reentry preparations' turn even where the craft was already base first,

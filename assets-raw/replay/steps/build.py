@@ -549,6 +549,129 @@ STEPS = {
         "success": (6.4, 2.4), "glitch": (6.4, 3.4), "failure": (6.4, 2.6),
         "times": [0.5, 1.4, 2.2, 3.0, 4.2, 6.3],
     },
+    # Project Gemini's own (2026-10-17): the generic timelines ("source") with its spacecraft ("skin": the gm- parts),
+    # its adapter's equipment section on until the reentry preparations drop it (adapter.jsx), its retros
+    # rippled (project-gemini.jsx) and its descent on two points (two-point.jsx); and the Agena's launch (ag-).
+    "gemini-launch-preparations": {
+        "pad": True, "source": "launch-preparations", "skin": "gm-",
+        "success": (6.4, 2.6), "glitch": (6.4, 3.5), "failure": (7.0, 3.1),
+        "times": [0.5, 2.0, 2.8, 3.4, 4.6, 6.4],
+    },
+    "gemini-countdown": {
+        "pad": True, "source": "countdown", "skin": "gm-",
+        "success": (6.4, 4.8), "glitch": (7.2, 3.6), "failure": (7.0, 4.7),
+        "times": [0.0, 2.2, 3.0, 4.4, 4.8, 6.4],
+    },
+    "gemini-ascent": {
+        "pad": False, "source": "ascent", "skin": "gm-",
+        "success": (6.5, 3.6), "glitch": (6.5, 4.0), "failure": (7.0, 3.4),
+        "times": [0.0, 1.5, 2.9, 3.4, 4.2, 6.4],
+    },
+    "gemini-deployment": {
+        "pad": False, "source": "deployment", "skin": "gm-",
+        "success": (6.0, 2.6), "glitch": (6.0, 2.6), "failure": (6.5, 2.3),
+        "times": [0.5, 1.2, 1.9, 2.4, 3.6, 5.9],
+    },
+    "gemini-earth-orbit": {
+        "pad": False, "source": "earth-orbit", "skin": "gm-",
+        "success": (6.0, 2.1), "glitch": (6.0, 3.4), "failure": (6.5, 3.0),
+        "times": [0.5, 2.0, 2.8, 3.6, 4.6, 5.9],
+    },
+    "gemini-insertion": {
+        "pad": False, "source": "insertion", "skin": "gm-", "before": ["orbit.jsx"],
+        "success": (6.0, 2.4), "glitch": (6.0, 3.2), "failure": (6.0, 3.0),
+        "times": [0.4, 1.2, 1.8, 2.4, 3.2, 5.9],
+    },
+    "gemini-duration-level-ii": {
+        "pad": False, "source": "duration-level-ii", "skin": "gm-", "before": ["orbit.jsx"], "after": ["duration.jsx"],
+        "success": (6.4, 2.6), "glitch": (6.4, 3.8), "failure": (6.4, 3.6),
+        "times": [0.5, 2.0, 2.6, 3.4, 4.4, 6.3],
+    },
+    "gemini-suborbital-flight": {
+        "pad": False, "mirror": True, "source": "suborbital-flight", "skin": "gm-", "before": ["motes.jsx"], "after": ["adapter.jsx"],
+        "success": (6.4, 3.4), "glitch": (6.4, 4.0), "failure": (6.4, 3.6),
+        "times": [0.5, 1.8, 2.8, 3.4, 4.4, 6.3],
+    },
+    "gemini-reentry-trim": {
+        "pad": False, "mirror": True, "source": "reentry-trim", "skin": "gm-", "before": ["motes.jsx", "gemini-esep-trim.jsx"], "after": ["adapter.jsx"],
+        "success": (6.0, 3.0), "glitch": (6.0, 3.4), "failure": (6.0, 3.0),
+        "times": [0.5, 1.6, 2.4, 3.0, 4.0, 5.9],
+    },
+    "gemini-reentry-preparations": {
+        "pad": False, "mirror": True, "source": "reentry-preparations", "skin": "gm-", "before": ["motes.jsx", "gemini-esep.jsx"], "after": ["adapter.jsx"],
+        "success": (6.0, 3.0), "glitch": (6.0, 3.6), "failure": (6.5, 3.4),
+        "times": [0.5, 1.6, 2.4, 3.2, 4.4, 5.9],
+    },
+    "gemini-retrofire": {
+        "pad": False, "mirror": True, "source": "retrofire", "skin": "gm-", "before": ["motes.jsx", "project-gemini.jsx"],
+        "success": (6.4, 2.6), "glitch": (6.4, 3.0), "failure": (6.4, 3.0),
+        "times": [0.5, 1.4, 2.0, 2.8, 3.8, 6.3],
+    },
+    "gemini-retrofire-jettison": {
+        "pad": False, "mirror": True, "source": "retrofire-jettison", "skin": "gm-", "before": ["motes.jsx"],
+        "success": (5.6, 1.6), "glitch": (5.6, 3.4), "failure": (6.4, 3.2),
+        "times": [0.5, 1.1, 1.8, 2.6, 3.8, 5.5],
+    },
+    "gemini-reentry": {
+        "pad": False, "mirror": True, "source": "reentry", "skin": "gm-",
+        "success": (6.4, 4.0), "glitch": (6.4, 4.4), "failure": (6.4, 3.4),
+        "times": [0.4, 1.6, 2.6, 3.4, 4.6, 6.3],
+    },
+    "gemini-descent-and-splashdown": {
+        "pad": False, "source": "descent-and-splashdown", "skin": "gm-", "before": ["two-point.jsx"], "after": ["descent.jsx"],
+        "success": (6.4, 2.4), "glitch": (6.4, 3.4), "failure": (6.4, 2.6),
+        "times": [0.5, 1.4, 2.2, 3.0, 4.2, 6.3],
+    },
+    "gemini-recovery": {
+        "pad": False, "source": "recovery", "skin": "gm-",
+        "success": (6.4, 2.0), "glitch": (6.4, 3.0), "failure": (6.4, 3.4),
+        "times": [0.5, 1.6, 2.6, 3.4, 4.4, 6.3],
+    },
+    "gemini-eva": {
+        "pad": False, "source": "eva", "skin": "gm-", "alias": {"r-capsule": "gm-e-capsule"}, "before": ["spacewalk.jsx"],
+        "success": (6.0, 2.4), "glitch": (6.8, 3.0), "failure": (6.4, 3.0),
+        "times": [1.2, 2.0, 2.4, 2.8, 3.9, 5.9],
+    },
+    "gemini-rendezvous-target-approach": {
+        "pad": False, "source": "rendezvous-target-approach", "skin": "gm-", "before": ["orbit.jsx"],
+        "success": (6.0, 2.6), "glitch": (6.0, 3.0), "failure": (6.0, 3.0),
+        "times": [0.5, 1.8, 2.4, 2.8, 4.0, 5.9],
+    },
+    "gemini-rendezvous": {
+        "pad": False, "source": "rendezvous", "skin": "gm-", "before": ["dock.jsx"],
+        "success": (6.0, 2.4), "glitch": (6.0, 3.4), "failure": (6.0, 3.4),
+        "times": [0.5, 1.6, 2.4, 3.2, 4.2, 5.9],
+    },
+    "gemini-target-approach": {
+        "pad": False, "source": "target-approach", "skin": "gm-", "before": ["dock.jsx"],
+        "success": (6.4, 2.4), "glitch": (6.4, 2.6), "failure": (6.4, 2.6),
+        "times": [0.5, 1.9, 2.3, 2.7, 3.6, 6.3],
+    },
+    "gemini-docking": {
+        "pad": False, "source": "docking", "skin": "gm-", "before": ["dock.jsx"],
+        "success": (6.4, 2.0), "glitch": (6.4, 3.4), "failure": (6.4, 3.4),
+        "times": [0.5, 1.7, 2.3, 3.1, 4.2, 6.3],
+    },
+    "agena-launch-preparations": {
+        "pad": True, "source": "launch-preparations", "skin": "ag-",
+        "success": (6.4, 2.6), "glitch": (6.4, 3.5), "failure": (7.0, 3.1),
+        "times": [0.5, 2.0, 2.8, 3.4, 4.6, 6.4],
+    },
+    "agena-countdown": {
+        "pad": True, "source": "countdown", "skin": "ag-",
+        "success": (6.4, 4.8), "glitch": (7.2, 3.6), "failure": (7.0, 4.7),
+        "times": [0.0, 2.2, 3.0, 4.4, 4.8, 6.4],
+    },
+    "agena-ascent": {
+        "pad": False, "source": "ascent", "skin": "ag-",
+        "success": (6.5, 3.6), "glitch": (6.5, 4.0), "failure": (7.0, 3.4),
+        "times": [0.0, 1.5, 2.9, 3.4, 4.2, 6.4],
+    },
+    "agena-deployment": {
+        "pad": False, "source": "deployment", "skin": "ag-",
+        "success": (6.0, 2.6), "glitch": (6.0, 2.6), "failure": (6.5, 2.3),
+        "times": [0.5, 1.2, 1.9, 2.4, 3.6, 5.9],
+    },
     # The OKB-MiG E-154's own (2026-10-17): the X-15's timelines ("source") with its craft (e154.jsx, read by craft.jsx).
     "e154-takeoff": {
         "pad": False, "source": "air-takeoff", "before": ["moon.jsx", "e154.jsx", "craft.jsx", "air.jsx"],

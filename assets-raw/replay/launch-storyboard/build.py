@@ -1,9 +1,10 @@
-"""Builds one launch variant from the storyboard: python build.py success|glitch|failure [render] [mercury]
+"""Builds one launch variant from the storyboard: python build.py success|glitch|failure [render] [mercury|gemini|agena]
 
 Compares it with the storyboard frames (build/compare_<variant>.png: storyboard left, ours right,
 at each frame's time) and, with "render", renders build/launch-<variant>.webm at 1500 kbps.
 "mercury" (2026-10-17): Project Mercury's launch, its capsule and escape tower on the rocket (the replay
-steps' mc- parts, ../steps/parts.py), published as mercury-launch-<variant>.
+steps' mc- parts, ../steps/parts.py), published as mercury-launch-<variant>; "gemini" and "agena" the same
+with Gemini (gm-) and the Agena target vehicle (ag-), as SKINS lists.
 """
 import io
 import json
@@ -28,6 +29,8 @@ VARIANTS = {"success": ("Success", 6.3, [0.0, 1.2, 2.0, 2.8, 4.2, 6.0]),
 # from 2.6 and the failure flickers from 3.0, so a success is certain once 3.0 has passed clean; the
 # glitch only once the engine catches (3.4); the failure once the engine cuts (3.2).
 REVEAL = {"success": 3.2, "glitch": 3.5, "failure": 3.3}
+# A craft's own launch: its parts' prefix in the steps' layers, and the clip's name.
+SKINS = {"mercury": ("mc-", "mercury-launch"), "gemini": ("gm-", "gemini-launch"), "agena": ("ag-", "agena-launch")}
 
 
 def kink():
@@ -51,17 +54,17 @@ def falls():
 def main():
     key = sys.argv[1]
     board, dur, times = VARIANTS[key]
-    # Mercury's draws from the steps' layers (the storyboard's are among them), each part as its mc- one.
-    skin = "mercury" in sys.argv
+    # A craft's own draws from the steps' layers (the storyboard's are among them), each part as its own.
+    skin = next((SKINS[a] for a in sys.argv if a in SKINS), None)
     src = os.path.join(HERE, "..", "steps", "build") if skin else BUILD
-    name = "mercury-launch" if skin else "launch"
+    name = skin[1] if skin else "launch"
     layers = json.load(open(os.path.join(src, "layers.json")))
     script = os.path.join(BUILD, f"{name}-{key}.gen.jsx")
     with open(script, "w", encoding="utf-8") as f:
         f.write("var DIR = " + json.dumps(os.path.join(src, "layers").replace("\\", "/") + "/") + ";\n")
         f.write("var L = " + json.dumps(layers) + ";\n")
         if skin:
-            f.write("var ALIAS = " + json.dumps({n[3:]: n for n in layers if n.startswith("mc-")}) + ";\n")
+            f.write("var ALIAS = " + json.dumps({n[len(skin[0]):]: n for n in layers if n.startswith(skin[0])}) + ";\n")
         f.write(f"var VARIANT = {json.dumps(board)}, DUR = {dur};\n")
         f.write("var KINK = " + json.dumps(kink()) + ";\n")
         f.write("var FALL = " + json.dumps(falls()) + ";\n")

@@ -611,6 +611,25 @@ leading to satellite navigation.
   top, and for launch the escape tower, jettisoned once the climb was safe. The clips leave out the
   pitch angles (they fly level) and the roll. Sources: Wikipedia ("Project Mercury",
   "Mercury-Redstone 1A" flight profile), the MR-3 air-to-ground transcript (NASA JSC; Spacelog).
+- **How a Gemini came home** (checked 2026-10-17, for Gemini's replay clips, `ui-spec.md` §4.7.3): the spacecraft
+  was 5.74 m long, the reentry module 3.45 m and the adapter 2.29 m, 3.05 m wide at its base (the Titan II's width)
+  and 2.29 m at the module's heat shield. The adapter had two sections: the retrograde section next to the shield,
+  with four solid retrorockets, and the equipment section behind it (fuel cells, propellant, life support). There
+  was no escape tower: the crew had ejection seats, usable only early in the climb, because the Titan's
+  hypergolic propellants burn at once instead of exploding. In orbit it usually flew small end forward. For the
+  way home the crew turned it blunt end forward (Grissom called it on Gemini 3), and about half a minute before
+  retrofire they jettisoned the equipment section, baring the retros. The four fired one after another, 5.5 s
+  apart, each burning about 5.5 s, and the retrograde section went about 45 s after the first lit. The module
+  flew a lifting reentry, its centre of gravity offset and rolled to steer. A drogue opened at about 15,000 m;
+  at about 3,200 m the crew released it to pull out the pilot chute, and 2.5 s later the rendezvous and recovery
+  section at the nose came away and drew out the main, a 25.6 m ring-sail. Then the module was turned from nose up
+  onto two-point suspension, to meet the water 35 degrees nose up, a rim of its shield first: no landing bag.
+  Gemini 2 (19 January 1965) was a suborbital test of the heat shield; Gemini 4 had the first American
+  spacewalk (Ed White, 3 June 1965); Gemini 6A and 7 the first rendezvous, 0.3 to 91 m apart (December 1965);
+  Gemini 8 the first docking, with an Agena target vehicle (16 March 1966), cut short by a stuck thruster.
+  The clips leave out the roll and the R&R section coming away. Sources: Wikipedia ("Project Gemini"), Gunter's
+  Space Page (Gemini), the Gemini 12 press kit (NASA), the Project Gemini Familiarization Manual, the Gemini 3
+  air-to-ground transcript (Spacelog), the Smithsonian's Gemini main parachute.
 
 ### 1.2 Content & asset policy: no copying BASPM's copyrighted content
 
