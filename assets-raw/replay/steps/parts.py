@@ -264,6 +264,8 @@ def return_parts():
     layer("r-carrier", "", RC)
     layer("r-capsule", RT(capsule()), RC)
     layer("r-capsule-up", RU(capsule()), RC)
+    # Mercury's periscope (2026-10-17): nothing on the generic capsule (mc-r-periscope draws it).
+    layer("r-periscope", "", RC)
     # The retro pack on the base: a box of three motors, held by two straps.
     pack = (f'<rect x="928" y="500" width="64" height="20" rx="3" fill="#ffffff" {LINE} stroke-width="2.4"/>'
             + "".join(f'<path d="M{x - 5} 520 L{x + 5} 520 L{x + 7} 529 L{x - 7} 529 Z" fill="#ffffff" {LINE} stroke-width="2"/>'

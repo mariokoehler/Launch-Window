@@ -9,7 +9,13 @@ var OM = typeof OM !== "undefined" && OM;
 var glitch = VARIANT === "glitch", failure = VARIANT === "failure";
 var START = 1.2, STOP = 3.0, K = 0.00015;
 
+// Where on the arc the capsule is: s px from its top, at a steady 172 px a second, the top at the end.
+var s = function (t) { return -1100 + 1100 * t / 6.4; };
+
 put("paper", "screen");
+// The motes (2026-10-17): streaming past along its way on the arc, as fast as the retrofire's begin, and
+// where they begin (settled), so the cut to the retrofire doesn't bring them in from nowhere.
+motes(function () { return MOTE_SPEED; }, function (t) { return path(t); }, true);
 put("d-earth");
 put("x-arc");
 put("r-carrier");
@@ -17,12 +23,11 @@ var parts = ["r-strap-a", "r-strap-b", "r-pack", "r-capsule", "r-jet-l", "r-jet-
 if (OM) parts.splice(4, 0, "r-om");
 for (var i = 0; i < parts.length; i++) put(parts[i], "r-carrier");
 
-// Where on the arc the capsule is: s px from its top, at a steady 172 px a second, the top at the end.
-var s = function (t) { return -1100 + 1100 * t / 6.4; };
 // The world under it slides so that point stays at the capsule (the Earth and the arc together).
 function slide(t) { var x = s(t); return [-x, -K * x * x]; }
 move("d-earth", slide);
 move("x-arc", slide);
+motesBelow(slide);
 // Climbing, nose along the arc (y down: the slope 2Ks is negative on the way up).
 function path(t) { return Math.atan(2 * K * s(t)) / RAD; }
 

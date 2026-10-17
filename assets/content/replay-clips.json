@@ -9,6 +9,8 @@
     {"step": "earth-orbit", "clip": "earth-orbit"},
     {"step": "orbital-flight", "clip": "earth-orbit"},
     {"step": "earth-orbital", "clip": "earth-orbit"},
+    {"step": "reentry-preparations", "after": "retrofire", "clip": "reentry-trim-burn"},
+    {"step": "reentry-preparations", "after": "suborbital-flight", "clip": "reentry-trim"},
     {"step": "reentry-preparations", "clip": "reentry-preparations"},
     {"step": "retrofire", "after": "reentry-preparations", "clip": "retrofire"},
     {"step": "retrofire", "after": "spc-b-reentry-preparations", "clip": "retrofire"},

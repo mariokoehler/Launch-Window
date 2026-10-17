@@ -55,6 +55,18 @@ STEPS = {
         "success": (6.0, 3.0), "glitch": (6.0, 3.6), "failure": (6.5, 3.4),
         "times": [0.5, 1.6, 2.4, 3.2, 4.4, 5.9],
     },
+    # Reentry preparations with the craft already base first (2026-10-17): after a suborbital flight's turn,
+    # or after the retrofire (-burn). No second turn: it holds, trims, and Mercury's periscope goes in.
+    "reentry-trim": {
+        "pad": False, "mirror": True, "before": ["motes.jsx"],
+        "success": (6.0, 3.0), "glitch": (6.0, 3.4), "failure": (6.0, 3.0),
+        "times": [0.5, 1.6, 2.4, 3.0, 4.0, 5.9],
+    },
+    "reentry-trim-burn": {
+        "pad": False, "mirror": True, "before": ["motes.jsx"], "after": ["reentry-trim.jsx"],
+        "success": (6.0, 3.0), "glitch": (6.0, 3.4), "failure": (6.0, 3.0),
+        "times": [0.5, 1.6, 2.4, 3.0, 4.0, 5.9],
+    },
     "retrofire": {
         "pad": False, "mirror": True, "before": ["motes.jsx"],
         "success": (6.4, 2.6), "glitch": (6.4, 3.0), "failure": (6.4, 3.0),
@@ -86,7 +98,7 @@ STEPS = {
     },
     # The LK-700's hop and the engine test after it, the orbital module on the nose.
     "suborbital-flight-om": {
-        "pad": False, "mirror": True, "after": ["suborbital-flight.jsx"],
+        "pad": False, "mirror": True, "before": ["motes.jsx"], "after": ["suborbital-flight.jsx"],
         "success": (6.4, 3.4), "glitch": (6.4, 4.0), "failure": (6.4, 3.6),
         "times": [0.5, 1.8, 2.8, 3.4, 4.4, 6.3],
     },
@@ -145,7 +157,7 @@ STEPS = {
         "times": [0.5, 2.0, 2.6, 3.4, 4.4, 6.3],
     },
     "suborbital-flight": {
-        "pad": False, "mirror": True,
+        "pad": False, "mirror": True, "before": ["motes.jsx"],
         "success": (6.4, 3.4), "glitch": (6.4, 4.0), "failure": (6.4, 3.6),
         "times": [0.5, 1.8, 2.8, 3.4, 4.4, 6.3],
     },

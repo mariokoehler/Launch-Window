@@ -1971,6 +1971,13 @@ clips, the replay is meant to be watched like a short film, and the player can s
   onto its pads, calls home and turns its solar panel to the Sun. The glitch is Surveyor 3's: the verniers don't
   cut, and it hops twice before they're shut off from Earth. The failure hops the same way, comes off it leaning,
   lands on one foot and topples onto its antenna. Every story unconfirmed.
+- **The way home in one piece (user, 2026-10-17):** the suborbital flight had no motes, so they popped in at the
+  retrofire; now they stream past along its arc (`motes()` takes the craft's way, and can settle where the next clip's
+  begin). Reentry preparations played the reentry preparations' turn even where the craft was already base first,
+  after a suborbital flight's turn (Gemini, Voskhod, Vostok) or after the retrofire (Mercury's hop, two Soyuz types).
+  There they play `reentry-trim` (after the turn) or `reentry-trim-burn` (after the burn, the Earth held where the
+  retrofire left it): no turn, the jets trimming its attitude, and Mercury's periscope sliding in, as it did about half
+  a minute after Freedom 7's retrofire. Glitch: the trim overshoots and rocks; failure: a jet sticks open. Unconfirmed.
 - **The OKB-MiG E-154 (user, 2026-10-17):** it's the Soviet X-15 now (`design.md` §1), and flies the X-15's steps with
   its own clips (`e154-takeoff`, `-cruise`, `-drop`, `-climb`, `-peak`, `-fast`, `-descent`, `-landing`): the X-15's
   timelines and stories, with the E-154 from the user's art (a needle nose, a tall swept fin, four nozzles, wheels)
