@@ -79,6 +79,11 @@ Each folder's `build/` is regenerated on every run and stays out of git.
     lander, its pads on the ground: legs (the near one in front), two compartments, the camera and its mirror hood,
     the mast with the planar antenna and the solar panel (`sv-panel`, turned about the mast's top), and three
     vernier plumes. The failure topples it over its right footpad (`PAD`), which stays where it landed.
+  - **Pacing an insertion** (2026-10-17): `loi.jsx` takes `SLOW` from the step's file (Mars's is 1.5): every time is
+    multiplied by it and every speed divided. The approach before it (`lunar-approach.jsx`, the same `SLOW`) is worked
+    back from where the insertion starts by equal areas, so the two meet at one speed, and `planet-orbit.jsx` takes
+    `SPEED` and `START` so the orbit after it carries on (`mars-orbit.jsx`: `START` is the insertion's last angle,
+    one frame on).
   - **Pioneer Venus Multiprobe** (2026-10-17, `pv-` parts, `multiprobe.jsx`): the bus (`pv-bus`, a drum seen a little
     from its forward end, the cells, `pv-cell-*`, going round its side) with the large probe (`pv-big`, a carrier with
     its shield, aft cover and pressure vessel as children) and three small ones, each in two copies (`pv-small-N` in

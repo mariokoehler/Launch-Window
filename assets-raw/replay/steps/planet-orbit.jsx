@@ -17,7 +17,7 @@ if (MOON) {
 put("p-beam");
 layers["p-beam"].moveAfter(layers["o-sat"]);
 
-var phi = orbitAngles(OSTART, function () { return 55; });
+var phi = orbitAngles(typeof START === "undefined" ? OSTART : START, function () { return typeof SPEED === "undefined" ? 55 : SPEED; });
 var wobble = function (t) {
     if (!(glitch || failure) || t < SAFE) return 0;
     var a = 22 * Math.sin(2 * Math.PI * 1.1 * (t - SAFE));

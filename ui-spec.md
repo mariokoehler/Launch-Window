@@ -1971,6 +1971,12 @@ clips, the replay is meant to be watched like a short film, and the player can s
   onto its pads, calls home and turns its solar panel to the Sun. The glitch is Surveyor 3's: the verniers don't
   cut, and it hops twice before they're shut off from Earth. The failure hops the same way, comes off it leaning,
   lands on one foot and topples onto its antenna. Every story unconfirmed.
+- **The Mars orbit insertion, slower (user, 2026-10-17):** it felt rushed, and the probe jumped where the approach
+  handed over. Every approach (`lunar-approach.jsx`, shared by the Moon, Venus, Mars, Jupiter and Saturn) now moves
+  along its path as an orbit does, slow far out and faster as it falls in, the view closing in to keep it in frame,
+  and arrives at the speed the insertion starts at (it used to all but stop first). The Mars insertion runs at
+  `SLOW` 1.5 (8.0 s, every moment half as long again, the probe two thirds as fast), and the Mars orbit after it goes
+  round at the same pace from where the insertion leaves it. Unconfirmed.
 - **Pioneer Venus Multiprobe (user, 2026-10-17):** its six probe steps borrowed Venera's release, entry and
   descent and a Moon landing; they play the Multiprobe now, a large and a small clip each. The releases show the
   bus, a spinning drum with the large probe on its forward end and three small ones round it:

@@ -8,6 +8,8 @@ var glitch = VARIANT === "glitch", failure = VARIANT === "failure";
 // shadow there, and no Earth in view.
 var BODY = typeof PLANET === "undefined" ? "moon" : PLANET, MOON = BODY === "moon";
 var DRIFT = 1.6, FIX = glitch || failure ? 3.0 : 2.0;
+// The insertion's pace (loi.jsx's SLOW): the step's own file sets it where the insertion's is slowed.
+var SLOW = typeof SLOW === "undefined" ? 1 : SLOW;
 
 orbitScene("p-" + BODY);
 if (MOON) {
@@ -23,12 +25,19 @@ fade("o-orbit", function () { return 0.6; });
 // The open path (loi.jsx's): r = 390 * 2.6 / (1 + 1.6 cos); the craft falls in along it, ending where
 // the insertion starts.
 function open(th) { return 390 * 2.6 / (1 + 1.6 * Math.cos(th * RAD)); }
-var H = 50 * 390 * 390;
-// Where the insertion starts: 1.6 s before its burn, on the open path (equal areas, as loi.jsx).
-var A0 = (function () { var th = 0; for (var f = 0; f < Math.round(1.6 * FPS); f++) { var r = open(th); th += H / (r * r) / FPS; } return th; })();
-// From far out at the bottom (85 degrees), speeding up as it falls in, to A0 (60).
-// Most of the way early, so it stays in the frame as the view closes in.
-var angle = function (t) { var u = clamp(t / DUR, 0, 1); return 85 + (A0 - 85) * (0.6 * (1 - (1 - u) * (1 - u)) + 0.4 * u); };
+var H = 50 / SLOW * 390 * 390;
+// Where the insertion starts: its burn's time before its burn, on the open path (equal areas, as loi.jsx).
+var A0 = (function () { var th = 0; for (var f = 0; f < Math.round(1.6 * SLOW * FPS); f++) { var r = open(th); th += H / (r * r) / FPS; } return th; })();
+// Along the open path as an orbit goes (equal areas), worked back from A0 at the end: slow far out, faster as it
+// falls in, and at the speed the insertion starts at (2026-10-17: it used to all but stop, and the insertion then set
+// off at once, which read as a jump).
+var angle = (function () {
+    var a = [], th = A0, n = NFRAMES + 1;
+    for (var f = n; f >= 0; f--) { a[f] = th; var r = open(th); th += H / (r * r) / FPS; }
+    // The frame at DUR is A0.
+    var end = Math.round(DUR * FPS);
+    return function (t) { return a[clamp(Math.round(t * FPS) + (n - end), 0, n)]; };
+})();
 // Off its aim: out from the Moon (px), growing, corrected (glitch) or not (failure).
 var off = function (t) {
     if (!(glitch || failure) || t < DRIFT) return 0;
@@ -41,8 +50,11 @@ function where(t) { var th = angle(t), r = open(th) + off(t); return [OCX + r * 
 move("o-sat", function (t) { var p = where(t); return [p[0] - OCX, p[1] - OCY]; });
 turn("o-sat", function (t) { return angle(t); });
 
-// The view closes in: the world from 0.4 of its size to all of it, about the Moon.
-var zoom = function (t) { var u = clamp(t / DUR, 0, 1); return 0.4 + 0.6 * u * u * (3 - 2 * u); };
+// The view closes in about the Moon as the craft falls in, keeping it 380 px below the Moon's centre until late, then
+// easing it to where the insertion has it, all of the world by the end.
+var below = function (t) { var th = angle(t); return open(th) * Math.sin(th * RAD); };
+var END = below(DUR);
+var zoom = function (t) { var u = clamp((t - 3.5) / 2.5, 0, 1); return Math.min(1, (380 + (END - 380) * u * u * (3 - 2 * u)) / below(t)); };
 bake(tf(world, "Scale"), function (t) { return [100 * zoom(t), 100 * zoom(t)]; });
 bake(tf(world, "Position"), function (t) { var k = zoom(t); return [OCX * (1 - k), OCY * (1 - k)]; });
 

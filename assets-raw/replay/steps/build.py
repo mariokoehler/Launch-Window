@@ -403,8 +403,8 @@ STEPS = {
     },
     "mars-orbit-injection": {
         "pad": False, "before": ["orbit.jsx"], "after": ["loi.jsx"],
-        "success": (6.4, 2.5), "glitch": (6.4, 2.8), "failure": (6.4, 2.8),
-        "times": [0.6, 1.2, 1.8, 2.5, 3.6, 6.3],
+        "success": (8.0, 3.75), "glitch": (8.0, 4.2), "failure": (8.0, 4.2),
+        "times": [0.9, 1.8, 2.7, 3.75, 5.4, 7.9],
     },
     # Probe landers on the planets (2026-10-14): the bus, the landing, the work on the surface (probe.jsx).
     "probe-landing": {
