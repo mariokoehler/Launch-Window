@@ -1971,6 +1971,11 @@ clips, the replay is meant to be watched like a short film, and the player can s
   onto its pads, calls home and turns its solar panel to the Sun. The glitch is Surveyor 3's: the verniers don't
   cut, and it hops twice before they're shut off from Earth. The failure hops the same way, comes off it leaning,
   lands on one foot and topples onto its antenna. Every story unconfirmed.
+- **Viking's separation (user, 2026-10-17):** its `lander-deployment-and-de-orbit` borrowed Venera's release; it plays
+  `viking-separation` now: the Viking orbiter (an octagonal body, four wings of panels, the dish on a boom, tanks and
+  engine above) lets the lander capsule go from under it, over Mars; the capsule turns side on, fires its deorbit jets,
+  falls behind and below, and turns heat shield down for its entry. The glitch's jets cut out and relight; the
+  failure's never relight, and it stays in orbit. Unconfirmed.
 - **The Mars orbit insertion, slower (user, 2026-10-17):** it felt rushed, and the probe jumped where the approach
   handed over. Every approach (`lunar-approach.jsx`, shared by the Moon, Venus, Mars, Jupiter and Saturn) now moves
   along its path as an orbit does, slow far out and faster as it falls in, the view closing in to keep it in frame,

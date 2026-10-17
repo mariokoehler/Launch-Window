@@ -677,7 +677,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: VENUS 1
   - Programs: Venera 7 1
 - [x] **Lander separation and deorbit** `lander-deployment-and-de-orbit`: 1 use in 1 configuration, 1 program (NASA) uncrewed, later seasons in 1 of 1
-  - Clip: `probe-release`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `viking-separation`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: orbiter 1, probe lander 1
   - Destinations: MARS 1
   - Programs: Viking 1

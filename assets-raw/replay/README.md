@@ -79,6 +79,8 @@ Each folder's `build/` is regenerated on every run and stays out of git.
     lander, its pads on the ground: legs (the near one in front), two compartments, the camera and its mirror hood,
     the mast with the planar antenna and the solar panel (`sv-panel`, turned about the mast's top), and three
     vernier plumes. The failure topples it over its right footpad (`PAD`), which stays where it landed.
+  - **Viking's orbiter** (2026-10-17, `vk-` parts, `viking-separation.jsx`): the orbiter side on (`vk-orbiter`), its
+    latches, and the capsule's deorbit jets (`vk-jets`, a child of `e-shell`, the aeroshell Viking's entry draws).
   - **Pacing an insertion** (2026-10-17): `loi.jsx` takes `SLOW` from the step's file (Mars's is 1.5): every time is
     multiplied by it and every speed divided. The approach before it (`lunar-approach.jsx`, the same `SLOW`) is worked
     back from where the insertion starts by equal areas, so the two meet at one speed, and `planet-orbit.jsx` takes

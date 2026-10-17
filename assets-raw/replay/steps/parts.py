@@ -1156,6 +1156,40 @@ def carrier_entry_parts():
     layer("b-glow", bow, (bx, by + 100))
 
 
+def viking_parts():
+    """The Viking orbiter (2026-10-17, NSSDCA), side on, about 64 px to the metre: an octagonal body 2.5 m across and
+    0.46 m high, its two propellant tanks and the main engine above it, four wings of solar panels (the two seen
+    across span 9.75 m; the other two, end on, are short stubs), the 1.5 m high-gain dish on a boom from one edge of its
+    base. The lander capsule (planet_entry_parts()'s e-shell, its backshell up) hangs under the body."""
+    x, y = 960, 300
+    wings = (f'<path d="M{x - 312} {y - 10} L{x - 84} {y - 10} L{x - 84} {y + 10} L{x - 312} {y + 10} Z M{x + 84} {y - 10} '
+             f'L{x + 312} {y - 10} L{x + 312} {y + 10} L{x + 84} {y + 10} Z" fill="url(#hatch)" {LINE} stroke-width="3"/>'
+             f'<path d="M{x - 198} {y - 10} L{x - 198} {y + 10} M{x + 198} {y - 10} L{x + 198} {y + 10}" fill="none" {LINE} '
+             f'stroke-width="2"/>')
+    stubs = (f'<path d="M{x - 40} {y - 15} L{x - 64} {y - 46} M{x + 40} {y - 15} L{x + 64} {y - 46}" fill="none" {LINE} '
+             f'stroke-width="3"/>'
+             f'<rect x="{x - 80}" y="{y - 58}" width="26" height="14" fill="url(#hatch)" {LINE} stroke-width="2.4"/>'
+             f'<rect x="{x + 54}" y="{y - 58}" width="26" height="14" fill="url(#hatch)" {LINE} stroke-width="2.4"/>')
+    tanks = (f'<rect x="{x - 56}" y="{y - 78}" width="48" height="64" rx="22" fill="#ffffff" {LINE} stroke-width="3"/>'
+             f'<rect x="{x + 8}" y="{y - 78}" width="48" height="64" rx="22" fill="#ffffff" {LINE} stroke-width="3"/>'
+             f'<path d="M{x - 12} {y - 92} L{x + 12} {y - 92} L{x + 20} {y - 124} L{x - 20} {y - 124} Z" fill="#ffffff" {LINE} '
+             f'stroke-width="3"/><path d="M{x} {y - 78} L{x} {y - 92}" fill="none" {LINE} stroke-width="3"/>')
+    body = (f'<path d="M{x - 80} {y - 8} L{x - 64} {y - 15} L{x + 64} {y - 15} L{x + 80} {y - 8} L{x + 80} {y + 8} L{x + 64} {y + 15} '
+            f'L{x - 64} {y + 15} L{x - 80} {y + 8} Z" fill="#ffffff" {LINE} stroke-width="3"/>'
+            f'<path d="M{x - 64} {y - 15} L{x - 64} {y + 15} M{x + 64} {y - 15} L{x + 64} {y + 15}" fill="none" {LINE} stroke-width="2"/>')
+    dish = (f'<path d="M{x + 80} {y + 8} L{x + 150} {y + 40}" fill="none" {LINE} stroke-width="3"/>'
+            f'<path d="M{x + 132} {y + 100} Q{x + 176} {y + 68} {x + 208} {y + 24} Q{x + 178} {y + 62} {x + 132} {y + 100} Z" '
+            f'fill="#ffffff" {LINE} stroke-width="3"/>'
+            f'<path d="M{x + 132} {y + 100} Q{x + 156} {y + 56} {x + 208} {y + 24}" fill="none" {LINE} stroke-width="3"/>')
+    layer("vk-orbiter", wings + stubs + tanks + body + dish, (x, y))
+    # The latches under the body, and the capsule's deorbit jets: two of its four clusters, on the backshell's
+    # shoulders, firing out along its axis (a child of e-shell, so they turn with it).
+    layer("vk-latch", "".join(f'<circle cx="{x + dx}" cy="{y + 18}" r="8" fill="{GOLD}"/>' for dx in (-30, 30)), (x, y + 18))
+    jet = lambda jx: (f'<path d="M{jx - 7} 400 C{jx - 6} 380 {jx - 3} 362 {jx} 344 C{jx + 3} 362 {jx + 6} 380 {jx + 7} 400 Z" '
+                      f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="2.4" stroke-linejoin="round"/>')
+    layer("vk-jets", jet(930) + jet(990), (960, 400))
+
+
 def planet_entry_parts():
     # A lander's entry at another planet (2026-10-15): Mars's limb (Venus's is b-limb), hatched as
     # p-mars, with one thin shell of air; the Mars landers' aeroshell (Viking's and Mars 3's blunt cone,
@@ -1333,6 +1367,7 @@ def main():
     multiprobe_parts()
     carrier_entry_parts()
     planet_entry_parts()
+    viking_parts()
     planet_descent_parts()
     air_parts()
     departure_parts()

@@ -356,6 +356,11 @@ leading to satellite navigation.
   pictures. On Surveyor 3 (April 1967) bright rocks confused the radar, the verniers didn't cut, and it bounced
   twice before they were shut off by command. Surveyor 2 tumbled when a vernier failed to light, and Surveyor 4
   fell silent seconds before its retro burned out. The replay's `surveyor-landing` plays the drop and the bounces.
+- **Viking's lander leaves its orbiter** (2026-10-17, NSSDCA's pages for Viking 1's orbiter and lander): the orbiter was
+  an octagon about 2.5 m across with four wings of solar panels (two opposite ones 9.75 m tip to tip), a 1.5 m dish on
+  one edge of its base and its main engine above; the lander's attachment points were on its bottom. Viking 1's lander
+  separated on 20 July 1976 at 08:51 UT and slowed itself out of orbit with its own hydrazine thrusters (12 nozzles in
+  four clusters of three, about 180 m/s), coasted a few hours and turned for entry. The replay's `viking-separation`.
 - **Pioneer Venus Multiprobe** (2026-10-17, checked against NSSDCA's catalogue pages for the bus, the large probe and
   the Day probe, and a NASA technical report for the anomaly): the bus was a drum 2.5 m across with solar cells round
   its side, no heat shield and no parachute; the large probe sat in the middle of its forward end and the three small

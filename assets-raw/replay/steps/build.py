@@ -455,6 +455,12 @@ STEPS = {
         "success": (5.6, 1.2), "glitch": (5.6, 2.2), "failure": (5.6, 2.4),
         "times": [0.5, 1.2, 1.9, 2.6, 3.6, 5.5],
     },
+    # Viking's own (2026-10-17): the orbiter lets the lander capsule go, and it burns out of orbit.
+    "viking-separation": {
+        "pad": False,
+        "success": (6.4, 2.7), "glitch": (6.4, 3.0), "failure": (6.4, 3.0),
+        "times": [0.5, 1.2, 2.4, 2.8, 4.0, 6.3],
+    },
     # Pioneer Venus Multiprobe's own (2026-10-17): multiprobe.jsx's bus and probes.
     "multiprobe-large-release": {
         "pad": False, "before": ["orbit.jsx", "multiprobe.jsx"], "after": ["multiprobe-release.jsx"],
