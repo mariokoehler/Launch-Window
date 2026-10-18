@@ -35,6 +35,12 @@ public final class HistoryNotes {
         + "spoke to the crew for everyone, usually a fellow astronaut, who knew best what the crew was facing. On "
         + "Apollo 11 it was Charlie Duke, so relieved at the landing that he stumbled over the name Tranquility.";
 
+    /** On the replay console's air-to-ground label, beside the radio calls' beeps (user's text, checked 2026-10-18). */
+    public static final String QUINDAR = "Those iconic beeps in Apollo mission recordings weren't sound effects. Named "
+        + "after a broadcast equipment manufacturer, Quindar tones remotely pressed and released the equivalent of a "
+        + "walkie-talkie's transmit button, switching ground-station radio transmitters on and off via ordinary "
+        + "telephone lines. A tiny piece of engineering that helped humanity reach the Moon.";
+
     /**
      * Not instantiable; this class only holds texts.
      */

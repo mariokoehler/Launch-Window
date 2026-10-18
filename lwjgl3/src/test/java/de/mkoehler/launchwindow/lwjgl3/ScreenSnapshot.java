@@ -1935,6 +1935,11 @@ public final class ScreenSnapshot {
             screen.watchPaused(10f);
         });
         write(folder, "replay-summary.png", new ReplayScreen(game, report, vostok), screen -> screen.show(99));
+        // The Quindar tones' note on the console's air-to-ground label, pinned open (2026-10-18).
+        write(folder, "replay-quindar-note.png", new ReplayScreen(game, report, vostok), screen -> {
+            screen.show(firstInteresting(report, vostok));
+            pinLastHistoryNote(screen.stage().getRoot());
+        });
         write(folder, "replay-sputnik.png", new ReplayScreen(game, report, "m-sputnik"), screen -> screen.show(0));
         // The console live (2026-10-13): Vostok's launch with a stand-in video, while it plays and after.
         fakeVideo = true;

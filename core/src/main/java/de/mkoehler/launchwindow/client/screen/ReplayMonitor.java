@@ -9,6 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.video.VideoPlayer;
+import de.mkoehler.launchwindow.client.ui.HistoryNote;
+import de.mkoehler.launchwindow.client.ui.HistoryNotes;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.UiKit;
 import de.mkoehler.launchwindow.client.view.ReplayClips;
@@ -95,6 +97,8 @@ public final class ReplayMonitor extends WidgetGroup {
     private final VideoPlayer player;
     private final Label label;
     private final Label pausedLabel;
+    private final Label loopLabel;
+    private final HistoryNote quindar;
     private final Label stepTitle;
     private final Label stepCount;
     private final Label missionLabel;
@@ -134,6 +138,11 @@ public final class ReplayMonitor extends WidgetGroup {
         this.player = player;
         label = add(ui.label("", Theme.TextStyle.EYEBROW, Theme.ON_FILL));
         pausedLabel = add(ui.label("PAUSED · NEXT STEP WAITS", Theme.TextStyle.EYEBROW, Theme.GOLD_ON_PAGE));
+        // The radio loop the calls come over, with the story of their beeps (user, 2026-10-18).
+        loopLabel = add(ui.label("AIR-TO-GROUND", Theme.TextStyle.EYEBROW, TITLE));
+        quindar = new HistoryNote(ui, HistoryNotes.QUINDAR);
+        quindar.setColor(Theme.ON_FILL);
+        addActor(quindar);
         stepTitle = add(ui.label("STEP", Theme.TextStyle.LABEL, ROW_TITLE));
         stepCount = add(ui.label("", Theme.TextStyle.LABEL, Theme.ON_FILL));
         missionLabel = add(ui.label("", Theme.TextStyle.LABEL, ROW_MISSION));
@@ -263,8 +272,12 @@ public final class ReplayMonitor extends WidgetGroup {
 
         float strip = h - STRIP / 2f - 3f;
         place(label, EDGE + 24f, strip);
+        quindar.setPosition(Math.round(w - MARGIN - HistoryNote.ICON_SIZE), Math.round(strip - HistoryNote.ICON_SIZE / 2f));
+        loopLabel.pack();
+        float loopX = quindar.getX() - Theme.SPACE_1 - loopLabel.getWidth();
+        place(loopLabel, loopX, strip);
         pausedLabel.pack();
-        place(pausedLabel, w - MARGIN - pausedLabel.getWidth(), strip);
+        place(pausedLabel, loopX - 2 * Theme.SPACE_3 - pausedLabel.getWidth(), strip);
         pausedLabel.setVisible(!playing);
 
         float row = py - LIP - 15f;

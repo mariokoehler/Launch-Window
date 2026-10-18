@@ -2087,7 +2087,8 @@ clips, the replay is meant to be watched like a short film, and the player can s
   aside the canvas's two other variants (side-by-side instruments on the shortest console, the
   picture on the right).
   - **Layout:** a 26 px label strip on top: a signal lamp (gold with a ring while the camera is live,
-    dark on "No signal"), the label, and "PAUSED · NEXT STEP WAITS" on the right while paused. The
+    dark on "No signal"), the label, and on the right "AIR-TO-GROUND" with a history note on the Quindar tones (user's text,
+    2026-10-18; the icon in cream on the panel), "PAUSED · NEXT STEP WAITS" left of it while paused. The
     16:9 picture takes the width but a 280 px column, capped by the height above a 53 px row of step
     lamps (the plan's steps: flown cream, current gold with a ring, the rest dark outlines; "3 OF 11";
     the mission's name on the right). The column takes the rest and always stacks three panels: the
