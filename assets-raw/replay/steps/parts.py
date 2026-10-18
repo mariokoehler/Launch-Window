@@ -2209,6 +2209,80 @@ def apollo_parts():
     layer("ap-r-main-half", limp + canopy(1160, top - 190, 200, 120) + canopy(960, top - 230, 210, 130), (960, top))
 
 
+# --- Apollo's lunar module (2026-10-18, user): in the lander's frame (the generic one's place and size: the
+# descent stage 4.2 m across between x 898 and 1022, the legs to their pads at 878, the ascent stage on top),
+# so the landing's and the moonwalk's timings fit it. The descent stage in its gold foil, two of its four legs
+# seen; the ascent stage faceted, its window, the docking tunnel on top, the rendezvous radar and the RCS quads.
+
+
+def lm_descent():
+    legs = (f'<path d="M906 770 L820 876 M1014 770 L1100 876 M914 790 L850 852 M1006 790 L1070 852" fill="none" '
+            f'{LINE} stroke-width="4"/>'
+            f'<ellipse cx="818" cy="878" rx="18" ry="5" fill="#ffffff" {LINE} stroke-width="3"/>'
+            f'<ellipse cx="1102" cy="878" rx="18" ry="5" fill="#ffffff" {LINE} stroke-width="3"/>')
+    bell = f'<path d="M946 792 L974 792 L984 822 L936 822 Z" fill="#ffffff" {LINE} stroke-width="3"/>'
+    stage = (f'<path d="M912 722 L1008 722 L1022 738 L1022 778 L1008 794 L912 794 L898 778 L898 738 Z" fill="{GOLD_FILL}" '
+             f'{LINE} stroke-width="3"/>'
+             f'<path d="M912 722 L912 794 M1008 722 L1008 794" fill="none" {LINE} stroke-width="1.6" opacity="0.6"/>'
+             + "".join(f'<path d="M{x} {y} l9 4 l-6 6 l10 3" fill="none" stroke="{GOLD}" stroke-width="1.6" opacity="0.9"/>'
+                       for x, y in ((924, 736), (952, 760), (980, 742), (938, 772), (990, 770))))
+    return legs + bell + stage
+
+
+def lm_ascent():
+    return (f'<path d="M914 722 L910 696 L922 668 L944 652 L980 652 L1000 664 L1010 690 L1008 722 Z" fill="#ffffff" {LINE} '
+            f'stroke-width="3"/>'
+            f'<path d="M926 678 L944 664 L945 690 Z" fill="rgba(22,48,92,0.14)" {LINE} stroke-width="2"/>'
+            f'<path d="M914 704 L1008 704" fill="none" {LINE} stroke-width="1.4" opacity="0.6"/>'
+            f'<rect x="950" y="640" width="20" height="12" fill="#ffffff" {LINE} stroke-width="2.4"/>'
+            f'<path d="M996 660 L1010 642" fill="none" {LINE} stroke-width="2.2"/>'
+            f'<circle cx="1013" cy="638" r="7" fill="#ffffff" {LINE} stroke-width="2.2"/>'
+            + "".join(f'<rect x="{x}" y="694" width="10" height="10" fill="#ffffff" {LINE} stroke-width="2"/>'
+                      f'<path d="M{x + (-4 if x < 960 else 14)} 699 L{x + (0 if x < 960 else 10)} 699" fill="none" {LINE} stroke-width="2"/>'
+                      for x in (898, 1014)))
+
+
+def lm_parts():
+    # In the lander's scenes (the ap- skin: n-descent, n-ascent; the plumes, the ladder and the dust are the
+    # generic ones, in the same places).
+    layer("ap-n-descent", lm_descent(), LC)
+    layer("ap-n-ascent", lm_ascent(), LC)
+    # In the docking close-up (39 px/m, 1.32 times the lander's frame): upside down, its tunnel's top (640) at
+    # the target's mouth (540), the rest above; whole, or the ascent stage alone (after the Moon).
+    flip = "translate(960 540) scale(1.32 -1.32) translate(-960 -640)"
+    tc = (KM[0] + KK * (540 - 426), KM[1])
+    layer("ap-k-target", KT(tc, 90, f'<g transform="{flip}">{lm_descent()}{lm_ascent()}</g>'), KM)
+    layer("ap-k-target-asc", KT(tc, 90, f'<g transform="{flip}">{lm_ascent()}</g>'), KM)
+    # The chaser: the CSM nose right, its probe's tip at the generic capsule's nose (352).
+    S = 39
+    y0 = 352 + (4.6 + 3.2 + 0.6) * S
+    layer("ap-k-chaser", KT(KC, 90, apollo_csm(y0, S)), KC)
+    quad = y0 - 0.65 * 4.6 * S
+    sh_t, sh_b = K_AT(KC, 960 - 1.95 * S - 10, quad, 90), K_AT(KC, 960 + 1.95 * S + 10, quad, 90)
+    layer("ap-k-brake", puff(sh_t[0] + 18, sh_t[1] - 6, 9) + puff(sh_b[0] + 18, sh_b[1] + 6, 9), KC)
+    b_t, b_b = K_AT(KC, 960 - 1.95 * S, y0, 90), K_AT(KC, 960 + 1.95 * S, y0, 90)
+    layer("ap-k-push", puff(b_t[0] - 16, b_t[1], 9) + puff(b_b[0] - 16, b_b[1], 9), KC)
+    side = K_AT(KC, 960 - 1.95 * S - 6, quad, 90)
+    layer("ap-k-side", puff(side[0], side[1] - 16, 10), side)
+    root = K_AT(KC, 960 - 1.95 * S, quad + 20, 90)
+    layer("ap-k-stuck", f'<path d="M{root[0] - 6:.1f} {root[1]:.1f} C{root[0] - 14:.1f} {root[1] - 40:.1f} {root[0] - 20:.1f} '
+                        f'{root[1] - 80:.1f} {root[0] - 28:.1f} {root[1] - 120:.1f} L{root[0] - 12:.1f} {root[1] - 122:.1f} '
+                        f'C{root[0] - 6:.1f} {root[1] - 80:.1f} {root[0] + 2:.1f} {root[1] - 40:.1f} {root[0] + 6:.1f} {root[1]:.1f} Z" '
+                        f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>', KC)
+    # The S-IVB in the transposition (the generic stage's box): its bands, the auxiliary propulsion modules at
+    # its aft end, the J-2's bell.
+    layer("ap-t-stage", f'<rect x="1080" y="400" width="420" height="140" fill="#ffffff" {LINE} stroke-width="3"/>'
+                        f'<path d="M1180 400 L1180 540 M1420 400 L1420 540" fill="none" {LINE} stroke-width="2"/>'
+                        f'<path d="M1280 400 L1280 540" fill="none" {LINE} stroke-width="1.2" opacity="0.5"/>'
+                        f'<rect x="1440" y="386" width="40" height="14" rx="2" fill="#ffffff" {LINE} stroke-width="2.2"/>'
+                        f'<rect x="1440" y="540" width="40" height="14" rx="2" fill="#ffffff" {LINE} stroke-width="2.2"/>'
+                        f'<path d="M1500 440 L1550 414 L1550 526 L1500 500 Z" fill="#ffffff" {LINE} stroke-width="3"/>',
+          (1290, 470))
+    # The lunar ascent's map: the ascent stage alone climbing to the CSM (o-sat-b), bigger so it reads.
+    body = re.sub(r'stroke-width="[\d.]+"', 'stroke-width="5"', lm_ascent())
+    layer("ap-o-sat-asc", f'<g transform="translate(960 560) scale(1.1) translate(-960 -681)">{body}</g>', (960, 560))
+
+
 # --- Project Gemini (2026-10-17): its spacecraft, and the Agena it docked with --------------------------
 # The reentry module seen from its back (the side with the hatches): the heat shield, the cabin's cone
 # with the two hatches, a window in each, the reentry control (RCS) section, a short cylinder, and the
@@ -2613,6 +2687,7 @@ def main():
     vostok_parts()
     soyuz_parts()
     apollo_parts()
+    lm_parts()
     satellite_parts()
     gemini_parts()
     if ONLY:

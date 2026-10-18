@@ -1078,6 +1078,73 @@ STEPS = {
         "success": (5.6, 1.8), "glitch": (5.6, 3.6), "failure": (6.4, 3.8),
         "times": [0.5, 1.0, 1.6, 2.6, 3.6, 5.5],
     },
+    # Apollo's lunar module (2026-10-18, user; ap-n-, ap-k- parts): in the lander's scenes, the transposition and
+    # extraction (the CSM, the S-IVB), docking (the lander whole, or its ascent stage after the Moon), the ascent.
+    "apollo-transposition": {
+        "pad": False, "source": "transposition", "skin": "ap-", "before": ["dock.jsx", "moon.jsx", "apollo.jsx"],
+        "success": (6.0, 3.0), "glitch": (6.4, 4.6), "failure": (6.4, 4.6),
+        "times": [0.6, 1.6, 2.6, 3.4, 4.6, 5.9],
+    },
+    "apollo-extraction": {
+        "pad": False, "source": "extraction", "skin": "ap-", "before": ["dock.jsx", "moon.jsx", "apollo.jsx"],
+        "success": (5.6, 1.2), "glitch": (5.6, 2.2), "failure": (5.6, 2.6),
+        "times": [0.5, 1.2, 1.9, 2.6, 3.6, 5.5],
+    },
+    "apollo-docking": {
+        "pad": False, "source": "docking", "skin": "ap-", "before": ["dock.jsx"],
+        "success": (6.4, 2.0), "glitch": (6.4, 3.4), "failure": (6.4, 3.4),
+        "times": [0.5, 1.7, 2.3, 3.1, 4.2, 6.3],
+    },
+    "apollo-undocking": {
+        "pad": False, "source": "undocking", "skin": "ap-", "before": ["dock.jsx"],
+        "success": (6.4, 1.2), "glitch": (6.4, 2.8), "failure": (6.4, 2.8),
+        "times": [0.5, 1.2, 2.0, 2.6, 3.8, 6.3],
+    },
+    "apollo-lander-engine-test": {
+        "pad": False, "source": "lander-engine-test", "skin": "ap-", "before": ["moon.jsx", "lander-orbit.jsx"],
+        "success": (6.0, 1.4), "glitch": (6.0, 2.0), "failure": (6.0, 2.0),
+        "times": [0.6, 1.2, 1.8, 2.4, 3.6, 5.9],
+    },
+    "apollo-lander-staging": {
+        "pad": False, "source": "lander-staging", "skin": "ap-", "before": ["moon.jsx", "lander-orbit.jsx"],
+        "success": (6.0, 1.4), "glitch": (6.0, 2.0), "failure": (6.0, 2.0),
+        "times": [0.6, 1.2, 1.8, 2.4, 3.6, 5.9],
+    },
+    "apollo-powered-descent": {
+        "pad": False, "source": "powered-descent", "skin": "ap-", "before": ["moon.jsx"],
+        "success": (6.4, 2.4), "glitch": (6.4, 3.4), "failure": (6.4, 3.2),
+        "times": [0.5, 2.0, 2.6, 3.4, 4.6, 6.3],
+    },
+    "apollo-lunar-landing": {
+        "pad": False, "source": "lunar-landing", "skin": "ap-", "before": ["moon.jsx"],
+        "success": (6.0, 2.6), "glitch": (6.0, 3.6), "failure": (6.0, 3.2),
+        "times": [0.5, 1.6, 2.4, 3.0, 3.6, 5.9],
+    },
+    "apollo-lunar-liftoff": {
+        "pad": False, "source": "lunar-liftoff", "skin": "ap-", "before": ["moon.jsx"],
+        "success": (5.6, 1.0), "glitch": (5.6, 2.0), "failure": (5.6, 2.8),
+        "times": [0.7, 1.2, 1.8, 2.6, 3.4, 5.5],
+    },
+    "apollo-moonwalk": {
+        "pad": False, "source": "moonwalk", "skin": "ap-", "before": ["moon.jsx"],
+        "success": (5.4, 2.6), "glitch": (5.8, 3.2), "failure": (5.8, 3.0),
+        "times": [0.6, 1.2, 2.2, 2.6, 3.4, 5.3],
+    },
+    "apollo-docking-asc": {
+        "pad": False, "source": "docking", "skin": "ap-", "alias": {"k-target": "ap-k-target-asc"}, "before": ["dock.jsx"],
+        "success": (6.4, 2.0), "glitch": (6.4, 3.4), "failure": (6.4, 3.4),
+        "times": [0.5, 1.7, 2.3, 3.1, 4.2, 6.3],
+    },
+    "apollo-lem-jettison": {
+        "pad": False, "source": "undocking", "skin": "ap-", "alias": {"k-target": "ap-k-target-asc"}, "before": ["dock.jsx"],
+        "success": (6.4, 1.2), "glitch": (6.4, 2.8), "failure": (6.4, 2.8),
+        "times": [0.5, 1.2, 2.0, 2.6, 3.8, 6.3],
+    },
+    "apollo-lunar-ascent": {
+        "pad": False, "source": "lunar-ascent", "skin": "ap-", "alias": {"o-sat": "ap-o-sat-asc", "o-sat-b": "ap-o-sat"}, "before": ["orbit.jsx"],
+        "success": (6.0, 1.8), "glitch": (6.0, 2.6), "failure": (6.0, 2.8),
+        "times": [0.5, 1.2, 1.8, 2.6, 3.4, 5.9],
+    },
     # Project Gemini's own (2026-10-17): the generic timelines ("source") with its spacecraft ("skin": the gm- parts),
     # its adapter's equipment section on until the reentry preparations drop it (adapter.jsx), its retros
     # rippled (project-gemini.jsx) and its descent on two points (two-point.jsx); and the Agena's launch (ag-).

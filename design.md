@@ -558,6 +558,11 @@ leading to satellite navigation.
   lines to every station, which were expensive; they keyed the stations from Mercury through Apollo.
   Generated for the game in `assets-raw/audio/quindar/` (2026-10-14). Sources: Wikipedia ("Quindar tones"),
   NASA's Apollo Lunar Surface Journal ("Quindar tones").
+- **Apollo's lunar module** (the replay's Apollo, 2026-10-18): about 7 m tall and 4.3 m across its legs; the descent
+  stage wrapped in gold and amber Kapton foil against the Sun's heat, the ascent stage's faceted cabin on top with its
+  two triangular windows, the docking tunnel on its roof (the commander flew the docking looking up through a small
+  window above him) and the rendezvous radar's dish. At liftoff the descent stage stayed behind as the launch pad.
+  Sources: Wikipedia ("Apollo Lunar Module").
 - **Apollo's command and service module** (the replay's Apollo, 2026-10-18): the command module a cone 3.9 m across;
   on the pad a boost protective cover over it, carried off with the escape tower once the second stage was going.
   Bound for the Moon, the CSM stayed on the S-IVB third stage through the parking orbit, and the S-IVB's second burn

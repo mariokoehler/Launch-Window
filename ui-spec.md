@@ -2028,8 +2028,12 @@ clips, the replay is meant to be watched like a short film, and the player can s
   S-IVB, which makes the burn (the `-stack` clips: the deployment, parking orbit and the burn, rules by `later: tli`),
   and after the extraction it flies with the lander on its nose (`ap-o-sat-lm`, `ap-m-probe`; rules by
   `earlier: extraction`), alone home; the service module's one big engine; three mains in the descent, the glitch's
-  half-open main two full and one collapsed (Apollo 15). A target's own launch (`atv-`) stays generic. Still generic:
-  the transposition, docking and undocking, the lander's scenes and the spacewalks (a later pass). Unconfirmed.
+  half-open main two full and one collapsed (Apollo 15). A target's own launch (`atv-`) stays generic. Its lunar module
+  (`ap-n-descent`, `ap-n-ascent`, drawn in the generic lander's place so the landing's and the moonwalk's timings fit)
+  in the lander's scenes (engine tests, staging, powered descent, landing, liftoff, moonwalks), in the docking
+  close-up upside down, its tunnel to the CSM's probe (`ap-k-target`; the ascent stage alone after the Moon and at
+  its jettison, `ap-k-target-asc`), in the transposition and extraction with the CSM and the S-IVB (`ap-t-stage`), and
+  on the lunar ascent's map climbing to the CSM. Still generic: the Earth-orbit spacewalks. Unconfirmed.
 - **Soyuz 7K-OK as itself (user, 2026-10-18; the rocket stays generic, user):** its three modules (`sy-`, `soyuz-*`),
   under a fairing and escape tower on the pad (thrown off in the climb, `a-les`); the orbital module rides on the nose
   through the way home (`project-soyuz.jsx`'s `OM`, read now by `reentry-preparations.jsx`, `reentry-trim.jsx` and
