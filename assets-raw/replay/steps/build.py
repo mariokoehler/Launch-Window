@@ -1334,6 +1334,49 @@ STEPS = {
         "success": (6.0, 2.1), "glitch": (6.0, 3.4), "failure": (6.0, 3.4),
         "times": [0.5, 1.8, 2.2, 3.0, 4.0, 5.9],
     },
+    # The lunar-orbit and direct-ascent Gemini's Earth-orbit tests (2026-10-18, user): the module's burn stretches the
+    # orbit into a long ellipse, the coast out to its high point, the trim there that lowers the low point into the
+    # entry corridor (or the ascent module's burn, which does it), the coast back down (high-orbit-scene.jsx).
+    "gemini-lpm-hoi": {
+        "pad": False, "source": "high-orbit-injection", "skin": "gm-", "alias": {"o-sat": "gl-o-sat"}, "before": ["orbit.jsx", "high-orbit-scene.jsx"],
+        "success": (6.0, 2.0), "glitch": (6.0, 3.2), "failure": (6.0, 3.0),
+        "times": [0.5, 1.4, 2.0, 2.8, 3.8, 5.9],
+    },
+    "gemini-lpm-high-orbit": {
+        "pad": False, "source": "high-orbit", "skin": "gm-", "alias": {"o-sat": "gl-o-sat"}, "before": ["orbit.jsx", "high-orbit-scene.jsx"],
+        "success": (6.0, 2.1), "glitch": (6.0, 3.4), "failure": (6.0, 3.4),
+        "times": [0.5, 1.8, 2.2, 3.0, 4.0, 5.9],
+    },
+    "gemini-lpm-trim": {
+        "pad": False, "source": "high-orbit-trim", "skin": "gm-", "alias": {"o-sat": "gl-o-sat"}, "before": ["orbit.jsx", "high-orbit-scene.jsx"],
+        "success": (6.0, 1.4), "glitch": (6.0, 3.0), "failure": (6.0, 3.0),
+        "times": [0.5, 1.4, 2.0, 2.8, 3.4, 5.9],
+    },
+    "gemini-lpm-return": {
+        "pad": False, "source": "high-orbit-return", "skin": "gm-", "alias": {"o-sat": "gl-o-sat"}, "before": ["orbit.jsx", "high-orbit-scene.jsx"],
+        "success": (6.0, 2.1), "glitch": (6.0, 3.0), "failure": (6.0, 3.2),
+        "times": [0.5, 1.8, 2.4, 3.2, 4.4, 5.9],
+    },
+    "gemini-da-hoi": {
+        "pad": False, "source": "high-orbit-injection", "skin": "gm-", "alias": {"o-sat": "gd-o-sat"}, "before": ["orbit.jsx", "high-orbit-scene.jsx"],
+        "success": (6.0, 2.0), "glitch": (6.0, 3.2), "failure": (6.0, 3.0),
+        "times": [0.5, 1.4, 2.0, 2.8, 3.8, 5.9],
+    },
+    "gemini-da-high-orbit": {
+        "pad": False, "source": "high-orbit", "skin": "gm-", "alias": {"o-sat": "gd-o-sat"}, "before": ["orbit.jsx", "high-orbit-scene.jsx"],
+        "success": (6.0, 2.1), "glitch": (6.0, 3.4), "failure": (6.0, 3.4),
+        "times": [0.5, 1.8, 2.2, 3.0, 4.0, 5.9],
+    },
+    "gemini-da-trim": {
+        "pad": False, "source": "high-orbit-trim", "skin": "gm-", "alias": {"o-sat": "gd-o-sat"}, "before": ["orbit.jsx", "high-orbit-scene.jsx"],
+        "success": (6.0, 1.4), "glitch": (6.0, 3.0), "failure": (6.0, 3.0),
+        "times": [0.5, 1.4, 2.0, 2.8, 3.4, 5.9],
+    },
+    "gemini-da-return": {
+        "pad": False, "source": "high-orbit-return", "skin": "gm-", "alias": {"o-sat": "gd-o-sat"}, "before": ["orbit.jsx", "high-orbit-scene.jsx"],
+        "success": (6.0, 2.1), "glitch": (6.0, 3.0), "failure": (6.0, 3.2),
+        "times": [0.5, 1.8, 2.4, 3.2, 4.4, 5.9],
+    },
     # The Transtage alone: its own launch (as the Agena's), and the target of the Transtage test's docking.
     "transtage-launch-preparations": {
         "pad": True, "source": "launch-preparations", "skin": "tt-",
@@ -1401,11 +1444,6 @@ STEPS = {
         "success": (6.0, 2.1), "glitch": (6.0, 3.4), "failure": (6.5, 3.0),
         "times": [0.5, 2.0, 2.8, 3.6, 4.6, 5.9],
     },
-    "gemini-lpm-earth-approach": {
-        "pad": False, "source": "earth-approach", "skin": "gm-", "alias": {"rocket": "gl-rocket", "debris-1": "gl-debris-1", "d-payload": "gl-d-payload", "o-sat": "gl-o-sat"}, "before": ["orbit.jsx"],
-        "success": (6.0, 2.4), "glitch": (6.0, 3.4), "failure": (6.0, 3.4),
-        "times": [0.5, 1.8, 2.6, 3.4, 4.4, 5.9],
-    },
     # The direct-ascent craft; its two module tests' burns are the insertion's.
     "gemini-da-launch-preparations": {
         "pad": True, "source": "launch-preparations", "skin": "gm-", "alias": {"rocket": "gd-rocket", "debris-1": "gd-debris-1", "d-payload": "gd-d-payload", "o-sat": "gd-o-sat"},
@@ -1426,11 +1464,6 @@ STEPS = {
         "pad": False, "source": "deployment", "skin": "gm-", "alias": {"rocket": "gd-rocket", "debris-1": "gd-debris-1", "d-payload": "gd-d-payload", "o-sat": "gd-o-sat"},
         "success": (6.0, 2.6), "glitch": (6.0, 2.6), "failure": (6.5, 2.3),
         "times": [0.5, 1.2, 1.9, 2.4, 3.6, 5.9],
-    },
-    "gemini-da-insertion": {
-        "pad": False, "source": "insertion", "skin": "gm-", "alias": {"rocket": "gd-rocket", "debris-1": "gd-debris-1", "d-payload": "gd-d-payload", "o-sat": "gd-o-sat"}, "before": ["orbit.jsx"],
-        "success": (6.0, 2.4), "glitch": (6.0, 3.2), "failure": (6.0, 3.0),
-        "times": [0.4, 1.2, 1.8, 2.4, 3.2, 5.9],
     },
     "gemini-da-earth-orbit": {
         "pad": False, "source": "earth-orbit", "skin": "gm-", "alias": {"rocket": "gd-rocket", "debris-1": "gd-debris-1", "d-payload": "gd-d-payload", "o-sat": "gd-o-sat"},

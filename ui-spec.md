@@ -2013,8 +2013,13 @@ clips, the replay is meant to be watched like a short film, and the player can s
   on a smaller one), and the Transtage lets go 0.4 s after the burn and drifts back off Gemini's tail (`SEP`,
   `hoi-separate.jsx`; the map's stack in two layers, `gt-o-sat-gemini` and `gt-o-sat-stage`, user); the Earth orbit after it is the capsule coasting out along it, round the high point
   (`gemini-high-orbit`, `high-orbit.jsx`; the shared scene `high-orbit-scene.jsx`). The lunar-orbit tests fly Gemini with its propulsion module behind the adapter
-  (`gemini-lpm-*`), the direct-ascent tests Gemini's reentry module on an ascent and a landing module (`gemini-da-*`);
-  their module tests are the insertion's burn on the map. The stack is gone at the reentry preparations, without
+  (`gemini-lpm-*`), the direct-ascent tests Gemini's reentry module on an ascent and a landing module (`gemini-da-*`).
+  Their tests fly the same long ellipse as the heat-shield test (user, 2026-10-18): the module's burn is the high-orbit
+  injection (`-hoi`), the coast to the high point the coast out (`-high-orbit`), the entry corridor trim (or the
+  ascent module's burn at the high point) lowers the low point into the entry corridor, the band turned to it, the new
+  path dashed as it's set (`-trim`, `high-orbit-trim.jsx`; time slowed there, 0.3), and the coast to reentry falls
+  down it to the band (`-return`, `high-orbit-return.jsx`; the glitch drifts shallow and is corrected, the failure's
+  correction misfires). The stack is gone at the reentry preparations, without
   a clip for its parting. The Transtage's size is real (3.05 by 4.57 m, two engines); the propulsion module's and the
   direct-ascent craft's shapes follow our blueprints, their sizes unconfirmed.
   The lunar Gemini programs themselves (direct ascent, EOR, circumlunar, lunar orbital) and Gemini EOR's Earth-orbit

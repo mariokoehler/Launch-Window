@@ -8,11 +8,7 @@ var QUIET = 2.0, BACK = 3.4;
 
 hoScene();
 // Where the injection left it: its burn's end angle and the time it has coasted since (6.0 - 2.6).
-var angle = orbitAngles(OSTART, function (t) {
-    var b = Math.max(0, Math.min(t, HO_END) - 1.0);
-    return 55 + 7.5 * Math.min(b, 1.6);
-});
-var BIG = kepler(HO_RP, HO_RA), PERI = angle(HO_END), SINCE = 6.0 - HO_END;
+var BIG = kepler(HO_RP, HO_RA), PERI = hoPeri(), SINCE = 6.0 - HO_END;
 turn("o-ellipse", function () { return PERI - 90; });
 var where = function (t) { return onEllipse(BIG, PERI, SINCE + t); };
 flyAlong(where);

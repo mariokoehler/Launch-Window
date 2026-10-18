@@ -4,13 +4,18 @@
 // (o-ellipse, drawn with its low point at the bottom, turned to where the burn ends). The craft goes round
 // anticlockwise, as everywhere (angles falling).
 var HO_RP = 390, HO_RA = 1100, HO_END = 2.6;
+// The return (2026-10-18; high-orbit-trim.jsx, high-orbit-return.jsx): a trim at the high point lowers the low
+// point into the entry corridor (l-corridor's band, 262 to 290), to HO_ENTRY.
+var HO_ENTRY = 276;
 
 // zoom: pull the camera back over the first second, from the Earth orbit's framing (the burn, which cuts on from
-// it); otherwise back from the start.
-function hoScene(zoom) {
+// it); otherwise back from the start. extra: the step's own parts, put before the camera is set (a part put
+// after it would keep its place on the screen as it's parented to the world, escaping the zoom).
+function hoScene(zoom, extra) {
     orbitScene();
     put("o-ellipse");
     layers["o-ellipse"].moveAfter(layers["o-orbit"]);
+    for (var i = 0; extra && i < extra.length; i++) put(extra[i]);
     hide("ring-1"); hide("ring-2"); hide("ring-3"); hide("ring-4");
     turn("o-earth", function (t) { return -0.25 * t; });
     // The camera back: the ellipse's middle (the Earth at 960 560, its high point 1100 above) on the screen's.
@@ -25,13 +30,31 @@ function hoScene(zoom) {
 function kepler(rp, ra) {
     var a = (rp + ra) / 2, e = (ra - rp) / (ra + rp);
     var period = 360 / 55 * Math.pow(a / HO_RP, 1.5);
-    return function (tau) {
+    var at = function (tau) {
         var m = 2 * Math.PI * tau / period, big = m;
         for (var i = 0; i < 12; i++) big = big - (big - e * Math.sin(big) - m) / (1 - e * Math.cos(big));
         var nu = 2 * Math.atan(Math.sqrt((1 + e) / (1 - e)) * Math.tan(big / 2));
         return [a * (1 - e * Math.cos(big)), nu / RAD];
     };
+    at.period = period;
+    return at;
 }
+// The angle of the long ellipse's low point: where the injection's success ends its burn, round the circular
+// orbit from OSTART, quicker while it burns (1.0 to HO_END), as high-orbit-injection.jsx goes.
+function hoPeri() {
+    var angle = orbitAngles(OSTART, function (t) {
+        var b = Math.max(0, Math.min(t, HO_END) - 1.0);
+        return 55 + 7.5 * Math.min(b, 1.6);
+    });
+    return angle(HO_END);
+}
+// The corridor band turned to the low point (it's drawn at the Earth's top, 260 degrees; put by hoScene's extra).
+function hoCorridor(peri) {
+    layers["l-corridor"].moveAfter(layers["o-sat"]);
+    turn("l-corridor", function () { return peri - 260; });
+}
+// The point s seconds past the high point on ellipse k (low point at angle peri).
+function pastHigh(k, peri, s) { return onEllipse(k, peri, k.period / 2 + s); }
 // The point tau seconds past the low point at angle peri (degrees) on that ellipse.
 function onEllipse(k, peri, tau) {
     var s = k(tau), p = (peri - s[1]) * RAD;

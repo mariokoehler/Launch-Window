@@ -220,12 +220,12 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: MOON 3, EARTH 2
   - Programs: Apollo 3, Apollo: Earth-orbit tests 2
 - [x] **Coast to high point** `co-apoa`: 4 uses in 4 configurations, 2 programs (NASA) crewed in 2 of 4
-  - Clip: by the steps before: `gemini-lpm-earth-orbit` after `lun-prop-mod-test` in lunar-orbital-gemini-earth-orbit 2, `gemini-da-earth-orbit` after `dir-asc-lan-mod-test` in gemini-direct-ascent-earth-orbit 2; [x] success, [x] glitch, [x] failure; cues yes
+  - Clip: by the steps before: `gemini-lpm-high-orbit` after `lun-prop-mod-test` in lunar-orbital-gemini-earth-orbit 2, `gemini-da-high-orbit` after `dir-asc-lan-mod-test` in gemini-direct-ascent-earth-orbit 2; [x] success, [x] glitch, [x] failure; cues yes
   - On screen: crewed craft 4
   - Destinations: EARTH 4
   - Programs: Gemini Direct Ascent: Earth-orbit tests 2, Lunar-orbit Gemini: Earth-orbit tests 2
 - [x] **Coast to reentry** `co-enin`: 4 uses in 4 configurations, 2 programs (NASA) crewed in 2 of 4
-  - Clip: by the steps before: `gemini-lpm-earth-orbit` after `ree-cor-adj-apoa` in lunar-orbital-gemini-earth-orbit 2, `gemini-da-earth-orbit` after `dir-asc-mod-test-orb-apoa` in gemini-direct-ascent-earth-orbit 2; [x] success, [x] glitch, [x] failure; cues yes
+  - Clip: by the steps before: `gemini-lpm-return` after `ree-cor-adj-apoa` in lunar-orbital-gemini-earth-orbit 2, `gemini-da-return` after `dir-asc-mod-test-orb-apoa` in gemini-direct-ascent-earth-orbit 2; [x] success, [x] glitch, [x] failure; cues no
   - On screen: crewed craft 4
   - Destinations: EARTH 4
   - Programs: Gemini Direct Ascent: Earth-orbit tests 2, Lunar-orbit Gemini: Earth-orbit tests 2
@@ -452,12 +452,12 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: MOON 3
   - Programs: Luna 15 1, Luna 17 1
 - [x] **Landing module burn** `dir-asc-lan-mod-test`: 2 uses in 2 configurations, 1 program (NASA) crewed in 1 of 2
-  - Clip: `gemini-da-insertion`; [x] success, [x] glitch, [x] failure; cues yes
+  - Clip: `gemini-da-hoi`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: crewed craft 2
   - Destinations: EARTH 2
   - Programs: Gemini Direct Ascent: Earth-orbit tests 2
 - [x] **Ascent module burn** `dir-asc-mod-test-orb-apoa`: 2 uses in 2 configurations, 1 program (NASA) crewed in 1 of 2
-  - Clip: `gemini-da-insertion`; [x] success, [x] glitch, [x] failure; cues yes
+  - Clip: `gemini-da-trim`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: crewed craft 2
   - Destinations: EARTH 2
   - Programs: Gemini Direct Ascent: Earth-orbit tests 2
@@ -492,7 +492,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: EARTH 2
   - Programs: Soyuz 7K-L3: Earth-orbit tests 2
 - [x] **Propulsion module burn** `lun-prop-mod-test`: 2 uses in 2 configurations, 1 program (NASA) crewed in 1 of 2
-  - Clip: `gemini-lpm-insertion`; [x] success, [x] glitch, [x] failure; cues yes
+  - Clip: `gemini-lpm-hoi`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: crewed craft 2
   - Destinations: EARTH 2
   - Programs: Lunar-orbit Gemini: Earth-orbit tests 2
@@ -772,7 +772,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: EARTH 2
   - Programs: Gemini 1, Lunar-orbit Gemini: Earth-orbit tests 1
 - [x] **Entry corridor trim** `ree-cor-adj-apoa`: 2 uses in 2 configurations, 1 program (NASA) crewed in 1 of 2
-  - Clip: `gemini-lpm-earth-approach`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `gemini-lpm-trim`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: crewed craft 2
   - Destinations: EARTH 2
   - Programs: Lunar-orbit Gemini: Earth-orbit tests 2

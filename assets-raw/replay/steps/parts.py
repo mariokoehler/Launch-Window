@@ -220,6 +220,9 @@ def orbit_parts():
           (cx, cy))
     # A long ellipse round the Earth (2026-10-18, high-orbit-scene.jsx): the Earth at its focus, its low point 390
     # below, its high point 1100 above (the timeline turns it to where the burn ends); thicker, as the camera is back.
+    # The return's path (high-orbit-trim.jsx): the same high point, its low point lowered into the entry corridor (276).
+    layer("o-ellipse-down", f'<ellipse cx="{cx}" cy="{cy - 412.0}" rx="551.0" ry="688.0" fill="none" stroke="{GOLD}" '
+                            f'stroke-width="5" stroke-dasharray="22 18" opacity="0.8"/>', (cx, cy))
     # A stage that parts from the payload on the map (empty unless a skin draws one, 2026-10-18).
     layer("o-stage", "", (960, 560))
     layer("o-ellipse", f'<ellipse cx="{cx}" cy="{cy - 355.0}" rx="655.0" ry="745.0" fill="none" stroke="{GOLD}" stroke-width="5" '
