@@ -34,7 +34,7 @@ REVEAL = {"success": 3.2, "glitch": 3.5, "failure": 3.3}
 SKINS = {"mercury": ("mc-", "mercury-launch"), "gemini": ("gm-", "gemini-launch"), "agena": ("ag-", "agena-launch"),
          "transtage": ("tt-", "transtage-launch"), "vostok": ("vk-", "vostok-launch"),
          "voskhod": ("vk-", "voskhod-launch", {"rocket": "vh-rocket", "debris-1": "vh-debris-1"}),
-         "soyuz": ("sy-", "soyuz-launch"),
+         "soyuz": ("sy-", "soyuz-launch"), "apollo": ("ap-", "apollo-launch"),
          "sputnik-1": ("sp1-", "sputnik-1-launch"), "explorer-1": ("ex1-", "explorer-1-launch"),
          "sputnik-2": ("sp2-", "sputnik-2-launch")}
 for _key, _prefix in (("gemini-transtage", "gt"), ("gemini-lpm", "gl"), ("gemini-da", "gd")):

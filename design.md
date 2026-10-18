@@ -558,6 +558,13 @@ leading to satellite navigation.
   lines to every station, which were expensive; they keyed the stations from Mercury through Apollo.
   Generated for the game in `assets-raw/audio/quindar/` (2026-10-14). Sources: Wikipedia ("Quindar tones"),
   NASA's Apollo Lunar Surface Journal ("Quindar tones").
+- **Apollo's command and service module** (the replay's Apollo, 2026-10-18): the command module a cone 3.9 m across;
+  on the pad a boost protective cover over it, carried off with the escape tower once the second stage was going.
+  Bound for the Moon, the CSM stayed on the S-IVB third stage through the parking orbit, and the S-IVB's second burn
+  sent it there; only then did it turn round, dock with the lander in the adapter and pull it out. It came home
+  under three main parachutes, built to land safely on two: on Apollo 15 (August 1971) one collapsed during the
+  descent, most likely burned by the fuel being vented from the reaction control system, and it splashed down on
+  two. Sources: Wikipedia ("Apollo command and service module", "Apollo 15").
 - **Soyuz 7K-OK** (the replay's Soyuz, 2026-10-18): 7.95 m long, 2.72 m across at the service module's skirt, its
   solar panels 9.80 m from tip to tip (one source gives 8.37); the orbital module 3.45 m long with its probe, the
   descent module 2.24 m long and 2.17 m across. The orbital and service modules both go at the separation, and a

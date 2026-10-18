@@ -1,0 +1,10 @@
+{
+ "duration": 6.0,
+ "revealAt": 3.0,
+ "cues": [
+  {
+   "at": 3.05,
+   "sound": "radio-burn-failed"
+  }
+ ]
+}

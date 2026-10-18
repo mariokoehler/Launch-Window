@@ -935,6 +935,149 @@ STEPS = {
         "success": (5.6, 1.6), "glitch": (5.6, 3.4), "failure": (6.4, 3.2),
         "times": [0.5, 1.0, 1.8, 2.8, 3.8, 5.5],
     },
+    # Apollo's command and service module (2026-10-18, user; ap- parts): on the pad in its adapter under the boost
+    # cover and tower (thrown off in the climb); out of it alone, or on the S-IVB to the Moon (the -stack clips);
+    # with the lander once it's extracted; the three mains coming home. The lander's own scenes are a later pass.
+    "apollo-launch-preparations": {
+        "pad": True, "source": "launch-preparations", "skin": "ap-",
+        "success": (6.4, 2.6), "glitch": (6.4, 3.5), "failure": (7.0, 3.1),
+        "times": [0.5, 2.0, 2.8, 3.4, 4.6, 6.4],
+    },
+    "apollo-countdown": {
+        "pad": True, "source": "countdown", "skin": "ap-",
+        "success": (6.4, 4.8), "glitch": (7.2, 3.6), "failure": (7.0, 4.7),
+        "times": [0.0, 2.2, 3.0, 4.4, 4.8, 6.4],
+    },
+    "apollo-deployment": {
+        "pad": False, "source": "deployment", "skin": "ap-",
+        "success": (6.0, 2.6), "glitch": (6.0, 2.6), "failure": (6.5, 2.3),
+        "times": [0.5, 1.2, 1.9, 2.4, 3.6, 5.9],
+    },
+    "apollo-earth-orbit": {
+        "pad": False, "source": "earth-orbit", "skin": "ap-",
+        "success": (6.0, 2.1), "glitch": (6.0, 3.4), "failure": (6.5, 3.0),
+        "times": [0.5, 2.0, 2.8, 3.6, 4.6, 5.9],
+    },
+    "apollo-insertion": {
+        "pad": False, "source": "insertion", "skin": "ap-", "before": ["orbit.jsx"],
+        "success": (6.0, 2.4), "glitch": (6.0, 3.2), "failure": (6.0, 3.0),
+        "times": [0.4, 1.2, 1.8, 2.4, 3.2, 5.9],
+    },
+    "apollo-duration-level-i": {
+        "pad": False, "source": "duration-level-i", "skin": "ap-", "before": ["orbit.jsx"], "after": ["duration.jsx"],
+        "success": (6.4, 2.6), "glitch": (6.4, 3.8), "failure": (6.4, 3.6),
+        "times": [0.5, 2.0, 2.6, 3.4, 4.4, 6.3],
+    },
+    "apollo-duration-level-ii": {
+        "pad": False, "source": "duration-level-ii", "skin": "ap-", "before": ["orbit.jsx"], "after": ["duration.jsx"],
+        "success": (6.4, 2.6), "glitch": (6.4, 3.8), "failure": (6.4, 3.6),
+        "times": [0.5, 2.0, 2.6, 3.4, 4.4, 6.3],
+    },
+    "apollo-lunar-flyby": {
+        "pad": False, "source": "lunar-flyby", "skin": "ap-", "before": ["orbit.jsx"],
+        "success": (6.4, 3.6), "glitch": (6.4, 4.4), "failure": (6.4, 4.4),
+        "times": [0.5, 2.0, 3.0, 3.6, 4.4, 6.3],
+    },
+    "apollo-tei": {
+        "pad": False, "source": "tei", "skin": "ap-", "before": ["orbit.jsx"],
+        "success": (6.0, 2.4), "glitch": (6.0, 3.0), "failure": (6.0, 3.0),
+        "times": [0.5, 1.4, 2.0, 2.8, 3.8, 5.9],
+    },
+    "apollo-reentry": {
+        "pad": False, "source": "reentry", "skin": "ap-", "mirror": True,
+        "success": (6.4, 4.0), "glitch": (6.4, 4.4), "failure": (6.4, 3.4),
+        "times": [0.4, 1.6, 2.6, 3.4, 4.6, 6.3],
+    },
+    "apollo-splashdown-and-recovery": {
+        "pad": False, "source": "splashdown-and-recovery", "skin": "ap-", "after": ["touchdown.jsx"],
+        "success": (6.0, 1.2), "glitch": (6.0, 1.8), "failure": (6.0, 1.8),
+        "times": [0.5, 1.2, 1.8, 2.6, 3.6, 5.9],
+    },
+    "apollo-ascent": {
+        "pad": False, "source": "ascent", "skin": "ap-", "alias": {"debris-1": "ap-debris-1-bare"},
+        "success": (6.5, 3.6), "glitch": (6.5, 4.0), "failure": (7.0, 3.4),
+        "times": [0.0, 1.5, 2.9, 3.4, 4.2, 6.4],
+    },
+    "apollo-deployment-stack": {
+        "pad": False, "source": "deployment", "skin": "ap-", "alias": {"d-payload": "ap-d-payload-stack"},
+        "success": (6.0, 2.6), "glitch": (6.0, 2.6), "failure": (6.5, 2.3),
+        "times": [0.5, 1.2, 1.9, 2.4, 3.6, 5.9],
+    },
+    "apollo-earth-orbit-stack": {
+        "pad": False, "source": "earth-orbit", "skin": "ap-", "alias": {"o-sat": "ap-o-sat-stack"},
+        "success": (6.0, 2.1), "glitch": (6.0, 3.4), "failure": (6.5, 3.0),
+        "times": [0.5, 2.0, 2.8, 3.6, 4.6, 5.9],
+    },
+    "apollo-tli": {
+        "pad": False, "source": "tpi", "skin": "ap-", "alias": {"o-sat": "ap-o-sat-stack"}, "before": ["orbit.jsx"],
+        "success": (6.0, 2.0), "glitch": (6.0, 3.2), "failure": (6.0, 3.0),
+        "times": [0.5, 1.4, 2.0, 2.8, 3.8, 5.9],
+    },
+    "apollo-lunar-approach": {
+        "pad": False, "source": "lunar-approach", "skin": "ap-", "alias": {"o-sat": "ap-o-sat-lm"}, "before": ["orbit.jsx"],
+        "success": (6.0, 2.4), "glitch": (6.0, 3.6), "failure": (6.0, 3.4),
+        "times": [0.5, 1.8, 2.4, 3.2, 4.2, 5.9],
+    },
+    "apollo-lunar-approach-csm": {
+        "pad": False, "source": "lunar-approach", "skin": "ap-", "before": ["orbit.jsx"],
+        "success": (6.0, 2.4), "glitch": (6.0, 3.6), "failure": (6.0, 3.4),
+        "times": [0.5, 1.8, 2.4, 3.2, 4.2, 5.9],
+    },
+    "apollo-loi": {
+        "pad": False, "source": "loi", "skin": "ap-", "alias": {"o-sat": "ap-o-sat-lm"}, "before": ["orbit.jsx"],
+        "success": (6.4, 2.5), "glitch": (6.4, 2.8), "failure": (6.4, 2.8),
+        "times": [0.6, 1.2, 1.8, 2.5, 3.6, 6.3],
+    },
+    "apollo-loi-csm": {
+        "pad": False, "source": "loi", "skin": "ap-", "before": ["orbit.jsx"],
+        "success": (6.4, 2.5), "glitch": (6.4, 2.8), "failure": (6.4, 2.8),
+        "times": [0.6, 1.2, 1.8, 2.5, 3.6, 6.3],
+    },
+    "apollo-lunar-orbit": {
+        "pad": False, "source": "lunar-orbit", "skin": "ap-", "alias": {"o-sat": "ap-o-sat-lm"}, "before": ["orbit.jsx"], "after": ["planet-orbit.jsx"],
+        "success": (6.0, 2.4), "glitch": (6.0, 3.6), "failure": (6.0, 3.6),
+        "times": [0.5, 1.8, 2.4, 3.2, 4.2, 5.9],
+    },
+    "apollo-lunar-orbit-csm": {
+        "pad": False, "source": "lunar-orbit", "skin": "ap-", "before": ["orbit.jsx"], "after": ["planet-orbit.jsx"],
+        "success": (6.0, 2.4), "glitch": (6.0, 3.6), "failure": (6.0, 3.6),
+        "times": [0.5, 1.8, 2.4, 3.2, 4.2, 5.9],
+    },
+    "apollo-tlc": {
+        "pad": False, "source": "trans-lunar-coast", "skin": "ap-", "alias": {"m-probe": "ap-m-probe"}, "after": ["moon-coast.jsx"],
+        "success": (6.4, 2.4), "glitch": (6.4, 3.6), "failure": (6.4, 3.4),
+        "times": [0.5, 1.8, 2.4, 3.2, 4.4, 6.3],
+    },
+    "apollo-tlc-csm": {
+        "pad": False, "source": "trans-lunar-coast", "skin": "ap-", "alias": {"m-probe": "ap-m-probe-csm"}, "after": ["moon-coast.jsx"],
+        "success": (6.4, 2.4), "glitch": (6.4, 3.6), "failure": (6.4, 3.4),
+        "times": [0.5, 1.8, 2.4, 3.2, 4.4, 6.3],
+    },
+    "apollo-tec": {
+        "pad": False, "source": "trans-earth-coast", "skin": "ap-", "alias": {"m-probe": "ap-m-probe-csm"}, "after": ["moon-coast.jsx"],
+        "success": (6.4, 2.4), "glitch": (6.4, 3.6), "failure": (6.4, 3.4),
+        "times": [0.5, 1.8, 2.4, 3.2, 4.4, 6.3],
+    },
+    "apollo-descent": {
+        "pad": False, "source": "descent-chutes", "skin": "ap-", "after": ["descent.jsx"],
+        "success": (6.0, 2.4), "glitch": (6.0, 3.4), "failure": (6.0, 2.6),
+        "times": [0.5, 1.4, 2.2, 3.0, 4.2, 5.9],
+    },
+    "apollo-reentry-preparations": {
+        "pad": False, "source": "reentry-preparations", "skin": "ap-", "mirror": True, "before": ["project-apollo.jsx", "motes.jsx"],
+        "success": (6.0, 3.0), "glitch": (6.0, 3.6), "failure": (6.5, 3.4),
+        "times": [0.5, 1.6, 2.4, 3.2, 4.4, 5.9],
+    },
+    "apollo-retrofire": {
+        "pad": False, "source": "retrofire", "skin": "ap-", "mirror": True, "before": ["project-apollo.jsx", "motes.jsx"],
+        "success": (6.4, 2.6), "glitch": (6.4, 3.0), "failure": (6.4, 3.0),
+        "times": [0.5, 1.4, 2.0, 2.8, 3.8, 6.3],
+    },
+    "apollo-modules-separation": {
+        "pad": False, "source": "modules-separation", "skin": "ap-", "mirror": True, "before": ["project-apollo.jsx", "motes.jsx"],
+        "success": (5.6, 1.8), "glitch": (5.6, 3.6), "failure": (6.4, 3.8),
+        "times": [0.5, 1.0, 1.6, 2.6, 3.6, 5.5],
+    },
     # Project Gemini's own (2026-10-17): the generic timelines ("source") with its spacecraft ("skin": the gm- parts),
     # its adapter's equipment section on until the reentry preparations drop it (adapter.jsx), its retros
     # rippled (project-gemini.jsx) and its descent on two points (two-point.jsx); and the Agena's launch (ag-).

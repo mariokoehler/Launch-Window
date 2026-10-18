@@ -2037,6 +2037,178 @@ def soyuz_parts():
                         f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>', KC)
 
 
+# --- Apollo (2026-10-18, user): the command and service module (CSM). The command module a cone 3.9 m across
+# and 3.2 m tall, its docking probe on the apex; the service module a cylinder 3.9 m across, its RCS quads, the
+# high-gain antenna at its foot and the SPS engine's big bell. On the pad, on the S-IVB (6.6 m: the rocket's
+# top, 90 px, 13.6 px/m): the adapter (SLA, 8.5 m, the lander inside), the CSM, the boost cover over the
+# command module and the escape tower, which the climb throws off together (a-les). Sizes from the
+# photographs, the service module's length (4.6 m, the bell 2.8 m) unconfirmed.
+AP_L = 13.6
+
+
+def apollo_csm(y0, k, probe=True):
+    """The CSM nose up, the service module's foot at y0 (the bell below it), k px per metre."""
+    w = lambda x: f'stroke-width="{x:.2f}"'
+    r = 1.95 * k
+    sm_h, cm_h, bell = 4.6 * k, 3.2 * k, 2.8 * k
+    top_sm = y0 - sm_h
+    out = (f'<path d="M{960 - 0.4 * k:.1f} {y0:.1f} L{960 - 1.25 * k:.1f} {y0 + bell:.1f} L{960 + 1.25 * k:.1f} {y0 + bell:.1f} '
+           f'L{960 + 0.4 * k:.1f} {y0:.1f} Z" fill="#ffffff" {LINE} {w(2.2)}/>'
+           f'<rect x="{960 - r:.1f}" y="{top_sm:.1f}" width="{2 * r:.1f}" height="{sm_h:.1f}" fill="#ffffff" {LINE} {w(2.6)}/>'
+           + "".join(f'<path d="M{960 - r:.1f} {top_sm + f * sm_h:.1f} L{960 + r:.1f} {top_sm + f * sm_h:.1f}" fill="none" {LINE} '
+                     f'{w(1.2)} opacity="0.5"/>' for f in (0.2, 0.85))
+           # The RCS quads, two seen, and the high-gain antenna on its boom at the foot.
+           + "".join(f'<rect x="{960 + sgn * r - (0.35 * k if sgn > 0 else 0.0):.1f}" y="{top_sm + 0.35 * sm_h:.1f}" '
+                     f'width="{0.35 * k:.1f}" height="{0.5 * k:.1f}" fill="#ffffff" {LINE} {w(1.6)} transform="translate({sgn * 0.3 * k:.1f} 0)"/>'
+                     for sgn in (-1, 1))
+           + f'<path d="M{960 - r:.1f} {y0 - 0.3 * k:.1f} L{960 - r - 0.9 * k:.1f} {y0 + 0.3 * k:.1f}" fill="none" {LINE} {w(1.6)}/>'
+           f'<circle cx="{960 - r - 1.0 * k:.1f}" cy="{y0 + 0.45 * k:.1f}" r="{0.32 * k:.1f}" fill="#ffffff" {LINE} {w(1.6)}/>')
+    base = top_sm
+    apex = base - cm_h
+    out += (f'<path d="M{960 - r:.1f} {base:.1f} L{960 - 0.3 * k:.1f} {apex:.1f} L{960 + 0.3 * k:.1f} {apex:.1f} L{960 + r:.1f} {base:.1f} Z" '
+            f'fill="#ffffff" {LINE} {w(2.6)}/>'
+            f'<path d="M{960 + 0.6 * k:.1f} {base - 1.6 * k:.1f} L{960 + 0.95 * k:.1f} {base - 1.6 * k:.1f} L{960 + 0.85 * k:.1f} '
+            f'{base - 1.95 * k:.1f} L{960 + 0.6 * k:.1f} {base - 1.95 * k:.1f} Z" fill="rgba(22,48,92,0.12)" {LINE} {w(1.4)}/>'
+            f'<path d="M{960 - 0.9 * k:.1f} {base - 0.5 * k:.1f} L{960 - 0.35 * k:.1f} {base - 0.5 * k:.1f} L{960 - 0.5 * k:.1f} '
+            f'{base - 1.8 * k:.1f} L{960 - 0.7 * k:.1f} {base - 1.8 * k:.1f} Z" fill="none" {LINE} {w(1.2)} opacity="0.7"/>')
+    if probe:
+        out += f'<path d="M960 {apex:.1f} L960 {apex - 0.6 * k:.1f}" fill="none" {LINE} {w(2)}/>'
+    return out
+
+
+def apollo_lm_small(apex, k):
+    """A small lunar module docked on the command module's apex, upside down (its top hatch on the probe):
+    the ascent stage (faceted), the descent stage (an octagon seen side on) and its legs, folded out."""
+    w = lambda x: f'stroke-width="{x:.2f}"'
+    a0 = apex - 0.6 * k
+    asc = (f'<path d="M{960 - 1.4 * k:.1f} {a0:.1f} L{960 + 1.4 * k:.1f} {a0:.1f} L{960 + 2.1 * k:.1f} {a0 - 1.2 * k:.1f} '
+           f'L{960 + 1.9 * k:.1f} {a0 - 2.4 * k:.1f} L{960 - 1.9 * k:.1f} {a0 - 2.4 * k:.1f} L{960 - 2.1 * k:.1f} {a0 - 1.2 * k:.1f} Z" '
+           f'fill="#ffffff" {LINE} {w(2.2)}/>')
+    d0 = a0 - 2.4 * k
+    desc = (f'<rect x="{960 - 2.1 * k:.1f}" y="{d0 - 1.6 * k:.1f}" width="{4.2 * k:.1f}" height="{1.6 * k:.1f}" fill="{GM_DARK}" '
+            f'{LINE} {w(2.2)}/>'
+            + "".join(f'<path d="M{960 + sgn * 2.1 * k:.1f} {d0 - 0.8 * k:.1f} L{960 + sgn * 3.6 * k:.1f} {d0 - 2.9 * k:.1f} '
+                      f'M{960 + sgn * 3.2 * k:.1f} {d0 - 2.9 * k:.1f} L{960 + sgn * 4.0 * k:.1f} {d0 - 2.9 * k:.1f}" fill="none" {LINE} {w(1.8)}/>'
+                      for sgn in (-1, 1)))
+    return asc + desc
+
+
+def apollo_sivb(y0, k):
+    """The S-IVB under it from y0 (the adapter's foot) down 6.6 m across, 17.8 m long (shortened), its J-2 bell."""
+    w = lambda x: f'stroke-width="{x:.2f}"'
+    h = 9.0 * k
+    return (f'<rect x="{960 - 3.3 * k:.1f}" y="{y0:.1f}" width="{6.6 * k:.1f}" height="{h:.1f}" fill="#ffffff" {LINE} {w(2.6)}/>'
+            + "".join(f'<path d="M{960 - 3.3 * k:.1f} {y0 + f * h:.1f} L{960 + 3.3 * k:.1f} {y0 + f * h:.1f}" fill="none" {LINE} '
+                      f'{w(1.2)} opacity="0.5"/>' for f in (0.25, 0.7))
+            + f'<path d="M{960 - 0.6 * k:.1f} {y0 + h:.1f} L{960 - 1.2 * k:.1f} {y0 + h + 1.6 * k:.1f} L{960 + 1.2 * k:.1f} '
+            f'{y0 + h + 1.6 * k:.1f} L{960 + 0.6 * k:.1f} {y0 + h:.1f} Z" fill="#ffffff" {LINE} {w(2)}/>')
+
+
+def apollo_sla(y0, k):
+    """The adapter on the S-IVB's top (y0): a frustum from 6.6 m to 3.9 m, 8.5 m tall."""
+    return (f'<path d="M{960 - 3.3 * k:.1f} {y0:.1f} L{960 - 1.95 * k:.1f} {y0 - 8.5 * k:.1f} L{960 + 1.95 * k:.1f} {y0 - 8.5 * k:.1f} '
+            f'L{960 + 3.3 * k:.1f} {y0:.1f} Z" fill="#ffffff" {LINE} stroke-width="2.6"/>'
+            f'<path d="M{960 - 2.62 * k:.1f} {y0 - 4.25 * k:.1f} L{960 + 2.62 * k:.1f} {y0 - 4.25 * k:.1f}" fill="none" {LINE} '
+            f'stroke-width="1.2" opacity="0.5"/>')
+
+
+def apollo_tower(cm_base, k):
+    """The boost cover over the command module and the escape tower on it (10 m)."""
+    apex = cm_base - 3.2 * k
+    w = lambda x: f'stroke-width="{x:.2f}"'
+    return (f'<path d="M{960 - 2.05 * k:.1f} {cm_base + 0.2 * k:.1f} L{960 - 0.5 * k:.1f} {apex - 0.4 * k:.1f} L{960 + 0.5 * k:.1f} '
+            f'{apex - 0.4 * k:.1f} L{960 + 2.05 * k:.1f} {cm_base + 0.2 * k:.1f} Z" fill="#ffffff" {LINE} {w(2.6)}/>'
+            f'<path d="M{960 - 0.45 * k:.1f} {apex - 0.4 * k:.1f} L{960 - 0.3 * k:.1f} {apex - 3.6 * k:.1f} M{960 + 0.45 * k:.1f} '
+            f'{apex - 0.4 * k:.1f} L{960 + 0.3 * k:.1f} {apex - 3.6 * k:.1f}" fill="none" {LINE} {w(2)}/>'
+            f'<rect x="{960 - 0.4 * k:.1f}" y="{apex - 8.6 * k:.1f}" width="{0.8 * k:.1f}" height="{5.0 * k:.1f}" fill="#ffffff" '
+            f'{LINE} {w(2)}/>'
+            f'<path d="M{960 - 0.4 * k:.1f} {apex - 8.6 * k:.1f} L960 {apex - 10 * k:.1f} L{960 + 0.4 * k:.1f} {apex - 8.6 * k:.1f} Z" '
+            f'fill="#ffffff" {LINE} {w(2)}/>')
+
+
+def apollo_parts():
+    small = lambda body: re.sub(r'stroke-width="([\d.]+)"', lambda m: f'stroke-width="{float(m.group(1)) * 0.8:.2f}"', body)
+    thick = lambda body: re.sub(r'stroke-width="[\d.]+"', 'stroke-width="5"', body)
+    rocket = board_group("rocket")
+    nose = rocket.index('<path xmlns="http://www.w3.org/2000/svg" d="M915 440')
+    big = f"translate({DX} {DY}) scale({DK}) translate(-850 -520)"
+    turn = "translate(-120 20) rotate(90 960 500)"
+    k = AP_L
+    sla_top = 500 - 8.5 * k
+    csm_l = apollo_csm(sla_top, k)
+    cm_base = sla_top - 4.6 * k
+    on_rocket = apollo_sla(500, k) + csm_l
+    layer("ap-rocket", rocket[:nose] + on_rocket + apollo_tower(cm_base, k), (960, 600))
+    layer("ap-debris-1", on_rocket + apollo_tower(cm_base, k), (960, 420))
+    layer("ap-debris-1-bare", on_rocket, (960, 420))
+    layer("ap-a-les", apollo_tower(cm_base, k), (960, 300))
+    # Out of the climb: the CSM alone (a flight in Earth orbit), or still on the S-IVB in its adapter (a flight
+    # to the Moon, which the S-IVB sends there); on the maps also the CSM with the lander, after the extraction.
+    # On the maps the craft is drawn bigger (the CSM 2.2 times) so it reads at the map's 0.6.
+    csm_alone = apollo_csm(500, k)
+    stack = apollo_sivb(500 - 4.0 * k, k * 0.5) + apollo_sla(500 - 4.0 * k, k * 0.5) + apollo_csm(500 - 8.25 * k, k * 0.5)
+    layer("ap-d-payload", f'<g transform="{big}"><g transform="{turn}">{csm_alone}</g></g>', D_AT(914, 520))
+    layer("ap-d-payload-stack", f'<g transform="{big}"><g transform="{turn}">{stack}</g></g>', D_AT(914, 520))
+    K2 = 2.2 * k
+    map_csm = apollo_csm(560, K2 * 0.5)
+    map_lm = apollo_csm(560, K2 * 0.5) + apollo_lm_small(560 - (4.6 + 3.2) * K2 * 0.5, K2 * 0.5)
+    map_stack = (apollo_sivb(560 - 1.5 * K2, K2 * 0.25) + apollo_sla(560 - 1.5 * K2, K2 * 0.25)
+                 + apollo_csm(560 - 1.5 * K2 - 8.5 * K2 * 0.25, K2 * 0.25))
+    for name, body in (("ap-o-sat", map_csm), ("ap-o-sat-b", map_csm), ("ap-o-sat-lm", map_lm), ("ap-o-sat-stack", map_stack)):
+        layer(name, f'<g transform="translate(960 560) scale(0.6) translate(-960 -426)">{thick(body)}</g>', (960, 560))
+    # The coasts' map probe (moon-coast.jsx): the craft small at the Sun's place, nose up.
+    cx, cy = SUN
+    for name, body in (("ap-m-probe", map_lm), ("ap-m-probe-csm", map_csm)):
+        layer(name, f'<g transform="translate({cx} {cy}) scale(0.32) translate(-960 -500)">{thick(body)}</g>', SUN)
+    # Coming home (31 px/m): the command module where the generic capsule is (its base at 500, 121 across); the
+    # service module behind it the pack (the burn's) and the module (the separation's, about its middle); one
+    # engine; no straps; the parachutes three mains.
+    K = 31
+    full = apollo_csm(500 + 4.6 * K, K)
+    cut = full.index(f'<path d="M{960 - 1.95 * K:.1f} {500:.1f} L')
+    sm, cmd = small(full[:cut]), small(full[cut:])
+    layer("ap-r-capsule", RT(cmd), RC)
+    layer("ap-r-capsule-up", RU(cmd), RC)
+    layer("ap-r-periscope", "", RC)
+    layer("ap-r-pack", RT(sm), RT_AT(960, 576))
+    layer("ap-r-module", RT(sm), RT_AT(960, 576))
+    for n in ("strap-a", "strap-b", "cut-a", "cut-b"):
+        layer(f"ap-r-{n}", "", RC)
+    layer("ap-r-pyro", RT("".join(f'<circle cx="{x}" cy="502" r="6" fill="{GOLD}"/>' for x in (910, 960, 1010))), RT_AT(960, 502))
+    exit_y = 500 + (4.6 + 2.8) * K
+    layer("ap-r-flame-1", RT(f'<path d="M928 {exit_y:.0f} C924 {exit_y + 30:.0f} 944 {exit_y + 64:.0f} 960 {exit_y + 96:.0f} '
+                             f'C976 {exit_y + 64:.0f} 996 {exit_y + 30:.0f} 992 {exit_y:.0f} Z" fill="{GOLD_FILL}" stroke="{GOLD}" '
+                             f'stroke-width="2" stroke-linejoin="round"/>'), RT_AT(960, exit_y))
+    layer("ap-r-flame-2", "", RT_AT(960, exit_y))
+    layer("ap-r-flame-3", "", RT_AT(960, exit_y))
+    quad = 500 + 0.35 * 4.6 * K
+    layer("ap-r-jet-l", RT(puff(886, quad, 10)), RT_AT(896, quad))
+    layer("ap-r-jet-r", RT(puff(1034, quad, 10)), RT_AT(1024, quad))
+    layer("ap-r-jet-stuck", RT(f'<path d="M1030 {quad - 4:.0f} C1060 {quad - 12:.0f} 1094 {quad - 22:.0f} 1130 {quad - 30:.0f} '
+                               f'L1134 {quad - 14:.0f} C1098 {quad - 8:.0f} 1062 {quad + 4:.0f} 1032 {quad + 12:.0f} Z" '
+                               f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>'), RC)
+    layer("ap-r-glow-side", RT(f'<path d="M972 410 C996 440 1016 470 1024 500 C1032 466 1006 434 972 410 Z" fill="{GOLD_FILL}" '
+                               f'stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>'), RC)
+    layer("ap-r-half-nose", RT(small(f'<path d="M951 401 L969 401 L996 450 L924 450 Z" fill="#ffffff" {LINE} stroke-width="3"/>')),
+          RT_AT(960, 410))
+    layer("ap-r-half-body", RT(small(f'<path d="M922 454 L998 454 L1020 500 L900 500 Z" fill="#ffffff" {LINE} stroke-width="3"/>')),
+          RT_AT(960, 472))
+    # Three mains (Apollo landed under three; Apollo 15 under two, one having collapsed): the glitch's half-open
+    # main is two full and one deflated.
+    top = RC[1] - RK * (426 - 352)
+    def canopy(cx, dome_y, w_, h):
+        return (f'<path d="M{cx - w_ / 2} {dome_y} C{cx - w_ / 2} {dome_y - h} {cx + w_ / 2} {dome_y - h} {cx + w_ / 2} {dome_y} '
+                f'C{cx + w_ / 4} {dome_y - h * 0.18} {cx - w_ / 4} {dome_y - h * 0.18} {cx - w_ / 2} {dome_y} Z" fill="#ffffff" {LINE} '
+                f'stroke-width="4"/>'
+                + "".join(f'<path d="M{cx + kk * w_ / 2} {dome_y} L960 {top}" fill="none" {LINE} stroke-width="1.6"/>'
+                          for kk in (-1, 1)))
+    three = canopy(760, top - 190, 200, 120) + canopy(1160, top - 190, 200, 120) + canopy(960, top - 230, 210, 130)
+    layer("ap-r-main", three, (960, top))
+    limp = (f'<path d="M760 {top - 170} C752 {top - 230} 772 {top - 260} 760 {top - 300} C774 {top - 270} 770 {top - 220} 780 {top - 170} Z" '
+            f'fill="#ffffff" {LINE} stroke-width="3"/><path d="M770 {top - 170} L960 {top}" fill="none" {LINE} stroke-width="1.6"/>')
+    layer("ap-r-main-half", limp + canopy(1160, top - 190, 200, 120) + canopy(960, top - 230, 210, 130), (960, top))
+
+
 # --- Project Gemini (2026-10-17): its spacecraft, and the Agena it docked with --------------------------
 # The reentry module seen from its back (the side with the hatches): the heat shield, the cabin's cone
 # with the two hatches, a window in each, the reentry control (RCS) section, a short cylinder, and the
@@ -2440,6 +2612,7 @@ def main():
     mercury_parts()
     vostok_parts()
     soyuz_parts()
+    apollo_parts()
     satellite_parts()
     gemini_parts()
     if ONLY:
