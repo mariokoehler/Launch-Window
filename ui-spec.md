@@ -2014,6 +2014,15 @@ clips, the replay is meant to be watched like a short film, and the player can s
   The lunar Gemini programs themselves (direct ascent, EOR, circumlunar, lunar orbital) and Gemini EOR's Earth-orbit
   tests are a later package; Gemini EOR's equipment-section separation drops the section before the turn, the wrong way round, to be
   fixed with them. Unconfirmed.
+- **The early-era pack's craft as themselves (user, 2026-10-18):** Vostok (`vk-`, `vostok-*`) plays every step as
+  itself: the sphere on its instrument module (its one retro flame; the module the separation's, its cable meeting
+  the module's near end, `project-vostok.jsx`), the nose fairing thrown off in the climb as Mercury's tower is
+  (`a-les`), the sphere alone on its chute. Korabl-Sputnik 2 flies it too, landing on the ground (its
+  `descent-and-splashdown`). Sputnik 1 (`sp1-`), Explorer 1 (`ex1-`) and Sputnik 2 (`sp2-`) fly as themselves in
+  the satellite's clips, Sputnik 2's heartbeat included. Simplified: the rocket stays generic (no R-7, no Juno I,
+  Explorer 1 standing on Juno's spinning tub only); Sputnik 2 separates in its deployment, though it stayed on its
+  core stage; the satellites drawn larger than their rocket's scale. Vostok's pilot doesn't eject in the descent
+  yet. Unconfirmed.
 - **The way home in one piece (user, 2026-10-17):** the suborbital flight had no motes, so they popped in at the
   retrofire; now they stream past along its arc (`motes()` takes the craft's way, and can settle where the next clip's
   begin). Reentry preparations played the reentry preparations' turn even where the craft was already base first,

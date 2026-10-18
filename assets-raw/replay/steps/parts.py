@@ -1622,6 +1622,190 @@ def mercury_parts():
     layer("mc-r-bag", RU(small(bag)), RU_AT(960, 506))
 
 
+# --- The first satellites (2026-10-18, user; the early-era pack), nose up on the rocket's top (y 500, 90 px
+# across). Sputnik 1 (58 cm, four antennas swept back) and Sputnik 2 (a cone about 4 m tall: an instrument
+# section on top, a sphere like Sputnik 1, Laika's cylindrical cabin at the foot) rode under a nose
+# fairing; Explorer 1 (2 m long, 15 cm across, the last stage's motor its tail) stood bare on Juno I's
+# spinning tub of small motors. Drawn larger than their rockets' scale where they'd vanish (Sputnik 1's
+# sphere, Explorer 1's width): unconfirmed proportions.
+
+
+def sat_fairing(top=330, k=1.0):
+    """A plain cone fairing on the rocket's top, its tip at top."""
+    return (f'<path d="M915 500 L915 450 Q930 {top + 40} 960 {top} Q990 {top + 40} 1005 450 L1005 500 Z" fill="#ffffff" '
+            f'{LINE} stroke-width="{3 * k:.2f}"/>'
+            f'<path d="M915 450 L1005 450" fill="none" {LINE} stroke-width="{1.6 * k:.2f}" opacity="0.6"/>')
+
+
+def sputnik1(k=1.0):
+    """Sputnik 1 nose up: the sphere (centre 960 430) and its four antennas swept back (down)."""
+    w = lambda x: f'stroke-width="{x * k:.2f}"'
+    ants = "".join(f'<path d="M{960 + dx} {440} L{960 + ex} 560" fill="none" {LINE} {w(2)}/>'
+                   for dx, ex in ((-18, -70), (-8, -30), (8, 30), (18, 70)))
+    return (ants + f'<circle cx="960" cy="430" r="26" fill="#ffffff" {LINE} {w(2.6)}/>'
+            f'<path d="M934 432 Q960 442 986 432" fill="none" {LINE} {w(1.4)} opacity="0.7"/>'
+            f'<path d="M944 414 Q952 408 962 408" fill="none" {LINE} {w(1.4)} opacity="0.6"/>')
+
+
+def explorer1(base=500, k=1.0, motor=True):
+    """Explorer 1 nose up, its foot at base: the motor case, the instrument section in bands, the nose, four whips."""
+    w = lambda x: f'stroke-width="{x * k:.2f}"'
+    out = ""
+    if motor:
+        out += f'<path d="M955 {base} L951 {base + 10} L969 {base + 10} L965 {base} Z" fill="#ffffff" {LINE} {w(1.8)}/>'
+    out += (f'<rect x="952" y="{base - 90}" width="16" height="90" fill="#ffffff" {LINE} {w(2.2)}/>'
+            + "".join(f'<rect x="952" y="{base - 150 + 12 * j}" width="16" height="6" fill="{NAVY}" opacity="0.85"/>'
+                      for j in range(5))
+            + f'<rect x="952" y="{base - 150}" width="16" height="60" fill="none" {LINE} {w(2.2)}/>'
+            f'<path d="M952 {base - 150} L960 {base - 178} L968 {base - 150} Z" fill="#ffffff" {LINE} {w(2)}/>'
+            + "".join(f'<path d="M{960 + s * 8} {base - 96} Q{960 + s * 40} {base - 86} {960 + s * 62} {base - 54}" fill="none" '
+                      f'{LINE} {w(1.6)}/>' for s in (-1, 1))
+            + "".join(f'<path d="M{960 + s * 8} {base - 92} Q{960 + s * 26} {base - 70} {960 + s * 36} {base - 34}" fill="none" '
+                      f'{LINE} {w(1.4)} opacity="0.8"/>' for s in (-1, 1)))
+    return out
+
+
+def juno_tub(k=1.0):
+    """Juno I's spinning tub on the rocket's top: a short drum, its ring of small motors' ends showing."""
+    w = lambda x: f'stroke-width="{x * k:.2f}"'
+    return (f'<rect x="930" y="462" width="60" height="38" fill="#ffffff" {LINE} {w(2.6)}/>'
+            + "".join(f'<path d="M{x} 462 L{x} 500" fill="none" {LINE} {w(1.2)} opacity="0.6"/>' for x in (942, 954, 966, 978))
+            + f'<path d="M930 470 L990 470" fill="none" {LINE} {w(1.4)} opacity="0.7"/>')
+
+
+def sputnik2(k=1.0):
+    """Sputnik 2 nose up, its foot at 500: the cone frame, Laika's cabin, the sphere, the instrument section."""
+    w = lambda x: f'stroke-width="{x * k:.2f}"'
+    return (f'<path d="M918 500 L948 352 M1002 500 L972 352 M918 500 L1002 500" fill="none" {LINE} {w(2)}/>'
+            f'<rect x="932" y="452" width="56" height="44" rx="4" fill="#ffffff" {LINE} {w(2.6)}/>'
+            f'<circle cx="960" cy="474" r="7" fill="rgba(22,48,92,0.12)" {LINE} {w(1.6)}/>'
+            f'<circle cx="960" cy="420" r="24" fill="#ffffff" {LINE} {w(2.4)}/>'
+            + "".join(f'<path d="M{960 + dx} 428 L{960 + ex} 452" fill="none" {LINE} {w(1.4)}/>' for dx, ex in ((-14, -26), (14, 26)))
+            + f'<rect x="948" y="364" width="24" height="32" fill="#ffffff" {LINE} {w(2.2)}/>'
+            f'<path d="M948 364 L960 350 L972 364 Z" fill="#ffffff" {LINE} {w(2)}/>')
+
+
+def satellite_parts():
+    rocket = board_group("rocket")
+    nose = rocket.index('<path xmlns="http://www.w3.org/2000/svg" d="M915 440')
+    big = f"translate({DX} {DY}) scale({DK}) translate(-850 -520)"
+    turn = "translate(-120 20) rotate(90 960 500)"
+    sats = {
+        # prefix: (on the rocket, bare in the deployment and in orbit)
+        "sp1": (sat_fairing(), sputnik1()),
+        "sp2": (sat_fairing(top=300), sputnik2()),
+        "ex1": (juno_tub() + explorer1(base=462, motor=False), explorer1()),
+    }
+    for key, (on_rocket, bare) in sats.items():
+        layer(f"{key}-rocket", rocket[:nose] + on_rocket, (960, 600))
+        layer(f"{key}-debris-1", on_rocket, (960, 420))
+        layer(f"{key}-d-payload", f'<g transform="{big}"><g transform="{turn}">{bare}</g></g>', D_AT(914, 520))
+        thick = re.sub(r'stroke-width="[\d.]+"', 'stroke-width="5"', bare)
+        layer(f"{key}-o-sat", f'<g transform="translate(960 560) scale(0.6) translate(-960 -426)">{thick}</g>', (960, 560))
+
+
+# --- Vostok (2026-10-18, user; the early-era pack): the descent sphere and its instrument module ---------
+# The sphere 2.30 m across, the instrument module 2.25 m long and 2.43 m across at its ring of gas bottles,
+# its one retro engine (the TDU-1) at the far end; four steel bands held the sphere to it. On the rocket
+# (the launch's frame, the third stage 90 px, about 2.6 m: 34.6 px/m) under a nose fairing; coming home
+# (the way home's frame, nose up about 960 426) the sphere where the generic capsule is (radius 74,
+# 64.3 px/m), the module behind its base.
+VK_L = 34.6
+
+
+def vostok_launch(bare=True, k=1.0):
+    """The craft nose up on the rocket's top (y 500): the module, the sphere on it, and bare its engine."""
+    w = lambda x: f'stroke-width="{x * k:.2f}"'
+    out = ""
+    if bare:
+        out += f'<path d="M954 500 L948 512 L972 512 L966 500 Z" fill="#ffffff" {LINE} {w(2)}/>'
+    out += (f'<path d="M930 500 L918 470 L938 432 L982 432 L1002 470 L990 500 Z" fill="#ffffff" {LINE} {w(2.4)}/>'
+            f'<path d="M918 470 L1002 470" fill="none" {LINE} {w(1.4)} opacity="0.6"/>'
+            + "".join(f'<circle cx="{x}" cy="470" r="5" fill="#ffffff" {LINE} {w(1.6)}/>' for x in (926, 943, 960, 977, 994))
+            + f'<rect x="942" y="424" width="36" height="8" fill="#ffffff" {LINE} {w(2)}/>'
+            f'<circle cx="960" cy="386" r="40" fill="#ffffff" {LINE} {w(2.6)}/>'
+            f'<circle cx="948" cy="380" r="13" fill="none" {LINE} {w(1.6)} opacity="0.8"/>'
+            f'<circle cx="977" cy="372" r="4" fill="rgba(22,48,92,0.12)" {LINE} {w(1.4)}/>'
+            f'<path d="M960 346 L960 330 M974 349 L984 336" fill="none" {LINE} {w(1.6)}/>')
+    return out
+
+
+def vostok_fairing(k=1.0):
+    """The nose fairing over it on the rocket, two portholes."""
+    w = lambda x: f'stroke-width="{x * k:.2f}"'
+    return (f'<path d="M915 500 L915 412 L948 326 Q960 316 972 326 L1005 412 L1005 500 Z" fill="#ffffff" {LINE} {w(3)}/>'
+            f'<path d="M915 412 L1005 412" fill="none" {LINE} {w(1.6)} opacity="0.6"/>'
+            + "".join(f'<circle cx="{x}" cy="440" r="7" fill="rgba(22,48,92,0.10)" {LINE} {w(1.6)}/>' for x in (942, 978)))
+
+
+def vostok_sphere():
+    """The descent sphere coming home (nose up, about 960 426, radius 74): its hatch, a window, two whips."""
+    return (f'<circle cx="960" cy="426" r="74" fill="#ffffff" {LINE} stroke-width="3"/>'
+            f'<circle cx="940" cy="420" r="26" fill="none" {LINE} stroke-width="2" opacity="0.8"/>'
+            f'<circle cx="992" cy="398" r="8" fill="rgba(22,48,92,0.12)" {LINE} stroke-width="2"/>'
+            f'<path d="M960 352 L960 330 M988 358 L1002 340" fill="none" {LINE} stroke-width="2"/>')
+
+
+def vostok_module():
+    """The instrument module behind the sphere's base (500): its collar, two cones about the gas bottles,
+    the engine's nozzle at the end (664)."""
+    return (f'<rect x="927" y="500" width="66" height="12" fill="#ffffff" {LINE} stroke-width="2.4"/>'
+            f'<path d="M927 512 L882 560 L882 576 L915 640 L1005 640 L1038 576 L1038 560 L993 512 Z" fill="#ffffff" {LINE} '
+            f'stroke-width="2.4"/>'
+            + "".join(f'<circle cx="{x}" cy="568" r="10" fill="#ffffff" {LINE} stroke-width="1.8"/>'
+                      for x in (896, 922, 948, 972, 998, 1024))
+            + f'<path d="M950 640 L938 664 L982 664 L970 640 Z" fill="#ffffff" {LINE} stroke-width="2.2"/>')
+
+
+def vostok_parts():
+    small = lambda body: re.sub(r'stroke-width="([\d.]+)"', lambda m: f'stroke-width="{float(m.group(1)) * 0.8:.2f}"', body)
+    rocket = board_group("rocket")
+    nose = rocket.index('<path xmlns="http://www.w3.org/2000/svg" d="M915 440')
+    # The launch: under its fairing on the pad and in a break-up; the climb throws the fairing off as it
+    # does Mercury's tower (the ascent's a-les), the craft bare under it; bare in the deployment and in orbit.
+    layer("vk-rocket", rocket[:nose] + vostok_launch(bare=False) + vostok_fairing(), (960, 600))
+    layer("vk-debris-1", vostok_launch(bare=False) + vostok_fairing(), (960, 420))
+    layer("vk-debris-1-bare", vostok_launch(bare=False), (960, 420))
+    layer("vk-a-les", vostok_fairing(), (960, 300))
+    big = f"translate({DX} {DY}) scale({DK}) translate(-850 -520)"
+    turn = "translate(-120 20) rotate(90 960 500)"
+    layer("vk-d-payload", f'<g transform="{big}"><g transform="{turn}">{vostok_launch()}</g></g>', D_AT(914, 520))
+    thick = re.sub(r'stroke-width="[\d.]+"', 'stroke-width="5"', vostok_launch())
+    for name in ("vk-o-sat", "vk-o-sat-b"):
+        layer(name, f'<g transform="translate(960 560) scale(0.6) translate(-960 -426)">{thick}</g>', (960, 560))
+    # Coming home: the sphere nose right (RT) and nose up (RU); the module is the pack (the retrofire's)
+    # and the module (the separation's, about its middle); the bands from the module's collar onto the
+    # sphere, hinged there; the pack turns about band b's hinge, as the generic one does.
+    sph, mod = small(vostok_sphere()), small(vostok_module())
+    layer("vk-r-capsule", RT(sph), RC)
+    layer("vk-r-capsule-up", RU(sph), RC)
+    layer("vk-r-periscope", "", RC)
+    layer("vk-r-pack", RT(mod), RT_AT(1014, 477))
+    layer("vk-r-module", RT(mod), RT_AT(960, 575))
+    layer("vk-r-strap-a", RT(f'<path d="M928 506 L906 477" fill="none" {LINE} stroke-width="2.4"/>'), RT_AT(906, 477))
+    layer("vk-r-strap-b", RT(f'<path d="M992 506 L1014 477" fill="none" {LINE} stroke-width="2.4"/>'), RT_AT(1014, 477))
+    layer("vk-r-cut-a", RT(f'<circle cx="906" cy="478" r="6" fill="{GOLD}"/>'), RT_AT(906, 478))
+    layer("vk-r-cut-b", RT(f'<circle cx="1014" cy="478" r="6" fill="{GOLD}"/>'), RT_AT(1014, 478))
+    layer("vk-r-pyro", RT("".join(f'<circle cx="{x}" cy="504" r="6" fill="{GOLD}"/>' for x in (930, 960, 990))), RT_AT(960, 504))
+    # One engine: one flame; the other two empty.
+    layer("vk-r-flame-1", RT(f'<path d="M944 664 C942 690 952 716 960 740 C968 716 978 690 976 664 Z" fill="{GOLD_FILL}" '
+                             f'stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>'), RT_AT(960, 664))
+    layer("vk-r-flame-2", "", RT_AT(960, 664))
+    layer("vk-r-flame-3", "", RT_AT(960, 664))
+    # The attitude jets, on the module's forward cone.
+    layer("vk-r-jet-l", RT(puff(896, 540, 10)), RT_AT(906, 540))
+    layer("vk-r-jet-r", RT(puff(1024, 540, 10)), RT_AT(1014, 540))
+    layer("vk-r-jet-stuck", RT(f'<path d="M1016 536 C1046 528 1080 518 1116 510 L1120 526 C1084 532 1048 544 1018 552 Z" '
+                               f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>'), RC)
+    layer("vk-r-glow-side", RT(f'<path d="M1012 372 C1034 396 1042 430 1034 466 C1052 430 1040 392 1012 372 Z" fill="{GOLD_FILL}" '
+                               f'stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>'), RC)
+    # The break-up: the sphere's two halves.
+    layer("vk-r-half-nose", RT(small(f'<path d="M886 424 A74 74 0 0 1 1034 424 Z" fill="#ffffff" {LINE} stroke-width="3"/>')),
+          RT_AT(960, 410))
+    layer("vk-r-half-body", RT(small(f'<path d="M886 430 A74 74 0 0 0 1034 430 Z" fill="#ffffff" {LINE} stroke-width="3"/>')),
+          RT_AT(960, 472))
+
+
 # --- Project Gemini (2026-10-17): its spacecraft, and the Agena it docked with --------------------------
 # The reentry module seen from its back (the side with the hatches): the heat shield, the cabin's cone
 # with the two hatches, a window in each, the reentry control (RCS) section, a short cylinder, and the
@@ -2023,6 +2207,8 @@ def main():
     air_parts()
     departure_parts()
     mercury_parts()
+    vostok_parts()
+    satellite_parts()
     gemini_parts()
     if ONLY:
         # Keep the parts not redrawn.

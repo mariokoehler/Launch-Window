@@ -549,6 +549,181 @@ STEPS = {
         "success": (6.4, 2.4), "glitch": (6.4, 3.4), "failure": (6.4, 2.6),
         "times": [0.5, 1.4, 2.2, 3.0, 4.2, 6.3],
     },
+    # The first satellites' own (2026-10-18, user; the early-era pack): Sputnik 1 (sp1-), Explorer 1 (ex1-) and
+    # Sputnik 2 (sp2-) in the generic satellite's timelines.
+    "sputnik-1-launch-preparations": {
+        "pad": True, "source": "launch-preparations", "skin": "sp1-",
+        "success": (6.4, 2.6), "glitch": (6.4, 3.5), "failure": (7.0, 3.1),
+        "times": [0.5, 2.0, 2.8, 3.4, 4.6, 6.4],
+    },
+    "sputnik-1-countdown": {
+        "pad": True, "source": "countdown", "skin": "sp1-",
+        "success": (6.4, 4.8), "glitch": (7.2, 3.6), "failure": (7.0, 4.7),
+        "times": [0.0, 2.2, 3.0, 4.4, 4.8, 6.4],
+    },
+    "sputnik-1-ascent": {
+        "pad": False, "source": "ascent", "skin": "sp1-",
+        "success": (6.5, 3.6), "glitch": (6.5, 4.0), "failure": (7.0, 3.4),
+        "times": [0.0, 1.5, 2.9, 3.4, 4.2, 6.4],
+    },
+    "sputnik-1-deployment": {
+        "pad": False, "source": "deployment", "skin": "sp1-",
+        "success": (6.0, 2.6), "glitch": (6.0, 2.6), "failure": (6.5, 2.3),
+        "times": [0.5, 1.2, 1.9, 2.4, 3.6, 5.9],
+    },
+    "sputnik-1-earth-orbit": {
+        "pad": False, "source": "earth-orbit", "skin": "sp1-",
+        "success": (6.0, 2.1), "glitch": (6.0, 3.4), "failure": (6.5, 3.0),
+        "times": [0.5, 2.0, 2.8, 3.6, 4.6, 5.9],
+    },
+    "sputnik-1-advanced-experiments-earth-orbit": {
+        "pad": False, "source": "advanced-experiments-earth-orbit", "skin": "sp1-", "before": ["orbit.jsx"],
+        "success": (6.0, 2.4), "glitch": (6.0, 3.6), "failure": (6.0, 3.6),
+        "times": [0.5, 1.8, 2.4, 3.2, 4.0, 5.9],
+    },
+    "explorer-1-launch-preparations": {
+        "pad": True, "source": "launch-preparations", "skin": "ex1-",
+        "success": (6.4, 2.6), "glitch": (6.4, 3.5), "failure": (7.0, 3.1),
+        "times": [0.5, 2.0, 2.8, 3.4, 4.6, 6.4],
+    },
+    "explorer-1-countdown": {
+        "pad": True, "source": "countdown", "skin": "ex1-",
+        "success": (6.4, 4.8), "glitch": (7.2, 3.6), "failure": (7.0, 4.7),
+        "times": [0.0, 2.2, 3.0, 4.4, 4.8, 6.4],
+    },
+    "explorer-1-ascent": {
+        "pad": False, "source": "ascent", "skin": "ex1-",
+        "success": (6.5, 3.6), "glitch": (6.5, 4.0), "failure": (7.0, 3.4),
+        "times": [0.0, 1.5, 2.9, 3.4, 4.2, 6.4],
+    },
+    "explorer-1-deployment": {
+        "pad": False, "source": "deployment", "skin": "ex1-",
+        "success": (6.0, 2.6), "glitch": (6.0, 2.6), "failure": (6.5, 2.3),
+        "times": [0.5, 1.2, 1.9, 2.4, 3.6, 5.9],
+    },
+    "explorer-1-earth-orbit": {
+        "pad": False, "source": "earth-orbit", "skin": "ex1-",
+        "success": (6.0, 2.1), "glitch": (6.0, 3.4), "failure": (6.5, 3.0),
+        "times": [0.5, 2.0, 2.8, 3.6, 4.6, 5.9],
+    },
+    "explorer-1-advanced-experiments-earth-orbit": {
+        "pad": False, "source": "advanced-experiments-earth-orbit", "skin": "ex1-", "before": ["orbit.jsx"],
+        "success": (6.0, 2.4), "glitch": (6.0, 3.6), "failure": (6.0, 3.6),
+        "times": [0.5, 1.8, 2.4, 3.2, 4.0, 5.9],
+    },
+    "sputnik-2-launch-preparations": {
+        "pad": True, "source": "launch-preparations", "skin": "sp2-",
+        "success": (6.4, 2.6), "glitch": (6.4, 3.5), "failure": (7.0, 3.1),
+        "times": [0.5, 2.0, 2.8, 3.4, 4.6, 6.4],
+    },
+    "sputnik-2-countdown": {
+        "pad": True, "source": "countdown", "skin": "sp2-",
+        "success": (6.4, 4.8), "glitch": (7.2, 3.6), "failure": (7.0, 4.7),
+        "times": [0.0, 2.2, 3.0, 4.4, 4.8, 6.4],
+    },
+    "sputnik-2-ascent": {
+        "pad": False, "source": "ascent", "skin": "sp2-",
+        "success": (6.5, 3.6), "glitch": (6.5, 4.0), "failure": (7.0, 3.4),
+        "times": [0.0, 1.5, 2.9, 3.4, 4.2, 6.4],
+    },
+    "sputnik-2-deployment": {
+        "pad": False, "source": "deployment", "skin": "sp2-",
+        "success": (6.0, 2.6), "glitch": (6.0, 2.6), "failure": (6.5, 2.3),
+        "times": [0.5, 1.2, 1.9, 2.4, 3.6, 5.9],
+    },
+    "sputnik-2-earth-orbit": {
+        "pad": False, "source": "earth-orbit", "skin": "sp2-",
+        "success": (6.0, 2.1), "glitch": (6.0, 3.4), "failure": (6.5, 3.0),
+        "times": [0.5, 2.0, 2.8, 3.6, 4.6, 5.9],
+    },
+    "sputnik-2-biometric-data-transmission": {
+        "pad": False, "source": "biometric-data-transmission", "skin": "sp2-", "before": ["orbit.jsx"],
+        "success": (6.0, 2.6), "glitch": (6.0, 3.8), "failure": (6.0, 3.8),
+        "times": [0.5, 1.8, 2.6, 3.2, 4.4, 5.9],
+    },
+    # Vostok's own (2026-10-18, user; the early-era pack): the generic timelines with its spacecraft ("skin": the vk-
+    # parts), as Mercury's; the climb throws its fairing off as Mercury's tower (a-les), and the separation's cable
+    # meets its module (project-vostok.jsx).
+    "vostok-launch-preparations": {
+        "pad": True, "source": "launch-preparations", "skin": "vk-",
+        "success": (6.4, 2.6), "glitch": (6.4, 3.5), "failure": (7.0, 3.1),
+        "times": [0.5, 2.0, 2.8, 3.4, 4.6, 6.4],
+    },
+    "vostok-countdown": {
+        "pad": True, "source": "countdown", "skin": "vk-",
+        "success": (6.4, 4.8), "glitch": (7.2, 3.6), "failure": (7.0, 4.7),
+        "times": [0.0, 2.2, 3.0, 4.4, 4.8, 6.4],
+    },
+    "vostok-ascent": {
+        "pad": False, "source": "ascent", "skin": "vk-", "alias": {"debris-1": "vk-debris-1-bare"},
+        "success": (6.5, 3.6), "glitch": (6.5, 4.0), "failure": (7.0, 3.4),
+        "times": [0.0, 1.5, 2.9, 3.4, 4.2, 6.4],
+    },
+    "vostok-deployment": {
+        "pad": False, "source": "deployment", "skin": "vk-",
+        "success": (6.0, 2.6), "glitch": (6.0, 2.6), "failure": (6.5, 2.3),
+        "times": [0.5, 1.2, 1.9, 2.4, 3.6, 5.9],
+    },
+    "vostok-suborbital-flight": {
+        "pad": False, "source": "suborbital-flight", "skin": "vk-", "mirror": True, "before": ["motes.jsx"],
+        "success": (6.4, 3.4), "glitch": (6.4, 4.0), "failure": (6.4, 3.6),
+        "times": [0.5, 1.8, 2.8, 3.4, 4.4, 6.3],
+    },
+    "vostok-earth-orbit": {
+        "pad": False, "source": "earth-orbit", "skin": "vk-",
+        "success": (6.0, 2.1), "glitch": (6.0, 3.4), "failure": (6.5, 3.0),
+        "times": [0.5, 2.0, 2.8, 3.6, 4.6, 5.9],
+    },
+    "vostok-duration-level-i": {
+        "pad": False, "source": "duration-level-i", "skin": "vk-", "before": ["orbit.jsx"], "after": ["duration.jsx"],
+        "success": (6.4, 2.6), "glitch": (6.4, 3.8), "failure": (6.4, 3.6),
+        "times": [0.5, 2.0, 2.6, 3.4, 4.4, 6.3],
+    },
+    "vostok-duration-level-ii": {
+        "pad": False, "source": "duration-level-ii", "skin": "vk-", "before": ["orbit.jsx"], "after": ["duration.jsx"],
+        "success": (6.4, 2.6), "glitch": (6.4, 3.8), "failure": (6.4, 3.6),
+        "times": [0.5, 2.0, 2.6, 3.4, 4.4, 6.3],
+    },
+    "vostok-reentry-preparations": {
+        "pad": False, "source": "reentry-preparations", "skin": "vk-", "mirror": True, "before": ["motes.jsx"],
+        "success": (6.0, 3.0), "glitch": (6.0, 3.6), "failure": (6.5, 3.4),
+        "times": [0.5, 1.6, 2.4, 3.2, 4.4, 5.9],
+    },
+    "vostok-reentry-trim": {
+        "pad": False, "source": "reentry-trim", "skin": "vk-", "mirror": True, "before": ["motes.jsx"],
+        "success": (6.0, 3.0), "glitch": (6.0, 3.4), "failure": (6.0, 3.0),
+        "times": [0.5, 1.6, 2.4, 3.0, 4.0, 5.9],
+    },
+    "vostok-retrofire": {
+        "pad": False, "source": "retrofire", "skin": "vk-", "mirror": True, "before": ["motes.jsx"],
+        "success": (6.4, 2.6), "glitch": (6.4, 3.0), "failure": (6.4, 3.0),
+        "times": [0.5, 1.4, 2.0, 2.8, 3.8, 6.3],
+    },
+    "vostok-retro-shutdown": {
+        "pad": False, "source": "retro-shutdown", "skin": "vk-", "mirror": True, "before": ["motes.jsx"],
+        "success": (4.4, 1.4), "glitch": (4.4, 2.8), "failure": (5.2, 3.0),
+        "times": [0.2, 0.8, 1.6, 2.4, 3.4, 4.3],
+    },
+    "vostok-modules-separation": {
+        "pad": False, "source": "modules-separation", "skin": "vk-", "mirror": True, "before": ["project-vostok.jsx", "motes.jsx"],
+        "success": (5.6, 1.8), "glitch": (5.6, 3.6), "failure": (6.4, 3.8),
+        "times": [0.5, 1.0, 1.6, 2.6, 3.6, 5.5],
+    },
+    "vostok-reentry": {
+        "pad": False, "source": "reentry", "skin": "vk-", "mirror": True,
+        "success": (6.4, 4.0), "glitch": (6.4, 4.4), "failure": (6.4, 3.4),
+        "times": [0.4, 1.6, 2.6, 3.4, 4.6, 6.3],
+    },
+    "vostok-rendezvous": {
+        "pad": False, "source": "rendezvous-target-approach", "skin": "vk-", "before": ["orbit.jsx"],
+        "success": (6.0, 2.6), "glitch": (6.0, 3.0), "failure": (6.0, 3.0),
+        "times": [0.5, 1.8, 2.4, 2.8, 4.0, 5.9],
+    },
+    "vostok-descent-and-landing": {
+        "pad": False, "source": "descent-and-landing", "skin": "vk-", "after": ["descent.jsx"],
+        "success": (6.4, 2.4), "glitch": (6.4, 3.4), "failure": (6.4, 2.6),
+        "times": [0.5, 1.4, 2.2, 3.0, 4.2, 6.3],
+    },
     # Project Gemini's own (2026-10-17): the generic timelines ("source") with its spacecraft ("skin": the gm- parts),
     # its adapter's equipment section on until the reentry preparations drop it (adapter.jsx), its retros
     # rippled (project-gemini.jsx) and its descent on two points (two-point.jsx); and the Agena's launch (ag-).

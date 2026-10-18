@@ -59,7 +59,9 @@ fade("r-pyro", function (t) { return t >= BOLTS && t < BOLTS + 0.25 ? 1 : 0; });
 
 // The cable, from the capsule's base to the module's near end, in the world (aimed and stretched
 // each frame). The capsule's base and the module's end, at the carrier's 0, from parts.py.
-var RC = [960, 470], BASE = [812, 470], MOD = [788, 470], END = 24;
+// A craft's own module (project-vostok.jsx) has its own pivot and near end.
+var RC = [960, 470], BASE = [812, 470];
+var MOD = typeof MODULE_AT !== "undefined" ? MODULE_AT : [788, 470], END = typeof MODULE_END !== "undefined" ? MODULE_END : 24;
 function rot(p, c, deg) {
     var a = deg * RAD, dx = p[0] - c[0], dy = p[1] - c[1];
     return [c[0] + dx * Math.cos(a) - dy * Math.sin(a), c[1] + dx * Math.sin(a) + dy * Math.cos(a)];

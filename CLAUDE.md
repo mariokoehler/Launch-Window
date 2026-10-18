@@ -198,7 +198,8 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   experiments and teardown; a stand-up, out on the tether, a photo and back in, docked to the Agena; on a rendezvous,
   beside the other Gemini, whose crewman takes the pictures. The Earth-orbit tests of the circumlunar, lunar-orbital
   and direct-ascent Gemini fly Gemini too, with their Transtage, propulsion module and direct-ascent craft (user,
-  2026-10-18). Client only.
+  2026-10-18). Vostok (`vk-`, Korabl-Sputnik 2 too), Sputnik 1, Explorer 1 and Sputnik 2 fly as themselves (user,
+  2026-10-18): the early-era pack has no generic craft left. Client only.
 
 ## How we work
 

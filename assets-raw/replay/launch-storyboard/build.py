@@ -32,7 +32,9 @@ REVEAL = {"success": 3.2, "glitch": 3.5, "failure": 3.3}
 # A craft's own launch: its parts' prefix in the steps' layers, the clip's name, and any parts in place of the
 # prefix's (2026-10-18: the lunar Gemini programs' stacks, Gemini's skin with the stack on the rocket).
 SKINS = {"mercury": ("mc-", "mercury-launch"), "gemini": ("gm-", "gemini-launch"), "agena": ("ag-", "agena-launch"),
-         "transtage": ("tt-", "transtage-launch")}
+         "transtage": ("tt-", "transtage-launch"), "vostok": ("vk-", "vostok-launch"),
+         "sputnik-1": ("sp1-", "sputnik-1-launch"), "explorer-1": ("ex1-", "explorer-1-launch"),
+         "sputnik-2": ("sp2-", "sputnik-2-launch")}
 for _key, _prefix in (("gemini-transtage", "gt"), ("gemini-lpm", "gl"), ("gemini-da", "gd")):
     SKINS[_key] = ("gm-", f"{_key}-launch", {"rocket": f"{_prefix}-rocket", "debris-1": f"{_prefix}-debris-1"})
 
@@ -82,7 +84,8 @@ def main():
     subprocess.run([CLI, "script", script, "--empty", "--save-as", project], check=True)
     rows = []
     for i, t in enumerate(times, 1):
-        out = os.path.join(BUILD, f"{key}_{t}.png")
+        # Named for the clip, so skins built side by side don't overwrite each other's frames.
+        out = os.path.join(BUILD, f"{name}-{key}_{t}.png")
         subprocess.run([CLI, "render-frame", "--project", project, "--comp", "Launch " + board,
                         "--time", str(t), "--max-side", "640", "--out", out], check=True, capture_output=True)
         rows.append((sheets.render(f"{board}{i}.dc.html", 640), Image.open(out).convert("RGB")))

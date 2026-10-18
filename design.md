@@ -558,6 +558,10 @@ leading to satellite navigation.
   lines to every station, which were expensive; they keyed the stations from Mercury through Apollo.
   Generated for the game in `assets-raw/audio/quindar/` (2026-10-14). Sources: Wikipedia ("Quindar tones"),
   NASA's Apollo Lunar Surface Journal ("Quindar tones").
+- **Vostok's shape** (the replay's Vostok, 2026-10-18): a spherical descent module 2.3 m across (about 2.46 t),
+  which carried the cosmonaut, and a biconical instrument module 2.25 m long and 2.43 m across with the
+  propellant and the retro engine; 4.55 m end to end. Sources: Wikipedia ("Vostok (spacecraft)"), Gunter's
+  Space Page (Vostok-3K).
 - **The Transtage** (the replay's lunar Gemini tests, 2026-10-18): the Titan III's restartable top stage was
   compact, 3.05 m across and 4.57 m long, with two Aerojet AJ10-138 engines of about 36 kN each, burning fuels that
   light on contact. Sources disagree on its length (one gives 7.6 m, which may count the interstage); the replay
