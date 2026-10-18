@@ -62,9 +62,12 @@ function onEllipse(k, peri, tau) {
 }
 // Moves the craft along where(t), nose along its way (from the way it moves).
 function flyAlong(where) {
+    // Nose first, or with HO_TAIL_FIRST (tail-first.jsx) blunt end first, as it stays from a retrofire to the pack's
+    // jettison.
+    var back = typeof HO_TAIL_FIRST !== "undefined" && HO_TAIL_FIRST ? 180 : 0;
     move("o-sat", function (t) { var p = where(t); return [p[0] - OCX, p[1] - OCY]; });
     turn("o-sat", function (t) {
         var a = where(Math.max(0, t - 0.02)), b = where(t + 0.02);
-        return Math.atan2(b[1] - a[1], b[0] - a[0]) / RAD + 90;
+        return Math.atan2(b[1] - a[1], b[0] - a[0]) / RAD + 90 + back;
     });
 }
