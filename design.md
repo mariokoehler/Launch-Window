@@ -558,6 +558,10 @@ leading to satellite navigation.
   lines to every station, which were expensive; they keyed the stations from Mercury through Apollo.
   Generated for the game in `assets-raw/audio/quindar/` (2026-10-14). Sources: Wikipedia ("Quindar tones"),
   NASA's Apollo Lunar Surface Journal ("Quindar tones").
+- **The Transtage** (the replay's lunar Gemini tests, 2026-10-18): the Titan III's restartable top stage was
+  compact, 3.05 m across and 4.57 m long, with two Aerojet AJ10-138 engines of about 36 kN each, burning fuels that
+  light on contact. Sources disagree on its length (one gives 7.6 m, which may count the interstage); the replay
+  draws 4.57. Sources: Wikipedia ("Transtage", "Titan IIIC").
 - **Rendezvous is counterintuitive** and **restarting an engine in zero-g is hard:** both now
   explainers (E-02, E-04 above).
 - **The R-16 disaster** (Baikonur, 24 October 1960) for a later memorial or news context,

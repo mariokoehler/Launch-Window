@@ -1723,6 +1723,124 @@ def agena_target(w=2.4):
             f'<path d="M954 540 L960 528 L966 540" fill="none" {LINE} stroke-width="{w * 0.7:.2f}"/>')
 
 
+# The lunar Gemini programs' hardware (2026-10-18), in Gemini's frame f (its units about a metre: the adapter's
+# base 3.05 m across, at GM_EQUIP_Y, where it sits on the rocket). The Transtage: the Titan III's top stage,
+# 3.05 m across and 4.57 m long, two engines (AJ10-138) at its foot. The lunar propulsion module and the
+# direct-ascent craft were proposals: their shapes follow our blueprints, their sizes unconfirmed.
+TT_LEN = 4.57
+
+
+def gm_shift(body, f, dy):
+    """A drawing in frame f moved up dy units."""
+    return f'<g transform="translate(0 {-dy * f[3]:.1f})">{body}</g>'
+
+
+def bells(f, y, xs, length, throat, exit_, k=1.0):
+    """Engine bells hanging from y (units) at each x, down length."""
+    return "".join(gm_poly(f, [(x - throat, y), (x - exit_, y - length), (x + exit_, y - length), (x + throat, y)],
+                           "#ffffff", f"{2.4 * k:.2f}") for x in xs)
+
+
+def transtage_body(f, y0, k=1.0):
+    """The Transtage's drum from y0 up TT_LEN, its bands."""
+    w = lambda x: f"{x * k:.2f}"
+    out = gm_poly(f, [(-GM_EQUIP, y0), (-GM_EQUIP, y0 + TT_LEN), (GM_EQUIP, y0 + TT_LEN), (GM_EQUIP, y0)], "#ffffff", w(2.4))
+    out += "".join(f'<path d="M{gm_pt(f, -GM_EQUIP, y0 + u)} L{gm_pt(f, GM_EQUIP, y0 + u)}" fill="none" {LINE} '
+                   f'stroke-width="{w(1.2)}" opacity="0.6"/>' for u in (0.9, TT_LEN - 0.9))
+    # A dark panel band round its middle, as the blueprint has.
+    out += gm_poly(f, [(-GM_EQUIP, y0 + 1.7), (-GM_EQUIP, y0 + 2.9), (GM_EQUIP, y0 + 2.9), (GM_EQUIP, y0 + 1.7)], GM_DARK, w(1.6),
+                   ' opacity="0.7"')
+    return out
+
+
+def transtage_dock(f, y0, k=1.0):
+    """The docking adapter on the Transtage's top (y0): a shoulder, a neck and the cone, its mouth y0 + 1.1 up."""
+    w = f"{2.4 * k:.2f}"
+    return (gm_poly(f, [(-GM_EQUIP, y0), (-0.6, y0 + 0.35), (0.6, y0 + 0.35), (GM_EQUIP, y0)], "#ffffff", w)
+            + gm_poly(f, [(-0.6, y0 + 0.35), (-0.6, y0 + 0.75), (0.6, y0 + 0.75), (0.6, y0 + 0.35)], "#ffffff", w)
+            + gm_poly(f, [(-0.6, y0 + 0.75), (-1.0, y0 + 1.1), (1.0, y0 + 1.1), (0.6, y0 + 0.75)], "#ffffff", w))
+
+
+def transtage_launch(f, shroud=True, k=1.0):
+    """The Transtage alone on the rocket (its foot on the rocket's top), under a shroud or bare with its engines."""
+    y0 = GM_EQUIP_Y
+    out = "" if shroud else bells(f, y0, (-0.6, 0.6), 0.9, 0.18, 0.42, k)
+    out += transtage_body(f, y0, k)
+    top = y0 + TT_LEN
+    if shroud:
+        out += (f'<path d="M{gm_pt(f, -GM_EQUIP, top)} Q{gm_pt(f, -GM_EQUIP, top + 2.2)} {gm_pt(f, 0, top + 2.9)} '
+                f'Q{gm_pt(f, GM_EQUIP, top + 2.2)} {gm_pt(f, GM_EQUIP, top)} Z" fill="#ffffff" {LINE} stroke-width="{3 * k:.2f}"/>')
+    else:
+        out += transtage_dock(f, top, k)
+    return out
+
+
+def gemini_on_transtage(f, bare):
+    """Gemini launched on top of its Transtage (the circumlunar heat-shield test): the stage's engines below."""
+    y0 = GM_EQUIP_Y
+    out = bells(f, y0, (-0.6, 0.6), 0.9, 0.18, 0.42) if bare else ""
+    return out + transtage_body(f, y0) + gm_shift(gemini_whole(f), f, TT_LEN)
+
+
+def gemini_docked_transtage(f):
+    """Gemini docked nose first into a Transtage's cone (the Transtage test's burn): the stage's engines below."""
+    y0 = GM_EQUIP_Y
+    top = y0 + TT_LEN
+    mouth = top + 1.1
+    # Gemini upside down, its nose (3.45 up) 0.25 inside the cone's mouth: y' = c - y.
+    c = mouth - 0.25 + 3.45
+    flip = f'<g transform="translate(0 {1000 - c * f[3]:.1f}) scale(1 -1)">{gemini_whole(f)}</g>'
+    return bells(f, y0, (-0.6, 0.6), 0.9, 0.18, 0.42) + transtage_body(f, y0) + flip + transtage_dock(f, top)
+
+
+LPM_H = 1.6
+
+
+def gemini_on_lpm(f, bare):
+    """Gemini with the lunar propulsion module behind its adapter: a short frustum, wider at its foot, one engine."""
+    y0 = GM_EQUIP_Y
+    out = bells(f, y0, (0,), 0.9, 0.3, 0.75) if bare else ""
+    out += gm_poly(f, [(-1.85, y0), (-GM_EQUIP, y0 + LPM_H), (GM_EQUIP, y0 + LPM_H), (1.85, y0)], "#ffffff", "2.4")
+    # Its tanks' dark panels, round the middle.
+    out += "".join(gm_poly(f, [(x - 0.32, y0 + 0.4), (x - 0.29, y0 + 1.2), (x + 0.29, y0 + 1.2), (x + 0.32, y0 + 0.4)], GM_DARK,
+                           "1.6", ' opacity="0.8"') for x in (-1.1, 0, 1.1))
+    return out + gm_shift(gemini_whole(f), f, LPM_H)
+
+
+LAND_H, ASC_H = 1.5, 1.3
+
+
+def gemini_direct(f, bare):
+    """The direct-ascent craft: Gemini's reentry module on an ascent module on a landing module with its legs."""
+    y0 = GM_EQUIP_Y
+    out = bells(f, y0, (0,), 0.8, 0.28, 0.6) if bare else ""
+    # Out of the rocket, its two legs seen: struts splayed from the landing module's side, a pad at each foot.
+    if bare:
+        out += "".join(f'<path d="M{gm_pt(f, s * 1.55, y0 + 0.65)} L{gm_pt(f, s * 2.25, y0 - 0.55)} M{gm_pt(f, s * 1.95, y0 - 0.55)} '
+                       f'L{gm_pt(f, s * 2.55, y0 - 0.55)}" fill="none" {LINE} stroke-width="2.4"/>' for s in (-1, 1))
+    half = lambda u: 1.75 - 0.45 * u / LAND_H
+    out += gm_poly(f, [(-1.75, y0), (-1.3, y0 + LAND_H), (1.3, y0 + LAND_H), (1.75, y0)], "#ffffff", "2.4")
+    out += gm_poly(f, [(-half(0.45), y0 + 0.45), (-half(0.95), y0 + 0.95), (half(0.95), y0 + 0.95), (half(0.45), y0 + 0.45)],
+                   GM_DARK, "1.6", ' opacity="0.7"')
+    a0 = y0 + LAND_H
+    out += gm_poly(f, [(-1.3, a0), (-1.3, a0 + ASC_H), (1.3, a0 + ASC_H), (1.3, a0)], "#ffffff", "2.4")
+    out += "".join(gm_poly(f, [(x - 0.3, a0 + 0.35), (x - 0.3, a0 + 0.95), (x + 0.3, a0 + 0.95), (x + 0.3, a0 + 0.35)], GM_DARK,
+                           "1.6", ' opacity="0.8"') for x in (-0.75, 0.75))
+    return out + gm_shift(gemini_module(f), f, a0 + ASC_H)
+
+
+def transtage_target(w=2.4):
+    """The Transtage as a docking target, as agena_target: engines at the top, the cone's mouth at the bottom (y 540)."""
+    return (f'<path d="M922 270 L934 311 L946 311 L958 270 Z M962 270 L974 311 L986 311 L998 270 Z" fill="#ffffff" {LINE} '
+            f'stroke-width="{w}"/>'
+            f'<rect x="899" y="311" width="122" height="159" fill="#ffffff" {LINE} stroke-width="{w}"/>'
+            f'<rect x="899" y="370" width="122" height="44" fill="{GM_DARK}" opacity="0.7" {LINE} stroke-width="{w * 0.7:.2f}"/>'
+            f'<path d="M899 340 L1021 340 M899 444 L1021 444" fill="none" {LINE} stroke-width="{w * 0.5:.2f}" opacity="0.6"/>'
+            f'<path d="M899 470 L1021 470 L984 494 L936 494 Z" fill="#ffffff" {LINE} stroke-width="{w}"/>'
+            f'<rect x="936" y="494" width="48" height="26" fill="#ffffff" {LINE} stroke-width="{w}"/>'
+            f'<path d="M936 520 L984 520 L1000 540 L920 540 Z" fill="#ffffff" {LINE} stroke-width="{w}"/>')
+
+
 def gemini_parts():
     # Empty for everyone else: the main hung from two points (descent.jsx's TILT draws it).
     layer("r-main-2pt", "", (960, RC[1] - RK * (426 - 352)))
@@ -1850,6 +1968,26 @@ def gemini_parts():
     layer("ag-rocket", rocket[:nose] + agena_launch(), (960, 600))
     layer("ag-debris-1", agena_launch(), (960, 380))
     layer("ag-d-payload", f'<g transform="{big}"><g transform="{turn}">{agena_launch(shroud=False)}</g></g>', D_AT(914, 520))
+    # The lunar Gemini programs' own hardware (2026-10-18, user; their Earth-orbit tests): the Transtage alone (tt-,
+    # under a shroud on the rocket, bare with its docking cone, and the docking target), and four stacks on the
+    # rocket, in deployment and on the map, played as Gemini's skin with these parts in its place: Gemini on a
+    # Transtage (gt-), Gemini docked nose first into one (gtd-, on the map only), Gemini with the lunar
+    # propulsion module (gl-) and the direct-ascent craft (gd-).
+    stacks = {"gt": gemini_on_transtage, "gl": gemini_on_lpm, "gd": gemini_direct}
+    for key, draw in stacks.items():
+        layer(f"{key}-rocket", rocket[:nose] + draw(GM_L, False), (960, 600))
+        layer(f"{key}-debris-1", draw(GM_L, False), (960, 410))
+        layer(f"{key}-d-payload", f'<g transform="{big}"><g transform="{turn}">{draw(GM_L, True)}</g></g>', D_AT(914, 520))
+        thick = re.sub(r'stroke-width="[\d.]+"', 'stroke-width="5"', draw(GM_L, True))
+        layer(f"{key}-o-sat", f'<g transform="translate(960 560) scale(0.6) translate(-960 -426)">{thick}</g>', (960, 560))
+    thick = re.sub(r'stroke-width="[\d.]+"', 'stroke-width="5"', gemini_docked_transtage(GM_L))
+    layer("gtd-o-sat", f'<g transform="translate(960 560) scale(0.6) translate(-960 -426)">{thick}</g>', (960, 560))
+    layer("tt-rocket", rocket[:nose] + transtage_launch(GM_L, shroud=True), (960, 600))
+    layer("tt-debris-1", transtage_launch(GM_L, shroud=True), (960, 410))
+    layer("tt-d-payload", f'<g transform="{big}"><g transform="{turn}">{transtage_launch(GM_L, shroud=False)}</g></g>',
+          D_AT(914, 520))
+    tc = (KM[0] + KK * (540 - 426), KM[1])
+    layer("tt-k-target", KT(tc, 90, transtage_target()), KM)
 
 
 def main():

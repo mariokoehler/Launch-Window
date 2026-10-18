@@ -1,4 +1,4 @@
-"""Builds one launch variant from the storyboard: python build.py success|glitch|failure [render] [mercury|gemini|agena]
+"""Builds one launch variant from the storyboard: python build.py success|glitch|failure [render] [a skin in SKINS]
 
 Compares it with the storyboard frames (build/compare_<variant>.png: storyboard left, ours right,
 at each frame's time) and, with "render", renders build/launch-<variant>.webm at 1500 kbps.
@@ -29,8 +29,12 @@ VARIANTS = {"success": ("Success", 6.3, [0.0, 1.2, 2.0, 2.8, 4.2, 6.0]),
 # from 2.6 and the failure flickers from 3.0, so a success is certain once 3.0 has passed clean; the
 # glitch only once the engine catches (3.4); the failure once the engine cuts (3.2).
 REVEAL = {"success": 3.2, "glitch": 3.5, "failure": 3.3}
-# A craft's own launch: its parts' prefix in the steps' layers, and the clip's name.
-SKINS = {"mercury": ("mc-", "mercury-launch"), "gemini": ("gm-", "gemini-launch"), "agena": ("ag-", "agena-launch")}
+# A craft's own launch: its parts' prefix in the steps' layers, the clip's name, and any parts in place of the
+# prefix's (2026-10-18: the lunar Gemini programs' stacks, Gemini's skin with the stack on the rocket).
+SKINS = {"mercury": ("mc-", "mercury-launch"), "gemini": ("gm-", "gemini-launch"), "agena": ("ag-", "agena-launch"),
+         "transtage": ("tt-", "transtage-launch")}
+for _key, _prefix in (("gemini-transtage", "gt"), ("gemini-lpm", "gl"), ("gemini-da", "gd")):
+    SKINS[_key] = ("gm-", f"{_key}-launch", {"rocket": f"{_prefix}-rocket", "debris-1": f"{_prefix}-debris-1"})
 
 
 def kink():
@@ -64,7 +68,9 @@ def main():
         f.write("var DIR = " + json.dumps(os.path.join(src, "layers").replace("\\", "/") + "/") + ";\n")
         f.write("var L = " + json.dumps(layers) + ";\n")
         if skin:
-            f.write("var ALIAS = " + json.dumps({n[len(skin[0]):]: n for n in layers if n.startswith(skin[0])}) + ";\n")
+            alias = {n[len(skin[0]):]: n for n in layers if n.startswith(skin[0])}
+            alias.update(skin[2] if len(skin) > 2 else {})
+            f.write("var ALIAS = " + json.dumps(alias) + ";\n")
         f.write(f"var VARIANT = {json.dumps(board)}, DUR = {dur};\n")
         f.write("var KINK = " + json.dumps(kink()) + ";\n")
         f.write("var FALL = " + json.dumps(falls()) + ";\n")

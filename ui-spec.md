@@ -2001,11 +2001,16 @@ clips, the replay is meant to be watched like a short film, and the player can s
   it, the pictures after; or the visor fogs, the walker is hauled in, and the photographer goes back in too). Any
   other Gemini `eva` plays the out-on-the-tether clip from a closed hatch, ending outside. Rules tell them apart by
   `later` and `after`. Unconfirmed. The Earth-orbit tests of circumlunar Gemini, lunar-orbital Gemini and Gemini
-  direct ascent fly Gemini too (user, 2026-10-18): the Gemini rules name their programs, and the trans-lunar burn
-  (`gemini-tli`) and the Earth approach (`gemini-earth-approach`) have Gemini versions. Their own modules aren't
-  drawn yet: the Transtage test's first launch, which carries the Transtage alone, stays generic (rules by
-  `earlier: deployment` and `later: docking`), its approach, docking and undocking have Gemini with the plain target,
-  not the Agena (`gemini-*-stage`), and the direct ascent's landing-module test keeps the generic lander. Unconfirmed.
+  direct ascent fly Gemini too, with their own hardware (user, 2026-10-18): the Gemini rules name their programs, and
+  a stack takes Gemini's place on the pad, in the climb, the deployment and on the map (`parts.py`'s `gt-`, `gl-`,
+  `gd-`). The circumlunar heat-shield test flies Gemini on top of its Transtage up to the trans-lunar burn; the
+  Transtage test launches the Transtage alone first (`transtage-*`, under a shroud; rules by `earlier: deployment`
+  and `later: docking`), docks Gemini to it (the Transtage the target) and burns docked nose first
+  (`gemini-transtage-docked-tli`). The lunar-orbit tests fly Gemini with its propulsion module behind the adapter
+  (`gemini-lpm-*`), the direct-ascent tests Gemini's reentry module on an ascent and a landing module (`gemini-da-*`);
+  their module tests are the insertion's burn on the map. The stack is gone at the reentry preparations, without
+  a clip for its parting. The Transtage's size is real (3.05 by 4.57 m, two engines); the propulsion module's and the
+  direct-ascent craft's shapes follow our blueprints, their sizes unconfirmed.
   The lunar Gemini programs themselves (direct ascent, EOR, circumlunar, lunar orbital) and Gemini EOR's Earth-orbit
   tests are a later package; Gemini EOR's equipment-section separation drops the section before the turn, the wrong way round, to be
   fixed with them. Unconfirmed.

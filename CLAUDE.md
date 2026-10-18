@@ -197,7 +197,8 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   (`core`'s rule matching changed). Its spacewalks play in steps (user, 2026-10-18, `ui-spec.md` §4.7.3): setup,
   experiments and teardown; a stand-up, out on the tether, a photo and back in, docked to the Agena; on a rendezvous,
   beside the other Gemini, whose crewman takes the pictures. The Earth-orbit tests of the circumlunar, lunar-orbital
-  and direct-ascent Gemini fly Gemini too (user, 2026-10-18; their own modules not drawn yet). Client only.
+  and direct-ascent Gemini fly Gemini too, with their Transtage, propulsion module and direct-ascent craft (user,
+  2026-10-18). Client only.
 
 ## How we work
 
