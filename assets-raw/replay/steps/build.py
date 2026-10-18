@@ -1349,8 +1349,8 @@ STEPS = {
     },
     "gemini-lpm-trim": {
         "pad": False, "source": "high-orbit-trim", "skin": "gm-", "alias": {"o-sat": "gl-o-sat"}, "before": ["orbit.jsx", "high-orbit-scene.jsx"],
-        "success": (6.0, 1.4), "glitch": (6.0, 3.0), "failure": (6.0, 3.0),
-        "times": [0.5, 1.4, 2.0, 2.8, 3.4, 5.9],
+        "success": (7.0, 2.3), "glitch": (7.0, 3.2), "failure": (7.0, 3.2),
+        "times": [0.5, 1.2, 2.3, 3.2, 4.4, 6.9],
     },
     "gemini-lpm-return": {
         "pad": False, "source": "high-orbit-return", "skin": "gm-", "alias": {"o-sat": "gl-o-sat"}, "before": ["orbit.jsx", "high-orbit-scene.jsx"],
@@ -1369,8 +1369,8 @@ STEPS = {
     },
     "gemini-da-trim": {
         "pad": False, "source": "high-orbit-trim", "skin": "gm-", "alias": {"o-sat": "gd-o-sat"}, "before": ["orbit.jsx", "high-orbit-scene.jsx"],
-        "success": (6.0, 1.4), "glitch": (6.0, 3.0), "failure": (6.0, 3.0),
-        "times": [0.5, 1.4, 2.0, 2.8, 3.4, 5.9],
+        "success": (7.0, 2.3), "glitch": (7.0, 3.2), "failure": (7.0, 3.2),
+        "times": [0.5, 1.2, 2.3, 3.2, 4.4, 6.9],
     },
     "gemini-da-return": {
         "pad": False, "source": "high-orbit-return", "skin": "gm-", "alias": {"o-sat": "gd-o-sat"}, "before": ["orbit.jsx", "high-orbit-scene.jsx"],

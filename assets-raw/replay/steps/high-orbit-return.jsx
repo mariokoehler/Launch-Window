@@ -12,9 +12,9 @@ var BIG = kepler(HO_RP, HO_RA), DOWN = kepler(HO_ENTRY, HO_RA), HIGH = kepler(33
 hide("o-ellipse");
 turn("o-ellipse-down", function () { return PERI - 90; });
 hoCorridor(PERI);
-// Seconds past the high point: on from the trim's end (0.3 a second there), then on to just short of the low
-// point by the end, quickening.
-var S0 = 6.0 - HO_END + 6.0 - BIG.period / 2 + 0.3 * 6.0, S1 = DOWN.period / 2 - 0.25;
+// Seconds past the high point: on from the trim's end (7.0 s at 0.3 a second there), then on to just short of
+// the low point by the end, quickening.
+var S0 = 6.0 - HO_END + 6.0 - BIG.period / 2 + 0.3 * 7.0, S1 = DOWN.period / 2 - 0.25;
 var past = function (t) { var u = clamp(t / 6.0, 0, 1); return S0 + (S1 - S0) * (0.55 * u + 0.45 * u * u); };
 var off = function (t) {
     if (!(glitch || failure) || t < DRIFT) return 0;
