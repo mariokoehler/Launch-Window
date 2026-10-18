@@ -200,7 +200,10 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   and direct-ascent Gemini fly Gemini too, with their Transtage, propulsion module and direct-ascent craft (user,
   2026-10-18). Vostok (`vk-`, Korabl-Sputnik 2 too), Sputnik 1, Explorer 1 and Sputnik 2 fly as themselves (user,
   2026-10-18): the early-era pack has no generic craft left. Voskhod too, with its soft landing and Leonov's spacewalk,
-  and Soyuz 7K-OK, its orbital module on the nose, and Apollo, its CSM and its lunar module (user, 2026-10-18). Rockets stay generic (user: the report doesn't
+  and Soyuz 7K-OK, its orbital module on the nose, and Apollo, its CSM and its lunar module (user, 2026-10-18). Circumlunar Gemini's Earth-orbit tests no
+  longer call their Transtage burn a trans-lunar injection: the converter renames it `high-orbit-injection`, and
+  the replay shows the long ellipse it puts the capsule on (user, 2026-10-18). The pack hash changed: reset the
+  dev data root, rebuild client and server together. Rockets stay generic (user: the report doesn't
   say which flew). Client only.
 
 ## How we work

@@ -2015,6 +2015,10 @@
       "name": "Transtage burn",
       "description": "The Transtage fires to push the capsule toward the Moon, then separates."
     },
+    "high-orbit-injection": {
+      "name": "High-orbit injection",
+      "description": "A burn that stretches the orbit into a long ellipse, out far from the Earth and back, so the capsule falls into the air at nearly the speed of a return from the Moon."
+    },
     "tli": {
       "name": "Trans-lunar injection",
       "description": "The burn that breaks out of Earth orbit onto a path to the Moon."

@@ -47966,7 +47966,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "07-tli",
+            "id": "07-high-orbit-injection",
             "componentInvolvements": [
               {
                 "componentId": "gemini-capsule",
@@ -49175,7 +49175,7 @@
             ]
           },
           {
-            "id": "14-tli",
+            "id": "14-high-orbit-injection",
             "componentInvolvements": [
               {
                 "componentId": "gemini-capsule",

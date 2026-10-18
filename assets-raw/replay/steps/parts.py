@@ -218,6 +218,10 @@ def orbit_parts():
           (cx, cy))
     layer("o-orbit", f'<circle cx="{cx}" cy="{cy}" r="390" fill="none" stroke="{GOLD}" stroke-width="3" stroke-dasharray="14 12" opacity="0.8"/>',
           (cx, cy))
+    # A long ellipse round the Earth (2026-10-18, high-orbit-scene.jsx): the Earth at its focus, its low point 390
+    # below, its high point 1100 above (the timeline turns it to where the burn ends); thicker, as the camera is back.
+    layer("o-ellipse", f'<ellipse cx="{cx}" cy="{cy - 355.0}" rx="655.0" ry="745.0" fill="none" stroke="{GOLD}" stroke-width="5" '
+                       f'stroke-dasharray="22 18" opacity="0.8"/>', (cx, cy))
     # The payload, small, nose up (it turns to face its way), and the glow when it comes down.
     # Thicker lines, so it still reads at 0.6 of its size on the replay's small monitor.
     sat = re.sub(r'stroke-width="[\d.]+"', 'stroke-width="5"', board_group("debris-1"))

@@ -1316,15 +1316,23 @@ STEPS = {
         "success": (6.0, 2.1), "glitch": (6.0, 3.4), "failure": (6.5, 3.0),
         "times": [0.5, 2.0, 2.8, 3.6, 4.6, 5.9],
     },
-    "gemini-transtage-tli": {
-        "pad": False, "source": "tpi", "skin": "gm-", "alias": {"rocket": "gt-rocket", "debris-1": "gt-debris-1", "d-payload": "gt-d-payload", "o-sat": "gt-o-sat"}, "before": ["orbit.jsx"],
+    # Circumlunar Gemini's heat-shield test (2026-10-18, user): the Transtage's burn stretches the orbit into a long
+    # ellipse (no trans-lunar injection: nothing leaves the Earth), and the capsule coasts out along it
+    # (high-orbit-scene.jsx); the Transtage test burns docked.
+    "gemini-transtage-hoi": {
+        "pad": False, "source": "high-orbit-injection", "skin": "gm-", "alias": {"o-sat": "gt-o-sat"}, "before": ["orbit.jsx", "high-orbit-scene.jsx"],
         "success": (6.0, 2.0), "glitch": (6.0, 3.2), "failure": (6.0, 3.0),
         "times": [0.5, 1.4, 2.0, 2.8, 3.8, 5.9],
     },
-    "gemini-transtage-docked-tli": {
-        "pad": False, "source": "tpi", "skin": "gm-", "alias": {"o-sat": "gtd-o-sat"}, "before": ["orbit.jsx"],
+    "gemini-transtage-docked-hoi": {
+        "pad": False, "source": "high-orbit-injection", "skin": "gm-", "alias": {"o-sat": "gtd-o-sat"}, "before": ["orbit.jsx", "high-orbit-scene.jsx"],
         "success": (6.0, 2.0), "glitch": (6.0, 3.2), "failure": (6.0, 3.0),
         "times": [0.5, 1.4, 2.0, 2.8, 3.8, 5.9],
+    },
+    "gemini-high-orbit": {
+        "pad": False, "source": "high-orbit", "skin": "gm-", "before": ["orbit.jsx", "high-orbit-scene.jsx"],
+        "success": (6.0, 2.1), "glitch": (6.0, 3.4), "failure": (6.0, 3.4),
+        "times": [0.5, 1.8, 2.2, 3.0, 4.0, 5.9],
     },
     # The Transtage alone: its own launch (as the Agena's), and the target of the Transtage test's docking.
     "transtage-launch-preparations": {

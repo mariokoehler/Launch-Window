@@ -2762,6 +2762,11 @@ first (login → action → scheduled resolution → result, end to end) before 
     converter swaps the pair back, each step keeping its own data and its number in the order
     (`20-retrofire-jettison, 21-retrofire` becomes `20-retrofire, 21-retrofire-jettison`; backup
     `.bak-preswap`). The order is BASPM's only here.
+  - **Circumlunar Gemini's Earth-orbit tests (user, 2026-10-18):** BASPM names the Transtage's burn a trans-lunar
+    injection (`tli`), but nothing leaves Earth orbit: it stretches the orbit into a long ellipse, so the capsule
+    comes back at nearly lunar-return speed (the heat-shield test; NASA did the same for Apollo on Apollo 4 and 6).
+    The converter renames the step `high-orbit-injection` for that program (both its configurations), with its own
+    text in `strings.json`. The pack hash changed.
   - **Gemini EOR comes home Gemini's way (user, 2026-10-16).** BASPM gives its six configurations with
     a way home the Soyuz order (retrofire, jettison, modules separation, or the last two alone). Gemini
     dropped its adapter's equipment section first, then fired the retros and dropped the retro section,
