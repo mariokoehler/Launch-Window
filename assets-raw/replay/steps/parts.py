@@ -220,6 +220,8 @@ def orbit_parts():
           (cx, cy))
     # A long ellipse round the Earth (2026-10-18, high-orbit-scene.jsx): the Earth at its focus, its low point 390
     # below, its high point 1100 above (the timeline turns it to where the burn ends); thicker, as the camera is back.
+    # A stage that parts from the payload on the map (empty unless a skin draws one, 2026-10-18).
+    layer("o-stage", "", (960, 560))
     layer("o-ellipse", f'<ellipse cx="{cx}" cy="{cy - 355.0}" rx="655.0" ry="745.0" fill="none" stroke="{GOLD}" stroke-width="5" '
                        f'stroke-dasharray="22 18" opacity="0.8"/>', (cx, cy))
     # The payload, small, nose up (it turns to face its way), and the glow when it comes down.
@@ -2645,6 +2647,13 @@ def gemini_parts():
         layer(f"{key}-d-payload", f'<g transform="{big}"><g transform="{turn}">{draw(GM_L, True)}</g></g>', D_AT(914, 520))
         thick = re.sub(r'stroke-width="[\d.]+"', 'stroke-width="5"', draw(GM_L, True))
         layer(f"{key}-o-sat", f'<g transform="translate(960 560) scale(0.6) translate(-960 -426)">{thick}</g>', (960, 560))
+    # The heat-shield test's stack on the map in two, overlaying gt-o-sat exactly (the same frame): Gemini and the
+    # Transtage under it, which lets go after the high-orbit injection (2026-10-18, high-orbit-injection.jsx's SEP).
+    th = lambda body: re.sub(r'stroke-width="[\d.]+"', 'stroke-width="5"', body)
+    on_map = lambda body: f'<g transform="translate(960 560) scale(0.6) translate(-960 -426)">{th(body)}</g>'
+    layer("gt-o-sat-gemini", on_map(gm_shift(gemini_whole(GM_L), GM_L, TT_LEN)), (960, 560))
+    layer("gt-o-sat-stage", on_map(bells(GM_L, GM_EQUIP_Y, (-0.6, 0.6), 0.9, 0.18, 0.42) + transtage_body(GM_L, GM_EQUIP_Y)),
+          (960, 560))
     thick = re.sub(r'stroke-width="[\d.]+"', 'stroke-width="5"', gemini_docked_transtage(GM_L))
     layer("gtd-o-sat", f'<g transform="translate(960 560) scale(0.6) translate(-960 -426)">{thick}</g>', (960, 560))
     layer("tt-rocket", rocket[:nose] + transtage_launch(GM_L, shroud=True), (960, 600))

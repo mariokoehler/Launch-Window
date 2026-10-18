@@ -5,12 +5,19 @@
 // Glitch: the burn cuts out at 1.6 and relights at 2.2; it reaches the same ellipse late, by 3.2.
 // Failure: the same cut, and the relight dies at 2.6: the burn falls short, and the craft climbs a much smaller
 // ellipse, well inside the planned one.
+// SEP (hoi-separate.jsx; the heat-shield test, user): the stage that burned lets go 0.4 s after the burn ends and
+// drifts back off the capsule's tail, tumbling slowly (o-stage, under o-sat, which is then the capsule alone).
 var glitch = VARIANT === "glitch", failure = VARIANT === "failure";
 var FIRE = 1.0, CUT = 1.6, RELIGHT = 2.2, DIES = 2.6, LATE = 3.2;
 
 hoScene(true);
 put("o-streak");
 layers["o-streak"].parent = layers["o-sat"];
+var SEP = typeof SEP !== "undefined" && SEP;
+if (SEP) {
+    put("o-stage", "o-sat");
+    layers["o-stage"].moveAfter(layers["o-sat"]);
+}
 
 function burning(t) {
     if (t < FIRE) return false;
@@ -53,3 +60,9 @@ if (glitch || failure) {
 flyAlong(where);
 fade("o-streak", function (t) { return burning(t) ? 1 : 0; });
 grow("o-streak", function (t) { return [1, 0.9 + 0.12 * Math.sin(2 * Math.PI * 11 * t)]; });
+if (SEP) {
+    // In the capsule's frame (nose up): back along its axis, slowly, and turning.
+    var PARTS = (glitch ? LATE : HO_END) + 0.4;
+    move("o-stage", function (t) { var u = Math.max(0, t - PARTS); return [6 * u, 36 * u + 10 * u * u]; });
+    turn("o-stage", function (t) { return 14 * Math.max(0, t - PARTS); });
+}
