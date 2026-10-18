@@ -768,6 +768,23 @@ def eva_parts():
     # The experiment package on the hull, ahead of the hatch; its pivot is where the hand takes it.
     layer("e-box", f'<rect x="958" y="356" width="34" height="24" rx="3" fill="url(#hatch)" {LINE} stroke-width="3"/>'
                    f'<rect x="958" y="356" width="34" height="24" rx="3" fill="{GOLD_FILL}"/>', (975, 360))
+    # The spacewalk's kit (2026-10-18, spacewalk.jsx's kit): what holds the package to the hull (none here, a
+    # craft's own skin draws one), the collector plate on its boom that rises out of the package (pivot where
+    # the boom leaves it, so it grows from there), the package's lamp, a micrometeoroid's spark, and the
+    # hand-held camera (drawn in the figure's hand at rest, pivot there) and its flash at the lens.
+    layer("e-mount", "", (975, 380))
+    layer("e-boom", f'<path d="M975 356 L975 322" fill="none" {LINE} stroke-width="4"/>'
+                    f'<rect x="951" y="306" width="48" height="16" rx="2" fill="url(#hatch)" {LINE} stroke-width="3"/>'
+                    f'<rect x="951" y="306" width="48" height="16" rx="2" fill="{GOLD_FILL}"/>'
+                    f'<path d="M967 306 L967 322 M983 306 L983 322" fill="none" {LINE} stroke-width="1.6"/>', (975, 356))
+    layer("e-lamp", f'<circle cx="985" cy="368" r="5" fill="{GOLD}" {LINE} stroke-width="2"/>', (985, 368))
+    layer("e-spark", f'<path d="M975 294 L980 307 L993 312 L980 317 L975 330 L970 317 L957 312 L970 307 Z" fill="{GOLD}" '
+                     f'stroke="{GOLD}" stroke-width="1.5" stroke-linejoin="round"/>', (975, 312))
+    layer("e-camera", f'<rect x="904" y="286" width="20" height="16" rx="2" fill="#ffffff" {LINE} stroke-width="3"/>'
+                      f'<rect x="924" y="289" width="7" height="10" rx="1" fill="#ffffff" {LINE} stroke-width="2.4"/>'
+                      f'<path d="M908 286 L910 281 L916 281 L918 286" fill="none" {LINE} stroke-width="2.4"/>', EH)
+    layer("e-flash", f'<path d="M944 284 L947 291 L955 294 L947 297 L944 304 L941 297 L933 294 L941 291 Z" fill="#ffffff" '
+                     f'stroke="{GOLD}" stroke-width="2.4" stroke-linejoin="round"/>', (944, 294))
 
 
 # --- On the Moon: the lander (two stages), the surface close up, the limb seen from low orbit ----------
@@ -1783,9 +1800,10 @@ def gemini_parts():
     layer("gm-e-hatch", f'<g transform="rotate({slope:.2f} {x1} {hy:.1f})"><rect x="{x0}" y="{hy - 8:.1f}" width="{x1 - x0}" '
                         f'height="10" rx="3" fill="{GM_DARK}" {LINE} stroke-width="3"/></g>', (x1, hy))
     rcs_top = RC[1] - EV_UP - RK * (0.49 * GM_R[2])
-    layer("gm-e-box", f'<path d="M966 380 L966 {rcs_top:.1f} M984 380 L984 {rcs_top:.1f}" fill="none" '
-                      f'{LINE} stroke-width="3"/>'
-                      f'<rect x="958" y="356" width="34" height="24" rx="3" fill="url(#hatch)" {LINE} stroke-width="3"/>'
+    # The mount stays on the hull when the package is taken (2026-10-18; the spacewalk's teardown).
+    layer("gm-e-mount", f'<path d="M966 380 L966 {rcs_top:.1f} M984 380 L984 {rcs_top:.1f}" fill="none" '
+                        f'{LINE} stroke-width="3"/>', (975, 380))
+    layer("gm-e-box", f'<rect x="958" y="356" width="34" height="24" rx="3" fill="url(#hatch)" {LINE} stroke-width="3"/>'
                       f'<rect x="958" y="356" width="34" height="24" rx="3" fill="{GOLD_FILL}"/>', (975, 360))
     # The Agena's own launch (its steps, "atv-", in a Gemini docking flight): on the rocket under its
     # shroud, and in the deployment with its docking cone bare.

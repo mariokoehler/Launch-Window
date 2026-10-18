@@ -194,7 +194,8 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   Mercury's is done: a step's `"skin"` in `build.py` draws `mc-<part>` for `<part>` (`motion.jsx`'s `ALIAS`), so
   the generic timelines play unchanged (`launch-storyboard/build.py <variant> mercury` for the launch). Client only.
   Gemini's is done too (`gm-`, and the Agena's own launch, `ag-`, picked by a rule's `"vehicle"`): rebuild the client
-  (`core`'s rule matching changed).
+  (`core`'s rule matching changed). Its spacewalks play in steps (user, 2026-10-18, `ui-spec.md` §4.7.3): setup,
+  experiments and teardown; a stand-up, out on the tether, a photo and back in. Client only.
 
 ## How we work
 

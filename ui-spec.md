@@ -1987,7 +1987,16 @@ clips, the replay is meant to be watched like a short film, and the player can s
   dropped (`adapter.jsx`; after the suborbital flight, which turns already, the trim then the drop); the retros lit
   one after another; the retrograde section jettisoned without straps; the main crossfading onto two points as the
   module tilts to 35 degrees nose up for the splash, upright again after it; the spacewalk's hatch on the cone and
-  the experiment on a mount. The lunar Gemini programs (direct ascent, EOR, circumlunar, lunar orbital) are a later
+  the experiment on a mount. Its spacewalks in steps (user, 2026-10-18): where three come in a row (`eva`,
+  `scientific-experiments`, `eva`) the first sets up the experiment (the collector plate rises out of the package on
+  its boom, the lamp comes on; glitch: the boom jams and a push frees it; failure: the visor fogs, Gemini 9A's), the
+  second runs it (micrometeoroid sparks on the plate; the lamp goes out and a tap brings it back, or doesn't), the
+  third takes it down and brings it in (the boom stalls and is pressed down, or the package is left on the hull). The
+  docking flights' `egress` is a stand-up in the hatch (the hatch sticks part open, Gemini 4's), and their two `eva`s
+  are out on the tether (the tumble and the gun, or the fog) and then a photo and back in (the camera slips and is
+  caught, or drifts away, Gemini 10's). The lone `eva` plays the out-on-the-tether clip from a closed hatch, ending
+  outside. Rules tell them apart by `later` and `after`. The docking flights' spacewalks show Gemini alone, without the
+  Agena docked at its nose (a later touch). Unconfirmed. The lunar Gemini programs (direct ascent, EOR, circumlunar, lunar orbital) are a later
   package; Gemini EOR's equipment-section separation drops the section before the turn, the wrong way round, to be
   fixed with them. Unconfirmed.
 - **The way home in one piece (user, 2026-10-17):** the suborbital flight had no motes, so they popped in at the

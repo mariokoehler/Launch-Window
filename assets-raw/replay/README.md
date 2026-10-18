@@ -173,6 +173,12 @@ Each folder's `build/` is regenerated on every run and stays out of git.
     it stands in the hatch (`handOn` puts its hand on a point), its tether aimed and stretched from
     the hatch every frame. The camera zooms in on the world null (1.35, or 1.2 for the transfer's two
     craft). `eva` and `crew-transfer` (`spacewalkScene(true)`: a second capsule, a collar, a rail).
+    Gemini's in steps (2026-10-18): `spacewalkScene(false, true)` adds the kit (`e-mount`, which only Gemini's skin
+    draws; the package's boom with its collector plate, `boom()`; its lamp; a spark, `sparks()`; the camera and its
+    flash, `handCam()` and `flashes()`), and `WORK` is where the figure works at the package. `eva-standup`,
+    `eva-out` (`eva-out-standing.jsx` sets `STANDING`: the timeline 1.4 s on, from the hatch), `eva-photo`,
+    `eva-setup`, `eva-experiments` and `eva-teardown` are published only as Gemini's (`gemini-eva-*`); each pair hands
+    off figure for figure (`check.py handoffs`), only the Earth's turn starting over.
   - **On the Moon** (2026-10-14): `moon.jsx`, the lander (`n-carrier` with the descent and ascent
     stages and their plumes) placed by offsets from where it stands on the surface, and a lamp panel
     fixed to the screen (`lamp("alarm" | "fuel", lit, blinking)`). `powered-descent` over the limb

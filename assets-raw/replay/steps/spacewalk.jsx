@@ -6,14 +6,28 @@ var EP = [870, 300], EW = [850, 300], EH = [916, 296], ANCHOR = [884, 380];
 var INSIDE = 150;
 
 // transfer: a second capsule docked nose to nose, with its own hatch and a handrail between them.
-function spacewalkScene(transfer) {
+// kit (2026-10-18, Gemini's spacewalks in steps): the package's mount, boom, lamp and spark, and the
+// camera and its flash, all hidden until a timeline shows them.
+function spacewalkScene(transfer, kit) {
     put("paper", "screen");
     put("d-earth");
     put("r-orbit");
+    if (kit) put("e-mount");
     put("e-box");
+    if (kit) {
+        put("e-boom", "e-box");
+        put("e-lamp", "e-box");
+        put("e-spark");
+    }
     put("e-suit");
     put("e-fog", "e-suit");
     put("e-gun", "e-suit");
+    if (kit) {
+        put("e-camera");
+        put("e-flash");
+        hide("e-lamp"); hide("e-spark"); hide("e-camera"); hide("e-flash");
+        tf(layers["e-boom"], "Scale").setValue([100, 1]);
+    }
     put("e-tether");
     put("r-capsule");
     put("e-hole");
@@ -65,6 +79,8 @@ function walk(pose) {
         return [Math.max(0.01, Math.sqrt(Math.pow(w[0] - ANCHOR[0], 2) + Math.pow(w[1] - ANCHOR[1], 2)) / 100), 1];
     });
     fade("e-tether", function (t) { return pose(t)[1] > 90 ? 0 : 1; });
+    // All the way in, it's gone (a foot would show under the hull, 2026-10-18).
+    fade("e-suit", function (t) { return pose(t)[1] > INSIDE - 10 ? 0 : 1; });
 }
 // The hatch opens over [a, a + 0.6] and closes over [c, c + 0.6] (the second capsule's: "e-hatch-b").
 function hatch(a, c, name) {
@@ -80,3 +96,36 @@ function carry(pose, grab) {
     });
     turn("e-box", function (t) { return t < grab ? 0 : pose(t)[2]; });
 }
+// The kit's motion (2026-10-18). The boom out of the package, 0 (in) to 1 (up); it shows only once out.
+function boom(fn) {
+    grow("e-boom", function (t) { return [1, Math.max(0.01, fn(t))]; });
+    fade("e-boom", function (t) { return fn(t) > 0.04 ? 1 : 0; });
+}
+// The camera in the hand (pose) while held(t), else where loose(t) puts it: [dx, dy, turn] from rest.
+function handCam(pose, held, loose) {
+    var at = function (t) {
+        if (held(t)) { var h = evaAt(pose(t), EH); return [h[0] - EH[0], h[1] - EH[1], pose(t)[2]]; }
+        return loose(t);
+    };
+    move("e-camera", function (t) { var a = at(t); return [a[0], a[1]]; });
+    turn("e-camera", function (t) { return at(t)[2]; });
+    return at;
+}
+// A flash at the lens at each of times, a tenth of a second long, the camera where cam(t) puts it.
+function flashes(cam, times) {
+    var on = function (t) { for (var i = 0; i < times.length; i++) if (t >= times[i] && t < times[i] + 0.1) return true; return false; };
+    move("e-flash", function (t) {
+        var c = cam(t), a = c[2] * RAD, x = 944 - EH[0], y = 294 - EH[1];
+        return [EH[0] + c[0] + x * Math.cos(a) - y * Math.sin(a) - 944, EH[1] + c[1] + x * Math.sin(a) + y * Math.cos(a) - 294];
+    });
+    fade("e-flash", function (t) { return on(t) ? 1 : 0; });
+}
+// Micrometeoroid hits on the plate: [[t, dx, dy], ...] from its middle, each a spark for 0.2 s.
+function sparks(hits) {
+    var at = function (t) { for (var i = 0; i < hits.length; i++) if (t >= hits[i][0] && t < hits[i][0] + 0.2) return hits[i]; return null; };
+    move("e-spark", function (t) { var h = at(t); return h ? [h[1], h[2]] : [0, 0]; });
+    grow("e-spark", function (t) { var h = at(t); return h ? 1 - 2 * (t - h[0]) : 1; });
+    fade("e-spark", function (t) { return at(t) ? 1 : 0; });
+}
+// Where the figure works at the package (a hand on its corner) and where it takes it.
+var WORK = handOn([957, 354], 25), TAKE = handOn([975, 360], 60);

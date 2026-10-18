@@ -630,6 +630,16 @@ leading to satellite navigation.
   The clips leave out the roll and the R&R section coming away. Sources: Wikipedia ("Project Gemini"), Gunter's
   Space Page (Gemini), the Gemini 12 press kit (NASA), the Project Gemini Familiarization Manual, the Gemini 3
   air-to-ground transcript (Spacelog), the Smithsonian's Gemini main parachute.
+- **Gemini's spacewalks, step by step** (the replay's spacewalk clips, 2026-10-18). Ed White's hatch on Gemini 4
+  (3 June 1965) wouldn't open at first: a spring that should have compressed to engage the latch gears hadn't,
+  a fault McDivitt had seen in a vacuum-chamber test. Closing it afterwards was worse, and it latched only with
+  White working the gears by hand and McDivitt pulling on him; it had to, for reentry. White steered with a
+  hand-held gun of compressed oxygen until it ran dry. On Gemini 9A (June 1966) Gene Cernan's visor fogged over as
+  he struggled to don the Air Force's manoeuvring unit, and the work was called off. Gemini 10, 11 and 12 (1966)
+  began their spacewalking with a stand-up EVA, standing in the open hatch to photograph stars and the Earth, and on
+  Gemini 10 Michael Collins's Hasselblad worked loose and drifted away while he was busy keeping his tether clear.
+  Sources: Wikipedia ("Gemini 4", "Gemini 10"), Smithsonian Air & Space ("The First U.S. Spacewalk"), Kosmofoto
+  (Collins's camera).
 
 ### 1.2 Content & asset policy: no copying BASPM's copyrighted content
 

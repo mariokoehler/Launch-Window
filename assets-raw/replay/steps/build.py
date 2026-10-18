@@ -627,10 +627,42 @@ STEPS = {
         "success": (6.4, 2.0), "glitch": (6.4, 3.0), "failure": (6.4, 3.4),
         "times": [0.5, 1.6, 2.6, 3.4, 4.4, 6.3],
     },
-    "gemini-eva": {
-        "pad": False, "source": "eva", "skin": "gm-", "alias": {"r-capsule": "gm-e-capsule"}, "before": ["spacewalk.jsx"],
-        "success": (6.0, 2.4), "glitch": (6.8, 3.0), "failure": (6.4, 3.0),
-        "times": [1.2, 2.0, 2.4, 2.8, 3.9, 5.9],
+    # Gemini's spacewalks in steps (2026-10-18, user): a stand-up in the hatch (egress), out on the tether
+    # (from inside, or on from the stand-up), a photo and back in; or an experiment set up, run and taken down.
+    "gemini-eva-standup": {
+        "pad": False, "source": "eva-standup", "skin": "gm-", "alias": {"r-capsule": "gm-e-capsule"}, "before": ["spacewalk.jsx"],
+        "success": (4.6, 1.0), "glitch": (5.6, 1.6), "failure": (4.2, 1.7),
+        "times": [0.6, 1.0, 1.6, 2.2, 3.2, 4.5],
+    },
+    "gemini-eva-out": {
+        "pad": False, "source": "eva-out", "skin": "gm-", "alias": {"r-capsule": "gm-e-capsule"}, "before": ["spacewalk.jsx"],
+        "success": (5.6, 2.6), "glitch": (6.0, 3.2), "failure": (6.6, 3.2),
+        "times": [1.2, 2.2, 2.8, 3.4, 4.4, 5.5],
+    },
+    "gemini-eva-out-standing": {
+        "pad": False, "source": "eva-out-standing", "skin": "gm-", "alias": {"r-capsule": "gm-e-capsule"}, "before": ["spacewalk.jsx"], "after": ["eva-out.jsx"],
+        "success": (4.2, 1.2), "glitch": (4.6, 1.8), "failure": (5.2, 1.8),
+        "times": [0.2, 0.8, 1.4, 2.0, 3.0, 4.1],
+    },
+    "gemini-eva-photo": {
+        "pad": False, "source": "eva-photo", "skin": "gm-", "alias": {"r-capsule": "gm-e-capsule"}, "before": ["spacewalk.jsx"],
+        "success": (5.2, 1.7), "glitch": (5.8, 2.4), "failure": (5.8, 2.3),
+        "times": [0.6, 1.2, 1.7, 2.4, 3.4, 5.1],
+    },
+    "gemini-eva-setup": {
+        "pad": False, "source": "eva-setup", "skin": "gm-", "alias": {"r-capsule": "gm-e-capsule"}, "before": ["spacewalk.jsx"],
+        "success": (4.6, 3.1), "glitch": (5.4, 3.6), "failure": (6.6, 3.8),
+        "times": [1.2, 2.4, 3.0, 3.5, 4.0, 4.5],
+    },
+    "gemini-eva-experiments": {
+        "pad": False, "source": "eva-experiments", "skin": "gm-", "alias": {"r-capsule": "gm-e-capsule"}, "before": ["spacewalk.jsx"],
+        "success": (5.0, 1.6), "glitch": (5.0, 2.2), "failure": (4.6, 2.7),
+        "times": [0.7, 1.2, 1.6, 2.1, 2.7, 4.5],
+    },
+    "gemini-eva-teardown": {
+        "pad": False, "source": "eva-teardown", "skin": "gm-", "alias": {"r-capsule": "gm-e-capsule"}, "before": ["spacewalk.jsx"],
+        "success": (4.8, 1.0), "glitch": (5.6, 1.8), "failure": (5.2, 2.0),
+        "times": [0.6, 1.0, 1.5, 2.0, 3.0, 4.7],
     },
     "gemini-rendezvous-target-approach": {
         "pad": False, "source": "rendezvous-target-approach", "skin": "gm-", "before": ["orbit.jsx"],
