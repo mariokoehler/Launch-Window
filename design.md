@@ -558,6 +558,15 @@ leading to satellite navigation.
   lines to every station, which were expensive; they keyed the stations from Mercury through Apollo.
   Generated for the game in `assets-raw/audio/quindar/` (2026-10-14). Sources: Wikipedia ("Quindar tones"),
   NASA's Apollo Lunar Surface Journal ("Quindar tones").
+- **Voskhod** (the replay's Voskhod, 2026-10-18): a Vostok made to carry two or three, with a solid-fuel backup
+  retro rocket on top of the descent sphere. Vostok hadn't needed one: its low orbit would have decayed within
+  about ten days if the retro failed, and Voskhod's heavier load flew higher. Its crew stayed aboard to the ground,
+  so a braking rocket hung in the parachute lines fired just before touchdown. Voskhod 2 (March 1965) carried
+  "Volga", an inflatable airlock on the sphere (its electronics were air-cooled, so the cabin couldn't be emptied),
+  jettisoned after Alexei Leonov's spacewalk, the first. Outside, his suit ballooned until he couldn't bend; he bled
+  it down to a dangerously low pressure and went back in head first, not feet first as planned, overheated and
+  soaked in sweat. The descent module didn't separate cleanly on the way home either. Sources: Wikipedia
+  ("Voskhod (spacecraft)", "Voskhod 2"), Spacefacts (Voskhod 2).
 - **Vostok's shape** (the replay's Vostok, 2026-10-18): a spherical descent module 2.3 m across (about 2.46 t),
   which carried the cosmonaut, and a biconical instrument module 2.25 m long and 2.43 m across with the
   propellant and the retro engine; 4.55 m end to end. Sources: Wikipedia ("Vostok (spacecraft)"), Gunter's

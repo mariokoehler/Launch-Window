@@ -22,6 +22,14 @@ if (GROUND) {
     for (i = 1; i <= 3; i++) put("r-ring-" + i);
     put("r-splash");
 }
+// A soft-landing rocket in the chute's lines (SOFT, project-voskhod.jsx; 2026-10-18): a flash under the base
+// just before it touches; the glitch's fires too high (hence its hard landing), the failure's torn chute takes
+// it away.
+if (typeof SOFT !== "undefined" && SOFT && !failure) {
+    put("r-soft", "r-carrier");
+    var FIRE = glitch ? SPLASH - 0.7 : SPLASH - 0.15;
+    fade("r-soft", function (t) { return t >= FIRE && t < FIRE + 0.25 ? 1 : 0; });
+}
 put("y-heli");
 put("y-rotor", "y-heli");
 camera(function () { return 200; }, function (t) { return t >= SPLASH && t < SPLASH + 0.3 ? (failure ? 10 : glitch ? 6 : 3) : 0; });

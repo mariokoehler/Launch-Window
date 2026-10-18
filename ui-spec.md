@@ -2023,6 +2023,15 @@ clips, the replay is meant to be watched like a short film, and the player can s
   Explorer 1 standing on Juno's spinning tub only); Sputnik 2 separates in its deployment, though it stayed on its
   core stage; the satellites drawn larger than their rocket's scale. Vostok's pilot doesn't eject in the descent
   yet. Unconfirmed.
+- **Voskhod as itself (user, 2026-10-18):** Vostok's skin with Voskhod's parts in place (`vh-`, `voskhod-*`): the
+  backup retro on the sphere's top in orbit, gone by the reentry (assumed jettisoned, unconfirmed); its soft landing,
+  a flash under the base just before touchdown (`touchdown.jsx`'s `SOFT`, `project-voskhod.jsx`; the glitch's fires too
+  high, hence its hard landing); the joint flight's time together as two Voskhods on the map. Voskhod 2's spacewalk in
+  the spacewalk scene with the airlock standing off the sphere (`vh-e-capsule`, the hatch at its end): out through
+  the airlock (no hand-held gun), filming (a cine camera on the rim, `e-cine`; the stiff suit misses the shutter in
+  the glitch, the camera stops in the failure, `eva-film.jsx`), and back in with the suit ballooned (`eva-in.jsx`:
+  bled down and in feet first; the glitch is Leonov's own, stuck and in head first; the failure fogs up too).
+  Unconfirmed.
 - **The way home in one piece (user, 2026-10-17):** the suborbital flight had no motes, so they popped in at the
   retrofire; now they stream past along its arc (`motes()` takes the craft's way, and can settle where the next clip's
   begin). Reentry preparations played the reentry preparations' turn even where the craft was already base first,

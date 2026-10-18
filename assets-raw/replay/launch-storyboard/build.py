@@ -33,6 +33,7 @@ REVEAL = {"success": 3.2, "glitch": 3.5, "failure": 3.3}
 # prefix's (2026-10-18: the lunar Gemini programs' stacks, Gemini's skin with the stack on the rocket).
 SKINS = {"mercury": ("mc-", "mercury-launch"), "gemini": ("gm-", "gemini-launch"), "agena": ("ag-", "agena-launch"),
          "transtage": ("tt-", "transtage-launch"), "vostok": ("vk-", "vostok-launch"),
+         "voskhod": ("vk-", "voskhod-launch", {"rocket": "vh-rocket", "debris-1": "vh-debris-1"}),
          "sputnik-1": ("sp1-", "sputnik-1-launch"), "explorer-1": ("ex1-", "explorer-1-launch"),
          "sputnik-2": ("sp2-", "sputnik-2-launch")}
 for _key, _prefix in (("gemini-transtage", "gt"), ("gemini-lpm", "gl"), ("gemini-da", "gd")):

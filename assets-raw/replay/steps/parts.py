@@ -812,6 +812,12 @@ def eva_parts():
     flash = (f'<path d="M944 284 L947 291 L955 294 L947 297 L944 304 L941 297 L933 294 L941 291 Z" fill="#ffffff" '
              f'stroke="{GOLD}" stroke-width="2.4" stroke-linejoin="round"/>')
     layer("e-flash", flash, (944, 294))
+    # Voskhod 2's (2026-10-18; any craft's): a cine camera on the hatch's rim, its lamp lit while it films, and a
+    # puff from the suit's valve at the figure's hip, as Leonov bled his suit down to fit back in.
+    layer("e-cine", f'<rect x="930" y="356" width="22" height="16" rx="2" fill="#ffffff" {LINE} stroke-width="2.6"/>'
+                    f'<path d="M952 360 L962 356 L962 372 L952 368 Z" fill="#ffffff" {LINE} stroke-width="2"/>', (941, 372))
+    layer("e-cine-lamp", f'<circle cx="935" cy="352" r="4" fill="{GOLD}" {LINE} stroke-width="1.6"/>', (935, 352))
+    layer("e-vent", puff(836, 318, 12) + puff(822, 324, 8), EP)
     # The other capsule's crewman, standing in its hatch with a camera, all mirrored (pivots too).
     layer("e-suit-b", mirror(suit()), (2 * XP - EP[0], EP[1]))
     camera = (f'<rect x="904" y="286" width="20" height="16" rx="2" fill="#ffffff" {LINE} stroke-width="3"/>'
@@ -1713,10 +1719,14 @@ def satellite_parts():
 VK_L = 34.6
 
 
-def vostok_launch(bare=True, k=1.0):
-    """The craft nose up on the rocket's top (y 500): the module, the sphere on it, and bare its engine."""
+def vostok_launch(bare=True, k=1.0, backup=False):
+    """The craft nose up on the rocket's top (y 500): the module, the sphere on it, and bare its engine;
+    Voskhod's (backup) with its backup retro rocket on the sphere's top."""
     w = lambda x: f'stroke-width="{x * k:.2f}"'
     out = ""
+    if backup:
+        out += (f'<rect x="951" y="330" width="18" height="20" rx="2" fill="#ffffff" {LINE} {w(2)}/>'
+                f'<path d="M951 334 L944 328 M969 334 L976 328" fill="none" {LINE} {w(1.6)}/>')
     if bare:
         out += f'<path d="M954 500 L948 512 L972 512 L966 500 Z" fill="#ffffff" {LINE} {w(2)}/>'
     out += (f'<path d="M930 500 L918 470 L938 432 L982 432 L1002 470 L990 500 Z" fill="#ffffff" {LINE} {w(2.4)}/>'
@@ -1726,7 +1736,8 @@ def vostok_launch(bare=True, k=1.0):
             f'<circle cx="960" cy="386" r="40" fill="#ffffff" {LINE} {w(2.6)}/>'
             f'<circle cx="948" cy="380" r="13" fill="none" {LINE} {w(1.6)} opacity="0.8"/>'
             f'<circle cx="977" cy="372" r="4" fill="rgba(22,48,92,0.12)" {LINE} {w(1.4)}/>'
-            f'<path d="M960 346 L960 330 M974 349 L984 336" fill="none" {LINE} {w(1.6)}/>')
+            + ("" if backup else f'<path d="M960 346 L960 330 M974 349 L984 336" fill="none" {LINE} {w(1.6)}/>')
+            + (f'<path d="M974 349 L984 336" fill="none" {LINE} {w(1.6)}/>' if backup else ""))
     return out
 
 
@@ -1738,12 +1749,17 @@ def vostok_fairing(k=1.0):
             + "".join(f'<circle cx="{x}" cy="440" r="7" fill="rgba(22,48,92,0.10)" {LINE} {w(1.6)}/>' for x in (942, 978)))
 
 
-def vostok_sphere():
-    """The descent sphere coming home (nose up, about 960 426, radius 74): its hatch, a window, two whips."""
-    return (f'<circle cx="960" cy="426" r="74" fill="#ffffff" {LINE} stroke-width="3"/>'
-            f'<circle cx="940" cy="420" r="26" fill="none" {LINE} stroke-width="2" opacity="0.8"/>'
-            f'<circle cx="992" cy="398" r="8" fill="rgba(22,48,92,0.12)" {LINE} stroke-width="2"/>'
-            f'<path d="M960 352 L960 330 M988 358 L1002 340" fill="none" {LINE} stroke-width="2"/>')
+def vostok_sphere(backup=False):
+    """The descent sphere coming home (nose up, about 960 426, radius 74): its hatch, a window, two whips;
+    Voskhod's (backup) with its backup retro rocket on the top in their place."""
+    out = (f'<circle cx="960" cy="426" r="74" fill="#ffffff" {LINE} stroke-width="3"/>'
+           f'<circle cx="940" cy="420" r="26" fill="none" {LINE} stroke-width="2" opacity="0.8"/>'
+           f'<circle cx="992" cy="398" r="8" fill="rgba(22,48,92,0.12)" {LINE} stroke-width="2"/>')
+    if backup:
+        return (f'<rect x="943" y="316" width="34" height="38" rx="3" fill="#ffffff" {LINE} stroke-width="2.6"/>'
+                f'<path d="M943 324 L928 312 M977 324 L992 312" fill="none" {LINE} stroke-width="2.2"/>' + out
+                + f'<path d="M988 358 L1002 340" fill="none" {LINE} stroke-width="2"/>')
+    return out + f'<path d="M960 352 L960 330 M988 358 L1002 340" fill="none" {LINE} stroke-width="2"/>'
 
 
 def vostok_module():
@@ -1755,6 +1771,27 @@ def vostok_module():
             + "".join(f'<circle cx="{x}" cy="568" r="10" fill="#ffffff" {LINE} stroke-width="1.8"/>'
                       for x in (896, 922, 948, 972, 998, 1024))
             + f'<path d="M950 640 L938 664 L982 664 L970 640 Z" fill="#ffffff" {LINE} stroke-width="2.2"/>')
+
+
+def voskhod_spacewalk():
+    """Voskhod 2 in the spacewalk scene (world px, nose right): the Volga airlock standing off the sphere, its
+    outer hatch where the scene's hatch is (836 to 926 at 380), so the figure climbs out of its end; the sphere
+    below it (1.15 m, 75 px/m), the instrument module behind, the backup retro on the nose."""
+    airlock = (f'<rect x="836" y="380" width="90" height="206" fill="#ffffff" {LINE} stroke-width="3"/>'
+               + "".join(f'<path d="M836 {y} L926 {y}" fill="none" {LINE} stroke-width="1.4" opacity="0.6"/>'
+                         for y in (420, 460, 500, 540))
+               + f'<rect x="830" y="380" width="102" height="10" rx="3" fill="#ffffff" {LINE} stroke-width="2.6"/>')
+    module = (f'<rect x="780" y="632" width="15" height="44" fill="#ffffff" {LINE} stroke-width="2.6"/>'
+              f'<path d="M780 632 L720 574 L700 574 L640 609 L640 699 L700 734 L720 734 L780 676 Z" fill="#ffffff" {LINE} '
+              f'stroke-width="2.6"/>'
+              + "".join(f'<circle cx="710" cy="{y}" r="11" fill="#ffffff" {LINE} stroke-width="1.8"/>' for y in (590, 618, 646, 674, 702))
+              + f'<path d="M640 644 L620 634 L620 674 L640 664 Z" fill="#ffffff" {LINE} stroke-width="2.2"/>')
+    sphere = (f'<circle cx="881" cy="654" r="86" fill="#ffffff" {LINE} stroke-width="3"/>'
+              f'<circle cx="858" cy="672" r="28" fill="none" {LINE} stroke-width="2" opacity="0.8"/>'
+              f'<circle cx="920" cy="690" r="9" fill="rgba(22,48,92,0.12)" {LINE} stroke-width="2"/>'
+              f'<rect x="967" y="636" width="34" height="36" rx="3" fill="#ffffff" {LINE} stroke-width="2.6"/>'
+              f'<path d="M1001 644 L1012 632 M1001 664 L1012 676" fill="none" {LINE} stroke-width="2.2"/>')
+    return module + sphere + airlock
 
 
 def vostok_parts():
@@ -1799,6 +1836,27 @@ def vostok_parts():
                                f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>'), RC)
     layer("vk-r-glow-side", RT(f'<path d="M1012 372 C1034 396 1042 430 1034 466 C1052 430 1040 392 1012 372 Z" fill="{GOLD_FILL}" '
                                f'stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>'), RC)
+    # Voskhod (2026-10-18, user): Vostok's parts with the backup retro on the sphere's top while in orbit; it's
+    # gone by the reentry (vh-r-capsule-bare, the reentry's and the descent's: assumed jettisoned, unconfirmed).
+    layer("vh-rocket", rocket[:nose] + vostok_launch(bare=False, backup=True) + vostok_fairing(), (960, 600))
+    layer("vh-debris-1", vostok_launch(bare=False, backup=True) + vostok_fairing(), (960, 420))
+    layer("vh-debris-1-bare", vostok_launch(bare=False, backup=True), (960, 420))
+    layer("vh-d-payload", f'<g transform="{big}"><g transform="{turn}">{vostok_launch(backup=True)}</g></g>', D_AT(914, 520))
+    thick = re.sub(r'stroke-width="[\d.]+"', 'stroke-width="5"', vostok_launch(backup=True))
+    for name in ("vh-o-sat", "vh-o-sat-b"):
+        layer(name, f'<g transform="translate(960 560) scale(0.6) translate(-960 -426)">{thick}</g>', (960, 560))
+    layer("vh-r-capsule", RT(small(vostok_sphere(backup=True))), RC)
+    layer("vh-r-capsule-bare", RT(sph), RC)
+    layer("vh-r-capsule-up", RU(sph), RC)
+    # Voskhod 2's spacewalk (2026-10-18, user): the craft with its airlock (vh-e-capsule, in place of the scene's
+    # capsule), no package, no hand-held gun (Leonov had none).
+    layer("vh-e-capsule", voskhod_spacewalk(), RC)
+    layer("vh-e-box", "", (975, 360))
+    layer("vh-e-gun", "", EP)
+    # The soft landing (2026-10-18; Voskhod's crew stayed aboard): a braking rocket in the chute's lines fires
+    # just before touchdown (touchdown.jsx's SOFT), a flash under the base. Generic: any capsule nose up.
+    layer("r-soft", RU(f'<path d="M912 506 C924 526 944 538 960 548 C976 538 996 526 1008 506 C990 520 930 520 912 506 Z" '
+                       f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>'), RU_AT(960, 506))
     # The break-up: the sphere's two halves.
     layer("vk-r-half-nose", RT(small(f'<path d="M886 424 A74 74 0 0 1 1034 424 Z" fill="#ffffff" {LINE} stroke-width="3"/>')),
           RT_AT(960, 410))

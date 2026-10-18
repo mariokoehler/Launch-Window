@@ -724,6 +724,105 @@ STEPS = {
         "success": (6.4, 2.4), "glitch": (6.4, 3.4), "failure": (6.4, 2.6),
         "times": [0.5, 1.4, 2.2, 3.0, 4.2, 6.3],
     },
+    # Voskhod's own (2026-10-18, user): Vostok's skin with Voskhod's parts in its place (the backup retro on the
+    # sphere's top, gone by the reentry), and its soft landing (project-voskhod.jsx).
+    "voskhod-launch-preparations": {
+        "pad": True, "source": "launch-preparations", "skin": "vk-", "alias": {"rocket": "vh-rocket", "debris-1": "vh-debris-1", "d-payload": "vh-d-payload", "o-sat": "vh-o-sat", "o-sat-b": "vh-o-sat-b", "r-capsule": "vh-r-capsule", "r-capsule-up": "vh-r-capsule-up"},
+        "success": (6.4, 2.6), "glitch": (6.4, 3.5), "failure": (7.0, 3.1),
+        "times": [0.5, 2.0, 2.8, 3.4, 4.6, 6.4],
+    },
+    "voskhod-countdown": {
+        "pad": True, "source": "countdown", "skin": "vk-", "alias": {"rocket": "vh-rocket", "debris-1": "vh-debris-1", "d-payload": "vh-d-payload", "o-sat": "vh-o-sat", "o-sat-b": "vh-o-sat-b", "r-capsule": "vh-r-capsule", "r-capsule-up": "vh-r-capsule-up"},
+        "success": (6.4, 4.8), "glitch": (7.2, 3.6), "failure": (7.0, 4.7),
+        "times": [0.0, 2.2, 3.0, 4.4, 4.8, 6.4],
+    },
+    "voskhod-deployment": {
+        "pad": False, "source": "deployment", "skin": "vk-", "alias": {"rocket": "vh-rocket", "debris-1": "vh-debris-1", "d-payload": "vh-d-payload", "o-sat": "vh-o-sat", "o-sat-b": "vh-o-sat-b", "r-capsule": "vh-r-capsule", "r-capsule-up": "vh-r-capsule-up"},
+        "success": (6.0, 2.6), "glitch": (6.0, 2.6), "failure": (6.5, 2.3),
+        "times": [0.5, 1.2, 1.9, 2.4, 3.6, 5.9],
+    },
+    "voskhod-suborbital-flight": {
+        "pad": False, "source": "suborbital-flight", "skin": "vk-", "alias": {"rocket": "vh-rocket", "debris-1": "vh-debris-1", "d-payload": "vh-d-payload", "o-sat": "vh-o-sat", "o-sat-b": "vh-o-sat-b", "r-capsule": "vh-r-capsule", "r-capsule-up": "vh-r-capsule-up"}, "mirror": True, "before": ["motes.jsx"],
+        "success": (6.4, 3.4), "glitch": (6.4, 4.0), "failure": (6.4, 3.6),
+        "times": [0.5, 1.8, 2.8, 3.4, 4.4, 6.3],
+    },
+    "voskhod-earth-orbit": {
+        "pad": False, "source": "earth-orbit", "skin": "vk-", "alias": {"rocket": "vh-rocket", "debris-1": "vh-debris-1", "d-payload": "vh-d-payload", "o-sat": "vh-o-sat", "o-sat-b": "vh-o-sat-b", "r-capsule": "vh-r-capsule", "r-capsule-up": "vh-r-capsule-up"},
+        "success": (6.0, 2.1), "glitch": (6.0, 3.4), "failure": (6.5, 3.0),
+        "times": [0.5, 2.0, 2.8, 3.6, 4.6, 5.9],
+    },
+    "voskhod-duration-level-i": {
+        "pad": False, "source": "duration-level-i", "skin": "vk-", "alias": {"rocket": "vh-rocket", "debris-1": "vh-debris-1", "d-payload": "vh-d-payload", "o-sat": "vh-o-sat", "o-sat-b": "vh-o-sat-b", "r-capsule": "vh-r-capsule", "r-capsule-up": "vh-r-capsule-up"}, "before": ["orbit.jsx"], "after": ["duration.jsx"],
+        "success": (6.4, 2.6), "glitch": (6.4, 3.8), "failure": (6.4, 3.6),
+        "times": [0.5, 2.0, 2.6, 3.4, 4.4, 6.3],
+    },
+    "voskhod-reentry-preparations": {
+        "pad": False, "source": "reentry-preparations", "skin": "vk-", "alias": {"rocket": "vh-rocket", "debris-1": "vh-debris-1", "d-payload": "vh-d-payload", "o-sat": "vh-o-sat", "o-sat-b": "vh-o-sat-b", "r-capsule": "vh-r-capsule", "r-capsule-up": "vh-r-capsule-up"}, "mirror": True, "before": ["motes.jsx"],
+        "success": (6.0, 3.0), "glitch": (6.0, 3.6), "failure": (6.5, 3.4),
+        "times": [0.5, 1.6, 2.4, 3.2, 4.4, 5.9],
+    },
+    "voskhod-reentry-trim": {
+        "pad": False, "source": "reentry-trim", "skin": "vk-", "alias": {"rocket": "vh-rocket", "debris-1": "vh-debris-1", "d-payload": "vh-d-payload", "o-sat": "vh-o-sat", "o-sat-b": "vh-o-sat-b", "r-capsule": "vh-r-capsule", "r-capsule-up": "vh-r-capsule-up"}, "mirror": True, "before": ["motes.jsx"],
+        "success": (6.0, 3.0), "glitch": (6.0, 3.4), "failure": (6.0, 3.0),
+        "times": [0.5, 1.6, 2.4, 3.0, 4.0, 5.9],
+    },
+    "voskhod-retrofire": {
+        "pad": False, "source": "retrofire", "skin": "vk-", "alias": {"rocket": "vh-rocket", "debris-1": "vh-debris-1", "d-payload": "vh-d-payload", "o-sat": "vh-o-sat", "o-sat-b": "vh-o-sat-b", "r-capsule": "vh-r-capsule", "r-capsule-up": "vh-r-capsule-up"}, "mirror": True, "before": ["motes.jsx"],
+        "success": (6.4, 2.6), "glitch": (6.4, 3.0), "failure": (6.4, 3.0),
+        "times": [0.5, 1.4, 2.0, 2.8, 3.8, 6.3],
+    },
+    "voskhod-retro-shutdown": {
+        "pad": False, "source": "retro-shutdown", "skin": "vk-", "alias": {"rocket": "vh-rocket", "debris-1": "vh-debris-1", "d-payload": "vh-d-payload", "o-sat": "vh-o-sat", "o-sat-b": "vh-o-sat-b", "r-capsule": "vh-r-capsule", "r-capsule-up": "vh-r-capsule-up"}, "mirror": True, "before": ["motes.jsx"],
+        "success": (4.4, 1.4), "glitch": (4.4, 2.8), "failure": (5.2, 3.0),
+        "times": [0.2, 0.8, 1.6, 2.4, 3.4, 4.3],
+    },
+    "voskhod-modules-separation": {
+        "pad": False, "source": "modules-separation", "skin": "vk-", "alias": {"rocket": "vh-rocket", "debris-1": "vh-debris-1", "d-payload": "vh-d-payload", "o-sat": "vh-o-sat", "o-sat-b": "vh-o-sat-b", "r-capsule": "vh-r-capsule", "r-capsule-up": "vh-r-capsule-up"}, "mirror": True, "before": ["project-vostok.jsx", "motes.jsx"],
+        "success": (5.6, 1.8), "glitch": (5.6, 3.6), "failure": (6.4, 3.8),
+        "times": [0.5, 1.0, 1.6, 2.6, 3.6, 5.5],
+    },
+    "voskhod-rendezvous": {
+        "pad": False, "source": "rendezvous-target-approach", "skin": "vk-", "alias": {"rocket": "vh-rocket", "debris-1": "vh-debris-1", "d-payload": "vh-d-payload", "o-sat": "vh-o-sat", "o-sat-b": "vh-o-sat-b", "r-capsule": "vh-r-capsule", "r-capsule-up": "vh-r-capsule-up"}, "before": ["orbit.jsx"],
+        "success": (6.0, 2.6), "glitch": (6.0, 3.0), "failure": (6.0, 3.0),
+        "times": [0.5, 1.8, 2.4, 2.8, 4.0, 5.9],
+    },
+    "voskhod-ascent": {
+        "pad": False, "source": "ascent", "skin": "vk-", "alias": {"rocket": "vh-rocket", "debris-1": "vh-debris-1-bare", "d-payload": "vh-d-payload", "o-sat": "vh-o-sat", "o-sat-b": "vh-o-sat-b", "r-capsule": "vh-r-capsule", "r-capsule-up": "vh-r-capsule-up", "a-les": "vk-a-les"},
+        "success": (6.5, 3.6), "glitch": (6.5, 4.0), "failure": (7.0, 3.4),
+        "times": [0.0, 1.5, 2.9, 3.4, 4.2, 6.4],
+    },
+    "voskhod-reentry": {
+        "pad": False, "source": "reentry", "skin": "vk-", "alias": {"rocket": "vh-rocket", "debris-1": "vh-debris-1", "d-payload": "vh-d-payload", "o-sat": "vh-o-sat", "o-sat-b": "vh-o-sat-b", "r-capsule": "vh-r-capsule-bare", "r-capsule-up": "vh-r-capsule-up"}, "mirror": True,
+        "success": (6.4, 4.0), "glitch": (6.4, 4.4), "failure": (6.4, 3.4),
+        "times": [0.4, 1.6, 2.6, 3.4, 4.6, 6.3],
+    },
+    "voskhod-descent": {
+        "pad": False, "source": "descent-chutes", "skin": "vk-", "alias": {"rocket": "vh-rocket", "debris-1": "vh-debris-1", "d-payload": "vh-d-payload", "o-sat": "vh-o-sat", "o-sat-b": "vh-o-sat-b", "r-capsule": "vh-r-capsule", "r-capsule-up": "vh-r-capsule-up"}, "after": ["descent.jsx"],
+        "success": (6.0, 2.4), "glitch": (6.0, 3.4), "failure": (6.0, 2.6),
+        "times": [0.5, 1.4, 2.2, 3.0, 4.2, 5.9],
+    },
+    "voskhod-landing-and-recovery": {
+        "pad": False, "source": "landing-and-recovery", "skin": "vk-", "before": ["project-voskhod.jsx"], "alias": {"rocket": "vh-rocket", "debris-1": "vh-debris-1", "d-payload": "vh-d-payload", "o-sat": "vh-o-sat", "o-sat-b": "vh-o-sat-b", "r-capsule": "vh-r-capsule", "r-capsule-up": "vh-r-capsule-up"}, "after": ["touchdown.jsx"],
+        "success": (6.0, 1.2), "glitch": (6.0, 1.8), "failure": (6.0, 1.8),
+        "times": [0.5, 1.2, 1.8, 2.6, 3.6, 5.9],
+    },
+    # Voskhod 2's spacewalk (2026-10-18, user): the craft with its airlock (vh-e-capsule) in the spacewalk scene: out
+    # through the airlock, filming, and back in with the suit ballooned (eva-film.jsx, eva-in.jsx).
+    "voskhod-eva-out": {
+        "pad": False, "source": "eva-out", "skin": "vh-", "alias": {"r-capsule": "vh-e-capsule"}, "before": ["spacewalk.jsx"],
+        "success": (5.6, 2.6), "glitch": (6.0, 3.2), "failure": (6.6, 3.2),
+        "times": [1.2, 2.2, 2.8, 3.4, 4.4, 5.5],
+    },
+    "voskhod-eva-film": {
+        "pad": False, "source": "eva-film", "skin": "vh-", "alias": {"r-capsule": "vh-e-capsule"}, "before": ["spacewalk.jsx"],
+        "success": (4.6, 1.2), "glitch": (4.6, 2.2), "failure": (4.6, 2.4),
+        "times": [0.5, 1.1, 1.3, 2.2, 2.6, 4.5],
+    },
+    "voskhod-eva-in": {
+        "pad": False, "source": "eva-in", "skin": "vh-", "alias": {"r-capsule": "vh-e-capsule"}, "before": ["spacewalk.jsx"],
+        "success": (3.8, 1.9), "glitch": (5.2, 2.1), "failure": (6.4, 3.0),
+        "times": [0.6, 1.8, 2.2, 3.0, 4.0, 5.0],
+    },
     # Project Gemini's own (2026-10-17): the generic timelines ("source") with its spacecraft ("skin": the gm- parts),
     # its adapter's equipment section on until the reentry preparations drop it (adapter.jsx), its retros
     # rippled (project-gemini.jsx) and its descent on two points (two-point.jsx); and the Agena's launch (ag-).
