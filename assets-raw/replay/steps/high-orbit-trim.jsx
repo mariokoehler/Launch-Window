@@ -13,8 +13,9 @@ var BURNT = glitch ? AGAIN + 0.4 : failure ? AGAIN + 0.15 : 2.6;
 var BACK = glitch || failure ? 3.6 : 2.8;
 
 hoScene(false, ["o-ellipse-down", "l-corridor"]);
-put("o-streak");
-layers["o-streak"].parent = layers["o-sat"];
+// The flame on the craft's tail: put on it as its parent first (parented after, at the camera's 0.6, it would
+// keep its place on the screen and sit off the tail).
+put("o-streak", "o-sat");
 var BIG = kepler(HO_RP, HO_RA), DOWN = kepler(HO_ENTRY, HO_RA), PERI = hoPeri();
 turn("o-ellipse", function () { return PERI - 90; });
 turn("o-ellipse-down", function () { return PERI - 90; });
@@ -39,9 +40,11 @@ var where = function (t) {
     return [mix(a[0], b[0], w), mix(a[1], b[1], w)];
 };
 move("o-sat", function (t) { var p = where(t); return [p[0] - OCX, p[1] - OCY]; });
-// Its way (nose first), and the turns: round to tail first, then back.
+// Its way (nose first) along the orbit, not from how its place changes: near the high point it barely moves,
+// and the burn's move from one path to the other would swing it round. Then the turns: round to tail first,
+// then back.
 var way = function (t) {
-    var a = where(Math.max(0, t - 0.02)), b = where(t + 0.02);
+    var a = pastHigh(BIG, PERI, past(t) - 0.05), b = pastHigh(BIG, PERI, past(t) + 0.05);
     return Math.atan2(b[1] - a[1], b[0] - a[0]) / RAD + 90;
 };
 turn("o-sat", function (t) { return way(t) + 180 * ease(TURN, TURN + 1.2, t) - 180 * ease(BACK, BACK + 1.2, t); });
