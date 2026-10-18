@@ -692,6 +692,34 @@ STEPS = {
         "success": (6.4, 2.0), "glitch": (6.4, 3.4), "failure": (6.4, 3.4),
         "times": [0.5, 1.7, 2.3, 3.1, 4.2, 6.3],
     },
+    # Gemini's Earth-orbit tests for the Moon (2026-10-18, user): the trans-lunar burn and the Earth approach on the
+    # map with Gemini; and the Transtage test's approach, docking and undocking with Gemini and the plain target,
+    # not the Agena (no Transtage drawn yet).
+    "gemini-tli": {
+        "pad": False, "source": "tpi", "skin": "gm-", "before": ["orbit.jsx"],
+        "success": (6.0, 2.0), "glitch": (6.0, 3.2), "failure": (6.0, 3.0),
+        "times": [0.5, 1.4, 2.0, 2.8, 3.8, 5.9],
+    },
+    "gemini-earth-approach": {
+        "pad": False, "source": "earth-approach", "skin": "gm-", "before": ["orbit.jsx"],
+        "success": (6.0, 2.4), "glitch": (6.0, 3.4), "failure": (6.0, 3.4),
+        "times": [0.5, 1.8, 2.6, 3.4, 4.4, 5.9],
+    },
+    "gemini-target-approach-stage": {
+        "pad": False, "source": "target-approach", "skin": "gm-", "alias": {"k-target": "k-target", "k-light": "k-light", "k-latch": "k-latch"}, "before": ["dock.jsx"],
+        "success": (6.4, 2.4), "glitch": (6.4, 2.6), "failure": (6.4, 2.6),
+        "times": [0.5, 1.9, 2.3, 2.7, 3.6, 6.3],
+    },
+    "gemini-docking-stage": {
+        "pad": False, "source": "docking", "skin": "gm-", "alias": {"k-target": "k-target", "k-light": "k-light", "k-latch": "k-latch"}, "before": ["dock.jsx"],
+        "success": (6.4, 2.0), "glitch": (6.4, 3.4), "failure": (6.4, 3.4),
+        "times": [0.5, 1.7, 2.3, 3.1, 4.2, 6.3],
+    },
+    "gemini-undocking-stage": {
+        "pad": False, "source": "undocking", "skin": "gm-", "alias": {"k-target": "k-target", "k-light": "k-light", "k-latch": "k-latch"}, "before": ["dock.jsx"],
+        "success": (6.4, 1.2), "glitch": (6.4, 2.8), "failure": (6.4, 2.8),
+        "times": [0.5, 1.2, 2.0, 2.6, 3.8, 6.3],
+    },
     "agena-launch-preparations": {
         "pad": True, "source": "launch-preparations", "skin": "ag-",
         "success": (6.4, 2.6), "glitch": (6.4, 3.5), "failure": (7.0, 3.1),

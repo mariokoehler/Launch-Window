@@ -196,7 +196,8 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   Gemini's is done too (`gm-`, and the Agena's own launch, `ag-`, picked by a rule's `"vehicle"`): rebuild the client
   (`core`'s rule matching changed). Its spacewalks play in steps (user, 2026-10-18, `ui-spec.md` §4.7.3): setup,
   experiments and teardown; a stand-up, out on the tether, a photo and back in, docked to the Agena; on a rendezvous,
-  beside the other Gemini, whose crewman takes the pictures. Client only.
+  beside the other Gemini, whose crewman takes the pictures. The Earth-orbit tests of the circumlunar, lunar-orbital
+  and direct-ascent Gemini fly Gemini too (user, 2026-10-18; their own modules not drawn yet). Client only.
 
 ## How we work
 

@@ -2000,8 +2000,14 @@ clips, the replay is meant to be watched like a short film, and the player can s
   noses, and the other's crewman stands up in its hatch and photographs it (the walker tumbles and the gun steadies
   it, the pictures after; or the visor fogs, the walker is hauled in, and the photographer goes back in too). Any
   other Gemini `eva` plays the out-on-the-tether clip from a closed hatch, ending outside. Rules tell them apart by
-  `later` and `after`. Unconfirmed. The lunar Gemini programs (direct ascent, EOR, circumlunar, lunar orbital) are a later
-  package; Gemini EOR's equipment-section separation drops the section before the turn, the wrong way round, to be
+  `later` and `after`. Unconfirmed. The Earth-orbit tests of circumlunar Gemini, lunar-orbital Gemini and Gemini
+  direct ascent fly Gemini too (user, 2026-10-18): the Gemini rules name their programs, and the trans-lunar burn
+  (`gemini-tli`) and the Earth approach (`gemini-earth-approach`) have Gemini versions. Their own modules aren't
+  drawn yet: the Transtage test's first launch, which carries the Transtage alone, stays generic (rules by
+  `earlier: deployment` and `later: docking`), its approach, docking and undocking have Gemini with the plain target,
+  not the Agena (`gemini-*-stage`), and the direct ascent's landing-module test keeps the generic lander. Unconfirmed.
+  The lunar Gemini programs themselves (direct ascent, EOR, circumlunar, lunar orbital) and Gemini EOR's Earth-orbit
+  tests are a later package; Gemini EOR's equipment-section separation drops the section before the turn, the wrong way round, to be
   fixed with them. Unconfirmed.
 - **The way home in one piece (user, 2026-10-17):** the suborbital flight had no motes, so they popped in at the
   retrofire; now they stream past along its arc (`motes()` takes the craft's way, and can settle where the next clip's
