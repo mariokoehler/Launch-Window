@@ -638,8 +638,14 @@ leading to satellite navigation.
   he struggled to don the Air Force's manoeuvring unit, and the work was called off. Gemini 10, 11 and 12 (1966)
   began their spacewalking with a stand-up EVA, standing in the open hatch to photograph stars and the Earth, and on
   Gemini 10 Michael Collins's Hasselblad worked loose and drifted away while he was busy keeping his tether clear.
-  Sources: Wikipedia ("Gemini 4", "Gemini 10"), Smithsonian Air & Space ("The First U.S. Spacewalk"), Kosmofoto
-  (Collins's camera).
+  Most of those later spacewalks were made docked to the Agena (checked 2026-10-18): Collins's stand-up EVA on
+  Gemini 10 was docked to Agena 10, though his umbilical EVA, across to the Agena left by Gemini 8, came after
+  undocking; Dick Gordon's umbilical EVA on Gemini 11 was docked, its task to fix a tether from the Agena's docking
+  collar to Gemini's nose; and on Gemini 12 Buzz Aldrin fitted a handrail from his hatch to the Agena's collar in
+  his first stand-up EVA and worked at a station on the Agena in his umbilical one. No Gemini spacewalk was made
+  beside a second Gemini: Gemini 6A and 7, the one rendezvous of two capsules, had none.
+  Sources: Wikipedia ("Gemini 4", "Gemini 10", "Gemini 11", "Gemini 12"), Smithsonian Air & Space ("The First U.S.
+  Spacewalk"), Kosmofoto (Collins's camera), NASA ("Gemini XII").
 
 ### 1.2 Content & asset policy: no copying BASPM's copyrighted content
 

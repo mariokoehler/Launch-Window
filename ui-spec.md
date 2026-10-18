@@ -1992,11 +1992,15 @@ clips, the replay is meant to be watched like a short film, and the player can s
   its boom, the lamp comes on; glitch: the boom jams and a push frees it; failure: the visor fogs, Gemini 9A's), the
   second runs it (micrometeoroid sparks on the plate; the lamp goes out and a tap brings it back, or doesn't), the
   third takes it down and brings it in (the boom stalls and is pressed down, or the package is left on the hull). The
-  docking flights' `egress` is a stand-up in the hatch (the hatch sticks part open, Gemini 4's), and their two `eva`s
-  are out on the tether (the tumble and the gun, or the fog) and then a photo and back in (the camera slips and is
-  caught, or drifts away, Gemini 10's). The lone `eva` plays the out-on-the-tether clip from a closed hatch, ending
-  outside. Rules tell them apart by `later` and `after`. The docking flights' spacewalks show Gemini alone, without the
-  Agena docked at its nose (a later touch). Unconfirmed. The lunar Gemini programs (direct ascent, EOR, circumlunar, lunar orbital) are a later
+  docking flights' spacewalks are with the Agena docked at the nose (user, 2026-10-18; Gemini 10, 11 and 12 had
+  theirs so): their `egress` is a stand-up in the hatch (the hatch sticks part open, Gemini 4's), and their two
+  `eva`s are out on the tether (the tumble and the gun, or the fog) and then a photo and back in (the camera slips
+  and is caught, or drifts away, Gemini 10's). A rendezvous flight's lone `eva`, after the `rendezvous`, has both
+  capsules in it, nose to nose a few metres apart (user, 2026-10-18): the walker comes out of one and drifts over the
+  noses, and the other's crewman stands up in its hatch and photographs it (the walker tumbles and the gun steadies
+  it, the pictures after; or the visor fogs, the walker is hauled in, and the photographer goes back in too). Any
+  other Gemini `eva` plays the out-on-the-tether clip from a closed hatch, ending outside. Rules tell them apart by
+  `later` and `after`. Unconfirmed. The lunar Gemini programs (direct ascent, EOR, circumlunar, lunar orbital) are a later
   package; Gemini EOR's equipment-section separation drops the section before the turn, the wrong way round, to be
   fixed with them. Unconfirmed.
 - **The way home in one piece (user, 2026-10-17):** the suborbital flight had no motes, so they popped in at the

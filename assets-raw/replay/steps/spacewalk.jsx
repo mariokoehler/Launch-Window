@@ -8,7 +8,12 @@ var INSIDE = 150;
 // transfer: a second capsule docked nose to nose, with its own hatch and a handrail between them.
 // kit (2026-10-18, Gemini's spacewalks in steps): the package's mount, boom, lamp and spark, and the
 // camera and its flash, all hidden until a timeline shows them.
-function spacewalkScene(transfer, kit) {
+// pair (2026-10-18, a spacewalk on a rendezvous): the other capsule a few metres off, nose to nose (the
+// first mirrored about XP), its hatch shut and its crewman inside with a camera ("e-suit-b").
+// DOCKED (a switch set before the timeline, eva-docked.jsx; 2026-10-18): the Agena docked at the nose.
+var XP = 1199;
+function spacewalkScene(transfer, kit, pair) {
+    var docked = typeof DOCKED !== "undefined" && DOCKED;
     put("paper", "screen");
     put("d-earth");
     put("r-orbit");
@@ -32,6 +37,16 @@ function spacewalkScene(transfer, kit) {
     put("r-capsule");
     put("e-hole");
     put("e-hatch");
+    if (docked) put("e-agena");
+    if (pair) {
+        put("e-suit-b");
+        put("e-camera-b", "e-suit-b");
+        put("e-flash-b", "e-suit-b");
+        put("e-capsule-pair");
+        put("e-hole-pair");
+        put("e-hatch-pair");
+        hide("e-flash-b");
+    }
     if (transfer) {
         put("e-capsule-b");
         put("e-collar");
@@ -43,8 +58,10 @@ function spacewalkScene(transfer, kit) {
     hide("e-fog"); hide("e-gun");
     // The camera in close, so the figure reads on the replay's small monitor: 1.35 times, the
     // capsule's top (900 400) at (960 430); for a transfer 1.2 times, the stack's middle (1128 400) at
-    // (960 470). The Earth's limb stays at the bottom.
-    var k = transfer ? 1.2 : 1.35, c = transfer ? [1128, 400, 470] : [900, 400, 430];
+    // (960 470); for a pair or a docked Agena 1.3 times, the two craft's middle at (960 440). The
+    // Earth's limb stays at the bottom.
+    var k = transfer ? 1.2 : pair || docked ? 1.3 : 1.35;
+    var c = transfer ? [1128, 400, 470] : pair ? [XP, 400, 440] : docked ? [1153, 400, 440] : [900, 400, 430];
     tf(world, "Scale").setValue([100 * k, 100 * k]);
     tf(world, "Position").setValue([960 - k * c[0], c[2] - k * c[1]]);
 }

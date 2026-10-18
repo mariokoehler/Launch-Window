@@ -273,7 +273,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: EARTH 37
   - Programs: LK-700: Earth-orbit tests 6, Voskhod 4, Soyuz 7K-L3: Earth-orbit tests 3, Soyuz 7K-L1: Earth-orbit tests 2
 - [x] **Spacewalk** `eva`: 24 uses in 14 configurations, 4 programs (NASA/SOVIET) crew risk in 24 of 24
-  - Clip: by the steps before: `eva` after `earth-orbit` 5, `eva` after `scientific-experiments` 5, `gemini-eva-setup` after `earth-orbit` in gemini 2, `gemini-eva-teardown` after `scientific-experiments` in gemini 2, `gemini-eva-out` after `rendezvous` in gemini 2, `gemini-eva-out-standing` after `egress` in gemini 2, `gemini-eva-photo` after `eva` in gemini 2, `eva` after `docking` 2, `eva` after `btm-earth-orbit` 1, `eva` after `extraction` 1; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: by the steps before: `eva` after `earth-orbit` 5, `eva` after `scientific-experiments` 5, `gemini-eva-setup` after `earth-orbit` in gemini 2, `gemini-eva-teardown` after `scientific-experiments` in gemini 2, `gemini-eva-pair` after `rendezvous` in gemini 2, `gemini-eva-out-docked` after `egress` in gemini 2, `gemini-eva-photo-docked` after `eva` in gemini 2, `eva` after `docking` 2, `eva` after `btm-earth-orbit` 1, `eva` after `extraction` 1; [x] success, [x] glitch, [x] failure; cues no
   - On screen: EVA suit 24, crewed craft 24, crewed lander 4, stage or target 4
   - Destinations: EARTH 24
   - Programs: Gemini 6, Apollo: Earth-orbit tests 5, Gemini EOR: Earth-orbit tests 2, Voskhod 1
@@ -334,7 +334,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: EARTH 2
   - Programs: Apollo: Earth-orbit tests 2
 - [x] **Egress** `egress`: 2 uses in 2 configurations, 1 program (NASA) crew risk in 2 of 2
-  - Clip: `gemini-eva-standup`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `gemini-eva-standup-docked`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: EVA suit 2, crewed craft 2, stage or target 2
   - Destinations: EARTH 2
   - Programs: Gemini 2

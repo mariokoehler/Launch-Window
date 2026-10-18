@@ -727,6 +727,29 @@ def dock_parts():
 # tether's end at its backpack (EW), the hand that holds things and the gun at EH.
 EP, EW, EH = (870, 300), (850, 300), (916, 296)
 HATCH = (836, 926, 380)
+# A spacewalk on a rendezvous (2026-10-18): the other capsule is this one mirrored about XP, its nose as far
+# off as the rendezvous leaves it. A docked Agena: its cone's mouth at AGENA_MOUTH, round the capsule's nose.
+XP = 1199
+AGENA_MOUTH = 1084
+
+
+def mirror(body, xm=XP):
+    return f'<g transform="translate({2 * xm} 0) scale(-1 1)">{body}</g>'
+
+
+def agena_docked(axis_y):
+    """The Agena docked at the capsule's nose (nose right, at 1108 on axis_y), as big as the capsule, its light lit."""
+    tc = (AGENA_MOUTH + RK * (540 - 426), axis_y)
+    body = agena_target(2.4) + f'<circle cx="938" cy="508" r="4" fill="{GOLD}" {LINE} stroke-width="1.4"/>'
+    return f'<g transform="translate({tc[0]} {tc[1]}) scale({RK}) rotate(90) translate(-960 -426)">{body}</g>'
+
+
+def pair_parts(prefix, capsule_body, hole_body, hatch_body, hatch_pivot):
+    """The other capsule of a rendezvous, mirrored: its body, the hole and the hatch (which turns the other way)."""
+    layer(prefix + "e-capsule-pair", mirror(capsule_body), (2 * XP - RC[0], RC[1]))
+    pivot = (2 * XP - hatch_pivot[0], hatch_pivot[1])
+    layer(prefix + "e-hole-pair", mirror(hole_body), pivot)
+    layer(prefix + "e-hatch-pair", mirror(hatch_body), pivot)
 
 
 def suit():
@@ -751,9 +774,12 @@ def eva_parts():
           EW)
     # The hatch, hinged at its front edge, and the dark opening under it.
     x0, x1, y = HATCH
-    layer("e-hole", f'<rect x="{x0 + 4}" y="{y - 2}" width="{x1 - x0 - 8}" height="10" fill="{NAVY}"/>', (x1, y))
-    layer("e-hatch", f'<rect x="{x0}" y="{y - 8}" width="{x1 - x0}" height="10" rx="3" fill="#ffffff" {LINE} stroke-width="3"/>',
-          (x1, y))
+    hole = f'<rect x="{x0 + 4}" y="{y - 2}" width="{x1 - x0 - 8}" height="10" fill="{NAVY}"/>'
+    hatch = f'<rect x="{x0}" y="{y - 8}" width="{x1 - x0}" height="10" rx="3" fill="#ffffff" {LINE} stroke-width="3"/>'
+    layer("e-hole", hole, (x1, y))
+    layer("e-hatch", hatch, (x1, y))
+    pair_parts("", RT(capsule()), hole, hatch, (x1, y))
+    layer("e-agena", agena_docked(RC[1]), (AGENA_MOUTH, RC[1]))
     # A crew transfer: a second capsule docked nose to nose, a collar between the noses (1108 and
     # 1148), its hatch mirrored about the collar's middle, and a handrail between the two hatches.
     layer("e-capsule-b", f'<g transform="translate(1296 470) scale(2) rotate(-90) translate(-960 -426)">{capsule()}</g>', (1296, 470))
@@ -783,8 +809,16 @@ def eva_parts():
     layer("e-camera", f'<rect x="904" y="286" width="20" height="16" rx="2" fill="#ffffff" {LINE} stroke-width="3"/>'
                       f'<rect x="924" y="289" width="7" height="10" rx="1" fill="#ffffff" {LINE} stroke-width="2.4"/>'
                       f'<path d="M908 286 L910 281 L916 281 L918 286" fill="none" {LINE} stroke-width="2.4"/>', EH)
-    layer("e-flash", f'<path d="M944 284 L947 291 L955 294 L947 297 L944 304 L941 297 L933 294 L941 291 Z" fill="#ffffff" '
-                     f'stroke="{GOLD}" stroke-width="2.4" stroke-linejoin="round"/>', (944, 294))
+    flash = (f'<path d="M944 284 L947 291 L955 294 L947 297 L944 304 L941 297 L933 294 L941 291 Z" fill="#ffffff" '
+             f'stroke="{GOLD}" stroke-width="2.4" stroke-linejoin="round"/>')
+    layer("e-flash", flash, (944, 294))
+    # The other capsule's crewman, standing in its hatch with a camera, all mirrored (pivots too).
+    layer("e-suit-b", mirror(suit()), (2 * XP - EP[0], EP[1]))
+    camera = (f'<rect x="904" y="286" width="20" height="16" rx="2" fill="#ffffff" {LINE} stroke-width="3"/>'
+              f'<rect x="924" y="289" width="7" height="10" rx="1" fill="#ffffff" {LINE} stroke-width="2.4"/>'
+              f'<path d="M908 286 L910 281 L916 281 L918 286" fill="none" {LINE} stroke-width="2.4"/>')
+    layer("e-camera-b", mirror(camera), (2 * XP - EH[0], EH[1]))
+    layer("e-flash-b", mirror(flash), (2 * XP - 944, 294))
 
 
 # --- On the Moon: the lander (two stages), the surface close up, the limb seen from low orbit ----------
@@ -1790,15 +1824,21 @@ def gemini_parts():
     # figure stands (the cone's top edge at y 380 under it), the hatch on that slope, and the experiment
     # package on a short mount down to the RCS section.
     EV_UP = 23
-    layer("gm-e-capsule", f'<g transform="translate(0 {-EV_UP})">{RT(whole)}</g>', RC)
+    gm_capsule = f'<g transform="translate(0 {-EV_UP})">{RT(whole)}</g>'
+    layer("gm-e-capsule", gm_capsule, RC)
     slope = math.degrees(math.atan2(2 * (0.655 * GM_R[2]), 2 * (1.77 * GM_R[3])))
     edge = lambda x: 380 + (x - 881) * math.tan(math.radians(slope))
     x0, x1 = HATCH[0], HATCH[1]
     hy = edge(x1)
-    layer("gm-e-hole", f'<g transform="rotate({slope:.2f} {x1} {hy:.1f})"><rect x="{x0 + 4}" y="{hy - 2:.1f}" width="{x1 - x0 - 8}" '
-                       f'height="10" fill="{NAVY}"/></g>', (x1, hy))
-    layer("gm-e-hatch", f'<g transform="rotate({slope:.2f} {x1} {hy:.1f})"><rect x="{x0}" y="{hy - 8:.1f}" width="{x1 - x0}" '
-                        f'height="10" rx="3" fill="{GM_DARK}" {LINE} stroke-width="3"/></g>', (x1, hy))
+    gm_hole = (f'<g transform="rotate({slope:.2f} {x1} {hy:.1f})"><rect x="{x0 + 4}" y="{hy - 2:.1f}" width="{x1 - x0 - 8}" '
+               f'height="10" fill="{NAVY}"/></g>')
+    gm_hatch = (f'<g transform="rotate({slope:.2f} {x1} {hy:.1f})"><rect x="{x0}" y="{hy - 8:.1f}" width="{x1 - x0}" '
+                f'height="10" rx="3" fill="{GM_DARK}" {LINE} stroke-width="3"/></g>')
+    layer("gm-e-hole", gm_hole, (x1, hy))
+    layer("gm-e-hatch", gm_hatch, (x1, hy))
+    # A spacewalk on a rendezvous: the other Gemini; and one docked, with the Agena at the nose (2026-10-18).
+    pair_parts("gm-", gm_capsule, gm_hole, gm_hatch, (x1, hy))
+    layer("gm-e-agena", agena_docked(RC[1] - EV_UP), (AGENA_MOUTH, RC[1] - EV_UP))
     rcs_top = RC[1] - EV_UP - RK * (0.49 * GM_R[2])
     # The mount stays on the hull when the package is taken (2026-10-18; the spacewalk's teardown).
     layer("gm-e-mount", f'<path d="M966 380 L966 {rcs_top:.1f} M984 380 L984 {rcs_top:.1f}" fill="none" '

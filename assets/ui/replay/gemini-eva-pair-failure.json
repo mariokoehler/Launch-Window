@@ -1,0 +1,10 @@
+{
+ "duration": 7.0,
+ "revealAt": 3.3,
+ "cues": [
+  {
+   "at": 3.55,
+   "sound": "radio-crew-back-in"
+  }
+ ]
+}

@@ -195,7 +195,8 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   the generic timelines play unchanged (`launch-storyboard/build.py <variant> mercury` for the launch). Client only.
   Gemini's is done too (`gm-`, and the Agena's own launch, `ag-`, picked by a rule's `"vehicle"`): rebuild the client
   (`core`'s rule matching changed). Its spacewalks play in steps (user, 2026-10-18, `ui-spec.md` §4.7.3): setup,
-  experiments and teardown; a stand-up, out on the tether, a photo and back in. Client only.
+  experiments and teardown; a stand-up, out on the tether, a photo and back in, docked to the Agena; on a rendezvous,
+  beside the other Gemini, whose crewman takes the pictures. Client only.
 
 ## How we work
 

@@ -178,7 +178,11 @@ Each folder's `build/` is regenerated on every run and stays out of git.
     flash, `handCam()` and `flashes()`), and `WORK` is where the figure works at the package. `eva-standup`,
     `eva-out` (`eva-out-standing.jsx` sets `STANDING`: the timeline 1.4 s on, from the hatch), `eva-photo`,
     `eva-setup`, `eva-experiments` and `eva-teardown` are published only as Gemini's (`gemini-eva-*`); each pair hands
-    off figure for figure (`check.py handoffs`), only the Earth's turn starting over.
+    off figure for figure (`check.py handoffs`), only the Earth's turn starting over. `eva-docked.jsx` (in
+    `before`) sets `DOCKED`: the Agena (`e-agena`) at the nose, the camera at 1.3 on the stack; the stand-up, out and
+    photo are published only so (`gemini-eva-*-docked`). `spacewalkScene(false, true, true)` is a pair: the other
+    capsule mirrored about `XP` (`e-capsule-pair`, `e-hole-pair`, `e-hatch-pair`, `parts.py`'s `pair_parts`) and its
+    crewman (`e-suit-b`, with `e-camera-b` and `e-flash-b` parented to it), for `eva-pair` (`gemini-eva-pair`).
   - **On the Moon** (2026-10-14): `moon.jsx`, the lander (`n-carrier` with the descent and ascent
     stages and their plumes) placed by offsets from where it stands on the surface, and a lamp panel
     fixed to the screen (`lamp("alarm" | "fuel", lit, blinking)`). `powered-descent` over the limb
