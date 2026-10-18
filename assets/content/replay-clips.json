@@ -88,6 +88,7 @@
     {"step": "deployment", "programs": ["gemini", "circumlunar-gemini-earth-orbit", "lunar-orbital-gemini-earth-orbit", "gemini-direct-ascent-earth-orbit"], "clip": "gemini-deployment"},
     {"step": "deployment", "clip": "deployment"},
     {"step": "earth-orbit", "programs": ["circumlunar-gemini-earth-orbit"], "after": "high-orbit-injection", "clip": "gemini-high-orbit"},
+    {"step": "earth-orbit", "programs": ["circumlunar-gemini-earth-orbit"], "after": "retrofire", "clip": "gemini-high-orbit-return"},
     {"step": "earth-orbit", "programs": ["apollo", "apollo-earth-orbit"], "later": "tli", "clip": "apollo-earth-orbit-stack"},
     {"step": "earth-orbit", "programs": ["apollo", "apollo-earth-orbit"], "clip": "apollo-earth-orbit"},
     {"step": "earth-orbit", "programs": ["soyuz-7k-ok"], "clip": "soyuz-earth-orbit"},

@@ -2655,6 +2655,9 @@ def gemini_parts():
     th = lambda body: re.sub(r'stroke-width="[\d.]+"', 'stroke-width="5"', body)
     on_map = lambda body: f'<g transform="translate(960 560) scale(0.6) translate(-960 -426)">{th(body)}</g>'
     layer("gt-o-sat-gemini", on_map(gm_shift(gemini_whole(GM_L), GM_L, TT_LEN)), (960, 560))
+    # Coming home on that ellipse (2026-10-18, user): the capsule and its retrograde section, the equipment section
+    # gone at the reentry preparations, in the same frame.
+    layer("gt-o-sat-home", on_map(gm_shift(gemini_retro(GM_L) + gemini_module(GM_L), GM_L, TT_LEN)), (960, 560))
     layer("gt-o-sat-stage", on_map(bells(GM_L, GM_EQUIP_Y, (-0.6, 0.6), 0.9, 0.18, 0.42) + transtage_body(GM_L, GM_EQUIP_Y)),
           (960, 560))
     thick = re.sub(r'stroke-width="[\d.]+"', 'stroke-width="5"', gemini_docked_transtage(GM_L))

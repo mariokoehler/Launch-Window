@@ -1347,6 +1347,14 @@ STEPS = {
         "success": (6.0, 2.1), "glitch": (6.0, 3.4), "failure": (6.0, 3.4),
         "times": [0.5, 1.8, 2.2, 3.0, 4.0, 5.9],
     },
+    # The heat-shield test's Earth orbit after the retrofire (2026-10-18, user): the retrofire at the high point has
+    # lowered the low point into the entry corridor, and the capsule falls down the lowered path to it, as the
+    # lunar-orbit tests' coast to reentry.
+    "gemini-high-orbit-return": {
+        "pad": False, "source": "high-orbit-return", "skin": "gm-", "alias": {"o-sat": "gt-o-sat-home"}, "before": ["orbit.jsx", "high-orbit-scene.jsx"],
+        "success": (6.0, 2.1), "glitch": (6.0, 3.0), "failure": (6.0, 3.2),
+        "times": [0.5, 1.8, 2.4, 3.2, 4.4, 5.9],
+    },
     "gemini-lpm-trim": {
         "pad": False, "source": "high-orbit-trim", "skin": "gm-", "alias": {"o-sat": "gl-o-sat"}, "before": ["orbit.jsx", "high-orbit-scene.jsx"],
         "success": (7.0, 2.3), "glitch": (7.0, 3.2), "failure": (7.0, 3.2),

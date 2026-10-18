@@ -2012,7 +2012,9 @@ clips, the replay is meant to be watched like a short film, and the player can s
   burn puts the craft on it (`gemini-transtage-hoi`, `high-orbit-injection.jsx`; the failure's short burn leaves it
   on a smaller one), and the Transtage lets go 0.4 s after the burn and drifts back off Gemini's tail (`SEP`,
   `hoi-separate.jsx`; the map's stack in two layers, `gt-o-sat-gemini` and `gt-o-sat-stage`, user); the Earth orbit after it is the capsule coasting out along it, round the high point
-  (`gemini-high-orbit`, `high-orbit.jsx`; the shared scene `high-orbit-scene.jsx`). The lunar-orbit tests fly Gemini with its propulsion module behind the adapter
+  (`gemini-high-orbit`, `high-orbit.jsx`; the shared scene `high-orbit-scene.jsx`). Its retrofire at the high point
+  lowers the low point into the entry corridor, so the Earth orbit after it is the fall down the lowered path, as the
+  lunar-orbit tests' coast to reentry (`gemini-high-orbit-return`, the capsule with its retrograde section only, user). The lunar-orbit tests fly Gemini with its propulsion module behind the adapter
   (`gemini-lpm-*`), the direct-ascent tests Gemini's reentry module on an ascent and a landing module (`gemini-da-*`).
   Their tests fly the same long ellipse as the heat-shield test (user, 2026-10-18): the module's burn is the high-orbit
   injection (`-hoi`), the coast to the high point the coast out (`-high-orbit`), the entry corridor trim (or the
