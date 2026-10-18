@@ -26,10 +26,8 @@ cut from the variable fonts), for the Firsts' front pages, under the SIL Open Fo
   Launch Window by its author from several NASA recordings of mission radio chatter. NASA,
   public domain.
 - `audio/replay/telemetry-blip-1.ogg`, `audio/replay/telemetry-blip-2.ogg`,
-  `audio/replay/telemetry-blip-3.ogg`: "Confirm Tap" by ExistentialTaco, Pixabay,
-  https://pixabay.com/sound-effects/film-special-effects-confirm-tap-394001/. Pixabay Content
-  License, https://pixabay.com/service/license-summary/. Level raised 11 dB; takes 2 and 3 pitched
-  3 % down and up.
+  `audio/replay/telemetry-blip-3.ogg`: made for Launch Window by its author (2026-10-18;
+  `assets-raw/audio/telemetry_beep*.ogg`).
 - `audio/replay/caution-tone.ogg`: "Warning Sound" by freesound_community, Pixabay,
   https://pixabay.com/sound-effects/film-special-effects-warning-sound-6686/. Pixabay Content
   License, https://pixabay.com/service/license-summary/. The first of its two sweeps, level raised
@@ -88,7 +86,8 @@ cut from the variable fonts), for the Firsts' front pages, under the SIL Open Fo
   `audio/replay/radio-engine-out-3.mp3`, `audio/replay/radio-escape-fired-1.mp3`,
   `audio/replay/radio-escape-fired-2.mp3`, `audio/replay/radio-escape-fired-3.mp3`,
   `audio/replay/radio-go-for-launch-1.mp3`, `audio/replay/radio-go-for-launch-2.mp3`,
-  `audio/replay/radio-guidance-internal.mp3`, `audio/replay/radio-hard-landing-1.mp3`,
+  `audio/replay/radio-guidance-internal-1.mp3`, `audio/replay/radio-guidance-internal-2.mp3`,
+  `audio/replay/radio-guidance-internal-3.mp3`, `audio/replay/radio-hard-landing-1.mp3`,
   `audio/replay/radio-hard-landing-2.mp3`, `audio/replay/radio-hard-landing-3.mp3`,
   `audio/replay/radio-hard-landing-4.mp3`, `audio/replay/radio-hard-landing-5.mp3`,
   `audio/replay/radio-lander-lost-1.mp3`, `audio/replay/radio-lander-lost-2.mp3`,

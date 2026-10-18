@@ -3,14 +3,14 @@
     {
       "id": "telemetry-blip",
       "kind": "EFFECT",
-      "volume": 0.3,
+      "volume": 0.25,
       "files": [
         "audio/replay/telemetry-blip-1.ogg",
         "audio/replay/telemetry-blip-2.ogg",
         "audio/replay/telemetry-blip-3.ogg"
       ],
       "credit": true,
-      "description": "Console. A short, soft electronic blip (80 to 120 ms), like a 1960s telemetry readout updating: mid-high pitch, clean, no reverb. 3 or 4 takes, slightly different in pitch, so the repetition doesn't show. Plays every 2 s while a camera is live, and stops once telemetry is lost."
+      "description": "Console. A short, soft electronic blip (80 to 120 ms), like a 1960s telemetry readout updating: mid-high pitch, clean, no reverb. 3 or 4 takes, slightly different in pitch, so the repetition doesn't show. Plays every 2 to 4 s (at random), a take at random, softer than everything else, while a camera is live, and stops once telemetry is lost."
     },
     {
       "id": "caution-tone",
@@ -109,7 +109,9 @@
       "kind": "RADIO",
       "volume": 0.7,
       "files": [
-        "audio/replay/radio-guidance-internal.mp3"
+        "audio/replay/radio-guidance-internal-1.mp3",
+        "audio/replay/radio-guidance-internal-2.mp3",
+        "audio/replay/radio-guidance-internal-3.mp3"
       ],
       "credit": true,
       "description": "\"Guidance is internal.\" Early in the countdown, in every variant (it tells nothing). Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."

@@ -26,7 +26,7 @@ def takes(line, n):
 SOUNDS = {
     "radio-go-for-launch": (["go_for_launch", "all_systems_go_for_launch"],
         "\"Go for launch.\" / \"All systems go for launch.\" The launch preparations' success, at its reveal."),
-    "radio-guidance-internal": (["guidance_is_internal"],
+    "radio-guidance-internal": (takes("guidance_is_internal", 3),
         "\"Guidance is internal.\" Early in the countdown, in every variant (it tells nothing)."),
     "radio-pitching-downrange": (["vehicle_pitching_downrange", "vehicle_is_supersonic"],
         "\"Vehicle pitching downrange.\" / \"Vehicle is supersonic.\" The launch's success, at its reveal."),

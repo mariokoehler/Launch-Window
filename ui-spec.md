@@ -2131,8 +2131,9 @@ clips, the replay is meant to be watched like a short film, and the player can s
     or not, included, and for a season that ends with the crew still aboard. It plays once, whichever
     way the summary is reached (played on, skipped to, clicked), again if the player comes back to
     it; going back to a step fades it within 0.3 s. A catastrophe shares the failure's fanfare.
-  - **The console's sounds, from `ReplayConsole`:** a telemetry blip every 2 s while a camera is live
-    (none once telemetry is lost), the CAUTION tone each time its lamp lights (three for a saved
+  - **The console's sounds, from `ReplayConsole`:** a telemetry blip while a camera is live, one of
+    three takes at random, every 2 to 4 s at random, the softest sound in the replay (user, 2026-10-18;
+    none once telemetry is lost), the CAUTION tone each time its lamp lights (three for a saved
     glitch), the MASTER ALARM for 3 s after a failure's reveal (the lamp stays lit), quiet static under
     a step with no signal, a click on Play and Pause. A lamp already lit when the step is reached stays
     quiet. The same rule as the lamps: nothing before the reveal depends on the outcome
@@ -2173,7 +2174,7 @@ clips, the replay is meant to be watched like a short film, and the player can s
     and its fanfare wait until the radio is done (a call talking or waiting for its turn), the clip
     holding its last frame, at most 8 s (user, 2026-10-15); skipping to the summary still cuts it off. Silent when sound is off, checked
     every frame. Volumes: the sound's own, times the player's setting (§4.12).
-  - **Unconfirmed:** the 2 s blip, the 3 s alarm, the static's level, the default volumes (0.7), the
+  - **Unconfirmed:** the blip's level (0.25), the 3 s alarm, the static's level, the default volumes (0.7), the
     fanfares' volume (0.8) and their 0.3 s fade.
   - **Placeholders (user, 2026-10-13):** a sound plays a synthesized `placeholder-*` take until its
     real one comes (`assets-raw/replay/sounds/make_placeholder_sounds.py`). Every sound is real since

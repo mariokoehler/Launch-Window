@@ -44,8 +44,9 @@ public final class ReplayConsole {
     /** The click of Play and Pause. */
     public static final String HOLD_CLICK = "hold-click";
 
-    /** The blips' period, in seconds (unconfirmed). */
-    private static final float BLIP_PERIOD = 2f;
+    /** The shortest and longest gap between two blips, in seconds, picked at random (user, 2026-10-18). */
+    private static final float BLIP_MIN_GAP = 2f;
+    private static final float BLIP_MAX_GAP = 4f;
     /** How long the alarm sounds after the reveal; the lamp stays lit (unconfirmed). */
     private static final float ALARM_SOUNDS = 3f;
     /** The needle's rest before the reveal and after a success. */
@@ -98,7 +99,9 @@ public final class ReplayConsole {
     private final float slowPhase;
     private final float fastPhase;
     private final float[] barPhases = new float[BARS.length];
-    private final float blipPhase;
+    /** The blips' times, drawn from {@link #blipTimes} as far as they're asked for. */
+    private final List<Float> blips = new ArrayList<>();
+    private final Random blipTimes;
 
     private ReplayConsole(long seed, MissionStepOutcome outcome, float revealAt, boolean revealedOnArrival) {
         this.outcome = outcome;
@@ -110,7 +113,7 @@ public final class ReplayConsole {
         for (int i = 0; i < barPhases.length; i++) {
             barPhases[i] = random.nextFloat() * TAU;
         }
-        blipPhase = random.nextFloat() * BLIP_PERIOD;
+        blipTimes = new Random(random.nextLong());
     }
 
     /**
@@ -369,9 +372,9 @@ public final class ReplayConsole {
         if (!live() || to <= from) {
             return started;
         }
-        for (float at = blipPhase + BLIP_PERIOD * (float) Math.floor((from - blipPhase) / BLIP_PERIOD + 1f);
-             at <= to; at += BLIP_PERIOD) {
-            if (at > from && at >= 0f && !(outcome == MissionStepOutcome.CATASTROPHIC && revealed(at))) {
+        for (int i = 0; blip(i) <= to; i++) {
+            float at = blip(i);
+            if (at > from && !(outcome == MissionStepOutcome.CATASTROPHIC && revealed(at))) {
                 started.add(BLIP);
             }
         }
@@ -379,6 +382,21 @@ public final class ReplayConsole {
             started.add(CAUTION_TONE);
         }
         return started;
+    }
+
+    /**
+     * Returns when a blip sounds: the first within the shortest gap of the step's start, each next one
+     * a random gap after the one before. Drawn from the seed alone, so it tells nothing.
+     *
+     * @param i the blip, from 0
+     * @return its time, seconds into the step
+     */
+    private float blip(int i) {
+        while (blips.size() <= i) {
+            blips.add(blips.isEmpty() ? blipTimes.nextFloat() * BLIP_MIN_GAP
+                : blips.getLast() + BLIP_MIN_GAP + blipTimes.nextFloat() * (BLIP_MAX_GAP - BLIP_MIN_GAP));
+        }
+        return blips.get(i);
     }
 
     /**

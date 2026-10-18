@@ -99,10 +99,19 @@ class ReplayConsoleTest {
 
     @Test
     void theConsoleSoundsItsLamps() {
-        // A blip every 2 s, frame by frame or in one go.
-        ReplayConsole success = ReplayConsole.live(SEED, MissionStepOutcome.SUCCESSFUL, REVEAL, false);
-        assertEquals(java.util.Collections.nCopies(5, ReplayConsole.BLIP), success.sounds(-0.001f, 9.999f));
-        assertEquals(5, frames(success, 10f, ReplayConsole.BLIP));
+        // A blip every 2 to 4 s, the same frame by frame or in one go.
+        for (long seed = 0; seed < 50; seed++) {
+            ReplayConsole success = ReplayConsole.live(seed, MissionStepOutcome.SUCCESSFUL, REVEAL, false);
+            int blips = success.sounds(-0.001f, 9.999f).size();
+            assertTrue(blips >= 3 && blips <= 5, "seed " + seed + ": " + blips);
+            assertEquals(blips, frames(success, 9.999f, ReplayConsole.BLIP), "seed " + seed);
+            assertEquals(1, success.sounds(-0.001f, 2f).size(), "seed " + seed);
+            for (float t = 0f; t < 40f; t += 1f) {
+                int inWindow = success.sounds(t, t + 2f).size();
+                assertTrue(inWindow <= 1, "seed " + seed + " at " + t);
+                assertTrue(success.sounds(t, t + 4.01f).size() >= 1, "seed " + seed + " at " + t);
+            }
+        }
         assertEquals(1, frames(ReplayConsole.live(SEED, MissionStepOutcome.MINOR_GLITCH, REVEAL, false), 10f,
             ReplayConsole.CAUTION_TONE));
         assertEquals(3, frames(ReplayConsole.live(SEED, MissionStepOutcome.MINOR_GLITCH_SOLVED, REVEAL, false), 10f,
