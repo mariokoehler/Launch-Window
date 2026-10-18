@@ -5,8 +5,11 @@
 // until the cable burns through at 3.4; the module flies off and the capsule rights itself by 5.0.
 // Failure: the same, but the cable never parts: the tumble grows wild and the pair meets the air
 // joined, a glow at the base from 4.4.
+// OM (project-soyuz.jsx; 2026-10-18): a Soyuz-type craft, its orbital module on the nose; it goes at the
+// bolts too, off past the nose, tumbling, whatever the module behind does.
 var glitch = VARIANT === "glitch", failure = VARIANT === "failure";
 var BOLTS = 0.8, SNAP = 1.25, TUMBLE = 1.6, BURN = 3.4;
+var OM = typeof OM !== "undefined" && OM;
 
 put("paper", "screen");
 // The motes stream past at the speed the retrofire left (it took 260 px/s off).
@@ -16,9 +19,15 @@ put("r-orbit");
 put("r-cable");
 put("r-carrier");
 var parts = ["r-glow", "r-module", "r-capsule", "r-pyro"];
+if (OM) parts.push("r-om");
 for (var i = 0; i < parts.length; i++) put(parts[i], "r-carrier");
 put("burst");
 hide("burst");
+if (OM) {
+    // In the carrier's frame the nose is +x: off ahead of it and a little aside, tumbling.
+    move("r-om", function (t) { var u = Math.max(0, t - BOLTS); return [80 * u + 60 * u * u, 14 * u]; });
+    turn("r-om", function (t) { return 35 * Math.max(0, t - BOLTS); });
+}
 
 // Sinking on as after the jettison, so the reentry starts where either leaves off.
 var sink = function (t) { return 140 + 14 * t + 0.4 * t * t; };

@@ -823,6 +823,118 @@ STEPS = {
         "success": (3.8, 1.9), "glitch": (5.2, 2.1), "failure": (6.4, 3.0),
         "times": [0.6, 1.8, 2.2, 3.0, 4.0, 5.0],
     },
+    # Soyuz 7K-OK's own (2026-10-18, user; sy- parts): its three modules, the orbital module on the nose until the
+    # modules separate (project-soyuz.jsx's OM), its soft landing, its fairing and tower thrown off in the climb.
+    "soyuz-launch-preparations": {
+        "pad": True, "source": "launch-preparations", "skin": "sy-",
+        "success": (6.4, 2.6), "glitch": (6.4, 3.5), "failure": (7.0, 3.1),
+        "times": [0.5, 2.0, 2.8, 3.4, 4.6, 6.4],
+    },
+    "soyuz-countdown": {
+        "pad": True, "source": "countdown", "skin": "sy-",
+        "success": (6.4, 4.8), "glitch": (7.2, 3.6), "failure": (7.0, 4.7),
+        "times": [0.0, 2.2, 3.0, 4.4, 4.8, 6.4],
+    },
+    "soyuz-deployment": {
+        "pad": False, "source": "deployment", "skin": "sy-",
+        "success": (6.0, 2.6), "glitch": (6.0, 2.6), "failure": (6.5, 2.3),
+        "times": [0.5, 1.2, 1.9, 2.4, 3.6, 5.9],
+    },
+    "soyuz-earth-orbit": {
+        "pad": False, "source": "earth-orbit", "skin": "sy-",
+        "success": (6.0, 2.1), "glitch": (6.0, 3.4), "failure": (6.5, 3.0),
+        "times": [0.5, 2.0, 2.8, 3.6, 4.6, 5.9],
+    },
+    "soyuz-insertion": {
+        "pad": False, "source": "insertion", "skin": "sy-", "before": ["orbit.jsx"],
+        "success": (6.0, 2.4), "glitch": (6.0, 3.2), "failure": (6.0, 3.0),
+        "times": [0.4, 1.2, 1.8, 2.4, 3.2, 5.9],
+    },
+    "soyuz-target-approach": {
+        "pad": False, "source": "target-approach", "skin": "sy-", "before": ["dock.jsx"],
+        "success": (6.4, 2.4), "glitch": (6.4, 2.6), "failure": (6.4, 2.6),
+        "times": [0.5, 1.9, 2.3, 2.7, 3.6, 6.3],
+    },
+    "soyuz-docking": {
+        "pad": False, "source": "docking", "skin": "sy-", "before": ["dock.jsx"],
+        "success": (6.4, 2.0), "glitch": (6.4, 3.4), "failure": (6.4, 3.4),
+        "times": [0.5, 1.7, 2.3, 3.1, 4.2, 6.3],
+    },
+    "soyuz-undocking": {
+        "pad": False, "source": "undocking", "skin": "sy-", "before": ["dock.jsx"],
+        "success": (6.4, 1.2), "glitch": (6.4, 2.8), "failure": (6.4, 2.8),
+        "times": [0.5, 1.2, 2.0, 2.6, 3.8, 6.3],
+    },
+    "soyuz-rendezvous": {
+        "pad": False, "source": "rendezvous", "skin": "sy-", "before": ["dock.jsx"],
+        "success": (6.0, 2.4), "glitch": (6.0, 3.4), "failure": (6.0, 3.4),
+        "times": [0.5, 1.6, 2.4, 3.2, 4.2, 5.9],
+    },
+    "soyuz-reentry": {
+        "pad": False, "source": "reentry", "skin": "sy-", "mirror": True,
+        "success": (6.4, 4.0), "glitch": (6.4, 4.4), "failure": (6.4, 3.4),
+        "times": [0.4, 1.6, 2.6, 3.4, 4.6, 6.3],
+    },
+    "soyuz-descent": {
+        "pad": False, "source": "descent-chutes", "skin": "sy-", "after": ["descent.jsx"],
+        "success": (6.0, 2.4), "glitch": (6.0, 3.4), "failure": (6.0, 2.6),
+        "times": [0.5, 1.4, 2.2, 3.0, 4.2, 5.9],
+    },
+    "soyuz-ascent": {
+        "pad": False, "source": "ascent", "skin": "sy-", "alias": {"debris-1": "sy-debris-1-bare"},
+        "success": (6.5, 3.6), "glitch": (6.5, 4.0), "failure": (7.0, 3.4),
+        "times": [0.0, 1.5, 2.9, 3.4, 4.2, 6.4],
+    },
+    "soyuz-joint": {
+        "pad": False, "source": "rendezvous-target-approach", "skin": "sy-", "before": ["orbit.jsx"],
+        "success": (6.0, 2.6), "glitch": (6.0, 3.0), "failure": (6.0, 3.0),
+        "times": [0.5, 1.8, 2.4, 2.8, 4.0, 5.9],
+    },
+    "soyuz-reentry-preparations": {
+        "pad": False, "source": "reentry-preparations", "skin": "sy-", "mirror": True, "before": ["project-soyuz.jsx", "motes.jsx"],
+        "success": (6.0, 3.0), "glitch": (6.0, 3.6), "failure": (6.5, 3.4),
+        "times": [0.5, 1.6, 2.4, 3.2, 4.4, 5.9],
+    },
+    "soyuz-reentry-trim": {
+        "pad": False, "source": "reentry-trim-burn", "skin": "sy-", "mirror": True, "before": ["project-soyuz.jsx", "motes.jsx"], "after": ["reentry-trim.jsx"],
+        "success": (6.0, 3.0), "glitch": (6.0, 3.4), "failure": (6.0, 3.0),
+        "times": [0.5, 1.6, 2.4, 3.0, 4.0, 5.9],
+    },
+    "soyuz-retrofire": {
+        "pad": False, "source": "retrofire", "skin": "sy-", "mirror": True, "before": ["project-soyuz.jsx", "motes.jsx"],
+        "success": (6.4, 2.6), "glitch": (6.4, 3.0), "failure": (6.4, 3.0),
+        "times": [0.5, 1.4, 2.0, 2.8, 3.8, 6.3],
+    },
+    "soyuz-deorbit-burn": {
+        "pad": False, "source": "deorbit-burn", "skin": "sy-", "mirror": True, "before": ["project-soyuz.jsx", "motes.jsx"], "after": ["retrofire.jsx"],
+        "success": (7.6, 3.8), "glitch": (7.6, 4.2), "failure": (7.6, 4.2),
+        "times": [0.3, 1.0, 1.8, 2.6, 4.0, 7.5],
+    },
+    "soyuz-modules-separation": {
+        "pad": False, "source": "modules-separation", "skin": "sy-", "mirror": True, "before": ["project-soyuz.jsx", "motes.jsx"],
+        "success": (5.6, 1.8), "glitch": (5.6, 3.6), "failure": (6.4, 3.8),
+        "times": [0.5, 1.0, 1.6, 2.6, 3.6, 5.5],
+    },
+    "soyuz-suborbital-flight": {
+        "pad": False, "source": "suborbital-flight", "skin": "sy-", "mirror": True, "before": ["project-soyuz.jsx", "motes.jsx"],
+        "success": (6.4, 3.4), "glitch": (6.4, 4.0), "failure": (6.4, 3.6),
+        "times": [0.5, 1.8, 2.8, 3.4, 4.4, 6.3],
+    },
+    "soyuz-landing-and-recovery": {
+        "pad": False, "source": "landing-and-recovery", "skin": "sy-", "before": ["project-soyuz.jsx"], "after": ["touchdown.jsx"],
+        "success": (6.0, 1.2), "glitch": (6.0, 1.8), "failure": (6.0, 1.8),
+        "times": [0.5, 1.2, 1.8, 2.6, 3.6, 5.9],
+    },
+    "soyuz-retrofire-jettison": {
+        "pad": False, "source": "retrofire-jettison-om", "skin": "sy-", "mirror": True, "before": ["motes.jsx"], "after": ["retrofire-jettison.jsx"],
+        "success": (5.6, 1.6), "glitch": (5.6, 3.4), "failure": (6.4, 3.2),
+        "times": [0.5, 1.1, 1.8, 2.6, 3.8, 5.5],
+    },
+    "soyuz-orbital-module-separation": {
+        "pad": False, "source": "orbital-module-separation", "skin": "sy-", "mirror": True, "before": ["motes.jsx"],
+        "success": (5.6, 1.6), "glitch": (5.6, 3.4), "failure": (6.4, 3.2),
+        "times": [0.5, 1.0, 1.8, 2.8, 3.8, 5.5],
+    },
     # Project Gemini's own (2026-10-17): the generic timelines ("source") with its spacecraft ("skin": the gm- parts),
     # its adapter's equipment section on until the reentry preparations drop it (adapter.jsx), its retros
     # rippled (project-gemini.jsx) and its descent on two points (two-point.jsx); and the Agena's launch (ag-).

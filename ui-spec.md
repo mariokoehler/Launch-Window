@@ -2023,6 +2023,13 @@ clips, the replay is meant to be watched like a short film, and the player can s
   Explorer 1 standing on Juno's spinning tub only); Sputnik 2 separates in its deployment, though it stayed on its
   core stage; the satellites drawn larger than their rocket's scale. Vostok's pilot doesn't eject in the descent
   yet. Unconfirmed.
+- **Soyuz 7K-OK as itself (user, 2026-10-18; the rocket stays generic, user):** its three modules (`sy-`, `soyuz-*`),
+  under a fairing and escape tower on the pad (thrown off in the climb, `a-les`); the orbital module rides on the nose
+  through the way home (`project-soyuz.jsx`'s `OM`, read now by `reentry-preparations.jsx`, `reentry-trim.jsx` and
+  `modules-separation.jsx` too) and goes off ahead at the modules separation as the service module goes aft; its soft
+  landing (`SOFT`); docking, the active probe to a passive Soyuz's drogue. The solar wings drawn short (60 % on the
+  pad and in orbit, 40 % coming home, so the turns keep them in frame). The spacewalk (`eva-7k-ok`) and the crew
+  transfer stay generic. Unconfirmed.
 - **Voskhod as itself (user, 2026-10-18):** Vostok's skin with Voskhod's parts in place (`vh-`, `voskhod-*`): the
   backup retro on the sphere's top in orbit, gone by the reentry (assumed jettisoned, unconfirmed); its soft landing,
   a flash under the base just before touchdown (`touchdown.jsx`'s `SOFT`, `project-voskhod.jsx`; the glitch's fires too

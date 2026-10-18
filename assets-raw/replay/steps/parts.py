@@ -1864,6 +1864,179 @@ def vostok_parts():
           RT_AT(960, 472))
 
 
+# --- Soyuz 7K-OK (2026-10-18, user): three modules, nose first: the orbital module (an elongated sphere,
+# the docking probe on its nose, 2.98 m long), the descent module (the "headlight", 2.24 m long, 2.17 m
+# across), the service module (2.26 m long, 2.72 m across at its skirt, the engine and two solar-panel wings,
+# drawn at 60 % of their 9.8 m span so they fit the frame). Each drawing nose up; sizes from the photographs,
+# unconfirmed where the sources are silent.
+
+
+def soyuz_stack(top, k, panels=True, probe=True, wing=0.6):
+    """Soyuz nose up, its probe's tip at top, k px per metre (the parts' own sizes in metres)."""
+    w = lambda x: f'stroke-width="{x:.2f}"'
+    y = top
+    out = ""
+    if probe:
+        out += f'<path d="M960 {y:.1f} L960 {y + 0.45 * k:.1f}" fill="none" {LINE} {w(2.4)}/>'
+        out += f'<path d="M952 {y + 0.45 * k:.1f} L968 {y + 0.45 * k:.1f} L964 {y + 0.3 * k:.1f} L956 {y + 0.3 * k:.1f} Z" fill="#ffffff" {LINE} {w(1.8)}/>'
+        y += 0.45 * k
+    om_h, om_r = 2.98 * k, 1.13 * k
+    out += (f'<ellipse cx="960" cy="{y + om_h / 2:.1f}" rx="{om_r:.1f}" ry="{om_h / 2:.1f}" fill="#ffffff" {LINE} {w(2.6)}/>'
+            f'<circle cx="{960 + om_r * 0.45:.1f}" cy="{y + om_h * 0.55:.1f}" r="{0.22 * k:.1f}" fill="none" {LINE} {w(1.6)} opacity="0.8"/>'
+            f'<path d="M{960 - om_r:.1f} {y + om_h / 2:.1f} Q960 {y + om_h / 2 + 0.25 * k:.1f} {960 + om_r:.1f} {y + om_h / 2:.1f}" '
+            f'fill="none" {LINE} {w(1.2)} opacity="0.5"/>')
+    y += om_h
+    dm_h, top_r, base_r = 2.24 * k, 0.5 * k, 1.085 * k
+    out += (f'<path d="M{960 - top_r:.1f} {y:.1f} C{960 - top_r - 0.35 * k:.1f} {y + 0.5 * k:.1f} {960 - base_r:.1f} {y + 1.2 * k:.1f} '
+            f'{960 - base_r:.1f} {y + dm_h:.1f} L{960 + base_r:.1f} {y + dm_h:.1f} C{960 + base_r:.1f} {y + 1.2 * k:.1f} '
+            f'{960 + top_r + 0.35 * k:.1f} {y + 0.5 * k:.1f} {960 + top_r:.1f} {y:.1f} Z" fill="#ffffff" {LINE} {w(2.6)}/>'
+            f'<circle cx="{960 + 0.42 * k:.1f}" cy="{y + 1.0 * k:.1f}" r="{0.13 * k:.1f}" fill="rgba(22,48,92,0.12)" {LINE} {w(1.4)}/>')
+    y += dm_h
+    sm_top, sm_skirt, sm_h = 1.1 * k, 1.36 * k, 2.26 * k
+    out += (f'<path d="M{960 - sm_top:.1f} {y:.1f} L{960 - sm_top:.1f} {y + 0.9 * k:.1f} L{960 - sm_skirt:.1f} {y + 1.4 * k:.1f} '
+            f'L{960 - sm_skirt:.1f} {y + sm_h:.1f} L{960 + sm_skirt:.1f} {y + sm_h:.1f} L{960 + sm_skirt:.1f} {y + 1.4 * k:.1f} '
+            f'L{960 + sm_top:.1f} {y + 0.9 * k:.1f} L{960 + sm_top:.1f} {y:.1f} Z" fill="#ffffff" {LINE} {w(2.6)}/>'
+            f'<path d="M{960 - sm_top:.1f} {y + 0.3 * k:.1f} L{960 + sm_top:.1f} {y + 0.3 * k:.1f}" fill="none" {LINE} {w(1.2)} opacity="0.5"/>'
+            f'<path d="M{960 - 0.2 * k:.1f} {y + sm_h:.1f} L{960 - 0.33 * k:.1f} {y + sm_h + 0.4 * k:.1f} L{960 + 0.33 * k:.1f} '
+            f'{y + sm_h + 0.4 * k:.1f} L{960 + 0.2 * k:.1f} {y + sm_h:.1f} Z" fill="#ffffff" {LINE} {w(2)}/>')
+    if panels:
+        span, h, py = 4.0 * wing * k, 0.95 * k, y + 1.55 * k
+        for sgn in (-1, 1):
+            x0 = 960 + sgn * sm_skirt
+            x1 = x0 + sgn * span
+            lo, hi = min(x0, x1), max(x0, x1)
+            out += (f'<rect x="{lo:.1f}" y="{py - h / 2:.1f}" width="{hi - lo:.1f}" height="{h:.1f}" fill="{GM_DARK}" {LINE} {w(2)}/>'
+                    + "".join(f'<path d="M{lo + (hi - lo) * f:.1f} {py - h / 2:.1f} L{lo + (hi - lo) * f:.1f} {py + h / 2:.1f}" '
+                              f'fill="none" {LINE} {w(1.2)} opacity="0.7"/>' for f in (0.25, 0.5, 0.75)))
+    return out
+
+
+def soyuz_fairing(k=1.0):
+    """The fairing over it on the rocket, and the escape tower on top."""
+    wd = lambda x: f'stroke-width="{x * k:.2f}"'
+    return (f'<path d="M912 500 L912 300 Q914 250 948 226 L972 226 Q1006 250 1008 300 L1008 500 Z" fill="#ffffff" {LINE} {wd(3)}/>'
+            f'<path d="M912 300 L1008 300" fill="none" {LINE} {wd(1.4)} opacity="0.6"/>'
+            + "".join(f'<path d="M{x} 340 L{x} 470" fill="none" {LINE} {wd(1.2)} opacity="0.5"/>' for x in (934, 986))
+            + f'<path d="M952 226 L956 186 L964 186 L968 226" fill="none" {LINE} {wd(2.2)}/>'
+            f'<rect x="953" y="140" width="14" height="46" fill="#ffffff" {LINE} {wd(2.2)}/>'
+            f'<path d="M953 140 L960 124 L967 140 Z" fill="#ffffff" {LINE} {wd(2)}/>'
+            f'<path d="M953 186 L946 194 M967 186 L974 194" fill="none" {LINE} {wd(1.8)}/>')
+
+
+def soyuz_om_home():
+    """The orbital module on the descent module's top (352), as the way home's r-om (66 px/m)."""
+    return (f'<rect x="938" y="342" width="44" height="12" fill="#ffffff" {LINE} stroke-width="2.4"/>'
+         f'<ellipse cx="960" cy="244" rx="72" ry="98" fill="#ffffff" {LINE} stroke-width="2.6"/>'
+         f'<circle cx="992" cy="262" r="14" fill="none" {LINE} stroke-width="1.6" opacity="0.8"/>'
+         f'<path d="M888 244 Q960 260 1032 244" fill="none" {LINE} stroke-width="1.2" opacity="0.5"/>'
+         f'<path d="M960 146 L960 118" fill="none" {LINE} stroke-width="2.4"/>'
+         f'<path d="M952 120 L968 120 L964 110 L956 110 Z" fill="#ffffff" {LINE} stroke-width="1.8"/>')
+
+
+def soyuz_dm_home():
+    """The descent module coming home (nose up, its base at 500, 72 across half, its hatch's top at 352)."""
+    return (f'<path d="M928 352 C904 384 888 430 888 500 L1032 500 C1032 430 1016 384 992 352 Z" fill="#ffffff" {LINE} '
+            f'stroke-width="3"/>'
+            f'<path d="M888 500 Q960 514 1032 500" fill="none" {LINE} stroke-width="2.4"/>'
+            f'<circle cx="988" cy="420" r="9" fill="rgba(22,48,92,0.12)" {LINE} stroke-width="2"/>'
+            f'<rect x="940" y="346" width="40" height="8" fill="#ffffff" {LINE} stroke-width="2"/>')
+
+
+def soyuz_sm_home():
+    """The service module behind the base (500 to 664), its engine and the two wings (40 % span: the way home's
+    turns would swing longer ones off the frame)."""
+    out = (f'<rect x="896" y="500" width="128" height="12" fill="#ffffff" {LINE} stroke-width="2.4"/>'
+           f'<path d="M888 512 L888 560 L870 590 L870 650 L1050 650 L1050 590 L1032 560 L1032 512 Z" fill="#ffffff" {LINE} '
+           f'stroke-width="2.6"/>'
+           f'<path d="M888 532 L1032 532" fill="none" {LINE} stroke-width="1.2" opacity="0.5"/>'
+           f'<path d="M948 650 L940 668 L980 668 L972 650 Z" fill="#ffffff" {LINE} stroke-width="2.2"/>')
+    for x0, x1 in ((870, 760), (1050, 1160)):
+        lo, hi = min(x0, x1), max(x0, x1)
+        out += (f'<rect x="{lo}" y="596" width="{hi - lo}" height="40" fill="{GM_DARK}" {LINE} stroke-width="2"/>'
+                + "".join(f'<path d="M{lo + (hi - lo) * f:.1f} 596 L{lo + (hi - lo) * f:.1f} 636" fill="none" {LINE} '
+                          f'stroke-width="1.2" opacity="0.7"/>' for f in (0.25, 0.5, 0.75)))
+    return out
+
+
+def soyuz_parts():
+    small = lambda body: re.sub(r'stroke-width="([\d.]+)"', lambda m: f'stroke-width="{float(m.group(1)) * 0.8:.2f}"', body)
+    rocket = board_group("rocket")
+    nose = rocket.index('<path xmlns="http://www.w3.org/2000/svg" d="M915 440')
+    big = f"translate({DX} {DY}) scale({DK}) translate(-850 -520)"
+    turn = "translate(-120 20) rotate(90 960 500)"
+    # The launch (33.8 px/m, the rocket's top stage 2.66 m): under its fairing and tower on the pad; the climb
+    # throws both off (a-les), the craft under them with its wings folded; deployed in orbit.
+    K = 33.8
+    top = 500 - (0.45 + 2.98 + 2.24 + 2.26) * K
+    folded = soyuz_stack(top, K, panels=False)
+    out = soyuz_stack(top, K)
+    layer("sy-rocket", rocket[:nose] + folded + soyuz_fairing(), (960, 600))
+    layer("sy-debris-1", folded + soyuz_fairing(), (960, 420))
+    layer("sy-debris-1-bare", folded, (960, 420))
+    layer("sy-a-les", soyuz_fairing(), (960, 300))
+    layer("sy-d-payload", f'<g transform="{big}"><g transform="{turn}">{out}</g></g>', D_AT(914, 520))
+    thick = re.sub(r'stroke-width="[\d.]+"', 'stroke-width="5"', out)
+    for name in ("sy-o-sat", "sy-o-sat-b"):
+        layer(name, f'<g transform="translate(960 560) scale(0.6) translate(-960 -426)">{thick}</g>', (960, 560))
+    # Coming home (66 px/m): the descent module where the generic capsule is; the service module the pack (the
+    # retrofire's) and the module (the separation's, about its middle); the orbital module on the nose, latched
+    # at two points, turning about latch b; no straps.
+    dm, sm = small(soyuz_dm_home()), small(soyuz_sm_home())
+    layer("sy-r-capsule", RT(dm), RC)
+    layer("sy-r-capsule-up", RU(dm), RC)
+    layer("sy-r-periscope", "", RC)
+    layer("sy-r-pack", RT(sm), RT_AT(960, 580))
+    layer("sy-r-module", RT(sm), RT_AT(960, 580))
+    layer("sy-r-om", RT(small(soyuz_om_home())), RT_AT(980, 352))
+    layer("sy-r-om-cut-a", RT(f'<circle cx="940" cy="350" r="6" fill="{GOLD}"/>'), RT_AT(940, 350))
+    layer("sy-r-om-cut-b", RT(f'<circle cx="980" cy="350" r="6" fill="{GOLD}"/>'), RT_AT(980, 350))
+    for n in ("strap-a", "strap-b", "cut-a", "cut-b"):
+        layer(f"sy-r-{n}", "", RC)
+    layer("sy-r-pyro", RT("".join(f'<circle cx="{x}" cy="504" r="6" fill="{GOLD}"/>' for x in (910, 960, 1010))), RT_AT(960, 504))
+    layer("sy-r-flame-1", RT(f'<path d="M944 668 C942 694 952 720 960 744 C968 720 978 694 976 668 Z" fill="{GOLD_FILL}" '
+                             f'stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>'), RT_AT(960, 668))
+    layer("sy-r-flame-2", "", RT_AT(960, 668))
+    layer("sy-r-flame-3", "", RT_AT(960, 668))
+    layer("sy-r-jet-l", RT(puff(880, 540, 10)), RT_AT(890, 540))
+    layer("sy-r-jet-r", RT(puff(1040, 540, 10)), RT_AT(1030, 540))
+    layer("sy-r-jet-stuck", RT(f'<path d="M1034 536 C1064 528 1098 518 1134 510 L1138 526 C1102 532 1066 544 1036 552 Z" '
+                               f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>'), RC)
+    layer("sy-r-glow-side", RT(f'<path d="M1000 366 C1024 396 1036 440 1036 496 C1050 440 1030 392 1000 366 Z" fill="{GOLD_FILL}" '
+                               f'stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>'), RC)
+    layer("sy-r-half-nose", RT(small(f'<path d="M928 352 C904 384 892 420 891 440 L1029 440 C1028 420 1016 384 992 352 Z" '
+                                     f'fill="#ffffff" {LINE} stroke-width="3"/>')), RT_AT(960, 410))
+    layer("sy-r-half-body", RT(small(f'<path d="M890 444 L1030 444 C1032 466 1032 484 1032 500 L888 500 C888 484 888 466 890 444 Z" '
+                                     f'fill="#ffffff" {LINE} stroke-width="3"/>')), RT_AT(960, 472))
+    # The docking close-up (39 px/m, as Gemini's there): the active Soyuz, its probe's tip at the generic
+    # capsule's nose (352), nose right; the passive one facing it, its drogue's mouth at the target's (540);
+    # the other of a rendezvous, nose left. Its jets: braking at the orbital module, pushing at the service
+    # module's foot, one on the side, one stuck.
+    S = 39
+    whole = soyuz_stack(352, S)
+    layer("sy-k-chaser", KT(KC, 90, whole), KC)
+    oc = (1150, 470)
+    layer("sy-k-other", KT(oc, -90, whole), oc)
+    # The passive one, upside down so its drogue (a cone, mouth at the bottom) meets the chaser's probe.
+    passive = soyuz_stack(352, S, probe=False)
+    drogue = f'<path d="M944 352 L920 336 L1000 336 L976 352 Z" fill="#ffffff" {LINE} stroke-width="2.2"/>'
+    # Flip it about y = 446 so its nose (352) lands at 540 and its foot above; the drogue's mouth at 540.
+    flipped = f'<g transform="translate(0 892) scale(1 -1)">{passive}{drogue}</g>'
+    tc = (KM[0] + KK * (540 - 426), KM[1])
+    layer("sy-k-target", KT(tc, 90, flipped), KM)
+    foot = 352 + (0.45 + 2.98 + 2.24 + 2.26 + 0.4) * S
+    sh_t, sh_b = K_AT(KC, 916, 400, 90), K_AT(KC, 1004, 400, 90)
+    layer("sy-k-brake", puff(sh_t[0] + 18, sh_t[1] - 6, 9) + puff(sh_b[0] + 18, sh_b[1] + 6, 9), KC)
+    b_t, b_b = K_AT(KC, 912, foot - 10, 90), K_AT(KC, 1008, foot - 10, 90)
+    layer("sy-k-push", puff(b_t[0] - 16, b_t[1], 9) + puff(b_b[0] - 16, b_b[1], 9), KC)
+    side = K_AT(KC, 916, 560, 90)
+    layer("sy-k-side", puff(side[0], side[1] - 16, 10), side)
+    root = K_AT(KC, 912, 580, 90)
+    layer("sy-k-stuck", f'<path d="M{root[0] - 6:.1f} {root[1]:.1f} C{root[0] - 14:.1f} {root[1] - 40:.1f} {root[0] - 20:.1f} '
+                        f'{root[1] - 80:.1f} {root[0] - 28:.1f} {root[1] - 120:.1f} L{root[0] - 12:.1f} {root[1] - 122:.1f} '
+                        f'C{root[0] - 6:.1f} {root[1] - 80:.1f} {root[0] + 2:.1f} {root[1] - 40:.1f} {root[0] + 6:.1f} {root[1]:.1f} Z" '
+                        f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>', KC)
+
+
 # --- Project Gemini (2026-10-17): its spacecraft, and the Agena it docked with --------------------------
 # The reentry module seen from its back (the side with the hatches): the heat shield, the cabin's cone
 # with the two hatches, a window in each, the reentry control (RCS) section, a short cylinder, and the
@@ -2266,6 +2439,7 @@ def main():
     departure_parts()
     mercury_parts()
     vostok_parts()
+    soyuz_parts()
     satellite_parts()
     gemini_parts()
     if ONLY:

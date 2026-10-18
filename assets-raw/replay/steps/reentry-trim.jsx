@@ -23,6 +23,8 @@ put("d-earth");
 put("r-orbit");
 put("r-carrier");
 var parts = ["r-strap-a", "r-strap-b", "r-pack", "r-periscope", "r-capsule", "r-jet-l", "r-jet-r", "r-jet-stuck"];
+// OM (project-soyuz.jsx; 2026-10-18): a Soyuz-type craft, its orbital module on the nose.
+if (typeof OM !== "undefined" && OM) parts.splice(5, 0, "r-om");
 for (var i = 0; i < parts.length; i++) put(parts[i], "r-carrier");
 
 if (BURN) {

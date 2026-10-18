@@ -199,8 +199,9 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   beside the other Gemini, whose crewman takes the pictures. The Earth-orbit tests of the circumlunar, lunar-orbital
   and direct-ascent Gemini fly Gemini too, with their Transtage, propulsion module and direct-ascent craft (user,
   2026-10-18). Vostok (`vk-`, Korabl-Sputnik 2 too), Sputnik 1, Explorer 1 and Sputnik 2 fly as themselves (user,
-  2026-10-18): the early-era pack has no generic craft left. Voskhod too, with its soft landing and Leonov's spacewalk
-  (user, 2026-10-18). Client only.
+  2026-10-18): the early-era pack has no generic craft left. Voskhod too, with its soft landing and Leonov's spacewalk,
+  and Soyuz 7K-OK, its orbital module on the nose (user, 2026-10-18). Rockets stay generic (user: the report doesn't
+  say which flew). Client only.
 
 ## How we work
 

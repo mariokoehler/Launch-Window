@@ -558,6 +558,14 @@ leading to satellite navigation.
   lines to every station, which were expensive; they keyed the stations from Mercury through Apollo.
   Generated for the game in `assets-raw/audio/quindar/` (2026-10-14). Sources: Wikipedia ("Quindar tones"),
   NASA's Apollo Lunar Surface Journal ("Quindar tones").
+- **Soyuz 7K-OK** (the replay's Soyuz, 2026-10-18): 7.95 m long, 2.72 m across at the service module's skirt, its
+  solar panels 9.80 m from tip to tip (one source gives 8.37); the orbital module 3.45 m long with its probe, the
+  descent module 2.24 m long and 2.17 m across. The orbital and service modules both go at the separation, and a
+  soft-landing engine fires just before touchdown. On Soyuz 5 (January 1969) the service module didn't separate
+  after the retrofire: the craft entered the air nose first, Boris Volynov hanging in his straps, until the module
+  broke away and the descent module righted itself; the parachute lines tangled and the soft-landing engines failed,
+  and the hard landing broke his teeth. Sources: Wikipedia ("Soyuz spacecraft", "Soyuz 5"), RussianSpaceWeb
+  (Soyuz 7K-OK).
 - **Voskhod** (the replay's Voskhod, 2026-10-18): a Vostok made to carry two or three, with a solid-fuel backup
   retro rocket on top of the descent sphere. Vostok hadn't needed one: its low orbit would have decayed within
   about ten days if the retro failed, and Voskhod's heavier load flew higher. Its crew stayed aboard to the ground,

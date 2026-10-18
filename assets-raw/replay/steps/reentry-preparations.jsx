@@ -4,8 +4,10 @@
 // Glitch: the stopping puff comes late; it swings past to 215, rocks, and the jets settle it at 180
 // by 4.4.
 // Failure: a jet sticks open at 2.6: the capsule spins on, faster and faster, and can't be held.
+// OM (project-soyuz.jsx; 2026-10-18): a Soyuz-type craft, its orbital module on the nose.
 var glitch = VARIANT === "glitch", failure = VARIANT === "failure";
 var START = 0.8, STOP = 2.6;
+var OM = typeof OM !== "undefined" && OM;
 
 put("paper", "screen");
 // The motes stream past at the orbit's speed: its way, before the turn.
@@ -14,6 +16,7 @@ put("d-earth");
 put("r-orbit");
 put("r-carrier");
 var parts = ["r-strap-a", "r-strap-b", "r-pack", "r-periscope", "r-capsule", "r-jet-l", "r-jet-r", "r-jet-stuck"];
+if (OM) parts.splice(5, 0, "r-om");
 for (var i = 0; i < parts.length; i++) put(parts[i], "r-carrier");
 
 turn("d-earth", function (t) { return -0.25 * t; });
