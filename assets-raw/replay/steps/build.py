@@ -1803,6 +1803,41 @@ variant_of("gemini-eva-out", "lk-700-eva-out", L7_EVA, skin="l7-")
 variant_of("soyuz-lok-eva-rail", "lk-700-eva-rail", {**L7_EVA, "e-rail": "l7-e-rail-solo"}, skin="l7-")
 variant_of("gemini-eva-photo-docked", "lk-700-eva-photo", L7_EVA, skin="l7-", before=["spacewalk.jsx"])
 
+# Gemini EOR's Earth-orbit tests (2026-10-19, user; ge-, ll- and sv- parts): Gemini's skin with the stack in its place
+# (the service module and the lander's frame where the equipment section was), its own way home's trunk; the S-IVB
+# tug's own launch, docking and burn to the high orbit, after which it lets go (hoi-separate.jsx); the spacewalks
+# aft to the lander and back (crew-transfer.jsx); the lander out of its frame, its engine test and restart in the
+# lander's scenes, back in, and cast off at the end. Unconfirmed: the stack's layout and sizes.
+GE = {"rocket": "ge-rocket", "debris-1": "ge-debris-1", "d-payload": "ge-d-payload", "o-sat": "ge-o-sat"}
+for _step in ("launch-preparations", "countdown", "ascent", "deployment", "insertion", "earth-orbit"):
+    variant_of(f"gemini-{_step}", f"gemini-eor-{_step}", GE)
+for _step in ("launch-preparations", "countdown", "ascent", "deployment", "earth-orbit"):
+    variant_of(_step, f"tug-{_step}", {}, skin="sv-")
+TUG_DOCK = {"k-chaser": "ge-k-chaser", "k-push": "ge-k-push", "k-target": "sv-k-target", "k-light": "sv-k-light",
+            "k-latch": "sv-k-latch"}
+variant_of("gemini-target-approach", "gemini-eor-tug-approach", TUG_DOCK)
+variant_of("gemini-docking", "gemini-eor-tug-docking", TUG_DOCK)
+variant_of("gemini-transtage-hoi", "gemini-eor-btm", {"o-sat": "ge-o-btm", "o-stage": "ge-o-btm-stage"})
+LL_DOCK = {"k-chaser": "ll-k-chaser", "k-brake": "ll-k-brake", "k-push": "ll-k-push", "k-side": "ll-k-side",
+           "k-stuck": "ll-k-stuck", "k-target": "ge-k-target", "k-light": "ge-k-light", "k-latch": "ge-k-latch"}
+variant_of("transtage-undocking", "langley-deployment", LL_DOCK)
+variant_of("gemini-docking", "langley-docking", LL_DOCK)
+variant_of("transtage-undocking", "langley-cast-off", {**LL_DOCK, "k-chaser": "ll-k-chaser-empty"})
+GE_WALK = {"e-hole": "ge-e-blank", "e-hatch": "ge-e-blank", "e-capsule-b": "ge-e-blank", "e-collar": "ge-e-blank"}
+variant_of("crew-transfer", "gemini-eor-transfer-out", {**GE_WALK, "r-capsule": "ge-e-capsule-out", "e-hole-b": "ge-e-hole-out",
+                                                      "e-hatch-b": "ge-e-hatch-out", "e-rail": "ge-e-rail-out"},
+           before=["gemini-eor-transfer.jsx", "spacewalk.jsx"], skin="ge-")
+variant_of("crew-transfer", "gemini-eor-transfer-back", {**GE_WALK, "r-capsule": "ge-e-capsule-back", "e-hole-b": "ge-e-hole-back",
+                                                       "e-hatch-b": "ge-e-hatch-back", "e-rail": "ge-e-rail-back"},
+           before=["gemini-eor-transfer-back.jsx", "spacewalk.jsx"], skin="ge-")
+variant_of("lander-engine-test", "langley-engine-test", {}, skin="ll-", before=["moon.jsx", "lander-orbit.jsx", "langley-engine-test.jsx"])
+variant_of("lander-engine-test", "langley-restart", {}, skin="ll-", before=["moon.jsx", "lander-orbit.jsx", "langley-restart.jsx"])
+variant_of("gemini-reentry-preparations", "gemini-eor-modules-separation", {"r-trunk": "ge-r-trunk"})
+# Its way down ends at sea, in two steps where Gemini's own flights have it in one and the recovery: the chutes,
+# then the splashdown, on two points from the main (two-point.jsx).
+variant_of("descent-chutes", "gemini-descent-chutes", {}, skin="gm-", before=["two-point.jsx"])
+variant_of("splashdown-and-recovery", "gemini-splashdown-and-recovery", {}, skin="gm-", before=["two-point.jsx"])
+
 
 def read(*path):
     return open(os.path.join(HERE, *path), encoding="utf-8").read() + "\n"

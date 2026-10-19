@@ -2102,6 +2102,26 @@ clips, the replay is meant to be watched like a short film, and the player can s
   of the three steps is unconfirmed. Its spacewalk is three steps on its own hull (`l7-e-capsule`): out on the tether,
   along a handrail on the cone and back, and a photo and back in. The Moon flights (`lk-700`), with the braking
   stage, are a later package. Sizes from the blueprint, unconfirmed.
+- **Gemini EOR's Earth-orbit tests (user, 2026-10-19):** the lander test in low orbit and the lander and heat-shield
+  test fly their own hardware (`gemini_eor_parts`; unconfirmed, our reading of the blueprints). The stack (`ge-`):
+  Gemini's reentry module and retrograde section, the EOR service module in the equipment section's place (a ribbed
+  cone, dark on one side), and behind it an open frame holding the Langley lander upright, its canopy towards the
+  capsule; no tower on the rocket (ejection seats). The lander (`ll-`): an open platform on legs, two dark tanks
+  either side of a clear canopy with its seat and pilot, one engine. The S-IVB tug (`sv-`) has its own launch
+  (`tug-*`, the `atv` steps; a step 6 Earth orbit alone, by `"later": "launch-preparations"`). The steps: the
+  spacewalk to the lander walks aft along a rail above the service module into the seat (`gemini-eor-transfer-out`,
+  the stack drawn nose left; the step `eva-gemini-langley`, or an `eva` before the lander test), and back to Gemini's
+  hatch after it (`-transfer-back`, an `eva` after `docking`; `crew-transfer.jsx` takes the rail's height and where
+  the figure stands up at each end, `gemini-eor-transfer*.jsx`). The lander's release (`langley-deployment`) backs it
+  out of its frame, the engine test and the restart (`langley-engine-test`, `langley-restart`) are two burns in the
+  lander's scene, the second on from the first's last frame (the lander is one stage: no staging), `docking` flies it
+  back in (the lander as the chaser), and the last `undocking` casts it off, empty. On the heat-shield test the stack
+  docks nose first into the tug's ring (`lll-docking`), the tug burns to the high orbit and lets go after
+  (`gemini-eor-btm`, `hoi-separate.jsx`). The way home is Gemini's: the service module and its empty frame go at the
+  modules separation (`gemini-eor-modules-separation`, `ge-r-trunk`), then Gemini's retrofire, jettison and reentry,
+  and its chutes and splashdown on two points (`gemini-descent-chutes`, `gemini-splashdown-and-recovery`). The
+  heat-shield test's fast reentry from the high orbit plays as a normal one. The Moon flights (`gemini-eor`) are a
+  later package.
 - **Voskhod as itself (user, 2026-10-18):** Vostok's skin with Voskhod's parts in place (`vh-`, `voskhod-*`): the
   backup retro on the sphere's top in orbit, thrown off with the instrument module at the modules separation
   (`vh-r-backup`, `BACKUP`; its real fate unconfirmed), which the orbital flights' retrofire jettison plays too, as

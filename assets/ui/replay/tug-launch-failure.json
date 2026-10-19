@@ -1,0 +1,17 @@
+{
+ "duration": 7.6,
+ "revealAt": 3.3,
+ "cues": [
+  {
+   "at": 0.9,
+   "sound": "rocket-roar",
+   "loop": true,
+   "until": 3.25,
+   "fade": 0.2
+  },
+  {
+   "at": 3.35,
+   "sound": "radio-launch-failure"
+  }
+ ]
+}

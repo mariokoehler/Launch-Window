@@ -3160,6 +3160,242 @@ def gemini_parts():
     layer("gd-r-trunk-cut-b", RT(f'<circle cx="{rim:.1f}" cy="500" r="6" fill="{GOLD}"/>'), RT_AT(rim, 500))
 
 
+# --- Gemini EOR (2026-10-19, user; ge-, ll- and sv- parts): its Earth-orbit tests. Gemini's reentry module and
+# retrograde section, then the EOR service module in the equipment section's place (our blueprint's ribbed cone,
+# dark on one side, out to GE_B) and behind it an open frame (the blueprint's second view) that holds the Langley
+# light lander upright, its canopy towards the capsule. The lander (ll-): an open platform on four legs (two seen),
+# two dark tanks either side of a clear canopy with the seat, one engine under it. The S-IVB tug (sv-): its docking
+# ring and ribbed collar, the forward cone, the long tank, the aft cone and its J-2's ribbed bell. Our reading of
+# the blueprints; the sizes are unconfirmed.
+GE_B, GE_SM_L, GE_BAY_L = 1.65, 3.0, 3.0
+GE_BAY0 = GM_RETRO_Y - GE_SM_L                               # the frame's front, where the service module ends
+GE_BASE = GE_BAY0 - GE_BAY_L                                 # its open end
+LL_TOP = 1.9                                                 # the canopy's top above the platform's foot
+TUG_L = 0.3 + 0.8 + 2.0 + 11.0 + 2.2 + 3.0                   # the tug, ring to bell
+
+
+def langley(cx, base, kx, ky, pilot=False, w=1.0):
+    """The Langley lander nose up, its platform's foot at base (px), kx and ky px/m across and along."""
+    X = lambda u: cx + u * kx
+    Y = lambda v: base - v * ky
+    sw = lambda x: f'stroke-width="{x * w:.2f}"'
+
+    def poly(pts, fill, width, extra=""):
+        return f'<path d="M{" L".join(f"{X(a):.1f} {Y(b):.1f}" for a, b in pts)} Z" fill="{fill}" {LINE} {sw(width)}{extra}/>'
+    out = poly([(-0.18, 0), (-0.32, -0.55), (0.32, -0.55), (0.18, 0)], "#ffffff", 2.4)
+    out += "".join(f'<path d="M{X(s * 0.85):.1f} {Y(0.1):.1f} L{X(s * 1.3):.1f} {Y(-0.72):.1f} M{X(s * 0.5):.1f} {Y(0):.1f} '
+                   f'L{X(s * 1.1):.1f} {Y(-0.42):.1f}" fill="none" {LINE} {sw(2.6)}/>'
+                   f'<ellipse cx="{X(s * 1.3):.1f}" cy="{Y(-0.75):.1f}" rx="{0.18 * kx:.1f}" ry="{0.05 * ky + 1:.1f}" fill="#ffffff" '
+                   f'{LINE} {sw(2)}/>' for s in (-1, 1))
+    out += poly([(-1.0, 0), (-1.0, 0.25), (1.0, 0.25), (1.0, 0)], "#ffffff", 2.6)
+    # The canopy, clear, the seat in it, and its pilot's helmet when crewed.
+    out += (f'<rect x="{X(-0.32):.1f}" y="{Y(LL_TOP):.1f}" width="{0.64 * kx:.1f}" height="{(LL_TOP - 0.25) * ky:.1f}" '
+            f'rx="{0.3 * kx:.1f}" fill="rgba(22,48,92,0.08)" {LINE} {sw(2.2)}/>'
+            f'<path d="M{X(-0.14):.1f} {Y(1.2):.1f} L{X(-0.14):.1f} {Y(0.45):.1f} L{X(0.2):.1f} {Y(0.45):.1f}" fill="none" {LINE} '
+            f'{sw(2.2)} opacity="0.7"/>')
+    if pilot:
+        out += (f'<circle cx="{X(0):.1f}" cy="{Y(1.32):.1f}" r="{0.19 * kx:.1f}" fill="#ffffff" {LINE} {sw(2.2)}/>'
+                f'<path d="M{X(0.02):.1f} {Y(1.42):.1f} L{X(0.17):.1f} {Y(1.4):.1f} L{X(0.17):.1f} {Y(1.24):.1f} L{X(0.02):.1f} '
+                f'{Y(1.22):.1f} Z" fill="{GM_DARK}" {LINE} {sw(1.6)}/>')
+    for s in (-1, 1):
+        x0 = min(s * 0.37, s * 0.99)
+        out += (f'<rect x="{X(x0):.1f}" y="{Y(1.5):.1f}" width="{0.62 * kx:.1f}" height="{1.25 * ky:.1f}" rx="{0.31 * kx:.1f}" '
+                f'fill="{GM_DARK}" {LINE} {sw(2.6)}/>'
+                f'<path d="M{X(s * 0.37):.1f} {Y(0.88):.1f} L{X(s * 0.99):.1f} {Y(0.88):.1f}" fill="none" {LINE} {sw(1.4)} opacity="0.6"/>'
+                f'<rect x="{X(s * 1.06) - 0.07 * kx:.1f}" y="{Y(1.0):.1f}" width="{0.14 * kx:.1f}" height="{0.2 * ky:.1f}" '
+                f'fill="#ffffff" {LINE} {sw(1.6)}/>')
+    # The dish on its mast, over the right-hand tank.
+    out += (f'<path d="M{X(0.68):.1f} {Y(1.5):.1f} L{X(0.82):.1f} {Y(1.82):.1f}" fill="none" {LINE} {sw(1.8)}/>'
+            f'<path d="M{X(0.66):.1f} {Y(1.86):.1f} Q{X(0.84):.1f} {Y(1.74):.1f} {X(1.0):.1f} {Y(1.9):.1f} Z" fill="#ffffff" '
+            f'{LINE} {sw(1.8)}/>')
+    return out
+
+
+def eor_sm(f, k=1.0):
+    """The service module, from the retrograde section's seam back to the frame."""
+    w = lambda x: f"{x * k:.2f}"
+    y0, y1 = GM_RETRO_Y, GE_BAY0
+    out = gm_poly(f, [(-GM_RETRO, y0), (-GE_B, y1), (GE_B, y1), (GM_RETRO, y0)], "#ffffff", w(2.4))
+    out += gm_poly(f, [(0, y0), (0, y1), (GE_B, y1), (GM_RETRO, y0)], GM_DARK, w(1.2), ' opacity="0.55"')
+    out += "".join(f'<path d="M{gm_pt(f, s * GM_RETRO * u, y0)} L{gm_pt(f, s * GE_B * u, y1)}" fill="none" {LINE} '
+                   f'stroke-width="{w(1.2)}" opacity="0.5"/>' for s in (-1, 1) for u in (0.3, 0.65))
+    # The ribbed collar at its narrow end.
+    c = GM_RETRO + (GE_B - GM_RETRO) * 0.3 / GE_SM_L
+    out += f'<path d="M{gm_pt(f, -c, y0 - 0.3)} L{gm_pt(f, c, y0 - 0.3)}" fill="none" {LINE} stroke-width="{w(1.4)}" opacity="0.7"/>'
+    return out
+
+
+def eor_bay(f, k=1.0):
+    """The open frame behind the service module: its bulkhead, two longerons and the stubs of its back ring."""
+    w = lambda x: f"{x * k:.2f}"
+    y0, y1, t = GE_BAY0, GE_BASE, 0.12
+    out = gm_poly(f, [(-GE_B, y0), (-GE_B, y0 - t), (GE_B, y0 - t), (GE_B, y0)], "#ffffff", w(2.4))
+    for s in (-1, 1):
+        out += gm_poly(f, [(s * GE_B, y0), (s * GE_B, y1), (s * (GE_B - t), y1), (s * (GE_B - t), y0)], "#ffffff", w(2.4))
+        out += gm_poly(f, [(s * GE_B, y1), (s * GE_B, y1 + t), (s * (GE_B - 0.4), y1 + t), (s * (GE_B - 0.4), y1)], "#ffffff", w(2.4))
+    return out
+
+
+def eor_stack(f, lander=True, pilot=False, k=1.0):
+    """Gemini EOR whole: the lander (or none) in its frame, the service module, the retrograde section, the module."""
+    out = ""
+    if lander:
+        base = f[1] - (GE_BAY0 - 0.15 - LL_TOP) * f[3]
+        out += langley(f[0], base, f[2], f[3], pilot, k * 0.8)
+    return out + eor_sm(f, k) + eor_bay(f, k) + gemini_retro(f, k) + gemini_module(f, k)
+
+
+def tug_up(cx, top, k):
+    """The S-IVB tug nose up, its docking ring's top at top, k px/m."""
+    X = lambda u: cx + u * k
+    Y = lambda v: top + v * k
+
+    def poly(pts, fill, width, extra=""):
+        return f'<path d="M{" L".join(f"{X(a):.1f} {Y(b):.1f}" for a, b in pts)} Z" fill="{fill}" {LINE} stroke-width="{width}"{extra}/>'
+    y = [0, 0.3, 1.1, 3.1, 14.1, 16.3, 19.3]
+    out = poly([(-0.5, y[5]), (-1.15, y[6]), (1.15, y[6]), (0.5, y[5])], "#ffffff", 2.4)
+    out += "".join(f'<path d="M{X(-0.5 - 0.65 * u):.1f} {Y(y[5] + 3 * u):.1f} L{X(0.5 + 0.65 * u):.1f} {Y(y[5] + 3 * u):.1f}" '
+                   f'fill="none" {LINE} stroke-width="1.2" opacity="0.5"/>' for u in (0.2, 0.4, 0.6, 0.8))
+    out += poly([(-3.3, y[4]), (-1.5, y[5]), (1.5, y[5]), (3.3, y[4])], "#ffffff", 2.6)
+    out += poly([(-3.3, y[3]), (-3.3, y[4]), (3.3, y[4]), (3.3, y[3])], "#ffffff", 3)
+    out += "".join(f'<path d="M{X(-3.3):.1f} {Y(v):.1f} L{X(3.3):.1f} {Y(v):.1f}" fill="none" {LINE} stroke-width="1.2" '
+                   f'opacity="0.45"/>' for v in (y[3] + 3.6, y[3] + 7.4))
+    out += poly([(-1.5, y[2]), (-3.3, y[3]), (3.3, y[3]), (1.5, y[2])], "#ffffff", 2.6)
+    out += "".join(f'<path d="M{X(s * 1.5 * u):.1f} {Y(y[2]):.1f} L{X(s * 3.3 * u):.1f} {Y(y[3]):.1f}" fill="none" {LINE} '
+                   f'stroke-width="1.2" opacity="0.5"/>' for s in (-1, 1) for u in (0.35, 0.7))
+    out += poly([(-1.5, y[1]), (-1.5, y[2]), (1.5, y[2]), (1.5, y[1])], "#ffffff", 2.4)
+    out += "".join(f'<path d="M{X(u):.1f} {Y(y[1]):.1f} L{X(u):.1f} {Y(y[2]):.1f}" fill="none" {LINE} stroke-width="1.2" '
+                   f'opacity="0.5"/>' for u in (-1.0, -0.5, 0, 0.5, 1.0))
+    out += poly([(-1.1, y[0]), (-1.1, y[1]), (1.1, y[1]), (1.1, y[0])], GM_DARK, 2.4)
+    return out
+
+
+def gemini_eor_parts():
+    small = lambda body: re.sub(r'stroke-width="([\d.]+)"', lambda m: f'stroke-width="{float(m.group(1)) * 0.8:.2f}"', body)
+    thick = lambda body, s=5: re.sub(r'stroke-width="[\d.]+"', f'stroke-width="{s}"', body)
+    rocket = board_group("rocket")
+    nose = rocket.index('<path xmlns="http://www.w3.org/2000/svg" d="M915 440')
+    big = f"translate({DX} {DY}) scale({DK}) translate(-850 -520)"
+    turn = "translate(-120 20) rotate(90 960 500)"
+    # On the rocket (no tower: ejection seats), out of it and on the map: the frame's open end on the rocket's top.
+    launch = gm_shift(eor_stack(GM_L), GM_L, GM_EQUIP_Y - GE_BASE)
+    mid = 500 - (3.45 - GE_BASE) * GM_L[3] / 2
+    layer("ge-rocket", rocket[:nose] + launch, (960, 600))
+    layer("ge-debris-1", launch, (960, mid))
+    layer("ge-d-payload", f'<g transform="{big}"><g transform="{turn}">{launch}</g></g>', D_AT(914, 520))
+    layer("ge-o-sat", f'<g transform="translate(960 560) scale(0.45) translate(-960 {-mid:.1f})">{thick(launch)}</g>', (960, 560))
+    # Coming home: the service module and its frame, empty, are the trunk the modules' separation drops (adapter.jsx),
+    # from the seam on, as Gemini's equipment section.
+    seam = 500 - GM_RETRO_Y * GM_R[3]
+    rim = 960 + GM_RETRO * GM_R[2]
+    layer("ge-r-trunk", RT(small(eor_sm(GM_R) + eor_bay(GM_R))), RT_AT(rim, seam))
+    # The docking close-up. The stack as the chaser (the tug's docking), its jets behind it at the frame's open end.
+    sx, sy = GM_R[2], GM_R[3]
+    layer("ge-k-chaser", KT(KC, 90, small(eor_stack(GM_R, lander=False))), KC)
+    base_y = 500 - GE_BASE * sy
+    b_t, b_b = K_AT(KC, 960 - GE_B * sx, base_y, 90), K_AT(KC, 960 + GE_B * sx, base_y, 90)
+    layer("ge-k-push", puff(b_t[0] - 16, b_t[1], 9) + puff(b_b[0] - 16, b_b[1], 9), KC)
+    # The stack as the lander's target, empty: the frame's open end at the target's mouth (540), the rest beyond it.
+    tc = (KM[0] + KK * (540 - 426), KM[1])
+    moved = f'<g transform="translate(0 {540 - base_y:.1f})">{small(eor_stack(GM_R, lander=False))}</g>'
+    layer("ge-k-target", KT(tc, 90, moved), KM)
+    lp = K_AT(tc, 960 - GE_B * sx + 8, 530, 90)
+    layer("ge-k-light", f'<circle cx="{lp[0]:.1f}" cy="{lp[1]:.1f}" r="7" fill="{GOLD}" {LINE} stroke-width="2"/>', lp)
+    corners = [K_AT(tc, 960 + s * (GE_B - 0.06) * sx, 540, 90) for s in (-1, 1)]
+    layer("ge-k-latch", "".join(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="9" fill="{GOLD}"/>' for x, y in corners), KM)
+    # The lander as the chaser, its canopy first: docked (no offset), it sits in the frame, its canopy 0.15 m off the
+    # bulkhead (the mouth is at 426 - (KM - KC) / KK in its own drawing). With its pilot, or empty (cast off).
+    mouth = 426 - (KM[0] - KC[0]) / KK
+    ll_base = mouth - (GE_BAY_L - 0.15 - LL_TOP) * sy
+    layer("ll-k-chaser", KT(KC, 90, small(langley(960, ll_base, sx, sy, pilot=True))), KC)
+    layer("ll-k-chaser-empty", KT(KC, 90, small(langley(960, ll_base, sx, sy))), KC)
+    sh_t, sh_b = K_AT(KC, 960 - 0.99 * sx, ll_base - 1.5 * sy, 90), K_AT(KC, 960 + 0.99 * sx, ll_base - 1.5 * sy, 90)
+    layer("ll-k-brake", puff(sh_t[0] + 18, sh_t[1] - 6, 9) + puff(sh_b[0] + 18, sh_b[1] + 6, 9), KC)
+    p_t, p_b = K_AT(KC, 960 - 1.0 * sx, ll_base, 90), K_AT(KC, 960 + 1.0 * sx, ll_base, 90)
+    layer("ll-k-push", puff(p_t[0] - 16, p_t[1], 9) + puff(p_b[0] - 16, p_b[1], 9), KC)
+    side = K_AT(KC, 960 - 1.06 * sx, ll_base - 0.9 * sy, 90)
+    layer("ll-k-side", puff(side[0], side[1] - 16, 10), side)
+    root = K_AT(KC, 960 - 1.06 * sx, ll_base - 0.6 * sy, 90)
+    layer("ll-k-stuck", f'<path d="M{root[0] - 6:.1f} {root[1]:.1f} C{root[0] - 14:.1f} {root[1] - 40:.1f} {root[0] - 20:.1f} '
+                        f'{root[1] - 80:.1f} {root[0] - 28:.1f} {root[1] - 120:.1f} L{root[0] - 12:.1f} {root[1] - 122:.1f} '
+                        f'C{root[0] - 6:.1f} {root[1] - 80:.1f} {root[0] + 2:.1f} {root[1] - 40:.1f} {root[0] + 6:.1f} {root[1]:.1f} Z" '
+                        f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>', KC)
+    # The tug as the stack's target, its ring's mouth at the target's (540), as big as the stack.
+    tug_flip = f'<g transform="translate(0 1080) scale(1 -1)">{tug_up(960, 540, sx)}</g>'
+    layer("sv-k-target", KT(tc, 90, tug_flip), KM)
+    lp = K_AT(tc, 960 - 1.1 * sx + 7, 533, 90)
+    layer("sv-k-light", f'<circle cx="{lp[0]:.1f}" cy="{lp[1]:.1f}" r="7" fill="{GOLD}" {LINE} stroke-width="2"/>', lp)
+    corners = [K_AT(tc, 960 + s * 1.1 * sx, 540, 90) for s in (-1, 1)]
+    layer("sv-k-latch", "".join(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="9" fill="{GOLD}"/>' for x, y in corners), KM)
+    # The tug's own launch, a little wider than the rocket: its aft end in an interstage on the rocket's top.
+    kl = 104 / 6.6
+    t_top = 500 - (TUG_L - 0.0) * kl
+    inter = (f'<path d="M915 500 L908 {500 - 5.2 * kl:.1f} L1012 {500 - 5.2 * kl:.1f} L1005 500 Z" fill="#ffffff" {LINE} '
+             f'stroke-width="3"/>')
+    tug_l = tug_up(960, t_top, kl) + inter
+    t_mid = (t_top + 500) / 2
+    layer("sv-rocket", rocket[:nose] + tug_l, (960, 600))
+    layer("sv-debris-1", tug_l, (960, t_mid))
+    layer("sv-d-payload", f'<g transform="{big}"><g transform="{turn}">{tug_up(960, t_top, kl)}</g></g>', D_AT(914, 520))
+    layer("sv-o-sat", f'<g transform="translate(960 560) scale(0.45) translate(-960 {-t_mid:.1f})">{thick(tug_up(960, t_top, kl))}</g>',
+          (960, 560))
+    # The burn to the high orbit on the map: the stack docked nose first into the tug's ring, upside down on it,
+    # as big as the tug; in two, the stack (o-sat) and the tug (o-stage) in one frame, so the tug lets go
+    # (hoi-separate.jsx).
+    fb = (960, 500, kl, kl * 1.09)
+    ring = 500 - TUG_L * kl
+    nose_y = ring + 0.3 * kl
+    c = nose_y + 500 - 3.45 * fb[3]
+    stack = f'<g transform="translate(0 {c:.1f}) scale(1 -1)">{eor_stack(fb, lander=False)}</g>'
+    top = nose_y - (3.45 - GE_BASE) * fb[3]
+    b_mid = (top + 500) / 2
+    on_map = lambda body: f'<g transform="translate(960 560) scale(0.42) translate(-960 {-b_mid:.1f})">{thick(body, 3.5)}</g>'
+    layer("ge-o-btm", on_map(stack), (960, 560))
+    layer("ge-o-btm-stage", on_map(tug_up(960, ring, kl)), (960, 560))
+    # The spacewalks to the lander and back (crew-transfer.jsx with gemini-eor-transfer.jsx's numbers): the stack as
+    # the way home's capsule (raised EV_UP, as gm-e-capsule), drawn nose left on the way out (mirrored about the
+    # hatch's middle, so the lander is ahead of the figure) and nose right on the way back, moved on so the lander's
+    # seat is where the figure starts. Gemini's hatch is the second one on both ways, the lander has none.
+    EV_UP, xm = 23, (HATCH[0] + HATCH[1]) / 2
+    pic = f'<g transform="translate(0 {-EV_UP})">{RT(small(eor_stack(GM_R)))}</g>'
+    seat = RT_AT(960, 500 - (GE_BAY0 - 0.15 - LL_TOP + 1.0) * sy)[0]
+    over = 2 * xm - seat - xm                                   # the seat's distance from the hatch, either way
+    slope = math.degrees(math.atan2(2 * (0.655 * GM_R[2]), 2 * (1.77 * GM_R[3])))
+    edge = lambda x: 380 + (x - 881) * math.tan(math.radians(slope))
+    x0, x1 = HATCH[0], HATCH[1]
+    hy = edge(x1)
+    hole = (f'<g transform="rotate({slope:.2f} {x1} {hy:.1f})"><rect x="{x0 + 4}" y="{hy - 2:.1f}" width="{x1 - x0 - 8}" '
+            f'height="10" fill="{NAVY}"/></g>')
+    hatch = (f'<g transform="rotate({slope:.2f} {x1} {hy:.1f})"><rect x="{x0}" y="{hy - 8:.1f}" width="{x1 - x0}" '
+             f'height="10" rx="3" fill="{GM_DARK}" {LINE} stroke-width="3"/></g>')
+    layer("ge-e-blank", "", RC)
+    layer("ge-e-capsule-out", mirror(pic, xm), RC)
+    layer("ge-e-hole-out", mirror(hole, xm), (2 * xm - x1, hy))
+    layer("ge-e-hatch-out", mirror(hatch, xm), (2 * xm - x1, hy))
+    rail = 290
+    bay_top = RC[1] - EV_UP - GE_B * RK * GM_R[2]
+    end = xm + over - 30
+    layer("ge-e-rail-out", f'<path d="M930 {rail} L{end:.1f} {rail} M960 {rail} L960 360 M{end - 14:.1f} {rail} '
+                           f'L{end - 14:.1f} {bay_top:.1f}" fill="none" {LINE} stroke-width="4"/>', (960, rail))
+    shift = f'translate({over:.1f} 0)'
+    layer("ge-e-capsule-back", f'<g transform="{shift}">{pic}</g>', RC)
+    a = math.radians(slope)
+    hinge = (x1 + (x0 - x1) * math.cos(a) + over, hy + (x0 - x1) * math.sin(a))
+    layer("ge-e-hole-back", f'<g transform="{shift}">{hole}</g>', hinge)
+    layer("ge-e-hatch-back", f'<g transform="{shift}">{hatch}</g>', hinge)
+    layer("ge-e-rail-back", f'<path d="M900 {rail} L{end:.1f} {rail} M930 {rail} L930 {bay_top:.1f} M{end - 14:.1f} {rail} '
+                            f'L{end - 14:.1f} 362" fill="none" {LINE} stroke-width="4"/>', (960, rail))
+    print("gemini-eor transfer: over", round(over, 1), "rail end", round(end, 1), "bay top", round(bay_top, 1))
+    # In the lander's scenes (the ll- skin), 55 px/m, crewed: the whole lander is the descent stage, no ascent stage.
+    layer("ll-n-descent", langley(960, 800, 55, 55, pilot=True, w=1.25), LC)
+    layer("ll-n-ascent", "", LC)
+    exit_y = 800 + 0.55 * 55
+    plume = (f'<path d="M943 {exit_y:.1f} C945 {exit_y + 32:.1f} 951 {exit_y + 64:.1f} 960 {exit_y + 96:.1f} C969 {exit_y + 64:.1f} '
+             f'975 {exit_y + 32:.1f} 977 {exit_y:.1f} Z" fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="3" stroke-linejoin="round"/>')
+    layer("ll-n-plume", plume, (960, exit_y))
+    layer("ll-n-flame-up", plume, (960, exit_y))
+
+
 def main():
     os.makedirs(OUT, exist_ok=True)
     copy_board_layers()
@@ -3199,6 +3435,7 @@ def main():
     lm_parts()
     satellite_parts()
     gemini_parts()
+    gemini_eor_parts()
     lk700_parts()
     if ONLY:
         # Keep the parts not redrawn.

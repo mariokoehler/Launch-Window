@@ -6,32 +6,37 @@
 // Failure: the same slip, and nothing brings it back: at 2.8 it's hauled in on its tether to the hatch
 // it came from, and the crossing is off.
 var glitch = VARIANT === "glitch", failure = VARIANT === "failure";
-var SLIP = 2.2, ANSWER = 2.8, RAIL = 352;
+var SLIP = 2.2, ANSWER = 2.8;
 // The second hatch's distance and the rail's end (a craft's own, lok-transfer.jsx; 2026-10-19).
 var OVER = typeof TRANSFER_OVER !== "undefined" ? TRANSFER_OVER : 494;
 var RAIL_END = typeof TRANSFER_RAIL_END !== "undefined" ? TRANSFER_RAIL_END : 1290;
+// The rail's height and where the figure stands up at each end, from the first hatch's (Gemini EOR's, 2026-10-19,
+// gemini-eor-transfer.jsx: the lander sits in a frame that stands higher than the hatch).
+var RAIL = typeof TRANSFER_RAIL !== "undefined" ? TRANSFER_RAIL : 352;
+var UP = typeof TRANSFER_UP !== "undefined" ? TRANSFER_UP : 0;
+var DY = typeof TRANSFER_DY !== "undefined" ? TRANSFER_DY : 0;
 
 spacewalkScene(true);
 
 var along = function (x) { return handOn([x, RAIL], 80); };
 // Hand over hand: a small bob along the rail.
 function hands(p, t, from) { return [p[0], p[1] + 4 * Math.sin(2 * Math.PI * 2 * (t - from)), p[2]]; }
-var start = [[0, [0, INSIDE, 0]], [0.8, [0, INSIDE, 0]], [1.4, [0, 0, 0]], [1.8, along(960)], [3.2, along(RAIL_END)]];
+var start = [[0, [0, INSIDE, 0]], [0.8, [0, INSIDE, 0]], [1.4, [0, UP, 0]], [1.8, along(960)], [3.2, along(RAIL_END)]];
 var pose;
 if (glitch || failure) {
     var before = poses(start), at = hands(before(SLIP), SLIP, 1.8), grip = evaAt(at, EH)[0];
     var adrift = function (t) { var u = t - SLIP; return [at[0] + 14 * u, at[1] - 70 * u, at[2] + 70 * u]; };
     var lost = adrift(ANSWER);
     var after = glitch
-        ? poses([[ANSWER, lost], [3.4, along(grip + 40)], [4.4, along(RAIL_END)], [4.9, [OVER, 0, 0]], [5.5, [OVER, INSIDE, 0]]])
-        : poses([[ANSWER, lost], [4.2, [0, 0, 0]], [4.8, [0, INSIDE, 0]]]);
+        ? poses([[ANSWER, lost], [3.4, along(grip + 40)], [4.4, along(RAIL_END)], [4.9, [OVER, DY, 0]], [5.5, [OVER, INSIDE, 0]]])
+        : poses([[ANSWER, lost], [4.2, [0, UP, 0]], [4.8, [0, INSIDE, 0]]]);
     pose = function (t) {
         if (t <= SLIP) return t > 1.8 ? hands(before(t), t, 1.8) : before(t);
         if (t <= ANSWER) return adrift(t);
         return glitch && t > 3.4 && t < 4.4 ? hands(after(t), t, 3.4) : after(t);
     };
 } else {
-    var all = poses(start.concat([[3.7, [OVER, 0, 0]], [4.3, [OVER, INSIDE, 0]]]));
+    var all = poses(start.concat([[3.7, [OVER, DY, 0]], [4.3, [OVER, INSIDE, 0]]]));
     pose = function (t) { return t > 1.8 && t < 3.2 ? hands(all(t), t, 1.8) : all(t); };
 }
 walk(pose);

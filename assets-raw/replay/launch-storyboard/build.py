@@ -41,6 +41,8 @@ SKINS["soyuz-l1"] = ("sy-", "soyuz-l1-launch", {"rocket": "s1-rocket", "debris-1
 SKINS["soyuz-lok"] = ("sy-", "soyuz-lok-launch", {"rocket": "lok-rocket", "debris-1": "lok-debris-1"})
 SKINS["lk"] = ("lkl-", "lk-launch")
 SKINS["lk-700"] = ("l7-", "lk-700-launch")
+SKINS["gemini-eor"] = ("gm-", "gemini-eor-launch", {"rocket": "ge-rocket", "debris-1": "ge-debris-1"})
+SKINS["tug"] = ("sv-", "tug-launch")
 for _key, _prefix in (("gemini-transtage", "gt"), ("gemini-lpm", "gl"), ("gemini-da", "gd")):
     SKINS[_key] = ("gm-", f"{_key}-launch", {"rocket": f"{_prefix}-rocket", "debris-1": f"{_prefix}-debris-1"})
 
