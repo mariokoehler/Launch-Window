@@ -1704,7 +1704,8 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
 - **Decided:** start with **passive competition** (the race, rival summaries in the Museum) plus
   **in-game messages** between players over the game connection, never email (user,
   2026-09-28). Espionage, sabotage and interference come later, once the daily loop is proven
-  fun and fair; they must not just punish whoever logs in less. Cooperative modes are a later
+  fun and fair; they must not just punish whoever logs in less. Cooperation's first piece is
+  publishing findings (§2.13, designed 2026-10-19). Cooperative modes are a later
   idea. Two pieces are already designed for it (§2.2(d), user 2026-10-07): an **intelligence
   service** that can run background checks on job candidates, and **poaching** other agencies'
   employees, with matching as a standing order.
@@ -2245,6 +2246,69 @@ pictures back. No BASPM precedent.
   (`assets-raw/archive/make_archive_assets.py`), and the screens (`ui-spec.md` §4.19). Venera 9's pictures
   aren't in (Mitchell's permission, the user's call); Leonov's part is told in words. The Sagan recording is
   the whole reading of his passage, 4:36.
+
+### 2.13 Publishing findings (cooperation)
+
+**The user's idea (2026-10-19), designed the same day; not built.** The race and the Intelligence Office
+(§2.9) are competition. This is the first cooperation: an agency that has learned something about an
+environment can publish it, which makes rivals' flights there safer and pays the publisher prestige. No
+BASPM precedent. History backs it: NASA published its results openly, the Soviets announced Sputnik's
+frequencies so anyone could track it, and both first satellites were contributions to the International
+Geophysical Year. No secrecy bonus for either archetype (as in §2.9).
+- **A finding is a science goal the pack already has** (`magnetic-field-study`, `micrometeoroid-study`,
+  `organisms-in-microgravity`, `lunar-bioscience`, `lunar-soil-study`, `lunar-mapping`,
+  `venus-atmosphere-study`, `mars-surface-and-atmosphere-study` and others), each mapped to the step kinds
+  it makes safer (step ids such as `reentry`, `landing`, `venus-entry`, `mars-descent`, with the body). The
+  exact mapping is worked out closer to implementation (user). Examples of what a finding answers:
+
+  | Finding | Makes safer | What was learned |
+  |---|---|---|
+  | `magnetic-field-study` | crewed Earth-orbit steps | Explorer 1 found the Van Allen belts (1958) |
+  | `micrometeoroid-study` | long orbital stays, spacewalks | Explorer 16 and the Pegasus satellites measured the hazard for Apollo |
+  | `organisms-in-microgravity` | the first crewed orbit and reentry | Korabl-Sputnik 2's dogs came home alive (1960) |
+  | `lunar-bioscience` | crewed circumlunar flight | Zond 5 took tortoises around the Moon and back (1968) |
+  | `lunar-soil-study`, `lunar-mapping` | the crewed lunar landing | Luna 9 and Surveyor 1 (1966) showed the surface holds a lander, against Gold's deep dust; Lunar Orbiter mapped the Apollo sites |
+  | `venus-atmosphere-study` | `venus-entry`, `venus-descent` | Venera 4 was crushed on the way down (1967); Venera 7 was built for 180 bar |
+  | `mars-surface-and-atmosphere-study` | `mars-entry`, `mars-descent`, `mars-landing` | Mariner 4 measured 4–7 mbar (1965), far thinner than assumed |
+
+  Every figure here is to be checked before it goes on a page.
+- **A known environment helps; an unknown one never hurts** (user): BASPM's odds stay the baseline. A
+  matching step gets **+4 base-chance points** (*proposed*) for an agency that knows the finding, by
+  earning the science goal itself (user: own science counts, so science flights are worth flying in the
+  lulls, §2.9) or because someone published it. **Bonuses from different findings stack** on a step (user;
+  rarely more than one applies).
+- **Publishing is an event the player takes part in, not a standing policy** (user). The finding shows up
+  in the turn report of the season its goal was earned, with a link to its archive page and a **Publish**
+  button. A confirmation dialog shows the prestige it would pay before anything is sent. Doing nothing
+  keeps the finding classified; no answer is ever required.
+- **Publishing later** (user): the finding's archive page keeps the Publish button until it is published,
+  so a player can hold a finding back, at the risk that rivals earn the goal themselves first and the
+  publication pays less.
+- **The payment, capped** (user): at most **50 % of the goal's prestige**, scaled by the share of rivals
+  it helps, `cap × helped / (players − 1)`, a rival being helped if it doesn't know the finding yet. With
+  10 players, helping all 9 pays the full 50 %, helping 6 pays 6/9 of it, and old news pays nothing.
+  *Proposed:* the dialog's amount is a preview as of now (a rival can still earn the goal at the same
+  resolution), and the turn report states the final amount; publications of one finding in the same
+  resolution split the payment; publishing is settled once a turn for every player, like the intelligence
+  board and the contract market (§2.9, §2.11). To check: whether "helps 6 of 9" tells more than the rival
+  summaries already show; if science goals aren't public there, the dialog shows only the amount.
+- **Archive pages** (§2.12): **every finding gets one** (user: "knowledge is cool"), written for those
+  that have none yet, and **no history notes for findings** (user): what a note would say goes on the page,
+  which stays locked until the finding is discovered, where a history note is always visible. **A
+  finding's page opens only for the agencies that know it** (user), unlike the other pages, which open for
+  the whole game: for its discoverers, and for everyone once it's published, so opening the page is part
+  of what publishing gives. *Proposed:* it still opens for everyone once the race is decided, like the other
+  closed pages. `lunar-mapping` already has a page (Lunar Orbiter 1); it would follow the finding's rule.
+  The archive is derived from goal records today; publications would be the one new record it reads.
+- **Likely touch points:** a content file mapping goals to step kinds (inside the pack hash or not, to
+  decide); `MissionStepResolution` for the bonus, which the client's odds read through the same rule
+  (`ui-spec.md` G7); known and held findings in the player's state and a new publish action, with the
+  server's preview for the dialog (saved fields and a new action: reset the dev data root, rebuild client
+  and server together); the turn report's finding entry, the archive page's button, the dialog, a help
+  topic (numbers as `HelpValues` tokens); the new pages in `archive.json` and their assets.
+- **To measure when built:** `ContentPackPlayouts standard smart` with the bonus on and off (landing,
+  lulls, side flights), and `RaceShock` with publishing always against never, beside the Sputnik shock
+  and the raises between reviews (§2.9), which already pull the side behind back into the race.
 
 ## 3. Architecture
 

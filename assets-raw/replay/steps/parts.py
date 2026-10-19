@@ -3289,9 +3289,10 @@ def gemini_eor_parts():
     seam = 500 - GM_RETRO_Y * GM_R[3]
     rim = 960 + GM_RETRO * GM_R[2]
     layer("ge-r-trunk", RT(small(eor_sm(GM_R) + eor_bay(GM_R))), RT_AT(rim, seam))
-    # The docking close-up. The stack as the chaser (the tug's docking), its jets behind it at the frame's open end.
+    # The docking close-up. The stack as the chaser (the tug's docking), the lander in its frame, its jets behind it at
+    # the frame's open end.
     sx, sy = GM_R[2], GM_R[3]
-    layer("ge-k-chaser", KT(KC, 90, small(eor_stack(GM_R, lander=False))), KC)
+    layer("ge-k-chaser", KT(KC, 90, small(eor_stack(GM_R))), KC)
     base_y = 500 - GE_BASE * sy
     b_t, b_b = K_AT(KC, 960 - GE_B * sx, base_y, 90), K_AT(KC, 960 + GE_B * sx, base_y, 90)
     layer("ge-k-push", puff(b_t[0] - 16, b_t[1], 9) + puff(b_b[0] - 16, b_b[1], 9), KC)
