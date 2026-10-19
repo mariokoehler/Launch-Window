@@ -5,8 +5,13 @@
 // starts to tumble, and the engine is shut down at 2.8, the alarm lamp lit.
 var glitch = VARIANT === "glitch", failure = VARIANT === "failure";
 var LIGHT = 0.8, LATE = 1.6, CUT = 2.8;
+// On from an engine test's last frame (2026-10-19; FROM, a step's file sets it): where its burn left the lander
+// (up by FROM[0]), its turn (FROM[1]) and the Earth's (FROM[2]); none when the staging opens the scene.
+var FROM = typeof FROM !== "undefined" ? FROM : [0, 0, 0];
 
 landerOrbit("alarm");
+LO = [LO[0], LO[1] + FROM[0]];
+turn("d-earth", function (t) { return FROM[2] - 0.25 * t; });
 var rough = glitch || failure;
 var go = rough ? LATE : LIGHT + 0.1;
 var flame = function (t) {
@@ -30,7 +35,7 @@ if (failure) {
     spin = function (t) { return 6 * Math.max(0, t - go); };
     move("n-carrier", function (t) { var u = Math.max(0, t - go); return [LO[0] - 10 * u, LO[1] + 30 * u]; });
 }
-turn("n-carrier", spin);
+turn("n-carrier", function (t) { return FROM[1] + spin(t); });
 fade("n-flame-up", function (t) { return flame(t) > 0 ? 1 : 0; });
 grow("n-flame-up", function (t) { var k = Math.max(flame(t), 0.01); return [k, k * (0.9 + 0.12 * Math.sin(2 * Math.PI * 11 * t)) * (1 + clamp((t - go) * 2, 0, 1.5))]; });
 fade("n-lamp", function (t) {

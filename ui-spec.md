@@ -2075,7 +2075,8 @@ clips, the replay is meant to be watched like a short film, and the player can s
   with the craft still on it (`-insertion`, `lkl-o-sat-stage`, `lok-o-sat-stage`); the uncrewed LK's last orbit is the
   ascent stage on its long ellipse (`lk-high-orbit`: Kosmos 379's ascent burn raised its apogee to about 14,000 km,
   and it stayed up); the crewed test's second engine test fires the backup engine's two nozzles
-  (`lk-engine-test-backup`). The LOK's spacewalks have its own hull (`lok-e-capsule`): the lone spacewalk's three
+  (`lk-engine-test-backup`); the staging starts where the engine test's burn left the LK, higher and turned
+  (`after-engine-test.jsx` sets `lander-staging.jsx`'s `FROM`, user, 2026-10-19). The LOK's spacewalks have its own hull (`lok-e-capsule`): the lone spacewalk's three
   steps are out on the tether, along the handrail to the docking probe and back (the crossing rehearsed,
   `eva-rail.jsx`), and a photo and back in; the lander test's two are the crossing to the docked LK and back from its
   ascent stage (crew-transfer.jsx's distance and rail and spacewalk.jsx's framing from `lok-transfer.jsx`). In the

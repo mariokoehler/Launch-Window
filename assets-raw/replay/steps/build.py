@@ -1748,7 +1748,7 @@ for _step in ("launch-preparations", "countdown", "deployment", "earth-orbit"):
     variant_of(_step, f"lk-{_step}", {}, skin="lkl-")
 variant_of("ascent", "lk-ascent", {"debris-1": "lkl-debris-1-bare"}, skin="lkl-")
 variant_of("lander-engine-test", "lk-engine-test", {}, skin="lkl-")
-variant_of("lander-staging", "lk-staging", {}, skin="lkl-")
+variant_of("lander-staging", "lk-staging", {}, skin="lkl-", before=["moon.jsx", "lander-orbit.jsx", "after-engine-test.jsx"])
 variant_of("soyuz-docking", "soyuz-lok-docking-lk", {**LOK, "k-target": "lkl-k-target-asc"})
 variant_of("soyuz-undocking", "soyuz-lok-undocking-lk", {**LOK, "k-target": "lkl-k-target-asc"})
 # The second ascent (2026-10-19, user): the rocket's third stage, its last burn into orbit, the craft still on it.
