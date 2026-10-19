@@ -585,7 +585,8 @@ leading to satellite navigation.
   "Volga", an inflatable airlock on the sphere (its electronics were air-cooled, so the cabin couldn't be emptied),
   jettisoned after Alexei Leonov's spacewalk, the first. Outside, his suit ballooned until he couldn't bend; he bled
   it down to a dangerously low pressure and went back in head first, not feet first as planned, overheated and
-  soaked in sweat. The descent module didn't separate cleanly on the way home either. Sources: Wikipedia
+  soaked in sweat. The descent module didn't separate cleanly on the way home either: the two modules, still joined,
+  spun until the connection burned through at about 100 km, as Vostok 1's had (the replay's modules separation glitch). Sources: Wikipedia
   ("Voskhod (spacecraft)", "Voskhod 2"), Spacefacts (Voskhod 2).
 - **Vostok's shape** (the replay's Vostok, 2026-10-18): a spherical descent module 2.3 m across (about 2.46 t),
   which carried the cosmonaut, and a biconical instrument module 2.25 m long and 2.43 m across with the

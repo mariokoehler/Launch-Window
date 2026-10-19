@@ -777,7 +777,7 @@ STEPS = {
         "times": [0.2, 0.8, 1.6, 2.4, 3.4, 4.3],
     },
     "voskhod-modules-separation": {
-        "pad": False, "source": "modules-separation", "skin": "vk-", "alias": {"rocket": "vh-rocket", "debris-1": "vh-debris-1", "d-payload": "vh-d-payload", "o-sat": "vh-o-sat", "o-sat-b": "vh-o-sat-b", "r-capsule": "vh-r-capsule", "r-capsule-up": "vh-r-capsule-up"}, "mirror": True, "before": ["project-vostok.jsx", "motes.jsx"],
+        "pad": False, "source": "modules-separation", "skin": "vk-", "alias": {"rocket": "vh-rocket", "debris-1": "vh-debris-1", "d-payload": "vh-d-payload", "o-sat": "vh-o-sat", "o-sat-b": "vh-o-sat-b", "r-capsule": "vh-r-capsule-bare", "r-capsule-up": "vh-r-capsule-up", "r-backup": "vh-r-backup"}, "mirror": True, "before": ["project-vostok.jsx", "project-voskhod.jsx", "motes.jsx"],
         "success": (5.6, 1.8), "glitch": (5.6, 3.6), "failure": (6.4, 3.8),
         "times": [0.5, 1.0, 1.6, 2.6, 3.6, 5.5],
     },
@@ -1195,6 +1195,15 @@ STEPS = {
     },
     "gemini-reentry-preparations": {
         "pad": False, "mirror": True, "source": "reentry-preparations", "skin": "gm-", "before": ["motes.jsx", "gemini-esep.jsx"], "after": ["adapter.jsx"],
+        "success": (6.0, 3.0), "glitch": (6.0, 3.6), "failure": (6.5, 3.4),
+        "times": [0.5, 1.6, 2.4, 3.2, 4.4, 5.9],
+    },
+    # The direct-ascent craft (2026-10-19, user): its ascent and landing modules go where the adapter's equipment
+    # section would, and there's no retrograde section behind the shield (the ascent module's burn was the retrofire).
+    "gemini-da-reentry-preparations": {
+        "pad": False, "mirror": True, "source": "reentry-preparations", "skin": "gm-",
+        "alias": {"r-pack": "gd-r-pack", "r-trunk": "gd-r-trunk", "r-trunk-cut-a": "gd-r-trunk-cut-a", "r-trunk-cut-b": "gd-r-trunk-cut-b"},
+        "before": ["motes.jsx", "gemini-esep.jsx"], "after": ["adapter.jsx"],
         "success": (6.0, 3.0), "glitch": (6.0, 3.6), "failure": (6.5, 3.4),
         "times": [0.5, 1.6, 2.4, 3.2, 4.4, 5.9],
     },

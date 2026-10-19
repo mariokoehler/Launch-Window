@@ -10,6 +10,7 @@
   "gemini-suborbital-flight": {"glitch": [{"at": 4.05, "sound": "radio-attitude-drift"}], "failure": [{"at": 3.65, "sound": "radio-tumbling"}]},
   "gemini-reentry-trim": {"success": [{"at": 3.05, "sound": "radio-roger"}], "glitch": [{"at": 3.45, "sound": "radio-attitude-drift"}], "failure": [{"at": 3.05, "sound": "radio-tumbling"}]},
   "gemini-reentry-preparations": {"success": [{"at": 3.05, "sound": "radio-roger"}], "glitch": [{"at": 3.65, "sound": "radio-attitude-drift"}], "failure": [{"at": 3.45, "sound": "radio-tumbling"}]},
+  "gemini-da-reentry-preparations": {"success": [{"at": 3.05, "sound": "radio-roger"}], "glitch": [{"at": 3.65, "sound": "radio-attitude-drift"}], "failure": [{"at": 3.45, "sound": "radio-tumbling"}]},
   "gemini-retrofire": {"success": [{"at": 1.0, "sound": "rocket-roar", "volume": 0.35, "loop": true, "until": 4.4, "fade": 0.3}], "glitch": [{"at": 1.0, "sound": "rocket-roar", "volume": 0.35, "loop": true, "until": 5.0, "fade": 0.3}], "failure": [{"at": 1.0, "sound": "rocket-roar", "volume": 0.35, "loop": true, "until": 2.6, "fade": 0.15}, {"at": 3.05, "sound": "radio-burn-failed"}]},
   "gemini-retrofire-jettison": {"glitch": [{"at": 3.45, "sound": "radio-separation-late"}], "failure": [{"at": 3.25, "sound": "radio-separation-failed"}]},
   "gemini-reentry": {"success": [{"at": 0.4, "sound": "radio-blackout"}], "glitch": [{"at": 0.4, "sound": "radio-blackout"}, {"at": 4.45, "sound": "radio-oscillations"}], "failure": [{"at": 0.4, "sound": "radio-blackout"}, {"at": 4.0, "sound": "radio-no-acquisition"}]},

@@ -821,11 +821,8 @@ def eva_parts():
     flash = (f'<path d="M944 284 L947 291 L955 294 L947 297 L944 304 L941 297 L933 294 L941 291 Z" fill="#ffffff" '
              f'stroke="{GOLD}" stroke-width="2.4" stroke-linejoin="round"/>')
     layer("e-flash", flash, (944, 294))
-    # Voskhod 2's (2026-10-18; any craft's): a cine camera on the hatch's rim, its lamp lit while it films, and a
-    # puff from the suit's valve at the figure's hip, as Leonov bled his suit down to fit back in.
-    layer("e-cine", f'<rect x="930" y="356" width="22" height="16" rx="2" fill="#ffffff" {LINE} stroke-width="2.6"/>'
-                    f'<path d="M952 360 L962 356 L962 372 L952 368 Z" fill="#ffffff" {LINE} stroke-width="2"/>', (941, 372))
-    layer("e-cine-lamp", f'<circle cx="935" cy="352" r="4" fill="{GOLD}" {LINE} stroke-width="1.6"/>', (935, 352))
+    # Voskhod 2's (2026-10-18; any craft's): a puff from the suit's valve at the figure's hip, as Leonov bled his suit
+    # down to fit back in.
     layer("e-vent", puff(836, 318, 12) + puff(822, 324, 8), EP)
     # The other capsule's crewman, standing in its hatch with a camera, all mirrored (pivots too).
     layer("e-suit-b", mirror(suit()), (2 * XP - EP[0], EP[1]))
@@ -1857,6 +1854,11 @@ def vostok_parts():
     layer("vh-r-capsule", RT(small(vostok_sphere(backup=True))), RC)
     layer("vh-r-capsule-bare", RT(sph), RC)
     layer("vh-r-capsule-up", RU(sph), RC)
+    # The backup retro alone (2026-10-19, user), thrown off with the instrument module at the modules separation
+    # (modules-separation.jsx's BACKUP, over the bare sphere): its fate is unconfirmed, but it's gone by the reentry.
+    layer("vh-r-backup", RT(small(f'<rect x="943" y="316" width="34" height="38" rx="3" fill="#ffffff" {LINE} stroke-width="2.6"/>'
+                                  f'<path d="M943 324 L928 312 M977 324 L992 312" fill="none" {LINE} stroke-width="2.2"/>')),
+          RT_AT(960, 335))
     # Voskhod 2's spacewalk (2026-10-18, user): the craft with its airlock (vh-e-capsule, in place of the scene's
     # capsule), no package, no hand-held gun (Leonov had none).
     layer("vh-e-capsule", voskhod_spacewalk(), RC)
@@ -2482,6 +2484,11 @@ LAND_H, ASC_H = 1.5, 1.3
 
 def gemini_direct(f, bare):
     """The direct-ascent craft: Gemini's reentry module on an ascent module on a landing module with its legs."""
+    return gemini_direct_modules(f, bare) + gm_shift(gemini_module(f), f, GM_EQUIP_Y + LAND_H + ASC_H)
+
+
+def gemini_direct_modules(f, bare):
+    """The direct-ascent craft's ascent and landing modules, the landing module's foot at GM_EQUIP_Y."""
     y0 = GM_EQUIP_Y
     out = bells(f, y0, (0,), 0.8, 0.28, 0.6) if bare else ""
     # Out of the rocket, its two legs seen: struts splayed from the landing module's side, a pad at each foot.
@@ -2496,7 +2503,7 @@ def gemini_direct(f, bare):
     out += gm_poly(f, [(-1.3, a0), (-1.3, a0 + ASC_H), (1.3, a0 + ASC_H), (1.3, a0)], "#ffffff", "2.4")
     out += "".join(gm_poly(f, [(x - 0.3, a0 + 0.35), (x - 0.3, a0 + 0.95), (x + 0.3, a0 + 0.95), (x + 0.3, a0 + 0.35)], GM_DARK,
                            "1.6", ' opacity="0.8"') for x in (-0.75, 0.75))
-    return out + gm_shift(gemini_module(f), f, a0 + ASC_H)
+    return out
 
 
 def transtage_target(w=2.4):
@@ -2668,6 +2675,14 @@ def gemini_parts():
           D_AT(914, 520))
     tc = (KM[0] + KK * (540 - 426), KM[1])
     layer("tt-k-target", KT(tc, 90, transtage_target()), KM)
+    # The direct-ascent craft coming home (2026-10-19, user): no adapter, so no retrograde section; its ascent and
+    # landing modules are the trunk the reentry preparations drop (adapter.jsx), latched at the shield's rim.
+    drop = -(GM_EQUIP_Y + LAND_H + ASC_H)
+    rim = 960 + 1.3 * GM_R[2]
+    layer("gd-r-pack", "", RT_AT(1005, 500))
+    layer("gd-r-trunk", RT(small(gm_shift(gemini_direct_modules(GM_R, True), GM_R, drop))), RT_AT(rim, 500))
+    layer("gd-r-trunk-cut-a", RT(f'<circle cx="{1920 - rim:.1f}" cy="500" r="6" fill="{GOLD}"/>'), RT_AT(1920 - rim, 500))
+    layer("gd-r-trunk-cut-b", RT(f'<circle cx="{rim:.1f}" cy="500" r="6" fill="{GOLD}"/>'), RT_AT(rim, 500))
 
 
 def main():

@@ -2023,8 +2023,9 @@ clips, the replay is meant to be watched like a short film, and the player can s
   path dashed as it's set (`-trim`, `high-orbit-trim.jsx`, 7 s, time slowed there, 0.3: a turn to tail first, the
   burn, the turn back, each given its time, user), and the coast to reentry falls
   down it to the band (`-return`, `high-orbit-return.jsx`; the glitch drifts shallow and is corrected, the failure's
-  correction misfires). The stack is gone at the reentry preparations, without
-  a clip for its parting. The Transtage's size is real (3.05 by 4.57 m, two engines); the propulsion module's and the
+  correction misfires). The direct-ascent craft's ascent and landing modules let go at the
+  reentry preparations, as Gemini's equipment section does (`gemini-da-reentry-preparations`, `gd-r-trunk`; it has no
+  retrograde section, user, 2026-10-19); the lunar propulsion module is still gone there without a clip for its parting. The Transtage's size is real (3.05 by 4.57 m, two engines); the propulsion module's and the
   direct-ascent craft's shapes follow our blueprints, their sizes unconfirmed.
   The lunar Gemini programs themselves (direct ascent, EOR, circumlunar, lunar orbital) and Gemini EOR's Earth-orbit
   tests are a later package; Gemini EOR's equipment-section separation drops the section before the turn, the wrong way round, to be
@@ -2057,12 +2058,15 @@ clips, the replay is meant to be watched like a short film, and the player can s
   pad and in orbit, 40 % coming home, so the turns keep them in frame). The spacewalk (`eva-7k-ok`) and the crew
   transfer stay generic. Unconfirmed.
 - **Voskhod as itself (user, 2026-10-18):** Vostok's skin with Voskhod's parts in place (`vh-`, `voskhod-*`): the
-  backup retro on the sphere's top in orbit, gone by the reentry (assumed jettisoned, unconfirmed); its soft landing,
+  backup retro on the sphere's top in orbit, thrown off with the instrument module at the modules separation
+  (`vh-r-backup`, `BACKUP`; its real fate unconfirmed), which the orbital flights' retrofire jettison plays too, as
+  Korabl-Sputnik 2's does (their configurations have no separation step; Vostok's suborbital flight, which has one
+  after the jettison, keeps the burn's end there, by `later`; user, 2026-10-19); its soft landing,
   a flash under the base just before touchdown (`touchdown.jsx`'s `SOFT`, `project-voskhod.jsx`; the glitch's fires too
   high, hence its hard landing); the joint flight's time together as two Voskhods on the map. Voskhod 2's spacewalk in
   the spacewalk scene with the airlock standing off the sphere (`vh-e-capsule`, the hatch at its end): out through
-  the airlock (no hand-held gun), filming (a cine camera on the rim, `e-cine`; the stiff suit misses the shutter in
-  the glitch, the camera stops in the failure, `eva-film.jsx`), and back in with the suit ballooned (`eva-in.jsx`:
+  the airlock (no hand-held gun), filming (the hand camera only: the airlock's cine camera popped in, user, 2026-10-19; the stiff suit misses the shutter
+  in the glitch, and both tries in the failure, `eva-film.jsx`), and back in with the suit ballooned (`eva-in.jsx`:
   bled down and in feet first; the glitch is Leonov's own, stuck and in head first; the failure fogs up too).
   Unconfirmed.
 - **The way home in one piece (user, 2026-10-17):** the suborbital flight had no motes, so they popped in at the
