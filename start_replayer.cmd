@@ -18,6 +18,12 @@ if errorlevel 1 (
     exit /b 1
 )
 
+rem Let Windows scale the window on a high-DPI display, as the client exe's "High DPI
+rem scaling override: System" does. The window belongs to the JDK's java.exe, which has no
+rem such setting of its own; the compatibility layer reaches it through the environment
+rem (Maven, then the java it forks). It changes nothing on a 100 % display.
+set __COMPAT_LAYER=DPIUNAWARE
+
 echo Starting the mission replayer (%PACK%)...
 call mvn -pl dev-tools compile exec:exec@replayer -Dreplayer.pack=%PACK%
 pause
