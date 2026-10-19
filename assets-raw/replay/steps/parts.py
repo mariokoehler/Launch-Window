@@ -2452,8 +2452,52 @@ def lok_eva_parts():
     layer("lkl-e-capsule-b", back(lok), (1296, 470))
 
 
+LK_H = (822 - 648) / 40           # the LK's height in metres, its plate to its LPU's tanks (the lander's frame)
+
+
+def lk_up(base_y, k):
+    """The LK nose up at k px/m, its foot at base_y."""
+    return f'<g transform="translate(960 {base_y:.1f}) scale({k / 40:.4f}) translate(-960 -822)">{lk_lpu()}{lk_lva()}</g>'
+
+
+def lk_down(plate_y, k):
+    """The LK upside down at k px/m, its plate at plate_y (docked on a craft below it)."""
+    return f'<g transform="translate(960 {plate_y:.1f}) scale({k / 40:.4f} {-k / 40:.4f}) translate(-960 -648)">{lk_lpu()}{lk_lva()}</g>'
+
+
+def lok_lk_parts():
+    """The crewed lander test's LOK and LK together (2026-10-19, user): as the N1 stacked them, the Blok D, the LK on
+    it and the LOK on the LK (the third stage's burn, and leaving the Blok D), and docked, the LOK's probe in the LK's
+    plate (in orbit, after a turn-around and docking no step shows)."""
+    lok_l = 0.45 + 2.98 + 2.24 + LOK_SM
+    thick = lambda body: re.sub(r'stroke-width="[\d.]+"', 'stroke-width="5"', body)
+    def n1(bottom, k, stage):
+        y = bottom
+        out = ""
+        if stage:
+            y -= BLOK_D_H * k
+            out += blok_d(y, k)
+        out = lk_up(y, k) + out
+        plate = y - LK_H * k
+        return soyuz_stack(plate - 0.3 * k - lok_l * k, k, panels=False, sm_h=LOK_SM) + out, (bottom + plate - lok_l * k) / 2
+    k = 33.8 * 0.6
+    body, mid = n1(500, k, True)
+    layer("lok-o-sat-stage-lk", f'<g transform="translate(960 560) scale(0.6) translate(-960 {-mid:.1f})">{thick(body)}</g>', (960, 560))
+    top = 500 - lok_l * k
+    docked = soyuz_stack(top, k, panels=False, sm_h=LOK_SM) + lk_down(top, k)
+    mid = (500 + top - LK_H * k) / 2
+    layer("lok-o-sat-lk", f'<g transform="translate(960 560) scale(0.6) translate(-960 {-mid:.1f})">{thick(docked)}</g>', (960, 560))
+    big = f"translate({DX} {DY}) scale({DK}) translate(-850 -520)"
+    turn = "translate(-120 20) rotate(90 960 500)"
+    KL = 33.8 * (0.45 + 2.98 + 2.24 + 2.26) / lok_l * 0.75
+    pair, _ = n1(500, KL, False)
+    layer("lok-d-payload-lk", f'<g transform="{big}"><g transform="{turn}">{pair}</g></g>', D_AT(914, 520))
+    layer("lok-d-stage-lk", f'<g transform="{big}"><g transform="{turn}">{blok_d(500, KL)}</g></g>', D_AT(770, 520))
+
+
 def lm_parts():
     lok_eva_parts()
+    lok_lk_parts()
     # The LK (2026-10-19): its plume and its ascent flame both from the Blok E's nozzle (802).
     layer("lkl-n-descent", lk_lpu(), LC)
     layer("lkl-n-ascent", lk_lva(), LC)

@@ -1,6 +1,8 @@
 {
+  "soyuz-lok-insertion-lk": {"success": [{"at": 2.45, "sound": "radio-orbit-insertion"}], "glitch": [{"at": 3.25, "sound": "radio-burn-short"}]},
+  "soyuz-lok-blok-d-deployment-lk": {"success": [{"at": 0.2, "sound": "radio-watching"}, {"at": 2.65, "sound": "radio-payload-separation"}], "glitch": [{"at": 0.2, "sound": "radio-watching"}, {"at": 2.65, "sound": "radio-separation-late"}], "failure": [{"at": 0.2, "sound": "radio-watching"}, {"at": 2.35, "sound": "radio-collision"}]},
+  "soyuz-lok-earth-orbit-lk": {"success": [{"at": 2.15, "sound": "radio-signal-good"}], "glitch": [{"at": 3.45, "sound": "radio-telemetry-lost"}], "failure": [{"at": 3.05, "sound": "radio-data-lost"}]},
   "soyuz-lok-eva-rail": {"failure": [{"at": 2.75, "sound": "radio-crew-back-in"}]},
-  "soyuz-lok-insertion": {"success": [{"at": 2.45, "sound": "radio-orbit-insertion"}], "glitch": [{"at": 3.25, "sound": "radio-burn-short"}]},
   "lk-insertion": {"success": [{"at": 2.45, "sound": "radio-orbit-insertion"}], "glitch": [{"at": 3.25, "sound": "radio-burn-short"}]},
   "lk-high-orbit": {"success": [{"at": 2.15, "sound": "radio-signal-good"}], "glitch": [{"at": 3.45, "sound": "radio-telemetry-lost"}], "failure": [{"at": 3.45, "sound": "radio-data-lost"}]},
   "soyuz-lok-eva-out": {"failure": [{"at": 3.25, "sound": "radio-crew-back-in"}]},

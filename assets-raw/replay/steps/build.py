@@ -1752,7 +1752,6 @@ variant_of("lander-staging", "lk-staging", {}, skin="lkl-")
 variant_of("soyuz-docking", "soyuz-lok-docking-lk", {**LOK, "k-target": "lkl-k-target-asc"})
 variant_of("soyuz-undocking", "soyuz-lok-undocking-lk", {**LOK, "k-target": "lkl-k-target-asc"})
 # The second ascent (2026-10-19, user): the rocket's third stage, its last burn into orbit, the craft still on it.
-variant_of("soyuz-insertion", "soyuz-lok-insertion", {**LOK, "o-sat": "lok-o-sat-stage"})
 variant_of("insertion", "lk-insertion", {"o-sat": "lkl-o-sat-stage"}, skin="lkl-")
 # After the uncrewed test's ascent burn the ascent stage coasts out on a long ellipse (Kosmos 379's apogee rose to
 # about 14,000 km), and stays up; the crewed test's second engine test fires the backup engine's two nozzles.
@@ -1760,6 +1759,11 @@ variant_of("gemini-high-orbit", "lk-high-orbit", {"o-sat": "lkl-o-sat-asc"}, ski
 variant_of("lander-engine-test", "lk-engine-test-backup", {"n-plume": "lkl-n-plume-backup"}, skin="lkl-")
 # The LOK's spacewalks (2026-10-19, user): the lone one in three (out, along the rail to the probe and back, a photo
 # and in), and the crossings to the LK and back (lok-transfer.jsx).
+# The crewed lander test's LOK and LK together (2026-10-19, user): stacked as on the N1 on the third stage and off the
+# Blok D (drawn smaller so the pair fits), docked in orbit.
+variant_of("soyuz-insertion", "soyuz-lok-insertion-lk", {**LOK, "o-sat": "lok-o-sat-stage-lk"})
+variant_of("soyuz-deployment", "soyuz-lok-blok-d-deployment-lk", {**LOK, "d-payload": "lok-d-payload-lk", "d-stage": "lok-d-stage-lk"})
+variant_of("soyuz-earth-orbit", "soyuz-lok-earth-orbit-lk", {**LOK, "o-sat": "lok-o-sat-lk"})
 LOK_EVA = {"r-capsule": "lok-e-capsule", "e-box": "lok-e-box"}
 variant_of("gemini-eva-out", "soyuz-lok-eva-out", LOK_EVA, skin="sy-")
 variant_of("gemini-eva-out", "soyuz-lok-eva-rail", {**LOK_EVA, "e-rail": "lok-e-rail-solo"}, skin="sy-", source="eva-rail",

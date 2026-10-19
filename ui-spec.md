@@ -2078,8 +2078,11 @@ clips, the replay is meant to be watched like a short film, and the player can s
   (`lk-engine-test-backup`). The LOK's spacewalks have its own hull (`lok-e-capsule`): the lone spacewalk's three
   steps are out on the tether, along the handrail to the docking probe and back (the crossing rehearsed,
   `eva-rail.jsx`), and a photo and back in; the lander test's two are the crossing to the docked LK and back from its
-  ascent stage (crew-transfer.jsx's distance and rail and spacewalk.jsx's framing from `lok-transfer.jsx`). Still
-  generic: in the crewed lander test the LK until the first crossing (the map shows the LOK alone). The Moon flights (`soyuz-7k-l1`, `soyuz-7k-l3`) are a later
+  ascent stage (crew-transfer.jsx's distance and rail and spacewalk.jsx's framing from `lok-transfer.jsx`). In the
+  crewed lander test the LK flies with the LOK from the third stage on (user, 2026-10-19; `lok_lk_parts`): stacked as
+  the N1 had them, the LK under the LOK on the Blok D, on the insertion and leaving the Blok D (`-lk` clips, the pair
+  drawn smaller to fit), and docked, the LOK's probe in the LK's plate, on the orbit's map; the turn-around and
+  docking between have no step and aren't shown. The launch and the climb show the LOK alone. The Moon flights (`soyuz-7k-l1`, `soyuz-7k-l3`) are a later
   package. Unconfirmed.
 - **Voskhod as itself (user, 2026-10-18):** Vostok's skin with Voskhod's parts in place (`vh-`, `voskhod-*`): the
   backup retro on the sphere's top in orbit, thrown off with the instrument module at the modules separation
