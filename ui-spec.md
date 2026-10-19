@@ -2057,6 +2057,22 @@ clips, the replay is meant to be watched like a short film, and the player can s
   landing (`SOFT`); docking, the active probe to a passive Soyuz's drogue. The solar wings drawn short (60 % on the
   pad and in orbit, 40 % coming home, so the turns keep them in frame). The spacewalk (`eva-7k-ok`) and the crew
   transfer stay generic. Unconfirmed.
+- **The Soviet lunar craft's Earth-orbit tests as themselves (user, 2026-10-19; the rocket stays generic):** played
+  on Soyuz's skin and timelines with their own parts in place. The 7K-L1 (`s1-`, `soyuz-l1-*`): a support cone where
+  the orbital module was, under the same fairing and tower, gone with them in the climb (assumed); the descent and
+  service modules, the wings and a high-gain dish on a boom (`soyuz_dish`, its size and place unconfirmed); no orbital
+  module coming home (`project-soyuz-l1.jsx`); a suborbital flight's engine test is its retrofire, and the reentry
+  preparations after it trim instead of turning again. The 7K-LOK (`lok-`, `soyuz-lok-*`): 10.06 m, so its service
+  module is 4.4 m (`LOK_SM`; longer coming home, `LOK_LONGER`, `project-soyuz-lok.jsx`), no wings (fuel cells), the
+  Kontakt probe drawn as Soyuz's; it leaves the rocket on its Blok D (`blok_d`, 5.5 m, unconfirmed) and then the
+  Blok D (the `soyuz-7k-l3-lok` deployment); its rendezvous and time together as two LOKs; it docks to the LK's
+  ascent stage. The LK (`lkl-`, `lk-*`): the LPU without legs, as the T2K tests flew, and the ascent stage (cabin,
+  big window, the passive Kontakt plate, the Blok E whose one engine both tests and lifts off, firing down through
+  the LPU); its own launch under a shroud, its engine test and staging in the lander's scenes, the ascent stage alone
+  on the map after the staging. Both craft share their descent module's reentry, descent and landing with Soyuz
+  (`soyuz-reentry`, ...). Still generic: the crew transfer (`eva-7k-lok`), and in the crewed lander test the LK until
+  its engine test (the map shows the LOK alone). The Moon flights (`soyuz-7k-l1`, `soyuz-7k-l3`) are a later
+  package. Unconfirmed.
 - **Voskhod as itself (user, 2026-10-18):** Vostok's skin with Voskhod's parts in place (`vh-`, `voskhod-*`): the
   backup retro on the sphere's top in orbit, thrown off with the instrument module at the modules separation
   (`vh-r-backup`, `BACKUP`; its real fate unconfirmed), which the orbital flights' retrofire jettison plays too, as

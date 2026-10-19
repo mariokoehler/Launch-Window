@@ -578,6 +578,16 @@ leading to satellite navigation.
   broke away and the descent module righted itself; the parachute lines tangled and the soft-landing engines failed,
   and the hard landing broke his teeth. Sources: Wikipedia ("Soyuz spacecraft", "Soyuz 5"), RussianSpaceWeb
   (Soyuz 7K-OK).
+- **Soyuz 7K-L1, 7K-LOK and the LK** (the replay's, 2026-10-19): the 7K-L1 (flown as Zond) was a Soyuz for a loop
+  round the Moon: its orbital module gave way to a support cone and a high-gain dish, the reserve parachute was
+  dropped, and a gyro platform and star sensors were added for navigating far from the Earth; its wings spanned about
+  9 m. The 7K-LOK, the lunar orbiter of the landing plan, was 10.06 m long and 2.93 m across, and swapped the solar
+  panels for fuel cells, as Apollo's service module had them. It could dock with the LK but had no tunnel: the
+  cosmonaut was to go across to the lander and back by spacewalk. The LK was tested uncrewed in Earth orbit (T2K):
+  Kosmos 379 (1970) fired its engine to stand in for the hover and touchdown, which raised its orbit to 196 by
+  1,206 km, then a 1.518 km/s burn for the lift-off from the Moon; one source says the test craft had no landing
+  legs. Sources: Wikipedia ("Soyuz 7K-L1", "Soyuz 7K-LOK", "LK (spacecraft)", "Kosmos 379"), RussianSpaceWeb (L1,
+  LOK), Gunter's Space Page (LK T2K).
 - **Voskhod** (the replay's Voskhod, 2026-10-18): a Vostok made to carry two or three, with a solid-fuel backup
   retro rocket on top of the descent sphere. Vostok hadn't needed one: its low orbit would have decayed within
   about ten days if the retro failed, and Voskhod's heavier load flew higher. Its crew stayed aboard to the ground,

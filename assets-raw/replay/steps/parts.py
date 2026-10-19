@@ -1882,28 +1882,81 @@ def vostok_parts():
 # unconfirmed where the sources are silent.
 
 
-def soyuz_stack(top, k, panels=True, probe=True, wing=0.6):
-    """Soyuz nose up, its probe's tip at top, k px per metre (the parts' own sizes in metres)."""
+# The 7K-L1 (2026-10-19, user): the orbital module's place taken by a support cone (the fairing's and the escape
+# tower's mount, its height unconfirmed), and a high-gain dish on a boom for the radio from the Moon (its size and
+# place unconfirmed).
+SOYUZ_CONE = 1.0
+# The 7K-LOK's service module (2026-10-19): the craft is 10.06 m long, so 4.4 m (the 7K-OK's is 2.26), LOK_LONGER px
+# more of it coming home (fitted to the frame, not to scale). The Blok D under it: 3.7 m across, BLOK_D_H long with its
+# engine (5.5 m, unconfirmed).
+LOK_SM, LOK_LONGER = 4.4, 100
+BLOK_D_H = 5.5
+
+
+def blok_d(top, k):
+    """The Blok D stage, nose up, its top at top: an adapter cone up to the craft, the tank section, the engine."""
+    r, w = 1.85 * k, lambda x: f'stroke-width="{x:.2f}"'
+    a = top + 0.6 * k
+    body_end = top + (BLOK_D_H - 0.6) * k
+    out = (f'<path d="M{960 - 1.36 * k:.1f} {top:.1f} L{960 - r:.1f} {a:.1f} L{960 + r:.1f} {a:.1f} L{960 + 1.36 * k:.1f} {top:.1f} Z" '
+           f'fill="#ffffff" {LINE} {w(2.4)}/>'
+           f'<rect x="{960 - r:.1f}" y="{a:.1f}" width="{2 * r:.1f}" height="{body_end - a:.1f}" fill="#ffffff" {LINE} {w(2.6)}/>'
+           + "".join(f'<path d="M{960 - r:.1f} {a + (body_end - a) * f:.1f} L{960 + r:.1f} {a + (body_end - a) * f:.1f}" fill="none" '
+                     f'{LINE} {w(1.2)} opacity="0.5"/>' for f in (0.35, 0.7))
+           + f'<path d="M{960 - 0.3 * k:.1f} {body_end:.1f} L{960 - 0.5 * k:.1f} {body_end + 0.6 * k:.1f} L{960 + 0.5 * k:.1f} '
+             f'{body_end + 0.6 * k:.1f} L{960 + 0.3 * k:.1f} {body_end:.1f} Z" fill="#ffffff" {LINE} {w(2)}/>')
+    return out
+
+
+def soyuz_dish(x0, y0, k, sw=2.0):
+    """The high-gain dish on a boom from x0, y0 (the service module's right side), looking out and forward."""
+    ax, ay = math.cos(math.radians(-50)), math.sin(math.radians(-50))
+    cx, cy = x0 + 0.75 * k, y0 - 0.75 * k
+    r = 0.5 * k
+    p1, p2 = (cx - ay * r, cy + ax * r), (cx + ay * r, cy - ax * r)
+    back = (cx - ax * 0.55 * r * 2, cy - ay * 0.55 * r * 2)
+    return (f'<path d="M{x0:.1f} {y0:.1f} L{cx - ax * 0.4 * r:.1f} {cy - ay * 0.4 * r:.1f}" fill="none" {LINE} '
+            f'stroke-width="{sw:.2f}"/>'
+            f'<path d="M{p1[0]:.1f} {p1[1]:.1f} Q{back[0]:.1f} {back[1]:.1f} {p2[0]:.1f} {p2[1]:.1f} Z" fill="#ffffff" {LINE} '
+            f'stroke-width="{sw:.2f}"/>'
+            f'<path d="M{cx:.1f} {cy:.1f} L{cx + ax * 0.6 * r:.1f} {cy + ay * 0.6 * r:.1f}" fill="none" {LINE} '
+            f'stroke-width="{sw * 0.8:.2f}"/>')
+
+
+def soyuz_stack(top, k, panels=True, probe=True, wing=0.6, nose="om", dish=False, sm_h=2.26):
+    """Soyuz nose up, its probe's tip at top, k px per metre (the parts' own sizes in metres). nose: the orbital
+    module ("om"), the 7K-L1's support cone ("cone", SOYUZ_CONE tall) or nothing ("none"); dish: the high-gain
+    antenna on a boom off the service module's top; sm_h: the service module's length (the 7K-LOK's is longer)."""
     w = lambda x: f'stroke-width="{x:.2f}"'
     y = top
     out = ""
-    if probe:
-        out += f'<path d="M960 {y:.1f} L960 {y + 0.45 * k:.1f}" fill="none" {LINE} {w(2.4)}/>'
-        out += f'<path d="M952 {y + 0.45 * k:.1f} L968 {y + 0.45 * k:.1f} L964 {y + 0.3 * k:.1f} L956 {y + 0.3 * k:.1f} Z" fill="#ffffff" {LINE} {w(1.8)}/>'
-        y += 0.45 * k
-    om_h, om_r = 2.98 * k, 1.13 * k
-    out += (f'<ellipse cx="960" cy="{y + om_h / 2:.1f}" rx="{om_r:.1f}" ry="{om_h / 2:.1f}" fill="#ffffff" {LINE} {w(2.6)}/>'
-            f'<circle cx="{960 + om_r * 0.45:.1f}" cy="{y + om_h * 0.55:.1f}" r="{0.22 * k:.1f}" fill="none" {LINE} {w(1.6)} opacity="0.8"/>'
-            f'<path d="M{960 - om_r:.1f} {y + om_h / 2:.1f} Q960 {y + om_h / 2 + 0.25 * k:.1f} {960 + om_r:.1f} {y + om_h / 2:.1f}" '
-            f'fill="none" {LINE} {w(1.2)} opacity="0.5"/>')
-    y += om_h
+    if nose == "om":
+        if probe:
+            out += f'<path d="M960 {y:.1f} L960 {y + 0.45 * k:.1f}" fill="none" {LINE} {w(2.4)}/>'
+            out += f'<path d="M952 {y + 0.45 * k:.1f} L968 {y + 0.45 * k:.1f} L964 {y + 0.3 * k:.1f} L956 {y + 0.3 * k:.1f} Z" fill="#ffffff" {LINE} {w(1.8)}/>'
+            y += 0.45 * k
+        om_h, om_r = 2.98 * k, 1.13 * k
+        out += (f'<ellipse cx="960" cy="{y + om_h / 2:.1f}" rx="{om_r:.1f}" ry="{om_h / 2:.1f}" fill="#ffffff" {LINE} {w(2.6)}/>'
+                f'<circle cx="{960 + om_r * 0.45:.1f}" cy="{y + om_h * 0.55:.1f}" r="{0.22 * k:.1f}" fill="none" {LINE} {w(1.6)} opacity="0.8"/>'
+                f'<path d="M{960 - om_r:.1f} {y + om_h / 2:.1f} Q960 {y + om_h / 2 + 0.25 * k:.1f} {960 + om_r:.1f} {y + om_h / 2:.1f}" '
+                f'fill="none" {LINE} {w(1.2)} opacity="0.5"/>')
+        y += om_h
+    elif nose == "cone":
+        ch = SOYUZ_CONE * k
+        out += (f'<path d="M{960 - 0.22 * k:.1f} {y:.1f} L{960 - 0.55 * k:.1f} {y + ch:.1f} L{960 + 0.55 * k:.1f} {y + ch:.1f} '
+                f'L{960 + 0.22 * k:.1f} {y:.1f} Z" fill="#ffffff" {LINE} {w(2.4)}/>'
+                f'<path d="M{960 - 0.4 * k:.1f} {y + ch * 0.55:.1f} L{960 + 0.4 * k:.1f} {y + ch * 0.55:.1f}" fill="none" {LINE} '
+                f'{w(1.2)} opacity="0.5"/>')
+        y += ch
     dm_h, top_r, base_r = 2.24 * k, 0.5 * k, 1.085 * k
     out += (f'<path d="M{960 - top_r:.1f} {y:.1f} C{960 - top_r - 0.35 * k:.1f} {y + 0.5 * k:.1f} {960 - base_r:.1f} {y + 1.2 * k:.1f} '
             f'{960 - base_r:.1f} {y + dm_h:.1f} L{960 + base_r:.1f} {y + dm_h:.1f} C{960 + base_r:.1f} {y + 1.2 * k:.1f} '
             f'{960 + top_r + 0.35 * k:.1f} {y + 0.5 * k:.1f} {960 + top_r:.1f} {y:.1f} Z" fill="#ffffff" {LINE} {w(2.6)}/>'
             f'<circle cx="{960 + 0.42 * k:.1f}" cy="{y + 1.0 * k:.1f}" r="{0.13 * k:.1f}" fill="rgba(22,48,92,0.12)" {LINE} {w(1.4)}/>')
     y += dm_h
-    sm_top, sm_skirt, sm_h = 1.1 * k, 1.36 * k, 2.26 * k
+    sm_top, sm_skirt, sm_h = 1.1 * k, 1.36 * k, sm_h * k
+    if dish:
+        out += soyuz_dish(960 + sm_top, y + 0.35 * k, k)
     out += (f'<path d="M{960 - sm_top:.1f} {y:.1f} L{960 - sm_top:.1f} {y + 0.9 * k:.1f} L{960 - sm_skirt:.1f} {y + 1.4 * k:.1f} '
             f'L{960 - sm_skirt:.1f} {y + sm_h:.1f} L{960 + sm_skirt:.1f} {y + sm_h:.1f} L{960 + sm_skirt:.1f} {y + 1.4 * k:.1f} '
             f'L{960 + sm_top:.1f} {y + 0.9 * k:.1f} L{960 + sm_top:.1f} {y:.1f} Z" fill="#ffffff" {LINE} {w(2.6)}/>'
@@ -1953,14 +2006,20 @@ def soyuz_dm_home():
             f'<rect x="940" y="346" width="40" height="8" fill="#ffffff" {LINE} stroke-width="2"/>')
 
 
-def soyuz_sm_home():
+def soyuz_sm_home(wings=True, dish=False, longer=0):
     """The service module behind the base (500 to 664), its engine and the two wings (40 % span: the way home's
-    turns would swing longer ones off the frame)."""
-    out = (f'<rect x="896" y="500" width="128" height="12" fill="#ffffff" {LINE} stroke-width="2.4"/>'
-           f'<path d="M888 512 L888 560 L870 590 L870 650 L1050 650 L1050 590 L1032 560 L1032 512 Z" fill="#ffffff" {LINE} '
-           f'stroke-width="2.6"/>'
-           f'<path d="M888 532 L1032 532" fill="none" {LINE} stroke-width="1.2" opacity="0.5"/>'
-           f'<path d="M948 650 L940 668 L980 668 L972 650 Z" fill="#ffffff" {LINE} stroke-width="2.2"/>')
+    turns would swing longer ones off the frame); the 7K-L1's dish; longer px more of it (the 7K-LOK's)."""
+    out = soyuz_dish(1032, 523, 66, 2.0) if dish else ""
+    end = 650 + longer
+    out += (f'<rect x="896" y="500" width="128" height="12" fill="#ffffff" {LINE} stroke-width="2.4"/>'
+            f'<path d="M888 512 L888 560 L870 590 L870 {end} L1050 {end} L1050 590 L1032 560 L1032 512 Z" fill="#ffffff" {LINE} '
+            f'stroke-width="2.6"/>'
+            f'<path d="M888 532 L1032 532" fill="none" {LINE} stroke-width="1.2" opacity="0.5"/>'
+            f'<path d="M948 {end} L940 {end + 18} L980 {end + 18} L972 {end} Z" fill="#ffffff" {LINE} stroke-width="2.2"/>')
+    if longer:
+        out += f'<path d="M870 650 L1050 650" fill="none" {LINE} stroke-width="1.2" opacity="0.5"/>'
+    if not wings:
+        return out
     for x0, x1 in ((870, 760), (1050, 1160)):
         lo, hi = min(x0, x1), max(x0, x1)
         out += (f'<rect x="{lo}" y="596" width="{hi - lo}" height="40" fill="{GM_DARK}" {LINE} stroke-width="2"/>'
@@ -1998,6 +2057,47 @@ def soyuz_parts():
     layer("sy-r-periscope", "", RC)
     layer("sy-r-pack", RT(sm), RT_AT(960, 580))
     layer("sy-r-module", RT(sm), RT_AT(960, 580))
+    # The 7K-L1 (2026-10-19, user; s1- parts, played on Soyuz's skin): on the rocket its support cone where the
+    # orbital module was, under the same fairing and tower, which take the cone with them in the climb (assumed,
+    # unconfirmed); out of it the descent and service modules, the wings and the dish unfolded; coming home the
+    # service module with its dish.
+    l1_top = 500 - (SOYUZ_CONE + 2.24 + 2.26) * K
+    l1_folded = soyuz_stack(l1_top, K, panels=False, nose="cone")
+    l1_bare = soyuz_stack(l1_top + SOYUZ_CONE * K, K, panels=False, nose="none")
+    l1_out = soyuz_stack(l1_top + SOYUZ_CONE * K, K, nose="none", dish=True)
+    layer("s1-rocket", rocket[:nose] + l1_folded + soyuz_fairing(), (960, 600))
+    layer("s1-debris-1", l1_folded + soyuz_fairing(), (960, 420))
+    layer("s1-debris-1-bare", l1_bare, (960, 420))
+    layer("s1-d-payload", f'<g transform="{big}"><g transform="{turn}">{l1_out}</g></g>', D_AT(914, 520))
+    l1_thick = re.sub(r'stroke-width="[\d.]+"', 'stroke-width="5"', l1_out)
+    for name in ("s1-o-sat", "s1-o-sat-b"):
+        layer(name, f'<g transform="translate(960 560) scale(0.6) translate(-960 -426)">{l1_thick}</g>', (960, 560))
+    l1_sm = small(soyuz_sm_home(dish=True))
+    layer("s1-r-pack", RT(l1_sm), RT_AT(960, 580))
+    layer("s1-r-module", RT(l1_sm), RT_AT(960, 580))
+    # The 7K-LOK (2026-10-19, user; lok- parts, played on Soyuz's skin): 10.06 m long, so its service module is
+    # LOK_SM long (the rest is 7K-OK's), no wings (fuel cells), its Kontakt probe on the orbital module's nose (drawn
+    # as Soyuz's probe). On the rocket it's drawn at Soyuz's height (KL px/m) under the same fairing and tower; it
+    # leaves the rocket on its Blok D (05-deployment), then the Blok D (its own deployment); coming home the longer
+    # service module (project-soyuz-lok.jsx has its pivot and near end for the cable).
+    KL = 33.8 * (0.45 + 2.98 + 2.24 + 2.26) / (0.45 + 2.98 + 2.24 + LOK_SM)
+    lok_top = 500 - (0.45 + 2.98 + 2.24 + LOK_SM) * KL
+    lok = soyuz_stack(lok_top, KL, panels=False, sm_h=LOK_SM)
+    on_d = soyuz_stack(lok_top - BLOK_D_H * KL, KL, panels=False, sm_h=LOK_SM) + blok_d(500 - BLOK_D_H * KL, KL)
+    layer("lok-rocket", rocket[:nose] + lok + soyuz_fairing(), (960, 600))
+    layer("lok-debris-1", lok + soyuz_fairing(), (960, 420))
+    layer("lok-debris-1-bare", lok, (960, 420))
+    layer("lok-d-payload", f'<g transform="{big}"><g transform="{turn}">{lok}</g></g>', D_AT(914, 520))
+    layer("lok-d-payload-stack", f'<g transform="{big}"><g transform="{turn}">{on_d}</g></g>', D_AT(914, 520))
+    layer("lok-d-stage", f'<g transform="{big}"><g transform="{turn}">{blok_d(500, KL)}</g></g>', D_AT(770, 520))
+    lok_map = re.sub(r'stroke-width="[\d.]+"', 'stroke-width="5"', soyuz_stack(500 - (0.45 + 2.98 + 2.24 + LOK_SM) * K, K,
+                                                                               panels=False, sm_h=LOK_SM))
+    for name in ("lok-o-sat", "lok-o-sat-b"):
+        layer(name, f'<g transform="translate(960 560) scale(0.6) translate(-960 -426)">{lok_map}</g>', (960, 560))
+    lok_sm = small(soyuz_sm_home(wings=False, longer=LOK_LONGER))
+    lok_mid = (500 + 668 + LOK_LONGER) / 2
+    layer("lok-r-pack", RT(lok_sm), RT_AT(960, lok_mid))
+    layer("lok-r-module", RT(lok_sm), RT_AT(960, lok_mid))
     layer("sy-r-om", RT(small(soyuz_om_home())), RT_AT(980, 352))
     layer("sy-r-om-cut-a", RT(f'<circle cx="940" cy="350" r="6" fill="{GOLD}"/>'), RT_AT(940, 350))
     layer("sy-r-om-cut-b", RT(f'<circle cx="980" cy="350" r="6" fill="{GOLD}"/>'), RT_AT(980, 350))
@@ -2046,6 +2146,13 @@ def soyuz_parts():
                         f'{root[1] - 80:.1f} {root[0] - 28:.1f} {root[1] - 120:.1f} L{root[0] - 12:.1f} {root[1] - 122:.1f} '
                         f'C{root[0] - 6:.1f} {root[1] - 80:.1f} {root[0] + 2:.1f} {root[1] - 40:.1f} {root[0] + 6:.1f} {root[1]:.1f} Z" '
                         f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>', KC)
+    # The 7K-LOK in the close-up (2026-10-19): the active one and the other of a rendezvous, its push at its own foot.
+    lok_whole = soyuz_stack(352, S, panels=False, sm_h=LOK_SM)
+    layer("lok-k-chaser", KT(KC, 90, lok_whole), KC)
+    layer("lok-k-other", KT(oc, -90, lok_whole), oc)
+    lok_foot = 352 + (0.45 + 2.98 + 2.24 + LOK_SM + 0.4) * S
+    b_t, b_b = K_AT(KC, 912, lok_foot - 10, 90), K_AT(KC, 1008, lok_foot - 10, 90)
+    layer("lok-k-push", puff(b_t[0] - 16, b_t[1], 9) + puff(b_b[0] - 16, b_b[1], 9), KC)
 
 
 # --- Apollo (2026-10-18, user): the command and service module (CSM). The command module a cone 3.9 m across
@@ -2253,7 +2360,67 @@ def lm_ascent():
                       for x in (898, 1014)))
 
 
+# The Soviet LK (2026-10-19, user; lkl- parts) in the lander's frame, about 40 px/m: the LPU (its landing unit, the
+# frame it stands on) and the LVA (the cabin, 2.3 m across, its big window, the passive Kontakt plate on top, and the
+# Blok E under it, whose one engine both lands and lifts off, firing down through the LPU). The Earth-orbit tests flew
+# without legs (T2K): legs=False. Sizes from the drawings, unconfirmed.
+def lk_lpu(legs=False):
+    out = ""
+    if legs:
+        out += (f'<path d="M908 790 L836 874 M1012 790 L1084 874 M922 792 L874 852 M998 792 L1046 852" fill="none" {LINE} '
+                f'stroke-width="4"/>'
+                f'<ellipse cx="834" cy="876" rx="16" ry="5" fill="#ffffff" {LINE} stroke-width="3"/>'
+                f'<ellipse cx="1086" cy="876" rx="16" ry="5" fill="#ffffff" {LINE} stroke-width="3"/>')
+    out += (f'<path d="M906 768 L1014 768 L1024 780 L1024 790 L1014 802 L906 802 L896 790 L896 780 Z" fill="url(#hatch)" {LINE} '
+            f'stroke-width="3"/>'
+            + "".join(f'<circle cx="{x}" cy="812" r="10" fill="#ffffff" {LINE} stroke-width="2.4"/>' for x in (920, 1000)))
+    return out
+
+
+def lk_lva():
+    return (f'<path d="M952 772 L948 802 L972 802 L968 772 Z" fill="#ffffff" {LINE} stroke-width="2.6"/>'
+            f'<rect x="928" y="736" width="64" height="36" fill="#ffffff" {LINE} stroke-width="3"/>'
+            f'<path d="M928 754 L992 754" fill="none" {LINE} stroke-width="1.4" opacity="0.6"/>'
+            f'<ellipse cx="960" cy="702" rx="48" ry="40" fill="#ffffff" {LINE} stroke-width="3"/>'
+            f'<ellipse cx="934" cy="696" rx="13" ry="16" fill="rgba(22,48,92,0.14)" {LINE} stroke-width="2.2"/>'
+            f'<path d="M952 662 L952 654 L968 654 L968 662" fill="none" {LINE} stroke-width="2.4"/>'
+            f'<rect x="938" y="648" width="44" height="6" rx="2" fill="#ffffff" {LINE} stroke-width="2.4"/>'
+            f'<path d="M996 680 L1012 660" fill="none" {LINE} stroke-width="2.2"/>'
+            + "".join(f'<rect x="{x}" y="716" width="10" height="10" fill="#ffffff" {LINE} stroke-width="2"/>' for x in (900, 1010)))
+
+
 def lm_parts():
+    # The LK (2026-10-19): its plume and its ascent flame both from the Blok E's nozzle (802).
+    layer("lkl-n-descent", lk_lpu(), LC)
+    layer("lkl-n-ascent", lk_lva(), LC)
+    lk_flame = (f'<path d="M948 802 C950 822 955 840 960 858 C965 840 970 822 972 802 Z" fill="{GOLD_FILL}" '
+                f'stroke="{GOLD}" stroke-width="3" stroke-linejoin="round"/>')
+    layer("lkl-n-flame-up", lk_flame, (960, 802))
+    layer("lkl-n-plume", f'<path d="M944 802 C946 830 952 860 960 890 C968 860 974 830 976 802 Z" fill="{GOLD_FILL}" '
+                         f'stroke="{GOLD}" stroke-width="3" stroke-linejoin="round"/>', (960, 802))
+    # 39 px/m, as the LOK beside it (the lander's frame is about 40).
+    lk_flip = "translate(960 540) scale(0.98 -0.98) translate(-960 -648)"
+    lk_tc = (KM[0] + KK * (540 - 426), KM[1])
+    layer("lkl-k-target", KT(lk_tc, 90, f'<g transform="{lk_flip}">{lk_lpu()}{lk_lva()}</g>'), KM)
+    layer("lkl-k-target-asc", KT(lk_tc, 90, f'<g transform="{lk_flip}">{lk_lva()}</g>'), KM)
+    # On the rocket (its own launch, the uncrewed test: no tower), out of it and on the map: nose up, its plate on top.
+    lk_rocket = board_group("rocket")
+    lk_nose = lk_rocket.index('<path xmlns="http://www.w3.org/2000/svg" d="M915 440')
+    lk_up = f'<g transform="translate(960 500) scale(0.75) translate(-960 -810)">{lk_lpu()}{lk_lva()}</g>'
+    lk_shroud = (f'<path d="M906 500 L906 400 Q910 330 960 300 Q1010 330 1014 400 L1014 500 Z" fill="#ffffff" {LINE} stroke-width="3"/>'
+                 f'<path d="M906 400 L1014 400" fill="none" {LINE} stroke-width="1.4" opacity="0.6"/>')
+    layer("lkl-rocket", lk_rocket[:lk_nose] + lk_up + lk_shroud, (960, 600))
+    layer("lkl-debris-1", lk_up + lk_shroud, (960, 420))
+    layer("lkl-debris-1-bare", lk_up, (960, 420))
+    layer("lkl-a-les", lk_shroud, (960, 400))
+    big = f"translate({DX} {DY}) scale({DK}) translate(-850 -520)"
+    turn = "translate(-120 20) rotate(90 960 500)"
+    layer("lkl-d-payload", f'<g transform="{big}"><g transform="{turn}">{lk_up}</g></g>', D_AT(914, 520))
+    lk_thick = lambda body: re.sub(r'stroke-width="[\d.]+"', 'stroke-width="5"', body)
+    lk_map = f'<g transform="translate(960 560) scale(0.9) translate(-960 -720)">{lk_thick(lk_lpu() + lk_lva())}</g>'
+    lk_map_asc = f'<g transform="translate(960 560) scale(0.9) translate(-960 -720)">{lk_thick(lk_lva())}</g>'
+    layer("lkl-o-sat", lk_map, (960, 560))
+    layer("lkl-o-sat-asc", lk_map_asc, (960, 560))
     # In the lander's scenes (the ap- skin: n-descent, n-ascent; the plumes, the ladder and the dust are the
     # generic ones, in the same places).
     layer("ap-n-descent", lm_descent(), LC)

@@ -1703,6 +1703,57 @@ STEPS = {
 }
 
 
+def variant_of(base, name, alias, swap=None, **extra):
+    """Another craft's clip from base's entry: its parts in alias over the base's own, a file in swap's place."""
+    spec = {**STEPS[base], "source": STEPS[base].get("source", base)}
+    spec["alias"] = {**spec.get("alias", {}), **alias}
+    for key in ("before", "after"):
+        if key in spec and swap:
+            spec[key] = [swap.get(f, f) for f in spec[key]]
+    spec.update(extra)
+    STEPS[name] = spec
+
+
+# The Soyuz 7K-L1's Earth-orbit tests (2026-10-19, user): Soyuz's skin and timelines with its own stack (s1- parts:
+# the support cone on the rocket, no orbital module, the dish), and no orbital module coming home
+# (project-soyuz-l1.jsx). Its reentry, descent and landing are Soyuz's own clips: the descent module is the same.
+L1 = {"rocket": "s1-rocket", "debris-1": "s1-debris-1", "d-payload": "s1-d-payload", "o-sat": "s1-o-sat",
+      "o-sat-b": "s1-o-sat-b", "r-pack": "s1-r-pack", "r-module": "s1-r-module"}
+for _step in ("launch-preparations", "countdown", "deployment", "earth-orbit", "reentry-preparations", "reentry-trim",
+              "retrofire", "modules-separation", "suborbital-flight"):
+    variant_of(f"soyuz-{_step}", f"soyuz-l1-{_step}", L1, {"project-soyuz.jsx": "project-soyuz-l1.jsx"})
+variant_of("soyuz-ascent", "soyuz-l1-ascent", {**L1, "debris-1": "s1-debris-1-bare"})
+variant_of("voskhod-duration-level-i", "soyuz-l1-duration-level-i", L1, skin="sy-")
+STEPS["soyuz-l1-duration-level-i"]["alias"] = dict(L1)
+
+# The Soyuz 7K-LOK's Earth-orbit tests (2026-10-19, user): Soyuz's skin and timelines with its own parts (lok-: the
+# longer service module, no wings), on its Blok D out of the rocket (-deployment), then off it (-lok-deployment).
+LOK = {"rocket": "lok-rocket", "debris-1": "lok-debris-1", "d-payload": "lok-d-payload", "o-sat": "lok-o-sat",
+       "o-sat-b": "lok-o-sat-b", "r-pack": "lok-r-pack", "r-module": "lok-r-module", "k-chaser": "lok-k-chaser",
+       "k-other": "lok-k-other", "k-push": "lok-k-push"}
+for _step in ("launch-preparations", "countdown", "earth-orbit", "reentry-preparations", "reentry-trim", "retrofire",
+              "deorbit-burn", "retrofire-jettison", "orbital-module-separation", "modules-separation", "suborbital-flight",
+              "joint", "rendezvous"):
+    variant_of(f"soyuz-{_step}", f"soyuz-lok-{_step}", LOK, {"project-soyuz.jsx": "project-soyuz-lok.jsx"})
+variant_of("soyuz-ascent", "soyuz-lok-ascent", {**LOK, "debris-1": "lok-debris-1-bare"})
+variant_of("soyuz-deployment", "soyuz-lok-deployment", {**LOK, "d-payload": "lok-d-payload-stack"})
+variant_of("soyuz-deployment", "soyuz-lok-blok-d-deployment", {**LOK, "d-stage": "lok-d-stage"})
+variant_of("voskhod-duration-level-i", "soyuz-lok-duration-level-i", LOK, skin="sy-")
+STEPS["soyuz-lok-duration-level-i"]["alias"] = dict(LOK)
+
+# The LK in its Earth-orbit tests (2026-10-19, user; lkl- parts, no legs as the T2K flew): its own launch under a
+# shroud (the uncrewed test), its engine test and its staging in the lander's scenes, its ascent stage alone on the map
+# after the staging, and docked to by the LOK (the crewed test).
+for _step in ("launch-preparations", "countdown", "deployment", "earth-orbit"):
+    variant_of(_step, f"lk-{_step}", {}, skin="lkl-")
+variant_of("ascent", "lk-ascent", {"debris-1": "lkl-debris-1-bare"}, skin="lkl-")
+variant_of("earth-orbit", "lk-earth-orbit-asc", {"o-sat": "lkl-o-sat-asc"}, skin="lkl-")
+variant_of("lander-engine-test", "lk-engine-test", {}, skin="lkl-")
+variant_of("lander-staging", "lk-staging", {}, skin="lkl-")
+variant_of("soyuz-docking", "soyuz-lok-docking-lk", {**LOK, "k-target": "lkl-k-target-asc"})
+variant_of("soyuz-undocking", "soyuz-lok-undocking-lk", {**LOK, "k-target": "lkl-k-target-asc"})
+
+
 def read(*path):
     return open(os.path.join(HERE, *path), encoding="utf-8").read() + "\n"
 

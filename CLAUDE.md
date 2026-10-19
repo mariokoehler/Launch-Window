@@ -205,6 +205,9 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   the replay shows the long ellipse it puts the capsule on (user, 2026-10-18). The pack hash changed: reset the
   dev data root, rebuild client and server together. Rockets stay generic (user: the report doesn't
   say which flew). Client only.
+  The Soviet lunar craft's Earth-orbit tests fly as themselves (user, 2026-10-19, `ui-spec.md` §4.7.3): the 7K-L1
+  (`s1-`), the 7K-LOK on its Blok D (`lok-`) and the LK without legs (`lkl-`), on Soyuz's skin and the lander's scenes
+  (`build.py`'s `variant_of`). Their Moon flights are a later package. Client only.
 
 ## How we work
 
