@@ -599,6 +599,19 @@ leading to satellite navigation.
   Sources: Wikipedia ("Soyuz 7K-L1", "Soyuz 7K-LOK", "LK (spacecraft)", "Kosmos 379", "Blok E", "Soyuz-L",
   "Soyuz Kontakt"),
   RussianSpaceWeb (L1, LOK), Gunter's Space Page (LK T2K, Soyuz-L).
+- **The LK-700** (the replay's, 2026-10-19): a real proposal, not BASPM's invention. Vladimir Chelomei's OKB-52
+  offered it in 1964 as a simpler way than Korolev's N1-L3: one craft for three cosmonauts, launched on his UR-700
+  (a heavy rocket related to the Proton, never built), flying straight to the Moon's surface and back with no
+  rendezvous. The UR-700's preliminary design was approved in 1965 and a further year's work in 1967; the LK-700
+  reached mock-ups and component tests. The first uncrewed launch was proposed for 1972 and the first crewed one for
+  1973. Sources disagree on its end: cancelled in 1974 (Wikipedia, the pack's note) or by Minister Afanasyev in 1968
+  (GlobalSecurity). Its stages, as described: a big braking stage that did most of the descent and was dropped a few
+  kilometres up, a landing stage with six legs (folded on the way) that also served as the launch pad, and a return
+  stage that sent the capsule (from Chelomei's LK-1 circumlunar craft) home. Wikipedia's 21.2 m and 154 t are for
+  the whole complex with its trans-lunar stage. BASPM's Earth-orbit tests of it are invented, their steps borrowed
+  from Soyuz 7K-OK's (the spacewalks are even named after it), which is why the replay once showed an orbital module
+  it never had. Sources: Wikipedia ("LK-700"), RussianSpaceWeb (UR-700), GlobalSecurity and Encyclopedia Astronautica
+  (from search summaries only; their pages couldn't be read).
 - **Voskhod** (the replay's Voskhod, 2026-10-18): a Vostok made to carry two or three, with a solid-fuel backup
   retro rocket on top of the descent sphere. Vostok hadn't needed one: its low orbit would have decayed within
   about ten days if the retro failed, and Voskhod's heavier load flew higher. Its crew stayed aboard to the ground,

@@ -1782,6 +1782,27 @@ variant_of("crew-transfer", "soyuz-lok-transfer-to-lk", LOK_CROSS, skin="sy-", b
 variant_of("crew-transfer", "soyuz-lok-transfer-from-lk", {**LOK_CROSS, "r-capsule": "lkl-e-capsule", "e-capsule-b": "lkl-e-capsule-b"},
            skin="sy-", before=["lok-transfer.jsx", "spacewalk.jsx"])
 
+# The LK-700's Earth-orbit tests (2026-10-19, user; l7- parts): its own launch under a fairing and tower, out of the
+# rocket on its top stage (the second ascent, -insertion), its maps, its spacewalk in three steps (out, along the
+# handrail on the cone, a photo and in). Its way home in three (unconfirmed): the landing stage's engines fire the
+# burn (r-pack, the capsule still on the return stage: r-capsule-stage), the landing stage goes (the jettison), and
+# the capsule leaves the return stage (the separation, project-lk700.jsx); then the capsule's own reentry and descent.
+L7_HOME = {"r-capsule": "l7-r-capsule-stage"}
+for _step in ("launch-preparations", "countdown", "deployment", "earth-orbit", "duration-level-i", "duration-level-ii",
+              "reentry", "descent-chutes", "landing-and-recovery"):
+    variant_of(_step, f"lk-700-{_step}", {}, skin="l7-")
+variant_of("ascent", "lk-700-ascent", {"debris-1": "l7-debris-1-bare"}, skin="l7-")
+variant_of("insertion", "lk-700-insertion", {"o-sat": "l7-o-sat-stage"}, skin="l7-")
+variant_of("suborbital-flight", "lk-700-suborbital-flight", L7_HOME, skin="l7-")
+variant_of("retrofire", "lk-700-retrofire", L7_HOME, skin="l7-")
+variant_of("deorbit-burn", "lk-700-deorbit-burn", L7_HOME, skin="l7-")
+variant_of("retrofire-jettison", "lk-700-retrofire-jettison", L7_HOME, skin="l7-", before=["motes.jsx", "lk700-jettison.jsx"])
+variant_of("modules-separation", "lk-700-modules-separation", {}, skin="l7-", before=["project-lk700.jsx", "motes.jsx"])
+L7_EVA = {"r-capsule": "l7-e-capsule"}
+variant_of("gemini-eva-out", "lk-700-eva-out", L7_EVA, skin="l7-")
+variant_of("soyuz-lok-eva-rail", "lk-700-eva-rail", {**L7_EVA, "e-rail": "l7-e-rail-solo"}, skin="l7-")
+variant_of("gemini-eva-photo-docked", "lk-700-eva-photo", L7_EVA, skin="l7-", before=["spacewalk.jsx"])
+
 
 def read(*path):
     return open(os.path.join(HERE, *path), encoding="utf-8").read() + "\n"

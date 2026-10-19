@@ -208,6 +208,7 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   The Soviet lunar craft's Earth-orbit tests fly as themselves (user, 2026-10-19, `ui-spec.md` §4.7.3): the 7K-L1
   (`s1-`), the 7K-LOK on its Blok D (`lok-`) and the LK without legs (`lkl-`), on Soyuz's skin and the lander's scenes
   (`build.py`'s `variant_of`). Their Moon flights are a later package. Client only.
+  So do the LK-700's (`l7-`, user, 2026-10-19), with a way home of its own instead of Soyuz's orbital module.
 
 ## How we work
 

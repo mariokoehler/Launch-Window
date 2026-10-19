@@ -2591,6 +2591,184 @@ def lm_parts():
     layer("ap-o-sat-asc", f'<g transform="translate(960 560) scale(1.1) translate(-960 -681)">{body}</g>', (960, 560))
 
 
+# --- The LK-700 (2026-10-19, user; l7- parts): Chelomei's direct-ascent lander, as our blueprint draws it. Nose up,
+# 2.7 m across (Wikipedia's span): the return capsule (LK-1's line) a cylinder with two portholes and the hatch under a
+# cone with a cap and a small dish on its tip; the return stage (Block IV) a banded cylinder; the landing stage (Block
+# III) with its six legs, folded until the descent (two seen), and its engines under it, a big one and two small.
+# The braking stage (Block II) and the trans-lunar stage fly only to the Moon (a later package). Sizes from the
+# blueprint, unconfirmed (Wikipedia's 21.2 m and 154 t are the whole complex with its trans-lunar stage).
+L7_W, L7_CYL, L7_CONE, L7_RET, L7_LAND = 2.7, 1.4, 1.4, 2.0, 1.4
+L7_CAP = 0.3
+L7_LEN = L7_LAND + L7_RET + L7_CYL + L7_CONE + L7_CAP
+
+
+def l7_capsule(base, k, w=1.0, hatch=True, shield=True):
+    """The return capsule, its base (heat shield) at y base, k px/m, stroke widths times w; its side hatch (none
+    where the spacewalk scene draws the hatch on top), and its heat shield's curve (alone)."""
+    sw = lambda x: f'stroke-width="{x * w:.2f}"'
+    r, rt = L7_W / 2 * k, 0.45 * k
+    y1 = base - L7_CYL * k
+    y2 = y1 - L7_CONE * k
+    out = (f'<path d="M{960 - r:.1f} {base:.1f} L{960 - r:.1f} {y1:.1f} L{960 - rt:.1f} {y2:.1f} L{960 + rt:.1f} {y2:.1f} '
+           f'L{960 + r:.1f} {y1:.1f} L{960 + r:.1f} {base:.1f} Z" fill="#ffffff" {LINE} {sw(2.6)}/>'
+           f'<path d="M{960 - r:.1f} {y1:.1f} L{960 + r:.1f} {y1:.1f}" fill="none" {LINE} {sw(1.6)}/>'
+           + (f'<path d="M{960 - r:.1f} {base:.1f} Q960 {base + 0.2 * k:.1f} {960 + r:.1f} {base:.1f}" fill="none" {LINE} {sw(2.2)}/>'
+              if shield else "")
+           # The hatch on the cylinder and the two portholes beside it, two small windows in the cone.
+           + (f'<rect x="{960 - 0.3 * k:.1f}" y="{y1 + 0.25 * k:.1f}" width="{0.6 * k:.1f}" height="{0.8 * k:.1f}" '
+              f'rx="{0.08 * k:.1f}" fill="none" {LINE} {sw(1.4)} opacity="0.8"/>' if hatch else "")
+           + "".join(f'<circle cx="{960 + s * 0.8 * k:.1f}" cy="{y1 + 0.55 * k:.1f}" r="{0.17 * k:.1f}" fill="rgba(22,48,92,0.12)" '
+                     f'{LINE} {sw(1.6)}/>' for s in (-1, 1))
+           + "".join(f'<circle cx="{960 + s * 0.42 * k:.1f}" cy="{y1 - 0.75 * k:.1f}" r="{0.1 * k:.1f}" fill="rgba(22,48,92,0.12)" '
+                     f'{LINE} {sw(1.4)}/>' for s in (-1, 1))
+           # The cap on the tip and the dish on its mast.
+           + f'<path d="M{960 - rt:.1f} {y2:.1f} Q960 {y2 - L7_CAP * k:.1f} {960 + rt:.1f} {y2:.1f}" fill="#ffffff" {LINE} {sw(2.2)}/>'
+           f'<path d="M960 {y2 - 0.15 * k:.1f} L960 {y2 - 0.55 * k:.1f}" fill="none" {LINE} {sw(1.6)}/>'
+           f'<path d="M{960 - 0.3 * k:.1f} {y2 - 0.62 * k:.1f} Q960 {y2 - 0.42 * k:.1f} {960 + 0.3 * k:.1f} {y2 - 0.62 * k:.1f}" '
+           f'fill="none" {LINE} {sw(1.6)}/>')
+    return out
+
+
+def l7_return(top, k, w=1.0):
+    """The return stage (Block IV), its top at y top."""
+    sw = lambda x: f'stroke-width="{x * w:.2f}"'
+    r, h = L7_W / 2 * k, L7_RET * k
+    return (f'<rect x="{960 - r:.1f}" y="{top:.1f}" width="{2 * r:.1f}" height="{h:.1f}" fill="#ffffff" {LINE} {sw(2.6)}/>'
+            f'<rect x="{960 - r:.1f}" y="{top + 0.55 * h:.1f}" width="{2 * r:.1f}" height="{0.25 * h:.1f}" fill="{GM_DARK}" '
+            f'opacity="0.7" {LINE} {sw(1.4)}/>'
+            + "".join(f'<path d="M{960 - r:.1f} {top + f * h:.1f} L{960 + r:.1f} {top + f * h:.1f}" fill="none" {LINE} {sw(1.2)} '
+                      f'opacity="0.5"/>' for f in (0.2, 0.92)))
+
+
+def l7_landing(top, k, w=1.0, legs="folded"):
+    """The landing stage (Block III), its top at y top, its engines under it; legs folded along its sides, or none."""
+    sw = lambda x: f'stroke-width="{x * w:.2f}"'
+    r, h = L7_W / 2 * k, L7_LAND * k
+    foot = top + h
+    out = "".join(f'<path d="M{x - a * k:.1f} {foot:.1f} L{x - b * k:.1f} {foot + n * k:.1f} L{x + b * k:.1f} {foot + n * k:.1f} '
+                  f'L{x + a * k:.1f} {foot:.1f} Z" fill="#ffffff" {LINE} {sw(2.2)}/>'
+                  for x, a, b, n in ((960 - 0.75 * k, 0.1, 0.16, 0.3), (960 + 0.75 * k, 0.1, 0.16, 0.3), (960, 0.18, 0.32, 0.45)))
+    out += (f'<rect x="{960 - r:.1f}" y="{top:.1f}" width="{2 * r:.1f}" height="{h:.1f}" fill="url(#hatch)" {LINE} {sw(2.6)}/>'
+            f'<path d="M{960 - r:.1f} {top + 0.3 * h:.1f} L{960 + r:.1f} {top + 0.3 * h:.1f}" fill="none" {LINE} {sw(1.2)} '
+            f'opacity="0.6"/>')
+    if legs == "folded":
+        out += "".join(f'<path d="M{960 + s * (r + 0.06 * k):.1f} {top + 0.08 * k:.1f} L{960 + s * (r + 0.14 * k):.1f} '
+                       f'{foot + 0.25 * k:.1f}" fill="none" {LINE} {sw(2.6)}/>'
+                       f'<rect x="{960 + s * (r + 0.14 * k) - 0.18 * k:.1f}" y="{foot + 0.25 * k:.1f}" width="{0.36 * k:.1f}" '
+                       f'height="{0.1 * k:.1f}" rx="{0.04 * k:.1f}" fill="#ffffff" {LINE} {sw(1.8)}/>' for s in (-1, 1))
+    return out
+
+
+def l7_stack(foot, k, w=1.0, landing=True, ret=True, hatch=True):
+    """The craft nose up, its landing stage's foot (or the return stage's, or the capsule's base) at y foot."""
+    y = foot
+    out = ""
+    if landing:
+        y -= L7_LAND * k
+        out += l7_landing(y, k, w)
+    if ret:
+        y -= L7_RET * k
+        out = l7_return(y, k, w) + out
+    return out + l7_capsule(y, k, w, hatch=hatch, shield=not ret)
+
+
+def lk700_parts():
+    thick = lambda body: re.sub(r'stroke-width="[\d.]+"', 'stroke-width="5"', body)
+    small = lambda body: re.sub(r'stroke-width="([\d.]+)"', lambda m: f'stroke-width="{float(m.group(1)) * 0.8:.2f}"', body)
+    rocket = board_group("rocket")
+    nose = rocket.index('<path xmlns="http://www.w3.org/2000/svg" d="M915 440')
+    big = f"translate({DX} {DY}) scale({DK}) translate(-850 -520)"
+    turn = "translate(-120 20) rotate(90 960 500)"
+    # The launch (33.8 px/m, as Soyuz's: 2.7 m is the rocket's top), under a fairing and escape tower (Soyuz's shape,
+    # assumed), which the climb throws off.
+    K = 33.8
+    craft = l7_stack(500 - 0.25 * K, K)
+    layer("l7-rocket", rocket[:nose] + craft + soyuz_fairing(), (960, 600))
+    layer("l7-debris-1", craft + soyuz_fairing(), (960, 420))
+    layer("l7-debris-1-bare", craft, (960, 420))
+    layer("l7-a-les", soyuz_fairing(), (960, 300))
+    layer("l7-d-payload", f'<g transform="{big}"><g transform="{turn}">{craft}</g></g>', D_AT(914, 520))
+    # On the maps, centred, thick; still on the rocket's top stage for the orbit insertion (the second ascent).
+    mid = 500 - L7_LEN * K / 2
+    for name in ("l7-o-sat", "l7-o-sat-b"):
+        layer(name, f'<g transform="translate(960 560) scale(0.6) translate(-960 {-mid:.1f})">{thick(l7_stack(500, K))}</g>',
+              (960, 560))
+    stage = (f'<rect x="{960 - 1.45 * K:.1f}" y="{500 + 0.35 * K:.1f}" width="{2.9 * K:.1f}" height="{3.2 * K:.1f}" fill="#ffffff" '
+             f'{LINE} stroke-width="3"/>'
+             f'<path d="M{960 - 1.45 * K:.1f} {500 + 1.3 * K:.1f} L{960 + 1.45 * K:.1f} {500 + 1.3 * K:.1f}" fill="none" {LINE} '
+             f'stroke-width="1.4" opacity="0.6"/>'
+             f'<path d="M{960 - 0.4 * K:.1f} {500 + 3.55 * K:.1f} L{960 - 0.6 * K:.1f} {500 + 4.2 * K:.1f} L{960 + 0.6 * K:.1f} '
+             f'{500 + 4.2 * K:.1f} L{960 + 0.4 * K:.1f} {500 + 3.55 * K:.1f} Z" fill="#ffffff" {LINE} stroke-width="2.4"/>')
+    mid_s = (500 - L7_LEN * K + 500 + 4.2 * K) / 2
+    layer("l7-o-sat-stage", f'<g transform="translate(960 560) scale(0.5) translate(-960 {-mid_s:.1f})">'
+                            f'{thick(stage + l7_stack(500, K))}</g>', (960, 560))
+    # Coming home (50 px/m, the capsule's base at 500, its tip about 350, where the chutes hang): the capsule alone,
+    # or still on the return stage (r-capsule-stage: the burn and the jettison); the landing stage the pack (its
+    # engines fire the burn), the return stage the module (the separation); the joints' flashes; no straps.
+    R = 50
+    cap = small(l7_capsule(500, R))
+    ret = small(l7_return(500, R))
+    cap_on = small(l7_capsule(500, R, shield=False))
+    land = small(l7_landing(500 + L7_RET * R, R))
+    land_mid = 500 + (L7_RET + L7_LAND / 2) * R
+    ret_mid = 500 + L7_RET / 2 * R
+    layer("l7-r-capsule", RT(cap), RC)
+    layer("l7-r-capsule-up", RU(cap), RC)
+    layer("l7-r-capsule-stage", RT(ret + cap_on), RC)
+    layer("l7-r-periscope", "", RC)
+    layer("l7-r-pack", RT(land), RT_AT(960, land_mid))
+    layer("l7-r-module", RT(ret), RT_AT(960, ret_mid))
+    for n in ("strap-a", "strap-b"):
+        layer(f"l7-r-{n}", "", RC)
+    joint = 500 + L7_RET * R
+    rr = L7_W / 2 * R
+    layer("l7-r-cut-a", RT(f'<circle cx="{960 - rr + 6:.1f}" cy="{joint:.1f}" r="6" fill="{GOLD}"/>'), RT_AT(960 - rr + 6, joint))
+    layer("l7-r-cut-b", RT(f'<circle cx="{960 + rr - 6:.1f}" cy="{joint:.1f}" r="6" fill="{GOLD}"/>'), RT_AT(960 + rr - 6, joint))
+    layer("l7-r-pyro", RT("".join(f'<circle cx="{x:.1f}" cy="503" r="6" fill="{GOLD}"/>' for x in (960 - rr + 10, 960, 960 + rr - 10))),
+          RT_AT(960, 503))
+    # Its engines' flames: the two small ones (1, 3) and the big one in the middle (2).
+    exit_y = joint + L7_LAND * R
+    for i, (x, n, a) in enumerate(((960 - 0.75 * R, 0.3, 0.16), (960, 0.45, 0.32), (960 + 0.75 * R, 0.3, 0.16)), 1):
+        y0, hw, ln = exit_y + n * R, a * R, (1.0 if i == 2 else 0.7) * R
+        layer(f"l7-r-flame-{i}", RT(f'<path d="M{x - hw:.1f} {y0:.1f} C{x - hw:.1f} {y0 + ln * 0.4:.1f} {x - 2:.1f} {y0 + ln * 0.8:.1f} '
+                                    f'{x:.1f} {y0 + ln:.1f} C{x + 2:.1f} {y0 + ln * 0.8:.1f} {x + hw:.1f} {y0 + ln * 0.4:.1f} {x + hw:.1f} '
+                                    f'{y0:.1f} Z" fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>'),
+              RT_AT(x, y0))
+    # The attitude jets on the capsule's cylinder, a puff each side, and one stuck open.
+    jy = 500 - 0.5 * L7_CYL * R
+    layer("l7-r-jet-l", RT(puff(960 - rr - 12, jy, 10)), RT_AT(960 - rr - 2, jy))
+    layer("l7-r-jet-r", RT(puff(960 + rr + 12, jy, 10)), RT_AT(960 + rr + 2, jy))
+    layer("l7-r-jet-stuck", RT(f'<path d="M{960 + rr:.1f} {jy - 4:.1f} C{960 + rr + 30:.1f} {jy - 12:.1f} {960 + rr + 64:.1f} {jy - 22:.1f} '
+                               f'{960 + rr + 100:.1f} {jy - 30:.1f} L{960 + rr + 104:.1f} {jy - 14:.1f} C{960 + rr + 68:.1f} {jy - 8:.1f} '
+                               f'{960 + rr + 32:.1f} {jy + 4:.1f} {960 + rr + 2:.1f} {jy + 12:.1f} Z" fill="{GOLD_FILL}" stroke="{GOLD}" '
+                               f'stroke-width="2" stroke-linejoin="round"/>'), RC)
+    layer("l7-r-glow-side", RT(f'<path d="M{960 + 0.45 * R + 4:.1f} {500 - (L7_CYL + L7_CONE) * R:.1f} C{960 + rr + 10:.1f} '
+                               f'{500 - L7_CYL * R:.1f} {960 + rr + 12:.1f} 460 {960 + rr + 4:.1f} 500 C{960 + rr + 24:.1f} 460 '
+                               f'{960 + rr + 14:.1f} {500 - L7_CYL * R - 10:.1f} {960 + 0.45 * R + 4:.1f} {500 - (L7_CYL + L7_CONE) * R:.1f} Z" '
+                               f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>'), RC)
+    # The break-up's halves: the cone (with its cap) and the cylinder.
+    y1, y2 = 500 - L7_CYL * R, 500 - (L7_CYL + L7_CONE) * R
+    layer("l7-r-half-nose", RT(small(f'<path d="M{960 - rr:.1f} {y1:.1f} L{960 - 0.45 * R:.1f} {y2:.1f} Q960 {y2 - L7_CAP * R:.1f} '
+                                     f'{960 + 0.45 * R:.1f} {y2:.1f} L{960 + rr:.1f} {y1:.1f} Z" fill="#ffffff" {LINE} stroke-width="3"/>')),
+          RT_AT(960, (y1 + y2) / 2))
+    layer("l7-r-half-body", RT(small(f'<rect x="{960 - rr:.1f}" y="{y1 + 4:.1f}" width="{2 * rr:.1f}" height="{L7_CYL * R - 4:.1f}" '
+                                     f'fill="#ffffff" {LINE} stroke-width="3"/>')), RT_AT(960, (y1 + 500) / 2))
+    # The spacewalk scene (nose right, the axis at 470, the hull's top at the hatch's 380: 66.7 px/m): the capsule's
+    # cylinder under the hatch (836 to 926), the return and landing stages behind it; a handrail from the hatch along
+    # the cone, on posts (the lone spacewalk's middle step, eva-rail.jsx: the figure goes hand over hand to its end).
+    E = 90 / (L7_W / 2)
+    side = re.sub(r'stroke-width="([\d.]+)"', lambda m: f'stroke-width="{float(m.group(1)) * 1.4:.2f}"', l7_stack(500, E, hatch=False))
+    cyl0 = 834
+    base_y = 500 - (L7_LAND + L7_RET) * E
+    layer("l7-e-capsule", f'<g transform="translate({cyl0} 470) rotate(90) translate(-960 {-base_y:.1f})">{side}</g>', RC)
+    layer("l7-e-box", "", (975, 360))
+    cone0 = cyl0 + L7_CYL * E
+    slope = (L7_W / 2 - 0.45) / L7_CONE
+    surf = lambda x: 380 + (x - cone0) * slope
+    layer("l7-e-rail-solo", f'<path d="M944 352 L1012 352 M960 352 L960 {surf(960):.1f} M998 352 L998 {surf(998):.1f}" fill="none" '
+                            f'{LINE} stroke-width="4"/>', (960, 352))
+
+
 # --- Project Gemini (2026-10-17): its spacecraft, and the Agena it docked with --------------------------
 # The reentry module seen from its back (the side with the hatches): the heat shield, the cabin's cone
 # with the two hatches, a window in each, the reentry control (RCS) section, a short cylinder, and the
@@ -3021,6 +3199,7 @@ def main():
     lm_parts()
     satellite_parts()
     gemini_parts()
+    lk700_parts()
     if ONLY:
         # Keep the parts not redrawn.
         old = json.load(open(os.path.join(BUILD, "layers.json")))

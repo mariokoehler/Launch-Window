@@ -36,12 +36,14 @@ if (BACKUP) {
     turn("r-backup", function (t) { return -40 * Math.max(0, t - BOLTS); });
 }
 
-// Sinking on as after the jettison, so the reentry starts where either leaves off.
-var sink = function (t) { return 140 + 14 * t + 0.4 * t * t; };
+// Sinking on as after the jettison, so the reentry starts where either leaves off. SEP_FROM (2026-10-19, the LK-700's,
+// whose jettison comes first): where it starts sinking from, how fast, and the Earth's turn.
+var SEP_FROM = typeof SEP_FROM !== "undefined" ? SEP_FROM : [140, 14, -2.776];
+var sink = function (t) { return SEP_FROM[0] + SEP_FROM[1] * t + 0.4 * t * t; };
 move("d-earth", function (t) { return [0, -sink(t)]; });
 move("r-orbit", function (t) { return [0, -sink(t)]; });
 motesBelow(sink);
-turn("d-earth", function (t) { return -2.776 - 0.25 * t; });
+turn("d-earth", function (t) { return SEP_FROM[2] - 0.25 * t; });
 
 // The tumble of the joined pair: the same in glitch and failure until the cable burns at 3.4; the
 // glitch's dies away by 5.0, the failure's grows wild.

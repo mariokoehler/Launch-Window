@@ -2090,6 +2090,18 @@ clips, the replay is meant to be watched like a short film, and the player can s
   drawn smaller to fit), and docked, the LOK's probe in the LK's plate, on the orbit's map; the turn-around and
   docking between have no step and aren't shown. The launch and the climb show the LOK alone. The Moon flights (`soyuz-7k-l1`, `soyuz-7k-l3`) are a later
   package. Unconfirmed.
+- **The LK-700's Earth-orbit tests (user, 2026-10-19):** its own craft (`l7-`, `lk-700-*`, `lk700_parts`), drawn as
+  the turn report's blueprint has it, 2.7 m across: the return capsule (a cylinder with two portholes and a hatch, a
+  cone with two windows, a cap and a small dish), the return stage, and the landing stage with its engines (a big
+  one and two small) and its legs folded (two of six seen). It launches under Soyuz's fairing and tower (assumed),
+  rides the rocket's top stage into orbit (the second ascent, `-insertion`), and has its own maps. The way home had
+  played Soyuz's orbital-module clips, which the LK-700 never had; it now goes: the landing stage's engines fire the
+  burn (the capsule still on the return stage, `l7-r-capsule-stage`), the landing stage is cast off (the jettison,
+  `lk700-jettison.jsx`), and the capsule leaves the return stage (the separation, `project-lk700.jsx`, on from the
+  jettison: `modules-separation.jsx`'s `SEP_FROM`); then the capsule's own reentry, chutes and landing. That reading
+  of the three steps is unconfirmed. Its spacewalk is three steps on its own hull (`l7-e-capsule`): out on the tether,
+  along a handrail on the cone and back, and a photo and back in. The Moon flights (`lk-700`), with the braking
+  stage, are a later package. Sizes from the blueprint, unconfirmed.
 - **Voskhod as itself (user, 2026-10-18):** Vostok's skin with Voskhod's parts in place (`vh-`, `voskhod-*`): the
   backup retro on the sphere's top in orbit, thrown off with the instrument module at the modules separation
   (`vh-r-backup`, `BACKUP`; its real fate unconfirmed), which the orbital flights' retrofire jettison plays too, as
