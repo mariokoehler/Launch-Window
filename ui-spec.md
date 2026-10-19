@@ -2070,8 +2070,16 @@ clips, the replay is meant to be watched like a short film, and the player can s
   big window, the passive Kontakt plate, the Blok E whose one engine both tests and lifts off, firing down through
   the LPU); its own launch under a shroud, its engine test and staging in the lander's scenes, the ascent stage alone
   on the map after the staging. Both craft share their descent module's reentry, descent and landing with Soyuz
-  (`soyuz-reentry`, ...). Still generic: the crew transfer (`eva-7k-lok`), and in the crewed lander test the LK until
-  its engine test (the map shows the LOK alone). The Moon flights (`soyuz-7k-l1`, `soyuz-7k-l3`) are a later
+  (`soyuz-reentry`, ...). Refined (user, 2026-10-19): the LOK's burn has its own flame at its own nozzle
+  (`lok-r-flame-1`); a second ascent is the rocket's third stage (the Soyuz-L had one) and plays the orbit insertion
+  with the craft still on it (`-insertion`, `lkl-o-sat-stage`, `lok-o-sat-stage`); the uncrewed LK's last orbit is the
+  ascent stage on its long ellipse (`lk-high-orbit`: Kosmos 379's ascent burn raised its apogee to about 14,000 km,
+  and it stayed up); the crewed test's second engine test fires the backup engine's two nozzles
+  (`lk-engine-test-backup`). The LOK's spacewalks have its own hull (`lok-e-capsule`): the lone spacewalk's three
+  steps are out on the tether, along the handrail to the docking probe and back (the crossing rehearsed,
+  `eva-rail.jsx`), and a photo and back in; the lander test's two are the crossing to the docked LK and back from its
+  ascent stage (crew-transfer.jsx's distance and rail and spacewalk.jsx's framing from `lok-transfer.jsx`). Still
+  generic: in the crewed lander test the LK until the first crossing (the map shows the LOK alone). The Moon flights (`soyuz-7k-l1`, `soyuz-7k-l3`) are a later
   package. Unconfirmed.
 - **Voskhod as itself (user, 2026-10-18):** Vostok's skin with Voskhod's parts in place (`vh-`, `voskhod-*`): the
   backup retro on the sphere's top in orbit, thrown off with the instrument module at the modules separation

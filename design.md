@@ -586,8 +586,11 @@ leading to satellite navigation.
   cosmonaut was to go across to the lander and back by spacewalk. The LK was tested uncrewed in Earth orbit (T2K):
   Kosmos 379 (1970) fired its engine to stand in for the hover and touchdown, which raised its orbit to 196 by
   1,206 km, then a 1.518 km/s burn for the lift-off from the Moon; one source says the test craft had no landing
-  legs. Sources: Wikipedia ("Soyuz 7K-L1", "Soyuz 7K-LOK", "LK (spacecraft)", "Kosmos 379"), RussianSpaceWeb (L1,
-  LOK), Gunter's Space Page (LK T2K).
+  legs. The ascent burn left Kosmos 379 on an orbit reaching out to about 14,000 km, and it stayed up until 1983. It
+  flew on the Soyuz-L, an R-7 with a third stage (Blok I). The LK's Blok E had a main engine with one nozzle and a
+  backup with two, either side of it; at landing and lift-off both would light, and one shut down if both worked.
+  Sources: Wikipedia ("Soyuz 7K-L1", "Soyuz 7K-LOK", "LK (spacecraft)", "Kosmos 379", "Blok E", "Soyuz-L"),
+  RussianSpaceWeb (L1, LOK), Gunter's Space Page (LK T2K, Soyuz-L).
 - **Voskhod** (the replay's Voskhod, 2026-10-18): a Vostok made to carry two or three, with a solid-fuel backup
   retro rocket on top of the descent sphere. Vostok hadn't needed one: its low orbit would have decayed within
   about ten days if the retro failed, and Voskhod's heavier load flew higher. Its crew stayed aboard to the ground,

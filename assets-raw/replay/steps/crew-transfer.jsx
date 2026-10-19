@@ -6,21 +6,24 @@
 // Failure: the same slip, and nothing brings it back: at 2.8 it's hauled in on its tether to the hatch
 // it came from, and the crossing is off.
 var glitch = VARIANT === "glitch", failure = VARIANT === "failure";
-var SLIP = 2.2, ANSWER = 2.8, RAIL = 352, OVER = 494;
+var SLIP = 2.2, ANSWER = 2.8, RAIL = 352;
+// The second hatch's distance and the rail's end (a craft's own, lok-transfer.jsx; 2026-10-19).
+var OVER = typeof TRANSFER_OVER !== "undefined" ? TRANSFER_OVER : 494;
+var RAIL_END = typeof TRANSFER_RAIL_END !== "undefined" ? TRANSFER_RAIL_END : 1290;
 
 spacewalkScene(true);
 
 var along = function (x) { return handOn([x, RAIL], 80); };
 // Hand over hand: a small bob along the rail.
 function hands(p, t, from) { return [p[0], p[1] + 4 * Math.sin(2 * Math.PI * 2 * (t - from)), p[2]]; }
-var start = [[0, [0, INSIDE, 0]], [0.8, [0, INSIDE, 0]], [1.4, [0, 0, 0]], [1.8, along(960)], [3.2, along(1290)]];
+var start = [[0, [0, INSIDE, 0]], [0.8, [0, INSIDE, 0]], [1.4, [0, 0, 0]], [1.8, along(960)], [3.2, along(RAIL_END)]];
 var pose;
 if (glitch || failure) {
     var before = poses(start), at = hands(before(SLIP), SLIP, 1.8), grip = evaAt(at, EH)[0];
     var adrift = function (t) { var u = t - SLIP; return [at[0] + 14 * u, at[1] - 70 * u, at[2] + 70 * u]; };
     var lost = adrift(ANSWER);
     var after = glitch
-        ? poses([[ANSWER, lost], [3.4, along(grip + 40)], [4.4, along(1290)], [4.9, [OVER, 0, 0]], [5.5, [OVER, INSIDE, 0]]])
+        ? poses([[ANSWER, lost], [3.4, along(grip + 40)], [4.4, along(RAIL_END)], [4.9, [OVER, 0, 0]], [5.5, [OVER, INSIDE, 0]]])
         : poses([[ANSWER, lost], [4.2, [0, 0, 0]], [4.8, [0, INSIDE, 0]]]);
     pose = function (t) {
         if (t <= SLIP) return t > 1.8 ? hands(before(t), t, 1.8) : before(t);

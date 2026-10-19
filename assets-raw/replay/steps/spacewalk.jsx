@@ -60,8 +60,10 @@ function spacewalkScene(transfer, kit, pair) {
     // capsule's top (900 400) at (960 430); for a transfer 1.2 times, the stack's middle (1128 400) at
     // (960 470); for a pair or a docked Agena 1.3 times, the two craft's middle at (960 440). The
     // Earth's limb stays at the bottom.
-    var k = transfer ? 1.2 : pair || docked ? 1.3 : 1.35;
-    var c = transfer ? [1128, 400, 470] : pair ? [XP, 400, 440] : docked ? [1153, 400, 440] : [900, 400, 430];
+    // A craft's own transfer framing (TRANSFER_VIEW, lok-transfer.jsx: [x, y, at y, scale]; 2026-10-19).
+    var tv = transfer && typeof TRANSFER_VIEW !== "undefined" ? TRANSFER_VIEW : null;
+    var k = tv ? tv[3] : transfer ? 1.2 : pair || docked ? 1.3 : 1.35;
+    var c = tv ? tv : transfer ? [1128, 400, 470] : pair ? [XP, 400, 440] : docked ? [1153, 400, 440] : [900, 400, 430];
     tf(world, "Scale").setValue([100 * k, 100 * k]);
     tf(world, "Position").setValue([960 - k * c[0], c[2] - k * c[1]]);
 }

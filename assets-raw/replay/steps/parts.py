@@ -2097,6 +2097,14 @@ def soyuz_parts():
     lok_sm = small(soyuz_sm_home(wings=False, longer=LOK_LONGER))
     lok_mid = (500 + 668 + LOK_LONGER) / 2
     layer("lok-r-pack", RT(lok_sm), RT_AT(960, lok_mid))
+    # Its engine's flame at its own nozzle (the 7K-OK's is LOK_LONGER further in, inside the service module).
+    layer("lok-r-flame-1", RT(f'<path d="M944 {668 + LOK_LONGER} C942 {694 + LOK_LONGER} 952 {720 + LOK_LONGER} 960 {744 + LOK_LONGER} '
+                              f'C968 {720 + LOK_LONGER} 978 {694 + LOK_LONGER} 976 {668 + LOK_LONGER} Z" fill="{GOLD_FILL}" '
+                              f'stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>'), RT_AT(960, 668 + LOK_LONGER))
+    # On the map still on its Blok D (the orbit insertion: the stack's last burn of the climb).
+    lok_stage_map = re.sub(r'stroke-width="[\d.]+"', 'stroke-width="5"',
+                           soyuz_stack(500 - (0.45 + 2.98 + 2.24 + LOK_SM) * K, K, panels=False, sm_h=LOK_SM) + blok_d(500, K))
+    layer("lok-o-sat-stage", f'<g transform="translate(960 560) scale(0.6) translate(-960 -426)">{lok_stage_map}</g>', (960, 560))
     layer("lok-r-module", RT(lok_sm), RT_AT(960, lok_mid))
     layer("sy-r-om", RT(small(soyuz_om_home())), RT_AT(980, 352))
     layer("sy-r-om-cut-a", RT(f'<circle cx="940" cy="350" r="6" fill="{GOLD}"/>'), RT_AT(940, 350))
@@ -2377,8 +2385,14 @@ def lk_lpu(legs=False):
     return out
 
 
+LK_BACKUP = (934, 986)             # the backup engine's two nozzles, either side of the main one
+
+
 def lk_lva():
     return (f'<path d="M952 772 L948 802 L972 802 L968 772 Z" fill="#ffffff" {LINE} stroke-width="2.6"/>'
+            + "".join(f'<path d="M{x - 5} 772 L{x - 7} 792 L{x + 7} 792 L{x + 5} 772 Z" fill="#ffffff" {LINE} stroke-width="2.2"/>'
+                      for x in LK_BACKUP)
+            +
             f'<rect x="928" y="736" width="64" height="36" fill="#ffffff" {LINE} stroke-width="3"/>'
             f'<path d="M928 754 L992 754" fill="none" {LINE} stroke-width="1.4" opacity="0.6"/>'
             f'<ellipse cx="960" cy="702" rx="48" ry="40" fill="#ffffff" {LINE} stroke-width="3"/>'
@@ -2389,13 +2403,67 @@ def lk_lva():
             + "".join(f'<rect x="{x}" y="716" width="10" height="10" fill="#ffffff" {LINE} stroke-width="2"/>' for x in (900, 1010)))
 
 
+# The LOK and the LK in the spacewalk scene (2026-10-19; world px, 75 px/m, the axis at y 470): the LOK nose right with
+# its orbital module's hatch where the scene's is (836 to 926 at 380), docked probe to plate with the LK, whose cabin
+# has its hatch on top LK_HATCH_X across; the way back is the same picture mirrored about LK_MIRROR (the ascent stage
+# left, the LOK right). crew-transfer.jsx reads the hatches' distance and the rail's end from lok-transfer.jsx.
+LKW = 75 / 40                      # the lander's frame (about 40 px/m) to the spacewalk scene's
+LK_DOCK_X = 881 + (2.98 / 2 + 0.45) * 75   # where the LOK's probe meets the LK's plate (the orbital module's middle
+                                           # under the hatch)
+LK_HATCH_X = LK_DOCK_X + (702 - 648) * LKW
+LK_MIRROR = (881 + LK_HATCH_X) / 2
+
+
+def lok_spacewalk(tip_x):
+    """The LOK nose right, its probe's tip at tip_x."""
+    k = 75
+    lok = soyuz_stack(0, k, panels=False, sm_h=LOK_SM)
+    # Its lines as heavy as the LK's beside it (drawn at the lander's frame, LKW times up).
+    lok = re.sub(r'stroke-width="([\d.]+)"', lambda m: f'stroke-width="{float(m.group(1)) * 1.7:.2f}"', lok)
+    return f'<g transform="translate({tip_x} 470) rotate(90) translate(-960 0)">{lok}</g>'
+
+
+def lk_spacewalk(plate_x, lpu=True):
+    """The LK nose left (its plate at plate_x), or the ascent stage alone."""
+    body = (lk_lpu() if lpu else "") + lk_lva()
+    return f'<g transform="translate({plate_x} 470) scale({LKW}) rotate(-90) translate(-960 -648)">{body}</g>'
+
+
+def lok_eva_parts():
+    x0, x1, y = HATCH
+    m0 = LK_HATCH_X - (x1 - x0) / 2
+    lok = lok_spacewalk(LK_DOCK_X)
+    layer("lok-e-capsule", lok, RC)
+    layer("lok-e-capsule-b", lk_spacewalk(LK_DOCK_X), (1296, 470))
+    layer("lok-e-collar", "", (LK_DOCK_X, 470))
+    layer("lok-e-box", "", (975, 360))
+    layer("lok-e-hole-b", f'<rect x="{m0 + 4:.1f}" y="{y - 2}" width="{x1 - x0 - 8}" height="10" fill="{NAVY}"/>', (m0, y))
+    layer("lok-e-hatch-b", f'<rect x="{m0:.1f}" y="{y - 8}" width="{x1 - x0}" height="10" rx="3" fill="#ffffff" {LINE} '
+                           f'stroke-width="3"/>', (m0, y))
+    rail_end = LK_HATCH_X - 30
+    layer("lok-e-rail", f'<path d="M944 352 L{rail_end:.1f} 352 M960 352 L960 384 M{rail_end - 14:.1f} 352 L{rail_end - 14:.1f} 384" '
+                        f'fill="none" {LINE} stroke-width="4"/>', (960, 352))
+    # The lone spacewalk's handrail: from the hatch along the orbital module towards its nose, where the LK would dock.
+    layer("lok-e-rail-solo", f'<path d="M944 352 L{LK_DOCK_X - 20} 352 M960 352 L960 384 M{LK_DOCK_X - 34} 352 '
+                             f'L{LK_DOCK_X - 34} 392" fill="none" {LINE} stroke-width="4"/>', (960, 352))
+    # The way back, mirrored: the ascent stage on the left, its hatch the scene's, the LOK on the right.
+    back = lambda body: f'<g transform="translate({2 * LK_MIRROR:.1f} 0) scale(-1 1)">{body}</g>'
+    layer("lkl-e-capsule", back(lk_spacewalk(LK_DOCK_X, lpu=False)), RC)
+    layer("lkl-e-capsule-b", back(lok), (1296, 470))
+
+
 def lm_parts():
+    lok_eva_parts()
     # The LK (2026-10-19): its plume and its ascent flame both from the Blok E's nozzle (802).
     layer("lkl-n-descent", lk_lpu(), LC)
     layer("lkl-n-ascent", lk_lva(), LC)
     lk_flame = (f'<path d="M948 802 C950 822 955 840 960 858 C965 840 970 822 972 802 Z" fill="{GOLD_FILL}" '
                 f'stroke="{GOLD}" stroke-width="3" stroke-linejoin="round"/>')
     layer("lkl-n-flame-up", lk_flame, (960, 802))
+    # The backup engine's test (the crewed test's second): its two plumes, either side of the main nozzle.
+    layer("lkl-n-plume-backup", "".join(f'<path d="M{x - 9} 792 C{x - 8} 818 {x - 4} 846 {x} 872 C{x + 4} 846 {x + 8} 818 {x + 9} 792 Z" '
+                                        f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="3" stroke-linejoin="round"/>'
+                                        for x in LK_BACKUP), (960, 792))
     layer("lkl-n-plume", f'<path d="M944 802 C946 830 952 860 960 890 C968 860 974 830 976 802 Z" fill="{GOLD_FILL}" '
                          f'stroke="{GOLD}" stroke-width="3" stroke-linejoin="round"/>', (960, 802))
     # 39 px/m, as the LOK beside it (the lander's frame is about 40).
@@ -2418,6 +2486,12 @@ def lm_parts():
     layer("lkl-d-payload", f'<g transform="{big}"><g transform="{turn}">{lk_up}</g></g>', D_AT(914, 520))
     lk_thick = lambda body: re.sub(r'stroke-width="[\d.]+"', 'stroke-width="5"', body)
     lk_map = f'<g transform="translate(960 560) scale(0.9) translate(-960 -720)">{lk_thick(lk_lpu() + lk_lva())}</g>'
+    # Still on the rocket's third stage (the orbit insertion: its last burn of the climb).
+    lk_stage = (f'<rect x="922" y="822" width="76" height="90" fill="#ffffff" {LINE} stroke-width="3"/>'
+                f'<path d="M922 852 L998 852" fill="none" {LINE} stroke-width="1.4" opacity="0.6"/>'
+                f'<path d="M948 912 L942 930 L978 930 L972 912 Z" fill="#ffffff" {LINE} stroke-width="2.4"/>')
+    layer("lkl-o-sat-stage", f'<g transform="translate(960 560) scale(0.75) translate(-960 -790)">'
+                             f'{lk_thick(lk_stage + lk_lpu() + lk_lva())}</g>', (960, 560))
     lk_map_asc = f'<g transform="translate(960 560) scale(0.9) translate(-960 -720)">{lk_thick(lk_lva())}</g>'
     layer("lkl-o-sat", lk_map, (960, 560))
     layer("lkl-o-sat-asc", lk_map_asc, (960, 560))

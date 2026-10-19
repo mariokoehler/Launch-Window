@@ -1730,7 +1730,7 @@ STEPS["soyuz-l1-duration-level-i"]["alias"] = dict(L1)
 # longer service module, no wings), on its Blok D out of the rocket (-deployment), then off it (-lok-deployment).
 LOK = {"rocket": "lok-rocket", "debris-1": "lok-debris-1", "d-payload": "lok-d-payload", "o-sat": "lok-o-sat",
        "o-sat-b": "lok-o-sat-b", "r-pack": "lok-r-pack", "r-module": "lok-r-module", "k-chaser": "lok-k-chaser",
-       "k-other": "lok-k-other", "k-push": "lok-k-push"}
+       "k-other": "lok-k-other", "k-push": "lok-k-push", "r-flame-1": "lok-r-flame-1"}
 for _step in ("launch-preparations", "countdown", "earth-orbit", "reentry-preparations", "reentry-trim", "retrofire",
               "deorbit-burn", "retrofire-jettison", "orbital-module-separation", "modules-separation", "suborbital-flight",
               "joint", "rendezvous"):
@@ -1747,11 +1747,29 @@ STEPS["soyuz-lok-duration-level-i"]["alias"] = dict(LOK)
 for _step in ("launch-preparations", "countdown", "deployment", "earth-orbit"):
     variant_of(_step, f"lk-{_step}", {}, skin="lkl-")
 variant_of("ascent", "lk-ascent", {"debris-1": "lkl-debris-1-bare"}, skin="lkl-")
-variant_of("earth-orbit", "lk-earth-orbit-asc", {"o-sat": "lkl-o-sat-asc"}, skin="lkl-")
 variant_of("lander-engine-test", "lk-engine-test", {}, skin="lkl-")
 variant_of("lander-staging", "lk-staging", {}, skin="lkl-")
 variant_of("soyuz-docking", "soyuz-lok-docking-lk", {**LOK, "k-target": "lkl-k-target-asc"})
 variant_of("soyuz-undocking", "soyuz-lok-undocking-lk", {**LOK, "k-target": "lkl-k-target-asc"})
+# The second ascent (2026-10-19, user): the rocket's third stage, its last burn into orbit, the craft still on it.
+variant_of("soyuz-insertion", "soyuz-lok-insertion", {**LOK, "o-sat": "lok-o-sat-stage"})
+variant_of("insertion", "lk-insertion", {"o-sat": "lkl-o-sat-stage"}, skin="lkl-")
+# After the uncrewed test's ascent burn the ascent stage coasts out on a long ellipse (Kosmos 379's apogee rose to
+# about 14,000 km), and stays up; the crewed test's second engine test fires the backup engine's two nozzles.
+variant_of("gemini-high-orbit", "lk-high-orbit", {"o-sat": "lkl-o-sat-asc"}, skin="lkl-")
+variant_of("lander-engine-test", "lk-engine-test-backup", {"n-plume": "lkl-n-plume-backup"}, skin="lkl-")
+# The LOK's spacewalks (2026-10-19, user): the lone one in three (out, along the rail to the probe and back, a photo
+# and in), and the crossings to the LK and back (lok-transfer.jsx).
+LOK_EVA = {"r-capsule": "lok-e-capsule", "e-box": "lok-e-box"}
+variant_of("gemini-eva-out", "soyuz-lok-eva-out", LOK_EVA, skin="sy-")
+variant_of("gemini-eva-out", "soyuz-lok-eva-rail", {**LOK_EVA, "e-rail": "lok-e-rail-solo"}, skin="sy-", source="eva-rail",
+           success=(5.6, 2.0), glitch=(6.0, 2.6), failure=(6.0, 2.6), times=[0.3, 1.2, 1.9, 2.6, 3.6, 5.5])
+variant_of("gemini-eva-photo-docked", "soyuz-lok-eva-photo", LOK_EVA, skin="sy-", before=["spacewalk.jsx"])
+LOK_CROSS = {**LOK_EVA, "e-capsule-b": "lok-e-capsule-b", "e-collar": "lok-e-collar", "e-hole-b": "lok-e-hole-b",
+             "e-hatch-b": "lok-e-hatch-b", "e-rail": "lok-e-rail"}
+variant_of("crew-transfer", "soyuz-lok-transfer-to-lk", LOK_CROSS, skin="sy-", before=["lok-transfer.jsx", "spacewalk.jsx"])
+variant_of("crew-transfer", "soyuz-lok-transfer-from-lk", {**LOK_CROSS, "r-capsule": "lkl-e-capsule", "e-capsule-b": "lkl-e-capsule-b"},
+           skin="sy-", before=["lok-transfer.jsx", "spacewalk.jsx"])
 
 
 def read(*path):
