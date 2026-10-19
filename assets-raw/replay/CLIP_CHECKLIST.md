@@ -412,7 +412,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: MOON 8
   - Programs: Gemini EOR 2
 - [x] **LK engine test** `lk-test`: 6 uses in 4 configurations, 2 programs (SOVIET) crew risk in 5 of 6
-  - Clip: by the steps before: `lk-engine-test` after `earth-orbit` in soyuz-7k-l3-earth-orbit 1, `lk-engine-test` after `eva-7k-lok` in soyuz-7k-l3-earth-orbit 1, `lk-engine-test-backup` after `lk-test` in soyuz-7k-l3-earth-orbit 1, `lander-engine-test` after `eva-7k-lok` 1, `lander-engine-test` after `lk-test` 1, `lander-engine-test` after `lk-descent` 1; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: by the steps before: `lk-engine-test` after `earth-orbit` in soyuz-7k-l3-earth-orbit 1, `lk-engine-test-undock` after `eva-7k-lok` in soyuz-7k-l3-earth-orbit 1, `lk-engine-test-check` after `lk-test` in soyuz-7k-l3-earth-orbit 1, `lander-engine-test` after `eva-7k-lok` 1, `lander-engine-test` after `lk-test` 1, `lander-engine-test` after `lk-descent` 1; [x] success, [x] glitch, [x] failure; cues no
   - On screen: crewed lander 6, crewed craft 5, launcher 3
   - Destinations: EARTH 3, MOON 3
   - Programs: Soyuz 7K-L3 lunar landing 2, Soyuz 7K-L3: Earth-orbit tests 2
@@ -487,7 +487,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: EARTH 2
   - Programs: Apollo: Earth-orbit tests 2
 - [x] **Landing gear jettison and restart** `lpu-jes-eng-res`: 2 uses in 2 configurations, 1 program (SOVIET) crew risk in 1 of 2
-  - Clip: `lk-staging`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: by the steps before: `lk-staging` after `lk-test` in soyuz-7k-l3-earth-orbit 1, `lk-staging-check` `eva-7k-lok` earlier in soyuz-7k-l3-earth-orbit 1; [x] success, [x] glitch, [x] failure; cues no
   - On screen: crewed lander 2, crewed craft 1
   - Destinations: EARTH 2
   - Programs: Soyuz 7K-L3: Earth-orbit tests 2

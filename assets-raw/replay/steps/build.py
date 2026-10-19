@@ -1754,9 +1754,16 @@ variant_of("soyuz-undocking", "soyuz-lok-undocking-lk", {**LOK, "k-target": "lkl
 # The second ascent (2026-10-19, user): the rocket's third stage, its last burn into orbit, the craft still on it.
 variant_of("insertion", "lk-insertion", {"o-sat": "lkl-o-sat-stage"}, skin="lkl-")
 # After the uncrewed test's ascent burn the ascent stage coasts out on a long ellipse (Kosmos 379's apogee rose to
-# about 14,000 km), and stays up; the crewed test's second engine test fires the backup engine's two nozzles.
+# about 14,000 km), and stays up.
 variant_of("gemini-high-orbit", "lk-high-orbit", {"o-sat": "lkl-o-sat-asc"}, skin="lkl-")
-variant_of("lander-engine-test", "lk-engine-test-backup", {"n-plume": "lkl-n-plume-backup"}, skin="lkl-")
+# The crewed test's two engine tests and its staging, one on from the other (2026-10-19, user): the LK lets go of the
+# LOK and flies the hover and touchdown burn, both engines lit and the backup shutting down (lk-undock-test.jsx); a
+# short check burn of the main engine alone (lk-check-burn.jsx); the staging from where that left it.
+variant_of("lander-engine-test", "lk-engine-test-undock", {"n-plume": "lkl-n-plume-both", "n-flame-up": "lkl-n-plume"},
+           skin="lkl-", before=["moon.jsx", "lander-orbit.jsx", "lk-undock-test.jsx"],
+           success=(6.4, 2.6), glitch=(6.4, 3.2), failure=(6.4, 3.2), times=[0.2, 1.0, 1.8, 2.3, 3.2, 4.4, 6.3])
+variant_of("lander-engine-test", "lk-engine-test-check", {}, skin="lkl-", before=["moon.jsx", "lander-orbit.jsx", "lk-check-burn.jsx"])
+variant_of("lander-staging", "lk-staging-check", {}, skin="lkl-", before=["moon.jsx", "lander-orbit.jsx", "after-check-burn.jsx"])
 # The LOK's spacewalks (2026-10-19, user): the lone one in three (out, along the rail to the probe and back, a photo
 # and in), and the crossings to the LK and back (lok-transfer.jsx).
 # The crewed lander test's LOK and LK together (2026-10-19, user): stacked as on the N1 on the third stage and off the

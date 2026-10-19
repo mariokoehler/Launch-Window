@@ -589,7 +589,15 @@ leading to satellite navigation.
   legs. The ascent burn left Kosmos 379 on an orbit reaching out to about 14,000 km, and it stayed up until 1983. It
   flew on the Soyuz-L, an R-7 with a third stage (Blok I). The LK's Blok E had a main engine with one nozzle and a
   backup with two, either side of it; at landing and lift-off both would light, and one shut down if both worked.
-  Sources: Wikipedia ("Soyuz 7K-L1", "Soyuz 7K-LOK", "LK (spacecraft)", "Kosmos 379", "Blok E", "Soyuz-L"),
+  None of it flew crewed. The LK flew only alone and uncrewed (Kosmos 379, 398 and 434, 1970-71), and the LOK never
+  reached orbit: a LOK and a dummy LK rode the last N1, which broke up on 23 November 1972. The Kontakt docking
+  system was never used in space, since the Soyuz flights planned to test it were cancelled. The game's crewed
+  Earth-orbit LK test is a rehearsal of the lunar sequence that was never flown: across by spacewalk, undocking,
+  the landing burn, lift-off from the descent stage, the LOK docking with the waiting ascent stage, and the
+  spacewalk back. Such a rehearsal could not have fired the full 1.5 km/s lift-off burn and still be caught by the
+  LOK.
+  Sources: Wikipedia ("Soyuz 7K-L1", "Soyuz 7K-LOK", "LK (spacecraft)", "Kosmos 379", "Blok E", "Soyuz-L",
+  "Soyuz Kontakt"),
   RussianSpaceWeb (L1, LOK), Gunter's Space Page (LK T2K, Soyuz-L).
 - **Voskhod** (the replay's Voskhod, 2026-10-18): a Vostok made to carry two or three, with a solid-fuel backup
   retro rocket on top of the descent sphere. Vostok hadn't needed one: its low orbit would have decayed within

@@ -2508,8 +2508,20 @@ def lm_parts():
     layer("lkl-n-plume-backup", "".join(f'<path d="M{x - 9} 792 C{x - 8} 818 {x - 4} 846 {x} 872 C{x + 4} 846 {x + 8} 818 {x + 9} 792 Z" '
                                         f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="3" stroke-linejoin="round"/>'
                                         for x in LK_BACKUP), (960, 792))
-    layer("lkl-n-plume", f'<path d="M944 802 C946 830 952 860 960 890 C968 860 974 830 976 802 Z" fill="{GOLD_FILL}" '
-                         f'stroke="{GOLD}" stroke-width="3" stroke-linejoin="round"/>', (960, 802))
+    main_plume = (f'<path d="M944 802 C946 830 952 860 960 890 C968 860 974 830 976 802 Z" fill="{GOLD_FILL}" '
+                  f'stroke="{GOLD}" stroke-width="3" stroke-linejoin="round"/>')
+    layer("lkl-n-plume", main_plume, (960, 802))
+    # The crewed test's first (lk-undock-test.jsx): the main engine and the backup lit together.
+    layer("lkl-n-plume-both", main_plume + "".join(
+        f'<path d="M{x - 9} 792 C{x - 8} 818 {x - 4} 846 {x} 872 C{x + 4} 846 {x + 8} 818 {x + 9} 792 Z" '
+        f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="3" stroke-linejoin="round"/>' for x in LK_BACKUP), (960, 802))
+    # The LOK docked on top of it there, nose down, its probe in the LK's plate (648 in the lander's frame, 40 px/m),
+    # where the carrier puts the plate on the screen (LC moved by lander-orbit.jsx's LO, scaled by its LK).
+    plate_y = LC[1] - 290 + (648 - LC[1]) * 0.8
+    lok_down = re.sub(r'stroke-width="([\d.]+)"', lambda m: f'stroke-width="{float(m.group(1)) * 1.15:.2f}"',
+                      soyuz_stack(648, 40, panels=False, sm_h=LOK_SM))
+    layer("lkl-n-lok", f'<g transform="translate(960 {plate_y:.1f}) scale(0.8) translate(-960 -648)">'
+                       f'<g transform="translate(0 1296) scale(1 -1)">{lok_down}</g></g>', (960, plate_y))
     # 39 px/m, as the LOK beside it (the lander's frame is about 40).
     lk_flip = "translate(960 540) scale(0.98 -0.98) translate(-960 -648)"
     lk_tc = (KM[0] + KK * (540 - 426), KM[1])

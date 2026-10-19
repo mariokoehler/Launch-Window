@@ -2074,9 +2074,14 @@ clips, the replay is meant to be watched like a short film, and the player can s
   (`lok-r-flame-1`); a second ascent is the rocket's third stage (the Soyuz-L had one) and plays the orbit insertion
   with the craft still on it (`-insertion`, `lkl-o-sat-stage`, `lok-o-sat-stage`); the uncrewed LK's last orbit is the
   ascent stage on its long ellipse (`lk-high-orbit`: Kosmos 379's ascent burn raised its apogee to about 14,000 km,
-  and it stayed up); the crewed test's second engine test fires the backup engine's two nozzles
-  (`lk-engine-test-backup`); the staging starts where the engine test's burn left the LK, higher and turned
-  (`after-engine-test.jsx` sets `lander-staging.jsx`'s `FROM`, user, 2026-10-19). The LOK's spacewalks have its own hull (`lok-e-capsule`): the lone spacewalk's three
+  and it stayed up); the staging starts where the engine test's burn left the LK, higher and turned
+  (`after-engine-test.jsx` sets `lander-staging.jsx`'s `FROM`, user, 2026-10-19). The crewed test's two engine tests
+  follow the landing plan (user, 2026-10-19): the first opens docked, the LK lets go of the LOK, which backs off and
+  away, then flies the hover and touchdown burn with the main engine and the backup lit together, the backup's two
+  nozzles shutting down once the main one burns steadily (on a glitch the backup carries the burn while the main
+  one sputters; `lk-engine-test-undock`, `lk-undock-test.jsx`); the second is a short check burn of the main engine
+  alone (`lk-engine-test-check`), and the staging after it is `lk-staging-check`, each on from where the one before
+  left the LK (`lander-engine-test.jsx` takes `FROM` and its times from a step's file, as the staging does). The LOK's spacewalks have its own hull (`lok-e-capsule`): the lone spacewalk's three
   steps are out on the tether, along the handrail to the docking probe and back (the crossing rehearsed,
   `eva-rail.jsx`), and a photo and back in; the lander test's two are the crossing to the docked LK and back from its
   ascent stage (crew-transfer.jsx's distance and rail and spacewalk.jsx's framing from `lok-transfer.jsx`). In the
