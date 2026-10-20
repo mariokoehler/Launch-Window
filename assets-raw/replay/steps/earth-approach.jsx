@@ -3,6 +3,9 @@
 // shallow and it skips off into space. It reaches the band at 3.4 and runs on into the air, glowing.
 // Glitch: from 1.6 its aim drifts shallow; a correction at 2.6 (a puff) puts it back in the band.
 // Failure: the same drift, and the correction misfires: it passes above the band and skips away.
+// DROP (adapter-drop.jsx; circumlunar Gemini, 2026-10-20): the craft casts off what it doesn't take into the air at
+// 0.6 in every variant (o-stage, under o-sat, which is then the capsule alone): pushed off ahead of it, tumbling,
+// gone by 2.8.
 var glitch = VARIANT === "glitch", failure = VARIANT === "failure";
 var DRIFT = 1.6, FIX = 2.6, ARRIVE = 3.4;
 
@@ -12,6 +15,11 @@ put("l-corridor");
 layers["l-corridor"].moveAfter(layers["o-sat"]);
 put("o-streak");
 layers["o-streak"].parent = layers["o-sat"];
+var DROP = typeof DROP !== "undefined" && DROP;
+if (DROP) {
+    put("o-stage", "o-sat");
+    layers["o-stage"].moveAfter(layers["o-sat"]);
+}
 put("m-puff");
 hide("ring-1"); hide("ring-2"); hide("ring-3"); hide("ring-4");
 turn("o-earth", function (t) { return -0.25 * t; });
@@ -53,3 +61,10 @@ var PUFF = glitch || failure ? FIX : 2.0;
 move("m-puff", function (t) { var p = where(Math.max(t, PUFF)); return [p[0] - 960, p[1] - 540]; });
 grow("m-puff", track([[PUFF, 0.6], [PUFF + 0.5, 2.2, "out"], [PUFF + 1.1, 2.6, "lin"]]));
 fade("m-puff", track([[PUFF, 0, "snap"], [PUFF + 0.02, 1, "snap"], [PUFF + 0.5, 1], [PUFF + 1.1, 0, "lin"]]));
+if (DROP) {
+    // In the craft's frame (nose up, so its base ahead): off the base, and turning.
+    var GO = 0.6;
+    move("o-stage", function (t) { var u = Math.max(0, t - GO); return [5 * u, 30 * u + 8 * u * u]; });
+    turn("o-stage", function (t) { return -18 * Math.max(0, t - GO); });
+    fade("o-stage", track([[2.0, 1], [2.8, 0, "lin"]]));
+}

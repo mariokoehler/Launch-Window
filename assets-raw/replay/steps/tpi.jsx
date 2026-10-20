@@ -3,12 +3,19 @@
 // the engine stops it leaves on a nearly straight line, off to the right.
 // Glitch: the burn cuts out at 1.6 and relights at 2.2; it leaves, later.
 // Failure: the same cut, but the relight dies at 2.6: it's left on a long ellipse, out and back round.
+// SEP (hoi-separate.jsx; circumlunar Gemini, 2026-10-20): the stage that burned lets go 0.4 s after the burn ends and
+// drifts back off the craft's tail, tumbling slowly (o-stage, under o-sat, which is then the craft alone).
 var glitch = VARIANT === "glitch", failure = VARIANT === "failure";
 var FIRE = 1.0, CUT = 1.6, RELIGHT = 2.2, DIES = 2.6;
 
 orbitScene();
 put("o-streak");
 layers["o-streak"].parent = layers["o-sat"];
+var SEP = typeof SEP !== "undefined" && SEP;
+if (SEP) {
+    put("o-stage", "o-sat");
+    layers["o-stage"].moveAfter(layers["o-sat"]);
+}
 hide("ring-1"); hide("ring-2"); hide("ring-3"); hide("ring-4");
 turn("o-earth", function (t) { return -0.25 * t; });
 
@@ -49,3 +56,9 @@ bake(tf(world, "Position"), function () { return [-300, -150]; });
 // The flame behind it while the engine burns, flickering.
 fade("o-streak", function (t) { return burning(t) ? 1 : 0; });
 grow("o-streak", function (t) { return [1, 0.9 + 0.12 * Math.sin(2 * Math.PI * 11 * t)]; });
+if (SEP) {
+    // In the craft's frame (nose up): back along its axis, slowly, and turning.
+    var PARTS = (glitch ? 3.4 : failure ? DIES : 2.6) + 0.4;
+    move("o-stage", function (t) { var u = Math.max(0, t - PARTS); return [6 * u, 36 * u + 10 * u * u]; });
+    turn("o-stage", function (t) { return 14 * Math.max(0, t - PARTS); });
+}

@@ -101,6 +101,10 @@ Each folder's `build/` is regenerated on every run and stays out of git.
   - **PrOP-M** (2026-10-17, `pr-` parts, `mars-rover.jsx`): the rover (`pr-rover`, its ski `pr-ski` and the bars' flash
     `pr-bump` children of it), its tether (`pr-cable`, aimed and stretched every frame), on `mars-surface`'s lander,
     2.2 times in. `make_clip_checklist.py` now matches rules by `programs` and `later` as `ReplayClips` does.
+  - **Circumlunar Gemini** (2026-10-20, `tt-`, `gtd-` and `gm-` map parts): `tpi.jsx` and `earth-approach.jsx` take a
+    second map layer under the craft, `o-stage`, put in its frame: with `SEP` (`hoi-separate.jsx`) the stage that burned
+    lets go 0.4 s after the burn, as `high-orbit-injection.jsx`'s; with `DROP` (`adapter-drop.jsx`) the craft casts it off
+    ahead at 0.6 and it fades by 2.8. The coasts' craft is `<skin>m-probe`, small at the Sun's place.
   - **Viking's orbiter** (2026-10-17, `vk-` parts, `viking-separation.jsx`): the orbiter side on (`vk-orbiter`), its
     latches, and the capsule's deorbit jets (`vk-jets`, a child of `e-shell`, the aeroshell Viking's entry draws).
   - **Pacing an insertion** (2026-10-17): `loi.jsx` takes `SLOW` from the step's file (Mars's is 1.5): every time is

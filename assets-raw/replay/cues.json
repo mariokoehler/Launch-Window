@@ -1,4 +1,11 @@
 {
+  "transtage-earth-orbit": {"success": [{"at": 2.15, "sound": "radio-signal-good"}], "glitch": [{"at": 3.45, "sound": "radio-telemetry-lost"}], "failure": [{"at": 3.05, "sound": "radio-data-lost"}]},
+  "transtage-tlc": {"glitch": [{"at": 3.65, "sound": "radio-problem"}], "failure": [{"at": 3.45, "sound": "radio-off-trajectory"}]},
+  "gemini-tlc": {"glitch": [{"at": 3.65, "sound": "radio-problem"}], "failure": [{"at": 3.45, "sound": "radio-off-trajectory"}]},
+  "transtage-lunar-approach": {"failure": [{"at": 3.45, "sound": "radio-off-trajectory"}]},
+  "gemini-lunar-approach": {"failure": [{"at": 3.45, "sound": "radio-off-trajectory"}]},
+  "gemini-tec": {"glitch": [{"at": 3.65, "sound": "radio-problem"}], "failure": [{"at": 3.45, "sound": "radio-off-trajectory"}]},
+  "gemini-reentry-from-moon": {"success": [{"at": 0.4, "sound": "radio-blackout"}], "glitch": [{"at": 0.4, "sound": "radio-blackout"}, {"at": 4.45, "sound": "radio-oscillations"}], "failure": [{"at": 0.4, "sound": "radio-blackout"}, {"at": 4.0, "sound": "radio-no-acquisition"}]},
   "gemini-eor-launch-preparations": {"success": [{"at": 2.65, "sound": "radio-go-for-launch"}]},
   "gemini-eor-countdown": {"success": [{"at": 0.1, "sound": "radio-guidance-internal"}], "glitch": [{"at": 0.1, "sound": "radio-guidance-internal"}, {"at": 3.65, "sound": "radio-countdown-hold"}], "failure": [{"at": 0.1, "sound": "radio-guidance-internal"}, {"at": 4.75, "sound": "radio-cutoff"}]},
   "gemini-eor-launch": {"success": [{"at": 0.9, "sound": "rocket-roar", "loop": true}, {"at": 3.25, "sound": "radio-pitching-downrange"}], "glitch": [{"at": 0.9, "sound": "rocket-roar", "loop": true}], "failure": [{"at": 0.9, "sound": "rocket-roar", "loop": true, "until": 3.25, "fade": 0.2}, {"at": 3.35, "sound": "radio-launch-failure"}]},

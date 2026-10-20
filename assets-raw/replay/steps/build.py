@@ -1838,6 +1838,26 @@ variant_of("gemini-reentry-preparations", "gemini-eor-modules-separation", {"r-t
 variant_of("descent-chutes", "gemini-descent-chutes", {}, skin="gm-", before=["two-point.jsx"])
 variant_of("splashdown-and-recovery", "gemini-splashdown-and-recovery", {}, skin="gm-", before=["two-point.jsx"])
 
+# Circumlunar Gemini to the Moon (2026-10-20, user): the Transtage launched alone (its Earth-orbit tests' clips), on the
+# map and on its way to the Moon (the uncrewed flyby, where its burn separates from nothing); Gemini docked into it
+# for the trans-lunar injection, after which it lets go (tpi.jsx's SEP); Gemini on the coasts, at the Moon and on
+# the way home, casting off its adapter on the Earth approach (earth-approach.jsx's DROP; no step of its own), and
+# its reentry unmirrored, in from the left as the approach leaves it.
+variant_of("earth-orbit", "transtage-earth-orbit", {}, skin="tt-")
+variant_of("tpi", "transtage-tli", {}, skin="tt-")
+variant_of("trans-lunar-coast", "transtage-tlc", {}, skin="tt-")
+variant_of("lunar-approach", "transtage-lunar-approach", {}, skin="tt-")
+variant_of("lunar-flyby", "transtage-lunar-flyby", {}, skin="tt-")
+variant_of("tpi", "gemini-transtage-tli", {"o-sat": "gtd-o-sat-gemini", "o-stage": "gtd-o-sat-stage"}, skin="gm-",
+           before=["orbit.jsx", "hoi-separate.jsx"])
+variant_of("trans-lunar-coast", "gemini-tlc", {}, skin="gm-")
+variant_of("lunar-approach", "gemini-lunar-approach", {}, skin="gm-")
+variant_of("lunar-flyby", "gemini-lunar-flyby", {}, skin="gm-")
+variant_of("trans-earth-coast", "gemini-tec", {}, skin="gm-")
+variant_of("earth-approach", "gemini-earth-approach", {"o-sat": "gm-o-sat-capsule", "o-stage": "gm-o-sat-adapter"}, skin="gm-",
+           before=["orbit.jsx", "adapter-drop.jsx"])
+variant_of("reentry-from-moon", "gemini-reentry-from-moon", {}, skin="gm-")
+
 
 def read(*path):
     return open(os.path.join(HERE, *path), encoding="utf-8").read() + "\n"

@@ -2027,8 +2027,18 @@ clips, the replay is meant to be watched like a short film, and the player can s
   reentry preparations, as Gemini's equipment section does (`gemini-da-reentry-preparations`, `gd-r-trunk`; it has no
   retrograde section, user, 2026-10-19); the lunar propulsion module is still gone there without a clip for its parting. The Transtage's size is real (3.05 by 4.57 m, two engines); the propulsion module's and the
   direct-ascent craft's shapes follow our blueprints, their sizes unconfirmed.
-  The lunar Gemini programs themselves (direct ascent, EOR, circumlunar, lunar orbital) and Gemini EOR's Earth-orbit
-  tests are a later package; Gemini EOR's equipment-section separation drops the section before the turn, the wrong way round, to be
+  Circumlunar Gemini's flights to the Moon fly as themselves (user, 2026-10-20): the Transtage launches alone on its
+  Earth-orbit tests' clips (rules by `"vehicle": "transtage"`), is on the map alone (`tt-o-sat`), and in the uncrewed
+  flyby burns for the Moon by itself (`transtage-tli`; its `ignition-and-separation` separates from nothing on screen),
+  coasts (`tt-m-probe`) and passes the Moon (`transtage-*`). In the crewed flyby Gemini launches on its own clips, docks
+  into the Transtage (`transtage-docking`, played for `approach-and-docking`, which has no approach of its own), and
+  the docked stack burns for the Moon, the Transtage letting go 0.4 s after the burn and drifting back
+  (`gemini-transtage-tli`, `tpi.jsx`'s `SEP`, the stack in two: `gtd-o-sat-gemini`, `gtd-o-sat-stage`). Gemini coasts out
+  and back (`gm-m-probe`), passes the Moon, and on the Earth approach casts off its adapter at 0.6 s in every variant
+  (`gemini-earth-approach`, `earth-approach.jsx`'s `DROP`): no step has it, and a capsule must meet the air alone
+  (unconfirmed). Its reentry is Gemini's unmirrored (`gemini-reentry-from-moon`), in from the left as the approach leaves
+  it; its descent and recovery Gemini's. The flame on the map stays the generic one, over the Transtage's drum.
+  The lunar Gemini programs themselves (direct ascent, EOR, lunar orbital) are a later package; Gemini EOR's equipment-section separation drops the section before the turn, the wrong way round, to be
   fixed with them. Unconfirmed.
 - **The early-era pack's craft as themselves (user, 2026-10-18):** Vostok (`vk-`, `vostok-*`) plays every step as
   itself: the sphere on its instrument module (its one retro flame; the module the separation's, its cable meeting

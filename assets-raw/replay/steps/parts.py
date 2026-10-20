@@ -3144,6 +3144,23 @@ def gemini_parts():
           (960, 560))
     thick = re.sub(r'stroke-width="[\d.]+"', 'stroke-width="5"', gemini_docked_transtage(GM_L))
     layer("gtd-o-sat", f'<g transform="translate(960 560) scale(0.6) translate(-960 -426)">{thick}</g>', (960, 560))
+    # Circumlunar Gemini's flight to the Moon (2026-10-20, user): the docked stack in two, overlaying gtd-o-sat exactly,
+    # for the trans-lunar injection after which the Transtage lets go (tpi.jsx's SEP); the Transtage alone on the
+    # map (the uncrewed flyby) and Gemini and the Transtage on the coasts' map (moon-coast.jsx, small at the Sun's
+    # place, as ap-m-probe); and Gemini whole and in two for the Earth approach, where the adapter goes (gm-o-sat's
+    # frame).
+    y0, top = GM_EQUIP_Y, GM_EQUIP_Y + TT_LEN
+    c = top + 1.1 - 0.25 + 3.45
+    layer("gtd-o-sat-gemini", on_map(f'<g transform="translate(0 {1000 - c * GM_L[3]:.1f}) scale(1 -1)">{gemini_whole(GM_L)}</g>'),
+          (960, 560))
+    layer("gtd-o-sat-stage", on_map(bells(GM_L, y0, (-0.6, 0.6), 0.9, 0.18, 0.42) + transtage_body(GM_L, y0)
+                                    + transtage_dock(GM_L, top)), (960, 560))
+    layer("tt-o-sat", on_map(transtage_launch(GM_L, shroud=False)), (960, 560))
+    layer("gm-o-sat-capsule", on_map(gemini_module(GM_L)), (960, 560))
+    layer("gm-o-sat-adapter", on_map(gemini_equip(GM_L) + gemini_retro(GM_L)), (960, 560))
+    cx, cy = SUN
+    for name, body in (("gm-m-probe", gemini_whole(GM_L)), ("tt-m-probe", transtage_launch(GM_L, shroud=False))):
+        layer(name, f'<g transform="translate({cx} {cy}) scale(0.32) translate(-960 -480)">{th(body)}</g>', SUN)
     layer("tt-rocket", rocket[:nose] + transtage_launch(GM_L, shroud=True), (960, 600))
     layer("tt-debris-1", transtage_launch(GM_L, shroud=True), (960, 410))
     layer("tt-d-payload", f'<g transform="{big}"><g transform="{turn}">{transtage_launch(GM_L, shroud=False)}</g></g>',
