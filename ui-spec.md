@@ -2172,7 +2172,8 @@ clips, the replay is meant to be watched like a short film, and the player can s
   rides under it out of the rocket and through the parking orbit, burns for the Moon and lets go (`-tli`, `SEP`). The
   landing stage brakes into lunar orbit and lands (the braking stage folded into it), or fires the craft home on the
   orbit flight; on the Moon the craft stands on its six legs at the moonwalk's scale (`l7m-`), its three surface steps
-  the flag, the experiment package and the rocks, and the return stage lifts off with the capsule, climbs with nothing
+  the flag, the rocks and the experiment package (in that order, so the package set out stays on the ground through
+  the liftoff, `PACKAGE`; user), and the return stage lifts off with the capsule, climbs with nothing
   waiting in orbit and fires home (`-asc`). Home after a landing: the reentry preparations turn the capsule on its return
   stage and the separation follows (`project-lk700-moon.jsx`'s `SEP_FROM`); on the flyby and the orbit flight the
   landing stage is cast off at the reentry preparations, as on the Earth-orbit tests (`lk-700-retrofire-jettison`).

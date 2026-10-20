@@ -2035,6 +2035,9 @@ for _base, _name in (("tei", "tei-asc"), ("trans-earth-coast", "tec-asc")):
 variant_of("lunar-ascent", "lk-700-lunar-ascent", {**L7_ASC, "o-sat-b": "l7-none"}, skin="l7-")
 for _base in ("powered-descent", "lunar-landing", "lunar-liftoff", "moonwalk"):
     variant_of(f"apollo-{_base}", f"lk-700-{_base}", {}, skin="l7m-")
+# Its surface steps go flag, rocks, package (user, 2026-10-20), so the package stays where it was set out, through the
+# liftoff too (moon.jsx's PACKAGE).
+STEPS["lk-700-lunar-liftoff"]["vars"] = {"FLAG": True, "PACKAGE": True}
 for _base in ("flag", "samples"):
     variant_of(f"apollo-{_base}", f"lk-700-{_base}", {}, skin="l7m-", before=["moon.jsx", "walker.jsx", "lk700-walk.jsx"])
 variant_of("reentry-preparations", "lk-700-reentry-preparations-asc", L7_HOME, skin="l7-")

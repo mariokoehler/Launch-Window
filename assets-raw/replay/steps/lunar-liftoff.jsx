@@ -11,6 +11,7 @@ put("paper", "screen");
 put("n-ground");
 put("n-rocks");
 var flag = flagPlanted();
+packageLeft();
 lander();
 put("n-dust");
 for (var i = 1; i <= 4; i++) put("r-chip-" + i);

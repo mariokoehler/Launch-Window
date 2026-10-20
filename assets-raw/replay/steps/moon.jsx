@@ -22,6 +22,15 @@ function flagPlanted() {
     put("e-flag-cloth", "e-flag-pole");
     return true;
 }
+// The experiment package left on the ground by a moonwalk (2026-10-20, the LK-700's landing): where moonwalk.jsx sets
+// it down (its REST, at its BOXK), when the builder sets PACKAGE. Put it before the lander, as the moonwalk does.
+function packageLeft() {
+    if (typeof PACKAGE === "undefined" || !PACKAGE) return false;
+    put("e-box");
+    grow("e-box", function () { return 0.6; });
+    move("e-box", function () { return [1236 + 34 - 975, 880 - 0.6 * 20 - 360]; });
+    return true;
+}
 // The lamp panel (alarm or fuel) and its lamp, lit while lit(t), blinking while blink(t).
 function lamp(which, lit, blinking) {
     put("n-panel-" + which, "screen");
