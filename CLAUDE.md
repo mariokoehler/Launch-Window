@@ -20,6 +20,7 @@ wall-clock time. A game runs for weeks to months.
   sessions. Claude Design reads it from GitHub.
 - `baspm.md`: an index into BASPM's decompiled source and data, with how its systems work.
 - `assets/CREDITS.md`: every third-party asset. Credit each one there.
+- `ideas/`: full plans for ideas kept for later, each linked from `design.md` §5, Backlog.
 - **History:** the docs were consolidated on 2026-10-06. The earlier, much longer versions are in
   git: `git show 6fc7af5:CLAUDE.md` (dated status narrative, harness numbers),
   `git show 6fc7af5:design.md` (every trace and decision as it happened) and

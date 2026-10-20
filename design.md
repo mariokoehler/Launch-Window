@@ -3542,6 +3542,15 @@ unlock sets, 31 clients), screens, help topic, a contract bot (`RaceLulls ... ah
 `TurnRollback`'s market files are in. Next: the play test, then tuning from the measurement in
 §2.11.
 
+**The world reacts** (the user's idea, 2026-10-20; **planned, not built**, the plan in
+`ideas/world-reacts.md`): when a First's front page is printed, every rival may give a press statement
+during the next turn. A statement is one of five stances (enthusiastic, polite, "we'll be next", downplay,
+no comment) plus an optional quote of up to 140 characters, printed word for word. At the next resolve, a
+follow-up page, "The World Reacts to …", prints them, and rivals who stayed silent appear as having
+declined to comment. It is flavour only, with no effect on money, prestige or anything else. The user
+chose quotes printed as given over an LLM writing the article: an LLM rewrite could come later as a layer
+on top, falling back to the printed quote.
+
 ### Later
 
 - **M6 — Deployment: built 2026-10-06, no release cut yet.** The jpackage client zip (built and
