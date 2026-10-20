@@ -1960,6 +1960,11 @@ for _base in ("powered-descent", "lunar-landing", "lunar-liftoff"):
     variant_of(f"apollo-{_base}", f"gemini-da-{_base}", {}, skin="gd-")
 variant_of("apollo-flag", "gemini-da-flag", {}, skin="gd-")
 
+# Apollo's close-ups in lunar orbit over the Moon, not the Earth (2026-10-20, user): the lander's undocking, its ascent
+# stage's docking and jettison (the Earth-orbit flights keep theirs).
+for _base in ("apollo-undocking", "apollo-docking-asc", "apollo-lem-jettison"):
+    variant_of(_base, f"{_base}-moon", {"d-earth": "d-moon"})
+
 
 def read(*path):
     return open(os.path.join(HERE, *path), encoding="utf-8").read() + "\n"

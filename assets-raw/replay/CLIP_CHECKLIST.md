@@ -186,7 +186,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: EARTH 14, MOON 11
   - Programs: Gemini 4, Gemini EOR 4, Apollo 3, Apollo: Earth-orbit tests 3
 - [x] **Undocking** `undocking`: 16 uses in 15 configurations, 8 programs (NASA/SOVIET) crew risk in 16 of 16
-  - Clip: by the steps before: `apollo-undocking` after `lunar-orbit` in apollo, apollo-earth-orbit 3, `langley-cast-off` after `eva` in gemini-eor-earth-orbit 2, `langley-cast-off-moon` after `eva-gemini-langley` in gemini-eor 2, `undocking` after `eva-7k-lok` 2, `transtage-undocking` after `high-orbit-injection` in circumlunar-gemini-earth-orbit 1, `soyuz-lok-undocking-lk` after `eva-7k-lok` in soyuz-7k-l3-earth-orbit 1, `undocking` after `lk-test` 1, `apollo-undocking` after `eva` in apollo, apollo-earth-orbit 1, `apollo-undocking` after `eva-in-meo` in apollo, apollo-earth-orbit 1, `apollo-undocking` after `docking` in apollo, apollo-earth-orbit 1, `soyuz-undocking` after `docking` in soyuz-7k-ok 1; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: by the steps before: `apollo-undocking-moon` after `lunar-orbit` in apollo 3, `langley-cast-off` after `eva` in gemini-eor-earth-orbit 2, `langley-cast-off-moon` after `eva-gemini-langley` in gemini-eor 2, `undocking` after `eva-7k-lok` 2, `transtage-undocking` after `high-orbit-injection` in circumlunar-gemini-earth-orbit 1, `soyuz-lok-undocking-lk` after `eva-7k-lok` in soyuz-7k-l3-earth-orbit 1, `undocking` after `lk-test` 1, `apollo-undocking` after `eva` in apollo, apollo-earth-orbit 1, `apollo-undocking` after `eva-in-meo` in apollo, apollo-earth-orbit 1, `apollo-undocking` after `docking` in apollo, apollo-earth-orbit 1, `soyuz-undocking` after `docking` in soyuz-7k-ok 1; [x] success, [x] glitch, [x] failure; cues no
   - On screen: crewed craft 16, crewed lander 13, launcher 1, stage or target 1
   - Destinations: EARTH 8, MOON 8
   - Programs: Apollo 3, Apollo: Earth-orbit tests 3, Gemini EOR 2, Gemini EOR: Earth-orbit tests 2
@@ -242,7 +242,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: EARTH 3
   - Programs: Soyuz 7K-OK 1
 - [x] **Rendezvous and docking** `rendezvous-and-docking`: 3 uses in 3 configurations, 1 program (NASA) crew risk in 3 of 3
-  - Clip: `apollo-docking-asc`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `apollo-docking-asc-moon`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: crewed craft 3, crewed lander 3
   - Destinations: MOON 3
   - Programs: Apollo 3
@@ -424,7 +424,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: MOON 6
   - Programs: Apollo 2, Gemini Direct Ascent 1, Gemini EOR 1, LK-700 Direct Ascent 1
 - [x] **Lunar module jettison** `lem-jettison`: 5 uses in 5 configurations, 2 programs (NASA) crew risk in 5 of 5
-  - Clip: `apollo-lem-jettison`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: by the steps before: `apollo-lem-jettison-moon` after `rendezvous-and-docking` in apollo 3, `apollo-lem-jettison` after `docking` in apollo, apollo-earth-orbit 2; [x] success, [x] glitch, [x] failure; cues no
   - On screen: crewed craft 5, crewed lander 5
   - Destinations: MOON 3, EARTH 2
   - Programs: Apollo 3, Apollo: Earth-orbit tests 2
