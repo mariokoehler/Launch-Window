@@ -209,7 +209,9 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   (`s1-`), the 7K-LOK on its Blok D (`lok-`) and the LK without legs (`lkl-`), on Soyuz's skin and the lander's scenes
   (`build.py`'s `variant_of`). Client only.
   Their Moon flights too (user, 2026-10-20): on their Blok D (BASPM's rocket), which the 7K-L1 drops after the burn for
-  the Moon and the 7K-L3 keeps into lunar orbit; the LK lands on its legs, and its cosmonaut plants the flag. Client only.
+  the Moon and the 7K-L3 keeps into lunar orbit; the LK lands on its legs, and its cosmonaut plants the flag. The crewed
+  orbit flight's second lunar orbit is retyped its Blok D separation: the pack hash changed, reset the dev data root,
+  rebuild client and server together.
   So do the LK-700's (`l7-`, user, 2026-10-19), with a way home of its own instead of Soyuz's orbital module, and
   Gemini EOR's (`ge-`, its Langley lander `ll-`, the S-IVB tug `sv-`; user, 2026-10-19).
   Circumlunar Gemini's Moon flights fly as themselves (user, 2026-10-20, `ui-spec.md` §4.7.3): the Transtage alone

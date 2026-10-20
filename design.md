@@ -2947,6 +2947,9 @@ first (login → action → scheduled resolution → result, end to end) before 
     touchdown ("Block-D jettison and lunar landing") `LK_TEST`, its two moonwalks `EVA_7K-LOK` (a spacewalk to the
     lander, playing the crew transfer) and its liftoff ("LPU jettison and lunar liftoff") `UNDOCKING`: they are
     `lunar-landing`, `eva-i`, `eva-ii` and `lunar-liftoff`. No step count changed; the pack hash did.
+  - **The 7K-L3's crewed orbit flight drops its Blok D (user, 2026-10-20).** Its second lunar orbit (BASPM: "Lunar orbit",
+    after "Inclination change maneuver") is retyped `blok-d-separation`, as its uncrewed twin's "Block-D separation":
+    nothing else drops the Blok D before the LOK's own burn home. The pack hash changed.
   - **Apollo's Earth-orbit flights by their names too (user, 2026-10-20).** `RETYPED` covers `apollo-earth-orbit`:
     the suborbital flights' `earth-orbit`, `reentry-preparations` and `earth-orbit` are the suborbital flight, an SPS
     test (`engine-test`) and the reentry preparations; the orbital flight's and the low-orbit lander test's second

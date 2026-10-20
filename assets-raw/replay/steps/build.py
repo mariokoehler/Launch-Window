@@ -1969,8 +1969,8 @@ for _base in ("apollo-undocking", "apollo-docking-asc", "apollo-lem-jettison"):
 # on their tail is BASPM's rocket after the launch: the Blok D. The 7K-L1 rides it into the parking orbit, burns for the
 # Moon on it and lets go (tpi.jsx's SEP); passes the Moon and comes home Soyuz's way, no retrofire. The 7K-L3's LOK rides
 # it all the way (no SEP), alone on the flyby and the orbit flight, with the LK between them on a landing (the N1's
-# stack, -n1); the Blok D brakes them into lunar orbit and leaves there (the flyby's separation step, or the orbit
-# flight's second lunar orbit). In lunar orbit the Earth-orbit tests' close-ups with the Moon below (-moon): the walk to
+# stack, -n1); the Blok D brakes them into lunar orbit and leaves there (each flight's separation step; the crewed
+# orbit flight's retyped in the converter). In lunar orbit the Earth-orbit tests' close-ups with the Moon below (-moon): the walk to
 # the LK, its release (the whole LK), its tests, the docking and the walk back, the cast-off. On the Moon the LK stands
 # on its legs (lkm-), its cosmonaut plants the flag and gathers rocks, and the cabin lifts off its landing unit. The LOK
 # alone fires home. Unconfirmed: the Blok D's part, the LK's descent without it on screen.

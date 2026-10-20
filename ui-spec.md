@@ -2149,7 +2149,7 @@ clips, the replay is meant to be watched like a short film, and the player can s
   preparations leave the Earth and sinks faster, `-modules-separation-moon`, `SEP_FROM`). The 7K-L3's LOK rides its Blok D all the way: alone on
   the flyby and the orbit flight, with the LK between them on the lander flights (the N1's stack, `-n1`, by
   `"later": "eva-7k-lok"`); the Blok D burns for the Moon and brakes into lunar orbit, and leaves there (the flyby's
-  separation step, or the orbit flight's second lunar orbit: `soyuz-lok-blok-d-separation-moon`). In lunar orbit the
+  separation step on all three, the crewed orbit flight's retyped from its second lunar orbit: `soyuz-lok-blok-d-separation-moon`). In lunar orbit the
   Earth-orbit tests' close-ups have the Moon below (`-moon`): the crossing to the LK and back, the LK's release (whole,
   `soyuz-lok-release-lk-moon`), its descent test and staging (the lander test), the docking and the cast-off. On the
   Moon the LK stands on its legs (`lkm-`, a ladder down its right leg, `lk-walk.jsx`); the one cosmonaut plants the

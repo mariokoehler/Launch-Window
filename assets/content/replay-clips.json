@@ -31,7 +31,6 @@
     {"step": "loi", "programs": ["soyuz-7k-l3"], "later": "eva-7k-lok", "clip": "soyuz-lok-loi-n1"},
     {"step": "loi", "programs": ["soyuz-7k-l3"], "clip": "soyuz-lok-loi"},
     {"step": "lunar-orbit", "programs": ["soyuz-7k-l3"], "later": "eva-7k-lok", "clip": "soyuz-lok-lunar-orbit-n1"},
-    {"step": "lunar-orbit", "programs": ["soyuz-7k-l3"], "after": "lunar-orbit", "clip": "soyuz-lok-blok-d-separation-moon"},
     {"step": "lunar-orbit", "programs": ["soyuz-7k-l3"], "clip": "soyuz-lok-lunar-orbit"},
     {"step": "lunar-approach", "programs": ["soyuz-7k-l3"], "clip": "soyuz-lok-lunar-approach"},
     {"step": "blok-d-separation", "programs": ["soyuz-7k-l3"], "clip": "soyuz-lok-blok-d-separation-moon"},
