@@ -233,6 +233,13 @@ def orbit_parts():
     layer("o-sat", f'<g transform="translate(960 560) scale(0.6) translate(-960 -426)">{sat}</g>', (960, 560))
     layer("o-streak", f'<path d="M944 600 C942 660 952 740 960 790 C968 740 978 660 976 600 Z" fill="{GOLD_FILL}" '
                       f'stroke="{GOLD}" stroke-width="3" stroke-linejoin="round"/>', (960, 560))
+    # The same flame from a longer stack's tail (2026-10-20): Gemini docked into the Transtage (gtd-), Gemini on its
+    # Centaur (gl-), whose engines are lower than a satellite's.
+    # Gemini with its propulsion module alone (gl-o-streak-lpm), the module's engine lower than Gemini's base.
+    for name, dy in (("gtd-o-streak", 66), ("gl-o-streak", 100), ("gl-o-streak-lpm", 66)):
+        layer(name, f'<g transform="translate(0 {dy})"><path d="M944 600 C942 660 952 740 960 790 C968 740 978 660 '
+                                   f'976 600 Z" fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="3" stroke-linejoin="round"/></g>',
+                  (960, 560))
     # Radio rings from the payload while it's alive: four, so they can overlap.
     for i in range(1, 5):
         layer(f"ring-{i}", f'<circle cx="960" cy="560" r="40" fill="none" stroke="{GOLD}" stroke-width="4"/>', (960, 560))
@@ -3179,8 +3186,41 @@ def gemini_parts():
     layer("tt-o-sat", on_map(transtage_launch(GM_L, shroud=False)), (960, 560))
     layer("gm-o-sat-capsule", on_map(gemini_module(GM_L)), (960, 560))
     layer("gm-o-sat-adapter", on_map(gemini_equip(GM_L) + gemini_retro(GM_L)), (960, 560))
+    # Lunar-orbit Gemini to the Moon (2026-10-20, user): a Centaur (3.05 m across, about 9.1 m long, two engines) pushes
+    # Gemini and its propulsion module out of the parking orbit (the program's history note: the simplest plan was a
+    # Centaur's), drawn on the map in a frame 0.6 of the others' with the stack's middle where the craft's is; it lets
+    # go after the burn (tpi.jsx's SEP), the craft without its engine bell there (it sat in the adapter). Coming home,
+    # the propulsion module and the adapter go on the Earth approach, before the air (earth-approach.jsx's DROP).
+    CEN_LEN, CEN_ADAPT = 9.1, 0.6
+    s0 = GM_EQUIP_Y - CEN_ADAPT - CEN_LEN - 1.0
+    mid_stack, mid_gl = (s0 + GM_EQUIP_Y + LPM_H + 3.45) / 2, (GM_EQUIP_Y - 0.9 + GM_EQUIP_Y + LPM_H + 3.45) / 2
+    sk = 0.6
+    fs = (960, GM_L[1] - mid_gl * GM_L[3] + mid_stack * sk * GM_L[3], GM_L[2] * sk, GM_L[3] * sk)
+    c0 = GM_EQUIP_Y - CEN_ADAPT
+
+    def centaur_at(f):
+        return (bells(f, c0 - CEN_LEN, (-0.6, 0.6), 1.0, 0.2, 0.45, sk)
+                + gm_poly(f, [(-GM_EQUIP, c0 - CEN_LEN), (-GM_EQUIP, c0), (GM_EQUIP, c0), (GM_EQUIP, c0 - CEN_LEN)], "#ffffff", "2.4")
+                + "".join(f'<path d="M{gm_pt(f, -GM_EQUIP, c0 - u)} L{gm_pt(f, GM_EQUIP, c0 - u)}" fill="none" {LINE} '
+                          f'stroke-width="1.2" opacity="0.6"/>' for u in (1.2, CEN_LEN - 1.6))
+                + gm_poly(f, [(-GM_EQUIP, c0), (-1.85, GM_EQUIP_Y), (1.85, GM_EQUIP_Y), (GM_EQUIP, c0)], "#ffffff", "2.4"))
+    centaur = centaur_at(fs)
+    layer("gl-o-sat-stack", on_map(centaur + gemini_on_lpm(fs, False)), (960, 560))
+    layer("gl-o-sat-top", on_map(gemini_on_lpm(fs, False)), (960, 560))
+    layer("gl-o-sat-centaur", on_map(centaur), (960, 560))
+    # In the deployment the same stack, its lowest point (the Centaur's bells) where the craft's adapter foot sits on the
+    # rocket.
+    fd = (960, GM_L[1] - GM_EQUIP_Y * GM_L[3] + s0 * sk * GM_L[3], GM_L[2] * sk, GM_L[3] * sk)
+    layer("gl-d-payload-stack", f'<g transform="{big}"><g transform="{turn}">{centaur_at(fd) + gemini_on_lpm(fd, False)}</g></g>',
+          D_AT(914, 520))
+    layer("gl-o-sat-aft", on_map(bells(GM_L, GM_EQUIP_Y, (0,), 0.9, 0.3, 0.75)
+                                 + gm_poly(GM_L, [(-1.85, GM_EQUIP_Y), (-GM_EQUIP, GM_EQUIP_Y + LPM_H), (GM_EQUIP, GM_EQUIP_Y + LPM_H),
+                                                  (1.85, GM_EQUIP_Y)], "#ffffff", "2.4")
+                                 + gm_shift(gemini_equip(GM_L) + gemini_retro(GM_L), GM_L, LPM_H)), (960, 560))
+    layer("gl-o-sat-capsule", on_map(gm_shift(gemini_module(GM_L), GM_L, LPM_H)), (960, 560))
     cx, cy = SUN
-    for name, body in (("gm-m-probe", gemini_whole(GM_L)), ("tt-m-probe", transtage_launch(GM_L, shroud=False))):
+    for name, body in (("gm-m-probe", gemini_whole(GM_L)), ("tt-m-probe", transtage_launch(GM_L, shroud=False)),
+                       ("gl-m-probe", gemini_on_lpm(GM_L, True))):
         layer(name, f'<g transform="translate({cx} {cy}) scale(0.32) translate(-960 -480)">{th(body)}</g>', SUN)
     layer("tt-rocket", rocket[:nose] + transtage_launch(GM_L, shroud=True), (960, 600))
     layer("tt-debris-1", transtage_launch(GM_L, shroud=True), (960, 410))

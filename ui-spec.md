@@ -2038,7 +2038,18 @@ clips, the replay is meant to be watched like a short film, and the player can s
   (`gemini-earth-approach`, `earth-approach.jsx`'s `DROP`): no step has it, and a capsule must meet the air alone
   (unconfirmed). Its reentry is Gemini's unmirrored (`gemini-reentry-from-moon`), in from the left as the approach leaves
   it; its descent and recovery Gemini's. The flame on the map stays the generic one, over the Transtage's drum.
-  The lunar Gemini programs themselves (direct ascent, EOR, lunar orbital) are a later package; Gemini EOR's equipment-section separation drops the section before the turn, the wrong way round, to be
+  Lunar-orbit Gemini's flights to the Moon fly as themselves too (user, 2026-10-20): the Earth-orbit tests' launch
+  (`gemini-lpm-*`), then out of the rocket on a Centaur (the program's history note: the simplest plan had a Centaur
+  push the capsule; 3.05 m across, about 9.1 m long, two engines), which stays on through the parking orbit
+  (`gemini-lpm-deployment-stack`, `-earth-orbit-stack`; the stack drawn at 0.6 of the craft's map scale so it fits),
+  makes the trans-lunar injection and lets go (`gemini-lpm-tli`, `SEP`). The propulsion module brakes into lunar orbit
+  and fires the craft home (`-loi`, `-lunar-orbit`, `-tei`). The two flyby configurations have an insertion and a lunar
+  orbit but no burn home (BASPM's data), so for them the insertion plays the approach and the orbit the flyby (rules by
+  `later: tei`; the data left as it is, unconfirmed). On the Earth approach the module and the adapter go together
+  (`-earth-approach`, `DROP`); the reentry, descent and recovery are circumlunar Gemini's. The stacks' burns have their
+  flame at their own engines (`gl-o-streak`, `gl-o-streak-lpm`, `gtd-o-streak`); the Earth-orbit tests' module burns
+  still have the generic one.
+  The lunar Gemini programs themselves (direct ascent, EOR) are a later package; Gemini EOR's equipment-section separation drops the section before the turn, the wrong way round, to be
   fixed with them. Unconfirmed.
 - **The early-era pack's craft as themselves (user, 2026-10-18):** Vostok (`vk-`, `vostok-*`) plays every step as
   itself: the sphere on its instrument module (its one retro flame; the module the separation's, its cable meeting

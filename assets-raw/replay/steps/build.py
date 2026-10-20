@@ -1334,7 +1334,7 @@ STEPS = {
         "times": [0.5, 1.4, 2.0, 2.8, 3.8, 5.9],
     },
     "gemini-transtage-docked-hoi": {
-        "pad": False, "source": "high-orbit-injection", "skin": "gm-", "alias": {"o-sat": "gtd-o-sat"}, "before": ["orbit.jsx", "high-orbit-scene.jsx"],
+        "pad": False, "source": "high-orbit-injection", "skin": "gm-", "alias": {"o-sat": "gtd-o-sat", "o-streak": "gtd-o-streak"}, "before": ["orbit.jsx", "high-orbit-scene.jsx"],
         "success": (6.0, 2.0), "glitch": (6.0, 3.2), "failure": (6.0, 3.0),
         "times": [0.5, 1.4, 2.0, 2.8, 3.8, 5.9],
     },
@@ -1848,7 +1848,7 @@ variant_of("tpi", "transtage-tli", {}, skin="tt-")
 variant_of("trans-lunar-coast", "transtage-tlc", {}, skin="tt-")
 variant_of("lunar-approach", "transtage-lunar-approach", {}, skin="tt-")
 variant_of("lunar-flyby", "transtage-lunar-flyby", {}, skin="tt-")
-variant_of("tpi", "gemini-transtage-tli", {"o-sat": "gtd-o-sat-gemini", "o-stage": "gtd-o-sat-stage"}, skin="gm-",
+variant_of("tpi", "gemini-transtage-tli", {"o-sat": "gtd-o-sat-gemini", "o-stage": "gtd-o-sat-stage", "o-streak": "gtd-o-streak"}, skin="gm-",
            before=["orbit.jsx", "hoi-separate.jsx"])
 variant_of("trans-lunar-coast", "gemini-tlc", {}, skin="gm-")
 variant_of("lunar-approach", "gemini-lunar-approach", {}, skin="gm-")
@@ -1857,6 +1857,26 @@ variant_of("trans-earth-coast", "gemini-tec", {}, skin="gm-")
 variant_of("earth-approach", "gemini-earth-approach", {"o-sat": "gm-o-sat-capsule", "o-stage": "gm-o-sat-adapter"}, skin="gm-",
            before=["orbit.jsx", "adapter-drop.jsx"])
 variant_of("reentry-from-moon", "gemini-reentry-from-moon", {}, skin="gm-")
+
+# Lunar-orbit Gemini to the Moon (2026-10-20, user; gl- parts): its Earth-orbit tests' launch, then out of the rocket on a
+# Centaur, which makes the trans-lunar injection and lets go (tpi.jsx's SEP); the propulsion module brakes into lunar
+# orbit and fires it home (loi, tei), or, on a flyby, the craft passes the Moon (its insertion and orbit steps played as
+# the approach and the flyby: the flyby configurations have no burn home); the module and the adapter go on the Earth
+# approach (earth-approach.jsx's DROP).
+GL = {"o-sat": "gl-o-sat", "m-probe": "gl-m-probe", "o-streak": "gl-o-streak-lpm"}
+variant_of("deployment", "gemini-lpm-deployment-stack", {"d-payload": "gl-d-payload-stack"}, skin="gm-")
+variant_of("earth-orbit", "gemini-lpm-earth-orbit-stack", {"o-sat": "gl-o-sat-stack"}, skin="gm-")
+variant_of("tpi", "gemini-lpm-tli", {"o-sat": "gl-o-sat-top", "o-stage": "gl-o-sat-centaur", "o-streak": "gl-o-streak"}, skin="gm-",
+           before=["orbit.jsx", "hoi-separate.jsx"])
+variant_of("trans-lunar-coast", "gemini-lpm-tlc", GL, skin="gm-")
+variant_of("lunar-approach", "gemini-lpm-lunar-approach", GL, skin="gm-")
+variant_of("lunar-flyby", "gemini-lpm-lunar-flyby", GL, skin="gm-")
+variant_of("loi", "gemini-lpm-loi", GL, skin="gm-")
+variant_of("lunar-orbit", "gemini-lpm-lunar-orbit", GL, skin="gm-")
+variant_of("tei", "gemini-lpm-tei", GL, skin="gm-")
+variant_of("trans-earth-coast", "gemini-lpm-tec", GL, skin="gm-")
+variant_of("earth-approach", "gemini-lpm-earth-approach", {"o-sat": "gl-o-sat-capsule", "o-stage": "gl-o-sat-aft"}, skin="gm-",
+           before=["orbit.jsx", "adapter-drop.jsx"])
 
 
 def read(*path):
