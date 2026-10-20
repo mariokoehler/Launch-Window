@@ -188,6 +188,12 @@ def deployment_parts():
     layer("d-earth", f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="url(#earth)" {LINE} stroke-width="3"/>'
                      f'<circle cx="{cx}" cy="{cy}" r="{r + 22}" fill="none" {LINE} stroke-width="1.5" stroke-dasharray="6 8" opacity="0.6"/>',
           (cx, cy))
+    # The Moon's limb in its place, for the close-ups in lunar orbit (2026-10-20): no air, a few craters near the top,
+    # which turn past as the limb does.
+    craters = "".join(f'<ellipse cx="{cx + x}" cy="{cy - r + y}" rx="{rx}" ry="{rx * 0.3:.1f}" fill="#ffffff" {LINE} stroke-width="2.4" '
+                      f'transform="rotate({ang} {cx} {cy})"/>'
+                      for x, y, rx, ang in ((0, 40, 60, 0), (0, 70, 30, 9), (0, 34, 44, -11), (0, 60, 52, 20), (0, 44, 36, -24)))
+    layer("d-moon", f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="url(#hatch)" opacity="0.9" {LINE} stroke-width="3"/>{craters}', (cx, cy))
     # The upper stage and its payload, nose to the right (the storyboard's own parts, turned), all
     # drawn 1.5 times the launch's size and placed by D (a point at rest -> where it's drawn).
     def D(x, y):
@@ -3626,6 +3632,56 @@ def gemini_eor_parts():
              f'975 {exit_y + 32:.1f} 977 {exit_y:.1f} Z" fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="3" stroke-linejoin="round"/>')
     layer("ll-n-plume", plume, (960, exit_y))
     layer("ll-n-flame-up", plume, (960, exit_y))
+
+    # Gemini EOR to the Moon (2026-10-20, user). The flyby and the lunar-orbit flight carry no lander: their stack has its
+    # frame empty (ge-*-empty), as the way home's trunk and the lander's target already draw it.
+    empty = gm_shift(eor_stack(GM_L, lander=False), GM_L, GM_EQUIP_Y - GE_BASE)
+    layer("ge-rocket-empty", rocket[:nose] + empty, (960, 600))
+    layer("ge-debris-1-empty", empty, (960, mid))
+    layer("ge-d-payload-empty", f'<g transform="{big}"><g transform="{turn}">{empty}</g></g>', D_AT(914, 520))
+    layer("ge-o-sat-empty", f'<g transform="translate(960 560) scale(0.45) translate(-960 {-mid:.1f})">{thick(empty)}</g>', (960, 560))
+    layer("ge-k-chaser-empty", KT(KC, 90, small(eor_stack(GM_R, lander=False))), KC)
+    # On the map, the flame from the frame's open end (where the service module's engine fires through).
+    bottom = 500 - GM_EQUIP_Y * GM_L[3]
+    dy = 560 + 0.45 * (bottom - mid) - 600
+    layer("ge-o-streak", f'<g transform="translate(0 {dy:.1f})"><path d="M944 600 C942 660 952 740 960 790 C968 740 978 660 976 600 Z" '
+                         f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="3" stroke-linejoin="round"/></g>', (960, 560))
+    # On the coasts' map, small at the Sun's place.
+    for name, body in (("ge-m-probe", launch), ("ge-m-probe-empty", empty)):
+        layer(name, f'<g transform="translate({SUN[0]} {SUN[1]}) scale(0.3) translate(-960 {-mid:.1f})">{thick(body)}</g>', SUN)
+    # The trans-lunar injection: the stack docked nose first into the tug's ring, as the heat-shield test's burn to the
+    # high orbit (ge-o-btm, empty), with the lander in its frame; the tug's flame at its bell.
+    stack_l = f'<g transform="translate(0 {c:.1f}) scale(1 -1)">{eor_stack(fb)}</g>'
+    layer("ge-o-btm-lander", on_map(stack_l), (960, 560))
+    dy = 560 + 0.42 * (500 - b_mid) - 600
+    layer("ge-o-streak-tug", f'<g transform="translate(0 {dy:.1f})"><path d="M944 600 C942 660 952 740 960 790 C968 740 978 660 976 600 Z" '
+                             f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="3" stroke-linejoin="round"/></g>', (960, 560))
+    # Coming home from the Moon there's no retrofire: the modules separation drops the service module, its empty frame and
+    # the retrograde section together, from the heat shield's rim (as the direct-ascent craft's trunk).
+    rim_s = 960 + GM_SHIELD * GM_R[2]
+    layer("ge-r-pack-moon", "", RT_AT(1005, 500))
+    layer("ge-r-trunk-moon", RT(small(eor_sm(GM_R) + eor_bay(GM_R) + gemini_retro(GM_R))), RT_AT(rim_s, 500))
+    layer("ge-r-trunk-moon-cut-a", RT(f'<circle cx="{1920 - rim_s:.1f}" cy="500" r="6" fill="{GOLD}"/>'), RT_AT(1920 - rim_s, 500))
+    layer("ge-r-trunk-moon-cut-b", RT(f'<circle cx="{rim_s:.1f}" cy="500" r="6" fill="{GOLD}"/>'), RT_AT(rim_s, 500))
+    # The Langley lander on the Moon (lg-), at the moonwalk's 40 px/m, its pads on the ground (878): with its pilot, or empty
+    # while the pilot is out; one stage, so at liftoff the whole lander goes (n-ascent) and nothing stays (n-descent empty).
+    # No ladder: the pilot steps off the open platform (langley-walk.jsx). On the map, alone, for its climb back to the stack.
+    lb = 878 - 0.75 * 40
+    layer("lg-n-descent", langley(960, lb, 40, 40, pilot=True), LC)
+    layer("lg-n-descent-empty", langley(960, lb, 40, 40), LC)
+    layer("lg-n-whole", langley(960, lb, 40, 40, pilot=True), LC)
+    for name in ("lg-n-ascent", "lg-n-ladder", "lg-none"):
+        layer(name, "", LC)
+    lex = lb + 0.55 * 40
+    lplume = (f'<path d="M946 {lex:.1f} C948 {lex + 26:.1f} 953 {lex + 52:.1f} 960 {lex + 78:.1f} C967 {lex + 52:.1f} '
+              f'972 {lex + 26:.1f} 974 {lex:.1f} Z" fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="3" stroke-linejoin="round"/>')
+    layer("lg-n-plume", lplume, (960, lex))
+    layer("lg-n-flame-up", lplume, (960, lex))
+    layer("lg-o-sat", f'<g transform="translate(960 560) scale(0.9) translate(-960 -500)">{thick(langley(960, 530, 34, 34, pilot=True), 4)}</g>',
+          (960, 560))
+    oy = 560 + 0.9 * (530 + 0.55 * 34 - 500) - 600
+    layer("lg-o-streak", f'<g transform="translate(0 {oy:.1f})"><path d="M944 600 C942 660 952 740 960 790 C968 740 978 660 976 600 Z" '
+                         f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="3" stroke-linejoin="round"/></g>', (960, 560))
 
 
 def main():

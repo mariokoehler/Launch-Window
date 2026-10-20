@@ -99,7 +99,8 @@ class ReplayClipsTest {
         assertEquals("agena-launch", CLIPS.clipName("03-atv-launch", none, none, "gemini").orElseThrow());
         assertEquals("gemini-launch", CLIPS.clipName("08-launch", none, none, "gemini").orElseThrow());
         assertEquals("gemini-launch", CLIPS.clipName("09-gemini-b-launch", none, none, "gemini").orElseThrow());
-        assertEquals("launch", CLIPS.clipName("03-atv-launch", none, none, "gemini-eor").orElseThrow());
+        assertEquals("tug-launch", CLIPS.clipName("03-atv-launch", none, none, "gemini-eor").orElseThrow());
+        assertEquals("launch", CLIPS.clipName("03-atv-launch", none, none, "no-such-program").orElseThrow());
     }
 
     /**

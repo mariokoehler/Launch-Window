@@ -2055,8 +2055,20 @@ clips, the replay is meant to be watched like a short film, and the player can s
   close-up), and its one surface step plants the flag (`gemini-da-flag`), which stands through the liftoff. The Earth
   approach casts off what's left (`DROP`); the reentry, descent and recovery are circumlunar Gemini's. Sizes from our
   blueprint, unconfirmed.
-  The lunar Gemini program still to come (EOR) is a later package; Gemini EOR's equipment-section separation drops the section before the turn, the wrong way round, to be
-  fixed with them. Unconfirmed.
+  Gemini EOR's flights to the Moon fly as themselves too (user, 2026-10-20): the tug and the stack launch on the
+  Earth-orbit tests' clips; the flyby and the lunar-orbit flight carry no lander, so their stack flies its frame empty
+  (`ge-*-empty`, `gemini-eor-empty-*`; no frame at all is the alternative). The stack meets the tug and docks nose first
+  into its ring (`gemini-eor-tug-*`), the tug burns for the Moon and lets go (`gemini-eor-tli`, `SEP`), and the service
+  module brakes into lunar orbit and fires home (`-loi`, `-tei`; its flame from the frame's open end, `ge-o-streak`). In
+  lunar orbit the close-ups have the Moon below (`d-moon` for `d-earth`, the `-moon` clips): the walk aft to the
+  lander, its release, its return and the cast-off are the Earth-orbit tests'. The Langley lander lands at the
+  moonwalk's scale (`lg-`, 40 px/m, standing on its pads), its pilot steps off the open platform (`langley-walk.jsx`)
+  and plants the flag (`langley-flag`), and the whole lander lifts off (one stage) and climbs to the stack waiting
+  in orbit (`langley-lunar-ascent`). The lander test in lunar orbit goes from its powered descent straight to the
+  climb (BASPM has no landing between). Home, the modules separation drops the service module, its frame and the
+  retrograde section together, there being no retrofire (`gemini-eor-modules-separation-moon`, `ge-r-trunk-moon`),
+  then the Earth-orbit tests' reentry, chutes and splashdown; the generic equipment-section separation, which dropped
+  the section before the turn, no longer plays for them. Unconfirmed.
 - **The early-era pack's craft as themselves (user, 2026-10-18):** Vostok (`vk-`, `vostok-*`) plays every step as
   itself: the sphere on its instrument module (its one retro flame; the module the separation's, its cable meeting
   the module's near end, `project-vostok.jsx`), the nose fairing thrown off in the climb as Mercury's tower is
@@ -2161,8 +2173,8 @@ clips, the replay is meant to be watched like a short film, and the player can s
   (`gemini-eor-btm`, `hoi-separate.jsx`). The way home is Gemini's: the service module and its empty frame go at the
   modules separation (`gemini-eor-modules-separation`, `ge-r-trunk`), then Gemini's retrofire, jettison and reentry,
   and its chutes and splashdown on two points (`gemini-descent-chutes`, `gemini-splashdown-and-recovery`). The
-  heat-shield test's fast reentry from the high orbit plays as a normal one. The Moon flights (`gemini-eor`) are a
-  later package.
+  heat-shield test's fast reentry from the high orbit plays as a normal one. The Moon flights (`gemini-eor`) are
+  under the lunar Gemini programs' flights to the Moon.
 - **Voskhod as itself (user, 2026-10-18):** Vostok's skin with Voskhod's parts in place (`vh-`, `voskhod-*`): the
   backup retro on the sphere's top in orbit, thrown off with the instrument module at the modules separation
   (`vh-r-backup`, `BACKUP`; its real fate unconfirmed), which the orbital flights' retrofire jettison plays too, as

@@ -1851,6 +1851,43 @@ variant_of("crew-transfer", "gemini-eor-transfer-back", {**GE_WALK, "r-capsule":
 variant_of("lander-engine-test", "langley-engine-test", {}, skin="ll-", before=["moon.jsx", "lander-orbit.jsx", "langley-engine-test.jsx"])
 variant_of("lander-engine-test", "langley-restart", {}, skin="ll-", before=["moon.jsx", "lander-orbit.jsx", "langley-restart.jsx"])
 variant_of("gemini-reentry-preparations", "gemini-eor-modules-separation", {"r-trunk": "ge-r-trunk"})
+
+# Gemini EOR to the Moon (2026-10-20, user): the tug and the stack launched as on the Earth-orbit tests; the flyby and the
+# lunar-orbit flight carry no lander, their frame empty (-empty). The stack docks nose first into the tug's ring, which
+# burns for the Moon and lets go (tpi.jsx's SEP); the service module brakes into lunar orbit and fires home. In lunar
+# orbit, over the Moon (d-moon), the pilot walks aft to the lander, which backs out, lands (the lg- lander at the
+# moonwalk's scale), plants the flag, lifts off whole (one stage), climbs to the stack (waiting, empty) and docks back
+# in; the pilot walks back and the lander is cast off. Home, the modules separation drops the service module, its frame
+# and the retrograde section together (no retrofire), then Gemini's reentry, chutes and splashdown. Unconfirmed.
+GE_EMPTY = {"rocket": "ge-rocket-empty", "debris-1": "ge-debris-1-empty", "d-payload": "ge-d-payload-empty", "o-sat": "ge-o-sat-empty"}
+for _step in ("launch-preparations", "countdown", "ascent", "deployment", "insertion", "earth-orbit"):
+    variant_of(f"gemini-{_step}", f"gemini-eor-empty-{_step}", GE_EMPTY)
+variant_of("gemini-target-approach", "gemini-eor-tug-approach-empty", {**TUG_DOCK, "k-chaser": "ge-k-chaser-empty"})
+variant_of("gemini-docking", "gemini-eor-tug-docking-empty", {**TUG_DOCK, "k-chaser": "ge-k-chaser-empty"})
+TLI = {"o-stage": "ge-o-btm-stage", "o-streak": "ge-o-streak-tug"}
+variant_of("tpi", "gemini-eor-tli", {**TLI, "o-sat": "ge-o-btm-lander"}, skin="gm-", before=["orbit.jsx", "hoi-separate.jsx"])
+variant_of("tpi", "gemini-eor-tli-empty", {**TLI, "o-sat": "ge-o-btm"}, skin="gm-", before=["orbit.jsx", "hoi-separate.jsx"])
+GE_MAP = {"o-sat": "ge-o-sat", "m-probe": "ge-m-probe", "o-streak": "ge-o-streak"}
+GE_MAP_EMPTY = {"o-sat": "ge-o-sat-empty", "m-probe": "ge-m-probe-empty", "o-streak": "ge-o-streak"}
+for _base, _name in (("trans-lunar-coast", "tlc"), ("loi", "loi"), ("lunar-orbit", "lunar-orbit")):
+    variant_of(_base, f"gemini-eor-{_name}", GE_MAP, skin="gm-")
+for _base, _name in (("trans-lunar-coast", "tlc-empty"), ("lunar-approach", "lunar-approach-empty"),
+                     ("lunar-flyby", "lunar-flyby-empty"), ("loi", "loi-empty"), ("lunar-orbit", "lunar-orbit-empty"),
+                     ("tei", "tei"), ("trans-earth-coast", "tec"), ("earth-approach", "earth-approach")):
+    variant_of(_base, f"gemini-eor-{_name}", GE_MAP_EMPTY, skin="gm-")
+variant_of("gemini-da-reentry-preparations", "gemini-eor-modules-separation-moon",
+           {"r-pack": "ge-r-pack-moon", "r-trunk": "ge-r-trunk-moon", "r-trunk-cut-a": "ge-r-trunk-moon-cut-a",
+            "r-trunk-cut-b": "ge-r-trunk-moon-cut-b"})
+MOON_BELOW = {"d-earth": "d-moon"}
+for _base in ("gemini-eor-transfer-out", "gemini-eor-transfer-back", "langley-deployment", "langley-docking", "langley-cast-off"):
+    variant_of(_base, f"{_base}-moon", MOON_BELOW)
+for _base in ("powered-descent", "lunar-landing"):
+    variant_of(f"apollo-{_base}", f"langley-{_base}", {}, skin="lg-")
+variant_of("apollo-flag", "langley-flag", {"n-descent": "lg-n-descent-empty"}, skin="lg-",
+           before=["moon.jsx", "walker.jsx", "langley-walk.jsx"])
+variant_of("apollo-lunar-liftoff", "langley-lunar-liftoff", {"n-descent": "lg-none", "n-ascent": "lg-n-whole"}, skin="lg-")
+variant_of("lunar-ascent", "langley-lunar-ascent", {"o-sat": "lg-o-sat", "o-streak": "lg-o-streak", "o-sat-b": "ge-o-sat-empty"},
+           skin="gm-")
 # Its way down ends at sea, in two steps where Gemini's own flights have it in one and the recovery: the chutes,
 # then the splashdown, on two points from the main (two-point.jsx).
 variant_of("descent-chutes", "gemini-descent-chutes", {}, skin="gm-", before=["two-point.jsx"])

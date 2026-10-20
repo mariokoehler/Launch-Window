@@ -215,6 +215,8 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   (`earth-approach.jsx`'s `DROP`). Client only.
   Direct-ascent Gemini's too (user, 2026-10-20): the rocket's stage makes the trans-lunar injection and lets go, the
   landing module brakes and lands, the ascent module lifts off and fires home, and the flag goes up. Client only.
+  Gemini EOR's too (user, 2026-10-20): the tug burns for the Moon and lets go, the Langley lander lands, plants the flag
+  and climbs back to the stack, the Moon under the lunar-orbit close-ups (`d-moon`). Client only.
   Lunar-orbit Gemini's too (user, 2026-10-20): the propulsion module makes the trans-lunar injection, the insertion
   and the burn home. Its flybys pass the Moon in one step now, BASPM's insertion and orbit replaced in the converter
   (`design.md` §5, M3): the pack hash changed, reset the dev data root, rebuild client and server together.
