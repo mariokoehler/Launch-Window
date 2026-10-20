@@ -572,6 +572,17 @@ leading to satellite navigation.
   while still bolted to the descent stage, as it would be in an abort during a landing, then an ascent-engine
   firing alone. It went well enough that a second uncrewed lunar module flight was dropped. **Not yet checked:** the
   first firing's length (about 4 s) and the cause of the cut-off; check before a history note uses them.
+- **Apollo's flag, rock boxes and rover** (found 2026-10-20, the replay's moonwalks): Apollo 11's flag hung from a
+  telescoping crossbar so it would show in the airless sky, and the crew couldn't pull the bar out all the way,
+  which left the ripple that looks like a breeze (NASA's account, 1993); the soil was hard a little way down and the
+  pole went in only a short way. Aldrin thought he saw it blown over by the ascent engine at liftoff, and later crews
+  planted theirs farther from the lander. The samples went home in aluminium rock boxes (the Apollo Lunar Sample
+  Return Container), sealed on the surface and carried up into the lander: Apollo 11's held 21.5 to 21.8 kg (NASA and
+  the Smithsonian give different figures). On Apollo 17 Cernan's hammer caught the rover's right rear fender
+  extension and broke it off; tape didn't hold in the dust, and the wheel showered the crew in dust until, overnight,
+  Houston worked out a new fender made of maps, tape and clamps from the cabin. The rover never went farther than the
+  crew could walk back. Sources: NASA's Apollo Lunar Surface Journal (Apollo 17's fender), the Smithsonian's rock box
+  records. **Not yet checked:** how deep Apollo 11's pole went; check before a history note uses it.
 - **Apollo's lunar module** (the replay's Apollo, 2026-10-18): about 7 m tall and 4.3 m across its legs; the descent
   stage wrapped in gold and amber Kapton foil against the Sun's heat, the ascent stage's faceted cabin on top with its
   two triangular windows, the docking tunnel on its roof (the commander flew the docking looking up through a small
@@ -2909,7 +2920,14 @@ first (login → action → scheduled resolution → result, end to end) before 
     the uncrewed one's a Blok D separation, now retyped), LK-700's landing's three `lunar-surface-activities`, and
     smaller name mismatches that change no step's meaning (the 7K-L3's `descent-and-landing` named "Descent", the
     LK-700's `descent-and-splashdown` named "Descent and landing", Apollo's `deployment` named "Orbit insertion" or
-    "CSM deployment", the rover landing's second `eva-ii` named "Moon surface activities III").
+    "CSM deployment"), and the 7K-L3's lunar-orbit lander test (its deployment typed `lk-test`, its engine test
+    `undocking`).
+  - **The landings' surface steps by their names (user, 2026-10-20).** Apollo's landing with the rover had five
+    moonwalks: BASPM types its "Rover surface trip I" and "II" `EVA_I` and its "Moon surface activities III" `EVA_II`.
+    They are `rover-trip-i`, `rover-trip-ii` and `eva-iii` now (new kinds, with text). The 7K-L3's landing typed its
+    touchdown ("Block-D jettison and lunar landing") `LK_TEST`, its two moonwalks `EVA_7K-LOK` (a spacewalk to the
+    lander, playing the crew transfer) and its liftoff ("LPU jettison and lunar liftoff") `UNDOCKING`: they are
+    `lunar-landing`, `eva-i`, `eva-ii` and `lunar-liftoff`. No step count changed; the pack hash did.
   - **Apollo's Earth-orbit flights by their names too (user, 2026-10-20).** `RETYPED` covers `apollo-earth-orbit`:
     the suborbital flights' `earth-orbit`, `reentry-preparations` and `earth-orbit` are the suborbital flight, an SPS
     test (`engine-test`) and the reentry preparations; the orbital flight's and the low-orbit lander test's second

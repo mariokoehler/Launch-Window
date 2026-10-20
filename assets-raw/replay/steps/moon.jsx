@@ -14,6 +14,14 @@ function plume(name, on, size) {
     fade(name, function (t) { return on(t) ? 1 : 0; });
     grow(name, function (t) { var k = size ? size(t) : 1; return [k, k * (0.9 + 0.12 * Math.sin(2 * Math.PI * 11 * t))]; });
 }
+// Apollo's flag (2026-10-20), planted on the first moonwalk (flag.jsx), standing beside the lander in the
+// surface scenes after it: when the builder sets FLAG. Put it before the figure, so the figure passes in front.
+function flagPlanted() {
+    if (typeof FLAG === "undefined" || !FLAG) return false;
+    put("e-flag-pole");
+    put("e-flag-cloth", "e-flag-pole");
+    return true;
+}
 // The lamp panel (alarm or fuel) and its lamp, lit while lit(t), blinking while blink(t).
 function lamp(which, lit, blinking) {
     put("n-panel-" + which, "screen");

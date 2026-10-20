@@ -10,11 +10,14 @@ var LIGHT = 0.6, LATE = 1.6, DIES = 2.4;
 put("paper", "screen");
 put("n-ground");
 put("n-rocks");
+var flag = flagPlanted();
 lander();
 put("n-dust");
 for (var i = 1; i <= 4; i++) put("r-chip-" + i);
 
 var go = glitch || failure ? LATE : LIGHT + 0.1;
+// The flag shakes in the ascent engine's blast while the stage is still low.
+if (flag) turn("e-flag-pole", function (t) { return t > go && t < go + 1.2 ? 5 * (1 - (t - go) / 1.2) * jitter(t, 7) : 0; });
 // The climb, up from the descent stage, leaning right; the failure's fall from where it died.
 var rise = function (t) { var u = Math.max(0, t - go); return [30 * u * u, -(60 * u + 170 * u * u)]; };
 var lean = function (t) { var u = Math.max(0, t - go - 0.4); return 14 * Math.min(u, 1.2); };

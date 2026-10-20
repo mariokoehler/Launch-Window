@@ -102,7 +102,7 @@
     {"id": "crew-transfer", "label": "Transposition and transfer", "explainer": "docking", "sheet": 2,
       "steps": ["transposition", "crew-transfer"]},
     {"id": "spacewalk", "label": "Spacewalk", "explainer": "spacewalks", "sheet": 1,
-      "steps": ["eva", "eva-i", "eva-ii", "eva-7k-lok", "eva-7k-ok", "eva-gemini-langley", "eva-in-meo"]},
+      "steps": ["eva", "eva-i", "eva-ii", "eva-iii", "rover-trip-i", "rover-trip-ii", "eva-7k-lok", "eva-7k-ok", "eva-gemini-langley", "eva-in-meo"]},
     {"id": "spacesuits", "label": "Spacesuits", "explainer": "spacewalks", "sheet": 2,
       "components": ["gemini-eva-suit", "apollo-lunar-eva-suit", "light-lunar-eva-suit", "berkut-eva-suit", "yastreb-eva-suit", "krechet-eva-suit"]},
     {"id": "transfer-orbit", "label": "Transfer orbit", "explainer": "launch-windows", "sheet": 1,

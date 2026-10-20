@@ -12,6 +12,7 @@ var EP = [870, 300], FP = [876, 366], EH = [916, 296], BOX = [975, 360], BOXK = 
 put("paper", "screen");
 put("n-ground");
 put("n-rocks");
+flagPlanted();
 put("e-suit");
 put("e-fog", "e-suit");
 hide("e-fog");

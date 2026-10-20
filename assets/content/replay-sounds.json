@@ -441,7 +441,7 @@
         "audio/replay/radio-problem-2.mp3"
       ],
       "credit": true,
-      "description": "\"Flight, we've had a problem here.\" (Apollo 13, reworded.) The coasts to and from the Moon, their glitches. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"Flight, we've had a problem here.\" (Apollo 13, reworded.) The coasts to and from the Moon, their glitches; the rover's breakdown. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
     },
     {
       "id": "radio-off-trajectory",

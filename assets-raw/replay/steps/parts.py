@@ -999,6 +999,122 @@ def lunar_parts():
     layer("n-limb", f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="url(#earth)" {LINE} stroke-width="3"/>{marks}', (cx, cy))
 
 
+# Apollo's moonwalks (user, 2026-10-20): the flag and the rock box, beside the lander (the surface close up).
+# The flag stands at FLAG_X: a plain cloth, no country's. Its pole pivots where the hand holds it once it's in
+# the ground (the hand's height over the feet: suit()'s EH less FP, scaled 0.45); the cloth, on its telescoping
+# crossbar, pivots at the pole's top, so a horizontal scale runs the bar out; the furled cloth hangs on the pole.
+FLAG_X, FLAG_TOP = 1180, 796
+FLAG_GRIP = (FLAG_X, GROUND_Y - 0.45 * 70)
+
+
+def moonwalk_kit_parts():
+    x, top = FLAG_X, FLAG_TOP
+    layer("e-flag-pole", f'<path d="M{x} {top} L{x} {GROUND_Y + 6}" fill="none" {LINE} stroke-width="3"/>'
+                         f'<circle cx="{x}" cy="{top - 3}" r="3.5" fill="#ffffff" {LINE} stroke-width="2"/>', FLAG_GRIP)
+    # The cloth 0.9 by 1.5 m, as Apollo's were (3 by 5 feet).
+    edge = (f'M{x + 1} {top + 3} L{x + 63} {top + 3} L{x + 63} {top + 41} Q{x + 47} {top + 45} {x + 32} {top + 41} '
+            f'Q{x + 16} {top + 37} {x + 1} {top + 41} Z')
+    cloth = (f'<path d="M{x} {top + 2} L{x + 64} {top + 2}" fill="none" {LINE} stroke-width="3"/>'
+             f'<path d="{edge}" fill="url(#hatch)" {LINE} stroke-width="2.6"/><path d="{edge}" fill="{GOLD_FILL}"/>')
+    layer("e-flag-cloth", cloth, (x, top + 2))
+    # The crossbar stuck part-way (Apollo 11's): the cloth bunched in folds along it.
+    folds = "".join(f'<path d="M{x + k} {top + 4} L{x + k + 2} {top + 38}" fill="none" {LINE} stroke-width="1.6" opacity="0.7"/>'
+                    for k in (13, 26, 39, 52))
+    layer("e-flag-folds", folds, (x, top + 2))
+    layer("e-flag-furl", f'<rect x="{x + 1}" y="{top + 4}" width="7" height="40" rx="3" fill="url(#hatch)" {LINE} stroke-width="2.4"/>'
+                         f'<rect x="{x + 1}" y="{top + 4}" width="7" height="40" rx="3" fill="{GOLD_FILL}"/>', (x, top + 2))
+    # The rock box, an aluminium case with ribs and a handle on its lid, drawn the size of the experiment package's
+    # frame (e-box: its pivot, where the hand holds it, at the handle); the lid hinges at its back edge.
+    body = (f'<rect x="950" y="364" width="50" height="30" rx="3" fill="#ffffff" {LINE} stroke-width="3"/>'
+            f'<path d="M962 368 L962 390 M975 368 L975 390 M988 368 L988 390" fill="none" {LINE} stroke-width="1.6" opacity="0.6"/>')
+    layer("e-rockbox", body, (975, 360))
+    layer("e-rockbox-lid", f'<rect x="948" y="358" width="54" height="7" rx="2" fill="#ffffff" {LINE} stroke-width="2.6"/>'
+                           f'<path d="M966 358 L966 352 L984 352 L984 358" fill="none" {LINE} stroke-width="2.6"/>', (948, 362))
+    # Two rocks to pick up, out beyond the boulders where the figure stops (samples.jsx's P1 and P2), gold so they
+    # read as the samples; pivot at their middles.
+    for i, (rx, w, h) in enumerate(((1630, 11, 9), (1670, 9, 8)), 1):
+        rock = f'M{rx - w} {GROUND_Y} Q{rx - w} {GROUND_Y - h} {rx} {GROUND_Y - h} Q{rx + w} {GROUND_Y - h} {rx + w} {GROUND_Y} Z'
+        layer(f"e-pebble-{i}", f'<path d="{rock}" fill="#ffffff"/><path d="{rock}" fill="{GOLD_FILL}" {LINE} stroke-width="2.4"/>',
+              (rx, GROUND_Y - h / 2))
+
+
+# The rover (user, 2026-10-20), Apollo's: side on, travelling right, about 40 px/m like the lander. Its middle at
+# LRV (the frame's middle, between the wheels), wheels 0.8 m across at LRV_WHEELS; the two crew sit side by side, the
+# far one a little behind and higher; the dish and the TV camera on the front, the tool pallet behind.
+LRV = (1400, 846)
+LRV_WHEELS = (1354, 1446)  # rear, front
+LRV_R = 16
+
+
+def seated(hx, hy, far=False):
+    """A suited figure in a seat, side on, facing right: its hip at (hx, hy), at the standing figure's scale."""
+    body = (f'<rect x="838" y="262" width="16" height="44" rx="3" fill="#ffffff" {LINE} stroke-width="3"/>'
+            f'<rect x="852" y="262" width="38" height="58" rx="9" fill="#ffffff" {LINE} stroke-width="3"/>'
+            f'<path d="M872 314 L910 316 L914 352 L926 354" fill="none" {LINE} stroke-width="9"/>'
+            f'<path d="M872 314 L910 316 L914 352 L926 354" fill="none" stroke="#ffffff" stroke-width="4" '
+            f'stroke-linecap="round" stroke-linejoin="round"/>'
+            f'<path d="M878 274 L900 296 L916 292" fill="none" {LINE} stroke-width="9"/>'
+            f'<path d="M878 274 L900 296 L916 292" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>'
+            f'<circle cx="870" cy="242" r="21" fill="#ffffff" {LINE} stroke-width="3"/>'
+            f'<path d="M874 230 Q892 232 890 246 Q888 258 874 256 Z" fill="{GOLD_FILL}" {LINE} stroke-width="2.4"/>')
+    fade = ' opacity="0.75"' if far else ""
+    return f'<g transform="translate({hx} {hy}) scale(0.45) translate(-872 -316)"{fade}>{body}</g>'
+
+
+def lrv_parts():
+    cx, cy = LRV
+    rx, fx = LRV_WHEELS
+    wy = GROUND_Y - LRV_R
+    # The chassis, its seats' backs, the fenders over the wheels (the rear one's extension its own part), the
+    # console between the seats, the dish on its mast and the TV camera, the tool pallet at the back.
+    frame = (f'<path d="M{cx - 66} {cy} L{cx + 66} {cy}" fill="none" {LINE} stroke-width="5"/>'
+             f'<path d="M{fx - 22} {cy + 2} Q{fx} {wy - 30} {fx + 22} {cy + 2} M{rx - 22} {cy + 2} Q{rx} {wy - 30} {rx + 22} {cy + 2}" '
+             f'fill="none" {LINE} stroke-width="3"/>'
+             f'<path d="M{cx - 30} {cy} L{cx - 36} {cy - 34} M{cx - 4} {cy} L{cx - 10} {cy - 34}" fill="none" {LINE} stroke-width="3"/>'
+             f'<rect x="{cx - 76}" y="{cy - 22}" width="26" height="20" rx="2" fill="url(#hatch)" {LINE} stroke-width="2.6"/>'
+             f'<path d="M{cx + 30} {cy} L{cx + 30} {cy - 30} L{cx + 40} {cy - 34}" fill="none" {LINE} stroke-width="3"/>'
+             f'<path d="M{cx + 56} {cy} L{cx + 56} {cy - 66}" fill="none" {LINE} stroke-width="2.6"/>'
+             f'<path d="M{cx + 40} {cy - 74} Q{cx + 56} {cy - 58} {cx + 72} {cy - 74} Z" fill="#ffffff" {LINE} stroke-width="2.6"/>'
+             f'<rect x="{cx + 58}" y="{cy - 22}" width="14" height="10" rx="2" fill="#ffffff" {LINE} stroke-width="2.4"/>'
+             f'<path d="M{cx + 72} {cy - 17} L{cx + 78} {cy - 17}" fill="none" {LINE} stroke-width="2.4"/>')
+    layer("lrv-body", frame, LRV)
+    layer("lrv-crew", seated(cx - 4, cy - 4, far=True) + seated(cx - 22, cy - 2), LRV)
+    layer("lrv-fender", f'<path d="M{rx - 22} {cy + 2} L{rx - 36} {cy + 10}" fill="none" {LINE} stroke-width="3"/>',
+          (rx - 22, cy + 2))
+    wheel = (f'<circle cx="0" cy="0" r="{LRV_R}" fill="url(#hatch)" {LINE} stroke-width="3"/>'
+             f'<circle cx="0" cy="0" r="5" fill="#ffffff" {LINE} stroke-width="2.4"/>'
+             + "".join(f'<path d="M0 0 L{LRV_R * math.cos(k * math.pi / 3):.1f} {LRV_R * math.sin(k * math.pi / 3):.1f}" '
+                       f'fill="none" {LINE} stroke-width="1.6" opacity="0.7"/>' for k in range(6)))
+    for name, x in (("lrv-wheel-front", fx), ("lrv-wheel-rear", rx)):
+        layer(name, f'<g transform="translate({x} {wy})">{wheel}</g>', (x, wy))
+    # The dust thrown up behind the rear wheel, low; and the rooster tail with the fender gone, arcing over the crew.
+    layer("lrv-dust", puff(rx - 26, GROUND_Y - 6, 8) + puff(rx - 40, GROUND_Y - 10, 6), (rx - 20, GROUND_Y - 4))
+    spray = ""
+    for k in range(14):
+        u = k / 13
+        sx, sy = rx - 4 + 120 * u, GROUND_Y - 30 - 90 * u + 70 * u * u
+        spray += (f'<circle cx="{sx:.1f}" cy="{sy:.1f}" r="{4 + 4 * math.sin(math.pi * u) + (k % 2):.1f}" '
+                  f'fill="rgba(224,167,46,0.5)" stroke="{GOLD}" stroke-width="2"/>')
+    layer("lrv-spray", spray, (rx - 20, GROUND_Y - 10))
+    # The crew off the rover, walking back: two standing figures (e-suit's drawing).
+    layer("lrv-walker", suit(), EP)
+    # The drive's ground beyond the lander: craters and rocks out to 3400, the rock the wheels go over (pivot on
+    # the ground), and a far ridge drawn long, moved slower than the camera.
+    craters = "".join(f'<ellipse cx="{x}" cy="{y}" rx="{r}" ry="{r * 0.22:.1f}" fill="#ffffff" {LINE} stroke-width="2.4"/>'
+                      for x, y, r in ((1700, 940, 50), (2050, 1000, 70), (2380, 930, 40), (2700, 980, 90), (3050, 950, 60)))
+    rocks = "".join(f'<path d="M{x - w} {GROUND_Y + 4} Q{x - w} {GROUND_Y - h} {x} {GROUND_Y - h} Q{x + w} {GROUND_Y - h} {x + w} '
+                    f'{GROUND_Y + 4} Z" fill="#ffffff" {LINE} stroke-width="3"/>'
+                    for x, w, h in ((1640, 12, 12), (1980, 18, 22), (2240, 10, 9), (2520, 24, 30), (2860, 14, 14), (3200, 20, 24)))
+    layer("lrv-terrain", f'<rect x="2800" y="{GROUND_Y}" width="1200" height="900" fill="url(#earth)"/>'
+                         f'<path d="M2800 {GROUND_Y} L4000 {GROUND_Y}" fill="none" {LINE} stroke-width="3"/>{craters}{rocks}',
+          (2000, GROUND_Y))
+    layer("lrv-bump", f'<path d="M1834 {GROUND_Y + 3} Q1836 {GROUND_Y - 9} 1846 {GROUND_Y - 9} Q1856 {GROUND_Y - 9} 1858 {GROUND_Y + 3} Z" '
+                      f'fill="#ffffff" {LINE} stroke-width="2.6"/>', (1846, GROUND_Y))
+    ridge = " ".join(f"Q{x + 150} {GROUND_Y - (110 if (x // 300) % 3 == 1 else 60)} {x + 300} {GROUND_Y - 20}" for x in range(-900, 4200, 300))
+    layer("lrv-ridge", f'<path d="M-900 {GROUND_Y - 20} {ridge}" fill="none" {LINE} stroke-width="2.4" opacity="0.45"/>',
+          (960, GROUND_Y))
+
+
 def surveyor_parts():
     """Surveyor (2026-10-17) in the Moon's close-up, on a carrier at LC like the crewed lander, its footpads on
     GROUND_Y: an open tripod frame with three legs (the near one in front), two boxed compartments, the TV
@@ -3466,6 +3582,8 @@ def main():
     dock_parts()
     eva_parts()
     lunar_parts()
+    moonwalk_kit_parts()
+    lrv_parts()
     surveyor_parts()
     lunokhod_parts()
     stage_parts()

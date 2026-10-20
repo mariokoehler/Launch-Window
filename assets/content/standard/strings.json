@@ -1925,11 +1925,23 @@
     },
     "eva-i": {
       "name": "First moonwalk",
-      "description": "The first walk on the surface: setting up experiments and collecting samples."
+      "description": "The first walk on the surface: planting the flag and setting up experiments."
     },
     "eva-ii": {
       "name": "Second moonwalk",
-      "description": "Another walk on the surface, ranging farther from the lander."
+      "description": "Another walk on the surface, ranging farther from the lander and collecting rocks to bring home."
+    },
+    "eva-iii": {
+      "name": "Third moonwalk",
+      "description": "A last walk on the surface, the rock boxes filled and carried up into the lander."
+    },
+    "rover-trip-i": {
+      "name": "First rover drive",
+      "description": "The crew unfold the rover from the lander's side and drive it out to the first sites."
+    },
+    "rover-trip-ii": {
+      "name": "Second rover drive",
+      "description": "A longer drive, kilometres from the lander, stopping to sample and photograph."
     },
     "eva-in-meo": {
       "name": "Spacewalk in high orbit",

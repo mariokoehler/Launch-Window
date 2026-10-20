@@ -2069,6 +2069,18 @@ clips, the replay is meant to be watched like a short film, and the player can s
   close-up upside down, its tunnel to the CSM's probe (`ap-k-target`; the ascent stage alone after the Moon and at
   its jettison, `ap-k-target-asc`), in the transposition and extraction with the CSM and the S-IVB (`ap-t-stage`), and
   on the lunar ascent's map climbing to the CSM. Still generic: the Earth-orbit spacewalks. Unconfirmed.
+- **Apollo's moonwalks as themselves (user, 2026-10-20; `flag.jsx`, `samples.jsx`, `rover.jsx`, the figure in
+  `walker.jsx`):** the first (`eva-i` after the landing, `apollo-flag`) plants a flag, a plain cloth with no country's:
+  down the ladder with the pole over the shoulder, two pushes into the ground, the cloth run out on its crossbar
+  (glitch: the pole jumps off rock and the crossbar sticks halfway, as Apollo 11's did, then runs out; failure: a
+  slip, the pole tips over, the visor fogs, back in). The last (`eva-ii` after `eva-i`, and `eva-iii`,
+  `apollo-samples`) carries the rock box out past the boulders, scoops up two gold rocks and carries them up and in
+  (glitch: a rock bounces off the rim and is chased; failure: a fall chasing it, the box left lying). The rover's
+  drives (`rover-trip-i`, `-ii`, `apollo-rover-drive`) ride along with the rover from beside the lander (glitch: the
+  fender lost on a rock and the crew showered in dust, as on Apollo 17; failure: the rover dies and they walk back).
+  A middle moonwalk keeps the experiment package (`apollo-moonwalk`). The flag stands in every Apollo surface scene
+  after it, the liftoff's blast shaking it (`build.py`'s `"vars": {"FLAG": true}`, `moon.jsx`'s `flagPlanted`).
+  Unconfirmed.
 - **Soyuz 7K-OK as itself (user, 2026-10-18; the rocket stays generic, user):** its three modules (`sy-`, `soyuz-*`),
   under a fairing and escape tower on the pad (thrown off in the climb, `a-les`); the orbital module rides on the nose
   through the way home (`project-soyuz.jsx`'s `OM`, read now by `reentry-preparations.jsx`, `reentry-trim.jsx` and

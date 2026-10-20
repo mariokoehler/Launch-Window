@@ -128593,7 +128593,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "18-eva-i",
+            "id": "18-rover-trip-i",
             "componentInvolvements": [
               {
                 "componentId": "lunar-roving-vehicle",
@@ -128845,7 +128845,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "20-eva-i",
+            "id": "20-rover-trip-ii",
             "componentInvolvements": [
               {
                 "componentId": "lunar-roving-vehicle",
@@ -128973,7 +128973,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "21-eva-ii",
+            "id": "21-eva-iii",
             "componentInvolvements": [
               {
                 "componentId": "apollo-lunar-eva-suit",
@@ -149608,7 +149608,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "14-lk-test",
+            "id": "14-lunar-landing",
             "componentInvolvements": [
               {
                 "componentId": "lk-lander",
@@ -149703,7 +149703,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "15-eva-7k-lok",
+            "id": "15-eva-i",
             "componentInvolvements": [
               {
                 "componentId": "krechet-eva-suit",
@@ -149807,7 +149807,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "16-eva-7k-lok",
+            "id": "16-eva-ii",
             "componentInvolvements": [
               {
                 "componentId": "krechet-eva-suit",
@@ -149911,7 +149911,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "17-undocking",
+            "id": "17-lunar-liftoff",
             "componentInvolvements": [
               {
                 "componentId": "lk-lander",

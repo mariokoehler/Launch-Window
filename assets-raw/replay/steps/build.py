@@ -1121,14 +1121,32 @@ STEPS = {
         "times": [0.5, 1.6, 2.4, 3.0, 3.6, 5.9],
     },
     "apollo-lunar-liftoff": {
-        "pad": False, "source": "lunar-liftoff", "skin": "ap-", "before": ["moon.jsx"],
+        "pad": False, "source": "lunar-liftoff", "skin": "ap-", "before": ["moon.jsx"], "vars": {"FLAG": True},
         "success": (5.6, 1.0), "glitch": (5.6, 2.0), "failure": (5.6, 2.8),
         "times": [0.7, 1.2, 1.8, 2.6, 3.4, 5.5],
     },
     "apollo-moonwalk": {
-        "pad": False, "source": "moonwalk", "skin": "ap-", "before": ["moon.jsx"],
+        "pad": False, "source": "moonwalk", "skin": "ap-", "before": ["moon.jsx"], "vars": {"FLAG": True},
         "success": (5.4, 2.6), "glitch": (5.8, 3.2), "failure": (5.8, 3.0),
         "times": [0.6, 1.2, 2.2, 2.6, 3.4, 5.3],
+    },
+    # Apollo's moonwalks as themselves (user, 2026-10-20): the flag on the first, rocks for home on the last; the
+    # flag stands in every surface scene after it ("vars": FLAG).
+    "apollo-flag": {
+        "pad": False, "source": "flag", "skin": "ap-", "before": ["moon.jsx", "walker.jsx"],
+        "success": (5.7, 2.7), "glitch": (6.6, 3.3), "failure": (6.4, 3.0),
+        "times": [0.8, 1.9, 2.4, 2.9, 3.4, 4.4],
+    },
+    "apollo-samples": {
+        "pad": False, "source": "samples", "skin": "ap-", "before": ["moon.jsx", "walker.jsx"], "vars": {"FLAG": True},
+        "success": (6.7, 3.7), "glitch": (7.8, 4.6), "failure": (8.4, 4.6),
+        "times": [1.0, 2.9, 3.6, 4.1, 4.7, 6.2],
+    },
+    # The rover's drives (user, 2026-10-20), out from beside the lander.
+    "apollo-rover-drive": {
+        "pad": False, "source": "rover", "skin": "ap-", "before": ["moon.jsx"], "vars": {"FLAG": True},
+        "success": (6.0, 2.4), "glitch": (6.0, 2.8), "failure": (6.6, 2.9),
+        "times": [0.4, 1.6, 2.3, 2.7, 3.6, 5.8],
     },
     "apollo-docking-asc": {
         "pad": False, "source": "docking", "skin": "ap-", "alias": {"k-target": "ap-k-target-asc"}, "before": ["dock.jsx"],
@@ -1892,6 +1910,9 @@ def project(step, variant):
             alias.update(STEPS[step].get("alias", {}))
             f.write("var ALIAS = " + json.dumps(alias) + ";\n")
         f.write(f"var VARIANT = {json.dumps(variant)}, DUR = {dur};\n")
+        # "vars": switches a shared timeline reads (FLAG: the flag already stands beside the lander).
+        for name, value in STEPS[step].get("vars", {}).items():
+            f.write(f"var {name} = {json.dumps(value)};\n")
         # "mirror": the world drawn left for right (motion.jsx's setup), so the craft travels left.
         f.write(f"var MIRROR = {json.dumps(bool(STEPS[step].get('mirror')))};\n")
         f.write(read("..", "motion.jsx"))

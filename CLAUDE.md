@@ -220,6 +220,9 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   Gemini EOR's Moon flights now reach the Moon; Apollo's Earth-orbit flights too), every flyby drops BASPM's slingshot step (Apollo's too), and five crewed
   configurations BASPM gave no crew risk have their sister flights' (user, 2026-10-20, `design.md` §5, M3). The pack
   hash changed: reset the dev data root, rebuild client and server together.
+  Apollo's moonwalks show the flag, the rock box and the rover's drives (user, 2026-10-20, `ui-spec.md` §4.7.3), and the
+  rover landing's drives and the 7K-L3 landing's touchdown, moonwalks and liftoff are typed by their names: the pack hash
+  changed, reset the dev data root, rebuild client and server together.
 
 ## How we work
 
