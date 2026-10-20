@@ -2873,6 +2873,16 @@ first (login → action → scheduled resolution → result, end to end) before 
     comes back at nearly lunar-return speed (the heat-shield test; NASA did the same for Apollo on Apollo 4 and 6).
     The converter renames the step `high-orbit-injection` for that program (both its configurations), with its own
     text in `strings.json`. The pack hash changed.
+  - **Lunar-orbit Gemini's flybys pass the Moon (user, 2026-10-20).** BASPM gives both flybys (crewed and uncrewed) a
+    lunar orbit insertion and a lunar orbit but no burn home: the craft brakes into an orbit it never leaves, and the
+    flyby had almost as many chances to fail as the orbit flight (15 steps to 16). The converter puts one
+    `lunar-flyby` in the pair's place, with the lunar orbit's data (Zond 5 has the one step), and renumbers the steps
+    after it: 14 steps to the orbit flight's 16. The pack hash changed.
+  - **Other flybys that look wrong (found 2026-10-20, not yet changed; the user's call):** Soyuz 7K-L3's two flybys
+    have a lunar orbit insertion, a lunar orbit and a burn home around their `lunar-flyby` (an orbit flight in all but
+    name) and two `earth-approach` steps; LK-700's flybys have a burn home (`tei`), the crewed one an insertion too;
+    Soyuz 7K-L1's flybys have two `lunar-flyby` steps, the uncrewed one two `descent` steps. Separately, no step of
+    lunar-orbit Gemini's crewed flights risks the crew (`crewRisk` false throughout, crew involved in every step).
   - **Gemini EOR comes home Gemini's way (user, 2026-10-16).** BASPM gives its six configurations with
     a way home the Soyuz order (retrofire, jettison, modules separation, or the last two alone). Gemini
     dropped its adapter's equipment section first, then fired the retros and dropped the retro section,

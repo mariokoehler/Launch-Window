@@ -1858,18 +1858,13 @@ variant_of("earth-approach", "gemini-earth-approach", {"o-sat": "gm-o-sat-capsul
            before=["orbit.jsx", "adapter-drop.jsx"])
 variant_of("reentry-from-moon", "gemini-reentry-from-moon", {}, skin="gm-")
 
-# Lunar-orbit Gemini to the Moon (2026-10-20, user; gl- parts): its Earth-orbit tests' launch, then out of the rocket on a
-# Centaur, which makes the trans-lunar injection and lets go (tpi.jsx's SEP); the propulsion module brakes into lunar
-# orbit and fires it home (loi, tei), or, on a flyby, the craft passes the Moon (its insertion and orbit steps played as
-# the approach and the flyby: the flyby configurations have no burn home); the module and the adapter go on the Earth
-# approach (earth-approach.jsx's DROP).
+# Lunar-orbit Gemini to the Moon (2026-10-20, user; gl- parts): its Earth-orbit tests' launch and deployment; the
+# propulsion module makes the trans-lunar injection (the step is mostly the module's), brakes into lunar orbit and fires
+# the craft home (loi, tei), or the craft passes the Moon (the flybys' one step there, corrected in the converter); the
+# module and the adapter go on the Earth approach (earth-approach.jsx's DROP).
 GL = {"o-sat": "gl-o-sat", "m-probe": "gl-m-probe", "o-streak": "gl-o-streak-lpm"}
-variant_of("deployment", "gemini-lpm-deployment-stack", {"d-payload": "gl-d-payload-stack"}, skin="gm-")
-variant_of("earth-orbit", "gemini-lpm-earth-orbit-stack", {"o-sat": "gl-o-sat-stack"}, skin="gm-")
-variant_of("tpi", "gemini-lpm-tli", {"o-sat": "gl-o-sat-top", "o-stage": "gl-o-sat-centaur", "o-streak": "gl-o-streak"}, skin="gm-",
-           before=["orbit.jsx", "hoi-separate.jsx"])
+variant_of("tpi", "gemini-lpm-tli", GL, skin="gm-")
 variant_of("trans-lunar-coast", "gemini-lpm-tlc", GL, skin="gm-")
-variant_of("lunar-approach", "gemini-lpm-lunar-approach", GL, skin="gm-")
 variant_of("lunar-flyby", "gemini-lpm-lunar-flyby", GL, skin="gm-")
 variant_of("loi", "gemini-lpm-loi", GL, skin="gm-")
 variant_of("lunar-orbit", "gemini-lpm-lunar-orbit", GL, skin="gm-")

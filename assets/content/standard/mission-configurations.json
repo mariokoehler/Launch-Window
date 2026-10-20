@@ -107656,55 +107656,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "09-loi",
-            "componentInvolvements": [
-              {
-                "componentId": "gemini-capsule",
-                "percent": 80
-              },
-              {
-                "componentId": "gemini-lunar-propulsion-module",
-                "percent": 20
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 2,
-                "percent": 20
-              },
-              {
-                "slot": 3,
-                "percent": 15
-              },
-              {
-                "slot": 4,
-                "percent": 15
-              },
-              {
-                "slot": 5,
-                "percent": 10
-              },
-              {
-                "slot": 6,
-                "percent": 5
-              },
-              {
-                "slot": 9,
-                "percent": 15
-              },
-              {
-                "slot": 10,
-                "percent": 20
-              }
-            ],
-            "crewInvolvements": [],
-            "crewRisk": false,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 5,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "10-lunar-orbit",
+            "id": "09-lunar-flyby",
             "componentInvolvements": [
               {
                 "componentId": "gemini-capsule",
@@ -107748,7 +107700,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "11-trans-earth-coast",
+            "id": "10-trans-earth-coast",
             "componentInvolvements": [
               {
                 "componentId": "gemini-capsule",
@@ -107788,7 +107740,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "12-earth-approach-and-reentry",
+            "id": "11-earth-approach-and-reentry",
             "componentInvolvements": [
               {
                 "componentId": "gemini-capsule",
@@ -107836,7 +107788,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "13-reentry",
+            "id": "12-reentry",
             "componentInvolvements": [
               {
                 "componentId": "gemini-capsule",
@@ -107864,7 +107816,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "14-descent-and-splashdown",
+            "id": "13-descent-and-splashdown",
             "componentInvolvements": [
               {
                 "componentId": "gemini-capsule",
@@ -107896,7 +107848,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "15-recovery",
+            "id": "14-recovery",
             "componentInvolvements": [
               {
                 "componentId": "gemini-capsule",
@@ -108662,87 +108614,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "09-loi",
-            "componentInvolvements": [
-              {
-                "componentId": "gemini-capsule",
-                "percent": 80
-              },
-              {
-                "componentId": "gemini-lunar-propulsion-module",
-                "percent": 20
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 2,
-                "percent": 20
-              },
-              {
-                "slot": 4,
-                "percent": 5
-              },
-              {
-                "slot": 5,
-                "percent": 15
-              },
-              {
-                "slot": 6,
-                "percent": 15
-              },
-              {
-                "slot": 8,
-                "percent": 10
-              },
-              {
-                "slot": 9,
-                "percent": 35
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 17.5
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 10.0
-              },
-              {
-                "slot": 0,
-                "skill": "SCIENCE",
-                "percent": 10.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 17.5
-              },
-              {
-                "slot": 1,
-                "skill": "LEADERSHIP",
-                "percent": 7.5
-              },
-              {
-                "slot": 1,
-                "skill": "PILOTING",
-                "percent": 20.0
-              },
-              {
-                "slot": 1,
-                "skill": "FITNESS",
-                "percent": 17.5
-              }
-            ],
-            "crewRisk": false,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 34,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "10-lunar-orbit",
+            "id": "09-lunar-flyby",
             "componentInvolvements": [
               {
                 "componentId": "gemini-capsule",
@@ -108824,7 +108696,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "11-trans-earth-coast",
+            "id": "10-trans-earth-coast",
             "componentInvolvements": [
               {
                 "componentId": "gemini-capsule",
@@ -108916,7 +108788,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "12-earth-approach-and-reentry",
+            "id": "11-earth-approach-and-reentry",
             "componentInvolvements": [
               {
                 "componentId": "gemini-capsule",
@@ -108994,7 +108866,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "13-reentry",
+            "id": "12-reentry",
             "componentInvolvements": [
               {
                 "componentId": "gemini-capsule",
@@ -109048,7 +108920,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "14-descent-and-splashdown",
+            "id": "13-descent-and-splashdown",
             "componentInvolvements": [
               {
                 "componentId": "gemini-capsule",
@@ -109104,7 +108976,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "15-recovery",
+            "id": "14-recovery",
             "componentInvolvements": [
               {
                 "componentId": "gemini-capsule",

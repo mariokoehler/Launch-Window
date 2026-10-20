@@ -1,8 +1,5 @@
 {
-  "gemini-lpm-deployment-stack": {"success": [{"at": 0.2, "sound": "radio-watching"}, {"at": 2.65, "sound": "radio-payload-separation"}], "glitch": [{"at": 0.2, "sound": "radio-watching"}, {"at": 2.65, "sound": "radio-separation-late"}], "failure": [{"at": 0.2, "sound": "radio-watching"}, {"at": 2.35, "sound": "radio-collision"}]},
-  "gemini-lpm-earth-orbit-stack": {"success": [{"at": 2.15, "sound": "radio-signal-good"}], "glitch": [{"at": 3.45, "sound": "radio-telemetry-lost"}], "failure": [{"at": 3.05, "sound": "radio-data-lost"}]},
   "gemini-lpm-tlc": {"glitch": [{"at": 3.65, "sound": "radio-problem"}], "failure": [{"at": 3.45, "sound": "radio-off-trajectory"}]},
-  "gemini-lpm-lunar-approach": {"failure": [{"at": 3.45, "sound": "radio-off-trajectory"}]},
   "gemini-lpm-loi": {"failure": [{"at": 2.85, "sound": "radio-burn-failed"}]},
   "gemini-lpm-tei": {"failure": [{"at": 3.05, "sound": "radio-burn-failed"}]},
   "gemini-lpm-tec": {"glitch": [{"at": 3.65, "sound": "radio-problem"}], "failure": [{"at": 3.45, "sound": "radio-off-trajectory"}]},
