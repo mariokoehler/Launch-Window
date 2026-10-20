@@ -1919,6 +1919,10 @@
       "name": "Egress",
       "description": "The hatch opens and an astronaut climbs out."
     },
+    "ingress": {
+      "name": "Ingress",
+      "description": "Back in through the hatch, which is shut and sealed behind the spacewalker."
+    },
     "eva": {
       "name": "Spacewalk",
       "description": "Work outside the spacecraft in a pressure suit."

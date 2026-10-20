@@ -5,7 +5,7 @@
 var glitch = VARIANT === "glitch", failure = VARIANT === "failure";
 var STUCK = 0.8, SHOVE = 1.4;
 
-spacewalkScene(false, true);
+spacewalkScene(typeof STANDUP_TRANSFER !== "undefined" && STANDUP_TRANSFER, true);
 
 // The hatch opens the same way in every variant until it sticks (or doesn't) at 40 degrees.
 var hatchAt;

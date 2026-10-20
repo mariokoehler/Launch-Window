@@ -2088,6 +2088,33 @@ for _base in ("flag", "samples"):
 variant_of("reentry-preparations", "lk-700-reentry-preparations-asc", L7_HOME, skin="l7-")
 variant_of("lk-700-modules-separation", "lk-700-modules-separation-moon", {}, before=["project-lk700-moon.jsx", "motes.jsx"])
 
+# Soyuz 7K-OK's spacewalks (2026-10-20, user; the steps by BASPM's names): the lone spacewalk's egress (a stand-up), out
+# on the tether from standing, and a photo and back in, on its own hull (sy-e-capsule, wings out); the crew transfer of
+# Soyuz 4 and 5 in three on the docked pair (sy-e-capsule-pair, soyuz-transfer.jsx): the stand-up in the first hatch, the
+# crossing from standing to standing (crew-transfer.jsx's FROM_STANDING, TO_STANDING), and in through the second hatch
+# (transfer-ingress.jsx). Its long flights' six levels each one on from the last, the supplies running lower
+# (duration.jsx's LEVEL and SUPPLY). Unconfirmed.
+# Its suborbital flights' reentry preparations come straight after the flight's turn (the KDTU-35 test, the burn, after
+# them): the trim that follows a turn, not the one after a burn.
+variant_of("reentry-trim", "soyuz-reentry-trim-sub", {}, skin="sy-", before=["project-soyuz.jsx", "motes.jsx"])
+SY_EVA = {"r-capsule": "sy-e-capsule", "e-box": "sy-e-box"}
+variant_of("gemini-eva-standup-docked", "soyuz-eva-standup", SY_EVA, skin="sy-", before=["spacewalk.jsx"])
+variant_of("gemini-eva-out-docked", "soyuz-eva-out-standing", SY_EVA, skin="sy-", before=["spacewalk.jsx"])
+variant_of("gemini-eva-photo-docked", "soyuz-eva-photo", SY_EVA, skin="sy-", before=["spacewalk.jsx"])
+SY_PAIR = {"r-capsule": "sy-e-capsule-pair", "e-box": "sy-e-box", "e-capsule-b": "sy-e-blank", "e-collar": "sy-e-blank",
+           "e-hole-b": "sy-e-hole-b", "e-hatch-b": "sy-e-hatch-b", "e-rail": "sy-e-rail"}
+SY_CROSS = ["soyuz-transfer.jsx", "spacewalk.jsx"]
+variant_of("gemini-eva-standup-docked", "soyuz-transfer-egress", SY_PAIR, skin="sy-", before=SY_CROSS, vars={"STANDUP_TRANSFER": True})
+variant_of("crew-transfer", "soyuz-transfer-cross", SY_PAIR, skin="sy-", before=SY_CROSS, vars={"FROM_STANDING": True, "TO_STANDING": True})
+variant_of("crew-transfer", "soyuz-transfer-ingress", SY_PAIR, skin="sy-", before=SY_CROSS, source="transfer-ingress",
+           success=(3.8, 2.1), glitch=(4.4, 3.0), failure=(4.6, 3.4), times=[0.4, 1.2, 2.0, 2.6, 3.2, 3.7])
+variant_of("duration-level-i", "soyuz-duration-level-i", {}, skin="sy-")
+variant_of("duration-level-ii", "soyuz-duration-level-ii", {}, skin="sy-")
+_supply = [[0.38, 0.30, 0.42], [0.31, 0.24, 0.35], [0.25, 0.19, 0.29], [0.20, 0.15, 0.24], [0.16, 0.11, 0.20]]
+for _n, _name in ((3, "iii"), (4, "iv"), (5, "v"), (6, "vi")):
+    variant_of("duration-level-ii", f"soyuz-duration-level-{_name}", {}, skin="sy-",
+               vars={"LEVEL": _n, "SUPPLY": [_supply[_n - 3], _supply[_n - 2]]})
+
 
 def read(*path):
     return open(os.path.join(HERE, *path), encoding="utf-8").read() + "\n"

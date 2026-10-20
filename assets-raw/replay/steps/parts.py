@@ -2578,7 +2578,33 @@ def lk_spacewalk(plate_x, lpu=True):
     return f'<g transform="translate({plate_x} 470) scale({LKW}) rotate(-90) translate(-960 -648)">{body}</g>'
 
 
+def soyuz_spacewalk(tip_x):
+    """The 7K-OK nose right, its probe's tip at tip_x, wings out."""
+    k = 75
+    ok = soyuz_stack(0, k)
+    ok = re.sub(r'stroke-width="([\d.]+)"', lambda m: f'stroke-width="{float(m.group(1)) * 1.7:.2f}"', ok)
+    return f'<g transform="translate({tip_x} 470) rotate(90) translate(-960 0)">{ok}</g>'
+
+
+def soyuz_ok_eva_parts():
+    x0, x1, y = HATCH
+    one = soyuz_spacewalk(LK_DOCK_X)
+    layer("sy-e-capsule", one, RC)
+    layer("sy-e-capsule-pair", one + f'<g transform="translate({2 * LK_DOCK_X:.1f} 0) scale(-1 1)">{one}</g>', RC)
+    layer("sy-e-box", "", (975, 360))
+    layer("sy-e-blank", "", RC)
+    hb = 2 * LK_DOCK_X - (x0 + x1) / 2
+    m0 = hb - (x1 - x0) / 2
+    layer("sy-e-hole-b", f'<rect x="{m0 + 4:.1f}" y="{y - 2}" width="{x1 - x0 - 8}" height="10" fill="{NAVY}"/>', (m0, y))
+    layer("sy-e-hatch-b", f'<rect x="{m0:.1f}" y="{y - 8}" width="{x1 - x0}" height="10" rx="3" fill="#ffffff" {LINE} '
+                          f'stroke-width="3"/>', (m0, y))
+    layer("sy-e-rail", f'<path d="M944 352 L{hb - 30:.1f} 352 M960 352 L960 384 M{hb - 44:.1f} 352 L{hb - 44:.1f} 384" '
+                       f'fill="none" {LINE} stroke-width="4"/>', (960, 352))
+    print("soyuz transfer: over", round(hb - (x0 + x1) / 2, 1), "rail end", round(hb - 85, 1), "middle", round(((x0 + x1) / 2 + hb) / 2, 1))
+
+
 def lok_eva_parts():
+    soyuz_ok_eva_parts()
     x0, x1, y = HATCH
     m0 = LK_HATCH_X - (x1 - x0) / 2
     lok = lok_spacewalk(LK_DOCK_X)

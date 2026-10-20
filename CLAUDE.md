@@ -218,6 +218,9 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   landing stage brakes and lands, the return stage lifts off with the capsule: every crewed Moon program now flies as itself. Client only.
   Apollo's Earth-orbit tests too (user, 2026-10-20, `ui-spec.md` §4.7.3): Apollo 5's LM alone, the suborbital arc, one scale
   for the transposition, the high-orbit burn, the CSM's own spacewalks, two CSMs' rendezvous, the docking flight's Agena. Client only.
+  Soyuz 7K-OK's steps typed by BASPM's names (user, 2026-10-20, `design.md` §5, M3): insertions, way home, duration levels,
+  docking, egress and ingress; its spacewalk and crew transfer in three clips each. The pack hash changed: reset the dev data
+  root, rebuild client and server together.
   Circumlunar Gemini's Moon flights fly as themselves (user, 2026-10-20, `ui-spec.md` §4.7.3): the Transtage alone
   to the Moon, or Gemini docked into it for the burn (`tpi.jsx`'s `SEP`), dropping its adapter on the Earth approach
   (`earth-approach.jsx`'s `DROP`). Client only.

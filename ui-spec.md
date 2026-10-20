@@ -2116,6 +2116,14 @@ clips, the replay is meant to be watched like a short film, and the player can s
   A middle moonwalk keeps the experiment package (`apollo-moonwalk`). The flag stands in every Apollo surface scene
   after it, the liftoff's blast shaking it (`build.py`'s `"vars": {"FLAG": true}`, `moon.jsx`'s `flagPlanted`).
   Unconfirmed.
+- **Soyuz 7K-OK's steps by their names (user, 2026-10-20):** once the converter typed them by BASPM's names (`design.md`
+  §5, M3), the lone spacewalk plays the stand-up egress, out on the tether from standing and a photo and back in on its own
+  hull (`sy-e-capsule`, wings out); the crew transfer (Soyuz 4 and 5) the stand-up in the first ship's hatch, the crossing
+  from standing to standing (`crew-transfer.jsx`'s `FROM_STANDING`, `TO_STANDING`) and in through the second ship's hatch
+  (`transfer-ingress.jsx`), all on the docked pair framed as the crossing (`sy-e-capsule-pair`, `soyuz-transfer.jsx`,
+  `eva-standup.jsx`'s `STANDUP_TRANSFER`); the long flights' six levels each on from the last, the supplies running lower
+  (`duration.jsx`'s `LEVEL` and `SUPPLY`); the suborbital flights' reentry preparations the trim after the turn
+  (`soyuz-reentry-trim-sub`) and the KDTU-35 test the burn. Unconfirmed.
 - **Soyuz 7K-OK as itself (user, 2026-10-18; the rocket stays generic, user):** its three modules (`sy-`, `soyuz-*`),
   under a fairing and escape tower on the pad (thrown off in the climb, `a-les`); the orbital module rides on the nose
   through the way home (`project-soyuz.jsx`'s `OM`, read now by `reentry-preparations.jsx`, `reentry-trim.jsx` and

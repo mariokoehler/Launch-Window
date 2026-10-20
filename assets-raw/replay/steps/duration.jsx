@@ -28,9 +28,10 @@ function speedOf(variant) {
 }
 // Where a day leaves off, for several days to begin: the day's success, run to its end.
 var start = OSTART;
-if (LEVEL === 2) {
+if (LEVEL >= 2) {
     var dayLength = 6.4, x = OSTART, sp = speedOf("success");
-    for (var f = 0; f < Math.round(dayLength * FPS); f++) x -= sp(f / FPS) / FPS;
+    for (var d = 1; d < LEVEL; d++)
+        for (var f = 0; f < Math.round(dayLength * FPS); f++) x -= sp(f / FPS) / FPS;
     start = x;
 }
 var phi = orbitAngles(start, speedOf(VARIANT));
@@ -41,8 +42,8 @@ if (failure) fade("o-sat", track([[ABORT + 1.1, 1], [ABORT + 1.5, 0, "lin"]]));
 turn("o-earth", function (t) { return -0.25 * t; });
 
 // The supplies, oxygen, power and food: from where they were to where this stretch leaves them.
-var from = LEVEL === 1 ? [0.95, 0.92, 0.95] : [0.72, 0.66, 0.75];
-var to = LEVEL === 1 ? [0.72, 0.66, 0.75] : [0.38, 0.30, 0.42];
+var from = typeof SUPPLY !== "undefined" ? SUPPLY[0] : LEVEL === 1 ? [0.95, 0.92, 0.95] : [0.72, 0.66, 0.75];
+var to = typeof SUPPLY !== "undefined" ? SUPPLY[1] : LEVEL === 1 ? [0.72, 0.66, 0.75] : [0.38, 0.30, 0.42];
 function supply(n) {
     return function (t) {
         var u = clamp(t / 6.4, 0, 1), l = from[n] + (to[n] - from[n]) * u;
@@ -50,7 +51,7 @@ function supply(n) {
         // The power dips at 2.2 in both; the glitch's is saved at 3.4, the failure's oxygen runs out from 3.0.
         if (n === 1 && t >= DIP) l -= 0.22 * clamp((t - DIP) / 0.3, 0, 1) - (glitch && t >= SAVE ? 0.15 * clamp((t - SAVE) / 0.4, 0, 1) : 0);
         if (n === 0 && failure && t >= OUT) l *= 1 - clamp((t - OUT) / 0.8, 0, 1);
-        return l;
+        return Math.max(0.02, l);
     };
 }
 gauge("x-bar-1", supply(0), function (t) { return failure && t >= OUT; });

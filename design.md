@@ -2950,6 +2950,16 @@ first (login → action → scheduled resolution → result, end to end) before 
     touchdown ("Block-D jettison and lunar landing") `LK_TEST`, its two moonwalks `EVA_7K-LOK` (a spacewalk to the
     lander, playing the crew transfer) and its liftoff ("LPU jettison and lunar liftoff") `UNDOCKING`: they are
     `lunar-landing`, `eva-i`, `eva-ii` and `lunar-liftoff`. No step count changed; the pack hash did.
+  - **Soyuz 7K-OK's steps by their names (user, 2026-10-20).** `RETYPED` covers `soyuz-7k-ok`: every "Orbit insertion"
+    (the crewed flights', the rendezvous flights' "Spacecraft A/B: Orbit insertion") was typed `ASCENT`, giving each launch
+    two ascents; the orbital flights' "Reentry preparations" and "De-orbit burn" were typed `RETROFIRE_JETTISON` and
+    `RETROFIRE`, which the retrofire swap turned into a burn and a jettison; the suborbital flights' "Reentry preparations"
+    and "KDTU-35 engine test" (the burn) each had the other's type; the long flights' "Duration Level I" to "VI" were all
+    `EARTH_ORBITAL`; the automatic rendezvous's and uncrewed docking's "Target approach" `JOINT_EARTH_ORBITAL` and the
+    latter's "Docking" and "Undocking" `RENDEZVOUS` (the crew transfer's "Undocking" too); the spacewalk's and the crew
+    transfer's "Egress" and "Ingress" the walk's own type. They are `insertion`, `reentry-preparations` and `retrofire`,
+    `reentry-preparations` and `engine-test`, `duration-level-i` to `duration-l6`, `target-approach`, `docking`,
+    `undocking`, `egress` and `ingress` (new, with text). No step count changed; the pack hash did.
   - **The 7K-L3's crewed orbit flight drops its Blok D (user, 2026-10-20).** Its second lunar orbit (BASPM: "Lunar orbit",
     after "Inclination change maneuver") is retyped `blok-d-separation`, as its uncrewed twin's "Block-D separation":
     nothing else drops the Blok D before the LOK's own burn home. The pack hash changed.

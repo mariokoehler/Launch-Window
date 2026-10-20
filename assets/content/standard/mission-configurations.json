@@ -183210,7 +183210,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "07-retrofire",
+            "id": "07-reentry-preparations",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-ok-spacecraft",
@@ -183258,7 +183258,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "08-reentry-preparations",
+            "id": "08-engine-test",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-ok-spacecraft",
@@ -184051,7 +184051,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "07-retrofire",
+            "id": "07-reentry-preparations",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-ok-spacecraft",
@@ -184139,7 +184139,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "08-retrofire-jettison",
+            "id": "08-engine-test",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-ok-spacecraft",
@@ -185894,95 +185894,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "08-retrofire",
-            "componentInvolvements": [
-              {
-                "componentId": "soyuz-7k-ok-spacecraft",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 15
-              },
-              {
-                "slot": 2,
-                "percent": 15
-              },
-              {
-                "slot": 4,
-                "percent": 5
-              },
-              {
-                "slot": 5,
-                "percent": 7
-              },
-              {
-                "slot": 6,
-                "percent": 20
-              },
-              {
-                "slot": 7,
-                "percent": 13
-              },
-              {
-                "slot": 8,
-                "percent": 10
-              },
-              {
-                "slot": 9,
-                "percent": 5
-              },
-              {
-                "slot": 13,
-                "percent": 10
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 10.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 10.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 15.0
-              },
-              {
-                "slot": 1,
-                "skill": "PILOTING",
-                "percent": 30.0
-              },
-              {
-                "slot": 1,
-                "skill": "FITNESS",
-                "percent": 15.0
-              },
-              {
-                "slot": 2,
-                "skill": "PILOTING",
-                "percent": 5.0
-              },
-              {
-                "slot": 2,
-                "skill": "FITNESS",
-                "percent": 15.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 20,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "09-retrofire-jettison",
+            "id": "08-reentry-preparations",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-ok-spacecraft",
@@ -186057,6 +185969,94 @@
                 "slot": 2,
                 "skill": "PILOTING",
                 "percent": 10.0
+              },
+              {
+                "slot": 2,
+                "skill": "FITNESS",
+                "percent": 15.0
+              }
+            ],
+            "crewRisk": true,
+            "prestigeSharePercent": 0,
+            "failurePrestigeDeduction": 20,
+            "goalIdsAchieved": []
+          },
+          {
+            "id": "09-retrofire",
+            "componentInvolvements": [
+              {
+                "componentId": "soyuz-7k-ok-spacecraft",
+                "percent": 100
+              }
+            ],
+            "controllerInvolvements": [
+              {
+                "slot": 1,
+                "percent": 15
+              },
+              {
+                "slot": 2,
+                "percent": 15
+              },
+              {
+                "slot": 4,
+                "percent": 5
+              },
+              {
+                "slot": 5,
+                "percent": 7
+              },
+              {
+                "slot": 6,
+                "percent": 20
+              },
+              {
+                "slot": 7,
+                "percent": 13
+              },
+              {
+                "slot": 8,
+                "percent": 10
+              },
+              {
+                "slot": 9,
+                "percent": 5
+              },
+              {
+                "slot": 13,
+                "percent": 10
+              }
+            ],
+            "crewInvolvements": [
+              {
+                "slot": 0,
+                "skill": "LEADERSHIP",
+                "percent": 10.0
+              },
+              {
+                "slot": 0,
+                "skill": "PILOTING",
+                "percent": 10.0
+              },
+              {
+                "slot": 0,
+                "skill": "FITNESS",
+                "percent": 15.0
+              },
+              {
+                "slot": 1,
+                "skill": "PILOTING",
+                "percent": 30.0
+              },
+              {
+                "slot": 1,
+                "skill": "FITNESS",
+                "percent": 15.0
+              },
+              {
+                "slot": 2,
+                "skill": "PILOTING",
+                "percent": 5.0
               },
               {
                 "slot": 2,
@@ -188137,7 +188137,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "05-ascent",
+            "id": "05-insertion",
             "componentInvolvements": [
               {
                 "componentId": "@rocket-1",
@@ -188417,7 +188417,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "08-earth-orbital",
+            "id": "08-duration-level-i",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-ok-spacecraft",
@@ -188524,7 +188524,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "09-earth-orbital",
+            "id": "09-duration-level-ii",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-ok-spacecraft",
@@ -189567,7 +189567,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "05-ascent",
+            "id": "05-insertion",
             "componentInvolvements": [
               {
                 "componentId": "@rocket-1",
@@ -189847,7 +189847,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "08-earth-orbital",
+            "id": "08-duration-level-i",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-ok-spacecraft",
@@ -189939,7 +189939,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "09-earth-orbital",
+            "id": "09-duration-level-ii",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-ok-spacecraft",
@@ -190031,7 +190031,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "10-earth-orbital",
+            "id": "10-duration-level-iii",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-ok-spacecraft",
@@ -191064,7 +191064,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "05-ascent",
+            "id": "05-insertion",
             "componentInvolvements": [
               {
                 "componentId": "@rocket-1",
@@ -191344,7 +191344,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "08-earth-orbital",
+            "id": "08-duration-level-i",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-ok-spacecraft",
@@ -191436,7 +191436,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "09-earth-orbital",
+            "id": "09-duration-level-ii",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-ok-spacecraft",
@@ -191528,7 +191528,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "10-earth-orbital",
+            "id": "10-duration-level-iii",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-ok-spacecraft",
@@ -191620,7 +191620,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "11-earth-orbital",
+            "id": "11-duration-level-iv",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-ok-spacecraft",
@@ -192658,7 +192658,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "05-ascent",
+            "id": "05-insertion",
             "componentInvolvements": [
               {
                 "componentId": "@rocket-1",
@@ -192938,7 +192938,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "08-earth-orbital",
+            "id": "08-duration-level-i",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-ok-spacecraft",
@@ -193030,7 +193030,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "09-earth-orbital",
+            "id": "09-duration-level-ii",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-ok-spacecraft",
@@ -193122,7 +193122,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "10-earth-orbital",
+            "id": "10-duration-level-iii",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-ok-spacecraft",
@@ -193214,7 +193214,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "11-earth-orbital",
+            "id": "11-duration-level-iv",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-ok-spacecraft",
@@ -193306,7 +193306,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "12-earth-orbital",
+            "id": "12-duration-l5",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-ok-spacecraft",
@@ -194349,7 +194349,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "05-ascent",
+            "id": "05-insertion",
             "componentInvolvements": [
               {
                 "componentId": "@rocket-1",
@@ -194629,7 +194629,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "08-earth-orbital",
+            "id": "08-duration-level-i",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-ok-spacecraft",
@@ -194721,7 +194721,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "09-earth-orbital",
+            "id": "09-duration-level-ii",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-ok-spacecraft",
@@ -194813,7 +194813,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "10-earth-orbital",
+            "id": "10-duration-level-iii",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-ok-spacecraft",
@@ -194905,7 +194905,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "11-earth-orbital",
+            "id": "11-duration-level-iv",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-ok-spacecraft",
@@ -194997,7 +194997,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "12-earth-orbital",
+            "id": "12-duration-l5",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-ok-spacecraft",
@@ -195089,7 +195089,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "13-earth-orbital",
+            "id": "13-duration-l6",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-ok-spacecraft",
@@ -196417,7 +196417,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "08-earth-orbital",
+            "id": "08-duration-level-i",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-ok-spacecraft",
@@ -196509,7 +196509,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "09-eva-7k-ok",
+            "id": "09-egress",
             "componentInvolvements": [
               {
                 "componentId": "yastreb-eva-suit",
@@ -196701,7 +196701,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "11-eva-7k-ok",
+            "id": "11-ingress",
             "componentInvolvements": [
               {
                 "componentId": "yastreb-eva-suit",
@@ -197729,7 +197729,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "05-ascent",
+            "id": "05-insertion",
             "componentInvolvements": [
               {
                 "componentId": "@rocket-1",
@@ -198345,7 +198345,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "12-ascent",
+            "id": "12-insertion",
             "componentInvolvements": [
               {
                 "componentId": "@rocket-2",
@@ -200160,7 +200160,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "05-ascent",
+            "id": "05-insertion",
             "componentInvolvements": [
               {
                 "componentId": "@rocket-1",
@@ -200784,7 +200784,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "12-ascent",
+            "id": "12-insertion",
             "componentInvolvements": [
               {
                 "componentId": "@rocket-2",
@@ -201064,7 +201064,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "15-joint-earth-orbital",
+            "id": "15-target-approach",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-ok-spacecraft",
@@ -202531,7 +202531,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "05-ascent",
+            "id": "05-insertion",
             "componentInvolvements": [
               {
                 "componentId": "@rocket-1",
@@ -202851,7 +202851,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "12-ascent",
+            "id": "12-insertion",
             "componentInvolvements": [
               {
                 "componentId": "@rocket-2",
@@ -202995,7 +202995,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "15-joint-earth-orbital",
+            "id": "15-target-approach",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-ok-spacecraft",
@@ -203043,7 +203043,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "16-rendezvous",
+            "id": "16-docking",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-ok-spacecraft",
@@ -203091,7 +203091,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "17-rendezvous",
+            "id": "17-undocking",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-ok-spacecraft",
@@ -204049,7 +204049,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "05-ascent",
+            "id": "05-insertion",
             "componentInvolvements": [
               {
                 "componentId": "@rocket-1",
@@ -204673,7 +204673,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "12-ascent",
+            "id": "12-insertion",
             "componentInvolvements": [
               {
                 "componentId": "@rocket-2",
@@ -206715,7 +206715,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "05-ascent",
+            "id": "05-insertion",
             "componentInvolvements": [
               {
                 "componentId": "@rocket-1",
@@ -207339,7 +207339,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "12-ascent",
+            "id": "12-insertion",
             "componentInvolvements": [
               {
                 "componentId": "@rocket-2",
@@ -207838,7 +207838,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "17-crew-transfer",
+            "id": "17-egress",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-ok-spacecraft",
@@ -208100,7 +208100,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "19-crew-transfer",
+            "id": "19-ingress",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-ok-spacecraft",
@@ -208231,7 +208231,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "20-rendezvous",
+            "id": "20-undocking",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-ok-spacecraft",
