@@ -8,7 +8,7 @@ number, and a step folds into another the way `ReplayClips` matches it: behind a
 Nothing else shares a clip: `lunar-ascent` isn't `ascent`. Variants are ticked when the clip
 and its sidecar are in `assets/ui/replay/` and a rule in `replay-clips.json` names it.
 
-**Status:** 146/146 steps complete, 438/438 variants. 211 step ids in 187 configurations.
+**Status:** 145/145 steps complete, 435/435 variants. 211 step ids in 187 configurations.
 
 How to read an entry (all counted automatically, a first pass):
 - **Uses**: step occurrences across all configurations; sorted by it within each family.
@@ -43,7 +43,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: EARTH 142, MOON 50, VENUS 7, MARS 5
   - Programs: Apollo: Earth-orbit tests 17, Soyuz 7K-OK 16, Gemini 15, Soyuz 7K-L3: Earth-orbit tests 12
 - [x] **Launch preparations** `launch-preparations`: 208 uses in 181 configurations, 53 programs (NASA/SOVIET) **(early-era)**, crew risk in 2 of 208
-  - Clip: by the steps before: `launch-preparations` after `None` 54, `apollo-launch-preparations` after `None` in apollo, apollo-earth-orbit 23, `soyuz-launch-preparations` after `None` in soyuz-7k-ok 16, `soyuz-lok-launch-preparations` after `None` in soyuz-7k-l3-earth-orbit 12, `gemini-launch-preparations` after `None` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 11, `lk-700-launch-preparations` after `None` in lk-700-earth-orbit 11, `voskhod-launch-preparations` after `None` in voskhod 10, `vostok-launch-preparations` after `None` in vostok, korabl-sputnik-2 8, `mercury-launch-preparations` after `None` in mercury 6, `soyuz-l1-launch-preparations` after `None` in soyuz-7k-l1-earth-orbit 6, `soyuz-launch-preparations` after `earth-orbit` in soyuz-7k-ok 5, `gemini-launch-preparations` after `earth-orbit` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 4, `agena-launch-preparations` after `None` in gemini behind `atv` 4, `gemini-launch-preparations` after `deployment` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 4, `gemini-lpm-launch-preparations` after `None` in lunar-orbital-gemini 4, `launch-preparations` after `deployment` 4, `sputnik-1-launch-preparations` after `None` in sputnik-1 2, `explorer-1-launch-preparations` after `None` in explorer-1 2, `transtage-launch-preparations` after `None` in circumlunar-gemini-earth-orbit 2, `gemini-lpm-launch-preparations` after `None` in lunar-orbital-gemini-earth-orbit 2, `gemini-da-launch-preparations` after `None` in gemini-direct-ascent-earth-orbit 2, `soyuz-lok-launch-preparations` after `earth-orbit` in soyuz-7k-l3-earth-orbit 2, `transtage-launch-preparations` after `None` in circumlunar-gemini behind `transtage` 2, `sputnik-2-launch-preparations` after `None` in sputnik-2 1, `mercury-launch-preparations` after `orbital-flight` in mercury 1, `vostok-launch-preparations` after `orbital-flight` in vostok, korabl-sputnik-2 1, `gemini-launch-preparations` `deployment` earlier in circumlunar-gemini-earth-orbit 1, `voskhod-launch-preparations` after `earth-orbit` in voskhod 1, `gemini-eor-launch-preparations` after `None` in gemini-eor-earth-orbit 1, `tug-launch-preparations` after `None` in gemini-eor-earth-orbit behind `atv` 1, `gemini-eor-launch-preparations` after `earth-orbit` in gemini-eor-earth-orbit 1, `gemini-launch-preparations` after `earth-orbit` in circumlunar-gemini 1, `apollo-launch-preparations` after `earth-orbit` in apollo, apollo-earth-orbit 1, `launch-preparations` after `None` in apollo, apollo-earth-orbit behind `atv` 1, `apollo-launch-preparations` after `deployment` in apollo, apollo-earth-orbit 1; [x] success, [x] glitch, [x] failure; cues yes
+  - Clip: by the steps before: `launch-preparations` after `None` 54, `apollo-launch-preparations` after `None` in apollo, apollo-earth-orbit 23, `soyuz-launch-preparations` after `None` in soyuz-7k-ok 16, `soyuz-lok-launch-preparations` after `None` in soyuz-7k-l3-earth-orbit 12, `gemini-launch-preparations` after `None` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 11, `lk-700-launch-preparations` after `None` in lk-700-earth-orbit 11, `voskhod-launch-preparations` after `None` in voskhod 10, `vostok-launch-preparations` after `None` in vostok, korabl-sputnik-2 8, `mercury-launch-preparations` after `None` in mercury 6, `soyuz-l1-launch-preparations` after `None` in soyuz-7k-l1-earth-orbit 6, `soyuz-launch-preparations` after `earth-orbit` in soyuz-7k-ok 5, `gemini-launch-preparations` after `earth-orbit` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 4, `agena-launch-preparations` after `None` in gemini behind `atv` 4, `gemini-launch-preparations` after `deployment` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 4, `gemini-lpm-launch-preparations` after `None` in lunar-orbital-gemini 4, `launch-preparations` after `earth-orbit` 4, `sputnik-1-launch-preparations` after `None` in sputnik-1 2, `explorer-1-launch-preparations` after `None` in explorer-1 2, `transtage-launch-preparations` after `None` in circumlunar-gemini-earth-orbit 2, `gemini-lpm-launch-preparations` after `None` in lunar-orbital-gemini-earth-orbit 2, `gemini-da-launch-preparations` after `None` in gemini-direct-ascent-earth-orbit 2, `soyuz-lok-launch-preparations` after `earth-orbit` in soyuz-7k-l3-earth-orbit 2, `transtage-launch-preparations` after `None` in circumlunar-gemini behind `transtage` 2, `sputnik-2-launch-preparations` after `None` in sputnik-2 1, `mercury-launch-preparations` after `orbital-flight` in mercury 1, `vostok-launch-preparations` after `orbital-flight` in vostok, korabl-sputnik-2 1, `gemini-launch-preparations` `deployment` earlier in circumlunar-gemini-earth-orbit 1, `voskhod-launch-preparations` after `earth-orbit` in voskhod 1, `gemini-eor-launch-preparations` after `None` in gemini-eor-earth-orbit 1, `tug-launch-preparations` after `None` in gemini-eor-earth-orbit behind `atv` 1, `gemini-eor-launch-preparations` after `earth-orbit` in gemini-eor-earth-orbit 1, `gemini-launch-preparations` after `earth-orbit` in circumlunar-gemini 1, `apollo-launch-preparations` after `earth-orbit` in apollo, apollo-earth-orbit 1, `launch-preparations` after `None` in apollo, apollo-earth-orbit behind `atv` 1, `apollo-launch-preparations` after `deployment` in apollo, apollo-earth-orbit 1; [x] success, [x] glitch, [x] failure; cues yes
   - Also covers: `atv-launch-preparations` 10, `gemini-a-launch-preparations` 4, `gemini-b-launch-preparations` 4, `transtage-launch-preparations` 2
   - On screen: launcher 208, crewed craft 148, crewed lander 30, probe 19, satellite 11, stage or target 5
   - Destinations: EARTH 142, MOON 50, VENUS 7, MARS 5
@@ -87,16 +87,16 @@ How to read an entry (all counted automatically, a first pass):
 ## Return to Earth (16)
 
 - [x] **Reentry** `reentry`: 158 uses in 144 configurations, 24 programs (NASA/SOVIET) **(early-era)**, crew risk in 120 of 158, later seasons in 1 of 158
-  - Clip: by the steps before: `gemini-reentry` after `retrofire-jettison` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 21, `soyuz-reentry` after `modules-separation` in soyuz-7k-ok 21, `reentry-from-moon` after `earth-approach` 16, `apollo-reentry` after `modules-separation` in apollo, apollo-earth-orbit 14, `soyuz-reentry` after `modules-separation` in soyuz-7k-l3-earth-orbit 13, `lk-700-reentry` after `modules-separation` in lk-700-earth-orbit 11, `voskhod-reentry` after `retrofire-jettison` in voskhod 10, `vostok-reentry` after `modules-separation` in vostok, korabl-sputnik-2 8, `mercury-reentry` after `retrofire-jettison` in mercury 7, `apollo-reentry` after `reentry-preparations` in apollo, apollo-earth-orbit 7, `soyuz-reentry` after `modules-separation` in soyuz-7k-l1-earth-orbit 6, `gemini-reentry` after `reentry-preparations` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 4, `gemini-reentry-from-moon` after `earth-approach-and-reentry` in lunar-orbital-gemini 4, `reentry` after `retrofire-jettison` 4, `reentry` after `de-orbit-burn` 2, `gemini-reentry` after `retrofire-jettison` in gemini-eor-earth-orbit 2, `reentry` after `modules-separation` 2, `apollo-reentry` after `de-orbit-burn` in apollo, apollo-earth-orbit 2, `vostok-reentry` after `retrofire-jettison` in vostok, korabl-sputnik-2 1, `reentry-from-moon` after `moon-earth-coast` 1, `voskhod-reentry` after `modules-separation` in voskhod 1, `gemini-reentry-from-moon` after `earth-approach` in circumlunar-gemini 1; [x] success, [x] glitch, [x] failure; cues yes
+  - Clip: by the steps before: `gemini-reentry` after `retrofire-jettison` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 21, `soyuz-reentry` after `modules-separation` in soyuz-7k-ok 21, `reentry` after `modules-separation` 17, `apollo-reentry` after `modules-separation` in apollo, apollo-earth-orbit 14, `soyuz-reentry` after `modules-separation` in soyuz-7k-l3-earth-orbit 13, `lk-700-reentry` after `modules-separation` in lk-700-earth-orbit 11, `voskhod-reentry` after `retrofire-jettison` in voskhod 10, `vostok-reentry` after `modules-separation` in vostok, korabl-sputnik-2 8, `mercury-reentry` after `retrofire-jettison` in mercury 7, `apollo-reentry` after `reentry-preparations` in apollo, apollo-earth-orbit 7, `soyuz-reentry` after `modules-separation` in soyuz-7k-l1-earth-orbit 6, `reentry-from-moon` after `earth-approach` 5, `gemini-reentry` after `reentry-preparations` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 4, `gemini-reentry-from-moon` after `earth-approach-and-reentry` in lunar-orbital-gemini 4, `reentry` after `de-orbit-burn` 2, `gemini-reentry` after `retrofire-jettison` in gemini-eor-earth-orbit 2, `apollo-reentry` after `de-orbit-burn` in apollo, apollo-earth-orbit 2, `vostok-reentry` after `retrofire-jettison` in vostok, korabl-sputnik-2 1, `reentry-from-moon` after `moon-earth-coast` 1, `voskhod-reentry` after `modules-separation` in voskhod 1, `gemini-reentry-from-moon` after `earth-approach` in circumlunar-gemini 1; [x] success, [x] glitch, [x] failure; cues yes
   - Also covers: `gemini-a-reentry` 4, `gemini-b-reentry` 4, `reentry-a` 1, `reentry-b` 1, `spc-a-reentry` 2
   - On screen: crewed craft 139, crewed lander 16, satellite 2, probe 1
   - Destinations: EARTH 123, MOON 35
   - Programs: Apollo: Earth-orbit tests 16, Soyuz 7K-OK 16, Gemini 15, LK-700: Earth-orbit tests 11
-- [x] **Reentry preparations** `reentry-preparations`: 102 uses in 91 configurations, 14 programs (NASA/SOVIET) **(early-era)**, crew risk in 76 of 102
-  - Clip: by the steps before: `apollo-reentry-preparations` after `trans-earth-coast` in apollo, apollo-earth-orbit 7, `soyuz-reentry-preparations` after `earth-orbital` in soyuz-7k-ok 6, `gemini-reentry-preparations` after `earth-orbit` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 5, `apollo-reentry-preparations` after `earth-orbit` in apollo, apollo-earth-orbit 5, `apollo-reentry-preparations` after `duration-level-i` in apollo, apollo-earth-orbit 5, `soyuz-reentry-preparations` after `landing-and-recovery` in soyuz-7k-ok 5, `gemini-reentry-preparations` after `eva` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 4, `gemini-reentry-preparations` after `duration-level-ii` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 4, `voskhod-reentry-preparations` after `duration` in voskhod 4, `soyuz-reentry-preparations` after `rendezvous` in soyuz-7k-ok 3, `mercury-reentry-trim` after `retrofire` in mercury 2, `mercury-reentry-preparations` after `orbital-flight` in mercury 2, `vostok-reentry-preparations` after `orbital-flight` in vostok, korabl-sputnik-2 2, `gemini-reentry-trim` after `suborbital-flight` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 2, `gemini-reentry-preparations` after `rendezvous` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 2, `gemini-reentry-preparations` after `recovery` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 2, `gemini-reentry-preparations` after `co-enin` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 2, `gemini-da-reentry-preparations` after `co-enin` in gemini-direct-ascent-earth-orbit 2, `voskhod-reentry-trim` after `suborbital-flight` in voskhod 2, `voskhod-reentry-preparations` after `earth-orbit` in voskhod 2, `soyuz-l1-reentry-trim` after `engine-test` in soyuz-7k-l1-earth-orbit 2, `soyuz-l1-reentry-preparations` after `earth-orbital` in soyuz-7k-l1-earth-orbit 2, `soyuz-l1-reentry-preparations` after `duration` in soyuz-7k-l1-earth-orbit 2, `soyuz-lok-reentry-trim` after `retrofire` in soyuz-7k-l3-earth-orbit 2, `soyuz-lok-reentry-preparations` after `earth-orbital` in soyuz-7k-l3-earth-orbit 2, `reentry-preparations` after `moon-earth-coast` 2, `vostok-reentry-preparations` after `earth-orbital` in vostok, korabl-sputnik-2 1, `mercury-reentry-preparations` after `duration-level-i` in mercury 1, `vostok-reentry-trim` after `suborbital-flight` in vostok, korabl-sputnik-2 1, `vostok-reentry-preparations` after `duration-level-i` in vostok, korabl-sputnik-2 1, `vostok-reentry-preparations` after `duration-level-ii` in vostok, korabl-sputnik-2 1, `vostok-reentry-preparations` after `joint-orbital-flight` in vostok, korabl-sputnik-2 1, `vostok-reentry-preparations` after `descent-and-landing` in vostok, korabl-sputnik-2 1, `gemini-reentry-preparations` after `docking` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 1, `gemini-reentry-preparations` after `undocking` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 1, `voskhod-reentry-preparations` after `eva` in voskhod 1, `voskhod-reentry-preparations` after `earth-orbital` in voskhod 1, `voskhod-reentry-preparations` after `landing-and-recovery` in voskhod 1, `soyuz-lok-reentry-preparations` after `duration` in soyuz-7k-l3-earth-orbit 1, `apollo-reentry-preparations` after `meo` in apollo, apollo-earth-orbit 1, `apollo-reentry-preparations` after `duration-level-ii` in apollo, apollo-earth-orbit 1, `apollo-reentry-preparations` after `duration-level-iii` in apollo, apollo-earth-orbit 1, `apollo-reentry-preparations` after `duration-level-iv` in apollo, apollo-earth-orbit 1, `soyuz-reentry-trim` after `retrofire` in soyuz-7k-ok 1, `soyuz-reentry-preparations` after `earth-orbit` in soyuz-7k-ok 1, `soyuz-reentry-preparations` after `eva-7k-ok` in soyuz-7k-ok 1, `soyuz-reentry-preparations` after `joint-earth-orbital` in soyuz-7k-ok 1, `soyuz-reentry-preparations` after `undocking` in soyuz-7k-ok 1; [x] success, [x] glitch, [x] failure; cues yes
+- [x] **Reentry preparations** `reentry-preparations`: 113 uses in 102 configurations, 16 programs (NASA/SOVIET) **(early-era)**, crew risk in 83 of 113
+  - Clip: by the steps before: `reentry-preparations` after `trans-earth-coast` 11, `apollo-reentry-preparations` after `trans-earth-coast` in apollo, apollo-earth-orbit 7, `soyuz-reentry-preparations` after `earth-orbital` in soyuz-7k-ok 6, `gemini-reentry-preparations` after `earth-orbit` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 5, `apollo-reentry-preparations` after `earth-orbit` in apollo, apollo-earth-orbit 5, `apollo-reentry-preparations` after `duration-level-i` in apollo, apollo-earth-orbit 5, `soyuz-reentry-preparations` after `landing-and-recovery` in soyuz-7k-ok 5, `gemini-reentry-preparations` after `eva` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 4, `gemini-reentry-preparations` after `duration-level-ii` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 4, `voskhod-reentry-preparations` after `duration` in voskhod 4, `soyuz-reentry-preparations` after `rendezvous` in soyuz-7k-ok 3, `mercury-reentry-trim` after `retrofire` in mercury 2, `mercury-reentry-preparations` after `orbital-flight` in mercury 2, `vostok-reentry-preparations` after `orbital-flight` in vostok, korabl-sputnik-2 2, `gemini-reentry-trim` after `suborbital-flight` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 2, `gemini-reentry-preparations` after `rendezvous` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 2, `gemini-reentry-preparations` after `recovery` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 2, `gemini-reentry-preparations` after `co-enin` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 2, `gemini-da-reentry-preparations` after `co-enin` in gemini-direct-ascent-earth-orbit 2, `voskhod-reentry-trim` after `suborbital-flight` in voskhod 2, `voskhod-reentry-preparations` after `earth-orbit` in voskhod 2, `soyuz-l1-reentry-trim` after `engine-test` in soyuz-7k-l1-earth-orbit 2, `soyuz-l1-reentry-preparations` after `earth-orbital` in soyuz-7k-l1-earth-orbit 2, `soyuz-l1-reentry-preparations` after `duration` in soyuz-7k-l1-earth-orbit 2, `soyuz-lok-reentry-trim` after `retrofire` in soyuz-7k-l3-earth-orbit 2, `soyuz-lok-reentry-preparations` after `earth-orbital` in soyuz-7k-l3-earth-orbit 2, `reentry-preparations` after `moon-earth-coast` 2, `vostok-reentry-preparations` after `earth-orbital` in vostok, korabl-sputnik-2 1, `mercury-reentry-preparations` after `duration-level-i` in mercury 1, `vostok-reentry-trim` after `suborbital-flight` in vostok, korabl-sputnik-2 1, `vostok-reentry-preparations` after `duration-level-i` in vostok, korabl-sputnik-2 1, `vostok-reentry-preparations` after `duration-level-ii` in vostok, korabl-sputnik-2 1, `vostok-reentry-preparations` after `joint-orbital-flight` in vostok, korabl-sputnik-2 1, `vostok-reentry-preparations` after `descent-and-landing` in vostok, korabl-sputnik-2 1, `gemini-reentry-preparations` after `docking` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 1, `gemini-reentry-preparations` after `undocking` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 1, `voskhod-reentry-preparations` after `eva` in voskhod 1, `voskhod-reentry-preparations` after `earth-orbital` in voskhod 1, `voskhod-reentry-preparations` after `landing-and-recovery` in voskhod 1, `soyuz-lok-reentry-preparations` after `duration` in soyuz-7k-l3-earth-orbit 1, `apollo-reentry-preparations` after `meo` in apollo, apollo-earth-orbit 1, `apollo-reentry-preparations` after `duration-level-ii` in apollo, apollo-earth-orbit 1, `apollo-reentry-preparations` after `duration-level-iii` in apollo, apollo-earth-orbit 1, `apollo-reentry-preparations` after `duration-level-iv` in apollo, apollo-earth-orbit 1, `soyuz-reentry-trim` after `retrofire` in soyuz-7k-ok 1, `soyuz-reentry-preparations` after `earth-orbit` in soyuz-7k-ok 1, `soyuz-reentry-preparations` after `eva-7k-ok` in soyuz-7k-ok 1, `soyuz-reentry-preparations` after `joint-earth-orbital` in soyuz-7k-ok 1, `soyuz-reentry-preparations` after `undocking` in soyuz-7k-ok 1; [x] success, [x] glitch, [x] failure; cues yes
   - Also covers: `gemini-a-reentry-preparations` 4, `gemini-b-reentry-preparations` 4, `reentry-preparations-a` 1, `reentry-preparations-b` 1, `spc-a-reentry-preparations` 1, `spc-b-reentry-preparations` 1
-  - On screen: crewed craft 102
-  - Destinations: EARTH 93, MOON 9
+  - On screen: crewed craft 108, crewed lander 5
+  - Destinations: EARTH 93, MOON 20
   - Programs: Gemini 15, Apollo: Earth-orbit tests 14, Soyuz 7K-OK 14, Voskhod 10
 - [x] **Descent** `descent`: 99 uses in 91 configurations, 12 programs (NASA/SOVIET) crew risk in 82 of 99
   - Clip: by the steps before: `apollo-descent` after `reentry` in apollo, apollo-earth-orbit 23, `soyuz-descent` after `reentry` in soyuz-7k-ok 21, `soyuz-descent` after `reentry` in soyuz-7k-l3-earth-orbit 13, `voskhod-descent` after `reentry` in voskhod 11, `lk-700-descent-chutes` after `reentry` in lk-700-earth-orbit 11, `soyuz-descent` after `reentry` in soyuz-7k-l1-earth-orbit 6, `descent-chutes` after `reentry` 6, `gemini-descent-chutes` after `reentry` in gemini-eor-earth-orbit 2, `x15-descent` after `powered-ascent` in x-15 1, `x15-descent` after `peak-altitude` in x-15 1, `x15-descent` after `high-speed-leg` in x-15 1, `e154-descent` after `powered-ascent` in mig-e-154 1, `e154-descent` after `peak-altitude` in mig-e-154 1, `e154-descent` after `high-speed-leg` in mig-e-154 1; [x] success, [x] glitch, [x] failure; cues no
@@ -110,11 +110,11 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: crewed craft 88, crewed lander 9
   - Destinations: EARTH 97
   - Programs: Soyuz 7K-OK 16, Gemini 15, Soyuz 7K-L3: Earth-orbit tests 11, Voskhod 10
-- [x] **Retropack jettison** `retrofire-jettison`: 67 uses in 59 configurations, 11 programs (NASA/SOVIET) **(early-era)**, crew risk in 57 of 67
-  - Clip: by the steps before: `gemini-retrofire-jettison` after `retrofire` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 20, `voskhod-modules-separation` after `retrofire` in voskhod 10, `lk-700-retrofire-jettison` after `retrofire` in lk-700-earth-orbit 9, `soyuz-lok-retrofire-jettison` after `retrofire` in soyuz-7k-l3-earth-orbit 8, `mercury-retrofire-jettison` after `retrofire` in mercury 5, `retrofire-jettison` after `modules-separation` 4, `vostok-retro-shutdown` after `retrofire` in vostok, korabl-sputnik-2 2, `mercury-retrofire-jettison` after `reentry-preparations` in mercury 2, `lk-700-retrofire-jettison` after `engine-test` in lk-700-earth-orbit 2, `gemini-retrofire-jettison` after `retrofire` in gemini-eor-earth-orbit 2, `soyuz-retrofire-jettison` after `retrofire` in soyuz-7k-ok 2, `gemini-retrofire-jettison` after `earth-orbit` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 1; [x] success, [x] glitch, [x] failure; cues no
+- [x] **Retropack jettison** `retrofire-jettison`: 63 uses in 55 configurations, 10 programs (NASA/SOVIET) **(early-era)**, crew risk in 53 of 63
+  - Clip: by the steps before: `gemini-retrofire-jettison` after `retrofire` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 20, `voskhod-modules-separation` after `retrofire` in voskhod 10, `lk-700-retrofire-jettison` after `retrofire` in lk-700-earth-orbit 9, `soyuz-lok-retrofire-jettison` after `retrofire` in soyuz-7k-l3-earth-orbit 8, `mercury-retrofire-jettison` after `retrofire` in mercury 5, `vostok-retro-shutdown` after `retrofire` in vostok, korabl-sputnik-2 2, `mercury-retrofire-jettison` after `reentry-preparations` in mercury 2, `lk-700-retrofire-jettison` after `engine-test` in lk-700-earth-orbit 2, `gemini-retrofire-jettison` after `retrofire` in gemini-eor-earth-orbit 2, `soyuz-retrofire-jettison` after `retrofire` in soyuz-7k-ok 2, `gemini-retrofire-jettison` after `earth-orbit` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 1; [x] success, [x] glitch, [x] failure; cues no
   - Also covers: `gemini-a-retrofire-jettison` 4, `gemini-b-retrofire-jettison` 4, `retrofire-jettison-a` 1, `retrofire-jettison-b` 1, `spc-a-retrofire-jettison` 1
-  - On screen: crewed craft 56, crewed lander 11
-  - Destinations: EARTH 63, MOON 4
+  - On screen: crewed craft 52, crewed lander 11
+  - Destinations: EARTH 63
   - Programs: Gemini 15, LK-700: Earth-orbit tests 11, Voskhod 9, Project Mercury 6
 - [x] **Landing and recovery** `landing-and-recovery`: 62 uses in 54 configurations, 5 programs (SOVIET) crew risk in 50 of 62
   - Clip: by the steps before: `soyuz-landing-and-recovery` after `descent` in soyuz-7k-ok 21, `soyuz-landing-and-recovery` after `descent` in soyuz-7k-l3-earth-orbit 13, `voskhod-landing-and-recovery` after `descent` in voskhod 11, `lk-700-landing-and-recovery` after `descent` in lk-700-earth-orbit 11, `soyuz-landing-and-recovery` after `descent` in soyuz-7k-l1-earth-orbit 6; [x] success, [x] glitch, [x] failure; cues no
@@ -139,11 +139,6 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: crewed craft 27
   - Destinations: EARTH 16, MOON 11
   - Programs: Apollo: Earth-orbit tests 14, Apollo 7, Gemini EOR 4, Gemini EOR: Earth-orbit tests 2
-- [x] **Earth approach** `earth-approach`: 17 uses in 17 configurations, 4 programs (NASA/SOVIET) crew risk in 11 of 17
-  - Clip: by the steps before: `earth-approach` after `trans-earth-coast` 16, `gemini-earth-approach` after `moon-earth-coast` in circumlunar-gemini 1; [x] success, [x] glitch, [x] failure; cues no
-  - On screen: crewed craft 12, crewed lander 5
-  - Destinations: MOON 17
-  - Programs: Soyuz 7K-L3 lunar landing 6, Gemini Direct Ascent 5, LK-700 Direct Ascent 5, Circumlunar Gemini 1
 - [x] **Deorbit burn** `de-orbit-burn`: 16 uses in 14 configurations, 2 programs (NASA) crew risk in 13 of 16, later seasons in 1 of 16
   - Clip: by the steps before: `apollo-retrofire` after `reentry-preparations` in apollo, apollo-earth-orbit 12, `apollo-retrofire` after `de-orbit-burn` in apollo, apollo-earth-orbit 2, `deorbit-burn` after `earth-orbit` 1, `deorbit-burn` after `advanced-experiments-earth-orbit` 1; [x] success, [x] glitch, [x] failure; cues yes
   - On screen: crewed craft 14, satellite 2
@@ -160,6 +155,11 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: spaceplane 6, crewed craft 3, crewed lander 3, probe 3, probe lander 2, rover 1
   - Destinations: EARTH 6, MOON 6, VENUS 2, MARS 1
   - Programs: OKB-MiG E-154 3, X-15 3, Apollo 2, Venera lander 2
+- [x] **Earth approach** `earth-approach`: 10 uses in 10 configurations, 3 programs (NASA) crew risk in 8 of 10
+  - Clip: by the steps before: `earth-approach` after `trans-earth-coast` 9, `gemini-earth-approach` after `moon-earth-coast` in circumlunar-gemini 1; [x] success, [x] glitch, [x] failure; cues no
+  - On screen: crewed craft 10
+  - Destinations: MOON 10
+  - Programs: Gemini Direct Ascent 5, Gemini EOR 4, Circumlunar Gemini 1
 - [x] **Approach and reentry** `earth-approach-and-reentry`: 5 uses in 5 configurations, 2 programs (NASA/SOVIET) crew risk in 2 of 5
   - Clip: by the steps before: `gemini-lpm-earth-approach` after `trans-earth-coast` in lunar-orbital-gemini 4, `earth-approach` after `moon-earth-coast` 1; [x] success, [x] glitch, [x] failure; cues no
   - On screen: crewed craft 4, probe 1
@@ -178,13 +178,13 @@ How to read an entry (all counted automatically, a first pass):
 
 ## Rendezvous and docking (17)
 
-- [x] **Docking** `docking`: 20 uses in 18 configurations, 9 programs (NASA/SOVIET) crew risk in 13 of 20
-  - Clip: by the steps before: `apollo-docking` after `transposition` in apollo, apollo-earth-orbit 5, `gemini-docking` after `target-approach` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 4, `langley-docking` after `langley-test-erat` in gemini-eor-earth-orbit 2, `docking` after `langley-test` 2, `docking` after `undocking` 2, `apollo-docking` after `lem-ascent-stage-test` in apollo, apollo-earth-orbit 2, `transtage-docking` after `target-approach` in circumlunar-gemini-earth-orbit 1, `soyuz-lok-docking-lk` after `lpu-jes-eng-res` in soyuz-7k-l3-earth-orbit 1, `soyuz-docking` after `target-approach` in soyuz-7k-ok 1; [x] success, [x] glitch, [x] failure; cues no
-  - On screen: crewed craft 20, crewed lander 14, launcher 5, EVA suit 4, stage or target 4
-  - Destinations: EARTH 13, MOON 7
-  - Programs: Gemini 4, Apollo 3, Apollo: Earth-orbit tests 2, Gemini EOR 2
+- [x] **Docking** `docking`: 24 uses in 20 configurations, 9 programs (NASA/SOVIET) crew risk in 17 of 24
+  - Clip: by the steps before: `apollo-docking` after `transposition` in apollo, apollo-earth-orbit 5, `gemini-docking` after `target-approach` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 4, `docking` after `target-approach` 4, `langley-docking` after `langley-test-erat` in gemini-eor-earth-orbit 2, `docking` after `lunar-ascent` 2, `docking` after `undocking` 2, `apollo-docking` after `lem-ascent-stage-test` in apollo, apollo-earth-orbit 2, `transtage-docking` after `target-approach` in circumlunar-gemini-earth-orbit 1, `soyuz-lok-docking-lk` after `lpu-jes-eng-res` in soyuz-7k-l3-earth-orbit 1, `soyuz-docking` after `target-approach` in soyuz-7k-ok 1; [x] success, [x] glitch, [x] failure; cues no
+  - On screen: crewed craft 24, crewed lander 16, launcher 5, EVA suit 4, stage or target 4
+  - Destinations: EARTH 13, MOON 11
+  - Programs: Gemini 4, Gemini EOR 4, Apollo 3, Apollo: Earth-orbit tests 2
 - [x] **Undocking** `undocking`: 16 uses in 14 configurations, 8 programs (NASA/SOVIET) crew risk in 13 of 16
-  - Clip: by the steps before: `undocking` after `eva-7k-lok` 5, `apollo-undocking` after `lunar-orbit` in apollo, apollo-earth-orbit 3, `langley-cast-off` after `eva` in gemini-eor-earth-orbit 2, `transtage-undocking` after `high-orbit-injection` in circumlunar-gemini-earth-orbit 1, `soyuz-lok-undocking-lk` after `eva-7k-lok` in soyuz-7k-l3-earth-orbit 1, `undocking` after `lk-test` 1, `apollo-undocking` after `eva` in apollo, apollo-earth-orbit 1, `apollo-undocking` after `eva-in-meo` in apollo, apollo-earth-orbit 1, `soyuz-undocking` after `docking` in soyuz-7k-ok 1; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: by the steps before: `apollo-undocking` after `lunar-orbit` in apollo, apollo-earth-orbit 3, `undocking` after `eva-7k-lok` 3, `langley-cast-off` after `eva` in gemini-eor-earth-orbit 2, `undocking` after `eva-gemini-langley` 2, `transtage-undocking` after `high-orbit-injection` in circumlunar-gemini-earth-orbit 1, `soyuz-lok-undocking-lk` after `eva-7k-lok` in soyuz-7k-l3-earth-orbit 1, `undocking` after `lk-test` 1, `apollo-undocking` after `eva` in apollo, apollo-earth-orbit 1, `apollo-undocking` after `eva-in-meo` in apollo, apollo-earth-orbit 1, `soyuz-undocking` after `docking` in soyuz-7k-ok 1; [x] success, [x] glitch, [x] failure; cues no
   - On screen: crewed craft 16, crewed lander 14, launcher 1
   - Destinations: MOON 9, EARTH 7
   - Programs: Apollo 3, Apollo: Earth-orbit tests 2, Gemini EOR 2, Gemini EOR: Earth-orbit tests 2
@@ -193,17 +193,17 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: launcher 13, probe 13, orbiter 2
   - Destinations: VENUS 7, MARS 5, JUPITER 1, MERCURY 1
   - Programs: Venera lander 2, Mariner 10 1, Mariner 5 1, Mariner 6 1
+- [x] **Target approach** `target-approach`: 12 uses in 12 configurations, 5 programs (NASA/SOVIET) crew risk in 12 of 12
+  - Clip: by the steps before: `gemini-target-approach` after `earth-orbit` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 4, `target-approach` after `parking-orbit` 4, `soyuz-target-approach` after `earth-orbit` in soyuz-7k-ok 2, `transtage-target-approach` after `earth-orbit` in circumlunar-gemini-earth-orbit 1, `gemini-eor-tug-approach` after `earth-orbit` in gemini-eor-earth-orbit 1; [x] success, [x] glitch, [x] failure; cues no
+  - Also covers: `atv-target-approach` 5
+  - On screen: crewed craft 12, stage or target 4, crewed lander 3
+  - Destinations: EARTH 8, MOON 4
+  - Programs: Gemini 4, Gemini EOR 4, Soyuz 7K-OK 2, Circumlunar Gemini: Earth-orbit tests 1
 - [x] **Rendezvous** `rendezvous`: 9 uses in 8 configurations, 3 programs (NASA/SOVIET) crew risk in 7 of 9
   - Clip: by the steps before: `gemini-rendezvous` after `rendezvous-target-approach` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 4, `soyuz-rendezvous` after `joint-earth-orbital` in soyuz-7k-ok 2, `soyuz-lok-rendezvous` after `joint-earth-orbital` in soyuz-7k-l3-earth-orbit 1, `soyuz-rendezvous` after `rendezvous` in soyuz-7k-ok 1, `soyuz-rendezvous` after `crew-transfer` in soyuz-7k-ok 1; [x] success, [x] glitch, [x] failure; cues no
   - On screen: crewed craft 9
   - Destinations: EARTH 9
   - Programs: Gemini 4, Soyuz 7K-OK 3, Soyuz 7K-L3: Earth-orbit tests 1
-- [x] **Target approach** `target-approach`: 8 uses in 8 configurations, 4 programs (NASA/SOVIET) crew risk in 8 of 8
-  - Clip: by the steps before: `gemini-target-approach` after `earth-orbit` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 4, `soyuz-target-approach` after `earth-orbit` in soyuz-7k-ok 2, `transtage-target-approach` after `earth-orbit` in circumlunar-gemini-earth-orbit 1, `gemini-eor-tug-approach` after `earth-orbit` in gemini-eor-earth-orbit 1; [x] success, [x] glitch, [x] failure; cues no
-  - Also covers: `atv-target-approach` 5
-  - On screen: crewed craft 8, stage or target 4, crewed lander 1
-  - Destinations: EARTH 8
-  - Programs: Gemini 4, Soyuz 7K-OK 2, Circumlunar Gemini: Earth-orbit tests 1, Gemini EOR: Earth-orbit tests 1
 - [x] **Lander extraction** `extraction`: 5 uses in 5 configurations, 2 programs (NASA) crew risk in 5 of 5
   - Clip: `apollo-extraction`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: crewed craft 5, crewed lander 5, launcher 5
@@ -282,11 +282,11 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: crewed craft 17
   - Destinations: EARTH 17
   - Programs: Apollo: Earth-orbit tests 8, Vostok 2, Project Mercury 1
-- [x] **Spacewalk to the lander** `eva-7k-lok`: 13 uses in 6 configurations, 3 programs (NASA/SOVIET) crew risk in 13 of 13
-  - Clip: by the steps before: `crew-transfer` after `docking` 4, `soyuz-lok-eva-photo` after `eva-7k-lok` in soyuz-7k-l3-earth-orbit 2, `crew-transfer` after `lunar-orbit` 2, `soyuz-lok-eva-out` after `earth-orbital` in soyuz-7k-l3-earth-orbit 1, `soyuz-lok-transfer-to-lk` after `earth-orbit` in soyuz-7k-l3-earth-orbit 1, `soyuz-lok-transfer-from-lk` after `docking` in soyuz-7k-l3-earth-orbit 1, `crew-transfer` after `lk-test` 1, `crew-transfer` after `eva-7k-lok` 1; [x] success, [x] glitch, [x] failure; cues no
-  - On screen: EVA suit 13, crewed craft 13, crewed lander 10, launcher 2
-  - Destinations: MOON 8, EARTH 5
-  - Programs: Gemini EOR 2, Soyuz 7K-L3 lunar landing 2, Soyuz 7K-L3: Earth-orbit tests 2
+- [x] **Spacewalk to the lander** `eva-7k-lok`: 11 uses in 4 configurations, 2 programs (SOVIET) crew risk in 11 of 11
+  - Clip: by the steps before: `soyuz-lok-eva-photo` after `eva-7k-lok` in soyuz-7k-l3-earth-orbit 2, `crew-transfer` after `lunar-orbit` 2, `crew-transfer` after `docking` 2, `soyuz-lok-eva-out` after `earth-orbital` in soyuz-7k-l3-earth-orbit 1, `soyuz-lok-transfer-to-lk` after `earth-orbit` in soyuz-7k-l3-earth-orbit 1, `soyuz-lok-transfer-from-lk` after `docking` in soyuz-7k-l3-earth-orbit 1, `crew-transfer` after `lk-test` 1, `crew-transfer` after `eva-7k-lok` 1; [x] success, [x] glitch, [x] failure; cues no
+  - On screen: EVA suit 11, crewed craft 11, crewed lander 8, launcher 2
+  - Destinations: MOON 6, EARTH 5
+  - Programs: Soyuz 7K-L3 lunar landing 2, Soyuz 7K-L3: Earth-orbit tests 2
 - [x] **Extended experiments in orbit** `advanced-experiments-earth-orbit`: 8 uses in 4 configurations, 4 programs (NASA/SOVIET) **(early-era)**, uncrewed, later seasons in 8 of 8
   - Clip: by the steps before: `advanced-experiments-earth-orbit` after `None` 4, `sputnik-1-advanced-experiments-earth-orbit` after `None` in sputnik-1 2, `explorer-1-advanced-experiments-earth-orbit` after `None` in explorer-1 2; [x] success, [x] glitch, [x] failure; cues no
   - On screen: satellite 8
@@ -308,10 +308,10 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: EVA suit 6, crewed craft 3, crewed lander 3
   - Destinations: EARTH 6
   - Programs: LK-700: Earth-orbit tests 1, Soyuz 7K-OK 1
-- [x] **Spacewalk to the lander** `eva-gemini-langley`: 4 uses in 3 configurations, 2 programs (NASA) crew risk in 4 of 4
-  - Clip: by the steps before: `crew-transfer` after `lunar-orbit` 2, `gemini-eor-transfer-out` after `earth-orbit` in gemini-eor-earth-orbit 1, `crew-transfer` after `langley-test` 1; [x] success, [x] glitch, [x] failure; cues no
-  - On screen: EVA suit 4, crewed craft 4, crewed lander 4
-  - Destinations: MOON 3, EARTH 1
+- [x] **Spacewalk to the lander** `eva-gemini-langley`: 5 uses in 3 configurations, 2 programs (NASA) crew risk in 5 of 5
+  - Clip: by the steps before: `crew-transfer` after `lunar-orbit` 2, `crew-transfer` after `docking` 2, `gemini-eor-transfer-out` after `earth-orbit` in gemini-eor-earth-orbit 1; [x] success, [x] glitch, [x] failure; cues no
+  - On screen: EVA suit 5, crewed craft 5, crewed lander 5
+  - Destinations: MOON 4, EARTH 1
   - Programs: Gemini EOR 2, Gemini EOR: Earth-orbit tests 1
 - [x] **First moonwalk** `eva-i`: 4 uses in 2 configurations, 1 program (NASA) crewed in 4 of 4
   - Clip: `apollo-moonwalk`; [x] success, [x] glitch, [x] failure; cues no
@@ -359,58 +359,58 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: EARTH 1
   - Programs: Apollo: Earth-orbit tests 1
 
-## Moon (34)
+## Moon (32)
 
-- [x] **Trans-lunar injection** `tli`: 39 uses in 39 configurations, 16 programs (NASA/SOVIET) crew risk in 18 of 39
-  - Clip: by the steps before: `tpi` after `parking-orbit` 16, `tpi` after `deployment` 12, `gemini-lpm-tli` after `parking-orbit` in lunar-orbital-gemini 4, `apollo-tli` after `earth-orbit` in apollo, apollo-earth-orbit 4, `apollo-tli` after `parking-orbit` in apollo, apollo-earth-orbit 3; [x] success, [x] glitch, [x] failure; cues no
-  - On screen: launcher 29, crewed craft 24, crewed lander 10, probe 7, probe lander 2, orbiter 1
-  - Destinations: MOON 39
+- [x] **Trans-lunar injection** `tli`: 43 uses in 43 configurations, 17 programs (NASA/SOVIET) crew risk in 22 of 43
+  - Clip: by the steps before: `tpi` after `parking-orbit` 18, `tpi` after `deployment` 10, `gemini-lpm-tli` after `parking-orbit` in lunar-orbital-gemini 4, `apollo-tli` after `earth-orbit` in apollo, apollo-earth-orbit 4, `tpi` after `docking` 4, `apollo-tli` after `parking-orbit` in apollo, apollo-earth-orbit 3; [x] success, [x] glitch, [x] failure; cues no
+  - On screen: launcher 29, crewed craft 28, crewed lander 12, probe 7, probe lander 2, orbiter 1
+  - Destinations: MOON 43
   - Programs: Apollo 7, Soyuz 7K-L3 lunar landing 6, Gemini Direct Ascent 5, LK-700 Direct Ascent 5
-- [x] **Coast to the Earth** `trans-earth-coast`: 27 uses in 27 configurations, 5 programs (NASA/SOVIET) crew risk in 12 of 27
-  - Clip: by the steps before: `trans-earth-coast` after `tei` 10, `trans-earth-coast` after `lunar-flyby` 6, `apollo-tec` after `tei` in apollo, apollo-earth-orbit 5, `gemini-lpm-tec` after `lunar-flyby` in lunar-orbital-gemini 2, `gemini-lpm-tec` after `tei` in lunar-orbital-gemini 2, `apollo-tec` after `lunar-slingshot` in apollo, apollo-earth-orbit 2; [x] success, [x] glitch, [x] failure; cues no
-  - On screen: crewed craft 22, crewed lander 5
-  - Destinations: MOON 27
+- [x] **Coast to the Earth** `trans-earth-coast`: 31 uses in 31 configurations, 6 programs (NASA/SOVIET) crew risk in 16 of 31
+  - Clip: by the steps before: `trans-earth-coast` after `tei` 13, `trans-earth-coast` after `lunar-flyby` 7, `apollo-tec` after `tei` in apollo, apollo-earth-orbit 5, `gemini-lpm-tec` after `lunar-flyby` in lunar-orbital-gemini 2, `gemini-lpm-tec` after `tei` in lunar-orbital-gemini 2, `apollo-tec` after `lunar-flyby` in apollo, apollo-earth-orbit 2; [x] success, [x] glitch, [x] failure; cues no
+  - On screen: crewed craft 26, crewed lander 5
+  - Destinations: MOON 31
   - Programs: Apollo 7, Soyuz 7K-L3 lunar landing 6, Gemini Direct Ascent 5, LK-700 Direct Ascent 5
-- [x] **Coast to the Moon** `trans-lunar-coast`: 27 uses in 27 configurations, 5 programs (NASA/SOVIET) crew risk in 12 of 27
-  - Clip: by the steps before: `trans-lunar-coast` after `tli` 16, `gemini-lpm-tlc` after `tli` in lunar-orbital-gemini 4, `apollo-tlc-csm` after `tli` in apollo, apollo-earth-orbit 4, `apollo-tlc` `extraction` earlier in apollo, apollo-earth-orbit 3; [x] success, [x] glitch, [x] failure; cues no
-  - On screen: crewed craft 22, crewed lander 10, launcher 6
-  - Destinations: MOON 27
+- [x] **Coast to the Moon** `trans-lunar-coast`: 31 uses in 31 configurations, 6 programs (NASA/SOVIET) crew risk in 16 of 31
+  - Clip: by the steps before: `trans-lunar-coast` after `tli` 20, `gemini-lpm-tlc` after `tli` in lunar-orbital-gemini 4, `apollo-tlc-csm` after `tli` in apollo, apollo-earth-orbit 4, `apollo-tlc` `extraction` earlier in apollo, apollo-earth-orbit 3; [x] success, [x] glitch, [x] failure; cues no
+  - On screen: crewed craft 26, crewed lander 12, launcher 6
+  - Destinations: MOON 31
   - Programs: Apollo 7, Soyuz 7K-L3 lunar landing 6, Gemini Direct Ascent 5, LK-700 Direct Ascent 5
-- [x] **Lunar orbit** `lunar-orbit`: 23 uses in 21 configurations, 8 programs (NASA/SOVIET) crew risk in 11 of 23
-  - Clip: by the steps before: `lunar-orbit` after `loi` 10, `apollo-lunar-orbit` `extraction` earlier in apollo, apollo-earth-orbit 3, `lunar-orbit` after `lunar-approach` 2, `gemini-lpm-lunar-orbit` after `loi` in lunar-orbital-gemini 2, `apollo-lunar-orbit-csm` after `loi` in apollo, apollo-earth-orbit 2, `lunar-orbit` after `earth-orbit` 2, `lunar-orbit` after `lunar-orbit` 2; [x] success, [x] glitch, [x] failure; cues no
-  - On screen: crewed craft 18, crewed lander 10, launcher 6, orbiter 1, probe 1
+- [x] **Lunar orbit** `lunar-orbit`: 23 uses in 22 configurations, 8 programs (NASA/SOVIET) crew risk in 12 of 23
+  - Clip: by the steps before: `lunar-orbit` after `loi` 13, `apollo-lunar-orbit` `extraction` earlier in apollo, apollo-earth-orbit 3, `lunar-orbit` after `lunar-approach` 2, `gemini-lpm-lunar-orbit` after `loi` in lunar-orbital-gemini 2, `apollo-lunar-orbit-csm` after `loi` in apollo, apollo-earth-orbit 2, `lunar-orbit` after `lunar-orbit` 1; [x] success, [x] glitch, [x] failure; cues no
+  - On screen: crewed craft 18, crewed lander 10, launcher 5, orbiter 1, probe 1
   - Destinations: MOON 23
-  - Programs: Apollo 5, Soyuz 7K-L3 lunar landing 4, Gemini Direct Ascent 3, LK-700 Direct Ascent 3
-- [x] **Lunar approach** `lunar-approach`: 19 uses in 19 configurations, 13 programs (NASA/SOVIET) crew risk in 5 of 19
-  - Clip: by the steps before: `lunar-approach` after `earth-moon-coast` 9, `lunar-approach` after `trans-lunar-coast` 6, `apollo-lunar-approach-csm` after `trans-lunar-coast` in apollo, apollo-earth-orbit 2, `transtage-lunar-approach` after `earth-moon-coast` in circumlunar-gemini 1, `gemini-lunar-approach` `approach-and-docking` earlier in circumlunar-gemini 1; [x] success, [x] glitch, [x] failure; cues no
-  - On screen: crewed craft 10, launcher 4, probe 4, crewed lander 2, probe lander 2, orbiter 1
-  - Destinations: MOON 19
+  - Programs: Apollo 5, Soyuz 7K-L3 lunar landing 4, Gemini Direct Ascent 3, Gemini EOR 3
+- [x] **Lunar orbit insertion** `loi`: 20 uses in 20 configurations, 6 programs (NASA/SOVIET) crew risk in 15 of 20
+  - Clip: by the steps before: `loi` after `trans-lunar-coast` 13, `apollo-loi` `extraction` earlier in apollo, apollo-earth-orbit 3, `gemini-lpm-loi` after `trans-lunar-coast` in lunar-orbital-gemini 2, `apollo-loi-csm` after `trans-lunar-coast` in apollo, apollo-earth-orbit 2; [x] success, [x] glitch, [x] failure; cues no
+  - On screen: crewed craft 17, crewed lander 10, launcher 4
+  - Destinations: MOON 20
+  - Programs: Apollo 5, Soyuz 7K-L3 lunar landing 4, Gemini Direct Ascent 3, Gemini EOR 3
+- [x] **Lunar approach** `lunar-approach`: 20 uses in 20 configurations, 14 programs (NASA/SOVIET) crew risk in 6 of 20
+  - Clip: by the steps before: `lunar-approach` after `earth-moon-coast` 9, `lunar-approach` after `trans-lunar-coast` 7, `apollo-lunar-approach-csm` after `trans-lunar-coast` in apollo, apollo-earth-orbit 2, `transtage-lunar-approach` after `earth-moon-coast` in circumlunar-gemini 1, `gemini-lunar-approach` `approach-and-docking` earlier in circumlunar-gemini 1; [x] success, [x] glitch, [x] failure; cues no
+  - On screen: crewed craft 11, launcher 4, probe 4, crewed lander 2, probe lander 2, orbiter 1
+  - Destinations: MOON 20
   - Programs: Apollo 2, Circumlunar Gemini 2, Gemini Direct Ascent 2, LK-700 Direct Ascent 2
-- [x] **Lunar orbit insertion** `loi`: 17 uses in 17 configurations, 5 programs (NASA/SOVIET) crew risk in 12 of 17
-  - Clip: by the steps before: `loi` after `trans-lunar-coast` 10, `apollo-loi` `extraction` earlier in apollo, apollo-earth-orbit 3, `gemini-lpm-loi` after `trans-lunar-coast` in lunar-orbital-gemini 2, `apollo-loi-csm` after `trans-lunar-coast` in apollo, apollo-earth-orbit 2; [x] success, [x] glitch, [x] failure; cues no
-  - On screen: crewed craft 14, crewed lander 8, launcher 4
-  - Destinations: MOON 17
-  - Programs: Apollo 5, Soyuz 7K-L3 lunar landing 4, Gemini Direct Ascent 3, LK-700 Direct Ascent 3
-- [x] **Lunar flyby** `lunar-flyby`: 17 uses in 17 configurations, 10 programs (NASA/SOVIET) crew risk in 6 of 17
-  - Clip: by the steps before: `lunar-flyby` after `lunar-approach` 8, `lunar-flyby` after `earth-moon-coast` 3, `gemini-lpm-lunar-flyby` after `trans-lunar-coast` in lunar-orbital-gemini 2, `apollo-lunar-flyby` after `lunar-approach` in apollo, apollo-earth-orbit 2, `transtage-lunar-flyby` after `lunar-approach` in circumlunar-gemini 1, `gemini-lunar-flyby` `approach-and-docking` earlier in circumlunar-gemini 1; [x] success, [x] glitch, [x] failure; cues no
-  - On screen: crewed craft 12, probe 3, crewed lander 2
-  - Destinations: MOON 17
+- [x] **Trans-Earth injection** `tei`: 20 uses in 20 configurations, 6 programs (NASA/SOVIET) crew risk in 15 of 20
+  - Clip: by the steps before: `tei` after `lunar-orbit` 6, `tei` after `undocking` 4, `apollo-tei` after `lem-jettison` in apollo, apollo-earth-orbit 3, `gemini-lpm-tei` after `lunar-orbit` in lunar-orbital-gemini 2, `tei` after `ascent` 2, `apollo-tei` after `lunar-orbit` in apollo, apollo-earth-orbit 2, `tei` after `blok-d-separation` 1; [x] success, [x] glitch, [x] failure; cues no
+  - On screen: crewed craft 17, crewed lander 3
+  - Destinations: MOON 20
+  - Programs: Apollo 5, Soyuz 7K-L3 lunar landing 4, Gemini Direct Ascent 3, Gemini EOR 3
+- [x] **Lunar flyby** `lunar-flyby`: 18 uses in 18 configurations, 11 programs (NASA/SOVIET) crew risk in 7 of 18
+  - Clip: by the steps before: `lunar-flyby` after `lunar-approach` 7, `lunar-flyby` after `earth-moon-coast` 3, `gemini-lpm-lunar-flyby` after `trans-lunar-coast` in lunar-orbital-gemini 2, `apollo-lunar-flyby` after `lunar-approach` in apollo, apollo-earth-orbit 2, `lunar-flyby` after `blok-d-separation` 2, `transtage-lunar-flyby` after `lunar-approach` in circumlunar-gemini 1, `gemini-lunar-flyby` `approach-and-docking` earlier in circumlunar-gemini 1; [x] success, [x] glitch, [x] failure; cues no
+  - On screen: crewed craft 13, probe 3, crewed lander 2
+  - Destinations: MOON 18
   - Programs: Apollo 2, Circumlunar Gemini 2, Gemini Direct Ascent 2, LK-700 Direct Ascent 2
-- [x] **Trans-Earth injection** `tei`: 17 uses in 17 configurations, 5 programs (NASA/SOVIET) crew risk in 12 of 17
-  - Clip: by the steps before: `tei` after `lunar-orbit` 6, `apollo-tei` after `lem-jettison` in apollo, apollo-earth-orbit 3, `gemini-lpm-tei` after `lunar-orbit` in lunar-orbital-gemini 2, `tei` after `ascent` 2, `apollo-tei` after `lunar-orbit` in apollo, apollo-earth-orbit 2, `tei` after `undocking` 2; [x] success, [x] glitch, [x] failure; cues no
-  - On screen: crewed craft 14, crewed lander 3
-  - Destinations: MOON 17
-  - Programs: Apollo 5, Soyuz 7K-L3 lunar landing 4, Gemini Direct Ascent 3, LK-700 Direct Ascent 3
 - [x] **Coast to the Moon** `earth-moon-coast`: 14 uses in 14 configurations, 12 programs (NASA/SOVIET) crew risk in 2 of 14
   - Clip: by the steps before: `trans-lunar-coast` after `tli` 12, `transtage-tlc` after `ignition-and-separation` in circumlunar-gemini 1, `gemini-tlc` `approach-and-docking` earlier in circumlunar-gemini 1; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 7, crewed craft 4, probe lander 2, orbiter 1
   - Destinations: MOON 14
   - Programs: Circumlunar Gemini 2, Soyuz 7K-L1 circumlunar 2, Luna 15 1, Luna 17 1
-- [x] **Ascent and rendezvous** `langley-test`: 8 uses in 2 configurations, 1 program (NASA) crew risk in 8 of 8
-  - Clip: `lunar-ascent`; [x] success, [x] glitch, [x] failure; cues no
-  - On screen: EVA suit 8, crewed craft 8, crewed lander 8
-  - Destinations: MOON 8
-  - Programs: Gemini EOR 2
+- [x] **Powered descent** `powered-descent`: 7 uses in 7 configurations, 4 programs (NASA/SOVIET) crew risk in 7 of 7
+  - Clip: by the steps before: `apollo-powered-descent` after `undocking` in apollo, apollo-earth-orbit 3, `powered-descent` after `lunar-orbit` 2, `powered-descent` after `langley-test-lld` 2; [x] success, [x] glitch, [x] failure; cues no
+  - On screen: crewed craft 6, crewed lander 6, EVA suit 2
+  - Destinations: MOON 7
+  - Programs: Apollo 3, Gemini EOR 2, Gemini Direct Ascent 1, LK-700 Direct Ascent 1
 - [x] **LK engine test** `lk-test`: 6 uses in 4 configurations, 2 programs (SOVIET) crew risk in 5 of 6
   - Clip: by the steps before: `lk-engine-test` after `earth-orbit` in soyuz-7k-l3-earth-orbit 1, `lk-engine-test-undock` after `eva-7k-lok` in soyuz-7k-l3-earth-orbit 1, `lk-engine-test-check` after `lk-test` in soyuz-7k-l3-earth-orbit 1, `lander-engine-test` after `eva-7k-lok` 1, `lander-engine-test` after `lk-test` 1, `lander-engine-test` after `lk-descent` 1; [x] success, [x] glitch, [x] failure; cues no
   - On screen: crewed lander 6, crewed craft 5, launcher 3
@@ -421,31 +421,31 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: crewed craft 5, crewed lander 5
   - Destinations: MOON 3, EARTH 2
   - Programs: Apollo 3, Apollo: Earth-orbit tests 2
+- [x] **Lunar ascent** `lunar-ascent`: 5 uses in 5 configurations, 2 programs (NASA) crew risk in 5 of 5
+  - Clip: by the steps before: `apollo-lunar-ascent` after `lunar-liftoff` in apollo, apollo-earth-orbit 2, `apollo-lunar-ascent` after `powered-descent` in apollo, apollo-earth-orbit 1, `lunar-ascent` after `powered-descent` 1, `lunar-ascent` after `lunar-liftoff` 1; [x] success, [x] glitch, [x] failure; cues no
+  - On screen: crewed craft 5, crewed lander 5, EVA suit 2
+  - Destinations: MOON 5
+  - Programs: Apollo 3, Gemini EOR 2
+- [x] **Lunar liftoff** `lunar-liftoff`: 5 uses in 5 configurations, 4 programs (NASA/SOVIET) crew risk in 5 of 5
+  - Clip: by the steps before: `lunar-liftoff` after `lunar-surface-activities` 3, `apollo-lunar-liftoff` after `eva-ii` in apollo, apollo-earth-orbit 2; [x] success, [x] glitch, [x] failure; cues no
+  - On screen: crewed craft 4, crewed lander 4, EVA suit 1
+  - Destinations: MOON 5
+  - Programs: Apollo 2, Gemini Direct Ascent 1, Gemini EOR 1, LK-700 Direct Ascent 1
+- [x] **On the surface** `lunar-surface-activities`: 5 uses in 3 configurations, 3 programs (NASA/SOVIET) crew risk in 5 of 5
+  - Clip: `moonwalk`; [x] success, [x] glitch, [x] failure; cues no
+  - On screen: EVA suit 5, crewed lander 4, crewed craft 2
+  - Destinations: MOON 5
+  - Programs: Gemini Direct Ascent 1, Gemini EOR 1, LK-700 Direct Ascent 1
 - [x] **Coast to the Earth** `moon-earth-coast`: 5 uses in 5 configurations, 4 programs (NASA/SOVIET) crew risk in 2 of 5
   - Clip: by the steps before: `trans-earth-coast` after `lunar-flyby` 3, `trans-earth-coast` after `ascent-from-lunar-surface` 1, `gemini-tec` after `lunar-flyby` in circumlunar-gemini 1; [x] success, [x] glitch, [x] failure; cues no
   - On screen: crewed craft 3, probe 2
   - Destinations: MOON 5
   - Programs: Soyuz 7K-L1 circumlunar 2, Circumlunar Gemini 1, Luna 15 1, Zond 5 1
-- [x] **Powered descent** `powered-descent`: 5 uses in 5 configurations, 3 programs (NASA/SOVIET) crew risk in 5 of 5
-  - Clip: by the steps before: `apollo-powered-descent` after `undocking` in apollo, apollo-earth-orbit 3, `powered-descent` after `lunar-orbit` 2; [x] success, [x] glitch, [x] failure; cues no
-  - On screen: crewed craft 4, crewed lander 4
-  - Destinations: MOON 5
-  - Programs: Apollo 3, Gemini Direct Ascent 1, LK-700 Direct Ascent 1
-- [x] **Lunar liftoff** `lunar-liftoff`: 4 uses in 4 configurations, 3 programs (NASA/SOVIET) crew risk in 4 of 4
-  - Clip: by the steps before: `lunar-liftoff` after `lunar-surface-activities` 2, `apollo-lunar-liftoff` after `eva-ii` in apollo, apollo-earth-orbit 2; [x] success, [x] glitch, [x] failure; cues no
-  - On screen: crewed craft 3, crewed lander 3
-  - Destinations: MOON 4
-  - Programs: Apollo 2, Gemini Direct Ascent 1, LK-700 Direct Ascent 1
-- [x] **On the surface** `lunar-surface-activities`: 4 uses in 2 configurations, 2 programs (NASA/SOVIET) crew risk in 4 of 4
-  - Clip: `moonwalk`; [x] success, [x] glitch, [x] failure; cues no
-  - On screen: EVA suit 4, crewed lander 3, crewed craft 1
-  - Destinations: MOON 4
-  - Programs: Gemini Direct Ascent 1, LK-700 Direct Ascent 1
-- [x] **Lunar ascent** `lunar-ascent`: 3 uses in 3 configurations, 1 program (NASA) crew risk in 3 of 3
-  - Clip: `apollo-lunar-ascent`; [x] success, [x] glitch, [x] failure; cues no
-  - On screen: crewed craft 3, crewed lander 3
-  - Destinations: MOON 3
-  - Programs: Apollo 3
+- [x] **Lander deployment** `langley-test-lld`: 4 uses in 4 configurations, 2 programs (NASA) crew risk in 4 of 4
+  - Clip: by the steps before: `undocking` after `eva-gemini-langley` 2, `langley-deployment` after `eva-gemini-langley` in gemini-eor-earth-orbit 1, `langley-deployment` after `eva` in gemini-eor-earth-orbit 1; [x] success, [x] glitch, [x] failure; cues no
+  - On screen: EVA suit 4, crewed craft 4, crewed lander 4
+  - Destinations: EARTH 2, MOON 2
+  - Programs: Gemini EOR 2, Gemini EOR: Earth-orbit tests 2
 - [x] **Surface operations** `lunar-surface-operations-robotic`: 3 uses in 2 configurations, 2 programs (SOVIET) uncrewed
   - Clip: by the steps before: `luna-sampler` after `landing` in luna-15 1, `lunokhod-deploy` after `landing` in luna-17 1, `lunokhod-drive` after `lunar-surface-operations-robotic` in luna-17 1; [x] success, [x] glitch, [x] failure; cues yes
   - On screen: probe lander 2, rover 2, probe 1
@@ -463,11 +463,6 @@ How to read an entry (all counted automatically, a first pass):
   - Programs: Gemini Direct Ascent: Earth-orbit tests 2
 - [x] **Restart and ascent test** `langley-test-erat`: 2 uses in 2 configurations, 1 program (NASA) crew risk in 2 of 2
   - Clip: `langley-restart`; [x] success, [x] glitch, [x] failure; cues no
-  - On screen: EVA suit 2, crewed craft 2, crewed lander 2
-  - Destinations: EARTH 2
-  - Programs: Gemini EOR: Earth-orbit tests 2
-- [x] **Lander deployment** `langley-test-lld`: 2 uses in 2 configurations, 1 program (NASA) crew risk in 2 of 2
-  - Clip: `langley-deployment`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: EVA suit 2, crewed craft 2, crewed lander 2
   - Destinations: EARTH 2
   - Programs: Gemini EOR: Earth-orbit tests 2
@@ -501,11 +496,11 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: probe 2
   - Destinations: MOON 2
   - Programs: Luna 2 1, Ranger 3 1
-- [x] **Around the Moon** `lunar-slingshot`: 2 uses in 2 configurations, 1 program (NASA) crewed in 1 of 2
-  - Clip: `apollo-lunar-flyby`; [x] success, [x] glitch, [x] failure; cues no
-  - On screen: crewed craft 2
+- [x] **Lunar landing** `lunar-landing`: 2 uses in 2 configurations, 2 programs (NASA) crew risk in 1 of 2
+  - Clip: by the steps before: `surveyor-landing` after `lunar-approach` in surveyor 1, `lunar-landing` after `powered-descent` 1; [x] success, [x] glitch, [x] failure; cues yes
+  - On screen: EVA suit 1, crewed craft 1, crewed lander 1, probe lander 1
   - Destinations: MOON 2
-  - Programs: Apollo 2
+  - Programs: Gemini EOR 1, Surveyor 1
 - [x] **Liftoff from the Moon** `ascent-from-lunar-surface`: 1 use in 1 configuration, 1 program (SOVIET) uncrewed
   - Clip: `luna-liftoff`; [x] success, [x] glitch, [x] failure; cues yes
   - On screen: probe 1
@@ -526,11 +521,6 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: crewed lander 1, launcher 1
   - Destinations: EARTH 1
   - Programs: Soyuz 7K-L3: Earth-orbit tests 1
-- [x] **Lunar landing** `lunar-landing`: 1 use in 1 configuration, 1 program (NASA) uncrewed
-  - Clip: `surveyor-landing`; [x] success, [x] glitch, [x] failure; cues yes
-  - On screen: probe lander 1
-  - Destinations: MOON 1
-  - Programs: Surveyor 1
 
 ## Planets and deep space (35)
 
@@ -710,36 +700,36 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: VENUS 1
   - Programs: Pioneer Venus Multiprobe 1
 
-## Earth orbit (15)
+## Earth orbit (16)
 
-- [x] **Deployment** `deployment`: 224 uses in 179 configurations, 53 programs (NASA/SOVIET) **(early-era)**, crew risk in 123 of 224
-  - Clip: by the steps before: `deployment` after `ascent` 54, `gemini-deployment` after `ascent` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 18, `soyuz-deployment` after `ascent` in soyuz-7k-ok 17, `apollo-deployment` after `ascent` in apollo, apollo-earth-orbit 14, `soyuz-lok-deployment` after `ascent` in soyuz-7k-l3-earth-orbit 12, `voskhod-deployment` after `ascent` in voskhod 11, `lk-700-deployment` after `ascent` in lk-700-earth-orbit 11, `apollo-deployment` after `insertion` in apollo, apollo-earth-orbit 11, `soyuz-lok-blok-d-deployment` after `deployment` in soyuz-7k-l3-earth-orbit behind `soyuz-7k-l3-lok` 10, `vostok-deployment` after `ascent` in vostok, korabl-sputnik-2 9, `mercury-deployment` after `ascent` in mercury 7, `soyuz-l1-deployment` after `ascent` in soyuz-7k-l1-earth-orbit 6, `deployment` after `deployment` 6, `agena-deployment` after `ascent` in gemini behind `atv` 4, `gemini-lpm-deployment` after `ascent` in lunar-orbital-gemini 4, `deployment` after `insertion` 4, `soyuz-deployment` after `insertion` in soyuz-7k-ok 4, `apollo-deployment` after `deployment` in apollo, apollo-earth-orbit 3, `sputnik-1-deployment` after `ascent` in sputnik-1 2, `explorer-1-deployment` after `ascent` in explorer-1 2, `transtage-deployment` after `ascent` in circumlunar-gemini-earth-orbit 2, `gemini-da-deployment` after `ascent` in gemini-direct-ascent-earth-orbit 2, `gemini-eor-deployment` after `insertion` in gemini-eor-earth-orbit 2, `transtage-deployment` after `ascent` in circumlunar-gemini behind `transtage` 2, `sputnik-2-deployment` after `ascent` in sputnik-2 1, `gemini-deployment` `deployment` earlier in circumlunar-gemini-earth-orbit 1, `gemini-lpm-deployment` after `ascent` in lunar-orbital-gemini-earth-orbit 1, `soyuz-lok-blok-d-deployment-lk` after `ascent` in soyuz-7k-l3-earth-orbit behind `soyuz-7k-l3-lok` 1, `tug-deployment` after `ascent` in gemini-eor-earth-orbit behind `atv` 1, `gemini-deployment` after `ascent` in circumlunar-gemini 1, `deployment` after `ascent` in apollo, apollo-earth-orbit behind `atv` 1; [x] success, [x] glitch, [x] failure; cues yes
-  - Also covers: `atv-deployment` 14, `deployment-a` 1, `deployment-b` 1, `gemini-a-deployment` 4, `gemini-b-deployment` 4, `lk-700-deployment` 9, `soyuz-7k-l3-lok-deployment` 11, `soyuz-7k-ok-deployment` 19, `spc-a-deployment` 2, `spc-b-deployment` 2, `transtage-deployment` 2
-  - On screen: launcher 222, crewed craft 165, crewed lander 29, probe 21, satellite 11, stage or target 5
-  - Destinations: EARTH 152, MOON 56, VENUS 7, MARS 5
+- [x] **Deployment** `deployment`: 218 uses in 179 configurations, 53 programs (NASA/SOVIET) **(early-era)**, crew risk in 122 of 218
+  - Clip: by the steps before: `deployment` after `ascent` 54, `gemini-deployment` after `ascent` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 18, `soyuz-deployment` after `ascent` in soyuz-7k-ok 17, `apollo-deployment` after `ascent` in apollo, apollo-earth-orbit 14, `soyuz-lok-deployment` after `ascent` in soyuz-7k-l3-earth-orbit 12, `voskhod-deployment` after `ascent` in voskhod 11, `lk-700-deployment` after `ascent` in lk-700-earth-orbit 11, `apollo-deployment` after `insertion` in apollo, apollo-earth-orbit 11, `soyuz-lok-blok-d-deployment` after `deployment` in soyuz-7k-l3-earth-orbit behind `soyuz-7k-l3-lok` 10, `vostok-deployment` after `ascent` in vostok, korabl-sputnik-2 9, `mercury-deployment` after `ascent` in mercury 7, `soyuz-l1-deployment` after `ascent` in soyuz-7k-l1-earth-orbit 6, `agena-deployment` after `ascent` in gemini behind `atv` 4, `gemini-lpm-deployment` after `ascent` in lunar-orbital-gemini 4, `deployment` after `insertion` 4, `soyuz-deployment` after `insertion` in soyuz-7k-ok 4, `apollo-deployment` after `deployment` in apollo, apollo-earth-orbit 3, `sputnik-1-deployment` after `ascent` in sputnik-1 2, `explorer-1-deployment` after `ascent` in explorer-1 2, `transtage-deployment` after `ascent` in circumlunar-gemini-earth-orbit 2, `gemini-da-deployment` after `ascent` in gemini-direct-ascent-earth-orbit 2, `gemini-eor-deployment` after `insertion` in gemini-eor-earth-orbit 2, `transtage-deployment` after `ascent` in circumlunar-gemini behind `transtage` 2, `sputnik-2-deployment` after `ascent` in sputnik-2 1, `gemini-deployment` `deployment` earlier in circumlunar-gemini-earth-orbit 1, `gemini-lpm-deployment` after `ascent` in lunar-orbital-gemini-earth-orbit 1, `soyuz-lok-blok-d-deployment-lk` after `ascent` in soyuz-7k-l3-earth-orbit behind `soyuz-7k-l3-lok` 1, `tug-deployment` after `ascent` in gemini-eor-earth-orbit behind `atv` 1, `gemini-deployment` after `ascent` in circumlunar-gemini 1, `deployment` after `ascent` in apollo, apollo-earth-orbit behind `atv` 1; [x] success, [x] glitch, [x] failure; cues yes
+  - Also covers: `atv-deployment` 10, `deployment-a` 1, `deployment-b` 1, `gemini-a-deployment` 4, `gemini-b-deployment` 4, `lk-700-deployment` 9, `soyuz-7k-l3-lok-deployment` 11, `soyuz-7k-ok-deployment` 19, `spc-a-deployment` 2, `spc-b-deployment` 2, `transtage-deployment` 2
+  - On screen: launcher 216, crewed craft 159, crewed lander 29, probe 21, satellite 11, stage or target 5
+  - Destinations: EARTH 152, MOON 50, VENUS 7, MARS 5
   - Programs: Apollo: Earth-orbit tests 17, Soyuz 7K-OK 16, Gemini 15, LK-700: Earth-orbit tests 11
-- [x] **Earth orbit** `earth-orbit`: 161 uses in 84 configurations, 19 programs (NASA/SOVIET) **(early-era)**, crew risk in 124 of 161, later seasons in 2 of 161
-  - Clip: by the steps before: `earth-orbit` after `earth-orbit` 28, `apollo-earth-orbit` after `deployment` in apollo, apollo-earth-orbit 22, `apollo-earth-orbit` after `earth-orbit` in apollo, apollo-earth-orbit 17, `soyuz-earth-orbit` after `deployment` in soyuz-7k-ok 17, `gemini-earth-orbit` after `deployment` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 16, `earth-orbit` after `deployment` 10, `voskhod-earth-orbit` after `deployment` in voskhod 9, `soyuz-lok-earth-orbit-lk` after `deployment` in soyuz-7k-l3-earth-orbit 5, `gemini-earth-orbit` after `earth-orbit` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 3, `gemini-eor-earth-orbit` after `deployment` in gemini-eor-earth-orbit 3, `sputnik-1-earth-orbit` after `deployment` in sputnik-1 2, `explorer-1-earth-orbit` after `deployment` in explorer-1 2, `earth-orbit` after `None` 2, `gemini-earth-orbit` after `deployment` in circumlunar-gemini-earth-orbit 2, `gemini-da-earth-orbit` after `deployment` in gemini-direct-ascent-earth-orbit 2, `transtage-earth-orbit` after `deployment` in circumlunar-gemini behind `transtage` 2, `earth-orbit` after `undocking` 2, `apollo-earth-orbit` after `reentry-preparations` in apollo, apollo-earth-orbit 2, `sputnik-2-earth-orbit` after `deployment` in sputnik-2 1, `gemini-earth-orbit` after `eva` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 1, `gemini-earth-orbit` after `orbit-insertion` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 1, `gemini-high-orbit` after `high-orbit-injection` in circumlunar-gemini-earth-orbit 1, `gemini-high-orbit-return` after `retrofire` in circumlunar-gemini-earth-orbit 1, `gemini-lpm-earth-orbit` after `deployment` in lunar-orbital-gemini-earth-orbit 1, `gemini-lpm-earth-orbit` after `orbit-insertion` in lunar-orbital-gemini-earth-orbit 1, `lk-earth-orbit` after `lk-lander-deployment` in soyuz-7k-l3-earth-orbit 1, `lk-high-orbit` after `lpu-jes-eng-res` in soyuz-7k-l3-earth-orbit 1, `lk-700-earth-orbit` after `deployment` in lk-700-earth-orbit 1, `gemini-earth-orbit` after `deployment` in circumlunar-gemini 1, `apollo-earth-orbit` after `lem-jettison` in apollo, apollo-earth-orbit 1, `apollo-earth-orbit` after `splashdown` in apollo, apollo-earth-orbit 1, `apollo-earth-orbit` after `modules-separation` in apollo, apollo-earth-orbit 1, `soyuz-earth-orbit` after `earth-orbit` in soyuz-7k-ok 1; [x] success, [x] glitch, [x] failure; cues yes
-  - Also covers: `earth-orbit-a` 2, `gemini-a-earth-orbit` 4, `gemini-b-earth-orbit` 4, `transtage-earth-orbit` 2
-  - On screen: crewed craft 140, crewed lander 25, satellite 13, launcher 7, stage or target 3
-  - Destinations: EARTH 120, MOON 41
+- [x] **Earth orbit** `earth-orbit`: 131 uses in 84 configurations, 19 programs (NASA/SOVIET) **(early-era)**, crew risk in 90 of 131, later seasons in 2 of 131
+  - Clip: by the steps before: `apollo-earth-orbit` after `deployment` in apollo, apollo-earth-orbit 22, `apollo-earth-orbit` after `earth-orbit` in apollo, apollo-earth-orbit 17, `soyuz-earth-orbit` after `deployment` in soyuz-7k-ok 17, `gemini-earth-orbit` after `deployment` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 16, `earth-orbit` after `deployment` 10, `voskhod-earth-orbit` after `deployment` in voskhod 9, `soyuz-lok-earth-orbit-lk` after `deployment` in soyuz-7k-l3-earth-orbit 5, `gemini-earth-orbit` after `earth-orbit` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 3, `gemini-eor-earth-orbit` after `deployment` in gemini-eor-earth-orbit 3, `sputnik-1-earth-orbit` after `deployment` in sputnik-1 2, `explorer-1-earth-orbit` after `deployment` in explorer-1 2, `earth-orbit` after `None` 2, `gemini-earth-orbit` after `deployment` in circumlunar-gemini-earth-orbit 2, `gemini-da-earth-orbit` after `deployment` in gemini-direct-ascent-earth-orbit 2, `transtage-earth-orbit` after `deployment` in circumlunar-gemini behind `transtage` 2, `apollo-earth-orbit` after `reentry-preparations` in apollo, apollo-earth-orbit 2, `sputnik-2-earth-orbit` after `deployment` in sputnik-2 1, `gemini-earth-orbit` after `eva` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 1, `gemini-earth-orbit` after `orbit-insertion` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 1, `gemini-high-orbit` after `high-orbit-injection` in circumlunar-gemini-earth-orbit 1, `gemini-high-orbit-return` after `retrofire` in circumlunar-gemini-earth-orbit 1, `gemini-lpm-earth-orbit` after `deployment` in lunar-orbital-gemini-earth-orbit 1, `gemini-lpm-earth-orbit` after `orbit-insertion` in lunar-orbital-gemini-earth-orbit 1, `lk-earth-orbit` after `lk-lander-deployment` in soyuz-7k-l3-earth-orbit 1, `lk-high-orbit` after `lpu-jes-eng-res` in soyuz-7k-l3-earth-orbit 1, `lk-700-earth-orbit` after `deployment` in lk-700-earth-orbit 1, `gemini-earth-orbit` after `deployment` in circumlunar-gemini 1, `apollo-earth-orbit` after `lem-jettison` in apollo, apollo-earth-orbit 1, `apollo-earth-orbit` after `splashdown` in apollo, apollo-earth-orbit 1, `apollo-earth-orbit` after `modules-separation` in apollo, apollo-earth-orbit 1, `soyuz-earth-orbit` after `earth-orbit` in soyuz-7k-ok 1; [x] success, [x] glitch, [x] failure; cues yes
+  - Also covers: `atv-earth-orbit` 4, `earth-orbit-a` 2, `gemini-a-earth-orbit` 4, `gemini-b-earth-orbit` 4, `transtage-earth-orbit` 2
+  - On screen: crewed craft 110, crewed lander 13, satellite 13, launcher 11, stage or target 3
+  - Destinations: EARTH 120, MOON 11
   - Programs: Apollo: Earth-orbit tests 17, Gemini 13, Soyuz 7K-OK 12, Voskhod 8
-- [x] **Modules separation** `modules-separation`: 83 uses in 74 configurations, 10 programs (NASA/SOVIET) **(early-era)**, crew risk in 22 of 83
-  - Clip: by the steps before: `soyuz-modules-separation` after `retrofire` in soyuz-7k-ok 18, `lk-700-modules-separation` after `retrofire-jettison` in lk-700-earth-orbit 11, `apollo-modules-separation` after `de-orbit-burn` in apollo, apollo-earth-orbit 10, `soyuz-lok-orbital-module-separation` after `retrofire-jettison` in soyuz-7k-l3-earth-orbit 8, `vostok-modules-separation` after `retrofire` in vostok, korabl-sputnik-2 7, `apollo-modules-separation` after `earth-orbit` in apollo, apollo-earth-orbit 5, `soyuz-l1-modules-separation` after `retrofire` in soyuz-7k-l1-earth-orbit 4, `equipment-section-separation` after `earth-orbit` in gemini-eor, gemini-eor-earth-orbit 4, `soyuz-lok-modules-separation` after `retrofire` in soyuz-7k-l3-earth-orbit 3, `soyuz-l1-modules-separation` after `reentry-preparations` in soyuz-7k-l1-earth-orbit 2, `soyuz-lok-modules-separation` after `reentry-preparations` in soyuz-7k-l3-earth-orbit 2, `gemini-eor-modules-separation` after `undocking` in gemini-eor-earth-orbit 2, `modules-separation` after `reentry-preparations` 2, `soyuz-orbital-module-separation` after `retrofire-jettison` in soyuz-7k-ok 2, `vostok-modules-separation` after `retrofire-jettison` in vostok, korabl-sputnik-2 1, `voskhod-modules-separation` after `retrofire` in voskhod 1, `soyuz-modules-separation` after `reentry-preparations` in soyuz-7k-ok 1; [x] success, [x] glitch, [x] failure; cues no
+- [x] **Modules separation** `modules-separation`: 94 uses in 85 configurations, 12 programs (NASA/SOVIET) **(early-era)**, crew risk in 29 of 94
+  - Clip: by the steps before: `soyuz-modules-separation` after `retrofire` in soyuz-7k-ok 18, `modules-separation` after `reentry-preparations` 13, `lk-700-modules-separation` after `retrofire-jettison` in lk-700-earth-orbit 11, `apollo-modules-separation` after `de-orbit-burn` in apollo, apollo-earth-orbit 10, `soyuz-lok-orbital-module-separation` after `retrofire-jettison` in soyuz-7k-l3-earth-orbit 8, `vostok-modules-separation` after `retrofire` in vostok, korabl-sputnik-2 7, `apollo-modules-separation` after `earth-orbit` in apollo, apollo-earth-orbit 5, `soyuz-l1-modules-separation` after `retrofire` in soyuz-7k-l1-earth-orbit 4, `equipment-section-separation` after `earth-approach` in gemini-eor, gemini-eor-earth-orbit 4, `soyuz-lok-modules-separation` after `retrofire` in soyuz-7k-l3-earth-orbit 3, `soyuz-l1-modules-separation` after `reentry-preparations` in soyuz-7k-l1-earth-orbit 2, `soyuz-lok-modules-separation` after `reentry-preparations` in soyuz-7k-l3-earth-orbit 2, `gemini-eor-modules-separation` after `undocking` in gemini-eor-earth-orbit 2, `soyuz-orbital-module-separation` after `retrofire-jettison` in soyuz-7k-ok 2, `vostok-modules-separation` after `retrofire-jettison` in vostok, korabl-sputnik-2 1, `voskhod-modules-separation` after `retrofire` in voskhod 1, `soyuz-modules-separation` after `reentry-preparations` in soyuz-7k-ok 1; [x] success, [x] glitch, [x] failure; cues no
   - Also covers: `spc-a-modules-separation` 1
-  - On screen: crewed craft 72, crewed lander 11
-  - Destinations: EARTH 77, MOON 6
+  - On screen: crewed craft 78, crewed lander 16
+  - Destinations: EARTH 77, MOON 17
   - Programs: Soyuz 7K-OK 16, Apollo: Earth-orbit tests 14, LK-700: Earth-orbit tests 11, Soyuz 7K-L3: Earth-orbit tests 11
 - [x] **Earth orbit** `earth-orbital`: 43 uses in 28 configurations, 6 programs (SOVIET) **(early-era)**, crew risk in 38 of 43
   - Clip: by the steps before: `soyuz-earth-orbit` after `earth-orbital` in soyuz-7k-ok 15, `lk-700-earth-orbit` after `deployment` in lk-700-earth-orbit 8, `soyuz-lok-earth-orbit` after `deployment` in soyuz-7k-l3-earth-orbit 6, `soyuz-earth-orbit` after `earth-orbit` in soyuz-7k-ok 6, `soyuz-l1-earth-orbit` after `deployment` in soyuz-7k-l1-earth-orbit 4, `soyuz-earth-orbit` after `deployment` in soyuz-7k-ok 2, `vostok-earth-orbit` after `deployment` in vostok, korabl-sputnik-2 1, `voskhod-rendezvous` after `earth-orbit` in voskhod 1; [x] success, [x] glitch, [x] failure; cues yes
   - On screen: crewed craft 35, crewed lander 8
   - Destinations: EARTH 43
   - Programs: LK-700: Earth-orbit tests 8, Soyuz 7K-OK 8, Soyuz 7K-L3: Earth-orbit tests 6, Soyuz 7K-L1: Earth-orbit tests 4
-- [x] **Parking orbit** `parking-orbit`: 23 uses in 23 configurations, 5 programs (NASA/SOVIET) crew risk in 15 of 23
-  - Clip: by the steps before: `earth-orbit` after `deployment` 16, `gemini-lpm-earth-orbit` after `deployment` in lunar-orbital-gemini 4, `apollo-earth-orbit-stack` after `deployment` in apollo, apollo-earth-orbit 3; [x] success, [x] glitch, [x] failure; cues yes
-  - On screen: crewed craft 18, launcher 12, crewed lander 10
-  - Destinations: MOON 23
-  - Programs: Soyuz 7K-L3 lunar landing 6, Gemini Direct Ascent 5, LK-700 Direct Ascent 5, Lunar-orbit Gemini 4
+- [x] **Parking orbit** `parking-orbit`: 29 uses in 29 configurations, 7 programs (NASA/SOVIET) crew risk in 20 of 29
+  - Clip: by the steps before: `earth-orbit` after `deployment` 22, `gemini-lpm-earth-orbit` after `deployment` in lunar-orbital-gemini 4, `apollo-earth-orbit-stack` after `deployment` in apollo, apollo-earth-orbit 3; [x] success, [x] glitch, [x] failure; cues yes
+  - On screen: crewed craft 24, launcher 14, crewed lander 12
+  - Destinations: MOON 29
+  - Programs: Soyuz 7K-L3 lunar landing 6, Gemini Direct Ascent 5, LK-700 Direct Ascent 5, Gemini EOR 4
 - [x] **Orbit insertion** `insertion`: 21 uses in 20 configurations, 4 programs (NASA/SOVIET) crew risk in 16 of 21
   - Clip: by the steps before: `apollo-insertion` after `ascent` in apollo, apollo-earth-orbit 11, `insertion` after `ascent` 4, `soyuz-insertion` after `ascent` in soyuz-7k-ok 4, `gemini-eor-insertion` after `ascent` in gemini-eor-earth-orbit 2; [x] success, [x] glitch, [x] failure; cues yes
   - On screen: launcher 21, crewed craft 20, crewed lander 5
@@ -756,6 +746,11 @@ How to read an entry (all counted automatically, a first pass):
   - On screen: crewed craft 2, crewed lander 2
   - Destinations: EARTH 4
   - Programs: LK-700: Earth-orbit tests 2, Soyuz 7K-L1: Earth-orbit tests 2
+- [x] **Blok D separation** `blok-d-separation`: 3 uses in 3 configurations, 1 program (SOVIET) crew risk in 1 of 3
+  - Clip: `undocking`; [x] success, [x] glitch, [x] failure; cues no
+  - On screen: crewed craft 3, launcher 3
+  - Destinations: MOON 3
+  - Programs: Soyuz 7K-L3 lunar landing 3
 - [x] **High-orbit injection** `high-orbit-injection`: 2 uses in 2 configurations, 1 program (NASA) crewed in 1 of 2
   - Clip: by the steps before: `gemini-transtage-hoi` after `earth-orbit` 1, `gemini-transtage-docked-hoi` after `docking` in circumlunar-gemini-earth-orbit 1; [x] success, [x] glitch, [x] failure; cues no
   - On screen: crewed craft 2

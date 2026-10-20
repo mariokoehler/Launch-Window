@@ -2873,29 +2873,37 @@ first (login → action → scheduled resolution → result, end to end) before 
     comes back at nearly lunar-return speed (the heat-shield test; NASA did the same for Apollo on Apollo 4 and 6).
     The converter renames the step `high-orbit-injection` for that program (both its configurations), with its own
     text in `strings.json`. The pack hash changed.
-  - **Lunar-orbit Gemini's flybys pass the Moon (user, 2026-10-20).** BASPM gives both flybys (crewed and uncrewed) a
-    lunar orbit insertion and a lunar orbit but no burn home: the craft brakes into an orbit it never leaves, and the
-    flyby had almost as many chances to fail as the orbit flight (15 steps to 16). The converter puts one
-    `lunar-flyby` in the pair's place, with the lunar orbit's data (Zond 5 has the one step), and renumbers the steps
-    after it: 14 steps to the orbit flight's 16. The pack hash changed.
-  - **The Soviet flybys pass the Moon too (user, 2026-10-20).** BASPM gives Soyuz 7K-L3's two flybys a lunar orbit
-    insertion, a lunar orbit and a burn home around their `lunar-flyby` (an orbit flight in all but name), LK-700's a
-    burn home (`tei`) and the crewed one an insertion, and Soyuz 7K-L1's two `lunar-flyby` steps. The converter turns
-    the insertion into a `lunar-approach` (as LK-700's uncrewed flyby and the 7K-L1's already have), drops the orbit,
-    the burn home and the second pass, and moves a dropped step's prestige share to the flyby (LK-700's crewed: 5 %
-    from `tei`). The 7K-L1's uncrewed flyby ends in a second `descent` that holds the goal: it's the `recovery`, as on
-    the crewed one. Every 7K-L3 and LK-700 Moon flight (flybys, orbits, lander test, landings) approaches Earth twice,
-    the same step repeated: once now. The steps: 7K-L3 flyby 15, orbit 17; LK-700 flyby 15, orbit 16, landing 23;
-    7K-L1 flyby 16. Lunar-orbit Gemini's flybys keep their one step at the Moon (no approach). The pack hash changed.
+  - **Moon steps by BASPM's own names (user, 2026-10-20).** In the Moon programs BASPM's step TypeIDs and its
+    names for the steps disagree, and the names are right: Gemini EOR's four Moon flights type every step from
+    the parking orbit to the trans-Earth coast `EARTH_ORBIT` (the flybys and lunar orbits never seemed to leave
+    Earth), and their lander's descent, landing, liftoff and ascent `LANGLEY_TEST`; the 7K-L3's and LK-700's
+    reentry preparations and modules separation are both `EARTH-APPROACH`; their Moon approach is `LOI`, the
+    7K-L3's Blok D separation `LUNAR_ORBIT`, their slingshot `TEI`; lunar-orbit Gemini's flyby is `LOI` and its
+    slingshot `LUNAR_ORBIT`; the 7K-L1's slingshot a second `LUNAR_FLYBY`, its parking orbit a second
+    `DEPLOYMENT`, its uncrewed recovery a second `DESCENT`. The converter reads BASPM's English step names
+    (`step_names`, only to compare, nothing copied) and retypes the steps its `RETYPED` table lists, per program,
+    to our kinds; one new kind, `blok-d-separation`. The step names are BASPM's own view of each step, so they
+    decide.
+  - **A flyby passes the Moon in one step (user, 2026-10-20).** BASPM's flybys pass the Moon as two steps, the
+    flyby and the slingshot (Apollo's and Gemini EOR's by name, the others under other TypeIDs): one event, one
+    more chance to fail, and the flyby nearly as hard as the orbit flight (Apollo's 16 steps to 16). The converter
+    drops the slingshot, its prestige share to the flyby. Flyby against orbit flight, in steps: Apollo 15 to 16,
+    Gemini EOR 25 to 26, lunar-orbit Gemini 14 to 16 (no approach), direct-ascent Gemini 15 to 16 (unchanged),
+    LK-700 16 to 17, 7K-L3 17 to 18 (its flyby keeps the Blok D separation), 7K-L1 16 (no orbit flight). The
+    first version of this fix (earlier the same day, by TypeID) took the 7K-L3's and LK-700's two
+    `EARTH-APPROACH` steps for one step repeated and merged them; the names showed they were two steps, and both
+    are back. The free-return concept chip, which named the slingshot, names these flybys instead. The pack hash
+    changed.
   - **Crew risk where BASPM has none (user, 2026-10-20).** No step of five crewed configurations risks the crew:
     lunar-orbit Gemini's flyby and orbit flight and its propulsion-module test, direct-ascent Gemini's crewed test,
     and Soyuz 7K-L1's crewed flyby. The converter gives them their sister flights' risk: every step with the crew in
     it from the launch on for Gemini, from the countdown on for the 7K-L1.
-  - **Found 2026-10-20, not changed (the user's call):** Apollo's flyby has as many steps as its lunar orbit (16 each:
-    approach, flyby and `lunar-slingshot` against insertion, orbit and burn home). Gemini EOR's flyby and lunar orbit
-    never leave Earth orbit: the same 26 steps each, ending in nine `earth-orbit` steps and the way home. Left as
-    BASPM has them: the 7K-L3 orbit's two `lunar-orbit` steps, the 7K-L1's two `deployment` steps (different data,
-    the second really the parking orbit), LK-700's landing's three `lunar-surface-activities`.
+  - **Left as BASPM has them:** the 7K-L3 orbit's two `lunar-orbit` steps (the second an inclination change,
+    the uncrewed one's a Blok D separation, now retyped), LK-700's landing's three `lunar-surface-activities`, and
+    smaller name mismatches that change no step's meaning (the 7K-L3's `descent-and-landing` named "Descent", the
+    LK-700's `descent-and-splashdown` named "Descent and landing"). Outside the Moon programs, Apollo's docking,
+    rendezvous, suborbital and uncrewed lunar module test type several steps `EARTH_ORBIT` that their names call
+    otherwise (a de-orbit burn, a descent, undocking, engine tests): not yet changed, the user's call.
   - **Gemini EOR comes home Gemini's way (user, 2026-10-16).** BASPM gives its six configurations with
     a way home the Soyuz order (retrofire, jettison, modules separation, or the last two alone). Gemini
     dropped its adapter's equipment section first, then fired the retros and dropped the retro section,

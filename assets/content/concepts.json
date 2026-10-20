@@ -127,7 +127,10 @@
       "programs": ["x-15", "mig-e-154"]},
     {"id": "free-return", "label": "Free return", "explainer": "free-return", "sheet": 1,
       "programs": ["zond-5", "soyuz-7k-l1", "circumlunar-gemini"],
-      "steps": ["lunar-slingshot"]},
+      "configurations": ["apollo-flyby", "apollo-uncrewed-flyby", "gemini-direct-ascent-flyby",
+        "gemini-direct-ascent-uncrewed-flyby", "gemini-eor-flyby", "lunar-orbital-gemini-flyby",
+        "lunar-orbital-gemini-uncrewed-flyby", "soyuz-7k-l3-flyby", "soyuz-7k-l3-uncrewed-flyby", "lk-700-flyby",
+        "lk-700-uncrewed-flyby"]},
     {"id": "lunar-reentry", "label": "Coming home from the Moon", "explainer": "free-return", "sheet": 2,
       "steps": ["earth-approach-and-reentry"],
       "goals": ["gemini-lunar-reentry-test-flown", "apollo-lunar-reentry-test-flown"]}

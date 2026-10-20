@@ -1979,6 +1979,10 @@
       "name": "LK separation",
       "description": "The LK separates from the rocket and is checked out in orbit."
     },
+    "blok-d-separation": {
+      "name": "Blok D separation",
+      "description": "The Blok D upper stage, its burns done, separates from the spacecraft."
+    },
     "lpu-jes-eng-res": {
       "name": "Landing gear jettison and restart",
       "description": "The LK drops its landing gear and restarts its engine, as it would to lift off from the Moon."
@@ -1994,10 +1998,6 @@
     "langley-test-erat": {
       "name": "Restart and ascent test",
       "description": "The lander restarts its engine and climbs as it would from the Moon."
-    },
-    "langley-test": {
-      "name": "Ascent and rendezvous",
-      "description": "The lander climbs back and meets the capsule in lunar orbit."
     },
     "lun-prop-mod-test": {
       "name": "Propulsion module burn",
@@ -2038,10 +2038,6 @@
     "lunar-flyby": {
       "name": "Lunar flyby",
       "description": "Swinging around the Moon, its gravity bending the path back toward the Earth."
-    },
-    "lunar-slingshot": {
-      "name": "Around the Moon",
-      "description": "Behind the Moon, out of radio contact, the craft swings around for home."
     },
     "loi": {
       "name": "Lunar orbit insertion",

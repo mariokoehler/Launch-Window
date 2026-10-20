@@ -216,9 +216,10 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   Lunar-orbit Gemini's too (user, 2026-10-20): the propulsion module makes the trans-lunar injection, the insertion
   and the burn home. Its flybys pass the Moon in one step now, BASPM's insertion and orbit replaced in the converter
   (`design.md` §5, M3): the pack hash changed, reset the dev data root, rebuild client and server together.
-  So do the Soviet flybys (7K-L3, LK-700, 7K-L1), approach and pass, and the 7K-L3's and LK-700's Moon flights approach
-  Earth once; five crewed configurations BASPM gave no crew risk have their sister flights' (user, 2026-10-20,
-  `design.md` §5, M3). The pack hash changed: reset the dev data root, rebuild client and server together.
+  The converter types the Moon programs' steps by BASPM's own step names where its TypeIDs disagree (`RETYPED`:
+  Gemini EOR's Moon flights now reach the Moon), every flyby drops BASPM's slingshot step (Apollo's too), and five crewed
+  configurations BASPM gave no crew risk have their sister flights' (user, 2026-10-20, `design.md` §5, M3). The pack
+  hash changed: reset the dev data root, rebuild client and server together.
 
 ## How we work
 
