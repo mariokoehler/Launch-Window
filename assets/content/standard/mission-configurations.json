@@ -157323,7 +157323,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "06-earth-orbit",
+            "id": "06-suborbital-flight",
             "componentInvolvements": [
               {
                 "componentId": "apollo-csm",
@@ -157367,7 +157367,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "07-reentry-preparations",
+            "id": "07-engine-test",
             "componentInvolvements": [
               {
                 "componentId": "apollo-csm",
@@ -157411,7 +157411,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "08-earth-orbit",
+            "id": "08-reentry-preparations",
             "componentInvolvements": [
               {
                 "componentId": "apollo-csm",
@@ -158116,7 +158116,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "06-earth-orbit",
+            "id": "06-suborbital-flight",
             "componentInvolvements": [
               {
                 "componentId": "apollo-csm",
@@ -158208,7 +158208,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "07-reentry-preparations",
+            "id": "07-engine-test",
             "componentInvolvements": [
               {
                 "componentId": "apollo-csm",
@@ -158296,7 +158296,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "08-earth-orbit",
+            "id": "08-reentry-preparations",
             "componentInvolvements": [
               {
                 "componentId": "apollo-csm",
@@ -160227,7 +160227,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "10-de-orbit-burn",
+            "id": "10-modules-separation",
             "componentInvolvements": [
               {
                 "componentId": "apollo-csm",
@@ -160972,7 +160972,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "08-earth-orbit",
+            "id": "08-lem-descent-stage-test",
             "componentInvolvements": [
               {
                 "componentId": "apollo-lunar-module",
@@ -161016,7 +161016,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "09-earth-orbit",
+            "id": "09-fire-in-the-hole",
             "componentInvolvements": [
               {
                 "componentId": "apollo-lunar-module",
@@ -161060,7 +161060,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "10-earth-orbit",
+            "id": "10-lem-ascent-stage-test",
             "componentInvolvements": [
               {
                 "componentId": "apollo-lunar-module",
@@ -162955,7 +162955,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "19-de-orbit-burn",
+            "id": "19-modules-separation",
             "componentInvolvements": [
               {
                 "componentId": "apollo-csm",
@@ -167653,7 +167653,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "09-duration-level-i",
+            "id": "09-duration-level-ii",
             "componentInvolvements": [
               {
                 "componentId": "apollo-csm",
@@ -169083,7 +169083,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "09-duration-level-i",
+            "id": "09-duration-level-ii",
             "componentInvolvements": [
               {
                 "componentId": "apollo-csm",
@@ -169190,7 +169190,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "10-duration-level-i",
+            "id": "10-duration-level-iii",
             "componentInvolvements": [
               {
                 "componentId": "apollo-csm",
@@ -170625,7 +170625,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "09-duration-level-i",
+            "id": "09-duration-level-ii",
             "componentInvolvements": [
               {
                 "componentId": "apollo-csm",
@@ -170732,7 +170732,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "10-duration-level-i",
+            "id": "10-duration-level-iii",
             "componentInvolvements": [
               {
                 "componentId": "apollo-csm",
@@ -170839,7 +170839,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "11-duration-level-i",
+            "id": "11-duration-level-iv",
             "componentInvolvements": [
               {
                 "componentId": "apollo-csm",
@@ -179888,7 +179888,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "15-earth-orbit",
+            "id": "15-rendezvous-target-approach",
             "componentInvolvements": [
               {
                 "componentId": "apollo-csm",
@@ -179972,7 +179972,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "16-earth-orbit",
+            "id": "16-rendezvous",
             "componentInvolvements": [
               {
                 "componentId": "apollo-csm",
@@ -180093,7 +180093,7 @@
             ]
           },
           {
-            "id": "17-earth-orbit",
+            "id": "17-spc-a-reentry-preparations",
             "componentInvolvements": [
               {
                 "componentId": "apollo-csm",
@@ -180181,7 +180181,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "18-earth-orbit",
+            "id": "18-spc-a-de-orbit-burn",
             "componentInvolvements": [
               {
                 "componentId": "apollo-csm",
@@ -180269,7 +180269,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "19-modules-separation",
+            "id": "19-spc-a-modules-separation",
             "componentInvolvements": [
               {
                 "componentId": "apollo-csm",
@@ -180357,7 +180357,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "20-reentry",
+            "id": "20-spc-a-reentry",
             "componentInvolvements": [
               {
                 "componentId": "apollo-csm",
@@ -180415,7 +180415,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "21-descent",
+            "id": "21-spc-a-descent",
             "componentInvolvements": [
               {
                 "componentId": "apollo-csm",
@@ -180495,7 +180495,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "22-splashdown",
+            "id": "22-spc-a-splashdown-and-recovery",
             "componentInvolvements": [
               {
                 "componentId": "apollo-csm",
@@ -180569,7 +180569,7 @@
             ]
           },
           {
-            "id": "23-earth-orbit",
+            "id": "23-spc-b-earth-orbit",
             "componentInvolvements": [
               {
                 "componentId": "apollo-csm",
@@ -180661,7 +180661,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "24-earth-orbit",
+            "id": "24-spc-b-reentry-preparations",
             "componentInvolvements": [
               {
                 "componentId": "apollo-csm",
@@ -180749,7 +180749,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "25-earth-orbit",
+            "id": "25-spc-b-de-orbit-burn",
             "componentInvolvements": [
               {
                 "componentId": "apollo-csm",
@@ -180837,7 +180837,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "26-modules-separation",
+            "id": "26-spc-b-modules-separation",
             "componentInvolvements": [
               {
                 "componentId": "apollo-csm",
@@ -180925,7 +180925,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "27-earth-orbit",
+            "id": "27-spc-b-reentry",
             "componentInvolvements": [
               {
                 "componentId": "apollo-csm",
@@ -180983,7 +180983,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "28-earth-orbit",
+            "id": "28-spc-b-descent",
             "componentInvolvements": [
               {
                 "componentId": "apollo-csm",
@@ -181063,7 +181063,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "29-earth-orbit",
+            "id": "29-spc-b-splashdown-and-recovery",
             "componentInvolvements": [
               {
                 "componentId": "apollo-csm",
@@ -182038,7 +182038,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "13-earth-orbit",
+            "id": "13-rendezvous-target-approach",
             "componentInvolvements": [
               {
                 "componentId": "apollo-csm",
@@ -182134,7 +182134,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "14-earth-orbit",
+            "id": "14-docking",
             "componentInvolvements": [
               {
                 "componentId": "apollo-csm",
@@ -182232,7 +182232,7 @@
             ]
           },
           {
-            "id": "15-earth-orbit",
+            "id": "15-undocking",
             "componentInvolvements": [
               {
                 "componentId": "apollo-csm",
@@ -182328,7 +182328,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "16-earth-orbit",
+            "id": "16-reentry-preparations",
             "componentInvolvements": [
               {
                 "componentId": "apollo-csm",
@@ -182416,7 +182416,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "17-earth-orbit",
+            "id": "17-de-orbit-burn",
             "componentInvolvements": [
               {
                 "componentId": "apollo-csm",

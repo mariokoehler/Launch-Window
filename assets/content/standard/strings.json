@@ -1963,6 +1963,14 @@
       "name": "Lunar module checkout",
       "description": "The crew powers up the lunar module and checks every system in Earth orbit."
     },
+    "lem-descent-stage-test": {
+      "name": "Descent engine firing",
+      "description": "The lunar module's descent engine fires in orbit, throttled as it would be for a landing."
+    },
+    "fire-in-the-hole": {
+      "name": "Fire in the hole",
+      "description": "The ascent engine lights while the two stages are still joined, as in an abort during a landing, and drives the ascent stage off the descent stage."
+    },
     "lem-ascent-stage-test": {
       "name": "Ascent stage test",
       "description": "The ascent stage fires and separates from the descent stage, as it would to leave the Moon."

@@ -565,6 +565,13 @@ leading to satellite navigation.
   drained the spin about its long axis, so within hours it was tumbling end over end, the flat spin in G4's notes:
   an early lesson in why a spinning craft must spin about its widest axis. **Not yet checked:** the whips' folding
   at launch and their release by the spin; check before a history note uses them.
+- **Apollo 5's "fire in the hole"** (found 2026-10-20, the uncrewed lunar module test's steps): the first lunar module,
+  LM-1, flew alone and without legs on a Saturn IB in January 1968. Its first descent-engine firing was cut short
+  seconds in by the guidance computer, which expected the thrust to build faster than it did; the controllers ran
+  the backup plan by hand: more descent-engine firings, then the "fire in the hole" staging, the ascent engine lit
+  while still bolted to the descent stage, as it would be in an abort during a landing, then an ascent-engine
+  firing alone. It went well enough that a second uncrewed lunar module flight was dropped. **Not yet checked:** the
+  first firing's length (about 4 s) and the cause of the cut-off; check before a history note uses them.
 - **Apollo's lunar module** (the replay's Apollo, 2026-10-18): about 7 m tall and 4.3 m across its legs; the descent
   stage wrapped in gold and amber Kapton foil against the Sun's heat, the ascent stage's faceted cabin on top with its
   two triangular windows, the docking tunnel on its roof (the commander flew the docking looking up through a small
@@ -2901,9 +2908,20 @@ first (login → action → scheduled resolution → result, end to end) before 
   - **Left as BASPM has them:** the 7K-L3 orbit's two `lunar-orbit` steps (the second an inclination change,
     the uncrewed one's a Blok D separation, now retyped), LK-700's landing's three `lunar-surface-activities`, and
     smaller name mismatches that change no step's meaning (the 7K-L3's `descent-and-landing` named "Descent", the
-    LK-700's `descent-and-splashdown` named "Descent and landing"). Outside the Moon programs, Apollo's docking,
-    rendezvous, suborbital and uncrewed lunar module test type several steps `EARTH_ORBIT` that their names call
-    otherwise (a de-orbit burn, a descent, undocking, engine tests): not yet changed, the user's call.
+    LK-700's `descent-and-splashdown` named "Descent and landing", Apollo's `deployment` named "Orbit insertion" or
+    "CSM deployment", the rover landing's second `eva-ii` named "Moon surface activities III").
+  - **Apollo's Earth-orbit flights by their names too (user, 2026-10-20).** `RETYPED` covers `apollo-earth-orbit`:
+    the suborbital flights' `earth-orbit`, `reentry-preparations` and `earth-orbit` are the suborbital flight, an SPS
+    test (`engine-test`) and the reentry preparations; the orbital flight's and the low-orbit lander test's second
+    `de-orbit-burn` is the modules separation; the long flights' duration levels past the first, all
+    `duration-level-i`, get their own levels; the uncrewed lunar module test's three `earth-orbit` firings are
+    Apollo 5's descent-engine firing, its "fire in the hole" and an ascent-engine firing (two new kinds,
+    `lem-descent-stage-test` and `fire-in-the-hole`, on the lander's engine-test and staging clips); the rendezvous'
+    approach, formation flight and both craft's ways home (`spc-a-`, `spc-b-`), and the docking flight's approach,
+    docking, undocking, reentry preparations and de-orbit burn were all `earth-orbit`. No step count changed. The
+    replay borrows Apollo's own clips where it has none (unconfirmed): `apollo-earth-orbit` for the suborbital
+    flight and the rendezvous' approach and formation flight (a clip with two CSMs would be new), `apollo-retrofire`
+    for the SPS test. The pack hash changed.
   - **Gemini EOR comes home Gemini's way (user, 2026-10-16).** BASPM gives its six configurations with
     a way home the Soyuz order (retrofire, jettison, modules separation, or the last two alone). Gemini
     dropped its adapter's equipment section first, then fired the retros and dropped the retro section,
