@@ -577,12 +577,16 @@ leading to satellite navigation.
   which left the ripple that looks like a breeze (NASA's account, 1993); the soil was hard a little way down and the
   pole went in only a short way. Aldrin thought he saw it blown over by the ascent engine at liftoff, and later crews
   planted theirs farther from the lander. The samples went home in aluminium rock boxes (the Apollo Lunar Sample
-  Return Container), sealed on the surface and carried up into the lander: Apollo 11's held 21.5 to 21.8 kg (NASA and
-  the Smithsonian give different figures). On Apollo 17 Cernan's hammer caught the rover's right rear fender
-  extension and broke it off; tape didn't hold in the dust, and the wheel showered the crew in dust until, overnight,
-  Houston worked out a new fender made of maps, tape and clamps from the cabin. The rover never went farther than the
-  crew could walk back. Sources: NASA's Apollo Lunar Surface Journal (Apollo 17's fender), the Smithsonian's rock box
-  records. **Not yet checked:** how deep Apollo 11's pole went; check before a history note uses it.
+  Return Container), sealed on the surface and carried up into the lander: Apollo 11 brought home 21.5 kg in 58
+  samples (NASA's curation paper; the Smithsonian's record for its box says 21.8 kg, a NASA poster 21.7). On Apollo
+  17, before the first drive, the hammer in Cernan's thigh pocket caught the rover's right rear fender and tore off
+  its extension; the tape repair failed in the dust on the drive back, and the wheel showered them until Houston
+  worked out a new fender overnight from four maps, tape and clamps from the cabin. A rover crew never drove farther
+  than they could walk back: the walk-back limit, about 10 km, was worked out from the suits' oxygen, cooling water
+  and batteries before each moonwalk and recalculated during it. Sources: NASA's Apollo Lunar Surface Journal
+  (Apollo 17's fender), J. H. Allton's sample curation paper (NASA JSC), the Smithsonian's rock box records, a Texas
+  Tech paper on the walk-back limit. **Not yet checked:** how deep Apollo 11's pole went; check before a history note
+  uses it.
 - **Apollo's lunar module** (the replay's Apollo, 2026-10-18): about 7 m tall and 4.3 m across its legs; the descent
   stage wrapped in gold and amber Kapton foil against the Sun's heat, the ascent stage's faceted cabin on top with its
   two triangular windows, the docking tunnel on its roof (the commander flew the docking looking up through a small
