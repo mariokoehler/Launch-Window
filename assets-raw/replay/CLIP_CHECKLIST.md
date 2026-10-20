@@ -181,7 +181,7 @@ How to read an entry (all counted automatically, a first pass):
 ## Rendezvous and docking (17)
 
 - [x] **Docking** `docking`: 25 uses in 21 configurations, 9 programs (NASA/SOVIET) crew risk in 25 of 25
-  - Clip: by the steps before: `apollo-docking` after `transposition` in apollo, apollo-earth-orbit 5, `gemini-docking` after `target-approach` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 4, `gemini-eor-tug-docking` after `target-approach` in gemini-eor 4, `langley-docking` after `langley-test-erat` in gemini-eor-earth-orbit 2, `langley-docking-moon` after `lunar-ascent` in gemini-eor 2, `apollo-docking-asc` after `lem-ascent-stage-test` in apollo-earth-orbit 2, `transtage-docking` after `target-approach` in circumlunar-gemini-earth-orbit 1, `soyuz-lok-docking-lk` after `lpu-jes-eng-res` in soyuz-7k-l3-earth-orbit 1, `soyuz-lok-docking-lk-moon` after `undocking` in soyuz-7k-l3 1, `soyuz-lok-docking-lk-moon` after `lunar-liftoff` in soyuz-7k-l3 1, `apollo-agena-docking` after `rendezvous-target-approach` in apollo-earth-orbit 1, `soyuz-docking` after `target-approach` in soyuz-7k-ok 1; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: by the steps before: `apollo-docking-sivb` after `transposition` in apollo, apollo-earth-orbit 5, `gemini-docking` after `target-approach` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 4, `gemini-eor-tug-docking` after `target-approach` in gemini-eor 4, `langley-docking` after `langley-test-erat` in gemini-eor-earth-orbit 2, `langley-docking-moon` after `lunar-ascent` in gemini-eor 2, `apollo-docking-asc` after `lem-ascent-stage-test` in apollo-earth-orbit 2, `transtage-docking` after `target-approach` in circumlunar-gemini-earth-orbit 1, `soyuz-lok-docking-lk` after `lpu-jes-eng-res` in soyuz-7k-l3-earth-orbit 1, `soyuz-lok-docking-lk-moon` after `undocking` in soyuz-7k-l3 1, `soyuz-lok-docking-lk-moon` after `lunar-liftoff` in soyuz-7k-l3 1, `apollo-agena-docking` after `rendezvous-target-approach` in apollo-earth-orbit 1, `soyuz-docking` after `target-approach` in soyuz-7k-ok 1; [x] success, [x] glitch, [x] failure; cues no
   - On screen: crewed craft 25, crewed lander 16, launcher 5, stage or target 5, EVA suit 4
   - Destinations: EARTH 14, MOON 11
   - Programs: Gemini 4, Gemini EOR 4, Apollo 3, Apollo: Earth-orbit tests 3
@@ -275,7 +275,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: EARTH 37
   - Programs: LK-700: Earth-orbit tests 6, Voskhod 4, Soyuz 7K-L3: Earth-orbit tests 3, Soyuz 7K-L1: Earth-orbit tests 2
 - [x] **Spacewalk** `eva`: 24 uses in 14 configurations, 4 programs (NASA/SOVIET) crew risk in 24 of 24
-  - Clip: by the steps before: `eva` after `earth-orbit` 4, `eva` after `scientific-experiments` 4, `gemini-eva-setup` after `earth-orbit` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 2, `gemini-eva-teardown` after `scientific-experiments` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 2, `gemini-eva-pair` after `rendezvous` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 2, `gemini-eva-out-docked` after `egress` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 2, `gemini-eva-photo-docked` after `eva` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 2, `gemini-eor-transfer-back` after `docking` in gemini-eor-earth-orbit 2, `voskhod-eva-out` after `earth-orbit` in voskhod 1, `voskhod-eva-in` after `scientific-experiments` in voskhod 1, `gemini-eor-transfer-out` after `btm-earth-orbit` in gemini-eor-earth-orbit 1, `eva` after `extraction` 1; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: by the steps before: `apollo-eva-out` after `earth-orbit` in apollo-earth-orbit 4, `apollo-eva-photo` after `scientific-experiments` in apollo-earth-orbit 4, `gemini-eva-setup` after `earth-orbit` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 2, `gemini-eva-teardown` after `scientific-experiments` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 2, `gemini-eva-pair` after `rendezvous` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 2, `gemini-eva-out-docked` after `egress` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 2, `gemini-eva-photo-docked` after `eva` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 2, `gemini-eor-transfer-back` after `docking` in gemini-eor-earth-orbit 2, `voskhod-eva-out` after `earth-orbit` in voskhod 1, `voskhod-eva-in` after `scientific-experiments` in voskhod 1, `gemini-eor-transfer-out` after `btm-earth-orbit` in gemini-eor-earth-orbit 1, `apollo-eva-lm` after `extraction` in apollo-earth-orbit 1; [x] success, [x] glitch, [x] failure; cues no
   - On screen: EVA suit 24, crewed craft 24, crewed lander 4, stage or target 4
   - Destinations: EARTH 24
   - Programs: Gemini 6, Apollo: Earth-orbit tests 5, Gemini EOR: Earth-orbit tests 2, Voskhod 1
@@ -301,7 +301,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: EARTH 8
   - Programs: Biosatellite 1, Explorer 1 1, Pegasus 1, Sputnik 1 1
 - [x] **Spacewalk and experiments** `scientific-experiments`: 7 uses in 7 configurations, 3 programs (NASA/SOVIET) crew risk in 7 of 7
-  - Clip: by the steps before: `eva` after `eva` 4, `gemini-eva-experiments` after `eva` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 2, `voskhod-eva-film` after `eva` in voskhod 1; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: by the steps before: `apollo-eva-rail` after `eva` in apollo-earth-orbit 4, `gemini-eva-experiments` after `eva` in gemini, circumlunar-gemini-earth-orbit, lunar-orbital-gemini-earth-orbit, gemini-direct-ascent-earth-orbit 2, `voskhod-eva-film` after `eva` in voskhod 1; [x] success, [x] glitch, [x] failure; cues no
   - On screen: EVA suit 7, crewed craft 7
   - Destinations: EARTH 7
   - Programs: Apollo: Earth-orbit tests 4, Gemini 2, Voskhod 1
@@ -361,7 +361,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: MOON 1
   - Programs: Apollo 1
 - [x] **Spacewalk in high orbit** `eva-in-meo`: 1 use in 1 configuration, 1 program (NASA) crew risk in 1 of 1
-  - Clip: `eva`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `apollo-eva-lm`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: EVA suit 1, crewed craft 1, crewed lander 1
   - Destinations: EARTH 1
   - Programs: Apollo: Earth-orbit tests 1
@@ -794,12 +794,12 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: EARTH 1
   - Programs: Apollo: Earth-orbit tests 1
 - [x] **Burn to high orbit** `injection-to-elliptical-meo`: 1 use in 1 configuration, 1 program (NASA) crew risk in 1 of 1
-  - Clip: `apollo-insertion`; [x] success, [x] glitch, [x] failure; cues yes
+  - Clip: `apollo-hoi`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: crewed craft 1, crewed lander 1, launcher 1
   - Destinations: EARTH 1
   - Programs: Apollo: Earth-orbit tests 1
 - [x] **High orbit** `meo`: 1 use in 1 configuration, 1 program (NASA) crew risk in 1 of 1
-  - Clip: `apollo-earth-orbit`; [x] success, [x] glitch, [x] failure; cues yes
+  - Clip: `apollo-high-orbit`; [x] success, [x] glitch, [x] failure; cues yes
   - On screen: crewed craft 1
   - Destinations: EARTH 1
   - Programs: Apollo: Earth-orbit tests 1

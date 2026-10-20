@@ -1,5 +1,13 @@
 {
   "rules": [
+    {"step": "injection-to-elliptical-meo", "programs": ["apollo-earth-orbit"], "clip": "apollo-hoi"},
+    {"step": "meo", "programs": ["apollo-earth-orbit"], "clip": "apollo-high-orbit"},
+    {"step": "eva", "programs": ["apollo-earth-orbit"], "later": "scientific-experiments", "clip": "apollo-eva-out"},
+    {"step": "scientific-experiments", "programs": ["apollo-earth-orbit"], "clip": "apollo-eva-rail"},
+    {"step": "eva", "programs": ["apollo-earth-orbit"], "after": "scientific-experiments", "clip": "apollo-eva-photo"},
+    {"step": "eva", "programs": ["apollo-earth-orbit"], "clip": "apollo-eva-lm"},
+    {"step": "eva-in-meo", "programs": ["apollo-earth-orbit"], "clip": "apollo-eva-lm"},
+    {"step": "docking", "programs": ["apollo", "apollo-earth-orbit"], "after": "transposition", "clip": "apollo-docking-sivb"},
     {"step": "launch-preparations", "programs": ["apollo-earth-orbit"], "later": "lem-descent-stage-test", "clip": "apollo-lm-launch-preparations"},
     {"step": "countdown", "programs": ["apollo-earth-orbit"], "later": "lem-descent-stage-test", "clip": "apollo-lm-countdown"},
     {"step": "launch", "programs": ["apollo-earth-orbit"], "later": "lem-descent-stage-test", "clip": "apollo-lm-launch"},

@@ -2090,7 +2090,20 @@ clips, the replay is meant to be watched like a short film, and the player can s
   in the lander's scenes (engine tests, staging, powered descent, landing, liftoff, moonwalks), in the docking
   close-up upside down, its tunnel to the CSM's probe (`ap-k-target`; the ascent stage alone after the Moon and at
   its jettison, `ap-k-target-asc`), in the transposition and extraction with the CSM and the S-IVB (`ap-t-stage`), and
-  on the lunar ascent's map climbing to the CSM. Still generic: the Earth-orbit spacewalks. Unconfirmed.
+  on the lunar ascent's map climbing to the CSM. Unconfirmed.
+- **Apollo's Earth-orbit tests as themselves (user, 2026-10-20):** the suborbital flights fly an arc, not an orbit
+  (`apollo-suborbital-flight`), their SPS test the burn, the reentry preparations after it a trim (`apollo-reentry-trim`,
+  the after-the-burn one). Apollo 5 (`a5-`, `apollo-lm-*`): the LM alone in its adapter under a nose cone, no CSM or tower;
+  the adapter's panels open and the LM backs out; alone on the map; its engine test and staging without legs, as LM-1
+  flew; the ascent stage's own test a shot of its own, and the ascent stage alone on the map after. The transposition,
+  docking and extraction in one scale (Moon flights too): the LM at the CSM's 39 px/m with its legs folded, the S-IVB 6.6 m
+  across (`apollo.jsx`'s `LMK`, `LM`), the first docking with the LM still on its S-IVB (`apollo-docking-sivb`); the second
+  docking the ascent stage alone. The high-orbit test's burn puts the CSM, still on its S-IVB, on the long ellipse
+  (`apollo-hoi`, no separation), its medium Earth orbit the coast round it. The spacewalks on the CSM's own hull, the hatch
+  on the command module's cone (`ap-e-capsule`): the spacewalk flights in three steps (out, along a handrail, a photo and
+  in), a lunar module test's one with the LM docked at the nose (`apollo-eva-lm`). The rendezvous flight's two CSMs close
+  in (`apollo-rendezvous*`), and the docking flight launches, meets, docks with and leaves the Agena target vehicle BASPM
+  gives it (`agena-*`, `apollo-agena-*`; user). Unconfirmed.
 - **Apollo's moonwalks as themselves (user, 2026-10-20; `flag.jsx`, `samples.jsx`, `rover.jsx`, the figure in
   `walker.jsx`):** the first (`eva-i` after the landing, `apollo-flag`) plants a flag, a plain cloth with no country's:
   down the ladder with the pole over the shoulder, two pushes into the ground, the cloth run out on its crossbar

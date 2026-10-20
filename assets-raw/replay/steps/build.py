@@ -1083,11 +1083,13 @@ STEPS = {
     # extraction (the CSM, the S-IVB), docking (the lander whole, or its ascent stage after the Moon), the ascent.
     "apollo-transposition": {
         "pad": False, "source": "transposition", "skin": "ap-", "before": ["dock.jsx", "moon.jsx", "apollo.jsx"],
+        "alias": {"n-descent": "ap-n-descent-folded"}, "vars": {"LMK": 1.32, "LM": [158, -290]},
         "success": (6.0, 3.0), "glitch": (6.4, 4.6), "failure": (6.4, 4.6),
         "times": [0.6, 1.6, 2.6, 3.4, 4.6, 5.9],
     },
     "apollo-extraction": {
         "pad": False, "source": "extraction", "skin": "ap-", "before": ["dock.jsx", "moon.jsx", "apollo.jsx"],
+        "alias": {"n-descent": "ap-n-descent-folded"}, "vars": {"LMK": 1.32, "LM": [158, -290]},
         "success": (5.6, 1.2), "glitch": (5.6, 2.2), "failure": (5.6, 2.6),
         "times": [0.5, 1.2, 1.9, 2.6, 3.6, 5.5],
     },
@@ -1967,7 +1969,7 @@ for _base in ("apollo-undocking", "apollo-docking-asc", "apollo-lem-jettison"):
 # Apollo's suborbital flights (2026-10-20, user): the arc up and down, not an orbit, then the SPS test as the burn; the
 # reentry preparations after it trim instead of turning again (as the 7K-L1's).
 variant_of("suborbital-flight", "apollo-suborbital-flight", {}, skin="ap-", before=["project-apollo.jsx", "motes.jsx"])
-variant_of("reentry-trim", "apollo-reentry-trim", {}, skin="ap-", before=["project-apollo.jsx", "motes.jsx"])
+variant_of("reentry-trim-burn", "apollo-reentry-trim", {}, skin="ap-", before=["project-apollo.jsx", "motes.jsx"])
 # The rendezvous flight's two CSMs (spacecraft A and B, as Gemini 6 and 7) on the map and close in; the docking flight's
 # CSM meeting, docking with and leaving the Agena target vehicle BASPM gives it (user, 2026-10-20: as BASPM).
 variant_of("gemini-rendezvous-target-approach", "apollo-rendezvous-target-approach", {}, skin="ap-")
@@ -1988,6 +1990,21 @@ variant_of("apollo-insertion", "apollo-lm-insertion", {"o-sat": "a5-o-sat-stack"
 variant_of("apollo-deployment", "apollo-lm-deployment", {"d-payload": "a5-d-payload", "d-stage": "a5-d-stage"})
 variant_of("apollo-earth-orbit", "apollo-lm-earth-orbit", {"o-sat": "a5-o-sat"})
 variant_of("apollo-earth-orbit", "apollo-lm-earth-orbit-asc", {"o-sat": "ap-o-sat-asc"})
+# The transposition, the docking and the extraction in one scale (2026-10-20, user): the transposition and the extraction
+# take the lander at the CSM's scale with its legs folded (apollo.jsx's LMK and LM, ap-n-descent-folded, the S-IVB 6.6 m
+# across); the docking after the transposition has the lander still on its S-IVB. The high-orbit test's burn puts the CSM,
+# still on its S-IVB, on the long ellipse (no separation: the transposition follows), and its medium Earth orbit coasts
+# round it. Its spacewalks (and the CSM-only flights') on the CSM's own hull, the hatch on the command module's cone, in
+# the LK-700's three steps: out on the tether, along a handrail and back, a photo and back in; a lunar module test's one
+# spacewalk with the LM docked at the nose (Apollo 9's picture), out and back in.
+variant_of("apollo-docking", "apollo-docking-sivb", {"k-target": "ap-k-target-sivb"})
+variant_of("gemini-da-hoi", "apollo-hoi", {"o-sat": "ap-o-sat-stack", "o-streak": "ap-o-streak-stack"}, skin="ap-")
+variant_of("gemini-da-high-orbit", "apollo-high-orbit", {"o-sat": "ap-o-sat"}, skin="ap-")
+AP_EVA = {"r-capsule": "ap-e-capsule", "e-box": "ap-e-box"}
+variant_of("gemini-eva-out", "apollo-eva-out", AP_EVA, skin="ap-")
+variant_of("lk-700-eva-rail", "apollo-eva-rail", {**AP_EVA, "e-rail": "ap-e-rail-solo"}, skin="ap-")
+variant_of("lk-700-eva-photo", "apollo-eva-photo", AP_EVA, skin="ap-")
+variant_of("eva", "apollo-eva-lm", {**AP_EVA, "r-capsule": "ap-e-capsule-lm"}, skin="ap-")
 A5_N = {"n-descent": "a5-n-descent", "n-ascent": "a5-n-ascent"}
 variant_of("apollo-lander-engine-test", "apollo-lm-engine-test", A5_N)
 variant_of("apollo-lander-staging", "apollo-lm-staging", A5_N)

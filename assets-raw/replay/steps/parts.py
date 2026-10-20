@@ -2780,6 +2780,77 @@ def lm_parts():
     layer("a5-n-descent", no_legs, LC)
     layer("a5-n-ascent", lm_ascent(), LC)
     layer("a5-none", "", LC)
+    # Apollo's Earth-orbit tests in one scale (2026-10-20, user). The transposition and the extraction (apollo.jsx) drew the
+    # lander at 0.42 of the lander's frame and the S-IVB 3.6 m across, against the CSM at 39 px/m; now the lander is at the
+    # docking close-up's 1.32 (the CSM's scale), its legs folded as they rode in the adapter, and the S-IVB 6.6 m across,
+    # its front past the lander's feet, the adapter's panels from it to the service module's base.
+    sk = 39
+    st_x0, st_half = 1200, 3.3 * sk
+    layer("ap-t-stage", f'<rect x="{st_x0}" y="{470 - st_half:.1f}" width="{17.8 * sk:.1f}" height="{2 * st_half:.1f}" fill="#ffffff" '
+                        f'{LINE} stroke-width="3"/>'
+                        + "".join(f'<path d="M{st_x0 + f * 17.8 * sk:.1f} {470 - st_half:.1f} L{st_x0 + f * 17.8 * sk:.1f} '
+                                  f'{470 + st_half:.1f}" fill="none" {LINE} stroke-width="2" opacity="0.5"/>' for f in (0.25, 0.7)),
+          (st_x0 + 8.9 * sk, 470))
+    sm_half = 1.95 * sk
+    for name, sgn in (("ap-t-panel-top", -1), ("ap-t-panel-bottom", 1)):
+        y_st, y_sm = 470 + sgn * st_half, 470 + sgn * sm_half
+        layer(name, f'<path d="M{st_x0} {y_st:.1f} L948 {y_sm:.1f} L948 {y_sm - sgn * 8:.1f} L{st_x0} {y_st - sgn * 10:.1f} Z" '
+                    f'fill="#ffffff" {LINE} stroke-width="3"/>', (st_x0, y_st - sgn * 5))
+    layer("ap-t-flash-sep", "".join(f'<circle cx="948" cy="{470 + sg * sm_half:.1f}" r="9" fill="{GOLD}"/>' for sg in (-1, 1)), (948, 470))
+    layer("ap-t-flash-lm", "".join(f'<circle cx="{st_x0 - 4}" cy="{470 + sg * 70:.1f}" r="9" fill="{GOLD}"/>' for sg in (-1, 1)),
+          (st_x0 - 4, 470))
+    # The lander with its legs folded, in the lander's frame: the struts up along the descent stage, the pads at its top.
+    full = lm_descent()
+    folded_legs = (f'<path d="M906 790 L884 730 M1014 790 L1036 730" fill="none" {LINE} stroke-width="4"/>'
+                   f'<ellipse cx="882" cy="726" rx="12" ry="5" fill="#ffffff" {LINE} stroke-width="3"/>'
+                   f'<ellipse cx="1038" cy="726" rx="12" ry="5" fill="#ffffff" {LINE} stroke-width="3"/>')
+    folded = folded_legs + full[full.index('<path d="M946 792 L974 792'):]
+    layer("ap-n-descent-folded", folded, LC)
+    # The first docking (after the transposition): the lander still on the S-IVB, its legs folded, the stage beyond it, in
+    # the docking close-up's frame (ap-k-target's: the lander upside down, its tunnel's top at the target's mouth).
+    flip = "translate(960 540) scale(1.32 -1.32) translate(-960 -640)"
+    sivb_lf = 1 / 1.32 * sk                                   # the S-IVB in the lander's frame, px/m
+    sivb = (f'<rect x="{960 - 3.3 * sivb_lf:.1f}" y="826" width="{6.6 * sivb_lf:.1f}" height="{17.8 * sivb_lf:.1f}" fill="#ffffff" '
+            f'{LINE} stroke-width="2.4"/>'
+            + "".join(f'<path d="M{960 - 3.3 * sivb_lf:.1f} {826 + f * 17.8 * sivb_lf:.1f} L{960 + 3.3 * sivb_lf:.1f} '
+                      f'{826 + f * 17.8 * sivb_lf:.1f}" fill="none" {LINE} stroke-width="1.6" opacity="0.5"/>' for f in (0.25, 0.7)))
+    tc = (KM[0] + KK * (540 - 426), KM[1])
+    layer("ap-k-target-sivb", KT(tc, 90, f'<g transform="{flip}">{sivb}{folded}{lm_ascent()}</g>'), KM)
+    # The high-orbit test's burn to the elliptical orbit: the S-IVB still under the CSM (ap-o-sat-stack), its flame at the
+    # J-2's bell.
+    K2 = 2.2 * AP_L
+    bell = 560 - 1.5 * K2 + 10.6 * K2 * 0.25
+    dy = 560 + 0.6 * (bell - 426) - 600
+    layer("ap-o-streak-stack", f'<g transform="translate(0 {dy:.1f})"><path d="M944 600 C942 660 952 740 960 790 C968 740 978 660 976 600 Z" '
+                               f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="3" stroke-linejoin="round"/></g>', (960, 560))
+    # The spacewalk scene (nose right, the axis at 470, 68 px/m): the CSM with its command module's side hatch on the
+    # cone where the scene's hatch is (836 to 926, its middle at 380), sloped as the cone is; no package on the hull;
+    # a handrail on posts from the hatch along the cone towards the nose; for the lunar module tests the LM docked on
+    # the nose, legs out (Apollo 9's picture).
+    E = 68
+    slope = math.degrees(math.atan2(1.65, 3.2))
+    xb = 881 - 1.2 * E                                        # the command module's base, so the hatch's middle is at 881
+    base_y = 500 - 4.6 * E
+    csm = re.sub(r'stroke-width="([\d.]+)"', lambda m: f'stroke-width="{float(m.group(1)) * 1.4:.2f}"', apollo_csm(500, E))
+    lm = re.sub(r'stroke-width="([\d.]+)"', lambda m: f'stroke-width="{float(m.group(1)) * 1.4:.2f}"',
+                apollo_lm_small(base_y - 3.2 * E, E))
+    on_axis = lambda body: f'<g transform="translate({xb:.1f} 470) rotate(90) translate(-960 {-base_y:.1f})">{body}</g>'
+    layer("ap-e-capsule", on_axis(csm), RC)
+    layer("ap-e-capsule-lm", on_axis(csm + lm), RC)
+    x0, x1, hy = HATCH
+    xm = (x0 + x1) / 2
+    hole = (f'<g transform="rotate({slope:.2f} {xm} {hy})"><rect x="{x0 + 4}" y="{hy - 2}" width="{x1 - x0 - 8}" height="10" '
+            f'fill="{NAVY}"/></g>')
+    hatch = (f'<g transform="rotate({slope:.2f} {xm} {hy})"><rect x="{x0}" y="{hy - 8}" width="{x1 - x0}" height="10" rx="3" '
+             f'fill="#ffffff" {LINE} stroke-width="3"/></g>')
+    a_ = math.radians(slope)
+    hinge = (xm + (x1 - xm) * math.cos(a_), hy + (x1 - xm) * math.sin(a_))
+    layer("ap-e-hole", hole, hinge)
+    layer("ap-e-hatch", hatch, hinge)
+    layer("ap-e-box", "", (975, 360))
+    surf = lambda x: hy + (x - xm) * math.tan(a_)
+    layer("ap-e-rail-solo", f'<path d="M944 352 L1012 352 M960 352 L960 {surf(960):.1f} M998 352 L998 {surf(998):.1f}" fill="none" '
+                            f'{LINE} stroke-width="4"/>', (960, 352))
 
 
 # --- The LK-700 (2026-10-19, user; l7- parts): Chelomei's direct-ascent lander, as our blueprint draws it. Nose up,

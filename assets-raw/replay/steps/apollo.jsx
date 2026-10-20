@@ -2,7 +2,8 @@
 // Earth's limb after the burn to the Moon, the third stage lies along the way with the lander in its
 // adapter, top first (the lander's carrier turned and scaled to fit); the capsule (dock.jsx's chaser)
 // is placed by offsets from where its nose meets the lander's hatch, docked.
-var LMK = 0.42, LM = [50, -290], DOCKED = 64;
+// LMK and LM a builder can set (2026-10-20, Apollo's: the lander at the CSM's scale, legs folded, further from the capsule).
+var LMK = typeof LMK !== "undefined" ? LMK : 0.42, LM = typeof LM !== "undefined" ? LM : [50, -290], DOCKED = 64;
 
 function apolloScene() {
     put("paper", "screen");
