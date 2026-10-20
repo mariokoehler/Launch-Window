@@ -1,4 +1,5 @@
-"""Builds one step clip in its three variants: python build.py <step> [render|publish]
+"""Builds one step clip in its three variants: python build.py <step> [render|publish] [nocues]
+(a batch of them, several at a time: ../publish.py)
 
 Writes build/<step>-<variant>.ecproj and build/sheet_<step>.png (the variants side by side, a row per
 time in TIMES), which is the thing to look at. "render" renders build/<step>-<variant>.webm at full
@@ -2053,8 +2054,9 @@ def main():
             with open(os.path.join(GAME, f"{step}-{v}.json"), "w") as f:
                 json.dump({"duration": spec[v][0], "revealAt": spec[v][1]}, f, indent=1)
                 f.write("\n")
-    if "publish" in sys.argv:
-        # The sound cues aren't the render's: put them back in the sidecars just written.
+    if "publish" in sys.argv and "nocues" not in sys.argv:
+        # The sound cues aren't the render's: put them back in the sidecars just written ("nocues": publish.py does it
+        # once after a batch, so parallel publishes don't rewrite the same sidecars at once).
         sys.path.insert(0, os.path.join(HERE, ".."))
         import cues
         cues.apply()

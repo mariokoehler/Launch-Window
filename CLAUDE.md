@@ -327,6 +327,9 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   checks a frame, `render --format webm` makes a clip. No vector export, and an SVG imports flat:
   split it into layers first (`assets-raw/splash/split_logo.py`). A null used as a parent needs its
   anchor and position at the comp centre, or its children land offset.
+  Publish a batch of replay clips with `assets-raw/replay/publish.py [-j 3] <clip> ... launch:<skin>`: three at a
+  time (one render keeps about three cores busy, user), a log each, the sound cues applied once at the end. A single
+  `build.py ... publish` exits non-zero when cues name clips not yet published: that's the cue check, not the render.
 - **VectorCraft** (an open-source Illustrator, `C:\Program Files\VectorCraft\vectorcraft-cli.exe`):
   `run --cmd ID --params JSON ... --export X.svg` works headless (selection is `select.all` /
   `select.set`); `commands` lists the 732 commands. Worth it for what hand-written SVG can't do:
