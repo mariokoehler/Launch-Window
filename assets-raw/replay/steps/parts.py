@@ -3326,6 +3326,68 @@ def gemini_parts():
     layer("gd-r-trunk", RT(small(gm_shift(gemini_direct_modules(GM_R, True), GM_R, drop))), RT_AT(rim, 500))
     layer("gd-r-trunk-cut-a", RT(f'<circle cx="{1920 - rim:.1f}" cy="500" r="6" fill="{GOLD}"/>'), RT_AT(1920 - rim, 500))
     layer("gd-r-trunk-cut-b", RT(f'<circle cx="{rim:.1f}" cy="500" r="6" fill="{GOLD}"/>'), RT_AT(rim, 500))
+    # The direct-ascent craft to the Moon (2026-10-20, user). The trans-lunar injection is the rocket's (70 % of the step):
+    # its upper stage stays on through the parking orbit, burns and lets go (tpi.jsx's SEP). A plain hydrogen stage
+    # (3.05 m across, about 9.1 m long, two engines), drawn as lunar-orbit Gemini's Centaur once was: rockets stay
+    # generic. On the map in a frame 0.6 of the others', the stack's middle where the craft's is.
+    ST_LEN, ST_ADAPT = 9.1, 0.6
+    craft_foot = GM_EQUIP_Y - 0.8
+    s0 = craft_foot - ST_ADAPT - ST_LEN - 1.0
+    craft_top = GM_EQUIP_Y + LAND_H + ASC_H + 3.45
+    sk = 0.6
+    fs = (960, GM_L[1] - (craft_foot + craft_top) / 2 * GM_L[3] + (s0 + craft_top) / 2 * sk * GM_L[3], GM_L[2] * sk, GM_L[3] * sk)
+    c0 = craft_foot - ST_ADAPT
+
+    def stage_at(f):
+        return (bells(f, c0 - ST_LEN, (-0.6, 0.6), 1.0, 0.2, 0.45, sk)
+                + gm_poly(f, [(-GM_EQUIP, c0 - ST_LEN), (-GM_EQUIP, c0), (GM_EQUIP, c0), (GM_EQUIP, c0 - ST_LEN)], "#ffffff", "2.4")
+                + "".join(f'<path d="M{gm_pt(f, -GM_EQUIP, c0 - u)} L{gm_pt(f, GM_EQUIP, c0 - u)}" fill="none" {LINE} '
+                          f'stroke-width="1.2" opacity="0.6"/>' for u in (1.2, ST_LEN - 1.6))
+                + gm_poly(f, [(-GM_EQUIP, c0), (-1.75, craft_foot), (1.75, craft_foot), (GM_EQUIP, c0)], "#ffffff", "2.4"))
+    layer("gd-o-sat-stack", on_map(stage_at(fs) + gemini_direct(fs, False)), (960, 560))
+    layer("gd-o-sat-top", on_map(gemini_direct(fs, False)), (960, 560))
+    layer("gd-o-sat-stage", on_map(stage_at(fs)), (960, 560))
+    fd = (960, GM_L[1] - GM_EQUIP_Y * GM_L[3] + s0 * sk * GM_L[3], GM_L[2] * sk, GM_L[3] * sk)
+    layer("gd-d-payload-stack", f'<g transform="{big}"><g transform="{turn}">{stage_at(fd) + gemini_direct(fd, False)}</g></g>',
+          D_AT(914, 520))
+    # The flames on the map, each from its own engine (the generic one's top is at 600): the stage's, the landing
+    # module's (the whole craft), the ascent module's (after the Moon: it has a small bell of its own, hidden in the
+    # landing module until then).
+    stage_tail = fs[1] - (c0 - ST_LEN - 1.0) * fs[3]
+    asc_bell = lambda f: bells(f, GM_EQUIP_Y + LAND_H, (0,), 0.5, 0.22, 0.42)
+    for name, tail in (("gd-o-streak-stage", stage_tail), ("gd-o-streak", 500 - (GM_EQUIP_Y - 0.8) * GM_L[3]),
+                       ("gd-o-streak-asc", 500 - (GM_EQUIP_Y + LAND_H - 0.5) * GM_L[3])):
+        dy = 560 + 0.6 * (tail - 426) - 600
+        layer(name, f'<g transform="translate(0 {dy:.1f})"><path d="M944 600 C942 660 952 740 960 790 C968 740 978 660 976 600 Z" '
+                    f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="3" stroke-linejoin="round"/></g>', (960, 560))
+    # After the Moon: the ascent module and the capsule; on the Earth approach the capsule alone and what it casts off
+    # (both modules, or the ascent module after a landing), all in gd-o-sat's frame. Nothing waits in lunar orbit for it
+    # (the lunar ascent's o-sat-b): it flies straight home.
+    capsule_at = lambda f: gm_shift(gemini_module(f), f, GM_EQUIP_Y + LAND_H + ASC_H)
+    asc_only = lambda f: gm_shift(asc_bell(f) + gm_poly(f, [(-1.3, GM_EQUIP_Y + LAND_H), (-1.3, GM_EQUIP_Y + LAND_H + ASC_H),
+                                                            (1.3, GM_EQUIP_Y + LAND_H + ASC_H), (1.3, GM_EQUIP_Y + LAND_H)], "#ffffff", "2.4"),
+                                  f, 0)
+    layer("gd-o-sat-asc", on_map(asc_only(GM_L) + capsule_at(GM_L)), (960, 560))
+    layer("gd-o-sat-capsule", on_map(capsule_at(GM_L)), (960, 560))
+    layer("gd-o-sat-aft", on_map(gemini_direct_modules(GM_L, True)), (960, 560))
+    layer("gd-o-sat-aft-asc", on_map(asc_only(GM_L)), (960, 560))
+    layer("gd-none", "", (960, 560))
+    for name, body in (("gd-m-probe", gemini_direct(GM_L, True)), ("gd-m-probe-asc", asc_only(GM_L) + capsule_at(GM_L))):
+        layer(name, f'<g transform="translate({SUN[0]} {SUN[1]}) scale(0.32) translate(-960 -480)">{th(body)}</g>', SUN)
+    # On the Moon, in the lander's frame (gd-n-descent, gd-n-ascent in the generic lander's place, so its scenes' timings
+    # fit): the landing module's top at the porch (y 722), its bell's mouth by the plume's root (822), 42 px a unit, so
+    # the capsule's nose stays inside the moonwalk's close-up. Legs of its own reach the ground (the Earth-orbit tests'
+    # stubs don't). Sizes unconfirmed, from our blueprint.
+    fn = (960, 722 + (GM_EQUIP_Y + LAND_H) * 42, 42, 42)
+    legs = (f'<path d="M906 760 L836 876 M1014 760 L1084 876 M916 784 L870 850 M1004 784 L1050 850" fill="none" {LINE} '
+            f'stroke-width="4"/>'
+            f'<ellipse cx="834" cy="878" rx="18" ry="5" fill="#ffffff" {LINE} stroke-width="3"/>'
+            f'<ellipse cx="1086" cy="878" rx="18" ry="5" fill="#ffffff" {LINE} stroke-width="3"/>')
+    landing = gemini_direct_modules(fn, False)
+    cut = landing.index(gm_poly(fn, [(-1.3, GM_EQUIP_Y + LAND_H), (-1.3, GM_EQUIP_Y + LAND_H + ASC_H),
+                                     (1.3, GM_EQUIP_Y + LAND_H + ASC_H), (1.3, GM_EQUIP_Y + LAND_H)], "#ffffff", "2.4"))
+    layer("gd-n-descent", legs + bells(fn, GM_EQUIP_Y, (0,), 0.8, 0.28, 0.6) + landing[:cut], LC)
+    layer("gd-n-ascent", landing[cut:] + capsule_at(fn), LC)
 
 
 # --- Gemini EOR (2026-10-19, user; ge-, ll- and sv- parts): its Earth-orbit tests. Gemini's reentry module and

@@ -2045,7 +2045,17 @@ clips, the replay is meant to be watched like a short film, and the player can s
   approach the module and the adapter go together (`-earth-approach`, `DROP`); the reentry, descent and recovery are
   circumlunar Gemini's. The module's burns and the docked Transtage's have their flame at their own engines
   (`gl-o-streak-lpm`, `gtd-o-streak`); the Earth-orbit tests' module burns still have the generic one.
-  The lunar Gemini programs themselves (direct ascent, EOR) are a later package; Gemini EOR's equipment-section separation drops the section before the turn, the wrong way round, to be
+  Direct-ascent Gemini's flights to the Moon fly as themselves too (user, 2026-10-20, `gemini-da-*`): the Earth-orbit
+  tests' launch; the rocket's upper stage stays on through the parking orbit (`-deployment-stack`, `-earth-orbit-stack`),
+  makes the trans-lunar injection (70 % of the step is the rocket's) and lets go (`-tli`, `SEP`; a plain stage, drawn as
+  lunar-orbit Gemini's Centaur once was). The landing module brakes into lunar orbit and lands, or on the orbit flight
+  fires the whole craft home; after a landing the ascent module and the capsule lift off, climb with nothing waiting in
+  orbit (`o-sat-b` empty) and fire home (`-asc`). The flyby passes the Moon in one step. On the Moon the craft stands in
+  the lander's place (`gd-n-descent`, `gd-n-ascent`, 42 px a unit so the capsule's nose stays in the moonwalk's
+  close-up), and its one surface step plants the flag (`gemini-da-flag`), which stands through the liftoff. The Earth
+  approach casts off what's left (`DROP`); the reentry, descent and recovery are circumlunar Gemini's. Sizes from our
+  blueprint, unconfirmed.
+  The lunar Gemini program still to come (EOR) is a later package; Gemini EOR's equipment-section separation drops the section before the turn, the wrong way round, to be
   fixed with them. Unconfirmed.
 - **The early-era pack's craft as themselves (user, 2026-10-18):** Vostok (`vk-`, `vostok-*`) plays every step as
   itself: the sphere on its instrument module (its one retro flame; the module the separation's, its cable meeting

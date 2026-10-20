@@ -213,6 +213,8 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   Circumlunar Gemini's Moon flights fly as themselves (user, 2026-10-20, `ui-spec.md` §4.7.3): the Transtage alone
   to the Moon, or Gemini docked into it for the burn (`tpi.jsx`'s `SEP`), dropping its adapter on the Earth approach
   (`earth-approach.jsx`'s `DROP`). Client only.
+  Direct-ascent Gemini's too (user, 2026-10-20): the rocket's stage makes the trans-lunar injection and lets go, the
+  landing module brakes and lands, the ascent module lifts off and fires home, and the flag goes up. Client only.
   Lunar-orbit Gemini's too (user, 2026-10-20): the propulsion module makes the trans-lunar injection, the insertion
   and the burn home. Its flybys pass the Moon in one step now, BASPM's insertion and orbit replaced in the converter
   (`design.md` §5, M3): the pack hash changed, reset the dev data root, rebuild client and server together.

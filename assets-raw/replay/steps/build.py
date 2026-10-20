@@ -1891,6 +1891,37 @@ variant_of("trans-earth-coast", "gemini-lpm-tec", GL, skin="gm-")
 variant_of("earth-approach", "gemini-lpm-earth-approach", {"o-sat": "gl-o-sat-capsule", "o-stage": "gl-o-sat-aft"}, skin="gm-",
            before=["orbit.jsx", "adapter-drop.jsx"])
 
+# The direct-ascent craft to the Moon (2026-10-20, user; gd- parts): its Earth-orbit tests' launch; the rocket's upper
+# stage stays on through the parking orbit (-deployment-stack, -earth-orbit-stack), makes the trans-lunar injection (the
+# step is 70 % the rocket's) and lets go (tpi.jsx's SEP). The landing module brakes into lunar orbit and lands, or, on the
+# orbit flights, fires the whole craft home; after a landing the ascent module lifts off, climbs with nothing in orbit to
+# meet (o-sat-b empty) and fires home (-asc). The Earth approach casts off what's left (earth-approach.jsx's DROP); the
+# reentry, descent and recovery are circumlunar Gemini's. On the Moon it lands in the lander's scenes (gd-n-descent,
+# gd-n-ascent) and plants the flag on its one surface step. Unconfirmed.
+GD = {"o-sat": "gd-o-sat", "m-probe": "gd-m-probe", "o-streak": "gd-o-streak"}
+GD_ASC = {"o-sat": "gd-o-sat-asc", "m-probe": "gd-m-probe-asc", "o-streak": "gd-o-streak-asc"}
+variant_of("deployment", "gemini-da-deployment-stack", {"d-payload": "gd-d-payload-stack"}, skin="gm-")
+variant_of("earth-orbit", "gemini-da-earth-orbit-stack", {"o-sat": "gd-o-sat-stack"}, skin="gm-")
+variant_of("tpi", "gemini-da-tli", {"o-sat": "gd-o-sat-top", "o-stage": "gd-o-sat-stage", "o-streak": "gd-o-streak-stage"},
+           skin="gm-", before=["orbit.jsx", "hoi-separate.jsx"])
+variant_of("trans-lunar-coast", "gemini-da-tlc", GD, skin="gm-")
+variant_of("lunar-approach", "gemini-da-lunar-approach", GD, skin="gm-")
+variant_of("lunar-flyby", "gemini-da-lunar-flyby", GD, skin="gm-")
+variant_of("loi", "gemini-da-loi", GD, skin="gm-")
+variant_of("lunar-orbit", "gemini-da-lunar-orbit", GD, skin="gm-")
+variant_of("tei", "gemini-da-tei", GD, skin="gm-")
+variant_of("trans-earth-coast", "gemini-da-tec", GD, skin="gm-")
+variant_of("earth-approach", "gemini-da-earth-approach", {"o-sat": "gd-o-sat-capsule", "o-stage": "gd-o-sat-aft"}, skin="gm-",
+           before=["orbit.jsx", "adapter-drop.jsx"])
+variant_of("lunar-ascent", "gemini-da-lunar-ascent", {**GD_ASC, "o-sat-b": "gd-none"}, skin="gm-")
+variant_of("tei", "gemini-da-tei-asc", GD_ASC, skin="gm-")
+variant_of("trans-earth-coast", "gemini-da-tec-asc", GD_ASC, skin="gm-")
+variant_of("earth-approach", "gemini-da-earth-approach-asc", {"o-sat": "gd-o-sat-capsule", "o-stage": "gd-o-sat-aft-asc"},
+           skin="gm-", before=["orbit.jsx", "adapter-drop.jsx"])
+for _base in ("powered-descent", "lunar-landing", "lunar-liftoff"):
+    variant_of(f"apollo-{_base}", f"gemini-da-{_base}", {}, skin="gd-")
+variant_of("apollo-flag", "gemini-da-flag", {}, skin="gd-")
+
 
 def read(*path):
     return open(os.path.join(HERE, *path), encoding="utf-8").read() + "\n"
