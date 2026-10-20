@@ -566,12 +566,15 @@ leading to satellite navigation.
   an early lesson in why a spinning craft must spin about its widest axis. **Not yet checked:** the whips' folding
   at launch and their release by the spin; check before a history note uses them.
 - **Apollo 5's "fire in the hole"** (found 2026-10-20, the uncrewed lunar module test's steps): the first lunar module,
-  LM-1, flew alone and without legs on a Saturn IB in January 1968. Its first descent-engine firing was cut short
-  seconds in by the guidance computer, which expected the thrust to build faster than it did; the controllers ran
+  LM-1, flew alone and without legs on a Saturn IB on 22 January 1968: inside its adapter under a nose cone about nine
+  feet tall, no CSM (the Saturn IB couldn't lift both). In orbit the cone came off, the adapter's four panels opened, and
+  the LM backed away on its own thrusters (NASA's account). Its first descent-engine firing was cut short seconds in by
+  the guidance computer, which found the craft slower than it expected (the thrust built more slowly than planned); the
+  controllers ran
   the backup plan by hand: more descent-engine firings, then the "fire in the hole" staging, the ascent engine lit
   while still bolted to the descent stage, as it would be in an abort during a landing, then an ascent-engine
   firing alone. It went well enough that a second uncrewed lunar module flight was dropped. **Not yet checked:** the
-  first firing's length (about 4 s) and the cause of the cut-off; check before a history note uses them.
+  first firing's length (about 4 s); check before a history note uses it.
 - **The Soviet way to the Moon and its Blok D** (found 2026-10-20, the replay's Soviet Moon flights): on the N1-L3 plan
   the Blok D stage did the work Apollo's service module did on the way out: course corrections, the braking burn into
   lunar orbit, and then, with the LK alone on it, most of the descent, before it let go a few kilometres up and fell

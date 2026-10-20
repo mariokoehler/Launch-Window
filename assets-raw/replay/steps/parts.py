@@ -2740,6 +2740,46 @@ def lm_parts():
     # The lunar ascent's map: the ascent stage alone climbing to the CSM (o-sat-b), bigger so it reads.
     body = re.sub(r'stroke-width="[\d.]+"', 'stroke-width="5"', lm_ascent())
     layer("ap-o-sat-asc", f'<g transform="translate(960 560) scale(1.1) translate(-960 -681)">{body}</g>', (960, 560))
+    # Apollo 5 (2026-10-20, user; a5- parts): the first lunar module, LM-1, flew alone on a Saturn IB, without legs, inside
+    # its adapter under a nose cone and no CSM or escape tower (NASA). In orbit the cone came off, the adapter's four
+    # panels opened, and the LM backed out on its own thrusters. On the pad and in the climb the adapter and the cone (the
+    # tower's part, a-les, empty: the cone stayed on into orbit); on the insertion's map the S-IVB, adapter and cone; in
+    # the deployment the S-IVB with two of its panels seen open, the LM leaving it; on the maps the LM alone; in the
+    # lander's scenes the LM without legs.
+    rocket = board_group("rocket")
+    nose = rocket.index('<path xmlns="http://www.w3.org/2000/svg" d="M915 440')
+    big = f"translate({DX} {DY}) scale({DK}) translate(-850 -520)"
+    turn = "translate(-120 20) rotate(90 960 500)"
+    thick = lambda body: re.sub(r'stroke-width="[\d.]+"', 'stroke-width="5"', body)
+    k = AP_L
+    sla_top = 500 - 8.5 * k
+
+    def cone(top, kk):
+        return (f'<path d="M{960 - 1.95 * kk:.1f} {top:.1f} C{960 - 1.95 * kk:.1f} {top - 1.6 * kk:.1f} {960 - 0.6 * kk:.1f} '
+                f'{top - 2.7 * kk:.1f} 960 {top - 2.9 * kk:.1f} C{960 + 0.6 * kk:.1f} {top - 2.7 * kk:.1f} {960 + 1.95 * kk:.1f} '
+                f'{top - 1.6 * kk:.1f} {960 + 1.95 * kk:.1f} {top:.1f} Z" fill="#ffffff" {LINE} stroke-width="2.6"/>')
+    a5_launch = apollo_sla(500, k) + cone(sla_top, k)
+    layer("a5-rocket", rocket[:nose] + a5_launch, (960, 600))
+    layer("a5-debris-1", a5_launch, (960, 440))
+    layer("a5-a-les", "", (960, 300))
+    K2 = 2.2 * k * 0.25
+    a5_map = apollo_sivb(560 - 1.5 * 2.2 * k, K2) + apollo_sla(560 - 1.5 * 2.2 * k, K2) + cone(560 - 1.5 * 2.2 * k - 8.5 * K2, K2)
+    layer("a5-o-sat-stack", f'<g transform="translate(960 560) scale(0.6) translate(-960 -426)">{thick(a5_map)}</g>', (960, 560))
+    # The LM without legs, in the lander's frame; in the launch's (k px/m), its descent stage's foot (the bell) at 500.
+    desc = lm_descent()
+    no_legs = desc[desc.index('<path d="M946 792 L974 792'):]
+    lm_up = lambda base, kk: (f'<g transform="translate(960 {base:.1f}) scale({kk / 40:.4f}) translate(-960 -822)">'
+                              f'{no_legs}{lm_ascent()}</g>')
+    layer("a5-d-payload", f'<g transform="{big}"><g transform="{turn}">{lm_up(500, k)}</g></g>', D_AT(914, 520))
+    panels = "".join(f'<path d="M{960 + s_ * 3.3 * k:.1f} 500 L{960 + s_ * (3.3 + 4.5) * k:.1f} {500 - 4.5 * k:.1f} '
+                     f'L{960 + s_ * (3.3 + 3.6) * k:.1f} {500 - 5.4 * k:.1f} L{960 + s_ * 2.6 * k:.1f} {500 - 0.7 * k:.1f} Z" '
+                     f'fill="#ffffff" {LINE} stroke-width="2.6"/>' for s_ in (-1, 1))
+    layer("a5-d-stage", f'<g transform="{big}"><g transform="{turn}">{apollo_sivb(500, k) + panels}</g></g>', D_AT(770, 520))
+    lm_map = re.sub(r'stroke-width="[\d.]+"', 'stroke-width="5"', no_legs + lm_ascent())
+    layer("a5-o-sat", f'<g transform="translate(960 560) scale(0.9) translate(-960 -735)">{lm_map}</g>', (960, 560))
+    layer("a5-n-descent", no_legs, LC)
+    layer("a5-n-ascent", lm_ascent(), LC)
+    layer("a5-none", "", LC)
 
 
 # --- The LK-700 (2026-10-19, user; l7- parts): Chelomei's direct-ascent lander, as our blueprint draws it. Nose up,

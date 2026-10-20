@@ -1,5 +1,16 @@
 {
   "rules": [
+    {"step": "launch-preparations", "programs": ["apollo-earth-orbit"], "later": "lem-descent-stage-test", "clip": "apollo-lm-launch-preparations"},
+    {"step": "countdown", "programs": ["apollo-earth-orbit"], "later": "lem-descent-stage-test", "clip": "apollo-lm-countdown"},
+    {"step": "launch", "programs": ["apollo-earth-orbit"], "later": "lem-descent-stage-test", "clip": "apollo-lm-launch"},
+    {"step": "ascent", "programs": ["apollo-earth-orbit"], "later": "lem-descent-stage-test", "clip": "apollo-lm-ascent"},
+    {"step": "insertion", "programs": ["apollo-earth-orbit"], "later": "lem-descent-stage-test", "clip": "apollo-lm-insertion"},
+    {"step": "deployment", "programs": ["apollo-earth-orbit"], "later": "lem-descent-stage-test", "clip": "apollo-lm-deployment"},
+    {"step": "earth-orbit", "programs": ["apollo-earth-orbit"], "after": "lem-ascent-stage-test", "clip": "apollo-lm-earth-orbit-asc"},
+    {"step": "earth-orbit", "programs": ["apollo-earth-orbit"], "later": "lem-descent-stage-test", "clip": "apollo-lm-earth-orbit"},
+    {"step": "lem-descent-stage-test", "programs": ["apollo-earth-orbit"], "clip": "apollo-lm-engine-test"},
+    {"step": "fire-in-the-hole", "programs": ["apollo-earth-orbit"], "clip": "apollo-lm-staging"},
+    {"step": "lem-ascent-stage-test", "programs": ["apollo-earth-orbit"], "after": "fire-in-the-hole", "clip": "apollo-lm-ascent-test"},
     {"step": "launch-preparations", "programs": ["lk-700"], "clip": "lk-700-launch-preparations"},
     {"step": "countdown", "programs": ["lk-700"], "clip": "lk-700-countdown"},
     {"step": "launch", "programs": ["lk-700"], "clip": "lk-700-launch"},

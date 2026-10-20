@@ -1976,6 +1976,22 @@ AGENA = {"k-target": "gm-k-target", "k-light": "gm-k-light"}
 variant_of("gemini-target-approach", "apollo-agena-approach", AGENA, skin="ap-")
 variant_of("gemini-docking", "apollo-agena-docking", AGENA, skin="ap-")
 variant_of("apollo-undocking", "apollo-agena-undocking", AGENA)
+# Apollo 5 (2026-10-20, user; a5- parts): the lunar module alone, in its adapter under a nose cone, no CSM or tower; the
+# insertion with the S-IVB, the adapter and the cone; out of the opened adapter; the LM alone on the map; its engine
+# test and staging in the lander's scenes without legs, as LM-1 flew; the ascent stage's own test a shot of its own, the
+# stage alone firing (the staging sends it off the screen); the ascent stage alone on the map after.
+A5 = {"rocket": "a5-rocket", "debris-1": "a5-debris-1", "a-les": "a5-a-les"}
+for _step in ("launch-preparations", "countdown"):
+    variant_of(f"apollo-{_step}", f"apollo-lm-{_step}", A5)
+variant_of("apollo-ascent", "apollo-lm-ascent", {**A5, "debris-1": "a5-debris-1"})
+variant_of("apollo-insertion", "apollo-lm-insertion", {"o-sat": "a5-o-sat-stack"})
+variant_of("apollo-deployment", "apollo-lm-deployment", {"d-payload": "a5-d-payload", "d-stage": "a5-d-stage"})
+variant_of("apollo-earth-orbit", "apollo-lm-earth-orbit", {"o-sat": "a5-o-sat"})
+variant_of("apollo-earth-orbit", "apollo-lm-earth-orbit-asc", {"o-sat": "ap-o-sat-asc"})
+A5_N = {"n-descent": "a5-n-descent", "n-ascent": "a5-n-ascent"}
+variant_of("apollo-lander-engine-test", "apollo-lm-engine-test", A5_N)
+variant_of("apollo-lander-staging", "apollo-lm-staging", A5_N)
+variant_of("apollo-lander-engine-test", "apollo-lm-ascent-test", {"n-descent": "a5-none", "n-ascent": "a5-n-ascent", "n-plume": "n-flame-up"})
 
 # The Soviet craft to the Moon (2026-10-20, user; parts.py's soviet_moon_parts). Unlike every craft before them, the stage
 # on their tail is BASPM's rocket after the launch: the Blok D. The 7K-L1 rides it into the parking orbit, burns for the
