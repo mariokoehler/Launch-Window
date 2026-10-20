@@ -2141,8 +2141,21 @@ clips, the replay is meant to be watched like a short film, and the player can s
   crewed lander test the LK flies with the LOK from the third stage on (user, 2026-10-19; `lok_lk_parts`): stacked as
   the N1 had them, the LK under the LOK on the Blok D, on the insertion and leaving the Blok D (`-lk` clips, the pair
   drawn smaller to fit), and docked, the LOK's probe in the LK's plate, on the orbit's map; the turn-around and
-  docking between have no step and aren't shown. The launch and the climb show the LOK alone. The Moon flights (`soyuz-7k-l1`, `soyuz-7k-l3`) are a later
-  package. Unconfirmed.
+  docking between have no step and aren't shown. The launch and the climb show the LOK alone. Unconfirmed.
+- **The Soviet Moon flights as themselves (user, 2026-10-20; `soviet_moon_parts`):** their tail stage is the Blok D,
+  which BASPM counts as the rocket, and the steps give it the burns. The 7K-L1 rides it into the parking orbit
+  (`soyuz-l1-deployment-stack`, `-earth-orbit-stack`), burns for the Moon on it and lets go (`soyuz-l1-tli`, `SEP`),
+  passes the Moon, and comes home Soyuz's way with no retrofire (both craft's modules separation starts where the reentry
+  preparations leave the Earth and sinks faster, `-modules-separation-moon`, `SEP_FROM`). The 7K-L3's LOK rides its Blok D all the way: alone on
+  the flyby and the orbit flight, with the LK between them on the lander flights (the N1's stack, `-n1`, by
+  `"later": "eva-7k-lok"`); the Blok D burns for the Moon and brakes into lunar orbit, and leaves there (the flyby's
+  separation step, or the orbit flight's second lunar orbit: `soyuz-lok-blok-d-separation-moon`). In lunar orbit the
+  Earth-orbit tests' close-ups have the Moon below (`-moon`): the crossing to the LK and back, the LK's release (whole,
+  `soyuz-lok-release-lk-moon`), its descent test and staging (the lander test), the docking and the cast-off. On the
+  Moon the LK stands on its legs (`lkm-`, a ladder down its right leg, `lk-walk.jsx`); the one cosmonaut plants the
+  flag and gathers rocks (`lk-flag`, `lk-samples`), and the cabin lifts off its landing unit. The Blok D's braking of
+  the LK down towards the surface isn't shown (the descent and landing show the LK alone). The descent and landing,
+  one step, play Soyuz's descent and the recovery its landing and recovery. Unconfirmed.
 - **The LK-700's Earth-orbit tests (user, 2026-10-19):** its own craft (`l7-`, `lk-700-*`, `lk700_parts`), drawn as
   the turn report's blueprint has it, 2.7 m across: the return capsule (a cylinder with two portholes and a hatch, a
   cone with two windows, a cap and a small dish), the return stage, and the landing stage with its engines (a big

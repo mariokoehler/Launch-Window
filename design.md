@@ -572,6 +572,16 @@ leading to satellite navigation.
   while still bolted to the descent stage, as it would be in an abort during a landing, then an ascent-engine
   firing alone. It went well enough that a second uncrewed lunar module flight was dropped. **Not yet checked:** the
   first firing's length (about 4 s) and the cause of the cut-off; check before a history note uses them.
+- **The Soviet way to the Moon and its Blok D** (found 2026-10-20, the replay's Soviet Moon flights): on the N1-L3 plan
+  the Blok D stage did the work Apollo's service module did on the way out: course corrections, the braking burn into
+  lunar orbit, and then, with the LK alone on it, most of the descent, before it let go a few kilometres up and fell
+  to the Moon while the LK's Blok E landed it; the same Blok E engine lifted the cabin off again. There was no tunnel
+  between the LOK and the LK: the one cosmonaut who landed crossed outside in his spacesuit, and back. On the 7K-L1
+  flights the Proton's Blok D fired a second time from the parking orbit to send the craft to the Moon; Zond 5 (launched
+  15 September 1968) passed about 1,950 km over the far side, came home on a ballistic entry after a guidance fault, and
+  splashed down in the Indian Ocean with two steppe tortoises, which survived, thinner. Sources: NASA's "50 years ago"
+  feature on Zond 5, the NSSDC record, russianspaceweb.com's L3 and LK pages. **Not yet checked:** the Blok D's speed and
+  height when it let the LK go (about 100 m/s at about 4 km, one source); check before a history note uses them.
 - **Apollo's flag, rock boxes and rover** (found 2026-10-20, the replay's moonwalks): Apollo 11's flag hung from a
   telescoping crossbar so it would show in the airless sky, and the crew couldn't pull the bar out all the way,
   which left the ripple that looks like a breeze (NASA's account, 1993); the soil was hard a little way down and the

@@ -207,7 +207,9 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   say which flew). Client only.
   The Soviet lunar craft's Earth-orbit tests fly as themselves (user, 2026-10-19, `ui-spec.md` §4.7.3): the 7K-L1
   (`s1-`), the 7K-LOK on its Blok D (`lok-`) and the LK without legs (`lkl-`), on Soyuz's skin and the lander's scenes
-  (`build.py`'s `variant_of`). Their Moon flights are a later package. Client only.
+  (`build.py`'s `variant_of`). Client only.
+  Their Moon flights too (user, 2026-10-20): on their Blok D (BASPM's rocket), which the 7K-L1 drops after the burn for
+  the Moon and the 7K-L3 keeps into lunar orbit; the LK lands on its legs, and its cosmonaut plants the flag. Client only.
   So do the LK-700's (`l7-`, user, 2026-10-19), with a way home of its own instead of Soyuz's orbital module, and
   Gemini EOR's (`ge-`, its Langley lander `ll-`, the S-IVB tug `sv-`; user, 2026-10-19).
   Circumlunar Gemini's Moon flights fly as themselves (user, 2026-10-20, `ui-spec.md` §4.7.3): the Transtage alone

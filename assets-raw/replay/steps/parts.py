@@ -3684,6 +3684,69 @@ def gemini_eor_parts():
                          f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="3" stroke-linejoin="round"/></g>', (960, 560))
 
 
+# The Soviet craft to the Moon (2026-10-20, user). BASPM gives the Blok D, the stage on the craft's tail, to the rocket
+# (@rocket-1), and the steps say what it does: the 7K-L1's burns for the Moon and lets go; the 7K-L3's LOK rides on it to
+# the Moon, with the LK between them on a landing (the N1's stack), and it brakes them into lunar orbit. On the map
+# (0.6 of the launch's size, as the Earth-orbit tests' parts), in the deployment, on the coasts' map (small at the Sun's
+# place); the flames from the Blok D's bell. The LK on the Moon (lkm-) stands on its legs, at the moonwalk's scale, with a
+# ladder down its right leg. Unconfirmed.
+def soviet_moon_parts():
+    K = 33.8
+    thick = lambda body: re.sub(r'stroke-width="[\d.]+"', 'stroke-width="5"', body)
+    on_map = lambda body, mid=426: f'<g transform="translate(960 560) scale(0.6) translate(-960 {-mid:.1f})">{thick(body)}</g>'
+    coast = lambda body, mid: f'<g transform="translate({SUN[0]} {SUN[1]}) scale(0.32) translate(-960 {-mid:.1f})">{thick(body)}</g>'
+    big = f"translate({DX} {DY}) scale({DK}) translate(-850 -520)"
+    turn = "translate(-120 20) rotate(90 960 500)"
+    deploy = lambda body: f'<g transform="{big}"><g transform="{turn}">{body}</g></g>'
+
+    def streak(name, tail, mid=426):
+        dy = 560 + 0.6 * (tail - mid) - 600
+        layer(name, f'<g transform="translate(0 {dy:.1f})"><path d="M944 600 C942 660 952 740 960 790 C968 740 978 660 976 600 Z" '
+                    f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="3" stroke-linejoin="round"/></g>', (960, 560))
+    # The 7K-L1 on its Blok D: out of the rocket, in the parking orbit, and in two for the burn (s1-o-sat over the stage).
+    l1_len = 2.24 + 2.26
+    l1 = soyuz_stack(500 - l1_len * K, K, nose="none", dish=True)
+    l1_on_d = soyuz_stack(500 - (l1_len + BLOK_D_H) * K, K, nose="none", dish=True) + blok_d(500 - BLOK_D_H * K, K)
+    layer("s1-d-payload-stack", deploy(l1_on_d), D_AT(914, 520))
+    layer("s1-o-sat-stage", on_map(l1 + blok_d(500, K)), (960, 560))
+    layer("s1-o-sat-dstage", on_map(blok_d(500, K)), (960, 560))
+    streak("bd-o-streak", 500 + BLOK_D_H * K)
+    layer("s1-m-probe", coast(l1, 500 - l1_len * K / 2), SUN)
+    # The 7K-LOK alone, on its Blok D, and the N1's stack (the Blok D, the LK on it, the LOK on the LK), as lok_lk_parts.
+    lok_l = 0.45 + 2.98 + 2.24 + LOK_SM
+    lok = soyuz_stack(500 - lok_l * K, K, panels=False, sm_h=LOK_SM)
+    layer("lok-m-probe", coast(lok, 500 - lok_l * K / 2), SUN)
+    layer("lok-m-probe-stage", coast(lok + blok_d(500, K), 500 - (lok_l - BLOK_D_H) * K / 2), SUN)
+
+    def n1(bottom, k):
+        y = bottom - BLOK_D_H * k
+        plate = y - LK_H * k
+        body = soyuz_stack(plate - 0.3 * k - lok_l * k, k, panels=False, sm_h=LOK_SM) + lk_up(y, k) + blok_d(y, k)
+        return body, (bottom + plate - lok_l * k) / 2
+    k = 33.8 * 0.6
+    body, mid = n1(500, k)
+    streak("n1-o-streak", 500, mid)
+    layer("lok-m-probe-n1", coast(body, mid), SUN)
+    KL = 33.8 * (0.45 + 2.98 + 2.24 + 2.26) / lok_l * 0.75
+    stack_d, _ = n1(500, KL)
+    layer("lok-d-payload-n1", deploy(stack_d), D_AT(914, 520))
+    # The LK on the Moon.
+    layer("lkm-n-descent", lk_lpu(legs=True), LC)
+    layer("lkm-n-ascent", lk_lva(), LC)
+    layer("lkm-n-flame-up", f'<path d="M948 802 C950 822 955 840 960 858 C965 840 970 822 972 802 Z" fill="{GOLD_FILL}" '
+                            f'stroke="{GOLD}" stroke-width="3" stroke-linejoin="round"/>', (960, 802))
+    layer("lkm-n-plume", f'<path d="M944 802 C946 830 952 860 960 890 C968 860 974 830 976 802 Z" fill="{GOLD_FILL}" '
+                         f'stroke="{GOLD}" stroke-width="3" stroke-linejoin="round"/>', (960, 802))
+    (x0, y0), (x1, y1) = (1028, 786), (1100, 872)
+    nx, ny = (y1 - y0), -(x1 - x0)
+    n = math.hypot(nx, ny)
+    nx, ny = 8 * nx / n, 8 * ny / n
+    rungs = "".join(f"M{x0 + (x1 - x0) * j / 5 - nx:.1f} {y0 + (y1 - y0) * j / 5 - ny:.1f} "
+                    f"L{x0 + (x1 - x0) * j / 5 + nx:.1f} {y0 + (y1 - y0) * j / 5 + ny:.1f} " for j in range(1, 5))
+    layer("lkm-n-ladder", f'<path d="M{x0 + nx:.1f} {y0 + ny:.1f} L{x1 + nx:.1f} {y1 + ny:.1f} {rungs}" fill="none" {LINE} '
+                          f'stroke-width="2.4"/>', LC)
+
+
 def main():
     os.makedirs(OUT, exist_ok=True)
     copy_board_layers()
@@ -3727,6 +3790,7 @@ def main():
     gemini_parts()
     gemini_eor_parts()
     lk700_parts()
+    soviet_moon_parts()
     if ONLY:
         # Keep the parts not redrawn.
         old = json.load(open(os.path.join(BUILD, "layers.json")))

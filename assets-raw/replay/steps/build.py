@@ -1965,6 +1965,54 @@ variant_of("apollo-flag", "gemini-da-flag", {}, skin="gd-")
 for _base in ("apollo-undocking", "apollo-docking-asc", "apollo-lem-jettison"):
     variant_of(_base, f"{_base}-moon", {"d-earth": "d-moon"})
 
+# The Soviet craft to the Moon (2026-10-20, user; parts.py's soviet_moon_parts). Unlike every craft before them, the stage
+# on their tail is BASPM's rocket after the launch: the Blok D. The 7K-L1 rides it into the parking orbit, burns for the
+# Moon on it and lets go (tpi.jsx's SEP); passes the Moon and comes home Soyuz's way, no retrofire. The 7K-L3's LOK rides
+# it all the way (no SEP), alone on the flyby and the orbit flight, with the LK between them on a landing (the N1's
+# stack, -n1); the Blok D brakes them into lunar orbit and leaves there (the flyby's separation step, or the orbit
+# flight's second lunar orbit). In lunar orbit the Earth-orbit tests' close-ups with the Moon below (-moon): the walk to
+# the LK, its release (the whole LK), its tests, the docking and the walk back, the cast-off. On the Moon the LK stands
+# on its legs (lkm-), its cosmonaut plants the flag and gathers rocks, and the cabin lifts off its landing unit. The LOK
+# alone fires home. Unconfirmed: the Blok D's part, the LK's descent without it on screen.
+SY_L1 = {"project-soyuz.jsx": "project-soyuz-l1.jsx"}
+variant_of("soyuz-deployment", "soyuz-l1-deployment-stack", {**L1, "d-payload": "s1-d-payload-stack"}, SY_L1)
+variant_of("soyuz-earth-orbit", "soyuz-l1-earth-orbit-stack", {**L1, "o-sat": "s1-o-sat-stage"}, SY_L1)
+variant_of("tpi", "soyuz-l1-tli", {"o-sat": "s1-o-sat", "o-stage": "s1-o-sat-dstage", "o-streak": "bd-o-streak"},
+           skin="sy-", before=["orbit.jsx", "hoi-separate.jsx"])
+S1_MAP = {"o-sat": "s1-o-sat", "m-probe": "s1-m-probe"}
+for _base, _name in (("trans-lunar-coast", "tlc"), ("lunar-approach", "lunar-approach"), ("lunar-flyby", "lunar-flyby"),
+                     ("trans-earth-coast", "tec")):
+    variant_of(_base, f"soyuz-l1-{_name}", S1_MAP, skin="sy-")
+LOK_STAGE = {"o-sat": "lok-o-sat-stage", "m-probe": "lok-m-probe-stage", "o-streak": "bd-o-streak"}
+LOK_N1 = {"o-sat": "lok-o-sat-stage-lk", "m-probe": "lok-m-probe-n1", "o-streak": "n1-o-streak"}
+LOK_ALONE = {"o-sat": "lok-o-sat", "m-probe": "lok-m-probe"}
+variant_of("soyuz-deployment", "soyuz-lok-deployment-n1", {**LOK, "d-payload": "lok-d-payload-n1"}, {"project-soyuz.jsx": "project-soyuz-lok.jsx"})
+variant_of("soyuz-earth-orbit", "soyuz-lok-earth-orbit-stage", {**LOK, "o-sat": "lok-o-sat-stage"}, {"project-soyuz.jsx": "project-soyuz-lok.jsx"})
+variant_of("soyuz-earth-orbit", "soyuz-lok-earth-orbit-n1", {**LOK, "o-sat": "lok-o-sat-stage-lk"}, {"project-soyuz.jsx": "project-soyuz-lok.jsx"})
+for _base, _name in (("tpi", "tli"), ("trans-lunar-coast", "tlc"), ("loi", "loi"), ("lunar-orbit", "lunar-orbit")):
+    variant_of(_base, f"soyuz-lok-{_name}", LOK_STAGE, skin="sy-")
+    variant_of(_base, f"soyuz-lok-{_name}-n1", LOK_N1, skin="sy-")
+variant_of("lunar-approach", "soyuz-lok-lunar-approach", LOK_STAGE, skin="sy-")
+for _base, _name in (("lunar-flyby", "lunar-flyby"), ("tei", "tei"), ("trans-earth-coast", "tec")):
+    variant_of(_base, f"soyuz-lok-{_name}", LOK_ALONE, skin="sy-")
+MOON_BELOW = {"d-earth": "d-moon"}
+variant_of("soyuz-lok-blok-d-deployment", "soyuz-lok-blok-d-separation-moon", MOON_BELOW)
+for _base in ("soyuz-lok-transfer-to-lk", "soyuz-lok-transfer-from-lk", "soyuz-lok-docking-lk", "soyuz-lok-undocking-lk"):
+    variant_of(_base, f"{_base}-moon", MOON_BELOW)
+variant_of("soyuz-lok-undocking-lk", "soyuz-lok-release-lk-moon", {**MOON_BELOW, "k-target": "lkl-k-target"})
+variant_of("lk-engine-test", "lk-engine-test-moon", MOON_BELOW, skin="lkm-")
+variant_of("lk-staging", "lk-staging-moon", MOON_BELOW, skin="lkm-")
+for _base in ("powered-descent", "lunar-landing", "lunar-liftoff"):
+    variant_of(f"apollo-{_base}", f"lk-{_base}", {}, skin="lkm-")
+variant_of("apollo-flag", "lk-flag", {}, skin="lkm-", before=["moon.jsx", "walker.jsx", "lk-walk.jsx"])
+variant_of("apollo-samples", "lk-samples", {}, skin="lkm-", before=["moon.jsx", "walker.jsx", "lk-walk.jsx"])
+# Coming home from the Moon there's no retrofire before the modules separation: it starts where the reentry preparations
+# leave the Earth (not sunk) and sinks faster, to end where the reentry starts (modules-separation.jsx's
+# SEP_FROM).
+SEP_MOON = {"SEP_FROM": [0, 39.0, -1.5]}
+variant_of("soyuz-l1-modules-separation", "soyuz-l1-modules-separation-moon", {}, vars=SEP_MOON)
+variant_of("soyuz-lok-modules-separation", "soyuz-lok-modules-separation-moon", {}, vars=SEP_MOON)
+
 
 def read(*path):
     return open(os.path.join(HERE, *path), encoding="utf-8").read() + "\n"
