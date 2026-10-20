@@ -1,4 +1,9 @@
 {
+  "apollo-suborbital-flight": {"glitch": [{"at": 4.05, "sound": "radio-attitude-drift"}], "failure": [{"at": 3.65, "sound": "radio-tumbling"}]},
+  "apollo-reentry-trim": {"success": [{"at": 3.05, "sound": "radio-roger"}], "glitch": [{"at": 3.45, "sound": "radio-attitude-drift"}], "failure": [{"at": 3.05, "sound": "radio-tumbling"}]},
+  "apollo-agena-approach": {"glitch": [{"at": 2.65, "sound": "radio-closing-fast"}]},
+  "apollo-agena-docking": {"glitch": [{"at": 3.45, "sound": "radio-latches"}], "failure": [{"at": 3.45, "sound": "radio-abort-docking"}]},
+  "apollo-agena-undocking": {"failure": [{"at": 2.85, "sound": "radio-tumbling"}]},
   "lk-700-deployment-tl": {"success": [{"at": 0.2, "sound": "radio-watching"}, {"at": 2.65, "sound": "radio-payload-separation"}], "glitch": [{"at": 0.2, "sound": "radio-watching"}, {"at": 2.65, "sound": "radio-separation-late"}], "failure": [{"at": 0.2, "sound": "radio-watching"}, {"at": 2.35, "sound": "radio-collision"}]},
   "lk-700-earth-orbit-tl": {"success": [{"at": 2.15, "sound": "radio-signal-good"}], "glitch": [{"at": 3.45, "sound": "radio-telemetry-lost"}], "failure": [{"at": 3.05, "sound": "radio-data-lost"}]},
   "lk-700-tlc": {"glitch": [{"at": 3.65, "sound": "radio-problem"}], "failure": [{"at": 3.45, "sound": "radio-off-trajectory"}]},

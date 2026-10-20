@@ -2714,6 +2714,8 @@ def lm_parts():
     S = 39
     y0 = 352 + (4.6 + 3.2 + 0.6) * S
     layer("ap-k-chaser", KT(KC, 90, apollo_csm(y0, S)), KC)
+    # The other CSM of a rendezvous (2026-10-20, user: the rendezvous flight's spacecraft B), nose left, facing the chaser.
+    layer("ap-k-other", KT((1150, 470), -90, apollo_csm(y0, S)), (1150, 470))
     quad = y0 - 0.65 * 4.6 * S
     sh_t, sh_b = K_AT(KC, 960 - 1.95 * S - 10, quad, 90), K_AT(KC, 960 + 1.95 * S + 10, quad, 90)
     layer("ap-k-brake", puff(sh_t[0] + 18, sh_t[1] - 6, 9) + puff(sh_b[0] + 18, sh_b[1] + 6, 9), KC)

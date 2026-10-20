@@ -1964,6 +1964,18 @@ variant_of("apollo-flag", "gemini-da-flag", {}, skin="gd-")
 # stage's docking and jettison (the Earth-orbit flights keep theirs).
 for _base in ("apollo-undocking", "apollo-docking-asc", "apollo-lem-jettison"):
     variant_of(_base, f"{_base}-moon", {"d-earth": "d-moon"})
+# Apollo's suborbital flights (2026-10-20, user): the arc up and down, not an orbit, then the SPS test as the burn; the
+# reentry preparations after it trim instead of turning again (as the 7K-L1's).
+variant_of("suborbital-flight", "apollo-suborbital-flight", {}, skin="ap-", before=["project-apollo.jsx", "motes.jsx"])
+variant_of("reentry-trim", "apollo-reentry-trim", {}, skin="ap-", before=["project-apollo.jsx", "motes.jsx"])
+# The rendezvous flight's two CSMs (spacecraft A and B, as Gemini 6 and 7) on the map and close in; the docking flight's
+# CSM meeting, docking with and leaving the Agena target vehicle BASPM gives it (user, 2026-10-20: as BASPM).
+variant_of("gemini-rendezvous-target-approach", "apollo-rendezvous-target-approach", {}, skin="ap-")
+variant_of("gemini-rendezvous", "apollo-rendezvous", {}, skin="ap-")
+AGENA = {"k-target": "gm-k-target", "k-light": "gm-k-light"}
+variant_of("gemini-target-approach", "apollo-agena-approach", AGENA, skin="ap-")
+variant_of("gemini-docking", "apollo-agena-docking", AGENA, skin="ap-")
+variant_of("apollo-undocking", "apollo-agena-undocking", AGENA)
 
 # The Soviet craft to the Moon (2026-10-20, user; parts.py's soviet_moon_parts). Unlike every craft before them, the stage
 # on their tail is BASPM's rocket after the launch: the Blok D. The 7K-L1 rides it into the parking orbit, burns for the
