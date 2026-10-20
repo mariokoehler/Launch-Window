@@ -18802,7 +18802,7 @@
                 "percent": 20.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 5,
             "failurePrestigeDeduction": 12,
             "goalIdsAchieved": []
@@ -18858,7 +18858,7 @@
                 "percent": 45.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 5,
             "failurePrestigeDeduction": 12,
             "goalIdsAchieved": []
@@ -18986,7 +18986,7 @@
                 "percent": 60.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 5,
             "failurePrestigeDeduction": 12,
             "goalIdsAchieved": []
@@ -19050,7 +19050,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 5,
             "failurePrestigeDeduction": 12,
             "goalIdsAchieved": []
@@ -19115,7 +19115,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 5,
             "failurePrestigeDeduction": 12,
             "goalIdsAchieved": []
@@ -19566,7 +19566,7 @@
                 "percent": 20.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 5,
             "failurePrestigeDeduction": 15,
             "goalIdsAchieved": []
@@ -19622,7 +19622,7 @@
                 "percent": 45.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 5,
             "failurePrestigeDeduction": 15,
             "goalIdsAchieved": []
@@ -20401,7 +20401,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 18,
             "goalIdsAchieved": []
@@ -20749,7 +20749,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 18,
             "goalIdsAchieved": []
@@ -22232,7 +22232,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 10,
             "goalIdsAchieved": []
@@ -22688,7 +22688,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 10,
             "goalIdsAchieved": []
@@ -23474,7 +23474,7 @@
                 "percent": 20.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 12,
             "goalIdsAchieved": []
@@ -24188,7 +24188,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 15,
             "goalIdsAchieved": []
@@ -24968,7 +24968,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 16,
             "goalIdsAchieved": []
@@ -25813,7 +25813,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 18,
             "goalIdsAchieved": []
@@ -26161,7 +26161,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 18,
             "goalIdsAchieved": []
@@ -27766,7 +27766,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 15,
             "goalIdsAchieved": []
@@ -27832,7 +27832,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 15,
             "goalIdsAchieved": []
@@ -29190,7 +29190,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 18,
             "goalIdsAchieved": []
@@ -29260,7 +29260,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 18,
             "goalIdsAchieved": []
@@ -30118,7 +30118,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 20,
             "goalIdsAchieved": []
@@ -30188,7 +30188,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 20,
             "goalIdsAchieved": []
@@ -31293,7 +31293,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": []
@@ -31363,7 +31363,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": []
@@ -31737,7 +31737,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": []
@@ -31807,7 +31807,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": []
@@ -32660,7 +32660,7 @@
                 "percent": 35.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 15,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": []
@@ -33403,7 +33403,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 25,
             "goalIdsAchieved": []
@@ -33473,7 +33473,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 25,
             "goalIdsAchieved": []
@@ -34526,7 +34526,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 42,
             "goalIdsAchieved": []
@@ -34596,7 +34596,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 42,
             "goalIdsAchieved": []
@@ -34970,7 +34970,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 42,
             "goalIdsAchieved": []
@@ -35040,7 +35040,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 42,
             "goalIdsAchieved": []
@@ -35975,7 +35975,7 @@
                 "percent": 35.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 15,
             "failurePrestigeDeduction": 42,
             "goalIdsAchieved": [
@@ -36357,7 +36357,7 @@
                 "percent": 35.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 50,
             "failurePrestigeDeduction": 42,
             "goalIdsAchieved": []
@@ -36720,7 +36720,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 45,
             "goalIdsAchieved": []
@@ -36790,7 +36790,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 45,
             "goalIdsAchieved": []
@@ -38094,7 +38094,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 25,
             "goalIdsAchieved": []
@@ -38164,7 +38164,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 25,
             "goalIdsAchieved": []
@@ -39358,7 +39358,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 28,
             "goalIdsAchieved": []
@@ -39428,7 +39428,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 28,
             "goalIdsAchieved": []
@@ -39802,7 +39802,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 28,
             "goalIdsAchieved": []
@@ -39872,7 +39872,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 28,
             "goalIdsAchieved": []
@@ -40725,7 +40725,7 @@
                 "percent": 35.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 20,
             "failurePrestigeDeduction": 28,
             "goalIdsAchieved": []
@@ -41558,7 +41558,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 32,
             "goalIdsAchieved": []
@@ -41628,7 +41628,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 32,
             "goalIdsAchieved": []
@@ -42772,7 +42772,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 45,
             "goalIdsAchieved": []
@@ -42842,7 +42842,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 45,
             "goalIdsAchieved": []
@@ -43216,7 +43216,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 45,
             "goalIdsAchieved": []
@@ -43286,7 +43286,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 45,
             "goalIdsAchieved": []
@@ -44242,7 +44242,7 @@
                 "percent": 35.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 10,
             "failurePrestigeDeduction": 45,
             "goalIdsAchieved": [
@@ -45079,7 +45079,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 48,
             "goalIdsAchieved": []
@@ -45149,7 +45149,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 48,
             "goalIdsAchieved": []
@@ -46542,7 +46542,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": []
@@ -48625,7 +48625,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 20,
             "goalIdsAchieved": []
@@ -48695,7 +48695,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 20,
             "goalIdsAchieved": []
@@ -49256,7 +49256,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 20,
             "goalIdsAchieved": []
@@ -50596,7 +50596,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 18,
             "goalIdsAchieved": []
@@ -50670,7 +50670,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 18,
             "goalIdsAchieved": []
@@ -52442,7 +52442,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": []
@@ -52516,7 +52516,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": []
@@ -54127,7 +54127,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 15,
             "goalIdsAchieved": []
@@ -54485,7 +54485,7 @@
                 "percent": 10.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 10,
             "failurePrestigeDeduction": 15,
             "goalIdsAchieved": []
@@ -54695,7 +54695,7 @@
                 "percent": 5.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 15,
             "goalIdsAchieved": []
@@ -55551,7 +55551,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 18,
             "goalIdsAchieved": []
@@ -56479,7 +56479,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 19,
             "goalIdsAchieved": []
@@ -57497,7 +57497,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 20,
             "goalIdsAchieved": []
@@ -58604,7 +58604,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 21,
             "goalIdsAchieved": []
@@ -59800,7 +59800,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": []
@@ -61085,7 +61085,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 20,
             "goalIdsAchieved": []
@@ -62259,7 +62259,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 19,
             "goalIdsAchieved": []
@@ -62703,7 +62703,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 19,
             "goalIdsAchieved": []
@@ -64689,7 +64689,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 16,
             "goalIdsAchieved": []
@@ -66191,7 +66191,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 18,
             "goalIdsAchieved": []
@@ -67143,7 +67143,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 20,
             "goalIdsAchieved": []
@@ -68185,7 +68185,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 20,
             "goalIdsAchieved": []
@@ -69914,7 +69914,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 17,
             "goalIdsAchieved": []
@@ -70416,7 +70416,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 17,
             "goalIdsAchieved": []
@@ -70499,7 +70499,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 17,
             "goalIdsAchieved": []
@@ -70582,7 +70582,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 17,
             "goalIdsAchieved": []
@@ -71622,7 +71622,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 20,
             "goalIdsAchieved": []
@@ -72381,7 +72381,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 20,
             "goalIdsAchieved": []
@@ -72779,7 +72779,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 20,
             "goalIdsAchieved": []
@@ -73625,7 +73625,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 20,
             "goalIdsAchieved": []
@@ -74029,7 +74029,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": []
@@ -74962,7 +74962,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": []
@@ -75371,7 +75371,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": []
@@ -76391,7 +76391,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": []
@@ -76805,7 +76805,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 20,
             "goalIdsAchieved": []
@@ -77837,7 +77837,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 20,
             "goalIdsAchieved": []
@@ -78242,7 +78242,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 20,
             "goalIdsAchieved": []
@@ -78831,7 +78831,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 20,
             "goalIdsAchieved": []
@@ -79699,7 +79699,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 20,
             "goalIdsAchieved": []
@@ -80155,7 +80155,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 20,
             "goalIdsAchieved": []
@@ -80567,7 +80567,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": []
@@ -81156,7 +81156,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": []
@@ -82111,7 +82111,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": []
@@ -82567,7 +82567,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": []
@@ -83538,7 +83538,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 26,
             "goalIdsAchieved": []
@@ -84986,7 +84986,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 26,
             "goalIdsAchieved": []
@@ -86134,7 +86134,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 18,
             "goalIdsAchieved": []
@@ -86710,7 +86710,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 18,
             "goalIdsAchieved": []
@@ -87902,7 +87902,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 20,
             "goalIdsAchieved": []
@@ -88777,7 +88777,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 20,
             "goalIdsAchieved": []
@@ -89275,7 +89275,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": []
@@ -90245,7 +90245,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": []
@@ -90749,7 +90749,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": []
@@ -91814,7 +91814,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": []
@@ -92323,7 +92323,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 24,
             "goalIdsAchieved": []
@@ -93483,7 +93483,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 24,
             "goalIdsAchieved": []
@@ -93997,7 +93997,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 24,
             "goalIdsAchieved": []
@@ -95252,7 +95252,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 24,
             "goalIdsAchieved": []
@@ -95771,7 +95771,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 26,
             "goalIdsAchieved": []
@@ -97121,7 +97121,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 26,
             "goalIdsAchieved": []
@@ -97645,7 +97645,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 26,
             "goalIdsAchieved": []
@@ -99090,7 +99090,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 26,
             "goalIdsAchieved": []
@@ -99619,7 +99619,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 21,
             "goalIdsAchieved": []
@@ -100791,7 +100791,7 @@
                 "percent": 22.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 21,
             "goalIdsAchieved": []
@@ -101271,7 +101271,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 5,
             "goalIdsAchieved": []
@@ -102525,7 +102525,7 @@
                 "percent": 5.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 5,
             "goalIdsAchieved": []
@@ -103259,7 +103259,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 33,
             "goalIdsAchieved": []
@@ -104793,7 +104793,7 @@
                 "percent": 5.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 33,
             "goalIdsAchieved": []
@@ -108036,7 +108036,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
@@ -108110,7 +108110,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
@@ -110013,7 +110013,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 40,
             "goalIdsAchieved": []
@@ -110087,7 +110087,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 40,
             "goalIdsAchieved": []
@@ -112126,7 +112126,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
@@ -112200,7 +112200,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
@@ -114217,7 +114217,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 41,
             "goalIdsAchieved": []
@@ -114291,7 +114291,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 41,
             "goalIdsAchieved": []
@@ -115603,7 +115603,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 55,
             "goalIdsAchieved": []
@@ -115677,7 +115677,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 55,
             "goalIdsAchieved": []
@@ -118149,7 +118149,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
@@ -118229,7 +118229,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
@@ -118405,7 +118405,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
@@ -118501,7 +118501,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
@@ -118781,7 +118781,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
@@ -118869,7 +118869,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
@@ -118957,7 +118957,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 10,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
@@ -119054,7 +119054,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
@@ -119352,7 +119352,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 85,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": [
@@ -120366,7 +120366,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 41,
             "goalIdsAchieved": []
@@ -120446,7 +120446,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 41,
             "goalIdsAchieved": []
@@ -120622,7 +120622,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 41,
             "goalIdsAchieved": []
@@ -120718,7 +120718,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 41,
             "goalIdsAchieved": []
@@ -120998,7 +120998,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 41,
             "goalIdsAchieved": []
@@ -121170,7 +121170,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 10,
             "failurePrestigeDeduction": 41,
             "goalIdsAchieved": []
@@ -121355,7 +121355,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 41,
             "goalIdsAchieved": []
@@ -121653,7 +121653,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 85,
             "failurePrestigeDeduction": 41,
             "goalIdsAchieved": [
@@ -121887,7 +121887,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 45,
             "goalIdsAchieved": []
@@ -121975,7 +121975,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 45,
             "goalIdsAchieved": []
@@ -122155,7 +122155,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 45,
             "goalIdsAchieved": []
@@ -122251,7 +122251,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 45,
             "goalIdsAchieved": []
@@ -122551,7 +122551,7 @@
                 "percent": 5.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 45,
             "goalIdsAchieved": []
@@ -122651,7 +122651,7 @@
                 "percent": 5.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 45,
             "goalIdsAchieved": []
@@ -122851,7 +122851,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 45,
             "goalIdsAchieved": []
@@ -123027,7 +123027,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 20,
             "failurePrestigeDeduction": 45,
             "goalIdsAchieved": []
@@ -123119,7 +123119,7 @@
                 "percent": 5.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 45,
             "goalIdsAchieved": []
@@ -123415,7 +123415,7 @@
                 "percent": 5.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 45,
             "goalIdsAchieved": []
@@ -123676,7 +123676,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 45,
             "goalIdsAchieved": []
@@ -123974,7 +123974,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 75,
             "failurePrestigeDeduction": 45,
             "goalIdsAchieved": [
@@ -124229,7 +124229,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 50,
             "goalIdsAchieved": []
@@ -124317,7 +124317,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 50,
             "goalIdsAchieved": []
@@ -124501,7 +124501,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 50,
             "goalIdsAchieved": []
@@ -124597,7 +124597,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 50,
             "goalIdsAchieved": []
@@ -124897,7 +124897,7 @@
                 "percent": 5.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 50,
             "goalIdsAchieved": []
@@ -124997,7 +124997,7 @@
                 "percent": 5.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 50,
             "goalIdsAchieved": []
@@ -125197,7 +125197,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 50,
             "goalIdsAchieved": []
@@ -125373,7 +125373,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 20,
             "failurePrestigeDeduction": 50,
             "goalIdsAchieved": []
@@ -125465,7 +125465,7 @@
                 "percent": 5.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 50,
             "goalIdsAchieved": []
@@ -125785,7 +125785,7 @@
                 "percent": 10.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 50,
             "goalIdsAchieved": []
@@ -125909,7 +125909,7 @@
                 "percent": 10.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 50,
             "goalIdsAchieved": []
@@ -126466,7 +126466,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 50,
             "goalIdsAchieved": []
@@ -126764,7 +126764,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 75,
             "failurePrestigeDeduction": 50,
             "goalIdsAchieved": [
@@ -127031,7 +127031,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 65,
             "goalIdsAchieved": []
@@ -127119,7 +127119,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 65,
             "goalIdsAchieved": []
@@ -127303,7 +127303,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 65,
             "goalIdsAchieved": []
@@ -127399,7 +127399,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 65,
             "goalIdsAchieved": []
@@ -127699,7 +127699,7 @@
                 "percent": 5.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 65,
             "goalIdsAchieved": []
@@ -127799,7 +127799,7 @@
                 "percent": 5.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 65,
             "goalIdsAchieved": []
@@ -127999,7 +127999,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 65,
             "goalIdsAchieved": []
@@ -128175,7 +128175,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 20,
             "failurePrestigeDeduction": 65,
             "goalIdsAchieved": []
@@ -128267,7 +128267,7 @@
                 "percent": 5.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 65,
             "goalIdsAchieved": []
@@ -128587,7 +128587,7 @@
                 "percent": 10.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 65,
             "goalIdsAchieved": []
@@ -128715,7 +128715,7 @@
                 "percent": 10.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 65,
             "goalIdsAchieved": []
@@ -128839,7 +128839,7 @@
                 "percent": 10.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 65,
             "goalIdsAchieved": []
@@ -128967,7 +128967,7 @@
                 "percent": 10.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 65,
             "goalIdsAchieved": []
@@ -129091,7 +129091,7 @@
                 "percent": 10.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 65,
             "goalIdsAchieved": []
@@ -129648,7 +129648,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 65,
             "goalIdsAchieved": []
@@ -129946,7 +129946,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 75,
             "failurePrestigeDeduction": 65,
             "goalIdsAchieved": [
@@ -130412,7 +130412,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
@@ -131648,7 +131648,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
@@ -132226,7 +132226,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 41,
             "goalIdsAchieved": []
@@ -133556,7 +133556,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 41,
             "goalIdsAchieved": []
@@ -134143,7 +134143,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 45,
             "goalIdsAchieved": []
@@ -136196,7 +136196,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 45,
             "goalIdsAchieved": []
@@ -136795,7 +136795,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 50,
             "goalIdsAchieved": []
@@ -139160,7 +139160,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 50,
             "goalIdsAchieved": []
@@ -140289,7 +140289,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
@@ -142431,7 +142431,7 @@
                 "percent": 30.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
@@ -144782,7 +144782,7 @@
                 "percent": 30.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 41,
             "goalIdsAchieved": []
@@ -146329,7 +146329,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 44,
             "goalIdsAchieved": []
@@ -148523,7 +148523,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 50,
             "goalIdsAchieved": []
@@ -151750,7 +151750,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
@@ -153809,7 +153809,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 42,
             "goalIdsAchieved": []
@@ -155198,7 +155198,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 60,
             "goalIdsAchieved": []
@@ -157758,7 +157758,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 18,
             "goalIdsAchieved": []
@@ -157838,7 +157838,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 18,
             "goalIdsAchieved": []
@@ -158014,7 +158014,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 18,
             "goalIdsAchieved": []
@@ -158110,7 +158110,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 18,
             "goalIdsAchieved": []
@@ -158466,7 +158466,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 18,
             "goalIdsAchieved": []
@@ -158676,7 +158676,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 95,
             "failurePrestigeDeduction": 18,
             "goalIdsAchieved": [
@@ -159509,7 +159509,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 20,
             "goalIdsAchieved": []
@@ -161329,7 +161329,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 4,
             "goalIdsAchieved": []
@@ -161417,7 +161417,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 4,
             "goalIdsAchieved": []
@@ -161601,7 +161601,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 4,
             "goalIdsAchieved": []
@@ -161697,7 +161697,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 4,
             "goalIdsAchieved": []
@@ -161897,7 +161897,7 @@
                 "percent": 5.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 4,
             "goalIdsAchieved": []
@@ -161997,7 +161997,7 @@
                 "percent": 5.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 4,
             "goalIdsAchieved": []
@@ -162589,7 +162589,7 @@
                 "percent": 5.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 4,
             "goalIdsAchieved": []
@@ -163247,7 +163247,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 100,
             "failurePrestigeDeduction": 4,
             "goalIdsAchieved": [
@@ -163459,7 +163459,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 6,
             "goalIdsAchieved": []
@@ -163547,7 +163547,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 6,
             "goalIdsAchieved": []
@@ -163731,7 +163731,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 6,
             "goalIdsAchieved": []
@@ -163827,7 +163827,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 6,
             "goalIdsAchieved": []
@@ -164127,7 +164127,7 @@
                 "percent": 5.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 6,
             "goalIdsAchieved": []
@@ -164227,7 +164227,7 @@
                 "percent": 5.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 6,
             "goalIdsAchieved": []
@@ -164819,7 +164819,7 @@
                 "percent": 5.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 6,
             "goalIdsAchieved": []
@@ -165477,7 +165477,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 100,
             "failurePrestigeDeduction": 6,
             "goalIdsAchieved": [
@@ -165686,7 +165686,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 21,
             "goalIdsAchieved": []
@@ -167004,7 +167004,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": []
@@ -168434,7 +168434,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 23,
             "goalIdsAchieved": []
@@ -169976,7 +169976,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 24,
             "goalIdsAchieved": []
@@ -171630,7 +171630,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 30,
             "goalIdsAchieved": []
@@ -173237,7 +173237,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 31,
             "goalIdsAchieved": []
@@ -173317,7 +173317,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 31,
             "goalIdsAchieved": []
@@ -174749,7 +174749,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 100,
             "failurePrestigeDeduction": 31,
             "goalIdsAchieved": [
@@ -174956,7 +174956,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 32,
             "goalIdsAchieved": []
@@ -175036,7 +175036,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 32,
             "goalIdsAchieved": []
@@ -176575,7 +176575,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 100,
             "failurePrestigeDeduction": 32,
             "goalIdsAchieved": [
@@ -176787,7 +176787,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 33,
             "goalIdsAchieved": []
@@ -176867,7 +176867,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 33,
             "goalIdsAchieved": []
@@ -178513,7 +178513,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 100,
             "failurePrestigeDeduction": 33,
             "goalIdsAchieved": [
@@ -178730,7 +178730,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 23,
             "goalIdsAchieved": []
@@ -179346,7 +179346,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 23,
             "goalIdsAchieved": []
@@ -181496,7 +181496,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 28,
             "goalIdsAchieved": []
@@ -183601,7 +183601,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 18,
             "goalIdsAchieved": []
@@ -184309,7 +184309,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 18,
             "goalIdsAchieved": []
@@ -185352,7 +185352,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 20,
             "goalIdsAchieved": []
@@ -185700,7 +185700,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 20,
             "goalIdsAchieved": []
@@ -186152,7 +186152,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 20,
             "goalIdsAchieved": []
@@ -186557,7 +186557,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 21,
             "goalIdsAchieved": []
@@ -186905,7 +186905,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 21,
             "goalIdsAchieved": []
@@ -187464,7 +187464,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 21,
             "goalIdsAchieved": []
@@ -187875,7 +187875,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": []
@@ -188889,7 +188889,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": []
@@ -189305,7 +189305,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 23,
             "goalIdsAchieved": []
@@ -190381,7 +190381,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 23,
             "goalIdsAchieved": []
@@ -190802,7 +190802,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 24,
             "goalIdsAchieved": []
@@ -191970,7 +191970,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 24,
             "goalIdsAchieved": []
@@ -192396,7 +192396,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 25,
             "goalIdsAchieved": []
@@ -193656,7 +193656,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 25,
             "goalIdsAchieved": []
@@ -194087,7 +194087,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 26,
             "goalIdsAchieved": []
@@ -195439,7 +195439,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 26,
             "goalIdsAchieved": []
@@ -195875,7 +195875,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 21,
             "goalIdsAchieved": []
@@ -197055,7 +197055,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 21,
             "goalIdsAchieved": []
@@ -197467,7 +197467,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": []
@@ -198083,7 +198083,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": []
@@ -199002,7 +199002,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": []
@@ -199478,7 +199478,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": []
@@ -199898,7 +199898,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 23,
             "goalIdsAchieved": []
@@ -200514,7 +200514,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 23,
             "goalIdsAchieved": []
@@ -201533,7 +201533,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 23,
             "goalIdsAchieved": []
@@ -202009,7 +202009,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 23,
             "goalIdsAchieved": []
@@ -203787,7 +203787,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 28,
             "goalIdsAchieved": []
@@ -204403,7 +204403,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 28,
             "goalIdsAchieved": []
@@ -205557,7 +205557,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 28,
             "goalIdsAchieved": []
@@ -206033,7 +206033,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 28,
             "goalIdsAchieved": []
@@ -206453,7 +206453,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 33,
             "goalIdsAchieved": []
@@ -207069,7 +207069,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 33,
             "goalIdsAchieved": []
@@ -208616,7 +208616,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 33,
             "goalIdsAchieved": []
@@ -209095,7 +209095,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 33,
             "goalIdsAchieved": []

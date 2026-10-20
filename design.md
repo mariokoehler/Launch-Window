@@ -2916,10 +2916,15 @@ first (login → action → scheduled resolution → result, end to end) before 
     `EARTH-APPROACH` steps for one step repeated and merged them; the names showed they were two steps, and both
     are back. The free-return concept chip, which named the slingshot, names these flybys instead. The pack hash
     changed.
-  - **Crew risk where BASPM has none (user, 2026-10-20).** No step of five crewed configurations risks the crew:
-    lunar-orbit Gemini's flyby and orbit flight and its propulsion-module test, direct-ascent Gemini's crewed test,
-    and Soyuz 7K-L1's crewed flyby. The converter gives them their sister flights' risk: every step with the crew in
-    it from the launch on for Gemini, from the countdown on for the 7K-L1.
+  - **Every step with the crew in it risks the crew (user, 2026-10-20).** BASPM's flag for it (`CrewCanPerish`) is
+    patchy: it left out 282 crewed steps in 105 standard configurations (and 16 in the early era), most of them launch
+    preparations (111), modules separations (46), countdowns (29) and recoveries, but also whole flights' moonwalks
+    and rover drives, dockings and coasts; and it set it on steps of uncrewed flights. The converter now ignores it:
+    a step risks the crew exactly when the crew has a part in it. History backs the odd-looking ones: the Apollo 1
+    fire was a test on the pad, Liberty Bell 7 sank after splashdown, and Soyuz 5's modules failed to separate. This
+    replaces the earlier fix for the five crewed configurations BASPM gave no risk at all. Measured with `ContentPackPlayouts standard smart`
+    (200 games): catastrophes 129 to 173, astronauts lost 289 to 372 (about 1.4 to 1.9 a game), seasons grounded after
+    a loss 429 to 560; the Moon race's median stays at 81 (NASA) and 82 (Soviet). Both packs' hashes changed.
   - **Left as BASPM has them:** the 7K-L3 orbit's two `lunar-orbit` steps (the second an inclination change,
     the uncrewed one's a Blok D separation, now retyped), LK-700's landing's three `lunar-surface-activities`, and
     smaller name mismatches that change no step's meaning (the 7K-L3's `descent-and-landing` named "Descent", the
