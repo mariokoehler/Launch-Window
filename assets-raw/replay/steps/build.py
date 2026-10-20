@@ -597,7 +597,7 @@ STEPS = {
         "times": [0.0, 1.5, 2.9, 3.4, 4.2, 6.4],
     },
     "explorer-1-deployment": {
-        "pad": False, "source": "deployment", "skin": "ex1-",
+        "pad": False, "source": "deployment", "skin": "ex1-", "after": ["explorer-whips.jsx"],
         "success": (6.0, 2.6), "glitch": (6.0, 2.6), "failure": (6.5, 2.3),
         "times": [0.5, 1.2, 1.9, 2.4, 3.6, 5.9],
     },

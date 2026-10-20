@@ -1659,8 +1659,20 @@ def sputnik1(k=1.0):
             f'<path d="M944 414 Q952 408 962 408" fill="none" {LINE} {w(1.4)} opacity="0.6"/>')
 
 
-def explorer1(base=500, k=1.0, motor=True):
-    """Explorer 1 nose up, its foot at base: the motor case, the instrument section in bands, the nose, four whips."""
+def explorer1_whips(base=500, k=1.0, spread=1.0):
+    """Explorer 1's four whip antennas, spread out by spread (1 out in orbit; 0.13 folded down along the body, as they
+    rode to orbit, until its spin flung them out)."""
+    w = lambda x: f'stroke-width="{x * k:.2f}"'
+    x = lambda s, d: f"{960 + s * (8 + (d - 8) * spread):.1f}"
+    return ("".join(f'<path d="M{x(s, 8)} {base - 96} Q{x(s, 40)} {base - 86} {x(s, 62)} {base - 54}" fill="none" '
+                    f'{LINE} {w(1.6)}/>' for s in (-1, 1))
+            + "".join(f'<path d="M{x(s, 8)} {base - 92} Q{x(s, 26)} {base - 70} {x(s, 36)} {base - 34}" fill="none" '
+                      f'{LINE} {w(1.4)} opacity="0.8"/>' for s in (-1, 1)))
+
+
+def explorer1(base=500, k=1.0, motor=True, spread=1.0):
+    """Explorer 1 nose up, its foot at base: the motor case, the instrument section in bands, the nose, four whips
+    (explorer1_whips; spread None for none)."""
     w = lambda x: f'stroke-width="{x * k:.2f}"'
     out = ""
     if motor:
@@ -1669,11 +1681,9 @@ def explorer1(base=500, k=1.0, motor=True):
             + "".join(f'<rect x="952" y="{base - 150 + 12 * j}" width="16" height="6" fill="{NAVY}" opacity="0.85"/>'
                       for j in range(5))
             + f'<rect x="952" y="{base - 150}" width="16" height="60" fill="none" {LINE} {w(2.2)}/>'
-            f'<path d="M952 {base - 150} L960 {base - 178} L968 {base - 150} Z" fill="#ffffff" {LINE} {w(2)}/>'
-            + "".join(f'<path d="M{960 + s * 8} {base - 96} Q{960 + s * 40} {base - 86} {960 + s * 62} {base - 54}" fill="none" '
-                      f'{LINE} {w(1.6)}/>' for s in (-1, 1))
-            + "".join(f'<path d="M{960 + s * 8} {base - 92} Q{960 + s * 26} {base - 70} {960 + s * 36} {base - 34}" fill="none" '
-                      f'{LINE} {w(1.4)} opacity="0.8"/>' for s in (-1, 1)))
+            f'<path d="M952 {base - 150} L960 {base - 178} L968 {base - 150} Z" fill="#ffffff" {LINE} {w(2)}/>')
+    if spread is not None:
+        out += explorer1_whips(base, k, spread)
     return out
 
 
@@ -1706,7 +1716,8 @@ def satellite_parts():
         # prefix: (on the rocket, bare in the deployment and in orbit)
         "sp1": (sat_fairing(), sputnik1()),
         "sp2": (sat_fairing(top=300), sputnik2()),
-        "ex1": (juno_tub() + explorer1(base=462, motor=False), explorer1()),
+        # Explorer 1 (2026-10-20, user): its whips folded down along it on the rocket, out in orbit.
+        "ex1": (juno_tub() + explorer1(base=462, motor=False, spread=EX1_FOLDED), explorer1()),
     }
     for key, (on_rocket, bare) in sats.items():
         layer(f"{key}-rocket", rocket[:nose] + on_rocket, (960, 600))
@@ -1714,6 +1725,16 @@ def satellite_parts():
         layer(f"{key}-d-payload", f'<g transform="{big}"><g transform="{turn}">{bare}</g></g>', D_AT(914, 520))
         thick = re.sub(r'stroke-width="[\d.]+"', 'stroke-width="5"', bare)
         layer(f"{key}-o-sat", f'<g transform="translate(960 560) scale(0.6) translate(-960 -426)">{thick}</g>', (960, 560))
+    # Explorer 1's deployment (explorer-whips.jsx): the satellite folded, and its whips in EX1_STEPS layers from folded
+    # to out, shown one at a time as its spin flings them out.
+    layer("ex1-d-payload", f'<g transform="{big}"><g transform="{turn}">{explorer1(spread=None)}</g></g>', D_AT(914, 520))
+    for n in range(EX1_STEPS + 1):
+        spread = EX1_FOLDED + (1 - EX1_FOLDED) * n / EX1_STEPS
+        layer(f"ex1-d-whips-{n}", f'<g transform="{big}"><g transform="{turn}">{explorer1_whips(spread=spread)}</g></g>',
+              D_AT(914, 520))
+
+
+EX1_FOLDED, EX1_STEPS = 0.13, 12
 
 
 # --- Vostok (2026-10-18, user; the early-era pack): the descent sphere and its instrument module ---------

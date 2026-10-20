@@ -2046,7 +2046,9 @@ clips, the replay is meant to be watched like a short film, and the player can s
   (`a-les`), the sphere alone on its chute. Korabl-Sputnik 2 flies it too, landing on the ground (its
   `descent-and-splashdown`). Sputnik 1 (`sp1-`), Explorer 1 (`ex1-`) and Sputnik 2 (`sp2-`) fly as themselves in
   the satellite's clips, Sputnik 2's heartbeat included. Simplified: the rocket stays generic (no R-7, no Juno I,
-  Explorer 1 standing on Juno's spinning tub only); Sputnik 2 separates in its deployment, though it stayed on its
+  Explorer 1 standing on Juno's spinning tub only; it flew bare, with no fairing, so its whip antennas lie folded
+  along it on the rocket and swing out 0.3 s after the deployment's push, `explorer-whips.jsx`, user, 2026-10-20);
+  Sputnik 2 separates in its deployment, though it stayed on its
   core stage; the satellites drawn larger than their rocket's scale. Vostok's pilot doesn't eject in the descent
   yet. Unconfirmed.
 - **Apollo's command and service module (user, 2026-10-18; `ap-`, `apollo-*`):** on the pad in its adapter under the

@@ -558,6 +558,13 @@ leading to satellite navigation.
   lines to every station, which were expensive; they keyed the stations from Mercury through Apollo.
   Generated for the game in `assets-raw/audio/quindar/` (2026-10-14). Sources: Wikipedia ("Quindar tones"),
   NASA's Apollo Lunar Surface Journal ("Quindar tones").
+- **Explorer 1 flew bare** (found 2026-10-20, the replay's Explorer 1): no nose fairing. The satellite was its own
+  last stage, a single small motor with the instrument section on its nose, standing on the spinning tub of the
+  Jupiter-C's upper stages, spun up on the pad to hold them steady. Its four flexible whip antennas lay folded for
+  the launch and were swung out by the spin once it was free (the replay shows them so). The whips flexing also
+  drained the spin about its long axis, so within hours it was tumbling end over end, the flat spin in G4's notes:
+  an early lesson in why a spinning craft must spin about its widest axis. **Not yet checked:** the whips' folding
+  at launch and their release by the spin; check before a history note uses them.
 - **Apollo's lunar module** (the replay's Apollo, 2026-10-18): about 7 m tall and 4.3 m across its legs; the descent
   stage wrapped in gold and amber Kapton foil against the Sun's heat, the ascent stage's faceted cabin on top with its
   two triangular windows, the docking tunnel on its roof (the commander flew the docking looking up through a small
