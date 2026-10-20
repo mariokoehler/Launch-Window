@@ -3343,7 +3343,8 @@ def gemini_parts():
                 + gm_poly(f, [(-GM_EQUIP, c0 - ST_LEN), (-GM_EQUIP, c0), (GM_EQUIP, c0), (GM_EQUIP, c0 - ST_LEN)], "#ffffff", "2.4")
                 + "".join(f'<path d="M{gm_pt(f, -GM_EQUIP, c0 - u)} L{gm_pt(f, GM_EQUIP, c0 - u)}" fill="none" {LINE} '
                           f'stroke-width="1.2" opacity="0.6"/>' for u in (1.2, ST_LEN - 1.6))
-                + gm_poly(f, [(-GM_EQUIP, c0), (-1.75, craft_foot), (1.75, craft_foot), (GM_EQUIP, c0)], "#ffffff", "2.4"))
+                # The adapter up to the landing module's foot, its engine bell inside.
+                + gm_poly(f, [(-GM_EQUIP, c0), (-1.75, GM_EQUIP_Y), (1.75, GM_EQUIP_Y), (GM_EQUIP, c0)], "#ffffff", "2.4"))
     layer("gd-o-sat-stack", on_map(stage_at(fs) + gemini_direct(fs, False)), (960, 560))
     layer("gd-o-sat-top", on_map(gemini_direct(fs, False)), (960, 560))
     layer("gd-o-sat-stage", on_map(stage_at(fs)), (960, 560))
