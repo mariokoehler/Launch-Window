@@ -50752,7 +50752,7 @@
                 "percent": 30.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 18,
             "goalIdsAchieved": []
@@ -50834,7 +50834,7 @@
                 "percent": 35.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 18,
             "goalIdsAchieved": []
@@ -50916,7 +50916,7 @@
                 "percent": 35.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 18,
             "goalIdsAchieved": []
@@ -50994,7 +50994,7 @@
                 "percent": 20.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 18,
             "goalIdsAchieved": []
@@ -51076,7 +51076,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 18,
             "goalIdsAchieved": [
@@ -51166,7 +51166,7 @@
                 "percent": 20.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 18,
             "goalIdsAchieved": []
@@ -51248,7 +51248,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 18,
             "goalIdsAchieved": []
@@ -51336,7 +51336,7 @@
                 "percent": 20.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 18,
             "goalIdsAchieved": []
@@ -51410,7 +51410,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 18,
             "goalIdsAchieved": []
@@ -51464,7 +51464,7 @@
                 "percent": 30.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 18,
             "goalIdsAchieved": [
@@ -51522,7 +51522,7 @@
                 "percent": 35.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 18,
             "goalIdsAchieved": []
@@ -51570,7 +51570,7 @@
                 "percent": 35.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 100,
             "failurePrestigeDeduction": 18,
             "goalIdsAchieved": [
@@ -52598,7 +52598,7 @@
                 "percent": 30.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": []
@@ -52680,7 +52680,7 @@
                 "percent": 35.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": []
@@ -52762,7 +52762,7 @@
                 "percent": 35.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": []
@@ -52840,7 +52840,7 @@
                 "percent": 20.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": []
@@ -52922,7 +52922,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": []
@@ -53010,7 +53010,7 @@
                 "percent": 20.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": []
@@ -53092,7 +53092,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": []
@@ -53180,7 +53180,7 @@
                 "percent": 20.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": []
@@ -53254,7 +53254,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": []
@@ -53308,7 +53308,7 @@
                 "percent": 30.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": [
@@ -53366,7 +53366,7 @@
                 "percent": 35.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": []
@@ -53414,7 +53414,7 @@
                 "percent": 35.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 100,
             "failurePrestigeDeduction": 22,
             "goalIdsAchieved": [
@@ -108188,7 +108188,7 @@
                 "percent": 30.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
@@ -108270,7 +108270,7 @@
                 "percent": 35.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
@@ -108352,7 +108352,7 @@
                 "percent": 35.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
@@ -108438,7 +108438,7 @@
                 "percent": 20.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
@@ -108520,7 +108520,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
@@ -108608,7 +108608,7 @@
                 "percent": 20.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
@@ -108690,7 +108690,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
@@ -108782,7 +108782,7 @@
                 "percent": 20.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
@@ -108860,7 +108860,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
@@ -108914,7 +108914,7 @@
                 "percent": 30.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
@@ -108970,7 +108970,7 @@
                 "percent": 35.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
@@ -109018,7 +109018,7 @@
                 "percent": 35.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 100,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": [
@@ -110167,7 +110167,7 @@
                 "percent": 30.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 40,
             "goalIdsAchieved": []
@@ -110249,7 +110249,7 @@
                 "percent": 35.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 40,
             "goalIdsAchieved": []
@@ -110331,7 +110331,7 @@
                 "percent": 35.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 40,
             "goalIdsAchieved": []
@@ -110417,7 +110417,7 @@
                 "percent": 20.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 40,
             "goalIdsAchieved": []
@@ -110499,7 +110499,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 40,
             "goalIdsAchieved": []
@@ -110587,7 +110587,7 @@
                 "percent": 20.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 40,
             "goalIdsAchieved": []
@@ -110669,7 +110669,7 @@
                 "percent": 17.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 40,
             "goalIdsAchieved": []
@@ -110753,7 +110753,7 @@
                 "percent": 17.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 40,
             "goalIdsAchieved": []
@@ -110835,7 +110835,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 40,
             "goalIdsAchieved": []
@@ -110927,7 +110927,7 @@
                 "percent": 20.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 40,
             "goalIdsAchieved": []
@@ -111005,7 +111005,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 40,
             "goalIdsAchieved": []
@@ -111059,7 +111059,7 @@
                 "percent": 30.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 40,
             "goalIdsAchieved": []
@@ -111115,7 +111115,7 @@
                 "percent": 35.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 40,
             "goalIdsAchieved": []
@@ -111163,7 +111163,7 @@
                 "percent": 35.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 100,
             "failurePrestigeDeduction": 40,
             "goalIdsAchieved": [
@@ -140142,47 +140142,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "11-lunar-flyby",
-            "componentInvolvements": [
-              {
-                "componentId": "soyuz-7k-l1-spacecraft",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 25
-              },
-              {
-                "slot": 3,
-                "percent": 15
-              },
-              {
-                "slot": 4,
-                "percent": 20
-              },
-              {
-                "slot": 5,
-                "percent": 15
-              },
-              {
-                "slot": 6,
-                "percent": 10
-              },
-              {
-                "slot": 9,
-                "percent": 15
-              }
-            ],
-            "crewInvolvements": [],
-            "crewRisk": false,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 5,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "12-moon-earth-coast",
+            "id": "11-moon-earth-coast",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-l1-spacecraft",
@@ -140218,7 +140178,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "13-reentry-preparations",
+            "id": "12-reentry-preparations",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-l1-spacecraft",
@@ -140262,7 +140222,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "14-modules-separation",
+            "id": "13-modules-separation",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-l1-spacecraft",
@@ -140302,7 +140262,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "15-reentry",
+            "id": "14-reentry",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-l1-spacecraft",
@@ -140330,7 +140290,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "16-descent",
+            "id": "15-descent",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-l1-spacecraft",
@@ -140362,7 +140322,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "17-descent",
+            "id": "16-recovery",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-l1-spacecraft",
@@ -140611,7 +140571,7 @@
                 "percent": 25.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
@@ -140689,7 +140649,7 @@
                 "percent": 30.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
@@ -140767,7 +140727,7 @@
                 "percent": 35.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
@@ -140845,7 +140805,7 @@
                 "percent": 35.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
@@ -140931,7 +140891,7 @@
                 "percent": 20.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
@@ -141013,7 +140973,7 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
@@ -141097,7 +141057,7 @@
                 "percent": 20.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
@@ -141179,7 +141139,7 @@
                 "percent": 17.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
@@ -141255,91 +141215,13 @@
                 "percent": 17.5
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 20,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
           },
           {
-            "id": "11-lunar-flyby",
-            "componentInvolvements": [
-              {
-                "componentId": "soyuz-7k-l1-spacecraft",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 15
-              },
-              {
-                "slot": 3,
-                "percent": 12
-              },
-              {
-                "slot": 4,
-                "percent": 5
-              },
-              {
-                "slot": 5,
-                "percent": 13
-              },
-              {
-                "slot": 6,
-                "percent": 7
-              },
-              {
-                "slot": 7,
-                "percent": 10
-              },
-              {
-                "slot": 8,
-                "percent": 7
-              },
-              {
-                "slot": 12,
-                "percent": 13
-              },
-              {
-                "slot": 13,
-                "percent": 18
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 20.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 30.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 15.0
-              },
-              {
-                "slot": 1,
-                "skill": "PILOTING",
-                "percent": 20.0
-              },
-              {
-                "slot": 1,
-                "skill": "FITNESS",
-                "percent": 15.0
-              }
-            ],
-            "crewRisk": false,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 34,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "12-moon-earth-coast",
+            "id": "11-moon-earth-coast",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-l1-spacecraft",
@@ -141421,13 +141303,13 @@
                 "percent": 20.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
           },
           {
-            "id": "13-reentry-preparations",
+            "id": "12-reentry-preparations",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-l1-spacecraft",
@@ -141495,13 +141377,13 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
           },
           {
-            "id": "14-modules-separation",
+            "id": "13-modules-separation",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-l1-spacecraft",
@@ -141573,13 +141455,13 @@
                 "percent": 15.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
           },
           {
-            "id": "15-reentry",
+            "id": "14-reentry",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-l1-spacecraft",
@@ -141627,13 +141509,13 @@
                 "percent": 30.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
           },
           {
-            "id": "16-descent",
+            "id": "15-descent",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-l1-spacecraft",
@@ -141683,13 +141565,13 @@
                 "percent": 35.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 0,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
           },
           {
-            "id": "17-recovery",
+            "id": "16-recovery",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-l1-spacecraft",
@@ -141731,7 +141613,7 @@
                 "percent": 35.0
               }
             ],
-            "crewRisk": false,
+            "crewRisk": true,
             "prestigeSharePercent": 80,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": [
@@ -142242,7 +142124,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "09-loi",
+            "id": "09-lunar-approach",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -142290,55 +142172,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "10-lunar-orbit",
-            "componentInvolvements": [
-              {
-                "componentId": "soyuz-7k-lok-spacecraft",
-                "percent": 70
-              },
-              {
-                "componentId": "@rocket-1",
-                "percent": 30
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 18
-              },
-              {
-                "slot": 2,
-                "percent": 18
-              },
-              {
-                "slot": 4,
-                "percent": 20
-              },
-              {
-                "slot": 5,
-                "percent": 15
-              },
-              {
-                "slot": 6,
-                "percent": 10
-              },
-              {
-                "slot": 7,
-                "percent": 7
-              },
-              {
-                "slot": 10,
-                "percent": 12
-              }
-            ],
-            "crewInvolvements": [],
-            "crewRisk": false,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 6,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "11-lunar-flyby",
+            "id": "10-lunar-flyby",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -142370,51 +142204,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "12-tei",
-            "componentInvolvements": [
-              {
-                "componentId": "soyuz-7k-lok-spacecraft",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 23
-              },
-              {
-                "slot": 2,
-                "percent": 18
-              },
-              {
-                "slot": 3,
-                "percent": 15
-              },
-              {
-                "slot": 4,
-                "percent": 12
-              },
-              {
-                "slot": 5,
-                "percent": 10
-              },
-              {
-                "slot": 6,
-                "percent": 12
-              },
-              {
-                "slot": 10,
-                "percent": 10
-              }
-            ],
-            "crewInvolvements": [],
-            "crewRisk": false,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 6,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "13-trans-earth-coast",
+            "id": "11-trans-earth-coast",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -142458,7 +142248,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "14-earth-approach",
+            "id": "12-earth-approach",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -142502,51 +142292,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "15-earth-approach",
-            "componentInvolvements": [
-              {
-                "componentId": "soyuz-7k-lok-spacecraft",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 18
-              },
-              {
-                "slot": 2,
-                "percent": 18
-              },
-              {
-                "slot": 4,
-                "percent": 20
-              },
-              {
-                "slot": 5,
-                "percent": 15
-              },
-              {
-                "slot": 6,
-                "percent": 10
-              },
-              {
-                "slot": 7,
-                "percent": 7
-              },
-              {
-                "slot": 10,
-                "percent": 12
-              }
-            ],
-            "crewInvolvements": [],
-            "crewRisk": false,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 6,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "16-reentry",
+            "id": "13-reentry",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -142578,7 +142324,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "17-descent-and-landing",
+            "id": "14-descent-and-landing",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -142614,7 +142360,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "18-recovery",
+            "id": "15-recovery",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -143387,7 +143133,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "09-loi",
+            "id": "09-lunar-approach",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -143469,99 +143215,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "10-lunar-orbit",
-            "componentInvolvements": [
-              {
-                "componentId": "soyuz-7k-lok-spacecraft",
-                "percent": 70
-              },
-              {
-                "componentId": "@rocket-1",
-                "percent": 30
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 15
-              },
-              {
-                "slot": 2,
-                "percent": 15
-              },
-              {
-                "slot": 4,
-                "percent": 5
-              },
-              {
-                "slot": 5,
-                "percent": 7
-              },
-              {
-                "slot": 6,
-                "percent": 20
-              },
-              {
-                "slot": 7,
-                "percent": 13
-              },
-              {
-                "slot": 8,
-                "percent": 10
-              },
-              {
-                "slot": 9,
-                "percent": 5
-              },
-              {
-                "slot": 13,
-                "percent": 10
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 17.5
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 10.0
-              },
-              {
-                "slot": 0,
-                "skill": "SCIENCE",
-                "percent": 10.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 17.5
-              },
-              {
-                "slot": 1,
-                "skill": "LEADERSHIP",
-                "percent": 7.5
-              },
-              {
-                "slot": 1,
-                "skill": "PILOTING",
-                "percent": 20.0
-              },
-              {
-                "slot": 1,
-                "skill": "FITNESS",
-                "percent": 17.5
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 34,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "11-lunar-flyby",
+            "id": "10-lunar-flyby",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -143649,85 +143303,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "12-tei",
-            "componentInvolvements": [
-              {
-                "componentId": "soyuz-7k-lok-spacecraft",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 15
-              },
-              {
-                "slot": 2,
-                "percent": 15
-              },
-              {
-                "slot": 3,
-                "percent": 13
-              },
-              {
-                "slot": 4,
-                "percent": 5
-              },
-              {
-                "slot": 5,
-                "percent": 7
-              },
-              {
-                "slot": 6,
-                "percent": 13
-              },
-              {
-                "slot": 7,
-                "percent": 10
-              },
-              {
-                "slot": 8,
-                "percent": 12
-              },
-              {
-                "slot": 13,
-                "percent": 10
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 20.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 30.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 15.0
-              },
-              {
-                "slot": 1,
-                "skill": "PILOTING",
-                "percent": 20.0
-              },
-              {
-                "slot": 1,
-                "skill": "FITNESS",
-                "percent": 15.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 34,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "13-trans-earth-coast",
+            "id": "11-trans-earth-coast",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -143819,7 +143395,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "14-earth-approach",
+            "id": "12-earth-approach",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -143897,85 +143473,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "15-earth-approach",
-            "componentInvolvements": [
-              {
-                "componentId": "soyuz-7k-lok-spacecraft",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 15
-              },
-              {
-                "slot": 2,
-                "percent": 15
-              },
-              {
-                "slot": 4,
-                "percent": 5
-              },
-              {
-                "slot": 5,
-                "percent": 7
-              },
-              {
-                "slot": 6,
-                "percent": 20
-              },
-              {
-                "slot": 7,
-                "percent": 13
-              },
-              {
-                "slot": 8,
-                "percent": 10
-              },
-              {
-                "slot": 9,
-                "percent": 5
-              },
-              {
-                "slot": 13,
-                "percent": 10
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 20.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 30.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 15.0
-              },
-              {
-                "slot": 1,
-                "skill": "PILOTING",
-                "percent": 20.0
-              },
-              {
-                "slot": 1,
-                "skill": "FITNESS",
-                "percent": 15.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 34,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "16-reentry",
+            "id": "13-reentry",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -144033,7 +143531,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "17-descent-and-landing",
+            "id": "14-descent-and-landing",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -144093,7 +143591,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "18-recovery",
+            "id": "15-recovery",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -144930,51 +144428,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "15-earth-approach",
-            "componentInvolvements": [
-              {
-                "componentId": "soyuz-7k-lok-spacecraft",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 18
-              },
-              {
-                "slot": 2,
-                "percent": 18
-              },
-              {
-                "slot": 4,
-                "percent": 20
-              },
-              {
-                "slot": 5,
-                "percent": 15
-              },
-              {
-                "slot": 6,
-                "percent": 10
-              },
-              {
-                "slot": 7,
-                "percent": 7
-              },
-              {
-                "slot": 10,
-                "percent": 12
-              }
-            ],
-            "crewInvolvements": [],
-            "crewRisk": false,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 8,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "16-reentry",
+            "id": "15-reentry",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -145006,7 +144460,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "17-descent-and-landing",
+            "id": "16-descent-and-landing",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -145042,7 +144496,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "18-recovery",
+            "id": "17-recovery",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -146326,85 +145780,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "15-earth-approach",
-            "componentInvolvements": [
-              {
-                "componentId": "soyuz-7k-lok-spacecraft",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 15
-              },
-              {
-                "slot": 2,
-                "percent": 15
-              },
-              {
-                "slot": 4,
-                "percent": 5
-              },
-              {
-                "slot": 5,
-                "percent": 7
-              },
-              {
-                "slot": 6,
-                "percent": 20
-              },
-              {
-                "slot": 7,
-                "percent": 13
-              },
-              {
-                "slot": 8,
-                "percent": 10
-              },
-              {
-                "slot": 9,
-                "percent": 5
-              },
-              {
-                "slot": 13,
-                "percent": 10
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 20.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 30.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 15.0
-              },
-              {
-                "slot": 1,
-                "skill": "PILOTING",
-                "percent": 20.0
-              },
-              {
-                "slot": 1,
-                "skill": "FITNESS",
-                "percent": 15.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 41,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "16-reentry",
+            "id": "15-reentry",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -146462,7 +145838,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "17-descent-and-landing",
+            "id": "16-descent-and-landing",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -146522,7 +145898,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "18-recovery",
+            "id": "17-recovery",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -148492,85 +147868,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "21-earth-approach",
-            "componentInvolvements": [
-              {
-                "componentId": "soyuz-7k-lok-spacecraft",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 15
-              },
-              {
-                "slot": 2,
-                "percent": 15
-              },
-              {
-                "slot": 4,
-                "percent": 5
-              },
-              {
-                "slot": 5,
-                "percent": 7
-              },
-              {
-                "slot": 6,
-                "percent": 20
-              },
-              {
-                "slot": 7,
-                "percent": 13
-              },
-              {
-                "slot": 10,
-                "percent": 10
-              },
-              {
-                "slot": 11,
-                "percent": 5
-              },
-              {
-                "slot": 15,
-                "percent": 10
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 20.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 30.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 15.0
-              },
-              {
-                "slot": 1,
-                "skill": "PILOTING",
-                "percent": 20.0
-              },
-              {
-                "slot": 1,
-                "skill": "FITNESS",
-                "percent": 15.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 44,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "22-reentry",
+            "id": "21-reentry",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -148628,7 +147926,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "23-descent-and-landing",
+            "id": "22-descent-and-landing",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -148688,7 +147986,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "24-recovery",
+            "id": "23-recovery",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -150985,85 +150283,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "24-earth-approach",
-            "componentInvolvements": [
-              {
-                "componentId": "soyuz-7k-lok-spacecraft",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 15
-              },
-              {
-                "slot": 2,
-                "percent": 15
-              },
-              {
-                "slot": 4,
-                "percent": 5
-              },
-              {
-                "slot": 5,
-                "percent": 7
-              },
-              {
-                "slot": 6,
-                "percent": 20
-              },
-              {
-                "slot": 7,
-                "percent": 13
-              },
-              {
-                "slot": 10,
-                "percent": 10
-              },
-              {
-                "slot": 11,
-                "percent": 5
-              },
-              {
-                "slot": 15,
-                "percent": 10
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 20.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 30.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 15.0
-              },
-              {
-                "slot": 1,
-                "skill": "PILOTING",
-                "percent": 20.0
-              },
-              {
-                "slot": 1,
-                "skill": "FITNESS",
-                "percent": 15.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 50,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "25-reentry",
+            "id": "24-reentry",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -151121,7 +150341,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "26-descent-and-landing",
+            "id": "25-descent-and-landing",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -151181,7 +150401,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "27-recovery",
+            "id": "26-recovery",
             "componentInvolvements": [
               {
                 "componentId": "soyuz-7k-lok-spacecraft",
@@ -151843,47 +151063,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "11-tei",
-            "componentInvolvements": [
-              {
-                "componentId": "lk-700-spacecraft",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 25
-              },
-              {
-                "slot": 3,
-                "percent": 15
-              },
-              {
-                "slot": 4,
-                "percent": 20
-              },
-              {
-                "slot": 5,
-                "percent": 15
-              },
-              {
-                "slot": 6,
-                "percent": 10
-              },
-              {
-                "slot": 9,
-                "percent": 15
-              }
-            ],
-            "crewInvolvements": [],
-            "crewRisk": false,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 6,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "12-trans-earth-coast",
+            "id": "11-trans-earth-coast",
             "componentInvolvements": [
               {
                 "componentId": "lk-700-spacecraft",
@@ -151919,7 +151099,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "13-earth-approach",
+            "id": "12-earth-approach",
             "componentInvolvements": [
               {
                 "componentId": "lk-700-spacecraft",
@@ -151963,47 +151143,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "14-earth-approach",
-            "componentInvolvements": [
-              {
-                "componentId": "lk-700-spacecraft",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 15
-              },
-              {
-                "slot": 2,
-                "percent": 20
-              },
-              {
-                "slot": 3,
-                "percent": 15
-              },
-              {
-                "slot": 4,
-                "percent": 30
-              },
-              {
-                "slot": 5,
-                "percent": 10
-              },
-              {
-                "slot": 6,
-                "percent": 10
-              }
-            ],
-            "crewInvolvements": [],
-            "crewRisk": false,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 6,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "15-reentry",
+            "id": "13-reentry",
             "componentInvolvements": [
               {
                 "componentId": "lk-700-spacecraft",
@@ -152031,7 +151171,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "16-descent-and-splashdown",
+            "id": "14-descent-and-splashdown",
             "componentInvolvements": [
               {
                 "componentId": "lk-700-spacecraft",
@@ -152063,7 +151203,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "17-recovery",
+            "id": "15-recovery",
             "componentInvolvements": [
               {
                 "componentId": "lk-700-spacecraft",
@@ -152788,7 +151928,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "09-loi",
+            "id": "09-lunar-approach",
             "componentInvolvements": [
               {
                 "componentId": "lk-700-spacecraft",
@@ -152937,90 +152077,12 @@
               }
             ],
             "crewRisk": true,
-            "prestigeSharePercent": 10,
+            "prestigeSharePercent": 15,
             "failurePrestigeDeduction": 34,
             "goalIdsAchieved": []
           },
           {
-            "id": "11-tei",
-            "componentInvolvements": [
-              {
-                "componentId": "lk-700-spacecraft",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 15
-              },
-              {
-                "slot": 3,
-                "percent": 12
-              },
-              {
-                "slot": 4,
-                "percent": 5
-              },
-              {
-                "slot": 5,
-                "percent": 13
-              },
-              {
-                "slot": 6,
-                "percent": 7
-              },
-              {
-                "slot": 7,
-                "percent": 10
-              },
-              {
-                "slot": 8,
-                "percent": 7
-              },
-              {
-                "slot": 12,
-                "percent": 13
-              },
-              {
-                "slot": 13,
-                "percent": 18
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 20.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 30.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 15.0
-              },
-              {
-                "slot": 1,
-                "skill": "PILOTING",
-                "percent": 20.0
-              },
-              {
-                "slot": 1,
-                "skill": "FITNESS",
-                "percent": 15.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 5,
-            "failurePrestigeDeduction": 34,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "12-trans-earth-coast",
+            "id": "11-trans-earth-coast",
             "componentInvolvements": [
               {
                 "componentId": "lk-700-spacecraft",
@@ -153108,7 +152170,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "13-earth-approach",
+            "id": "12-earth-approach",
             "componentInvolvements": [
               {
                 "componentId": "lk-700-spacecraft",
@@ -153182,81 +152244,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "14-earth-approach",
-            "componentInvolvements": [
-              {
-                "componentId": "lk-700-spacecraft",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 18
-              },
-              {
-                "slot": 3,
-                "percent": 15
-              },
-              {
-                "slot": 4,
-                "percent": 10
-              },
-              {
-                "slot": 5,
-                "percent": 20
-              },
-              {
-                "slot": 6,
-                "percent": 12
-              },
-              {
-                "slot": 7,
-                "percent": 10
-              },
-              {
-                "slot": 8,
-                "percent": 5
-              },
-              {
-                "slot": 9,
-                "percent": 10
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 20.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 30.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 15.0
-              },
-              {
-                "slot": 1,
-                "skill": "PILOTING",
-                "percent": 20.0
-              },
-              {
-                "slot": 1,
-                "skill": "FITNESS",
-                "percent": 15.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 34,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "15-reentry",
+            "id": "13-reentry",
             "componentInvolvements": [
               {
                 "componentId": "lk-700-spacecraft",
@@ -153310,7 +152298,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "16-descent-and-splashdown",
+            "id": "14-descent-and-splashdown",
             "componentInvolvements": [
               {
                 "componentId": "lk-700-spacecraft",
@@ -153366,7 +152354,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "17-recovery",
+            "id": "15-recovery",
             "componentInvolvements": [
               {
                 "componentId": "lk-700-spacecraft",
@@ -154091,51 +153079,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "14-earth-approach",
-            "componentInvolvements": [
-              {
-                "componentId": "lk-700-spacecraft",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 20
-              },
-              {
-                "slot": 3,
-                "percent": 12
-              },
-              {
-                "slot": 4,
-                "percent": 23
-              },
-              {
-                "slot": 5,
-                "percent": 28
-              },
-              {
-                "slot": 6,
-                "percent": 5
-              },
-              {
-                "slot": 9,
-                "percent": 7
-              },
-              {
-                "slot": 10,
-                "percent": 5
-              }
-            ],
-            "crewInvolvements": [],
-            "crewRisk": false,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 8,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "15-reentry",
+            "id": "14-reentry",
             "componentInvolvements": [
               {
                 "componentId": "lk-700-spacecraft",
@@ -154163,7 +153107,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "16-descent-and-splashdown",
+            "id": "15-descent-and-splashdown",
             "componentInvolvements": [
               {
                 "componentId": "lk-700-spacecraft",
@@ -154195,7 +153139,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "17-recovery",
+            "id": "16-recovery",
             "componentInvolvements": [
               {
                 "componentId": "lk-700-spacecraft",
@@ -155333,85 +154277,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "14-earth-approach",
-            "componentInvolvements": [
-              {
-                "componentId": "lk-700-spacecraft",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 15
-              },
-              {
-                "slot": 2,
-                "percent": 15
-              },
-              {
-                "slot": 4,
-                "percent": 5
-              },
-              {
-                "slot": 5,
-                "percent": 7
-              },
-              {
-                "slot": 6,
-                "percent": 20
-              },
-              {
-                "slot": 7,
-                "percent": 13
-              },
-              {
-                "slot": 8,
-                "percent": 10
-              },
-              {
-                "slot": 9,
-                "percent": 5
-              },
-              {
-                "slot": 13,
-                "percent": 10
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 20.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 30.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 15.0
-              },
-              {
-                "slot": 1,
-                "skill": "PILOTING",
-                "percent": 20.0
-              },
-              {
-                "slot": 1,
-                "skill": "FITNESS",
-                "percent": 15.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 42,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "15-reentry",
+            "id": "14-reentry",
             "componentInvolvements": [
               {
                 "componentId": "lk-700-spacecraft",
@@ -155465,7 +154331,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "16-descent-and-splashdown",
+            "id": "15-descent-and-splashdown",
             "componentInvolvements": [
               {
                 "componentId": "lk-700-spacecraft",
@@ -155521,7 +154387,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "17-recovery",
+            "id": "16-recovery",
             "componentInvolvements": [
               {
                 "componentId": "lk-700-spacecraft",
@@ -157286,81 +156152,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "21-earth-approach",
-            "componentInvolvements": [
-              {
-                "componentId": "lk-700-spacecraft",
-                "percent": 100
-              }
-            ],
-            "controllerInvolvements": [
-              {
-                "slot": 1,
-                "percent": 18
-              },
-              {
-                "slot": 3,
-                "percent": 15
-              },
-              {
-                "slot": 4,
-                "percent": 10
-              },
-              {
-                "slot": 5,
-                "percent": 20
-              },
-              {
-                "slot": 6,
-                "percent": 12
-              },
-              {
-                "slot": 7,
-                "percent": 10
-              },
-              {
-                "slot": 8,
-                "percent": 5
-              },
-              {
-                "slot": 9,
-                "percent": 10
-              }
-            ],
-            "crewInvolvements": [
-              {
-                "slot": 0,
-                "skill": "LEADERSHIP",
-                "percent": 20.0
-              },
-              {
-                "slot": 0,
-                "skill": "PILOTING",
-                "percent": 30.0
-              },
-              {
-                "slot": 0,
-                "skill": "FITNESS",
-                "percent": 15.0
-              },
-              {
-                "slot": 1,
-                "skill": "PILOTING",
-                "percent": 20.0
-              },
-              {
-                "slot": 1,
-                "skill": "FITNESS",
-                "percent": 15.0
-              }
-            ],
-            "crewRisk": true,
-            "prestigeSharePercent": 0,
-            "failurePrestigeDeduction": 60,
-            "goalIdsAchieved": []
-          },
-          {
-            "id": "22-reentry",
+            "id": "21-reentry",
             "componentInvolvements": [
               {
                 "componentId": "lk-700-spacecraft",
@@ -157414,7 +156206,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "23-descent-and-splashdown",
+            "id": "22-descent-and-splashdown",
             "componentInvolvements": [
               {
                 "componentId": "lk-700-spacecraft",
@@ -157470,7 +156262,7 @@
             "goalIdsAchieved": []
           },
           {
-            "id": "24-recovery",
+            "id": "23-recovery",
             "componentInvolvements": [
               {
                 "componentId": "lk-700-spacecraft",
