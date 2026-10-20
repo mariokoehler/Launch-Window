@@ -601,6 +601,7 @@
     {"step": "rendezvous", "programs": ["apollo", "apollo-earth-orbit"], "clip": "apollo-rendezvous"},
     {"step": "rendezvous", "clip": "rendezvous"},
     {"step": "target-approach", "programs": ["gemini-eor-earth-orbit"], "clip": "gemini-eor-tug-approach"},
+    {"step": "target-approach", "programs": ["soyuz-7k-ok"], "later": "rendezvous", "clip": "soyuz-rendezvous-target-approach"},
     {"step": "target-approach", "programs": ["soyuz-7k-ok"], "clip": "soyuz-target-approach"},
     {"step": "target-approach", "programs": ["circumlunar-gemini-earth-orbit"], "clip": "transtage-target-approach"},
     {"step": "target-approach", "programs": ["gemini", "circumlunar-gemini-earth-orbit", "lunar-orbital-gemini-earth-orbit", "gemini-direct-ascent-earth-orbit"], "clip": "gemini-target-approach"},

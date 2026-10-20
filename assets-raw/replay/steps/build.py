@@ -2097,6 +2097,9 @@ variant_of("lk-700-modules-separation", "lk-700-modules-separation-moon", {}, be
 # Its suborbital flights' reentry preparations come straight after the flight's turn (the KDTU-35 test, the burn, after
 # them): the trim that follows a turn, not the one after a burn.
 variant_of("reentry-trim", "soyuz-reentry-trim-sub", {}, skin="sy-", before=["project-soyuz.jsx", "motes.jsx"])
+# The automatic rendezvous's target approach (2026-10-20, user): the closing in on the map, the chaser rising from a lower
+# orbit onto the other's, before the rendezvous's close-up; the docking flights keep the close-up approach.
+variant_of("gemini-rendezvous-target-approach", "soyuz-rendezvous-target-approach", {}, skin="sy-")
 SY_EVA = {"r-capsule": "sy-e-capsule", "e-box": "sy-e-box"}
 variant_of("gemini-eva-standup-docked", "soyuz-eva-standup", SY_EVA, skin="sy-", before=["spacewalk.jsx"])
 variant_of("gemini-eva-out-docked", "soyuz-eva-out-standing", SY_EVA, skin="sy-", before=["spacewalk.jsx"])
