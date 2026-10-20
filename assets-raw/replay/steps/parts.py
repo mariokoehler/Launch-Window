@@ -3684,6 +3684,73 @@ def gemini_eor_parts():
                          f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="3" stroke-linejoin="round"/></g>', (960, 560))
 
 
+# The LK-700 to the Moon (2026-10-20, user). BASPM gives every step from the parking orbit on to the craft, so its
+# "spacecraft" is the whole complex (Wikipedia's 21.2 m and 154 t): under the craft a trans-lunar stage, which burns for
+# the Moon and lets go; the landing stage then brakes into lunar orbit and lands (the braking stage folded into it); the
+# return stage lifts off with the capsule and fires home. The trans-lunar stage's shape is ours, unconfirmed. On the Moon
+# (l7m-) the craft stands on its six legs (two seen), at the moonwalk's scale, the landing stage's top at the porch.
+L7_TL = 4.6                          # the trans-lunar stage below the craft's foot: its interstage and body, the bell under
+
+
+def l7_tl_stage(foot, k):
+    """The trans-lunar stage under the craft, its interstage's top at the landing stage's foot (y foot)."""
+    r, ri = 1.45 * k, L7_W / 2 * k
+    a, b = foot + 0.6 * k, foot + L7_TL * k
+    return (f'<path d="M{960 - ri:.1f} {foot:.1f} L{960 - r:.1f} {a:.1f} L{960 + r:.1f} {a:.1f} L{960 + ri:.1f} {foot:.1f} Z" '
+            f'fill="#ffffff" {LINE} stroke-width="2.4"/>'
+            f'<rect x="{960 - r:.1f}" y="{a:.1f}" width="{2 * r:.1f}" height="{b - a:.1f}" fill="#ffffff" {LINE} stroke-width="2.6"/>'
+            + "".join(f'<path d="M{960 - r:.1f} {a + (b - a) * f:.1f} L{960 + r:.1f} {a + (b - a) * f:.1f}" fill="none" {LINE} '
+                      f'stroke-width="1.2" opacity="0.5"/>' for f in (0.3, 0.65))
+            + f'<path d="M{960 - 0.4 * k:.1f} {b:.1f} L{960 - 0.65 * k:.1f} {b + 0.7 * k:.1f} L{960 + 0.65 * k:.1f} {b + 0.7 * k:.1f} '
+              f'L{960 + 0.4 * k:.1f} {b:.1f} Z" fill="#ffffff" {LINE} stroke-width="2.2"/>')
+
+
+def lk700_moon_parts():
+    K = 33.8
+    thick = lambda body: re.sub(r'stroke-width="[\d.]+"', 'stroke-width="5"', body)
+    big = f"translate({DX} {DY}) scale({DK}) translate(-850 -520)"
+    turn = "translate(-120 20) rotate(90 960 500)"
+    mid = 500 - L7_LEN * K / 2
+    on_map = lambda body: f'<g transform="translate(960 560) scale(0.6) translate(-960 {-mid:.1f})">{thick(body)}</g>'
+
+    def streak(name, tail):
+        dy = 560 + 0.6 * (tail - mid) - 600
+        layer(name, f'<g transform="translate(0 {dy:.1f})"><path d="M944 600 C942 660 952 740 960 790 C968 740 978 660 976 600 Z" '
+                    f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="3" stroke-linejoin="round"/></g>', (960, 560))
+    # The complex on the map (l7-o-sat's frame, so the craft alone overlays it) and in two for the burn; out of the rocket.
+    layer("l7-o-sat-tl", on_map(l7_stack(500, K) + l7_tl_stage(500, K)), (960, 560))
+    layer("l7-o-sat-tlstage", on_map(l7_tl_stage(500, K)), (960, 560))
+    streak("l7-o-streak-tl", 500 + (L7_TL + 0.7) * K)
+    streak("l7-o-streak", 500 + 0.45 * K)
+    tl_d = l7_stack(500 - (L7_TL + 0.7) * K, K) + l7_tl_stage(500 - (L7_TL + 0.7) * K, K)
+    layer("l7-d-payload-tl", f'<g transform="{big}"><g transform="{turn}">{tl_d}</g></g>', D_AT(914, 520))
+    # After the Moon: the return stage and the capsule, with the return stage's own small engine (inside the landing
+    # stage until then).
+    ret_top = 500 - L7_LAND * K - L7_RET * K
+    asc_bell = (f'<path d="M{960 - 0.22 * K:.1f} {500 - L7_LAND * K:.1f} L{960 - 0.38 * K:.1f} {500 - L7_LAND * K + 0.5 * K:.1f} '
+                f'L{960 + 0.38 * K:.1f} {500 - L7_LAND * K + 0.5 * K:.1f} L{960 + 0.22 * K:.1f} {500 - L7_LAND * K:.1f} Z" fill="#ffffff" '
+                f'{LINE} stroke-width="2.2"/>')
+    asc = asc_bell + l7_stack(500 - L7_LAND * K, K, landing=False)
+    layer("l7-o-sat-asc", on_map(asc), (960, 560))
+    streak("l7-o-streak-asc", 500 - L7_LAND * K + 0.5 * K)
+    layer("l7-none", "", (960, 560))
+    for name, body, m in (("l7-m-probe", l7_stack(500, K), mid), ("l7-m-probe-asc", asc, (ret_top + 500 - L7_LAND * K) / 2)):
+        layer(name, f'<g transform="translate({SUN[0]} {SUN[1]}) scale(0.32) translate(-960 {-m:.1f})">{thick(body)}</g>', SUN)
+    # On the Moon, 40 px/m: the landing stage's top at the porch (722), its legs out to pads on the ground (876).
+    k = 40
+    land_top = 722
+    legs = (f'<path d="M908 734 L836 874 M1012 734 L1084 874 M916 760 L870 850 M1004 760 L1050 850" fill="none" {LINE} '
+            f'stroke-width="4"/>'
+            f'<ellipse cx="834" cy="876" rx="16" ry="5" fill="#ffffff" {LINE} stroke-width="3"/>'
+            f'<ellipse cx="1086" cy="876" rx="16" ry="5" fill="#ffffff" {LINE} stroke-width="3"/>')
+    layer("l7m-n-descent", legs + l7_landing(land_top, k, legs=None), LC)
+    layer("l7m-n-ascent", l7_stack(land_top, k, landing=False), LC)
+    exit_y = land_top + (L7_LAND + 0.45) * k
+    layer("l7m-n-plume", f'<path d="M942 {exit_y:.1f} C944 {exit_y + 30:.1f} 951 {exit_y + 60:.1f} 960 {exit_y + 90:.1f} C969 {exit_y + 60:.1f} '
+                         f'976 {exit_y + 30:.1f} 978 {exit_y:.1f} Z" fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="3" '
+                         f'stroke-linejoin="round"/>', (960, exit_y))
+
+
 # The Soviet craft to the Moon (2026-10-20, user). BASPM gives the Blok D, the stage on the craft's tail, to the rocket
 # (@rocket-1), and the steps say what it does: the 7K-L1's burns for the Moon and lets go; the 7K-L3's LOK rides on it to
 # the Moon, with the LK between them on a landing (the N1's stack), and it brakes them into lunar orbit. On the map
@@ -3791,6 +3858,7 @@ def main():
     gemini_eor_parts()
     lk700_parts()
     soviet_moon_parts()
+    lk700_moon_parts()
     if ONLY:
         # Keep the parts not redrawn.
         old = json.load(open(os.path.join(BUILD, "layers.json")))

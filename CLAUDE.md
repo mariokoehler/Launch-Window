@@ -214,6 +214,8 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   rebuild client and server together.
   So do the LK-700's (`l7-`, user, 2026-10-19), with a way home of its own instead of Soyuz's orbital module, and
   Gemini EOR's (`ge-`, its Langley lander `ll-`, the S-IVB tug `sv-`; user, 2026-10-19).
+  The LK-700's Moon flights too (user, 2026-10-20): a trans-lunar stage of its own burns for the Moon and lets go, the
+  landing stage brakes and lands, the return stage lifts off with the capsule: every crewed Moon program now flies as itself. Client only.
   Circumlunar Gemini's Moon flights fly as themselves (user, 2026-10-20, `ui-spec.md` §4.7.3): the Transtage alone
   to the Moon, or Gemini docked into it for the burn (`tpi.jsx`'s `SEP`), dropping its adapter on the Earth approach
   (`earth-approach.jsx`'s `DROP`). Client only.

@@ -2166,8 +2166,17 @@ clips, the replay is meant to be watched like a short film, and the player can s
   `lk700-jettison.jsx`), and the capsule leaves the return stage (the separation, `project-lk700.jsx`, on from the
   jettison: `modules-separation.jsx`'s `SEP_FROM`); then the capsule's own reentry, chutes and landing. That reading
   of the three steps is unconfirmed. Its spacewalk is three steps on its own hull (`l7-e-capsule`): out on the tether,
-  along a handrail on the cone and back, and a photo and back in. The Moon flights (`lk-700`), with the braking
-  stage, are a later package. Sizes from the blueprint, unconfirmed.
+  along a handrail on the cone and back, and a photo and back in. Sizes from the blueprint, unconfirmed.
+  Its Moon flights (user, 2026-10-20; `lk700_moon_parts`, `lk-700-*`): BASPM gives every step from the parking orbit on
+  to the craft, so its spacecraft is the whole complex: a trans-lunar stage of its own (`l7_tl_stage`, its shape ours)
+  rides under it out of the rocket and through the parking orbit, burns for the Moon and lets go (`-tli`, `SEP`). The
+  landing stage brakes into lunar orbit and lands (the braking stage folded into it), or fires the craft home on the
+  orbit flight; on the Moon the craft stands on its six legs at the moonwalk's scale (`l7m-`), its three surface steps
+  the flag, the experiment package and the rocks, and the return stage lifts off with the capsule, climbs with nothing
+  waiting in orbit and fires home (`-asc`). Home after a landing: the reentry preparations turn the capsule on its return
+  stage and the separation follows (`project-lk700-moon.jsx`'s `SEP_FROM`); on the flyby and the orbit flight the
+  landing stage is cast off at the reentry preparations, as on the Earth-orbit tests (`lk-700-retrofire-jettison`).
+  Unconfirmed.
 - **Gemini EOR's Earth-orbit tests (user, 2026-10-19):** the lander test in low orbit and the lander and heat-shield
   test fly their own hardware (`gemini_eor_parts`; unconfirmed, our reading of the blueprints). The stack (`ge-`):
   Gemini's reentry module and retrograde section, the EOR service module in the equipment section's place (a ribbed

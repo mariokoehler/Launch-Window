@@ -2013,6 +2013,33 @@ SEP_MOON = {"SEP_FROM": [0, 39.0, -1.5]}
 variant_of("soyuz-l1-modules-separation", "soyuz-l1-modules-separation-moon", {}, vars=SEP_MOON)
 variant_of("soyuz-lok-modules-separation", "soyuz-lok-modules-separation-moon", {}, vars=SEP_MOON)
 
+# The LK-700 to the Moon (2026-10-20, user; parts.py's lk700_moon_parts): every step from the parking orbit on is the
+# craft's, so a trans-lunar stage of its own rides under it out of the rocket and through the parking orbit, burns for
+# the Moon and lets go (tpi.jsx's SEP). The landing stage brakes into lunar orbit and lands (the braking stage folded
+# into it), or on the orbit flight fires the craft home; after a landing the return stage lifts off with the capsule,
+# climbs with nothing waiting in orbit and fires home (-asc). On the Moon (l7m-) its three cosmonauts plant the flag,
+# set out the experiment package and gather rocks. Home: after a landing the reentry preparations turn the capsule on
+# its return stage and the separation follows from there (project-lk700-moon.jsx); on the flyby and the orbit flight
+# the landing stage is cast off at the reentry preparations, as on the Earth-orbit tests. Unconfirmed.
+variant_of("lk-700-deployment", "lk-700-deployment-tl", {"d-payload": "l7-d-payload-tl"})
+variant_of("lk-700-earth-orbit", "lk-700-earth-orbit-tl", {"o-sat": "l7-o-sat-tl"})
+variant_of("tpi", "lk-700-tli", {"o-sat": "l7-o-sat", "o-stage": "l7-o-sat-tlstage", "o-streak": "l7-o-streak-tl"},
+           skin="l7-", before=["orbit.jsx", "hoi-separate.jsx"])
+L7_MAP = {"o-sat": "l7-o-sat", "m-probe": "l7-m-probe", "o-streak": "l7-o-streak"}
+L7_ASC = {"o-sat": "l7-o-sat-asc", "m-probe": "l7-m-probe-asc", "o-streak": "l7-o-streak-asc"}
+for _base, _name in (("trans-lunar-coast", "tlc"), ("lunar-approach", "lunar-approach"), ("lunar-flyby", "lunar-flyby"),
+                     ("loi", "loi"), ("lunar-orbit", "lunar-orbit"), ("tei", "tei"), ("trans-earth-coast", "tec")):
+    variant_of(_base, f"lk-700-{_name}", L7_MAP, skin="l7-")
+for _base, _name in (("tei", "tei-asc"), ("trans-earth-coast", "tec-asc")):
+    variant_of(_base, f"lk-700-{_name}", L7_ASC, skin="l7-")
+variant_of("lunar-ascent", "lk-700-lunar-ascent", {**L7_ASC, "o-sat-b": "l7-none"}, skin="l7-")
+for _base in ("powered-descent", "lunar-landing", "lunar-liftoff", "moonwalk"):
+    variant_of(f"apollo-{_base}", f"lk-700-{_base}", {}, skin="l7m-")
+for _base in ("flag", "samples"):
+    variant_of(f"apollo-{_base}", f"lk-700-{_base}", {}, skin="l7m-", before=["moon.jsx", "walker.jsx", "lk700-walk.jsx"])
+variant_of("reentry-preparations", "lk-700-reentry-preparations-asc", L7_HOME, skin="l7-")
+variant_of("lk-700-modules-separation", "lk-700-modules-separation-moon", {}, before=["project-lk700-moon.jsx", "motes.jsx"])
+
 
 def read(*path):
     return open(os.path.join(HERE, *path), encoding="utf-8").read() + "\n"
