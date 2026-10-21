@@ -13,6 +13,10 @@
   {
    "at": 3.05,
    "sound": "radio-roger"
+  },
+  {
+   "at": 3.6,
+   "sound": "decoupler"
   }
  ]
 }

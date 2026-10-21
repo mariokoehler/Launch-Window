@@ -3,8 +3,8 @@
  "revealAt": 3.4,
  "cues": [
   {
-   "at": 3.25,
-   "sound": "radio-crew-back-in"
+   "at": 3.45,
+   "sound": "radio-eva-task-failed"
   }
  ]
 }

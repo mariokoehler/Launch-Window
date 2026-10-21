@@ -7,6 +7,14 @@
    "sound": "rcs-puff"
   },
   {
+   "at": 1.2,
+   "sound": "deploy"
+  },
+  {
+   "at": 2.2,
+   "sound": "servo"
+  },
+  {
    "at": 4.35,
    "sound": "radio-signal-good"
   }

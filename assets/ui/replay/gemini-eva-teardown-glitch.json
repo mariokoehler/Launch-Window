@@ -1,4 +1,14 @@
 {
  "duration": 5.6,
- "revealAt": 1.8
+ "revealAt": 1.8,
+ "cues": [
+  {
+   "at": 0.5,
+   "sound": "servo"
+  },
+  {
+   "at": 1.85,
+   "sound": "radio-eva-trouble"
+  }
+ ]
 }

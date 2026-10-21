@@ -5,6 +5,10 @@
   {
    "at": 0.2,
    "sound": "rcs-puff"
+  },
+  {
+   "at": 2.45,
+   "sound": "radio-rendezvous-good"
   }
  ]
 }

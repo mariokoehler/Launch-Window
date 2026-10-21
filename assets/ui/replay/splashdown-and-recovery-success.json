@@ -3,6 +3,10 @@
  "revealAt": 1.2,
  "cues": [
   {
+   "at": 1.25,
+   "sound": "radio-splashdown-good"
+  },
+  {
    "at": 2.433,
    "sound": "helicopter",
    "loop": true

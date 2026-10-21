@@ -1,4 +1,10 @@
 {
  "duration": 7.0,
- "revealAt": 2.3
+ "revealAt": 2.3,
+ "cues": [
+  {
+   "at": 2.35,
+   "sound": "radio-entry-corridor-good"
+  }
+ ]
 }

@@ -14,6 +14,10 @@
    "at": 0.9,
    "sound": "rocket-roar",
    "loop": true
+  },
+  {
+   "at": 3.55,
+   "sound": "radio-engine-rough"
   }
  ]
 }

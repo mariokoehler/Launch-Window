@@ -5,6 +5,10 @@
   {
    "at": 0.4,
    "sound": "rcs-puff"
+  },
+  {
+   "at": 2.05,
+   "sound": "radio-docked"
   }
  ]
 }

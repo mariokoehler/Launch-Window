@@ -7,6 +7,18 @@
    "sound": "rcs-puff"
   },
   {
+   "at": 1.2,
+   "sound": "deploy"
+  },
+  {
+   "at": 2.5,
+   "sound": "deploy"
+  },
+  {
+   "at": 3.0,
+   "sound": "servo"
+  },
+  {
    "at": 5.5,
    "sound": "radio-probe-silent"
   }

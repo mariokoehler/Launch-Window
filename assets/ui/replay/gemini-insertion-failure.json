@@ -3,6 +3,10 @@
  "revealAt": 3.0,
  "cues": [
   {
+   "at": 3.05,
+   "sound": "radio-burn-failed"
+  },
+  {
    "at": 3.267,
    "sound": "explosion",
    "volume": 0.5

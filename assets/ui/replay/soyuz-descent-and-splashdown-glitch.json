@@ -3,6 +3,10 @@
  "revealAt": 3.4,
  "cues": [
   {
+   "at": 3.45,
+   "sound": "radio-chute-partial"
+  },
+  {
    "at": 4.733,
    "sound": "splash"
   }

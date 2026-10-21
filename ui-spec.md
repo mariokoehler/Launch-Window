@@ -2421,7 +2421,11 @@ sound placements keep their own flags.
     or a transfer's hatch swings open and as Voskhod's airlock vents, `fueling` while the tanks fill,
     `vent` from the tanks topped off through the countdown to the launch's ignition, `reentry-plasma`
     while an entry's glow shows (and the rocket plane's fast run), `splash` at splashdown, `helicopter`
-    from just before it flies into the recovery, `explosion` at every blast (quieter on the map). Their
+    from just before it flies into the recovery, `explosion` at every blast (quieter on the map). Four
+    more, the user's own from Stable Audio 3: `decoupler` as springs, bolts, straps or latches fire and a
+    stage falls away, `explosion-debris` for a blast near the ground (the pad, the Luna landers),
+    `servo` as an arm, a dish or a panel moves, `deploy` as booms, whips, masts, ramps, petals, panels or
+    gear unfold. Their
     times are read off the clips' built projects by `assets-raw/replay/effects.py`, rerun after a clip
     is published with a changed timeline; it skips a clip whose project is newer than its render. Before
     the reveal an effect only some variants have waits for the reveal if it's within 0.35 s of it, and is
@@ -2437,7 +2441,10 @@ sound placements keep their own flags.
     (2026-10-14): flight-controller calls made with VibeVoice, the radio's noise and the Quindar tones
     already in them (`assets-raw/audio/chatter/`), `radio-*` sounds whose takes are one line's
     variations or lines for the same moment. More from 2026-10-15, made by Claude with the user's
-    workflow, screened by a transcript (Whisper) and picked by the user's ear: 51 sounds in all.
+    workflow, screened by a transcript (Whisper) and picked by the user's ear: 51 sounds in all. Round 2
+    (2026-10-21, the user's ask): a call for every step and outcome, from a pool of two lines or more, so
+    steps in a row don't say the same words (spacewalks and moonwalks have four): 123 sounds, 802 takes,
+    on every variant of every clip but the runway landing's failure (`assets-raw/audio/chatter/CALLOUTS.md`).
     Placed in `cues.json`: a call 0.05 s after its own variant's reveal (the line confirms what was
     just seen), on the glitches and, from 2026-10-15, the failures of most steps (a later start where
     an opening call would hold it up past the wait); a few calls that tell nothing before the earliest

@@ -3,6 +3,10 @@
  "revealAt": 2.1,
  "cues": [
   {
+   "at": 2.15,
+   "sound": "radio-eva-trouble"
+  },
+  {
    "at": 2.5,
    "sound": "hatch-open"
   }

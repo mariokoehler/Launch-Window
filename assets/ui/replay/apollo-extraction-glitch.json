@@ -3,12 +3,24 @@
  "revealAt": 2.2,
  "cues": [
   {
+   "at": 0.6,
+   "sound": "decoupler"
+  },
+  {
    "at": 0.7,
    "sound": "rcs-puff"
   },
   {
+   "at": 1.8,
+   "sound": "decoupler"
+  },
+  {
    "at": 1.933,
    "sound": "rcs-puff"
+  },
+  {
+   "at": 2.25,
+   "sound": "radio-undock-glitch"
   }
  ]
 }

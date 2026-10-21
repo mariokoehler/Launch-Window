@@ -1,4 +1,14 @@
 {
  "duration": 6.0,
- "revealAt": 2.0
+ "revealAt": 2.0,
+ "cues": [
+  {
+   "at": 2.05,
+   "sound": "radio-entry-good"
+  },
+  {
+   "at": 3.6,
+   "sound": "deploy"
+  }
+ ]
 }

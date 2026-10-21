@@ -13,6 +13,10 @@
   {
    "at": 3.0,
    "sound": "rcs-puff"
+  },
+  {
+   "at": 3.45,
+   "sound": "radio-rendezvous-lost"
   }
  ]
 }

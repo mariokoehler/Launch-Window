@@ -5,6 +5,10 @@
   {
    "at": 1.2,
    "sound": "rcs-puff"
+  },
+  {
+   "at": 3.45,
+   "sound": "radio-over-the-top"
   }
  ]
 }

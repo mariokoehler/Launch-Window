@@ -3,8 +3,16 @@
  "revealAt": 4.6,
  "cues": [
   {
+   "at": 0.4,
+   "sound": "servo"
+  },
+  {
    "at": 4.65,
    "sound": "radio-signal-good"
+  },
+  {
+   "at": 4.8,
+   "sound": "servo"
   }
  ]
 }

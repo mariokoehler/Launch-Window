@@ -10,6 +10,10 @@
    "fade": 0.4
   },
   {
+   "at": 3.55,
+   "sound": "radio-pad-glitch"
+  },
+  {
    "at": 3.6,
    "sound": "fueling",
    "loop": true,

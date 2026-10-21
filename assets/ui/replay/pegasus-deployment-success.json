@@ -7,6 +7,14 @@
    "sound": "radio-watching"
   },
   {
+   "at": 1.0,
+   "sound": "decoupler"
+  },
+  {
+   "at": 2.3,
+   "sound": "deploy"
+  },
+  {
    "at": 2.65,
    "sound": "radio-payload-separation"
   }

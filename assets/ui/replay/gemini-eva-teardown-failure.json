@@ -1,4 +1,14 @@
 {
  "duration": 5.2,
- "revealAt": 2.0
+ "revealAt": 2.0,
+ "cues": [
+  {
+   "at": 0.5,
+   "sound": "servo"
+  },
+  {
+   "at": 2.05,
+   "sound": "radio-eva-task-failed"
+  }
+ ]
 }

@@ -10,8 +10,12 @@
    "fade": 0.4
   },
   {
+   "at": 3.15,
+   "sound": "radio-pad-fire"
+  },
+  {
    "at": 4.333,
-   "sound": "explosion"
+   "sound": "explosion-debris"
   }
  ]
 }

@@ -1,4 +1,14 @@
 {
  "duration": 6.0,
- "revealAt": 2.8
+ "revealAt": 2.8,
+ "cues": [
+  {
+   "at": 2.667,
+   "sound": "deploy"
+  },
+  {
+   "at": 2.85,
+   "sound": "radio-lander-down"
+  }
+ ]
 }

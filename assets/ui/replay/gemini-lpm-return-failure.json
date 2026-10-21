@@ -6,6 +6,10 @@
    "at": 3.0,
    "sound": "rcs-puff",
    "volume": 0.25
+  },
+  {
+   "at": 3.25,
+   "sound": "radio-skip-out"
   }
  ]
 }

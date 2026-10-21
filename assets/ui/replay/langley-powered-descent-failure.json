@@ -3,6 +3,10 @@
  "revealAt": 3.2,
  "cues": [
   {
+   "at": 3.0,
+   "sound": "decoupler"
+  },
+  {
    "at": 3.25,
    "sound": "radio-abort-landing"
   }

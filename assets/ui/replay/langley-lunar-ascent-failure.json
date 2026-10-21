@@ -3,6 +3,10 @@
  "revealAt": 2.8,
  "cues": [
   {
+   "at": 2.85,
+   "sound": "radio-liftoff-failed"
+  },
+  {
    "at": 3.867,
    "sound": "explosion",
    "volume": 0.5

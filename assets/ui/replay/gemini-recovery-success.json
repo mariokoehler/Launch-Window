@@ -6,6 +6,10 @@
    "at": 0.0,
    "sound": "helicopter",
    "loop": true
+  },
+  {
+   "at": 2.05,
+   "sound": "radio-recovery-good"
   }
  ]
 }

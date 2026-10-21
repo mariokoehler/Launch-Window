@@ -1,4 +1,10 @@
 {
  "duration": 6.0,
- "revealAt": 2.4
+ "revealAt": 2.4,
+ "cues": [
+  {
+   "at": 2.45,
+   "sound": "radio-plane-climb"
+  }
+ ]
 }

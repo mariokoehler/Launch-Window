@@ -7,6 +7,10 @@
    "sound": "rcs-puff"
   },
   {
+   "at": 2.25,
+   "sound": "radio-over-the-top"
+  },
+  {
    "at": 3.8,
    "sound": "rcs-puff"
   }

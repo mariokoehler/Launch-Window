@@ -9,6 +9,10 @@
   {
    "at": 1.4,
    "sound": "hatch-open"
+  },
+  {
+   "at": 1.65,
+   "sound": "radio-eva-trouble"
   }
  ]
 }

@@ -3,6 +3,10 @@
  "revealAt": 3.0,
  "cues": [
   {
+   "at": 3.05,
+   "sound": "radio-course-corrected"
+  },
+  {
    "at": 4.033,
    "sound": "explosion",
    "volume": 0.5

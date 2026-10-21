@@ -14,8 +14,14 @@ best. Where they play: `make_radio_sounds.py`'s descriptions and `assets-raw/rep
 a row don't repeat (the replay deals a sound's lines, not its takes). The pools, the steps they're for and their
 lines are in `round2.json` (109 pools, 245 lines: new pools, and new lines for the one-line sounds); made with
 `make_callouts.py 1101,2202,3303 --lines=round2.json`, screened with `check_callouts.py --lines=round2.json`, in
-`lw_callout/review/` for the user's ear. Once the user has culled them, the kept takes go into
-`make_radio_sounds.py` and their placements into `cues.json`.
+`lw_callout/review/` for the user's ear. Thirty lines that garbled on every seed were reworded and rendered again
+(three more seeds for every line short of two good takes). The user kept 657 takes of 241 lines; they're in this
+folder and in `make_radio_sounds.py` (`ROUND_2`, `MORE_LINES`): 123 radio sounds, 802 takes. Three pools the cull
+left with one line were merged: the suborbital arc's and the X-15's peak into `radio-over-the-top`, the crew
+transfer's into `radio-ingress-good`. Placed by timeline, 0.05 s after each variant's reveal: every variant of every
+clip now has a call but the runway landing's failure (the skid gives way; no line fits yet). Taken off where they no
+longer fit: `radio-roger` (its new lines are the retrofire's) from the probes' glitches, `radio-problem` (its lines end
+"okay") from three failures, the attitude and tumbling calls from Vostok's and Voskhod's stuck valve, which has its own.
 
 Below: the lines, mostly for glitches and failures. They follow how the real flight loop
 sounded (`design.md` §1.1, "The flight loop in trouble").

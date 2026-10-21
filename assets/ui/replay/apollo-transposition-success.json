@@ -4,7 +4,15 @@
  "cues": [
   {
    "at": 0.3,
+   "sound": "decoupler"
+  },
+  {
+   "at": 0.3,
    "sound": "rcs-puff"
+  },
+  {
+   "at": 0.4,
+   "sound": "deploy"
   },
   {
    "at": 1.2,
@@ -13,6 +21,14 @@
   {
    "at": 2.2,
    "sound": "rcs-puff"
+  },
+  {
+   "at": 3.0,
+   "sound": "decoupler"
+  },
+  {
+   "at": 3.05,
+   "sound": "radio-docked"
   }
  ]
 }

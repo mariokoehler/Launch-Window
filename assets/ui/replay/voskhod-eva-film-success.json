@@ -1,4 +1,10 @@
 {
  "duration": 4.6,
- "revealAt": 1.2
+ "revealAt": 1.2,
+ "cues": [
+  {
+   "at": 1.25,
+   "sound": "radio-eva-good"
+  }
+ ]
 }

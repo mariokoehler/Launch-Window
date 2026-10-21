@@ -6,6 +6,10 @@
    "at": 0.433,
    "sound": "reentry-plasma",
    "loop": true
+  },
+  {
+   "at": 2.85,
+   "sound": "radio-plane-hot-spot"
   }
  ]
 }

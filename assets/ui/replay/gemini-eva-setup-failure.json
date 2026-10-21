@@ -7,6 +7,10 @@
    "sound": "hatch-open"
   },
   {
+   "at": 2.633,
+   "sound": "deploy"
+  },
+  {
    "at": 3.85,
    "sound": "radio-crew-back-in"
   }

@@ -5,6 +5,10 @@
   {
    "at": 1.9,
    "sound": "hatch-open"
+  },
+  {
+   "at": 1.95,
+   "sound": "radio-ingress-good"
   }
  ]
 }

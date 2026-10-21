@@ -1,4 +1,18 @@
 {
  "duration": 5.6,
- "revealAt": 2.2
+ "revealAt": 2.2,
+ "cues": [
+  {
+   "at": 0.6,
+   "sound": "decoupler"
+  },
+  {
+   "at": 1.8,
+   "sound": "decoupler"
+  },
+  {
+   "at": 2.25,
+   "sound": "radio-separation-late"
+  }
+ ]
 }

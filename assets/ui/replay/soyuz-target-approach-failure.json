@@ -9,6 +9,10 @@
   {
    "at": 2.4,
    "sound": "rcs-puff"
+  },
+  {
+   "at": 2.65,
+   "sound": "radio-cant-brake"
   }
  ]
 }

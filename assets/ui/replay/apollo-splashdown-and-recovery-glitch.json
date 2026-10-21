@@ -3,6 +3,10 @@
  "revealAt": 1.8,
  "cues": [
   {
+   "at": 1.85,
+   "sound": "radio-recovery-list"
+  },
+  {
    "at": 2.433,
    "sound": "helicopter",
    "loop": true

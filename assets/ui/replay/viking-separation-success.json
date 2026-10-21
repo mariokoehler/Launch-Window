@@ -3,8 +3,16 @@
  "revealAt": 2.7,
  "cues": [
   {
+   "at": 0.8,
+   "sound": "decoupler"
+  },
+  {
    "at": 2.3,
    "sound": "rcs-puff"
+  },
+  {
+   "at": 2.75,
+   "sound": "radio-lander-away"
   }
  ]
 }

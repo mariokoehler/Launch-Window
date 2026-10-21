@@ -1,4 +1,14 @@
 {
  "duration": 6.0,
- "revealAt": 1.9
+ "revealAt": 1.9,
+ "cues": [
+  {
+   "at": 1.6,
+   "sound": "decoupler"
+  },
+  {
+   "at": 1.95,
+   "sound": "radio-lander-away"
+  }
+ ]
 }

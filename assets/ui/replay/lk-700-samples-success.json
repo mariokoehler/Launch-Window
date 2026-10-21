@@ -1,4 +1,10 @@
 {
  "duration": 6.7,
- "revealAt": 3.7
+ "revealAt": 3.7,
+ "cues": [
+  {
+   "at": 3.75,
+   "sound": "radio-moonwalk-good"
+  }
+ ]
 }

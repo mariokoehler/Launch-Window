@@ -5,6 +5,10 @@
   {
    "at": 2.75,
    "sound": "radio-oscillations"
+  },
+  {
+   "at": 4.0,
+   "sound": "deploy"
   }
  ]
 }

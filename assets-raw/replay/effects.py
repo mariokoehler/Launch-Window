@@ -14,6 +14,13 @@ with a changed timeline:
 - reentry-plasma: while an entry's glow shows (GLOWS)
 - splash: the `r-splash` at splashdown
 - helicopter: from just before the helicopter flies in to the clip's end
+- decoupler (the user's own, Stable Audio 3, as the three below): springs, bolts, straps and latches firing
+  (SEPARATIONS' flashes; latches only where they let go), a spent stage falling away, the ascent stage leaving
+  the descent stage, the X-15's ventral fin dropped
+- explosion-debris: a `burst` near the ground (GROUND_BLASTS: the pad, a launch falling back, the Luna landers)
+- servo: an arm, a dish or a panel moving, a boom drawn in, a lid shut, PrOP-M's first step (SERVOS)
+- deploy: booms, whips, wings and masts swinging out, ramps down, a lid or petals opening, panels opening,
+  gear down (DEPLOYS)
 Every cue of these sounds in cues.json is replaced, the rest left alone. Before a clip's earliest reveal every
 variant must sound the same (ReplayClipsTest): there an effect only some variants have waits for the reveal if
 it's just before it, and is left out if not (canonical). A clip whose project is newer
@@ -22,6 +29,7 @@ Then cues.py writes the sidecars.
 """
 import json
 import os
+import re
 import sys
 from multiprocessing import Pool
 
@@ -30,16 +38,33 @@ GAME = os.path.normpath(os.path.join(HERE, "..", "..", "assets", "ui", "replay")
 BUILDS = [os.path.join(HERE, "steps", "build"), os.path.join(HERE, "launch-storyboard", "build")]
 UNIT = 254016000000  # EffectCraft's ticks a second
 VARIANTS = ("success", "glitch", "failure")
-SOUNDS = {"explosion", "rcs-puff", "hatch-open", "fueling", "vent", "reentry-plasma", "splash", "helicopter"}
-PUFFS = {"r-jet-l", "r-jet-r", "k-brake", "k-push", "k-side", "g-puff-1", "g-puff-2", "d-puff", "vk-jets",
+SOUNDS = {"explosion", "rcs-puff", "hatch-open", "fueling", "vent", "reentry-plasma", "splash", "helicopter",
+          "decoupler", "explosion-debris", "servo", "deploy"}
+PUFFS = {"r-jet-l", "r-jet-r", "k-brake", "k-push", "k-side", "g-puff-1", "g-puff-2", "vk-jets",
          "x15-rcs-down", "x15-rcs-up", "e154-rcs-down", "e154-rcs-up"}
 MAP_PUFF = "m-puff"  # a course correction's puff on the map: far off, so quieter
 GLOWS = {"r-glow", "e-glow", "b-glow", "pv-glow-1", "x15-heat", "e154-heat"}
 HATCHES = {"e-hatch", "e-hatch-b", "e-hatch-pair"}
 WISPS = {"wisp-1", "wisp-2", "wisp-3"}
 LEVELS = {"level-lower", "level-upper"}
-WANTED = PUFFS | GLOWS | HATCHES | WISPS | LEVELS | {MAP_PUFF, "burst", "r-cable", "r-jet-stuck", "e-vent",
-                                                    "r-splash", "y-heli", "flame-ignite", "o-orbit", "o-streak"}
+# Separations: the flashes as springs, bolts, straps and latches fire.
+SEPARATIONS = {"d-springs", "r-pyro", "r-cut-a", "r-cut-b", "r-trunk-cut-a", "r-trunk-cut-b", "r-om-cut-a", "r-om-cut-b",
+               "t-flash-sep", "t-flash-lm", "v-latch", "vk-latch", "pv-latch", "pv-clamp-1", "pv-clamp-2", "pv-clamp-3"}
+LETTING_GO = re.compile(r"undock|jettison|cast-off|release|deployment|separation")  # where k-latch's flash lets go
+GROUND_BLASTS = re.compile(r"(^|-)(launch-preparations|countdown|launch)$|^luna-(landing|liftoff)")
+# (layer, prop, which spans): "all" every span, "out" growing away from its start, "in" shrinking back.
+SERVOS = [("v-arm", "rotation", "all"), ("s-arm", "rotation", "all"), ("g-dish", "rotation", "all"),
+          ("sv-panel", "rotation", "all"), ("e-boom", "scale", "in"), ("u-lid", "rotation", "in")]
+DEPLOYS = [("g-boom", "rotation", "all"), ("u-ramp-f", "rotation", "all"), ("u-lid", "rotation", "out"),
+           ("v-mast", "scale", "all"), ("t-panel-top", "rotation", "all"), ("e-boom", "scale", "out"),
+           ("e154-gear", "rotation", "all")]
+UNFOLDS = {"d-whips-1", "d-wing-l-1"}  # drawings shown in turn as they swing out: the first one's showing
+PETALS = {"mars-2-mars-landing": 2.667}
+# Clips whose failure breaks up at staging, a moment after the others stage: it hears their staging too.
+BORROW = (re.compile(r"(^|-)ascent$"), "decoupler")  # Mars 2's petals open after touchdown (the legs' turn runs on from the fall)
+WANTED = PUFFS | GLOWS | HATCHES | WISPS | LEVELS | SEPARATIONS | UNFOLDS | {
+    MAP_PUFF, "burst", "r-cable", "r-jet-stuck", "e-vent", "r-splash", "y-heli", "flame-ignite", "o-orbit", "o-streak",
+    "k-latch", "debris-3", "n-ascent", "x15-ventral", "pr-rover"} | {n for n, _, _ in SERVOS + DEPLOYS}
 
 
 def props(o, out):
@@ -97,7 +122,7 @@ def read(name):
                                  "moves": {m: moving(k) for m, k in keyed.items() if m != "opacity"},
                                  "first": {m: k[0][1] for m, k in keyed.items()},
                                  "path": keyed.get("position") if layer["name"] == "y-heli" else None}
-    return name, {"dur": dur, "layers": layers}
+    return name, {"name": name.rsplit("-", 1)[0], "dur": dur, "layers": layers}
 
 
 def r(t):
@@ -134,8 +159,37 @@ def effects(clip):
     cues = []
     bursts = starts("burst") if "r-cable" not in L else []
     far = "o-orbit" in L or "o-streak" in L
+    ground = GROUND_BLASTS.search(clip["name"])
     for t in bursts:
-        cues.append(cue(t, "explosion", 0.5 if far else None))
+        cues.append(cue(t, "explosion-debris") if ground else cue(t, "explosion", 0.5 if far else None))
+    moves = lambda name, prop: L.get(name, {}).get("moves", {}).get(prop, [])
+    parts = [t for name in SEPARATIONS for t in starts(name)]
+    if LETTING_GO.search(clip["name"]):
+        parts += starts("k-latch")
+    parts += [a for a, b, v0, v1 in moves("debris-3", "position")[:1] if not any(abs(a - t) < 0.5 for t in bursts)]
+    parts += [a for a, b, v0, v1 in moves("n-ascent", "position")[:1]]
+    parts += [a for a, b, v0, v1 in moves("x15-ventral", "position")[:1]]
+    for t in onsets(parts, 0.3):
+        cues.append(cue(t, "decoupler"))
+
+    def size(v):
+        return sum(abs(x) for x in v) if isinstance(v, list) else abs(v)
+
+    def spans(table):
+        out = []
+        for name, prop, which in table:
+            for a, b, v0, v1 in moves(name, prop):
+                if which == "all" or (which == "out") == (size(v1) > size(v0)):
+                    out.append(a)
+        return out
+    servo = spans(SERVOS) + [a for a, b, v0, v1 in moves("pr-rover", "position")[1:2]]
+    for t in onsets(servo, 1.0):
+        cues.append(cue(t, "servo"))
+    unfold = spans(DEPLOYS) + [t for name in UNFOLDS for t in starts(name)[:1]]
+    if clip["name"] in PETALS:
+        unfold.append(PETALS[clip["name"]])
+    for t in onsets(unfold, 1.0):
+        cues.append(cue(t, "deploy"))
     puffs = [t for name in PUFFS for t in starts(name)]
     for a, b in (L.get("r-jet-stuck", {}).get("shown") or []):
         puffs += [t for t in (a, a + 0.7, a + 1.6) if t < b]
@@ -185,7 +239,7 @@ def effects(clip):
 NEAR = 0.35  # a variant's own effect this close before the reveal waits for it; one earlier is dropped
 
 
-def canonical(variants, reveal):
+def canonical(variants, reveal, clip=""):
     """Before the earliest reveal every variant sounds the same: an effect every variant has stays (at the success's
     time), one only some have moves to the reveal if it's NEAR it and is dropped if not. A loop every variant starts
     stops where the success's does if that's before the reveal; if not, each variant keeps its own stop, but runs
@@ -196,7 +250,8 @@ def canonical(variants, reveal):
         return any(o["sound"] == c["sound"] and bool(o.get("loop")) == bool(c.get("loop"))
                    and abs(o["at"] - c["at"]) <= 0.05 and o["at"] < reveal for o in cues)
 
-    common = [c for c in base if c["at"] < reveal and all(has(cues, c) for cues in variants.values())]
+    common = [c for c in base if c["at"] < reveal and (all(has(cues, c) for cues in variants.values())
+                                                       or (BORROW[0].search(clip) and c["sound"] == BORROW[1]))]
     out = {}
     for v, cues in variants.items():
         fixed = []
@@ -240,7 +295,7 @@ def main():
         sidecars = {v: json.load(open(os.path.join(GAME, f"{clip}-{v}.json"))) for v in VARIANTS
                     if os.path.exists(os.path.join(GAME, f"{clip}-{v}.json"))}
         reveal = min(s["revealAt"] for s in sidecars.values() if s.get("revealAt") is not None)
-        new = canonical({v: effects(read_[f"{clip}-{v}"]) for v in sidecars}, reveal)
+        new = canonical({v: effects(read_[f"{clip}-{v}"]) for v in sidecars}, reveal, clip)
         entry = cues.get(clip, {})
         for v in sidecars:
             kept = [c for c in entry.get(v, []) if c["sound"] not in SOUNDS]

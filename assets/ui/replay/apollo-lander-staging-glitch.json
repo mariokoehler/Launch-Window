@@ -1,4 +1,14 @@
 {
  "duration": 6.0,
- "revealAt": 2.0
+ "revealAt": 2.0,
+ "cues": [
+  {
+   "at": 1.6,
+   "sound": "decoupler"
+  },
+  {
+   "at": 2.05,
+   "sound": "radio-engine-rough"
+  }
+ ]
 }

@@ -3,6 +3,10 @@
  "revealAt": 3.0,
  "cues": [
   {
+   "at": 0.8,
+   "sound": "decoupler"
+  },
+  {
    "at": 2.3,
    "sound": "rcs-puff"
   },

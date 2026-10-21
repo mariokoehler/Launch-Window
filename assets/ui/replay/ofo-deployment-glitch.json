@@ -7,8 +7,16 @@
    "sound": "radio-watching"
   },
   {
-   "at": 2.633,
-   "sound": "rcs-puff"
+   "at": 1.0,
+   "sound": "decoupler"
+  },
+  {
+   "at": 2.3,
+   "sound": "decoupler"
+  },
+  {
+   "at": 2.367,
+   "sound": "deploy"
   },
   {
    "at": 2.65,

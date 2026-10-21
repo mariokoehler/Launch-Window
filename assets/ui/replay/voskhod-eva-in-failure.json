@@ -5,6 +5,10 @@
   {
    "at": 2.5,
    "sound": "hatch-open"
+  },
+  {
+   "at": 3.05,
+   "sound": "radio-crew-back-in"
   }
  ]
 }

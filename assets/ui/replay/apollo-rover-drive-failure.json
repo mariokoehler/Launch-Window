@@ -3,8 +3,8 @@
  "revealAt": 2.9,
  "cues": [
   {
-   "at": 3.0,
-   "sound": "radio-problem"
+   "at": 2.95,
+   "sound": "radio-rover-dead"
   }
  ]
 }

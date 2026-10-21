@@ -7,6 +7,10 @@
    "sound": "radio-watching"
   },
   {
+   "at": 1.0,
+   "sound": "decoupler"
+  },
+  {
    "at": 2.35,
    "sound": "radio-collision"
   }

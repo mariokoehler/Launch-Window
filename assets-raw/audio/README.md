@@ -58,5 +58,13 @@ The user's Pixabay finds, each with a `.txt` beside it naming its page and uploa
 - `helicopter_loop.ogg`: the recovery clips with a helicopter (`helicopter`).
 - `explosion.ogg`: whenever something explodes (`explosion`).
 
+Four more, the user's own, made with Stable Audio 3 (no `.txt`):
+
+- `decoupler.ogg`: two things separating, as at a stage separation (`decoupler`).
+- `explosion_with_debris.ogg`: a blast with debris hitting the ground, for blasts near the ground, not in space
+  (`explosion-debris`).
+- `servomotor.ogg`: something mechanical moving, as a robot arm (`servo`).
+- `deploy_solar_panel.ogg`: something folded unfolding: solar panels, antennas, landing legs (`deploy`).
+
 `assets-raw/replay/sounds/make_effect_sounds.py` publishes them (level raised, as OGG) into the replay's
 catalog, and `assets-raw/replay/effects.py` times their cues off the clips' built projects.

@@ -17,6 +17,10 @@
    "loop": true,
    "until": 6.0,
    "fade": 0.3
+  },
+  {
+   "at": 4.25,
+   "sound": "radio-retro-glitch"
   }
  ]
 }

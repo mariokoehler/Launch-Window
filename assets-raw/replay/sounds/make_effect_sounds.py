@@ -1,7 +1,7 @@
 """Publishes the user's sound effects for the clips: python assets-raw/replay/sounds/make_effect_sounds.py
 
 The user's Pixabay finds (2026-10-21) are in assets-raw/audio/, each with a .txt beside it naming its page and
-uploader. This raises each one's level by its gain, writes it under assets/audio/replay/ as <id>.ogg (OGG: the
+uploader, and four of the user's own made with Stable Audio 3 (no .txt). This raises each one's level by its gain, writes it under assets/audio/replay/ as <id>.ogg (OGG: the
 loops must be seamless) and writes its entry into assets/content/replay-sounds.json, after rocket-roar,
 replacing an entry of the same id. Credit each file in assets/CREDITS.md. Where they play is
 assets-raw/replay/effects.py's.
@@ -48,6 +48,22 @@ SOUNDS = {
                   "Clips. A blast and its rumble (5 s). Plays wherever something blows up on screen: a rocket "
                   "on the pad or in flight, a stage, a craft breaking up in reentry, a carrier burning up, "
                   "a lander or a probe hitting the ground."),
+    # The user's own, made with Stable Audio 3 (2026-10-21).
+    "decoupler": ("decoupler", "EFFECT", 9, 0.6,
+                  "Clips. Two things coming apart: a pyro's crack and a clunk (1.8 s). Plays as springs, bolts, "
+                  "straps or latches fire: a payload pushed off its stage, a stage falling away, modules and "
+                  "packs let go, a lander or a probe released, undocking latches, the ascent stage off the descent "
+                  "stage, the X-15's ventral fin dropped."),
+    "explosion-debris": ("explosion_with_debris", "EFFECT", 1.5, 0.85,
+                         "Clips. A blast near the ground, its debris coming down (5.3 s). Plays where something "
+                         "blows up on or by the ground: the pad, a rocket falling back onto it, a lander crashing; "
+                         "a blast in the air or in space plays explosion."),
+    "servo": ("servomotor", "EFFECT", 0, 0.4,
+              "Clips. A servomotor's whine (2.3 s). Plays as something mechanical moves: a sampler arm, a dish "
+              "swinging round, a solar panel turning, a boom drawn in, Lunokhod's lid shut, PrOP-M walking off."),
+    "deploy": ("deploy_solar_panel", "EFFECT", 6, 0.45,
+               "Clips. Something folded unfolding (3.2 s). Plays as booms, whips, wings and masts swing out, ramps "
+               "come down, a lid or petals open, an adapter's panels open, landing gear comes down."),
 }
 
 

@@ -9,6 +9,10 @@
    "loop": true,
    "until": 3.6,
    "fade": 0.3
+  },
+  {
+   "at": 2.65,
+   "sound": "radio-retro-good"
   }
  ]
 }

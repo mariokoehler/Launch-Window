@@ -5,6 +5,10 @@
   {
    "at": 0.3,
    "sound": "hatch-open"
+  },
+  {
+   "at": 3.25,
+   "sound": "radio-eva-tumble"
   }
  ]
 }

@@ -3,6 +3,10 @@
  "revealAt": 2.6,
  "cues": [
   {
+   "at": 0.4,
+   "sound": "servo"
+  },
+  {
    "at": 2.65,
    "sound": "radio-probe-silent"
   }

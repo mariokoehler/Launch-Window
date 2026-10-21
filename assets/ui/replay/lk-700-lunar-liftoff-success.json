@@ -1,4 +1,14 @@
 {
  "duration": 5.6,
- "revealAt": 1.0
+ "revealAt": 1.0,
+ "cues": [
+  {
+   "at": 1.0,
+   "sound": "decoupler"
+  },
+  {
+   "at": 1.05,
+   "sound": "radio-liftoff-good"
+  }
+ ]
 }

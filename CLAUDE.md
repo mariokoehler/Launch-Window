@@ -160,7 +160,7 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   silent), cues in the clips' sidecars (kept in `assets-raw/replay/cues.json`, written by its `cues.py`;
   the first, a rocket roar under the burns, 2026-10-14; radio calls on the early steps, the user's
   VibeVoice takes, one voice at a time, 2026-10-14; on most steps' glitches and failures, Claude's takes
-  from the user's workflow, 2026-10-15; the user's effects, 2026-10-21, timed off the clips' built projects by
+  from the user's workflow, 2026-10-15; a call on every step and outcome from a pool of two lines or more, 2026-10-21; the user's effects, 2026-10-21, timed off the clips' built projects by
   `effects.py`), the console's own sounds, room tone, a fanfare at the season
   summary (success or failure; no background music, user), music and effects volumes in Settings. All
   English (user). Every sound is real (Pixabay, NASA, Stable Audio 3, credited); a new one plays a

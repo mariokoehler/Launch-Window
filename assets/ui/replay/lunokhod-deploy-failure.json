@@ -3,6 +3,10 @@
  "revealAt": 3.4,
  "cues": [
   {
+   "at": 0.2,
+   "sound": "deploy"
+  },
+  {
    "at": 3.45,
    "sound": "radio-probe-silent"
   }

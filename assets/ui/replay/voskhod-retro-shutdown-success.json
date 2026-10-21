@@ -5,6 +5,10 @@
   {
    "at": 1.4,
    "sound": "rcs-puff"
+  },
+  {
+   "at": 1.45,
+   "sound": "radio-retro-good"
   }
  ]
 }

@@ -3,13 +3,17 @@
  "revealAt": 2.9,
  "cues": [
   {
+   "at": 0.0,
+   "sound": "decoupler"
+  },
+  {
    "at": 0.433,
    "sound": "reentry-plasma",
    "loop": true
   },
   {
    "at": 2.95,
-   "sound": "radio-problem"
+   "sound": "radio-plane-climb-failed"
   }
  ]
 }

@@ -17,6 +17,10 @@
   {
    "at": 3.7,
    "sound": "rcs-puff"
+  },
+  {
+   "at": 4.6,
+   "sound": "decoupler"
   }
  ]
 }

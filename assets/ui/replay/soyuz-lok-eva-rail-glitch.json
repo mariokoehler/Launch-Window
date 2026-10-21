@@ -1,4 +1,10 @@
 {
  "duration": 6.0,
- "revealAt": 2.6
+ "revealAt": 2.6,
+ "cues": [
+  {
+   "at": 2.65,
+   "sound": "radio-eva-tumble"
+  }
+ ]
 }

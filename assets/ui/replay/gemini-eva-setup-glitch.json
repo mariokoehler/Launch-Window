@@ -5,6 +5,14 @@
   {
    "at": 0.3,
    "sound": "hatch-open"
+  },
+  {
+   "at": 2.633,
+   "sound": "deploy"
+  },
+  {
+   "at": 3.65,
+   "sound": "radio-eva-trouble"
   }
  ]
 }

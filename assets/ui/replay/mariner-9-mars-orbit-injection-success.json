@@ -1,4 +1,10 @@
 {
  "duration": 8.0,
- "revealAt": 3.75
+ "revealAt": 3.75,
+ "cues": [
+  {
+   "at": 3.8,
+   "sound": "radio-burn-good"
+  }
+ ]
 }

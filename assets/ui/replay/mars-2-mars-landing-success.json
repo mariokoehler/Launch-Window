@@ -3,6 +3,10 @@
  "revealAt": 3.8,
  "cues": [
   {
+   "at": 2.667,
+   "sound": "deploy"
+  },
+  {
    "at": 3.85,
    "sound": "radio-signal-good"
   }
