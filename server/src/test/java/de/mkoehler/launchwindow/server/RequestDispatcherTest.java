@@ -274,7 +274,8 @@ class RequestDispatcherTest {
     }
 
     /**
-     * Verifies that game-meta.json's devArchiveOpen opens every page asked about, in dev mode only.
+     * Verifies that game-meta.json's devArchiveOpen opens every page asked about, in dev mode only: a
+     * finding's page too, which otherwise opens only for the agencies that know it (design.md 2.13).
      */
     @Test
     void devArchiveOpenOpensEveryPageInDevModeOnly(@TempDir Path dataRoot) {
@@ -286,8 +287,10 @@ class RequestDispatcherTest {
                 ServerTestGames.CONTEXT, meta, ServerTestGames.gameInfo(root, mapper, meta));
             dispatcher.handleHandshake(1, new HandshakeRequest(AppVersion.getVersion(), "mario", "hunter2"));
             dispatcher.handleClaimSlot(1, new ClaimSlotRequest(Archetype.SOVIET, "OKB-1", "Chief"));
-            List<ArchiveUnlock> unlocks = dispatcher.handleArchive(1, ArchiveRequest.of(List.of("lunar-flyby"))).unlocks();
-            assertEquals(dev ? List.of(new ArchiveUnlock("lunar-flyby", 1, true)) : List.of(), unlocks);
+            List<ArchiveUnlock> unlocks = dispatcher.handleArchive(1, ArchiveRequest.of(
+                List.of("lunar-flyby", "magnetic-field-study"))).unlocks();
+            assertEquals(dev ? List.of(new ArchiveUnlock("lunar-flyby", 1, true),
+                new ArchiveUnlock("magnetic-field-study", 1, true)) : List.of(), unlocks);
         }
     }
 
