@@ -93,4 +93,25 @@ class ReplaySoundsTest {
             }
         }
     }
+
+    @Test
+    void linesDontRepeatEvenWithSeveralTakesEach() {
+        // Three lines, two takes each: a call never says the words the one before said.
+        ReplaySounds.Sound call = new ReplaySounds.Sound("call", ReplaySounds.Kind.RADIO, 0.5f,
+            List.of("a1", "a2", "b1", "b2", "c1", "c2"), false, "test", List.of(0, 0, 1, 1, 2, 2));
+        ReplaySounds sounds = ReplaySounds.of(List.of(call));
+        Set<String> heard = new HashSet<>();
+        char previous = 0;
+        for (int round = 0; round < 30; round++) {
+            Set<Character> seen = new HashSet<>();
+            for (int i = 0; i < 3; i++) {
+                String take = sounds.take("call");
+                heard.add(take);
+                assertNotEquals(previous, take.charAt(0));
+                assertTrue(seen.add(take.charAt(0)), "repeated line " + take);
+                previous = take.charAt(0);
+            }
+        }
+        assertEquals(6, heard.size(), "every take gets its turn");
+    }
 }

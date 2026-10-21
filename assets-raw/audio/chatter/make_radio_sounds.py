@@ -4,11 +4,13 @@ Copies the takes in this folder (made with VibeVoice in ComfyUI, the user's work
 Claude's from 2026-10-15, screened with Whisper and picked by the user's ear; each file's name is what's
 said, "(n)" a variation of one line) into assets/audio/replay/ as radio-<id>[-n].mp3, one sound per
 meaning, and writes their entries into assets/content/replay-sounds.json (any radio-* entries there are
-replaced). Where they play is in assets-raw/replay/cues.json. A new take: add its file name to its sound
+replaced). Takes of one line ("(n)") get a "lines" list, so the replay never says the same words twice in a
+row. Where they play is in assets-raw/replay/cues.json. A new take: add its file name to its sound
 below, rerun, and list it in assets/CREDITS.md's radio bullet.
 """
 import json
 import os
+import re
 import shutil
 
 SRC = os.path.dirname(os.path.abspath(__file__))
@@ -197,8 +199,13 @@ def main():
             name = f"{sid}-{i}.mp3" if len(sources) > 1 else f"{sid}.mp3"
             shutil.copyfile(os.path.join(SRC, src + ".mp3"), os.path.join(DST, name))
             files.append("audio/replay/" + name)
-        catalog["sounds"].append({"id": sid, "kind": "RADIO", "volume": 0.7, "files": files, "credit": True,
-                                  "description": said + COMMON})
+        entry = {"id": sid, "kind": "RADIO", "volume": 0.7, "files": files, "credit": True,
+                 "description": said + COMMON}
+        said_lines = [re.sub(r" \(\d+\)$", "", src) for src in sources]
+        if len(set(said_lines)) < len(said_lines):  # takes of one line: the replay deals lines, not takes
+            order = list(dict.fromkeys(said_lines))
+            entry["lines"] = [order.index(line) for line in said_lines]
+        catalog["sounds"].append(entry)
     with open(CATALOG, "w", encoding="utf-8", newline="\n") as f:
         json.dump(catalog, f, indent=2, ensure_ascii=False)
         f.write("\n")

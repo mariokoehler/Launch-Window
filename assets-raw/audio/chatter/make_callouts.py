@@ -4,7 +4,8 @@ Queues the user's Radio_Callouts workflow (VibeVoice-Large cloning mc_sample2.og
 it, the Quindar tones at both ends) for every line in callouts.json, one take per seed (default 1101,
 2202, 3303, 4404). ComfyUI writes the finished take to output/lw_callout/<line>_s<seed>_00001.mp3 and the
 bare voice to output/lw_callout/clean/ (FLAC, for the check). Takes already there are skipped, so a rerun
-fills gaps; --retry takes only the lines with fewer than two takes that
+fills gaps; --lines=<file> reads another lines file (round2.json, the second round's pools; give
+check_callouts.py the same); --retry takes only the lines with fewer than two takes that
 passed the last check (qc/report.json), for more seeds; --only=<part of a line's file name> takes one line. The batch's last job unloads VibeVoice, so check_callouts.py's Whisper fits on the GPU.
 
 A line's "say" is what VibeVoice reads ("S-C-E" spells it out); "hear", if given, is what the check
@@ -21,7 +22,16 @@ import urllib.request
 URL = "http://127.0.0.1:8188"
 OUTPUT = r"E:\Comfy-Desktop\ComfyUI-Shared\output\lw_callout"
 HERE = os.path.dirname(os.path.abspath(__file__))
-LINES = json.load(open(os.path.join(HERE, "callouts.json"), encoding="utf-8"))
+LINES_FILE = next((a[len("--lines="):] for a in sys.argv if a.startswith("--lines=")), "callouts.json")
+
+
+def load_lines(name):
+    """A lines file: a list of lines (callouts.json), or round 2's pools, each with its lines (round2.json)."""
+    data = json.load(open(os.path.join(HERE, name), encoding="utf-8"))
+    return data if isinstance(data, list) else [line for pool in data["pools"] for line in pool["lines"]]
+
+
+LINES = load_lines(LINES_FILE)
 ARGS = [a for a in sys.argv[1:] if not a.startswith("--")]
 SEEDS = [int(s) for s in ARGS[0].split(",")] if ARGS else [1101, 2202, 3303, 4404]
 

@@ -22,8 +22,10 @@ import java.util.Random;
  * The replay's pool of sounds ({@code ui-spec.md} &sect;4.7.3, "Sound"), read from
  * {@code assets/content/replay-sounds.json}, outside the content pack like the clips. Each sound has an
  * id that the clips' cues and the console name, a kind, a volume and any number of takes, picked
- * with no repeats until all have played. A sound with no takes yet is wanted: its description is
- * the brief for making it, and the replay plays nothing for it until it has one.
+ * with no repeats until all have played. Takes that say the same line count as one: the lines are
+ * dealt, so two calls in a row never say the same words, and a line's takes take turns. A sound with
+ * no takes yet is wanted: its description is the brief for making it, and the replay plays nothing
+ * for it until it has one.
  *
  * @author Mario Koehler
  */
@@ -69,8 +71,35 @@ public final class ReplaySounds {
      * @param files       its takes, under {@code assets/}; empty while it's wanted
      * @param credit      whether {@code assets/CREDITS.md} must credit its takes
      * @param description what it is, and the brief for making it
+     * @param lines       for each take, the line it says (takes of one line share a number); null or
+     *                    empty when every take is a line of its own
      */
-    public record Sound(String id, Kind kind, float volume, List<String> files, boolean credit, String description) {
+    public record Sound(String id, Kind kind, float volume, List<String> files, boolean credit, String description,
+                        List<Integer> lines) {
+
+        /**
+         * A sound whose every take is a line of its own.
+         *
+         * @param id          its id
+         * @param kind        how it plays
+         * @param volume      its volume, 0 to 1, before the player's setting
+         * @param files       its takes, under {@code assets/}; empty while it's wanted
+         * @param credit      whether {@code assets/CREDITS.md} must credit its takes
+         * @param description what it is, and the brief for making it
+         */
+        public Sound(String id, Kind kind, float volume, List<String> files, boolean credit, String description) {
+            this(id, kind, volume, files, credit, description, null);
+        }
+
+        /**
+         * Returns the line a take says.
+         *
+         * @param take the take's index in {@link #files()}
+         * @return its line
+         */
+        public int line(int take) {
+            return lines == null || lines.isEmpty() ? take : lines.get(take);
+        }
     }
 
     /**
@@ -83,7 +112,8 @@ public final class ReplaySounds {
 
     private final Map<String, Sound> sounds = new HashMap<>();
     private final List<Sound> all;
-    private final Map<String, Deque<String>> decks = new HashMap<>();
+    private final Map<String, Deque<Integer>> decks = new HashMap<>();
+    private final Map<String, Integer> lastLine = new HashMap<>();
     private final Map<String, String> lastTake = new HashMap<>();
     private final Random random = new Random();
 
@@ -165,8 +195,8 @@ public final class ReplaySounds {
     }
 
     /**
-     * Returns the next take of a sound: shuffled, no repeats until all have played, and never the
-     * same take twice in a row.
+     * Returns the next take of a sound: its lines shuffled, no line again until all have played and
+     * never the same line twice in a row, then one of that line's takes, not the one it played last.
      *
      * @param id the sound's id
      * @return the take, under {@code assets/}, or {@code null} while the sound has none
@@ -176,18 +206,29 @@ public final class ReplaySounds {
         if (sound == null || sound.files().isEmpty()) {
             return null;
         }
-        Deque<String> deck = decks.computeIfAbsent(id, key -> new ArrayDeque<>());
+        Map<Integer, List<String>> byLine = new HashMap<>();
+        for (int i = 0; i < sound.files().size(); i++) {
+            byLine.computeIfAbsent(sound.line(i), key -> new ArrayList<>()).add(sound.files().get(i));
+        }
+        Deque<Integer> deck = decks.computeIfAbsent(id, key -> new ArrayDeque<>());
         if (deck.isEmpty()) {
-            List<String> shuffled = new ArrayList<>(sound.files());
+            List<Integer> shuffled = new ArrayList<>(byLine.keySet());
             Collections.shuffle(shuffled, random);
-            String last = lastTake.get(id);
+            Integer last = lastLine.get(id);
             if (shuffled.size() > 1 && shuffled.get(0).equals(last)) {
                 Collections.swap(shuffled, 0, shuffled.size() - 1);
             }
             deck.addAll(shuffled);
         }
-        String take = deck.poll();
-        lastTake.put(id, take);
+        int line = deck.poll();
+        List<String> takes = new ArrayList<>(byLine.get(line));
+        String last = lastTake.get(id + "#" + line);
+        if (takes.size() > 1) {
+            takes.remove(last);
+        }
+        String take = takes.get(random.nextInt(takes.size()));
+        lastLine.put(id, line);
+        lastTake.put(id + "#" + line, take);
         return take;
     }
 }

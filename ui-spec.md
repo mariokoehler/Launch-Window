@@ -2417,8 +2417,8 @@ sound placements keep their own flags.
     from the launch, the upper stage quieter) and the retrofire, each cut with its engine in a failure.
     **Unconfirmed:** its volumes and fades.
   - **The pool:** `assets/content/replay-sounds.json` (outside the pack, like the clips), each sound an
-    id, a kind (effect, loop, radio, music for the fanfares, room), a volume, its takes (several, dealt with no repeats)
-    and a description that is the brief for making it. A sound with no takes yet plays nothing.
+    id, a kind (effect, loop, radio, music for the fanfares, room), a volume, its takes (several, dealt with no repeats; takes of one line count as one, so two calls in a row never say
+    the same words, and a line's takes take turns: `lines` in the catalog, 2026-10-21) and a description that is the brief for making it. A sound with no takes yet plays nothing.
     Files go under `assets/audio/replay/`; loops must be OGG or WAV (MP3 pads its ends, so it can't
     loop seamlessly). `ReplaySoundsTest` holds every take to being there, in the catalog and, where
     it isn't the project's own, credited.

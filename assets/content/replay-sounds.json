@@ -114,7 +114,12 @@
         "audio/replay/radio-guidance-internal-3.mp3"
       ],
       "credit": true,
-      "description": "\"Guidance is internal.\" Early in the countdown, in every variant (it tells nothing). Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"Guidance is internal.\" Early in the countdown, in every variant (it tells nothing). Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another.",
+      "lines": [
+        0,
+        0,
+        0
+      ]
     },
     {
       "id": "radio-pitching-downrange",
@@ -180,7 +185,13 @@
         "audio/replay/radio-signal-good-4.mp3"
       ],
       "credit": true,
-      "description": "\"Power and telemetry nominal.\" / \"Data coming in now.\" A satellite in orbit calling home, its success, at the reveal; the carrier entry's success (its data home before it burns up); the landers' descents at Venus and Mars, their successes; the Mars landing's (the dish sending home). Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"Power and telemetry nominal.\" / \"Data coming in now.\" A satellite in orbit calling home, its success, at the reveal; the carrier entry's success (its data home before it burns up); the landers' descents at Venus and Mars, their successes; the Mars landing's (the dish sending home). Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another.",
+      "lines": [
+        0,
+        1,
+        1,
+        1
+      ]
     },
     {
       "id": "radio-watching",
@@ -205,7 +216,13 @@
         "audio/replay/radio-countdown-hold-4.mp3"
       ],
       "credit": true,
-      "description": "\"Copy, standing by.\" / \"Hold, hold, hold. … Recycling. Counting again.\" The countdown's hold (its glitch), at the reveal. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"Copy, standing by.\" / \"Hold, hold, hold. … Recycling. Counting again.\" The countdown's hold (its glitch), at the reveal. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another.",
+      "lines": [
+        0,
+        1,
+        1,
+        1
+      ]
     },
     {
       "id": "radio-roger",
@@ -216,7 +233,11 @@
         "audio/replay/radio-roger-2.mp3"
       ],
       "credit": true,
-      "description": "\"Roger, copy.\" An acknowledgement: the reentry preparations' success. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"Roger, copy.\" An acknowledgement: the reentry preparations' success. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another.",
+      "lines": [
+        0,
+        0
+      ]
     },
     {
       "id": "radio-engine-out",
@@ -228,7 +249,12 @@
         "audio/replay/radio-engine-out-3.mp3"
       ],
       "credit": true,
-      "description": "\"Flight, Booster. We have an engine out. Remaining engines are compensating.\" / \"Inboard engine out. We're still go.\" Not placed yet: no clip shows an engine out on a many-engined stage. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"Flight, Booster. We have an engine out. Remaining engines are compensating.\" / \"Inboard engine out. We're still go.\" Not placed yet: no clip shows an engine out on a many-engined stage. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another.",
+      "lines": [
+        0,
+        1,
+        1
+      ]
     },
     {
       "id": "radio-second-stage-late",
@@ -239,7 +265,11 @@
         "audio/replay/radio-second-stage-late-2.mp3"
       ],
       "credit": true,
-      "description": "\"Flight, Booster. Second stage ignition late, but it's good thrust now.\" Not placed yet: no clip shows a late ignition. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"Flight, Booster. Second stage ignition late, but it's good thrust now.\" Not placed yet: no clip shows a late ignition. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another.",
+      "lines": [
+        0,
+        0
+      ]
     },
     {
       "id": "radio-trajectory-low",
@@ -250,7 +280,11 @@
         "audio/replay/radio-trajectory-low-2.mp3"
       ],
       "credit": true,
-      "description": "\"Trajectory is a little low. Guidance is correcting.\" The ascent's glitch (the upper stage swings off its path and is steered back). Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"Trajectory is a little low. Guidance is correcting.\" The ascent's glitch (the upper stage swings off its path and is steered back). Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another.",
+      "lines": [
+        0,
+        0
+      ]
     },
     {
       "id": "radio-oscillations",
@@ -272,7 +306,12 @@
         "audio/replay/radio-telemetry-lost-3.mp3"
       ],
       "credit": true,
-      "description": "\"Flight, we've lost telemetry. … We have it back. Signal is good.\" / \"Loss of signal. … Acquisition of signal. Data looks good.\" A satellite's or a crew's signal dropping out and coming back: the glitches of the Earth orbit, the biometric data and the carrier entry. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"Flight, we've lost telemetry. … We have it back. Signal is good.\" / \"Loss of signal. … Acquisition of signal. Data looks good.\" A satellite's or a crew's signal dropping out and coming back: the glitches of the Earth orbit, the biometric data and the carrier entry. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another.",
+      "lines": [
+        0,
+        1,
+        1
+      ]
     },
     {
       "id": "radio-undervolt",
@@ -286,7 +325,14 @@
         "audio/replay/radio-undervolt-5.mp3"
       ],
       "credit": true,
-      "description": "\"Flight, main bus undervolt. Switching to backup. Voltage is coming back.\" / \"Try SCE to Aux.\" (Apollo 12.) The power dropping and the backup coming in: the experiments' and the long flights' glitches. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"Flight, main bus undervolt. Switching to backup. Voltage is coming back.\" / \"Try SCE to Aux.\" (Apollo 12.) The power dropping and the backup coming in: the experiments' and the long flights' glitches. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another.",
+      "lines": [
+        0,
+        0,
+        0,
+        1,
+        1
+      ]
     },
     {
       "id": "radio-attitude-drift",
@@ -317,7 +363,11 @@
         "audio/replay/radio-separation-late-2.mp3"
       ],
       "credit": true,
-      "description": "\"Separation indicator did not light. … Confirmed by telemetry. We have separation.\" Something that should let go and doesn't at first: the deployment's, the retropack's and the modules' glitches. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"Separation indicator did not light. … Confirmed by telemetry. We have separation.\" Something that should let go and doesn't at first: the deployment's, the retropack's and the modules' glitches. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another.",
+      "lines": [
+        0,
+        0
+      ]
     },
     {
       "id": "radio-chute-partial",
@@ -328,7 +378,11 @@
         "audio/replay/radio-chute-partial-2.mp3"
       ],
       "credit": true,
-      "description": "\"One chute is not fully inflated. Two good mains. Landing should be fine.\" The chutes' glitch on the descent (descent-chutes), placed to hear how it feels: the picture shows one main chute, the line speaks of three; Mercury's and Vostok's descents have no call. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"One chute is not fully inflated. Two good mains. Landing should be fine.\" The chutes' glitch on the descent (descent-chutes), placed to hear how it feels: the picture shows one main chute, the line speaks of three; Mercury's and Vostok's descents have no call. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another.",
+      "lines": [
+        0,
+        0
+      ]
     },
     {
       "id": "radio-hard-landing",
@@ -342,7 +396,14 @@
         "audio/replay/radio-hard-landing-5.mp3"
       ],
       "credit": true,
-      "description": "\"Recovery reports a hard landing. Vehicle is OK.\" / \"… Crew is okay.\" A landing on the ground that tips the capsule over: the glitches of the descent and landing and of the landing and recovery. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"Recovery reports a hard landing. Vehicle is OK.\" / \"… Crew is okay.\" A landing on the ground that tips the capsule over: the glitches of the descent and landing and of the landing and recovery. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another.",
+      "lines": [
+        0,
+        0,
+        1,
+        1,
+        1
+      ]
     },
     {
       "id": "radio-program-alarm",
@@ -354,7 +415,12 @@
         "audio/replay/radio-program-alarm-3.mp3"
       ],
       "credit": true,
-      "description": "\"We have a program alarm. … We're go on that alarm.\" Apollo 11's 1202 alarm: the powered descent's glitch. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"We have a program alarm. … We're go on that alarm.\" Apollo 11's 1202 alarm: the powered descent's glitch. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another.",
+      "lines": [
+        0,
+        0,
+        0
+      ]
     },
     {
       "id": "radio-cutoff",
@@ -365,7 +431,11 @@
         "audio/replay/radio-cutoff-2.mp3"
       ],
       "credit": true,
-      "description": "\"Hold, hold, hold. We have a cutoff.\" The countdown's failure (the engine lights early), at the reveal. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"Hold, hold, hold. We have a cutoff.\" The countdown's failure (the engine lights early), at the reveal. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another.",
+      "lines": [
+        0,
+        0
+      ]
     },
     {
       "id": "radio-launch-failure",
@@ -378,7 +448,13 @@
         "audio/replay/radio-launch-failure-4.mp3"
       ],
       "credit": true,
-      "description": "\"Abort. Abort. Abort.\" / \"We've lost thrust. Range safety is standing by.\" The launch's failure (the engine quits off the pad), at its reveal. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"Abort. Abort. Abort.\" / \"We've lost thrust. Range safety is standing by.\" The launch's failure (the engine quits off the pad), at its reveal. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another.",
+      "lines": [
+        0,
+        0,
+        1,
+        1
+      ]
     },
     {
       "id": "radio-breakup",
@@ -393,7 +469,15 @@
         "audio/replay/radio-breakup-6.mp3"
       ],
       "credit": true,
-      "description": "\"We have a major malfunction.\" / \"Range safety has initiated destruct.\" The ascent's failure (the rocket breaks up at staging), at its reveal. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"We have a major malfunction.\" / \"Range safety has initiated destruct.\" The ascent's failure (the rocket breaks up at staging), at its reveal. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another.",
+      "lines": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        1
+      ]
     },
     {
       "id": "radio-data-lost",
@@ -417,7 +501,24 @@
         "audio/replay/radio-data-lost-15.mp3"
       ],
       "credit": true,
-      "description": "\"Flight, we've lost all data.\" / \"We have no downlink.\" / \"No signal. We've lost the spacecraft.\" / \"Loss of signal. … Still no signal. … No acquisition.\" A craft in orbit falling silent: the failures of the Earth orbit, the experiments, the biometric data and the carrier entry. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"Flight, we've lost all data.\" / \"We have no downlink.\" / \"No signal. We've lost the spacecraft.\" / \"Loss of signal. … Still no signal. … No acquisition.\" A craft in orbit falling silent: the failures of the Earth orbit, the experiments, the biometric data and the carrier entry. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another.",
+      "lines": [
+        0,
+        0,
+        1,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ]
     },
     {
       "id": "radio-pressure",
@@ -430,7 +531,13 @@
         "audio/replay/radio-pressure-4.mp3"
       ],
       "credit": true,
-      "description": "\"Pressure is dropping fast.\" The long flights' failures (the crew comes home early). Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"Pressure is dropping fast.\" The long flights' failures (the crew comes home early). Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another.",
+      "lines": [
+        0,
+        0,
+        0,
+        0
+      ]
     },
     {
       "id": "radio-problem",
@@ -441,7 +548,11 @@
         "audio/replay/radio-problem-2.mp3"
       ],
       "credit": true,
-      "description": "\"Flight, we've had a problem here.\" (Apollo 13, reworded.) The coasts to and from the Moon, their glitches; the rover's breakdown. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"Flight, we've had a problem here.\" (Apollo 13, reworded.) The coasts to and from the Moon, their glitches. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another.",
+      "lines": [
+        0,
+        0
+      ]
     },
     {
       "id": "radio-off-trajectory",
@@ -452,7 +563,11 @@
         "audio/replay/radio-off-trajectory-2.mp3"
       ],
       "credit": true,
-      "description": "\"Flight, the vehicle is off trajectory.\" A correction that misfires: the failures of the coasts, the cruises between planets, the lunar approach and the lunar impact. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"Flight, the vehicle is off trajectory.\" A correction that misfires: the failures of the coasts, the cruises between planets, the lunar approach and the lunar impact. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another.",
+      "lines": [
+        0,
+        0
+      ]
     },
     {
       "id": "radio-collision",
@@ -465,7 +580,13 @@
         "audio/replay/radio-collision-4.mp3"
       ],
       "credit": true,
-      "description": "\"Flight, we have a collision.\" The deployment's failure (the stage runs into the payload). Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"Flight, we have a collision.\" The deployment's failure (the stage runs into the payload). Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another.",
+      "lines": [
+        0,
+        0,
+        0,
+        0
+      ]
     },
     {
       "id": "radio-closing-fast",
@@ -477,7 +598,12 @@
         "audio/replay/radio-closing-fast-3.mp3"
       ],
       "credit": true,
-      "description": "\"Closing rate is high. Recommend you brake. … Rates look good now.\" The target approach's glitch (the braking puff comes late). Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"Closing rate is high. Recommend you brake. … Rates look good now.\" The target approach's glitch (the braking puff comes late). Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another.",
+      "lines": [
+        0,
+        0,
+        0
+      ]
     },
     {
       "id": "radio-latches",
@@ -488,7 +614,11 @@
         "audio/replay/radio-latches-2.mp3"
       ],
       "credit": true,
-      "description": "\"Capture latches did not engage. Back off and try again. … Hard dock.\" The docking's glitch (a bounce, then a second try). Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"Capture latches did not engage. Back off and try again. … Hard dock.\" The docking's glitch (a bounce, then a second try). Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another.",
+      "lines": [
+        0,
+        0
+      ]
     },
     {
       "id": "radio-abort-docking",
@@ -499,7 +629,11 @@
         "audio/replay/radio-abort-docking-2.mp3"
       ],
       "credit": true,
-      "description": "\"Abort the docking. Back away.\" The docking's failure. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"Abort the docking. Back away.\" The docking's failure. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another.",
+      "lines": [
+        0,
+        0
+      ]
     },
     {
       "id": "radio-separation-failed",
@@ -512,7 +646,13 @@
         "audio/replay/radio-separation-failed-4.mp3"
       ],
       "credit": true,
-      "description": "\"Separation has failed. The payload is still attached.\" Something that won't let go: the failures of the retropack's jettison, the modules' separation, the probe's release and the lander's extraction. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"Separation has failed. The payload is still attached.\" Something that won't let go: the failures of the retropack's jettison, the modules' separation, the probe's release and the lander's extraction. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another.",
+      "lines": [
+        0,
+        0,
+        0,
+        0
+      ]
     },
     {
       "id": "radio-burn-failed",
@@ -524,7 +664,12 @@
         "audio/replay/radio-burn-failed-3.mp3"
       ],
       "credit": true,
-      "description": "\"Flight, the burn did not take place.\" A burn that dies: the failures of the retrofire and of the burns into and out of lunar orbit; the Mars lander's descent's (its engines never light). Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"Flight, the burn did not take place.\" A burn that dies: the failures of the retrofire and of the burns into and out of lunar orbit; the Mars lander's descent's (its engines never light). Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another.",
+      "lines": [
+        0,
+        0,
+        0
+      ]
     },
     {
       "id": "radio-tumbling",
@@ -535,7 +680,11 @@
         "audio/replay/radio-tumbling-2.mp3"
       ],
       "credit": true,
-      "description": "\"Flight, we're tumbling. We cannot stop it.\" (Gemini 8.) A jet stuck open: the failures of the suborbital flight, the reentry preparations and the undocking. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"Flight, we're tumbling. We cannot stop it.\" (Gemini 8.) A jet stuck open: the failures of the suborbital flight, the reentry preparations and the undocking. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another.",
+      "lines": [
+        0,
+        0
+      ]
     },
     {
       "id": "radio-blackout",
@@ -547,7 +696,12 @@
         "audio/replay/radio-blackout-3.mp3"
       ],
       "credit": true,
-      "description": "\"We're in blackout. … Expect acquisition in about two minutes.\" The reentry's opening, in every variant (it tells nothing). Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"We're in blackout. … Expect acquisition in about two minutes.\" The reentry's opening, in every variant (it tells nothing). Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another.",
+      "lines": [
+        0,
+        0,
+        0
+      ]
     },
     {
       "id": "radio-no-acquisition",
@@ -559,7 +713,12 @@
         "audio/replay/radio-no-acquisition-3.mp3"
       ],
       "credit": true,
-      "description": "\"We're past the expected acquisition time. Still no signal.\" The reentry's failure. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"We're past the expected acquisition time. Still no signal.\" The reentry's failure. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another.",
+      "lines": [
+        0,
+        0,
+        0
+      ]
     },
     {
       "id": "radio-main-chute-failed",
@@ -570,7 +729,11 @@
         "audio/replay/radio-main-chute-failed-2.mp3"
       ],
       "credit": true,
-      "description": "\"Main chute did not deploy.\" The chutes' failures: the descents under chutes, to the ground or the sea. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"Main chute did not deploy.\" The chutes' failures: the descents under chutes, to the ground or the sea. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another.",
+      "lines": [
+        0,
+        0
+      ]
     },
     {
       "id": "radio-recovery-no-contact",
@@ -581,7 +744,11 @@
         "audio/replay/radio-recovery-no-contact-2.mp3"
       ],
       "credit": true,
-      "description": "\"Recovery has no contact.\" The touchdowns' failures (the main tears loose), on the ground or at sea. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"Recovery has no contact.\" The touchdowns' failures (the main tears loose), on the ground or at sea. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another.",
+      "lines": [
+        0,
+        0
+      ]
     },
     {
       "id": "radio-capsule-sinking",
@@ -592,7 +759,11 @@
         "audio/replay/radio-capsule-sinking-2.mp3"
       ],
       "credit": true,
-      "description": "\"Flight, the capsule is sinking.\" (Liberty Bell 7.) The recovery's failure. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"Flight, the capsule is sinking.\" (Liberty Bell 7.) The recovery's failure. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another.",
+      "lines": [
+        0,
+        0
+      ]
     },
     {
       "id": "radio-crew-back-in",
@@ -614,7 +785,12 @@
         "audio/replay/radio-abort-landing-3.mp3"
       ],
       "credit": true,
-      "description": "\"Abort the landing. Abort.\" The powered descent's failure (the crew aborts to orbit). Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"Abort the landing. Abort.\" The powered descent's failure (the crew aborts to orbit). Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another.",
+      "lines": [
+        0,
+        0,
+        0
+      ]
     },
     {
       "id": "radio-contact-light",
@@ -626,7 +802,12 @@
         "audio/replay/radio-contact-light-3.mp3"
       ],
       "credit": true,
-      "description": "\"Sixty seconds. … Thirty seconds. … Contact light.\" (Apollo 11's fuel calls.) The lunar landing's glitch (a hover low on fuel). Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"Sixty seconds. … Thirty seconds. … Contact light.\" (Apollo 11's fuel calls.) The lunar landing's glitch (a hover low on fuel). Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another.",
+      "lines": [
+        0,
+        0,
+        0
+      ]
     },
     {
       "id": "radio-lander-lost",
@@ -639,7 +820,13 @@
         "audio/replay/radio-lander-lost-4.mp3"
       ],
       "credit": true,
-      "description": "\"We've lost contact with the lander.\" The landings' failures, on the Moon and the planets; the landers' entries' at Venus and Mars, and Venera's descent's (its chute torn away). Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"We've lost contact with the lander.\" The landings' failures, on the Moon and the planets; the landers' entries' at Venus and Mars, and Venera's descent's (its chute torn away). Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another.",
+      "lines": [
+        0,
+        0,
+        0,
+        0
+      ]
     },
     {
       "id": "radio-probe-silent",
@@ -650,7 +837,11 @@
         "audio/replay/radio-probe-silent-2.mp3"
       ],
       "credit": true,
-      "description": "\"The probe has stopped transmitting.\" The failure of the work on the surface (Mars 3), the probe's and Viking's lander's at Mars. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"The probe has stopped transmitting.\" The failure of the work on the surface (Mars 3), the probe's and Viking's lander's at Mars. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another.",
+      "lines": [
+        0,
+        0
+      ]
     },
     {
       "id": "radio-drogue-late",
@@ -662,7 +853,12 @@
         "audio/replay/radio-drogue-late-3.mp3"
       ],
       "credit": true,
-      "description": "\"Drogue is late. … Drogue deployed. Main chute is out.\" Not placed yet: no clip shows a late drogue. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"Drogue is late. … Drogue deployed. Main chute is out.\" Not placed yet: no clip shows a late drogue. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another.",
+      "lines": [
+        0,
+        0,
+        0
+      ]
     },
     {
       "id": "radio-pad-shutdown",
@@ -674,7 +870,12 @@
         "audio/replay/radio-pad-shutdown-3.mp3"
       ],
       "credit": true,
-      "description": "\"Engine shutdown. Vehicle is safe on the pad.\" Not placed yet: no clip shuts down safely on the pad. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"Engine shutdown. Vehicle is safe on the pad.\" Not placed yet: no clip shuts down safely on the pad. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another.",
+      "lines": [
+        0,
+        0,
+        0
+      ]
     },
     {
       "id": "radio-escape-fired",
@@ -686,7 +887,12 @@
         "audio/replay/radio-escape-fired-3.mp3"
       ],
       "credit": true,
-      "description": "\"The launch escape system has fired. Crew capsule is clear.\" Not placed yet: the clips don't know whether a crew flies. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another."
+      "description": "\"The launch escape system has fired. Crew capsule is clear.\" Not placed yet: the clips don't know whether a crew flies. Radio: a flight controller's call on the loop, VibeVoice in ComfyUI (the user's workflow), brownian noise under it, the Quindar tones at both ends (assets-raw/audio/chatter/). Streamed; it never overlaps another.",
+      "lines": [
+        0,
+        0,
+        0
+      ]
     }
   ]
 }
