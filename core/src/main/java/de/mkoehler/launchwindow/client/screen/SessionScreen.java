@@ -14,6 +14,7 @@ import de.mkoehler.launchwindow.client.ClientSession;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.connect.ServerResult;
 import de.mkoehler.launchwindow.client.ui.Countdown;
+import de.mkoehler.launchwindow.client.ui.HistoryNote;
 import de.mkoehler.launchwindow.client.ui.Refusals;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.view.Help;
@@ -431,12 +432,32 @@ abstract class SessionScreen extends StageScreen {
      * @return the card
      */
     protected Table dialogCard(String eyebrow, String title) {
+        return dialogCard(eyebrow, title, null);
+    }
+
+    /**
+     * Builds a dialog card with a history note's icon after its title (component 15).
+     *
+     * @param eyebrow     the eyebrow
+     * @param title       the title
+     * @param historyNote the note's text, or null for none
+     * @return the card
+     */
+    protected Table dialogCard(String eyebrow, String title, String historyNote) {
         Table card = new Table();
         card.setBackground(ui.rect(Theme.SURFACE_CARD, Theme.NAVY, Theme.BORDER_EMPHASIS));
         card.pad(Theme.SPACE_5 + Theme.BORDER_EMPHASIS);
         card.defaults().growX().left();
         card.add(ui.label(eyebrow, Theme.TextStyle.EYEBROW, Theme.NAVY)).padBottom(2f).row();
-        card.add(ui.paragraph(title, Theme.TextStyle.HEADING_SM, Theme.INK)).padBottom(Theme.SPACE_4).row();
+        if (historyNote == null) {
+            card.add(ui.paragraph(title, Theme.TextStyle.HEADING_SM, Theme.INK)).padBottom(Theme.SPACE_4).row();
+        } else {
+            Table head = new Table();
+            head.add(ui.label(title, Theme.TextStyle.HEADING_SM, Theme.INK));
+            head.add(new HistoryNote(ui, historyNote)).size(HistoryNote.ICON_SIZE).padLeft(Theme.SPACE_2);
+            head.add().expandX();
+            card.add(head).padBottom(Theme.SPACE_4).row();
+        }
         return card;
     }
 

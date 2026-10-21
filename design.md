@@ -502,11 +502,13 @@ leading to satellite navigation.
 - **How the Firsts reached the papers** (checked 2026-10-11, for the front pages, `ui-spec.md`
   §4.18): Pravda printed Sputnik 1 on 5 October 1957 as a plain TASS report on page one, given no
   more room than a report on Marshal Zhukov's visit to Yugoslavia, and without naming the satellite;
-  the world's reaction made it a sensation, and later issues gave it far more room (a single source
-  says the next day's whole front page; unchecked). Moscow radio announced Gagarin's flight at 10:02
-  Moscow time on 12 April 1961, while he was still in orbit: he landed at about 10:55. Whether
-  Levitan read that first bulletin isn't confirmed; leave it out. Sources: Smithsonian Air and Space
-  ("We Shocked the World"), The Moscow Times ("Space race started with a cosmic blunder"), NASA
+  the world's reaction made it a sensation, and the next day's issue, 6 October, gave it the whole
+  front page (checked 2026-10-21: Smithsonian Air and Space and Trinity College's "Where Did Sputnik
+  Get its Name?" agree). Moscow radio announced Gagarin's flight at 10:02 Moscow time on 12 April 1961,
+  while he was still in orbit: he landed at about 10:55. Yuri Levitan read that bulletin (checked
+  2026-10-21: the archive recording in Suspilne's media library, a 1961 newspaper account, firstorbit.org's
+  transcript). Both are in the space-race news (`space-race-news.json`, 2026-10-21). Sources: Smithsonian Air
+  and Space ("We Shocked the World"), The Moscow Times ("Space race started with a cosmic blunder"), NASA
   History, RussianSpaceWeb ("Vostok 1"). Our papers' headlines and articles are our own, never a real
   paper's.
 - **Whole-crew losses:** Apollo 1, Soyuz 1, Soyuz 11, Challenger and Columbia lost everyone
@@ -539,12 +541,12 @@ leading to satellite navigation.
     work. Their work fed the R-1, the Soviet copy of the V-2. **Numbers disagree** (73 at first,
     "about 150", "more than 170"): say "over a hundred" or none. Sources: Wikipedia
     ("Gorodomlya Island"), War on the Rocks ("The Forgotten Rocketeers", 2019), RussianSpaceWeb.
-  - **Not confirmed:** the name "Operation Osoaviakhim" for the October 1946 round-up wasn't in
-    the sources found; leave it out until checked.
-  - **Suggested note** (for the offer dialog): "Both sides began with poached engineers. After the
-    war about 120 of von Braun's Peenemünde team came to Texas under Operation Paperclip; in
-    October 1946 the Soviets put others on trains to an island in Lake Seliger, where they helped
-    build the R-1, a copy of the V-2."
+  - **Operation Osoaviakhim** (checked 2026-10-21, Wikipedia's "Operation Osoaviakhim"): the round-up's
+    name, in the early hours of 22 October 1946. It took more than 2,500 specialists from many industries
+    (aviation, optics, radio, chemistry, rockets) and their families, over 6,000 people: the "over a
+    hundred" above is only the rocket group, so never attach that number to the whole operation.
+  - **The note is built** (2026-10-21, `HistoryNotes.POACHING`, on the offer dialog's title): Paperclip's
+    120, Osoaviakhim before dawn on 22 October 1946, the rocket group's island in Lake Seliger and the R-1.
 - **Bars (also called Chaika) and Lisichka** died when their Korabl-Sputnik launch failed on 28
   July 1960, 19 seconds in: a strap-on broke away and the capsule's parachutes opened too low.
   They're the dogs remembered on a failed Korabl-Sputnik 2 flight (§2.5(f)), as "Chaika". Sources
@@ -563,8 +565,10 @@ leading to satellite navigation.
   Jupiter-C's upper stages, spun up on the pad to hold them steady. Its four flexible whip antennas lay folded for
   the launch and were swung out by the spin once it was free (the replay shows them so). The whips flexing also
   drained the spin about its long axis, so within hours it was tumbling end over end, the flat spin in G4's notes:
-  an early lesson in why a spinning craft must spin about its widest axis. **Not yet checked:** the whips' folding
-  at launch and their release by the spin; check before a history note uses them.
+  an early lesson in why a spinning craft must spin about its widest axis. **Checked 2026-10-21:** the spin about the
+  long axis kept the flexible whips extended (NASA History, "Explorer-I and Jupiter-C"), and their flexing drained the
+  spin into a tumble (Wikipedia, "Explorer 1"). **Not found** (searched 2026-10-21): how the whips were held for the
+  launch and whether the spin swung them out; don't use either in a history note (the replay's swing-out stays, user).
 - **Pegasus, Biosatellite and the frogs' satellite** (found 2026-10-21, the replay's later NASA satellites): Pegasus
   rode up folded inside a boilerplate Apollo service module, under a boilerplate command module and escape tower; the
   tower went at second-stage ignition, and in orbit the boilerplate CSM (about 10,000 lb) was jettisoned into an orbit
@@ -577,9 +581,13 @@ leading to satellite navigation.
   Otolith (9 November 1970, Scout B from Wallops, 132.9 kg, 0.76 by 1.2 m) had an octagonal electronics section and a
   truncated cone for the frogs' package under a heat shield; after separation a yo-yo despin slowed its spin and four
   booms folded against its side swung out, raising its moment of inertia to keep accelerations below a thousandth of a
-  g; the water-filled centrifuge was locked until the orbit settled, then ran cycles of about 8 minutes. **Not yet
-  checked:** the Biosatellite capsule's shape and where its motor sat, the Star-12, and whether OFO stayed on the Scout's
-  last stage. Sources: Wikipedia ("Pegasus (satellite)", "Biosatellite program", "Biosatellite 3", "Orbiting Frog
+  g; the water-filled centrifuge was locked until the orbit settled, then ran cycles of about 8 minutes. **Checked
+  2026-10-21:** Biosatellite's reentry vehicle was the experiment capsule, a heat shield running from the nose to a skirt
+  over a conical section, and a "thrust cone or retro rocket assembly"; the payload saw spin-up and despin around the retro
+  firing and up to 9 g in reentry, as predicted (B. C. Look, NASA Ames, "Biosatellite II Experiment Environment", 1968).
+  The motor was a Star-12 (Gunter's Space Page, and a satellite catalog that also calls the capsule a cone, about 0.7 m
+  across). OFO separated from the launch vehicle before its yo-yo despin (Wikipedia), so it didn't stay on the Scout's
+  last stage. **Not found:** exactly where the thrust cone sat on the capsule; keep it out of history notes. Sources: Wikipedia ("Pegasus (satellite)", "Biosatellite program", "Biosatellite 3", "Orbiting Frog
   Otolith"), the National Air and Space Museum (Biosatellite 2), Gunter's Space Page (Biosat).
 - **Zond 5, Pioneer 10 and Luna 16** (found 2026-10-21, the replay's probes): Zond 5, an uncrewed Soyuz 7K-L1, was the
   first craft to go round the Moon and come back (September 1968), with two tortoises, fruit-fly eggs, plants and
@@ -587,13 +595,29 @@ leading to satellite navigation.
   Indian Ocean instead of landing in Kazakhstan. Pioneer 10's 2.74 m dish sat on a hexagonal bus; its four SNAP-19
   generators rode on two 3 m trusses 120 degrees apart, away from the instruments, and its magnetometer on a 6.6 m boom.
   Luna 16's sample came home in a capsule on top of a small ascent stage, parachuting down near Jezkazgan (24 September
-  1970). **Not yet checked:** Pioneer 11's likeness to Pioneer 10, Luna 15's being of Luna 16's design, the return
-  capsule's size. Sources: Wikipedia ("Zond 5", "Pioneer 10", "Luna 16"). Mars 2's and Mars 3's descent modules were
+  1970). Sources: Wikipedia ("Zond 5", "Pioneer 10", "Luna 16"). Mars 2's and Mars 3's descent modules were
   mounted on the bus opposite its engine and let go about 4.5 hours before reaching Mars (Mars 3's at 09:14 UT on
-  2 December 1971, 4 h 35 min out), not from orbit as Viking's were (Wikipedia, "Mars 2", "Mars 3"). **Not yet
-  checked:** the module's own motor firing after the release to set it on its way in (the replay shows one burn), and the
-  landers' shapes the replay draws: Mars 3's 1.2 m sphere opening four petals on the ground; Venera 9's lander inside a
-  2.4 m spherical heat shield, falling the last 50 km with a disc round it as an airbrake and landing on a crush ring.
+  2 December 1971, 4 h 35 min out), not from orbit as Viking's were (Wikipedia, "Mars 2", "Mars 3").
+  **Checked 2026-10-21** (mostly from Asif Siddiqi's *Beyond Earth*, NASA, 2018):
+  - Pioneer 11 was Pioneer 10's sister craft with one more instrument, a fluxgate magnetometer (Wikipedia); on the way
+    out one of its generator booms briefly failed to deploy, a thruster and the dust detector gave trouble, none of it
+    serious (Siddiqi). It passed Jupiter at 42,500 km, three times closer than Pioneer 10.
+  - Luna 15 (Ye-8-5 no. 401) and Luna 16 (no. 406) were one design. Before Luna 15's launch one of the ascent stage's two
+    1.28 kg radio transmitters was taken out to save weight, leaving no spare for the way home (Siddiqi). Luna 16's
+    capsule: a small sphere of 34 kg that hit the air at 10.95 km/s and up to 350 g (Siddiqi). **Not found:** its
+    diameter (one web source says about 35 cm; 50 cm and 39 kg are Luna 24's): keep it out of history notes.
+  - After the release the Mars lander was to spin up about its long axis and fire a solid motor to set its entry
+    (the replay's one burn is right). Mars 2's last correction was so accurate that no more was needed, but the
+    computer's preset algorithm assumed an error, turned the lander the wrong way, and it entered far too steeply; its
+    parachute never opened (Siddiqi). The landers were egg-shaped with petals, about 1,000 kg with a 355 kg surface
+    capsule (Siddiqi); Mars 3's a 1.2 m sphere with four triangular petals, under a 2.9 m conical braking shield
+    (Wikipedia).
+  - Venera 9's lander rode in a 2.4 m spherical pod of 1,560 kg; parachutes pulled off its upper and then its lower
+    half, it hung under three main canopies for about 20 minutes, then fell on its disc-shaped airbrake alone from about
+    50 km, landing at about 7 m/s on toroidal shells built to crumple (Siddiqi, quoting Pravda of 21 February 1976;
+    Wikipedia). The disc's size (the `venera-9-probe` note's "about 2 meters") wasn't found in these sources.
+  - In the game since 2026-10-21: history notes on `luna-15-sample-return`, `venera-orbiter-and-lander`,
+    `mars-2-orbiter-lander-rover` and `pioneer-11-flyby` (the standard pack's `strings.json`).
 - **Apollo 5's "fire in the hole"** (found 2026-10-20, the uncrewed lunar module test's steps): the first lunar module,
   LM-1, flew alone and without legs on a Saturn IB on 22 January 1968: inside its adapter under a nose cone about nine
   feet tall, no CSM (the Saturn IB couldn't lift both). In orbit the cone came off, the adapter's four panels opened, and
@@ -602,8 +626,9 @@ leading to satellite navigation.
   controllers ran
   the backup plan by hand: more descent-engine firings, then the "fire in the hole" staging, the ascent engine lit
   while still bolted to the descent stage, as it would be in an abort during a landing, then an ascent-engine
-  firing alone. It went well enough that a second uncrewed lunar module flight was dropped. **Not yet checked:** the
-  first firing's length (about 4 s); check before a history note uses it.
+  firing alone. It went well enough that a second uncrewed lunar module flight was dropped. The first firing was cut
+  after about 4 s of a planned 39 (checked 2026-10-21: NASA History's "55 Years Ago: The First Test Flight of the Apollo
+  Lunar Module", Wikipedia); the `apollo-uncrewed-lunar-module-test` note says so.
 - **The Soviet way to the Moon and its Blok D** (found 2026-10-20, the replay's Soviet Moon flights): on the N1-L3 plan
   the Blok D stage did the work Apollo's service module did on the way out: course corrections, the braking burn into
   lunar orbit, and then, with the LK alone on it, most of the descent, before it let go a few kilometres up and fell
@@ -612,8 +637,10 @@ leading to satellite navigation.
   flights the Proton's Blok D fired a second time from the parking orbit to send the craft to the Moon; Zond 5 (launched
   15 September 1968) passed about 1,950 km over the far side, came home on a ballistic entry after a guidance fault, and
   splashed down in the Indian Ocean with two steppe tortoises, which survived, thinner. Sources: NASA's "50 years ago"
-  feature on Zond 5, the NSSDC record, russianspaceweb.com's L3 and LK pages. **Not yet checked:** the Blok D's speed and
-  height when it let the LK go (about 100 m/s at about 4 km, one source); check before a history note uses them.
+  feature on Zond 5, the NSSDC record, russianspaceweb.com's L3 and LK pages. The Blok D let the LK go at about 100 m/s
+  about 4 km up (checked 2026-10-21: Wikipedia's "LK (spacecraft)" and Astronautix, likely one origin; RussianSpaceWeb
+  gives no figures). Use them only with "about", as the `lk-lander` note does; RussianSpaceWeb's "10-second final
+  descent" can't be right from there, so don't use it.
 - **Apollo's flag, rock boxes and rover** (found 2026-10-20, the replay's moonwalks): Apollo 11's flag hung from a
   telescoping crossbar so it would show in the airless sky, and the crew couldn't pull the bar out all the way,
   which left the ripple that looks like a breeze (NASA's account, 1993); the soil was hard a little way down and the
@@ -627,8 +654,9 @@ leading to satellite navigation.
   than they could walk back: the walk-back limit, about 10 km, was worked out from the suits' oxygen, cooling water
   and batteries before each moonwalk and recalculated during it. Sources: NASA's Apollo Lunar Surface Journal
   (Apollo 17's fender), J. H. Allton's sample curation paper (NASA JSC), the Smithsonian's rock box records, a Texas
-  Tech paper on the walk-back limit. **Not yet checked:** how deep Apollo 11's pole went; check before a history note
-  uses it.
+  Tech paper on the walk-back limit. How deep Apollo 11's pole went (checked 2026-10-21): only a few inches; Armstrong
+  later put it at "six to eight inches" (quoted by the Alan Bean Gallery, not found in the Lunar Surface Journal), and
+  other accounts say about 6 or 7. Use it only as his estimate, never as a measurement.
 - **Apollo's lunar module** (the replay's Apollo, 2026-10-18): about 7 m tall and 4.3 m across its legs; the descent
   stage wrapped in gold and amber Kapton foil against the Sun's heat, the ascent stage's faceted cabin on top with its
   two triangular windows, the docking tunnel on its roof (the commander flew the docking looking up through a small

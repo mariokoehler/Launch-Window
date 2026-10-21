@@ -2922,6 +2922,8 @@ place of the button, like the other reasons someone can't be approached.
   - **Their answer, as far as you can tell:** a chance range from the loyalty band and what the
     file shows ("15–30 %"), with a line that the rival may match it and that you won't know their
     matching rule. Never an exact number: the loyalty is only a band.
+  - **A history note** after the title (2026-10-21, `HistoryNotes.POACHING`, `design.md` §1.1): both
+    sides began with poached engineers, Paperclip and Osoaviakhim. `-Dshots=poaching` renders the dialog.
   - **When the answer comes:** "In the next turn report."
   - Buttons: **Make the offer** (queues it), Cancel.
 - **Queued offer:** listed on the Operations tab with the season's operations, cancellable until

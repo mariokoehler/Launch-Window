@@ -303,6 +303,10 @@ public final class ScreenSnapshot {
             consoleShots(folder, game);
             return;
         }
+        if ("poaching".equals(System.getProperty("shots"))) {
+            poachingShots(folder, game);
+            return;
+        }
         if ("replay".equals(System.getProperty("shots"))) {
             String hash = ContentPackHash.ofClasspath("content/early-era", ScreenSnapshot.class.getClassLoader());
             reportShots(folder, game, GameInfoResponse.success("early-era", hash, List.of(), 1, true,

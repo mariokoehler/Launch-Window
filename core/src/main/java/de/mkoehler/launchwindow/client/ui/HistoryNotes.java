@@ -41,6 +41,13 @@ public final class HistoryNotes {
         + "walkie-talkie's transmit button, switching ground-station radio transmitters on and off via ordinary "
         + "telephone lines. A tiny piece of engineering that helped humanity reach the Moon.";
 
+    /** On the Intelligence Office's offer dialog, beside its title (checked 2026-10-08 and 2026-10-21). */
+    public static final String POACHING = "Both sides began with poached engineers. After the war about 120 of "
+        + "Wernher von Braun's Peenemünde team came to Texas under Operation Paperclip. Before dawn on 22 October "
+        + "1946, in Operation Osoaviakhim, the Soviets put German specialists and their families on trains to the "
+        + "USSR without warning. The core of the rocket group ended up on an island in Lake Seliger, where they "
+        + "helped build the R-1, a copy of the V-2.";
+
     /**
      * Not instantiable; this class only holds texts.
      */

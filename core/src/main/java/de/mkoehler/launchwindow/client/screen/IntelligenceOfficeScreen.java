@@ -13,6 +13,7 @@ import de.mkoehler.launchwindow.actions.MakeOfferAction;
 import de.mkoehler.launchwindow.actions.QueueIntelOperationAction;
 import de.mkoehler.launchwindow.actions.SetIntelligenceTargetAction;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
+import de.mkoehler.launchwindow.client.ui.HistoryNotes;
 import de.mkoehler.launchwindow.client.ui.ReliabilityBar;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.TraitChip;
@@ -1321,7 +1322,7 @@ public final class IntelligenceOfficeScreen extends ChromeScreen {
     public void openOffer(String key, PersonnelFile file) {
         String agency = agencyName(key);
         Table card = dialogCard("Intelligence Office · an offer to " + agency + "'s staff",
-            "Make " + file.name() + " an offer");
+            "Make " + file.name() + " an offer", HistoryNotes.POACHING);
         Table columns = new Table();
         columns.top();
         columns.add(offerFileColumn(key, file)).width(470f).top().padRight(Theme.SPACE_4);

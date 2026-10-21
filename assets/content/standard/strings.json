@@ -1013,7 +1013,8 @@
     },
     "luna-15-sample-return": {
       "name": "Sample return",
-      "description": "Land, drill into the surface, and launch the sample back to Earth in a sealed capsule."
+      "description": "Land, drill into the surface, and launch the sample back to Earth in a sealed capsule.",
+      "historyNote": "Luna 15 and Luna 16 were the same machine, the Ye-8-5: a landing stage with a drill arm, carrying a small ascent rocket with the sealed return capsule on top. To save weight, the designers took one of the ascent stage's two radio transmitters out of Luna 15 before launch, leaving the whole trip home with no spare."
     },
     "luna-3-flyby": {
       "name": "Far side flyby",
@@ -1058,7 +1059,8 @@
     },
     "venera-orbiter-and-lander": {
       "name": "Orbiter and lander",
-      "description": "The carrier brakes into orbit and relays the lander's signal from the surface."
+      "description": "The carrier brakes into orbit and relays the lander's signal from the surface.",
+      "historyNote": "On the way to Venus the lander rode inside a sphere 2.4 meters across, its heat shield. In the upper air the sphere came off in halves as the parachutes opened, and the lander hung under its main canopies for about 20 minutes before dropping them. It touched down on a hollow metal ring around its base, built to crumple and soak up the blow."
     },
     "mariner-6-flyby": {
       "name": "Mars flyby",
@@ -1074,7 +1076,8 @@
     },
     "mars-2-orbiter-lander-rover": {
       "name": "Orbiter, lander and rover",
-      "description": "Brake into orbit, send the lander down, and walk the small rover across the surface."
+      "description": "Brake into orbit, send the lander down, and walk the small rover across the surface.",
+      "historyNote": "Mars 2 and Mars 3 let their landers go about four and a half hours out. Each lander was to spin itself up and fire a small solid rocket to set its angle into the atmosphere. Mars 2's last course correction was so accurate that nothing more was needed, but its computer, programmed to expect an error, turned the lander anyway. It came in far too steeply, its parachute never opened, and it crashed."
     },
     "mars-m69-orbit": {
       "name": "Mars orbit",
@@ -1086,7 +1089,8 @@
     },
     "pioneer-11-flyby": {
       "name": "Jupiter and Saturn flyby",
-      "description": "Fly past Jupiter and use its gravity to reach Saturn."
+      "description": "Fly past Jupiter and use its gravity to reach Saturn.",
+      "historyNote": "Pioneer 11 was Pioneer 10's twin, with one more instrument, an extra magnetometer for the giant planets' strong fields. On the way out one of the booms carrying its nuclear generators was briefly slow to deploy, but nothing put the mission at risk. It passed Jupiter at 42,500 km, about three times closer than Pioneer 10."
     },
     "x-15-flight-test": {
       "name": "Flight test",
