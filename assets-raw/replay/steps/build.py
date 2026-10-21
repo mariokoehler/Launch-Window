@@ -2132,6 +2132,47 @@ for _step in ("earth-orbit", "advanced-experiments-earth-orbit"):
     variant_of(_step, f"pegasus-{_step}", {}, skin="pg-")
 variant_of("deployment", "pegasus-deployment", {}, skin="pg-", after=["pegasus-wings.jsx"])
 
+# The robot probes as themselves (2026-10-21, user; the standard pack): each in the generic timelines with its own drawing
+# (parts.py's PROBES: the skin's debris-1-bare on the stage once the ascent has thrown its fairing off as a tower, a-les;
+# d-payload, o-sat, m-probe, g-probe). The pad's three clips stay generic: under its fairing a probe looks as the generic
+# nose does. The clips each family's programs play that draw the craft (the rest are already its own scenes).
+PROBE_CLIPS = {
+    "pioneer-10": ("pio-", ["ascent", "deployment", "earth-jupiter-transit", "jupiter-approach", "jupiter-flyby", "jupiter-saturn-transit", "saturn-approach", "saturn-flyby", "tpi"]),
+    "pioneer-2": ("pa2-", ["ascent", "deployment", "lunar-approach", "lunar-orbit", "tpi", "trans-lunar-coast"]),
+    "pioneer-4": ("pi4-", ["ascent", "deployment", "lunar-flyby", "tpi", "trans-lunar-coast"]),
+    "pioneer-6": ("pi6-", ["ascent", "deployment", "sun-measurements", "tpi"]),
+    "pioneer-venus-orbiter": ("pvo-", ["ascent", "deployment", "earth-departure", "earth-venus-transit", "tpi", "venus-approach", "venus-orbit"]),
+    "pioneer-venus-multiprobe": ("pvm-", ["ascent", "deployment", "earth-departure", "tpi", "venus-approach"]),
+    "ranger": ("rng-", ["ascent", "deployment", "lunar-approach", "lunar-impact", "tpi", "trans-lunar-coast"]),
+    "lunar-orbiter": ("lor-", ["ascent", "deployment", "lunar-approach", "lunar-orbit", "tpi", "trans-lunar-coast"]),
+    "mariner-5": ("mr5-", ["ascent", "deployment", "earth-venus-transit", "tpi", "venus-approach", "venus-flyby"]),
+    "mariner-6": ("mr6-", ["ascent", "deployment", "earth-mars-transit", "mars-approach", "mars-flyby", "tpi"]),
+    "mariner-9": ("mr9-", ["ascent", "deployment", "earth-mars-transit", "mars-approach", "mars-orbit", "mars-orbit-injection", "tpi"]),
+    "mariner-10": ("mr10-", ["ascent", "deployment", "earth-venus-transit", "mercury-flyby", "tpi", "venus-flyby", "venus-mercury-transit"]),
+    "viking": ("vik-", ["ascent", "deployment", "earth-mars-transit", "mars-approach", "mars-orbit", "tpi"]),
+    "surveyor": ("svy-", ["ascent", "deployment", "lunar-approach", "tpi", "trans-lunar-coast"]),
+    "luna-2": ("lu2-", ["ascent", "deployment", "lunar-approach", "lunar-impact", "tpi", "trans-lunar-coast"]),
+    "luna-3": ("lu3-", ["ascent", "deployment", "lunar-flyby", "tpi", "trans-lunar-coast"]),
+    "luna-15": ("lu15-", ["ascent", "deployment", "earth-approach", "lunar-approach", "tpi", "trans-earth-coast", "trans-lunar-coast"]),
+    "luna-17": ("lu17-", ["ascent", "deployment", "lunar-approach", "tpi", "trans-lunar-coast"]),
+    "mars-2": ("ma2-", ["ascent", "deployment", "earth-departure", "earth-mars-transit", "mars-approach", "mars-orbit", "tpi"]),
+    "mars-m69": ("m69-", ["ascent", "deployment", "earth-mars-transit", "mars-approach", "mars-orbit", "mars-orbit-injection", "tpi"]),
+    "venera-15": ("ve15-", ["ascent", "deployment", "earth-departure", "earth-venus-transit", "tpi", "venus-orbit"]),
+    "venera-7": ("ve7-", ["ascent", "deployment", "earth-departure", "earth-venus-transit", "tpi", "venus-approach"]),
+    "venera-9": ("ve9-", ["ascent", "deployment", "earth-departure", "earth-venus-transit", "tpi", "venus-approach", "venus-flyby", "venus-orbit"]),
+}
+for _fam, (_skin, _clips) in PROBE_CLIPS.items():
+    for _clip in _clips:
+        variant_of(_clip, f"{_fam}-{_clip}", {"debris-1": f"{_skin}debris-1-bare"} if _clip == "ascent" else {}, skin=_skin)
+# Luna 15 comes home as its return rocket, then its sphere (lu15-o-sat-ret, -m-probe-ret, -r-capsule), landing on the ground.
+STEPS["luna-15-earth-approach"]["alias"]["o-sat"] = "lu15-o-sat-ret"
+STEPS["luna-15-trans-earth-coast"]["alias"]["m-probe"] = "lu15-m-probe-ret"
+variant_of("reentry-from-moon", "luna-15-reentry-from-moon", {}, skin="lu15-")
+variant_of("descent-and-landing", "luna-15-descent-and-landing", {}, skin="lu15-")
+# Zond 5 (2026-10-21): the uncrewed 7K-L1 on its flight round the Moon flies the 7K-L1's clips; it came down in the
+# Indian Ocean, the first craft back from the Moon, so its descent ends in the sea.
+variant_of("descent-and-splashdown", "soyuz-descent-and-splashdown", {}, skin="sy-")
+
 
 def read(*path):
     return open(os.path.join(HERE, *path), encoding="utf-8").read() + "\n"

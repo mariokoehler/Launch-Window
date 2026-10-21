@@ -581,6 +581,14 @@ leading to satellite navigation.
   checked:** the Biosatellite capsule's shape and where its motor sat, the Star-12, and whether OFO stayed on the Scout's
   last stage. Sources: Wikipedia ("Pegasus (satellite)", "Biosatellite program", "Biosatellite 3", "Orbiting Frog
   Otolith"), the National Air and Space Museum (Biosatellite 2), Gunter's Space Page (Biosat).
+- **Zond 5, Pioneer 10 and Luna 16** (found 2026-10-21, the replay's probes): Zond 5, an uncrewed Soyuz 7K-L1, was the
+  first craft to go round the Moon and come back (September 1968), with two tortoises, fruit-fly eggs, plants and
+  bacteria aboard; its guided reentry switched itself off and it came in too steeply for a crew, splashing down in the
+  Indian Ocean instead of landing in Kazakhstan. Pioneer 10's 2.74 m dish sat on a hexagonal bus; its four SNAP-19
+  generators rode on two 3 m trusses 120 degrees apart, away from the instruments, and its magnetometer on a 6.6 m boom.
+  Luna 16's sample came home in a capsule on top of a small ascent stage, parachuting down near Jezkazgan (24 September
+  1970). **Not yet checked:** Pioneer 11's likeness to Pioneer 10, Luna 15's being of Luna 16's design, the return
+  capsule's size. Sources: Wikipedia ("Zond 5", "Pioneer 10", "Luna 16").
 - **Apollo 5's "fire in the hole"** (found 2026-10-20, the uncrewed lunar module test's steps): the first lunar module,
   LM-1, flew alone and without legs on a Saturn IB on 22 January 1968: inside its adapter under a nose cone about nine
   feet tall, no CSM (the Saturn IB couldn't lift both). In orbit the cone came off, the adapter's four panels opened, and

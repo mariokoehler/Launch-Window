@@ -4139,6 +4139,338 @@ def soviet_moon_parts():
                           f'stroke-width="2.4"/>', LC)
 
 
+# --- The robot probes as themselves (2026-10-21, user; the standard pack) -----------------------------------------
+# Each probe drawn once in the launch's frame, nose up, its foot on the stage's top (500): folded on the rocket and in the
+# deployment (its panels and booms up along it), and open in orbit, on the coasts' and cruises' maps and at the Earth
+# departure (probe_skin). On the rocket it rides under the generic nose fairing, which the ascent throws off as Mercury's
+# tower (<p>-a-les), the probe standing bare on its adapter (<p>-debris-1-bare): the pad's clips stay generic, the
+# fairing there being the generic nose. Shapes from the blueprints and photographs, drawn to fit the generic sprite (a
+# probe of a few decimetres as large as one of a few metres; panels and booms shortened): unconfirmed.
+
+
+def _r(x, y, w, h, sw=2.4, fill="#ffffff", extra=""):
+    return f'<rect x="{x}" y="{y}" width="{w}" height="{h}" fill="{fill}" {LINE} stroke-width="{sw}"{extra}/>'
+
+
+def _p(d, sw=2.4, fill="#ffffff", op=1.0):
+    return f'<path d="{d}" fill="{fill}" {LINE} stroke-width="{sw}"' + (f' opacity="{op}"' if op != 1.0 else "") + "/>"
+
+
+def _l(d, sw=1.8, op=1.0):
+    return _p(d, sw, "none", op)
+
+
+def _c(cx, cy, r, sw=2.4, fill="#ffffff"):
+    return f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="{fill}" {LINE} stroke-width="{sw}"/>'
+
+
+def _panel(x, y, w, h, n=3):
+    """A solar panel: hatched, n cells along its long side."""
+    cells = "".join((f"M{x + w * j / n:.1f} {y} L{x + w * j / n:.1f} {y + h} " if w >= h else
+                     f"M{x} {y + h * j / n:.1f} L{x + w} {y + h * j / n:.1f} ") for j in range(1, n))
+    return _r(x, y, w, h, 2.2, "url(#hatch)") + (_l(cells, 1.2, 0.7) if cells else "")
+
+
+def _bowl(cx, y, w, depth):
+    """A dish opening up, its rim at y, and its feed."""
+    return (_p(f"M{cx - w / 2} {y} Q{cx} {y + 2 * depth} {cx + w / 2} {y} Z")
+            + _l(f"M{cx} {y + depth} L{cx} {y - depth * 1.4}", 1.6))
+
+
+def _side_dish(cx, cy, h, depth, facing):
+    """A dish seen edge on, facing left (-1) or right (1), its back at cx."""
+    return _p(f"M{cx} {cy - h / 2} Q{cx - facing * 2 * depth} {cy} {cx} {cy + h / 2} Z") + _l(
+        f"M{cx} {cy} L{cx + facing * depth * 1.6} {cy}", 1.4)
+
+
+def _oct(y0, y1, x0=932, x1=988):
+    c = 6
+    return _p(f"M{x0 + c} {y0} L{x1 - c} {y0} L{x1} {y0 + c} L{x1} {y1 - c} L{x1 - c} {y1} L{x0 + c} {y1} L{x0} {y1 - c} "
+              f"L{x0} {y0 + c} Z") + _l(f"M{x0 + 14} {y0} L{x0 + 14} {y1} M{x1 - 14} {y0} L{x1 - 14} {y1}", 1.2, 0.6)
+
+
+def _wings(y, h, reach, n=4, gap=4, x0=932, x1=988):
+    """Two panels straight out to the sides (open)."""
+    return _panel(x0 - gap - reach, y, reach, h, n) + _panel(x1 + gap, y, reach, h, n) + _l(
+        f"M{x0 - gap} {y + h / 2} L{x0} {y + h / 2} M{x1} {y + h / 2} L{x1 + gap} {y + h / 2}", 2)
+
+
+def _folded(y0, y1, w=10, xl=920, xr=990):
+    """Two panels folded up along the body (on the rocket)."""
+    return _panel(xl, y0, w, y1 - y0, 3) + _panel(xr, y0, w, y1 - y0, 3)
+
+
+def _adapter():
+    return _p("M946 490 L974 490 L978 500 L942 500 Z")
+
+
+def _e8_stage(legs_open):
+    """The Lunas' landing stage (E-8): four spherical tanks in a ring, the cylindrical ones between, four legs."""
+    out = _r(934, 470, 52, 12, 2.2) + _c(938, 480, 11) + _c(982, 480, 11) + _c(960, 484, 10)
+    if legs_open:
+        out += _l("M932 486 L908 504 M988 486 L1012 504 M950 490 L944 508 M970 490 L976 508", 2.6)
+        out += "".join(f'<ellipse cx="{x}" cy="{y}" rx="8" ry="2.5" fill="#ffffff" {LINE} stroke-width="2"/>'
+                       for x, y in ((906, 506), (1014, 506), (943, 510), (977, 510)))
+    else:
+        out += _l("M932 486 L926 470 M988 486 L994 470", 2.4)
+    return out
+
+
+def pioneer10(open_):
+    out = (_r(944, 456, 32, 26) + _l("M952 456 L952 482 M968 456 L968 482", 1.2, 0.6)
+           + _bowl(960, 444, 84, 12) + _l("M934 446 L960 414 L986 446", 1.4) + _r(955, 406, 10, 8, 1.8))
+    if open_:
+        out += (_l("M944 470 L896 510 M976 470 L1024 510", 2) + _r(884, 504, 14, 24, 2) + _r(1022, 504, 14, 24, 2)
+                + _l("M976 462 L1096 432", 1.6) + _c(1098, 431, 4, 1.6))
+    else:
+        out += _r(926, 458, 10, 26, 2) + _r(984, 458, 10, 26, 2)
+    return out
+
+
+def pioneer2(open_):
+    return (_r(930, 446, 60, 26) + _l("M930 459 L990 459", 1.2, 0.6) + _p("M930 446 L946 424 L974 424 L990 446 Z")
+            + _p("M930 472 L946 488 L974 488 L990 472 Z") + _p("M954 488 L950 497 L970 497 L966 488 Z", 2)
+            + "".join(_p(f"M{x - 3} 424 L{x - 4} 417 L{x + 4} 417 L{x + 3} 424 Z", 1.6) for x in (948, 960, 972)))
+
+
+def pioneer4(open_):
+    stripes = "".join(f'<path d="M960 402 L{x0} 486 L{x1} 486 Z" fill="{NAVY}" opacity="0.35"/>' for x0, x1 in ((946, 952), (958, 964), (970, 975)))
+    return (_p("M944 486 L960 402 L976 486 Z") + stripes + _r(944, 486, 32, 8, 2) + _l("M960 402 L960 388", 1.6))
+
+
+def pioneer6(open_):
+    out = (_r(930, 444, 60, 40, 2.4, "url(#hatch)") + _l("M930 450 L990 450", 1.4, 0.7) + _r(950, 484, 20, 8, 2)
+           + _l("M960 444 L960 384", 2.2) + _l("M952 400 L968 400 M954 412 L966 412", 1.4))
+    if open_:
+        out += _l("M930 466 L846 486 M990 466 L1074 486", 1.8) + _c(844, 487, 3.5, 1.6) + _c(1076, 487, 3.5, 1.6)
+    else:
+        out += _l("M928 472 L928 420 M992 472 L992 420", 1.6)
+    return out
+
+
+def pv_drum():
+    return (_r(918, 452, 84, 34, 2.4, "url(#hatch)") + _r(918, 446, 84, 6, 2) + _l("M932 452 L932 486 M988 452 L988 486", 1.2, 0.6))
+
+
+def pv_orbiter(open_):
+    out = pv_drum() + _p("M952 486 L948 498 L972 498 L968 486 Z", 2) + _l("M960 446 L960 404", 2) + _side_dish(962, 412, 36, 8, -1)
+    out += _l("M1002 466 L1120 466", 1.6) + _c(1122, 466, 3.5, 1.6) if open_ else _l("M1004 486 L1004 432", 1.6)
+    return out
+
+
+def pv_multiprobe(open_):
+    return (pv_drum() + _p("M940 446 C940 428 950 414 960 414 C970 414 980 428 980 446 Z") + _l("M942 438 L978 438", 1.4, 0.6)
+            + _p("M922 446 Q922 432 931 432 Q940 432 940 446 Z", 2) + _p("M980 446 Q980 432 989 432 Q998 432 998 446 Z", 2))
+
+
+def ranger(open_):
+    out = (_r(934, 470, 52, 16) + _p("M942 470 L954 406 L966 406 L978 470 Z") + _l("M946 450 L974 450 M950 428 L970 428", 1.2, 0.6)
+           + _c(960, 397, 9))
+    if open_:
+        out += (_wings(472, 14, 96, 4, 4, 934, 986) + _l("M944 486 L918 508", 2)
+                + f'<ellipse cx="910" cy="514" rx="22" ry="7" transform="rotate(-30 910 514)" fill="#ffffff" {LINE} stroke-width="2.2"/>')
+    else:
+        out += _folded(412, 468, 11, 921, 988) + _p("M948 486 Q960 494 972 486 Z", 2)
+    return out
+
+
+def lunar_orbiter(open_):
+    out = (_p("M928 488 L944 446 L976 446 L992 488 Z") + _l("M936 468 L984 468", 1.2, 0.6) + _p("M948 446 Q960 426 972 446 Z")
+           + _p("M956 432 L952 420 L968 420 L964 432 Z", 2))
+    if open_:
+        out += (_panel(858, 486, 68, 10, 3) + _panel(994, 486, 68, 10, 3) + _l("M932 470 L874 452", 1.8)
+                + _side_dish(872, 452, 34, 7, -1) + _l("M988 466 L1052 438", 1.6) + _r(1050, 430, 10, 8, 1.6))
+    else:
+        out += _folded(436, 486, 9, 918, 993)
+    return out
+
+
+def _mariner(top, open_, reach=92, n=4, two=False):
+    """A Mariner's octagonal bus (its top at top) and its panels: four (two seen) or two."""
+    out = _oct(top, top + 30)
+    if open_:
+        out += _wings(top + 10, 10, reach, n)
+    else:
+        out += _folded(top - 56, top + 2, 10, 920, 990)
+    return out
+
+
+def mariner5(open_):
+    return (_mariner(456, open_) + _l("M960 456 L960 398", 2) + _r(955, 392, 10, 6, 1.6) + _side_dish(984, 448, 20, 5, 1)
+            + _r(952, 486, 16, 6, 2))
+
+
+def mariner6(open_):
+    return (_mariner(458, open_) + _bowl(960, 452, 56, 9) + _l("M984 458 L984 380", 2) + _r(950, 488, 20, 10, 2))
+
+
+def mariner9(open_):
+    return (_mariner(460, open_) + _p("M940 460 L952 430 L968 430 L980 460 Z") + _p("M956 430 L953 418 L967 418 L964 430 Z", 2)
+            + _l("M978 460 L990 386", 2) + _side_dish(996, 452, 22, 5, 1) + _r(950, 490, 20, 8, 2))
+
+
+def mariner10(open_):
+    out = _oct(456, 486) + _l("M960 456 L960 428", 2) + _bowl(960, 424, 38, 6) + _r(948, 486, 24, 10, 2)
+    if open_:
+        out += _wings(466, 12, 74, 3) + _l("M988 474 L1088 516", 1.6) + _c(1090, 517, 3.5, 1.6)
+    else:
+        out += _folded(400, 458, 10, 920, 990) + _l("M990 484 L990 462", 1.4)
+    return out
+
+
+def viking(open_):
+    out = (_oct(462, 490) + _p("M936 462 L948 428 L972 428 L984 462 Z") + _l("M942 446 L978 446", 1.4, 0.6)
+           + _r(954, 420, 12, 8, 2))
+    if open_:
+        out += _wings(470, 10, 100, 4) + _side_dish(1000, 484, 26, 6, 1) + _l("M940 462 L930 404", 1.8)
+    else:
+        out += _folded(404, 464, 10, 918, 992)
+    return out
+
+
+def surveyor(open_):
+    out = (_l("M930 486 L990 486 L960 440 Z M944 464 L976 464", 2.2) + _c(960, 474, 13) + _l("M960 440 L960 402", 2.2)
+           + _r(934, 470, 18, 12, 2) + _r(972, 472, 16, 10, 2))
+    if open_:
+        out += (_l("M934 484 L898 512 M986 484 L1022 512 M960 488 L960 516", 2.4)
+                + "".join(f'<ellipse cx="{x}" cy="{y}" rx="9" ry="3" fill="#ffffff" {LINE} stroke-width="2"/>'
+                          for x, y in ((896, 514), (1024, 514), (960, 518)))
+                + _panel(904, 384, 50, 30, 3) + _l("M954 400 L960 404", 1.6) + _r(970, 380, 30, 30, 2) + _l("M960 404 L970 398", 1.6))
+    else:
+        out += _l("M930 486 L924 452 M990 486 L996 452", 2.2) + _panel(940, 404, 18, 30, 2) + _r(962, 404, 18, 30, 2)
+    return out
+
+
+def luna2(open_):
+    reach = 1.0 if open_ else 0.4
+    whips = "".join(f"M{960 + s * dx} {y} L{960 + s * (dx + ex * reach):.0f} {y - 40 * (0.6 + 0.4 * reach):.0f} "
+                    for s in (-1, 1) for dx, ex, y in ((16, 30, 430), (10, 18, 426)))
+    return (_l(whips, 1.6) + _c(960, 446, 24) + _l("M936 446 Q960 456 984 446", 1.2, 0.7) + _l("M960 422 L960 386", 1.8)
+            + _c(960, 384, 3, 1.6) + _r(950, 470, 20, 8, 2))
+
+
+def luna3(open_):
+    return (_r(940, 430, 40, 44, 2.4, "url(#hatch)") + _p("M940 430 Q940 410 960 408 Q980 410 980 430 Z")
+            + _p("M940 474 Q940 490 960 492 Q980 490 980 474 Z") + _c(960, 420, 4, 1.6)
+            + _l("M946 414 L930 392 M974 414 L990 392 M960 408 L960 390", 1.6))
+
+
+def luna15(open_):
+    return (_e8_stage(open_) + _r(948, 440, 24, 30, 2.2) + _c(944, 462, 6, 1.8) + _c(976, 462, 6, 1.8)
+            + _c(960, 428, 10) + _l("M954 420 L944 404 M966 420 L976 404", 1.4))
+
+
+def luna17(open_):
+    tub = _p("M936 456 L984 456 L978 440 L942 440 Z") + _p("M940 440 Q960 430 980 440", 2, "none")
+    wheels = "".join(_c(x, 462, 4, 1.6) for x in (942, 954, 966, 978))
+    return _e8_stage(open_) + _l("M932 468 L916 482 M988 468 L1004 482", 2) + tub + wheels
+
+
+def mars2(open_):
+    out = (_r(946, 444, 28, 36) + _r(938, 480, 44, 10, 2) + _p("M924 444 Q960 408 996 444 Z") + _l("M930 438 L990 438", 1.2, 0.6))
+    if open_:
+        out += _wings(452, 12, 84, 4, 4, 946, 974) + _l("M946 470 L934 470", 2) + _side_dish(932, 470, 40, 9, -1)
+    else:
+        out += _folded(446, 492, 9, 914, 997)
+    return out
+
+
+def mars_m69(open_):
+    out = (_r(942, 446, 36, 40) + _p("M942 446 L956 406 Q960 400 964 406 L978 446 Z") + _c(934, 480, 9) + _c(986, 480, 9))
+    if open_:
+        out += _wings(454, 12, 84, 4, 6, 942, 978) + _side_dish(990, 432, 40, 9, 1) + _l("M978 432 L990 432", 2)
+    else:
+        out += _folded(400, 448, 9, 922, 989)
+    return out
+
+
+def venera15(open_):
+    w = 54 if open_ else 36
+    sar = _p(f"M{960 - w} 418 Q960 444 {960 + w} 418 Q960 432 {960 - w} 418 Z")
+    out = _r(946, 436, 28, 50) + _l("M946 470 L974 470", 1.2, 0.6) + sar + _l("M960 428 L960 436", 2)
+    if open_:
+        out += _wings(452, 12, 92, 4, 4, 946, 974) + _side_dish(978, 476, 32, 8, 1)
+    else:
+        out += _folded(440, 490, 9, 924, 987)
+    return out
+
+
+def venera7(open_):
+    out = _r(946, 440, 28, 30) + _bowl(960, 436, 50, 8) + _c(960, 482, 14) + _l("M946 482 Q960 488 974 482", 1.2, 0.6)
+    if open_:
+        out += _wings(448, 12, 82, 3, 4, 946, 974)
+    else:
+        out += _folded(404, 470, 10, 922, 988)
+    return out
+
+
+def venera9(open_):
+    out = (f'<ellipse cx="960" cy="428" rx="34" ry="5" fill="#ffffff" {LINE} stroke-width="2"/>' + _c(960, 416, 24)
+           + _l("M938 410 Q960 400 982 410", 1.2, 0.6) + _r(948, 442, 24, 36)
+           + _p("M940 478 L980 478 L974 492 L946 492 Z", 2))
+    if open_:
+        out += _wings(450, 12, 84, 4, 4, 948, 972) + _side_dish(984, 466, 28, 7, 1)
+    else:
+        out += _folded(446, 492, 9, 928, 984)
+    return out
+
+
+# prefix: (drawing, its middle's y when open, its width open: the sprites are scaled to fit)
+PROBES = {
+    "pio-": (pioneer10, 462, 220), "pa2-": (pioneer2, 458, 70), "pi4-": (pioneer4, 442, 40), "pi6-": (pioneer6, 440, 230),
+    "pvo-": (pv_orbiter, 452, 210), "pvm-": (pv_multiprobe, 456, 90), "rng-": (ranger, 450, 270),
+    "lor-": (lunar_orbiter, 460, 210), "mr5-": (mariner5, 456, 250), "mr6-": (mariner6, 452, 250),
+    "mr9-": (mariner9, 452, 250), "mr10-": (mariner10, 460, 210), "vik-": (viking, 456, 270),
+    "svy-": (surveyor, 450, 130), "lu2-": (luna2, 436, 100), "lu3-": (luna3, 450, 64), "lu15-": (luna15, 460, 110),
+    "lu17-": (luna17, 470, 110), "ma2-": (mars2, 452, 230), "m69-": (mars_m69, 450, 230), "ve15-": (venera15, 448, 230),
+    "ve7-": (venera7, 450, 220), "ve9-": (venera9, 450, 220),
+}
+
+
+def probe_skin_parts():
+    big = f"translate({DX} {DY}) scale({DK}) translate(-850 -520)"
+    turn = "translate(-120 20) rotate(90 960 500)"
+    thick = lambda body, w: re.sub(r'stroke-width="[\d.]+"', f'stroke-width="{w}"', body)
+    fairing = board_group("debris-1")
+    for p, (draw, mid, width) in PROBES.items():
+        folded, opened = draw(False), draw(True)
+        layer(f"{p}a-les", fairing, (960, 300))
+        layer(f"{p}debris-1-bare", _adapter() + folded, (960, 420))
+        layer(f"{p}d-payload", f'<g transform="{big}"><g transform="{turn}">{folded}</g></g>', D_AT(914, 520))
+        k = min(1.0, 200 / width)
+        for name in ("o-sat", "o-sat-b"):
+            layer(f"{p}{name}", f'<g transform="translate(960 560) scale({0.6 * k:.3f}) translate(-960 -{mid})">{thick(opened, 5)}</g>',
+                  (960, 560))
+        cx, cy = SUN
+        layer(f"{p}m-probe", f'<g transform="translate({cx} {cy}) scale({0.32 * min(1.0, 120 / width):.3f}) translate(-960 -{mid})">'
+                             f'{thick(opened, 6)}</g>', SUN)
+        gx, gy = G
+        layer(f"{p}g-probe", f'<g transform="translate({gx} {gy}) scale({GK * min(1.0, 120 / width):.3f}) rotate(90) '
+                             f'translate(-960 -{mid})">{thick(opened, 3)}</g>', G)
+        layer(f"{p}g-boom", "", G)
+        layer(f"{p}g-dish", "", G)
+    # Luna 15's way home: the return rocket alone (its cylinder of tanks and the sphere on top) on the coast home and the
+    # Earth approach, and the return sphere (about 50 cm, its two whips) for the reentry and the landing under its chute,
+    # where the generic capsule is.
+    ret = _r(948, 440, 24, 30, 2.2) + _c(944, 462, 6, 1.8) + _c(976, 462, 6, 1.8) + _c(960, 428, 10) + _l(
+        "M954 420 L944 404 M966 420 L976 404", 1.4) + _p("M954 470 L950 480 L970 480 L966 470 Z", 2)
+    layer("lu15-o-sat-ret", f'<g transform="translate(960 560) scale(0.9) translate(-960 -442)">{thick(ret, 5)}</g>', (960, 560))
+    cx, cy = SUN
+    layer("lu15-m-probe-ret", f'<g transform="translate({cx} {cy}) scale(0.4) translate(-960 -442)">{thick(ret, 6)}</g>', SUN)
+    small = lambda body: re.sub(r'stroke-width="([\d.]+)"', lambda m: f'stroke-width="{float(m.group(1)) * 0.8:.2f}"', body)
+    sphere = (f'<circle cx="960" cy="446" r="54" fill="#ffffff" {LINE} stroke-width="3"/>'
+              f'<path d="M906 452 Q960 470 1014 452" fill="none" {LINE} stroke-width="2" opacity="0.7"/>'
+              f'<path d="M944 394 L930 352 M976 394 L990 352" fill="none" {LINE} stroke-width="2.4"/>'
+              f'<rect x="952" y="384" width="16" height="10" rx="2" fill="#ffffff" {LINE} stroke-width="2.2"/>'
+              f'<path d="M960 384 L960 352" fill="none" {LINE} stroke-width="2"/>')
+    layer("lu15-r-capsule", RT(small(sphere)), RC)
+    layer("lu15-r-capsule-up", RU(small(sphere)), RC)
+    layer("lu15-r-half-nose", RT(small(f'<path d="M906 446 A54 54 0 0 1 1014 446 Z" fill="#ffffff" {LINE} stroke-width="3"/>')),
+          RT_AT(960, 410))
+    layer("lu15-r-half-body", RT(small(f'<path d="M906 450 A54 54 0 0 0 1014 450 Z" fill="#ffffff" {LINE} stroke-width="3"/>')),
+          RT_AT(960, 472))
+
+
 def main():
     os.makedirs(OUT, exist_ok=True)
     copy_board_layers()
@@ -4181,6 +4513,7 @@ def main():
     satellite_parts()
     ofo_bios_parts()
     pegasus_parts()
+    probe_skin_parts()
     gemini_parts()
     gemini_eor_parts()
     lk700_parts()

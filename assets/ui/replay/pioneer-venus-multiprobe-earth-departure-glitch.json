@@ -1,0 +1,10 @@
+{
+ "duration": 6.4,
+ "revealAt": 2.8,
+ "cues": [
+  {
+   "at": 5.05,
+   "sound": "radio-roger"
+  }
+ ]
+}

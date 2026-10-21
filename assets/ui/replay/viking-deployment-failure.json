@@ -1,0 +1,14 @@
+{
+ "duration": 6.5,
+ "revealAt": 2.3,
+ "cues": [
+  {
+   "at": 0.2,
+   "sound": "radio-watching"
+  },
+  {
+   "at": 2.35,
+   "sound": "radio-collision"
+  }
+ ]
+}

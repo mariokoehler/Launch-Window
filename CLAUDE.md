@@ -243,6 +243,9 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   The later NASA satellites fly as themselves (user, 2026-10-21, `ui-spec.md` §4.7.3): the Orbiting Frog Otolith (`of-`, its booms
   swinging out), Biosatellite (`bs-`, its capsule coming home alone) and Pegasus (Apollo's launch clips, its wings unfolding
   on its stage, `pg-`). Client only.
+  So do the robot probes (user, 2026-10-21, `ui-spec.md` §4.7.3): a drawing each (`parts.py`'s `PROBES`), their own copies
+  of the generic clips that draw a craft (`build.py`'s `PROBE_CLIPS`), the pad's clips generic under the fairing; Zond 5 flies
+  the 7K-L1's. Client only.
 
 ## How we work
 

@@ -2092,6 +2092,17 @@ clips, the replay is meant to be watched like a short film, and the player can s
   unfolding to scale 0.9 s later over 2.2 s (`pegasus-wings.jsx`; the glitch's left wing stalls half open for 0.8 s, the
   failure's never open), the radio rings from Pegasus once they're out; on the map its wings at 45 % of their length.
   The rocket stays generic. Unconfirmed: the proportions, the capsule's shape, the adapter's going, a mid-air catch.
+- **The robot probes as themselves (user, 2026-10-21):** every probe of the standard pack has its own drawing (`parts.py`'s
+  `PROBES`, a prefix each: `pio-` for Pioneer 10 and 11, `pa2-`, `pi4-`, `pi6-` for the Sun orbiters, `pvo-`, `pvm-`, `rng-`, `lor-`,
+  `mr5-`, `mr6-`, `mr9-`, `mr10-`, `vik-`, `svy-`, `lu2-`, `lu3-`, `lu15-`, `lu17-`, `ma2-`, `m69-`, `ve15-`, `ve7-`, `ve9-`), folded on
+  the rocket and in the deployment, open in orbit, on the maps and at the Earth departure: the ascent throws the nose
+  fairing off as Mercury's tower and the probe stands on its adapter, then flies its own copies of the generic clips
+  that draw a craft (`build.py`'s `PROBE_CLIPS`, `<family>-<clip>`; the rules are the generic ones with the family's
+  programs). The pad's three clips stay generic: under its fairing a probe looks as the generic nose does. Luna 15 comes
+  home as its return rocket and then its sphere (`lu15-o-sat-ret`, `-r-capsule`), landing on the ground. Zond 5 flies the
+  7K-L1's clips and comes down in the sea (`soyuz-descent-and-splashdown`). Left generic: the Veneras' release (the
+  generic bus and pod) and Mars 2's detachment (Viking's separation). Unconfirmed: every shape and proportion (drawn to
+  the generic sprite's size, panels and booms shortened), the panels folded on the rocket.
 - **Apollo's command and service module (user, 2026-10-18; `ap-`, `apollo-*`):** on the pad in its adapter under the
   boost cover and escape tower, thrown off together in the climb (`a-les`); for a flight to the Moon it stays on the
   S-IVB, which makes the burn (the `-stack` clips: the deployment, parking orbit and the burn, rules by `later: tli`),
