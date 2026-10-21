@@ -655,8 +655,9 @@ leading to satellite navigation.
   and batteries before each moonwalk and recalculated during it. Sources: NASA's Apollo Lunar Surface Journal
   (Apollo 17's fender), J. H. Allton's sample curation paper (NASA JSC), the Smithsonian's rock box records, a Texas
   Tech paper on the walk-back limit. How deep Apollo 11's pole went (checked 2026-10-21): only a few inches; Armstrong
-  later put it at "six to eight inches" (quoted by the Alan Bean Gallery, not found in the Lunar Surface Journal), and
-  other accounts say about 6 or 7. Use it only as his estimate, never as a measurement.
+  said "Six to eight inches was about as far as I could get it in" in the 1969 technical debrief, and Aldrin that the
+  first 4 or 5 inches went easily (the Lunar Surface Journal's commentary after 110:10:33, `a11.step.html`). Use it only
+  as his estimate, never as a measurement. It's on the `apollo-11` archive page (2026-10-21).
 - **Apollo's lunar module** (the replay's Apollo, 2026-10-18): about 7 m tall and 4.3 m across its legs; the descent
   stage wrapped in gold and amber Kapton foil against the Sun's heat, the ascent stage's faceted cabin on top with its
   two triangular windows, the docking tunnel on its roof (the commander flew the docking looking up through a small

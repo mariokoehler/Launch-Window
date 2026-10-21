@@ -20,6 +20,7 @@ Written 2026-10-15 from these sources (design.md 2.12); the pages are assets/con
 - Landing 20:17:40 UT = 4:17:40 p.m. EDT, 20 July 1969: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1969-059A
 - First step 02:56:15 UT 21 July (22:56 EDT 20 July); words 'That's one small step for (a) man; one giant leap for mankind', Armstrong meant 'a man': https://apollojournals.org/alsj/a11/a11.step.html
 - EVA a little over two hours: NSSDC gives 02:56:15 to 05:11:13 UT (about 2 h 15 min, first step to end); ALSJ's EVA from hatch opening is longer, about 2 h 31 min: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1969-059A
+- The flagpole only a few inches into hard ground; Armstrong in the 1969 technical debrief: 'Six to eight inches was about as far as I could get it in.' (ALSJ commentary after 110:10:33; added 2026-10-21): https://apollojournals.org/alsj/a11/a11.step.html
 - 21.55 kg of samples; 21 h 36 min on the surface; liftoff 17:54 UT 21 July: https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=1969-059A
 - Seismometer (Passive Seismic Experiment), laser reflector (Laser Ranging Retroreflector), solar wind foil: https://nssdc.gsfc.nasa.gov/planetary/lunar/apollo11info.html
 - Kennedy's goal, 25 May 1961, 'before this decade is out': https://www.jfklibrary.org/learn/about-jfk/historic-speeches/address-to-joint-session-of-congress-may-25-1961
