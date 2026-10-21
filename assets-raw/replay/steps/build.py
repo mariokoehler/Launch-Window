@@ -2174,6 +2174,20 @@ variant_of("descent-and-landing", "luna-15-descent-and-landing", {}, skin="lu15-
 variant_of("probe-release", "venera-7-probe-release", {}, skin="ve7-")
 variant_of("probe-release", "venera-9-probe-release", {}, skin="ve9-")
 variant_of("viking-separation", "mars-2-lander-detachment", {}, skin="ma2-")
+# Their entries, descents and landings (2026-10-21, user): Venera 7's sphere, Venera 9's heat shield and lander, Mars 2's
+# lander (Mars 3's design: a sphere opening its petals on the ground, one retro motor), in the generic parts' places
+# (parts.py's lander_own_parts()). Mars 2's entry stays generic: e-shell is its aeroshell's shape too.
+variant_of("venus-entry", "venera-7-venus-entry", {"v-pod": "ve7-pod"})
+variant_of("venus-entry", "venera-9-venus-entry", {"v-pod": "ve9-shell"})
+variant_of("venus-descent", "venera-9-venus-descent", {"v-pod": "ve9-pod"})
+variant_of("probe-landing", "venera-7-probe-landing", {"v-lander": "ve7-lander", "v-mast": "ve7-mast"})
+variant_of("probe-landing", "venera-9-probe-landing", {"v-lander": "ve9-lander", "v-mast": "ve9-mast"})
+MA2 = {"m-lander": "ma2-lander", "m-leg-l": "ma2-petal-l", "m-leg-r": "ma2-petal-r", "m-flame-1": "ma2-none", "m-flame-2": "ma2-none",
+       "m-flame-3": "ma2-flame"}
+variant_of("mars-descent", "mars-2-mars-descent", MA2, after=STEPS["mars-descent"]["after"] + ["mars-2-petals-closed.jsx"])
+variant_of("mars-landing", "mars-2-mars-landing", MA2, after=STEPS["mars-landing"].get("after", []) + ["mars-2-petals-open.jsx"])
+variant_of("mars-surface", "mars-2-mars-surface", MA2)
+variant_of("mars-rover", "mars-2-mars-rover", MA2)
 # Zond 5 (2026-10-21): the uncrewed 7K-L1 on its flight round the Moon flies the 7K-L1's clips; it came down in the
 # Indian Ocean, the first craft back from the Moon, so its descent ends in the sea.
 variant_of("descent-and-splashdown", "soyuz-descent-and-splashdown", {}, skin="sy-")
@@ -2191,9 +2205,9 @@ def project(step, variant):
         f.write("var L = " + open(os.path.join(BUILD, "layers.json")).read() + ";\n")
         # "skin" (2026-10-17): a craft's own drawings, mc-<part> for <part> (motion.jsx's ALIAS); "alias"
         # names more, or other ones, for a step of its own.
-        if STEPS[step].get("skin"):
-            prefix = STEPS[step]["skin"]
-            alias = {n[len(prefix):]: n for n in json.load(open(os.path.join(BUILD, "layers.json"))) if n.startswith(prefix)}
+        if STEPS[step].get("skin") or STEPS[step].get("alias"):
+            prefix = STEPS[step].get("skin")
+            alias = {n[len(prefix):]: n for n in json.load(open(os.path.join(BUILD, "layers.json"))) if prefix and n.startswith(prefix)}
             alias.update(STEPS[step].get("alias", {}))
             f.write("var ALIAS = " + json.dumps(alias) + ";\n")
         f.write(f"var VARIANT = {json.dumps(variant)}, DUR = {dur};\n")

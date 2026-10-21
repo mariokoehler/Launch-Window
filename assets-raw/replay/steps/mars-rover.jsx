@@ -1,5 +1,5 @@
-// A rover on Mars (2026-10-17): PrOP-M, which Mars 2 and Mars 3 carried, on the lander mars-surface shows (Mars 2's
-// lands as Viking's in the replay), closer (2.2 times) and a little to the right. The arm swings out with the rover hanging from
+// A rover on Mars (2026-10-17): PrOP-M, which Mars 2 and Mars 3 carried, on the lander mars-surface shows (Viking's; Mars 2's
+// own sphere in mars-2-mars-rover, 2026-10-21), closer (2.2 times) and a little to the right. The arm swings out with the rover hanging from
 // its tip and sets it down at 1.6; the arm folds back, and the rover walks off on its skis (a step every 0.7 s, its
 // body rising and sliding forward), its tether paying out behind it. The real ones never got to: Mars 2 crashed, and
 // Mars 3 fell silent seconds after landing.

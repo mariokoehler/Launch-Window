@@ -4512,10 +4512,47 @@ def lander_release_parts():
     layer("ma2-vk-orbiter", orbiter, (960, 300))
     layer("ma2-vk-jets", f'<path d="M950 400 C951 376 955 352 960 330 C965 352 969 376 970 400 Z" fill="{GOLD_FILL}" '
                          f'stroke="{GOLD}" stroke-width="2.4" stroke-linejoin="round"/>', (960, 400))
+    lander_own_parts()
     cx, cy, r = 620, 1320, 440
     layer("ma2-e-limb-mars", f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="url(#hatch)" {LINE} stroke-width="3"/>'
                              f'<circle cx="{cx}" cy="{cy}" r="{r + 10}" fill="none" {LINE} stroke-width="1.5" '
                              f'stroke-dasharray="6 8" opacity="0.6"/>', (cx, cy))
+
+
+def lander_own_parts():
+    """The landers' own entries, descents and landings (2026-10-21, user), in the generic parts' places: Venera 7's sphere
+    (its chute's lid on top) and Venera 9's (the 2.4 m heat shield in its entry; then the lander inside, its airbrake disc
+    round its middle, the antenna drum on top and the crush ring under it), where v-pod is (960 506) and v-lander stands
+    (VL); Mars 2's lander, Mars 3's design, where m-lander is (centre 960 440, its feet 73 below): a sphere whose four
+    petals open on the ground (two seen, m-leg-l and -r, drawn open, pivoting at their hinges), one retro motor's flame."""
+    seam = lambda x, y, r: _l(f"M{x - r} {y} Q{x} {y + r * 0.33:.0f} {x + r} {y}", 2, 0.7)
+    layer("ve7-pod", _c(960, 506, 48, 3) + seam(960, 506, 48) + _r(946, 448, 28, 12, 2.4), (960, 506))
+    layer("ve9-shell", _c(960, 506, 48, 3) + _l("M912 506 L1008 506", 2.4) + _l("M920 482 Q960 470 1000 482", 1.6, 0.6),
+          (960, 506))
+    ve9 = lambda x, y, k: (_l(f"M{x - 24 * k} {y + 32 * k} L{x - 30 * k} {y + 46 * k} M{x + 24 * k} {y + 32 * k} "
+                              f"L{x + 30 * k} {y + 46 * k}", 2.6)
+                           + f'<ellipse cx="{x}" cy="{y + 48 * k}" rx="{40 * k}" ry="{6 * k}" fill="#ffffff" {LINE} stroke-width="2.6"/>'
+                           + _c(x, y + 6 * k, 34 * k, 3) + _r(x - 10 * k, y - 44 * k, 20 * k, 18 * k, 2.4)
+                           + f'<ellipse cx="{x}" cy="{y - 18 * k}" rx="{58 * k}" ry="{7 * k}" fill="#ffffff" {LINE} stroke-width="2.6"/>')
+    layer("ve9-pod", ve9(960, 506, 1), (960, 506))
+    x, y = VL
+    layer("ve7-lander", _c(x, y + 12, 58, 3) + seam(x, y + 12, 58) + _r(x - 14, y - 56, 28, 12, 2.4), (x, y))
+    layer("ve9-lander", ve9(x, y - 2, 1.4), (x, y))
+    rod = f'<path d="M{x} {y - 48} L{x} {y - 124}" fill="none" {LINE} stroke-width="3"/>' + _c(x, y - 128, 5, 2.4)
+    layer("ve7-mast", rod, (x, y - 48))
+    layer("ve9-mast", rod, (x, y - 48))
+    # Mars 2.
+    x, y = 960, 440
+    layer("ma2-lander", _c(x, y + 15, 58, 3) + seam(x, y + 15, 58) + _l(f"M{x + 22} {y - 38} L{x + 30} {y - 58}", 2.6)
+          + _c(x + 30, y - 60, 4, 2.2), (x, y))
+    layer("ma2-petal-l", _p(f"M{x - 46} {y + 60} L{x - 46} {y + 72} L{x - 118} {y + 76} L{x - 114} {y + 68} Z", 2.6),
+          (x - 46, y + 66))
+    layer("ma2-petal-r", _p(f"M{x + 46} {y + 60} L{x + 46} {y + 72} L{x + 118} {y + 76} L{x + 114} {y + 68} Z", 2.6),
+          (x + 46, y + 66))
+    layer("ma2-flame", f'<path d="M{x - 11} {y + 73} C{x - 12} {y + 100} {x - 5} {y + 128} {x} {y + 150} C{x + 5} {y + 128} '
+                       f'{x + 12} {y + 100} {x + 11} {y + 73} Z" fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="2" '
+                       f'stroke-linejoin="round"/>', (x, y + 73))
+    layer("ma2-none", "", (x, y))
 
 
 def main():

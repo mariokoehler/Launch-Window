@@ -591,7 +591,9 @@ leading to satellite navigation.
   capsule's size. Sources: Wikipedia ("Zond 5", "Pioneer 10", "Luna 16"). Mars 2's and Mars 3's descent modules were
   mounted on the bus opposite its engine and let go about 4.5 hours before reaching Mars (Mars 3's at 09:14 UT on
   2 December 1971, 4 h 35 min out), not from orbit as Viking's were (Wikipedia, "Mars 2", "Mars 3"). **Not yet
-  checked:** the module's own motor firing after the release to set it on its way in (the replay shows one burn).
+  checked:** the module's own motor firing after the release to set it on its way in (the replay shows one burn), and the
+  landers' shapes the replay draws: Mars 3's 1.2 m sphere opening four petals on the ground; Venera 9's lander inside a
+  2.4 m spherical heat shield, falling the last 50 km with a disc round it as an airbrake and landing on a crush ring.
 - **Apollo 5's "fire in the hole"** (found 2026-10-20, the uncrewed lunar module test's steps): the first lunar module,
   LM-1, flew alone and without legs on a Saturn IB on 22 January 1968: inside its adapter under a nose cone about nine
   feet tall, no CSM (the Saturn IB couldn't lift both). In orbit the cone came off, the adapter's four panels opened, and

@@ -2104,7 +2104,13 @@ clips, the replay is meant to be watched like a short film, and the player can s
   (`lander_release_parts()`): Venera 7's and Venera 9's buses let their own spheres go (`venera-7-probe-release`,
   `venera-9-probe-release`; Venera 9's sphere rides on top, so its bus is drawn upside down), and Mars 2's orbiter lets
   its descent module go on Viking's timeline, 4.5 hours out with Mars a disc ahead, one motor on the module's back
-  (`mars-2-lander-detachment`). Unconfirmed: every shape and proportion (drawn to
+  (`mars-2-lander-detachment`). Their entries, descents and landings too (`lander_own_parts()`, aliases in the generic
+  parts' places): Venera 7's sphere with its chute's lid, landing on its side in the glitch; Venera 9's 2.4 m heat shield in
+  its entry, then its lander (airbrake disc, antenna drum, crush ring) under the chute and on the ground; Mars 2's lander
+  as Mars 3's design, a sphere with one retro motor whose petals stay closed on the way down and open on the ground
+  (`mars-2-petals-*.jsx`), also on its surface clips (`mars-2-mars-surface`, `mars-2-mars-rover`, where Viking's sampler arm
+  still lies across it when stowed). Mars 2's entry stays generic: `e-shell` is its aeroshell's shape. The landers' masts
+  are whip antennas that extend after landing (unconfirmed: Venera 9's antenna was fixed). Unconfirmed: every shape and proportion (drawn to
   the generic sprite's size, panels and booms shortened), the panels folded on the rocket.
 - **Apollo's command and service module (user, 2026-10-18; `ap-`, `apollo-*`):** on the pad in its adapter under the
   boost cover and escape tower, thrown off together in the climb (`a-les`); for a flight to the Moon it stays on the
