@@ -2169,6 +2169,11 @@ STEPS["luna-15-earth-approach"]["alias"]["o-sat"] = "lu15-o-sat-ret"
 STEPS["luna-15-trans-earth-coast"]["alias"]["m-probe"] = "lu15-m-probe-ret"
 variant_of("reentry-from-moon", "luna-15-reentry-from-moon", {}, skin="lu15-")
 variant_of("descent-and-landing", "luna-15-descent-and-landing", {}, skin="lu15-")
+# The landers' releases (2026-10-21, user): Venera 7's and Venera 9's buses let their own spheres go (parts.py's
+# lander_release_parts()), and Mars 2's orbiter its descent module, 4.5 hours out with Mars ahead, on Viking's timeline.
+variant_of("probe-release", "venera-7-probe-release", {}, skin="ve7-")
+variant_of("probe-release", "venera-9-probe-release", {}, skin="ve9-")
+variant_of("viking-separation", "mars-2-lander-detachment", {}, skin="ma2-")
 # Zond 5 (2026-10-21): the uncrewed 7K-L1 on its flight round the Moon flies the 7K-L1's clips; it came down in the
 # Indian Ocean, the first craft back from the Moon, so its descent ends in the sea.
 variant_of("descent-and-splashdown", "soyuz-descent-and-splashdown", {}, skin="sy-")

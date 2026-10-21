@@ -761,5 +761,8 @@
   "venera-9-earth-venus-transit": {"failure": [{"at": 3.45, "sound": "radio-off-trajectory"}]},
   "soyuz-descent-and-splashdown": {"failure": [{"at": 2.65, "sound": "radio-main-chute-failed"}]},
   "luna-15-reentry-from-moon": {"success": [{"at": 0.4, "sound": "radio-blackout"}], "glitch": [{"at": 0.4, "sound": "radio-blackout"}, {"at": 4.45, "sound": "radio-oscillations"}], "failure": [{"at": 0.4, "sound": "radio-blackout"}, {"at": 4.0, "sound": "radio-no-acquisition"}]},
-  "luna-15-descent-and-landing": {"glitch": [{"at": 4.85, "sound": "radio-hard-landing"}], "failure": [{"at": 2.65, "sound": "radio-main-chute-failed"}]}
+  "luna-15-descent-and-landing": {"glitch": [{"at": 4.85, "sound": "radio-hard-landing"}], "failure": [{"at": 2.65, "sound": "radio-main-chute-failed"}]},
+  "venera-7-probe-release": {"failure": [{"at": 2.45, "sound": "radio-separation-failed"}]},
+  "venera-9-probe-release": {"failure": [{"at": 2.45, "sound": "radio-separation-failed"}]},
+  "mars-2-lander-detachment": {"failure": [{"at": 3.05, "sound": "radio-burn-failed"}]}
 }

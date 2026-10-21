@@ -245,7 +245,7 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   on its stage, `pg-`). Client only.
   So do the robot probes (user, 2026-10-21, `ui-spec.md` §4.7.3): a drawing each (`parts.py`'s `PROBES`), their own copies
   of the generic clips that draw a craft (`build.py`'s `PROBE_CLIPS`), the pad's clips generic under the fairing; Zond 5 flies
-  the 7K-L1's. Client only.
+  the 7K-L1's; the Veneras' releases and Mars 2's detachment have their own too. Client only.
 
 ## How we work
 

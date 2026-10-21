@@ -602,7 +602,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: MARS 4
   - Programs: Mars 2 1, Viking 1
 - [x] **Lander release** `lander-release`: 3 uses in 3 configurations, 2 programs (SOVIET) uncrewed
-  - Clip: `probe-release`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: by the steps before: `venera-9-probe-release` after `earth-venus-transit` in venera-lander 2, `venera-7-probe-release` after `venus-approach` in venera-7 1; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 3
   - Destinations: VENUS 3
   - Programs: Venera lander 2, Venera 7 1
@@ -672,7 +672,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: VENUS 1
   - Programs: Venera 7 1
 - [x] **Lander separation** `lander-detachment`: 1 use in 1 configuration, 1 program (SOVIET) uncrewed, later seasons in 1 of 1
-  - Clip: `viking-separation`; [x] success, [x] glitch, [x] failure; cues no
+  - Clip: `mars-2-lander-detachment`; [x] success, [x] glitch, [x] failure; cues no
   - On screen: probe 1
   - Destinations: MARS 1
   - Programs: Mars 2 1

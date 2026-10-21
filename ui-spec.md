@@ -2100,8 +2100,11 @@ clips, the replay is meant to be watched like a short film, and the player can s
   that draw a craft (`build.py`'s `PROBE_CLIPS`, `<family>-<clip>`; the rules are the generic ones with the family's
   programs). The pad's three clips stay generic: under its fairing a probe looks as the generic nose does. Luna 15 comes
   home as its return rocket and then its sphere (`lu15-o-sat-ret`, `-r-capsule`), landing on the ground. Zond 5 flies the
-  7K-L1's clips and comes down in the sea (`soyuz-descent-and-splashdown`). Left generic: the Veneras' release (the
-  generic bus and pod) and Mars 2's detachment (Viking's separation). Unconfirmed: every shape and proportion (drawn to
+  7K-L1's clips and comes down in the sea (`soyuz-descent-and-splashdown`). The landers' releases too
+  (`lander_release_parts()`): Venera 7's and Venera 9's buses let their own spheres go (`venera-7-probe-release`,
+  `venera-9-probe-release`; Venera 9's sphere rides on top, so its bus is drawn upside down), and Mars 2's orbiter lets
+  its descent module go on Viking's timeline, 4.5 hours out with Mars a disc ahead, one motor on the module's back
+  (`mars-2-lander-detachment`). Unconfirmed: every shape and proportion (drawn to
   the generic sprite's size, panels and booms shortened), the panels folded on the rocket.
 - **Apollo's command and service module (user, 2026-10-18; `ap-`, `apollo-*`):** on the pad in its adapter under the
   boost cover and escape tower, thrown off together in the climb (`a-les`); for a flight to the Moon it stays on the

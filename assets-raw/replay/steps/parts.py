@@ -4471,6 +4471,53 @@ def probe_skin_parts():
           RT_AT(960, 472))
 
 
+def lander_release_parts():
+    """The landers' releases as themselves (2026-10-21, user): the probe drawings above, drawn large in their own place
+    (probe-release.jsx's v-bus, v-pod and v-latch; viking-separation.jsx's vk-orbiter, vk-jets and Mars), the lander
+    under its bus. Venera 9's and Mars 2's carry theirs on top, so they're drawn upside down: in space it's all one."""
+    # Venera 7: probe_skin_parts()'s drawing 3.6 times over, about its body's top.
+    k, ox, oy = 3.6, 960, 440
+    X = lambda x: ox + (x - ox) * k
+    Y = lambda y: oy + (y - oy) * k
+    bus = (_wings(Y(448), 12 * k, 82 * k, 3, 4 * k, X(946), X(974)) + _r(X(946), Y(440), 28 * k, 30 * k, 3)
+           + _bowl(960, Y(436), 50 * k, 8 * k))
+    layer("ve7-v-bus", bus, (960, Y(455)))
+    pod = (_c(960, Y(482), 14 * k, 3) + _l(f"M{X(946)} {Y(482)} Q960 {Y(488)} {X(974)} {Y(482)}", 2, 0.7))
+    layer("ve7-v-pod", pod, (960, Y(482)))
+    layer("ve7-v-latch", "".join(f'<circle cx="{960 + dx}" cy="{Y(468) + 6}" r="8" fill="{GOLD}"/>' for dx in (-30, 30)),
+          (960, Y(468) + 6))
+    # Venera 9: 3 times over, flipped about its ring, the descent sphere (2.4 m, its heat shield) below.
+    k, c, oy = 3.0, 452, 430
+    X = lambda x: 960 + (x - 960) * k
+    Y = lambda y: oy - (y - c) * k
+    bus = (_wings(Y(462), 12 * k, 84 * k, 4, 4 * k, X(948), X(972))
+           + _r(X(948), Y(478), 24 * k, 36 * k, 3)
+           + _p(f"M{X(940)} {Y(478)} L{X(980)} {Y(478)} L{X(974)} {Y(492)} L{X(946)} {Y(492)} Z", 3)
+           + _side_dish(X(984), Y(466), 28 * k, 7 * k, 1)
+           + f'<ellipse cx="960" cy="{Y(428)}" rx="{34 * k}" ry="{5 * k}" fill="#ffffff" {LINE} stroke-width="3"/>')
+    layer("ve9-v-bus", bus, (960, Y(456)))
+    pod = _c(960, Y(416), 24 * k, 3) + _l(f"M{X(938)} {Y(410)} Q960 {Y(400)} {X(982)} {Y(410)}", 2, 0.7)
+    layer("ve9-v-pod", pod, (960, Y(416)))
+    layer("ve9-v-latch", "".join(f'<circle cx="{960 + dx}" cy="{Y(428)}" r="8" fill="{GOLD}"/>' for dx in (-44, 44)),
+          (960, Y(428)))
+    # Mars 2: 2.6 times over, flipped, its descent module's seat on viking_parts()'s latches (y 315), so e-shell (Viking's
+    # and Mars 3's blunt cone) fits under it; one motor on the module's back for its burn (vk-jets, as Viking's); Mars
+    # still a disc ahead, the release 4.5 hours out.
+    k, c, oy = 2.6, 444, 315
+    X = lambda x: 960 + (x - 960) * k
+    Y = lambda y: oy - (y - c) * k
+    orbiter = (_wings(Y(464), 12 * k, 84 * k, 4, 4 * k, X(946), X(974)) + _r(X(946), Y(480), 28 * k, 36 * k, 3)
+               + _r(X(938), Y(490), 44 * k, 10 * k, 3) + _l(f"M{X(946)} {Y(470)} L{X(934)} {Y(470)}", 3)
+               + _side_dish(X(932), Y(470), 40 * k, 9 * k, -1))
+    layer("ma2-vk-orbiter", orbiter, (960, 300))
+    layer("ma2-vk-jets", f'<path d="M950 400 C951 376 955 352 960 330 C965 352 969 376 970 400 Z" fill="{GOLD_FILL}" '
+                         f'stroke="{GOLD}" stroke-width="2.4" stroke-linejoin="round"/>', (960, 400))
+    cx, cy, r = 620, 1320, 440
+    layer("ma2-e-limb-mars", f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="url(#hatch)" {LINE} stroke-width="3"/>'
+                             f'<circle cx="{cx}" cy="{cy}" r="{r + 10}" fill="none" {LINE} stroke-width="1.5" '
+                             f'stroke-dasharray="6 8" opacity="0.6"/>', (cx, cy))
+
+
 def main():
     os.makedirs(OUT, exist_ok=True)
     copy_board_layers()
@@ -4514,6 +4561,7 @@ def main():
     ofo_bios_parts()
     pegasus_parts()
     probe_skin_parts()
+    lander_release_parts()
     gemini_parts()
     gemini_eor_parts()
     lk700_parts()
