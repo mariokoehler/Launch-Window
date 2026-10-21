@@ -585,8 +585,8 @@ leading to satellite navigation.
   2026-10-21:** Biosatellite's reentry vehicle was the experiment capsule, a heat shield running from the nose to a skirt
   over a conical section, and a "thrust cone or retro rocket assembly"; the payload saw spin-up and despin around the retro
   firing and up to 9 g in reentry, as predicted (B. C. Look, NASA Ames, "Biosatellite II Experiment Environment", 1968).
-  The motor was a Star-12 (Gunter's Space Page, and a satellite catalog that also calls the capsule a cone, about 0.7 m
-  across). OFO separated from the launch vehicle before its yo-yo despin (Wikipedia), so it didn't stay on the Scout's
+  The motor was a Star-12 (Gunter's Space Page, and a satellite catalog that also calls the capsule a cone; its
+  sizes there have no units, so don't use them). OFO separated from the launch vehicle before its yo-yo despin (Wikipedia), so it didn't stay on the Scout's
   last stage. **Not found:** exactly where the thrust cone sat on the capsule; keep it out of history notes. Sources: Wikipedia ("Pegasus (satellite)", "Biosatellite program", "Biosatellite 3", "Orbiting Frog
   Otolith"), the National Air and Space Museum (Biosatellite 2), Gunter's Space Page (Biosat).
 - **Zond 5, Pioneer 10 and Luna 16** (found 2026-10-21, the replay's probes): Zond 5, an uncrewed Soyuz 7K-L1, was the

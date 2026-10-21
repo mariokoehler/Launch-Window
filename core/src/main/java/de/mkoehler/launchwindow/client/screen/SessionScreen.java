@@ -436,7 +436,8 @@ abstract class SessionScreen extends StageScreen {
     }
 
     /**
-     * Builds a dialog card with a history note's icon after its title (component 15).
+     * Builds a dialog card with a history note's icon after its title (component 15). The title is one line:
+     * keep it short.
      *
      * @param eyebrow     the eyebrow
      * @param title       the title
