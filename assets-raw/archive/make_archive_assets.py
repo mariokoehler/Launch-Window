@@ -68,14 +68,59 @@ PICTURES = {
     "luna16": "https://nssdc.gsfc.nasa.gov/image/spacecraft/luna16.jpg",
     "venera-maxwell": "https://pds-geosciences.wustl.edu/venera/GIF/venera-maxwell.gif",
     "PIA00465": "https://assets.science.nasa.gov/content/dam/science/psd/photojournal/pia/pia00/pia00465/PIA00465.jpg",
+    # Added 2026-10-21: the findings' pages (design.md 2.13).
+    "5663627": None,
+    "6414024": None,
+    "s61-479": "https://www.nasa.gov/wp-content/uploads/2018/01/historic_radiation_belts_orig.jpg",
+    "strelka": "https://nssdc.gsfc.nasa.gov/image/spacecraft/strelka.jpg",
+    "6519204": None,
+    "6518485": None,
+    "S65-42437": None,
+    "pioneer6-9": "https://nssdc.gsfc.nasa.gov/image/spacecraft/pioneer6-9.jpg",
+    "pioneer_solar_weather_console": "https://www.nasa.gov/wp-content/uploads/2017/12/pioneer_solar_weather_console.png",
+    "ARC-1966-A-37949-1": None,
+    "lunar_orbiter_render": "https://nssdc.gsfc.nasa.gov/planetary/image/lunar_orbiter_render.jpg",
+    "LRC-1967-B701_P-01853": None,
+    "mariner-5-spacecraft": "https://www.nasa.gov/wp-content/uploads/2022/10/mariner_5_flyby_2_spacecraft.jpg",
+    "6757466": None,
+    "venera_4_capsule": "https://nssdc.gsfc.nasa.gov/planetary/image/venera_4_capsule.jpg",
+    "PIA16587": None,
+    "as12-51-7507": None,
+    "zond5_earth": "https://www.nasa.gov/wp-content/uploads/2018/09/zond-5.jpg",
+    "zond5_splashdown": "https://www.nasa.gov/wp-content/uploads/2018/09/zond-6.jpg",
+    "PIA02981": None,
+    "PIA02989": None,
+    "69PC-23": None,
+    "ntrs-19700024873-fig4": "https://ntrs.nasa.gov/api/citations/19700024873/downloads/19700024873.pdf",
+    "ntrs-19700024873-fig5": "https://ntrs.nasa.gov/api/citations/19700024873/downloads/19700024873.pdf",
+    "AS12-48-7133": None,
+    "surveyor3_sp146_fig4-10": "https://ntrs.nasa.gov/api/citations/19670023253/downloads/19670023253.pdf",
+    "as12-48-7110": None,
+    "PIA00389": None,
+    "PIA00390": None,
+    "PIA00145": None,
+    "ARC-1977-AC77-0376-8": None,
+    "ARC-1978-AC78-9245": None,
 }
 
 
 # Crops before scaling, as fractions (left, top, right, bottom): a typed data label under the picture.
 CROPS = {"ARC-1973-AC73-9278": (0.0, 0.0, 1.0, 0.80)}
 # Crops in pixels of the original (left, top, right, bottom), and pictures to mirror left to right.
-PIXEL_CROPS = {"M175502049RC": (930, 25540, 1430, 25940)}
+PIXEL_CROPS = {"M175502049RC": (930, 25540, 1430, 25940),
+               # The findings' pages (2026-10-21): the press kit's two drawings, turned upright; Surveyor 3's
+               # trench from SP-146's page; the halves of NASA History's two-photo Zond 5 composites.
+               "ntrs-19700024873-fig4": (420, 352, 3080, 2172), "ntrs-19700024873-fig5": (360, 132, 3080, 2252),
+               "surveyor3_sp146_fig4-10": (346, 307, 2192, 2267),
+               "zond5_earth": (609, 0, 917, 424), "zond5_splashdown": (0, 0, 456, 337)}
 MIRRORED = {"M175502049RC"}
+# Figures that are scanned pages of a NASA report's PDF: the page (from 1) and how far to turn it, in degrees
+# counter-clockwise (a page printed sideways). PIXEL_CROPS then cut the figure out of the turned page.
+PDF_PAGES = {"ntrs-19700024873-fig4": (14, 90), "ntrs-19700024873-fig5": (16, 90),
+             "surveyor3_sp146_fig4-10": (81, 0)}
+# Boxes painted white after the crop, in its pixels: the press kit's figure numbers, which share a row
+# with the drawings' labels.
+BLANKS = {"ntrs-19700024873-fig4": (2120, 1630, 2440, 1750), "ntrs-19700024873-fig5": (2090, 1990, 2430, 2110)}
 
 
 def fetch(url):
@@ -125,8 +170,17 @@ def rgb(im):
     return im.convert("RGB")
 
 
+def pdf_page(path, pid):
+    """A scanned page's embedded image, turned upright."""
+    from pypdf import PdfReader
+    number, turn = PDF_PAGES[pid]
+    im = PdfReader(path).pages[number - 1].images[0].image
+    return im.rotate(turn, expand=True) if turn else im
+
+
 def game_copy(pid):
-    source = Image.open(original(pid))
+    path = original(pid)
+    source = pdf_page(path, pid) if path.lower().endswith(".pdf") else Image.open(path)
     if pid in PIXEL_CROPS:
         # A large multi-resolution TIFF: crop the full-size level before converting the rest.
         source = source.crop(PIXEL_CROPS[pid])
@@ -134,6 +188,9 @@ def game_copy(pid):
     if pid in CROPS:
         l, t, r, b = CROPS[pid]
         im = im.crop((round(l * im.width), round(t * im.height), round(r * im.width), round(b * im.height)))
+    if pid in BLANKS:
+        from PIL import ImageDraw
+        ImageDraw.Draw(im).rectangle(BLANKS[pid], fill=(255, 255, 255))
     if pid in MIRRORED:
         im = im.transpose(Image.FLIP_LEFT_RIGHT)
     scale = min(1.0, LONG_EDGE / max(im.size))

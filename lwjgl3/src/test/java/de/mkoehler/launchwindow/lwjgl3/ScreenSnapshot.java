@@ -581,7 +581,11 @@ public final class ScreenSnapshot {
         write(folder, "archive-viewer.png", new ArchivePageScreen(game, apollo8, () -> null),
             screen -> screen.openViewer(1));
         for (String id : List.of("mariner-4", "pale-blue-dot", "venera-surface", "luna-3", "apollo-11", "apollo-15", "lunokhod-1",
-            "venera-15-16", "pioneer-11", "surveyor-1", "luna-9")) {
+            "venera-15-16", "pioneer-11", "surveyor-1", "luna-9",
+            // The findings' pages (design.md 2.13, 2026-10-21).
+            "explorer-1", "korabl-sputnik-2", "pegasus", "pioneer-6-9", "lunar-orbiter-micrometeoroids", "mascons",
+            "surveyor-3", "mariner-5-venera-4", "zond-5", "mariners-6-7", "orbiting-frog-otolith", "viking-soil",
+            "pioneer-venus-multiprobe")) {
             write(folder, "archive-page-" + id + ".png", new ArchivePageScreen(game,
                 new de.mkoehler.launchwindow.client.view.Archive.Entry(archive.page(id), 60, true), () -> null), null);
         }

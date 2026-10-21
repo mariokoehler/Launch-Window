@@ -3284,7 +3284,7 @@ first reached in the game, so a flight feels like getting its pictures back. The
 rights are in `assets-raw/archive/PAGES.md`.
 
 **The Museum's Archive tab** (§4.11):
-- **The list:** one card per page, in the order of the real missions' dates (1959 to 1990), so it reads
+- **The list:** one card per page, in the order of the real missions' dates (1958 to 1990), so it reads
   like a timeline.
 - **An unlocked card:** a cropped thumbnail of its first image, the title ("Apollo 8: Earthrise"), the
   real date and agency, a one-line summary, and the gold "new" dot (component 19) until it's opened.

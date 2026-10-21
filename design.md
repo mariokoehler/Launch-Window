@@ -2338,7 +2338,7 @@ Geophysical Year. No secrecy bonus for either archetype (as in §2.9).
   | `organisms-in-microgravity` | the first crewed orbit and reentry | Korabl-Sputnik 2's dogs came home alive (1960) |
   | `lunar-bioscience` | crewed circumlunar flight | Zond 5 took tortoises around the Moon and back (1968) |
   | `lunar-soil-study`, `lunar-mapping` | the crewed lunar landing | Luna 9 and Surveyor 1 (1966) showed the surface holds a lander, against Gold's deep dust; Lunar Orbiter mapped the Apollo sites |
-  | `venus-atmosphere-study` | `venus-entry`, `venus-descent` | Venera 4 was crushed on the way down (1967); Venera 7 was built for 180 bar |
+  | `venus-atmosphere-study` | `venus-entry`, `venus-descent` | Venera 4 fell silent some 25 km up (1967; heat and pressure or its battery, NSSDC); Venera 7 was built for 150 to 180 atm |
   | `mars-surface-and-atmosphere-study` | `mars-entry`, `mars-descent`, `mars-landing` | Mariner 4 measured 4–7 mbar (1965), far thinner than assumed |
 
   Every figure here is to be checked before it goes on a page.
@@ -2434,9 +2434,16 @@ Geophysical Year. No secrecy bonus for either archetype (as in §2.9).
     action); an ask is settled or dropped at the resolution.
   - **Pages:** a finding's page opens only for the agencies that know it, for everyone at the end (as
     proposed). Five findings already have one (Lunar Orbiter 1, Mariner 9, Venera's surface, Venera 15 and
-    16, Pioneer 11), so those pages no longer open for everyone. **The other 13 pages are the next step**
-    (user, 2026-10-21: mechanics first); until then the Museum's "Your findings" card is where they're
-    published later.
+    16, Pioneer 11), so those pages no longer open for everyone. **The other 13 were written the same day**
+    (after the mechanics, user): Explorer 1 and the belts, Belka and Strelka, Pegasus, Pioneers 6 to 9, Lunar
+    Orbiter's meteoroid cells, the mascons, Surveyor 3's scoop, Venera 4 and Mariner 5, Zond 5's tortoises,
+    Mariners 6 and 7, the Orbiting Frog Otolith, Viking's soil and the Pioneer Venus Multiprobe: 33 pages in
+    all, Explorer 1 (1958) now the first. Their figures are traced in `assets-raw/archive/CHECKS.md`, their
+    pictures' rights in `PAGES.md`. Riskier pictures: Zond 5's two halves of NASA History's composites
+    (credited RKK Energiya, first publication unverified, medium), Venera 4's capsule, Korabl-Sputnik 2's one
+    TV frame (the page's only picture), a Pioneer Venus painting credited to Paul Hudson. Three are figures
+    from NASA reports' PDFs (`make_archive_assets.py`'s `PDF_PAGES`, `BLANKS`). On the way, `viking-1` lost
+    its year for the Mutch Memorial Station (NASA Science says January 1982, other sources 7 January 1981).
   - **Measured (2026-10-21):** `ContentPackPlayouts standard smart`, 200 games, with the bonus on and off
     (`-Drules.findingBonus=0`): average completion season 84.6 against 84.8, medians 82 and 81 (NASA), 81
     and 82 (Soviet), crewed completion chance at launch 0.62 against 0.63 (median): no effect beyond noise.
@@ -3645,7 +3652,7 @@ G16): science goals as findings that add 4 points to the base chance of the step
 the standard pack, mapped for review), published from the turn report, a finding's archive page or the
 Museum, paying up to 33 % of the goal's first-time prestige by the share of rivals helped (user). Settled
 once a turn (`publications/turn-N.json`). No effect beyond noise on the smart bot's race. Next: the user's
-review of the mapping and the 13 missing finding pages and their pictures. Publishing measured with
+review of the mapping. All 18 findings have pages (13 written 2026-10-21). Publishing measured with
 `RaceShock -Drace.publish=never,always`. Reset the dev data root and rebuild client and server together.
 
 **The world reacts** (the user's idea, 2026-10-20; **planned, not built**, the plan in

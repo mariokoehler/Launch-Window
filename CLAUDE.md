@@ -251,7 +251,7 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   straight in libGDX): science goals in each pack's hashed `findings.json` add `Findings.BONUS_POINTS` to the
   steps they make safer (`rules.Findings`, in the season pass and `MissionAssessment` alike), published by
   `PublishFindingAction`, settled once a turn (`FindingPublications`, `publications/turn-N.json`), paying up
-  to 33 % of the goal's prestige. The mapping awaits the user's review; 13 finding pages are still to write.
+  to 33 % of the goal's prestige. The mapping awaits the user's review. Every finding has its archive page (33 pages in all).
   `-Dshots=findings`, `-Drules.findingBonus=0`. Reset the dev data root, rebuild client and server together.
 
 ## How we work

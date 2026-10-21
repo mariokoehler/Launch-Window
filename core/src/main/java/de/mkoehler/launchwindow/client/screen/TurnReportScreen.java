@@ -413,7 +413,7 @@ public final class TurnReportScreen extends ChromeScreen {
             Theme.INK)).padBottom(4f).row();
         words.add(ui.paragraph((atTheEnd.size() == 1 ? "The last page nobody had reached opened today"
             : "The " + atTheEnd.size() + " pages nobody had reached opened today") + ", for every agency: the real "
-            + "missions' stories, their pictures and their sounds, from Luna 3 to the Pale Blue Dot.",
+            + "missions' stories, their pictures and their sounds, from Explorer 1 to the Pale Blue Dot.",
             Theme.TextStyle.BODY, Theme.INK));
         card.add(words).expandX().fillX().left().padRight(Theme.SPACE_5);
         card.add(actionButton("Open the archive", Theme.ButtonKind.PRIMARY,

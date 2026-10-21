@@ -1,6 +1,98 @@
 {
   "pages": [
     {
+      "id": "explorer-1",
+      "goalId": "magnetic-field-study",
+      "title": "Explorer 1: the Van Allen belts",
+      "agency": "NASA",
+      "date": "January 1958",
+      "when": "1958-01",
+      "summary": "America’s first satellite carried a Geiger counter that found belts of radiation.",
+      "facts": [
+        {
+          "label": "Craft",
+          "value": "Explorer 1, followed by Explorers 3 and 4"
+        },
+        {
+          "label": "Launch vehicle",
+          "value": "Juno I, a modified Jupiter-C"
+        },
+        {
+          "label": "Launched",
+          "value": "31 January 1958, 10:48 p.m. EST, Cape Canaveral (1 February UT)"
+        },
+        {
+          "label": "Orbit",
+          "value": "About 360 to 2,500 km above the Earth"
+        },
+        {
+          "label": "Last signal",
+          "value": "23 May 1958, when its batteries ran down"
+        },
+        {
+          "label": "Reentry",
+          "value": "31 March 1970"
+        },
+        {
+          "label": "Crew",
+          "value": "None"
+        },
+        {
+          "label": "Agency",
+          "value": "US Army (ABMA) and JPL; NASA opened on 1 October 1958"
+        }
+      ],
+      "firsts": [
+        "First US satellite",
+        "First US scientific discovery in space",
+        "First tape recorder flown on a satellite (Explorer 3)"
+      ],
+      "sections": [
+        {
+          "heading": "The flight",
+          "text": "Sputnik 1 went up on 4 October 1957, and on 6 December the Navy’s Vanguard rocket exploded on its pad. The Army’s team got its chance. Wernher von Braun’s group at the Army Ballistic Missile Agency turned its Jupiter-C into the Juno launcher, the Jet Propulsion Laboratory built the satellite, and the work took 84 days. Explorer 1 left Cape Canaveral at 10:48 p.m. on 31 January 1958, into an orbit somewhat higher than planned. At 1 a.m. William Pickering, James Van Allen and von Braun announced it in Washington, holding a full-size model over their heads."
+        },
+        {
+          "heading": "A counter that went quiet",
+          "text": "Van Allen, a physicist at the University of Iowa, had built the main instrument: a Geiger counter meant to measure cosmic rays. Explorer 1 carried no tape recorder, so its counts arrived only while it passed near a ground station, a few minutes at a time. Low in the orbit the rate looked as expected. Higher up the counter fell silent. Van Allen came to a surprising reading of this: the tube was not seeing too little radiation but far too much, swamped by charged particles, mainly from the Sun, held in place by the Earth’s magnetic field."
+        },
+        {
+          "heading": "Explorers 3 and 4",
+          "text": "Explorer 2 failed at launch, but Explorer 3 reached orbit on 26 March 1958 with a small tape recorder built in Van Allen’s department, the first flown on a satellite. Its record showed the count climbing with height to the top of the scale and then dropping to zero, the same pattern laboratory counters gave under very intense radiation. Explorer 4 followed on 26 July with four detectors, some of them shielded, built to measure the belts and the high-altitude nuclear tests of Project Argus. With Pioneer 3’s data that December, a second, outer belt emerged."
+        },
+        {
+          "heading": "Why it mattered",
+          "text": "Space close to the Earth was not empty. The inner belt, mostly protons, and the outer belt, mostly electrons, were named after Van Allen, and their danger was known before anyone flew in space. In NASA’s own summary, the simple answer was to orbit below the belts, under about 300 nautical miles (some 560 km), and to cross them quickly on the way out. The belts dip lower over the South Atlantic, so the tilt of an orbit set how often a crew passed through that patch. Apollo’s crews crossed the belts on the way to the Moon, and their radiation doses stayed small."
+        }
+      ],
+      "sources": [
+        "NASA Science, Explorer 1",
+        "NASA History, 60 Years Ago: Explorer 1 Becomes America’s First Satellite",
+        "NASA Science, 10 Things to Know About Explorer 1",
+        "NASA Goddard, Studying the Van Allen Belts 60 Years After America’s First Spacecraft",
+        "NASA Goddard (Stern), Explorers 1 and 3",
+        "National Air and Space Museum, Explorer 3 tape recorder; Explorer 4",
+        "NASA TN D-7080, Apollo Experience Report: Protection Against Radiation"
+      ],
+      "images": [
+        {
+          "file": "archive/5663627.jpg",
+          "caption": "Pickering, Van Allen and von Braun hold up a full-size model of Explorer 1 at the National Academy of Sciences in Washington, early on 1 February 1958.",
+          "credit": "NASA/JPL · 5663627"
+        },
+        {
+          "file": "archive/6414024.jpg",
+          "caption": "Explorer 1 being fitted to its Jupiter-C launch vehicle in January 1958.",
+          "credit": "NASA/MSFC · 6414024"
+        },
+        {
+          "file": "archive/s61-479.jpg",
+          "caption": "An early NASA drawing of the inner and outer Van Allen belts.",
+          "credit": "NASA · S61-479"
+        }
+      ]
+    },
+    {
       "id": "luna-3",
       "goalId": "lunar-photos",
       "title": "Luna 3: the far side of the Moon",
@@ -72,6 +164,80 @@
           "file": "archive/lu3_1.jpg",
           "caption": "The first view of the Moon’s far side, 7 October 1959, with Mare Moscoviense and the crater Tsiolkovskiy.",
           "credit": "Luna 3 (USSR, 1959). Image via NASA/NSSDC · lu3_1"
+        }
+      ]
+    },
+    {
+      "id": "korabl-sputnik-2",
+      "goalId": "organisms-in-microgravity",
+      "title": "Korabl-Sputnik 2: Belka and Strelka come home",
+      "agency": "USSR",
+      "date": "August 1960",
+      "when": "1960-08",
+      "summary": "The first animals to orbit the Earth and come back alive, in a test Vostok.",
+      "facts": [
+        {
+          "label": "Craft",
+          "value": "Korabl-Sputnik 2 (Sputnik 5 in the West), an uncrewed Vostok"
+        },
+        {
+          "label": "Launch vehicle",
+          "value": "8K72, an R-7 with an upper stage"
+        },
+        {
+          "label": "Launched",
+          "value": "19 August 1960, Baikonur"
+        },
+        {
+          "label": "Landed",
+          "value": "20 August 1960, near Orsk, after about 26 hours"
+        },
+        {
+          "label": "Mass in orbit",
+          "value": "About 4,600 kg"
+        },
+        {
+          "label": "Crew",
+          "value": "None; the dogs Belka and Strelka, 40 mice, two rats, insects and plants"
+        },
+        {
+          "label": "Agency",
+          "value": "USSR (OKB-1)"
+        }
+      ],
+      "firsts": [
+        "First living things brought back alive from orbit"
+      ],
+      "sections": [
+        {
+          "heading": "Laika’s one-way trip",
+          "text": "The first animal in orbit had flown three years earlier. On 3 November 1957 Sputnik 2 carried the dog Laika, a calm stray of about 6 kg, in a padded, sealed cabin with air regeneration, food in jelly form, sensors for her pulse and breathing, and a television camera. Nobody yet knew how to bring a payload back from orbit, so her flight could only end one way. The cabin overheated soon after launch, and Laika died of the heat within days; the sources disagree on exactly when. She still gave doctors their first readings from a living animal in orbit."
+        },
+        {
+          "heading": "The second try",
+          "text": "Korabl-Sputnik 2 was an uncrewed test model of Vostok, the ship meant to carry the first cosmonaut. A first attempt with the dogs Chayka and Lisichka ended on 28 July 1960 when the rocket broke apart seconds after launch, killing both. On 19 August 1960 the next ship reached an orbit of 306 by 339 km with Belka and Strelka aboard. They rode with 40 mice, two rats, insects, plants, fungi, seeds, microbes and strips of human skin. Two cameras let doctors watch the dogs, and the ship also carried instruments for cosmic rays and ultraviolet and X-ray light."
+        },
+        {
+          "heading": "Watched from the ground",
+          "text": "The first pictures worried the doctors. At first the dogs lay so still that only the telemetry showed they were alive. Later they moved, but in jerks, and on the fourth orbit Belka struggled and vomited. The ship’s infrared orientation system failed, so engineers turned to the backup that used the Sun, and on the 18th orbit the descent capsule came down at the right angle. The dogs’ cabin was ejected and landed by parachute near Orsk, about 26 hours after launch. Belka and Strelka were in good health. An American Discoverer capsule had come back from orbit nine days earlier, but it carried no one."
+        },
+        {
+          "heading": "Why it mattered",
+          "text": "The flight checked almost every main part of the Vostok design, from life support and reentry to the ejection seat the dogs’ cabin rode in, and showed that animals could live through a day in weightlessness and come home. It also left doubts. After seeing Belka on the screen, the head of the medical team, Vladimir Yazdovskiy, told the State Commission that the first cosmonaut should fly only one orbit. The last two test ships, in March 1961, each made a single orbit with a dog and a dummy. On 12 April 1961 Yuri Gagarin flew one orbit in Vostok 1. Strelka later had puppies, and Khrushchev gave one, Pushinka, to Caroline Kennedy."
+        }
+      ],
+      "sources": [
+        "NASA SP-2000-4408, Siddiqi, Challenge to Apollo (Sputnik 2, Vostok)",
+        "NASA NSSDC, Sputnik 5 (archived copy)",
+        "NASA NSSDC, Sputnik 2 (archived copy)",
+        "NASA History, A Brief History of Animals in Space",
+        "NASA StarChild, Question of the Month, September 2002"
+      ],
+      "images": [
+        {
+          "file": "archive/strelka.jpg",
+          "caption": "A dog in orbit on the ship’s television, August 1960; NASA’s catalog names her Strelka.",
+          "credit": "Korabl-Sputnik 2 (USSR, 1960). Image via NASA/NSSDC · strelka"
         }
       ]
     },
@@ -158,6 +324,97 @@
           "file": "archive/ra7_p200.jpg",
           "caption": "Ranger 7’s last frames, cut off when the spacecraft struck the Moon on 31 July 1964.",
           "credit": "NASA/JPL · ra7_p200"
+        }
+      ]
+    },
+    {
+      "id": "pegasus",
+      "goalId": "micrometeoroid-study",
+      "title": "Pegasus: wings to catch meteoroids",
+      "agency": "NASA",
+      "date": "February to July 1965",
+      "when": "1965-02",
+      "summary": "Three winged satellites counted the grains of dust that punched through thin aluminum.",
+      "facts": [
+        {
+          "label": "Craft",
+          "value": "Pegasus 1, 2 and 3"
+        },
+        {
+          "label": "Launch vehicle",
+          "value": "Saturn I (SA-9, SA-8 and SA-10)"
+        },
+        {
+          "label": "Launched",
+          "value": "16 February, 25 May and 30 July 1965, Cape Kennedy"
+        },
+        {
+          "label": "Wings",
+          "value": "29.3 by 4.3 m, roughly 200 m² of detectors"
+        },
+        {
+          "label": "Orbits",
+          "value": "About 500 to 740 km up; Pegasus 3 nearly circular at about 530 km"
+        },
+        {
+          "label": "Mass",
+          "value": "About 1,450 kg; 10,500 kg with the rocket stage it stayed on"
+        },
+        {
+          "label": "Crew",
+          "value": "None"
+        },
+        {
+          "label": "Agency",
+          "value": "NASA (Marshall Space Flight Center; built by Fairchild)"
+        }
+      ],
+      "firsts": [
+        "First working payload carried by a Saturn rocket",
+        "First night launch of a Saturn (Pegasus 2)"
+      ],
+      "sections": [
+        {
+          "heading": "Why count meteoroids",
+          "text": "In 1962 Apollo’s designers knew little about the grains of dust that could pierce a spacecraft’s skin. Telescopes and radar followed meteors heavier than about a ten-thousandth of a gram, and small satellites such as Explorer 16 had counted hits on thin pressurized cans. In between lay the sizes that mattered for a hull or a propellant tank, and there the estimates differed by a factor of nearly a thousand. Marshall Space Flight Center proposed a satellite big enough to catch these rarer grains, launched on a Saturn I, and Fairchild won the contract to build it in 1963."
+        },
+        {
+          "heading": "The wings",
+          "text": "Each Pegasus rode folded inside a dummy Apollo service module on top of the Saturn I’s second stage. In orbit the boilerplate Apollo command and service modules were cast off into an orbit of their own, and a motor unfolded two wings 29.3 m long and 4.3 m wide. They held 208 detector panels: aluminum sheets 0.038, 0.2 or 0.4 mm thick over a thin plastic film and a layer of copper, each pair forming a capacitor. A grain that punched through shorted it for an instant, the spark burned the short away, and the hit was counted and timed. The satellite stayed fixed to the spent stage."
+        },
+        {
+          "heading": "Three flights",
+          "text": "Pegasus 1 went up on 16 February 1965, the first working payload a Saturn had carried, and a television camera on board watched its wings unfold. Pegasus 2 followed at 2:35 a.m. on 25 May, the first Saturn launched at night, and Pegasus 3 on 30 July on the last Saturn I. Shorted panels troubled the first satellite, and its successors carried fixes. By the end of 1965 Pegasus 2 and 3 alone had recorded 387 penetrations of the thinnest sheets, 41 of the middle ones and 201 of the thickest. All three were switched off in August 1968."
+        },
+        {
+          "heading": "Why it mattered",
+          "text": "Designers now had a measured rate instead of a guess. Near the Earth, a square meter of 0.4 mm aluminum was punctured about once in 200 days, and a square meter of the thinnest foil about once in five. The rates fell between the estimates then in use, and in December 1965 NASA announced that the structure of Apollo and its Saturn would withstand meteoroids. The hazard did not vanish: Apollo’s spacesuits kept an outer garment against heat and micrometeoroids. Pegasus 3 also carried sample panels for a Gemini spacewalker to collect, but no flight went to it, and it reentered on 4 August 1969."
+        }
+      ],
+      "sources": [
+        "NASA NSSDC, Pegasus 1, 2 and 3",
+        "NASA TM X-1316, Pegasus Satellite Measurements of Meteoroid Penetration (Feb. 16 to Dec. 31, 1965)",
+        "NASA, The Meteoroid Satellite Project Pegasus: First Summary Report",
+        "NASA SP-4206, Bilstein, Stages to Saturn (chapter 11)",
+        "NASA History, Pegasus Satellite (Marshall)",
+        "NASA Press Release 65-232, Project Pegasus C",
+        "NASA TN D-8093, Apollo Experience Report: Development of the Extravehicular Mobility Unit"
+      ],
+      "images": [
+        {
+          "file": "archive/6519204.jpg",
+          "caption": "Technicians at Fairchild check a Pegasus detector wing at full extension, before the first launch in 1965.",
+          "credit": "NASA/MSFC · 6519204"
+        },
+        {
+          "file": "archive/6518485.jpg",
+          "caption": "Pegasus 1, folded inside its Apollo service module shroud, on top of the Saturn I second stage at Cape Kennedy, 13 January 1965.",
+          "credit": "NASA/MSFC · 6518485"
+        },
+        {
+          "file": "archive/s65-42437.jpg",
+          "caption": "The first night launch of a Saturn, carrying Pegasus 2 at 2:35 a.m. on 25 May 1965.",
+          "credit": "NASA · S65-42437"
         }
       ]
     },
@@ -318,6 +575,96 @@
           "file": "archive/pia02979.jpg",
           "caption": "Frame 11E: Mariner crater, 151 km across, with a long ridge running across its floor.",
           "credit": "NASA/JPL · PIA02979"
+        }
+      ]
+    },
+    {
+      "id": "pioneer-6-9",
+      "goalId": "solar-wind-measurements",
+      "title": "Pioneers 6 to 9: weather reports from the Sun",
+      "agency": "NASA",
+      "date": "1965 to 1968",
+      "when": "1965-12",
+      "summary": "Four small probes circled the Sun and sent solar weather reports for Apollo.",
+      "facts": [
+        {
+          "label": "Craft",
+          "value": "Pioneers 6, 7, 8 and 9 (Pioneer A to D)"
+        },
+        {
+          "label": "Launch vehicle",
+          "value": "Delta"
+        },
+        {
+          "label": "Launched",
+          "value": "16 December 1965, 17 August 1966, 13 December 1967 and 8 November 1968, Cape Kennedy"
+        },
+        {
+          "label": "Orbits",
+          "value": "Around the Sun, between about 0.75 and 1.12 AU (the Earth is at 1 AU)"
+        },
+        {
+          "label": "Planned life",
+          "value": "Six months"
+        },
+        {
+          "label": "Last contact",
+          "value": "Pioneer 6, 8 December 2000"
+        },
+        {
+          "label": "Crew",
+          "value": "None"
+        },
+        {
+          "label": "Agency",
+          "value": "NASA (Ames Research Center)"
+        }
+      ],
+      "firsts": [
+        "First space-based solar weather network"
+      ],
+      "sections": [
+        {
+          "heading": "The solar wind",
+          "text": "In 1958 the physicist Eugene Parker argued that the Sun’s outer atmosphere streams away into space without pause. Not everyone believed him. Soviet Luna probes and NASA’s Explorer 10 picked up signs of a flow, but the proof came from Mariner 2 on its way to Venus in 1962. It found a wind that never stopped, at about 400 to 700 km/s, with fast and slow streams that came around again roughly every 27 days, as if their sources turned with the Sun. Storms in the Earth’s magnetic field rose and fell with them."
+        },
+        {
+          "heading": "Four probes around the Sun",
+          "text": "NASA’s Ames Research Center then managed a set of small spinning probes to watch that wind from several places at once. Four were launched on Delta rockets between December 1965 and November 1968. Each went into its own orbit around the Sun, close to the Earth’s: Pioneers 6 and 9 a little inside it, Pioneers 7 and 8 a little outside, so that they drifted apart along the Earth’s path. They measured the wind’s particles, the magnetic field it carries out from the Sun, and cosmic rays; Pioneers 8 and 9 also counted dust. Each was planned to work for six months."
+        },
+        {
+          "heading": "Solar weather for Apollo",
+          "text": "During the Apollo flights to the Moon the Pioneers sent hourly reports on the Sun’s activity, and their data went to flight controllers in Houston as a warning of bursts of solar protons that could endanger astronauts beyond the Earth’s magnetic shield. At Ames a console showed the wind’s speed, cosmic ray activity and the magnetic field at each probe. NASA’s rules for Apollo waited for particle sensors on spacecraft in solar and Earth orbit to confirm an event before acting, since only about one large flare in five sent particles toward the Earth and Moon. No major solar particle event struck during an Apollo mission."
+        },
+        {
+          "heading": "Why it mattered",
+          "text": "The Pioneers turned the solar wind from a discovery into something watched every day. Their readings were used to forecast solar storms for about a thousand users, among them the Federal Aviation Agency, airlines, power companies and communication companies. They also outlived their six months by decades. In August 1972 they and Pioneer 10, then 2.2 AU from the Sun on its way to Jupiter, followed one large solar flare together. Pioneer 9 was heard until 1983, Pioneer 7 until 1995, Pioneer 8 until 1996, and Pioneer 6 answered for the last time on 8 December 2000, 35 years after launch."
+        }
+      ],
+      "sources": [
+        "NASA NSSDC, Pioneers 6, 7, 8 and 9; Mariner 2",
+        "NASA Science, Pioneer 6, Pioneer 7, Pioneer 8 (after Siddiqi, Beyond Earth, SP-2018-4041)",
+        "NASA History, 50 Years Ago: Pioneer 8 Studies Interplanetary Space",
+        "NASA History, 50 Years Ago, Pioneer 9 Launched to Aid Apollo Astronauts",
+        "NASA History, 60 Years Ago: Mariner 2, First to Explore Venus",
+        "NASA Goddard (Stern), The Solar Wind: History",
+        "NASA TN D-7080, Apollo Experience Report: Protection Against Radiation"
+      ],
+      "images": [
+        {
+          "file": "archive/pioneer6-9.jpg",
+          "caption": "A painting of the spacecraft design shared by Pioneers 6 to 9, a spinning drum with long booms.",
+          "credit": "NASA · pioneer6-9"
+        },
+        {
+          "file": "archive/pioneer_solar_weather_console.jpg",
+          "caption": "The Pioneer space weather console at Ames during Apollo 10 in May 1969, showing readings from Pioneers 8 and 9.",
+          "credit": "NASA Ames Research Center · pioneer_solar_weather_console"
+        },
+        {
+          "file": "archive/arc-1966-a-37949-1.jpg",
+          "caption": "Ames staff in the data room of the Pioneer tape processing station, 29 November 1966.",
+          "credit": "NASA Ames Research Center · ARC-1966-A-37949-1"
         }
       ]
     },
@@ -567,6 +914,430 @@
       ]
     },
     {
+      "id": "lunar-orbiter-micrometeoroids",
+      "goalId": "lunar-micrometeoroid-study",
+      "title": "Lunar Orbiter: counting meteoroid hits",
+      "agency": "NASA",
+      "date": "1966 to 1967",
+      "when": "1966-08",
+      "summary": "Gas cells and dosimeters on five orbiters size up the dangers Apollo would meet.",
+      "facts": [
+        {
+          "label": "Craft",
+          "value": "Lunar Orbiters 1 to 5"
+        },
+        {
+          "label": "Launch vehicle",
+          "value": "Atlas-Agena D"
+        },
+        {
+          "label": "Launched",
+          "value": "10 August 1966 to 1 August 1967, Cape Kennedy"
+        },
+        {
+          "label": "Detectors",
+          "value": "20 pressurized cells per craft, 0.186 m² in all"
+        },
+        {
+          "label": "Punctures",
+          "value": "22 in 17 months"
+        },
+        {
+          "label": "Dosimeters",
+          "value": "Two per craft, behind light and heavier shielding"
+        },
+        {
+          "label": "Crew",
+          "value": "None"
+        },
+        {
+          "label": "Agency",
+          "value": "NASA (Langley)"
+        }
+      ],
+      "firsts": [
+        "First American measurements of meteoroids and radiation in orbit around the Moon"
+      ],
+      "sections": [
+        {
+          "heading": "Cells around the middle",
+          "text": "Besides their cameras, all five Lunar Orbiters carried two small experiments from NASA’s Langley center. Charles Gurtler and William Kinnard designed the meteoroid detector: twenty half-cylinders of beryllium copper foil, 0.025 mm thick, mounted around the craft’s middle deck outside its thermal blanket. Gas inside each cell held a switch closed. A grain that punched through the foil let the gas out, the switch opened, and the next telemetry reading showed a new hole. When the builder, Boeing, planned to cut the cells to fifteen, Gurtler insisted that fewer than twenty would not give useful results."
+        },
+        {
+          "heading": "Counting the hits",
+          "text": "Lunar Orbiter 1 reached the Moon in August 1966 and recorded no hits at all. Lunar Orbiter 2 counted three in its first nineteen days, in November, possibly grains from the Leonid meteor shower. Over 17 months the five orbiters flew equatorial and polar orbits between 30 and 6,200 km up, and together recorded 22 punctures. That came to about 0.16 per square meter per day, roughly half the rate the same kind of cells had measured on the Explorer 16 and 23 satellites near the Earth. More holes came on the side facing forward along the Earth and Moon’s path around the Sun, and the rate did not rise closer to the surface."
+        },
+        {
+          "heading": "Dosimeters for the film",
+          "text": "Trutz Foelsche at Langley designed the radiation experiment, chiefly to protect the film. A strong burst of particles from the Sun could fog the pictures still waiting to be developed, and live readings would let controllers react in time. Each orbiter had two detectors, one behind thin aluminum, the other behind ten times as much. Crossing the Van Allen belts, the early orbiters recorded 0.75 rads at the film supply, and Lunar Orbiter 4 recorded 5.5 rads in May 1967. Between August 1966 and August 1967 the dosimeters caught several solar particle events, among them those of September 1966, January 1967 and May 1967."
+        },
+        {
+          "heading": "Why it mattered",
+          "text": "Before these flights, estimates of the meteoroid hazard near the Moon ranged from somewhat less than near the Earth to many times greater. The orbiters found it no greater, the answer Apollo’s planners needed to judge how much protection its spacecraft, instruments and spacesuits required. The radiation data were translated into doses for people: the solar events had mattered only behind thin shielding, in a spacesuit or the lunar module. The analysis concluded that Apollo’s hardware would protect its crews from average and larger short-term events, but that a rare storm like those of 1959 and 1960 could be dangerous to an astronaut in a suit if no precautions were taken."
+        }
+      ],
+      "sources": [
+        "NASA TM X-3487, Byers, Destination Moon: A History of the Lunar Orbiter Program",
+        "Gurtler and Grew, Meteoroid Hazard near Moon, Science, 1968",
+        "NASA NSSDC, Lunar Orbiter 1 to 5",
+        "NASA NSSDC, Lunar Orbiter 1 meteoroid detectors",
+        "NASA SP-2018-4041, Siddiqi, Beyond Earth (Lunar Orbiter III, V)"
+      ],
+      "images": [
+        {
+          "file": "archive/lunar_orbiter_render.jpg",
+          "caption": "A NASA rendering of a Lunar Orbiter; the meteoroid cells were mounted around the middle deck, which also carried the propellant tanks.",
+          "credit": "NASA/NSSDCA · lunar_orbiter_render"
+        },
+        {
+          "file": "archive/lrc-1967-b701_p-01853.jpg",
+          "caption": "Lunar Orbiter 3 lifts off on an Atlas-Agena D from Cape Kennedy on 5 February 1967.",
+          "credit": "NASA/Langley · LRC-1967-B701_P-01853"
+        }
+      ]
+    },
+    {
+      "id": "mascons",
+      "goalId": "lunar-structure-survey",
+      "title": "Mascons: the Moon’s uneven pull",
+      "agency": "NASA",
+      "date": "1966 to 1969",
+      "when": "1966-08",
+      "summary": "Tracking the Lunar Orbiters reveals heavy masses under the maria that bend orbits.",
+      "facts": [
+        {
+          "label": "Craft",
+          "value": "Lunar Orbiters 1 to 5, tracked by radio"
+        },
+        {
+          "label": "Tracked",
+          "value": "August 1966 to January 1968"
+        },
+        {
+          "label": "Found by",
+          "value": "Paul Muller and William Sjogren, JPL"
+        },
+        {
+          "label": "Published",
+          "value": "Science, 16 August 1968"
+        },
+        {
+          "label": "Where",
+          "value": "Under the Moon’s ringed maria"
+        },
+        {
+          "label": "Crew",
+          "value": "None"
+        },
+        {
+          "label": "Agency",
+          "value": "NASA (JPL, Langley)"
+        }
+      ],
+      "firsts": [
+        "Discovery of mascons, the mass concentrations under the lunar maria"
+      ],
+      "sections": [
+        {
+          "heading": "Orbits that wandered",
+          "text": "Every Lunar Orbiter carried a transponder that returned radio signals from the tracking stations, so engineers could measure its speed and distance from the shifts in the signal. Small changes in an orbit showed how the Moon’s gravity pulled on the craft. The first orbiter already hinted that the Moon was slightly pear-shaped. In December 1966 controllers tilted Lunar Orbiter 2’s orbit to gather new gravity data, and the last two orbiters circled over the poles. The orbits drifted in ways that, at first, nobody could predict, and the tracking went on until Lunar Orbiter 5 was crashed into the Moon in January 1968."
+        },
+        {
+          "heading": "Weights under the seas",
+          "text": "At the Jet Propulsion Laboratory, Paul Muller and William Sjogren worked the tracking data into a gravity map of the Moon’s near side. Although their model was simple, the result was clear: there were large concentrations of mass beneath the round, ringed maria, which pulled harder on a passing spacecraft. They published it in Science on 16 August 1968 and called the features mascons. A Soviet scientist had noted from Luna 10’s orbit in 1966 that the Moon’s gravity was uneven, but NASA’s history of deep space flight credits the discovery to Muller and Sjogren. In 2013 NASA’s GRAIL mission confirmed that the mascons came from ancient giant impacts."
+        },
+        {
+          "heading": "Apollo 11 lands long",
+          "text": "Apollo crews flew low around the Moon, and on 20 July 1969 Eagle began its descent several kilometers farther along its track than planned. Armstrong steered past a boulder field and landed long, and Houston estimated the miss at about four miles (6 km). Afterwards the flight controllers found several causes. The largest was air left in the tunnel between Eagle and Columbia, which gave Eagle a small push when the two separated; the gravity model then in use was among the others. One flight dynamics officer thought the mascons played a part. Armstrong noted that the mascons’ pull on orbits was still a concern for anyone aiming at an exact spot."
+        },
+        {
+          "heading": "Why it mattered",
+          "text": "For Apollo 12 the target was Surveyor 3, which had landed in 1967. Ground controllers measured Intrepid’s path from Earth and, a new step for Apollo 12, radioed a correction during the descent that moved its landing point 4,200 feet (about 1.3 km) downrange. Intrepid came down less than 200 meters from Surveyor. Mascons kept mattering: by the time of Apollo 15 and 17, which landed far from the equator, orbits there could still not be predicted with confidence. In 1972 the Moon’s gravity so disturbed the low orbit of a small satellite left by Apollo 16 that it struck the surface after 34 days instead of a year."
+        }
+      ],
+      "sources": [
+        "Muller and Sjogren, Mascons: Lunar Mass Concentrations, Science, 1968",
+        "NASA SP-2018-4041, Siddiqi, Beyond Earth (Luna 10, Lunar Orbiter V)",
+        "NASA TM X-3487, Byers, Destination Moon",
+        "NASA NSSDC, Lunar Orbiter 1 to 5",
+        "Apollo Lunar Surface Journal, Apollo 11 and Apollo 12 landings",
+        "NASA SP-284, Analysis of Surveyor 3 Material and Photographs Returned by Apollo 12",
+        "NASA JPL, GRAIL Mission Solves Mystery of Moon’s Surface Gravity (2013)",
+        "NASA Science, Apollo 16 Subsatellite"
+      ],
+      "images": [
+        {
+          "file": "archive/pia16587.jpg",
+          "caption": "The Moon’s gravity mapped by GRAIL in 2012, far side in the center: red marks extra mass, and the round red spots on the near side, at both edges, mark the mascons under the maria.",
+          "credit": "NASA/ARC/MIT · PIA16587"
+        },
+        {
+          "file": "archive/as12-51-7507.jpg",
+          "caption": "Apollo 12’s lunar module Intrepid in lunar orbit on 19 November 1969, seen from Yankee Clipper before its descent to the Ocean of Storms.",
+          "credit": "NASA · AS12-51-7507"
+        }
+      ]
+    },
+    {
+      "id": "surveyor-3",
+      "goalId": "lunar-soil-study",
+      "title": "Surveyor 3: digging into the Moon",
+      "agency": "NASA",
+      "date": "1967 to 1969",
+      "when": "1967-04",
+      "summary": "A lander scoops trenches in the lunar soil, and two astronauts later walk up to it.",
+      "facts": [
+        {
+          "label": "Craft",
+          "value": "Surveyor 3, built by Hughes for JPL"
+        },
+        {
+          "label": "Launch vehicle",
+          "value": "Atlas-Centaur"
+        },
+        {
+          "label": "Launched",
+          "value": "17 April 1967, Cape Kennedy"
+        },
+        {
+          "label": "Landed",
+          "value": "20 April 1967, after three touchdowns, Ocean of Storms"
+        },
+        {
+          "label": "Scoop work",
+          "value": "Four trenches, the deepest about 18 cm"
+        },
+        {
+          "label": "Last contact",
+          "value": "4 May 1967"
+        },
+        {
+          "label": "Visited",
+          "value": "20 November 1969, by Apollo 12"
+        },
+        {
+          "label": "Crew",
+          "value": "None"
+        }
+      ],
+      "firsts": [
+        "First Surveyor to carry a scoop to dig into the Moon’s surface"
+      ],
+      "sections": [
+        {
+          "heading": "Three landings and a scoop",
+          "text": "Surveyor 3 left Cape Kennedy on 17 April 1967. On the way down to the Ocean of Storms, bright reflections confused its radar, and its engines did not shut off at 4.3 m as planned. It touched down, bounced about 20 m, touched down again and hopped another 11 m before controllers on Earth cut the engines. It settled on 20 April on a sloping wall inside a crater about 200 m across. In place of the earlier landers’ approach camera it carried a scoop 12 cm long on a 1.5 m folding arm, which engineers on Earth drove by radio command, in short timed steps, while the lander’s camera watched."
+        },
+        {
+          "heading": "Testing the ground",
+          "text": "In 1955 the astronomer Thomas Gold had proposed that the Moon’s smooth plains were dust that had settled flat, and some feared such dust would not hold a spacecraft. Luna 9 and Surveyor 1 had already stood on the surface. Surveyor 3 tested it. Over 18 hours of work the scoop dug four trenches, the deepest about 18 cm, pressed into the soil, dropped onto it and squeezed a small rock without breaking it. The soil behaved much like moist, fine-grained soil on Earth. It was softer at the surface and firmer about 10 cm down, and the footpads had sunk no more than 5 cm. The camera sent back more than 6,300 pictures before the lunar night fell."
+        },
+        {
+          "heading": "Visitors from Apollo 12",
+          "text": "Surveyor 3 never woke after its first lunar night, but its site was chosen for Apollo 12, a chance to show that a crew could land on a chosen spot. On 19 November 1969 Pete Conrad and Alan Bean set Intrepid down on the crater’s rim, 155 m away. The next day they walked down the slope and spent about 25 minutes at the lander. Its trenches and footpad prints looked much as they had in 1967. With cutters they removed the camera, the scoop with some soil still inside, and lengths of tubing and cable. Studies on Earth later showed that dust blown by Intrepid’s engine had sandblasted the old lander."
+        },
+        {
+          "heading": "Why it mattered",
+          "text": "The lunar module’s legs had been designed before anyone knew what the surface was like. Its engineers assumed soil that a static load of about 7 kPa would press in no more than 10 cm. The soil Surveyor 3 tested bore 20 to 55 kPa, and the Surveyor and Lunar Orbiter results confirmed that the assumed surface was a sound basis. Apollo 11 then showed it to be on the cautious side: its footpads sank only 1 to 4 cm. The parts that Apollo 12 brought home showed that the camera’s electronics, optics and mechanisms had come through 31 months on the Moon in good condition. The camera is now at the Smithsonian’s National Air and Space Museum."
+        }
+      ],
+      "sources": [
+        "NASA NSSDC, Surveyor 3",
+        "NASA SP-146, Surveyor III: A Preliminary Report (1967)",
+        "NASA SP-184, Surveyor Program Results (1969)",
+        "NASA SP-2018-4041, Siddiqi, Beyond Earth (Surveyor III)",
+        "NASA TN D-6850, Apollo Experience Report: Lunar Module Landing Gear Subsystem",
+        "NASA SP-284, Analysis of Surveyor 3 Material and Photographs Returned by Apollo 12",
+        "NASA, John Uri: 55 Years Ago: Apollo 12 Makes a Pinpoint Landing on the Moon",
+        "Apollo Lunar Surface Journal, Apollo 12 at Surveyor",
+        "Gold, The Lunar Surface, Monthly Notices of the Royal Astronomical Society, 1955"
+      ],
+      "images": [
+        {
+          "file": "archive/as12-48-7133.jpg",
+          "caption": "Pete Conrad at Surveyor 3 on 20 November 1969, examining its TV camera before removing it, with Intrepid on the crater rim behind.",
+          "credit": "NASA · AS12-48-7133"
+        },
+        {
+          "file": "archive/surveyor3_sp146_fig4-10.jpg",
+          "caption": "Surveyor 3’s own view of its third trench, widened, with the scoop poised for a bearing test at the bottom, 28 April 1967.",
+          "credit": "NASA/JPL · SP-146, fig. 4-10"
+        },
+        {
+          "file": "archive/as12-48-7110.jpg",
+          "caption": "One of Surveyor 3’s footpads and its scoop, photographed by Apollo 12 on 20 November 1969, beside the imprint the pad left when the lander bounced.",
+          "credit": "NASA · AS12-48-7110"
+        }
+      ]
+    },
+    {
+      "id": "mariner-5-venera-4",
+      "goalId": "venus-structure-study",
+      "title": "Venera 4 and Mariner 5: into the air of Venus",
+      "agency": "USSR and NASA",
+      "date": "October 1967",
+      "when": "1967-10",
+      "summary": "A Soviet capsule falls silent in Venus’s air; a US flyby shows how deep that air goes.",
+      "facts": [
+        {
+          "label": "Craft",
+          "value": "Venera 4, a carrier with a descent capsule; Mariner 5, a flyby craft"
+        },
+        {
+          "label": "Launch vehicle",
+          "value": "Molniya-M; Atlas-Agena D"
+        },
+        {
+          "label": "Launched",
+          "value": "12 June 1967, Baikonur; 14 June 1967, Cape Kennedy"
+        },
+        {
+          "label": "At Venus",
+          "value": "18 October 1967; 19 October 1967"
+        },
+        {
+          "label": "Descent",
+          "value": "93 minutes of readings from Venera 4’s capsule"
+        },
+        {
+          "label": "Crew",
+          "value": "None"
+        },
+        {
+          "label": "Agency",
+          "value": "USSR (Lavochkin); NASA (JPL)"
+        }
+      ],
+      "firsts": [
+        "First craft to send back data from inside another planet’s atmosphere (Venera 4)"
+      ],
+      "sections": [
+        {
+          "heading": "Venera 4 goes in",
+          "text": "Venera 4 left Baikonur on a Molniya rocket on 12 June 1967. Built by the Lavochkin design bureau, it carried a descent capsule, a sphere about 1 m across with a mass of 383 kg, made to stand up to the heat and the braking of entry. On 18 October it reached Venus and let the capsule go, and the carrier burned up in the atmosphere behind it. The capsule hit the night side at about 11 km/s, slowed behind a thick heat shield, and opened its main parachute about 52 km up. For 93 minutes it radioed back temperature, pressure, density and the makeup of the air around it."
+        },
+        {
+          "heading": "The silence",
+          "text": "What it found was startling. The air was 90 to 95 percent carbon dioxide, with none of the nitrogen many had expected to make up most of it, and it grew steadily hotter on the way down, past 260 °C. The barometer, built to read no more than 7.3 atmospheres, soon ran off its scale. Then the signal stopped. Soviet scientists at first announced that the capsule had kept transmitting until it touched the ground, so its last readings would be the surface itself. Later analysis showed it had gone silent some 25 km or more above the ground, overwhelmed by heat and pressure or out of battery power."
+        },
+        {
+          "heading": "Mariner 5 the next day",
+          "text": "Mariner 5, the spare Mariner 4, was rebuilt for Venus and launched from Cape Kennedy on 14 June 1967. It carried no camera. On 19 October, a day after Venera 4, it passed about 4,000 km above Venus and slipped behind the planet as seen from Earth for some 26 minutes. Going in and coming out, its radio signal passed through the atmosphere, which bent and weakened it. From those changes JPL’s team worked out how temperature, pressure and density climbed with depth, down to where the signal was lost. Carried on down to the surface found by Earth-based radar, the profile gave a pressure 75 to 100 times Earth’s and a temperature over 500 °C."
+        },
+        {
+          "heading": "Why it mattered",
+          "text": "Put side by side, the two flights told one story: matched to the radar’s surface, Venera 4’s last readings came from about 25 km up, not from the ground. American and Soviet scientists compared the data in Arizona in March 1968, at one of the first international meetings on results from planetary spacecraft. Lavochkin built stronger capsules. Venera 5 and 6, made for 25 atmospheres, still went silent about 18 km up, so Venera 7 was built for 150 to 180 atmospheres and 540 °C. On 15 December 1970 it sent back the first signals from the surface of another planet: about 90 atmospheres and 475 °C, a good fit with the 1967 estimates."
+        }
+      ],
+      "sources": [
+        "NSSDC: Venera 4 and Venera 4 Descent Craft",
+        "NSSDC: Mariner 5",
+        "NASA SP-2018-4041, Siddiqi, Beyond Earth (Venera 4, Mariner V, Venera 5 to 7)",
+        "NASA Science: Mariner 5",
+        "NASA History: 55 Years Ago, Mariner 5 Explores Venus",
+        "JPL: Venus air pressure (news release, 22 August 1968)",
+        "Kliore et al., Atmosphere and ionosphere of Venus from the Mariner V S-band radio occultation measurement (Science, 1967)"
+      ],
+      "images": [
+        {
+          "file": "archive/mariner-5-spacecraft.jpg",
+          "caption": "Mariner 5, the rebuilt spare of Mariner 4, with its four solar panels spread.",
+          "credit": "NASA/JPL · Mariner 5, 1967"
+        },
+        {
+          "file": "archive/6757466.jpg",
+          "caption": "The Atlas-Agena carrying Mariner 5 on its pad at Cape Kennedy, 14 June 1967.",
+          "credit": "NASA · 6757466"
+        },
+        {
+          "file": "archive/venera_4_capsule.jpg",
+          "caption": "Venera 4’s descent capsule, the sphere that sent back the first readings from inside the air of Venus.",
+          "credit": "Venera 4 (USSR, 1967). Image via NASA/NSSDC · venera_4_capsule"
+        }
+      ]
+    },
+    {
+      "id": "zond-5",
+      "goalId": "lunar-bioscience",
+      "title": "Zond 5: tortoises around the Moon",
+      "agency": "USSR",
+      "date": "September 1968",
+      "when": "1968-09",
+      "summary": "Two tortoises flew around the Moon and back, the first living things to do so.",
+      "facts": [
+        {
+          "label": "Craft",
+          "value": "Zond 5 (7K-L1 no. 9), a circumlunar ship without its crew"
+        },
+        {
+          "label": "Launch vehicle",
+          "value": "Proton-K with a Blok D upper stage"
+        },
+        {
+          "label": "Launched",
+          "value": "14 September 1968 (15 September, Moscow time), Baikonur"
+        },
+        {
+          "label": "At the Moon",
+          "value": "18 September 1968, about 1,950 km from the far side"
+        },
+        {
+          "label": "Home",
+          "value": "21 September 1968, Indian Ocean"
+        },
+        {
+          "label": "Crew",
+          "value": "None; two steppe tortoises, fly eggs, mealworms, seeds, plants and bacteria"
+        },
+        {
+          "label": "Agency",
+          "value": "USSR (TsKBEM)"
+        }
+      ],
+      "firsts": [
+        "First spacecraft to fly around the Moon and return to Earth",
+        "First living things to travel around the Moon"
+      ],
+      "sections": [
+        {
+          "heading": "The passengers",
+          "text": "The 7K-L1 was the Soviet ship for sending two cosmonauts around the Moon, and Zond 5 flew one with animals and plants in their place. The main passengers were two steppe tortoises, each weighing 340 to 400 grams, chosen because they could be held firmly in place and needed little life support. They went aboard on 2 September and were given no food from then on, as were control tortoises on the ground, so that doctors could tell the effects of fasting from those of the flight. Fruit fly eggs, mealworms, seeds, a flowering plant, algae and bacteria flew too, and a dummy fitted with radiation detectors sat in the pilot’s seat."
+        },
+        {
+          "heading": "Around the Moon",
+          "text": "A Proton rocket put the ship into Earth orbit, and about 67 minutes after launch its upper stage fired again to send it toward the Moon. On the way, the star sensor needed for steering failed, fouled by residue from the ship’s own coatings. Controllers made a course correction on 17 September with less precise Sun and Earth sensors, 325,000 km from home. On 18 September Zond 5 swung around the far side, about 1,950 km above the surface. Its cameras also photographed the whole Earth from about 90,000 km out. At Jodrell Bank, British listeners even heard a voice reading out instrument values: cosmonauts on the ground, rehearsing through the ship."
+        },
+        {
+          "heading": "Straight down",
+          "text": "On the way back an Earth sensor failed too, and the ship’s stabilizer switched off its guided reentry, the path planned to bring it down on Soviet land. Instead controllers spent about twenty hours nudging the ship with small thrusters until it lined up with a narrow corridor for a steep, ballistic entry over the Indian Ocean, the backup area. The capsule opened its parachutes at 7 km and splashed down at night on 21 September 1968, 105 km from the nearest Soviet ship. U.S. Navy vessels watched as a Soviet ship found it hours later. It reached Bombay by sea on 3 October and Moscow by air."
+        },
+        {
+          "heading": "Why it mattered",
+          "text": "The tortoises came back alive, the first living things to have flown around the Moon. They had lost about a tenth of their weight but stayed active and hungry, and dissection showed that most of the changes in their bodies came from fasting, not from the flight. Zond 5 proved that a ship could return from the Moon and that living things could survive the trip, even its rough, steep reentry. The Soviets began planning a crewed flight around the Moon. In the United States, NASA had been studying since August whether to send Apollo 8 to the Moon; Zond 5 added to the pressure, and on 12 November NASA announced that it would."
+        }
+      ],
+      "sources": [
+        "NASA SP-2018-4041, Siddiqi, Beyond Earth (Zond 5)",
+        "NASA SP-2000-4408, Siddiqi, Challenge to Apollo (Zond 5, Apollo 8)",
+        "NASA NSSDC, Zond 5 (archived copy)",
+        "NASA History, 50 Years Ago: On the Way to the Moon",
+        "NASA History, 50 Years Ago: Apollo 8 Is Go for the Moon",
+        "NASA History, A Brief History of Animals in Space"
+      ],
+      "images": [
+        {
+          "file": "archive/zond5_earth.jpg",
+          "caption": "The whole Earth photographed by Zond 5 from about 90,000 km, September 1968.",
+          "credit": "Zond 5 (USSR, 1968). Image via NASA, credited RKK Energiya · zond5_earth"
+        },
+        {
+          "file": "archive/zond5_splashdown.jpg",
+          "caption": "Zond 5’s capsule afloat in the Indian Ocean after splashdown, September 1968.",
+          "credit": "Zond 5 (USSR, 1968). Image via NASA, credited RKK Energiya · zond5_splashdown"
+        }
+      ]
+    },
+    {
       "id": "apollo-8",
       "goalId": "crewed-lunar-orbit",
       "title": "Apollo 8: Earthrise",
@@ -759,6 +1530,100 @@
       }
     },
     {
+      "id": "mariners-6-7",
+      "goalId": "mars-surface-and-atmosphere-study",
+      "title": "Mariners 6 and 7: the thin air of Mars",
+      "agency": "NASA",
+      "date": "July to August 1969",
+      "when": "1969-07",
+      "summary": "Twin flybys measure the thin carbon dioxide air of Mars and find its polar cap frozen.",
+      "facts": [
+        {
+          "label": "Craft",
+          "value": "Mariner 6 and Mariner 7"
+        },
+        {
+          "label": "Launch vehicle",
+          "value": "Atlas-Centaur"
+        },
+        {
+          "label": "Launched",
+          "value": "25 February 1969 (UT; 24 February in Florida) and 27 March 1969, Cape Kennedy"
+        },
+        {
+          "label": "At Mars",
+          "value": "31 July 1969 (Mariner 6) and 5 August 1969 (Mariner 7), each about 3,430 km above the surface"
+        },
+        {
+          "label": "Pictures",
+          "value": "About 200, the close-ups covering some 20 percent of the surface"
+        },
+        {
+          "label": "Surface pressure",
+          "value": "6 to 7 millibars at three points, 3.8 on high ground"
+        },
+        {
+          "label": "Crew",
+          "value": "None"
+        },
+        {
+          "label": "Agency",
+          "value": "NASA (JPL)"
+        }
+      ],
+      "firsts": [
+        "First Mariners launched on an Atlas-Centaur"
+      ],
+      "sections": [
+        {
+          "heading": "Two craft, one plan",
+          "text": "Mariners 6 and 7 were twins, built at JPL to study Mars from close by and to prepare the way for later missions. Ten days before launch, the Atlas meant for Mariner 6 began to buckle on the pad when a faulty switch let its tanks lose pressure, until two ground crewmen stopped the leak; the probe moved to another rocket and left Cape Kennedy on 25 February 1969. Mariner 7 followed on 27 March. Mariner 6 swept past Mars on 31 July at about 3,430 km, over the equatorial regions. Its views of the south polar cap led controllers to reprogram Mariner 7 for more of them before it passed on 5 August."
+        },
+        {
+          "heading": "Listening through the air",
+          "text": "Neither craft carried anything to drop into the atmosphere. The measurement came from the radio. As each Mariner passed behind Mars, its signal grazed the edge of the planet on the way in and again on the way out, four soundings in all. How much the gas bent the signal showed how dense it was, all the way down to the ground. For air mostly of carbon dioxide, three points gave a surface pressure of 6 to 7 millibars, less than one percent of Earth’s at sea level. The fourth gave only 3.8, which the team read as ground 5 to 6 km higher. Mariner 4 had found 4 to 7 millibars in 1965; two more craft now confirmed it."
+        },
+        {
+          "heading": "Carbon dioxide, even frozen",
+          "text": "The other instruments read the light from Mars. An ultraviolet spectrometer saw the glow of ionized carbon dioxide and carbon monoxide high in the atmosphere, and the light of atomic hydrogen and oxygen. An infrared radiometer found the south polar cap as cold as 150 kelvin, about minus 123 degrees Celsius, a sign that the cap was frozen carbon dioxide. Mariner 7’s infrared spectrometer caught sharp bands at the cap’s edge that matched methane and ammonia, but the team traced them to carbon dioxide ice. The cameras showed cratered ground across the south, a jumbled “chaotic” terrain, and the floor of Hellas, where the cameras could make out no craters."
+        },
+        {
+          "heading": "Why it mattered",
+          "text": "Three flybys now agreed: the pressure at the surface of Mars was about a hundredth of Earth’s, and lower still on high ground. Viking was designed around it. The 1969 results shaped Viking’s entry shell, 3.5 meters across: braking in the air was the only practical way to slow so heavy a lander. Each Viking came in behind an ablative heat shield, opened a 16-meter parachute about 6 km up and fired retro-rockets for the last 1.5 km. Its parachute was tested by balloon drops over New Mexico in 1972, and its planners looked for low ground, where the air is thickest."
+        }
+      ],
+      "sources": [
+        "NSSDC: Mariner 6",
+        "NSSDC: Mariner 7",
+        "NASA Science: Mariner 6",
+        "NASA Science: Mariner 7",
+        "NASA SP-4212, Ezell and Ezell, On Mars (1984)",
+        "Kliore et al., Science 166 (1969): radio occultation",
+        "Neugebauer et al., Science 166 (1969): infrared radiometer",
+        "Barth et al., Science 165 (1969): ultraviolet spectrum",
+        "Herr and Pimentel, Science 166 (1969): polar cap absorptions",
+        "NSSDC: Viking 1 Lander",
+        "Photojournal: PIA02981, PIA02989"
+      ],
+      "images": [
+        {
+          "file": "archive/pia02981.jpg",
+          "caption": "Mariner 7 closing in on Mars in early August 1969, the bright south polar cap at the bottom of both views.",
+          "credit": "NASA/JPL · PIA02981"
+        },
+        {
+          "file": "archive/pia02989.jpg",
+          "caption": "The south polar region from Mariner 7 in August 1969 (bottom), covered in dry ice, and from Mariner 9 through the 1971 dust storm (top).",
+          "credit": "NASA/JPL · PIA02989"
+        },
+        {
+          "file": "archive/69pc-23.jpg",
+          "caption": "Mariner 6 leaves Cape Kennedy on an Atlas-Centaur on the evening of 24 February 1969, Florida time.",
+          "credit": "NASA · 69PC-23"
+        }
+      ]
+    },
+    {
       "id": "luna-16",
       "goalId": "lunar-sample-return",
       "title": "Luna 16: Moon soil by robot",
@@ -913,6 +1778,84 @@
           "file": "archive/lunokhod.jpg",
           "caption": "A Lunokhod rover on Earth: the tub-shaped body, the lid that held its solar cells, and eight wheels.",
           "credit": "Lunokhod (USSR, c. 1970). Image via NASA/NSSDC · lunokhod"
+        }
+      ]
+    },
+    {
+      "id": "orbiting-frog-otolith",
+      "goalId": "amphibians-in-microgravity",
+      "title": "Orbiting Frog Otolith: the inner ear in orbit",
+      "agency": "NASA",
+      "date": "November 1970",
+      "when": "1970-11",
+      "summary": "Two bullfrogs wired at the inner ear showed how its gravity sensors adapt to orbit.",
+      "facts": [
+        {
+          "label": "Craft",
+          "value": "OFO-A (OFO 1), 132.9 kg"
+        },
+        {
+          "label": "Launch vehicle",
+          "value": "Scout"
+        },
+        {
+          "label": "Launched",
+          "value": "9 November 1970, Wallops Island, Virginia"
+        },
+        {
+          "label": "Orbit",
+          "value": "300 to 574 km, one turn in about 93 minutes"
+        },
+        {
+          "label": "Data",
+          "value": "About 144 hours of recordings from the frogs’ nerves"
+        },
+        {
+          "label": "Crew",
+          "value": "None; two male bullfrogs"
+        },
+        {
+          "label": "Agency",
+          "value": "NASA (Office of Advanced Research and Technology; Ames, Wallops)"
+        }
+      ],
+      "firsts": [
+        "First direct recordings from the inner ear’s gravity sensors during a long stay in weightlessness"
+      ],
+      "sections": [
+        {
+          "heading": "The question",
+          "text": "Deep in the inner ear, tiny crystals called otoliths rest on a bed of sensory hair cells. When the head tilts or speeds up, the crystals shift, bend the hairs and change the rate at which the nerve fires. On Earth gravity always pulls on them; in orbit it doesn’t. People in weightlessness, in aircraft and in spacecraft, had suffered from disorientation, which was blamed on this balance system, and NASA wanted to know what happened to the sensors over days rather than seconds. Bullfrogs were chosen because their otoliths work much like ours, they are small enough to pack, and they can live in water during a flight."
+        },
+        {
+          "heading": "Two wired frogs",
+          "text": "The experiment was designed by Torquato Gualtierotti of the University of Milan while he worked at NASA’s Ames Research Center. Before launch, fine electrodes were implanted in the balance nerve of each of two bullfrogs, two per frog, each listening to a single nerve fiber. The frogs rode in a sealed package about 46 cm across, in a water-filled centrifuge that could spin them up to 50 turns a minute, about half a g, to give their ears a test pull. Heartbeat and water temperature were sent down too. After launch the spacecraft stopped its spin and unfolded four booms, which kept the frogs within a thousandth of a g of weightlessness between runs."
+        },
+        {
+          "heading": "What the nerves said",
+          "text": "The recordings held through launch, and the frogs’ heartbeats showed them in good health throughout. In weightlessness the resting firing rate of the sensors first fell and then rose, swinging over about a day, and their response to the centrifuge became exaggerated, overshooting as it spun up and undershooting as it slowed. Over more than 100 hours the sensors adjusted, and in the last 10 to 20 hours of the flight they were back to normal. One frog’s heart signal became noisy after a day, so its data were analyzed only for the first 40 hours. The frogs were never meant to come back: recovery was not planned, and the spacecraft fell back into the atmosphere in May 1971."
+        },
+        {
+          "heading": "Why it mattered",
+          "text": "OFO-A showed that the inner ear does not simply go quiet in orbit: its gravity sensors are thrown off for the first days and then, over four to five days, adapt to the new conditions. The investigators suggested that the early changes could explain the space sickness felt by some astronauts, and warned that the same sensors would need time to readjust after a long flight back on Earth. They asked that planners allow for that when sending crews on long stays to the space stations then being prepared. NASA’s first, Skylab, was launched in 1973."
+        }
+      ],
+      "sources": [
+        "NASA NSSDC, OFO 1",
+        "NASA News Release 70-132, Orbiting Frog Otolith (OFO) press kit",
+        "NASA CR-62084, Gualtierotti and others, OFO-A: data reduction and control experimentation",
+        "NASA NSSDC, Skylab"
+      ],
+      "images": [
+        {
+          "file": "archive/ntrs-19700024873-fig4.jpg",
+          "caption": "A cutaway of the Orbiting Frog Otolith spacecraft, with the frogs’ package under its thermal shroud, 1970.",
+          "credit": "NASA · News Release 70-132, figure 4"
+        },
+        {
+          "file": "archive/ntrs-19700024873-fig5.jpg",
+          "caption": "Inside the Frog Otolith Experiment Package: the water-filled centrifuge and its life support, 1970.",
+          "credit": "NASA · News Release 70-132, figure 5"
         }
       ]
     },
@@ -1413,7 +2356,7 @@
         },
         {
           "heading": "Why it mattered",
-          "text": "Viking 1's lander kept working until November 1982, more than six years on the surface, sending back weather readings and pictures of the same patch of ground through the Martian seasons. With its twin, Viking 2, it returned over 1,400 images of the two landing sites, while the orbiters mapped the whole planet. The answer on life stayed open. In 2008 the Phoenix lander found perchlorate salts in Martian soil, which can destroy organic compounds when heated, as Viking's instrument heated its samples. In 1982 the lander was named the Thomas Mutch Memorial Station, after the leader of its imaging team."
+          "text": "Viking 1's lander kept working until November 1982, more than six years on the surface, sending back weather readings and pictures of the same patch of ground through the Martian seasons. With its twin, Viking 2, it returned over 1,400 images of the two landing sites, while the orbiters mapped the whole planet. The answer on life stayed open. In 2008 the Phoenix lander found perchlorate salts in Martian soil, which can destroy organic compounds when heated, as Viking's instrument heated its samples. Later the lander was named the Thomas Mutch Memorial Station, after the leader of its imaging team."
         }
       ],
       "sources": [
@@ -1438,6 +2381,187 @@
           "file": "archive/pia00563.jpg",
           "caption": "The first color picture from the surface, taken on 21 July 1976 and balanced against a test chart on the lander.",
           "credit": "NASA/JPL · PIA00563"
+        }
+      ]
+    },
+    {
+      "id": "viking-soil",
+      "goalId": "mars-soil-study",
+      "title": "Vikings 1 and 2: the soil of Mars",
+      "agency": "NASA",
+      "date": "July to September 1976",
+      "when": "1976-07",
+      "summary": "Two lander arms dig into Mars and find an iron-rich, oxidizing soil with no organics.",
+      "facts": [
+        {
+          "label": "Craft",
+          "value": "Viking 1 and Viking 2 landers"
+        },
+        {
+          "label": "Launch vehicle",
+          "value": "Titan IIIE-Centaur"
+        },
+        {
+          "label": "Launched",
+          "value": "20 August and 9 September 1975"
+        },
+        {
+          "label": "Landed",
+          "value": "20 July 1976, Chryse Planitia; 3 September 1976, Utopia Planitia"
+        },
+        {
+          "label": "First soil sample",
+          "value": "28 July 1976 (Viking 1, sol 8)"
+        },
+        {
+          "label": "Distance between sites",
+          "value": "About 4,500 km"
+        },
+        {
+          "label": "Crew",
+          "value": "None"
+        },
+        {
+          "label": "Agency",
+          "value": "NASA"
+        }
+      ],
+      "firsts": [
+        "First chemical analysis of Martian soil"
+      ],
+      "sections": [
+        {
+          "heading": "Digging and standing",
+          "text": "Each lander reached out with a sampler arm: a scoop with a lid and a small backhoe on a boom about 3 m long. Its first trench at the Viking 1 site, dug on 28 July 1976, was about 8 cm wide, 5 cm deep and 15 cm long. The walls stood steep, like a trench in damp sand, although the soil was bone dry. The arm also measured how hard the ground resisted being pushed and how much dust clung to the scoop. One of Viking 1’s feet had landed in soft drift and sunk about 13 cm, with loose soil sliding over it, while another stood on firmer ground. Mechanically, the soil there was much like the Moon’s."
+        },
+        {
+          "heading": "What the soil is made of",
+          "text": "Inside each lander, an X-ray fluorescence spectrometer lit the soil with X-rays and measured what came back, which differs for each element. The first sample from Chryse already showed the pattern: about 14 percent iron, a few percent sulfur, little aluminum. In all, the landers collected 21 samples for it, and 17 were analyzed precisely. Compared with soils on Earth and the dark plains of the Moon, Martian soil was richer in iron and far richer in sulfur and chlorine. Crusty clods held about half again as much sulfur as loose soil. And soil from the two sites, some 4,500 km apart, was nearly the same, as if dust storms had mixed it across the planet."
+        },
+        {
+          "heading": "Chemistry, not life",
+          "text": "The biology experiments, built to look for life, ended up revealing the soil’s chemistry. When Viking 1’s gas exchange experiment only moistened a sample, it gave off about 15 times more oxygen than any known source could explain. In the labeled release experiment, nutrient marked with radioactive carbon quickly turned to radioactive gas, and heating the soil beforehand stopped the reaction. The organic analyzer found no organic compounds at either site, down to parts per billion, although heating a sample to 500 degrees Celsius drove out a lot of water. Most of the scientists came to see strong oxidizers in the soil, perhaps peroxides made by the Sun’s ultraviolet light, able to break organic matter down."
+        },
+        {
+          "heading": "Why it mattered",
+          "text": "Viking’s numbers became the yardstick for the next landers. When Mars Pathfinder analyzed soil in 1997, its first result came out almost identical to Viking’s; later ones showed more aluminum and magnesium and less iron, sulfur and chlorine. The oxidizing surface changed where to look for organic matter. Radiation and harsh chemicals break it down near the top, so later missions went below. In 2018 the Curiosity rover reported organic molecules in 3-billion-year-old mudstone it had drilled into. Europe’s Rosalind Franklin rover was built with a drill that reaches 2 m, far below the roughly 15 cm of Viking, still the deepest search for organics on Mars."
+        }
+      ],
+      "sources": [
+        "NSSDC: Viking 1 Lander",
+        "NSSDC: Viking 2 Lander",
+        "NASA Science: Viking 1",
+        "NASA Science: Viking 2",
+        "NASA SP-4212, Ezell and Ezell, On Mars (1984)",
+        "Toulmin et al., Science 194 (1976): the first X-ray fluorescence sample",
+        "Clark et al., JGR 87 (1982): Chemical composition of Martian fines",
+        "Shorthill et al., Science 194 (1976): The “Soil” of Mars (Viking 1)",
+        "NSSDC: Mars Pathfinder APXS results",
+        "JPL: NASA Finds Ancient Organic Material, Mysterious Methane on Mars (2018)",
+        "ESA: ExoMars Rosalind Franklin",
+        "Photojournal: PIA00389, PIA00390, PIA00145"
+      ],
+      "images": [
+        {
+          "file": "archive/pia00389.jpg",
+          "caption": "Viking 1’s first trench, dug on 28 July 1976: about 15 cm long, its walls standing steep in the dry soil.",
+          "credit": "NASA/JPL · PIA00389"
+        },
+        {
+          "file": "archive/pia00390.jpg",
+          "caption": "Viking 1’s footpad 3, hidden under loose soil after sinking about 13 cm, seen on 1 August 1976.",
+          "credit": "NASA/JPL · PIA00390"
+        },
+        {
+          "file": "archive/pia00145.jpg",
+          "caption": "Viking 2’s arm digs through a thin crust nicknamed “Bonneville Salt Flats” for the organic analyzer, 25 September 1976.",
+          "credit": "NASA/JPL · PIA00145"
+        }
+      ]
+    },
+    {
+      "id": "pioneer-venus-multiprobe",
+      "goalId": "venus-atmosphere-study",
+      "title": "Pioneer Venus 2: four probes at once",
+      "agency": "NASA",
+      "date": "December 1978",
+      "when": "1978-12",
+      "summary": "Four probes fall through Venus’s clouds at once, and one keeps talking on the ground.",
+      "facts": [
+        {
+          "label": "Craft",
+          "value": "Pioneer Venus 2 (the Multiprobe): a bus, one large and three small probes"
+        },
+        {
+          "label": "Launch vehicle",
+          "value": "Atlas-Centaur"
+        },
+        {
+          "label": "Launched",
+          "value": "8 August 1978, Cape Canaveral"
+        },
+        {
+          "label": "Probes released",
+          "value": "16 November 1978 (large); 20 November 1978 (small)"
+        },
+        {
+          "label": "Entered the atmosphere",
+          "value": "9 December 1978"
+        },
+        {
+          "label": "On the surface",
+          "value": "Day Probe, 67 minutes"
+        },
+        {
+          "label": "Crew",
+          "value": "None"
+        },
+        {
+          "label": "Agency",
+          "value": "NASA (Ames)"
+        }
+      ],
+      "firsts": [
+        "With the Pioneer Venus Orbiter, the first study of Venus on a global scale"
+      ],
+      "sections": [
+        {
+          "heading": "One craft, five parts",
+          "text": "Pioneer Venus 2, also called the Multiprobe, was launched on an Atlas-Centaur from Cape Canaveral on 8 August 1978. NASA’s Ames Research Center ran the mission, and Hughes Aircraft built the craft: a drum-shaped bus carrying four probes. The large probe, 1.5 m across, had a parachute; the three identical small probes had none. Each kept its instruments inside a sealed titanium sphere. On 16 November, about 11 million km from Venus, the bus released the large probe. Four days later it spun off the small ones, named for where they were going: the North Probe, the Day Probe and the Night Probe."
+        },
+        {
+          "heading": "Four ways down",
+          "text": "All four probes entered the atmosphere on 9 December 1978, within minutes of one another, at sites thousands of kilometers apart. The large probe went in on the day side near the equator, shed its heat shield, rode its parachute down to about 45 km, then fell free. The small probes fell all the way on their heat shields alone. The North Probe and the Night Probe went down on the night side, the Day Probe into the southern day side. Each took about an hour to reach the ground. None was built to survive the landing, yet the Day Probe sent data from the surface for 67 minutes, until its batteries ran down."
+        },
+        {
+          "heading": "What they found",
+          "text": "The probes measured the clouds layer by layer. The main deck lay between about 47 and 70 km up, in three distinct layers made largely of sulfuric acid, and looked much the same at all four sites. Below a thin haze near 30 km the air was clear. Between about 10 and 50 km there was almost no convection, and below 50 km the four probes read nearly the same temperatures. Tracked by radio from Earth, they drifted west with winds that grew from a few meters per second near the ground to about 150 m/s at the cloud tops. And the air held several hundred times more primordial argon and neon than Earth’s."
+        },
+        {
+          "heading": "Why it mattered",
+          "text": "The four probes gave a profile of Venus’s air at four places on the same day, from high above the clouds to the ground. Scientists combined their readings with those of the Pioneer Venus Orbiter and the Venera 10, 12 and 13 landers into models of the atmosphere from the surface to 100 km, published in 1985 as the Venus International Reference Atmosphere. NASA’s engineering model of Venus’s air, Venus-GRAM, is built on it and is used to simulate the entry, descent and landing of new craft. In June 1985 the Soviet Vega balloons drifted through the middle cloud layer the probes had charted, and Pioneer Venus probe scientists from Ames helped report what they found."
+        }
+      ],
+      "sources": [
+        "NSSDC: Pioneer Venus Probe Bus, Large Probe, North, Night and Day Probes",
+        "NASA SP-461, Fimmel, Colin and Burgess, Pioneer Venus (1983)",
+        "NASA SP-2018-4041, Siddiqi, Beyond Earth (Pioneer Venus 2, Vega 1)",
+        "NASA Science: Pioneer Venus 2",
+        "NASA History: 40 Years Ago, Pioneers Encounter Venus",
+        "Seiff et al., Models of the structure of the atmosphere of Venus from the surface to 100 kilometers altitude (1985)",
+        "NASA NTRS: Venus Global Reference Atmospheric Model (Venus-GRAM) Upgrades (2021)",
+        "Sagdeev et al., Overview of VEGA Venus balloon in situ meteorological measurements (Science, 1986)"
+      ],
+      "images": [
+        {
+          "file": "archive/arc-1977-ac77-0376-8.jpg",
+          "caption": "Project manager Charlie Hall with the Multiprobe at Hughes Aircraft in December 1976: the large probe in the middle, three small probes around it.",
+          "credit": "NASA Ames Research Center · ARC-1977-AC77-0376-8"
+        },
+        {
+          "file": "archive/arc-1978-ac78-9245.jpg",
+          "caption": "Paul Hudson’s painting of the Multiprobe’s bus after it had released its four probes toward Venus.",
+          "credit": "NASA Ames Research Center/Paul Hudson · ARC-1978-AC78-9245"
         }
       ]
     },
