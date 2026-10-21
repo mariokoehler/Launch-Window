@@ -25,6 +25,7 @@ import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.TraitChip;
 import de.mkoehler.launchwindow.client.view.Archive;
 import de.mkoehler.launchwindow.client.view.ContentNames;
+import de.mkoehler.launchwindow.client.view.FindingsView;
 import de.mkoehler.launchwindow.client.view.People;
 import de.mkoehler.launchwindow.client.view.TurnReportView;
 import de.mkoehler.launchwindow.content.ContentCatalog;
@@ -129,6 +130,10 @@ public final class TurnReportScreen extends ChromeScreen {
             newsColumn.add(intelligence(intelligence)).row();
         }
         first.add(goals()).row();
+        Table findings = findings(catalog);
+        if (findings != null) {
+            first.add(findings).row();
+        }
         Table archive = archive(catalog);
         if (archive != null) {
             first.add(archive).row();
@@ -367,7 +372,10 @@ public final class TurnReportScreen extends ChromeScreen {
                 check.setColor(Theme.SUCCESS);
                 who.add(check).size(12f).padRight(4f);
             }
-            who.add(ui.label(entry.byYou() ? "Flown by you" : "Flown by a rival", Theme.TextStyle.CAPTION,
+            // A finding's page opens for a rival only when someone publishes it (design.md 2.13).
+            boolean finding = catalog.finding(page.goalId()).isPresent();
+            who.add(ui.label(entry.byYou() ? "Flown by you" : finding ? "Published" : "Flown by a rival",
+                Theme.TextStyle.CAPTION,
                 entry.byYou() ? Theme.SUCCESS : Theme.INK_MUTED));
             who.add(ui.label("  ·  " + ContentNames.of(page.goalId()), Theme.TextStyle.CAPTION, Theme.INK_MUTED));
             text.add(who);
@@ -469,6 +477,46 @@ public final class TurnReportScreen extends ChromeScreen {
             row.add(left).expandX().fillX().left();
             row.add(ui.label(TurnReportView.signed(line.prestige()), Theme.TextStyle.BODY_STRONG, Theme.SUCCESS));
             card.add(row).padBottom(Theme.SPACE_2).row();
+        }
+        return card;
+    }
+
+    /**
+     * The Findings card ({@code design.md} &sect;2.13), or {@code null} on a turn with none: a finding
+     * earned this turn, with what it makes safer and the way to publish it; the agency's own
+     * publications, with what they paid; and other agencies' publications.
+     */
+    private Table findings(ContentCatalog catalog) {
+        List<FindingsView.ReportLine> lines = FindingsView.reportLines(report, catalog);
+        if (lines.isEmpty()) {
+            return null;
+        }
+        Table card = section("Findings", "Science that makes flights safer");
+        List<Archive.Entry> entries = Archive.standard().entries(catalog, session.archive());
+        for (int i = 0; i < lines.size(); i++) {
+            FindingsView.ReportLine line = lines.get(i);
+            Table row = new Table();
+            Table text = new Table();
+            text.left();
+            text.defaults().left().growX();
+            text.add(ui.paragraph(line.title(), Theme.TextStyle.BODY_STRONG, Theme.INK)).padBottom(2f).row();
+            text.add(ui.paragraph(line.text(), Theme.TextStyle.CAPTION, Theme.INK_MUTED)).row();
+            entries.stream().filter(entry -> entry.open() && entry.page().goalId().equals(line.goalId())).findFirst()
+                .ifPresent(entry -> {
+                    Label open = ui.label("Read its page in the archive", Theme.TextStyle.CAPTION, Theme.NAVY);
+                    open.setTouchable(com.badlogic.gdx.scenes.scene2d.Touchable.enabled);
+                    open.addListener(clicked(() -> game.setScreen(new ArchivePageScreen(game, entry,
+                        () -> new TurnReportScreen(game, report)))));
+                    text.add(open).padTop(2f).row();
+                });
+            row.add(text).expandX().fillX().left().padRight(Theme.SPACE_3);
+            if (line.earned()) {
+                row.add(findingControls(line.goalId())).right().top();
+            } else if (line.prestige() > 0) {
+                row.add(ui.label(TurnReportView.signed(line.prestige()), Theme.TextStyle.BODY_STRONG, Theme.SUCCESS))
+                    .top();
+            }
+            card.add(row).padBottom(i < lines.size() - 1 ? Theme.SPACE_3 : 0f).row();
         }
         return card;
     }

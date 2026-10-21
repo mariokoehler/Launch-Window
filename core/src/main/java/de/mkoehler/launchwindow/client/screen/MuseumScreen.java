@@ -19,6 +19,7 @@ import de.mkoehler.launchwindow.client.ui.HistoryNote;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.view.Archive;
 import de.mkoehler.launchwindow.client.view.ContentNames;
+import de.mkoehler.launchwindow.client.view.FindingsView;
 import de.mkoehler.launchwindow.client.view.Explainers;
 import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.Museum;
@@ -559,8 +560,15 @@ public final class MuseumScreen extends ChromeScreen {
                 : entries.stream().anyMatch(Archive.Entry::atTheEnd)
                 ? "The real missions behind the goals, in the order they flew. The race is decided: every page is open."
                 : "The real missions behind the goals, in the order they flew. A page opens for everyone in this game "
-                + "when any agency first reaches its goal.", Theme.TextStyle.CAPTION, Theme.ON_PAGE_STRONG));
+                + "when any agency first reaches its goal; a finding's page, for those who know it.",
+                Theme.TextStyle.CAPTION, Theme.ON_PAGE_STRONG));
         content.add(head).padBottom(Theme.SPACE_4).row();
+        Table body = new Table();
+        body.top().left();
+        Table findings = findingsCard();
+        if (findings != null) {
+            body.add(findings).growX().left().padBottom(Theme.SPACE_5).padRight(8f).row();
+        }
         Table grid = new Table();
         grid.top().left();
         // Room for the "new" dots that stick out over the cards' corners (the scroll pane clips).
@@ -578,7 +586,42 @@ public final class MuseumScreen extends ChromeScreen {
             }
             grid.row();
         }
-        content.add(scrollPane(grid)).expand().fill();
+        body.add(grid).left();
+        content.add(scrollPane(body)).expand().fill();
+    }
+
+    /**
+     * The findings the agency knows ({@code design.md} &sect;2.13), or {@code null} while it knows none:
+     * what each makes safer, its standing, and Publish while it's classified. The place to publish one
+     * later, and the only one for a finding whose page isn't written yet.
+     */
+    private Table findingsCard() {
+        List<String> known = FindingsView.known(session.state(), session.catalog());
+        if (known.isEmpty()) {
+            return null;
+        }
+        Table card = ui.card();
+        card.top();
+        card.defaults().growX().left();
+        Table head = new Table();
+        head.add(ui.label("YOUR FINDINGS", Theme.TextStyle.EYEBROW, Theme.NAVY)).expandX().left();
+        head.add(ui.label("Each one known adds " + FindingsView.bonusText() + " points to the base chance of the "
+            + "steps it makes safer", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).right();
+        card.add(head).padBottom(Theme.SPACE_3).row();
+        for (int i = 0; i < known.size(); i++) {
+            String goalId = known.get(i);
+            Table row = new Table();
+            Table text = new Table();
+            text.left();
+            text.defaults().left().growX();
+            text.add(ui.label(ContentNames.of(goalId), Theme.TextStyle.BODY_STRONG, Theme.INK)).padBottom(2f).row();
+            String safer = FindingsView.safer(session.catalog(), goalId);
+            text.add(ui.paragraph("Makes safer: " + safer + ".", Theme.TextStyle.CAPTION, Theme.INK_MUTED));
+            row.add(text).expandX().fillX().left().padRight(Theme.SPACE_3);
+            row.add(findingControls(goalId)).right();
+            card.add(row).padBottom(i < known.size() - 1 ? Theme.SPACE_2 : 0f).row();
+        }
+        return card;
     }
 
     /** A stop on the timeline over a card: its year, and a dot (white open, gold new, hollow locked). */
@@ -623,7 +666,9 @@ public final class MuseumScreen extends ChromeScreen {
             text.add(ui.paragraph(page.title(), Theme.TextStyle.ARCHIVE_CARD_TITLE, Theme.INK_MUTED)).row();
             text.add().expandY().row();
             text.add(new Image(ui.solid(Theme.NAVY_BORDER))).height(Theme.BORDER_THIN).padBottom(10f).row();
-            text.add(ui.label("Unlocks with:", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).padBottom(2f).row();
+            boolean finding = session.catalog().finding(page.goalId()).isPresent();
+            text.add(ui.label(finding ? "A finding: opens when you know" : "Unlocks with:", Theme.TextStyle.CAPTION,
+                Theme.INK_MUTED)).padBottom(2f).row();
             text.add(ui.paragraph(ContentNames.of(page.goalId()), Theme.TextStyle.BODY_STRONG, Theme.INK));
             card.add(text).expandY().fill();
             return card;

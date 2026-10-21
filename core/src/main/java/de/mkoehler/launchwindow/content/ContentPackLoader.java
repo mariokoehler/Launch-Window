@@ -48,6 +48,8 @@ public final class ContentPackLoader {
     public static final String GOALS_FILE = "goals.json";
     /** The programs' commercial blocks ({@code design.md} &sect;2.11). */
     public static final String COMMERCIAL_FILE = "commercial.json";
+    /** The findings and the steps they make safer ({@code design.md} &sect;2.13). */
+    public static final String FINDINGS_FILE = "findings.json";
     /**
      * Every rules file a pack consists of, in a fixed order. The one list the loader, the server's
      * freezing step and {@link ContentPackHash} all go by, so a rules file added to packs later
@@ -57,7 +59,7 @@ public final class ContentPackLoader {
      * bundled pack's hash.
      */
     public static final List<String> FILES = List.of(CATEGORIES_FILE, PROGRAMS_FILE, MISSION_COMPONENTS_FILE,
-        MISSION_CONFIGURATIONS_FILE, GOALS_FILE, COMMERCIAL_FILE);
+        MISSION_CONFIGURATIONS_FILE, GOALS_FILE, COMMERCIAL_FILE, FINDINGS_FILE);
 
     private static final ObjectMapper MAPPER = createMapper();
 
@@ -127,8 +129,9 @@ public final class ContentPackLoader {
             read(source, label, MISSION_CONFIGURATIONS_FILE, new TypeReference<>() { });
         List<Goal> goals = read(source, label, GOALS_FILE, new TypeReference<>() { });
         List<Commercial> commercials = read(source, label, COMMERCIAL_FILE, new TypeReference<>() { });
+        List<Finding> findings = read(source, label, FINDINGS_FILE, new TypeReference<>() { });
         return new ContentCatalog(categories, programs, configurations, components, goals,
-            BuildingSchedule.baspmClose(), commercials);
+            BuildingSchedule.baspmClose(), commercials, findings);
     }
 
     private static <T> List<T> read(Source source, String label, String fileName, TypeReference<List<T>> type) {

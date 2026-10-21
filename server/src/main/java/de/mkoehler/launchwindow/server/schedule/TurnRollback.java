@@ -27,7 +27,7 @@ import java.util.stream.Stream;
  * <p>Rolling back to turn N undoes N and every turn after it: each player's snapshots and reports
  * from N on are deleted, the actions N resolved go back into the journal, and the actions queued
  * later are set aside in {@code journal-rolled-back/} (they were planned against the wrong
- * results; players queue again). The turns' intelligence and contract market files go too, the
+ * results; players queue again). The turns' intelligence, contract market and publications files go too, the
  * game result if one of the turns decided it, and the scheduler's next turn becomes N. The whole data root is zipped
  * into {@code backups/} first ({@link TurnBackups}).</p>
  *
@@ -75,6 +75,7 @@ public final class TurnRollback {
             }
             Files.deleteIfExists(dataRoot.resolve("intelligence").resolve("turn-" + turn + ".json"));
             Files.deleteIfExists(TurnScheduler.marketFile(dataRoot, turn));
+            Files.deleteIfExists(TurnScheduler.publicationsFile(dataRoot, turn));
         }
         FrontPageStore.dropFrom(dataRoot, mapper, gameTurn);
         Path resultFile = dataRoot.resolve(GameResult.FILE_NAME);

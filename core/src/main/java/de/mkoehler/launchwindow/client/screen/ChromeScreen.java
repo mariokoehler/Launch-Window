@@ -19,12 +19,15 @@ import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.ConceptChip;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.view.Concepts;
+import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.Explainers;
+import de.mkoehler.launchwindow.client.view.FindingsView;
 import de.mkoehler.launchwindow.client.view.IntelTexts;
 import de.mkoehler.launchwindow.client.view.Programs;
 import de.mkoehler.launchwindow.client.view.SetSkills;
 import de.mkoehler.launchwindow.client.view.Tips;
 import de.mkoehler.launchwindow.client.view.SetDepartment;
+import de.mkoehler.launchwindow.actions.PublishFindingAction;
 import de.mkoehler.launchwindow.actions.UpgradeBuildingAction;
 import de.mkoehler.launchwindow.content.BuildingSchedule;
 import de.mkoehler.launchwindow.content.ContentCatalog;
@@ -420,6 +423,94 @@ abstract class ChromeScreen extends SessionScreen {
             })));
         card.add(buttons).right().fill(false, false);
         showDialog(card);
+    }
+
+    /**
+     * A finding's standing and what the player can do about it ({@code design.md} &sect;2.13): Publish
+     * while it's classified, Withdraw while it's asked for, a plain label otherwise. Offered only while
+     * the player can still act on it: an older report's controls would act on today's state, which is
+     * fine, since they read today's state too.
+     *
+     * @param goalId the finding
+     * @return the controls
+     */
+    protected Table findingControls(String goalId) {
+        return findingControls(goalId, Theme.ButtonKind.SECONDARY);
+    }
+
+    /**
+     * As {@link #findingControls(String)}, with the buttons in a kind of their own: primary on the page's
+     * blue, where an outlined button reads as switched off.
+     *
+     * @param goalId the finding
+     * @param kind   the buttons' kind
+     * @return the controls
+     */
+    protected Table findingControls(String goalId, Theme.ButtonKind kind) {
+        Table controls = new Table();
+        FindingsView.Status status = FindingsView.status(session.state(), goalId);
+        switch (status) {
+            case CLASSIFIED -> controls.add(actionButton("Publish", kind,
+                () -> confirmPublish(goalId)));
+            case QUEUED -> {
+                controls.add(ui.badge(Theme.BadgeKind.ACTIVE, "Publishing")).padRight(Theme.SPACE_2);
+                controls.add(actionButton("Withdraw", kind, () -> submit(
+                    new PublishFindingAction(goalId, false), result -> toast("Withdrawn: "
+                        + ContentNames.of(goalId) + " stays classified.", Theme.NoticeKind.INFO))));
+            }
+            case PUBLISHED_BY_YOU, PUBLIC -> controls.add(ui.badge(Theme.BadgeKind.SUCCESS,
+                FindingsView.statusText(status)));
+            case UNKNOWN -> controls.add(ui.label(FindingsView.statusText(status), Theme.TextStyle.CAPTION,
+                Theme.INK_MUTED));
+        }
+        return controls;
+    }
+
+    /**
+     * Asks the server what publishing a finding now would pay, then asks the player to confirm
+     * ({@code design.md} &sect;2.13). Nothing is sent before the player confirms.
+     *
+     * @param goalId the finding
+     */
+    public void confirmPublish(String goalId) {
+        game.gateway().previewPublication(session.credentials(), goalId, preview -> {
+            if (!isShowing()) {
+                return;
+            }
+            if (!preview.ok()) {
+                toast("Couldn't ask what publishing would pay: " + preview.message(), Theme.NoticeKind.WARNING);
+                return;
+            }
+            String name = ContentNames.of(goalId);
+            Table card = dialogCard("Publish a finding", "Publish " + name + "?");
+            card.add(ui.paragraph("At the next resolution every agency that doesn't know it learns it, and its page "
+                + "in the archive, where it has one, opens for them. Their steps get the same " + FindingsView.bonusText()
+                + " points to the base chance yours do: " + FindingsView.safer(session.catalog(), goalId)
+                + ". Once the turn resolves, it can't be taken back.", Theme.TextStyle.BODY,
+                Theme.INK_MUTED)).padBottom(Theme.SPACE_4).row();
+            Table amount = new Table();
+            amount.add(ui.label("Pays now", Theme.TextStyle.BODY_STRONG, Theme.INK)).expandX().left();
+            amount.add(ui.label("+" + preview.prestige() + " prestige", Theme.TextStyle.HEADING_SM,
+                preview.prestige() > 0 ? Theme.SUCCESS : Theme.INK)).right();
+            card.add(amount).growX().padBottom(2f).row();
+            card.add(ui.paragraph((preview.rivals() == 0 ? "You have no rivals yet." : preview.helped() == 0
+                ? "Every rival knows it already: old news pays nothing."
+                : "It helps " + preview.helped() + " of your " + preview.rivals()
+                    + (preview.rivals() == 1 ? " rival" : " rivals") + ".")
+                + " As of now: a rival that earns it first lowers it, and agencies publishing it at the same "
+                + "resolution split it.", Theme.TextStyle.CAPTION, Theme.INK_MUTED)).growX()
+                .padBottom(Theme.SPACE_4).row();
+            Table buttons = new Table();
+            buttons.add(actionButton("Keep it classified", Theme.ButtonKind.SECONDARY, this::closeDialog))
+                .padRight(10f);
+            buttons.add(actionButton("Publish", Theme.ButtonKind.PRIMARY, () -> submit(
+                new PublishFindingAction(goalId, true), result -> {
+                    closeDialog();
+                    toast(name + " is published at the next resolution.", Theme.NoticeKind.SUCCESS);
+                })));
+            card.add(buttons).right().fill(false, false);
+            showDialog(card, 560f);
+        });
     }
 
     @Override

@@ -7,6 +7,7 @@ import de.mkoehler.launchwindow.content.RandomEventRoster;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.rules.GoalTally;
 import de.mkoehler.launchwindow.rules.Contracts;
+import de.mkoehler.launchwindow.rules.FindingPublications;
 import de.mkoehler.launchwindow.rules.IntelFinding;
 import de.mkoehler.launchwindow.rules.ResolutionEvent;
 import de.mkoehler.launchwindow.rules.TurnReport;
@@ -174,6 +175,28 @@ public class PlayerStateService {
     public List<ResolutionEvent> resolveTurn(long gameTurn, GoalTally goalTally, RandomEventRoster roster,
             long seasonSeed, List<IntelFinding> intelligence, Contracts.Turn contracts, List<String> rivalFirsts)
             throws IOException {
+        return resolveTurn(gameTurn, goalTally, roster, seasonSeed, intelligence, contracts, rivalFirsts, List.of());
+    }
+
+    /**
+     * As {@link #resolveTurn(long, GoalTally, RandomEventRoster, long, List, Contracts.Turn, List)}, also
+     * applying this player's part of the turn's publications of findings ({@code design.md} &sect;2.13,
+     * settled once for every player).
+     *
+     * @param gameTurn     the turn to resolve
+     * @param goalTally    the game-wide goal counts as of the start of the turn
+     * @param roster       the random events
+     * @param seasonSeed   the seed of this player's season pass
+     * @param intelligence this player's intelligence findings
+     * @param contracts    this player's part of the contract market
+     * @param rivalFirsts  the goals settled first in the game last turn, by anyone
+     * @param findings     this player's part of the turn's publications
+     * @return the season's events, or none if the turn was already resolved
+     * @throws IOException if the player's files can't be read or written
+     */
+    public List<ResolutionEvent> resolveTurn(long gameTurn, GoalTally goalTally, RandomEventRoster roster,
+            long seasonSeed, List<IntelFinding> intelligence, Contracts.Turn contracts, List<String> rivalFirsts,
+            List<FindingPublications.News> findings) throws IOException {
         OptionalLong latestTurn = snapshotStore.latestTurnNumber();
         if (latestTurn.isPresent() && latestTurn.getAsLong() >= gameTurn) {
             finishArchivingUpToCutoff(gameTurn);
@@ -184,7 +207,7 @@ public class PlayerStateService {
         PlayerSnapshot resolved = replay.replay(base,
             pending.stream().map(PlayerActionJournal.PendingAction::action).toList(), context).state();
         SeasonResolver.Context season = new SeasonResolver.Context(context.catalog(), context.schedule(), roster,
-            goalTally, Math.toIntExact(gameTurn), resolved.getSeason(), intelligence, contracts, rivalFirsts);
+            goalTally, Math.toIntExact(gameTurn), resolved.getSeason(), intelligence, contracts, rivalFirsts, findings);
         // The report's "before" is today's state, actions applied, not the stored previous snapshot.
         PlayerSnapshot before = replay.copy(resolved);
         List<ResolutionEvent> events = SeasonResolver.advanceSeason(resolved, season, new SplittableRandom(seasonSeed));

@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.Theme;
+import de.mkoehler.launchwindow.client.view.FindingsView;
 import de.mkoehler.launchwindow.client.view.Archive;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.Museum;
@@ -128,10 +129,19 @@ public final class ArchivePageScreen extends ChromeScreen {
         Archive.Page page = entry.page();
         content.clearChildren();
         content.top().left();
+        boolean finding = session.catalog().finding(page.goalId()).isPresent();
         String flown = entry.atTheEnd() ? "opened when the race was decided" : entry.byYou() ? "flown by you"
-            : "flown by a rival";
-        content.add(ui.label("In the archive since " + Museum.date(entry.turn()) + " · " + flown, Theme.TextStyle.BODY,
-            Theme.ON_PAGE_STRONG)).left().padBottom(Theme.SPACE_4).row();
+            : finding ? "published" : "flown by a rival";
+        Table head = new Table();
+        head.add(ui.label("In the archive since " + Museum.date(entry.turn()) + " · " + flown, Theme.TextStyle.BODY,
+            Theme.ON_PAGE_STRONG)).expandX().left();
+        if (finding) {
+            // A finding's page keeps its Publish button until anyone publishes it (design.md 2.13).
+            head.add(ui.label("A finding. Safer for those who know it: " + FindingsView.safer(session.catalog(),
+                page.goalId()), Theme.TextStyle.CAPTION, Theme.ON_PAGE_STRONG)).right().padRight(Theme.SPACE_3);
+            head.add(findingControls(page.goalId(), Theme.ButtonKind.PRIMARY)).right();
+        }
+        content.add(head).growX().left().padBottom(Theme.SPACE_4).row();
         Table columns = new Table();
         columns.top().left();
         columns.add(scrollPane(text(page))).width(TEXT_WIDTH).top().fillY().padRight(Theme.SPACE_4);

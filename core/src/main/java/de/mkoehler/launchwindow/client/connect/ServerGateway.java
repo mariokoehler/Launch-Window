@@ -123,6 +123,18 @@ public interface ServerGateway {
     }
 
     /**
+     * Asks what publishing a finding now would pay ({@code design.md} &sect;2.13), for the confirmation
+     * dialog. A read: retried once if the connection broke. By default it never answers, like a gateway
+     * with no server.
+     *
+     * @param credentials who and where
+     * @param goalId      the finding
+     * @param done        called on the render thread with the result
+     */
+    default void previewPublication(Credentials credentials, String goalId, Consumer<PublishPreviewResult> done) {
+    }
+
+    /**
      * Asks a dev-mode server to resolve the open turn now, then fetches the new state and game
      * info. Never repeated if the connection breaks mid-exchange.
      *

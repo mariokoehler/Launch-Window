@@ -2442,6 +2442,11 @@ public final class ContentPackPlayouts {
         if (raise != null) {
             de.mkoehler.launchwindow.rules.BudgetProgress.setRaiseShare(Double.parseDouble(raise));
         }
+        // -Drules.findingBonus=0 turns off the findings' bonus (design.md 2.13), for measuring it.
+        String findingBonus = System.getProperty("rules.findingBonus");
+        if (findingBonus != null) {
+            de.mkoehler.launchwindow.rules.Findings.setBonusPoints(Double.parseDouble(findingBonus));
+        }
         Bot bot = args.length < 2 ? Bot.PLAIN : switch (args[1]) {
             case "ahead" -> Bot.AHEAD;
             case "side" -> Bot.SIDE_MISSIONS;

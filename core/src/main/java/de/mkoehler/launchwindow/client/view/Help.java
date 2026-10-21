@@ -166,7 +166,7 @@ public record Help(List<Topic> topics) {
         /** A program's details and its mission configurations. */
         PROGRAM("this program", "programs", "planning-missions", "rnd"),
         /** Planning a mission: the plan, its steps and its odds. */
-        MISSION_PLAN("planning a mission", "planning-missions", "mission-steps", "rockets", "prestige"),
+        MISSION_PLAN("planning a mission", "planning-missions", "mission-steps", "rockets", "prestige", "findings"),
         /** Assembling a mission's crew and consoles. */
         ASSEMBLE_MISSION("assembling a mission", "planning-missions", "chemistry", "mission-steps",
             "mission-control"),
@@ -190,9 +190,10 @@ public record Help(List<Topic> topics) {
         /** Someone's page on the memorial. */
         MEMORIAL("the memorial", "careers", "museum", "traits"),
         /** The turn report and a mission's replay. */
-        TURN_REPORT("the turn report", "turn-report", "mission-steps", "random-events", "budget", "contracts"),
+        TURN_REPORT("the turn report", "turn-report", "mission-steps", "random-events", "budget", "contracts",
+            "findings"),
         /** The Museum. */
-        MUSEUM("the Museum", "museum", "winning", "the-race", "prestige", "careers"),
+        MUSEUM("the Museum", "museum", "winning", "the-race", "prestige", "careers", "findings"),
         /** The Intelligence Office. */
         INTELLIGENCE("the Intelligence Office", "intelligence", "poaching", "the-race");
 

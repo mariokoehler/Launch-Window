@@ -66,6 +66,11 @@ public final class RaceShock {
         if (raise != null) {
             de.mkoehler.launchwindow.rules.BudgetProgress.setRaiseShare(Double.parseDouble(raise));
         }
+        // -Drules.findingBonus=0 turns off the findings' bonus (design.md 2.13), for measuring it.
+        String findingBonus = System.getProperty("rules.findingBonus");
+        if (findingBonus != null) {
+            de.mkoehler.launchwindow.rules.Findings.setBonusPoints(Double.parseDouble(findingBonus));
+        }
         if (args.length > 1 && args[1].equals("decisions")) {
             de.mkoehler.launchwindow.content.Decisions.setStandard(de.mkoehler.launchwindow.content.Decisions.load(
                 Path.of("assets", "content", de.mkoehler.launchwindow.content.Decisions.FILE)));

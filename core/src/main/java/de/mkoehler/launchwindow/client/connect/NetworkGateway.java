@@ -10,6 +10,8 @@ import de.mkoehler.launchwindow.net.messages.ClaimSlotResponse;
 import de.mkoehler.launchwindow.net.messages.FetchStateRequest;
 import de.mkoehler.launchwindow.net.messages.ArchiveRequest;
 import de.mkoehler.launchwindow.net.messages.ArchiveResponse;
+import de.mkoehler.launchwindow.net.messages.PublishPreviewRequest;
+import de.mkoehler.launchwindow.net.messages.PublishPreviewResponse;
 import de.mkoehler.launchwindow.net.messages.FrontPagesRequest;
 import de.mkoehler.launchwindow.net.messages.FrontPagesResponse;
 import de.mkoehler.launchwindow.net.messages.FetchStateResponse;
@@ -279,6 +281,31 @@ public final class NetworkGateway implements ServerGateway {
             ArchiveResult first = fetchArchiveOnce(credentials, goalIds);
             return !first.ok() && client == null ? fetchArchiveOnce(credentials, goalIds) : first;
         }, message -> new ArchiveResult(false, message, null), done);
+    }
+
+    @Override
+    public void previewPublication(Credentials credentials, String goalId, Consumer<PublishPreviewResult> done) {
+        run(() -> {
+            PublishPreviewResult first = previewPublicationOnce(credentials, goalId);
+            return !first.ok() && client == null ? previewPublicationOnce(credentials, goalId) : first;
+        }, message -> new PublishPreviewResult(false, message, 0, 0, 0), done);
+    }
+
+    private PublishPreviewResult previewPublicationOnce(Credentials credentials, String goalId) {
+        Optional<LoginResult> refusal = ensureSession(credentials);
+        if (refusal.isPresent()) {
+            return new PublishPreviewResult(false, refusal.get().message(), 0, 0, 0);
+        }
+        try {
+            PublishPreviewResponse response = client.sendAndReceive(new PublishPreviewRequest(goalId),
+                PublishPreviewResponse.class);
+            return response.success()
+                ? new PublishPreviewResult(true, "", response.prestige(), response.helped(), response.rivals())
+                : new PublishPreviewResult(false, response.message(), 0, 0, 0);
+        } catch (IOException | RuntimeException e) {
+            dropConnection();
+            return new PublishPreviewResult(false, e.getMessage(), 0, 0, 0);
+        }
     }
 
     private ArchiveResult fetchArchiveOnce(Credentials credentials, List<String> goalIds) {

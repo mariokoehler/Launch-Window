@@ -515,6 +515,27 @@
       "related": ["winning", "intelligence", "prestige"]
     },
     {
+      "id": "findings",
+      "group": "Rivals",
+      "title": "Findings",
+      "body": [
+        "Some science goals are findings: what the flight learned makes later flights safer. Each finding you know adds {findings.bonus} points to the base chance of every step it makes safer, a step's first roll, and findings stack on a step. A finding nobody knows never makes a step harder: the odds stay as they were.",
+        "You know a finding when you reach its goal yourself, credited through a cascade too, or when any agency publishes it. The mission plan's odds mark the steps a finding you know makes safer.",
+        "## Publishing",
+        "A finding you reach shows up in that turn's report, with a Publish button. Publishing asks first: the dialog shows what it would pay as things stand. Nothing is sent until you confirm, and you can withdraw until the turn resolves. Doing nothing keeps the finding classified; no answer is ever required, and you can publish it later from the Museum's archive, until any agency has published it.",
+        "When the turn resolves, every agency that didn't know the finding learns it, and its page in the archive opens for them where it has one. A finding's page opens only for the agencies that know it, unlike the other pages, and for everyone once the race is decided.",
+        "## What it pays",
+        "Publishing pays prestige: at most {findings.share} % of the goal's first-time prestige, as a share of your rivals it helps. Helping all of them pays it all, helping two of three pays two thirds, and old news pays nothing. A rival counts as helped if it doesn't know the finding when the turn resolves, before that turn's flights. Agencies publishing the same finding at the same resolution split the payment. It counts at the next funding review like any prestige.",
+        "Holding a finding back keeps your rivals' flights where they were, but a rival that reaches the goal itself makes publishing it pay less."
+      ],
+      "related": [
+        "the-race",
+        "mission-steps",
+        "museum",
+        "prestige"
+      ]
+    },
+    {
       "id": "intelligence",
       "group": "Rivals",
       "title": "Intelligence",

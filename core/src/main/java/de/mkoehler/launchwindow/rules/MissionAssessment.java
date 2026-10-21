@@ -47,9 +47,18 @@ public final class MissionAssessment {
      * @param glitch       a minor glitch: the flight goes on at half the step's prestige
      * @param failure      a failure: the flight ends
      * @param catastrophic a catastrophe: the flight ends and the crew is lost
+     * @param findings     the known findings that make the step safer ({@link Findings}), each adding its
+     *                     points to the base chance
      */
     public record StepOdds(int seasonIndex, MissionStep step, double hardware, double success, double solved,
-                           double glitch, double failure, double catastrophic) {
+                           double glitch, double failure, double catastrophic, List<String> findings) {
+
+        /**
+         * Copies the findings.
+         */
+        public StepOdds {
+            findings = findings == null ? List.of() : List.copyOf(findings);
+        }
 
         /**
          * Returns the chance this step ends the flight.
@@ -168,7 +177,11 @@ public final class MissionAssessment {
         Chemistry.MissionChemistry chemistry = Chemistry.mission(snapshot, plan, true);
         double crewSum = crewInvolved
             ? Math.min(100, MissionProgress.crewContributionSum(snapshot, plan, step) * chemistry.multiplier(true)) : 0;
-        double base = MissionStepResolution.computeBaseProbability(componentSum, crewInvolved, crewSum);
+        // The findings the player knows, with the goals this flight earns before the step (design.md 2.13).
+        List<String> findings = Findings.applying(catalog, catalog.missionConfiguration(plan.getMissionConfigurationId())
+            .orElseThrow(), step, Findings.knowing(snapshot, held));
+        double base = MissionStepResolution.computeBaseProbability(componentSum, crewInvolved, crewSum)
+            + findings.size() * Findings.bonusPoints();
         double controllerSum = Math.min(100,
             MissionProgress.controlContributionSum(snapshot, catalog, plan, step, chemistry));
         double save = Math.min(100, MissionStepResolution.computeSavingThrowProbability(base, controllerSum)
@@ -185,7 +198,7 @@ public final class MissionAssessment {
             failure += catastrophicBand;
         }
         return new StepOdds(seasonIndex, step, componentSum, first, (1 - first) * saving, glitch, failure,
-            catastrophic);
+            catastrophic, findings);
     }
 
     private static double clamp(double probability) {

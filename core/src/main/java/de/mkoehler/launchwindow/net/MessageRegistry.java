@@ -311,5 +311,10 @@ public final class MessageRegistry {
         kryo.register(de.mkoehler.launchwindow.net.messages.ArchiveRequest.class);
         kryo.register(de.mkoehler.launchwindow.net.messages.ArchiveResponse.class);
         kryo.register(de.mkoehler.launchwindow.net.messages.ArchiveUnlock.class);
+
+        // Publishing findings (design.md section 2.13, 2026-10-21). Never move these lines.
+        kryo.register(de.mkoehler.launchwindow.actions.PublishFindingAction.class);
+        kryo.register(de.mkoehler.launchwindow.net.messages.PublishPreviewRequest.class);
+        kryo.register(de.mkoehler.launchwindow.net.messages.PublishPreviewResponse.class);
     }
 }

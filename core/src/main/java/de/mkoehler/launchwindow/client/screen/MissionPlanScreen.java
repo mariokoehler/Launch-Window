@@ -13,6 +13,7 @@ import de.mkoehler.launchwindow.client.ui.OutcomeBar;
 import de.mkoehler.launchwindow.client.ui.Refusals;
 import de.mkoehler.launchwindow.client.ui.ReliabilityBar;
 import de.mkoehler.launchwindow.client.ui.Theme;
+import de.mkoehler.launchwindow.client.view.FindingsView;
 import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.Staffing;
 import de.mkoehler.launchwindow.client.view.ContentNames;
@@ -430,6 +431,17 @@ public final class MissionPlanScreen extends ChromeScreen {
                 weak.add(ui.label("WEAK", Theme.TextStyle.LABEL, Theme.GOLD_TEXT));
                 nameCell.add(weak).padLeft(6f);
             }
+            if (!step.findings().isEmpty()) {
+                // Known findings make the step safer (design.md 2.13): their points, named in the tooltip.
+                Table safer = new Table();
+                safer.setBackground(ui.rect(new Color(0f, 0f, 0f, 0f), Theme.SUCCESS, Theme.BORDER_THIN));
+                safer.pad(1f, 5f, 1f, 5f);
+                safer.add(ui.label(FindingsView.pointsText(step.findings().size()), Theme.TextStyle.LABEL,
+                    Theme.SUCCESS));
+                ui.tooltip(safer, "Findings", "Known findings add to this step's success: " + String.join(", ",
+                    step.findings().stream().map(ContentNames::of).toList()) + ".");
+                nameCell.add(safer).padLeft(6f);
+            }
             Object[] cells = {ui.label(String.valueOf(number), Theme.TextStyle.BODY_SM, Theme.INK_MUTED), nameCell,
                 num(String.format(Locale.ROOT, "%.1f", step.hardware())), num(pct(step.success())),
                 num(pct(step.solved())), num(pct(step.endsFlight()), true), num(step.step().crewRisk()
@@ -448,7 +460,8 @@ public final class MissionPlanScreen extends ChromeScreen {
         card.add(ui.paragraph("Hardware is the components' weighted reliability after goal penalties. Success is the "
             + "first roll, with the crew's skills blended in where the hardware is above "
             + Math.round(MissionStepResolution.CREW_BLEND_HARDWARE_THRESHOLD) + ". If it fails, the controllers get "
-            + "a saving roll. A minor glitch lets the mission go on at half the step's prestige.",
+            + "a saving roll. A minor glitch lets the mission go on at half the step's prestige. Each finding you know "
+            + "adds " + FindingsView.bonusText() + " to the success of the steps it makes safer (marked).",
             Theme.TextStyle.CAPTION, Theme.INK_MUTED)).growX().padTop(Theme.SPACE_3);
         return card;
     }

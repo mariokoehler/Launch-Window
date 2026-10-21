@@ -487,7 +487,8 @@ public final class MissionProgress {
         Chemistry.MissionChemistry chemistry = Chemistry.mission(snapshot, mission, false);
         double crewSum = crewInvolved
             ? Math.min(100, crewContributionSum(snapshot, mission, step) * chemistry.multiplier(true)) : 0;
-        double baseProbability = MissionStepResolution.computeBaseProbability(componentSum, crewInvolved, crewSum);
+        double baseProbability = MissionStepResolution.computeBaseProbability(componentSum, crewInvolved, crewSum)
+            + findingBonus(snapshot, catalog, mission, step, snapshot::hasAchievedOrCancelledGoal);
 
         double firstRoll = MissionStepResolution.drawRoll(random);
         if (MissionStepResolution.firstRollSucceeded(baseProbability, firstRoll)) {
@@ -647,6 +648,25 @@ public final class MissionProgress {
             }
         }
         return null;
+    }
+
+    /**
+     * The base-chance points the findings the player knows add to a step ({@link Findings},
+     * {@code design.md} &sect;2.13): its held goals, as the caller counts them, and every published finding.
+     *
+     * @param snapshot the player
+     * @param catalog  the content catalog, for the mission's configuration
+     * @param mission  the mission the step belongs to
+     * @param step     the step
+     * @param goalHeld whether a goal is achieved or cancelled
+     * @return the points, from 0
+     */
+    static double findingBonus(PlayerSnapshot snapshot, ContentCatalog catalog, InProgressMission mission,
+            MissionStep step, Predicate<String> goalHeld) {
+        MissionConfiguration configuration = catalog.missionConfiguration(mission.getMissionConfigurationId())
+            .orElse(null);
+        return configuration == null ? 0
+            : Findings.stepBonus(catalog, configuration, step, Findings.knowing(snapshot, goalHeld));
     }
 
     /**

@@ -143,6 +143,7 @@ class ContentPackLoaderTest {
         write(ContentPackLoader.MISSION_CONFIGURATIONS_FILE, configurations);
         write(ContentPackLoader.GOALS_FILE, goals);
         write(ContentPackLoader.COMMERCIAL_FILE, List.of());
+        write(ContentPackLoader.FINDINGS_FILE, List.of());
     }
 
     private void write(String fileName, Object value) throws IOException {

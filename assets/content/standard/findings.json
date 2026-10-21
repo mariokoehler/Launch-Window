@@ -1,0 +1,110 @@
+[
+  {
+    "goalId": "magnetic-field-study",
+    "matches": [
+      {"kinds": ["earth-orbit", "orbital-flight", "earth-orbital", "high-orbit-injection", "injection-to-elliptical-meo", "meo", "tli"], "crewed": true}
+    ]
+  },
+  {
+    "goalId": "organisms-in-microgravity",
+    "matches": [
+      {"kinds": ["suborbital-flight", "insertion", "orbit-insertion", "reentry"], "body": "EARTH", "crewed": true}
+    ]
+  },
+  {
+    "goalId": "amphibians-in-microgravity",
+    "matches": [
+      {"kinds": ["duration*"], "crewed": true}
+    ]
+  },
+  {
+    "goalId": "micrometeoroid-study",
+    "matches": [
+      {"kinds": ["eva*"], "body": "EARTH", "crewed": true}
+    ]
+  },
+  {
+    "goalId": "lunar-micrometeoroid-study",
+    "matches": [
+      {"kinds": ["lunar-orbit", "lunar-surface-activities", "eva*"], "body": "MOON", "crewed": true}
+    ]
+  },
+  {
+    "goalId": "lunar-bioscience",
+    "matches": [
+      {"kinds": ["lunar-flyby", "earth-approach", "earth-approach-and-reentry", "reentry"], "body": "MOON", "crewed": true}
+    ]
+  },
+  {
+    "goalId": "lunar-structure-survey",
+    "matches": [
+      {"kinds": ["loi", "lunar-orbit"], "body": "MOON"}
+    ]
+  },
+  {
+    "goalId": "lunar-soil-study",
+    "matches": [
+      {"kinds": ["powered-descent", "landing", "lunar-landing", "lk-descent"], "body": "MOON"}
+    ]
+  },
+  {
+    "goalId": "lunar-mapping",
+    "matches": [
+      {"kinds": ["powered-descent", "landing", "lunar-landing", "lk-descent"], "body": "MOON"}
+    ]
+  },
+  {
+    "goalId": "venus-structure-study",
+    "matches": [
+      {"kinds": ["lander-entry", "big-probe-approach-and-entry", "small-probes-approach-and-entry"], "body": "VENUS"}
+    ]
+  },
+  {
+    "goalId": "venus-atmosphere-study",
+    "matches": [
+      {"kinds": ["lander-descent", "lander-descent-and-landing", "big-probe-descent-and-landing", "small-probes-landing"], "body": "VENUS"}
+    ]
+  },
+  {
+    "goalId": "venus-surface-study",
+    "matches": [
+      {"kinds": ["landing", "lander-descent-and-landing"], "body": "VENUS"}
+    ]
+  },
+  {
+    "goalId": "venus-radar-mapping",
+    "matches": [
+      {"kinds": ["landing"], "body": "VENUS"}
+    ]
+  },
+  {
+    "goalId": "mars-surface-and-atmosphere-study",
+    "matches": [
+      {"kinds": ["lander-entry", "lander-descent", "lander-deployment-and-de-orbit"], "body": "MARS"}
+    ]
+  },
+  {
+    "goalId": "mars-mapping",
+    "matches": [
+      {"kinds": ["landing", "landing-and-deployment"], "body": "MARS"}
+    ]
+  },
+  {
+    "goalId": "mars-soil-study",
+    "matches": [
+      {"kinds": ["mars-surface"], "body": "MARS"}
+    ]
+  },
+  {
+    "goalId": "solar-wind-measurements",
+    "matches": [
+      {"kinds": ["earth-venus-transit", "venus-mercury-transit", "earth-mars-transit", "earth-jupiter-transit", "jupiter-saturn-transit"]}
+    ]
+  },
+  {
+    "goalId": "saturn-structure-study",
+    "matches": [
+      {"kinds": ["saturn-approach", "saturn-flyby"], "body": "SATURN"}
+    ]
+  }
+]

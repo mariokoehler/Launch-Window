@@ -88,6 +88,12 @@ public class PlayerSnapshot {
     private ContractApplication contractApplication;
     private ActiveContract activeContract;
     private Map<String, ContractRecord> contractRecords = new LinkedHashMap<>();
+    /** Findings published by any agency, with the turn each became public ({@code design.md} &sect;2.13). */
+    private Map<String, Integer> publicFindings = new LinkedHashMap<>();
+    /** Findings this agency asked to publish this turn, settled at the resolution. */
+    private List<String> pendingPublications = new ArrayList<>();
+    /** Findings this agency published. */
+    private List<String> publishedFindings = new ArrayList<>();
 
     /**
      * No-argument constructor required for Jackson deserialization.
@@ -1341,5 +1347,61 @@ public class PlayerSnapshot {
      */
     public void setContractRecords(Map<String, ContractRecord> contractRecords) {
         this.contractRecords = contractRecords == null ? new LinkedHashMap<>() : new LinkedHashMap<>(contractRecords);
+    }
+
+    /**
+     * Returns the findings published in the game, by anyone, with the turn each became public
+     * ({@code design.md} &sect;2.13).
+     *
+     * @return the findings, live
+     */
+    public Map<String, Integer> getPublicFindings() {
+        return publicFindings;
+    }
+
+    /**
+     * Sets the findings published in the game.
+     *
+     * @param publicFindings the findings, or {@code null} for none
+     */
+    public void setPublicFindings(Map<String, Integer> publicFindings) {
+        this.publicFindings = publicFindings == null ? new LinkedHashMap<>() : new LinkedHashMap<>(publicFindings);
+    }
+
+    /**
+     * Returns the findings this agency asked to publish this turn.
+     *
+     * @return the findings, live
+     */
+    public List<String> getPendingPublications() {
+        return pendingPublications;
+    }
+
+    /**
+     * Sets the findings asked to be published this turn.
+     *
+     * @param pendingPublications the findings, or {@code null} for none
+     */
+    public void setPendingPublications(List<String> pendingPublications) {
+        this.pendingPublications = pendingPublications == null ? new ArrayList<>()
+            : new ArrayList<>(pendingPublications);
+    }
+
+    /**
+     * Returns the findings this agency published.
+     *
+     * @return the findings, live
+     */
+    public List<String> getPublishedFindings() {
+        return publishedFindings;
+    }
+
+    /**
+     * Sets the findings this agency published.
+     *
+     * @param publishedFindings the findings, or {@code null} for none
+     */
+    public void setPublishedFindings(List<String> publishedFindings) {
+        this.publishedFindings = publishedFindings == null ? new ArrayList<>() : new ArrayList<>(publishedFindings);
     }
 }

@@ -247,6 +247,13 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   of the generic clips that draw a craft (`build.py`'s `PROBE_CLIPS`), the pad's clips generic under the fairing; Zond 5 flies
   the 7K-L1's; the Veneras' releases and Mars 2's detachment have their own too. Client only.
 
+- **Publishing findings is built** (the user's idea, 2026-10-21, `design.md` §2.13, `ui-spec.md` §4.20 and G16,
+  straight in libGDX): science goals in each pack's hashed `findings.json` add `Findings.BONUS_POINTS` to the
+  steps they make safer (`rules.Findings`, in the season pass and `MissionAssessment` alike), published by
+  `PublishFindingAction`, settled once a turn (`FindingPublications`, `publications/turn-N.json`), paying up
+  to 33 % of the goal's prestige. The mapping awaits the user's review; 13 finding pages are still to write.
+  `-Dshots=findings`, `-Drules.findingBonus=0`. Reset the dev data root, rebuild client and server together.
+
 ## How we work
 
 - **Screens:** Claude writes the spec in `ui-spec.md`, the user mocks it up in Claude Design,
@@ -499,6 +506,9 @@ cd assets && java --enable-native-access=ALL-UNNAMED -cp "../lwjgl3/target/class
   turn reports store their story ids, so never rename or reuse one.
 - Help's `handsOn.*` tokens quote the first hands-on level in `decisions.json` (rounds, slots, the
   expert's cost): a later level with a different shape needs the help text reworded.
+- `findings.json` is a rules file in `ContentPackLoader.FILES` (hashed, frozen), unlike the text files above:
+  a pack without one doesn't load. A finding's kinds are step ids without numbering or a/b
+  (`Findings.kind`); `FindingsTest` fails on a kind that matches no step of the standard pack.
 - `cancelsGoalIds` means "also credits, with prestige" (`rules.GoalCascade`), not "makes
   unearnable".
 - A seat titled "FLIGHT DIRECTOR" doesn't always read the average skill; go by the seat's skill

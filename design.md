@@ -1774,7 +1774,7 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
   **in-game messages** between players over the game connection, never email (user,
   2026-09-28). Espionage, sabotage and interference come later, once the daily loop is proven
   fun and fair; they must not just punish whoever logs in less. Cooperation's first piece is
-  publishing findings (§2.13, designed 2026-10-19). Cooperative modes are a later
+  publishing findings (§2.13, designed 2026-10-19, built 2026-10-21). Cooperative modes are a later
   idea. Two pieces are already designed for it (§2.2(d), user 2026-10-07): an **intelligence
   service** that can run background checks on job candidates, and **poaching** other agencies'
   employees, with matching as a standing order.
@@ -2318,7 +2318,8 @@ pictures back. No BASPM precedent.
 
 ### 2.13 Publishing findings (cooperation)
 
-**The user's idea (2026-10-19), designed the same day; not built.** The race and the Intelligence Office
+**The user's idea (2026-10-19), designed the same day; built 2026-10-21** (what was decided and built is
+at the end of this section). The race and the Intelligence Office
 (§2.9) are competition. This is the first cooperation: an agency that has learned something about an
 environment can publish it, which makes rivals' flights there safer and pays the publisher prestige. No
 BASPM precedent. History backs it: NASA published its results openly, the Soviets announced Sputnik's
@@ -2342,7 +2343,7 @@ Geophysical Year. No secrecy bonus for either archetype (as in §2.9).
 
   Every figure here is to be checked before it goes on a page.
 - **A known environment helps; an unknown one never hurts** (user): BASPM's odds stay the baseline. A
-  matching step gets **+4 base-chance points** (*proposed*) for an agency that knows the finding, by
+  matching step gets **+4 base-chance points** (user, 2026-10-21) for an agency that knows the finding, by
   earning the science goal itself (user: own science counts, so science flights are worth flying in the
   lulls, §2.9) or because someone published it. **Bonuses from different findings stack** on a step (user;
   rarely more than one applies).
@@ -2353,14 +2354,15 @@ Geophysical Year. No secrecy bonus for either archetype (as in §2.9).
 - **Publishing later** (user): the finding's archive page keeps the Publish button until it is published,
   so a player can hold a finding back, at the risk that rivals earn the goal themselves first and the
   publication pays less.
-- **The payment, capped** (user): at most **50 % of the goal's prestige**, scaled by the share of rivals
-  it helps, `cap × helped / (players − 1)`, a rival being helped if it doesn't know the finding yet. With
-  10 players, helping all 9 pays the full 50 %, helping 6 pays 6/9 of it, and old news pays nothing.
+- **The payment, capped** (user): at most **33 % of the goal's first-time prestige** (user, 2026-10-21; first
+  designed at 50 %), scaled by the share of rivals it helps, `cap × helped / (players − 1)`, a rival being
+  helped if it doesn't know the finding yet. With 10 players, helping all 9 pays the full 33 %, helping 6
+  pays 6/9 of it, and old news pays nothing.
   *Proposed:* the dialog's amount is a preview as of now (a rival can still earn the goal at the same
   resolution), and the turn report states the final amount; publications of one finding in the same
   resolution split the payment; publishing is settled once a turn for every player, like the intelligence
-  board and the contract market (§2.9, §2.11). To check: whether "helps 6 of 9" tells more than the rival
-  summaries already show; if science goals aren't public there, the dialog shows only the amount.
+  board and the contract market (§2.9, §2.11). The dialog shows the amount and "helps 6 of 9" both (user,
+  2026-10-21: the amount gives the count away to anyone who does the sum, so there's no point hiding it).
 - **Archive pages** (§2.12): **every finding gets one** (user: "knowledge is cool"), written for those
   that have none yet, and **no history notes for findings** (user): what a note would say goes on the page,
   which stays locked until the finding is discovered, where a history note is always visible. **A
@@ -2378,6 +2380,71 @@ Geophysical Year. No secrecy bonus for either archetype (as in §2.9).
 - **To measure when built:** `ContentPackPlayouts standard smart` with the bonus on and off (landing,
   lulls, side flights), and `RaceShock` with publishing always against never, beside the Sputnik shock
   and the raises between reviews (§2.9), which already pull the side behind back into the race.
+- **Built (2026-10-21)**, straight in libGDX (user: no mockup; `ui-spec.md` §4.20, G16). What was decided
+  on the way, every point unconfirmed unless it names the user:
+  - **The mapping** (user: worked out at implementation, for review): 18 findings in the standard pack, 2
+    in the early one, in each pack's `findings.json`, **a rules file inside the pack hash** (user). A step
+    matches by its kind (its id without the numbering and the a/b of a two-craft flight:
+    `rules.Findings.kind`), the body its program's category is browsed under (a flight to the Moon is
+    MOON for every step, its Earth reentry too), and whether it carries crew. A kind ending in `*` matches
+    every kind it starts (`duration*`). `FindingsTest` prints how many steps each kind matches and fails on
+    one that matches none.
+
+    | Finding | Makes safer | Steps (standard) |
+    |---|---|---|
+    | `magnetic-field-study` | crewed Earth orbit, high orbits, trans-lunar injection (the belts) | 125 |
+    | `organisms-in-microgravity` | crewed suborbital flight, orbit insertion, reentry, around Earth | 136 |
+    | `amphibians-in-microgravity` | crewed long stays (every duration level; the OFO's inner ears) | 89 |
+    | `micrometeoroid-study` | crewed spacewalks around Earth | 35 |
+    | `lunar-micrometeoroid-study` | crewed lunar orbit, surface activities, spacewalks, Moon flights | 35 |
+    | `lunar-bioscience` | crewed lunar flyby, Earth approach and reentry, Moon flights | 41 |
+    | `lunar-structure-survey` | lunar orbit insertion and lunar orbit (mascons, found from Lunar Orbiter's tracking, 1968) | 42 |
+    | `lunar-soil-study`, `lunar-mapping` | powered descent and landing on the Moon | 17 each |
+    | `venus-structure-study` | entry at Venus (Mariner 5's occultation, 1967) | 5 |
+    | `venus-atmosphere-study` | lander and probe descent at Venus | 5 |
+    | `venus-surface-study` | landing at Venus | 3 |
+    | `venus-radar-mapping` | landing at Venus | 2 |
+    | `mars-surface-and-atmosphere-study` | entry, lander descent and de-orbit at Mars | 5 |
+    | `mars-mapping` | landing at Mars | 2 |
+    | `mars-soil-study` | surface work at Mars | 4 |
+    | `solar-wind-measurements` | interplanetary cruise | 46 |
+    | `saturn-structure-study` | approach and flyby at Saturn (Pioneer 11's ring-plane crossing) | 2 |
+
+    Left out: photo goals, and the goals whose step makes nothing later safer (Mercury's, Jupiter's; Pioneer
+    10's radiation finding has no goal of its own). `organisms-in-microgravity` and `magnetic-field-study`
+    reach most crewed Earth flights, and Korabl-Sputnik 2 earns both: the smart bot never flies it (below), so
+    their reach is still to measure with flights that earn them. Every figure the table names is to be checked before it goes on a page.
+  - **The bonus:** `Findings.BONUS_POINTS` (4, user) per known matching finding on the step's base chance, after
+    the crew blend, in the season pass (`MissionProgress.resolveStep`) and in the odds the client shows
+    (`MissionAssessment`, which lists them on `StepOdds.findings`). A goal the flight earns counts for its
+    later steps, as goal modifiers do. `-Drules.findingBonus=0` turns it off in `ContentPackPlayouts` and
+    `RaceShock`.
+  - **Known** is held (achieved or credited through a cascade) or public. `PlayerSnapshot.publicFindings`
+    keeps every published finding with its turn, the same in every agency, so it also hides the Publish
+    button once anyone has published (the page keeps it "until it is published": by anyone, since a second
+    publication would pay nothing). A late joiner starts with the findings already public.
+  - **Settled before the turn's flights**, like the market (`FindingPublications.settle`, kept in
+    `publications/turn-N.json`): a rival counts as helped when it doesn't know the finding at the start of
+    the resolution, so one that earns the goal itself at the same resolution still counts. This is where
+    the build parts from the design's proposed "final amount": the dialog's preview is then exact unless
+    another agency publishes the same finding at the same resolution, when they split it. Rivals learn it
+    in the same pass (a `FINDINGS` phase before the budget, so a review that season counts the prestige),
+    so it helps their flights from the next turn on.
+  - **Asking to publish** is `PublishFindingAction`, withdrawn by the same action (the journal's inverse
+    action); an ask is settled or dropped at the resolution.
+  - **Pages:** a finding's page opens only for the agencies that know it, for everyone at the end (as
+    proposed). Five findings already have one (Lunar Orbiter 1, Mariner 9, Venera's surface, Venera 15 and
+    16, Pioneer 11), so those pages no longer open for everyone. **The other 13 pages are the next step**
+    (user, 2026-10-21: mechanics first); until then the Museum's "Your findings" card is where they're
+    published later.
+  - **Measured (2026-10-21):** `ContentPackPlayouts standard smart`, 200 games, with the bonus on and off
+    (`-Drules.findingBonus=0`): average completion season 84.6 against 84.8, medians 82 and 81 (NASA), 81
+    and 82 (Soviet), crewed completion chance at launch 0.62 against 0.63 (median): no effect beyond noise.
+    The smart bot's route earns only two findings, `magnetic-field-study` (Explorer 1, NASA only) and
+    `lunar-soil-study` (the lunar impacts), so few of its steps get the bonus; a player who flies the
+    science flights in the lulls gets more. Side flights and the lulls (`RaceLulls`) are still to measure.
+  - **Not done yet:** the bots never publish, so `RaceShock` with publishing always against never needs a
+    publishing bot first.
 
 ## 3. Architecture
 
@@ -3568,6 +3635,14 @@ sealed applications, tiers by track record, money instead of prestige. Rules, ma
 unlock sets, 31 clients), screens, help topic, a contract bot (`RaceLulls ... ahead+contracts`) and
 `TurnRollback`'s market files are in. Next: the play test, then tuning from the measurement in
 §2.11.
+
+**Publishing findings** (the user's idea, 2026-10-19; **built 2026-10-21**, §2.13, `ui-spec.md` §4.20 and
+G16): science goals as findings that add 4 points to the base chance of the steps they make safer (18 in
+the standard pack, mapped for review), published from the turn report, a finding's archive page or the
+Museum, paying up to 33 % of the goal's first-time prestige by the share of rivals helped (user). Settled
+once a turn (`publications/turn-N.json`). No effect beyond noise on the smart bot's race. Next: the user's
+review of the mapping, the 13 missing finding pages and their pictures, then a publishing bot for
+`RaceShock`. Reset the dev data root and rebuild client and server together.
 
 **The world reacts** (the user's idea, 2026-10-20; **planned, not built**, the plan in
 `ideas/world-reacts.md`): when a First's front page is printed, every rival may give a press statement

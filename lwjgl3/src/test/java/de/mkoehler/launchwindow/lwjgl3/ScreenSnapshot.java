@@ -194,6 +194,13 @@ public final class ScreenSnapshot {
         }
 
         @Override
+        public void previewPublication(Credentials credentials, String goalId,
+                Consumer<de.mkoehler.launchwindow.client.connect.PublishPreviewResult> done) {
+            // A fixed answer, for the confirmation dialog's shot: helps two of three rivals.
+            done.accept(new de.mkoehler.launchwindow.client.connect.PublishPreviewResult(true, "", 287, 2, 3));
+        }
+
+        @Override
         public void logOut() {
         }
 
@@ -286,6 +293,10 @@ public final class ScreenSnapshot {
         }
         if ("archive".equals(System.getProperty("shots"))) {
             archiveShots(folder, game);
+            return;
+        }
+        if ("findings".equals(System.getProperty("shots"))) {
+            findingShots(folder, game);
             return;
         }
         if ("console".equals(System.getProperty("shots"))) {
@@ -480,6 +491,58 @@ public final class ScreenSnapshot {
         raiseShots(folder, game);
         consoleShots(folder, game);
         archiveShots(folder, game);
+        findingShots(folder, game);
+    }
+
+    /**
+     * Findings and publishing them (design.md 2.13, 2026-10-21): the turn report's Findings card with a
+     * finding earned, the agency's publication and a rival's; the confirmation dialog; the Museum's list
+     * of known findings; a finding's archive page with its Publish button; and the mission plan's odds
+     * with the steps a known finding makes safer marked.
+     */
+    private static void findingShots(File folder, LaunchWindowGame game) {
+        String hash = ContentPackHash.ofClasspath("content/standard", ScreenSnapshot.class.getClassLoader());
+        GameInfoResponse info = GameInfoResponse.success("standard", hash, List.of(), 52, true,
+            6 * 3_600_000L + 12 * 60_000L, 0L, null, List.of(), List.of(), 0);
+        PlayerSnapshot me = new PlayerSnapshot("Baltic Star Agency", Archetype.NASA, 24_310, 14_280, 3_400, 52);
+        me.setDirectorName("A. Reyes");
+        me.getAchievedGoals().put("mars-mapping", 51);
+        me.getAchievedGoals().put("lunar-mapping", 44);
+        me.getAchievedGoals().put("magnetic-field-study", 6);
+        me.getAchievedGoals().put("micrometeoroid-study", 20);
+        me.getPendingPublications().add("micrometeoroid-study");
+        me.getPublishedFindings().add("lunar-mapping");
+        me.getPublicFindings().put("lunar-mapping", 51);
+        me.getPublicFindings().put("venus-atmosphere-study", 51);
+        startSession(game, me, info);
+        game.useArchiveReadMarksInMemory(new java.util.HashSet<>());
+        List<de.mkoehler.launchwindow.net.messages.ArchiveUnlock> unlocks = List.of(
+            new de.mkoehler.launchwindow.net.messages.ArchiveUnlock("lunar-mapping", 44, true),
+            new de.mkoehler.launchwindow.net.messages.ArchiveUnlock("mars-mapping", 51, true));
+        game.session().keepArchive(unlocks);
+        TurnReport report = TurnReport.build(me, me, List.of(
+            new de.mkoehler.launchwindow.rules.GoalSettled("m9", "mars-mapping", false, 1_300, true),
+            new de.mkoehler.launchwindow.rules.FindingPublished("lunar-mapping", 176, 2, 3, List.of()),
+            new de.mkoehler.launchwindow.rules.FindingLearned("venus-atmosphere-study", List.of("Orion Spaceworks"),
+                false)), 51, game.session().catalog());
+        game.session().keepReport(report);
+        write(folder, "findings-report.png", new TurnReportScreen(game, report), null);
+        write(folder, "findings-dialog.png", new TurnReportScreen(game, report),
+            screen -> screen.confirmPublish("mars-mapping"));
+        write(folder, "findings-museum.png", new MuseumScreen(game, MuseumScreen.Tab.ARCHIVE), null);
+        de.mkoehler.launchwindow.client.view.Archive archive = de.mkoehler.launchwindow.client.view.Archive.standard();
+        write(folder, "findings-page.png", new ArchivePageScreen(game, de.mkoehler.launchwindow.client.view.Archive
+            .entry(archive.entries(game.session().catalog(), unlocks), "mariner-9"), () -> null), null);
+        write(folder, "findings-help.png", new MuseumScreen(game, MuseumScreen.Tab.ARCHIVE),
+            screen -> screen.openHelp().select("findings"));
+
+        String early = ContentPackHash.ofClasspath("content/early-era", ScreenSnapshot.class.getClassLoader());
+        PlayerSnapshot planning = planningState(11, 25_000);
+        planning.getAchievedGoals().put("organisms-in-microgravity", 12);
+        startSession(game, planning, GameInfoResponse.success("early-era", early, List.of(), 1, true,
+            6 * 3_600_000L + 12 * 60_000L + 30_000L, 0L, null, List.of(), List.of(), 0));
+        write(folder, "findings-plan.png", new MissionPlanScreen(game, "vostok-orbital",
+            MissionPlanScreen.Tab.ASSESSMENT), null);
     }
 
     /**

@@ -53,6 +53,8 @@ public final class SeasonResolver {
         INTELLIGENCE,
         /** Contracts: a lapse, the turn's award, the board for the coming turn (design.md 2.11). */
         CONTRACTS,
+        /** Findings published this turn: made public, the publishers paid, before the budget (design.md 2.13). */
+        FINDINGS,
         /** Rivals' Firsts last turn add to the next review's credit, before the budget (design.md 2.1(e)). */
         RIVAL_FIRSTS,
         /** Running costs, the review if due, and funding. */
@@ -86,10 +88,31 @@ public final class SeasonResolver {
      * @param contracts      this player's part of the turn's contract market ({@link ContractMarket})
      * @param rivalFirsts    the goals settled first in the game last turn, by anyone
      *                       ({@link RivalFirsts#settledFirstOn})
+     * @param findings       this player's part of the turn's publications ({@link FindingPublications})
      */
     public record Context(ContentCatalog catalog, BudgetSchedule schedule, RandomEventRoster roster,
                           GoalTally goalTally, int gameTurn, int seasonsElapsed, List<IntelFinding> intelligence,
-                          Contracts.Turn contracts, List<String> rivalFirsts) {
+                          Contracts.Turn contracts, List<String> rivalFirsts, List<FindingPublications.News> findings) {
+
+        /**
+         * A context with no publications.
+         *
+         * @param catalog        the content catalog
+         * @param schedule       the budget schedule
+         * @param roster         the random events
+         * @param goalTally      the game-wide goal counts
+         * @param gameTurn       the turn being resolved
+         * @param seasonsElapsed the player's seasons elapsed, counting this one
+         * @param intelligence   the player's intelligence findings
+         * @param contracts      the player's part of the contract market
+         * @param rivalFirsts    the goals settled first in the game last turn
+         */
+        public Context(ContentCatalog catalog, BudgetSchedule schedule, RandomEventRoster roster, GoalTally goalTally,
+                int gameTurn, int seasonsElapsed, List<IntelFinding> intelligence, Contracts.Turn contracts,
+                List<String> rivalFirsts) {
+            this(catalog, schedule, roster, goalTally, gameTurn, seasonsElapsed, intelligence, contracts, rivalFirsts,
+                List.of());
+        }
 
         /**
          * A context with no Firsts settled last turn.
@@ -153,6 +176,7 @@ public final class SeasonResolver {
             intelligence = intelligence == null ? List.of() : List.copyOf(intelligence);
             contracts = contracts == null ? Contracts.Turn.NONE : contracts;
             rivalFirsts = rivalFirsts == null ? List.of() : List.copyOf(rivalFirsts);
+            findings = findings == null ? List.of() : List.copyOf(findings);
             if (seasonsElapsed < 1) {
                 throw new IllegalArgumentException("seasonsElapsed must be at least 1: " + seasonsElapsed);
             }
@@ -256,6 +280,7 @@ public final class SeasonResolver {
                 context.seasonsElapsed());
             case INTELLIGENCE -> Intelligence.advanceSeason(snapshot, context.intelligence(), context.gameTurn());
             case CONTRACTS -> Contracts.advanceSeason(snapshot, context.contracts(), context.gameTurn());
+            case FINDINGS -> Findings.advanceSeason(snapshot, context.findings(), context.gameTurn());
             case RIVAL_FIRSTS -> RivalFirsts.advanceSeason(snapshot, context.catalog(), context.rivalFirsts());
             case BUDGET -> BudgetProgress.advanceSeason(snapshot, context.catalog(), context.schedule(),
                 context.seasonsElapsed());

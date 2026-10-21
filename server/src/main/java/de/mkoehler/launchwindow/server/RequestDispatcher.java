@@ -21,6 +21,8 @@ import de.mkoehler.launchwindow.net.messages.TurnReportResponse;
 import de.mkoehler.launchwindow.net.messages.GameInfoResponse;
 import de.mkoehler.launchwindow.net.messages.HandshakeRequest;
 import de.mkoehler.launchwindow.net.messages.HandshakeResponse;
+import de.mkoehler.launchwindow.net.messages.PublishPreviewRequest;
+import de.mkoehler.launchwindow.net.messages.PublishPreviewResponse;
 import de.mkoehler.launchwindow.net.messages.ResolveTurnNowRequest;
 import de.mkoehler.launchwindow.net.messages.ResolveTurnNowResponse;
 import de.mkoehler.launchwindow.net.messages.RivalSummary;
@@ -34,6 +36,8 @@ import de.mkoehler.launchwindow.persistence.PlayerAction;
 import de.mkoehler.launchwindow.persistence.PlayerSnapshotStore;
 import de.mkoehler.launchwindow.persistence.PlayerStateService;
 import de.mkoehler.launchwindow.persistence.SetFundsAction;
+import de.mkoehler.launchwindow.rules.FindingPublications;
+import de.mkoehler.launchwindow.rules.Findings;
 import de.mkoehler.launchwindow.rules.HiringPool;
 import de.mkoehler.launchwindow.rules.Personality;
 import de.mkoehler.launchwindow.rules.TurnReport;
@@ -178,6 +182,9 @@ public class RequestDispatcher {
         if (message instanceof ArchiveRequest request) {
             return new DispatchResult(handleArchive(connectionId, request), false);
         }
+        if (message instanceof PublishPreviewRequest request) {
+            return new DispatchResult(handlePublishPreview(connectionId, request), false);
+        }
         throw new IllegalArgumentException("Unexpected message type: " + message.getClass().getName());
     }
 
@@ -239,7 +246,10 @@ public class RequestDispatcher {
             }
             String agencyName = request.agencyName().strip();
             String directorName = request.directorName().strip();
+            Map<String, Integer> publicFindings = new LinkedHashMap<>();
             for (PlayerSnapshot other : everyPlayer()) {
+                // A late joiner knows what was published before it joined (design.md section 2.13).
+                other.getPublicFindings().forEach((goal, turn) -> publicFindings.merge(goal, turn, Math::min));
                 if (agencyName.equalsIgnoreCase(other.getAgencyName())) {
                     return ClaimSlotResponse.failure(ClaimSlotResponse.Reason.AGENCY_NAME_TAKEN, "The agency name \"" + agencyName + "\" is already taken.");
                 }
@@ -251,6 +261,7 @@ public class RequestDispatcher {
             PlayerSnapshot start = new PlayerSnapshot(agencyName, request.archetype(), schedule.initialFunds(),
                 schedule.initialPrestige(), schedule.initialFundingRate(), 1);
             start.setDirectorName(directorName);
+            start.setPublicFindings(publicFindings);
             HiringPool.refreshCandidates(start, new SplittableRandom(GameSeeds.forNewPlayer(meta.getGameSeed(),
                 accountId)));
             store.save(0, start, null);
@@ -435,7 +446,9 @@ public class RequestDispatcher {
      * the first turn any player held it (achieved or credited through a cascade), read from every
      * player's latest resolved snapshot, and whether the asking player was among the first. Once the race
      * is decided ({@code game-result.json}), every goal nobody reached by then opens on the deciding turn,
-     * marked {@code atTheEnd}. Only the goals and turns leave the server, never who reached them.
+     * marked {@code atTheEnd}. A finding's page ({@code design.md} &sect;2.13) opens only for the asking
+     * player while it knows the finding: from the turn it reached the goal or the finding was published,
+     * whichever came first. Only the goals and turns leave the server, never who reached them.
      *
      * @param connectionId the connection the request arrived on
      * @param request      the request
@@ -457,6 +470,7 @@ public class RequestDispatcher {
             }
             Map<String, Integer> first = new LinkedHashMap<>();
             Map<String, Integer> mine = Map.of();
+            PlayerSnapshot me = null;
             try (Stream<Path> listing = Files.list(dataRoot.resolve("players"))) {
                 for (Path playerDir : listing.filter(Files::isDirectory).sorted().toList()) {
                     Optional<PlayerSnapshot> snapshot = new PlayerSnapshotStore(playerDir, mapper).load();
@@ -467,6 +481,7 @@ public class RequestDispatcher {
                     times.forEach((goal, turn) -> first.merge(goal, turn, Math::min));
                     if (playerDir.getFileName().toString().equals(accountId)) {
                         mine = times;
+                        me = snapshot.get();
                     }
                 }
             }
@@ -478,6 +493,19 @@ public class RequestDispatcher {
             List<ArchiveUnlock> unlocks = new ArrayList<>();
             for (String goal : goals) {
                 Integer turn = first.get(goal);
+                if (context.catalog().finding(goal).isPresent()) {
+                    // A finding's page opens only for the agencies that know it: its discoverers, and
+                    // everyone once it's published (design.md section 2.13).
+                    Integer own = mine.get(goal);
+                    Integer published = me == null ? null : me.getPublicFindings().get(goal);
+                    turn = own == null ? published : published == null ? own : Math.min(own, published);
+                    if (decided != null && (turn == null || turn > decided)) {
+                        unlocks.add(new ArchiveUnlock(goal, decided, false, true));
+                    } else if (turn != null) {
+                        unlocks.add(new ArchiveUnlock(goal, turn, turn.equals(own)));
+                    }
+                    continue;
+                }
                 if (decided != null && (turn == null || turn > decided)) {
                     unlocks.add(new ArchiveUnlock(goal, decided, false, true));
                 } else if (turn != null) {
@@ -487,6 +515,43 @@ public class RequestDispatcher {
             return ArchiveResponse.of(unlocks);
         } catch (IOException | RuntimeException e) {
             return ArchiveResponse.failure("Failed to read the archive: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Handles a {@link PublishPreviewRequest} ({@code design.md} &sect;2.13): what publishing a finding
+     * now would pay the asking player, from every player's latest resolved snapshot (what a rival
+     * knows only changes when a turn resolves). Only the amount and the counts leave the server, never
+     * which rivals know it.
+     *
+     * @param connectionId the connection the request arrived on
+     * @param request      the request
+     * @return the response
+     */
+    public PublishPreviewResponse handlePublishPreview(int connectionId, PublishPreviewRequest request) {
+        String accountId = connectionAccountIds.get(connectionId);
+        if (accountId == null) {
+            return PublishPreviewResponse.failure("Not authenticated - send a HandshakeRequest first.");
+        }
+        try {
+            if (!hasSlot(accountId)) {
+                return PublishPreviewResponse.failure(ClaimSlotRequest.SLOT_CLAIM_REQUIRED);
+            }
+            if (request.goalId() == null || context.catalog().finding(request.goalId()).isEmpty()) {
+                return PublishPreviewResponse.failure(Findings.PublishOutcome.NOT_A_FINDING.name());
+            }
+            Map<String, PlayerSnapshot> agencies = new LinkedHashMap<>();
+            try (Stream<Path> listing = Files.list(dataRoot.resolve("players"))) {
+                for (Path playerDir : listing.filter(Files::isDirectory).sorted().toList()) {
+                    new PlayerSnapshotStore(playerDir, mapper).load()
+                        .ifPresent(state -> agencies.put(playerDir.getFileName().toString(), state));
+                }
+            }
+            FindingPublications.Preview preview = FindingPublications.preview(accountId, request.goalId(), agencies,
+                context.catalog());
+            return PublishPreviewResponse.of(preview.prestige(), preview.helped(), preview.rivals());
+        } catch (IOException | RuntimeException e) {
+            return PublishPreviewResponse.failure("Failed to preview the publication: " + e.getMessage());
         }
     }
 

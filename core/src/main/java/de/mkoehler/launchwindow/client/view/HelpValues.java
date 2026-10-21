@@ -73,6 +73,8 @@ public final class HelpValues {
         v.put("budget.fundsPerPrestige", whole(budget.fundsPerPrestige()));
         v.put("budget.coveredSeasons", whole(PrestigeConversion.COVERED_SEASONS));
         v.put("budget.rivalShare", whole(Math.round(de.mkoehler.launchwindow.rules.RivalFirsts.SHARE * 100)));
+        v.put("findings.bonus", whole(Math.round(de.mkoehler.launchwindow.rules.Findings.BONUS_POINTS)));
+        v.put("findings.share", whole(Math.round(de.mkoehler.launchwindow.rules.Findings.PRESTIGE_SHARE * 100)));
 
         v.put("rnd.slots", whole(MissionComponent.RD_SLOT_COUNT));
         v.put("outlook.ready", whole(Math.round(Advisor.READY_RELIABILITY)));

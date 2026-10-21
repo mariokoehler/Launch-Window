@@ -3364,6 +3364,41 @@ placeholders tagged with their real ids. Choices, all **unconfirmed**:
 - **New in `Theme.java`:** `SCRIM_VIEWER`, and the text styles `ARTICLE`, `ARTICLE_HEADING` and
   `ARCHIVE_CARD_TITLE`. No new icons. `ScreenSnapshot -Dshots=archive` renders it all.
 
+### 4.20 Findings *(the user's idea, 2026-10-19, `design.md` §2.13; built straight in libGDX on 2026-10-21, no mockup, user)*
+**Purpose:** science goals whose results make later steps safer, and publishing them. Small additions to
+existing screens, made of existing components; every look is unconfirmed.
+- **Turn report, a Findings card** (left column, under Goals; only on a turn with something to say),
+  eyebrow "FINDINGS", note "Science that makes flights safer". One row per line:
+  - a finding earned this turn: "New finding: Mars mapped", "Your flights know it now. Safer: landing on
+    flights to Mars.", the archive link when its page is open, and the finding's controls on the right;
+  - the agency's own publication: "You published Moon mapped", "It helped 2 of your 3 rivals." (or "Every
+    rival knew it already."; co-publishers named), the prestige on the right in green;
+  - another agency's: "Orion Spaceworks published Venus's atmosphere studied", "Safer for you from now on:
+    …" or "You knew it already."
+- **The finding's controls** (`ChromeScreen.findingControls`): classified, a Publish button (secondary on a
+  card, primary on the page's blue); asked for, a gold "Publishing" badge and Withdraw; published, a green
+  badge, "Published by you" or "Published". They read today's state, on any report.
+- **The confirmation dialog** (component 6's shape, 560 px): eyebrow "PUBLISH A FINDING", "Publish Mars
+  mapped?", what publishing does, "Pays now" with "+287 prestige" (green, from the server's preview, G16),
+  "It helps 2 of your 3 rivals." with the preview's caveats, and "Keep it classified" / "Publish". Nothing
+  is sent before Publish; a failed preview is a warning toast and no dialog.
+- **The Museum's Archive tab, a "YOUR FINDINGS" card** above the timeline while the agency knows any: one
+  row per finding known (the pack's order), its name, "Makes safer: …" and its controls. The place to
+  publish later, and the only place for a finding whose page isn't written yet. The tab's line adds "a
+  finding's page, for those who know it".
+- **Archive cards and pages of a finding:** a locked card says "A finding: opens when you know" where others
+  say "Unlocks with:"; the page's top line says "published" where others say "flown by a rival", and carries
+  "A finding. Safer for those who know it: …" with the controls on the right. The report's "New in the
+  archive" row says "Published" for a finding a rival published.
+- **The mission plan's odds** (§4.6.7): a step a known finding makes safer gets a green outlined chip with
+  its points ("+4", "+8" for two) beside its name, with the findings in a tooltip; the table's caption says
+  so.
+- **Words** come from `client.view.FindingsView`: step kinds fold into a few names ("lunar-landing" and
+  "lk-descent" read as landing and powered descent), and the body reads "around Earth" or "on flights to
+  Mars".
+- **Help:** a "Findings" topic (Rivals), on the mission plan, the turn report and the Museum.
+  `ScreenSnapshot -Dshots=findings` renders the report, the dialog, the tab, a page, the help and the plan.
+
 ## 5. Refusal reasons (for toasts and inline messages)
 
 The server replies with these codes. Suggested wording below; final wording is
@@ -3405,6 +3440,7 @@ for the mockups.
 | Building upgrade: MAX_LEVEL / ALREADY_UPGRADING; program opening also UNKNOWN_PROGRAM | Already at the top level. / Already upgrading. / That program doesn't exist in this game. |
 | Manage department (`AdjustSalariesAction`, added 2026-10-04): INVALID_PERCENT / EMPTY_DEPARTMENT | Pick a change between −50 % and +50 %. / There's nobody in the department yet. |
 | Hands-on campaign (added 2026-10-11, component 26, type 11; `HandsOn.Outcome`, `RdDecisions.Outcome.NO_PUZZLE`): WRONG_PHASE / NO_SLOT / CANT_PAY / UNKNOWN_COMMAND / NOTHING_QUEUED / CANT_RESIST / NO_PUZZLE | Not now: the campaign is somewhere else. / The round's slots are full. / You can't pay for that command. / That command isn't in this campaign. / Nothing is queued. / Not enough shifts to call in an expert. / No campaign is in progress. |
+| Findings (added 2026-10-21, §4.20; `Findings.PublishOutcome`): NOT_A_FINDING / NOT_KNOWN / ALREADY_PUBLIC / ALREADY_QUEUED / NOT_QUEUED | That goal isn't a finding. / Reach the goal first. / Someone published it already. / It's published at the next resolution already. / There's nothing to withdraw. |
 | Contracts (added 2026-10-11, §4.17; built as `ContractOutcome`): CONTRACT_ACTIVE / NOT_QUALIFIED / PROGRAM_NOT_OPEN / UNKNOWN_LISTING; closing a program while its contract flies is the existing MISSIONS_IN_FLIGHT | You have an active contract: one at a time. / You can't fly this one: unlock its line first. / Open the program first. / That listing isn't on the board any more. / Can't close while a mission uses it. |
 | Join game (`ClaimSlotResponse.Reason`, added 2026-10-04): AGENCY_NAME_TAKEN / DIRECTOR_NAME_TAKEN / MISSING_FIELDS / ALREADY_CLAIMED / NOT_AUTHENTICATED / SERVER_ERROR | Already taken by another agency. (under the field) / the same / Required. / (client logs in again and opens the agency) / (danger notice with the server's words) |
 
@@ -3598,6 +3634,21 @@ current state alone. Each is an M5 task.
     report shows the pages whose unlock turn is its turn (`Archive.openedIn`). A page whose goal the game's
     pack doesn't have isn't shown.
   - **Rebuild client and server together** (a new message); no reset.
+- **G16. Findings (§4.20, `design.md` §2.13, 2026-10-21). Built.**
+  - **Content:** each pack's `findings.json`, a rules file in `ContentPackLoader.FILES` (hashed): a goal and
+    the step kinds it makes safer, each with an optional body and crewed flag.
+  - **State:** `PlayerSnapshot.publicFindings` (goal to the turn it became public, the same in every
+    agency), `pendingPublications` (this turn's asks) and `publishedFindings` (the agency's own).
+  - **Action:** `PublishFindingAction` (goal, publish or withdraw), appended to `PlayerAction`'s subtypes
+    and the registry.
+  - **Server:** `PublishPreviewRequest`/`PublishPreviewResponse` (prestige, helped, rivals), appended to the
+    registry; `RequestDispatcher.handlePublishPreview` reads every player's latest snapshot. The turn's
+    publications are settled once (`FindingPublications.settle`) into `publications/turn-N.json`;
+    `TurnRollback` deletes them with the turn. `handleArchive` opens a finding's page only for agencies
+    that know it (or at the end), and a late joiner starts with the findings already public.
+  - **Events:** `FindingPublished`, `FindingLearned` (append-only ids `findingPublished`, `findingLearned`).
+  - **Reset the dev data root and rebuild client and server together** (saved fields, a pack hash change,
+    a new action and message).
 
 ## 7. Suggested mockup order
 

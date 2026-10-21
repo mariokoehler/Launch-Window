@@ -1,0 +1,14 @@
+[
+  {
+    "goalId": "magnetic-field-study",
+    "matches": [
+      {"kinds": ["earth-orbit", "orbital-flight", "earth-orbital", "high-orbit-injection", "injection-to-elliptical-meo", "meo", "tli"], "crewed": true}
+    ]
+  },
+  {
+    "goalId": "organisms-in-microgravity",
+    "matches": [
+      {"kinds": ["suborbital-flight", "insertion", "orbit-insertion", "reentry"], "body": "EARTH", "crewed": true}
+    ]
+  }
+]

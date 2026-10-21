@@ -37,6 +37,7 @@ public final class ContentCatalog {
     private final Map<String, Goal> goalsById;
     private final BuildingSchedule buildings;
     private final Map<String, Commercial> commercialsByProgramId;
+    private final Map<String, Finding> findingsByGoalId;
     private final Map<Archetype, java.util.Set<String>> reachableGoals =
         new java.util.concurrent.ConcurrentHashMap<>();
 
@@ -117,7 +118,30 @@ public final class ContentCatalog {
     public ContentCatalog(List<ProgramCategory> categories, List<Program> programs,
             List<MissionConfiguration> missionConfigurations, List<MissionComponent> missionComponents,
             List<Goal> goals, BuildingSchedule buildings, List<Commercial> commercials) {
+        this(categories, programs, missionConfigurations, missionComponents, goals, buildings, commercials, List.of());
+    }
+
+    /**
+     * Builds and validates a catalog with goals, a building table, the programs' commercial blocks
+     * and the findings ({@code design.md} &sect;2.13).
+     *
+     * @param categories            every program category
+     * @param programs              every program
+     * @param missionConfigurations every mission configuration
+     * @param missionComponents     every mission component
+     * @param goals                 every goal a step or modifier can reference
+     * @param buildings             the building table
+     * @param commercials           every program's commercial block, at most one per program
+     * @param findings              every finding, at most one per goal
+     * @throws NullPointerException     if any argument is {@code null}
+     * @throws IllegalArgumentException if any list contains a duplicate id, or
+     *                                   any reference doesn't resolve
+     */
+    public ContentCatalog(List<ProgramCategory> categories, List<Program> programs,
+            List<MissionConfiguration> missionConfigurations, List<MissionComponent> missionComponents,
+            List<Goal> goals, BuildingSchedule buildings, List<Commercial> commercials, List<Finding> findings) {
         this.buildings = Objects.requireNonNull(buildings, "buildings must not be null");
+        Objects.requireNonNull(findings, "findings must not be null");
         Objects.requireNonNull(commercials, "commercials must not be null");
         Objects.requireNonNull(categories, "categories must not be null");
         Objects.requireNonNull(programs, "programs must not be null");
@@ -132,6 +156,7 @@ public final class ContentCatalog {
         this.missionComponentsById = indexById(missionComponents, MissionComponent::id, "MissionComponent");
         this.goalsById = indexById(goals, Goal::id, "Goal");
         this.commercialsByProgramId = indexById(commercials, Commercial::programId, "Commercial");
+        this.findingsByGoalId = indexById(findings, Finding::goalId, "Finding");
 
         validateReferences();
     }
@@ -291,6 +316,25 @@ public final class ContentCatalog {
     }
 
     /**
+     * Returns the finding a science goal is ({@code design.md} &sect;2.13).
+     *
+     * @param goalId the goal
+     * @return its finding, or empty when the goal isn't one
+     */
+    public Optional<Finding> finding(String goalId) {
+        return Optional.ofNullable(findingsByGoalId.get(goalId));
+    }
+
+    /**
+     * Returns every finding, in the pack's order.
+     *
+     * @return the findings, unmodifiable
+     */
+    public java.util.Collection<Finding> findings() {
+        return java.util.Collections.unmodifiableCollection(findingsByGoalId.values());
+    }
+
+    /**
      * Returns every mission component, in the pack's order.
      *
      * @return the components, unmodifiable
@@ -396,6 +440,12 @@ public final class ContentCatalog {
                     problems.add("Program " + commercial.programId() + "'s unlock set names " + configurationId
                         + ", not one of its configurations");
                 }
+            }
+        }
+
+        for (Finding finding : findingsByGoalId.values()) {
+            if (!goalsById.containsKey(finding.goalId())) {
+                problems.add("Finding for unknown Goal " + finding.goalId());
             }
         }
 

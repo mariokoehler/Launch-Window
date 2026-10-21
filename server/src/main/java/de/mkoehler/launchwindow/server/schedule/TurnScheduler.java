@@ -12,6 +12,7 @@ import de.mkoehler.launchwindow.persistence.AtomicFiles;
 import de.mkoehler.launchwindow.persistence.PlayerSnapshotStore;
 import de.mkoehler.launchwindow.persistence.PlayerStateService;
 import de.mkoehler.launchwindow.rules.ContractMarket;
+import de.mkoehler.launchwindow.rules.FindingPublications;
 import de.mkoehler.launchwindow.rules.FrontPagePrinter;
 import de.mkoehler.launchwindow.rules.GoalTally;
 import de.mkoehler.launchwindow.rules.IntelFinding;
@@ -246,11 +247,13 @@ public class TurnScheduler {
         List<String> rivalFirsts = RivalFirsts.settledFirstOn(startOfTurn, Math.toIntExact(gameTurn - 1));
         Map<String, List<IntelFinding>> intelligence = intelligence(gameTurn, meta, withActions);
         ContractMarket.Settlement market = market(gameTurn, meta, withActions, startByKey);
+        FindingPublications.Settlement publications = publications(gameTurn, withActions);
         for (Map.Entry<String, PlayerStateService> player : services.entrySet()) {
             String key = GameSeeds.rivalKey(meta.getGameSeed(), player.getKey());
             player.getValue().resolveTurn(gameTurn, tally, roster,
                 GameSeeds.forSeason(meta.getGameSeed(), gameTurn, player.getKey()),
-                intelligence.getOrDefault(key, List.of()), market.turnFor(key), rivalFirsts);
+                intelligence.getOrDefault(key, List.of()), market.turnFor(key), rivalFirsts,
+                publications.turnFor(key));
         }
         printFrontPages(gameTurn, meta, services);
         recordResultIfDecided(gameTurn, meta, services);
@@ -342,6 +345,42 @@ public class TurnScheduler {
         mapper.writerWithDefaultPrettyPrinter().writeValue(temp.toFile(), settlement);
         AtomicFiles.moveReplacingWithRetry(temp, file);
         return settlement;
+    }
+
+    /**
+     * Settles the turn's publications of findings once for every player ({@code design.md} &sect;2.13)
+     * and keeps them in {@code publications/turn-N.json}, like the market, so a retry after a crash
+     * halfway through applies the same ones. Settled from each player's state with the turn's actions
+     * applied, before any flight of the turn.
+     *
+     * @param gameTurn    the turn
+     * @param withActions every player's state with the turn's actions applied, by key
+     * @return the settlement
+     * @throws IOException if the file can't be read or written
+     */
+    private FindingPublications.Settlement publications(long gameTurn, Map<String, PlayerSnapshot> withActions)
+            throws IOException {
+        Path file = publicationsFile(dataRoot, gameTurn);
+        if (Files.exists(file)) {
+            return mapper.readValue(file.toFile(), FindingPublications.Settlement.class);
+        }
+        FindingPublications.Settlement settlement = FindingPublications.settle(withActions, context.catalog());
+        Files.createDirectories(file.getParent());
+        Path temp = Files.createTempFile(file.getParent(), "turn-", ".json.tmp");
+        mapper.writerWithDefaultPrettyPrinter().writeValue(temp.toFile(), settlement);
+        AtomicFiles.moveReplacingWithRetry(temp, file);
+        return settlement;
+    }
+
+    /**
+     * Returns the file a turn's publications of findings are kept in.
+     *
+     * @param dataRoot the data root
+     * @param gameTurn the turn
+     * @return the file
+     */
+    static Path publicationsFile(Path dataRoot, long gameTurn) {
+        return dataRoot.resolve("publications").resolve("turn-" + gameTurn + ".json");
     }
 
     /**
