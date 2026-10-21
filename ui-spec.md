@@ -1884,6 +1884,9 @@ Control mockup:
 an animated clip (`design.md` §5, Backlog, "Animated mission steps"), and the replay plays the steps
 by itself again. **This reverses the 2026-10-06 decision** against automatic playback: with the
 clips, the replay is meant to be watched like a short film, and the player can still pause and step.
+**The clips are confirmed (user, 2026-10-21):** every clip's story, craft, shape and proportion below, and the
+decisions made along the way, as built at the end of the overhaul pass. The console, the playback timings and the
+sound placements keep their own flags.
 - **Layout:** the step card keeps its head (step n of m, name, text, components); the result (the
   roll line and the outcome box) moves up beside the success chance and the saving roll, and a
   monitor fills the rest of the card: a navy console drawn by the game (sharp at any size) across
@@ -1902,7 +1905,7 @@ clips, the replay is meant to be watched like a short film, and the player can s
   lists (`atv`, `gemini-a`, `soyuz-7k-ok`) or with a craft's letter after it (`reentry-a`), never by
   how its name ends: `lunar-ascent` never plays `ascent`'s clip, only its own (2026-10-13; a test
   holds the list to the pack's vehicles). A rule can also name the step before (`"after"`, matched the
-  same way; 2026-10-14, unconfirmed): `landing` is on the Moon after `powered-descent` or a robot's
+  same way; 2026-10-14): `landing` is on the Moon after `powered-descent` or a robot's
   `lunar-approach`, a probe's after `lander-descent` and a spaceplane's after `descent`, so a rule with
   `after` goes before one for the same step without it. A rule can name a step anywhere before it in the
   season instead (`"earlier"`, 2026-10-15): `lander-descent` follows `lander-entry` at both planets, so
@@ -1911,22 +1914,22 @@ clips, the replay is meant to be watched like a short film, and the player can s
 - **Which steps have clips (2026-10-13):** a first satellite's whole mission (Sputnik 1, Explorer 1):
   launch preparations, countdown, launch, ascent, deployment, Earth orbit. The rest are listed in
   `assets-raw/replay/CLIP_CHECKLIST.md`. Every clip is generic (it plays for every program that flies
-  the step: the payload is the launch rocket's own nose section) and has no lettering (digits only; unconfirmed).
+  the step: the payload is the launch rocket's own nose section) and has no lettering (digits only).
   Steps cut straight into each other, so a step's success and glitch end on the same frame, and a
   step on the pad ends on the next one's first. Where history differs from a borrowed clip, the step
   gets its own: Venera 7's carrier entry (`interplanetary-bus-entry`) played the capsule's `reentry`
   right after the lander's, but the carrier burned up (`design.md` §1.1), so it has `bus-entry`
   (user, 2026-10-15): the carrier burns up in every variant, and only the data it sends home before
-  differs (unconfirmed). The landers' entries had the Earth capsule's `reentry` too, Earth's limb and
+  differs. The landers' entries had the Earth capsule's `reentry` too, Earth's limb and
   all; they have `venus-entry` (Venera's sphere; the Pioneer Venus probes have their own since 2026-10-17) and `mars-entry` (Viking's
   and Mars 3's aeroshell), the reentry's story at their planet, Mars picked by the step before
   (user, 2026-10-15). Their descents had the capsule's chutes; they have `venus-descent` (Venera's
   reefed chute opening; the glitch tears it, as Venera 7's did, the failure tears it away) and
   `mars-descent` (Viking's chute, heat shield, legs and three engines; the glitch lights one late, the
-  failure none), Mars picked by an earlier step (user, 2026-10-15; the stories unconfirmed). At Mars the
+  failure none), Mars picked by an earlier step (user, 2026-10-15). At Mars the
   landing follows on in `mars-landing` (Viking's lander on its engines; the glitch stands on a rock,
   tilted, as Viking 2 did; the failure sends once and falls silent, as Mars 3 did), for `landing` and
-  `landing-and-deployment` (user, 2026-10-15; unconfirmed), and the work on the surface after it in
+  `landing-and-deployment` (user, 2026-10-15), and the work on the surface after it in
   `mars-surface` (the probe's story, its arm stalling as Viking 1's did, with Viking's lander; user,
   2026-10-15).
 - **The way home goes the orbit's way (user, 2026-10-16):** the Earth orbit's map goes round
@@ -1936,7 +1939,7 @@ clips, the replay is meant to be watched like a short film, and the player can s
   preparations before it (Biosatellite's `de-orbit-burn`, straight from the orbit) plays `deorbit-burn`,
   the capsule turning round first. `reentry` after `earth-approach` (from the Moon, coming in from the
   left) plays `reentry-from-moon`, unmirrored. The cut from `deployment` (going right) to
-  `suborbital-flight` (now going left) flips: unconfirmed.
+  `suborbital-flight` (now going left) flips.
 - **Orbit insertion coasts to the top, then burns (user, 2026-10-16):** the craft rises from the ascent on
   its arc, slowing, to the top on the planned orbit, and fires there to circularize. The glitch cuts out
   and sags below the orbit until a relight brings it back; the failure falls back and burns up.
@@ -1944,7 +1947,7 @@ clips, the replay is meant to be watched like a short film, and the player can s
   jettison (`design.md` §5, M3). These flights (Soyuz 7K-L3, 7K-OK, LK-700, Gemini EOR's lander tests) carry
   an orbital module on the nose through the burn and the jettison; their modules separation drops it, where
   Vostok's drops the pack. The glitch hangs it on one latch until a second try; the failure never frees it
-  (unconfirmed).
+ .
 - **Rules by craft and by what's planned (2026-10-16):** a rule may name `programs` (it matches only a
   configuration of one of them) and `later` (a step anywhere after it in the season's plan, which the player
   sees, so it spoils nothing). The Soyuz-type programs show their orbital module from their first close-up
@@ -1952,25 +1955,25 @@ clips, the replay is meant to be watched like a short film, and the player can s
   `equipment-section-separation` (the adapter's back section drops, the capsule turns base first), then the
   retrofire and the retro section's jettison. Vostok had no pack to drop, so its "retrofire jettison" (BASPM's
   Vostok suborbital, a what-if) plays `retro-shutdown`: the burn tails off and the jets steady it; the glitch's
-  valve sticks and the engine sputters on, the failure's won't stop and pitches the capsule away (unconfirmed).
+  valve sticks and the engine sputters on, the failure's won't stop and pitches the capsule away.
 - **Lunokhod (user, 2026-10-16):** Luna 17's two surface operations had the Mars lander's clip; they play the
   rover's own: `lunokhod-deploy` (the ramps unfold, it rolls down onto the surface, opens its lid to the Sun and
   calls home; the glitch slips halfway down the ramp and tries again; the failure noses in at the ramp's foot and
   pitches over) and then `lunokhod-drive` (on over a crater's rim, a laser from Earth finding its reflector; the
   glitch slips on the slope; the failure is Lunokhod 2's end, its open lid scooping soil that overheats it once
-  shut). Every story unconfirmed.
+  shut).
 - **The Luna landers (user, 2026-10-16):** Luna 17's and Luna 15's landings had the crewed lander's clip, and
   Luna 15's surface operations the Mars lander's; they play the Ye-8 stage now (`luna-landing-rover`,
   `luna-landing-sampler`: down on its engine, which cuts just above the surface; the glitch cuts high and lands
   hard; the failure, Luna 15's, flies into the ground) and `luna-sampler` (the arm drills a core and lifts it
   into the return capsule; the glitch hits rock and drills again; the failure jams), and `luna-liftoff` (the
   return rocket lifts off the stage and climbs away; the glitch's engine sputters first; the failure leans, loses
-  its engine and falls back). Every story unconfirmed.
+  its engine and falls back).
 - **Surveyor (user, 2026-10-17):** its `lunar-landing` played the crewed lander's clip; it plays
   `surveyor-landing` now: the tripod comes down on its three verniers, which cut a few metres up, and it drops
   onto its pads, calls home and turns its solar panel to the Sun. The glitch is Surveyor 3's: the verniers don't
   cut, and it hops twice before they're shut off from Earth. The failure hops the same way, comes off it leaning,
-  lands on one foot and topples onto its antenna. Every story unconfirmed.
+  lands on one foot and topples onto its antenna.
 - **Project Mercury as itself (user, 2026-10-17):** the first of the programs from Mercury on to get their own
   spacecraft in every clip (the rocket stays generic: any rocket can fly them). Mercury's 17 clips (`mercury-*`) are the
   generic timelines drawn with its capsule (a step's `"skin"`, `mc-` parts: the blunt shield, the shingled cone with
@@ -1978,7 +1981,7 @@ clips, the replay is meant to be watched like a short film, and the player can s
   the escape tower on the pad and jettisoned in the ascent after staging, the periscope out after the turnaround and in
   after the retrofire, the three retros lit one after another, the shield let down on the landing bag before the
   splash. Its orbital flights keep the generic turn before the retrofire, though Mercury flew heat shield first all
-  orbit (`design.md` §1.1): kept so (user, 2026-10-17). Unconfirmed.
+  orbit (`design.md` §1.1): kept so (user, 2026-10-17).
 - **Project Gemini as itself (user, 2026-10-17):** the second package: Gemini in every clip of the `gemini` program
   (`gemini-*`, `gm-` parts: the dark reentry module seen from the hatches' side, two windows, the RCS and R&R
   sections; the white adapter), and the Agena target vehicle as itself: in the docking close-up, its cone taking
@@ -2000,7 +2003,7 @@ clips, the replay is meant to be watched like a short film, and the player can s
   noses, and the other's crewman stands up in its hatch and photographs it (the walker tumbles and the gun steadies
   it, the pictures after; or the visor fogs, the walker is hauled in, and the photographer goes back in too). Any
   other Gemini `eva` plays the out-on-the-tether clip from a closed hatch, ending outside. Rules tell them apart by
-  `later` and `after`. Unconfirmed. The Earth-orbit tests of circumlunar Gemini, lunar-orbital Gemini and Gemini
+  `later` and `after`. The Earth-orbit tests of circumlunar Gemini, lunar-orbital Gemini and Gemini
   direct ascent fly Gemini too, with their own hardware (user, 2026-10-18): the Gemini rules name their programs, and
   a stack takes Gemini's place on the pad, in the climb, the deployment and on the map (`parts.py`'s `gt-`, `gl-`,
   `gd-`). The circumlunar heat-shield test flies Gemini on top of its Transtage up to the high-orbit injection; the
@@ -2026,7 +2029,7 @@ clips, the replay is meant to be watched like a short film, and the player can s
   correction misfires). The direct-ascent craft's ascent and landing modules let go at the
   reentry preparations, as Gemini's equipment section does (`gemini-da-reentry-preparations`, `gd-r-trunk`; it has no
   retrograde section, user, 2026-10-19); the lunar propulsion module is still gone there without a clip for its parting. The Transtage's size is real (3.05 by 4.57 m, two engines); the propulsion module's and the
-  direct-ascent craft's shapes follow our blueprints, their sizes unconfirmed.
+  direct-ascent craft's shapes follow our blueprints.
   Circumlunar Gemini's flights to the Moon fly as themselves (user, 2026-10-20): the Transtage launches alone on its
   Earth-orbit tests' clips (rules by `"vehicle": "transtage"`), is on the map alone (`tt-o-sat`), and in the uncrewed
   flyby burns for the Moon by itself (`transtage-tli`; its `ignition-and-separation` separates from nothing on screen),
@@ -2036,7 +2039,7 @@ clips, the replay is meant to be watched like a short film, and the player can s
   (`gemini-transtage-tli`, `tpi.jsx`'s `SEP`, the stack in two: `gtd-o-sat-gemini`, `gtd-o-sat-stage`). Gemini coasts out
   and back (`gm-m-probe`), passes the Moon, and on the Earth approach casts off its adapter at 0.6 s in every variant
   (`gemini-earth-approach`, `earth-approach.jsx`'s `DROP`): no step has it, and a capsule must meet the air alone
-  (unconfirmed). Its reentry is Gemini's unmirrored (`gemini-reentry-from-moon`), in from the left as the approach leaves
+ . Its reentry is Gemini's unmirrored (`gemini-reentry-from-moon`), in from the left as the approach leaves
   it; its descent and recovery Gemini's. The flame on the map stays the generic one, over the Transtage's drum.
   Lunar-orbit Gemini's flights to the Moon fly as themselves too (user, 2026-10-20): the Earth-orbit tests' launch and
   deployment (`gemini-lpm-*`); the propulsion module makes the trans-lunar injection (the step is 80 % the module's),
@@ -2054,7 +2057,7 @@ clips, the replay is meant to be watched like a short film, and the player can s
   the lander's place (`gd-n-descent`, `gd-n-ascent`, 42 px a unit so the capsule's nose stays in the moonwalk's
   close-up), and its one surface step plants the flag (`gemini-da-flag`), which stands through the liftoff. The Earth
   approach casts off what's left (`DROP`); the reentry, descent and recovery are circumlunar Gemini's. Sizes from our
-  blueprint, unconfirmed.
+  blueprint.
   Gemini EOR's flights to the Moon fly as themselves too (user, 2026-10-20): the tug and the stack launch on the
   Earth-orbit tests' clips; the flyby and the lunar-orbit flight carry no lander, so their stack flies its frame empty
   (`ge-*-empty`, `gemini-eor-empty-*`; no frame at all is the alternative). The stack meets the tug and docks nose first
@@ -2068,7 +2071,7 @@ clips, the replay is meant to be watched like a short film, and the player can s
   climb (BASPM has no landing between). Home, the modules separation drops the service module, its frame and the
   retrograde section together, there being no retrofire (`gemini-eor-modules-separation-moon`, `ge-r-trunk-moon`),
   then the Earth-orbit tests' reentry, chutes and splashdown; the generic equipment-section separation, which dropped
-  the section before the turn, no longer plays for them. Unconfirmed.
+  the section before the turn, no longer plays for them.
 - **The early-era pack's craft as themselves (user, 2026-10-18):** Vostok (`vk-`, `vostok-*`) plays every step as
   itself: the sphere on its instrument module (its one retro flame; the module the separation's, its cable meeting
   the module's near end, `project-vostok.jsx`), the nose fairing thrown off in the climb as Mercury's tower is
@@ -2079,7 +2082,7 @@ clips, the replay is meant to be watched like a short film, and the player can s
   along it on the rocket and swing out 0.3 s after the deployment's push, `explorer-whips.jsx`, user, 2026-10-20);
   Sputnik 2 separates in its deployment, though it stayed on its
   core stage; the satellites drawn larger than their rocket's scale. Vostok's pilot doesn't eject in the descent
-  yet. Unconfirmed.
+  yet.
 - **The later NASA satellites as themselves (user, 2026-10-21):** the Orbiting Frog Otolith (`of-`, `ofo-*`): its
   octagonal lower section and the cone above it under its heat shield, under a fairing on the rocket; its four booms
   ride folded against its side and swing out after the deployment's push (`explorer-whips.jsx`, as Explorer 1's whips;
@@ -2091,7 +2094,7 @@ clips, the replay is meant to be watched like a short film, and the player can s
   in its deployment the boilerplate drifts off and Pegasus stays on the stage, as it did on the S-IV, its two wings
   unfolding to scale 0.9 s later over 2.2 s (`pegasus-wings.jsx`; the glitch's left wing stalls half open for 0.8 s, the
   failure's never open), the radio rings from Pegasus once they're out; on the map its wings at 45 % of their length.
-  The rocket stays generic. Unconfirmed: the proportions, the capsule's shape, the adapter's going, a mid-air catch.
+  The rocket stays generic.
 - **The robot probes as themselves (user, 2026-10-21):** every probe of the standard pack has its own drawing (`parts.py`'s
   `PROBES`, a prefix each: `pio-` for Pioneer 10 and 11, `pa2-`, `pi4-`, `pi6-` for the Sun orbiters, `pvo-`, `pvm-`, `rng-`, `lor-`,
   `mr5-`, `mr6-`, `mr9-`, `mr10-`, `vik-`, `svy-`, `lu2-`, `lu3-`, `lu15-`, `lu17-`, `ma2-`, `m69-`, `ve15-`, `ve7-`, `ve9-`), folded on
@@ -2110,8 +2113,8 @@ clips, the replay is meant to be watched like a short film, and the player can s
   as Mars 3's design, a sphere with one retro motor whose petals stay closed on the way down and open on the ground
   (`mars-2-petals-*.jsx`), also on its surface clips (`mars-2-mars-surface`, `mars-2-mars-rover`, where Viking's sampler arm
   still lies across it when stowed). Venera 7's carrier burns up as itself (`venera-7-bus-entry`). Mars 2's entry stays generic: `e-shell` is its aeroshell's shape. The landers' masts
-  are whip antennas that extend after landing (unconfirmed: Venera 9's antenna was fixed). Unconfirmed: every shape and proportion (drawn to
-  the generic sprite's size, panels and booms shortened), the panels folded on the rocket.
+  are whip antennas that extend after landing (Venera 9's antenna was fixed). The probes are drawn to the generic
+  sprite's size, panels and booms shortened, their panels folded on the rocket.
 - **Apollo's command and service module (user, 2026-10-18; `ap-`, `apollo-*`):** on the pad in its adapter under the
   boost cover and escape tower, thrown off together in the climb (`a-les`); for a flight to the Moon it stays on the
   S-IVB, which makes the burn (the `-stack` clips: the deployment, parking orbit and the burn, rules by `later: tli`),
@@ -2122,7 +2125,7 @@ clips, the replay is meant to be watched like a short film, and the player can s
   in the lander's scenes (engine tests, staging, powered descent, landing, liftoff, moonwalks), in the docking
   close-up upside down, its tunnel to the CSM's probe (`ap-k-target`; the ascent stage alone after the Moon and at
   its jettison, `ap-k-target-asc`), in the transposition and extraction with the CSM and the S-IVB (`ap-t-stage`), and
-  on the lunar ascent's map climbing to the CSM. Unconfirmed.
+  on the lunar ascent's map climbing to the CSM.
 - **Apollo's Earth-orbit tests as themselves (user, 2026-10-20):** the suborbital flights fly an arc, not an orbit
   (`apollo-suborbital-flight`), their SPS test the burn, the reentry preparations after it a trim (`apollo-reentry-trim`,
   the after-the-burn one). Apollo 5 (`a5-`, `apollo-lm-*`): the LM alone in its adapter under a nose cone, no CSM or tower;
@@ -2135,7 +2138,7 @@ clips, the replay is meant to be watched like a short film, and the player can s
   on the command module's cone (`ap-e-capsule`): the spacewalk flights in three steps (out, along a handrail, a photo and
   in), a lunar module test's one with the LM docked at the nose (`apollo-eva-lm`). The rendezvous flight's two CSMs close
   in (`apollo-rendezvous*`), and the docking flight launches, meets, docks with and leaves the Agena target vehicle BASPM
-  gives it (`agena-*`, `apollo-agena-*`; user). Unconfirmed.
+  gives it (`agena-*`, `apollo-agena-*`; user).
 - **Apollo's moonwalks as themselves (user, 2026-10-20; `flag.jsx`, `samples.jsx`, `rover.jsx`, the figure in
   `walker.jsx`):** the first (`eva-i` after the landing, `apollo-flag`) plants a flag, a plain cloth with no country's:
   down the ladder with the pole over the shoulder, two pushes into the ground, the cloth run out on its crossbar
@@ -2147,7 +2150,7 @@ clips, the replay is meant to be watched like a short film, and the player can s
   fender lost on a rock and the crew showered in dust, as on Apollo 17; failure: the rover dies and they walk back).
   A middle moonwalk keeps the experiment package (`apollo-moonwalk`). The flag stands in every Apollo surface scene
   after it, the liftoff's blast shaking it (`build.py`'s `"vars": {"FLAG": true}`, `moon.jsx`'s `flagPlanted`).
-  Unconfirmed.
+ 
 - **Soyuz 7K-OK's steps by their names (user, 2026-10-20):** once the converter typed them by BASPM's names (`design.md`
   §5, M3), the lone spacewalk plays the stand-up egress, out on the tether from standing and a photo and back in on its own
   hull (`sy-e-capsule`, wings out); the crew transfer (Soyuz 4 and 5) the stand-up in the first ship's hatch, the crossing
@@ -2155,22 +2158,22 @@ clips, the replay is meant to be watched like a short film, and the player can s
   (`transfer-ingress.jsx`), all on the docked pair framed as the crossing (`sy-e-capsule-pair`, `soyuz-transfer.jsx`,
   `eva-standup.jsx`'s `STANDUP_TRANSFER`); the long flights' six levels each on from the last, the supplies running lower
   (`duration.jsx`'s `LEVEL` and `SUPPLY`); the suborbital flights' reentry preparations the trim after the turn
-  (`soyuz-reentry-trim-sub`) and the KDTU-35 test the burn. Unconfirmed.
+  (`soyuz-reentry-trim-sub`) and the KDTU-35 test the burn.
 - **Soyuz 7K-OK as itself (user, 2026-10-18; the rocket stays generic, user):** its three modules (`sy-`, `soyuz-*`),
   under a fairing and escape tower on the pad (thrown off in the climb, `a-les`); the orbital module rides on the nose
   through the way home (`project-soyuz.jsx`'s `OM`, read now by `reentry-preparations.jsx`, `reentry-trim.jsx` and
   `modules-separation.jsx` too) and goes off ahead at the modules separation as the service module goes aft; its soft
   landing (`SOFT`); docking, the active probe to a passive Soyuz's drogue. The solar wings drawn short (60 % on the
   pad and in orbit, 40 % coming home, so the turns keep them in frame). The spacewalk (`eva-7k-ok`) and the crew
-  transfer stay generic. Unconfirmed.
+  transfer stay generic.
 - **The Soviet lunar craft's Earth-orbit tests as themselves (user, 2026-10-19; the rocket stays generic):** played
   on Soyuz's skin and timelines with their own parts in place. The 7K-L1 (`s1-`, `soyuz-l1-*`): a support cone where
   the orbital module was, under the same fairing and tower, gone with them in the climb (assumed); the descent and
-  service modules, the wings and a high-gain dish on a boom (`soyuz_dish`, its size and place unconfirmed); no orbital
+  service modules, the wings and a high-gain dish on a boom (`soyuz_dish`); no orbital
   module coming home (`project-soyuz-l1.jsx`); a suborbital flight's engine test is its retrofire, and the reentry
   preparations after it trim instead of turning again. The 7K-LOK (`lok-`, `soyuz-lok-*`): 10.06 m, so its service
   module is 4.4 m (`LOK_SM`; longer coming home, `LOK_LONGER`, `project-soyuz-lok.jsx`), no wings (fuel cells), the
-  Kontakt probe drawn as Soyuz's; it leaves the rocket on its Blok D (`blok_d`, 5.5 m, unconfirmed) and then the
+  Kontakt probe drawn as Soyuz's; it leaves the rocket on its Blok D (`blok_d`, 5.5 m) and then the
   Blok D (the `soyuz-7k-l3-lok` deployment); its rendezvous and time together as two LOKs; it docks to the LK's
   ascent stage. The LK (`lkl-`, `lk-*`): the LPU without legs, as the T2K tests flew, and the ascent stage (cabin,
   big window, the passive Kontakt plate, the Blok E whose one engine both tests and lifts off, firing down through
@@ -2194,7 +2197,7 @@ clips, the replay is meant to be watched like a short film, and the player can s
   crewed lander test the LK flies with the LOK from the third stage on (user, 2026-10-19; `lok_lk_parts`): stacked as
   the N1 had them, the LK under the LOK on the Blok D, on the insertion and leaving the Blok D (`-lk` clips, the pair
   drawn smaller to fit), and docked, the LOK's probe in the LK's plate, on the orbit's map; the turn-around and
-  docking between have no step and aren't shown. The launch and the climb show the LOK alone. Unconfirmed.
+  docking between have no step and aren't shown. The launch and the climb show the LOK alone.
 - **The Soviet Moon flights as themselves (user, 2026-10-20; `soviet_moon_parts`):** their tail stage is the Blok D,
   which BASPM counts as the rocket, and the steps give it the burns. The 7K-L1 rides it into the parking orbit
   (`soyuz-l1-deployment-stack`, `-earth-orbit-stack`), burns for the Moon on it and lets go (`soyuz-l1-tli`, `SEP`),
@@ -2208,7 +2211,7 @@ clips, the replay is meant to be watched like a short film, and the player can s
   Moon the LK stands on its legs (`lkm-`, a ladder down its right leg, `lk-walk.jsx`); the one cosmonaut plants the
   flag and gathers rocks (`lk-flag`, `lk-samples`), and the cabin lifts off its landing unit. The Blok D's braking of
   the LK down towards the surface isn't shown (the descent and landing show the LK alone). The descent and landing,
-  one step, play Soyuz's descent and the recovery its landing and recovery. Unconfirmed.
+  one step, play Soyuz's descent and the recovery its landing and recovery.
 - **The LK-700's Earth-orbit tests (user, 2026-10-19):** its own craft (`l7-`, `lk-700-*`, `lk700_parts`), drawn as
   the turn report's blueprint has it, 2.7 m across: the return capsule (a cylinder with two portholes and a hatch, a
   cone with two windows, a cap and a small dish), the return stage, and the landing stage with its engines (a big
@@ -2217,9 +2220,8 @@ clips, the replay is meant to be watched like a short film, and the player can s
   played Soyuz's orbital-module clips, which the LK-700 never had; it now goes: the landing stage's engines fire the
   burn (the capsule still on the return stage, `l7-r-capsule-stage`), the landing stage is cast off (the jettison,
   `lk700-jettison.jsx`), and the capsule leaves the return stage (the separation, `project-lk700.jsx`, on from the
-  jettison: `modules-separation.jsx`'s `SEP_FROM`); then the capsule's own reentry, chutes and landing. That reading
-  of the three steps is unconfirmed. Its spacewalk is three steps on its own hull (`l7-e-capsule`): out on the tether,
-  along a handrail on the cone and back, and a photo and back in. Sizes from the blueprint, unconfirmed.
+  jettison: `modules-separation.jsx`'s `SEP_FROM`); then the capsule's own reentry, chutes and landing. Its spacewalk is three steps on its own hull (`l7-e-capsule`): out on the tether,
+  along a handrail on the cone and back, and a photo and back in. Sizes from the blueprint.
   Its Moon flights (user, 2026-10-20; `lk700_moon_parts`, `lk-700-*`): BASPM gives every step from the parking orbit on
   to the craft, so its spacecraft is the whole complex: a trans-lunar stage of its own (`l7_tl_stage`, its shape ours)
   rides under it out of the rocket and through the parking orbit, burns for the Moon and lets go (`-tli`, `SEP`). The
@@ -2230,9 +2232,9 @@ clips, the replay is meant to be watched like a short film, and the player can s
   waiting in orbit and fires home (`-asc`). Home after a landing: the reentry preparations turn the capsule on its return
   stage and the separation follows (`project-lk700-moon.jsx`'s `SEP_FROM`); on the flyby and the orbit flight the
   landing stage is cast off at the reentry preparations, as on the Earth-orbit tests (`lk-700-retrofire-jettison`).
-  Unconfirmed.
+ 
 - **Gemini EOR's Earth-orbit tests (user, 2026-10-19):** the lander test in low orbit and the lander and heat-shield
-  test fly their own hardware (`gemini_eor_parts`; unconfirmed, our reading of the blueprints). The stack (`ge-`):
+  test fly their own hardware (`gemini_eor_parts`; our reading of the blueprints). The stack (`ge-`):
   Gemini's reentry module and retrograde section, the EOR service module in the equipment section's place (a ribbed
   cone, dark on one side), and behind it an open frame holding the Langley lander upright, its canopy towards the
   capsule; no tower on the rocket (ejection seats). The lander (`ll-`): an open platform on legs, two dark tanks
@@ -2253,7 +2255,7 @@ clips, the replay is meant to be watched like a short film, and the player can s
   under the lunar Gemini programs' flights to the Moon.
 - **Voskhod as itself (user, 2026-10-18):** Vostok's skin with Voskhod's parts in place (`vh-`, `voskhod-*`): the
   backup retro on the sphere's top in orbit, thrown off with the instrument module at the modules separation
-  (`vh-r-backup`, `BACKUP`; its real fate unconfirmed), which the orbital flights' retrofire jettison plays too, as
+  (`vh-r-backup`, `BACKUP`), which the orbital flights' retrofire jettison plays too, as
   Korabl-Sputnik 2's does (their configurations have no separation step; Vostok's suborbital flight, which has one
   after the jettison, keeps the burn's end there, by `later`; user, 2026-10-19); its soft landing,
   a flash under the base just before touchdown (`touchdown.jsx`'s `SOFT`, `project-voskhod.jsx`; the glitch's fires too
@@ -2262,21 +2264,21 @@ clips, the replay is meant to be watched like a short film, and the player can s
   the airlock (no hand-held gun), filming (the hand camera only: the airlock's cine camera popped in, user, 2026-10-19; the stiff suit misses the shutter
   in the glitch, and both tries in the failure, `eva-film.jsx`), and back in with the suit ballooned (`eva-in.jsx`:
   bled down and in feet first; the glitch is Leonov's own, stuck and in head first; the failure fogs up too).
-  Unconfirmed.
+ 
 - **The way home in one piece (user, 2026-10-17):** the suborbital flight had no motes, so they popped in at the
   retrofire; now they stream past along its arc (`motes()` takes the craft's way, and can settle where the next clip's
   begin). Reentry preparations played the reentry preparations' turn even where the craft was already base first,
   after a suborbital flight's turn (Gemini, Voskhod, Vostok) or after the retrofire (Mercury's hop, two Soyuz types).
   There they play `reentry-trim` (after the turn) or `reentry-trim-burn` (after the burn, the Earth held where the
   retrofire left it): no turn, the jets trimming its attitude, and Mercury's periscope sliding in, as it did about half
-  a minute after Freedom 7's retrofire. Glitch: the trim overshoots and rocks; failure: a jet sticks open. Unconfirmed.
+  a minute after Freedom 7's retrofire. Glitch: the trim overshoots and rocks; failure: a jet sticks open.
 - **The OKB-MiG E-154 (user, 2026-10-17):** it's the Soviet X-15 now (`design.md` §1), and flies the X-15's steps with
   its own clips (`e154-takeoff`, `-cruise`, `-drop`, `-climb`, `-peak`, `-fast`, `-descent`, `-landing`): the X-15's
   timelines and stories, with the E-154 from the user's art (a needle nose, a tall swept fin, four nozzles, wheels)
   slung under the belly of a Soviet four-turboprop bomber. Its strake tears away where the X-15 loses its lower fin; it
   lowers its wheels on the way down instead of dropping a fin (each leg on its own hinge, `e154-gear` and `e154-nose`:
   the nose wheel once swung down from the main gear's, user), and in the landing's failure they fold up and it slides
-  on its belly. Unconfirmed.
+  on its belly.
 - **The X-15 (user, 2026-10-17):** the drop had the X-15 climb straight through its carrier; now it runs on ahead, level,
   until its tail is past the carrier's nose, and pulls up there, while the carrier falls behind and the camera eases
   ahead. Its descent had a capsule's chutes, and its peak and its fast run shared one clip; each has its own now:
@@ -2285,24 +2287,24 @@ clips, the replay is meant to be watched like a short film, and the player can s
   clouds, fast streaks, a shock cone, its nose glowing; the glitch's belly gets a hot spot and it throttles back, the
   failure tears off its lower fin) and `x15-descent` (nose down through the clouds, pulling out, dropping its lower fin
   on a little chute; the glitch's nose bobs and is damped, the failure breaks up). The lower fin rides under its tail
-  from the takeoff on. Every story unconfirmed.
+  from the takeoff on.
 - **A rover at Mars (user, 2026-10-17):** Mars 2's third season replayed its second's surface work; its surface step
   there plays `mars-rover` now (season 2 keeps `mars-surface`: a `mars-2` rule after `landing-and-deployment` first, then
   one with no step before). On the lander Mars 2 lands as (Viking's, in the replay), the arm sets PrOP-M down, and it
   walks off on its skis, its tether paying out. The glitch's front bar meets a rock: it steps back, sidesteps and walks
-  round it; the failure stops at the rock and the lander falls silent. Unconfirmed.
+  round it; the failure stops at the rock and the lander falls silent.
 - **Viking's separation (user, 2026-10-17):** its `lander-deployment-and-de-orbit` borrowed Venera's release; it plays
   `viking-separation` now: the Viking orbiter (an octagonal body, four wings of panels, the dish on a boom, tanks and
   engine above) lets the lander capsule go from under it, over Mars; the capsule turns side on, fires its deorbit jets,
   falls behind and below, and turns heat shield down for its entry. The glitch's jets cut out and relight; the
   failure's never relight, and it stays in orbit. Mars 2's `lander-detachment` plays it too (user, 2026-10-17): it
-  leads into the same Mars entry, descent and landing. Unconfirmed.
+  leads into the same Mars entry, descent and landing.
 - **The Mars orbit insertion, slower (user, 2026-10-17):** it felt rushed, and the probe jumped where the approach
   handed over. Every approach (`lunar-approach.jsx`, shared by the Moon, Venus, Mars, Jupiter and Saturn) now moves
   along its path as an orbit does, slow far out and faster as it falls in, the view closing in to keep it in frame,
   and arrives at the speed the insertion starts at (it used to all but stop first). The Mars insertion runs at
   `SLOW` 1.5 (8.0 s, every moment half as long again, the probe two thirds as fast), and the Mars orbit after it goes
-  round at the same pace from where the insertion leaves it. Unconfirmed.
+  round at the same pace from where the insertion leaves it.
 - **Pioneer Venus Multiprobe (user, 2026-10-17):** its six probe steps borrowed Venera's release, entry and
   descent and a Moon landing; they play the Multiprobe now, a large and a small clip each. The releases show the
   bus, a spinning drum with the large probe on its forward end and three small ones round it:
@@ -2315,12 +2317,12 @@ clips, the replay is meant to be watched like a short film, and the player can s
   loose and the sphere falls free to the ground) and `multiprobe-small-descent` (the three keep their heat shields,
   no chute, and hit one after another; the Day probe goes on sending from the ground). None was built to land, so
   a success ends at the impact; the glitch is a spark at the temperature sensor (all four lost theirs near
-  12.5 km) and a weaker signal after, and the failure's signal stops there. Every story unconfirmed.
+  12.5 km) and a weaker signal after, and the failure's signal stops there.
 - **Earth departure (user, 2026-10-16):** it borrowed `tpi`, so the injection's burn played twice; BASPM gives the
   step to the probe alone. `earth-departure` is the probe close up after the burn, the Earth shrinking behind
   it: puffs spin it up, its boom unfolds, its dish turns home, and a tracking pulse goes out and comes back. The
   glitch's boom sticks and a jolt frees it; in the failure it stays stuck, the probe wobbles, the dish hunts
-  and the Earth's pulses get no answer. Every story unconfirmed.
+  and the Earth's pulses get no answer.
 - **No clip yet:** a step with no clip, or a variant missing, plays `no-signal.webm` on a loop (an
   antenna searching, outcome-neutral) with "No signal" in the bezel; its result shows after a
   1.5 s pause, and playback moves on at 3 s. If no video can play at all (no file, no native

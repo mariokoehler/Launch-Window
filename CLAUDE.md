@@ -147,7 +147,7 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   (2026-10-13, `assets-raw/replay/steps/`), and so does a capsule's way home (2026-10-14: reentry
   preparations, retrofire, retropack jettison or modules separation, reentry, descent to the sea or the
   ground; a crewed orbit borrows the satellite's `earth-orbit`, user), so Mercury's and Vostok's orbital
-  flights play whole. By 2026-10-14 every step has a clip, many borrowed (unconfirmed), and all 249 seasons
+  flights play whole. By 2026-10-14 every step has a clip, many borrowed, and all 249 seasons
   play whole (Venera 7's carrier entry got its own, `bus-entry`, 2026-10-15: it burns up; the landers' entries
   `venus-entry` and `mars-entry`, no longer the Earth capsule's; their descents `venus-descent` and `mars-descent`, Viking's landing `mars-landing` and surface work `mars-surface`); a clip rule can name the step before (`landing` on the Moon, a runway or a planet) or, with `earlier`, any step before it in the season (a descent at Mars). Client only: no reset, no server
   rebuild.
@@ -247,6 +247,8 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   of the generic clips that draw a craft (`build.py`'s `PROBE_CLIPS`), the pad's clips generic under the fairing; Zond 5 flies
   the 7K-L1's; the Veneras' and Mars 2's landers have their own release, entry, descent and landing too, and Venera 7's carrier its burn-up (a step's
   `"alias"` in `build.py` alone now draws, without a skin). Client only.
+  **The overhaul pass is done and confirmed** (user, 2026-10-21): no step draws a generic craft, the rockets, the probes' pad
+  clips and Mars 2's entry aside; every clip and the decisions behind it stand as built (`ui-spec.md` §4.7.3).
 
 - **Publishing findings is built** (the user's idea, 2026-10-21, `design.md` §2.13, `ui-spec.md` §4.20 and G16,
   straight in libGDX): science goals in each pack's hashed `findings.json` add `Findings.BONUS_POINTS` to the
