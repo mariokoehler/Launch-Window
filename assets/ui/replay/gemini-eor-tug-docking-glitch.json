@@ -3,6 +3,14 @@
  "revealAt": 3.4,
  "cues": [
   {
+   "at": 0.4,
+   "sound": "rcs-puff"
+  },
+  {
+   "at": 2.4,
+   "sound": "rcs-puff"
+  },
+  {
    "at": 3.45,
    "sound": "radio-latches"
   }

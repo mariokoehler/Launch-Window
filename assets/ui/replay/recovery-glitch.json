@@ -1,4 +1,11 @@
 {
  "duration": 6.4,
- "revealAt": 3.0
+ "revealAt": 3.0,
+ "cues": [
+  {
+   "at": 0.0,
+   "sound": "helicopter",
+   "loop": true
+  }
+ ]
 }

@@ -1,4 +1,25 @@
 {
  "duration": 6.4,
- "revealAt": 3.5
+ "revealAt": 3.5,
+ "cues": [
+  {
+   "at": 0.6,
+   "sound": "fueling",
+   "loop": true,
+   "until": 2.6,
+   "fade": 0.4
+  },
+  {
+   "at": 3.6,
+   "sound": "fueling",
+   "loop": true,
+   "until": 5.2,
+   "fade": 0.4
+  },
+  {
+   "at": 5.2,
+   "sound": "vent",
+   "loop": true
+  }
+ ]
 }

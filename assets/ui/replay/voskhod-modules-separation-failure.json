@@ -5,6 +5,11 @@
   {
    "at": 3.85,
    "sound": "radio-separation-failed"
+  },
+  {
+   "at": 4.5,
+   "sound": "reentry-plasma",
+   "loop": true
   }
  ]
 }

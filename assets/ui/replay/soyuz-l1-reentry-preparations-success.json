@@ -3,6 +3,10 @@
  "revealAt": 3.0,
  "cues": [
   {
+   "at": 0.8,
+   "sound": "rcs-puff"
+  },
+  {
    "at": 3.05,
    "sound": "radio-roger"
   }

@@ -3,6 +3,14 @@
  "revealAt": 4.2,
  "cues": [
   {
+   "at": 0.3,
+   "sound": "rcs-puff"
+  },
+  {
+   "at": 1.6,
+   "sound": "rcs-puff"
+  },
+  {
    "at": 2.2,
    "sound": "rocket-roar",
    "volume": 0.35,

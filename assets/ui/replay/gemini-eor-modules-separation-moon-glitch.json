@@ -3,8 +3,20 @@
  "revealAt": 3.6,
  "cues": [
   {
+   "at": 0.8,
+   "sound": "rcs-puff"
+  },
+  {
+   "at": 3.0,
+   "sound": "rcs-puff"
+  },
+  {
    "at": 3.65,
    "sound": "radio-attitude-drift"
+  },
+  {
+   "at": 3.7,
+   "sound": "rcs-puff"
   }
  ]
 }

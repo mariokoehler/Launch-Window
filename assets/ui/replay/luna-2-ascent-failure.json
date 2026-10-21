@@ -23,6 +23,10 @@
    "fade": 0.1
   },
   {
+   "at": 3.4,
+   "sound": "explosion"
+  },
+  {
    "at": 3.45,
    "sound": "radio-breakup"
   }

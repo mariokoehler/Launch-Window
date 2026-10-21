@@ -3,6 +3,11 @@
  "revealAt": 1.8,
  "cues": [
   {
+   "at": 2.433,
+   "sound": "helicopter",
+   "loop": true
+  },
+  {
    "at": 2.75,
    "sound": "radio-hard-landing"
   }

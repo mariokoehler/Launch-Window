@@ -1,4 +1,13 @@
 {
  "duration": 6.4,
- "revealAt": 4.0
+ "revealAt": 4.0,
+ "cues": [
+  {
+   "at": 0.8,
+   "sound": "reentry-plasma",
+   "loop": true,
+   "until": 4.467,
+   "fade": 0.6
+  }
+ ]
 }

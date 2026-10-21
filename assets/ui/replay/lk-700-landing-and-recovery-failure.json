@@ -5,6 +5,11 @@
   {
    "at": 1.85,
    "sound": "radio-recovery-no-contact"
+  },
+  {
+   "at": 2.433,
+   "sound": "helicopter",
+   "loop": true
   }
  ]
 }

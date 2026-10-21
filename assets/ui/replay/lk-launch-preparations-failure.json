@@ -1,4 +1,17 @@
 {
  "duration": 7.0,
- "revealAt": 3.1
+ "revealAt": 3.1,
+ "cues": [
+  {
+   "at": 0.6,
+   "sound": "fueling",
+   "loop": true,
+   "until": 2.6,
+   "fade": 0.4
+  },
+  {
+   "at": 4.333,
+   "sound": "explosion"
+  }
+ ]
 }

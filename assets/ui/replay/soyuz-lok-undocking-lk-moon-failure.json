@@ -3,6 +3,14 @@
  "revealAt": 2.8,
  "cues": [
   {
+   "at": 0.9,
+   "sound": "rcs-puff"
+  },
+  {
+   "at": 2.333,
+   "sound": "rcs-puff"
+  },
+  {
    "at": 2.85,
    "sound": "radio-tumbling"
   }

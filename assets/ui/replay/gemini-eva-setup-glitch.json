@@ -1,4 +1,10 @@
 {
  "duration": 5.4,
- "revealAt": 3.6
+ "revealAt": 3.6,
+ "cues": [
+  {
+   "at": 0.3,
+   "sound": "hatch-open"
+  }
+ ]
 }

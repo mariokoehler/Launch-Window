@@ -3,6 +3,11 @@
  "revealAt": 2.9,
  "cues": [
   {
+   "at": 0.433,
+   "sound": "reentry-plasma",
+   "loop": true
+  },
+  {
    "at": 2.95,
    "sound": "radio-problem"
   }

@@ -160,7 +160,8 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   silent), cues in the clips' sidecars (kept in `assets-raw/replay/cues.json`, written by its `cues.py`;
   the first, a rocket roar under the burns, 2026-10-14; radio calls on the early steps, the user's
   VibeVoice takes, one voice at a time, 2026-10-14; on most steps' glitches and failures, Claude's takes
-  from the user's workflow, 2026-10-15), the console's own sounds, room tone, a fanfare at the season
+  from the user's workflow, 2026-10-15; the user's effects, 2026-10-21, timed off the clips' built projects by
+  `effects.py`), the console's own sounds, room tone, a fanfare at the season
   summary (success or failure; no background music, user), music and effects volumes in Settings. All
   English (user). Every sound is real (Pixabay, NASA, Stable Audio 3, credited); a new one plays a
   synthesized `placeholder-*` take until it has its own (`assets-raw/replay/sounds/make_placeholder_sounds.py`).
@@ -343,6 +344,9 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
     `output/lw_callout/review/` for the user's ear). Run the check only with ComfyUI idle: VibeVoice-Large
     and Whisper don't fit on the GPU together, and the clash hung ComfyUI once. Kept takes are renamed
     into `chatter/`, then `make_radio_sounds.py` and `assets-raw/replay/cues.py`.
+  - **Clip effects** (2026-10-21): the user's Pixabay finds in `assets-raw/audio/` go in through
+    `assets-raw/replay/sounds/make_effect_sounds.py`; `assets-raw/replay/effects.py` cues them where their layers
+    show in the built projects (main PC only; rerun it after publishing a clip whose timeline changed).
   - **Sound effects:** Stable Audio 3 (the user's `Sound_Effects.json`) was tried for the replay's sounds on
     2026-10-15 and almost nothing was usable: the user curates clips (Pixabay) for a few moments instead.
 - **Photocraft** (an open-source Photoshop, as the `photocraft` MCP server): reads and writes only

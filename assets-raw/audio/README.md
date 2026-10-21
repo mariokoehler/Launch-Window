@@ -42,3 +42,21 @@ Tried on 2026-10-15 with the user's Stable Audio 3 workflow (`Sound_Effects.json
 the replay's audio plan, four seeds each. Almost none were usable (the user's verdict), so the takes and the
 script were deleted (it's in git, b0680d2). The user picks curated clips (Pixabay) for a few impactful moments
 instead of a sound under every action.
+
+## Sound effects for the clips (2026-10-21)
+
+The user's Pixabay finds, each with a `.txt` beside it naming its page and uploader (credited in
+`assets/CREDITS.md`). A name ending in `_loop` loops seamlessly. The user's notes on where each goes:
+
+- `short_puff.ogg`: an RCS thruster's puff (`rcs-puff`).
+- `puff_followed_by_hiss.ogg`: a hatch opening on a spacewalk (`hatch-open`).
+- `pump_loop.ogg`: under the rocket on the pad while it's loaded with propellant (`fueling`).
+- `hissing_venting_loop.ogg`: after the propellant is loaded, the rocket waiting for the countdown and the
+  launch (`vent`).
+- `reentry_air_rush_loop.ogg`: the reentry clips, once the plasma shows (`reentry-plasma`).
+- `water_splash.ogg`: a capsule touching down in the water (`splash`).
+- `helicopter_loop.ogg`: the recovery clips with a helicopter (`helicopter`).
+- `explosion.ogg`: whenever something explodes (`explosion`).
+
+`assets-raw/replay/sounds/make_effect_sounds.py` publishes them (level raised, as OGG) into the replay's
+catalog, and `assets-raw/replay/effects.py` times their cues off the clips' built projects.

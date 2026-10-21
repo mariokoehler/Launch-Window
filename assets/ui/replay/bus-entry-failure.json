@@ -3,8 +3,19 @@
  "revealAt": 2.85,
  "cues": [
   {
+   "at": 1.367,
+   "sound": "reentry-plasma",
+   "loop": true,
+   "until": 4.433,
+   "fade": 0.6
+  },
+  {
    "at": 2.9,
    "sound": "radio-data-lost"
+  },
+  {
+   "at": 3.933,
+   "sound": "explosion"
   }
  ]
 }

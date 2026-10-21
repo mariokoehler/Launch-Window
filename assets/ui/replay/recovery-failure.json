@@ -3,6 +3,11 @@
  "revealAt": 3.4,
  "cues": [
   {
+   "at": 0.0,
+   "sound": "helicopter",
+   "loop": true
+  },
+  {
    "at": 3.45,
    "sound": "radio-capsule-sinking"
   }

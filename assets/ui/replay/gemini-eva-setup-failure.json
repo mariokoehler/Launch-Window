@@ -3,6 +3,10 @@
  "revealAt": 3.8,
  "cues": [
   {
+   "at": 0.3,
+   "sound": "hatch-open"
+  },
+  {
    "at": 3.85,
    "sound": "radio-crew-back-in"
   }

@@ -3,8 +3,20 @@
  "revealAt": 4.7,
  "cues": [
   {
+   "at": 0.0,
+   "sound": "vent",
+   "loop": true,
+   "carry": true,
+   "until": 4.367,
+   "fade": 0.3
+  },
+  {
    "at": 0.1,
    "sound": "radio-guidance-internal"
+  },
+  {
+   "at": 4.633,
+   "sound": "explosion"
   },
   {
    "at": 4.75,

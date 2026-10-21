@@ -47,6 +47,30 @@ cut from the variable fonts), for the Firsts' front pages, under the SIL Open Fo
 - `audio/replay/rocket-roar.ogg`: "Rocket Launch SFX" by JCI21, Pixabay,
   https://pixabay.com/sound-effects/film-special-effects-rocket-launch-sfx-253937/. Pixabay Content
   License, https://pixabay.com/service/license-summary/. Level raised 10 dB.
+- `audio/replay/rcs-puff.ogg`: "Inhaler Puff" by freesound_community, Pixabay,
+  https://pixabay.com/sound-effects/household-inhaler-puff-37313/. Pixabay Content License,
+  https://pixabay.com/service/license-summary/. Level raised 2 dB.
+- `audio/replay/hatch-open.ogg`: "Inhaler Puff 170427_1464" by freesound_community, Pixabay,
+  https://pixabay.com/sound-effects/film-special-effects-inhaler-puff-170427-1464-101773/. Pixabay
+  Content License, https://pixabay.com/service/license-summary/. Level raised 5.5 dB.
+- `audio/replay/fueling.ogg`: "Sample Pump Sound" by samplefile_download, Pixabay,
+  https://pixabay.com/sound-effects/technology-sample-pump-sound-251173/. Pixabay Content License,
+  https://pixabay.com/service/license-summary/. Level raised 7 dB.
+- `audio/replay/vent.ogg`: "Air Hiss Tubes Loop" by freesound_community, Pixabay,
+  https://pixabay.com/sound-effects/film-special-effects-air-hiss-tubes-loop-96446/. Pixabay Content
+  License, https://pixabay.com/service/license-summary/. Level raised 10 dB.
+- `audio/replay/reentry-plasma.ogg`: "Air Rush Longer" by freesound_community, Pixabay,
+  https://pixabay.com/sound-effects/film-special-effects-air-rush-longer-106990/. Pixabay Content
+  License, https://pixabay.com/service/license-summary/. Level raised 2 dB.
+- `audio/replay/splash.ogg`: "Water Splash" by Universfield, Pixabay,
+  https://pixabay.com/sound-effects/film-special-effects-water-splash-199583/. Pixabay Content License,
+  https://pixabay.com/service/license-summary/. Level raised 7 dB.
+- `audio/replay/helicopter.ogg`: "Helicopter Hovering (Distant)" by freesound_community, Pixabay,
+  https://pixabay.com/sound-effects/film-special-effects-helicopter-hovering-distant-23791/. Pixabay
+  Content License, https://pixabay.com/service/license-summary/. Level raised 4 dB.
+- `audio/replay/explosion.ogg`: "My First Recorded Explosion" by freesound_community, Pixabay,
+  https://pixabay.com/sound-effects/film-special-effects-my-first-recorded-explosion-103816/. Pixabay
+  Content License, https://pixabay.com/service/license-summary/.
 - `audio/replay/fanfare-success.mp3`, `audio/replay/fanfare-failure.mp3`: made for Launch Window by its
   author with Stable Audio 3 (Stability AI; the ComfyUI repackaging,
   https://huggingface.co/Comfy-Org/stable-audio-3/). The model is under the Stability AI Community

@@ -7,6 +7,17 @@
    "sound": "radio-blackout"
   },
   {
+   "at": 0.833,
+   "sound": "reentry-plasma",
+   "loop": true,
+   "until": 3.4,
+   "fade": 0.6
+  },
+  {
+   "at": 3.433,
+   "sound": "explosion"
+  },
+  {
    "at": 4.0,
    "sound": "radio-no-acquisition"
   }

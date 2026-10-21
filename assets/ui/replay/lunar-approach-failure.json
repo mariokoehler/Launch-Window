@@ -3,6 +3,11 @@
  "revealAt": 3.4,
  "cues": [
   {
+   "at": 3.033,
+   "sound": "rcs-puff",
+   "volume": 0.25
+  },
+  {
    "at": 3.45,
    "sound": "radio-off-trajectory"
   }

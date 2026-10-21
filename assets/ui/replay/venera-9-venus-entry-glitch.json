@@ -3,6 +3,13 @@
  "revealAt": 4.4,
  "cues": [
   {
+   "at": 0.8,
+   "sound": "reentry-plasma",
+   "loop": true,
+   "until": 4.467,
+   "fade": 0.6
+  },
+  {
    "at": 4.45,
    "sound": "radio-oscillations"
   }

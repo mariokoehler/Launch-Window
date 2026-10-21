@@ -1,4 +1,14 @@
 {
  "duration": 6.0,
- "revealAt": 2.2
+ "revealAt": 2.2,
+ "cues": [
+  {
+   "at": 1.2,
+   "sound": "rcs-puff"
+  },
+  {
+   "at": 3.8,
+   "sound": "rcs-puff"
+  }
+ ]
 }

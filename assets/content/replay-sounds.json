@@ -64,6 +64,86 @@
       "description": "Clips. A rocket engine's roar at full thrust, steady in level and pitch, a seamless loop (16 s). Plays while an engine burns on screen: the launch from ignition, the ascent's first and upper stages (the upper one quieter, further off), the retro motors. It carries on from the launch into the ascent without a break. OGG, for a seamless loop."
     },
     {
+      "id": "rcs-puff",
+      "kind": "EFFECT",
+      "volume": 0.45,
+      "files": [
+        "audio/replay/rcs-puff.ogg"
+      ],
+      "credit": true,
+      "description": "Clips. An attitude thruster's puff: a short, dry pneumatic hiss (0.5 s). Plays as each jet fires on screen: a capsule turning or braking, a craft backing away, a docking's push, a probe's separation jets and springs, a course correction's puff on the map, the rocket plane's reaction jets; again and again while a jet is stuck open."
+    },
+    {
+      "id": "hatch-open",
+      "kind": "EFFECT",
+      "volume": 0.5,
+      "files": [
+        "audio/replay/hatch-open.ogg"
+      ],
+      "credit": true,
+      "description": "Clips. A hatch coming open: a puff and the hiss of the air going (1.6 s). Plays as a spacewalk's or a crew transfer's hatch swings open, and as Voskhod's airlock vents."
+    },
+    {
+      "id": "fueling",
+      "kind": "LOOP",
+      "volume": 0.35,
+      "files": [
+        "audio/replay/fueling.ogg"
+      ],
+      "credit": true,
+      "description": "Clips. Propellant pumping up the tower: a pump's steady throb, a seamless loop (9.8 s). Plays under the launch preparations while the tanks fill, and stops as they're topped off (or as the pad blows). OGG, for a seamless loop."
+    },
+    {
+      "id": "vent",
+      "kind": "LOOP",
+      "volume": 0.3,
+      "files": [
+        "audio/replay/vent.ogg"
+      ],
+      "credit": true,
+      "description": "Clips. The oxidizer boiling off: a soft, steady hiss, a seamless loop (3.5 s). Plays from the moment the tanks are topped off, on through the countdown, until the engines light at the launch. OGG, for a seamless loop."
+    },
+    {
+      "id": "reentry-plasma",
+      "kind": "LOOP",
+      "volume": 0.55,
+      "files": [
+        "audio/replay/reentry-plasma.ogg"
+      ],
+      "credit": true,
+      "description": "Clips. Reentry: a rushing roar of air, a seamless loop (10.3 s). Plays while the heat's glow shows round a capsule, a probe or a carrier coming into an atmosphere, and while the rocket plane's skin glows on its fast run. OGG, for a seamless loop."
+    },
+    {
+      "id": "splash",
+      "kind": "EFFECT",
+      "volume": 0.7,
+      "files": [
+        "audio/replay/splash.ogg"
+      ],
+      "credit": true,
+      "description": "Clips. A capsule hitting the sea: a heavy splash (3 s). Plays as the splash shows at splashdown, hard or soft."
+    },
+    {
+      "id": "helicopter",
+      "kind": "LOOP",
+      "volume": 0.4,
+      "files": [
+        "audio/replay/helicopter.ogg"
+      ],
+      "credit": true,
+      "description": "Clips. A recovery helicopter hovering some way off: rotor thump and turbine, a seamless loop (35 s). Plays while the helicopter flies in over the recovery. OGG, for a seamless loop."
+    },
+    {
+      "id": "explosion",
+      "kind": "EFFECT",
+      "volume": 0.8,
+      "files": [
+        "audio/replay/explosion.ogg"
+      ],
+      "credit": true,
+      "description": "Clips. A blast and its rumble (5 s). Plays wherever something blows up on screen: a rocket on the pad or in flight, a stage, a craft breaking up in reentry, a carrier burning up, a lander or a probe hitting the ground."
+    },
+    {
       "id": "fanfare-success",
       "kind": "MUSIC",
       "volume": 0.8,

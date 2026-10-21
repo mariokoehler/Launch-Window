@@ -3,6 +3,17 @@
  "revealAt": 3.2,
  "cues": [
   {
+   "at": 1.167,
+   "sound": "reentry-plasma",
+   "loop": true,
+   "until": 3.2,
+   "fade": 0.6
+  },
+  {
+   "at": 3.2,
+   "sound": "explosion"
+  },
+  {
    "at": 3.25,
    "sound": "radio-lander-lost"
   }

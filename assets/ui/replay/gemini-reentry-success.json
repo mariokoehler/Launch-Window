@@ -5,6 +5,13 @@
   {
    "at": 0.4,
    "sound": "radio-blackout"
+  },
+  {
+   "at": 0.833,
+   "sound": "reentry-plasma",
+   "loop": true,
+   "until": 4.467,
+   "fade": 0.6
   }
  ]
 }

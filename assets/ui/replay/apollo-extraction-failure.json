@@ -3,6 +3,14 @@
  "revealAt": 2.6,
  "cues": [
   {
+   "at": 0.7,
+   "sound": "rcs-puff"
+  },
+  {
+   "at": 1.933,
+   "sound": "rcs-puff"
+  },
+  {
    "at": 2.65,
    "sound": "radio-separation-failed"
   }

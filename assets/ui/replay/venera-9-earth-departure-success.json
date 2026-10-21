@@ -3,6 +3,10 @@
  "revealAt": 2.2,
  "cues": [
   {
+   "at": 0.633,
+   "sound": "rcs-puff"
+  },
+  {
    "at": 4.35,
    "sound": "radio-signal-good"
   }

@@ -2415,7 +2415,18 @@ sound placements keep their own flags.
     `cues.py` beside it, which the clip builders run on publish. The first is `rocket-roar`
     (2026-10-14, the user's find): under the launch from ignition, the ascent's two stages (carried on
     from the launch, the upper stage quieter) and the retrofire, each cut with its engine in a failure.
-    **Unconfirmed:** its volumes and fades.
+    **Unconfirmed:** its volumes and fades. **Effects** (2026-10-21, the user's finds and where they go,
+    `assets-raw/replay/sounds/make_effect_sounds.py`): `rcs-puff` as each thruster puffs (a few while a
+    jet is stuck open; quieter for a course correction's puff on the map), `hatch-open` as a spacewalk's
+    or a transfer's hatch swings open and as Voskhod's airlock vents, `fueling` while the tanks fill,
+    `vent` from the tanks topped off through the countdown to the launch's ignition, `reentry-plasma`
+    while an entry's glow shows (and the rocket plane's fast run), `splash` at splashdown, `helicopter`
+    from just before it flies into the recovery, `explosion` at every blast (quieter on the map). Their
+    times are read off the clips' built projects by `assets-raw/replay/effects.py`, rerun after a clip
+    is published with a changed timeline; it skips a clip whose project is newer than its render. Before
+    the reveal an effect only some variants have waits for the reveal if it's within 0.35 s of it, and is
+    left out if not. **Unconfirmed:** their volumes, and the 17 steps skipped as stale (their clips get
+    no effects until they're published again).
   - **The pool:** `assets/content/replay-sounds.json` (outside the pack, like the clips), each sound an
     id, a kind (effect, loop, radio, music for the fanfares, room), a volume, its takes (several, dealt with no repeats; takes of one line count as one, so two calls in a row never say
     the same words, and a line's takes take turns: `lines` in the catalog, 2026-10-21) and a description that is the brief for making it. A sound with no takes yet plays nothing.

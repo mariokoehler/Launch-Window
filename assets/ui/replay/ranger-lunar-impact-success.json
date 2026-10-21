@@ -1,4 +1,11 @@
 {
  "duration": 6.0,
- "revealAt": 2.2
+ "revealAt": 2.2,
+ "cues": [
+  {
+   "at": 4.033,
+   "sound": "explosion",
+   "volume": 0.5
+  }
+ ]
 }

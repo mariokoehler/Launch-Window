@@ -5,6 +5,10 @@
   {
    "at": 2.65,
    "sound": "radio-main-chute-failed"
+  },
+  {
+   "at": 3.633,
+   "sound": "splash"
   }
  ]
 }

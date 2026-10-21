@@ -1,4 +1,26 @@
 {
  "duration": 6.4,
- "revealAt": 4.6
+ "revealAt": 4.6,
+ "cues": [
+  {
+   "at": 0.3,
+   "sound": "rcs-puff"
+  },
+  {
+   "at": 1.2,
+   "sound": "rcs-puff"
+  },
+  {
+   "at": 2.2,
+   "sound": "rcs-puff"
+  },
+  {
+   "at": 3.2,
+   "sound": "rcs-puff"
+  },
+  {
+   "at": 4.0,
+   "sound": "rcs-puff"
+  }
+ ]
 }

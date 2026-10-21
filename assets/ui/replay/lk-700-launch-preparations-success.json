@@ -3,8 +3,20 @@
  "revealAt": 2.6,
  "cues": [
   {
+   "at": 0.6,
+   "sound": "fueling",
+   "loop": true,
+   "until": 4.8,
+   "fade": 0.4
+  },
+  {
    "at": 2.65,
    "sound": "radio-go-for-launch"
+  },
+  {
+   "at": 4.8,
+   "sound": "vent",
+   "loop": true
   }
  ]
 }

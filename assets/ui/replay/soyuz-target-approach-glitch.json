@@ -3,6 +3,14 @@
  "revealAt": 2.6,
  "cues": [
   {
+   "at": 0.2,
+   "sound": "rcs-puff"
+  },
+  {
+   "at": 2.4,
+   "sound": "rcs-puff"
+  },
+  {
    "at": 2.65,
    "sound": "radio-closing-fast"
   }

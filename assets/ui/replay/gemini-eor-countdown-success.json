@@ -3,6 +3,12 @@
  "revealAt": 4.8,
  "cues": [
   {
+   "at": 0.0,
+   "sound": "vent",
+   "loop": true,
+   "carry": true
+  },
+  {
    "at": 0.1,
    "sound": "radio-guidance-internal"
   }

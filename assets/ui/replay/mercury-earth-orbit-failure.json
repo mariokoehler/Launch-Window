@@ -5,6 +5,11 @@
   {
    "at": 3.05,
    "sound": "radio-data-lost"
+  },
+  {
+   "at": 4.433,
+   "sound": "explosion",
+   "volume": 0.5
   }
  ]
 }
