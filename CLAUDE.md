@@ -407,7 +407,7 @@ mvn -pl dev-tools compile exec:exec@replayer        # any mission's replay, any 
   (`-Dexec.args=standard` for the full pack, which plays the Moon race; add `ahead` for the bot that
   works ahead, `side` for the one that also flies side missions, or `smart` for the best player, whose parts switch with `-Dbot.*` properties (`Bot.SMART`'s Javadoc), `-Dexec.args="standard side"`)
   (`-Dexec.args="standard side decisions"` plays with the R&D decisions and reports how often they come)
-  (`RaceShock` plays NASA against the Soviets in one game, the answer to rivals' Firsts off and on, `-Drace.shares=0,0.5`; both it and `ContentPackPlayouts` take `-Drules.raiseShare=0` to turn off raises between reviews)
+  (`RaceShock` plays NASA against the Soviets in one game, the answer to rivals' Firsts off and on, `-Drace.shares=0,0.5`, or publishing findings never and always, `-Drace.publish=never,always`; both it and `ContentPackPlayouts` take `-Drules.raiseShare=0` to turn off raises between reviews and `-Drules.findingBonus=0` to turn off the findings' bonus)
   (also `PersonnelLifecyclePlayouts`, `CareerCurves`, `StateSizes` (it takes the pack too), `IntelligencePlayouts`, `RaceLulls` (the Moon race's lulls with R&D tuned; `-Dexec.args="standard ahead+contracts 1.0 0.0"` plays with contracts against three simulated rivals); `design.md` §3.10).
 - **Releasing** (ported from Robot-Rampage 2026-10-06; its and StarWars' CLAUDE.md hold the
   gotchas):

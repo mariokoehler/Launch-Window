@@ -7,6 +7,9 @@ import de.mkoehler.launchwindow.rules.BudgetProgress;
 import de.mkoehler.launchwindow.rules.GoalSettled;
 import de.mkoehler.launchwindow.rules.GoalTally;
 import de.mkoehler.launchwindow.rules.ResolutionEvent;
+import de.mkoehler.launchwindow.rules.FindingPublications;
+import de.mkoehler.launchwindow.rules.FindingPublished;
+import de.mkoehler.launchwindow.rules.Findings;
 import de.mkoehler.launchwindow.rules.RivalFirsts;
 import de.mkoehler.launchwindow.rules.RivalFirstsAnswered;
 
@@ -15,6 +18,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
@@ -28,7 +32,9 @@ import java.util.Set;
  * <p>Reports each side's Moon landing, who lands first, the margin between the two landings, and how
  * often the side behind after the review of season 32 (the lower funding rate) still lands first: the
  * snowball's grip. Run with {@code -Dexec.args="standard"} ({@code decisions} as a second argument plays
- * with the R&amp;D decisions); {@code -Dbot.seed} picks the seed.</p>
+ * with the R&amp;D decisions); {@code -Dbot.seed} picks the seed. {@code -Drace.publish=never,always} plays
+ * agencies that never publish their findings against agencies that publish each one at once ({@code design.md}
+ * &sect;2.13).</p>
  *
  * @author Mario Koehler
  */
@@ -42,7 +48,7 @@ public final class RaceShock {
 
     /** One race's outcome. */
     private record Race(int nasa, int soviet, long nasaRate32, long sovietRate32, long[] behindRates,
-                        long[] aheadRates, long nasaCredit, long sovietCredit) {
+                        long[] aheadRates, long nasaCredit, long sovietCredit, int published, long publishedPrestige) {
 
         int behindLands() {
             return nasaRate32 < sovietRate32 ? nasa : soviet;
@@ -76,16 +82,26 @@ public final class RaceShock {
                 Path.of("assets", "content", de.mkoehler.launchwindow.content.Decisions.FILE)));
         }
         long seed = Long.getLong("bot.seed", 42L);
+        // -Drace.publish=never,always compares agencies that never publish their findings with agencies that
+        // publish each one the season after they earn it (design.md 2.13), at the rule's default share.
+        String publish = System.getProperty("race.publish");
+        if (publish != null) {
+            for (String mode : publish.split(",")) {
+                List<Race> races = play(catalog, seed, mode.equals("always"));
+                report("publishing " + mode, races);
+            }
+            return;
+        }
         String shares = System.getProperty("race.shares", "0," + RivalFirsts.SHARE);
         for (String share : shares.split(",")) {
             RivalFirsts.setShare(Double.parseDouble(share));
-            List<Race> races = play(catalog, seed);
-            report(share, races);
+            List<Race> races = play(catalog, seed, false);
+            report("share " + share, races);
         }
         RivalFirsts.setShare(RivalFirsts.SHARE);
     }
 
-    private static List<Race> play(ContentCatalog catalog, long seed) {
+    private static List<Race> play(ContentCatalog catalog, long seed, boolean publish) {
         ContentPackPlayouts nasaHarness = new ContentPackPlayouts(catalog, ContentPackPlayouts.Bot.SMART);
         ContentPackPlayouts sovietHarness = new ContentPackPlayouts(catalog, ContentPackPlayouts.Bot.SMART);
         List<Race> races = new ArrayList<>();
@@ -101,17 +117,33 @@ public final class RaceShock {
             long[] nasaRates = new long[3];
             long[] sovietRates = new long[3];
             long[] credits = new long[2];
+            int published = 0;
+            long publishedPrestige = 0;
             for (int season = 0; season < SEASONS; season++) {
                 List<ResolutionEvent> all = new ArrayList<>();
                 ContentPackPlayouts.Game[] sides = {nasa, soviet};
+                // Last season's asks, settled before this season's flights, as the server settles them.
+                FindingPublications.Settlement publications = FindingPublications.settle(
+                    Map.of("0", nasa.snapshot, "1", soviet.snapshot), catalog);
                 for (int side = 0; side < 2; side++) {
                     if (sides[side].completedSeason > 0) {
                         continue;
                     }
-                    List<ResolutionEvent> events = sides[side].season(season, tally, firsts);
+                    List<ResolutionEvent> events = sides[side].season(season, tally, firsts,
+                        publications.turnFor(String.valueOf(side)));
                     for (ResolutionEvent event : events) {
                         if (event instanceof RivalFirstsAnswered answered) {
                             credits[side] += answered.credit();
+                        }
+                        if (event instanceof FindingPublished paid) {
+                            published++;
+                            publishedPrestige += paid.prestige();
+                        }
+                    }
+                    if (publish) {
+                        // Every finding held and still classified, asked for at once.
+                        for (de.mkoehler.launchwindow.content.Finding finding : catalog.findings()) {
+                            Findings.publish(sides[side].snapshot, finding.goalId(), true, catalog);
                         }
                     }
                     all.addAll(events);
@@ -142,13 +174,14 @@ public final class RaceShock {
             int sovietLands = soviet.completedSeason > 0 ? soviet.completedSeason : SEASONS + 1;
             boolean nasaBehind = nasaRate32 < sovietRate32;
             races.add(new Race(nasaLands, sovietLands, nasaRate32, sovietRate32,
-                nasaBehind ? nasaRates : sovietRates, nasaBehind ? sovietRates : nasaRates, credits[0], credits[1]));
+                nasaBehind ? nasaRates : sovietRates, nasaBehind ? sovietRates : nasaRates, credits[0], credits[1],
+                published, publishedPrestige));
         }
         return races;
     }
 
-    private static void report(String share, List<Race> races) {
-        System.out.printf(Locale.ROOT, "%n== Share %s: %d races, NASA against the Soviets ==%n", share, races.size());
+    private static void report(String label, List<Race> races) {
+        System.out.printf(Locale.ROOT, "%n== %s: %d races, NASA against the Soviets ==%n", label, races.size());
         System.out.println("NASA lands:   " + quartiles(races.stream().map(Race::nasa).toList()));
         System.out.println("Soviet lands: " + quartiles(races.stream().map(Race::soviet).toList()));
         System.out.println("First landing: " + quartiles(races.stream().map(race -> Math.min(race.nasa(), race.soviet()))
@@ -172,6 +205,9 @@ public final class RaceShock {
         System.out.printf(Locale.ROOT, "Credit for rivals' Firsts per game: NASA %,.0f, Soviets %,.0f prestige%n",
             races.stream().mapToLong(Race::nasaCredit).average().orElse(0),
             races.stream().mapToLong(Race::sovietCredit).average().orElse(0));
+        System.out.printf(Locale.ROOT, "Findings published per game %.2f, paying %,.0f prestige%n",
+            races.stream().mapToInt(Race::published).average().orElse(0),
+            races.stream().mapToLong(Race::publishedPrestige).average().orElse(0));
         List<Integer> slowest = races.stream().map(race -> Math.max(race.nasa(), race.soviet())).sorted().toList();
         System.out.printf(Locale.ROOT, "Second landing, average %.1f; slowest quarter's average %.1f%n",
             slowest.stream().mapToInt(Integer::intValue).average().orElse(0),

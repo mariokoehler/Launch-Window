@@ -551,6 +551,21 @@ public final class ContentPackPlayouts {
          * @return the season's events
          */
         List<ResolutionEvent> season(int season, GoalTally goalTally, List<String> rivalFirsts) {
+            return season(season, goalTally, rivalFirsts, List.of());
+        }
+
+        /**
+         * Plays one season with this agency's part of the season's publications of findings
+         * ({@code design.md} &sect;2.13), settled by the caller from every agency's asks.
+         *
+         * @param season      the season, from 0; it's also the game turn
+         * @param goalTally   the game-wide goal counts; the caller commits the season's events to it
+         * @param rivalFirsts the goals other agencies settled first last season
+         * @param findings    this agency's part of the season's publications
+         * @return the season's events
+         */
+        List<ResolutionEvent> season(int season, GoalTally goalTally, List<String> rivalFirsts,
+                List<de.mkoehler.launchwindow.rules.FindingPublications.News> findings) {
             // Journaled player actions first.
             tally.launchedThisSeason = 0;
             seasonNow = season;
@@ -574,7 +589,7 @@ public final class ContentPackPlayouts {
             }
             // One player per game, so the game turn and the player's own seasons coincide here.
             SeasonResolver.Context context = new SeasonResolver.Context(catalog, schedule, roster, goalTally, season,
-                season + 1, List.of(), contracts, rivalFirsts);
+                season + 1, List.of(), contracts, rivalFirsts, findings);
             BudgetWatch watch = new BudgetWatch();
             List<ResolutionEvent> seasonEvents = SeasonResolver.advanceSeason(snapshot, context, random, watch);
             checkState(snapshot);

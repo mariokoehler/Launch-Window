@@ -2443,8 +2443,12 @@ Geophysical Year. No secrecy bonus for either archetype (as in §2.9).
     The smart bot's route earns only two findings, `magnetic-field-study` (Explorer 1, NASA only) and
     `lunar-soil-study` (the lunar impacts), so few of its steps get the bonus; a player who flies the
     science flights in the lulls gets more. Side flights and the lulls (`RaceLulls`) are still to measure.
-  - **Not done yet:** the bots never publish, so `RaceShock` with publishing always against never needs a
-    publishing bot first.
+  - **Publishing measured (2026-10-21):** `RaceShock standard -Drace.publish=never,always`, 200 races of
+    NASA against the Soviets (both smart bots; "always" asks to publish every classified finding at once,
+    settled before the next season's flights as on the server). About 2 publications a game, paying 255
+    prestige in all. First landing 78.3 against 77.9 seasons on average; the side behind on funding after
+    season 32 still lands first 76 times against 64; the slowest quarter's second landing 108.3 against
+    113.7. A mild pull toward a closer race, part of it perhaps noise; the bots earn few findings.
 
 ## 3. Architecture
 
@@ -3641,8 +3645,8 @@ G16): science goals as findings that add 4 points to the base chance of the step
 the standard pack, mapped for review), published from the turn report, a finding's archive page or the
 Museum, paying up to 33 % of the goal's first-time prestige by the share of rivals helped (user). Settled
 once a turn (`publications/turn-N.json`). No effect beyond noise on the smart bot's race. Next: the user's
-review of the mapping, the 13 missing finding pages and their pictures, then a publishing bot for
-`RaceShock`. Reset the dev data root and rebuild client and server together.
+review of the mapping and the 13 missing finding pages and their pictures. Publishing measured with
+`RaceShock -Drace.publish=never,always`. Reset the dev data root and rebuild client and server together.
 
 **The world reacts** (the user's idea, 2026-10-20; **planned, not built**, the plan in
 `ideas/world-reacts.md`): when a First's front page is printed, every rival may give a press statement
