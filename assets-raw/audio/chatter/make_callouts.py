@@ -88,13 +88,19 @@ def main():
     for i, (text, seed, name) in enumerate(jobs):
         pending[name] = post("/prompt", {"prompt": workflow(text, seed, name, i == len(jobs) - 1)})["prompt_id"]
     print(f"queued {len(jobs)} takes", flush=True)
+    wait(pending)
+
+
+def wait(pending):
+    """Waits for the queued takes (name: prompt id) to leave ComfyUI's queue, then unloads its models. One
+    request a cycle: asking for every prompt's history each time ran out of local ports on a big batch."""
     while pending:
-        time.sleep(5)
+        time.sleep(15)
+        queue = json.load(urllib.request.urlopen(f"{URL}/queue"))
+        queued = {job[1] for job in queue["queue_running"] + queue["queue_pending"]}
         for name, pid in list(pending.items()):
-            history = json.load(urllib.request.urlopen(f"{URL}/history/{pid}"))
-            if pid in history:
-                status = history[pid].get("status", {}).get("status_str")
-                print("done", name, status, flush=True)
+            if pid not in queued:
+                print("done", name, flush=True)
                 del pending[name]
     post("/free", {"unload_models": True, "free_memory": True})
 
