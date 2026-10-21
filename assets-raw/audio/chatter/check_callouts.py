@@ -45,7 +45,9 @@ EXPECTED = {slug(line["say"]): line.get("hear", line["say"]) for line in LINES}
 PROMPT = "Flight, EECOM, FIDO, CAPCOM. Telemetry, acquisition of signal, program alarm, drogue, abort, SCE to Aux, downlink."
 SAME = {"we've": "we have", "we're": "we are", "it's": "it is", "he's": "he is", "ok": "okay",
         "60": "sixty", "30": "thirty", "2": "two", "break": "brake", "standby": "stand by",
-        "cut-off": "cutoff"}
+        "cut-off": "cut off", "cutoff": "cut off", "shutdown": "shut down", "midcourse": "mid course",
+        "mid-course": "mid course", "3": "three", "retro's": "retros", "pyro's": "pyros", "max-q": "max q",
+        "maxq": "max q", "passed": "past", "shoot": "chute"}  # spellings and homophones Whisper picks either way
 
 
 def words(text):
