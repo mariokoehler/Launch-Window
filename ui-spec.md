@@ -2109,7 +2109,7 @@ clips, the replay is meant to be watched like a short film, and the player can s
   its entry, then its lander (airbrake disc, antenna drum, crush ring) under the chute and on the ground; Mars 2's lander
   as Mars 3's design, a sphere with one retro motor whose petals stay closed on the way down and open on the ground
   (`mars-2-petals-*.jsx`), also on its surface clips (`mars-2-mars-surface`, `mars-2-mars-rover`, where Viking's sampler arm
-  still lies across it when stowed). Mars 2's entry stays generic: `e-shell` is its aeroshell's shape. The landers' masts
+  still lies across it when stowed). Venera 7's carrier burns up as itself (`venera-7-bus-entry`). Mars 2's entry stays generic: `e-shell` is its aeroshell's shape. The landers' masts
   are whip antennas that extend after landing (unconfirmed: Venera 9's antenna was fixed). Unconfirmed: every shape and proportion (drawn to
   the generic sprite's size, panels and booms shortened), the panels folded on the rocket.
 - **Apollo's command and service module (user, 2026-10-18; `ap-`, `apollo-*`):** on the pad in its adapter under the

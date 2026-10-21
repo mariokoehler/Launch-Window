@@ -2188,6 +2188,9 @@ variant_of("mars-descent", "mars-2-mars-descent", MA2, after=STEPS["mars-descent
 variant_of("mars-landing", "mars-2-mars-landing", MA2, after=STEPS["mars-landing"].get("after", []) + ["mars-2-petals-open.jsx"])
 variant_of("mars-surface", "mars-2-mars-surface", MA2)
 variant_of("mars-rover", "mars-2-mars-rover", MA2)
+# Venera 7's carrier burns up as itself (2026-10-21, user).
+variant_of("bus-entry", "venera-7-bus-entry", {"b-panel-l": "ve7-b-panel-l", "b-panel-r": "ve7-b-panel-r", "b-body": "ve7-b-body",
+                                              "b-hot": "ve7-b-hot"})
 # Zond 5 (2026-10-21): the uncrewed 7K-L1 on its flight round the Moon flies the 7K-L1's clips; it came down in the
 # Indian Ocean, the first craft back from the Moon, so its descent ends in the sea.
 variant_of("descent-and-splashdown", "soyuz-descent-and-splashdown", {}, skin="sy-")

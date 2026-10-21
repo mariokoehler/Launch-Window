@@ -931,6 +931,7 @@
     {"step": "lander-entry", "after": "lander-deployment-and-de-orbit", "clip": "mars-entry"},
     {"step": "lander-entry", "after": "lander-detachment", "clip": "mars-entry"},
     {"step": "lander-entry", "clip": "venus-entry"},
+    {"step": "interplanetary-bus-entry", "programs": ["venera-7"], "clip": "venera-7-bus-entry"},
     {"step": "interplanetary-bus-entry", "clip": "bus-entry"},
     {"step": "big-probe-approach-and-entry", "clip": "multiprobe-large-entry"},
     {"step": "small-probes-approach-and-entry", "clip": "multiprobe-small-entry"},

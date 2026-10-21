@@ -657,7 +657,7 @@ How to read an entry (all counted automatically, a first pass):
   - Destinations: SUN 1
   - Programs: Pioneer Sun orbiter 1
 - [x] **Carrier entry** `interplanetary-bus-entry`: 1 use in 1 configuration, 1 program (SOVIET) uncrewed
-  - Clip: `bus-entry`; [x] success, [x] glitch, [x] failure; cues yes
+  - Clip: `venera-7-bus-entry`; [x] success, [x] glitch, [x] failure; cues yes
   - On screen: probe 1
   - Destinations: VENUS 1
   - Programs: Venera 7 1

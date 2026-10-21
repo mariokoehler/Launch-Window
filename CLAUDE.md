@@ -245,7 +245,7 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   on its stage, `pg-`). Client only.
   So do the robot probes (user, 2026-10-21, `ui-spec.md` §4.7.3): a drawing each (`parts.py`'s `PROBES`), their own copies
   of the generic clips that draw a craft (`build.py`'s `PROBE_CLIPS`), the pad's clips generic under the fairing; Zond 5 flies
-  the 7K-L1's; the Veneras' and Mars 2's landers have their own release, entry, descent and landing too (a step's
+  the 7K-L1's; the Veneras' and Mars 2's landers have their own release, entry, descent and landing too, and Venera 7's carrier its burn-up (a step's
   `"alias"` in `build.py` alone now draws, without a skin). Client only.
 
 - **Publishing findings is built** (the user's idea, 2026-10-21, `design.md` §2.13, `ui-spec.md` §4.20 and G16,

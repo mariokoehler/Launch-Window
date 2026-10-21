@@ -772,5 +772,6 @@
   "mars-2-mars-descent": {"success": [{"at": 3.25, "sound": "radio-signal-good"}], "glitch": [{"at": 3.55, "sound": "radio-attitude-drift"}], "failure": [{"at": 3.35, "sound": "radio-burn-failed"}]},
   "mars-2-mars-landing": {"success": [{"at": 3.85, "sound": "radio-signal-good"}], "failure": [{"at": 3.85, "sound": "radio-lander-lost"}]},
   "mars-2-mars-surface": {"failure": [{"at": 2.65, "sound": "radio-probe-silent"}]},
-  "mars-2-mars-rover": {"success": [{"at": 3.45, "sound": "radio-signal-good"}], "glitch": [{"at": 3.65, "sound": "radio-roger"}], "failure": [{"at": 3.65, "sound": "radio-probe-silent"}]}
+  "mars-2-mars-rover": {"success": [{"at": 3.45, "sound": "radio-signal-good"}], "glitch": [{"at": 3.65, "sound": "radio-roger"}], "failure": [{"at": 3.65, "sound": "radio-probe-silent"}]},
+  "venera-7-bus-entry": {"success": [{"at": 2.15, "sound": "radio-signal-good"}], "glitch": [{"at": 2.9, "sound": "radio-telemetry-lost"}], "failure": [{"at": 2.9, "sound": "radio-data-lost"}]}
 }

@@ -4553,6 +4553,19 @@ def lander_own_parts():
                        f'{x + 12} {y + 100} {x + 11} {y + 73} Z" fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="2" '
                        f'stroke-linejoin="round"/>', (x, y + 73))
     layer("ma2-none", "", (x, y))
+    # Venera 7's carrier burning up (bus-entry.jsx), its lander gone: the release's drawing 3 times over, about the generic
+    # carrier's middle (960 380), in the same pieces (its panels, its body with the dish, the body glowing).
+    k = 3.0
+    X = lambda x: 960 + (x - 960) * k
+    Y = lambda y: 380 + (y - 455) * k
+    py, ph, reach, gap = Y(448), 12 * k, 82 * k, 4 * k
+    for side, x0 in (("l", X(946) - gap - reach), ("r", X(974) + gap)):
+        stub = (f"M{X(946) - gap} {py + ph / 2} L{X(946)} {py + ph / 2}" if side == "l" else
+                f"M{X(974)} {py + ph / 2} L{X(974) + gap} {py + ph / 2}")
+        layer(f"ve7-b-panel-{side}", _panel(x0, py, reach, ph, 3) + _l(stub, 2.4), (x0 + reach / 2, py + ph / 2))
+    layer("ve7-b-body", _r(X(946), Y(440), 28 * k, 30 * k, 3) + _bowl(960, Y(436), 50 * k, 8 * k), (960, 380))
+    layer("ve7-b-hot", f'<rect x="{X(946)}" y="{Y(440)}" width="{28 * k}" height="{30 * k}" fill="{GOLD_FILL}" stroke="{GOLD}" '
+                       f'stroke-width="3"/>', (960, 380))
 
 
 def main():
