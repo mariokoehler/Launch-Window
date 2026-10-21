@@ -2401,6 +2401,192 @@ def apollo_tower(cm_base, k):
             f'fill="#ffffff" {LINE} {w(2)}/>')
 
 
+# --- The later NASA satellites (2026-10-21, user; the standard pack): the Orbiting Frog Otolith, Biosatellite and
+# Pegasus, in the first satellites' manner. Proportions from the blueprints and photographs, drawn larger than their
+# rockets' scale where they'd vanish (OFO's 0.76 m): unconfirmed.
+
+# OFO (0.76 m across, 1.2 m long): an octagonal lower section for the electronics, a truncated cone above it for the
+# frogs' centrifuge under its heat shield; four booms folded against its side rode to orbit and swung out once the
+# yo-yo weights had slowed the Scout's spin (of-d-whips-0 to -12, explorer-whips.jsx), to keep it steady below a
+# thousandth of a g.
+OFO_FOLDED = 0.0
+
+
+def ofo_booms(base=500, k=1.0, spread=1.0):
+    """OFO's four booms, hinged at the octagon's top corners: up along the cone folded (spread 0), straight out at 1.
+    The outer pair seen side on, the inner pair foreshortened (towards and away from us)."""
+    w = lambda x: f'stroke-width="{x * k:.2f}"'
+    a = math.radians(6 + 84 * spread)
+    out = ""
+    for s in (-1, 1):
+        for hx, length, sw, op in ((30, 54, 1.8, 1.0), (16, 32, 1.5, 0.8)):
+            x0, y0 = 960 + s * hx, base - 48
+            x1, y1 = x0 + s * length * math.sin(a), y0 - length * math.cos(a)
+            out += (f'<path d="M{x0} {y0} L{x1:.1f} {y1:.1f}" fill="none" {LINE} {w(sw)} opacity="{op}"/>'
+                    f'<circle cx="{x1:.1f}" cy="{y1:.1f}" r="{3.2 * k:.1f}" fill="#ffffff" {LINE} {w(1.4)} opacity="{op}"/>')
+    return out
+
+
+def ofo(base=500, k=1.0, spread=1.0):
+    """OFO nose up, its foot at base: the octagon (three faces seen), the cone under its shield, the booms (spread None
+    for none)."""
+    w = lambda x: f'stroke-width="{x * k:.2f}"'
+    out = (f'<rect x="930" y="{base - 48}" width="60" height="48" fill="#ffffff" {LINE} {w(2.4)}/>'
+           + "".join(f'<path d="M{x} {base - 48} L{x} {base}" fill="none" {LINE} {w(1.4)} opacity="0.7"/>' for x in (942, 978))
+           + f'<path d="M953 {base} L951 {base + 6} L969 {base + 6} L967 {base} Z" fill="#ffffff" {LINE} {w(1.6)}/>'
+           f'<path d="M932 {base - 48} L946 {base - 100} L974 {base - 100} L988 {base - 48} Z" fill="url(#hatch)" {LINE} {w(2.4)}/>'
+           f'<path d="M939 {base - 74} L981 {base - 74}" fill="none" {LINE} {w(1.4)} opacity="0.7"/>'
+           f'<rect x="954" y="{base - 106}" width="12" height="6" fill="#ffffff" {LINE} {w(1.6)}/>')
+    if spread is not None:
+        out += ofo_booms(base, k, spread)
+    return out
+
+
+# Biosatellite: the recovery capsule on its adapter (the blueprint's louvred drum, the deorbit motor inside it); the
+# capsule a bell on its heat shield, the parachute canister on top. Coming home (bs-r-) it's drawn in the generic
+# capsule's place (its base 915 to 1005 at 500, its top at 352, where the chutes' lines meet); on the rocket and in orbit
+# at BS_K of that on the adapter. The adapter stays in orbit: it's gone by the de-orbit burn, which starts with the
+# capsule alone (no step separates them; unconfirmed). Its one motor fires from a stub on the shield's middle.
+BS_K = 0.7
+
+
+def bios_capsule(k=1.0):
+    """The capsule nose up, its base at 500, its stroke widths times k."""
+    w = lambda x: f'stroke-width="{x * k:.2f}"'
+    return (f'<path d="M915 500 C915 420 938 372 960 372 C982 372 1005 420 1005 500 Z" '
+            f'fill="#ffffff" {LINE} {w(3)}/>'
+            f'<path d="M915 500 Q960 516 1005 500 Z" fill="url(#hatch)" {LINE} {w(2.6)}/>'
+            f'<path d="M918 470 Q960 480 1002 470" fill="none" {LINE} {w(1.6)} opacity="0.6"/>'
+            f'<path d="M927 430 Q960 438 993 430" fill="none" {LINE} {w(1.6)} opacity="0.6"/>'
+            f'<rect x="952" y="356" width="16" height="18" rx="2" fill="#ffffff" {LINE} {w(2.2)}/>')
+
+
+def bios_adapter(top, k=1.0):
+    """The adapter drum under the capsule, its top at top: 80 across, 70 tall, a panel of louvres."""
+    w = lambda x: f'stroke-width="{x * k:.2f}"'
+    return (f'<rect x="920" y="{top}" width="80" height="70" fill="#ffffff" {LINE} {w(2.6)}/>'
+            + "".join(f'<rect x="946" y="{top + 18 + 9 * j}" width="28" height="5" fill="{NAVY}" opacity="0.85"/>' for j in range(4))
+            + f'<path d="M920 {top + 8} L1000 {top + 8}" fill="none" {LINE} {w(1.4)} opacity="0.6"/>')
+
+
+def biosatellite(k=1.0):
+    """The satellite nose up, its foot at 500: the adapter, the capsule on it."""
+    top = 430
+    return (bios_adapter(top, k)
+            + f'<g transform="translate(960 {top}) scale({BS_K}) translate(-960 -500)">{bios_capsule(k / BS_K)}</g>')
+
+
+def ofo_bios_parts():
+    rocket = board_group("rocket")
+    nose = rocket.index('<path xmlns="http://www.w3.org/2000/svg" d="M915 440')
+    big = f"translate({DX} {DY}) scale({DK}) translate(-850 -520)"
+    turn = "translate(-120 20) rotate(90 960 500)"
+    sats = {
+        # prefix: (on the rocket, bare in the deployment and in orbit). OFO's booms folded on the Scout, out in orbit.
+        "of": (sat_fairing(top=350), ofo(spread=OFO_FOLDED), ofo()),
+        "bs": (sat_fairing(top=270), biosatellite(), biosatellite()),
+    }
+    for key, (on_rocket, deploying, bare) in sats.items():
+        layer(f"{key}-rocket", rocket[:nose] + on_rocket, (960, 600))
+        layer(f"{key}-debris-1", on_rocket, (960, 420))
+        layer(f"{key}-d-payload", f'<g transform="{big}"><g transform="{turn}">{deploying}</g></g>', D_AT(914, 520))
+        thick = re.sub(r'stroke-width="[\d.]+"', 'stroke-width="5"', bare)
+        layer(f"{key}-o-sat", f'<g transform="translate(960 560) scale(0.6) translate(-960 -426)">{thick}</g>', (960, 560))
+    # OFO's deployment (explorer-whips.jsx): the satellite without its booms, and the booms from folded to out.
+    layer("of-d-payload", f'<g transform="{big}"><g transform="{turn}">{ofo(spread=None)}</g></g>', D_AT(914, 520))
+    for n in range(EX1_STEPS + 1):
+        layer(f"of-d-whips-{n}", f'<g transform="{big}"><g transform="{turn}">{ofo_booms(spread=n / EX1_STEPS)}</g></g>',
+              D_AT(914, 520))
+    # Biosatellite coming home: the capsule nose right (RT) and nose up (RU); its motor the pack, on a stub at the
+    # shield's middle; one flame; no straps, no periscope.
+    small = lambda body: re.sub(r'stroke-width="([\d.]+)"', lambda m: f'stroke-width="{float(m.group(1)) * 0.8:.2f}"', body)
+    cap = small(bios_capsule())
+    layer("bs-r-capsule", RT(cap), RC)
+    layer("bs-r-capsule-up", RU(cap), RC)
+    motor = small(f'<path d="M954 508 L966 508 L966 516 L954 516 Z" fill="#ffffff" {LINE} stroke-width="2.4"/>'
+                  f'<circle cx="960" cy="528" r="13" fill="#ffffff" {LINE} stroke-width="2.6"/>'
+                  f'<path d="M954 540 L950 552 L970 552 L966 540 Z" fill="#ffffff" {LINE} stroke-width="2.2"/>')
+    layer("bs-r-pack", RT(motor), RT_AT(960, 512))
+    layer("bs-r-module", RT(motor), RT_AT(960, 528))
+    for n in ("strap-a", "strap-b", "cut-a", "cut-b", "periscope", "flame-2", "flame-3"):
+        layer(f"bs-r-{n}", "", RC)
+    layer("bs-r-flame-1", RT(f'<path d="M950 552 C948 574 954 596 960 616 C966 596 972 574 970 552 Z" fill="{GOLD_FILL}" '
+                             f'stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>'), RT_AT(960, 552))
+    # The attitude jets, on the bell's shoulders.
+    layer("bs-r-jet-l", RT(puff(922, 430, 9)), RT_AT(932, 430))
+    layer("bs-r-jet-r", RT(puff(998, 430, 9)), RT_AT(988, 430))
+    layer("bs-r-jet-stuck", RT(f'<path d="M986 432 C1016 424 1050 414 1086 406 L1090 422 C1054 428 1018 440 988 448 Z" '
+                               f'fill="{GOLD_FILL}" stroke="{GOLD}" stroke-width="2" stroke-linejoin="round"/>'), RC)
+    # The break-up: the neck and canister from the bell.
+    layer("bs-r-half-nose", RT(small(f'<path d="M927 430 C935 396 948 372 960 372 C972 372 985 396 993 430 Q960 438 927 430 Z" fill="#ffffff" {LINE} stroke-width="3"/>'
+                                     f'<rect x="952" y="356" width="16" height="18" rx="2" fill="#ffffff" {LINE} stroke-width="2.2"/>')),
+          RT_AT(960, 410))
+    layer("bs-r-half-body", RT(small(f'<path d="M915 500 C915 470 919 448 927 430 L993 430 C1001 448 1005 470 1005 500 Z" '
+                                     f'fill="#ffffff" {LINE} stroke-width="3"/>'
+                                     f'<path d="M915 500 Q960 516 1005 500 Z" fill="url(#hatch)" {LINE} stroke-width="2.6"/>')),
+          RT_AT(960, 472))
+
+
+# Pegasus (2026-10-21, user): it rode to orbit folded inside a boilerplate Apollo service module, under a boilerplate
+# command module and escape tower (Apollo's own drawings on the rocket: its launch clips are Apollo's); in orbit the
+# boilerplate went off on its own and Pegasus stayed on the S-IV stage, whose two wings of detector panels (14.6 m
+# each, 4.3 m wide) a motor unfolded to a 29 m span. In the deployment (pegasus-wings.jsx) the stage keeps it and the
+# payload that drifts off is the boilerplate CSM, its service module open at the foot over the folded wings; the wings
+# unfold in PG_STEPS drawings each. At the launch's 13.6 px/m (AP_L), true to scale there; on the map at PG_MAP of
+# their length so the craft fits its orbit (unconfirmed).
+PG_STEPS, PG_MAP = 12, 0.45
+PG_H = 4.3
+
+
+def pegasus_core(k=AP_L):
+    """The centre section on the stage's top (500) between the folded wings: a frame PG_H tall."""
+    h = PG_H * k
+    return (f'<rect x="950" y="{500 - h:.1f}" width="20" height="{h:.1f}" fill="#ffffff" {LINE} stroke-width="2.4"/>'
+            f'<path d="M950 {500 - h / 2:.1f} L970 {500 - h / 2:.1f}" fill="none" {LINE} stroke-width="1.4" opacity="0.6"/>'
+            f'<path d="M960 {500 - h:.1f} L960 {500 - h - 8:.1f}" fill="none" {LINE} stroke-width="2"/>')
+
+
+def pegasus_wing(side, spread, k=AP_L, length=1.0):
+    """One wing out from the centre section to the side (-1 left, 1 right), opened by spread (0 a folded pack 11 px
+    thick, 1 its full 14.6 m times length), its panels across it."""
+    h = PG_H * k
+    full = 14.6 * k * length
+    reach = 11 + (full - 11) * spread
+    x0 = 960 + side * 10
+    x1 = x0 + side * reach
+    panels = max(2, round(7 * spread) + 1)
+    lines = "".join(f'<path d="M{x0 + side * reach * j / panels:.1f} {500 - h:.1f} L{x0 + side * reach * j / panels:.1f} 500" '
+                    f'fill="none" {LINE} stroke-width="1.4" opacity="0.7"/>' for j in range(1, panels))
+    return (f'<path d="M{x0:.1f} {500 - h:.1f} L{x1:.1f} {500 - h:.1f} L{x1:.1f} 500 L{x0:.1f} 500 Z" fill="url(#hatch)" {LINE} '
+            f'stroke-width="2.4"/>{lines}'
+            f'<path d="M{x0:.1f} {500 - h / 2:.1f} L{x1:.1f} {500 - h / 2:.1f}" fill="none" {LINE} stroke-width="1.2" opacity="0.5"/>')
+
+
+def pegasus_parts():
+    k = AP_L
+    h = PG_H * k
+    big = f"translate({DX} {DY}) scale({DK}) translate(-850 -520)"
+    turn = "translate(-120 20) rotate(90 960 500)"
+    stage = board_group("debris-2") + '<path d="M944 621 L976 621 L982 639 L938 639 Z" fill="#ffffff" stroke="#16305c" stroke-width="3"/>'
+    folded = pegasus_wing(-1, 0) + pegasus_wing(1, 0) + pegasus_core()
+    d = lambda body: f'<g transform="{big}"><g transform="{turn}">{body}</g></g>'
+    layer("pg-d-stage", d(stage + folded), D_AT(770, 520))
+    # The boilerplate CSM: Apollo's, its service module run down over the folded wings to the stage (no engine bell).
+    csm = apollo_csm(500 - h, k)
+    csm = csm[csm.index("<rect"):]
+    r = 1.95 * k
+    shell = f'<rect x="{960 - r:.1f}" y="{500 - h - 2:.1f}" width="{2 * r:.1f}" height="{h + 2:.1f}" fill="#ffffff" {LINE} stroke-width="2.6"/>'
+    layer("pg-d-payload", d(shell + csm), D_AT(914, 520))
+    for n in range(PG_STEPS + 1):
+        for side, name in ((-1, "l"), (1, "r")):
+            layer(f"pg-d-wing-{name}-{n}", d(pegasus_wing(side, n / PG_STEPS)), D_AT(770, 520))
+    # On the map: the stage nose up, Pegasus open on it.
+    body = (stage + pegasus_wing(-1, 1, length=PG_MAP) + pegasus_wing(1, 1, length=PG_MAP) + pegasus_core())
+    thick = re.sub(r'stroke-width="[\d.]+"', 'stroke-width="5"', body)
+    layer("pg-o-sat", f'<g transform="translate(960 560) scale(0.6) translate(-960 -540)">{thick}</g>', (960, 560))
+
+
+
 def apollo_parts():
     small = lambda body: re.sub(r'stroke-width="([\d.]+)"', lambda m: f'stroke-width="{float(m.group(1)) * 0.8:.2f}"', body)
     thick = lambda body: re.sub(r'stroke-width="[\d.]+"', 'stroke-width="5"', body)
@@ -3993,6 +4179,8 @@ def main():
     apollo_parts()
     lm_parts()
     satellite_parts()
+    ofo_bios_parts()
+    pegasus_parts()
     gemini_parts()
     gemini_eor_parts()
     lk700_parts()

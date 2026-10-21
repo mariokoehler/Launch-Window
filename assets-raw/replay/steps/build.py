@@ -2118,6 +2118,20 @@ for _n, _name in ((3, "iii"), (4, "iv"), (5, "v"), (6, "vi")):
     variant_of("duration-level-ii", f"soyuz-duration-level-{_name}", {}, skin="sy-",
                vars={"LEVEL": _n, "SUPPLY": [_supply[_n - 3], _supply[_n - 2]]})
 
+# The later NASA satellites' own (2026-10-21, user; the standard pack), in the generic satellite's timelines: the Orbiting
+# Frog Otolith (of-, its booms swinging out after the push as Explorer 1's whips do) and Biosatellite (bs-, its capsule
+# coming home alone: the de-orbit burn turns it first, as nothing has); Pegasus (pg-) flies Apollo's launch clips (its
+# boilerplate CSM is Apollo's on the rocket) and stays on its stage, where its wings unfold (pegasus-wings.jsx).
+for _step in ("launch-preparations", "countdown", "ascent", "deployment", "earth-orbit"):
+    variant_of(_step, f"ofo-{_step}", {}, skin="of-")
+    variant_of(_step, f"biosatellite-{_step}", {}, skin="bs-")
+STEPS["ofo-deployment"]["after"] = ["explorer-whips.jsx"]
+for _step in ("advanced-experiments-earth-orbit", "deorbit-burn", "reentry", "descent-and-splashdown"):
+    variant_of(_step, f"biosatellite-{_step}", {}, skin="bs-")
+for _step in ("earth-orbit", "advanced-experiments-earth-orbit"):
+    variant_of(_step, f"pegasus-{_step}", {}, skin="pg-")
+variant_of("deployment", "pegasus-deployment", {}, skin="pg-", after=["pegasus-wings.jsx"])
+
 
 def read(*path):
     return open(os.path.join(HERE, *path), encoding="utf-8").read() + "\n"

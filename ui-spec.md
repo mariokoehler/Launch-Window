@@ -2080,6 +2080,18 @@ clips, the replay is meant to be watched like a short film, and the player can s
   Sputnik 2 separates in its deployment, though it stayed on its
   core stage; the satellites drawn larger than their rocket's scale. Vostok's pilot doesn't eject in the descent
   yet. Unconfirmed.
+- **The later NASA satellites as themselves (user, 2026-10-21):** the Orbiting Frog Otolith (`of-`, `ofo-*`): its
+  octagonal lower section and the cone above it under its heat shield, under a fairing on the rocket; its four booms
+  ride folded against its side and swing out after the deployment's push (`explorer-whips.jsx`, as Explorer 1's whips;
+  the yo-yo despin before it isn't shown). Biosatellite (`bs-`, `biosatellite-*`): the recovery capsule, a bell on its
+  heat shield, on its louvred adapter; coming home the capsule alone (the adapter stays in orbit, gone before the de-orbit
+  burn, which no step shows), its one deorbit motor on the shield's middle, turned base first by the burn's own turn,
+  the generic reentry and splashdown (Biosatellite II's capsule was caught in the air, III's came down in the sea).
+  Pegasus (`pg-`, `pegasus-*`) flies Apollo's launch clips, its boilerplate CSM and tower being Apollo's on the rocket;
+  in its deployment the boilerplate drifts off and Pegasus stays on the stage, as it did on the S-IV, its two wings
+  unfolding to scale 0.9 s later over 2.2 s (`pegasus-wings.jsx`; the glitch's left wing stalls half open for 0.8 s, the
+  failure's never open), the radio rings from Pegasus once they're out; on the map its wings at 45 % of their length.
+  The rocket stays generic. Unconfirmed: the proportions, the capsule's shape, the adapter's going, a mid-air catch.
 - **Apollo's command and service module (user, 2026-10-18; `ap-`, `apollo-*`):** on the pad in its adapter under the
   boost cover and escape tower, thrown off together in the climb (`a-les`); for a flight to the Moon it stays on the
   S-IVB, which makes the burn (the `-stack` clips: the deployment, parking orbit and the burn, rules by `later: tli`),

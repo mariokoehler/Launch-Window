@@ -1,6 +1,7 @@
 // Explorer 1's deployment (2026-10-20, user): its four whip antennas rode to orbit folded down along it, and its spin
 // flung them out once it was free. After deployment.jsx: from 0.3 s after the push they swing out over 1.2 s, one
-// drawing of them at a time (parts.py's ex1-d-whips-0 to -12), in every variant.
+// drawing of them at a time (parts.py's ex1-d-whips-0 to -12), in every variant. The Orbiting Frog Otolith's four
+// booms swing out the same way (2026-10-21, of-d-whips-0 to -12).
 var WHIPS = 12, OUT = FREE + 0.3, OPEN = 1.2;
 for (var w = 0; w <= WHIPS; w++) {
     put("d-whips-" + w, "d-payload");

@@ -240,6 +240,9 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   Apollo's moonwalks show the flag, the rock box and the rover's drives (user, 2026-10-20, `ui-spec.md` §4.7.3), and the
   rover landing's drives and the 7K-L3 landing's touchdown, moonwalks and liftoff are typed by their names: the pack hash
   changed, reset the dev data root, rebuild client and server together.
+  The later NASA satellites fly as themselves (user, 2026-10-21, `ui-spec.md` §4.7.3): the Orbiting Frog Otolith (`of-`, its booms
+  swinging out), Biosatellite (`bs-`, its capsule coming home alone) and Pegasus (Apollo's launch clips, its wings unfolding
+  on its stage, `pg-`). Client only.
 
 ## How we work
 

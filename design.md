@@ -565,6 +565,22 @@ leading to satellite navigation.
   drained the spin about its long axis, so within hours it was tumbling end over end, the flat spin in G4's notes:
   an early lesson in why a spinning craft must spin about its widest axis. **Not yet checked:** the whips' folding
   at launch and their release by the spin; check before a history note uses them.
+- **Pegasus, Biosatellite and the frogs' satellite** (found 2026-10-21, the replay's later NASA satellites): Pegasus
+  rode up folded inside a boilerplate Apollo service module, under a boilerplate command module and escape tower; the
+  tower went at second-stage ignition, and in orbit the boilerplate CSM (about 10,000 lb) was jettisoned into an orbit
+  of its own while Pegasus stayed attached to the S-IV stage, a motor unfolding its wings to a 96 ft (29 m) span; a TV
+  camera in the adapter filmed it. Biosatellite's recovery capsule separated from the satellite, fired its own small
+  deorbit motor (a Star-12, per Gunter's Space Page), and came down under a parachute for an aircraft to snag in mid-air:
+  Biosatellite II's was caught so after 45 hours (1967); Biosatellite 1's motor never fired, and its capsule stayed up
+  until it decayed on 15 February 1967; Biosatellite III's catch was called off for cloud and rain near Hawaii, and the
+  capsule with the macaque Bonny was picked up from the sea on 7 July 1969 (he died the next day). The Orbiting Frog
+  Otolith (9 November 1970, Scout B from Wallops, 132.9 kg, 0.76 by 1.2 m) had an octagonal electronics section and a
+  truncated cone for the frogs' package under a heat shield; after separation a yo-yo despin slowed its spin and four
+  booms folded against its side swung out, raising its moment of inertia to keep accelerations below a thousandth of a
+  g; the water-filled centrifuge was locked until the orbit settled, then ran cycles of about 8 minutes. **Not yet
+  checked:** the Biosatellite capsule's shape and where its motor sat, the Star-12, and whether OFO stayed on the Scout's
+  last stage. Sources: Wikipedia ("Pegasus (satellite)", "Biosatellite program", "Biosatellite 3", "Orbiting Frog
+  Otolith"), the National Air and Space Museum (Biosatellite 2), Gunter's Space Page (Biosat).
 - **Apollo 5's "fire in the hole"** (found 2026-10-20, the uncrewed lunar module test's steps): the first lunar module,
   LM-1, flew alone and without legs on a Saturn IB on 22 January 1968: inside its adapter under a nose cone about nine
   feet tall, no CSM (the Saturn IB couldn't lift both). In orbit the cone came off, the adapter's four panels opened, and

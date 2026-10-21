@@ -36,7 +36,8 @@ SKINS = {"mercury": ("mc-", "mercury-launch"), "gemini": ("gm-", "gemini-launch"
          "voskhod": ("vk-", "voskhod-launch", {"rocket": "vh-rocket", "debris-1": "vh-debris-1"}),
          "soyuz": ("sy-", "soyuz-launch"), "apollo": ("ap-", "apollo-launch"),
          "sputnik-1": ("sp1-", "sputnik-1-launch"), "explorer-1": ("ex1-", "explorer-1-launch"),
-         "sputnik-2": ("sp2-", "sputnik-2-launch")}
+         "sputnik-2": ("sp2-", "sputnik-2-launch"), "ofo": ("of-", "ofo-launch"),
+         "biosatellite": ("bs-", "biosatellite-launch")}
 SKINS["soyuz-l1"] = ("sy-", "soyuz-l1-launch", {"rocket": "s1-rocket", "debris-1": "s1-debris-1"})
 SKINS["soyuz-lok"] = ("sy-", "soyuz-lok-launch", {"rocket": "lok-rocket", "debris-1": "lok-debris-1"})
 SKINS["lk"] = ("lkl-", "lk-launch")
