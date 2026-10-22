@@ -511,6 +511,20 @@ leading to satellite navigation.
   and Space ("We Shocked the World"), The Moscow Times ("Space race started with a cosmic blunder"), NASA
   History, RussianSpaceWeb ("Vostok 1"). Our papers' headlines and articles are our own, never a real
   paper's.
+- **How the leaders answered a rival's First** (checked 2026-10-22, for the follow-up pages, `ui-spec.md`
+  §4.18.1; our articles quote nobody real):
+  - Eisenhower played Sputnik down at his press conference of 9 October 1957: the satellite itself did not
+    raise his apprehensions, "not one iota". Biographers count it among the most hostile press conferences
+    of his presidency, and the public did not believe him; he knew from the secret U-2 flights how far the
+    Soviet missile programme really was. Sources: NASA History ("One Small Ball in the Air", SP-4510), American
+    Heritage ("Ike Shrugged at Sputnik"), CIA Studies in Intelligence ("Sputnik and US Intelligence").
+  - Kennedy congratulated the Soviet scientists and engineers on Gagarin's flight in a written statement on
+    12 April 1961, calling it an outstanding technical accomplishment, and at his press conference the same
+    day conceded that the Soviets were ahead and that catching up would take time. Sources: the American
+    Presidency Project (the statement), The Battalion of 13 April 1961 (the press conference).
+  - Apollo 11 carried two Soviet medals honouring Yuri Gagarin and Vladimir Komarov, both dead by then, as
+    Nixon announced on 17 July 1969; the crew left them on the Moon with the mission's other memorials.
+    Sources: the American Presidency Project (Nixon's statement), the Apollo 11 Lunar Surface Journal.
 - **Whole-crew losses:** Apollo 1, Soyuz 1, Soyuz 11, Challenger and Columbia lost everyone
   aboard, the real basis of §2.5(f). A sober note the first time it happens.
 - **Spying on the Moon race** (checked 2026-10-07, for the Intelligence Office's history notes):
@@ -3686,14 +3700,21 @@ once a turn (`publications/turn-N.json`). No effect beyond noise on the smart bo
 review of the mapping. All 18 findings have pages (13 written 2026-10-21). Publishing measured with
 `RaceShock -Drace.publish=never,always`. Reset the dev data root and rebuild client and server together.
 
-**The world reacts** (the user's idea, 2026-10-20; **planned, not built**, the plan in
-`ideas/world-reacts.md`): when a First's front page is printed, every rival may give a press statement
-during the next turn. A statement is one of five stances (enthusiastic, polite, "we'll be next", downplay,
-no comment) plus an optional quote of up to 140 characters, printed word for word. At the next resolve, a
-follow-up page, "The World Reacts to …", prints them, and rivals who stayed silent appear as having
-declined to comment. It is flavour only, with no effect on money, prestige or anything else. The user
-chose quotes printed as given over an LLM writing the article: an LLM rewrite could come later as a layer
-on top, falling back to the printed quote.
+**The world reacts** (the user's idea, 2026-10-20; **built 2026-10-22**, `ui-spec.md` §4.18.1, component 28
+and G17, from the canvas `Launch Window — The World Reacts`): when a First's front page is printed, every
+rival may give a press statement during the next turn. A statement is one of five stances (enthusiastic,
+polite, "we'll be next", downplay, no comment) plus an optional quote of up to 140 characters, printed word
+for word. At the next resolve, a follow-up page, "The World Reacts", prints them as one article, and rivals
+who stayed silent appear as not responding. It is flavour only, with no effect on money, prestige or
+anything else. The user chose quotes printed as given over an LLM writing the article: an LLM rewrite could
+come later as a layer on top, falling back to the printed quote. **The article reads as a story, not a list**
+(user, 2026-10-22): the statements' mood picks a story written whole for the First; stance lines are joined
+by linking sentences where the stance changes; clauses on where a rival stands come from public facts only
+(the goals it holds). At most 4 statements are told in full, quotes first and taking turns across the
+stances; the rest share a line. A page that runs long drops its close, then runs on to a continuation sheet
+("Continued on page 2"), never a scroll area (user, 2026-10-22). Its first plan is in
+`ideas/world-reacts.md`, superseded where they differ. Next: the play test. Unconfirmed: late joiners can't
+answer; no page when nobody spoke; follow-ups print before the turn's own Firsts.
 
 ### Later
 

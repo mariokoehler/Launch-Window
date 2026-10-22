@@ -5,6 +5,7 @@ import de.mkoehler.launchwindow.content.FrontPages;
 import de.mkoehler.launchwindow.model.FrontPage;
 import de.mkoehler.launchwindow.model.GameDate;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.EnumMap;
@@ -23,7 +24,8 @@ import java.util.SplittableRandom;
  * <p>The statements' mix picks the story's mood; statements are told in stance order, quoted before
  * unquoted, each by a stance line drawn without repeats, with a linking sentence wherever the stance
  * changes and sometimes a clause on where the rival stands in the race. At most {@link #MAX_TOLD}
- * are told one by one, quotes first; the rest share an "also" line per stance. Rivals who gave none
+ * are told one by one, quotes first and taking turns across the stances; the rest share an "also" line
+ * per stance. Rivals who gave none
  * share a "declined" line. A page whose rivals all stayed silent isn't printed.</p>
  *
  * <p>Every draw comes from the game seed salted and mixed with the follow-up's id, never from the
@@ -141,14 +143,25 @@ public final class ReactionPrinter {
         List<String> weather = pages.weatherFor(GameDate.ofTurn(gameTurn).season());
         String weatherLine = weather.isEmpty() ? "" : weather.get(random.nextInt(weather.size()));
 
-        // Told one by one: quotes first, then by stance and name; the rest share a line.
+        // Told one by one: quotes first, taking turns across the stances so a crowded page keeps every voice;
+        // the rest share a line per stance.
         Comparator<Agency> byStance = Comparator.comparing((Agency a) -> stance(a, first))
             .thenComparing(a -> quote(a, first).isEmpty())
             .thenComparing(Agency::agencyName);
-        List<Agency> chosen = new ArrayList<>(spoke);
-        chosen.sort(Comparator.comparing((Agency a) -> quote(a, first).isEmpty()).thenComparing(byStance));
-        List<Agency> told = new ArrayList<>(chosen.subList(0, Math.min(MAX_TOLD, chosen.size())));
-        List<Agency> folded = new ArrayList<>(chosen.subList(told.size(), chosen.size()));
+        List<Agency> told = new ArrayList<>();
+        for (boolean quoted : new boolean[] {true, false}) {
+            Map<FrontPage.Stance, ArrayDeque<Agency>> queues = new EnumMap<>(FrontPage.Stance.class);
+            spoke.stream().filter(a -> quote(a, first).isEmpty() != quoted).sorted(byStance)
+                .forEach(a -> queues.computeIfAbsent(stance(a, first), k -> new ArrayDeque<>()).add(a));
+            while (told.size() < MAX_TOLD && queues.values().stream().anyMatch(q -> !q.isEmpty())) {
+                for (ArrayDeque<Agency> queue : queues.values()) {
+                    if (told.size() < MAX_TOLD && !queue.isEmpty()) {
+                        told.add(queue.poll());
+                    }
+                }
+            }
+        }
+        List<Agency> folded = new ArrayList<>(spoke.stream().filter(a -> !told.contains(a)).toList());
         told.sort(byStance);
         folded.sort(byStance);
 

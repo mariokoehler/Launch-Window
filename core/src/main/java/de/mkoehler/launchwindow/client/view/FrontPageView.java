@@ -183,6 +183,83 @@ public final class FrontPageView {
     }
 
     /**
+     * Returns a stance's name as the statement dialog's row shows it (component 28).
+     *
+     * @param stance the stance
+     * @return its name
+     */
+    public static String stanceTitle(FrontPage.Stance stance) {
+        return switch (stance) {
+            case ENTHUSIASTIC -> "Enthusiastic congratulations";
+            case POLITE -> "Polite congratulations";
+            case NEXT -> "“We’ll be next”";
+            case DOWNPLAY -> "Downplay";
+            case NO_COMMENT -> "No comment";
+            case DECLINED -> "No statement";
+        };
+    }
+
+    /**
+     * Returns a stance's short name, for the strip's "Your statement: ..." button.
+     *
+     * @param stance the stance
+     * @return its short name
+     */
+    public static String stanceName(FrontPage.Stance stance) {
+        return switch (stance) {
+            case ENTHUSIASTIC -> "Enthusiastic";
+            case POLITE -> "Polite";
+            default -> stanceTitle(stance);
+        };
+    }
+
+    /**
+     * Returns the muted line under a stance's name in the statement dialog.
+     *
+     * @param stance the stance
+     * @return the line
+     */
+    public static String stanceHint(FrontPage.Stance stance) {
+        return switch (stance) {
+            case ENTHUSIASTIC -> "Warm, generous praise.";
+            case POLITE -> "Correct, and brief.";
+            case NEXT -> "Congratulate them, then promise to catch up.";
+            case DOWNPLAY -> "It proves less than it seems.";
+            case NO_COMMENT -> "A pointed refusal to say anything. (Staying silent is printed as “did not respond”.)";
+            case DECLINED -> "";
+        };
+    }
+
+    /**
+     * Returns how a statement might read in the follow-up, for the dialog's preview: the stance's
+     * first line, quoted or plain, with the player's names, without a detail clause. The printed page
+     * may draw another line of the same stance.
+     *
+     * @param first     the First's page
+     * @param stance    the stance
+     * @param quote     the quote, cleaned, or {@code ""}
+     * @param agency    the player's agency
+     * @param director  its director
+     * @param reactions the follow-ups' words
+     * @param names     a goal's display name
+     * @return the sentence, or {@code ""} if the words file has none
+     */
+    public static String sample(FrontPage first, FrontPage.Stance stance, String quote, String agency, String director,
+                                FrontPageReactions reactions, Function<String, String> names) {
+        FrontPageReactions.StanceLines lines = reactions.linesOf(stance);
+        boolean quoted = quote != null && !quote.isBlank() && stance.quotable() && !lines.quoted().isEmpty();
+        List<FrontPageReactions.Line> pool = quoted ? lines.quoted() : lines.plain();
+        if (pool.isEmpty()) {
+            return "";
+        }
+        Map<String, String> tokens = new HashMap<>(tokens(first, names));
+        tokens.put("rival", agency);
+        tokens.put("rivalDirector", director);
+        tokens.put("detail", "");
+        return fill(pool.get(0).text(), tokens).replace("{quote}", quoted(quote));
+    }
+
+    /**
      * Sets a player's quote as the paper prints it: in curly quotes, ending in a full stop unless it
      * ends in other punctuation.
      *

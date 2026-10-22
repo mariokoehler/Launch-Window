@@ -18,10 +18,14 @@ import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.FrontPageView;
 import de.mkoehler.launchwindow.client.view.Hub;
+import de.mkoehler.launchwindow.content.FrontPageReactions;
 import de.mkoehler.launchwindow.content.FrontPages;
 import de.mkoehler.launchwindow.model.FrontPage;
+import de.mkoehler.launchwindow.rules.ReactionPrinter;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -36,6 +40,12 @@ import java.util.Set;
  * <p>The page's layout follows the Photocraft mockup ({@code assets-raw/frontpage/mockup/}) at
  * 1920 x 1080: a 1440 x 900 page with a 40 px margin, a three-column lower half (the photo, then
  * two text columns of 336 px).</p>
+ *
+ * <p>A follow-up, "The world reacts" (&sect;4.18.1), has four text columns of 322 px instead, the photo
+ * over the first, the race box at the foot of the last (the canvas "Launch Window - The World Reacts",
+ * 2026-10-22). Its article runs on from column to column, a paragraph split where a column ends; what
+ * still doesn't fit once the closing paragraphs are dropped runs on to a continuation sheet ("Continued
+ * on page 2"), so nothing is ever cut. On a rival's First the strip offers a statement (component 28).</p>
  *
  * @author Mario Koehler
  */
@@ -69,11 +79,21 @@ public class FrontPageScreen extends SessionScreen {
     private static final float PARAGRAPH_GAP = 4f;
     /** A paragraph's first-line indent, as spaces (the fonts have no em space). */
     private static final String INDENT_TEXT = "    ";
+    /** A follow-up's four text columns and the photo over the first. */
+    private static final float R_COLUMN = 322f;
+    private static final float R_GUTTER = (INNER - 4 * R_COLUMN - 3f) / 6f;
+    private static final float R_PHOTO_HEIGHT = 221f;
+    /** The continuation sheet's running head. */
+    private static final float RUNNING_HEAD = 46f;
 
     private final List<FrontPage> pages;
     private final Runnable done;
     private final boolean reopened;
     private int index;
+    /** 0 for the page itself, 1 for its continuation sheet. */
+    private int sheet;
+    /** What a follow-up's page couldn't hold, for its continuation sheet. */
+    private List<Piece> carried = List.of();
     private int fontGeneration;
 
     /**
@@ -162,7 +182,7 @@ public class FrontPageScreen extends SessionScreen {
 
         Table front = new Table();
         front.top();
-        front.add(page(page)).size(PAGE_WIDTH, PAGE_HEIGHT).padTop(MARGIN).row();
+        front.add(sheet == 0 ? page(page) : continuation(page)).size(PAGE_WIDTH, PAGE_HEIGHT).padTop(MARGIN).row();
         front.add(strip(page)).width(PAGE_WIDTH).padTop(28f);
 
         Stack stack = new Stack();
@@ -177,8 +197,12 @@ public class FrontPageScreen extends SessionScreen {
         Drawable paper = ui.picture("frontpage/paper.jpg");
         sheet.setBackground(paper == null ? ui.solid(Color.valueOf("#f5f0dd")) : paper);
         sheet.top().pad(0f, MARGIN, MARGIN, MARGIN);
-        Optional<FrontPageView.Page> words = FrontPageView.of(page, allPages(), FrontPages.standard(),
-            goal -> session.catalog().goal(goal).isPresent(), ContentNames::of);
+        carried = List.of();
+        Optional<FrontPageView.Page> words = page.followUp()
+            ? FrontPageView.ofReactions(page, allPages(), FrontPageReactions.standard(), FrontPages.standard(),
+                goal -> session.catalog().goal(goal).isPresent(), ContentNames::of)
+            : FrontPageView.of(page, allPages(), FrontPages.standard(),
+                goal -> session.catalog().goal(goal).isPresent(), ContentNames::of);
         if (words.isEmpty()) {
             return sheet;
         }
@@ -191,8 +215,13 @@ public class FrontPageScreen extends SessionScreen {
         Image masthead = new Image(ui.picture("frontpage/masthead.png"));
         masthead.setScaling(Scaling.fit);
         band.add(masthead).size(761f, BAND_HEIGHT).expandX();
-        band.add(ear(ui.label("EXTRA", Theme.TextStyle.NEWS_EXTRA, Theme.INK),
-            ui.label("Special edition", Theme.TextStyle.NEWS_CAPTION, Theme.INK))).size(230f, 84f);
+        if (page.followUp()) {
+            band.add(ear(ui.label("THE WORLD", Theme.TextStyle.NEWS_EAR_TWO, Theme.INK),
+                ui.label("REACTS", Theme.TextStyle.NEWS_EAR_TWO, Theme.INK))).size(230f, 84f);
+        } else {
+            band.add(ear(ui.label("EXTRA", Theme.TextStyle.NEWS_EXTRA, Theme.INK),
+                ui.label("Special edition", Theme.TextStyle.NEWS_CAPTION, Theme.INK))).size(230f, 84f);
+        }
         sheet.add(band).width(INNER).height(BAND_HEIGHT).padTop(BAND_TOP).row();
 
         // The folio line between its rules.
@@ -219,8 +248,190 @@ public class FrontPageScreen extends SessionScreen {
         sheet.add(rule()).width(INNER).height(1f).padTop(10f).row();
 
         float lower = PAGE_HEIGHT - MARGIN - TOP_FIXED - headlineHeight - deckHeight;
-        sheet.add(lower(view, lower)).width(INNER).height(lower).padTop(LOWER_TOP).row();
+        sheet.add(page.followUp() ? lowerReactions(view, lower) : lower(view, lower)).width(INNER).height(lower)
+            .padTop(LOWER_TOP).row();
         return sheet;
+    }
+
+    /**
+     * A follow-up's lower half: four text columns, the photo and its caption over the first, the race box at
+     * the foot of the last. The closing paragraphs go first when the article is long; what still doesn't fit
+     * is carried to the continuation sheet, with "Continued on page 2" at the foot of the last column.
+     */
+    private Table lowerReactions(FrontPageView.Page view, float height) {
+        BitmapFont body = ui.fonts().get(Theme.TextStyle.NEWS_BODY);
+        BitmapFont captionFont = ui.fonts().get(Theme.TextStyle.NEWS_CAPTION);
+        float captionHeight = lines(captionFont, view.caption(), R_COLUMN, Align.left) * captionFont.getLineHeight();
+        float raceHeight = raceHeight(view, R_COLUMN - 24f);
+        float jump = captionFont.getLineHeight() + 6f;
+        float[] capacities = {height - R_PHOTO_HEIGHT - 6f - captionHeight - 8f - BYLINE_HEIGHT, height, height,
+            height - raceHeight - 12f};
+        List<String> paragraphs = new ArrayList<>(view.paragraphs());
+        int droppable = view.droppable();
+        Flow flow = flow(pieces(paragraphs), capacities, body);
+        while (!flow.rest().isEmpty() && droppable > 0) {
+            paragraphs.remove(paragraphs.size() - 1);
+            droppable--;
+            flow = flow(pieces(paragraphs), capacities, body);
+        }
+        if (!flow.rest().isEmpty()) {
+            capacities[3] -= jump;
+            flow = flow(pieces(paragraphs), capacities, body);
+            carried = flow.rest();
+        }
+
+        Table lower = new Table();
+        lower.top().left();
+        for (int c = 0; c < 4; c++) {
+            if (c > 0) {
+                lower.add(rule()).width(1f).height(height).padLeft(R_GUTTER).padRight(R_GUTTER);
+            }
+            Table column = new Table();
+            column.top().left();
+            if (c == 0) {
+                column.add(new Image(cropped(view.photo(), R_COLUMN / R_PHOTO_HEIGHT))).size(R_COLUMN, R_PHOTO_HEIGHT)
+                    .row();
+                column.add(ui.paragraph(view.caption(), Theme.TextStyle.NEWS_CAPTION, Theme.INK)).width(R_COLUMN)
+                    .padTop(6f).padBottom(8f).left().row();
+                column.add(ui.label("FROM OUR SPACE CORRESPONDENT", Theme.TextStyle.NEWS_BYLINE, Theme.INK)).left()
+                    .height(BYLINE_HEIGHT - 6f).padBottom(6f).row();
+            }
+            for (Piece piece : flow.columns().get(c)) {
+                column.add(pieceLabel(piece)).width(R_COLUMN).padBottom(PARAGRAPH_GAP).left().row();
+            }
+            column.add().expandY().row();
+            if (c == 3) {
+                if (!carried.isEmpty()) {
+                    Label more = ui.label("Continued on page 2", Theme.TextStyle.NEWS_CAPTION, Theme.INK);
+                    more.setAlignment(Align.right);
+                    column.add(more).width(R_COLUMN).padBottom(6f).row();
+                }
+                column.add(race(view, R_COLUMN)).width(R_COLUMN).height(raceHeight).bottom();
+            }
+            lower.add(column).width(R_COLUMN).height(height).top();
+        }
+        return lower;
+    }
+
+    /**
+     * The continuation sheet of a follow-up whose article didn't fit its page: a running head, then the
+     * rest of the article in the same four columns.
+     */
+    private Table continuation(FrontPage page) {
+        // Lays the page out again, so what's carried matches the current fonts.
+        page(page);
+        Table sheet = new Table();
+        Drawable paper = ui.picture("frontpage/paper.jpg");
+        sheet.setBackground(paper == null ? ui.solid(Color.valueOf("#f5f0dd")) : paper);
+        sheet.top().pad(MARGIN);
+        sheet.add(rule()).width(INNER).height(4f).row();
+        Table head = new Table();
+        head.add(ui.label("THE WORLD REACTS", Theme.TextStyle.NEWS_LABEL, Theme.INK)).left().width(300f);
+        head.add(ui.label("CONTINUED FROM PAGE 1", Theme.TextStyle.NEWS_FOLIO, Theme.INK)).expandX();
+        Label season = ui.label(seasonOf(page), Theme.TextStyle.NEWS_FOLIO, Theme.INK);
+        season.setAlignment(Align.right);
+        head.add(season).right().width(300f);
+        sheet.add(head).width(INNER).height(RUNNING_HEAD - 10f).padTop(3f).row();
+        sheet.add(rule()).width(INNER).height(1f).padBottom(14f).row();
+        float height = PAGE_HEIGHT - 2 * MARGIN - RUNNING_HEAD - 4f - 1f - 14f;
+        Flow flow = flow(new ArrayDeque<>(carried), new float[] {height, height, height, height},
+            ui.fonts().get(Theme.TextStyle.NEWS_BODY));
+        Table columns = new Table();
+        columns.top().left();
+        for (int c = 0; c < 4; c++) {
+            if (c > 0) {
+                columns.add(rule()).width(1f).height(height).padLeft(R_GUTTER).padRight(R_GUTTER);
+            }
+            Table column = new Table();
+            column.top().left();
+            for (Piece piece : flow.columns().get(c)) {
+                column.add(pieceLabel(piece)).width(R_COLUMN).padBottom(PARAGRAPH_GAP).left().row();
+            }
+            column.add().expandY();
+            columns.add(column).width(R_COLUMN).height(height).top();
+        }
+        sheet.add(columns).width(INNER).height(height).row();
+        return sheet;
+    }
+
+    private static String seasonOf(FrontPage page) {
+        return de.mkoehler.launchwindow.model.GameDate.ofTurn(page.gameTurn()).label().toUpperCase(java.util.Locale.ROOT);
+    }
+
+    /** A part of a paragraph: all of it, or what a column holds of it; only a paragraph's start is indented. */
+    private record Piece(String text, boolean indent) {
+    }
+
+    /** Pieces per column, and what no column held. */
+    private record Flow(List<List<Piece>> columns, List<Piece> rest) {
+    }
+
+    private static Deque<Piece> pieces(List<String> paragraphs) {
+        Deque<Piece> pieces = new ArrayDeque<>();
+        paragraphs.forEach(p -> pieces.add(new Piece(p, true)));
+        return pieces;
+    }
+
+    /**
+     * Runs pieces through columns of the given heights, splitting a paragraph between words where a column
+     * ends (at least two lines stay behind, so no column ends on a lone line).
+     */
+    private Flow flow(Deque<Piece> queue, float[] capacities, BitmapFont font) {
+        float lineHeight = font.getLineHeight();
+        List<List<Piece>> columns = new ArrayList<>();
+        for (float capacity : capacities) {
+            List<Piece> column = new ArrayList<>();
+            float used = 0f;
+            while (!queue.isEmpty()) {
+                Piece piece = queue.peekFirst();
+                float needed = pieceHeight(piece, font);
+                if (used + needed <= capacity) {
+                    column.add(queue.pollFirst());
+                    used += needed;
+                    continue;
+                }
+                int room = (int) Math.floor((capacity - used - PARAGRAPH_GAP) / lineHeight);
+                Piece[] split = room >= 2 ? split(piece, room, font) : null;
+                if (split != null) {
+                    queue.pollFirst();
+                    column.add(split[0]);
+                    queue.addFirst(split[1]);
+                }
+                break;
+            }
+            columns.add(column);
+        }
+        return new Flow(columns, new ArrayList<>(queue));
+    }
+
+    /** Splits a piece after as many words as fill {@code lines} lines; null if not even one line's worth fits. */
+    private Piece[] split(Piece piece, int lines, BitmapFont font) {
+        String[] words = piece.text().split(" ");
+        int low = 0;
+        int high = words.length - 1;
+        while (low < high) {
+            int mid = (low + high + 1) / 2;
+            String head = String.join(" ", java.util.Arrays.copyOfRange(words, 0, mid));
+            if (lines(font, (piece.indent() ? INDENT_TEXT : "") + head, R_COLUMN, Align.left) <= lines) {
+                low = mid;
+            } else {
+                high = mid - 1;
+            }
+        }
+        if (low == 0) {
+            return null;
+        }
+        return new Piece[] {new Piece(String.join(" ", java.util.Arrays.copyOfRange(words, 0, low)), piece.indent()),
+            new Piece(String.join(" ", java.util.Arrays.copyOfRange(words, low, words.length)), false)};
+    }
+
+    private float pieceHeight(Piece piece, BitmapFont font) {
+        return lines(font, (piece.indent() ? INDENT_TEXT : "") + piece.text(), R_COLUMN, Align.left)
+            * font.getLineHeight() + PARAGRAPH_GAP;
+    }
+
+    private Label pieceLabel(Piece piece) {
+        return ui.paragraph((piece.indent() ? INDENT_TEXT : "") + piece.text(), Theme.TextStyle.NEWS_BODY, Theme.INK);
     }
 
     private Table ear(Label top, Label bottom) {
@@ -297,12 +508,7 @@ public class FrontPageScreen extends SessionScreen {
         // end while they don't fit.
         BitmapFont small = ui.fonts().get(Theme.TextStyle.NEWS_SMALL);
         BitmapFont italic = ui.fonts().get(Theme.TextStyle.NEWS_CAPTION);
-        float raceHeight = RACE_CHROME;
-        for (FrontPageView.RaceRow row : view.race()) {
-            raceHeight += oneLine(row) ? Math.max(small.getLineHeight(), italic.getLineHeight()) + RACE_GAP
-                : small.getLineHeight() + lines(italic, row.who(), RACE_TEXT, Align.right) * italic.getLineHeight()
-                    + RACE_GAP;
-        }
+        float raceHeight = raceHeight(view, RACE_TEXT);
         float capacityA = height - BYLINE_HEIGHT - BRIEF_HEIGHT;
         float capacityB = height - raceHeight - 12f;
         List<String> paragraphs = new ArrayList<>(view.paragraphs());
@@ -350,7 +556,7 @@ public class FrontPageScreen extends SessionScreen {
             b.add(paragraphLabel(paragraph)).width(COLUMN).padBottom(PARAGRAPH_GAP).left().row();
         }
         b.add().expandY().row();
-        b.add(race(view)).width(COLUMN).height(raceHeight).bottom();
+        b.add(race(view, COLUMN)).width(COLUMN).height(raceHeight).bottom();
         lower.add(b).width(COLUMN).height(height).top();
         return lower;
     }
@@ -394,7 +600,21 @@ public class FrontPageScreen extends SessionScreen {
         return brief;
     }
 
-    private Table race(FrontPageView.Page view) {
+    /** The race box's height for a text width. */
+    private float raceHeight(FrontPageView.Page view, float textWidth) {
+        BitmapFont small = ui.fonts().get(Theme.TextStyle.NEWS_SMALL);
+        BitmapFont italic = ui.fonts().get(Theme.TextStyle.NEWS_CAPTION);
+        float raceHeight = RACE_CHROME;
+        for (FrontPageView.RaceRow row : view.race()) {
+            raceHeight += oneLine(row, textWidth) ? Math.max(small.getLineHeight(), italic.getLineHeight()) + RACE_GAP
+                : small.getLineHeight() + lines(italic, row.who(), textWidth, Align.right) * italic.getLineHeight()
+                    + RACE_GAP;
+        }
+        return raceHeight;
+    }
+
+    private Table race(FrontPageView.Page view, float width) {
+        float textWidth = width - 24f;
         Table race = new Table();
         race.setBackground(ui.rect(new Color(0f, 0f, 0f, 0f), Theme.INK, 1f));
         race.top().pad(8f, 12f, 8f, 12f);
@@ -404,41 +624,98 @@ public class FrontPageScreen extends SessionScreen {
             who.setAlignment(Align.right);
             Table line = new Table();
             line.add(ui.label(row.first(), Theme.TextStyle.NEWS_SMALL, Theme.INK)).left().expandX();
-            if (oneLine(row)) {
+            if (oneLine(row, textWidth)) {
                 line.add(who).right();
             } else {
                 who.setWrap(true);
                 line.row();
-                line.add(who).width(RACE_TEXT).right();
+                line.add(who).width(textWidth).right();
             }
-            race.add(line).width(RACE_TEXT).padBottom(RACE_GAP).row();
+            race.add(line).width(textWidth).padBottom(RACE_GAP).row();
         }
         return race;
     }
 
     /** Whether a race row's First and who-and-when fit side by side. */
-    private boolean oneLine(FrontPageView.RaceRow row) {
+    private boolean oneLine(FrontPageView.RaceRow row, float textWidth) {
         GlyphLayout first = new GlyphLayout(ui.fonts().get(Theme.TextStyle.NEWS_SMALL), row.first());
         GlyphLayout who = new GlyphLayout(ui.fonts().get(Theme.TextStyle.NEWS_CAPTION), row.who());
-        return first.width + who.width + 16f <= RACE_TEXT;
+        return first.width + who.width + 16f <= textWidth;
     }
 
     private Table strip(FrontPage page) {
         Table strip = new Table();
-        String line = FrontPageView.gameLine(page, session.state().getAgencyName(), session.catalog(), ContentNames::of);
+        String line = page.followUp() ? "Statements only: no effect on the race."
+            : FrontPageView.gameLine(page, session.state().getAgencyName(), session.catalog(), ContentNames::of);
         strip.add(ui.label(line, Theme.TextStyle.BODY, Theme.ON_PAGE)).left().expandX();
         if (pages.size() > 1) {
             strip.add(ui.label((index + 1) + " of " + pages.size(), Theme.TextStyle.BODY_SM, Theme.ON_PAGE_MUTED))
                 .padRight(Theme.SPACE_4);
         }
-        String next = reopened ? "Close" : index + 1 < pages.size() ? "Next front page" : "Continue";
+        statementButton(page).ifPresent(extra -> strip.add(extra).padRight(Theme.SPACE_4));
+        String next = sheet == 0 && !carried.isEmpty() ? "Turn to page 2"
+            : reopened ? "Close" : index + 1 < pages.size() ? "Next front page" : "Continue";
         TextButton button = ui.pageButton(next);
         button.addListener(clicked(this::next));
         strip.add(button).right();
         return strip;
     }
 
+    /**
+     * Shows the current page's continuation sheet, if its article ran on to one, as the strip's "Turn to
+     * page 2" does ({@code ScreenSnapshot}).
+     */
+    public void showContinuation() {
+        if (sheet == 0 && !carried.isEmpty()) {
+            next();
+        }
+    }
+
+    /**
+     * The strip's second button on a First's page (component 28): "Give a statement" or "Your statement:
+     * Polite · Change" while this player may answer it, or "Read the reactions" once its follow-up is printed.
+     */
+    private Optional<TextButton> statementButton(FrontPage page) {
+        if (page.followUp() || sheet > 0) {
+            return Optional.empty();
+        }
+        Optional<FrontPage> followUp = allPages().stream()
+            .filter(p -> p.followUp() && page.id().equals(p.reactsTo())).findFirst();
+        if (followUp.isPresent()) {
+            if (!reopened) {
+                return Optional.empty();
+            }
+            TextButton read = ui.pageGhostButton("Read the reactions");
+            read.addListener(clicked(() -> game.visit(new FrontPageScreen(game, List.of(followUp.get()),
+                () -> game.setScreen(this), true))));
+            return Optional.of(read);
+        }
+        if (!ReactionPrinter.mayReact(page, Math.toIntExact(session.openTurn()), session.state().getAgencyName(),
+                Math.toIntExact(session.joinedTurn()))) {
+            return Optional.empty();
+        }
+        Optional<FrontPage.Statement> given = session.statement(page.id());
+        TextButton button = ui.pageGhostButton(given.map(s -> "Your statement: "
+            + FrontPageView.stanceName(s.stance()) + " · Change").orElse("Give a statement"));
+        if (given.isPresent()) {
+            Image check = new Image(ui.icon("check"), Scaling.fit);
+            check.setColor(Theme.ON_PAGE_STRONG);
+            Label label = button.getLabel();
+            button.clearChildren();
+            button.add(check).size(13f).padRight(6f);
+            button.add(label);
+        }
+        button.addListener(clicked(() -> new StatementDialog(this, page, this::rebuild).show()));
+        return Optional.of(button);
+    }
+
     private void next() {
+        if (sheet == 0 && !carried.isEmpty()) {
+            sheet = 1;
+            rebuild();
+            return;
+        }
+        sheet = 0;
         if (!reopened) {
             game.markFrontPageSeen(pages.get(index).id());
         }

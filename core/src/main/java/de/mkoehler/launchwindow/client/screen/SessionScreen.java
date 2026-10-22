@@ -650,6 +650,7 @@ abstract class SessionScreen extends StageScreen {
         game.gateway().fetchFrontPages(session.credentials(), result -> {
             if (result.ok()) {
                 session.keepFrontPages(result.pages());
+                session.keepStatements(result.yours());
             }
             if (isShowing()) {
                 after.run();

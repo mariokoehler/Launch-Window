@@ -1,8 +1,9 @@
 # The world reacts: rivals' statements on a First
 
-**Status: an idea, planned 2026-10-20, not built.** Referenced from `design.md` §5, Backlog. The plan below was
-written against the code as it stood on 2026-10-20 (after commit f06c1ee); check its file paths and line numbers
-before building. Points marked unconfirmed are defaults for the user to decide.
+**Status: built 2026-10-22; this first plan is superseded where it differs** (`ui-spec.md` §4.18.1, component
+28, G17, and `design.md` §5). The main differences: the article is a story chosen by the statements' mood with
+linking sentences and public-fact details, not a grid of boxes; at most 4 statements are told in full, not 9;
+the messages are `SubmitStatementRequest`/`Response`; the page has four columns and a continuation sheet.
 
 
 ## Context

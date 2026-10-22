@@ -20,6 +20,9 @@ import de.mkoehler.launchwindow.net.messages.GameInfoResponse;
 import de.mkoehler.launchwindow.net.messages.HandshakeRequest;
 import de.mkoehler.launchwindow.net.messages.HandshakeResponse;
 import de.mkoehler.launchwindow.net.messages.SubmitActionRequest;
+import de.mkoehler.launchwindow.net.messages.SubmitStatementRequest;
+import de.mkoehler.launchwindow.net.messages.SubmitStatementResponse;
+import de.mkoehler.launchwindow.model.FrontPage;
 import de.mkoehler.launchwindow.net.messages.SubmitActionResponse;
 import de.mkoehler.launchwindow.net.messages.ResolveTurnNowRequest;
 import de.mkoehler.launchwindow.net.messages.ResolveTurnNowResponse;
@@ -267,12 +270,31 @@ public final class NetworkGateway implements ServerGateway {
         }
         try {
             FrontPagesResponse response = client.sendAndReceive(new FrontPagesRequest(), FrontPagesResponse.class);
-            return response.success() ? new FrontPagesResult(true, "", response.pages())
+            return response.success() ? new FrontPagesResult(true, "", response.pages(), response.yours())
                 : new FrontPagesResult(false, response.message(), null);
         } catch (IOException | RuntimeException e) {
             dropConnection();
             return new FrontPagesResult(false, e.getMessage(), null);
         }
+    }
+
+    @Override
+    public void submitStatement(Credentials credentials, long gameTurn, String pageId, FrontPage.Stance stance,
+                                String quote, Consumer<StatementResult> done) {
+        run(() -> {
+            Optional<LoginResult> refusal = ensureSession(credentials);
+            if (refusal.isPresent()) {
+                return new StatementResult(false, refusal.get().message(), null);
+            }
+            try {
+                SubmitStatementResponse response = client.sendAndReceive(new SubmitStatementRequest(
+                    Math.toIntExact(gameTurn), pageId, stance, quote == null ? "" : quote), SubmitStatementResponse.class);
+                return new StatementResult(response.success(), response.message(), response.yours());
+            } catch (IOException | RuntimeException e) {
+                dropConnection();
+                return new StatementResult(false, e.getMessage(), null);
+            }
+        }, message -> new StatementResult(false, message, null), done);
     }
 
     @Override

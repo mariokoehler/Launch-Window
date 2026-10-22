@@ -42,6 +42,10 @@ import de.mkoehler.launchwindow.client.screen.RocketProgramsScreen;
 import de.mkoehler.launchwindow.client.screen.VabScreen;
 import de.mkoehler.launchwindow.client.screen.MuseumScreen;
 import de.mkoehler.launchwindow.client.screen.ArchivePageScreen;
+import de.mkoehler.launchwindow.client.screen.StatementDialog;
+import de.mkoehler.launchwindow.content.FrontPageReactions;
+import de.mkoehler.launchwindow.content.FrontPages;
+import de.mkoehler.launchwindow.rules.ReactionPrinter;
 import de.mkoehler.launchwindow.client.screen.FrontPageScreen;
 import de.mkoehler.launchwindow.client.screen.AstronautComplexScreen;
 import de.mkoehler.launchwindow.client.screen.PublicAffairsScreen;
@@ -275,6 +279,10 @@ public final class ScreenSnapshot {
             frontPageShots(folder, game);
             return;
         }
+        if ("reactions".equals(System.getProperty("shots"))) {
+            reactionShots(folder, game);
+            return;
+        }
         if ("grounding".equals(System.getProperty("shots"))) {
             groundingShots(folder, game);
             return;
@@ -496,6 +504,7 @@ public final class ScreenSnapshot {
         consoleShots(folder, game);
         archiveShots(folder, game);
         findingShots(folder, game);
+        reactionShots(folder, game);
     }
 
     /**
@@ -913,6 +922,108 @@ public final class ScreenSnapshot {
             later += 24 * 3_600_000L;
             game.hubClock().enter(later);
         }
+    }
+
+    /**
+     * The world reacts (ui-spec.md section 4.18.1, component 28, 2026-10-22): a rival's First with the
+     * strip's statement button in its states, the statement dialog's states, and follow-up pages for one
+     * statement, a few, and a crowded game at the longest names, with its continuation sheet.
+     */
+    private static void reactionShots(File folder, LaunchWindowGame game) {
+        game.useFrontPageMarksInMemory(new java.util.HashSet<>());
+        String hash = ContentPackHash.ofClasspath("content/standard", ScreenSnapshot.class.getClassLoader());
+        GameInfoResponse info = GameInfoResponse.success("standard", hash, List.of(), 26, true,
+            6 * 3_600_000L, 0L, null, List.of(), List.of(), 0);
+        PlayerSnapshot me = new PlayerSnapshot("Northern Rocket Bureau", Archetype.NASA, 60_000, 2_140, 3_000, 26);
+        me.setDirectorName("Ellen Hale");
+        startSession(game, me, info);
+        FrontPage satellite = new FrontPage("11-earth-orbit-satellite", "earth-orbit-satellite", 11, "sat-new-moon",
+            "Crisp, clear evening", List.of(), List.of(new FrontPage.Achiever("Northern Rocket Bureau", "Ellen Hale",
+                List.of())), List.of("Orion Spaceworks"));
+        FrontPage space = new FrontPage("25-human-in-space", "human-in-space", 25, "space-up-and-down",
+            "Fair and cool tonight", List.of(), List.of(new FrontPage.Achiever("Kestrel Space Directorate",
+                "Mikhail Sorin", List.of("Lev Marek"))), List.of("Northern Rocket Bureau", "Polaris Space Agency"));
+        game.session().keepFrontPages(List.of(satellite, space));
+        game.session().keepStatements(List.of());
+        write(folder, "reactions-strip-give.png", new FrontPageScreen(game, List.of(space), () -> { }, false), null);
+        write(folder, "reactions-dialog-fresh.png", new FrontPageScreen(game, List.of(space), () -> { }, false),
+            screen -> new StatementDialog(screen, space, () -> { }).show());
+        write(folder, "reactions-dialog-next.png", new FrontPageScreen(game, List.of(space), () -> { }, false),
+            screen -> new StatementDialog(screen, space, () -> { }).preset(FrontPage.Stance.NEXT,
+                "Congratulations to Kestrel on a fine flight. Our pilots are ready, and we will be up soon.").show());
+        write(folder, "reactions-dialog-nocomment.png", new FrontPageScreen(game, List.of(space), () -> { }, false),
+            screen -> new StatementDialog(screen, space, () -> { }).preset(FrontPage.Stance.NO_COMMENT, "").show());
+        write(folder, "reactions-dialog-error.png", new FrontPageScreen(game, List.of(space), () -> { }, false),
+            screen -> new StatementDialog(screen, space, () -> { }).preset(FrontPage.Stance.POLITE,
+                "Well flown <3").show());
+        game.session().keepStatements(List.of(new FrontPage.Statement(space.id(), FrontPage.Stance.POLITE,
+            "Well flown.")));
+        write(folder, "reactions-strip-given.png", new FrontPageScreen(game, List.of(space), () -> { }, false), null);
+        write(folder, "reactions-dialog-edit.png", new FrontPageScreen(game, List.of(space), () -> { }, false),
+            screen -> new StatementDialog(screen, space, () -> { }).show());
+
+        // The follow-ups, printed by the server's own printer from the bundled words.
+        FrontPageReactions words = FrontPageReactions.standard();
+        List<ReactionPrinter.Agency> few = List.of(
+            agencyOf("Kestrel Space Directorate", "Mikhail Sorin", null, ""),
+            agencyOf("Northern Rocket Bureau", "Ellen Hale", FrontPage.Stance.ENTHUSIASTIC,
+                "Today belongs to everyone who has ever looked up."),
+            agencyOf("Halberd Rocket Bureau", "Oskar Lind", FrontPage.Stance.POLITE, ""),
+            agencyOf("Polaris Space Agency", "Ruth Calder", FrontPage.Stance.NEXT,
+                "We will be next, and we will stay up longer."),
+            agencyOf("Orion Spaceworks", "Sam Okafor", null, ""));
+        FrontPage fewPage = ReactionPrinter.print(26, 7L, List.of(space), few, words, FrontPages.standard()).get(0);
+        FrontPage one = ReactionPrinter.print(26, 7L, List.of(space), List.of(few.get(0), few.get(3)), words,
+            FrontPages.standard()).get(0);
+        startSession(game, me, GameInfoResponse.success("standard", hash, List.of(), 27, true,
+            6 * 3_600_000L, 0L, null, List.of(), List.of(), 0));
+        game.session().keepFrontPages(List.of(satellite, space, fewPage));
+        write(folder, "reactions-page-few.png", new FrontPageScreen(game, List.of(fewPage), () -> { }, false), null);
+        write(folder, "reactions-strip-read.png", new FrontPageScreen(game, List.of(space), () -> { }, true), null);
+        game.session().keepFrontPages(List.of(satellite, space, one));
+        write(folder, "reactions-page-one.png", new FrontPageScreen(game, List.of(one), () -> { }, false), null);
+
+        // A crowded game at the longest names and quotes allowed: four told, the rest folded, a continuation.
+        String quote = ("We congratulate them warmly on a fine achievement and we look forward to the day when our "
+            + "own crews follow them into the history books. ").repeat(2).substring(0,
+            FrontPage.Statement.MAX_QUOTE_LENGTH).strip();
+        List<ReactionPrinter.Agency> crowd = new java.util.ArrayList<>();
+        crowd.add(agencyOf("Kestrel Space Directorate", "Mikhail Sorin", null, ""));
+        String[] names = {"Interplanetary Research Agency A", "Interplanetary Research Agency B",
+            "Interplanetary Research Agency C", "Interplanetary Research Agency D", "Interplanetary Research Agency E",
+            "Interplanetary Research Agency F", "Interplanetary Research Agency G"};
+        FrontPage.Stance[] stances = {FrontPage.Stance.ENTHUSIASTIC, FrontPage.Stance.NEXT, FrontPage.Stance.DOWNPLAY,
+            FrontPage.Stance.POLITE, FrontPage.Stance.POLITE, FrontPage.Stance.POLITE, null};
+        for (int i = 0; i < names.length; i++) {
+            crowd.add(new ReactionPrinter.Agency(names[i], "Alexandra Konstantinopoulou-Sim" + (char) ('a' + i), 1,
+                java.util.Set.of("earth-orbit-satellite"), stances[i] == null ? java.util.Map.of()
+                    : java.util.Map.of(space.id(), new FrontPage.Statement(space.id(), stances[i], quote))));
+        }
+        FrontPage crowded = ReactionPrinter.print(26, 7L, List.of(space), crowd, words, FrontPages.standard()).get(0);
+        game.session().keepFrontPages(List.of(satellite, space, crowded));
+        write(folder, "reactions-page-crowded.png", new FrontPageScreen(game, List.of(crowded), () -> { }, false),
+            null);
+        // More statements than the printer ever tells, to see the article run on to its continuation sheet.
+        List<FrontPage.Reaction> many = new java.util.ArrayList<>(crowded.reactions());
+        for (FrontPage.Reaction reaction : crowded.reactions()) {
+            if (!words.shared(reaction.lineId())) {
+                many.add(0, reaction);
+            }
+        }
+        FrontPage overflowing = new FrontPage(crowded.id(), crowded.goalId(), crowded.gameTurn(), crowded.storyId(),
+            crowded.weather(), crowded.foldedGoalIds(), crowded.achievers(), crowded.rivals(), crowded.kind(),
+            crowded.reactsTo(), many);
+        game.session().keepFrontPages(List.of(satellite, space, overflowing));
+        write(folder, "reactions-page-overflow.png", new FrontPageScreen(game, List.of(overflowing), () -> { },
+            false), null);
+        write(folder, "reactions-page-overflow-2.png", new FrontPageScreen(game, List.of(overflowing), () -> { },
+            false), FrontPageScreen::showContinuation);
+    }
+
+    private static ReactionPrinter.Agency agencyOf(String name, String director, FrontPage.Stance stance, String quote) {
+        return new ReactionPrinter.Agency(name, director, 1, java.util.Set.of("earth-orbit-satellite"),
+            stance == null ? java.util.Map.of() : java.util.Map.of("25-human-in-space",
+                new FrontPage.Statement("25-human-in-space", stance, quote)));
     }
 
     /**

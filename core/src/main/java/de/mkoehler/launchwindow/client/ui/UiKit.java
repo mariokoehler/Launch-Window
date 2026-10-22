@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.Tooltip;
@@ -79,6 +80,7 @@ public final class UiKit implements Disposable {
     private TextField.TextFieldStyle searchFieldStyle;
     private Slider.SliderStyle sliderStyle;
     private TextButton.TextButtonStyle pageButtonStyle;
+    private TextButton.TextButtonStyle pageGhostButtonStyle;
     private String backdropPath;
     private Texture backdrop;
 
@@ -548,6 +550,43 @@ public final class UiKit implements Disposable {
         TextButton button = new TextButton(text, pageButtonStyle);
         button.pad(Theme.SPACE_2, Theme.SPACE_3, Theme.SPACE_2, Theme.SPACE_3);
         return button;
+    }
+
+    /**
+     * Builds a ghost button for the strip under a page (component 28): transparent, a thin
+     * {@link Theme#ON_PAGE} line and an {@link Theme#ON_PAGE_STRONG} label, beside the white
+     * {@link #pageButton}, which stays the way on.
+     *
+     * @param text the label
+     * @return the button
+     */
+    public TextButton pageGhostButton(String text) {
+        if (pageGhostButtonStyle == null) {
+            pageGhostButtonStyle = new TextButton.TextButtonStyle(buttonStyles.get(Theme.ButtonKind.SECONDARY));
+            Color clear = new Color(0f, 0f, 0f, 0f);
+            pageGhostButtonStyle.up = rect(clear, Theme.ON_PAGE, Theme.BORDER_THIN);
+            pageGhostButtonStyle.over = rect(new Color(1f, 1f, 1f, 0.12f), Theme.ON_PAGE, Theme.BORDER_THIN);
+            pageGhostButtonStyle.down = rect(new Color(1f, 1f, 1f, 0.2f), Theme.ON_PAGE, Theme.BORDER_THIN);
+            pageGhostButtonStyle.fontColor = Theme.ON_PAGE_STRONG;
+            pageGhostButtonStyle.overFontColor = Theme.ON_PAGE_STRONG;
+            pageGhostButtonStyle.downFontColor = Theme.ON_PAGE_STRONG;
+        }
+        TextButton button = new TextButton(text, pageGhostButtonStyle);
+        button.pad(Theme.SPACE_2, Theme.SPACE_3, Theme.SPACE_2, Theme.SPACE_3);
+        return button;
+    }
+
+    /**
+     * Builds a multi-line text field in the text field's look (component 28's quote).
+     *
+     * @param text        the initial text
+     * @param placeholder the hint shown while empty
+     * @return the field
+     */
+    public TextArea textArea(String text, String placeholder) {
+        TextArea area = new TextArea(text, fieldStyle);
+        area.setMessageText(placeholder);
+        return area;
     }
 
     /**

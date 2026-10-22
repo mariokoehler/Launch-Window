@@ -485,6 +485,16 @@ public final class Theme {
         /** The race box's First names: Libre Caslon Regular 14. */
         NEWS_SMALL(FontFile.LIBRE_CASLON_REGULAR, 14, 19, 0f),
         /*
+         * The world reacts (ui-spec.md section 4.18.1, component 28, from the canvas
+         * "Launch Window - The World Reacts", 2026-10-22). Not design-system tokens.
+         */
+        /** The statement dialog's preview, "It might read": Libre Caslon Italic 15, line-height 21. */
+        NEWS_QUOTE(FontFile.LIBRE_CASLON_ITALIC, 15, 21, 0f),
+        /** A small box title, such as the preview's "IT MIGHT READ": Old Standard Bold 13, letter-spaced. */
+        NEWS_LABEL_SM(FontFile.OLD_STANDARD_BOLD, 13, 16, 0.1f),
+        /** A follow-up's right ear, "THE WORLD / REACTS" in two lines: Old Standard Bold 25, letter-spaced. */
+        NEWS_EAR_TWO(FontFile.OLD_STANDARD_BOLD, 25, 28, 0.12f),
+        /*
          * The archive's page (ui-spec.md section 4.19, from the Archive canvas, 2026-10-15): an
          * encyclopedia article's type, a step larger than the working screens'. Not design-system tokens yet.
          */

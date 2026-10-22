@@ -132,6 +132,22 @@ class ReactionPrinterTest {
     }
 
     @Test
+    void aCrowdedPageTakesTurnsAcrossTheStances() {
+        List<ReactionPrinter.Agency> agencies = new ArrayList<>();
+        agencies.add(agency("Orion Spaceworks", 1, null));
+        for (String name : List.of("Polite A", "Polite B", "Polite C", "Polite D")) {
+            agencies.add(agency(name, 1, statement(FrontPage.Stance.POLITE, "Well done.")));
+        }
+        agencies.add(agency("Next E", 1, statement(FrontPage.Stance.NEXT, "We follow.")));
+        agencies.add(agency("Down F", 1, statement(FrontPage.Stance.DOWNPLAY, "A stunt.")));
+        FrontPage page = ReactionPrinter.print(21, SEED, List.of(FIRST), agencies, WORDS, PAGES).get(0);
+        List<FrontPage.Stance> told = page.reactions().stream().filter(r -> !WORDS.shared(r.lineId()))
+            .map(FrontPage.Reaction::stance).toList();
+        assertEquals(List.of(FrontPage.Stance.POLITE, FrontPage.Stance.POLITE, FrontPage.Stance.NEXT,
+            FrontPage.Stance.DOWNPLAY), told, "every voice is told before a stance's second");
+    }
+
+    @Test
     void aRivalThatMatchedTheFirstIsAlwaysSaidToHave() {
         for (long seed = 0; seed < 20; seed++) {
             List<ReactionPrinter.Agency> agencies = List.of(agency("Orion Spaceworks", 1, null),

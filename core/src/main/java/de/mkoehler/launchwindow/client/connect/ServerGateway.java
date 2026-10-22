@@ -111,6 +111,23 @@ public interface ServerGateway {
     }
 
     /**
+     * Gives the press a statement about a rival's First, or withdraws it ({@code ui-spec.md} &sect;4.18.1,
+     * G17). A write: never repeated if the connection breaks. By default it never answers, like a
+     * gateway with no server.
+     *
+     * @param credentials who and where
+     * @param gameTurn    the open turn the player saw
+     * @param pageId      the First's page
+     * @param stance      what it says, or {@code null} to withdraw
+     * @param quote       the quote, or {@code ""}
+     * @param done        called on the render thread with the result
+     */
+    default void submitStatement(Credentials credentials, long gameTurn, String pageId,
+                                 de.mkoehler.launchwindow.model.FrontPage.Stance stance, String quote,
+                                 Consumer<StatementResult> done) {
+    }
+
+    /**
      * Fetches when the archive's goals were first reached in the game ({@code design.md} &sect;2.12,
      * G15). A read: retried once if the connection broke. By default it never answers, like a gateway
      * with no server.

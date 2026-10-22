@@ -56,6 +56,7 @@ public final class ClientSession {
     private long lastTurnWithoutReport;
     private List<RivalSummary> rivals;
     private List<FrontPage> frontPages;
+    private List<FrontPage.Statement> statements = List.of();
     private List<ArchiveUnlock> archive;
 
     private ClientSession(Credentials credentials, ContentCatalog catalog, PackStatus packStatus, PlayerSnapshot state,
@@ -265,6 +266,35 @@ public final class ClientSession {
      */
     public void keepFrontPages(List<FrontPage> pages) {
         this.frontPages = List.copyOf(pages);
+    }
+
+    /**
+     * Returns the statements this player gave in the open turn ({@code ui-spec.md} &sect;4.18.1), as
+     * last fetched or kept.
+     *
+     * @return the statements, maybe none
+     */
+    public List<FrontPage.Statement> statements() {
+        return statements;
+    }
+
+    /**
+     * Keeps the statements this player gave in the open turn.
+     *
+     * @param statements the statements
+     */
+    public void keepStatements(List<FrontPage.Statement> statements) {
+        this.statements = List.copyOf(statements);
+    }
+
+    /**
+     * Returns this player's statement about a First's page in the open turn.
+     *
+     * @param pageId the page
+     * @return the statement, if one was given
+     */
+    public java.util.Optional<FrontPage.Statement> statement(String pageId) {
+        return statements.stream().filter(s -> s.pageId().equals(pageId)).findFirst();
     }
 
     /**

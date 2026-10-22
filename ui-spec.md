@@ -1187,8 +1187,8 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       mission lists in Mission Control don't wear the badge yet. Shots `contracts-configs-*.png`,
       `contracts-program.png`, `contracts-assemble.png`.
 
-28. **Statement dialog** *(the user's idea, 2026-10-20, for §4.18 "The world reacts"; specified 2026-10-22,
-    to be mocked up in Claude Design)*. Gives the press one statement about a rival's First, printed the
+28. **Statement dialog** *(the user's idea, 2026-10-20, for §4.18 "The world reacts"; specified, mocked up
+    and built 2026-10-22, `screen.StatementDialog`)*. Gives the press one statement about a rival's First, printed the
     next turn in a follow-up page.
     - **Opens from** the strip under a rival's First page (§4.18), from a secondary button left of the
       primary one: "Give a statement" while the player may give one (below), "Your statement: Polite ·
@@ -1220,6 +1220,14 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       `client.ui.Refusals`.
     - **States to mock up:** fresh; "We'll be next" with a quote and its preview; No comment (quote
       disabled); the quote error; editing a given statement (Withdraw shown); the strip's three states.
+    - **Built as mocked up (2026-10-22):** the strip's ghost button (`UiKit.pageGhostButton`, a check icon
+      before "Your statement: ... · Change"); the rows a navy line and a 5 % navy tint when picked (the
+      mockup's, not the option card's gold); the quote a `TextArea` (`UiKit.textArea`) filtered to the allowed
+      characters, its counter inside at the foot; the preview a piece of `paper.jpg` with `NEWS_LABEL_SM` and
+      `NEWS_QUOTE`, the stance's first line with the player's names, the quote left out while it has an error;
+      Submit disabled until a stance is picked and while the quote has an error; Withdraw at the left,
+      destructive, without confirmation. The picked stance survives a change of stance, the quote not when
+      No comment empties it. Shots `-Dshots=reactions` (`reactions-*.png`).
 
 ---
 
@@ -3338,7 +3346,7 @@ from `assets/content/front-pages.json` (`content.FrontPages`). Shots `frontpage-
   instances at weight 400, cut from the variable fonts), the `NEWS_*` text styles (the headline styles
   generated with capitals only, `Theme.CAPITALS`), and `SCRIM_DEEP` (`#0d1b33` at 80 %).
 
-#### 4.18.1 The world reacts *(the user's idea, 2026-10-20; specified 2026-10-22, G17)*
+#### 4.18.1 The world reacts *(the user's idea, 2026-10-20; specified, mocked up and built 2026-10-22, G17)*
 **Purpose:** a First is news for the winner and a moment for everyone else. For one turn after a First's
 page is printed, every rival may give the press a statement about it (component 28); at the next
 resolution a follow-up page, "The World Reacts", prints them all as one article. Flavour only: no money,
@@ -3367,12 +3375,21 @@ prestige or anything else changes.
   - *Close:* per First, pointing at the next contest; the Moon landing's at the race's end. Closing
     paragraphs are dropped from the end when the page is full.
 - **No statement at all** (every rival silent): no follow-up page (unconfirmed).
-- **The page:** the First page's frame (§4.18), the right ear "THE WORLD REACTS", the First's photo and
-  caption, the race box as of the follow-up's turn, no "In brief". The strip says "Statements only: no
-  effect on the race." It shows like any page (on login, after a resolution) and opens again from the
-  First's page ("Read the reactions"). *Lower half to mock up:* more text room than a First's page (about
-  60 lines): proposed, the photo at one column's width over column one, the article through columns one to
-  three, the race box at the foot of column three.
+- **The page:** the First page's frame (§4.18), the right ear "THE WORLD / REACTS" in two lines
+  (`NEWS_EAR_TWO`), the First's photo and caption, the race box as of the follow-up's turn, no "In brief".
+  The strip says "Statements only: no effect on the race." It shows like any page (on login, after a
+  resolution) and opens again from the First's page ("Read the reactions", reopened only).
+- **Lower half** (mocked up on the canvas `Launch Window — The World Reacts`): four text columns of 322 px
+  with 1 px rules between, the photo (322 x 221) and its caption over column one, then the byline; the race
+  box at the foot of column four. The article runs from column to column and a paragraph is split between
+  words where a column ends (at least two lines stay behind; the rest goes on unindented), ragged-right as
+  on a First's page (the mockup's justified, hyphenated text needs a line-level layout).
+- **When it doesn't fit:** the closing paragraphs go first; what still doesn't fit runs on to a continuation
+  sheet: "Continued on page 2" at the foot of column four, "Turn to page 2" on the strip's button, then a
+  sheet with a running head ("THE WORLD REACTS · CONTINUED FROM PAGE 1 · <season>") and four full columns
+  (user, 2026-10-22: no scroll area). The fullest article the printer makes (4 told at 140 characters, the
+  longest names) still fits one page in the shots; `FrontPageReactionsTest` holds the words to 64 lines at
+  316 px, unsplit.
 - **Words:** `assets/content/front-page-reactions.json` (outside the pack, not hashed;
   `FrontPageReactionsTest`): per First its stories per mood, its detail clauses and closes; per stance its
   quoted, plain and "also" lines; the linking sentences; the declined lines. Every piece has an id that
@@ -3752,7 +3769,7 @@ current state alone. Each is an M5 task.
   - **Events:** `FindingPublished`, `FindingLearned` (append-only ids `findingPublished`, `findingLearned`).
   - **Reset the dev data root and rebuild client and server together** (saved fields, a pack hash change,
     a new action and message).
-- **G17. The world reacts (§4.18.1, component 28, 2026-10-22). Planned, being built.**
+- **G17. The world reacts (§4.18.1, component 28, 2026-10-22). Built.**
   - **Model:** `FrontPage` gains `kind` (FIRST or REACTIONS; missing reads as FIRST, so old files load),
     `reactsTo` and `reactions` (`FrontPage.Reaction`: agency, director, stance, quote, and the ids of its
     line, link and detail). `FrontPage.Statement` (page, stance, quote) is what a player gives.
@@ -3761,6 +3778,8 @@ current state alone. Each is an M5 task.
   - **Server:** statements kept in `reactions/turn-N.json` by `GameSeeds.rivalKey`, never account ids;
     `rules.ReactionPrinter` prints the follow-ups in `printFrontPages`, in one `FrontPageStore.keep` with
     the turn's Firsts; `TurnRollback` keeps turn T's statements and deletes later ones.
+  - **Client:** `ServerGateway.submitStatement` (a write, never repeated), `FrontPagesResult.yours`,
+    `ClientSession.statements`, the refusals in `client.ui.Refusals`.
   - **Rebuild client and server together; no reset.**
 
 ## 7. Suggested mockup order

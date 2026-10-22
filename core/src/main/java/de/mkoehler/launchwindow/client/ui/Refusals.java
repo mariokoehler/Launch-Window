@@ -40,6 +40,14 @@ public final class Refusals {
         Map.entry("NO_FILE", "An offer needs a personnel file on that person."),
         Map.entry("CANT_APPROACH_GROUP", "Astronauts can't be approached."),
         Map.entry("INVALID_RAISE", "Pick one of the raises."),
+        // The world reacts (ui-spec.md section 4.18.1, component 28).
+        Map.entry("UNKNOWN_PAGE", "That front page isn't there any more."),
+        Map.entry("REACTION_WINDOW_CLOSED", "Statements on that First closed when the turn after it resolved."),
+        Map.entry("NOT_A_RIVAL", "Only a rival that was in the race when the First was printed can answer it."),
+        Map.entry("INVALID_STANCE", "Pick one of the five stances."),
+        Map.entry("QUOTE_TOO_LONG", "At most " + de.mkoehler.launchwindow.model.FrontPage.Statement.MAX_QUOTE_LENGTH
+            + " characters."),
+        Map.entry("QUOTE_BAD_CHARACTERS", "Only letters, numbers and common punctuation."),
         Map.entry("OFFER_USED", "This season's offer is already made. Cancel it to make another."),
         Map.entry("ALREADY_APPROACHED", "You already made them an offer. They won't hear another from you."),
         Map.entry("INVALID_RETENTION", "That standing order isn't one of the choices."),

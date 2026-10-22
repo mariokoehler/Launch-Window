@@ -258,6 +258,13 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   to 33 % of the goal's prestige. The mapping awaits the user's review. Every finding has its archive page (33 pages in all).
   `-Dshots=findings`, `-Drules.findingBonus=0`. Reset the dev data root, rebuild client and server together.
 
+- **The world reacts is built** (the user's idea, 2026-10-20, built 2026-10-22, `design.md` §5, `ui-spec.md`
+  §4.18.1, component 28 and G17, from the canvas `Launch Window — The World Reacts`): rivals give one statement
+  on a First in the turn after it (`SubmitStatementRequest`, kept in `reactions/turn-N.json` by rival key), and
+  the next resolution prints a follow-up page (`rules.ReactionPrinter`), its words in
+  `assets/content/front-page-reactions.json` (outside the pack, `FrontPageReactionsTest`). `FrontPage` gained
+  fields (old files load). A new message pair: rebuild client and server together; no reset.
+
 ## How we work
 
 - **Screens:** Claude writes the spec in `ui-spec.md`, the user mocks it up in Claude Design,
@@ -504,7 +511,9 @@ cd assets && java --enable-native-access=ALL-UNNAMED -cp "../lwjgl3/target/class
   Never add it there. `ContentStringsTest` fails until every new id has text. The same goes for
   `assets/content/space-race-news.json` (`SpaceRaceNewsTest`), `pr-press.json` (`PrDutyTest`) and
   `event-stories.json` (`EventStoriesTest`, which holds each event to its sized count), and
-  `decisions.json` (`DecisionsTest`; saved state keeps its ids too), `agency-names.json` (`AgencyNamesTest`), `replay-sounds.json`
+  `decisions.json` (`DecisionsTest`; saved state keeps its ids too), `agency-names.json` (`AgencyNamesTest`),
+  `front-page-reactions.json` (`FrontPageReactionsTest`, which also holds the fullest article to its columns; printed
+  pages store its ids), `replay-sounds.json`
   (`ReplaySoundsTest`: every take there, listed and credited; loops OGG or WAV, never MP3), `replay-clips.json`
   (`ReplayClipsTest`, which holds every rule to its three clips and sidecars), and `front-pages.json`
   (`FrontPagesTest`, which also holds every article to its columns; printed pages store story ids). Core's tests have no assets on the
