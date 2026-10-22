@@ -3828,6 +3828,8 @@ current state alone. Each is an M5 task.
     (`ReactionStore.seal`, a `turn-N.sealed` marker), and a statement or withdrawal arriving after that is
     refused with `TURN_RESOLVED` instead of being kept unprinted. A rollback reopens the kept turn (its seal
     goes, its statements stay).
+  - **DevClient** (2026-10-22): `pages` lists the printed pages and your statements, `react <pageId>
+    <stance|withdraw> [quote...]` gives, changes or withdraws one for the open turn, for trying the refusals.
   - **Rebuild client and server together; no reset.**
 
 ## 7. Suggested mockup order

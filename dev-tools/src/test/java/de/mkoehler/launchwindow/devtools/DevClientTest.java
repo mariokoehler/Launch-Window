@@ -1,7 +1,9 @@
 package de.mkoehler.launchwindow.devtools;
 
 import de.mkoehler.launchwindow.model.Archetype;
+import de.mkoehler.launchwindow.model.FrontPage;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
+import de.mkoehler.launchwindow.net.messages.SubmitStatementRequest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -33,6 +35,22 @@ class DevClientTest {
     @Test
     void parseFundsAmountTrimsWhitespace() {
         assertEquals(42L, DevClient.parseFundsAmount("  42  "));
+    }
+
+    /**
+     * Verifies the react command: a stance in any case with the rest of the line as the quote, a withdrawal,
+     * and the usage for anything else.
+     */
+    @Test
+    void parseReactReadsAStanceAQuoteAndAWithdrawal() {
+        assertEquals(new SubmitStatementRequest(7, "6-lunar-probe", FrontPage.Stance.NO_COMMENT, ""),
+            DevClient.parseReact(7, "react 6-lunar-probe no-comment"));
+        assertEquals(new SubmitStatementRequest(7, "6-lunar-probe", FrontPage.Stance.POLITE, "Well  flown, all."),
+            DevClient.parseReact(7, "  react 6-lunar-probe Polite Well  flown, all."));
+        assertEquals(new SubmitStatementRequest(7, "6-lunar-probe", null, ""),
+            DevClient.parseReact(7, "react 6-lunar-probe withdraw"));
+        assertThrows(IllegalArgumentException.class, () -> DevClient.parseReact(7, "react 6-lunar-probe"));
+        assertThrows(IllegalArgumentException.class, () -> DevClient.parseReact(7, "react 6-lunar-probe smug"));
     }
 
     /**
