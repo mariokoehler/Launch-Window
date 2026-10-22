@@ -182,6 +182,8 @@ public final class SpaceComplexScreen extends SessionScreen {
             settled[0] = true;
             List<FrontPage> unseen = FrontPageScreen.unseen(game);
             if (unseen.isEmpty()) {
+                // The fetch brought the losses the press waits on (ui-spec.md 4.18.3): show its card now.
+                rebuild();
                 afterPages(true);
             } else {
                 game.setScreen(new FrontPageScreen(game, unseen,

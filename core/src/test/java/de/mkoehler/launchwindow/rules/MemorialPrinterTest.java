@@ -66,6 +66,23 @@ class MemorialPrinterTest {
         assertEquals(1, loss.crew().get(1).flights());
     }
 
+    /** Two crews lost in one turn, the second while already grounded: two losses, each with its own crew. */
+    @Test
+    void twoCrewsLostInOneTurnAreTwoLosses() {
+        TurnReport report = new TurnReport(TurnReport.VERSION, 44, 0, 0, 0, 0, List.of(), List.of(), List.of(
+            departure("a1", "Ana Reyes", 38), new CrewedFlightsGrounded("m7", "gemini-spacewalk", 4),
+            departure("a2", "Lev Marek", 32), departure("a3", "Moses Okafor", 35),
+            new CrewedFlightsGrounded("m8", "gemini-docking", 4)), null);
+        List<FrontPage.Loss> losses = MemorialPrinter.losses(44, List.of(new MemorialPrinter.Turn(ORION, report,
+            List.of(entry("a1", "Ana Reyes", 38, 16, List.of(), 1), entry("a2", "Lev Marek", 32, 16, List.of(), 1),
+                entry("a3", "Moses Okafor", 35, 16, List.of(), 1)))));
+        assertEquals(List.of("44-loss-1", "44-loss-2"), losses.stream().map(FrontPage.Loss::id).toList());
+        assertEquals(List.of("Ana Reyes"), losses.get(0).crew().stream().map(FrontPage.Lost::name).toList());
+        assertEquals(List.of("Lev Marek", "Moses Okafor"),
+            losses.get(1).crew().stream().map(FrontPage.Lost::name).toList());
+        assertEquals("gemini-docking", losses.get(1).missionConfigurationId());
+    }
+
     /**
      * The agency's tone picks a story of that tone and its words are kept; rivals' condolences are told, quotes
      * first, the losing agency's own never; a page without a statement prints the spokesman's.
