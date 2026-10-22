@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.Theme;
+import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.FindingsView;
 import de.mkoehler.launchwindow.client.view.Archive;
 import de.mkoehler.launchwindow.client.view.ContentNames;
@@ -122,6 +123,11 @@ public final class ArchivePageScreen extends ChromeScreen {
             updateTrack(position);
         }
         super.render(delta);
+    }
+
+    @Override
+    protected Help.Context helpContext() {
+        return Help.Context.MUSEUM;
     }
 
     @Override

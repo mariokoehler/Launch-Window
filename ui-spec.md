@@ -718,6 +718,9 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       the screen's `helpContext()`), and help opens filtered to them, on the first, with a navy chip
       in the status line: "3 topics for the SET Centre". A screen without a context opens on every
       topic ("All 7 topics.").
+      Synced with the code on 2026-10-22: 32 topics, the newspaper's among them ("The Daily Zenith"); its pages open
+      on it (`Help.Context.NEWSPAPER`), the archive's pages and the explainers on the Museum's. `HelpTest` checks that
+      every context names real topics and that every topic is on some screen's list (the basics on the hub's).
     - **Filter:** typing searches **every** topic's title and text (numbers filled in, ignoring
       case) and drops the screen's filter; the status line says how many topics mention the text,
       or that none does. **Show all topics** clears both the text and the screen's filter.

@@ -24,6 +24,7 @@ import de.mkoehler.launchwindow.content.FrontPageReactions;
 import de.mkoehler.launchwindow.content.FrontPages;
 import de.mkoehler.launchwindow.content.Theories;
 import de.mkoehler.launchwindow.content.MemorialPages;
+import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.MemorialView;
 import de.mkoehler.launchwindow.model.FrontPage;
 import de.mkoehler.launchwindow.rules.ReactionPrinter;
@@ -127,6 +128,11 @@ public class FrontPageScreen extends SessionScreen {
         this.reopened = reopened;
         root.setBackground(ui.solid(Theme.NAVY));
         rebuild();
+    }
+
+    @Override
+    protected Help.Context helpContext() {
+        return Help.Context.NEWSPAPER;
     }
 
     /**

@@ -980,6 +980,8 @@ public final class ScreenSnapshot {
         game.session().keepStatements(List.of());
         write(folder, "memorial-page.png", new FrontPageScreen(game, List.of(three), () -> { }, false), null);
         write(folder, "memorial-short.png", new FrontPageScreen(game, List.of(two), () -> { }, false), null);
+        write(folder, "memorial-help.png", new FrontPageScreen(game, List.of(two), () -> { }, false),
+            screen -> screen.openHelp());
         // The fullest page: the director's words and four rivals' at the longest, a fifth folded in; it runs on.
         String longest = "We grieve with you. Your crew were the finest of us all, and every agency in this race owes "
             + "them a debt that we will never be able";

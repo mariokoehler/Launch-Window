@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.DrawingView;
 import de.mkoehler.launchwindow.client.ui.Theme;
+import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.Explainers;
 
 import java.util.List;
@@ -85,6 +86,11 @@ public final class ExplainerScreen extends SessionScreen {
         super.dispose();
         // The full drawings are big; free them once the explainer is gone (the Museum's thumbnails stay).
         ui.releasePictures("explainers/", "-thumb.png");
+    }
+
+    @Override
+    protected Help.Context helpContext() {
+        return Help.Context.MUSEUM;
     }
 
     @Override

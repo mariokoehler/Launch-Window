@@ -15,11 +15,12 @@
         "- people retire or resign;",
         "- missions in flight fly this season's steps, and new launches lift off;",
         "- building upgrades finish, and astronauts on PR duty make the news;",
-        "- intelligence operations and poaching offers are settled;",
+        "- intelligence operations and poaching offers are settled, contracts are awarded, findings are published, and rivals' Firsts are answered;",
         "- running costs are paid, a budget review runs if one is due, and the season's funding arrives;",
         "- random events happen;",
-        "- training and R&D make their progress, and teams build rapport;",
+        "- training and R&D make their progress, teams build rapport, careers and ambitions move on, and an R&D decision may be offered;",
         "- new candidates arrive in the hiring pool.",
+        "- then, across the game: the Firsts are decided, the newspaper prints its pages, and the win is checked.",
         "The turn report then tells you what happened. On a day without a resolution (a weekend or a holiday, if the game is set up that way) your orders simply wait for the next one."
       ],
       "related": ["turn-report", "buildings", "budget"]
@@ -32,13 +33,13 @@
         "Your agency lives in the Space Complex, the hub. Click a building to go in; the chips along the bottom of every screen lead to the same places.",
         "## What each building does",
         "- VAB: rocket programs and Rocket R&D.",
-        "- Headquarters: programs, and planning missions.",
+        "- Headquarters: programs, planning missions, and the Contracts board.",
         "- Mission Control: the flight controllers, and the missions in flight.",
         "- Astronaut Complex: the astronauts, their training and PR duty.",
         "- SET Centre: the engineers, and Payload R&D.",
         "- Public Affairs Office: the budget, prestige and the news.",
         "- Museum: the race, your achievements, flights, the memorial, the encyclopedia and the archive.",
-        "- Intelligence Office: its level and its operations against rivals.",
+        "- Intelligence Office: its level, its operations against rivals, personnel files and poaching offers.",
         "## Levels",
         "Five buildings have levels, and each level raises a cap:",
         "- Astronaut Complex: {buildings.astronauts} astronauts;",
@@ -64,11 +65,17 @@
         "- departures and hires;",
         "- the budget: running costs, funding, and a review if one happened;",
         "- intelligence: findings, catches, poaching offers;",
+        "- a pending R&D decision, and last turn's decision settled;",
+        "- contracts: awarded, missed, paid, insured or lapsed, and the board's news;",
+        "- findings you reached, each with a Publish button, and new pages in the archive;",
+        "- theories of the day your scientists raised or a flight settled;",
+        "- buildings finished;",
+        "- a crew lost: crewed flights grounded, the goals not credited, and the press waiting for your statement; or a rival's loss in the news, with Send condolences;",
         "- random events;",
-        "- and, to open it, a real event from the same season of the real space race.",
-        "Each mission flown can be replayed: it plays like a short film, step by step, each step's result showing once its film makes it clear. Pause it, or step through by hand. When a turn has missions flown, the game offers to play them before the report, so their endings stay a surprise (Settings: ask, always or never). A person's name opens their page."
+        "- and, in the news, a real event from the same season of the real space race.",
+        "Each mission flown can be replayed: it plays like a short film, step by step, each step's result showing once its film makes it clear. Pause it, or step through by hand. When a turn has missions flown, the game offers to play them first, so their endings stay a surprise (Settings: ask, always or never), then shows any new pages of the newspaper, then the report. A person's name opens their page."
       ],
-      "related": ["turns", "mission-steps", "the-race"]
+      "related": ["turns", "mission-steps", "the-race", "the-paper"]
     },
     {
       "id": "winning",
@@ -76,9 +83,9 @@
       "title": "Winning the game",
       "body": [
         "The host picks a list of goals for each game, such as the first satellite in orbit and the first person in space; the Museum's Race tab shows them. The first agency to reach all of them wins.",
-        "A goal counts when you achieve it, or when a bigger goal you achieve credits it.",
+        "A goal counts when you achieve it, or when a bigger goal you achieve credits it. On a crewed flight it counts only if the crew comes home.",
         "## Ties",
-        "If several agencies finish in the same turn, they're ranked by the listed goals: for each goal, who reached it first, second and so on, compared like a medal table, most firsts first, then most seconds.",
+        "If several agencies finish in the same turn, they're ranked against each other by the listed goals: for each goal, who reached it first, second and so on, compared like a medal table, most firsts first, then most seconds. If they're still level after every place, they share the win.",
         "The game goes on after a winner: goals, flights and prestige still count."
       ],
       "related": ["prestige", "the-race", "museum"]
@@ -90,13 +97,15 @@
       "body": [
         "The Museum is the scoreboard and the archive. Its tabs:",
         "- The race: the game's listed goals, and every agency's progress side by side.",
-        "- Achievements: every goal you reached, with the turn and the prestige.",
-        "- Flights: how often you've flown each mission, and the animals that came home from them.",
-        "- Memorial: the astronauts, and the animals, lost in your program.",
+        "- Achievements: every goal, reached or still open, with the turn and the prestige it paid or would pay.",
+        "- Flights: how often each mission completed, and the animals that came home from them.",
+        "- Memorial: the astronauts, and the animals, lost in your program; a lost astronaut's page reopens the newspaper's memorial page.",
         "- Encyclopedia: explainers on how the real thing works, from orbits to heat shields. A gold dot marks one you haven't opened; the concept chips on the program and rocket screens open them too.",
-        "- Archive: pages about the real missions that sent back memorable pictures, with their photos and, for some, their sound. A page opens for every agency in the game when any agency first reaches its goal, and the turn report says so; until then its card says which goal opens it. Above the pages, the theories of the day: the questions your scientists raised and those a flight settled, with the paper's science page and the archive's pages about the flight. They're flavour only."
+        "- Archive: pages about the real missions that sent back memorable pictures, with their photos and, for some, their sound. A page opens for every agency in the game when any agency first reaches its goal, and the turn report says so; until then its card says which goal opens it. A finding's page opens only for those who know it, and once the race is decided every page opens.",
+        "Above the archive's pages: your findings, what each makes safer, with Publish while it's still classified; then the theories of the day, the questions your scientists raised and those a flight settled, with the paper's science page and the archive's pages about the flight. They're flavour only.",
+        "In the race and achievements tables, a First's tag opens the newspaper's front page about it."
       ],
-      "related": ["winning", "careers"]
+      "related": ["winning", "careers", "the-paper", "findings"]
     },
     {
       "id": "budget",
@@ -105,7 +114,7 @@
       "body": [
         "Your agency starts with {budget.startFunds} in funds, {budget.startPrestige} prestige and {budget.startFunding} in funding a season.",
         "## Income",
-        "Funding is the only income. Missions and goals never pay money: they earn prestige, and prestige sets your funding.",
+        "Funding is the main income. Missions and goals pay prestige, not money, and prestige sets your funding. Money also comes from contracts, from refunds when you scrub or cancel a mission, and from turning prestige into funds while in debt.",
         "Every {budget.seasonsPerReview} seasons of your agency, a budget review turns your prestige into the funding rate for the next {budget.seasonsPerReview}. The Public Affairs Office shows your bracket and what the next review would pay.",
         "If your prestige fell short of a review's minimum, the next review's bracket moves down by that shortfall, so one bad stretch isn't counted twice.", "Between reviews, funding follows your prestige up but never down: once the first review has set your rate, each season your prestige is higher than ever since the last review, the review in force pays for the difference straight away. Extra funding from events stays on top.", "When another agency is first to a goal you could have reached, the government wants an answer: the next review counts {budget.rivalShare} % of that goal's first-time prestige on top of yours. It counts once, at that review, and only for goals your agency's programs can reach.",
         "## Running costs",
@@ -115,7 +124,7 @@
         "- each building's upkeep;",
         "- the Intelligence Office at its level.",
         "## Debt",
-        "Funds can go below zero. In debt you can't spend on anything new, and nothing else happens. While in debt, the Public Affairs Office can turn prestige into funds at {budget.fundsPerPrestige} funds a point, enough to clear the debt and leave {budget.coveredSeasons} seasons of running costs in the bank. Prestige spent this way is missing at the next review, so keep it for emergencies."
+        "Funds can go below zero. In debt you can't spend on anything new, and the Intelligence Office loses a level each turn; nothing else happens. While in debt, the Public Affairs Office can turn prestige into funds at {budget.fundsPerPrestige} funds a point, enough to clear the debt and leave {budget.coveredSeasons} seasons of running costs in the bank. Prestige spent this way is missing at the next review, so keep it for emergencies."
       ],
       "related": ["prestige", "salaries", "random-events"]
     },
@@ -128,12 +137,14 @@
         "## From missions",
         "Each mission has a prestige total, split across its steps. A step pays its share when it succeeds or its glitch is solved, and half on a minor glitch. A failed step wipes out what the season had earned and costs a deduction instead; earlier seasons keep theirs.",
         "Flying the same mission again pays less: {prestige.second} % the second time, {prestige.later} % after that, counted by completed flights.",
+        "A contract flight reaches no goals and pays no prestige: the client pays money instead.",
         "## Goals",
         "Mission steps reach goals, such as the first satellite in orbit or the first person in space. A goal pays more to the first agency in the game to reach it than to everyone after; agencies that reach it in the same turn all count as first. Some goals also credit smaller ones, and pay their prestige too.",
+        "A goal's prestige joins its step's share: halved on a minor glitch, and lost if a later step that season fails, though the goal still counts.",
         "On a crewed flight a goal counts only if the crew comes home. If the crew is lost later in the flight, the flight earns none of the goals it reached, and the next agency to reach them can still be first. A flight cut short with the crew safe keeps what it reached, and so does an uncrewed one.",
         "Goals open programs, and they change how missions fly. A mission can name goals that make one of its components fly less reliably until you reach them: a penalty, sometimes a large one. It can also name goals that make a component fly a little more reliably once you have them: a boost, earned by related work such as an earlier probe or another program. Both apply only to that mission, on every step. Each mission's steps screen lists them, and the plan shows the ones in play.",
         "## Elsewhere",
-        "Astronauts on PR duty earn prestige, random events can add or take some, and an intelligence operation caught in the act costs some."
+        "Astronauts on PR duty earn prestige, publishing a finding earns some, and random events can add or take some. An intelligence operation caught in the act, a lapsed contract, a crew lost on a contract flight and cancelling a mission in flight cost some; turning prestige into funds spends it."
       ],
       "related": ["budget", "winning", "pr-duty"]
     },
@@ -159,7 +170,7 @@
         "- a prestige boost;",
         "- faster R&D for a few seasons;",
         "- lower running costs for several seasons.",
-        "Events never touch anyone on a mission. Two effects of the same kind multiply, and the longer one lasts.",
+        "Events never take away anyone on a mission or on PR duty, though a morale change reaches a whole department. Two effects of the same kind multiply, and the longer one lasts.",
         "Each event comes with a short story of what happened. You won't read the same story twice until you've seen all of that event's stories."
       ],
       "related": ["turn-report", "budget"]
@@ -176,10 +187,10 @@
         "Headquarters' Contracts screen shows every listing on offer, the same for every agency. Only lines some agency can fly are listed. A listing stays {contracts.listingTurns} turns unless it is awarded first, and new ones are posted when a turn resolves.",
         "## Applying",
         "You can apply for one listing a turn, and only while you have no active contract. Applications are sealed: nobody sees who applied, and you can change or withdraw yours until the turn resolves.",
-        "When it resolves, the applicants are ranked by their score: the reliability of the weakest component the contract flight would use, plus their record in the line, {contracts.flownPoints} for each contract flown and {contracts.failedPoints} for each one that failed or lapsed, within {contracts.recordCap} either way. Crew and controllers don't count: clients judge the hardware. The best {contracts.tiers} win tiers 1 to {contracts.tiers}, which pay {contracts.margins} % over the launch cost. A fourth applicant and later get nothing. The news names the winners, but never the ranking.",
+        "When it resolves, the applicants are ranked by their score: the reliability of the weakest component the contract flight would use, plus their record in the line, {contracts.flownPoints} for each contract flown and {contracts.failedPoints} for each one that failed or lapsed, within {contracts.recordCap} either way. Scores are taken from the start of the turn, ties are drawn by lot, and an application is void if you no longer qualify then. Crew and controllers don't count: clients judge the hardware. The best {contracts.tiers} win tiers 1 to {contracts.tiers}, which pay {contracts.margins} % over the launch cost. A fourth applicant and later get nothing. The news names the winners, but never the ranking.",
         "## Flying it",
         "The fee is fixed when the contract is awarded, from the launch cost with the cheapest rocket you could fly it on then. You pay the launch cost as usual, and the first launch of the contract's flight is the contract flight. It must launch within {contracts.window} turns, or it lapses: {contracts.lapsePrestige} prestige, and it counts as a failure.",
-        "On success the client pays the fee. On failure the insurer refunds the launch cost, and the failure costs its prestige as any flight's would. A crew lost on a contract flight costs another {contracts.crewLossPrestige} prestige. A contract flight pays no prestige and doesn't count as a repeat, so it never lowers what a later flight of the same mission pays. A scrub keeps the contract while its window lasts."
+        "On success the client pays the fee. On failure the insurer refunds the launch cost, and the failure costs its prestige as any flight's would. A crew lost on a contract flight costs another {contracts.crewLossPrestige} prestige. Cancelled in flight, it counts as a failure, with neither fee nor refund. A contract flight pays no prestige and doesn't count as a repeat, so it never lowers what a later flight of the same mission pays. A scrub keeps the contract while its window lasts."
       ],
       "related": ["budget", "programs", "planning-missions"]
     },
@@ -192,11 +203,11 @@
         "## Opening a program",
         "- It needs a free place in Headquarters. Each Headquarters level runs more programs at once.",
         "- Some programs need goals reached first.",
-        "- The price is the opening cost, less a discount for other programs you have open, plus the creation cost of each component you don't own yet. A component you kept from a closed program costs nothing.",
-        "- From the next turn on, the program costs its upkeep every season, and each of its active components its own.",
+        "- The price is the opening cost, less a discount when a related program is already open (sometimes all of it), plus the creation cost of each component you don't own yet. A component you kept from a closed program costs nothing.",
+        "- From the next resolution on, the program costs its upkeep every season, and each of its active components its own.",
         "After opening, the game offers to put engineers on any of its components that nobody works on yet.",
         "## Closing a program",
-        "Closing gives no refund. Its components go inactive and their engineers are released, but you keep the components with their reliability, so reopening later costs only the opening cost. A program can't close while one of its missions is in flight.",
+        "Closing gives no refund. Its components that no other open program uses go inactive and their engineers are released, but you keep the components with their reliability, so reopening later costs only the opening cost. A program can't close while one of its missions is in flight.",
         "## Rockets",
         "Rockets have their own programs, in the VAB. Opening one costs the rocket's creation cost, and reopening it later charges that cost again."
       ],
@@ -209,7 +220,7 @@
       "body": [
         "Every rocket, capsule, satellite and probe has a reliability: the base chance that its part of a mission step goes right. A new component starts low, with a one-time bonus from related components you already own: Atlas, for example, builds on Redstone.",
         "## Engineers on R&D",
-        "Up to {rnd.slots} engineers from the SET Centre (SET: scientists, engineers and technicians) can work on one component at once, and each season they raise its reliability. The first slot gains the most and each further slot a little less, so a fourth engineer still helps, only less than the first.",
+        "Up to {rnd.slots} engineers from the SET Centre (SET: scientists, engineers and technicians) can work on one component at once, and each season they raise its reliability. The first slot gains the most and each further slot a little less, so a fourth engineer still helps, only less than the first. Each season's gain shrinks as the component nears its R&D ceiling, so the last points come slowest.",
         "An engineer's skill for that kind of component matters most; the assign dialog lists the idle engineers best first. The team's chemistry then scales what it gains.",
         "## Two ceilings",
         "R&D alone takes a component only to its R&D ceiling. When it gets there, every engineer on it is released for other work. Only flying takes it further, toward its absolute maximum.",
@@ -228,8 +239,9 @@
       "body": [
         "Now and then, mostly while you wait between flights, the game puts a decision to you about one component under R&D: a test to pay for, a question only one answer fits, a problem to diagnose, people to pair up. It shows on the component's card on its R&D board, on the turn report and as a gold dot on the VAB or the SET Centre on the hub.",
         "## Deciding",
-        "Each option says what it shows in advance; some show nothing. Choose one and the outcome is worked out at once: the card shows what happened, and the reliability bar moves with it. The outcome is fixed when the decision comes, so choosing again can't change it.",
-        "Effects are measured in seasons of the component's R&D, so a decision weighs the same on a small satellite as on a big rocket. Some options take an engineer: an idle one to oversee a test, two to pair up, one to send away for a while.",
+        "Each option says what it shows in advance; some show nothing. Choose one and the outcome is worked out at once: the card shows what happened, and the reliability bar moves with it. The luck is drawn when the decision comes, so it can't be rerolled; the option and the people you pick set the odds it's read against.",
+        "Where the odds depend on someone, such as an overseer's skill or a pair's rapport, or on your Intelligence Office's level, the option shows them for the people you pick. If the component's team is gone, only the option marked “If you don't decide” is left.",
+        "Reliability effects are measured in seasons of the component's R&D, and costs in shares of a season's funding, so a decision weighs the same on a small satellite as on a big rocket. Some outcomes touch morale, rapport, skills or the pace of R&D for a while. Some options take an engineer: an idle one to oversee a test, two to pair up, one to send away for a while.",
         "## If you don't decide",
         "When the turn resolves, an open decision takes the option marked “If you don't decide”. After that no new decision comes until you do something again, so a decision never piles up while you're away.",
         "## Story arcs",
@@ -246,10 +258,11 @@
       "group": "Programs and hardware",
       "title": "Rockets",
       "body": [
-        "A rocket is bought through a rocket program in the VAB, at its creation cost. Closing the program keeps the rocket and its reliability, but reopening charges the cost again.",
+        "A rocket is bought through a rocket program in the VAB, at its creation cost. An open rocket program costs the rocket's upkeep every season. Closing it keeps the rocket and its reliability, but reopening charges the cost again, and a rocket program can't close while a mission in flight uses the rocket.",
         "## Lift",
         "Each rocket lifts so much to each kind of trajectory: a suborbital hop, low Earth orbit, toward the Moon, or toward the planets. When you plan a mission you pick a rocket whose lift covers the payload. A mission with a crew needs a human-rated rocket.",
-        "Each launch costs the payload's unit cost plus the rocket's.",
+        "Some payloads, such as an Agena or Apollo's service module, add lift of their own, so the rocket needs to lift only the rest. An air-dropped flight, like the X-15's, needs no rocket.",
+        "Each launch costs the mission's launch cost plus each rocket's. A mission with several launches needs a rocket for each, and pays for each.",
         "## Size",
         "The VAB's level sets the biggest class you can open: Light at level 1, Medium at level 2, Heavy at level 3. It also caps how many rocket programs you can have open.",
         "## Reliability",
@@ -269,7 +282,8 @@
         "- Pick the rockets.",
         "- Assemble the crew, CAPCOM and the flight controllers, or let the game fill the seats with the best people free.",
         "- Launch.",
-        "Launching charges the launch cost at once. The mission lifts off at the next resolution and flies its first season's steps then.",
+        "Launching charges the launch cost, the mission's plus each rocket's, at once. The mission lifts off at the next resolution and flies its first season's steps then.",
+        "Some missions need a goal reached first, such as the X-15's research flights after its flight test. After a crew is lost, crewed missions can't launch until the grounding ends; the mission's card shows when.",
         "## Changing your mind",
         "Until it lifts off you can scrub a mission for a full refund. Once it flies, an uncrewed mission can be cancelled, with a prestige deduction and part of the cost back; a crewed mission can't be abandoned.",
         "While a mission flies its crew stays aboard, but Mission Control can swap its controllers and CAPCOM. A console whose last season has flown is released, and its controller goes idle."
@@ -283,17 +297,17 @@
       "body": [
         "Each season of a mission is a series of steps, such as the launch, reaching orbit or re-entry, rolled one after another.",
         "## The first roll",
-        "A step's chance is the reliability of the components it involves, weighted by how much each matters to it. Once that's above {missions.blendAbove} % and the crew is involved, the crew's skill counts for {missions.crewWeight} % of the chance, so a weak crew can lower the odds.",
+        "A step's chance is the reliability of the components it involves, weighted by how much each matters to it. Goals the mission depends on, and findings you know, move it too (see Prestige and goals, and Findings). Once that's above {missions.blendAbove} % and the crew is involved, the crew's skill counts for {missions.crewWeight} % of the chance, so a weak crew can lower the odds.",
         "## The saving throw",
         "If the first roll fails, the flight controllers get a saving throw: the step's chance, scaled by the skills of the consoles it involves. If it works, the glitch is solved and the step counts as a success. If not, it's one of:",
         "- a minor glitch ({missions.minor} % of the time): half the step's prestige, and the mission goes on;",
-        "- a failure ({missions.failure} %): the mission ends;",
-        "- a catastrophe ({missions.catastrophic} %): on a step that puts the crew at risk, the mission ends and the whole crew is lost. On other steps it counts as a failure. Losing a crew grounds your crewed flights for the next {missions.grounding} turns while the accident is investigated; uncrewed flights go on, as Apollo 4, 5 and 6 did after the Apollo 1 fire.",
-        "Experts can improve the saving throw, and each team's chemistry scales its contribution.",
+        "- a failure ({missions.failure} %): the mission ends, and the season's prestige turns into a deduction;",
+        "- a catastrophe ({missions.catastrophic} %): on a step that puts the crew at risk, the mission ends, the whole crew is lost, and the flight's goals don't count. On other steps it counts as a failure. Losing a crew grounds your crewed flights for the next {missions.grounding} turns while the accident is investigated; uncrewed flights go on, as Apollo 4, 5 and 6 did after the Apollo 1 fire.",
+        "Experts can improve the saving throw, and so can the trait Cool under pressure. Each team's chemistry scales what it brings: the crew's skill in the first roll, the controllers' and CAPCOM's in the saving throw.",
         "## After each season",
         "Each component's reliability moves with how it did: success and minor glitches raise it toward its maximum, a failure lowers it, never below where it started. Every astronaut aboard grows all their skills, and each controller the skills their console used."
       ],
-      "related": ["experts", "mission-control", "chemistry"],
+      "related": ["experts", "mission-control", "chemistry", "prestige", "findings", "traits"],
       "explainers": ["reliability", "launch-escape"]
     },
     {
@@ -306,7 +320,8 @@
         "When a step's first roll fails, every Expert in a skill the step involves helps with the saving throw, whether they're aboard, idle or training. Each closes part of the gap to a certain rescue: {missions.expertBoosts} % on their first, second and third use in a turn, then nothing.",
         "- A controller on another mission, or an astronaut on PR duty, helps at {missions.expertAway} %.",
         "- An astronaut on another mission can't help: they're in space.",
-        "The saving throw never goes above {missions.expertCap} % this way."
+        "The saving throw never goes above {missions.expertCap} % this way.",
+        "A Flight Director's console calls on no single skill, so Experts can't help there; a CAPCOM's can."
       ],
       "related": ["mission-steps", "training"]
     },
@@ -315,9 +330,9 @@
       "group": "Missions",
       "title": "Flight controllers and CAPCOM",
       "body": [
-        "Flight controllers sit at consoles during a mission. Each console reads one controller's skill: Propulsion, Trajectory & guidance, Spacecraft systems, Crew & payload, or Mission operations. Their skills set the saving throw when a step goes wrong.",
-        "CAPCOM, the capsule communicator, is an astronaut on the ground who talks to the crew. For chemistry CAPCOM counts with the crew, and grows the skills used, as a controller does.",
-        "Controllers are never at risk. A console is released after its last season, and while a mission flies Mission Control can swap who sits at each one, at no cost.",
+        "Flight controllers sit at consoles during a mission. Each console reads one controller's skill: Propulsion, Trajectory & guidance, Spacecraft systems, Crew & payload, or Mission operations; a Flight Director's console reads the average of all five, and grows all five a little. Their skills set the saving throw when a step goes wrong.",
+        "CAPCOM, the capsule communicator, is an astronaut on the ground who talks to the crew. CAPCOM's Leadership counts in the saving throw beside the controllers'. For chemistry CAPCOM counts with the crew, and grows the skills used, as a controller does.",
+        "Controllers are never at risk. A controller grows only in seasons when a step uses their console. A console is released after its last season, and while a mission flies Mission Control can swap who sits at each one, at no cost.",
         "Mission Control's level caps the roster: {buildings.controllers} controllers."
       ],
       "related": ["mission-steps", "chemistry", "experts"],
@@ -328,10 +343,10 @@
       "group": "People",
       "title": "Hiring",
       "body": [
-        "Each season every department gets a fresh pool of {hiring.batch} candidates. The happier the department (its average morale), the better the candidates.",
+        "Each season every department gets a fresh pool of {hiring.batch} candidates. The happier the department (its average morale), the better the candidates. Some press stories add extra candidates for a season or two, a few of them from the best quality band.",
         "Hiring is free apart from the salary, between {people.salaryMin} and {people.salaryMax} a season. You can pay a signing bonus of one season's salary to start the new hire's morale {hiring.signingMorale} % higher.",
         "## Age",
-        "Older candidates start more skilled, by up to about {hiring.experience} points; younger ones learn faster, with a learning potential of {hiring.rookieLearning} for a rookie and {hiring.veteranLearning} for a veteran. Rookies catch up over the years.",
+        "Older candidates start more skilled, a veteran by up to about {hiring.experience} points over a rookie; younger ones learn faster, with a learning potential of {hiring.rookieLearning} for a rookie and {hiring.veteranLearning} for a veteran. Rookies catch up over the years.",
         "## What you can't see",
         "Traits are hidden. Each candidate comes with one hint from a colleague, such as \"driven\" or \"calm\". A telling hint always fits one of their traits, but each hint fits several traits, and some hints are bland. An Intelligence Office can run a background check.",
         "## After hiring",
@@ -346,12 +361,13 @@
       "body": [
         "Each group has five skills, from 0 to 100. Astronauts: leadership, piloting, EVA, science and fitness. Engineers: rockets, space probes, human-rated rockets, crewed spacecraft and EVA suits. Flight controllers: Propulsion, Trajectory & guidance, Spacecraft systems, Crew & payload, and Mission operations.",
         "## Basic training",
-        "Every new hire starts with it, and it can't be skipped or cut short: {training.basicAstronaut} seasons for astronauts, {training.basicEngineer} for engineers and {training.basicController} for controllers. When it ends, one of their skills grows.",
+        "Every new hire starts with it, and you can't skip it or cut it short, though bad luck can add a season or make a trainee fail and leave: {training.basicAstronaut} seasons for astronauts, {training.basicEngineer} for engineers and {training.basicController} for controllers. When it ends, one of their skills grows.",
         "## Advanced and permanent training",
-        "Advanced training takes {training.advanced} seasons and raises the skill you choose. Permanent training repeats advanced rounds until the skill reaches the level you set, and stops early once a round gains next to nothing. Pulling someone out pays the share of the training done.",
+        "Advanced training takes {training.advanced} seasons and raises the skill you choose. Permanent training repeats advanced rounds until the skill reaches the level you set, and stops early once a round gains next to nothing. Pulling someone out pays the share of the round done; Expert training pays nothing. Training is free.",
         "Growth slows as a skill nears 100, and a higher learning potential makes it faster.",
         "## On the job",
-        "Skills also grow at work: engineers on R&D, astronauts aboard a mission, controllers and CAPCOM at their consoles. Training keeps people busy, which is good for morale, but nobody in training can work."
+        "Skills also grow at work: engineers on R&D, astronauts aboard a mission, controllers and CAPCOM at their consoles. Training keeps people busy, which is good for morale, but nobody in training can work.",
+        "Someone sidelined by a random event or an R&D decision can't train, work, fly or go on tour until it ends. The rosters show the seasons left."
       ],
       "related": ["experts", "hiring", "morale"]
     },
@@ -360,7 +376,7 @@
       "group": "People",
       "title": "Morale, resigning and retiring",
       "body": [
-        "Morale runs from 0 to 100. Busy people (on R&D, on a mission, in training or on PR duty) gain {people.busyMorale} a season; idle ones lose {people.idleMorale}. Salary changes, ambitions, press stories and random events move it too.",
+        "Morale runs from 0 to 100. Busy people (on R&D, on a mission, in training or on PR duty) gain {people.busyMorale} a season; idle ones lose {people.idleMorale}. Salary changes, ambitions, press stories, R&D decisions, random events and some traits move it too.",
         "A department's average morale also sets how good its candidates are.",
         "## Leaving",
         "- At {people.resignAt} or below, a person resigns.",
@@ -386,7 +402,7 @@
       "group": "People",
       "title": "Traits",
       "body": [
-        "People have none, one or two hidden traits. A trait shows itself after a few seasons of work in teams, or sooner when it matters, and the turn report says so. Once the reveal window has passed, a person's page says there's nothing more to discover.",
+        "People have none, one or two hidden traits. A trait shows itself after a few seasons of work in teams, or sooner when it matters, and the turn report says so. Only seasons in a team count, on R&D or on a mission in flight; training and PR duty don't. Once the reveal window has passed, a person's page says there's nothing more to discover.",
         "## Their own work",
         "- Workaholic: {trait.workaholicRd} % more R&D gain, but loses morale {trait.workaholicIdle} times as fast when idle.",
         "- Steady: the season's own morale change, from work or idleness, is halved either way.",
@@ -416,7 +432,8 @@
         "## Rapport",
         "Each pair of people who share a team builds rapport, from -{chemistry.rapportMax} to +{chemistry.rapportMax}. Every season together moves it by up to {chemistry.rapportDrift} points, toward liking or toward friction, depending on how the two get along. It never resets, so old colleagues meet again as friends or as enemies, and it's lost only when one of them leaves.",
         "Past {chemistry.rapportShown} either way, it shows: the two \"work well together\" or \"clash\".",
-        "A team's chemistry is the average rapport of all its pairs, plus what its members' team traits add.",
+        "A team's chemistry is the average rapport of all its pairs, plus what its members' team traits add. R&D decisions can also change two engineers' rapport.",
+        "The chemistry shown on the R&D board and in Assemble mission counts only traits that have shown and relationships that are visible, and says “unknown factors” when there may be more. The season uses the real values.",
         "## Traits",
         "People have none, one or two hidden traits. A trait shows itself after {chemistry.revealMin} to {chemistry.revealMax} seasons of work in teams, or sooner when it matters. Some change the person's own work, such as Workaholic, Steady or Perfectionist. Others change the team: a Team player lifts it, a Loner works best alone, and someone who Must be the best wants to be its most skilled member.",
         "So choose teams with care: a slightly weaker engineer who gets on with everyone can beat a brilliant one who clashes."
@@ -429,7 +446,7 @@
       "title": "Ambitions and loyalty",
       "body": [
         "Some people want something: to fly in space, to bring a component to its R&D ceiling, to be on the consoles for a first. The Ambitious always have an ambition ({ambition.chanceAmbitious} %), Glory seekers usually ({ambition.chanceGlory} %), anyone else sometimes ({ambition.chanceOthers} %).",
-        "They say so after {ambition.sayAfter} seasons with the agency, once out of basic training. The ambition then has a window of {ambition.windowMin} to {ambition.windowMax} seasons, depending on how hard it is: {ambition.ambitiousWindow} less for the Ambitious, {ambition.steadyWindow} more for the Steady. Their page and the rosters show the seasons left.",
+        "They say so after {ambition.sayAfter} seasons with the agency, once out of basic training, and only ambitions the agency can reach now are chosen; if none can be, the person waits and says one later. The ambition then has a window of {ambition.windowMin} to {ambition.windowMax} seasons, depending on how hard it is: {ambition.ambitiousWindow} less for the Ambitious, {ambition.steadyWindow} more for the Steady. Their page and the rosters show the seasons left. Assemble mission tells you who on the flight gets what they want, and who is free and would be passed over.",
         "## How it ends",
         "- Fulfilled: morale +{ambition.fulfilledMorale}, loyalty +{ambition.fulfilledLoyalty} (+{ambition.fulfilledLoyaltyAmbitious} for the Ambitious).",
         "- Passed over, when someone else in the agency gets it: morale -{ambition.passedMorale}, loyalty -{ambition.passedLoyalty}, and the window shrinks by a season more. The ambition stays.",
@@ -437,7 +454,7 @@
         "- Runs out: morale -{ambition.ranOutMorale}, loyalty -{ambition.ranOutLoyalty}, and the person stays disappointed for {ambition.disappointed} seasons, easy to poach.",
         "After that a new ambition may follow: {ambition.nextAmbitious} % for the Ambitious, {ambition.nextOthers} % for anyone else.",
         "## Loyalty",
-        "Loyalty runs from 0 to 100. It starts at {loyalty.start} and grows {loyalty.perSeason} a season with the agency; it moves with half of any department salary change, and with ambitions. It's what keeps people when a rival makes them an offer."
+        "Loyalty runs from 0 to 100. It starts at {loyalty.start} and grows {loyalty.perSeason} a season with the agency; it moves with half of any department salary change, with ambitions, and grows {poaching.matchLoyalty} when the agency matches a rival's offer. It's what keeps people when a rival makes them an offer."
       ],
       "related": ["poaching", "traits", "careers"]
     },
@@ -447,10 +464,11 @@
       "title": "Careers and the memorial",
       "body": [
         "Everyone has a page: skills, traits, relationships, ambition, loyalty and a career record. Open it from any roster, or from a name in the turn report.",
-        "The career record lists hiring, training, each stint on R&D, each flight or shift at a console, firsts, traits that came out, relationships, Expert marks and ambitions. It keeps the last {careers.kept} lines, and always the hiring line.",
-        "Those who die in your program go on the Museum's memorial, with their page as it was. Animals lost on flights are remembered there too."
+        "The career record lists hiring, training, each stint on R&D, each flight or shift at a console, firsts, traits that came out, relationships, Expert marks, ambitions, and offers from rivals: turned down, matched, or the move to a new agency. It keeps the last {careers.kept} lines, and always the hiring line and every move between agencies.",
+        "Those who die in your program go on the Museum's memorial, with their page as it was. Only astronauts can be lost: on a flight, or in an accident while idle. Animals lost on flights are remembered there too.",
+        "When a crew is lost in flight, the newspaper prints a memorial page a turn later, with your agency's statement and the other agencies' condolences (see The Daily Zenith). An astronaut lost in an accident gets no page."
       ],
-      "related": ["ambitions", "museum"]
+      "related": ["ambitions", "museum", "the-paper"]
     },
     {
       "id": "astronauts",
@@ -459,7 +477,7 @@
       "body": [
         "Astronauts fly crewed missions and sit at CAPCOM. Each crew seat reads one person's skill, and everyone aboard grows all five of their skills from the flight.",
         "When not flying they can train, or go on PR duty to earn prestige.",
-        "A step that puts the crew at risk can end in catastrophe, and then the whole crew is lost. Astronauts retire at {people.retireAstronaut}, and are never poached: an astronaut changing sides was unthinkable."
+        "A step that puts the crew at risk can end in catastrophe, and then the whole crew is lost: your crewed flights are grounded for {missions.grounding} turns, and the flight earns none of the goals it reached. An idle astronaut can also die in an accident, a random event; on tour, in training or on a mission they're safe from it. Astronauts retire at {people.retireAstronaut}, and are never poached: an astronaut changing sides was unthinkable."
       ],
       "related": ["pr-duty", "mission-control", "mission-steps"],
       "explainers": ["weightlessness", "coming-home"]
@@ -471,12 +489,12 @@
       "body": [
         "An idle astronaut can go on PR duty: tours and public appearances instead of training, until you recall them, which is free and immediate.",
         "## What it earns",
-        "Each season on tour earns prestige: a tenth of their Leadership, plus {pr.perFlight} for each flight they've completed and {pr.perFirst} for each that set a first in the game, at most {pr.maxYield}. With several on tour, they earn {pr.shares} % in order of yield, and anyone after that nothing.",
-        "Each season also has a {pr.pressChance} % chance of a press story, {pr.goodPress} % of them good. A good story adds {pr.pressShare} % of the season's yield; a bad one costs that much instead. Some stories do more: bigger hiring pools, morale, faster R&D, or funds.",
+        "Each season on tour earns prestige: a tenth of their Leadership, plus {pr.perFlight} for each flight they've completed as crew and {pr.perFirst} for each that set a first in the game, at most {pr.maxYield}. With several on tour, they earn {pr.shares} % in order of yield, and anyone after that nothing.",
+        "Each astronaut's season on tour also has a {pr.pressChance} % chance of a press story, {pr.goodPress} % of them good. A good story adds {pr.pressShare} % of the season's yield; a bad one earns nothing and costs that much instead. Some stories do more: bigger hiring pools, morale, faster R&D, lower running costs, funds or a higher funding rate. Bad ones can cost morale, Fitness or R&D progress.",
         "## The catch",
         "- On tour, an astronaut can't fly or sit at CAPCOM. An Expert still helps rescue steps, at {pr.expertShare} %.",
         "- After {pr.rustFree} seasons in a row on tour, piloting and fitness each lose {pr.rust} a season.",
-        "- It keeps morale up like work, but it doesn't keep anyone from resigning or retiring."
+        "- It keeps morale up like work, but it doesn't keep anyone from resigning or retiring. An astronaut on tour is never picked by random events."
       ],
       "related": ["astronauts", "prestige"]
     },
@@ -488,12 +506,13 @@
         "Rival agencies can lure away your engineers and flight controllers, and you can lure away theirs. Astronauts are never poached.",
         "## Making an offer",
         "You need a personnel file on the person, which takes an Intelligence Office at level {poaching.fileLevel}. From the file, you offer a raise over their salary of {poaching.raises} %. You can make {poaching.offersPerSeason} offer a season; it uses no intelligence action and can be cancelled until the turn resolves.",
-        "When the turn resolves, the person must have been with their agency at least {poaching.minTenure} seasons, not have been approached in the last {poaching.cooldown}, and be neither training nor on a mission. Otherwise the offer lapses, and they never hear of it.",
+        "When the turn resolves, the person must have been with their agency at least {poaching.minTenure} seasons, not have been approached in the last {poaching.cooldown}, and be neither training nor on a mission. Otherwise the offer lapses, and they never hear of it. Engineers on R&D can be approached; if one leaves, their place on the team frees at once.",
         "Each agency gets one shot at each person. Once they've answered your offer, matched or turned down, they won't hear another from you, wherever they work. An offer that lapsed doesn't count.",
-        "If they come, you pay the new salary from then on, plus a signing bonus of one season's new salary at once. You also need room in that roster, or the offer lapses.",
+        "If they come, you pay the new salary from then on, plus a signing bonus of one season's new salary at once. You also need room in that roster, or the offer lapses. If several agencies make an offer to the same person in one turn, the biggest raise is settled and the others lapse.",
+        "Someone who comes over keeps their skills, Expert marks, career and any ambition. They start idle at loyalty {loyalty.start}, and only the trait your file showed is known; the rest are hidden again.",
         "## Defending your people",
         "Offers arrive while you're away, so your defence is a standing order. For each department, set how far you match an offer: {poaching.matches}. A new agency matches up to +{poaching.defaultMatch} %. On a person's page you can override it: Keep at any price, or Let go.",
-        "A matched offer fails. The person's salary rises to the offered one for good, and their loyalty grows by {poaching.matchLoyalty}. Matching never takes a salary past {poaching.matchCeiling} times what it was before the first matched offer: past that, the agency keeps them at that salary.",
+        "A matched offer fails. The person's salary rises to the offered one for good, and their loyalty grows by {poaching.matchLoyalty}. Matching never takes a salary past {poaching.matchCeiling} times what it was before the first matched offer: past that, the agency keeps them at that salary. Matching ignores your funds: the raise is paid even into debt.",
         "## Will they go?",
         "An offer you don't match, the person decides on. The bigger the raise, the likelier they go: a base of {poaching.acceptBase} % for the three raises, multiplied by (100 - loyalty) / {poaching.loyaltyPivot}. Loyalty {poaching.loyaltyPivot} leaves it as it is; loyalty 100 takes it to nothing. Then:",
         "- disappointed (an ambition ran out): +{poaching.disappointed};",
@@ -511,9 +530,33 @@
       "body": [
         "Every agency in the game races for the same goals, each with its own copy of its side's programs: nobody can take your Sputnik. The first to reach a goal earns its full prestige; everyone after earns less.",
         "The Museum's Race tab shows the game's listed goals and every agency's progress, by agency and director. What rivals are doing beyond that is hidden: that's what the Intelligence Office is for.",
-        "Each turn report opens with a real event from the same season of the real space race."
+        "Each turn report's news carries a real event from the same season of the real space race.",
+        "A rival's First is news: the newspaper prints a front page on it, and you can answer it with a statement (see The Daily Zenith). It also counts at your next budget review (see Money and the budget review). When an agency loses a crew, the others hear of it in their news and can send condolences."
       ],
-      "related": ["winning", "intelligence", "prestige"]
+      "related": ["winning", "intelligence", "prestige", "the-paper", "budget"]
+    },
+    {
+      "id": "the-paper",
+      "group": "Rivals",
+      "title": "The Daily Zenith",
+      "body": [
+        "The Daily Zenith is the game's newspaper. Its new pages show when you come into the game, after the offer to watch your missions and before the turn report. Nothing on them changes the rules: it's the world's view of the race.",
+        "## The great Firsts",
+        "When an agency is first in the game to put a satellite in orbit, a person in space, a person in orbit, a crew around the Moon or a crew on the Moon, the paper prints a front page on it, for every agency. The Museum's race and achievements tables, and the turn report's goal lines, reopen it.",
+        "## The world reacts",
+        "In the turn after a rival's First, you can give the press a statement on it from the page's strip: one of five stances, from warm congratulations to a pointed no comment, with words of your own if you like (at most {paper.quoteLength} characters, printed as you write them). You can change or withdraw it until the turn resolves. The next turn's paper prints every rival's statement together on a follow-up page, and names those who said nothing. Only agencies in the race when the First was printed can answer it, and never the agency that made it.",
+        "## Theories of the day",
+        "Some goals raise a question the real space age argued over, such as whether the Moon's plains are deep dust; the turn report tells you when your scientists raise one. The first flight in the game that answers it settles it for everyone, and a question the public followed gets a science page. The Museum's Archive tab lists them.",
+        "## In memory",
+        "When a crew is lost in flight, the paper waits a turn, so no page spoils the replay. In that turn the agency gives the press a statement, from its turn report or the hub, in one of four tones: their courage, who they were, we will go on, or we will find out why, with words of its own if it likes. Without one, a spokesman's short statement is printed.",
+        "Every other agency hears of the loss in its news and can send condolences or a tribute until the turn resolves; silence is never reported. The memorial page is printed when that turn resolves and shown before any other page. Each lost astronaut's page on the memorial reopens it."
+      ],
+      "related": [
+        "the-race",
+        "museum",
+        "careers",
+        "turn-report"
+      ]
     },
     {
       "id": "findings",
@@ -526,7 +569,7 @@
         "A finding you reach shows up in that turn's report, with a Publish button. Publishing asks first: the dialog shows what it would pay as things stand. Nothing is sent until you confirm, and you can withdraw until the turn resolves. Doing nothing keeps the finding classified; no answer is ever required, and you can publish it later from the Museum's archive, until any agency has published it.",
         "When the turn resolves, every agency that didn't know the finding learns it, and its page in the archive opens for them where it has one. A finding's page opens only for the agencies that know it, unlike the other pages, and for everyone once the race is decided.",
         "## What it pays",
-        "Publishing pays prestige: at most {findings.share} % of the goal's first-time prestige, as a share of your rivals it helps. Helping all of them pays it all, helping two of three pays two thirds, and old news pays nothing. A rival counts as helped if it doesn't know the finding when the turn resolves, before that turn's flights. Agencies publishing the same finding at the same resolution split the payment. It counts at the next funding review like any prestige.",
+        "Publishing pays prestige: at most {findings.share} % of the goal's first-time prestige, as a share of your rivals it helps. Helping all of them pays it all, helping two of three pays two thirds, and old news pays nothing. A rival counts as helped if it doesn't know the finding when the turn resolves, before that turn's flights. Agencies publishing the same finding at the same resolution split the payment. It counts toward your funding like any other prestige. Agencies that learn it get its help from the next turn's flights.",
         "Holding a finding back keeps your rivals' flights where they were, but a rival that reaches the goal itself makes publishing it pay less."
       ],
       "related": [
@@ -541,14 +584,15 @@
       "group": "Rivals",
       "title": "Intelligence",
       "body": [
-        "The Intelligence Office's level, from 0 to {intelligence.maxLevel}, is a budget dial. Set a target, and the level moves one step toward it each turn, so a change always takes time. Levels 0 to {intelligence.maxLevel} cost {intelligence.costs} a season, paid with the running costs.",
+        "The Intelligence Office's level, from 0 to {intelligence.maxLevel}, is a budget dial. Set a target, and the level moves one step toward it each turn, so a change always takes time; in debt it drops a step each turn, whatever the target. Levels 0 to {intelligence.maxLevel} cost {intelligence.costs} a season, paid with the running costs.",
         "## What each level brings",
         "A level keeps what the levels below it bring, and gives as many actions a season as its number. Unused actions don't carry over.",
         "- Level {intelligence.checkLevel}: a background check shows one of a candidate's traits at once. Each new candidate also has a {intelligence.passiveCandidate} % chance to show one by itself.",
         "- Level {intelligence.assessmentLevel}: an agency assessment looks at one area of a rival: their R&D, their programs and plans, or their personnel. Each season there's also a {intelligence.tidbit2} % chance of a tidbit about a rival.",
         "- Level {intelligence.fileLevel}: a personnel file on one of a rival's people, which a poaching offer needs. Tidbits come {intelligence.tidbit3} % of the time.",
+        "Assessments and files give ranges, narrower the higher your level stands over theirs. A background check can come back with no notable traits.",
         "## Odds, and getting caught",
-        "An operation against a rival succeeds {intelligence.successBase} % of the time, less {intelligence.successPerLevel} points for each level of the rival's own Intelligence Office, down to {intelligence.successLowest} %. A failed operation learns nothing, and is caught {intelligence.catchBase} % of the time plus {intelligence.catchPerLevel} % per rival level. Caught, you lose {intelligence.caughtPrestige} prestige and the rival learns who sent it, but you learn their level.",
+        "An operation against a rival succeeds {intelligence.successBase} % of the time, less {intelligence.successPerLevel} points for each level of the rival's own Intelligence Office, down to {intelligence.successLowest} %. A failed operation learns nothing, and is caught {intelligence.catchBase} % of the time plus {intelligence.catchPerLevel} % per rival level. Caught, you lose {intelligence.caughtPrestige} prestige and the rival learns who sent it and your level, but you learn theirs.",
         "There is no sabotage: intelligence only ever finds things out."
       ],
       "related": ["poaching", "the-race", "hiring"]

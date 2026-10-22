@@ -65,6 +65,25 @@ class HelpTest {
         }
     }
 
+    /** F1's filter (component 23): every screen context names topics that exist, and every topic is on one. */
+    @Test
+    void everyContextNamesRealTopicsAndEveryTopicHasOne() throws IOException {
+        Set<String> ids = new HashSet<>();
+        bundled().topics().forEach(topic -> ids.add(topic.id()));
+        Set<String> reached = new HashSet<>();
+        for (Help.Context context : Help.Context.values()) {
+            for (String id : context.topicIds()) {
+                assertTrue(ids.contains(id), context + " names unknown topic " + id);
+                reached.add(id);
+            }
+        }
+        // The basics are the full list's: the hub opens help unfiltered.
+        Set<String> unfiltered = Set.of("turns", "buildings");
+        for (String id : ids) {
+            assertTrue(reached.contains(id) || unfiltered.contains(id), "no screen's F1 shows " + id);
+        }
+    }
+
     @Test
     void aContextFiltersUntilThePlayerTypes() throws IOException {
         Help help = bundled();
