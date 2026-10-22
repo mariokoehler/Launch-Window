@@ -194,6 +194,38 @@ class FrontPageReactionsTest {
         }
     }
 
+    /** The fillers: enough for three empty columns, each short enough for a column, in the fonts' letters. */
+    @Test
+    void fillersAndHistoryNotesAreThere() throws Exception {
+        assertTrue(WORDS.fillers().size() >= 6);
+        Font font = Font.createFont(Font.TRUETYPE_FONT,
+            Files.newInputStream(Path.of("..", "assets", "fonts", "LibreCaslonText-Regular.ttf"))).deriveFont(BODY_SIZE);
+        FontRenderContext context = new FontRenderContext(null, true, true);
+        Set<String> ids = new HashSet<>();
+        for (FrontPageReactions.Filler filler : WORDS.fillers()) {
+            assertTrue(ids.add(filler.id()), filler.id());
+            assertFalse(filler.headline().isBlank(), filler.id());
+            assertFalse(filler.paragraphs().isEmpty(), filler.id());
+            int lines = 0;
+            for (String paragraph : filler.paragraphs()) {
+                lines += lines(paragraph, font, context);
+            }
+            assertTrue(lines <= 9, filler.id() + " runs to " + lines + " lines");
+            List<String> texts = new ArrayList<>(filler.paragraphs());
+            texts.add(filler.headline());
+            for (String text : texts) {
+                assertFalse(text.contains("{"), filler.id());
+                text.chars().forEach(c -> assertTrue(c == ' ' || Theme.CHARACTERS.indexOf(c) >= 0,
+                    "'" + (char) c + "' isn't in the fonts: " + text));
+            }
+        }
+        for (String note : List.of(WORDS.historyNotes().statement(), WORDS.historyNotes().followUp())) {
+            assertFalse(note.isBlank());
+            note.chars().forEach(c -> assertTrue(c == ' ' || Theme.CHARACTERS.indexOf(c) >= 0,
+                "'" + (char) c + "' isn't in the fonts: " + note));
+        }
+    }
+
     @Test
     void aQuoteHoldsOnlyLettersTheFontsHave() {
         FrontPage.Statement.ALLOWED_CHARACTERS.chars().forEach(c -> assertTrue(c == ' '

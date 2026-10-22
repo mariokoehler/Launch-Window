@@ -33,18 +33,20 @@ import java.util.Optional;
  * @param stances  the lines per stance (not {@link FrontPage.Stance#DECLINED})
  * @param links    the sentences leading from one stance to another
  * @param declined the lines naming the rivals who gave no statement
+ * @param fillers  short local items that fill a follow-up's empty columns
+ * @param historyNotes the history notes on the statement dialog and the follow-up's strip
  * @author Mario Koehler
  */
 @JsonIgnoreProperties({"_comment"})
 public record FrontPageReactions(List<First> firsts, Map<FrontPage.Stance, StanceLines> stances, List<Link> links,
-                                 Declined declined) {
+                                 Declined declined, List<Filler> fillers, HistoryNotes historyNotes) {
 
     /** The file's name, under the assets' {@code content/} folder. */
     public static final String FILE = "front-page-reactions.json";
 
     /** No words: what a missing file reads as. */
     public static final FrontPageReactions EMPTY = new FrontPageReactions(List.of(), Map.of(), List.of(),
-        new Declined(List.of(), List.of()));
+        new Declined(List.of(), List.of()), List.of(), new HistoryNotes("", ""));
 
     private static volatile FrontPageReactions standard;
 
@@ -56,6 +58,35 @@ public record FrontPageReactions(List<First> firsts, Map<FrontPage.Stance, Stanc
         stances = stances == null ? Map.of() : Map.copyOf(stances);
         links = links == null ? List.of() : List.copyOf(links);
         declined = declined == null ? new Declined(List.of(), List.of()) : declined;
+        fillers = fillers == null ? List.of() : List.copyOf(fillers);
+        historyNotes = historyNotes == null ? new HistoryNotes("", "") : historyNotes;
+    }
+
+    /**
+     * A short local item that fills a follow-up's empty columns: our own fiction, picked by the page's id,
+     * so every player reads the same page.
+     *
+     * @param id         a stable id
+     * @param headline   its headline (set in capitals)
+     * @param paragraphs its paragraphs
+     */
+    public record Filler(String id, String headline, List<String> paragraphs) {
+
+        /**
+         * Copies the list, reading a missing one as empty.
+         */
+        public Filler {
+            paragraphs = paragraphs == null ? List.of() : List.copyOf(paragraphs);
+        }
+    }
+
+    /**
+     * The history notes (component 15) of the world reacts, checked in {@code design.md} &sect;1.1.
+     *
+     * @param statement the statement dialog's: how leaders answered a rival's First
+     * @param followUp  the follow-up's strip: how rivals honoured each other
+     */
+    public record HistoryNotes(String statement, String followUp) {
     }
 
     /**

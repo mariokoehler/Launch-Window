@@ -512,7 +512,8 @@ leading to satellite navigation.
   History, RussianSpaceWeb ("Vostok 1"). Our papers' headlines and articles are our own, never a real
   paper's.
 - **How the leaders answered a rival's First** (checked 2026-10-22, for the follow-up pages, `ui-spec.md`
-  §4.18.1; our articles quote nobody real):
+  §4.18.1; our articles quote nobody real). Shown in the game as history notes: the first two on the statement
+  dialog, the third on the follow-up page's strip (`historyNotes` in `front-page-reactions.json`):
   - Eisenhower played Sputnik down at his press conference of 9 October 1957: the satellite itself did not
     raise his apprehensions, "not one iota". Biographers count it among the most hostile press conferences
     of his presidency, and the public did not believe him; he knew from the secret U-2 flights how far the

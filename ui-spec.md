@@ -1227,7 +1227,8 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       `NEWS_QUOTE`, the stance's first line with the player's names, the quote left out while it has an error;
       Submit disabled until a stance is picked and while the quote has an error; Withdraw at the left,
       destructive, without confirmation. The picked stance survives a change of stance, the quote not when
-      No comment empties it. Shots `-Dshots=reactions` (`reactions-*.png`).
+      No comment empties it. A history note after the title: how Eisenhower and Kennedy answered the
+      Soviets' Firsts (2026-10-22). Shots `-Dshots=reactions` (`reactions-*.png`).
 
 ---
 
@@ -3384,6 +3385,15 @@ prestige or anything else changes.
   box at the foot of column four. The article runs from column to column and a paragraph is split between
   words where a column ends (at least two lines stay behind; the rest goes on unindented), ragged-right as
   on a First's page (the mockup's justified, hyphenated text needs a line-level layout).
+- **Short articles** (the user's idea, 2026-10-22): the room a short article leaves is filled with short local
+  items, as a paper fills its columns: `fillers` in `front-page-reactions.json` (our own fiction, nine of them,
+  at most 9 lines each), a headline in `NEWS_LABEL` capitals over Caslon body, a short centred rule (64 px)
+  between items. They go into the column the article ends in and every one after it, each at most once a page,
+  in an order drawn from the page's id, so every player reads the same page. None on a page that runs on.
+- **History notes** (component 15, the user's idea, 2026-10-22): on the follow-up's strip after "Statements
+  only: no effect on the race." (the icon in `ON_PAGE`), how rivals honoured each other (Apollo 11's medals for
+  Gagarin and Komarov); and on the statement dialog's title (below). Their words are `historyNotes` in
+  `front-page-reactions.json`, checked in `design.md` §1.1.
 - **When it doesn't fit:** the closing paragraphs go first; what still doesn't fit runs on to a continuation
   sheet: "Continued on page 2" at the foot of column four, "Turn to page 2" on the strip's button, then a
   sheet with a running head ("THE WORLD REACTS · CONTINUED FROM PAGE 1 · <season>") and four full columns

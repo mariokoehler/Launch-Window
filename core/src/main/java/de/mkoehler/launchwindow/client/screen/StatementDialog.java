@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
+import de.mkoehler.launchwindow.client.ui.HistoryNote;
 import de.mkoehler.launchwindow.client.ui.Refusals;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.ui.UiKit;
@@ -102,7 +103,12 @@ public final class StatementDialog {
         card.defaults().growX().left();
 
         Table head = new Table();
-        head.add(ui.label("Give a statement", Theme.TextStyle.HEADING_LG, Theme.INK)).left().expandX();
+        head.add(ui.label("Give a statement", Theme.TextStyle.HEADING_LG, Theme.INK)).left();
+        String note = FrontPageReactions.standard().historyNotes().statement();
+        if (!note.isBlank()) {
+            head.add(new HistoryNote(ui, note)).size(HistoryNote.ICON_SIZE).padLeft(Theme.SPACE_2);
+        }
+        head.add().expandX();
         given.ifPresent(statement -> {
             Image check = new Image(ui.icon("check"), Scaling.fit);
             check.setColor(Theme.SUCCESS);

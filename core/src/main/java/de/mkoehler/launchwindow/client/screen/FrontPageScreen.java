@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
+import de.mkoehler.launchwindow.client.ui.HistoryNote;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.FrontPageView;
@@ -83,6 +84,9 @@ public class FrontPageScreen extends SessionScreen {
     private static final float R_COLUMN = 322f;
     private static final float R_GUTTER = (INNER - 4 * R_COLUMN - 3f) / 6f;
     private static final float R_PHOTO_HEIGHT = 221f;
+    /** The short rule above a filler item, and the space either side of it. */
+    private static final float FILLER_RULE = 64f;
+    private static final float FILLER_GAP = 8f;
     /** The continuation sheet's running head. */
     private static final float RUNNING_HEAD = 46f;
 
@@ -248,7 +252,7 @@ public class FrontPageScreen extends SessionScreen {
         sheet.add(rule()).width(INNER).height(1f).padTop(10f).row();
 
         float lower = PAGE_HEIGHT - MARGIN - TOP_FIXED - headlineHeight - deckHeight;
-        sheet.add(page.followUp() ? lowerReactions(view, lower) : lower(view, lower)).width(INNER).height(lower)
+        sheet.add(page.followUp() ? lowerReactions(page, view, lower) : lower(view, lower)).width(INNER).height(lower)
             .padTop(LOWER_TOP).row();
         return sheet;
     }
@@ -256,9 +260,10 @@ public class FrontPageScreen extends SessionScreen {
     /**
      * A follow-up's lower half: four text columns, the photo and its caption over the first, the race box at
      * the foot of the last. The closing paragraphs go first when the article is long; what still doesn't fit
-     * is carried to the continuation sheet, with "Continued on page 2" at the foot of the last column.
+     * is carried to the continuation sheet, with "Continued on page 2" at the foot of the last column. A short
+     * article leaves room: short local items fill it, as a paper fills its columns.
      */
-    private Table lowerReactions(FrontPageView.Page view, float height) {
+    private Table lowerReactions(FrontPage page, FrontPageView.Page view, float height) {
         BitmapFont body = ui.fonts().get(Theme.TextStyle.NEWS_BODY);
         BitmapFont captionFont = ui.fonts().get(Theme.TextStyle.NEWS_CAPTION);
         float captionHeight = lines(captionFont, view.caption(), R_COLUMN, Align.left) * captionFont.getLineHeight();
@@ -279,6 +284,7 @@ public class FrontPageScreen extends SessionScreen {
             flow = flow(pieces(paragraphs), capacities, body);
             carried = flow.rest();
         }
+        List<List<FrontPageReactions.Filler>> fillers = fillers(page, flow, capacities, body);
 
         Table lower = new Table();
         lower.top().left();
@@ -298,6 +304,14 @@ public class FrontPageScreen extends SessionScreen {
             }
             for (Piece piece : flow.columns().get(c)) {
                 column.add(pieceLabel(piece)).width(R_COLUMN).padBottom(PARAGRAPH_GAP).left().row();
+            }
+            boolean above = !flow.columns().get(c).isEmpty() || c == 0;
+            for (FrontPageReactions.Filler filler : fillers.get(c)) {
+                if (above) {
+                    column.add(rule()).width(FILLER_RULE).height(1f).padTop(FILLER_GAP).padBottom(FILLER_GAP).row();
+                }
+                column.add(filler(filler)).width(R_COLUMN).row();
+                above = true;
             }
             column.add().expandY().row();
             if (c == 3) {
@@ -352,6 +366,71 @@ public class FrontPageScreen extends SessionScreen {
         }
         sheet.add(columns).width(INNER).height(height).row();
         return sheet;
+    }
+
+    /**
+     * Picks the short items for a follow-up's spare room: in an order drawn from the page's id, so every player
+     * reads the same page, each item at most once, into the column the article ends in and every one after it.
+     */
+    private List<List<FrontPageReactions.Filler>> fillers(FrontPage page, Flow flow, float[] capacities,
+                                                          BitmapFont body) {
+        List<List<FrontPageReactions.Filler>> fills = new ArrayList<>();
+        for (int c = 0; c < capacities.length; c++) {
+            fills.add(new ArrayList<>());
+        }
+        if (!carried.isEmpty()) {
+            return fills;
+        }
+        List<FrontPageReactions.Filler> order = new ArrayList<>(FrontPageReactions.standard().fillers());
+        java.util.Collections.shuffle(order, new java.util.Random(page.id().hashCode()));
+        int last = 0;
+        for (int c = 0; c < capacities.length; c++) {
+            if (!flow.columns().get(c).isEmpty()) {
+                last = c;
+            }
+        }
+        for (int c = last; c < capacities.length; c++) {
+            float room = capacities[c];
+            for (Piece piece : flow.columns().get(c)) {
+                room -= pieceHeight(piece, body);
+            }
+            boolean above = !flow.columns().get(c).isEmpty() || c == 0;
+            for (java.util.Iterator<FrontPageReactions.Filler> it = order.iterator(); it.hasNext(); ) {
+                FrontPageReactions.Filler filler = it.next();
+                float needed = fillerHeight(filler, body) + (above ? 2 * FILLER_GAP + 1f : 0f);
+                if (needed <= room) {
+                    fills.get(c).add(filler);
+                    it.remove();
+                    room -= needed;
+                    above = true;
+                }
+            }
+        }
+        return fills;
+    }
+
+    private Table filler(FrontPageReactions.Filler filler) {
+        Table item = new Table();
+        item.top().left();
+        Label head = ui.label(filler.headline().toUpperCase(java.util.Locale.ROOT), Theme.TextStyle.NEWS_LABEL,
+            Theme.INK);
+        head.setWrap(true);
+        head.setAlignment(Align.center);
+        item.add(head).width(R_COLUMN).padBottom(4f).row();
+        for (String paragraph : filler.paragraphs()) {
+            item.add(pieceLabel(new Piece(paragraph, true))).width(R_COLUMN).padBottom(PARAGRAPH_GAP).left().row();
+        }
+        return item;
+    }
+
+    private float fillerHeight(FrontPageReactions.Filler filler, BitmapFont body) {
+        BitmapFont label = ui.fonts().get(Theme.TextStyle.NEWS_LABEL);
+        float height = lines(label, filler.headline().toUpperCase(java.util.Locale.ROOT), R_COLUMN, Align.center)
+            * label.getLineHeight() + 4f;
+        for (String paragraph : filler.paragraphs()) {
+            height += pieceHeight(new Piece(paragraph, true), body);
+        }
+        return height;
     }
 
     private static String seasonOf(FrontPage page) {
@@ -647,7 +726,14 @@ public class FrontPageScreen extends SessionScreen {
         Table strip = new Table();
         String line = page.followUp() ? "Statements only: no effect on the race."
             : FrontPageView.gameLine(page, session.state().getAgencyName(), session.catalog(), ContentNames::of);
-        strip.add(ui.label(line, Theme.TextStyle.BODY, Theme.ON_PAGE)).left().expandX();
+        if (page.followUp() && !FrontPageReactions.standard().historyNotes().followUp().isBlank()) {
+            strip.add(ui.label(line, Theme.TextStyle.BODY, Theme.ON_PAGE)).left();
+            HistoryNote note = new HistoryNote(ui, FrontPageReactions.standard().historyNotes().followUp());
+            note.setColor(Theme.ON_PAGE);
+            strip.add(note).size(HistoryNote.ICON_SIZE).padLeft(Theme.SPACE_2).left().expandX();
+        } else {
+            strip.add(ui.label(line, Theme.TextStyle.BODY, Theme.ON_PAGE)).left().expandX();
+        }
         if (pages.size() > 1) {
             strip.add(ui.label((index + 1) + " of " + pages.size(), Theme.TextStyle.BODY_SM, Theme.ON_PAGE_MUTED))
                 .padRight(Theme.SPACE_4);

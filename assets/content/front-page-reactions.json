@@ -1,5 +1,5 @@
 {
-  "_comment": "The follow-up pages, 'The world reacts' (ui-spec.md 4.18.1, G17): what the paper prints the turn after a First, from the rivals' statements. Our own text. Every id is stored in printed pages: never rename or reuse one. A First's stories: one or more per mood (GRACIOUS, CHALLENGE, MIXED, DISMISSIVE, SILENT); headlines read with one agency or two in {agency} (a tie), so no possessives of it; deckOne and leadOne serve a single statement (MIXED always has two). Details: public facts only (the goals an agency holds), each starting ', ' and ending ',', set right after {rival}. Stance lines: {detail} right after {rival}; quoted lines end in {quote}, which the client fills last, in curly quotes. Tokens: {agency}, {director}, {season}, {commander}, {crew} (the First's makers and flight), {rival}, {rivalDirector}, {detail}, {quote}, and {rivals} in 'also' and 'declined' lines. FrontPageReactionsTest holds the rules and the fit.",
+  "_comment": "The follow-up pages, 'The world reacts' (ui-spec.md 4.18.1, G17): what the paper prints the turn after a First, from the rivals' statements. Our own text. Every id is stored in printed pages: never rename or reuse one. A First's stories: one or more per mood (GRACIOUS, CHALLENGE, MIXED, DISMISSIVE, SILENT); headlines read with one agency or two in {agency} (a tie), so no possessives of it; deckOne and leadOne serve a single statement (MIXED always has two). Details: public facts only (the goals an agency holds), each starting ', ' and ending ',', set right after {rival}. Stance lines: {detail} right after {rival}; quoted lines end in {quote}, which the client fills last, in curly quotes. Tokens: {agency}, {director}, {season}, {commander}, {crew} (the First's makers and flight), {rival}, {rivalDirector}, {detail}, {quote}, and {rivals} in 'also' and 'declined' lines. FrontPageReactionsTest holds the rules and the fit. Fillers: short local items that fill a follow-up's empty columns, picked by the page's id (our own fiction, so nothing to check). historyNotes: the history notes on the statement dialog and the follow-up's strip (design.md 1.1, checked).",
   "firsts": [
     {
       "goal": "earth-orbit-satellite",
@@ -887,5 +887,75 @@
         "text": "Calls to {rivals} went unanswered."
       }
     ]
+  },
+  "fillers": [
+    {
+      "id": "r-filler-planetarium",
+      "headline": "Planetarium queues round the block",
+      "paragraphs": [
+        "The city planetarium has added three evening shows a week after its queue stretched round the block on Saturday. The new shows follow the night sky as it will look this season, with the brightest satellites marked."
+      ]
+    },
+    {
+      "id": "r-filler-rocket-club",
+      "headline": "School rocket club moved on",
+      "paragraphs": [
+        "Pupils at a local grammar school have been asked to move their rocket club off the playing field after a model came down on the bowling green.",
+        "The headmaster praised their enthusiasm and found them a corner of the allotments instead."
+      ]
+    },
+    {
+      "id": "r-filler-radio-logs",
+      "headline": "Radio amateurs compare notes",
+      "paragraphs": [
+        "Members of the county radio society met on Tuesday to compare their recordings of signals from orbit. Several had heard the same pass within seconds of one another, and the society hopes to send its logs to the university."
+      ]
+    },
+    {
+      "id": "r-filler-balloon",
+      "headline": "Light over the harbour",
+      "paragraphs": [
+        "Police took more than forty calls on Wednesday night about a bright light drifting slowly over the harbour. It was a weather balloon, the weather office said, catching the last of the sun from high above the clouds."
+      ]
+    },
+    {
+      "id": "r-filler-teachers",
+      "headline": "Science teachers wanted",
+      "paragraphs": [
+        "The education board says it will need two hundred more science and mathematics teachers by next autumn, and has asked graduates in industry to think about the classroom. Evening courses in physics are already full."
+      ]
+    },
+    {
+      "id": "r-filler-letters",
+      "headline": "Letters: the price of the race",
+      "paragraphs": [
+        "Sir, \u2014 I read that the space agencies spend more in a week than our town spends in a year. I do not begrudge them the stars, but I should like a new roof on the library first. \u2014 A reader, East Hill"
+      ]
+    },
+    {
+      "id": "r-filler-toys",
+      "headline": "Space toys sell out",
+      "paragraphs": [
+        "Toy shops report that tin rockets and model satellites are selling faster than they can be stocked. One shopkeeper said a delivery of clockwork spacemen was gone before lunch."
+      ]
+    },
+    {
+      "id": "r-filler-telescopes",
+      "headline": "Telescopes on loan",
+      "paragraphs": [
+        "The public library will lend small telescopes to its readers from next month, a week at a time. Borrowers must be over sixteen and promise never to point them at the sun."
+      ]
+    },
+    {
+      "id": "r-filler-observatory",
+      "headline": "Observatory open night",
+      "paragraphs": [
+        "The university observatory opens its dome to the public on the first clear Friday of each month. Visitors are asked to bring warm coats: the dome is not heated."
+      ]
+    }
+  ],
+  "historyNotes": {
+    "statement": "Leaders have answered a rival\u2019s First in very different ways. Eisenhower played Sputnik down in October 1957: the satellite itself, he told the press, did not raise his apprehensions \u201cone iota\u201d. When Gagarin flew in April 1961, Kennedy congratulated the Soviet scientists and engineers in a written statement, and admitted that catching up would take time.",
+    "followUp": "Rivals honoured each other too. Apollo 11 carried two Soviet medals for Yuri Gagarin and Vladimir Komarov, both dead by 1969, which their widows had given to the astronaut Frank Borman in Moscow. The crew left them on the Moon in a small packet with an Apollo 1 patch and a gold olive branch."
   }
 }
