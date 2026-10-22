@@ -3432,8 +3432,14 @@ Flavour only: nothing in the rules reads them.
 - **The science page:** the follow-up's frame (§4.18.1) with the right ear "SCIENCE / REPORT", no photo (the
   byline "FROM OUR SCIENCE CORRESPONDENT" at the top of column one), the article and then the filler items, the
   race box; the strip "Science news: no effect on the race." with the theory's history note.
-- **Known gap:** a science page shows once, on login; nothing reopens it later (unlike a First's page, from the
-  Museum).
+- **In the Museum** (2026-10-22): the Archive tab's "THEORIES OF THE DAY" card, under the findings card, lists the
+  theories this agency's scientists raised and those a flight settled (never one neither, so it spoils no
+  checkpoint; `FrontPageView.museum`). Each row: the question with its history note, "What would settle it" or the
+  answer and who settled it, when your scientists raised it; on the right the status ("OPEN QUESTION" or
+  "SETTLED · <season>") over the links: "Read the page" for a public theory (reopens the science page, "Close"),
+  and a button per archive page about the flights that settled it, once settled and open in this game
+  (`theories.json`'s `archive` ids, checked by `TheoriesTest`; the Moon germs have none: no archive page covers
+  the quarantine). The report's "Settled:" line for a public theory opens its page too.
 - Shots `-Dshots=theories`.
 
 ### 4.19 Archive *(the user's idea, 2026-10-15; specified, mocked up and built the same day for `design.md` §2.12)*
@@ -3540,6 +3546,7 @@ existing screens, made of existing components; every look is unconfirmed.
   mapped?", what publishing does, "Pays now" with "+287 prestige" (green, from the server's preview, G16),
   "It helps 2 of your 3 rivals." with the preview's caveats, and "Keep it classified" / "Publish". Nothing
   is sent before Publish; a failed preview is a warning toast and no dialog.
+- **The Museum's Archive tab** also has the theories of the day's card, under this one (§4.18.2).
 - **The Museum's Archive tab, a "YOUR FINDINGS" card** above the timeline while the agency knows any: one
   row per finding known (the pack's order), its name, "Makes safer: …" and its controls. The place to
   publish later, and the only place for a finding whose page isn't written yet. The tab's line adds "a

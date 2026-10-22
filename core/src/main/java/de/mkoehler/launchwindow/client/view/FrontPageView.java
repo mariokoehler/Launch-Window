@@ -205,6 +205,57 @@ public final class FrontPageView {
     }
 
     /**
+     * A theory of the day as the Museum lists it ({@code ui-spec.md} &sect;4.18.2).
+     *
+     * @param theory   the theory
+     * @param raisedOn the turn this agency's scientists raised it, or {@code null} if they haven't
+     * @param settled  the science page that settled it, or {@code null} while it's open
+     * @param archive  the open archive pages about the flights that settled it, maybe none
+     */
+    public record TheoryRow(Theories.Theory theory, Integer raisedOn, FrontPage settled, List<Archive.Entry> archive) {
+
+        /**
+         * Returns whether the paper ran a page about it that can be reopened: a public theory's, with words.
+         *
+         * @return whether there's a page to read
+         */
+        public boolean hasPage() {
+            return settled != null && theory.reach() == Theories.Reach.PUBLIC && theory.headline() != null;
+        }
+    }
+
+    /**
+     * Returns the theories the Museum lists: those this agency's scientists raised and those a flight settled,
+     * in the file's order. A theory neither raised nor settled stays hidden, so the list never spoils a
+     * checkpoint. Archive pages are linked only once settled and open in this game.
+     *
+     * @param theories  the theories
+     * @param goalTurns the player's goals and the turn each was reached
+     * @param all       every page printed in the game, or {@code null} if none are fetched
+     * @param entries   the archive's pages in this game, open or not
+     * @param inPack    whether the game's pack has a goal
+     * @return the rows, maybe none
+     */
+    public static List<TheoryRow> museum(Theories theories, Map<String, Integer> goalTurns, List<FrontPage> all,
+                                         List<Archive.Entry> entries, java.util.function.Predicate<String> inPack) {
+        List<TheoryRow> rows = new ArrayList<>();
+        for (Theories.Theory theory : theories.theories()) {
+            if (!theory.playable(inPack)) {
+                continue;
+            }
+            Integer raised = theory.raisedOn(goalTurns).orElse(null);
+            FrontPage settled = settledBy(all, theory.id(), Integer.MAX_VALUE).orElse(null);
+            if (raised == null && settled == null) {
+                continue;
+            }
+            List<Archive.Entry> archive = settled == null ? List.of() : theory.archive().stream()
+                .flatMap(id -> entries.stream().filter(e -> e.open() && e.page().id().equals(id))).toList();
+            rows.add(new TheoryRow(theory, raised, settled, archive));
+        }
+        return rows;
+    }
+
+    /**
      * Returns the agencies that settled a theory, as a sentence names them.
      *
      * @param page the science page

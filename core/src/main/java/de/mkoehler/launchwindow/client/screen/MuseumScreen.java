@@ -25,6 +25,10 @@ import de.mkoehler.launchwindow.client.view.Help;
 import de.mkoehler.launchwindow.client.view.Museum;
 import de.mkoehler.launchwindow.content.ContentCatalog;
 import de.mkoehler.launchwindow.content.Goal;
+import de.mkoehler.launchwindow.client.view.FrontPageView;
+import de.mkoehler.launchwindow.content.Theories;
+import de.mkoehler.launchwindow.model.FrontPage;
+import de.mkoehler.launchwindow.model.GameDate;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
 import de.mkoehler.launchwindow.net.messages.GameInfoResponse;
 import de.mkoehler.launchwindow.net.messages.RivalSummary;
@@ -104,6 +108,14 @@ public final class MuseumScreen extends ChromeScreen {
         rebuild();
         fetchRivals();
         fetchArchive();
+        // The theories of the day read the printed pages (ui-spec.md 4.18.2).
+        if (session.frontPages() == null) {
+            fetchFrontPages(() -> {
+                if (this.tab == Tab.ARCHIVE) {
+                    rebuild();
+                }
+            });
+        }
     }
 
     private void fetchArchive() {
@@ -569,6 +581,10 @@ public final class MuseumScreen extends ChromeScreen {
         if (findings != null) {
             body.add(findings).growX().left().padBottom(Theme.SPACE_5).padRight(8f).row();
         }
+        Table theories = theoriesCard(entries);
+        if (theories != null) {
+            body.add(theories).growX().left().padBottom(Theme.SPACE_5).padRight(8f).row();
+        }
         Table grid = new Table();
         grid.top().left();
         // Room for the "new" dots that stick out over the cards' corners (the scroll pane clips).
@@ -622,6 +638,84 @@ public final class MuseumScreen extends ChromeScreen {
             card.add(row).padBottom(i < known.size() - 1 ? Theme.SPACE_2 : 0f).row();
         }
         return card;
+    }
+
+    /**
+     * The theories of the day ({@code ui-spec.md} &sect;4.18.2), or {@code null} while there are none: those
+     * this agency's scientists raised and those a flight settled, each open or answered, with the paper's science
+     * page and the archive's pages about the flights that settled it.
+     *
+     * @param entries the archive's pages in this game
+     */
+    private Table theoriesCard(List<Archive.Entry> entries) {
+        List<FrontPageView.TheoryRow> rows = FrontPageView.museum(Theories.standard(),
+            session.state().getAchievedGoals(), session.frontPages(), entries,
+            goal -> session.catalog().goal(goal).isPresent());
+        if (rows.isEmpty()) {
+            return null;
+        }
+        Table card = ui.card();
+        card.top();
+        card.defaults().growX().left();
+        Table head = new Table();
+        head.add(ui.label("THEORIES OF THE DAY", Theme.TextStyle.EYEBROW, Theme.NAVY)).expandX().left();
+        head.add(ui.label(session.frontPages() == null ? "Fetching the papers…"
+            : "Questions the space age argued over, until a flight settled them. Flavour only: no effect on the rules",
+            Theme.TextStyle.CAPTION, Theme.INK_MUTED)).right();
+        card.add(head).padBottom(Theme.SPACE_3).row();
+        for (int i = 0; i < rows.size(); i++) {
+            card.add(theoryRow(rows.get(i))).padBottom(i < rows.size() - 1 ? Theme.SPACE_2 : 0f).row();
+            if (i < rows.size() - 1) {
+                card.add(new Image(ui.solid(Theme.NAVY_BORDER))).height(Theme.BORDER_THIN).padBottom(Theme.SPACE_2)
+                    .row();
+            }
+        }
+        return card;
+    }
+
+    private Table theoryRow(FrontPageView.TheoryRow row) {
+        Theories.Theory theory = row.theory();
+        FrontPage settled = row.settled();
+        Table line = new Table();
+        Table text = new Table();
+        text.left();
+        text.defaults().left().growX();
+        Table title = new Table();
+        title.add(ui.label(theory.title(), Theme.TextStyle.BODY_STRONG, Theme.INK)).left();
+        title.add(new HistoryNote(ui, theory.historyNote())).size(HistoryNote.ICON_SIZE).padLeft(Theme.SPACE_2);
+        title.add().expandX();
+        text.add(title).padBottom(2f).row();
+        text.add(ui.paragraph(settled == null ? "What would settle it: " + theory.settledBy() + "."
+            : theory.answer() + " Settled by " + FrontPageView.settlers(settled) + ".", Theme.TextStyle.BODY_SM,
+            Theme.INK)).padBottom(2f).row();
+        if (row.raisedOn() != null) {
+            text.add(ui.label("Your scientists raised it in " + GameDate.ofTurn(row.raisedOn()).label() + ".",
+                Theme.TextStyle.CAPTION, Theme.INK_MUTED)).row();
+        }
+        line.add(text).expandX().fillX().left().top().padRight(Theme.SPACE_3);
+        // The status over the links, both flush right, so every row's status lines up.
+        Table side = new Table();
+        side.top().right();
+        side.add(ui.label(settled == null ? "OPEN QUESTION"
+            : ("Settled · " + GameDate.ofTurn(settled.gameTurn()).label()).toUpperCase(Locale.ROOT),
+            Theme.TextStyle.LABEL, settled == null ? Theme.NAVY : Theme.SUCCESS)).right().row();
+        Table links = new Table();
+        links.right();
+        if (row.hasPage()) {
+            links.add(onClick(ui.button("Read the page", Theme.ButtonKind.SECONDARY),
+                () -> openSciencePage(theory.id()))).padLeft(Theme.SPACE_2);
+        }
+        for (Archive.Entry entry : row.archive()) {
+            TextButton open = onClick(ui.button(entry.page().title(), Theme.ButtonKind.SECONDARY),
+                () -> openArchivePage(entry));
+            ui.tooltip(open, entry.page().title(), "Opens the archive's page about the flight.");
+            links.add(open).padLeft(Theme.SPACE_2);
+        }
+        if (links.hasChildren()) {
+            side.add(links).right().padTop(6f);
+        }
+        line.add(side).right().top();
+        return line;
     }
 
     /** A stop on the timeline over a card: its year, and a dot (white open, gold new, hollow locked). */

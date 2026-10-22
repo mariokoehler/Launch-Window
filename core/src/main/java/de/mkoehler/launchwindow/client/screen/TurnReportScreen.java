@@ -55,6 +55,8 @@ import java.util.Optional;
 public final class TurnReportScreen extends ChromeScreen {
 
     private final TurnReport report;
+    /** The news lines about settled theories, each opening its science page (ui-spec.md 4.18.2). */
+    private final java.util.Map<TurnReportView.Line, String> sciencePages = new java.util.IdentityHashMap<>();
     private final TextButton previous;
     private final TextButton next;
 
@@ -99,6 +101,7 @@ public final class TurnReportScreen extends ChromeScreen {
 
     @Override
     protected void rebuild() {
+        sciencePages.clear();
         ContentCatalog catalog = session.catalog();
         previous.setDisabled(!session.mayHaveReport(report.gameTurn() - 1));
         next.setDisabled(!session.mayHaveReport(report.gameTurn() + 1));
@@ -661,11 +664,17 @@ public final class TurnReportScreen extends ChromeScreen {
                 if (!page.science() || page.gameTurn() != report.gameTurn()) {
                     continue;
                 }
-                Theories.standard().theory(page.storyId()).ifPresent(theory -> lines.add(
-                    new TurnReportView.Line("Settled: " + theory.title(), theory.reach() == Theories.Reach.PUBLIC
+                Theories.standard().theory(page.storyId()).ifPresent(theory -> {
+                    TurnReportView.Line line = new TurnReportView.Line("Settled: " + theory.title(),
+                        theory.reach() == Theories.Reach.PUBLIC
                         ? theory.answer() + " " + FrontPageView.settlers(page) + " flew it; the Daily Zenith ran it "
                             + "on its science page."
-                        : theory.notice().replace("{agency}", FrontPageView.settlers(page)), "", 0)));
+                        : theory.notice().replace("{agency}", FrontPageView.settlers(page)), "", 0);
+                    lines.add(line);
+                    if (theory.reach() == Theories.Reach.PUBLIC && theory.headline() != null) {
+                        sciencePages.put(line, theory.id());
+                    }
+                });
             }
         }
         // The contract board's public news (ui-spec.md section 4.17).
@@ -777,7 +786,13 @@ public final class TurnReportScreen extends ChromeScreen {
             Table row = line(line.title(), line.tag().toUpperCase(Locale.ROOT), color);
             // A line about someone still here opens their page (poaching's lines, ui-spec.md 4.16).
             Personnel person = line.personId() == null ? null : People.find(session.state(), line.personId());
-            if (person != null) {
+            // A settled theory's line opens the paper's science page (ui-spec.md 4.18.2).
+            String theoryId = sciencePages.get(line);
+            if (theoryId != null) {
+                row.setTouchable(com.badlogic.gdx.scenes.scene2d.Touchable.enabled);
+                row.addListener(clicked(() -> openSciencePage(theoryId)));
+                ui.tooltip(row, "The science page", "Opens the page the Daily Zenith ran.");
+            } else if (person != null) {
                 row.setTouchable(com.badlogic.gdx.scenes.scene2d.Touchable.enabled);
                 row.addListener(clicked(() -> game.setScreen(new PersonScreen(game, person,
                     () -> new TurnReportScreen(game, report)))));

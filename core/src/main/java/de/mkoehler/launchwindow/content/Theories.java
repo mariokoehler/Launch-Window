@@ -71,15 +71,18 @@ public record Theories(List<Theory> theories) {
      * @param article       the science page's paragraphs ({@code {agency}}, {@code {season}})
      * @param notice        a technical theory's news line ({@code {agency}})
      * @param historyNote   the real history, checked in {@code design.md} &sect;1.1
+     * @param archive       the archive pages about the flights that settled it ({@code archive.json} ids), maybe none
      */
     public record Theory(String id, Reach reach, List<String> raisedBy, List<String> answeredBy, String title,
                          String question, String settledBy, String answer, String headline, String headlineShort,
-                         String deck, List<String> article, String notice, String historyNote) {
+                         String deck, List<String> article, String notice, String historyNote,
+                         List<String> archive) {
 
         /**
          * Copies the lists, reading missing ones as empty.
          */
         public Theory {
+            archive = archive == null ? List.of() : List.copyOf(archive);
             raisedBy = raisedBy == null ? List.of() : List.copyOf(raisedBy);
             answeredBy = answeredBy == null ? List.of() : List.copyOf(answeredBy);
             article = article == null ? List.of() : List.copyOf(article);

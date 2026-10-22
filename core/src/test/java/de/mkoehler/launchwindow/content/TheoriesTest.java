@@ -86,6 +86,19 @@ class TheoriesTest {
         }
     }
 
+    /** The Museum links a settled theory to the archive's pages about the flights that settled it. */
+    @Test
+    void everyArchiveLinkIsAnArchivePage() {
+        de.mkoehler.launchwindow.client.view.Archive archive =
+            de.mkoehler.launchwindow.client.view.Archive.load(Path.of("..", "assets"));
+        for (Theories.Theory theory : THEORIES.theories()) {
+            for (String id : theory.archive()) {
+                assertTrue(archive.page(id) != null, theory.id() + ": " + id);
+            }
+        }
+        assertEquals(List.of("luna-9", "surveyor-1"), THEORIES.theory("deep-dust").orElseThrow().archive());
+    }
+
     @Test
     void aTheoryIsRaisedOnTheFirstOfItsGoals() {
         Theories.Theory dust = THEORIES.theory("deep-dust").orElseThrow();

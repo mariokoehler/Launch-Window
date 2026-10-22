@@ -176,6 +176,17 @@ public class FrontPageScreen extends SessionScreen {
         return all == null ? Optional.empty() : all.stream().filter(p -> p.tells(goalId)).findFirst();
     }
 
+    /**
+     * Returns the science page that settled a theory of the day ({@code ui-spec.md} &sect;4.18.2).
+     *
+     * @param game     the game, in a session
+     * @param theoryId the theory
+     * @return the page, if one was printed and fetched
+     */
+    public static Optional<FrontPage> sciencePageFor(LaunchWindowGame game, String theoryId) {
+        return FrontPageView.settledBy(game.session().frontPages(), theoryId, Integer.MAX_VALUE);
+    }
+
     @Override
     protected void rebuild() {
         fontGeneration = ui.fonts().generation();

@@ -4,7 +4,9 @@ import de.mkoehler.launchwindow.content.ContentCatalog;
 import de.mkoehler.launchwindow.content.ContentPackLoader;
 import de.mkoehler.launchwindow.content.FrontPageReactions;
 import de.mkoehler.launchwindow.content.FrontPages;
+import de.mkoehler.launchwindow.content.Theories;
 import de.mkoehler.launchwindow.model.FrontPage;
+import de.mkoehler.launchwindow.net.messages.ArchiveUnlock;
 import de.mkoehler.launchwindow.rules.ReactionPrinter;
 import org.junit.jupiter.api.Test;
 
@@ -139,5 +141,37 @@ class FrontPageViewTest {
         assertEquals("“We will follow.”", FrontPageView.quoted("We will follow"));
         assertEquals("“Why not us?”", FrontPageView.quoted("Why not us?"));
         assertEquals("", FrontPageView.quoted(""));
+    }
+
+    /**
+     * The Museum lists the theories raised or settled, never one neither (no spoilers), and links a settled one
+     * to its open archive pages only.
+     */
+    @Test
+    void theMuseumListsTheTheoriesRaisedOrSettled() {
+        Theories theories = Theories.load(Path.of("..", "assets", "content", Theories.FILE));
+        Archive archive = Archive.load(Path.of("..", "assets"));
+        FrontPage dust = new FrontPage("34-science-deep-dust", "lunar-soft-landing", 34, "deep-dust", "", List.of(),
+            List.of(new FrontPage.Achiever("Kestrel", "Moses", List.of())), List.of(), FrontPage.Kind.SCIENCE, null,
+            null);
+        FrontPage germs = new FrontPage("60-science-moon-germs", "crewed-lunar-landing", 60, "moon-germs", "",
+            List.of(), List.of(new FrontPage.Achiever("Kestrel", "Moses", List.of())), List.of(),
+            FrontPage.Kind.SCIENCE, null, null);
+        List<Archive.Entry> entries = archive.entries(CATALOG,
+            List.of(new ArchiveUnlock(archive.page("luna-9").goalId(), 33, false)));
+        List<FrontPageView.TheoryRow> rows = FrontPageView.museum(theories,
+            Map.of("earth-orbit-satellite", 5, "lunar-probe", 30), List.of(SATELLITE, dust, germs), entries,
+            goal -> CATALOG.goal(goal).isPresent());
+        assertEquals(List.of("deep-dust", "weightless-body", "radiation-belts", "venus-jungle", "mars-canals",
+            "moon-germs"), rows.stream().map(r -> r.theory().id()).toList());
+        FrontPageView.TheoryRow first = rows.get(0);
+        assertEquals(30, first.raisedOn());
+        assertEquals(dust, first.settled());
+        assertTrue(first.hasPage());
+        assertEquals(List.of("luna-9"), first.archive().stream().map(e -> e.page().id()).toList(),
+            "Surveyor 1's page isn't open yet");
+        assertTrue(rows.get(1).settled() == null && rows.get(1).archive().isEmpty());
+        assertEquals(null, rows.get(5).raisedOn(), "settled before this agency raised it");
+        assertFalse(FrontPageView.museum(theories, Map.of(), null, entries, goal -> true).iterator().hasNext());
     }
 }

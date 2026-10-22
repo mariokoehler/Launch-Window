@@ -677,6 +677,24 @@ abstract class SessionScreen extends StageScreen {
     }
 
     /**
+     * Reopens the science page that settled a theory of the day over this screen, coming back to it
+     * afterwards ({@code ui-spec.md} &sect;4.18.2): from the Museum's theories and the report's news.
+     *
+     * @param theoryId the theory
+     */
+    protected void openSciencePage(String theoryId) {
+        Runnable open = () -> FrontPageScreen.sciencePageFor(game, theoryId).ifPresentOrElse(page -> {
+            SessionScreen self = this;
+            game.visit(new FrontPageScreen(game, List.of(page), () -> game.setScreen(self), true));
+        }, () -> toast("That front page isn't here.", Theme.NoticeKind.INFO));
+        if (FrontPageScreen.sciencePageFor(game, theoryId).isEmpty()) {
+            fetchFrontPages(open);
+        } else {
+            open.run();
+        }
+    }
+
+    /**
      * Runs after the session took in a new state: rebuilds the screen. Screens with more than
      * their content to update (the chrome's chips) override it.
      */

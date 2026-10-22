@@ -962,6 +962,13 @@ public final class ScreenSnapshot {
         write(folder, "theories-report.png", new TurnReportScreen(game, report), null);
         write(folder, "theories-page-mars.png", new FrontPageScreen(game, List.of(mars), () -> { }, false), null);
         write(folder, "theories-page-dust.png", new FrontPageScreen(game, List.of(dust), () -> { }, false), null);
+        // The Museum's list (raised and settled, with the open archive pages) and a page reopened from it.
+        game.useArchiveReadMarksInMemory(new java.util.HashSet<>());
+        game.session().keepArchive(List.of(
+            new de.mkoehler.launchwindow.net.messages.ArchiveUnlock("lunar-surface-photos", 33, false),
+            new de.mkoehler.launchwindow.net.messages.ArchiveUnlock("mars-photos", 28, false)));
+        write(folder, "theories-museum.png", new MuseumScreen(game, MuseumScreen.Tab.ARCHIVE), null);
+        write(folder, "theories-page-reopened.png", new FrontPageScreen(game, List.of(mars), () -> { }, true), null);
     }
 
     /**
