@@ -36,6 +36,7 @@ import de.mkoehler.launchwindow.server.accounts.AccountStore;
 import de.mkoehler.launchwindow.server.schedule.FrontPageStore;
 import de.mkoehler.launchwindow.server.schedule.GameMeta;
 import de.mkoehler.launchwindow.server.schedule.GameResult;
+import de.mkoehler.launchwindow.server.schedule.LossStore;
 import de.mkoehler.launchwindow.server.schedule.ReactionStore;
 import de.mkoehler.launchwindow.server.schedule.SchedulerState;
 import org.junit.jupiter.api.AfterEach;
@@ -316,6 +317,25 @@ class RequestDispatcherTest {
         assertEquals(1, ReactionStore.load(dataRoot, mapper, 4).size(), "and keeps its statements");
         assertTrue(dispatcher.handleSubmitStatement(2,
             new SubmitStatementRequest(4, first.id(), FrontPage.Stance.NEXT, "")).success());
+
+        // A crew lost in turn 3 (ui-spec.md 4.18.3): its agency gives a tone, every other agency condolences.
+        String mario = store.findByLogin("mario").orElseThrow().getId();
+        FrontPage.Loss loss = new FrontPage.Loss("3-loss-1", 3, GameSeeds.rivalKey(ServerTestGames.meta(false)
+            .getGameSeed(), mario), "OKB-1", "Chief", "vostok-orbital", "10-reentry", List.of(), List.of(), List.of());
+        LossStore.keep(dataRoot, mapper, 3, List.of(loss));
+        assertEquals(List.of(loss), dispatcher.handleFrontPages(2, new FrontPagesRequest()).losses());
+        assertEquals(SubmitStatementResponse.INVALID_STANCE, dispatcher.handleSubmitStatement(2,
+            new SubmitStatementRequest(4, loss.id(), FrontPage.Stance.PEOPLE, "")).message());
+        assertEquals(SubmitStatementResponse.INVALID_STANCE, dispatcher.handleSubmitStatement(1,
+            new SubmitStatementRequest(4, loss.id(), FrontPage.Stance.CONDOLENCES, "")).message());
+        assertTrue(dispatcher.handleSubmitStatement(2,
+            new SubmitStatementRequest(4, loss.id(), FrontPage.Stance.TRIBUTE, "  They went first. ")).success());
+        SubmitStatementResponse eulogy = dispatcher.handleSubmitStatement(1,
+            new SubmitStatementRequest(4, loss.id(), FrontPage.Stance.COURAGE, ""));
+        assertEquals(List.of(new FrontPage.Statement(loss.id(), FrontPage.Stance.COURAGE, "")), eulogy.yours());
+        assertEquals(SubmitStatementResponse.INVALID_STANCE, dispatcher.handleSubmitStatement(2,
+            new SubmitStatementRequest(4, first.id(), FrontPage.Stance.TRIBUTE, "")).message(),
+            "a First takes none of the new stances");
     }
 
     /**

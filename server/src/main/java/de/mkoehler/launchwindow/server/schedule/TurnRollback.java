@@ -81,6 +81,8 @@ public final class TurnRollback {
         FrontPageStore.dropFrom(dataRoot, mapper, gameTurn);
         // Statements given in later turns answered pages that are being undone; the turn's own stay.
         ReactionStore.dropAfter(dataRoot, gameTurn);
+        // The crews lost in the undone turns are their results; the turn before's stay for its statements to answer.
+        LossStore.dropFrom(dataRoot, gameTurn);
         Path resultFile = dataRoot.resolve(GameResult.FILE_NAME);
         if (Files.exists(resultFile) && mapper.readValue(resultFile.toFile(), GameResult.class).decidedOnTurn() >= gameTurn) {
             Files.delete(resultFile);

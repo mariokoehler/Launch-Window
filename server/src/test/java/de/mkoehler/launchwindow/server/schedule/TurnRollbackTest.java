@@ -250,6 +250,45 @@ class TurnRollbackTest {
             "the redone turn prints the same follow-up");
     }
 
+    /**
+     * Verifies the memorial pages (ui-spec.md 4.18.3, G19): a crew lost in turn 1 is printed at the end of turn 2,
+     * first of the turn's pages, with the agency's tone and the rival's tribute, and printed the same after a
+     * rollback, which keeps the loss notice the turn's statements answer.
+     */
+    @Test
+    void aMemorialPageIsPrintedTheTurnAfterTheLossAndTheSameAfterARollback(@TempDir Path dataRoot) throws IOException {
+        twoPlayers(dataRoot);
+        resolveOn(dataRoot, "2026-09-29");
+        long seed = GameMetaStore.loadOrCreateDefault(dataRoot.resolve("game-meta.json"), mapper).meta().getGameSeed();
+        String target = GameSeeds.rivalKey(seed, "acct-target");
+        FrontPage.Loss loss = new FrontPage.Loss("1-loss-1", 1, target, "Target", "Director", "vostok-orbital",
+            "10-reentry", List.of(new FrontPage.Lost("Ana Reyes", 38, null, "a1", 2, 0, 12, List.of())), List.of(),
+            List.of());
+        LossStore.keep(dataRoot, mapper, 1, List.of(loss));
+        ReactionStore.put(dataRoot, mapper, 2, target, new FrontPage.Statement(loss.id(), FrontPage.Stance.RESOLVE, ""));
+        ReactionStore.put(dataRoot, mapper, 2, GameSeeds.rivalKey(seed, "acct-spy"),
+            new FrontPage.Statement(loss.id(), FrontPage.Stance.TRIBUTE, "We will not forget"));
+
+        resolveOn(dataRoot, "2026-09-30");
+
+        FrontPage memorial = FrontPageStore.load(dataRoot, mapper).get(0);
+        assertTrue(memorial.memorialPage(), "first of the turn's pages");
+        assertEquals("2-memorial-1-loss-1", memorial.id());
+        assertEquals(FrontPage.Stance.RESOLVE, memorial.memorial().tone());
+        assertEquals(List.of("Spy Bureau"), memorial.reactions().stream().map(FrontPage.Reaction::agencyName).toList());
+        assertTrue(LossStore.load(dataRoot, mapper, 2).isEmpty(), "nobody was lost in turn 2");
+        byte[] printed = Files.readAllBytes(dataRoot.resolve(FrontPageStore.FILE_NAME));
+
+        TurnRollback.rollBackTo(dataRoot, mapper, ServerTestGames.CONTEXT, 2, NOW);
+
+        assertEquals(List.of(loss), LossStore.load(dataRoot, mapper, 1), "the loss the turn answers stays");
+        assertEquals(2, scheduler(dataRoot, "2026-09-30").resolveNow());
+        assertArrayEquals(printed, Files.readAllBytes(dataRoot.resolve(FrontPageStore.FILE_NAME)),
+            "the redone turn prints the same memorial page");
+        TurnRollback.rollBackTo(dataRoot, mapper, ServerTestGames.CONTEXT, 1, NOW);
+        assertTrue(LossStore.load(dataRoot, mapper, 1).isEmpty(), "undoing the loss's turn drops it");
+    }
+
     /** Two players, one a spy with level-2 intelligence, and the scheduler bootstrapped. */
     private Path twoPlayers(Path dataRoot) throws IOException {
         new PlayerSnapshotStore(dataRoot.resolve("players").resolve("acct-target"), mapper)

@@ -49,6 +49,7 @@ import de.mkoehler.launchwindow.rules.WinCondition;
 import de.mkoehler.launchwindow.server.accounts.AccountStore;
 import de.mkoehler.launchwindow.server.accounts.AuthResult;
 import de.mkoehler.launchwindow.server.schedule.FrontPageStore;
+import de.mkoehler.launchwindow.server.schedule.LossStore;
 import de.mkoehler.launchwindow.server.schedule.ReactionStore;
 import de.mkoehler.launchwindow.server.schedule.GameMeta;
 
@@ -443,8 +444,9 @@ public class RequestDispatcher {
             if (!hasSlot(accountId)) {
                 return FrontPagesResponse.failure(ClaimSlotRequest.SLOT_CLAIM_REQUIRED);
             }
+            long open = gameInfo.openGameTurn();
             return FrontPagesResponse.of(FrontPageStore.load(dataRoot, mapper),
-                ReactionStore.of(dataRoot, mapper, gameInfo.openGameTurn(), rivalKey(accountId)));
+                ReactionStore.of(dataRoot, mapper, open, rivalKey(accountId)), LossStore.load(dataRoot, mapper, open - 1));
         } catch (IOException | RuntimeException e) {
             return FrontPagesResponse.failure("Failed to read the front pages: " + e.getMessage());
         }
@@ -456,6 +458,10 @@ public class RequestDispatcher {
      * that made the First, nor one that joined after it was printed), only in the turn after the First,
      * and the quote is cleaned and checked: at most {@link FrontPage.Statement#MAX_QUOTE_LENGTH}
      * characters, all {@link FrontPage.Statement#ALLOWED_CHARACTERS}. A No comment keeps no quote.
+     *
+     * <p>The same request answers a crew lost in the turn before ({@code ui-spec.md} &sect;4.18.3, G19): its
+     * {@code pageId} is the loss's id. The agency that lost the crew gives its statement in one of the four tones;
+     * every other agency may send condolences or a tribute.</p>
      *
      * @param connectionId the connection the request arrived on
      * @param request      the request
@@ -474,6 +480,14 @@ public class RequestDispatcher {
             if (request.gameTurn() != open) {
                 return SubmitStatementResponse.failure(SubmitStatementResponse.TURN_RESOLVED);
             }
+            String key = rivalKey(accountId);
+            // A crew lost in the turn before: its agency's statement, or another's condolences (ui-spec.md 4.18.3).
+            Optional<FrontPage.Loss> loss = LossStore.load(dataRoot, mapper, open - 1).stream()
+                .filter(l -> l.id().equals(request.pageId())).findFirst();
+            if (loss.isPresent()) {
+                boolean own = loss.get().rivalKey().equals(key);
+                return keepStatement(request, open, key, stance -> own ? stance.tone() : stance.condolence());
+            }
             Optional<FrontPage> page = FrontPageStore.load(dataRoot, mapper).stream()
                 .filter(p -> p.id().equals(request.pageId()) && p.firstPage()).findFirst();
             if (page.isEmpty()) {
@@ -487,29 +501,44 @@ public class RequestDispatcher {
                     ReactionPrinter.firstTurn(open, state.getSeason()))) {
                 return SubmitStatementResponse.failure(SubmitStatementResponse.NOT_A_RIVAL);
             }
-            String key = rivalKey(accountId);
-            if (request.stance() == null) {
-                return SubmitStatementResponse.success(ReactionStore.remove(dataRoot, mapper, open, key,
-                    request.pageId()));
-            }
-            if (!request.stance().givable()) {
-                return SubmitStatementResponse.failure(SubmitStatementResponse.INVALID_STANCE);
-            }
-            String quote = request.stance().quotable() ? FrontPage.Statement.clean(request.quote()) : "";
-            if (quote.length() > FrontPage.Statement.MAX_QUOTE_LENGTH) {
-                return SubmitStatementResponse.failure(SubmitStatementResponse.QUOTE_TOO_LONG);
-            }
-            if (!FrontPage.Statement.allowed(quote)) {
-                return SubmitStatementResponse.failure(SubmitStatementResponse.QUOTE_BAD_CHARACTERS);
-            }
-            return SubmitStatementResponse.success(ReactionStore.put(dataRoot, mapper, open, key,
-                new FrontPage.Statement(request.pageId(), request.stance(), quote)));
+            return keepStatement(request, open, key, FrontPage.Stance::givable);
         } catch (ReactionStore.SealedException e) {
             // The turn is resolving and has read its statements: this one would never be printed.
             return SubmitStatementResponse.failure(SubmitStatementResponse.TURN_RESOLVED);
         } catch (IOException | RuntimeException e) {
             return SubmitStatementResponse.failure("Failed to keep the statement: " + e.getMessage());
         }
+    }
+
+    /**
+     * Keeps or withdraws a statement once the page or loss it answers checked out: the stance must be one this
+     * agency may give there, and the quote is cleaned and checked.
+     *
+     * @param request the request
+     * @param open    the open turn
+     * @param key     the agency's key
+     * @param allowed the stances it may give
+     * @return the response, with its statements for the open turn
+     * @throws IOException if the statements can't be read or written
+     */
+    private SubmitStatementResponse keepStatement(SubmitStatementRequest request, long open, String key,
+            java.util.function.Predicate<FrontPage.Stance> allowed) throws IOException {
+        if (request.stance() == null) {
+            return SubmitStatementResponse.success(ReactionStore.remove(dataRoot, mapper, open, key,
+                request.pageId()));
+        }
+        if (!allowed.test(request.stance())) {
+            return SubmitStatementResponse.failure(SubmitStatementResponse.INVALID_STANCE);
+        }
+        String quote = request.stance().quotable() ? FrontPage.Statement.clean(request.quote()) : "";
+        if (quote.length() > FrontPage.Statement.MAX_QUOTE_LENGTH) {
+            return SubmitStatementResponse.failure(SubmitStatementResponse.QUOTE_TOO_LONG);
+        }
+        if (!FrontPage.Statement.allowed(quote)) {
+            return SubmitStatementResponse.failure(SubmitStatementResponse.QUOTE_BAD_CHARACTERS);
+        }
+        return SubmitStatementResponse.success(ReactionStore.put(dataRoot, mapper, open, key,
+            new FrontPage.Statement(request.pageId(), request.stance(), quote)));
     }
 
     private String rivalKey(String accountId) {

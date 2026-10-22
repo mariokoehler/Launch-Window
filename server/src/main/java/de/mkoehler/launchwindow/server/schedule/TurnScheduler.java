@@ -16,7 +16,9 @@ import de.mkoehler.launchwindow.persistence.PlayerSnapshotStore;
 import de.mkoehler.launchwindow.persistence.PlayerStateService;
 import de.mkoehler.launchwindow.rules.ContractMarket;
 import de.mkoehler.launchwindow.rules.FindingPublications;
+import de.mkoehler.launchwindow.rules.MemorialPrinter;
 import de.mkoehler.launchwindow.rules.SciencePrinter;
+import de.mkoehler.launchwindow.content.MemorialPages;
 import de.mkoehler.launchwindow.content.Theories;
 import de.mkoehler.launchwindow.rules.FrontPagePrinter;
 import de.mkoehler.launchwindow.rules.GoalTally;
@@ -269,8 +271,9 @@ public class TurnScheduler {
      * every player's turn report, which survives a retry after a crash halfway through (a player
      * already resolved returns no events, but their report is on disk), and the follow-ups with the
      * rivals' statements on the turn before's Firsts (&sect;4.18.1, G17) and the science pages of the theories
-     * settled this turn (&sect;4.18.2, G18), and keeps them all in {@code frontpages.json} at once, follow-ups
-     * first.
+     * settled this turn (&sect;4.18.2, G18), and keeps them all in {@code frontpages.json} at once. The crews lost
+     * this turn are recorded in {@code losses/turn-N.json} for the next turn to answer, and the memorial pages of
+     * those lost in the turn before are printed, first of all (&sect;4.18.3, G19).
      *
      * @param gameTurn the turn just resolved
      * @param meta     the game's configuration, for its seed
@@ -279,17 +282,33 @@ public class TurnScheduler {
      */
     private void printFrontPages(long gameTurn, GameMeta meta, Map<String, PlayerStateService> services)
             throws IOException {
+        // The crews lost this turn (ui-spec.md 4.18.3): public from the next turn, printed at its end.
+        List<MemorialPrinter.Agency> named = new ArrayList<>();
+        List<MemorialPrinter.Turn> turns = new ArrayList<>();
+        for (Map.Entry<String, PlayerStateService> player : services.entrySet()) {
+            PlayerSnapshot state = player.getValue().stateBefore(gameTurn + 1).orElseThrow();
+            MemorialPrinter.Agency agency = new MemorialPrinter.Agency(
+                GameSeeds.rivalKey(meta.getGameSeed(), player.getKey()), state.getAgencyName(), state.getDirectorName());
+            named.add(agency);
+            turns.add(new MemorialPrinter.Turn(agency, player.getValue().turnReport(gameTurn).orElse(null),
+                state.getMemorial()));
+        }
+        LossStore.keep(dataRoot, mapper, gameTurn, MemorialPrinter.losses(Math.toIntExact(gameTurn), turns));
         FrontPages words = FrontPages.standard();
         if (words.firsts().isEmpty()) {
             return;
         }
+        // Sealed as they are read: a statement arriving later is refused, not kept unprinted.
+        Map<String, List<FrontPage.Statement>> statements = ReactionStore.seal(dataRoot, mapper, gameTurn);
         List<FrontPagePrinter.Agency> agencies = new ArrayList<>();
         for (PlayerStateService service : services.values()) {
             PlayerSnapshot state = service.stateBefore(gameTurn + 1).orElseThrow();
             agencies.add(new FrontPagePrinter.Agency(state.getAgencyName(), state.getDirectorName(),
                 service.turnReport(gameTurn).orElse(null)));
         }
-        List<FrontPage> pages = new ArrayList<>(followUps(gameTurn, meta, services, words));
+        List<FrontPage> pages = new ArrayList<>(MemorialPrinter.print(Math.toIntExact(gameTurn), meta.getGameSeed(),
+            LossStore.load(dataRoot, mapper, gameTurn - 1), statements, named, MemorialPages.standard(), words));
+        pages.addAll(followUps(gameTurn, meta, services, words, statements));
         pages.addAll(FrontPagePrinter.print(Math.toIntExact(gameTurn), meta.getGameSeed(), agencies, words,
             goal -> context.catalog().goal(goal).isPresent()));
         // Theories of the day settled this turn (ui-spec.md 4.18.2): each once, so not those settled before.
@@ -308,14 +327,13 @@ public class TurnScheduler {
      * @param gameTurn the turn just resolved
      * @param meta     the game's configuration, for its seed
      * @param services every player's state service, by account
-     * @param words    the Firsts' words, for the weather
+     * @param words      the Firsts' words, for the weather
+     * @param statements this turn's statements, by agency key, sealed
      * @return the follow-ups, maybe none
      * @throws IOException if a file can't be read
      */
     private List<FrontPage> followUps(long gameTurn, GameMeta meta, Map<String, PlayerStateService> services,
-            FrontPages words) throws IOException {
-        // Sealed as it is read: a statement arriving later is refused, not kept unprinted.
-        Map<String, List<FrontPage.Statement>> statements = ReactionStore.seal(dataRoot, mapper, gameTurn);
+            FrontPages words, Map<String, List<FrontPage.Statement>> statements) throws IOException {
         List<FrontPage> firsts = FrontPageStore.load(dataRoot, mapper).stream()
             .filter(p -> p.firstPage() && p.gameTurn() == gameTurn - 1).toList();
         if (firsts.isEmpty()) {
