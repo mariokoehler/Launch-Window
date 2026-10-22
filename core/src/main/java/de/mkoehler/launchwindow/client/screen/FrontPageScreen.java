@@ -372,7 +372,8 @@ public class FrontPageScreen extends SessionScreen {
         sheet.top().pad(MARGIN);
         sheet.add(rule()).width(INNER).height(4f).row();
         Table head = new Table();
-        head.add(ui.label("THE WORLD REACTS", Theme.TextStyle.NEWS_LABEL, Theme.INK)).left().width(300f);
+        head.add(ui.label(page.science() ? "SCIENCE REPORT" : "THE WORLD REACTS", Theme.TextStyle.NEWS_LABEL,
+            Theme.INK)).left().width(300f);
         head.add(ui.label("CONTINUED FROM PAGE 1", Theme.TextStyle.NEWS_FOLIO, Theme.INK)).expandX();
         Label season = ui.label(seasonOf(page), Theme.TextStyle.NEWS_FOLIO, Theme.INK);
         season.setAlignment(Align.right);

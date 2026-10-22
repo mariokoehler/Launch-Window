@@ -269,7 +269,9 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   §4.18.2 and G18): eight questions in `assets/content/theories.json` (outside the pack, `TheoriesTest`), raised in
   the turn report at a goal, settled by the first flight in the game that reaches an answering goal
   (`rules.SciencePrinter`, a `SCIENCE` page in `frontpages.json`). `FrontPage.firstPage()` means a First's page;
-  never `!followUp()`. Rebuild client and server together; no reset.
+  never `!followUp()`. Rebuild client and server together; no reset. The gaps closed the same day: a late statement
+  is refused, not lost (`ReactionStore.seal`); `DevClient`'s `pages` and `react`; the theories in the Museum's
+  Archive tab, with their pages and archive links; the science page's "THE QUESTION" box; longer articles.
 
 ## How we work
 

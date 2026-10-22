@@ -3434,7 +3434,9 @@ Flavour only: nothing in the rules reads them.
   stood for the reader's agency, in the race box's rows: "Raised by your staff" (the season, or "not by then"),
   "Settled" and "Open for" ("1 year", "2 years, 1 season"; `FrontPageView.standing`), so every game's page
   differs. Then the byline "FROM OUR SCIENCE CORRESPONDENT", the article and the filler items, the race box; the
-  strip "Science news: no effect on the race." with the theory's history note.
+  strip "Science news: no effect on the race." with the theory's history note. An article runs 5 to 8 paragraphs,
+  32 to 48 lines at the longest names (`TheoriesTest`), so it fills about two and a half columns and the filler
+  items only the rest; one that still runs over goes on to the continuation sheet, headed "SCIENCE REPORT".
 - **In the Museum** (2026-10-22): the Archive tab's "THEORIES OF THE DAY" card, under the findings card, lists the
   theories this agency's scientists raised and those a flight settled (never one neither, so it spoils no
   checkpoint; `FrontPageView.museum`). Each row: the question with its history note, "What would settle it" or the

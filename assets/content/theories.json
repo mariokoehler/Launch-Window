@@ -21,8 +21,11 @@
       "deck": "A probe flown by {agency} comes down on the lunar plains, and does not sink",
       "article": [
         "{season} \u2014 The Moon will hold a spacecraft. A probe flown by {agency} came down gently on one of the dark lunar plains this season and stood there, sending home pictures of gritty, rubble-strewn ground.",
-        "The landing answers a fear that has shadowed every plan to put people on the Moon: that the plains are deep seas of dust that would swallow anything set down on them. There is dust, the pictures show, but it lies thin over firmer ground.",
-        "Engineers at every agency will be studying the pictures. A landing leg, it seems, need not be built like a snowshoe."
+        "The landing answers a fear that has shadowed every plan to put people on the Moon: that the plains are deep seas of fine dust, gathered over the ages, that would swallow anything set down on them.",
+        "The idea was never as wild as it sounded. Through a telescope the plains look smooth, and some astronomers argued that dust worn from the mountains could have drifted down and pooled there. Pictures from probes that crashed into the Moon showed smaller and smaller craters on the way down, but they could not say how firm the ground was.",
+        "Now there is an answer. The probe did not sink, and its pictures show stones lying on the surface, not swallowed by it. There is dust, but it lies thin over firmer ground.",
+        "Engineers at every agency will be studying the pictures. A landing leg, it seems, need not be built like a snowshoe, and a crew stepping down a ladder should find the ground no softer than a sandy beach.",
+        "Not everyone is ready to call the question closed for every plain on the Moon. But no one now expects a lander to vanish."
       ],
       "historyNote": "In 1955 the astronomer Thomas Gold proposed that the lunar plains were covered in fine dust; the press turned it into a dust sea deep enough to swallow a lander, a version Gold said misquoted him. The Ranger probes' close-ups of 1964 and 1965 did not settle it. Luna 9's landing on 3 February 1966 and Surveyor 1's on 2 June 1966 did: neither sank.",
       "archive": ["luna-9", "surveyor-1"]
@@ -45,7 +48,11 @@
       "deck": "Food, water and work are no trouble without weight, a flight by {agency} shows",
       "article": [
         "{season} \u2014 It may be the most ordinary meal ever to make the news. On the first flight all the way around the Earth, the pilot of {agency} squeezed food from a tube, swallowed it, and reported nothing unusual.",
-        "Doctors had warned that weightlessness might upset swallowing, eyesight or balance. The flight answered them: the pilot ate, drank, read the instruments and flew the craft without trouble.",
+        "Doctors had warned that weightlessness might upset the body in ways nobody could test on the ground. Food, some feared, would not go down a throat that had no weight to help it; the eyes might not see properly; a pilot might be in no state to fly.",
+        "Animals had flown before and come home alive, but an animal cannot say how its lunch went down, or whether it could still read a dial.",
+        "The flight answered the doctors. The pilot ate, drank, read the instruments and flew the craft without trouble, and came home able to describe it all.",
+        "The pilot's own account was almost dull. The food tasted like food, the water went down like water, and the view from the window was the only thing worth describing at length.",
+        "Meals for space will still need work. Crumbs that float could foul the instruments, so for now the menu comes in tubes.",
         "Longer flights will test the body further. But the first fears, at least, can be crossed off the list."
       ],
       "historyNote": "Before people flew, doctors could not rule out that weightlessness would stop a pilot swallowing or seeing properly. Yuri Gagarin ate from food tubes on Vostok 1 in April 1961, and on 20 February 1962 John Glenn ate applesauce from a tube in orbit; the Mercury pilots reported no trouble chewing, swallowing or digesting.",
@@ -69,7 +76,12 @@
       "deck": "A satellite flown by {agency} finds that space above the air is far from empty",
       "article": [
         "{season} \u2014 Space is not as empty as it looked. Counters aboard a satellite flown by {agency} found that at certain heights the radiation climbs so high that the instruments jam, overwhelmed.",
-        "The particles, scientists say, are held by the Earth's magnetic field in great belts around the planet. Below them a crew in orbit is safe enough; a flight to the Moon will have to cross them, and cross them quickly.",
+        "At first the counters' silence was a puzzle. High on each orbit they fell quiet, as if space up there held nothing at all. Only when the recordings were played back did the reason appear: there was so much radiation that the counters could not keep up, and stopped counting.",
+        "The particles, scientists say, are held by the Earth's magnetic field in great belts around the planet, high above the air.",
+        "Few had expected anything like them. The instruments sent up before the satellites rode balloons and small rockets, and none of them stayed high enough for long enough to meet the belts.",
+        "Engineers are already asking what the belts mean for the craft still to come: how much shielding a capsule needs, which orbits to keep clear of, and how quickly a crossing must be made.",
+        "Below them a crew in orbit is safe enough. A flight to the Moon will have to cross them, and cross them quickly.",
+        "The belts already have a name in the papers, and the counters' makers have been asked to explain them in every lecture hall that will have them.",
         "It is the first great discovery of the space age, and it came as a surprise."
       ],
       "historyNote": "Explorer 1's cosmic-ray counter, built by James Van Allen's team, kept falling silent in orbit; Explorer 3's recordings showed why: at those heights the radiation was so intense that it saturated the counter. Van Allen announced the belts in Washington on 1 May 1958, and the press named them after him.",
@@ -110,7 +122,12 @@
       "deck": "No swamps and no seas under the clouds: a probe flown by {agency} measures a scorching surface",
       "article": [
         "{season} \u2014 The swamps of Venus are gone, if they were ever there. A probe flown by {agency} reached the cloud-wrapped planet this season and measured its heat: the surface below is far hotter than boiling water.",
-        "The thick air, scientists now think, traps the sun's warmth the way a greenhouse does, only far more fiercely. Nothing we would recognise as life could live there.",
+        "For as long as telescopes have been pointed at it, Venus has hidden its face under a bright, unbroken veil of cloud. Writers filled the gap with steaming swamps, warm seas and forests, on a world much like the young Earth.",
+        "The probe's instruments read the heat coming up from below the clouds, and found no sign of anything so mild.",
+        "The clouds, it turns out, are no rain clouds over a wet world. They hang in an atmosphere far thicker than our own, which presses down on the hidden ground below.",
+        "Planners hoping to send a probe down through it have a new problem: building one that can last long enough to report.",
+        "The thick air, scientists now think, traps the sun's warmth the way a greenhouse does, only far more fiercely: the heat gets in, and cannot get out.",
+        "Nothing we would recognise as life could live there. Any probe sent down to the surface will need to be built more like an oven door than a boat.",
         "The novelists will have to find another planet."
       ],
       "historyNote": "Before 1962 many pictured Venus under its clouds as a warm, swampy world. Mariner 2 flew past on 14 December 1962 and its radiometers found a very hot surface, supporting Carl Sagan's idea that the thick atmosphere traps heat in a runaway greenhouse effect.",
@@ -134,7 +151,12 @@
       "deck": "The first close pictures, from a probe flown by {agency}, show a land like the Moon's",
       "article": [
         "{season} \u2014 Mars has craters, not canals. The first close pictures of the planet, taken by a probe flown by {agency}, show a dry, pitted land that looks more like the Moon than the Earth.",
-        "There are no straight lines, no cities and no signs of plants. The air, the probe found, is far thinner than anyone had hoped.",
+        "For two generations the canals have been the most famous sight on any planet. Through the telescope some observers saw fine straight lines crossing the red deserts, and one argued that they were built by thinking beings.",
+        "There are no straight lines in the new pictures, no cities and no signs of plants. The air, the probe found, is far thinner than anyone had hoped.",
+        "The pictures came home slowly, a line at a time, and were laid out by hand as they arrived. Crater after crater appeared, old and worn, as quiet as the Moon's.",
+        "Astronomers now suspect the canals were a trick of the eye: faint, scattered markings that a tired observer joined into lines.",
+        "For those who hoped for neighbours, it is a heavy blow.",
+        "Planners will not give up on Mars. There is still a planet to map, and one day to land on. But they will be planning for a desert, not a garden.",
         "Whether anything ever lived there is still an open question. But the Mars of the old stories, with its canals and their builders, is gone."
       ],
       "historyNote": "Percival Lowell had argued that the \u201ccanals\u201d of Mars were built by intelligent beings. Mariner 4 flew past on 14 July 1965 and sent home the first close-up pictures of another planet: a cratered, Moon-like surface. On 29 July the New York Times called it \u201ca heavy, perhaps fatal, blow\u201d to the possibility of life on Mars.",
@@ -178,6 +200,10 @@
       "article": [
         "{season} \u2014 The first people to walk on the Moon have been let out of quarantine, as healthy as the day they left. For weeks they lived behind sealed doors while scientists exposed mice, birds, insects and plants to lunar soil and waited for something to happen.",
         "Nothing did. No germ, no mould and no sickness of any kind has been found in the samples brought home by {agency}.",
+        "The precautions began the moment the crew were back. They went straight into sealed rooms, and the boxes of rock and soil were opened only behind glass.",
+        "The tests were thorough. Mice bred to carry no germs of their own were given lunar dust and watched for any sign of illness; seeds were sown in lunar soil; samples were kept warm and wet for anything that might grow.",
+        "The crew, for their part, passed the time with reports, examinations and a good deal of sleep, and were told almost daily that nothing had happened yet.",
+        "The fear was never that the Moon was teeming with life, scientists admit, but that no one could prove it was not. A single unknown germ, loose on the Earth, was a risk nobody wanted to take.",
         "Later crews may be spared the quarantine. The Moon, it seems, is a dead world: magnificent, and quite sterile."
       ],
       "historyNote": "NASA's Interagency Committee on Back Contamination, formally set up in January 1966, planned the quarantine. Apollo 11's crew spent theirs in a sealed trailer and then the Lunar Receiving Laboratory in Houston, and were declared free to go on 10 August 1969. Lunar soil was tested on germ-free mice, quail, oysters, insects and plants; nothing grew. The crew quarantine was dropped after Apollo 14.",

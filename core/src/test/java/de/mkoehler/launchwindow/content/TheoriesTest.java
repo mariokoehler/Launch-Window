@@ -99,6 +99,49 @@ class TheoriesTest {
         assertEquals(List.of("luna-9", "surveyor-1"), THEORIES.theory("deep-dust").orElseThrow().archive());
     }
 
+    /**
+     * A science page's article fills most of its four columns and stays on the page: at least {@link #MIN_LINES}
+     * (fewer leaves most of the page to the filler items) and at most {@link #MAX_LINES} at the longest names, two
+     * agencies sharing it. The page holds about 56 lines under "THE QUESTION" and over the race box.
+     */
+    @Test
+    void everyArticleFillsItsPageAndFits() throws Exception {
+        java.awt.Font font = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, java.nio.file.Files.newInputStream(
+            Path.of("..", "assets", "fonts", "LibreCaslonText-Regular.ttf"))).deriveFont(16f);
+        java.awt.font.FontRenderContext context = new java.awt.font.FontRenderContext(null, true, true);
+        for (Theories.Theory theory : THEORIES.theories()) {
+            if (theory.reach() != Theories.Reach.PUBLIC) {
+                continue;
+            }
+            int lines = 0;
+            for (String paragraph : theory.article()) {
+                lines += lines(paragraph.replace("{agency}", "Aaaaaaaaaaaa Bbbbbbbbbbbb Cccccc and Aaaaaaaaaaaa "
+                    + "Bbbbbbbbbbbb Dddddd").replace("{season}", "SUMMER 1968"), font, context);
+            }
+            assertTrue(lines >= MIN_LINES && lines <= MAX_LINES, theory.id() + " runs to " + lines + " lines");
+        }
+    }
+
+    private static final int MIN_LINES = 32;
+    private static final int MAX_LINES = 48;
+
+    private static int lines(String text, java.awt.Font font, java.awt.font.FontRenderContext context) {
+        int lines = 1;
+        float indent = (float) font.getStringBounds("    ", context).getWidth();
+        StringBuilder line = new StringBuilder();
+        for (String word : text.strip().split(" ")) {
+            String trial = line.isEmpty() ? word : line + " " + word;
+            float width = (float) font.getStringBounds(trial, context).getWidth() + (lines == 1 ? indent : 0f);
+            if (!line.isEmpty() && width > 316f) {
+                lines++;
+                line = new StringBuilder(word);
+            } else {
+                line = new StringBuilder(trial);
+            }
+        }
+        return lines;
+    }
+
     @Test
     void aTheoryIsRaisedOnTheFirstOfItsGoals() {
         Theories.Theory dust = THEORIES.theory("deep-dust").orElseThrow();
