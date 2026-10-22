@@ -1252,8 +1252,8 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       No comment empties it. A history note after the title: how Eisenhower and Kennedy answered the
       Soviets' Firsts (2026-10-22). Shots `-Dshots=reactions` (`reactions-*.png`).
 
-29. **Eulogy dialog** *(the user's idea, 2026-10-22, for §4.18.3 "In memory"; specified 2026-10-22, to be
-    mocked up)*. The losing agency's statement on its lost crew, printed the next turn on the memorial page.
+29. **Eulogy dialog** *(the user's idea, 2026-10-22, for §4.18.3 "In memory"; specified and mocked up
+    2026-10-22)*. The losing agency's statement on its lost crew, printed the next turn on the memorial page.
     - **Opens from** the card "The press is waiting for your statement" in the report of the turn after the loss
       and on the hub (an advisor-style card), and from the strip of the report's People line about the loss.
       After a statement is given: "Your statement: Who they were · Change". Gone once the turn resolves.
@@ -1278,6 +1278,22 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       the quote, Withdraw, and the footnote "Only what is sent is printed; silence is never reported."
     - **States to mock up:** fresh (three crew); a tone picked with a quote and its preview; a given statement
       being changed; the condolence form; the report card and the hub card.
+    - **Mocked up (2026-10-22)** on the canvas `Launch Window — In Memory` (the Artifact tool's list finds it), with
+      §4.18.3's page. Choices, all **unconfirmed**:
+      - **The frame:** component 28's Dialog at 720 px, quieter: navy and ink only, no gold. The newsprint preview lies
+        flat (no tilt), and a given or sent status is in `INK_MUTED` with the check icon (component 28's is `SUCCESS`).
+        The history note follows the title's last word (`HistoryNote`, its card opening downward).
+      - **The crew:** 64 px greyscale portraits with a hairline, the name in body-strong 12 and "Aged 38" in caption.
+      - **The field** is labelled "Your words (optional)", not "Quote". "Pick a tone to see how it might read." stands
+        in for the preview until a tone is picked.
+      - **The condolence form:** "What you send" (Condolences, A tribute), the status "✓ Sent this season: A tribute",
+        Withdraw at the left (component 28's destructive outline; a navy outline would be quieter), Cancel and
+        "Send".
+      - **The report card:** a full-width primary Card (1.5 px navy) under the summary strip: the eyebrow "The
+        press", the title, 40 px greyscale portraits with one line, "If you give none, a spokesman's short one is
+        printed." and "Give a statement". **The hub's card:** the same at 420 px, top left (the advisor's place),
+        with "Until the turn resolves". **The rival's line:** first in the News card, "<Agency> has lost the crew
+        of <mission>" with one more line and "Send condolences" (secondary), no eyebrow and no colour.
 
 ---
 
@@ -3497,7 +3513,7 @@ Flavour only: nothing in the rules reads them.
   the quarantine). The report's "Settled:" line for a public theory opens its page too.
 - Shots `-Dshots=theories`.
 
-#### 4.18.3 In memory *(the user's idea, 2026-10-22; specified 2026-10-22, to be mocked up; G19)*
+#### 4.18.3 In memory *(the user's idea, 2026-10-22; specified and mocked up 2026-10-22; G19)*
 **Purpose:** a lost crew is news for the whole world, and the agency that lost it owes the world a statement.
 The paper prints a memorial page for every crew lost in flight, a turn after the loss, with the agency's
 statement in the tone its director chose and the other agencies' condolences. It gives the moment the gravity
@@ -3556,6 +3572,14 @@ the withheld goals, §2.6).
   sentences, close), the withheld-goal sentences per goal kind, the condolence lines, the spokesman's
   statement. Ids are stored on printed pages: never rename or reuse one. Tokens as the reactions' (`{agency}`,
   `{director}`, `{season}`, `{quote}`), plus `{mission}`, `{step}`, `{crew}`, `{name}`, `{age}`, `{flights}`.
+- **Mocked up (2026-10-22, unconfirmed)** on the canvas `Launch Window — In Memory`: three crew with a quote and two
+  condolences, two crew with a short article, and the losing agency's copy. The mourning frame is a 3 px ink rule
+  12 px inside the sheet, with the ear "IN MEMORY" on one line at 26 px. The crew row sits between 1 px rules: the
+  128 px portraits in greyscale with a hairline, the name (Caslon 17) and "Aged 38 · 2 flights" (Caslon italic 14).
+  The article runs in four columns balanced to end together, or in two centred columns (692 px) when it is short
+  (under about 16 lines), then a centred 64 px rule; the paper below stays empty. "From the other agencies" is a
+  small capital head between rules (Old Standard Bold 12). The strip's history note follows "In memory."; the
+  losing agency's "Open the memorial" is a ghost button left of Continue.
 - **Later** (the user's call, not specified): secrecy, a Soviet agency keeping a loss quiet at the risk of
   rivals' intelligence uncovering it later (Bondarenko's death in 1961 was not revealed until 1986).
 
