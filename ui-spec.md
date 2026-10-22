@@ -1230,7 +1230,35 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       No comment empties it. A history note after the title: how Eisenhower and Kennedy answered the
       Soviets' Firsts (2026-10-22). Shots `-Dshots=reactions` (`reactions-*.png`).
 
+29. **Eulogy dialog** *(the user's idea, 2026-10-22, for §4.18.3 "In memory"; specified 2026-10-22, to be
+    mocked up)*. The losing agency's statement on its lost crew, printed the next turn on the memorial page.
+    - **Opens from** the card "The press is waiting for your statement" in the report of the turn after the loss
+      and on the hub (an advisor-style card), and from the strip of the report's People line about the loss.
+      After a statement is given: "Your statement: Who they were · Change". Gone once the turn resolves.
+    - **About 720 px wide,** a modal in the dialog style, quieter than the statement dialog: no gold, navy
+      and ink only. Title "A statement on the loss of <mission>"; subtitle "Printed in tomorrow's paper,
+      <season>". A history note after the title (Kranz, §4.18.3).
+    - **The crew,** at the top: their portraits in a row (greyscale, 64 px), name and age under each.
+    - **Four tone rows,** one choice, in component 28's choice-row pattern (radio mark, bold label, a muted line):
+      1. *Their courage*: They knew the risks, and flew.
+      2. *Who they were*: The people behind the names.
+      3. *We will go on*: We fly again, and finish what they started.
+      4. *We will find out why*: We will learn what went wrong, and fix it.
+    - **Quote,** optional, as component 28's (140 characters, filtered, counter, error), placeholder "Add words of
+      your own, printed as you write them (optional)".
+    - **Preview,** "IT MIGHT READ": a scrap of newsprint with the tone's first statement line and the names.
+    - **Footnote:** "If you give no statement, a spokesman's short one is printed. You can change yours until the
+      turn resolves."
+    - **Buttons:** Cancel, "Give statement" (primary, disabled until a tone is picked). No Withdraw (changing is
+      enough; unconfirmed).
+    - **The rivals' condolence form** is component 28 with its own title ("Condolences to <agency>"), two rows
+      (*Condolences*: Sympathy for the families and the agency. *A tribute*: Honour the crew and what they did.),
+      the quote, Withdraw, and the footnote "Only what is sent is printed; silence is never reported."
+    - **States to mock up:** fresh (three crew); a tone picked with a quote and its preview; a given statement
+      being changed; the condolence form; the report card and the hub card.
+
 ---
+
 
 ## 3. Screen flow *(decided)*
 
@@ -3447,6 +3475,68 @@ Flavour only: nothing in the rules reads them.
   the quarantine). The report's "Settled:" line for a public theory opens its page too.
 - Shots `-Dshots=theories`.
 
+#### 4.18.3 In memory *(the user's idea, 2026-10-22; specified 2026-10-22, to be mocked up; G19)*
+**Purpose:** a lost crew is news for the whole world, and the agency that lost it owes the world a statement.
+The paper prints a memorial page for every crew lost in flight, a turn after the loss, with the agency's
+statement in the tone its director chose and the other agencies' condolences. It gives the moment the gravity
+it deserves, and confronts the player with a choice about how to speak of the dead (user). Flavour only: no
+money, prestige or anything else changes (the rules' cost of a loss is the grounding, `design.md` §2.5(j), and
+the withheld goals, §2.6).
+- **What triggers it:** a catastrophic step that loses a crewed flight's crew, as for the grounding
+  (`MissionProgress.loseCrew`). Not an astronaut who perishes in a random event, nor an animal passenger
+  (unconfirmed). One page per lost crew; two crews lost in one turn print two pages.
+- **When, a turn late** (user, 2026-10-22): nothing is printed the turn of the loss, so no page spoils the
+  replay at login. The losing player learns it from the replay and the report, as now.
+  - *Turn T resolves:* the crew is lost.
+  - *Turn T+1, open:* the losing agency gives its statement (component 29); every other agency may send
+    condolences (component 28's condolence form). The losing agency's report and hub show "The press is
+    waiting for your statement"; every other agency's report news says "<Agency> has lost the crew of
+    <mission>" (their names: public, as on the page) with "Send condolences".
+  - *Turn T+1 resolves:* the page is printed (`FrontPage.Kind.MEMORIAL`) and shows to everyone at the next
+    login, before any other page that turn.
+- **The agency's statement** (component 29): one of four tones (the user's list, 2026-10-22: "do you want to
+  focus on the bravery, or the personal, or..."), and an optional quote of up to 140 characters, printed word for
+  word. The last one sent before the turn resolves counts; it can be changed.
+  1. *Their courage:* they knew the risks and flew anyway.
+  2. *Who they were:* the people behind the names, beyond the flight.
+  3. *We will go on:* we fly again, and finish what they started.
+  4. *We will find out why:* we will learn what went wrong, and fix it.
+  No statement by then: the paper prints a short one "from a spokesman", plain and dignified, never a reproach
+  (unconfirmed).
+- **Condolences** (rivals; component 28 with its own rows): *Condolences* (sympathy to the families and the
+  agency), *A tribute* (honour the crew and what they did), each with an optional quote; or nothing. Unlike a
+  First's statements, silence is never printed, and no stance can belittle (no downplay, no "we'll be next").
+- **The page:** the paper's frame (§4.18) in mourning: a black rule around the sheet, the right ear "IN
+  MEMORY", no race box, no filler items, no photo of a launch. Under the headline and deck, the crew's
+  portraits in a row (the memorial's 128 px portraits, in greyscale), each with name, age and "N flights".
+  Then the article, in the statement's tone (2 or 3 stories a tone, picked by the page's id):
+  - *The lead:* what happened, in plain words: the flight and the step it was lost on ("lost during reentry").
+  - *The statement,* told in its tone, with the quote.
+  - *The people:* a sentence each from what the game knows (age, years with the agency, flights flown, firsts
+    flown, a revealed trait; never anything hidden); the tone picks which.
+  - *What they nearly did:* when the flight had reached a goal the loss withheld (`GoalsWithheld`): "They had
+    become the first to walk in space, and did not come home." The goal stays unclaimed (§2.6).
+  - *The stand-down:* "<Agency> has stood down its crewed flights while the accident is investigated."
+  - *From the other agencies:* the condolences, quotes first, as one paragraph or two; none when nobody sent
+    any (the article simply ends).
+  - *A close* per tone.
+- **The strip:** "In memory." with a history note (the Fallen Astronaut, below), and Continue. The losing
+  agency's copy adds "Open the memorial" (the Museum's Memorial tab). The page opens again from each lost
+  person's memorial page ("Read the paper").
+- **When the grounding ends** (`CrewedGrounding`): every agency's report news says "<Agency> resumes crewed
+  flights" (a line, no page; unconfirmed).
+- **History notes** (component 15; checked in `design.md` §1.1): on the page's strip, the Fallen Astronaut
+  left on the Moon by Apollo 15 with the names of eight Americans and six Soviets; on the statement dialog,
+  Gene Kranz's "tough and competent" talk to his controllers after the Apollo 1 fire; on the condolence form,
+  Tom Stafford at the Soyuz 11 funeral, representing the President, a pallbearer.
+- **Words:** `assets/content/memorial-pages.json` (outside the pack, a test like `FrontPageReactionsTest`):
+  per tone its stories (headline, deck, lead, the statement's lines with and without a quote, the people's
+  sentences, close), the withheld-goal sentences per goal kind, the condolence lines, the spokesman's
+  statement. Ids are stored on printed pages: never rename or reuse one. Tokens as the reactions' (`{agency}`,
+  `{director}`, `{season}`, `{quote}`), plus `{mission}`, `{step}`, `{crew}`, `{name}`, `{age}`, `{flights}`.
+- **Later** (the user's call, not specified): secrecy, a Soviet agency keeping a loss quiet at the risk of
+  rivals' intelligence uncovering it later (Bondarenko's death in 1961 was not revealed until 1986).
+
 ### 4.19 Archive *(the user's idea, 2026-10-15; specified, mocked up and built the same day for `design.md` §2.12)*
 **Purpose:** pages about the real missions that sent back something memorable, unlocked when a goal is
 first reached in the game, so a flight feels like getting its pictures back. The pages, images and
@@ -3820,6 +3910,20 @@ current state alone. Each is an M5 task.
   - **Events:** `FindingPublished`, `FindingLearned` (append-only ids `findingPublished`, `findingLearned`).
   - **Reset the dev data root and rebuild client and server together** (saved fields, a pack hash change,
     a new action and message).
+- **G19. In memory (§4.18.3, component 29, 2026-10-22). Specified.**
+  - **Model:** `FrontPage.Kind.MEMORIAL` (appended); the page carries the lost crew (name, age, portrait, flights,
+    firsts flown, a revealed trait), the configuration and failed step, the withheld goals, the agency's tone and
+    quote (or the spokesman's), and the condolences (`FrontPage.Reaction`, with two stances appended:
+    `CONDOLENCES`, `TRIBUTE`; the eulogy's four tones as their own enum).
+  - **A loss is public a turn early:** the resolution that loses a crew records a notice in
+    `losses/turn-N.json` (rival key, agency, mission, the crew's public data), which the next turn's
+    statements and condolences answer and the next resolution prints from; `TurnRollback` drops the later
+    turns' files as for the reactions.
+  - **Messages:** the statement and the condolences reuse `SubmitStatementRequest`'s shape (the loss's id in
+    place of a page id), or a new pair; `FrontPagesResponse` (or the report) carries the open losses. Decided at
+    build.
+  - **Rebuild client and server together;** no reset (new fields only).
+
 - **G18. Theories of the day (§4.18.2, 2026-10-22). Built.** `FrontPage.Kind.SCIENCE` (appended; its story id is
   the theory's), `rules.SciencePrinter` in `TurnScheduler.printFrontPages`, settled once per theory (the pages of
   earlier turns are read back), kept in `frontpages.json`, so retries and `TurnRollback` need nothing new. The

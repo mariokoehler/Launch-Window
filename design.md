@@ -528,6 +528,33 @@ leading to satellite navigation.
     crew left them on the Moon in a small memorial packet with an Apollo 1 patch and a gold olive branch.
     Sources: the American Presidency Project (Nixon's statement), History News Network and Astronomy
     ("Apollo 11 brought a message of peace to the Moon").
+- **In memory** (checked 2026-10-22, for `ui-spec.md` §4.18.3 and §2.6; shown as history notes):
+  - *Fallen Astronaut:* Apollo 15's David Scott left a small aluminium figure and a plaque with 14 names, eight
+    American and six Soviet astronauts and cosmonauts who had died, in alphabetical order, at Hadley-Apennine on
+    2 August 1971, about 20 feet north of the rover; he made it public only after the flight. The figure is by
+    the Belgian artist Paul Van Hoeydonck. Sources: NASA Science ("Memorial to fallen astronauts on the Moon"),
+    Scott's memorandum (NASA ALSJ), Wikipedia ("Fallen Astronaut").
+  - *Apollo 11's tributes:* Armstrong and Aldrin left an Apollo 1 patch for Grissom, White and Chaffee and two
+    Soviet medals for Gagarin and Komarov; NASA's catalogue of man-made material on the Moon lists them.
+    Sources: NASA History catalogue, Astronomy.com, Britannica.
+  - *Soyuz 11:* the Soviet government gave Dobrovolsky, Volkov and Patsayev a state funeral; NASA astronaut
+    Thomas Stafford represented the President of the United States and was one of the pallbearers; they were
+    buried in the Kremlin Wall. Sources: NASA ("50 years ago: remembering the crew of Soyuz 11"), AMU Edge. (That
+    the Soviets asked him to carry the coffin rests on one source.)
+  - *"Tough and competent":* after the Apollo 1 fire Gene Kranz told his flight controllers that they were the
+    cause: they had been too eager about the schedule and had shut out the problems they saw every day. From
+    then on Mission Control would be "tough" (always accountable for what it did or failed to do) and
+    "competent" (never taking anything for granted); the words were to be written on every blackboard and never
+    erased. Sources: Wikipedia ("Gene Kranz"), The Space Review. When he spoke differs between accounts (the
+    Monday after, or two days after).
+  - *Gemini 8* (for §2.6, a flight cut short keeps its goals): Armstrong and Scott made the first docking of two
+    spacecraft in orbit, with an Agena, on 16 March 1966; a thruster stuck on soon after, the craft tumbled at
+    about one turn a second, and with most of the reentry fuel used to stop it the flight was cut short; they
+    came down safely in the Pacific. Sources: Space.com, NASA, Space Center Houston.
+  - *Checked and not used:* no Soviet condolence message after Apollo 1 was found; the US astronauts' telegram
+    of condolence after Soyuz 1 rests on one 1967 report. Valentin Bondarenko's death in a fire in an
+    oxygen-rich chamber on 23 March 1961 was first made public in Izvestia in 1986 (James Oberg; for the secrecy
+    idea, if it's ever built).
 - **Theories of the day** (checked 2026-10-22, for `ui-spec.md` §4.18.2; shown as history notes, the words in
   `theories.json`; our articles name no real person):
   - *Deep lunar dust:* Thomas Gold proposed in 1955 that the lunar plains were covered in fine dust; the press
@@ -3770,6 +3797,14 @@ stances; the rest share a line. A page that runs long drops its close, then runs
 ("Continued on page 2"), never a scroll area (user, 2026-10-22). Its first plan is in
 `ideas/world-reacts.md`, superseded where they differ. Next: the play test. Unconfirmed: late joiners can't
 answer; no page when nobody spoke; follow-ups print before the turn's own Firsts.
+
+**In memory** (the user's idea, 2026-10-22; **specified**, `ui-spec.md` §4.18.3, component 29 and G19, to be mocked
+up): a memorial page in the paper for every crew lost in flight, printed a turn late so it never spoils the replay
+(user), with the agency's statement in the tone its director picks (their courage, who they were, we will go on,
+we will find out why) and the other agencies' condolences; a news line when crewed flights resume. It came with
+a rule change built the same day: **a goal counts only if the crew comes home** (§2.6, `GoalsWithheld`; the
+smart bot's 200 games came out identical before and after, it never lost a crew after a step that reached a
+goal). Left for later: secrecy (a Soviet agency keeping a loss quiet).
 
 **Theories of the day** (the user's idea, 2026-10-22; **built the same day, flavour only**, `ui-spec.md` §4.18.2
 and G18, straight in libGDX): the questions the real space age argued over before a flight settled them (the
