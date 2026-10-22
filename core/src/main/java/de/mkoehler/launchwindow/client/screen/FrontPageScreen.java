@@ -290,9 +290,14 @@ public class FrontPageScreen extends SessionScreen {
         float captionHeight = photo ? lines(captionFont, view.caption(), R_COLUMN, Align.left)
             * captionFont.getLineHeight() : 0f;
         float raceHeight = raceHeight(view, R_COLUMN - 24f);
+        // A science page opens its first column with how the question stood for the reader (ui-spec.md 4.18.2).
+        Theories.Theory theory = page.science() ? Theories.standard().theory(page.storyId()).orElse(null) : null;
+        List<FrontPageView.RaceRow> standing = theory == null ? List.of()
+            : FrontPageView.standing(theory, session.state().getAchievedGoals(), page);
+        float questionHeight = theory == null ? 0f : boxHeight(theory.title(), standing, R_COLUMN - 24f) + 14f;
         float jump = captionFont.getLineHeight() + 6f;
-        float[] capacities = {height - (photo ? R_PHOTO_HEIGHT + 6f + captionHeight + 8f : 0f) - BYLINE_HEIGHT, height,
-            height, height - raceHeight - 12f};
+        float[] capacities = {height - (photo ? R_PHOTO_HEIGHT + 6f + captionHeight + 8f : questionHeight)
+            - BYLINE_HEIGHT, height, height, height - raceHeight - 12f};
         List<String> paragraphs = new ArrayList<>(view.paragraphs());
         int droppable = view.droppable();
         Flow flow = flow(pieces(paragraphs), capacities, body);
@@ -322,6 +327,9 @@ public class FrontPageScreen extends SessionScreen {
                         .size(R_COLUMN, R_PHOTO_HEIGHT).row();
                     column.add(ui.paragraph(view.caption(), Theme.TextStyle.NEWS_CAPTION, Theme.INK)).width(R_COLUMN)
                         .padTop(6f).padBottom(8f).left().row();
+                } else if (theory != null) {
+                    column.add(box("THE QUESTION", theory.title(), standing, R_COLUMN)).width(R_COLUMN)
+                        .height(questionHeight - 14f).padBottom(14f).row();
                 }
                 column.add(ui.label(page.science() ? "FROM OUR SCIENCE CORRESPONDENT" : "FROM OUR SPACE CORRESPONDENT",
                     Theme.TextStyle.NEWS_BYLINE, Theme.INK)).left().height(BYLINE_HEIGHT - 6f).padBottom(6f).row();
@@ -705,24 +713,42 @@ public class FrontPageScreen extends SessionScreen {
 
     /** The race box's height for a text width. */
     private float raceHeight(FrontPageView.Page view, float textWidth) {
+        return boxHeight(null, view.race(), textWidth);
+    }
+
+    /** A ruled box's height for a text width: its label, an optional wrapped lead line, and its rows. */
+    private float boxHeight(String lead, List<FrontPageView.RaceRow> rows, float textWidth) {
         BitmapFont small = ui.fonts().get(Theme.TextStyle.NEWS_SMALL);
         BitmapFont italic = ui.fonts().get(Theme.TextStyle.NEWS_CAPTION);
-        float raceHeight = RACE_CHROME;
-        for (FrontPageView.RaceRow row : view.race()) {
-            raceHeight += oneLine(row, textWidth) ? Math.max(small.getLineHeight(), italic.getLineHeight()) + RACE_GAP
+        float height = RACE_CHROME;
+        if (lead != null) {
+            height += lines(small, lead, textWidth, Align.center) * small.getLineHeight() + 6f;
+        }
+        for (FrontPageView.RaceRow row : rows) {
+            height += oneLine(row, textWidth) ? Math.max(small.getLineHeight(), italic.getLineHeight()) + RACE_GAP
                 : small.getLineHeight() + lines(italic, row.who(), textWidth, Align.right) * italic.getLineHeight()
                     + RACE_GAP;
         }
-        return raceHeight;
+        return height;
     }
 
     private Table race(FrontPageView.Page view, float width) {
+        return box("THE RACE SO FAR", null, view.race(), width);
+    }
+
+    /** A ruled box: a label, an optional lead line (a science page's question), and rows of a name and a when. */
+    private Table box(String label, String lead, List<FrontPageView.RaceRow> rows, float width) {
         float textWidth = width - 24f;
         Table race = new Table();
         race.setBackground(ui.rect(new Color(0f, 0f, 0f, 0f), Theme.INK, 1f));
         race.top().pad(8f, 12f, 8f, 12f);
-        race.add(ui.label("THE RACE SO FAR", Theme.TextStyle.NEWS_LABEL, Theme.INK)).padBottom(6f).row();
-        for (FrontPageView.RaceRow row : view.race()) {
+        race.add(ui.label(label, Theme.TextStyle.NEWS_LABEL, Theme.INK)).padBottom(6f).row();
+        if (lead != null) {
+            Label question = ui.paragraph(lead, Theme.TextStyle.NEWS_SMALL, Theme.INK);
+            question.setAlignment(Align.center);
+            race.add(question).width(textWidth).padBottom(6f).row();
+        }
+        for (FrontPageView.RaceRow row : rows) {
             Label who = ui.label(row.who(), Theme.TextStyle.NEWS_CAPTION, row.done() ? Theme.INK : Theme.INK_MUTED);
             who.setAlignment(Align.right);
             Table line = new Table();

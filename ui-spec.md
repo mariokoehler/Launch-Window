@@ -3429,9 +3429,12 @@ Flavour only: nothing in the rules reads them.
   `printFrontPages`, after the Firsts) the first time anyone reaches one of a theory's `answeredBy` goals; once
   per theory; agencies settling it in the same turn share it. A public one shows like any unseen page, in the
   paper; every report of that turn lists the theories settled in its News card ("Settled: <question>").
-- **The science page:** the follow-up's frame (§4.18.1) with the right ear "SCIENCE / REPORT", no photo (the
-  byline "FROM OUR SCIENCE CORRESPONDENT" at the top of column one), the article and then the filler items, the
-  race box; the strip "Science news: no effect on the race." with the theory's history note.
+- **The science page:** the follow-up's frame (§4.18.1) with the right ear "SCIENCE / REPORT", no photo; column
+  one opens with a ruled box where a First's photo would be, "THE QUESTION" (2026-10-22): the question, then how it
+  stood for the reader's agency, in the race box's rows: "Raised by your staff" (the season, or "not by then"),
+  "Settled" and "Open for" ("1 year", "2 years, 1 season"; `FrontPageView.standing`), so every game's page
+  differs. Then the byline "FROM OUR SCIENCE CORRESPONDENT", the article and the filler items, the race box; the
+  strip "Science news: no effect on the race." with the theory's history note.
 - **In the Museum** (2026-10-22): the Archive tab's "THEORIES OF THE DAY" card, under the findings card, lists the
   theories this agency's scientists raised and those a flight settled (never one neither, so it spoils no
   checkpoint; `FrontPageView.museum`). Each row: the question with its history note, "What would settle it" or the

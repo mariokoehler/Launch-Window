@@ -143,6 +143,25 @@ class FrontPageViewTest {
         assertEquals("", FrontPageView.quoted(""));
     }
 
+    /** The science page's box tells how the question stood for the reader: raised, settled, how long open. */
+    @Test
+    void theQuestionBoxTellsHowLongItStoodForTheReader() {
+        Theories.Theory dust = Theories.load(Path.of("..", "assets", "content", Theories.FILE)).theory("deep-dust")
+            .orElseThrow();
+        FrontPage page = new FrontPage("34-science-deep-dust", "lunar-soft-landing", 34, "deep-dust", "", List.of(),
+            List.of(), List.of(), FrontPage.Kind.SCIENCE, null, null);
+        List<FrontPageView.RaceRow> rows = FrontPageView.standing(dust, Map.of("lunar-probe", 25), page);
+        assertEquals(List.of("Raised by your staff", "Settled", "Open for"),
+            rows.stream().map(FrontPageView.RaceRow::first).toList());
+        assertEquals("2 years, 1 season", rows.get(2).who());
+        List<FrontPageView.RaceRow> late = FrontPageView.standing(dust, Map.of("lunar-probe", 40), page);
+        assertEquals("not by then", late.get(0).who(), "raised after the page was printed");
+        assertEquals(2, late.size());
+        assertEquals("under a season", FrontPageView.howLong(0));
+        assertEquals("3 seasons", FrontPageView.howLong(3));
+        assertEquals("1 year", FrontPageView.howLong(4));
+    }
+
     /**
      * The Museum lists the theories raised or settled, never one neither (no spoilers), and links a settled one
      * to its open archive pages only.

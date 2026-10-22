@@ -27,6 +27,8 @@ import java.util.function.Function;
  */
 public final class FrontPageView {
 
+    private static final int SEASONS_PER_YEAR = de.mkoehler.launchwindow.model.Season.values().length;
+
     private FrontPageView() {
     }
 
@@ -253,6 +255,47 @@ public final class FrontPageView {
             rows.add(new TheoryRow(theory, raised, settled, archive));
         }
         return rows;
+    }
+
+    /**
+     * Returns the rows of a science page's "THE QUESTION" box ({@code ui-spec.md} &sect;4.18.2): how the theory
+     * stood for the reader's agency, so every game's page differs. When its scientists raised it (or "not by
+     * then"), when a flight settled it, and how long it stood open for them.
+     *
+     * @param theory    the theory
+     * @param goalTurns the reader's goals and the turn each was reached
+     * @param page      the science page
+     * @return the rows, in the race box's shape
+     */
+    public static List<RaceRow> standing(Theories.Theory theory, Map<String, Integer> goalTurns, FrontPage page) {
+        Integer raised = theory.raisedOn(goalTurns).filter(turn -> turn <= page.gameTurn()).orElse(null);
+        List<RaceRow> rows = new ArrayList<>();
+        rows.add(new RaceRow("Raised by your staff", raised == null ? "not by then"
+            : GameDate.ofTurn(raised).label(), raised != null));
+        rows.add(new RaceRow("Settled", GameDate.ofTurn(page.gameTurn()).label(), true));
+        if (raised != null) {
+            rows.add(new RaceRow("Open for", howLong(page.gameTurn() - raised), true));
+        }
+        return rows;
+    }
+
+    /**
+     * Words a span of seasons as a paper would: "under a season", "3 seasons", "2 years" or "2 years, 1 season".
+     *
+     * @param seasons the seasons
+     * @return the words
+     */
+    public static String howLong(int seasons) {
+        if (seasons <= 0) {
+            return "under a season";
+        }
+        if (seasons < SEASONS_PER_YEAR) {
+            return seasons + (seasons == 1 ? " season" : " seasons");
+        }
+        int years = seasons / SEASONS_PER_YEAR;
+        int rest = seasons % SEASONS_PER_YEAR;
+        return years + (years == 1 ? " year" : " years") + (rest == 0 ? "" : ", " + rest
+            + (rest == 1 ? " season" : " seasons"));
     }
 
     /**
