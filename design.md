@@ -1778,7 +1778,23 @@ scrapped). Goal badges are embroidered mission patches (`ui-spec.md` component 8
   at each season's resolution**, never stamped at launch.
 - **Per season, not per mission:** a failing step **replaces** the season's accumulated total
   with its own `failurePrestigeDeduction`, so a failed season forfeits what its earlier steps
-  earned (goals stay achieved). Earlier seasons keep their prestige.
+  earned (goals stay achieved, unless the crew was lost: below). Earlier seasons keep their prestige.
+- **A goal counts only if the crew comes home** (the user's decision, 2026-10-22: "would we really claim
+  that Gagarin was the first man in space if he had died during reentry?", Kennedy's "and returning him
+  safely to the Earth"; our own, BASPM pays goals step by step). When a catastrophic step loses a crewed
+  flight's crew, every goal the flight reached, and those their cascade credited, is taken back
+  (`MissionProgress.withholdGoals`): out of `achievedGoals`, `cancelledGoalIds`, `goalRecords` and the
+  report's `GoalSettled` events, so nobody holds it and the next agency to reach it is still first. A
+  `GoalsWithheld` event names them (with those that would have been first in the game) for the report
+  ("No goals for <configuration>") and the memorial page. Steps still settle as they go, so later steps
+  read their goal modifiers exactly as before and prestige is unchanged (the failing step already
+  replaced the season's total). A crewed flight cut short with the crew alive keeps its goals (Gemini 8's
+  docking), and so does an uncrewed flight (a probe that sent its pictures home sent them). No crewed
+  configuration spans two seasons in either pack, so the season's goals are the flight's; a multi-season
+  crewed flight would need its earlier seasons' goals held back too. It closes the one way a First's page
+  could print for a crew that died: a goal credited mid-flight through the cascade (a first spacewalk
+  crediting "Human in orbit") before a fatal reentry. The steps screen says "Counts if the crew comes
+  home" under a crewed flight's goals, and help says so ("Prestige and goals").
 - **The goal cascade:** `cancelsGoalIds` means "also credits": each goal credited this way pays
   its own prestige into the achieving goal's reward and counts as achieved, recursively
   (`rules.GoalCascade`). It never makes a goal unearnable.

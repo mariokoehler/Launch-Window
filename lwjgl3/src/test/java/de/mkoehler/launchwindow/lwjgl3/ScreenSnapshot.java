@@ -831,10 +831,14 @@ public final class ScreenSnapshot {
         write(folder, "grounding-assemble.png", new AssembleMissionScreen(game, "vostok-orbital"), null);
         write(folder, "grounding-configs.png", new MissionConfigsScreen(game, "vostok"), null);
         TurnReport report = TurnReport.build(grounded, grounded, List.of(
-            new de.mkoehler.launchwindow.rules.CrewedFlightsGrounded("m3", "vostok-orbital", 4)), 22,
+            new de.mkoehler.launchwindow.rules.CrewedFlightsGrounded("m3", "vostok-orbital", 4),
+            new de.mkoehler.launchwindow.rules.GoalsWithheld("m3", "vostok-orbital",
+                List.of("human-in-orbit", "human-in-space"), List.of("human-in-orbit"))), 22,
             game.session().catalog());
         game.session().keepReport(report);
         write(folder, "grounding-report.png", new TurnReportScreen(game, report), null);
+        // A crewed flight's goals count only if the crew comes home (design.md 2.6).
+        write(folder, "grounding-steps.png", new MissionStepsScreen(game, "vostok-orbital"), null);
 
         java.util.Set<String> marks = new java.util.HashSet<>(java.util.Set.of("helpOpened", "advisorRetired"));
         game.useAdvisorMarksInMemory(marks);

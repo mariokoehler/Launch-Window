@@ -659,6 +659,12 @@ public final class TurnReportView {
                     + ContentNames.of(grounded.missionConfigurationId()) + ", no crewed flight may launch for the next "
                     + grounded.seasons() + " turns while the accident is investigated. Uncrewed flights go on.",
                     "Grounded", -1));
+            } else if (event instanceof de.mkoehler.launchwindow.rules.GoalsWithheld withheld) {
+                // A goal counts only if the crew comes home (design.md 2.6).
+                lines.add(new Line("No goals for " + ContentNames.of(withheld.missionConfigurationId()),
+                    "The crew did not come home, so the flight earns none of the goals it reached: "
+                        + String.join(", ", withheld.goalIds().stream().map(ContentNames::of).toList()) + ".",
+                    "Not credited", -1));
             } else if (event instanceof PassengerLost lost) {
                 lines.add(new Line(lost.name() + " did not come home", lost.failedStepId() == null
                     ? "The flight had no way home."

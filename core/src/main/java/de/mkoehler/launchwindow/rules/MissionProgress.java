@@ -214,6 +214,10 @@ public final class MissionProgress {
         long tierTotal = mission.isContract() ? 0 : MissionPrestige.tierTotal(configuration, tier);
         boolean crewLost = false;
         long seasonPrestige = 0;
+        // Where this season's goals start, so a lost crew's can be taken back (withholdGoals).
+        int seasonEvents = events.size();
+        int seasonRecords = snapshot.getGoalRecords().size();
+        boolean firstBefore = mission.isFirstInGame();
         for (MissionStep step : season.steps()) {
             MissionStepResolved resolved = resolveStep(snapshot, catalog, random, mission, step, expertUseCounts,
                 events);
@@ -238,6 +242,7 @@ public final class MissionProgress {
                     loseCrew(snapshot, mission, step, gameTurn, events);
                     if (crewLost) {
                         CrewedGrounding.ground(snapshot, mission, events);
+                        withholdGoals(snapshot, mission, seasonEvents, seasonRecords, firstBefore, events);
                     }
                 }
                 break;
@@ -1163,6 +1168,49 @@ public final class MissionProgress {
                 }
             }
         }
+    }
+
+    /**
+     * Takes back the goals a crewed flight reached this season, and those their cascade credited, once its
+     * crew is lost: a goal counts only if the crew comes home ({@code design.md} &sect;2.6, the user's decision
+     * 2026-10-22, "and return him safely"). They were settled step by step as usual, so later steps read their
+     * goal modifiers as before and the season's prestige is already replaced by the failing step's deduction;
+     * this removes the settlements, their records and their events, and reports a {@link GoalsWithheld}. A
+     * crewed flight never spans seasons in either pack, so the season's goals are the flight's. Uncrewed
+     * flights keep the goals they reached: a probe that sent its pictures home sent them.
+     *
+     * @param snapshot      the player
+     * @param mission       the mission that lost its crew
+     * @param seasonEvents  the size of {@code events} when this mission's season began
+     * @param seasonRecords the size of the player's goal records when this mission's season began
+     * @param firstBefore   whether the mission had set a first in the game before this season
+     * @param events        the events; this mission's season's {@link GoalSettled} are removed from it
+     */
+    private static void withholdGoals(PlayerSnapshot snapshot, InProgressMission mission, int seasonEvents,
+            int seasonRecords, boolean firstBefore, List<ResolutionEvent> events) {
+        List<String> goals = new ArrayList<>();
+        List<String> firsts = new ArrayList<>();
+        for (Iterator<ResolutionEvent> it = events.subList(seasonEvents, events.size()).iterator(); it.hasNext();) {
+            if (it.next() instanceof GoalSettled settled && settled.missionInstanceId().equals(mission.getId())) {
+                if (settled.cancelled()) {
+                    snapshot.getCancelledGoalIds().remove(settled.goalId());
+                } else {
+                    snapshot.getAchievedGoals().remove(settled.goalId());
+                }
+                goals.add(settled.goalId());
+                if (settled.firstInGame()) {
+                    firsts.add(settled.goalId());
+                }
+                it.remove();
+            }
+        }
+        if (goals.isEmpty()) {
+            return;
+        }
+        // Only this mission settled goals since the season began: missions resolve one after another.
+        snapshot.getGoalRecords().subList(seasonRecords, snapshot.getGoalRecords().size()).clear();
+        mission.setFirstInGame(firstBefore);
+        events.add(new GoalsWithheld(mission.getId(), mission.getMissionConfigurationId(), goals, firsts));
     }
 
     /**

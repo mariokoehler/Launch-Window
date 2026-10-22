@@ -11,6 +11,7 @@ import de.mkoehler.launchwindow.content.ProgramCategory;
 import de.mkoehler.launchwindow.model.Archetype;
 import de.mkoehler.launchwindow.model.AssignmentState;
 import de.mkoehler.launchwindow.model.Astronaut;
+import de.mkoehler.launchwindow.model.AstronautSkill;
 import de.mkoehler.launchwindow.model.InProgressMission;
 import de.mkoehler.launchwindow.model.OwnedMissionComponent;
 import de.mkoehler.launchwindow.model.GoalRecord;
@@ -242,6 +243,69 @@ class MissionProgressGoalsTest {
         assertTrue(snapshot.getAchievedGoals().containsKey("orbit"));
         tally.commit(events);
         assertEquals(1, tally.countOf("orbit"));
+    }
+
+    /** A crewed flight: a step reaching "orbit", then a crew-risk step that a scripted roll decides. */
+    private static PlayerSnapshot crewedFlight(ContentCatalog[] catalog) {
+        MissionStep risky = new MissionStep("s2", List.of(new MissionStep.ComponentInvolvement("capsule-mercury", 100)),
+            List.of(), List.of(new MissionStep.CrewInvolvement(0, AstronautSkill.PILOTING, 100)), true, 50, 150,
+            List.of());
+        MissionConfiguration crewed = new MissionConfiguration(CONFIG, "mercury-program",
+            List.of(new MissionSeason(List.of(step("s1", 50, 0, List.of("orbit")), risky))), 1, 0, 0, 1_000,
+            List.of(), List.of());
+        catalog[0] = catalog(crewed);
+        PlayerSnapshot snapshot = snapshotWithMission(500);
+        Astronaut pilot = new Astronaut("a1", "Pilot", 30, 60, 50);
+        pilot.setAssignmentState(AssignmentState.ASSIGNED);
+        pilot.setAssignedMissionId("m0");
+        snapshot.getAstronauts().add(pilot);
+        snapshot.getInProgressMissions().put("m0", new InProgressMission("m0", CONFIG, List.of("a1"), List.of()));
+        return snapshot;
+    }
+
+    /**
+     * A goal counts only if the crew comes home (design.md 2.6, 2026-10-22): a crew lost after a step reached
+     * "orbit" takes back it and its cascade, with their records, and reports what was withheld.
+     */
+    @Test
+    void aLostCrewEarnsNoGoals() {
+        ContentCatalog[] catalog = new ContentCatalog[1];
+        PlayerSnapshot snapshot = crewedFlight(catalog);
+        GoalTally tally = new GoalTally();
+
+        // Step 1 passes; step 2 fails into the catastrophic band (no controllers: 10).
+        List<ResolutionEvent> events = MissionProgress.advanceSeason(snapshot, catalog[0],
+            scripted(rolls(99.0, 0.0, 5.0)), tally, 4);
+
+        assertTrue(events.stream().anyMatch(e -> e instanceof MissionStepResolved r
+            && r.outcome() == MissionStepOutcome.CATASTROPHIC));
+        assertTrue(settlements(events).isEmpty(), "no goal settles");
+        assertTrue(snapshot.getAchievedGoals().isEmpty());
+        assertTrue(snapshot.getCancelledGoalIds().isEmpty());
+        assertTrue(snapshot.getGoalRecords().isEmpty());
+        assertEquals(List.of(new GoalsWithheld("m0", CONFIG, List.of("orbit", "basic-training", "pre-flight"),
+            List.of("orbit", "basic-training", "pre-flight"))),
+            events.stream().filter(GoalsWithheld.class::isInstance).toList());
+        assertEquals(350, snapshot.getPrestige(), "the failing step's deduction, as before");
+        tally.commit(events);
+        assertEquals(0, tally.countOf("orbit"), "nobody holds it, so the next agency is still first");
+    }
+
+    /** A flight cut short with the crew alive keeps what it reached: the crew came home. */
+    @Test
+    void anAbortedCrewedFlightKeepsItsGoals() {
+        ContentCatalog[] catalog = new ContentCatalog[1];
+        PlayerSnapshot snapshot = crewedFlight(catalog);
+
+        // Step 2 fails outside the catastrophic band: an abort.
+        List<ResolutionEvent> events = MissionProgress.advanceSeason(snapshot, catalog[0],
+            scripted(rolls(99.0, 0.0, 30.0)), new GoalTally(), 4);
+
+        assertTrue(events.stream().anyMatch(e -> e instanceof MissionStepResolved r
+            && r.outcome() == MissionStepOutcome.FAILURE));
+        assertEquals(Map.of("orbit", 4), snapshot.getAchievedGoals());
+        assertEquals(3, settlements(events).size());
+        assertTrue(events.stream().noneMatch(GoalsWithheld.class::isInstance));
     }
 
     /**

@@ -358,6 +358,11 @@ public final class MissionStepsScreen extends ChromeScreen {
                 goals.add(line).width(widths[6]).row();
             }
         }
+        // On a crewed flight a goal counts only once the crew is home (design.md 2.6).
+        if (!step.goalIdsAchieved().isEmpty() && de.mkoehler.launchwindow.rules.CrewedGrounding.crewed(configuration)) {
+            goals.add(ui.paragraph("Counts if the crew comes home", Theme.TextStyle.CAPTION, Theme.INK_MUTED))
+                .width(widths[6]).row();
+        }
         grid.add(goals).width(widths[6]).left().pad(7f, 0f, 7f, 0f);
         grid.row();
     }
