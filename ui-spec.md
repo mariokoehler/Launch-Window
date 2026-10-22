@@ -1188,7 +1188,7 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       `contracts-program.png`, `contracts-assemble.png`.
 
 28. **Statement dialog** *(the user's idea, 2026-10-20, for §4.18 "The world reacts"; specified 2026-10-22,
-    to be mocked up in Claude Design)*. Gives the press one statement about a rival's First, printed the
+    mocked up the same day)*. Gives the press one statement about a rival's First, printed the
     next turn in a follow-up page.
     - **Opens from** the strip under a rival's First page (§4.18), from a secondary button left of the
       primary one: "Give a statement" while the player may give one (below), "Your statement: Polite ·
@@ -1220,6 +1220,28 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       `client.ui.Refusals`.
     - **States to mock up:** fresh; "We'll be next" with a quote and its preview; No comment (quote
       disabled); the quote error; editing a given statement (Withdraw shown); the strip's three states.
+    - **Mocked up (2026-10-22)** on the canvas `Launch Window — The World Reacts` (the Artifact tool's list
+      finds it): the Kestrel Space Directorate's first human in space, seen by the Northern Rocket Bureau, with the
+      strip's states and the dialog's five. Choices, all **unconfirmed**:
+      - **The strip's button:** a ghost button on the page (transparent, a 1 px `ON_PAGE` line, `ON_PAGE_STRONG`
+        text, the inactive NavTab's look) left of the white page button, after "1 of 2". Given: "✓ Your statement:
+        Polite · Change", with "Change" underlined.
+      - **The dialog:** the design system's Dialog at 720 px over a second scrim (navy at 55 %). The stances are
+        real radios in a fieldset ("Your stance"). The picked row has a 1.5 px navy line and a 5 % navy tint. The
+        quote box is 76 px with its counter inside at the foot on the right. "It might read" is a scrap of
+        `paper.jpg`, tilted 0.4°, its label in Old Standard Bold 13 px with "The Daily Zenith, next season" beside
+        it, the text in Libre Caslon italic 15/21. With nothing picked it says "Pick a stance to see how it
+        might read."
+      - **The error:** the box's line and counter turn `DANGER`, Submit is disabled while it stands, and the
+        preview drops the quote for the stance's unquoted line.
+      - **No comment:** the box is emptied and greyed. Picking another stance turns it back on, empty.
+      - **Editing:** "✓ Given this season: Polite congratulations" in the head (caption, `SUCCESS`). Withdraw
+        (destructive outline) sits at the left end of the button row, apart from Cancel and Submit. It
+        withdraws at once, with no confirmation.
+      - **New for `Theme`:** a page ghost button (`UiKit.pageGhostButton`), a shared stance row, a multi-line
+        field with a counter, the newsprint scrap, and the text styles `NEWS_QUOTE` (Caslon italic 15/21),
+        `NEWS_LABEL_SM` (Old Standard Bold 13/16) and `NEWS_EAR_TWO` (Old Standard Bold 25/28, below). No new
+        colours or icons.
 
 ---
 
@@ -3373,6 +3395,13 @@ prestige or anything else changes.
   First's page ("Read the reactions"). *Lower half to mock up:* more text room than a First's page (about
   60 lines): proposed, the photo at one column's width over column one, the article through columns one to
   three, the race box at the foot of column three.
+  *Mocked up (2026-10-22, unconfirmed)* on the same canvas as component 28, with **four columns of 322 px**, not
+  three: three 336 px columns fill 1056 of the page's 1360 px. The photo spans column one (322 × 221) with its
+  caption, then the byline and the article through all four columns. The race box sits at the foot of column
+  four. With the two-line headline an agency's name usually needs, that holds about 49 lines (about 61 with a
+  one-line headline). The right ear is "THE WORLD / REACTS" in two lines of Old Standard Bold 25 px with no
+  "Special edition": EXTRA's 34 px doesn't fit the ear on one line. The mock justifies and lets paragraphs
+  break across columns; the built page moves them whole, ragged-right.
 - **Words:** `assets/content/front-page-reactions.json` (outside the pack, not hashed;
   `FrontPageReactionsTest`): per First its stories per mood, its detail clauses and closes; per stance its
   quoted, plain and "also" lines; the linking sentences; the declined lines. Every piece has an id that
