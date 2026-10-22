@@ -94,7 +94,7 @@
         "- Flights: how often you've flown each mission, and the animals that came home from them.",
         "- Memorial: the astronauts, and the animals, lost in your program.",
         "- Encyclopedia: explainers on how the real thing works, from orbits to heat shields. A gold dot marks one you haven't opened; the concept chips on the program and rocket screens open them too.",
-        "- Archive: pages about the real missions that sent back memorable pictures, with their photos and, for some, their sound. A page opens for every agency in the game when any agency first reaches its goal, and the turn report says so; until then its card says which goal opens it."
+        "- Archive: pages about the real missions that sent back memorable pictures, with their photos and, for some, their sound. A page opens for every agency in the game when any agency first reaches its goal, and the turn report says so; until then its card says which goal opens it. Above the pages, the theories of the day: the questions your scientists raised and those a flight settled, with the paper's science page and the archive's pages about the flight. They're flavour only."
       ],
       "related": ["winning", "careers"]
     },
