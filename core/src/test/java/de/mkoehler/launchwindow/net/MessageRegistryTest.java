@@ -292,7 +292,9 @@ class MessageRegistryTest {
                     "r-declined-one-1", null, null)));
         List<FrontPage.Statement> yours = List.of(new FrontPage.Statement(first.id(), FrontPage.Stance.POLITE,
             "Well flown."));
-        FrontPagesResponse pages = FrontPagesResponse.of(List.of(first, followUp), yours);
+        FrontPage science = new FrontPage("30-science-deep-dust", "lunar-lander", 30, "deep-dust", "Fair", List.of(),
+            List.of(orion), List.of(), FrontPage.Kind.SCIENCE, null, null);
+        FrontPagesResponse pages = FrontPagesResponse.of(List.of(first, followUp, science), yours);
         assertEquals(pages, roundTrip(pages, FrontPagesResponse.class));
         SubmitStatementRequest give = new SubmitStatementRequest(27, first.id(), FrontPage.Stance.DOWNPLAY, "A stunt.");
         assertEquals(give, roundTrip(give, SubmitStatementRequest.class));

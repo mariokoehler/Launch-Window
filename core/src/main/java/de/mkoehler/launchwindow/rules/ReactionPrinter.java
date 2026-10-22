@@ -82,7 +82,7 @@ public final class ReactionPrinter {
      * @return whether it may
      */
     public static boolean mayReact(FrontPage page, int openTurn, String agencyName, int firstTurn) {
-        return !page.followUp() && page.gameTurn() == openTurn - 1 && !page.madeBy(agencyName)
+        return page.firstPage() && page.gameTurn() == openTurn - 1 && !page.madeBy(agencyName)
             && firstTurn <= page.gameTurn();
     }
 
@@ -101,7 +101,7 @@ public final class ReactionPrinter {
                                         FrontPageReactions words, FrontPages pages) {
         List<FrontPage> printed = new ArrayList<>();
         for (FrontPage first : firsts) {
-            if (first.followUp() || first.gameTurn() != gameTurn - 1) {
+            if (!first.firstPage() || first.gameTurn() != gameTurn - 1) {
                 continue;
             }
             FrontPageReactions.First text = words.first(first.goalId()).orElse(null);

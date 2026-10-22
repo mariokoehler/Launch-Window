@@ -4,6 +4,7 @@ import de.mkoehler.launchwindow.content.ContentCatalog;
 import de.mkoehler.launchwindow.content.FrontPageReactions;
 import de.mkoehler.launchwindow.content.FrontPages;
 import de.mkoehler.launchwindow.content.Goal;
+import de.mkoehler.launchwindow.content.Theories;
 import de.mkoehler.launchwindow.model.FrontPage;
 import de.mkoehler.launchwindow.model.GameDate;
 
@@ -136,6 +137,81 @@ public final class FrontPageView {
             fill(first.get().caption(), tokens), List.of(), paragraphs, text.get().close().size(), folio,
             date.label().toUpperCase(Locale.ROOT), page.weather(), race(page, all, words, inPack, names),
             "frontpage/" + page.goalId() + ".jpg"));
+    }
+
+    /**
+     * Builds a science page's words ({@code ui-spec.md} &sect;4.18.2): the theory's headline, deck and article, with
+     * who settled it and when. No photo, no brief; the last paragraph may be left out to fit.
+     *
+     * @param page     the printed science page
+     * @param all      every page printed in the game, for the race box
+     * @param theories the theories
+     * @param words    the Firsts' words, for the race order
+     * @param inPack   whether the game's pack has a goal
+     * @param names    a goal's display name
+     * @return the words, or empty if the theory isn't known or has no page
+     */
+    public static Optional<Page> ofScience(FrontPage page, List<FrontPage> all, Theories theories, FrontPages words,
+                                           java.util.function.Predicate<String> inPack,
+                                           Function<String, String> names) {
+        Optional<Theories.Theory> theory = theories.theory(page.storyId());
+        if (theory.isEmpty() || theory.get().headline() == null) {
+            return Optional.empty();
+        }
+        Map<String, String> tokens = new HashMap<>(tokens(page, names));
+        tokens.put("season", GameDate.ofTurn(page.gameTurn()).label().toUpperCase(Locale.ROOT));
+        List<String> paragraphs = new ArrayList<>();
+        theory.get().article().forEach(p -> paragraphs.add(fill(p, tokens)));
+        GameDate date = GameDate.ofTurn(page.gameTurn());
+        String folio = "VOL. " + roman(date.year() - GameDate.START_YEAR + 1) + " · No. " + page.gameTurn();
+        String headline = fill(theory.get().headline(), tokens).toUpperCase(Locale.ROOT);
+        String shortHeadline = theory.get().headlineShort() == null ? headline
+            : fill(theory.get().headlineShort(), tokens).toUpperCase(Locale.ROOT);
+        return Optional.of(new Page(headline, shortHeadline, fill(theory.get().deck(), tokens), "", List.of(),
+            paragraphs, Math.min(1, paragraphs.size()), folio, date.label().toUpperCase(Locale.ROOT), page.weather(),
+            race(page, all, words, inPack, names), null));
+    }
+
+    /**
+     * Returns the theories a turn raised for this player ({@code ui-spec.md} &sect;4.18.2): those whose first
+     * {@code raisedBy} goal it reached that turn, in a pack that can settle them.
+     *
+     * @param theories  the theories
+     * @param goalTurns the player's goals and the turn each was reached
+     * @param gameTurn  the turn
+     * @param inPack    whether the game's pack has a goal
+     * @return the theories, maybe none
+     */
+    public static List<Theories.Theory> raised(Theories theories, Map<String, Integer> goalTurns, int gameTurn,
+                                               java.util.function.Predicate<String> inPack) {
+        return theories.theories().stream().filter(t -> t.playable(inPack))
+            .filter(t -> t.raisedOn(goalTurns).map(turn -> turn == gameTurn).orElse(false)).toList();
+    }
+
+    /**
+     * Returns the science page that settled a theory by a turn, if one is printed and fetched.
+     *
+     * @param all      every page printed in the game, or {@code null} if none are fetched
+     * @param theoryId the theory
+     * @param gameTurn the latest turn that counts
+     * @return the page, if there is one
+     */
+    public static Optional<FrontPage> settledBy(List<FrontPage> all, String theoryId, int gameTurn) {
+        if (all == null) {
+            return Optional.empty();
+        }
+        return all.stream().filter(p -> p.science() && p.storyId().equals(theoryId) && p.gameTurn() <= gameTurn)
+            .findFirst();
+    }
+
+    /**
+     * Returns the agencies that settled a theory, as a sentence names them.
+     *
+     * @param page the science page
+     * @return the names
+     */
+    public static String settlers(FrontPage page) {
+        return join(page.achievers().stream().map(FrontPage.Achiever::agencyName).toList());
     }
 
     /**

@@ -3408,6 +3408,34 @@ prestige or anything else changes.
 
 ---
 
+#### 4.18.2 Theories of the day *(the user's idea, 2026-10-22; built straight in libGDX the same day, no mockup, user; G18)*
+**Purpose:** the space age argued over questions nobody could answer from Earth: is the Moon a sea of dust, is
+Venus a swamp, does weightlessness stop a pilot swallowing. A flight settled each one. Here a player's scientists
+raise such a question at a checkpoint, and the first flight in the game that settles it answers it for everyone.
+Flavour only: nothing in the rules reads them.
+- **The theories** (`assets/content/theories.json`, outside the pack, `TheoriesTest`), eight: the deep lunar dust,
+  eating and working weightless, the radiation belts, micrometeoroids, a warm wet Venus, canals on Mars, the
+  Moon's lumpy pull (mascons) and Moon germs. Each has a reach, `PUBLIC` (the public followed it: a science page
+  in the paper) or `TECHNICAL` (argued over among engineers: a line in the report's news), the goals that raise
+  it (`raisedBy`, e.g. `lunar-probe`, which opens the crewed lunar programs, for the dust) and the goals that
+  settle it (`answeredBy`, e.g. `lunar-soft-landing`), a briefing, what would settle it, the answer in a
+  sentence, a public theory's headline, deck and article or a technical one's notice, and a history note.
+  A theory whose goals the game's pack lacks never shows (early-era: the weightless body and the belts).
+- **Raised** (private, in the turn report's News card): a card per theory whose first `raisedBy` goal the
+  player reached that turn ("A NEW THEORY · <season>", the question with its history note, "What would settle
+  it: ...", or "Settled already, by <agency> in <season>. <answer>" when a flight in the game settled it
+  before). Derived on the client from the player's goal turns and the printed pages; nothing saved.
+- **Settled** (shared): the server prints a page of kind `SCIENCE` (`rules.SciencePrinter`, in
+  `printFrontPages`, after the Firsts) the first time anyone reaches one of a theory's `answeredBy` goals; once
+  per theory; agencies settling it in the same turn share it. A public one shows like any unseen page, in the
+  paper; every report of that turn lists the theories settled in its News card ("Settled: <question>").
+- **The science page:** the follow-up's frame (§4.18.1) with the right ear "SCIENCE / REPORT", no photo (the
+  byline "FROM OUR SCIENCE CORRESPONDENT" at the top of column one), the article and then the filler items, the
+  race box; the strip "Science news: no effect on the race." with the theory's history note.
+- **Known gap:** a science page shows once, on login; nothing reopens it later (unlike a First's page, from the
+  Museum).
+- Shots `-Dshots=theories`.
+
 ### 4.19 Archive *(the user's idea, 2026-10-15; specified, mocked up and built the same day for `design.md` §2.12)*
 **Purpose:** pages about the real missions that sent back something memorable, unlocked when a goal is
 first reached in the game, so a flight feels like getting its pictures back. The pages, images and
@@ -3780,6 +3808,11 @@ current state alone. Each is an M5 task.
   - **Events:** `FindingPublished`, `FindingLearned` (append-only ids `findingPublished`, `findingLearned`).
   - **Reset the dev data root and rebuild client and server together** (saved fields, a pack hash change,
     a new action and message).
+- **G18. Theories of the day (§4.18.2, 2026-10-22). Built.** `FrontPage.Kind.SCIENCE` (appended; its story id is
+  the theory's), `rules.SciencePrinter` in `TurnScheduler.printFrontPages`, settled once per theory (the pages of
+  earlier turns are read back), kept in `frontpages.json`, so retries and `TurnRollback` need nothing new. The
+  questions are derived on the client. `FrontPage.firstPage()` replaces "not a follow-up" wherever a First is
+  meant. Rebuild client and server together; no reset.
 - **G17. The world reacts (§4.18.1, component 28, 2026-10-22). Built.**
   - **Model:** `FrontPage` gains `kind` (FIRST or REACTIONS; missing reads as FIRST, so old files load),
     `reactsTo` and `reactions` (`FrontPage.Reaction`: agency, director, stance, quote, and the ids of its

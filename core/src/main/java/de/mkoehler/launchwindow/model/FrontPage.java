@@ -82,14 +82,33 @@ public record FrontPage(String id, String goalId, int gameTurn, String storyId, 
     }
 
     /**
-     * Returns whether the page tells a First, its own or folded in. A follow-up tells none: it's about
-     * the First, not the news of it.
+     * Returns whether the page tells one of the great Firsts (not a follow-up, not a science page). Not named
+     * as a getter, so Jackson never saves it.
+     *
+     * @return whether it does
+     */
+    public boolean firstPage() {
+        return kind == Kind.FIRST;
+    }
+
+    /**
+     * Returns whether the page is a science page: a theory of the day settled ({@code ui-spec.md} &sect;4.18.2).
+     *
+     * @return whether it is
+     */
+    public boolean science() {
+        return kind == Kind.SCIENCE;
+    }
+
+    /**
+     * Returns whether the page tells a First, its own or folded in. Only a First's page does: a follow-up is
+     * about the First, not the news of it, and a science page about a theory.
      *
      * @param goal the goal
      * @return whether it does
      */
     public boolean tells(String goal) {
-        return !followUp() && (goalId.equals(goal) || foldedGoalIds.contains(goal));
+        return firstPage() && (goalId.equals(goal) || foldedGoalIds.contains(goal));
     }
 
     /**
@@ -107,7 +126,9 @@ public record FrontPage(String id, String goalId, int gameTurn, String storyId, 
         /** One of the great Firsts. */
         FIRST,
         /** The rivals' statements about a First, printed the turn after it. */
-        REACTIONS
+        REACTIONS,
+        /** A theory of the day settled by a flight (ui-spec.md section 4.18.2); its story id is the theory's. */
+        SCIENCE
     }
 
     /**

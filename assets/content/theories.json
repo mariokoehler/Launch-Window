@@ -1,0 +1,179 @@
+{
+  "_comment": "Theories of the day (ui-spec.md 4.18.2, design.md 1.1): a question a player's scientists raise when the player first reaches one of raisedBy (a card in that turn's report, private), and its answer when anyone in the game first reaches one of answeredBy (PUBLIC: a science page in the paper; TECHNICAL: a line in every report's news). Flavour only. Our own text; the articles name no real person, the history notes are checked in design.md 1.1. Ids are stored in printed pages: never rename or reuse one. Tokens: {agency} (who settled it, a list for several), {season}. TheoriesTest holds the rules.",
+  "theories": [
+    {
+      "id": "deep-dust",
+      "reach": "PUBLIC",
+      "raisedBy": [
+        "lunar-probe"
+      ],
+      "answeredBy": [
+        "lunar-soft-landing",
+        "lunar-lander",
+        "crewed-lunar-landing"
+      ],
+      "title": "Is the Moon a sea of dust?",
+      "question": "Your scientists bring an unsettling idea to the planning meeting. Some astronomers think the Moon's dark plains are deep beds of fine dust, built up over the ages, and that anything landing there could sink out of sight. Others think the ground is solid rock. Nobody can tell from Earth.",
+      "settledBy": "a probe that lands softly on the Moon and stays upright",
+      "answer": "A soft landing showed firm ground under a thin layer of dust.",
+      "headline": "Moon is firm enough to land on, probe shows",
+      "headlineShort": "The Moon is firm",
+      "deck": "A probe flown by {agency} comes down on the lunar plains, and does not sink",
+      "article": [
+        "{season} \u2014 The Moon will hold a spacecraft. A probe flown by {agency} came down gently on one of the dark lunar plains this season and stood there, sending home pictures of gritty, rubble-strewn ground.",
+        "The landing answers a fear that has shadowed every plan to put people on the Moon: that the plains are deep seas of dust that would swallow anything set down on them. There is dust, the pictures show, but it lies thin over firmer ground.",
+        "Engineers at every agency will be studying the pictures. A landing leg, it seems, need not be built like a snowshoe."
+      ],
+      "historyNote": "In 1955 the astronomer Thomas Gold proposed that the lunar plains were covered in fine dust; the press turned it into a dust sea deep enough to swallow a lander, a version Gold said misquoted him. The Ranger probes' close-ups of 1964 and 1965 did not settle it. Luna 9's landing on 3 February 1966 and Surveyor 1's on 2 June 1966 did: neither sank."
+    },
+    {
+      "id": "weightless-body",
+      "reach": "PUBLIC",
+      "raisedBy": [
+        "earth-orbit-satellite"
+      ],
+      "answeredBy": [
+        "human-in-orbit"
+      ],
+      "title": "Can people eat and work weightless?",
+      "question": "Before anyone flies for long, the doctors have a list of worries. Without weight, some fear, a pilot might not be able to swallow, to see clearly or to keep a meal down, and the inner ear might be thrown into confusion. A short hop tells little. Only a long flight will.",
+      "settledBy": "a crewed flight all the way around the Earth",
+      "answer": "The first orbital flight showed that a pilot can eat, drink and work weightless.",
+      "headline": "Orbit pilot eats lunch, and the doctors relax",
+      "headlineShort": "Pilot eats in orbit",
+      "deck": "Food, water and work are no trouble without weight, a flight by {agency} shows",
+      "article": [
+        "{season} \u2014 It may be the most ordinary meal ever to make the news. On the first flight all the way around the Earth, the pilot of {agency} squeezed food from a tube, swallowed it, and reported nothing unusual.",
+        "Doctors had warned that weightlessness might upset swallowing, eyesight or balance. The flight answered them: the pilot ate, drank, read the instruments and flew the craft without trouble.",
+        "Longer flights will test the body further. But the first fears, at least, can be crossed off the list."
+      ],
+      "historyNote": "Before people flew, doctors could not rule out that weightlessness would stop a pilot swallowing or seeing properly. Yuri Gagarin ate from food tubes on Vostok 1 in April 1961, and on 20 February 1962 John Glenn ate applesauce from a tube in orbit; the Mercury pilots reported no trouble chewing, swallowing or digesting."
+    },
+    {
+      "id": "radiation-belts",
+      "reach": "PUBLIC",
+      "raisedBy": [
+        "earth-orbit-satellite"
+      ],
+      "answeredBy": [
+        "magnetic-field-study"
+      ],
+      "title": "Is space above the air empty?",
+      "question": "Most physicists expect the space just above the atmosphere to be nearly empty: a few cosmic rays from far away, and little else. A particle counter carried into orbit would show what is really there, and how much of it a crew would have to fly through.",
+      "settledBy": "a satellite that measures the particles and the magnetic field in orbit",
+      "answer": "A satellite found belts of radiation held around the Earth by its magnetic field.",
+      "headline": "Belts of radiation girdle the Earth",
+      "headlineShort": "Radiation belts found",
+      "deck": "A satellite flown by {agency} finds that space above the air is far from empty",
+      "article": [
+        "{season} \u2014 Space is not as empty as it looked. Counters aboard a satellite flown by {agency} found that at certain heights the radiation climbs so high that the instruments jam, overwhelmed.",
+        "The particles, scientists say, are held by the Earth's magnetic field in great belts around the planet. Below them a crew in orbit is safe enough; a flight to the Moon will have to cross them, and cross them quickly.",
+        "It is the first great discovery of the space age, and it came as a surprise."
+      ],
+      "historyNote": "Explorer 1's cosmic-ray counter, built by James Van Allen's team, kept falling silent in orbit; Explorer 3's recordings showed why: at those heights the radiation was so intense that it saturated the counter. Van Allen announced the belts in Washington on 1 May 1958, and the press named them after him."
+    },
+    {
+      "id": "micrometeoroids",
+      "reach": "TECHNICAL",
+      "raisedBy": [
+        "human-in-space"
+      ],
+      "answeredBy": [
+        "micrometeoroid-study"
+      ],
+      "title": "Will grit from space hole a spacecraft?",
+      "question": "Space is full of specks of grit, some of them moving many times faster than a bullet. Estimates of how many there are near the Earth disagree widely, and with them the armour a crewed craft would need. Too little, and a puncture could empty the cabin; too much, and the craft is too heavy to launch.",
+      "settledBy": "a satellite with large panels that count the punctures",
+      "answer": "A satellite counted the punctures through skins of different thickness.",
+      "notice": "A report going round the design offices: {agency} has counted the punctures in a satellite's detector panels, and published how often grit from space breaks through skins of different thickness. Every engineer now has real numbers to work with.",
+      "historyNote": "Engineers feared that micrometeoroids could puncture Apollo's skin. In 1965 three Pegasus satellites, launched by Saturn I rockets, spread wide detector panels of three thicknesses and counted the punctures in each, putting measurements where there had been estimates."
+    },
+    {
+      "id": "venus-jungle",
+      "reach": "PUBLIC",
+      "raisedBy": [
+        "lunar-probe"
+      ],
+      "answeredBy": [
+        "venus-probe"
+      ],
+      "title": "Is Venus a warm, wet world?",
+      "question": "Venus is wrapped in unbroken cloud, and nobody has seen its surface. Many imagine a warm, wet world beneath, all swamps and seas; a few think the thick air might trap the sun's heat and make it far hotter. A probe that reaches it could measure the planet's heat.",
+      "settledBy": "a probe that reaches Venus",
+      "answer": "A probe measured a scorching surface under the clouds.",
+      "headline": "Venus is a furnace, probe finds",
+      "headlineShort": "Venus is a furnace",
+      "deck": "No swamps and no seas under the clouds: a probe flown by {agency} measures a scorching surface",
+      "article": [
+        "{season} \u2014 The swamps of Venus are gone, if they were ever there. A probe flown by {agency} reached the cloud-wrapped planet this season and measured its heat: the surface below is far hotter than boiling water.",
+        "The thick air, scientists now think, traps the sun's warmth the way a greenhouse does, only far more fiercely. Nothing we would recognise as life could live there.",
+        "The novelists will have to find another planet."
+      ],
+      "historyNote": "Before 1962 many pictured Venus under its clouds as a warm, swampy world. Mariner 2 flew past on 14 December 1962 and its radiometers found a very hot surface, supporting Carl Sagan's idea that the thick atmosphere traps heat in a runaway greenhouse effect."
+    },
+    {
+      "id": "mars-canals",
+      "reach": "PUBLIC",
+      "raisedBy": [
+        "lunar-probe"
+      ],
+      "answeredBy": [
+        "mars-probe"
+      ],
+      "title": "Are there canals on Mars?",
+      "question": "Through the telescope Mars shows dark patches that change with its seasons, and some astronomers have drawn fine straight lines between them: canals, perhaps, or bands of plants along water. Close pictures from a probe would show what the planet really looks like.",
+      "settledBy": "a probe that photographs Mars from close by",
+      "answer": "Close pictures showed a cratered, Moon-like Mars with very thin air.",
+      "headline": "No canals on Mars: a cratered world",
+      "headlineShort": "No canals on Mars",
+      "deck": "The first close pictures, from a probe flown by {agency}, show a land like the Moon's",
+      "article": [
+        "{season} \u2014 Mars has craters, not canals. The first close pictures of the planet, taken by a probe flown by {agency}, show a dry, pitted land that looks more like the Moon than the Earth.",
+        "There are no straight lines, no cities and no signs of plants. The air, the probe found, is far thinner than anyone had hoped.",
+        "Whether anything ever lived there is still an open question. But the Mars of the old stories, with its canals and their builders, is gone."
+      ],
+      "historyNote": "Percival Lowell had argued that the \u201ccanals\u201d of Mars were built by intelligent beings. Mariner 4 flew past on 14 July 1965 and sent home the first close-up pictures of another planet: a cratered, Moon-like surface. On 29 July the New York Times called it \u201ca heavy, perhaps fatal, blow\u201d to the possibility of life on Mars."
+    },
+    {
+      "id": "mascons",
+      "reach": "TECHNICAL",
+      "raisedBy": [
+        "lunar-soft-landing",
+        "lunar-lander"
+      ],
+      "answeredBy": [
+        "lunar-mapping"
+      ],
+      "title": "Does the Moon pull evenly?",
+      "question": "The navigators planning a landing assume that the Moon pulls evenly in every direction, like a smooth ball. If it doesn't, a craft in lunar orbit will drift from its predicted path, and a landing could come down far from its target. Only careful tracking of a craft in lunar orbit will tell.",
+      "settledBy": "a probe in lunar orbit, tracked closely",
+      "answer": "Tracking a lunar orbiter showed hidden masses that tug a craft off course.",
+      "notice": "A report going round the design offices: tracking of a lunar orbiter flown by {agency} shows that the Moon's pull is lumpy. Hidden masses under the round lunar plains tug a craft off its predicted path, and every landing plan must now allow for them.",
+      "historyNote": "In 1968 Paul Muller and William Sjogren of JPL found \u201cmascons\u201d, mass concentrations under the Moon's round basins, in the tracking of the Lunar Orbiters, whose paths strayed from the predictions. Allowing for them, Apollo 12 landed about 160 metres from Surveyor 3 in November 1969."
+    },
+    {
+      "id": "moon-germs",
+      "reach": "PUBLIC",
+      "raisedBy": [
+        "crewed-lunar-flyby",
+        "crewed-lunar-orbit"
+      ],
+      "answeredBy": [
+        "crewed-lunar-landing"
+      ],
+      "title": "Could the Moon carry germs?",
+      "question": "If anything lives in the lunar soil, a crew coming home could bring it with them. The chance is thought to be tiny, but the cost of being wrong could be enormous. Planners talk of sealed trailers, quarantine laboratories and weeks of tests for any crew that walks on the Moon.",
+      "settledBy": "a crew that walks on the Moon and comes home",
+      "answer": "The first Moon crew came home healthy, and the tests found no life in the samples.",
+      "headline": "No germs from the Moon, and the crew go free",
+      "headlineShort": "No Moon germs",
+      "deck": "After weeks of quarantine and tests, the Moon crew of {agency} walk out healthy",
+      "article": [
+        "{season} \u2014 The first people to walk on the Moon have been let out of quarantine, as healthy as the day they left. For weeks they lived behind sealed doors while scientists exposed mice, birds, insects and plants to lunar soil and waited for something to happen.",
+        "Nothing did. No germ, no mould and no sickness of any kind has been found in the samples brought home by {agency}.",
+        "Later crews may be spared the quarantine. The Moon, it seems, is a dead world: magnificent, and quite sterile."
+      ],
+      "historyNote": "NASA's Interagency Committee on Back Contamination, formally set up in January 1966, planned the quarantine. Apollo 11's crew spent theirs in a sealed trailer and then the Lunar Receiving Laboratory in Houston, and were declared free to go on 10 August 1969. Lunar soil was tested on germ-free mice, quail, oysters, insects and plants; nothing grew. The crew quarantine was dropped after Apollo 14."
+    }
+  ]
+}

@@ -15,6 +15,10 @@ import de.mkoehler.launchwindow.client.view.ContractsView;
 import de.mkoehler.launchwindow.client.view.DecisionView;
 import de.mkoehler.launchwindow.rules.ContractSettled;
 import de.mkoehler.launchwindow.client.view.Help;
+import de.mkoehler.launchwindow.content.Theories;
+import de.mkoehler.launchwindow.client.ui.HistoryNote;
+import de.mkoehler.launchwindow.client.view.FrontPageView;
+import de.mkoehler.launchwindow.model.FrontPage;
 import de.mkoehler.launchwindow.content.SpaceRaceNews;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.MilestoneLabels;
@@ -644,8 +648,26 @@ public final class TurnReportScreen extends ChromeScreen {
             }
             card.add(real).padBottom(Theme.SPACE_4).row();
         });
+        // Theories of the day this turn raised for this agency (ui-spec.md section 4.18.2).
+        for (Theories.Theory theory : FrontPageView.raised(Theories.standard(), session.state().getAchievedGoals(),
+                Math.toIntExact(report.gameTurn()), goal -> catalog.goal(goal).isPresent())) {
+            card.add(theoryCard(theory)).padBottom(Theme.SPACE_4).row();
+        }
         List<TurnReportView.Line> lines = new java.util.ArrayList<>(TurnReportView.news(report, catalog,
             session.state().getArchetype()));
+        // Theories settled this turn, by anyone: the public's in the paper, the engineers' as a report.
+        if (session.frontPages() != null) {
+            for (FrontPage page : session.frontPages()) {
+                if (!page.science() || page.gameTurn() != report.gameTurn()) {
+                    continue;
+                }
+                Theories.standard().theory(page.storyId()).ifPresent(theory -> lines.add(
+                    new TurnReportView.Line("Settled: " + theory.title(), theory.reach() == Theories.Reach.PUBLIC
+                        ? theory.answer() + " " + FrontPageView.settlers(page) + " flew it; the Daily Zenith ran it "
+                            + "on its science page."
+                        : theory.notice().replace("{agency}", FrontPageView.settlers(page)), "", 0)));
+            }
+        }
         // The contract board's public news (ui-spec.md section 4.17).
         lines.addAll(ContractsView.news(report));
         // Last turn's R&D decision, decided or lapsed (ui-spec.md component 26).
@@ -680,6 +702,37 @@ public final class TurnReportScreen extends ChromeScreen {
             card.add(row).padBottom(Theme.SPACE_3).row();
         }
         return card;
+    }
+
+    /**
+     * A theory of the day the agency's scientists raise (ui-spec.md section 4.18.2): the question, what would settle
+     * it and, when a flight in the game has settled it already, the answer.
+     */
+    private Table theoryCard(Theories.Theory theory) {
+        Table box = new Table();
+        box.setBackground(ui.cardAccent(Theme.NAVY));
+        box.pad(Theme.SPACE_3, Theme.SPACE_3 + Theme.BORDER_ACCENT, Theme.SPACE_3, Theme.SPACE_3);
+        box.left();
+        box.defaults().left().growX();
+        box.add(ui.label(("A new theory · " + GameDate.ofTurn(report.gameTurn()).label()).toUpperCase(Locale.ROOT),
+            Theme.TextStyle.EYEBROW, Theme.NAVY)).padBottom(4f).row();
+        Table title = new Table();
+        title.add(ui.label(theory.title(), Theme.TextStyle.BODY_STRONG, Theme.INK)).left();
+        title.add(new HistoryNote(ui, theory.historyNote())).size(HistoryNote.ICON_SIZE).padLeft(Theme.SPACE_2);
+        title.add().expandX();
+        box.add(title).padBottom(2f).row();
+        box.add(ui.paragraph(theory.question(), Theme.TextStyle.BODY_SM, Theme.INK)).padBottom(4f).row();
+        java.util.Optional<FrontPage> settled = FrontPageView.settledBy(session.frontPages(), theory.id(),
+            Math.toIntExact(report.gameTurn()));
+        if (settled.isPresent()) {
+            box.add(ui.paragraph("Settled already, by " + FrontPageView.settlers(settled.get()) + " in "
+                + GameDate.ofTurn(settled.get().gameTurn()).label() + ". " + theory.answer(), Theme.TextStyle.BODY_SM,
+                Theme.INK_MUTED));
+        } else {
+            box.add(ui.paragraph("What would settle it: " + theory.settledBy() + ". Flavour only: no effect on the "
+                + "rules.", Theme.TextStyle.BODY_SM, Theme.INK_MUTED));
+        }
+        return box;
     }
 
     private Table intelligence(List<TurnReportView.Line> lines) {

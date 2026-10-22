@@ -528,6 +528,42 @@ leading to satellite navigation.
     crew left them on the Moon in a small memorial packet with an Apollo 1 patch and a gold olive branch.
     Sources: the American Presidency Project (Nixon's statement), History News Network and Astronomy
     ("Apollo 11 brought a message of peace to the Moon").
+- **Theories of the day** (checked 2026-10-22, for `ui-spec.md` §4.18.2; shown as history notes, the words in
+  `theories.json`; our articles name no real person):
+  - *Deep lunar dust:* Thomas Gold proposed in 1955 that the lunar plains were covered in fine dust; the press
+    turned it into a dust sea that would swallow a lander, a version Gold said misquoted him, and he never
+    accepted the refutation. The Ranger close-ups (1964-65) did not settle it; Luna 9 (landed 3 February 1966)
+    and Surveyor 1 (2 June 1966) did: neither sank. Apollo found a few inches of dust. Sources: JSTOR Daily ("The
+    first lunar lander and the great Moon dust debate"), Smithsonian Air & Space ("Shooting the Moon"), Cornell
+    Chronicle, Britannica (Luna), Air & Space ("1966: the (real) first Moon landing").
+  - *Eating weightless:* doctors could not rule out that weightlessness would stop a pilot swallowing or seeing.
+    Gagarin ate from tubes on Vostok 1; Glenn ate applesauce from a tube on 20 February 1962; the Mercury pilots
+    reported no trouble chewing, swallowing or digesting. Sources: Smithsonian ("What do astronauts eat"),
+    Astronomy ("First food in space").
+  - *The radiation belts:* Explorer 1's counter (James Van Allen's team) kept falling silent; Explorer 3's
+    recordings showed the radiation saturated it. Announced at a joint meeting of the National Academy of Sciences
+    and the American Physical Society in Washington on 1 May 1958, with much publicity; the press named the belts.
+    The reach on the public is from that; how many front pages it made is unchecked. Sources: University of
+    Iowa (Van Allen biography), Physics Today, Symmetry.
+  - *Micrometeoroids:* engineers feared punctures of Apollo's skin; the three Pegasus satellites (1965, Saturn I)
+    counted the punctures in detector panels of three thicknesses (387, 41 and 201 penetrations by the end of 1965
+    in one NASA report). Whether the hazard proved smaller than feared rests on one secondary source, so the
+    game doesn't say so. Sources: NASA History (Pegasus), MSFC history, NTRS 19670003479.
+  - *Venus:* before 1962 many pictured a warm, swampy Venus. Mariner 2 flew past on 14 December 1962 and found a
+    very hot surface, supporting Carl Sagan's runaway greenhouse. The figures differ between sources, so the game
+    gives none. Sources: NASA ("60 years ago, Mariner 2"), Inverse.
+  - *Mars:* Percival Lowell argued the canals were built by intelligent beings. Mariner 4 flew past on 14 July
+    1965 and sent the first close-up pictures of another planet, a cratered, Moon-like surface; on 29 July the New
+    York Times called it "a heavy, perhaps fatal, blow" to the possibility of life on Mars. Sources: NASA SP-4212,
+    Space.com, History.com.
+  - *Mascons:* found in 1968 by Paul Muller and William Sjogren (JPL) from Lunar Orbiter tracking, whose paths
+    strayed from predictions. Allowing for them, Apollo 12 landed about 160 m from Surveyor 3 (NASA SVS; a figure of
+    30 m in one source is wrong). Sources: Wikipedia ("Mass concentration"), AmericaSpace, NASA SVS 4767.
+  - *Moon germs:* NASA's Interagency Committee on Back Contamination was formally set up in January 1966 (one
+    NASA report; some accounts say planning began in 1963). Apollo 11's crew were declared releasable on 10
+    August 1969; lunar soil was tested on germ-free mice, quail, oysters, insects and plants; crew quarantine was
+    dropped after Apollo 14. Sources: NTRS 20170004403, NASA Apollo Flight Journal (LRL), Aeon ("The lunar pandemic
+    that never was").
 - **Whole-crew losses:** Apollo 1, Soyuz 1, Soyuz 11, Challenger and Columbia lost everyone
   aboard, the real basis of §2.5(f). A sober note the first time it happens.
 - **Spying on the Moon race** (checked 2026-10-07, for the Intelligence Office's history notes):
@@ -3718,6 +3754,15 @@ stances; the rest share a line. A page that runs long drops its close, then runs
 ("Continued on page 2"), never a scroll area (user, 2026-10-22). Its first plan is in
 `ideas/world-reacts.md`, superseded where they differ. Next: the play test. Unconfirmed: late joiners can't
 answer; no page when nobody spoke; follow-ups print before the turn's own Firsts.
+
+**Theories of the day** (the user's idea, 2026-10-22; **built the same day, flavour only**, `ui-spec.md` §4.18.2
+and G18, straight in libGDX): the questions the real space age argued over before a flight settled them (the
+deep lunar dust, eating weightless, the radiation belts, micrometeoroids, a warm Venus, canals on Mars, mascons,
+Moon germs), raised for a player at a checkpoint in the turn report and settled for everyone by the first flight
+that answers them: a science page in the paper for the public's questions, a news line for the engineers'. The
+history is in §1.1. Considered and left for later (user): a light rules effect, an open question showing as
+"unknown" on its steps until settled; theories that turn out right (the belts) as a new hazard. Next: the play
+test.
 
 ### Later
 

@@ -283,6 +283,10 @@ public final class ScreenSnapshot {
             reactionShots(folder, game);
             return;
         }
+        if ("theories".equals(System.getProperty("shots"))) {
+            theoryShots(folder, game);
+            return;
+        }
         if ("grounding".equals(System.getProperty("shots"))) {
             groundingShots(folder, game);
             return;
@@ -505,6 +509,7 @@ public final class ScreenSnapshot {
         archiveShots(folder, game);
         findingShots(folder, game);
         reactionShots(folder, game);
+        theoryShots(folder, game);
     }
 
     /**
@@ -922,6 +927,41 @@ public final class ScreenSnapshot {
             later += 24 * 3_600_000L;
             game.hubClock().enter(later);
         }
+    }
+
+    /**
+     * Theories of the day (ui-spec.md section 4.18.2, 2026-10-22): a turn report raising three theories, one of them
+     * settled already, with a public and a technical theory settled this turn; and two science pages.
+     */
+    private static void theoryShots(File folder, LaunchWindowGame game) {
+        game.useFrontPageMarksInMemory(new java.util.HashSet<>());
+        String hash = ContentPackHash.ofClasspath("content/standard", ScreenSnapshot.class.getClassLoader());
+        GameInfoResponse info = GameInfoResponse.success("standard", hash, List.of(), 31, true,
+            6 * 3_600_000L, 0L, null, List.of(), List.of(), 0);
+        PlayerSnapshot me = new PlayerSnapshot("Baltic Star Agency", Archetype.NASA, 40_000, 3_100, 3_000, 31);
+        me.setDirectorName("A. Reyes");
+        me.getAchievedGoals().put("earth-orbit-satellite", 5);
+        me.getAchievedGoals().put("human-in-space", 12);
+        me.getAchievedGoals().put("lunar-probe", 30);
+        startSession(game, me, info);
+        FrontPage.Achiever orion = new FrontPage.Achiever("Orion Spaceworks", "Ana Reyes", List.of());
+        FrontPage.Achiever kestrel = new FrontPage.Achiever("Kestrel Aerospace", "Moses Okafor", List.of());
+        FrontPage mars = new FrontPage("28-science-mars-canals", "mars-probe", 28, "mars-canals", "Hot and humid",
+            List.of(), List.of(orion), List.of(), FrontPage.Kind.SCIENCE, null, null);
+        FrontPage belts = new FrontPage("30-science-radiation-belts", "magnetic-field-study", 30, "radiation-belts",
+            "Crisp, clear evening", List.of(), List.of(orion), List.of(), FrontPage.Kind.SCIENCE, null, null);
+        FrontPage grit = new FrontPage("30-science-micrometeoroids", "micrometeoroid-study", 30, "micrometeoroids",
+            "Crisp, clear evening", List.of(), List.of(kestrel), List.of(), FrontPage.Kind.SCIENCE, null, null);
+        FrontPage dust = new FrontPage("34-science-deep-dust", "lunar-lander", 34, "deep-dust", "Fair and cool tonight",
+            List.of(), List.of(kestrel, orion), List.of(), FrontPage.Kind.SCIENCE, null, null);
+        game.session().keepFrontPages(List.of(mars, belts, grit, dust));
+        TurnReport report = TurnReport.build(me, me, List.of(
+            new de.mkoehler.launchwindow.rules.GoalSettled("m3", "lunar-probe", false, 800, false)), 30,
+            game.session().catalog());
+        game.session().keepReport(report);
+        write(folder, "theories-report.png", new TurnReportScreen(game, report), null);
+        write(folder, "theories-page-mars.png", new FrontPageScreen(game, List.of(mars), () -> { }, false), null);
+        write(folder, "theories-page-dust.png", new FrontPageScreen(game, List.of(dust), () -> { }, false), null);
     }
 
     /**

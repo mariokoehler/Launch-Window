@@ -475,7 +475,7 @@ public class RequestDispatcher {
                 return SubmitStatementResponse.failure(SubmitStatementResponse.TURN_RESOLVED);
             }
             Optional<FrontPage> page = FrontPageStore.load(dataRoot, mapper).stream()
-                .filter(p -> p.id().equals(request.pageId()) && !p.followUp()).findFirst();
+                .filter(p -> p.id().equals(request.pageId()) && p.firstPage()).findFirst();
             if (page.isEmpty()) {
                 return SubmitStatementResponse.failure(SubmitStatementResponse.UNKNOWN_PAGE);
             }

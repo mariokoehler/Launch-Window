@@ -265,6 +265,12 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   `assets/content/front-page-reactions.json` (outside the pack, `FrontPageReactionsTest`). `FrontPage` gained
   fields (old files load). A new message pair: rebuild client and server together; no reset.
 
+- **Theories of the day are built** (the user's idea, 2026-10-22, flavour only, `design.md` §5 and §1.1, `ui-spec.md`
+  §4.18.2 and G18): eight questions in `assets/content/theories.json` (outside the pack, `TheoriesTest`), raised in
+  the turn report at a goal, settled by the first flight in the game that reaches an answering goal
+  (`rules.SciencePrinter`, a `SCIENCE` page in `frontpages.json`). `FrontPage.firstPage()` means a First's page;
+  never `!followUp()`. Rebuild client and server together; no reset.
+
 ## How we work
 
 - **Screens:** Claude writes the spec in `ui-spec.md`, the user mocks it up in Claude Design,
@@ -513,7 +519,7 @@ cd assets && java --enable-native-access=ALL-UNNAMED -cp "../lwjgl3/target/class
   `event-stories.json` (`EventStoriesTest`, which holds each event to its sized count), and
   `decisions.json` (`DecisionsTest`; saved state keeps its ids too), `agency-names.json` (`AgencyNamesTest`),
   `front-page-reactions.json` (`FrontPageReactionsTest`, which also holds the fullest article to its columns; printed
-  pages store its ids), `replay-sounds.json`
+  pages store its ids), `theories.json` (`TheoriesTest`; science pages store its ids), `replay-sounds.json`
   (`ReplaySoundsTest`: every take there, listed and credited; loops OGG or WAV, never MP3), `replay-clips.json`
   (`ReplayClipsTest`, which holds every rule to its three clips and sidecars), and `front-pages.json`
   (`FrontPagesTest`, which also holds every article to its columns; printed pages store story ids). Core's tests have no assets on the

@@ -21,6 +21,7 @@ import de.mkoehler.launchwindow.client.view.FrontPageView;
 import de.mkoehler.launchwindow.client.view.Hub;
 import de.mkoehler.launchwindow.content.FrontPageReactions;
 import de.mkoehler.launchwindow.content.FrontPages;
+import de.mkoehler.launchwindow.content.Theories;
 import de.mkoehler.launchwindow.model.FrontPage;
 import de.mkoehler.launchwindow.rules.ReactionPrinter;
 
@@ -152,7 +153,11 @@ public class FrontPageScreen extends SessionScreen {
             if (page.gameTurn() < joined) {
                 continue;
             }
-            if (!game.frontPageSeen(page.id()) && FrontPages.standard().first(page.goalId()).isPresent()) {
+            // A science page shows only for a theory the public followed (ui-spec.md 4.18.2).
+            boolean words = page.science() ? Theories.standard().theory(page.storyId())
+                .map(t -> t.reach() == Theories.Reach.PUBLIC).orElse(false)
+                : FrontPages.standard().first(page.goalId()).isPresent();
+            if (!game.frontPageSeen(page.id()) && words) {
                 unseen.add(page);
             }
         }
@@ -202,11 +207,13 @@ public class FrontPageScreen extends SessionScreen {
         sheet.setBackground(paper == null ? ui.solid(Color.valueOf("#f5f0dd")) : paper);
         sheet.top().pad(0f, MARGIN, MARGIN, MARGIN);
         carried = List.of();
+        java.util.function.Predicate<String> inPack = goal -> session.catalog().goal(goal).isPresent();
         Optional<FrontPageView.Page> words = page.followUp()
             ? FrontPageView.ofReactions(page, allPages(), FrontPageReactions.standard(), FrontPages.standard(),
-                goal -> session.catalog().goal(goal).isPresent(), ContentNames::of)
-            : FrontPageView.of(page, allPages(), FrontPages.standard(),
-                goal -> session.catalog().goal(goal).isPresent(), ContentNames::of);
+                inPack, ContentNames::of)
+            : page.science() ? FrontPageView.ofScience(page, allPages(), Theories.standard(), FrontPages.standard(),
+                inPack, ContentNames::of)
+            : FrontPageView.of(page, allPages(), FrontPages.standard(), inPack, ContentNames::of);
         if (words.isEmpty()) {
             return sheet;
         }
@@ -219,9 +226,10 @@ public class FrontPageScreen extends SessionScreen {
         Image masthead = new Image(ui.picture("frontpage/masthead.png"));
         masthead.setScaling(Scaling.fit);
         band.add(masthead).size(761f, BAND_HEIGHT).expandX();
-        if (page.followUp()) {
-            band.add(ear(ui.label("THE WORLD", Theme.TextStyle.NEWS_EAR_TWO, Theme.INK),
-                ui.label("REACTS", Theme.TextStyle.NEWS_EAR_TWO, Theme.INK))).size(230f, 84f);
+        if (page.followUp() || page.science()) {
+            band.add(ear(ui.label(page.science() ? "SCIENCE" : "THE WORLD", Theme.TextStyle.NEWS_EAR_TWO, Theme.INK),
+                ui.label(page.science() ? "REPORT" : "REACTS", Theme.TextStyle.NEWS_EAR_TWO, Theme.INK)))
+                .size(230f, 84f);
         } else {
             band.add(ear(ui.label("EXTRA", Theme.TextStyle.NEWS_EXTRA, Theme.INK),
                 ui.label("Special edition", Theme.TextStyle.NEWS_CAPTION, Theme.INK))).size(230f, 84f);
@@ -252,7 +260,7 @@ public class FrontPageScreen extends SessionScreen {
         sheet.add(rule()).width(INNER).height(1f).padTop(10f).row();
 
         float lower = PAGE_HEIGHT - MARGIN - TOP_FIXED - headlineHeight - deckHeight;
-        sheet.add(page.followUp() ? lowerReactions(page, view, lower) : lower(view, lower)).width(INNER).height(lower)
+        sheet.add(page.firstPage() ? lower(view, lower) : lowerReactions(page, view, lower)).width(INNER).height(lower)
             .padTop(LOWER_TOP).row();
         return sheet;
     }
@@ -266,11 +274,14 @@ public class FrontPageScreen extends SessionScreen {
     private Table lowerReactions(FrontPage page, FrontPageView.Page view, float height) {
         BitmapFont body = ui.fonts().get(Theme.TextStyle.NEWS_BODY);
         BitmapFont captionFont = ui.fonts().get(Theme.TextStyle.NEWS_CAPTION);
-        float captionHeight = lines(captionFont, view.caption(), R_COLUMN, Align.left) * captionFont.getLineHeight();
+        // A science page has no photo: its first column starts with the byline.
+        boolean photo = view.photo() != null;
+        float captionHeight = photo ? lines(captionFont, view.caption(), R_COLUMN, Align.left)
+            * captionFont.getLineHeight() : 0f;
         float raceHeight = raceHeight(view, R_COLUMN - 24f);
         float jump = captionFont.getLineHeight() + 6f;
-        float[] capacities = {height - R_PHOTO_HEIGHT - 6f - captionHeight - 8f - BYLINE_HEIGHT, height, height,
-            height - raceHeight - 12f};
+        float[] capacities = {height - (photo ? R_PHOTO_HEIGHT + 6f + captionHeight + 8f : 0f) - BYLINE_HEIGHT, height,
+            height, height - raceHeight - 12f};
         List<String> paragraphs = new ArrayList<>(view.paragraphs());
         int droppable = view.droppable();
         Flow flow = flow(pieces(paragraphs), capacities, body);
@@ -295,12 +306,14 @@ public class FrontPageScreen extends SessionScreen {
             Table column = new Table();
             column.top().left();
             if (c == 0) {
-                column.add(new Image(cropped(view.photo(), R_COLUMN / R_PHOTO_HEIGHT))).size(R_COLUMN, R_PHOTO_HEIGHT)
-                    .row();
-                column.add(ui.paragraph(view.caption(), Theme.TextStyle.NEWS_CAPTION, Theme.INK)).width(R_COLUMN)
-                    .padTop(6f).padBottom(8f).left().row();
-                column.add(ui.label("FROM OUR SPACE CORRESPONDENT", Theme.TextStyle.NEWS_BYLINE, Theme.INK)).left()
-                    .height(BYLINE_HEIGHT - 6f).padBottom(6f).row();
+                if (photo) {
+                    column.add(new Image(cropped(view.photo(), R_COLUMN / R_PHOTO_HEIGHT)))
+                        .size(R_COLUMN, R_PHOTO_HEIGHT).row();
+                    column.add(ui.paragraph(view.caption(), Theme.TextStyle.NEWS_CAPTION, Theme.INK)).width(R_COLUMN)
+                        .padTop(6f).padBottom(8f).left().row();
+                }
+                column.add(ui.label(page.science() ? "FROM OUR SCIENCE CORRESPONDENT" : "FROM OUR SPACE CORRESPONDENT",
+                    Theme.TextStyle.NEWS_BYLINE, Theme.INK)).left().height(BYLINE_HEIGHT - 6f).padBottom(6f).row();
             }
             for (Piece piece : flow.columns().get(c)) {
                 column.add(pieceLabel(piece)).width(R_COLUMN).padBottom(PARAGRAPH_GAP).left().row();
@@ -725,10 +738,14 @@ public class FrontPageScreen extends SessionScreen {
     private Table strip(FrontPage page) {
         Table strip = new Table();
         String line = page.followUp() ? "Statements only: no effect on the race."
+            : page.science() ? "Science news: no effect on the race."
             : FrontPageView.gameLine(page, session.state().getAgencyName(), session.catalog(), ContentNames::of);
-        if (page.followUp() && !FrontPageReactions.standard().historyNotes().followUp().isBlank()) {
+        String history = page.followUp() ? FrontPageReactions.standard().historyNotes().followUp()
+            : page.science() ? Theories.standard().theory(page.storyId()).map(Theories.Theory::historyNote).orElse("")
+            : "";
+        if (!history.isBlank()) {
             strip.add(ui.label(line, Theme.TextStyle.BODY, Theme.ON_PAGE)).left();
-            HistoryNote note = new HistoryNote(ui, FrontPageReactions.standard().historyNotes().followUp());
+            HistoryNote note = new HistoryNote(ui, history);
             note.setColor(Theme.ON_PAGE);
             strip.add(note).size(HistoryNote.ICON_SIZE).padLeft(Theme.SPACE_2).left().expandX();
         } else {
@@ -762,7 +779,7 @@ public class FrontPageScreen extends SessionScreen {
      * Polite · Change" while this player may answer it, or "Read the reactions" once its follow-up is printed.
      */
     private Optional<TextButton> statementButton(FrontPage page) {
-        if (page.followUp() || sheet > 0) {
+        if (!page.firstPage() || sheet > 0) {
             return Optional.empty();
         }
         Optional<FrontPage> followUp = allPages().stream()

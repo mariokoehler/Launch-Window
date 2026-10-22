@@ -16,6 +16,8 @@ import de.mkoehler.launchwindow.persistence.PlayerSnapshotStore;
 import de.mkoehler.launchwindow.persistence.PlayerStateService;
 import de.mkoehler.launchwindow.rules.ContractMarket;
 import de.mkoehler.launchwindow.rules.FindingPublications;
+import de.mkoehler.launchwindow.rules.SciencePrinter;
+import de.mkoehler.launchwindow.content.Theories;
 import de.mkoehler.launchwindow.rules.FrontPagePrinter;
 import de.mkoehler.launchwindow.rules.GoalTally;
 import de.mkoehler.launchwindow.rules.IntelFinding;
@@ -266,8 +268,9 @@ public class TurnScheduler {
      * Prints the turn's front pages for the great Firsts ({@code ui-spec.md} &sect;4.18, G14) from
      * every player's turn report, which survives a retry after a crash halfway through (a player
      * already resolved returns no events, but their report is on disk), and the follow-ups with the
-     * rivals' statements on the turn before's Firsts (&sect;4.18.1, G17), and keeps them all in
-     * {@code frontpages.json} at once, follow-ups first.
+     * rivals' statements on the turn before's Firsts (&sect;4.18.1, G17) and the science pages of the theories
+     * settled this turn (&sect;4.18.2, G18), and keeps them all in {@code frontpages.json} at once, follow-ups
+     * first.
      *
      * @param gameTurn the turn just resolved
      * @param meta     the game's configuration, for its seed
@@ -289,6 +292,12 @@ public class TurnScheduler {
         List<FrontPage> pages = new ArrayList<>(followUps(gameTurn, meta, services, words));
         pages.addAll(FrontPagePrinter.print(Math.toIntExact(gameTurn), meta.getGameSeed(), agencies, words,
             goal -> context.catalog().goal(goal).isPresent()));
+        // Theories of the day settled this turn (ui-spec.md 4.18.2): each once, so not those settled before.
+        Set<String> settled = FrontPageStore.load(dataRoot, mapper).stream()
+            .filter(p -> p.science() && p.gameTurn() < gameTurn).map(FrontPage::storyId)
+            .collect(java.util.stream.Collectors.toSet());
+        pages.addAll(SciencePrinter.print(Math.toIntExact(gameTurn), meta.getGameSeed(), agencies,
+            Theories.standard(), settled, words, goal -> context.catalog().goal(goal).isPresent()));
         FrontPageStore.keep(dataRoot, mapper, gameTurn, pages);
     }
 
@@ -306,7 +315,7 @@ public class TurnScheduler {
     private List<FrontPage> followUps(long gameTurn, GameMeta meta, Map<String, PlayerStateService> services,
             FrontPages words) throws IOException {
         List<FrontPage> firsts = FrontPageStore.load(dataRoot, mapper).stream()
-            .filter(p -> !p.followUp() && p.gameTurn() == gameTurn - 1).toList();
+            .filter(p -> p.firstPage() && p.gameTurn() == gameTurn - 1).toList();
         if (firsts.isEmpty()) {
             return List.of();
         }
