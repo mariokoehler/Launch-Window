@@ -366,6 +366,12 @@ public final class FrontPageView {
             case DOWNPLAY -> "Downplay";
             case NO_COMMENT -> "No comment";
             case DECLINED -> "No statement";
+            case COURAGE -> "Their courage";
+            case PEOPLE -> "Who they were";
+            case RESOLVE -> "We will go on";
+            case CAUSE -> "We will find out why";
+            case CONDOLENCES -> "Condolences";
+            case TRIBUTE -> "A tribute";
         };
     }
 
@@ -397,6 +403,12 @@ public final class FrontPageView {
             case DOWNPLAY -> "It proves less than it seems.";
             case NO_COMMENT -> "A pointed refusal to say anything. (Staying silent is printed as “did not respond”.)";
             case DECLINED -> "";
+            case COURAGE -> "They knew the risks, and flew.";
+            case PEOPLE -> "The people behind the names.";
+            case RESOLVE -> "We fly again, and finish what they started.";
+            case CAUSE -> "We will learn what went wrong, and fix it.";
+            case CONDOLENCES -> "Sympathy for the families and the agency.";
+            case TRIBUTE -> "Honour the crew and what they did.";
         };
     }
 

@@ -1,0 +1,126 @@
+{
+  "_comment": "The memorial pages' words (ui-spec.md 4.18.3): a crew lost in flight, printed the turn after the loss, with the agency's statement in the tone its director chose and the rivals' condolences. Our own words, written from no source; the history notes are checked in design.md 1.1. Printed pages store the story and line ids: never rename or reuse one. Tokens: {agency}, {director}, {season}, {crew} (the names as a sentence names them), {name}, {age}, {nth} (an ordinal), {years}, {where}, {during}, {first}, {after}, {count}, {rival}, {rivalDirector}, {rivals}, {quote} (only at a line's end). A one-person crew reads with the singular they.",
+  "numbers": ["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve"],
+  "ordinals": ["", "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth", "eleventh", "twelfth"],
+  "headlines": {
+    "one": "{agency} loses {name} {where}",
+    "many": "{agency} loses {count} {where}",
+    "shortOne": "{name} lost {where}",
+    "shortMany": "{count} lost {where}"
+  },
+  "decks": {
+    "plain": "{crew} died {during}",
+    "first": "{crew} died {during}, after {after}"
+  },
+  "places": [
+    {"id": "spacewalk", "match": ["eva", "egress", "ingress", "spacewalk"], "where": "on a spacewalk", "during": "during a spacewalk"},
+    {"id": "moon", "match": ["lunar-landing", "lk-descent", "lunar-liftoff", "lunar-ascent", "moonwalk", "lunar-surface"], "where": "on the Moon", "during": "on the Moon"},
+    {"id": "pad", "match": ["launch-preparations", "countdown"], "where": "on the pad", "during": "on the launch pad", "tail": ", before their flight had begun"},
+    {"id": "ascent", "match": ["ascent", "staging", "max-q"], "where": "on the way up", "during": "during the ascent", "tail": ", in the first minutes of their flight"},
+    {"id": "launch", "match": ["launch", "liftoff"], "where": "at launch", "during": "during launch", "tail": ", in the first minute of their flight"},
+    {"id": "reentry", "match": ["retrofire", "reentry", "de-orbit", "modules-separation", "retropack", "retrofire-jettison", "earth-approach"], "where": "on the way home", "during": "during reentry", "tail": ", in the last hour of a flight that had gone well until then"},
+    {"id": "landing", "match": ["descent", "landing", "recovery", "splashdown", "parachute"], "where": "on landing", "during": "on landing", "tail": ", within sight of home"},
+    {"id": "orbit", "match": ["orbit", "docking", "rendezvous", "transfer", "duration", "undocking", "transposition", "injection", "insertion", "experiments"], "where": "in orbit", "during": "in orbit"}
+  ],
+  "elsewhere": {"id": "flight", "where": "in flight", "during": "in flight"},
+  "firsts": [
+    {"goal": "crewed-lunar-landing", "first": "land on the Moon", "after": "the first landing on the Moon"},
+    {"goal": "crewed-lunar-orbit", "first": "orbit the Moon", "after": "the first orbit of the Moon"},
+    {"goal": "crewed-lunar-flyby", "first": "fly around the Moon", "after": "the first flight around the Moon"},
+    {"goal": "crew-transfer", "first": "cross from one ship to another in orbit", "after": "the first crossing between two ships in orbit"},
+    {"goal": "docking", "first": "dock two ships in orbit", "after": "the first docking in orbit"},
+    {"goal": "rendezvous", "first": "bring two ships together in orbit", "after": "the first meeting of two ships in orbit"},
+    {"goal": "spacewalk", "first": "walk in space", "after": "the first walk in space"},
+    {"goal": "joint-crewed-launch", "first": "fly two crews at once", "after": "the first flight of two crews at once"},
+    {"goal": "three-crew-spacecraft", "first": "fly three people in one ship", "after": "the first flight of three"},
+    {"goal": "two-crew-spacecraft", "first": "fly two people in one ship", "after": "the first flight of two"},
+    {"goal": "human-in-orbit", "first": "orbit the Earth", "after": "the first orbit of the Earth"},
+    {"goal": "human-in-space", "first": "fly into space", "after": "the first flight into space"}
+  ],
+  "leads": [
+    {"id": "m-lead-1", "text": "{season} — {crew} of {agency} died last season when their spacecraft was lost {during}{tail}."}
+  ],
+  "withheld": {"id": "m-withheld-1", "text": "They had become the first to {first}, and did not come home."},
+  "standDown": {"id": "m-standdown-1", "text": "{agency} has stood down its crewed flights while the accident is investigated."},
+  "people": {
+    "first": "{name}, {age}, was flying for the first time.",
+    "again": "{name}, {age}, was on a {nth} flight.",
+    "served": "{name}, {age}, had served the agency for {years} and was on a {nth} flight.",
+    "servedFirst": "{name}, {age}, had served the agency for {years} and was flying for the first time.",
+    "traits": {
+      "WORKAHOLIC": "{name}, {age}, was usually the last to leave the building.",
+      "STEADY": "{name}, {age}, was the calmest voice on any crew.",
+      "AMBITIOUS": "{name}, {age}, had hoped to command a flight one day.",
+      "GLORY_SEEKER": "{name}, {age}, had always wanted to be first.",
+      "COOL_UNDER_PRESSURE": "{name}, {age}, was known for a cool head when things went wrong.",
+      "RESTLESS": "{name}, {age}, could never sit still between flights.",
+      "QUICK_STUDY": "{name}, {age}, learned every new system faster than anyone.",
+      "MENTOR": "{name}, {age}, was known as a patient teacher of the younger crews.",
+      "LONER": "{name}, {age}, was a private person, liked by the few who knew them well.",
+      "EASY_GOING": "{name}, {age}, could make a whole crew laugh in a bad week.",
+      "ABRASIVE": "{name}, {age}, was known for blunt words and fair judgement.",
+      "MUST_BE_THE_BEST": "{name}, {age}, trained harder than anyone in the building.",
+      "TEAM_PLAYER": "{name}, {age}, always put the crew first."
+    }
+  },
+  "tones": [
+    {"tone": "COURAGE", "stories": [
+      {"id": "m-courage-1",
+       "quoted": "The agency’s director, {director}, said they had known the risks and flown anyway: {quote}",
+       "plain": "They knew the risks, the agency’s director, {director}, said, and they flew because the work mattered to them more than the danger did.",
+       "close": "They were the bravest of us, colleagues said, and the most careful."},
+      {"id": "m-courage-2",
+       "quoted": "At {agency}, the director, {director}, spoke of their courage: {quote}",
+       "plain": "At {agency}, the director, {director}, spoke of their courage. Every one of them, {director} said, had asked to fly knowing what it might cost.",
+       "close": "Their names will be read out at the agency’s next launch."}
+    ]},
+    {"tone": "PEOPLE", "stories": [
+      {"id": "m-people-1",
+       "quoted": "The agency’s director, {director}, spoke of them not as pilots but as people: {quote}",
+       "plain": "The agency’s director, {director}, spoke of them not as pilots but as people: friends, parents and colleagues, each of them missed in a different way.",
+       "close": "Flags at the agency flew at half-staff all week. {crew} leave families, friends and colleagues who knew them well."},
+      {"id": "m-people-2",
+       "quoted": "“They were more than a crew,” the agency said. Its director, {director}, added: {quote}",
+       "plain": "“They were more than a crew,” the agency said in a statement from its director, {director}, and asked that the families be left in peace.",
+       "close": "A memorial service will be held at the agency next week. Colleagues have asked that it be a quiet one."}
+    ]},
+    {"tone": "RESOLVE", "stories": [
+      {"id": "m-resolve-1",
+       "quoted": "{agency} will fly again, its director, {director}, said, and finish the work its crew began: {quote}",
+       "plain": "{agency} will fly again, its director, {director}, said, and finish the work its crew began. Stopping now would be the one thing they would not have forgiven.",
+       "close": "When the next crew flies, the agency says, it will carry their names."},
+      {"id": "m-resolve-2",
+       "quoted": "There was no talk at {agency} of giving up. Its director, {director}, said: {quote}",
+       "plain": "There was no talk at {agency} of giving up. Its director, {director}, said the program would go on, and that its crew had believed in it more than anyone.",
+       "close": "The agency’s next flight, its director said, will be flown for them."}
+    ]},
+    {"tone": "CAUSE", "stories": [
+      {"id": "m-cause-1",
+       "quoted": "{agency} has promised to learn what went wrong. Speaking of {crew}, its director, {director}, said: {quote}",
+       "plain": "{agency} has promised to learn what went wrong, and to say so in public. Its director, {director}, said nothing would fly again until the cause was found and fixed.",
+       "close": "Engineers began work on the inquiry within hours of the loss."},
+      {"id": "m-cause-2",
+       "quoted": "“We are responsible,” {director}, the director of {agency}, told the staff the next morning, and added: {quote}",
+       "plain": "“We are responsible,” {director}, the director of {agency}, told the staff the next morning. “We will find out why, and we will fix it.”",
+       "close": "Every part of the spacecraft, the agency says, will be examined again before anyone flies in it."}
+    ]}
+  ],
+  "spokesman": {"id": "m-spokesman-1",
+    "plain": "A spokesman for {agency} said the agency was in mourning and would say more when it could.",
+    "close": "A memorial service is to be held at the agency."},
+  "condolences": {
+    "head": "From the other agencies",
+    "lines": [
+      {"id": "m-tribute-q-1", "stance": "TRIBUTE", "quoted": true, "text": "{rivalDirector}, director of {rival}, paid tribute: {quote}"},
+      {"id": "m-tribute-1", "stance": "TRIBUTE", "quoted": false, "text": "{rival} paid tribute to the crew and to what they had done."},
+      {"id": "m-condolences-q-1", "stance": "CONDOLENCES", "quoted": true, "text": "{rivalDirector}, director of {rival}, wrote to the families: {quote}"},
+      {"id": "m-condolences-1", "stance": "CONDOLENCES", "quoted": false, "text": "{rival} sent its sympathy to the families and to everyone at {agency}."}
+    ],
+    "also": {"id": "m-also-1", "text": "Messages came too from {rivals}."}
+  },
+  "historyNotes": {
+    "page": "In 1971 Apollo 15's crew left a small aluminium figure, the Fallen Astronaut, on the Moon beside a plaque with fourteen names: the eight American astronauts and six Soviet cosmonauts who had died by then, in alphabetical order.",
+    "statement": "After the Apollo 1 fire in 1967, flight director Gene Kranz told his controllers that they were the cause: they had been too eager about the schedule. From then on Mission Control would be tough, always accountable, and competent, taking nothing for granted. The two words were to be written on every blackboard and never erased.",
+    "condolences": "When the three cosmonauts of Soyuz 11 were lost in 1971, the Soviet Union gave them a state funeral. NASA astronaut Tom Stafford represented the President of the United States, and was one of the pallbearers."
+  }
+}

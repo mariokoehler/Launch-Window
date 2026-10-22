@@ -7,11 +7,12 @@ import java.util.List;
  * A printed front page ({@code ui-spec.md} &sect;4.18, G14): either one of the great Firsts (which
  * First, the turn it was reached in, the story drawn for it, and who made it), or the follow-up page
  * that prints the rivals' statements about one ({@link Kind#REACTIONS}, &sect;4.18 "The world reacts",
- * G17). Printed once by the server at a resolution, kept in the game's {@code frontpages.json}, and
- * sent to every player. Agency names only, never account ids.
+ * G17), a theory of the day settled ({@link Kind#SCIENCE}, &sect;4.18.2), or a crew lost in flight
+ * ({@link Kind#MEMORIAL}, &sect;4.18.3). Printed once by the server at a resolution, kept in the game's
+ * {@code frontpages.json}, and sent to every player. Agency names only, never account ids.
  *
  * @param id             the page's id, {@code <turn>-<goal-id>}, or {@code <turn>-<goal-id>-reactions}
- * @param goalId         the First's goal
+ * @param goalId         the First's goal; a memorial page's is {@code ""}
  * @param gameTurn       the turn it was printed in: the one the First was reached in, or for a
  *                       follow-up the turn after it, when the statements were given
  * @param storyId        the story's id: in {@code front-pages.json}, or for a follow-up in
@@ -23,12 +24,14 @@ import java.util.List;
  * @param kind           what the page is; {@code null} (a page printed before follow-ups) reads as
  *                       {@link Kind#FIRST}
  * @param reactsTo       a follow-up's First page, or {@code null}
- * @param reactions      a follow-up's statements, in the order the article tells them
+ * @param reactions      a follow-up's statements, in the order the article tells them; a memorial page's
+ *                       condolences
+ * @param memorial       a memorial page's lost crew and the agency's statement, or {@code null}
  * @author Mario Koehler
  */
 public record FrontPage(String id, String goalId, int gameTurn, String storyId, String weather,
                         List<String> foldedGoalIds, List<Achiever> achievers, List<String> rivals,
-                        Kind kind, String reactsTo, List<Reaction> reactions) {
+                        Kind kind, String reactsTo, List<Reaction> reactions, Memorial memorial) {
 
     /** A follow-up page's id ends in this, after the First page's own id. */
     public static final String REACTIONS_SUFFIX = "-reactions";
@@ -59,6 +62,28 @@ public record FrontPage(String id, String goalId, int gameTurn, String storyId, 
     public FrontPage(String id, String goalId, int gameTurn, String storyId, String weather,
                      List<String> foldedGoalIds, List<Achiever> achievers, List<String> rivals) {
         this(id, goalId, gameTurn, storyId, weather, foldedGoalIds, achievers, rivals, Kind.FIRST, null, null);
+    }
+
+    /**
+     * A page without a memorial: a First's, a follow-up or a science page.
+     *
+     * @param id            the page's id
+     * @param goalId        the First's goal
+     * @param gameTurn      the turn it was printed in
+     * @param storyId       the story's id
+     * @param weather       the ear's weather line
+     * @param foldedGoalIds other Firsts told on this page
+     * @param achievers     the agencies that made it
+     * @param rivals        up to two other agencies the article names
+     * @param kind          what the page is
+     * @param reactsTo      a follow-up's First page, or {@code null}
+     * @param reactions     a follow-up's statements
+     */
+    public FrontPage(String id, String goalId, int gameTurn, String storyId, String weather,
+                     List<String> foldedGoalIds, List<Achiever> achievers, List<String> rivals, Kind kind,
+                     String reactsTo, List<Reaction> reactions) {
+        this(id, goalId, gameTurn, storyId, weather, foldedGoalIds, achievers, rivals, kind, reactsTo, reactions,
+            null);
     }
 
     /**
@@ -101,6 +126,15 @@ public record FrontPage(String id, String goalId, int gameTurn, String storyId, 
     }
 
     /**
+     * Returns whether the page is a memorial page: a crew lost in flight ({@code ui-spec.md} &sect;4.18.3).
+     *
+     * @return whether it is
+     */
+    public boolean memorialPage() {
+        return kind == Kind.MEMORIAL;
+    }
+
+    /**
      * Returns whether the page tells a First, its own or folded in. Only a First's page does: a follow-up is
      * about the First, not the news of it, and a science page about a theory.
      *
@@ -128,7 +162,9 @@ public record FrontPage(String id, String goalId, int gameTurn, String storyId, 
         /** The rivals' statements about a First, printed the turn after it. */
         REACTIONS,
         /** A theory of the day settled by a flight (ui-spec.md section 4.18.2); its story id is the theory's. */
-        SCIENCE
+        SCIENCE,
+        /** A crew lost in flight, printed the turn after the loss (ui-spec.md section 4.18.3). */
+        MEMORIAL
     }
 
     /**
@@ -146,15 +182,45 @@ public record FrontPage(String id, String goalId, int gameTurn, String storyId, 
         /** A pointed refusal to say anything. */
         NO_COMMENT,
         /** Gave no statement at all: the server's, never a player's choice. */
-        DECLINED;
+        DECLINED,
+        /** A lost crew's agency, on their courage: they knew the risks, and flew (ui-spec.md 4.18.3). */
+        COURAGE,
+        /** A lost crew's agency, on who they were: the people behind the names. */
+        PEOPLE,
+        /** A lost crew's agency, on going on: we fly again, and finish what they started. */
+        RESOLVE,
+        /** A lost crew's agency, on finding out why: we will learn what went wrong, and fix it. */
+        CAUSE,
+        /** A rival on a lost crew: sympathy for the families and the agency. */
+        CONDOLENCES,
+        /** A rival on a lost crew: honour the crew and what they did. */
+        TRIBUTE;
 
         /**
-         * Returns whether a player may give this stance.
+         * Returns whether a player may give this stance on a rival's First.
          *
          * @return whether it's one of the five
          */
         public boolean givable() {
-            return this != DECLINED;
+            return ordinal() <= NO_COMMENT.ordinal();
+        }
+
+        /**
+         * Returns whether this is the tone of a lost crew's agency's statement.
+         *
+         * @return whether it's one of the four tones
+         */
+        public boolean tone() {
+            return this == COURAGE || this == PEOPLE || this == RESOLVE || this == CAUSE;
+        }
+
+        /**
+         * Returns whether this is what a rival may send on a lost crew.
+         *
+         * @return whether it's condolences or a tribute
+         */
+        public boolean condolence() {
+            return this == CONDOLENCES || this == TRIBUTE;
         }
 
         /**
@@ -164,6 +230,77 @@ public record FrontPage(String id, String goalId, int gameTurn, String storyId, 
          */
         public boolean quotable() {
             return this != NO_COMMENT && this != DECLINED;
+        }
+    }
+
+    /**
+     * One person lost with a crew, as the paper names them: what the game knows publicly, never anything hidden.
+     *
+     * @param name        their name
+     * @param age         their age
+     * @param portraitId  their portrait, or {@code null}
+     * @param personnelId their id on the agency's memorial
+     * @param flights     the flights they flew, the last one included
+     * @param firsts      the flights of theirs that set a first in the game
+     * @param seasons     the seasons they served the agency, or {@code -1} if not known
+     * @param traits      their revealed traits, by name
+     */
+    public record Lost(String name, int age, String portraitId, String personnelId, int flights, int firsts,
+                       int seasons, List<String> traits) {
+
+        /**
+         * Copies the list into an {@link ArrayList}, which Kryo can rebuild.
+         */
+        public Lost {
+            traits = traits == null ? new ArrayList<>() : new ArrayList<>(traits);
+        }
+    }
+
+    /**
+     * A crew lost in flight, as the world learns of it the turn after ({@code ui-spec.md} &sect;4.18.3): the
+     * agency's statement and the rivals' condolences answer its id, and the next resolution prints its page.
+     *
+     * @param id                     {@code <turn>-loss-<n>}, unique in the game
+     * @param gameTurn               the turn the crew was lost in
+     * @param rivalKey               the losing agency's key ({@code GameSeeds.rivalKey}), never its account id
+     * @param agencyName             the losing agency
+     * @param directorName           its director
+     * @param missionConfigurationId the flight
+     * @param stepId                 the step it was lost on
+     * @param crew                   the crew, in seat order
+     * @param withheldGoalIds        the goals the flight had reached, withheld (design.md section 2.6)
+     * @param firstGoalIds           those of them that would have been first in the game
+     */
+    public record Loss(String id, int gameTurn, String rivalKey, String agencyName, String directorName,
+                       String missionConfigurationId, String stepId, List<Lost> crew, List<String> withheldGoalIds,
+                       List<String> firstGoalIds) {
+
+        /**
+         * Copies the lists into {@link ArrayList}s, which Kryo can rebuild.
+         */
+        public Loss {
+            crew = crew == null ? new ArrayList<>() : new ArrayList<>(crew);
+            withheldGoalIds = withheldGoalIds == null ? new ArrayList<>() : new ArrayList<>(withheldGoalIds);
+            firstGoalIds = firstGoalIds == null ? new ArrayList<>() : new ArrayList<>(firstGoalIds);
+        }
+    }
+
+    /**
+     * What a memorial page tells beyond its achiever (the losing agency) and its condolences.
+     *
+     * @param loss    the loss it remembers
+     * @param tone    the agency's statement's tone, or {@code null} for the spokesman's statement
+     * @param quote   the agency's words, word for word, or {@code ""}
+     * @param lineIds the ids of the pieces the article was made of, in {@code memorial-pages.json}
+     */
+    public record Memorial(Loss loss, Stance tone, String quote, List<String> lineIds) {
+
+        /**
+         * Copies the list into an {@link ArrayList}, which Kryo can rebuild.
+         */
+        public Memorial {
+            quote = quote == null ? "" : quote;
+            lineIds = lineIds == null ? new ArrayList<>() : new ArrayList<>(lineIds);
         }
     }
 

@@ -324,5 +324,10 @@ public final class MessageRegistry {
         kryo.register(de.mkoehler.launchwindow.model.FrontPage.Statement.class);
         kryo.register(de.mkoehler.launchwindow.net.messages.SubmitStatementRequest.class);
         kryo.register(de.mkoehler.launchwindow.net.messages.SubmitStatementResponse.class);
+
+        // In memory (ui-spec.md section 4.18.3, G19, 2026-10-22). Never move these lines.
+        kryo.register(de.mkoehler.launchwindow.model.FrontPage.Lost.class);
+        kryo.register(de.mkoehler.launchwindow.model.FrontPage.Loss.class);
+        kryo.register(de.mkoehler.launchwindow.model.FrontPage.Memorial.class);
     }
 }

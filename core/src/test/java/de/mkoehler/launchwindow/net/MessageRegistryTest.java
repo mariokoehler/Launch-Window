@@ -296,6 +296,17 @@ class MessageRegistryTest {
             List.of(orion), List.of(), FrontPage.Kind.SCIENCE, null, null);
         FrontPagesResponse pages = FrontPagesResponse.of(List.of(first, followUp, science), yours);
         assertEquals(pages, roundTrip(pages, FrontPagesResponse.class));
+        // In memory (ui-spec.md 4.18.3): an open loss, and its page with condolences.
+        FrontPage.Loss loss = new FrontPage.Loss("44-loss-1", 44, "k1", "Orion Spaceworks", "Ana Reyes",
+            "apollo-spacewalk", "18-reentry", List.of(new FrontPage.Lost("Lev Marek", 32, "p-7", "a3", 1, 0, 12,
+                List.of("CALM"))), List.of("spacewalk"), List.of("spacewalk"));
+        FrontPage memorial = new FrontPage("45-memorial-44-loss-1", "", 45, "m-people-1", "Cold", List.of(),
+            List.of(orion), List.of(), FrontPage.Kind.MEMORIAL, null, List.of(new FrontPage.Reaction("Kestrel Aerospace",
+                "Moses Okafor", FrontPage.Stance.TRIBUTE, "We will not forget them.", "m-tribute-q-1", null, null)),
+            new FrontPage.Memorial(loss, FrontPage.Stance.PEOPLE, "Lev wrote home every day.", List.of("m-people-1")));
+        FrontPagesResponse withLoss = FrontPagesResponse.of(List.of(memorial), List.of(new FrontPage.Statement(
+            loss.id(), FrontPage.Stance.CONDOLENCES, "")), List.of(loss));
+        assertEquals(withLoss, roundTrip(withLoss, FrontPagesResponse.class));
         SubmitStatementRequest give = new SubmitStatementRequest(27, first.id(), FrontPage.Stance.DOWNPLAY, "A stunt.");
         assertEquals(give, roundTrip(give, SubmitStatementRequest.class));
         SubmitStatementRequest withdraw = new SubmitStatementRequest(27, first.id(), null, "");
