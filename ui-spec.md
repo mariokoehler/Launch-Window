@@ -3562,6 +3562,7 @@ for the mockups.
 | Hands-on campaign (added 2026-10-11, component 26, type 11; `HandsOn.Outcome`, `RdDecisions.Outcome.NO_PUZZLE`): WRONG_PHASE / NO_SLOT / CANT_PAY / UNKNOWN_COMMAND / NOTHING_QUEUED / CANT_RESIST / NO_PUZZLE | Not now: the campaign is somewhere else. / The round's slots are full. / You can't pay for that command. / That command isn't in this campaign. / Nothing is queued. / Not enough shifts to call in an expert. / No campaign is in progress. |
 | Findings (added 2026-10-21, §4.20; `Findings.PublishOutcome`): NOT_A_FINDING / NOT_KNOWN / ALREADY_PUBLIC / ALREADY_QUEUED / NOT_QUEUED | That goal isn't a finding. / Reach the goal first. / Someone published it already. / It's published at the next resolution already. / There's nothing to withdraw. |
 | Contracts (added 2026-10-11, §4.17; built as `ContractOutcome`): CONTRACT_ACTIVE / NOT_QUALIFIED / PROGRAM_NOT_OPEN / UNKNOWN_LISTING; closing a program while its contract flies is the existing MISSIONS_IN_FLIGHT | You have an active contract: one at a time. / You can't fly this one: unlock its line first. / Open the program first. / That listing isn't on the board any more. / Can't close while a mission uses it. |
+| The world reacts (added 2026-10-22, §4.18.1, component 28; `SubmitStatementResponse`): TURN_RESOLVED / UNKNOWN_PAGE / REACTION_WINDOW_CLOSED / NOT_A_RIVAL / INVALID_STANCE / QUOTE_TOO_LONG / QUOTE_BAD_CHARACTERS | The turn resolved before that reached the server, so nothing was done. / That front page isn't there any more. / Statements on that First closed when the turn after it resolved. / Only a rival that was in the race when the First was printed can answer it. / Pick one of the five stances. / At most 140 characters. / Only letters, numbers and common punctuation. |
 | Join game (`ClaimSlotResponse.Reason`, added 2026-10-04): AGENCY_NAME_TAKEN / DIRECTOR_NAME_TAKEN / MISSING_FIELDS / ALREADY_CLAIMED / NOT_AUTHENTICATED / SERVER_ERROR | Already taken by another agency. (under the field) / the same / Required. / (client logs in again and opens the agency) / (danger notice with the server's words) |
 
 ---
@@ -3780,6 +3781,9 @@ current state alone. Each is an M5 task.
     the turn's Firsts; `TurnRollback` keeps turn T's statements and deletes later ones.
   - **Client:** `ServerGateway.submitStatement` (a write, never repeated), `FrontPagesResult.yours`,
     `ClientSession.statements`, the refusals in `client.ui.Refusals`.
+  - **A known edge:** a statement that reaches the server while the turn is resolving passes the open-turn
+    check (the scheduler moves the open turn on only after resolving) and is written after the follow-ups were
+    printed, so it is lost, like an action sent at that moment.
   - **Rebuild client and server together; no reset.**
 
 ## 7. Suggested mockup order

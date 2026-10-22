@@ -523,8 +523,10 @@ leading to satellite navigation.
     day conceded that the Soviets were ahead and that catching up would take time. Sources: the American
     Presidency Project (the statement), The Battalion of 13 April 1961 (the press conference).
   - Apollo 11 carried two Soviet medals honouring Yuri Gagarin and Vladimir Komarov, both dead by then, as
-    Nixon announced on 17 July 1969; the crew left them on the Moon with the mission's other memorials.
-    Sources: the American Presidency Project (Nixon's statement), the Apollo 11 Lunar Surface Journal.
+    Nixon announced on 17 July 1969: Frank Borman had been given them in Moscow by the cosmonauts' widows. The
+    crew left them on the Moon in a small memorial packet with an Apollo 1 patch and a gold olive branch.
+    Sources: the American Presidency Project (Nixon's statement), History News Network and Astronomy
+    ("Apollo 11 brought a message of peace to the Moon").
 - **Whole-crew losses:** Apollo 1, Soyuz 1, Soyuz 11, Challenger and Columbia lost everyone
   aboard, the real basis of §2.5(f). A sober note the first time it happens.
 - **Spying on the Moon race** (checked 2026-10-07, for the Intelligence Office's history notes):

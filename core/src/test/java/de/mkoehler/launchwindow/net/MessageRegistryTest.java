@@ -32,6 +32,8 @@ import de.mkoehler.launchwindow.net.messages.FetchStateRequest;
 import de.mkoehler.launchwindow.net.messages.FetchStateResponse;
 import de.mkoehler.launchwindow.net.messages.FrontPagesRequest;
 import de.mkoehler.launchwindow.net.messages.FrontPagesResponse;
+import de.mkoehler.launchwindow.net.messages.SubmitStatementRequest;
+import de.mkoehler.launchwindow.net.messages.SubmitStatementResponse;
 import de.mkoehler.launchwindow.net.messages.ArchiveRequest;
 import de.mkoehler.launchwindow.net.messages.ArchiveResponse;
 import de.mkoehler.launchwindow.net.messages.ArchiveUnlock;
@@ -274,6 +276,32 @@ class MessageRegistryTest {
         assertEquals(pages, roundTrip(pages, FrontPagesResponse.class));
         assertEquals(FrontPagesResponse.failure("nope"), roundTrip(FrontPagesResponse.failure("nope"),
             FrontPagesResponse.class));
+    }
+
+    /** The world reacts (G17): a follow-up with nullable ids, the player's statements, a withdraw. */
+    @Test
+    void statementsAndFollowUpsRoundTrip() {
+        FrontPage.Achiever orion = new FrontPage.Achiever("Orion Spaceworks", "Ana Reyes", List.of("Daniel Hale"));
+        FrontPage first = new FrontPage("26-human-in-orbit", "human-in-orbit", 26, "orbit-circles", "Fair",
+            List.of(), List.of(orion), List.of("Kestrel Aerospace"));
+        FrontPage followUp = new FrontPage("26-human-in-orbit-reactions", "human-in-orbit", 27, "r-orbit-mixed",
+            "Hot", List.of(), List.of(orion), List.of(), FrontPage.Kind.REACTIONS, first.id(), List.of(
+                new FrontPage.Reaction("Kestrel Aerospace", "Moses Okafor", FrontPage.Stance.NEXT, "We follow.",
+                    "r-next-q-1", null, "r-orbit-held-1"),
+                new FrontPage.Reaction("Baltic Star Agency", "A. Reyes", FrontPage.Stance.DECLINED, "",
+                    "r-declined-one-1", null, null)));
+        List<FrontPage.Statement> yours = List.of(new FrontPage.Statement(first.id(), FrontPage.Stance.POLITE,
+            "Well flown."));
+        FrontPagesResponse pages = FrontPagesResponse.of(List.of(first, followUp), yours);
+        assertEquals(pages, roundTrip(pages, FrontPagesResponse.class));
+        SubmitStatementRequest give = new SubmitStatementRequest(27, first.id(), FrontPage.Stance.DOWNPLAY, "A stunt.");
+        assertEquals(give, roundTrip(give, SubmitStatementRequest.class));
+        SubmitStatementRequest withdraw = new SubmitStatementRequest(27, first.id(), null, "");
+        assertEquals(withdraw, roundTrip(withdraw, SubmitStatementRequest.class));
+        SubmitStatementResponse kept = SubmitStatementResponse.success(yours);
+        assertEquals(kept, roundTrip(kept, SubmitStatementResponse.class));
+        SubmitStatementResponse refused = SubmitStatementResponse.failure(SubmitStatementResponse.NOT_A_RIVAL);
+        assertEquals(refused, roundTrip(refused, SubmitStatementResponse.class));
     }
 
     @Test
