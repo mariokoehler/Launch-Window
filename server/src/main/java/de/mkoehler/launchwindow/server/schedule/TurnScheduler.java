@@ -314,12 +314,13 @@ public class TurnScheduler {
      */
     private List<FrontPage> followUps(long gameTurn, GameMeta meta, Map<String, PlayerStateService> services,
             FrontPages words) throws IOException {
+        // Sealed as it is read: a statement arriving later is refused, not kept unprinted.
+        Map<String, List<FrontPage.Statement>> statements = ReactionStore.seal(dataRoot, mapper, gameTurn);
         List<FrontPage> firsts = FrontPageStore.load(dataRoot, mapper).stream()
             .filter(p -> p.firstPage() && p.gameTurn() == gameTurn - 1).toList();
         if (firsts.isEmpty()) {
             return List.of();
         }
-        Map<String, List<FrontPage.Statement>> statements = ReactionStore.load(dataRoot, mapper, gameTurn);
         List<ReactionPrinter.Agency> agencies = new ArrayList<>();
         for (Map.Entry<String, PlayerStateService> player : services.entrySet()) {
             PlayerSnapshot state = player.getValue().stateBefore(gameTurn + 1).orElseThrow();

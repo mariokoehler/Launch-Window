@@ -302,6 +302,20 @@ class RequestDispatcherTest {
             new SubmitStatementRequest(4, first.id(), null, ""));
         assertTrue(withdrawn.success());
         assertTrue(withdrawn.yours().isEmpty());
+
+        // The resolution reads the turn's statements: one arriving after that is refused, not lost.
+        dispatcher.handleSubmitStatement(2, new SubmitStatementRequest(4, first.id(), FrontPage.Stance.POLITE, ""));
+        assertEquals(1, ReactionStore.seal(dataRoot, mapper, 4).size());
+        assertEquals(SubmitStatementResponse.TURN_RESOLVED, dispatcher.handleSubmitStatement(2,
+            new SubmitStatementRequest(4, first.id(), FrontPage.Stance.NEXT, "")).message());
+        assertEquals(SubmitStatementResponse.TURN_RESOLVED, dispatcher.handleSubmitStatement(2,
+            new SubmitStatementRequest(4, first.id(), null, "")).message());
+        assertEquals(1, ReactionStore.seal(dataRoot, mapper, 4).size(), "a retry reads the same statements");
+        ReactionStore.dropAfter(dataRoot, 4);
+        assertFalse(Files.exists(dataRoot.resolve("reactions").resolve("turn-4.sealed")), "a rollback reopens it");
+        assertEquals(1, ReactionStore.load(dataRoot, mapper, 4).size(), "and keeps its statements");
+        assertTrue(dispatcher.handleSubmitStatement(2,
+            new SubmitStatementRequest(4, first.id(), FrontPage.Stance.NEXT, "")).success());
     }
 
     /**

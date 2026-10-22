@@ -3824,9 +3824,10 @@ current state alone. Each is an M5 task.
     the turn's Firsts; `TurnRollback` keeps turn T's statements and deletes later ones.
   - **Client:** `ServerGateway.submitStatement` (a write, never repeated), `FrontPagesResult.yours`,
     `ClientSession.statements`, the refusals in `client.ui.Refusals`.
-  - **A known edge:** a statement that reaches the server while the turn is resolving passes the open-turn
-    check (the scheduler moves the open turn on only after resolving) and is written after the follow-ups were
-    printed, so it is lost, like an action sent at that moment.
+  - **Sealed on reading** (2026-10-22): the resolution seals the turn as it reads its statements
+    (`ReactionStore.seal`, a `turn-N.sealed` marker), and a statement or withdrawal arriving after that is
+    refused with `TURN_RESOLVED` instead of being kept unprinted. A rollback reopens the kept turn (its seal
+    goes, its statements stay).
   - **Rebuild client and server together; no reset.**
 
 ## 7. Suggested mockup order

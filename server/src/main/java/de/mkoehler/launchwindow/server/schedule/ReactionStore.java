@@ -18,7 +18,9 @@ import java.util.stream.Stream;
  * The statements rivals give about a First ({@code ui-spec.md} &sect;4.18.1, G17), kept per turn in
  * {@code reactions/turn-N.json}, N being the open turn they were given in, and read when that turn
  * resolves. Keyed by {@code GameSeeds.rivalKey}, never by account id. Each file is rewritten whole,
- * atomically; a lock keeps a statement arriving while another is written from losing either.
+ * atomically; a lock keeps a statement arriving while another is written from losing either. The
+ * resolution seals a turn when it reads it ({@link #seal}, a {@code turn-N.sealed} marker beside the
+ * file): a statement arriving after that is refused ({@link SealedException}), not kept unprinted.
  *
  * @author Mario Koehler
  */
@@ -28,6 +30,16 @@ public final class ReactionStore {
     private static final TypeReference<Map<String, List<FrontPage.Statement>>> TYPE = new TypeReference<>() { };
 
     private ReactionStore() {
+    }
+
+    /**
+     * Thrown when a statement arrives for a turn the resolution has read already.
+     */
+    public static final class SealedException extends IOException {
+
+        SealedException(long gameTurn) {
+            super("The statements of turn " + gameTurn + " were read already.");
+        }
     }
 
     /**
@@ -55,6 +67,28 @@ public final class ReactionStore {
         synchronized (LOCK) {
             Path file = file(dataRoot, gameTurn);
             return Files.exists(file) ? new TreeMap<>(mapper.readValue(file.toFile(), TYPE)) : new TreeMap<>();
+        }
+    }
+
+    /**
+     * Seals a turn and reads its statements, as the resolution does: later statements for it are
+     * refused. A retry reads the same statements again.
+     *
+     * @param dataRoot the data root
+     * @param mapper   the JSON mapper
+     * @param gameTurn the turn
+     * @return the statements, per rival key; empty if none were given
+     * @throws IOException if the file can't be read or the marker written
+     */
+    public static Map<String, List<FrontPage.Statement>> seal(Path dataRoot, ObjectMapper mapper, long gameTurn)
+            throws IOException {
+        synchronized (LOCK) {
+            Path marker = marker(dataRoot, gameTurn);
+            Files.createDirectories(marker.getParent());
+            if (!Files.exists(marker)) {
+                Files.createFile(marker);
+            }
+            return load(dataRoot, mapper, gameTurn);
         }
     }
 
@@ -87,6 +121,7 @@ public final class ReactionStore {
     public static List<FrontPage.Statement> put(Path dataRoot, ObjectMapper mapper, long gameTurn, String key,
                                                 FrontPage.Statement statement) throws IOException {
         synchronized (LOCK) {
+            refuseSealed(dataRoot, gameTurn);
             Map<String, List<FrontPage.Statement>> all = load(dataRoot, mapper, gameTurn);
             List<FrontPage.Statement> mine = new ArrayList<>(all.getOrDefault(key, List.of()));
             mine.removeIf(s -> s.pageId().equals(statement.pageId()));
@@ -111,6 +146,7 @@ public final class ReactionStore {
     public static List<FrontPage.Statement> remove(Path dataRoot, ObjectMapper mapper, long gameTurn, String key,
                                                    String pageId) throws IOException {
         synchronized (LOCK) {
+            refuseSealed(dataRoot, gameTurn);
             Map<String, List<FrontPage.Statement>> all = load(dataRoot, mapper, gameTurn);
             List<FrontPage.Statement> mine = new ArrayList<>(all.getOrDefault(key, List.of()));
             if (!mine.removeIf(s -> s.pageId().equals(pageId))) {
@@ -128,7 +164,8 @@ public final class ReactionStore {
 
     /**
      * Deletes the statements of every turn after one, for rolling turns back: those were given against
-     * results that are being undone. The turn's own stay, so a redone turn prints the same follow-ups.
+     * results that are being undone. The turn's own stay, so a redone turn prints the same follow-ups,
+     * but it opens again, so its seal goes.
      *
      * @param dataRoot the data root
      * @param gameTurn the last turn whose statements stay
@@ -143,12 +180,26 @@ public final class ReactionStore {
             try (Stream<Path> files = Files.list(dir)) {
                 for (Path file : files.toList()) {
                     String name = file.getFileName().toString();
-                    if (name.matches("turn-\\d+\\.json")
-                        && Long.parseLong(name.substring(5, name.length() - 5)) > gameTurn) {
+                    if (!name.matches("turn-\\d+\\.(json|sealed)")) {
+                        continue;
+                    }
+                    long turn = Long.parseLong(name.substring(5, name.lastIndexOf('.')));
+                    // The kept turn opens again too: its seal goes, its statements stay.
+                    if (turn > gameTurn || turn == gameTurn && name.endsWith(".sealed")) {
                         Files.delete(file);
                     }
                 }
             }
+        }
+    }
+
+    private static Path marker(Path dataRoot, long gameTurn) {
+        return dataRoot.resolve("reactions").resolve("turn-" + gameTurn + ".sealed");
+    }
+
+    private static void refuseSealed(Path dataRoot, long gameTurn) throws SealedException {
+        if (Files.exists(marker(dataRoot, gameTurn))) {
+            throw new SealedException(gameTurn);
         }
     }
 

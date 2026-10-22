@@ -504,6 +504,9 @@ public class RequestDispatcher {
             }
             return SubmitStatementResponse.success(ReactionStore.put(dataRoot, mapper, open, key,
                 new FrontPage.Statement(request.pageId(), request.stance(), quote)));
+        } catch (ReactionStore.SealedException e) {
+            // The turn is resolving and has read its statements: this one would never be printed.
+            return SubmitStatementResponse.failure(SubmitStatementResponse.TURN_RESOLVED);
         } catch (IOException | RuntimeException e) {
             return SubmitStatementResponse.failure("Failed to keep the statement: " + e.getMessage());
         }
