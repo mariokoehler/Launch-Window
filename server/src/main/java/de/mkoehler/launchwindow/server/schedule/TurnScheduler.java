@@ -1,5 +1,8 @@
 package de.mkoehler.launchwindow.server.schedule;
 
+import java.util.Set;
+import de.mkoehler.launchwindow.content.FrontPageReactions;
+import de.mkoehler.launchwindow.rules.ReactionPrinter;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.mkoehler.launchwindow.content.CommercialClients;
@@ -262,8 +265,9 @@ public class TurnScheduler {
     /**
      * Prints the turn's front pages for the great Firsts ({@code ui-spec.md} &sect;4.18, G14) from
      * every player's turn report, which survives a retry after a crash halfway through (a player
-     * already resolved returns no events, but their report is on disk), and keeps them in
-     * {@code frontpages.json}.
+     * already resolved returns no events, but their report is on disk), and the follow-ups with the
+     * rivals' statements on the turn before's Firsts (&sect;4.18.1, G17), and keeps them all in
+     * {@code frontpages.json} at once, follow-ups first.
      *
      * @param gameTurn the turn just resolved
      * @param meta     the game's configuration, for its seed
@@ -282,9 +286,45 @@ public class TurnScheduler {
             agencies.add(new FrontPagePrinter.Agency(state.getAgencyName(), state.getDirectorName(),
                 service.turnReport(gameTurn).orElse(null)));
         }
-        List<FrontPage> pages = FrontPagePrinter.print(Math.toIntExact(gameTurn), meta.getGameSeed(), agencies, words,
-            goal -> context.catalog().goal(goal).isPresent());
+        List<FrontPage> pages = new ArrayList<>(followUps(gameTurn, meta, services, words));
+        pages.addAll(FrontPagePrinter.print(Math.toIntExact(gameTurn), meta.getGameSeed(), agencies, words,
+            goal -> context.catalog().goal(goal).isPresent()));
         FrontPageStore.keep(dataRoot, mapper, gameTurn, pages);
+    }
+
+    /**
+     * Prints the follow-ups of the turn before's Firsts from the statements given in this turn
+     * ({@code reactions/turn-N.json}), which a retry reads again, so it prints the same pages.
+     *
+     * @param gameTurn the turn just resolved
+     * @param meta     the game's configuration, for its seed
+     * @param services every player's state service, by account
+     * @param words    the Firsts' words, for the weather
+     * @return the follow-ups, maybe none
+     * @throws IOException if a file can't be read
+     */
+    private List<FrontPage> followUps(long gameTurn, GameMeta meta, Map<String, PlayerStateService> services,
+            FrontPages words) throws IOException {
+        List<FrontPage> firsts = FrontPageStore.load(dataRoot, mapper).stream()
+            .filter(p -> !p.followUp() && p.gameTurn() == gameTurn - 1).toList();
+        if (firsts.isEmpty()) {
+            return List.of();
+        }
+        Map<String, List<FrontPage.Statement>> statements = ReactionStore.load(dataRoot, mapper, gameTurn);
+        List<ReactionPrinter.Agency> agencies = new ArrayList<>();
+        for (Map.Entry<String, PlayerStateService> player : services.entrySet()) {
+            PlayerSnapshot state = player.getValue().stateBefore(gameTurn + 1).orElseThrow();
+            Map<String, FrontPage.Statement> given = new LinkedHashMap<>();
+            for (FrontPage.Statement statement : statements.getOrDefault(
+                    GameSeeds.rivalKey(meta.getGameSeed(), player.getKey()), List.of())) {
+                given.put(statement.pageId(), statement);
+            }
+            agencies.add(new ReactionPrinter.Agency(state.getAgencyName(), state.getDirectorName(),
+                ReactionPrinter.firstTurn(gameTurn + 1, state.getSeason()), Set.copyOf(state.getAchievedGoals().keySet()),
+                given));
+        }
+        return ReactionPrinter.print(Math.toIntExact(gameTurn), meta.getGameSeed(), firsts, agencies,
+            FrontPageReactions.standard(), words);
     }
 
     /**

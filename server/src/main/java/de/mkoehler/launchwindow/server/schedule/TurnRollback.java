@@ -28,6 +28,7 @@ import java.util.stream.Stream;
  * from N on are deleted, the actions N resolved go back into the journal, and the actions queued
  * later are set aside in {@code journal-rolled-back/} (they were planned against the wrong
  * results; players queue again). The turns' intelligence, contract market and publications files go too, the
+ * statements on the Firsts given after turn N (turn N's own stay, so a redo prints the same follow-ups), the
  * game result if one of the turns decided it, and the scheduler's next turn becomes N. The whole data root is zipped
  * into {@code backups/} first ({@link TurnBackups}).</p>
  *
@@ -78,6 +79,8 @@ public final class TurnRollback {
             Files.deleteIfExists(TurnScheduler.publicationsFile(dataRoot, turn));
         }
         FrontPageStore.dropFrom(dataRoot, mapper, gameTurn);
+        // Statements given in later turns answered pages that are being undone; the turn's own stay.
+        ReactionStore.dropAfter(dataRoot, gameTurn);
         Path resultFile = dataRoot.resolve(GameResult.FILE_NAME);
         if (Files.exists(resultFile) && mapper.readValue(resultFile.toFile(), GameResult.class).decidedOnTurn() >= gameTurn) {
             Files.delete(resultFile);

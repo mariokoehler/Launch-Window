@@ -1,5 +1,7 @@
 package de.mkoehler.launchwindow.server;
 
+import de.mkoehler.launchwindow.rules.ReactionPrinter;
+import de.mkoehler.launchwindow.model.FrontPage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.mkoehler.launchwindow.content.BudgetSchedule;
 import de.mkoehler.launchwindow.model.PlayerSnapshot;
@@ -15,6 +17,8 @@ import de.mkoehler.launchwindow.net.messages.ArchiveResponse;
 import de.mkoehler.launchwindow.net.messages.ArchiveUnlock;
 import de.mkoehler.launchwindow.net.messages.FrontPagesRequest;
 import de.mkoehler.launchwindow.net.messages.FrontPagesResponse;
+import de.mkoehler.launchwindow.net.messages.SubmitStatementRequest;
+import de.mkoehler.launchwindow.net.messages.SubmitStatementResponse;
 import de.mkoehler.launchwindow.net.messages.GameInfoRequest;
 import de.mkoehler.launchwindow.net.messages.TurnReportRequest;
 import de.mkoehler.launchwindow.net.messages.TurnReportResponse;
@@ -45,6 +49,7 @@ import de.mkoehler.launchwindow.rules.WinCondition;
 import de.mkoehler.launchwindow.server.accounts.AccountStore;
 import de.mkoehler.launchwindow.server.accounts.AuthResult;
 import de.mkoehler.launchwindow.server.schedule.FrontPageStore;
+import de.mkoehler.launchwindow.server.schedule.ReactionStore;
 import de.mkoehler.launchwindow.server.schedule.GameMeta;
 
 import java.io.IOException;
@@ -184,6 +189,9 @@ public class RequestDispatcher {
         }
         if (message instanceof PublishPreviewRequest request) {
             return new DispatchResult(handlePublishPreview(connectionId, request), false);
+        }
+        if (message instanceof SubmitStatementRequest request) {
+            return new DispatchResult(handleSubmitStatement(connectionId, request), false);
         }
         throw new IllegalArgumentException("Unexpected message type: " + message.getClass().getName());
     }
@@ -435,10 +443,74 @@ public class RequestDispatcher {
             if (!hasSlot(accountId)) {
                 return FrontPagesResponse.failure(ClaimSlotRequest.SLOT_CLAIM_REQUIRED);
             }
-            return FrontPagesResponse.of(FrontPageStore.load(dataRoot, mapper));
+            return FrontPagesResponse.of(FrontPageStore.load(dataRoot, mapper),
+                ReactionStore.of(dataRoot, mapper, gameInfo.openGameTurn(), rivalKey(accountId)));
         } catch (IOException | RuntimeException e) {
             return FrontPagesResponse.failure("Failed to read the front pages: " + e.getMessage());
         }
+    }
+
+    /**
+     * Handles a {@link SubmitStatementRequest} ({@code ui-spec.md} &sect;4.18.1, G17): keeps a statement
+     * about a rival's First for the open turn, or withdraws it. Only a rival may give one (not an agency
+     * that made the First, nor one that joined after it was printed), only in the turn after the First,
+     * and the quote is cleaned and checked: at most {@link FrontPage.Statement#MAX_QUOTE_LENGTH}
+     * characters, all {@link FrontPage.Statement#ALLOWED_CHARACTERS}. A No comment keeps no quote.
+     *
+     * @param connectionId the connection the request arrived on
+     * @param request      the request
+     * @return the response, with the player's statements for the open turn
+     */
+    public SubmitStatementResponse handleSubmitStatement(int connectionId, SubmitStatementRequest request) {
+        String accountId = connectionAccountIds.get(connectionId);
+        if (accountId == null) {
+            return SubmitStatementResponse.failure("Not authenticated - send a HandshakeRequest first.");
+        }
+        try {
+            if (!hasSlot(accountId)) {
+                return SubmitStatementResponse.failure(ClaimSlotRequest.SLOT_CLAIM_REQUIRED);
+            }
+            long open = gameInfo.openGameTurn();
+            if (request.gameTurn() != open) {
+                return SubmitStatementResponse.failure(SubmitStatementResponse.TURN_RESOLVED);
+            }
+            Optional<FrontPage> page = FrontPageStore.load(dataRoot, mapper).stream()
+                .filter(p -> p.id().equals(request.pageId()) && !p.followUp()).findFirst();
+            if (page.isEmpty()) {
+                return SubmitStatementResponse.failure(SubmitStatementResponse.UNKNOWN_PAGE);
+            }
+            if (page.get().gameTurn() != open - 1) {
+                return SubmitStatementResponse.failure(SubmitStatementResponse.REACTION_WINDOW_CLOSED);
+            }
+            PlayerSnapshot state = playerStateService(accountId).currentState();
+            if (!ReactionPrinter.mayReact(page.get(), Math.toIntExact(open), state.getAgencyName(),
+                    ReactionPrinter.firstTurn(open, state.getSeason()))) {
+                return SubmitStatementResponse.failure(SubmitStatementResponse.NOT_A_RIVAL);
+            }
+            String key = rivalKey(accountId);
+            if (request.stance() == null) {
+                return SubmitStatementResponse.success(ReactionStore.remove(dataRoot, mapper, open, key,
+                    request.pageId()));
+            }
+            if (!request.stance().givable()) {
+                return SubmitStatementResponse.failure(SubmitStatementResponse.INVALID_STANCE);
+            }
+            String quote = request.stance().quotable() ? FrontPage.Statement.clean(request.quote()) : "";
+            if (quote.length() > FrontPage.Statement.MAX_QUOTE_LENGTH) {
+                return SubmitStatementResponse.failure(SubmitStatementResponse.QUOTE_TOO_LONG);
+            }
+            if (!FrontPage.Statement.allowed(quote)) {
+                return SubmitStatementResponse.failure(SubmitStatementResponse.QUOTE_BAD_CHARACTERS);
+            }
+            return SubmitStatementResponse.success(ReactionStore.put(dataRoot, mapper, open, key,
+                new FrontPage.Statement(request.pageId(), request.stance(), quote)));
+        } catch (IOException | RuntimeException e) {
+            return SubmitStatementResponse.failure("Failed to keep the statement: " + e.getMessage());
+        }
+    }
+
+    private String rivalKey(String accountId) {
+        return GameSeeds.rivalKey(meta.getGameSeed(), accountId);
     }
 
     /**

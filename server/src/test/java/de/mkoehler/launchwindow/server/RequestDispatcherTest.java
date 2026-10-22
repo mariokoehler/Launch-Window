@@ -25,6 +25,9 @@ import de.mkoehler.launchwindow.net.messages.ResolveTurnNowRequest;
 import de.mkoehler.launchwindow.net.messages.ResolveTurnNowResponse;
 import de.mkoehler.launchwindow.net.messages.SubmitActionRequest;
 import de.mkoehler.launchwindow.net.messages.SubmitActionResponse;
+import de.mkoehler.launchwindow.net.messages.SubmitStatementRequest;
+import de.mkoehler.launchwindow.net.messages.SubmitStatementResponse;
+import de.mkoehler.launchwindow.persistence.PlayerSnapshotStore;
 import de.mkoehler.launchwindow.persistence.PlayerAction;
 import de.mkoehler.launchwindow.persistence.SetFundsAction;
 import de.mkoehler.launchwindow.rules.HiringPool;
@@ -33,6 +36,7 @@ import de.mkoehler.launchwindow.server.accounts.AccountStore;
 import de.mkoehler.launchwindow.server.schedule.FrontPageStore;
 import de.mkoehler.launchwindow.server.schedule.GameMeta;
 import de.mkoehler.launchwindow.server.schedule.GameResult;
+import de.mkoehler.launchwindow.server.schedule.ReactionStore;
 import de.mkoehler.launchwindow.server.schedule.SchedulerState;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -226,6 +230,78 @@ class RequestDispatcherTest {
             List.of(), List.of(new FrontPage.Achiever("OKB-1", "Chief", List.of())), List.of());
         FrontPageStore.keep(dataRoot, GameServer.createMapper(), 3, List.of(page));
         assertEquals(List.of(page), dispatcher.handleFrontPages(1, new FrontPagesRequest()).pages());
+    }
+
+    /**
+     * Verifies a statement on a rival's First (ui-spec.md 4.18.1, G17): refused for the agency that made
+     * it, a late joiner, a page from another turn, a stale turn, an unknown page, the server's own stance
+     * and a bad quote; kept, changed and withdrawn for a rival, and sent back with the front pages, keyed
+     * by the rival key in the turn's file.
+     */
+    @Test
+    void aRivalGivesChangesAndWithdrawsAStatement(@TempDir Path dataRoot) throws Exception {
+        AccountStore store = createAccountStore(dataRoot);
+        RequestDispatcher dispatcher = dispatcher(store, dataRoot, false);
+        dispatcher.handleHandshake(1, new HandshakeRequest(AppVersion.getVersion(), "mario", "hunter2"));
+        dispatcher.handleClaimSlot(1, new ClaimSlotRequest(Archetype.SOVIET, "OKB-1", "Chief"));
+        dispatcher.handleHandshake(2, new HandshakeRequest(AppVersion.getVersion(), "anna", "hunter2"));
+        dispatcher.handleClaimSlot(2, new ClaimSlotRequest(Archetype.NASA, "Kestrel", "Anna"));
+        dispatcher.handleHandshake(3, new HandshakeRequest(AppVersion.getVersion(), "late", "hunter2"));
+        dispatcher.handleClaimSlot(3, new ClaimSlotRequest(Archetype.NASA, "Latecomer", "Lou"));
+        for (String login : List.of("mario", "anna")) {
+            // Playing since turn 1: three turns resolved before the open turn 4.
+            PlayerSnapshotStore snapshots = new PlayerSnapshotStore(
+                dataRoot.resolve("players").resolve(store.findByLogin(login).orElseThrow().getId()), mapper);
+            PlayerSnapshot state = snapshots.load().orElseThrow();
+            state.setSeason(4);
+            snapshots.save(3, state, null);
+        }
+        SchedulerState open = new SchedulerState();
+        open.setNextGameTurn(4);
+        open.setLastResolvedDate(LocalDate.of(2026, 10, 9));
+        mapper.writeValue(dataRoot.resolve("scheduler-state.json").toFile(), open);
+        FrontPage first = new FrontPage("3-earth-orbit-satellite", "earth-orbit-satellite", 3, "sat-signal", "",
+            List.of(), List.of(new FrontPage.Achiever("OKB-1", "Chief", List.of())), List.of());
+        FrontPage older = new FrontPage("2-human-in-space", "human-in-space", 2, "space-first-flight", "",
+            List.of(), List.of(new FrontPage.Achiever("OKB-1", "Chief", List.of())), List.of());
+        FrontPageStore.keep(dataRoot, mapper, 2, List.of(older));
+        FrontPageStore.keep(dataRoot, mapper, 3, List.of(first));
+
+        assertEquals(SubmitStatementResponse.NOT_A_RIVAL, dispatcher.handleSubmitStatement(1,
+            new SubmitStatementRequest(4, first.id(), FrontPage.Stance.POLITE, "")).message());
+        assertEquals(SubmitStatementResponse.NOT_A_RIVAL, dispatcher.handleSubmitStatement(3,
+            new SubmitStatementRequest(4, first.id(), FrontPage.Stance.POLITE, "")).message());
+        assertEquals(SubmitStatementResponse.TURN_RESOLVED, dispatcher.handleSubmitStatement(2,
+            new SubmitStatementRequest(3, first.id(), FrontPage.Stance.POLITE, "")).message());
+        assertEquals(SubmitStatementResponse.UNKNOWN_PAGE, dispatcher.handleSubmitStatement(2,
+            new SubmitStatementRequest(4, "3-nothing", FrontPage.Stance.POLITE, "")).message());
+        assertEquals(SubmitStatementResponse.REACTION_WINDOW_CLOSED, dispatcher.handleSubmitStatement(2,
+            new SubmitStatementRequest(4, older.id(), FrontPage.Stance.POLITE, "")).message());
+        assertEquals(SubmitStatementResponse.INVALID_STANCE, dispatcher.handleSubmitStatement(2,
+            new SubmitStatementRequest(4, first.id(), FrontPage.Stance.DECLINED, "")).message());
+        assertEquals(SubmitStatementResponse.QUOTE_TOO_LONG, dispatcher.handleSubmitStatement(2,
+            new SubmitStatementRequest(4, first.id(), FrontPage.Stance.POLITE, "a".repeat(141))).message());
+        assertEquals(SubmitStatementResponse.QUOTE_BAD_CHARACTERS, dispatcher.handleSubmitStatement(2,
+            new SubmitStatementRequest(4, first.id(), FrontPage.Stance.POLITE, "Hi {quote}")).message());
+
+        SubmitStatementResponse kept = dispatcher.handleSubmitStatement(2,
+            new SubmitStatementRequest(4, first.id(), FrontPage.Stance.POLITE, "  Well   flown.  "));
+        assertTrue(kept.success(), kept.message());
+        assertEquals(List.of(new FrontPage.Statement(first.id(), FrontPage.Stance.POLITE, "Well flown.")), kept.yours());
+        SubmitStatementResponse changed = dispatcher.handleSubmitStatement(2,
+            new SubmitStatementRequest(4, first.id(), FrontPage.Stance.NO_COMMENT, "dropped"));
+        assertEquals(List.of(new FrontPage.Statement(first.id(), FrontPage.Stance.NO_COMMENT, "")), changed.yours());
+        assertEquals(changed.yours(), dispatcher.handleFrontPages(2, new FrontPagesRequest()).yours());
+        assertTrue(dispatcher.handleFrontPages(1, new FrontPagesRequest()).yours().isEmpty(), "never another's");
+        String anna = store.findByLogin("anna").orElseThrow().getId();
+        assertEquals(List.of(GameSeeds.rivalKey(ServerTestGames.meta(false).getGameSeed(), anna)),
+            List.copyOf(ReactionStore.load(dataRoot, mapper, 4).keySet()));
+        assertFalse(Files.readString(dataRoot.resolve("reactions").resolve("turn-4.json")).contains(anna));
+
+        SubmitStatementResponse withdrawn = dispatcher.handleSubmitStatement(2,
+            new SubmitStatementRequest(4, first.id(), null, ""));
+        assertTrue(withdrawn.success());
+        assertTrue(withdrawn.yours().isEmpty());
     }
 
     /**

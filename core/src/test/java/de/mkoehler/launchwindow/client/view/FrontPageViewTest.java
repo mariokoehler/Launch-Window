@@ -2,12 +2,16 @@ package de.mkoehler.launchwindow.client.view;
 
 import de.mkoehler.launchwindow.content.ContentCatalog;
 import de.mkoehler.launchwindow.content.ContentPackLoader;
+import de.mkoehler.launchwindow.content.FrontPageReactions;
 import de.mkoehler.launchwindow.content.FrontPages;
 import de.mkoehler.launchwindow.model.FrontPage;
+import de.mkoehler.launchwindow.rules.ReactionPrinter;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -97,5 +101,43 @@ class FrontPageViewTest {
         assertEquals("VII", FrontPageView.roman(7));
         assertEquals("XIV", FrontPageView.roman(14));
         assertEquals("XLIX", FrontPageView.roman(49));
+    }
+
+    @Test
+    void aFollowUpTellsEveryStatementAsOneArticle() {
+        FrontPageReactions words = FrontPageReactions.load(Path.of("..", "assets", "content", FrontPageReactions.FILE));
+        List<ReactionPrinter.Agency> agencies = List.of(
+            new ReactionPrinter.Agency("Orion Spaceworks", "Ana Reyes", 1, Set.of(), Map.of()),
+            new ReactionPrinter.Agency("Kestrel Aerospace", "Moses Okafor", 1, Set.of("earth-orbit-satellite"),
+                Map.of(ORBIT.id(), new FrontPage.Statement(ORBIT.id(), FrontPage.Stance.ENTHUSIASTIC,
+                    "Today belongs to everyone who has ever looked up"))),
+            new ReactionPrinter.Agency("Northern Rocket Bureau", "Ellen Hale", 1, Set.of("human-in-space"),
+                Map.of(ORBIT.id(), new FrontPage.Statement(ORBIT.id(), FrontPage.Stance.NEXT,
+                    "Enjoy the view while it lasts. We will be up there before the year is out!"))),
+            new ReactionPrinter.Agency("Union Rocket Institute", "Pavel Brandt", 1, Set.of("human-in-space"),
+                Map.of(ORBIT.id(), new FrontPage.Statement(ORBIT.id(), FrontPage.Stance.DOWNPLAY, ""))),
+            new ReactionPrinter.Agency("Baltic Star Agency", "Rosa Ortiz", 1, Set.of(), Map.of()));
+        FrontPage followUp = ReactionPrinter.print(27, 99L, List.of(ORBIT), agencies, words, PAGES).get(0);
+        FrontPageView.Page page = FrontPageView.ofReactions(followUp, List.of(SATELLITE, ORBIT, followUp), words, PAGES,
+            goal -> true, NAMES).orElseThrow();
+        String article = String.join("\n", page.paragraphs());
+        assertTrue(article.startsWith("SUMMER 1961 — "), article);
+        assertTrue(article.contains("“Today belongs to everyone who has ever looked up.”"), article);
+        assertTrue(article.contains("“Enjoy the view while it lasts. We will be up there before the year is out!”"),
+            article);
+        assertTrue(article.indexOf("Kestrel Aerospace") < article.indexOf("Northern Rocket Bureau")
+            && article.indexOf("Northern Rocket Bureau") < article.indexOf("Union Rocket Institute"), article);
+        assertTrue(article.contains("Baltic Star Agency"), "the silent rival is named");
+        assertFalse(article.contains("{"), article);
+        assertTrue(page.brief().isEmpty());
+        assertEquals(1, page.droppable());
+        assertEquals(page.headline().toUpperCase(), page.headline());
+    }
+
+    @Test
+    void aQuoteGetsCurlyQuotesAndAFullStop() {
+        assertEquals("“We will follow.”", FrontPageView.quoted("We will follow"));
+        assertEquals("“Why not us?”", FrontPageView.quoted("Why not us?"));
+        assertEquals("", FrontPageView.quoted(""));
     }
 }

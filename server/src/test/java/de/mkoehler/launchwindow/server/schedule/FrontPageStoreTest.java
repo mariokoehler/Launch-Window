@@ -31,6 +31,19 @@ class FrontPageStoreTest {
         assertFalse(Files.exists(dataRoot.resolve(FrontPageStore.FILE_NAME)));
     }
 
+    /** A file printed before the follow-ups (G17) still loads: its pages read as Firsts. */
+    @Test
+    void aFileFromBeforeTheFollowUpsStillLoads(@TempDir Path dataRoot) throws IOException {
+        java.nio.file.Files.writeString(dataRoot.resolve(FrontPageStore.FILE_NAME), """
+            {"pages":[{"id":"11-earth-orbit-satellite","goalId":"earth-orbit-satellite","gameTurn":11,
+            "storyId":"sat-signal","weather":"","foldedGoalIds":[],"achievers":[{"agencyName":"Orion Spaceworks",
+            "directorName":"Ana Reyes","crewNames":[]}],"rivals":[]}]}""");
+        FrontPage page = FrontPageStore.load(dataRoot, mapper).get(0);
+        assertEquals(FrontPage.Kind.FIRST, page.kind());
+        assertTrue(page.reactions().isEmpty());
+        assertTrue(page.tells("earth-orbit-satellite"));
+    }
+
     @Test
     void aRetriedTurnReplacesItsPagesAndRollingBackDropsThem(@TempDir Path dataRoot) throws IOException {
         FrontPage satellite = page(11, "earth-orbit-satellite");

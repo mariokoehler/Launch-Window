@@ -1,6 +1,7 @@
 package de.mkoehler.launchwindow.client.view;
 
 import de.mkoehler.launchwindow.content.ContentCatalog;
+import de.mkoehler.launchwindow.content.FrontPageReactions;
 import de.mkoehler.launchwindow.content.FrontPages;
 import de.mkoehler.launchwindow.content.Goal;
 import de.mkoehler.launchwindow.model.FrontPage;
@@ -8,9 +9,11 @@ import de.mkoehler.launchwindow.model.GameDate;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -92,6 +95,114 @@ public final class FrontPageView {
             found.map(s -> fill(s.deck(), tokens)).orElse(""), fill(first.get().caption(), tokens), first.get().brief(),
             paragraphs, droppable, folio, date.label().toUpperCase(Locale.ROOT), page.weather(),
             race(page, all, words, inPack, names), "frontpage/" + page.goalId() + ".jpg"));
+    }
+
+    /**
+     * Builds a follow-up page's words ({@code ui-spec.md} &sect;4.18.1): the story picked for the mood, then
+     * every statement as the server laid it out, then the closing paragraphs, which may be dropped to fit.
+     *
+     * @param page      the printed follow-up
+     * @param all       every page printed in the game, for the race box
+     * @param reactions the follow-ups' words
+     * @param words     the Firsts' words, for the photo's caption and the race order
+     * @param inPack    whether the game's pack has a goal
+     * @param names     a goal's display name
+     * @return the words, or empty if the words files don't know the page's First
+     */
+    public static Optional<Page> ofReactions(FrontPage page, List<FrontPage> all, FrontPageReactions reactions,
+                                             FrontPages words, java.util.function.Predicate<String> inPack,
+                                             Function<String, String> names) {
+        Optional<FrontPages.First> first = words.first(page.goalId());
+        Optional<FrontPageReactions.First> text = reactions.first(page.goalId());
+        if (first.isEmpty() || text.isEmpty()) {
+            return Optional.empty();
+        }
+        Optional<FrontPageReactions.Story> found = text.get().story(page.storyId());
+        Map<String, String> tokens = new HashMap<>(tokens(page, names));
+        tokens.put("season", GameDate.ofTurn(page.gameTurn()).label().toUpperCase(Locale.ROOT));
+        long spoke = page.reactions().stream().filter(r -> r.stance() != FrontPage.Stance.DECLINED).count();
+        boolean one = spoke == 1;
+        String headline = found.map(s -> fill(s.headline(), tokens)).orElse(names.apply(page.goalId()));
+        String shortHeadline = found.map(s -> fill(s.headlineShort(), tokens)).orElse(headline);
+        String deck = found.map(s -> fill(one && !isBlank(s.deckOne()) ? s.deckOne() : s.deck(), tokens)).orElse("");
+        List<String> paragraphs = new ArrayList<>();
+        found.ifPresent(s -> (one && !s.leadOne().isEmpty() ? s.leadOne() : s.lead())
+            .forEach(p -> paragraphs.add(fill(p, tokens))));
+        paragraphs.addAll(statements(page, reactions, text.get(), tokens));
+        text.get().close().forEach(p -> paragraphs.add(fill(p, tokens)));
+        GameDate date = GameDate.ofTurn(page.gameTurn());
+        String folio = "VOL. " + roman(date.year() - GameDate.START_YEAR + 1) + " · No. " + page.gameTurn();
+        return Optional.of(new Page(headline.toUpperCase(Locale.ROOT), shortHeadline.toUpperCase(Locale.ROOT), deck,
+            fill(first.get().caption(), tokens), List.of(), paragraphs, text.get().close().size(), folio,
+            date.label().toUpperCase(Locale.ROOT), page.weather(), race(page, all, words, inPack, names),
+            "frontpage/" + page.goalId() + ".jpg"));
+    }
+
+    /**
+     * Returns a follow-up's statements as paragraphs: one per statement told on its own, with the
+     * sentence leading into it, and one per run of statements sharing an "also" or "declined" line.
+     *
+     * @param page      the follow-up
+     * @param reactions the follow-ups' words
+     * @param first     its First's words, for the detail clauses
+     * @param base      the page's tokens
+     * @return the paragraphs
+     */
+    static List<String> statements(FrontPage page, FrontPageReactions reactions, FrontPageReactions.First first,
+                                   Map<String, String> base) {
+        List<String> paragraphs = new ArrayList<>();
+        List<FrontPage.Reaction> all = page.reactions();
+        int i = 0;
+        while (i < all.size()) {
+            FrontPage.Reaction reaction = all.get(i);
+            String line = reactions.text(reaction.lineId()).orElse("");
+            if (reactions.shared(reaction.lineId())) {
+                List<String> names = new ArrayList<>();
+                int j = i;
+                while (j < all.size() && Objects.equals(all.get(j).lineId(), reaction.lineId())) {
+                    names.add(all.get(j).agencyName());
+                    j++;
+                }
+                Map<String, String> tokens = new HashMap<>(base);
+                tokens.put("rivals", join(names));
+                paragraphs.add(fill(line, tokens));
+                i = j;
+                continue;
+            }
+            Map<String, String> tokens = new HashMap<>(base);
+            tokens.put("rival", reaction.agencyName());
+            tokens.put("rivalDirector", reaction.directorName());
+            tokens.put("detail", reactions.text(reaction.detailId()).orElse(""));
+            String told = fill(line, tokens);
+            String link = reactions.text(reaction.linkId()).map(l -> fill(l, tokens) + " ").orElse("");
+            // The quote goes in last, so a player's words are never read as a token.
+            paragraphs.add(link + told.replace("{quote}", quoted(reaction.quote())));
+            i++;
+        }
+        return paragraphs;
+    }
+
+    /**
+     * Sets a player's quote as the paper prints it: in curly quotes, ending in a full stop unless it
+     * ends in other punctuation.
+     *
+     * @param quote the quote
+     * @return the printed quote
+     */
+    static String quoted(String quote) {
+        String text = quote == null ? "" : quote.strip();
+        if (text.isEmpty()) {
+            return "";
+        }
+        char last = text.charAt(text.length() - 1);
+        if (".!?…".indexOf(last) < 0) {
+            text = text + ".";
+        }
+        return "“" + text + "”";
+    }
+
+    private static boolean isBlank(String text) {
+        return text == null || text.isBlank();
     }
 
     /**

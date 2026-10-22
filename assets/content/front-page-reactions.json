@@ -1,0 +1,891 @@
+{
+  "_comment": "The follow-up pages, 'The world reacts' (ui-spec.md 4.18.1, G17): what the paper prints the turn after a First, from the rivals' statements. Our own text. Every id is stored in printed pages: never rename or reuse one. A First's stories: one or more per mood (GRACIOUS, CHALLENGE, MIXED, DISMISSIVE, SILENT); headlines read with one agency or two in {agency} (a tie), so no possessives of it; deckOne and leadOne serve a single statement (MIXED always has two). Details: public facts only (the goals an agency holds), each starting ', ' and ending ',', set right after {rival}. Stance lines: {detail} right after {rival}; quoted lines end in {quote}, which the client fills last, in curly quotes. Tokens: {agency}, {director}, {season}, {commander}, {crew} (the First's makers and flight), {rival}, {rivalDirector}, {detail}, {quote}, and {rivals} in 'also' and 'declined' lines. FrontPageReactionsTest holds the rules and the fit.",
+  "firsts": [
+    {
+      "goal": "earth-orbit-satellite",
+      "before": null,
+      "stories": [
+        {
+          "id": "r-sat-gracious",
+          "mood": "GRACIOUS",
+          "headline": "Rivals salute the new moon",
+          "headlineShort": "Rivals salute satellite",
+          "deck": "Congratulations pour in for {agency} as the first satellite circles the Earth",
+          "deckOne": "A rival sends its congratulations to {agency} on the first satellite",
+          "lead": [
+            "{season} \u2014 The world's first artificial satellite is still circling the Earth, and the agencies racing {agency} into space have been quick to send their congratulations."
+          ],
+          "leadOne": [
+            "{season} \u2014 The world's first artificial satellite is still circling the Earth, and the first word from a rival agency was a generous one."
+          ]
+        },
+        {
+          "id": "r-sat-challenge",
+          "mood": "CHALLENGE",
+          "headline": "Rivals vow to follow the satellite into orbit",
+          "headlineShort": "Rivals vow to follow",
+          "deck": "Congratulations for {agency}, and a race declared: the other agencies say their own satellites are close",
+          "deckOne": "Congratulations for {agency}, and a promise from a rival to follow",
+          "lead": [
+            "{season} \u2014 A satellite has been in orbit for a season now, and the agencies left on the ground have made one thing clear: they do not intend to stay there."
+          ],
+          "leadOne": [
+            "{season} \u2014 A satellite has been in orbit for a season now, and at least one agency left on the ground has made it clear that it does not intend to stay there."
+          ]
+        },
+        {
+          "id": "r-sat-mixed",
+          "mood": "MIXED",
+          "headline": "Praise and scorn for the first satellite",
+          "headlineShort": "Praise and scorn",
+          "deck": "Some rivals congratulate {agency}; others say a radio in the sky proves little",
+          "deckOne": "Some rivals congratulate {agency}; others say a radio in the sky proves little",
+          "lead": [
+            "{season} \u2014 The first satellite has divided the agencies racing {agency}. Some sent warm congratulations; others say a beeping radio in the sky proves little."
+          ],
+          "leadOne": []
+        },
+        {
+          "id": "r-sat-dismissive",
+          "mood": "DISMISSIVE",
+          "headline": "Rivals shrug at the satellite",
+          "headlineShort": "Rivals shrug",
+          "deck": "{agency} put the first satellite in orbit. The other agencies say it changes nothing",
+          "deckOne": "{agency} put the first satellite in orbit. A rival says it changes nothing",
+          "lead": [
+            "{season} \u2014 If the agencies racing {agency} were worried by the first satellite, they did not show it this week."
+          ],
+          "leadOne": [
+            "{season} \u2014 If the first satellite worried the agencies racing {agency}, the first of them to speak did not show it."
+          ]
+        },
+        {
+          "id": "r-sat-silent",
+          "mood": "SILENT",
+          "headline": "Silence greets the satellite",
+          "headlineShort": "Silence from rivals",
+          "deck": "The world talks of nothing else, but the other agencies will not",
+          "deckOne": "The world talks of nothing else, but a rival agency will not",
+          "lead": [
+            "{season} \u2014 The first satellite has been the talk of every newsroom and every kitchen table. The agencies racing {agency}, though, have chosen to say nothing."
+          ],
+          "leadOne": [
+            "{season} \u2014 The first satellite has been the talk of every newsroom and every kitchen table. The first rival agency we asked about it, though, chose to say nothing."
+          ]
+        }
+      ],
+      "details": {
+        "MATCHED": [
+          {
+            "id": "r-sat-matched-1",
+            "text": ", which has since put a satellite of its own in orbit,"
+          },
+          {
+            "id": "r-sat-matched-2",
+            "text": ", whose own satellite reached orbit only this season,"
+          }
+        ],
+        "HELD_BEFORE": [
+          {
+            "id": "r-sat-held-1",
+            "text": ", which has already flown rockets of its own,"
+          },
+          {
+            "id": "r-sat-held-2",
+            "text": ", whose own rockets have already reached the upper air,"
+          }
+        ],
+        "LACKS_BEFORE": [
+          {
+            "id": "r-sat-lacks-1",
+            "text": ", which has yet to fly anything of note,"
+          },
+          {
+            "id": "r-sat-lacks-2",
+            "text": ", whose own rockets have yet to leave the ground,"
+          }
+        ]
+      },
+      "close": [
+        "Whatever was said in public, the next contest is already plain: a human being in space."
+      ]
+    },
+    {
+      "goal": "human-in-space",
+      "before": "earth-orbit-satellite",
+      "stories": [
+        {
+          "id": "r-space-gracious",
+          "mood": "GRACIOUS",
+          "headline": "Rivals salute the first flight into space",
+          "headlineShort": "Rivals salute first flight",
+          "deck": "Warm words for {agency} and for {commander}, the first person in space",
+          "deckOne": "A rival sends warm words to {agency} and to {commander}, the first person in space",
+          "lead": [
+            "{season} \u2014 A season after {commander} rode a rocket above the atmosphere and came home safely, the agencies racing {agency} have had their say. They were generous."
+          ],
+          "leadOne": [
+            "{season} \u2014 A season after {commander} rode a rocket above the atmosphere and came home safely, the first rival agency to speak was generous."
+          ]
+        },
+        {
+          "id": "r-space-challenge",
+          "mood": "CHALLENGE",
+          "headline": "After the first spaceflight, a promise: we will follow",
+          "headlineShort": "Rivals promise to follow",
+          "deck": "The agencies racing {agency} congratulate {commander}, and say their own pilots will follow",
+          "deckOne": "A rival congratulates {commander}, and says its own pilots will follow",
+          "lead": [
+            "{season} \u2014 The first person to reach space came home a hero. The agencies racing {agency} have spent the season since congratulating {commander}, and promising, one after another, that their own pilots will follow."
+          ],
+          "leadOne": [
+            "{season} \u2014 The first person to reach space came home a hero, and the first rival agency to speak congratulated {commander} with one eye on its own launch pad."
+          ]
+        },
+        {
+          "id": "r-space-mixed",
+          "mood": "MIXED",
+          "headline": "The first spaceflight: a triumph, or a stunt?",
+          "headlineShort": "Triumph, or stunt?",
+          "deck": "The rivals of {agency} are divided over the first flight into space",
+          "deckOne": "The rivals of {agency} are divided over the first flight into space",
+          "lead": [
+            "{season} \u2014 Was it the start of a new age, or a few minutes of headlines? The agencies racing {agency} could not agree this week on what the first flight into space had proved."
+          ],
+          "leadOne": []
+        },
+        {
+          "id": "r-space-dismissive",
+          "mood": "DISMISSIVE",
+          "headline": "Rivals unmoved by the first spaceflight",
+          "headlineShort": "Rivals unmoved",
+          "deck": "The other agencies say a flight above the atmosphere proves little",
+          "deckOne": "A rival says a flight above the atmosphere proves little",
+          "lead": [
+            "{season} \u2014 Crowds cheered {commander} home from space. At the agencies racing {agency}, the cheering was harder to hear."
+          ],
+          "leadOne": [
+            "{season} \u2014 Crowds cheered {commander} home from space. At the first rival agency to speak, the cheering was harder to hear."
+          ]
+        },
+        {
+          "id": "r-space-silent",
+          "mood": "SILENT",
+          "headline": "No word from rivals on the first spaceflight",
+          "headlineShort": "No word from rivals",
+          "deck": "The other agencies will not discuss the first person in space",
+          "deckOne": "A rival agency will not discuss the first person in space",
+          "lead": [
+            "{season} \u2014 {commander} has been to space and back, and the world wants to know what the other agencies make of it. They are not saying."
+          ],
+          "leadOne": [
+            "{season} \u2014 {commander} has been to space and back, and the world wants to know what the other agencies make of it. The first one we asked would not say."
+          ]
+        }
+      ],
+      "details": {
+        "MATCHED": [
+          {
+            "id": "r-space-matched-1",
+            "text": ", which has since sent a pilot of its own into space,"
+          },
+          {
+            "id": "r-space-matched-2",
+            "text": ", whose own pilot reached space only this season,"
+          }
+        ],
+        "HELD_BEFORE": [
+          {
+            "id": "r-space-held-1",
+            "text": ", which already has a satellite of its own in orbit,"
+          },
+          {
+            "id": "r-space-held-2",
+            "text": ", whose own satellite has been circling the Earth for some time,"
+          }
+        ],
+        "LACKS_BEFORE": [
+          {
+            "id": "r-space-lacks-1",
+            "text": ", still without a satellite of its own,"
+          },
+          {
+            "id": "r-space-lacks-2",
+            "text": ", which has yet to put anything at all in orbit,"
+          }
+        ]
+      },
+      "close": [
+        "Whatever was said in public, the next contest is already plain: a full orbit of the Earth."
+      ]
+    },
+    {
+      "goal": "human-in-orbit",
+      "before": "human-in-space",
+      "stories": [
+        {
+          "id": "r-orbit-gracious",
+          "mood": "GRACIOUS",
+          "headline": "Rivals salute the first orbit",
+          "headlineShort": "Salute for first orbit",
+          "deck": "Congratulations for {agency} and for {crew}, the first to circle the Earth",
+          "deckOne": "A rival congratulates {crew}, the first to circle the Earth",
+          "lead": [
+            "{season} \u2014 Around the world in an hour and a half: the first orbital flight has drawn praise from every quarter, the agencies racing {agency} among them."
+          ],
+          "leadOne": [
+            "{season} \u2014 Around the world in an hour and a half: the first orbital flight has drawn praise from every quarter, and one of the agencies racing {agency} has added its own."
+          ]
+        },
+        {
+          "id": "r-orbit-challenge",
+          "mood": "CHALLENGE",
+          "headline": "After the first orbit, rivals promise to catch up",
+          "headlineShort": "Rivals promise to catch up",
+          "deck": "The agencies racing {agency} say their own crews will circle the Earth before long",
+          "deckOne": "A rival says its own crew will circle the Earth before long",
+          "lead": [
+            "{season} \u2014 The first orbital flight is over, and the race has a new pace. The other agencies spent the season insisting that the gap is smaller than it looks."
+          ],
+          "leadOne": [
+            "{season} \u2014 The first orbital flight is over, and the race has a new pace. The first rival agency to speak insisted that the gap is smaller than it looks."
+          ]
+        },
+        {
+          "id": "r-orbit-mixed",
+          "mood": "MIXED",
+          "headline": "Rivals split over the first orbit",
+          "headlineShort": "Rivals split",
+          "deck": "Praise for {crew} from some rivals; from others, a shrug",
+          "deckOne": "Praise for {crew} from some rivals; from others, a shrug",
+          "lead": [
+            "{season} \u2014 Nobody disputes that {crew} went around the world. Whether it matters as much as {agency} says is another question, and the other agencies gave very different answers this week."
+          ],
+          "leadOne": []
+        },
+        {
+          "id": "r-orbit-dismissive",
+          "mood": "DISMISSIVE",
+          "headline": "The first orbit? Rivals are not impressed",
+          "headlineShort": "Rivals not impressed",
+          "deck": "The other agencies say circling the Earth is no great leap",
+          "deckOne": "A rival says circling the Earth is no great leap",
+          "lead": [
+            "{season} \u2014 {agency} may have flown the first orbit, but to hear the other agencies this week, it was nothing much."
+          ],
+          "leadOne": [
+            "{season} \u2014 {agency} may have flown the first orbit, but to hear the first rival agency to speak this week, it was nothing much."
+          ]
+        },
+        {
+          "id": "r-orbit-silent",
+          "mood": "SILENT",
+          "headline": "Rivals silent on the first orbit",
+          "headlineShort": "Rivals silent",
+          "deck": "The world followed the first orbit; the other agencies will not discuss it",
+          "deckOne": "The world followed the first orbit; a rival agency will not discuss it",
+          "lead": [
+            "{season} \u2014 Millions followed the first orbital flight on the radio. The agencies racing {agency} followed it too, no doubt, but they are not saying what they made of it."
+          ],
+          "leadOne": [
+            "{season} \u2014 Millions followed the first orbital flight on the radio. The first rival agency we asked would not say what it made of it."
+          ]
+        }
+      ],
+      "details": {
+        "MATCHED": [
+          {
+            "id": "r-orbit-matched-1",
+            "text": ", which has since flown an orbit of its own,"
+          },
+          {
+            "id": "r-orbit-matched-2",
+            "text": ", whose own crew circled the Earth only this season,"
+          }
+        ],
+        "HELD_BEFORE": [
+          {
+            "id": "r-orbit-held-1",
+            "text": ", which has already sent a pilot into space,"
+          },
+          {
+            "id": "r-orbit-held-2",
+            "text": ", whose own pilots have already been to space and back,"
+          }
+        ],
+        "LACKS_BEFORE": [
+          {
+            "id": "r-orbit-lacks-1",
+            "text": ", which has yet to send anyone into space,"
+          },
+          {
+            "id": "r-orbit-lacks-2",
+            "text": ", still waiting to send its first pilot into space,"
+          }
+        ]
+      },
+      "close": [
+        "Whatever was said in public, the next contest is already plain, and it is almost four hundred thousand kilometres away: the Moon."
+      ]
+    },
+    {
+      "goal": "crewed-lunar-flyby",
+      "before": "human-in-orbit",
+      "stories": [
+        {
+          "id": "r-flyby-gracious",
+          "mood": "GRACIOUS",
+          "headline": "Rivals salute the first crew around the Moon",
+          "headlineShort": "Salute for Moon crew",
+          "deck": "Congratulations for {agency} and for {crew}, the first people to fly around the Moon",
+          "deckOne": "A rival congratulates {crew}, the first people to fly around the Moon",
+          "lead": [
+            "{season} \u2014 For the first time, people have seen the far side of the Moon with their own eyes, and the agencies racing {agency} have been generous in their praise."
+          ],
+          "leadOne": [
+            "{season} \u2014 For the first time, people have seen the far side of the Moon with their own eyes, and the first rival agency to speak was generous in its praise."
+          ]
+        },
+        {
+          "id": "r-flyby-challenge",
+          "mood": "CHALLENGE",
+          "headline": "After the Moon flight, rivals look to the landing",
+          "headlineShort": "Rivals look to the landing",
+          "deck": "The agencies racing {agency} congratulate {crew}, and set their sights on the surface",
+          "deckOne": "A rival congratulates {crew}, and sets its sights on the surface",
+          "lead": [
+            "{season} \u2014 The first crew has flown around the Moon and come home. The other agencies have congratulated {crew}, and pointed out that nobody has landed yet."
+          ],
+          "leadOne": [
+            "{season} \u2014 The first crew has flown around the Moon and come home. The first rival agency to speak congratulated {crew}, and pointed out that nobody has landed yet."
+          ]
+        },
+        {
+          "id": "r-flyby-mixed",
+          "mood": "MIXED",
+          "headline": "The first Moon flight divides the rivals",
+          "headlineShort": "Moon flight divides rivals",
+          "deck": "Some call it the greatest voyage in history; others, a long way to go to look",
+          "deckOne": "Some call it the greatest voyage in history; others, a long way to go to look",
+          "lead": [
+            "{season} \u2014 The first crew to fly around the Moon came home to a hero's welcome. Among the agencies racing {agency}, though, the welcome was mixed."
+          ],
+          "leadOne": []
+        },
+        {
+          "id": "r-flyby-dismissive",
+          "mood": "DISMISSIVE",
+          "headline": "Rivals unimpressed by the Moon flight",
+          "headlineShort": "Rivals unimpressed",
+          "deck": "Going round is not landing, the other agencies say",
+          "deckOne": "Going round is not landing, a rival says",
+          "lead": [
+            "{season} \u2014 The first crew has flown around the Moon, but the agencies racing {agency} have a short answer for anyone who asks about it: going round is not landing."
+          ],
+          "leadOne": [
+            "{season} \u2014 The first crew has flown around the Moon, but the first rival agency to speak had a short answer: going round is not landing."
+          ]
+        },
+        {
+          "id": "r-flyby-silent",
+          "mood": "SILENT",
+          "headline": "No comment on the Moon flight",
+          "headlineShort": "No comment from rivals",
+          "deck": "The other agencies will not discuss the first crew to fly around the Moon",
+          "deckOne": "A rival agency will not discuss the first crew to fly around the Moon",
+          "lead": [
+            "{season} \u2014 The pictures from around the Moon have been printed in every paper in the world. The agencies racing {agency} will not say a word about them."
+          ],
+          "leadOne": [
+            "{season} \u2014 The pictures from around the Moon have been printed in every paper in the world. The first rival agency we asked would not say a word about them."
+          ]
+        }
+      ],
+      "details": {
+        "MATCHED": [
+          {
+            "id": "r-flyby-matched-1",
+            "text": ", which has since sent a crew around the Moon itself,"
+          },
+          {
+            "id": "r-flyby-matched-2",
+            "text": ", whose own crew rounded the Moon only this season,"
+          }
+        ],
+        "HELD_BEFORE": [
+          {
+            "id": "r-flyby-held-1",
+            "text": ", which already has crews flying in Earth orbit,"
+          },
+          {
+            "id": "r-flyby-held-2",
+            "text": ", whose own crews have already circled the Earth,"
+          }
+        ],
+        "LACKS_BEFORE": [
+          {
+            "id": "r-flyby-lacks-1",
+            "text": ", which has yet to put a crew in orbit,"
+          },
+          {
+            "id": "r-flyby-lacks-2",
+            "text": ", still some way from its first orbital flight,"
+          }
+        ]
+      },
+      "close": [
+        "Whatever was said in public, only one contest is left, and everyone knows what it is: a landing."
+      ]
+    },
+    {
+      "goal": "crewed-lunar-landing",
+      "before": "crewed-lunar-flyby",
+      "stories": [
+        {
+          "id": "r-landing-gracious",
+          "mood": "GRACIOUS",
+          "headline": "The world, and the rivals, salute the Moon landing",
+          "headlineShort": "Rivals salute the landing",
+          "deck": "Congratulations for {agency} and for {crew}, the crew of the first Moon landing",
+          "deckOne": "A rival congratulates {crew}, the crew of the first Moon landing",
+          "lead": [
+            "{season} \u2014 The race is over, and it ended in a footprint. The agencies that ran against {agency} have spent the season since the landing saying, with one voice, that it was well won."
+          ],
+          "leadOne": [
+            "{season} \u2014 The race is over, and it ended in a footprint. The first rival agency to speak said that it was well won."
+          ]
+        },
+        {
+          "id": "r-landing-challenge",
+          "mood": "CHALLENGE",
+          "headline": "Rivals say they too will walk on the Moon",
+          "headlineShort": "Rivals: we will land too",
+          "deck": "The race is won, but the other agencies say they are still going",
+          "deckOne": "The race is won, but a rival says it is still going",
+          "lead": [
+            "{season} \u2014 {agency} won the race to the Moon. The other agencies congratulated the winners, and then made it clear that they do not consider the Moon closed."
+          ],
+          "leadOne": [
+            "{season} \u2014 {agency} won the race to the Moon. The first rival agency to speak congratulated the winners, and then made it clear that it does not consider the Moon closed."
+          ]
+        },
+        {
+          "id": "r-landing-mixed",
+          "mood": "MIXED",
+          "headline": "Footprints on the Moon, and a war of words",
+          "headlineShort": "A war of words",
+          "deck": "Praise from some rivals, scorn from others, for the first Moon landing",
+          "deckOne": "Praise from some rivals, scorn from others, for the first Moon landing",
+          "lead": [
+            "{season} \u2014 Footprints on the Moon could last for millions of years, scientists say. The goodwill among the agencies that raced {agency} there may not last the season."
+          ],
+          "leadOne": []
+        },
+        {
+          "id": "r-landing-dismissive",
+          "mood": "DISMISSIVE",
+          "headline": "Rivals belittle the Moon landing",
+          "headlineShort": "Rivals belittle landing",
+          "deck": "The other agencies say the first landing was a costly stunt",
+          "deckOne": "A rival says the first landing was a costly stunt",
+          "lead": [
+            "{season} \u2014 {commander} walked on the Moon, and the whole world stopped to watch. The agencies that lost the race to {agency} have spent the season since insisting that it was not much of a race."
+          ],
+          "leadOne": [
+            "{season} \u2014 {commander} walked on the Moon, and the whole world stopped to watch. The first rival agency to speak insisted that it was not much of a race."
+          ]
+        },
+        {
+          "id": "r-landing-silent",
+          "mood": "SILENT",
+          "headline": "Silence from the losers of the Moon race",
+          "headlineShort": "Silence from rivals",
+          "deck": "The other agencies will not talk about the first Moon landing",
+          "deckOne": "A rival agency will not talk about the first Moon landing",
+          "lead": [
+            "{season} \u2014 The first people to walk on the Moon are home. The agencies that raced {agency} there have had a season to find something to say, and have said nothing."
+          ],
+          "leadOne": [
+            "{season} \u2014 The first people to walk on the Moon are home. The first rival agency we asked has had a season to find something to say, and has said nothing."
+          ]
+        }
+      ],
+      "details": {
+        "MATCHED": [
+          {
+            "id": "r-landing-matched-1",
+            "text": ", which has since landed a crew of its own,"
+          },
+          {
+            "id": "r-landing-matched-2",
+            "text": ", whose own crew reached the surface only this season,"
+          }
+        ],
+        "HELD_BEFORE": [
+          {
+            "id": "r-landing-held-1",
+            "text": ", which has already sent a crew around the Moon,"
+          },
+          {
+            "id": "r-landing-held-2",
+            "text": ", whose own crews have already seen the far side,"
+          }
+        ],
+        "LACKS_BEFORE": [
+          {
+            "id": "r-landing-lacks-1",
+            "text": ", which has yet to send a crew to the Moon at all,"
+          },
+          {
+            "id": "r-landing-lacks-2",
+            "text": ", still without a crewed flight to the Moon,"
+          }
+        ]
+      },
+      "close": [
+        "Whatever was said in public, the race is over. What the Moon is for, now that people have been there, is a question for another day."
+      ]
+    }
+  ],
+  "stances": {
+    "ENTHUSIASTIC": {
+      "quoted": [
+        {
+          "id": "r-enth-q-1",
+          "text": "{rival}{detail} sent its congratulations as soon as the news broke. Its director, {rivalDirector}, said: {quote}"
+        },
+        {
+          "id": "r-enth-q-2",
+          "text": "From {rival}{detail} came a message of open admiration. {rivalDirector}, its director, told reporters: {quote}"
+        },
+        {
+          "id": "r-enth-q-3",
+          "text": "{rival}{detail} was generous in its praise. Speaking on the steps of the agency, its director, {rivalDirector}, said: {quote}"
+        }
+      ],
+      "plain": [
+        {
+          "id": "r-enth-p-1",
+          "text": "{rival}{detail} sent its warmest congratulations as soon as the news broke, calling the flight a triumph that belonged to everyone."
+        },
+        {
+          "id": "r-enth-p-2",
+          "text": "From {rival}{detail} came a message of open admiration, praising the courage and skill of the team behind it."
+        },
+        {
+          "id": "r-enth-p-3",
+          "text": "{rival}{detail} was generous in its praise. Its director, {rivalDirector}, called it a day the whole world could be proud of."
+        }
+      ],
+      "also": [
+        {
+          "id": "r-enth-a-1",
+          "text": "Warm congratulations also came from {rivals}."
+        },
+        {
+          "id": "r-enth-a-2",
+          "text": "{rivals} sent equally warm messages."
+        }
+      ]
+    },
+    "POLITE": {
+      "quoted": [
+        {
+          "id": "r-pol-q-1",
+          "text": "{rival}{detail} offered its congratulations in a brief statement. Its director, {rivalDirector}, said: {quote}"
+        },
+        {
+          "id": "r-pol-q-2",
+          "text": "At {rival}{detail} the reply was courteous and short. {rivalDirector}, its director, said: {quote}"
+        },
+        {
+          "id": "r-pol-q-3",
+          "text": "{rival}{detail} issued a formal note of congratulation, signed by its director, {rivalDirector}. It read: {quote}"
+        }
+      ],
+      "plain": [
+        {
+          "id": "r-pol-p-1",
+          "text": "{rival}{detail} offered its congratulations in a brief, formal statement."
+        },
+        {
+          "id": "r-pol-p-2",
+          "text": "At {rival}{detail} a spokesman confirmed that a message of congratulation had been sent, and declined to say more."
+        },
+        {
+          "id": "r-pol-p-3",
+          "text": "{rival}{detail} acknowledged the achievement politely, in a statement of two sentences."
+        }
+      ],
+      "also": [
+        {
+          "id": "r-pol-a-1",
+          "text": "{rivals} also sent their congratulations."
+        },
+        {
+          "id": "r-pol-a-2",
+          "text": "Brief, courteous messages came from {rivals} as well."
+        }
+      ]
+    },
+    "NEXT": {
+      "quoted": [
+        {
+          "id": "r-next-q-1",
+          "text": "{rival}{detail} offered its congratulations, then made a promise. Its director, {rivalDirector}, said: {quote}"
+        },
+        {
+          "id": "r-next-q-2",
+          "text": "At {rival}{detail} the congratulations came with a challenge attached. {rivalDirector}, its director, said: {quote}"
+        },
+        {
+          "id": "r-next-q-3",
+          "text": "{rival}{detail} made it plain that it does not mean to stay behind for long. Its director, {rivalDirector}, put it this way: {quote}"
+        }
+      ],
+      "plain": [
+        {
+          "id": "r-next-p-1",
+          "text": "{rival}{detail} congratulated its rival, and promised that it would not be far behind."
+        },
+        {
+          "id": "r-next-p-2",
+          "text": "At {rival}{detail} the congratulations came with a challenge attached: its own flight, officials said, is coming."
+        },
+        {
+          "id": "r-next-p-3",
+          "text": "{rival}{detail} offered a sportsman's congratulations, and said that it would be next."
+        }
+      ],
+      "also": [
+        {
+          "id": "r-next-a-1",
+          "text": "{rivals} also promised to follow."
+        },
+        {
+          "id": "r-next-a-2",
+          "text": "{rivals} said much the same: congratulations, and they would be next."
+        }
+      ]
+    },
+    "DOWNPLAY": {
+      "quoted": [
+        {
+          "id": "r-down-q-1",
+          "text": "{rival}{detail} was unimpressed. Its director, {rivalDirector}, said: {quote}"
+        },
+        {
+          "id": "r-down-q-2",
+          "text": "At {rival}{detail} officials played the news down. {rivalDirector}, its director, said: {quote}"
+        },
+        {
+          "id": "r-down-q-3",
+          "text": "{rival}{detail} saw little to celebrate. Asked about the flight, its director, {rivalDirector}, said: {quote}"
+        }
+      ],
+      "plain": [
+        {
+          "id": "r-down-p-1",
+          "text": "{rival}{detail} called the flight a stunt, and said that it proved less than the headlines claimed."
+        },
+        {
+          "id": "r-down-p-2",
+          "text": "At {rival}{detail} officials played the news down, saying that their own work would matter more in the end."
+        },
+        {
+          "id": "r-down-p-3",
+          "text": "{rival}{detail} said it saw nothing in the flight that its own engineers had not already mastered on paper."
+        }
+      ],
+      "also": [
+        {
+          "id": "r-down-a-1",
+          "text": "{rivals} were no more impressed."
+        },
+        {
+          "id": "r-down-a-2",
+          "text": "{rivals} also played the news down."
+        }
+      ]
+    },
+    "NO_COMMENT": {
+      "quoted": [],
+      "plain": [
+        {
+          "id": "r-nocom-p-1",
+          "text": "{rival}{detail} refused to answer questions. A spokesman said only that the agency had \u201cnothing to add.\u201d"
+        },
+        {
+          "id": "r-nocom-p-2",
+          "text": "At {rival}{detail} the doors stayed shut. Reporters who waited outside were told there would be no statement."
+        },
+        {
+          "id": "r-nocom-p-3",
+          "text": "{rival}{detail} said it would not comment on the achievements of other agencies."
+        }
+      ],
+      "also": [
+        {
+          "id": "r-nocom-a-1",
+          "text": "{rivals} also refused to comment."
+        },
+        {
+          "id": "r-nocom-a-2",
+          "text": "There was no comment from {rivals} either."
+        }
+      ]
+    }
+  },
+  "links": [
+    {
+      "id": "r-link-enth-pol-1",
+      "from": "ENTHUSIASTIC",
+      "to": "POLITE",
+      "text": "Others were more reserved."
+    },
+    {
+      "id": "r-link-enth-pol-2",
+      "from": "ENTHUSIASTIC",
+      "to": "POLITE",
+      "text": "Not every message was so warm."
+    },
+    {
+      "id": "r-link-enth-next-1",
+      "from": "ENTHUSIASTIC",
+      "to": "NEXT",
+      "text": "Elsewhere, the praise had an edge to it."
+    },
+    {
+      "id": "r-link-enth-next-2",
+      "from": "ENTHUSIASTIC",
+      "to": "NEXT",
+      "text": "Some rivals looked ahead rather than back."
+    },
+    {
+      "id": "r-link-enth-down-1",
+      "from": "ENTHUSIASTIC",
+      "to": "DOWNPLAY",
+      "text": "Not everyone was impressed."
+    },
+    {
+      "id": "r-link-enth-down-2",
+      "from": "ENTHUSIASTIC",
+      "to": "DOWNPLAY",
+      "text": "Not every rival was so generous."
+    },
+    {
+      "id": "r-link-enth-nocom-1",
+      "from": "ENTHUSIASTIC",
+      "to": "NO_COMMENT",
+      "text": "Others would say nothing at all."
+    },
+    {
+      "id": "r-link-enth-nocom-2",
+      "from": "ENTHUSIASTIC",
+      "to": "NO_COMMENT",
+      "text": "Not every agency was willing to speak."
+    },
+    {
+      "id": "r-link-pol-next-1",
+      "from": "POLITE",
+      "to": "NEXT",
+      "text": "Elsewhere, the courtesy had an edge to it."
+    },
+    {
+      "id": "r-link-pol-next-2",
+      "from": "POLITE",
+      "to": "NEXT",
+      "text": "Some rivals looked ahead rather than back."
+    },
+    {
+      "id": "r-link-pol-down-1",
+      "from": "POLITE",
+      "to": "DOWNPLAY",
+      "text": "Not everyone was impressed."
+    },
+    {
+      "id": "r-link-pol-down-2",
+      "from": "POLITE",
+      "to": "DOWNPLAY",
+      "text": "Others were less gracious."
+    },
+    {
+      "id": "r-link-pol-nocom-1",
+      "from": "POLITE",
+      "to": "NO_COMMENT",
+      "text": "Others would say nothing at all."
+    },
+    {
+      "id": "r-link-pol-nocom-2",
+      "from": "POLITE",
+      "to": "NO_COMMENT",
+      "text": "Not every agency was willing to speak."
+    },
+    {
+      "id": "r-link-next-down-1",
+      "from": "NEXT",
+      "to": "DOWNPLAY",
+      "text": "Others went further, and questioned the feat itself."
+    },
+    {
+      "id": "r-link-next-down-2",
+      "from": "NEXT",
+      "to": "DOWNPLAY",
+      "text": "Not everyone was impressed."
+    },
+    {
+      "id": "r-link-next-nocom-1",
+      "from": "NEXT",
+      "to": "NO_COMMENT",
+      "text": "Others would say nothing at all."
+    },
+    {
+      "id": "r-link-next-nocom-2",
+      "from": "NEXT",
+      "to": "NO_COMMENT",
+      "text": "Some preferred silence."
+    },
+    {
+      "id": "r-link-down-nocom-1",
+      "from": "DOWNPLAY",
+      "to": "NO_COMMENT",
+      "text": "Others would say nothing at all."
+    },
+    {
+      "id": "r-link-down-nocom-2",
+      "from": "DOWNPLAY",
+      "to": "NO_COMMENT",
+      "text": "Some preferred silence to argument."
+    }
+  ],
+  "declined": {
+    "one": [
+      {
+        "id": "r-declined-one-1",
+        "text": "{rivals} did not respond to our questions."
+      },
+      {
+        "id": "r-declined-one-2",
+        "text": "{rivals} could not be reached for comment."
+      },
+      {
+        "id": "r-declined-one-3",
+        "text": "Calls to {rivals} went unanswered."
+      }
+    ],
+    "many": [
+      {
+        "id": "r-declined-many-1",
+        "text": "{rivals} did not respond to our questions."
+      },
+      {
+        "id": "r-declined-many-2",
+        "text": "{rivals} could not be reached for comment."
+      },
+      {
+        "id": "r-declined-many-3",
+        "text": "Calls to {rivals} went unanswered."
+      }
+    ]
+  }
+}

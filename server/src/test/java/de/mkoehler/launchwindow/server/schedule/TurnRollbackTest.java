@@ -209,6 +209,47 @@ class TurnRollbackTest {
         assertTrue(kept.contains(TurnBackups.turnZipName(3)));
     }
 
+    /**
+     * Verifies the follow-ups (ui-spec.md 4.18.1, G17): the turn after a First prints the rivals'
+     * statements given in it, and a rolled-back turn keeps its own statements, drops later ones, and
+     * prints the same follow-up again.
+     */
+    @Test
+    void aFollowUpIsPrintedAndPrintedTheSameAfterARollback(@TempDir Path dataRoot) throws IOException {
+        twoPlayers(dataRoot);
+        resolveOn(dataRoot, "2026-09-29");
+        FrontPage first = new FrontPage("1-earth-orbit-satellite", "earth-orbit-satellite", 1, "sat-signal", "",
+            List.of(), List.of(new FrontPage.Achiever("Target", "Director", List.of())), List.of());
+        FrontPageStore.keep(dataRoot, mapper, 1, List.of(first));
+        long seed = GameMetaStore.loadOrCreateDefault(dataRoot.resolve("game-meta.json"), mapper).meta().getGameSeed();
+        String spy = GameSeeds.rivalKey(seed, "acct-spy");
+        ReactionStore.put(dataRoot, mapper, 2, spy,
+            new FrontPage.Statement(first.id(), FrontPage.Stance.NEXT, "We will follow"));
+        ReactionStore.put(dataRoot, mapper, 2, GameSeeds.rivalKey(seed, "acct-target"),
+            new FrontPage.Statement(first.id(), FrontPage.Stance.DOWNPLAY, "Not us"));
+
+        resolveOn(dataRoot, "2026-09-30");
+
+        FrontPage followUp = FrontPageStore.load(dataRoot, mapper).stream().filter(FrontPage::followUp)
+            .findFirst().orElseThrow();
+        assertEquals("1-earth-orbit-satellite-reactions", followUp.id());
+        assertEquals(2, followUp.gameTurn());
+        assertEquals(List.of("Spy Bureau"), followUp.reactions().stream().map(FrontPage.Reaction::agencyName).toList(),
+            "the First's own agency isn't asked");
+        assertEquals("We will follow", followUp.reactions().get(0).quote());
+        byte[] printed = Files.readAllBytes(dataRoot.resolve(FrontPageStore.FILE_NAME));
+        ReactionStore.put(dataRoot, mapper, 3, spy, new FrontPage.Statement("2-x", FrontPage.Stance.POLITE, ""));
+
+        TurnRollback.rollBackTo(dataRoot, mapper, ServerTestGames.CONTEXT, 2, NOW);
+
+        assertEquals(List.of(first), FrontPageStore.load(dataRoot, mapper));
+        assertFalse(ReactionStore.load(dataRoot, mapper, 2).isEmpty(), "the turn's own statements stay");
+        assertTrue(ReactionStore.load(dataRoot, mapper, 3).isEmpty(), "later ones go");
+        assertEquals(2, scheduler(dataRoot, "2026-09-30").resolveNow());
+        assertArrayEquals(printed, Files.readAllBytes(dataRoot.resolve(FrontPageStore.FILE_NAME)),
+            "the redone turn prints the same follow-up");
+    }
+
     /** Two players, one a spy with level-2 intelligence, and the scheduler bootstrapped. */
     private Path twoPlayers(Path dataRoot) throws IOException {
         new PlayerSnapshotStore(dataRoot.resolve("players").resolve("acct-target"), mapper)

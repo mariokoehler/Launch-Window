@@ -316,5 +316,13 @@ public final class MessageRegistry {
         kryo.register(de.mkoehler.launchwindow.actions.PublishFindingAction.class);
         kryo.register(de.mkoehler.launchwindow.net.messages.PublishPreviewRequest.class);
         kryo.register(de.mkoehler.launchwindow.net.messages.PublishPreviewResponse.class);
+
+        // The world reacts (ui-spec.md section 4.18.1, G17, 2026-10-22). Never move these lines.
+        kryo.register(de.mkoehler.launchwindow.model.FrontPage.Kind.class);
+        kryo.register(de.mkoehler.launchwindow.model.FrontPage.Stance.class);
+        kryo.register(de.mkoehler.launchwindow.model.FrontPage.Reaction.class);
+        kryo.register(de.mkoehler.launchwindow.model.FrontPage.Statement.class);
+        kryo.register(de.mkoehler.launchwindow.net.messages.SubmitStatementRequest.class);
+        kryo.register(de.mkoehler.launchwindow.net.messages.SubmitStatementResponse.class);
     }
 }
