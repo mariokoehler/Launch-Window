@@ -273,6 +273,13 @@ everyone confirms; Launch Window resolves on a daily schedule with nobody waitin
   is refused, not lost (`ReactionStore.seal`); `DevClient`'s `pages` and `react`; the theories in the Museum's
   Archive tab, with their pages and archive links; the science page's "THE QUESTION" box; longer articles.
 
+- **In memory is built** (the user's idea, 2026-10-22, `ui-spec.md` §4.18.3, component 29 and G19, from the canvas
+  `Launch Window — In Memory`): a crew lost in flight is recorded a turn early (`losses/turn-N.json`), its agency
+  gives a statement in one of four tones and every other agency may send condolences (both `Stance`s on the loss's
+  id), and the next resolution prints a memorial page (`rules.MemorialPrinter`, first of the turn's pages). It came
+  with **a goal counts only if the crew comes home** (`design.md` §2.6, `GoalsWithheld`). Rebuild client and server
+  together; no reset.
+
 ## How we work
 
 - **Screens:** Claude writes the spec in `ui-spec.md`, the user mocks it up in Claude Design,
@@ -521,7 +528,8 @@ cd assets && java --enable-native-access=ALL-UNNAMED -cp "../lwjgl3/target/class
   `event-stories.json` (`EventStoriesTest`, which holds each event to its sized count), and
   `decisions.json` (`DecisionsTest`; saved state keeps its ids too), `agency-names.json` (`AgencyNamesTest`),
   `front-page-reactions.json` (`FrontPageReactionsTest`, which also holds the fullest article to its columns; printed
-  pages store its ids), `theories.json` (`TheoriesTest`; science pages store its ids), `replay-sounds.json`
+  pages store its ids), `theories.json` (`TheoriesTest`; science pages store its ids), `memorial-pages.json` (`MemorialPagesTest`; memorial
+  pages store its story and line ids), `replay-sounds.json`
   (`ReplaySoundsTest`: every take there, listed and credited; loops OGG or WAV, never MP3), `replay-clips.json`
   (`ReplayClipsTest`, which holds every rule to its three clips and sidecars), and `front-pages.json`
   (`FrontPagesTest`, which also holds every article to its columns; printed pages store story ids). Core's tests have no assets on the

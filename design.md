@@ -3798,8 +3798,8 @@ stances; the rest share a line. A page that runs long drops its close, then runs
 `ideas/world-reacts.md`, superseded where they differ. Next: the play test. Unconfirmed: late joiners can't
 answer; no page when nobody spoke; follow-ups print before the turn's own Firsts.
 
-**In memory** (the user's idea, 2026-10-22; **specified**, `ui-spec.md` §4.18.3, component 29 and G19, to be mocked
-up): a memorial page in the paper for every crew lost in flight, printed a turn late so it never spoils the replay
+**In memory** (the user's idea, 2026-10-22; **built the same day**, `ui-spec.md` §4.18.3, component 29 and G19, from
+the canvas `Launch Window — In Memory`): a memorial page in the paper for every crew lost in flight, printed a turn late so it never spoils the replay
 (user), with the agency's statement in the tone its director picks (their courage, who they were, we will go on,
 we will find out why) and the other agencies' condolences; a news line when crewed flights resume. It came with
 a rule change built the same day: **a goal counts only if the crew comes home** (§2.6, `GoalsWithheld`; the

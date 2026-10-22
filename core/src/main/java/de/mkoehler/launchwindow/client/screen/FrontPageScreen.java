@@ -214,7 +214,8 @@ public class FrontPageScreen extends SessionScreen {
 
         Table front = new Table();
         front.top();
-        front.add(sheet == 0 ? page(page) : continuation(page)).size(PAGE_WIDTH, PAGE_HEIGHT).padTop(MARGIN).row();
+        front.add(sheet == 0 ? page(page) : page.memorialPage() ? mourning(continuation(page)) : continuation(page))
+            .size(PAGE_WIDTH, PAGE_HEIGHT).padTop(MARGIN).row();
         front.add(strip(page)).width(PAGE_WIDTH).padTop(28f);
 
         Stack stack = new Stack();
@@ -361,6 +362,15 @@ public class FrontPageScreen extends SessionScreen {
             }
             flow = flow(new ArrayDeque<>(all), even(count, high), body);
         }
+        boolean continued = !flow.rest().isEmpty();
+        if (continued) {
+            // Too long for the page: full columns, the last one short of its "Continued on page 2".
+            BitmapFont caption = ui.fonts().get(Theme.TextStyle.NEWS_CAPTION);
+            float[] capacities = even(count, room);
+            capacities[count - 1] -= caption.getLineHeight() + 6f;
+            flow = flow(new ArrayDeque<>(all), capacities, body);
+            high = room;
+        }
         carried = flow.rest();
         float columnHeight = Math.min(room, (float) Math.ceil(high));
         Table columns = new Table();
@@ -374,7 +384,12 @@ public class FrontPageScreen extends SessionScreen {
             for (Piece piece : flow.columns().get(c)) {
                 column.add(memorialPiece(piece)).width(R_COLUMN).padBottom(PARAGRAPH_GAP).left().row();
             }
-            column.add().expandY();
+            column.add().expandY().row();
+            if (c == count - 1 && continued) {
+                Label more = ui.label("Continued on page 2", Theme.TextStyle.NEWS_CAPTION, Theme.INK);
+                more.setAlignment(Align.right);
+                column.add(more).width(R_COLUMN).padBottom(6f);
+            }
             columns.add(column).width(R_COLUMN).height(columnHeight).top();
         }
         lower.add(columns).expandX().top().row();

@@ -118,7 +118,6 @@ public final class MemorialView {
 
         List<String> condolences = new ArrayList<>();
         List<String> also = new ArrayList<>();
-        StringBuilder told = new StringBuilder();
         for (FrontPage.Reaction reaction : page.reactions()) {
             if (reaction.lineId() == null || reaction.lineId().equals(words.condolences().also().id())) {
                 also.add(reaction.agencyName());
@@ -133,13 +132,7 @@ public final class MemorialView {
             rival.put("rival", reaction.agencyName());
             rival.put("rivalDirector", reaction.directorName());
             rival.put("quote", FrontPageView.quoted(reaction.quote()));
-            if (!told.isEmpty()) {
-                told.append(' ');
-            }
-            told.append(FrontPageView.fill(line.get().text(), rival));
-        }
-        if (!told.isEmpty()) {
-            condolences.add(told.toString());
+            condolences.add(FrontPageView.fill(line.get().text(), rival));
         }
         if (!also.isEmpty()) {
             Map<String, String> rest = new HashMap<>(tokens);

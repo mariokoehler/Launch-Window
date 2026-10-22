@@ -1252,8 +1252,8 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       No comment empties it. A history note after the title: how Eisenhower and Kennedy answered the
       Soviets' Firsts (2026-10-22). Shots `-Dshots=reactions` (`reactions-*.png`).
 
-29. **Eulogy dialog** *(the user's idea, 2026-10-22, for §4.18.3 "In memory"; specified and mocked up
-    2026-10-22)*. The losing agency's statement on its lost crew, printed the next turn on the memorial page.
+29. **Eulogy dialog** *(the user's idea, 2026-10-22, for §4.18.3 "In memory"; specified, mocked up and built
+    2026-10-22, `StatementDialog.eulogy` and `.condolences`)*. The losing agency's statement on its lost crew, printed the next turn on the memorial page.
     - **Opens from** the card "The press is waiting for your statement" in the report of the turn after the loss
       and on the hub (an advisor-style card), and from the strip of the report's People line about the loss.
       After a statement is given: "Your statement: Who they were · Change". Gone once the turn resolves.
@@ -3513,7 +3513,7 @@ Flavour only: nothing in the rules reads them.
   the quarantine). The report's "Settled:" line for a public theory opens its page too.
 - Shots `-Dshots=theories`.
 
-#### 4.18.3 In memory *(the user's idea, 2026-10-22; specified and mocked up 2026-10-22; G19)*
+#### 4.18.3 In memory *(the user's idea, 2026-10-22; specified, mocked up and built 2026-10-22; G19)*
 **Purpose:** a lost crew is news for the whole world, and the agency that lost it owes the world a statement.
 The paper prints a memorial page for every crew lost in flight, a turn after the loss, with the agency's
 statement in the tone its director chose and the other agencies' condolences. It gives the moment the gravity
@@ -3580,6 +3580,24 @@ the withheld goals, §2.6).
   (under about 16 lines), then a centred 64 px rule; the paper below stays empty. "From the other agencies" is a
   small capital head between rules (Old Standard Bold 12). The strip's history note follows "In memory."; the
   losing agency's "Open the memorial" is a ghost button left of Continue.
+- **Built (2026-10-22)** as mocked up, with these choices (unconfirmed):
+  - *The portraits* are greyscale copies made at runtime from the colour portraits (`UiKit.greyPicture`), 128 px
+    on the page, 64 in the dialog, 40 on the cards.
+  - *Short article:* under 24 lines (the mockup's 16 left a lone line atop the last of four columns), two centred
+    columns and a 64 px rule. *Long:* four columns of an even height found by halving, so they end together.
+  - *Running on:* a page with the director's words and four rivals' at 140 characters runs on to a continuation
+    sheet in the same mourning frame, "Continued on page 2" at the foot of column four (`-Dshots=memorial`'s
+    crowded page). Each rival's line is its own paragraph.
+  - *The person sentences* (`MemorialView.person`): for "Who they were", a revealed trait's line, else the years
+    served; for the other tones, the flights ("was flying for the first time", "was on a second flight").
+  - *Places* (the headline's "on the way home", the lead's "during reentry") come from the step's id
+    (`memorial-pages.json`'s `places`, in order; "in flight" when none matches).
+  - *The firsts* worth a sentence are a ranked list (`firsts`): a withheld goal not on it (a program's own "flown"
+    goals) gets none.
+  - *The hub's card* sits top left under the strip (420 px), over the art; it covers part of the VAB's marker.
+  - *"Read the paper"* on each lost person's memorial page reopens the page; "Open the memorial" on the losing
+    agency's copy visits the first of the crew's.
+  - The "resumes crewed flights" line is not built (unconfirmed, and a second loss restarts the count).
 - **Later** (the user's call, not specified): secrecy, a Soviet agency keeping a loss quiet at the risk of
   rivals' intelligence uncovering it later (Bondarenko's death in 1961 was not revealed until 1986).
 
@@ -3956,7 +3974,16 @@ current state alone. Each is an M5 task.
   - **Events:** `FindingPublished`, `FindingLearned` (append-only ids `findingPublished`, `findingLearned`).
   - **Reset the dev data root and rebuild client and server together** (saved fields, a pack hash change,
     a new action and message).
-- **G19. In memory (§4.18.3, component 29, 2026-10-22). Specified.**
+- **G19. In memory (§4.18.3, component 29, 2026-10-22). Built.** As decided at build (the advisor's call): the four
+  tones and the two condolences are `FrontPage.Stance` values appended (`tone()`, `condolence()`; `givable()` stays
+  the First's five), so the eulogy and the condolences are ordinary statements on the loss's id, kept by
+  `ReactionStore` (sealed and rolled back as the reactions are) and sent with `SubmitStatementRequest`; the
+  dispatcher checks a loss id before the front pages (its agency may send only a tone, everyone else only a
+  condolence). `losses/turn-N.json` (`LossStore`) is a result of turn N, rewritten whole by a retry and dropped by a
+  rollback of N; `FrontPagesResponse.losses` carries the turn before's. `rules.MemorialPrinter` finds the losses
+  (each grounding with the departures before it and its `GoalsWithheld`, the crew from the memorial) and prints the
+  pages first of the turn's; at most 4 condolences are told one by one, the rest share a sentence. The words are in
+  `assets/content/memorial-pages.json` (`MemorialPagesTest`), the article put together by `client.view.MemorialView`.
   - **Model:** `FrontPage.Kind.MEMORIAL` (appended); the page carries the lost crew (name, age, portrait, flights,
     firsts flown, a revealed trait), the configuration and failed step, the withheld goals, the agency's tone and
     quote (or the spokesman's), and the condolences (`FrontPage.Reaction`, with two stances appended:

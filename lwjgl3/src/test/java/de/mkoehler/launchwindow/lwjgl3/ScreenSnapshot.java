@@ -980,6 +980,26 @@ public final class ScreenSnapshot {
         game.session().keepStatements(List.of());
         write(folder, "memorial-page.png", new FrontPageScreen(game, List.of(three), () -> { }, false), null);
         write(folder, "memorial-short.png", new FrontPageScreen(game, List.of(two), () -> { }, false), null);
+        // The fullest page: the director's words and four rivals' at the longest, a fifth folded in; it runs on.
+        String longest = "We grieve with you. Your crew were the finest of us all, and every agency in this race owes "
+            + "them a debt that we will never be able";
+        List<FrontPage.Reaction> crowd = new java.util.ArrayList<>();
+        for (String name : List.of("Northern Rocket Bureau", "Polaris Space Agency", "Kestrel Space Directorate",
+                "Baltic Star Agency")) {
+            crowd.add(new FrontPage.Reaction(name, "Konstantin Alexandropoulos", FrontPage.Stance.CONDOLENCES, longest,
+                "m-condolences-q-1", null, null));
+        }
+        crowd.add(new FrontPage.Reaction("Meridian Aerospace", "Ana Ruiz", FrontPage.Stance.TRIBUTE, "", "m-also-1",
+            null, null));
+        FrontPage crowded = new FrontPage("44-memorial-43-loss-3", "", 44, "m-people-2", "Snow flurries, bitter cold",
+            List.of(), List.of(orion), List.of(), FrontPage.Kind.MEMORIAL, null, crowd,
+            new FrontPage.Memorial(loss, FrontPage.Stance.PEOPLE, longest, List.of("m-people-2")));
+        write(folder, "memorial-crowded.png", new FrontPageScreen(game, List.of(crowded), () -> { }, false), null);
+        write(folder, "memorial-crowded-2.png", new FrontPageScreen(game, List.of(crowded), () -> { }, false),
+            FrontPageScreen::showContinuation);
+        TurnReport rivalReport = TurnReport.build(rival, rival, List.of(), 43, game.session().catalog());
+        game.session().keepReport(rivalReport);
+        write(folder, "memorial-report-rival.png", new TurnReportScreen(game, rivalReport), null);
         write(folder, "memorial-condolences.png", new FrontPageScreen(game, List.of(three), () -> { }, false),
             screen -> StatementDialog.condolences(screen, loss, () -> { }).preset(FrontPage.Stance.TRIBUTE,
                 "They went first, and they showed us the way. We will not forget them.").show());
@@ -997,6 +1017,14 @@ public final class ScreenSnapshot {
         game.session().keepLosses(List.of(loss));
         game.session().keepStatements(List.of());
         write(folder, "memorial-own.png", new FrontPageScreen(game, List.of(three), () -> { }, false), null);
+        TurnReport ownReport = TurnReport.build(own, own, List.of(
+            new de.mkoehler.launchwindow.rules.CrewedFlightsGrounded("m7", "gemini-spacewalk", 4),
+            new de.mkoehler.launchwindow.rules.GoalsWithheld("m7", "gemini-spacewalk", List.of("spacewalk"),
+                List.of("spacewalk"))), 43, game.session().catalog());
+        game.session().keepReport(ownReport);
+        write(folder, "memorial-report-own.png", new TurnReportScreen(game, ownReport), null);
+        write(folder, "memorial-hub.png", new SpaceComplexScreen(game), null);
+        write(folder, "memorial-person.png", new de.mkoehler.launchwindow.client.screen.MemorialPersonScreen(game, 0, () -> new SpaceComplexScreen(game)), null);
         write(folder, "memorial-eulogy-fresh.png", new FrontPageScreen(game, List.of(three), () -> { }, false),
             screen -> StatementDialog.eulogy(screen, loss, () -> { }).show());
         write(folder, "memorial-eulogy-picked.png", new FrontPageScreen(game, List.of(three), () -> { }, false),

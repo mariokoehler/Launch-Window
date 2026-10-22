@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Scaling;
 import de.mkoehler.launchwindow.client.LaunchWindowGame;
@@ -119,6 +120,19 @@ public final class MemorialPersonScreen extends ChromeScreen {
         Museum.Plaque plaque = Museum.memorial(session.state(), session.catalog()).get(index);
         card.add(ui.paragraph(plaque.line(), Theme.TextStyle.BODY_STRONG, Theme.INK)).padBottom(Theme.SPACE_2).row();
         card.add(ui.paragraph(plaque.detail(), Theme.TextStyle.BODY_SM, Theme.INK)).row();
+        // The paper's memorial page, once printed (ui-spec.md 4.18.3).
+        java.util.List<de.mkoehler.launchwindow.model.FrontPage> pages = session.frontPages();
+        if (pages != null && entry.personnelId() != null) {
+            pages.stream().filter(p -> p.memorialPage() && p.memorial() != null && p.memorial().loss().crew().stream()
+                    .anyMatch(lost -> entry.personnelId().equals(lost.personnelId())))
+                .findFirst().ifPresent(page -> {
+                    MemorialPersonScreen self = this;
+                    TextButton read = ui.button("Read the paper", Theme.ButtonKind.SECONDARY);
+                    read.addListener(clicked(() -> game.visit(new FrontPageScreen(game, java.util.List.of(page),
+                        () -> game.setScreen(self), true))));
+                    card.add(read).left().fill(false, false).expand(false, false).padTop(Theme.SPACE_3).row();
+                });
+        }
         return card;
     }
 

@@ -84,6 +84,8 @@ public final class SpaceComplexScreen extends SessionScreen {
     private final Table strip = new Table();
     /** The advisor's corner: bottom left, clear of every building's marker on both agencies' art. */
     private final Table advisorCorner = new Table();
+    /** The press's card, top left under the strip, while it waits for a statement (ui-spec.md 4.18.3). */
+    private final Table pressCorner = new Table();
     private boolean resolving;
     private final Label countdown;
     private final ShapeRenderer shapes = new ShapeRenderer();
@@ -127,6 +129,7 @@ public final class SpaceComplexScreen extends SessionScreen {
         Table overlay = new Table();
         overlay.top();
         overlay.add(strip).growX().row();
+        overlay.add(pressCorner).left().pad(Theme.SPACE_6, Theme.SPACE_6, 0f, 0f).row();
         Stack stack = new Stack();
         stack.add(art);
         stack.add(layer);
@@ -308,6 +311,9 @@ public final class SpaceComplexScreen extends SessionScreen {
         art.setDrawable(picture);
         rebuildStrip(state);
         rebuildAdvisor(state);
+        pressCorner.clearChildren();
+        PressCards.waiting(this).ifPresent(loss -> pressCorner.add(PressCards.own(this, loss, true, this::rebuild))
+            .width(420f));
     }
 
     /**

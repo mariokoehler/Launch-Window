@@ -109,6 +109,10 @@ public final class TurnReportScreen extends ChromeScreen {
         content.top();
         content.defaults().growX();
         content.add(glance(catalog)).padBottom(Theme.SPACE_4).row();
+        // The press waits for a statement on a crew this turn lost (ui-spec.md 4.18.3, component 29).
+        PressCards.waiting(this).filter(loss -> loss.gameTurn() == report.gameTurn())
+            .ifPresent(loss -> content.add(PressCards.own(this, loss, false, this::rebuild)).padBottom(Theme.SPACE_4)
+                .row());
         Table decision = decisionCard();
         if (decision != null) {
             content.add(decision).padBottom(Theme.SPACE_4).row();
@@ -635,6 +639,12 @@ public final class TurnReportScreen extends ChromeScreen {
 
     private Table news(ContentCatalog catalog) {
         Table card = section("News", "This season");
+        // Another agency's crew lost this turn, first in the news, with "Send condolences" (ui-spec.md 4.18.3).
+        for (de.mkoehler.launchwindow.model.FrontPage.Loss loss : PressCards.others(this)) {
+            if (loss.gameTurn() == report.gameTurn()) {
+                card.add(PressCards.rival(this, loss, this::rebuild)).padBottom(Theme.SPACE_3).row();
+            }
+        }
         TurnReportView.realNews(report, SpaceRaceNews.standard(), session.state().getArchetype()).ifPresent(story -> {
             Table real = new Table();
             real.setBackground(ui.cardAccent(Theme.NAVY));
