@@ -287,6 +287,10 @@ public final class ScreenSnapshot {
             theoryShots(folder, game);
             return;
         }
+        if ("memorial".equals(System.getProperty("shots"))) {
+            memorialShots(folder, game);
+            return;
+        }
         if ("grounding".equals(System.getProperty("shots"))) {
             groundingShots(folder, game);
             return;
@@ -510,6 +514,7 @@ public final class ScreenSnapshot {
         findingShots(folder, game);
         reactionShots(folder, game);
         theoryShots(folder, game);
+        memorialShots(folder, game);
     }
 
     /**
@@ -931,6 +936,72 @@ public final class ScreenSnapshot {
             later += 24 * 3_600_000L;
             game.hubClock().enter(later);
         }
+    }
+
+    /**
+     * In memory (ui-spec.md section 4.18.3, component 29, 2026-10-22): the memorial page with three crew, a quote
+     * and two condolences; a short one; the losing agency's own copy; the eulogy dialog fresh and with a tone; the
+     * condolence form.
+     */
+    private static void memorialShots(File folder, LaunchWindowGame game) {
+        game.useFrontPageMarksInMemory(new java.util.HashSet<>());
+        String hash = ContentPackHash.ofClasspath("content/standard", ScreenSnapshot.class.getClassLoader());
+        GameInfoResponse info = GameInfoResponse.success("standard", hash, List.of(), 44, true,
+            6 * 3_600_000L, 0L, null, List.of(), List.of(), 0);
+        PlayerSnapshot rival = new PlayerSnapshot("Northern Rocket Bureau", Archetype.NASA, 60_000, 9_640, 3_000, 44);
+        rival.setDirectorName("Ellen Hale");
+        startSession(game, rival, info);
+        FrontPage.Loss loss = new FrontPage.Loss("43-loss-1", 43, "k-orion", "Orion Spaceworks", "Clara Voss",
+            "gemini-spacewalk", "18-reentry", List.of(
+                new FrontPage.Lost("Ana Reyes", 38, "nasa_001", "a1", 2, 0, 28, List.of("MENTOR")),
+                new FrontPage.Lost("Moses Okafor", 35, "nasa_002", "a2", 1, 0, 20, List.of("EASY_GOING")),
+                new FrontPage.Lost("Lev Marek", 32, "nasa_003", "a3", 1, 0, 6, List.of())),
+            List.of("gemini-spacewalk-flown", "spacewalk"), List.of("spacewalk"));
+        FrontPage.Achiever orion = new FrontPage.Achiever("Orion Spaceworks", "Clara Voss",
+            List.of("Ana Reyes", "Moses Okafor", "Lev Marek"));
+        FrontPage three = new FrontPage("44-memorial-43-loss-1", "", 44, "m-people-1", "Snow flurries, bitter cold",
+            List.of(), List.of(orion), List.of(), FrontPage.Kind.MEMORIAL, null, List.of(
+                new FrontPage.Reaction("Northern Rocket Bureau", "Ellen Hale", FrontPage.Stance.TRIBUTE,
+                    "They went first, and they showed us the way. We will not forget them.", "m-tribute-q-1", null, null),
+                new FrontPage.Reaction("Polaris Space Agency", "Ruth Calder", FrontPage.Stance.CONDOLENCES, "",
+                    "m-condolences-1", null, null)),
+            new FrontPage.Memorial(loss, FrontPage.Stance.PEOPLE, "Ana sang on the radio when she thought no one was "
+                + "listening. Moses never lost at chess. Lev wrote home every day.", List.of("m-people-1")));
+        FrontPage.Loss launch = new FrontPage.Loss("43-loss-2", 43, "k-orion", "Orion Spaceworks", "Clara Voss",
+            "gemini-docking", "03-launch", List.of(
+                new FrontPage.Lost("Jonas Lindqvist", 41, "nasa_004", "a4", 3, 1, 40, List.of()),
+                new FrontPage.Lost("Hanna Weber", 41, "nasa_005", "a5", 2, 0, 30, List.of())), List.of(), List.of());
+        FrontPage two = new FrontPage("44-memorial-43-loss-2", "", 44, "m-courage-1", "Snow flurries, bitter cold",
+            List.of(), List.of(new FrontPage.Achiever("Orion Spaceworks", "Clara Voss", List.of())), List.of(),
+            FrontPage.Kind.MEMORIAL, null, List.of(), new FrontPage.Memorial(launch, FrontPage.Stance.COURAGE, "",
+                List.of("m-courage-1")));
+        game.session().keepFrontPages(List.of(three, two));
+        game.session().keepLosses(List.of(loss));
+        game.session().keepStatements(List.of());
+        write(folder, "memorial-page.png", new FrontPageScreen(game, List.of(three), () -> { }, false), null);
+        write(folder, "memorial-short.png", new FrontPageScreen(game, List.of(two), () -> { }, false), null);
+        write(folder, "memorial-condolences.png", new FrontPageScreen(game, List.of(three), () -> { }, false),
+            screen -> StatementDialog.condolences(screen, loss, () -> { }).preset(FrontPage.Stance.TRIBUTE,
+                "They went first, and they showed us the way. We will not forget them.").show());
+
+        // The losing agency: its own copy, and the statement it gives the turn after the loss.
+        PlayerSnapshot own = new PlayerSnapshot("Orion Spaceworks", Archetype.NASA, 16_940, 7_210, 3_000, 44);
+        own.setDirectorName("Clara Voss");
+        for (FrontPage.Lost lost : loss.crew()) {
+            own.getMemorial().add(new de.mkoehler.launchwindow.model.MemorialEntry(lost.name(), lost.age(), 43,
+                de.mkoehler.launchwindow.model.MemorialEntry.Cause.MISSION, "gemini-spacewalk", "18-reentry",
+                lost.portraitId(), lost.personnelId(), java.util.Map.of(), List.of(), 15, List.of()));
+        }
+        startSession(game, own, info);
+        game.session().keepFrontPages(List.of(three, two));
+        game.session().keepLosses(List.of(loss));
+        game.session().keepStatements(List.of());
+        write(folder, "memorial-own.png", new FrontPageScreen(game, List.of(three), () -> { }, false), null);
+        write(folder, "memorial-eulogy-fresh.png", new FrontPageScreen(game, List.of(three), () -> { }, false),
+            screen -> StatementDialog.eulogy(screen, loss, () -> { }).show());
+        write(folder, "memorial-eulogy-picked.png", new FrontPageScreen(game, List.of(three), () -> { }, false),
+            screen -> StatementDialog.eulogy(screen, loss, () -> { }).preset(FrontPage.Stance.CAUSE,
+                "We owe them the truth. We will find what went wrong, fix it, and fly again.").show());
     }
 
     /**

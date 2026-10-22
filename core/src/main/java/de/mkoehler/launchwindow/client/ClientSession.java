@@ -57,6 +57,7 @@ public final class ClientSession {
     private List<RivalSummary> rivals;
     private List<FrontPage> frontPages;
     private List<FrontPage.Statement> statements = List.of();
+    private List<FrontPage.Loss> losses = List.of();
     private List<ArchiveUnlock> archive;
 
     private ClientSession(Credentials credentials, ContentCatalog catalog, PackStatus packStatus, PlayerSnapshot state,
@@ -266,6 +267,36 @@ public final class ClientSession {
      */
     public void keepFrontPages(List<FrontPage> pages) {
         this.frontPages = List.copyOf(pages);
+    }
+
+    /**
+     * Returns the crews lost in the turn before the open one, as last fetched ({@code ui-spec.md} &sect;4.18.3).
+     *
+     * @return the losses, maybe none
+     */
+    public List<FrontPage.Loss> losses() {
+        return losses;
+    }
+
+    /**
+     * Keeps the crews lost in the turn before the open one, as the last front-pages fetch brought them
+     * ({@code ui-spec.md} &sect;4.18.3): the open turn's statements and condolences answer them.
+     *
+     * @param losses the losses
+     */
+    public void keepLosses(List<FrontPage.Loss> losses) {
+        this.losses = List.copyOf(losses);
+    }
+
+    /**
+     * Returns this agency's own loss in the turn before, which the press waits for a statement on, if it lost a
+     * crew then.
+     *
+     * @return the loss, if there is one
+     */
+    public java.util.Optional<FrontPage.Loss> ownLoss() {
+        String mine = state() == null ? null : state().getAgencyName();
+        return losses.stream().filter(l -> l.agencyName().equals(mine)).findFirst();
     }
 
     /**

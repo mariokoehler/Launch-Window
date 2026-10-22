@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -22,6 +23,8 @@ import de.mkoehler.launchwindow.client.view.Hub;
 import de.mkoehler.launchwindow.content.FrontPageReactions;
 import de.mkoehler.launchwindow.content.FrontPages;
 import de.mkoehler.launchwindow.content.Theories;
+import de.mkoehler.launchwindow.content.MemorialPages;
+import de.mkoehler.launchwindow.client.view.MemorialView;
 import de.mkoehler.launchwindow.model.FrontPage;
 import de.mkoehler.launchwindow.rules.ReactionPrinter;
 
@@ -90,6 +93,14 @@ public class FrontPageScreen extends SessionScreen {
     private static final float FILLER_GAP = 8f;
     /** The continuation sheet's running head. */
     private static final float RUNNING_HEAD = 46f;
+    /** A memorial page's portraits (ui-spec.md 4.18.3, from the canvas "In Memory"). */
+    private static final float M_PORTRAIT = 128f;
+    /** The crew row: its rules, the portraits, the name and the caption. */
+    private static final float M_CREW_HEIGHT = 1f + 14f + M_PORTRAIT + 8f + 22f + 19f + 14f + 1f;
+    /** The condolences' small head between its rules. */
+    private static final float M_HEAD_HEIGHT = 8f + 1f + 6f + 16f + 6f + 1f + 8f;
+    /** An article shorter than this many lines runs in two centred columns. */
+    private static final int M_SHORT_LINES = 24;
 
     private final List<FrontPage> pages;
     private final Runnable done;
@@ -156,6 +167,7 @@ public class FrontPageScreen extends SessionScreen {
             // A science page shows only for a theory the public followed (ui-spec.md 4.18.2).
             boolean words = page.science() ? Theories.standard().theory(page.storyId())
                 .map(t -> t.reach() == Theories.Reach.PUBLIC).orElse(false)
+                : page.memorialPage() ? page.memorial() != null
                 : FrontPages.standard().first(page.goalId()).isPresent();
             if (!game.frontPageSeen(page.id()) && words) {
                 unseen.add(page);
@@ -219,7 +231,12 @@ public class FrontPageScreen extends SessionScreen {
         sheet.top().pad(0f, MARGIN, MARGIN, MARGIN);
         carried = List.of();
         java.util.function.Predicate<String> inPack = goal -> session.catalog().goal(goal).isPresent();
-        Optional<FrontPageView.Page> words = page.followUp()
+        Optional<MemorialView.Page> memorial = page.memorialPage() ? MemorialView.of(page, MemorialPages.standard())
+            : Optional.empty();
+        Optional<FrontPageView.Page> words = page.memorialPage() ? memorial.map(m -> new FrontPageView.Page(
+                m.headline(), m.shortHeadline(), m.deck(), "", List.of(), List.of(), 0, m.folio(), m.date(), m.weather(),
+                List.of(), null))
+            : page.followUp()
             ? FrontPageView.ofReactions(page, allPages(), FrontPageReactions.standard(), FrontPages.standard(),
                 inPack, ContentNames::of)
             : page.science() ? FrontPageView.ofScience(page, allPages(), Theories.standard(), FrontPages.standard(),
@@ -237,7 +254,9 @@ public class FrontPageScreen extends SessionScreen {
         Image masthead = new Image(ui.picture("frontpage/masthead.png"));
         masthead.setScaling(Scaling.fit);
         band.add(masthead).size(761f, BAND_HEIGHT).expandX();
-        if (page.followUp() || page.science()) {
+        if (page.memorialPage()) {
+            band.add(ear(ui.label("IN MEMORY", Theme.TextStyle.NEWS_EAR_TWO, Theme.INK), null)).size(230f, 84f);
+        } else if (page.followUp() || page.science()) {
             band.add(ear(ui.label(page.science() ? "SCIENCE" : "THE WORLD", Theme.TextStyle.NEWS_EAR_TWO, Theme.INK),
                 ui.label(page.science() ? "REPORT" : "REACTS", Theme.TextStyle.NEWS_EAR_TWO, Theme.INK)))
                 .size(230f, 84f);
@@ -271,9 +290,132 @@ public class FrontPageScreen extends SessionScreen {
         sheet.add(rule()).width(INNER).height(1f).padTop(10f).row();
 
         float lower = PAGE_HEIGHT - MARGIN - TOP_FIXED - headlineHeight - deckHeight;
-        sheet.add(page.firstPage() ? lower(view, lower) : lowerReactions(page, view, lower)).width(INNER).height(lower)
-            .padTop(LOWER_TOP).row();
-        return sheet;
+        sheet.add(page.firstPage() ? lower(view, lower) : page.memorialPage() ? lowerMemorial(memorial.get(), lower)
+            : lowerReactions(page, view, lower)).width(INNER).height(lower).padTop(LOWER_TOP).row();
+        return page.memorialPage() ? mourning(sheet) : sheet;
+    }
+
+    /** The memorial page's mourning frame: a 3 px ink rule 12 px inside the sheet. */
+    private Table mourning(Table sheet) {
+        Table border = new Table();
+        border.pad(12f);
+        border.add(new Image(ui.rect(new Color(0f, 0f, 0f, 0f), Theme.INK, 3f))).grow();
+        border.setTouchable(Touchable.disabled);
+        Stack stack = new Stack();
+        stack.add(sheet);
+        stack.add(border);
+        Table framed = new Table();
+        framed.add(stack).grow();
+        return framed;
+    }
+
+    /**
+     * A memorial page's lower half (ui-spec.md 4.18.3): the crew's greyscale portraits between rules, then the
+     * article, its condolences under their small head, in four columns balanced to end together, or two centred
+     * columns and a short rule when it is short. No race box, no filler items: the paper below stays empty.
+     */
+    private Table lowerMemorial(MemorialView.Page view, float height) {
+        BitmapFont body = ui.fonts().get(Theme.TextStyle.NEWS_BODY);
+        Table lower = new Table();
+        lower.top();
+        // The deck's rule above is the crew row's first.
+        Table crew = new Table();
+        for (FrontPage.Lost lost : view.crew()) {
+            Table person = new Table();
+            Table frame = new Table();
+            frame.setBackground(ui.rect(new Color(0f, 0f, 0f, 0f), Theme.INK, 1f));
+            frame.pad(1f);
+            Drawable portrait = lost.portraitId() == null ? null
+                : ui.greyPicture("portraits/" + lost.portraitId() + ".jpg");
+            frame.add(portrait == null ? new Image(ui.solid(new Color(Theme.INK).mul(1f, 1f, 1f, 0.15f)))
+                : new Image(portrait, Scaling.fill)).size(M_PORTRAIT);
+            person.add(frame).padBottom(8f).row();
+            person.add(ui.label(lost.name(), Theme.TextStyle.NEWS_NAME, Theme.INK)).height(22f).row();
+            person.add(ui.label("Aged " + lost.age() + " · " + lost.flights() + (lost.flights() == 1 ? " flight"
+                : " flights"), Theme.TextStyle.NEWS_CAPTION, Theme.INK)).height(19f);
+            crew.add(person).padLeft(28f).padRight(28f).top();
+        }
+        lower.add(crew).width(INNER).height(M_CREW_HEIGHT - 2f).row();
+        lower.add(rule()).width(INNER).height(1f).padBottom(14f).row();
+
+        float room = height - M_CREW_HEIGHT - 14f;
+        List<Piece> all = memorialPieces(view);
+        float total = 0f;
+        for (Piece piece : all) {
+            total += pieceHeight(piece, body);
+        }
+        boolean shortArticle = total < M_SHORT_LINES * body.getLineHeight();
+        int count = shortArticle ? 2 : 4;
+        // The shortest even column height that holds the whole article: the columns end together.
+        float low = total / count;
+        float high = room;
+        Flow flow = flow(new ArrayDeque<>(all), even(count, high), body);
+        if (flow.rest().isEmpty()) {
+            for (int i = 0; i < 20; i++) {
+                float mid = (low + high) / 2f;
+                if (flow(new ArrayDeque<>(all), even(count, mid), body).rest().isEmpty()) {
+                    high = mid;
+                } else {
+                    low = mid;
+                }
+            }
+            flow = flow(new ArrayDeque<>(all), even(count, high), body);
+        }
+        carried = flow.rest();
+        float columnHeight = Math.min(room, (float) Math.ceil(high));
+        Table columns = new Table();
+        columns.top();
+        for (int c = 0; c < count; c++) {
+            if (c > 0) {
+                columns.add(rule()).width(1f).height(columnHeight).padLeft(R_GUTTER).padRight(R_GUTTER);
+            }
+            Table column = new Table();
+            column.top().left();
+            for (Piece piece : flow.columns().get(c)) {
+                column.add(memorialPiece(piece)).width(R_COLUMN).padBottom(PARAGRAPH_GAP).left().row();
+            }
+            column.add().expandY();
+            columns.add(column).width(R_COLUMN).height(columnHeight).top();
+        }
+        lower.add(columns).expandX().top().row();
+        if (shortArticle) {
+            lower.add(rule()).width(FILLER_RULE).height(1f).padTop(14f).row();
+        }
+        lower.add().expandY();
+        return lower;
+    }
+
+    private static float[] even(int count, float height) {
+        float[] capacities = new float[count];
+        java.util.Arrays.fill(capacities, height);
+        return capacities;
+    }
+
+    /** The memorial article as pieces, the condolences' head among them. */
+    private static List<Piece> memorialPieces(MemorialView.Page view) {
+        List<Piece> pieces = new ArrayList<>();
+        view.article().forEach(p -> pieces.add(new Piece(p, true)));
+        if (view.head() != null) {
+            pieces.add(new Piece(view.head(), false, true));
+        }
+        view.condolences().forEach(p -> pieces.add(new Piece(p, true)));
+        pieces.add(new Piece(view.close(), true));
+        return pieces;
+    }
+
+    /** A memorial article's piece: a paragraph, or the condolences' small head between rules. */
+    private com.badlogic.gdx.scenes.scene2d.Actor memorialPiece(Piece piece) {
+        if (!piece.head()) {
+            return pieceLabel(piece);
+        }
+        Table head = new Table();
+        head.add(rule()).width(R_COLUMN).height(1f).padTop(8f).row();
+        Label label = ui.label(piece.text().toUpperCase(java.util.Locale.ROOT), Theme.TextStyle.NEWS_LABEL_SM,
+            Theme.INK);
+        label.setAlignment(Align.center);
+        head.add(label).width(R_COLUMN).height(16f).padTop(6f).padBottom(6f).row();
+        head.add(rule()).width(R_COLUMN).height(1f).padBottom(8f - PARAGRAPH_GAP);
+        return head;
     }
 
     /**
@@ -372,7 +514,8 @@ public class FrontPageScreen extends SessionScreen {
         sheet.top().pad(MARGIN);
         sheet.add(rule()).width(INNER).height(4f).row();
         Table head = new Table();
-        head.add(ui.label(page.science() ? "SCIENCE REPORT" : "THE WORLD REACTS", Theme.TextStyle.NEWS_LABEL,
+        head.add(ui.label(page.science() ? "SCIENCE REPORT" : page.memorialPage() ? "IN MEMORY" : "THE WORLD REACTS",
+            Theme.TextStyle.NEWS_LABEL,
             Theme.INK)).left().width(300f);
         head.add(ui.label("CONTINUED FROM PAGE 1", Theme.TextStyle.NEWS_FOLIO, Theme.INK)).expandX();
         Label season = ui.label(seasonOf(page), Theme.TextStyle.NEWS_FOLIO, Theme.INK);
@@ -392,7 +535,7 @@ public class FrontPageScreen extends SessionScreen {
             Table column = new Table();
             column.top().left();
             for (Piece piece : flow.columns().get(c)) {
-                column.add(pieceLabel(piece)).width(R_COLUMN).padBottom(PARAGRAPH_GAP).left().row();
+                column.add(memorialPiece(piece)).width(R_COLUMN).padBottom(PARAGRAPH_GAP).left().row();
             }
             column.add().expandY();
             columns.add(column).width(R_COLUMN).height(height).top();
@@ -470,8 +613,15 @@ public class FrontPageScreen extends SessionScreen {
         return de.mkoehler.launchwindow.model.GameDate.ofTurn(page.gameTurn()).label().toUpperCase(java.util.Locale.ROOT);
     }
 
-    /** A part of a paragraph: all of it, or what a column holds of it; only a paragraph's start is indented. */
-    private record Piece(String text, boolean indent) {
+    /**
+     * A part of a paragraph: all of it, or what a column holds of it; only a paragraph's start is indented. A head
+     * (a memorial page's "From the other agencies") is never split.
+     */
+    private record Piece(String text, boolean indent, boolean head) {
+
+        Piece(String text, boolean indent) {
+            this(text, indent, false);
+        }
     }
 
     /** Pieces per column, and what no column held. */
@@ -503,7 +653,7 @@ public class FrontPageScreen extends SessionScreen {
                     continue;
                 }
                 int room = (int) Math.floor((capacity - used - PARAGRAPH_GAP) / lineHeight);
-                Piece[] split = room >= 2 ? split(piece, room, font) : null;
+                Piece[] split = room >= 2 && !piece.head() ? split(piece, room, font) : null;
                 if (split != null) {
                     queue.pollFirst();
                     column.add(split[0]);
@@ -538,6 +688,9 @@ public class FrontPageScreen extends SessionScreen {
     }
 
     private float pieceHeight(Piece piece, BitmapFont font) {
+        if (piece.head()) {
+            return M_HEAD_HEIGHT;
+        }
         return lines(font, (piece.indent() ? INDENT_TEXT : "") + piece.text(), R_COLUMN, Align.left)
             * font.getLineHeight() + PARAGRAPH_GAP;
     }
@@ -550,7 +703,9 @@ public class FrontPageScreen extends SessionScreen {
         Table ear = new Table();
         ear.setBackground(ui.rect(new Color(0f, 0f, 0f, 0f), Theme.INK, 1f));
         ear.add(top).row();
-        ear.add(bottom).padTop(4f);
+        if (bottom != null) {
+            ear.add(bottom).padTop(4f);
+        }
         return ear;
     }
 
@@ -775,10 +930,12 @@ public class FrontPageScreen extends SessionScreen {
 
     private Table strip(FrontPage page) {
         Table strip = new Table();
-        String line = page.followUp() ? "Statements only: no effect on the race."
+        String line = page.memorialPage() ? "In memory."
+            : page.followUp() ? "Statements only: no effect on the race."
             : page.science() ? "Science news: no effect on the race."
             : FrontPageView.gameLine(page, session.state().getAgencyName(), session.catalog(), ContentNames::of);
-        String history = page.followUp() ? FrontPageReactions.standard().historyNotes().followUp()
+        String history = page.memorialPage() ? MemorialView.historyNote(MemorialPages.standard())
+            : page.followUp() ? FrontPageReactions.standard().historyNotes().followUp()
             : page.science() ? Theories.standard().theory(page.storyId()).map(Theories.Theory::historyNote).orElse("")
             : "";
         if (!history.isBlank()) {
@@ -794,6 +951,7 @@ public class FrontPageScreen extends SessionScreen {
                 .padRight(Theme.SPACE_4);
         }
         statementButton(page).ifPresent(extra -> strip.add(extra).padRight(Theme.SPACE_4));
+        memorialButton(page).ifPresent(extra -> strip.add(extra).padRight(Theme.SPACE_4));
         String next = sheet == 0 && !carried.isEmpty() ? "Turn to page 2"
             : reopened ? "Close" : index + 1 < pages.size() ? "Next front page" : "Continue";
         TextButton button = ui.pageButton(next);
@@ -848,6 +1006,30 @@ public class FrontPageScreen extends SessionScreen {
         }
         button.addListener(clicked(() -> new StatementDialog(this, page, this::rebuild).show()));
         return Optional.of(button);
+    }
+
+    /**
+     * The strip's "Open the memorial" on the losing agency's own copy of a memorial page: the first of the crew's
+     * pages on its memorial, coming back to this page.
+     */
+    private Optional<TextButton> memorialButton(FrontPage page) {
+        if (!page.memorialPage() || page.memorial() == null || sheet > 0
+                || !page.madeBy(session.state().getAgencyName())) {
+            return Optional.empty();
+        }
+        List<de.mkoehler.launchwindow.model.MemorialEntry> memorial = session.state().getMemorial();
+        java.util.Set<String> crew = new java.util.HashSet<>();
+        page.memorial().loss().crew().forEach(lost -> crew.add(lost.personnelId()));
+        for (int i = 0; i < memorial.size(); i++) {
+            if (crew.contains(memorial.get(i).personnelId())) {
+                int index = i;
+                TextButton open = ui.pageGhostButton("Open the memorial");
+                FrontPageScreen self = this;
+                open.addListener(clicked(() -> game.visit(new MemorialPersonScreen(game, index, () -> self))));
+                return Optional.of(open);
+            }
+        }
+        return Optional.empty();
     }
 
     private void next() {

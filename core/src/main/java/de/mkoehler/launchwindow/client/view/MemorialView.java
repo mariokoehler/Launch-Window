@@ -187,6 +187,70 @@ public final class MemorialView {
     }
 
     /**
+     * Names a lost crew as a sentence does: "Ana Reyes, Moses Okafor and Lev Marek".
+     *
+     * @param loss the loss
+     * @return the names
+     */
+    public static String crew(FrontPage.Loss loss) {
+        return FrontPageView.join(loss.crew().stream().map(FrontPage.Lost::name).toList());
+    }
+
+    /**
+     * Names a lost crew's flight as a sentence does: "the Gemini spacewalk flight".
+     *
+     * @param loss    the loss
+     * @param catalog the game's content, for the flight's program
+     * @return the name
+     */
+    public static String flight(FrontPage.Loss loss, de.mkoehler.launchwindow.content.ContentCatalog catalog) {
+        return catalog.missionConfiguration(loss.missionConfigurationId()).map(c -> {
+            String name = Missions.name(c);
+            String lower = name.isEmpty() ? name : Character.toLowerCase(name.charAt(0)) + name.substring(1);
+            return "the " + ContentNames.of(c.programId()) + " " + lower + " flight";
+        }).orElse("the flight");
+    }
+
+    /**
+     * Returns how the agency's statement might read, for the dialog's preview: the tone's first story with the
+     * director's words.
+     *
+     * @param loss  the loss
+     * @param tone  the tone
+     * @param quote the words, cleaned, or {@code ""}
+     * @param words the words
+     * @return the sentence
+     */
+    public static String sampleStatement(FrontPage.Loss loss, FrontPage.Stance tone, String quote, MemorialPages words) {
+        List<MemorialPages.Story> stories = words.storiesOf(tone);
+        if (stories.isEmpty()) {
+            return "";
+        }
+        Map<String, String> tokens = Map.of("agency", loss.agencyName(), "director", loss.directorName(),
+            "crew", FrontPageView.join(loss.crew().stream().map(FrontPage.Lost::name).toList()),
+            "quote", FrontPageView.quoted(quote));
+        return FrontPageView.fill(quote.isBlank() ? stories.get(0).plain() : stories.get(0).quoted(), tokens);
+    }
+
+    /**
+     * Returns how a rival's condolences might read, for the dialog's preview.
+     *
+     * @param loss     the loss
+     * @param stance   condolences or a tribute
+     * @param quote    the words, cleaned, or {@code ""}
+     * @param agency   the sending agency
+     * @param director its director
+     * @param words    the words
+     * @return the sentence
+     */
+    public static String sampleCondolence(FrontPage.Loss loss, FrontPage.Stance stance, String quote, String agency,
+                                          String director, MemorialPages words) {
+        return words.condolenceLine(stance, !quote.isBlank()).map(line -> FrontPageView.fill(line.text(), Map.of(
+            "rival", agency, "rivalDirector", director, "agency", loss.agencyName(),
+            "quote", FrontPageView.quoted(quote)))).orElse("");
+    }
+
+    /**
      * Returns the history note on the memorial page's strip.
      *
      * @param words the words

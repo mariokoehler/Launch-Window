@@ -494,6 +494,8 @@ public final class Theme {
         NEWS_LABEL_SM(FontFile.OLD_STANDARD_BOLD, 13, 16, 0.1f),
         /** A follow-up's right ear, "THE WORLD / REACTS" in two lines: Old Standard Bold 25, letter-spaced. */
         NEWS_EAR_TWO(FontFile.OLD_STANDARD_BOLD, 25, 28, 0.12f),
+        /** A lost crew's names under their portraits on a memorial page (ui-spec.md 4.18.3): Libre Caslon 17. */
+        NEWS_NAME(FontFile.LIBRE_CASLON_REGULAR, 17, 22, 0f),
         /*
          * The archive's page (ui-spec.md section 4.19, from the Archive canvas, 2026-10-15): an
          * encyclopedia article's type, a step larger than the working screens'. Not design-system tokens yet.

@@ -270,7 +270,8 @@ public final class NetworkGateway implements ServerGateway {
         }
         try {
             FrontPagesResponse response = client.sendAndReceive(new FrontPagesRequest(), FrontPagesResponse.class);
-            return response.success() ? new FrontPagesResult(true, "", response.pages(), response.yours())
+            return response.success() ? new FrontPagesResult(true, "", response.pages(), response.yours(),
+                response.losses())
                 : new FrontPagesResult(false, response.message(), null);
         } catch (IOException | RuntimeException e) {
             dropConnection();

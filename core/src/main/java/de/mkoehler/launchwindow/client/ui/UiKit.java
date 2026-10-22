@@ -2,6 +2,7 @@ package de.mkoehler.launchwindow.client.ui;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -166,6 +167,41 @@ public final class UiKit implements Disposable {
             pictures.put(path, file.exists() ? smoothTexture(file) : null);
         }
         Texture texture = pictures.get(path);
+        return texture == null ? null : new TextureRegionDrawable(texture);
+    }
+
+    /**
+     * Returns a picture from the assets folder in greyscale, made once from the colour file and cached, such as a
+     * lost crew's portraits on a memorial page ({@code ui-spec.md} &sect;4.18.3).
+     *
+     * @param path the path under {@code ui/}
+     * @return the drawable, or {@code null} if the file doesn't exist
+     */
+    public TextureRegionDrawable greyPicture(String path) {
+        String key = "grey:" + path;
+        if (!pictures.containsKey(key)) {
+            FileHandle file = assets.child("ui/" + path);
+            Texture texture = null;
+            if (file.exists()) {
+                Pixmap colour = new Pixmap(file);
+                Pixmap grey = new Pixmap(colour.getWidth(), colour.getHeight(), Pixmap.Format.RGBA8888);
+                for (int y = 0; y < colour.getHeight(); y++) {
+                    for (int x = 0; x < colour.getWidth(); x++) {
+                        int rgba = colour.getPixel(x, y);
+                        // Rec. 601 luma, the eye's weighting of red, green and blue.
+                        int luma = Math.round(0.299f * (rgba >>> 24 & 0xff) + 0.587f * (rgba >>> 16 & 0xff)
+                            + 0.114f * (rgba >>> 8 & 0xff));
+                        grey.drawPixel(x, y, luma << 24 | luma << 16 | luma << 8 | (rgba & 0xff));
+                    }
+                }
+                colour.dispose();
+                texture = new Texture(grey, true);
+                texture.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.Linear);
+                grey.dispose();
+            }
+            pictures.put(key, texture);
+        }
+        Texture texture = pictures.get(key);
         return texture == null ? null : new TextureRegionDrawable(texture);
     }
 

@@ -651,6 +651,7 @@ abstract class SessionScreen extends StageScreen {
             if (result.ok()) {
                 session.keepFrontPages(result.pages());
                 session.keepStatements(result.yours());
+                session.keepLosses(result.losses());
             }
             if (isShowing()) {
                 after.run();
