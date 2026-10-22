@@ -1187,6 +1187,40 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       mission lists in Mission Control don't wear the badge yet. Shots `contracts-configs-*.png`,
       `contracts-program.png`, `contracts-assemble.png`.
 
+28. **Statement dialog** *(the user's idea, 2026-10-20, for §4.18 "The world reacts"; specified 2026-10-22,
+    to be mocked up in Claude Design)*. Gives the press one statement about a rival's First, printed the
+    next turn in a follow-up page.
+    - **Opens from** the strip under a rival's First page (§4.18), from a secondary button left of the
+      primary one: "Give a statement" while the player may give one (below), "Your statement: Polite ·
+      Change" once given (the stance in the player's words). Not shown when the player made the First,
+      joined after it was printed, or the turn after it has resolved. A reopened First page whose
+      follow-up is printed shows "Read the reactions" there instead.
+    - **About 720 px wide,** a modal over the page and its scrim, in the design system's dialog style.
+      Title "Give a statement"; subtitle "On the <agency>'s <First> · printed next season".
+    - **Five stance rows,** one choice, in the personnel dialogs' choice-row pattern (radio mark, bold
+      label, one muted line):
+      1. *Enthusiastic congratulations*: Warm, generous praise.
+      2. *Polite congratulations*: Correct, and brief.
+      3. *"We'll be next"*: Congratulate them, then promise to catch up.
+      4. *Downplay*: It proves less than it seems.
+      5. *No comment*: A pointed refusal to say anything. (Staying silent is printed as "did not
+         respond".)
+    - **Quote,** optional: a multi-line field, at most 140 characters (`FrontPage.Statement.MAX_QUOTE_LENGTH`),
+      an "n / 140" counter at its foot, placeholder "Add a quote, printed word for word (optional)".
+      Typing is filtered to `FrontPage.Statement.ALLOWED_CHARACTERS` (letters, digits, everyday
+      punctuation; no braces or angle brackets). Disabled, greyed and emptied for No comment. Inline
+      error under it: "Only letters, numbers and common punctuation." / "At most 140 characters."
+    - **Preview,** "IT MIGHT READ": a scrap of newsprint (warm off-white, `Theme.INK`, Libre Caslon
+      italic) with one sentence as the paper might print it, from the stance's first line in
+      `front-page-reactions.json` with the player's names and quote. It follows the stance and quote.
+    - **Footnote** (muted, small): "Every rival's statement is printed together next season. You can
+      change or withdraw yours until the turn resolves."
+    - **Buttons,** right: Withdraw (only when one was given; quiet style), Cancel, and "Submit statement"
+      (primary, disabled until a stance is picked). A refusal from the server shows as a toast through
+      `client.ui.Refusals`.
+    - **States to mock up:** fresh; "We'll be next" with a quote and its preview; No comment (quote
+      disabled); the quote error; editing a given statement (Withdraw shown); the strip's three states.
+
 ---
 
 ## 3. Screen flow *(decided)*
@@ -3304,6 +3338,47 @@ from `assets/content/front-pages.json` (`content.FrontPages`). Shots `frontpage-
   instances at weight 400, cut from the variable fonts), the `NEWS_*` text styles (the headline styles
   generated with capitals only, `Theme.CAPITALS`), and `SCRIM_DEEP` (`#0d1b33` at 80 %).
 
+#### 4.18.1 The world reacts *(the user's idea, 2026-10-20; specified 2026-10-22, G17)*
+**Purpose:** a First is news for the winner and a moment for everyone else. For one turn after a First's
+page is printed, every rival may give the press a statement about it (component 28); at the next
+resolution a follow-up page, "The World Reacts", prints them all as one article. Flavour only: no money,
+prestige or anything else changes.
+- **Who may react:** every agency that had a turn report for the First's turn (late joiners are out,
+  unconfirmed) and didn't make the First (in a tie, none of the achievers). One statement per First's
+  page; several Firsts printed together each take their own. The last statement sent before the turn
+  resolves counts; it can be withdrawn.
+- **A statement:** one of five stances (enthusiastic, polite, "we'll be next", downplay, no comment) and an
+  optional quote of up to 140 characters, printed word for word inside curly quotes. No LLM (user,
+  2026-10-20); one could rewrite later, as a layer on top.
+- **The article reads as a story, not a list** (user, 2026-10-22, options 2, 3 and 4 of the talk-through):
+  - *Mood:* the statements' mix picks the story, written whole per First: GRACIOUS (only
+    congratulations), CHALLENGE ("we'll be next", nobody belittling), MIXED (congratulations and
+    belittling), DISMISSIVE (belittling, no congratulations), SILENT (only pointed no-comments). A story
+    has a headline, a deck and a lead, with a form of the deck and lead for a single statement (two-player
+    games).
+  - *Statements* are told in stance order (enthusiastic, polite, next, downplay, no comment), quoted
+    before unquoted, each by a stance line; a *linking sentence* leads in when the stance changes ("Not
+    everyone was impressed.").
+  - *Details* from public facts only (the goals an agency holds, as the race box and the archive show;
+    never what the Intelligence Office sells, unconfirmed): whether the rival matched the First in the
+    meantime (always told), or holds the First before this one or not (told about half the time).
+  - *A crowded page:* at most 5 statements are told one by one, quotes first; the rest of each stance
+    share one "also" sentence. Rivals who gave none share one closing line ("did not respond").
+  - *Close:* per First, pointing at the next contest; the Moon landing's at the race's end. Closing
+    paragraphs are dropped from the end when the page is full.
+- **No statement at all** (every rival silent): no follow-up page (unconfirmed).
+- **The page:** the First page's frame (§4.18), the right ear "THE WORLD REACTS", the First's photo and
+  caption, the race box as of the follow-up's turn, no "In brief". The strip says "Statements only: no
+  effect on the race." It shows like any page (on login, after a resolution) and opens again from the
+  First's page ("Read the reactions"). *Lower half to mock up:* more text room than a First's page (about
+  60 lines): proposed, the photo at one column's width over column one, the article through columns one to
+  three, the race box at the foot of column three.
+- **Words:** `assets/content/front-page-reactions.json` (outside the pack, not hashed;
+  `FrontPageReactionsTest`): per First its stories per mood, its detail clauses and closes; per stance its
+  quoted, plain and "also" lines; the linking sentences; the declined lines. Every piece has an id that
+  printed pages store: never rename or reuse one. Tokens: `{agency}` and `{director}` (the First's
+  makers), `{season}`, `{rival}`, `{rivalDirector}`, `{detail}`, `{quote}` (only at a line's end), `{rivals}`.
+
 ---
 
 ### 4.19 Archive *(the user's idea, 2026-10-15; specified, mocked up and built the same day for `design.md` §2.12)*
@@ -3677,6 +3752,16 @@ current state alone. Each is an M5 task.
   - **Events:** `FindingPublished`, `FindingLearned` (append-only ids `findingPublished`, `findingLearned`).
   - **Reset the dev data root and rebuild client and server together** (saved fields, a pack hash change,
     a new action and message).
+- **G17. The world reacts (§4.18.1, component 28, 2026-10-22). Planned, being built.**
+  - **Model:** `FrontPage` gains `kind` (FIRST or REACTIONS; missing reads as FIRST, so old files load),
+    `reactsTo` and `reactions` (`FrontPage.Reaction`: agency, director, stance, quote, and the ids of its
+    line, link and detail). `FrontPage.Statement` (page, stance, quote) is what a player gives.
+  - **Messages:** `SubmitStatementRequest`/`SubmitStatementResponse`, appended to the registry;
+    `FrontPagesResponse` gains the requester's own statements for the open turn.
+  - **Server:** statements kept in `reactions/turn-N.json` by `GameSeeds.rivalKey`, never account ids;
+    `rules.ReactionPrinter` prints the follow-ups in `printFrontPages`, in one `FrontPageStore.keep` with
+    the turn's Firsts; `TurnRollback` keeps turn T's statements and deletes later ones.
+  - **Rebuild client and server together; no reset.**
 
 ## 7. Suggested mockup order
 
