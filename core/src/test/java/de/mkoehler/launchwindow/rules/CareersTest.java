@@ -267,7 +267,7 @@ class CareersTest {
 
     /**
      * A planned crewed orbital flight meets the ambition of a controller on its consoles and passes
-     * over a free one who wanted it; a busy one isn't counted, and an uncrewed flight settles nothing.
+     * over everyone else who wanted it, free or busy, as the season pass does; an uncrewed flight settles nothing.
      */
     @Test
     void ambitionsAtStakeForAPlannedMission() {
@@ -285,11 +285,13 @@ class CareersTest {
         }
         MissionConfiguration orbital = CATALOG.missionConfiguration("vostok-orbital").orElseThrow();
         List<Careers.AmbitionAtStake> stakes = Careers.ambitionsAtStake(snapshot, orbital, List.of(), List.of("c1"));
-        assertEquals(2, stakes.size());
+        assertEquals(3, stakes.size());
         assertEquals("c1", stakes.get(0).person().getId());
         assertTrue(stakes.get(0).met());
         assertEquals("c2", stakes.get(1).person().getId());
         assertFalse(stakes.get(1).met(), "free and left off: passed over");
+        assertEquals("c3", stakes.get(2).person().getId());
+        assertFalse(stakes.get(2).met(), "in training, and passed over all the same");
 
         MissionConfiguration uncrewed = CATALOG.missionConfiguration("vostok-uncrewed-orbital").orElseThrow();
         assertTrue(Careers.ambitionsAtStake(snapshot, uncrewed, List.of(), List.of("c1")).isEmpty());

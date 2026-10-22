@@ -286,7 +286,10 @@ public final class PersonnelLifecycle {
      */
     private static DepartureReason advanceOne(Personnel person, PersonnelGroup group, int retirementAge) {
         boolean idle = person.getAssignmentState() == AssignmentState.IDLE;
-        int moraleDelta = TraitEffects.seasonMorale(person,
+        // Someone sidelined (a random event, an R&D decision's secondment) can't be given work, so being idle
+        // isn't held against them: their season's own morale doesn't move (the user's decision, 2026-10-22).
+        boolean sidelined = idle && person.getUnavailableSeasons() > 0;
+        int moraleDelta = sidelined ? 0 : TraitEffects.seasonMorale(person,
             idle ? -IDLE_MORALE_LOSS_PER_SEASON : BUSY_MORALE_GAIN_PER_SEASON);
         person.setMorale(clamp(person.getMorale() + moraleDelta, MORALE_MIN, MORALE_MAX));
         person.setSeasonsSinceTraining(TraitEffects.inTraining(person) ? 0 : person.getSeasonsSinceTraining() + 1);

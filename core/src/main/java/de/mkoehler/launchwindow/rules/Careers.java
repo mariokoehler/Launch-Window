@@ -440,8 +440,7 @@ public final class Careers {
      * @param person    the person
      * @param kind      the ambition
      * @param met       {@code true} when they're on the team and it would come true; {@code false}
-     *                  when they're free to be picked but someone else of their group fills the role,
-     *                  which passes them over
+     *                  when someone else of their group fills the role, which passes them over
      * @param ifFirst   whether it only counts if the flight reaches a goal first in the game
      */
     public record AmbitionAtStake(Personnel person, Ambition.Kind kind, boolean met, boolean ifFirst) {
@@ -451,8 +450,9 @@ public final class Careers {
      * Returns whose stated ambitions a planned mission would meet or pass over if it flies well
      * (the user's request, 2026-10-10), the way the season pass settles them: crew ambitions by who
      * is in the crew, console ambitions by who is on the ground team (CAPCOM counts as aboard for
-     * {@link Ambition.Kind#BE_FIRST}). Only people free to be put on it count as passed over: anyone
-     * busy elsewhere couldn't have been picked. The two "first" ambitions only matter while the
+     * {@link Ambition.Kind#BE_FIRST}). Everyone of the group not on it counts as passed over, as the season
+     * pass counts them, busy elsewhere or not (2026-10-22: the preview had left out anyone in training, on
+     * another mission or sidelined). The two "first" ambitions only matter while the
      * mission has a goal the agency hasn't reached yet, and then only if nobody gets there first.
      *
      * @param snapshot      the player
@@ -542,7 +542,7 @@ public final class Careers {
             boolean ifFirst = ambition.kind() == Ambition.Kind.BE_FIRST || ambition.kind() == Ambition.Kind.CONSOLES_FIRST;
             if (mine) {
                 stakes.add(new AmbitionAtStake(person, ambition.kind(), true, ifFirst));
-            } else if (MissionLaunch.isAvailable(person) && others(role, id, group)) {
+            } else if (others(role, id, group)) {
                 stakes.add(new AmbitionAtStake(person, ambition.kind(), false, ifFirst));
             }
         }

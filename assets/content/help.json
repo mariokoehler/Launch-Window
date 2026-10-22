@@ -367,7 +367,7 @@
         "Growth slows as a skill nears 100, and a higher learning potential makes it faster.",
         "## On the job",
         "Skills also grow at work: engineers on R&D, astronauts aboard a mission, controllers and CAPCOM at their consoles. Training keeps people busy, which is good for morale, but nobody in training can work.",
-        "Someone sidelined by a random event or an R&D decision can't train, work, fly or go on tour until it ends. The rosters show the seasons left."
+        "Someone sidelined by a random event or an R&D decision can't train, work, fly or go on tour until it ends, and their morale holds meanwhile. The rosters show the seasons left."
       ],
       "related": ["experts", "hiring", "morale"]
     },
@@ -376,7 +376,7 @@
       "group": "People",
       "title": "Morale, resigning and retiring",
       "body": [
-        "Morale runs from 0 to 100. Busy people (on R&D, on a mission, in training or on PR duty) gain {people.busyMorale} a season; idle ones lose {people.idleMorale}. Salary changes, ambitions, press stories, R&D decisions, random events and some traits move it too.",
+        "Morale runs from 0 to 100. Busy people (on R&D, on a mission, in training or on PR duty) gain {people.busyMorale} a season; idle ones lose {people.idleMorale}, unless they're sidelined and can't be given work. Salary changes, ambitions, press stories, R&D decisions, random events and some traits move it too.",
         "A department's average morale also sets how good its candidates are.",
         "## Leaving",
         "- At {people.resignAt} or below, a person resigns.",
@@ -446,7 +446,7 @@
       "title": "Ambitions and loyalty",
       "body": [
         "Some people want something: to fly in space, to bring a component to its R&D ceiling, to be on the consoles for a first. The Ambitious always have an ambition ({ambition.chanceAmbitious} %), Glory seekers usually ({ambition.chanceGlory} %), anyone else sometimes ({ambition.chanceOthers} %).",
-        "They say so after {ambition.sayAfter} seasons with the agency, once out of basic training, and only ambitions the agency can reach now are chosen; if none can be, the person waits and says one later. The ambition then has a window of {ambition.windowMin} to {ambition.windowMax} seasons, depending on how hard it is: {ambition.ambitiousWindow} less for the Ambitious, {ambition.steadyWindow} more for the Steady. Their page and the rosters show the seasons left. Assemble mission tells you who on the flight gets what they want, and who is free and would be passed over.",
+        "They say so after {ambition.sayAfter} seasons with the agency, once out of basic training, and only ambitions the agency can reach now are chosen; if none can be, the person waits and says one later. The ambition then has a window of {ambition.windowMin} to {ambition.windowMax} seasons, depending on how hard it is: {ambition.ambitiousWindow} less for the Ambitious, {ambition.steadyWindow} more for the Steady. Their page and the rosters show the seasons left. Assemble mission tells you who on the flight gets what they want, and who would be passed over, busy elsewhere or not.",
         "## How it ends",
         "- Fulfilled: morale +{ambition.fulfilledMorale}, loyalty +{ambition.fulfilledLoyalty} (+{ambition.fulfilledLoyaltyAmbitious} for the Ambitious).",
         "- Passed over, when someone else in the agency gets it: morale -{ambition.passedMorale}, loyalty -{ambition.passedLoyalty}, and the window shrinks by a season more. The ambition stays.",

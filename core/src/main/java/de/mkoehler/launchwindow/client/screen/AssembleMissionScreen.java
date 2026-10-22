@@ -182,8 +182,9 @@ public final class AssembleMissionScreen extends ChromeScreen {
                 continue;
             }
             String wants = CareerTexts.ambition(stake.kind(), "");
-            lines.add(stake.person().getName() + " is free and wants to " + Character.toLowerCase(wants.charAt(0))
-                + wants.substring(1) + (stake.ifFirst() ? " (if this flight reaches a goal first)" : "") + ".");
+            lines.add(stake.person().getName() + (MissionLaunch.isAvailable(stake.person()) ? " is free and" : " is busy but")
+                + " wants to " + Character.toLowerCase(wants.charAt(0)) + wants.substring(1)
+                + (stake.ifFirst() ? " (if this flight reaches a goal first)" : "") + ".");
         }
         if (lines.isEmpty()) {
             return null;

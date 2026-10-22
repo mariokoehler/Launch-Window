@@ -36,6 +36,17 @@ class PersonnelLifecycleTest {
         assertEquals(60 - PersonnelLifecycle.IDLE_MORALE_LOSS_PER_SEASON, snapshot.getAstronauts().get(0).getMorale());
     }
 
+    /** Someone sidelined can't be given work, so their idle season costs them no morale (2026-10-22). */
+    @Test
+    void aSidelinedEmployeeKeepsTheirMorale() {
+        PlayerSnapshot snapshot = snapshotWithAstronaut(astronaut("a1", 40, 60, AssignmentState.IDLE));
+        snapshot.getAstronauts().get(0).setUnavailableSeasons(2);
+
+        PersonnelLifecycle.advanceSeason(snapshot);
+
+        assertEquals(60, snapshot.getAstronauts().get(0).getMorale());
+    }
+
     /**
      * Verifies that a busy (assigned) employee gains the configured amount
      * of morale in one pass.

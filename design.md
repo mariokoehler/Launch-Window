@@ -1535,6 +1535,9 @@ such as letting a brilliant troublemaker go.
     component" became the agency's most skilled engineer in their best skill. The component for
     "bring a component to its cap" is the one they work on when they say it, else a random owned
     one below its cap.
+  - **Everyone of the group not on the flight is passed over,** busy elsewhere or not; Assemble mission's
+    warning lists them all, "is free and" or "is busy but wants to ..." (2026-10-22: it had left out anyone in
+    training, on another mission or sidelined, the user asked to fix the undercount, keeping the rule).
   - **A flight passes others over once,** in its first season (its second, for days in orbit),
     however many seasons it lasts.
   - **The window** counts down once the ambition is said: the table's seasons, −1 for Ambitious
@@ -2896,6 +2899,9 @@ runs with that in mind; per-run history is in the pre-2026-10-06 design doc (see
   Widen the gap between the floor and the Poor ceiling if unhappy rosters should hire worse.
 - **Idle morale loss is a "sustained neglect" penalty** at typical activity levels, not a
   routine one.
+- **Someone sidelined loses no idle morale** (the user's decision, 2026-10-22): an employee made unavailable by
+  a random event or an R&D decision's secondment can't be given work, so their season's own morale holds
+  (`PersonnelLifecycle`); other morale changes (events, salary, ambitions) still apply.
 
 ### 3.11 Offscreen screenshot tooling for UI checking
 
