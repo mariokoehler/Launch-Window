@@ -124,6 +124,12 @@ engineering problem or tidbit, note it here the same session.
       the relight towards the Moon it used the 70 lbf ullage thrusters in its two Auxiliary
       Propulsion System modules, burning nitrogen tetroxide and monomethylhydrazine (the S-IVB
       article on Wikipedia; Roy Godfrey's oral history at the University of Alabama in Huntsville).
+    - E-04 sheet 2, gas-fed engines (user, 2026-10-23): no pumps to starve, but the propellant must still
+      lie over the outlet, or the pressurising gas is what flows. Apollo's service module engine was
+      settled by a +X burn of the steering jets (two or four jets) before its burns, longer when the
+      tanks were low and the craft heavy, none with nearly full tanks (Apollo 10 Flight Journal; the
+      Apollo 14 CSM checklist's ullage charts). Apollo 10's lunar module ascent stage was starved
+      of propellant once for want of settling (TRW's flight evaluation, 1969).
     - E-05: oxygen boils at −183 °C, hydrogen at −253 °C. Vacuum exhaust speeds about 3.0
       (F-1, 304 s), 4.2 (J-2, 421 s) and 3.1 km/s (Apollo's service engine, 314 s). The word
       "Hypergol" was coined by Wolfgang Nöggerath (Braunschweig) in the early 1940s. The R-16

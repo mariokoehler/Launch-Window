@@ -268,7 +268,7 @@
           "points": [
             {
               "title": "Simple engines restart best",
-              "text": "An engine fed by gas pressure has no pumps to starve, and propellants that ignite the moment they meet need no spark. Apollo's service module engine, which took the crew into lunar orbit and out again, was built this way. So was the lunar module's ascent engine, which had no backup."
+              "text": "An engine fed by gas pressure has no pumps to starve, and propellants that ignite the moment they meet need no spark. The liquid must still lie over the outlet, or the gas pushes out gas. Apollo's service module engine, which took the crew into lunar orbit and out again, was built this way, and so was the lunar module's ascent engine, which had no backup. Before most burns, the service module's steering jets nudged the craft to settle the propellant."
             },
             {
               "title": "Learned the hard way",
