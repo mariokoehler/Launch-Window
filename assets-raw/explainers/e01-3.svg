@@ -32,12 +32,12 @@
           <!-- B · Staging -->
           <text x="394" y="44" class="d-head">B · Drop what’s empty</text>
           <!-- Core stage, still flying -->
-          <path d="M540 92 L552 66 L564 92 Z" fill="#ffffff" stroke="#16305c" stroke-width="2" stroke-linejoin="round"/>
-          <rect x="540" y="92" width="24" height="44" fill="#ffffff" stroke="#16305c" stroke-width="2"/>
-          <rect x="536" y="136" width="32" height="250" fill="#ffffff" stroke="#16305c" stroke-width="2"/>
-          <path d="M540 386 L536 404 L568 404 L564 386" fill="#ffffff" stroke="#16305c" stroke-width="2" stroke-linejoin="round"/>
-          <path d="M546 406 L552 432 L558 406" fill="#e0a72e" stroke="#8a5d12" stroke-width="1.5" stroke-linejoin="round"/>
-          <path d="M552 60 L552 40" stroke="#16305c" stroke-width="2" marker-end="url(#arN3)"/>
+          <path d="M540 116 L552 90 L564 116 Z" fill="#ffffff" stroke="#16305c" stroke-width="2" stroke-linejoin="round"/>
+          <rect x="540" y="116" width="24" height="44" fill="#ffffff" stroke="#16305c" stroke-width="2"/>
+          <rect x="536" y="160" width="32" height="250" fill="#ffffff" stroke="#16305c" stroke-width="2"/>
+          <path d="M540 410 L536 428 L568 428 L564 410" fill="#ffffff" stroke="#16305c" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M546 430 L552 456 L558 430" fill="#e0a72e" stroke="#8a5d12" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M552 84 L552 64" stroke="#16305c" stroke-width="2" marker-end="url(#arN3)"/>
           <!-- Left booster, falling away -->
           <g transform="rotate(-18 470 410)">
             <path d="M458 300 L470 268 L482 300 L482 470 L458 470 Z" fill="#ffffff" stroke="#16305c" stroke-width="2" stroke-linejoin="round"/>
@@ -66,16 +66,16 @@
           </g>
           <text x="734" y="104" class="d-lbl-gold">1 · Retrofire</text>
           <text x="734" y="122" class="d-txt">Fire a rocket forwards, to brake.</text>
-          <text x="734" y="200" class="d-txt">An orbit never ends by itself.</text>
+          <text x="846" y="204" class="d-txt">An orbit never ends by itself.</text>
           <!-- The way down -->
           <path d="M812 168 Q870 320 958 470" fill="none" stroke="#16305c" stroke-width="2" stroke-dasharray="8 6" marker-end="url(#arN3)"/>
           <!-- Capsule in the heat of re-entry -->
           <path d="M968 486 Q948 470 952 446" fill="none" stroke="#e0a72e" stroke-width="6" stroke-linecap="round"/>
           <circle cx="972" cy="472" r="13" fill="#ffffff" stroke="#16305c" stroke-width="2"/>
-          <text x="882" y="330" class="d-lbl">2 · Into the air</text>
-          <text x="882" y="348" class="d-txt">About 12 times the energy</text>
-          <text x="882" y="364" class="d-txt">of a suborbital return,</text>
-          <text x="882" y="380" class="d-txt">all turned into heat.</text>
+          <text x="734" y="410" class="d-lbl">2 · Into the air</text>
+          <text x="734" y="428" class="d-txt">About 12 times the energy</text>
+          <text x="734" y="444" class="d-txt">of a suborbital return,</text>
+          <text x="734" y="460" class="d-txt">all turned into heat.</text>
 
           <!-- Formula -->
           <path d="M24 620 L1036 620" stroke="rgba(22,48,92,0.25)" stroke-width="1"/>

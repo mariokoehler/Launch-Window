@@ -183,8 +183,8 @@
    "text": "Fire a rocket forwards, to brake."
   },
   {
-   "x": 734.0,
-   "y": 200.0,
+   "x": 846.0,
+   "y": 204.0,
    "anchor": "start",
    "kind": "d-txt",
    "size": 0,
@@ -192,8 +192,8 @@
    "text": "An orbit never ends by itself."
   },
   {
-   "x": 882.0,
-   "y": 330.0,
+   "x": 734.0,
+   "y": 410.0,
    "anchor": "start",
    "kind": "d-lbl",
    "size": 0,
@@ -201,8 +201,8 @@
    "text": "2 · Into the air"
   },
   {
-   "x": 882.0,
-   "y": 348.0,
+   "x": 734.0,
+   "y": 428.0,
    "anchor": "start",
    "kind": "d-txt",
    "size": 0,
@@ -210,8 +210,8 @@
    "text": "About 12 times the energy"
   },
   {
-   "x": 882.0,
-   "y": 364.0,
+   "x": 734.0,
+   "y": 444.0,
    "anchor": "start",
    "kind": "d-txt",
    "size": 0,
@@ -219,8 +219,8 @@
    "text": "of a suborbital return,"
   },
   {
-   "x": 882.0,
-   "y": 380.0,
+   "x": 734.0,
+   "y": 460.0,
    "anchor": "start",
    "kind": "d-txt",
    "size": 0,
