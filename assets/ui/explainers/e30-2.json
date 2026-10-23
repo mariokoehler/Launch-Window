@@ -21,22 +21,31 @@
    "text": "Earth's air"
   },
   {
-   "x": 182.0,
-   "y": 520.0,
-   "anchor": "start",
+   "x": 148.0,
+   "y": 482.0,
+   "anchor": "end",
    "kind": "d-lbl",
    "size": 14.0,
    "color": "#16305c",
    "text": "Too steep:"
   },
   {
-   "x": 182.0,
-   "y": 536.0,
-   "anchor": "start",
+   "x": 148.0,
+   "y": 498.0,
+   "anchor": "end",
    "kind": "d-txt",
    "size": 12.5,
    "color": "#5b5548",
-   "text": "crushing braking, too hot"
+   "text": "crushing braking,"
+  },
+  {
+   "x": 148.0,
+   "y": 514.0,
+   "anchor": "end",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "too hot"
   },
   {
    "x": 490.0,
@@ -57,8 +66,8 @@
    "text": "skims back out to space"
   },
   {
-   "x": 262.0,
-   "y": 340.0,
+   "x": 290.0,
+   "y": 494.0,
    "anchor": "start",
    "kind": "d-lbl-gold",
    "size": 14.0,
@@ -66,8 +75,8 @@
    "text": "Just right: a few"
   },
   {
-   "x": 262.0,
-   "y": 356.0,
+   "x": 290.0,
+   "y": 510.0,
    "anchor": "start",
    "kind": "d-lbl-gold",
    "size": 14.0,
