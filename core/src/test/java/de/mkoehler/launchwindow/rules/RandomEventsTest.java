@@ -160,6 +160,8 @@ class RandomEventsTest {
                 if (random.nextDouble() < 0.2) {
                     player.setLastFailureTurn(season);
                 }
+                // The agency's own season, as the server keeps it: the basic-training events skip its first.
+                player.setSeason(season);
                 List<ResolutionEvent> events = RandomEvents.advanceSeason(player, roster(100, 100), random,
                     season, season);
                 for (ResolutionEvent event : events) {
@@ -192,6 +194,45 @@ class RandomEventsTest {
             }
         }
         assertEquals(IMPLEMENTED, seen, "every implemented event should fire somewhere in the long run");
+    }
+
+    /**
+     * On the agency's first season, no trainee's basic training is extended or failed (user, 2026-10-23),
+     * however the dice fall; from the second season on, both can happen again.
+     */
+    @Test
+    void basicTrainingEventsSkipTheFirstSeason() {
+        Set<RandomEventKind> training = EnumSet.of(RandomEventKind.BASIC_TRAINING_EXTENSION,
+            RandomEventKind.EMPLOYEE_FAILED_BASIC_TRAINING);
+        Set<RandomEventKind> later = EnumSet.noneOf(RandomEventKind.class);
+        for (long seed = 0; seed < 400; seed++) {
+            PlayerSnapshot first = traineesOnly();
+            for (RandomEventKind kind : kindsApplied(RandomEvents.advanceSeason(first, roster(100, 0),
+                    new Random(seed), 1, 1))) {
+                assertFalse(training.contains(kind), "on the first season: " + kind);
+            }
+            PlayerSnapshot second = traineesOnly();
+            second.setSeason(2);
+            later.addAll(kindsApplied(RandomEvents.advanceSeason(second, roster(100, 0), new Random(seed), 2, 2)));
+        }
+        assertTrue(later.containsAll(training), "both happen from the second season on: " + later);
+    }
+
+    /** A first-season agency whose only people are engineers in basic training. */
+    private static PlayerSnapshot traineesOnly() {
+        PlayerSnapshot player = quietPlayer(0, 0);
+        List<SetSpecialist> specialists = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            SetSpecialist specialist = new SetSpecialist("s" + i, "s" + i, 35, 70, 60);
+            specialist.setAssignmentState(AssignmentState.IN_TRAINING);
+            specialist.setTrainingKind(TrainingKind.BASIC);
+            specialist.setTrainingSeasonsTotal(TrainingProgress.FIRST_TURN_SET_BASIC_TRAINING_SEASONS);
+            specialists.add(specialist);
+        }
+        player.setSetSpecialists(specialists);
+        player.setLastFailureTurn(-1);
+        player.setLastFlightSeasonTurn(-1);
+        return player;
     }
 
     /**

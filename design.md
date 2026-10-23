@@ -1109,7 +1109,8 @@ season unchanged. Tiger Teams' live per-step choice doesn't fit, so it was redes
   turn** (its season 1, a late joiner's too) train one season, not two, so they're ready on the
   second turn, a program can open, and the advisor moves on to flight directors (user, 2026-10-23:
   the second day had nothing to do). A quiet gift: nothing on screen says so, and the hire screen
-  still quotes two seasons. **Permanent** training repeats
+  still quotes two seasons. To keep it certain, neither basic-training event (extended, failed) can
+  happen on that first season (`RandomEvents.firstSeason`); the roll passes to the pool's next event. **Permanent** training repeats
   advanced-length rounds until a target level, stopping when a round gains less than 0.05.
 - **Expert trait** (replaces Tiger Teams, user, 2026-09-27 and 2026-10-02): an astronaut or
   controller (never SET) with a skill at 80 or more can train toward Expert in it. Each season

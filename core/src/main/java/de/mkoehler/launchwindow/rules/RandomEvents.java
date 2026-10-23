@@ -297,7 +297,7 @@ public final class RandomEvents {
     private static boolean extendBasicTraining(PlayerSnapshot snapshot, RandomGenerator random, int turn,
             List<ResolutionEvent> events) {
         List<Personnel> trainees = basicTrainees(snapshot);
-        if (trainees.isEmpty()) {
+        if (trainees.isEmpty() || firstSeason(snapshot)) {
             return false;
         }
         Personnel trainee = trainees.get(random.nextInt(trainees.size()));
@@ -305,6 +305,16 @@ public final class RandomEvents {
         occurred(snapshot, events, RandomEventKind.BASIC_TRAINING_EXTENSION, trainee.getId(), 1, turn,
             trainee.getName());
         return true;
+    }
+
+    /**
+     * Whether this is the agency's own first season (it starts at season 1, a late joiner too). Neither
+     * basic-training event happens then, so the first turn's hires are ready on the second turn
+     * ({@link TrainingProgress#FIRST_TURN_SET_BASIC_TRAINING_SEASONS}; user, 2026-10-23); the roll
+     * passes to the pool's next event, as it does when nobody is in training.
+     */
+    static boolean firstSeason(PlayerSnapshot snapshot) {
+        return snapshot.getSeason() == 1;
     }
 
     /**
@@ -332,7 +342,7 @@ public final class RandomEvents {
     private static boolean failBasicTraining(PlayerSnapshot snapshot, RandomGenerator random, int turn,
             List<ResolutionEvent> events) {
         List<Personnel> trainees = basicTrainees(snapshot);
-        if (trainees.isEmpty()) {
+        if (trainees.isEmpty() || firstSeason(snapshot)) {
             return false;
         }
         Personnel trainee = trainees.get(random.nextInt(trainees.size()));
