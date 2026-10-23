@@ -116,7 +116,14 @@ engineering problem or tidbit, note it here the same session.
       in orbit, so "relit" was wrong. It stranded the first Venus probe (4 February 1961, an
       ignition failure) and Venus and Mars probes in August, September, October and November
       1962; on 25 August 1962 an ullage motor failed to fire and the stage tumbled (added to
-      the sheet).
+      the sheet). Its settling rockets were solid ones, four of them (Andrew LePage, *The Space
+      Review*, "If at first you don't succeed", part 2).
+    - E-04, settling rockets (user, 2026-10-23): many were small solid motors, which can't float but
+      can't be stopped or relit either. The Saturn V's third stage (S-IVB-500) fired two solid
+      Thiokol TX-280 ullage motors on its aft skirt before its first start, then dropped them; for
+      the relight towards the Moon it used the 70 lbf ullage thrusters in its two Auxiliary
+      Propulsion System modules, burning nitrogen tetroxide and monomethylhydrazine (the S-IVB
+      article on Wikipedia; Roy Godfrey's oral history at the University of Alabama in Huntsville).
     - E-05: oxygen boils at −183 °C, hydrogen at −253 °C. Vacuum exhaust speeds about 3.0
       (F-1, 304 s), 4.2 (J-2, 421 s) and 3.1 km/s (Apollo's service engine, 314 s). The word
       "Hypergol" was coined by Wolfgang Nöggerath (Braunschweig) in the early 1940s. The R-16

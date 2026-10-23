@@ -256,7 +256,7 @@
             },
             {
               "title": "Nudge, then light",
-              "text": "The cure is a settling burn: small rockets fire for a few seconds to push the craft forward, the propellant drifts back to the bottom of its tanks, and only then does the main engine start. The Saturn V's third stage did this before it relit to leave Earth orbit for the Moon."
+              "text": "The cure is a settling burn: small rockets push the craft forward for a few seconds, the propellant drifts back to the bottom of its tanks, and only then does the main engine start. Often these were tiny solid rockets, with no liquid to float, but once lit a solid rocket burns until it is empty and can't be used again. The Saturn V's third stage used solid ones before its first start, and small liquid thrusters, which can be fired again and again, before it relit for the Moon."
             }
           ],
           "inGame": "The R-7 lights every engine on the ground for this reason: in the early 1950s nobody knew whether a big engine could be started reliably high up. Its history note tells the story."
