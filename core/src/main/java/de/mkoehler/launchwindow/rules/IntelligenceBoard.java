@@ -63,12 +63,15 @@ public final class IntelligenceBoard {
         Map<String, List<IntelFinding>> findings = new LinkedHashMap<>();
         for (Map.Entry<String, PlayerSnapshot> spy : sorted.entrySet()) {
             PlayerSnapshot agency = spy.getValue();
+            // Whom this agency's personnel files reached this turn, as "rival/person": never twice in a turn.
+            Set<String> filedThisTurn = new HashSet<>();
             for (IntelOperation operation : agency.getIntelligence().getQueued()) {
                 if (operation.kind() == IntelOperation.Kind.OFFER) {
                     continue;
                 }
                 SplittableRandom random = new SplittableRandom(seed(gameSeed, gameTurn, spy.getKey(), operation.id()));
-                settleOperation(spy.getKey(), agency, operation, sorted, catalog, (int) gameTurn, random, findings);
+                settleOperation(spy.getKey(), agency, operation, sorted, catalog, (int) gameTurn, random, findings,
+                    filedThisTurn);
             }
         }
         settleOffers(sorted, catalog, gameSeed, gameTurn, findings);
@@ -188,7 +191,7 @@ public final class IntelligenceBoard {
 
     private static void settleOperation(String spyId, PlayerSnapshot spy, IntelOperation operation,
             Map<String, PlayerSnapshot> agencies, ContentCatalog catalog, int gameTurn, SplittableRandom random,
-            Map<String, List<IntelFinding>> findings) {
+            Map<String, List<IntelFinding>> findings, Set<String> filedThisTurn) {
         List<IntelFinding> mine = findings.computeIfAbsent(spyId, id -> new ArrayList<>());
         PlayerSnapshot target = operation.targetId().equals(spyId) ? null : agencies.get(operation.targetId());
         if (target == null) {
@@ -198,7 +201,8 @@ public final class IntelligenceBoard {
         Personnel person = null;
         if (operation.kind() == IntelOperation.Kind.PERSONNEL_FILE) {
             RivalFolder folder = spy.getIntelligence().getFolders().get(operation.targetId());
-            person = filePick(target, PersonnelGroup.valueOf(operation.group()), operation.personId(), folder);
+            person = filePick(target, PersonnelGroup.valueOf(operation.group()), operation.personId(), folder,
+                filedThisTurn, operation.targetId());
             if (person == null) {
                 mine.add(IntelFinding.about(IntelFinding.Kind.NO_TARGET, operation, target.getAgencyName(), -1));
                 return;
@@ -234,6 +238,7 @@ public final class IntelligenceBoard {
         List<TraitState> traits = person.getTraits();
         Trait trait = traits.isEmpty() ? null : traits.get(random.nextInt(traits.size())).trait();
         String band = Careers.loyaltyBand(person.getLoyalty());
+        filedThisTurn.add(operation.targetId() + "/" + person.getId());
         PersonnelFile file = new PersonnelFile(person.getId(), person.getName(), person.getPortraitId(),
             operation.group(), person.getAge(), gameTurn, skills, trait, band, person.getAmbition(),
             person.getDisappointedSeasons() > 0, person.getSalary(), person.getTenureSeasons(),
@@ -244,11 +249,14 @@ public final class IntelligenceBoard {
 
     /**
      * Picks a personnel file's subject: the named person if they're still there, else the group's
-     * most skilled without a file yet, else the group's most skilled.
+     * most skilled without a file yet, else the group's most skilled. Nobody filed by another of the
+     * spy's operations this turn is picked again (user, 2026-10-23: three files on one person); with
+     * everyone filed, there's nobody.
      */
     private static Personnel filePick(PlayerSnapshot target, PersonnelGroup group, String personId,
-            RivalFolder folder) {
+            RivalFolder folder, Set<String> filedThisTurn, String targetId) {
         List<Personnel> roster = new ArrayList<>(roster(target, group));
+        roster.removeIf(person -> filedThisTurn.contains(targetId + "/" + person.getId()));
         if (personId != null) {
             for (Personnel person : roster) {
                 if (person.getId().equals(personId)) {

@@ -2010,7 +2010,10 @@ No BASPM precedent beyond its 1v1 PBEM mode and rival comparison screen.
   - **Personnel file** (level 3): one rival employee, in a group the player picks: the most
     skilled person there without a current file, or a person the player names from an earlier
     file. It shows name and portrait, skills as ranges, a loyalty band (low, middling, high; needs phase 4's loyalty), their ambition and
-    whether they're disappointed, and one of their traits.
+    whether they're disappointed, and one of their traits. **Never the same person twice in a turn**
+    (user, 2026-10-23, after three files came back on one astronaut): the files settle one after
+    another, and each skips whoever an earlier one filed that turn, a named person too; with nobody
+    left in the group, the file finds nothing to look at.
   - **Odds against a rival's counter-intelligence** (the target's level, 0 to 3): a targeted
     action succeeds at **85 % minus 15 points per level** of the target's counter-intelligence
     (85 / 70 / 55 / 40). Ranges are tighter the higher the spy's level is over the target's:

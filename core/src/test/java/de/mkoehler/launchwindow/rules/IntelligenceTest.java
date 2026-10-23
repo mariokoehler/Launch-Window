@@ -270,6 +270,49 @@ class IntelligenceTest {
         assertNull(probe.file.file().ambition(), "an ambition not said yet stays hidden, even from spies");
     }
 
+    /**
+     * Personnel files queued in one turn never come back on the same person (user, 2026-10-23: three
+     * files on one astronaut): each picks the best not filed yet this turn, a named person included, and
+     * with everyone filed there's nobody left to look at.
+     */
+    @Test
+    void personnelFilesInOneTurnNeverFileTheSamePersonTwice() {
+        int threeFiles = 0;
+        int nobodyLeft = 0;
+        for (long seed = 0; seed < 60; seed++) {
+            Map<String, PlayerSnapshot> agencies = rivals(3, 0);
+            for (int i = 2; i <= 3; i++) {
+                Astronaut other = new Astronaut("p" + i, "Other " + i, 30, 70, 50);
+                for (AstronautSkill skill : AstronautSkill.values()) {
+                    other.setSkill(skill, 40 + i);
+                }
+                agencies.get("target").getAstronauts().add(other);
+            }
+            Intelligence.queue(agencies.get("spy"), IntelOperation.Kind.PERSONNEL_FILE, "target", null, "ASTRONAUT",
+                null);
+            Intelligence.queue(agencies.get("spy"), IntelOperation.Kind.PERSONNEL_FILE, "target", null, "ASTRONAUT",
+                "p1");
+            Intelligence.queue(agencies.get("spy"), IntelOperation.Kind.PERSONNEL_FILE, "target", null, "ASTRONAUT",
+                null);
+            List<String> filed = IntelligenceBoard.settle(agencies, CATALOG, seed, 5).get("spy").stream()
+                .filter(finding -> finding.kind() == IntelFinding.Kind.PERSONNEL_FILE)
+                .map(finding -> finding.file().personId()).toList();
+            assertEquals(new java.util.HashSet<>(filed).size(), filed.size(), "the same person twice: " + filed);
+            threeFiles += filed.size() == 3 ? 1 : 0;
+
+            Map<String, PlayerSnapshot> lone = rivals(3, 0);
+            Intelligence.queue(lone.get("spy"), IntelOperation.Kind.PERSONNEL_FILE, "target", null, "ASTRONAUT", null);
+            Intelligence.queue(lone.get("spy"), IntelOperation.Kind.PERSONNEL_FILE, "target", null, "ASTRONAUT", null);
+            List<IntelFinding> found = IntelligenceBoard.settle(lone, CATALOG, seed, 5).get("spy");
+            if (found.getFirst().kind() == IntelFinding.Kind.PERSONNEL_FILE) {
+                assertEquals(IntelFinding.Kind.NO_TARGET, found.get(1).kind(), "only one astronaut to file");
+                nobodyLeft++;
+            }
+        }
+        assertTrue(threeFiles > 0, "some turn files all three");
+        assertTrue(nobodyLeft > 0);
+    }
+
     private static final class PersonnelFileProbe {
         private IntelFinding file;
     }
