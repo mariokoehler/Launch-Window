@@ -32,6 +32,10 @@
           <text x="766" y="550" class="d-txt">curves away. That is an orbit.</text>
           <!-- Edge of space label -->
           <path d="M214 330 L150 300" stroke="rgba(22,48,92,0.5)" stroke-width="1"/>
+          <path d="M336 118 L410 158" stroke="rgba(22,48,92,0.5)" stroke-width="1"/>
+          <text x="330" y="94" text-anchor="end" class="d-sm">Newton’s mountain</text>
+          <text x="330" y="110" text-anchor="end" class="d-txt">Its top is above the air,</text>
+          <text x="330" y="126" text-anchor="end" class="d-txt">so nothing slows the ball</text>
           <text x="40" y="282" class="d-sm">Edge of space</text>
           <text x="40" y="298" class="d-txt">about 100 km up</text>
           <!-- Footer of drawing -->

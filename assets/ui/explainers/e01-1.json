@@ -93,6 +93,33 @@
    "text": "curves away. That is an orbit."
   },
   {
+   "x": 330.0,
+   "y": 94.0,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 0,
+   "color": "#5b5548",
+   "text": "Newton’s mountain"
+  },
+  {
+   "x": 330.0,
+   "y": 110.0,
+   "anchor": "end",
+   "kind": "d-txt",
+   "size": 0,
+   "color": "#5b5548",
+   "text": "Its top is above the air,"
+  },
+  {
+   "x": 330.0,
+   "y": 126.0,
+   "anchor": "end",
+   "kind": "d-txt",
+   "size": 0,
+   "color": "#5b5548",
+   "text": "so nothing slows the ball"
+  },
+  {
    "x": 40.0,
    "y": 282.0,
    "anchor": "start",
