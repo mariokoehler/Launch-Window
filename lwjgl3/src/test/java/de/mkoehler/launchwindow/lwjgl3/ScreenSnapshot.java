@@ -439,6 +439,11 @@ public final class ScreenSnapshot {
                 Programs.price(game.session().catalog().program("vostok").orElseThrow(), game.session().state(),
                     game.session().catalog())));
         write(folder, "hq-details-sputnik-1.png", new ProgramDetailsScreen(game, "sputnik-1", null), null);
+        // Its satellite is new, so the upkeep is itemized: the program's and the satellite's.
+        write(folder, "hq-details-sputnik-2-open.png", new ProgramDetailsScreen(game, "sputnik-2", CelestialBody.EARTH),
+            screen -> screen.tryOpen(game.session().catalog().program("sputnik-2").orElseThrow(),
+                Programs.price(game.session().catalog().program("sputnik-2").orElseThrow(), game.session().state(),
+                    game.session().catalog())));
         // The longest history note in the pack (the Sputnik 1 satellite's), pinned open.
         write(folder, "hq-details-sputnik-1-note.png", new ProgramDetailsScreen(game, "sputnik-1", null),
             screen -> pinLastHistoryNote(screen.stage().getRoot()));

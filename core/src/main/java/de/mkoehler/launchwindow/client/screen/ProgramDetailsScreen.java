@@ -338,13 +338,28 @@ public final class ProgramDetailsScreen extends ChromeScreen {
         }
         String name = ContentNames.of(program.id());
         Table card = dialogCard("Confirm", "Open " + name + "?");
-        card.add(ui.paragraph("Its upkeep of " + money(program.maintenanceCost()) + " is charged every season from the "
-            + "next turn on.", Theme.TextStyle.BODY, Theme.INK_MUTED)).padBottom(Theme.SPACE_4).row();
+        // The upkeep is the program's and that of every component it brings, as BudgetProgress charges it.
+        long upkeep = Outlook.openingUpkeep(program, session.state(), session.catalog());
+        double multiplier = session.state().getCostMultiplier();
+        List<String> shares = new ArrayList<>();
+        for (String id : program.requiredMissionComponentIds()) {
+            OwnedMissionComponent owned = session.state().getMissionComponents().get(id);
+            if (owned == null || !owned.isActive()) {
+                shares.add(money(Math.round(session.catalog().missionComponent(id).orElseThrow().maintenanceCost()
+                    * multiplier)) + " for the " + ContentNames.of(id));
+            }
+        }
+        String parts = "";
+        if (!shares.isEmpty()) {
+            shares.addFirst(money(Math.round(program.maintenanceCost() * multiplier)) + " for the program");
+            parts = " (" + String.join(", ", shares) + ")";
+        }
+        card.add(ui.paragraph("Its upkeep of " + money(upkeep) + parts + " is charged every season from the next turn "
+            + "on.", Theme.TextStyle.BODY, Theme.INK_MUTED)).padBottom(Theme.SPACE_4).row();
         card.add(priceBreakdown(price.lines(), price.total())).padBottom(Theme.SPACE_4).row();
         // How long the funds last with its upkeep added (the user's request, 2026-10-10).
-        long upkeep = Outlook.openingUpkeep(program, session.state(), session.catalog());
         PlayerSnapshot after = session.state();
-        card.add(ui.notice(Theme.NoticeKind.INFO, "With its upkeep of " + money(upkeep) + " a season.",
+        card.add(ui.notice(Theme.NoticeKind.INFO, "With that upkeep added.",
             "After its price, " + lowerFirst(Outlook.runwayLine(after, session.catalog(),
                 session.gameInfo().response().budgetSchedule(), upkeep, price.total(), session.openTurn()))))
             .growX().padBottom(Theme.SPACE_4).row();

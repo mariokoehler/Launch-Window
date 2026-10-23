@@ -897,7 +897,11 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       review counted." or "…last at least ten years…", red within 4 seasons. Each season pays today's
       running costs and funding; the next review pays what today's prestige earns. The confirmation
       adds the program's upkeep and its new components' upkeep and pays the price first ("After its
-      price, at today's costs…").
+      price, at today's costs…"). Its first line gives that same total, itemized when components
+      add to it: "Its upkeep of $ 88.0 ($ 13.0 for the program, $ 75.0 for the Sputnik 1
+      satellite) is charged every season…" (user, 2026-10-23: it named the program's alone, which
+      read as a contradiction). Shot: `hq-details-sputnik-2-open.png` (an inactive satellite's
+      upkeep coming back).
     - **Where to earn a goal** (§4.6.3, §4.6.4, idea 6). On a locked program's details, a line per
       missing goal: "Satellite in orbit: Earned by Project Mercury (open), Apollo (open), Explorer 1
       (available) and 8 more programs." Open programs first, then available; the agency's own
