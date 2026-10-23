@@ -52,6 +52,13 @@ class CareersTest {
         return engineer;
     }
 
+    private static SetSpecialist skilled(SetSpecialist engineer, double skill) {
+        for (de.mkoehler.launchwindow.model.SetSkill each : de.mkoehler.launchwindow.model.SetSkill.values()) {
+            engineer.setSkill(each, skill);
+        }
+        return engineer;
+    }
+
     private static void research(SetSpecialist engineer) {
         engineer.setAssignmentState(AssignmentState.ASSIGNED);
         engineer.setRdTargetComponentId(COMPONENT);
@@ -87,8 +94,10 @@ class CareersTest {
     @Test
     void anAmbitionIsSaidAfterTwoSeasonsWithAWindowSizedByTraits() {
         PlayerSnapshot snapshot = agency();
-        SetSpecialist eager = engineer(snapshot, "p1", Trait.AMBITIOUS);
-        SetSpecialist calm = engineer(snapshot, "p2", Trait.STEADY);
+        // Near its cap with skilled engineers, so the table's window is long enough and isn't stretched.
+        snapshot.getMissionComponents().put(COMPONENT, new OwnedMissionComponent(86, 40));
+        SetSpecialist eager = skilled(engineer(snapshot, "p1", Trait.AMBITIOUS), 65);
+        SetSpecialist calm = skilled(engineer(snapshot, "p2", Trait.STEADY), 65);
         research(eager);
         research(calm);
         eager.setAmbitionPending(true);
@@ -102,6 +111,46 @@ class CareersTest {
         assertEquals(calm.getAmbition().kind().window() + Careers.WINDOW_STEADY, calm.getAmbition().window());
         assertFalse(eager.isAmbitionPending());
         assertEquals(CareerEntry.Kind.AMBITION, eager.getCareer().getLast().kind());
+    }
+
+    /**
+     * "Bring a component to its cap" is only said when the agency's best team can get there in time
+     * (user, 2026-10-23): its window stretches to the projection plus {@link Careers#CAP_SLACK}, up to
+     * {@link Careers#CAP_WINDOW_MAX}, and a cap further off isn't drawn at all. With no program open,
+     * it's the only ambition an engineer can draw here.
+     */
+    @Test
+    void theCapAmbitionFitsWhatTheAgencysBestTeamCanDo() {
+        boolean stretched = false;
+        boolean skipped = false;
+        // A strong team and a weak one; the one who wants it is the best already, so "be the agency's
+        // best" isn't on offer.
+        for (int[] skills : new int[][] {{65, 45}, {30, 20}}) for (int start = 40; start <= 88; start += 2) {
+            PlayerSnapshot snapshot = agency();
+            snapshot.getMissionComponents().put(COMPONENT, new OwnedMissionComponent(start, 40));
+            SetSpecialist wants = skilled(engineer(snapshot, "p1"), skills[0]);
+            skilled(engineer(snapshot, "p2"), skills[1]);
+            skilled(engineer(snapshot, "p3"), skills[1]);
+            skilled(engineer(snapshot, "p4"), skills[1]);
+            research(wants);
+            wants.setAmbitionPending(true);
+            season(snapshot, 1);
+            season(snapshot, 2);
+            java.util.OptionalInt needed = Careers.seasonsToCap(snapshot, CATALOG, wants, COMPONENT);
+            if (needed.isEmpty() || needed.getAsInt() + Careers.CAP_SLACK > Careers.CAP_WINDOW_MAX) {
+                assertNull(wants.getAmbition(), "out of reach from " + start);
+                skipped = true;
+                continue;
+            }
+            Ambition said = wants.getAmbition();
+            assertNotNull(said, "in reach from " + start);
+            assertEquals(Ambition.Kind.COMPONENT_CAP, said.kind());
+            assertEquals(Math.max(Ambition.Kind.COMPONENT_CAP.window(), needed.getAsInt() + Careers.CAP_SLACK),
+                said.window(), "from " + start);
+            stretched |= said.window() > Ambition.Kind.COMPONENT_CAP.window();
+        }
+        assertTrue(stretched, "some start needs a longer window");
+        assertTrue(skipped, "some start is out of reach");
     }
 
     @Test

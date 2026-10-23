@@ -143,6 +143,7 @@ public final class HelpValues {
             .max().orElse(0)));
         v.put("ambition.ambitiousWindow", whole(-Careers.WINDOW_AMBITIOUS));
         v.put("ambition.steadyWindow", whole(Careers.WINDOW_STEADY));
+        v.put("ambition.capWindowMax", whole(Careers.CAP_WINDOW_MAX));
         v.put("ambition.fulfilledMorale", whole(Careers.FULFILLED_MORALE));
         v.put("ambition.fulfilledLoyalty", whole(Careers.FULFILLED_LOYALTY));
         v.put("ambition.fulfilledLoyaltyAmbitious", whole(Careers.FULFILLED_LOYALTY_AMBITIOUS));

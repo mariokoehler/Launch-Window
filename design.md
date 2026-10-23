@@ -1565,6 +1565,14 @@ such as letting a brilliant troublemaker go.
     component" became the agency's most skilled engineer in their best skill. The component for
     "bring a component to its cap" is the one they work on when they say it, else a random owned
     one below its cap.
+  - **"Bring a component to its cap" fits what the agency can do** (user, 2026-10-23, after a play test:
+    an engineer had 11 seasons for a Sputnik cap that four engineers would reach in 26). When it's
+    drawn, `Careers.seasonsToCap` projects the R&D (`ResearchPlanning.project`, the average) with the
+    agency's best team: the engineer and its three most skilled others in the component's skill, busy
+    or not. The window is the table's 12 (traits applied) or the projection plus 2 (`CAP_SLACK`),
+    whichever is longer, up to 20 (`CAP_WINDOW_MAX`); a cap further off is out of reach, so another
+    owned component in reach is taken, else the ambition isn't on offer and another kind is drawn.
+    Both numbers are unconfirmed defaults. The measured counts below predate this, for engineers.
   - **Everyone of the group not on the flight is passed over,** busy elsewhere or not; Assemble mission's
     warning lists them all, "is free and" or "is busy but wants to ..." (2026-10-22: it had left out anyone in
     training, on another mission or sidelined, the user asked to fix the undercount, keeping the rule).

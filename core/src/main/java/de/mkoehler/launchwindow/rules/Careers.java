@@ -23,12 +23,14 @@ import de.mkoehler.launchwindow.model.Trait;
 import de.mkoehler.launchwindow.model.TraitState;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.OptionalInt;
 import java.util.Set;
 import java.util.SplittableRandom;
 import java.util.stream.Stream;
@@ -62,6 +64,16 @@ public final class Careers {
     public static final int WINDOW_STEADY = 2;
     /** The shortest patience window. */
     public static final int WINDOW_MIN = 3;
+    /**
+     * Seasons to spare beyond the projection for "bring a component to its cap" (user, 2026-10-23): the
+     * team has to be seated first, and the projection is an average.
+     */
+    public static final int CAP_SLACK = 2;
+    /**
+     * The longest window "bring a component to its cap" stretches to; a cap further off than this, with
+     * the agency's best team, isn't drawn at all (user, 2026-10-23).
+     */
+    public static final int CAP_WINDOW_MAX = 20;
     /** Loyalty on hiring. */
     public static final int LOYALTY_START = 50;
     /** Loyalty gained each season with the agency. */
@@ -628,25 +640,32 @@ public final class Careers {
             person.getId() + "/say/" + gameTurn) ^ DRAW_SALT);
         List<Ambition.Kind> options = new ArrayList<>();
         Map<Ambition.Kind, String> refs = new HashMap<>();
+        Map<Ambition.Kind, Integer> windows = new HashMap<>();
         for (Ambition.Kind kind : Ambition.Kind.forGroup(groupOf(person).name())) {
             String ref = componentFor(snapshot, catalog, person, kind, random);
-            if (reachable(snapshot, catalog, tally, person, kind, ref)) {
-                options.add(kind);
-                refs.put(kind, ref);
+            if (!reachable(snapshot, catalog, tally, person, kind, ref)) {
+                continue;
             }
+            int window = patience(person, kind);
+            if (kind == Ambition.Kind.COMPONENT_CAP) {
+                // Only a cap the agency's own best team can reach in time (user, 2026-10-23): the window
+                // stretches to fit it, and a cap too far off isn't drawn.
+                OptionalInt needed = seasonsToCap(snapshot, catalog, person, ref);
+                if (needed.isEmpty() || needed.getAsInt() + CAP_SLACK > CAP_WINDOW_MAX) {
+                    continue;
+                }
+                window = Math.max(window, needed.getAsInt() + CAP_SLACK);
+            }
+            options.add(kind);
+            refs.put(kind, ref);
+            windows.put(kind, window);
         }
         if (options.isEmpty()) {
             return;
         }
         Ambition.Kind kind = options.get(random.nextInt(options.size()));
         String ref = refs.get(kind);
-        int window = kind.window();
-        if (Personality.has(person, Trait.AMBITIOUS)) {
-            window = Math.max(WINDOW_MIN, window + WINDOW_AMBITIOUS);
-        }
-        if (Personality.has(person, Trait.STEADY)) {
-            window += WINDOW_STEADY;
-        }
+        int window = windows.get(kind);
         Ambition ambition = new Ambition(kind, ref, window, window, gameTurn);
         person.setAmbition(ambition);
         person.setAmbitionPending(false);
@@ -656,10 +675,48 @@ public final class Careers {
             AmbitionSettled.Outcome.SAID, window, 0, 0));
     }
 
+    /** The table's window for an ambition, shortened for Ambitious and lengthened for Steady. */
+    private static int patience(Personnel person, Ambition.Kind kind) {
+        int window = kind.window();
+        if (Personality.has(person, Trait.AMBITIOUS)) {
+            window = Math.max(WINDOW_MIN, window + WINDOW_AMBITIOUS);
+        }
+        if (Personality.has(person, Trait.STEADY)) {
+            window += WINDOW_STEADY;
+        }
+        return window;
+    }
+
+    /**
+     * Returns how many seasons, on average, the agency's best team would take to bring a component to
+     * its R&amp;D cap: the engineer and the agency's three most skilled others in the component's skill,
+     * busy or not, the best in the richest slot ({@link ResearchPlanning#project}).
+     *
+     * @return the seasons, empty if the team doesn't get there within the projection's horizon
+     */
+    static OptionalInt seasonsToCap(PlayerSnapshot snapshot, ContentCatalog catalog, Personnel person,
+            String componentId) {
+        if (!(person instanceof SetSpecialist engineer)) {
+            return OptionalInt.empty();
+        }
+        MissionComponent component = catalog.missionComponent(componentId).orElseThrow();
+        Comparator<SetSpecialist> bestFirst = Comparator.comparingDouble(
+            (SetSpecialist specialist) -> specialist.getSkill(component.associatedSkill())).reversed();
+        List<SetSpecialist> team = new ArrayList<>(List.of(engineer));
+        snapshot.getSetSpecialists().stream().filter(other -> !other.getId().equals(engineer.getId()))
+            .sorted(bestFirst).limit(MissionComponent.RD_SLOT_COUNT - 1).forEach(team::add);
+        team.sort(bestFirst);
+        ResearchPlanning.Projection projection = ResearchPlanning.project(snapshot, component,
+            snapshot.getMissionComponents().get(componentId).getCurrentReliability(),
+            team.toArray(new SetSpecialist[MissionComponent.RD_SLOT_COUNT]));
+        return projection.seasonsTo(projection.cap());
+    }
+
     /**
      * Returns the component a "bring a component to its cap" ambition is about: the one the engineer
-     * works on if it's below its cap, else a random owned one below its cap; {@code ""} for other
-     * ambitions or none.
+     * works on if it's below its cap and in reach, else a random owned one that is; {@code ""} for other
+     * ambitions or none. In reach: the agency's best team gets there within {@link #CAP_WINDOW_MAX}
+     * seasons, slack included.
      */
     private static String componentFor(PlayerSnapshot snapshot, ContentCatalog catalog, Personnel person,
             Ambition.Kind kind, SplittableRandom random) {
@@ -667,12 +724,19 @@ public final class Careers {
             return "";
         }
         if (person instanceof SetSpecialist engineer && engineer.getRdTargetComponentId() != null
-                && belowCap(snapshot, catalog, engineer.getRdTargetComponentId())) {
+                && belowCap(snapshot, catalog, engineer.getRdTargetComponentId())
+                && inReach(snapshot, catalog, person, engineer.getRdTargetComponentId())) {
             return engineer.getRdTargetComponentId();
         }
         List<String> below = snapshot.getMissionComponents().keySet().stream()
-            .filter(id -> belowCap(snapshot, catalog, id)).toList();
+            .filter(id -> belowCap(snapshot, catalog, id) && inReach(snapshot, catalog, person, id)).toList();
         return below.isEmpty() ? "" : below.get(random.nextInt(below.size()));
+    }
+
+    private static boolean inReach(PlayerSnapshot snapshot, ContentCatalog catalog, Personnel person,
+            String componentId) {
+        OptionalInt needed = seasonsToCap(snapshot, catalog, person, componentId);
+        return needed.isPresent() && needed.getAsInt() + CAP_SLACK <= CAP_WINDOW_MAX;
     }
 
     private static boolean belowCap(PlayerSnapshot snapshot, ContentCatalog catalog, String componentId) {
