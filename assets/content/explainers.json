@@ -1385,7 +1385,7 @@
       "code": "E-29",
       "title": "Rocket planes",
       "topic": "Rocket planes",
-      "summary": "The X-15's flights to the edge of space, and the spaceplanes that lost to the capsules.",
+      "summary": "The X-15's flights to the edge of space, why that edge is drawn at 100 km, and the spaceplanes that lost to the capsules.",
       "sheets": [
         {
           "title": "Rocket planes at the edge of space",
@@ -1406,6 +1406,26 @@
             }
           ],
           "inGame": "The X-15 and OKB-MiG E-154 programs launch from a carrier plane, in the Carrier takeoff and Drop and ignition steps: no rocket needed."
+        },
+        {
+          "title": "Where does space begin?",
+          "drawing": "e29-2",
+          "scale": "Heights to scale",
+          "points": [
+            {
+              "title": "Thinner air, faster wings",
+              "text": "A wing holds a plane up by pushing air down. The higher it flies, the thinner the air, so the faster it has to go to stay up. At 50 km the air is about a thousand times thinner than on the ground."
+            },
+            {
+              "title": "Where wings give up",
+              "text": "Somewhere above 80 km, the speed a wing would need is faster than orbital speed, 7.8 km/s. Anything that fast is falling around the world anyway, wings or not: flying has turned into orbiting. A 1956 chart by the engineer Theodore von Kármán put the limit near 84 km, and the line is named after him."
+            },
+            {
+              "title": "Why 100 km, then?",
+              "text": "Real craft cross somewhere from 70 to 90 km. The air thins so fast up there that a craft's weight and wings hardly move the line. In the 1960s the FAI, which keeps the records, settled on 100 km, a number easy to remember. The US uses 50 miles, about 80 km. At 200 km there's still a trace of air, but far too little to fly on: satellites orbit there."
+            }
+          ],
+          "inGame": "The X-15 and OKB-MiG E-154 programs climb towards this line on a rocket, with wings to glide home."
         }
       ]
     },

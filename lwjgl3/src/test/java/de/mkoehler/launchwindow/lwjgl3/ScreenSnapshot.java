@@ -307,6 +307,14 @@ public final class ScreenSnapshot {
             joinNameShots(folder, game);
             return;
         }
+        if ("explainers".equals(System.getProperty("shots"))) {
+            String hash = ContentPackHash.ofClasspath("content/standard", ScreenSnapshot.class.getClassLoader());
+            startSession(game, new PlayerSnapshot("Baltic Star Agency", Archetype.NASA, 24_310, 14_280, 3_400, 52),
+                GameInfoResponse.success("standard", hash, List.of(), 52, true, 6 * 3_600_000L, 0L, null, List.of(),
+                    List.of(), 0));
+            explainerShots(folder, game);
+            return;
+        }
         if ("archive".equals(System.getProperty("shots"))) {
             archiveShots(folder, game);
             return;
@@ -758,6 +766,19 @@ public final class ScreenSnapshot {
      * Funding raised between reviews (design.md 2.1(f), 2026-10-12): the turn report's budget card,
      * and the Public Affairs Office after a raise, with its line on what more prestige would add.
      */
+    /**
+     * Every sheet of every explainer (ui-spec.md component 18), alone with {@code -Dshots=explainers}.
+     */
+    private static void explainerShots(File folder, LaunchWindowGame game) {
+        for (Explainers.Explainer explainer : Explainers.standard().explainers()) {
+            for (int sheet = 0; sheet < explainer.sheets().size(); sheet++) {
+                write(folder, "explainer-" + explainer.code().toLowerCase(java.util.Locale.ROOT) + "-" + (sheet + 1)
+                    + ".png", new ExplainerScreen(game, explainer, sheet, () -> new MuseumScreen(game,
+                    MuseumScreen.Tab.ENCYCLOPEDIA)), null);
+            }
+        }
+    }
+
     /**
      * The Join screen's Randomize button (ui-spec.md 4.2): a suggested name filled in (set directly,
      * since the button deals at random), and the button's tooltip.
@@ -2463,13 +2484,7 @@ public final class ScreenSnapshot {
 
         // The Museum encyclopedia (2026-10-06): its tab, and every sheet of every explainer.
         write(folder, "museum-encyclopedia.png", new MuseumScreen(game, MuseumScreen.Tab.ENCYCLOPEDIA), null);
-        for (Explainers.Explainer explainer : Explainers.standard().explainers()) {
-            for (int sheet = 0; sheet < explainer.sheets().size(); sheet++) {
-                write(folder, "explainer-" + explainer.code().toLowerCase(java.util.Locale.ROOT) + "-" + (sheet + 1)
-                    + ".png", new ExplainerScreen(game, explainer, sheet, () -> new MuseumScreen(game,
-                    MuseumScreen.Tab.ENCYCLOPEDIA)), null);
-            }
-        }
+        explainerShots(folder, game);
 
         // Concept chips (2026-10-07): the loop above opened every explainer, so all read now. The
         // unread shots are the earlier hq-details-vostok, plan-steps, vab-open and museum-encyclopedia.

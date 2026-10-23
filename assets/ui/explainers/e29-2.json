@@ -1,0 +1,258 @@
+{
+ "width": 1060,
+ "height": 660,
+ "labels": [
+  {
+   "x": 24.0,
+   "y": 44.0,
+   "anchor": "start",
+   "kind": "d-head",
+   "size": 13.0,
+   "color": "#16305c",
+   "text": "How fast a wing must fly to hold its height"
+  },
+  {
+   "x": 120.0,
+   "y": 260.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Real craft: 70 to 90 km"
+  },
+  {
+   "x": 98.0,
+   "y": 594.0,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "0 km"
+  },
+  {
+   "x": 98.0,
+   "y": 502.0,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "20 km"
+  },
+  {
+   "x": 98.0,
+   "y": 410.0,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "40 km"
+  },
+  {
+   "x": 98.0,
+   "y": 318.0,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "60 km"
+  },
+  {
+   "x": 98.0,
+   "y": 226.0,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "80 km"
+  },
+  {
+   "x": 98.0,
+   "y": 134.0,
+   "anchor": "end",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "100 km"
+  },
+  {
+   "x": 110.0,
+   "y": 610.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "0"
+  },
+  {
+   "x": 288.0,
+   "y": 610.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "2"
+  },
+  {
+   "x": 466.0,
+   "y": 610.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "4"
+  },
+  {
+   "x": 644.0,
+   "y": 610.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "6"
+  },
+  {
+   "x": 822.0,
+   "y": 610.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "8"
+  },
+  {
+   "x": 1000.0,
+   "y": 610.0,
+   "anchor": "middle",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "10 km/s"
+  },
+  {
+   "x": 120.0,
+   "y": 122.0,
+   "anchor": "start",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "100 km: the round number most people use"
+  },
+  {
+   "x": 120.0,
+   "y": 211.8,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "50 miles, about 80 km: the US line"
+  },
+  {
+   "x": 814.2,
+   "y": 452.0,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Orbital speed"
+  },
+  {
+   "x": 814.2,
+   "y": 468.0,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "7.8 km/s, about 28,000 km/h"
+  },
+  {
+   "x": 219.2,
+   "y": 336.4,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "The speed a wing needs"
+  },
+  {
+   "x": 219.2,
+   "y": 352.4,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Thinner air, faster flight"
+  },
+  {
+   "x": 790.2,
+   "y": 173.6,
+   "anchor": "end",
+   "kind": "d-lbl-gold",
+   "size": 14.0,
+   "color": "#8a5d12",
+   "text": "Von Kármán: about 84 km"
+  },
+  {
+   "x": 790.2,
+   "y": 189.6,
+   "anchor": "end",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Above this, flying fast enough means orbiting"
+  },
+  {
+   "x": 216.8,
+   "y": 534.8,
+   "anchor": "start",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Flight"
+  },
+  {
+   "x": 216.8,
+   "y": 550.8,
+   "anchor": "start",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "The wings hold the plane up"
+  },
+  {
+   "x": 1036.0,
+   "y": 314.0,
+   "anchor": "end",
+   "kind": "d-lbl",
+   "size": 14.0,
+   "color": "#16305c",
+   "text": "Orbit"
+  },
+  {
+   "x": 1036.0,
+   "y": 330.0,
+   "anchor": "end",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "Falling around the world,"
+  },
+  {
+   "x": 1036.0,
+   "y": 346.0,
+   "anchor": "end",
+   "kind": "d-txt",
+   "size": 12.5,
+   "color": "#5b5548",
+   "text": "wings or not"
+  },
+  {
+   "x": 24.0,
+   "y": 640.0,
+   "anchor": "start",
+   "kind": "d-sm",
+   "size": 11.0,
+   "color": "#5b5548",
+   "text": "Heights to scale · the curve: one imagined plane in real air"
+  }
+ ]
+}

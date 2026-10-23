@@ -488,7 +488,9 @@ On the right:
         - **E-27 "Pictures before digital cameras"** (Space photography), one sheet: *Film,
           developed in space*.
         - **E-28 "Moon rock by robot"** (Sample return), one sheet: *A piece of the Moon by robot*.
-        - **E-29 "Rocket planes"**, one sheet: *Rocket planes at the edge of space*.
+        - **E-29 "Rocket planes"**: *Rocket planes at the edge of space*; *Where does space begin?*
+          (added 2026-10-23 straight in libGDX, user: a chart of the speed a wing needs against
+          orbital speed, von Kármán's 84 km, the US 50 miles and the round 100 km; `design.md` §1.1).
         - **E-30 "Around the Moon and back"** (Circumlunar flight): *The free return*; *Coming home
           fast*.
       - **Changed from the brief** (by the mockup session, each in its row's note): shorter

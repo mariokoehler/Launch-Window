@@ -215,6 +215,18 @@ engineering problem or tidbit, note it here the same session.
   sunlight shares, signal delays and "twice the energy" are arithmetic. The concept chips
   don't reach the standard pack's new programs and components yet either; the existing 19
   explainers already cover many of them (staging, delta-v, cryogenics, rocket classes).
+- **E-29's second sheet, "Where does space begin?"** (the user's idea, 2026-10-23, built straight in
+  libGDX, drawn by `assets-raw/explainers/make_e29_2.py`): why the edge of space is drawn at 100 km.
+  The user's account, checked: the higher a plane flies, the faster it must go to hold its height, and
+  where that speed would pass orbital speed, flying has turned into orbiting. Corrections to it: the
+  crossing isn't slightly below 100 km but well below, von Kármán's 1956 chart giving about 275,000 ft
+  (84 km) and McDowell's 2018 recalculation always 70 to 90 km (*Acta Astronautica* 151; *Physics Today*,
+  "Where does outer space begin?"); von Kármán's paper was about aircraft overheating and never mentions
+  orbit or space, and Andrew Haley named the line in 1959 from its chart; the FAI settled on 100 km in the
+  1960s as a round number; the US Air Force and NASA use 50 miles (80.5 km), and the FAI considered 80 km in
+  2018 without changing. The curve is the standard atmosphere's densities (1976) and one wing loading
+  set to cross at 84 km; a tenth to ten times that loading crosses between 69 and 91 km, which is why
+  the line hardly depends on the craft. At 50 km the air is about 1,200 times thinner than at sea level.
 - **Concepts: linking game content to the explainers** (user's idea, 2026-10-07; specified in
   `ui-spec.md` component 19, mocked up the same day). Programs, configurations, steps, rockets and
   capsules each list the real-world concepts behind them; a Concepts section on their screens
