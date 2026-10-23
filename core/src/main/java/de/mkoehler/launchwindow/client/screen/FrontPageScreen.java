@@ -112,6 +112,8 @@ public class FrontPageScreen extends SessionScreen {
     private int sheet;
     /** What a follow-up's page couldn't hold, for its continuation sheet. */
     private List<Piece> carried = List.of();
+    /** The pages whose statement reminder showed in this visit. */
+    private final java.util.Set<String> reminded = new java.util.HashSet<>();
     private int fontGeneration;
 
     /**
@@ -1067,6 +1069,16 @@ public class FrontPageScreen extends SessionScreen {
             rebuild();
             return;
         }
+        FrontPage page = pages.get(index);
+        if (mayStillAnswer(page) && reminded.add(page.id())) {
+            remindStatement(page);
+            return;
+        }
+        leave();
+    }
+
+    /** Moves on from the current page: to the next one, or out of the paper. */
+    private void leave() {
         sheet = 0;
         if (!reopened) {
             game.markFrontPageSeen(pages.get(index).id());
@@ -1077,6 +1089,51 @@ public class FrontPageScreen extends SessionScreen {
             return;
         }
         done.run();
+    }
+
+    /** Whether this player may still answer a First's page and hasn't (component 28). */
+    private boolean mayStillAnswer(FrontPage page) {
+        return page.firstPage()
+            && allPages().stream().noneMatch(p -> p.followUp() && page.id().equals(p.reactsTo()))
+            && ReactionPrinter.mayReact(page, Math.toIntExact(session.openTurn()), session.state().getAgencyName(),
+                Math.toIntExact(session.joinedTurn()))
+            && session.statement(page.id()).isEmpty();
+    }
+
+    /**
+     * Reminds a player leaving a First's page without a statement that they may give one (user, 2026-10-23): "Give
+     * a statement" opens the strip's dialog, "Decline to comment" moves on. Once a page per visit.
+     */
+    private void remindStatement(FrontPage page) {
+        String agencies = String.join(" and ", page.achievers().stream().map(FrontPage.Achiever::agencyName).toList());
+        Table card = dialogCard("A rival’s First", "Give a statement?");
+        card.add(ui.paragraph("You have a unique chance to answer " + agencies + "’s first "
+            + ContentNames.of(page.goalId()).toLowerCase(java.util.Locale.ROOT) + ". Every rival’s statement is "
+            + "printed together in next season’s paper, and this season is the only one to give yours.",
+            Theme.TextStyle.BODY, Theme.INK_MUTED)).padBottom(Theme.SPACE_4).row();
+        Table buttons = new Table();
+        TextButton decline = ui.button("Decline to comment", Theme.ButtonKind.SECONDARY);
+        decline.addListener(clicked(() -> {
+            closeDialog();
+            leave();
+        }));
+        TextButton give = ui.button("Give a statement", Theme.ButtonKind.PRIMARY);
+        give.addListener(clicked(() -> {
+            closeDialog();
+            new StatementDialog(this, page, this::rebuild).show();
+        }));
+        buttons.add(decline).padRight(10f);
+        buttons.add(give);
+        card.add(buttons).right().fill(false, false);
+        showDialog(card);
+    }
+
+    /**
+     * Shows the reminder the current page gives on leaving it unanswered, as its Continue would
+     * ({@code ScreenSnapshot}).
+     */
+    public void leaveUnanswered() {
+        next();
     }
 
     private List<FrontPage> allPages() {

@@ -1124,6 +1124,8 @@ public final class ScreenSnapshot {
         game.session().keepFrontPages(List.of(satellite, space));
         game.session().keepStatements(List.of());
         write(folder, "reactions-strip-give.png", new FrontPageScreen(game, List.of(space), () -> { }, false), null);
+        write(folder, "reactions-reminder.png", new FrontPageScreen(game, List.of(space), () -> { }, false),
+            FrontPageScreen::leaveUnanswered);
         write(folder, "reactions-dialog-fresh.png", new FrontPageScreen(game, List.of(space), () -> { }, false),
             screen -> new StatementDialog(screen, space, () -> { }).show());
         write(folder, "reactions-dialog-next.png", new FrontPageScreen(game, List.of(space), () -> { }, false),

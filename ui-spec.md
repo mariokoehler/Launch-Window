@@ -1207,7 +1207,12 @@ Writing them turned up two things for the rules, recorded in `design.md` §2.2(d
       Change" once given (the stance in the player's words). Not shown when the player made the First,
       joined after it was printed, or the turn after it has resolved. A reopened First page whose
       follow-up is printed shows "Read the reactions" there instead.
-    - **About 720 px wide,** a modal over the page and its scrim, in the design system's dialog style.
+    - **A reminder on leaving** (user, 2026-10-23, `FrontPageScreen.remindStatement`, shot `reactions-reminder.png`): the
+      strip's button is easy to miss under the paper, so leaving such a page unanswered (Continue, Next front page or
+      Close, from either sheet) asks first: eyebrow "A rival's First", title "Give a statement?", "You have a unique
+      chance to answer <agency>'s first <First>. Every rival's statement is printed together in next season's paper,
+      and this season is the only one to give yours." "Give a statement" (primary) opens this dialog over the page;
+      "Decline to comment" (secondary) moves on as the strip's button would, nothing sent. Once a page per visit.    - **About 720 px wide,** a modal over the page and its scrim, in the design system's dialog style.
       Title "Give a statement"; subtitle "On the <agency>'s <First> · printed next season".
     - **Five stance rows,** one choice, in the personnel dialogs' choice-row pattern (radio mark, bold
       label, one muted line):
