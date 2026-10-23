@@ -3470,10 +3470,14 @@ prestige or anything else changes.
   words where a column ends (at least two lines stay behind; the rest goes on unindented), ragged-right as
   on a First's page (the mockup's justified, hyphenated text needs a line-level layout).
 - **Short articles** (the user's idea, 2026-10-22): the room a short article leaves is filled with short local
-  items, as a paper fills its columns: `fillers` in `front-page-reactions.json` (our own fiction, nine of them,
-  at most 9 lines each), a headline in `NEWS_LABEL` capitals over Caslon body, a short centred rule (64 px)
-  between items. They go into the column the article ends in and every one after it, each at most once a page,
-  in an order drawn from the page's id, so every player reads the same page. None on a page that runs on.
+  items, as a paper fills its columns: `fillers` in `front-page-reactions.json` (our own fiction, 24 of them since
+  2026-10-23, at least 20 (`FrontPageReactionsTest`), at most 9 lines each, true before anyone has flown), a headline
+  in `NEWS_LABEL` capitals over Caslon body, a short centred rule (64 px) between items. They go into the column the
+  article ends in and every one after it, each at most once a page. None on a page that runs on.
+  **No repeats** (user, 2026-10-23, `client.view.FillerDeck`): the client keeps, per server and login, the items shown
+  since the last had been and offers those not yet shown first, in an order drawn from the page's id; once all have
+  been, the deck starts over. A page keeps the items it first showed when it opens again. Since every player sees the
+  same pages in the same order, they read the same items, except a late joiner or a fresh install.
 - **History notes** (component 15, the user's idea, 2026-10-22): on the follow-up's strip after "Statements
   only: no effect on the race." (the icon in `ON_PAGE`), how rivals honoured each other (Apollo 11's medals for
   Gagarin and Komarov); and on the statement dialog's title (below). Their words are `historyNotes` in

@@ -194,10 +194,10 @@ class FrontPageReactionsTest {
         }
     }
 
-    /** The fillers: enough for three empty columns, each short enough for a column, in the fonts' letters. */
+    /** The fillers: enough that pages rarely repeat one, each short enough for a column, in the fonts' letters. */
     @Test
     void fillersAndHistoryNotesAreThere() throws Exception {
-        assertTrue(WORDS.fillers().size() >= 6);
+        assertTrue(WORDS.fillers().size() >= 20);
         Font font = Font.createFont(Font.TRUETYPE_FONT,
             Files.newInputStream(Path.of("..", "assets", "fonts", "LibreCaslonText-Regular.ttf"))).deriveFont(BODY_SIZE);
         FontRenderContext context = new FontRenderContext(null, true, true);

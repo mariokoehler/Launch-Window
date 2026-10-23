@@ -48,6 +48,8 @@ public class LaunchWindowGame extends Game {
     private java.util.Set<String> explainersReadInMemory;
     private java.util.Set<String> archiveReadInMemory;
     private java.util.Set<String> frontPagesSeenInMemory;
+    /** The front pages' filler records when kept in memory (screenshots), else {@code null}. */
+    private java.util.Map<String, String> fillersInMemory;
     private java.util.Set<String> flagsInMemory;
     private float pendingFontScale;
     private long lastResizeMillis;
@@ -319,6 +321,66 @@ public class LaunchWindowGame extends Game {
      */
     public void useFrontPageMarksInMemory(java.util.Set<String> seen) {
         frontPagesSeenInMemory = seen;
+        fillersInMemory = new java.util.HashMap<>();
+    }
+
+    /**
+     * Returns the filler items a front page showed on this device ({@code ui-spec.md} &sect;4.18.1), so it shows
+     * the same ones when it opens again.
+     *
+     * @param pageId the page
+     * @return their ids in order, or {@code null} if it hasn't shown any yet
+     */
+    public java.util.List<String> fillersShown(String pageId) {
+        String value = fillerValue("fillers." + pageId);
+        return value == null ? null : ids(value);
+    }
+
+    /**
+     * Returns the filler items shown on this device since every one had been, so none repeats before the rest.
+     *
+     * @return their ids
+     */
+    public java.util.Set<String> fillersSeen() {
+        String value = fillerValue("fillersSeen");
+        return value == null ? new java.util.LinkedHashSet<>() : new java.util.LinkedHashSet<>(ids(value));
+    }
+
+    /**
+     * Records what a front page showed and the items shown since the deck last ran out.
+     *
+     * @param pageId the page
+     * @param shown  its items, in order
+     * @param seen   the items shown since the deck last ran out, this page's included
+     */
+    public void recordFillers(String pageId, java.util.List<String> shown, java.util.Set<String> seen) {
+        if (fillersInMemory != null) {
+            fillersInMemory.put("fillers." + pageId, String.join(",", shown));
+            fillersInMemory.put("fillersSeen", String.join(",", seen));
+            return;
+        }
+        if (session == null) {
+            return;
+        }
+        com.badlogic.gdx.Preferences preferences = preferences();
+        preferences.putString(key("fillers." + pageId), String.join(",", shown));
+        preferences.putString(key("fillersSeen"), String.join(",", seen));
+        preferences.flush();
+    }
+
+    private String fillerValue(String name) {
+        if (fillersInMemory != null) {
+            return fillersInMemory.get(name);
+        }
+        if (session == null) {
+            return null;
+        }
+        com.badlogic.gdx.Preferences preferences = preferences();
+        return preferences.contains(key(name)) ? preferences.getString(key(name)) : null;
+    }
+
+    private static java.util.List<String> ids(String value) {
+        return value.isEmpty() ? java.util.List.of() : java.util.List.of(value.split(","));
     }
 
     /**

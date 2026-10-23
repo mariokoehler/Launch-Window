@@ -893,7 +893,7 @@
       "id": "r-filler-planetarium",
       "headline": "Planetarium queues round the block",
       "paragraphs": [
-        "The city planetarium has added three evening shows a week after its queue stretched round the block on Saturday. The new shows follow the night sky as it will look this season, with the brightest satellites marked."
+        "The city planetarium has added three evening shows a week after its queue stretched round the block on Saturday. The new shows follow the night sky as it will look this season, with the planets and the brightest stars marked."
       ]
     },
     {
@@ -908,7 +908,7 @@
       "id": "r-filler-radio-logs",
       "headline": "Radio amateurs compare notes",
       "paragraphs": [
-        "Members of the county radio society met on Tuesday to compare their recordings of signals from orbit. Several had heard the same pass within seconds of one another, and the society hopes to send its logs to the university."
+        "Members of the county radio society met on Tuesday to hear how amateurs can help track satellites. A lecturer from the university showed them how to log a passing signal to the second, and twelve members signed up for night watches."
       ]
     },
     {
@@ -951,6 +951,112 @@
       "headline": "Observatory open night",
       "paragraphs": [
         "The university observatory opens its dome to the public on the first clear Friday of each month. Visitors are asked to bring warm coats: the dome is not heated."
+      ]
+    },
+    {
+      "id": "r-filler-forecasts",
+      "headline": "Forecasts from the new computer",
+      "paragraphs": [
+        "The weather office has begun to work out its forecasts on an electronic computer, which fills a room of its own. Officials say tomorrow's weather now arrives a full hour sooner, though they admit it is not yet always right."
+      ]
+    },
+    {
+      "id": "r-filler-haircut",
+      "headline": "The rocket cut",
+      "paragraphs": [
+        "Barbers in the town centre report a run on a short, flat haircut that customers ask for as the rocket cut. One barber said he had no idea what a rocket had to do with it, but he was not complaining."
+      ]
+    },
+    {
+      "id": "r-filler-meteors",
+      "headline": "Shooting stars on Thursday",
+      "paragraphs": [
+        "The annual meteor shower peaks on Thursday night. The observatory advises watchers to find a dark field, give their eyes a quarter of an hour, and look to the north-east after midnight. Up to forty an hour may be seen."
+      ]
+    },
+    {
+      "id": "r-filler-essay",
+      "headline": "Schoolgirl wins essay prize",
+      "paragraphs": [
+        "A fourteen-year-old pupil has won the regional essay prize with a piece on how a family might live on the Moon. The judges praised her sums for the air and water, and asked where she had learned them.",
+        "From her father's encyclopaedia, she said."
+      ]
+    },
+    {
+      "id": "r-filler-cinema",
+      "headline": "Space picture held over",
+      "paragraphs": [
+        "The science-fiction picture at the Regent has been held over for a third week. The manager says audiences now argue in the foyer about whether its rockets could really fly, but the seats are full every night."
+      ]
+    },
+    {
+      "id": "r-filler-moon-cake",
+      "headline": "Moon cake wins the fete",
+      "paragraphs": [
+        "The winner of the church fete's baking contest was a cake shaped like the Moon, its craters made with a teaspoon and its dust with icing sugar. It was sold in slices for the roof fund and gone within the hour."
+      ]
+    },
+    {
+      "id": "r-filler-stamps",
+      "headline": "New stamps on sale",
+      "paragraphs": [
+        "The post office issues a set of four stamps on space science next month. Collectors are already queueing for first-day covers, and the post office asks them to order by letter rather than crowd the counters."
+      ]
+    },
+    {
+      "id": "r-filler-evening-classes",
+      "headline": "Astronomy for beginners",
+      "paragraphs": [
+        "Evening classes in astronomy for beginners start at the technical college in the new term. No mathematics is needed, the college says, only a pencil and a willingness to stay up late. Twenty places remain."
+      ]
+    },
+    {
+      "id": "r-filler-dogs-home",
+      "headline": "A dog named Rocket",
+      "paragraphs": [
+        "The dogs' home reports that Rocket is now the most popular name for the puppies it rehomes, ahead of Lady and Rex. Staff say one family asked whether their new pet could be trained for space. It could not."
+      ]
+    },
+    {
+      "id": "r-filler-street-lamps",
+      "headline": "Lamps out for the stars",
+      "paragraphs": [
+        "Residents of the new estate have asked the council to dim the street lamps after ten, so their children can see the stars. The council says it will consider the matter, and the lamps will stay on until it has."
+      ]
+    },
+    {
+      "id": "r-filler-instrument-works",
+      "headline": "Jobs at the instrument works",
+      "paragraphs": [
+        "The instrument works on the ring road is taking on sixty skilled hands for its new contracts, mostly gauges and valves for the rocket industry. Applicants with steady fingers and good eyesight should call in person."
+      ]
+    },
+    {
+      "id": "r-filler-crossword",
+      "headline": "The setter regrets nothing",
+      "paragraphs": [
+        "Readers who wrote in about last week's crossword clue, \"It goes up but never comes down (9)\", will find the answer on page eleven. Several suggested a word the paper cannot print. The setter regrets nothing."
+      ]
+    },
+    {
+      "id": "r-filler-science-fair",
+      "headline": "Science fair record",
+      "paragraphs": [
+        "A record two hundred entries filled the town hall for this year's schools science fair. Rockets of every size lined the stage, and the fire brigade, invited to judge, gave first prize to a working model of a fire engine."
+      ]
+    },
+    {
+      "id": "r-filler-chess",
+      "headline": "Chess club challenges the engineers",
+      "paragraphs": [
+        "The town chess club has challenged the engineers of the rocket works to a match over twenty boards. The engineers have accepted, on condition that they may bring their slide rules. The club has said no."
+      ]
+    },
+    {
+      "id": "r-filler-ice-cream",
+      "headline": "A flavour for the times",
+      "paragraphs": [
+        "A cafe on the promenade has added a blue ice cream it calls Outer Space to its menu. Nobody can agree on what it tastes of, but the owner says it outsells vanilla two to one on a hot afternoon."
       ]
     }
   ],

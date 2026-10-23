@@ -18,6 +18,7 @@ import de.mkoehler.launchwindow.client.LaunchWindowGame;
 import de.mkoehler.launchwindow.client.ui.HistoryNote;
 import de.mkoehler.launchwindow.client.ui.Theme;
 import de.mkoehler.launchwindow.client.view.ContentNames;
+import de.mkoehler.launchwindow.client.view.FillerDeck;
 import de.mkoehler.launchwindow.client.view.FrontPageView;
 import de.mkoehler.launchwindow.client.view.Hub;
 import de.mkoehler.launchwindow.content.FrontPageReactions;
@@ -566,8 +567,9 @@ public class FrontPageScreen extends SessionScreen {
     }
 
     /**
-     * Picks the short items for a follow-up's spare room: in an order drawn from the page's id, so every player
-     * reads the same page, each item at most once, into the column the article ends in and every one after it.
+     * Picks the short items for a follow-up's spare room, each at most once, into the column the article ends in and
+     * every one after it: none this device has shown before until all have been, and the same ones when the page
+     * opens again ({@link FillerDeck}).
      */
     private List<List<FrontPageReactions.Filler>> fillers(FrontPage page, Flow flow, float[] capacities,
                                                           BitmapFont body) {
@@ -578,8 +580,10 @@ public class FrontPageScreen extends SessionScreen {
         if (!carried.isEmpty()) {
             return fills;
         }
-        List<FrontPageReactions.Filler> order = new ArrayList<>(FrontPageReactions.standard().fillers());
-        java.util.Collections.shuffle(order, new java.util.Random(page.id().hashCode()));
+        List<FrontPageReactions.Filler> pool = FrontPageReactions.standard().fillers();
+        List<String> shown = game.fillersShown(page.id());
+        java.util.Set<String> seen = game.fillersSeen();
+        List<FrontPageReactions.Filler> order = new ArrayList<>(FillerDeck.order(pool, page.id(), shown, seen));
         int last = 0;
         for (int c = 0; c < capacities.length; c++) {
             if (!flow.columns().get(c).isEmpty()) {
@@ -602,6 +606,10 @@ public class FrontPageScreen extends SessionScreen {
                     above = true;
                 }
             }
+        }
+        if (shown == null) {
+            List<String> picked = fills.stream().flatMap(List::stream).map(FrontPageReactions.Filler::id).toList();
+            game.recordFillers(page.id(), picked, FillerDeck.afterShowing(pool, seen, picked));
         }
         return fills;
     }
