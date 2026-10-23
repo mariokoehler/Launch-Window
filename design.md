@@ -1105,7 +1105,11 @@ season unchanged. Tiger Teams' live per-step choice doesn't fit, so it was redes
   (astronauts) / 2 (SET) / 2 (Mission Control), advanced 3. **Basic training follows BASPM's
   shape:** it starts automatically after hiring, the player can't start it or cut it short, so
   a hire can't be bought the season it's needed. Unlike BASPM, it grows one **random** skill of
-  the group on completion (user's choice, kept 2026-10-06). **Permanent** training repeats
+  the group on completion (user's choice, kept 2026-10-06). **Engineers hired on the agency's first
+  turn** (its season 1, a late joiner's too) train one season, not two, so they're ready on the
+  second turn, a program can open, and the advisor moves on to flight directors (user, 2026-10-23:
+  the second day had nothing to do). A quiet gift: nothing on screen says so, and the hire screen
+  still quotes two seasons. **Permanent** training repeats
   advanced-length rounds until a target level, stopping when a round gains less than 0.05.
 - **Expert trait** (replaces Tiger Teams, user, 2026-09-27 and 2026-10-02): an astronaut or
   controller (never SET) with a skill at 80 or more can train toward Expert in it. Each season

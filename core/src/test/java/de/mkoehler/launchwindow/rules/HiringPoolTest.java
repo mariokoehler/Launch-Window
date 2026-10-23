@@ -262,6 +262,27 @@ class HiringPoolTest {
     }
 
     /**
+     * An engineer hired on the player's first turn trains one season, so a program can open on the second
+     * turn (user, 2026-10-23); from the second turn on, basic training is back to its usual length.
+     */
+    @Test
+    void engineersHiredOnTheFirstTurnTrainOneSeason() {
+        PlayerSnapshot snapshot = newSnapshot();
+        HiringPool.refreshCandidates(snapshot, new Random(1L));
+        String first = snapshot.getSetSpecialistCandidates().get(0).getId();
+        String second = snapshot.getSetSpecialistCandidates().get(1).getId();
+
+        assertEquals(HireOutcome.HIRED, HiringPool.hire(snapshot, PersonnelGroup.SET, first, new Random(2L)));
+        snapshot.setSeason(2);
+        assertEquals(HireOutcome.HIRED, HiringPool.hire(snapshot, PersonnelGroup.SET, second, new Random(3L)));
+
+        assertEquals(TrainingProgress.FIRST_TURN_SET_BASIC_TRAINING_SEASONS, snapshot.getSetSpecialists().stream()
+            .filter(s -> s.getId().equals(first)).findFirst().orElseThrow().getTrainingSeasonsTotal());
+        assertEquals(TrainingProgress.SET_BASIC_TRAINING_SEASONS, snapshot.getSetSpecialists().stream()
+            .filter(s -> s.getId().equals(second)).findFirst().orElseThrow().getTrainingSeasonsTotal());
+    }
+
+    /**
      * A signing bonus costs one season's salary and multiplies the new hire's morale by 1.1, capped
      * at 100 (user decision 2026-10-06).
      */

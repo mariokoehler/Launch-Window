@@ -90,6 +90,13 @@ public final class TrainingProgress {
     /** Fixed length, in seasons, of SET basic training. */
     public static final int SET_BASIC_TRAINING_SEASONS = 2;
 
+    /**
+     * Length, in seasons, of SET basic training for a hire on the player's own first turn: a quiet gift
+     * (user, 2026-10-23), so the first engineers are ready on the second turn and a program can open, with
+     * nothing on screen calling it out.
+     */
+    public static final int FIRST_TURN_SET_BASIC_TRAINING_SEASONS = 1;
+
     /** Fixed length, in seasons, of Mission Control basic training. */
     public static final int MISSION_CONTROL_BASIC_TRAINING_SEASONS = 2;
 

@@ -554,7 +554,9 @@ public final class HiringPool {
         snapshot.setSetSpecialistCandidates(pool);
         SetSkill[] skills = SetSkill.values();
         SetSkill target = skills[random.nextInt(skills.length)];
-        startBasicTraining(candidate, TrainingProgress.SET_BASIC_TRAINING_SEASONS);
+        // Season 1 is the player's own first turn (an agency starts there), late joiners' too.
+        startBasicTraining(candidate, snapshot.getSeason() == 1
+            ? TrainingProgress.FIRST_TURN_SET_BASIC_TRAINING_SEASONS : TrainingProgress.SET_BASIC_TRAINING_SEASONS);
         candidate.setTrainingTargetSkill(target);
         List<SetSpecialist> roster = snapshot.getSetSpecialists();
         roster.add(candidate);
