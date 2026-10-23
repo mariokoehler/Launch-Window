@@ -119,10 +119,15 @@ public final class JoinScreen extends StageScreen {
             .padBottom(Theme.SPACE_1).row();
         column.add(centered(ui.label("Found your agency", Theme.TextStyle.HEADING_LG, Theme.ON_PAGE_STRONG)))
             .padBottom(Theme.SPACE_5).row();
-        column.add(ui.notice(Theme.NoticeKind.INFO, "Everyone starts from the same line.",
-            "Whenever you join, your agency starts fresh: every building at level 1, empty rosters, and ten "
-                + "candidates waiting in each hiring pool. Hire SET specialists first. They research the parts "
-                + "every mission flies on.")).padBottom(Theme.SPACE_5).row();
+        column.add(ui.notice(Theme.NoticeKind.INFO, "Your choices here last the whole game.",
+            "Pick a side's style. NASA-style and Soviet-style each fly their own program tree, with historical "
+                + "rockets, spacecraft and missions, and each has its own headquarters. Budgets and rules are the "
+                + "same for both. Several players can pick the same style; every agency still races alone, "
+                + "against everyone.\n\n"
+                + "Your agency's name and your director's name are what rivals see: on the newspaper's front page "
+                + "when you claim a First, in their statements and condolences, in their Intelligence Office files "
+                + "and on the Museum's list of agencies. The paper quotes your director by name. Neither name can "
+                + "be changed later.")).padBottom(Theme.SPACE_5).row();
         bannerCell = column.add((Actor) null);
         column.row();
         column.add(card).row();

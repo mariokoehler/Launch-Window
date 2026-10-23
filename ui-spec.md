@@ -1425,6 +1425,12 @@ to hire staff (SET Centre first).
   Whenever you join, your agency starts fresh: every building at level 1, empty
   rosters, and ten candidates waiting in each hiring pool. Hire SET specialists
   first. They research the parts every mission flies on."*
+  **Replaced (user, 2026-10-23):** hiring advice got ahead of this screen. The hint
+  now explains the two choices made here: *"Your choices here last the whole game."*
+  What the style decides (its own program tree and headquarters; budgets and rules
+  the same; not exclusive), and where rivals see the agency's and director's names
+  (front pages, statements and condolences, Intelligence Office files, the Museum's
+  list of agencies), fixed for the game. The text is in `JoinScreen`.
 - **Text on the blue page is light.** The mockup set the heading, eyebrow and
   footnote in ink and navy directly on the page, which is illegible there. They
   use the on-page colors instead.
