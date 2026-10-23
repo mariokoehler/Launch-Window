@@ -23,6 +23,7 @@ import de.mkoehler.launchwindow.client.view.ContentNames;
 import de.mkoehler.launchwindow.client.view.Explainers;
 import de.mkoehler.launchwindow.client.view.FindingsView;
 import de.mkoehler.launchwindow.client.view.IntelTexts;
+import de.mkoehler.launchwindow.client.view.Outlook;
 import de.mkoehler.launchwindow.client.view.Programs;
 import de.mkoehler.launchwindow.client.view.SetSkills;
 import de.mkoehler.launchwindow.client.view.Tips;
@@ -263,6 +264,16 @@ abstract class ChromeScreen extends SessionScreen {
     }
 
     /**
+     * Lowers a sentence's first letter, to follow words such as "After its price, ".
+     *
+     * @param text the sentence
+     * @return the sentence with its first letter lowered
+     */
+    protected static String lowerFirst(String text) {
+        return text.isEmpty() ? text : Character.toLowerCase(text.charAt(0)) + text.substring(1);
+    }
+
+    /**
      * Builds a landing screen's navigation card: an eyebrow, a title, a line of copy, and a
      * primary button.
      *
@@ -412,8 +423,22 @@ abstract class ChromeScreen extends SessionScreen {
         card.add(ui.paragraph("Raises the " + capNoun + " from " + levels.caps().get(level - 1) + " to "
             + levels.caps().get(level) + (unlocks == null ? "" : " and unlocks " + unlocks) + ". Takes " + duration + ", and upgrading is final.", Theme.TextStyle.BODY,
             Theme.INK_MUTED)).padBottom(Theme.SPACE_4).row();
+        // The new level's upkeep, charged once the upgrade is done, as BudgetProgress charges it (user, 2026-10-23).
+        double multiplier = session.state().getCostMultiplier();
+        long upkeepNow = Math.round(levels.maintenance().get(level - 1) * multiplier);
+        long upkeepNext = Math.round(levels.maintenance().get(level) * multiplier);
+        card.add(ui.paragraph(upkeepNext == upkeepNow
+            ? "Its upkeep stays at " + money(upkeepNow) + " a season."
+            : "Its upkeep rises from " + money(upkeepNow) + " to " + money(upkeepNext) + " a season once the upgrade "
+                + "is done.", Theme.TextStyle.BODY, Theme.INK_MUTED)).padBottom(Theme.SPACE_4).row();
         card.add(priceBreakdown(List.of(new Programs.PriceLine("Upgrade cost", cost, null)), cost))
             .padBottom(Theme.SPACE_4).row();
+        // How long the funds last, the higher upkeep counted from now on, which errs on the safe side.
+        card.add(ui.notice(Theme.NoticeKind.INFO, upkeepNext == upkeepNow ? "After the upgrade."
+                : "With the higher upkeep added.",
+            "After its price, " + lowerFirst(Outlook.runwayLine(session.state(), session.catalog(),
+                session.gameInfo().response().budgetSchedule(), upkeepNext - upkeepNow, cost, session.openTurn()))))
+            .growX().padBottom(Theme.SPACE_4).row();
         Table buttons = new Table();
         buttons.add(actionButton("Cancel", Theme.ButtonKind.SECONDARY, this::closeDialog)).padRight(10f);
         buttons.add(actionButton("Upgrade", Theme.ButtonKind.PRIMARY, () -> submit(new UpgradeBuildingAction(building),

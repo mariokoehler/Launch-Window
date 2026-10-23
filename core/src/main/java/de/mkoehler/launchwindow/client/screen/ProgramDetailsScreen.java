@@ -287,10 +287,6 @@ public final class ProgramDetailsScreen extends ChromeScreen {
         return block;
     }
 
-    private static String lowerFirst(String text) {
-        return text.isEmpty() ? text : Character.toLowerCase(text.charAt(0)) + text.substring(1);
-    }
-
     private Table goalBadge(String goalId, PlayerSnapshot state) {
         boolean achieved = state.getAchievedGoals().containsKey(goalId);
         boolean cancelled = state.getCancelledGoalIds().contains(goalId);

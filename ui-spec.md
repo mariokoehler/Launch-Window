@@ -148,7 +148,10 @@ On the right:
    900 · 1 season · final"). While building: "Upgrading, 1 season left". It
    appears on the five building screens with a cap: Astronaut Complex, Mission
    Control, SET Centre, Headquarters, and the VAB. Upgrading is final, so it needs
-   a confirmation.
+   a confirmation. The confirmation also gives the new level's upkeep ("Its upkeep rises from
+   $ 150.0 to $ 400.0 a season once the upgrade is done.") and, below the price, how long the
+   funds last with it, counted from now on, the safe side (component 25's funds runway; user,
+   2026-10-23). Shots: `hq-upgrade.png`, `vab-upgrade.png`.
 8. **Goal badge.** The mission-patch circle (`logo.svg` frame), open or
    achieved, with a "first" ribbon when the player was first to it.
    *Implemented (2026-10-06, built in libGDX without a mockup round):* each goal has its own
